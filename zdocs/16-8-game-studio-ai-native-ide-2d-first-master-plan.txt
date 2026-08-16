@@ -1,0 +1,1414 @@
+================================================================================
+16-8-2026 — HH GAME STUDIO — MASTER PLAN (v2, đã hardening sau review)
+IDE LÀM GAME AI-NATIVE: AGENT TOÀN QUYỀN NHƯ NGƯỜI — 2D VERTICAL-SLICE TRƯỚC
+================================================================================
+
+FILE NÀY LÀ GÌ
+  Plan gốc (source of truth) cho sản phẩm MỚI: một IDE/editor làm game kiểu
+  Unity/Godot nhưng thiết kế từ đầu để AI agent là user hạng nhất — agent dùng
+  được 100% tính năng qua command bus (không giả lập chuột), người thấy agent
+  thao tác live và giật lại tay lái được trong 1 cú click (tinh thần tab
+  "Máy này" của zoracle/hh-console, nhưng thứ bị điều khiển là game editor).
+
+  Sản phẩm TÁCH KHỎI mạng xã hội Hoan Hao. Không đụng code microservice.
+  Chỉ TÁI DÙNG PATTERN (không copy nguyên khối) từ zoracle/ (session, journal
+  JSONL, atomic write, validate + byte caps, single-instance lock) và
+  toolstart-egui/ (app eframe/egui, quản lý process con).
+
+  Người đọc: AI agent (Cursor/Codex/Claude) và dev con người sẽ triển khai.
+  Trạng thái: PLAN v2 — chưa có dòng code nào.
+
+CHANGELOG v2 (16-8, sau review độc lập — v1 bị đánh giá "architecture draft
+tốt nhưng chưa phải execution plan"; v2 sửa toàn bộ blocker):
+  C1  Journal digest -> WAL đầy đủ (full command+inverse, txn marker, checksum,
+      flush-trước-ACK, truncated-tail, fault-injection test). Recovery v1
+      KHÔNG THỂ chạy được vì digest không replay được — lỗi P0, đã sửa (5.5).
+  C2  play.start dùng IMMUTABLE PLAY SNAPSHOT (manifest + hash + revision),
+      không đọc file "đang dirty" trên đĩa (6.1). runtime.copy_to_scene có
+      expected_revision.
+  C3  Protocol tuân thủ JSON-RPC 2.0 thật: error.code là SỐ, app code nằm ở
+      error.data.app_code; event = notification chuẩn; batch.begin/end đổi
+      thành transaction.execute (atomic, một request); chốt framing NDJSON.
+      Bảng lệnh -> EXECUTABLE REGISTRY máy-đọc-được, sinh docs/CLI/MCP/
+      conformance test; bổ sung ~15 method bị thiếu (4.0-4.2).
+  C4  Authority model: server cấp actor_id sau handshake, client KHÔNG tự khai
+      actor; human:ui chỉ tồn tại in-process; capability có scope/expiry/
+      single-use; agent bị pause không tự resume; confirmation bind actor +
+      params hash + revision, dùng một lần (4.4-4.5).
+  C5  Idempotency: command_id + dedup bền vững; optimistic concurrency:
+      expected_revision + E_CONFLICT; lock có owner token + TTL; undo đa tác
+      nhân: agent mặc định chỉ revert transaction của mình khi không conflict,
+      selective undo = transaction mới có precondition (4.3, 2.8).
+  C6  I1 viết lại: "100% mutation vào AUTHORITATIVE PROJECT MODEL đi qua
+      dispatcher" (view-state UI miễn); imagegen worker chỉ ghi STAGING rồi
+      editor ingest qua dispatcher; sửa file .luau bằng tool ngoài được ingest
+      thành synthetic command (8.2, 8.4). Metric M8 "80%" đổi nghĩa: đo mức
+      agent TỰ HOÀN THÀNH kịch bản; mutation qua bus là 100% by construction.
+  C7  Luau: mô tả đúng API thật — deadline kiểm tại SAFEPOINT (không hứa
+      "mỗi 10k instruction"), vượt hạn -> error từ interrupt (callback fail
+      sạch), mutation từ gs.* được BUFFER và chỉ commit khi callback thành
+      công; GLOBAL frame budget (không chỉ per-script); env riêng per script;
+      cấm nạp bytecode; type check = luau-analyze (tool riêng) (7.3).
+  C8  Determinism cho judge: single-thread schedule, phase cố định, stable
+      sort theo entity id, cấm phụ thuộc HashMap order, rapier insert theo
+      thứ tự ổn định + pin version; tape header chứa build/hashes; replay
+      từ chối khi manifest lệch (6.2).
+  C9  Scene schema: entity counter CHỐT ở project.json (sample v1 mâu thuẫn);
+      thêm parent/sibling_order; tách document ID và runtime ID; Script.props
+      dùng tagged ref {"$entity":...}; canonical writer spec (JCS-inspired);
+      PREFAB đầy đủ CẮT khỏi MVP -> thay bằng BLUEPRINT (template instantiate
+      read-only); full prefab sang M9 (5.x).
+  C10 Renderer: thêm M-1 SPIKE bắt buộc chứng minh 1 renderer chạy 3 target
+      (viewport eframe / player winit / offscreen headless) + chốt IR
+      RenderSnapshot, PPU, trục Y, sRGB, premultiplied alpha, picking; pin
+      compatibility matrix egui-wgpu/wgpu/glyphon đã compile-test (2.3, M-1).
+  C11 Judge: event trace bền vững per play_id + wait từ seq/frame (hết race
+      "step xong mới wait thì lỡ event"); judge.assert_world; test manifest
+      .gtest.json + evidence bundle; golden so sánh per-pixel threshold +
+      pixel-ratio + mask + diff PNG (thay mean-abs-diff đơn lẻ) (6.3, 10.3).
+  C12 Asset pipeline: importer_version, content sniffing, decode caps, job
+      state machine (lease/heartbeat/cancel/timeout/quarantine kết quả trễ),
+      GATE chọn provider imagegen trước M6, sRGB/premultiplied policy (8.x).
+  C13 M7 tách đôi: M7A export game của user (unsigned/user-key) khác M7B
+      phân phối editor (installer/update/signing/SBOM/third-party notices/
+      font license). Thêm M9+ roadmap "2D completeness" — M0..M8 là VERTICAL
+      SLICE, không tự nhận "2D hoàn thiện". Timeline viết lại thực tế.
+  C14 Repo split: MỘT mốc quyết định duy nhất = review cuối M2 (v1 tự mâu
+      thuẫn giữa 1.2 và T8.4).
+
+QUY ƯỚC ĐỌC CHO AI AGENT
+  - Đọc Phần 0 (bảng tiến độ + luật bất biến) TRƯỚC khi làm bất cứ gì.
+  - Làm đúng milestone đang mở, đúng thứ tự task Phần 13; M-1 phải xong và
+    được review chốt trước khi viết code M0.
+  - Không tự thêm ngôn ngữ/framework ngoài Phần 2.1.
+  - Xong task: tick bảng 0.1 (sửa file này), ghi ngày + commit.
+  - Thuật ngữ: "editor" = gs-editor; "player" = gs-player; "bus" = command
+    bus JSON-RPC; "dispatcher" = CommandDispatcher trong editor (nơi DUY NHẤT
+    được mutate document); "actor" = danh tính server cấp cho một client;
+    "document/project model" = scene + blueprint + script + asset meta +
+    settings + input map (những gì được save/version); "view-state" = trạng
+    thái UI thuần (pan/zoom, tab, filter) không thuộc document.
+
+================================================================================
+PHẦN 0 — BẢNG TỔNG QUAN TIẾN ĐỘ & THỨ TỰ LÀM (ĐỌC ĐẦU TIÊN)
+================================================================================
+
+0.1 BẢNG MILESTONE (tick [x] khi xong, ghi ngày)
+
+| M   | Tên                            | Deliverable chính                                | Phụ thuộc      | Ước lượng | Trạng thái |
+|-----|--------------------------------|--------------------------------------------------|----------------|-----------|------------|
+| M-1 | Spike & chốt nền               | (a) 1 renderer chạy 3 target + IR + hệ tọa độ;   | —              | 2-3 tuần  | [ ]        |
+|     | (BẮT BUỘC trước M0)            | (b) Luau deadline+mutation-buffer POC;           |                |           |            |
+|     |                                | (c) WAL crash/fault-injection POC;               |                |           |            |
+|     |                                | (d) play-snapshot POC; (e) MCP hello spike;      |                |           |            |
+|     |                                | (f) pin compatibility matrix versions            |                |           |            |
+| M0  | Registry + authority + WAL +   | gs-registry (executable contract), dispatcher,   | M-1            | 3 tuần    | [ ]        |
+|     | scene core + CLI + shell       | WAL+recovery, undo đa tác nhân, handshake/       |                |           |            |
+|     |                                | capability, gs.ps1, editor shell (console+feed)  |                |           |            |
+| M1  | Viewport 2D + inspector        | gs-render2d production, pan/zoom/gizmo/pick,     | M0             | 2-3 tuần  | [ ]        |
+|     |                                | hierarchy, inspector schema-driven, import png   |                |           |            |
+| M2  | Player process + Play loop     | play snapshot bất biến, IPC control, live-view,  | M0 + T1.1      | 2 tuần    | [ ]        |
+|     |                                | screenshot/world_dump/logs, headless, watchdog   | (render core)  |           |            |
+| M3  | Luau scripting                 | host API v1, sandbox+budget global, hot reload,  | M2             | 2-3 tuần  | [ ]        |
+|     |                                | diagnostics file:line, luau-analyze tích hợp     |                |           |            |
+| M4  | Physics + tilemap + audio      | rapier2d (insert ổn định), tilemap, kira,        | M1,M2,M3       | 2-3 tuần  | [ ]        |
+|     |                                | camera follow, input map + gamepad               |                |           |            |
+| M5  | Judge + test manifest          | event trace, run_until_event, assert_world,      | M4 (full),     | 1-2 tuần  | [ ]        |
+|     |                                | tape record/replay + manifest check, .gtest.json | M2,M3 (partial)|           |            |
+|     |                                | + evidence bundle, golden diff chuẩn             |                |           |            |
+| M6  | Asset pipeline + imagegen      | staging->ingest, job state machine, flipbook,    | M1,M2 + GATE   | 2 tuần    | [ ]        |
+|     |                                | text/font, provider theo GATE đã chọn            | provider       |           |            |
+| M7A | Export game của user           | build folder game chạy độc lập, clean-VM test,   | M2..M6         | 1-2 tuần  | [ ]        |
+|     |                                | unsigned/user-key, asset check trước build       |                |           |            |
+| M7B | Phân phối editor               | installer + update + signing + SBOM + notices    | M7A            | 2-3 tuần  | [ ]        |
+|     | (chỉ cần trước khi public)     | + clean Windows 10/11 VM matrix                  |                |           |            |
+| M8  | MCP + dogfood lặp              | gs-mcp pin revision, kịch bản Kho Bí Ẩn chạy     | M0..M7A        | 2 tuần    | [ ]        |
+|     |                                | lặp, sửa top-10 điểm agent kẹt, go/no-go beta    | (M7B không cần)|           |            |
+| M9+ | 2D COMPLETENESS (plan riêng)   | game UI widgets, spritesheet slicer, anim state  | M8             | roadmap   | [ ]        |
+|     |                                | machine, tile palette, save-game API, particles, |                | riêng     |            |
+|     |                                | parallax, pathfinding, localization, asset       |                |           |            |
+|     |                                | browser, scene tabs, debugger, FULL PREFAB       |                |           |            |
+
+  ĐỊNH VỊ TRUNG THỰC: M0..M8 = "2D VERTICAL-SLICE MVP" (làm được game top-down/
+  platformer nhỏ trọn vòng A-Z). "2D hoàn thiện" = hết M9+. KHÔNG tự nhận
+  "hoàn thiện" ở M8 — đây là sửa có chủ đích so với v1.
+
+0.2 DAG & LÀM SONG SONG (đội nhiều người)
+
+  M-1 ──> M0 ──┬──> M1 ──┬──────────> M4 ──> M5(full) ──> M7A ──> M7B
+               │         │(T1.1 core) ^                    ^
+               │         └──> M2 ──> M3                    │
+               │              │  └──> M5(partial)          │
+               │              └─────> M6 <── GATE provider ┘
+               └──> (MCP spike tiếp tục nền từ M-1e, hoàn thiện ở M8)
+
+  Track A (Rust core):    M0 registry/WAL/dispatcher -> M2 player -> M5
+  Track B (Rust render):  M-1a spike -> M1 render/viewport -> M4 tilemap -> M7A
+  Track C (Rust editor):  M0 shell -> M1 inspector -> M6 jobs UI -> UX rải
+  Track D (Rust gameplay):M-1b spike -> M3 Luau -> M4 physics/audio
+  Track E (Python/CLI/MCP):M0 gs.ps1 -> M-1e MCP spike duy trì -> M6 worker -> M8
+  Điểm đồng bộ: KHÔNG code M0 khi M-1 chưa review chốt; KHÔNG code M6 khi
+  GATE provider (8.5) chưa chọn; registry (4.0) chốt trước mọi handler.
+
+0.3 LUẬT BẤT BIẾN (INVARIANTS) — vi phạm là reject PR
+
+  I1 (SỬA v2). 100% mutation vào AUTHORITATIVE PROJECT MODEL đi qua typed
+      CommandDispatcher (một cửa duy nhất, cả UI người lẫn bus agent lẫn
+      ingest hệ thống). Nút UI mutating = phát command. View-state thuần UI
+      (pan/zoom viewport, tab, filter, selection cục bộ) KHÔNG bắt buộc qua
+      bus. Không tồn tại đường ghi document nào khác: worker ghi staging chứ
+      không ghi project; file sửa ngoài (VS Code) được ingest thành synthetic
+      command; không có "sửa tay JSON rồi editor tự nuốt im lặng".
+  I2 (SỬA v2). Mọi command mutating: validate -> ghi WAL record (full
+      command + inverse, checksum) -> FLUSH -> áp vào document -> rồi mới ACK
+      thành công. Có inverse hoặc nằm trong transaction có inverse. Phát
+      event tương ứng sau commit.
+  I3. Play luôn là PROCESS RIÊNG chạy từ SNAPSHOT BẤT BIẾN. Editor không bao
+      giờ load gameplay code (Luau) vào process của nó.
+  I4 (SỬA v2). Luau: sandbox(true) + memory limit + interrupt deadline luôn
+      bật; CHỈ compile từ source (cấm nạp bytecode từ ngoài); mutation từ
+      gs.* buffer per-callback, commit khi callback kết thúc thành công;
+      host function bounded, không blocking.
+  I5. Scene/asset meta là JSON canonical (5.4b), schema_version bắt buộc,
+      unknown field ở MỌI cấp nesting: giữ nguyên round-trip, không drop.
+  I6. Mọi write file: tmp + rename. WAL/registry: append-only, mỗi record có
+      seq + checksum; đọc gặp record hỏng ở ĐUÔI: cắt tại đó (truncated-tail
+      tolerated); hỏng ở GIỮA: dừng + báo, không đoán.
+  I7. Path từ command: canonicalize, phải nằm dưới project root; từ chối
+      symlink thoát root, tên Windows reserved (CON, NUL, COM1..), path >200.
+  I8 (SỬA v2). Bus chỉ bind 127.0.0.1 + token. Danh tính (actor_id) do
+      SERVER CẤP sau handshake — không tin bất kỳ trường danh tính nào client
+      tự khai trên từng request. Token/secret không vào log/event/journal.
+  I9. Không thêm ngôn ngữ/framework ngoài bảng 2.1.
+  I10. Code chết dọn ngay PR kế tiếp; spike nằm experiments/ và xóa sau khi
+      học xong; clippy -D warnings + cargo machete + fmt --check trong CI.
+  I11 (MỚI). Mọi command mutating mang command_id (client sinh, ULID);
+      server dedup bền vững (WAL-backed) — retry sau đứt kết nối là AN TOÀN,
+      không nhân đôi side effect.
+  I12 (MỚI). Capability nguy hiểm do server + UI người cấp (scope, expiry,
+      max-use, audit). Agent bị pause không thể tự resume; khi pause chỉ
+      được pure-read. Confirmation dùng một lần, bind actor + params hash +
+      base revision + expiry.
+  I13 (MỚI). Mọi con số hiệu năng trong plan là MỤC TIÊU đo được, không phải
+      sự thật đã chứng minh — chỉ được viện dẫn sau khi benchmark trong repo
+      xác nhận (chống cargo-cult số liệu).
+
+================================================================================
+PHẦN 1 — SẢN PHẨM & PHẠM VI
+================================================================================
+
+1.1 ĐỊNH NGHĨA MỘT CÂU
+  "HH Game Studio" (tên làm việc, codename thư mục: gamestudio/) là app
+  desktop Windows: editor game 2D nơi NGƯỜI và AGENT cùng ngồi một phiên —
+  người thấy viewport/hierarchy/inspector như Unity thu nhỏ; agent điều
+  khiển toàn bộ qua command bus; cả hai thấy cùng world, cùng lịch sử lệnh,
+  cùng undo stack.
+
+1.2 ĐÓNG GÓI (trả lời "IDE / tool / engine / app?")
+  - SẢN PHẨM = 1 APP desktop: gs-editor.exe.
+  - ENGINE = các crate Rust bên trong repo — chi tiết triển khai, KHÔNG
+    phát hành engine rời (tránh bẫy "làm engine 10 năm").
+  - PLAYER = gs-player.exe đi kèm (Play trong dev; đóng gói cùng assets
+    thành game khi export).
+  - GIAO DIỆN AGENT = gs.ps1 (CLI, từ M0) + gs-mcp (MCP server, spike từ
+    M-1, hoàn thiện M8). Não (Cursor/Codex/model nào cũng vậy) là client
+    của bus — KHÔNG nhúng LLM vào app.
+  - THÀNH PHẦN NGOÀI TÙY CHỌN: workers/imagegen (Python) — app vẫn đầy đủ
+    chức năng editor khi thiếu worker (import tay); mọi demo có gen ảnh
+    phải khai prerequisite rõ (8.5). "Một app" = một app EDITOR; asset gen
+    là dịch vụ ngoài có preflight, không giấu.
+  - VỊ TRÍ CODE = folder gamestudio/ trong workspace hoan-hao (pha khởi
+    động). QUYẾT ĐỊNH TÁCH REPO: một mốc duy nhất = review cuối M2 (C14).
+    Đặt tên sản phẩm thật: quyết ở M8.
+
+1.3 2D TRƯỚC, 3D SAU — CHỪA CỬA GÌ
+  Một app, một bus — 2D/3D là mode của cùng world (như Unity/Godot), KHÔNG
+  tách hai app/hai engine. Chừa cửa ngay M0 (rẻ):
+  - Transform2D có x, y, z_index; 3D sau này là component Transform3D
+    RIÊNG (không nhét chung struct).
+  - Component registry generic: thêm component mới không đổi protocol.
+  - Bus không có khái niệm "2D" trong tên lệnh.
+  - Asset kind mở: sprite | audio | font | tileset | (sau: mesh, material).
+  KHÔNG làm trước M8: camera 3D, light/bake, skeleton, PBR, navmesh 3D.
+
+1.4 NON-GOALS ĐẾN HẾT M8
+  3D; multiplayer; mobile/console; asset store; cloud/account; visual
+  scripting graph; nhúng model AI local; skeleton/spine (flipbook đủ);
+  macOS/Linux (không chặn kiến trúc, không test); FULL PREFAB với override
+  + apply-back (C9 — Blueprint read-only thay thế, 5.3); particles,
+  save-game API, localization, debugger tích hợp (tất cả thuộc M9+).
+
+1.5 KỊCH BẢN CHUẨN 15 PHÚT (acceptance cuối ở M8)
+  Người gõ (Cursor): "Làm phòng kho top-down: đi WASD, một cửa khóa, một
+  chìa giấu sau thùng, nhặt chìa mở cửa thì thắng. Art pixel tối giản."
+  Agent tự: tạo project từ template; gen sprite (qua worker ĐÃ provision
+  theo GATE 8.5 — prerequisite khai rõ); spawn entities + collider +
+  tilemap; viết player_move.luau, door.luau, key_pickup.luau; đặt input
+  map; play từ snapshot; inject input tape; judge bằng event trace
+  (KeyPicked, DoorOpened); gặp fail đọc diagnostics sửa rồi chạy lại;
+  export game folder chạy độc lập.
+  Người: nhìn viewport, kéo thử một thùng (agent thấy event và tôn trọng
+  revision), bấm "Tạm dừng agent" bất kỳ lúc nào.
+  METRIC (sửa v2 — C6):
+  - Mutation qua dispatcher: 100% BY CONSTRUCTION (I1) — không phải KPI.
+  - KPI tự chủ: >= 80% BƯỚC KỊCH BẢN agent tự hoàn thành không cần người
+    gỡ (đếm theo checklist bước ở trên).
+  - Thời gian <= 15 phút trên máy dev chuẩn ĐÃ provision imagegen + model
+    warm; người không phải mở/sửa tay bất kỳ file JSON nào.
+
+================================================================================
+PHẦN 2 — QUYẾT ĐỊNH KIẾN TRÚC (kèm so sánh, lý do, điều kiện xét lại)
+================================================================================
+
+2.1 BẢNG NGÔN NGỮ THEO TẦNG (FINAL — luật I9)
+
+| Tầng                        | Chọn                          | KHÔNG chọn (lý do ngắn)                 |
+|-----------------------------|-------------------------------|------------------------------------------|
+| Editor app + dispatcher/bus | Rust + eframe/egui (wgpu)     | C++ (compile/UB), Tauri (JS+RAM), C# CLR |
+| Runtime game                | Rust: bevy_ecs standalone +   | Full Bevy app (xem 2.3), Godot (editor   |
+|                             | gs-render2d(wgpu) + rapier2d  | không phải của mình), tự viết ECS        |
+|                             | + kira + winit + glyphon      |                                          |
+| Gameplay (agent sửa/phút)   | LUAU qua mlua                 | Lua 5.4 (thiếu sandbox/limit sẵn), Rhai  |
+|                             |                               | (chậm), Rust thuần (compile), C#         |
+| Type check gameplay         | luau-analyze (tool Luau       | Tự viết checker; mlua KHÔNG có type      |
+|                             | chính chủ, chạy ở editor)     | checker — hiểu đúng phạm vi từng tool    |
+| Shader                      | WGSL                          | HLSL/GLSL                                |
+| Asset gen worker            | Python (process ngoài, staging)| Nhúng PyTorch vào editor                |
+| CLI pha 1                   | PowerShell gs.ps1             | (khớp thói quen hhsend)                  |
+| MCP server                  | Rust (gs-mcp, stdio, PIN      | Node (thêm runtime); KHÔNG giả định SDK  |
+|                             | revision rust-sdk cụ thể)     | MCP Rust đã ổn định — spike từ M-1       |
+| File format document        | JSON canonical (5.4b)         | RON/YAML/binary (agent + git + tooling)  |
+
+2.2 EDITOR: RUST + EFRAME/EGUI
+  Giữ nguyên lựa chọn v1 (bảng so sánh với Bevy-editor/Fyrox/Godot-fork/
+  Tauri không đổi): team đã thạo stack này qua zoracle/toolstart; editor là
+  sản phẩm nên phải sở hữu 100%. Editor bật backend WGPU (toolstart đang
+  dùng glow — KHÔNG copy config đó).
+
+2.3 RUNTIME: bevy_ecs STANDALONE + RENDERER CHUNG (lý do viết lại — C10)
+  - Lý do CHÍNH XÁC (sửa v1): chọn bevy_ecs rời + renderer tự viết vì
+    (i) KIỂM SOÁT: document JSON là chân lý, ECS chỉ là runtime projection
+    — mình không muốn gánh thêm asset server/scene format/schedule mặc
+    định của full Bevy dù chúng CÓ THỂ tắt được (v1 nói "bắt buộc" là quá
+    tuyệt đối — full Bevy tùy biến được, nhưng chi phí hiểu + churn version
+    vẫn là của mình); (ii) KÍCH THƯỚC phụ thuộc nhỏ, pin version dễ;
+    (iii) editor eframe và player winit dùng CÙNG crate render.
+  - gs-render2d: sprite batch + atlas, tilemap chunk, text (glyphon),
+    debug shapes, camera 2D. Mục tiêu 10k sprite @60fps GPU tầm trung
+    (I13: là mục tiêu, đo ở M1).
+  - HỢP ĐỒNG RENDER (chốt ở M-1a, không để trôi đến M1):
+    * IR trung gian: RenderSnapshot { camera, Vec<RenderItem> } — simulate
+      sinh IR, cả 3 target (viewport eframe qua egui_wgpu::CallbackTrait,
+      player winit surface, offscreen headless) chỉ tiêu thụ IR.
+    * Hệ tọa độ: Y-up, gốc world (0,0) giữa màn camera mặc định; PPU đặt
+      ở asset meta (default 16); pivot [0..1]^2 gốc dưới-trái sprite.
+    * Màu: textures sRGB, blend premultiplied alpha, output surface sRGB.
+    * Transparency sort: z_index rồi entity id (stable). Atlas padding 2px,
+      filter nearest mặc định (pixel art).
+    * Picking: alpha>0.1 trên CPU readback nhỏ hoặc collider — chốt ở M-1a.
+    * DPI: viewport render theo physical px; egui points chỉ cho UI.
+  - COMPATIBILITY MATRIX (M-1f): pin bộ version egui/eframe/egui-wgpu/wgpu/
+    glyphon ĐÃ compile-test cùng nhau (các crate này kéo wgpu::Device khác
+    version là vỡ — không chọn "latest" độc lập từng crate). Ghi vào
+    rust-toolchain.toml + Cargo.lock commit + bảng trong docs/VERSIONS.md.
+  - FALLBACK (giữ, làm rõ chi phí): nếu M-1a spike fail hoặc M1 trễ >3
+    tuần so ước lượng -> chuyển full Bevy cho player + editor nhúng preview
+    texture. Đây KHÔNG phải fallback rẻ (đổi asset/scene glue, mất viewport
+    trực tiếp) — vì thế mới bắt buộc spike M-1a trước khi cam kết.
+
+2.4 PLAY = PROCESS RIÊNG TỪ SNAPSHOT BẤT BIẾN (C2)
+  Godot chạy game process riêng (kể cả khi cửa sổ được nhúng vào editor từ
+  4.4) — editor không chết theo game, không cần domain reload kiểu Unity.
+  Với editor mà AGENT viết gameplay, crash/treo là chuyện THƯỜNG NGÀY —
+  cách ly process là bắt buộc.
+  - play.start KHÔNG đọc file working-tree trực tiếp. Editor dựng snapshot:
+      .gs/runtime/play/<play_id>/
+        manifest.json        # document_revision, engine_ver, protocol_ver,
+                             # seed, hashes (scene/scripts/assets/inputmap),
+                             # created_at, actor yêu cầu
+        scene.json           # bản đông cứng tại revision đó
+        project-settings.json
+        input-map.json
+        scripts/             # copy .luau tại revision
+        asset-manifest.json  # asset_id -> path + hash (asset đọc từ store
+                             # gốc theo hash — không copy binary lớn)
+    Player chạy với --snapshot <manifest path>. Snapshot là immutable; xóa
+    theo GC (giữ 10 bản gần nhất).
+  - Live edit khi đang Play: lệnh meta.live=true áp vào WORLD ĐANG CHẠY
+    (không đụng document, không đụng snapshot). Muốn giữ giá trị: lệnh
+    runtime.copy_to_scene {play_id, entity_ids?, fields?, expected_revision}
+    — editor áp vào document như một transaction thường; nếu document đã
+    đổi khác expected_revision -> E_CONFLICT kèm diff (không ghi đè mù
+    thao tác người vừa làm).
+  - Một project một player một thời điểm (MVP). play.start khi đang sống:
+    E_PLAYER_RUNNING kèm pid; force=true cần capability.
+
+2.5 SCRIPTING: LUAU — TÓM TẮT QUYẾT ĐỊNH (chi tiết + semantics đúng ở Phần 7)
+  sandbox(true) luôn bật; memory limit 64MB/VM; deadline kiểm tại SAFEPOINT
+  qua set_interrupt (không hứa granularity theo instruction); budget GLOBAL
+  per frame cho toàn bộ script + cap per-script; mutation buffer commit
+  theo callback; env riêng per script instance; chỉ compile source;
+  luau-analyze cho type diagnostics (chạy async ở editor, warning không
+  chặn). LƯU Ý TRUNG THỰC: 3 API trên là CƠ CHẾ, không phải sự an toàn —
+  an toàn thật nằm ở host API hẹp (7.2), scheduling (7.3) và test (7.6);
+  không tuyên bố "an toàn ngang Roblox".
+
+2.6 FILE FORMAT: JSON CANONICAL — vì agent parse/sinh JSON đáng tin nhất,
+  git diff sạch, tooling phổ quát. Spec canonical writer ở 5.4b (sorted
+  keys ĐỆ QUY + quy tắc float — "sorted keys" đơn thuần chưa đủ). Binary
+  chỉ là derived cache (.gs/cache, xóa được, không commit).
+
+2.7 COMMAND BUS: JSON-RPC 2.0 THẬT + NDJSON (C3)
+  So sánh FIFO file (zoracle) vs TCP giữ như v1 (TCP thắng: request/
+  response, streaming, nhiều client, Windows native). Giữ của zoracle:
+  WAL/journal append-only, session registry, byte caps validate sớm,
+  single-instance lock. Cổng động + token trong .gs/runtime/endpoint.json
+  (kèm pid — client kiểm pid sống trước khi tin, dọn file mồ côi).
+  TUÂN THỦ SPEC (sửa v1): error.code là SỐ NGUYÊN; app code chuỗi nằm ở
+  error.data.app_code; event là notification chuẩn; batch stateful đổi
+  thành transaction.execute một-request (4.2). Framing chốt ở 4.1.
+
+2.8 UNDO ĐA TÁC NHÂN (C5 — viết lại)
+  - Mỗi transaction commit = 1 entry {txn_id, seq, actor_id, label,
+    commands[], inverses[], base_revision, new_revision}.
+  - MỘT lịch sử chung cho document (như Google Docs), entry gắn actor.
+  - Con người (UI): Ctrl+Z = undo entry MỚI NHẤT của lịch sử (quyền tối
+    thượng — người luôn undo được mọi thứ, kể cả việc agent làm).
+  - Agent (mặc định): undo.revert_own {txn_id} — chỉ revert transaction
+    CỦA CHÍNH NÓ, và chỉ khi không có transaction sau đó đụng cùng
+    entity/field (không conflict). Muốn revert của người/actor khác: cần
+    capability "undo.others".
+  - SELECTIVE UNDO (revert entry không phải mới nhất): KHÔNG áp inverse mù.
+    Tạo TRANSACTION MỚI từ inverse cũ + precondition (giá trị hiện tại
+    phải bằng giá trị sau-transaction-cũ trên từng field đụng tới); lệch
+    -> E_CONFLICT kèm diff, actor tự quyết ghi đè bằng lệnh thường.
+  - Stack cap 500 entry / 64MB inverse; tràn bỏ đầu cũ (đã autosave nên
+    không mất an toàn dữ liệu).
+  - Batch/gizmo-drag của người auto-gộp thành 1 transaction khi thả chuột.
+
+2.9 ASSET GEN: PYTHON WORKER + STAGING (C6 — sửa đường ghi; chi tiết Phần 8)
+  Worker KHÔNG ghi vào assets/ của project. Worker chỉ đọc job spec và ghi
+  kết quả vào .gs/staging/jobs/<job_id>/. Editor (dispatcher) validate +
+  ingest bằng command asset.ingest_staged (actor hệ thống "system:ingest",
+  hiển thị rõ trên feed) -> lúc đó mới có asset_id, meta, WAL. I1 giữ 100%.
+
+2.10 NÃO AGENT: CLI pha 1, MCP spike sớm (C3/C13)
+  - gs.ps1 từ M0 (Cursor dùng ngay). MCP KHÔNG đợi M8: M-1e spike hello +
+    1 tool generic gs_command qua rust-sdk PIN REVISION (SDK còn chuyển
+    động — theo dõi roadmap, không giả định ổn định); duy trì compile xanh
+    suốt M0..M7; hoàn thiện bộ tool + conformance ở M8 với MCP Inspector +
+    Cursor thật.
+  - Không bao giờ nhúng model vào editor; editor không gọi thẳng OpenAI/
+    Ollama.
+
+================================================================================
+PHẦN 3 — REPO LAYOUT & VỆ SINH CODE
+================================================================================
+
+3.1 CÂY THƯ MỤC (tạo ở M0; M-1 dùng experiments/)
+
+  gamestudio/
+    Cargo.toml, Cargo.lock (COMMIT), rust-toolchain.toml
+    AGENTS.md                # luật cho AI agent làm trong repo NÀY
+    docs/
+      PROTOCOL.md            # SINH TỰ ĐỘNG từ gs-registry — cấm sửa tay
+      SCENE_FORMAT.md, LUAU_API.md, VERSIONS.md (matrix pin), DECISIONS.md
+    crates/
+      gs-registry/           # EXECUTABLE CONTRACT: khai báo method (schema
+                             # in/out, capability, side_effect, undo class,
+                             # idempotency, timeout, cancellable, errors,
+                             # events) -> sinh docs + validators + stubs
+                             # CLI/MCP + conformance tests (C3)
+      gs-protocol/           # envelope, framing, error codes, types — dùng
+                             # chung editor/player/CLI/MCP; phụ thuộc registry
+      gs-scene/              # document model: JSON canonical, component
+                             # registry, dispatcher apply/inverse, WAL,
+                             # undo đa tác nhân, autosave, lock, blueprint
+      gs-render2d/           # wgpu: RenderSnapshot IR -> 3 target
+      gs-runtime-core/       # bevy_ecs world, phase schedule cố định,
+                             # physics, audio, input, event trace, luau host
+      gs-player/             # bin: --snapshot, control server, record/replay,
+                             # screenshot, watchdog
+      gs-editor/             # bin: eframe(wgpu), panels, viewport, bus
+                             # server, session/authority, confirm UI
+      gs-cli/                # lõi cho gs.ps1 (tùy chọn)
+      gs-mcp/                # MCP server stdio (spike từ M-1e)
+    tools/gs.ps1
+    workers/imagegen/        # Python watcher + providers + requirements.txt
+    templates/2d-topdown/, 2d-platformer/
+    examples/kho-bi-an/
+    experiments/             # spike M-1 — XÓA sau khi chốt bài học vào docs/
+    tests/fixtures/          # WAL fault-injection, golden, tapes, .gtest.json
+
+3.2 LUẬT VỆ SINH (bổ sung I10)
+  - Chiều phụ thuộc: registry <- protocol <- scene <- runtime-core <-
+    player/editor. Không import ngược.
+  - Mỗi crate README 10 dòng: làm gì / KHÔNG làm gì.
+  - Không copy file từ zoracle/toolstart — học pattern, viết lại.
+  - Binary >5MB không vào git; examples/ dùng art tự sinh tối giản.
+  - CI chặn: fmt --check, clippy -D warnings, cargo machete, test, grep
+    cấm unimplemented!/todo!/dbg! ngoài experiments/; grep token pattern
+    trong fixture log (I8).
+  - File 2 milestone không ai đụng + không test cover -> review: xóa hoặc
+    viết test.
+  - docs/DECISIONS.md: mọi thay đổi quyết định kiến trúc ghi ngày + lý do
+    (không sửa ngầm plan).
+
+================================================================================
+PHẦN 4 — PROTOCOL & COMMAND CONTRACT (HỢP ĐỒNG SỐ 1)
+================================================================================
+
+4.0 EXECUTABLE REGISTRY (C3 — thay "bảng trong docs" của v1)
+  Nguồn chân lý là CODE: crates/gs-registry khai báo từng method:
+    method "entity.spawn" {
+      input: JsonSchema, output: JsonSchema,
+      side_effect: Mutating | ReadOnly | Job,
+      undo: Auto | None | Special("..."),
+      capability: Base | Destructive("entity.destroy.mass") | UiOnly,
+      idempotency: ByCommandId | Natural | NotApplicable,
+      timeout_ms, cancellable: bool,
+      errors: [APP_CODE...], emits: [event...]
+    }
+  Từ registry SINH: docs/PROTOCOL.md, validator server, help CLI, tool list
+  MCP, conformance test (gọi từng method với input hợp lệ/không hợp lệ sinh
+  từ schema — chạy trong CI). Bảng 4.2 dưới đây là BẢN CHIẾU để người đọc
+  plan; số lượng chính xác do registry quyết — không quảng cáo "84 lệnh"
+  bằng đếm tay nữa (v1 đếm sai).
+
+4.1 ENVELOPE & FRAMING (JSON-RPC 2.0 tuân thủ — C3)
+  - Transport: TCP 127.0.0.1. NDJSON: mỗi thông điệp 1 dòng UTF-8 kết thúc
+    LF; dòng tối đa 256KB (đọc quá -> đóng kết nối E_PROTO); parse sau khi
+    đọc đủ dòng; partial read được buffer; idle timeout 120s có ping
+    (session.ping); chống slowloris: >10s không hoàn thành 1 dòng -> đóng.
+  - Request:
+    {"jsonrpc":"2.0","id":"a-000123","method":"entity.spawn",
+     "params":{"scene_id":"s_main","command_id":"01J...ULID","...":"..."}}
+    Sau handshake, MỌI danh tính lấy từ connection — không có meta.actor
+    client tự khai (C4). dry_run/live/confirmation_id là field trong params
+    (thuộc schema từng method), không phải meta tự do.
+  - Response kết quả: {"jsonrpc":"2.0","id":"a-000123","result":{...,
+    "revision":"r-000451","txn_id":"t-000318"}}
+  - Response lỗi (SPEC: code là SỐ):
+    {"jsonrpc":"2.0","id":"a-000123","error":{"code":-32602,
+     "message":"invalid params","data":{"app_code":"E_VALIDATION",
+     "field":"x","reason":"nan","retryable":false}}}
+    Mã số: -32700 parse; -32600 invalid request; -32601 method not found;
+    -32602 invalid params; -32000 app error (mọi app_code nghiệp vụ);
+    -32001 unauthorized; -32002 conflict; -32003 busy/budget.
+  - Event = NOTIFICATION chuẩn (không id):
+    {"jsonrpc":"2.0","method":"event.scene_changed","params":{"seq":4512,
+     "actor_id":"act_02","txn_id":"t-000318","summary":"entity.spawn
+     crate_1","entities":["e_000042"],"revision":"r-000451"}}
+  - JSON-RPC ARRAY BATCH: KHÔNG hỗ trợ (server trả -32600) — spec cho phép
+    xử lý song song/không thứ tự, trái nhu cầu atomicity; dùng
+    transaction.execute. Công bố rõ trong hello.
+
+4.2 BẢN CHIẾU METHOD v1 (registry là chân lý; U=undo auto, D=cần
+    capability/confirm, P=cần player, UI=chỉ dispatcher in-process của UI)
+
+  session/authority:
+    session.hello{client_name,protocol_ver,token} -> {actor_id,principal,
+      protocol_ver,methods[],capabilities[]}   (bắt buộc trước mọi lệnh)
+    session.ping | session.subscribe{topics[]} | session.goodbye
+    session.list (ai đang nối, trạng thái pause)         [đọc]
+    session.pause_actor{actor_id} / session.resume_actor  [UI]
+    session.revoke{actor_id}                               [UI]
+    capability.grant{actor_id,cap,scope,expiry,max_use}    [UI]
+    capability.list{actor_id}
+    confirmation.request{...} (server tự phát khi cần — xem 4.5)
+    confirmation.approve{confirmation_id} / .deny          [UI]
+
+  project/scene:
+    project.create{path,template,name} | project.open{path}
+    project.info | project.save_all
+    project.settings_get / settings_set{patch}                U
+    scene.new{path} | scene.open{path} | scene.save{scene_id}
+    scene.list | scene.rename{scene_id,new_rel} U | scene.duplicate U
+    scene.delete{scene_id}                                    U,D
+    scene.dump{scene_id,filter?} -> FILE path
+    scene.stats{scene_id}
+
+  entity/component (mọi lệnh mutating nhận expected_revision? — 4.3):
+    entity.spawn{scene_id,name?,parent?,components{}}         U
+    entity.destroy{ids[]}                                     U, D(>20)
+    entity.duplicate{ids[],offset?}                           U
+    entity.reparent{ids[],new_parent,keep_world:bool}         U
+    entity.set_order{id,sibling_index}                        U
+    entity.rename{id,name}                                    U
+    entity.find{name?,tag?,component?,aabb?,limit<=10k}
+    entity.lock{ids[],note} / entity.unlock (owner token+TTL — 4.3)
+    component.set{id,type,patch}                              U
+    component.add{id,type,value} / component.remove{id,type}  U
+    component.get{id,type?} | component.registry
+    blueprint.create{from_entity,path}                        U
+    blueprint.instantiate{path,at?,name_prefix?}              U
+    (KHÔNG có prefab.apply_overrides trong MVP — C9)
+
+  transaction/undo:
+    transaction.execute{label,commands[](<=200),command_id}   1 txn atomic
+    undo.perform{steps=1} [UI]  | undo.redo{steps=1} [UI]
+    undo.revert_own{txn_id}     (agent — 2.8)
+    undo.revert{txn_id}         D, capability "undo.others"
+    undo.history{limit}
+
+  asset:
+    asset.import{src_abs,dest_rel} U | asset.list{kind?,folder?}
+    asset.meta_get / meta_set{patch}                          U
+    asset.move{asset_id,new_rel} U | asset.rename U
+    asset.delete{asset_id} -> vào .gs/trash (CAS, giữ 7 ngày) U,D
+    asset.reimport{asset_id}
+    asset.gen_image{prompt,size,seed?,style_preset,dest_rel,command_id}
+      -> job_id                                               Job
+    asset.job_status{job_id} | asset.job_cancel{job_id}
+    asset.ingest_staged{job_id}  (hệ thống/UI gọi — 8.2)      U
+    asset.make_flipbook{frames[],fps,dest_rel}                U
+
+  play/observe/judge (editor forward sang player):
+    play.start{scene_id,seed?,record_tape?,replay_tape?,headless?}
+      -> {play_id,pid,snapshot_manifest}
+    play.stop{force?} -> exit_report | play.status
+    play.pause / play.resume / play.step_frames{n<=3600}      P
+    play.set_timescale{0.1..10}                               P
+    runtime.copy_to_scene{play_id,entity_ids?,fields?,
+      expected_revision}                                      U (2.4)
+    obs.screenshot{camera?,max_size?} -> FILE                 P
+    obs.world_dump{filter?} -> FILE                           P
+    obs.query{raycast|overlap_aabb|entity_at}                 P
+    obs.logs_tail{n<=500} | obs.perf                          P
+    obs.events{play_id,after_seq,name?,limit} (đọc EVENT TRACE bền vững —
+      hết race, C11)
+    input.inject{actions[{frame_offset,action,value}]}        P
+    judge.run_until_event{play_id,name,matcher?,max_frames}   P (đăng ký
+      TRƯỚC rồi drive frame — không miss)
+    judge.wait_event{play_id,name,after_seq,timeout_frames}   P
+    judge.assert_world{play_id,checks[]} (query + so sánh có epsilon)
+    judge.assert_screenshot{golden_rel,thresholds{per_px,ratio},mask?}
+    judge.assert_perf{max_frame_ms,frames}
+    judge.run_test{gtest_rel} -> evidence bundle path (10.3)
+
+  script:
+    script.create{path,template?} U | script.get_source{path}
+    script.set_source{path,source<=256KB} -> diagnostics[]    U
+    script.diagnostics{path?} (gồm cả luau-analyze nếu bật)
+    script.attach{entity_id,path,props} / script.detach       U
+    script.reload{path?}                                      P (hot reload)
+    script.ingest_external{path} (watcher phát hiện sửa ngoài -> synthetic
+      command, xem 8.4)                                       U
+
+  tilemap/input/build/artifact:
+    tilemap.set_cells{entity_id,layer,cells[]} U | tilemap.fill_rect U
+    inputmap.get / inputmap.set{actions}                      U
+    build.game{out_dir,include_debug?,command_id} -> build_id Job
+    build.status{build_id} | build.cancel{build_id}
+    artifact.list{kind: screenshot|dump|tape|evidence|build}
+    artifact.get{artifact_id} -> FILE path | artifact.gc{keep_last}
+
+4.3 IDEMPOTENCY & OPTIMISTIC CONCURRENCY (C5)
+  - command_id: ULID client sinh, bắt buộc với MỌI lệnh mutating + Job.
+    Server giữ dedup map (command_id -> txn_id/result) WAL-backed, cửa sổ
+    24h/10k entry. Retry cùng command_id -> trả lại KẾT QUẢ CŨ, không áp
+    lại (TCP rớt sau commit trước response an toàn).
+  - revision: document revision "r-xxxxxx" tăng mỗi txn commit. Lệnh
+    mutating nhận expected_revision (tùy chọn nhưng agent NÊN gửi — ghi
+    trong AGENTS.md); lệch -> -32002/E_CONFLICT kèm current_revision +
+    diff tóm tắt các entity đụng độ. Đọc (component.get/scene.stats) trả
+    revision hiện tại để client bám.
+  - Lock: entity.lock trả owner_token, TTL 60s, renew bằng gọi lại; quota
+    100 lock/actor; disconnect -> release; NGƯỜI (UI) có quyền force-unlock
+    mọi lock (người > agent); lệnh đụng entity khóa bởi actor khác ->
+    E_LOCKED kèm owner + note.
+
+4.4 AUTHORITY MODEL (C4 — server cấp danh tính, không tin client)
+  - Handshake: client gửi token (đọc từ endpoint.json — quyền đọc file =
+    quyền nối bus). Server cấp actor_id ("act_NN") + principal:
+      * "human_ui": CHỈ dispatcher in-process của cửa sổ editor — không
+        cấp qua TCP bao giờ (UI không đi TCP; nó gọi thẳng dispatcher).
+      * "agent": mọi kết nối TCP. client_name chỉ là nhãn hiển thị,
+        không phải quyền.
+    => agent KHÔNG THỂ giả human:ui, không thể tự pause/resume actor khác,
+    không thể tự approve confirmation (các method [UI] bị từ chối
+    -32001 cho principal agent).
+  - Capability: server + UI người cấp (capability.grant), có scope (method
+    cụ thể hoặc nhóm), expiry, max_use, audit vào WAL. Mặc định agent: mọi
+    lệnh không-D + play/obs/judge theo budget.
+  - Pause (I12): actor bị pause chỉ được pure-read (component.get, obs.*
+    đọc, session.*); play/input/build/gen_image/undo/txn mới -> E_PAUSED;
+    job đang bay của actor đó bị hủy an toàn (job cancel, build cancel);
+    resume chỉ từ UI.
+  - Rà soát bảng 4.2 theo nguyên tắc: mọi method có side effect người-thấy
+    -được đều phải gắn capability class trong registry — conformance test
+    kiểm principal agent gọi method [UI] phải bị chặn.
+
+4.5 CONFIRMATION (C4)
+  Lệnh D thiếu capability -> server phát event confirmation.request
+  {confirmation_id, actor_id, method, params_canonical_hash,
+  base_revision, summary, expires_in:120s} -> UI hiện hộp thoại (9.7).
+  Người approve/deny (chỉ UI). Approve -> server thực thi NGAY command đã
+  giữ (không cần agent gửi lại — tránh TOCTOU); confirmation_id dùng MỘT
+  lần, bind đủ actor + hash + revision; đổi params/revision -> vô hiệu.
+  Agent cố lách bằng chia nhỏ lệnh (xóa 19 entity x nhiều lần): rate
+  cùng-loại-lệnh 3 lần/phút khi dưới ngưỡng D 20% — vượt là nâng thành D
+  (heuristic chống salami, log rõ).
+
+4.6 BUDGET (giữ v1, số là mục tiêu I13)
+  mutating 200/phút/actor; obs.screenshot 60/phút; play.start 10/phút;
+  asset.gen_image 20/giờ; vượt -> -32003/E_BUDGET + retry_after_ms; feed
+  cảnh báo vàng khi 1 actor chạm budget 3 lần/5 phút.
+
+4.7 VERSIONING & CONFORMANCE
+  protocol_ver 1.x; thêm method/field = minor; đổi nghĩa = major (tránh —
+  thêm method mới thay vì sửa cũ). hello trả methods[] — client tự thích
+  nghi. Unknown field trong params: reject -32602 (chống typo agent).
+  Unknown field trong FILE document: giữ round-trip (I5). Conformance
+  suite sinh từ registry chạy CI: schema hợp lệ/không hợp lệ, principal
+  agent vs [UI], idempotency retry, E_CONFLICT.
+
+================================================================================
+PHẦN 5 — WORLD MODEL & SCENE FORMAT (C9 — schema sửa và đầy đủ hơn)
+================================================================================
+
+5.1 ID
+  - DOCUMENT entity id: "e_" + u64 tăng dần PER-PROJECT, counter DUY NHẤT
+    nằm trong project.json (v1 mâu thuẫn — sample có next_entity trong
+    scene: SAI, đã bỏ). Không tái sử dụng id kể cả sau destroy. Cấp phát
+    bởi dispatcher trong transaction (WAL ghi lại — recovery không cấp
+    trùng).
+  - RUNTIME id (bevy_ecs Entity) là chuyện nội bộ player — KHÔNG xuất hiện
+    trong protocol/document; mapping doc-id <-> runtime-id do runtime giữ.
+  - asset id "a_" + u64, txn id "t-", revision "r-", play id "p-",
+    job id "j-", actor id "act_": tiền tố cố định giúp agent đọc log.
+  - name là nhãn, không unique, tìm qua entity.find.
+
+5.2 COMPONENT REGISTRY v1
+  (Bảng field như v1 — Name, Tags, Transform2D, Sprite, AnimFlipbook,
+   Camera2D, RigidBody2D{+ccd:bool}, Collider2D, Tilemap, Text2D,
+   AudioSource, Script, Visibility — kèm min/max/finite constraints; đầy
+   đủ trong docs/SCENE_FORMAT.md sinh kèm registry.)
+  Bổ sung v2:
+  - CẤU TRÚC CÂY nằm ở entity record: "parent": "e_000001"|null và
+    "order": u32 (sibling_order — thứ tự render/serialize ổn định).
+    entity.reparent có keep_world (giữ world transform bằng cách tính lại
+    local); cycle detection (ancestor chain); destroy có policy
+    cascade (mặc định, xóa cả con — D nếu tổng >20) | detach_children.
+  - Transform LOCAL là dữ liệu lưu; world = tính từ chain. Docs ghi rõ
+    convention (v1 thiếu).
+  - Script.props: value là TAGGED khi tham chiếu:
+      {"speed": 2.5, "target": {"$entity":"e_000042"},
+       "icon": {"$asset":"a_000007"}}
+    JSON string trần không bao giờ được hiểu là entity id (C9) — validator
+    + reparent/destroy tooling dựa vào tag để cập nhật/cảnh báo dangling.
+  - Validate tập trung tại gs-scene (NaN/Inf chặn, scale 0 chặn, asset
+    tồn tại trừ khi allow_missing=true...).
+
+5.3 BLUEPRINT (THAY PREFAB TRONG MVP — C9)
+  - blueprint = file .gbp.json chứa CÂY entity mẫu với BLUEPRINT-LOCAL
+    STABLE ID ("b_1","b_2"... — không phải index mảng).
+  - blueprint.instantiate = STAMP: copy cây thành entity document mới
+    (id mới), đặt tại at?, KHÔNG giữ link ngược, KHÔNG override tracking,
+    KHÔNG apply-back. Sửa blueprint không đổi instance đã stamp.
+  - Runtime Luau gs.spawn(blueprint_path, {x,y}) dùng đúng cơ chế này
+    trong player (spawn đạn/quái lúc chạy).
+  - FULL PREFAB (override + revert + apply-back + nesting) chuyển M9+,
+    thiết kế riêng khi đó với bài học từ blueprint. Lý do cắt: prefab
+    override đúng nghĩa cần path addressing ổn định + merge semantics —
+    làm nửa vời còn tệ hơn không làm (kết luận review đồng thuận).
+
+5.4 FILE SCENE VÍ DỤ (v2 — có parent/order, không next_entity)
+  {
+    "schema_version": 1,
+    "mode": "2d",
+    "entities": [
+      {"id":"e_000001","parent":null,"order":0,"components":{
+        "Name":{"value":"MainCamera"},
+        "Transform2D":{"x":0,"y":0,"rot":0,"sx":1,"sy":1,"z_index":0},
+        "Camera2D":{"ortho_height":10.0,"active":true}}},
+      {"id":"e_000042","parent":null,"order":1,"components":{
+        "Name":{"value":"door_1"},
+        "Tags":{"values":["door","interactive"]},
+        "Transform2D":{"x":4.5,"y":2.0,"rot":0,"sx":1,"sy":1,"z_index":10},
+        "Sprite":{"asset":{"$asset":"a_000007"},"color":[1,1,1,1],
+                   "flip_x":false,"flip_y":false,"pivot":[0.5,0.0]},
+        "Collider2D":{"shape":{"box":{"w":1.0,"h":2.0}},"is_sensor":false,
+                       "offset":[0,1.0],"layer":1,"mask":4294967295},
+        "Script":{"file":"scripts/door.luau","props":{"locked":true,
+                   "key_tag":"key_gold","open_sprite":{"$asset":"a_000008"}}}}}
+    ]
+  }
+
+5.4b CANONICAL WRITER SPEC (C9 — "sorted keys" đơn thuần chưa đủ)
+  - Key sort: bytewise UTF-8, ĐỆ QUY mọi object (tham khảo tinh thần
+    RFC 8785/JCS, không cần tuân thủ từng bit).
+  - entities sort theo id tăng dần; trong components sort theo tên.
+  - Float: serialize shortest round-trip (Rust ryu); -0.0 chuẩn hóa thành
+    0.0 TRƯỚC khi ghi; cấm NaN/Inf (validator chặn từ cửa — I5).
+  - Indent 2 space, LF, UTF-8 không BOM, newline cuối file.
+  - Unknown field: mỗi component/entity giữ map "x-unknown" nội bộ khi
+    parse, ghi lại nguyên văn đúng vị trí khi save (test round-trip mọi
+    cấp nesting trong CI).
+  - Mục tiêu: cùng document -> cùng bytes (diff/merge/hash ổn định).
+
+5.5 WAL & RECOVERY (C1 — viết lại toàn bộ; v1 "digest" là lỗi P0)
+  - File: .gs/wal/<ts>.wal.jsonl, append-only, xoay 64MB giữ 10 file.
+  - RECORD THẬT SỰ REPLAY ĐƯỢC:
+      {"seq":4512,"kind":"txn",
+       "txn_id":"t-000318","command_id":"01J...","actor_id":"act_02",
+       "base_revision":"r-000450","new_revision":"r-000451",
+       "commands":[{"method":"entity.spawn","params":{...FULL normalized,
+         đã validate, id đã cấp...}}],
+       "inverses":[{"method":"entity.destroy","params":{...}}],
+       "schema_version":1,"ts":"...","crc32":"..."}
+    Payload quá 1MB (hiếm — tilemap lớn): body ghi ra .gs/wal/blobs/
+    <sha256> (CAS bền vững), record giữ {$blob:"sha256:..."} — blob GC
+    CHỈ khi không còn WAL/undo entry nào tham chiếu.
+  - Một txn = MỘT record nguyên tử (không begin/commit hai dòng — đơn
+    giản và đủ vì dispatcher single-writer). Ghi record -> flush (fsync
+    theo policy: mặc định fdatasync mỗi record; config "relaxed" fsync
+    100ms/lần cho máy chậm, ghi rõ trade-off) -> áp document -> ACK (I2).
+  - Snapshot (autosave): .gs/autosave/<scene>.<ts>.json + sidecar
+    {"last_committed_seq":4500,"revision":"r-000450","doc_sha256":"..."}
+    mỗi 60s hoặc 50 txn, và LUÔN trước play.start; giữ 20 bản.
+  - RECOVERY khi mở project có marker dirty:
+      1) nạp autosave mới nhất có sidecar hợp lệ (verify doc_sha256);
+      2) replay WAL các record seq > last_committed_seq, verify crc32
+         từng record + base_revision khớp chain;
+      3) đuôi WAL hỏng (crash giữa ghi): cắt tại record hỏng cuối —
+         truncated-tail tolerated (I6); hỏng GIỮA chain: dừng, hiện hộp
+         thoại chọn autosave, không đoán.
+      4) dedup map (4.3) dựng lại từ WAL trong lúc replay.
+  - Asset binary: asset.delete di chuyển vào .gs/trash/<sha256> giữ >=7
+    ngày — undo khôi phục từ trash, KHÔNG mất binary thật (C1).
+  - FAULT-INJECTION TEST bắt buộc (M-1c POC, M0 hoàn chỉnh): kill -9 tại
+    (a) giữa ghi record, (b) sau ghi trước áp, (c) giữa tmp+rename
+    autosave, (d) giữa 2 record của cùng phiên — mở lại phải về đúng
+    revision đã ACK, không mất txn đã ACK, không áp txn chưa ACK.
+
+5.6 LOCK/INSTANCE & MIGRATION (giữ v1)
+  - editor.lock (fs2); instance 2 read-only + banner. OneDrive/Dropbox
+    rename fail 3 lần -> cảnh báo thư mục bị sync tool giữ.
+  - schema_version migrate chain v1->v2->... test round-trip; file mới
+    hơn app: từ chối mở + báo cập nhật.
+
+================================================================================
+PHẦN 6 — PLAYER, PLAY LOOP, DETERMINISM (C2, C8)
+================================================================================
+
+6.1 VÒNG ĐỜI (snapshot-based)
+  play.start -> editor autosave + dựng snapshot .gs/runtime/play/<play_id>/
+  (manifest đầy đủ hash/revision — 2.4) -> spawn gs-player --snapshot
+  <manifest> --control-port 0 -> player ghi .gs/runtime/player.json
+  {pid, port, token, play_id, started_at} -> editor connect, heartbeat 1s
+  qua play.status; mất 5 nhịp -> "treo?", hiện nút Kill (không tự kill).
+  Kết thúc: exit_report.json {exit_code, frames, last_error?, log_tail[50],
+  event_trace_path, perf_summary} -> editor đọc + hiển thị + artifact.
+
+6.2 FIXED TIMESTEP & DETERMINISM (C8 — điều kiện đủ, không chỉ tuyên bố)
+  - Simulate 60Hz cố định, accumulator; render interpolate; timescale chỉ
+    đổi tốc độ tích lũy.
+  - PHASE ORDER CỐ ĐỊNH (một luồng cho simulate — "judge mode" là mặc
+    định của player; render thread tách riêng):
+      input -> script on_update (theo THỨ TỰ entity id tăng) ->
+      commit script mutation buffer (theo thứ tự script chạy) ->
+      physics step -> collision/sensor events (sort cặp theo id) ->
+      timers -> emit event trace -> build RenderSnapshot
+  - Cấm nondeterminism nguồn: KHÔNG dùng HashMap iteration trong đường
+    gameplay-visible (dùng BTreeMap/Vec sort theo id); bevy_ecs chạy
+    single-thread executor cho simulate (parallel executor CHỈ được bật
+    lại khi có bằng chứng benchmark + vẫn giữ phase order — quyết định ghi
+    DECISIONS.md); rapier: insert/remove body theo entity id tăng, pin
+    version + feature enhanced-determinism (rapier chỉ hứa determinism khi
+    initial state + construction order + build giống nhau).
+  - RNG: gs.random seeded từ play seed; không expose math.random.
+  - TAPE HEADER (C8): {engine_build, protocol_ver, fixed_dt, seed,
+    snapshot_hashes{scene,scripts,assets,inputmap}}. Replay: manifest
+    lệch -> TỪ CHỐI (hoặc --force kèm warning to, kết quả không tính là
+    bằng chứng judge).
+  - CAM KẾT: cùng máy + cùng build + cùng snapshot + cùng seed + cùng tape
+    => cùng kết quả từng frame. KHÔNG cam kết cross-machine. Agent viết
+    assert số thực phải dùng epsilon (ghi AGENTS.md).
+
+6.3 EVENT TRACE (C11 — nền của judge, hết race)
+  - Player ghi MỌI event gameplay (gs.emit, collision, timer, system) vào
+    ring 64k event + file .gs/runtime/play/<play_id>/events.jsonl:
+    {"seq":812,"frame":300,"name":"DoorOpened","data":{...},"entity":"e_42"}
+  - obs.events{after_seq} đọc từ trace (không phải stream sống) — agent
+    step xong mới hỏi vẫn thấy event đã nổ. judge.run_until_event đăng ký
+    matcher TRƯỚC rồi drive frame — không miss theo cách nào.
+  - Trace thuộc play_id — event play cũ không thể gây pass giả (client
+    phải nêu play_id).
+
+6.4 INPUT TAPE & HEADLESS (giữ v1 + header 6.2)
+  Tape JSONL theo INPUT MAP trừu tượng; record từ thiết bị thật; replay bỏ
+  thiết bị; input.inject khi pause/step. Headless: --headless render
+  offscreen (GPU thật hoặc GS_GPU=warp); không GPU nào: no-render mode —
+  physics/script/event trace vẫn đúng; obs.screenshot trả app_code
+  "no_gpu" -> judge chuyển assert_world.
+
+6.5 WATCHDOG & GIỚI HẠN (giữ v1)
+  frame simulate >2000ms: dump stack Luau + world -> exit 13 SCRIPT_HANG.
+  RAM >1GB warning event; >2GB exit 14 OOM_GUARD + dump thống kê.
+  step_frames <=3600/lần. Exit codes chuẩn hóa trong docs.
+
+================================================================================
+PHẦN 7 — LUAU GAMEPLAY LAYER (C7 — semantics viết lại theo API thật)
+================================================================================
+
+7.1 VÒNG ĐỜI SCRIPT (giữ v1)
+  Script component -> 1 instance (env riêng) trong VM Luau chung của
+  player. Export bảng callbacks: on_init(self), on_update(self, dt),
+  on_event(self, name, data), on_destroy(self). self = {id, props, state}.
+
+7.2 API v1 gs.* (giữ bảng v1 với 2 sửa):
+  - gs.spawn(BLUEPRINT_path, {x,y}) — đổi từ "prefab" (5.3).
+  - Mọi hàm gs.* MUTATING (set/spawn/destroy/velocity/emit/play_sfx...)
+    KHÔNG áp thẳng vào world: ghi vào MUTATION BUFFER của callback đang
+    chạy; đọc (gs.get_pos...) thấy world + buffer của CHÍNH callback đó
+    (read-your-writes). Buffer COMMIT khi callback return thành công;
+    callback error/vượt deadline -> buffer DISCARD toàn bộ + diagnostic
+    (không có state nửa vời — C7). Host function bounded: không I/O,
+    không block, chi phí O(nhỏ) — mọi hàm mới phải qua review checklist.
+
+7.3 SANDBOX + BUDGET (C7 — mô tả đúng cơ chế mlua/Luau)
+  - Lua::sandbox(true): library/globals read-only, safeenv. Mỗi script
+    instance có ENVIRONMENT TABLE RIÊNG (không rò global giữa script;
+    _G ghi của script này script khác không thấy).
+  - set_memory_limit(64MB) cho VM + theo dõi used_memory() per frame;
+    MemoryError -> callback fail sạch (buffer discard), script đếm lỗi.
+  - DEADLINE: set_interrupt callback — Luau gọi interrupt tại SAFEPOINT
+    (call boundaries/loop back-edge, "eventually" — KHÔNG hứa đúng mỗi N
+    instruction). Interrupt kiểm deadline + cờ cancel; quá hạn -> trả
+    error từ interrupt => callback đang chạy fail sạch (KHÔNG dùng
+    VmState::Yield cho việc này — yield là suspend coroutine để resume,
+    không phải abort; v1 mô tả sai, đã sửa).
+  - BUDGET HAI TẦNG (C7 — v1 chỉ per-script là sai số học: 50 script x
+    4ms = 200ms/frame):
+      * GLOBAL: tổng thời gian script mỗi frame 6ms soft / 12ms hard
+        (mục tiêu I13). Chạm hard giữa chừng: các script CHƯA chạy frame
+        này bị skip + đánh dấu starved (round-robin: frame sau ưu tiên
+        chạy script bị skip trước — công bằng, không starvation vĩnh viễn).
+      * PER-SCRIPT: 2ms soft (warning gộp 1 lần/5s) / 4ms hard (deadline
+        error như trên).
+      * on_init: 100ms (chạy 1 lần, cho phép nặng hơn).
+  - Script fail 3 lần hard-deadline liên tiếp hoặc 10 lỗi runtime/10s ->
+    DISABLE script đó (entity sống), event diagnostic "script_disabled",
+    badge đỏ editor — agent thấy và sửa; enable lại = script.reload.
+  - CHỈ COMPILE TỪ SOURCE (I4): mlua compile .luau text; không bao giờ
+    nhận bytecode từ file/command (Luau VM giả định bytecode do compiler
+    tin cậy sinh ra — nạp bytecode lạ là lỗ thủng sandbox).
+  - TYPE DIAGNOSTICS: luau-analyze (binary chính chủ Luau) chạy async ở
+    EDITOR khi script.set_source (mlua KHÔNG có type checker — phân định
+    đúng phạm vi tool); kết quả trộn vào script.diagnostics mức warning,
+    không chặn chạy. --!strict khuyến khích trong template.
+
+7.4 HOT RELOAD (giữ v1 + 1 sửa)
+  Watcher/script.set_source -> compile mới; áp CUỐI FRAME (không đổi VM
+  giữa callback); instance sống: on_destroy cũ -> swap -> on_init mới với
+  CÙNG self.props; state closure cũ mất — muốn giữ qua reload thì để trong
+  self.state (persist qua reload, document hóa trong LUAU_API.md).
+  Compile/analyze fail: giữ bản cũ chạy + diagnostic — không swap bản hỏng.
+
+7.5 VÍ DỤ door.luau (giữ v1, đổi self.locked -> self.state.locked cho đúng
+  ngữ nghĩa persist reload; nội dung đầy đủ trong templates/).
+
+7.6 TEST MATRIX LUAU (C7 — bắt buộc ở M3)
+  vòng lặp vô hạn (on_update + on_init); pcall nuốt error deadline (interrupt
+  error phải xuyên pcall được — dùng cơ chế error không bắt được hoặc
+  kiểm cờ cancel sau pcall); metamethod chạy dài; coroutine tự tạo; string
+  khổng lồ (memory limit); gs.* trong on_destroy; spawn đệ quy (blueprint
+  spawn chính nó — cap 1000 spawn/frame); reload giữa lúc pause; 2 script
+  cùng sửa 1 component (thứ tự commit theo thứ tự chạy — xác định);
+  starved script được chạy lại frame sau.
+
+================================================================================
+PHẦN 8 — ASSET PIPELINE 2D (C6, C12)
+================================================================================
+
+8.1 IMPORT & META (bổ sung v2)
+  - asset.import: copy vào assets/, sinh .meta.json sidecar. Ghi CẶP file
+    nguyên tử: ghi <name>.png.tmp + <name>.meta.json.tmp rồi rename cả
+    hai; meta chứa content sha256 — mismatch lúc quét = coi như re-import
+    cần chạy (asset.reimport).
+  - meta v2: {asset_id, kind, importer_version, source_sha256, ppu, pivot,
+    filter, color_space:"srgb", premultiplied:true, license_note?,
+    imported_at}. importer_version tăng khi thuật toán import đổi -> quét
+    thấy version cũ đề nghị reimport hàng loạt (không tự làm — lệnh).
+  - VALIDATE: content sniffing bằng MAGIC BYTES (không tin đuôi file);
+    decode cap: đọc header trước, từ chối ảnh >8192x8192 hoặc ước tính
+    RAM decode >256MB; png/jpg <=20MB; ogg/wav <=20MB + <=10 phút; ttf/otf
+    <=5MB + parse được bằng font parser (từ chối font hỏng); tên file
+    [a-z0-9_-]; nhãn hiển thị tự do (tách định danh khỏi nhãn).
+  - Màu: decode -> sRGB, upload GPU premultiplied alpha (chốt M-1a) —
+    ghi trong meta để sau này không đoán.
+
+8.2 IMAGEGEN: STAGING + INGEST (C6 — worker không đụng project model)
+  - Job spec: .gs/jobs/queue/<job_id>.job.json {kind:"image", prompt,
+    negative?, size, seed, style_preset, dest_rel_hint, command_id,
+    actor_id, created_at}.
+  - STATE MACHINE (C12):
+      queued -> running (worker claim bằng rename queue/->running/ atomic
+      + ghi lease {worker_id, heartbeat_at} mỗi 10s)
+      -> succeeded | failed | cancelled | timed_out
+    Editor sweeper: running mà heartbeat >30s -> timed_out (worker chết);
+    job cancel: editor tạo cancel marker, worker thấy thì dừng sớm;
+    attempts<=2; KẾT QUẢ TRỄ (worker xong sau khi timed_out/cancelled):
+    output vào staging bị QUARANTINE (không ingest, giữ 24h để debug).
+  - Worker output: .gs/staging/jobs/<job_id>/{out.png, result.json
+    {ok, provider, ms, error?}} — TUYỆT ĐỐI không ghi vào assets/.
+  - Editor thấy result -> event asset.job_done -> asset.ingest_staged
+    (tự động nếu job hợp lệ + validate 8.1 pass; actor "system:ingest"
+    hiện trên feed) -> lúc này mới có asset_id + WAL + undo (I1 giữ).
+  - Idempotency: job_id sinh từ command_id — retry gen_image không tạo
+    job đôi.
+
+8.3 CONVENTION FOLDER (giữ v1) + .gs/ mở rộng:
+  .gs/{wal,autosave,cache,jobs{queue,running,done},staging,trash,runtime}
+  — toàn bộ .gs/ gitignore.
+
+8.4 SỬA FILE NGOÀI EDITOR (C6 — đóng lỗ hổng I1 thứ hai)
+  - Watcher thấy .luau/scene JSON đổi trên đĩa mà editor không tự ghi:
+    * .luau: dispatcher tạo synthetic command script.ingest_external
+      {path, old_sha, new_sha} (actor "system:file-watch") -> vào WAL +
+      undo + hot reload như set_source. Nếu editor đang giữ bản CHƯA LƯU
+      của file đó: hiện conflict dialog (giữ của tôi / lấy của đĩa / xem
+      diff) — không ghi đè im lặng.
+    * scene JSON sửa tay khi editor mở: cảnh báo + đề nghị reload có
+      xác nhận (document trong RAM là chân lý khi editor đang mở; khuyến
+      cáo trong docs: sửa scene bằng bus, không sửa tay).
+  - Đây là ĐƯỜNG NHẬP có kiểm soát — không phải đường ghi ngầm.
+
+8.5 GATE PROVIDER IMAGEGEN (C12 — phải chọn TRƯỚC khi code M6)
+  Ba phương án, chọn MỘT làm mặc định được hỗ trợ chính thức:
+  | PA | Mô tả | Ưu | Nhược |
+  |----|-------|----|-------|
+  | A  | Bundle runtime+model ký kèm app | UX 1-click | Size GB, license model, build phức tạp |
+  | B  | ComfyUI local là PREREQUISITE, app có preflight "gs doctor" kiểm Python/model/GPU | Không gánh phân phối model | Demo 15' chỉ đúng trên máy đã provision (khai rõ ở 1.5) |
+  | C  | Provider API từ xa (key người dùng cấp), quota + cost cap + secret store ngoài project | Máy yếu vẫn gen được | Cần mạng, tốn phí, privacy |
+  KHUYẾN NGHỊ: B làm mặc định dev/dogfood + C là lựa chọn cấu hình; A chỉ
+  xét sau M8 nếu đi hướng sản phẩm đóng gói đại chúng. Quyết định chốt ghi
+  DECISIONS.md trước M6 (GATE trong DAG 0.2). Secret của C: nằm ngoài
+  project (per-user config), không đi qua bus, không vào git/WAL.
+
+================================================================================
+PHẦN 9 — EDITOR UI/UX (giữ khung v1; các sửa v2 đánh dấu)
+================================================================================
+
+9.1 LAYOUT 5 VÙNG cố định (docking M9+) — như v1.
+9.2 VIEWPORT — như v1 (pan/zoom/grid/snap/gizmo/pick, overlay collider,
+  badge lỗi script, live-view 10fps khi Play). BỔ SUNG v2: pan/zoom/tab/
+  filter là view-state, KHÔNG qua bus (I1 mới); kéo gizmo vẫn qua bus
+  (mutation) và auto-gộp transaction khi thả.
+9.3 HIERARCHY & INSPECTOR schema-driven từ component.registry — như v1;
+  thêm cột order + kéo sắp xếp (entity.set_order), reparent giữ keep_world
+  mặc định true (đúng trực giác kéo-thả).
+9.4 CONSOLE & ACTIVITY FEED — như v1 (badge NGƯỜI/AGENT/HỆ THỐNG, click
+  chọn entity, cảnh báo budget). BỔ SUNG: entry hệ thống "system:ingest",
+  "system:file-watch" hiển thị rõ — mọi đường nhập đều thấy được.
+9.5 PLAY CONTROLS — như v1 + hiển thị play_id + revision snapshot; nút
+  "Chép giá trị đang chạy về scene" mở panel chọn entity/field (dùng
+  runtime.copy_to_scene với expected_revision; conflict -> dialog diff).
+9.6 SESSION PANEL — như v1 + nút cấp/thu capability (capability.grant/
+  revoke UI), danh sách confirmation đang chờ.
+9.7 AN TOÀN — như v1 với semantics C4/C5: pause = agent chỉ pure-read +
+  job đang bay bị hủy; confirm dialog approve/deny CHỈ từ UI; undo là nút
+  cứu sinh (test M0: agent spawn 100 trong 1 txn, người Ctrl+Z 1 lần sạch).
+9.8 PHÍM TẮT — như v1 (đều phát command trừ phím thuần view-state).
+9.9 ERROR/EMPTY STATES — như v1 (player crash banner, GPU lost, disk
+  đầy, scene hỏng, worker thiếu -> hướng dẫn "gs doctor") + THÊM:
+  conflict dialog (E_CONFLICT/file-watch), quarantine job notice.
+
+================================================================================
+PHẦN 10 — AGENT INTEGRATION (C3, C11)
+================================================================================
+
+10.1 CLI gs.ps1 (M0)
+  gsopen/gssend/gstxn (transaction.execute từ file JSONL)/gsevents/gsshot/
+  gsplay/gsstop/gsstep/gsdump/gsjudge — wrapper mỏng của bus, exit code !=0
+  khi error. BỔ SUNG v2: gssend tự sinh command_id (ULID) nếu params thiếu
+  và IN RA để agent retry đúng; gsjudge dùng judge.run_until_event.
+
+10.2 PHIÊN A-Z MẪU — như v1, cập nhật: play từ snapshot; obs.events
+  after_seq thay vì đọc stream sống; retry lệnh đứt kết nối bằng CÙNG
+  command_id.
+
+10.3 JUDGE & TEST MANIFEST (C11)
+  - Thang tin cậy: (1) event trace + assert_world, (2) golden screenshot,
+    (3) nhìn ảnh bằng mắt model — chỉ để khám phá.
+  - .gtest.json (test là DATA, agent viết được):
+    {"name":"door_opens_with_key","scene":"scenes/main.gscene.json",
+     "seed":7,"tape":"tapes/get_key_open_door.tape.jsonl",
+     "max_frames":600,
+     "asserts":[{"event":{"name":"KeyPicked"}},
+                {"event":{"name":"DoorOpened","after":"KeyPicked"}},
+                {"world":{"entity_tag":"door","component":"Collider2D",
+                  "field":"is_sensor","equals":true}},
+                {"screenshot":{"golden":"golden/door_open.png",
+                  "per_px":8,"max_bad_ratio":0.002,
+                  "mask":"golden/door_open.mask.png"}}],
+     "expect_diagnostics_max":0}
+  - judge.run_test chạy player headless từ snapshot + tape -> EVIDENCE
+    BUNDLE .gs/runtime/evidence/<test>-<ts>/: manifest hashes, world dump
+    cuối + doc hash, event trace, log tail, screenshot + diff PNG +
+    diff score, perf summary, engine build id. Agent trích dẫn bundle làm
+    bằng chứng "xong việc" — không phải lời nói.
+  - Golden compare (C11): per-pixel threshold (default 8/255 mỗi kênh) +
+    max_bad_ratio (default 0.2%) + mask optional + xuất diff heatmap PNG;
+    mean-abs-diff toàn ảnh CHỈ là số phụ (một mình nó bỏ lọt lỗi cục bộ).
+
+10.4 MCP (spike M-1e, hoàn thiện M8): tool generic gs_command + tool tiện
+  ích (gs_screenshot trả image content, gs_events_poll, gs_run_test...);
+  PIN revision rust-sdk; conformance với MCP Inspector + Cursor thật;
+  registry sinh tool list — MCP không được tụt hậu so bus.
+
+10.5 AGENTS.md (viết ở M0, cập nhật mỗi milestone) — bổ sung v2:
+  - Luôn gửi expected_revision khi sửa entity đang tranh chấp; gặp
+    E_CONFLICT: đọc diff, quyết định, KHÔNG blind-retry.
+  - Retry sau đứt kết nối: dùng LẠI command_id cũ.
+  - Bị pause: dừng mutating, được phép đọc; KHÔNG tự resume.
+  - Không tin screenshot đơn lẻ làm bằng chứng; dùng run_test/evidence.
+  - Số thực: so sánh epsilon (determinism 6.2).
+  - Không lách confirm bằng chia nhỏ lệnh (heuristic 4.5 sẽ bắt).
+
+================================================================================
+PHẦN 11 — EDGE CASES & VALIDATION MATRIX (C: mỗi case có test_id, milestone
+gắn, loại test — reviewer dùng làm checklist; fixture nằm tests/fixtures/)
+================================================================================
+
+  Cột: test_id | case | xử lý chốt | M | loại (U=unit, I=integration,
+  F=fault-injection, E=E2E, M/T=manual)
+
+  DỮ LIỆU & VALIDATE
+  GS-EC-01 | Transform NaN/Inf từ lệnh/script | chặn validator + gs.set; physics sinh NaN: reset pose cuối hợp lệ + diagnostic; không bao giờ ghi file | M0/M4 | U,I
+  GS-EC-02 | scale 0 / |s|>1000 | clamp theo schema + diagnostic | M0 | U
+  GS-EC-03 | id không tồn tại trong lệnh/props | E_NOT_FOUND kèm id; txn rollback nguyên khối | M0 | U
+  GS-EC-04 | chuỗi khổng lồ (Name 10MB) | max length schema, reject sớm | M0 | U
+  GS-EC-05 | scene 100k entity | cap scene_max 50k; cảnh báo 20k; culling giữ 60fps @10k visible | M1 | I,perf
+  GS-EC-06 | tilemap cell ngoài biên/1M cell | reject schema + gợi ý chia layer | M4 | U
+  GS-EC-07 | reparent tạo cycle | ancestor check, reject | M0 | U
+  GS-EC-08 | blueprint file mất nhưng scene từng stamp | không sao (stamp không giữ link); gs.spawn runtime path mất -> lỗi rõ | M3 | I
+  GS-EC-09 | asset xóa tay ngoài editor | hash mismatch khi quét: sprite ô tím "missing", asset.list đánh dấu, agent gen lại được | M6 | I
+  GS-EC-10 | scene JSON sửa tay hỏng / marker git conflict | parse error dòng/cột + đề nghị autosave; "<<<<<<<" phát hiện riêng | M0 | U
+  GS-EC-11 | unknown field mọi cấp nesting | round-trip giữ nguyên (I5) | M0 | U
+
+  ĐỒNG THỜI NGƯỜI + AGENT + IDEMPOTENCY
+  GS-EC-12 | người kéo gizmo entity agent đang set | lock mềm 2s khi drag; agent E_LOCKED kèm note | M1 | I
+  GS-EC-13 | 2 agent sửa 1 field | dispatcher serialize theo seq; expected_revision lệch -> E_CONFLICT + diff | M0 | I
+  GS-EC-14 | agent loop 10k lệnh/phút | budget E_BUDGET + retry_after + cảnh báo feed | M0 | I
+  GS-EC-15 | trùng client_name khi hello | cho phép (chỉ là nhãn) nhưng actor_id khác nhau — danh tính là server cấp | M0 | U
+  GS-EC-16 | người Ctrl+Z giữa txn agent đang mở | txn là 1 request atomic (transaction.execute) — không còn khái niệm "đang mở" giữa các request; race biến mất by design | M0 | U
+  GS-EC-17 | agent bị pause giữa job/build | job cancel an toàn, mutating E_PAUSED, pure-read OK | M0/M6 | I
+  GS-EC-18 | người tắt editor khi agent làm | graceful: in-flight trả error shutting_down; WAL đã flush các txn ACK | M0 | F
+  GS-EC-19 | TCP rớt SAU commit TRƯỚC response, agent retry | dedup command_id trả kết quả cũ — không nhân đôi entity (I11) | M0 | I,F
+  GS-EC-20 | confirmation token bị dùng lại / đổi params | bind hash+revision+one-time -> vô hiệu | M0 | U
+  GS-EC-21 | agent lách D bằng chia nhỏ (salami) | heuristic 4.5 nâng thành D + log | M0 | I
+
+  PLAY/PLAYER/LUAU
+  GS-EC-22 | Luau while true on_update | interrupt deadline error tại safepoint; C-call dài không safepoint: watchdog 2000ms exit 13 | M3 | I
+  GS-EC-23 | Luau memory bomb | set_memory_limit -> MemoryError, script disable, player sống | M3 | I
+  GS-EC-24 | pcall nuốt deadline error | cờ cancel kiểm sau pcall — không thoát được án tử (7.6) | M3 | U
+  GS-EC-25 | script destroy entity script khác đang giữ | gs.exists + gs.* trên id chết trả nil/false, diagnostic debug | M3 | U
+  GS-EC-26 | 50 script x 4ms | GLOBAL budget 12ms hard + starved round-robin (7.3) | M3 | I,perf
+  GS-EC-27 | player crash thật (Rust/GPU bug) | editor sống, banner + exit_report + minidump nếu bật | M2 | F
+  GS-EC-28 | play khi player đang sống | E_PLAYER_RUNNING kèm pid | M2 | U
+  GS-EC-29 | 0/2+ camera active | validate lúc dựng snapshot: 0 -> lỗi rõ; 2+ -> id nhỏ nhất + warning | M2 | U
+  GS-EC-30 | step khi chưa pause | tự pause rồi step | M2 | U
+  GS-EC-31 | screenshot khi minimize/headless-no-GPU | offscreen OK; no-gpu -> app_code no_gpu, judge chuyển assert_world | M2 | I
+  GS-EC-32 | timescale 10x tunneling | ccd:bool trên RigidBody2D, docs khuyên bật cho đạn | M4 | I
+  GS-EC-33 | audio device rút giữa chừng | kira rebuild output, không crash | M4 | M/T
+  GS-EC-34 | hot reload giữa callback / khi pause | áp cuối frame; pause thì áp ngay frame kế khi resume/step | M3 | I
+  GS-EC-35 | event miss do step-rồi-mới-wait | event trace + after_seq + run_until_event (6.3) — pass giả từ play cũ bị chặn bởi play_id | M5 | I
+  GS-EC-36 | replay tape trên build/snapshot lệch | header mismatch -> từ chối (6.2) | M5 | U
+  GS-EC-37 | blueprint spawn đệ quy chính nó | cap 1000 spawn/frame + diagnostic | M3 | U
+
+  FILE/OS/MÔI TRƯỜNG
+  GS-EC-38 | crash giữa ghi WAL / giữa tmp+rename | fault-injection 4 điểm (5.5) — về đúng revision ACK | M0 | F
+  GS-EC-39 | đĩa đầy khi save/WAL | tmp+rename fail an toàn; WAL fsync fail -> từ chối mutating mới + banner đỏ (fail-stop, không fail-silent) | M0 | F
+  GS-EC-40 | path traversal/symlink thoát root | canonicalize + prefix (I7) | M0 | U
+  GS-EC-41 | tên Windows reserved / unicode | blacklist tên file; nhãn hiển thị tự do (5.2/8.1) | M0 | U
+  GS-EC-42 | OneDrive/Dropbox giữ file | rename fail 3 lần -> cảnh báo sync tool | M0 | M/T
+  GS-EC-43 | 2 editor cùng project | instance 2 read-only + banner (fs2 lock) | M0 | I
+  GS-EC-44 | endpoint/player.json mồ côi sau crash | file chứa pid; client verify pid sống; editor mới dọn | M0/M2 | I
+  GS-EC-45 | token lộ vào log/event | CI grep token pattern trong fixture (I8) | M0 | U
+  GS-EC-46 | GPU device lost / driver update | recreate surface + reload texture cache; document nguyên vẹn | M1 | M/T
+  GS-EC-47 | DPI đổi giữa chừng | viewport theo physical px; test kéo giữa 2 màn | M1 | M/T
+  GS-EC-48 | máy CI không GPU | GS_GPU=warp hoặc no-render (6.4) | M2 | I
+  GS-EC-49 | antivirus khóa exe khi build | retry 3 + thông báo rõ | M7A | M/T
+
+  ASSET/JOB
+  GS-EC-50 | job treo (provider chết) | lease heartbeat 30s -> timed_out (8.2) | M6 | I
+  GS-EC-51 | 2 worker cùng claim | rename atomic là mutex | M6 | I
+  GS-EC-52 | kết quả trễ sau cancel/timeout | quarantine, không ingest (8.2) | M6 | I
+  GS-EC-53 | import file 2GB / ảnh 16k / font hỏng | sniffing + decode cap + parser validate (8.1) | M6 | U
+  GS-EC-54 | đổi ppu khi 500 sprite đang dùng | thuộc tính asset — đổi 1 chỗ cả scene đổi; undo được; docs cảnh báo | M6 | U
+  GS-EC-55 | worker cố ghi thẳng assets/ | quyền: worker chỉ được cấp path staging; editor không bao giờ quét assets/ tự nuốt file lạ — file lạ hiện "chưa import" | M6 | I
+  GS-EC-56 | ảnh gen NSFW | pha local: không moderation (người tự chịu); GATE lại khi có share online | M9+ | —
+
+================================================================================
+PHẦN 12 — TESTING & CI
+================================================================================
+
+12.1 TẦNG TEST
+  - Unit: protocol serde + reject unknown; canonical writer (bytes-stable);
+    scene apply/inverse property test (áp N lệnh ngẫu -> undo hết -> bằng
+    gốc từng byte); validator matrix GS-EC-01..11.
+  - Conformance (SINH TỪ REGISTRY — C3): mọi method x {input hợp lệ, input
+    hỏng từng field, principal agent gọi [UI], retry command_id, revision
+    conflict}.
+  - Fault-injection (C1): GS-EC-18/19/38/39 — harness kill -9 process con
+    tại điểm đánh dấu, chạy trong CI.
+  - Integration: bus in-memory + player headless no-render: play -> inject
+    tape -> run_until_event -> world dump.
+  - Golden: 6 cảnh chuẩn offscreen; per-pixel + ratio + mask + diff PNG
+    (10.3); 2 bộ golden dev-GPU/WARP nếu lệch raster.
+  - Replay determinism: tape 600 frame x2 cùng snapshot -> world_dump cuối
+    giống từng byte (JSON canonical).
+  - Luau matrix 7.6. Fuzz nightly: 10k command sinh từ schema — không
+    panic, chỉ E_*.
+  - E2E agent script: phiên 10.2 từ gsopen tới judge.run_test pass —
+    smoke chính mỗi PR.
+
+12.2 CI (GitHub Actions windows-latest)
+  fmt -> clippy -D warnings -> machete -> unit + conformance -> fault-
+  injection -> integration no-render -> build release -> E2E smoke ->
+  upload artifact. Golden GPU: nightly trên runner tự host/WARP, không
+  chặn PR. License allowlist check (M7B chuẩn bị: deny GPL-incompat...).
+
+12.3 PERF BUDGET (mục tiêu I13, đo nightly sau khi có benchmark)
+  editor mở 5k entity <3s, RAM <500MB; player 10k sprite + 200 body + 50
+  script: p95 <=16.7ms, RAM <250MB; round-trip lệnh p95 <20ms; txn 200
+  lệnh <250ms; screenshot 1080p <150ms; hot reload <300ms; script global
+  budget 12ms enforced.
+
+================================================================================
+PHẦN 13 — MILESTONES CHI TIẾT (DAG 0.2; mỗi M có acceptance chạy được)
+================================================================================
+
+M-1 — SPIKE & CHỐT NỀN (2-3 tuần, BẮT BUỘC trước M0; code ở experiments/)
+  T-1.a Renderer spike: 1 crate vẽ sprite batch qua IR RenderSnapshot chạy
+        ĐỦ 3 target: (1) viewport eframe egui_wgpu CallbackTrait, (2)
+        window winit rời, (3) offscreen headless ghi PNG. Chốt: PPU, Y-up,
+        pivot, sRGB, premultiplied, sort, atlas padding, picking, DPI.
+  T-1.b Luau POC: mlua luau vendored build trên máy team; sandbox +
+        memory limit + interrupt deadline xuyên pcall; mutation buffer
+        mẫu; đo overhead interrupt.
+  T-1.c WAL POC: ghi txn record + crc + fsync; harness kill -9 4 điểm;
+        recovery đúng revision.
+  T-1.d Play-snapshot POC: dựng manifest + hash; player stub đọc snapshot.
+  T-1.e MCP spike: rust-sdk pin revision, hello + 1 tool gs_command echo,
+        test với MCP Inspector + Cursor.
+  T-1.f Compatibility matrix: bảng version egui/eframe/egui-wgpu/wgpu/
+        glyphon/mlua/rapier2d/bevy_ecs compile-test cùng nhau ->
+        docs/VERSIONS.md + Cargo.lock.
+  NGHIỆM THU M-1: demo 3-target cùng 1 IR; kill -9 hồi phục đúng; Luau
+  deadline không thoát được bằng pcall; báo cáo chốt các hằng số render;
+  bài học ghi docs/DECISIONS.md; experiments/ XÓA sau khi chốt.
+  GO/NO-GO: fail T-1.a -> kích hoạt fallback full Bevy (2.3) TRƯỚC M0.
+
+M0 — REGISTRY + AUTHORITY + WAL + SCENE CORE (3 tuần)
+  T0.1 gamestudio/ workspace + CI khung + AGENTS.md v1
+  T0.2 gs-registry: DSL khai báo method + codegen validator/docs/
+       conformance; gs-protocol: envelope/framing/error theo 4.1
+  T0.3 gs-scene: document + component registry + dispatcher + inverse +
+       undo đa tác nhân (2.8) + WAL/recovery (5.5) + canonical writer
+       (5.4b) + blueprint + lock file
+  T0.4 gs-editor shell: bus server + handshake/authority/capability/
+       confirm (4.4-4.5) + dedup command_id + Console/Feed/Session panel
+       + pause actor
+  T0.5 tools/gs.ps1 (10.1)
+  T0.6 Test: conformance + fault-injection + property undo + GS-EC nhóm
+       M0 (01-04,07,10-11,13-21,38-45)
+  NGHIỆM THU M0: từ Cursor: gsopen -> transaction.execute spawn 100 (dry
+  run trước) -> feed từng dòng [AGENT] -> người Ctrl+Z 1 lần sạch -> redo
+  -> save -> kill -9 editor -> mở lại khôi phục đúng revision ACK; retry
+  cùng command_id không nhân đôi; agent gọi undo.perform bị -32001.
+
+M1 — VIEWPORT 2D + INSPECTOR (2-3 tuần)
+  T1.1 gs-render2d production hóa từ spike (core cho M2 dùng chung)
+  T1.2 Viewport eframe: pan/zoom/grid/snap (view-state), pick chuẩn M-1a
+  T1.3 Gizmo move/rotate/scale -> transaction gộp khi thả + lock mềm 2s
+  T1.4 Hierarchy (parent/order, kéo thả keep_world) + Inspector schema-
+       driven + asset.import png + preview
+  T1.5 Golden 6 cảnh + perf 10k sprite + GS-EC-05,12,46,47
+  NGHIỆM THU M1: agent spawn 500 sprite lưới; người pan/zoom 60fps, kéo 1
+  sprite (feed [BẠN], agent component.get thấy vị trí mới + revision mới);
+  bật log bus xác nhận MỌI mutation từ UI đều là command.
+
+M2 — PLAYER PROCESS (2 tuần)
+  T2.1 gs-player: đọc snapshot manifest (verify hash), winit + fixed
+       60Hz + phase order 6.2, render bằng gs-render2d
+  T2.2 Control server + play/pause/step/status/timescale + player.json +
+       exit_report + heartbeat; editor Play controls + crash banner
+  T2.3 obs.screenshot/world_dump/logs_tail/perf + event trace (6.3) +
+       obs.events
+  T2.4 Snapshot builder trong editor + runtime.copy_to_scene với
+       expected_revision + live-view 10fps
+  T2.5 --headless + GS_GPU=warp + no-render + watchdog/OOM (6.5) +
+       GS-EC-27..31,44,48
+  NGHIỆM THU M2: play từ snapshot trong khi người TIẾP TỤC sửa document
+  (không ảnh hưởng player); kill -9 player -> editor sống + banner đúng;
+  copy_to_scene conflict khi document đã đổi -> E_CONFLICT + dialog.
+  + REVIEW TÁCH REPO (C14): quyết định tách/không, ghi DECISIONS.md.
+
+M3 — LUAU (2-3 tuần)
+  T3.1 gs-runtime-core: VM + sandbox + env per script + budget 2 tầng +
+       mutation buffer + interrupt deadline (7.3)
+  T3.2 Script component + lifecycle + self.state persist reload +
+       diagnostics {file,line,stack} + disable policy
+  T3.3 Hot reload cuối frame + script.ingest_external (8.4) + conflict
+       dialog
+  T3.4 luau-analyze tích hợp async + inputmap + gs.action (bàn phím)
+  T3.5 Test matrix 7.6 + GS-EC-22..26,34,37
+  NGHIỆM THU M3: agent set_source lỗi -> diagnostics có dòng; sửa -> hot
+  reload khi ĐANG play -> hành vi đổi; while true -> script disable,
+  player sống; 50 script không kéo frame quá budget global.
+
+M4 — PHYSICS/TILEMAP/AUDIO (2-3 tuần)
+  T4.1 rapier2d: sync ECS (insert theo entity id), collision/sensor
+       events sort ổn định, raycast/overlaps, ccd flag
+  T4.2 Tilemap render chunk + collider bake từ layer solid + tilemap.*
+  T4.3 kira (play_sfx/pan/volume, ogg/wav) + camera follow/shake + gamepad
+  T4.4 GS-EC-06,32,33 + demo platformer transcript kiểu 10.2
+  NGHIỆM THU M4: platformer nhỏ: đi/nhảy/đứng tilemap/ăn coin (sensor+
+  sfx+event) — agent dựng 100% qua bus.
+
+M5 — JUDGE/TEST MANIFEST (1-2 tuần)
+  T5.1 tape record/replay + header manifest check (6.2)
+  T5.2 judge.run_until_event/wait_event(after_seq)/assert_world/
+       assert_screenshot(per-px+ratio+mask+diff)/assert_perf
+  T5.3 .gtest.json + judge.run_test + evidence bundle (10.3) + artifact.*
+  T5.4 GS-EC-35,36 + replay determinism test x2
+  NGHIỆM THU M5: agent đổi gravity -> chạy lại tape "nhảy qua hố" ->
+  run_test fail đúng assert, evidence bundle đầy đủ; sửa lại -> pass.
+
+M6 — ASSET PIPELINE (2 tuần; GATE 8.5 đã chốt provider)
+  T6.1 workers/imagegen: state machine + lease/heartbeat/cancel/
+       quarantine (8.2) + provider theo GATE + gs doctor preflight
+  T6.2 asset.gen_image/job_status/job_cancel/ingest_staged + jobs UI
+  T6.3 AnimFlipbook + make_flipbook; Text2D + font import validate
+  T6.4 importer_version/reimport/sniffing/decode caps (8.1) +
+       GS-EC-09,50..55
+  NGHIỆM THU M6: kịch bản 1.5 bước gen art chạy thật trên máy đã
+  provision; rút worker giữa chừng -> job timed_out sạch; kết quả trễ bị
+  quarantine.
+
+M7A — EXPORT GAME (1-2 tuần)
+  T7A.1 build.game: copy player + pack assets + settings runtime + icon;
+        kiểm asset missing TRƯỚC build (fail sớm); build.cancel
+  T7A.2 Bản build chạy không cần editor/.gs; CLEAN-VM TEST (Windows 10 +
+        11 máy ảo sạch — không cài Rust/Python); GS-EC-49
+  T7A.3 Game export KHÔNG ký bằng cert của editor: unsigned mặc định +
+        hướng dẫn user-supplied signing (C13)
+  NGHIỆM THU M7A: game "Kho Bí Ẩn" chạy trên VM sạch cả Win10/11.
+
+M7B — PHÂN PHỐI EDITOR (2-3 tuần; cần trước public, KHÔNG chặn M8)
+  T7B.1 Installer (MSIX hoặc Inno — chọn ghi DECISIONS.md) + uninstall
+        sạch + update channel + rollback
+  T7B.2 Code signing + timestamp; crash report opt-in + symbol + privacy
+  T7B.3 SBOM + THIRD_PARTY_NOTICES + license allowlist CI + font license
+        audit (quyền EMBED font trong document != quyền REDISTRIBUTE font
+        trong app/game — kiểm từng font bundle)
+  NGHIỆM THU M7B: cài/gỡ/update trên VM sạch; mọi dependency có license
+  được phép; notices đầy đủ.
+
+M8 — MCP + DOGFOOD LẶP (2 tuần)
+  T8.1 gs-mcp hoàn thiện từ spike: tool list sinh từ registry +
+       conformance MCP Inspector + Cursor thật
+  T8.2 Chạy kịch bản 1.5 bằng agent thật >=3 vòng, đo KPI tự chủ (>=80%
+       bước), quay video, log mọi điểm kẹt
+  T8.3 Sửa top-10 điểm kẹt (thiếu lệnh? observation? docs?) — vòng lặp
+       sản phẩm quan trọng nhất
+  T8.4 Đặt tên sản phẩm + go/no-go beta + chốt scope M9
+  NGHIỆM THU M8: tiêu chí 1.5 đạt trên máy provision, evidence bundle
+  làm bằng chứng, video demo.
+
+M9+ — 2D COMPLETENESS (plan riêng khi M8 xong — danh mục từ review):
+  game UI widgets (button/label/panel canvas), sprite-sheet slicing, anim
+  state machine, tile palette/tileset editor nâng cao, save-game API,
+  particles, materials/shader tùy chỉnh, parallax/lighting 2D, pathfinding,
+  localization, scene tabs + asset browser, debugger Luau (breakpoint),
+  FULL PREFAB (override/apply-back/nesting), docking layout, undo history
+  UI, moderation ảnh gen khi share online.
+
+TIMELINE THỰC TẾ (C13 — thay số lạc quan v1; đã gồm buffer chưa gồm
+contingency; cộng thêm 20-30% khi cam kết lịch với bên ngoài):
+  | Phạm vi                          | 1 senior     | đội 3-4 người |
+  |----------------------------------|--------------|---------------|
+  | M-1..M8 (vertical-slice, có M7A) | 7-10 tháng   | 4-6 tháng     |
+  | + M7B (public-ready editor)      | 9-13 tháng   | 5-7 tháng     |
+  | + M9 (2D completeness beta)      | 14-20 tháng  | 8-12 tháng    |
+  NẾU BỊ ÉP xuống ~4-5 tháng 1 người: phải CÔNG KHAI cắt (ghi DECISIONS):
+  hoãn fault-injection đầy đủ (giữ WAL cơ bản), hoãn luau-analyze, hoãn
+  M7B, golden chỉ 1 bộ, bỏ gamepad, bỏ flipbook editor UI (chỉ lệnh),
+  giảm edge matrix xuống nhóm P0 (01,03,13,18,19,22,23,27,38,39,40,45).
+  KHÔNG ĐƯỢC cắt: WAL flush-trước-ACK, authority model, play snapshot,
+  event trace, sandbox Luau — cắt mấy cái này là đổi sản phẩm thành demo.
+
+================================================================================
+PHẦN 14 — RỦI RO, GATES, CÂU HỎI MỞ
+================================================================================
+
+14.1 RỦI RO & FALLBACK
+  R1 T-1.a spike fail / M1 trễ >3 tuần -> full Bevy cho player + preview
+     texture trong editor; quyết tại M-1 hoặc review M1 (2.3).
+  R2 mlua/Luau build khó trên máy team -> phát hiện ngay T-1.b (không còn
+     là rủi ro muộn); fallback Lua 5.4 + tự viết guard là HẠ CẤP lớn, cần
+     quyết định có chữ ký ở DECISIONS.md.
+  R3 egui viewport hiệu năng kém texture lớn -> render scale + upscale;
+     hoặc child HWND của player nhúng.
+  R4 WARP lệch golden -> 2 bộ golden (12.1).
+  R5 Dispatcher single-writer nghẽn txn khổng lồ -> đã có cap 200 lệnh/txn
+     + budget; nếu thiếu: scene.load_document (áp cả file, vẫn WAL + undo
+     entry).
+  R6 MCP rust-sdk đổi API -> pin revision + spike sống từ M-1e; wrapper
+     mỏng để thay SDK không chạm registry.
+
+14.2 GATES (phải chốt trước khi code phần liên quan)
+  G1 (trước M0): review chốt M-1 — render constants, WAL format, Luau
+     semantics, matrix versions.
+  G2 (cuối M2): tách repo hay không (C14).
+  G3 (trước M6): provider imagegen A/B/C (8.5).
+  G4 (trước M7B): kênh phân phối MSIX vs Inno + chính sách signing.
+  G5 (M8): tên sản phẩm, license sản phẩm, go/no-go beta.
+
+14.3 CÂU HỎI MỞ (không chặn M-1/M0)
+  Q1 Tên sản phẩm thật + license (G5).
+  Q2 Moderation ảnh gen khi có share online (M9+).
+  Q3 Graph IR visual scripting cho non-programmer (sau M8, dựa dữ liệu
+     dogfood xem Luau text có đủ không).
+  Q4 3D: mở plan riêng sau M8 — tái dùng bus/protocol nguyên vẹn (1.3).
+
+14.4 ĐIỀU KIỆN THÀNH CÔNG (giữ v1 — la bàn)
+  - Không phải "đủ tính năng như Unity". Là: MỌI tính năng ĐÃ CÓ đều dùng
+    được bởi agent 100% qua bus, quan sát được, undo được, có bằng chứng
+    (evidence bundle).
+  - Tính năng chỉ-người-dùng-được là bug kiến trúc.
+  - Người luôn giật lại tay lái trong 1 cú click.
+
+================================================================================
+PHỤ LỤC A — BUDGET HIỆU NĂNG/RAM (mục tiêu I13 — xác nhận bằng benchmark)
+================================================================================
+  editor idle <=300MB; editor 5k entity <=500MB, mở <3s
+  player 10k sprite <=250MB, p95 <=16.7ms; script global 12ms hard
+  bus round-trip p95 <20ms; txn 200 lệnh <250ms
+  screenshot 1080p <150ms; hot reload <300ms
+  WAL fsync mặc định mỗi txn (đo overhead ở T-1.c; nếu >2ms/txn trên SSD
+  thường -> cân nhắc group-commit 5ms, ghi DECISIONS.md)
+  build Kho Bí Ẩn <30s, output <80MB
+  (Đây là tool desktop offline-first: "trăm triệu user" = nhiều máy chạy
+   độc lập, không server bắt buộc; server chỉ xuất hiện nếu có share/cloud
+   — plan riêng.)
+
+================================================================================
+PHỤ LỤC B — TÁI DÙNG PATTERN TỪ REPO HIỆN CÓ (đọc, học, viết lại)
+================================================================================
+  zoracle/logviewer/src/model.rs      -> validate + byte caps
+  zoracle/logviewer/src/runner.rs     -> write_json_atomic, kill tree
+  zoracle/logviewer/src/session/*     -> session registry, attach, journal
+  zoracle/hh.ps1                      -> hình mẫu gs.ps1 (mandatory
+                                         -Session, validate sớm)
+  toolstart-egui/src/*                -> eframe app + quản lý process con
+  Khác biệt chủ đích: TCP JSON-RPC thay FIFO free-text; document + WAL +
+  undo (zoracle không cần); authority server-cấp (zoracle tin localhost).
+
+================================================================================
+HẾT PLAN v2 — cập nhật bảng 0.1 sau mỗi milestone. Thay đổi quyết định
+kiến trúc: ghi docs/DECISIONS.md + Phần 14, KHÔNG sửa ngầm.
+================================================================================
