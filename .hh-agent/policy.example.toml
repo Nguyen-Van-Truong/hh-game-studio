@@ -43,9 +43,11 @@ allow_write_rel = [
 ]
 
 # §6.4: generic write/delete tools cannot touch plugin, policy, or locks.
+# deny wins over allow_write_rel = ["godot/"] — the addon host is not writable.
 deny_write_rel = [
   "addons/hh_agent/",
   "res://addons/hh_agent/",
+  "godot/plugin-project/addons/",
   ".hh-agent/policy.toml",
   ".hh-agent/policy.example.toml",
   ".hh-agent/capability-lock.json",

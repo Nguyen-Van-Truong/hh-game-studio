@@ -2,7 +2,7 @@
 """Git-ish scan: no credential-shaped secrets in the working tree.
 
 Walks the repo; skips `.git`, `target`, `node_modules`, `.godot`.
-Skips `tests/bootstrap/policy/fail_*.toml` (validator negative fixtures).
+Negative policy fixtures must not contain PAT-shaped blobs either.
 
 Exit 0 = clean. Stdlib only. Do not use cargo.
 """
@@ -40,18 +40,6 @@ SKIP_SUFFIXES = {
 MAX_BYTES = 2_000_000
 
 
-def is_negative_secret_fixture(path: Path) -> bool:
-    try:
-        rel_parts = path.resolve().relative_to(REPO_ROOT.resolve()).parts
-    except ValueError:
-        return False
-    return (
-        rel_parts[:3] == ("tests", "bootstrap", "policy")
-        and path.name.startswith("fail_")
-        and path.suffix == ".toml"
-    )
-
-
 def iter_repo_files(root: Path):
     for path in root.rglob("*"):
         if not path.is_file():
@@ -59,8 +47,6 @@ def iter_repo_files(root: Path):
         if any(part in SKIP_DIR_NAMES for part in path.parts):
             continue
         if path.suffix.lower() in SKIP_SUFFIXES:
-            continue
-        if is_negative_secret_fixture(path):
             continue
         yield path
 

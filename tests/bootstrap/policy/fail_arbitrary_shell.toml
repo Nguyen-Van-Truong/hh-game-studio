@@ -19,7 +19,12 @@ block_symlink_escape = true
 block_junction_escape = true
 block_device_reserved = true
 allow_write_rel = ["godot/"]
-deny_write_rel = [".hh-agent/policy.toml"]
+deny_write_rel = [
+  "addons/hh_agent/",
+  "res://addons/hh_agent/",
+  "godot/plugin-project/addons/",
+  ".hh-agent/policy.toml",
+]
 
 [process]
 allow_arbitrary_shell = true

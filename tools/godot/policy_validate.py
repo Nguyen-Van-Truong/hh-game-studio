@@ -88,7 +88,14 @@ FIXTURE_EXPECT = {
     "fail_path_absolute.toml": "E_PATH_ABSOLUTE",
     "fail_arbitrary_shell.toml": "E_ARBITRARY_SHELL",
     "fail_secret.toml": "E_SECRET",
+    "fail_addon_jail.toml": "E_ADDON_JAIL",
 }
+# §6.4: generic write cannot touch the Godot addon host or hh_agent plugin.
+REQUIRED_DENY_PREFIXES = (
+    "addons/hh_agent/",
+    "res://addons/hh_agent/",
+    "godot/plugin-project/addons/",
+)
 
 
 def posixish(s: str) -> str:
@@ -119,6 +126,27 @@ def is_os_absolute(s: str) -> bool:
     if t.startswith("/"):
         return True
     return Path(t).is_absolute()
+
+
+def posix_prefix(s: str) -> str:
+    p = posixish(s.strip()).lstrip("./")
+    if not p:
+        return ""
+    return p if p.endswith("/") else p + "/"
+
+
+def prefix_covers(deny: str, required: str) -> bool:
+    """True if deny is the required path or a parent of it."""
+    d = posix_prefix(deny)
+    r = posix_prefix(required)
+    return bool(d) and (r == d or r.startswith(d))
+
+
+def path_under(path: str, prefix: str) -> bool:
+    """True if path equals prefix or is a child of it."""
+    p = posix_prefix(path)
+    d = posix_prefix(prefix)
+    return bool(d) and (p == d or p.startswith(d))
 
 
 def abs_allowlisted(s: str) -> bool:
@@ -217,6 +245,27 @@ def validate_policy_text(text: str, source: str = "<policy>") -> list[str]:
         ):
             if roots.get(flag) is not True:
                 errors.append(f"E_ROOTS: {source}: {flag} must be true (A8 jail)")
+        deny_rel = roots.get("deny_write_rel")
+        if not isinstance(deny_rel, list):
+            errors.append(f"E_ADDON_JAIL: {source}: deny_write_rel must be an array")
+            deny_rel = []
+        deny_strs = [item for item in deny_rel if isinstance(item, str)]
+        for required in REQUIRED_DENY_PREFIXES:
+            if not any(prefix_covers(item, required) for item in deny_strs):
+                errors.append(
+                    f"E_ADDON_JAIL: {source}: deny_write_rel must cover {required!r}"
+                )
+        allow_rel = roots.get("allow_write_rel")
+        if isinstance(allow_rel, list):
+            for item in allow_rel:
+                if not isinstance(item, str):
+                    continue
+                for required in REQUIRED_DENY_PREFIXES:
+                    if path_under(item, required):
+                        errors.append(
+                            f"E_ADDON_JAIL: {source}: allow_write_rel {item!r} "
+                            f"cannot punch through deny {required!r}"
+                        )
 
     proc = data.get("process")
     if not isinstance(proc, dict):
