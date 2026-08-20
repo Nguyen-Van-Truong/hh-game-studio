@@ -18,5 +18,5 @@ python tools/godot/policy_validate.py .hh-agent/policy.example.toml
 Exit 0 = pass.
 
 - `test_authoritative_plan.py` — exactly one `AUTHORITATIVE_PLAN=1` (the 20-8 plan).
-- `test_policy.py` — `.hh-agent/policy.example.toml` valid; `tests/bootstrap/policy/fail_*.toml` rejected (`..`, absolute path, arbitrary shell, fake `sk-`/`ghp_`/`token=`).
-- `test_no_secrets.py` — tree scan (skips `.git`, `target`, `node_modules`, `.godot`, and those fail fixtures).
+- `test_policy.py` — `.hh-agent/policy.example.toml` valid; `tests/bootstrap/policy/fail_*.toml` rejected (`..`, absolute path, arbitrary shell, placeholder token, addon jail).
+- `test_no_secrets.py` — tree scan (skips `.git`, `target`, `node_modules`, `.godot`). Policy fail fixtures must not contain PAT-shaped blobs.

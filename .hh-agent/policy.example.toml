@@ -46,7 +46,7 @@ allow_write_rel = [
 # deny wins over allow_write_rel = ["godot/"] — the addon host is not writable.
 deny_write_rel = [
   "addons/hh_agent/",
-  "res://addons/hh_agent/",
+  "res://addons/",
   "godot/plugin-project/addons/",
   ".hh-agent/policy.toml",
   ".hh-agent/policy.example.toml",

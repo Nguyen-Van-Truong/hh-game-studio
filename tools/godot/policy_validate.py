@@ -91,10 +91,20 @@ FIXTURE_EXPECT = {
     "fail_addon_jail.toml": "E_ADDON_JAIL",
 }
 # §6.4: generic write cannot touch the Godot addon host or hh_agent plugin.
+# Spellings are aliased: res://addons/** ↔ godot/plugin-project/addons/**.
 REQUIRED_DENY_PREFIXES = (
     "addons/hh_agent/",
-    "res://addons/hh_agent/",
+    "res://addons/",
     "godot/plugin-project/addons/",
+)
+PLUGIN_PROJECT_PREFIX = "godot/plugin-project/"
+JAIL_ATTACK_ALLOWS = (
+    "res://addons/godot-mcp/",
+    "res://godot/plugin-project/addons/godot-mcp/",
+    "godot/plugin-project/./addons/godot-mcp/",
+    "godot/plugin-project//addons/godot-mcp/",
+    "Godot/plugin-project/addons/godot-mcp/",
+    "godot\\\\plugin-project\\\\addons\\\\godot-mcp/",
 )
 
 
@@ -128,25 +138,71 @@ def is_os_absolute(s: str) -> bool:
     return Path(t).is_absolute()
 
 
-def posix_prefix(s: str) -> str:
-    p = posixish(s.strip()).lstrip("./")
+def collapse_posix(s: str) -> str:
+    """Lowercase POSIX path; drop empty and '.' segments; keep '..' for other checks.
+
+    Do not use str.lstrip('./') — that strips any mix of those characters.
+    """
+    raw = s.replace("\\", "/").strip()
+    scheme = ""
+    rest = raw
+    if raw.lower().startswith("res://"):
+        scheme = "res://"
+        rest = raw[6:]
+    while rest.startswith("./") or rest.startswith("/"):
+        rest = rest[2:] if rest.startswith("./") else rest[1:]
+    parts: list[str] = []
+    for part in rest.split("/"):
+        if part in ("", "."):
+            continue
+        parts.append(".." if part == ".." else part.lower())
+    body = "/".join(parts)
+    return scheme + body
+
+
+def as_prefix(s: str) -> str:
+    p = collapse_posix(s)
     if not p:
         return ""
     return p if p.endswith("/") else p + "/"
 
 
+def path_aliases(s: str) -> set[str]:
+    """res://addons/** and godot/plugin-project/addons/** are the same host."""
+    p = as_prefix(s)
+    if not p:
+        return set()
+    out = {p}
+    if p.startswith("res://"):
+        rest = p[6:]
+        out.add(as_prefix(PLUGIN_PROJECT_PREFIX + rest))
+        out.add(as_prefix(rest))
+    elif p.startswith(PLUGIN_PROJECT_PREFIX):
+        rest = p[len(PLUGIN_PROJECT_PREFIX) :]
+        out.add(as_prefix("res://" + rest))
+        out.add(as_prefix(rest))
+    elif p.startswith("addons/"):
+        out.add(as_prefix("res://" + p))
+        out.add(as_prefix(PLUGIN_PROJECT_PREFIX + p))
+    return {item for item in out if item}
+
+
 def prefix_covers(deny: str, required: str) -> bool:
-    """True if deny is the required path or a parent of it."""
-    d = posix_prefix(deny)
-    r = posix_prefix(required)
-    return bool(d) and (r == d or r.startswith(d))
+    """True if deny is the required path, a parent, or an aliased spelling."""
+    for deny_a in path_aliases(deny):
+        for req_a in path_aliases(required):
+            if req_a == deny_a or req_a.startswith(deny_a):
+                return True
+    return False
 
 
 def path_under(path: str, prefix: str) -> bool:
-    """True if path equals prefix or is a child of it."""
-    p = posix_prefix(path)
-    d = posix_prefix(prefix)
-    return bool(d) and (p == d or p.startswith(d))
+    """True if path equals prefix, is a child, or matches an aliased spelling."""
+    for path_a in path_aliases(path):
+        for prefix_a in path_aliases(prefix):
+            if path_a == prefix_a or path_a.startswith(prefix_a):
+                return True
+    return False
 
 
 def abs_allowlisted(s: str) -> bool:
@@ -400,6 +456,23 @@ def self_test() -> int:
         missing = set(FIXTURE_EXPECT) - seen
         if missing:
             errors.append(f"missing fixtures: {sorted(missing)}")
+
+    example_text = EXAMPLE_POLICY.read_text(encoding="utf-8")
+    needle = '  "godot/",'
+    if needle not in example_text:
+        errors.append("policy.example.toml missing allow_write_rel godot/ needle")
+    else:
+        for attack in JAIL_ATTACK_ALLOWS:
+            mutated_allow = example_text.replace(
+                needle, needle + f'\n  "{attack}",', 1
+            )
+            synth_jail = validate_policy_text(
+                mutated_allow, f"<jail-attack:{attack}>"
+            )
+            if not any(e.startswith("E_ADDON_JAIL:") for e in synth_jail):
+                errors.append(
+                    f"jail attack allow {attack!r} was not rejected: {synth_jail}"
+                )
 
     fake_sk = "sk-" + ("ab" * 16)
     fake_ghp = "ghp_" + ("cd" * 18)

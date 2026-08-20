@@ -55,10 +55,12 @@ or calls into the hh_agent plugin.
 
 **Controls**
 
-- **reject:** generic write/delete tools cannot touch `res://addons/hh_agent/**`,
-  `godot/plugin-project/addons/**` (the real addon host — including a third-party
-  MCP plugin), `.hh-agent/policy.toml`, capability-lock, or the ledger (§6.4).
-  `allow_write_rel = ["godot/"]` does not punch through those deny prefixes.
+- **reject:** generic write/delete tools cannot touch `res://addons/**` (the
+  Godot project addon host, including a third-party MCP plugin),
+  `godot/plugin-project/addons/**` (same host on disk), `addons/hh_agent/**`,
+  `.hh-agent/policy.toml`, capability-lock, or the ledger (§6.4).
+  `allow_write_rel = ["godot/"]` does not punch through those deny prefixes;
+  `res://`, `./`, `//`, and case-folded spellings are the same paths.
   Unknown eval / `Object.call` surfaces from the agent tool list are denied (see T4).
 - **jail:** project-content mutation stays under project root after canonicalize (A8).
   Import goes through magic/size/decode + quarantine before `res://`.

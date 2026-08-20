@@ -1,7 +1,8 @@
 # Negative fixtures for tools/godot/policy_validate.py --self-test.
 #
-# fail_*.toml MUST be rejected. test_no_secrets.py skips these files so the
-# fake sk-/ghp_/token= values are not treated as a repo leak.
+# fail_*.toml MUST be rejected. Do not put sk-/ghp_/PAT blobs in these files;
+# fail_secret.toml uses a non-placeholder session_token (E_SECRET) so the tree
+# scanner can walk this directory.
 
 Each `fail_*.toml` is otherwise a complete policy with one defect:
 
@@ -11,5 +12,6 @@ Each `fail_*.toml` is otherwise a complete policy with one defect:
 | `fail_path_absolute.toml` | `E_PATH_ABSOLUTE` |
 | `fail_arbitrary_shell.toml` | `E_ARBITRARY_SHELL` |
 | `fail_secret.toml` | `E_SECRET` |
+| `fail_addon_jail.toml` | `E_ADDON_JAIL` |
 
 Pass case: repo `.hh-agent/policy.example.toml`.
