@@ -11,3 +11,24 @@ experiments/**/target/
 .vscode/
 *.swp
 Thumbs.db
+
+# Godot editor import cache (never commit). Do not ignore godot/plugin-project sources.
+.godot/
+**/.godot/
+
+# Node sidecar
+node_modules/
+/bridge/dist/
+**/__pycache__/
+*.pyc
+
+# Local Godot binary / template cache (never commit zip/tpz/exe)
+.godot-cache/
+/Godot_v*.zip
+/Godot_v*.tpz
+/Godot_v*.exe
+
+# Agent secrets / local session (example policy files may be committed later)
+.hh-agent/secrets/
+.hh-agent/**/*.token
+.hh-agent/session.json

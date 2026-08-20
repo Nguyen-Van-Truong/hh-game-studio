@@ -1,0 +1,81 @@
+{
+  "schema": "hh-godot-pin/1",
+  "frozen_on": "2026-08-20",
+  "godot": {
+    "flavor": "standard",
+    "tag": "4.7.1-stable",
+    "version_id": "4.7.1.stable.official.a13da4feb",
+    "commit_short": "a13da4feb",
+    "commit_full": "a13da4feb8d8aefc283c3763d33a2f170a18d541",
+    "cache_dirname": "godot-4.7.1-stable",
+    "license": "MIT",
+    "license_url": "https://raw.githubusercontent.com/godotengine/godot/4.7.1-stable/LICENSE.txt",
+    "copyright_url": "https://raw.githubusercontent.com/godotengine/godot/4.7.1-stable/COPYRIGHT.txt",
+    "sums_url": "https://github.com/godotengine/godot-builds/releases/download/4.7.1-stable/SHA512-SUMS.txt",
+    "refuse_version_prefixes": ["4.7.2", "4.8"],
+    "refuse_url_substrings": [
+      "/releases/latest",
+      "tuxfamily.org",
+      "4.7.2",
+      "4.8-dev",
+      "4.8-stable",
+      "_mono_",
+      ".NET"
+    ],
+    "downloads": {
+      "win64_editor_zip": {
+        "file": "Godot_v4.7.1-stable_win64.exe.zip",
+        "url": "https://github.com/godotengine/godot-builds/releases/download/4.7.1-stable/Godot_v4.7.1-stable_win64.exe.zip",
+        "bytes": 84198557,
+        "sha512": "a6b02c527c18ba9936e63562032701432b2dc57d98d6483ceaccb00fe14af16af5773ae8a55e7b4d614edf121c4d9e420d870f804edb1dac16362298a01ce6c4",
+        "sha256": "c7a289051eaefb460b0106b60e9cd5bee0ef55fd102dcb2bed1eb356cf3d90a1",
+        "console_exe": "Godot_v4.7.1-stable_win64_console.exe",
+        "gui_exe": "Godot_v4.7.1-stable_win64.exe"
+      },
+      "export_templates_tpz": {
+        "file": "Godot_v4.7.1-stable_export_templates.tpz",
+        "url": "https://github.com/godotengine/godot-builds/releases/download/4.7.1-stable/Godot_v4.7.1-stable_export_templates.tpz",
+        "bytes": 1280486955,
+        "sha512": "afcc83d8d3d298038f19c58744a0d660fa75dd4baa33cb55d1011bb2565a2a8c2381728924564cb909e37c205a23f21b521b23bd057993afd43ae4da0b2f9d47",
+        "sha256_github_digest": "86409db6200b6f8fd3230989c2d2002851f3dd18acf11d7bdbafddf5a0dd0f72",
+        "sha256_verified": "86409db6200b6f8fd3230989c2d2002851f3dd18acf11d7bdbafddf5a0dd0f72",
+        "sha256_verified_on": "2026-08-20"
+      }
+    }
+  },
+  "node": {
+    "line": "24",
+    "codename": "Krypton",
+    "status": "Active LTS",
+    "version": "24.19.0",
+    "fetched_from": "https://nodejs.org/dist/index.json",
+    "fetched_on": "2026-08-20"
+  },
+  "typescript": {
+    "version": "5.9.3",
+    "license": "Apache-2.0"
+  },
+  "types_node": {
+    "version": "24.13.3",
+    "license": "MIT"
+  },
+  "godot_test_runner": {
+    "name": "GUT",
+    "package": "bitwes/Gut",
+    "version": "9.7.1",
+    "tag": "v9.7.1",
+    "commit": "aeb5d4f3f7f0a6c9b5e178876d6c99b791fda605",
+    "branch": "godot_4_7",
+    "godot_compat": "4.7.x",
+    "license": "MIT",
+    "license_file": "addons/gut/LICENSE.md",
+    "source_tag_url": "https://github.com/bitwes/Gut/releases/tag/v9.7.1",
+    "source_commit_url": "https://github.com/bitwes/Gut/tree/aeb5d4f3f7f0a6c9b5e178876d6c99b791fda605",
+    "archive_url": "https://github.com/bitwes/Gut/archive/refs/tags/v9.7.1.zip",
+    "vendored": false,
+    "rejected_alternatives": {
+      "gdunit4": "MIT, but no clean tagged pin for Godot 4.7.1-stable (4.7 support was master / 4.7.1-rc1 at research time).",
+      "godot_builtin": "No first-party GDScript unit-test runner comparable to GUT/GdUnit4."
+    }
+  }
+}
