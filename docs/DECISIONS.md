@@ -34,6 +34,78 @@ R0-WP1 đã đóng băng engine Rust/`gs-*` tại `legacy_base_commit` bằng an
 `legacy-rust-engine-2026-08-20` và branch `archive/legacy-rust-engine-2026-08-20`.
 Không tiếp tục WP-M6 / M7 / M8 của engine đó. Pointer phục hồi: `legacy/README.md`.
 
+## 2026-08-20 — G1 base: in-house thin (architecture gate, không phải E1–E4)
+
+`decision_id: GODOT-G1-BASE-2026-08-20`
+`status: approved`
+`gate: G1 NO-FORK`
+`choice: in-house thin`
+`g1_base: in-house-thin`
+`mcp_vendor: none`
+
+Đây là **architecture gate G1** sau R1 bake-off + stock vertical slice. Không phải
+stop-gate người E1–E4 (không secret, không spend, không ký/publish, không đổi brief).
+Không fork Godot C++. Không enable MCP trong `godot/plugin-project/`.
+
+### Chọn đúng một: (3) in-house thin
+
+Engine pin: Godot **4.7.1-stable** only —
+`4.7.1.stable.official.a13da4feb` /
+commit `a13da4feb8d8aefc283c3763d33a2f170a18d541`. Refuse `4.7.2*`.
+
+Cây sản phẩm tương lai (R2; **không** tạo addon/MCP server trong WP này):
+
+- plugin: `godot/plugin-project/addons/hh_agent/`
+- sidecar: `bridge/` (TypeScript MCP; scaffold `hh-godot-bridge` 0.0.0 + Node 24.19.0
+  lockfile đã có)
+- schema ownership (R2): `bridge/src/registry/`
+
+Lock: `.hh-agent/capability-lock.json` và `docs/godot-agent/G1_BASE.md`.
+
+### Bác (1) và (2)
+
+- **Rejected (1) vendor exact MIT commit** — không copy A/C/B/D source vào product
+  tree (`godot/plugin-project/`, `godot/test-projects/minimal-2d/`, `bridge/src/`).
+- **Rejected (2) depend exact package** — không `npx -y`, không thêm
+  `@satelliteoflove/godot-mcp` (hay Beckett/KeeVeeG/Sods2 npm) làm dependency sản phẩm.
+  npm `@satelliteoflove/godot-mcp@4.1.0` (tag `godot-mcp-v4.1.0`, SHA
+  `59da3d0dae06c79cc970d83828e54b2fc16d0769`) is **not** candidate A.
+
+### Lý do — MUST-PATCH leftover còn mở
+
+Plan §0.2 mặc định ưu tiên tái sử dụng/vendor một MCP MIT. R1-WP5 ghi mặc định ưu
+tiên satelliteoflove **nếu** self-verify/security **đạt**. Chúng **không** đạt cho
+enable-as-is: fail-hard enable-as-is = **yes** cho cả bốn ứng viên. WP R1-WP5 cho
+phép “tự làm phần tối thiểu nếu audit thất bại” / “write the minimal sidecar +
+plugin ourselves if MUST-PATCH stay open.” Các hàng MUST-PATCH **còn mở**. Đây
+**không** phải silent spec rewrite: không sửa `zdocs/20-8-godot-agent-autopilot-plan.txt`
+§0.2 `[CHỌN] Tái sử dụng/vendor một MCP MIT`; fallback ghi ở đây.
+
+**A** satelliteoflove/godot-mcp `1b7d40537240fd54300f54bf6fda1ea91f06c878`: không
+session token, cổng cố định **6550**, `godot_exec`, **zero UndoRedo**, `update_node`
+trả empty success, `MCPGameBridge` đi vào export. Spike security (token + disable
+exec) được vá **trong driver bake-off của ta**, không phải upstream.
+
+**C** Beckett Lite `efb81dec03ba0af2b7a6dce0e4678bdbde5e454d`: `call_method` /
+`Object.callv`, token thiếu trên upgrade path, zero-sidecar **conflicts** với
+TypeScript sidecar đã chọn (§0.2 / §2.2). Beckett Full itch = **E2 fail-hard**
+(không mua).
+
+Bake-off (`tests/e2e/bakeoff/SCORECARD.md`): agent-driven undo/redo **FAIL for both**
+(undo=0). Weighted C 3.625 vs A 2.858 **không** ủy quyền vendor. Dummy PNG
+screenshot = SKIP.
+
+**B** KeeVeeG `9ea1a41b9ed6cd819c602a37cc111c50017707d8` và **D** Sods2
+`78b2cee00d697f117d6875e07675101b867efe70`: fail-hard bake-off; coverage inventory
+only; không copy.
+
+### Boundary (G1)
+
+- upstream boundary = **none** (SHA trên là reference-only, không phải product upstream)
+- patch queue = **do not patch-vendor**
+- update cadence = **none** cho MCP candidate (chỉ re-audit nếu WP sau đề xuất (1) hoặc (2))
+- production fixture: `godot/plugin-project/` **không** có `addons/` / `plugin.cfg`
+
 ## 2026-08-16 — G1 chốt M-1 (người: tiếp tục, không dừng ở gate)
 
 - Renderer: **bevy_ecs standalone + gs-render2d**, không fallback full Bevy.

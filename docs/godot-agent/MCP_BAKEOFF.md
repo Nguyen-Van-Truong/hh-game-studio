@@ -281,7 +281,8 @@ scope and fail-hard** if required for acceptance.
 ## plugin-project
 
 `godot/plugin-project/` has `project.godot` only (plus gitignored `.godot/`).
-**No `addons/` tree, no MCP/GUT plugin enabled.** R1-WP3 must use disposable copies.
+**No `addons/` tree, no MCP/GUT plugin enabled.** R1-WP3 used disposable copies.
+G1 (R1-WP5) keeps the production fixture empty of MCP plugin candidates.
 
 ---
 
@@ -298,3 +299,72 @@ Driver: `python tests/e2e/bakeoff/run_bakeoff.py` (copies `minimal-2d`, pins A+C
 eval/`call_method`, requires a session token, binds 127.0.0.1). Guard:
 `python tests/bootstrap/test_bakeoff_guard.py`. Scorecard:
 [`tests/e2e/bakeoff/SCORECARD.md`](../../tests/e2e/bakeoff/SCORECARD.md).
+
+---
+
+## G1 — chosen base (R1-WP5)
+
+**Chosen:** in-house thin (`g1_base=in-house-thin`, `mcp_vendor=none`).
+Lock: [`G1_BASE.md`](G1_BASE.md), [`.hh-agent/capability-lock.json`](../../.hh-agent/capability-lock.json),
+decision `GODOT-G1-BASE-2026-08-20`.
+
+**Not chosen:** (1) vendor exact MIT commit; (2) depend exact package.
+
+Do not vendor A as-is. Do not vendor C as-is. The verdict table above is unchanged:
+fail-hard enable-as-is stays **yes** for A/B/C/D. G1 does not flip those cells to
+no. MUST-PATCH leftover stays open. We refused to vendor rather than patch-vendor.
+
+### Why not vendor A / C
+
+Plan default was satelliteoflove **if** self-verify/security **đạt**. They did
+**not** đạt for enable-as-is.
+
+- **A** (`1b7d40537240fd54300f54bf6fda1ea91f06c878`): no session token, fixed port
+  6550, `godot_exec`, **zero UndoRedo**, empty `update_node` success, `MCPGameBridge`
+  ships in export. Spike security was patched **in our bake-off driver**, not upstream.
+- **C Lite** (`efb81dec03ba0af2b7a6dce0e4678bdbde5e454d`): `call_method` /
+  `Object.callv`, missing token on upgrade path, zero-sidecar **conflicts** with the
+  chosen TypeScript sidecar (§0.2 / §2.2). Full itch = E2 — do not buy.
+- Bake-off weighted C 3.625 vs A 2.858 does **not** authorize vendor: agent-driven
+  undo/redo is FAIL for both (undo=0). Dummy PNG screenshot = SKIP.
+
+B KeeVeeG and D Sods2 remain fail-hard / coverage inventory only.
+
+### Upstream boundary
+
+**none.** The four SHAs are reference-only. They are not a product upstream. Do not
+copy their addon trees into `godot/plugin-project/` or `bridge/src/`.
+
+Reference roles only:
+
+- A: runtime freeze/step/input/digest
+- C Lite: validate-before-write + live EditorUndoRedoManager on scene tools
+- B / D: fail-hard inventory
+
+### Patch queue
+
+**do not patch-vendor.** No fork of satelliteoflove or Beckett into a product
+`third_party/` tree. Staging remains `third_party/mcp-staging/<id>/{LICENSE,PIN.json}`
+only. MUST-PATCH rows stay open; the fallback is in-house thin (`addons/hh_agent` +
+`bridge/` in R2).
+
+### Schema ownership
+
+Ours, starting R2 in `bridge/src/registry/`. Not inherited from A or C tool names.
+
+### Update cadence
+
+**none** for MCP candidates. Do not follow upstream tags. Re-audit only if a later
+WP proposes option (1) or (2). Godot stays 4.7.1-stable; refuse 4.7.2*.
+
+Do not `npx -y`. Do not install `@satelliteoflove/godot-mcp` as the G1 path.
+
+### Future tree (not this WP)
+
+- `godot/plugin-project/addons/hh_agent/` — named; **do not create now** (R2)
+- `bridge/` TypeScript MCP sidecar — scaffold exists; no MCP SDK this WP
+
+### Production fixture
+
+`godot/plugin-project/` has no `addons/` and no `plugin.cfg`. G1 closed every MCP
+plugin candidate as a production vendor.

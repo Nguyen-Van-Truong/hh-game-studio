@@ -5,7 +5,9 @@ pins (LICENSE + `PIN.json` only). Toolchain pins come from
 [`docs/VERSIONS_GODOT.md`](../VERSIONS_GODOT.md) and `tools/godot/pin.json`.
 Fetched **2026-08-20**. Do not bump Godot to 4.7.2.
 
-Upgrade of Godot or an upstream MCP is its own WP (A16).
+Upgrade of Godot is its own WP (A16). G1 (`GODOT-G1-BASE-2026-08-20`) chose
+**in-house thin**; there is no product-upstream MCP to bump. A later WP that
+proposes vendor/depend must re-audit; a vendor MCP will not land from this baseline.
 
 ---
 
@@ -23,19 +25,22 @@ Godot trademark: https://godot.foundation/policies-and-procedures/trademark-poli
 
 ---
 
-## MCP candidates — R1-WP2 pins (do not enable)
+## MCP candidates — R1-WP2 pins (G1 closed as production vendors)
 
-Scorecard: [MCP_BAKEOFF.md](MCP_BAKEOFF.md). Staging: `third_party/mcp-staging/<id>/{LICENSE,PIN.json}`
-only — source was grepped then discarded. **Not** copied into `plugin-project`.
+Scorecard: [MCP_BAKEOFF.md](MCP_BAKEOFF.md) + G1 section. Staging:
+`third_party/mcp-staging/<id>/{LICENSE,PIN.json}` only — source was grepped then
+discarded. **Not** copied into `plugin-project`. G1 base is **in-house thin**;
+these SHAs are reference-only, not product dependencies.
 
 | ID | Repository | Pin SHA (2026-08-20) | SPDX | Status |
 |----|------------|----------------------|------|--------|
-| A | [satelliteoflove/godot-mcp](https://github.com/satelliteoflove/godot-mcp) | `1b7d40537240fd54300f54bf6fda1ea91f06c878` | MIT | **shortlist** (must-patch before OWNER_AUTOPILOT) |
-| B | [KeeVeeG/godot-mcp](https://github.com/KeeVeeG/godot-mcp) | `9ea1a41b9ed6cd819c602a37cc111c50017707d8` | MIT | **fail-hard** (eval + `OS.execute` git clone + no token) |
-| C | [beckettlab/beckett-godot-mcp](https://github.com/beckettlab/beckett-godot-mcp) **Lite** | `efb81dec03ba0af2b7a6dce0e4678bdbde5e454d` (`v1.13.0`) | MIT (Lite tree) | **shortlist Lite**; **Full itch = E2 fail-hard** (do not buy) |
-| D | [Sods2/godot-mcp](https://github.com/Sods2/godot-mcp) | `78b2cee00d697f117d6875e07675101b867efe70` | MIT | **fail-hard** (no token, TCP 6008, disk-first writes) |
+| A | [satelliteoflove/godot-mcp](https://github.com/satelliteoflove/godot-mcp) | `1b7d40537240fd54300f54bf6fda1ea91f06c878` | MIT | **G1 rejected vendor** (reference-only). Enable-as-is fail-hard remains **yes**. Spike shortlist does not authorize vendor. |
+| B | [KeeVeeG/godot-mcp](https://github.com/KeeVeeG/godot-mcp) | `9ea1a41b9ed6cd819c602a37cc111c50017707d8` | MIT | **fail-hard** (eval + `OS.execute` git clone + no token); inventory only |
+| C | [beckettlab/beckett-godot-mcp](https://github.com/beckettlab/beckett-godot-mcp) **Lite** | `efb81dec03ba0af2b7a6dce0e4678bdbde5e454d` (`v1.13.0`) | MIT (Lite tree) | **G1 rejected vendor** (reference-only). **Full itch = E2 fail-hard** (do not buy). Enable-as-is fail-hard remains **yes**. |
+| D | [Sods2/godot-mcp](https://github.com/Sods2/godot-mcp) | `78b2cee00d697f117d6875e07675101b867efe70` | MIT | **fail-hard** (no token, TCP 6008, disk-first writes); inventory only |
 
 Plan references: §2.3, §12 MCP baseline URLs. README stars are not evidence.
+G1 lock: [`G1_BASE.md`](G1_BASE.md). NOTICE: we did not copy A/C/B/D source.
 
 ---
 
@@ -43,4 +48,5 @@ Plan references: §2.3, §12 MCP baseline URLs. README stars are not evidence.
 
 - Not a recursive npm/Godot addon SBOM (that is release / R9).
 - Not permission to `npx -y latest` or Asset Library latest.
-- Not a vendor of MCP addon source (R1-WP2 keeps LICENSE + PIN.json only).
+- Not a vendor of MCP addon source (R1-WP2 keeps LICENSE + PIN.json only;
+  R1-WP5 / G1 confirmed `mcp_vendor=none`, in-house thin).

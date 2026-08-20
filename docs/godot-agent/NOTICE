@@ -1,0 +1,17 @@
+HH Game Studio — Godot Agent Autopilot
+Copyright (c) 2026 HH Game Studio contributors
+
+G1 base (2026-08-20, decision_id GODOT-G1-BASE-2026-08-20): in-house thin.
+
+This product did not copy satelliteoflove/godot-mcp, KeeVeeG/godot-mcp,
+beckettlab/beckett-godot-mcp (Lite), or Sods2/godot-mcp source into product
+trees (godot/plugin-project/, godot/test-projects/minimal-2d/, bridge/src/).
+Beckett Full (itch) was not purchased (E2 fail-hard).
+
+MIT LICENSE files for those four GitHub audit pins remain only under
+third_party/mcp-staging/<id>/LICENSE. The pins are reference-only; they are
+not product dependencies and are not vendored addon trees.
+
+Godot Engine 4.7.1-stable is MIT. We pin the official binary
+(4.7.1.stable.official.a13da4feb / a13da4feb8d8aefc283c3763d33a2f170a18d541)
+and do not vendor or fork the C++ engine tree.

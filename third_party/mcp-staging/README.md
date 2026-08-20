@@ -1,5 +1,9 @@
 # MCP candidate staging (R1-WP2)
 
+G1 (R1-WP5, `GODOT-G1-BASE-2026-08-20`) closed all four as production vendors.
+This directory is audit pins only. The product base is in-house thin (future
+`godot/plugin-project/addons/hh_agent/` + `bridge/` in R2 — not created here).
+
 Audit clones of the four plan §2.3 MIT candidates. **LICENSE + `PIN.json` only**
 are committed. Full source was fetched at the pin SHA, grepped for the threat
 checklist, then discarded so this repo does not vendor addons.

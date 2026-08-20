@@ -1,0 +1,58 @@
+{
+  "schema": "hh-godot-capability-lock/1",
+  "decision_id": "GODOT-G1-BASE-2026-08-20",
+  "frozen_on": "2026-08-20",
+  "g1_base": "in-house-thin",
+  "godot": {
+    "tag": "4.7.1-stable",
+    "version_id": "4.7.1.stable.official.a13da4feb",
+    "commit_full": "a13da4feb8d8aefc283c3763d33a2f170a18d541",
+    "downloads": {
+      "win64_editor_zip": {
+        "sha256": "c7a289051eaefb460b0106b60e9cd5bee0ef55fd102dcb2bed1eb356cf3d90a1",
+        "sha512": "a6b02c527c18ba9936e63562032701432b2dc57d98d6483ceaccb00fe14af16af5773ae8a55e7b4d614edf121c4d9e420d870f804edb1dac16362298a01ce6c4"
+      },
+      "export_templates_tpz": {
+        "sha512": "afcc83d8d3d298038f19c58744a0d660fa75dd4baa33cb55d1011bb2565a2a8c2381728924564cb909e37c205a23f21b521b23bd057993afd43ae4da0b2f9d47",
+        "sha256_verified": "86409db6200b6f8fd3230989c2d2002851f3dd18acf11d7bdbafddf5a0dd0f72"
+      }
+    }
+  },
+  "mcp_vendor": "none",
+  "reference_shas": {
+    "A": "1b7d40537240fd54300f54bf6fda1ea91f06c878",
+    "B": "9ea1a41b9ed6cd819c602a37cc111c50017707d8",
+    "C": "efb81dec03ba0af2b7a6dce0e4678bdbde5e454d",
+    "D": "78b2cee00d697f117d6875e07675101b867efe70"
+  },
+  "g1_status": {
+    "A": "never-enable",
+    "B": "never-enable",
+    "C": "never-enable",
+    "D": "never-enable"
+  },
+  "never_enable_release_mistaken_for_A": "59da3d0dae06c79cc970d83828e54b2fc16d0769",
+  "bridge_npm": {
+    "node": "24.19.0",
+    "packages": {
+      "typescript": {
+        "version": "5.9.3",
+        "integrity": "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="
+      },
+      "@types/node": {
+        "version": "24.13.3",
+        "integrity": "sha512-Dh8vAsV36ig5wa9OX4pXvMc9D3Veibfw2wix0CUwYODLD8nkj9UsLjASr49nPg+2eKzxhBV+v7L8pXvT4e639Q=="
+      },
+      "undici-types": {
+        "version": "7.18.2",
+        "integrity": "sha512-AsuCzffGHJybSaRrmr5eHr81mwJU3kjw6M+uprWvCXiNeN9SOGwQ3Jn8jb8m3Z6izVgknn1R0FTCEAP2QrLY/w=="
+      }
+    }
+  },
+  "future_plugin": "godot/plugin-project/addons/hh_agent/",
+  "future_bridge": "bridge/",
+  "schema_ownership": "bridge/src/registry/",
+  "upstream_boundary": "none",
+  "patch_queue": "do-not-patch-vendor",
+  "update_cadence": "none"
+}
