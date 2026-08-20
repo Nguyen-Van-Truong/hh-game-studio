@@ -2,11 +2,12 @@
 """Parse docs/godot-agent/CAPABILITY_MATRIX.md (R1-WP1).
 
 Fails (exit != 0) if:
-  - unique CM-xxx IDs < 100
+  - a Supported row names EditorInterface (plugin does not exist)
+  - unique CM-xxx IDs or distinct Workflow/Semantic strings < 100
   - a WP group is missing
   - R8 traces section is missing or a required R8 keyword has no CM-ID
-  - any row is Status=Supported and Pri=P0 without a stock 4.7.1 hint
-    (EditorInterface, Godot CLI, or a godot/ path) in API/Notes/headless cells
+  - an R8 keyword's CM-IDs do not mention that work in Workflow/Semantic/Notes
+  - a Supported P0 row lacks Godot CLI or a godot/ path
 
 Stdlib only. Do not use cargo.
 """
@@ -127,11 +128,7 @@ def keyword_line_pattern(keyword: str) -> re.Pattern[str]:
 
 def stock_hint(api: str, headless: str, notes: str) -> bool:
     blob = f"{api} {headless} {notes}"
-    return (
-        "EditorInterface" in blob
-        or "Godot CLI" in blob
-        or "godot/" in blob
-    )
+    return "Godot CLI" in blob or "godot/" in blob
 
 
 def main() -> int:
@@ -175,12 +172,28 @@ def main() -> int:
             errors.append(f"{r[COL_ID]} Status={status!r} not Supported/Alternative/Gap")
         if pri not in {"P0", "P1", "P2"}:
             errors.append(f"{r[COL_ID]} Pri={pri!r} not P0/P1/P2")
-        if status == "Supported" and pri == "P0":
-            if not stock_hint(r[COL_API], r[COL_HEADLESS], r[COL_NOTES]):
+        if status == "Supported":
+            if "EditorInterface" in r[COL_API]:
                 errors.append(
-                    f"{r[COL_ID]} Supported P0 lacks EditorInterface, Godot CLI, "
-                    "or godot/ in API/Notes/headless"
+                    f"{r[COL_ID]} Supported but API names EditorInterface "
+                    "(plugin does not exist yet)"
                 )
+            if pri == "P0" and not stock_hint(r[COL_API], r[COL_HEADLESS], r[COL_NOTES]):
+                errors.append(
+                    f"{r[COL_ID]} Supported P0 lacks Godot CLI or godot/ in API/Notes/headless"
+                )
+
+    actions = [r[2] for r in rows if len(r) > 2]
+    if len(set(actions)) < MIN_UNIQUE_IDS:
+        errors.append(
+            f"distinct Workflow strings = {len(set(actions))} (need >= {MIN_UNIQUE_IDS})"
+        )
+    semantics = [r[3] for r in rows if len(r) > 3]
+    if len(set(semantics)) < MIN_UNIQUE_IDS:
+        errors.append(
+            f"distinct Semantic action strings = {len(set(semantics))} "
+            f"(need >= {MIN_UNIQUE_IDS})"
+        )
 
     traces = r8_traces_section(text)
     if traces is None:
@@ -204,6 +217,19 @@ def main() -> int:
                 errors.append(
                     f"R8 traces keyword {kw!r} references unknown IDs: {unknown}"
                 )
+            if not kw.startswith("R8-WP"):
+                by_id = {row[0]: row for row in rows}
+                blobs = []
+                for cid in found_ids:
+                    row = by_id.get(cid)
+                    if row and len(row) >= EXPECTED_COLS:
+                        blobs.append(" ".join((row[2], row[3], row[COL_NOTES])))
+                combined = "\n".join(blobs)
+                if blobs and not pat.search(combined):
+                    errors.append(
+                        f"R8 traces keyword {kw!r} IDs {found_ids} do not describe "
+                        "that work in Workflow/Semantic/Notes"
+                    )
 
     if errors:
         print("FAIL: capability matrix check", file=sys.stderr)
