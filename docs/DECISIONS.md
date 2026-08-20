@@ -1,5 +1,39 @@
 # Architecture decisions
 
+## 2026-08-20 — Reboot sang Godot stock + Agent Autopilot (người đã chọn hướng mới)
+
+`decision_id: GODOT-REBOOT-2026-08-20`
+`status: approved-transition`
+`supersedes-roadmap: zdocs/16-8-game-studio-*.txt`
+`effective-scope: chọn WP mới ngay; product implementation chỉ sau R0 archive/cutover`
+`legacy_base_commit=698e6088cc6d2c0a9a7b74021de409d46e5971aa`
+`archive_tag=legacy-rust-engine-2026-08-20`
+`archive_branch=archive/legacy-rust-engine-2026-08-20`
+
+Người dùng yêu cầu bỏ hướng/game cũ vì chất lượng không đạt, chọn giải pháp tốt nhất để
+AI agent có thể tự làm toàn bộ game còn người chỉ xem và review. Quyết định kiến trúc:
+
+- Dừng mở WP mới của roadmap Rust/`gs-*`; giữ nguyên code/lịch sử cho tới khi R0 archive
+  an toàn, không xóa ngầm.
+- Nền mới là **Godot stock stable**; game và EditorPlugin dùng GDScript. Không fork C++
+  trước. Chỉ mở GDExtension/fork nếu public API thất bại một capability bắt buộc và người
+  tick Gate GX.
+- Agent thao tác bằng semantic commands qua EditorPlugin/MCP, UndoRedo, atomic file write,
+  postcondition và Git checkpoint. Pixel mouse/RPA không phải nguồn mutation.
+- Editor thật hiển thị selection, Inspector, timeline và overlay/replay để người xem agent
+  làm. `OWNER_AUTOPILOT` tự duyệt việc project-scoped; chỉ hỏi ở secret/spend/sign-publish
+  hoặc thay đổi mục tiêu sản phẩm lớn.
+- Kế hoạch reboot chi tiết và progress authority sau cutover:
+  `zdocs/20-8-godot-agent-autopilot-plan.txt`.
+
+Đây là quyết định thay hướng sản phẩm do người yêu cầu trực tiếp ngày 20-8-2026. Việc
+triển khai bắt đầu ở R0-WP1; stanza TRANSITION trong AGENTS.md chỉ làm R0-WP1 có thể
+được chọn. R0-WP2 mới hoàn tất bootstrap và banner legacy; không sửa checkbox lịch sử.
+
+R0-WP1 đã đóng băng engine Rust/`gs-*` tại `legacy_base_commit` bằng annotated tag
+`legacy-rust-engine-2026-08-20` và branch `archive/legacy-rust-engine-2026-08-20`.
+Không tiếp tục WP-M6 / M7 / M8 của engine đó. Pointer phục hồi: `legacy/README.md`.
+
 ## 2026-08-16 — G1 chốt M-1 (người: tiếp tục, không dừng ở gate)
 
 - Renderer: **bevy_ecs standalone + gs-render2d**, không fallback full Bevy.

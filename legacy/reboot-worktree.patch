@@ -1,0 +1,59 @@
+diff --git a/AGENTS.md b/AGENTS.md
+index 2d9a6ca..e2b6eb6 100644
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -1,5 +1,17 @@
+ # AGENTS.md — HH Game Studio
+ 
++## TRANSITION 20-8-2026 — USER-APPROVED GODOT REBOOT
++
++Người dùng đã yêu cầu dừng mở WP mới của engine Rust cũ và lập hướng Godot Agent
++Autopilot. Trước mọi product code mới, đọc
++`zdocs/20-8-godot-agent-autopilot-plan.txt` và chỉ thực hiện **R0-WP1** (archive
++an toàn), sau đó R0-WP2 sẽ hoàn tất cutover bootstrap. Không làm WP-M6/M7/M8 cũ,
++không xóa code/asset cũ, không fork Godot. Entry quyết định:
++`docs/DECISIONS.md` — `GODOT-REBOOT-2026-08-20`.
++
++Trong giai đoạn chuyển tiếp, hướng dẫn bên dưới chỉ áp dụng khi audit/khôi phục
++legacy; nếu mâu thuẫn về WP hiện tại, stanza TRANSITION này thắng.
++
+ Bạn là AI agent triển khai sản phẩm. Repo này CHƯA có code sản phẩm cho đến khi
+ bạn (hoặc agent khác) làm work package. Mục tiêu: IDE làm game AI-native,
+ 2D hoàn thiện (M-1 → M9). Không đụng mạng xã hội Hoan Hao.
+diff --git a/docs/DECISIONS.md b/docs/DECISIONS.md
+index ad1c6ee..bf983ff 100644
+--- a/docs/DECISIONS.md
++++ b/docs/DECISIONS.md
+@@ -1,5 +1,32 @@
+ # Architecture decisions
+ 
++## 2026-08-20 — Reboot sang Godot stock + Agent Autopilot (người đã chọn hướng mới)
++
++`decision_id: GODOT-REBOOT-2026-08-20`
++`status: approved-transition`
++`supersedes-roadmap: zdocs/16-8-game-studio-*.txt`
++`effective-scope: chọn WP mới ngay; product implementation chỉ sau R0 archive/cutover`
++
++Người dùng yêu cầu bỏ hướng/game cũ vì chất lượng không đạt, chọn giải pháp tốt nhất để
++AI agent có thể tự làm toàn bộ game còn người chỉ xem và review. Quyết định kiến trúc:
++
++- Dừng mở WP mới của roadmap Rust/`gs-*`; giữ nguyên code/lịch sử cho tới khi R0 archive
++  an toàn, không xóa ngầm.
++- Nền mới là **Godot stock stable**; game và EditorPlugin dùng GDScript. Không fork C++
++  trước. Chỉ mở GDExtension/fork nếu public API thất bại một capability bắt buộc và người
++  tick Gate GX.
++- Agent thao tác bằng semantic commands qua EditorPlugin/MCP, UndoRedo, atomic file write,
++  postcondition và Git checkpoint. Pixel mouse/RPA không phải nguồn mutation.
++- Editor thật hiển thị selection, Inspector, timeline và overlay/replay để người xem agent
++  làm. `OWNER_AUTOPILOT` tự duyệt việc project-scoped; chỉ hỏi ở secret/spend/sign-publish
++  hoặc thay đổi mục tiêu sản phẩm lớn.
++- Kế hoạch reboot chi tiết và progress authority sau cutover:
++  `zdocs/20-8-godot-agent-autopilot-plan.txt`.
++
++Đây là quyết định thay hướng sản phẩm do người yêu cầu trực tiếp ngày 20-8-2026. Việc
++triển khai bắt đầu ở R0-WP1; stanza TRANSITION trong AGENTS.md chỉ làm R0-WP1 có thể
++được chọn. R0-WP2 mới hoàn tất bootstrap và banner legacy; không sửa checkbox lịch sử.
++
+ ## 2026-08-16 — G1 chốt M-1 (người: tiếp tục, không dừng ở gate)
+ 
+ - Renderer: **bevy_ecs standalone + gs-render2d**, không fallback full Bevy.
