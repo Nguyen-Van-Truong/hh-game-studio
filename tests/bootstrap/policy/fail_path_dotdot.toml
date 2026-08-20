@@ -1,0 +1,46 @@
+schema = "hh-godot-agent-policy/1"
+
+[profile]
+name = "OWNER_AUTOPILOT"
+allow_profile_escalation = false
+
+[stop_gates]
+E1_secret_or_account = true
+E2_spend_or_paid_quota = true
+E3_sign_upload_publish_or_exfil = true
+E4_brief_contradiction_or_product_pivot = true
+
+[roots]
+project_root = "."
+local_app_data = "%LOCALAPPDATA%/HHGodotAgent"
+export_out_dir = ""
+block_dotdot = true
+block_symlink_escape = true
+block_junction_escape = true
+block_device_reserved = true
+allow_write_rel = ["godot/../../../outside"]
+deny_write_rel = [".hh-agent/policy.toml"]
+
+[process]
+allow_arbitrary_shell = false
+args_are_arrays = true
+allowlist = ["godot", "gut", "exporter", "git"]
+
+[process.godot]
+tag = "4.7.1-stable"
+version_id = "4.7.1.stable.official.a13da4feb"
+
+[retention]
+evidence_days = 14
+ledger_days = 90
+ledger_in_git = false
+ledger_location = "%LOCALAPPDATA%/HHGodotAgent/projects/<project_id>/ledger.sqlite"
+
+[auth]
+bind = "127.0.0.1"
+allow_non_loopback = false
+log_secrets = false
+session_token = "YOUR_TOKEN_HERE"
+
+[pause]
+always_available = true

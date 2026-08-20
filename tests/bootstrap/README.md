@@ -2,6 +2,21 @@
 
 Governance checks for the Godot cutover. Do **not** run `cargo test` for these.
 
-    python tests/bootstrap/test_authoritative_plan.py
+```text
+python tests/bootstrap/test_authoritative_plan.py
+python tests/bootstrap/test_policy.py
+python tests/bootstrap/test_no_secrets.py
+```
 
-Exit 0 = pass. Non-zero = `AUTHORITATIVE_PLAN` markers are missing or duplicated.
+Equivalent policy command:
+
+```text
+python tools/godot/policy_validate.py --self-test
+python tools/godot/policy_validate.py .hh-agent/policy.example.toml
+```
+
+Exit 0 = pass.
+
+- `test_authoritative_plan.py` — exactly one `AUTHORITATIVE_PLAN=1` (the 20-8 plan).
+- `test_policy.py` — `.hh-agent/policy.example.toml` valid; `tests/bootstrap/policy/fail_*.toml` rejected (`..`, absolute path, arbitrary shell, fake `sk-`/`ghp_`/`token=`).
+- `test_no_secrets.py` — tree scan (skips `.git`, `target`, `node_modules`, `.godot`, and those fail fixtures).

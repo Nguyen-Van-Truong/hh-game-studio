@@ -28,7 +28,10 @@ node_modules/
 /Godot_v*.tpz
 /Godot_v*.exe
 
-# Agent secrets / local session (example policy files may be committed later)
+# Agent secrets / local session. Commit policy.example.toml only — never live tokens.
+.hh-agent/policy.toml
 .hh-agent/secrets/
 .hh-agent/**/*.token
 .hh-agent/session.json
+.env
+.env.*

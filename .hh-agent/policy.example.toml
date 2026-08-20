@@ -1,0 +1,88 @@
+# HH Godot Agent — example policy (R0-WP4)
+#
+# Copy this file to `.hh-agent/policy.toml` for a live session.
+# Do NOT commit the live copy, and do NOT put real tokens in either file.
+# Session tokens live under %LOCALAPPDATA%/HHGodotAgent/ (A8/A9), never git.
+#
+# Placeholder only if a field must exist in TOML: YOUR_TOKEN_HERE
+# Never use sk- / ghp_ / token=<random> shaped values in examples.
+
+schema = "hh-godot-agent-policy/1"
+
+[profile]
+# Repo default (plan §0.4 / §6.1). A client request must not escalate.
+name = "OWNER_AUTOPILOT"
+allowed = ["OBSERVE", "EDIT", "OWNER_AUTOPILOT"]
+allow_profile_escalation = false
+
+[stop_gates]
+# True = agent STOPs and asks the owner. Unrelated work may still be paused.
+E1_secret_or_account = true
+E2_spend_or_paid_quota = true
+E3_sign_upload_publish_or_exfil = true
+E4_brief_contradiction_or_product_pivot = true
+
+[roots]
+# A8: project-content mutations canonicalize under the project root.
+project_root = "."
+local_app_data = "%LOCALAPPDATA%/HHGodotAgent"
+# Per-job grant only. Empty means “not granted”.
+export_out_dir = ""
+block_dotdot = true
+block_symlink_escape = true
+block_junction_escape = true
+block_device_reserved = true
+max_path_chars = 240
+
+# Relative POSIX-style prefixes. No `..`. No OS-absolute paths.
+allow_write_rel = [
+  "godot/",
+  "docs/godot-agent/",
+  ".hh-agent/evidence/",
+  "PROJECT_BRIEF.md",
+]
+
+# §6.4: generic write/delete tools cannot touch plugin, policy, or locks.
+deny_write_rel = [
+  "addons/hh_agent/",
+  "res://addons/hh_agent/",
+  ".hh-agent/policy.toml",
+  ".hh-agent/policy.example.toml",
+  ".hh-agent/capability-lock.json",
+  ".hh-agent/checkpoints.jsonl",
+]
+
+[process]
+# §6.4: no arbitrary shell. Subprocess args are arrays, never a shell string.
+allow_arbitrary_shell = false
+args_are_arrays = true
+allowlist = [
+  "godot",    # pin 4.7.1-stable via tools/godot/pin.json (doctor cache)
+  "gut",      # GUT 9.7.1 test runner
+  "exporter", # Godot export / export templates
+  "git",      # recoverable checkpoints only (A15) — no force-rewrite
+]
+
+[process.godot]
+tag = "4.7.1-stable"
+version_id = "4.7.1.stable.official.a13da4feb"
+
+[retention]
+# Evidence blobs expire; ledger is durable LocalAppData, never git.
+evidence_days = 14
+ledger_days = 90
+ledger_in_git = false
+ledger_location = "%LOCALAPPDATA%/HHGodotAgent/projects/<project_id>/ledger.sqlite"
+
+[auth]
+# A9: loopback + random 256-bit token + current-user ACL. Do not log the token.
+bind = "127.0.0.1"
+allow_non_loopback = false
+log_secrets = false
+session_token = "YOUR_TOKEN_HERE"
+
+[pause]
+# A10 / A14: Pause always wins; ACK/draining target <= 250 ms.
+always_available = true
+ack_ms = 250
+destructive_requires_checkpoint = true
