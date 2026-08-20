@@ -1,0 +1,1701 @@
+AUTHORITATIVE_PLAN=1
+STATUS=APPROVED_TRANSITION
+CURRENT_VALID_WP=R0-WP1
+
+================================================================================
+BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
+================================================================================
+
+| Thứ tự | Milestone | Kết quả bắt buộc | Track có thể chạy song song | Gate | Trạng thái |
+|--------|-----------|------------------|-----------------------------|------|------------|
+| 0 | R0 — Cutover an toàn | Đóng băng engine Rust cũ, pin Godot, đổi bootstrap sang plan này, không mất lịch sử | Governance + Toolchain | G0 | [ ] 0/4 WP |
+| 1 | R1 — Spike và chọn nền MCP | Chứng minh agent tạo/sửa/chạy/nhìn một scene thật trong editor; chốt upstream hay tự làm | Research + Security + POC | G1 NO-FORK | [ ] 0/5 WP |
+| 2 | R2 — Control plane | Plugin, sidecar, Agent Host, MCP, auth, registry, ledger, pause và OWNER_AUTOPILOT hoạt động | Bridge + Plugin + Security | — | [ ] 0/7 WP |
+| 3 | R3 — Quyền editor ngữ nghĩa | Scene/node/property/resource/script/asset/project settings có undo, dedup và postcondition | Scene + Script + Asset | — | [ ] 0/8 WP |
+| 4 | R4 — Người xem được agent làm | Activity Dock, chọn node, focus inspector, cursor/gizmo ảo, replay kéo-thả, Watch/Fast mode | Observer UI + Editor UX | G2 VISIBLE | [ ] 0/6 WP |
+| 5 | R5 — Bộ công cụ làm game 2D | TileMapLayer, animation, UI, audio, physics, navigation, shader/particles được agent thao tác đầy đủ | 2D-A + 2D-B + Assets | — | [ ] 0/7 WP |
+| 6 | R6 — Agent tự chơi và tự kiểm | Play/debug, input, runtime state, deterministic step, screenshot/diff/perf, test evidence | Runtime + Test + Vision | G3 SELF-VERIFY | [ ] 0/7 WP |
+| 7 | R7 — Autopilot dài hạn | Nhận brief một lần, tự plan→làm→test→sửa→commit→resume; nhiều agent không đạp nhau | Orchestrator + Git + Recovery | G4 AUTONOMY | [ ] 0/6 WP |
+| 8 | R8 — Dogfood game thật | Từ project trống tạo game top-down 2D có art/audio/UI/save, người chỉ xem/review | Game + Art + QA song song theo DAG | G5 DOGFOOD | [ ] 0/6 WP |
+| 9 | R9 — Export và vận hành | Windows build sạch, addon/sidecar đóng gói, update pin, tài liệu review | Release + Docs + Compatibility | G6 RELEASE | [ ] 0/4 WP |
+| 10 | RX — Ngoại lệ engine | Chỉ mở khi public API/GDExtension không giải được một capability bắt buộc | C++ patch riêng | GX FORK | [ ] khóa |
+
+VIỆC PHẢI LÀM TRƯỚC: R0-WP1 → R0-WP2 → R0-WP3 → R0-WP4 → R1-WP1.
+Không được bắt đầu R2
+trước G1. Từ R2 trở đi chỉ song song các track có ranh giới file rõ ràng.
+
+Tiến độ tổng: [ ] 0/60 WP. First valid WP: R0-WP1.
+Ngày lập: 20-8-2026 (Asia/Saigon).
+
+================================================================================
+20-8-2026 — HH GODOT AGENT AUTOPILOT — KẾ HOẠCH DUY NHẤT
+================================================================================
+
+0. VAI TRÒ, TRẠNG THÁI VÀ QUYẾT ĐỊNH ĐÃ CHỌN
+
+0.1 Mục đích
+
+Tạo một hệ thống để AI agent có thể tự làm game Godot từ đầu đến bản build:
+tạo scene, thêm/reparent node, sửa Inspector, kéo-thả tài nguyên theo nghĩa
+ngữ nghĩa, viết GDScript, tạo TileMap/animation/UI/audio, chạy game, tự chơi,
+đọc trạng thái, chụp hình, test, sửa lỗi và commit. Người dùng chỉ cần:
+
+  1) đưa brief/mục tiêu một lần;
+  2) mở chế độ xem hoặc để hệ thống tự mở Godot;
+  3) nhấn Pause khi muốn;
+  4) review checkpoint/bản build.
+
+Không yêu cầu người dùng bấm từng nút, nhập từng property, chạy từng test hoặc
+chép log cho agent.
+
+0.2 Quyết định kiến trúc — CHỌN CÁCH NÀY
+
+  [CHỌN] Godot stock 4.7.1-stable, bản standard, game viết GDScript.
+  [CHỌN] EditorPlugin GDScript + MCP sidecar TypeScript, localhost có token.
+  [CHỌN] Lệnh ngữ nghĩa dùng Godot Editor API và EditorUndoRedoManager.
+  [CHỌN] Lớp quan sát/replay làm editor chọn node, focus Inspector, highlight,
+         chạy gizmo/cursor ảo để người thấy tiến trình.
+  [CHỌN] OWNER_AUTOPILOT là profile mặc định: việc trong project tự duyệt.
+  [CHỌN] Tái sử dụng/vendor một MCP MIT sau spike; không viết lại mọi thứ.
+  [CHỌN] Runtime observation + deterministic playtest là tiêu chí số 1.
+  [KHÔNG] Fork Godot C++ ngay từ đầu.
+  [KHÔNG] Dùng SendInput/toạ độ pixel/RPA làm nguồn mutation.
+  [KHÔNG] Đánh giá năng lực bằng số lượng tool; đánh giá bằng workflow E2E.
+  [KHÔNG] Tiếp tục tự viết renderer/physics/editor thay Godot.
+
+Lý do: public Editor API đã cung cấp open/save/play scene, selection, Inspector,
+filesystem/import, plugin dock và UndoRedo. Agent cần năng lực của thao tác UI,
+không cần giả làm con chuột. Fork C++ làm tăng chi phí merge upstream, crash và
+test mà không cải thiện chất lượng game ở giai đoạn đầu.
+
+0.3 Trạng thái so với hai plan cũ
+
+Plan này là kế hoạch reboot sản phẩm. Hai file 16-8 về engine Rust được giữ làm
+lịch sử/audit, KHÔNG dùng để chọn WP mới sau khi R0-WP2 cutover hoàn tất. Không
+xóa code cũ trước khi có tag/branch archive và không tái sử dụng một module cũ
+chỉ vì nó đã tồn tại; muốn reuse phải có test độc lập và lợi ích rõ.
+
+Plan này gộp WHAT/WHY + thứ tự + verify + tiến độ trong MỘT file để tránh drift.
+Không tạo một bảng checkbox thứ hai ở tài liệu khác.
+
+0.4 Mức “toàn quyền” được cam kết
+
+Toàn quyền nghĩa là agent được tự làm tất cả thao tác project-scoped có thể phục
+hồi: tạo/sửa/xóa scene và asset, viết code, đổi project settings, chạy test,
+chạy/export game và commit trên branch được cấp. Agent KHÔNG hỏi từng lệnh.
+
+Chỉ dừng ở bốn loại quyền không thể suy diễn an toàn:
+
+  E1. cần secret/tài khoản/API key mà máy chưa có;
+  E2. phát sinh tiền, quota trả phí hoặc mua asset/license;
+  E3. ký số, upload store, publish công khai hay gửi dữ liệu ra ngoài;
+  E4. brief mâu thuẫn hoặc cần đổi thể loại/đối tượng người chơi/phạm vi lớn.
+
+Mọi việc còn lại: agent tự chọn mặc định tốt, ghi assumption, làm, test, sửa và
+đưa checkpoint để người review sau. Nút Pause luôn có hiệu lực tức thì.
+
+0.5 Giới hạn phải nói thật
+
+Không hứa “bấm được 100% mọi pixel/nút nội bộ” vì một số màn hình Godot không có
+public API ổn định. Cam kết đúng là:
+
+  - 100% workflow cần để làm/export/test game 2D trong coverage matrix;
+  - mỗi nút quan trọng có semantic command hoặc một workflow thay thế tương đương;
+  - thao tác không có API được ghi gap, thử GDScript plugin rồi GDExtension;
+  - chỉ khi capability bắt buộc vẫn thiếu mới xét patch C++ qua Gate GX;
+  - RPA chỉ được dùng để test UI/replay trình diễn, không ghi scene/project.
+
+================================================================================
+1. TRẢI NGHIỆM ĐÍCH VÀ TIÊU CHÍ THÀNH CÔNG
+================================================================================
+
+1.1 Luồng người dùng đích
+
+  1) Người đặt PROJECT_BRIEF.md và chọn “Autopilot”.
+  2) Launcher mở đúng project, Godot editor và agent bridge.
+  3) Agent đọc project/brief, tạo plan slice đầu và hiện trong Activity Dock.
+  4) Editor tự chuyển 2D/Script, chọn đúng node, Inspector hiện property đang đổi.
+  5) Với “drag asset vào Sprite2D”, overlay diễn lại đường kéo; mutation thật là
+     resource assignment qua UndoRedo.
+  6) Agent viết script bằng atomic write, mở script đúng dòng, validate rồi chạy.
+  7) Agent Play, inject input, đọc remote tree/state/log/perf và chụp screenshot.
+  8) Nếu fail, agent tự sửa và chạy lại; nếu pass, tạo evidence + Git checkpoint.
+  9) Người xem timeline/replay hoặc chỉ review build cuối milestone.
+
+1.2 Definition of Autonomy (DoA)
+
+Một milestone chỉ được gọi là autonomous khi:
+
+  - không có bước hướng dẫn “người hãy click...” trong happy path;
+  - agent có thể tự discover class/property/method hợp version Godot đang pin;
+  - mọi success đều có postcondition/readback, không chỉ trả {ok:true};
+  - lỗi script/import/runtime được agent nhìn thấy trong cùng phiên;
+  - agent có thể tự quay về checkpoint xanh gần nhất;
+  - tiến trình bị kill có thể resume mà không chạy đôi command đã commit;
+  - evidence đủ để người review mà không phải tái tạo thủ công.
+
+1.3 KPI chấp nhận cuối R9
+
+  K1. 100% workflow bắt buộc trong Capability Matrix có E2E pass.
+  K2. >=95% thao tác sản xuất game dùng semantic API; 0 mutation dùng pixel RPA.
+  K3. 100% mutation scene/resource có UndoRedo hoặc atomic file transaction.
+  K4. 100% command có command_id, postcondition và audit entry; retry không chạy đôi.
+  K5. Agent dựng vertical slice dogfood từ project trống không cần click của người.
+  K6. Agent tự phát hiện và sửa tối thiểu 5 lỗi cài sẵn trong regression gauntlet.
+  K7. Một phiên 2 giờ bị restart ở ba điểm vẫn resume, không mất scene/nhân đôi node.
+  K8. Build Windows chạy trên VM sạch không cần Node, source repo hay Godot editor.
+  K9. Pause gate ACK/draining trong <=250 ms; job dài dừng ở safe-point gần nhất và
+      người có thể Undo/revert checkpoint agent gần nhất.
+  K10. Editor hiển thị action hiện tại trong <=500 ms ở Watch mode.
+
+1.4 Chất lượng game, không chỉ chất lượng tool
+
+Dogfood không được pass bằng ô màu/placeholder. Bản game nghiệm thu cần art style
+nhất quán, animation có state, âm thanh cơ bản, UI rõ, camera hợp lý, feedback khi
+tương tác, save/load và 10 phút gameplay không blocker. Asset AI phải có manifest
+nguồn/prompt/license; asset tạm phải mang nhãn PLACEHOLDER và không được vào build
+ release.
+
+================================================================================
+2. KIẾN TRÚC ĐÍCH
+================================================================================
+
+2.1 Sơ đồ
+
+  Agent Host (phiên bền; adapter Codex / Cursor / Claude / CI)
+        |-- giữ task/DAG/context summary/wakeup; gọi model qua credential user
+        |-- interactive: client hiện có chính là host; unattended: host process riêng
+        |
+        | MCP stdio, schema versioned
+        v
+  hh-godot-bridge (TypeScript sidecar, process riêng)
+        |-- Capability registry + JSON Schema
+        |-- Policy engine: OWNER_AUTOPILOT / EDIT / OBSERVE
+        |-- Command ledger + dedup + job supervisor
+        |-- Atomic file writer + GDScript validator + Git checkpoint
+        |-- Evidence index + MCP resources/prompts
+        |
+        | WebSocket localhost, port ngẫu nhiên, token theo session
+        v
+  addons/hh_agent (GDScript @tool EditorPlugin, chạy main thread editor)
+        |-- CommandRouter: scene/node/resource/editor actions
+        |-- EditorUndoRedoManager adapter
+        |-- Inspector/selection/filesystem/import adapter
+        |-- Activity Dock + overlay/cursor/replay
+        |-- Runtime debugger bridge
+        |
+        +-----------------------> Godot editor stock (cửa sổ người đang xem)
+        |
+        +-- khi Play -----------> game process + HHAgentRuntime autoload
+                                      | input/time/state/events/screenshot/perf
+                                      v
+                                  evidence/test assertions
+
+2.2 Vì sao sidecar + plugin
+
+Plugin phải chạy trong editor để dùng object thật, UndoRedo, selection, Inspector,
+import và Play. Sidecar chịu phần không nên nhét vào editor: MCP transport, schema,
+filesystem atomic, process/job, Git và lưu ledger. Agent Host chịu suy luận/session dài;
+sidecar/plugin tuyệt đối không nhúng model key hay tự giả làm AI. Trong phiên Codex/Cursor/
+Claude tương tác, chính client đó là Host. R7 unattended dùng host process có provider
+adapter, wakeup và context checkpoint; model credential nằm user store, không trong repo.
+Nếu sidecar crash, editor vẫn dùng bình thường. Nếu plugin crash, sidecar fail sạch và
+không tuyên bố success.
+
+MCP dùng stdio ở biên agent để không mở HTTP public. Plugin kết nối outbound tới
+sidecar bằng session descriptor có ACL của user hiện tại; không scan dải port cố
+định. Streamable HTTP chỉ thêm ở R9 nếu có nhu cầu, vẫn bind 127.0.0.1.
+
+2.3 Chiến lược reuse — không viết lại bừa
+
+R1 phải audit và spike các dự án MIT hiện hành. Ứng viên chính ban đầu:
+
+  A. satelliteoflove/godot-mcp — ưu tiên: tool gọn, runtime state, input và
+     deterministic playtest; đây là ứng viên primary để vendor/reference.
+  B. KeeVeeG/godot-mcp — coverage rộng, Editor API + UndoRedo + activity panel;
+     dùng làm coverage inventory, tránh bê nguyên 300+ tool nếu schema gây nhiễu.
+  C. Beckett Lite — zero-sidecar, validate-before-write, runtime observation;
+     chỉ phần MIT, không phụ thuộc tính năng thương mại cho acceptance cốt lõi.
+  D. Sods2/godot-mcp — tham khảo hybrid live-editor/file và test integrations.
+
+Không chạy đồng thời nhiều MCP plugin trong production. Sau R1 chỉ chọn MỘT base
+hoặc tự làm phần tối thiểu nếu audit thất bại. Nếu vendor: pin commit SHA, giữ LICENSE,
+SBOM, patch queue nhỏ và upstream-sync test. Không dùng `npx -y latest` trong CI/release.
+
+2.4 Thứ tự giải quyết một capability
+
+  Tier 1: Godot public Editor API trong GDScript EditorPlugin.
+  Tier 2: Godot CLI / text resource edit có conflict check + import/reload.
+  Tier 3: plugin UI riêng hoặc semantic menu command có stable ID.
+  Tier 4: GDExtension nhỏ, ABI/version pin và test riêng.
+  Tier 5: patch C++ Godot qua Gate GX.
+
+Pixel RPA không nằm trong chuỗi trên. Nó chỉ có thể là công cụ QA để xác nhận replay
+trông đúng, tuyệt đối không là đường ghi project.
+
+================================================================================
+3. BẤT BIẾN — VI PHẠM THÌ KHÔNG MERGE/TICK WP
+================================================================================
+
+A1. Godot stock trước: không sửa C++ engine khi Gate GX chưa được người tick.
+
+A2. Semantic source of truth: scene/project mutation đến từ command có schema;
+    cursor/gizmo/kéo-thả hiển thị chỉ là projection của command đã xác thực.
+
+A3. Scene và built-in resource đang mở: mutation qua EditorUndoRedoManager, đặt owner,
+    mark unsaved và scene save bằng EditorInterface. External resource dùng UndoRedo cho
+    object + ResourceSaver cho durable save. Script text dùng A4; project settings dùng
+    ProjectSettings API + save. UndoRedo chỉ là history trong phiên; commit bền chỉ khi
+    writer đúng loại save thành công + disk readback/hash đúng.
+
+A4. File text/binary: write temp cùng volume → flush/sync → atomic replace; trước write
+    phải kiểm base hash, sau write validate/import/readback. Không ghi đè buffer editor
+    đang dirty mà không resolve conflict tự động an toàn.
+
+A5. Mỗi mutation có command_id ULID, session_id, actor, precondition, policy và
+    postcondition. Retry trả kết quả cũ hoặc xác nhận postcondition đã tồn tại; không
+    thêm node/job/commit lần hai.
+
+A6. Không success giả: `{ok:true}` chỉ được trả sau postcondition readback. Nếu API
+    không chứng minh được kết quả, trả `E_UNVERIFIED` và evidence chẩn đoán.
+
+A7. Godot object chỉ chạm trên editor main thread. Network/job callback enqueue;
+    không block `_process` bằng import/export dài. Cancel phải có trạng thái thật.
+
+A8. Mọi project-content mutation canonicalize và nằm dưới project root. Ngoại lệ tin cậy
+    có schema riêng: LocalAppData current-user cho session/ledger/secret; read-only external
+    source có import grant rồi copy vào staging; export out_dir được cấp rõ. Mỗi root vẫn
+    chặn `..`, symlink/junction escape, device/reserved path và path quá dài.
+
+A9. Chỉ loopback + random 256-bit token + current-user ACL. Không log token/secret;
+    không expose arbitrary shell/eval qua plugin; Origin check nếu dùng HTTP.
+
+A10. OWNER_AUTOPILOT được tự quyết trong project nhưng mọi destructive slice phải có
+     checkpoint phục hồi trước. Xóa đưa vào trash/quarantine hoặc Git, không hard-delete
+     asset cuối cùng khi còn reference.
+
+A11. Play là process/game tree runtime riêng. Editor plugin không giả runtime state;
+     query Remote tree qua debugger/runtime bridge và phân biệt editor vs remote.
+
+A12. Structured observation trước, screenshot sau: tree/property/event/perf là bằng
+     chứng chính; screenshot dùng cho hình ảnh/layout, không thay state assertion.
+
+A13. Test gameplay phải có seed/fixed step/input timeline. Không khẳng định pass dựa
+     trên sleep tuỳ ý hoặc một screenshot “có vẻ đúng”.
+
+A14. Pause là ưu tiên cao nhất: gate phải ACK trạng thái draining <=250 ms, ngừng nhận
+     mutation mới, để command atomic đang commit kết thúc/rollback. Import/export dài
+     dừng ở safe-point/cancel thật; không hứa kill tức thì làm hỏng dữ liệu.
+
+A15. Git không bị rewrite/reset phá huỷ. Mỗi slice xanh có checkpoint; asset lớn dùng
+     LFS theo policy. Không commit secret, `.godot/`, token, cache hay build output.
+
+A16. Dependency pin bằng exact version/hash; giữ license/notice/SBOM. Upgrade Godot hay
+     upstream MCP là một WP riêng với compatibility matrix, không bump tiện tay.
+
+A17. Presentation độc lập: tắt overlay/replay không đổi command result; replay chậm
+     không giữ lock mutation vô hạn; Fast mode vẫn lưu event để xem lại.
+
+A18. Multi-agent: một writer lease trên mỗi scene/resource/file; read song song; export
+     và import lớn qua job queue. Không hai agent cùng sửa một file rồi “merge bằng may”.
+
+A19. Game code mặc định GDScript typed; warning policy được pin. C# không thêm nếu brief
+     không bắt buộc. C++ chỉ thuộc RX.
+
+A20. Một WP chỉ tick sau Verify + DoD + LOG. Không tick cả milestone bằng số test package;
+     manual-visible acceptance phải thật sự launch cửa sổ và có evidence.
+
+================================================================================
+4. REPO VÀ SẢN PHẨM SINH RA
+================================================================================
+
+4.1 Layout đích (tạo dần, không move legacy trước R0)
+
+  zdocs/20-8-godot-agent-autopilot-plan.txt   # file quyền lực duy nhất
+  docs/godot-agent/                           # protocol, security, coverage, ops
+  godot/plugin-project/project.godot          # project dev cho addon
+  godot/plugin-project/addons/hh_agent/        # addon canonical
+  bridge/                                      # TypeScript MCP sidecar
+  host/                                        # persistent agent-host/provider adapters
+  bridge/src/registry/                         # schema/action registry duy nhất
+  bridge/tests/                                # unit/contract tests
+  godot/test-projects/minimal-2d/              # fixture E2E nhỏ
+  godot/test-projects/coverage-2d/             # mọi node/workflow cần hỗ trợ
+  godot/dogfood/kho-bi-an/                     # game nghiệm thu R8
+  tests/e2e/                                   # MCP client + editor/runtime E2E
+  tools/godot/                                 # doctor, launch, install, package
+  third_party/                                 # vendored exact commit + LICENSE (nếu chọn)
+  legacy/README.md                             # chỉ pointer tới tag/branch cũ
+
+Không chuyển hàng nghìn file cũ sang `legacy/` trong một lệnh. R0 tạo tag/branch bảo
+toàn, thêm README freeze và bắt đầu code mới dưới `godot/` + `bridge/`. Dọn vật lý là
+việc riêng sau khi game Godot dogfood pass và người cho phép.
+
+4.2 File cấu hình
+
+  PROJECT_BRIEF.md                  mục tiêu game, platform, art, content constraints
+  .hh-agent/policy.toml             profile, budgets, allowed roots, review cadence
+  .hh-agent/capability-lock.json    Godot/upstream/tool schema hash đã pin
+  .hh-agent/checkpoints.jsonl       manifest checkpoint (không chứa secret)
+  .hh-agent/evidence/<run_id>/      manifest/log/diff/screenshot/test report
+  %LOCALAPPDATA%/HHGodotAgent/      token, session descriptor, user secrets/config,
+                                    durable per-project ledger/checkpoint metadata
+
+Ledger bền nằm duy nhất ở `%LOCALAPPDATA%/HHGodotAgent/projects/<project_id>/ledger.sqlite`
+với ACL current user. `.godot/hh_agent/` chỉ chứa cache có thể tái tạo và được ignore;
+xóa `.godot/` không được làm mất dedup/recovery. Evidence lớn có retention; manifest nhỏ
+có thể commit.
+
+4.3 Toolchain pin ban đầu
+
+  - Godot 4.7.1-stable standard (official commit `a13da4feb`), checksum binary/export
+    templates ghi trong docs/VERSIONS_GODOT.md.
+  - Không dùng 4.8-dev cho production. Upgrade chỉ qua R9-WP3.
+  - GDScript là ngôn ngữ addon/runtime/game.
+  - TypeScript strict cho sidecar; Node LTS được pin sau R1, không dùng global latest.
+  - PowerShell chỉ cho bootstrap/package Windows; business logic không nằm trong .ps1.
+  - Test framework Godot được chọn/pin ở R0-WP3 sau license audit; E2E luôn có một
+    client MCP thật, không chỉ gọi router nội bộ.
+
+================================================================================
+5. COMMAND CONTRACT, TOOL SURFACE VÀ EVENT
+================================================================================
+
+5.1 Command envelope tối thiểu
+
+Client gửi phần intent tối thiểu (không được tự nâng quyền):
+
+  {
+    "protocol": "hh-godot-agent/1",
+    "command_id": "ULID",
+    "method": "godot.node",
+    "action": "add",
+    "params": {...},
+    "precondition": {
+      "scene": "res://scenes/main.tscn",
+      "scene_hash": "...",
+      "target_uid": "...",
+      "property_hash": "..."
+    },
+    "presentation": {"mode":"watch", "duration_ms":250}
+  }
+
+Sidecar xác thực connection rồi tự bind `session_id`, `actor`, `project_id`, policy và
+capability grant vào command nội bộ. Giá trị client tự nhét vào các field này bị reject;
+request không bao giờ được dùng để chuyển EDIT thành OWNER_AUTOPILOT.
+
+Result tối thiểu:
+
+  {
+    "ok": true,
+    "command_id": "...",
+    "changed": true,
+    "before": {...summary...},
+    "after": {...summary...},
+    "postcondition": {"verified":true, "checks":[...]},
+    "undo_action": "Agent: node.add Player",
+    "evidence": ["artifact://..."],
+    "warnings": []
+  }
+
+5.2 Công cụ MCP — ít tool, nhiều action có schema
+
+Ưu tiên ít domain tool + action có schema để agent chọn đúng. Con số cuối không hard-code:
+R1 đo trên prompt corpus để chọn flat tools, discriminated action union hoặc lazy registry.
+Coverage đến từ action registry, không từ việc khoe hàng trăm tên tool. Nhóm bắt buộc:
+
+  capabilities.describe   version/class/property/method/action discovery
+  project.*               inspect/settings/input/autoload/plugin/doctor
+  scene.*                 create/open/read/save/close/instantiate/dependencies
+  node.*                  add/remove/rename/reparent/reorder/duplicate/group/query
+  property.*              get/set/batch/reset; Variant/Resource/NodePath codec
+  resource.*              create/load/assign/duplicate/edit/save/uid
+  signal.*                list/connect/disconnect/inspect
+  script.*                read/write/patch/validate/attach/open_at/diagnostics
+  asset.*                 import/reimport/move/rename/delete/dependencies/preview
+  tilemap.*               tileset/source/terrain/layer/cell/fill/stamp/query
+  animation.*             library/animation/track/key/state-machine/preview
+  ui.*                    Control/theme/layout/anchor/focus/accessibility query
+  editor.*                state/select/focus/main_screen/frame_view/replay/pause
+  play.*                  start/stop/restart/debug/status/logs
+  input.*                 action/key/mouse/touch/sequence/release_all
+  runtime.*               tree/node/state/signal/time/freeze/step/screenshot/perf
+  test.*                  define/run/assert/report/evidence/baseline
+  export.*                preset/validate/build/cancel/artifacts
+  git.*                   status/diff/checkpoint/revert_checkpoint (project-scoped)
+  job.*                   status/list/cancel/wait
+
+Mỗi action khai báo side_effect (`read`, `view`, `mutate`, `destructive`, `external`),
+undo strategy, timeout, cancellable, required policy, input/output JSON Schema, error
+codes và postcondition. CLI/help/MCP schema/contract test sinh từ registry này.
+
+5.3 Stable identity
+
+NodePath và tên có thể đổi. Plugin dùng composite reference: scene UID/path + node
+`_hh_agent_uid` + structural fingerprint/path hint. Node được duplicate/instantiate/inherit/
+make-local có thể copy metadata, nên save/open scan phải phát hiện collision và sửa trong
+UndoRedo trước khi nhận lệnh tiếp. Resource ưu tiên Godot UID nhưng vẫn có hash/path hint
+vì built-in resource không phải lúc nào cũng có UID. Nếu identity mâu thuẫn: fail conflict,
+không đoán.
+
+5.4 Ledger và crash recovery
+
+Sidecar dùng SQLite ở durable LocalAppData, `journal_mode=WAL`, `synchronous=FULL`, với
+trạng thái `received → validated → applying → applied_volatile → verified →
+committed_durable/failed/uncertain`. `received/validated/applying` và canonical request
+hash phải commit+flush trước khi dispatch tương ứng. Cùng `command_id` nhưng request hash,
+bound actor/project/policy khác trả `E_IDEMPOTENCY_CONFLICT`, không trả cached result.
+
+Ledger phân biệt `applied_volatile` với `committed_durable`. Một scene mutation chỉ thành
+durable khi save scene/resource thành công, file trên đĩa đọc lại được và disk hash khớp.
+Batch/transaction chỉ save một lần cuối; lỗi save phải rollback hoặc restore checkpoint.
+
+Crash ở `applying`/`applied_volatile` không tự chạy lại mù quáng. Khi resume:
+
+  1) đọc postcondition theo stable UID/hash;
+  2) nếu đã đúng, đánh committed và trả cached result;
+  3) nếu trước-state còn nguyên, apply lại một lần;
+  4) nếu cả trước và sau đều không khớp, trả `E_UNCERTAIN`, restore checkpoint hoặc
+     mở repair flow; tuyệt đối không báo success.
+
+Ledger là audit/dedup, không cố thay định dạng `.tscn` của Godot bằng document model mới.
+
+5.5 Event stream cho người xem
+
+  action.planned, action.started, selection.changed, overlay.started,
+  mutation.committed, postcondition.verified, import.started/completed,
+  play.started/stopped, test.assertion, checkpoint.created, action.failed,
+  agent.paused/resumed.
+
+Activity Dock hiển thị actor, scene/node, diff ngắn, thời lượng, verify và nút mở evidence.
+Secret/value nhạy cảm được redact trước event. Feed không được là nguồn thực thi lại; replay
+dùng bản presentation event riêng và không gọi mutation lần hai.
+
+================================================================================
+6. PROFILE TỰ CHỦ, AN TOÀN VÀ QUYỀN NGƯỜI DÙNG
+================================================================================
+
+6.1 Ba profile
+
+  OBSERVE          chỉ đọc editor/runtime/evidence.
+  EDIT             mutate project, destructive cần approve.
+  OWNER_AUTOPILOT  mutate/destructive project-scoped tự duyệt sau checkpoint.
+
+Repo này mặc định OWNER_AUTOPILOT theo yêu cầu người dùng. Profile không cấp quyền ra
+ngoài project, không tự tiêu tiền và không tự publish.
+
+6.2 Chính sách quyết định không hỏi người
+
+Khi brief không chỉ định chi tiết nhỏ, agent chọn theo thứ tự:
+
+  1) convention Godot và template đã pin;
+  2) phương án dễ test/revert nhất;
+  3) phương án ít dependency và public API nhất;
+  4) phương án có chất lượng game tốt hơn nếu chi phí tương đương.
+
+Assumption ghi vào `.hh-agent/evidence/<run>/assumptions.md`, không chặn tiến trình. Chỉ
+E1–E4 ở mục 0.4 bắt buộc cần input/quyền mới từ người; lỗi kỹ thuật có thể chuyển hệ thống
+sang safe-stop/repair/critic theo 6.5 mà không mặc định giao việc làm hộ cho người.
+
+6.3 Pause, rollback và review
+
+Toolbar/Dock có Pause đỏ luôn thấy, shortcut được pin. Pause đóng gate mutation ở sidecar
+và plugin; job cancellable nhận cancel, job atomic hoàn tất rồi dừng. Người có thể:
+
+  - xem diff/checkpoint;
+  - Undo action hiện tại trong Godot;
+  - revert checkpoint bằng một lệnh recoverable;
+  - chuyển Watch ↔ Fast mà không ảnh hưởng project.
+
+Review mặc định ở cuối milestone, không phải cuối từng WP. Agent vẫn tạo checkpoint nhỏ
+để rollback. Gate cần mắt người chỉ là G2 (trải nghiệm xem), G5 (chất lượng game), GX
+(fork) và E3/G6 publish/signing; các gate kỹ thuật còn lại tự chốt bằng test + critic.
+
+6.4 Security tối thiểu
+
+  - canonical root + allowlist extension/path; khóa `res://addons/hh_agent/**`,
+    `.hh-agent/**`, ledger/session/capability-lock khỏi generic write/delete tools;
+  - no arbitrary shell tool; process allowlist chỉ Godot, test runner, exporter, Git;
+  - subprocess args là array, không ghép shell string;
+  - import asset được kiểm magic/size/decode và quarantine trước res://;
+  - runtime test code chỉ có trong debug/test build, bị strip/disable ở release;
+  - export filter + artifact scan cấm addon, token, evidence và test runtime vào game build;
+  - log/screenshot scrub token, home path, API key và environment secret;
+  - dependency audit, license scan, checksum và SBOM ở mỗi release;
+  - MCP/server từ upstream phải threat-model trước khi enable OWNER_AUTOPILOT.
+
+6.5 Bảng authority duy nhất
+
+| Tình huống | Hệ thống làm gì | Có cần người ngay? | Ai chốt |
+|------------|-----------------|--------------------|---------|
+| Assumption nhỏ, phương án kỹ thuật trong scope | tự chọn, ghi evidence, tiếp tục | Không | Agent Host |
+| Test/verify fail vòng 1–2 | rollback/repair/critic trong budget | Không | Agent + critic |
+| Conflict/version drift/false success/security invariant | đóng mutation lane, reconcile/restore | Chỉ khi tự phục hồi fail | Coordinator |
+| G1 stock-only, G3 self-verify, G4 soak | test + critic đạt thì tự tick | Không | Coordinator + critic |
+| G2 visible UX | đưa evidence/editor thật để review | Có, chỉ review | Người |
+| G5 chất lượng dogfood | chơi/review build, không sửa hộ | Có, chỉ review | Người |
+| E1 secret, E2 spend, E3 sign/publish, E4 product pivot | STOP với request cụ thể | Có | Người |
+| GX fork Godot | STOP với gap report | Có | Người |
+| G6 internal technical release | test/clean VM/critic | Không | Coordinator + critic |
+| Public upload/sign/channel | STOP theo E3 sau G6 | Có | Người |
+
+“STOP” kỹ thuật nghĩa là ngừng mutation để bảo toàn state, không đồng nghĩa quăng một
+danh sách thao tác cho người làm. Chỉ hàng ghi “Có” mới được hỏi người.
+
+================================================================================
+7. GIAO THỨC THỰC THI CHO AI AGENT
+================================================================================
+
+7.1 Thứ tự đọc
+
+  1) AGENTS.md sau cutover R0-WP2.
+  2) Bảng tổng quan đầu file này.
+  3) WP chưa tick đầu tiên có dependency xanh.
+  4) Các invariant/mục được WP trỏ đến; không tự mở milestone xa.
+  5) File nguồn chính thức Godot đúng version pin khi cần API cụ thể.
+
+7.2 Vòng lặp một WP
+
+  1) Claim WP trong LOG: agent, thời gian, file ownership/lease.
+  2) Chụp `git status`, baseline test liên quan và state hash.
+  3) Làm đúng scope; gap ngoài scope ghi backlog, không tiện tay mở rộng.
+  4) Chạy Verify riêng WP và verify chuẩn phù hợp milestone.
+  5) Chạy critic/review độc lập cho mutation/security/runtime quan trọng.
+  6) Dán LOG 5–15 dòng: command, số test, artifact, gap còn lại.
+  7) Chỉ tick checkbox WP nếu DoD đạt thật.
+  8) Commit `R<n>-WP<n>: <mô tả ngắn>`; không gộp 5 WP vào một commit.
+  9) Cập nhật đúng một dòng bảng tổng quan; không tạo progress shadow khác.
+
+7.3 Verify chuẩn theo loại
+
+Sidecar:
+
+  npm ci
+  npm run format:check
+  npm run lint
+  npm run typecheck
+  npm test
+  npm run build
+
+Godot/plugin/game:
+
+  godot --version
+  godot --headless --editor --path <fixture> --import --quit
+  godot --headless --path <fixture> --script res://tests/run_all.gd
+  godot --headless --path <fixture> --quit-after <n> --write-movie <artifact>
+
+E2E:
+
+  - khởi động một Godot editor process thật với fixture copy sạch;
+  - kết nối bằng một MCP client thật qua sidecar, không gọi router trực tiếp;
+  - chạy command, readback, undo/redo, save, Play, runtime assert;
+  - đóng/restart editor và xác minh persistence/dedup;
+  - UI-visible WP phải launch non-headless trên Windows và capture evidence.
+
+Lệnh cụ thể được đóng gói trong `tools/godot/verify.ps1` nhưng LOG phải ghi các bước
+thực tế, không chỉ “script pass”. Verify script trả non-zero nếu thiếu artifact/manual run.
+
+7.4 Track song song
+
+  Track A — bridge/protocol/security: bridge/, docs/godot-agent/protocol*
+  Track B — editor plugin/mutation: godot/plugin-project/addons/hh_agent/core*
+  Track C — observer UI: addons/hh_agent/ui*, overlay*, replay*
+  Track D — runtime/test: addons/hh_agent/runtime*, tests/runtime*
+  Track E — 2D adapters: tilemap/animation/ui/audio/physics adapters
+  Track F — dogfood/assets: godot/dogfood/, asset staging
+  Track G — release/docs: tools/godot/, packaging, clean VM, operations
+
+Track được code song song nếu không sửa cùng registry/generated file. Một coordinator
+sở hữu progress table và generated artifacts. Godot editor mutation E2E luôn đi qua một
+single-writer queue dù code được viết song song.
+
+7.5 STOP conditions
+
+  S1. Cần fork/GDExtension cho capability bắt buộc: lập gap report, hỏi người tại GX.
+  S2. Cần secret/spend/sign/publish/pivot: hỏi người theo E1–E4, không giả quyền.
+  S3. Acceptance cùng lỗi fail hai vòng: safe-stop → critic/root cause/rollback; chỉ hỏi
+      người nếu hết repair alternatives/budget và quyết định còn lại đổi scope.
+  S4. Upstream license/source/binary không xác minh: tự loại candidate, dùng fallback.
+  S5. Không chắc WP hoặc conflict: release lease, coordinator reconcile; không hỏi người
+      trừ khi conflict là thay đổi mục tiêu của họ không thể bảo toàn đồng thời.
+  S6. False success/postcondition sai: đóng mutation lane tới khi sửa invariant + regression.
+  S7. Version lệch capability-lock: Observe/Doctor, tự dùng binary pin hoặc báo blocker.
+
+7.6 Gates
+
+  G0 DIRECTION   [x] người — 20-8-2026, bỏ engine cũ/chọn hướng tốt nhất.
+  G1 NO-FORK     [ ] auto: R1 stock vertical slice + critic, pin upstream SHA.
+  G2 VISIBLE     [ ] người review: selection/Inspector/overlay/timeline trên editor thật.
+  G3 SELF-VERIFY [ ] auto: gauntlet + critic, agent tự chơi/bắt lỗi/evidence.
+  G4 AUTONOMY    [ ] auto: soak/resume/checkpoint/zero-touch trial.
+  G5 DOGFOOD     [ ] người review chất lượng game; không làm hộ thao tác.
+  G6 RELEASE     [ ] auto kỹ thuật: clean VM/package/rollback; publish vẫn E3.
+  GX FORK        [ ] chỉ người tick sau gap report; mặc định khóa vĩnh viễn.
+
+================================================================================
+8. WORK PACKAGES CHI TIẾT
+================================================================================
+
+--------------------------------------------------------------------------------
+R0 — CUTOVER AN TOÀN VÀ PIN NỀN (4 WP)
+--------------------------------------------------------------------------------
+
+R0-WP1 — Ghi quyết định và đóng băng engine cũ                         [ ]
+  Phụ thuộc: G0.
+  Track/file: Governance; docs/DECISIONS.md, legacy/README.md, Git tag/branch.
+  Làm:
+    - xác minh/hoàn thiện entry `GODOT-REBOOT-2026-08-20` đã có; không append decision
+      trùng. Trạng thái approved-transition, supersedes roadmap 16-8;
+    - ghi `legacy_base_commit=<HEAD trước mọi reboot doc/code>` rồi tạo annotated tag
+      `legacy-rust-engine-2026-08-20` và branch archive trỏ CHÍNH XÁC commit đó;
+    - không auto-commit worktree dirty vào tag legacy. Lưu `git status`, hashes và patch
+      của file user/reboot riêng; chỉ stage allowlist sau khi xác minh ownership;
+    - ghi inventory code/binary/asset cũ; đánh dấu “không tiếp tục M6/M7/M8 cũ”;
+    - không xóa/move hàng loạt và không đưa target/cache vào archive commit.
+  Verify:
+    - `git fsck`; tag resolve đúng `legacy_base_commit`; clone/tag đọc được hai plan/code cũ;
+    - tag tree không chứa plan/reboot diff phát sinh sau base; `git status` không mất file;
+      inventory/patch hash có kết quả.
+  DoD: có đường phục hồi nguyên trạng; quyết định không còn là chat-only.
+  LOG: (trống)
+
+R0-WP2 — Cutover bootstrap cho agent mới                              [ ]
+  Phụ thuộc: R0-WP1.
+  Track/file: Governance; AGENTS.md, header hai plan 16-8.
+  Làm:
+    - sửa AGENTS.md đọc plan 20-8 này và lấy WP theo bảng đầu;
+    - thêm banner `LEGACY / NON-AUTHORITATIVE` vào hai plan cũ, không sửa lịch sử LOG;
+    - quy định không tự chạy Cargo/engine cũ trừ audit/legacy recovery;
+    - thêm test text kiểm chỉ một file có marker `AUTHORITATIVE_PLAN=1`.
+  Verify: spawn/read-only một agent mới; agent phải trả “WP đầu tiên R0-WP3”, không M6.
+  DoD: không agent tuân bootstrap nào vô tình tiếp tục roadmap cũ.
+  LOG: (trống)
+
+R0-WP3 — Pin Godot/toolchain và tạo workspace mới                     [ ]
+  Phụ thuộc: R0-WP2.
+  Track/file: Toolchain; docs/VERSIONS_GODOT.md, godot/, bridge/, tools/godot/.
+  Làm:
+    - tải/pin Godot 4.7.1-stable standard + export templates từ nguồn official;
+    - lưu URL, SHA-256, binary version/commit; từ chối 4.7.2-rc/4.8-dev;
+    - pin Node LTS exact, package manager lockfile, TypeScript strict;
+    - tạo plugin-project và minimal-2d fixture cực nhỏ; `.gitignore` đúng `.godot/`;
+    - chọn/pin test framework Godot sau license/compatibility check.
+  Verify:
+    - binary checksum đúng; `godot --version` đúng pin;
+    - fixture import headless và mở editor visible không lỗi plugin;
+    - `npm ci && npm run build` từ clean clone.
+  DoD: máy mới bootstrap bằng một doctor script, không dùng global latest ngầm.
+  LOG: (trống)
+
+R0-WP4 — Charter, policy và threat model baseline                     [ ]
+  Phụ thuộc: R0-WP3.
+  Track/file: Security/Product; PROJECT_BRIEF.template.md,
+              .hh-agent/policy.example.toml, docs/godot-agent/THREAT_MODEL.md.
+  Làm:
+    - schema brief: genre, camera, resolution, input, platform, art, audio, save,
+      content/license, performance, acceptance và assumption policy;
+    - profile OWNER_AUTOPILOT + E1–E4; root jail, process allowlist, retention;
+    - threat model token theft, malicious project/tool script, path escape, arbitrary
+      eval/Object.call, dependency supply chain, runtime bridge còn trong release;
+    - license/SBOM baseline cho Godot và các MCP candidate.
+  Verify: invalid policy/path/secret fixture bị validator từ chối; no secret in Git scan.
+  DoD: security boundary rõ trước khi bật plugin của bên thứ ba.
+  LOG: (trống)
+
+--------------------------------------------------------------------------------
+R1 — SPIKE, MCP BAKE-OFF VÀ GATE NO-FORK (5 WP)
+--------------------------------------------------------------------------------
+
+R1-WP1 — Capability Matrix “mọi năng lực cần làm game”                [ ]
+  Phụ thuộc: R0-WP4.
+  Track/file: Research; docs/godot-agent/CAPABILITY_MATRIX.md.
+  Làm:
+    - liệt kê menu/nút/workflow theo nhóm project, scene, node, inspector, filesystem,
+      script, TileMap, animation, UI, audio, physics/navigation, Play/debug/export;
+    - mỗi dòng ghi semantic action, public API/CLI, visible projection, undo, readback,
+      headless test, trạng thái Supported/Alternative/Gap;
+    - đánh dấu P0 workflow bắt buộc, P1 tối ưu, P2 plugin bên thứ ba.
+  Verify: matrix có ít nhất 100 workflow cụ thể; mọi workflow R8 trace đến action/test.
+  DoD: “all buttons” được thay bằng danh sách đo được, không slogan.
+  LOG: (trống)
+
+R1-WP2 — Audit license, security và code của bốn MCP candidate         [ ]
+  Phụ thuộc: R1-WP1.
+  Track/file: Security; docs/godot-agent/MCP_BAKEOFF.md, third_party staging.
+  Làm:
+    - pin commit/release tạm cho satelliteoflove, KeeVeeG, Beckett Lite, Sods2;
+    - xác minh LICENSE, contributor/release/CI, dependencies và supported Godot;
+    - tìm fixed-port/no-token, arbitrary eval/shell/Object.call, direct file mutation,
+      thiếu UndoRedo, success không readback, runtime code lọt release;
+    - không mua/đòi tính năng commercial để đạt core acceptance.
+  Verify: dependency/license scan + threat checklist; candidate fail hard được loại rõ.
+  DoD: shortlist tối đa hai candidate; không cài “latest” vào project chính.
+  LOG: (trống)
+
+R1-WP3 — Bake-off cùng một kịch bản trên candidate shortlist           [ ]
+  Phụ thuộc: R1-WP2.
+  Track/file: POC; disposable copies của minimal-2d, tests/e2e/bakeoff/.
+  Làm: trên từng candidate:
+    - handshake/auth; create/open/save scene;
+    - add/delete/duplicate/reparent/reorder node; generic property/resource set;
+    - script write/validate/attach; undo/redo; Play/Stop/log/screenshot/runtime state;
+    - select/focus node để người thấy; thử retry/restart theo khả năng candidate nhưng
+      đánh dấu đây là spike evidence, không thay production ledger R2;
+    - path/token/schema sai và unsupported action phải fail có type.
+  Verify: cùng test driver + scorecard, quay evidence editor visible.
+  DoD: số tool không được tính điểm; trọng số cao nhất là correctness, self-verify,
+       undo, security, maintainability và version compatibility.
+  LOG: (trống)
+
+R1-WP4 — Stock-only vertical slice từ project trống                    [ ]
+  Phụ thuộc: R1-WP3.
+  Track/file: POC; test-projects/stock-poc/.
+  Làm:
+    - agent tạo CharacterBody2D, Sprite/placeholder, Camera2D, collision, UI label;
+    - viết typed movement GDScript, tạo input actions, Play và inject input;
+    - query vị trí đổi, log sạch, screenshot có player, Stop, save, reopen;
+    - editor visible selection + Inspector; overlay/timeline có thể là disposable POC để
+      chứng minh hook, production UX/coverage thuộc R4 và không được tick sớm;
+    - không patch C++, không click tay, không sửa `.tscn` khi scene dirty.
+  Verify: chạy 20 lần trên fixture copy sạch; 20/20 pass, không node duplicate.
+  DoD: chứng minh kiến trúc plugin đủ vertical slice trước khi xây platform lớn.
+  LOG: (trống)
+
+R1-WP5 — Chốt base, vendor strategy và G1                            [ ]
+  Phụ thuộc: R1-WP4.
+  Track/file: Architecture; MCP_BAKEOFF.md, DECISIONS.md, third_party/.
+  Làm:
+    - chọn đúng một: vendor exact MIT commit, depend exact package, hoặc in-house thin;
+    - mặc định ưu tiên satelliteoflove nếu score self-verify/security đạt; không ép chọn
+      nếu code audit bác bỏ; ghi lý do và fallback;
+    - định nghĩa upstream boundary, patch queue, schema ownership và update cadence;
+    - đóng mọi MCP plugin candidate còn lại trong production fixture.
+  Verify: clean clone dùng exact lock/hash; offline install; license/NOTICE đầy đủ.
+  DoD/G1: stock Godot pass R1-WP4 và một base được pin. Nếu không pass, STOP; không tự fork.
+  LOG: (trống)
+
+--------------------------------------------------------------------------------
+R2 — CONTROL PLANE, AUTH, REGISTRY, READ MODEL VÀ AGENT HOST (7 WP)
+--------------------------------------------------------------------------------
+
+R2-WP1 — Registry/schema duy nhất + code generation                    [ ]
+  Phụ thuộc: G1.
+  Track/file: A; bridge/src/registry/, protocol docs, generated plugin schemas.
+  Làm:
+    - định nghĩa action metadata ở 5.2; Variant schema có version;
+    - sinh MCP input/output schema, CLI help, plugin validator, capability docs và
+      positive/negative contract matrix từ cùng registry;
+    - unknown params reject; protocol/action version negotiation rõ.
+  Verify: mọi action × required/unknown/type/bounds invalid; generated diff sạch.
+  DoD: không có handler hard-code ngoài registry; CI fail nếu docs/schema drift.
+  LOG: (trống)
+
+R2-WP2 — Sidecar lifecycle + secure session transport                  [ ]
+  Phụ thuộc: R2-WP1.
+  Track/file: A; bridge/src/session, transport, doctor.
+  Làm:
+    - MCP stdio server; project discovery canonical; one sidecar/project session;
+    - random port/token descriptor trong LocalAppData ACL current user;
+    - WebSocket handshake mutual version/project/token; heartbeat/reconnect/backoff;
+    - process supervisor không ghép shell; graceful shutdown và stale descriptor cleanup.
+  Verify: wrong token/project/protocol/non-loopback reject; port collision; 100 reconnects.
+  DoD: không fixed port scan và không secret trong project/log.
+  LOG: (trống)
+
+R2-WP3 — EditorPlugin router main-thread + health dock                 [ ]
+  Phụ thuộc: R2-WP1, R2-WP2 handshake contract.
+  Track/file: B/C; addons/hh_agent/core, ui/health.
+  Làm:
+    - @tool EditorPlugin enter/exit cleanup; queue request lên main thread;
+    - validate schema lần hai, route read action, typed errors/timeouts;
+    - health dock: version, project, bridge, policy, queue, Pause status;
+    - plugin disable/reload không leak socket/signal/control.
+  Verify: enable/disable/reload 50 lần; malformed/flood request; editor responsive.
+  DoD: router chưa có mutation ngoài test noop; lifecycle ổn trước adapter.
+  LOG: (trống)
+
+R2-WP4 — Command ledger, dedup và uncertain recovery                   [ ]
+  Phụ thuộc: R2-WP2, R2-WP3.
+  Track/file: A/B; bridge ledger, plugin postcondition adapter.
+  Làm:
+    - state machine mục 5.4 ở durable LocalAppData SQLite WAL/FULL; flush state trước
+      dispatch, canonical request hash + bound identity/policy; cached durable result;
+    - stable UID metadata, scene/resource/file hash, before/after summaries;
+    - fault hooks kill sidecar/plugin/editor ở received/validated/applying/verified;
+    - retention/compaction không xoá evidence của checkpoint còn dùng.
+  Verify: 200 randomized idempotent commands; same ID/different payload hoặc actor reject;
+          xóa `.godot/` vẫn dedup; kill tại mọi hook; no duplicate/corruption.
+  DoD: restart không biến `uncertain` thành success hoặc apply mù.
+  LOG: (trống)
+
+R2-WP5 — OWNER_AUTOPILOT policy, leases, jail và Pause                 [ ]
+  Phụ thuộc: R2-WP2, R2-WP4.
+  Track/file: A/C; policy engine, project lock, Pause UI.
+  Làm:
+    - profile/side-effect gates; triển khai recovery checkpoint primitive trước destructive:
+      manifest + copy-on-write/quarantine cho file đích và Git checkpoint nếu tree sạch;
+      checkpoint flush/verify trước khi command được vào mutation queue;
+    - one project writer + per-file/scene leases TTL; human-edit drift detection;
+    - canonical path/symlink/junction tests; process/network allowlist;
+    - Pause priority queue, cancel semantics và resume/re-sync.
+  Verify: path escape corpus; concurrent writer; edit tay; destructive kill/restore;
+          checkpoint flush failure phải chặn mutation; Pause latency p95.
+  DoD: OWNER không đồng nghĩa unrestricted OS; mọi delete/remove sau WP này có recovery
+       primitive thật; p95 Pause gate ACK <=250 ms.
+  LOG: (trống)
+
+R2-WP6 — Read model, capability discovery và `doctor` E2E              [ ]
+  Phụ thuộc: R2-WP3, R2-WP5.
+  Track/file: A/B; read adapters, doctor, MCP resources.
+  Làm:
+    - editor/project/open scene/selection/tree/property/resource/script/import/play state;
+    - class/property/method docs đúng Godot pin, paginated + filters để không nổ context;
+    - doctor kiểm binary/templates/plugin/bridge/token/schema/Git/policy;
+    - resource `project://summary`, `editor://state`, `capability://matrix`.
+  Verify: real MCP client từ clean fixture; 1k-node tree paging; version skew fail readably.
+  DoD: agent hiểu state trước khi có quyền mutation; không cần người copy Inspector/log.
+  LOG: (trống)
+
+R2-WP7 — Agent Host adapter, session/wakeup/context contract            [ ]
+  Phụ thuộc: R2-WP2, R2-WP4, R2-WP6.
+  Track/file: A; host/, provider adapters, session contract/docs.
+  Làm:
+    - định nghĩa Host là lớp duy nhất gọi model và quyết định tool loop; sidecar/plugin chỉ
+      deterministic execution. Interactive Codex/Cursor/Claude dùng adapter của client;
+    - persistent host cho unattended: task/session state, wakeup, heartbeat, context summary,
+      budget/cancel, reconnect và handoff; không phụ thuộc chat transcript vô hạn;
+    - provider interface pin model/config nhưng credential từ OS/user store, không project;
+    - MCP conformance: same plan state/tool result qua interactive và persistent host;
+    - không tự gửi network ngoài model endpoint/provider đã được user cấu hình.
+  Verify: fake deterministic model adapter; kill/resume host giữa tool calls; credential absent
+          fail E_EXTERNAL; context compact/reload không mất current task/command_id.
+  DoD: R7 có process chịu trách nhiệm phiên 90 phút rõ ràng; không giả định “MCP tự suy luận”.
+  LOG: (trống)
+
+--------------------------------------------------------------------------------
+R3 — QUYỀN EDITOR NGỮ NGHĨA VÀ PERSISTENCE ĐÚNG (8 WP)
+--------------------------------------------------------------------------------
+
+R3-WP1 — Scene lifecycle + durable save                               [ ]
+  Phụ thuộc: R2-WP6.
+  Track/file: B; scene adapter, fixtures scene lifecycle.
+  Làm:
+    - create/open/list tabs/activate/read/save/save-as/reload/close scene;
+    - scene mutation lấy editor history version + normalized structural fingerprint,
+      không chỉ disk hash vì editor có thể đang dirty;
+    - detect dirty/human edit giữa precondition và commit → `E_CONFLICT` + resync;
+    - durable save: EditorInterface save → disk reopen/hash → ledger committed_durable.
+  Verify: dirty tab, inherited scene, external file change, save failure/read-only disk;
+          restart editor sau từng state không mất/nhân đôi nội dung.
+  DoD: không generic raw-write `.tscn/.scn/.tres/.res`; plugin là writer duy nhất.
+  LOG: (trống)
+
+R3-WP2 — Node CRUD, identity, hierarchy và owner                        [ ]
+  Phụ thuộc: R3-WP1.
+  Track/file: B; node adapter + identity registry.
+  Làm:
+    - add/remove/rename/duplicate/reparent/reorder/instantiate/make-local/groups;
+    - set `owner=edited_scene_root` hoặc đúng subscene owner để node lưu/hiện tree;
+    - composite UID collision repair khi duplicate/instance/inherit/reopen;
+    - keep_global_transform option đúng cho Node2D/Control/Node3D, typed unsupported.
+  Verify: 200 random operations rồi Undo hết = canonical baseline; Redo = final;
+          save/reopen identity/path/owner đúng; references không dangling.
+  DoD: mọi mutation một UndoRedo action có tên `Agent: ...`, postcondition theo UID.
+  LOG: (trống)
+
+R3-WP3 — Generic property/Variant codec + Inspector semantics           [ ]
+  Phụ thuộc: R3-WP2.
+  Track/file: B; property adapter, Variant codec.
+  Làm:
+    - discovery từ ClassDB/Object property list, usage/hint/range/enum/flags/read-only;
+    - codec scalar, Vector/Rect/Color/Transform, NodePath, arrays/dicts, typed arrays,
+      Resource refs; batch set atomic một UndoRedo action;
+    - reset default, null, subresource edit, expected-old-hash precondition;
+    - reject internal/editor-only/unsupported Variant thay vì generic Object.call.
+  Verify: property corpus mọi Variant được phép; invalid enum/range/type; batch rollback;
+          Inspector/readback và disk reopen đều khớp.
+  DoD: agent set được property mà không cần tool riêng cho từng node class.
+  LOG: (trống)
+
+R3-WP4 — Resource, signal, group và dependency operations               [ ]
+  Phụ thuộc: R3-WP3.
+  Track/file: B; resource/signal adapters.
+  Làm:
+    - create/load/duplicate/assign/save built-in/external Resource, UID/dependencies;
+      built-in bền theo scene save; external dùng `ResourceSaver.save` + disk readback;
+    - connect/disconnect signal với method validation; group membership persistent;
+    - resource shared-vs-unique semantics explicit, prevent accidental global mutation;
+    - refuse delete/move resource còn reference nếu chưa có rewrite plan/checkpoint.
+  Verify: shared subresource, circular refs, move/rename UID stability, signal duplicate;
+          save/reopen and Undo/Redo.
+  DoD: không orphan asset/resource, không đổi shared resource ngoài ý command.
+  LOG: (trống)
+
+R3-WP5 — Script write/patch/validate/attach + dirty-buffer conflict      [ ]
+  Phụ thuộc: R3-WP1, R2-WP5.
+  Track/file: A/B; atomic file transaction, ScriptEditor integration.
+  Làm:
+    - read/create/replace/range patch/attach/detach/open-at-line;
+    - trước write kiểm ScriptEditor buffer dirty và base content hash; dirty mismatch →
+      `E_CONFLICT`, không ghi đè; nếu sạch dùng temp+sync+atomic replace;
+    - validate GDScript syntax/type/warning policy trước commit; parse fail giữ file cũ;
+    - EditorFileSystem update/scan + diagnostics readback; checkpoint cho delete/rename.
+  Verify: syntax fail, concurrent human edit, editor-open script, rename refs, crash hooks;
+          no partial UTF-8/BOM/newline corruption.
+  DoD: agent tự viết code nhưng không mất thay đổi chưa save của người.
+  LOG: (trống)
+
+R3-WP6 — Asset ingest/import/reimport/move/delete an toàn                [ ]
+  Phụ thuộc: R3-WP4, R3-WP5 transaction primitives.
+  Track/file: A/B; staging/quarantine, EditorFileSystem job adapter.
+  Làm:
+    - copy external source vào staging, sniff magic/decode/size/license manifest;
+    - atomic promote dưới res://, update/scan/reimport và đợi import completion;
+    - busy/reentrancy guard vì Godot import có thể chạy main-loop trong lúc block;
+    - move/rename rewrite refs qua Godot UID/import; delete → quarantine + dependency check.
+  Verify: corrupt/huge/polyglot, symlink escape, importer hang/cancel, same-name collision,
+          crash trước/sau promote; late import không commit job cũ.
+  DoD: agent kéo/thả asset theo nghĩa ngữ nghĩa, project không có nửa file/nửa meta.
+  LOG: (trống)
+
+R3-WP7 — Project settings, input map, autoload và plugin policy          [ ]
+  Phụ thuộc: R3-WP3, R2-WP5.
+  Track/file: B; project settings adapter.
+  Làm:
+    - get/set/remove project setting qua ProjectSettings/InputMap API + explicit save,
+      disk parse/readback; không raw text patch `project.godot`;
+    - add/remove/reorder autoload có path validation; main scene setting;
+    - enable third-party plugin chỉ khi allowlist/license/threat scan pass;
+    - protected hh_agent plugin/policy không thể tự disable qua generic action.
+  Verify: atomic project.godot update, invalid input event/path, restart persistence;
+          plugin allowlist negative tests.
+  DoD: project configuration đầy đủ mà không mở dialog/click tay.
+  LOG: (trống)
+
+R3-WP8 — Transaction, checkpoint và editor-mutation gauntlet            [ ]
+  Phụ thuộc: R3-WP1..7.
+  Track/file: A/B/G; transaction coordinator, E2E gauntlet.
+  Làm:
+    - batch scene actions thành một UndoRedo/save; phối hợp scene + script/asset bằng
+      staging/checkpoint/compensation, không tuyên bố atomic OS toàn cục;
+    - automatic Git/checkpoint trước destructive; rollback/recovery report;
+    - test 50 clean-clone runs, 200 random mutations, kill sidecar/plugin/editor;
+    - manual human edit trong phiên phải pause/resync, không merge mù.
+  Verify: baseline→mutate→undo all byte/structural equivalent; redo/save/reopen; crash matrix.
+  DoD: R3 green chỉ khi không corruption, no duplicate, no false success.
+  LOG: (trống)
+
+--------------------------------------------------------------------------------
+R4 — OBSERVER UI: NGƯỜI XEM ĐƯỢC, KHÔNG CẦN ĐIỀU KHIỂN (6 WP)
+--------------------------------------------------------------------------------
+
+R4-WP1 — Activity Dock và action timeline                              [ ]
+  Phụ thuộc: R2-WP3, R2-WP4.
+  Track/file: C; dock scene/scripts, event projection.
+  Làm:
+    - current task/agent/policy/queue/job/elapsed; planned→verified timeline;
+    - diff summary, undo/checkpoint/evidence link, filter actor/scene/status;
+    - token/secret/path redaction; virtualized list + retention để không lag;
+    - Pause/Resume, Watch/Fast, Replay buttons luôn thấy.
+  Verify: 10k events không freeze; reload dock giữ state; 100% mutation có row.
+  DoD: người biết agent đang làm gì và kết quả gì mà không đọc terminal.
+  LOG: (trống)
+
+R4-WP2 — Selection, Inspector, Script và FileSystem focus               [ ]
+  Phụ thuộc: R3-WP1..7, R4-WP1.
+  Track/file: C; presenter adapters.
+  Làm:
+    - trước/đúng lúc action, mở scene, chọn/edit node/resource, focus main screen;
+    - Inspector hiện target/property; script mở đúng line/column; filesystem chọn asset;
+    - note: EditorSelection đơn thuần không tự mở Inspector, dùng edit_node/edit_resource;
+    - presentation failure không rollback mutation, nhưng ghi `presentation_failed`.
+  Verify: node renamed/reparented, Inspector hidden/dock moved, multi-scene tabs, external editor.
+  DoD: Watch mode luôn đưa người đến đối tượng thật đang đổi khi API hỗ trợ.
+  LOG: (trống)
+
+R4-WP3 — Viewport overlay, agent cursor và semantic drag replay          [ ]
+  Phụ thuộc: R4-WP2.
+  Track/file: C; 2D/3D overlay, replay renderer.
+  Làm:
+    - draw highlight/bounds/label/cursor/ghost path trong viewport;
+    - replay add/reparent/property/transform/asset assign thành animation 200–400 ms;
+    - drag replay chỉ trình bày start→end; mutation thật commit đúng một lần/Undo action;
+    - camera/frame target, DPI/zoom/theme independent; tắt hoàn toàn ở Fast/headless.
+  Verify: overlay screenshot goldens nhiều DPI/zoom; replay không đổi scene hash/history.
+  DoD: người có cảm giác thấy agent thao tác nhưng không có pixel mutation/RPA.
+  LOG: (trống)
+
+R4-WP4 — Watch/Fast/Replay scheduler và backpressure                    [ ]
+  Phụ thuộc: R4-WP1, R4-WP3.
+  Track/file: C/A; presentation scheduler.
+  Làm:
+    - Watch chậm bước quan trọng; Fast commit ngay nhưng ghi presentation events;
+    - coalesce spam property/cell changes; replay từ event log không gọi command router;
+    - backpressure/drop presentation frame, không drop audit/mutation;
+    - multi-agent colors/lanes, only-one-current-focus policy.
+  Verify: 5k tile cells không mất 20 phút; switch mode mid-action; no deadlock/lock extension.
+  DoD: quan sát không làm giảm đáng kể throughput hay correctness.
+  LOG: (trống)
+
+R4-WP5 — Review Center: diff, assumptions, evidence và checkpoint       [ ]
+  Phụ thuộc: R4-WP1, R3-WP8.
+  Track/file: C/G; review UI + artifact index.
+  Làm:
+    - milestone card: mục tiêu, assumptions, files/scenes/assets, tests, screenshots,
+      perf, license, known gaps, Git diff/checkpoint;
+    - open before/after/diff, replay selected action, revert whole checkpoint;
+    - review là async: agent tiếp tục milestone được phép, không cần approve từng action.
+  Verify: missing/corrupt artifact rõ ràng; revert checkpoint recoverable; large diff paging.
+  DoD: người review chất lượng/kết quả thay vì làm hộ thao tác.
+  LOG: (trống)
+
+R4-WP6 — Nghiệm thu visible thật + Gate G2                            [ ]
+  Phụ thuộc: R4-WP1..5.
+  Track/file: C/Test; non-headless Windows E2E.
+  Làm:
+    - agent chạy kịch bản create scene→add Sprite2D→assign texture→move→script→Play;
+    - thu video/screenshot timestamp đồng bộ event, selection, Inspector, overlay;
+    - người chỉ Start và xem; test Pause/Replay/Revert;
+    - liệt kê action nào dùng Alternative thay native UI, không che gap.
+  Verify: reviewer ký G2; automated assertion timeline coverage=100%, no scene change by replay.
+  DoD/G2: quan sát hữu ích, đúng action, không giả click và editor không lag.
+  LOG: (trống)
+
+--------------------------------------------------------------------------------
+R5 — COVERAGE LÀM GAME 2D THỰC TẾ (7 WP)
+--------------------------------------------------------------------------------
+
+R5-WP1 — Transform/Canvas/Camera/visual 2D adapters                    [ ]
+  Phụ thuộc: R3, G2.
+  Track/file: E; 2D adapters + coverage fixture.
+  Làm:
+    - Node2D/CanvasItem/Sprite2D/TextureRect/Camera2D properties và resource assignment;
+    - global/local transform, z-order/y-sort, visibility/modulate, region/flip, camera limits;
+    - bounds/frame-view/readback dùng engine-computed transform, không tự tính sai parent;
+    - bulk layout operation là một transaction/postcondition.
+  Verify: nested transform/reparent keep-global, negative scale/rotation, camera screenshot.
+  DoD: agent bố trí một scene top-down đúng hình và nhìn thấy kết quả.
+  LOG: (trống)
+
+R5-WP2 — TileSet/TileMapLayer/terrain workflow                          [ ]
+  Phụ thuộc: R5-WP1, R3-WP4.
+  Track/file: E; tilemap adapter/tests.
+  Làm:
+    - create TileSet atlas sources, physics/navigation/occlusion layers, terrain sets;
+    - add/remove/reorder TileMapLayer, paint/query/erase/fill/stamp cells và terrain connect;
+    - chunk command + compact payload, one undo action per stroke, bounds/cell readback;
+    - không raw-edit base64/binary cell data trong `.tscn`.
+  Verify: 100x100 map, undo/redo, terrain continuity, collision playtest, save/reopen hash.
+  DoD: agent tự dựng level tilemap hoàn chỉnh không cần người dùng TileMap UI.
+  LOG: (trống)
+
+R5-WP3 — Animation/SpriteFrames/AnimationTree                           [ ]
+  Phụ thuộc: R5-WP1, R3-WP4.
+  Track/file: E; animation adapter/tests.
+  Làm:
+    - SpriteFrames animations/frame duration/loop; AnimationPlayer libraries/tracks/keys;
+    - property/call/audio/bezier tracks allowlisted; AnimationTree state machine/transitions;
+    - preview scrub/play trong editor và runtime readback state;
+    - batch key operation compact + undo, validate time/path/value compatibility.
+  Verify: idle/walk/interact state, transition condition, save/reopen, screenshot sequence.
+  DoD: agent tạo/chỉnh animation có thể preview/test, không chỉ gán ảnh tĩnh.
+  LOG: (trống)
+
+R5-WP4 — UI/Control/theme/layout/accessibility                          [ ]
+  Phụ thuộc: R3-WP3, R5-WP1.
+  Track/file: E; UI adapter + layout audit.
+  Làm:
+    - Control anchors/offset/container/theme/stylebox/font/focus/neighbors;
+    - build HUD/menu/dialog/settings với reusable scenes/resources;
+    - viewport-size matrix, text overflow, contrast/focus/navigation structured checks;
+    - UI screenshot/diff và semantic tree để agent hiểu layout không chỉ pixel.
+  Verify: 1280x720, 1920x1080, 16:10; keyboard/gamepad focus; long/localized text fixture.
+  DoD: UI chơi được, không overlap/cutoff và không hard-code mọi pixel.
+  LOG: (trống)
+
+R5-WP5 — Physics/navigation/collision adapters                          [ ]
+  Phụ thuộc: R5-WP1, R5-WP2.
+  Track/file: E/D; physics/nav actions + runtime probes.
+  Làm:
+    - CharacterBody2D/RigidBody2D/Area2D/StaticBody2D, shapes/layers/masks/material;
+    - NavigationRegion2D polygon/map/agent/path query; collision debug overlay/readback;
+    - shape resource creation from explicit geometry/asset bounds, no unsafe eval;
+    - invariant scale/owner/reference và common configuration lint.
+  Verify: move-and-slide, sensor, projectile, nav-around-wall, collision layer matrix.
+  DoD: agent cấu hình gameplay physical/nav và tự chứng minh bằng runtime state.
+  LOG: (trống)
+
+R5-WP6 — Audio, shader, particles và quality adapters                   [ ]
+  Phụ thuộc: R3-WP4, R5-WP1.
+  Track/file: E; audio/render adapters.
+  Làm:
+    - AudioStreamPlayer/2D, buses/effects/volume, import/preview/play assertion;
+    - CanvasItem shader create/assign/param validate; GPUParticles2D material/amount/lifetime;
+    - common 2D lights/environment and quality preset; fallback on low renderer;
+    - audio/image asset license/source manifest linked.
+  Verify: SFX event, bus mute/volume, shader compile diagnostic, particles screenshot/perf.
+  DoD: game có feedback hình/âm; shader lỗi không được “ok” im lặng.
+  LOG: (trống)
+
+R5-WP7 — Capability coverage gauntlet và docs                           [ ]
+  Phụ thuộc: R5-WP1..6.
+  Track/file: E/Test; coverage-2d fixture + generated matrix report.
+  Làm:
+    - trace mọi P0/P1 2D row trong matrix đến action + E2E + visible projection;
+    - agent dựng một museum scene chứa tilemap, animation, UI, physics, nav, audio, shader;
+    - unsupported trả typed gap/alternative; không generic click/call để đạt checkbox;
+    - benchmark batch/tool selection và context size trên 50 prompt task corpus.
+  Verify: coverage P0=100%, P1>=90%; remainder có owner/backlog; museum Play sạch.
+  DoD: tool surface đủ làm game 2D, không chỉ CRUD node cơ bản.
+  LOG: (trống)
+
+--------------------------------------------------------------------------------
+R6 — RUNTIME, PLAYTEST TỰ ĐỘNG VÀ BẰNG CHỨNG (7 WP)
+--------------------------------------------------------------------------------
+
+R6-WP1 — Play/debug process lifecycle và log/diagnostics               [ ]
+  Phụ thuộc: R3, R5-WP1.
+  Track/file: D/A; EditorDebuggerPlugin/runtime channel/job supervisor.
+  Làm:
+    - play main/current/custom, stop/restart/status/PID/exit/timeout; debug args allowlisted;
+    - debugger messages, parser/runtime/import errors, stack trace và source link;
+    - distinguish editor tree vs remote runtime tree; stale run_id messages reject;
+    - crash/hang watchdog và release_all input on stop/failure.
+  Verify: parse error, runtime exception, crash/hang, quick restart, two stale sessions.
+  DoD: agent tự thấy lỗi mà người không copy Output panel.
+  LOG: (trống)
+
+R6-WP2 — Runtime probe/autoload và structured state                    [ ]
+  Phụ thuộc: R6-WP1.
+  Track/file: D; debug-only runtime bridge.
+  Làm:
+    - remote tree paging, node/property snapshot allowlist, groups/signals/timeline;
+    - custom game observation contract (`agent_observe`) không bắt buộc cho base nodes;
+    - request/response bind run_id/token; budget/rate limits;
+    - export filter và release artifact scan loại autoload/probe/addon/evidence.
+  Verify: 10k-node runtime query paging; secret property redaction; release scan negative.
+  DoD: structured state đủ để test logic, runtime bridge không lọt game phát hành.
+  LOG: (trống)
+
+R6-WP3 — Input injection đa thiết bị và deterministic timeline          [ ]
+  Phụ thuộc: R6-WP2.
+  Track/file: D; input protocol/runner.
+  Làm:
+    - action press/release/strength, keyboard modifiers, mouse motion/click, wheel,
+      joypad axes/buttons và touch; sequence theo tick/time; `release_all` bất biến;
+    - input đi vào game window/run đúng, không SendInput lên desktop;
+    - record/replay header: engine/project/run/seed/fixed-step/snapshot hashes.
+  Verify: movement, menu typing/click, controller/touch fixture, focus loss, replay mismatch.
+  DoD: agent tự chơi gameplay và UI bằng input thật của game process.
+  LOG: (trống)
+
+R6-WP4 — Freeze/step/step-until và deterministic scope                  [ ]
+  Phụ thuộc: R6-WP2, R6-WP3.
+  Track/file: D; time controller + test-mode bootstrap.
+  Làm:
+    - freeze frame 0, fixed physics ticks, step N/ms/until predicate with timeout;
+    - pin seed và relevant time/random knobs; event subscription trước drive;
+    - nói rõ logic/state deterministic trong cùng build/máy; không cam kết pixel hay
+      physics bit-exact cross-GPU/platform;
+    - predicate DSL allowlisted, không arbitrary runtime eval trong production tool.
+  Verify: same input 10 runs canonical state equal; timeout/missed event; CPU load variance.
+  DoD: test không dựa vào `sleep 2s` và không race observation.
+  LOG: (trống)
+
+R6-WP5 — Screenshot, visual diff, UI/scene assertions và perf           [ ]
+  Phụ thuộc: R6-WP2, R6-WP4.
+  Track/file: D/Test; capture/assertions/artifacts.
+  Làm:
+    - screenshot game/editor viewport, wait stable frames, region/mask/tolerance/diff;
+    - assertions tree/property/signal/UI layout/audio event/world predicate;
+    - perf monitors/time series/p95/spike/memory, warmup và hardware manifest;
+    - baseline update là explicit reviewed action, thiếu baseline không tự bless.
+  Verify: seeded intentional pass/fail, GPU variance masks, missing baseline fail, perf regression.
+  DoD: bằng chứng ảnh dùng đúng chỗ, state assertion vẫn là nguồn chính.
+  LOG: (trống)
+
+R6-WP6 — Test manifest/runner/evidence bundle                           [ ]
+  Phụ thuộc: R6-WP3..5.
+  Track/file: D/Test; `.hh-test.json`, test.* MCP, evidence index.
+  Làm:
+    - setup/run/input/step/assert/teardown schema; suite filtering/retry policy;
+    - bundle project/commit/engine/tool hashes, logs, state, event, screenshots/diff, perf;
+    - pass/fail/infra_error phân biệt; flaky không biến thành pass bằng retry im lặng;
+    - artifact list/get/retention, portable HTML/JSON review report.
+  Verify: one pass, logic fail, visual fail, perf fail, crash, timeout, flaky fixture.
+  DoD: agent viện dẫn artifact, không chỉ nói “tôi đã test”.
+  LOG: (trống)
+
+R6-WP7 — Self-repair gauntlet + Gate G3                                [ ]
+  Phụ thuộc: R6-WP1..6, R5-WP7.
+  Track/file: Test; seeded-bug microgame copies.
+  Làm:
+    - cài tối thiểu 8 lỗi: syntax, missing asset, wrong collision mask, signal sai,
+      animation transition, UI overflow, reversed/wrong visual property, perf explosion;
+    - agent nhận chỉ symptom/test, tự inspect→diagnose→patch→retest→checkpoint;
+    - giới hạn 3 repair loops/lỗi; không sửa test để che bug;
+    - critic kiểm diff và evidence độc lập.
+  Verify: >=7/8 tự sửa, 0 false pass, mọi lỗi có root cause/artifact; chạy clean clone x3.
+  DoD/G3: agent chứng minh có mắt, tay và khả năng tự kiểm/sửa thật.
+  LOG: (trống)
+
+--------------------------------------------------------------------------------
+R7 — AUTOPILOT DÀI HẠN, GIT VÀ NHIỀU AGENT (6 WP)
+--------------------------------------------------------------------------------
+
+R7-WP1 — Brief compiler và task DAG tự động                            [ ]
+  Phụ thuộc: G3, R2-WP7.
+  Track/file: A; brief parser/planner + UI plan cards.
+  Làm:
+    - validate PROJECT_BRIEF; chuyển acceptance thành vertical slices/test trước;
+    - sinh DAG có output/files/scene leases/dependency/verify/budget/rollback;
+    - assumption nhỏ tự chọn theo 6.2; E1–E4 thành blocker rõ, không hỏi lan man;
+    - plan update giữ trace brief→task→command→test→checkpoint.
+  Verify: corpus 20 brief mơ hồ/đủ/contradictory; no circular DAG; acceptance trace 100%.
+  DoD: agent biết “xong là gì” trước khi sản xuất hàng loạt asset/code.
+  LOG: (trống)
+
+R7-WP2 — Orchestrator state machine và bounded repair loop              [ ]
+  Phụ thuộc: R7-WP1, R2-WP4, R6-WP6.
+  Track/file: A; orchestrator/jobs/state store.
+  Làm:
+    - states inspect→plan→checkpoint→execute→verify→repair→review-ready/done/blocked;
+    - budgets thời gian/command/context/retry; heartbeat/cancel/resume;
+    - repair dựa evidence/root cause, tối đa 3 cùng lỗi rồi critic/escalate;
+    - process restart không mất current task, không replay committed command.
+  Verify: kill/restart mọi state; dependency fail/cancel; infinite repair fixture bị chặn.
+  DoD: một phiên dài tự tiếp tục đúng chỗ, không cần người nhắc “continue”.
+  LOG: (trống)
+
+R7-WP3 — Git checkpoint, asset LFS và rollback policy                   [ ]
+  Phụ thuộc: R7-WP2, R3-WP8.
+  Track/file: A/G; git adapter, checkpoint manifest.
+  Làm:
+    - worktree status/diff, branch `agent/<project>/<run>`, checkpoint per green slice;
+    - preserve user changes; stage allowlisted files only; no reset-hard/force push;
+    - LFS threshold/types, binary asset manifest, merge conflict → pause/resync;
+    - revert checkpoint bằng new commit/recoverable operation, not history rewrite.
+  Verify: dirty user file, untracked asset, conflict, large binary, detached/restart states.
+  DoD: mọi destructive action có recovery, agent không chiếm/xóa work người.
+  LOG: (trống)
+
+R7-WP4 — Multi-agent scheduler và single mutation lane                 [ ]
+  Phụ thuộc: R7-WP2, R2-WP5.
+  Track/file: A; scheduler/leases/coordinator.
+  Làm:
+    - song song research/code staging/asset generation/test analysis theo DAG;
+    - duy nhất một writer queue vào Godot; scene/resource/file lease + TTL/heartbeat;
+    - merge staged code theo base hash; conflict không auto-resolve mù;
+    - coordinator sở hữu registry/generated/progress, agent khác gửi change proposal.
+  Verify: 4 workers, lease expiry/crash, same-file race, independent scene throughput.
+  DoD: parallel nhanh hơn task corpus nhưng correctness không giảm/no lost update.
+  LOG: (trống)
+
+R7-WP5 — Long-session soak, context compaction và resume                [ ]
+  Phụ thuộc: R7-WP1..4.
+  Track/file: A/Test; soak harness, summaries/resources.
+  Làm:
+    - chạy 2 giờ / >=500 commands / >=20 Play runs; compact old context thành state resource;
+    - restart sidecar/editor/agent ở ba điểm; reconnect/version/hash reconcile;
+    - cap event/evidence/cache memory; rotate logs mà giữ checkpoint refs;
+    - idle/wake/monitor không tự đánh blocked khi state chỉ chưa đổi.
+  Verify: no duplicate, leak trend within budget, final project/test equal uninterrupted run.
+  DoD: agent không cần lịch sử chat dài để biết đang làm gì.
+  LOG: (trống)
+
+R7-WP6 — Zero-touch autonomy trial + Gate G4                           [ ]
+  Phụ thuộc: R7-WP5.
+  Track/file: Test/Product; fresh 2D task not used in fixtures.
+  Làm:
+    - người đưa brief + Start, sau đó không click/type/sửa file trong 90 phút;
+    - agent tự plan, làm, tự chơi, repair, checkpoint và tạo review package;
+    - thử Pause/Resume một lần nhưng người không cung cấp thông tin mới;
+    - ghi mọi lần agent đòi input; chỉ E1–E4 được chấp nhận.
+  Verify: video/timeline + command ledger + Git + evidence; independent critic audit.
+  DoD/G4: không có human-work step; output chạy được và test xanh.
+  LOG: (trống)
+
+--------------------------------------------------------------------------------
+R8 — DOGFOOD: GAME TOP-DOWN 2D THẬT, KHÔNG PLACEHOLDER RELEASE (6 WP)
+--------------------------------------------------------------------------------
+
+R8-WP1 — Chốt brief “Kho Bí Ẩn” và acceptance game                     [ ]
+  Phụ thuộc: G4.
+  Track/file: F/Product; godot/dogfood/kho-bi-an/PROJECT_BRIEF.md.
+  Làm:
+    - top-down 2D, 10 phút vertical slice: di chuyển, tương tác, lấy key/item, mở cửa,
+      một NPC/đối thủ đơn giản, thắng/thua/restart;
+    - keyboard + gamepad, 1280x720 base, target Windows;
+    - art bible/palette/scale, audio list, UI flow, save/load, performance budgets;
+    - testable acceptance và danh sách cấm/placeholder policy.
+  Verify: brief compiler tạo DAG không blocker; asset/license budget khả thi.
+  DoD: scope đủ nhỏ để xong, đủ giàu để bác output “game quá tệ”.
+  LOG: (trống)
+
+R8-WP2 — Skeleton gameplay first + executable graybox                  [ ]
+  Phụ thuộc: R8-WP1.
+  Track/file: F; game scenes/scripts/tests.
+  Làm:
+    - project settings/input/main scene; world tilemap/collision/camera/player;
+    - interaction/state/inventory key-door/win-loss/restart; save model versioned;
+    - test trước cho critical path; typed GDScript composition, no giant script;
+    - agent tự Play/input/assert full graybox loop trước khi polish.
+  Verify: deterministic test từ start→key→door→win; save/load; no errors/leaks.
+  DoD: gameplay loop hoàn chỉnh bằng graybox, art chưa được phép che logic lỗi.
+  LOG: (trống)
+
+R8-WP3 — Art/animation/audio pipeline và license manifest               [ ]
+  Phụ thuộc: R8-WP1; song song R8-WP2 qua asset staging.
+  Track/file: F/E; assets, source manifests, import presets.
+  Làm:
+    - tạo/nhập tiles, player/NPC/item/door/VFX/UI icon/font/SFX/music theo art bible;
+    - sprite size/pivot/filter/atlas/animation consistent; remove obvious AI artifacts;
+    - mỗi asset có source/tool/prompt/model/license/hash; commercial-safe policy;
+    - imagegen local/remote chỉ dùng nếu đã provision/authorized; thiếu thì dùng asset
+      MIT/CC0 được pin hoặc procedural art chất lượng, không dừng project vì API key.
+  Verify: contact sheet/animation preview/audio audit; missing attribution/placeholder fail.
+  DoD: visual/audio cohesive; release asset manifest không có UNKNOWN.
+  LOG: (trống)
+
+R8-WP4 — Integrate art, UI, feedback, accessibility và polish          [ ]
+  Phụ thuộc: R8-WP2, R8-WP3.
+  Track/file: F; game integration.
+  Làm:
+    - thay graybox bằng asset; animation states, hit/interact feedback, camera, lighting;
+    - HUD/menu/pause/settings/tutorial prompt; audio buses; focus/gamepad;
+    - color/contrast/text/layout/readability; options volume/fullscreen/input basics;
+    - lint PLACEHOLDER, broken refs, unused asset/node/script.
+  Verify: visual baselines nhiều resolution; keyboard/gamepad full flow; screenshot review.
+  DoD: game trông có chủ đích, không phải demo kỹ thuật bằng ô màu.
+  LOG: (trống)
+
+R8-WP5 — Agent playtest, balance, save/load và bug bash                  [ ]
+  Phụ thuộc: R8-WP4.
+  Track/file: F/D/Test.
+  Làm:
+    - ít nhất 20 seeded runs gồm happy path, bỏ item, retry, pause, save mid-run, load;
+    - exploratory action sequences/fuzz UI boundaries; collision/nav stuck checks;
+    - perf p95/memory/load time trên máy dev; visual diff và log clean;
+    - agent tự sửa issue P0/P1; issue P2 ghi backlog có evidence.
+  Verify: test suite + evidence bundles; 10 phút continuous play no blocker.
+  DoD: game chịu được cách chơi khác happy path, không chỉ scripted demo.
+  LOG: (trống)
+
+R8-WP6 — Fresh-project recreation + human review Gate G5               [ ]
+  Phụ thuộc: R8-WP5.
+  Track/file: F/Test/Product.
+  Làm:
+    - trên clean clone/project bootstrap, agent tái tạo/build game từ brief + assets pin;
+    - người chỉ xem Watch/Fast/replay và review build cuối;
+    - review rubric: gameplay, visual, audio, UX, stability, autonomy, evidence;
+    - nếu fail chất lượng, quay lại đúng WP, không mở R9 bằng checkbox test xanh.
+  Verify: independent critic + người chơi 10 phút; artifact/version hashes reproducible.
+  DoD/G5: người chấp nhận game đạt mục tiêu; không cần tự vào editor sửa hộ.
+  LOG: (trống)
+
+--------------------------------------------------------------------------------
+R9 — EXPORT, PHÂN PHỐI VÀ VẬN HÀNH (4 WP)
+--------------------------------------------------------------------------------
+
+R9-WP1 — Export job/preset/validation và clean build                    [ ]
+  Phụ thuộc: G5.
+  Track/file: G/A; export adapter, Windows preset, artifact jobs.
+  Làm:
+    - install/verify exact export templates; validate preset/assets/main scene/license;
+    - background export job progress/cancel/timeout; output ngoài project allowlisted;
+    - release export filter loại addon/runtime probe/evidence/token/test-only files;
+    - artifact hash/SBOM/notices/build manifest và launch smoke.
+  Verify: clean VM Windows chạy game không Node/Godot/source; artifact scan forbidden paths.
+  DoD: người chơi nhận game độc lập, agent bridge không nằm trong build.
+  LOG: (trống)
+
+R9-WP2 — Package addon + sidecar + doctor/installer                     [ ]
+  Phụ thuộc: R9-WP1.
+  Track/file: G; release bundle/installer/docs.
+  Làm:
+    - package exact addon/sidecar/launcher/checksum/licenses; no online-latest bootstrap;
+    - install/update/uninstall giữ user project; doctor actionable; rollback một version;
+    - Windows current-user install ưu tiên, không đòi admin nếu không cần;
+    - signing/publish là E3: unsigned internal build được, public release phải user cấp cert.
+  Verify: clean VM install/connect/create microgame/uninstall/rollback; tampered hash reject.
+  DoD: setup không yêu cầu người copy nhiều folder/config thủ công.
+  LOG: (trống)
+
+R9-WP3 — Compatibility/update matrix                                   [ ]
+  Phụ thuộc: R9-WP2.
+  Track/file: G/Test; compatibility CI, upgrade playbook.
+  Làm:
+    - support chính xác Godot pin; probe latest stable chỉ non-blocking until approved;
+    - run contract/E2E/visible/headless/export suite trước patch/minor upgrade;
+    - upstream MCP sync: review diff/license/security/schema, reapply minimal patch queue;
+    - capability-lock migration/rollback; version mismatch chỉ Observe/Doctor.
+  Verify: old/new lock, downgrade, project migration copy, intentionally broken API fixture.
+  DoD: không tự bump Godot/dependency làm hỏng agent giữa phiên.
+  LOG: (trống)
+
+R9-WP4 — Release gate G6 và operations handoff                          [ ]
+  Phụ thuộc: R9-WP1..3.
+  Track/file: G/Product; release checklist/runbooks.
+  Làm:
+    - security/privacy/license/SBOM/clean-VM/autonomy/dogfood evidence review;
+    - backup/restore, log collection/redaction, crash recovery, token rotation runbook;
+    - known limitations map tới Capability Matrix, không quảng cáo “mọi nút” tuyệt đối;
+    - human chốt publish/name/trademark/signing/channel; agent không tự upload.
+  Verify: disaster drill + fresh reviewer follow runbook; all gates/artifacts resolve.
+  DoD/G6: internal production-ready; public release chỉ sau E3 approval riêng.
+  LOG: (trống)
+
+--------------------------------------------------------------------------------
+RX — NGOẠI LỆ GDEXTENSION / GODOT C++ FORK (MẶC ĐỊNH KHÓA)
+--------------------------------------------------------------------------------
+
+RX-WP1 — Capability gap report                                        [ ] khóa
+  Chỉ mở khi một P0 capability matrix fail bằng public API/CLI/plugin UI và ảnh hưởng
+  trực tiếp G5/G6. Report phải có reproduction stock, API đã thử, upstream issue, semantic
+  alternative, chi phí không làm và patch surface tối thiểu.
+
+RX-WP2 — GDExtension spike                                             [ ] khóa
+  Phải thử trước C++ fork nếu extension point phù hợp. Process/ABI isolation, exact Godot
+  version, crash/upgrade/packaging tests; không expose generic arbitrary call.
+
+RX-WP3 — Gate GX và patch C++ tối thiểu                               [ ] khóa
+  Chỉ người tick. Fork đổi tên nếu phân phối theo trademark policy, giữ MIT notices.
+  Patch tách riêng, upstreamable, build/export templates pin; merge-upstream CI bắt buộc.
+
+RX-WP4 — Exit criterion                                                [ ] khóa
+  Mỗi release kiểm public API mới có thay patch được không. Xóa fork patch khi không còn
+  cần. Fork không được biến thành roadmap mặc định hay nơi thêm feature game.
+
+================================================================================
+9. DAG, CRITICAL PATH VÀ CÁCH LÀM NHIỀU VIỆC NHẤT MÀ VẪN HIỆU QUẢ
+================================================================================
+
+9.1 Critical path
+
+  R0-1 → R0-2 → R0-3 → R0-4
+       → R1-1 → R1-2 → R1-3 → R1-4 → R1-5/G1
+       → R2 registry/transport/router → ledger/policy/read model
+       → R3 scene/node/property/script/asset → transaction gauntlet
+       → R4 visible/G2
+       → R5 2D coverage + R6 runtime self-verify/G3
+       → R7 autonomy/G4 → R8 dogfood/G5 → R9 release/G6
+
+R4 không được trì hoãn tới cuối vì “người thấy được agent làm” là yêu cầu sản phẩm,
+nhưng presentation không được chặn correctness của R3. R5 và R6 có thể xen kẽ sau khi
+R3 primitives ổn: mỗi adapter 2D phải có runtime assertion ngay, không đợi R6 hoàn tất.
+
+9.2 Fan-out khuyến nghị
+
+Sau G1:
+
+  - Agent A: R2-WP1/2 registry + transport.
+  - Agent B: R2-WP3 plugin lifecycle trên schema stub đã chốt.
+  - Agent C: fixtures/E2E/fault harness, không sửa production router.
+  - Agent D: observer UI prototype từ read-only event interface.
+
+Sau R3-WP4:
+
+  - Lane 1: TileMap/physics/navigation.
+  - Lane 2: animation/audio/shader.
+  - Lane 3: UI/layout/accessibility.
+  - Lane 4: runtime/input/time/assertions.
+
+Sau R8-WP1:
+
+  - Gameplay graybox và test critical path.
+  - Asset creation/import staging.
+  - UI/audio concept + reusable resources.
+  - QA xây test manifest từ acceptance.
+
+Chỉ merge khi dependency contract đã versioned. Generated registry/progress table/lockfile
+do coordinator cập nhật; agent track gửi patch, không cùng lúc edit. Scene dogfood có thể
+tách thành `world.tscn`, `player.tscn`, `ui.tscn`, `actors/*.tscn` để lease độc lập.
+
+9.3 WIP limits
+
+  - tối đa 4 WP code đang in-progress toàn repo;
+  - tối đa 1 schema migration và 1 Godot mutation E2E cùng lúc;
+  - mỗi agent tối đa 1 WP chính; subtasks chỉ research/test độc lập;
+  - một WP >2 ngày hoặc >~800 dòng production phải split trước khi code;
+  - không mở milestone mới chỉ để “giữ agent bận” khi invariant/gate đang đỏ.
+
+9.4 Ưu tiên sửa lỗi
+
+  P0: corruption, false success, auth/path escape, mất user work, release leak.
+  P1: workflow P0 capability không làm được, undo/recovery sai, self-test false pass.
+  P2: visible replay/UX/perf làm chậm nhưng có alternative đúng.
+  P3: polish/docs/backlog không chặn game.
+
+P0/P1 luôn chen trước feature mới. Một test bị sửa từ assert feature có sang assert feature
+thiếu là reject; gap phải đỏ rõ chứ không biến thành test xanh.
+
+================================================================================
+10. ACCEPTANCE MATRIX BẮT BUỘC
+================================================================================
+
+| ID | Kịch bản | Kết quả bắt buộc | Gate |
+|----|----------|------------------|------|
+| AC-01 | Blank project → scene/node/property/script/save/reopen | 20/20, không click, không duplicate | G1 |
+| AC-02 | Retry cùng command_id 10 lần | một mutation, cùng cached durable result | R2 |
+| AC-03 | Wrong token/non-loopback/project mismatch | reject trước handler, secret không log | R2 |
+| AC-04 | `..`/symlink/junction/reserved path | reject, không ghi ngoài root | R2 |
+| AC-05 | 200 random node/property ops → undo all → redo | structural baseline/final exact | R3 |
+| AC-06 | Kill sidecar/plugin/editor ở lifecycle hooks | resume hoặc E_UNCERTAIN, không corruption | R3 |
+| AC-07 | Human sửa scene/script khi agent đang làm | E_CONFLICT + resync, không mất edit | R3 |
+| AC-08 | Asset corrupt/huge/import hang/late result | quarantine/cancel, no partial asset | R3 |
+| AC-09 | Watch mode action sequence | selection/Inspector/overlay/timeline đúng | G2 |
+| AC-10 | Replay/Fast mode | project/history hash không đổi bởi presentation | G2 |
+| AC-11 | Tilemap+physics+nav+animation+UI+audio museum | Play sạch, P0 coverage 100% | R5 |
+| AC-12 | Input + freeze/step + state assert x10 | canonical logic state equal trong scope | R6 |
+| AC-13 | Missing visual baseline | test fail; không tự tạo/bless | R6 |
+| AC-14 | 8 seeded bugs | >=7 tự sửa, 0 false pass, evidence đủ | G3 |
+| AC-15 | Pause lúc queue/import/export | gate ACK <=250 ms, safe drain/cancel nhất quán | G4 |
+| AC-16 | 2h soak + 3 process restarts | final state như uninterrupted, no leak/duplicate | G4 |
+| AC-17 | 4 agent song song | no lost update; one mutation lane; throughput có lợi | G4 |
+| AC-18 | Brief→game dogfood 10 phút | người không làm hộ; rubric chất lượng đạt | G5 |
+| AC-19 | Save/load/restart/gamepad/resolution variants | no blocker/data loss/UI cutoff | G5 |
+| AC-20 | Windows clean VM export | game chạy không editor/Node/addon/token/evidence | G6 |
+| AC-21 | Tamper package/version skew | checksum reject hoặc Observe/Doctor only | G6 |
+| AC-22 | Clean clone offline với lock/cache chuẩn | build/test reproducible | G6 |
+
+Mỗi AC có test ID/artifact URI trong Capability Matrix. Không ghi “manual” mà không có
+ngày/máy/người/artifact. Test UI visible cần ảnh/video; test state cần structured dump.
+
+================================================================================
+11. ERROR MODEL VÀ OBSERVABILITY
+================================================================================
+
+Lỗi tối thiểu, có `code`, `message`, `retryable`, `state`, `evidence`:
+
+  E_AUTH          token/origin/session sai
+  E_POLICY        profile/capability không cho phép
+  E_PATH          path/root/symlink/reserved violation
+  E_SCHEMA        params/protocol/action version invalid
+  E_NOT_FOUND     stable identity/path/resource không tồn tại
+  E_AMBIGUOUS     UID collision/multiple target, không đoán
+  E_CONFLICT      revision/history/fingerprint/base hash/human edit lệch
+  E_IDEMPOTENCY_CONFLICT  cùng command_id nhưng canonical request/binding khác
+  E_UNSUPPORTED   public semantic capability chưa có, kèm alternative/gap ID
+  E_BUSY          import/save/editor transition đang bận, có retry_after
+  E_TIMEOUT       deadline, state/cancel outcome rõ
+  E_CANCELLED     cancel ở safe-point, partial state/rollback report
+  E_VALIDATE      script/import/property/postcondition fail
+  E_SAVE          apply volatile nhưng durable save/readback fail
+  E_UNVERIFIED    handler không chứng minh postcondition
+  E_UNCERTAIN     crash giữa apply, cần reconcile/checkpoint recovery
+  E_EXTERNAL      cần E1–E3 hoặc external service fail
+
+Metrics: queue latency, apply time, save/import time, postcondition time, Pause ACK,
+reconnect, conflict, retry/dedup, E_UNCERTAIN, editor frame stall, test flake, evidence size.
+Mọi metric có run/session/action tags không chứa path/secret thô.
+
+================================================================================
+12. NGUỒN CHÍNH THỨC VÀ BASELINE RESEARCH (ĐÃ KIỂM 20-8-2026)
+================================================================================
+
+Nguồn official ưu tiên; agent phải đọc docs đúng version pin, không suy từ bài blog cũ:
+
+  Godot release archive / latest stable:
+    https://godotengine.org/download/archive/
+    Tại thời điểm lập plan: 4.7.1-stable là stable; 4.7.2 chỉ RC1, 4.8 là dev.
+    Release 4.7.1 / commit a13da4feb:
+    https://godotengine.org/article/maintenance-release-godot-4-7-1/
+
+  EditorPlugin:
+    https://docs.godotengine.org/en/4.7/classes/class_editorplugin.html
+
+  EditorInterface (open/save/play/edit node/resource/script/selection/Inspector):
+    https://docs.godotengine.org/en/4.7/classes/class_editorinterface.html
+
+  EditorUndoRedoManager:
+    https://docs.godotengine.org/en/4.7/classes/class_editorundoredomanager.html
+
+  EditorSelection:
+    https://docs.godotengine.org/en/4.7/classes/class_editorselection.html
+
+  EditorFileSystem (scan/update/reimport và reentrancy warning):
+    https://docs.godotengine.org/en/4.7/classes/class_editorfilesystem.html
+
+  EditorDebuggerPlugin:
+    https://docs.godotengine.org/en/4.7/classes/class_editordebuggerplugin.html
+
+  Making plugins / @tool caveats:
+    https://docs.godotengine.org/en/4.7/tutorials/plugins/editor/making_plugins.html
+    https://docs.godotengine.org/en/4.7/tutorials/plugins/running_code_in_the_editor.html
+
+  CLI/headless/import/export:
+    https://docs.godotengine.org/en/4.7/tutorials/editor/command_line_tutorial.html
+
+  License/trademark (nếu sau này fork/phân phối):
+    https://godotengine.org/license/
+    https://godot.foundation/policies-and-procedures/trademark-policy
+
+MCP baseline để R1 audit, không phải endorsement và không tự lấy latest:
+
+  https://github.com/satelliteoflove/godot-mcp
+  https://github.com/KeeVeeG/godot-mcp
+  https://github.com/beckettlab/beckett-godot-mcp  (chỉ Lite MIT cho core)
+  https://github.com/Sods2/godot-mcp
+
+Baseline observation từ research: các dự án này chứng minh hướng plugin/MCP khả thi và
+một số đã có live scene/runtime/input/screenshot/deterministic time. Plan vẫn bắt audit
+code/license/security và bake-off; README của upstream không thay evidence trong repo.
+
+================================================================================
+13. QUY TẮC DUY TRÌ FILE NÀY
+================================================================================
+
+13.1 Authority
+
+Ba dòng machine-readable ở đầu file là authority/status/WP hiện tại. Coordinator cập
+nhật `CURRENT_VALID_WP` sau mỗi WP commit; R0-WP2 đổi status transition thành active.
+
+Hai plan 16-8 chứa `AUTHORITATIVE_PLAN=0`. Chỉ file này giữ checkbox tiến độ. README,
+issue tracker hay Review Center có thể link/render, không được giữ một bộ checkbox khác.
+
+13.2 Tick/progress
+
+Một WP tick ở đúng hai chỗ trong CÙNG file: dòng WP chi tiết và ô đếm milestone trong
+bảng đầu. Không tick chỉ vì unit test xanh nếu DoD đòi visible/clean VM/human gate.
+Coordinator chạy script kiểm dependency, count 60 WP, duplicate ID, missing LOG/DoD.
+
+13.3 Thay plan
+
+Sửa requirement/architecture/invariant phải thêm entry có ngày/lý do/impact/migration
+trong cuối file hoặc docs/DECISIONS, rồi cập nhật WP/test liên quan trong cùng commit.
+Không sửa acceptance để hợp code đã lỡ viết. Một capability cắt scope cần người chấp
+thuận nếu ảnh hưởng G5/G6.
+
+13.4 LOG template
+
+  LOG YYYY-MM-DD HH:mm Asia/Saigon — agent=<id>
+    Base: <commit>, Godot=<version/hash>, schema=<hash>
+    Files/leases: <...>
+    Verify: <commands + pass counts>
+    E2E/artifacts: <URI/hash/video/screenshot/report>
+    Critic: <agent/result>
+    Gaps: none | <typed gap/backlog>
+    Commit: <hash + exact WP message>
+
+================================================================================
+14. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
+================================================================================
+
+Hiện tại chưa triển khai Godot; file này mới là proposal/plan được người yêu cầu tạo.
+Agent tiếp theo KHÔNG nhảy vào plugin/MCP và KHÔNG tiếp tục WP-M6 cũ.
+
+Lệnh hợp lệ đầu tiên:
+
+  1) đọc AGENTS.md hiện tại + mục R0-WP1 trong file này;
+  2) xác nhận user decision ngày 20-8-2026 trong docs/DECISIONS.md;
+  3) kiểm worktree đầy đủ, tạo checkpoint/tag archive an toàn theo R0-WP1;
+  4) verify recovery rồi mới tick R0-WP1;
+  5) làm R0-WP2 để cutover bootstrap; trước đó plan cũ vẫn là lịch sử bắt buộc bảo toàn.
+
+Không được tự xóa engine/code/game/asset cũ. Không được tự fork Godot. Không yêu cầu
+người click editor trong happy path. Mục tiêu cuối là: người giao brief, xem agent làm,
+review evidence/build — agent chịu toàn bộ công việc triển khai và tự kiểm còn lại.
+
+================================================================================
+HẾT PLAN — 20-8-2026
+================================================================================

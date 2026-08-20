@@ -1,5 +1,17 @@
 # AGENTS.md — HH Game Studio
 
+## TRANSITION 20-8-2026 — USER-APPROVED GODOT REBOOT
+
+Người dùng đã yêu cầu dừng mở WP mới của engine Rust cũ và lập hướng Godot Agent
+Autopilot. Trước mọi product code mới, đọc
+`zdocs/20-8-godot-agent-autopilot-plan.txt` và chỉ thực hiện **R0-WP1** (archive
+an toàn), sau đó R0-WP2 sẽ hoàn tất cutover bootstrap. Không làm WP-M6/M7/M8 cũ,
+không xóa code/asset cũ, không fork Godot. Entry quyết định:
+`docs/DECISIONS.md` — `GODOT-REBOOT-2026-08-20`.
+
+Trong giai đoạn chuyển tiếp, hướng dẫn bên dưới chỉ áp dụng khi audit/khôi phục
+legacy; nếu mâu thuẫn về WP hiện tại, stanza TRANSITION này thắng.
+
 Bạn là AI agent triển khai sản phẩm. Repo này CHƯA có code sản phẩm cho đến khi
 bạn (hoặc agent khác) làm work package. Mục tiêu: IDE làm game AI-native,
 2D hoàn thiện (M-1 → M9). Không đụng mạng xã hội Hoan Hao.
