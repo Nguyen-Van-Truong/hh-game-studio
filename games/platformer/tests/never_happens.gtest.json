@@ -1,0 +1,10 @@
+{
+  "name": "never_happens",
+  "scene": "scenes/main.gscene.json",
+  "seed": 7,
+  "max_frames": 8,
+  "asserts": [
+    { "event": { "name": "NeverHappens" } }
+  ],
+  "expect_diagnostics_max": 0
+}

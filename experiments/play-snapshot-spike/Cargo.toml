@@ -1,0 +1,15 @@
+[package]
+name = "play-snapshot-spike"
+version = "0.0.0"
+edition = "2021"
+publish = false
+description = "M-1-d spike: immutable play snapshot builder + player stub"
+
+[[bin]]
+name = "gs-player-stub"
+path = "src/main.rs"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"

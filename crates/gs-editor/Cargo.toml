@@ -1,0 +1,29 @@
+[package]
+name = "gs-editor"
+version.workspace = true
+edition.workspace = true
+publish = false
+description = "Editor app: eframe/wgpu, bus server, authority, feed"
+
+[[bin]]
+name = "gs-editor"
+path = "src/main.rs"
+
+[dependencies]
+eframe = { version = "=0.31.1", default-features = false, features = ["default_fonts", "wgpu"] }
+egui = "=0.31.1"
+gs-player = { path = "../gs-player" }
+gs-protocol = { path = "../gs-protocol" }
+gs-registry = { path = "../gs-registry" }
+gs-render2d = { path = "../gs-render2d" }
+gs-scene = { path = "../gs-scene" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+ulid = { workspace = true }
+sha2 = "0.10"
+
+[dev-dependencies]
+tempfile = "3"
+serde_json = { workspace = true }
+ulid = { workspace = true }

@@ -1,0 +1,239 @@
+{
+  "schema_version": 1,
+  "mode": "2d",
+  "entities": [
+    {
+      "id": "e_000001",
+      "parent": null,
+      "order": 0,
+      "components": {
+        "Name": { "value": "camera" },
+        "Transform2D": {
+          "x": 5.0,
+          "y": 3.0,
+          "rot": 0.0,
+          "sx": 1.0,
+          "sy": 1.0,
+          "z_index": 0
+        },
+        "Camera2D": {
+          "ortho_height": 11.0,
+          "active": true
+        }
+      }
+    },
+    {
+      "id": "e_000002",
+      "parent": null,
+      "order": 1,
+      "components": {
+        "Name": { "value": "floor" },
+        "Transform2D": {
+          "x": 0.0,
+          "y": 0.0,
+          "rot": 0.0,
+          "sx": 1.0,
+          "sy": 1.0,
+          "z_index": 0
+        },
+        "Tilemap": {
+          "tileset": { "$asset": "a_000001" },
+          "cell_size": [1.0, 1.0],
+          "layers": [
+            {
+              "name": "ground",
+              "solid": true,
+              "cells": [[0, 0, 18, 1]]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "e_000003",
+      "parent": null,
+      "order": 2,
+      "components": {
+        "Name": { "value": "player" },
+        "Tags": { "values": ["player"] },
+        "Transform2D": {
+          "x": 2.0,
+          "y": 2.2,
+          "rot": 0.0,
+          "sx": 1.0,
+          "sy": 1.0,
+          "z_index": 1
+        },
+        "Sprite": {
+          "asset": { "$asset": "a_000002" },
+          "color": [0.2, 0.55, 0.95, 1.0],
+          "flip_x": false,
+          "flip_y": false,
+          "pivot": [0.5, 0.0]
+        },
+        "RigidBody2D": {
+          "kind": "dynamic",
+          "ccd": false,
+          "gravity_scale": 1.0,
+          "fixed_rotation": true,
+          "linear_damping": 0.0
+        },
+        "Collider2D": {
+          "shape": { "box": { "w": 1.0, "h": 1.0 } },
+          "is_sensor": false,
+          "offset": [0.0, 0.0],
+          "layer": 1,
+          "mask": 4294967295,
+          "friction": 0.5,
+          "restitution": 0.0
+        },
+        "Script": {
+          "file": "scripts/player_move.luau",
+          "props": {}
+        }
+      }
+    },
+    {
+      "id": "e_000004",
+      "parent": null,
+      "order": 3,
+      "components": {
+        "Name": { "value": "coin" },
+        "Tags": { "values": ["coin"] },
+        "Transform2D": {
+          "x": 3.4,
+          "y": 1.5,
+          "rot": 0.0,
+          "sx": 1.0,
+          "sy": 1.0,
+          "z_index": 2
+        },
+        "Sprite": {
+          "asset": { "$asset": "a_000003" },
+          "color": [1.0, 0.84, 0.2, 1.0],
+          "flip_x": false,
+          "flip_y": false,
+          "pivot": [0.5, 0.0]
+        },
+        "Collider2D": {
+          "shape": { "box": { "w": 0.5, "h": 0.5 } },
+          "is_sensor": true,
+          "offset": [0.0, 0.0],
+          "layer": 1,
+          "mask": 4294967295,
+          "friction": 0.0,
+          "restitution": 0.0
+        },
+        "Script": {
+          "file": "scripts/coin.luau",
+          "props": {}
+        }
+      }
+    },
+    {
+      "id": "e_000005",
+      "parent": null,
+      "order": 4,
+      "components": {
+        "Name": { "value": "ledges" },
+        "Transform2D": {
+          "x": 0.0,
+          "y": 0.0,
+          "rot": 0.0,
+          "sx": 1.0,
+          "sy": 1.0,
+          "z_index": 0
+        },
+        "Tilemap": {
+          "tileset": { "$asset": "a_000001" },
+          "cell_size": [1.0, 1.0],
+          "layers": [
+            {
+              "name": "ledges",
+              "solid": true,
+              "cells": [
+                [6, 3, 3, 1],
+                [11, 5, 3, 1],
+                [15, 3, 3, 1]
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "e_000006",
+      "parent": null,
+      "order": 5,
+      "components": {
+        "Name": { "value": "coin_mid" },
+        "Tags": { "values": ["coin"] },
+        "Transform2D": {
+          "x": 7.5,
+          "y": 4.25,
+          "rot": 0.0,
+          "sx": 1.0,
+          "sy": 1.0,
+          "z_index": 2
+        },
+        "Sprite": {
+          "asset": { "$asset": "a_000003" },
+          "color": [1.0, 0.84, 0.2, 1.0],
+          "flip_x": false,
+          "flip_y": false,
+          "pivot": [0.5, 0.0]
+        },
+        "Collider2D": {
+          "shape": { "box": { "w": 0.5, "h": 0.5 } },
+          "is_sensor": true,
+          "offset": [0.0, 0.0],
+          "layer": 1,
+          "mask": 4294967295,
+          "friction": 0.0,
+          "restitution": 0.0
+        },
+        "Script": {
+          "file": "scripts/coin.luau",
+          "props": {}
+        }
+      }
+    },
+    {
+      "id": "e_000007",
+      "parent": null,
+      "order": 6,
+      "components": {
+        "Name": { "value": "coin_high" },
+        "Tags": { "values": ["coin"] },
+        "Transform2D": {
+          "x": 12.5,
+          "y": 6.25,
+          "rot": 0.0,
+          "sx": 1.0,
+          "sy": 1.0,
+          "z_index": 2
+        },
+        "Sprite": {
+          "asset": { "$asset": "a_000003" },
+          "color": [1.0, 0.84, 0.2, 1.0],
+          "flip_x": false,
+          "flip_y": false,
+          "pivot": [0.5, 0.0]
+        },
+        "Collider2D": {
+          "shape": { "box": { "w": 0.5, "h": 0.5 } },
+          "is_sensor": true,
+          "offset": [0.0, 0.0],
+          "layer": 1,
+          "mask": 4294967295,
+          "friction": 0.0,
+          "restitution": 0.0
+        },
+        "Script": {
+          "file": "scripts/coin.luau",
+          "props": {}
+        }
+      }
+    }
+  ]
+}

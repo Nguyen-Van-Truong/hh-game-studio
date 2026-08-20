@@ -1,0 +1,20 @@
+[package]
+name = "matrix-spike"
+version = "0.1.0"
+edition = "2021"
+publish = false
+description = "M-1-f: compile-test the pinned crate set together"
+
+[dependencies]
+# Same pin family as render-spike (egui 0.31.1 / wgpu 24)
+egui = "=0.31.1"
+eframe = { version = "=0.31.1", default-features = false, features = ["default_fonts", "wgpu"] }
+egui-wgpu = "=0.31.1"
+wgpu = { version = "24.0.3", features = ["wgsl", "dx12", "metal", "vulkan-portability"] }
+winit = "0.30.9"
+# Same as luau-spike
+mlua = { version = "0.11.6", features = ["luau"] }
+# Gameplay / text — must compile with the above, not "latest" independently
+bevy_ecs = "0.15"
+rapier2d = { version = "0.22", features = ["enhanced-determinism"] }
+glyphon = "0.8"

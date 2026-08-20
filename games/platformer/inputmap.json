@@ -1,0 +1,16 @@
+{
+  "actions": [
+    {
+      "name": "move_x",
+      "type": "axis",
+      "keys": [["A", -1.0], ["D", 1.0], ["Left", -1.0], ["Right", 1.0]],
+      "gamepad_axis": "left_x"
+    },
+    {
+      "name": "jump",
+      "type": "button",
+      "keys": ["Space", "W", "Up"],
+      "gamepad_button": "south"
+    }
+  ]
+}

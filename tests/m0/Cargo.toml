@@ -1,0 +1,15 @@
+[package]
+name = "m0"
+version.workspace = true
+edition.workspace = true
+publish = false
+description = "M0 conformance, fault-injection, and GS-EC matrix (WP-M0-6)"
+
+[dependencies]
+gs-editor = { path = "../../crates/gs-editor" }
+gs-protocol = { path = "../../crates/gs-protocol" }
+gs-registry = { path = "../../crates/gs-registry" }
+gs-scene = { path = "../../crates/gs-scene" }
+serde_json = { workspace = true }
+tempfile = "3"
+ulid = { workspace = true }

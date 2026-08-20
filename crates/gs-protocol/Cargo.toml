@@ -1,0 +1,11 @@
+[package]
+name = "gs-protocol"
+version.workspace = true
+edition.workspace = true
+publish = false
+description = "JSON-RPC 2.0 envelope, NDJSON framing, error codes"
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }

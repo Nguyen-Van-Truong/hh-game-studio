@@ -1,0 +1,9 @@
+[package]
+name = "luau-spike"
+version = "0.1.0"
+edition = "2021"
+publish = false
+description = "M-1 WP-b spike: mlua+Luau sandbox, interrupt deadline, mutation buffer"
+
+[dependencies]
+mlua = { version = "0.11.6", features = ["luau"] }

@@ -1,0 +1,16 @@
+{
+  "actions": [
+    {
+      "name": "move_x",
+      "type": "axis",
+      "keys": [["A", -1.0], ["D", 1.0], ["Left", -1.0], ["Right", 1.0]],
+      "gamepad_axis": "left_x"
+    },
+    {
+      "name": "move_y",
+      "type": "axis",
+      "keys": [["S", -1.0], ["W", 1.0], ["Down", -1.0], ["Up", 1.0]],
+      "gamepad_axis": "left_y"
+    }
+  ]
+}

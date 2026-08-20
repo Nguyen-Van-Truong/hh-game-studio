@@ -1,0 +1,28 @@
+[package]
+name = "gs-player"
+version.workspace = true
+edition.workspace = true
+publish = false
+description = "Play process: verify immutable snapshot, 60Hz simulate, render"
+
+[[bin]]
+name = "gs-player"
+path = "src/main.rs"
+
+[dependencies]
+gs-protocol = { path = "../gs-protocol" }
+gs-render2d = { path = "../gs-render2d" }
+gs-runtime-core = { path = "../gs-runtime-core" }
+gs-scene = { path = "../gs-scene" }
+gilrs = "0.11.2"
+kira = { version = "0.10.8", default-features = false, features = ["cpal", "ogg", "wav"] }
+pollster = "0.4.0"
+serde = { workspace = true }
+serde_json = { workspace = true }
+sha2 = "0.10"
+thiserror = { workspace = true }
+ulid = { workspace = true }
+winit = "0.30.9"
+
+[dev-dependencies]
+tempfile = "3"

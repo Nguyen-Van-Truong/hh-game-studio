@@ -1,0 +1,21 @@
+[package]
+name = "gs-scene"
+version.workspace = true
+edition.workspace = true
+publish = false
+description = "Document model, dispatcher, WAL, undo, blueprint"
+
+[dependencies]
+gs-protocol = { path = "../gs-protocol" }
+gs-registry = { path = "../gs-registry" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+crc32fast = { workspace = true }
+ulid = { workspace = true }
+fs2 = { workspace = true }
+ryu = { workspace = true }
+sha2 = "0.10"
+
+[dev-dependencies]
+tempfile = "3"

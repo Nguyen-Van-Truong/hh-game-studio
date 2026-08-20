@@ -1,0 +1,11 @@
+[package]
+name = "gs-registry"
+version.workspace = true
+edition.workspace = true
+publish = false
+description = "Executable method contract — source of truth for the bus"
+
+[dependencies]
+gs-protocol = { path = "../gs-protocol" }
+serde = { workspace = true }
+serde_json = { workspace = true }

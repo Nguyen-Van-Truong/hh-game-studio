@@ -1,0 +1,14 @@
+[package]
+name = "gs-runtime-core"
+version.workspace = true
+edition.workspace = true
+publish = false
+description = "Play-world projection, fixed phase schedule, and Luau VM host"
+
+[dependencies]
+gs-render2d = { path = "../gs-render2d" }
+gs-scene = { path = "../gs-scene" }
+mlua = { version = "0.11.6", features = ["luau"] }
+rapier2d = { version = "0.22", features = ["enhanced-determinism"] }
+serde_json = { workspace = true }
+thiserror = { workspace = true }

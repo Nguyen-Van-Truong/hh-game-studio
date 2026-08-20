@@ -1,0 +1,1422 @@
+================================================================================
+16-8-2026 — HH GAME STUDIO — EXECUTION PLAN CHO AI AGENT
+M-1 → M9: 2D HOÀN THIỆN. Code ở ROOT repo hh-game-studio.
+================================================================================
+
+FILE NÀY LÀ GÌ
+  GIAO THỨC + THỨ TỰ LÀM + VERIFY + TIẾN ĐỘ. Không thay SPEC.
+  SPEC (WHAT/WHY, bất biến, schema, protocol): 
+    zdocs/16-8-game-studio-ai-native-ide-2d-first-master-plan.txt
+    (gọi tắt: MASTER). Số mục kiểu "4.1", "I2", "GS-EC-19" = mục MASTER.
+  Xung đột file này vs MASTER: MASTER thắng. Viết đề xuất
+  docs/DECISIONS.md rồi STOP — không sửa spec ngầm.
+
+  Người đọc: AI agent (Cursor/Codex/Claude) triển khai. Người duyệt gate.
+  Trạng thái: chưa có dòng code sản phẩm. WP đầu tiên = WP-M-1-a.
+
+  "gamestudio/" trong MASTER = ROOT repo này (Cargo.toml ở gốc). C22.
+
+================================================================================
+PHẦN A — GIAO THỨC THỰC THI (đọc hết trước khi đụng code)
+================================================================================
+
+A.1 VÒNG LẶP MỘT WORK PACKAGE
+
+  1) Mở Phần E, lấy WP chưa tick [ ] ĐẦU TIÊN mà phụ thuộc đã xong.
+     (Một agent đơn: làm tuần tự. Nhiều agent: xem A.6.)
+  2) Đọc khối WP ở Phần B hoặc C: spec refs, file đích, verify, DoD.
+  3) Đọc ĐÚNG các mục MASTER được trỏ — không đọc cả 1700 dòng mỗi lần.
+  4) Làm việc. Không tự thêm crate/ngôn ngữ ngoài MASTER 2.1 + I9.
+  5) Chạy VERIFY của WP. Fail = sửa, không tick.
+  6) Dán bằng chứng vào ô LOG (lệnh + kết quả ngắn + ngày).
+  7) Tick [x] ở khối WP và ở bảng Phần E, ghi ngày.
+     Milestone xong: tick thêm bảng 0.1 MASTER.
+  8) Commit: M<x>-WP<n>: <mô tả ngắn>
+     Ví dụ: M-1-WP-a: renderer 3-target spike
+  9) WP kế. Gặp GATE / STOP → dừng, báo người, không tự mở milestone sau.
+
+A.2 PHÂN VAI FILE
+
+  MASTER     = SPEC. Đúng/sai kiến trúc lấy từ đây.
+  File này   = thứ tự, lệnh verify, khi nào dừng, chỗ tick tiến độ.
+  AGENTS.md  = bootstrap 40 dòng (Cursor nạp sẵn).
+  docs/DECISIONS.md (tạo từ M-1/M0) = mọi lệch so với SPEC, có chữ ký người.
+
+A.3 STOP CONDITIONS — dừng ngay, không tự quyết
+
+  S1  Gặp GATE G1, G3, G4, G5, G6: điền báo cáo ngắn, chờ người tick gate.
+  S2  Spike T-1.a / WP-M-1-a FAIL (không ra 3-target cùng 1 IR): kích hoạt
+      fallback full Bevy (MASTER 2.3) — CHỈ sau khi người xác nhận. Không
+      tự chuyển, không tự code M0 trên renderer fail.
+  S3  Cần lệch SPEC: viết đề xuất 1 đoạn vào docs/DECISIONS.md (hoặc
+      comment PR nếu docs/ chưa có), STOP, chờ người.
+  S4  Nghiệm thu milestone fail 2 lần liên tiếp: STOP, mô tả lệch, chờ người.
+  S5  Việc cần người: API key, cert signing, review chốt hằng số, quyết
+      định cắt scope, chọn provider A/B/C, chọn MSIX vs Inno.
+  S6  Không chắc WP nào đang mở: STOP, hỏi. Không đoán, không làm 3 WP một lúc
+      (trừ A.6 đã phân track rõ).
+
+A.4 MÔI TRƯỜNG
+
+  OS: Windows 10/11. Shell: PowerShell.
+  Rust: pin trong rust-toolchain.toml (chốt ở WP-M-1-f; trước đó dùng
+        stable mới nhất team compile được, ghi version vào LOG).
+  GPU: máy dev có GPU; CI có thể không GPU → GS_GPU=warp hoặc no-render
+       (MASTER 6.4) từ M2.
+  Không giả định Linux/macOS test (MASTER 1.4).
+  Thư mục spike M-1: experiments/ (xóa sau G1 chốt, bài học vào docs/).
+
+A.5 BỘ LỆNH VERIFY CHUẨN
+
+  Từ khi có workspace Cargo (M0; spike M-1 dùng experiments/ riêng):
+
+    cargo fmt --check
+    cargo clippy --all-targets -- -D warnings
+    cargo test
+    cargo machete          # từ khi CI có (T0.1)
+
+  E2E smoke (từ khi có tools/gs.ps1 + editor): phiên MASTER 10.2
+  (gsopen → spawn → play snapshot → judge.run_until_event / run_test).
+
+  Fault-injection: harness kill process tại điểm MASTER 5.5 — bắt buộc
+  M-1-c (POC) và M0 (đủ 4 điểm, CI).
+
+  Bằng chứng LOG: dán 3–10 dòng output (pass/fail + số test), không dán
+  cả log 200 dòng.
+
+A.6 NHIỀU AGENT SONG SONG (tùy chọn — mặc định 1 agent tuần tự)
+
+  DAG MASTER 0.2. Ranh giới crate — không hai agent sửa cùng crate:
+
+    Track A core:     gs-registry, gs-protocol, gs-scene, gs-player (M0→M2→M5)
+    Track B render:   gs-render2d, viewport (M-1-a → M1 → M4 tilemap render)
+    Track C editor:   gs-editor panels (M0 shell → M1 inspector → M6 jobs UI)
+    Track D gameplay: gs-runtime-core Luau/physics/audio (M-1-b → M3 → M4)
+    Track E tool:     tools/gs.ps1, gs-mcp, workers/imagegen (M0 CLI → M-1-e → M6 → M8)
+
+  Đồng bộ bắt buộc: không code M0 khi G1 chưa tick; không code M6 khi G3
+  chưa tick; registry (4.0) chốt trước mọi handler mới.
+  Mỗi agent chỉ tick WP mình xong. Conflict file: dừng, không force-merge spec.
+
+A.7 GATES (khớp MASTER 14.2 + C22)
+
+  G1 trước M0     review chốt M-1 (render constants, WAL, Luau, versions)
+  G2 RESOLVED     repo đã tách — bỏ qua, không hỏi lại
+  G3 trước M6     provider imagegen A/B/C (MASTER 8.5)
+  G4 trước M7B    MSIX vs Inno + chính sách signing
+  G5 tại M8       tên sản phẩm, license, go/no-go beta
+  G6 sau M8       chốt scope/thứ tự/mini-spec M9A–M9F theo dogfood
+
+  Agent điền khối GATE (báo cáo 5–15 dòng) rồi STOP. Người tick [x] GATE.
+
+================================================================================
+PHẦN B — WORK PACKAGES M-1 → M8
+================================================================================
+
+Mỗi WP: ID | phụ thuộc | spec refs | file đích | việc | verify | DoD | LOG.
+Tick [x] khi DoD + verify xanh. Ngày ghi cạnh [x].
+
+--------------------------------------------------------------------------------
+M-1 — SPIKE & CHỐT NỀN (2-3 tuần) — code ở experiments/ — BẮT BUỘC trước M0
+--------------------------------------------------------------------------------
+
+WP-M-1-a  Renderer 3-target + IR + hệ tọa độ                    [x] 16-8-2026
+  Phụ thuộc: —
+  Spec: MASTER 2.3, T-1.a, I13 (số fps là mục tiêu)
+  Đích: experiments/render-spike/ (crate tạm)
+  Làm: 1 crate vẽ sprite batch qua IR RenderSnapshot trên ĐỦ 3 target:
+        (1) viewport eframe + egui_wgpu::CallbackTrait
+        (2) cửa sổ winit rời
+        (3) offscreen headless ghi PNG
+        Chốt và GHI vào experiments/NOTES.md (sẽ chuyển docs/DECISIONS.md
+        lúc G1): PPU default 16, Y-up, pivot gốc dưới-trái, sRGB,
+        premultiplied alpha, sort z_index rồi entity id, atlas padding 2px,
+        picking (alpha>0.1 CPU hoặc collider), DPI physical px.
+  Verify: cargo test trong crate spike; demo chạy 3 target cùng 1 IR;
+          1 PNG offscreen tồn tại.
+  DoD: NOTES.md có bảng hằng số; 3 target chạy; không claim "production".
+  LOG:
+    16-8-2026 parent review: cargo test 8 passed. out/spike.png 5610
+    bytes, magic 89 50 4E 47. IR RenderSnapshot dùng chung 3 bin
+    (viewport/player compile; offscreen RAN trên GTX 1660 Ti Vulkan).
+    Cửa sổ eframe/winit chưa launch tay. Pin egui/eframe/egui-wgpu
+    =0.31.1 + wgpu 24. GO 3-target — không kích hoạt fallback Bevy.
+    Crate: experiments/render-spike/
+
+WP-M-1-b  Luau deadline + mutation-buffer POC                   [x] 16-8-2026
+  Phụ thuộc: —
+  Spec: MASTER 7.3, 7.6 (pcall), T-1.b, I4
+  Đích: experiments/luau-spike/
+  Làm: mlua + Luau vendored build trên máy team; sandbox(true);
+        memory limit; set_interrupt deadline XUYÊN pcall; mutation
+        buffer mẫu (commit khi callback OK, discard khi error);
+        đo overhead interrupt, ghi NOTES.md.
+  Verify: test: while-true bị deadline; pcall không nuốt án tử;
+          buffer discard khi fail.
+  DoD: build xanh trên máy team; 3 test trên pass; version mlua/Luau ghi NOTES.
+  LOG:
+    16-8-2026 parent review: cargo test 5 passed. mlua 0.11.6 + Luau
+    0.709 vendored. Deadline = Err từ interrupt (không Yield). pcall
+    không nuốt án tử; buffer discard khi fail. Overhead đo ~52 ns/
+    interrupt (release). Windows: cần vcvars64 trước lần build C++.
+    Crate: experiments/luau-spike/
+
+WP-M-1-c  WAL crash / fault-injection POC                       [x] 16-8-2026
+  Phụ thuộc: —
+  Spec: MASTER 5.5, I2, I6, T-1.c, GS-EC-38
+  Đích: experiments/wal-spike/
+  Làm: ghi txn record (full command+inverse + crc32); fsync;
+        harness kill process tại 4 điểm: (a) giữa ghi record,
+        (b) sau ghi trước apply, (c) giữa tmp+rename autosave,
+        (d) giữa 2 record. Recovery về đúng revision đã ACK.
+  Verify: 4 kịch bản kill → mở lại đúng revision ACK; không áp txn chưa ACK.
+  DoD: NOTES.md mô tả format record + policy fsync; 4 case pass.
+  LOG:
+    16-8-2026 parent review: cargo test 11 passed (4 unit + 7 integ).
+    (a)(b)(c)(d) pass; I6 corrupt-middle stops. Record = full command+
+    inverse + crc32; I2 flush-trước-apply-trước-ACK. Crash = mô phỏng
+    trạng thái đĩa (không kill -9 thật trên Windows) — đủ POC; M0 CI
+    nên giữ harness tương đương. Fsync ~5ms/txn (debug) > gợi ý 2ms —
+    ghi G1, không đổi policy. Crate: experiments/wal-spike/
+
+WP-M-1-d  Play-snapshot POC                                     [x] 16-8-2026
+  Phụ thuộc: —
+  Spec: MASTER 2.4, 6.1, T-1.d, I3
+  Đích: experiments/play-snapshot-spike/
+  Làm: dựng .gs/runtime/play/<id>/ manifest + hash scene/scripts/assets/
+        inputmap; player stub đọc --snapshot, từ chối nếu hash lệch.
+  Verify: stub load snapshot hợp lệ; từ chối snapshot sửa tay 1 byte.
+  DoD: format manifest ghi NOTES.md (khớp field MASTER 2.4).
+  LOG:
+    16-8-2026 parent review: cargo test 3 passed (hash stable + load OK +
+    1-byte scene tamper REJECT). Stub prints OK p-000001 r-000001.
+    NOTES.md schema khớp 2.4 (scene/scripts/assets/inputmap hashed;
+    project-settings copied, không nằm 4 hash — đúng spec). I3: stub
+    không execute Luau. Crate: experiments/play-snapshot-spike/
+
+WP-M-1-e  MCP hello spike                                       [x] 16-8-2026
+  Phụ thuộc: —
+  Spec: MASTER 2.10, 10.4, T-1.e
+  Đích: experiments/mcp-spike/ (sau chuyển crates/gs-mcp)
+  Làm: rust-sdk PIN revision; hello + 1 tool gs_command echo;
+        chạy MCP Inspector + Cursor thật.
+  Verify: Inspector list tool; Cursor gọi echo thành công.
+  DoD: revision SDK ghi NOTES.md + sẽ vào docs/VERSIONS.md lúc G1.
+  LOG:
+    16-8-2026 parent review: cargo test 4 passed (hello, schema,
+    handler echo, stdio initialize+list+call). Pin rmcp =3.1.2
+    (git 02c62aef). Crate: experiments/mcp-spike/
+    CHƯA chạy MCP Inspector / Cursor — lệnh nằm NOTES.md; làm lúc G1
+    hoặc M8. Không claim "Inspector xanh".
+
+WP-M-1-f  Compatibility matrix                                  [x] 16-8-2026
+  Phụ thuộc: WP-M-1-a (egui/wgpu), WP-M-1-b (mlua)
+  Spec: MASTER 2.3 matrix, T-1.f, I9
+  Đích: docs/VERSIONS.md (tạo) + Cargo.lock của spike gộp
+  Làm: bảng version egui/eframe/egui-wgpu/wgpu/glyphon/mlua/
+        rapier2d/bevy_ecs ĐÃ compile-test CÙNG NHAU. Không "latest" rời.
+  Verify: một workspace spike (hoặc 2 crate) compile với bộ pin đó.
+  DoD: docs/VERSIONS.md tồn tại; rust-toolchain.toml đề xuất ghi NOTES.
+  LOG:
+    16-8-2026 parent: cargo test experiments/matrix-spike 3 passed
+    (egui 0.31.1 + wgpu 24 + glyphon 0.8 + mlua 0.11.6/Luau 0.709 +
+    bevy_ecs 0.15.4 + rapier2d 0.22 enhanced-determinism cùng lúc).
+    docs/VERSIONS.md + rust-toolchain.toml (stable) đã ghi.
+
+--- NGHIỆM THU M-1 (MASTER T-1) ---
+  Demo 3-target cùng 1 IR; kill -9 WAL hồi phục đúng; Luau deadline
+  không thoát bằng pcall; hằng số render + versions sẵn sàng G1.
+  experiments/ CHƯA xóa cho đến khi G1 tick (bài học vào docs/ rồi mới xóa).
+
+GATE G1 — review chốt M-1                                          [x] 16-8-2026 (người: tiếp tục, đừng dừng)
+  Agent điền (16-8-2026, parent tự chạy test):
+    Render constants (chép từ NOTES):
+      PPU=16, Y-up, origin camera center, pivot BL, sRGB + PMA,
+      sort z_index rồi entity_id, atlas pad 2px, nearest,
+      pick alpha>0.1 CPU sample, DPI physical px.
+    WAL format + fsync policy:
+      1 JSONL record/txn, full command+inverse, crc32, fdatasync
+      mỗi record. ACK cursor riêng (flush-trước-apply-trước-ACK).
+      Fsync đo ~5ms/txn debug — cân nhắc group-commit ở M0 nếu cần.
+    Luau: interrupt xuyên pcall? YES. Evidence: cargo test
+      pcall_does_not_swallow_deadline — lua_ok=false, cancel=true,
+      touched_after_pcall=false. Không dùng VmState::Yield.
+    Matrix versions (trỏ VERSIONS.md):
+      docs/VERSIONS.md — egui 0.31.1 / wgpu 24 / glyphon 0.8 /
+      mlua 0.11.6 + Luau 0.709 / bevy_ecs 0.15.4 / rapier2d 0.22 /
+      rmcp 3.1.2
+    T-1.a pass? YES — không fallback Bevy.
+    Còn lại cho người: chạy tay `viewport`/`player`; MCP Inspector.
+  Người tick [x] + ngày khi chốt. CẤM code M0 trước khi G1 = [x].
+
+--------------------------------------------------------------------------------
+M0 — REGISTRY + AUTHORITY + WAL + SCENE CORE (3 tuần)
+--------------------------------------------------------------------------------
+
+WP-M0-1  Workspace root + CI + AGENTS.md repo                     [x] 16-8-2026
+  Phụ thuộc: G1 = [x]
+  Spec: MASTER 3.1, 3.2, 12.2, T0.1, I10
+  Đích: Cargo.toml (workspace), rust-toolchain.toml, Cargo.lock,
+        .github/workflows/ci.yml, crates/* trống khung, AGENTS.md
+        (đã có bootstrap — bổ sung lệnh crate khi có)
+  Làm: workspace root; CI: fmt, clippy -D warnings, machete, test;
+        grep cấm unimplemented!/todo!/dbg! ngoài experiments/;
+        grep token pattern (I8).
+  Verify: CI job chạy (hoặc local cùng lệnh) xanh trên crate trống + 1
+          smoke test.
+  DoD: `cargo test` ở root chạy; CI file có mặt.
+  LOG:
+    16-8-2026: cargo test --workspace 5 smoke passed. CI
+    .github/workflows/ci.yml (fmt/clippy/test/grep). Members:
+    gs-protocol, gs-registry, gs-scene, gs-editor, gs-cli.
+
+WP-M0-2  gs-registry + gs-protocol                                [x] 16-8-2026
+  Phụ thuộc: WP-M0-1
+  Spec: MASTER 4.0, 4.1, 4.2, 4.7, T0.2, C3, C16 (cap dòng 4MB)
+  Đích: crates/gs-registry/, crates/gs-protocol/, docs/PROTOCOL.md (SINH)
+  Làm: DSL khai báo method; codegen validator + PROTOCOL.md +
+        conformance stubs; envelope JSON-RPC 2.0; error.code SỐ;
+        app_code trong error.data; NDJSON LF, cap 4MB, slowloris 10s,
+        idle 120s; từ chối JSON-RPC array batch (-32600).
+  Verify: cargo test; 1 request/response/event round-trip in-memory;
+          dòng >4MB → E_PROTO (GS-EC-58); array batch → -32600.
+  DoD: PROTOCOL.md sinh, không sửa tay; registry là chân lý method.
+  LOG:
+    16-8-2026 registry: cargo test -p gs-registry 9 passed. 47 methods;
+    undo.perform UiOnly; docs/PROTOCOL.md SINH.
+    16-8-2026 protocol: cargo test -p gs-protocol 8 passed. error.code
+    số; dòng >4MB E_PROTO; array batch -32600; notification không id.
+    API: encode_message/decode_message/read_ndjson_line.
+
+WP-M0-3  gs-scene: document + dispatcher + WAL + undo + blueprint [x] 16-8-2026
+  Phụ thuộc: WP-M0-2
+  Spec: MASTER 5.1–5.6, 2.8, 4.3, I1, I2, I5, I6, I11, T0.3
+        GS-EC-01..04,07,10,11,38,39,57
+  Đích: crates/gs-scene/
+  Làm: document model; component registry (bảng 5.2); dispatcher
+        apply/inverse; WAL full record + crc + flush-trước-ACK;
+        recovery + dirty marker; dedup command_id quét TOÀN BỘ WAL
+        (100k LRU); undo đa tác nhân (2.8); canonical writer 5.4b
+        (sort id theo SỐ); blueprint stamp; lock file fs2.
+  Verify: property test undo (áp N → undo hết → bytes gốc);
+          fault-injection 4 điểm 5.5; GS-EC nhóm trên (unit).
+  DoD: I2 giữ; recovery đúng revision ACK; không đường ghi document khác.
+  LOG:
+    16-8-2026 slice 1 (parent re-ran): cargo test -p gs-scene
+    13 passed (6 unit + 7 invariants). I2 in Dispatcher::commit_planned:
+    plan/validate → WAL append+fsync → apply → ACK. I11 command_id
+    retry. Crash (a) truncated tail, (b) flush-then-no-ACK. Exclusive
+    editor.lock. Canonical 5.4b (numeric id sort, -0.0, ryu).
+    API: Session::open/open_read_only/dispatch/undo_last/revert_own/
+    save/autosave/inject_crash; Dispatcher::execute(DispatchRequest).
+    Commands: spawn/destroy/reparent/set_order/rename/component_set/
+    set_transform/transaction.
+    CHƯA tick [x]: no blueprint 5.3; 5.2 only Name/Transform2D/Tags;
+    no x-unknown (I5/GS-EC-11); single wal.jsonl (no 64MB/10-file);
+    dedup unbounded HashMap; no crash (c)(d); no GS-EC-39; no redo/
+    dry_run/duplicate/lock. Slice 2 must close these before [x].
+    16-8-2026 slice 2 (parent re-ran): cargo test -p gs-scene 25
+    passed (6 unit + 19 invariants). clippy -D warnings clean.
+    Crash (c) MidAutosaveRename, (d) BetweenRecords. Blueprint
+    stamp (create/instantiate, no back-link). 5.2 all components.
+    I5 x-unknown nested round-trip. WAL rotate 64MB/10 files;
+    dedup LRU 100k/24h + GS-EC-57. dry_run; GS-EC-39 fsync-fail.
+    Còn: entity.lock/redo; tilemap.set_cells/fill_rect; WAL blob
+    CAS >1MB; undo stack cap. DoD I2 + recovery ACK: đạt.
+
+WP-M0-4  gs-editor shell: bus + authority + confirm + feed        [x] 16-8-2026
+  Phụ thuộc: WP-M0-2, WP-M0-3
+  Spec: MASTER 4.4, 4.5, 4.6, 9.4, 9.6, 9.7, I8, I12, T0.4
+        GS-EC-13..21,45
+  Đích: crates/gs-editor/ (eframe wgpu — config WGPU, không copy glow)
+  Làm: bus TCP 127.0.0.1 + token endpoint.json (kèm pid);
+        handshake cấp actor_id; human_ui CHỈ in-process;
+        method [UI] từ chối principal agent (-32001);
+        capability grant/revoke; confirmation event + approve một lần;
+        salami heuristic 4.5; pause = pure-read + hủy job;
+        Console / Activity Feed / Session panel.
+  Verify: agent gọi undo.perform → -32001; retry cùng command_id không
+          nhân đôi; confirmation reuse vô hiệu; token không có trong log
+          fixture (grep I8).
+  DoD: UI mutating = command qua dispatcher (log bus chứng minh được).
+  LOG:
+    16-8-2026 (parent re-ran): cargo test -p gs-editor 8 passed
+    (7 WP + bin smoke). clippy -D warnings clean.
+    API: gs_editor::start(root) bind 127.0.0.1:0, write
+    .gs/runtime/endpoint.json {host,port,token,pid}; connect_agent
+    TCP hello principal=agent; bus.ui() in-process human_ui.
+    Verify: TCP undo.perform → -32001; command_id retry no dup;
+    confirmation reuse invalid; token absent from feed/events;
+    duplicate client_name → distinct actor_ids; pause → E_PAUSED
+    + ping OK; human_ui undo after agent spawn.
+    Gap: no eframe/wgpu 5-region window (main prints endpoint,
+    stays headless). Feed/Session are library data. Jobs cancel
+    on pause N/A (no jobs). Capability in-memory not WAL-audited.
+    play/asset/script/judge/build/blueprint over bus → -32601.
+
+WP-M0-5  tools/gs.ps1                                             [x] 16-8-2026
+  Phụ thuộc: WP-M0-4
+  Spec: MASTER 10.1, T0.5
+  Đích: tools/gs.ps1 (+ crates/gs-cli/ nếu cần)
+  Làm: gsopen/gssend/gstxn/gsevents/gsshot/gsplay/gsstop/gsstep/
+        gsdump/gsjudge/gsdoctor. gssend tự sinh command_id ULID và IN RA.
+  Verify: gsopen + gssend session.hello; gssend entity.spawn (sau
+          project); exit code !=0 khi error.
+  DoD: CLI mỏng, không chứa logic document.
+  LOG:
+    16-8-2026 (parent re-ran): cargo test -p gs-cli 12 passed.
+    clippy -D warnings clean. Live gs.ps1 on temp project:
+    doctor=0; open=0 act_02; project.open=0; entity.spawn=0
+    command_id printed + e_000001; session.hello=0; no.such.method
+    exit 1 (-32601); txn=0 e_000002; events=0; play=1 (-32601
+    until M2). Token not in stdout. CLI is gs-cli bus client;
+    no document logic. play/shot/judge/dump wrappers exist,
+    bus still -32601.
+
+WP-M0-6  Test M0: conformance + fault-injection + GS-EC           [x] 16-8-2026
+  Phụ thuộc: WP-M0-3, WP-M0-4
+  Spec: MASTER 12.1, T0.6, GS-EC-01-04,07,10-11,13-21,38-45,57,58
+  Đích: tests/ + crates/*/tests
+  Làm: conformance sinh từ registry (input tốt/xấu, [UI] vs agent,
+        retry command_id, E_CONFLICT, txn chứa lệnh D chờ confirm,
+        dòng >4MB); fault-injection CI; property undo.
+  Verify: cargo test + harness fault-injection xanh.
+  DoD: mọi test_id nhóm M0 có test hoặc ghi "manual" có lý do.
+  LOG:
+    16-8-2026 (parent re-ran): cargo test -p m0 21 passed
+    (1 lib + 7 conformance + 5 fault + 8 gs_ec). clippy -D warnings
+    clean. Matrix docs/M0-GS-EC.md: 24 IDs automated pass; GS-EC-18
+    and GS-EC-42 manual with reason. Crash harness = inject_crash
+    (not kill -9). Registry loop: every UiOnly → -32001.
+    Nghiệm thu M0 CHƯA tick MASTER 0.1: no eframe feed window; no
+    redo; library/tests cover spawn+undo+retry+unauthorized.
+
+--- NGHIỆM THU M0 (chạy được, không chỉ compile) ---
+  Từ Cursor: gsopen → transaction.execute spawn 100 (dry_run trước) →
+  feed từng dòng [AGENT] → người Ctrl+Z 1 lần sạch → redo → save →
+  kill editor → mở lại đúng revision ACK; retry cùng command_id không
+  nhân đôi; agent gọi undo.perform bị -32001.
+  Tick bảng 0.1 MASTER khi pass.
+
+--------------------------------------------------------------------------------
+M1 — VIEWPORT 2D + INSPECTOR (2-3 tuần)
+--------------------------------------------------------------------------------
+
+WP-M1-1  gs-render2d production từ spike                          [x] 16-8-2026
+  Phụ thuộc: M0 xong, G1 constants
+  Spec: MASTER 2.3, T1.1
+  Đích: crates/gs-render2d/
+  Làm: chuyển spike thành crate production; IR RenderSnapshot;
+        3 target API ổn định. Xóa code spike trùng sau khi port.
+  Verify: unit + offscreen PNG; clippy sạch.
+  DoD: player/editor chỉ phụ thuộc crate này để vẽ 2D, không copy shader.
+  LOG:
+    16-8-2026 (parent re-ran): cargo test -p gs-render2d 10 passed.
+    PNG crates/gs-render2d/out/offscreen_test.png 1881 bytes,
+    magic 89 50 4E 47 0D 0A 1A 0A. IR RenderSnapshot + 3 targets
+    (offscreen, ViewportCallback, render_snapshot_to_surface).
+    Constants: PPU 16, Y-up, pivot BL, PMA, sort z then id, pad 2,
+    nearest, pick alpha>0.1 CPU. Spike kept in experiments/.
+    Gaps: glyphon, tilemap chunks, 10k fps not measured.
+
+WP-M1-2  Viewport eframe: pan/zoom/grid/snap/pick                 [x] 16-8-2026
+  Phụ thuộc: WP-M1-1
+  Spec: MASTER 9.2, T1.2, I1 (view-state không qua bus)
+  Đích: crates/gs-editor/ (viewport panel)
+  Làm: pan/zoom/grid/snap = view-state; pick theo chuẩn G1;
+        overlay collider; badge lỗi script (placeholder đến M3).
+  Verify: tương tác tay + 1 test pick tọa độ; 60fps mục tiêu I13 đo
+          và ghi số thật (không bịa).
+  DoD: pan/zoom không tạo WAL record.
+  LOG:
+    16-8-2026 (parent re-ran): cargo test -p gs-editor 12 passed
+    (7 M0-4 + pick + pan/zoom no revision + 2 view-state + smoke).
+    ViewState / apply_view_navigation never calls dispatch.
+    eframe window compiled, not launched interactively. I13 fps
+    unmeasured. Script badge placeholder. No project atlas yet.
+
+WP-M1-3  Gizmo move/rotate/scale → transaction gộp                [x] 16-8-2026
+  Phụ thuộc: WP-M1-2, WP-M0-3
+  Spec: MASTER 2.8, 9.2, T1.3, GS-EC-12
+  Đích: gs-editor gizmo + dispatcher
+  Làm: kéo gizmo = command; lock mềm 2s; gộp 1 txn khi thả.
+  Verify: 1 drag = 1 undo entry; agent đụng entity đang drag → E_LOCKED.
+  DoD: feed hiện [BẠN] khi người kéo.
+  LOG:
+    16-8-2026 (parent re-ran): cargo test -p gs-editor 16 passed
+    (4 new M1-3). UiHandle begin/update/end_gizmo_drag; one
+    component.set on release; feed Human; agent E_LOCKED (-32002)
+    during drag. entity.lock still missing in gs-scene (editor
+    soft lock 2s only).
+
+WP-M1-4  Hierarchy + Inspector schema-driven + import png         [x] 16-8-2026
+  Phụ thuộc: WP-M1-2, WP-M0-3
+  Spec: MASTER 9.3, 5.2, 8.1 (png), T1.4, I7
+  Đích: gs-editor hierarchy/inspector; asset.import png
+  Làm: cây parent/order; kéo-thả reparent keep_world=true;
+        inspector sinh từ component.registry; import png + preview.
+  Verify: spawn qua bus hiện hierarchy; sửa field inspector = command;
+          import src ngoài root vẫn OK (I7).
+  DoD: thêm component mới không sửa tay UI inspector.
+  LOG:
+    16-8-2026 (parent re-ran): cargo test -p gs-editor 27 passed
+    (5 new M1-4). hierarchy/inspector/component.registry data-driven
+    FieldKind. asset.import editor-layer (src outside root OK; dest
+    jailed). Gap: imported PNG not on GPU atlas; not a gs-scene WAL
+    command.
+
+WP-M1-5  Golden 6 cảnh + perf 10k + GS-EC-05,12,46,47             [x] 16-8-2026
+  Phụ thuộc: WP-M1-1..4
+  Spec: MASTER 10.3, 12.1, 12.3, T1.5, I13
+  Đích: tests/fixtures/golden/, bench ghi docs hoặc tests
+  Làm: 6 cảnh offscreen; đo 10k sprite (ghi số đo, không claim đạt
+        nếu chưa đạt); GS-EC-05,12; 46/47 manual ghi checklist.
+  Verify: golden so sánh per-px+ratio (ngưỡng 10.3) trên máy dev.
+  DoD: số đo trong LOG; nếu trượt mục tiêu — ghi, không bịa pass.
+  LOG:
+    16-8-2026 (parent re-ran): cargo test -p m1 12 passed.
+    6 goldens 128x64 under tests/fixtures/golden/. 10k offscreen
+    PNG helper on GTX 1660 Ti Vulkan: release median 282.19 ms
+    (debug 363.66 ms). TARGET NOT MET vs 16.7ms — includes device
+    create + readback + PNG encode, not a present-loop frame.
+    GS-EC-05 gap (no scene_max 50k). 12 mapped to M1-3 E_LOCKED.
+    46/47 manual. docs/M1-PERF.md + docs/M1-GS-EC.md.
+
+--- NGHIỆM THU M1 ---
+  Agent spawn 500 sprite lưới; người pan/zoom, kéo 1 sprite (feed [BẠN],
+  agent component.get thấy vị trí + revision mới); log bus xác nhận mọi
+  mutation UI là command.
+
+--------------------------------------------------------------------------------
+M2 — PLAYER PROCESS (2 tuần)
+--------------------------------------------------------------------------------
+
+WP-M2-1  gs-player đọc snapshot + winit + phase 6.2               [x] 16-8-2026
+  Phụ thuộc: WP-M1-1, M0
+  Spec: MASTER 6.1, 6.2, 2.4, I3, T2.1
+  Đích: crates/gs-player/, crates/gs-runtime-core/ (schedule)
+  Làm: --snapshot verify hash; 60Hz cố định; phase order 6.2;
+        single-thread simulate; render bằng gs-render2d.
+  Verify: load snapshot; hash lệch → từ chối; 1 scene camera chạy.
+  DoD: editor không link gameplay Luau (chưa có Luau cũng không nhét sau).
+  LOG:
+    16-8-2026 (parent re-ran): cargo test -p gs-runtime-core 5;
+    cargo test -p gs-player 10. verify OK; 1-byte tamper REJECT;
+    phase order 6.2; headless --frames 3. No Luau. No control
+    server yet. Editor does not depend on gs-player.
+
+WP-M2-2  Control server + Play controls + crash banner            [x] 17-8-2026
+  Phụ thuộc: WP-M2-1
+  Spec: MASTER 6.1, 9.5, I8, T2.2, GS-EC-27,28,44
+  Đích: gs-player control; gs-editor Play bar
+  Làm: bind 127.0.0.1 + token (player.json); play/pause/step/status/
+        timescale; heartbeat 1s; mất 5 nhịp → "treo?" + nút Kill
+        (không tự kill); exit_report; editor sống khi player chết.
+  Verify: kill player → banner + exit_report; play khi đang sống →
+          E_PLAYER_RUNNING; file mồ côi: client check pid.
+  DoD: agent KHÔNG nối thẳng player — chỉ qua bus editor.
+  LOG:
+    17-8-2026 (parent re-ran): cargo test -p gs-player 16 (M2-1+2);
+    cargo test -p gs-editor wp_m2_2 4 passed. play.start twice →
+    E_PLAYER_RUNNING; kill player → bus ping OK; token not in
+    feed. Fixed play.stop hang (control idle 2s + child.wait).
+    Agent never gets player token/port.
+
+WP-M2-3  obs.* + event trace                                      [x] 17-8-2026
+  Phụ thuộc: WP-M2-2
+  Spec: MASTER 6.3, 4.2 obs/judge (phần obs), T2.3
+  Đích: player events.jsonl; editor forward obs.*
+  Làm: screenshot, world_dump, logs_tail, perf, events after_seq;
+        ring 64k + file per play_id.
+  Verify: step rồi mới obs.events vẫn thấy event (không race).
+  DoD: event play cũ không lẫn — bắt buộc play_id.
+  LOG:
+    17-8-2026 (parent re-ran): gs-player wp_m2_3 2; gs-editor
+    wp_m2_3 4 (was 10053; fixed by player nonblocking accept +
+    editor reconnect-once). step then obs.events sees
+    FrameAdvanced; wrong play_id rejected; token omitted.
+
+WP-M2-4  Snapshot builder + copy_to_scene + live-view             [x] 17-8-2026
+  Phụ thuộc: WP-M2-2
+  Spec: MASTER 2.4, 9.5, T2.4
+  Đích: gs-editor snapshot builder
+  Làm: play.start = autosave + dựng snapshot; live-view 10fps;
+        runtime.copy_to_scene + expected_revision; conflict dialog.
+  Verify: sửa document khi đang play KHÔNG đổi player; copy khi
+          document đã đổi → E_CONFLICT + dialog.
+  DoD: snapshot immutable; GC giữ 10 bản.
+  LOG:
+    17-8-2026 (parent re-ran): cargo test -p gs-editor 41.
+    wp_m2_4 6: isolation spawn≠player dump; copy_to_scene via
+    dispatch; stale revision E_CONFLICT; GC ≤10; live-view JSON
+    10Hz data-only (viewport still paints document).
+
+WP-M2-5  Headless + warp + no-render + watchdog                   [x] 17-8-2026
+  Phụ thuộc: WP-M2-1
+  Spec: MASTER 6.4, 6.5, T2.5, GS-EC-27..31,44,48
+  Đích: gs-player flags
+  Làm: --headless; GS_GPU=warp; no-render; watchdog 2000ms exit 13;
+        OOM guard; step_frames cap 3600.
+  Verify: CI no-render play + world_dump; screenshot no-gpu → app_code
+          no_gpu.
+  DoD: GS-EC-27..31,44,48 có test hoặc checklist manual.
+  LOG:
+    17-8-2026 (parent re-ran): cargo test -p gs-player 30.
+    --no-render / GS_GPU=none → screenshot no_gpu; watchdog
+    inject exit 13 (fake elapsed); OOM inject exit 14 (no 2GB
+    alloc); step n=3601 rejected. GS_GPU=warp = no-render alias
+    (no wgpu WARP adapter here).
+
+--- NGHIỆM THU M2 ---
+  Play từ snapshot khi người tiếp tục sửa document; kill -9 player →
+  editor sống + banner; copy_to_scene conflict đúng.
+  G2: BỎ QUA (resolved C22). Tick 0.1 MASTER.
+
+--------------------------------------------------------------------------------
+M3 — LUAU (2-3 tuần)
+--------------------------------------------------------------------------------
+
+WP-M3-1  VM + sandbox + budget 2 tầng + mutation buffer           [x] 17-8-2026
+  Phụ thuộc: M2, WP-M-1-b bài học
+  Spec: MASTER 7.2, 7.3, I4, T3.1, GS-EC-22,23,24,26
+  Đích: crates/gs-runtime-core/ luau host
+  Làm: sandbox; env per script; memory 64MB; interrupt tại safepoint
+        (không Yield để abort); budget global 6/12ms + per-script 2/4ms
+        + starved round-robin; mutation buffer; cấm nạp bytecode.
+  Verify: matrix một phần: while true, memory bomb, pcall, 50 script.
+  DoD: host API chỉ hàm trong 7.2 — hàm mới = review + cap.
+  LOG:
+    17-8-2026 (parent re-ran): cargo test -p gs-runtime-core 12;
+    fmt+clippy -D warnings clean. ScriptVm mlua 0.11.6 / Luau 0.709;
+    interrupt Err not Yield; pcall still Deadline+discard; 50 scripts
+    fake 1ms → 12 ran / 38 starved, next frame starved-first.
+    while-true real safepoint (~50ms). Memory bomb uses 2MiB test cap
+    (prod 64MiB). Host subset: exists/get_pos/dt/time/log/set_pos/
+    set_transform. Gap: run_world_scripts builds a new VM per step()
+    (env/state do not persist across frames) — fix in WP-M3-2.
+
+WP-M3-2  Script component + lifecycle + disable                   [x] 17-8-2026
+  Phụ thuộc: WP-M3-1
+  Spec: MASTER 7.1, 7.2, T3.2, GS-EC-25
+  Đích: runtime + scene Script component
+  Làm: on_init/on_update/on_event/on_destroy; self.state persist;
+        diagnostics {file,line,stack}; disable sau 3 hard-deadline
+        hoặc 10 lỗi/10s.
+  Verify: door.luau mẫu (7.5) chạy trên scene 5.4 (collider sensor
+          mock nếu chưa M4).
+  DoD: id runtime spawn = rt_NNN (5.3); document id không cấp lúc play.
+  LOG:
+    17-8-2026 (parent re-ran): cargo test -p gs-runtime-core 21
+    (13 lib + 8 wp_m3_2); clippy crate clean. ScriptHost caller-owned
+    (!Send, not on World). door.luau = MASTER 7.5 from templates/;
+    unlock with key + stay locked without; self.state persists;
+    3 hard-deadline / 10 errors/10s disable; GS-EC-25 dead id nil;
+    gs.spawn rt_1..rt_1000 cap. Gap: player chưa giữ ScriptHost
+    (step() ephemeral); gs.emit chưa broadcast on_event; spawn
+    chưa load .gbp.json.
+
+WP-M3-3  Hot reload + script.ingest_external                      [x] 17-8-2026
+  Phụ thuộc: WP-M3-2
+  Spec: MASTER 7.4, 8.4, T3.3, GS-EC-34, I1
+  Đích: editor watcher + player reload
+  Làm: áp cuối frame; conflict dialog nếu bản chưa lưu; ingest_external
+        = synthetic command (system:file-watch) vào WAL.
+  Verify: set_source khi đang play đổi hành vi; sửa ngoài + dirty editor
+          → dialog, không ghi đè im.
+  DoD: compile fail giữ bản cũ.
+  LOG:
+    17-8-2026 (parent re-ran): gs-scene 35 (9 wp_m3_3 WAL+I7+256KB+
+    crash-before-persist); gs-player 34 (4 wp_m3_3: ScriptHost on
+    dedicated sim thread, reload between frames, bad source keeps
+    process); gs-editor 46 (5 wp_m3_3: create/set/revert_own, poll
+    ingest system:file-watch, dirty→conflict not overwrite, set_source
+    while play stays alive). Gap: editor test did not assert play
+    world mutation after set_source (player test did). No luau-analyze.
+
+WP-M3-4  luau-analyze + inputmap + gs.action                      [x] 17-8-2026
+  Phụ thuộc: WP-M3-2
+  Spec: MASTER 7.3 type, 6.4 inputmap, 7.2 gs.action, T3.4
+  Đích: editor tool luau-analyze pin; gs.d.luau sinh; inputmap
+  Làm: analyze async, warning không chặn; binary thiếu → banner
+        "type check off"; input map + gs.action (tên sai = 0 + warning).
+  Verify: --!strict template; action WASD đọc được trong on_update.
+  DoD: version analyze = version Luau vendored (VERSIONS.md).
+  LOG:
+    17-8-2026 (parent re-ran): gs-runtime-core 24 (gs.action + warn
+    once); gs-scene 40 (inputmap.json WAL+undo); gs-editor wp_m3_4 6
+    (diagnostics type_check off without binary; inputmap.get/set;
+    play.start copies read_inputmap into input-map.json); gs-player
+    39 (input.inject move_x → gs.action → set_pos). Gap: no
+    luau-analyze 0.709 binary on PATH (banner off is specified);
+    window keyboard→action not live (inject covers WASD verify).
+
+WP-M3-5  Test matrix 7.6 + GS-EC-22..26,34,37                     [x] 17-8-2026
+  Phụ thuộc: WP-M3-1..4
+  Spec: MASTER 7.6, T3.5
+  Đích: tests Luau
+  Làm: đủ case 7.6 (kể cả spawn đệ quy cap 1000, 2 script 1 component).
+  Verify: cargo test + player headless no-render.
+  DoD: nghiệm thu M3 chạy được (dưới).
+  LOG:
+    17-8-2026 (parent re-ran): cargo test -p gs-runtime-core 37
+    (13 lib + 8 m3_2 + 3 m3_4 + 13 wp_m3_5). Matrix: on_update/
+    on_init deadline, pcall, metamethod, coroutine, memory, gs.*
+    on_destroy commit/discard, recursive spawn cap 1000, reload
+    then step, two scripts later-wins, starved-first, GS-EC-25.
+    Gap: on_init deadline fake 100ms; spawn không load .gbp.json;
+    không đo 50-script wall budget (I13); nghiệm thu M3 interactive
+    chưa làm. MASTER 0.1 M3 vẫn [ ].
+
+--- NGHIỆM THU M3 ---
+  Agent set_source lỗi → diagnostics có dòng; sửa → hot reload khi đang
+  play; while true → script disable, player sống; 50 script không vượt
+  budget global (đo, ghi số).
+
+--------------------------------------------------------------------------------
+M4 — PHYSICS / TILEMAP / AUDIO (2-3 tuần)
+--------------------------------------------------------------------------------
+
+WP-M4-1  rapier2d sync + events ổn định                           [x] 17-8-2026
+  Phụ thuộc: M1 render, M2 player, M3 scripts
+  Spec: MASTER 6.2 rapier, 5.2 RigidBody/Collider, T4.1, GS-EC-01 (NaN),32
+  Đích: gs-runtime-core physics
+  Làm: insert/remove body theo entity id tăng; pin version +
+        enhanced-determinism; collision/sensor sort cặp id; raycast/
+        overlaps; ccd flag.
+  Verify: 2 run cùng snapshot+seed → world_dump physics giống;
+          timescale 10x + ccd documented.
+  DoD: không HashMap iteration trên đường gameplay-visible.
+  LOG:
+    17-8-2026 (parent re-ran): cargo test -p gs-runtime-core 43
+    (37 + 6 wp_m4_1). PhysicsHost caller-owned; 2×180 frame seed 42
+    bit-identical; sensor pairs sorted; CCD no-tunnel; NaN skipped;
+    rust raycast/overlaps. Gap: player chưa giữ PhysicsHost (bare
+    step = ephemeral, mất velocity); gs.raycast/overlaps vẫn stub
+    phía Luau; timescale 10x chưa đo; chưa so world_dump player.
+
+WP-M4-2  Tilemap render chunk + collider bake + tilemap.*         [x] 17-8-2026
+  Phụ thuộc: WP-M4-1, WP-M1-1
+  Spec: MASTER 5.2 Tilemap RLE, 4.2 tilemap.*, T4.2, GS-EC-06
+  Đích: gs-render2d tilemap + gs-scene tilemap commands
+  Làm: chunk render; bake collider layer solid; set_cells/fill_rect;
+        RLE trong scene JSON; patch lớn → WAL blob CAS.
+  Verify: GS-EC-06; platformer đứng trên tile.
+  DoD: scene JSON không nổ vì 1M cell thô — RLE + reject schema.
+  LOG:
+    17-8-2026 (parent re-ran): gs-scene 48 (set_cells/fill_rect WAL+
+    undo, 1M len reject no expand); gs-runtime-core 47 then 51
+    (bake solid, stand on tiles, gs.impulse/raycast/overlaps);
+    gs-editor wp_m4_2 4 (bus fill_rect+undo, input.inject, scene.dump).
+    Critic: blob CAS still missing (>1MB reject). Player PhysicsHost
+    persisted (gs-player 41).
+
+WP-M4-3  kira audio + camera follow/shake + gamepad               [x] 17-8-2026
+  Phụ thuộc: WP-M2-1, WP-M3-4
+  Spec: MASTER 5.2 AudioSource, 7.2 gs.play_sfx/camera_*, T4.3, GS-EC-33
+  Đích: runtime audio (kira), camera, gilrs
+  Làm: play_sfx one-shot; AudioSource loop; camera follow/shake;
+        gamepad map vào inputmap (6.4).
+  Verify: sfx khi sensor; gamepad hoặc keyboard tương đương action;
+          GS-EC-33 manual (rút device).
+  DoD: spatial audio KHÔNG làm (5.2).
+  LOG:
+    17-8-2026 (parent re-ran): gs-runtime-core wp_m4_3 3 (follow/
+    shake/sfx queue); gs-player wp_m4_3 missing-file no kill.
+    kira 0.10.8 MockBackend headless; gilrs 0.11.2 window-only.
+    Gap: GS-EC-33 unplug is simulated not a real device; no
+    keyboard→action in window (inject still the agent path).
+
+WP-M4-4  GS-EC-06,32,33 + demo platformer qua bus                 [x] 17-8-2026
+  Phụ thuộc: WP-M4-1..3
+  Spec: MASTER T4.4, 10.2
+  Đích: examples/ hoặc templates/2d-platformer/
+  Làm: demo đi/nhảy/đứng tile/ăn coin (sensor+sfx+event) — agent dựng
+        100% qua bus (transcript).
+  Verify: transcript replay hoặc tay + event CoinPicked.
+  DoD: nghiệm thu M4 pass.
+  LOG:
+    17-8-2026 (parent re-ran): gs-editor wp_m4_4 1 — bus spawn
+    camera/floor fill_rect/player/coin + script.set_source +
+    inputmap.set + play.start headless + input.inject walk;
+    obs.events CoinPicked=true AND coin gone from world_dump.
+    Player EventTrace now drains World.play_events (was FrameAdvanced
+    only). games/platformer is a Session-openable copy of the demo.
+    Nghiệm thu M4 interactive (human Play+WASD) still not signed off;
+    MASTER 0.1 M4 remains [ ].
+
+--- NGHIỆM THU M4 ---
+  Platformer nhỏ: đi/nhảy/đứng tilemap/ăn coin — 100% qua bus.
+
+--------------------------------------------------------------------------------
+M5 — JUDGE / TEST MANIFEST (1-2 tuần)
+--------------------------------------------------------------------------------
+
+WP-M5-1  Tape record/replay + header check                        [x] 17-8-2026
+  Phụ thuộc: M4 (full judge), M2/M3 (partial có thể bắt đầu sớm hơn
+             nhưng DoD full cần physics)
+  Spec: MASTER 6.2 tape, 6.4, T5.1, GS-EC-36
+  Đích: player record/replay; .tape.jsonl
+  Làm: header {engine_build, protocol_ver, fixed_dt, seed,
+        snapshot_hashes}; replay lệch → từ chối (hoặc --force không
+        tính evidence).
+  Verify: GS-EC-36; record từ thiết bị + replay bỏ thiết bị.
+  DoD: format khớp 6.4.
+  LOG:
+    17-8-2026 (parent re-ran): gs-player wp_m5_1 5 — header match,
+    scene-hash reject GS-EC-36, --force evidence_ok=false, 3-frame
+    actions_for_frame, record JSONL round-trip. Wired into sim.rs
+    step_one + run.rs + CLI --record/--replay/--force + tape.record.
+    Gap: editor play.start does not yet forward record_tape/replay_tape;
+    no real-device record (inject/held keys only).
+
+WP-M5-2  judge.* methods                                          [x] 17-8-2026
+  Phụ thuộc: WP-M5-1, WP-M2-3
+  Spec: MASTER 4.2 judge, 6.3, T5.2, GS-EC-35
+  Đích: editor forward + player
+  Làm: run_until_event (đăng ký TRƯỚC rồi drive);
+        wait_event after_seq; assert_world (epsilon);
+        assert_screenshot per-px+ratio+mask+diff PNG; assert_perf.
+  Verify: GS-EC-35 không miss; fail đúng khi event không tới.
+  DoD: không dùng stream sống làm nguồn truth.
+  LOG:
+    17-8-2026 (parent re-ran): gs-player wp_m5_2 4 + gs-editor
+    wp_m5_2 4 — run_until_event sees emit; miss → GS-EC-35;
+    wait_event CoinPicked from ring; assert_world 1e-5 pass / 1.0 fail.
+    assert_screenshot is no_gpu stub (no fake PNG). judge.run_test
+    still unimplemented (WP-M5-3).
+
+WP-M5-3  .gtest.json + run_test + evidence bundle + artifact.*    [x] 17-8-2026
+  Phụ thuộc: WP-M5-2
+  Spec: MASTER 10.3, T5.3
+  Đích: tests/*.gtest.json; .gs/runtime/evidence/
+  Làm: schema gtest; judge.run_test; bundle: hashes, dump, trace,
+        log, screenshot+diff, perf, engine build; artifact.list/get/gc.
+  Verify: 1 gtest mẫu door/key (hoặc coin) pass + 1 fail có bundle.
+  DoD: agent dẫn bundle làm bằng chứng, không lời nói.
+  LOG:
+    17-8-2026 (parent re-ran): gs-editor wp_m5_3 4 — CoinPicked
+    run_test pass + bundle (events.jsonl contains CoinPicked);
+    NeverHappens → E_ASSERT + bundle passed=false; artifact.list/get/gc
+    keep_last=1; gtest_rel .. → E_PATH. play.start wires --replay/--record
+    /seed; run_test rewrites tape header from live snapshot (not --force).
+    Gap: screenshot still no_gpu stub; in-test happy path uses inject
+    when tape omitted. Sample files under games/platformer/tests/.
+
+WP-M5-4  GS-EC-35,36 + determinism x2                             [x] 17-8-2026
+  Phụ thuộc: WP-M5-1..3
+  Spec: MASTER 12.1 replay, T5.4, 6.2 cam kết
+  Đích: tests determinism
+  Làm: tape 600 frame chạy 2 lần cùng snapshot → world_dump cuối
+        giống từng byte (JSON canonical).
+  Verify: test CI no-render.
+  DoD: không cam kết cross-machine (ghi AGENTS.md).
+  LOG:
+    17-8-2026 (parent re-ran): gs-player wp_m5_4 2 — 600-frame
+    move_x tape replayed twice headless; canonical world_dump
+    byte-equal (0.46s). Wrong scene hash → GS-EC-36 refuse.
+    Same-machine only (test comment + gs-player README).
+    Nghiệm thu M5 "đổi gravity → fail bundle" chưa chạy tay.
+    MASTER 0.1 M5 remains [ ].
+
+--- NGHIỆM THU M5 ---
+  Đổi gravity → tape "nhảy qua hố" fail đúng assert + bundle đầy đủ;
+  sửa lại → pass.
+
+--------------------------------------------------------------------------------
+GATE G3 — trước M6: chọn provider imagegen                         [x] 17-8-2026
+  Đọc MASTER 8.5. Khuyến nghị SPEC: B (ComfyUI prerequisite) + C tùy chọn.
+  Người (chat): chọn lâu dài → **B+C**. Xem docs/DECISIONS.md.
+    Máy dogfood đã có ComfyUI/GPU? Chưa (GPU editor có; ComfyUI chưa provision).
+    Cần API remote (C)? Có, làm cấu hình tùy chọn; secret ngoài project.
+
+--------------------------------------------------------------------------------
+M6 — ASSET PIPELINE + IMAGEGEN (2 tuần)
+--------------------------------------------------------------------------------
+
+WP-M6-1  Worker state machine + gs doctor                         [ ]
+  Phụ thuộc: G3 = [x], M1, M2
+  Spec: MASTER 8.2, 8.5, T6.1, GS-EC-50,51,52,55
+  Đích: workers/imagegen/, .gs/jobs, .gs/staging
+  Làm: queued→running (rename atomic + lease 10s)→succeeded/failed/
+        cancelled/timed_out; heartbeat 30s → timed_out; kết quả trễ
+        → quarantine; worker CHỈ ghi staging; gs doctor preflight.
+  Verify: GS-EC-50..52,55; rút worker → timed_out sạch.
+  DoD: I1: không ghi thẳng assets/.
+  LOG:
+    (trống)
+
+WP-M6-2  asset.gen_image / job_* / ingest_staged + jobs UI        [ ]
+  Phụ thuộc: WP-M6-1, WP-M0-4
+  Spec: MASTER 4.2 asset, 8.2, 9.4 jobs, T6.2, I1, I11
+  Đích: dispatcher + editor Jobs tab
+  Làm: gen_image → job_id từ command_id; ingest_staged actor
+        system:ingest hiện feed; auto-ingest nếu validate 8.1 pass.
+  Verify: retry gen_image không tạo job đôi; feed có [HỆ THỐNG].
+  DoD: undo ingest được (WAL).
+  LOG:
+    (trống)
+
+WP-M6-3  AnimFlipbook + make_flipbook; Text2D + font              [ ]
+  Phụ thuộc: WP-M1-1, WP-M6-2
+  Spec: MASTER 5.2 AnimFlipbook/Text2D, T6.3, 8.1 font
+  Đích: runtime + asset.make_flipbook; font import validate
+  Làm: flipbook fps/loop; Text2D + font OFL default; parse font hỏng từ chối.
+  Verify: 1 flipbook play; font hỏng → reject.
+  DoD: license font default ghi notices (chuẩn bị M7B).
+  LOG:
+    (trống)
+
+WP-M6-4  importer_version / sniffing / decode caps + GS-EC        [ ]
+  Phụ thuộc: WP-M6-1, import png M1
+  Spec: MASTER 8.1, T6.4, GS-EC-09,50..55
+  Đích: gs-scene asset import
+  Làm: magic bytes; cap 8192, 20MB, font 5MB; meta importer_version;
+        reimport lệnh (không tự); file lạ trong assets/ = "chưa import".
+  Verify: GS-EC-09,53,54,55.
+  DoD: nghiệm thu M6: kịch bản 1.5 bước gen art trên máy provision.
+  LOG:
+    (trống)
+
+--- NGHIỆM THU M6 ---
+  Gen art kịch bản 1.5 chạy thật; rút worker → timed_out; kết quả trễ
+  bị quarantine.
+
+--------------------------------------------------------------------------------
+M7A — EXPORT GAME (1-2 tuần)
+--------------------------------------------------------------------------------
+
+WP-M7A-1  build.game + fail sớm asset missing                     [ ]
+  Phụ thuộc: M2..M6
+  Spec: MASTER 4.2 build.*, T7A.1, I7 (out_dir ngoài project)
+  Đích: editor/job build
+  Làm: copy player + pack assets + settings runtime + icon;
+        kiểm missing TRƯỚC build; build.cancel; out_dir không nằm
+        trong project root.
+  Verify: missing sprite → fail sớm; cancel an toàn.
+  DoD: output không cần editor/.gs để chạy.
+  LOG:
+    17-8-2026 parent re-run: cargo test -p gs-player --test wp_m7a_1 8/8
+    (gồm spawn packed gs-player.exe --headless --frames 8); cargo test
+    -p gs-editor --test wp_m7a_1 7/7 (out_dir jail, missing script,
+    dest_rel escape E_PATH, artifact.list kind=build, restart dedup).
+    hh-play.bat packs to %TEMP% then window; packed folder no cargo.
+    Lệch: pack sync nên build.cancel = already_finished (không interrupt);
+    missing = dest_rel import mất file, $asset không PNG vẫn pack (quad);
+    I11 build = sidecar .gs/runtime/build không WAL; M6 chưa xong —
+    DECISIONS M7A-1 trước M6. Critic 17-8: KHÔNG tick — cancel stub,
+    I11 không WAL, missing ≠ $asset, phụ thuộc M6 còn [ ]. Code giữ.
+
+WP-M7A-2  Clean-VM test Win10 + Win11                             [ ]
+  Phụ thuộc: WP-M7A-1
+  Spec: MASTER T7A.2, GS-EC-49
+  Đích: checklist + artifact build
+  Làm: chạy game trên VM sạch (không Rust/Python). Antivirus lock →
+        retry 3 + thông báo.
+  Verify: người hoặc agent có quyền VM: log screenshot + exit 0.
+          Không có VM: STOP (S5), ghi blocker, không tick.
+  DoD: Kho Bí Ẩn (hoặc demo M4) chạy 2 VM hoặc 1 VM + lý do thiếu.
+  LOG:
+    (trống)
+
+WP-M7A-3  Unsigned + hướng dẫn user-key                           [ ]
+  Phụ thuộc: WP-M7A-1
+  Spec: MASTER T7A.3, C13
+  Đích: docs hướng dẫn signing user
+  Làm: game export KHÔNG ký bằng cert editor; unsigned mặc định.
+  Verify: docs tồn tại; build không nhúng cert editor.
+  DoD: nghiệm thu M7A: game chạy VM sạch.
+  LOG:
+    17-8-2026 docs/EXPORT_SIGNING.md; pack build.json signed=false;
+    pack_project_does_not_copy_pfx xanh. Critic 17-8: KHÔNG tick —
+    DoD vẫn là nghiệm thu VM sạch (M7A-2 STOP S5). Docs giữ.
+
+--- NGHIỆM THU M7A ---
+  Game "Kho Bí Ẩn" (examples/) chạy Win10/11 VM sạch.
+
+--------------------------------------------------------------------------------
+M8 — MCP + DOGFOOD (2 tuần) — M7B KHÔNG chặn M8
+--------------------------------------------------------------------------------
+
+WP-M8-1  gs-mcp hoàn thiện từ spike                               [ ]
+  Phụ thuộc: M0..M7A (bus đủ), WP-M-1-e
+  Spec: MASTER 10.4, T8.1
+  Đích: crates/gs-mcp/
+  Làm: tool list SINH từ registry; gs_command + gs_screenshot (image
+        content) + gs_events_poll + gs_run_test; pin SDK;
+        conformance MCP Inspector + Cursor thật.
+  Verify: Inspector + 1 phiên Cursor gọi run_test.
+  DoD: MCP không tụt method so bus (so registry).
+  LOG:
+    (trống)
+
+WP-M8-2  Dogfood kịch bản 1.5 ≥3 vòng                             [ ]
+  Phụ thuộc: WP-M8-1, M7A
+  Spec: MASTER 1.5, T8.2, C6 KPI
+  Đích: zdocs/dogfood/ (log vòng) + video nếu được
+  Làm: agent thật làm phòng kho 15 phút; đo % bước tự xong;
+        log mọi điểm kẹt. Máy phải provision imagegen (G3).
+  Verify: 3 vòng có bảng bước pass/fail; thời gian từng vòng.
+  DoD: KPI ≥80% VÀ ≤15 phút — nếu chưa đạt, không giả; chuyển WP-M8-3.
+  LOG:
+    (trống)
+
+WP-M8-3  Sửa top-10 điểm kẹt                                      [ ]
+  Phụ thuộc: WP-M8-2
+  Spec: MASTER T8.3
+  Đích: code/docs theo từng điểm kẹt
+  Làm: xếp hạng 10 điểm (thiếu lệnh / observation / docs / bug);
+        sửa; chạy lại ít nhất 1 vòng dogfood.
+  Verify: vòng lại cải thiện KPI hoặc hết top blocker.
+  DoD: danh sách 10 điểm + trạng thái sửa trong zdocs/dogfood/.
+  LOG:
+    (trống)
+
+WP-M8-4  Tên sản phẩm + go/no-go beta + chốt câu hỏi G5           [ ]
+  Phụ thuộc: WP-M8-3
+  Spec: MASTER T8.4, 14.2 G5, 14.3 Q1
+  Đích: DECISIONS.md
+  Làm: đề xuất tên + license; không tự chốt.
+  Verify: —
+  DoD: gói tài liệu cho GATE G5.
+  LOG:
+    (trống)
+
+GATE G5 — tên, license, go/no-go beta                              [ ]
+  Người tick. no-go → STOP toàn chương trình hoặc cắt scope công khai
+  (MASTER timeline cut-list). go → tiếp G6 / M7B.
+
+--- NGHIỆM THU M8 ---
+  Tiêu chí 1.5 đạt trên máy provision; evidence bundle; video demo.
+  Tick 0.1 MASTER.
+
+================================================================================
+PHẦN C — M7B + M9 (2D COMPLETENESS)
+================================================================================
+
+M7B chạy SAU M7A, SONG SONG được với M8/M9A, BẮT BUỘC trước public beta.
+M9 code CHỈ sau G6 = [x]. Mỗi nhóm M9* bắt đầu bằng WP chốt mini-spec.
+
+--------------------------------------------------------------------------------
+GATE G4 — trước M7B: MSIX vs Inno + signing                        [x] 17-8-2026
+  Người (chat): chọn lâu dài → **Inno Setup**. Xem docs/DECISIONS.md.
+  Game M7A vẫn unsigned. Cert editor = S5 (M7B-2).
+
+WP-M7B-1  Installer + uninstall + update channel + rollback       [ ]
+  Phụ thuộc: G4 = [x], M7A
+  Spec: MASTER T7B.1
+  Đích: packager (MSIX hoặc Inno theo G4)
+  Làm: cài/gỡ sạch; update channel; rollback 1 bản.
+  Verify: VM sạch: cài → chạy editor → gỡ → không rác (checklist).
+  DoD: ghi bước reproduce trong docs/.
+  LOG:
+    (trống)
+
+WP-M7B-2  Code signing + timestamp + crash opt-in                 [ ]
+  Phụ thuộc: WP-M7B-1, S5 (cert do người cấp)
+  Spec: MASTER T7B.2
+  Đích: pipeline ký
+  Làm: ký + timestamp; crash report opt-in + symbol + privacy note.
+  Verify: file đã ký (signtool/tương đương); không ký thì STOP S5.
+  DoD: game user (M7A) vẫn unsigned — không nhầm cert.
+  LOG:
+    (trống)
+
+WP-M7B-3  SBOM + notices + license allowlist + font audit         [ ]
+  Phụ thuộc: WP-M7B-1
+  Spec: MASTER T7B.3, 12.2 license
+  Đích: SBOM, THIRD_PARTY_NOTICES, CI allowlist
+  Làm: deny GPL-incompat; phân biệt quyền EMBED font trong document
+        vs REDISTRIBUTE font trong app/game — kiểm từng font bundle.
+  Verify: CI license check; notices đủ crate + font + Luau + models
+          (nếu A).
+  DoD: nghiệm thu M7B: cài/gỡ/update VM; mọi dep có license được phép.
+  LOG:
+    (trống)
+
+--- NGHIỆM THU M7B ---
+  Cài/gỡ/update VM sạch; notices đầy đủ. Tick 0.1 MASTER.
+
+--------------------------------------------------------------------------------
+GATE G6 — sau M8, trước code M9: chốt scope M9                     [ ]
+  Đọc dogfood (WP-M8-2/3) + danh mục dưới. Người được:
+    - đổi THỨ TỰ nhóm M9A–M9F
+    - CẮT nhóm (ghi DECISIONS, công khai)
+    - KHÔNG được cắt các bất biến I1–I12 và "không được cắt" MASTER timeline
+  Agent điền đề xuất ưu tiên (dựa dogfood), STOP. Người tick [x].
+
+  CẤM viết code M9 trước G6. WP-M9*-0 (mini-spec) là tài liệu, làm sau G6.
+
+--------------------------------------------------------------------------------
+M9A — Game UI + save-game API  (game thật cần trước)
+--------------------------------------------------------------------------------
+
+WP-M9A-0  Mini-spec docs/M9A_GAME_UI_SAVE.md                      [ ]
+  Phụ thuộc: G6 = [x]
+  Spec: MASTER 1.4 (cắt khỏi M8), 7.2 (mở rộng API có review), I1, I4
+  Làm: chốt widget (button/label/panel canvas), tọa độ UI vs world,
+        input UI vs game, API gs.save/gs.load (path dưới project hoặc
+        %APPDATA% slot — CHỐT trong mini-spec), schema save versioned,
+        method bus mới (nếu có) khai trong registry TRƯỚC handler.
+  Verify: người review mini-spec (ghi tên/ngày trong file). Không code UI.
+  DoD: file docs/ merged; registry stub method nếu cần.
+  LOG:
+    (trống)
+
+WP-M9A-1  Runtime game UI canvas (widget tối thiểu)               [ ]
+  Phụ thuộc: WP-M9A-0
+  Đích: gs-runtime-core + gs-render2d UI pass
+  Làm: đúng mini-spec; agent điều khiển qua bus (tạo/sửa widget =
+        command hoặc script gs.* đã spec).
+  Verify: menu Pause + 1 button "Quit to title" trong demo; screenshot
+          golden 1 cảnh UI.
+  DoD: I1: data UI thuộc document hoặc script props — không ghi lậu file.
+  LOG:
+    (trống)
+
+WP-M9A-2  Save / load API + bus                                   [ ]
+  Phụ thuộc: WP-M9A-0, M3
+  Làm: gs.save/load theo mini-spec; version; reject path thoát (I7);
+        slot list qua bus nếu spec có.
+  Verify: play → save → restart player → load → world assert;
+          path traversal reject.
+  DoD: không serialize secret/token.
+  LOG:
+    (trống)
+
+--- NGHIỆM THU M9A ---
+  Demo có title/pause UI + 1 slot save/load; agent làm 100% qua bus/script.
+
+--------------------------------------------------------------------------------
+M9B — Editor productivity
+--------------------------------------------------------------------------------
+
+WP-M9B-0  Mini-spec docs/M9B_EDITOR.md                            [ ]
+  Phụ thuộc: G6
+  Làm: chốt docking (egui dock?), scene tabs, asset browser
+        (cây assets/ + preview), undo history UI (không đổi semantics
+        2.8 — chỉ view). Người review.
+  LOG:
+    (trống)
+
+WP-M9B-1  Asset browser + scene tabs                              [ ]
+  Phụ thuộc: WP-M9B-0, M1, M6
+  Làm: duyệt assets; double-click gán/preview; tab nhiều scene
+        (1 scene active mutate; scene không active không dirty ngầm).
+  Verify: mở 2 scene; mutate scene A không đổi bytes scene B.
+  DoD: mọi mutate vẫn qua dispatcher.
+  LOG:
+    (trống)
+
+WP-M9B-2  Docking layout + undo history UI                        [ ]
+  Phụ thuộc: WP-M9B-0
+  Làm: docking tùy biến (M9+ MASTER 9.1); panel lịch sử txn
+        (actor, label, revision); click chọn entity.
+  Verify: layout persist view-state (không WAL); undo UI gọi
+        undo.perform [UI] / revert_own đúng quyền.
+  DoD: agent không gọi được undo.perform.
+  LOG:
+    (trống)
+
+--- NGHIỆM THU M9B ---
+  Người làm việc 30 phút không thiếu browser/tab/dock cơ bản; agent
+  vẫn thao tác scene/asset qua bus như cũ.
+
+--------------------------------------------------------------------------------
+M9C — Art pipeline
+--------------------------------------------------------------------------------
+
+WP-M9C-0  Mini-spec docs/M9C_ART.md                               [ ]
+  Phụ thuộc: G6
+  Làm: spritesheet slice (grid / JSON frame); anim state machine
+        (data-driven, không visual graph — MASTER 1.4 cấm graph đến
+        hết M8; M9 vẫn KHÔNG làm visual scripting graph trừ G6 mở);
+        tile palette / tileset editor. Người review.
+  LOG:
+    (trống)
+
+WP-M9C-1  Spritesheet slicer + flipbook từ sheet                  [ ]
+  Phụ thuộc: WP-M9C-0, M6
+  Làm: lệnh asset.slice_sheet + UI; ra frame assets + make_flipbook.
+  Verify: 1 sheet 4x4 → 16 frame + flipbook play.
+  DoD: ingest qua dispatcher.
+  LOG:
+    (trống)
+
+WP-M9C-2  Anim state machine                                      [ ]
+  Phụ thuộc: WP-M9C-1, M3
+  Làm: component/data + runtime; script hoặc table chuyển state;
+        bus get/set state.
+  Verify: idle↔walk theo axis; replay tape deterministic.
+  DoD: không nhúng Spine/skeleton (MASTER 1.4).
+  LOG:
+    (trống)
+
+WP-M9C-3  Tile palette / tileset editor                           [ ]
+  Phụ thuộc: WP-M9C-0, M4 tilemap
+  Làm: chọn tile, vẽ lên tilemap = tilemap.set_cells (gộp txn).
+  Verify: vẽ 10 cell = 1 undo; agent set_cells tương đương.
+  DoD: không format tileset mới nếu RLE 5.2 đủ — ghi DECISIONS nếu cần.
+  LOG:
+    (trống)
+
+--- NGHIỆM THU M9C ---
+  Agent cắt sheet, gắn anim, vẽ tile palette — qua bus; người có UI tương đương.
+
+--------------------------------------------------------------------------------
+M9D — Render nâng cao 2D
+--------------------------------------------------------------------------------
+
+WP-M9D-0  Mini-spec docs/M9D_RENDER.md                            [ ]
+  Phụ thuộc: G6, G1 constants
+  Làm: particles (CPU vs GPU — chốt 1); parallax layers; lighting 2D
+        (không PBR 3D); custom material WGSL (sandbox: không I/O,
+        pin stage). Người review. I13: đo sau, không claim.
+  LOG:
+    (trống)
+
+WP-M9D-1  Particles                                               [ ]
+  Phụ thuộc: WP-M9D-0, gs-render2d
+  Làm: component + bus; cap số particle; IR item mới.
+  Verify: 1 emitter; tắt hết = 0 draw; golden 1 cảnh (mask).
+  DoD: 3 target vẫn cùng IR.
+  LOG:
+    (trống)
+
+WP-M9D-2  Parallax + lighting 2D                                  [ ]
+  Phụ thuộc: WP-M9D-0
+  Làm: đúng mini-spec; camera-relative layers; light 2D tối thiểu
+        (điểm / cone — theo spec).
+  Verify: 2 layer parallax screenshot; light không phá determinism
+          simulate (render-only thì ghi rõ).
+  DoD: không camera 3D / PBR (MASTER 1.3).
+  LOG:
+    (trống)
+
+WP-M9D-3  Custom material WGSL                                    [ ]
+  Phụ thuộc: WP-M9D-0
+  Làm: material asset; validate WGSL; không load shader ngoài project
+        root; lỗi compile → diagnostic, không crash.
+  Verify: 1 shader đổi màu sprite; shader hỏng → reject.
+  DoD: không HLSL/GLSL (2.1).
+  LOG:
+    (trống)
+
+--- NGHIỆM THU M9D ---
+  1 scene dùng particle + parallax + 1 material tùy chỉnh; play snapshot
+  + golden/assert_world tùy thứ render-only.
+
+--------------------------------------------------------------------------------
+M9E — Gameplay systems (pathfinding + FULL PREFAB)
+--------------------------------------------------------------------------------
+
+WP-M9E-0  Mini-spec docs/M9E_PATH_PREFAB.md                       [ ]
+  Phụ thuộc: G6
+  Spec: MASTER 5.3 cảnh báo: prefab nửa vời tệ hơn không làm.
+  Làm: (1) pathfinding: grid/nav từ tilemap solid, API gs.path_to,
+        determinism. (2) FULL PREFAB: path addressing ổn định,
+        override, revert, apply-back, nesting — HOẶC ghi "cắt, giữ
+        Blueprint" nếu G6 cắt. Không được làm override mà không có
+        merge semantics.
+  Verify: người review BẮT BUỘC trước code prefab. Pathfinding có thể
+          được duyệt riêng.
+  DoD: nếu prefab cắt → WP-M9E-2 = cancelled, ghi DECISIONS.
+  LOG:
+    (trống)
+
+WP-M9E-1  Pathfinding                                             [ ]
+  Phụ thuộc: WP-M9E-0, M4 tilemap
+  Làm: bake grid; gs.path_to; agent đặt destination qua bus/script.
+  Verify: cùng seed+map → cùng path; ô solid không đi xuyên;
+          cap độ dài path.
+  DoD: single-thread; không HashMap order.
+  LOG:
+    (trống)
+
+WP-M9E-2  FULL PREFAB (chỉ khi G6 + mini-spec duyệt LÀM)          [ ]
+  Phụ thuộc: WP-M9E-0 approved-prefab
+  Làm: đúng mini-spec 100%. Method registry trước. Test override/
+        revert/apply-back/nesting + reparent.
+  Verify: suite trong mini-spec — thiếu 1 case = chưa tick.
+  DoD: stamp Blueprint cũ vẫn chạy (không phá 5.3).
+  LOG:
+    (trống)
+
+--- NGHIỆM THU M9E ---
+  Pathfinding demo (địch đi tới player) qua bus. Prefab: theo G6
+  (làm đủ hoặc cắt công khai).
+
+--------------------------------------------------------------------------------
+M9F — Chất lượng / public / debugger / i18n / moderation
+--------------------------------------------------------------------------------
+
+WP-M9F-0  Mini-spec docs/M9F_QUALITY.md                           [ ]
+  Phụ thuộc: G6, G5 (nếu public)
+  Làm: debugger Luau (breakpoint — process player, I3: không nhét VM
+        vào editor); localization (string table, không hardcode UI
+        còn lại); moderation ảnh khi share (MASTER Q2 — nếu CHƯA share
+        online thì cắt + ghi). Checklist M7B đã xong trước public.
+  LOG:
+    (trống)
+
+WP-M9F-1  Debugger Luau                                           [ ]
+  Phụ thuộc: WP-M9F-0, M3
+  Làm: breakpoint + step + locals; giao tiếp qua control server
+        (editor forward); pause script không pause editor.
+  Verify: breakpoint trúng; resume; agent đặt breakpoint qua bus.
+  DoD: I3 giữ — editor không load source vào Lua VM của nó.
+  LOG:
+    (trống)
+
+WP-M9F-2  Localization                                            [ ]
+  Phụ thuộc: WP-M9F-0
+  Làm: bảng string; locale setting; editor UI + game UI (M9A) lookup.
+  Verify: đổi locale → UI đổi; missing key → hiện key + warning.
+  DoD: file locale là document/asset qua dispatcher khi agent sửa.
+  LOG:
+    (trống)
+
+WP-M9F-3  Moderation ảnh (chỉ nếu G6 mở share)                    [ ]
+  Phụ thuộc: WP-M9F-0, M6
+  Làm: theo mini-spec; local-only thì CANCELLED (MASTER GS-EC-56).
+  Verify: theo spec hoặc tick cancelled + DECISIONS.
+  LOG:
+    (trống)
+
+WP-M9F-4  Public-ready checklist                                  [ ]
+  Phụ thuộc: M7B xong (nếu G5 = public), M9A–M9E theo G6
+  Làm: đối chiếu Phần D; điền thiếu sót; không thêm tính năng mới.
+  Verify: checklist D tất cả [x] hoặc cắt có DECISIONS.
+  DoD: điều kiện DONE (Phần D) đạt → chương trình dừng.
+  LOG:
+    (trống)
+
+--- NGHIỆM THU M9F ---
+  Debugger dùng được trên demo; locale đổi được; public checklist xanh
+  hoặc beta nội bộ không public (G5) thì M7B/moderation có thể cắt đã ghi.
+
+================================================================================
+PHẦN D — "HOẠT ĐỘNG TỐT Ở GAME 2D" = ĐIỀU KIỆN DỪNG TOÀN CHƯƠNG TRÌNH
+================================================================================
+
+Tick khi có bằng chứng (LOG / evidence bundle / DECISIONS). Thiếu 1 ô
+bắt buộc chưa cắt → CHƯA DONE.
+
+D1  M8 nghiệm thu: KPI tự chủ ≥80% bước kịch bản 1.5 VÀ ≤15 phút
+    trên máy provision. Evidence + video.                    [ ]
+D2  Toàn bộ GS-EC-01..58: pass theo milestone gắn, hoặc manual
+    có checklist, hoặc M9+ (56) đã xử lý/cắt.                [ ]
+D3  Perf Phụ lục A MASTER: ĐÃ ĐO (I13), số ghi trong repo.
+    Trượt mục tiêu phải ghi DECISIONS (chấp nhận / kế hoạch),
+    không im.                                                [ ]
+D4  2 game demo export (Kho Bí Ẩn + platformer) chạy VM sạch
+    Win10 và/hoặc Win11 (M7A).                               [ ]
+D5  M9A nghiệm thu (UI + save/load).                         [ ]
+D6  M9B nghiệm thu (browser/tabs/dock/history) hoặc G6 cắt.  [ ]
+D7  M9C nghiệm thu (sheet/anim/palette) hoặc G6 cắt.         [ ]
+D8  M9D nghiệm thu (particle/parallax/material) hoặc G6 cắt. [ ]
+D9  M9E nghiệm thu (pathfinding; prefab làm đủ hoặc cắt).    [ ]
+D10 M9F nghiệm thu theo G5/G6 (debugger/i18n/moderation).    [ ]
+D11 G5 go-beta (hoặc no-go có hướng khác — khi đó D* cắt
+    theo DECISIONS, không tự coi DONE).                      [ ]
+D12 G6 đã chốt và mọi cắt M9 công khai trong DECISIONS.      [ ]
+D13 M7B xong NẾU G5 = public; nếu beta nội bộ: cắt có ghi.   [ ]
+D14 I1–I12 không bị phá (review kiến trúc cuối: không đường
+    ghi lậu, không agent giả human_ui).                      [ ]
+
+ĐỦ D1–D14 (ô cắt phải có DECISIONS) → DONE.
+Mọi việc sau (3D, multiplayer, mobile, cloud, visual graph, asset store)
+= PLAN MỚI. Không nhét vào file này.
+
+================================================================================
+PHẦN E — BẢNG TIẾN ĐỘ TỔNG (tick tại đây + tại khối WP)
+================================================================================
+
+Quy ước: [ ] chưa | [x] xong (ghi ngày) | [-] cắt (trỏ DECISIONS)
+
+M-1 SPIKE
+  [x] WP-M-1-a  renderer 3-target  16-8-2026
+  [x] WP-M-1-b  Luau POC  16-8-2026
+  [x] WP-M-1-c  WAL POC  16-8-2026
+  [x] WP-M-1-d  play-snapshot POC  16-8-2026
+  [x] WP-M-1-e  MCP spike  16-8-2026 (Inspector/Cursor còn G1)
+  [x] WP-M-1-f  version matrix  16-8-2026
+  [x] GATE G1  16-8-2026 (người: tiếp tục, đừng dừng)
+
+M0 CORE
+  [x] WP-M0-1  16-8-2026
+  [x] WP-M0-2  16-8-2026
+  [x] WP-M0-3  16-8-2026
+  [x] WP-M0-4  16-8-2026 (bus/authority; eframe window deferred)
+  [x] WP-M0-5  16-8-2026
+  [x] WP-M0-6  16-8-2026
+  MASTER 0.1 M0 còn [ ] — nghiệm thu UI/redo chưa đủ
+
+M1 VIEWPORT
+  [x] WP-M1-1  16-8-2026
+  [x] WP-M1-2  16-8-2026 (window compiled, not launched)
+  [x] WP-M1-3  16-8-2026
+  [x] WP-M1-4  16-8-2026
+  [x] WP-M1-5  16-8-2026 (10k target NOT met; see LOG)
+  MASTER 0.1 M1 còn [ ] — nghiệm thu tương tác chưa chạy
+
+M2 PLAYER
+  [x] WP-M2-1  16-8-2026
+  [x] WP-M2-2  17-8-2026
+  [x] WP-M2-3  17-8-2026
+  [x] WP-M2-4  17-8-2026
+  [x] WP-M2-5  17-8-2026
+  MASTER 0.1 M2 còn [ ] — nghiệm thu tương tác / live-view paint chưa đủ
+
+M3 LUAU
+  [x] WP-M3-1 .. [x] WP-M3-5  17-8-2026
+  MASTER 0.1 M3 còn [ ] — nghiệm thu tương tác / 50-script budget chưa đo
+
+M4 PHYSICS/TILE/AUDIO
+  [x] WP-M4-1  17-8-2026
+  [x] WP-M4-2  17-8-2026
+  [x] WP-M4-3  17-8-2026
+  [x] WP-M4-4  17-8-2026
+  MASTER 0.1 M4 còn [ ] — nghiệm thu tay Play+WASD chưa ký
+
+M5 JUDGE
+  [x] WP-M5-1  17-8-2026
+  [x] WP-M5-2  17-8-2026
+  [x] WP-M5-3  17-8-2026
+  [x] WP-M5-4  17-8-2026
+  MASTER 0.1 M5 còn [ ] — nghiệm thu tay gravity/tape/bundle chưa ký
+
+  [x] GATE G3  17-8-2026 (B+C — DECISIONS)
+
+M6 ASSETS
+  [ ] WP-M6-1 .. [ ] WP-M6-4
+
+M7A EXPORT GAME
+  [ ] WP-M7A-1  code có; critic: chưa tick
+  [ ] WP-M7A-2  STOP S5 (không VM)
+  [ ] WP-M7A-3  docs có; DoD = VM — chưa tick
+
+M8 DOGFOOD
+  [ ] WP-M8-1 .. [ ] WP-M8-4
+  [ ] GATE G5
+
+  [x] GATE G4  17-8-2026 (Inno — DECISIONS)
+
+M7B EDITOR DIST
+  [ ] WP-M7B-1 .. [ ] WP-M7B-3
+
+  [ ] GATE G6  (trước mọi WP-M9*)
+
+M9A UI+SAVE     [ ] WP-M9A-0  [ ] WP-M9A-1  [ ] WP-M9A-2
+M9B EDITOR      [ ] WP-M9B-0  [ ] WP-M9B-1  [ ] WP-M9B-2
+M9C ART         [ ] WP-M9C-0  [ ] WP-M9C-1  [ ] WP-M9C-2  [ ] WP-M9C-3
+M9D RENDER      [ ] WP-M9D-0  [ ] WP-M9D-1  [ ] WP-M9D-2  [ ] WP-M9D-3
+M9E GAMEPLAY    [ ] WP-M9E-0  [ ] WP-M9E-1  [ ] WP-M9E-2
+M9F QUALITY     [ ] WP-M9F-0  [ ] WP-M9F-1  [ ] WP-M9F-2  [ ] WP-M9F-3  [ ] WP-M9F-4
+
+PHẦN D (DONE)   [ ] D1 .. D14 đủ
+
+================================================================================
+HẾT EXECUTION PLAN
+Agent mới: đọc AGENTS.md → Phần A → WP chưa tick đầu tiên (hiện: WP-M-1-a).
+Không viết code M0 khi G1 chưa [x]. Không viết code M9 khi G6 chưa [x].
+================================================================================

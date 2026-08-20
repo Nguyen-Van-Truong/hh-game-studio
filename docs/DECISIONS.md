@@ -1,0 +1,103 @@
+# Architecture decisions
+
+## 2026-08-16 — G1 chốt M-1 (người: tiếp tục, không dừng ở gate)
+
+- Renderer: **bevy_ecs standalone + gs-render2d**, không fallback full Bevy.
+  Constants: PPU 16, Y-up, pivot bottom-left, sRGB + premultiplied alpha,
+  sort z_index then entity id, atlas pad 2px, nearest, pick alpha>0.1 CPU.
+- WAL: full command+inverse JSONL + crc32; fsync every record; ACK after apply.
+  Crash tests may simulate disk state (not only kill -9). Fsync ~5ms/txn on
+  this machine — revisit group-commit if M0 measures worse.
+- Luau: interrupt returns error (not Yield); must pierce pcall; mutation buffer.
+  mlua 0.11.6 + Luau 0.709. Windows needs `vcvars64` for first C++ vendored build.
+- Versions: see `docs/VERSIONS.md`. Pin the set; do not bump crates independently.
+- MCP: `rmcp =3.1.2`. Inspector/Cursor still a human check (M8).
+- `experiments/` kept until M0 crates absorb the lessons; then delete spikes.
+
+## 2026-08-17 — G3 imagegen CHỐT: B+C (người: chọn cách tốt nhất lâu dài)
+
+Người (chat 17-8-2026): “cứ chọn cách tốt nhất cho lâu dài” — ủy quyền chốt gate, không chờ thêm một vòng hỏi A/B/C.
+
+- **Mặc định hỗ trợ chính thức: B** — ComfyUI local là prerequisite (MASTER 8.5). Không bundle model (A): size/license/build không bền vững trước M8.
+- **Cấu hình tùy chọn: C** — HTTP API + key ngoài project (per-user, không bus, không git/WAL). Máy không GPU vẫn gen được.
+- **A:** chỉ xét sau M8 nếu G5 = public boxed product.
+- Máy dogfood hiện **chưa** có ComfyUI trong repo. `gs doctor` phải fail sạch (exit ≠ 0) khi thiếu Python/ComfyUI/API — không giả gen art.
+- Secret C: `%APPDATA%/hh-game-studio/imagegen.json` (hoặc tương đương), không nằm dưới project root.
+
+## 2026-08-17 — M7A-1 trước M6 (lệch thứ tự WP, không lệch SPEC T7A.1)
+
+Người yêu cầu đóng gói/chạy game (`hh-play.bat`) ngay. WP-M7A-1 ghi phụ thuộc M6; M6 bị G3 chặn. **Làm T7A.1 trên asset đã có** (scene, scripts, player exe, color sprites). Không làm worker imagegen. Missing = script file không tồn tại hoặc asset đã import mà path mất — không fail chỉ vì `$asset` id chưa có PNG (quad màu, đúng game hiện tại).
+
+Người bác thì dừng export, không tick M7A.
+
+## 2026-08-17 — G4 installer CHỐT: Inno Setup (người: chọn lâu dài)
+
+- **Chọn Inno Setup** cho editor dist (M7B). Unsigned OK trên Win10/11; rollback = uninstaller + giữ 1 bản cũ; CI Windows runner đơn giản.
+- **Không chọn MSIX** lúc này: sideload/unsigned khó, chưa cần store identity.
+- Game user (M7A) vẫn **unsigned**, cert editor ≠ cert game (C13).
+- Signing editor + timestamp: M7B-2, cần cert người cấp (S5) — không giả ký.
+
+## 2026-08-17 — GATE G3 báo cáo (STOP S1 — chờ người)
+
+Đọc MASTER 8.5. Agent không chọn A/B/C.
+
+- Máy dogfood đã có ComfyUI/GPU? **Chưa xác nhận.** Máy này chạy editor/player wgpu; repo không có ComfyUI, không có `workers/imagegen/`.
+- Cần API remote (C)? **Chưa xác nhận.**
+- Khuyến nghị SPEC (không chốt): **B** (ComfyUI local) ± **C** nếu GPU máy dogfood không đủ.
+- **CẤM** cho đến khi người tick G3 = `[x]` và ghi A/B/C vào file này: `workers/imagegen/`, `asset.gen_image`, `asset.job_*`, `asset.ingest_staged`, `asset.make_flipbook` worker path, WP-M6-1..4, dogfood 1.5 phụ thuộc imagegen (WP-M8-2).
+
+Người: ghi `A` / `B` / `C` (hoặc `B+C`) rồi tick G3 trong execution plan.
+
+## 2026-08-17 — GATE G4 báo cáo (STOP S1 — chờ người)
+
+Ưu/nhược ngắn (agent không chọn):
+
+- **Inno Setup:** đơn giản Win10/11, unsigned OK, rollback = uninstaller + giữ 1 bản cũ. Khớp M7A unsigned. Script Pascal, CI dễ trên Windows runner.
+- **MSIX:** update channel sạch, package identity; unsigned/sideload khó; SmartScreen/dev mode trên VM sạch.
+- Signing editor ≠ signing game user (C13). Game M7A luôn unsigned.
+
+Người: ghi `Inno` hoặc `MSIX` (+ chính sách signing) rồi tick G4. CẤM code `installer/` / M7B trước đó.
+
+## 2026-08-17 — GATE G6 báo cáo (STOP — chưa đến lượt)
+
+G6 chỉ sau M8 dogfood. Chưa có `zdocs/dogfood/`. **CẤM** mọi WP-M9* (kể cả mini-spec `docs/M9*_*.md`) cho đến G6 = `[x]`.
+
+Đề xuất ưu tiên (dự kiến, không chốt): M9A (UI+save) → M9E pathfinding → M9B editor → M9C art → M9D render → M9F. Prefab FULL: nghiêng **cắt, giữ Blueprint 5.3** trừ dogfood chứng minh thiếu. Người được đổi thứ tự / cắt nhóm.
+
+## 2026-08-17 — M7A-2 STOP S5 (không có VM sạch)
+
+Không có Win10/11 clean VM (không Rust/Python) trong môi trường agent. `examples/kho-bi-an/` không tồn tại (`games/snake` + `games/platformer` là stand-in). **Không tick WP-M7A-2.** Không giả screenshot VM.
+
+`hh-play.bat` trên máy dev **cần cargo** để *tạo* pack (trừ khi `GS_SKIP_BUILD=1` và đã có `target\release\gs-player.exe`). Máy sạch không Rust: chỉ chạy được folder pack sẵn (`gs-player.exe` + `manifest.json`) — `hh-play.bat <pack-dir>`. Không phải T7A.2.
+
+## 2026-08-17 — Critic M7A/M8: không tick
+
+Critic độc lập: **không tick** WP-M7A-1 / M7A-2 / M7A-3 / M8-1. Parent chấp nhận (kể cả sau spawn-exe + command_id).
+
+Giữ code pack/`hh-play.bat`/`EXPORT_SIGNING.md`. Không tick: `build.cancel` stub (pack sync); missing = `dest_rel` import, không phải `$asset` không PNG; I11 build là sidecar không WAL; `build.game` không qua dispatcher; phụ thuộc M6 còn `[ ]`; M7A-3 DoD = VM sạch.
+
+**G3 / G4 ticks giữ** — gate là chọn provider / Inno, không phải ComfyUI đã cài hay file `.iss` đã có.
+
+## 2026-08-17 — Ngân sách biên dịch chunk = INIT_BUDGET (lấp khoảng trống 7.3)
+
+MASTER 7.3 chỉ định ngân sách cho **callback**: per-script 2ms soft / 4ms hard mỗi
+frame, `on_init` 100ms ("chạy 1 lần, cho phép nặng hơn"). SPEC **không** nói lần
+biên dịch chunk (`ensure_compiled`, chunk `load:<id>`) tính vào bucket nào.
+
+`vm.rs` đang tính nó vào `SCRIPT_HARD` (4ms). Hậu quả đo được: `fighter.luau`
+của `games/scrap-yard` ở 777 dòng làm **9/9 test `wp_games_scrap` fail** với
+`deadline exceeded`, `file: "load:e_000020"` — script chưa chạy một dòng gameplay
+nào đã chết ở bước nạp. Trần thực tế cho một script gameplay là ~400 dòng, tức
+không viết nổi một nhân vật brawler.
+
+Đổi thành `INIT_BUDGET` (100ms). Lý do: biên dịch là chi phí **một lần** mỗi
+instance, đúng cùng loại với `on_init` mà SPEC đã cho 100ms. Không đổi bất kỳ
+ngân sách per-frame nào, nên GS-EC-26 (50 script x 4ms) và global 6/12ms giữ
+nguyên; hot-reload cũng đi qua đường này nên hưởng cùng ngân sách.
+
+Đây là **lấp khoảng trống**, không phải lệch SPEC. Nếu người đọc thấy SPEC hàm ý
+compile phải nằm trong 4ms thì đây là chỗ cần bác — nói để hoàn tác một dòng.
+
+## 2026-08-17 — Critic #2: hoàn tác tick M7A-1/M7A-3
+
+Parent đã tick rồi hoàn tác. G3=B+C và G4=Inno giữ. M6-3 flipbook bị recall (phụ thuộc M6-2). `entity.lock` phải nằm trong `Dispatcher`, không editor RAM. Worker Python chỉ ghi staging.

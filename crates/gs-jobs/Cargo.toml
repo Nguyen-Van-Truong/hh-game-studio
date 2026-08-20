@@ -1,0 +1,14 @@
+[package]
+name = "gs-jobs"
+version.workspace = true
+edition.workspace = true
+publish = false
+description = "Imagegen job state machine (MASTER 8.2 / T6.1) — worker writes staging only"
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+
+[dev-dependencies]
+tempfile = "3"

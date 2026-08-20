@@ -1,0 +1,36 @@
+name: ci
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - name: fmt
+        run: cargo fmt --check
+      - name: clippy
+        run: cargo clippy --all-targets -- -D warnings
+      - name: test
+        run: cargo test --workspace
+      - name: no unimplemented/todo/dbg outside experiments
+        shell: pwsh
+        run: |
+          $hits = Get-ChildItem -Recurse -Include *.rs crates |
+            Select-String -Pattern 'unimplemented!|todo!|dbg!' |
+            Where-Object { $_.Path -notmatch 'experiments' }
+          if ($hits) { $hits | ForEach-Object { $_ }; exit 1 }
+      - name: no token-like secrets in fixtures
+        shell: pwsh
+        run: |
+          if (Test-Path tests) {
+            $hits = Get-ChildItem -Recurse tests |
+              Select-String -Pattern 'gs_token_[A-Za-z0-9]{16,}'
+            if ($hits) { $hits | ForEach-Object { $_ }; exit 1 }
+          }

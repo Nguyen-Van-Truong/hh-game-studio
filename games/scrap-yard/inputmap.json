@@ -1,0 +1,74 @@
+{
+  "actions": [
+    {
+      "name": "move_x_p1",
+      "type": "axis",
+      "keys": [["Left", -1.0], ["Right", 1.0]]
+    },
+    {
+      "name": "jump_p1",
+      "type": "button",
+      "keys": ["Up"]
+    },
+    {
+      "name": "crouch_p1",
+      "type": "button",
+      "keys": ["Down"]
+    },
+    {
+      "name": "melee_p1",
+      "type": "button",
+      "keys": ["N"]
+    },
+    {
+      "name": "shoot_p1",
+      "type": "button",
+      "keys": ["M"]
+    },
+    {
+      "name": "grenade_p1",
+      "type": "button",
+      "keys": ["Comma"]
+    },
+    {
+      "name": "power_p1",
+      "type": "button",
+      "keys": ["Period"]
+    },
+    {
+      "name": "move_x_p2",
+      "type": "axis",
+      "keys": [["A", -1.0], ["D", 1.0]]
+    },
+    {
+      "name": "jump_p2",
+      "type": "button",
+      "keys": ["W"]
+    },
+    {
+      "name": "crouch_p2",
+      "type": "button",
+      "keys": ["S"]
+    },
+    {
+      "name": "melee_p2",
+      "type": "button",
+      "keys": ["1"]
+    },
+    {
+      "name": "shoot_p2",
+      "type": "button",
+      "keys": ["2"]
+    },
+    {
+      "name": "grenade_p2",
+      "type": "button",
+      "keys": ["3"]
+    },
+    {
+      "name": "power_p2",
+      "type": "button",
+      "keys": ["4"]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+[package]
+name = "gs-cli"
+version.workspace = true
+edition.workspace = true
+publish = false
+description = "Library behind tools/gs.ps1"
+
+[dependencies]
+gs-protocol = { path = "../gs-protocol" }
+gs-jobs = { path = "../gs-jobs" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+ulid = { workspace = true }
+
+[dev-dependencies]
+gs-editor = { path = "../gs-editor" }
+tempfile = "3"
+serde_json = { workspace = true }
+ulid = { workspace = true }

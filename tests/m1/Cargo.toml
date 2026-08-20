@@ -1,0 +1,14 @@
+[package]
+name = "m1"
+version.workspace = true
+edition.workspace = true
+publish = false
+description = "M1 golden offscreen scenes, 10k sprite measure, GS-EC-05/12/46/47 (WP-M1-5)"
+
+[dependencies]
+gs-render2d = { path = "../../crates/gs-render2d" }
+gs-scene = { path = "../../crates/gs-scene" }
+image = { version = "0.25.6", default-features = false, features = ["png"] }
+serde_json = { workspace = true }
+tempfile = "3"
+ulid = { workspace = true }
