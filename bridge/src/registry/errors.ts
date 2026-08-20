@@ -1,0 +1,34 @@
+/** Typed error codes for envelope/params/variant validation. */
+
+export const E = {
+  E_UNKNOWN_ACTION: "E_UNKNOWN_ACTION",
+  E_PROTOCOL_VERSION: "E_PROTOCOL_VERSION",
+  E_ACTION_VERSION: "E_ACTION_VERSION",
+  E_UNKNOWN_PARAM: "E_UNKNOWN_PARAM",
+  E_MISSING_REQUIRED: "E_MISSING_REQUIRED",
+  E_INVALID_TYPE: "E_INVALID_TYPE",
+  E_OUT_OF_BOUNDS: "E_OUT_OF_BOUNDS",
+  E_INVALID_COMMAND_ID: "E_INVALID_COMMAND_ID",
+  E_CLIENT_ESCALATION: "E_CLIENT_ESCALATION",
+  E_UNKNOWN_VARIANT_TYPE: "E_UNKNOWN_VARIANT_TYPE",
+  E_INVALID_VARIANT: "E_INVALID_VARIANT",
+  E_INVALID_ENVELOPE: "E_INVALID_ENVELOPE",
+  E_UNVERIFIED: "E_UNVERIFIED",
+} as const;
+
+export type ErrorCode = (typeof E)[keyof typeof E];
+
+export const COMMON_PARAM_ERRORS: readonly ErrorCode[] = [
+  E.E_MISSING_REQUIRED,
+  E.E_UNKNOWN_PARAM,
+  E.E_INVALID_TYPE,
+  E.E_OUT_OF_BOUNDS,
+];
+
+export function typedError(
+  code: string,
+  message: string,
+  path = "",
+): { code: string; message: string; path: string } {
+  return { code, message, path };
+}

@@ -3,12 +3,13 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "HH Godot Agent sidecar scaffold. MCP server is R2.",
+  "description": "HH Godot Agent sidecar. Action registry and generated contracts (not a live MCP server).",
   "engines": {
     "node": "24.19.0"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json --pretty false"
+    "build": "tsc -p tsconfig.json --pretty false",
+    "generate": "tsc -p tsconfig.json --pretty false && node dist/generate.js"
   },
   "devDependencies": {
     "@types/node": "24.13.3",
