@@ -5,6 +5,7 @@ Baseline **before** any third-party Godot MCP plugin is enabled in
 
 | File | What it is |
 |------|------------|
+| [CAPABILITY_MATRIX.md](CAPABILITY_MATRIX.md) | R1-WP1: measurable 2D workflows (not “all buttons”). Status is honest: no hh_agent yet. |
 | [THREAT_MODEL.md](THREAT_MODEL.md) | Threats → controls (reject / jail / strip / Pause). A8–A10. |
 | [SBOM_BASELINE.md](SBOM_BASELINE.md) | Godot 4.7.1-stable, GUT 9.7.1, Node/TS pins, MCP candidates **to-audit**. |
 | [../../PROJECT_BRIEF.template.md](../../PROJECT_BRIEF.template.md) | Brief schema (not the dogfood brief). |
@@ -19,4 +20,5 @@ Validate:
 python tools/godot/policy_validate.py --self-test
 python tests/bootstrap/test_policy.py
 python tests/bootstrap/test_no_secrets.py
+python tests/bootstrap/test_capability_matrix.py
 ```
