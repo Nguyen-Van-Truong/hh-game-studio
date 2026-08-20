@@ -61,6 +61,22 @@ CANDIDATES = (
 
 SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 MIT_HEAD = "MIT License"
+VERDICT_ROW_RE = re.compile(
+    r"^\|\s*(?P<id>[ABCD])\s*\|"
+    r"(?P<cand>[^|]+)\|"
+    r"(?P<bake>[^|]+)\|"
+    r"(?P<enable>[^|]+)\|"
+    r"(?P<spike>[^|]+)\|"
+)
+
+
+def cell_yes(cell: str) -> bool:
+    """True if the first emphasis token is yes (ignore later 'yes' in notes)."""
+    tokens = re.findall(r"\*\*(yes|no)\*\*|\b(yes|no)\b", cell, re.IGNORECASE)
+    if not tokens:
+        return False
+    first = (tokens[0][0] or tokens[0][1]).lower()
+    return first == "yes"
 
 
 def rel(path: Path) -> str:
@@ -137,6 +153,40 @@ def main() -> int:
         errors.append("bake-off must name eliminated KeeVeeG and Sods2")
     if "E2" not in text:
         errors.append("bake-off must mark Beckett Full as E2 fail-hard")
+
+    parsed: dict[str, dict[str, bool]] = {}
+    for line in text.splitlines():
+        match = VERDICT_ROW_RE.match(line.strip())
+        if not match:
+            continue
+        cid = match.group("id")
+        parsed[cid] = {
+            "bake": cell_yes(match.group("bake")),
+            "enable": cell_yes(match.group("enable")),
+            "spike": cell_yes(match.group("spike")),
+        }
+    expected_ids = {c["id"] for c in CANDIDATES}
+    if set(parsed) != expected_ids:
+        errors.append(f"verdict table IDs {sorted(parsed)} != {sorted(expected_ids)}")
+    else:
+        spike = [cid for cid, row in parsed.items() if row["spike"]]
+        if len(spike) > 2:
+            errors.append(f"spike shortlist has {len(spike)} names: {spike}")
+        if set(spike) != {"A", "C"}:
+            errors.append(f"spike shortlist must be A+C, got {spike}")
+        for cid, row in parsed.items():
+            if row["spike"] and row["bake"]:
+                errors.append(
+                    f"{cid}: spike shortlist cannot also be fail-hard bake-off"
+                )
+            if not row["enable"]:
+                errors.append(
+                    f"{cid}: fail-hard enable as-is must be yes until G1 patches"
+                )
+        if not parsed["B"]["bake"] or not parsed["D"]["bake"]:
+            errors.append("B and D must be fail-hard bake-off (eliminated)")
+        if parsed["A"]["bake"] or parsed["C"]["bake"]:
+            errors.append("A and C must not be fail-hard bake-off")
 
     if PLUGIN_PROJECT.is_dir():
         for marker in PLUGIN_PROJECT.rglob("*"):

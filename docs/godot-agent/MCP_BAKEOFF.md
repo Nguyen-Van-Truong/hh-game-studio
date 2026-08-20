@@ -14,16 +14,19 @@ Do not enable any candidate in the production fixture.
 
 ## Verdict
 
-| ID | Candidate | Fail-hard? | Shortlist? |
-|----|-----------|------------|------------|
-| A | [satelliteoflove/godot-mcp](https://github.com/satelliteoflove/godot-mcp) | **no** for bake-off; **yes as-is for OWNER_AUTOPILOT enable** (no session token, `godot_exec`, no UndoRedo, empty success, runtime autoload in export) | **yes** |
-| B | [KeeVeeG/godot-mcp](https://github.com/KeeVeeG/godot-mcp) | **yes** — editor/game `evaluate_expression` + `OS.execute` git clone + no token + WebSocket listen without loopback host | **no** |
-| C | [beckettlab/beckett-godot-mcp](https://github.com/beckettlab/beckett-godot-mcp) **Lite** MIT tree | Lite: **no** for bake-off; **yes as-is** if `call_method`/`Object.callv` stays on, or if token is left off. **Full (itch, $15): fail-hard E2** — do not buy | **yes (Lite only)** |
-| D | [Sods2/godot-mcp](https://github.com/Sods2/godot-mcp) | **yes** — TCP `:6008` no token; disk-first `.tscn` writes; no release tag; last push 2026-04-12 | **no** |
+Spike shortlist is **not** permission to vendor or to enable `OWNER_AUTOPILOT`.
+G1 must not ship either shortlist candidate as-is.
+
+| ID | Candidate | Fail-hard bake-off? | Fail-hard enable as-is? | Spike shortlist? |
+|----|-----------|---------------------|-------------------------|------------------|
+| A | [satelliteoflove/godot-mcp](https://github.com/satelliteoflove/godot-mcp) | **no** | **yes** — no session token, `godot_exec`, no UndoRedo, empty success, runtime autoload in export | **yes** |
+| B | [KeeVeeG/godot-mcp](https://github.com/KeeVeeG/godot-mcp) | **yes** — editor/game `evaluate_expression` + `OS.execute` git clone + no token + WebSocket listen without loopback host | **yes** | **no** |
+| C | [beckettlab/beckett-godot-mcp](https://github.com/beckettlab/beckett-godot-mcp) **Lite** MIT tree | **no** | **yes** — `call_method`/`Object.callv` and missing token. **Full (itch): fail-hard E2** — do not buy | **yes (Lite only)** |
+| D | [Sods2/godot-mcp](https://github.com/Sods2/godot-mcp) | **yes** — TCP `:6008` no token; disk-first `.tscn` writes | **yes** | **no** |
 
 **Shortlist (max two):** A `satelliteoflove/godot-mcp`, C Beckett **Lite**.
 
-**Fail-hard / eliminated:** B KeeVeeG; D Sods2; Beckett **Full** (commercial, E2).
+**Fail-hard bake-off / eliminated from R1-WP3:** B KeeVeeG; D Sods2; Beckett **Full** (commercial, E2).
 
 R1-WP3 may bake-off A and C on disposable copies with eval/`call_method` disabled
 and token required. G1 (R1-WP5) must not vendor either as-is. Fallback remains
