@@ -55,3 +55,6 @@ tests/e2e/bakeoff/evidence/*.bin
 !tests/e2e/bakeoff/evidence/*-small.png
 !tests/e2e/bakeoff/evidence/*.md
 !tests/e2e/bakeoff/evidence/*.txt
+
+# R1-WP4 stock-poc disposable copies (never vendor into plugin-project).
+tests/e2e/stock_poc/work/
