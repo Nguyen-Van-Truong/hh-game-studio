@@ -1,35 +1,63 @@
 # AGENTS.md — HH Game Studio
 
-## TRANSITION 20-8-2026 — USER-APPROVED GODOT REBOOT
+## Hướng hiện tại — Godot Agent Autopilot (R0-WP2 cutover)
 
-Người dùng đã yêu cầu dừng mở WP mới của engine Rust cũ và lập hướng Godot Agent
-Autopilot. Trước mọi product code mới, đọc
-`zdocs/20-8-godot-agent-autopilot-plan.txt` và chỉ thực hiện **R0-WP1** (archive
-an toàn), sau đó R0-WP2 sẽ hoàn tất cutover bootstrap. Không làm WP-M6/M7/M8 cũ,
-không xóa code/asset cũ, không fork Godot. Entry quyết định:
-`docs/DECISIONS.md` — `GODOT-REBOOT-2026-08-20`.
+Người dùng đã chọn reboot: dừng WP mới của engine Rust/`gs-*`, làm Godot stock
++ Agent Autopilot. Quyết định: `docs/DECISIONS.md` — `GODOT-REBOOT-2026-08-20`.
+Kế hoạch quyền lực duy nhất: `zdocs/20-8-godot-agent-autopilot-plan.txt`
+(`AUTHORITATIVE_PLAN=1`).
 
-Trong giai đoạn chuyển tiếp, hướng dẫn bên dưới chỉ áp dụng khi audit/khôi phục
-legacy; nếu mâu thuẫn về WP hiện tại, stanza TRANSITION này thắng.
+R0-WP1 (đóng băng engine cũ) đã xong. File này **là** cutover R0-WP2 — không làm
+lại R0-WP1 hay R0-WP2. **WP sản phẩm đầu tiên của agent mới là R0-WP3** (pin
+Godot/toolchain; tạo `godot/` và `bridge/`). Coordinator tick checkbox / cập nhật
+`CURRENT_VALID_WP`; agent sản phẩm không đợi và không tự tick.
 
-Bạn là AI agent triển khai sản phẩm. Repo này CHƯA có code sản phẩm cho đến khi
-bạn (hoặc agent khác) làm work package. Mục tiêu: IDE làm game AI-native,
-2D hoàn thiện (M-1 → M9). Không đụng mạng xã hội Hoan Hao.
+Không làm WP-M6/M7/M8 của engine cũ. Không xóa code/asset/crate/game cũ. Không
+fork Godot C++. Không đụng mạng xã hội Hoan Hao. Không tải/pin Godot và không
+tạo `godot/` hay `bridge/` trước R0-WP3.
 
 ## Đọc theo thứ tự này — không nhảy cóc
 
 1. File này (`AGENTS.md`).
-2. `zdocs/16-8-game-studio-execution-plan-cho-ai-agent.txt` — **Phần A**
-   (giao thức), rồi **WP chưa tick đầu tiên** ở Phần B/C/E.
-3. Chỉ những mục SPEC được WP trỏ tới trong
-   `zdocs/16-8-game-studio-ai-native-ide-2d-first-master-plan.txt`.
-4. Làm đúng WP đó. Không tự mở WP sau, không tự thêm ngôn ngữ/framework.
+2. `zdocs/20-8-godot-agent-autopilot-plan.txt` — bảng tổng quan đầu file, rồi WP
+   chưa tick đầu tiên có dependency xanh **sau R0-WP2**. Đó là **R0-WP3**.
+3. Chỉ các invariant/mục mà WP đó trỏ tới (A1–A20 và mục SPEC trong cùng file
+   20-8). Không tự mở milestone xa.
 
-SPEC (master plan) = WHAT/WHY. Execution plan = THỨ TỰ + VERIFY + TIẾN ĐỘ.
-Xung đột: SPEC thắng. Viết đề xuất vào `docs/DECISIONS.md` rồi **STOP**,
-báo người — không sửa spec ngầm.
+Plan 20-8 gộp WHAT/WHY + thứ tự + verify + tiến độ. Xung đột với chat, README,
+hay file 16-8: plan 20-8 thắng. Đề xuất lệch spec ghi `docs/DECISIONS.md` rồi
+STOP — không sửa spec ngầm.
 
-## Bất biến (vi phạm = reject PR) — chi tiết I1–I13 ở master 0.3
+Hai file `zdocs/16-8-game-studio-*.txt` là **LEGACY / NON-AUTHORITATIVE**
+(`AUTHORITATIVE_PLAN=0`). Chỉ dùng khi audit, khôi phục tree archive
+(`legacy-rust-engine-2026-08-20`), hoặc đọc lịch sử. Không lấy WP mới từ Phần
+A/B/C/E của chúng. Không theo 16-8 làm nguồn WP tiếp theo.
+
+## Không làm
+
+- Không mở WP `gs-*` / Cargo sản phẩm mới. `cargo fmt` / `clippy` / `test` chỉ
+  khi audit hoặc khôi phục legacy.
+- Không tick checkbox trong plan 20-8 trừ coordinator sau DoD thật.
+- Không xóa/move hàng loạt crates, games, hay engine cũ.
+- Không fork Godot; không pin binary Godot ngoài R0-WP3.
+
+## Bất biến sống — A1–A20 (plan 20-8 §3)
+
+Vi phạm = không merge / không tick WP. Đọc đầy đủ trong plan 20-8 mục 3; không
+dùng I1–I13 cho WP Godot.
+
+- A1: Godot stock; không sửa C++ khi Gate GX chưa được người tick.
+- A2–A6: mutation semantic + UndoRedo/atomic write + `command_id` + postcondition.
+- A7–A9: object Godot trên main thread; path dưới project root; loopback + token;
+  không log secret.
+- A10–A14: checkpoint trước destructive; Play là runtime riêng; Pause ưu tiên.
+- A15–A20: không rewrite Git phá huỷ; pin version/hash; một writer mỗi file;
+  GDScript typed; tick WP chỉ sau Verify + DoD + LOG.
+
+## Bất biến legacy I1–I13 (engine Rust — chỉ audit/khôi phục)
+
+Áp dụng khi đọc/sửa tree đóng băng, không khi làm WP Godot. Chi tiết master 16-8
+mục 0.3.
 
 - I1: 100% mutation document qua CommandDispatcher. View-state UI miễn.
 - I2: validate → WAL (full command+inverse) → FLUSH → apply → ACK.
@@ -45,25 +73,21 @@ báo người — không sửa spec ngầm.
 - I12: capability + pause + confirmation một lần (bind actor/hash/revision).
 - I13: số hiệu năng là mục tiêu — chỉ viện dẫn sau khi benchmark trong repo.
 
-## Verify chuẩn (mỗi WP, trừ khi WP ghi khác)
+## Verify
 
-```
-cargo fmt --check
-cargo clippy --all-targets -- -D warnings
-cargo test --workspace
-```
+Mỗi WP dùng verify ghi trong chính WP đó và plan 20-8 §7.3 (sidecar npm / Godot
+headless / E2E). Không lấy `cargo test --workspace` làm verify mặc định cho WP
+Godot.
 
-E2E smoke (từ M0 khi có CLI): phiên master 10.2. Bằng chứng dán vào ô LOG của WP.
+R0-WP2: `python tests/bootstrap/test_authoritative_plan.py` (exit 0).
 
-## STOP — dừng, không tự quyết
+## STOP
 
-Gate G1, G3–G6 (G2 đã resolved); spike M-1a fail (fallback Bevy); cần lệch spec;
-acceptance fail 2 lần;
-cần người (API key, review, cắt scope). Xem execution plan Phần A.
+S1–S7 và gate G0–G6/GX: plan 20-8 §7.5–7.6. Chỉ hỏi người ở E1–E4 (secret, tiền,
+ký/publish, đổi mục tiêu lớn).
 
 ## Tiến độ & commit
 
-- Tick `[x]` WP trong execution plan Phần E + ngày. Milestone xong: tick thêm
-  bảng 0.1 master plan.
-- Commit: `M<x>-WP<n>: <mô tả ngắn>` (vd `M-1-WP-a: renderer 3-target spike`).
-- Code ở **root repo** (Cargo.toml ở gốc). `gamestudio/` trong spec = root này.
+- Checkbox tiến độ chỉ trong `zdocs/20-8-godot-agent-autopilot-plan.txt`.
+- Commit: `R<n>-WP<n>: <mô tả ngắn>` (vd `R0-WP3: pin Godot 4.7.1-stable`).
+- Layout đích: plan 20-8 §4.1. `godot/` và `bridge/` thuộc R0-WP3.
