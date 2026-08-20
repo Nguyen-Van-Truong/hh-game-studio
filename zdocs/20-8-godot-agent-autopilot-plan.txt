@@ -1,6 +1,6 @@
 AUTHORITATIVE_PLAN=1
 STATUS=ACTIVE
-CURRENT_VALID_WP=R0-WP4
+CURRENT_VALID_WP=R1-WP1
 
 ================================================================================
 BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
@@ -8,7 +8,7 @@ BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
 
 | Thứ tự | Milestone | Kết quả bắt buộc | Track có thể chạy song song | Gate | Trạng thái |
 |--------|-----------|------------------|-----------------------------|------|------------|
-| 0 | R0 — Cutover an toàn | Đóng băng engine Rust cũ, pin Godot, đổi bootstrap sang plan này, không mất lịch sử | Governance + Toolchain | G0 | [ ] 3/4 WP |
+| 0 | R0 — Cutover an toàn | Đóng băng engine Rust cũ, pin Godot, đổi bootstrap sang plan này, không mất lịch sử | Governance + Toolchain | G0 | [x] 4/4 WP |
 | 1 | R1 — Spike và chọn nền MCP | Chứng minh agent tạo/sửa/chạy/nhìn một scene thật trong editor; chốt upstream hay tự làm | Research + Security + POC | G1 NO-FORK | [ ] 0/5 WP |
 | 2 | R2 — Control plane | Plugin, sidecar, Agent Host, MCP, auth, registry, ledger, pause và OWNER_AUTOPILOT hoạt động | Bridge + Plugin + Security | — | [ ] 0/7 WP |
 | 3 | R3 — Quyền editor ngữ nghĩa | Scene/node/property/resource/script/asset/project settings có undo, dedup và postcondition | Scene + Script + Asset | — | [ ] 0/8 WP |
@@ -24,7 +24,7 @@ VIỆC PHẢI LÀM TRƯỚC: R0-WP1 → R0-WP2 → R0-WP3 → R0-WP4 → R1-WP1.
 Không được bắt đầu R2
 trước G1. Từ R2 trở đi chỉ song song các track có ranh giới file rõ ràng.
 
-Tiến độ tổng: [ ] 3/60 WP. First valid WP: R0-WP4.
+Tiến độ tổng: [ ] 4/60 WP. First valid WP: R1-WP1.
 Ngày lập: 20-8-2026 (Asia/Saigon).
 
 ================================================================================
@@ -724,7 +724,7 @@ R0-WP3 — Pin Godot/toolchain và tạo workspace mới                     [x]
       Gaps: doctor does not install Node 24.19.0 — waived for R0-WP4; track for sidecar R2.
       Commit: ac62b42 R0-WP3: pin Godot 4.7.1-stable toolchain
 
-R0-WP4 — Charter, policy và threat model baseline                     [ ]
+R0-WP4 — Charter, policy và threat model baseline                     [x] 20-8-2026
   Phụ thuộc: R0-WP3.
   Track/file: Security/Product; PROJECT_BRIEF.template.md,
               .hh-agent/policy.example.toml, docs/godot-agent/THREAT_MODEL.md.
@@ -737,7 +737,26 @@ R0-WP4 — Charter, policy và threat model baseline                     [ ]
     - license/SBOM baseline cho Godot và các MCP candidate.
   Verify: invalid policy/path/secret fixture bị validator từ chối; no secret in Git scan.
   DoD: security boundary rõ trước khi bật plugin của bên thứ ba.
-  LOG: (trống)
+  LOG:
+    LOG 2026-08-20 10:37 Asia/Saigon — agent=coordinator
+      Base: ebe40e7, Godot=4.7.1.stable.official.a13da4feb, schema=hh-godot-agent-policy/1
+      Files/leases: PROJECT_BRIEF.template.md, .hh-agent/policy.example.toml,
+        docs/godot-agent/{README,THREAT_MODEL,SBOM_BASELINE}.md,
+        tools/godot/policy_validate.py, tests/bootstrap/policy/, tests/bootstrap/test_policy.py,
+        tests/bootstrap/test_no_secrets.py
+      Verify: python tools/godot/policy_validate.py --self-test → 0;
+        python tests/bootstrap/test_policy.py → 0;
+        python tests/bootstrap/test_no_secrets.py → 0;
+        fail_*.toml (dotdot/absolute/shell/secret/addon_jail) → 1
+      E2E/artifacts: b5f4983 charter; 7eae6f6 deny plugin-project/addons;
+        49bb80b alias/canonicalize; aa0119b Win32 trailing-dot; 522c252 NTFS stream
+      Critic: PASS-WITH-GAPS (47a65e10). P0 none. Closed P1: addon host deny, PAT skip-list,
+        res://./ // case, trailing-dot, ::$INDEX_ALLOCATION. No new validator-PASS write
+        into godot/plugin-project/addons/<mcp>/.
+      Gaps: P2 paper flags (symlink/junction/device/max_path), process names not hashes,
+        optional [pause], secret detector prefix-only, parent allow+child deny,
+        GetFullPathNameW runtime jail = R2-WP5. Do not enable third-party MCP in R1.
+      Commit: b5f4983 R0-WP4: charter policy and threat model
 
 --------------------------------------------------------------------------------
 R1 — SPIKE, MCP BAKE-OFF VÀ GATE NO-FORK (5 WP)
@@ -1718,14 +1737,15 @@ thuận nếu ảnh hưởng G5/G6.
 14. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Hiện tại R0-WP1..R0-WP3 đã xong. Agent tiếp theo làm **R0-WP4**.
+Hiện tại R0 đã xong (4/4). Agent tiếp theo làm **R1-WP1**.
 KHÔNG nhảy plugin/MCP (R2, khóa đến G1), KHÔNG M6, KHÔNG fork Godot.
 
 Lệnh hợp lệ:
 
-  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R0-WP4`);
-  2) R0-WP4: PROJECT_BRIEF.template, policy.example, THREAT_MODEL, validator;
+  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R1-WP1`);
+  2) R1-WP1: docs/godot-agent/CAPABILITY_MATRIX.md (≥100 workflow, R8 traces);
   3) mở editor fixture: `hh-godot-editor.bat` (Godot 4.7.1-stable pin).
+  4) không enable MCP plugin trong plugin-project.
 
 Không được tự xóa engine/code/game/asset cũ. Không được tự fork Godot. Không yêu cầu
 người click editor trong happy path. Mục tiêu cuối là: người giao brief, xem agent làm,
