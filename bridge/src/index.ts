@@ -1,7 +1,7 @@
-/** Sidecar entry. R2-WP1 is the action registry — not a live MCP server. */
+/** Sidecar entry. Transport + registry. Editor mutations are not dispatched. */
 
 export const BRIDGE_PACKAGE = "hh-godot-bridge" as const;
-export const BRIDGE_STATUS = "registry" as const;
+export const BRIDGE_STATUS = "session-transport" as const;
 
 export function bridgeVersion(): string {
   return "0.0.0";
@@ -31,3 +31,8 @@ export {
   VARIANT_SCHEMA_VERSION,
 } from "./registry/types.js";
 export { decodeVariant } from "./registry/variant.js";
+export { startSidecar } from "./session/session.js";
+export { generateSessionToken } from "./session/token.js";
+export { listenLoopback, listenExplicit } from "./transport/loopback.js";
+export { startMcpStdio } from "./transport/mcp_stdio.js";
+export { runSessionDoctor } from "./doctor/doctor.js";

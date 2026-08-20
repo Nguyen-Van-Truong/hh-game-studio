@@ -1,8 +1,10 @@
-# Godot agent protocol (R2-WP1)
+# Godot agent protocol (R2-WP1 + R2-WP2)
 
-This is the in-house command contract. The sidecar process is **not** a live
-MCP server in this work package: `bridge/` exposes a typed **registry** and
-code generator only. Transport, token, and listen land in a later WP.
+This is the in-house command contract. R2-WP1 is the typed **registry**.
+R2-WP2 adds sidecar **session transport**: agent-facing MCP on **stdio**
+(newline JSON-RPC) and plugin-facing WebSocket on **127.0.0.1** with an
+OS-assigned port. Registry tools are listed but **not dispatched** — they
+return `E_UNVERIFIED`, never a live Godot `{ok:true}` mutation.
 
 ## Versions
 
@@ -104,5 +106,9 @@ trees must not grow `MCPGameBridge`, `godot_mcp`, `call_method`,
 `bridge/src/` (even comments). This file is the reject note; the registry
 does not implement them.
 
-No `@modelcontextprotocol/sdk` runtime dependency. Validation uses the stdlib
-walker in `bridge/src/registry/schema.ts`.
+Stdio MCP is an in-house JSON-RPC speaker. The official SDK is allowed only as
+an exact pin if added later; this tree does not depend on it (the 1.30 line
+pulls HTTP/SSE stacks this WP must not expose). Validation uses the stdlib
+walker in `bridge/src/registry/schema.ts`. Session token lives only under
+`%LOCALAPPDATA%/HHGodotAgent/` (current-user ACL), never in the git project,
+`.godot/`, `.hh-agent/`, or logs.

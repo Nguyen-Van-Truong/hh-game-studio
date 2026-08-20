@@ -14,6 +14,11 @@ export const E = {
   E_INVALID_VARIANT: "E_INVALID_VARIANT",
   E_INVALID_ENVELOPE: "E_INVALID_ENVELOPE",
   E_UNVERIFIED: "E_UNVERIFIED",
+  E_AUTH: "E_AUTH",
+  E_BIND: "E_BIND",
+  E_PROJECT_MISMATCH: "E_PROJECT_MISMATCH",
+  E_PATH: "E_PATH",
+  E_BUSY: "E_BUSY",
 } as const;
 
 export type ErrorCode = (typeof E)[keyof typeof E];

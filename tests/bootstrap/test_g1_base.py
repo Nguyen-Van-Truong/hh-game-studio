@@ -14,7 +14,8 @@ Fails (exit != 0) if:
   - any third_party/mcp-staging/*/PIN.json lacks g1=never-enable
   - implementer ticked R1-WP5 or G1 NO-FORK, or CURRENT_VALID_WP is not R1-WP5
   - Godot pin in lock != 4.7.1.stable.official.a13da4feb
-  - bridge/package.json gains MCP / godot-mcp
+  - bridge/package.json gains godot-mcp or a caret-ranged MCP SDK
+    (exact-pinned @modelcontextprotocol/sdk is the only extra MCP dep allowed)
 
 This test still does **not** run Godot or `npm ci`. If offline npm is not
 cached, that is a GAP — do not download godot-mcp.
@@ -646,13 +647,28 @@ def main() -> int:
             deps.update(pkg["dependencies"])
         if isinstance(pkg.get("devDependencies"), dict):
             deps.update(pkg["devDependencies"])
-        allowed = {"typescript", "@types/node"}
+        allowed = {"typescript", "@types/node", "@modelcontextprotocol/sdk"}
         extra = set(deps) - allowed
         if extra:
             errors.append(f"{rel(BRIDGE_PKG)} added unexpected deps this WP: {sorted(extra)}")
         blob = json.dumps(pkg)
-        if "modelcontextprotocol" in blob or "satelliteoflove" in blob.lower():
-            errors.append(f"{rel(BRIDGE_PKG)} must not add MCP SDK / godot-mcp this WP")
+        sdk_ver = deps.get("@modelcontextprotocol/sdk")
+        if sdk_ver is not None:
+            if not isinstance(sdk_ver, str) or not re.fullmatch(r"\d+\.\d+\.\d+", sdk_ver):
+                errors.append(
+                    f"{rel(BRIDGE_PKG)} @modelcontextprotocol/sdk must be an exact x.y.z pin (no caret)"
+                )
+            pinned = (
+                lock.get("bridge_npm", {}).get("packages", {}).get("@modelcontextprotocol/sdk")
+                if isinstance(lock.get("bridge_npm"), dict)
+                else None
+            )
+            if not isinstance(pinned, dict) or not pinned.get("integrity"):
+                errors.append(
+                    f"{rel(LOCK)} missing bridge_npm.packages.@modelcontextprotocol/sdk.integrity"
+                )
+        if "satelliteoflove" in blob.lower():
+            errors.append(f"{rel(BRIDGE_PKG)} must not add satelliteoflove packages")
         if "godot-mcp" in blob.lower():
             errors.append(f"{rel(BRIDGE_PKG)} must not add godot-mcp this WP")
 

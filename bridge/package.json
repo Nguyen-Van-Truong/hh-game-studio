@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "HH Godot Agent sidecar. Action registry and generated contracts (not a live MCP server).",
+  "description": "HH Godot Agent sidecar. Action registry plus stdio MCP and loopback session transport.",
   "engines": {
     "node": "24.19.0"
   },
