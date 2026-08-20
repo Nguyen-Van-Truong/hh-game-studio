@@ -128,7 +128,33 @@ def main() -> int:
                     f"{side} {step} claims PASS for eval/shell without noting it was disabled"
                 )
 
-    # Capability rows must not celebrate a live exec/callv.
+    screenshot_row = parsed.get("screenshot")
+    if screenshot_row:
+        for line in text.splitlines():
+            match = ROW_RE.match(line.strip())
+            if not match or match.group("step") != "screenshot":
+                continue
+            for side, status_key, ev_key in (
+                ("A", "a_status", "a_ev"),
+                ("C", "c_status", "c_ev"),
+            ):
+                if match.group(status_key) != "PASS":
+                    continue
+                ev = match.group(ev_key).strip()
+                png = REPO_ROOT / ev.replace("\\", "/") if ev.endswith(".png") else None
+                if png is None or not png.is_file() or png.stat().st_size < 2048:
+                    errors.append(
+                        f"{side} screenshot PASS requires a PNG >= 2048 bytes "
+                        "(dummy gray is SKIP)"
+                    )
+
+    undo_a = parsed.get("undo", {}).get("A")
+    undo_c = parsed.get("undo", {}).get("C")
+    if undo_a == "FAIL" and undo_c == "FAIL":
+        if re.search(r"C lead[^\n]*\+\s*UndoRedo", text):
+            errors.append(
+                "ranking must not claim C wins on UndoRedo when both undo rows are FAIL"
+            )
     for step in ("unsupported_eval_or_callv",):
         if step not in parsed:
             continue

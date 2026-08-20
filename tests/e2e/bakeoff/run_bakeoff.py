@@ -929,12 +929,7 @@ def run_a(book: Book, client: CandidateA, evidence_dir: Path, project: Path) -> 
                 "A-game-small.png",
                 str((shot.get("result") or {})["image_base64"]),
             )
-            book.set(
-                "screenshot",
-                "PASS",
-                "game screenshot PNG (headless dummy renderer is often a blank gray frame, not editor-visible)",
-                saved_path or snippet(shot),
-            )
+            record_screenshot(book, saved_path)
         else:
             ed = client.call("capture_editor_screenshot", {"viewport": "2d", "max_width": 320}, timeout=20.0)
             if a_ok(ed) and (ed.get("result") or {}).get("image_base64"):
@@ -943,7 +938,7 @@ def run_a(book: Book, client: CandidateA, evidence_dir: Path, project: Path) -> 
                     "A-editor-small.png",
                     str((ed.get("result") or {})["image_base64"]),
                 )
-                book.set("screenshot", "PASS", "editor viewport screenshot", saved_path or snippet(ed))
+                record_screenshot(book, saved_path)
             else:
                 book.set(
                     "screenshot",
@@ -973,7 +968,7 @@ def run_a(book: Book, client: CandidateA, evidence_dir: Path, project: Path) -> 
                 "A-editor-small.png",
                 str((ed.get("result") or {})["image_base64"]),
             )
-            book.set("screenshot", "PASS", "editor screenshot without play", saved_path or "")
+            record_screenshot(book, saved_path)
         logs = client.call("get_log_messages", {"limit": 20})
         if a_ok(logs):
             book.set("log", "PASS", "get_log_messages without play", snippet(logs))
@@ -1074,6 +1069,30 @@ def save_png(evidence_dir: Path, name: str, b64: str) -> str:
         encoding="utf-8",
     )
     return rel(note)
+
+
+MIN_VISIBLE_PNG = 2048
+
+
+def classify_screenshot(saved_rel: str) -> tuple[str, str]:
+    """Blank dummy frames (headless ~619 B gray) are SKIP, not PASS."""
+    if not saved_rel or saved_rel.endswith(".txt"):
+        return "SKIP", "no PNG bytes (not editor-visible)"
+    path = REPO / saved_rel.replace("\\", "/")
+    if not path.is_file():
+        return "SKIP", f"missing {saved_rel} (not editor-visible)"
+    size = path.stat().st_size
+    if size < MIN_VISIBLE_PNG:
+        return (
+            "SKIP",
+            f"{saved_rel} is {size} bytes dummy/blank (not editor-visible)",
+        )
+    return "PASS", f"{saved_rel} ({size} bytes, treated as visible)"
+
+
+def record_screenshot(book: Book, saved_rel: str) -> None:
+    status, notes = classify_screenshot(saved_rel)
+    book.set("screenshot", status, notes, saved_rel)
 
 
 def wait_c(client: CandidateC, cond: str, seconds: float = 20.0) -> dict[str, Any]:
@@ -1328,12 +1347,7 @@ def run_c(book: Book, client: CandidateC, evidence_dir: Path) -> None:
         b64 = mcp_image_b64(shot)
         if c_ok(shot) and not c_handler_error(shot) and b64:
             saved_path = save_png(evidence_dir, "C-game-small.png", b64)
-            book.set(
-                "screenshot",
-                "PASS",
-                "screenshot target=game (headless dummy renderer may be blank)",
-                saved_path or snippet(shot),
-            )
+            record_screenshot(book, saved_path)
         elif c_ok(shot) and not c_handler_error(shot):
             note_path = EVIDENCE_COMMIT / "C-screenshot.txt"
             note_path.write_text(
@@ -1341,15 +1355,25 @@ def run_c(book: Book, client: CandidateC, evidence_dir: Path) -> None:
                 f"{snippet(shot)}\n",
                 encoding="utf-8",
             )
-            book.set("screenshot", "PASS", "screenshot target=game (no inline PNG extracted)", rel(note_path))
+            book.set(
+                "screenshot",
+                "SKIP",
+                "screenshot tool returned success but no inline PNG (not editor-visible)",
+                rel(note_path),
+            )
         else:
             ed = client.call_tool("screenshot", {"target": "editor", "max_dim": 320}, timeout=20.0)
             b64e = mcp_image_b64(ed)
             if b64e:
                 saved_path = save_png(evidence_dir, "C-editor-small.png", b64e)
-                book.set("screenshot", "PASS", "screenshot target=editor", saved_path or "")
+                record_screenshot(book, saved_path)
             elif c_ok(ed) and not c_handler_error(ed):
-                book.set("screenshot", "PASS", "screenshot target=editor", snippet(ed))
+                book.set(
+                    "screenshot",
+                    "SKIP",
+                    "screenshot target=editor with no PNG bytes (not editor-visible)",
+                    snippet(ed),
+                )
             else:
                 book.set(
                     "screenshot",
@@ -1567,7 +1591,8 @@ def write_scorecard(books: dict[str, Book], extras: dict[str, Any]) -> None:
         f"Row counts: A {counts(a)}; C {counts(c)}.",
         "",
         f"**Ranking: {winner}** (higher weighted score). "
-        "A lead, if any, is usually runtime/select; C lead, if any, is scene CRUD + UndoRedo + script validate.",
+        "A lead, if any, is runtime/select. C lead, if any, is scene CRUD + script validate. "
+        "Agent-driven undo/redo is FAIL for both (internal EditorUndoRedoManager is not scored).",
         "",
         "## Maintainability notes",
         "",

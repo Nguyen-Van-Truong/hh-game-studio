@@ -30,10 +30,9 @@ G1 must not ship either shortlist candidate as-is.
 
 **Fail-hard bake-off / eliminated from R1-WP3:** B KeeVeeG; D Sods2; Beckett **Full** (commercial, E2).
 
-R1-WP3 may bake-off A and C on disposable copies with eval/`call_method` disabled
+R1-WP3 ran A and C on disposable copies with eval/`call_method` disabled
 and token required. G1 (R1-WP5) must not vendor either as-is. Fallback remains
-“write the minimal sidecar + plugin ourselves” if bake-off cannot close the
-MUST-PATCH rows.
+“write the minimal sidecar + plugin ourselves” if MUST-PATCH rows stay open.
 
 Do **not** run `npx` with `-y` against a floating `latest` tag, and do not
 install `@satelliteoflove/godot-mcp` via unpinned `npx` (A16 / T5). Pin the SHA below.
@@ -62,7 +61,8 @@ install `@satelliteoflove/godot-mcp` via unpinned `npx` (A16 / T5). Pin the SHA 
 ### Godot version vs 4.7.1-stable
 
 Claim: **Godot 4.5+** (Logger / `OS.add_logger`). Compatible with **4.7.1-stable**.
-Not tested in *this* repo. Upstream CI is Node 20 unit/protocol tests, not Godot 4.7.1.
+R1-WP3 handshake on this pin returned `godot_version: 4.7.1-stable (official)`.
+Upstream CI is still Node 20 unit/protocol tests, not a Godot 4.7.1 editor suite.
 
 ### Contributors / release / CI
 

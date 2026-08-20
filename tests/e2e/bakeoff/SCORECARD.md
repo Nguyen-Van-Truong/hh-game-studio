@@ -29,7 +29,7 @@ Driver: `tests/e2e/bakeoff/run_bakeoff.py`. Mode: headless. Eval/`godot_exec`/`c
 | play | PASS | {"id": "23", "result": {"frozen": true}, "status": "success"} | run_project frozen=true | PASS | {"id": 27, "jsonrpc": "2.0", "result": {"content": [{"text": "playing res://main.tscn", "type":… | play_scene main.tscn |
 | stop | PASS | {"id": "27", "result": {}, "status": "success"} | stop_project | PASS | {"id": 35, "jsonrpc": "2.0", "result": {"content": [{"text": "stopped", "type": "text"}], "isEr… | stop_scene |
 | log | PASS | {"id": "26", "result": {"cursor": 0, "match_count": 0, "messages": [], "returned_count": 0, "to… | get_log_messages | PASS | {"id": 31, "jsonrpc": "2.0", "result": {"content": [{"text": "[user://logs/godot.log] 1/1 lines… | logs_read |
-| screenshot | PASS | tests/e2e/bakeoff/evidence/A-game-small.png | game screenshot PNG (headless dummy renderer is often a blank gray frame, not editor-visible) | PASS | tests/e2e/bakeoff/evidence/C-game-small.png | screenshot target=game (headless dummy renderer may be blank) |
+| screenshot | SKIP | tests/e2e/bakeoff/evidence/A-game-small.png | 619-byte dummy gray PNG (not editor-visible) | SKIP | tests/e2e/bakeoff/evidence/C-game-small.png | 619-byte dummy gray PNG (not editor-visible) |
 | runtime_state | FAIL | {"error": {"code": "TIMEOUT", "message": "Timed out waiting for get_runtime_state response"}, "… | runtime digest failed (game/debug session may be missing in headless) | PASS | {"tree": {"id": 32, "jsonrpc": "2.0", "result": {"content": [{"text": "{\"node_count\":3.0,\"tr… | get_remote_tree and/or runtime_get_property |
 | select_focus | PASS | {"sel": {"id": "28", "result": {}, "status": "success"}, "got": {"id": "29", "result": {"select… | select_node + get_selected_nodes readback (headless: Inspector not shown to a human) | FAIL | {"create": {"id": 12, "jsonrpc": "2.0", "result": {"content": [{"text": "created Node2D 'ChildA… | dock/activity focus hint on create_node, but no EditorInterface.select tool so a human Inspecto… |
 | retry_restart | PASS | {"id": "33", "result": {"restarting": true, "save": false}, "status": "success"} | restart_editor ACK (spike evidence, not a production ledger) | SKIP | {"error": {"code": -32602, "message": "Unknown tool: restart_editor"}, "id": 37, "jsonrpc": "2.… | no editor restart MCP tool on Lite (spike gap, not a ledger) |
@@ -43,16 +43,16 @@ Driver: `tests/e2e/bakeoff/run_bakeoff.py`. Mode: headless. Eval/`godot_exec`/`c
 | Criterion | Weight | A | C |
 |-----------|--------|---|---|
 | correctness | 5 | 1.92 | 5.0 |
-| self_verify | 5 | 4.0 | 4.0 |
+| self_verify | 5 | 3.0 | 3.0 |
 | undo | 4 | 0.0 | 0.0 |
 | security | 4 | 5.0 | 5.0 |
 | maintainability | 3 | 3.0 | 4.0 |
 | godot_471 | 3 | 5.0 | 5.0 |
-| **weighted total** | | **3.067** | **3.833** |
+| **weighted total** | | **2.858** | **3.625** |
 
-Row counts: A PASS 16 / FAIL 11 / SKIP 0; C PASS 23 / FAIL 3 / SKIP 1.
+Row counts: A PASS 15 / FAIL 11 / SKIP 1; C PASS 22 / FAIL 3 / SKIP 2.
 
-**Ranking: C** (higher weighted score). A lead, if any, is usually runtime/select; C lead, if any, is scene CRUD + UndoRedo + script validate.
+**Ranking: C** (higher weighted score). A lead, if any, is runtime/select. C lead, if any, is scene CRUD + script validate. Agent-driven undo/redo is FAIL for both (internal EditorUndoRedoManager is not scored).
 
 ## Maintainability notes
 
