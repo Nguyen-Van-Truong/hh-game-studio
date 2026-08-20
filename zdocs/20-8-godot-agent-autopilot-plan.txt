@@ -1,6 +1,6 @@
 AUTHORITATIVE_PLAN=1
 STATUS=APPROVED_TRANSITION
-CURRENT_VALID_WP=R0-WP1
+CURRENT_VALID_WP=R0-WP2
 
 ================================================================================
 BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
@@ -8,7 +8,7 @@ BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
 
 | Thứ tự | Milestone | Kết quả bắt buộc | Track có thể chạy song song | Gate | Trạng thái |
 |--------|-----------|------------------|-----------------------------|------|------------|
-| 0 | R0 — Cutover an toàn | Đóng băng engine Rust cũ, pin Godot, đổi bootstrap sang plan này, không mất lịch sử | Governance + Toolchain | G0 | [ ] 0/4 WP |
+| 0 | R0 — Cutover an toàn | Đóng băng engine Rust cũ, pin Godot, đổi bootstrap sang plan này, không mất lịch sử | Governance + Toolchain | G0 | [ ] 1/4 WP |
 | 1 | R1 — Spike và chọn nền MCP | Chứng minh agent tạo/sửa/chạy/nhìn một scene thật trong editor; chốt upstream hay tự làm | Research + Security + POC | G1 NO-FORK | [ ] 0/5 WP |
 | 2 | R2 — Control plane | Plugin, sidecar, Agent Host, MCP, auth, registry, ledger, pause và OWNER_AUTOPILOT hoạt động | Bridge + Plugin + Security | — | [ ] 0/7 WP |
 | 3 | R3 — Quyền editor ngữ nghĩa | Scene/node/property/resource/script/asset/project settings có undo, dedup và postcondition | Scene + Script + Asset | — | [ ] 0/8 WP |
@@ -24,7 +24,7 @@ VIỆC PHẢI LÀM TRƯỚC: R0-WP1 → R0-WP2 → R0-WP3 → R0-WP4 → R1-WP1.
 Không được bắt đầu R2
 trước G1. Từ R2 trở đi chỉ song song các track có ranh giới file rõ ràng.
 
-Tiến độ tổng: [ ] 0/60 WP. First valid WP: R0-WP1.
+Tiến độ tổng: [ ] 1/60 WP. First valid WP: R0-WP2.
 Ngày lập: 20-8-2026 (Asia/Saigon).
 
 ================================================================================
@@ -640,7 +640,7 @@ single-writer queue dù code được viết song song.
 R0 — CUTOVER AN TOÀN VÀ PIN NỀN (4 WP)
 --------------------------------------------------------------------------------
 
-R0-WP1 — Ghi quyết định và đóng băng engine cũ                         [ ]
+R0-WP1 — Ghi quyết định và đóng băng engine cũ                         [x] 20-8-2026
   Phụ thuộc: G0.
   Track/file: Governance; docs/DECISIONS.md, legacy/README.md, Git tag/branch.
   Làm:
@@ -657,7 +657,22 @@ R0-WP1 — Ghi quyết định và đóng băng engine cũ                      
     - tag tree không chứa plan/reboot diff phát sinh sau base; `git status` không mất file;
       inventory/patch hash có kết quả.
   DoD: có đường phục hồi nguyên trạng; quyết định không còn là chat-only.
-  LOG: (trống)
+  LOG:
+    LOG 2026-08-20 09:09 Asia/Saigon — agent=coordinator
+      Base: 698e6088cc6d2c0a9a7b74021de409d46e5971aa, Godot=n/a, schema=n/a
+      Files/leases: tag legacy-rust-engine-2026-08-20, branch archive/legacy-rust-engine-2026-08-20,
+        docs/DECISIONS.md, legacy/README.md, legacy/reboot-worktree.patch, legacy/R0-WP1-CRITIC.md
+      Verify: git fsck exit 0 (dangling tree 288378fc, not a recovery blocker);
+        tag^{} and archive branch == 698e6088cc6d2c0a9a7b74021de409d46e5971aa != WP1 7cf0a26;
+        tagged tree 354 files, crates=187 games=56, both 16-8 plans present, 20-8 plan absent, legacy/ absent;
+        tagged AGENTS.md has no TRANSITION; tagged DECISIONS.md has no GODOT-REBOOT
+      E2E/artifacts: WP1 commit 7cf0a26846cf995c27e2dcaaff24547fdfdae80c allowlist 3 files;
+        DECISIONS blob SHA-256 LF 3d2699f6…; tagged DECISIONS blob 267bd5de…;
+        recover via git worktree add … legacy-rust-engine-2026-08-20
+      Critic: PASS-WITH-GAPS. P0 none. P1 repaired: blob hashes in README.
+        Unsigned tag waived (spec không đòi GPG). 50e06934 is user leftover-docs commit, NOT R0-WP2.
+      Gaps: named freeze refs may still be local until push; 4.7.2-stable exists (plan §12 stale) — R0-WP3.
+      Commit: 7cf0a26 R0-WP1: archive rust engine freeze (+ this closeout)
 
 R0-WP2 — Cutover bootstrap cho agent mới                              [ ]
   Phụ thuộc: R0-WP1.
