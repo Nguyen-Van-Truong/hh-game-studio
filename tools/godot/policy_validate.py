@@ -108,6 +108,9 @@ JAIL_ATTACK_ALLOWS = (
     "godot/plugin-project/addons./godot-mcp/",
     "godot/plugin-project./addons/godot-mcp/",
     "godot/plugin-project/addons.../godot-mcp/",
+    "godot/plugin-project/addons::$INDEX_ALLOCATION/godot-mcp/",
+    "godot/plugin-project::$INDEX_ALLOCATION/addons/godot-mcp/",
+    "godot::$INDEX_ALLOCATION/plugin-project/addons/godot-mcp/",
 )
 
 
@@ -142,10 +145,20 @@ def is_os_absolute(s: str) -> bool:
 
 
 def win32_component(part: str) -> str:
-    """Win32 strips trailing dots and spaces from a path segment (not '.' / '..')."""
+    """Win32: strip NTFS stream suffix and trailing dots/spaces (not '.' / '..')."""
     if part in (".", ".."):
         return part
+    if ":" in part:
+        part = part.split(":", 1)[0]
     return part.rstrip(" .")
+
+
+def has_ntfs_stream(s: str) -> bool:
+    """Colon after a res:// scheme is an NTFS stream, not a POSIX path."""
+    raw = posixish(s.strip())
+    if raw.lower().startswith("res://"):
+        raw = raw[6:]
+    return any(":" in part for part in raw.replace("\\", "/").split("/"))
 
 
 def collapse_posix(s: str) -> str:
@@ -418,6 +431,10 @@ def validate_policy_text(text: str, source: str = "<policy>") -> list[str]:
         label = ".".join(keys) if keys else "path"
         if has_dotdot(value):
             errors.append(f"E_PATH_DOTDOT: {source}: {label} contains '..': {value!r}")
+        if has_ntfs_stream(value):
+            errors.append(
+                f"E_PATH_STREAM: {source}: {label} has an NTFS stream suffix: {value!r}"
+            )
         if is_os_absolute(value) and not abs_allowlisted(value):
             errors.append(
                 f"E_PATH_ABSOLUTE: {source}: {label} is absolute outside "
@@ -480,7 +497,10 @@ def self_test() -> int:
             synth_jail = validate_policy_text(
                 mutated_allow, f"<jail-attack:{attack}>"
             )
-            if not any(e.startswith("E_ADDON_JAIL:") for e in synth_jail):
+            if not any(
+                e.startswith("E_ADDON_JAIL:") or e.startswith("E_PATH_STREAM:")
+                for e in synth_jail
+            ):
                 errors.append(
                     f"jail attack allow {attack!r} was not rejected: {synth_jail}"
                 )

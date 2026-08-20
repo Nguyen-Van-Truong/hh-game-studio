@@ -60,8 +60,8 @@ or calls into the hh_agent plugin.
   `godot/plugin-project/addons/**` (same host on disk), `addons/hh_agent/**`,
   `.hh-agent/policy.toml`, capability-lock, or the ledger (§6.4).
   `allow_write_rel = ["godot/"]` does not punch through those deny prefixes;
-  `res://`, `./`, `//`, case-fold, and Win32 trailing-dot/space spellings are
-  the same paths.
+  `res://`, `./`, `//`, case-fold, Win32 trailing-dot/space, and NTFS
+  `::$INDEX_ALLOCATION` / stream suffixes are the same paths (or rejected).
   Unknown eval / `Object.call` surfaces from the agent tool list are denied (see T4).
 - **jail:** project-content mutation stays under project root after canonicalize (A8).
   Import goes through magic/size/decode + quarantine before `res://`.
