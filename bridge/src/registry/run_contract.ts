@@ -78,6 +78,15 @@ function runEnvelopeGuards(errors: string[]): void {
   if (good) {
     errors.push(`valid result rejected: ${good.code} ${good.message}`);
   }
+
+  const paper = validateResult({
+    ok: true,
+    command_id: EXAMPLE_ULID,
+    postcondition: { verified: true, checks: [] },
+  });
+  if (!paper || paper.code !== E.E_UNVERIFIED) {
+    errors.push("verified:true with empty checks must fail as paper success");
+  }
 }
 
 export function runContract(): ContractReport {

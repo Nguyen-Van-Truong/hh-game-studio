@@ -378,10 +378,10 @@ def plan_g1_progress_errors(text: str) -> list[str]:
         if g1_ticked:
             errors.append(f"{rel(PLAN_20_8)} G1 NO-FORK ticked before R1-WP5")
     else:
-        if current != "R2-WP1":
+        if not re.match(r"^R[2-9]-WP\d+$", current):
             errors.append(
                 f"{rel(PLAN_20_8)} CURRENT_VALID_WP={current!r} "
-                "(need R2-WP1 after R1-WP5 tick)"
+                "(need R2+ after R1-WP5 tick)"
             )
         if not g1_ticked:
             errors.append(f"{rel(PLAN_20_8)} G1 NO-FORK must tick with R1-WP5")

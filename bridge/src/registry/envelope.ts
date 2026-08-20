@@ -43,7 +43,25 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 export function validateResult(value: unknown): TypedError | null {
   const issue = validateSchema(RESULT_SCHEMA, value);
-  return issue;
+  if (issue) {
+    return issue;
+  }
+  if (!isRecord(value)) {
+    return typedError(E.E_INVALID_TYPE, "result must be an object", "");
+  }
+  const post = value.postcondition;
+  if (!isRecord(post)) {
+    return typedError(E.E_MISSING_REQUIRED, "postcondition required", "postcondition");
+  }
+  const checks = post.checks;
+  if (post.verified === true && Array.isArray(checks) && checks.length === 0) {
+    return typedError(
+      E.E_UNVERIFIED,
+      "verified:true with empty checks is a paper success",
+      "postcondition.checks",
+    );
+  }
+  return null;
 }
 
 export type EnvelopeOk = { ok: true; envelope: CommandEnvelope };

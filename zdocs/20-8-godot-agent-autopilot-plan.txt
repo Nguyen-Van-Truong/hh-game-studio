@@ -1,6 +1,6 @@
 AUTHORITATIVE_PLAN=1
 STATUS=ACTIVE
-CURRENT_VALID_WP=R2-WP1
+CURRENT_VALID_WP=R2-WP2
 
 ================================================================================
 BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
@@ -10,7 +10,7 @@ BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
 |--------|-----------|------------------|-----------------------------|------|------------|
 | 0 | R0 — Cutover an toàn | Đóng băng engine Rust cũ, pin Godot, đổi bootstrap sang plan này, không mất lịch sử | Governance + Toolchain | G0 | [x] 4/4 WP |
 | 1 | R1 — Spike và chọn nền MCP | Chứng minh agent tạo/sửa/chạy/nhìn một scene thật trong editor; chốt upstream hay tự làm | Research + Security + POC | G1 NO-FORK | [x] 5/5 WP |
-| 2 | R2 — Control plane | Plugin, sidecar, Agent Host, MCP, auth, registry, ledger, pause và OWNER_AUTOPILOT hoạt động | Bridge + Plugin + Security | — | [ ] 0/7 WP |
+| 2 | R2 — Control plane | Plugin, sidecar, Agent Host, MCP, auth, registry, ledger, pause và OWNER_AUTOPILOT hoạt động | Bridge + Plugin + Security | — | [ ] 1/7 WP |
 | 3 | R3 — Quyền editor ngữ nghĩa | Scene/node/property/resource/script/asset/project settings có undo, dedup và postcondition | Scene + Script + Asset | — | [ ] 0/8 WP |
 | 4 | R4 — Người xem được agent làm | Activity Dock, chọn node, focus inspector, cursor/gizmo ảo, replay kéo-thả, Watch/Fast mode | Observer UI + Editor UX | G2 VISIBLE | [ ] 0/6 WP |
 | 5 | R5 — Bộ công cụ làm game 2D | TileMapLayer, animation, UI, audio, physics, navigation, shader/particles được agent thao tác đầy đủ | 2D-A + 2D-B + Assets | — | [ ] 0/7 WP |
@@ -24,7 +24,7 @@ VIỆC PHẢI LÀM TRƯỚC: R0-WP1 → R0-WP2 → R0-WP3 → R0-WP4 → R1-WP1.
 Không được bắt đầu R2
 trước G1. Từ R2 trở đi chỉ song song các track có ranh giới file rõ ràng.
 
-Tiến độ tổng: [ ] 9/60 WP. First valid WP: R2-WP1.
+Tiến độ tổng: [ ] 10/60 WP. First valid WP: R2-WP2.
 Ngày lập: 20-8-2026 (Asia/Saigon).
 
 ================================================================================
@@ -904,7 +904,7 @@ R1-WP5 — Chốt base, vendor strategy và G1                            [x] 20
 R2 — CONTROL PLANE, AUTH, REGISTRY, READ MODEL VÀ AGENT HOST (7 WP)
 --------------------------------------------------------------------------------
 
-R2-WP1 — Registry/schema duy nhất + code generation                    [ ]
+R2-WP1 — Registry/schema duy nhất + code generation                    [x] 21-8-2026
   Phụ thuộc: G1.
   Track/file: A; bridge/src/registry/, protocol docs, generated plugin schemas.
   Làm:
@@ -914,7 +914,21 @@ R2-WP1 — Registry/schema duy nhất + code generation                    [ ]
     - unknown params reject; protocol/action version negotiation rõ.
   Verify: mọi action × required/unknown/type/bounds invalid; generated diff sạch.
   DoD: không có handler hard-code ngoài registry; CI fail nếu docs/schema drift.
-  LOG: (trống)
+  LOG:
+    LOG 2026-08-21 06:20 Asia/Saigon — agent=coordinator
+      Base: 7707b9e951ea6fadc26a2d75605f234ec8981af5, Godot=4.7.1.stable.official.a13da4feb, schema=hh-godot-actions/1
+      Files/leases: bridge/src/registry/, bridge/generated/, docs/godot-agent/{ACTIONS,CONTRACT_MATRIX,PROTOCOL}.md,
+        tests/bootstrap/test_registry.py
+      Verify: python tests/bootstrap/test_registry.py → 0 (118 ActionDefs, 610 cases);
+        test_g1_base.py → 0. Does not run Godot. GitHub CI still Cargo-only (P1).
+      E2E/artifacts: 7707b9e catalog+generate; 20 domain MCP tools + discriminator
+      Critic: PASS-WITH-GAPS (15f4dd6f) on 7707b9e. P0 none. Closed P1: paper
+        RESULT verified:true+empty checks now E_UNVERIFIED. Prior FAIL (c4c9493a)
+        was the uncommitted name-list.
+      Gaps: MCP params generic (reject on ActionDef only); plugin-validator dump
+        unread; describe kinds extra TS not JSON schema; node.query discriminator
+        holes; schemas are stubs; CI drift not in GitHub. Not a live Godot driver.
+      Commit: 7707b9e R2-WP1: action registry and generated contracts
 
 R2-WP2 — Sidecar lifecycle + secure session transport                  [ ]
   Phụ thuộc: R2-WP1.
@@ -1807,15 +1821,15 @@ thuận nếu ảnh hưởng G5/G6.
 14. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Hiện tại R0 đã xong (4/4). R1 đã xong (5/5, G1 in-house thin). Agent tiếp theo làm **R2-WP1**.
-KHÔNG vendor A/C as-is, KHÔNG M6, KHÔNG fork Godot. MCP production bắt đầu ở R2 trên hh_agent + bridge.
+Hiện tại R0 (4/4) + R1 (5/5, G1) + R2-WP1 đã xong. Agent tiếp theo làm **R2-WP2**.
+KHÔNG vendor A/C as-is, KHÔNG M6, KHÔNG fork Godot. Không bật addons trong plugin-project (R2-WP3).
 
 Lệnh hợp lệ:
 
-  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R2-WP1`);
-  2) R2-WP1: registry/schema duy nhất + code generation (bridge/src/registry/);
-  3) mở editor fixture: `hh-godot-editor.bat` (Godot 4.7.1-stable pin, minimal-2d, no MCP until plugin lands);
-  4) không copy hh_stock_poc vào plugin-project; không npx -y; không bump 4.7.2.
+  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R2-WP2`);
+  2) R2-WP2: sidecar MCP stdio + session transport (random port/token, loopback, no secret in log);
+  3) mở editor fixture: `hh-godot-editor.bat` (Godot 4.7.1-stable pin, minimal-2d);
+  4) không copy hh_stock_poc; không npx -y; không bump 4.7.2; không fixed-port scan.
 
 Không được tự xóa engine/code/game/asset cũ. Không được tự fork Godot. Không yêu cầu
 người click editor trong happy path. Mục tiêu cuối là: người giao brief, xem agent làm,

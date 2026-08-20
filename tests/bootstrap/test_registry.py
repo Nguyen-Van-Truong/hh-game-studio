@@ -59,6 +59,7 @@ def file_digest(path: Path) -> str:
 
 
 def plan_errors(text: str) -> list[str]:
+    """Allow pre-tick (implementer) or post-tick (coordinator) plan state."""
     errors: list[str] = []
     current = ""
     wp1 = None
@@ -68,14 +69,18 @@ def plan_errors(text: str) -> list[str]:
             current = stripped.split("=", 1)[1].strip()
         if re.match(r"^R2-WP1\b", stripped):
             wp1 = stripped
-    if current != "R2-WP1":
-        errors.append(f"CURRENT_VALID_WP={current!r} (need R2-WP1)")
     if wp1 is None:
         errors.append("plan missing R2-WP1 heading")
-    elif re.search(r"\[x\]", wp1, re.IGNORECASE):
-        errors.append("R2-WP1 must stay unticked ([ ])")
-    elif "[ ]" not in wp1:
-        errors.append("R2-WP1 heading must keep [ ]")
+        return errors
+    ticked = bool(re.search(r"\[x\]", wp1, re.IGNORECASE))
+    if not ticked:
+        if current != "R2-WP1":
+            errors.append(f"CURRENT_VALID_WP={current!r} (need R2-WP1 while WP1 is unticked)")
+        if "[ ]" not in wp1:
+            errors.append("R2-WP1 heading must keep [ ] until coordinator tick")
+    else:
+        if current != "R2-WP2":
+            errors.append(f"CURRENT_VALID_WP={current!r} (need R2-WP2 after R2-WP1 tick)")
     return errors
 
 
@@ -178,7 +183,7 @@ def main() -> int:
 
     print(
         "PASS: live ActionDef catalog; envelope guards; executed contract matrix; "
-        "generated artifacts stable; R2-WP1 unticked; plugin-project/addons absent. "
+        "generated artifacts stable; plan R2-WP1 progress consistent; plugin-project/addons absent. "
         "Did not run Godot."
     )
     return 0
