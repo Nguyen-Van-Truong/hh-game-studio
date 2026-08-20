@@ -142,18 +142,28 @@ def main() -> int:
                     )
                 if data.get("plugin_project_clean") is not True:
                     errors.append("results.json must record plugin_project_clean true")
+                if data.get("godot") != "4.7.1.stable.official.a13da4feb":
+                    errors.append("results.json godot pin must be 4.7.1.stable.official.a13da4feb")
+                projects: list[str] = []
                 for row in data.get("rows") or []:
                     if not isinstance(row, dict):
                         continue
                     if row.get("overall") != "PASS":
                         errors.append(f"run {row.get('run')} overall is {row.get('overall')}")
-                    shot_note = str(row.get("screenshot_note") or "")
-                    if row.get("screenshot") == "PASS" and re.search(
-                        r"dummy|619|headless viewport|nearly-uniform", shot_note, re.I
-                    ):
+                    proj = str(row.get("project") or "")
+                    if proj:
+                        projects.append(proj)
+                    if row.get("screenshot") == "PASS":
                         errors.append(
-                            f"run {row.get('run')} screenshot PASS is a dummy/gray frame (must be SKIP)"
+                            f"run {row.get('run')} screenshot PASS is not allowed without a "
+                            "committed player-sized PNG (this WP recorded SKIP)"
                         )
+                    if row.get("inspector") not in {"GAP", "SKIP", "PASS"}:
+                        errors.append(f"run {row.get('run')} inspector={row.get('inspector')!r}")
+                if len(projects) != 20 or len(set(projects)) != 20:
+                    errors.append(
+                        f"results.json must have 20 unique copy paths, got {len(set(projects))}"
+                    )
         if RESULT_MD.is_file():
             text = RESULT_MD.read_text(encoding="utf-8")
             match = re.search(r"STOCK_POC_OVERALL=(\d+)/(\d+)", text)
