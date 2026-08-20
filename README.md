@@ -1,11 +1,14 @@
 # HH Game Studio
 
-IDE làm game AI-native, 2D trước. Chưa phải sản phẩm hoàn chỉnh — đang ở milestone **M-1 (spike)**.
+IDE làm game AI-native. **20-8-2026:** reboot sang Godot stock + Agent Autopilot.
+Engine Rust/`gs-*` đã đóng băng; không mở WP M6/M7/M8 cũ.
 
 ## Agent mới bắt đầu từ đây
 
 1. Đọc [AGENTS.md](AGENTS.md)
-2. Đọc [zdocs/16-8-game-studio-execution-plan-cho-ai-agent.txt](zdocs/16-8-game-studio-execution-plan-cho-ai-agent.txt) Phần A, rồi WP chưa tick đầu tiên
-3. Spec: [zdocs/16-8-game-studio-ai-native-ide-2d-first-master-plan.txt](zdocs/16-8-game-studio-ai-native-ide-2d-first-master-plan.txt)
+2. Đọc [zdocs/20-8-godot-agent-autopilot-plan.txt](zdocs/20-8-godot-agent-autopilot-plan.txt) — bảng tổng quan, rồi WP chưa tick đầu tiên có dependency xanh (**R0-WP3**)
+3. Quyết định: [docs/DECISIONS.md](docs/DECISIONS.md) — `GODOT-REBOOT-2026-08-20`
 
-Code sản phẩm (crates/) chỉ được viết **sau GATE G1**. Spike M-1 nằm ở `experiments/`.
+Hai file `zdocs/16-8-game-studio-*.txt` là **LEGACY / NON-AUTHORITATIVE** (audit/khôi phục). Không lấy WP mới từ chúng.
+
+Khôi phục engine cũ: tag `legacy-rust-engine-2026-08-20` — xem [legacy/README.md](legacy/README.md).

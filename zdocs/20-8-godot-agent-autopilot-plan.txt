@@ -1,6 +1,6 @@
 AUTHORITATIVE_PLAN=1
-STATUS=APPROVED_TRANSITION
-CURRENT_VALID_WP=R0-WP2
+STATUS=ACTIVE
+CURRENT_VALID_WP=R0-WP3
 
 ================================================================================
 BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
@@ -8,7 +8,7 @@ BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
 
 | Thứ tự | Milestone | Kết quả bắt buộc | Track có thể chạy song song | Gate | Trạng thái |
 |--------|-----------|------------------|-----------------------------|------|------------|
-| 0 | R0 — Cutover an toàn | Đóng băng engine Rust cũ, pin Godot, đổi bootstrap sang plan này, không mất lịch sử | Governance + Toolchain | G0 | [ ] 1/4 WP |
+| 0 | R0 — Cutover an toàn | Đóng băng engine Rust cũ, pin Godot, đổi bootstrap sang plan này, không mất lịch sử | Governance + Toolchain | G0 | [ ] 2/4 WP |
 | 1 | R1 — Spike và chọn nền MCP | Chứng minh agent tạo/sửa/chạy/nhìn một scene thật trong editor; chốt upstream hay tự làm | Research + Security + POC | G1 NO-FORK | [ ] 0/5 WP |
 | 2 | R2 — Control plane | Plugin, sidecar, Agent Host, MCP, auth, registry, ledger, pause và OWNER_AUTOPILOT hoạt động | Bridge + Plugin + Security | — | [ ] 0/7 WP |
 | 3 | R3 — Quyền editor ngữ nghĩa | Scene/node/property/resource/script/asset/project settings có undo, dedup và postcondition | Scene + Script + Asset | — | [ ] 0/8 WP |
@@ -24,7 +24,7 @@ VIỆC PHẢI LÀM TRƯỚC: R0-WP1 → R0-WP2 → R0-WP3 → R0-WP4 → R1-WP1.
 Không được bắt đầu R2
 trước G1. Từ R2 trở đi chỉ song song các track có ranh giới file rõ ràng.
 
-Tiến độ tổng: [ ] 1/60 WP. First valid WP: R0-WP2.
+Tiến độ tổng: [ ] 2/60 WP. First valid WP: R0-WP3.
 Ngày lập: 20-8-2026 (Asia/Saigon).
 
 ================================================================================
@@ -674,7 +674,7 @@ R0-WP1 — Ghi quyết định và đóng băng engine cũ                      
       Gaps: named freeze refs may still be local until push; 4.7.2-stable exists (plan §12 stale) — R0-WP3.
       Commit: 7cf0a26 R0-WP1: archive rust engine freeze (+ this closeout)
 
-R0-WP2 — Cutover bootstrap cho agent mới                              [ ]
+R0-WP2 — Cutover bootstrap cho agent mới                              [x] 20-8-2026
   Phụ thuộc: R0-WP1.
   Track/file: Governance; AGENTS.md, header hai plan 16-8.
   Làm:
@@ -684,7 +684,17 @@ R0-WP2 — Cutover bootstrap cho agent mới                              [ ]
     - thêm test text kiểm chỉ một file có marker `AUTHORITATIVE_PLAN=1`.
   Verify: spawn/read-only một agent mới; agent phải trả “WP đầu tiên R0-WP3”, không M6.
   DoD: không agent tuân bootstrap nào vô tình tiếp tục roadmap cũ.
-  LOG: (trống)
+  LOG:
+    LOG 2026-08-20 09:19 Asia/Saigon — agent=coordinator
+      Base: 9bcf8d6, Godot=n/a, schema=n/a
+      Files/leases: AGENTS.md, zdocs/16-8-*.txt headers, tests/bootstrap/test_authoritative_plan.py,
+        tests/bootstrap/README.md, README.md (P1 leak closeout)
+      Verify: python tests/bootstrap/test_authoritative_plan.py → exit 0;
+        git show 98c5186 16-8 diffs +12 header lines only; critic spawn answer = R0-WP3 not M6
+      E2E/artifacts: commit 98c51869fe511470712087730aa054a639d74d1a
+      Critic: PASS. P0 none. P1 README 16-8 pointer fixed this closeout.
+      Gaps: CI GitHub vẫn cargo-only (P2, không phải agent default)
+      Commit: 98c5186 R0-WP2: cutover agent bootstrap to Godot plan
 
 R0-WP3 — Pin Godot/toolchain và tạo workspace mới                     [ ]
   Phụ thuộc: R0-WP2.
@@ -1696,16 +1706,16 @@ thuận nếu ảnh hưởng G5/G6.
 14. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Hiện tại chưa triển khai Godot; file này mới là proposal/plan được người yêu cầu tạo.
-Agent tiếp theo KHÔNG nhảy vào plugin/MCP và KHÔNG tiếp tục WP-M6 cũ.
+Hiện tại R0-WP1 và R0-WP2 đã xong. Agent tiếp theo làm **R0-WP3**.
+KHÔNG nhảy vào plugin/MCP, KHÔNG tiếp tục WP-M6 cũ, KHÔNG làm lại archive/cutover.
 
-Lệnh hợp lệ đầu tiên:
+Lệnh hợp lệ:
 
-  1) đọc AGENTS.md hiện tại + mục R0-WP1 trong file này;
-  2) xác nhận user decision ngày 20-8-2026 trong docs/DECISIONS.md;
-  3) kiểm worktree đầy đủ, tạo checkpoint/tag archive an toàn theo R0-WP1;
-  4) verify recovery rồi mới tick R0-WP1;
-  5) làm R0-WP2 để cutover bootstrap; trước đó plan cũ vẫn là lịch sử bắt buộc bảo toàn.
+  1) đọc AGENTS.md rồi bảng tổng quan file này (`CURRENT_VALID_WP=R0-WP3`);
+  2) xác nhận `GODOT-REBOOT-2026-08-20` trong docs/DECISIONS.md;
+  3) pin Godot 4.7.1-stable standard (`a13da4feb`) + toolchain theo R0-WP3;
+     từ chối mọi 4.7.2* và 4.8* dù 4.7.2-stable đã ra 18-8-2026;
+  4) không xóa engine cũ; khôi phục bằng worktree từ tag `legacy-rust-engine-2026-08-20`.
 
 Không được tự xóa engine/code/game/asset cũ. Không được tự fork Godot. Không yêu cầu
 người click editor trong happy path. Mục tiêu cuối là: người giao brief, xem agent làm,
