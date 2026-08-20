@@ -1,0 +1,23 @@
+{
+  "godot": "4.7.1-stable",
+  "notes": "Pins copied from docs/godot-agent/MCP_BAKEOFF.md. Do not npx -y latest. Do not clone floating main.",
+  "candidates": {
+    "A": {
+      "id": "A",
+      "name": "satelliteoflove/godot-mcp",
+      "repository": "https://github.com/satelliteoflove/godot-mcp.git",
+      "commit": "1b7d40537240fd54300f54bf6fda1ea91f06c878",
+      "addon_from": "godot/addons/godot_mcp",
+      "plugin_cfg": "res://addons/godot_mcp/plugin.cfg"
+    },
+    "C": {
+      "id": "C",
+      "name": "beckettlab/beckett-godot-mcp",
+      "edition": "Lite",
+      "repository": "https://github.com/beckettlab/beckett-godot-mcp.git",
+      "commit": "efb81dec03ba0af2b7a6dce0e4678bdbde5e454d",
+      "addon_from": "addons/beckett",
+      "plugin_cfg": "res://addons/beckett/plugin.cfg"
+    }
+  }
+}

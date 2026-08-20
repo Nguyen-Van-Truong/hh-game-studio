@@ -9,7 +9,9 @@ Library “latest”, or GitHub default-branch floating tip.
 Our Godot pin: **4.7.1-stable** (`a13da4feb`). Invariants: A8–A9, A16, E2.
 Threat model: [THREAT_MODEL.md](THREAT_MODEL.md) T1/T4/T5/T6.
 
-This WP is **audit only**. R1-WP3 runs E2E on the shortlist using disposable copies.
+This WP is **audit only**. R1-WP3 ran the same E2E scenario on disposable copies:
+[`tests/e2e/bakeoff/README.md`](../../tests/e2e/bakeoff/README.md) and
+[`tests/e2e/bakeoff/SCORECARD.md`](../../tests/e2e/bakeoff/SCORECARD.md).
 Do not enable any candidate in the production fixture.
 
 ## Verdict
@@ -289,3 +291,10 @@ scope and fail-hard** if required for acceptance.
 - `npx -y …`, Asset Library latest, or clone `main`/`master` without the SHAs above.
 - Buy or demand Beckett Full to pass core acceptance.
 - Score by tool count (KeeVeeG 300+ is not a point).
+
+## R1-WP3 E2E
+
+Driver: `python tests/e2e/bakeoff/run_bakeoff.py` (copies `minimal-2d`, pins A+C, disables
+eval/`call_method`, requires a session token, binds 127.0.0.1). Guard:
+`python tests/bootstrap/test_bakeoff_guard.py`. Scorecard:
+[`tests/e2e/bakeoff/SCORECARD.md`](../../tests/e2e/bakeoff/SCORECARD.md).

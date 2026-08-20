@@ -1,0 +1,14 @@
+R1-WP3 evidence notes
+=====================
+
+Large PNG/JPEG blobs are gitignored under this folder. A small
+`*-small.png` may be committed if a capture stays under ~100 KiB.
+
+If the editor GUI cannot launch in this environment, the driver records
+SKIP for visual evidence and may write a path under %TEMP% instead of
+committing a huge screenshot.
+
+Human editor (no MCP): repo-root `hh-godot-editor.bat` opens the
+`godot/test-projects/minimal-2d` fixture on Godot 4.7.1-stable.
+Do not enable MCP there. Bake-off copies live under
+`tests/e2e/bakeoff/work/` (gitignored).

@@ -42,3 +42,16 @@ third_party/mcp-staging/**
 .hh-agent/session.json
 .env
 .env.*
+
+# R1-WP3 MCP bake-off disposable copies (never vendor into plugin-project).
+tests/e2e/bakeoff/work/
+tests/e2e/bakeoff/clones/
+tests/e2e/bakeoff/**/node_modules/
+tests/e2e/bakeoff/evidence/*.png
+tests/e2e/bakeoff/evidence/*.jpg
+tests/e2e/bakeoff/evidence/*.jpeg
+tests/e2e/bakeoff/evidence/*.webp
+tests/e2e/bakeoff/evidence/*.bin
+!tests/e2e/bakeoff/evidence/*-small.png
+!tests/e2e/bakeoff/evidence/*.md
+!tests/e2e/bakeoff/evidence/*.txt

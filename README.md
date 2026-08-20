@@ -10,6 +10,11 @@ Engine Rust/`gs-*` đã đóng băng; không mở WP M6/M7/M8 cũ.
 
 Đó chưa phải game chơi được. Chưa có plugin agent / MCP (R2, khóa đến G1).
 
+R1-WP3 bake-off (A vs C Lite, disposable copies only):
+[`tests/e2e/bakeoff/README.md`](tests/e2e/bakeoff/README.md) ·
+[`tests/e2e/bakeoff/SCORECARD.md`](tests/e2e/bakeoff/SCORECARD.md).
+Không enable MCP trong `godot/plugin-project/`.
+
 ## Agent mới bắt đầu từ đây
 
 1. Đọc [AGENTS.md](AGENTS.md)
