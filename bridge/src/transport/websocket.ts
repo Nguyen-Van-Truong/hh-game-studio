@@ -79,7 +79,25 @@ function unmask(payload: Buffer, mask: Buffer): Buffer {
   return out;
 }
 
-function takeFrame(buf: Buffer): { frame: { opcode: number; payload: Buffer } | null; rest: Buffer } {
+function originAllowed(origin: string | undefined): boolean {
+  if (origin === undefined || origin === "" || origin.toLowerCase() === "null") {
+    return true;
+  }
+  try {
+    const url = new URL(origin);
+    if (url.protocol === "file:") {
+      return true;
+    }
+    const host = url.hostname.replace(/^\[|\]$/g, "").toLowerCase();
+    return host === "127.0.0.1" || host === "localhost" || host === "::1";
+  } catch {
+    return false;
+  }
+}
+
+function takeFrame(
+  buf: Buffer,
+): { frame: { opcode: number; payload: Buffer } | null; rest: Buffer; reject?: boolean } {
   if (buf.length < 2) {
     return { frame: null, rest: buf };
   }
@@ -87,6 +105,9 @@ function takeFrame(buf: Buffer): { frame: { opcode: number; payload: Buffer } | 
   const b1 = buf[1] ?? 0;
   const opcode = b0 & 0x0f;
   const masked = (b1 & 0x80) !== 0;
+  if (!masked) {
+    return { frame: null, rest: Buffer.alloc(0), reject: true };
+  }
   let ln = b1 & 0x7f;
   let off = 2;
   if (ln === 126) {
@@ -107,13 +128,13 @@ function takeFrame(buf: Buffer): { frame: { opcode: number; payload: Buffer } | 
     ln = lo;
     off = 10;
   }
-  const maskLen = masked ? 4 : 0;
+  const maskLen = 4;
   if (buf.length < off + maskLen + ln) {
     return { frame: null, rest: buf };
   }
-  const mask = masked ? buf.subarray(off, off + 4) : Buffer.alloc(0);
+  const mask = buf.subarray(off, off + 4);
   const raw = buf.subarray(off + maskLen, off + maskLen + ln);
-  const payload = masked ? unmask(raw, mask) : raw;
+  const payload = unmask(raw, mask);
   return { frame: { opcode, payload }, rest: buf.subarray(off + maskLen + ln) };
 }
 
@@ -160,11 +181,29 @@ async function upgradeSocket(socket: net.Socket): Promise<boolean> {
     return false;
   }
   const head = headBuf.toString("utf8");
+  const remote = socket.remoteAddress ?? "";
+  if (remote !== "127.0.0.1" && remote !== "::1" && remote !== ":ffff:127.0.0.1") {
+    socket.write("HTTP/1.1 403 Forbidden\r\nConnection: close\r\nContent-Length: 0\r\n\r\n");
+    socket.destroy();
+    return false;
+  }
   const upgrade = (headerValue(head, "Upgrade") ?? "").toLowerCase();
   const connection = (headerValue(head, "Connection") ?? "").toLowerCase();
   const key = headerValue(head, "Sec-WebSocket-Key");
+  const version = headerValue(head, "Sec-WebSocket-Version");
+  const origin = headerValue(head, "Origin");
   if (upgrade !== "websocket" || !connection.includes("upgrade") || !key) {
     socket.write("HTTP/1.1 400 Bad Request\r\nConnection: close\r\nContent-Length: 0\r\n\r\n");
+    socket.destroy();
+    return false;
+  }
+  if (version !== undefined && version !== "13") {
+    socket.write("HTTP/1.1 400 Bad Request\r\nConnection: close\r\nContent-Length: 0\r\n\r\n");
+    socket.destroy();
+    return false;
+  }
+  if (!originAllowed(origin)) {
+    socket.write("HTTP/1.1 403 Forbidden\r\nConnection: close\r\nContent-Length: 0\r\n\r\n");
     socket.destroy();
     return false;
   }
@@ -203,6 +242,12 @@ export async function startPluginTransport(opts: PluginTransportOpts): Promise<P
       for (;;) {
         const taken = takeFrame(state.buf);
         state.buf = taken.rest;
+        if (taken.reject) {
+          state.closed = true;
+          state.socket.end();
+          sockets.delete(state);
+          break;
+        }
         if (!taken.frame) {
           break;
         }

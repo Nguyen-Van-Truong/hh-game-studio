@@ -79,8 +79,10 @@ def plan_errors(text: str) -> list[str]:
         if "[ ]" not in wp1:
             errors.append("R2-WP1 heading must keep [ ] until coordinator tick")
     else:
-        if current != "R2-WP2":
-            errors.append(f"CURRENT_VALID_WP={current!r} (need R2-WP2 after R2-WP1 tick)")
+        if not re.match(r"^R2-WP[2-9]$|^R2-WP\d{2,}$|^R[3-9]-WP\d+$", current):
+            errors.append(
+                f"CURRENT_VALID_WP={current!r} (need R2-WP2+ after R2-WP1 tick)"
+            )
     return errors
 
 

@@ -2,7 +2,7 @@ import fs from "node:fs";
 
 import { PROTOCOL } from "../registry/types.js";
 import { publicDescriptorView, readDescriptor, type SessionDescriptor } from "../session/descriptor.js";
-import { agentHome, isUnderAgentHome } from "../session/paths.js";
+import { agentHome, descriptorPath, isUnderAgentHome } from "../session/paths.js";
 import { pidAlive } from "../session/supervisor.js";
 import { LOOPBACK_HOST } from "../transport/loopback.js";
 
@@ -32,7 +32,7 @@ export function runSessionDoctor(desc?: SessionDescriptor, home = agentHome()): 
   if (desc) {
     session_present = true;
     pid_ok = pidAlive(desc.pid);
-    under = fs.existsSync(home) && isUnderAgentHome(home, home);
+    under = isUnderAgentHome(descriptorPath(desc.project_id, home), home);
     view = publicDescriptorView(desc);
     if (desc.host === LOOPBACK_HOST) {
       checks.push("descriptor host is loopback");
@@ -52,7 +52,7 @@ export function runSessionDoctor(desc?: SessionDescriptor, home = agentHome()): 
     loopback: LOOPBACK_HOST,
     session_present,
     pid_alive: pid_ok,
-    descriptor_under_home: under || fs.existsSync(home),
+    descriptor_under_home: under,
     token_in_report: false,
     checks,
     ...(view ? { session: view } : {}),

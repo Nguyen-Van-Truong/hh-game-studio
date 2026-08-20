@@ -58,6 +58,7 @@ def redact(text: str, secret: str) -> str:
 
 
 def plan_errors(text: str) -> list[str]:
+    """Allow pre-tick (implementer) or post-tick (coordinator) plan state."""
     errors: list[str] = []
     current = ""
     wp2 = None
@@ -70,12 +71,13 @@ def plan_errors(text: str) -> list[str]:
     if wp2 is None:
         return ["plan missing R2-WP2 heading"]
     ticked = bool(re.search(r"\[x\]", wp2, re.IGNORECASE))
-    if ticked:
-        errors.append("R2-WP2 must stay [ ] until coordinator tick")
-    elif "[ ]" not in wp2:
-        errors.append("R2-WP2 heading must keep [ ]")
-    if current != "R2-WP2":
-        errors.append(f"CURRENT_VALID_WP={current!r} (need R2-WP2)")
+    if not ticked:
+        if "[ ]" not in wp2:
+            errors.append("R2-WP2 heading must keep [ ] until coordinator tick")
+        if current != "R2-WP2":
+            errors.append(f"CURRENT_VALID_WP={current!r} (need R2-WP2 while WP2 is unticked)")
+    elif current != "R2-WP3":
+        errors.append(f"CURRENT_VALID_WP={current!r} (need R2-WP3 after R2-WP2 tick)")
     return errors
 
 
@@ -89,10 +91,13 @@ def _readn(sock: socket.socket, n: int) -> bytes:
     return buf
 
 
-def ws_connect(host: str, port: int, timeout: float = 3.0) -> socket.socket:
+def ws_connect(
+    host: str, port: int, timeout: float = 3.0, origin: str | None = None
+) -> socket.socket:
     key = base64.b64encode(os.urandom(16)).decode("ascii")
     sock = socket.create_connection((host, port), timeout=timeout)
     sock.settimeout(timeout)
+    extra = f"Origin: {origin}\r\n" if origin else ""
     req = (
         f"GET / HTTP/1.1\r\n"
         f"Host: {host}:{port}\r\n"
@@ -100,6 +105,7 @@ def ws_connect(host: str, port: int, timeout: float = 3.0) -> socket.socket:
         f"Connection: Upgrade\r\n"
         f"Sec-WebSocket-Key: {key}\r\n"
         f"Sec-WebSocket-Version: 13\r\n"
+        f"{extra}"
         f"\r\n"
     )
     sock.sendall(req.encode("ascii"))
@@ -118,6 +124,38 @@ def ws_connect(host: str, port: int, timeout: float = 3.0) -> socket.socket:
         # leftover frames after the HTTP head (rare)
         sock = _PrefixedSocket(sock, extra)
     return sock
+
+
+def ws_upgrade_status(
+    host: str, port: int, timeout: float = 3.0, origin: str | None = None
+) -> str:
+    key = base64.b64encode(os.urandom(16)).decode("ascii")
+    sock = socket.create_connection((host, port), timeout=timeout)
+    sock.settimeout(timeout)
+    extra = f"Origin: {origin}\r\n" if origin else ""
+    req = (
+        f"GET / HTTP/1.1\r\n"
+        f"Host: {host}:{port}\r\n"
+        f"Upgrade: websocket\r\n"
+        f"Connection: Upgrade\r\n"
+        f"Sec-WebSocket-Key: {key}\r\n"
+        f"Sec-WebSocket-Version: 13\r\n"
+        f"{extra}"
+        f"\r\n"
+    )
+    sock.sendall(req.encode("ascii"))
+    data = b""
+    try:
+        while b"\r\n\r\n" not in data:
+            chunk = sock.recv(4096)
+            if not chunk:
+                break
+            data += chunk
+    finally:
+        sock.close()
+    if not data:
+        return ""
+    return data.split(b"\r\n", 1)[0].decode("ascii", "replace")
 
 
 class _PrefixedSocket:
@@ -416,6 +454,12 @@ def main() -> int:
         if bad_proto.get("ok") is not False or (bad_proto.get("error") or {}).get("code") != "E_PROTOCOL_VERSION":
             errors.append(f"wrong protocol must be E_PROTOCOL_VERSION: {redact(json.dumps(bad_proto), secret)}")
 
+        evil = ws_upgrade_status(host, port, origin="https://evil.example")
+        if "101" in evil:
+            errors.append("Origin https://evil.example must not get 101")
+        elif "403" not in evil:
+            errors.append(f"Origin https://evil.example expected 403, got {evil!r}")
+
         good = ws_hello(host, port, hello_payload(project_id, secret))
         if good.get("ok") is not True:
             errors.append(f"good hello failed: {redact(json.dumps(good), secret)}")
@@ -540,7 +584,7 @@ def main() -> int:
     print(
         "PASS: loopback OS-assigned bind; typed rejects for token/project/protocol/non-loopback; "
         "EADDRINUSE retried listen(0); executed 100 reconnects; stdio MCP not-dispatched; "
-        "token only under LOCALAPPDATA/HHGodotAgent; plan R2-WP2 still [ ]; "
+        "token only under LOCALAPPDATA/HHGodotAgent; plan R2-WP2 progress consistent; "
         "plugin-project/addons absent."
     )
     return 0
