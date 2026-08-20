@@ -37,15 +37,17 @@ Không tiếp tục WP-M6 / M7 / M8 của engine đó. Pointer phục hồi: `le
 ## 2026-08-20 — G1 base: in-house thin (architecture gate, không phải E1–E4)
 
 `decision_id: GODOT-G1-BASE-2026-08-20`
-`status: approved`
-`gate: G1 NO-FORK`
+`status: choice-approved`
+`plan_tick: coordinator after critic — plan G1 checkbox stays [ ] until then`
 `choice: in-house thin`
 `g1_base: in-house-thin`
 `mcp_vendor: none`
 
-Đây là **architecture gate G1** sau R1 bake-off + stock vertical slice. Không phải
+Đây là **lựa chọn** architecture cho gate G1 (in-house thin) sau R1 bake-off +
+stock vertical slice — không phải xác nhận checkbox plan đã tick. Không phải
 stop-gate người E1–E4 (không secret, không spend, không ký/publish, không đổi brief).
 Không fork Godot C++. Không enable MCP trong `godot/plugin-project/`.
+Mục 2026-08-16 «G1 chốt M-1» bên dưới là gate engine Rust legacy, không phải gate này.
 
 ### Chọn đúng một: (3) in-house thin
 

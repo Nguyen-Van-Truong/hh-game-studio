@@ -40,6 +40,8 @@ LOCK = REPO_ROOT / ".hh-agent" / "capability-lock.json"
 GODOT_PIN = REPO_ROOT / "tools" / "godot" / "pin.json"
 PLUGIN_PROJECT = REPO_ROOT / "godot" / "plugin-project"
 MINIMAL_2D = REPO_ROOT / "godot" / "test-projects" / "minimal-2d"
+GODOT_ADDONS = REPO_ROOT / "godot" / "addons"
+BRIDGE_ROOT = REPO_ROOT / "bridge"
 BRIDGE_SRC = REPO_ROOT / "bridge" / "src"
 BRIDGE_PKG = REPO_ROOT / "bridge" / "package.json"
 BRIDGE_LOCK = REPO_ROOT / "bridge" / "package-lock.json"
@@ -170,7 +172,9 @@ def plugin_project_errors() -> list[str]:
 
 def product_tree_vendor_errors() -> list[str]:
     errors: list[str] = []
-    trees = (PLUGIN_PROJECT, MINIMAL_2D, BRIDGE_SRC)
+    if GODOT_ADDONS.exists():
+        errors.append("godot/addons/ must not exist (G1 closed MCP vendors)")
+    trees = (PLUGIN_PROJECT, MINIMAL_2D, BRIDGE_SRC, BRIDGE_ROOT)
     for root in trees:
         if not root.exists():
             errors.append(f"missing product tree {rel(root)}")
@@ -345,34 +349,42 @@ def bridge_npm_errors(lock: dict) -> list[str]:
     return errors
 
 
-def plan_implementer_tick_errors(text: str) -> list[str]:
+def plan_g1_progress_errors(text: str) -> list[str]:
+    """Allow either pre-tick (implementer) or post-tick (coordinator) plan state."""
     errors: list[str] = []
     found_wp = False
-    for i, line in enumerate(text.splitlines(), 1):
+    wp5_ticked = False
+    g1_ticked = False
+    current = ""
+    for line in text.splitlines():
         stripped = line.strip()
         if stripped.startswith("CURRENT_VALID_WP="):
-            value = stripped.split("=", 1)[1].strip()
-            if value != "R1-WP5":
-                errors.append(
-                    f"{rel(PLAN_20_8)}:{i} CURRENT_VALID_WP={value!r} "
-                    "(need R1-WP5; coordinator ticks later)"
-                )
+            current = stripped.split("=", 1)[1].strip()
         if re.match(r"^R1-WP5\b", stripped):
             found_wp = True
-            if re.search(r"\[x\]", stripped, re.IGNORECASE):
-                errors.append(
-                    f"{rel(PLAN_20_8)}:{i} implementer must not tick R1-WP5 "
-                    "(coordinator ticks later)"
-                )
-        if "G1 NO-FORK" in stripped and re.search(r"\[x\]", stripped, re.IGNORECASE):
-            errors.append(
-                f"{rel(PLAN_20_8)}:{i} implementer must not tick G1 NO-FORK "
-                "(coordinator ticks later)"
-            )
+            wp5_ticked = bool(re.search(r"\[x\]", stripped, re.IGNORECASE))
+        if stripped.startswith("G1 NO-FORK") and re.search(r"\[x\]", stripped, re.IGNORECASE):
+            g1_ticked = True
     if not found_wp:
         errors.append(f"{rel(PLAN_20_8)} missing R1-WP5 heading")
     if "CURRENT_VALID_WP=" not in text:
         errors.append(f"{rel(PLAN_20_8)} missing CURRENT_VALID_WP=")
+    if not wp5_ticked:
+        if current != "R1-WP5":
+            errors.append(
+                f"{rel(PLAN_20_8)} CURRENT_VALID_WP={current!r} "
+                "(need R1-WP5 while WP5 is unticked)"
+            )
+        if g1_ticked:
+            errors.append(f"{rel(PLAN_20_8)} G1 NO-FORK ticked before R1-WP5")
+    else:
+        if current != "R2-WP1":
+            errors.append(
+                f"{rel(PLAN_20_8)} CURRENT_VALID_WP={current!r} "
+                "(need R2-WP1 after R1-WP5 tick)"
+            )
+        if not g1_ticked:
+            errors.append(f"{rel(PLAN_20_8)} G1 NO-FORK must tick with R1-WP5")
     return errors
 
 
@@ -531,7 +543,8 @@ def main() -> int:
                 (
                     "in-house thin",
                     "in-house-thin",
-                    "status: approved",
+                    "status: choice-approved",
+                    "plan G1 checkbox",
                     "Rejected (1) vendor exact MIT commit",
                     "Rejected (2) depend exact package",
                     "MUST-PATCH",
@@ -649,7 +662,7 @@ def main() -> int:
     if plan_text is None:
         errors.append(f"missing {rel(PLAN_20_8)}")
     else:
-        errors.extend(plan_implementer_tick_errors(plan_text))
+        errors.extend(plan_g1_progress_errors(plan_text))
 
     if errors:
         print("FAIL: G1 base check", file=sys.stderr)
@@ -661,7 +674,7 @@ def main() -> int:
         "PASS: G1 in-house-thin lock; mcp_vendor=none; plugin-project has no addons; "
         "no vendor MCP copies; SHAs match PIN.json; Godot 4.7.1.stable.official.a13da4feb; "
         "bridge_npm integrities match package-lock; 59da3d0 is not A; "
-        "R1-WP5/G1 unticked. This test does not run Godot or npm ci."
+        "plan G1 progress consistent. This test does not run Godot or npm ci."
     )
     return 0
 

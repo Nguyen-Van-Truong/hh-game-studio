@@ -1,7 +1,7 @@
 # G1 base lock (R1-WP5)
 
 `decision_id: GODOT-G1-BASE-2026-08-20`
-`status: approved` (architecture gate G1, not a human E1–E4)
+`status: choice-approved` (choice only; plan G1 checkbox stays `[ ]` until coordinator+critic)
 `g1_base: in-house-thin`
 `mcp_vendor: none`
 

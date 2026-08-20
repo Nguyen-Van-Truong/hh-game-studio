@@ -1,6 +1,6 @@
 AUTHORITATIVE_PLAN=1
 STATUS=ACTIVE
-CURRENT_VALID_WP=R1-WP5
+CURRENT_VALID_WP=R2-WP1
 
 ================================================================================
 BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
@@ -9,7 +9,7 @@ BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
 | Thứ tự | Milestone | Kết quả bắt buộc | Track có thể chạy song song | Gate | Trạng thái |
 |--------|-----------|------------------|-----------------------------|------|------------|
 | 0 | R0 — Cutover an toàn | Đóng băng engine Rust cũ, pin Godot, đổi bootstrap sang plan này, không mất lịch sử | Governance + Toolchain | G0 | [x] 4/4 WP |
-| 1 | R1 — Spike và chọn nền MCP | Chứng minh agent tạo/sửa/chạy/nhìn một scene thật trong editor; chốt upstream hay tự làm | Research + Security + POC | G1 NO-FORK | [ ] 4/5 WP |
+| 1 | R1 — Spike và chọn nền MCP | Chứng minh agent tạo/sửa/chạy/nhìn một scene thật trong editor; chốt upstream hay tự làm | Research + Security + POC | G1 NO-FORK | [x] 5/5 WP |
 | 2 | R2 — Control plane | Plugin, sidecar, Agent Host, MCP, auth, registry, ledger, pause và OWNER_AUTOPILOT hoạt động | Bridge + Plugin + Security | — | [ ] 0/7 WP |
 | 3 | R3 — Quyền editor ngữ nghĩa | Scene/node/property/resource/script/asset/project settings có undo, dedup và postcondition | Scene + Script + Asset | — | [ ] 0/8 WP |
 | 4 | R4 — Người xem được agent làm | Activity Dock, chọn node, focus inspector, cursor/gizmo ảo, replay kéo-thả, Watch/Fast mode | Observer UI + Editor UX | G2 VISIBLE | [ ] 0/6 WP |
@@ -24,7 +24,7 @@ VIỆC PHẢI LÀM TRƯỚC: R0-WP1 → R0-WP2 → R0-WP3 → R0-WP4 → R1-WP1.
 Không được bắt đầu R2
 trước G1. Từ R2 trở đi chỉ song song các track có ranh giới file rõ ràng.
 
-Tiến độ tổng: [ ] 8/60 WP. First valid WP: R1-WP5.
+Tiến độ tổng: [ ] 9/60 WP. First valid WP: R2-WP1.
 Ngày lập: 20-8-2026 (Asia/Saigon).
 
 ================================================================================
@@ -624,7 +624,7 @@ single-writer queue dù code được viết song song.
 7.6 Gates
 
   G0 DIRECTION   [x] người — 20-8-2026, bỏ engine cũ/chọn hướng tốt nhất.
-  G1 NO-FORK     [ ] auto: R1 stock vertical slice + critic, pin upstream SHA.
+  G1 NO-FORK     [x] 20-8-2026 auto: R1 stock vertical slice + critic, pin in-house thin.
   G2 VISIBLE     [ ] người review: selection/Inspector/overlay/timeline trên editor thật.
   G3 SELF-VERIFY [ ] auto: gauntlet + critic, agent tự chơi/bắt lỗi/evidence.
   G4 AUTONOMY    [ ] auto: soak/resume/checkpoint/zero-touch trial.
@@ -871,7 +871,7 @@ R1-WP4 — Stock-only vertical slice từ project trống                    [x]
         plugin-project. G1 = in-house thin; do not vendor A/C as-is.
       Commit: 3a0236e R1-WP4: stock-only vertical slice 20/20
 
-R1-WP5 — Chốt base, vendor strategy và G1                            [ ]
+R1-WP5 — Chốt base, vendor strategy và G1                            [x] 20-8-2026
   Phụ thuộc: R1-WP4.
   Track/file: Architecture; MCP_BAKEOFF.md, DECISIONS.md, third_party/.
   Làm:
@@ -882,7 +882,23 @@ R1-WP5 — Chốt base, vendor strategy và G1                            [ ]
     - đóng mọi MCP plugin candidate còn lại trong production fixture.
   Verify: clean clone dùng exact lock/hash; offline install; license/NOTICE đầy đủ.
   DoD/G1: stock Godot pass R1-WP4 và một base được pin. Nếu không pass, STOP; không tự fork.
-  LOG: (trống)
+  LOG:
+    LOG 2026-08-20 21:43 Asia/Saigon — agent=coordinator
+      Base: 6c7e30d04f67ba6a9e2f0d67a99daaf11f7331d9, Godot=4.7.1.stable.official.a13da4feb, schema=n/a
+      Files/leases: docs/DECISIONS.md GODOT-G1-BASE-2026-08-20, docs/godot-agent/G1_BASE.md,
+        .hh-agent/capability-lock.json, docs/godot-agent/NOTICE, third_party/mcp-staging/*/PIN.json
+      Verify: python tests/bootstrap/test_g1_base.py → 0 (paper lock: SHA/integrity echo;
+        does not hash Godot zip on disk or run npm ci). test_mcp_bakeoff/bakeoff_guard/
+        stock_poc/authoritative_plan → 0. Closer ran npm ci --offline + tsc (Node on
+        machine 24.10.0 vs pin 24.19.0 EBADENGINE warning).
+      E2E/artifacts: 6c7e30d pin; R1-WP4 stock slice 3a0236e 20/20 (screenshot SKIP,
+        inspector GAP). mcp_vendor=none. 59da3d0 is not A.
+      Critic: PASS-WITH-GAPS (1fe08482) on stale HEAD bcaadbd (P0 no-commit — closed by
+        6c7e30d). Closed P1: status=choice-approved (not “gate already ticked”);
+        vendor scan adds godot/addons + bridge/. P1 leftover: no zip re-hash.
+      Gaps: G1 is the pin, not a live OWNER_AUTOPILOT / watch-agent loop (R2+R4+R6).
+        Node pin vs local 24.10.0. Do not vendor A/C. Do not copy hh_stock_poc.
+      Commit: 6c7e30d R1-WP5: pin in-house thin G1 base
 
 --------------------------------------------------------------------------------
 R2 — CONTROL PLANE, AUTH, REGISTRY, READ MODEL VÀ AGENT HOST (7 WP)
@@ -1791,15 +1807,15 @@ thuận nếu ảnh hưởng G5/G6.
 14. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Hiện tại R0 đã xong (4/4). R1-WP1..WP4 đã xong. Agent tiếp theo làm **R1-WP5 / G1**.
-KHÔNG enable MCP trong godot/plugin-project (R2, khóa đến G1), KHÔNG M6, KHÔNG fork Godot.
+Hiện tại R0 đã xong (4/4). R1 đã xong (5/5, G1 in-house thin). Agent tiếp theo làm **R2-WP1**.
+KHÔNG vendor A/C as-is, KHÔNG M6, KHÔNG fork Godot. MCP production bắt đầu ở R2 trên hh_agent + bridge.
 
 Lệnh hợp lệ:
 
-  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R1-WP5`);
-  2) R1-WP5: chốt đúng một base (in-house thin — không vendor A/C as-is), DECISIONS + bake-off;
-  3) mở editor fixture: `hh-godot-editor.bat` (Godot 4.7.1-stable pin, minimal-2d, no MCP).
-  4) không enable MCP plugin trong plugin-project; không copy hh_stock_poc vào plugin-project.
+  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R2-WP1`);
+  2) R2-WP1: registry/schema duy nhất + code generation (bridge/src/registry/);
+  3) mở editor fixture: `hh-godot-editor.bat` (Godot 4.7.1-stable pin, minimal-2d, no MCP until plugin lands);
+  4) không copy hh_stock_poc vào plugin-project; không npx -y; không bump 4.7.2.
 
 Không được tự xóa engine/code/game/asset cũ. Không được tự fork Godot. Không yêu cầu
 người click editor trong happy path. Mục tiêu cuối là: người giao brief, xem agent làm,
