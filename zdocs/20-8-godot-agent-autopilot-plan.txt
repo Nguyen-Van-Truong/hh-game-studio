@@ -1,6 +1,6 @@
 AUTHORITATIVE_PLAN=1
 STATUS=ACTIVE
-CURRENT_VALID_WP=R1-WP2
+CURRENT_VALID_WP=R1-WP3
 
 ================================================================================
 BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
@@ -9,7 +9,7 @@ BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
 | Thứ tự | Milestone | Kết quả bắt buộc | Track có thể chạy song song | Gate | Trạng thái |
 |--------|-----------|------------------|-----------------------------|------|------------|
 | 0 | R0 — Cutover an toàn | Đóng băng engine Rust cũ, pin Godot, đổi bootstrap sang plan này, không mất lịch sử | Governance + Toolchain | G0 | [x] 4/4 WP |
-| 1 | R1 — Spike và chọn nền MCP | Chứng minh agent tạo/sửa/chạy/nhìn một scene thật trong editor; chốt upstream hay tự làm | Research + Security + POC | G1 NO-FORK | [ ] 1/5 WP |
+| 1 | R1 — Spike và chọn nền MCP | Chứng minh agent tạo/sửa/chạy/nhìn một scene thật trong editor; chốt upstream hay tự làm | Research + Security + POC | G1 NO-FORK | [ ] 2/5 WP |
 | 2 | R2 — Control plane | Plugin, sidecar, Agent Host, MCP, auth, registry, ledger, pause và OWNER_AUTOPILOT hoạt động | Bridge + Plugin + Security | — | [ ] 0/7 WP |
 | 3 | R3 — Quyền editor ngữ nghĩa | Scene/node/property/resource/script/asset/project settings có undo, dedup và postcondition | Scene + Script + Asset | — | [ ] 0/8 WP |
 | 4 | R4 — Người xem được agent làm | Activity Dock, chọn node, focus inspector, cursor/gizmo ảo, replay kéo-thả, Watch/Fast mode | Observer UI + Editor UX | G2 VISIBLE | [ ] 0/6 WP |
@@ -24,7 +24,7 @@ VIỆC PHẢI LÀM TRƯỚC: R0-WP1 → R0-WP2 → R0-WP3 → R0-WP4 → R1-WP1.
 Không được bắt đầu R2
 trước G1. Từ R2 trở đi chỉ song song các track có ranh giới file rõ ràng.
 
-Tiến độ tổng: [ ] 5/60 WP. First valid WP: R1-WP2.
+Tiến độ tổng: [ ] 6/60 WP. First valid WP: R1-WP3.
 Ngày lập: 20-8-2026 (Asia/Saigon).
 
 ================================================================================
@@ -787,7 +787,7 @@ R1-WP1 — Capability Matrix “mọi năng lực cần làm game”            
         explicit non-goals. R1-WP2 audit only — do not enable MCP in plugin-project.
       Commit: afeb8ee R1-WP1: capability matrix for 2d workflows
 
-R1-WP2 — Audit license, security và code của bốn MCP candidate         [ ]
+R1-WP2 — Audit license, security và code của bốn MCP candidate         [x] 20-8-2026
   Phụ thuộc: R1-WP1.
   Track/file: Security; docs/godot-agent/MCP_BAKEOFF.md, third_party staging.
   Làm:
@@ -798,7 +798,19 @@ R1-WP2 — Audit license, security và code của bốn MCP candidate         [ 
     - không mua/đòi tính năng commercial để đạt core acceptance.
   Verify: dependency/license scan + threat checklist; candidate fail hard được loại rõ.
   DoD: shortlist tối đa hai candidate; không cài “latest” vào project chính.
-  LOG: (trống)
+  LOG:
+    LOG 2026-08-20 11:40 Asia/Saigon — agent=coordinator
+      Base: 85691a8, Godot=4.7.1.stable.official.a13da4feb, schema=n/a
+      Files/leases: docs/godot-agent/MCP_BAKEOFF.md, third_party/mcp-staging/*/LICENSE+PIN.json,
+        tests/bootstrap/test_mcp_bakeoff.py
+      Verify: python tests/bootstrap/test_mcp_bakeoff.py → 0
+      E2E/artifacts: 7524bbd audit; 01966da split bake-off vs enable fail-hard
+      Critic: PASS-WITH-GAPS (bf677303). P0 none. Closed P1: test parses three verdict
+        columns; in-memory B-spike / A-bake-off / empty-enable all fail. Spike ≠ vendor.
+      Gaps: P2 captions not locked; Python CANDIDATES still has unused fail_hard=False.
+        R1-WP3 disposable copies only; eval/call_method off; token required;
+        never enable MCP in godot/plugin-project/.
+      Commit: 7524bbd R1-WP2: audit four godot MCP candidates
 
 R1-WP3 — Bake-off cùng một kịch bản trên candidate shortlist           [ ]
   Phụ thuộc: R1-WP2.
@@ -1749,13 +1761,13 @@ thuận nếu ảnh hưởng G5/G6.
 14. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Hiện tại R0 đã xong (4/4). R1-WP1 đã xong. Agent tiếp theo làm **R1-WP2**.
-KHÔNG nhảy plugin/MCP vào plugin-project (R2, khóa đến G1), KHÔNG M6, KHÔNG fork Godot.
+Hiện tại R0 đã xong (4/4). R1-WP1 và R1-WP2 đã xong. Agent tiếp theo làm **R1-WP3**.
+KHÔNG enable MCP trong godot/plugin-project (R2, khóa đến G1), KHÔNG M6, KHÔNG fork Godot.
 
 Lệnh hợp lệ:
 
-  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R1-WP2`);
-  2) R1-WP2: docs/godot-agent/MCP_BAKEOFF.md + third_party staging (audit only);
+  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R1-WP3`);
+  2) R1-WP3: tests/e2e/bakeoff/ disposable copies of A+C Lite (eval/call_method off, token on);
   3) mở editor fixture: `hh-godot-editor.bat` (Godot 4.7.1-stable pin).
   4) không enable MCP plugin trong plugin-project.
 
