@@ -28,6 +28,13 @@ node_modules/
 /Godot_v*.tpz
 /Godot_v*.exe
 
+# MCP candidate clone bodies (R1-WP2). Commit LICENSE + PIN.json only.
+third_party/mcp-staging/**
+!third_party/mcp-staging/README.md
+!third_party/mcp-staging/*/
+!third_party/mcp-staging/*/LICENSE
+!third_party/mcp-staging/*/PIN.json
+
 # Agent secrets / local session. Commit policy.example.toml only — never live tokens.
 .hh-agent/policy.toml
 .hh-agent/secrets/

@@ -1,13 +1,15 @@
 # Godot Agent security / license docs (R0-WP4)
 
 Baseline **before** any third-party Godot MCP plugin is enabled in
-`godot/plugin-project/` (that bake-off is R1; `addons/hh_agent` is R2).
+`godot/plugin-project/` (audit is R1-WP2; E2E bake-off is R1-WP3;
+`addons/hh_agent` is R2).
 
 | File | What it is |
 |------|------------|
 | [CAPABILITY_MATRIX.md](CAPABILITY_MATRIX.md) | R1-WP1: measurable 2D workflows (not “all buttons”). Status is honest: no hh_agent yet. |
+| [MCP_BAKEOFF.md](MCP_BAKEOFF.md) | R1-WP2: license/security scorecards for four MCP candidates. Shortlist A+C Lite. Do not enable in `plugin-project`. |
 | [THREAT_MODEL.md](THREAT_MODEL.md) | Threats → controls (reject / jail / strip / Pause). A8–A10. |
-| [SBOM_BASELINE.md](SBOM_BASELINE.md) | Godot 4.7.1-stable, GUT 9.7.1, Node/TS pins, MCP candidates **to-audit**. |
+| [SBOM_BASELINE.md](SBOM_BASELINE.md) | Godot 4.7.1-stable, GUT 9.7.1, Node/TS pins, MCP candidate pins (R1-WP2). |
 | [../../PROJECT_BRIEF.template.md](../../PROJECT_BRIEF.template.md) | Brief schema (not the dogfood brief). |
 | [../../.hh-agent/policy.example.toml](../../.hh-agent/policy.example.toml) | `OWNER_AUTOPILOT` + E1–E4 + jail + process allowlist. Deny includes `godot/plugin-project/addons/` and `res://addons/`. |
 
@@ -21,4 +23,5 @@ python tools/godot/policy_validate.py --self-test
 python tests/bootstrap/test_policy.py
 python tests/bootstrap/test_no_secrets.py
 python tests/bootstrap/test_capability_matrix.py
+python tests/bootstrap/test_mcp_bakeoff.py
 ```

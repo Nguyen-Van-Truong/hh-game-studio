@@ -7,6 +7,7 @@ python tests/bootstrap/test_authoritative_plan.py
 python tests/bootstrap/test_policy.py
 python tests/bootstrap/test_no_secrets.py
 python tests/bootstrap/test_capability_matrix.py
+python tests/bootstrap/test_mcp_bakeoff.py
 ```
 
 Equivalent policy command:
@@ -22,3 +23,4 @@ Exit 0 = pass.
 - `test_policy.py` — `.hh-agent/policy.example.toml` valid; `tests/bootstrap/policy/fail_*.toml` rejected (`..`, absolute path, arbitrary shell, placeholder token, addon jail).
 - `test_no_secrets.py` — tree scan (skips `.git`, `target`, `node_modules`, `.godot`). Policy fail fixtures must not contain PAT-shaped blobs.
 - `test_capability_matrix.py` — `docs/godot-agent/CAPABILITY_MATRIX.md` has ≥100 unique `CM-xxx` workflows, all R1-WP1 groups, R8 traces, and no fake Supported P0 rows.
+- `test_mcp_bakeoff.py` — R1-WP2 scorecard + four MIT PIN.json SHAs; Beckett Full not bought; `godot/plugin-project` has no addon `plugin.cfg`.

@@ -1,7 +1,7 @@
 # SBOM baseline (R0-WP4)
 
-Not a vendor SBOM and **not** a CycloneDX dump. This is the license/pin baseline
-before R1 clones anything into `third_party/`. Pins come from
+Not a vendor SBOM and **not** a CycloneDX dump. MCP candidate SHAs are R1-WP2
+pins (LICENSE + `PIN.json` only). Toolchain pins come from
 [`docs/VERSIONS_GODOT.md`](../VERSIONS_GODOT.md) and `tools/godot/pin.json`.
 Fetched **2026-08-20**. Do not bump Godot to 4.7.2.
 
@@ -23,20 +23,17 @@ Godot trademark: https://godot.foundation/policies-and-procedures/trademark-poli
 
 ---
 
-## MCP candidates — status **to-audit** (do not clone)
+## MCP candidates — R1-WP2 pins (do not enable)
 
-R1-WP2 pins commits, walks dependencies, and may **fail-hard**. R0 only records
-GitHub SPDX + LICENSE URL. None of the four public repos is marked fail-hard
-today (all SPDX **MIT** on 2026-08-20).
+Scorecard: [MCP_BAKEOFF.md](MCP_BAKEOFF.md). Staging: `third_party/mcp-staging/<id>/{LICENSE,PIN.json}`
+only — source was grepped then discarded. **Not** copied into `plugin-project`.
 
-Do **not** copy these into `third_party/` or enable them in `plugin-project`.
-
-| ID | Repository | GitHub SPDX (2026-08-20) | LICENSE URL | Status | Fail-hard later if |
-|----|------------|--------------------------|-------------|--------|--------------------|
-| A | [satelliteoflove/godot-mcp](https://github.com/satelliteoflove/godot-mcp) | MIT | https://raw.githubusercontent.com/satelliteoflove/godot-mcp/main/LICENSE | **to-audit** | Arbitrary eval/shell/`Object.call`, no token, fixed-port bind, runtime left in export, or LICENSE drift off MIT. |
-| B | [KeeVeeG/godot-mcp](https://github.com/KeeVeeG/godot-mcp) | MIT | https://raw.githubusercontent.com/KeeVeeG/godot-mcp/master/LICENSE | **to-audit** | Same security checklist; 300+ tools must not skip UndoRedo/readback. |
-| C | [beckettlab/beckett-godot-mcp](https://github.com/beckettlab/beckett-godot-mcp) **Lite** | MIT (this GitHub tree) | https://raw.githubusercontent.com/beckettlab/beckett-godot-mcp/main/LICENSE | **to-audit** (Lite only) | **Full** edition is a **separate commercial** product (itch). Using Full for core acceptance is **E2** + **fail-hard** (non-MIT / paid). Plan: Lite only; do not buy. |
-| D | [Sods2/godot-mcp](https://github.com/Sods2/godot-mcp) | MIT | https://raw.githubusercontent.com/Sods2/godot-mcp/main/LICENSE | **to-audit** | Same checklist as A/B. |
+| ID | Repository | Pin SHA (2026-08-20) | SPDX | Status |
+|----|------------|----------------------|------|--------|
+| A | [satelliteoflove/godot-mcp](https://github.com/satelliteoflove/godot-mcp) | `1b7d40537240fd54300f54bf6fda1ea91f06c878` | MIT | **shortlist** (must-patch before OWNER_AUTOPILOT) |
+| B | [KeeVeeG/godot-mcp](https://github.com/KeeVeeG/godot-mcp) | `9ea1a41b9ed6cd819c602a37cc111c50017707d8` | MIT | **fail-hard** (eval + `OS.execute` git clone + no token) |
+| C | [beckettlab/beckett-godot-mcp](https://github.com/beckettlab/beckett-godot-mcp) **Lite** | `efb81dec03ba0af2b7a6dce0e4678bdbde5e454d` (`v1.13.0`) | MIT (Lite tree) | **shortlist Lite**; **Full itch = E2 fail-hard** (do not buy) |
+| D | [Sods2/godot-mcp](https://github.com/Sods2/godot-mcp) | `78b2cee00d697f117d6875e07675101b867efe70` | MIT | **fail-hard** (no token, TCP 6008, disk-first writes) |
 
 Plan references: §2.3, §12 MCP baseline URLs. README stars are not evidence.
 
@@ -46,4 +43,4 @@ Plan references: §2.3, §12 MCP baseline URLs. README stars are not evidence.
 
 - Not a recursive npm/Godot addon SBOM (that is release / R9).
 - Not permission to `npx -y latest` or Asset Library latest.
-- Not a clone of candidates (R1-WP2).
+- Not a vendor of MCP addon source (R1-WP2 keeps LICENSE + PIN.json only).
