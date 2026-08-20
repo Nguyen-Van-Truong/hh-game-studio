@@ -105,6 +105,9 @@ JAIL_ATTACK_ALLOWS = (
     "godot/plugin-project//addons/godot-mcp/",
     "Godot/plugin-project/addons/godot-mcp/",
     "godot\\\\plugin-project\\\\addons\\\\godot-mcp/",
+    "godot/plugin-project/addons./godot-mcp/",
+    "godot/plugin-project./addons/godot-mcp/",
+    "godot/plugin-project/addons.../godot-mcp/",
 )
 
 
@@ -138,6 +141,13 @@ def is_os_absolute(s: str) -> bool:
     return Path(t).is_absolute()
 
 
+def win32_component(part: str) -> str:
+    """Win32 strips trailing dots and spaces from a path segment (not '.' / '..')."""
+    if part in (".", ".."):
+        return part
+    return part.rstrip(" .")
+
+
 def collapse_posix(s: str) -> str:
     """Lowercase POSIX path; drop empty and '.' segments; keep '..' for other checks.
 
@@ -153,6 +163,7 @@ def collapse_posix(s: str) -> str:
         rest = rest[2:] if rest.startswith("./") else rest[1:]
     parts: list[str] = []
     for part in rest.split("/"):
+        part = win32_component(part)
         if part in ("", "."):
             continue
         parts.append(".." if part == ".." else part.lower())
