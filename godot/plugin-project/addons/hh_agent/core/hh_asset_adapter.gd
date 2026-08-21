@@ -715,6 +715,7 @@ func _referencers(res_path: String) -> PackedStringArray:
 	var uid_text: String = _uid_of(res_path)
 	var files: PackedStringArray = PackedStringArray()
 	_collect_files("res://", files)
+	_append_text_owners(files)
 	for item: String in files:
 		if item == res_path or item == res_path + ".uid" or item == res_path + ".import":
 			continue
@@ -748,7 +749,22 @@ func _file_refs(file_path: String, res_path: String, uid_text: String) -> bool:
 	return false
 
 
+func _append_text_owners(out: PackedStringArray) -> void:
+	# project.godot / export_presets.cfg are text owners (autoload, icon, presets).
+	var owners: PackedStringArray = PackedStringArray()
+	owners.append("res://project.godot")
+	owners.append("res://export_presets.cfg")
+	for item: String in owners:
+		if not FileAccess.file_exists(item):
+			continue
+		if item in out:
+			continue
+		out.append(item)
+
+
 func _collect_files(dir_path: String, out: PackedStringArray) -> void:
+	if dir_path == "res://":
+		_append_text_owners(out)
 	var abs_dir: String = ProjectSettings.globalize_path(dir_path)
 	var da: DirAccess = DirAccess.open(abs_dir)
 	if da == null:

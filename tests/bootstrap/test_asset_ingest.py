@@ -117,6 +117,12 @@ def src_scan_errors() -> list[str]:
         errors.append("official test must generate the source PNG in a TEMP outside the project")
     if "asset.import" not in self_text:
         errors.append("official test must call asset.import")
+    if "hh_reload_driver.gd" not in self_text:
+        errors.append("official test must delete res://hh_reload_driver.gd and expect E_CONFLICT")
+    if "res://project.godot" not in self_text:
+        errors.append("official test must refuse asset.delete/move of project.godot")
+    if "JUNCTION_SKIP" not in self_text:
+        errors.append("official test must print JUNCTION_SKIP=os instead of skip-PASS")
     router = (ADDON / "core" / "hh_router.gd").read_text(encoding="utf-8")
     if "hh_asset_adapter" not in router:
         errors.append("router must dispatch the asset adapter")
@@ -143,6 +149,10 @@ def src_scan_errors() -> list[str]:
             errors.append("asset adapter must guard reentrancy and late import jobs")
         if "_quarantine_path" not in text:
             errors.append("asset adapter must quarantine instead of hard-delete")
+        if "res://project.godot" not in text or "export_presets.cfg" not in text:
+            errors.append("asset adapter must scan project.godot and export_presets.cfg as text owners")
+        if "_append_text_owners" not in text:
+            errors.append("asset adapter must always append project text owners")
         delete_fn = re.search(r"func _delete\b.*?func _move\b", text, re.S)
         if delete_fn is None:
             errors.append("missing _delete")
@@ -176,6 +186,17 @@ def src_scan_errors() -> list[str]:
     execute = (BRIDGE / "src" / "ledger" / "execute.ts").read_text(encoding="utf-8")
     if "import_sidecar" not in execute or "late import" not in execute:
         errors.append("ledger must verify import sidecar and reject a late old job")
+    if "after.quarantined" not in execute:
+        errors.append("ledger must require after.quarantined on asset.delete success")
+    jail_ts = (BRIDGE / "src" / "policy" / "jail.ts").read_text(encoding="utf-8")
+    for needle in ("project.godot", "export_presets.cfg", ".godot/"):
+        if needle not in jail_ts:
+            errors.append(f"sidecar jail must lock {needle}")
+    meta = (ADDON / "core" / "hh_scene_meta.gd").read_text(encoding="utf-8")
+    if "project.godot" not in meta or "export_presets.cfg" not in meta:
+        errors.append("plugin jail must lock project.godot and export_presets.cfg")
+    if ".godot" not in meta:
+        errors.append("plugin jail must lock .godot/")
     actions_ts = (BRIDGE / "src" / "registry" / "actions.ts").read_text(encoding="utf-8")
     if "OS_SOURCE" not in actions_ts:
         errors.append("asset.import must accept an external OS_SOURCE")
@@ -235,7 +256,8 @@ def sha256_file(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def try_junction_escape() -> str | None:
+def try_junction_escape() -> tuple[str | None, str]:
+    """Return (res dest, skip reason). Missing link is never a PASS of the symlink case."""
     outside = Path(tempfile.mkdtemp(prefix="hh-r3w6-link-"))
     link = TEMP_DIR / "outlink"
     try:
@@ -249,13 +271,13 @@ def try_junction_escape() -> str | None:
             )
             if done.returncode != 0 or not link.exists():
                 shutil.rmtree(outside, ignore_errors=True)
-                return None
+                return None, "os"
         else:
             link.symlink_to(outside, target_is_directory=True)
-        return "res://r3w6/outlink/escaped.png"
+        return "res://r3w6/outlink/escaped.png", ""
     except OSError:
         shutil.rmtree(outside, ignore_errors=True)
-        return None
+        return None, "os"
 
 
 def live_errors(exe: Path) -> list[str]:
@@ -414,7 +436,7 @@ def live_errors(exe: Path) -> list[str]:
             except OSError:
                 pass
 
-        linked = try_junction_escape()
+        linked, junction_skip = try_junction_escape()
         if linked:
             req_id, escaped = tool_call(
                 proc,
@@ -427,6 +449,19 @@ def live_errors(exe: Path) -> list[str]:
             escaped_abs = PLUGIN_PROJECT / "r3w6" / "outlink" / "escaped.png"
             if escaped_abs.is_file():
                 errors.append("symlink escape wrote a dest outside the jail")
+        else:
+            print("JUNCTION_SKIP=os", flush=True)
+            if junction_skip != "os":
+                errors.append(f"junction skip must print JUNCTION_SKIP=os, got {junction_skip!r}")
+
+        req_id, outside_root = tool_call(
+            proc,
+            req_id,
+            "godot.asset",
+            "import",
+            {"path": "res://r3w6/../../outside.png", "source": str(src_png)},
+        )
+        expect_code(outside_root, ("E_PATH",), errors, "dest globalized outside project root")
 
         req_id, spare = tool_call(
             proc,
@@ -469,6 +504,48 @@ def live_errors(exe: Path) -> list[str]:
         expect_code(del_ref, ("E_CONFLICT",), errors, "delete referenced")
         if not dest_abs.is_file():
             errors.append("referenced delete silently removed the dest")
+
+        driver = "res://hh_reload_driver.gd"
+        driver_abs = PLUGIN_PROJECT / "hh_reload_driver.gd"
+        if not driver_abs.is_file():
+            errors.append("missing hh_reload_driver.gd before autoload-delete probe")
+            return errors
+        req_id, del_driver = tool_call(proc, req_id, "godot.asset", "delete", {"path": driver})
+        expect_code(del_driver, ("E_CONFLICT",), errors, "delete autoload script")
+        if not driver_abs.is_file():
+            errors.append("autoload delete quarantined a live project.godot ref")
+
+        proj = "res://project.godot"
+        proj_abs = PLUGIN_PROJECT / "project.godot"
+        locked_codes = ("E_PATH", "E_POLICY", "E_OUT_OF_BOUNDS")
+        req_id, del_proj = tool_call(proc, req_id, "godot.asset", "delete", {"path": proj})
+        expect_code(del_proj, locked_codes, errors, "delete project.godot")
+        if not proj_abs.is_file():
+            errors.append("asset.delete project.godot removed the file")
+
+        req_id, move_proj = tool_call(
+            proc,
+            req_id,
+            "godot.asset",
+            "move",
+            {"from": proj, "to": "res://r3w6/project.godot"},
+        )
+        expect_code(move_proj, locked_codes, errors, "move project.godot")
+        if not proj_abs.is_file():
+            errors.append("asset.move project.godot removed the file")
+
+        req_id, rename_proj = tool_call(
+            proc,
+            req_id,
+            "godot.asset",
+            "rename",
+            {"path": proj, "name": "project_renamed"},
+        )
+        expect_code(rename_proj, locked_codes, errors, "rename project.godot")
+        if not proj_abs.is_file():
+            errors.append("asset.rename project.godot removed the file")
+        if (PLUGIN_PROJECT / "project_renamed.godot").is_file():
+            errors.append("asset.rename project.godot created a renamed copy")
 
         req_id, del_spare = tool_call(proc, req_id, "godot.asset", "delete", {"path": other})
         if not ack_ok(del_spare, errors, "delete unreferenced"):
@@ -583,7 +660,8 @@ def main() -> int:
 
     print(
         "PASS: asset ingest/import wait + .import sidecar; corrupt/polyglot/huge typed fail; "
-        "path jail; collision; referenced delete E_CONFLICT; unreferenced quarantine; Pause."
+        "path jail; autoload E_CONFLICT; project.godot locked; "
+        "collision; referenced delete E_CONFLICT; unreferenced quarantine; Pause."
     )
     return 0
 

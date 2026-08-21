@@ -23,17 +23,22 @@ func jail(command_id: String, res_path: String) -> Dictionary:
 		return _errors.fail(
 			command_id,
 			HHAgentErrors.E_PATH,
-			"write is locked under addons/hh_agent",
+			"generic write/delete is locked for this path",
 			res_path,
 		)
 	return {"ok": true, "abs": abs_path}
 
 
 func _locked_write(res_path: String) -> bool:
-	var norm: String = res_path.replace("\\", "/").to_lower()
+	var norm: String = res_path.replace("\\", "/").to_lower().simplify_path()
 	if norm.begins_with("res://addons/hh_agent/") or norm == "res://addons/hh_agent":
 		return true
 	if norm.begins_with("res://.hh-agent/") or norm == "res://.hh-agent":
+		return true
+	if norm.begins_with("res://.godot/") or norm == "res://.godot":
+		return true
+	var name_s: String = norm.get_file()
+	if name_s == "project.godot" or name_s == "export_presets.cfg":
 		return true
 	return false
 

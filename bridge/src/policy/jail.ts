@@ -14,6 +14,7 @@ const LOCKED_PREFIXES = [
   "res://addons/hh_agent/",
   "res://addons/",
   ".hh-agent/",
+  ".godot/",
 ];
 
 const LOCKED_NAMES = new Set([
@@ -21,6 +22,9 @@ const LOCKED_NAMES = new Set([
   "ledger.sqlite",
   "sidecar.lock",
   "session.json",
+  "project.godot",
+  "export_presets.cfg",
+  ".godot",
 ]);
 
 export interface JailOk {

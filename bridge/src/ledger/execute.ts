@@ -549,6 +549,9 @@ function resourceApplyOk(
     if (!isRecord(after) || after.absent !== true) {
       return errorResult(result.command_id, E.E_UNVERIFIED, "delete missing absent readback");
     }
+    if (after.quarantined !== true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "delete missing quarantine stamp");
+    }
     return undefined;
   }
   if (actionId === "asset.import" || actionId === "asset.reimport") {
