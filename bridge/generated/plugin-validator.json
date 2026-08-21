@@ -3,7 +3,7 @@
   "protocol": "hh-godot-agent/1",
   "registry_version": "hh-godot-actions/1",
   "variant_schema": "hh-godot-variant/1",
-  "action_count": 130,
+  "action_count": 131,
   "envelope": {
     "allowed": [
       "protocol",
@@ -11207,6 +11207,62 @@
             "minLength": 1,
             "maxLength": 256,
             "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
+          },
+          "uid": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z0-9_.:-]+$"
+          },
+          "property": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*(?:[/:][A-Za-z_][A-Za-z0-9_]*)*$"
+          },
+          "resource_path": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 256,
+            "pattern": "^res://[^\\s]+$"
+          },
+          "script_path": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 256,
+            "pattern": "^res://[^\\s]+$"
+          },
+          "script_line": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100000
+          },
+          "script_column": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000
+          },
+          "filesystem_path": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 256,
+            "pattern": "^res://[^\\s]+$"
+          },
+          "screen": {
+            "type": "string",
+            "enum": [
+              "2D",
+              "3D",
+              "Script",
+              "Game",
+              "AssetLib"
+            ]
+          },
+          "hide_inspector": {
+            "type": "boolean"
+          },
+          "use_external_editor": {
+            "type": "boolean"
           }
         }
       },
@@ -12198,6 +12254,126 @@
         "E_UNVERIFIED"
       ],
       "postcondition": "observer_rows_appended"
+    },
+    "observer.focus": {
+      "method": "godot.observer",
+      "verb": "focus",
+      "action_version": "1",
+      "side_effect": "read",
+      "undo": "none",
+      "timeout_ms": 5000,
+      "cancellable": false,
+      "required_policy": "OBSERVE",
+      "checkpoint_required": false,
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "detail"
+        ],
+        "properties": {
+          "detail": {
+            "type": "string",
+            "enum": [
+              "short",
+              "full"
+            ]
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ok",
+          "command_id",
+          "postcondition"
+        ],
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "changed": {
+            "type": "boolean"
+          },
+          "before": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "after": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "postcondition": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "verified",
+              "checks"
+            ],
+            "properties": {
+              "verified": {
+                "type": "boolean"
+              },
+              "checks": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "undo_action": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "error": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "error_codes": [
+        "E_MISSING_REQUIRED",
+        "E_UNKNOWN_PARAM",
+        "E_INVALID_TYPE",
+        "E_OUT_OF_BOUNDS",
+        "E_UNKNOWN_ACTION",
+        "E_PROTOCOL_VERSION",
+        "E_ACTION_VERSION",
+        "E_CLIENT_ESCALATION",
+        "E_INVALID_COMMAND_ID",
+        "E_INVALID_ENVELOPE",
+        "E_UNVERIFIED"
+      ],
+      "postcondition": "observer_focus_snapshot"
     },
     "play.start": {
       "method": "godot.play",

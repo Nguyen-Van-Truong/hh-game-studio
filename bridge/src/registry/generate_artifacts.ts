@@ -60,6 +60,10 @@ export function buildMcpTools(): Record<string, unknown> {
             type: "object",
             description: "Optional fingerprint/history/disk hash for E_CONFLICT.",
           },
+          presentation: {
+            type: "object",
+            description: "Optional Watch/Fast presentation hint. Does not mutate the document.",
+          },
         },
       },
     };

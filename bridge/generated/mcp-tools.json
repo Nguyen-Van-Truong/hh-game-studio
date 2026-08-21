@@ -5,7 +5,7 @@
   "registry_version": "hh-godot-actions/1",
   "action_version": "1",
   "tool_count": 21,
-  "action_count": 130,
+  "action_count": 131,
   "tools": [
     {
       "name": "godot.capabilities",
@@ -36,6 +36,10 @@
           "precondition": {
             "type": "object",
             "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
+          },
+          "presentation": {
+            "type": "object",
+            "description": "Optional Watch/Fast presentation hint. Does not mutate the document."
           }
         }
       }
@@ -74,6 +78,10 @@
           "precondition": {
             "type": "object",
             "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
+          },
+          "presentation": {
+            "type": "object",
+            "description": "Optional Watch/Fast presentation hint. Does not mutate the document."
           }
         }
       }
@@ -117,6 +125,10 @@
           "precondition": {
             "type": "object",
             "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
+          },
+          "presentation": {
+            "type": "object",
+            "description": "Optional Watch/Fast presentation hint. Does not mutate the document."
           }
         }
       }
@@ -160,6 +172,10 @@
           "precondition": {
             "type": "object",
             "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
+          },
+          "presentation": {
+            "type": "object",
+            "description": "Optional Watch/Fast presentation hint. Does not mutate the document."
           }
         }
       }
@@ -196,6 +212,10 @@
           "precondition": {
             "type": "object",
             "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
+          },
+          "presentation": {
+            "type": "object",
+            "description": "Optional Watch/Fast presentation hint. Does not mutate the document."
           }
         }
       }
@@ -235,6 +255,10 @@
           "precondition": {
             "type": "object",
             "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
+          },
+          "presentation": {
+            "type": "object",
+            "description": "Optional Watch/Fast presentation hint. Does not mutate the document."
           }
         }
       }
@@ -271,6 +295,10 @@
           "precondition": {
             "type": "object",
             "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
+          },
+          "presentation": {
+            "type": "object",
+            "description": "Optional Watch/Fast presentation hint. Does not mutate the document."
           }
         }
       }
@@ -312,6 +340,10 @@
           "precondition": {
             "type": "object",
             "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
+          },
+          "presentation": {
+            "type": "object",
+            "description": "Optional Watch/Fast presentation hint. Does not mutate the document."
           }
         }
       }
@@ -351,6 +383,10 @@
           "precondition": {
             "type": "object",
             "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
+          },
+          "presentation": {
+            "type": "object",
+            "description": "Optional Watch/Fast presentation hint. Does not mutate the document."
           }
         }
       }
@@ -391,6 +427,10 @@
           "precondition": {
             "type": "object",
             "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
+          },
+          "presentation": {
+            "type": "object",
+            "description": "Optional Watch/Fast presentation hint. Does not mutate the document."
           }
         }
       }
@@ -429,6 +469,10 @@
           "precondition": {
             "type": "object",
             "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
+          },
+          "presentation": {
+            "type": "object",
+            "description": "Optional Watch/Fast presentation hint. Does not mutate the document."
           }
         }
       }
@@ -467,6 +511,10 @@
           "precondition": {
             "type": "object",
             "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
+          },
+          "presentation": {
+            "type": "object",
+            "description": "Optional Watch/Fast presentation hint. Does not mutate the document."
           }
         }
       }
@@ -506,6 +554,10 @@
           "precondition": {
             "type": "object",
             "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
+          },
+          "presentation": {
+            "type": "object",
+            "description": "Optional Watch/Fast presentation hint. Does not mutate the document."
           }
         }
       }
@@ -525,7 +577,8 @@
             "type": "string",
             "enum": [
               "timeline",
-              "append"
+              "append",
+              "focus"
             ]
           },
           "params": {
@@ -540,6 +593,10 @@
           "precondition": {
             "type": "object",
             "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
+          },
+          "presentation": {
+            "type": "object",
+            "description": "Optional Watch/Fast presentation hint. Does not mutate the document."
           }
         }
       }
@@ -578,6 +635,10 @@
           "precondition": {
             "type": "object",
             "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
+          },
+          "presentation": {
+            "type": "object",
+            "description": "Optional Watch/Fast presentation hint. Does not mutate the document."
           }
         }
       }
@@ -616,6 +677,10 @@
           "precondition": {
             "type": "object",
             "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
+          },
+          "presentation": {
+            "type": "object",
+            "description": "Optional Watch/Fast presentation hint. Does not mutate the document."
           }
         }
       }
@@ -657,6 +722,10 @@
           "precondition": {
             "type": "object",
             "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
+          },
+          "presentation": {
+            "type": "object",
+            "description": "Optional Watch/Fast presentation hint. Does not mutate the document."
           }
         }
       }
@@ -695,6 +764,10 @@
           "precondition": {
             "type": "object",
             "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
+          },
+          "presentation": {
+            "type": "object",
+            "description": "Optional Watch/Fast presentation hint. Does not mutate the document."
           }
         }
       }
@@ -732,6 +805,10 @@
           "precondition": {
             "type": "object",
             "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
+          },
+          "presentation": {
+            "type": "object",
+            "description": "Optional Watch/Fast presentation hint. Does not mutate the document."
           }
         }
       }
@@ -768,6 +845,10 @@
           "precondition": {
             "type": "object",
             "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
+          },
+          "presentation": {
+            "type": "object",
+            "description": "Optional Watch/Fast presentation hint. Does not mutate the document."
           }
         }
       }
@@ -805,6 +886,10 @@
           "precondition": {
             "type": "object",
             "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
+          },
+          "presentation": {
+            "type": "object",
+            "description": "Optional Watch/Fast presentation hint. Does not mutate the document."
           }
         }
       }

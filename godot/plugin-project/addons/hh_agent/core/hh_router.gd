@@ -16,6 +16,7 @@ const _ScriptScript: GDScript = preload("res://addons/hh_agent/core/hh_script_ad
 const _AssetScript: GDScript = preload("res://addons/hh_agent/core/hh_asset_adapter.gd")
 const _SettingsScript: GDScript = preload("res://addons/hh_agent/core/hh_settings_adapter.gd")
 const _TxScript: GDScript = preload("res://addons/hh_agent/core/hh_transaction_adapter.gd")
+const _PresenterScript: GDScript = preload("res://addons/hh_agent/core/hh_presenter.gd")
 
 ## Routes read/view adapters, scene/node/property/resource/signal/script/asset/project/transaction apply.
 
@@ -31,6 +32,7 @@ var _scripts: HHAgentScriptAdapter = HHAgentScriptAdapter.new()
 var _assets: HHAgentAssetAdapter = HHAgentAssetAdapter.new()
 var _settings: HHAgentSettingsAdapter = HHAgentSettingsAdapter.new()
 var _tx: HHAgentTransactionAdapter = HHAgentTransactionAdapter.new()
+var _presenter: HHAgentPresenter = HHAgentPresenter.new()
 
 
 func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_gate: HHAgentPauseGate = null) -> Dictionary:
@@ -83,29 +85,34 @@ func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_ga
 	var pre: Dictionary = {}
 	if envelope.has("precondition") and envelope.get("precondition") is Dictionary:
 		pre = envelope.get("precondition") as Dictionary
+	var result: Dictionary = {}
 	if method == "godot.job" and action == "transaction":
-		return _tx.handle(command_id, method, action, params, actions, pre)
-	if method == "godot.scene" and action == "instantiate":
-		return _nodes.handle(command_id, method, action, params, actions, pre)
-	if method == "godot.node" and action != "query" and _nodes.handles(action):
-		return _nodes.handle(command_id, method, action, params, actions, pre)
-	if method == "godot.property" and action != "get" and _props.handles(action):
-		return _props.handle(command_id, method, action, params, actions, pre)
-	if method == "godot.resource" and action != "load" and action != "uid" and _resources.handles(action):
-		return _resources.handle(command_id, method, action, params, actions, pre)
-	if method == "godot.signal" and _signals.handles(action):
-		return _signals.handle(command_id, method, action, params, actions, pre)
-	if method == "godot.asset" and _assets.handles(action):
-		return _assets.handle(command_id, method, action, params, actions, pre, pause_gate)
-	if method == "godot.script" and _scripts.handles(action):
-		return _scripts.handle(command_id, method, action, params, actions, pre)
-	if method == "godot.project" and action != "inspect" and action != "doctor" and _settings.handles(action):
-		return _settings.handle(command_id, method, action, params, actions, pre)
-	if method == "godot.scene" and _scenes.handles(action):
-		return _scenes.handle(command_id, method, action, params, actions, pre)
-	if side_effect == "read" or side_effect == "view":
-		return _reads.handle(command_id, method, action, params, actions)
-	return _errors.fail(command_id, HHAgentErrors.E_UNVERIFIED, "not dispatched", "")
+		result = _tx.handle(command_id, method, action, params, actions, pre)
+	elif method == "godot.scene" and action == "instantiate":
+		result = _nodes.handle(command_id, method, action, params, actions, pre)
+	elif method == "godot.node" and action != "query" and _nodes.handles(action):
+		result = _nodes.handle(command_id, method, action, params, actions, pre)
+	elif method == "godot.property" and action != "get" and _props.handles(action):
+		result = _props.handle(command_id, method, action, params, actions, pre)
+	elif method == "godot.resource" and action != "load" and action != "uid" and _resources.handles(action):
+		result = _resources.handle(command_id, method, action, params, actions, pre)
+	elif method == "godot.signal" and _signals.handles(action):
+		result = _signals.handle(command_id, method, action, params, actions, pre)
+	elif method == "godot.asset" and _assets.handles(action):
+		result = _assets.handle(command_id, method, action, params, actions, pre, pause_gate)
+	elif method == "godot.script" and _scripts.handles(action):
+		result = _scripts.handle(command_id, method, action, params, actions, pre)
+	elif method == "godot.project" and action != "inspect" and action != "doctor" and _settings.handles(action):
+		result = _settings.handle(command_id, method, action, params, actions, pre)
+	elif method == "godot.scene" and _scenes.handles(action):
+		result = _scenes.handle(command_id, method, action, params, actions, pre)
+	elif method == "godot.editor" and (action == "select" or action == "focus" or action == "main_screen"):
+		result = _presenter.handle(command_id, method, action, params, actions, envelope)
+	elif side_effect == "read" or side_effect == "view":
+		result = _reads.handle(command_id, method, action, params, actions)
+	else:
+		return _errors.fail(command_id, HHAgentErrors.E_UNVERIFIED, "not dispatched", "")
+	return _presenter.after_success(result, method, action, params, envelope)
 
 
 func run_selftest(actions: HHAgentActions) -> PackedStringArray:

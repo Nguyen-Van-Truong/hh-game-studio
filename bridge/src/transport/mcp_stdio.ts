@@ -118,6 +118,7 @@ function domainTools(): Array<{
           params: { type: "object" },
           approval: { type: "string", minLength: 64, maxLength: 64 },
           precondition: { type: "object" },
+          presentation: { type: "object" },
         },
       },
     },
@@ -172,6 +173,7 @@ function domainTools(): Array<{
           params: { type: "object" },
           command_id: { type: "string", minLength: 26, maxLength: 26 },
           precondition: { type: "object" },
+          presentation: { type: "object" },
         },
       },
     });
@@ -358,6 +360,7 @@ async function handleTool(
         action,
         params,
         ...(isRecord(args.precondition) ? { precondition: args.precondition } : {}),
+        ...(isRecord(args.presentation) ? { presentation: args.presentation } : {}),
       });
     } finally {
       if (ctx.policy) {
@@ -393,6 +396,7 @@ async function handleTool(
     action,
     params,
     ...(isRecord(args.precondition) ? { precondition: args.precondition } : {}),
+    ...(isRecord(args.presentation) ? { presentation: args.presentation } : {}),
   });
 }
 

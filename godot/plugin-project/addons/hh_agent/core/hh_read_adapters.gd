@@ -7,12 +7,14 @@ const _ActionsScript: GDScript = preload("res://addons/hh_agent/core/hh_actions.
 const _MetaScript: GDScript = preload("res://addons/hh_agent/core/hh_scene_meta.gd")
 const _CodecScript: GDScript = preload("res://addons/hh_agent/core/hh_variant_codec.gd")
 const _StoreScript: GDScript = preload("res://addons/hh_agent/core/hh_activity_store.gd")
+const _PresenterScript: GDScript = preload("res://addons/hh_agent/core/hh_presenter.gd")
 
 ## Main-thread read/view adapters. Mutate is never applied here.
 
 var _errors: HHAgentErrors = HHAgentErrors.new()
 var _meta: HHAgentSceneMeta = HHAgentSceneMeta.new()
 var _codec: HHAgentVariantCodec = HHAgentVariantCodec.new()
+var _presenter: HHAgentPresenter = HHAgentPresenter.new()
 
 
 func handle(command_id: String, method: String, action: String, params: Dictionary, actions: HHAgentActions) -> Dictionary:
@@ -30,8 +32,10 @@ func handle(command_id: String, method: String, action: String, params: Dictiona
 		return _observer_timeline(command_id, params, post)
 	if method == "godot.observer" and action == "append":
 		return _observer_append(command_id, params, post)
+	if method == "godot.observer" and action == "focus":
+		return _observer_focus(command_id, params, post)
 	if method == "godot.editor" and action == "select":
-		return _editor_select(command_id, params, post)
+		return _presenter.handle(command_id, method, action, params, actions, {})
 	if method == "godot.scene" and action == "read":
 		return _scene_read(command_id, params, post)
 	if method == "godot.scene" and action == "list_tabs":
@@ -109,6 +113,7 @@ func _post_name(def: Dictionary, method: String, action: String) -> String:
 			"observer.timeline": "observer_timeline_snapshot",
 			"observer.append": "observer_rows_appended",
 			"editor.select": "selection_paths_match",
+			"observer.focus": "observer_focus_snapshot",
 			"play.status": "play_status_known",
 			"play.logs": "play_logs_returned",
 		}
@@ -407,6 +412,7 @@ func _editor_state(command_id: String, params: Dictionary, post: String) -> Dict
 		"detail": str(params.get("detail", "short")),
 		"dock": dock,
 	}
+	_merge_focus(after, _presenter.live_snapshot())
 	var again: Array = _selection_paths()
 	if again != selected:
 		return _unverified(command_id, "selection changed during readback")
@@ -420,6 +426,25 @@ func _observer_timeline(command_id: String, params: Dictionary, post: String) ->
 			store.reload_from_disk()
 	var dock: Dictionary = _dock_snapshot(params)
 	return _ok(command_id, post, _redact_after({"dock": dock, "detail": str(params.get("detail", "short"))}))
+
+
+func _observer_focus(command_id: String, _params: Dictionary, post: String) -> Dictionary:
+	var focus: Dictionary = _presenter.live_snapshot()
+	return _ok(command_id, post, _redact_after(focus))
+
+
+func _merge_focus(after: Dictionary, focus: Dictionary) -> void:
+	for key: String in [
+		"selected_paths",
+		"inspector_class",
+		"inspector_path",
+		"script_path",
+		"script_line",
+		"filesystem_path",
+		"main_screen",
+		"presentation_failed",
+	]:
+		after[key] = focus.get(key)
 
 
 func _observer_append(command_id: String, params: Dictionary, post: String) -> Dictionary:
@@ -502,10 +527,6 @@ func _selection_paths() -> Array:
 		if node_v is Node:
 			out.append(str((node_v as Node).get_path()))
 	return out
-
-
-func _editor_select(command_id: String, _params: Dictionary, _post: String) -> Dictionary:
-	return _unverified(command_id, "editor.select mutates EditorSelection; not a R2-WP6 read")
 
 
 func _scene_read(command_id: String, params: Dictionary, post: String) -> Dictionary:

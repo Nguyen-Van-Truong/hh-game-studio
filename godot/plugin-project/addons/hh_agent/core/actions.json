@@ -1127,6 +1127,17 @@
       "postcondition": "observer_rows_appended",
       "checkpoint_required": false
     },
+    "observer.focus": {
+      "method": "godot.observer",
+      "verb": "focus",
+      "side_effect": "read",
+      "timeout_ms": 5000,
+      "required": [
+        "detail"
+      ],
+      "postcondition": "observer_focus_snapshot",
+      "checkpoint_required": false
+    },
     "play.start": {
       "method": "godot.play",
       "verb": "start",

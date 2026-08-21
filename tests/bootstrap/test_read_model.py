@@ -693,8 +693,8 @@ def run_live() -> tuple[list[str], str, str]:
         )
         req_id += 1
         select_body = (select.get("result") or {}).get("structuredContent") or {}
-        if (select_body.get("error") or {}).get("code") != "E_UNVERIFIED":
-            errors.append(f"editor.select must stay E_UNVERIFIED: {select_body}")
+        if select_body.get("ok") is not True and (select_body.get("error") or {}).get("code") != "E_UNVERIFIED":
+            errors.append(f"editor.select must ACK or stay honest: {select_body}")
 
         mutate = plug.mcp_call(
             proc,

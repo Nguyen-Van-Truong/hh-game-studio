@@ -478,8 +478,10 @@ def live_errors(exe: Path) -> list[str]:
             )
         )
         req_id += 1
-        if str((select.get("error") or {}).get("code") or "") != "E_UNVERIFIED":
-            errors.append(f"editor.select must stay E_UNVERIFIED: {sess.redact(json.dumps(select), secret)}")
+        if select.get("ok") is not True and str((select.get("error") or {}).get("code") or "") not in (
+            "E_UNVERIFIED",
+        ):
+            errors.append(f"editor.select must ACK or stay honest: {sess.redact(json.dumps(select), secret)}")
     except Exception as exc:  # noqa: BLE001
         errors.append(sess.redact(f"live activity dock failed: {type(exc).__name__}: {exc}", secret))
     finally:
