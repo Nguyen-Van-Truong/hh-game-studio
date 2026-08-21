@@ -5,7 +5,7 @@
   "registry_version": "hh-godot-actions/1",
   "action_version": "1",
   "tool_count": 20,
-  "action_count": 122,
+  "action_count": 125,
   "tools": [
     {
       "name": "godot.capabilities",
@@ -142,7 +142,10 @@
               "reorder",
               "duplicate",
               "group",
-              "query"
+              "query",
+              "make_local",
+              "undo",
+              "redo"
             ]
           },
           "params": {

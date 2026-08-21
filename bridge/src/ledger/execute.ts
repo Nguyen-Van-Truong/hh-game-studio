@@ -21,7 +21,12 @@ import {
 } from "../transport/plugin_rpc.js";
 import { LedgerPluginDeath, maybeCrashAfterDispatchAttempt, maybeFault } from "./fault.js";
 import { canonicalRequestHash } from "./hash.js";
-import { isSceneLifecycleApply, sceneNeedsDiskHash } from "./scene_lifecycle.js";
+import {
+  isProvenEditorApply,
+  isSceneLifecycleApply,
+  nodeNeedsUidAfter,
+  sceneNeedsDiskHash,
+} from "./scene_lifecycle.js";
 import { emptyRow, type CommandLedger, type CommandRow } from "./store.js";
 import type { LedgerState } from "./states.js";
 
@@ -106,6 +111,9 @@ export function parseStoredResult(raw: string, commandId: string): PluginCommand
     }
     if (isRecord(parsed.after)) {
       result.after = parsed.after;
+    }
+    if (typeof parsed.undo_action === "string") {
+      result.undo_action = parsed.undo_action;
     }
     return result;
   } catch {
@@ -272,7 +280,7 @@ function classify(raw: Record<string, unknown>, commandId: string): Classified {
       timeoutMs: def?.timeout_ms ?? 5_000,
     };
   }
-  if (isSceneLifecycleApply(accepted.action_id)) {
+  if (isProvenEditorApply(accepted.action_id)) {
     return {
       kind: "mutate",
       sideEffect: side,
@@ -286,6 +294,50 @@ function classify(raw: Record<string, unknown>, commandId: string): Classified {
     actionId: accepted.action_id,
     result: unverifiedResult(commandId, "not dispatched"),
   };
+}
+
+function nodeIdentityOk(result: PluginCommandResult, actionId: string): PluginCommandResult | undefined {
+  if (!result.ok) {
+    return result;
+  }
+  const after = result.after;
+  if (actionId === "node.remove") {
+    if (!isRecord(after) || after.absent !== true || typeof after.path !== "string" || after.path.length < 1) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "remove postcondition missing absent path");
+    }
+    if (typeof result.undo_action !== "string" || !result.undo_action.startsWith("Agent: ")) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "remove missing Agent UndoRedo name");
+    }
+    return undefined;
+  }
+  if (actionId === "node.undo" || actionId === "node.redo") {
+    if (!isRecord(after) || typeof after.fingerprint !== "string" || after.fingerprint.length < 8) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "history op missing fingerprint readback");
+    }
+    return undefined;
+  }
+  if (actionId === "node.make_local") {
+    return undefined;
+  }
+  if (!nodeNeedsUidAfter(actionId)) {
+    return undefined;
+  }
+  if (!isRecord(after)) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "node after-summary missing");
+  }
+  if (typeof after.uid !== "string" || after.uid.length < 1) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "node uid missing after plugin ACK");
+  }
+  if (typeof after.path !== "string" || after.path.length < 1) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "node tree path missing after plugin ACK");
+  }
+  if (typeof after.owner !== "string") {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "node owner missing after plugin ACK");
+  }
+  if (typeof result.undo_action !== "string" || !result.undo_action.startsWith("Agent: ")) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "mutation missing Agent UndoRedo name");
+  }
+  return undefined;
 }
 
 function durableDiskOk(
@@ -592,8 +644,8 @@ async function applyMutateOnce(
   if (isNoopEnvelope(envelope)) {
     return markUncertain(ledger, row, "noop cannot use scene mutate apply");
   }
-  if (!isSceneLifecycleApply(classified.actionId)) {
-    return markUncertain(ledger, row, "only proven scene lifecycle verbs may apply");
+  if (!isProvenEditorApply(classified.actionId)) {
+    return markUncertain(ledger, row, "only proven editor apply verbs may apply");
   }
   const fields = envelopeFields(envelope);
   runtime.policy?.pause.registerJob(row.command_id, { atomic: true });
@@ -653,10 +705,11 @@ async function applyMutateOnce(
     row.apply_count = 1;
     persistResult(row, result);
     row.after_summary = JSON.stringify({
-      kind: "scene",
+      kind: isSceneLifecycleApply(classified.actionId) ? "scene" : "node",
       action_id: classified.actionId,
       checks: result.postcondition.checks,
       disk_hash: isRecord(result.after) ? result.after.disk_hash ?? "" : "",
+      uid: isRecord(result.after) ? result.after.uid ?? "" : "",
     });
     if (gated.checkpoint) {
       row.evidence_json = JSON.stringify([gated.checkpoint.manifest_path]);
@@ -676,6 +729,12 @@ async function applyMutateOnce(
       persistResult(row, failed);
       saveState(ledger, row, "failed");
       return failed;
+    }
+    const identityFail = nodeIdentityOk(result, classified.actionId);
+    if (identityFail) {
+      persistResult(row, identityFail);
+      saveState(ledger, row, "failed");
+      return identityFail;
     }
     const projectRoot = runtime.projectRoot ?? runtime.policy?.projectRoot ?? "";
     const diskFail = durableDiskOk(result, classified.actionId, fields.params, projectRoot);

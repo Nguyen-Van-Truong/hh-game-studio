@@ -5,11 +5,13 @@ const _ConstantsScript: GDScript = preload("res://addons/hh_agent/core/hh_consta
 const _ErrorsScript: GDScript = preload("res://addons/hh_agent/core/hh_errors.gd")
 const _ActionsScript: GDScript = preload("res://addons/hh_agent/core/hh_actions.gd")
 const _MetaScript: GDScript = preload("res://addons/hh_agent/core/hh_scene_meta.gd")
+const _NodeScript: GDScript = preload("res://addons/hh_agent/core/hh_node_adapter.gd")
 
-## Proven scene lifecycle via EditorInterface. Not node CRUD.
+## Proven scene lifecycle via EditorInterface. Node CRUD is the node adapter.
 
 var _errors: HHAgentErrors = HHAgentErrors.new()
 var _meta: HHAgentSceneMeta = HHAgentSceneMeta.new()
+var _nodes: HHAgentNodeAdapter = HHAgentNodeAdapter.new()
 
 
 func handles(action: String) -> bool:
@@ -179,6 +181,7 @@ func _open(command_id: String, params: Dictionary, post: String) -> Dictionary:
 	var again: String = _meta.edited_path()
 	if again != res_path:
 		return _unverified(command_id, "edited_scene changed during readback")
+	_nodes.repair_open_collisions(edited, res_path)
 	var after: Dictionary = _meta.snapshot(edited, res_path)
 	after["source"] = "editor"
 	return _errors.ok_changed(command_id, _checks(post), after, true)
@@ -261,6 +264,7 @@ func _reload(command_id: String, params: Dictionary, precondition: Dictionary, p
 	edited = EditorInterface.get_edited_scene_root()
 	if edited == null or edited.scene_file_path != res_path:
 		return _unverified(command_id, "reload did not leave %s edited" % res_path)
+	_nodes.repair_open_collisions(edited, res_path)
 	var after: Dictionary = _meta.snapshot(edited, res_path)
 	after["source"] = "editor"
 	return _errors.ok_changed(command_id, _checks(post), after, true)

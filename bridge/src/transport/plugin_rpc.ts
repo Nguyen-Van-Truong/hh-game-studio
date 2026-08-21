@@ -12,6 +12,7 @@ export interface PluginCommandResult {
   error?: { code: string; message: string; path: string };
   after?: Record<string, unknown>;
   before?: Record<string, unknown>;
+  undo_action?: string;
   warnings?: string[];
   evidence?: string[];
 }
@@ -131,6 +132,9 @@ export function parsePluginResult(raw: unknown): PluginCommandResult | null {
   }
   if (isRecord(raw.before)) {
     result.before = raw.before;
+  }
+  if (typeof raw.undo_action === "string") {
+    result.undo_action = raw.undo_action;
   }
   if (Array.isArray(raw.warnings)) {
     result.warnings = raw.warnings.filter((item): item is string => typeof item === "string");

@@ -689,31 +689,35 @@ def main() -> int:
             mutate = mcp_call(
                 proc,
                 3,
-                "godot.node",
+                "godot.property",
                 {
-                    "action": "add",
+                    "action": "set",
                     "params": {
                         "scene": "res://main.tscn",
-                        "parent": ".",
-                        "class_name": "Node2D",
-                        "name": "X",
+                        "node_path": ".",
+                        "property": "position",
+                        "value": {
+                            "schema": "hh-godot-variant/1",
+                            "type": "Vector2",
+                            "value": {"x": 1, "y": 2},
+                        },
                     },
                 },
             )
             body = (mutate.get("result") or {}).get("structuredContent") or {}
             err = body.get("error") or {}
             if err.get("code") != "E_UNVERIFIED":
-                errors.append(f"mutate must stay E_UNVERIFIED: {sess.redact(json.dumps(mutate), secret)}")
+                errors.append(f"unproven mutate must stay E_UNVERIFIED: {sess.redact(json.dumps(mutate), secret)}")
             if mutate.get("result", {}).get("isError") is not True:
-                errors.append("mutate must be isError")
+                errors.append("unproven mutate must be isError")
             dumped = json.dumps(mutate)
             if '"ok": true' in dumped or '"ok":true' in dumped:
-                errors.append("mutate path returned ok true")
+                errors.append("unproven mutate path returned ok true")
             if '"accepted": true' in dumped or '"accepted":true' in dumped:
                 errors.append("mutate reject must not nest registry.accepted true")
             time.sleep(0.2)
             if len(inbound) != before:
-                errors.append("mutate must not be forwarded to the plugin")
+                errors.append("unproven mutate must not be forwarded to the plugin")
 
             noop = mcp_call(proc, 4, "hh.plugin_noop", {})
             noop_body = (noop.get("result") or {}).get("structuredContent") or {}
@@ -779,7 +783,7 @@ def main() -> int:
 
     print(
         "PASS: hh_agent router + health dock; envelope second pass; "
-        "python-mock sidecar noop; mutate not dispatched; "
+        "python-mock sidecar noop; unproven mutate not dispatched; "
         f"GODOT_SELFTEST={godot_selftest}; GODOT_IN_EDITOR_RELOAD_50={godot_reload}; "
         f"GODOT_LIVE_HELLO={godot_live}; R2-WP3 stays unticked."
     )

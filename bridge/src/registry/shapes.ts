@@ -26,7 +26,7 @@ export const NODE_PATH: JsonSchema = {
   type: "string",
   minLength: 1,
   maxLength: 256,
-  pattern: "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$",
+  pattern: "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$",
 };
 
 export const IDENT: JsonSchema = {

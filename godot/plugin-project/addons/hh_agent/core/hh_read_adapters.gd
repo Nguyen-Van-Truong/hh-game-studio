@@ -799,7 +799,7 @@ func _walk_scene(scene: String) -> Dictionary:
 		return hold
 	var root: Node = hold.get("root") as Node
 	var nodes: Array = []
-	_collect(root, ".", nodes)
+	_collect(root, ".", nodes, root)
 	var summary: Dictionary = {
 		"ok": true,
 		"root": root.name,
@@ -812,20 +812,46 @@ func _walk_scene(scene: String) -> Dictionary:
 	return summary
 
 
-func _collect(node: Node, path_s: String, out: Array) -> void:
-	var groups: Array = _as_str_array(node.get_groups())
+func _collect(node: Node, path_s: String, out: Array, root: Node) -> void:
+	var groups: Array = []
+	for group_s: String in _as_str_array(node.get_groups()):
+		if group_s.begins_with("_"):
+			continue
+		groups.append(group_s)
+	groups.sort()
+	var uid: String = ""
+	if node.has_meta(HHAgentConstants.NODE_UID_META):
+		uid = str(node.get_meta(HHAgentConstants.NODE_UID_META))
+	elif node.has_meta(HHAgentConstants.NODE_UID_META_HIDDEN):
+		uid = str(node.get_meta(HHAgentConstants.NODE_UID_META_HIDDEN))
+	var owner_node: Node = node.owner
+	if owner_node == null and node != root:
+		var walk: Node = node.get_parent()
+		while walk != null and walk != root:
+			if not walk.scene_file_path.is_empty() and walk.scene_file_path != root.scene_file_path:
+				owner_node = walk
+				break
+			walk = walk.get_parent()
+	var owner_path: String = ""
+	if owner_node != null:
+		owner_path = "." if owner_node == root else str(root.get_path_to(owner_node))
 	out.append({
 		"name": node.name,
 		"path": path_s,
 		"class_name": node.get_class(),
 		"child_count": node.get_child_count(),
 		"groups": groups,
+		"uid": uid,
+		"owner": owner_path,
 	})
 	var i: int = 0
 	while i < node.get_child_count():
 		var child: Node = node.get_child(i)
+		if str(child.name).begins_with("__hh_"):
+			i += 1
+			continue
 		var child_path: String = child.name if path_s == "." else "%s/%s" % [path_s, child.name]
-		_collect(child, child_path, out)
+		_collect(child, child_path, out, root)
 		i += 1
 
 

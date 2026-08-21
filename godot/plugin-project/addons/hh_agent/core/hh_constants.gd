@@ -31,3 +31,6 @@ const READBACK_TYPE: String = "readback"
 const READBACK_RESULT_TYPE: String = "readback_result"
 const RECONNECT_BASE_MS: int = 500
 const RECONNECT_CAP_MS: int = 5000
+const NODE_UID_META: String = "hh_agent_uid"
+const NODE_UID_META_HIDDEN: String = "_hh_agent_uid"
+const UNDO_ACTION_PREFIX: String = "Agent: "

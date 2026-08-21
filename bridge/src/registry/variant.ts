@@ -17,7 +17,7 @@ export type VariantType = (typeof VARIANT_TYPES)[number];
 
 const TYPE_SET = new Set<string>(VARIANT_TYPES);
 const UID_RE = /^uid:\/\/[A-Za-z0-9]+$/;
-const NODE_PATH_RE = /^[A-Za-z_./%][A-Za-z0-9_./%]*$/;
+const NODE_PATH_RE = /^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$/;
 const VEC_ABS_MAX = 1_000_000;
 
 export interface EncodedVariant {

@@ -8,13 +8,15 @@ const _ActionsScript: GDScript = preload("res://addons/hh_agent/core/hh_actions.
 const _PauseScript: GDScript = preload("res://addons/hh_agent/core/hh_pause.gd")
 const _ReadsScript: GDScript = preload("res://addons/hh_agent/core/hh_read_adapters.gd")
 const _SceneScript: GDScript = preload("res://addons/hh_agent/core/hh_scene_adapter.gd")
+const _NodeScript: GDScript = preload("res://addons/hh_agent/core/hh_node_adapter.gd")
 
-## Routes read/view adapters and proven scene lifecycle. Node CRUD stays E_UNVERIFIED.
+## Routes read/view adapters, scene lifecycle, and proven node CRUD.
 
 var _errors: HHAgentErrors = HHAgentErrors.new()
 var _envelope: HHAgentEnvelope = HHAgentEnvelope.new()
 var _reads: HHAgentReadAdapters = HHAgentReadAdapters.new()
 var _scenes: HHAgentSceneAdapter = HHAgentSceneAdapter.new()
+var _nodes: HHAgentNodeAdapter = HHAgentNodeAdapter.new()
 
 
 func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_gate: HHAgentPauseGate = null) -> Dictionary:
@@ -64,12 +66,14 @@ func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_ga
 	var side_effect: String = str(def.get("side_effect", ""))
 	if pause_gate != null and not pause_gate.allows_side_effect(side_effect):
 		return _errors.fail(command_id, HHAgentErrors.E_PAUSED, "mutation gate is paused", "pause")
+	var pre: Dictionary = {}
+	if envelope.has("precondition") and envelope.get("precondition") is Dictionary:
+		pre = envelope.get("precondition") as Dictionary
 	if method == "godot.scene" and action == "instantiate":
-		return _errors.fail(command_id, HHAgentErrors.E_UNVERIFIED, "scene.instantiate is R3-WP2 node CRUD", "")
+		return _nodes.handle(command_id, method, action, params, actions, pre)
+	if method == "godot.node" and action != "query" and _nodes.handles(action):
+		return _nodes.handle(command_id, method, action, params, actions, pre)
 	if method == "godot.scene" and _scenes.handles(action):
-		var pre: Dictionary = {}
-		if envelope.has("precondition") and envelope.get("precondition") is Dictionary:
-			pre = envelope.get("precondition") as Dictionary
 		return _scenes.handle(command_id, method, action, params, actions, pre)
 	if side_effect == "read" or side_effect == "view":
 		return _reads.handle(command_id, method, action, params, actions)
@@ -107,8 +111,10 @@ func run_selftest(actions: HHAgentActions) -> PackedStringArray:
 		0,
 	)
 	var mutate_err: Dictionary = _error_of(mutate)
-	if str(mutate_err.get("code", "")) != HHAgentErrors.E_UNVERIFIED or mutate.get("ok", true) == true:
-		failures.append("mutate must be E_UNVERIFIED")
+	if mutate.get("ok", true) == true:
+		failures.append("node.add on missing scene must not paper-ok")
+	if str(mutate_err.get("code", "")) == "":
+		failures.append("node.add on missing scene must be a typed error")
 	var gate: HHAgentPauseGate = HHAgentPauseGate.new()
 	gate.set_paused(true)
 	var paused_mutate: Dictionary = dispatch(
@@ -168,15 +174,22 @@ func run_selftest(actions: HHAgentActions) -> PackedStringArray:
 					failures.append("ClassDB page total too small")
 	var mutate_still: Dictionary = dispatch(
 		_sample(
-			"godot.node",
-			"add",
-			{"scene": "res://main.tscn", "parent": ".", "class_name": "Node2D", "name": "X"},
+			"godot.property",
+			"set",
+			{
+				"scene": "res://main.tscn",
+				"node_path": ".",
+				"property": "position",
+				"value": {"schema": "hh-godot-variant/1", "type": "Vector2", "value": {"x": 1, "y": 2}},
+			},
 		),
 		actions,
 		0,
 	)
 	if str(_error_of(mutate_still).get("code", "")) != HHAgentErrors.E_UNVERIFIED:
-		failures.append("mutate must stay E_UNVERIFIED after read adapters")
+		failures.append("property.set must stay E_UNVERIFIED")
+	if mutate_still.get("ok", true) == true:
+		failures.append("property.set must not paper-ok")
 	var forbidden: Dictionary = dispatch(
 		{
 			"protocol": HHAgentConstants.PROTOCOL,

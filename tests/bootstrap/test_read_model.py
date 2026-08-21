@@ -427,14 +427,14 @@ def run_live() -> tuple[list[str], str, str]:
             except json.JSONDecodeError:
                 errors.append(f"{uri} text was not JSON")
                 payload = {}
-            if uri == "capability://matrix" and payload.get("node_crud_dispatched") is not False:
-                errors.append("capability://matrix must declare node_crud_dispatched false")
+            if uri == "capability://matrix" and payload.get("node_crud_dispatched") is not True:
+                errors.append("capability://matrix must declare node_crud_dispatched true")
             if uri == "capability://matrix" and payload.get("mutate_dispatched") not in (
-                False,
                 "scene-lifecycle",
+                "scene-lifecycle+node-crud",
             ):
                 errors.append(
-                    f"capability://matrix mutate_dispatched must be false or scene-lifecycle: {payload.get('mutate_dispatched')}"
+                    f"capability://matrix mutate_dispatched must include scene-lifecycle: {payload.get('mutate_dispatched')}"
                 )
             if uri == "capability://matrix":
                 node_add = next(
@@ -445,8 +445,8 @@ def run_live() -> tuple[list[str], str, str]:
                     ),
                     {},
                 )
-                if node_add.get("adapter") != "not-dispatched":
-                    errors.append(f"node.add must stay not-dispatched: {node_add}")
+                if node_add.get("adapter") != "node-crud":
+                    errors.append(f"node.add must be labeled node-crud: {node_add}")
             if uri == "capability://matrix":
                 select = next(
                     (
@@ -682,24 +682,28 @@ def run_live() -> tuple[list[str], str, str]:
         mutate = plug.mcp_call(
             proc,
             req_id,
-            "godot.node",
+            "godot.property",
             {
-                "action": "add",
+                "action": "set",
                 "params": {
                     "scene": "res://fixtures/tree_1k.tscn",
-                    "parent": ".",
-                    "class_name": "Node2D",
-                    "name": "AgentWroteThis",
+                    "node_path": ".",
+                    "property": "position",
+                    "value": {
+                        "schema": "hh-godot-variant/1",
+                        "type": "Vector2",
+                        "value": {"x": 1, "y": 2},
+                    },
                 },
             },
         )
         mutate_body = (mutate.get("result") or {}).get("structuredContent") or {}
         if (mutate_body.get("error") or {}).get("code") != "E_UNVERIFIED":
-            errors.append(f"mutate must stay E_UNVERIFIED: {mutate_body}")
+            errors.append(f"property.set must stay E_UNVERIFIED without UndoRedo codec: {mutate_body}")
         if mutate_body.get("ok") is True:
-            errors.append("mutate returned ok true")
+            errors.append("unproven property.set returned ok true")
         if TREE_FIXTURE.read_text(encoding="utf-8").count("AgentWroteThis"):
-            errors.append("mutate wrote a node into the fixture scene")
+            errors.append("read-model path wrote a node into the fixture scene")
     except Exception as exc:  # noqa: BLE001
         errors.append(sess.redact(f"live read-model run failed: {type(exc).__name__}: {exc}", secret))
     finally:

@@ -340,6 +340,40 @@
       "postcondition": "query_hits_match_tree",
       "checkpoint_required": false
     },
+    "node.make_local": {
+      "method": "godot.node",
+      "verb": "make_local",
+      "side_effect": "mutate",
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path"
+      ],
+      "postcondition": "instance_is_local",
+      "checkpoint_required": false
+    },
+    "node.undo": {
+      "method": "godot.node",
+      "verb": "undo",
+      "side_effect": "mutate",
+      "timeout_ms": 60000,
+      "required": [
+        "scene"
+      ],
+      "postcondition": "history_undo_applied",
+      "checkpoint_required": false
+    },
+    "node.redo": {
+      "method": "godot.node",
+      "verb": "redo",
+      "side_effect": "mutate",
+      "timeout_ms": 60000,
+      "required": [
+        "scene"
+      ],
+      "postcondition": "history_redo_applied",
+      "checkpoint_required": false
+    },
     "property.get": {
       "method": "godot.property",
       "verb": "get",

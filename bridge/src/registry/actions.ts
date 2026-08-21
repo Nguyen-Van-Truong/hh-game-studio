@@ -130,7 +130,7 @@ function mutate(
   post: string,
   input: JsonSchema,
   example: Record<string, unknown>,
-  extra?: { policy?: Policy; cancel?: boolean; extra_errors?: readonly string[] },
+  extra?: { policy?: Policy; cancel?: boolean; extra_errors?: readonly string[]; timeout_ms?: number },
 ): ActionSpec {
   const spec: ActionSpec = {
     summary,
@@ -146,6 +146,9 @@ function mutate(
   }
   if (extra?.extra_errors) {
     spec.extra_errors = extra.extra_errors;
+  }
+  if (extra?.timeout_ms !== undefined) {
+    spec.timeout_ms = extra.timeout_ms;
   }
   return spec;
 }
@@ -307,6 +310,7 @@ const SPECS: Record<string, ActionSpec> = {
       packed: "res://scenes/key.tscn",
       parent: "World",
     },
+    { extra_errors: SCENE_MUTATE_ERRORS },
   ),
   "scene.dependencies": read(
     "List scene ExtResource / UID dependencies",
@@ -361,12 +365,14 @@ const SPECS: Record<string, ActionSpec> = {
       class_name: "Node2D",
       name: "Prop",
     },
+    { extra_errors: SCENE_MUTATE_ERRORS },
   ),
   "node.remove": dest(
     "Remove a node from the packed scene",
     "node_path_absent",
     obj(["scene", "node_path"], { scene: RES_PATH, node_path: NODE_PATH }),
     { scene: "res://scenes/world.tscn", node_path: "World/Prop" },
+    { extra_errors: SCENE_MUTATE_ERRORS },
   ),
   "node.rename": mutate(
     "Rename a node without breaking unique-name lookups",
@@ -378,6 +384,7 @@ const SPECS: Record<string, ActionSpec> = {
       name: IDENT,
     }),
     { scene: "res://scenes/world.tscn", node_path: "World/Temp", name: "Door" },
+    { extra_errors: SCENE_MUTATE_ERRORS },
   ),
   "node.reparent": mutate(
     "Reparent a node, optionally keeping global transform",
@@ -387,12 +394,14 @@ const SPECS: Record<string, ActionSpec> = {
       scene: RES_PATH,
       node_path: NODE_PATH,
       new_parent: NODE_PATH,
+      keep_global_transform: BOOL,
     }),
     {
       scene: "res://scenes/world.tscn",
       node_path: "World/Props/Door",
       new_parent: "World/Doors",
     },
+    { extra_errors: SCENE_MUTATE_ERRORS },
   ),
   "node.reorder": mutate(
     "Move a node to a sibling index",
@@ -404,6 +413,7 @@ const SPECS: Record<string, ActionSpec> = {
       index: INDEX,
     }),
     { scene: "res://scenes/world.tscn", node_path: "World/HUD", index: 3 },
+    { extra_errors: SCENE_MUTATE_ERRORS },
   ),
   "node.duplicate": mutate(
     "Duplicate a node and its owned children",
@@ -411,6 +421,7 @@ const SPECS: Record<string, ActionSpec> = {
     "duplicate_sibling_exists",
     obj(["scene", "node_path"], { scene: RES_PATH, node_path: NODE_PATH }),
     { scene: "res://scenes/world.tscn", node_path: "World/Prop" },
+    { extra_errors: SCENE_MUTATE_ERRORS },
   ),
   "node.group": mutate(
     "Add or remove a persistent group membership",
@@ -428,6 +439,31 @@ const SPECS: Record<string, ActionSpec> = {
       group: "interactable",
       op: "add",
     },
+    { extra_errors: SCENE_MUTATE_ERRORS },
+  ),
+  "node.make_local": mutate(
+    "Make an instanced PackedScene local if a proven Editor API exists",
+    "editor_undo_redo",
+    "instance_is_local",
+    obj(["scene", "node_path"], { scene: RES_PATH, node_path: NODE_PATH }),
+    { scene: "res://scenes/world.tscn", node_path: "World/Key" },
+    { extra_errors: SCENE_MUTATE_ERRORS },
+  ),
+  "node.undo": mutate(
+    "Undo one or more EditorUndoRedo actions on the edited scene",
+    "editor_undo_redo",
+    "history_undo_applied",
+    obj(["scene"], { scene: RES_PATH, count: INDEX }),
+    { scene: "res://scenes/world.tscn" },
+    { extra_errors: SCENE_MUTATE_ERRORS, timeout_ms: 60_000 },
+  ),
+  "node.redo": mutate(
+    "Redo one or more EditorUndoRedo actions on the edited scene",
+    "editor_undo_redo",
+    "history_redo_applied",
+    obj(["scene"], { scene: RES_PATH, count: INDEX }),
+    { scene: "res://scenes/world.tscn" },
+    { extra_errors: SCENE_MUTATE_ERRORS, timeout_ms: 60_000 },
   ),
   "node.query": read(
     "Query nodes by type, group, or path prefix",

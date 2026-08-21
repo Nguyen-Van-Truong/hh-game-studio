@@ -163,10 +163,22 @@ func _fp_walk(node: Node, path_s: String, edited: String, out: PackedStringArray
 	var inst: String = ""
 	if not node.scene_file_path.is_empty() and node.scene_file_path != edited:
 		inst = "\tinstance:%s" % node.scene_file_path
-	out.append("%s\t%s\t%s%s" % [path_s, node.name, node.get_class(), inst])
+	var uid: String = ""
+	if node.has_meta(HHAgentConstants.NODE_UID_META):
+		uid = str(node.get_meta(HHAgentConstants.NODE_UID_META))
+	var groups: PackedStringArray = PackedStringArray()
+	for group: String in node.get_groups():
+		if group.begins_with("_"):
+			continue
+		groups.append(group)
+	groups.sort()
+	out.append("%s\t%s\t%s\tuid:%s\tgroups:%s%s" % [path_s, node.name, node.get_class(), uid, ",".join(groups), inst])
 	var i: int = 0
 	while i < node.get_child_count():
 		var child: Node = node.get_child(i)
+		if str(child.name).begins_with("__hh_"):
+			i += 1
+			continue
 		var child_path: String = child.name if path_s == "." else "%s/%s" % [path_s, child.name]
 		_fp_walk(child, child_path, edited, out)
 		i += 1

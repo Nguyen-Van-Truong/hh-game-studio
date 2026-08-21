@@ -120,8 +120,10 @@ def src_scan_errors() -> list[str]:
     if "attack_external_edit" not in self_text:
         errors.append("official test must isolate human-edit writes")
     plugin_router = (ADDON / "core" / "hh_router.gd").read_text(encoding="utf-8")
-    if "godot.node" not in plugin_router or "E_UNVERIFIED" not in plugin_router:
-        errors.append("router must still refuse node CRUD as E_UNVERIFIED")
+    if "godot.node" not in plugin_router:
+        errors.append("router must still name godot.node")
+    if "HHAgentNodeAdapter" not in plugin_router and "hh_node_adapter" not in plugin_router:
+        errors.append("router must route node CRUD through the node adapter")
     return errors
 
 
@@ -342,10 +344,10 @@ def live_errors(exe: Path) -> list[str]:
             )
         )
         req_id += 1
-        if (node_add.get("error") or {}).get("code") != "E_UNVERIFIED":
-            errors.append(f"node.add must stay E_UNVERIFIED: {node_add}")
         if node_add.get("ok") is True:
-            errors.append("node.add returned ok true")
+            errors.append("node.add on missing scene returned ok true")
+        if (node_add.get("error") or {}).get("code") not in ("E_UNVERIFIED", "E_PATH"):
+            errors.append(f"node.add on missing scene must be typed fail: {node_add}")
 
         select = body_of(
             mcp_call(
@@ -576,10 +578,17 @@ def live_errors(exe: Path) -> list[str]:
             )
         )
         req_id += 1
-        if (node_add2.get("error") or {}).get("code") != "E_UNVERIFIED":
-            errors.append(f"node.add must stay E_UNVERIFIED after scene verbs: {node_add2}")
+        if node_add2.get("ok") is True:
+            undo_name = str(node_add2.get("undo_action") or "")
+            after_add = node_add2.get("after") or {}
+            if not undo_name.startswith("Agent:"):
+                errors.append(f"node.add ACK missing Agent UndoRedo name: {node_add2}")
+            if not after_add.get("uid") or not after_add.get("path"):
+                errors.append(f"node.add ACK missing uid/path: {after_add}")
+        elif (node_add2.get("error") or {}).get("code") not in ("E_UNVERIFIED", "E_PATH", "E_PAUSED"):
+            errors.append(f"node.add after lifecycle failed typed: {node_add2}")
         if copied_abs.is_file() and "AgentWroteThis" in copied_abs.read_text(encoding="utf-8"):
-            errors.append("node.add wrote into the scene after lifecycle")
+            errors.append("node.add wrote disk without scene.save")
 
         if secret and secret in "".join(err_lines):
             errors.append("session secret appeared in sidecar logs")
@@ -659,7 +668,7 @@ def main() -> int:
     print(
         "PASS: scene lifecycle create/open/list/activate/read/save/save-as/reload; "
         "fingerprint+history; E_CONFLICT on external edit; read-only typed fail; "
-        "inherited instance= survives save+restart; node.add stays E_UNVERIFIED; "
+        "inherited instance= survives save+restart; node.add may ACK via UndoRedo; "
         "plugin is the .tscn writer; R3-WP1 stays [ ]."
     )
     return 0

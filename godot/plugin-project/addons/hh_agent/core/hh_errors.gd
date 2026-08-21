@@ -59,13 +59,19 @@ func ok_read(command_id: String, checks: PackedStringArray, after: Dictionary) -
 	}
 
 
-func ok_changed(command_id: String, checks: PackedStringArray, after: Dictionary, changed: bool) -> Dictionary:
+func ok_changed(
+	command_id: String,
+	checks: PackedStringArray,
+	after: Dictionary,
+	changed: bool,
+	undo_action: String = "",
+) -> Dictionary:
 	var check_list: Array = []
 	for item: String in checks:
 		check_list.append(item)
 	if check_list.is_empty():
 		return fail(command_id, E_UNVERIFIED, "empty postcondition checks", "")
-	return {
+	var result: Dictionary = {
 		"type": HHAgentConstants.RESULT_TYPE,
 		"ok": true,
 		"command_id": command_id,
@@ -73,6 +79,9 @@ func ok_changed(command_id: String, checks: PackedStringArray, after: Dictionary
 		"after": after,
 		"postcondition": {"verified": true, "checks": check_list},
 	}
+	if not undo_action.is_empty():
+		result["undo_action"] = undo_action
+	return result
 
 
 func ok_noop(command_id: String) -> Dictionary:

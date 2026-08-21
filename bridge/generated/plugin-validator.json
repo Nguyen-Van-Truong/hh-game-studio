@@ -3,7 +3,7 @@
   "protocol": "hh-godot-agent/1",
   "registry_version": "hh-godot-actions/1",
   "variant_schema": "hh-godot-variant/1",
-  "action_count": 122,
+  "action_count": 125,
   "envelope": {
     "allowed": [
       "protocol",
@@ -1764,7 +1764,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           }
         }
       },
@@ -1858,7 +1858,12 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_CONFLICT",
+        "E_PATH",
+        "E_PAUSED",
+        "E_LEASE",
+        "E_CHECKPOINT"
       ],
       "postcondition": "instance_child_exists"
     },
@@ -2503,7 +2508,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           },
           "class_name": {
             "type": "string",
@@ -2609,7 +2614,12 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_CONFLICT",
+        "E_PATH",
+        "E_PAUSED",
+        "E_LEASE",
+        "E_CHECKPOINT"
       ],
       "postcondition": "node_exists_under_parent"
     },
@@ -2641,7 +2651,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           }
         }
       },
@@ -2735,7 +2745,12 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_CONFLICT",
+        "E_PATH",
+        "E_PAUSED",
+        "E_LEASE",
+        "E_CHECKPOINT"
       ],
       "postcondition": "node_path_absent"
     },
@@ -2768,7 +2783,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           },
           "name": {
             "type": "string",
@@ -2868,7 +2883,12 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_CONFLICT",
+        "E_PATH",
+        "E_PAUSED",
+        "E_LEASE",
+        "E_CHECKPOINT"
       ],
       "postcondition": "node_name_equals"
     },
@@ -2901,13 +2921,16 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           },
           "new_parent": {
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
+          },
+          "keep_global_transform": {
+            "type": "boolean"
           }
         }
       },
@@ -3001,7 +3024,12 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_CONFLICT",
+        "E_PATH",
+        "E_PAUSED",
+        "E_LEASE",
+        "E_CHECKPOINT"
       ],
       "postcondition": "node_parent_equals"
     },
@@ -3034,7 +3062,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           },
           "index": {
             "type": "integer",
@@ -3133,7 +3161,12 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_CONFLICT",
+        "E_PATH",
+        "E_PAUSED",
+        "E_LEASE",
+        "E_CHECKPOINT"
       ],
       "postcondition": "node_index_equals"
     },
@@ -3165,7 +3198,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           }
         }
       },
@@ -3259,7 +3292,12 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_CONFLICT",
+        "E_PATH",
+        "E_PAUSED",
+        "E_LEASE",
+        "E_CHECKPOINT"
       ],
       "postcondition": "duplicate_sibling_exists"
     },
@@ -3293,7 +3331,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           },
           "group": {
             "type": "string",
@@ -3400,7 +3438,12 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_CONFLICT",
+        "E_PATH",
+        "E_PAUSED",
+        "E_LEASE",
+        "E_CHECKPOINT"
       ],
       "postcondition": "node_group_membership"
     },
@@ -3452,7 +3495,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           },
           "limit": {
             "type": "integer",
@@ -3561,6 +3604,395 @@
       ],
       "postcondition": "query_hits_match_tree"
     },
+    "node.make_local": {
+      "method": "godot.node",
+      "verb": "make_local",
+      "action_version": "1",
+      "side_effect": "mutate",
+      "undo": "editor_undo_redo",
+      "timeout_ms": 15000,
+      "cancellable": false,
+      "required_policy": "EDIT",
+      "checkpoint_required": false,
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "scene",
+          "node_path"
+        ],
+        "properties": {
+          "scene": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 256,
+            "pattern": "^res://[^\\s]+$"
+          },
+          "node_path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ok",
+          "command_id",
+          "postcondition"
+        ],
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "changed": {
+            "type": "boolean"
+          },
+          "before": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "after": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "postcondition": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "verified",
+              "checks"
+            ],
+            "properties": {
+              "verified": {
+                "type": "boolean"
+              },
+              "checks": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "undo_action": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "error": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "error_codes": [
+        "E_MISSING_REQUIRED",
+        "E_UNKNOWN_PARAM",
+        "E_INVALID_TYPE",
+        "E_OUT_OF_BOUNDS",
+        "E_UNKNOWN_ACTION",
+        "E_PROTOCOL_VERSION",
+        "E_ACTION_VERSION",
+        "E_CLIENT_ESCALATION",
+        "E_INVALID_COMMAND_ID",
+        "E_INVALID_ENVELOPE",
+        "E_UNVERIFIED",
+        "E_CONFLICT",
+        "E_PATH",
+        "E_PAUSED",
+        "E_LEASE",
+        "E_CHECKPOINT"
+      ],
+      "postcondition": "instance_is_local"
+    },
+    "node.undo": {
+      "method": "godot.node",
+      "verb": "undo",
+      "action_version": "1",
+      "side_effect": "mutate",
+      "undo": "editor_undo_redo",
+      "timeout_ms": 60000,
+      "cancellable": false,
+      "required_policy": "EDIT",
+      "checkpoint_required": false,
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "scene"
+        ],
+        "properties": {
+          "scene": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 256,
+            "pattern": "^res://[^\\s]+$"
+          },
+          "count": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4096
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ok",
+          "command_id",
+          "postcondition"
+        ],
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "changed": {
+            "type": "boolean"
+          },
+          "before": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "after": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "postcondition": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "verified",
+              "checks"
+            ],
+            "properties": {
+              "verified": {
+                "type": "boolean"
+              },
+              "checks": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "undo_action": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "error": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "error_codes": [
+        "E_MISSING_REQUIRED",
+        "E_UNKNOWN_PARAM",
+        "E_INVALID_TYPE",
+        "E_OUT_OF_BOUNDS",
+        "E_UNKNOWN_ACTION",
+        "E_PROTOCOL_VERSION",
+        "E_ACTION_VERSION",
+        "E_CLIENT_ESCALATION",
+        "E_INVALID_COMMAND_ID",
+        "E_INVALID_ENVELOPE",
+        "E_UNVERIFIED",
+        "E_CONFLICT",
+        "E_PATH",
+        "E_PAUSED",
+        "E_LEASE",
+        "E_CHECKPOINT"
+      ],
+      "postcondition": "history_undo_applied"
+    },
+    "node.redo": {
+      "method": "godot.node",
+      "verb": "redo",
+      "action_version": "1",
+      "side_effect": "mutate",
+      "undo": "editor_undo_redo",
+      "timeout_ms": 60000,
+      "cancellable": false,
+      "required_policy": "EDIT",
+      "checkpoint_required": false,
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "scene"
+        ],
+        "properties": {
+          "scene": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 256,
+            "pattern": "^res://[^\\s]+$"
+          },
+          "count": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4096
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ok",
+          "command_id",
+          "postcondition"
+        ],
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "changed": {
+            "type": "boolean"
+          },
+          "before": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "after": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "postcondition": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "verified",
+              "checks"
+            ],
+            "properties": {
+              "verified": {
+                "type": "boolean"
+              },
+              "checks": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "undo_action": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "error": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "error_codes": [
+        "E_MISSING_REQUIRED",
+        "E_UNKNOWN_PARAM",
+        "E_INVALID_TYPE",
+        "E_OUT_OF_BOUNDS",
+        "E_UNKNOWN_ACTION",
+        "E_PROTOCOL_VERSION",
+        "E_ACTION_VERSION",
+        "E_CLIENT_ESCALATION",
+        "E_INVALID_COMMAND_ID",
+        "E_INVALID_ENVELOPE",
+        "E_UNVERIFIED",
+        "E_CONFLICT",
+        "E_PATH",
+        "E_PAUSED",
+        "E_LEASE",
+        "E_CHECKPOINT"
+      ],
+      "postcondition": "history_redo_applied"
+    },
     "property.get": {
       "method": "godot.property",
       "verb": "get",
@@ -3590,7 +4022,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           },
           "property": {
             "type": "string",
@@ -3724,7 +4156,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           },
           "property": {
             "type": "string",
@@ -3874,7 +4306,7 @@
                   "type": "string",
                   "minLength": 1,
                   "maxLength": 256,
-                  "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+                  "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
                 },
                 "property": {
                   "type": "string",
@@ -4015,7 +4447,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           },
           "property": {
             "type": "string",
@@ -4394,7 +4826,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           },
           "property": {
             "type": "string",
@@ -5026,7 +5458,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           }
         }
       },
@@ -5155,7 +5587,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           },
           "signal": {
             "type": "string",
@@ -5167,7 +5599,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           },
           "method": {
             "type": "string",
@@ -5302,7 +5734,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           },
           "signal": {
             "type": "string",
@@ -5314,7 +5746,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           },
           "method": {
             "type": "string",
@@ -5447,7 +5879,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           },
           "signal": {
             "type": "string",
@@ -6085,7 +6517,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           },
           "path": {
             "type": "string",
@@ -7309,7 +7741,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           },
           "tileset": {
             "type": "string",
@@ -7700,7 +8132,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           },
           "enabled": {
             "type": "boolean"
@@ -7834,7 +8266,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           },
           "x": {
             "type": "integer",
@@ -7990,7 +8422,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           },
           "x": {
             "type": "integer",
@@ -8144,7 +8576,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           },
           "x": {
             "type": "integer",
@@ -8290,7 +8722,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           },
           "x": {
             "type": "integer",
@@ -8437,7 +8869,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           },
           "library": {
             "type": "string",
@@ -8571,7 +9003,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           },
           "name": {
             "type": "string",
@@ -8710,7 +9142,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           },
           "animation": {
             "type": "string",
@@ -8722,7 +9154,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           }
         }
       },
@@ -8852,7 +9284,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           },
           "animation": {
             "type": "string",
@@ -8999,7 +9431,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           },
           "from": {
             "type": "string",
@@ -9138,7 +9570,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           },
           "animation": {
             "type": "string",
@@ -9271,7 +9703,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           },
           "preset": {
             "type": "string",
@@ -9407,7 +9839,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           },
           "theme": {
             "type": "string",
@@ -9540,7 +9972,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           },
           "separation": {
             "type": "integer",
@@ -9673,7 +10105,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           },
           "anchor_left": {
             "type": "number",
@@ -9809,7 +10241,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           }
         }
       },
@@ -9935,7 +10367,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           }
         }
       },
@@ -10181,7 +10613,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           }
         }
       },
@@ -10307,7 +10739,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           }
         }
       },
@@ -10556,7 +10988,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           }
         }
       },
@@ -12541,7 +12973,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 256,
-            "pattern": "^[A-Za-z_./%:][A-Za-z0-9_./%:-]*$"
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
           }
         }
       },
