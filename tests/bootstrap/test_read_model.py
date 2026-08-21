@@ -195,20 +195,29 @@ def test_skew_and_static() -> list[str]:
     if built2.returncode != 0:
         errors.append(f"npm run build failed:\n{built2.stdout}\n{built2.stderr}")
         return errors
-    fake = tmp / ("fake-godot.cmd" if os.name == "nt" else "fake-godot")
-    if os.name == "nt":
-        fake.write_text("@echo 4.7.2.stable.official.deadbeef\r\n", encoding="utf-8")
-    else:
-        fake.write_text("#!/bin/sh\necho 4.7.2.stable.official.deadbeef\n", encoding="utf-8")
-        fake.chmod(0o755)
+    fake = tmp / "fake-godot.mjs"
+    fake.write_text('console.log("4.7.2.stable.official.deadbeef");\n', encoding="utf-8")
     godot_skew = doctor_cli(tmp, ["--godot-exe", str(fake)])
     err = godot_skew.get("error") or {}
+    version_row = next(
+        (
+            row
+            for row in (godot_skew.get("check_details") or [])
+            if isinstance(row, dict) and row.get("id") == "godot_version"
+        ),
+        {},
+    )
     if godot_skew.get("ok") is True:
         errors.append("wrong Godot --version must not report ok true")
     if err.get("code") != "E_VERSION_SKEW":
         errors.append(f"measured wrong Godot must be E_VERSION_SKEW: {godot_skew}")
     if godot_skew.get("_exit") == 0:
         errors.append("version skew doctor must exit non-zero")
+    if "4.7.2.stable.official.deadbeef" not in str(version_row.get("detail") or ""):
+        errors.append(
+            "doctor must MEASURE the --godot-exe stub --version, not empty-version skew: "
+            f"{version_row}"
+        )
     proto_root = Path(tempfile.mkdtemp(prefix="hh-r2wp6-proto-"))
     (proto_root / "project.godot").write_text("; proto\nconfig_version=5\n", encoding="utf-8")
     (proto_root / ".hh-agent").mkdir()

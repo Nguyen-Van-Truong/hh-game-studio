@@ -34,7 +34,7 @@ export interface DoctorReport {
   session_present: boolean;
   pid_alive: boolean;
   descriptor_under_home: boolean;
-  token_in_report: false;
+  token_in_report: boolean;
   checks: string[];
   check_details: DoctorCheck[];
   error?: { code: string; message: string; path: string };
@@ -170,11 +170,23 @@ function add(
   lines.push(`${ok ? "ok" : "fail"}:${id} ${detail}`);
 }
 
+function godotVersionSpawn(exe: string): { command: string; args: string[] } {
+  const lower = exe.toLowerCase();
+  if (lower.endsWith(".js") || lower.endsWith(".mjs") || lower.endsWith(".cjs")) {
+    return { command: process.execPath, args: [exe, "--version"] };
+  }
+  if (process.platform === "win32" && (lower.endsWith(".cmd") || lower.endsWith(".bat"))) {
+    return { command: process.env.ComSpec ?? "cmd.exe", args: ["/d", "/s", "/c", exe, "--version"] };
+  }
+  return { command: exe, args: ["--version"] };
+}
+
 function runGodotVersion(exe: string): { ok: boolean; text: string } {
   if (!fs.existsSync(exe)) {
     return { ok: false, text: "" };
   }
-  const proc = spawnSync(exe, ["--version"], {
+  const spec = godotVersionSpawn(exe);
+  const proc = spawnSync(spec.command, spec.args, {
     encoding: "utf8",
     timeout: 15_000,
     windowsHide: true,
@@ -403,7 +415,7 @@ export function runDoctor(opts: DoctorOptions = {}): DoctorReport {
     session_present,
     pid_alive: pid_ok,
     descriptor_under_home: under,
-    token_in_report: false,
+    token_in_report: !redacted,
     checks,
     check_details: details,
   };
