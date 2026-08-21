@@ -149,7 +149,9 @@ func _reset(command_id: String, params: Dictionary, precondition: Dictionary, po
 	var packed_err: Dictionary = _reject_packed(command_id, node, edited)
 	if not packed_err.is_empty():
 		return packed_err
-	var walked: Dictionary = _walk_property(command_id, node, str(params.get("property", "")))
+	var walked: Dictionary = _walk_property(
+		command_id, node, str(params.get("property", "")), edited.scene_file_path
+	)
 	if walked.get("ok", false) != true:
 		return walked
 	var target: Object = walked.get("target") as Object
@@ -202,7 +204,7 @@ func _plan_item(
 	var packed_err: Dictionary = _reject_packed(command_id, node, edited)
 	if not packed_err.is_empty():
 		return packed_err
-	var walked: Dictionary = _walk_property(command_id, node, prop)
+	var walked: Dictionary = _walk_property(command_id, node, prop, edited.scene_file_path)
 	if walked.get("ok", false) != true:
 		return walked
 	var target: Object = walked.get("target") as Object
@@ -290,7 +292,7 @@ func _rollback(mgr: EditorUndoRedoManager, edited: Node) -> void:
 		ur.undo()
 
 
-func _walk_property(command_id: String, node: Object, prop: String) -> Dictionary:
+func _walk_property(command_id: String, node: Object, prop: String, scene_path: String) -> Dictionary:
 	if prop.is_empty():
 		return _errors.fail(command_id, HHAgentErrors.E_MISSING_REQUIRED, "property is required", "params.property")
 	var exact: Dictionary = _find_info(node, prop)
@@ -318,11 +320,25 @@ func _walk_property(command_id: String, node: Object, prop: String) -> Dictionar
 		if not (nxt is Resource):
 			return _errors.fail(command_id, HHAgentErrors.E_INVALID_VARIANT, "nested property is not a Resource", "params.property")
 		var res: Resource = nxt as Resource
-		if not res.resource_path.is_empty():
+		if not _is_current_scene_builtin(res, scene_path):
 			return _unverified(command_id, "external Resource field mutate is not proven here")
 		cur = res
 		i += 1
 	return _unverified(command_id, "property path empty")
+
+
+func _is_current_scene_builtin(res: Resource, scene_path: String) -> bool:
+	if res == null:
+		return false
+	var path_s: String = res.resource_path
+	if path_s.is_empty():
+		return true
+	if not path_s.contains("::"):
+		return false
+	var prefix: String = path_s.get_slice("::", 0)
+	if prefix.is_empty() or scene_path.is_empty():
+		return false
+	return prefix.simplify_path() == scene_path.simplify_path()
 
 
 func _revert_value(target: Object, leaf: String) -> Dictionary:

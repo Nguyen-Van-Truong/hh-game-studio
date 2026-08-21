@@ -106,6 +106,13 @@ def src_scan_errors() -> list[str]:
             errors.append("property adapter must name Agent UndoRedo actions")
         if re.search(r"\bcallv\b", text) or "Object.call" in text:
             errors.append("property adapter has a generic invoke path")
+        if re.search(r"if not res\.resource_path\.is_empty\(\)", text):
+            errors.append(
+                "named same-scene SubResource after save is built-in; "
+                "do not treat every resource_path as external"
+            )
+        if "_is_current_scene_builtin" not in text or 'contains("::")' not in text:
+            errors.append("property adapter must allow same-scene :: SubResource after save")
     if not codec.is_file():
         errors.append("missing variant codec")
     else:
@@ -224,6 +231,11 @@ def live_errors(exe: Path) -> list[str]:
     scene_abs = life.res_to_abs(scene)
     req_id = 2
     try:
+        (TEMP_DIR / "external.tres").write_text(
+            "[gd_resource type=\"PlaceholderTexture2D\" format=3]\n\n"
+            "[resource]\nsize = Vector2(8, 8)\n",
+            encoding="utf-8",
+        )
         proc, desc_path, secret, err_lines = life.start_sidecar()
         godot, godot_lines = life.start_godot(exe)
         req_id, hello, last = life.wait_hello(proc, godot, req_id)
@@ -518,6 +530,30 @@ def live_errors(exe: Path) -> list[str]:
             {"scene": scene, "node_path": "Actor", "property": "position", "value": variant("bool", True)},
         )
         expect_code(type_bad, ("E_INVALID_TYPE",), errors, "wrong type on position")
+        req_id, rid_set = prop_call(
+            proc,
+            req_id,
+            "set",
+            {
+                "scene": scene,
+                "node_path": "Actor",
+                "property": "position",
+                "value": variant("RID", "1"),
+            },
+        )
+        expect_code(rid_set, ("E_UNVERIFIED",), errors, "RID set")
+        req_id, n3d_pos = prop_call(
+            proc,
+            req_id,
+            "set",
+            {
+                "scene": scene,
+                "node_path": "Space",
+                "property": "position",
+                "value": variant("Vector3", {"x": 1, "y": 2, "z": 3}),
+            },
+        )
+        expect_code(n3d_pos, ("E_INVALID_VARIANT",), errors, "Node3D.position editor-only")
         req_id, unknown = prop_call(
             proc,
             req_id,
@@ -730,6 +766,59 @@ def live_errors(exe: Path) -> list[str]:
             elif not close((got.get("after") or {}).get("value"), value):
                 errors.append(f"disk reopen {node_path}.{prop} != set: {got.get('after')} vs {value}")
 
+        reopen_size = variant("Vector2", {"x": 40, "y": 56})
+        req_id, set_after_save = prop_call(
+            proc,
+            req_id,
+            "set",
+            {
+                "scene": scene,
+                "node_path": "Sprite",
+                "property": "texture/size",
+                "value": reopen_size,
+            },
+        )
+        if not ack_ok(set_after_save, errors, "set"):
+            errors.append(f"post-save builtin texture/size set must ACK: {set_after_save}")
+        req_id, got_after_save = prop_call(
+            proc, req_id, "get", {"scene": scene, "node_path": "Sprite", "property": "texture/size"}
+        )
+        if not close((got_after_save.get("after") or {}).get("value"), reopen_size):
+            errors.append(f"post-save builtin texture/size get != set: {got_after_save}")
+
+        req_id, assign_ext = prop_call(
+            proc,
+            req_id,
+            "set",
+            {
+                "scene": scene,
+                "node_path": "Sprite",
+                "property": "texture",
+                "value": variant("Resource", {"path": "res://r3w3/external.tres"}),
+            },
+        )
+        ext_ready = assign_ext.get("ok") is True
+        if not ext_ready:
+            req_id, tex_now = prop_call(
+                proc, req_id, "get", {"scene": scene, "node_path": "Sprite", "property": "texture"}
+            )
+            tex_inner = ((tex_now.get("after") or {}).get("value") or {}).get("value")
+            if isinstance(tex_inner, dict) and "external.tres" in str(tex_inner.get("path") or ""):
+                ext_ready = True
+        if ext_ready:
+            req_id, ext_field = prop_call(
+                proc,
+                req_id,
+                "set",
+                {
+                    "scene": scene,
+                    "node_path": "Sprite",
+                    "property": "texture/size",
+                    "value": variant("Vector2", {"x": 9, "y": 10}),
+                },
+            )
+            expect_code(ext_field, ("E_UNVERIFIED",), errors, "external Resource field mutate")
+
         paused = body_of(mcp_call(proc, req_id, "hh.pause", {}))
         req_id += 1
         if paused.get("ok") is not True:
@@ -815,7 +904,8 @@ def main() -> int:
 
     print(
         "PASS: property Variant codec + Inspector set/batch/reset; "
-        "corpus, invalid enum/range/type, batch rollback, save/reopen, Pause; "
+        "corpus, invalid enum/range/type, batch rollback, save/reopen, "
+        "post-save builtin SubResource set, Pause; "
         "R3-WP3 stays [ ]."
     )
     return 0
