@@ -154,11 +154,10 @@ func _reset(command_id: String, params: Dictionary, precondition: Dictionary, po
 		return walked
 	var target: Object = walked.get("target") as Object
 	var leaf: String = str(walked.get("leaf", ""))
-	if not target.has_method("property_can_revert") or not target.has_method("property_get_revert"):
-		return _unverified(command_id, "property revert is not proven on this object")
-	if not target.property_can_revert(leaf):
-		return _unverified(command_id, "property_can_revert is false; refusing a guessed default")
-	var revert_v: Variant = target.property_get_revert(leaf)
+	var revert_found: Dictionary = _revert_value(target, leaf)
+	if revert_found.get("ok", false) != true:
+		return _unverified(command_id, "no ClassDB/property_get_revert default for %s" % leaf)
+	var revert_v: Variant = revert_found.get("value")
 	var old_v: Variant = target.get(leaf)
 	var action_name: String = "%sproperty.reset %s" % [HHAgentConstants.UNDO_ACTION_PREFIX, leaf]
 	var mgr: EditorUndoRedoManager = _mgr()
@@ -170,7 +169,7 @@ func _reset(command_id: String, params: Dictionary, precondition: Dictionary, po
 	mgr.commit_action()
 	var now_v: Variant = target.get(leaf)
 	if not _codec.same(now_v, revert_v):
-		return _unverified(command_id, "reset readback did not match property_get_revert")
+		return _unverified(command_id, "reset readback did not match property_get_revert / class default")
 	_meta.mark_dirty(str(params.get("scene", "")))
 	var enc: Dictionary = _codec.encode(now_v)
 	if enc.get("ok", false) != true:
@@ -294,13 +293,16 @@ func _rollback(mgr: EditorUndoRedoManager, edited: Node) -> void:
 func _walk_property(command_id: String, node: Object, prop: String) -> Dictionary:
 	if prop.is_empty():
 		return _errors.fail(command_id, HHAgentErrors.E_MISSING_REQUIRED, "property is required", "params.property")
+	var exact: Dictionary = _find_info(node, prop)
+	if not exact.is_empty():
+		return {"ok": true, "target": node, "leaf": prop, "info": exact}
 	var parts: PackedStringArray = PackedStringArray()
 	if prop.contains("/"):
 		parts = prop.split("/")
 	elif prop.contains(":"):
 		parts = prop.split(":")
 	else:
-		parts = PackedStringArray([prop])
+		return _unverified(command_id, "property %s missing" % prop)
 	var cur: Object = node
 	var i: int = 0
 	while i < parts.size():
@@ -321,6 +323,37 @@ func _walk_property(command_id: String, node: Object, prop: String) -> Dictionar
 		cur = res
 		i += 1
 	return _unverified(command_id, "property path empty")
+
+
+func _revert_value(target: Object, leaf: String) -> Dictionary:
+	if target == null or leaf.is_empty():
+		return {}
+	if target.has_method("property_can_revert") and target.has_method("property_get_revert"):
+		if target.property_can_revert(leaf):
+			return {"ok": true, "value": target.property_get_revert(leaf)}
+	var cls: String = target.get_class()
+	while not cls.is_empty():
+		if _class_has_property(cls, leaf):
+			return {"ok": true, "value": ClassDB.class_get_property_default_value(cls, leaf)}
+		cls = ClassDB.get_parent_class(cls)
+	var class_name_s: String = target.get_class()
+	if ClassDB.class_exists(class_name_s) and ClassDB.can_instantiate(class_name_s):
+		var inst: Variant = ClassDB.instantiate(class_name_s)
+		if inst is Object:
+			var fresh: Object = inst
+			var val: Variant = fresh.get(leaf)
+			fresh.free()
+			return {"ok": true, "value": val}
+	return {}
+
+
+func _class_has_property(class_name_s: String, leaf: String) -> bool:
+	if class_name_s.is_empty() or leaf.is_empty():
+		return false
+	for item_v: Variant in ClassDB.class_get_property_list(class_name_s, true):
+		if item_v is Dictionary and str((item_v as Dictionary).get("name", "")) == leaf:
+			return true
+	return false
 
 
 func _find_info(obj: Object, name_s: String) -> Dictionary:

@@ -194,6 +194,32 @@ func run_selftest(actions: HHAgentActions) -> PackedStringArray:
 		failures.append("property.set on missing scene must not paper-ok")
 	if str(_error_of(property_missing).get("code", "")) == "":
 		failures.append("property.set on missing scene must be a typed error")
+	var edited: Node = EditorInterface.get_edited_scene_root()
+	if edited != null and not str(edited.scene_file_path).is_empty() and FileAccess.file_exists(edited.scene_file_path):
+		var live_set: Dictionary = dispatch(
+			_sample(
+				"godot.property",
+				"set",
+				{
+					"scene": str(edited.scene_file_path),
+					"node_path": ".",
+					"property": "visible",
+					"value": {"schema": "hh-godot-variant/1", "type": "bool", "value": true},
+				},
+			),
+			actions,
+			0,
+		)
+		if live_set.get("ok", false) != true:
+			failures.append("property.set on open edited scene must ACK")
+		elif not str(live_set.get("undo_action", "")).begins_with(HHAgentConstants.UNDO_ACTION_PREFIX):
+			failures.append("property.set on open edited scene missing Agent undo")
+		else:
+			dispatch(
+				_sample("godot.node", "undo", {"scene": str(edited.scene_file_path), "count": 1}),
+				actions,
+				0,
+			)
 	var mutate_still: Dictionary = dispatch(
 		_sample(
 			"godot.resource",

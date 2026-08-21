@@ -596,22 +596,21 @@ func _has_property(node: Object, prop: String) -> bool:
 func _walk_prop(node: Object, prop: String) -> Dictionary:
 	if node == null or prop.is_empty():
 		return {}
+	var exact: Dictionary = _find_info(node, prop)
+	if not exact.is_empty():
+		return {"ok": true, "target": node, "leaf": prop, "info": exact}
 	var parts: PackedStringArray = PackedStringArray()
 	if prop.contains("/"):
 		parts = prop.split("/")
 	elif prop.contains(":"):
 		parts = prop.split(":")
 	else:
-		parts = PackedStringArray([prop])
+		return {}
 	var cur: Object = node
 	var i: int = 0
 	while i < parts.size():
 		var name_s: String = parts[i]
-		var info: Dictionary = {}
-		for item_v: Variant in cur.get_property_list():
-			if item_v is Dictionary and str((item_v as Dictionary).get("name", "")) == name_s:
-				info = item_v
-				break
+		var info: Dictionary = _find_info(cur, name_s)
 		if info.is_empty():
 			return {}
 		if i == parts.size() - 1:
@@ -621,6 +620,15 @@ func _walk_prop(node: Object, prop: String) -> Dictionary:
 			return {}
 		cur = nxt as Object
 		i += 1
+	return {}
+
+
+func _find_info(obj: Object, name_s: String) -> Dictionary:
+	if obj == null or name_s.is_empty():
+		return {}
+	for item_v: Variant in obj.get_property_list():
+		if item_v is Dictionary and str((item_v as Dictionary).get("name", "")) == name_s:
+			return item_v
 	return {}
 
 

@@ -135,9 +135,18 @@ def canon(value):
 
 
 def close(a, b) -> bool:
-    return json.dumps(canon(a), separators=(",", ":"), sort_keys=True) == json.dumps(
-        canon(b), separators=(",", ":"), sort_keys=True
-    )
+    return _close(canon(a), canon(b))
+
+
+def _close(a, b) -> bool:
+    if isinstance(a, (int, float)) and isinstance(b, (int, float)) and not isinstance(a, bool) and not isinstance(b, bool):
+        scale = max(abs(float(a)), abs(float(b)), 1.0)
+        return abs(float(a) - float(b)) <= 1e-5 * scale
+    if isinstance(a, list) and isinstance(b, list):
+        return len(a) == len(b) and all(_close(left, right) for left, right in zip(a, b))
+    if isinstance(a, dict) and isinstance(b, dict):
+        return set(a) == set(b) and all(_close(a[key], b[key]) for key in a)
+    return a == b
 
 
 def mcp_call(proc: subprocess.Popen[str], req_id: int, name: str, arguments: dict, timeout: float = 30.0) -> dict:
@@ -310,12 +319,101 @@ def live_errors(exe: Path) -> list[str]:
         if hist0 and hist1 and hist0 != hist1:
             errors.append(f"failed batch changed Undo history {hist0} -> {hist1}")
 
+        req_id, pos_before_undo = prop_call(
+            proc, req_id, "get", {"scene": scene, "node_path": "Actor", "property": "position"}
+        )
+        before_undo_pos = (pos_before_undo.get("after") or {}).get("value")
+        set_undo_pos = variant("Vector2", {"x": 99, "y": 88})
+        req_id, set_for_undo = prop_call(
+            proc,
+            req_id,
+            "set",
+            {"scene": scene, "node_path": "Actor", "property": "position", "value": set_undo_pos},
+        )
+        if not ack_ok(set_for_undo, errors, "set"):
+            errors.append(f"property.set Actor.position for undo must ACK: {set_for_undo}")
+        req_id, pos_set_undo = prop_call(
+            proc, req_id, "get", {"scene": scene, "node_path": "Actor", "property": "position"}
+        )
+        if not close((pos_set_undo.get("after") or {}).get("value"), set_undo_pos):
+            errors.append(f"pre-undo position was not set: {pos_set_undo}")
+        req_id, undone_pos = node_call(proc, req_id, "undo", {"scene": scene, "count": 1})
+        if undone_pos.get("ok") is not True:
+            errors.append(f"godot.node undo after property.set must ACK: {undone_pos}")
+        req_id, pos_after_undo = prop_call(
+            proc, req_id, "get", {"scene": scene, "node_path": "Actor", "property": "position"}
+        )
+        if not close((pos_after_undo.get("after") or {}).get("value"), before_undo_pos):
+            errors.append(
+                f"undo after property.set did not restore position: {pos_after_undo} vs {before_undo_pos}"
+            )
+
+        req_id, vis0 = prop_call(
+            proc, req_id, "get", {"scene": scene, "node_path": "Actor", "property": "visible"}
+        )
+        req_id, pos_b0 = prop_call(
+            proc, req_id, "get", {"scene": scene, "node_path": "Actor", "property": "position"}
+        )
+        batch_vis = variant("bool", False)
+        batch_pos = variant("Vector2", {"x": 64, "y": 96})
+        old_vis = (vis0.get("after") or {}).get("value")
+        old_batch_pos = (pos_b0.get("after") or {}).get("value")
+        req_id, batch_ok = prop_call(
+            proc,
+            req_id,
+            "batch",
+            {
+                "scene": scene,
+                "items": [
+                    {"node_path": "Actor", "property": "position", "value": batch_pos},
+                    {"node_path": "Actor", "property": "visible", "value": batch_vis},
+                ],
+            },
+        )
+        if not ack_ok(batch_ok, errors, "batch"):
+            errors.append(f"successful property.batch must ACK: {batch_ok}")
+        req_id, pos_b1 = prop_call(
+            proc, req_id, "get", {"scene": scene, "node_path": "Actor", "property": "position"}
+        )
+        req_id, vis1 = prop_call(
+            proc, req_id, "get", {"scene": scene, "node_path": "Actor", "property": "visible"}
+        )
+        if not close((pos_b1.get("after") or {}).get("value"), batch_pos):
+            errors.append(f"batch did not set position: {pos_b1}")
+        if not close((vis1.get("after") or {}).get("value"), batch_vis):
+            errors.append(f"batch did not set visible: {vis1}")
+        req_id, undone_batch = node_call(proc, req_id, "undo", {"scene": scene, "count": 1})
+        if undone_batch.get("ok") is not True:
+            errors.append(f"godot.node undo after property.batch must ACK: {undone_batch}")
+        req_id, pos_b2 = prop_call(
+            proc, req_id, "get", {"scene": scene, "node_path": "Actor", "property": "position"}
+        )
+        req_id, vis2 = prop_call(
+            proc, req_id, "get", {"scene": scene, "node_path": "Actor", "property": "visible"}
+        )
+        if not close((pos_b2.get("after") or {}).get("value"), old_batch_pos):
+            errors.append(f"batch undo did not restore position: {pos_b2} vs {old_batch_pos}")
+        if not close((vis2.get("after") or {}).get("value"), old_vis):
+            errors.append(f"batch undo did not restore visible: {vis2} vs {old_vis}")
+
+        theme_color = variant("Color", {"r": 0.1, "g": 0.2, "b": 0.9, "a": 1})
+        poly_verts = variant(
+            "TypedArray",
+            {
+                "element": "Vector2",
+                "items": [{"x": 0, "y": 0}, {"x": 16, "y": 0}, {"x": 8, "y": 16}],
+            },
+        )
+        poly_array = variant(
+            "Array",
+            [variant("TypedArray", {"element": "int", "items": [0, 1, 2]})],
+        )
         corpus = [
             ("Actor", "visible", variant("bool", False)),
             ("Actor", "z_index", variant("int", 3)),
             ("Actor", "rotation", variant("float", 0.5)),
             ("Caption", "text", variant("string", "hello-agent")),
-            ("Actor", "position", variant("Vector2", {"x": 16, "y": 32})),
+            ("Actor", "position", variant("Vector2", {"x": 8, "y": 12})),
             ("List", "fixed_icon_size", variant("Vector2i", {"x": 16, "y": 24})),
             ("Ray", "target_position", variant("Vector3", {"x": 1, "y": 2, "z": 3})),
             ("Sprite", "region_rect", variant("Rect2", {"x": 2, "y": 4, "w": 8, "h": 10})),
@@ -347,6 +445,7 @@ def live_errors(exe: Path) -> list[str]:
                 ),
             ),
             ("Actor", "modulate", variant("Color", {"r": 0.25, "g": 0.5, "b": 0.75, "a": 1})),
+            ("Caption", "theme_override_colors/font_color", theme_color),
             ("Remote", "remote_path", variant("NodePath", "Sprite")),
             ("Sprite", "texture", variant("Resource", {"class_name": "PlaceholderTexture2D"})),
             (
@@ -360,7 +459,8 @@ def live_errors(exe: Path) -> list[str]:
                     },
                 ),
             ),
-            ("Poly", "polygons", variant("Array", [])),
+            ("Poly", "polygon", poly_verts),
+            ("Poly", "polygons", poly_array),
             (
                 "Edit",
                 "auto_brace_completion_pairs",
@@ -392,6 +492,10 @@ def live_errors(exe: Path) -> list[str]:
                 errors.append(f"corpus get {node_path}.{prop} failed: {got}")
             elif not close((got.get("after") or {}).get("value"), value):
                 errors.append(f"Inspector get {node_path}.{prop} != set: {got.get('after')} vs {value}")
+            elif prop == "polygons":
+                got_items = ((got.get("after") or {}).get("value") or {}).get("value")
+                if not isinstance(got_items, list) or got_items == []:
+                    errors.append(f"Array corpus {node_path}.{prop} readback must not be []: {got}")
 
         req_id, enum_bad = prop_call(
             proc,
@@ -529,21 +633,73 @@ def live_errors(exe: Path) -> list[str]:
             if not ack_ok(hashed, errors, "set"):
                 errors.append(f"matching expected-old-hash must ACK: {hashed}")
 
-        req_id, rot = prop_call(
+        hdr = variant("Color", {"r": 2, "g": 0.5, "b": 0.25, "a": 1})
+        req_id, hdr_set = prop_call(
             proc,
             req_id,
             "set",
-            {"scene": scene, "node_path": "Actor", "property": "rotation", "value": variant("float", 1.25)},
+            {"scene": scene, "node_path": "Actor", "property": "modulate", "value": hdr},
         )
-        if ack_ok(rot, errors, "set"):
-            req_id, reset = prop_call(
-                proc, req_id, "reset", {"scene": scene, "node_path": "Actor", "property": "rotation"}
+        if not ack_ok(hdr_set, errors, "set"):
+            errors.append(f"HDR Color r=2 must ACK: {hdr_set}")
+        req_id, hdr_get = prop_call(
+            proc, req_id, "get", {"scene": scene, "node_path": "Actor", "property": "modulate"}
+        )
+        hdr_got = (hdr_get.get("after") or {}).get("value")
+        if not close(hdr_got, hdr):
+            errors.append(f"HDR Color get != set: {hdr_get} vs {hdr}")
+        req_id, hdr_again = prop_call(
+            proc,
+            req_id,
+            "set",
+            {"scene": scene, "node_path": "Actor", "property": "modulate", "value": hdr_got},
+        )
+        if not ack_ok(hdr_again, errors, "set"):
+            errors.append(f"HDR set-the-get must ACK: {hdr_again}")
+        req_id, hdr_final = prop_call(
+            proc, req_id, "get", {"scene": scene, "node_path": "Actor", "property": "modulate"}
+        )
+        if not close((hdr_final.get("after") or {}).get("value"), hdr):
+            errors.append(f"HDR set-the-get lost r=2: {hdr_final}")
+
+        away = variant("Vector2", {"x": 40, "y": 50})
+        default_pos = variant("Vector2", {"x": 0, "y": 0})
+        req_id, away_set = prop_call(
+            proc,
+            req_id,
+            "set",
+            {"scene": scene, "node_path": "Actor", "property": "position", "value": away},
+        )
+        if not ack_ok(away_set, errors, "set"):
+            errors.append(f"position away from default must ACK: {away_set}")
+        req_id, reset = prop_call(
+            proc, req_id, "reset", {"scene": scene, "node_path": "Actor", "property": "position"}
+        )
+        if not ack_ok(reset, errors, "reset"):
+            errors.append(f"property.reset must ACK after proven set: {reset}")
+        req_id, reset_got = prop_call(
+            proc, req_id, "get", {"scene": scene, "node_path": "Actor", "property": "position"}
+        )
+        if not close((reset_got.get("after") or {}).get("value"), default_pos):
+            errors.append(f"property.reset readback != class default (0,0): {reset_got}")
+
+        persist = [
+            (node_path, prop, value)
+            for node_path, prop, value in corpus
+            if not (node_path == "Actor" and prop == "rotation")
+        ] + [
+            ("Sprite", "texture/size", variant("Vector2", {"x": 32, "y": 48})),
+            ("Remote", "remote_path", variant("NodePath", "Sprite")),
+        ]
+        for node_path, prop, value in persist:
+            req_id, body = prop_call(
+                proc,
+                req_id,
+                "set",
+                {"scene": scene, "node_path": node_path, "property": prop, "value": value},
             )
-            if reset.get("ok") is True:
-                if not ack_ok(reset, errors, "reset"):
-                    errors.append(f"property.reset paper: {reset}")
-            elif (reset.get("error") or {}).get("code") != "E_UNVERIFIED":
-                errors.append(f"property.reset must ACK or honest E_UNVERIFIED: {reset}")
+            if not ack_ok(body, errors, "set"):
+                errors.append(f"persist {node_path}.{prop} failed: {body}")
 
         req_id, saved = scene_call(proc, req_id, "save", {"path": scene})
         if saved.get("ok") is not True:
@@ -563,13 +719,9 @@ def live_errors(exe: Path) -> list[str]:
             errors.append(f"scene.open after restart must ACK: {opened}")
             return errors
         reopen = [
-            ("Caption", "text", variant("string", "hello-agent")),
-            ("Actor", "modulate", variant("Color", {"r": 0.25, "g": 0.5, "b": 0.75, "a": 1})),
-            ("List", "fixed_icon_size", variant("Vector2i", {"x": 16, "y": 24})),
-            ("Ray", "target_position", variant("Vector3", {"x": 1, "y": 2, "z": 3})),
-            ("Sprite", "region_rect", variant("Rect2", {"x": 2, "y": 4, "w": 8, "h": 10})),
-            ("Sprite", "texture/size", variant("Vector2", {"x": 32, "y": 48})),
-            ("Remote", "remote_path", variant("NodePath", "Sprite")),
+            (node_path, prop, value)
+            for node_path, prop, value in persist
+            if prop != "texture"
         ]
         for node_path, prop, value in reopen:
             req_id, got = prop_call(proc, req_id, "get", {"scene": scene, "node_path": node_path, "property": prop})

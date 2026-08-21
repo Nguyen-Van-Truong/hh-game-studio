@@ -29,6 +29,7 @@ const NODE_PATH_RE = /^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$/;
 const RES_PATH_RE = /^res:\/\/[^\s]+$/;
 const CLASS_RE = /^[A-Za-z_][A-Za-z0-9_]*$/;
 const VEC_ABS_MAX = 1_000_000;
+const COLOR_ABS_MAX = 16;
 const CONTAINER_MAX = 256;
 
 export interface EncodedVariant {
@@ -262,8 +263,12 @@ function checkValue(
         if (!num(channel)) {
           return typed(E.E_INVALID_TYPE, `Color.${key} must be a finite number`, `${path}/${key}`);
         }
-        if (channel < 0 || channel > 1) {
-          return typed(E.E_OUT_OF_BOUNDS, `Color.${key} must be 0..1`, `${path}/${key}`);
+        if (Math.abs(channel) > COLOR_ABS_MAX) {
+          return typed(
+            E.E_OUT_OF_BOUNDS,
+            `Color.${key} abs must be <= ${COLOR_ABS_MAX}`,
+            `${path}/${key}`,
+          );
         }
       }
       return null;

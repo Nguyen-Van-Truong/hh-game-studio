@@ -315,7 +315,33 @@ function canonJson(value: unknown): unknown {
 }
 
 function encodedClose(a: unknown, b: unknown): boolean {
-  return JSON.stringify(canonJson(a)) === JSON.stringify(canonJson(b));
+  return valueClose(canonJson(a), canonJson(b));
+}
+
+function valueClose(a: unknown, b: unknown): boolean {
+  if (typeof a === "number" && typeof b === "number") {
+    if (!Number.isFinite(a) || !Number.isFinite(b)) {
+      return a === b;
+    }
+    if (a === b) {
+      return true;
+    }
+    const scale = Math.max(Math.abs(a), Math.abs(b), 1);
+    return Math.abs(a - b) <= 1e-5 * scale;
+  }
+  if (Array.isArray(a) && Array.isArray(b)) {
+    return a.length === b.length && a.every((item, i) => valueClose(item, b[i]));
+  }
+  if (isRecord(a) && isRecord(b)) {
+    const keys = new Set([...Object.keys(a), ...Object.keys(b)]);
+    for (const key of keys) {
+      if (!valueClose(a[key], b[key])) {
+        return false;
+      }
+    }
+    return true;
+  }
+  return a === b;
 }
 
 function propertyApplyOk(

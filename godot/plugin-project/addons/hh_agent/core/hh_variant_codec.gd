@@ -8,6 +8,7 @@ const _ErrorsScript: GDScript = preload("res://addons/hh_agent/core/hh_errors.gd
 
 const SCHEMA: String = "hh-godot-variant/1"
 const VEC_ABS_MAX: float = 1000000.0
+const COLOR_ABS_MAX: float = 16.0
 const CONTAINER_MAX: int = 256
 
 var _errors: HHAgentErrors = HHAgentErrors.new()
@@ -152,11 +153,12 @@ func discover(info: Dictionary) -> Dictionary:
 	var usage: int = int(info.get("usage", 0))
 	var hint: int = int(info.get("hint", 0))
 	var hint_string: String = str(info.get("hint_string", ""))
+	var name_s: String = str(info.get("name", ""))
 	var read_only: bool = (usage & PROPERTY_USAGE_READ_ONLY) != 0
 	var internal: bool = (usage & PROPERTY_USAGE_INTERNAL) != 0
 	var storage: bool = (usage & PROPERTY_USAGE_STORAGE) != 0
 	var editor: bool = (usage & PROPERTY_USAGE_EDITOR) != 0
-	var editor_only: bool = editor and not storage
+	var editor_only: bool = editor and not storage and not name_s.begins_with("theme_override_")
 	var out: Dictionary = {
 		"name": str(info.get("name", "")),
 		"type": int(info.get("type", 0)),
@@ -192,7 +194,8 @@ func reject_usage(info: Dictionary) -> Dictionary:
 		return _fail(HHAgentErrors.E_INVALID_VARIANT, "read-only property is rejected", "property")
 	var storage: bool = (usage & PROPERTY_USAGE_STORAGE) != 0
 	var editor: bool = (usage & PROPERTY_USAGE_EDITOR) != 0
-	if editor and not storage:
+	var name_s: String = str(info.get("name", ""))
+	if editor and not storage and not name_s.begins_with("theme_override_"):
 		return _fail(HHAgentErrors.E_INVALID_VARIANT, "editor-only property is rejected", "property")
 	return {}
 
@@ -335,6 +338,22 @@ func to_packed(kind_element: String, items: Array, prop_type: int) -> Variant:
 			packedf.append(float(item_v6))
 		return packedf
 	return items
+
+
+func _packed_type_of(element: String) -> int:
+	if element == "int":
+		return TYPE_PACKED_INT32_ARRAY
+	if element == "float":
+		return TYPE_PACKED_FLOAT32_ARRAY
+	if element == "string":
+		return TYPE_PACKED_STRING_ARRAY
+	if element == "Vector2":
+		return TYPE_PACKED_VECTOR2_ARRAY
+	if element == "Vector3":
+		return TYPE_PACKED_VECTOR3_ARRAY
+	if element == "Color":
+		return TYPE_PACKED_COLOR_ARRAY
+	return TYPE_ARRAY
 
 
 func _decode_kind(kind: String, value: Variant, path: String) -> Dictionary:
@@ -518,8 +537,8 @@ func _decode_color(value: Variant, path: String) -> Dictionary:
 		if not _finite(rec.get(ch)):
 			return _fail(HHAgentErrors.E_INVALID_TYPE, "Color.%s must be a finite number" % ch, "%s/%s" % [path, ch])
 		var n: float = float(rec.get(ch))
-		if n < 0.0 or n > 1.0:
-			return _fail(HHAgentErrors.E_OUT_OF_BOUNDS, "Color.%s must be 0..1" % ch, "%s/%s" % [path, ch])
+		if abs(n) > COLOR_ABS_MAX:
+			return _fail(HHAgentErrors.E_OUT_OF_BOUNDS, "Color.%s abs must be <= %s" % [ch, str(COLOR_ABS_MAX)], "%s/%s" % [path, ch])
 	return _ok("Color", Color(float(rec.get("r")), float(rec.get("g")), float(rec.get("b")), float(rec.get("a"))))
 
 
@@ -584,7 +603,10 @@ func _decode_array(value: Variant, path: String) -> Dictionary:
 		var item: Dictionary = decode(raw[i], "%s/%d" % [path, i])
 		if item.get("ok", false) != true:
 			return item
-		out.append(item.get("value"))
+		var item_v: Variant = item.get("value")
+		if str(item.get("type", "")) == "TypedArray":
+			item_v = to_packed(str(item.get("element", "")), item.get("value") as Array, _packed_type_of(str(item.get("element", ""))))
+		out.append(item_v)
 		i += 1
 	return _ok("Array", out)
 
