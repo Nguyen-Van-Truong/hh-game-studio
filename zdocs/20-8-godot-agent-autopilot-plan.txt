@@ -1,6 +1,6 @@
 AUTHORITATIVE_PLAN=1
 STATUS=ACTIVE
-CURRENT_VALID_WP=R3-WP5
+CURRENT_VALID_WP=R3-WP6
 
 ================================================================================
 BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
@@ -11,7 +11,7 @@ BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
 | 0 | R0 — Cutover an toàn | Đóng băng engine Rust cũ, pin Godot, đổi bootstrap sang plan này, không mất lịch sử | Governance + Toolchain | G0 | [x] 4/4 WP |
 | 1 | R1 — Spike và chọn nền MCP | Chứng minh agent tạo/sửa/chạy/nhìn một scene thật trong editor; chốt upstream hay tự làm | Research + Security + POC | G1 NO-FORK | [x] 5/5 WP |
 | 2 | R2 — Control plane | Plugin, sidecar, Agent Host, MCP, auth, registry, ledger, pause và OWNER_AUTOPILOT hoạt động | Bridge + Plugin + Security | — | [x] 7/7 WP |
-| 3 | R3 — Quyền editor ngữ nghĩa | Scene/node/property/resource/script/asset/project settings có undo, dedup và postcondition | Scene + Script + Asset | — | [ ] 4/8 WP |
+| 3 | R3 — Quyền editor ngữ nghĩa | Scene/node/property/resource/script/asset/project settings có undo, dedup và postcondition | Scene + Script + Asset | — | [ ] 5/8 WP |
 | 4 | R4 — Người xem được agent làm | Activity Dock, chọn node, focus inspector, cursor/gizmo ảo, replay kéo-thả, Watch/Fast mode | Observer UI + Editor UX | G2 VISIBLE | [ ] 0/6 WP |
 | 5 | R5 — Bộ công cụ làm game 2D | TileMapLayer, animation, UI, audio, physics, navigation, shader/particles được agent thao tác đầy đủ | 2D-A + 2D-B + Assets | — | [ ] 0/7 WP |
 | 6 | R6 — Agent tự chơi và tự kiểm | Play/debug, input, runtime state, deterministic step, screenshot/diff/perf, test evidence | Runtime + Test + Vision | G3 SELF-VERIFY | [ ] 0/7 WP |
@@ -24,7 +24,7 @@ VIỆC PHẢI LÀM TRƯỚC: R0-WP1 → R0-WP2 → R0-WP3 → R0-WP4 → R1-WP1.
 Không được bắt đầu R2
 trước G1. Từ R2 trở đi chỉ song song các track có ranh giới file rõ ràng.
 
-Tiến độ tổng: [ ] 20/60 WP. First valid WP: R3-WP5.
+Tiến độ tổng: [ ] 21/60 WP. First valid WP: R3-WP6.
 Ngày lập: 20-8-2026 (Asia/Saigon).
 
 ================================================================================
@@ -1287,7 +1287,7 @@ R3-WP4 — Resource, signal, group và dependency operations               [x]
         d76bfde unique dest hash, uid jail, edit undo;
         2a668fb unique save, tres owners, assign rollback
 
-R3-WP5 — Script write/patch/validate/attach + dirty-buffer conflict      [ ]
+R3-WP5 — Script write/patch/validate/attach + dirty-buffer conflict      [x]
   Phụ thuộc: R3-WP1, R2-WP5.
   Track/file: A/B; atomic file transaction, ScriptEditor integration.
   Làm:
@@ -1299,7 +1299,29 @@ R3-WP5 — Script write/patch/validate/attach + dirty-buffer conflict      [ ]
   Verify: syntax fail, concurrent human edit, editor-open script, rename refs, crash hooks;
           no partial UTF-8/BOM/newline corruption.
   DoD: agent tự viết code nhưng không mất thay đổi chưa save của người.
-  LOG: (trống)
+  LOG:
+    LOG 2026-08-21 16:10 Asia/Saigon — agent=coordinator
+      Base: 2929656 script write/patch/attach; cheap-fix bda35f3 SCRIPT_TEXT/
+        packed/jail; 312ebde write class_name dest path; ac87467 validate
+        class_name dest path.
+        Godot=4.7.1.stable.official.a13da4feb, schema=hh-godot-actions/1
+      Files/leases: godot/plugin-project/addons/hh_agent/core/hh_script_adapter.gd,
+        tests/bootstrap/test_script_write.py
+      Verify: test_script_write.py → 0 (dirty E_CONFLICT; parse fail keeps old;
+        SCRIPT_TEXT >4000; class_name write+rewrite+validate; packed attach
+        refuse; addon jail; Pause); g1/registry/plugin_router → 0
+      E2E/artifacts: tmp+bak+rename; GDScript.reload before dest replace;
+        attach UndoRedo add_do_property
+      Critic: FAIL tick no (200b1e62) on 2929656 — TEXT 4000. FAIL (7bb50edc)
+        on bda35f3 — nameless class_name probe. FAIL (f3e81b10) on 312ebde —
+        script.validate nameless. Closed on ac87467 (1429c6bd PASS-WITH-GAPS,
+        prior P1s dead, recommend tick).
+      Gaps: diagnostics E_UNVERIFIED; A19 warning-as-error; open_at caret;
+        flush ≠ fsync; stock-POC leftover.
+      Commit: 2929656 R3-WP5: script write patch attach and dirty conflict;
+        bda35f3 raise script TEXT cap and packed attach;
+        312ebde class_name validate uses dest path;
+        ac87467 validate class_name uses dest path
 
 R3-WP6 — Asset ingest/import/reimport/move/delete an toàn                [ ]
   Phụ thuộc: R3-WP4, R3-WP5 transaction primitives.
@@ -2037,14 +2059,14 @@ thuận nếu ảnh hưởng G5/G6.
 14. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Hiện tại R0 (4/4) + R1 (5/5, G1) + R2 (7/7) + R3-WP1..WP4 đã xong. Agent tiếp theo làm **R3-WP5**.
+Hiện tại R0 (4/4) + R1 (5/5, G1) + R2 (7/7) + R3-WP1..WP5 đã xong. Agent tiếp theo làm **R3-WP6**.
 KHÔNG vendor A/C as-is, KHÔNG M6, KHÔNG fork Godot. Scene + node + property +
-resource/signal exist; script write/patch is next. Do not claim the agent drives a full game.
+resource + script exist; asset ingest is next. Do not claim the agent drives a full game.
 
 Lệnh hợp lệ:
 
-  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R3-WP5`);
-  2) R3-WP5: Script write/patch/validate/attach + dirty-buffer conflict;
+  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R3-WP6`);
+  2) R3-WP6: Asset ingest/import/reimport/move/delete an toàn;
   3) mở editor fixture: `hh-godot-editor.bat` (Godot 4.7.1-stable pin, minimal-2d);
   4) không copy hh_stock_poc; không npx -y; không bump 4.7.2; không raw-write
      .tscn; plugin is the only writer.
