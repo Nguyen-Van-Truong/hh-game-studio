@@ -99,6 +99,8 @@ def src_scan_errors() -> list[str]:
         errors.append("unproven-mutate sentinel must move off resource.create")
     resource = ADDON / "core" / "hh_resource_adapter.gd"
     signal = ADDON / "core" / "hh_signal_adapter.gd"
+    reads = ADDON / "core" / "hh_read_adapters.gd"
+    life_ts = BRIDGE / "src" / "ledger" / "scene_lifecycle.ts"
     if not resource.is_file():
         errors.append("missing resource adapter")
     else:
@@ -113,8 +115,43 @@ def src_scan_errors() -> list[str]:
             errors.append("resource adapter must refuse accidental shared mutation")
         if "rewrite_plan" not in text:
             errors.append("move/delete must require a rewrite plan when referenced")
+        if "FileAccess.WRITE" in text:
+            errors.append("resource adapter must not in-place FileAccess.WRITE rewrite")
+        if "_cleanup_new_external" not in text:
+            errors.append("failed create/unique must delete the new dest file")
+        if "get_open_scenes" not in text:
+            errors.append("shared owner count must include EditorInterface.get_open_scenes")
+        edit_fn = re.search(r"func _edit_resource\b.*?func _save\b", text, re.S)
+        if edit_fn is None:
+            errors.append("missing _edit_resource")
+        else:
+            body = edit_fn.group(0)
+            if "_persist_external" in body or "ResourceSaver.save" in body:
+                errors.append("_edit_resource must not persist; disk write is resource.save")
         if re.search(r"\bcallv\b", text) or "Object.call" in text:
             errors.append("resource adapter has a generic invoke path")
+    if reads.is_file():
+        uid_fn = re.search(
+            r"func _resource_uid\b.*?func _signal_list\b",
+            reads.read_text(encoding="utf-8"),
+            re.S,
+        )
+        if uid_fn is None:
+            errors.append("missing _resource_uid")
+        else:
+            uid_body = uid_fn.group(0)
+            if "_jail(" not in uid_body:
+                errors.append("resource.uid must jail the mapped path")
+            if "file_exists" not in uid_body:
+                errors.append("resource.uid must FileAccess-check the mapped path")
+    if life_ts.is_file():
+        life_text = life_ts.read_text(encoding="utf-8")
+        if "params.unique === true" not in life_text:
+            errors.append("mutationNeedsDiskHash must treat unique dest as the durable write")
+        if not re.search(r'actionId === "resource.edit"', life_text):
+            errors.append("durableResPath must handle resource.edit dest after.path")
+    if '"unique": True' not in self_text:
+        errors.append("official test must send resource.edit unique=true + dest")
     if not signal.is_file():
         errors.append("missing signal adapter")
     else:
@@ -192,6 +229,13 @@ def sha256_file(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def variant_xy(body: dict) -> tuple[float, float] | None:
+    val = ((body.get("after") or {}).get("value") or {}).get("value") or {}
+    if not isinstance(val, dict):
+        return None
+    return float(val.get("x") or 0), float(val.get("y") or 0)
+
+
 def live_errors(exe: Path) -> list[str]:
     errors: list[str] = []
     cleanup_temp()
@@ -206,6 +250,10 @@ def live_errors(exe: Path) -> list[str]:
     tiles = "res://r3w4/tiles.tres"
     tex = "res://r3w4/tex.tres"
     tex2 = "res://r3w4/tex2.tres"
+    tex_unique = "res://r3w4/tex_unique.tres"
+    undo_tex = "res://r3w4/undo_tex.tres"
+    ghost = "res://r3w4/ghost.tres"
+    other = "res://r3w4/other.tscn"
     box = "res://r3w4/box.tres"
     box2 = "res://r3w4/box2.tres"
     mat_a = "res://r3w4/mat_a.tres"
@@ -213,6 +261,9 @@ def live_errors(exe: Path) -> list[str]:
     tiles_abs = life.res_to_abs(tiles)
     tex_abs = life.res_to_abs(tex)
     tex2_abs = life.res_to_abs(tex2)
+    tex_unique_abs = life.res_to_abs(tex_unique)
+    undo_abs = life.res_to_abs(undo_tex)
+    ghost_abs = life.res_to_abs(ghost)
     box2_abs = life.res_to_abs(box2)
     req_id = 2
     try:
@@ -244,7 +295,13 @@ def live_errors(exe: Path) -> list[str]:
         req_id, created = tool_call(proc, req_id, "godot.scene", "create", {"path": scene, "root_class": "Node2D"})
         if not ack_ok(created, errors, "scene.create"):
             return errors
-        for name, cls in (("Sprite", "Sprite2D"), ("SpriteB", "Sprite2D"), ("Mark", "Sprite2D"), ("Clock", "Timer")):
+        for name, cls in (
+            ("Sprite", "Sprite2D"),
+            ("SpriteB", "Sprite2D"),
+            ("Mark", "Sprite2D"),
+            ("UndoSpr", "Sprite2D"),
+            ("Clock", "Timer"),
+        ):
             req_id, added = tool_call(
                 proc,
                 req_id,
@@ -281,6 +338,22 @@ def live_errors(exe: Path) -> list[str]:
             return errors
         if str((uid_body.get("after") or {}).get("path") or "") != tiles:
             errors.append(f"resource.uid path mismatch: {uid_body}")
+
+        req_id, fake_uid = tool_call(proc, req_id, "godot.resource", "uid", {"uid": "uid://zznotmappedxx"})
+        expect_code(fake_uid, ("E_UNVERIFIED", "E_PATH"), errors, "fake/unmapped resource.uid")
+        req_id, ghost_body = tool_call(
+            proc, req_id, "godot.resource", "create", {"path": ghost, "class_name": "TileSet"}
+        )
+        ghost_uid = str((ghost_body.get("after") or {}).get("uid") or "")
+        if ack_ok(ghost_body, errors, "resource.create ghost"):
+            if ghost_abs.is_file():
+                try:
+                    ghost_abs.unlink()
+                except OSError as exc:
+                    errors.append(f"could not unlink ghost for mapped+missing uid test: {exc}")
+            if ghost_uid.startswith("uid://"):
+                req_id, missing_uid = tool_call(proc, req_id, "godot.resource", "uid", {"uid": ghost_uid})
+                expect_code(missing_uid, ("E_UNVERIFIED", "E_PATH"), errors, "mapped+missing resource.uid")
 
         req_id, tex_body = tool_call(
             proc, req_id, "godot.resource", "create", {"path": tex, "class_name": "PlaceholderTexture2D"}
@@ -338,6 +411,143 @@ def live_errors(exe: Path) -> list[str]:
         )
         if not ack_ok(path_set, errors, "property.set Resource path", undo=True):
             errors.append(f"encodedClose leftover: path-assign must ACK: {path_set}")
+
+        req_id, saved_main = tool_call(proc, req_id, "godot.scene", "save", {"path": scene})
+        if not ack_ok(saved_main, errors, "scene.save before two-scene share"):
+            return errors
+        req_id, other_body = tool_call(
+            proc, req_id, "godot.scene", "create", {"path": other, "root_class": "Node2D"}
+        )
+        if not ack_ok(other_body, errors, "scene.create other"):
+            return errors
+        req_id, other_spr = tool_call(
+            proc,
+            req_id,
+            "godot.node",
+            "add",
+            {"scene": other, "parent": ".", "class_name": "Sprite2D", "name": "Sprite"},
+        )
+        if not ack_ok(other_spr, errors, "node.add other Sprite", undo=True):
+            return errors
+        req_id, other_assign = tool_call(
+            proc,
+            req_id,
+            "godot.resource",
+            "assign",
+            {"scene": other, "node_path": "Sprite", "property": "texture", "resource": tex},
+        )
+        if not ack_ok(other_assign, errors, "resource.assign other scene", undo=True):
+            return errors
+        req_id, saved_other = tool_call(proc, req_id, "godot.scene", "save", {"path": other})
+        if not ack_ok(saved_other, errors, "scene.save other"):
+            return errors
+        req_id, two_scene_edit = tool_call(
+            proc,
+            req_id,
+            "godot.resource",
+            "edit",
+            {"path": tex, "property": "size", "value": variant("Vector2", {"x": 7, "y": 8})},
+        )
+        expect_code(two_scene_edit, ("E_CONFLICT",), errors, "two-scene shared edit without flags")
+        req_id, back_main = tool_call(proc, req_id, "godot.scene", "open", {"path": scene})
+        if not ack_ok(back_main, errors, "scene.open main after other"):
+            return errors
+
+        tex_hash_before_unique = sha256_file(tex_abs)
+        req_id, size_before_unique = tool_call(
+            proc, req_id, "godot.property", "get", {"scene": scene, "node_path": "Sprite", "property": "texture/size"}
+        )
+        before_xy = variant_xy(size_before_unique)
+        req_id, unique_true = tool_call(
+            proc,
+            req_id,
+            "godot.resource",
+            "edit",
+            {
+                "path": tex,
+                "unique": True,
+                "dest": tex_unique,
+                "property": "size",
+                "value": variant("Vector2", {"x": 99, "y": 88}),
+            },
+        )
+        if not ack_ok(unique_true, errors, "resource.edit unique=true dest", undo=True):
+            return errors
+        if str((unique_true.get("after") or {}).get("path") or "") != tex_unique:
+            errors.append(f"unique=true after.path must be dest: {unique_true}")
+        if not tex_unique_abs.is_file():
+            errors.append("unique=true dest missing on disk")
+        if sha256_file(tex_abs) != tex_hash_before_unique:
+            errors.append("unique=true mutated the original .tres on disk")
+        req_id, size_after_unique = tool_call(
+            proc, req_id, "godot.property", "get", {"scene": scene, "node_path": "Sprite", "property": "texture/size"}
+        )
+        after_xy = variant_xy(size_after_unique)
+        if before_xy is not None and after_xy == (99.0, 88.0):
+            errors.append(f"unique=true mutated the original in-memory field: {size_after_unique}")
+        if after_xy is not None and before_xy is not None and after_xy != before_xy:
+            errors.append(f"unique=true changed original Sprite size {before_xy} -> {after_xy}")
+
+        req_id, undo_created = tool_call(
+            proc, req_id, "godot.resource", "create", {"path": undo_tex, "class_name": "PlaceholderTexture2D"}
+        )
+        if not ack_ok(undo_created, errors, "resource.create undo_tex"):
+            return errors
+        req_id, undo_assigned = tool_call(
+            proc,
+            req_id,
+            "godot.resource",
+            "assign",
+            {"scene": scene, "node_path": "UndoSpr", "property": "texture", "resource": undo_tex},
+        )
+        if not ack_ok(undo_assigned, errors, "resource.assign undo_tex", undo=True):
+            return errors
+        req_id, undo_old = tool_call(
+            proc, req_id, "godot.property", "get", {"scene": scene, "node_path": "UndoSpr", "property": "texture/size"}
+        )
+        old_xy = variant_xy(undo_old)
+        if old_xy is None:
+            errors.append(f"undo_tex old size missing: {undo_old}")
+            return errors
+        undo_disk_before = sha256_file(undo_abs)
+        req_id, undo_edit = tool_call(
+            proc,
+            req_id,
+            "godot.resource",
+            "edit",
+            {"path": undo_tex, "property": "size", "value": variant("Vector2", {"x": 20, "y": 21})},
+        )
+        if not ack_ok(undo_edit, errors, "resource.edit undo field", undo=True):
+            return errors
+        if sha256_file(undo_abs) != undo_disk_before:
+            errors.append("resource.edit wrote the .tres; disk write must wait for resource.save")
+        req_id, undo_now = tool_call(
+            proc, req_id, "godot.property", "get", {"scene": scene, "node_path": "UndoSpr", "property": "texture/size"}
+        )
+        if variant_xy(undo_now) != (20.0, 21.0):
+            errors.append(f"edit did not set in-memory size: {undo_now}")
+        req_id, undone_edit = tool_call(proc, req_id, "godot.node", "undo", {"scene": scene, "count": 1})
+        if not ack_ok(undone_edit, errors, "node.undo after resource.edit"):
+            return errors
+        req_id, undo_restored = tool_call(
+            proc, req_id, "godot.property", "get", {"scene": scene, "node_path": "UndoSpr", "property": "texture/size"}
+        )
+        if variant_xy(undo_restored) != old_xy:
+            errors.append(f"undo after edit did not restore in-memory field: {undo_restored} vs {old_xy}")
+        req_id, undo_edit2 = tool_call(
+            proc,
+            req_id,
+            "godot.resource",
+            "edit",
+            {"path": undo_tex, "property": "size", "value": variant("Vector2", {"x": 22, "y": 23})},
+        )
+        if not ack_ok(undo_edit2, errors, "resource.edit before save", undo=True):
+            return errors
+        req_id, undo_saved = tool_call(proc, req_id, "godot.resource", "save", {"path": undo_tex})
+        if not ack_ok(undo_saved, errors, "resource.save after edit"):
+            return errors
+        if str((undo_saved.get("after") or {}).get("disk_hash") or "") != sha256_file(undo_abs):
+            errors.append(f"resource.save undo_tex disk SHA mismatch: {undo_saved}")
 
         req_id, dup = tool_call(proc, req_id, "godot.resource", "duplicate", {"path": tex, "dest": tex2})
         if not ack_ok(dup, errors, "resource.duplicate"):
@@ -445,6 +655,16 @@ def live_errors(exe: Path) -> list[str]:
 
         req_id, move_ref = tool_call(proc, req_id, "godot.asset", "move", {"from": tex, "to": "res://r3w4/tex_moved.tres"})
         expect_code(move_ref, ("E_CONFLICT",), errors, "move still-referenced without rewrite_plan")
+        req_id, rewrite = tool_call(
+            proc,
+            req_id,
+            "godot.asset",
+            "move",
+            {"from": tex, "to": "res://r3w4/tex_moved.tres", "rewrite_plan": True},
+        )
+        expect_code(rewrite, ("E_UNVERIFIED",), errors, "rewrite_plan=true referenced move")
+        if not tex_abs.is_file():
+            errors.append("rewrite_plan refusal must not move the referenced file")
 
         req_id, mat_a_body = tool_call(
             proc, req_id, "godot.resource", "create", {"path": mat_a, "class_name": "ShaderMaterial"}
@@ -583,6 +803,11 @@ def live_errors(exe: Path) -> list[str]:
         hits = (((queried.get("after") or {}).get("hits") or {}).get("items")) or []
         if not any(str(item.get("name") or "") == "Sprite" for item in hits if isinstance(item, dict)):
             errors.append(f"group membership lost after save/reopen: {queried}")
+        req_id, reopen_undo = tool_call(
+            proc, req_id, "godot.property", "get", {"scene": scene, "node_path": "UndoSpr", "property": "texture/size"}
+        )
+        if variant_xy(reopen_undo) != (22.0, 23.0):
+            errors.append(f"edit+save+reopen did not keep new field: {reopen_undo}")
         req_id, reopen_insp = tool_call(
             proc, req_id, "godot.signal", "inspect", {"scene": scene, "node_path": "Clock", "signal": "timeout"}
         )

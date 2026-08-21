@@ -665,6 +665,11 @@ func _resource_uid(command_id: String, params: Dictionary, post: String) -> Dict
 	var mapped: String = ResourceUID.get_id_path(uid)
 	if mapped.is_empty():
 		return _unverified(command_id, "uid has no path")
+	var jail: Dictionary = _jail(command_id, mapped)
+	if jail.get("ok", false) != true:
+		return jail
+	if not FileAccess.file_exists(mapped) or not ResourceLoader.exists(mapped):
+		return _unverified(command_id, "uid maps to a missing resource file")
 	return _ok(command_id, post, {"uid": uid_text, "path": mapped})
 
 

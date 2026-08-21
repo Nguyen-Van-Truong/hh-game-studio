@@ -97,8 +97,11 @@ export function mutationNeedsDiskHash(actionId: string, params: Record<string, u
   if (sceneNeedsDiskHash(actionId)) {
     return true;
   }
-  if (actionId === "resource.create" || actionId === "resource.save" || actionId === "resource.edit") {
+  if (actionId === "resource.create" || actionId === "resource.save") {
     return typeof params.path === "string" && isExternalResPath(params.path);
+  }
+  if (actionId === "resource.edit") {
+    return params.unique === true;
   }
   if (actionId === "resource.duplicate") {
     return typeof params.dest === "string" && isExternalResPath(params.dest);
@@ -111,21 +114,30 @@ export function durableResPath(
   params: Record<string, unknown>,
   after?: Record<string, unknown>,
 ): string {
+  const source = typeof params.path === "string" ? params.path : "";
   if (
     after &&
     typeof after.path === "string" &&
     after.path.startsWith("res://") &&
-    (actionId === "asset.move" || actionId === "asset.rename" || actionId === "resource.duplicate")
+    isExternalResPath(after.path)
   ) {
-    return after.path;
+    if (actionId === "asset.move" || actionId === "asset.rename" || actionId === "resource.duplicate") {
+      return after.path;
+    }
+    if (actionId === "resource.edit" && after.path !== source) {
+      return after.path;
+    }
   }
   if (actionId === "resource.duplicate" && typeof params.dest === "string") {
+    return params.dest;
+  }
+  if (actionId === "resource.edit" && params.unique === true && typeof params.dest === "string") {
     return params.dest;
   }
   if (actionId === "asset.move" && typeof params.to === "string") {
     return params.to;
   }
-  return typeof params.path === "string" ? params.path : "";
+  return source;
 }
 
 export function nodeNeedsUidAfter(actionId: string): boolean {

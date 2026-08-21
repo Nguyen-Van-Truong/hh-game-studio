@@ -281,6 +281,7 @@ func _duplicate(command_id: String, params: Dictionary, post: String) -> Diction
 		return persisted
 	var dest_uid: String = str(persisted.get("uid", ""))
 	if dest_uid.is_empty() or dest_uid == source_uid:
+		_cleanup_new_external(dest)
 		return _unverified(command_id, "duplicate uid was not distinct")
 	var after: Dictionary = {
 		"path": dest,
@@ -327,12 +328,17 @@ func _unique_then_edit(
 	post: String,
 	res: Resource,
 ) -> Dictionary:
+	var src_path: String = str(params.get("path", ""))
 	var dest: String = str(params.get("dest", ""))
 	if dest.is_empty():
-		dest = _unique_dest(str(params.get("path", "")))
+		dest = _unique_dest(src_path)
 	var dest_jail: Dictionary = _meta.jail(command_id, dest)
 	if dest_jail.get("ok", false) != true:
 		return dest_jail
+	if not _is_external_res(dest):
+		return _errors.fail(command_id, HHAgentErrors.E_PATH, "unique dest must be .tres or .res", dest)
+	if dest == src_path:
+		return _errors.fail(command_id, HHAgentErrors.E_CONFLICT, "unique dest must differ from source", dest)
 	if FileAccess.file_exists(dest):
 		return _errors.fail(command_id, HHAgentErrors.E_CONFLICT, "unique dest already exists", dest)
 	var copy: Resource = res.duplicate(true)
@@ -351,10 +357,26 @@ func _unique_then_edit(
 			command_id, scene_path, node_path, assign_prop, copy, precondition, "resource_property_path_equals", false
 		)
 		if assigned.get("ok", false) != true:
+			_cleanup_new_external(dest)
 			return assigned
 	var edit_params: Dictionary = params.duplicate()
 	edit_params["path"] = dest
-	return _edit_resource(command_id, edit_params, post, copy, dest, 1, false)
+	var edited: Dictionary = _edit_resource(command_id, edit_params, post, copy, dest, 1, false)
+	if edited.get("ok", false) != true:
+		_cleanup_new_external(dest)
+		return edited
+	var after_v: Variant = edited.get("after", {})
+	if after_v is Dictionary:
+		var after: Dictionary = after_v
+		after["path"] = dest
+		after["disk_hash"] = str(persisted.get("disk_hash", ""))
+		after["uid"] = str(persisted.get("uid", ""))
+		after["unique"] = true
+		after["source_path"] = src_path
+	else:
+		_cleanup_new_external(dest)
+		return _unverified(command_id, "unique edit missing after")
+	return edited
 
 
 func _edit_resource(
@@ -427,16 +449,13 @@ func _edit_resource(
 	if enc.get("ok", false) != true:
 		return _fail_enc(command_id, enc)
 	after["value"] = {"schema": HHAgentVariantCodec.SCHEMA, "type": str(enc.get("type", "")), "value": enc.get("value")}
-	if _is_external_res(res_path) and not res_path.contains("::"):
-		var persisted: Dictionary = _persist_external(command_id, res, res_path)
-		if persisted.get("ok", false) != true:
-			return persisted
-		after["disk_hash"] = str(persisted.get("disk_hash", ""))
-		after["uid"] = str(persisted.get("uid", ""))
-	else:
-		var scene_path: String = str(params.get("scene", ""))
-		if scene_path.is_empty() == false:
-			_meta.mark_dirty(scene_path)
+	_meta.mark_dirty(res_path)
+	var scene_path: String = str(params.get("scene", ""))
+	if scene_path.is_empty() == false:
+		_meta.mark_dirty(scene_path)
+	var edited_now: Node = EditorInterface.get_edited_scene_root()
+	if edited_now != null and not edited_now.scene_file_path.is_empty():
+		_meta.mark_dirty(edited_now.scene_file_path)
 	return _errors.ok_changed(command_id, _checks(post), after, true, action_name)
 
 
@@ -520,11 +539,18 @@ func _move(command_id: String, src: String, dest: String, rewrite_plan: bool, po
 	if FileAccess.file_exists(dest):
 		return _errors.fail(command_id, HHAgentErrors.E_CONFLICT, "destination already exists", dest)
 	var refs: PackedStringArray = _referencers(src)
-	if refs.size() > 0 and not rewrite_plan:
+	if refs.size() > 0:
+		if rewrite_plan:
+			return _errors.fail(
+				command_id,
+				HHAgentErrors.E_UNVERIFIED,
+				"rewrite_plan is not proven; refusing in-place reference rewrite",
+				src,
+			)
 		return _errors.fail(
 			command_id,
 			HHAgentErrors.E_CONFLICT,
-			"resource is still referenced; pass rewrite_plan=true after a checkpoint",
+			"resource is still referenced; rewrite_plan is not proven",
 			src,
 		)
 	var uid_text: String = _uid_of(src)
@@ -546,8 +572,6 @@ func _move(command_id: String, src: String, dest: String, rewrite_plan: bool, po
 		)
 	if uid_id != ResourceUID.INVALID_ID:
 		ResourceUID.set_id(uid_id, dest)
-	if rewrite_plan:
-		_rewrite_paths(src, dest, refs)
 	_meta.refresh_fs(src)
 	_meta.refresh_fs(dest)
 	if FileAccess.file_exists(src) or not FileAccess.file_exists(dest):
@@ -566,37 +590,50 @@ func _move(command_id: String, src: String, dest: String, rewrite_plan: bool, po
 		"uid": new_uid,
 		"old_path_absent": true,
 		"disk_hash": _meta.disk_hash(dest),
-		"rewritten": refs.size() if rewrite_plan else 0,
+		"rewritten": 0,
 		"source": "editor",
 	}
 	return _errors.ok_changed(command_id, _checks(post), after, true)
 
 
 func _persist_external(command_id: String, res: Resource, res_path: String) -> Dictionary:
+	var existed: bool = FileAccess.file_exists(res_path)
 	var dir_err: Error = _meta.ensure_parent_dir(res_path)
 	if dir_err != OK:
 		return _errors.fail(command_id, HHAgentErrors.E_PATH, "cannot create resource directory", res_path)
 	var save_err: Error = ResourceSaver.save(res, res_path)
 	if save_err != OK:
+		if not existed:
+			_cleanup_new_external(res_path)
 		if save_err == ERR_FILE_CANT_WRITE or save_err == ERR_CANT_CREATE or save_err == ERR_UNAUTHORIZED:
 			return _errors.fail(command_id, HHAgentErrors.E_PATH, "ResourceSaver.save failed: %s" % error_string(save_err), res_path)
 		return _unverified(command_id, "ResourceSaver.save failed: %s" % error_string(save_err))
 	_meta.refresh_fs(res_path)
 	if not FileAccess.file_exists(res_path):
+		if not existed:
+			_cleanup_new_external(res_path)
 		return _unverified(command_id, "resource file missing after ResourceSaver.save")
 	var bytes: PackedByteArray = FileAccess.get_file_as_bytes(res_path)
 	if bytes.is_empty():
+		if not existed:
+			_cleanup_new_external(res_path)
 		return _unverified(command_id, "ResourceSaver.save wrote zero bytes")
 	var disk: String = _sha256_bytes(bytes)
 	if disk.is_empty() or disk == "missing":
+		if not existed:
+			_cleanup_new_external(res_path)
 		return _unverified(command_id, "resource disk SHA-256 missing after save")
 	var again: String = _meta.disk_hash(res_path)
 	if again != disk:
+		if not existed:
+			_cleanup_new_external(res_path)
 		return _unverified(command_id, "resource disk SHA-256 raced during readback")
 	var uid_text: String = _uid_of(res_path)
 	if uid_text.is_empty():
 		uid_text = _ensure_uid(res_path)
 	if uid_text.is_empty():
+		if not existed:
+			_cleanup_new_external(res_path)
 		return _unverified(command_id, "UID missing after ResourceSaver.save + disk readback")
 	return {"ok": true, "disk_hash": disk, "uid": uid_text, "path": res_path}
 
@@ -610,6 +647,13 @@ func _resolve_request_resource(command_id: String, params: Dictionary) -> Dictio
 		if id == ResourceUID.INVALID_ID or not ResourceUID.has_id(id):
 			return _unverified(command_id, "uid is not in ResourceUID map")
 		var mapped: String = ResourceUID.get_id_path(id)
+		if mapped.is_empty():
+			return _unverified(command_id, "uid has no path")
+		var mapped_jail: Dictionary = _meta.jail(command_id, mapped)
+		if mapped_jail.get("ok", false) != true:
+			return mapped_jail
+		if not FileAccess.file_exists(mapped) or not ResourceLoader.exists(mapped):
+			return _unverified(command_id, "uid maps to a missing resource file")
 		var loaded_uid: Resource = _load_res(mapped)
 		if loaded_uid == null:
 			return _unverified(command_id, "uid resource failed to load")
@@ -733,9 +777,25 @@ func _owner_count(res: Resource) -> int:
 	if res == null:
 		return 0
 	var n: int = 0
+	var seen: Dictionary = {}
 	var edited: Node = EditorInterface.get_edited_scene_root()
+	var edited_path: String = ""
 	if edited != null:
-		n += _count_in_tree(edited, res)
+		edited_path = edited.scene_file_path
+		var live: int = _count_in_tree(edited, res)
+		n += live
+		if not edited_path.is_empty():
+			seen[edited_path] = true
+			if live == 0 and _scene_file_refs_path(edited_path, res.resource_path):
+				n += 1
+	var open: PackedStringArray = EditorInterface.get_open_scenes()
+	for scene_path: String in open:
+		if seen.has(scene_path):
+			continue
+		if _scene_file_refs_path(scene_path, res.resource_path):
+			n += 1
+			seen[scene_path] = true
+	n += _count_disk_scene_owners(res.resource_path, seen)
 	return n
 
 
@@ -847,21 +907,46 @@ func _collect_files(dir_path: String, out: PackedStringArray) -> void:
 	da.list_dir_end()
 
 
-func _rewrite_paths(old_path: String, new_path: String, files: PackedStringArray) -> void:
+func _scene_file_refs_path(scene_path: String, res_path: String) -> bool:
+	if res_path.is_empty() or scene_path.is_empty():
+		return false
+	if not scene_path.ends_with(".tscn") and not scene_path.ends_with(".scn"):
+		return false
+	if not FileAccess.file_exists(scene_path):
+		return false
+	var text: String = FileAccess.get_file_as_string(scene_path)
+	return text.contains(res_path)
+
+
+func _count_disk_scene_owners(res_path: String, seen: Dictionary) -> int:
+	if res_path.is_empty():
+		return 0
+	var n: int = 0
+	var files: PackedStringArray = PackedStringArray()
+	_collect_files("res://", files)
 	for item: String in files:
-		if not FileAccess.file_exists(item):
+		if seen.has(item):
 			continue
-		var text: String = FileAccess.get_file_as_string(item)
-		var updated: String = text.replace(old_path, new_path)
-		if updated == text:
+		if not item.ends_with(".tscn") and not item.ends_with(".scn"):
 			continue
-		var fa: FileAccess = FileAccess.open(item, FileAccess.WRITE)
-		if fa == null:
-			continue
-		fa.store_string(updated)
-		fa.flush()
-		fa.close()
-		_meta.refresh_fs(item)
+		if _scene_file_refs_path(item, res_path):
+			n += 1
+			seen[item] = true
+	return n
+
+
+func _cleanup_new_external(res_path: String) -> void:
+	if res_path.is_empty() or not _is_external_res(res_path):
+		return
+	var uid_id: int = ResourceLoader.get_resource_uid(res_path)
+	if FileAccess.file_exists(res_path):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(res_path))
+	var sidecar: String = res_path + ".uid"
+	if FileAccess.file_exists(sidecar):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(sidecar))
+	if uid_id != ResourceUID.INVALID_ID and ResourceUID.has_id(uid_id):
+		ResourceUID.remove_id(uid_id)
+	_meta.refresh_fs(res_path)
 
 
 func _load_res(res_path: String) -> Resource:
