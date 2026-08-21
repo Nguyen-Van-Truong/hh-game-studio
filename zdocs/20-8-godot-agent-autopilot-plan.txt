@@ -1,6 +1,6 @@
 AUTHORITATIVE_PLAN=1
 STATUS=ACTIVE
-CURRENT_VALID_WP=R2-WP7
+CURRENT_VALID_WP=R3-WP1
 
 ================================================================================
 BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
@@ -10,7 +10,7 @@ BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
 |--------|-----------|------------------|-----------------------------|------|------------|
 | 0 | R0 — Cutover an toàn | Đóng băng engine Rust cũ, pin Godot, đổi bootstrap sang plan này, không mất lịch sử | Governance + Toolchain | G0 | [x] 4/4 WP |
 | 1 | R1 — Spike và chọn nền MCP | Chứng minh agent tạo/sửa/chạy/nhìn một scene thật trong editor; chốt upstream hay tự làm | Research + Security + POC | G1 NO-FORK | [x] 5/5 WP |
-| 2 | R2 — Control plane | Plugin, sidecar, Agent Host, MCP, auth, registry, ledger, pause và OWNER_AUTOPILOT hoạt động | Bridge + Plugin + Security | — | [ ] 6/7 WP |
+| 2 | R2 — Control plane | Plugin, sidecar, Agent Host, MCP, auth, registry, ledger, pause và OWNER_AUTOPILOT hoạt động | Bridge + Plugin + Security | — | [x] 7/7 WP |
 | 3 | R3 — Quyền editor ngữ nghĩa | Scene/node/property/resource/script/asset/project settings có undo, dedup và postcondition | Scene + Script + Asset | — | [ ] 0/8 WP |
 | 4 | R4 — Người xem được agent làm | Activity Dock, chọn node, focus inspector, cursor/gizmo ảo, replay kéo-thả, Watch/Fast mode | Observer UI + Editor UX | G2 VISIBLE | [ ] 0/6 WP |
 | 5 | R5 — Bộ công cụ làm game 2D | TileMapLayer, animation, UI, audio, physics, navigation, shader/particles được agent thao tác đầy đủ | 2D-A + 2D-B + Assets | — | [ ] 0/7 WP |
@@ -24,7 +24,7 @@ VIỆC PHẢI LÀM TRƯỚC: R0-WP1 → R0-WP2 → R0-WP3 → R0-WP4 → R1-WP1.
 Không được bắt đầu R2
 trước G1. Từ R2 trở đi chỉ song song các track có ranh giới file rõ ràng.
 
-Tiến độ tổng: [ ] 15/60 WP. First valid WP: R2-WP7.
+Tiến độ tổng: [ ] 16/60 WP. First valid WP: R3-WP1.
 Ngày lập: 20-8-2026 (Asia/Saigon).
 
 ================================================================================
@@ -1100,7 +1100,7 @@ R2-WP6 — Read model, capability discovery và `doctor` E2E              [x] 21
         780eb2f edited-tree reads and honest doctor;
         611b8a7 measure fake Godot --version
 
-R2-WP7 — Agent Host adapter, session/wakeup/context contract            [ ]
+R2-WP7 — Agent Host adapter, session/wakeup/context contract            [x] 21-8-2026
   Phụ thuộc: R2-WP2, R2-WP4, R2-WP6.
   Track/file: A; host/, provider adapters, session contract/docs.
   Làm:
@@ -1114,7 +1114,29 @@ R2-WP7 — Agent Host adapter, session/wakeup/context contract            [ ]
   Verify: fake deterministic model adapter; kill/resume host giữa tool calls; credential absent
           fail E_EXTERNAL; context compact/reload không mất current task/command_id.
   DoD: R7 có process chịu trách nhiệm phiên 90 phút rõ ràng; không giả định “MCP tự suy luận”.
-  LOG: (trống)
+  LOG:
+    LOG 2026-08-21 10:42 Asia/Saigon — agent=coordinator
+      Base: ba7d65b host/ fake model + 90min session persist.
+        Godot=4.7.1.stable.official.a13da4feb, schema=hh-godot-actions/1
+      Files/leases: host/, docs/godot-agent/HOST.md,
+        tests/bootstrap/test_host.py
+      Verify: test_host.py → 0 (fake two-tool script; second-process
+        --hold-after-decision kill + --resume same session/task/command_id;
+        credential absent E_EXTERNAL path=credential; compact/reload keeps
+        ids; persist under LOCALAPPDATA/HHGodotAgent/hosts; budget E_POLICY;
+        godot.node add E_UNVERIFIED); g1 → 0. Does not apply scene mutations.
+      E2E/artifacts: state.json under HHGodotAgent/hosts/<session>/;
+        interactive vs persistent same tool keys; no live model network
+      Critic: PASS-WITH-GAPS tick yes (474b9743) on ba7d65b. P0/P1 none.
+        Independent probe: hold pid killed, resume different writer_pid,
+        handoff.from_pid matched; no --force credential path.
+      Gaps: configured provider never opens network; FakeExecutor always
+        used (McpStdioExecutor dead); MCP probe is envelope-shape; live
+        --cancel clobbered by hold heartbeat; fake executor only denies
+        godot.node add (other mutate verbs ok:true + verified=false, not
+        applied); 90min is deadline math not soak; creds JSON/env not
+        keychain. Mutate still never applying in Godot.
+      Commit: ba7d65b R2-WP7: Agent Host session and fake model
 
 --------------------------------------------------------------------------------
 R3 — QUYỀN EDITOR NGỮ NGHĨA VÀ PERSISTENCE ĐÚNG (8 WP)
@@ -1925,19 +1947,20 @@ thuận nếu ảnh hưởng G5/G6.
 14. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Hiện tại R0 (4/4) + R1 (5/5, G1) + R2-WP1..WP6 đã xong. Agent tiếp theo làm **R2-WP7**.
-KHÔNG vendor A/C as-is, KHÔNG M6, KHÔNG fork Godot. Policy + Pause + ledger +
-read model exist; mutate still not dispatched. Host/session only — do not claim
-the agent drives Godot or writes scenes.
+Hiện tại R0 (4/4) + R1 (5/5, G1) + R2 (7/7) đã xong. Agent tiếp theo làm **R3-WP1**.
+KHÔNG vendor A/C as-is, KHÔNG M6, KHÔNG fork Godot. Control plane exists;
+mutate still not dispatched until R3 adapters + UndoRedo + durable save.
+Do not claim the host drives Godot.
 
 Lệnh hợp lệ:
 
-  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R2-WP7`);
-  2) R2-WP7: Agent Host adapter, session/wakeup/context, fake deterministic
-     model, credential-absent E_EXTERNAL (plan R2-WP7);
+  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R3-WP1`);
+  2) R3-WP1: scene lifecycle + durable save via plugin (create/open/list/
+     activate/read/save/save-as/reload/close); fingerprint + E_CONFLICT;
+     EditorInterface save → disk hash → ledger committed_durable;
   3) mở editor fixture: `hh-godot-editor.bat` (Godot 4.7.1-stable pin, minimal-2d);
-  4) không copy hh_stock_poc; không npx -y; không bump 4.7.2; không mutation
-     adapter (R3); không pretend host means live scene edits.
+  4) không copy hh_stock_poc; không npx -y; không bump 4.7.2; không raw-write
+     .tscn; plugin is the only writer.
 
 Không được tự xóa engine/code/game/asset cũ. Không được tự fork Godot. Không yêu cầu
 người click editor trong happy path. Mục tiêu cuối là: người giao brief, xem agent làm,
