@@ -414,6 +414,8 @@ def live_errors(exe: Path) -> list[str]:
             saved_hash = disk
             if s_after.get("disk_hash") != disk:
                 errors.append(f"save disk_hash {s_after.get('disk_hash')} != sidecar {disk}")
+            if "_hh_unsaved" in life_abs.read_text(encoding="utf-8"):
+                errors.append("save persisted the dirty-mark metadata into the .tscn")
         inspect_s = body_of(mcp_call(proc, req_id, "hh.ledger_inspect", {"command_id": save_id}))
         req_id += 1
         if (inspect_s.get("row") or {}).get("state") != "committed_durable":

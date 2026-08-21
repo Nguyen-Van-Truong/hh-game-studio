@@ -207,6 +207,7 @@ func _save(
 	var pre_err: Dictionary = _check_precondition(command_id, precondition, edited, edited.scene_file_path)
 	if pre_err.get("ok", false) != true:
 		return pre_err
+	_strip_mark_meta(edited)
 	if save_as:
 		if not EditorInterface.has_method("save_scene_as"):
 			return _unverified(command_id, "EditorInterface.save_scene_as missing")
@@ -349,6 +350,11 @@ func _check_precondition(
 			"precondition.scene_hash",
 		)
 	return {"ok": true}
+
+
+func _strip_mark_meta(root: Node) -> void:
+	if root != null and root.has_meta("_hh_unsaved"):
+		root.remove_meta("_hh_unsaved")
 
 
 func _maybe_mark_dirty(res_path: String, root: Node) -> void:
