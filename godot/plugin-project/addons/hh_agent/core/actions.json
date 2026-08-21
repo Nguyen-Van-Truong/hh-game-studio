@@ -1559,6 +1559,17 @@
       ],
       "postcondition": "job_terminal_state",
       "checkpoint_required": false
+    },
+    "job.transaction": {
+      "method": "godot.job",
+      "verb": "transaction",
+      "side_effect": "mutate",
+      "timeout_ms": 60000,
+      "required": [
+        "steps"
+      ],
+      "postcondition": "transaction_steps_verified",
+      "checkpoint_required": true
     }
   }
 }

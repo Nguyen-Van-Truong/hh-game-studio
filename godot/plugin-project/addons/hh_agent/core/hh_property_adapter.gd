@@ -20,6 +20,62 @@ func handles(action: String) -> bool:
 	return action == "set" or action == "batch" or action == "reset"
 
 
+func plan_item_on(
+	command_id: String,
+	edited: Node,
+	node: Node,
+	node_path: String,
+	prop: String,
+	raw_value: Variant,
+) -> Dictionary:
+	if node == null:
+		return _unverified(command_id, "node not found")
+	var packed_err: Dictionary = _reject_packed(command_id, node, edited)
+	if not packed_err.is_empty():
+		return packed_err
+	var walked: Dictionary = _walk_property(command_id, node, prop, edited.scene_file_path)
+	if walked.get("ok", false) != true:
+		return walked
+	var target: Object = walked.get("target") as Object
+	var leaf: String = str(walked.get("leaf", ""))
+	var info: Dictionary = walked.get("info")
+	var usage_err: Dictionary = _codec.reject_usage(info)
+	if not usage_err.is_empty():
+		return _errors.fail(command_id, str((usage_err.get("error") as Dictionary).get("code", "")), str((usage_err.get("error") as Dictionary).get("message", "")), "params.property")
+	var decoded: Dictionary = _codec.decode(raw_value, "params.value")
+	if decoded.get("ok", false) != true:
+		return _fail_enc(command_id, decoded)
+	var kind: String = str(decoded.get("type", ""))
+	var new_v: Variant = decoded.get("value")
+	if kind == "TypedArray":
+		new_v = _codec.to_packed(str(decoded.get("element", "")), decoded.get("value") as Array, int(info.get("type", 0)))
+	var type_err: Dictionary = _codec.types_compatible(int(info.get("type", 0)), kind, new_v, str(info.get("class_name", "")))
+	if not type_err.is_empty():
+		return _errors.fail(command_id, str((type_err.get("error") as Dictionary).get("code", "")), str((type_err.get("error") as Dictionary).get("message", "")), "params.value")
+	var hint_err: Dictionary = _codec.validate_hints(info, new_v, kind)
+	if not hint_err.is_empty():
+		return _errors.fail(command_id, str((hint_err.get("error") as Dictionary).get("code", "")), str((hint_err.get("error") as Dictionary).get("message", "")), "params.value")
+	var old_v: Variant = target.get(leaf)
+	return {
+		"ok": true,
+		"target": target,
+		"leaf": leaf,
+		"old": _codec.snapshot(old_v),
+		"new": _codec.snapshot(new_v),
+		"node_path": node_path,
+		"property": prop,
+		"kind": kind,
+		"discovery": _codec.discover(info),
+	}
+
+
+func queue_planned(mgr: EditorUndoRedoManager, planned: Dictionary) -> void:
+	var target: Object = planned.get("target") as Object
+	var leaf: String = str(planned.get("leaf", ""))
+	mgr.add_do_property(target, leaf, planned.get("new"))
+	mgr.add_undo_property(target, leaf, planned.get("old"))
+
+
 func handle(
 	command_id: String,
 	method: String,

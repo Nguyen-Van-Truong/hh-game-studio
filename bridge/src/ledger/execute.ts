@@ -3,8 +3,8 @@
 import fs from "node:fs";
 import path from "node:path";
 
-import { runMutationGate, type PolicyServices } from "../policy/engine.js";
-import { jailProjectPath } from "../policy/jail.js";
+import { runMutationGate, type GateResult, type PolicyServices } from "../policy/engine.js";
+import { extractTargetPaths, jailProjectPath } from "../policy/jail.js";
 import { contentHash } from "../policy/leases.js";
 import { DEFAULT_POLICY, normalizePolicy } from "../policy/profiles.js";
 import { isSidecarOnlyAction, trySidecarRead } from "../read/sidecar_reads.js";
@@ -32,13 +32,23 @@ import {
   isResourceApply,
   isSceneLifecycleApply,
   isScriptApply,
+  isSidecarMutateApply,
   isSignalApply,
+  isTransactionApply,
   mutationNeedsDiskHash,
   nodeNeedsUidAfter,
   sceneNeedsDiskHash,
 } from "./scene_lifecycle.js";
 import { emptyRow, type CommandLedger, type CommandRow } from "./store.js";
 import type { LedgerState } from "./states.js";
+import {
+  applyGitCheckpoint,
+  applyGitRevert,
+  checkpointEvidence,
+  compensateFromManifest,
+  mergeAfter,
+  transactionApplyOk,
+} from "./transaction.js";
 
 export { DEFAULT_POLICY as DEFAULT_LEDGER_POLICY, normalizePolicy };
 
@@ -291,7 +301,7 @@ function classify(raw: Record<string, unknown>, commandId: string): Classified {
       timeoutMs: def?.timeout_ms ?? 5_000,
     };
   }
-  if (isProvenEditorApply(accepted.action_id)) {
+  if (isProvenEditorApply(accepted.action_id) || isSidecarMutateApply(accepted.action_id)) {
     return {
       kind: "mutate",
       sideEffect: side,
@@ -982,7 +992,7 @@ async function applyMutateOnce(
   if (isNoopEnvelope(envelope)) {
     return markUncertain(ledger, row, "noop cannot use scene mutate apply");
   }
-  if (!isProvenEditorApply(classified.actionId)) {
+  if (!isProvenEditorApply(classified.actionId) && !isSidecarMutateApply(classified.actionId)) {
     return markUncertain(ledger, row, "only proven editor apply verbs may apply");
   }
   const fields = envelopeFields(envelope);
@@ -1010,6 +1020,18 @@ async function applyMutateOnce(
       saveState(ledger, row, "failed");
       return result;
     }
+    const projectRoot = runtime.projectRoot ?? runtime.policy?.projectRoot ?? "";
+    if (isSidecarMutateApply(classified.actionId)) {
+      return finishSidecarMutate(
+        ledger,
+        row,
+        classified.actionId,
+        fields.params,
+        projectRoot,
+        gated,
+        runtime.policy,
+      );
+    }
     if (!runtime.pluginConnected()) {
       const result = unverifiedResult(row.command_id, "no plugin");
       persistResult(row, result);
@@ -1018,7 +1040,7 @@ async function applyMutateOnce(
     }
     saveState(ledger, row, "applying", {
       before_summary: JSON.stringify({
-        kind: "scene",
+        kind: isTransactionApply(classified.actionId) ? "transaction" : "scene",
         action_id: classified.actionId,
         ...(gated.checkpoint
           ? { checkpoint_id: gated.checkpoint.checkpoint_id }
@@ -1038,30 +1060,58 @@ async function applyMutateOnce(
       if (err instanceof LedgerPluginDeath) {
         runtime.killPlugin?.();
       }
+      if (gated.checkpoint) {
+        const recovery = compensateFromManifest(gated.checkpoint.manifest_path);
+        const uncertain = errorResult(
+          row.command_id,
+          E.E_UNCERTAIN,
+          "dispatch interrupted; postcondition unknown; checkpoint restore attempted",
+        );
+        mergeAfter(uncertain, { ...checkpointEvidence(gated.checkpoint), recovery });
+        persistResult(row, uncertain);
+        row.evidence_json = JSON.stringify([gated.checkpoint.manifest_path]);
+        ledger.addCheckpoint(
+          gated.checkpoint.checkpoint_id,
+          [gated.checkpoint.manifest_path],
+          row.command_id,
+        );
+        saveState(ledger, row, "uncertain");
+        return uncertain;
+      }
       return markUncertain(ledger, row, "dispatch interrupted; postcondition unknown");
+    }
+    if (gated.checkpoint) {
+      mergeAfter(result, checkpointEvidence(gated.checkpoint));
+      if (!result.ok && (result.changed === true || isTransactionApply(classified.actionId))) {
+        const recovery = compensateFromManifest(gated.checkpoint.manifest_path);
+        mergeAfter(result, { recovery });
+      }
     }
     row.apply_count = 1;
     persistResult(row, result);
     row.after_summary = JSON.stringify({
-      kind: isPropertyApply(classified.actionId)
-        ? "property"
-        : isResourceApply(classified.actionId) ||
-            isAssetRefApply(classified.actionId) ||
-            isAssetIngestApply(classified.actionId)
-          ? "resource"
-          : isSignalApply(classified.actionId)
-            ? "signal"
-            : isScriptApply(classified.actionId)
-              ? "script"
-              : isSceneLifecycleApply(classified.actionId)
-                ? "scene"
-                : isProjectSettingsApply(classified.actionId)
-                  ? "project"
-                  : "node",
+      kind: isTransactionApply(classified.actionId)
+        ? "transaction"
+        : isPropertyApply(classified.actionId)
+          ? "property"
+          : isResourceApply(classified.actionId) ||
+              isAssetRefApply(classified.actionId) ||
+              isAssetIngestApply(classified.actionId)
+            ? "resource"
+            : isSignalApply(classified.actionId)
+              ? "signal"
+              : isScriptApply(classified.actionId)
+                ? "script"
+                : isSceneLifecycleApply(classified.actionId)
+                  ? "scene"
+                  : isProjectSettingsApply(classified.actionId)
+                    ? "project"
+                    : "node",
       action_id: classified.actionId,
       checks: result.postcondition.checks,
       disk_hash: isRecord(result.after) ? result.after.disk_hash ?? "" : "",
       uid: isRecord(result.after) ? result.after.uid ?? "" : "",
+      ...(gated.checkpoint ? { checkpoint_id: gated.checkpoint.checkpoint_id } : {}),
     });
     if (gated.checkpoint) {
       row.evidence_json = JSON.stringify([gated.checkpoint.manifest_path]);
@@ -1078,6 +1128,12 @@ async function applyMutateOnce(
     }
     if (!isReadVerified(result.postcondition, classified.actionId)) {
       const failed = unverifiedResult(row.command_id, "scene postcondition failed");
+      if (gated.checkpoint && isTransactionApply(classified.actionId)) {
+        mergeAfter(failed, {
+          ...checkpointEvidence(gated.checkpoint),
+          recovery: compensateFromManifest(gated.checkpoint.manifest_path),
+        });
+      }
       persistResult(row, failed);
       saveState(ledger, row, "failed");
       return failed;
@@ -1106,7 +1162,18 @@ async function applyMutateOnce(
       saveState(ledger, row, "failed");
       return scriptFail;
     }
-    const projectRoot = runtime.projectRoot ?? runtime.policy?.projectRoot ?? "";
+    const txFail = isTransactionApply(classified.actionId) ? transactionApplyOk(result) : undefined;
+    if (txFail) {
+      if (gated.checkpoint) {
+        mergeAfter(txFail, {
+          ...checkpointEvidence(gated.checkpoint),
+          recovery: compensateFromManifest(gated.checkpoint.manifest_path),
+        });
+      }
+      persistResult(row, txFail);
+      saveState(ledger, row, "failed");
+      return txFail;
+    }
     const settingsFail = projectSettingsApplyOk(result, classified.actionId, projectRoot);
     if (settingsFail) {
       persistResult(row, settingsFail);
@@ -1115,6 +1182,12 @@ async function applyMutateOnce(
     }
     const diskFail = durableDiskOk(result, classified.actionId, fields.params, projectRoot);
     if (diskFail) {
+      if (gated.checkpoint && isTransactionApply(classified.actionId)) {
+        mergeAfter(diskFail, {
+          ...checkpointEvidence(gated.checkpoint),
+          recovery: compensateFromManifest(gated.checkpoint.manifest_path),
+        });
+      }
       persistResult(row, diskFail);
       saveState(ledger, row, "failed");
       return diskFail;
@@ -1132,6 +1205,14 @@ async function applyMutateOnce(
         const jailed = jailProjectPath(projectRoot, rawPath, { forWrite: true });
         if (jailed.ok) {
           runtime.policy.leases.noteWritten(runtime.policy.writerId, jailed.rel, jailed.abs);
+        }
+      }
+      if (isTransactionApply(classified.actionId)) {
+        for (const target of extractTargetPaths(fields.params, classified.actionId)) {
+          const jailed = jailProjectPath(projectRoot, target, { forWrite: true });
+          if (jailed.ok && fs.existsSync(jailed.abs)) {
+            runtime.policy.leases.noteWritten(runtime.policy.writerId, jailed.rel, jailed.abs);
+          }
         }
       }
       if (isProjectSettingsApply(classified.actionId)) {
@@ -1171,6 +1252,90 @@ async function applyMutateOnce(
   } finally {
     runtime.policy?.pause.finishJob(row.command_id);
   }
+}
+
+function finishSidecarMutate(
+  ledger: CommandLedger,
+  row: CommandRow,
+  actionId: string,
+  params: Record<string, unknown>,
+  projectRoot: string,
+  gated: Extract<GateResult, { ok: true }>,
+  policy?: PolicyServices,
+): PluginCommandResult {
+  saveState(ledger, row, "applying", {
+    before_summary: JSON.stringify({
+      kind: "sidecar",
+      action_id: actionId,
+      ...(gated.checkpoint ? { checkpoint_id: gated.checkpoint.checkpoint_id } : {}),
+    }),
+    side_effect: actionId === "git.revert_checkpoint" ? "destructive" : "mutate",
+    action_id: actionId,
+  });
+  row.dispatch_attempted = 1;
+  row.updated_at = nowIso();
+  ledger.save(row);
+  let result: PluginCommandResult;
+  if (actionId === "git.checkpoint") {
+    const paths = extractTargetPaths(params, actionId);
+    result = applyGitCheckpoint({
+      commandId: row.command_id,
+      projectRoot,
+      message: typeof params.message === "string" ? params.message : "",
+      paths,
+    });
+  } else if (actionId === "git.revert_checkpoint") {
+    result = applyGitRevert({
+      commandId: row.command_id,
+      projectRoot,
+      ref: typeof params.ref === "string" ? params.ref : "",
+    });
+  } else {
+    result = unverifiedResult(row.command_id, "sidecar mutate not implemented");
+  }
+  if (gated.checkpoint) {
+    mergeAfter(result, checkpointEvidence(gated.checkpoint));
+    row.evidence_json = JSON.stringify([gated.checkpoint.manifest_path]);
+    ledger.addCheckpoint(
+      gated.checkpoint.checkpoint_id,
+      [gated.checkpoint.manifest_path],
+      row.command_id,
+    );
+  }
+  row.apply_count = 1;
+  persistResult(row, result);
+  row.after_summary = JSON.stringify({
+    kind: "sidecar",
+    action_id: actionId,
+    checks: result.postcondition.checks,
+    ...(gated.checkpoint ? { checkpoint_id: gated.checkpoint.checkpoint_id } : {}),
+    ...(isRecord(result.after) && isRecord(result.after.recovery) ? { recovery: result.after.recovery } : {}),
+  });
+  saveState(ledger, row, "applied_volatile");
+  if (!result.ok || !isReadVerified(result.postcondition, actionId)) {
+    const failed = result.ok
+      ? unverifiedResult(row.command_id, "sidecar mutate postcondition failed")
+      : result;
+    persistResult(row, failed);
+    saveState(ledger, row, "failed");
+    return failed;
+  }
+  if (policy && actionId === "git.revert_checkpoint" && isRecord(result.after)) {
+    const files = [
+      ...(Array.isArray(result.after.restored) ? result.after.restored : []),
+      ...(Array.isArray(result.after.deleted) ? result.after.deleted : []),
+    ];
+    for (const rel of files) {
+      if (typeof rel !== "string" || !rel) {
+        continue;
+      }
+      const abs = path.join(projectRoot, rel);
+      policy.leases.noteWritten(policy.writerId, rel, abs);
+    }
+  }
+  saveState(ledger, row, "verified");
+  saveState(ledger, row, "committed_durable");
+  return result;
 }
 
 function markUncertain(

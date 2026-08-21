@@ -69,6 +69,42 @@ func handle(
 	return _errors.fail(command_id, HHAgentErrors.E_UNVERIFIED, "node.%s is not a proven CRUD verb" % action, "")
 
 
+func queue_add(mgr: EditorUndoRedoManager, command_id: String, edited: Node, params: Dictionary) -> Dictionary:
+	var parent: Node = _resolve(edited, str(params.get("parent", "")))
+	if parent == null:
+		return _unverified(command_id, "parent not found")
+	_ensure_editable(edited, parent)
+	var class_name_s: String = str(params.get("class_name", ""))
+	var name_s: String = str(params.get("name", ""))
+	var class_err: Dictionary = _instantiate_class(command_id, class_name_s)
+	if class_err.get("ok", false) != true:
+		return class_err
+	var child: Node = class_err.get("node") as Node
+	child.name = name_s
+	var owner: Node = _identity.pick_owner(parent, edited)
+	var uid: String = _identity.mint()
+	_identity.stamp(child, uid)
+	_queue_root_stamp(mgr, edited)
+	_queue_editable(mgr, edited, parent)
+	mgr.add_do_method(parent, "add_child", child, true)
+	mgr.add_do_method(child, "set_owner", owner)
+	mgr.add_do_method(child, "set_meta", HHAgentConstants.NODE_UID_META, uid)
+	mgr.add_do_method(child, "set_meta", HHAgentConstants.NODE_UID_META_HIDDEN, uid)
+	mgr.add_undo_method(parent, "remove_child", child)
+	mgr.add_undo_reference(child)
+	var parent_path: String = "." if parent == edited else _identity.tree_path(parent, edited)
+	var path_s: String = name_s if parent_path == "." else "%s/%s" % [parent_path, name_s]
+	return {
+		"ok": true,
+		"child": child,
+		"path": path_s,
+		"uid": uid,
+		"name": name_s,
+		"parent": parent_path,
+		"class_name": class_name_s,
+	}
+
+
 func _reject_packed(command_id: String, node: Node, edited: Node) -> Dictionary:
 	if _identity.is_packed_internal(node, edited):
 		return _errors.fail(

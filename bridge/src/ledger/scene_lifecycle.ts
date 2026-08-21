@@ -55,6 +55,10 @@ export const PROJECT_SETTINGS_APPLY = [
   "project.plugin",
 ] as const;
 
+export const SIDECAR_MUTATE_APPLY = ["git.checkpoint", "git.revert_checkpoint"] as const;
+
+export const TRANSACTION_APPLY = ["job.transaction"] as const;
+
 export const NODE_UID_AFTER = [
   "node.add",
   "node.rename",
@@ -103,6 +107,14 @@ export function isProjectSettingsApply(actionId: string): boolean {
   return (PROJECT_SETTINGS_APPLY as readonly string[]).includes(actionId);
 }
 
+export function isSidecarMutateApply(actionId: string): boolean {
+  return (SIDECAR_MUTATE_APPLY as readonly string[]).includes(actionId);
+}
+
+export function isTransactionApply(actionId: string): boolean {
+  return (TRANSACTION_APPLY as readonly string[]).includes(actionId);
+}
+
 export function isProvenEditorApply(actionId: string): boolean {
   return (
     isSceneLifecycleApply(actionId) ||
@@ -113,7 +125,8 @@ export function isProvenEditorApply(actionId: string): boolean {
     isAssetRefApply(actionId) ||
     isAssetIngestApply(actionId) ||
     isScriptApply(actionId) ||
-    isProjectSettingsApply(actionId)
+    isProjectSettingsApply(actionId) ||
+    isTransactionApply(actionId)
   );
 }
 
@@ -152,6 +165,19 @@ export function mutationNeedsDiskHash(actionId: string, params: Record<string, u
   if (actionId === "asset.import" || actionId === "asset.reimport") {
     return typeof params.path === "string" && params.path.startsWith("res://");
   }
+  if (actionId === "job.transaction") {
+    if (params.save === true) {
+      return true;
+    }
+    const steps = Array.isArray(params.steps) ? params.steps : [];
+    return steps.some((step) => {
+      if (!step || typeof step !== "object" || Array.isArray(step)) {
+        return false;
+      }
+      const action = (step as Record<string, unknown>).action;
+      return action === "scene.save" || action === "scene.create" || action === "script.write";
+    });
+  }
   return actionId === "asset.move" || actionId === "asset.rename";
 }
 
@@ -187,6 +213,31 @@ export function durableResPath(
   }
   if (actionId === "asset.move" && typeof params.to === "string") {
     return params.to;
+  }
+  if (actionId === "job.transaction") {
+    if (after && typeof after.path === "string" && after.path.startsWith("res://")) {
+      return after.path;
+    }
+    if (after && typeof after.scene === "string" && after.scene.startsWith("res://")) {
+      return after.scene;
+    }
+    const steps = Array.isArray(params.steps) ? params.steps : [];
+    for (let i = steps.length - 1; i >= 0; i -= 1) {
+      const step = steps[i];
+      if (!step || typeof step !== "object" || Array.isArray(step)) {
+        continue;
+      }
+      const rec = step as Record<string, unknown>;
+      const child = rec.params && typeof rec.params === "object" && !Array.isArray(rec.params)
+        ? (rec.params as Record<string, unknown>)
+        : {};
+      if ((rec.action === "scene.save" || rec.action === "scene.create") && typeof child.path === "string") {
+        return child.path;
+      }
+      if (rec.action === "script.write" && typeof child.path === "string") {
+        return child.path;
+      }
+    }
   }
   return source;
 }

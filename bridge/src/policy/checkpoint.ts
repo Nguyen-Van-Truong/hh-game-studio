@@ -226,7 +226,64 @@ export function createRecoveryCheckpoint(opts: {
   return { ok: true, checkpoint_id: checkpointId, dir, manifest_path: manifestPath, manifest };
 }
 
-export function restoreCheckpoint(manifestPath: string): { ok: true; restored: string[] } | CheckpointErr {
+export function resolveCheckpointRef(projectRoot: string, ref: string): string | undefined {
+  const raw = ref.trim();
+  if (!raw) {
+    return undefined;
+  }
+  if (raw.endsWith("manifest.json") && fs.existsSync(raw) && fs.statSync(raw).isFile()) {
+    return raw;
+  }
+  const id = raw.replace(/^refs\/hh-ckpt\//, "").replace(/^hh-ckpt\//, "");
+  const direct = path.join(projectRoot, ".hh-agent", "checkpoints", id, "manifest.json");
+  if (fs.existsSync(direct) && fs.statSync(direct).isFile()) {
+    return direct;
+  }
+  const root = path.join(projectRoot, ".hh-agent", "checkpoints");
+  if (!fs.existsSync(root) || !fs.statSync(root).isDirectory()) {
+    return undefined;
+  }
+  let entries: fs.Dirent[];
+  try {
+    entries = fs.readdirSync(root, { withFileTypes: true });
+  } catch {
+    return undefined;
+  }
+  for (const entry of entries) {
+    if (!entry.isDirectory()) {
+      continue;
+    }
+    const manifestPath = path.join(root, entry.name, "manifest.json");
+    if (!fs.existsSync(manifestPath)) {
+      continue;
+    }
+    try {
+      const parsed: unknown = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+      if (!parsed || typeof parsed !== "object") {
+        continue;
+      }
+      const rec = parsed as Record<string, unknown>;
+      if (rec.checkpoint_id === raw || rec.checkpoint_id === id || rec.git_ref === raw) {
+        return manifestPath;
+      }
+    } catch {
+      continue;
+    }
+  }
+  return undefined;
+}
+
+function destAllowed(rel: string): boolean {
+  const posix = rel.replace(/\\/g, "/");
+  if (posix.includes("..") || posix.startsWith("addons/hh_agent") || posix.startsWith(".hh-agent/")) {
+    return false;
+  }
+  return true;
+}
+
+export function restoreCheckpoint(
+  manifestPath: string,
+): { ok: true; restored: string[]; deleted: string[] } | CheckpointErr {
   let manifest: CheckpointManifest;
   try {
     const raw: unknown = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
@@ -240,13 +297,21 @@ export function restoreCheckpoint(manifestPath: string): { ok: true; restored: s
   const dir = path.dirname(manifestPath);
   const filesDir = path.join(dir, "files");
   const restored: string[] = [];
+  const deleted: string[] = [];
   try {
     for (const file of manifest.files) {
+      if (!destAllowed(file.rel)) {
+        throw new Error(`refusing restore outside product files ${file.rel}`);
+      }
+      const dest = path.join(manifest.project_root, file.rel);
       if (file.missing) {
+        if (fs.existsSync(dest) && fs.statSync(dest).isFile()) {
+          fs.unlinkSync(dest);
+          deleted.push(file.rel);
+        }
         continue;
       }
       const src = path.join(filesDir, file.rel.replace(/[\\/]/g, "__"));
-      const dest = path.join(manifest.project_root, file.rel);
       if (!fs.existsSync(src)) {
         throw new Error(`quarantine missing ${file.rel}`);
       }
@@ -264,5 +329,5 @@ export function restoreCheckpoint(manifestPath: string): { ok: true; restored: s
     const message = err instanceof Error ? err.message : "restore failed";
     return { ok: false, error: typedError(E.E_CHECKPOINT, message, manifestPath) };
   }
-  return { ok: true, restored };
+  return { ok: true, restored, deleted };
 }

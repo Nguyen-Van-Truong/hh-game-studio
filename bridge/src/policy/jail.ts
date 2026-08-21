@@ -255,6 +255,28 @@ export function extractTargetPaths(params: Record<string, unknown>, actionId?: s
   if (actionId && PROJECT_FILE_ACTIONS.has(actionId)) {
     return ["res://project.godot"];
   }
+  if (actionId === "git.checkpoint" && Array.isArray(params.paths)) {
+    return params.paths.filter((item): item is string => typeof item === "string" && item.length > 0);
+  }
+  if (actionId === "job.transaction" && Array.isArray(params.steps)) {
+    const nested: string[] = [];
+    for (const step of params.steps) {
+      if (!step || typeof step !== "object" || Array.isArray(step)) {
+        continue;
+      }
+      const rec = step as Record<string, unknown>;
+      const childAction = typeof rec.action === "string" ? rec.action : "";
+      const childParams = rec.params && typeof rec.params === "object" && !Array.isArray(rec.params)
+        ? (rec.params as Record<string, unknown>)
+        : {};
+      for (const item of extractTargetPaths(childParams, childAction)) {
+        if (!nested.includes(item)) {
+          nested.push(item);
+        }
+      }
+    }
+    return nested;
+  }
   const keys = ["path", "scene", "from", "to", "target", "file"];
   const out: string[] = [];
   for (const key of keys) {

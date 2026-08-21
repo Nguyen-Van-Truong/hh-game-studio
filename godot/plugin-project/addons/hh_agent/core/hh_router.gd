@@ -15,8 +15,9 @@ const _SignalScript: GDScript = preload("res://addons/hh_agent/core/hh_signal_ad
 const _ScriptScript: GDScript = preload("res://addons/hh_agent/core/hh_script_adapter.gd")
 const _AssetScript: GDScript = preload("res://addons/hh_agent/core/hh_asset_adapter.gd")
 const _SettingsScript: GDScript = preload("res://addons/hh_agent/core/hh_settings_adapter.gd")
+const _TxScript: GDScript = preload("res://addons/hh_agent/core/hh_transaction_adapter.gd")
 
-## Routes read/view adapters, scene/node/property/resource/signal/script/asset/project apply.
+## Routes read/view adapters, scene/node/property/resource/signal/script/asset/project/transaction apply.
 
 var _errors: HHAgentErrors = HHAgentErrors.new()
 var _envelope: HHAgentEnvelope = HHAgentEnvelope.new()
@@ -29,6 +30,7 @@ var _signals: HHAgentSignalAdapter = HHAgentSignalAdapter.new()
 var _scripts: HHAgentScriptAdapter = HHAgentScriptAdapter.new()
 var _assets: HHAgentAssetAdapter = HHAgentAssetAdapter.new()
 var _settings: HHAgentSettingsAdapter = HHAgentSettingsAdapter.new()
+var _tx: HHAgentTransactionAdapter = HHAgentTransactionAdapter.new()
 
 
 func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_gate: HHAgentPauseGate = null) -> Dictionary:
@@ -81,6 +83,8 @@ func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_ga
 	var pre: Dictionary = {}
 	if envelope.has("precondition") and envelope.get("precondition") is Dictionary:
 		pre = envelope.get("precondition") as Dictionary
+	if method == "godot.job" and action == "transaction":
+		return _tx.handle(command_id, method, action, params, actions, pre)
 	if method == "godot.scene" and action == "instantiate":
 		return _nodes.handle(command_id, method, action, params, actions, pre)
 	if method == "godot.node" and action != "query" and _nodes.handles(action):
@@ -282,6 +286,47 @@ func run_selftest(actions: HHAgentActions) -> PackedStringArray:
 		failures.append("play.input inject must stay E_UNVERIFIED")
 	if mutate_still.get("ok", true) == true:
 		failures.append("play.input inject must not paper-ok")
+	var tx_missing: Dictionary = dispatch(
+		_sample(
+			"godot.job",
+			"transaction",
+			{
+				"steps": [
+					{
+						"action": "node.add",
+						"params": {"scene": "res://main.tscn", "parent": ".", "class_name": "Node2D", "name": "X"},
+					}
+				]
+			},
+		),
+		actions,
+		0,
+	)
+	if tx_missing.get("ok", true) == true:
+		failures.append("job.transaction on missing scene must not paper-ok")
+	if str(_error_of(tx_missing).get("code", "")) == "":
+		failures.append("job.transaction on missing scene must be a typed error")
+	gate.set_paused(true)
+	var paused_tx: Dictionary = dispatch(
+		_sample(
+			"godot.job",
+			"transaction",
+			{
+				"steps": [
+					{
+						"action": "node.add",
+						"params": {"scene": "res://main.tscn", "parent": ".", "class_name": "Node2D", "name": "X"},
+					}
+				]
+			},
+		),
+		actions,
+		0,
+		gate,
+	)
+	if str(_error_of(paused_tx).get("code", "")) != HHAgentErrors.E_PAUSED:
+		failures.append("paused job.transaction must be E_PAUSED")
+	gate.set_paused(false)
 	var forbidden: Dictionary = dispatch(
 		{
 			"protocol": HHAgentConstants.PROTOCOL,

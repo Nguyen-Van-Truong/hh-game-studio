@@ -1496,8 +1496,16 @@ const SPECS: Record<string, ActionSpec> = {
     "Create a recoverability checkpoint",
     "git_checkpoint",
     "checkpoint_ref_present",
-    obj(["message"], { message: TEXT }),
-    { message: "before destructive node.remove" },
+    obj(["message"], {
+      message: TEXT,
+      paths: {
+        type: "array",
+        minItems: 1,
+        maxItems: 64,
+        items: RES_PATH,
+      },
+    }),
+    { message: "before destructive node.remove", paths: ["res://scenes/world.tscn"] },
   ),
   "git.revert_checkpoint": dest(
     "Revert the project to a checkpoint",
@@ -1534,6 +1542,64 @@ const SPECS: Record<string, ActionSpec> = {
     }),
     { job_id: "export-win64-1", timeout_sec: 30 },
     { cancel: true },
+  ),
+  "job.transaction": mutate(
+    "Stage scene/node/property/script/save as one logical job (checkpoint + one UndoRedo + one final save; not OS-global atomic)",
+    "git_checkpoint",
+    "transaction_steps_verified",
+    obj(["steps"], {
+      steps: {
+        type: "array",
+        minItems: 1,
+        maxItems: 32,
+        items: obj(["action", "params"], {
+          action: {
+            type: "string",
+            enum: [
+              "scene.create",
+              "scene.open",
+              "scene.save",
+              "node.add",
+              "property.set",
+              "property.batch",
+              "script.write",
+            ],
+          },
+          params: { type: "object", additionalProperties: true },
+        }),
+      },
+      save: BOOL,
+    }),
+    {
+      steps: [
+        { action: "scene.create", params: { path: "res://scenes/world.tscn", root_class: "Node2D" } },
+        {
+          action: "node.add",
+          params: {
+            scene: "res://scenes/world.tscn",
+            parent: ".",
+            class_name: "Node2D",
+            name: "Player",
+          },
+        },
+        {
+          action: "property.set",
+          params: {
+            scene: "res://scenes/world.tscn",
+            node_path: "Player",
+            property: "visible",
+            value: exampleVariantBool(true),
+          },
+        },
+        {
+          action: "script.write",
+          params: { path: "res://scripts/player.gd", contents: "extends Node2D\n" },
+        },
+        { action: "scene.save", params: { path: "res://scenes/world.tscn" } },
+      ],
+      save: true,
+    },
+    { extra_errors: SCENE_MUTATE_ERRORS, timeout_ms: 60_000, checkpoint: true, cancel: true },
   ),
 };
 
