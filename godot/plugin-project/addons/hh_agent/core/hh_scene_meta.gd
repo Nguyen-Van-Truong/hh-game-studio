@@ -7,6 +7,7 @@ const _ErrorsScript: GDScript = preload("res://addons/hh_agent/core/hh_errors.gd
 ## Editor-tree fingerprint + disk hash. No sidecar writes.
 
 var _errors: HHAgentErrors = HHAgentErrors.new()
+static var _dirty_paths: Dictionary = {}
 
 
 func jail(command_id: String, res_path: String) -> Dictionary:
@@ -41,13 +42,28 @@ func fingerprint(root: Node) -> String:
 	return _sha256_bytes(joined.to_utf8_buffer())
 
 
+func history_id(root: Node) -> int:
+	if root == null:
+		return 0
+	var mgr: EditorUndoRedoManager = EditorInterface.get_editor_undo_redo()
+	if mgr == null:
+		return 0
+	if mgr.has_method("get_object_history_id"):
+		return int(mgr.get_object_history_id(root))
+	if mgr.has_method("get_history_id_for_object"):
+		return int(mgr.get_history_id_for_object(root))
+	return 0
+
+
 func history_version(root: Node) -> int:
 	if root == null:
 		return 0
 	var mgr: EditorUndoRedoManager = EditorInterface.get_editor_undo_redo()
 	if mgr == null:
 		return 0
-	var hid: int = mgr.get_history_id_for_object(root)
+	var hid: int = history_id(root)
+	if hid == 0:
+		return 0
 	if not mgr.has_method("get_history_undo_redo"):
 		return hid
 	var ur: UndoRedo = mgr.get_history_undo_redo(hid)
@@ -56,13 +72,28 @@ func history_version(root: Node) -> int:
 	return ur.get_version()
 
 
+func mark_dirty(res_path: String) -> void:
+	if res_path.is_empty():
+		return
+	_dirty_paths[res_path] = true
+
+
+func clear_dirty(res_path: String) -> void:
+	_dirty_paths.erase(res_path)
+
+
 func is_dirty(root: Node) -> bool:
 	if root == null:
 		return false
+	var path_s: String = str(root.scene_file_path)
+	if not path_s.is_empty() and _dirty_paths.get(path_s, false) == true:
+		return true
 	var mgr: EditorUndoRedoManager = EditorInterface.get_editor_undo_redo()
 	if mgr == null:
 		return false
-	var hid: int = mgr.get_history_id_for_object(root)
+	var hid: int = history_id(root)
+	if hid == 0:
+		return false
 	if mgr.has_method("is_history_unsaved"):
 		return mgr.is_history_unsaved(hid)
 	return false

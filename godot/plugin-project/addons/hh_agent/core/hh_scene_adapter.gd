@@ -72,7 +72,7 @@ func _create(command_id: String, params: Dictionary, post: String) -> Dictionary
 	if dir_err != OK:
 		return _errors.fail(command_id, HHAgentErrors.E_PATH, "cannot create scene directory", res_path)
 	if not inherit_from.is_empty():
-		return _create_inherited(command_id, res_path, root_class, inherit_from, post)
+		return _create_inherited(command_id, res_path, inherit_from, post)
 	if not ClassDB.class_exists(root_class):
 		return _unverified(command_id, "ClassDB has no class %s" % root_class)
 	if not ClassDB.can_instantiate(root_class):
@@ -103,18 +103,21 @@ func _create(command_id: String, params: Dictionary, post: String) -> Dictionary
 		return _unverified(command_id, "EditorInterface did not edit %s" % res_path)
 	if edited.get_class() != root_class:
 		return _unverified(command_id, "edited root class %s != %s" % [edited.get_class(), root_class])
-	_maybe_mark_dirty()
+	_maybe_mark_dirty(res_path, edited)
 	var after: Dictionary = _meta.snapshot(edited, res_path)
 	after["source"] = "editor"
 	if after.get("disk_hash", "") == "missing" or str(after.get("disk_hash", "")).is_empty():
 		return _unverified(command_id, "create disk hash missing")
+	if after.get("dirty", false) != true:
+		return _unverified(command_id, "create did not leave an unsaved/dirty tab")
+	if int(after.get("history_version", "0")) <= 0:
+		return _unverified(command_id, "create history_version did not bind EditorUndoRedo")
 	return _errors.ok_changed(command_id, _checks(post), after, true)
 
 
 func _create_inherited(
 	command_id: String,
 	res_path: String,
-	root_class: String,
 	inherit_from: String,
 	post: String,
 ) -> Dictionary:
@@ -123,30 +126,42 @@ func _create_inherited(
 		return base_gate
 	if not FileAccess.file_exists(inherit_from):
 		return _unverified(command_id, "inherit_from scene missing")
-	var root_name: String = res_path.get_file().get_basename()
-	var body: String = "[gd_scene load_steps=2 format=3]\n\n"
-	body += "[ext_resource type=\"PackedScene\" path=\"%s\" id=\"1_base\"]\n\n" % inherit_from
-	body += "[node name=\"%s\" instance=ExtResource(\"1_base\")]\n" % root_name
-	var f: FileAccess = FileAccess.open(res_path, FileAccess.WRITE)
-	if f == null:
-		return _save_fail(command_id, FileAccess.get_open_error(), res_path)
-	f.store_string(body)
-	f.flush()
-	f.close()
+	var loaded: Resource = ResourceLoader.load(inherit_from)
+	if loaded == null or not (loaded is PackedScene):
+		return _unverified(command_id, "inherit_from is not a PackedScene")
+	var base: PackedScene = loaded as PackedScene
+	var inst: Node = base.instantiate(PackedScene.GEN_EDIT_STATE_MAIN_INHERITED)
+	if inst == null:
+		inst = base.instantiate(PackedScene.GEN_EDIT_STATE_INSTANCE)
+	if inst == null:
+		return _unverified(command_id, "failed to instantiate inherit_from")
+	inst.name = res_path.get_file().get_basename()
+	var packed: PackedScene = PackedScene.new()
+	var pack_err: Error = packed.pack(inst)
+	inst.free()
+	if pack_err != OK:
+		return _unverified(command_id, "inherited PackedScene.pack failed")
+	var save_err: Error = ResourceSaver.save(packed, res_path)
+	if save_err != OK:
+		return _save_fail(command_id, save_err, res_path)
 	_meta.refresh_fs(res_path)
+	if not FileAccess.file_exists(res_path):
+		return _unverified(command_id, "inherited scene file missing after plugin write")
+	var text: String = FileAccess.get_file_as_string(res_path)
+	if not text.contains("instance="):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(res_path))
+		_meta.refresh_fs(res_path)
+		return _unverified(command_id, "ResourceSaver flattened inherit; refusing raw tscn stub")
 	EditorInterface.open_scene_from_path(res_path)
 	var edited: Node = EditorInterface.get_edited_scene_root()
 	if edited == null or edited.scene_file_path != res_path:
 		return _unverified(command_id, "inherited scene did not become edited")
-	if not root_class.is_empty() and edited.get_class() != root_class:
-		return _unverified(command_id, "inherited root class %s != %s" % [edited.get_class(), root_class])
-	var text: String = FileAccess.get_file_as_string(res_path)
-	if not text.contains("instance="):
-		return _unverified(command_id, "inherited stub lost instance=")
-	_maybe_mark_dirty()
+	_maybe_mark_dirty(res_path, edited)
 	var after: Dictionary = _meta.snapshot(edited, res_path)
 	after["source"] = "editor"
 	after["inherit_from"] = inherit_from
+	if after.get("inherited", false) != true:
+		return _unverified(command_id, "inherited snapshot lost instance=")
 	return _errors.ok_changed(command_id, _checks(post), after, true)
 
 
@@ -214,6 +229,7 @@ func _save(
 		edited = EditorInterface.get_edited_scene_root()
 		if edited == null or edited.scene_file_path != res_path:
 			return _unverified(command_id, "save-as did not switch edited scene")
+	_meta.clear_dirty(res_path)
 	var after: Dictionary = _meta.snapshot(edited, res_path)
 	after["source"] = "editor"
 	if str(after.get("disk_hash", "")) != disk:
@@ -264,6 +280,14 @@ func _close(command_id: String, params: Dictionary, post: String) -> Dictionary:
 			EditorInterface.open_scene_from_path(res_path)
 	if _meta.edited_path() != res_path:
 		return _unverified(command_id, "cannot activate %s to close it" % res_path)
+	var closing: Node = EditorInterface.get_edited_scene_root()
+	if _meta.is_dirty(closing):
+		return _errors.fail(
+			command_id,
+			HHAgentErrors.E_CONFLICT,
+			"close refused on dirty tab; save or match precondition first",
+			res_path,
+		)
 	EditorInterface.close_scene()
 	var open: Array = _meta.open_scenes()
 	if res_path in open:
@@ -327,9 +351,17 @@ func _check_precondition(
 	return {"ok": true}
 
 
-func _maybe_mark_dirty() -> void:
+func _maybe_mark_dirty(res_path: String, root: Node) -> void:
+	_meta.mark_dirty(res_path)
 	if EditorInterface.has_method("mark_scene_as_unsaved"):
 		EditorInterface.mark_scene_as_unsaved()
+	var mgr: EditorUndoRedoManager = EditorInterface.get_editor_undo_redo()
+	if mgr == null or root == null:
+		return
+	mgr.create_action("hh.scene.mark_unsaved")
+	mgr.add_do_method(root, "set_meta", "_hh_unsaved", true)
+	mgr.add_undo_method(root, "remove_meta", "_hh_unsaved")
+	mgr.commit_action()
 
 
 func _save_fail(command_id: String, err: Error, res_path: String) -> Dictionary:

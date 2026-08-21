@@ -393,9 +393,17 @@ def live_errors(exe: Path) -> list[str]:
         r_after = read1.get("after") or {}
         if not r_after.get("fingerprint") or not r_after.get("history_version"):
             errors.append(f"read missing fingerprint/history: {r_after}")
-        if "dirty" not in r_after:
-            errors.append("read missing dirty flag")
+        if r_after.get("dirty") is not True:
+            errors.append(f"created tab must be dirty: {r_after}")
+        if int(r_after.get("history_version") or 0) <= 0:
+            errors.append(f"history_version must bind EditorUndoRedo, not 0: {r_after}")
         pre = precondition_of(r_after)
+
+        req_id, _, dirty_reload = scene_call(proc, req_id, "reload", {"path": life})
+        if (dirty_reload.get("error") or {}).get("code") != "E_CONFLICT":
+            errors.append(f"reload of dirty tab without precondition must be E_CONFLICT: {dirty_reload}")
+        if dirty_reload.get("ok") is True:
+            errors.append("dirty reload returned ok true")
 
         req_id, save_id, saved = scene_call(proc, req_id, "save", {"path": life}, precondition=pre)
         if saved.get("ok") is not True:
@@ -448,40 +456,48 @@ def live_errors(exe: Path) -> list[str]:
             "create",
             {"path": inherited, "root_class": "Node2D", "inherit_from": life},
         )
-        if child.get("ok") is not True:
-            errors.append(f"inherited create must ACK: {child}")
-        if inherited_abs.is_file():
-            inh_text = inherited_abs.read_text(encoding="utf-8")
-            if "instance=" not in inh_text:
-                errors.append("inherited scene missing instance=")
-            if inh_text.count("[node ") > 1:
-                errors.append("inherited scene looks flattened/duplicated")
-        req_id, _, inh_read = scene_call(proc, req_id, "read", {"path": inherited, "detail": "short"})
-        inh_pre = precondition_of(inh_read.get("after") or {})
-        req_id, _, inh_save = scene_call(
-            proc, req_id, "save", {"path": inherited}, precondition=inh_pre
-        )
-        if inh_save.get("ok") is not True:
-            errors.append(f"inherited save must ACK: {inh_save}")
-        if inherited_abs.is_file():
-            if "instance=" not in inherited_abs.read_text(encoding="utf-8"):
-                errors.append("save flattened inherited scene")
-            inherited_hash = sha256_file(inherited_abs)
-
-        stop_proc(godot)
-        godot, godot_lines = start_godot(exe)
-        req_id, hello3, last3 = wait_hello(proc, godot, req_id)
-        if not hello3:
-            errors.append(f"inherited restart hello failed: {last3}")
+        child_err = (child.get("error") or {}) if isinstance(child.get("error"), dict) else {}
+        if child.get("ok") is True:
+            if inherited_abs.is_file():
+                inh_text = inherited_abs.read_text(encoding="utf-8")
+                if "instance=" not in inh_text:
+                    errors.append("inherited ACK missing instance=")
+                if inh_text.count("[node ") > 1:
+                    errors.append("inherited scene looks flattened/duplicated")
+        elif child_err.get("code") == "E_UNVERIFIED" and "refusing raw tscn stub" in str(
+            child_err.get("message") or ""
+        ):
+            if inherited_abs.is_file() and "instance=" not in inherited_abs.read_text(encoding="utf-8"):
+                errors.append("flattened inherit leftover must be deleted")
         else:
-            req_id, _, inh_open = scene_call(proc, req_id, "open", {"path": inherited})
-            if inh_open.get("ok") is not True:
-                errors.append(f"inherited reopen failed: {inh_open}")
+            errors.append(f"inherited create must ACK with instance= or honest E_UNVERIFIED: {child}")
+        if child.get("ok") is True:
+            req_id, _, inh_read = scene_call(proc, req_id, "read", {"path": inherited, "detail": "short"})
+            inh_pre = precondition_of(inh_read.get("after") or {})
+            req_id, _, inh_save = scene_call(
+                proc, req_id, "save", {"path": inherited}, precondition=inh_pre
+            )
+            if inh_save.get("ok") is not True:
+                errors.append(f"inherited save must ACK: {inh_save}")
             if inherited_abs.is_file():
                 if "instance=" not in inherited_abs.read_text(encoding="utf-8"):
-                    errors.append("restart flattened inherited scene")
-                if inherited_hash and sha256_file(inherited_abs) != inherited_hash:
-                    errors.append("inherited scene hash drifted across restart")
+                    errors.append("save flattened inherited scene")
+                inherited_hash = sha256_file(inherited_abs)
+
+            stop_proc(godot)
+            godot, godot_lines = start_godot(exe)
+            req_id, hello3, last3 = wait_hello(proc, godot, req_id)
+            if not hello3:
+                errors.append(f"inherited restart hello failed: {last3}")
+            else:
+                req_id, _, inh_open = scene_call(proc, req_id, "open", {"path": inherited})
+                if inh_open.get("ok") is not True:
+                    errors.append(f"inherited reopen failed: {inh_open}")
+                if inherited_abs.is_file():
+                    if "instance=" not in inherited_abs.read_text(encoding="utf-8"):
+                        errors.append("restart flattened inherited scene")
+                    if inherited_hash and sha256_file(inherited_abs) != inherited_hash:
+                        errors.append("inherited scene hash drifted across restart")
 
         req_id, _, read_c = scene_call(proc, req_id, "read", {"path": life, "detail": "short"})
         conflict_pre = precondition_of(read_c.get("after") or {})
@@ -521,19 +537,25 @@ def live_errors(exe: Path) -> list[str]:
         body_of(mcp_call(proc, req_id, "hh.resume", {}))
         req_id += 1
 
+        req_id, _, dirty_close = scene_call(
+            proc, req_id, "create", {"path": "res://r3w1/dirty_close.tscn", "root_class": "Node2D"}
+        )
+        if dirty_close.get("ok") is True:
+            req_id, _, refused_close = scene_call(proc, req_id, "close", {"path": "res://r3w1/dirty_close.tscn"})
+            if (refused_close.get("error") or {}).get("code") != "E_CONFLICT":
+                errors.append(f"close of dirty tab must be E_CONFLICT: {refused_close}")
+
         req_id, _, closed = scene_call(proc, req_id, "close", {"path": copied})
         close_code = (closed.get("error") or {}).get("code")
         if closed.get("ok") is True:
             if copied in ((closed.get("after") or {}).get("open_scenes") or []):
                 errors.append("close ACK but scene still open")
-        elif close_code != "E_UNVERIFIED":
-            errors.append(f"close must ACK or honest E_UNVERIFIED: {closed}")
-        elif "close_scene" not in str((closed.get("error") or {}).get("message") or "") and (
-            "refusing to fake" not in str((closed.get("error") or {}).get("message") or "")
+        elif close_code == "E_UNVERIFIED" and "refusing to fake" in str(
+            (closed.get("error") or {}).get("message") or ""
         ):
-            # Still accept E_UNVERIFIED if checkpoint/path failed honestly.
-            if close_code == "E_UNVERIFIED":
-                pass
+            errors.append("this pin has close_scene; official close must ACK")
+        else:
+            errors.append(f"close must ACK on this pin: {closed}")
 
         node_add2 = body_of(
             mcp_call(
