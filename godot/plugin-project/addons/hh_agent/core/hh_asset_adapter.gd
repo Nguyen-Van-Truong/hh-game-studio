@@ -524,6 +524,7 @@ func _move(command_id: String, src: String, dest: String, rewrite_plan: bool, po
 		return _errors.fail(command_id, HHAgentErrors.E_CONFLICT, "destination already exists", dest)
 	var refs: PackedStringArray = _referencers(src)
 	var rewritten: int = 0
+	var rewritten_paths: Array = []
 	if refs.size() > 0:
 		if not rewrite_plan:
 			return _errors.fail(
@@ -536,10 +537,14 @@ func _move(command_id: String, src: String, dest: String, rewrite_plan: bool, po
 		if planned.get("ok", false) != true:
 			return planned
 		rewritten = int(planned.get("rewritten", 0))
+		var paths_v: Variant = planned.get("paths", [])
+		if paths_v is Array:
+			rewritten_paths = paths_v as Array
 	var uid_text: String = _uid_of(src)
 	var uid_id: int = ResourceUID.INVALID_ID
 	if not uid_text.is_empty():
 		uid_id = ResourceUID.text_to_id(uid_text)
+	var live: Resource = _load_res(src)
 	var dir_err: Error = _meta.ensure_parent_dir(dest)
 	if dir_err != OK:
 		return _errors.fail(command_id, HHAgentErrors.E_PATH, "cannot create destination directory", dest)
@@ -552,6 +557,8 @@ func _move(command_id: String, src: String, dest: String, rewrite_plan: bool, po
 	_move_sidecar(src + ".uid", dest + ".uid")
 	if uid_id != ResourceUID.INVALID_ID:
 		ResourceUID.set_id(uid_id, dest)
+	if live != null and live.has_method("take_over_path"):
+		live.take_over_path(dest)
 	_meta.refresh_fs(src)
 	_meta.refresh_fs(dest)
 	if FileAccess.file_exists(src) or not FileAccess.file_exists(dest):
@@ -569,6 +576,7 @@ func _move(command_id: String, src: String, dest: String, rewrite_plan: bool, po
 		"old_path_absent": true,
 		"disk_hash": _meta.disk_hash(dest),
 		"rewritten": rewritten,
+		"rewritten_paths": rewritten_paths,
 		"source": "editor",
 	}
 	return _errors.ok_changed(command_id, _checks(post), after, true)
@@ -576,12 +584,21 @@ func _move(command_id: String, src: String, dest: String, rewrite_plan: bool, po
 
 func _rewrite_refs(command_id: String, src: String, dest: String, refs: PackedStringArray) -> Dictionary:
 	var backups: Array[Dictionary] = []
+	var paths: Array = []
+	var open_scenes: Dictionary = {}
+	for scene_path: String in EditorInterface.get_open_scenes():
+		open_scenes[scene_path] = true
+	var edited: Node = EditorInterface.get_edited_scene_root()
+	if edited != null and not edited.scene_file_path.is_empty():
+		open_scenes[edited.scene_file_path] = true
 	for item: String in refs:
 		var item_jail: Dictionary = _meta.jail(command_id, item)
 		if item_jail.get("ok", false) != true:
 			_restore_rewrites(backups)
 			return item_jail
 		if not FileAccess.file_exists(item):
+			continue
+		if open_scenes.has(item):
 			continue
 		var text: String = FileAccess.get_file_as_string(item)
 		if not text.contains(src):
@@ -594,7 +611,17 @@ func _rewrite_refs(command_id: String, src: String, dest: String, refs: PackedSt
 			_restore_rewrites(backups)
 			return wr
 		backups.append({"path": item, "bak": str(wr.get("bak", ""))})
-	return {"ok": true, "rewritten": backups.size()}
+		paths.append(item)
+	_drop_rewrite_baks(backups)
+	return {"ok": true, "rewritten": backups.size(), "paths": paths}
+
+
+func _drop_rewrite_baks(backups: Array[Dictionary]) -> void:
+	for row: Dictionary in backups:
+		var bak: String = str(row.get("bak", ""))
+		if bak.is_empty() or not FileAccess.file_exists(bak):
+			continue
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(bak))
 
 
 func _atomic_text_replace(command_id: String, dest: String, contents: String) -> Dictionary:

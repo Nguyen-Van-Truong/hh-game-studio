@@ -1085,6 +1085,22 @@ async function applyMutateOnce(
           runtime.policy.leases.noteWritten(runtime.policy.writerId, jailed.rel, jailed.abs);
         }
       }
+      const after = isRecord(result.after) ? result.after : undefined;
+      if (
+        after &&
+        (classified.actionId === "asset.move" || classified.actionId === "asset.rename") &&
+        Array.isArray(after.rewritten_paths)
+      ) {
+        for (const item of after.rewritten_paths) {
+          if (typeof item !== "string" || !item.startsWith("res://")) {
+            continue;
+          }
+          const jailed = jailProjectPath(projectRoot, item, { forWrite: true });
+          if (jailed.ok) {
+            runtime.policy.leases.noteWritten(runtime.policy.writerId, jailed.rel, jailed.abs);
+          }
+        }
+      }
     }
     saveState(ledger, row, "verified");
     try {
