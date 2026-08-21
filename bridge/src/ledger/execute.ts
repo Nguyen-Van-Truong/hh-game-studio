@@ -317,6 +317,15 @@ function nodeIdentityOk(result: PluginCommandResult, actionId: string): PluginCo
     return undefined;
   }
   if (actionId === "node.make_local") {
+    if (!isRecord(after) || after.instance_is_local !== true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "make_local missing instance_is_local");
+    }
+    if (typeof after.uid !== "string" || after.uid.length < 1) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "make_local uid missing");
+    }
+    if (typeof result.undo_action !== "string" || !result.undo_action.startsWith("Agent: ")) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "make_local missing Agent UndoRedo name");
+    }
     return undefined;
   }
   if (!nodeNeedsUidAfter(actionId)) {

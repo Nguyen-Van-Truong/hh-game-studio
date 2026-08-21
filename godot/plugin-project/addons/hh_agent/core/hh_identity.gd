@@ -48,15 +48,18 @@ func remint_owned(node: Node, owner: Node) -> void:
 	if node == null:
 		return
 	stamp(node, mint())
-	if not node.scene_file_path.is_empty() and owner != null and node.scene_file_path != owner.scene_file_path:
-		return
+	var packed_root: bool = (
+		owner != null
+		and not node.scene_file_path.is_empty()
+		and node.scene_file_path != owner.scene_file_path
+	)
 	var i: int = 0
 	while i < node.get_child_count():
 		var child: Node = node.get_child(i)
-		if not child.scene_file_path.is_empty() and owner != null and child.scene_file_path != owner.scene_file_path:
-			stamp(child, mint())
-		elif child.owner == null or child.owner == owner or child.owner == node:
-			remint_owned(child, owner)
+		if packed_root and is_packed_internal(child, owner):
+			i += 1
+			continue
+		remint_owned(child, owner)
 		i += 1
 
 
@@ -150,14 +153,12 @@ func plan_collision_repairs(root: Node) -> Array:
 func _walk_collisions(node: Node, edited: Node, seen: Dictionary, repairs: Array) -> void:
 	if node == null:
 		return
-	var owned: bool = node == edited or node.owner == edited
-	if owned:
-		var uid: String = read_uid(node)
-		if not uid.is_empty():
-			if seen.has(uid):
-				repairs.append({"node": node, "old": uid, "new": mint()})
-			else:
-				seen[uid] = true
+	var uid: String = read_uid(node)
+	if not uid.is_empty():
+		if seen.has(uid):
+			repairs.append({"node": node, "old": uid, "new": mint()})
+		else:
+			seen[uid] = true
 	var i: int = 0
 	while i < node.get_child_count():
 		_walk_collisions(node.get_child(i), edited, seen, repairs)

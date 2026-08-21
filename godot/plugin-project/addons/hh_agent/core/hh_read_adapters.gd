@@ -825,16 +825,20 @@ func _collect(node: Node, path_s: String, out: Array, root: Node) -> void:
 	elif node.has_meta(HHAgentConstants.NODE_UID_META_HIDDEN):
 		uid = str(node.get_meta(HHAgentConstants.NODE_UID_META_HIDDEN))
 	var owner_node: Node = node.owner
-	if owner_node == null and node != root:
-		var walk: Node = node.get_parent()
-		while walk != null and walk != root:
-			if not walk.scene_file_path.is_empty() and walk.scene_file_path != root.scene_file_path:
-				owner_node = walk
-				break
-			walk = walk.get_parent()
 	var owner_path: String = ""
 	if owner_node != null:
 		owner_path = "." if owner_node == root else str(root.get_path_to(owner_node))
+	var packed_internal: bool = false
+	if node != root:
+		var walk: Node = node.get_parent()
+		var inst: Node = null
+		while walk != null and walk != root:
+			if not walk.scene_file_path.is_empty() and walk.scene_file_path != root.scene_file_path:
+				inst = walk
+				break
+			walk = walk.get_parent()
+		if inst != null:
+			packed_internal = node.owner == inst or node.owner == null
 	out.append({
 		"name": node.name,
 		"path": path_s,
@@ -843,6 +847,7 @@ func _collect(node: Node, path_s: String, out: Array, root: Node) -> void:
 		"groups": groups,
 		"uid": uid,
 		"owner": owner_path,
+		"packed_internal": packed_internal,
 	})
 	var i: int = 0
 	while i < node.get_child_count():

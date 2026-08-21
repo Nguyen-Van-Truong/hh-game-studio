@@ -61,7 +61,7 @@ func handle(
 	if action == "instantiate":
 		return _instantiate(command_id, params, precondition, post)
 	if action == "make_local":
-		return _make_local(command_id, params, post)
+		return _make_local(command_id, params, precondition, post)
 	if action == "undo":
 		return _history(command_id, params, post, false)
 	if action == "redo":
@@ -478,13 +478,81 @@ func _instantiate(command_id: String, params: Dictionary, precondition: Dictiona
 	return result
 
 
-func _make_local(command_id: String, _params: Dictionary, _post: String) -> Dictionary:
-	if EditorInterface.has_method("make_scene_local") or EditorInterface.has_method("make_local"):
-		return _unverified(command_id, "EditorInterface make-local exists but is not wired; refusing a fake unpack")
-	return _unverified(
-		command_id,
-		"EditorInterface has no proven make_local / make_scene_local on this pin; refusing a raw unpack",
-	)
+func _make_local(
+	command_id: String,
+	params: Dictionary,
+	precondition: Dictionary,
+	post: String,
+) -> Dictionary:
+	var hold: Dictionary = _hold_scene(command_id, str(params.get("scene", "")), precondition)
+	if hold.get("ok", false) != true:
+		return hold
+	var edited: Node = hold.get("root") as Node
+	var node: Node = _resolve(edited, str(params.get("node_path", "")))
+	if node == null:
+		return _unverified(command_id, "node not found")
+	if node == edited:
+		return _unverified(command_id, "edited root is already local")
+	var packed: String = node.scene_file_path
+	if packed.is_empty() or packed == edited.scene_file_path:
+		return _unverified(command_id, "node is already local")
+	_ensure_editable(edited, node)
+	var rows: Array = []
+	_collect_local_rows(node, rows)
+	var mgr: EditorUndoRedoManager = _mgr()
+	if mgr == null:
+		return _unverified(command_id, "EditorUndoRedoManager missing")
+	var action_name: String = "%snode.make_local %s" % [HHAgentConstants.UNDO_ACTION_PREFIX, node.name]
+	mgr.create_action(action_name, UndoRedo.MERGE_DISABLE, edited)
+	_queue_editable(mgr, edited, node)
+	mgr.add_do_method(node, "set_scene_file_path", "")
+	mgr.add_undo_method(node, "set_scene_file_path", packed)
+	var i: int = 0
+	while i < rows.size():
+		var row: Dictionary = rows[i]
+		var target: Node = row.get("node") as Node
+		var old_owner: Node = row.get("owner") as Node
+		var old_uid: String = str(row.get("uid", ""))
+		var new_uid: String = _identity.mint()
+		if target != edited:
+			mgr.add_do_method(target, "set_owner", edited)
+			if old_owner != null:
+				mgr.add_undo_method(target, "set_owner", old_owner)
+		mgr.add_do_method(target, "set_meta", HHAgentConstants.NODE_UID_META, new_uid)
+		mgr.add_do_method(target, "set_meta", HHAgentConstants.NODE_UID_META_HIDDEN, new_uid)
+		if old_uid.is_empty():
+			mgr.add_undo_method(target, "remove_meta", HHAgentConstants.NODE_UID_META)
+			mgr.add_undo_method(target, "remove_meta", HHAgentConstants.NODE_UID_META_HIDDEN)
+		else:
+			mgr.add_undo_method(target, "set_meta", HHAgentConstants.NODE_UID_META, old_uid)
+			mgr.add_undo_method(target, "set_meta", HHAgentConstants.NODE_UID_META_HIDDEN, old_uid)
+		i += 1
+	mgr.commit_action()
+	if not node.scene_file_path.is_empty():
+		return _unverified(command_id, "make_local did not clear scene_file_path")
+	if node.owner != edited:
+		return _unverified(command_id, "make_local owner is not the edited root")
+	if _identity.read_uid(node).is_empty():
+		return _unverified(command_id, "make_local uid missing")
+	var result: Dictionary = _ok_node(command_id, post, action_name, edited, node, str(params.get("scene", "")), true)
+	if result.get("ok", false) == true:
+		var after_v: Variant = result.get("after", {})
+		if after_v is Dictionary:
+			(after_v as Dictionary)["instance_is_local"] = true
+			(after_v as Dictionary)["was_packed"] = packed
+	return result
+
+
+func _collect_local_rows(node: Node, rows: Array) -> void:
+	rows.append({
+		"node": node,
+		"owner": node.owner,
+		"uid": _identity.read_uid(node),
+	})
+	var i: int = 0
+	while i < node.get_child_count():
+		_collect_local_rows(node.get_child(i), rows)
+		i += 1
 
 
 func _history(command_id: String, params: Dictionary, post: String, redo: bool) -> Dictionary:

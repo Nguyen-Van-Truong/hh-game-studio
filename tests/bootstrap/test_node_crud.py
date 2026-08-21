@@ -190,7 +190,11 @@ def non_root(items: list[dict]) -> list[dict]:
 
 
 def edited_owned(items: list[dict]) -> list[dict]:
-    return [row for row in non_root(items) if str(row.get("owner") or "") in ("", ".")]
+    return [
+        row
+        for row in non_root(items)
+        if str(row.get("owner") or "") == "." and row.get("packed_internal") is not True
+    ]
 
 
 def path_is_under(ancestor: str, path: str) -> bool:
@@ -505,6 +509,30 @@ def live_errors(exe: Path) -> list[str]:
                 f"redo-all fingerprint {redo_fp} != final {end_fp}; read={redo_read.get('after')}"
             )
 
+        req_id, inst = node_call(
+            proc,
+            req_id,
+            "instantiate",
+            {"scene": main, "packed": prefab, "parent": "."},
+            method="godot.scene",
+        )
+        if not ack_ok(inst, errors, "instantiate"):
+            return errors
+        inst_path = str((inst.get("after") or {}).get("path") or "")
+        if not inst_path:
+            errors.append(f"instantiate missing path: {inst}")
+            return errors
+        req_id, made_local = node_call(
+            proc, req_id, "make_local", {"scene": main, "node_path": inst_path}
+        )
+        if made_local.get("ok") is not True:
+            errors.append(f"make_local on instance must ACK: {made_local}")
+            return errors
+        if (made_local.get("after") or {}).get("instance_is_local") is not True:
+            errors.append(f"make_local missing instance_is_local: {made_local}")
+        if not str((made_local.get("undo_action") or "")).startswith("Agent: "):
+            errors.append(f"make_local missing Agent UndoRedo name: {made_local}")
+
         req_id, before_items, _ = query_all(proc, req_id, main)
         before_ids = identities(before_items)
         if not before_ids:
@@ -559,11 +587,11 @@ def live_errors(exe: Path) -> list[str]:
         if typed.get("ok") is True or (typed.get("error") or {}).get("code") != "E_INVALID_TYPE":
             errors.append(f"keep_global_transform on Node must be E_INVALID_TYPE: {typed}")
 
-        req_id, local = node_call(
+        req_id, local_root = node_call(
             proc, req_id, "make_local", {"scene": main, "node_path": "."}
         )
-        if local.get("ok") is True or (local.get("error") or {}).get("code") != "E_UNVERIFIED":
-            errors.append(f"make_local must be honest E_UNVERIFIED: {local}")
+        if local_root.get("ok") is True or (local_root.get("error") or {}).get("code") != "E_UNVERIFIED":
+            errors.append(f"make_local on edited root must stay E_UNVERIFIED: {local_root}")
 
         paused = body_of(mcp_call(proc, req_id, "hh.pause", {}))
         req_id += 1
@@ -664,7 +692,8 @@ def main() -> int:
     print(
         "PASS: node CRUD add/remove/rename/duplicate/reparent/reorder/instantiate/groups; "
         "200 seeded random then Undo ALL = baseline and Redo = final; "
-        "save/reopen uid/path/owner; Pause blocks; make-local E_UNVERIFIED; "
+        "save/reopen uid/path/owner including instance children; Pause blocks; "
+        "make-local unpacks an instance; "
         "R3-WP2 stays [ ]."
     )
     return 0
