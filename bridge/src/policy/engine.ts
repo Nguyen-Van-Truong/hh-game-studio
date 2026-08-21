@@ -69,10 +69,13 @@ export function runMutationGate(input: GateInput): GateResult {
       error: typedError(E.E_PATH, "project root required for mutation gates", "project"),
     };
   }
-  const targets = isProjectSettingsAction(input.actionId) ? [] : extractTargetPaths(input.params);
+  const targets = extractTargetPaths(input.params, input.actionId);
   const jailed: JailOk[] = [];
   for (const target of targets) {
-    const result = jailProjectPath(services.projectRoot, target, { forWrite: true });
+    const result = jailProjectPath(services.projectRoot, target, {
+      forWrite: true,
+      allowProjectGodot: isProjectSettingsAction(input.actionId),
+    });
     if (!result.ok) {
       return { ok: false, error: result.error };
     }

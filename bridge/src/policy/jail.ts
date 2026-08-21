@@ -184,7 +184,7 @@ export function isLockedProjectRel(rel: string): boolean {
 export function jailProjectPath(
   projectRoot: string,
   candidate: string,
-  opts: { maxPathChars?: number; forWrite?: boolean } = {},
+  opts: { maxPathChars?: number; forWrite?: boolean; allowProjectGodot?: boolean } = {},
 ): JailResult {
   const maxChars = opts.maxPathChars ?? DEFAULT_MAX_PATH_CHARS;
   if (!candidate || typeof candidate !== "string") {
@@ -233,7 +233,10 @@ export function jailProjectPath(
   }
   const relPosix = posixish(relToRoot);
   if (opts.forWrite !== false && isLockedProjectRel(relPosix)) {
-    return fail("generic write/delete is locked for this path", candidate, E.E_PATH);
+    const name = relPosix.split("/").pop() ?? "";
+    if (!(opts.allowProjectGodot === true && name === "project.godot")) {
+      return fail("generic write/delete is locked for this path", candidate, E.E_PATH);
+    }
   }
   if (relPosix.length > maxChars) {
     return fail("canonical path too long", candidate);
@@ -241,7 +244,17 @@ export function jailProjectPath(
   return { ok: true, abs: combined, rel: relPosix };
 }
 
-export function extractTargetPaths(params: Record<string, unknown>): string[] {
+const PROJECT_FILE_ACTIONS = new Set([
+  "project.settings",
+  "project.input",
+  "project.autoload",
+  "project.plugin",
+]);
+
+export function extractTargetPaths(params: Record<string, unknown>, actionId?: string): string[] {
+  if (actionId && PROJECT_FILE_ACTIONS.has(actionId)) {
+    return ["res://project.godot"];
+  }
   const keys = ["path", "scene", "from", "to", "target", "file"];
   const out: string[] = [];
   for (const key of keys) {

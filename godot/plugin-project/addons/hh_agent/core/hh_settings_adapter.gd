@@ -15,12 +15,16 @@ const FEATURES_KEY: String = "application/config/features"
 const PLUGINS_KEY: String = "editor_plugins/enabled"
 const PROJECT_TEXT: String = "res://project.godot"
 const PROJECT_BIN: String = "res://project.binary"
+const PROJECT_TMP: String = "res://project.godot.hh-tmp.godot"
+const PROJECT_BAK: String = "res://project.godot.hh-bak"
 const PROTECTED_AUTOLOAD: String = "HhReloadDriver"
+const RELOAD_DRIVER_VALUE: String = "*res://hh_reload_driver.gd"
 
 
 var _errors: HHAgentErrors = HHAgentErrors.new()
 var _codec: HHAgentVariantCodec = HHAgentVariantCodec.new()
 var _meta: HHAgentSceneMeta = HHAgentSceneMeta.new()
+var _precondition_hold: Dictionary = {}
 
 
 func handles(action: String) -> bool:
@@ -33,8 +37,9 @@ func handle(
 	action: String,
 	params: Dictionary,
 	actions: HHAgentActions,
-	_precondition: Dictionary,
+	precondition: Dictionary,
 ) -> Dictionary:
+	_precondition_hold = precondition
 	if method != "godot.project":
 		return _errors.fail(command_id, HHAgentErrors.E_UNVERIFIED, "not a project verb", "")
 	var def: Dictionary = actions.lookup(method, action)
@@ -71,6 +76,8 @@ func _settings(command_id: String, params: Dictionary, post: String) -> Dictiona
 	var op: String = _infer_settings_op(params)
 	if op == "get":
 		return _settings_get(command_id, key, post)
+	if _dedicated_settings_key(key):
+		return _errors.fail(command_id, HHAgentErrors.E_POLICY, "key requires a dedicated project verb", key)
 	if op == "remove":
 		var blocked_rm: Dictionary = _refuse_setting(command_id, key, null, true)
 		if not blocked_rm.is_empty():
@@ -328,7 +335,18 @@ func _plugin(command_id: String, params: Dictionary, post: String) -> Dictionary
 	return _errors.fail(command_id, HHAgentErrors.E_POLICY, "plugin enable list is hh_agent-only", "params.plugin_name")
 
 
+func _dedicated_settings_key(key: String) -> bool:
+	return (
+		key.begins_with("input/")
+		or key.begins_with("autoload/")
+		or key.begins_with("editor_plugins/")
+		or key.begins_with("debug/gdscript/warnings/")
+	)
+
+
 func _refuse_setting(command_id: String, key: String, value: Variant, removing: bool) -> Dictionary:
+	if _dedicated_settings_key(key):
+		return _errors.fail(command_id, HHAgentErrors.E_POLICY, "key requires a dedicated project verb", key)
 	if key == FEATURES_KEY:
 		if removing:
 			return _errors.fail(command_id, HHAgentErrors.E_POLICY, "application features cannot be cleared", key)
@@ -336,26 +354,6 @@ func _refuse_setting(command_id: String, key: String, value: Variant, removing: 
 		var nxt: PackedStringArray = _as_packed_strings(value)
 		if not _packed_same(cur, nxt):
 			return _errors.fail(command_id, HHAgentErrors.E_POLICY, "application features cannot be changed to a vendor set", key)
-		return {}
-	if key == PLUGINS_KEY or key.begins_with("editor_plugins/"):
-		if removing:
-			return _errors.fail(command_id, HHAgentErrors.E_POLICY, "editor plugin list cannot be cleared", key)
-		var plugins: PackedStringArray = _as_packed_strings(value)
-		if plugins.size() != 1 or plugins[0] != HH_PLUGIN_CFG:
-			return _errors.fail(command_id, HHAgentErrors.E_POLICY, "editor_plugins/enabled may only keep hh_agent", key)
-		return {}
-	if key.begins_with("autoload/"):
-		var auto_name: String = key.substr(9)
-		if auto_name == PROTECTED_AUTOLOAD:
-			return _errors.fail(command_id, HHAgentErrors.E_POLICY, "protected autoload cannot be changed", key)
-		if removing:
-			return {}
-		var path_s: String = str(value).replace("*", "").strip_edges()
-		var ref: Dictionary = _ref_ok(command_id, path_s)
-		if ref.get("ok", false) != true:
-			return ref
-		return {}
-	if key.begins_with("input/"):
 		return {}
 	if _looks_like_addon_enable(key, value):
 		return _errors.fail(command_id, HHAgentErrors.E_POLICY, "refusing a setting that enables a third-party addon", key)
@@ -442,13 +440,103 @@ func _persist_input_action(action_name: String) -> void:
 
 
 func _save_project(command_id: String) -> Dictionary:
-	var err: Error = ProjectSettings.save()
+	var drift: Dictionary = _project_hash_conflict(command_id)
+	if not drift.is_empty():
+		return drift
+	_ensure_reload_driver()
+	_recover_project_bak()
+	var dest: String = PROJECT_TEXT
+	var tmp: String = PROJECT_TMP
+	var bak: String = PROJECT_BAK
+	var dest_abs: String = ProjectSettings.globalize_path(dest)
+	var tmp_abs: String = ProjectSettings.globalize_path(tmp)
+	var bak_abs: String = ProjectSettings.globalize_path(bak)
+	if FileAccess.file_exists(tmp):
+		DirAccess.remove_absolute(tmp_abs)
+	var err: Error = ProjectSettings.save_custom(tmp)
 	if err != OK:
-		return _unverified(command_id, "ProjectSettings.save failed (%d)" % int(err))
+		if FileAccess.file_exists(tmp):
+			DirAccess.remove_absolute(tmp_abs)
+		return _unverified(command_id, "ProjectSettings.save_custom failed (%d)" % int(err))
+	if not FileAccess.file_exists(tmp):
+		return _unverified(command_id, "save_custom tmp missing")
+	var tmp_bytes: PackedByteArray = FileAccess.get_file_as_bytes(tmp)
+	if tmp_bytes.is_empty():
+		DirAccess.remove_absolute(tmp_abs)
+		return _unverified(command_id, "save_custom tmp is empty")
+	var tmp_cfg: ConfigFile = ConfigFile.new()
+	if tmp_cfg.load(tmp) != OK:
+		DirAccess.remove_absolute(tmp_abs)
+		return _unverified(command_id, "ConfigFile.load tmp failed")
+	var existed: bool = FileAccess.file_exists(dest)
+	if existed:
+		if FileAccess.file_exists(bak):
+			DirAccess.remove_absolute(bak_abs)
+		var bak_err: Error = DirAccess.rename_absolute(dest_abs, bak_abs)
+		if bak_err != OK:
+			DirAccess.remove_absolute(tmp_abs)
+			return _unverified(command_id, "could not park project.godot for atomic replace")
+	var ren: Error = DirAccess.rename_absolute(tmp_abs, dest_abs)
+	if ren != OK:
+		if existed:
+			DirAccess.rename_absolute(bak_abs, dest_abs)
+		if FileAccess.file_exists(tmp):
+			DirAccess.remove_absolute(tmp_abs)
+		return _unverified(command_id, "atomic rename failed: %s" % error_string(ren))
+	if existed and FileAccess.file_exists(bak):
+		DirAccess.remove_absolute(bak_abs)
+	if FileAccess.file_exists(tmp):
+		DirAccess.remove_absolute(tmp_abs)
+	if not FileAccess.file_exists(dest):
+		return _unverified(command_id, "dest missing after atomic rename")
+	var prove: ConfigFile = ConfigFile.new()
+	if prove.load(dest) != OK:
+		return _unverified(command_id, "ConfigFile.load dest failed after atomic replace")
 	var disk: Dictionary = _load_disk()
 	if disk.get("ok", false) != true:
 		return _unverified(command_id, str(disk.get("message", "project file unreadable after save")))
+	var protect: Dictionary = _require_reload_driver(command_id, disk)
+	if not protect.is_empty():
+		return protect
 	return {"ok": true, "disk": disk}
+
+
+func _project_hash_conflict(command_id: String) -> Dictionary:
+	var expected: String = str(_precondition_hold.get("scene_hash", ""))
+	if expected.is_empty():
+		return {}
+	var now_hash: String = _meta.disk_hash(PROJECT_TEXT)
+	if now_hash != expected:
+		return _errors.fail(command_id, HHAgentErrors.E_CONFLICT, "project.godot hash drifted", PROJECT_TEXT)
+	return {}
+
+
+func _ensure_reload_driver() -> void:
+	var key: String = "autoload/%s" % PROTECTED_AUTOLOAD
+	if not ProjectSettings.has_setting(key) or str(ProjectSettings.get_setting(key)) != RELOAD_DRIVER_VALUE:
+		ProjectSettings.set_setting(key, RELOAD_DRIVER_VALUE)
+
+
+func _require_reload_driver(command_id: String, disk: Dictionary) -> Dictionary:
+	var key: String = "autoload/%s" % PROTECTED_AUTOLOAD
+	if not _disk_has(disk, key):
+		return _unverified(command_id, "protected HhReloadDriver missing from project.godot")
+	var got: String = str(_disk_get(disk, key))
+	if got != RELOAD_DRIVER_VALUE and not got.contains("hh_reload_driver.gd"):
+		return _unverified(command_id, "protected HhReloadDriver path drifted on disk")
+	return {}
+
+
+func _recover_project_bak() -> void:
+	if FileAccess.file_exists(PROJECT_TEXT):
+		if FileAccess.file_exists(PROJECT_BAK):
+			DirAccess.remove_absolute(ProjectSettings.globalize_path(PROJECT_BAK))
+		return
+	if FileAccess.file_exists(PROJECT_BAK):
+		DirAccess.rename_absolute(
+			ProjectSettings.globalize_path(PROJECT_BAK),
+			ProjectSettings.globalize_path(PROJECT_TEXT),
+		)
 
 
 func _load_disk() -> Dictionary:

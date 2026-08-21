@@ -1134,6 +1134,15 @@ async function applyMutateOnce(
           runtime.policy.leases.noteWritten(runtime.policy.writerId, jailed.rel, jailed.abs);
         }
       }
+      if (isProjectSettingsApply(classified.actionId)) {
+        const jailed = jailProjectPath(projectRoot, "res://project.godot", {
+          forWrite: true,
+          allowProjectGodot: true,
+        });
+        if (jailed.ok) {
+          runtime.policy.leases.noteWritten(runtime.policy.writerId, jailed.rel, jailed.abs);
+        }
+      }
       const after = isRecord(result.after) ? result.after : undefined;
       if (
         after &&

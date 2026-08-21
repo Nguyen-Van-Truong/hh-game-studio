@@ -34,6 +34,7 @@ SETTING_VAL = "probe-r3wp7"
 INPUT_ACTION = "hh_r3wp7_move"
 AUTOLOAD_NAME = "HhSettingsProbe"
 AUTOLOAD_PATH = "res://hh_reload_driver.gd"
+HH_RELOAD_LINE = 'HhReloadDriver="*res://hh_reload_driver.gd"'
 
 
 def rel(path: Path) -> str:
@@ -132,6 +133,12 @@ def src_scan_errors() -> list[str]:
         text = adapter.read_text(encoding="utf-8")
         if "ProjectSettings.set_setting" not in text or "ProjectSettings.save" not in text:
             errors.append("settings adapter must use ProjectSettings.set_setting + save")
+        if re.search(r"ProjectSettings\.save\s*\(", text):
+            errors.append("settings adapter must not persist via in-place ProjectSettings.save()")
+        if "save_custom" not in text:
+            errors.append("settings adapter must persist via ProjectSettings.save_custom")
+        if ".hh-tmp" not in text or "rename_absolute" not in text:
+            errors.append("settings adapter must atomically replace project.godot from same-volume tmp")
         if "ProjectSettings.clear" not in text:
             errors.append("settings adapter must remove via ProjectSettings.clear")
         if "ConfigFile" not in text or ".load(" not in text:
@@ -144,11 +151,34 @@ def src_scan_errors() -> list[str]:
             errors.append("settings adapter must add/remove/reorder autoload")
         if "E_POLICY" not in text or "third-party" not in text:
             errors.append("settings adapter must refuse third-party plugin enable")
+        if "hh_agent plugin cannot be disabled" not in text:
+            errors.append("settings adapter must refuse disabling hh_agent")
+        for prefix in ("input/", "autoload/", "editor_plugins/", "debug/gdscript/warnings/"):
+            if prefix not in text:
+                errors.append(f"settings adapter must refuse generic key prefix {prefix!r}")
         if re.search(r"\bcallv\b", text) or "Object.call" in text:
             errors.append("settings adapter has a generic invoke path")
         for needle in ("satelliteoflove", "MCPGameBridge", "godot_mcp"):
             if needle in text:
                 errors.append(f"settings adapter contains vendor needle {needle!r}")
+    read_ad = ADDON / "core" / "hh_read_adapters.gd"
+    if not read_ad.is_file():
+        errors.append("missing read adapters")
+    else:
+        read_text = read_ad.read_text(encoding="utf-8")
+        inspect_fn = re.search(r"func _project_inspect\b.*?func _", read_text, re.S)
+        if inspect_fn is None or "ConfigFile" not in inspect_fn.group(0) or ".load(" not in inspect_fn.group(0):
+            errors.append("project.inspect must parse disk ConfigFile")
+    jail_ts = (BRIDGE / "src" / "policy" / "jail.ts").read_text(encoding="utf-8")
+    extract_fn = re.search(r"export function extractTargetPaths\b.*?\n\}", jail_ts, re.S)
+    if extract_fn is None or "res://project.godot" not in extract_fn.group(0):
+        errors.append("extractTargetPaths must include res://project.godot for project settings verbs")
+    for verb in ("project.settings", "project.input", "project.autoload", "project.plugin"):
+        if verb not in jail_ts:
+            errors.append(f"extractTargetPaths must treat {verb} as a project.godot target")
+    engine_ts = (BRIDGE / "src" / "policy" / "engine.ts").read_text(encoding="utf-8")
+    if re.search(r"isProjectSettingsAction\([^)]*\) \? \[\]", engine_ts):
+        errors.append("engine must not skip extractTargetPaths for project settings")
     life_ts = (BRIDGE / "src" / "ledger" / "scene_lifecycle.ts").read_text(encoding="utf-8")
     if "PROJECT_SETTINGS_APPLY" not in life_ts or "isProjectSettingsApply" not in life_ts:
         errors.append("sidecar must treat project.settings as a proven apply verb")
@@ -208,6 +238,11 @@ def sha256_file(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def assert_reload_driver(disk_text: str, errors: list[str], label: str) -> None:
+    if HH_RELOAD_LINE not in disk_text:
+        errors.append(f"{label} dropped protected autoload: missing {HH_RELOAD_LINE}")
+
+
 def live_errors(exe: Path) -> list[str]:
     errors: list[str] = []
     snapshot = PROJECT_GODOT.read_bytes() if PROJECT_GODOT.is_file() else b""
@@ -261,6 +296,49 @@ def live_errors(exe: Path) -> list[str]:
         reported = str(after.get("disk_hash") or "")
         if not reported or reported != sha256_file(PROJECT_GODOT):
             errors.append(f"set disk_hash mismatch: {reported}")
+        assert_reload_driver(
+            PROJECT_GODOT.read_text(encoding="utf-8") if PROJECT_GODOT.is_file() else "",
+            errors,
+            "settings set",
+        )
+
+        req_id, inspect = tool_call(
+            proc,
+            req_id,
+            "godot.project",
+            "inspect",
+            {"detail": "short"},
+        )
+        if ack_ok(inspect, errors, "project.inspect"):
+            inspect_after = inspect.get("after") or {}
+            if inspect_after.get("disk_source") != "project.godot":
+                errors.append(f"project.inspect must stamp disk_source from ConfigFile: {inspect}")
+
+        req_id, reserved_input = tool_call(
+            proc,
+            req_id,
+            "godot.project",
+            "settings",
+            {"key": "input/ui_accept", "op": "set", "value": variant("string", "nope")},
+        )
+        expect_code(reserved_input, ("E_POLICY", "E_CONFLICT"), errors, "refuse generic input/ui_accept")
+        req_id, reserved_warn = tool_call(
+            proc,
+            req_id,
+            "godot.project",
+            "settings",
+            {
+                "key": "debug/gdscript/warnings/untyped_declaration",
+                "op": "set",
+                "value": variant("int", 0),
+            },
+        )
+        expect_code(
+            reserved_warn,
+            ("E_POLICY", "E_CONFLICT"),
+            errors,
+            "refuse generic debug/gdscript/warnings/untyped_declaration",
+        )
 
         req_id, got2 = tool_call(
             proc,
@@ -300,6 +378,7 @@ def live_errors(exe: Path) -> list[str]:
         auto_val = disk_setting(disk_text, f"autoload/{AUTOLOAD_NAME}")
         if auto_val is None or "hh_reload_driver.gd" not in auto_val:
             errors.append(f"autoload missing from disk: {auto_val!r}")
+        assert_reload_driver(disk_text, errors, "autoload add")
 
         req_id, reordered = tool_call(
             proc,
@@ -314,6 +393,7 @@ def live_errors(exe: Path) -> list[str]:
         auto_keys = list(parse_godot(disk_text).get("autoload", {}).keys())
         if AUTOLOAD_NAME not in auto_keys or auto_keys[0] != AUTOLOAD_NAME:
             errors.append(f"autoload reorder did not put {AUTOLOAD_NAME} first: {auto_keys}")
+        assert_reload_driver(disk_text, errors, "autoload reorder")
 
         req_id, removed_al = tool_call(
             proc,
@@ -327,6 +407,7 @@ def live_errors(exe: Path) -> list[str]:
         disk_text = PROJECT_GODOT.read_text(encoding="utf-8") if PROJECT_GODOT.is_file() else ""
         if disk_setting(disk_text, f"autoload/{AUTOLOAD_NAME}") is not None:
             errors.append("autoload still on disk after remove")
+        assert_reload_driver(disk_text, errors, "autoload remove")
         if "satelliteoflove" in disk_text or "MCPGameBridge" in disk_text:
             errors.append("project.godot gained satelliteoflove / MCPGameBridge")
 
@@ -346,6 +427,18 @@ def live_errors(exe: Path) -> list[str]:
             {"plugin_name": "satelliteoflove", "enabled": True},
         )
         expect_code(vendor_name, ("E_POLICY", "E_CONFLICT"), errors, "refuse vendor plugin name")
+
+        req_id, disabled = tool_call(
+            proc,
+            req_id,
+            "godot.project",
+            "plugin",
+            {"plugin_name": "hh_agent", "enabled": False},
+        )
+        expect_code(disabled, ("E_POLICY",), errors, "refuse disable hh_agent")
+        disk_after_disable = PROJECT_GODOT.read_text(encoding="utf-8") if PROJECT_GODOT.is_file() else ""
+        if "res://addons/hh_agent/plugin.cfg" not in disk_after_disable:
+            errors.append("hh_agent plugin was disabled on disk")
 
         req_id, features = tool_call(
             proc,
@@ -419,6 +512,15 @@ def live_errors(exe: Path) -> list[str]:
                 pass
         if snapshot:
             PROJECT_GODOT.write_bytes(snapshot)
+        for leftover in (
+            PLUGIN_PROJECT / "project.godot.hh-tmp.godot",
+            PLUGIN_PROJECT / "project.godot.hh-bak",
+        ):
+            if leftover.is_file():
+                try:
+                    leftover.unlink()
+                except OSError:
+                    pass
         agent = PLUGIN_PROJECT / ".hh-agent"
         for name in ("file-leases.json", "writer.lock"):
             lock = agent / name

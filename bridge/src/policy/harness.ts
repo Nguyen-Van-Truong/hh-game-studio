@@ -49,6 +49,16 @@ function str(rec: Record<string, unknown>, key: string, fallback = ""): string {
   return typeof value === "string" ? value : fallback;
 }
 
+function actionIdFromEnvelope(envelope: Record<string, unknown>): string {
+  const method = typeof envelope.method === "string" ? envelope.method : "";
+  const action = typeof envelope.action === "string" ? envelope.action : "";
+  const trimmed = method.startsWith("godot.") ? method.slice("godot.".length) : method;
+  if (!trimmed || !action) {
+    return "";
+  }
+  return `${trimmed}.${action}`;
+}
+
 function num(rec: Record<string, unknown>, key: string, fallback: number): number {
   const value = rec[key];
   return typeof value === "number" && Number.isFinite(value) ? value : fallback;
@@ -299,7 +309,10 @@ async function submitCmd(payload: Record<string, unknown>): Promise<void> {
       ok: result.ok,
       result,
       ledger: row ? inspectRow(row) : null,
-      targets: extractTargetPaths(isRecord(envelope.params) ? envelope.params : {}),
+      targets: extractTargetPaths(
+        isRecord(envelope.params) ? envelope.params : {},
+        actionIdFromEnvelope(envelope),
+      ),
     });
   } finally {
     ledger.close();

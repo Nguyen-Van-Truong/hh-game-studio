@@ -322,26 +322,33 @@ func _slim_method(item: Dictionary) -> Dictionary:
 
 
 func _project_inspect(command_id: String, params: Dictionary, post: String) -> Dictionary:
-	var name: String = str(ProjectSettings.get_setting("application/config/name", ""))
-	var main_scene: String = str(ProjectSettings.get_setting("application/run/main_scene", ""))
-	var features: Array = _as_str_array(ProjectSettings.get_setting("application/config/features", PackedStringArray()))
-	var readback: String = str(ProjectSettings.get_setting("application/config/name", ""))
-	if readback != name:
-		return _unverified(command_id, "project name changed during readback")
+	if not FileAccess.file_exists("res://project.godot"):
+		return _unverified(command_id, "project.godot missing; inspect requires disk ConfigFile")
+	var cfg: ConfigFile = ConfigFile.new()
+	if cfg.load("res://project.godot") != OK:
+		return _unverified(command_id, "ConfigFile.load project.godot failed")
+	var name: String = str(cfg.get_value("application", "config/name", ""))
+	var main_scene: String = str(cfg.get_value("application", "run/main_scene", ""))
+	var features: Array = _as_str_array(cfg.get_value("application", "config/features", PackedStringArray()))
+	var plugins_v: Variant = cfg.get_value("editor_plugins", "enabled", PackedStringArray())
 	var after: Dictionary = {
 		"name": name,
 		"main_scene": main_scene,
 		"features": features,
-		"hh_agent_enabled": _plugin_enabled(),
+		"hh_agent_enabled": _plugin_list_has_hh(plugins_v),
 		"godot": _godot_string(),
 		"source": "editor",
+		"disk_source": "project.godot",
 		"detail": str(params.get("detail", "short")),
 	}
 	return _ok(command_id, post, after)
 
 
 func _plugin_enabled() -> bool:
-	var raw: Variant = ProjectSettings.get_setting("editor_plugins/enabled", PackedStringArray())
+	return _plugin_list_has_hh(ProjectSettings.get_setting("editor_plugins/enabled", PackedStringArray()))
+
+
+func _plugin_list_has_hh(raw: Variant) -> bool:
 	if raw is PackedStringArray:
 		for item: String in raw:
 			if item == "res://addons/hh_agent/plugin.cfg":
@@ -350,6 +357,8 @@ func _plugin_enabled() -> bool:
 		for item_v: Variant in raw:
 			if str(item_v) == "res://addons/hh_agent/plugin.cfg":
 				return true
+	if typeof(raw) == TYPE_STRING:
+		return str(raw).contains("res://addons/hh_agent/plugin.cfg")
 	return false
 
 
