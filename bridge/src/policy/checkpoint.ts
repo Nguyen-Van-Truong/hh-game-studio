@@ -325,9 +325,42 @@ export function restoreCheckpoint(
       fs.renameSync(tmp, dest);
       restored.push(file.rel);
     }
+    const destMismatch = verifyRestoredDest(manifest);
+    if (destMismatch) {
+      return destMismatch;
+    }
   } catch (err) {
     const message = err instanceof Error ? err.message : "restore failed";
     return { ok: false, error: typedError(E.E_CHECKPOINT, message, manifestPath) };
   }
   return { ok: true, restored, deleted };
+}
+
+function verifyRestoredDest(manifest: CheckpointManifest): CheckpointErr | undefined {
+  for (const file of manifest.files) {
+    const dest = path.join(manifest.project_root, file.rel);
+    const exists = fs.existsSync(dest) && fs.statSync(dest).isFile();
+    if (file.missing) {
+      if (exists) {
+        return {
+          ok: false,
+          error: typedError(E.E_CHECKPOINT, `restore left unexpected file ${file.rel}`, file.rel),
+        };
+      }
+      continue;
+    }
+    if (!exists) {
+      return {
+        ok: false,
+        error: typedError(E.E_CHECKPOINT, `restore missing dest ${file.rel}`, file.rel),
+      };
+    }
+    if (sha256File(dest) !== file.sha256) {
+      return {
+        ok: false,
+        error: typedError(E.E_CHECKPOINT, `restore hash mismatch ${file.rel}`, file.rel),
+      };
+    }
+  }
+  return undefined;
 }

@@ -156,6 +156,7 @@ func _flush_graph(
 		if step_action == "node.add":
 			var queued: Dictionary = _nodes.queue_add(mgr, command_id, edited, step_params)
 			if queued.get("ok", false) != true:
+				_abandon_open_action(mgr, edited, _graph_had_ops(minted, planned_props))
 				return queued
 			var path_s: String = str(queued.get("path", ""))
 			minted[path_s] = queued.get("child")
@@ -168,6 +169,7 @@ func _flush_graph(
 		elif step_action == "property.set":
 			var planned: Dictionary = _plan_prop(command_id, edited, minted, step_params)
 			if planned.get("ok", false) != true:
+				_abandon_open_action(mgr, edited, _graph_had_ops(minted, planned_props))
 				return planned
 			_props.queue_planned(mgr, planned)
 			planned_props.append(planned)
@@ -180,11 +182,13 @@ func _flush_graph(
 		elif step_action == "property.batch":
 			var items_v: Variant = step_params.get("items", [])
 			if typeof(items_v) != TYPE_ARRAY:
+				_abandon_open_action(mgr, edited, _graph_had_ops(minted, planned_props))
 				return _errors.fail(command_id, HHAgentErrors.E_INVALID_TYPE, "items must be an array", "params.items")
 			var items: Array = items_v
 			var bi: int = 0
 			while bi < items.size():
 				if typeof(items[bi]) != TYPE_DICTIONARY:
+					_abandon_open_action(mgr, edited, _graph_had_ops(minted, planned_props))
 					return _errors.fail(command_id, HHAgentErrors.E_INVALID_TYPE, "batch item must be an object", "params.items/%d" % bi)
 				var item: Dictionary = items[bi]
 				var one: Dictionary = _plan_prop(command_id, edited, minted, {
@@ -193,6 +197,7 @@ func _flush_graph(
 					"value": item.get("value"),
 				})
 				if one.get("ok", false) != true:
+					_abandon_open_action(mgr, edited, _graph_had_ops(minted, planned_props))
 					return one
 				_props.queue_planned(mgr, one)
 				planned_props.append(one)
@@ -260,6 +265,21 @@ func _same_prop(now_v: Variant, want_v: Variant) -> bool:
 	if typeof(now_v) != typeof(want_v):
 		return false
 	return now_v == want_v
+
+
+func _graph_had_ops(minted: Dictionary, planned_props: Array) -> bool:
+	return not minted.is_empty() or not planned_props.is_empty()
+
+
+func _abandon_open_action(mgr: EditorUndoRedoManager, edited: Node, had_ops: bool) -> void:
+	## Close a create_action that failed mid-queue so UndoRedo is not left open.
+	if mgr == null:
+		return
+	if had_ops:
+		mgr.commit_action()
+		_rollback(mgr, edited)
+		return
+	mgr.commit_action(false)
 
 
 func _rollback(mgr: EditorUndoRedoManager, edited: Node) -> void:

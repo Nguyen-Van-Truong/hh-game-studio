@@ -35,6 +35,7 @@ TEMP_DIR = PLUGIN_PROJECT / "r3w8"
 SEED = 20260821
 CLEAN_RUNS = 50
 RANDOM_OPS = 200
+COMPENSATION_OPS = 20
 VENDOR_NEEDLES = plug.VENDOR_NEEDLES
 SCHEMA = "hh-godot-variant/1"
 SCRIPT_A = "extends Node2D\n\nfunc speed() -> int:\n	return 8\n"
@@ -143,6 +144,14 @@ def src_scan_errors() -> list[str]:
         errors.append("official test must actually loop CLEAN_RUNS with a reset each iteration")
     if "RANDOM_OPS = 200" not in self_text:
         errors.append("official test must declare 200 random mutations")
+    if "AC-05" not in self_text or '"undo"' not in self_text or '"redo"' not in self_text:
+        errors.append("official test must undo-all/redo the 200 node+property ops (AC-05)")
+    if "COMPENSATION_OPS" not in self_text or "compensation" not in self_text:
+        errors.append("official test must keep a labeled checkpoint-compensation mix")
+    if "still on disk" not in self_text:
+        errors.append("official test must assert human-edit bytes still on disk")
+    if self_text.count("life.start_sidecar") < 2:
+        errors.append("crash recovery must restart the sidecar (old sidecar wedges)")
     if "attack_human_edit" not in self_text:
         errors.append("official test must isolate human-edit writes")
     if re.search(r"\.write_text\([^\n]*\.(tscn|gd)", self_text) and "attack_human_edit" not in self_text:
@@ -163,6 +172,8 @@ def src_scan_errors() -> list[str]:
         text = tx.read_text(encoding="utf-8")
         if "create_action" not in text or "UNDO_ACTION_PREFIX" not in text:
             errors.append("transaction adapter must create one Agent UndoRedo action")
+        if "_abandon_open_action" not in text or "commit_action(false)" not in text:
+            errors.append("transaction adapter must cancel an abandoned create_action")
         if "os_global_atomic" not in text or "false" not in text:
             errors.append("transaction adapter must deny OS-global atomicity")
         if "script.write" not in text:
@@ -172,6 +183,8 @@ def src_scan_errors() -> list[str]:
         errors.append("checkpoint restore primitive missing")
     if "unlinkSync" not in ckpt:
         errors.append("restore must delete files that were missing at checkpoint time")
+    if "restore hash mismatch" not in ckpt:
+        errors.append("restoreCheckpoint must SHA dest files vs the snapshot")
     catalog = (BRIDGE / "src" / "registry" / "catalog.ts").read_text(encoding="utf-8")
     if '"transaction"' not in catalog:
         errors.append("catalog must include job.transaction")
@@ -228,6 +241,75 @@ def resync(proc: subprocess.Popen[str], req_id: int, scene: str) -> int:
     if opened.get("ok") is not True:
         req_id, opened = tool_call(proc, req_id, "godot.scene", "open", {"path": scene})
     return req_id
+
+
+def scene_fingerprint(
+    proc: subprocess.Popen[str], req_id: int, scene: str
+) -> tuple[int, str, dict]:
+    req_id, body = tool_call(proc, req_id, "godot.scene", "read", {"path": scene, "detail": "short"})
+    after = body.get("after") or {}
+    return req_id, str(after.get("fingerprint") or ""), body
+
+
+def checkpoint_sha_errors(ckpt_id: str, dests: list[Path]) -> list[str]:
+    man_path = PLUGIN_PROJECT / ".hh-agent" / "checkpoints" / ckpt_id / "manifest.json"
+    if not man_path.is_file():
+        return [f"checkpoint manifest missing after revert: {ckpt_id}"]
+    try:
+        man = json.loads(man_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        return [f"checkpoint manifest unreadable: {exc}"]
+    by_rel = {
+        str(row.get("rel") or ""): row
+        for row in (man.get("files") or [])
+        if isinstance(row, dict)
+    }
+    errors: list[str] = []
+    root = PLUGIN_PROJECT.resolve()
+    for dest in dests:
+        rel_s = dest.resolve().relative_to(root).as_posix()
+        row = by_rel.get(rel_s)
+        if row is None:
+            continue
+        if row.get("missing") is True:
+            if dest.is_file():
+                errors.append(f"revert left unexpected dest {rel_s}")
+            continue
+        want = str(row.get("sha256") or "")
+        got = sha256_file(dest)
+        if got != want:
+            errors.append(f"revert SHA mismatch {rel_s}: dest={got} snapshot={want}")
+    return errors
+
+
+def human_marker(path: Path) -> bytes:
+    return b"; human-edit" if path.suffix == ".tscn" else b"# human-edit"
+
+
+def restart_stack(
+    proc: subprocess.Popen[str] | None,
+    desc_path: Path | None,
+    godot: subprocess.Popen[str] | None,
+    exe: Path,
+) -> tuple[subprocess.Popen[str], Path, str, list[str], subprocess.Popen[str], list[str]]:
+    life.stop_proc(godot)
+    life.stop_proc(proc)
+    if desc_path is not None and desc_path.is_file():
+        try:
+            desc_path.unlink()
+        except OSError:
+            pass
+    agent = PLUGIN_PROJECT / ".hh-agent"
+    for name in ("file-leases.json", "writer.lock"):
+        lock = agent / name
+        if lock.is_file():
+            try:
+                lock.unlink()
+            except OSError:
+                pass
+    new_proc, new_desc, new_secret, new_err = life.start_sidecar()
+    new_godot, new_lines = life.start_godot(exe)
+    return new_proc, new_desc, new_secret, new_err, new_godot, new_lines
 
 
 def run_selftest(exe: Path) -> list[str]:
@@ -406,6 +488,7 @@ def live_errors(exe: Path) -> list[str]:
         req_id, restored = tool_call(proc, req_id, "godot.git", "revert_checkpoint", {"ref": ckpt_ref})
         if not ack_ok(restored, errors, "git.revert_checkpoint"):
             return errors
+        errors.extend(checkpoint_sha_errors(ckpt_ref, [scene_abs, script_abs]))
         recovery = (restored.get("after") or {}).get("recovery") or {}
         if recovery.get("restored") is not True:
             errors.append(f"revert missing recovery report: {restored}")
@@ -439,16 +522,24 @@ def live_errors(exe: Path) -> list[str]:
                 errors.append(f"clean run {run_i} leftover dirty after restore")
                 break
             clean_done += 1
-        print(f"CLEAN_RUN={clean_done}", flush=True)
+        print(f"CLEAN_RUN={clean_done} (reset-via-checkpoint, not OS clones)", flush=True)
         if clean_done != CLEAN_RUNS:
             errors.append(f"CLEAN_RUN={clean_done} (need {CLEAN_RUNS} clean resets)")
 
         req_id, _ = tool_call(proc, req_id, "godot.git", "revert_checkpoint", {"ref": ckpt_ref})
         req_id = resync(proc, req_id, scene)
-        mix_baseline = fingerprint([scene_abs, script_abs])
+        req_id, saved0 = tool_call(proc, req_id, "godot.scene", "save", {"path": scene})
+        if not ack_ok(saved0, errors, "AC-05 baseline save"):
+            return errors
+        pre_sha = sha256_file(scene_abs)
+        req_id, pre_fp, pre_read = scene_fingerprint(proc, req_id, scene)
+        if not pre_fp:
+            errors.append(f"AC-05 missing pre-200 fingerprint: {pre_read}")
+            return errors
         rng = random.Random(SEED)
+        success_200 = 0
         for op_i in range(RANDOM_OPS):
-            kind = rng.choice(["node", "property", "script", "scene"])
+            kind = "node" if op_i == 0 else "property" if op_i == 1 else rng.choice(["node", "property"])
             used.add(kind)
             if kind == "node":
                 req_id, body = tool_call(
@@ -466,7 +557,7 @@ def live_errors(exe: Path) -> list[str]:
                 if body.get("ok") is not True:
                     errors.append(f"random node.add {op_i} failed: {body}")
                     break
-            elif kind == "property":
+            else:
                 req_id, body = tool_call(
                     proc,
                     req_id,
@@ -482,7 +573,75 @@ def live_errors(exe: Path) -> list[str]:
                 if body.get("ok") is not True:
                     errors.append(f"random property.set {op_i} failed: {body}")
                     break
-            elif kind == "script":
+            success_200 += 1
+        if not {"node", "property"}.issubset(used):
+            errors.append(f"200 node+property mix too narrow: {sorted(used)}")
+        if success_200 != RANDOM_OPS:
+            errors.append(f"AC-05 only {success_200}/{RANDOM_OPS} node+property ops ACK")
+            return errors
+        req_id, saved200 = tool_call(proc, req_id, "godot.scene", "save", {"path": scene})
+        if not ack_ok(saved200, errors, "AC-05 post-200 save"):
+            return errors
+        post_sha = sha256_file(scene_abs)
+        req_id, post_fp, post_read = scene_fingerprint(proc, req_id, scene)
+        if not post_fp:
+            errors.append(f"AC-05 missing post-200 fingerprint: {post_read}")
+            return errors
+        if post_fp == pre_fp or post_sha == pre_sha:
+            errors.append("AC-05 200 ops left SHA/fingerprint unchanged")
+        req_id, undone = tool_call(
+            proc,
+            req_id,
+            "godot.node",
+            "undo",
+            {"scene": scene, "count": success_200},
+            timeout=90.0,
+        )
+        if not ack_ok(undone, errors, "AC-05 undo-all"):
+            return errors
+        req_id, saved_undo = tool_call(proc, req_id, "godot.scene", "save", {"path": scene})
+        if not ack_ok(saved_undo, errors, "AC-05 save after undo-all"):
+            return errors
+        req_id, undo_fp, undo_read = scene_fingerprint(proc, req_id, scene)
+        if sha256_file(scene_abs) != pre_sha or undo_fp != pre_fp:
+            errors.append(
+                "AC-05 undo-all SHA/fingerprint != pre-200 baseline; "
+                f"sha={sha256_file(scene_abs)} want={pre_sha}; fp={undo_fp} want={pre_fp}; "
+                f"read={undo_read.get('after')}"
+            )
+        req_id, redone = tool_call(
+            proc,
+            req_id,
+            "godot.node",
+            "redo",
+            {"scene": scene, "count": success_200},
+            timeout=90.0,
+        )
+        if not ack_ok(redone, errors, "AC-05 redo-all"):
+            return errors
+        req_id, saved_redo = tool_call(proc, req_id, "godot.scene", "save", {"path": scene})
+        if not ack_ok(saved_redo, errors, "AC-05 save after redo-all"):
+            return errors
+        req_id, redo_fp, redo_read = scene_fingerprint(proc, req_id, scene)
+        if sha256_file(scene_abs) != post_sha or redo_fp != post_fp:
+            errors.append(
+                "AC-05 redo-all SHA/fingerprint != post-200; "
+                f"sha={sha256_file(scene_abs)} want={post_sha}; fp={redo_fp} want={post_fp}; "
+                f"read={redo_read.get('after')}"
+            )
+
+        # Separate compensation mix: script.write is file-not-UndoRedo. NOT a substitute for AC-05.
+        req_id, comp_rev = tool_call(proc, req_id, "godot.git", "revert_checkpoint", {"ref": ckpt_ref})
+        if not ack_ok(comp_rev, errors, "compensation setup revert"):
+            return errors
+        errors.extend(checkpoint_sha_errors(ckpt_ref, [scene_abs, script_abs]))
+        req_id = resync(proc, req_id, scene)
+        comp_baseline = fingerprint([scene_abs, script_abs])
+        comp_used: set[str] = set()
+        for op_i in range(COMPENSATION_OPS):
+            kind = "script" if op_i % 3 == 0 else rng.choice(["node", "property", "script"])
+            comp_used.add(kind)
+            if kind == "script":
                 req_id, body = tool_call(
                     proc,
                     req_id,
@@ -490,24 +649,46 @@ def live_errors(exe: Path) -> list[str]:
                     "write",
                     {"path": script, "contents": SCRIPT_B if op_i % 2 else SCRIPT_A},
                 )
-                if body.get("ok") is not True:
-                    errors.append(f"random script.write {op_i} failed: {body}")
-                    break
+            elif kind == "node":
+                req_id, body = tool_call(
+                    proc,
+                    req_id,
+                    "godot.node",
+                    "add",
+                    {
+                        "scene": scene,
+                        "parent": ".",
+                        "class_name": "Node2D",
+                        "name": f"Comp{op_i}",
+                    },
+                )
             else:
-                req_id, body = tool_call(proc, req_id, "godot.scene", "save", {"path": scene})
-                if body.get("ok") is not True:
-                    errors.append(f"random scene.save {op_i} failed: {body}")
-                    break
-        if not {"node", "property"}.issubset(used) or not ({"script", "scene"} & used):
-            errors.append(f"200 random mix too narrow: {sorted(used)}")
+                req_id, body = tool_call(
+                    proc,
+                    req_id,
+                    "godot.property",
+                    "set",
+                    {
+                        "scene": scene,
+                        "node_path": "Player",
+                        "property": "visible",
+                        "value": variant_bool(bool(rng.getrandbits(1))),
+                    },
+                )
+            if body.get("ok") is not True:
+                errors.append(f"compensation {kind} {op_i} failed: {body}")
+                break
+        if "script" not in comp_used:
+            errors.append(f"compensation mix missing script.write: {sorted(comp_used)}")
         req_id, mix_restore = tool_call(proc, req_id, "godot.git", "revert_checkpoint", {"ref": ckpt_ref})
-        if not ack_ok(mix_restore, errors, "200-op checkpoint restore"):
+        if not ack_ok(mix_restore, errors, "compensation checkpoint restore"):
             return errors
+        errors.extend(checkpoint_sha_errors(ckpt_ref, [scene_abs, script_abs]))
         req_id = resync(proc, req_id, scene)
-        if fingerprint([scene_abs, script_abs]) != mix_baseline:
+        if fingerprint([scene_abs, script_abs]) != comp_baseline:
             errors.append(
-                "200 mixed mutations + checkpoint restore did not match baseline "
-                "(script.write is file-not-UndoRedo; compensation is checkpoint restore)"
+                "compensation mix + checkpoint restore did not match baseline "
+                "(script.write is file compensation, not UndoRedo)"
             )
 
         if scene_abs.is_file():
@@ -520,8 +701,8 @@ def live_errors(exe: Path) -> list[str]:
                 {"scene": scene, "parent": ".", "class_name": "Node2D", "name": "Human"},
             )
             expect_code(conflict, ("E_CONFLICT",), errors, "human-edit .tscn")
-        req_id, _ = tool_call(proc, req_id, "godot.git", "revert_checkpoint", {"ref": ckpt_ref})
-        req_id = resync(proc, req_id, scene)
+            if human_marker(scene_abs) not in scene_abs.read_bytes():
+                errors.append("human-edit .tscn bytes not still on disk after E_CONFLICT")
         if script_abs.is_file():
             attack_human_edit(script_abs)
             req_id, gd_conflict = tool_call(
@@ -532,7 +713,22 @@ def live_errors(exe: Path) -> list[str]:
                 {"path": script, "contents": SCRIPT_B},
             )
             expect_code(gd_conflict, ("E_CONFLICT",), errors, "human-edit .gd")
-        req_id, _ = tool_call(proc, req_id, "godot.git", "revert_checkpoint", {"ref": ckpt_ref})
+            if human_marker(script_abs) not in script_abs.read_bytes():
+                errors.append("human-edit .gd bytes not still on disk after E_CONFLICT")
+        paused_human = body_of(mcp_call(proc, req_id, "hh.pause", {}))
+        req_id += 1
+        if paused_human.get("ok") is not True and (paused_human.get("error") or {}).get("code"):
+            errors.append(f"hh.pause after human-edit failed: {paused_human}")
+        if scene_abs.is_file() and human_marker(scene_abs) not in scene_abs.read_bytes():
+            errors.append("human-edit .tscn bytes lost after hh.pause")
+        if script_abs.is_file() and human_marker(script_abs) not in script_abs.read_bytes():
+            errors.append("human-edit .gd bytes lost after hh.pause")
+        mcp_call(proc, req_id, "hh.resume", {})
+        req_id += 1
+        req_id, human_rev = tool_call(proc, req_id, "godot.git", "revert_checkpoint", {"ref": ckpt_ref})
+        if not ack_ok(human_rev, errors, "human-edit revert after asserts"):
+            return errors
+        errors.extend(checkpoint_sha_errors(ckpt_ref, [scene_abs, script_abs]))
         req_id = resync(proc, req_id, scene)
 
         req_id, spare_w = tool_call(
@@ -578,7 +774,7 @@ def live_errors(exe: Path) -> list[str]:
         req_id += 1
 
         if godot is not None and godot.poll() is None:
-            killer = threading.Thread(target=lambda: (time.sleep(0.2), godot.kill()), daemon=True)
+            killer = threading.Thread(target=lambda: (time.sleep(0.05), godot.kill()), daemon=True)
             killer.start()
             try:
                 req_id, killed = tool_call(
@@ -594,7 +790,25 @@ def live_errors(exe: Path) -> list[str]:
                                     "scene": scene,
                                     "parent": ".",
                                     "class_name": "Node2D",
-                                    "name": "KillGodot",
+                                    "name": "KillGodotA",
+                                },
+                            },
+                            {
+                                "action": "node.add",
+                                "params": {
+                                    "scene": scene,
+                                    "parent": ".",
+                                    "class_name": "Node2D",
+                                    "name": "KillGodotB",
+                                },
+                            },
+                            {
+                                "action": "node.add",
+                                "params": {
+                                    "scene": scene,
+                                    "parent": ".",
+                                    "class_name": "Label",
+                                    "name": "KillGodotC",
                                 },
                             },
                             {"action": "script.write", "params": {"path": script, "contents": SCRIPT_B}},
@@ -606,32 +820,44 @@ def live_errors(exe: Path) -> list[str]:
             except Exception as exc:  # noqa: BLE001
                 killed = {"ok": False, "error": {"code": "E_UNCERTAIN", "message": str(exc)}}
             killer.join(timeout=5)
+            if godot.poll() is None:
+                godot.kill()
             if killed.get("ok") is True:
-                print("KILL_GODOT=completed-before-kill", flush=True)
+                errors.append("in-flight transaction must not ACK {ok:true} after Godot kill")
             else:
                 code = str((killed.get("error") or {}).get("code") or "")
                 if code not in ("E_UNCERTAIN", "E_UNVERIFIED", "E_BUSY", ""):
                     errors.append(f"kill Godot mid-command unexpected: {killed}")
-                print("KILL_GODOT=ran", flush=True)
             if not valid_tscn(scene_abs):
                 errors.append("Godot kill left a corrupt .tscn")
             if not valid_gd(script_abs):
                 errors.append("Godot kill left a corrupt .gd")
-            life.stop_proc(godot)
-            godot, godot_lines = life.start_godot(exe)
-            hello2 = False
-            last2: dict = {}
             try:
+                proc, desc_path, secret, err_lines, godot, godot_lines = restart_stack(
+                    proc, desc_path, godot, exe
+                )
+                req_id = 2
+                hello2 = False
+                last2: dict = {}
                 req_id, hello2, last2 = life.wait_hello(proc, godot, req_id)
             except Exception as exc:  # noqa: BLE001
+                hello2 = False
                 last2 = {"error": {"code": "E_UNCERTAIN", "message": str(exc)}}
             if not hello2:
-                print(f"reopen hello after Godot kill failed (sidecar may be wedged): {last2}", flush=True)
+                errors.append(
+                    "reopen hello after Godot kill failed: "
+                    f"{sess.redact(json.dumps(last2), secret)}"
+                )
             else:
+                print("KILL_GODOT=ran", flush=True)
                 try:
                     req_id, reopened = tool_call(proc, req_id, "godot.scene", "open", {"path": scene})
                     if reopened.get("ok") is not True:
-                        req_id, _ = tool_call(proc, req_id, "godot.git", "revert_checkpoint", {"ref": ckpt_ref})
+                        req_id, rev_kill = tool_call(
+                            proc, req_id, "godot.git", "revert_checkpoint", {"ref": ckpt_ref}
+                        )
+                        if rev_kill.get("ok") is True:
+                            errors.extend(checkpoint_sha_errors(ckpt_ref, [scene_abs, script_abs]))
                         req_id, reopened = tool_call(proc, req_id, "godot.scene", "open", {"path": scene})
                     if reopened.get("ok") is not True:
                         errors.append(f"scene unreadable after Godot kill: {reopened}")
@@ -690,14 +916,7 @@ def live_errors(exe: Path) -> list[str]:
                 desc_path.unlink()
             except OSError:
                 pass
-        agent = PLUGIN_PROJECT / ".hh-agent"
-        for name in ("file-leases.json", "writer.lock"):
-            lock = agent / name
-            if lock.is_file():
-                try:
-                    lock.unlink()
-                except OSError:
-                    pass
+        cleanup_temp()
     return errors
 
 
@@ -754,10 +973,11 @@ def main() -> int:
         return 1
 
     print(
-        "PASS: job.transaction + restorable checkpoint; CLEAN_RUN=50; "
-        "200 mixed mutations restored via checkpoint (script.write is file compensation); "
-        "human-edit E_CONFLICT; real kill matrix; Pause; play.input inject stays unproven; "
-        "R3-WP8 stays unticked."
+        "PASS: job.transaction + restorable checkpoint; CLEAN_RUN=50 via checkpoint "
+        "(not OS clones); AC-05 undo-all/redo 200 node+property; "
+        "compensation mix uses checkpoint restore; human-edit bytes stay on disk; "
+        "kill Godot restarts sidecar+Godot and hello must succeed; "
+        "play.input inject stays unproven; R3-WP8 stays unticked."
     )
     return 0
 
