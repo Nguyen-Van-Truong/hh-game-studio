@@ -1,6 +1,6 @@
 AUTHORITATIVE_PLAN=1
 STATUS=ACTIVE
-CURRENT_VALID_WP=R2-WP3
+CURRENT_VALID_WP=R2-WP4
 
 ================================================================================
 BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
@@ -10,7 +10,7 @@ BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
 |--------|-----------|------------------|-----------------------------|------|------------|
 | 0 | R0 — Cutover an toàn | Đóng băng engine Rust cũ, pin Godot, đổi bootstrap sang plan này, không mất lịch sử | Governance + Toolchain | G0 | [x] 4/4 WP |
 | 1 | R1 — Spike và chọn nền MCP | Chứng minh agent tạo/sửa/chạy/nhìn một scene thật trong editor; chốt upstream hay tự làm | Research + Security + POC | G1 NO-FORK | [x] 5/5 WP |
-| 2 | R2 — Control plane | Plugin, sidecar, Agent Host, MCP, auth, registry, ledger, pause và OWNER_AUTOPILOT hoạt động | Bridge + Plugin + Security | — | [ ] 2/7 WP |
+| 2 | R2 — Control plane | Plugin, sidecar, Agent Host, MCP, auth, registry, ledger, pause và OWNER_AUTOPILOT hoạt động | Bridge + Plugin + Security | — | [ ] 3/7 WP |
 | 3 | R3 — Quyền editor ngữ nghĩa | Scene/node/property/resource/script/asset/project settings có undo, dedup và postcondition | Scene + Script + Asset | — | [ ] 0/8 WP |
 | 4 | R4 — Người xem được agent làm | Activity Dock, chọn node, focus inspector, cursor/gizmo ảo, replay kéo-thả, Watch/Fast mode | Observer UI + Editor UX | G2 VISIBLE | [ ] 0/6 WP |
 | 5 | R5 — Bộ công cụ làm game 2D | TileMapLayer, animation, UI, audio, physics, navigation, shader/particles được agent thao tác đầy đủ | 2D-A + 2D-B + Assets | — | [ ] 0/7 WP |
@@ -24,7 +24,7 @@ VIỆC PHẢI LÀM TRƯỚC: R0-WP1 → R0-WP2 → R0-WP3 → R0-WP4 → R1-WP1.
 Không được bắt đầu R2
 trước G1. Từ R2 trở đi chỉ song song các track có ranh giới file rõ ràng.
 
-Tiến độ tổng: [ ] 11/60 WP. First valid WP: R2-WP3.
+Tiến độ tổng: [ ] 12/60 WP. First valid WP: R2-WP4.
 Ngày lập: 20-8-2026 (Asia/Saigon).
 
 ================================================================================
@@ -962,7 +962,7 @@ R2-WP2 — Sidecar lifecycle + secure session transport                  [x] 21-
         existsSync(home).
       Commit: 5974076 R2-WP2: sidecar session transport and stdio MCP
 
-R2-WP3 — EditorPlugin router main-thread + health dock                 [ ]
+R2-WP3 — EditorPlugin router main-thread + health dock                 [x] 21-8-2026
   Phụ thuộc: R2-WP1, R2-WP2 handshake contract.
   Track/file: B/C; addons/hh_agent/core, ui/health.
   Làm:
@@ -972,7 +972,29 @@ R2-WP3 — EditorPlugin router main-thread + health dock                 [ ]
     - plugin disable/reload không leak socket/signal/control.
   Verify: enable/disable/reload 50 lần; malformed/flood request; editor responsive.
   DoD: router chưa có mutation ngoài test noop; lifecycle ổn trước adapter.
-  LOG: (trống)
+  LOG:
+    LOG 2026-08-21 07:45 Asia/Saigon — agent=coordinator
+      Base: 7215026 plugin router; P0 handshake fix 5f6861a; in-editor 50× 8a9f97f.
+        Godot=4.7.1.stable.official.a13da4feb, schema=hh-godot-actions/1
+      Files/leases: godot/plugin-project/addons/hh_agent/, hh_reload_driver.gd,
+        bridge/src/transport/{websocket,mcp_stdio,plugin_rpc}.ts,
+        tests/bootstrap/test_plugin_router.py
+      Verify: test_plugin_router.py → 0 (GODOT_SELFTEST=ran,
+        GODOT_IN_EDITOR_RELOAD_50=in-editor-disable-enable-ran,
+        GODOT_LIVE_HELLO=ran); test_g1_base/registry/session → 0.
+        Isolated router + live hello + noop ACK. Does not apply scene mutations.
+      E2E/artifacts: outbound WS hello to LOCALAPPDATA session.json; only
+        hh.plugin/noop verified:true checks=["noop"]; read/view E_UNVERIFIED;
+        mutate not dispatched
+      Critic: FAIL (f49ab89b) on 7215026 — start() wiped token via close();
+        suite was Python mock + 50 process launches. Closed on 5f6861a
+        (f6ff97d6 PASS-WITH-GAPS, tick held for 50×). Closed on 8a9f97f
+        (7a452de1 PASS-WITH-GAPS, tick yes). P0 none remaining.
+      Gaps: _paused unused (R2-WP5); plugin second pass is required-keys not
+        param types; queue flood is selftest not live WS. Homemade RFC6455
+        sidecar gaps from WP2 untouched.
+      Commit: 7215026 R2-WP3: EditorPlugin router and health dock;
+        5f6861a fix handshake; 8a9f97f in-editor 50×
 
 R2-WP4 — Command ledger, dedup và uncertain recovery                   [ ]
   Phụ thuộc: R2-WP2, R2-WP3.
@@ -1841,19 +1863,19 @@ thuận nếu ảnh hưởng G5/G6.
 14. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Hiện tại R0 (4/4) + R1 (5/5, G1) + R2-WP1 + R2-WP2 đã xong. Agent tiếp theo làm **R2-WP3**.
-KHÔNG vendor A/C as-is, KHÔNG M6, KHÔNG fork Godot. R2-WP3 tạo `addons/hh_agent` only —
-không copy hh_stock_poc, không enable vendor MCP, không mutation ngoài test noop.
+Hiện tại R0 (4/4) + R1 (5/5, G1) + R2-WP1..WP3 đã xong. Agent tiếp theo làm **R2-WP4**.
+KHÔNG vendor A/C as-is, KHÔNG M6, KHÔNG fork Godot. Router + hello exists; mutate still
+not dispatched. Ledger must not turn uncertain into success. Do not claim the agent
+drives Godot or writes scenes.
 
 Lệnh hợp lệ:
 
-  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R2-WP3`);
-  2) R2-WP3: EditorPlugin router main-thread + health dock; đọc session.json,
-     outbound WS hello {protocol, project_id, token}; update G1/session/registry
-     tests so only addons/hh_agent is allowed;
+  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R2-WP4`);
+  2) R2-WP4: command ledger, dedup, uncertain recovery (plan §5.4) in LocalAppData
+     SQLite WAL/FULL; flush before dispatch; kill hooks; restart must not apply blind;
   3) mở editor fixture: `hh-godot-editor.bat` (Godot 4.7.1-stable pin, minimal-2d);
-  4) không copy hh_stock_poc; không npx -y; không bump 4.7.2; không claim live
-     scene success without postcondition.
+  4) không copy hh_stock_poc; không npx -y; không bump 4.7.2; không mutation adapter
+     (R3); không OWNER_AUTOPILOT (R2-WP5).
 
 Không được tự xóa engine/code/game/asset cũ. Không được tự fork Godot. Không yêu cầu
 người click editor trong happy path. Mục tiêu cuối là: người giao brief, xem agent làm,

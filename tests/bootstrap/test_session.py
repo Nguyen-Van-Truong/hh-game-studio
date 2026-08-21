@@ -79,8 +79,8 @@ def plan_errors(text: str) -> list[str]:
             errors.append("R2-WP2 heading must keep [ ] until coordinator tick")
         if current != "R2-WP2":
             errors.append(f"CURRENT_VALID_WP={current!r} (need R2-WP2 while WP2 is unticked)")
-    elif current != "R2-WP3":
-        errors.append(f"CURRENT_VALID_WP={current!r} (need R2-WP3 after R2-WP2 tick)")
+    elif not re.match(r"^R2-WP[3-9]$|^R2-WP\d{2,}$|^R[3-9]-WP\d+$", current):
+        errors.append(f"CURRENT_VALID_WP={current!r} (need R2-WP3+ after R2-WP2 tick)")
     return errors
 
 
