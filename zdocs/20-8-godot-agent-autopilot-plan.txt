@@ -1,6 +1,6 @@
 AUTHORITATIVE_PLAN=1
 STATUS=ACTIVE
-CURRENT_VALID_WP=R3-WP2
+CURRENT_VALID_WP=R3-WP3
 
 ================================================================================
 BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
@@ -11,7 +11,7 @@ BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
 | 0 | R0 — Cutover an toàn | Đóng băng engine Rust cũ, pin Godot, đổi bootstrap sang plan này, không mất lịch sử | Governance + Toolchain | G0 | [x] 4/4 WP |
 | 1 | R1 — Spike và chọn nền MCP | Chứng minh agent tạo/sửa/chạy/nhìn một scene thật trong editor; chốt upstream hay tự làm | Research + Security + POC | G1 NO-FORK | [x] 5/5 WP |
 | 2 | R2 — Control plane | Plugin, sidecar, Agent Host, MCP, auth, registry, ledger, pause và OWNER_AUTOPILOT hoạt động | Bridge + Plugin + Security | — | [x] 7/7 WP |
-| 3 | R3 — Quyền editor ngữ nghĩa | Scene/node/property/resource/script/asset/project settings có undo, dedup và postcondition | Scene + Script + Asset | — | [ ] 1/8 WP |
+| 3 | R3 — Quyền editor ngữ nghĩa | Scene/node/property/resource/script/asset/project settings có undo, dedup và postcondition | Scene + Script + Asset | — | [ ] 2/8 WP |
 | 4 | R4 — Người xem được agent làm | Activity Dock, chọn node, focus inspector, cursor/gizmo ảo, replay kéo-thả, Watch/Fast mode | Observer UI + Editor UX | G2 VISIBLE | [ ] 0/6 WP |
 | 5 | R5 — Bộ công cụ làm game 2D | TileMapLayer, animation, UI, audio, physics, navigation, shader/particles được agent thao tác đầy đủ | 2D-A + 2D-B + Assets | — | [ ] 0/7 WP |
 | 6 | R6 — Agent tự chơi và tự kiểm | Play/debug, input, runtime state, deterministic step, screenshot/diff/perf, test evidence | Runtime + Test + Vision | G3 SELF-VERIFY | [ ] 0/7 WP |
@@ -24,7 +24,7 @@ VIỆC PHẢI LÀM TRƯỚC: R0-WP1 → R0-WP2 → R0-WP3 → R0-WP4 → R1-WP1.
 Không được bắt đầu R2
 trước G1. Từ R2 trở đi chỉ song song các track có ranh giới file rõ ràng.
 
-Tiến độ tổng: [ ] 17/60 WP. First valid WP: R3-WP2.
+Tiến độ tổng: [ ] 18/60 WP. First valid WP: R3-WP3.
 Ngày lập: 20-8-2026 (Asia/Saigon).
 
 ================================================================================
@@ -1180,7 +1180,7 @@ R3-WP1 — Scene lifecycle + durable save                               [x] 21-8
         f337ff5 dirty tab history and honest inherit;
         0c16483 strip dirty-mark before scene save
 
-R3-WP2 — Node CRUD, identity, hierarchy và owner                        [ ]
+R3-WP2 — Node CRUD, identity, hierarchy và owner                        [x] 21-8-2026
   Phụ thuộc: R3-WP1.
   Track/file: B; node adapter + identity registry.
   Làm:
@@ -1191,7 +1191,28 @@ R3-WP2 — Node CRUD, identity, hierarchy và owner                        [ ]
   Verify: 200 random operations rồi Undo hết = canonical baseline; Redo = final;
           save/reopen identity/path/owner đúng; references không dangling.
   DoD: mọi mutation một UndoRedo action có tên `Agent: ...`, postcondition theo UID.
-  LOG: (trống)
+  LOG:
+    LOG 2026-08-21 12:10 Asia/Saigon — agent=coordinator
+      Base: a178191 node CRUD UndoRedo; cheap-fix 739b3ad make_local unpack.
+        Godot=4.7.1.stable.official.a13da4feb, schema=hh-godot-actions/1
+      Files/leases: godot/plugin-project/addons/hh_agent/core/hh_node_adapter.gd,
+        hh_identity.gd, tests/bootstrap/test_node_crud.py
+      Verify: test_node_crud.py → 0 (200 seeded ops; Undo ALL = baseline;
+        Redo = final; instantiate + make_local ACK instance_is_local;
+        save/reopen persistable uid/path/owner; Pause E_PAUSED; edited-root
+        make_local E_UNVERIFIED); g1/registry/plugin_router/scene_lifecycle/
+        read_model → 0.
+      E2E/artifacts: every success-path mutation is Agent: UndoRedo;
+        persistable identity is meta hh_agent_uid
+      Critic: PASS-WITH-GAPS tick no (9f6490ea) on a178191 — make_local
+        refuse encoded as PASS; save/reopen dropped instance children.
+        Closed on 739b3ad (same critic, prior P1s dead, recommend tick).
+      Gaps: collision walk can remint packed internals on open; make_local
+        not in the 200-op mix; fingerprint omits owner; keep_global_transform
+        has no transform readback; group uses scene UndoRedo.create_action.
+        property.set still E_UNVERIFIED (R3-WP3).
+      Commit: a178191 R3-WP2: node CRUD identity and UndoRedo;
+        739b3ad make_local unpack and persistable identity
 
 R3-WP3 — Generic property/Variant codec + Inspector semantics           [ ]
   Phụ thuộc: R3-WP2.
@@ -1971,16 +1992,14 @@ thuận nếu ảnh hưởng G5/G6.
 14. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Hiện tại R0 (4/4) + R1 (5/5, G1) + R2 (7/7) + R3-WP1 đã xong. Agent tiếp theo làm **R3-WP2**.
-KHÔNG vendor A/C as-is, KHÔNG M6, KHÔNG fork Godot. Scene lifecycle exists;
-node CRUD is the next mutation slice. Do not claim the agent drives a full game.
+Hiện tại R0 (4/4) + R1 (5/5, G1) + R2 (7/7) + R3-WP1..WP2 đã xong. Agent tiếp theo làm **R3-WP3**.
+KHÔNG vendor A/C as-is, KHÔNG M6, KHÔNG fork Godot. Scene + node CRUD exist;
+property/Variant codec is next. Do not claim the agent drives a full game.
 
 Lệnh hợp lệ:
 
-  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R3-WP2`);
-  2) R3-WP2: node add/remove/rename/duplicate/reparent/reorder/instantiate/
-     make-local/groups; owner + UID; UndoRedo `Agent: ...`; 200 random
-     then Undo=baseline Redo=final;
+  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R3-WP3`);
+  2) R3-WP3: generic property/Variant codec + Inspector semantics;
   3) mở editor fixture: `hh-godot-editor.bat` (Godot 4.7.1-stable pin, minimal-2d);
   4) không copy hh_stock_poc; không npx -y; không bump 4.7.2; không raw-write
      .tscn; plugin is the only writer.
