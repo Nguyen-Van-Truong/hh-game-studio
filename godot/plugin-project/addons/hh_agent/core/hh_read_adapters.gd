@@ -4,10 +4,12 @@ extends RefCounted
 const _ConstantsScript: GDScript = preload("res://addons/hh_agent/core/hh_constants.gd")
 const _ErrorsScript: GDScript = preload("res://addons/hh_agent/core/hh_errors.gd")
 const _ActionsScript: GDScript = preload("res://addons/hh_agent/core/hh_actions.gd")
+const _MetaScript: GDScript = preload("res://addons/hh_agent/core/hh_scene_meta.gd")
 
 ## Main-thread read/view adapters. Mutate is never applied here.
 
 var _errors: HHAgentErrors = HHAgentErrors.new()
+var _meta: HHAgentSceneMeta = HHAgentSceneMeta.new()
 
 
 func handle(command_id: String, method: String, action: String, params: Dictionary, actions: HHAgentActions) -> Dictionary:
@@ -25,6 +27,8 @@ func handle(command_id: String, method: String, action: String, params: Dictiona
 		return _editor_select(command_id, params, post)
 	if method == "godot.scene" and action == "read":
 		return _scene_read(command_id, params, post)
+	if method == "godot.scene" and action == "list_tabs":
+		return _scene_list_tabs(command_id, params, post)
 	if method == "godot.scene" and action == "dependencies":
 		return _scene_deps(command_id, params, post)
 	if method == "godot.node" and action == "query":
@@ -79,6 +83,7 @@ func _post_name(def: Dictionary, method: String, action: String) -> String:
 			"project.inspect": "project_inspect_matches_project_godot",
 			"project.doctor": "doctor_report_complete",
 			"scene.read": "scene_tree_summary_matches",
+			"scene.list_tabs": "open_scene_tabs_match",
 			"scene.dependencies": "dependency_list_complete",
 			"node.query": "query_hits_match_tree",
 			"property.get": "property_value_matches_get",
@@ -425,6 +430,18 @@ func _scene_read(command_id: String, params: Dictionary, post: String) -> Dictio
 		return _unverified(command_id, "page exceeded max")
 	if (page.get("items") as Array).size() > HHAgentConstants.MAX_PAGE:
 		return _unverified(command_id, "adapter dumped more than one page")
+	var edited: Node = EditorInterface.get_edited_scene_root()
+	var snap: Dictionary = {}
+	if edited != null and edited.scene_file_path == scene:
+		snap = _meta.snapshot(edited, scene)
+	else:
+		snap = {
+			"fingerprint": "",
+			"history_version": "0",
+			"disk_hash": _meta.disk_hash(scene),
+			"dirty": false,
+			"inherited": _meta.is_inherited_file(scene),
+		}
 	var after: Dictionary = {
 		"path": scene,
 		"root": str(walk.get("root", "")),
@@ -432,6 +449,40 @@ func _scene_read(command_id: String, params: Dictionary, post: String) -> Dictio
 		"source": str(walk.get("source", "")),
 		"tree": page,
 		"detail": str(params.get("detail", "short")),
+		"fingerprint": str(snap.get("fingerprint", "")),
+		"history_version": str(snap.get("history_version", "0")),
+		"disk_hash": str(snap.get("disk_hash", "")),
+		"dirty": snap.get("dirty", false) == true,
+		"inherited": snap.get("inherited", false) == true,
+	}
+	return _ok(command_id, post, after)
+
+
+func _scene_list_tabs(command_id: String, params: Dictionary, post: String) -> Dictionary:
+	var open_a: Array = _meta.open_scenes()
+	var open_b: Array = _meta.open_scenes()
+	if open_a != open_b:
+		return _unverified(command_id, "open scene list changed during readback")
+	var edited: Node = EditorInterface.get_edited_scene_root()
+	var edited_path: String = _meta.edited_path()
+	var tabs: Array = []
+	for item_v: Variant in open_a:
+		var path_s: String = str(item_v)
+		var tab: Dictionary = {
+			"path": path_s,
+			"edited": path_s == edited_path,
+		}
+		if path_s == edited_path and edited != null:
+			tab["dirty"] = _meta.is_dirty(edited)
+			tab["fingerprint"] = _meta.fingerprint(edited)
+			tab["history_version"] = str(_meta.history_version(edited))
+		tabs.append(tab)
+	var after: Dictionary = {
+		"open_scenes": open_a,
+		"edited_scene": edited_path,
+		"tabs": tabs,
+		"detail": str(params.get("detail", "short")),
+		"source": "editor",
 	}
 	return _ok(command_id, post, after)
 

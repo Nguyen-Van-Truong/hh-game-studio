@@ -52,6 +52,8 @@ func load_from_res() -> bool:
 					"side_effect": str(spec.get("side_effect", "")),
 					"timeout_ms": int(spec.get("timeout_ms", 5000)),
 					"required": required,
+					"postcondition": str(spec.get("postcondition", "")),
+					"checkpoint_required": spec.get("checkpoint_required", false) == true,
 				}
 	loaded = protocol == HHAgentConstants.PROTOCOL and not _by_key.is_empty()
 	return loaded

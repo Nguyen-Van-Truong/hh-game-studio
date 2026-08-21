@@ -39,6 +39,10 @@ interface JsonRpcReq {
   params?: unknown;
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
 export interface McpStdioContext {
   descriptor: () => SessionDescriptor;
   doctor: () => DoctorReport;
@@ -113,6 +117,7 @@ function domainTools(): Array<{
           action: { type: "string" },
           params: { type: "object" },
           approval: { type: "string", minLength: 64, maxLength: 64 },
+          precondition: { type: "object" },
         },
       },
     },
@@ -157,7 +162,7 @@ function domainTools(): Array<{
   for (const [name, verbs] of byMethod) {
     tools.push({
       name,
-      description: `Domain tool ${name}. Discriminator is action. Read/view may dispatch; mutate is not applied.`,
+      description: `Domain tool ${name}. Discriminator is action. Scene lifecycle may apply; node CRUD stays refused.`,
       inputSchema: {
         type: "object",
         additionalProperties: false,
@@ -165,6 +170,8 @@ function domainTools(): Array<{
         properties: {
           action: { type: "string", enum: verbs },
           params: { type: "object" },
+          command_id: { type: "string", minLength: 26, maxLength: 26 },
+          precondition: { type: "object" },
         },
       },
     });
@@ -350,6 +357,7 @@ async function handleTool(
         method,
         action,
         params,
+        ...(isRecord(args.precondition) ? { precondition: args.precondition } : {}),
       });
     } finally {
       if (ctx.policy) {
@@ -384,6 +392,7 @@ async function handleTool(
     method: name,
     action,
     params,
+    ...(isRecord(args.precondition) ? { precondition: args.precondition } : {}),
   });
 }
 

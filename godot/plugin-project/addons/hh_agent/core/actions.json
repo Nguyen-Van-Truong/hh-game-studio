@@ -38,7 +38,9 @@
       "timeout_ms": 5000,
       "required": [
         "kind"
-      ]
+      ],
+      "postcondition": "describe_kind_payload_present",
+      "checkpoint_required": false
     },
     "project.inspect": {
       "method": "godot.project",
@@ -47,7 +49,9 @@
       "timeout_ms": 5000,
       "required": [
         "detail"
-      ]
+      ],
+      "postcondition": "project_inspect_matches_project_godot",
+      "checkpoint_required": false
     },
     "project.settings": {
       "method": "godot.project",
@@ -57,7 +61,9 @@
       "required": [
         "key",
         "value"
-      ]
+      ],
+      "postcondition": "setting_equals_after_save",
+      "checkpoint_required": false
     },
     "project.input": {
       "method": "godot.project",
@@ -67,7 +73,9 @@
       "required": [
         "action_name",
         "keycode"
-      ]
+      ],
+      "postcondition": "input_action_present",
+      "checkpoint_required": false
     },
     "project.autoload": {
       "method": "godot.project",
@@ -77,7 +85,9 @@
       "required": [
         "name",
         "path"
-      ]
+      ],
+      "postcondition": "autoload_singleton_registered",
+      "checkpoint_required": false
     },
     "project.plugin": {
       "method": "godot.project",
@@ -87,7 +97,9 @@
       "required": [
         "plugin_name",
         "enabled"
-      ]
+      ],
+      "postcondition": "plugin_enabled_matches",
+      "checkpoint_required": false
     },
     "project.doctor": {
       "method": "godot.project",
@@ -96,7 +108,9 @@
       "timeout_ms": 5000,
       "required": [
         "detail"
-      ]
+      ],
+      "postcondition": "doctor_report_complete",
+      "checkpoint_required": false
     },
     "scene.create": {
       "method": "godot.scene",
@@ -106,7 +120,9 @@
       "required": [
         "path",
         "root_class"
-      ]
+      ],
+      "postcondition": "scene_file_exists_with_root_type",
+      "checkpoint_required": false
     },
     "scene.open": {
       "method": "godot.scene",
@@ -115,7 +131,9 @@
       "timeout_ms": 15000,
       "required": [
         "path"
-      ]
+      ],
+      "postcondition": "edited_scene_path_matches",
+      "checkpoint_required": false
     },
     "scene.read": {
       "method": "godot.scene",
@@ -125,7 +143,9 @@
       "required": [
         "path",
         "detail"
-      ]
+      ],
+      "postcondition": "scene_tree_summary_matches",
+      "checkpoint_required": false
     },
     "scene.save": {
       "method": "godot.scene",
@@ -134,7 +154,9 @@
       "timeout_ms": 15000,
       "required": [
         "path"
-      ]
+      ],
+      "postcondition": "scene_disk_hash_matches_pack",
+      "checkpoint_required": false
     },
     "scene.close": {
       "method": "godot.scene",
@@ -143,7 +165,9 @@
       "timeout_ms": 30000,
       "required": [
         "path"
-      ]
+      ],
+      "postcondition": "scene_not_in_open_list",
+      "checkpoint_required": true
     },
     "scene.instantiate": {
       "method": "godot.scene",
@@ -154,7 +178,9 @@
         "scene",
         "packed",
         "parent"
-      ]
+      ],
+      "postcondition": "instance_child_exists",
+      "checkpoint_required": false
     },
     "scene.dependencies": {
       "method": "godot.scene",
@@ -163,7 +189,53 @@
       "timeout_ms": 5000,
       "required": [
         "path"
-      ]
+      ],
+      "postcondition": "dependency_list_complete",
+      "checkpoint_required": false
+    },
+    "scene.list_tabs": {
+      "method": "godot.scene",
+      "verb": "list_tabs",
+      "side_effect": "read",
+      "timeout_ms": 5000,
+      "required": [
+        "detail"
+      ],
+      "postcondition": "open_scene_tabs_match",
+      "checkpoint_required": false
+    },
+    "scene.activate": {
+      "method": "godot.scene",
+      "verb": "activate",
+      "side_effect": "mutate",
+      "timeout_ms": 15000,
+      "required": [
+        "path"
+      ],
+      "postcondition": "edited_scene_path_matches",
+      "checkpoint_required": false
+    },
+    "scene.save_as": {
+      "method": "godot.scene",
+      "verb": "save_as",
+      "side_effect": "mutate",
+      "timeout_ms": 15000,
+      "required": [
+        "path"
+      ],
+      "postcondition": "scene_disk_hash_matches_pack",
+      "checkpoint_required": false
+    },
+    "scene.reload": {
+      "method": "godot.scene",
+      "verb": "reload",
+      "side_effect": "mutate",
+      "timeout_ms": 15000,
+      "required": [
+        "path"
+      ],
+      "postcondition": "scene_tree_matches_disk",
+      "checkpoint_required": false
     },
     "node.add": {
       "method": "godot.node",
@@ -175,7 +247,9 @@
         "parent",
         "class_name",
         "name"
-      ]
+      ],
+      "postcondition": "node_exists_under_parent",
+      "checkpoint_required": false
     },
     "node.remove": {
       "method": "godot.node",
@@ -185,7 +259,9 @@
       "required": [
         "scene",
         "node_path"
-      ]
+      ],
+      "postcondition": "node_path_absent",
+      "checkpoint_required": true
     },
     "node.rename": {
       "method": "godot.node",
@@ -196,7 +272,9 @@
         "scene",
         "node_path",
         "name"
-      ]
+      ],
+      "postcondition": "node_name_equals",
+      "checkpoint_required": false
     },
     "node.reparent": {
       "method": "godot.node",
@@ -207,7 +285,9 @@
         "scene",
         "node_path",
         "new_parent"
-      ]
+      ],
+      "postcondition": "node_parent_equals",
+      "checkpoint_required": false
     },
     "node.reorder": {
       "method": "godot.node",
@@ -218,7 +298,9 @@
         "scene",
         "node_path",
         "index"
-      ]
+      ],
+      "postcondition": "node_index_equals",
+      "checkpoint_required": false
     },
     "node.duplicate": {
       "method": "godot.node",
@@ -228,7 +310,9 @@
       "required": [
         "scene",
         "node_path"
-      ]
+      ],
+      "postcondition": "duplicate_sibling_exists",
+      "checkpoint_required": false
     },
     "node.group": {
       "method": "godot.node",
@@ -240,7 +324,9 @@
         "node_path",
         "group",
         "op"
-      ]
+      ],
+      "postcondition": "node_group_membership",
+      "checkpoint_required": false
     },
     "node.query": {
       "method": "godot.node",
@@ -250,7 +336,9 @@
       "required": [
         "scene",
         "by"
-      ]
+      ],
+      "postcondition": "query_hits_match_tree",
+      "checkpoint_required": false
     },
     "property.get": {
       "method": "godot.property",
@@ -261,7 +349,9 @@
         "scene",
         "node_path",
         "property"
-      ]
+      ],
+      "postcondition": "property_value_matches_get",
+      "checkpoint_required": false
     },
     "property.set": {
       "method": "godot.property",
@@ -273,7 +363,9 @@
         "node_path",
         "property",
         "value"
-      ]
+      ],
+      "postcondition": "property_get_equals_set",
+      "checkpoint_required": false
     },
     "property.batch": {
       "method": "godot.property",
@@ -283,7 +375,9 @@
       "required": [
         "scene",
         "items"
-      ]
+      ],
+      "postcondition": "batch_properties_match",
+      "checkpoint_required": false
     },
     "property.reset": {
       "method": "godot.property",
@@ -294,7 +388,9 @@
         "scene",
         "node_path",
         "property"
-      ]
+      ],
+      "postcondition": "property_is_default",
+      "checkpoint_required": false
     },
     "resource.create": {
       "method": "godot.resource",
@@ -304,7 +400,9 @@
       "required": [
         "path",
         "class_name"
-      ]
+      ],
+      "postcondition": "resource_file_exists",
+      "checkpoint_required": false
     },
     "resource.load": {
       "method": "godot.resource",
@@ -313,7 +411,9 @@
       "timeout_ms": 5000,
       "required": [
         "path"
-      ]
+      ],
+      "postcondition": "resource_load_ok",
+      "checkpoint_required": false
     },
     "resource.assign": {
       "method": "godot.resource",
@@ -325,7 +425,9 @@
         "node_path",
         "property",
         "resource"
-      ]
+      ],
+      "postcondition": "resource_property_path_equals",
+      "checkpoint_required": false
     },
     "resource.duplicate": {
       "method": "godot.resource",
@@ -335,7 +437,9 @@
       "required": [
         "path",
         "dest"
-      ]
+      ],
+      "postcondition": "duplicate_resource_uid_distinct",
+      "checkpoint_required": false
     },
     "resource.edit": {
       "method": "godot.resource",
@@ -346,7 +450,9 @@
         "path",
         "property",
         "value"
-      ]
+      ],
+      "postcondition": "resource_field_equals",
+      "checkpoint_required": false
     },
     "resource.save": {
       "method": "godot.resource",
@@ -355,7 +461,9 @@
       "timeout_ms": 15000,
       "required": [
         "path"
-      ]
+      ],
+      "postcondition": "resource_disk_hash_matches",
+      "checkpoint_required": false
     },
     "resource.uid": {
       "method": "godot.resource",
@@ -364,7 +472,9 @@
       "timeout_ms": 5000,
       "required": [
         "uid"
-      ]
+      ],
+      "postcondition": "uid_maps_to_path",
+      "checkpoint_required": false
     },
     "signal.list": {
       "method": "godot.signal",
@@ -374,7 +484,9 @@
       "required": [
         "scene",
         "node_path"
-      ]
+      ],
+      "postcondition": "signal_list_complete",
+      "checkpoint_required": false
     },
     "signal.connect": {
       "method": "godot.signal",
@@ -387,7 +499,9 @@
         "signal",
         "target",
         "method"
-      ]
+      ],
+      "postcondition": "connection_present",
+      "checkpoint_required": false
     },
     "signal.disconnect": {
       "method": "godot.signal",
@@ -400,7 +514,9 @@
         "signal",
         "target",
         "method"
-      ]
+      ],
+      "postcondition": "connection_absent",
+      "checkpoint_required": false
     },
     "signal.inspect": {
       "method": "godot.signal",
@@ -411,7 +527,9 @@
         "scene",
         "node_path",
         "signal"
-      ]
+      ],
+      "postcondition": "connection_list_matches",
+      "checkpoint_required": false
     },
     "script.read": {
       "method": "godot.script",
@@ -420,7 +538,9 @@
       "timeout_ms": 5000,
       "required": [
         "path"
-      ]
+      ],
+      "postcondition": "script_text_matches_disk",
+      "checkpoint_required": false
     },
     "script.write": {
       "method": "godot.script",
@@ -430,7 +550,9 @@
       "required": [
         "path",
         "contents"
-      ]
+      ],
+      "postcondition": "script_disk_equals_write",
+      "checkpoint_required": false
     },
     "script.patch": {
       "method": "godot.script",
@@ -441,7 +563,9 @@
         "path",
         "find",
         "replace"
-      ]
+      ],
+      "postcondition": "script_patch_applied",
+      "checkpoint_required": false
     },
     "script.validate": {
       "method": "godot.script",
@@ -450,7 +574,9 @@
       "timeout_ms": 5000,
       "required": [
         "path"
-      ]
+      ],
+      "postcondition": "script_validate_clean",
+      "checkpoint_required": false
     },
     "script.attach": {
       "method": "godot.script",
@@ -461,7 +587,9 @@
         "scene",
         "node_path",
         "path"
-      ]
+      ],
+      "postcondition": "node_script_path_equals",
+      "checkpoint_required": false
     },
     "script.open_at": {
       "method": "godot.script",
@@ -471,7 +599,9 @@
       "required": [
         "path",
         "line"
-      ]
+      ],
+      "postcondition": "script_editor_line_visible",
+      "checkpoint_required": false
     },
     "script.diagnostics": {
       "method": "godot.script",
@@ -480,7 +610,9 @@
       "timeout_ms": 5000,
       "required": [
         "path"
-      ]
+      ],
+      "postcondition": "diagnostics_list_complete",
+      "checkpoint_required": false
     },
     "asset.import": {
       "method": "godot.asset",
@@ -489,7 +621,9 @@
       "timeout_ms": 15000,
       "required": [
         "path"
-      ]
+      ],
+      "postcondition": "import_sidecar_exists",
+      "checkpoint_required": false
     },
     "asset.reimport": {
       "method": "godot.asset",
@@ -498,7 +632,9 @@
       "timeout_ms": 15000,
       "required": [
         "path"
-      ]
+      ],
+      "postcondition": "import_timestamp_updated",
+      "checkpoint_required": false
     },
     "asset.move": {
       "method": "godot.asset",
@@ -508,7 +644,9 @@
       "required": [
         "from",
         "to"
-      ]
+      ],
+      "postcondition": "old_path_absent_new_path_present",
+      "checkpoint_required": false
     },
     "asset.rename": {
       "method": "godot.asset",
@@ -518,7 +656,9 @@
       "required": [
         "path",
         "name"
-      ]
+      ],
+      "postcondition": "asset_renamed",
+      "checkpoint_required": false
     },
     "asset.delete": {
       "method": "godot.asset",
@@ -527,7 +667,9 @@
       "timeout_ms": 30000,
       "required": [
         "path"
-      ]
+      ],
+      "postcondition": "asset_absent_or_quarantined",
+      "checkpoint_required": true
     },
     "asset.dependencies": {
       "method": "godot.asset",
@@ -536,7 +678,9 @@
       "timeout_ms": 5000,
       "required": [
         "path"
-      ]
+      ],
+      "postcondition": "dependency_owners_listed",
+      "checkpoint_required": false
     },
     "asset.preview": {
       "method": "godot.asset",
@@ -545,7 +689,9 @@
       "timeout_ms": 5000,
       "required": [
         "path"
-      ]
+      ],
+      "postcondition": "preview_handle_present",
+      "checkpoint_required": false
     },
     "tilemap.tileset": {
       "method": "godot.tilemap",
@@ -556,7 +702,9 @@
         "scene",
         "node_path",
         "tileset"
-      ]
+      ],
+      "postcondition": "tileset_assigned",
+      "checkpoint_required": false
     },
     "tilemap.source": {
       "method": "godot.tilemap",
@@ -567,7 +715,9 @@
         "tileset",
         "source_id",
         "texture"
-      ]
+      ],
+      "postcondition": "tileset_source_present",
+      "checkpoint_required": false
     },
     "tilemap.terrain": {
       "method": "godot.tilemap",
@@ -577,7 +727,9 @@
       "required": [
         "tileset",
         "terrain_name"
-      ]
+      ],
+      "postcondition": "terrain_set_present",
+      "checkpoint_required": false
     },
     "tilemap.layer": {
       "method": "godot.tilemap",
@@ -588,7 +740,9 @@
         "scene",
         "node_path",
         "enabled"
-      ]
+      ],
+      "postcondition": "tilemap_layer_matches",
+      "checkpoint_required": false
     },
     "tilemap.cell": {
       "method": "godot.tilemap",
@@ -603,7 +757,9 @@
         "source_id",
         "atlas_x",
         "atlas_y"
-      ]
+      ],
+      "postcondition": "cell_atlas_coords_match",
+      "checkpoint_required": false
     },
     "tilemap.fill": {
       "method": "godot.tilemap",
@@ -618,7 +774,9 @@
         "w",
         "h",
         "source_id"
-      ]
+      ],
+      "postcondition": "fill_region_matches",
+      "checkpoint_required": false
     },
     "tilemap.stamp": {
       "method": "godot.tilemap",
@@ -631,7 +789,9 @@
         "x",
         "y",
         "pattern"
-      ]
+      ],
+      "postcondition": "stamp_cells_match",
+      "checkpoint_required": false
     },
     "tilemap.query": {
       "method": "godot.tilemap",
@@ -645,7 +805,9 @@
         "y",
         "w",
         "h"
-      ]
+      ],
+      "postcondition": "cell_query_matches_layer",
+      "checkpoint_required": false
     },
     "animation.library": {
       "method": "godot.animation",
@@ -656,7 +818,9 @@
         "scene",
         "node_path",
         "library"
-      ]
+      ],
+      "postcondition": "animation_library_present",
+      "checkpoint_required": false
     },
     "animation.animation": {
       "method": "godot.animation",
@@ -668,7 +832,9 @@
         "node_path",
         "name",
         "length_sec"
-      ]
+      ],
+      "postcondition": "animation_named_exists",
+      "checkpoint_required": false
     },
     "animation.track": {
       "method": "godot.animation",
@@ -680,7 +846,9 @@
         "node_path",
         "animation",
         "track_path"
-      ]
+      ],
+      "postcondition": "animation_track_present",
+      "checkpoint_required": false
     },
     "animation.key": {
       "method": "godot.animation",
@@ -694,7 +862,9 @@
         "track",
         "time_sec",
         "value"
-      ]
+      ],
+      "postcondition": "animation_key_at_time",
+      "checkpoint_required": false
     },
     "animation.state_machine": {
       "method": "godot.animation",
@@ -706,7 +876,9 @@
         "node_path",
         "from",
         "to"
-      ]
+      ],
+      "postcondition": "state_machine_transition_present",
+      "checkpoint_required": false
     },
     "animation.preview": {
       "method": "godot.animation",
@@ -717,7 +889,9 @@
         "scene",
         "node_path",
         "animation"
-      ]
+      ],
+      "postcondition": "animation_preview_playing",
+      "checkpoint_required": false
     },
     "ui.control": {
       "method": "godot.ui",
@@ -728,7 +902,9 @@
         "scene",
         "node_path",
         "preset"
-      ]
+      ],
+      "postcondition": "control_layout_flags_match",
+      "checkpoint_required": false
     },
     "ui.theme": {
       "method": "godot.ui",
@@ -739,7 +915,9 @@
         "scene",
         "node_path",
         "theme"
-      ]
+      ],
+      "postcondition": "control_theme_path_equals",
+      "checkpoint_required": false
     },
     "ui.layout": {
       "method": "godot.ui",
@@ -750,7 +928,9 @@
         "scene",
         "node_path",
         "separation"
-      ]
+      ],
+      "postcondition": "container_layout_matches",
+      "checkpoint_required": false
     },
     "ui.anchor": {
       "method": "godot.ui",
@@ -762,7 +942,9 @@
         "node_path",
         "anchor_left",
         "anchor_top"
-      ]
+      ],
+      "postcondition": "control_anchors_match",
+      "checkpoint_required": false
     },
     "ui.focus": {
       "method": "godot.ui",
@@ -772,7 +954,9 @@
       "required": [
         "scene",
         "node_path"
-      ]
+      ],
+      "postcondition": "focus_owner_matches",
+      "checkpoint_required": false
     },
     "ui.accessibility": {
       "method": "godot.ui",
@@ -782,7 +966,9 @@
       "required": [
         "scene",
         "node_path"
-      ]
+      ],
+      "postcondition": "accessibility_fields_present",
+      "checkpoint_required": false
     },
     "editor.state": {
       "method": "godot.editor",
@@ -791,7 +977,9 @@
       "timeout_ms": 5000,
       "required": [
         "detail"
-      ]
+      ],
+      "postcondition": "editor_state_snapshot",
+      "checkpoint_required": false
     },
     "editor.select": {
       "method": "godot.editor",
@@ -801,7 +989,9 @@
       "required": [
         "scene",
         "node_path"
-      ]
+      ],
+      "postcondition": "selection_paths_match",
+      "checkpoint_required": false
     },
     "editor.focus": {
       "method": "godot.editor",
@@ -811,7 +1001,9 @@
       "required": [
         "scene",
         "node_path"
-      ]
+      ],
+      "postcondition": "inspector_shows_object",
+      "checkpoint_required": false
     },
     "editor.main_screen": {
       "method": "godot.editor",
@@ -820,7 +1012,9 @@
       "timeout_ms": 5000,
       "required": [
         "screen"
-      ]
+      ],
+      "postcondition": "main_screen_equals",
+      "checkpoint_required": false
     },
     "editor.frame_view": {
       "method": "godot.editor",
@@ -830,7 +1024,9 @@
       "required": [
         "scene",
         "node_path"
-      ]
+      ],
+      "postcondition": "view_framed_on_node",
+      "checkpoint_required": false
     },
     "editor.replay": {
       "method": "godot.editor",
@@ -839,7 +1035,9 @@
       "timeout_ms": 5000,
       "required": [
         "command_id"
-      ]
+      ],
+      "postcondition": "replay_started",
+      "checkpoint_required": false
     },
     "editor.pause": {
       "method": "godot.editor",
@@ -848,7 +1046,9 @@
       "timeout_ms": 15000,
       "required": [
         "op"
-      ]
+      ],
+      "postcondition": "pause_gate_ack",
+      "checkpoint_required": false
     },
     "play.start": {
       "method": "godot.play",
@@ -858,7 +1058,9 @@
       "required": [
         "scene",
         "mode"
-      ]
+      ],
+      "postcondition": "play_process_running",
+      "checkpoint_required": false
     },
     "play.stop": {
       "method": "godot.play",
@@ -867,7 +1069,9 @@
       "timeout_ms": 120000,
       "required": [
         "reason"
-      ]
+      ],
+      "postcondition": "play_process_stopped",
+      "checkpoint_required": false
     },
     "play.restart": {
       "method": "godot.play",
@@ -876,7 +1080,9 @@
       "timeout_ms": 120000,
       "required": [
         "scene"
-      ]
+      ],
+      "postcondition": "play_process_restarted",
+      "checkpoint_required": false
     },
     "play.debug": {
       "method": "godot.play",
@@ -885,7 +1091,9 @@
       "timeout_ms": 120000,
       "required": [
         "scene"
-      ]
+      ],
+      "postcondition": "play_debug_attached",
+      "checkpoint_required": false
     },
     "play.status": {
       "method": "godot.play",
@@ -894,7 +1102,9 @@
       "timeout_ms": 5000,
       "required": [
         "detail"
-      ]
+      ],
+      "postcondition": "play_status_known",
+      "checkpoint_required": false
     },
     "play.logs": {
       "method": "godot.play",
@@ -903,7 +1113,9 @@
       "timeout_ms": 5000,
       "required": [
         "limit"
-      ]
+      ],
+      "postcondition": "play_logs_returned",
+      "checkpoint_required": false
     },
     "input.action": {
       "method": "godot.input",
@@ -913,7 +1125,9 @@
       "required": [
         "action_name",
         "phase"
-      ]
+      ],
+      "postcondition": "input_action_injected",
+      "checkpoint_required": false
     },
     "input.key": {
       "method": "godot.input",
@@ -923,7 +1137,9 @@
       "required": [
         "keycode",
         "phase"
-      ]
+      ],
+      "postcondition": "input_key_injected",
+      "checkpoint_required": false
     },
     "input.mouse": {
       "method": "godot.input",
@@ -934,7 +1150,9 @@
         "button",
         "x",
         "y"
-      ]
+      ],
+      "postcondition": "input_mouse_injected",
+      "checkpoint_required": false
     },
     "input.touch": {
       "method": "godot.input",
@@ -946,7 +1164,9 @@
         "x",
         "y",
         "pressed"
-      ]
+      ],
+      "postcondition": "input_touch_injected",
+      "checkpoint_required": false
     },
     "input.sequence": {
       "method": "godot.input",
@@ -955,7 +1175,9 @@
       "timeout_ms": 120000,
       "required": [
         "steps"
-      ]
+      ],
+      "postcondition": "input_sequence_accepted",
+      "checkpoint_required": false
     },
     "input.release_all": {
       "method": "godot.input",
@@ -964,7 +1186,9 @@
       "timeout_ms": 120000,
       "required": [
         "scope"
-      ]
+      ],
+      "postcondition": "all_injected_inputs_released",
+      "checkpoint_required": false
     },
     "runtime.tree": {
       "method": "godot.runtime",
@@ -973,7 +1197,9 @@
       "timeout_ms": 5000,
       "required": [
         "detail"
-      ]
+      ],
+      "postcondition": "remote_tree_snapshot",
+      "checkpoint_required": false
     },
     "runtime.node": {
       "method": "godot.runtime",
@@ -982,7 +1208,9 @@
       "timeout_ms": 5000,
       "required": [
         "node_path"
-      ]
+      ],
+      "postcondition": "remote_node_snapshot",
+      "checkpoint_required": false
     },
     "runtime.state": {
       "method": "godot.runtime",
@@ -991,7 +1219,9 @@
       "timeout_ms": 5000,
       "required": [
         "key"
-      ]
+      ],
+      "postcondition": "runtime_state_keys_present",
+      "checkpoint_required": false
     },
     "runtime.signal": {
       "method": "godot.runtime",
@@ -1001,7 +1231,9 @@
       "required": [
         "signal",
         "limit"
-      ]
+      ],
+      "postcondition": "runtime_signal_log",
+      "checkpoint_required": false
     },
     "runtime.time": {
       "method": "godot.runtime",
@@ -1010,7 +1242,9 @@
       "timeout_ms": 5000,
       "required": [
         "detail"
-      ]
+      ],
+      "postcondition": "runtime_time_snapshot",
+      "checkpoint_required": false
     },
     "runtime.freeze": {
       "method": "godot.runtime",
@@ -1020,7 +1254,9 @@
       "required": [
         "frozen",
         "reason"
-      ]
+      ],
+      "postcondition": "runtime_frozen_matches",
+      "checkpoint_required": false
     },
     "runtime.step": {
       "method": "godot.runtime",
@@ -1029,7 +1265,9 @@
       "timeout_ms": 120000,
       "required": [
         "frames"
-      ]
+      ],
+      "postcondition": "runtime_stepped_frames",
+      "checkpoint_required": false
     },
     "runtime.screenshot": {
       "method": "godot.runtime",
@@ -1038,7 +1276,9 @@
       "timeout_ms": 5000,
       "required": [
         "scale"
-      ]
+      ],
+      "postcondition": "screenshot_artifact_present",
+      "checkpoint_required": false
     },
     "runtime.perf": {
       "method": "godot.runtime",
@@ -1047,7 +1287,9 @@
       "timeout_ms": 5000,
       "required": [
         "detail"
-      ]
+      ],
+      "postcondition": "perf_counters_present",
+      "checkpoint_required": false
     },
     "test.define": {
       "method": "godot.test",
@@ -1057,7 +1299,9 @@
       "required": [
         "name",
         "steps"
-      ]
+      ],
+      "postcondition": "test_definition_saved",
+      "checkpoint_required": false
     },
     "test.run": {
       "method": "godot.test",
@@ -1066,7 +1310,9 @@
       "timeout_ms": 120000,
       "required": [
         "name"
-      ]
+      ],
+      "postcondition": "test_run_recorded",
+      "checkpoint_required": false
     },
     "test.assert": {
       "method": "godot.test",
@@ -1076,7 +1322,9 @@
       "required": [
         "name",
         "expect"
-      ]
+      ],
+      "postcondition": "assertion_recorded",
+      "checkpoint_required": false
     },
     "test.report": {
       "method": "godot.test",
@@ -1085,7 +1333,9 @@
       "timeout_ms": 5000,
       "required": [
         "name"
-      ]
+      ],
+      "postcondition": "test_report_present",
+      "checkpoint_required": false
     },
     "test.evidence": {
       "method": "godot.test",
@@ -1094,7 +1344,9 @@
       "timeout_ms": 5000,
       "required": [
         "name"
-      ]
+      ],
+      "postcondition": "evidence_index_present",
+      "checkpoint_required": false
     },
     "test.baseline": {
       "method": "godot.test",
@@ -1104,7 +1356,9 @@
       "required": [
         "name",
         "hash"
-      ]
+      ],
+      "postcondition": "baseline_hash_saved",
+      "checkpoint_required": false
     },
     "export.preset": {
       "method": "godot.export",
@@ -1114,7 +1368,9 @@
       "required": [
         "name",
         "platform"
-      ]
+      ],
+      "postcondition": "export_preset_present",
+      "checkpoint_required": false
     },
     "export.validate": {
       "method": "godot.export",
@@ -1123,7 +1379,9 @@
       "timeout_ms": 5000,
       "required": [
         "name"
-      ]
+      ],
+      "postcondition": "export_preset_valid",
+      "checkpoint_required": false
     },
     "export.build": {
       "method": "godot.export",
@@ -1132,7 +1390,9 @@
       "timeout_ms": 120000,
       "required": [
         "name"
-      ]
+      ],
+      "postcondition": "export_job_accepted",
+      "checkpoint_required": false
     },
     "export.cancel": {
       "method": "godot.export",
@@ -1141,7 +1401,9 @@
       "timeout_ms": 30000,
       "required": [
         "job_id"
-      ]
+      ],
+      "postcondition": "export_job_cancelled",
+      "checkpoint_required": true
     },
     "export.artifacts": {
       "method": "godot.export",
@@ -1150,7 +1412,9 @@
       "timeout_ms": 5000,
       "required": [
         "name"
-      ]
+      ],
+      "postcondition": "export_artifact_list",
+      "checkpoint_required": false
     },
     "git.status": {
       "method": "godot.git",
@@ -1159,7 +1423,9 @@
       "timeout_ms": 5000,
       "required": [
         "detail"
-      ]
+      ],
+      "postcondition": "git_status_parsed",
+      "checkpoint_required": false
     },
     "git.diff": {
       "method": "godot.git",
@@ -1168,7 +1434,9 @@
       "timeout_ms": 5000,
       "required": [
         "path"
-      ]
+      ],
+      "postcondition": "git_diff_text",
+      "checkpoint_required": false
     },
     "git.checkpoint": {
       "method": "godot.git",
@@ -1177,7 +1445,9 @@
       "timeout_ms": 15000,
       "required": [
         "message"
-      ]
+      ],
+      "postcondition": "checkpoint_ref_present",
+      "checkpoint_required": false
     },
     "git.revert_checkpoint": {
       "method": "godot.git",
@@ -1186,7 +1456,9 @@
       "timeout_ms": 30000,
       "required": [
         "ref"
-      ]
+      ],
+      "postcondition": "tree_matches_checkpoint",
+      "checkpoint_required": true
     },
     "job.status": {
       "method": "godot.job",
@@ -1195,7 +1467,9 @@
       "timeout_ms": 5000,
       "required": [
         "job_id"
-      ]
+      ],
+      "postcondition": "job_status_known",
+      "checkpoint_required": false
     },
     "job.list": {
       "method": "godot.job",
@@ -1204,7 +1478,9 @@
       "timeout_ms": 5000,
       "required": [
         "limit"
-      ]
+      ],
+      "postcondition": "job_list_returned",
+      "checkpoint_required": false
     },
     "job.cancel": {
       "method": "godot.job",
@@ -1213,7 +1489,9 @@
       "timeout_ms": 30000,
       "required": [
         "job_id"
-      ]
+      ],
+      "postcondition": "job_cancelled",
+      "checkpoint_required": true
     },
     "job.wait": {
       "method": "godot.job",
@@ -1223,7 +1501,9 @@
       "required": [
         "job_id",
         "timeout_sec"
-      ]
+      ],
+      "postcondition": "job_terminal_state",
+      "checkpoint_required": false
     }
   }
 }

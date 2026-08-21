@@ -182,4 +182,18 @@ export class LeaseTable {
   peekFile(rel: string): FileLease | undefined {
     return this.readFiles()[rel];
   }
+
+  noteWritten(writerId: string, rel: string, abs: string, ttlMs = DEFAULT_LEASE_TTL_MS): FileLease {
+    const files = this.readFiles();
+    const now = nowMs();
+    const lease: FileLease = {
+      writer_id: writerId,
+      hash: contentHash(abs),
+      expires_at: now + ttlMs,
+      rel,
+    };
+    files[rel] = lease;
+    atomicWrite(this.filesPath, `${JSON.stringify(files)}\n`);
+    return lease;
+  }
 }

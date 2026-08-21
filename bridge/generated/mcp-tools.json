@@ -5,7 +5,7 @@
   "registry_version": "hh-godot-actions/1",
   "action_version": "1",
   "tool_count": 20,
-  "action_count": 118,
+  "action_count": 122,
   "tools": [
     {
       "name": "godot.capabilities",
@@ -27,6 +27,15 @@
           "params": {
             "type": "object",
             "description": "Per-action params. The matched ActionDef input_schema sets additionalProperties false."
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "precondition": {
+            "type": "object",
+            "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
           }
         }
       }
@@ -56,6 +65,15 @@
           "params": {
             "type": "object",
             "description": "Per-action params. The matched ActionDef input_schema sets additionalProperties false."
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "precondition": {
+            "type": "object",
+            "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
           }
         }
       }
@@ -80,12 +98,25 @@
               "save",
               "close",
               "instantiate",
-              "dependencies"
+              "dependencies",
+              "list_tabs",
+              "activate",
+              "save_as",
+              "reload"
             ]
           },
           "params": {
             "type": "object",
             "description": "Per-action params. The matched ActionDef input_schema sets additionalProperties false."
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "precondition": {
+            "type": "object",
+            "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
           }
         }
       }
@@ -117,6 +148,15 @@
           "params": {
             "type": "object",
             "description": "Per-action params. The matched ActionDef input_schema sets additionalProperties false."
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "precondition": {
+            "type": "object",
+            "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
           }
         }
       }
@@ -144,6 +184,15 @@
           "params": {
             "type": "object",
             "description": "Per-action params. The matched ActionDef input_schema sets additionalProperties false."
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "precondition": {
+            "type": "object",
+            "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
           }
         }
       }
@@ -174,6 +223,15 @@
           "params": {
             "type": "object",
             "description": "Per-action params. The matched ActionDef input_schema sets additionalProperties false."
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "precondition": {
+            "type": "object",
+            "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
           }
         }
       }
@@ -201,6 +259,15 @@
           "params": {
             "type": "object",
             "description": "Per-action params. The matched ActionDef input_schema sets additionalProperties false."
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "precondition": {
+            "type": "object",
+            "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
           }
         }
       }
@@ -231,6 +298,15 @@
           "params": {
             "type": "object",
             "description": "Per-action params. The matched ActionDef input_schema sets additionalProperties false."
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "precondition": {
+            "type": "object",
+            "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
           }
         }
       }
@@ -261,6 +337,15 @@
           "params": {
             "type": "object",
             "description": "Per-action params. The matched ActionDef input_schema sets additionalProperties false."
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "precondition": {
+            "type": "object",
+            "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
           }
         }
       }
@@ -292,6 +377,15 @@
           "params": {
             "type": "object",
             "description": "Per-action params. The matched ActionDef input_schema sets additionalProperties false."
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "precondition": {
+            "type": "object",
+            "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
           }
         }
       }
@@ -321,6 +415,15 @@
           "params": {
             "type": "object",
             "description": "Per-action params. The matched ActionDef input_schema sets additionalProperties false."
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "precondition": {
+            "type": "object",
+            "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
           }
         }
       }
@@ -350,6 +453,15 @@
           "params": {
             "type": "object",
             "description": "Per-action params. The matched ActionDef input_schema sets additionalProperties false."
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "precondition": {
+            "type": "object",
+            "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
           }
         }
       }
@@ -380,6 +492,15 @@
           "params": {
             "type": "object",
             "description": "Per-action params. The matched ActionDef input_schema sets additionalProperties false."
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "precondition": {
+            "type": "object",
+            "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
           }
         }
       }
@@ -409,6 +530,15 @@
           "params": {
             "type": "object",
             "description": "Per-action params. The matched ActionDef input_schema sets additionalProperties false."
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "precondition": {
+            "type": "object",
+            "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
           }
         }
       }
@@ -438,6 +568,15 @@
           "params": {
             "type": "object",
             "description": "Per-action params. The matched ActionDef input_schema sets additionalProperties false."
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "precondition": {
+            "type": "object",
+            "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
           }
         }
       }
@@ -470,6 +609,15 @@
           "params": {
             "type": "object",
             "description": "Per-action params. The matched ActionDef input_schema sets additionalProperties false."
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "precondition": {
+            "type": "object",
+            "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
           }
         }
       }
@@ -499,6 +647,15 @@
           "params": {
             "type": "object",
             "description": "Per-action params. The matched ActionDef input_schema sets additionalProperties false."
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "precondition": {
+            "type": "object",
+            "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
           }
         }
       }
@@ -527,6 +684,15 @@
           "params": {
             "type": "object",
             "description": "Per-action params. The matched ActionDef input_schema sets additionalProperties false."
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "precondition": {
+            "type": "object",
+            "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
           }
         }
       }
@@ -554,6 +720,15 @@
           "params": {
             "type": "object",
             "description": "Per-action params. The matched ActionDef input_schema sets additionalProperties false."
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "precondition": {
+            "type": "object",
+            "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
           }
         }
       }
@@ -581,6 +756,15 @@
           "params": {
             "type": "object",
             "description": "Per-action params. The matched ActionDef input_schema sets additionalProperties false."
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "precondition": {
+            "type": "object",
+            "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
           }
         }
       }

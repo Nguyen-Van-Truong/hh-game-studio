@@ -55,6 +55,11 @@ export function buildMcpTools(): Record<string, unknown> {
             description:
               "Per-action params. The matched ActionDef input_schema sets additionalProperties false.",
           },
+          command_id: { type: "string", minLength: 26, maxLength: 26 },
+          precondition: {
+            type: "object",
+            description: "Optional fingerprint/history/disk hash for E_CONFLICT.",
+          },
         },
       },
     };
@@ -229,6 +234,56 @@ export function generatedTargets(): { rel: string; body: string }[] {
   }));
 }
 
+function buildPluginActionsJson(): string {
+  const actions: Record<string, unknown> = {};
+  for (const def of allActionDefs()) {
+    const required = Array.isArray(def.input_schema.required) ? def.input_schema.required : [];
+    actions[def.id] = {
+      method: def.method,
+      verb: def.verb,
+      side_effect: def.side_effect,
+      timeout_ms: def.timeout_ms,
+      required,
+      postcondition: def.postcondition,
+      checkpoint_required: def.checkpoint_required,
+    };
+  }
+  return jsonBlock({
+    source: "bridge/generated/plugin-validator.json",
+    protocol: PROTOCOL,
+    envelope: {
+      allowed: [
+        "protocol",
+        "command_id",
+        "method",
+        "action",
+        "params",
+        "precondition",
+        "presentation",
+        "action_version",
+      ],
+      forbidden_client_fields: [
+        "session_id",
+        "actor",
+        "actor_id",
+        "project_id",
+        "policy",
+        "profile",
+        "capability",
+        "capability_grant",
+        "grants",
+      ],
+    },
+    noop: {
+      method: "hh.plugin",
+      action: "noop",
+      side_effect: "read",
+      timeout_ms: 5000,
+    },
+    actions,
+  });
+}
+
 export function writeGeneratedArtifacts(): string[] {
   const { repoRoot } = repoPaths();
   const written: string[] = [];
@@ -237,5 +292,8 @@ export function writeGeneratedArtifacts(): string[] {
     writeText(abs, target.body);
     written.push(target.rel);
   }
+  const pluginActionsRel = "godot/plugin-project/addons/hh_agent/core/actions.json";
+  writeText(path.join(repoRoot, pluginActionsRel), buildPluginActionsJson());
+  written.push(pluginActionsRel);
   return written;
 }

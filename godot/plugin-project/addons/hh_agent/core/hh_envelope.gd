@@ -94,7 +94,14 @@ func _validate_precondition(raw: Variant) -> Dictionary:
 	if typeof(raw) != TYPE_DICTIONARY:
 		return _errors.typed(HHAgentErrors.E_INVALID_TYPE, "precondition must be an object", "precondition")
 	var rec: Dictionary = raw
-	var allowed: Dictionary = {"scene": true, "scene_hash": true, "target_uid": true, "property_hash": true}
+	var allowed: Dictionary = {
+		"scene": true,
+		"scene_hash": true,
+		"target_uid": true,
+		"property_hash": true,
+		"fingerprint": true,
+		"history_version": true,
+	}
 	for key_v: Variant in rec.keys():
 		var key: String = str(key_v)
 		if not allowed.has(key):
@@ -108,6 +115,9 @@ func _validate_precondition(raw: Variant) -> Dictionary:
 		elif key == "target_uid":
 			if text.length() < 1 or text.length() > 128:
 				return _errors.typed(HHAgentErrors.E_OUT_OF_BOUNDS, "invalid target_uid", "precondition.target_uid")
+		elif key == "history_version":
+			if text.length() < 1 or text.length() > 32:
+				return _errors.typed(HHAgentErrors.E_OUT_OF_BOUNDS, "invalid history_version", "precondition.history_version")
 		elif text.length() < 8 or text.length() > 128:
 			return _errors.typed(HHAgentErrors.E_OUT_OF_BOUNDS, "invalid hash", "precondition.%s" % key)
 	return {}

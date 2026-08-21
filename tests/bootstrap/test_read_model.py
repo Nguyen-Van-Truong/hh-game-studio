@@ -427,8 +427,26 @@ def run_live() -> tuple[list[str], str, str]:
             except json.JSONDecodeError:
                 errors.append(f"{uri} text was not JSON")
                 payload = {}
-            if uri == "capability://matrix" and payload.get("mutate_dispatched") is not False:
-                errors.append("capability://matrix must declare mutate_dispatched false")
+            if uri == "capability://matrix" and payload.get("node_crud_dispatched") is not False:
+                errors.append("capability://matrix must declare node_crud_dispatched false")
+            if uri == "capability://matrix" and payload.get("mutate_dispatched") not in (
+                False,
+                "scene-lifecycle",
+            ):
+                errors.append(
+                    f"capability://matrix mutate_dispatched must be false or scene-lifecycle: {payload.get('mutate_dispatched')}"
+                )
+            if uri == "capability://matrix":
+                node_add = next(
+                    (
+                        row
+                        for row in (payload.get("actions") or [])
+                        if isinstance(row, dict) and row.get("id") == "node.add"
+                    ),
+                    {},
+                )
+                if node_add.get("adapter") != "not-dispatched":
+                    errors.append(f"node.add must stay not-dispatched: {node_add}")
             if uri == "capability://matrix":
                 select = next(
                     (

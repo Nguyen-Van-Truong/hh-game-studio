@@ -1,4 +1,5 @@
 import { PINNED_VERSION_ID } from "../doctor/pin.js";
+import { isSceneLifecycleApply } from "../ledger/scene_lifecycle.js";
 import { allActionDefs } from "../registry/registry.js";
 import { PROTOCOL, REGISTRY_VERSION } from "../registry/types.js";
 import { publicDescriptorView, type SessionDescriptor } from "../session/descriptor.js";
@@ -36,7 +37,7 @@ export function listResources(): McpResource[] {
     {
       uri: "capability://matrix",
       name: "Capability matrix",
-      description: "Pinned Godot + action wiring. Mutate is not dispatched.",
+      description: "Pinned Godot + action wiring. Scene lifecycle may apply; node CRUD does not.",
       mimeType: "application/json",
     },
   ];
@@ -71,8 +72,9 @@ export function capabilityMatrix(): Record<string, unknown> {
     protocol: PROTOCOL,
     registry_version: REGISTRY_VERSION,
     godot_pin: PINNED_VERSION_ID,
-    mutate_dispatched: false,
-    note: "Read/view may ACK after postcondition readback. Scene writes are R3.",
+    mutate_dispatched: "scene-lifecycle",
+    node_crud_dispatched: false,
+    note: "Scene lifecycle verbs may ACK after EditorInterface + disk readback. node.add stays E_UNVERIFIED.",
     actions: allActionDefs().map((def) => ({
       id: def.id,
       method: def.method,
@@ -82,9 +84,11 @@ export function capabilityMatrix(): Record<string, unknown> {
       adapter:
         def.id === "editor.select"
           ? "view-state-mutate-not-wp6"
-          : def.side_effect === "read" || def.side_effect === "view"
-            ? "read-or-view"
-            : "not-dispatched",
+          : isSceneLifecycleApply(def.id)
+            ? "scene-lifecycle"
+            : def.side_effect === "read" || def.side_effect === "view"
+              ? "read-or-view"
+              : "not-dispatched",
     })),
   };
 }

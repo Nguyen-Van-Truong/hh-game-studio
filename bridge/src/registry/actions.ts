@@ -116,13 +116,21 @@ function view(
   };
 }
 
+const SCENE_MUTATE_ERRORS: readonly string[] = [
+  E.E_CONFLICT,
+  E.E_PATH,
+  E.E_PAUSED,
+  E.E_LEASE,
+  E.E_CHECKPOINT,
+];
+
 function mutate(
   summary: string,
   undo: UndoStrategy,
   post: string,
   input: JsonSchema,
   example: Record<string, unknown>,
-  extra?: { policy?: Policy; cancel?: boolean },
+  extra?: { policy?: Policy; cancel?: boolean; extra_errors?: readonly string[] },
 ): ActionSpec {
   const spec: ActionSpec = {
     summary,
@@ -136,6 +144,9 @@ function mutate(
   if (extra?.cancel !== undefined) {
     spec.cancellable = extra.cancel;
   }
+  if (extra?.extra_errors) {
+    spec.extra_errors = extra.extra_errors;
+  }
   return spec;
 }
 
@@ -144,8 +155,9 @@ function dest(
   post: string,
   input: JsonSchema,
   example: Record<string, unknown>,
+  extra?: { extra_errors?: readonly string[] },
 ): ActionSpec {
-  return {
+  const spec: ActionSpec = {
     summary,
     side_effect: "destructive",
     undo: "git_checkpoint",
@@ -155,6 +167,10 @@ function dest(
     example,
     postcondition: post,
   };
+  if (extra?.extra_errors) {
+    spec.extra_errors = extra.extra_errors;
+  }
+  return spec;
 }
 
 function ext(
@@ -232,11 +248,16 @@ const SPECS: Record<string, ActionSpec> = {
   ),
 
   "scene.create": mutate(
-    "Create a new PackedScene with a typed root",
+    "Create a new PackedScene with a typed root via the editor plugin",
     "atomic_file",
     "scene_file_exists_with_root_type",
-    obj(["path", "root_class"], { path: RES_PATH, root_class: IDENT }),
+    obj(["path", "root_class"], {
+      path: RES_PATH,
+      root_class: IDENT,
+      inherit_from: RES_PATH,
+    }),
     { path: "res://scenes/world.tscn", root_class: "Node2D" },
+    { extra_errors: SCENE_MUTATE_ERRORS },
   ),
   "scene.open": mutate(
     "Open a scene path in the editor",
@@ -244,6 +265,7 @@ const SPECS: Record<string, ActionSpec> = {
     "edited_scene_path_matches",
     obj(["path"], { path: RES_PATH }),
     { path: "res://scenes/world.tscn" },
+    { extra_errors: SCENE_MUTATE_ERRORS },
   ),
   "scene.read": read(
     "Read the edited or disk scene tree summary",
@@ -257,17 +279,19 @@ const SPECS: Record<string, ActionSpec> = {
     { path: "res://scenes/world.tscn", detail: "short" },
   ),
   "scene.save": mutate(
-    "Save the edited scene to disk",
+    "Save the edited scene to disk via EditorInterface",
     "atomic_file",
     "scene_disk_hash_matches_pack",
     obj(["path"], { path: RES_PATH }),
     { path: "res://scenes/world.tscn" },
+    { extra_errors: SCENE_MUTATE_ERRORS },
   ),
   "scene.close": dest(
     "Close a scene tab (checkpoint first if dirty)",
     "scene_not_in_open_list",
     obj(["path"], { path: RES_PATH }),
     { path: "res://scenes/world.tscn" },
+    { extra_errors: SCENE_MUTATE_ERRORS },
   ),
   "scene.instantiate": mutate(
     "Instance a PackedScene under a parent",
@@ -289,6 +313,36 @@ const SPECS: Record<string, ActionSpec> = {
     "dependency_list_complete",
     obj(["path"], { path: RES_PATH }),
     { path: "res://scenes/world.tscn" },
+  ),
+  "scene.list_tabs": read(
+    "List open scene tabs from EditorInterface.get_open_scenes",
+    "open_scene_tabs_match",
+    obj(["detail"], { detail: DETAIL }),
+    { detail: "short" },
+  ),
+  "scene.activate": mutate(
+    "Switch the edited scene tab so edited_scene matches path",
+    "editor_undo_redo",
+    "edited_scene_path_matches",
+    obj(["path"], { path: RES_PATH }),
+    { path: "res://scenes/world.tscn" },
+    { extra_errors: SCENE_MUTATE_ERRORS },
+  ),
+  "scene.save_as": mutate(
+    "Save the edited scene to a new path via EditorInterface.save_scene_as",
+    "atomic_file",
+    "scene_disk_hash_matches_pack",
+    obj(["path"], { path: RES_PATH }),
+    { path: "res://scenes/world_copy.tscn" },
+    { extra_errors: SCENE_MUTATE_ERRORS },
+  ),
+  "scene.reload": mutate(
+    "Reload a scene from disk via EditorInterface.reload_scene_from_path",
+    "editor_undo_redo",
+    "scene_tree_matches_disk",
+    obj(["path"], { path: RES_PATH }),
+    { path: "res://scenes/world.tscn" },
+    { extra_errors: SCENE_MUTATE_ERRORS },
   ),
 
   "node.add": mutate(

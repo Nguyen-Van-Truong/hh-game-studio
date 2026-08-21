@@ -7,12 +7,14 @@ const _EnvelopeScript: GDScript = preload("res://addons/hh_agent/core/hh_envelop
 const _ActionsScript: GDScript = preload("res://addons/hh_agent/core/hh_actions.gd")
 const _PauseScript: GDScript = preload("res://addons/hh_agent/core/hh_pause.gd")
 const _ReadsScript: GDScript = preload("res://addons/hh_agent/core/hh_read_adapters.gd")
+const _SceneScript: GDScript = preload("res://addons/hh_agent/core/hh_scene_adapter.gd")
 
-## Routes read/view adapters and the test noop. Never mutates the scene.
+## Routes read/view adapters and proven scene lifecycle. Node CRUD stays E_UNVERIFIED.
 
 var _errors: HHAgentErrors = HHAgentErrors.new()
 var _envelope: HHAgentEnvelope = HHAgentEnvelope.new()
 var _reads: HHAgentReadAdapters = HHAgentReadAdapters.new()
+var _scenes: HHAgentSceneAdapter = HHAgentSceneAdapter.new()
 
 
 func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_gate: HHAgentPauseGate = null) -> Dictionary:
@@ -62,6 +64,13 @@ func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_ga
 	var side_effect: String = str(def.get("side_effect", ""))
 	if pause_gate != null and not pause_gate.allows_side_effect(side_effect):
 		return _errors.fail(command_id, HHAgentErrors.E_PAUSED, "mutation gate is paused", "pause")
+	if method == "godot.scene" and action == "instantiate":
+		return _errors.fail(command_id, HHAgentErrors.E_UNVERIFIED, "scene.instantiate is R3-WP2 node CRUD", "")
+	if method == "godot.scene" and _scenes.handles(action):
+		var pre: Dictionary = {}
+		if envelope.has("precondition") and envelope.get("precondition") is Dictionary:
+			pre = envelope.get("precondition") as Dictionary
+		return _scenes.handle(command_id, method, action, params, actions, pre)
 	if side_effect == "read" or side_effect == "view":
 		return _reads.handle(command_id, method, action, params, actions)
 	return _errors.fail(command_id, HHAgentErrors.E_UNVERIFIED, "not dispatched", "")
@@ -69,7 +78,7 @@ func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_ga
 
 func run_selftest(actions: HHAgentActions) -> PackedStringArray:
 	var failures: PackedStringArray = PackedStringArray()
-	if not actions.loaded or actions.action_count() < 118:
+	if not actions.loaded or actions.action_count() < 122:
 		failures.append("catalog load")
 	if not actions.allowed_fields.has("command_id"):
 		failures.append("allowed missing command_id")
@@ -114,6 +123,23 @@ func run_selftest(actions: HHAgentActions) -> PackedStringArray:
 	)
 	if str(_error_of(paused_mutate).get("code", "")) != HHAgentErrors.E_PAUSED:
 		failures.append("paused mutate must be E_PAUSED")
+	var paused_scene: Dictionary = dispatch(
+		_sample("godot.scene", "create", {"path": "res://r3w1/paused.tscn", "root_class": "Node2D"}),
+		actions,
+		0,
+		gate,
+	)
+	if str(_error_of(paused_scene).get("code", "")) != HHAgentErrors.E_PAUSED:
+		failures.append("paused scene.create must be E_PAUSED")
+	var tabs: Dictionary = dispatch(_sample("godot.scene", "list_tabs", {"detail": "short"}), actions, 0)
+	if tabs.get("ok", false) != true:
+		failures.append("scene.list_tabs must ACK")
+	else:
+		var post_tabs: Variant = tabs.get("postcondition", {})
+		if post_tabs is Dictionary:
+			var checks_t: Variant = (post_tabs as Dictionary).get("checks", [])
+			if not (checks_t is Array) or not ((checks_t as Array).has("open_scene_tabs_match")):
+				failures.append("scene.list_tabs postcondition")
 	var pause_samples: Dictionary = gate.measure_samples(20)
 	if float(pause_samples.get("p95", 999.0)) > 250.0:
 		failures.append("plugin Pause ACK p95 exceeded 250 ms")

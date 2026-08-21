@@ -25,6 +25,8 @@ export const PRECONDITION_SCHEMA: JsonSchema = {
     scene_hash: { type: "string", minLength: 8, maxLength: 128 },
     target_uid: { type: "string", minLength: 1, maxLength: 128 },
     property_hash: { type: "string", minLength: 8, maxLength: 128 },
+    fingerprint: { type: "string", minLength: 8, maxLength: 128 },
+    history_version: { type: "string", minLength: 1, maxLength: 32, pattern: "^[0-9]+$" },
   },
 };
 
