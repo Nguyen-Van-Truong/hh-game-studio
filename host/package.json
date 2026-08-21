@@ -1,0 +1,17 @@
+{
+  "name": "hh-godot-host",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "HH Godot Agent Host. Persistent session, provider adapters, fake deterministic model. The only process that calls a model.",
+  "engines": {
+    "node": "24.19.0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json --pretty false"
+  },
+  "devDependencies": {
+    "@types/node": "24.13.3",
+    "typescript": "5.9.3"
+  }
+}
