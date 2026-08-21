@@ -8,6 +8,7 @@ const _MetaScript: GDScript = preload("res://addons/hh_agent/core/hh_scene_meta.
 const _CodecScript: GDScript = preload("res://addons/hh_agent/core/hh_variant_codec.gd")
 const _StoreScript: GDScript = preload("res://addons/hh_agent/core/hh_activity_store.gd")
 const _PresenterScript: GDScript = preload("res://addons/hh_agent/core/hh_presenter.gd")
+const _OverlayScript: GDScript = preload("res://addons/hh_agent/ui/overlay/hh_overlay.gd")
 
 ## Main-thread read/view adapters. Mutate is never applied here.
 
@@ -17,7 +18,14 @@ var _codec: HHAgentVariantCodec = HHAgentVariantCodec.new()
 var _presenter: HHAgentPresenter = HHAgentPresenter.new()
 
 
-func handle(command_id: String, method: String, action: String, params: Dictionary, actions: HHAgentActions) -> Dictionary:
+func handle(
+	command_id: String,
+	method: String,
+	action: String,
+	params: Dictionary,
+	actions: HHAgentActions,
+	envelope: Dictionary = {},
+) -> Dictionary:
 	var def: Dictionary = actions.lookup(method, action)
 	var post: String = _post_name(def, method, action)
 	if method == "godot.capabilities" and action == "describe":
@@ -34,6 +42,8 @@ func handle(command_id: String, method: String, action: String, params: Dictiona
 		return _observer_append(command_id, params, post)
 	if method == "godot.observer" and action == "focus":
 		return _observer_focus(command_id, params, post)
+	if method == "godot.observer" and action == "overlay":
+		return _observer_overlay(command_id, params, envelope, post)
 	if method == "godot.editor" and action == "select":
 		return _presenter.handle(command_id, method, action, params, actions, {})
 	if method == "godot.scene" and action == "read":
@@ -114,6 +124,7 @@ func _post_name(def: Dictionary, method: String, action: String) -> String:
 			"observer.append": "observer_rows_appended",
 			"editor.select": "selection_paths_match",
 			"observer.focus": "observer_focus_snapshot",
+			"observer.overlay": "observer_overlay_snapshot",
 			"play.status": "play_status_known",
 			"play.logs": "play_logs_returned",
 		}
@@ -433,6 +444,13 @@ func _observer_focus(command_id: String, _params: Dictionary, post: String) -> D
 	return _ok(command_id, post, _redact_after(focus))
 
 
+func _observer_overlay(command_id: String, _params: Dictionary, envelope: Dictionary, post: String) -> Dictionary:
+	var overlay: HHAgentOverlay = HHAgentOverlay.current()
+	if overlay == null:
+		overlay = HHAgentOverlay.new()
+	return _ok(command_id, post, _redact_after(overlay.snapshot(envelope)))
+
+
 func _merge_focus(after: Dictionary, focus: Dictionary) -> void:
 	for key: String in [
 		"selected_paths",
@@ -482,7 +500,7 @@ func _dock_snapshot(params: Dictionary) -> Dictionary:
 				"resume": {"visible": true, "label": "Resume"},
 				"watch": {"visible": true, "label": "Watch"},
 				"fast": {"visible": true, "label": "Fast"},
-				"replay": {"visible": true, "label": "Replay", "ready": false, "code": "E_UNVERIFIED"},
+				"replay": {"visible": true, "label": "Replay", "ready": true, "code": ""},
 			},
 			"rows": {
 				"items": [],

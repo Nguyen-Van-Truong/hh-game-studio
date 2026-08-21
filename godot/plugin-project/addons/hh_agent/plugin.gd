@@ -10,6 +10,7 @@ const _ClientScript: GDScript = preload("res://addons/hh_agent/core/hh_bridge_cl
 const _PostScript: GDScript = preload("res://addons/hh_agent/core/hh_postcondition.gd")
 const _DockScript: GDScript = preload("res://addons/hh_agent/ui/health/hh_activity_dock.gd")
 const _StoreScript: GDScript = preload("res://addons/hh_agent/core/hh_activity_store.gd")
+const _OverlayScript: GDScript = preload("res://addons/hh_agent/ui/overlay/hh_overlay.gd")
 const _PauseScript: GDScript = preload("res://addons/hh_agent/core/hh_pause.gd")
 const _ErrorsScript: GDScript = preload("res://addons/hh_agent/core/hh_errors.gd")
 
@@ -26,6 +27,7 @@ var _client: HHAgentBridgeClient
 var _postcondition: HHAgentPostcondition
 var _dock: HHAgentActivityDock
 var _store: HHAgentActivityStore
+var _overlay: HHAgentOverlay
 var _pause_gate: HHAgentPauseGate
 var _errors: HHAgentErrors
 var _reconnect_timer: Timer
@@ -51,6 +53,10 @@ func _enter_tree() -> void:
 	_store = HHAgentActivityStore.new()
 	_store.attach()
 	_store.load_from_disk()
+	_overlay = HHAgentOverlay.new()
+	_overlay.attach()
+	_overlay.set_mode(_store.mode())
+	set_force_draw_over_forwarding_enabled()
 	_client.set_enqueue(Callable(self, "_enqueue_inbound"))
 	_client.set_hello_handler(Callable(self, "_on_hello"))
 	_client.set_readback(Callable(self, "_on_readback"))
@@ -78,6 +84,10 @@ func _exit_tree() -> void:
 
 
 func _process(_delta: float) -> void:
+	if _overlay != null:
+		_overlay.tick(_delta)
+		if _overlay.is_draw_enabled():
+			update_overlays()
 	if _client != null:
 		_client.poll()
 	if _busy:
@@ -115,9 +125,39 @@ func _on_resume_requested() -> void:
 	_last_pause_ack = _apply_pause(false)
 
 
+func _forward_canvas_draw_over_viewport(overlay: Control) -> void:
+	_draw_overlay_2d(overlay)
+
+
+func _forward_canvas_force_draw_over_viewport(overlay: Control) -> void:
+	_draw_overlay_2d(overlay)
+
+
+func _forward_3d_draw_over_viewport(viewport_control: Control) -> void:
+	_draw_overlay_3d(viewport_control)
+
+
+func _forward_3d_force_draw_over_viewport(viewport_control: Control) -> void:
+	_draw_overlay_3d(viewport_control)
+
+
+func _draw_overlay_2d(overlay: Control) -> void:
+	if _overlay == null:
+		return
+	_overlay.draw_canvas(overlay)
+
+
+func _draw_overlay_3d(viewport_control: Control) -> void:
+	if _overlay == null:
+		return
+	_overlay.draw_spatial(viewport_control)
+
+
 func _on_mode_changed(mode: String) -> void:
 	if _store != null:
 		_store.set_mode(mode)
+	if _overlay != null:
+		_overlay.set_mode(mode)
 	_refresh_dock()
 
 
@@ -529,6 +569,9 @@ func _cleanup() -> void:
 		remove_child(_reconnect_timer)
 		_reconnect_timer.queue_free()
 		_reconnect_timer = null
+	if _overlay != null:
+		_overlay.detach()
+		_overlay = null
 	if _store != null:
 		_store.persist()
 		_store.detach()

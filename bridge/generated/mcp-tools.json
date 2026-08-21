@@ -5,7 +5,7 @@
   "registry_version": "hh-godot-actions/1",
   "action_version": "1",
   "tool_count": 21,
-  "action_count": 131,
+  "action_count": 132,
   "tools": [
     {
       "name": "godot.capabilities",
@@ -578,7 +578,8 @@
             "enum": [
               "timeline",
               "append",
-              "focus"
+              "focus",
+              "overlay"
             ]
           },
           "params": {

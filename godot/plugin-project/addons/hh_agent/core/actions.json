@@ -1138,6 +1138,17 @@
       "postcondition": "observer_focus_snapshot",
       "checkpoint_required": false
     },
+    "observer.overlay": {
+      "method": "godot.observer",
+      "verb": "overlay",
+      "side_effect": "read",
+      "timeout_ms": 5000,
+      "required": [
+        "detail"
+      ],
+      "postcondition": "observer_overlay_snapshot",
+      "checkpoint_required": false
+    },
     "play.start": {
       "method": "godot.play",
       "verb": "start",

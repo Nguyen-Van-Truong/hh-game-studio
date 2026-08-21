@@ -1244,6 +1244,12 @@ const SPECS: Record<string, ActionSpec> = {
     obj(["detail"], { detail: DETAIL }),
     { detail: "short" },
   ),
+  "observer.overlay": read(
+    "Read the live viewport overlay presentation model",
+    "observer_overlay_snapshot",
+    obj(["detail"], { detail: DETAIL }),
+    { detail: "short" },
+  ),
   "editor.select": view(
     "Present a node, resource, script, or filesystem path in the editor",
     "selection_paths_match",

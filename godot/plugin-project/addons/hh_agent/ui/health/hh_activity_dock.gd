@@ -3,6 +3,7 @@ extends VBoxContainer
 
 const _ConstantsScript: GDScript = preload("res://addons/hh_agent/core/hh_constants.gd")
 const _HealthScript: GDScript = preload("res://addons/hh_agent/ui/health/hh_health_dock.gd")
+const _OverlayScript: GDScript = preload("res://addons/hh_agent/ui/overlay/hh_overlay.gd")
 
 ## Activity dock: health + task/job/elapsed + always-visible Pause/Resume/Watch/Fast/Replay.
 ## Timeline is virtualized (one page of rows). Never displays the session token.
@@ -65,7 +66,7 @@ func _ready() -> void:
 	add_child(_list)
 	_summary = _add_label("summary: —")
 	_links = _add_label("undo / checkpoint / evidence: —")
-	_replay_note = _add_label("Replay: E_UNVERIFIED until R4-WP3 (no router replay)")
+	_replay_note = _add_label("Replay: presentation only (does not call the command router)")
 	_force_buttons_visible()
 
 
@@ -183,10 +184,10 @@ func _on_fast() -> void:
 
 
 func _on_replay() -> void:
-	var store: HHAgentActivityStore = HHAgentActivityStore.current()
-	if store != null:
-		store.mark_replay_unverified()
-	_replay_note.text = "Replay: E_UNVERIFIED until R4-WP3 (no router replay)"
+	var overlay: HHAgentOverlay = HHAgentOverlay.current()
+	if overlay != null:
+		overlay.replay_last()
+	_replay_note.text = "Replay: presentation only (does not call the command router)"
 
 
 func _add_button(parent: HBoxContainer, text: String) -> Button:

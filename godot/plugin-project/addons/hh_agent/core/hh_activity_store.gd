@@ -19,7 +19,7 @@ var _job: String = "—"
 var _elapsed_ms: int = 0
 var _pause: String = "inactive"
 var _mode: String = HHAgentConstants.MODE_WATCH
-var _replay_code: String = "E_UNVERIFIED"
+var _replay_code: String = ""
 var _session_re: RegEx = RegEx.new()
 var _bearer_re: RegEx = RegEx.new()
 
@@ -88,6 +88,10 @@ func mode() -> String:
 
 func mark_replay_unverified() -> void:
 	_replay_code = "E_UNVERIFIED"
+
+
+func mark_replay_ready() -> void:
+	_replay_code = ""
 
 
 func record_planned(row: Dictionary) -> void:
@@ -303,7 +307,7 @@ func snapshot(params: Dictionary) -> Dictionary:
 			"resume": {"visible": true, "label": "Resume"},
 			"watch": {"visible": true, "label": "Watch"},
 			"fast": {"visible": true, "label": "Fast"},
-			"replay": {"visible": true, "label": "Replay", "ready": false, "code": _replay_code},
+			"replay": {"visible": true, "label": "Replay", "ready": _replay_code.is_empty(), "code": _replay_code},
 		},
 		"rows": page,
 		"filters": {
@@ -312,9 +316,9 @@ func snapshot(params: Dictionary) -> Dictionary:
 			"status": str(params.get("status", "")),
 		},
 		"replay": {
-			"ready": false,
+			"ready": _replay_code.is_empty(),
 			"code": _replay_code,
-			"message": "replay is presentation-only after R4-WP3; does not call the command router",
+			"message": "replay is presentation-only; does not call the command router",
 		},
 	}
 

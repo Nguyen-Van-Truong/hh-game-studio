@@ -17,6 +17,7 @@ const _AssetScript: GDScript = preload("res://addons/hh_agent/core/hh_asset_adap
 const _SettingsScript: GDScript = preload("res://addons/hh_agent/core/hh_settings_adapter.gd")
 const _TxScript: GDScript = preload("res://addons/hh_agent/core/hh_transaction_adapter.gd")
 const _PresenterScript: GDScript = preload("res://addons/hh_agent/core/hh_presenter.gd")
+const _OverlayScript: GDScript = preload("res://addons/hh_agent/ui/overlay/hh_overlay.gd")
 
 ## Routes read/view adapters, scene/node/property/resource/signal/script/asset/project/transaction apply.
 
@@ -33,6 +34,7 @@ var _assets: HHAgentAssetAdapter = HHAgentAssetAdapter.new()
 var _settings: HHAgentSettingsAdapter = HHAgentSettingsAdapter.new()
 var _tx: HHAgentTransactionAdapter = HHAgentTransactionAdapter.new()
 var _presenter: HHAgentPresenter = HHAgentPresenter.new()
+var _overlay_local: HHAgentOverlay = HHAgentOverlay.new()
 
 
 func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_gate: HHAgentPauseGate = null) -> Dictionary:
@@ -108,11 +110,15 @@ func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_ga
 		result = _scenes.handle(command_id, method, action, params, actions, pre)
 	elif method == "godot.editor" and (action == "select" or action == "focus" or action == "main_screen"):
 		result = _presenter.handle(command_id, method, action, params, actions, envelope)
+	elif method == "godot.editor" and (action == "frame_view" or action == "replay"):
+		result = _overlay().handle(command_id, method, action, params, actions, envelope)
 	elif side_effect == "read" or side_effect == "view":
-		result = _reads.handle(command_id, method, action, params, actions)
+		result = _reads.handle(command_id, method, action, params, actions, envelope)
 	else:
 		return _errors.fail(command_id, HHAgentErrors.E_UNVERIFIED, "not dispatched", "")
-	return _presenter.after_success(result, method, action, params, envelope)
+	result = _presenter.after_success(result, method, action, params, envelope)
+	_overlay().after_success(result, method, action, params, envelope)
+	return result
 
 
 func run_selftest(actions: HHAgentActions) -> PackedStringArray:
@@ -363,6 +369,13 @@ func run_selftest(actions: HHAgentActions) -> PackedStringArray:
 	if str(_error_of(unknown).get("code", "")) != HHAgentErrors.E_INVALID_ENVELOPE:
 		failures.append("unknown field must be E_INVALID_ENVELOPE")
 	return failures
+
+
+func _overlay() -> HHAgentOverlay:
+	var live: HHAgentOverlay = HHAgentOverlay.current()
+	if live != null:
+		return live
+	return _overlay_local
 
 
 func _sample(method: String, action: String, params: Dictionary) -> Dictionary:

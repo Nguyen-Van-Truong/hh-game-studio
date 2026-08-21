@@ -467,8 +467,12 @@ def live_errors(exe: Path) -> list[str]:
             )
         )
         req_id += 1
-        if str((replay.get("error") or {}).get("code") or "") != "E_UNVERIFIED":
-            errors.append(f"editor.replay must stay E_UNVERIFIED: {sess.redact(json.dumps(replay), secret)}")
+        if replay.get("ok") is not True:
+            errors.append(
+                f"editor.replay must ACK presentation-only: {sess.redact(json.dumps(replay), secret)}"
+            )
+        if replay.get("changed") is True:
+            errors.append("editor.replay must not report a document change")
         select = body_of(
             mcp_call(
                 proc,
