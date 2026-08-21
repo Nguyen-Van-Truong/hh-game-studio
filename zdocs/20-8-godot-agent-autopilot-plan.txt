@@ -1,6 +1,6 @@
 AUTHORITATIVE_PLAN=1
 STATUS=ACTIVE
-CURRENT_VALID_WP=R3-WP6
+CURRENT_VALID_WP=R3-WP7
 
 ================================================================================
 BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
@@ -11,7 +11,7 @@ BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
 | 0 | R0 — Cutover an toàn | Đóng băng engine Rust cũ, pin Godot, đổi bootstrap sang plan này, không mất lịch sử | Governance + Toolchain | G0 | [x] 4/4 WP |
 | 1 | R1 — Spike và chọn nền MCP | Chứng minh agent tạo/sửa/chạy/nhìn một scene thật trong editor; chốt upstream hay tự làm | Research + Security + POC | G1 NO-FORK | [x] 5/5 WP |
 | 2 | R2 — Control plane | Plugin, sidecar, Agent Host, MCP, auth, registry, ledger, pause và OWNER_AUTOPILOT hoạt động | Bridge + Plugin + Security | — | [x] 7/7 WP |
-| 3 | R3 — Quyền editor ngữ nghĩa | Scene/node/property/resource/script/asset/project settings có undo, dedup và postcondition | Scene + Script + Asset | — | [ ] 5/8 WP |
+| 3 | R3 — Quyền editor ngữ nghĩa | Scene/node/property/resource/script/asset/project settings có undo, dedup và postcondition | Scene + Script + Asset | — | [ ] 6/8 WP |
 | 4 | R4 — Người xem được agent làm | Activity Dock, chọn node, focus inspector, cursor/gizmo ảo, replay kéo-thả, Watch/Fast mode | Observer UI + Editor UX | G2 VISIBLE | [ ] 0/6 WP |
 | 5 | R5 — Bộ công cụ làm game 2D | TileMapLayer, animation, UI, audio, physics, navigation, shader/particles được agent thao tác đầy đủ | 2D-A + 2D-B + Assets | — | [ ] 0/7 WP |
 | 6 | R6 — Agent tự chơi và tự kiểm | Play/debug, input, runtime state, deterministic step, screenshot/diff/perf, test evidence | Runtime + Test + Vision | G3 SELF-VERIFY | [ ] 0/7 WP |
@@ -24,7 +24,7 @@ VIỆC PHẢI LÀM TRƯỚC: R0-WP1 → R0-WP2 → R0-WP3 → R0-WP4 → R1-WP1.
 Không được bắt đầu R2
 trước G1. Từ R2 trở đi chỉ song song các track có ranh giới file rõ ràng.
 
-Tiến độ tổng: [ ] 21/60 WP. First valid WP: R3-WP6.
+Tiến độ tổng: [ ] 22/60 WP. First valid WP: R3-WP7.
 Ngày lập: 20-8-2026 (Asia/Saigon).
 
 ================================================================================
@@ -1323,7 +1323,7 @@ R3-WP5 — Script write/patch/validate/attach + dirty-buffer conflict      [x]
         312ebde class_name validate uses dest path;
         ac87467 validate class_name uses dest path
 
-R3-WP6 — Asset ingest/import/reimport/move/delete an toàn                [ ]
+R3-WP6 — Asset ingest/import/reimport/move/delete an toàn                [x]
   Phụ thuộc: R3-WP4, R3-WP5 transaction primitives.
   Track/file: A/B; staging/quarantine, EditorFileSystem job adapter.
   Làm:
@@ -1334,7 +1334,27 @@ R3-WP6 — Asset ingest/import/reimport/move/delete an toàn                [ ]
   Verify: corrupt/huge/polyglot, symlink escape, importer hang/cancel, same-name collision,
           crash trước/sau promote; late import không commit job cũ.
   DoD: agent kéo/thả asset theo nghĩa ngữ nghĩa, project không có nửa file/nửa meta.
-  LOG: (trống)
+  LOG:
+    LOG 2026-08-21 17:20 Asia/Saigon — agent=coordinator
+      Base: 9afafb9 ingest/import/quarantine; dbc16b6 lease/UID rewrite;
+        cheap-fix 6cd7f32 lock project.godot + scan autoload refs.
+        Godot=4.7.1.stable.official.a13da4feb, schema=hh-godot-actions/1
+      Files/leases: godot/plugin-project/addons/hh_agent/core/hh_asset_adapter.gd,
+        tests/bootstrap/test_asset_ingest.py
+      Verify: test_asset_ingest.py → 0 (import wait + .import; corrupt/polyglot/
+        huge typed fail; path jail; autoload E_CONFLICT; project.godot locked;
+        collision; referenced delete E_CONFLICT; unreferenced quarantine;
+        Pause); g1/registry → 0
+      E2E/artifacts: staging sniff → tmp+rename promote; ACK requires dest +
+        .import + ResourceLoader.exists; plugin is the only dest writer
+      Critic: FAIL tick no (0f028857) on dbc16b6 — autoload invisible,
+        project.godot deletable. Closed on 6cd7f32 (210f99ef PASS-WITH-GAPS,
+        prior P0s dead, recommend tick).
+      Gaps: rewrite_plan still String.replace; OS.delay_msec import wait;
+        hang/cancel untested; crash-retry E_CONFLICT; flush ≠ fsync.
+      Commit: 9afafb9 R3-WP6: asset ingest import quarantine and move;
+        dbc16b6 refresh leases and live UID after rewrite;
+        6cd7f32 lock project.godot and scan autoload refs
 
 R3-WP7 — Project settings, input map, autoload và plugin policy          [ ]
   Phụ thuộc: R3-WP3, R2-WP5.
@@ -2059,14 +2079,15 @@ thuận nếu ảnh hưởng G5/G6.
 14. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Hiện tại R0 (4/4) + R1 (5/5, G1) + R2 (7/7) + R3-WP1..WP5 đã xong. Agent tiếp theo làm **R3-WP6**.
+Hiện tại R0 (4/4) + R1 (5/5, G1) + R2 (7/7) + R3-WP1..WP6 đã xong. Agent tiếp theo làm **R3-WP7**.
 KHÔNG vendor A/C as-is, KHÔNG M6, KHÔNG fork Godot. Scene + node + property +
-resource + script exist; asset ingest is next. Do not claim the agent drives a full game.
+resource + script + asset ingest exist; project settings is next. Do not claim
+the agent drives a full game.
 
 Lệnh hợp lệ:
 
-  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R3-WP6`);
-  2) R3-WP6: Asset ingest/import/reimport/move/delete an toàn;
+  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R3-WP7`);
+  2) R3-WP7: Project settings, input map, autoload và plugin policy;
   3) mở editor fixture: `hh-godot-editor.bat` (Godot 4.7.1-stable pin, minimal-2d);
   4) không copy hh_stock_poc; không npx -y; không bump 4.7.2; không raw-write
      .tscn; plugin is the only writer.
