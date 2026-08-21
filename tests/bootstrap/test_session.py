@@ -21,10 +21,13 @@ import threading
 import time
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from hh_agent_allow import hh_agent_only_addon_errors
+
 REPO_ROOT = Path(__file__).resolve().parents[2]
 BRIDGE = REPO_ROOT / "bridge"
 PLAN = REPO_ROOT / "zdocs" / "20-8-godot-agent-autopilot-plan.txt"
-PLUGIN_ADDONS = REPO_ROOT / "godot" / "plugin-project" / "addons"
+PLUGIN_PROJECT = REPO_ROOT / "godot" / "plugin-project"
 PROTOCOL = "hh-godot-agent/1"
 FORBIDDEN_SRC_PORTS = ("6550", "6008", "8770") + tuple(str(p) for p in range(6505, 6515))
 SKIP_DIR_NAMES = {
@@ -367,8 +370,7 @@ def src_scan_errors() -> list[str]:
 def main() -> int:
     errors: list[str] = []
 
-    if PLUGIN_ADDONS.exists():
-        errors.append("godot/plugin-project/addons must stay absent (R2-WP2 is transport only)")
+    errors.extend(hh_agent_only_addon_errors(PLUGIN_PROJECT, REPO_ROOT))
 
     plan_text = PLAN.read_text(encoding="utf-8") if PLAN.is_file() else None
     if plan_text is None:
@@ -585,7 +587,7 @@ def main() -> int:
         "PASS: loopback OS-assigned bind; typed rejects for token/project/protocol/non-loopback; "
         "EADDRINUSE retried listen(0); executed 100 reconnects; stdio MCP not-dispatched; "
         "token only under LOCALAPPDATA/HHGodotAgent; plan R2-WP2 progress consistent; "
-        "plugin-project/addons absent."
+        "plugin-project allows only hh_agent."
     )
     return 0
 

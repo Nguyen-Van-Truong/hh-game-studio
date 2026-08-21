@@ -1,4 +1,4 @@
-/** Sidecar entry. Transport + registry. Editor mutations are not dispatched. */
+/** Sidecar entry. Transport + registry. Editor mutations are not dispatched. Read/view/noop may forward to a connected plugin. */
 
 export const BRIDGE_PACKAGE = "hh-godot-bridge" as const;
 export const BRIDGE_STATUS = "session-transport" as const;

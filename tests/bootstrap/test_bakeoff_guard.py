@@ -2,7 +2,7 @@
 """R1-WP3 guard: bake-off scorecard exists for A+C; plugin-project stays addon-free.
 
 Fails (exit != 0) if:
-  - godot/plugin-project gained addons/plugin.cfg
+  - godot/plugin-project gained addons other than hh_agent
   - SCORECARD.md missing A or C columns or required scenario rows
   - scorecard claims PASS for eval/shell/godot_exec/call_method without noting it was disabled
 
@@ -14,6 +14,9 @@ from __future__ import annotations
 import re
 import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from hh_agent_allow import hh_agent_only_addon_errors
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT / "tests" / "e2e" / "bakeoff"))
@@ -51,25 +54,7 @@ def rel(path: Path) -> str:
 
 
 def plugin_project_errors() -> list[str]:
-    errors: list[str] = []
-    if not PLUGIN_PROJECT.is_dir():
-        return [f"missing {rel(PLUGIN_PROJECT)}"]
-    addons = PLUGIN_PROJECT / "addons"
-    if addons.is_dir():
-        leftover = [
-            p for p in addons.rglob("*") if p.is_file() and ".godot" not in p.parts
-        ]
-        if leftover:
-            errors.append(
-                "godot/plugin-project/addons/ must stay empty; found "
-                + ", ".join(rel(p) for p in leftover[:8])
-            )
-    for marker in PLUGIN_PROJECT.rglob("*"):
-        if not marker.is_file() or any(part == ".godot" for part in marker.parts):
-            continue
-        if marker.name.lower() in {"plugin.cfg", "plugin.gd"}:
-            errors.append(f"plugin-project must not contain addon files: {rel(marker)}")
-    return errors
+    return hh_agent_only_addon_errors(PLUGIN_PROJECT, REPO_ROOT)
 
 
 def main() -> int:
@@ -170,7 +155,7 @@ def main() -> int:
         return 1
 
     print(
-        "PASS: plugin-project has no addons; SCORECARD has A+C rows; "
+        "PASS: plugin-project allows only hh_agent; SCORECARD has A+C rows; "
         "eval/call_method PASS only as disabled refusal"
     )
     return 0

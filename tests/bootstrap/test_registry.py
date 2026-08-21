@@ -6,7 +6,7 @@ Fails (exit != 0) if:
   - the 4-way invalid + 1 positive matrix is not executed (or a case fails)
   - generated artifacts lack a DO NOT EDIT / generated header
   - npm run generate dirties those artifacts
-  - godot/plugin-project/addons exists
+  - godot/plugin-project/addons contains anything other than hh_agent
   - plan R2-WP1 is ticked or CURRENT_VALID_WP is not R2-WP1
 
 Does not run Godot. Stdlib + the already-pinned bridge Node/tsc toolchain.
@@ -22,10 +22,13 @@ import subprocess
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from hh_agent_allow import hh_agent_only_addon_errors
+
 REPO_ROOT = Path(__file__).resolve().parents[2]
 BRIDGE = REPO_ROOT / "bridge"
 PLAN = REPO_ROOT / "zdocs" / "20-8-godot-agent-autopilot-plan.txt"
-PLUGIN_ADDONS = REPO_ROOT / "godot" / "plugin-project" / "addons"
+PLUGIN_PROJECT = REPO_ROOT / "godot" / "plugin-project"
 GENERATED = (
     BRIDGE / "generated" / "mcp-tools.json",
     BRIDGE / "generated" / "cli-help.txt",
@@ -105,8 +108,7 @@ def artifact_digests() -> dict[str, str]:
 def main() -> int:
     errors: list[str] = []
 
-    if PLUGIN_ADDONS.exists():
-        errors.append("godot/plugin-project/addons must stay absent (R2-WP1 is registry only)")
+    errors.extend(hh_agent_only_addon_errors(PLUGIN_PROJECT, REPO_ROOT))
 
     plan_text = PLAN.read_text(encoding="utf-8") if PLAN.is_file() else None
     if plan_text is None:
@@ -185,7 +187,7 @@ def main() -> int:
 
     print(
         "PASS: live ActionDef catalog; envelope guards; executed contract matrix; "
-        "generated artifacts stable; plan R2-WP1 progress consistent; plugin-project/addons absent. "
+        "generated artifacts stable; plan R2-WP1 progress consistent; plugin-project allows only hh_agent. "
         "Did not run Godot."
     )
     return 0

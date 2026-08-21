@@ -2,10 +2,17 @@ import { createInterface } from "node:readline";
 
 import { acceptCommand } from "../registry/dispatch.js";
 import { E } from "../registry/errors.js";
-import { allActionDefs } from "../registry/registry.js";
+import { actionIdFromMethod, allActionDefs, getAction } from "../registry/registry.js";
+import { newUlid } from "../registry/ulid.js";
 import type { SessionLog } from "../session/log.js";
 import { publicDescriptorView, type SessionDescriptor } from "../session/descriptor.js";
 import type { DoctorReport } from "../doctor/doctor.js";
+import {
+  PLUGIN_NOOP_ACTION,
+  PLUGIN_NOOP_METHOD,
+  unverifiedResult,
+  type PluginCommandResult,
+} from "./plugin_rpc.js";
 
 interface JsonRpcReq {
   jsonrpc?: string;
@@ -18,6 +25,13 @@ export interface McpStdioContext {
   descriptor: () => SessionDescriptor;
   doctor: () => DoctorReport;
   log: SessionLog;
+  plugin?: {
+    connected: () => boolean;
+    dispatch: (
+      envelope: Record<string, unknown>,
+      timeoutMs: number,
+    ) => Promise<PluginCommandResult>;
+  };
 }
 
 function writeRpc(obj: unknown): void {
@@ -48,6 +62,11 @@ function domainTools(): Array<{
     {
       name: "hh.doctor",
       description: "Session/transport doctor. Secrets are redacted.",
+      inputSchema: { type: "object", additionalProperties: false, properties: {} },
+    },
+    {
+      name: "hh.plugin_noop",
+      description: "Test noop ACK through a connected plugin. Does not mutate the scene.",
       inputSchema: { type: "object", additionalProperties: false, properties: {} },
     },
   ];
@@ -81,12 +100,30 @@ function toolResult(id: string | number | null | undefined, body: unknown, isErr
   });
 }
 
-function handleTool(ctx: McpStdioContext, name: string, args: Record<string, unknown>): { body: unknown; isError: boolean } {
+async function handleTool(
+  ctx: McpStdioContext,
+  name: string,
+  args: Record<string, unknown>,
+): Promise<{ body: unknown; isError: boolean }> {
   if (name === "hh.session_status") {
     return { body: { ok: true, session: publicDescriptorView(ctx.descriptor()) }, isError: false };
   }
   if (name === "hh.doctor") {
     return { body: ctx.doctor(), isError: false };
+  }
+  if (name === "hh.plugin_noop") {
+    const envelope = {
+      protocol: ctx.descriptor().protocol,
+      command_id: newUlid(),
+      method: PLUGIN_NOOP_METHOD,
+      action: PLUGIN_NOOP_ACTION,
+      params: {},
+    };
+    if (!ctx.plugin?.connected()) {
+      return { body: unverifiedResult(envelope.command_id, "no plugin"), isError: true };
+    }
+    const result = await ctx.plugin.dispatch(envelope, 5_000);
+    return { body: result, isError: !result.ok };
   }
   const action = args.action;
   const params = args.params;
@@ -98,24 +135,58 @@ function handleTool(ctx: McpStdioContext, name: string, args: Record<string, unk
       isError: true,
     };
   }
+  const command_id = newUlid();
   const accepted = acceptCommand({
     protocol: ctx.descriptor().protocol,
-    command_id: "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+    command_id,
     method: name,
     action,
     params,
   });
-  return {
-    body: {
-      error: {
-        code: E.E_UNVERIFIED,
-        message: "not dispatched; transport only",
-        path: "",
+  const resolvedId = accepted.accepted ? accepted.action_id : actionIdFromMethod(name, action);
+  const def = resolvedId ? getAction(resolvedId) : undefined;
+  if (
+    def &&
+    (def.side_effect === "mutate" || def.side_effect === "destructive" || def.side_effect === "external")
+  ) {
+    return {
+      body: {
+        error: {
+          code: E.E_UNVERIFIED,
+          message: "not dispatched",
+          path: "",
+        },
+        registry: accepted,
       },
-      registry: accepted,
+      isError: true,
+    };
+  }
+  if (!accepted.accepted) {
+    return { body: { error: accepted.error, registry: accepted }, isError: true };
+  }
+  if (!def) {
+    return {
+      body: {
+        error: { code: E.E_UNVERIFIED, message: "not dispatched", path: "" },
+        registry: accepted,
+      },
+      isError: true,
+    };
+  }
+  if (!ctx.plugin?.connected()) {
+    return { body: unverifiedResult(command_id, "no plugin"), isError: true };
+  }
+  const result = await ctx.plugin.dispatch(
+    {
+      protocol: ctx.descriptor().protocol,
+      command_id,
+      method: name,
+      action,
+      params,
     },
-    isError: true,
-  };
+    def.timeout_ms,
+  );
+  return { body: result, isError: !result.ok };
 }
 
 export function startMcpStdio(ctx: McpStdioContext): void {
@@ -165,17 +236,19 @@ export function startMcpStdio(ctx: McpStdioContext): void {
         params.arguments && typeof params.arguments === "object" && !Array.isArray(params.arguments)
           ? (params.arguments as Record<string, unknown>)
           : {};
-      try {
-        const out = handleTool(ctx, name, args);
-        toolResult(id, out.body, out.isError);
-      } catch (err) {
-        ctx.log.error(`tools/call failed: ${err instanceof Error ? err.message : "error"}`);
-        toolResult(
-          id,
-          { error: { code: E.E_UNVERIFIED, message: "not dispatched; transport only", path: "" } },
-          true,
-        );
-      }
+      void (async () => {
+        try {
+          const out = await handleTool(ctx, name, args);
+          toolResult(id, out.body, out.isError);
+        } catch (err) {
+          ctx.log.error(`tools/call failed: ${err instanceof Error ? err.message : "error"}`);
+          toolResult(
+            id,
+            { error: { code: E.E_UNVERIFIED, message: "not dispatched", path: "" } },
+            true,
+          );
+        }
+      })();
       return;
     }
     writeRpc({

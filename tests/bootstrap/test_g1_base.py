@@ -3,7 +3,7 @@
 
 Fails (exit != 0) if:
   - DECISIONS / G1_BASE / capability-lock missing or g1_base is not in-house-thin
-  - godot/plugin-project/addons exists (empty dir counts)
+  - godot/plugin-project/addons contains anything other than hh_agent
   - product trees contain satelliteoflove / Beckett / KeeVeeG / Sods2 addon copies
   - npx -y or Beckett Full purchase is recommended as the G1 path
   - lock SHAs drift from bake-off PIN.json files
@@ -29,6 +29,9 @@ import json
 import re
 import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from hh_agent_allow import hh_agent_only_addon_errors
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DECISIONS = REPO_ROOT / "docs" / "DECISIONS.md"
@@ -156,19 +159,7 @@ def iter_files(root: Path):
 
 
 def plugin_project_errors() -> list[str]:
-    errors: list[str] = []
-    if not PLUGIN_PROJECT.is_dir():
-        return [f"missing {rel(PLUGIN_PROJECT)}"]
-    addons = PLUGIN_PROJECT / "addons"
-    if addons.exists():
-        errors.append("godot/plugin-project/addons/ must not exist (G1 closed MCP vendors)")
-    for marker in iter_files(PLUGIN_PROJECT):
-        if marker.name.lower() in {"plugin.cfg", "plugin.gd"}:
-            errors.append(f"plugin-project must not contain addon files: {rel(marker)}")
-    hh_agent = PLUGIN_PROJECT / "addons" / "hh_agent"
-    if hh_agent.exists():
-        errors.append("do not create godot/plugin-project/addons/hh_agent/ in R1-WP5 (R2)")
-    return errors
+    return hh_agent_only_addon_errors(PLUGIN_PROJECT, REPO_ROOT)
 
 
 def product_tree_vendor_errors() -> list[str]:
@@ -687,7 +678,7 @@ def main() -> int:
         return 1
 
     print(
-        "PASS: G1 in-house-thin lock; mcp_vendor=none; plugin-project has no addons; "
+        "PASS: G1 in-house-thin lock; mcp_vendor=none; plugin-project allows only hh_agent; "
         "no vendor MCP copies; SHAs match PIN.json; Godot 4.7.1.stable.official.a13da4feb; "
         "bridge_npm integrities match package-lock; 59da3d0 is not A; "
         "plan G1 progress consistent. This test does not run Godot or npm ci."

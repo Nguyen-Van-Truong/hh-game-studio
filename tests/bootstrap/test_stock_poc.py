@@ -2,7 +2,7 @@
 """R1-WP4 guard: stock-poc fixture exists; plugin-project stays addon-free.
 
 Fails (exit != 0) if:
-  - godot/plugin-project gained addons / MCP / GUT / hh_stock_poc
+  - godot/plugin-project gained addons other than hh_agent / MCP / GUT / hh_stock_poc
   - stock-poc missing disposable hh_stock_poc plugin
   - hh-godot-editor.bat no longer opens minimal-2d
   - recorded 20/20 RESULT is missing or any run FAIL
@@ -17,6 +17,9 @@ import json
 import re
 import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from hh_agent_allow import hh_agent_only_addon_errors
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 PLUGIN_PROJECT = REPO_ROOT / "godot" / "plugin-project"
@@ -46,30 +49,15 @@ def rel(path: Path) -> str:
 
 
 def plugin_project_errors() -> list[str]:
-    errors: list[str] = []
+    errors = hh_agent_only_addon_errors(PLUGIN_PROJECT, REPO_ROOT)
     if not PLUGIN_PROJECT.is_dir():
-        return [f"missing {rel(PLUGIN_PROJECT)}"]
-    addons = PLUGIN_PROJECT / "addons"
-    if addons.is_dir():
-        leftover = [
-            p for p in addons.rglob("*") if p.is_file() and ".godot" not in p.parts
-        ]
-        if leftover:
-            errors.append(
-                "godot/plugin-project/addons/ must stay empty; found "
-                + ", ".join(rel(p) for p in leftover[:8])
-            )
+        return errors
     for marker in PLUGIN_PROJECT.rglob("*"):
         if not marker.is_file() or any(part == ".godot" for part in marker.parts):
             continue
         posix = marker.as_posix().lower()
-        name = marker.name.lower()
-        if name in {"plugin.cfg", "plugin.gd"}:
-            errors.append(f"plugin-project must not contain addon files: {rel(marker)}")
         if any(needle in posix for needle in MCP_NEEDLES):
             errors.append(f"plugin-project must not contain MCP/GUT: {rel(marker)}")
-        if "hh_stock_poc" in posix:
-            errors.append(f"hh_stock_poc must not be copied into plugin-project: {rel(marker)}")
     return errors
 
 
@@ -184,7 +172,7 @@ def main() -> int:
         return 1
 
     print(
-        "PASS: plugin-project has no addons/MCP; stock-poc plugin present; "
+        "PASS: plugin-project allows only hh_agent (no MCP/GUT); stock-poc plugin present; "
         "hh-godot-editor.bat still minimal-2d; RESULT 20/20"
     )
     return 0

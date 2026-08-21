@@ -54,6 +54,10 @@ async function main(): Promise<void> {
     descriptor: () => sidecar.descriptor,
     doctor: () => runSessionDoctor(sidecar.descriptor),
     log: sidecar.log,
+    plugin: {
+      connected: () => sidecar.transport.pluginConnected(),
+      dispatch: (envelope, timeoutMs) => sidecar.transport.dispatchToPlugin(envelope, timeoutMs),
+    },
   });
 }
 

@@ -5,7 +5,7 @@ Fails (exit != 0) if:
   - MCP_BAKEOFF.md missing required candidate headings / shortlist / fail-hard
   - a PIN.json SHA is missing from the bake-off or is not 40 hex chars
   - a staged LICENSE does not look like MIT
-  - godot/plugin-project contains an enabled addon (plugin.cfg / plugin.gd)
+  - godot/plugin-project contains an addon other than hh_agent
   - bake-off tells us to npx -y latest or to buy Beckett Full
   - shortlist names more than two bake-off candidates
 
@@ -18,6 +18,9 @@ import json
 import re
 import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from hh_agent_allow import hh_agent_only_addon_errors
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 BAKEOFF = REPO_ROOT / "docs" / "godot-agent" / "MCP_BAKEOFF.md"
@@ -188,29 +191,7 @@ def main() -> int:
         if parsed["A"]["bake"] or parsed["C"]["bake"]:
             errors.append("A and C must not be fail-hard bake-off")
 
-    if PLUGIN_PROJECT.is_dir():
-        for marker in PLUGIN_PROJECT.rglob("*"):
-            if not marker.is_file():
-                continue
-            if any(part == ".godot" for part in marker.parts):
-                continue
-            name = marker.name.lower()
-            if name in {"plugin.cfg", "plugin.gd"}:
-                errors.append(
-                    f"plugin-project must not contain addon files: {rel(marker)}"
-                )
-        addons = PLUGIN_PROJECT / "addons"
-        if addons.is_dir():
-            leftover = [
-                p
-                for p in addons.rglob("*")
-                if p.is_file() and ".godot" not in p.parts
-            ]
-            if leftover:
-                errors.append(
-                    "godot/plugin-project/addons/ must stay empty; found "
-                    + ", ".join(rel(p) for p in leftover[:8])
-                )
+    errors.extend(hh_agent_only_addon_errors(PLUGIN_PROJECT, REPO_ROOT))
 
     if len(shortlist_names) > 2:
         errors.append(f"shortlist coding error: {shortlist_names}")
@@ -223,7 +204,7 @@ def main() -> int:
 
     print(
         "PASS: MCP bake-off 4 MIT pins, shortlist A+C Lite, "
-        "fail-hard B/D/Full, plugin-project has no addons"
+        "fail-hard B/D/Full, plugin-project allows only hh_agent"
     )
     return 0
 

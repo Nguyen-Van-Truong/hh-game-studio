@@ -4,6 +4,13 @@ import net from "node:net";
 import type { SessionLog } from "../session/log.js";
 import { evaluateHello, parseHello, type HelloErr, type HelloOk } from "./handshake.js";
 import { listenLoopback } from "./loopback.js";
+import {
+  busyResult,
+  guardPaperSuccess,
+  parsePluginResult,
+  unverifiedResult,
+  type PluginCommandResult,
+} from "./plugin_rpc.js";
 
 const WS_GUID = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
 const OP_TEXT = 0x1;
@@ -15,6 +22,11 @@ export interface PluginTransport {
   host: "127.0.0.1";
   port: number;
   close: () => Promise<void>;
+  pluginConnected: () => boolean;
+  dispatchToPlugin: (
+    envelope: Record<string, unknown>,
+    timeoutMs: number,
+  ) => Promise<PluginCommandResult>;
 }
 
 export interface PluginTransportOpts {
@@ -221,7 +233,31 @@ async function upgradeSocket(socket: net.Socket): Promise<boolean> {
 export async function startPluginTransport(opts: PluginTransportOpts): Promise<PluginTransport> {
   const heartbeatMs = opts.heartbeatMs ?? 5_000;
   const sockets = new Set<SockState>();
+  let latest: SockState | undefined;
+  const pending = new Map<
+    string,
+    { resolve: (result: PluginCommandResult) => void; timer: ReturnType<typeof setTimeout> }
+  >();
   let beats: ReturnType<typeof setInterval> | undefined;
+
+  const pickLatest = (): void => {
+    latest = undefined;
+    for (const state of sockets) {
+      if (state.authed && !state.closed) {
+        latest = state;
+      }
+    }
+  };
+
+  const failPending = (commandId: string, result: PluginCommandResult): void => {
+    const wait = pending.get(commandId);
+    if (!wait) {
+      return;
+    }
+    clearTimeout(wait.timer);
+    pending.delete(commandId);
+    wait.resolve(result);
+  };
 
   const server = net.createServer((socket) => {
     void handleConn(socket);
@@ -257,10 +293,16 @@ export async function startPluginTransport(opts: PluginTransportOpts): Promise<P
     socket.on("close", () => {
       state.closed = true;
       sockets.delete(state);
+      if (latest === state) {
+        pickLatest();
+      }
     });
     socket.on("error", () => {
       state.closed = true;
       sockets.delete(state);
+      if (latest === state) {
+        pickLatest();
+      }
     });
   };
 
@@ -312,11 +354,17 @@ export async function startPluginTransport(opts: PluginTransportOpts): Promise<P
         return;
       }
       state.authed = true;
+      latest = state;
       opts.log.info("plugin session accepted");
       return;
     }
     if (parsed && typeof parsed === "object" && "type" in parsed && parsed.type === "ping") {
       sendText(state.socket, JSON.stringify({ type: "pong" }));
+      return;
+    }
+    const result = parsePluginResult(parsed);
+    if (result) {
+      failPending(result.command_id, result);
     }
   };
 
@@ -333,15 +381,40 @@ export async function startPluginTransport(opts: PluginTransportOpts): Promise<P
   return {
     host: addr.host,
     port: addr.port,
+    pluginConnected: () => latest !== undefined && latest.authed && !latest.closed,
+    dispatchToPlugin: (envelope, timeoutMs) => {
+      const commandId = typeof envelope.command_id === "string" ? envelope.command_id : "";
+      const sock = latest;
+      if (!sock || !sock.authed || sock.closed) {
+        return Promise.resolve(unverifiedResult(commandId, "no plugin"));
+      }
+      if (!commandId) {
+        return Promise.resolve(unverifiedResult("", "command_id required"));
+      }
+      return new Promise<PluginCommandResult>((resolve) => {
+        const timer = setTimeout(() => {
+          failPending(commandId, busyResult(commandId, "plugin timeout"));
+        }, timeoutMs);
+        pending.set(commandId, {
+          resolve: (result) => resolve(guardPaperSuccess(result, envelope)),
+          timer,
+        });
+        sendText(sock.socket, JSON.stringify({ type: "request", envelope }));
+      });
+    },
     close: async () => {
       if (beats) {
         clearInterval(beats);
+      }
+      for (const [commandId] of pending) {
+        failPending(commandId, unverifiedResult(commandId, "no plugin"));
       }
       for (const state of sockets) {
         state.closed = true;
         state.socket.destroy();
       }
       sockets.clear();
+      latest = undefined;
       await new Promise<void>((resolve, reject) => {
         server.close((err) => {
           if (err) {

@@ -109,6 +109,15 @@ void (async () => {
       tokenShape();
       return;
     }
+    if (cmd === "discover") {
+      if (!extra) {
+        fail(new Error("discover requires a project path"));
+      }
+      const { discoverProject } = await import("./project.js");
+      const found = discoverProject(extra);
+      write({ ok: true, root: found.root, project_id: found.projectId });
+      return;
+    }
     fail(new Error("unknown harness command"));
   } catch (err) {
     if (process.exitCode) {
