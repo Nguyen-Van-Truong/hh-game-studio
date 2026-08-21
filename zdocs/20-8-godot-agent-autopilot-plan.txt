@@ -1,6 +1,6 @@
 AUTHORITATIVE_PLAN=1
 STATUS=ACTIVE
-CURRENT_VALID_WP=R4-WP2
+CURRENT_VALID_WP=R4-WP3
 
 ================================================================================
 BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
@@ -12,7 +12,7 @@ BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
 | 1 | R1 — Spike và chọn nền MCP | Chứng minh agent tạo/sửa/chạy/nhìn một scene thật trong editor; chốt upstream hay tự làm | Research + Security + POC | G1 NO-FORK | [x] 5/5 WP |
 | 2 | R2 — Control plane | Plugin, sidecar, Agent Host, MCP, auth, registry, ledger, pause và OWNER_AUTOPILOT hoạt động | Bridge + Plugin + Security | — | [x] 7/7 WP |
 | 3 | R3 — Quyền editor ngữ nghĩa | Scene/node/property/resource/script/asset/project settings có undo, dedup và postcondition | Scene + Script + Asset | — | [x] 8/8 WP |
-| 4 | R4 — Người xem được agent làm | Activity Dock, chọn node, focus inspector, cursor/gizmo ảo, replay kéo-thả, Watch/Fast mode | Observer UI + Editor UX | G2 VISIBLE | [ ] 1/6 WP |
+| 4 | R4 — Người xem được agent làm | Activity Dock, chọn node, focus inspector, cursor/gizmo ảo, replay kéo-thả, Watch/Fast mode | Observer UI + Editor UX | G2 VISIBLE | [ ] 2/6 WP |
 | 5 | R5 — Bộ công cụ làm game 2D | TileMapLayer, animation, UI, audio, physics, navigation, shader/particles được agent thao tác đầy đủ | 2D-A + 2D-B + Assets | — | [ ] 0/7 WP |
 | 6 | R6 — Agent tự chơi và tự kiểm | Play/debug, input, runtime state, deterministic step, screenshot/diff/perf, test evidence | Runtime + Test + Vision | G3 SELF-VERIFY | [ ] 0/7 WP |
 | 7 | R7 — Autopilot dài hạn | Nhận brief một lần, tự plan→làm→test→sửa→commit→resume; nhiều agent không đạp nhau | Orchestrator + Git + Recovery | G4 AUTONOMY | [ ] 0/6 WP |
@@ -24,7 +24,7 @@ VIỆC PHẢI LÀM TRƯỚC: R0-WP1 → R0-WP2 → R0-WP3 → R0-WP4 → R1-WP1.
 Không được bắt đầu R2
 trước G1. Từ R2 trở đi chỉ song song các track có ranh giới file rõ ràng.
 
-Tiến độ tổng: [ ] 25/60 WP. First valid WP: R4-WP2.
+Tiến độ tổng: [ ] 26/60 WP. First valid WP: R4-WP3.
 Ngày lập: 20-8-2026 (Asia/Saigon).
 
 ================================================================================
@@ -1447,7 +1447,7 @@ R4-WP1 — Activity Dock và action timeline                              [x]
         10k is synthetic append; G2 VISIBLE stays human
       Commit: 29e3dc4 R4-WP1: activity dock and action timeline
 
-R4-WP2 — Selection, Inspector, Script và FileSystem focus               [ ]
+R4-WP2 — Selection, Inspector, Script và FileSystem focus               [x]
   Phụ thuộc: R3-WP1..7, R4-WP1.
   Track/file: C; presenter adapters.
   Làm:
@@ -1457,7 +1457,18 @@ R4-WP2 — Selection, Inspector, Script và FileSystem focus               [ ]
     - presentation failure không rollback mutation, nhưng ghi `presentation_failed`.
   Verify: node renamed/reparented, Inspector hidden/dock moved, multi-scene tabs, external editor.
   DoD: Watch mode luôn đưa người đến đối tượng thật đang đổi khi API hỗ trợ.
-  LOG: (trống)
+  LOG:
+    LOG 2026-08-22 06:45 Asia/Saigon — agent=coordinator
+      Base: 4ff42c0 editor.select presentation (edit_node/inspect_object/
+        edit_script/select_file). Godot=4.7.1.stable.official.a13da4feb
+      Files/leases: hh_presenter.gd, editor.select catalog, test_editor_focus.py
+      Verify: test_editor_focus.py → 0; test_scene_lifecycle.py → 0;
+        test_read_model.py → 0 after allowlist +project-settings (R3 leftover)
+      E2E/artifacts: presentation_failed does not rollback; G2 stays human
+      Critic: a01a7106 PASS-WITH-GAPS, TICK yes R4-WP2 only
+      Gaps: script.open_at still echoes line; Watch auto-hint skips
+        rename/reparent; Inspector property path unread; headless cheap
+      Commit: 4ff42c0 R4-WP2: editor select inspector script filesystem focus
 
 R4-WP3 — Viewport overlay, agent cursor và semantic drag replay          [ ]
   Phụ thuộc: R4-WP2.
@@ -2127,15 +2138,15 @@ thuận nếu ảnh hưởng G5/G6.
 14. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Hiện tại R0 (4/4) + R1 (5/5, G1) + R2 (7/7) + R3 (8/8) + R4-WP1 đã xong. Agent tiếp theo làm **R4-WP2**.
+Hiện tại R0 (4/4) + R1 (5/5, G1) + R2 (7/7) + R3 (8/8) + R4-WP1..WP2 đã xong. Agent tiếp theo làm **R4-WP3**.
 KHÔNG vendor A/C as-is, KHÔNG M6, KHÔNG fork Godot. Semantic editor verbs exist;
-Selection/Inspector/Script/FileSystem focus is next. Do not claim the agent
-drives a full game. G2 VISIBLE stays a human review gate — do not fake it.
+Viewport overlay / agent cursor / semantic drag replay is next. Do not claim
+the agent drives a full game. G2 VISIBLE stays a human review gate — do not fake it.
 
 Lệnh hợp lệ:
 
-  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R4-WP2`);
-  2) R4-WP2: Selection, Inspector, Script và FileSystem focus;
+  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R4-WP3`);
+  2) R4-WP3: Viewport overlay, agent cursor và semantic drag replay;
   3) mở editor fixture: `hh-godot-editor.bat` (Godot 4.7.1-stable pin, minimal-2d);
   4) không copy hh_stock_poc; không npx -y; không bump 4.7.2; không raw-write
      .tscn; plugin is the only writer.
