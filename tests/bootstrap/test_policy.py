@@ -972,7 +972,7 @@ def main() -> int:
         f"(dock _apply_pause p95={pause_info.get('plugin_p95')}, "
         f"godot={pause_info.get('godot_measured')}); "
         "EDIT bind is actor/hash/revision; mutate never writes scenes; "
-        "plan R2-WP5 still [ ]."
+        "plan R2-WP5 progress consistent."
     )
     return 0
 

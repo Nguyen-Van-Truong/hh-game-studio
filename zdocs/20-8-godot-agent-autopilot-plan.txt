@@ -1,6 +1,6 @@
 AUTHORITATIVE_PLAN=1
 STATUS=ACTIVE
-CURRENT_VALID_WP=R2-WP5
+CURRENT_VALID_WP=R2-WP6
 
 ================================================================================
 BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
@@ -10,7 +10,7 @@ BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
 |--------|-----------|------------------|-----------------------------|------|------------|
 | 0 | R0 — Cutover an toàn | Đóng băng engine Rust cũ, pin Godot, đổi bootstrap sang plan này, không mất lịch sử | Governance + Toolchain | G0 | [x] 4/4 WP |
 | 1 | R1 — Spike và chọn nền MCP | Chứng minh agent tạo/sửa/chạy/nhìn một scene thật trong editor; chốt upstream hay tự làm | Research + Security + POC | G1 NO-FORK | [x] 5/5 WP |
-| 2 | R2 — Control plane | Plugin, sidecar, Agent Host, MCP, auth, registry, ledger, pause và OWNER_AUTOPILOT hoạt động | Bridge + Plugin + Security | — | [ ] 4/7 WP |
+| 2 | R2 — Control plane | Plugin, sidecar, Agent Host, MCP, auth, registry, ledger, pause và OWNER_AUTOPILOT hoạt động | Bridge + Plugin + Security | — | [ ] 5/7 WP |
 | 3 | R3 — Quyền editor ngữ nghĩa | Scene/node/property/resource/script/asset/project settings có undo, dedup và postcondition | Scene + Script + Asset | — | [ ] 0/8 WP |
 | 4 | R4 — Người xem được agent làm | Activity Dock, chọn node, focus inspector, cursor/gizmo ảo, replay kéo-thả, Watch/Fast mode | Observer UI + Editor UX | G2 VISIBLE | [ ] 0/6 WP |
 | 5 | R5 — Bộ công cụ làm game 2D | TileMapLayer, animation, UI, audio, physics, navigation, shader/particles được agent thao tác đầy đủ | 2D-A + 2D-B + Assets | — | [ ] 0/7 WP |
@@ -24,7 +24,7 @@ VIỆC PHẢI LÀM TRƯỚC: R0-WP1 → R0-WP2 → R0-WP3 → R0-WP4 → R1-WP1.
 Không được bắt đầu R2
 trước G1. Từ R2 trở đi chỉ song song các track có ranh giới file rõ ràng.
 
-Tiến độ tổng: [ ] 13/60 WP. First valid WP: R2-WP5.
+Tiến độ tổng: [ ] 14/60 WP. First valid WP: R2-WP6.
 Ngày lập: 20-8-2026 (Asia/Saigon).
 
 ================================================================================
@@ -1028,7 +1028,7 @@ R2-WP4 — Command ledger, dedup và uncertain recovery                   [x] 21
       Commit: 73dacac R2-WP4: command ledger and uncertain recovery;
         31f7196 durable actor across sidecar restart
 
-R2-WP5 — OWNER_AUTOPILOT policy, leases, jail và Pause                 [ ]
+R2-WP5 — OWNER_AUTOPILOT policy, leases, jail và Pause                 [x] 21-8-2026
   Phụ thuộc: R2-WP2, R2-WP4.
   Track/file: A/C; policy engine, project lock, Pause UI.
   Làm:
@@ -1042,7 +1042,26 @@ R2-WP5 — OWNER_AUTOPILOT policy, leases, jail và Pause                 [ ]
           checkpoint flush failure phải chặn mutation; Pause latency p95.
   DoD: OWNER không đồng nghĩa unrestricted OS; mọi delete/remove sau WP này có recovery
        primitive thật; p95 Pause gate ACK <=250 ms.
-  LOG: (trống)
+  LOG:
+    LOG 2026-08-21 09:20 Asia/Saigon — agent=coordinator
+      Base: 4361e09 policy/jail/leases/Pause; cheap-fix 2fb2cb4 live gate.
+        Godot=4.7.1.stable.official.a13da4feb, schema=hh-godot-actions/1
+      Files/leases: bridge/src/policy/, godot/plugin-project/addons/hh_agent/,
+        tests/bootstrap/test_policy.py
+      Verify: test_policy.py → 0 (path-escape; E_BUSY; human-edit E_CONFLICT;
+        checkpoint restore + fail-blocks; live sidecar hh.pause n=40 + dock
+        _apply_pause; EDIT actor/hash/revision bind); g1/registry/session/
+        plugin_router/ledger → 0. Does not apply scene mutations.
+      E2E/artifacts: checkpoint under .hh-agent/checkpoints/; Pause dock →
+        sidecar gate E_PAUSED; OWNER default is project-scoped, not OS-wide
+      Critic: PASS-WITH-GAPS tick no (f9a9f72d) on 4361e09 — official p95 was
+        in-process bool flip; suite never started sidecar. Closed on 2fb2cb4
+        (8a1487f2 PASS-WITH-GAPS, prior P1s dead, recommend tick). P0 none.
+      Gaps: ACK is draining flag not drain-done; mutate-lane is a sentinel;
+        allowlist basename-only; MCP additionalProperties catalog-only;
+        no pinned Pause shortcut / resume re-sync. Mutate still never applying.
+      Commit: 4361e09 R2-WP5: policy jail leases and Pause gate;
+        2fb2cb4 live Pause gate and bound approve
 
 R2-WP6 — Read model, capability discovery và `doctor` E2E              [ ]
   Phụ thuộc: R2-WP3, R2-WP5.
@@ -1881,19 +1900,19 @@ thuận nếu ảnh hưởng G5/G6.
 14. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Hiện tại R0 (4/4) + R1 (5/5, G1) + R2-WP1..WP4 đã xong. Agent tiếp theo làm **R2-WP5**.
-KHÔNG vendor A/C as-is, KHÔNG M6, KHÔNG fork Godot. Ledger + hello exist; mutate still
-not dispatched. OWNER_AUTOPILOT is project-scoped after checkpoint — not unrestricted OS.
-Do not claim the agent drives Godot or writes scenes.
+Hiện tại R0 (4/4) + R1 (5/5, G1) + R2-WP1..WP5 đã xong. Agent tiếp theo làm **R2-WP6**.
+KHÔNG vendor A/C as-is, KHÔNG M6, KHÔNG fork Godot. Policy + Pause + ledger exist;
+mutate still not dispatched. Read/discovery only — agent must understand state
+before mutation rights. Do not claim the agent drives Godot or writes scenes.
 
 Lệnh hợp lệ:
 
-  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R2-WP5`);
-  2) R2-WP5: policy engine, leases, path jail, recovery checkpoint primitive,
-     Pause gate ACK p95 <=250 ms (plan §6 + A8/A10/A14);
+  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R2-WP6`);
+  2) R2-WP6: read adapters, capability discovery, doctor E2E, MCP resources
+     project://summary, editor://state, capability://matrix (plan R2-WP6);
   3) mở editor fixture: `hh-godot-editor.bat` (Godot 4.7.1-stable pin, minimal-2d);
   4) không copy hh_stock_poc; không npx -y; không bump 4.7.2; không mutation adapter
-     (R3); không pretend Pause/OWNER means live scene edits.
+     (R3); không pretend read model means live scene edits.
 
 Không được tự xóa engine/code/game/asset cũ. Không được tự fork Godot. Không yêu cầu
 người click editor trong happy path. Mục tiêu cuối là: người giao brief, xem agent làm,
