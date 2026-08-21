@@ -1149,6 +1149,17 @@
       "postcondition": "observer_overlay_snapshot",
       "checkpoint_required": false
     },
+    "observer.scheduler": {
+      "method": "godot.observer",
+      "verb": "scheduler",
+      "side_effect": "view",
+      "timeout_ms": 15000,
+      "required": [
+        "detail"
+      ],
+      "postcondition": "observer_scheduler_snapshot",
+      "checkpoint_required": false
+    },
     "play.start": {
       "method": "godot.play",
       "verb": "start",

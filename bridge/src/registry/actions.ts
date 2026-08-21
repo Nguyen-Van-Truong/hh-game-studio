@@ -1250,6 +1250,20 @@ const SPECS: Record<string, ActionSpec> = {
     obj(["detail"], { detail: DETAIL }),
     { detail: "short" },
   ),
+  "observer.scheduler": view(
+    "Read presentation scheduler snapshot; optional stress records cell events without UndoRedo",
+    "observer_scheduler_snapshot",
+    obj(["detail"], {
+      detail: DETAIL,
+      stress: { type: "integer", minimum: 0, maximum: 10000 },
+      unique_keys: BOOL,
+      replay: BOOL,
+      command_id: { type: "string", minLength: 26, maxLength: 26 },
+    }),
+    { detail: "short" },
+    "n/a",
+    { timeout_ms: 15_000 },
+  ),
   "editor.select": view(
     "Present a node, resource, script, or filesystem path in the editor",
     "selection_paths_match",

@@ -9,6 +9,7 @@ const _CodecScript: GDScript = preload("res://addons/hh_agent/core/hh_variant_co
 const _StoreScript: GDScript = preload("res://addons/hh_agent/core/hh_activity_store.gd")
 const _PresenterScript: GDScript = preload("res://addons/hh_agent/core/hh_presenter.gd")
 const _OverlayScript: GDScript = preload("res://addons/hh_agent/ui/overlay/hh_overlay.gd")
+const _SchedulerScript: GDScript = preload("res://addons/hh_agent/core/hh_scheduler.gd")
 
 ## Main-thread read/view adapters. Mutate is never applied here.
 
@@ -44,6 +45,8 @@ func handle(
 		return _observer_focus(command_id, params, post)
 	if method == "godot.observer" and action == "overlay":
 		return _observer_overlay(command_id, params, envelope, post)
+	if method == "godot.observer" and action == "scheduler":
+		return _observer_scheduler(command_id, params, envelope, post)
 	if method == "godot.editor" and action == "select":
 		return _presenter.handle(command_id, method, action, params, actions, {})
 	if method == "godot.scene" and action == "read":
@@ -125,6 +128,7 @@ func _post_name(def: Dictionary, method: String, action: String) -> String:
 			"editor.select": "selection_paths_match",
 			"observer.focus": "observer_focus_snapshot",
 			"observer.overlay": "observer_overlay_snapshot",
+			"observer.scheduler": "observer_scheduler_snapshot",
 			"play.status": "play_status_known",
 			"play.logs": "play_logs_returned",
 		}
@@ -436,7 +440,11 @@ func _observer_timeline(command_id: String, params: Dictionary, post: String) ->
 		if store != null:
 			store.reload_from_disk()
 	var dock: Dictionary = _dock_snapshot(params)
-	return _ok(command_id, post, _redact_after({"dock": dock, "detail": str(params.get("detail", "short"))}))
+	return _ok(command_id, post, _redact_after({
+		"dock": dock,
+		"detail": str(params.get("detail", "short")),
+		"scheduler": _scheduler_snapshot(),
+	}))
 
 
 func _observer_focus(command_id: String, _params: Dictionary, post: String) -> Dictionary:
@@ -448,7 +456,46 @@ func _observer_overlay(command_id: String, _params: Dictionary, envelope: Dictio
 	var overlay: HHAgentOverlay = HHAgentOverlay.current()
 	if overlay == null:
 		overlay = HHAgentOverlay.new()
-	return _ok(command_id, post, _redact_after(overlay.snapshot(envelope)))
+	var sched: HHAgentScheduler = HHAgentScheduler.current()
+	if sched != null:
+		sched.flush_model()
+	var after: Dictionary = overlay.snapshot(envelope)
+	after["scheduler"] = _scheduler_snapshot()
+	return _ok(command_id, post, _redact_after(after))
+
+
+func _observer_scheduler(command_id: String, params: Dictionary, envelope: Dictionary, post: String) -> Dictionary:
+	var sched: HHAgentScheduler = HHAgentScheduler.current()
+	if sched == null:
+		sched = HHAgentScheduler.new()
+	var stress_n: int = int(params.get("stress", 0))
+	if stress_n > 0:
+		sched.stress(stress_n, params.get("unique_keys", true) == true)
+	if params.get("replay", false) == true:
+		sched.replay_from_log(str(params.get("command_id", "")), envelope)
+	sched.flush_model()
+	var after: Dictionary = sched.snapshot()
+	after["detail"] = str(params.get("detail", "short"))
+	var overlay: HHAgentOverlay = HHAgentOverlay.current()
+	if overlay != null:
+		after["overlay_drawn"] = overlay.snapshot(envelope).get("enabled", false) == true
+	return _ok(command_id, post, _redact_after(after))
+
+
+func _scheduler_snapshot() -> Dictionary:
+	var sched: HHAgentScheduler = HHAgentScheduler.current()
+	if sched == null:
+		return {
+			"mode": HHAgentConstants.MODE_WATCH,
+			"queue_depth": 0,
+			"dropped_present": 0,
+			"dropped_audit": 0,
+			"coalesced": 0,
+			"applied_present": 0,
+			"focus_id": "",
+			"lanes": [],
+		}
+	return sched.snapshot()
 
 
 func _merge_focus(after: Dictionary, focus: Dictionary) -> void:

@@ -29,6 +29,7 @@ var _anim_active: bool = false
 var _anim_t_ms: float = 0.0
 var _anim_ms: int = 0
 var _anim_points: Array[Vector2] = []
+var _lane_color_html: String = "#3db8ff"
 
 
 static func current() -> HHAgentOverlay:
@@ -93,21 +94,63 @@ func after_success(
 ) -> void:
 	if result.get("ok", false) != true:
 		return
-	if not _is_presentable_mutate(method, action):
+	if not is_presentable_mutate(method, action):
 		return
-	var record: Dictionary = _record_from_mutate(method, action, params, result)
+	var record: Dictionary = event_from_mutate(method, action, params, result)
 	if record.is_empty():
 		return
+	record_event(record)
+
+
+func record_event(record: Dictionary) -> void:
 	var cid: String = str(record.get("command_id", ""))
 	if not cid.is_empty():
 		_records[cid] = record
 	_last = record
-	_apply_record(record, false)
-	if is_draw_enabled_for(envelope):
-		_start_anim(record, _duration_ms(envelope))
 	var store: HHAgentActivityStore = HHAgentActivityStore.current()
 	if store != null:
 		store.mark_replay_ready()
+
+
+func event_from_mutate(method: String, action: String, params: Dictionary, result: Dictionary) -> Dictionary:
+	return _record_from_mutate(method, action, params, result)
+
+
+func apply_event(record: Dictionary, start_anim: bool, envelope: Dictionary) -> void:
+	if record.is_empty():
+		return
+	_apply_record(record, true)
+	if start_anim and is_draw_enabled_for(envelope):
+		_start_anim(record, _duration_ms(envelope))
+	else:
+		_anim_active = false
+
+
+func clear_focus() -> void:
+	_highlights.clear()
+	_ghost.clear()
+	_framed = ""
+	_anim_active = false
+
+
+func is_animating() -> bool:
+	return _anim_active
+
+
+func last_event() -> Dictionary:
+	if _last.is_empty():
+		return {}
+	return _last.duplicate(true)
+
+
+func set_lane_color(html: String) -> void:
+	if html.is_empty():
+		return
+	_lane_color_html = html
+
+
+func is_presentable_mutate(method: String, action: String) -> bool:
+	return _is_presentable_mutate(method, action)
 
 
 func replay_last() -> Dictionary:
@@ -327,11 +370,15 @@ func _apply_record(record: Dictionary, _is_replay: bool) -> void:
 		_cursor = rect.get_center()
 		_framed = str(record.get("path", ""))
 	_highlights.clear()
+	var color_s: String = str(record.get("color", _lane_color_html))
+	if color_s.is_empty():
+		color_s = _lane_color_html
 	_highlights.append({
 		"path": str(record.get("path", "")),
 		"uid": str(record.get("uid", "")),
 		"label": str(record.get("label", record.get("path", ""))),
 		"kind": str(record.get("kind", "bounds")),
+		"color": color_s,
 		"rect": {"x": rect.position.x, "y": rect.position.y, "w": rect.size.x, "h": rect.size.y},
 		"space": "world",
 	})
@@ -602,7 +649,8 @@ func _draw_highlights(overlay: Control, xform: Transform2D, scale_px: float) -> 
 		var d: Vector2 = xform * (rect.position + Vector2(0.0, rect.size.y))
 		var screen: Rect2 = Rect2(a, Vector2.ZERO)
 		screen = screen.expand(b).expand(c).expand(d)
-		_stroke_rect(overlay, screen.grow(2.0 * scale_px), scale_px)
+		var accent: Color = _color_of(item)
+		_stroke_rect(overlay, screen.grow(2.0 * scale_px), scale_px, accent)
 		_draw_label(overlay, screen.position + Vector2(4.0 * scale_px, -16.0 * scale_px), str(item.get("label", "")), scale_px)
 		i += 1
 
@@ -613,9 +661,17 @@ func _draw_cursor(overlay: Control, xform: Transform2D, scale_px: float) -> void
 	overlay.draw_circle(pos, 2.0 * scale_px, Color(1.0, 1.0, 1.0, 0.95))
 
 
-func _stroke_rect(overlay: Control, rect: Rect2, scale_px: float) -> void:
-	overlay.draw_rect(rect, Color(0.15, 0.75, 1.0, 0.12), true)
-	overlay.draw_rect(rect, Color(0.2, 0.85, 1.0, 0.95), false, 2.0 * scale_px)
+func _color_of(item: Dictionary) -> Color:
+	var html: String = str(item.get("color", _lane_color_html))
+	if html.is_empty() or not html.begins_with("#"):
+		return Color(0.2, 0.85, 1.0, 0.95)
+	return Color.html(html)
+
+
+func _stroke_rect(overlay: Control, rect: Rect2, scale_px: float, accent: Color = Color(0.2, 0.85, 1.0, 0.95)) -> void:
+	var fill: Color = Color(accent.r, accent.g, accent.b, 0.12)
+	overlay.draw_rect(rect, fill, true)
+	overlay.draw_rect(rect, accent, false, 2.0 * scale_px)
 
 
 func _draw_label(overlay: Control, pos: Vector2, text: String, scale_px: float) -> void:

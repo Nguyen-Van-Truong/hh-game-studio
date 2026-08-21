@@ -11,6 +11,7 @@ const _PostScript: GDScript = preload("res://addons/hh_agent/core/hh_postconditi
 const _DockScript: GDScript = preload("res://addons/hh_agent/ui/health/hh_activity_dock.gd")
 const _StoreScript: GDScript = preload("res://addons/hh_agent/core/hh_activity_store.gd")
 const _OverlayScript: GDScript = preload("res://addons/hh_agent/ui/overlay/hh_overlay.gd")
+const _SchedulerScript: GDScript = preload("res://addons/hh_agent/core/hh_scheduler.gd")
 const _PauseScript: GDScript = preload("res://addons/hh_agent/core/hh_pause.gd")
 const _ErrorsScript: GDScript = preload("res://addons/hh_agent/core/hh_errors.gd")
 
@@ -28,6 +29,7 @@ var _postcondition: HHAgentPostcondition
 var _dock: HHAgentActivityDock
 var _store: HHAgentActivityStore
 var _overlay: HHAgentOverlay
+var _scheduler: HHAgentScheduler
 var _pause_gate: HHAgentPauseGate
 var _errors: HHAgentErrors
 var _reconnect_timer: Timer
@@ -56,6 +58,9 @@ func _enter_tree() -> void:
 	_overlay = HHAgentOverlay.new()
 	_overlay.attach()
 	_overlay.set_mode(_store.mode())
+	_scheduler = HHAgentScheduler.new()
+	_scheduler.attach()
+	_scheduler.set_mode(_store.mode())
 	set_force_draw_over_forwarding_enabled()
 	_client.set_enqueue(Callable(self, "_enqueue_inbound"))
 	_client.set_hello_handler(Callable(self, "_on_hello"))
@@ -84,26 +89,28 @@ func _exit_tree() -> void:
 
 
 func _process(_delta: float) -> void:
+	if _client != null:
+		_client.poll()
+	var inbound_this_frame: bool = false
+	if not _busy:
+		var n: int = 0
+		while n < HHAgentConstants.DRAIN_PER_FRAME:
+			if _queue == null:
+				break
+			var item: Dictionary = _queue.take()
+			if item.is_empty():
+				break
+			inbound_this_frame = true
+			_busy = true
+			_handle_item(item)
+			_busy = false
+			n += 1
+	if _scheduler != null:
+		_scheduler.tick(_delta, inbound_this_frame or _busy)
 	if _overlay != null:
 		_overlay.tick(_delta)
 		if _overlay.is_draw_enabled():
 			update_overlays()
-	if _client != null:
-		_client.poll()
-	if _busy:
-		_refresh_dock()
-		return
-	var n: int = 0
-	while n < HHAgentConstants.DRAIN_PER_FRAME:
-		if _queue == null:
-			break
-		var item: Dictionary = _queue.take()
-		if item.is_empty():
-			break
-		_busy = true
-		_handle_item(item)
-		_busy = false
-		n += 1
 	_refresh_dock()
 
 
@@ -158,6 +165,8 @@ func _on_mode_changed(mode: String) -> void:
 		_store.set_mode(mode)
 	if _overlay != null:
 		_overlay.set_mode(mode)
+	if _scheduler != null:
+		_scheduler.set_mode(mode)
 	_refresh_dock()
 
 
@@ -572,6 +581,9 @@ func _cleanup() -> void:
 	if _overlay != null:
 		_overlay.detach()
 		_overlay = null
+	if _scheduler != null:
+		_scheduler.detach()
+		_scheduler = null
 	if _store != null:
 		_store.persist()
 		_store.detach()

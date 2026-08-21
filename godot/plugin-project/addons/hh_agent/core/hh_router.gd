@@ -18,6 +18,8 @@ const _SettingsScript: GDScript = preload("res://addons/hh_agent/core/hh_setting
 const _TxScript: GDScript = preload("res://addons/hh_agent/core/hh_transaction_adapter.gd")
 const _PresenterScript: GDScript = preload("res://addons/hh_agent/core/hh_presenter.gd")
 const _OverlayScript: GDScript = preload("res://addons/hh_agent/ui/overlay/hh_overlay.gd")
+const _SchedulerScript: GDScript = preload("res://addons/hh_agent/core/hh_scheduler.gd")
+const _StoreScript: GDScript = preload("res://addons/hh_agent/core/hh_activity_store.gd")
 
 ## Routes read/view adapters, scene/node/property/resource/signal/script/asset/project/transaction apply.
 
@@ -35,6 +37,7 @@ var _settings: HHAgentSettingsAdapter = HHAgentSettingsAdapter.new()
 var _tx: HHAgentTransactionAdapter = HHAgentTransactionAdapter.new()
 var _presenter: HHAgentPresenter = HHAgentPresenter.new()
 var _overlay_local: HHAgentOverlay = HHAgentOverlay.new()
+var _scheduler_local: HHAgentScheduler = HHAgentScheduler.new()
 
 
 func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_gate: HHAgentPauseGate = null) -> Dictionary:
@@ -68,6 +71,7 @@ func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_ga
 			return _errors.fail(command_id, HHAgentErrors.E_BUSY, "request timed out in queue", "")
 	var params_v: Variant = envelope.get("params", {})
 	var params: Dictionary = params_v if params_v is Dictionary else {}
+	_sync_presentation_mode(envelope)
 	var required_v: Variant = def.get("required", [])
 	if required_v is Array:
 		for field_v: Variant in required_v:
@@ -116,8 +120,7 @@ func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_ga
 		result = _reads.handle(command_id, method, action, params, actions, envelope)
 	else:
 		return _errors.fail(command_id, HHAgentErrors.E_UNVERIFIED, "not dispatched", "")
-	result = _presenter.after_success(result, method, action, params, envelope)
-	_overlay().after_success(result, method, action, params, envelope)
+	result = _scheduler().after_success(result, method, action, params, envelope)
 	return result
 
 
@@ -376,6 +379,27 @@ func _overlay() -> HHAgentOverlay:
 	if live != null:
 		return live
 	return _overlay_local
+
+
+func _scheduler() -> HHAgentScheduler:
+	var live: HHAgentScheduler = HHAgentScheduler.current()
+	if live != null:
+		return live
+	return _scheduler_local
+
+
+func _sync_presentation_mode(envelope: Dictionary) -> void:
+	var pres_v: Variant = envelope.get("presentation", {})
+	if not (pres_v is Dictionary):
+		return
+	var mode_s: String = str((pres_v as Dictionary).get("mode", ""))
+	if mode_s != HHAgentConstants.MODE_FAST and mode_s != HHAgentConstants.MODE_WATCH:
+		return
+	var store: HHAgentActivityStore = HHAgentActivityStore.current()
+	if store != null:
+		store.set_mode(mode_s)
+	_overlay().set_mode(mode_s)
+	_scheduler().set_mode(mode_s)
 
 
 func _sample(method: String, action: String, params: Dictionary) -> Dictionary:

@@ -41,7 +41,7 @@ func after_success(
 ) -> Dictionary:
 	if result.get("ok", false) != true:
 		return result
-	var hint: Dictionary = _hint_from_mutation(method, action, params, result)
+	var hint: Dictionary = hint_from_mutation(method, action, params, result)
 	if hint.is_empty():
 		return result
 	var applied: Dictionary = apply_presentation(hint, envelope, false)
@@ -50,6 +50,10 @@ func after_success(
 	_merge_focus(after, applied)
 	result["after"] = after
 	return result
+
+
+func hint_from_mutation(method: String, action: String, params: Dictionary, result: Dictionary) -> Dictionary:
+	return _hint_from_mutation(method, action, params, result)
 
 
 func live_snapshot() -> Dictionary:
