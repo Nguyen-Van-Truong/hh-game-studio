@@ -906,7 +906,7 @@ def main() -> int:
         "PASS: property Variant codec + Inspector set/batch/reset; "
         "corpus, invalid enum/range/type, batch rollback, save/reopen, "
         "post-save builtin SubResource set, Pause; "
-        "R3-WP3 stays [ ]."
+        "plan progress consistent."
     )
     return 0
 
