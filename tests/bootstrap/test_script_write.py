@@ -229,6 +229,8 @@ def src_scan_errors() -> list[str]:
                 errors.append("_validate_source must set probe resource_path to dest before reload")
         if "class_name R3W5Named" not in self_text:
             errors.append("official test must write class_name R3W5Named, not only class_name-less fixtures")
+        if 'godot.script", "validate", {"path": named}' not in self_text:
+            errors.append("official test must script.validate res://r3w5/named.gd after class_name write/rewrite")
         if re.search(r"\bcallv\b", text) or "Object.call" in text:
             errors.append("script adapter has a generic invoke path")
     meta = ADDON / "core" / "hh_scene_meta.gd"
@@ -243,6 +245,19 @@ def src_scan_errors() -> list[str]:
             errors.append("missing _script_validate")
         elif "reload" not in val_fn.group(0):
             errors.append("script.validate must parse via GDScript.reload, not paper after write")
+        elif "_parse_gdscript(text, res_path)" not in val_fn.group(0):
+            errors.append("script.validate must parse against dest resource_path")
+        parse_fn = re.search(r"func _parse_gdscript\b.*?func _script_open_at\b", read_text, re.S)
+        if parse_fn is None:
+            errors.append("missing _parse_gdscript")
+        else:
+            probe_body = parse_fn.group(0)
+            rp = probe_body.find("resource_path")
+            rl = probe_body.find("reload(")
+            if rp < 0 or rl < 0 or rp > rl:
+                errors.append("_parse_gdscript must set probe resource_path to dest before reload")
+            if "has_cached" not in probe_body and "CACHE_MODE_REUSE" not in probe_body:
+                errors.append("_parse_gdscript must reuse the loaded dest script when present")
         diag_fn = re.search(r"func _script_diagnostics\b.*?func _script_open_at\b", read_text, re.S)
         if diag_fn is None:
             errors.append("missing _script_diagnostics")
@@ -449,6 +464,11 @@ def live_errors(exe: Path) -> list[str]:
             return errors
         if named_abs.read_bytes() != NAMED_NEXT.encode("utf-8"):
             errors.append(f"second class_name write disk mismatch: {named_abs.read_bytes()!r}")
+            return errors
+        req_id, named_validated = tool_call(
+            proc, req_id, "godot.script", "validate", {"path": named}
+        )
+        if not ack_ok(named_validated, errors, "script.validate class_name R3W5Named"):
             return errors
         req_id, named_patched = tool_call(
             proc,

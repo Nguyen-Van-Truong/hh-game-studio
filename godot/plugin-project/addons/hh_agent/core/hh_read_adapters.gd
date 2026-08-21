@@ -750,7 +750,7 @@ func _script_validate(command_id: String, params: Dictionary, post: String) -> D
 	if not FileAccess.file_exists(res_path):
 		return _unverified(command_id, "script missing")
 	var text: String = FileAccess.get_file_as_bytes(res_path).get_string_from_utf8()
-	var parsed: Dictionary = _parse_gdscript(text)
+	var parsed: Dictionary = _parse_gdscript(text, res_path)
 	if parsed.get("ok", false) != true:
 		return _errors.fail(
 			command_id,
@@ -780,13 +780,31 @@ func _script_diagnostics(command_id: String, params: Dictionary, _post: String) 
 	)
 
 
-func _parse_gdscript(contents: String) -> Dictionary:
+func _parse_gdscript(contents: String, dest_path: String = "") -> Dictionary:
 	if contents.begins_with("\ufeff"):
 		return {"ok": false, "code": HHAgentErrors.E_INVALID_TYPE, "message": "UTF-8 BOM is not allowed"}
 	var probe: GDScript = GDScript.new()
+	var reused: bool = false
+	var old_source: String = ""
+	if not dest_path.is_empty():
+		if ResourceLoader.has_cached(dest_path):
+			var loaded: Resource = ResourceLoader.load(dest_path, "", ResourceLoader.CACHE_MODE_REUSE)
+			if loaded is GDScript:
+				probe = loaded as GDScript
+				reused = true
+				old_source = probe.source_code
+		if probe.resource_path != dest_path:
+			probe.resource_path = dest_path
+		if probe.resource_path != dest_path:
+			probe.take_over_path(dest_path)
 	probe.source_code = contents
 	var err: Error = probe.reload()
+	if not reused and not dest_path.is_empty() and probe.resource_path == dest_path:
+		probe.resource_path = ""
 	if err != OK:
+		if reused:
+			probe.source_code = old_source
+			probe.reload()
 		return {
 			"ok": false,
 			"code": HHAgentErrors.E_INVALID_TYPE,
@@ -794,6 +812,9 @@ func _parse_gdscript(contents: String) -> Dictionary:
 		}
 	var base: String = probe.get_instance_base_type()
 	if base.is_empty() and contents.contains("extends "):
+		if reused:
+			probe.source_code = old_source
+			probe.reload()
 		return {"ok": false, "code": HHAgentErrors.E_INVALID_TYPE, "message": "GDScript has no instance base type"}
 	return {"ok": true, "base": base}
 
