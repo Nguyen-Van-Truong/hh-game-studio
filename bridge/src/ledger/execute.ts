@@ -22,6 +22,7 @@ import {
 import { LedgerPluginDeath, maybeCrashAfterDispatchAttempt, maybeFault } from "./fault.js";
 import { canonicalRequestHash } from "./hash.js";
 import {
+  isPropertyApply,
   isProvenEditorApply,
   isSceneLifecycleApply,
   nodeNeedsUidAfter,
@@ -294,6 +295,75 @@ function classify(raw: Record<string, unknown>, commandId: string): Classified {
     actionId: accepted.action_id,
     result: unverifiedResult(commandId, "not dispatched"),
   };
+}
+
+function canonJson(value: unknown): unknown {
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return value;
+  }
+  if (Array.isArray(value)) {
+    return value.map((item) => canonJson(item));
+  }
+  if (isRecord(value)) {
+    const out: Record<string, unknown> = {};
+    for (const key of Object.keys(value).sort()) {
+      out[key] = canonJson(value[key]);
+    }
+    return out;
+  }
+  return value;
+}
+
+function encodedClose(a: unknown, b: unknown): boolean {
+  return JSON.stringify(canonJson(a)) === JSON.stringify(canonJson(b));
+}
+
+function propertyApplyOk(
+  result: PluginCommandResult,
+  actionId: string,
+  params: Record<string, unknown>,
+): PluginCommandResult | undefined {
+  if (!isPropertyApply(actionId)) {
+    return undefined;
+  }
+  if (!result.ok) {
+    return result;
+  }
+  if (typeof result.undo_action !== "string" || !result.undo_action.startsWith("Agent: ")) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "property missing Agent UndoRedo name");
+  }
+  const after = result.after;
+  if (!isRecord(after) || after.readback_equals !== true) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "property readback did not equal set");
+  }
+  if (actionId === "property.set") {
+    if (!isRecord(after.value)) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "property.set missing encoded value");
+    }
+    if (!encodedClose(after.value, params.value)) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "property.set readback != requested value");
+    }
+  }
+  if (actionId === "property.batch") {
+    if (!Array.isArray(after.items) || after.items.length < 1) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "property.batch missing items readback");
+    }
+    const requested = Array.isArray(params.items) ? params.items : [];
+    if (after.items.length !== requested.length) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "property.batch item count mismatch");
+    }
+    for (let i = 0; i < requested.length; i += 1) {
+      const want = requested[i];
+      const got = after.items[i];
+      if (!isRecord(want) || !isRecord(got) || !encodedClose(got.value, want.value)) {
+        return errorResult(result.command_id, E.E_UNVERIFIED, `property.batch item ${i} readback != set`);
+      }
+    }
+  }
+  if (actionId === "property.reset" && after.is_default !== true && after.reverted !== true) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "property.reset missing default readback");
+  }
+  return undefined;
 }
 
 function nodeIdentityOk(result: PluginCommandResult, actionId: string): PluginCommandResult | undefined {
@@ -714,7 +784,11 @@ async function applyMutateOnce(
     row.apply_count = 1;
     persistResult(row, result);
     row.after_summary = JSON.stringify({
-      kind: isSceneLifecycleApply(classified.actionId) ? "scene" : "node",
+      kind: isPropertyApply(classified.actionId)
+        ? "property"
+        : isSceneLifecycleApply(classified.actionId)
+          ? "scene"
+          : "node",
       action_id: classified.actionId,
       checks: result.postcondition.checks,
       disk_hash: isRecord(result.after) ? result.after.disk_hash ?? "" : "",
@@ -744,6 +818,12 @@ async function applyMutateOnce(
       persistResult(row, identityFail);
       saveState(ledger, row, "failed");
       return identityFail;
+    }
+    const propertyFail = propertyApplyOk(result, classified.actionId, fields.params);
+    if (propertyFail) {
+      persistResult(row, propertyFail);
+      saveState(ledger, row, "failed");
+      return propertyFail;
     }
     const projectRoot = runtime.projectRoot ?? runtime.policy?.projectRoot ?? "";
     const diskFail = durableDiskOk(result, classified.actionId, fields.params, projectRoot);

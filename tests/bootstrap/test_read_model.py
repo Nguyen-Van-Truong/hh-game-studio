@@ -432,6 +432,7 @@ def run_live() -> tuple[list[str], str, str]:
             if uri == "capability://matrix" and payload.get("mutate_dispatched") not in (
                 "scene-lifecycle",
                 "scene-lifecycle+node-crud",
+                "scene-lifecycle+node-crud+property",
             ):
                 errors.append(
                     f"capability://matrix mutate_dispatched must include scene-lifecycle: {payload.get('mutate_dispatched')}"
@@ -682,26 +683,20 @@ def run_live() -> tuple[list[str], str, str]:
         mutate = plug.mcp_call(
             proc,
             req_id,
-            "godot.property",
+            "godot.resource",
             {
-                "action": "set",
+                "action": "create",
                 "params": {
-                    "scene": "res://fixtures/tree_1k.tscn",
-                    "node_path": ".",
-                    "property": "position",
-                    "value": {
-                        "schema": "hh-godot-variant/1",
-                        "type": "Vector2",
-                        "value": {"x": 1, "y": 2},
-                    },
+                    "path": "res://fixtures/unproven.tres",
+                    "class_name": "TileSet",
                 },
             },
         )
         mutate_body = (mutate.get("result") or {}).get("structuredContent") or {}
         if (mutate_body.get("error") or {}).get("code") != "E_UNVERIFIED":
-            errors.append(f"property.set must stay E_UNVERIFIED without UndoRedo codec: {mutate_body}")
+            errors.append(f"resource.create must stay E_UNVERIFIED: {mutate_body}")
         if mutate_body.get("ok") is True:
-            errors.append("unproven property.set returned ok true")
+            errors.append("unproven resource.create returned ok true")
         if TREE_FIXTURE.read_text(encoding="utf-8").count("AgentWroteThis"):
             errors.append("read-model path wrote a node into the fixture scene")
     except Exception as exc:  # noqa: BLE001

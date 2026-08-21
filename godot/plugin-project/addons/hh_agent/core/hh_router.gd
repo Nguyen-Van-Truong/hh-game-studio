@@ -9,14 +9,16 @@ const _PauseScript: GDScript = preload("res://addons/hh_agent/core/hh_pause.gd")
 const _ReadsScript: GDScript = preload("res://addons/hh_agent/core/hh_read_adapters.gd")
 const _SceneScript: GDScript = preload("res://addons/hh_agent/core/hh_scene_adapter.gd")
 const _NodeScript: GDScript = preload("res://addons/hh_agent/core/hh_node_adapter.gd")
+const _PropertyScript: GDScript = preload("res://addons/hh_agent/core/hh_property_adapter.gd")
 
-## Routes read/view adapters, scene lifecycle, and proven node CRUD.
+## Routes read/view adapters, scene lifecycle, node CRUD, and property set.
 
 var _errors: HHAgentErrors = HHAgentErrors.new()
 var _envelope: HHAgentEnvelope = HHAgentEnvelope.new()
 var _reads: HHAgentReadAdapters = HHAgentReadAdapters.new()
 var _scenes: HHAgentSceneAdapter = HHAgentSceneAdapter.new()
 var _nodes: HHAgentNodeAdapter = HHAgentNodeAdapter.new()
+var _props: HHAgentPropertyAdapter = HHAgentPropertyAdapter.new()
 
 
 func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_gate: HHAgentPauseGate = null) -> Dictionary:
@@ -73,6 +75,8 @@ func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_ga
 		return _nodes.handle(command_id, method, action, params, actions, pre)
 	if method == "godot.node" and action != "query" and _nodes.handles(action):
 		return _nodes.handle(command_id, method, action, params, actions, pre)
+	if method == "godot.property" and action != "get" and _props.handles(action):
+		return _props.handle(command_id, method, action, params, actions, pre)
 	if method == "godot.scene" and _scenes.handles(action):
 		return _scenes.handle(command_id, method, action, params, actions, pre)
 	if side_effect == "read" or side_effect == "view":
@@ -172,7 +176,7 @@ func run_selftest(actions: HHAgentActions) -> PackedStringArray:
 					failures.append("class page exceeded limit")
 				if total < 6:
 					failures.append("ClassDB page total too small")
-	var mutate_still: Dictionary = dispatch(
+	var property_missing: Dictionary = dispatch(
 		_sample(
 			"godot.property",
 			"set",
@@ -186,10 +190,23 @@ func run_selftest(actions: HHAgentActions) -> PackedStringArray:
 		actions,
 		0,
 	)
+	if property_missing.get("ok", true) == true:
+		failures.append("property.set on missing scene must not paper-ok")
+	if str(_error_of(property_missing).get("code", "")) == "":
+		failures.append("property.set on missing scene must be a typed error")
+	var mutate_still: Dictionary = dispatch(
+		_sample(
+			"godot.resource",
+			"create",
+			{"path": "res://r3w3/unproven.tres", "class_name": "TileSet"},
+		),
+		actions,
+		0,
+	)
 	if str(_error_of(mutate_still).get("code", "")) != HHAgentErrors.E_UNVERIFIED:
-		failures.append("property.set must stay E_UNVERIFIED")
+		failures.append("resource.create must stay E_UNVERIFIED")
 	if mutate_still.get("ok", true) == true:
-		failures.append("property.set must not paper-ok")
+		failures.append("resource.create must not paper-ok")
 	var forbidden: Dictionary = dispatch(
 		{
 			"protocol": HHAgentConstants.PROTOCOL,

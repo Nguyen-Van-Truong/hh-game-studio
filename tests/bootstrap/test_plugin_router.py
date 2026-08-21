@@ -689,18 +689,12 @@ def main() -> int:
             mutate = mcp_call(
                 proc,
                 3,
-                "godot.property",
+                "godot.resource",
                 {
-                    "action": "set",
+                    "action": "create",
                     "params": {
-                        "scene": "res://main.tscn",
-                        "node_path": ".",
-                        "property": "position",
-                        "value": {
-                            "schema": "hh-godot-variant/1",
-                            "type": "Vector2",
-                            "value": {"x": 1, "y": 2},
-                        },
+                        "path": "res://main.tres",
+                        "class_name": "TileSet",
                     },
                 },
             )

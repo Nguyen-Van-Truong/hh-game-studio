@@ -5,11 +5,13 @@ const _ConstantsScript: GDScript = preload("res://addons/hh_agent/core/hh_consta
 const _ErrorsScript: GDScript = preload("res://addons/hh_agent/core/hh_errors.gd")
 const _ActionsScript: GDScript = preload("res://addons/hh_agent/core/hh_actions.gd")
 const _MetaScript: GDScript = preload("res://addons/hh_agent/core/hh_scene_meta.gd")
+const _CodecScript: GDScript = preload("res://addons/hh_agent/core/hh_variant_codec.gd")
 
 ## Main-thread read/view adapters. Mutate is never applied here.
 
 var _errors: HHAgentErrors = HHAgentErrors.new()
 var _meta: HHAgentSceneMeta = HHAgentSceneMeta.new()
+var _codec: HHAgentVariantCodec = HHAgentVariantCodec.new()
 
 
 func handle(command_id: String, method: String, action: String, params: Dictionary, actions: HHAgentActions) -> Dictionary:
@@ -295,11 +297,7 @@ func _slim_props(raw: Array) -> Array:
 
 
 func _slim_prop(item: Dictionary) -> Dictionary:
-	return {
-		"name": str(item.get("name", "")),
-		"type": int(item.get("type", 0)),
-		"class_name": str(item.get("class_name", "")),
-	}
+	return _codec.discover(item)
 
 
 func _slim_methods(raw: Array) -> Array:
@@ -549,30 +547,81 @@ func _property_get(command_id: String, params: Dictionary, post: String) -> Dict
 	var result: Dictionary = {}
 	if node == null:
 		result = _unverified(command_id, "node not found")
-	elif not _has_property(node, prop):
-		result = _unverified(command_id, "property %s missing on %s" % [prop, node_path])
 	else:
-		var value: Variant = node.get(prop)
-		var again: Variant = node.get(prop)
-		if str(value) != str(again):
-			result = _unverified(command_id, "property changed during readback")
+		var walked: Dictionary = _walk_prop(node, prop)
+		if walked.get("ok", false) != true:
+			result = _unverified(command_id, "property %s missing on %s" % [prop, node_path])
 		else:
-			result = _ok(command_id, post, {
-				"scene": scene,
-				"node_path": node_path,
-				"property": prop,
-				"value": _encode_variant(value),
-			})
+			var target: Object = walked.get("target") as Object
+			var leaf: String = str(walked.get("leaf", ""))
+			var info: Dictionary = walked.get("info") if walked.get("info") is Dictionary else {}
+			var value: Variant = target.get(leaf)
+			var again: Variant = target.get(leaf)
+			if str(value) != str(again):
+				result = _unverified(command_id, "property changed during readback")
+			else:
+				var enc_raw: Dictionary = _codec.encode(value)
+				if enc_raw.get("ok", false) != true:
+					var enc_err: Dictionary = enc_raw.get("error") if enc_raw.get("error") is Dictionary else {}
+					result = _errors.fail(
+						command_id,
+						str(enc_err.get("code", HHAgentErrors.E_UNKNOWN_VARIANT_TYPE)),
+						str(enc_err.get("message", "unsupported Variant")),
+						str(enc_err.get("path", prop)),
+					)
+				else:
+					var enc: Dictionary = {
+						"schema": "hh-godot-variant/1",
+						"type": str(enc_raw.get("type", "")),
+						"value": enc_raw.get("value"),
+					}
+					var after: Dictionary = {
+						"scene": scene,
+						"node_path": node_path,
+						"property": prop,
+						"value": enc,
+						"property_hash": _codec.hash_of(value),
+						"discovery": _codec.discover(info) if not info.is_empty() else {},
+					}
+					result = _ok(command_id, post, after)
 	if hold.get("borrowed", false) != true and root != null:
 		root.free()
 	return result
 
 
 func _has_property(node: Object, prop: String) -> bool:
-	for item_v: Variant in node.get_property_list():
-		if item_v is Dictionary and str((item_v as Dictionary).get("name", "")) == prop:
-			return true
-	return false
+	return _walk_prop(node, prop).get("ok", false) == true
+
+
+func _walk_prop(node: Object, prop: String) -> Dictionary:
+	if node == null or prop.is_empty():
+		return {}
+	var parts: PackedStringArray = PackedStringArray()
+	if prop.contains("/"):
+		parts = prop.split("/")
+	elif prop.contains(":"):
+		parts = prop.split(":")
+	else:
+		parts = PackedStringArray([prop])
+	var cur: Object = node
+	var i: int = 0
+	while i < parts.size():
+		var name_s: String = parts[i]
+		var info: Dictionary = {}
+		for item_v: Variant in cur.get_property_list():
+			if item_v is Dictionary and str((item_v as Dictionary).get("name", "")) == name_s:
+				info = item_v
+				break
+		if info.is_empty():
+			return {}
+		if i == parts.size() - 1:
+			return {"ok": true, "target": cur, "leaf": name_s, "info": info}
+		var nxt: Variant = cur.get(name_s)
+		if nxt == null or typeof(nxt) != TYPE_OBJECT:
+			return {}
+		cur = nxt as Object
+		i += 1
+	return {}
 
 
 func _resource_load(command_id: String, params: Dictionary, post: String) -> Dictionary:
@@ -872,27 +921,3 @@ func _find_node(scene: String, node_path: String) -> Node:
 		return null
 	# Disk instances are only used for read snapshots; caller must not persist them.
 	return null
-
-
-func _encode_variant(value: Variant) -> Dictionary:
-	var t: int = typeof(value)
-	if t == TYPE_BOOL:
-		return {"schema": "hh-godot-variant/1", "type": "bool", "value": value}
-	if t == TYPE_INT:
-		return {"schema": "hh-godot-variant/1", "type": "int", "value": value}
-	if t == TYPE_FLOAT:
-		return {"schema": "hh-godot-variant/1", "type": "float", "value": value}
-	if t == TYPE_STRING:
-		return {"schema": "hh-godot-variant/1", "type": "string", "value": value}
-	if t == TYPE_VECTOR2:
-		var v: Vector2 = value
-		return {"schema": "hh-godot-variant/1", "type": "Vector2", "value": {"x": v.x, "y": v.y}}
-	if t == TYPE_COLOR:
-		var c: Color = value
-		return {"schema": "hh-godot-variant/1", "type": "Color", "value": {"r": c.r, "g": c.g, "b": c.b, "a": c.a}}
-	if t == TYPE_NODE_PATH:
-		return {"schema": "hh-godot-variant/1", "type": "NodePath", "value": str(value)}
-	if t == TYPE_OBJECT and value is Resource:
-		var res: Resource = value as Resource
-		return {"schema": "hh-godot-variant/1", "type": "Resource", "value": res.resource_path}
-	return {"schema": "hh-godot-variant/1", "type": "string", "value": str(value)}

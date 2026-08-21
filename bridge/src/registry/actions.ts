@@ -26,6 +26,7 @@ import {
   JOB_ID,
   LIMIT,
   NODE_PATH,
+  PROP_PATH,
   RES_PATH,
   TEXT,
   VARIANT,
@@ -486,7 +487,7 @@ const SPECS: Record<string, ActionSpec> = {
     obj(["scene", "node_path", "property"], {
       scene: RES_PATH,
       node_path: NODE_PATH,
-      property: IDENT,
+      property: PROP_PATH,
     }),
     { scene: "res://scenes/world.tscn", node_path: "Player", property: "position" },
   ),
@@ -498,8 +499,9 @@ const SPECS: Record<string, ActionSpec> = {
     input: obj(["scene", "node_path", "property", "value"], {
       scene: RES_PATH,
       node_path: NODE_PATH,
-      property: IDENT,
+      property: PROP_PATH,
       value: VARIANT,
+      expected_old_hash: HASH,
     }),
     example: {
       scene: "res://scenes/world.tscn",
@@ -508,7 +510,7 @@ const SPECS: Record<string, ActionSpec> = {
       value: exampleVariantVec2(16, 32),
     },
     postcondition: "property_get_equals_set",
-    extra_errors: [E.E_INVALID_VARIANT, E.E_UNKNOWN_VARIANT_TYPE],
+    extra_errors: [...SCENE_MUTATE_ERRORS, E.E_INVALID_VARIANT, E.E_UNKNOWN_VARIANT_TYPE],
   },
   "property.batch": {
     summary: "Set several properties in one UndoRedo action",
@@ -523,8 +525,9 @@ const SPECS: Record<string, ActionSpec> = {
         maxItems: 64,
         items: obj(["node_path", "property", "value"], {
           node_path: NODE_PATH,
-          property: IDENT,
+          property: PROP_PATH,
           value: VARIANT,
+          expected_old_hash: HASH,
         }),
       },
     }),
@@ -539,7 +542,7 @@ const SPECS: Record<string, ActionSpec> = {
       ],
     },
     postcondition: "batch_properties_match",
-    extra_errors: [E.E_INVALID_VARIANT, E.E_UNKNOWN_VARIANT_TYPE],
+    extra_errors: [...SCENE_MUTATE_ERRORS, E.E_INVALID_VARIANT, E.E_UNKNOWN_VARIANT_TYPE],
   },
   "property.reset": mutate(
     "Reset a property to its class default",
@@ -548,9 +551,10 @@ const SPECS: Record<string, ActionSpec> = {
     obj(["scene", "node_path", "property"], {
       scene: RES_PATH,
       node_path: NODE_PATH,
-      property: IDENT,
+      property: PROP_PATH,
     }),
     { scene: "res://scenes/world.tscn", node_path: "Player", property: "modulate" },
+    { extra_errors: SCENE_MUTATE_ERRORS },
   ),
 
   "resource.create": mutate(

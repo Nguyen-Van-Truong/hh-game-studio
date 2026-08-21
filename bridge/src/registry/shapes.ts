@@ -36,6 +36,13 @@ export const IDENT: JsonSchema = {
   pattern: "^[A-Za-z_][A-Za-z0-9_]*$",
 };
 
+export const PROP_PATH: JsonSchema = {
+  type: "string",
+  minLength: 1,
+  maxLength: 256,
+  pattern: "^[A-Za-z_][A-Za-z0-9_]*(?:[/:][A-Za-z_][A-Za-z0-9_]*)*$",
+};
+
 export const ACTION_ID: JsonSchema = {
   type: "string",
   minLength: 3,

@@ -1,5 +1,5 @@
 import { PINNED_VERSION_ID } from "../doctor/pin.js";
-import { isNodeCrudApply, isSceneLifecycleApply } from "../ledger/scene_lifecycle.js";
+import { isNodeCrudApply, isPropertyApply, isSceneLifecycleApply } from "../ledger/scene_lifecycle.js";
 import { allActionDefs } from "../registry/registry.js";
 import { PROTOCOL, REGISTRY_VERSION } from "../registry/types.js";
 import { publicDescriptorView, type SessionDescriptor } from "../session/descriptor.js";
@@ -72,9 +72,10 @@ export function capabilityMatrix(): Record<string, unknown> {
     protocol: PROTOCOL,
     registry_version: REGISTRY_VERSION,
     godot_pin: PINNED_VERSION_ID,
-    mutate_dispatched: "scene-lifecycle+node-crud",
+    mutate_dispatched: "scene-lifecycle+node-crud+property",
     node_crud_dispatched: true,
-    note: "Scene lifecycle and node CRUD ACK after EditorUndoRedo + UID/owner/path readback. property.set stays E_UNVERIFIED.",
+    property_dispatched: true,
+    note: "Scene lifecycle, node CRUD, and property set ACK after EditorUndoRedo + readback. resource.create stays E_UNVERIFIED.",
     actions: allActionDefs().map((def) => ({
       id: def.id,
       method: def.method,
@@ -84,13 +85,15 @@ export function capabilityMatrix(): Record<string, unknown> {
       adapter:
         def.id === "editor.select"
           ? "view-state-mutate-not-wp6"
-          : isNodeCrudApply(def.id)
-            ? "node-crud"
-            : isSceneLifecycleApply(def.id)
-              ? "scene-lifecycle"
-              : def.side_effect === "read" || def.side_effect === "view"
-                ? "read-or-view"
-                : "not-dispatched",
+          : isPropertyApply(def.id)
+            ? "property-codec"
+            : isNodeCrudApply(def.id)
+              ? "node-crud"
+              : isSceneLifecycleApply(def.id)
+                ? "scene-lifecycle"
+                : def.side_effect === "read" || def.side_effect === "view"
+                  ? "read-or-view"
+                  : "not-dispatched",
     })),
   };
 }

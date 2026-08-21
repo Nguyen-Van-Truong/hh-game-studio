@@ -1,4 +1,4 @@
-/** Proven editor apply verbs. Scene lifecycle from R3-WP1; node CRUD from R3-WP2. */
+/** Proven editor apply verbs. Scene lifecycle, node CRUD, and property codec. */
 
 export const SCENE_LIFECYCLE_APPLY = [
   "scene.create",
@@ -24,6 +24,8 @@ export const NODE_CRUD_APPLY = [
   "scene.instantiate",
 ] as const;
 
+export const PROPERTY_APPLY = ["property.set", "property.batch", "property.reset"] as const;
+
 export const NODE_UID_AFTER = [
   "node.add",
   "node.rename",
@@ -44,8 +46,12 @@ export function isNodeCrudApply(actionId: string): boolean {
   return (NODE_CRUD_APPLY as readonly string[]).includes(actionId);
 }
 
+export function isPropertyApply(actionId: string): boolean {
+  return (PROPERTY_APPLY as readonly string[]).includes(actionId);
+}
+
 export function isProvenEditorApply(actionId: string): boolean {
-  return isSceneLifecycleApply(actionId) || isNodeCrudApply(actionId);
+  return isSceneLifecycleApply(actionId) || isNodeCrudApply(actionId) || isPropertyApply(actionId);
 }
 
 export function sceneNeedsDiskHash(actionId: string): boolean {
