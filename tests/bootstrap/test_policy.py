@@ -9,12 +9,14 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import os
 import re
 import shutil
 import subprocess
 import sys
 import tempfile
+import threading
 import time
 from pathlib import Path
 
@@ -136,9 +138,17 @@ def src_scan_errors() -> list[str]:
     plugin = (ADDON / "plugin.gd").read_text(encoding="utf-8")
     if "_paused" not in plugin or "_on_pause_requested" not in plugin:
         errors.append("plugin.gd does not wire _paused / Pause")
+    if "HH_PAUSE_WIRE" not in plugin or 'emit_signal("pause_requested")' not in plugin:
+        errors.append("plugin.gd missing dock-signal Pause wire bench")
     dock = (ADDON / "ui" / "health" / "hh_health_dock.gd").read_text(encoding="utf-8")
     if "Pause" not in dock or "font_color" not in dock or "pause_requested" not in dock:
         errors.append("health dock missing red Pause button")
+    self_text = Path(__file__).read_text(encoding="utf-8")
+    if "dist/main.js" not in self_text.replace("\\", "/") and "dist\\\\main.js" not in self_text:
+        if 'dist / "main.js"' not in self_text:
+            errors.append("official Pause test must start sidecar main.js")
+    if '"hh.pause"' not in self_text:
+        errors.append("official Pause test must call live hh.pause")
     return errors
 
 
@@ -411,6 +421,7 @@ def test_profiles(root: Path) -> list[str]:
     errors: list[str] = []
     (root / "assets" / "x.txt").write_text("x", encoding="utf-8")
     home = Path(tempfile.mkdtemp(prefix="hh-r2wp5-prof-"))
+    destroy_params = {"path": "res://assets/x.txt"}
     for policy, expect in (("OBSERVE", "E_POLICY"), ("EDIT", "E_POLICY")):
         got = harness(
             "submit",
@@ -419,18 +430,70 @@ def test_profiles(root: Path) -> list[str]:
                 "project_id": hashlib.sha256(os.urandom(8)).hexdigest()[:32],
                 "project_root": str(root),
                 "policy": policy,
+                "approved_destructive": True,
                 "envelope": {
                     "protocol": PROTOCOL,
                     "command_id": new_ulid(),
                     "method": "godot.asset",
                     "action": "delete",
-                    "params": {"path": "res://assets/x.txt"},
+                    "params": destroy_params,
                 },
             },
         )
         code = ((got.get("result") or {}).get("error") or {}).get("code")
         if code != expect:
             errors.append(f"{policy} destructive expected {expect}, got {got}")
+    edit_id = new_ulid()
+    envelope = {
+        "protocol": PROTOCOL,
+        "command_id": edit_id,
+        "method": "godot.asset",
+        "action": "delete",
+        "params": destroy_params,
+    }
+    minted = harness(
+        "approve",
+        {"project_root": str(root), "actor": "writer-a", "envelope": envelope},
+    )
+    if minted.get("ok") is not True or not minted.get("approval"):
+        errors.append(f"approve bind failed: {minted}")
+    bound = harness(
+        "submit",
+        {
+            "home": str(home),
+            "project_id": hashlib.sha256(os.urandom(8)).hexdigest()[:32],
+            "project_root": str(root),
+            "actor": "writer-a",
+            "writer_id": "writer-a",
+            "policy": "EDIT",
+            "approval": minted.get("approval"),
+            "envelope": envelope,
+        },
+    )
+    bcode = ((bound.get("result") or {}).get("error") or {}).get("code")
+    if bcode != "E_UNVERIFIED":
+        errors.append(f"EDIT with issued bind must pass profile (E_UNVERIFIED): {bound}")
+    forged = harness(
+        "submit",
+        {
+            "home": str(home),
+            "project_id": hashlib.sha256(os.urandom(8)).hexdigest()[:32],
+            "project_root": str(root),
+            "actor": "writer-a",
+            "writer_id": "writer-a",
+            "policy": "EDIT",
+            "approval": "0" * 64,
+            "envelope": {
+                "protocol": PROTOCOL,
+                "command_id": new_ulid(),
+                "method": "godot.asset",
+                "action": "delete",
+                "params": destroy_params,
+            },
+        },
+    )
+    if ((forged.get("result") or {}).get("error") or {}).get("code") != "E_POLICY":
+        errors.append(f"forged approval token must be E_POLICY: {forged}")
     defaulted = harness("default-policy", {})
     if defaulted.get("default_policy") != "OWNER_AUTOPILOT" or defaulted.get("normalized_empty") != "OWNER_AUTOPILOT":
         errors.append(f"default policy must be OWNER_AUTOPILOT: {defaulted}")
@@ -473,6 +536,12 @@ def test_allowlist() -> list[str]:
     good = harness("allowlist", {"kind": "process", "file": "git", "argv": ["status"]})
     if good.get("ok") is not True:
         errors.append(f"git must be allowed: {good}")
+    live_cmd = harness("supervisor", {"file": "cmd.exe", "argv": ["/c", "dir"]})
+    if (live_cmd.get("error") or {}).get("code") != "E_POLICY":
+        errors.append(f"live runSync cmd.exe must be E_POLICY: {live_cmd}")
+    live_git = harness("supervisor", {"file": "git", "argv": ["--version"]})
+    if live_git.get("ok") is not True:
+        errors.append(f"live runSync git must be allowed: {live_git}")
     net = harness("allowlist", {"kind": "net", "host": "1.1.1.1"})
     if (net.get("error") or {}).get("code") != "E_BIND":
         errors.append(f"non-loopback host must be E_BIND: {net}")
@@ -482,56 +551,346 @@ def test_allowlist() -> list[str]:
     return errors
 
 
-def test_pause() -> tuple[list[str], dict]:
-    errors: list[str] = []
-    measured = harness("pause", {"samples": 40, "cancellable_job": True, "atomic_job": True})
-    samples = measured.get("samples")
-    p95 = measured.get("p95")
-    if not isinstance(samples, list) or len(samples) != 40:
-        errors.append(f"pause samples missing: {measured}")
-        return errors, {}
-    if not isinstance(p95, (int, float)):
-        errors.append(f"pause p95 missing: {measured}")
-        return errors, {}
-    if any(not isinstance(x, (int, float)) for x in samples):
-        errors.append("pause samples are not numeric")
-    if float(p95) > PAUSE_BUDGET_MS:
-        errors.append(f"sidecar Pause ACK p95 {p95} > {PAUSE_BUDGET_MS}")
-    if measured.get("cancellable_cancelled") is not True:
-        errors.append("cancellable job was not cancelled on Pause")
-    if measured.get("atomic_cancelled") is True:
-        errors.append("atomic in-flight job was cancelled")
-    resume = harness("resume", {})
-    if resume.get("paused") is True:
-        errors.append(f"resume left gate paused: {resume}")
-    plugin_p95 = None
-    godot = find_pinned_godot()
-    if godot is not None:
-        proc = subprocess.run(
-            [str(godot), "--headless", "--path", str(PLUGIN_PROJECT), "--script", "res://hh_pause_bench.gd"],
-            cwd=str(PLUGIN_PROJECT),
-            text=True,
-            capture_output=True,
-            check=False,
-            timeout=30,
+def mcp_call(proc: subprocess.Popen[str], req_id: int, name: str, arguments: dict) -> dict:
+    assert proc.stdin and proc.stdout
+    proc.stdin.write(
+        json.dumps(
+            {
+                "jsonrpc": "2.0",
+                "id": req_id,
+                "method": "tools/call",
+                "params": {"name": name, "arguments": arguments},
+            }
         )
+        + "\n"
+    )
+    proc.stdin.flush()
+    line = sess.readline_timeout(proc.stdout, 8.0)
+    return json.loads(line)
+
+
+def mcp_body(resp: dict) -> dict:
+    body = (resp.get("result") or {}).get("structuredContent")
+    return body if isinstance(body, dict) else {}
+
+
+def _p95(samples: list[float]) -> float:
+    if not samples:
+        return 0.0
+    sorted_s = sorted(samples)
+    idx = max(0, math.ceil(0.95 * len(sorted_s)) - 1)
+    if idx >= len(sorted_s):
+        idx = len(sorted_s) - 1
+    return float(sorted_s[idx])
+
+
+def test_pause() -> tuple[list[str], dict]:
+    """Live sidecar hh.pause/hh.resume + dock-signal plugin _apply_pause. Not a bool flip."""
+    errors: list[str] = []
+    info: dict = {"sidecar_samples": [], "sidecar_p95": None, "plugin_p95": None, "godot_measured": False}
+    tmp = make_project("hh-r2wp5-livepause-")
+    proc: subprocess.Popen[str] | None = None
+    desc_path: Path | None = None
+    err_lines: list[str] = []
+    plugin_events: list[dict] = []
+    try:
+        proc = subprocess.Popen(
+            [sess.node(), str(BRIDGE / "dist" / "main.js"), "--project", str(tmp)],
+            cwd=str(BRIDGE),
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+        threading.Thread(target=sess.drain_stderr, args=(proc, err_lines), daemon=True).start()
+        desc_path, desc = sess.find_descriptor(proc.pid)
+        secret = str(desc.get("token") or "")
+        host = str(desc.get("host") or "")
+        port = int(desc.get("port") or 0)
+        sid_project = str(desc.get("project_id") or "")
+        plugin_sock = sess.ws_connect(host, port)
+        sess.ws_send_text(plugin_sock, json.dumps(sess.hello_payload(sid_project, secret)))
+        hello_ok = json.loads(sess.ws_recv_text(plugin_sock))
+        if hello_ok.get("ok") is not True:
+            errors.append(f"live pause hello failed: {sess.redact(json.dumps(hello_ok), secret)}")
+
+        def plugin_loop() -> None:
+            try:
+                while True:
+                    msg = json.loads(sess.ws_recv_text(plugin_sock))
+                    plugin_events.append(msg)
+                    if msg.get("type") == "readback":
+                        sess.ws_send_text(
+                            plugin_sock,
+                            json.dumps(
+                                {
+                                    "type": "readback_result",
+                                    "command_id": msg.get("command_id"),
+                                    "found": False,
+                                    "ok": False,
+                                    "postcondition": {"verified": False, "checks": []},
+                                }
+                            ),
+                        )
+            except OSError:
+                return
+
+        threading.Thread(target=plugin_loop, daemon=True).start()
+        if proc.stdin and proc.stdout:
+            proc.stdin.write(
+                json.dumps(
+                    {
+                        "jsonrpc": "2.0",
+                        "id": 1,
+                        "method": "initialize",
+                        "params": {
+                            "protocolVersion": "2024-11-05",
+                            "capabilities": {},
+                            "clientInfo": {"name": "test-policy-pause", "version": "0"},
+                        },
+                    }
+                )
+                + "\n"
+            )
+            proc.stdin.flush()
+            sess.readline_timeout(proc.stdout, 5.0)
+
+        samples: list[float] = []
+        req_id = 2
+        for _ in range(40):
+            before_pause = len(plugin_events)
+            t0 = time.perf_counter()
+            paused = mcp_body(mcp_call(proc, req_id, "hh.pause", {}))
+            req_id += 1
+            elapsed = (time.perf_counter() - t0) * 1000.0
+            ack = paused.get("ack_ms")
+            samples.append(float(ack) if isinstance(ack, (int, float)) else elapsed)
+            if paused.get("paused") is not True or paused.get("state") != "draining":
+                errors.append(f"live hh.pause did not ACK draining: {paused}")
+            if "mutate-lane" not in (paused.get("cancelled_jobs") or []):
+                errors.append(f"live hh.pause did not cancel mutate-lane: {paused}")
+            deadline = time.time() + 2.0
+            saw_plugin_pause = False
+            while time.time() < deadline:
+                extra = plugin_events[before_pause:]
+                if any(m.get("type") == "pause" and m.get("paused") is True for m in extra):
+                    saw_plugin_pause = True
+                    break
+                time.sleep(0.01)
+            if not saw_plugin_pause:
+                errors.append("sidecar hh.pause did not send plugin WS pause")
+            resumed = mcp_body(mcp_call(proc, req_id, "hh.resume", {}))
+            req_id += 1
+            if resumed.get("paused") is True:
+                errors.append(f"live hh.resume left gate paused: {resumed}")
+
+        info["sidecar_samples"] = samples
+        info["sidecar_p95"] = _p95(samples)
+        if info["sidecar_p95"] > PAUSE_BUDGET_MS:
+            errors.append(f"live sidecar Pause ACK p95 {info['sidecar_p95']} > {PAUSE_BUDGET_MS}")
+
+        mcp_call(proc, req_id, "hh.pause", {})
+        req_id += 1
+        mutate = mcp_body(
+            mcp_call(
+                proc,
+                req_id,
+                "hh.command",
+                {
+                    "command_id": new_ulid(),
+                    "method": "godot.node",
+                    "action": "add",
+                    "params": {
+                        "scene": "res://main.tscn",
+                        "parent": ".",
+                        "class_name": "Node2D",
+                        "name": "X",
+                    },
+                },
+            )
+        )
+        req_id += 1
+        if (mutate.get("error") or {}).get("code") != "E_PAUSED":
+            errors.append(f"live paused mutate must be E_PAUSED: {mutate}")
+        mcp_call(proc, req_id, "hh.resume", {})
+        req_id += 1
+        before_ws = len(plugin_events)
+        sess.ws_send_text(plugin_sock, json.dumps({"type": "pause", "paused": True}))
+        deadline = time.time() + 2.0
+        saw_ack = False
+        while time.time() < deadline:
+            extra = plugin_events[before_ws:]
+            if any(m.get("type") == "pause_ack" for m in extra):
+                saw_ack = True
+                break
+            time.sleep(0.01)
+        if not saw_ack:
+            errors.append("plugin WS pause did not receive pause_ack")
+        again = mcp_body(
+            mcp_call(
+                proc,
+                req_id,
+                "hh.command",
+                {
+                    "command_id": new_ulid(),
+                    "method": "godot.asset",
+                    "action": "delete",
+                    "params": {"path": "res://assets/x.txt"},
+                },
+            )
+        )
+        if (again.get("error") or {}).get("code") != "E_PAUSED":
+            errors.append(f"plugin WS pause must E_PAUSED: {again}")
+    except Exception as exc:  # noqa: BLE001
+        errors.append(f"live sidecar Pause failed: {type(exc).__name__}: {exc}")
+    finally:
+        if proc and proc.poll() is None:
+            proc.terminate()
+            try:
+                proc.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                proc.kill()
+        if desc_path and desc_path.is_file():
+            try:
+                desc_path.unlink()
+            except OSError:
+                pass
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    godot_errors, plugin_p95, godot_measured = test_godot_dock_pause()
+    errors.extend(godot_errors)
+    info["plugin_p95"] = plugin_p95
+    info["godot_measured"] = godot_measured
+    return errors, info
+
+
+def test_godot_dock_pause() -> tuple[list[str], float | None, bool]:
+    """Measure plugin.gd _apply_pause via the health-dock signal on a live sidecar."""
+    errors: list[str] = []
+    exe = find_pinned_godot()
+    if exe is None:
+        return ["Godot pin missing; dock Pause wire bench is required"], None, False
+    proc: subprocess.Popen[str] | None = None
+    godot: subprocess.Popen[str] | None = None
+    desc_path: Path | None = None
+    godot_lines: list[str] = []
+    err_lines: list[str] = []
+    plugin_p95: float | None = None
+    try:
+        proc = subprocess.Popen(
+            [sess.node(), str(BRIDGE / "dist" / "main.js"), "--project", str(PLUGIN_PROJECT)],
+            cwd=str(BRIDGE),
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+        threading.Thread(target=sess.drain_stderr, args=(proc, err_lines), daemon=True).start()
+        desc_path, desc = sess.find_descriptor(proc.pid)
+        if proc.stdin and proc.stdout:
+            proc.stdin.write(
+                json.dumps(
+                    {
+                        "jsonrpc": "2.0",
+                        "id": 1,
+                        "method": "initialize",
+                        "params": {
+                            "protocolVersion": "2024-11-05",
+                            "capabilities": {},
+                            "clientInfo": {"name": "test-policy-dock", "version": "0"},
+                        },
+                    }
+                )
+                + "\n"
+            )
+            proc.stdin.flush()
+            sess.readline_timeout(proc.stdout, 5.0)
+        env = os.environ.copy()
+        env["HH_PAUSE_WIRE_BENCH"] = "1"
+        env.pop("HH_AGENT_SELFTEST", None)
+        godot = subprocess.Popen(
+            [str(exe), "--headless", "--editor", "--path", str(PLUGIN_PROJECT)],
+            cwd=str(REPO_ROOT),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            env=env,
+        )
+
+        def drain_out() -> None:
+            if godot is None or godot.stdout is None:
+                return
+            for line in godot.stdout:
+                godot_lines.append(line)
+
+        threading.Thread(target=drain_out, daemon=True).start()
+        threading.Thread(target=sess.drain_stderr, args=(godot, godot_lines), daemon=True).start()
         blob = ""
-        for line in (proc.stdout or "").splitlines():
-            if line.strip().startswith("{") and "p95" in line:
-                blob = line.strip()
+        deadline = time.time() + 30.0
+        while time.time() < deadline:
+            joined = "".join(godot_lines)
+            for line in joined.splitlines():
+                if "HH_PAUSE_WIRE " in line:
+                    blob = line.split("HH_PAUSE_WIRE ", 1)[1].strip()
+                    break
+            if blob:
+                break
+            if godot.poll() is not None or (proc and proc.poll() is not None):
+                break
+            time.sleep(0.1)
         if not blob:
-            errors.append(f"godot pause bench produced no JSON: {proc.stdout} {proc.stderr}")
-        else:
-            parsed = json.loads(blob)
-            plugin_p95 = parsed.get("p95")
-            if not isinstance(plugin_p95, (int, float)) or float(plugin_p95) > PAUSE_BUDGET_MS:
-                errors.append(f"plugin Pause ACK p95 {plugin_p95} > {PAUSE_BUDGET_MS}")
-    return errors, {
-        "sidecar_samples": samples,
-        "sidecar_p95": p95,
-        "plugin_p95": plugin_p95,
-        "godot_measured": godot is not None,
-    }
+            errors.append(f"Godot dock Pause wire produced no HH_PAUSE_WIRE: {''.join(godot_lines)[-2000:]}")
+            return errors, None, True
+        parsed = json.loads(blob)
+        plugin_p95 = parsed.get("p95")
+        if "pause_requested" not in str(parsed.get("path", "")):
+            errors.append(f"plugin Pause path is not dock signal: {parsed}")
+        if not isinstance(plugin_p95, (int, float)) or float(plugin_p95) > PAUSE_BUDGET_MS:
+            errors.append(f"plugin dock _apply_pause p95 {plugin_p95} > {PAUSE_BUDGET_MS}")
+        time.sleep(0.25)
+        paused = mcp_body(
+            mcp_call(
+                proc,
+                2,
+                "hh.command",
+                {
+                    "command_id": new_ulid(),
+                    "method": "godot.node",
+                    "action": "add",
+                    "params": {
+                        "scene": "res://main.tscn",
+                        "parent": ".",
+                        "class_name": "Node2D",
+                        "name": "X",
+                    },
+                },
+            )
+        )
+        if (paused.get("error") or {}).get("code") != "E_PAUSED":
+            errors.append(f"dock Pause must close sidecar gate (E_PAUSED): {paused}")
+    except Exception as exc:  # noqa: BLE001
+        errors.append(f"Godot dock Pause failed: {type(exc).__name__}: {exc}")
+    finally:
+        if godot and godot.poll() is None:
+            godot.terminate()
+            try:
+                godot.wait(timeout=8)
+            except subprocess.TimeoutExpired:
+                godot.kill()
+        if proc and proc.poll() is None:
+            proc.terminate()
+            try:
+                proc.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                proc.kill()
+        if desc_path and desc_path.is_file():
+            try:
+                desc_path.unlink()
+            except OSError:
+                pass
+    return errors, plugin_p95, True
 
 
 def no_scene_write_errors(roots: list[Path]) -> list[str]:
@@ -609,10 +968,11 @@ def main() -> int:
     print(
         "PASS: R0 TOML fixtures; path-escape corpus; concurrent E_BUSY; "
         "human-edit E_CONFLICT; checkpoint restore + fail-blocks; "
-        f"Pause ACK p95={pause_info.get('sidecar_p95')}ms n={len(samples)} "
-        f"(plugin p95={pause_info.get('plugin_p95')}, "
+        f"live sidecar hh.pause p95={pause_info.get('sidecar_p95')}ms n={len(samples)} "
+        f"(dock _apply_pause p95={pause_info.get('plugin_p95')}, "
         f"godot={pause_info.get('godot_measured')}); "
-        "mutate never writes scenes; plan R2-WP5 still [ ]."
+        "EDIT bind is actor/hash/revision; mutate never writes scenes; "
+        "plan R2-WP5 still [ ]."
     )
     return 0
 

@@ -31,6 +31,7 @@ var _busy: bool = false
 var _paused: bool = false
 var _bridge_pid: int = 0
 var _reconnect_attempt: int = 0
+var _last_pause_ack: Dictionary = {}
 
 
 func _enter_tree() -> void:
@@ -94,7 +95,7 @@ func _enqueue_inbound(envelope: Variant) -> bool:
 
 
 func _on_pause_requested() -> void:
-	_apply_pause(not _paused)
+	_last_pause_ack = _apply_pause(not _paused)
 
 
 func _on_sidecar_pause(paused: bool) -> void:
@@ -268,10 +269,41 @@ func _on_hello(ok: bool) -> void:
 		if _reconnect_timer != null:
 			_reconnect_timer.stop()
 		print("%s event=hello_ok" % PLUGIN_PRINT)
+		if OS.get_environment("HH_PAUSE_WIRE_BENCH") == "1":
+			call_deferred("_wire_pause_bench")
 	else:
 		print("%s event=hello_err" % PLUGIN_PRINT)
 		_schedule_reconnect()
 	_refresh_dock()
+
+
+func _wire_pause_bench() -> void:
+	var samples: Array[float] = []
+	var i: int = 0
+	while i < 40:
+		if _dock != null:
+			_dock.emit_signal("pause_requested")
+		else:
+			_on_pause_requested()
+		samples.append(float(_last_pause_ack.get("ack_ms", 0.0)))
+		i += 1
+	if not _paused:
+		if _dock != null:
+			_dock.emit_signal("pause_requested")
+		else:
+			_on_pause_requested()
+	var sorted: Array[float] = samples.duplicate()
+	sorted.sort()
+	var idx: int = maxi(0, int(ceil(0.95 * float(sorted.size()))) - 1)
+	var p95: float = 0.0
+	if idx < sorted.size():
+		p95 = sorted[idx]
+	print("HH_PAUSE_WIRE %s" % JSON.stringify({
+		"path": "hh_health_dock.pause_requested -> plugin.gd:_on_pause_requested",
+		"samples": samples,
+		"p95": p95,
+		"paused": _paused,
+	}))
 
 
 func _on_reconnect_timeout() -> void:

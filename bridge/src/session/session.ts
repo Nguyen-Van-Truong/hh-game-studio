@@ -3,6 +3,7 @@ import { randomBytes } from "node:crypto";
 import { openLedger, type CommandLedger } from "../ledger/store.js";
 import { DEFAULT_LEDGER_POLICY, normalizePolicy } from "../ledger/execute.js";
 import { durableActorId } from "../ledger/paths.js";
+import { ApprovalBinder, projectRevision } from "../policy/approve.js";
 import { LeaseTable } from "../policy/leases.js";
 import { PauseGate } from "../policy/pause.js";
 import type { PolicyServices } from "../policy/engine.js";
@@ -70,7 +71,8 @@ export async function startSidecar(projectInput: string): Promise<SidecarHandle>
       writerId: actorId,
       pause,
       leases: new LeaseTable(project.root),
-      approvedDestructive: (process.env.HH_APPROVE_DESTRUCTIVE ?? "").trim() === "1",
+      approvals: new ApprovalBinder(project.root),
+      revision: projectRevision(project.root),
     };
     const descriptor: SessionDescriptor = {
       protocol: PROTOCOL,

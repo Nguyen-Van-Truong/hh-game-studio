@@ -19,10 +19,16 @@ export interface PauseAck {
   cancelled_jobs: string[];
 }
 
+export const MUTATE_LANE_JOB = "mutate-lane";
+
 export class PauseGate {
   private paused = false;
   private readonly jobs = new Map<string, PauseJob>();
   lastAck: PauseAck = { paused: false, state: "open", ack_ms: 0, cancelled_jobs: [] };
+
+  constructor() {
+    this.registerJob(MUTATE_LANE_JOB, { cancellable: true });
+  }
 
   isPaused(): boolean {
     return this.paused;
@@ -76,6 +82,13 @@ export class PauseGate {
   resume(): PauseAck {
     const t0 = performance.now();
     this.paused = false;
+    const lane = this.jobs.get(MUTATE_LANE_JOB);
+    if (lane) {
+      lane.cancelled = false;
+      lane.finished = false;
+    } else {
+      this.registerJob(MUTATE_LANE_JOB, { cancellable: true });
+    }
     const ackMs = performance.now() - t0;
     this.lastAck = { paused: false, state: "open", ack_ms: ackMs, cancelled_jobs: [] };
     return this.lastAck;

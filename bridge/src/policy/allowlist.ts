@@ -2,7 +2,7 @@
 
 import { E, typedError } from "../registry/errors.js";
 
-export const PROCESS_ALLOWLIST = ["godot", "gut", "exporter", "git"] as const;
+export const PROCESS_ALLOWLIST = ["godot", "gut", "exporter", "git", "icacls"] as const;
 
 const PROCESS_ALIASES: Record<string, (typeof PROCESS_ALLOWLIST)[number]> = {
   godot: "godot",
@@ -13,6 +13,7 @@ const PROCESS_ALIASES: Record<string, (typeof PROCESS_ALLOWLIST)[number]> = {
   exporter: "exporter",
   godot_export: "exporter",
   git: "git",
+  icacls: "icacls",
 };
 
 const LOOPBACK = new Set(["127.0.0.1", "::1", "localhost"]);

@@ -43,3 +43,4 @@ export { runMutationGate } from "./policy/engine.js";
 export { jailProjectPath } from "./policy/jail.js";
 export { PauseGate } from "./policy/pause.js";
 export { DEFAULT_POLICY, normalizePolicy } from "./policy/profiles.js";
+export { ApprovalBinder, approvalToken } from "./policy/approve.js";

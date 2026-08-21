@@ -5,6 +5,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 import { E, typedError } from "../registry/errors.js";
+import { pidAlive } from "../session/supervisor.js";
 
 export const DEFAULT_LEASE_TTL_MS = 30_000;
 
@@ -105,7 +106,15 @@ export class LeaseTable {
     const existing = this.readWriter();
     const now = nowMs();
     if (existing && existing.expires_at > now && existing.writer_id !== writerId) {
-      throw typedError(E.E_BUSY, "project writer lease held by another actor", "lease");
+      if (existing.pid > 0 && !pidAlive(existing.pid)) {
+        try {
+          fs.unlinkSync(this.writerPath);
+        } catch {
+          /* stale lock */
+        }
+      } else {
+        throw typedError(E.E_BUSY, "project writer lease held by another actor", "lease");
+      }
     }
     const lock: WriterLock = { writer_id: writerId, expires_at: now + ttlMs, pid: process.pid };
     if (!existing || existing.expires_at <= now) {

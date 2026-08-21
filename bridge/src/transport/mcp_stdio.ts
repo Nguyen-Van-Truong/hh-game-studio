@@ -1,5 +1,7 @@
 import { createInterface } from "node:readline";
 
+import { ApprovalBinder, projectRevision } from "../policy/approve.js";
+import { canonicalRequestHash } from "../ledger/hash.js";
 import { executeCommand, inspectRow, type LedgerBound, type LedgerRuntime } from "../ledger/execute.js";
 import type { CommandLedger } from "../ledger/store.js";
 import type { PauseGate } from "../policy/pause.js";
@@ -100,6 +102,7 @@ function domainTools(): Array<{
           method: { type: "string" },
           action: { type: "string" },
           params: { type: "object" },
+          approval: { type: "string", minLength: 64, maxLength: 64 },
         },
       },
     },
@@ -124,6 +127,21 @@ function domainTools(): Array<{
       name: "hh.resume",
       description: "Re-open the mutation gate. Does not apply uncertain commands.",
       inputSchema: { type: "object", additionalProperties: false, properties: {} },
+    },
+    {
+      name: "hh.approve",
+      description: "Issue a one-shot EDIT destructive bind (actor + request hash + revision).",
+      inputSchema: {
+        type: "object",
+        additionalProperties: false,
+        required: ["command_id", "method", "action", "params"],
+        properties: {
+          command_id: { type: "string", minLength: 26, maxLength: 26 },
+          method: { type: "string" },
+          action: { type: "string" },
+          params: { type: "object" },
+        },
+      },
     },
   ];
   for (const [name, verbs] of byMethod) {
@@ -154,6 +172,51 @@ function toolResult(id: string | number | null | undefined, body: unknown, isErr
       isError,
     },
   });
+}
+
+function issueApproval(
+  ctx: McpStdioContext,
+  args: Record<string, unknown>,
+): { body: unknown; isError: boolean } {
+  const commandId = typeof args.command_id === "string" ? args.command_id : "";
+  const method = typeof args.method === "string" ? args.method : "";
+  const action = typeof args.action === "string" ? args.action : "";
+  const params = args.params;
+  if (!isUlid(commandId) || !method || !action || !params || typeof params !== "object" || Array.isArray(params)) {
+    return {
+      body: {
+        error: { code: E.E_INVALID_ENVELOPE, message: "command_id, method, action, params required", path: "params" },
+      },
+      isError: true,
+    };
+  }
+  if (!ctx.bound || !ctx.policy) {
+    return {
+      body: { error: { code: E.E_POLICY, message: "approval binder unavailable", path: "approval" } },
+      isError: true,
+    };
+  }
+  const requestHash = canonicalRequestHash({
+    command_id: commandId,
+    method,
+    action,
+    params,
+  });
+  const revision = ctx.policy.revision ?? projectRevision(ctx.policy.projectRoot);
+  const approvals = ctx.policy.approvals ?? new ApprovalBinder();
+  ctx.policy.approvals = approvals;
+  const token = approvals.issue(ctx.bound.actorId, requestHash, revision);
+  return {
+    body: {
+      ok: true,
+      approval: token,
+      request_hash: requestHash,
+      revision,
+      actor: ctx.bound.actorId,
+      command_id: commandId,
+    },
+    isError: false,
+  };
 }
 
 function runtimeOf(ctx: McpStdioContext): LedgerRuntime {
@@ -250,6 +313,9 @@ async function handleTool(
       params: {},
     });
   }
+  if (name === "hh.approve") {
+    return issueApproval(ctx, args);
+  }
   if (name === "hh.command") {
     const commandId = typeof args.command_id === "string" ? args.command_id : "";
     const method = typeof args.method === "string" ? args.method : "";
@@ -263,13 +329,22 @@ async function handleTool(
         isError: true,
       };
     }
-    return runThroughLedger(ctx, {
-      protocol: ctx.descriptor().protocol,
-      command_id: commandId,
-      method,
-      action,
-      params,
-    });
+    if (ctx.policy && typeof args.approval === "string") {
+      ctx.policy.approvalToken = args.approval;
+    }
+    try {
+      return await runThroughLedger(ctx, {
+        protocol: ctx.descriptor().protocol,
+        command_id: commandId,
+        method,
+        action,
+        params,
+      });
+    } finally {
+      if (ctx.policy) {
+        delete ctx.policy.approvalToken;
+      }
+    }
   }
   const action = args.action;
   const params = args.params;

@@ -2,6 +2,7 @@
 
 import { E, typedError } from "../registry/errors.js";
 import type { Policy, SideEffect } from "../registry/types.js";
+import { ApprovalBinder, projectRevision } from "./approve.js";
 import { createRecoveryCheckpoint, type CheckpointOk } from "./checkpoint.js";
 import { extractTargetPaths, jailProjectPath, type JailOk } from "./jail.js";
 import { LeaseTable } from "./leases.js";
@@ -13,7 +14,9 @@ export interface PolicyServices {
   writerId: string;
   pause: PauseGate;
   leases: LeaseTable;
-  approvedDestructive?: boolean;
+  approvals?: ApprovalBinder;
+  approvalToken?: string;
+  revision?: string;
   checkpointFail?: boolean;
 }
 
@@ -24,6 +27,7 @@ export interface GateInput {
   checkpointRequired: boolean;
   policy: Policy;
   params: Record<string, unknown>;
+  requestHash?: string;
   services?: PolicyServices;
 }
 
@@ -48,7 +52,11 @@ export function runMutationGate(input: GateInput): GateResult {
       error: typedError(E.E_PAUSED, "mutation gate is paused", "pause"),
     };
   }
-  const denied = denyProfile(input.policy, input.sideEffect, services?.approvedDestructive === true);
+  const denied = denyProfile(
+    input.policy,
+    input.sideEffect,
+    consumeEditApproval(services, input.policy, input.sideEffect, input.requestHash ?? ""),
+  );
   if (denied) {
     return { ok: false, error: denied };
   }
@@ -101,4 +109,24 @@ export function runMutationGate(input: GateInput): GateResult {
     return { ok: false, error: created.error };
   }
   return { ok: true, jailed, checkpoint: created };
+}
+
+function consumeEditApproval(
+  services: PolicyServices | undefined,
+  policy: Policy,
+  side: string,
+  requestHash: string,
+): boolean {
+  if (policy !== "EDIT" || side !== "destructive") {
+    return true;
+  }
+  if (!services || !requestHash) {
+    return false;
+  }
+  const revision = services.revision ?? projectRevision(services.projectRoot);
+  const token = services.approvalToken ?? "";
+  if (services.approvals) {
+    return services.approvals.consume(services.writerId, requestHash, revision, token);
+  }
+  return false;
 }

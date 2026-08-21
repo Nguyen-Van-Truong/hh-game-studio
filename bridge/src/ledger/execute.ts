@@ -235,6 +235,15 @@ function settleBlocked(
 ): PluginCommandResult {
   const def = getAction(classified.actionId);
   const fields = envelopeFields(envelope);
+  runtime.policy?.pause.registerJob(row.command_id, { cancellable: true });
+  const pausedJob = runtime.policy?.pause.job(row.command_id);
+  if (pausedJob?.cancelled || (runtime.policy && !runtime.policy.pause.allowsSideEffect(classified.sideEffect))) {
+    runtime.policy?.pause.finishJob(row.command_id);
+    const result = errorResult(row.command_id, E.E_PAUSED, "mutation gate is paused", "pause");
+    persistResult(row, result);
+    saveState(ledger, row, "failed");
+    return result;
+  }
   const gated = runMutationGate({
     commandId: row.command_id,
     sideEffect: classified.sideEffect,
@@ -242,8 +251,10 @@ function settleBlocked(
     checkpointRequired: def?.checkpoint_required === true,
     policy: normalizePolicy(bound.policy),
     params: fields.params,
+    requestHash: row.request_hash,
     ...(runtime.policy ? { services: runtime.policy } : {}),
   });
+  runtime.policy?.pause.finishJob(row.command_id);
   if (!gated.ok) {
     const result = errorResult(
       row.command_id,
@@ -311,59 +322,64 @@ async function applyNoopOnce(
     saveState(ledger, row, "failed");
     return result;
   }
-  saveState(ledger, row, "applying", {
-    before_summary: '{"kind":"noop"}',
-    side_effect: "read",
-    action_id: "hh.plugin/noop",
-  });
+  runtime.policy?.pause.registerJob(row.command_id, { atomic: true });
   try {
-    maybeFault("applying", row.command_id);
-  } catch (err) {
-    handlePluginFault(runtime, err);
-  }
-  if (!runtime.pluginConnected()) {
-    return unverifiedResult(row.command_id, "no plugin");
-  }
-  row.dispatch_attempted = 1;
-  row.updated_at = nowIso();
-  ledger.save(row);
-  maybeCrashAfterDispatchAttempt(row.command_id);
-  let result: PluginCommandResult;
-  try {
-    result = await runtime.dispatch(envelope, timeoutMs);
-  } catch (err) {
-    if (err instanceof LedgerPluginDeath) {
-      runtime.killPlugin?.();
+    saveState(ledger, row, "applying", {
+      before_summary: '{"kind":"noop"}',
+      side_effect: "read",
+      action_id: "hh.plugin/noop",
+    });
+    try {
+      maybeFault("applying", row.command_id);
+    } catch (err) {
+      handlePluginFault(runtime, err);
     }
-    return markUncertain(
-      ledger,
-      row,
-      "dispatch interrupted; postcondition unknown",
-    );
+    if (!runtime.pluginConnected()) {
+      return unverifiedResult(row.command_id, "no plugin");
+    }
+    row.dispatch_attempted = 1;
+    row.updated_at = nowIso();
+    ledger.save(row);
+    maybeCrashAfterDispatchAttempt(row.command_id);
+    let result: PluginCommandResult;
+    try {
+      result = await runtime.dispatch(envelope, timeoutMs);
+    } catch (err) {
+      if (err instanceof LedgerPluginDeath) {
+        runtime.killPlugin?.();
+      }
+      return markUncertain(
+        ledger,
+        row,
+        "dispatch interrupted; postcondition unknown",
+      );
+    }
+    row.apply_count = 1;
+    persistResult(row, result);
+    row.after_summary = JSON.stringify({
+      kind: "noop",
+      checks: result.postcondition.checks,
+    });
+    saveState(ledger, row, "applied_volatile");
+    if (!result.ok || !isNoopVerified(result.postcondition)) {
+      const failed = result.ok
+        ? errorResult(row.command_id, E.E_UNVERIFIED, "noop postcondition failed")
+        : result;
+      persistResult(row, failed);
+      saveState(ledger, row, "failed");
+      return failed;
+    }
+    saveState(ledger, row, "verified");
+    try {
+      maybeFault("verified", row.command_id);
+    } catch (err) {
+      handlePluginFault(runtime, err);
+    }
+    saveState(ledger, row, "committed_durable");
+    return result;
+  } finally {
+    runtime.policy?.pause.finishJob(row.command_id);
   }
-  row.apply_count = 1;
-  persistResult(row, result);
-  row.after_summary = JSON.stringify({
-    kind: "noop",
-    checks: result.postcondition.checks,
-  });
-  saveState(ledger, row, "applied_volatile");
-  if (!result.ok || !isNoopVerified(result.postcondition)) {
-    const failed = result.ok
-      ? errorResult(row.command_id, E.E_UNVERIFIED, "noop postcondition failed")
-      : result;
-    persistResult(row, failed);
-    saveState(ledger, row, "failed");
-    return failed;
-  }
-  saveState(ledger, row, "verified");
-  try {
-    maybeFault("verified", row.command_id);
-  } catch (err) {
-    handlePluginFault(runtime, err);
-  }
-  saveState(ledger, row, "committed_durable");
-  return result;
 }
 
 function markUncertain(

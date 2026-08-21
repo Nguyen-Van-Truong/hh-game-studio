@@ -8,8 +8,10 @@ import { executeCommand, inspectRow, type LedgerBound, type LedgerRuntime } from
 import { openLedger } from "../ledger/store.js";
 import { ProcessSupervisor } from "../session/supervisor.js";
 import { isNoopEnvelope, unverifiedResult, type PluginCommandResult } from "../transport/plugin_rpc.js";
+import { ApprovalBinder, projectRevision } from "./approve.js";
 import { assertAgentProcess, assertLoopbackHost } from "./allowlist.js";
 import { createRecoveryCheckpoint, restoreCheckpoint } from "./checkpoint.js";
+import { canonicalRequestHash } from "../ledger/hash.js";
 import { extractTargetPaths, jailProjectPath } from "./jail.js";
 import { LeaseTable } from "./leases.js";
 import { PauseGate } from "./pause.js";
@@ -64,7 +66,9 @@ function servicesOf(payload: Record<string, unknown>): PolicyServices {
     writerId: str(payload, "writer_id", str(payload, "actor", "writer-a")),
     pause: pauseSingleton,
     leases: new LeaseTable(projectRoot),
-    approvedDestructive: payload.approved_destructive === true,
+    approvals: new ApprovalBinder(projectRoot),
+    approvalToken: str(payload, "approval"),
+    revision: str(payload, "revision") || projectRevision(projectRoot),
     checkpointFail: payload.checkpoint_fail === true,
   };
 }
@@ -239,6 +243,13 @@ function gateCmd(payload: Record<string, unknown>): void {
     checkpointRequired: payload.checkpoint_required !== false,
     policy: normalizePolicy(str(payload, "policy", DEFAULT_POLICY)),
     params,
+    requestHash: str(payload, "request_hash")
+      || canonicalRequestHash({
+        command_id: str(payload, "command_id", "01ARZ3NDEKTSV4RRFFQ69G5FAV"),
+        method: str(payload, "method", "godot.asset"),
+        action: str(payload, "action", "delete"),
+        params,
+      }),
     services: svc,
   });
   write(
@@ -297,6 +308,42 @@ async function submitCmd(payload: Record<string, unknown>): Promise<void> {
 
 function defaultPolicyCmd(): void {
   write({ ok: true, default_policy: DEFAULT_POLICY, normalized_empty: normalizePolicy(undefined) });
+}
+
+function approveCmd(payload: Record<string, unknown>): void {
+  const envelopeRaw = isRecord(payload.envelope) ? payload.envelope : payload;
+  const commandId = str(envelopeRaw, "command_id");
+  const method = str(envelopeRaw, "method");
+  const action = str(envelopeRaw, "action");
+  const params = isRecord(envelopeRaw.params) ? envelopeRaw.params : {};
+  const actor = str(payload, "actor", str(payload, "writer_id", "writer-a"));
+  const requestHash = canonicalRequestHash({
+    command_id: commandId,
+    method,
+    action,
+    params,
+  });
+  const revision = str(payload, "revision") || projectRevision(str(payload, "project_root"));
+  const token = new ApprovalBinder(str(payload, "project_root")).issue(actor, requestHash, revision);
+  write({ ok: true, approval: token, request_hash: requestHash, revision, actor });
+}
+
+function supervisorCmd(payload: Record<string, unknown>): void {
+  const supervisor = new ProcessSupervisor();
+  const argvRaw = payload.argv;
+  const argv = Array.isArray(argvRaw)
+    ? argvRaw.filter((item): item is string => typeof item === "string")
+    : [];
+  try {
+    const result = supervisor.runSync(str(payload, "file"), argv);
+    write({ ok: true, status: result.status, stdout: result.stdout.slice(0, 200) });
+  } catch (err) {
+    const rec = err && typeof err === "object" ? (err as { code?: string; message?: string; path?: string }) : {};
+    write({
+      ok: false,
+      error: { code: rec.code ?? E.E_POLICY, message: rec.message ?? "denied", path: rec.path ?? "" },
+    });
+  }
 }
 
 function pausePluginLocal(): void {
@@ -366,6 +413,14 @@ void (async () => {
     }
     if (cmd === "default-policy") {
       defaultPolicyCmd();
+      return;
+    }
+    if (cmd === "approve") {
+      approveCmd(payload);
+      return;
+    }
+    if (cmd === "supervisor") {
+      supervisorCmd(payload);
       return;
     }
     if (cmd === "pause-plugin-local") {

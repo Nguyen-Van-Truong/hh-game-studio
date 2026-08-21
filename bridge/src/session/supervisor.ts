@@ -20,6 +20,7 @@ export class ProcessSupervisor {
 
   spawn(file: string, argv: readonly string[], opts?: SpawnOptions): ChildProcess {
     forbidShell(opts);
+    assertAgentProcess(file, argv, { shell: false });
     const child = spawn(file, [...argv], {
       ...opts,
       shell: false,
@@ -38,6 +39,7 @@ export class ProcessSupervisor {
     opts?: SpawnOptions,
   ): { status: number | null; stdout: string; stderr: string } {
     forbidShell(opts);
+    assertAgentProcess(file, argv, { shell: false });
     const result = spawnSync(file, [...argv], {
       ...opts,
       shell: false,
