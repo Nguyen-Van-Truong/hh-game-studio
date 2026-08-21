@@ -93,6 +93,13 @@ export const TEXT: JsonSchema = {
   maxLength: 4000,
 };
 
+/** Read-only external ingest source (A8 import-grant). Not a res:// dest. */
+export const OS_SOURCE: JsonSchema = {
+  type: "string",
+  minLength: 1,
+  maxLength: 512,
+};
+
 /** Dedicated cap for script source / find / replace. TEXT stays short for other fields. */
 export const SCRIPT_TEXT: JsonSchema = {
   type: "string",

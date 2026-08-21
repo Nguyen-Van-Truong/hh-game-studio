@@ -13,8 +13,9 @@ const _PropertyScript: GDScript = preload("res://addons/hh_agent/core/hh_propert
 const _ResourceScript: GDScript = preload("res://addons/hh_agent/core/hh_resource_adapter.gd")
 const _SignalScript: GDScript = preload("res://addons/hh_agent/core/hh_signal_adapter.gd")
 const _ScriptScript: GDScript = preload("res://addons/hh_agent/core/hh_script_adapter.gd")
+const _AssetScript: GDScript = preload("res://addons/hh_agent/core/hh_asset_adapter.gd")
 
-## Routes read/view adapters, scene/node/property/resource/signal/script apply.
+## Routes read/view adapters, scene/node/property/resource/signal/script/asset apply.
 
 var _errors: HHAgentErrors = HHAgentErrors.new()
 var _envelope: HHAgentEnvelope = HHAgentEnvelope.new()
@@ -25,6 +26,7 @@ var _props: HHAgentPropertyAdapter = HHAgentPropertyAdapter.new()
 var _resources: HHAgentResourceAdapter = HHAgentResourceAdapter.new()
 var _signals: HHAgentSignalAdapter = HHAgentSignalAdapter.new()
 var _scripts: HHAgentScriptAdapter = HHAgentScriptAdapter.new()
+var _assets: HHAgentAssetAdapter = HHAgentAssetAdapter.new()
 
 
 func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_gate: HHAgentPauseGate = null) -> Dictionary:
@@ -87,8 +89,8 @@ func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_ga
 		return _resources.handle(command_id, method, action, params, actions, pre)
 	if method == "godot.signal" and _signals.handles(action):
 		return _signals.handle(command_id, method, action, params, actions, pre)
-	if method == "godot.asset" and _resources.handles_asset(action):
-		return _resources.handle_asset(command_id, method, action, params, actions, pre)
+	if method == "godot.asset" and _assets.handles(action):
+		return _assets.handle(command_id, method, action, params, actions, pre, pause_gate)
 	if method == "godot.script" and _scripts.handles(action):
 		return _scripts.handle(command_id, method, action, params, actions, pre)
 	if method == "godot.scene" and _scenes.handles(action):

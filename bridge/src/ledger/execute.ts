@@ -23,6 +23,7 @@ import { LedgerPluginDeath, maybeCrashAfterDispatchAttempt, maybeFault } from ".
 import { canonicalRequestHash } from "./hash.js";
 import {
   durableResPath,
+  isAssetIngestApply,
   isAssetRefApply,
   isPropertyApply,
   isProvenEditorApply,
@@ -456,7 +457,12 @@ function resourceApplyOk(
   actionId: string,
   params: Record<string, unknown>,
 ): PluginCommandResult | undefined {
-  if (!isResourceApply(actionId) && !isSignalApply(actionId) && !isAssetRefApply(actionId)) {
+  if (
+    !isResourceApply(actionId) &&
+    !isSignalApply(actionId) &&
+    !isAssetRefApply(actionId) &&
+    !isAssetIngestApply(actionId)
+  ) {
     return undefined;
   }
   if (!result.ok) {
@@ -543,6 +549,25 @@ function resourceApplyOk(
     if (!isRecord(after) || after.absent !== true) {
       return errorResult(result.command_id, E.E_UNVERIFIED, "delete missing absent readback");
     }
+    return undefined;
+  }
+  if (actionId === "asset.import" || actionId === "asset.reimport") {
+    if (!isRecord(after) || typeof after.path !== "string" || after.path.length < 1) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "import missing dest path");
+    }
+    if (after.import_sidecar !== true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "import sidecar missing after wait");
+    }
+    if (after.resource_exists !== true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "ResourceLoader.exists was false after wait");
+    }
+    if (typeof after.disk_hash !== "string" || after.disk_hash.length < 16) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "import missing disk hash");
+    }
+    if (typeof after.job !== "string" || after.job !== result.command_id) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "late import must not commit an old job");
+    }
+    return undefined;
   }
   return undefined;
 }
@@ -628,6 +653,12 @@ function durableDiskOk(
   }
   if (!fs.existsSync(jailed.abs) || !fs.statSync(jailed.abs).isFile()) {
     return errorResult(result.command_id, E.E_UNVERIFIED, "durable save file missing after plugin ACK", rawPath);
+  }
+  if (
+    (actionId === "asset.import" || actionId === "asset.reimport") &&
+    (!fs.existsSync(`${jailed.abs}.import`) || !fs.statSync(`${jailed.abs}.import`).isFile())
+  ) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "durable .import sidecar missing after wait", rawPath);
   }
   const disk = contentHash(jailed.abs);
   const reported = isRecord(result.after) && typeof result.after.disk_hash === "string" ? result.after.disk_hash : "";
@@ -973,7 +1004,9 @@ async function applyMutateOnce(
     row.after_summary = JSON.stringify({
       kind: isPropertyApply(classified.actionId)
         ? "property"
-        : isResourceApply(classified.actionId) || isAssetRefApply(classified.actionId)
+        : isResourceApply(classified.actionId) ||
+            isAssetRefApply(classified.actionId) ||
+            isAssetIngestApply(classified.actionId)
           ? "resource"
           : isSignalApply(classified.actionId)
             ? "signal"
@@ -1114,6 +1147,7 @@ async function recoverFromReadback(
       sceneNeedsDiskHash(row.action_id) ||
       isResourceApply(row.action_id) ||
       isAssetRefApply(row.action_id) ||
+      isAssetIngestApply(row.action_id) ||
       isScriptApply(row.action_id)
     ) {
       return undefined;

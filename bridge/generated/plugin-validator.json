@@ -7352,6 +7352,16 @@
             "minLength": 6,
             "maxLength": 256,
             "pattern": "^res://[^\\s]+$"
+          },
+          "source": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          },
+          "license": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000
           }
         }
       },
@@ -7445,7 +7455,13 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_CONFLICT",
+        "E_PATH",
+        "E_PAUSED",
+        "E_LEASE",
+        "E_CHECKPOINT",
+        "E_BUSY"
       ],
       "postcondition": "import_sidecar_exists"
     },
@@ -7564,7 +7580,13 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_CONFLICT",
+        "E_PATH",
+        "E_PAUSED",
+        "E_LEASE",
+        "E_CHECKPOINT",
+        "E_BUSY"
       ],
       "postcondition": "import_timestamp_updated"
     },

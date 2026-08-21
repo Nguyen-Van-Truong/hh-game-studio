@@ -914,9 +914,14 @@ def live_errors(exe: Path) -> list[str]:
             "move",
             {"from": tex, "to": "res://r3w4/tex_moved.tres", "rewrite_plan": True},
         )
-        expect_code(rewrite, ("E_UNVERIFIED",), errors, "rewrite_plan=true referenced move")
-        if not tex_abs.is_file():
-            errors.append("rewrite_plan refusal must not move the referenced file")
+        if not ack_ok(rewrite, errors, "rewrite_plan=true referenced move"):
+            return errors
+        moved_abs = life.res_to_abs("res://r3w4/tex_moved.tres")
+        if tex_abs.is_file() or not moved_abs.is_file():
+            errors.append("rewrite_plan must atomically relocate the referenced file")
+        req_id, uid_rewritten = tool_call(proc, req_id, "godot.resource", "uid", {"uid": str((rewrite.get("after") or {}).get("uid") or "")})
+        if str((uid_rewritten.get("after") or {}).get("path") or "") != "res://r3w4/tex_moved.tres":
+            errors.append(f"UID map after rewrite move is not the new path: {uid_rewritten}")
 
         req_id, mat_a_body = tool_call(
             proc, req_id, "godot.resource", "create", {"path": mat_a, "class_name": "ShaderMaterial"}

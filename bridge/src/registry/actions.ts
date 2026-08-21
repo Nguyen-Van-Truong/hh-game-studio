@@ -27,6 +27,7 @@ import {
   JOB_ID,
   LIMIT,
   NODE_PATH,
+  OS_SOURCE,
   PROP_PATH,
   RES_PATH,
   SCRIPT_TEXT,
@@ -822,18 +823,24 @@ const SPECS: Record<string, ActionSpec> = {
   ),
 
   "asset.import": mutate(
-    "Import a file already under the project root",
+    "Stage an external source, sniff it, and atomically import under res://",
     "atomic_file",
     "import_sidecar_exists",
-    obj(["path"], { path: RES_PATH }),
-    { path: "res://assets/tiles/floor.png" },
+    obj(["path"], {
+      path: RES_PATH,
+      source: OS_SOURCE,
+      license: TEXT,
+    }),
+    { path: "res://assets/tiles/floor.png", source: "C:/tmp/floor.png" },
+    { extra_errors: [...SCENE_MUTATE_ERRORS, E.E_BUSY], timeout_ms: 15_000 },
   ),
   "asset.reimport": mutate(
-    "Reimport one dirty asset",
+    "Reimport one dirty asset and wait for the import sidecar",
     "atomic_file",
     "import_timestamp_updated",
     obj(["path"], { path: RES_PATH }),
     { path: "res://assets/tiles/floor.png" },
+    { extra_errors: [...SCENE_MUTATE_ERRORS, E.E_BUSY], timeout_ms: 15_000 },
   ),
   "asset.move": mutate(
     "Move an asset and rewrite references",

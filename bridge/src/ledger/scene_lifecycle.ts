@@ -36,6 +36,8 @@ export const RESOURCE_APPLY = [
 
 export const SIGNAL_APPLY = ["signal.connect", "signal.disconnect"] as const;
 
+export const ASSET_INGEST_APPLY = ["asset.import", "asset.reimport"] as const;
+
 export const ASSET_REF_APPLY = ["asset.move", "asset.rename", "asset.delete"] as const;
 
 export const SCRIPT_APPLY = [
@@ -78,6 +80,10 @@ export function isSignalApply(actionId: string): boolean {
   return (SIGNAL_APPLY as readonly string[]).includes(actionId);
 }
 
+export function isAssetIngestApply(actionId: string): boolean {
+  return (ASSET_INGEST_APPLY as readonly string[]).includes(actionId);
+}
+
 export function isAssetRefApply(actionId: string): boolean {
   return (ASSET_REF_APPLY as readonly string[]).includes(actionId);
 }
@@ -94,6 +100,7 @@ export function isProvenEditorApply(actionId: string): boolean {
     isResourceApply(actionId) ||
     isSignalApply(actionId) ||
     isAssetRefApply(actionId) ||
+    isAssetIngestApply(actionId) ||
     isScriptApply(actionId)
   );
 }
@@ -129,6 +136,9 @@ export function mutationNeedsDiskHash(actionId: string, params: Record<string, u
   }
   if (actionId === "script.rename") {
     return true;
+  }
+  if (actionId === "asset.import" || actionId === "asset.reimport") {
+    return typeof params.path === "string" && params.path.startsWith("res://");
   }
   return actionId === "asset.move" || actionId === "asset.rename";
 }
