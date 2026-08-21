@@ -23,6 +23,7 @@ import {
   HASH,
   IDENT,
   INDEX,
+  UID_TEXT,
   JOB_ID,
   LIMIT,
   NODE_PATH,
@@ -131,7 +132,13 @@ function mutate(
   post: string,
   input: JsonSchema,
   example: Record<string, unknown>,
-  extra?: { policy?: Policy; cancel?: boolean; extra_errors?: readonly string[]; timeout_ms?: number },
+  extra?: {
+    policy?: Policy;
+    cancel?: boolean;
+    extra_errors?: readonly string[];
+    timeout_ms?: number;
+    checkpoint?: boolean;
+  },
 ): ActionSpec {
   const spec: ActionSpec = {
     summary,
@@ -150,6 +157,9 @@ function mutate(
   }
   if (extra?.timeout_ms !== undefined) {
     spec.timeout_ms = extra.timeout_ms;
+  }
+  if (extra?.checkpoint) {
+    spec.checkpoint_required = true;
   }
   return spec;
 }
@@ -561,8 +571,17 @@ const SPECS: Record<string, ActionSpec> = {
     "Create a new Resource of a given class",
     "atomic_file",
     "resource_file_exists",
-    obj(["path", "class_name"], { path: RES_PATH, class_name: IDENT }),
+    obj(["path", "class_name"], {
+      path: RES_PATH,
+      class_name: IDENT,
+      builtin: BOOL,
+      scene: RES_PATH,
+      node_path: NODE_PATH,
+      property: PROP_PATH,
+      local_to_scene: BOOL,
+    }),
     { path: "res://res/tile_set.tres", class_name: "TileSet" },
+    { extra_errors: SCENE_MUTATE_ERRORS },
   ),
   "resource.load": read(
     "Load a resource path or UID and return a summary",
@@ -577,8 +596,10 @@ const SPECS: Record<string, ActionSpec> = {
     obj(["scene", "node_path", "property", "resource"], {
       scene: RES_PATH,
       node_path: NODE_PATH,
-      property: IDENT,
+      property: PROP_PATH,
       resource: RES_PATH,
+      uid: UID_TEXT,
+      class_name: IDENT,
     }),
     {
       scene: "res://scenes/world.tscn",
@@ -586,13 +607,15 @@ const SPECS: Record<string, ActionSpec> = {
       property: "texture",
       resource: "res://assets/player.png",
     },
+    { extra_errors: SCENE_MUTATE_ERRORS },
   ),
   "resource.duplicate": mutate(
     "Duplicate a resource, optionally local-to-scene",
     "editor_undo_redo",
     "duplicate_resource_uid_distinct",
-    obj(["path", "dest"], { path: RES_PATH, dest: RES_PATH }),
+    obj(["path", "dest"], { path: RES_PATH, dest: RES_PATH, local_to_scene: BOOL }),
     { path: "res://res/shape.tres", dest: "res://res/shape_2.tres" },
+    { extra_errors: SCENE_MUTATE_ERRORS },
   ),
   "resource.edit": mutate(
     "Edit a resource field (Variant codec)",
@@ -600,14 +623,20 @@ const SPECS: Record<string, ActionSpec> = {
     "resource_field_equals",
     obj(["path", "property", "value"], {
       path: RES_PATH,
-      property: IDENT,
+      property: PROP_PATH,
       value: VARIANT,
+      shared: BOOL,
+      unique: BOOL,
+      scene: RES_PATH,
+      node_path: NODE_PATH,
+      dest: RES_PATH,
     }),
     {
       path: "res://res/tile_set.tres",
       property: "tile_size",
       value: exampleVariantInt(16),
     },
+    { extra_errors: SCENE_MUTATE_ERRORS },
   ),
   "resource.save": mutate(
     "Save a resource to disk",
@@ -615,13 +644,12 @@ const SPECS: Record<string, ActionSpec> = {
     "resource_disk_hash_matches",
     obj(["path"], { path: RES_PATH }),
     { path: "res://res/tile_set.tres" },
+    { extra_errors: SCENE_MUTATE_ERRORS },
   ),
   "resource.uid": read(
     "Resolve a Godot UID to a resource path",
     "uid_maps_to_path",
-    obj(["uid"], {
-      uid: { type: "string", minLength: 7, maxLength: 128, pattern: "^uid://[A-Za-z0-9]+$" },
-    }),
+    obj(["uid"], { uid: UID_TEXT }),
     { uid: "uid://b8k2example" },
   ),
 
@@ -649,6 +677,7 @@ const SPECS: Record<string, ActionSpec> = {
       target: "World/Door",
       method: "_on_body_entered",
     },
+    { extra_errors: SCENE_MUTATE_ERRORS },
   ),
   "signal.disconnect": mutate(
     "Disconnect a signal from a callable",
@@ -668,6 +697,7 @@ const SPECS: Record<string, ActionSpec> = {
       target: "World/Door",
       method: "_on_body_entered",
     },
+    { extra_errors: SCENE_MUTATE_ERRORS },
   ),
   "signal.inspect": read(
     "Inspect one signal's connections",
@@ -763,21 +793,24 @@ const SPECS: Record<string, ActionSpec> = {
     "Move an asset and rewrite references",
     "atomic_file",
     "old_path_absent_new_path_present",
-    obj(["from", "to"], { from: RES_PATH, to: RES_PATH }),
+    obj(["from", "to"], { from: RES_PATH, to: RES_PATH, rewrite_plan: BOOL }),
     { from: "res://assets/key.png", to: "res://assets/key_gold.png" },
+    { extra_errors: SCENE_MUTATE_ERRORS, checkpoint: true },
   ),
   "asset.rename": mutate(
     "Rename an asset in place",
     "atomic_file",
     "asset_renamed",
-    obj(["path", "name"], { path: RES_PATH, name: IDENT }),
+    obj(["path", "name"], { path: RES_PATH, name: IDENT, rewrite_plan: BOOL }),
     { path: "res://assets/key.png", name: "key_gold" },
+    { extra_errors: SCENE_MUTATE_ERRORS, checkpoint: true },
   ),
   "asset.delete": dest(
     "Quarantine/delete an unreferenced asset",
     "asset_absent_or_quarantined",
-    obj(["path"], { path: RES_PATH }),
+    obj(["path"], { path: RES_PATH, rewrite_plan: BOOL }),
     { path: "res://assets/tmp_PLACEHOLDER.png" },
+    { extra_errors: SCENE_MUTATE_ERRORS },
   ),
   "asset.dependencies": read(
     "List reverse dependencies of an asset",

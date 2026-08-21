@@ -60,8 +60,8 @@ MCP surface is **few domain tools + action discriminator**, not one tool per ver
 | script.diagnostics | godot.script | read | none | OBSERVE | 5000 | false | false | diagnostics_list_complete |
 | asset.import | godot.asset | mutate | atomic_file | EDIT | 15000 | false | false | import_sidecar_exists |
 | asset.reimport | godot.asset | mutate | atomic_file | EDIT | 15000 | false | false | import_timestamp_updated |
-| asset.move | godot.asset | mutate | atomic_file | EDIT | 15000 | false | false | old_path_absent_new_path_present |
-| asset.rename | godot.asset | mutate | atomic_file | EDIT | 15000 | false | false | asset_renamed |
+| asset.move | godot.asset | mutate | atomic_file | EDIT | 15000 | false | true | old_path_absent_new_path_present |
+| asset.rename | godot.asset | mutate | atomic_file | EDIT | 15000 | false | true | asset_renamed |
 | asset.delete | godot.asset | destructive | git_checkpoint | OWNER_AUTOPILOT | 30000 | true | true | asset_absent_or_quarantined |
 | asset.dependencies | godot.asset | read | none | OBSERVE | 5000 | false | false | dependency_owners_listed |
 | asset.preview | godot.asset | read | none | OBSERVE | 5000 | false | false | preview_handle_present |

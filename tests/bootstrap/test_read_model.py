@@ -683,20 +683,20 @@ def run_live() -> tuple[list[str], str, str]:
         mutate = plug.mcp_call(
             proc,
             req_id,
-            "godot.resource",
+            "godot.script",
             {
-                "action": "create",
+                "action": "write",
                 "params": {
-                    "path": "res://fixtures/unproven.tres",
-                    "class_name": "TileSet",
+                    "path": "res://fixtures/unproven.gd",
+                    "contents": "extends Node",
                 },
             },
         )
         mutate_body = (mutate.get("result") or {}).get("structuredContent") or {}
         if (mutate_body.get("error") or {}).get("code") != "E_UNVERIFIED":
-            errors.append(f"resource.create must stay E_UNVERIFIED: {mutate_body}")
+            errors.append(f"script.write must stay E_UNVERIFIED: {mutate_body}")
         if mutate_body.get("ok") is True:
-            errors.append("unproven resource.create returned ok true")
+            errors.append("unproven script.write returned ok true")
         if TREE_FIXTURE.read_text(encoding="utf-8").count("AgentWroteThis"):
             errors.append("read-model path wrote a node into the fixture scene")
     except Exception as exc:  # noqa: BLE001

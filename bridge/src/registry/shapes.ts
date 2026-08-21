@@ -107,6 +107,13 @@ export const HASH: JsonSchema = {
   pattern: "^[A-Fa-f0-9]+$",
 };
 
+export const UID_TEXT: JsonSchema = {
+  type: "string",
+  minLength: 7,
+  maxLength: 128,
+  pattern: "^uid://[A-Za-z0-9]+$",
+};
+
 export function exampleVariantInt(value = 1): Record<string, unknown> {
   return {
     schema: VARIANT_SCHEMA_VERSION,

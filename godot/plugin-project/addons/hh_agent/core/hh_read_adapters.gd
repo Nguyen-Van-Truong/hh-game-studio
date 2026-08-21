@@ -688,9 +688,22 @@ func _signal_inspect(command_id: String, params: Dictionary, post: String) -> Di
 	for item_v: Variant in node.get_signal_connection_list(signal_name):
 		if item_v is Dictionary:
 			var item: Dictionary = item_v
+			var method_s: String = ""
+			var target_path: String = ""
+			var cb_v: Variant = item.get("callable")
+			if cb_v is Callable:
+				var cb: Callable = cb_v
+				method_s = str(cb.get_method())
+				var obj: Object = cb.get_object()
+				if obj is Node:
+					target_path = str(node.get_path_to(obj as Node)) if obj != node else "."
+					if target_path.is_empty():
+						target_path = str((obj as Node).name)
 			conns.append({
 				"signal": signal_name,
-				"target": str(item.get("callable", "")),
+				"method": method_s,
+				"target_path": target_path,
+				"target": str(cb_v),
 			})
 	return _ok(command_id, post, {"signal": signal_name, "connections": conns})
 

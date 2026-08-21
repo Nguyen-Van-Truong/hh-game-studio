@@ -1,4 +1,4 @@
-/** Proven editor apply verbs. Scene lifecycle, node CRUD, and property codec. */
+/** Proven editor apply verbs. Scene, node, property, resource, signal, asset-ref. */
 
 export const SCENE_LIFECYCLE_APPLY = [
   "scene.create",
@@ -26,6 +26,18 @@ export const NODE_CRUD_APPLY = [
 
 export const PROPERTY_APPLY = ["property.set", "property.batch", "property.reset"] as const;
 
+export const RESOURCE_APPLY = [
+  "resource.create",
+  "resource.assign",
+  "resource.duplicate",
+  "resource.edit",
+  "resource.save",
+] as const;
+
+export const SIGNAL_APPLY = ["signal.connect", "signal.disconnect"] as const;
+
+export const ASSET_REF_APPLY = ["asset.move", "asset.rename", "asset.delete"] as const;
+
 export const NODE_UID_AFTER = [
   "node.add",
   "node.rename",
@@ -50,12 +62,70 @@ export function isPropertyApply(actionId: string): boolean {
   return (PROPERTY_APPLY as readonly string[]).includes(actionId);
 }
 
+export function isResourceApply(actionId: string): boolean {
+  return (RESOURCE_APPLY as readonly string[]).includes(actionId);
+}
+
+export function isSignalApply(actionId: string): boolean {
+  return (SIGNAL_APPLY as readonly string[]).includes(actionId);
+}
+
+export function isAssetRefApply(actionId: string): boolean {
+  return (ASSET_REF_APPLY as readonly string[]).includes(actionId);
+}
+
 export function isProvenEditorApply(actionId: string): boolean {
-  return isSceneLifecycleApply(actionId) || isNodeCrudApply(actionId) || isPropertyApply(actionId);
+  return (
+    isSceneLifecycleApply(actionId) ||
+    isNodeCrudApply(actionId) ||
+    isPropertyApply(actionId) ||
+    isResourceApply(actionId) ||
+    isSignalApply(actionId) ||
+    isAssetRefApply(actionId)
+  );
 }
 
 export function sceneNeedsDiskHash(actionId: string): boolean {
   return (SCENE_DURABLE_DISK as readonly string[]).includes(actionId);
+}
+
+function isExternalResPath(path: string): boolean {
+  return (path.endsWith(".tres") || path.endsWith(".res")) && !path.includes("::");
+}
+
+export function mutationNeedsDiskHash(actionId: string, params: Record<string, unknown>): boolean {
+  if (sceneNeedsDiskHash(actionId)) {
+    return true;
+  }
+  if (actionId === "resource.create" || actionId === "resource.save" || actionId === "resource.edit") {
+    return typeof params.path === "string" && isExternalResPath(params.path);
+  }
+  if (actionId === "resource.duplicate") {
+    return typeof params.dest === "string" && isExternalResPath(params.dest);
+  }
+  return actionId === "asset.move" || actionId === "asset.rename";
+}
+
+export function durableResPath(
+  actionId: string,
+  params: Record<string, unknown>,
+  after?: Record<string, unknown>,
+): string {
+  if (
+    after &&
+    typeof after.path === "string" &&
+    after.path.startsWith("res://") &&
+    (actionId === "asset.move" || actionId === "asset.rename" || actionId === "resource.duplicate")
+  ) {
+    return after.path;
+  }
+  if (actionId === "resource.duplicate" && typeof params.dest === "string") {
+    return params.dest;
+  }
+  if (actionId === "asset.move" && typeof params.to === "string") {
+    return params.to;
+  }
+  return typeof params.path === "string" ? params.path : "";
 }
 
 export function nodeNeedsUidAfter(actionId: string): boolean {

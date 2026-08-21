@@ -22,9 +22,14 @@ import {
 import { LedgerPluginDeath, maybeCrashAfterDispatchAttempt, maybeFault } from "./fault.js";
 import { canonicalRequestHash } from "./hash.js";
 import {
+  durableResPath,
+  isAssetRefApply,
   isPropertyApply,
   isProvenEditorApply,
+  isResourceApply,
   isSceneLifecycleApply,
+  isSignalApply,
+  mutationNeedsDiskHash,
   nodeNeedsUidAfter,
   sceneNeedsDiskHash,
 } from "./scene_lifecycle.js";
@@ -229,14 +234,15 @@ function storedSceneReady(
   if (!commitReady(stored, row)) {
     return false;
   }
-  if (!sceneNeedsDiskHash(row.action_id)) {
+  const params = envelopeFields(envelope).params;
+  if (!mutationNeedsDiskHash(row.action_id, params)) {
     return true;
   }
   const projectRoot = runtime.projectRoot ?? runtime.policy?.projectRoot ?? "";
   if (!projectRoot) {
     return false;
   }
-  return durableDiskOk(stored, row.action_id, envelopeFields(envelope).params, projectRoot) === undefined;
+  return durableDiskOk(stored, row.action_id, params, projectRoot) === undefined;
 }
 
 function classify(raw: Record<string, unknown>, commandId: string): Classified {
@@ -314,34 +320,33 @@ function canonJson(value: unknown): unknown {
   return value;
 }
 
-function encodedClose(a: unknown, b: unknown): boolean {
-  return valueClose(canonJson(a), canonJson(b));
+function encodedClose(after: unknown, requested: unknown): boolean {
+  return valueClose(canonJson(after), canonJson(requested));
 }
 
-function valueClose(a: unknown, b: unknown): boolean {
-  if (typeof a === "number" && typeof b === "number") {
-    if (!Number.isFinite(a) || !Number.isFinite(b)) {
-      return a === b;
+function valueClose(after: unknown, requested: unknown): boolean {
+  if (typeof after === "number" && typeof requested === "number") {
+    if (!Number.isFinite(after) || !Number.isFinite(requested)) {
+      return after === requested;
     }
-    if (a === b) {
+    if (after === requested) {
       return true;
     }
-    const scale = Math.max(Math.abs(a), Math.abs(b), 1);
-    return Math.abs(a - b) <= 1e-5 * scale;
+    const scale = Math.max(Math.abs(after), Math.abs(requested), 1);
+    return Math.abs(after - requested) <= 1e-5 * scale;
   }
-  if (Array.isArray(a) && Array.isArray(b)) {
-    return a.length === b.length && a.every((item, i) => valueClose(item, b[i]));
+  if (Array.isArray(after) && Array.isArray(requested)) {
+    return after.length === requested.length && after.every((item, i) => valueClose(item, requested[i]));
   }
-  if (isRecord(a) && isRecord(b)) {
-    const keys = new Set([...Object.keys(a), ...Object.keys(b)]);
-    for (const key of keys) {
-      if (!valueClose(a[key], b[key])) {
+  if (isRecord(after) && isRecord(requested)) {
+    for (const key of Object.keys(requested)) {
+      if (!valueClose(after[key], requested[key])) {
         return false;
       }
     }
     return true;
   }
-  return a === b;
+  return after === requested;
 }
 
 function propertyApplyOk(
@@ -445,19 +450,115 @@ function nodeIdentityOk(result: PluginCommandResult, actionId: string): PluginCo
   return undefined;
 }
 
+function resourceApplyOk(
+  result: PluginCommandResult,
+  actionId: string,
+  params: Record<string, unknown>,
+): PluginCommandResult | undefined {
+  if (!isResourceApply(actionId) && !isSignalApply(actionId) && !isAssetRefApply(actionId)) {
+    return undefined;
+  }
+  if (!result.ok) {
+    return result;
+  }
+  const after = result.after;
+  const needsUndo =
+    actionId === "resource.assign" ||
+    actionId === "resource.edit" ||
+    actionId === "signal.connect" ||
+    actionId === "signal.disconnect";
+  if (needsUndo && (typeof result.undo_action !== "string" || !result.undo_action.startsWith("Agent: "))) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, `${actionId} missing Agent UndoRedo name`);
+  }
+  if (actionId === "resource.assign") {
+    if (!isRecord(after) || after.readback_equals !== true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "resource.assign readback failed");
+    }
+    const want = typeof params.resource === "string" ? params.resource : "";
+    const got = typeof after.path === "string" ? after.path : "";
+    if (want && got && want !== got && !got.includes("::") && !got.endsWith(want)) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "resource.assign path mismatch");
+    }
+    return undefined;
+  }
+  if (actionId === "resource.edit") {
+    if (!isRecord(after) || after.readback_equals !== true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "resource.edit readback failed");
+    }
+    return undefined;
+  }
+  if (actionId === "resource.create") {
+    if (!isRecord(after)) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "resource.create missing after");
+    }
+    if (after.builtin === true) {
+      return undefined;
+    }
+    if (typeof after.path !== "string" || after.path.length < 1) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "resource.create missing path");
+    }
+    if (typeof after.uid !== "string" || after.uid.length < 1) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "resource.create missing uid");
+    }
+    return undefined;
+  }
+  if (actionId === "resource.duplicate") {
+    if (!isRecord(after) || typeof after.uid !== "string" || after.uid.length < 1) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "duplicate uid missing");
+    }
+    if (typeof after.source_uid === "string" && after.source_uid === after.uid) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "duplicate uid not distinct");
+    }
+    return undefined;
+  }
+  if (actionId === "resource.save") {
+    if (!isRecord(after) || typeof after.disk_hash !== "string" || after.disk_hash.length < 16) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "resource.save missing disk hash");
+    }
+    return undefined;
+  }
+  if (actionId === "signal.connect") {
+    if (!isRecord(after) || after.connected !== true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "signal.connect missing connection readback");
+    }
+    return undefined;
+  }
+  if (actionId === "signal.disconnect") {
+    if (!isRecord(after) || after.connected === true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "signal.disconnect still connected");
+    }
+    return undefined;
+  }
+  if (actionId === "asset.move" || actionId === "asset.rename") {
+    if (!isRecord(after) || after.old_path_absent !== true || typeof after.path !== "string") {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "move/rename missing dest path");
+    }
+    if (typeof after.uid !== "string" || after.uid.length < 1) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "move/rename uid missing");
+    }
+    return undefined;
+  }
+  if (actionId === "asset.delete") {
+    if (!isRecord(after) || after.absent !== true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "delete missing absent readback");
+    }
+  }
+  return undefined;
+}
+
 function durableDiskOk(
   result: PluginCommandResult,
   actionId: string,
   params: Record<string, unknown>,
   projectRoot: string,
 ): PluginCommandResult | undefined {
-  if (!sceneNeedsDiskHash(actionId)) {
+  if (!mutationNeedsDiskHash(actionId, params)) {
     return undefined;
   }
   if (!result.ok) {
     return result;
   }
-  const rawPath = typeof params.path === "string" ? params.path : "";
+  const rawPath = durableResPath(actionId, params, isRecord(result.after) ? result.after : undefined);
   if (!rawPath) {
     return errorResult(result.command_id, E.E_UNVERIFIED, "durable save missing path", "params.path");
   }
@@ -812,9 +913,13 @@ async function applyMutateOnce(
     row.after_summary = JSON.stringify({
       kind: isPropertyApply(classified.actionId)
         ? "property"
-        : isSceneLifecycleApply(classified.actionId)
-          ? "scene"
-          : "node",
+        : isResourceApply(classified.actionId) || isAssetRefApply(classified.actionId)
+          ? "resource"
+          : isSignalApply(classified.actionId)
+            ? "signal"
+            : isSceneLifecycleApply(classified.actionId)
+              ? "scene"
+              : "node",
       action_id: classified.actionId,
       checks: result.postcondition.checks,
       disk_hash: isRecord(result.after) ? result.after.disk_hash ?? "" : "",
@@ -851,6 +956,12 @@ async function applyMutateOnce(
       saveState(ledger, row, "failed");
       return propertyFail;
     }
+    const resourceFail = resourceApplyOk(result, classified.actionId, fields.params);
+    if (resourceFail) {
+      persistResult(row, resourceFail);
+      saveState(ledger, row, "failed");
+      return resourceFail;
+    }
     const projectRoot = runtime.projectRoot ?? runtime.policy?.projectRoot ?? "";
     const diskFail = durableDiskOk(result, classified.actionId, fields.params, projectRoot);
     if (diskFail) {
@@ -858,8 +969,12 @@ async function applyMutateOnce(
       saveState(ledger, row, "failed");
       return diskFail;
     }
-    if (runtime.policy && sceneNeedsDiskHash(classified.actionId)) {
-      const rawPath = typeof fields.params.path === "string" ? fields.params.path : "";
+    if (runtime.policy && mutationNeedsDiskHash(classified.actionId, fields.params)) {
+      const rawPath = durableResPath(
+        classified.actionId,
+        fields.params,
+        isRecord(result.after) ? result.after : undefined,
+      );
       if (rawPath) {
         const jailed = jailProjectPath(projectRoot, rawPath, { forWrite: true });
         if (jailed.ok) {
@@ -924,7 +1039,11 @@ async function recoverFromReadback(
     row.action_id !== "hh.plugin/noop" &&
     isReadVerified(readback.postcondition, row.action_id);
   if (noopOk || readOk) {
-    if (sceneNeedsDiskHash(row.action_id)) {
+    if (
+      sceneNeedsDiskHash(row.action_id) ||
+      isResourceApply(row.action_id) ||
+      isAssetRefApply(row.action_id)
+    ) {
       return undefined;
     }
     const result: PluginCommandResult = {

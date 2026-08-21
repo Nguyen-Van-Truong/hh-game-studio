@@ -689,12 +689,12 @@ def main() -> int:
             mutate = mcp_call(
                 proc,
                 3,
-                "godot.resource",
+                "godot.script",
                 {
-                    "action": "create",
+                    "action": "write",
                     "params": {
-                        "path": "res://main.tres",
-                        "class_name": "TileSet",
+                        "path": "res://scripts/unproven.gd",
+                        "contents": "extends Node",
                     },
                 },
             )

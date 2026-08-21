@@ -680,7 +680,7 @@
         "to"
       ],
       "postcondition": "old_path_absent_new_path_present",
-      "checkpoint_required": false
+      "checkpoint_required": true
     },
     "asset.rename": {
       "method": "godot.asset",
@@ -692,7 +692,7 @@
         "name"
       ],
       "postcondition": "asset_renamed",
-      "checkpoint_required": false
+      "checkpoint_required": true
     },
     "asset.delete": {
       "method": "godot.asset",

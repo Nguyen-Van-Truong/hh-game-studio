@@ -10,8 +10,10 @@ const _ReadsScript: GDScript = preload("res://addons/hh_agent/core/hh_read_adapt
 const _SceneScript: GDScript = preload("res://addons/hh_agent/core/hh_scene_adapter.gd")
 const _NodeScript: GDScript = preload("res://addons/hh_agent/core/hh_node_adapter.gd")
 const _PropertyScript: GDScript = preload("res://addons/hh_agent/core/hh_property_adapter.gd")
+const _ResourceScript: GDScript = preload("res://addons/hh_agent/core/hh_resource_adapter.gd")
+const _SignalScript: GDScript = preload("res://addons/hh_agent/core/hh_signal_adapter.gd")
 
-## Routes read/view adapters, scene lifecycle, node CRUD, and property set.
+## Routes read/view adapters, scene/node/property/resource/signal apply.
 
 var _errors: HHAgentErrors = HHAgentErrors.new()
 var _envelope: HHAgentEnvelope = HHAgentEnvelope.new()
@@ -19,6 +21,8 @@ var _reads: HHAgentReadAdapters = HHAgentReadAdapters.new()
 var _scenes: HHAgentSceneAdapter = HHAgentSceneAdapter.new()
 var _nodes: HHAgentNodeAdapter = HHAgentNodeAdapter.new()
 var _props: HHAgentPropertyAdapter = HHAgentPropertyAdapter.new()
+var _resources: HHAgentResourceAdapter = HHAgentResourceAdapter.new()
+var _signals: HHAgentSignalAdapter = HHAgentSignalAdapter.new()
 
 
 func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_gate: HHAgentPauseGate = null) -> Dictionary:
@@ -77,6 +81,12 @@ func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_ga
 		return _nodes.handle(command_id, method, action, params, actions, pre)
 	if method == "godot.property" and action != "get" and _props.handles(action):
 		return _props.handle(command_id, method, action, params, actions, pre)
+	if method == "godot.resource" and action != "load" and action != "uid" and _resources.handles(action):
+		return _resources.handle(command_id, method, action, params, actions, pre)
+	if method == "godot.signal" and _signals.handles(action):
+		return _signals.handle(command_id, method, action, params, actions, pre)
+	if method == "godot.asset" and _resources.handles_asset(action):
+		return _resources.handle_asset(command_id, method, action, params, actions, pre)
 	if method == "godot.scene" and _scenes.handles(action):
 		return _scenes.handle(command_id, method, action, params, actions, pre)
 	if side_effect == "read" or side_effect == "view":
@@ -222,17 +232,17 @@ func run_selftest(actions: HHAgentActions) -> PackedStringArray:
 			)
 	var mutate_still: Dictionary = dispatch(
 		_sample(
-			"godot.resource",
-			"create",
-			{"path": "res://r3w3/unproven.tres", "class_name": "TileSet"},
+			"godot.script",
+			"write",
+			{"path": "res://r3w4/unproven.gd", "contents": "extends Node"},
 		),
 		actions,
 		0,
 	)
 	if str(_error_of(mutate_still).get("code", "")) != HHAgentErrors.E_UNVERIFIED:
-		failures.append("resource.create must stay E_UNVERIFIED")
+		failures.append("script.write must stay E_UNVERIFIED")
 	if mutate_still.get("ok", true) == true:
-		failures.append("resource.create must not paper-ok")
+		failures.append("script.write must not paper-ok")
 	var forbidden: Dictionary = dispatch(
 		{
 			"protocol": HHAgentConstants.PROTOCOL,
