@@ -41,6 +41,22 @@ PLAYER = (
     "	return \"ok\"\n"
 )
 
+NAMED = (
+    "class_name R3W5Named\n"
+    "extends Node2D\n"
+    "\n"
+    "func speed() -> int:\n"
+    "	return 80\n"
+)
+
+NAMED_NEXT = (
+    "class_name R3W5Named\n"
+    "extends Node2D\n"
+    "\n"
+    "func speed() -> int:\n"
+    "	return 240\n"
+)
+
 INVALID = "extends Node2D\n\nfunc broken( -> void:\n	pass\n"
 
 PATCH_LINE = "	return 80\n"
@@ -164,6 +180,8 @@ def src_scan_errors() -> list[str]:
             body = write_fn.group(0)
             if "_validate_source" not in body and "validate_source" not in body:
                 errors.append("_write must validate BEFORE atomic replace")
+            if "_validate_source(contents, res_path)" not in body:
+                errors.append("_write must validate against dest resource_path")
             if "_atomic_replace" not in body:
                 errors.append("_write must atomic-replace via tmp+rename")
             if "_conflict_gate" not in body:
@@ -198,6 +216,19 @@ def src_scan_errors() -> list[str]:
             replace_at = body.find("_atomic_replace")
             if constraint < 0 or replace_at < 0 or constraint > replace_at:
                 errors.append("range/unrelated-lines constraint must run before _atomic_replace")
+            if "_validate_source(next_text, res_path)" not in body:
+                errors.append("_patch must validate against dest resource_path")
+        val_src = re.search(r"func _validate_source\b.*?func _parse_fail\b", text, re.S)
+        if val_src is None:
+            errors.append("missing _validate_source")
+        else:
+            probe_body = val_src.group(0)
+            rp = probe_body.find("resource_path")
+            rl = probe_body.find("reload(")
+            if rp < 0 or rl < 0 or rp > rl:
+                errors.append("_validate_source must set probe resource_path to dest before reload")
+        if "class_name R3W5Named" not in self_text:
+            errors.append("official test must write class_name R3W5Named, not only class_name-less fixtures")
         if re.search(r"\bcallv\b", text) or "Object.call" in text:
             errors.append("script adapter has a generic invoke path")
     meta = ADDON / "core" / "hh_scene_meta.gd"
@@ -400,6 +431,38 @@ def live_errors(exe: Path) -> list[str]:
         after_hash = str((created.get("after") or {}).get("disk_hash") or "")
         if after_hash != sha256_file(player_abs) or after_hash != sha256_text(PLAYER):
             errors.append(f"write disk SHA mismatch: {created} vs {sha256_file(player_abs)}")
+
+        named = "res://r3w5/named.gd"
+        named_abs = life.res_to_abs(named)
+        req_id, named_body = tool_call(
+            proc, req_id, "godot.script", "write", {"path": named, "contents": NAMED}
+        )
+        if not ack_ok(named_body, errors, "script.write class_name R3W5Named"):
+            return errors
+        if not named_abs.is_file() or named_abs.read_bytes() != NAMED.encode("utf-8"):
+            errors.append("class_name R3W5Named write did not persist equal disk bytes")
+            return errors
+        req_id, named_again = tool_call(
+            proc, req_id, "godot.script", "write", {"path": named, "contents": NAMED_NEXT}
+        )
+        if not ack_ok(named_again, errors, "script.write class_name R3W5Named again"):
+            return errors
+        if named_abs.read_bytes() != NAMED_NEXT.encode("utf-8"):
+            errors.append(f"second class_name write disk mismatch: {named_abs.read_bytes()!r}")
+            return errors
+        req_id, named_patched = tool_call(
+            proc,
+            req_id,
+            "godot.script",
+            "patch",
+            {"path": named, "find": "	return 240\n", "replace": "	return 241\n"},
+        )
+        if not ack_ok(named_patched, errors, "script.patch class_name R3W5Named"):
+            return errors
+        named_disk = named_abs.read_bytes()
+        if b"return 241" not in named_disk or b"class_name R3W5Named" not in named_disk:
+            errors.append(f"class_name patch did not persist new text: {named_disk!r}")
+            return errors
 
         req_id, validated = tool_call(proc, req_id, "godot.script", "validate", {"path": player})
         if not ack_ok(validated, errors, "script.validate"):
@@ -765,9 +828,9 @@ def main() -> int:
 
     print(
         "PASS: script write/validate/patch/attach + dirty E_CONFLICT; "
-        "SCRIPT_TEXT >4000 ACK; packed attach refuse; plugin addon jail; "
-        "diagnostics E_UNVERIFIED; invalid parse keeps old bytes; Pause; "
-        "unproven sentinel on project.settings; R3-WP5 stays unticked."
+        "class_name R3W5Named rewrite ACK; SCRIPT_TEXT >4000 ACK; packed attach refuse; "
+        "plugin addon jail; diagnostics E_UNVERIFIED; invalid parse keeps old bytes; "
+        "Pause; unproven sentinel on project.settings; R3-WP5 stays unticked."
     )
     return 0
 

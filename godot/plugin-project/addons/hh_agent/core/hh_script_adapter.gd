@@ -51,8 +51,8 @@ func handle(
 	return _errors.fail(command_id, HHAgentErrors.E_UNVERIFIED, "script.%s is not a proven verb" % action, "")
 
 
-func validate_source(contents: String) -> Dictionary:
-	return _validate_source(contents)
+func validate_source(contents: String, dest_path: String = "") -> Dictionary:
+	return _validate_source(contents, dest_path)
 
 
 func fallback_post(action: String) -> String:
@@ -80,7 +80,7 @@ func _write(command_id: String, params: Dictionary, precondition: Dictionary, po
 	var conflict: Dictionary = _conflict_gate(command_id, res_path, params, precondition)
 	if conflict.get("ok", false) != true:
 		return conflict
-	var parsed: Dictionary = _validate_source(contents)
+	var parsed: Dictionary = _validate_source(contents, res_path)
 	if parsed.get("ok", false) != true:
 		return _parse_fail(command_id, parsed, res_path)
 	var persisted: Dictionary = _atomic_replace(command_id, res_path, contents)
@@ -159,7 +159,7 @@ func _patch(command_id: String, params: Dictionary, precondition: Dictionary, po
 			"source": "editor",
 		}
 		return _errors.ok_changed(command_id, _checks(post), after_buf, true)
-	var parsed: Dictionary = _validate_source(next_text)
+	var parsed: Dictionary = _validate_source(next_text, res_path)
 	if parsed.get("ok", false) != true:
 		return _parse_fail(command_id, parsed, res_path)
 	if not _patch_constraint_holds(source, next_text, find_s, replace_s, start_line, end_line):
@@ -369,7 +369,7 @@ func _conflict_gate(command_id: String, res_path: String, params: Dictionary, pr
 	return {"ok": true, "state": state, "existed": FileAccess.file_exists(res_path)}
 
 
-func _validate_source(contents: String) -> Dictionary:
+func _validate_source(contents: String, dest_path: String = "") -> Dictionary:
 	if contents.begins_with("\ufeff") or _has_bom_bytes(contents.to_utf8_buffer()):
 		return {
 			"ok": false,
@@ -377,9 +377,27 @@ func _validate_source(contents: String) -> Dictionary:
 			"message": "UTF-8 BOM is not allowed",
 		}
 	var probe: GDScript = GDScript.new()
+	var reused: bool = false
+	var old_source: String = ""
+	if not dest_path.is_empty():
+		if ResourceLoader.has_cached(dest_path):
+			var loaded: Resource = ResourceLoader.load(dest_path, "", ResourceLoader.CACHE_MODE_REUSE)
+			if loaded is GDScript:
+				probe = loaded as GDScript
+				reused = true
+				old_source = probe.source_code
+		if probe.resource_path != dest_path:
+			probe.resource_path = dest_path
+		if probe.resource_path != dest_path:
+			probe.take_over_path(dest_path)
 	probe.source_code = contents
 	var err: Error = probe.reload()
+	if not reused and not dest_path.is_empty() and probe.resource_path == dest_path:
+		probe.resource_path = ""
 	if err != OK:
+		if reused:
+			probe.source_code = old_source
+			probe.reload()
 		return {
 			"ok": false,
 			"code": HHAgentErrors.E_INVALID_TYPE,
@@ -389,6 +407,9 @@ func _validate_source(contents: String) -> Dictionary:
 		}
 	var base: String = probe.get_instance_base_type()
 	if base.is_empty() and contents.contains("extends "):
+		if reused:
+			probe.source_code = old_source
+			probe.reload()
 		return {
 			"ok": false,
 			"code": HHAgentErrors.E_INVALID_TYPE,
