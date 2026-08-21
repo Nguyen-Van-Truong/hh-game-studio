@@ -19,7 +19,23 @@ func jail(command_id: String, res_path: String) -> Dictionary:
 	var root: String = ProjectSettings.globalize_path("res://")
 	if not abs_path.begins_with(root):
 		return _errors.fail(command_id, HHAgentErrors.E_PATH, "path is outside project root", res_path)
+	if _locked_write(res_path):
+		return _errors.fail(
+			command_id,
+			HHAgentErrors.E_PATH,
+			"write is locked under addons/hh_agent",
+			res_path,
+		)
 	return {"ok": true, "abs": abs_path}
+
+
+func _locked_write(res_path: String) -> bool:
+	var norm: String = res_path.replace("\\", "/").to_lower()
+	if norm.begins_with("res://addons/hh_agent/") or norm == "res://addons/hh_agent":
+		return true
+	if norm.begins_with("res://.hh-agent/") or norm == "res://.hh-agent":
+		return true
+	return false
 
 
 func is_scene_path(res_path: String) -> bool:
@@ -96,6 +112,16 @@ func is_dirty(root: Node) -> bool:
 		return false
 	if mgr.has_method("is_history_unsaved"):
 		return mgr.is_history_unsaved(hid)
+	return false
+
+
+func any_open_dirty() -> bool:
+	var edited: Node = EditorInterface.get_edited_scene_root()
+	if is_dirty(edited):
+		return true
+	for item: String in open_scenes():
+		if _dirty_paths.get(item, false) == true:
+			return true
 	return false
 
 

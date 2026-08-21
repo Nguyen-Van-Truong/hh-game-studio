@@ -93,6 +93,13 @@ export const TEXT: JsonSchema = {
   maxLength: 4000,
 };
 
+/** Dedicated cap for script source / find / replace. TEXT stays short for other fields. */
+export const SCRIPT_TEXT: JsonSchema = {
+  type: "string",
+  minLength: 1,
+  maxLength: 262144,
+};
+
 export const JOB_ID: JsonSchema = {
   type: "string",
   minLength: 1,

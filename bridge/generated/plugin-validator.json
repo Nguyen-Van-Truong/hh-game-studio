@@ -6279,7 +6279,7 @@
           "contents": {
             "type": "string",
             "minLength": 1,
-            "maxLength": 4000
+            "maxLength": 262144
           },
           "expected_hash": {
             "type": "string",
@@ -6422,12 +6422,12 @@
           "find": {
             "type": "string",
             "minLength": 1,
-            "maxLength": 4000
+            "maxLength": 262144
           },
           "replace": {
             "type": "string",
             "minLength": 1,
-            "maxLength": 4000
+            "maxLength": 262144
           },
           "start_line": {
             "type": "integer",

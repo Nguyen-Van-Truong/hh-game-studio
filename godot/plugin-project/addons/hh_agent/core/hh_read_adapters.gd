@@ -765,28 +765,19 @@ func _script_validate(command_id: String, params: Dictionary, post: String) -> D
 	})
 
 
-func _script_diagnostics(command_id: String, params: Dictionary, post: String) -> Dictionary:
+func _script_diagnostics(command_id: String, params: Dictionary, _post: String) -> Dictionary:
 	var res_path: String = str(params.get("path", ""))
 	var jail: Dictionary = _jail(command_id, res_path)
 	if jail.get("ok", false) != true:
 		return jail
 	if not FileAccess.file_exists(res_path):
 		return _unverified(command_id, "script missing")
-	var text: String = FileAccess.get_file_as_bytes(res_path).get_string_from_utf8()
-	var parsed: Dictionary = _parse_gdscript(text)
-	var items: Array = []
-	if parsed.get("ok", false) != true:
-		items.append({
-			"line": 0,
-			"code": str(parsed.get("code", "")),
-			"message": str(parsed.get("message", "")),
-		})
-	return _ok(command_id, post, {
-		"path": res_path,
-		"valid": parsed.get("ok", false) == true,
-		"base": str(parsed.get("base", "")),
-		"diagnostics": items,
-	})
+	return _errors.fail(
+		command_id,
+		HHAgentErrors.E_UNVERIFIED,
+		"script.diagnostics has no proven editor warning list; use script.validate for parse errors",
+		res_path,
+	)
 
 
 func _parse_gdscript(contents: String) -> Dictionary:

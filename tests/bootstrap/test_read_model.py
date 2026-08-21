@@ -107,6 +107,18 @@ def src_scan_errors() -> list[str]:
     if "no read adapter" in (ADDON / "core" / "hh_router.gd").read_text(encoding="utf-8"):
         if "return _reads.handle" not in (ADDON / "core" / "hh_router.gd").read_text(encoding="utf-8"):
             errors.append("router still auto-rejects every read")
+    reads = ADDON / "core" / "hh_read_adapters.gd"
+    if reads.is_file():
+        read_text = reads.read_text(encoding="utf-8")
+        diag_fn = re.search(r"func _script_diagnostics\b.*?func _script_open_at\b", read_text, re.S)
+        if diag_fn is None:
+            errors.append("missing _script_diagnostics")
+        else:
+            body = diag_fn.group(0)
+            if "E_UNVERIFIED" not in body:
+                errors.append("script.diagnostics must stay E_UNVERIFIED")
+            if re.search(r"\b_ok\s*\(", body):
+                errors.append("script.diagnostics must not paper an empty-list ACK")
     return errors
 
 
@@ -651,8 +663,10 @@ def run_live() -> tuple[list[str], str, str]:
         )
         req_id += 1
         diag_body = (diag.get("result") or {}).get("structuredContent") or {}
-        if diag_body.get("ok") is not True:
-            errors.append(f"live script.diagnostics must ACK: {sess.redact(json.dumps(diag), secret)}")
+        if (diag_body.get("error") or {}).get("code") != "E_UNVERIFIED":
+            errors.append(
+                f"script.diagnostics must stay E_UNVERIFIED: {sess.redact(json.dumps(diag), secret)}"
+            )
         logs = plug.mcp_call(
             proc,
             req_id,

@@ -29,6 +29,7 @@ import {
   NODE_PATH,
   PROP_PATH,
   RES_PATH,
+  SCRIPT_TEXT,
   TEXT,
   VARIANT,
   exampleVariantBool,
@@ -727,7 +728,7 @@ const SPECS: Record<string, ActionSpec> = {
     "script_disk_equals_write",
     obj(["path", "contents"], {
       path: RES_PATH,
-      contents: TEXT,
+      contents: SCRIPT_TEXT,
       expected_hash: HASH,
       base_hash: HASH,
     }),
@@ -740,8 +741,8 @@ const SPECS: Record<string, ActionSpec> = {
     "script_patch_applied",
     obj(["path", "find", "replace"], {
       path: RES_PATH,
-      find: TEXT,
-      replace: TEXT,
+      find: SCRIPT_TEXT,
+      replace: SCRIPT_TEXT,
       start_line: { type: "integer", minimum: 1, maximum: 100000 },
       end_line: { type: "integer", minimum: 1, maximum: 100000 },
       buffer_only: BOOL,

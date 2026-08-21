@@ -46,6 +46,33 @@ INVALID = "extends Node2D\n\nfunc broken( -> void:\n	pass\n"
 PATCH_LINE = "	return 80\n"
 PATCH_NEXT = "	return 120\n"
 
+RANGE_SRC = (
+    "extends Node2D\n"
+    "\n"
+    "func first() -> int:\n"
+    "	return 7\n"
+    "\n"
+    "func second() -> int:\n"
+    "	return 7\n"
+)
+
+
+def big_script() -> str:
+    parts = [
+        "extends Node2D\n",
+        "\n",
+        "func speed() -> int:\n",
+        "	return 80\n",
+        "\n",
+    ]
+    i = 0
+    while sum(len(part) for part in parts) <= 4000:
+        parts.append("func pad_%d() -> int:\n" % i)
+        parts.append("	return %d\n" % i)
+        parts.append("\n")
+        i += 1
+    return "".join(parts)
+
 
 def rel(path: Path) -> str:
     return path.resolve().relative_to(REPO_ROOT.resolve()).as_posix()
@@ -158,8 +185,26 @@ def src_scan_errors() -> list[str]:
             errors.append("attach must name Agent UndoRedo actions")
         if "E_CONFLICT" not in text or "buffer" not in text:
             errors.append("dirty ScriptEditor must return E_CONFLICT")
+        if "_reject_packed" not in text or "is_packed_internal" not in text:
+            errors.append("attach/detach must refuse packed internals via the same packed reject")
+        if "any_open_dirty" not in text:
+            errors.append("script.rename must refuse when an open scene is dirty")
+        patch_fn = re.search(r"func _patch\b.*?func _attach\b", text, re.S)
+        if patch_fn is None:
+            errors.append("missing _patch")
+        else:
+            body = patch_fn.group(0)
+            constraint = body.find("_patch_constraint_holds")
+            replace_at = body.find("_atomic_replace")
+            if constraint < 0 or replace_at < 0 or constraint > replace_at:
+                errors.append("range/unrelated-lines constraint must run before _atomic_replace")
         if re.search(r"\bcallv\b", text) or "Object.call" in text:
             errors.append("script adapter has a generic invoke path")
+    meta = ADDON / "core" / "hh_scene_meta.gd"
+    if meta.is_file():
+        meta_text = meta.read_text(encoding="utf-8")
+        if "addons/hh_agent" not in meta_text or "_locked_write" not in meta_text:
+            errors.append("plugin jail() must refuse writes under res://addons/hh_agent")
     if reads.is_file():
         read_text = reads.read_text(encoding="utf-8")
         val_fn = re.search(r"func _script_validate\b.*?func _script_open_at\b", read_text, re.S)
@@ -167,6 +212,15 @@ def src_scan_errors() -> list[str]:
             errors.append("missing _script_validate")
         elif "reload" not in val_fn.group(0):
             errors.append("script.validate must parse via GDScript.reload, not paper after write")
+        diag_fn = re.search(r"func _script_diagnostics\b.*?func _script_open_at\b", read_text, re.S)
+        if diag_fn is None:
+            errors.append("missing _script_diagnostics")
+        else:
+            diag_body = diag_fn.group(0)
+            if "E_UNVERIFIED" not in diag_body:
+                errors.append("script.diagnostics must return honest E_UNVERIFIED")
+            if re.search(r"\b_ok\s*\(", diag_body):
+                errors.append("script.diagnostics must not ACK an empty diagnostics list")
     if life_ts.is_file():
         life_text = life_ts.read_text(encoding="utf-8")
         if "script.write" not in life_text or "isScriptApply" not in life_text:
@@ -176,6 +230,18 @@ def src_scan_errors() -> list[str]:
     execute = (BRIDGE / "src" / "ledger" / "execute.ts").read_text(encoding="utf-8")
     if "scriptApplyOk" not in execute:
         errors.append("ledger must verify script write/attach postconditions")
+    shapes = (BRIDGE / "src" / "registry" / "shapes.ts").read_text(encoding="utf-8")
+    if "SCRIPT_TEXT" not in shapes or "262144" not in shapes:
+        errors.append("shapes.ts must define SCRIPT_TEXT with a 262144-char cap")
+    if re.search(r"export const TEXT:[\s\S]*?maxLength:\s*4000", shapes) is None:
+        errors.append("short TEXT must stay 4000 for non-script fields")
+    actions_ts = (BRIDGE / "src" / "registry" / "actions.ts").read_text(encoding="utf-8")
+    write_block = re.search(r'"script\.write":[\s\S]*?"script\.patch":', actions_ts)
+    patch_block = re.search(r'"script\.patch":[\s\S]*?"script\.validate":', actions_ts)
+    if write_block is None or "SCRIPT_TEXT" not in write_block.group(0):
+        errors.append("script.write contents must use SCRIPT_TEXT, not short TEXT")
+    if patch_block is None or "SCRIPT_TEXT" not in patch_block.group(0):
+        errors.append("script.patch find/replace must use SCRIPT_TEXT, not short TEXT")
     for path in ADDON.rglob("*.gd"):
         text = path.read_text(encoding="utf-8", errors="replace")
         if re.search(r"\bcallv\b", text) or "Object.call" in text:
@@ -288,6 +354,36 @@ def live_errors(exe: Path) -> list[str]:
         req_id += 1
         expect_code(jail, ("E_PATH",), errors, "escaped script path")
 
+        addon_write = body_of(
+            mcp_call(
+                proc,
+                req_id,
+                "godot.script",
+                {
+                    "action": "write",
+                    "params": {
+                        "path": "res://addons/hh_agent/r3w5_attack.gd",
+                        "contents": PLAYER,
+                    },
+                    "command_id": life.new_ulid(),
+                },
+            )
+        )
+        req_id += 1
+        expect_code(
+            addon_write,
+            ("E_PATH", "E_OUT_OF_BOUNDS"),
+            errors,
+            "script.write into addons/hh_agent",
+        )
+        attack_abs = ADDON / "r3w5_attack.gd"
+        if attack_abs.is_file():
+            errors.append("script.write into addons/hh_agent created a file")
+            try:
+                attack_abs.unlink()
+            except OSError:
+                pass
+
         req_id, created = tool_call(
             proc, req_id, "godot.script", "write", {"path": player, "contents": PLAYER}
         )
@@ -309,7 +405,21 @@ def live_errors(exe: Path) -> list[str]:
         if not ack_ok(validated, errors, "script.validate"):
             return errors
         req_id, diags = tool_call(proc, req_id, "godot.script", "diagnostics", {"path": player})
-        if not ack_ok(diags, errors, "script.diagnostics"):
+        expect_code(diags, ("E_UNVERIFIED",), errors, "script.diagnostics")
+
+        big = big_script()
+        if len(big) <= 4000:
+            errors.append("big_script helper is not longer than 4000 chars")
+            return errors
+        big_path = "res://r3w5/big.gd"
+        big_abs = life.res_to_abs(big_path)
+        req_id, big_body = tool_call(
+            proc, req_id, "godot.script", "write", {"path": big_path, "contents": big}
+        )
+        if not ack_ok(big_body, errors, "script.write >4000 chars"):
+            return errors
+        if not big_abs.is_file() or big_abs.read_bytes() != big.encode("utf-8"):
+            errors.append("script.write >4000 did not persist equal disk bytes")
             return errors
 
         before_invalid = player_abs.read_bytes()
@@ -384,6 +494,37 @@ def live_errors(exe: Path) -> list[str]:
         if has_bom(player_abs):
             errors.append("patch introduced a BOM")
 
+        range_path = "res://r3w5/range.gd"
+        range_abs = life.res_to_abs(range_path)
+        req_id, range_write = tool_call(
+            proc, req_id, "godot.script", "write", {"path": range_path, "contents": RANGE_SRC}
+        )
+        if not ack_ok(range_write, errors, "script.write range source"):
+            return errors
+        before_range = range_abs.read_bytes()
+        req_id, range_patched = tool_call(
+            proc,
+            req_id,
+            "godot.script",
+            "patch",
+            {
+                "path": range_path,
+                "find": "	return 7\n",
+                "replace": "	return 9\n",
+                "start_line": 7,
+                "end_line": 7,
+            },
+        )
+        if not ack_ok(range_patched, errors, "script.patch range second match"):
+            return errors
+        after_range = range_abs.read_text(encoding="utf-8")
+        if after_range.count("return 7") != 1 or after_range.count("return 9") != 1:
+            errors.append(f"range patch was not surgical: {after_range!r}")
+        if b"func first()" not in after_range.encode("utf-8"):
+            errors.append("range patch dropped an unrelated function")
+        if before_range == range_abs.read_bytes():
+            errors.append("range patch did not change dest")
+
         req_id, other_body = tool_call(
             proc, req_id, "godot.script", "write", {"path": other, "contents": PLAYER}
         )
@@ -417,6 +558,50 @@ def live_errors(exe: Path) -> list[str]:
         )
         if not ack_ok(added, errors, "node.add Player", undo=True):
             return errors
+
+        prefab = "res://r3w5/prefab.tscn"
+        req_id, prefab_body = tool_call(
+            proc, req_id, "godot.scene", "create", {"path": prefab, "root_class": "Node2D"}
+        )
+        if not ack_ok(prefab_body, errors, "scene.create prefab"):
+            return errors
+        req_id, body_added = tool_call(
+            proc,
+            req_id,
+            "godot.node",
+            "add",
+            {"scene": prefab, "parent": ".", "class_name": "Node2D", "name": "Body"},
+        )
+        if not ack_ok(body_added, errors, "node.add Body", undo=True):
+            return errors
+        req_id, prefab_saved = tool_call(proc, req_id, "godot.scene", "save", {"path": prefab})
+        if not ack_ok(prefab_saved, errors, "scene.save prefab"):
+            return errors
+        req_id, opened_main = tool_call(proc, req_id, "godot.scene", "open", {"path": scene})
+        if not ack_ok(opened_main, errors, "scene.open main"):
+            return errors
+        req_id, inst = tool_call(
+            proc,
+            req_id,
+            "godot.scene",
+            "instantiate",
+            {"scene": scene, "packed": prefab, "parent": "."},
+        )
+        if not ack_ok(inst, errors, "scene.instantiate prefab", undo=True):
+            return errors
+        inst_path = str((inst.get("after") or {}).get("path") or "")
+        if not inst_path or inst_path == ".":
+            errors.append(f"instantiate missing instance path: {inst}")
+            return errors
+        req_id, packed_attach = tool_call(
+            proc,
+            req_id,
+            "godot.script",
+            "attach",
+            {"scene": scene, "node_path": f"{inst_path}/Body", "path": player},
+        )
+        expect_code(packed_attach, ("E_CONFLICT",), errors, "packed script.attach without make_local")
+
         req_id, attached = tool_call(
             proc,
             req_id,
@@ -457,6 +642,16 @@ def live_errors(exe: Path) -> list[str]:
             {"scene": scene, "node_path": "Player", "path": player},
         )
         if not ack_ok(attached2, errors, "script.attach again", undo=True):
+            return errors
+        req_id, dirty_rename = tool_call(
+            proc, req_id, "godot.script", "rename", {"path": player, "name": "hero"}
+        )
+        expect_code(dirty_rename, ("E_CONFLICT",), errors, "script.rename while scene dirty")
+        if not player_abs.is_file() or hero_abs.is_file():
+            errors.append("dirty script.rename rewrote paths")
+            return errors
+        req_id, saved_main = tool_call(proc, req_id, "godot.scene", "save", {"path": scene})
+        if not ack_ok(saved_main, errors, "scene.save before rename"):
             return errors
         req_id, renamed = tool_call(
             proc, req_id, "godot.script", "rename", {"path": player, "name": "hero"}
@@ -570,8 +765,9 @@ def main() -> int:
 
     print(
         "PASS: script write/validate/patch/attach + dirty E_CONFLICT; "
-        "invalid parse keeps old bytes; Pause; unproven sentinel on project.settings; "
-        "R3-WP5 stays unticked."
+        "SCRIPT_TEXT >4000 ACK; packed attach refuse; plugin addon jail; "
+        "diagnostics E_UNVERIFIED; invalid parse keeps old bytes; Pause; "
+        "unproven sentinel on project.settings; R3-WP5 stays unticked."
     )
     return 0
 

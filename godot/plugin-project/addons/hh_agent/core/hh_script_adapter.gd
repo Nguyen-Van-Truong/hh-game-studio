@@ -5,11 +5,13 @@ const _ConstantsScript: GDScript = preload("res://addons/hh_agent/core/hh_consta
 const _ErrorsScript: GDScript = preload("res://addons/hh_agent/core/hh_errors.gd")
 const _ActionsScript: GDScript = preload("res://addons/hh_agent/core/hh_actions.gd")
 const _MetaScript: GDScript = preload("res://addons/hh_agent/core/hh_scene_meta.gd")
+const _IdentityScript: GDScript = preload("res://addons/hh_agent/core/hh_identity.gd")
 
 ## Script write/patch/attach/detach/rename. Validate before dest replace. Dirty buffer → E_CONFLICT.
 
 var _errors: HHAgentErrors = HHAgentErrors.new()
 var _meta: HHAgentSceneMeta = HHAgentSceneMeta.new()
+var _identity: HHAgentIdentity = HHAgentIdentity.new()
 
 
 func handles(action: String) -> bool:
@@ -160,6 +162,8 @@ func _patch(command_id: String, params: Dictionary, precondition: Dictionary, po
 	var parsed: Dictionary = _validate_source(next_text)
 	if parsed.get("ok", false) != true:
 		return _parse_fail(command_id, parsed, res_path)
+	if not _patch_constraint_holds(source, next_text, find_s, replace_s, start_line, end_line):
+		return _unverified(command_id, "patch would change unrelated lines")
 	var persisted: Dictionary = _atomic_replace(command_id, res_path, next_text)
 	if persisted.get("ok", false) != true:
 		return persisted
@@ -169,7 +173,7 @@ func _patch(command_id: String, params: Dictionary, precondition: Dictionary, po
 	var readback: String = _read_utf8(res_path)
 	if readback != next_text:
 		return _unverified(command_id, "patched disk text mismatch")
-	if not _unrelated_lines_hold(source, next_text, find_s, replace_s):
+	if not _patch_constraint_holds(source, readback, find_s, replace_s, start_line, end_line):
 		return _unverified(command_id, "patch changed unrelated lines")
 	var disk_hash: String = _meta.disk_hash(res_path)
 	if disk_hash != _sha256_text(next_text):
@@ -203,6 +207,9 @@ func _attach(
 	var node: Node = _resolve(edited, node_path)
 	if node == null:
 		return _unverified(command_id, "node not found")
+	var packed_err: Dictionary = _reject_packed(command_id, node, edited)
+	if not packed_err.is_empty():
+		return packed_err
 	var loaded: Script = null
 	if not detach:
 		var gated: Dictionary = _gate_gd(command_id, script_path)
@@ -269,6 +276,13 @@ func _rename(command_id: String, params: Dictionary, precondition: Dictionary, p
 	var conflict: Dictionary = _conflict_gate(command_id, src, params, precondition)
 	if conflict.get("ok", false) != true:
 		return conflict
+	if _meta.any_open_dirty():
+		return _errors.fail(
+			command_id,
+			HHAgentErrors.E_CONFLICT,
+			"open scene is dirty; save before script.rename so refs do not drop edits",
+			src,
+		)
 	var refs: PackedStringArray = _referencers(src)
 	var uid_text: String = _uid_of(src)
 	var uid_id: int = ResourceUID.INVALID_ID
@@ -494,6 +508,45 @@ func _unrelated_lines_hold(before: String, after: String, find_s: String, replac
 		return false
 	var expected: String = before.substr(0, idx) + replace_s + before.substr(idx + find_s.length())
 	return expected == after
+
+
+func _patch_constraint_holds(
+	before: String,
+	after: String,
+	find_s: String,
+	replace_s: String,
+	start_line: int,
+	end_line: int,
+) -> bool:
+	if start_line < 1:
+		return _unrelated_lines_hold(before, after, find_s, replace_s)
+	var last: int = end_line if end_line >= start_line else start_line
+	var span: Vector2i = _line_span(before, start_line, last)
+	var prefix: String = before.substr(0, span.x)
+	var suffix: String = before.substr(span.y)
+	if not after.begins_with(prefix):
+		return false
+	if after.length() < prefix.length() + suffix.length():
+		return false
+	if suffix.length() > 0 and after.substr(after.length() - suffix.length()) != suffix:
+		return false
+	var before_mid: String = before.substr(span.x, span.y - span.x)
+	var after_mid: String = after.substr(prefix.length(), after.length() - prefix.length() - suffix.length())
+	var idx: int = before_mid.find(find_s)
+	if idx < 0:
+		return false
+	return before_mid.substr(0, idx) + replace_s + before_mid.substr(idx + find_s.length()) == after_mid
+
+
+func _reject_packed(command_id: String, node: Node, edited: Node) -> Dictionary:
+	if _identity.is_packed_internal(node, edited):
+		return _errors.fail(
+			command_id,
+			HHAgentErrors.E_CONFLICT,
+			"packed instance child requires make_local; refusing a flatten",
+			"params.node_path",
+		)
+	return {}
 
 
 func _buffer_state(res_path: String) -> Dictionary:

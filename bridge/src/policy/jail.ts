@@ -229,7 +229,7 @@ export function jailProjectPath(
   }
   const relPosix = posixish(relToRoot);
   if (opts.forWrite !== false && isLockedProjectRel(relPosix)) {
-    return fail("generic write/delete is locked for this path", candidate, E.E_POLICY);
+    return fail("generic write/delete is locked for this path", candidate, E.E_PATH);
   }
   if (relPosix.length > maxChars) {
     return fail("canonical path too long", candidate);
