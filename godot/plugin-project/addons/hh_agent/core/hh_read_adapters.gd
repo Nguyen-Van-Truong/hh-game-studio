@@ -6,6 +6,7 @@ const _ErrorsScript: GDScript = preload("res://addons/hh_agent/core/hh_errors.gd
 const _ActionsScript: GDScript = preload("res://addons/hh_agent/core/hh_actions.gd")
 const _MetaScript: GDScript = preload("res://addons/hh_agent/core/hh_scene_meta.gd")
 const _CodecScript: GDScript = preload("res://addons/hh_agent/core/hh_variant_codec.gd")
+const _StoreScript: GDScript = preload("res://addons/hh_agent/core/hh_activity_store.gd")
 
 ## Main-thread read/view adapters. Mutate is never applied here.
 
@@ -25,6 +26,10 @@ func handle(command_id: String, method: String, action: String, params: Dictiona
 		return _project_doctor(command_id, post)
 	if method == "godot.editor" and action == "state":
 		return _editor_state(command_id, params, post)
+	if method == "godot.observer" and action == "timeline":
+		return _observer_timeline(command_id, params, post)
+	if method == "godot.observer" and action == "append":
+		return _observer_append(command_id, params, post)
 	if method == "godot.editor" and action == "select":
 		return _editor_select(command_id, params, post)
 	if method == "godot.scene" and action == "read":
@@ -101,6 +106,8 @@ func _post_name(def: Dictionary, method: String, action: String) -> String:
 			"tilemap.query": "cell_query_matches_layer",
 			"ui.accessibility": "accessibility_fields_present",
 			"editor.state": "editor_state_snapshot",
+			"observer.timeline": "observer_timeline_snapshot",
+			"observer.append": "observer_rows_appended",
 			"editor.select": "selection_paths_match",
 			"play.status": "play_status_known",
 			"play.logs": "play_logs_returned",
@@ -388,6 +395,7 @@ func _editor_state(command_id: String, params: Dictionary, post: String) -> Dict
 	var playing_scene: String = ""
 	if EditorInterface.is_playing_scene():
 		playing_scene = str(EditorInterface.get_playing_scene())
+	var dock: Dictionary = _dock_snapshot(params)
 	var after: Dictionary = {
 		"edited_scene": edited_path,
 		"open_scenes": open_scenes,
@@ -397,11 +405,89 @@ func _editor_state(command_id: String, params: Dictionary, post: String) -> Dict
 		"paused": HHAgentPauseGate.last_paused,
 		"godot": _godot_string(),
 		"detail": str(params.get("detail", "short")),
+		"dock": dock,
 	}
 	var again: Array = _selection_paths()
 	if again != selected:
 		return _unverified(command_id, "selection changed during readback")
-	return _ok(command_id, post, after)
+	return _ok(command_id, post, _redact_after(after))
+
+
+func _observer_timeline(command_id: String, params: Dictionary, post: String) -> Dictionary:
+	if params.get("reload", false) == true:
+		var store: HHAgentActivityStore = HHAgentActivityStore.current()
+		if store != null:
+			store.reload_from_disk()
+	var dock: Dictionary = _dock_snapshot(params)
+	return _ok(command_id, post, _redact_after({"dock": dock, "detail": str(params.get("detail", "short"))}))
+
+
+func _observer_append(command_id: String, params: Dictionary, post: String) -> Dictionary:
+	var store: HHAgentActivityStore = HHAgentActivityStore.current()
+	if store == null:
+		return _unverified(command_id, "activity store is not attached")
+	var count: int = int(params.get("count", 0))
+	var added: int = store.append_synthetic(count, str(params.get("actor", "")), str(params.get("scene", "")))
+	var dock: Dictionary = _dock_snapshot({"detail": "short", "limit": HHAgentConstants.DEFAULT_PAGE})
+	var rows_v: Variant = dock.get("rows", {})
+	var total: int = 0
+	if rows_v is Dictionary:
+		total = int((rows_v as Dictionary).get("total", 0))
+	return _ok(command_id, post, _redact_after({
+		"added": added,
+		"total": total,
+		"dock": dock,
+	}))
+
+
+func _dock_snapshot(params: Dictionary) -> Dictionary:
+	var store: HHAgentActivityStore = HHAgentActivityStore.current()
+	if store == null:
+		return {
+			"task": "idle",
+			"agent": "hh_agent",
+			"policy": HHAgentConstants.POLICY_DISPLAY,
+			"queue": 0,
+			"job": "—",
+			"elapsed": 0,
+			"pause": "active" if HHAgentPauseGate.last_paused else "inactive",
+			"modes": {"watch": true, "fast": true, "replay": true},
+			"buttons": {
+				"pause": {"visible": true, "label": "Pause"},
+				"resume": {"visible": true, "label": "Resume"},
+				"watch": {"visible": true, "label": "Watch"},
+				"fast": {"visible": true, "label": "Fast"},
+				"replay": {"visible": true, "label": "Replay", "ready": false, "code": "E_UNVERIFIED"},
+			},
+			"rows": {
+				"items": [],
+				"total": 0,
+				"offset": 0,
+				"limit": _page_limit(params),
+				"next_cursor": "",
+				"has_more": false,
+			},
+			"filters": {
+				"actor": str(params.get("actor", "")),
+				"scene": str(params.get("scene", "")),
+				"status": str(params.get("status", "")),
+			},
+		}
+	return store.snapshot(params)
+
+
+func _redact_after(after: Dictionary) -> Dictionary:
+	var store: HHAgentActivityStore = HHAgentActivityStore.current()
+	if store == null:
+		return after
+	var text: String = JSON.stringify(after)
+	var cleaned: String = store.redact_text(text)
+	if cleaned == text:
+		return after
+	var parsed: Variant = JSON.parse_string(cleaned)
+	if parsed is Dictionary:
+		return parsed
+	return after
 
 
 func _selection_paths() -> Array:

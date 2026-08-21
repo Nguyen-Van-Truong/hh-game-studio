@@ -3,7 +3,7 @@
   "protocol": "hh-godot-agent/1",
   "registry_version": "hh-godot-actions/1",
   "variant_schema": "hh-godot-variant/1",
-  "action_count": 128,
+  "action_count": 130,
   "envelope": {
     "allowed": [
       "protocol",
@@ -11048,6 +11048,39 @@
               "short",
               "full"
             ]
+          },
+          "cursor": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "pattern": "^[0-9A-Za-z_.:-]+$"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "actor": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "scene": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "planned",
+              "verified",
+              "failed"
+            ]
+          },
+          "reload": {
+            "type": "boolean"
           }
         }
       },
@@ -11883,6 +11916,288 @@
         "E_UNVERIFIED"
       ],
       "postcondition": "pause_gate_ack"
+    },
+    "observer.timeline": {
+      "method": "godot.observer",
+      "verb": "timeline",
+      "action_version": "1",
+      "side_effect": "read",
+      "undo": "none",
+      "timeout_ms": 15000,
+      "cancellable": false,
+      "required_policy": "OBSERVE",
+      "checkpoint_required": false,
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "detail"
+        ],
+        "properties": {
+          "detail": {
+            "type": "string",
+            "enum": [
+              "short",
+              "full"
+            ]
+          },
+          "cursor": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "pattern": "^[0-9A-Za-z_.:-]+$"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "actor": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "scene": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "planned",
+              "verified",
+              "failed"
+            ]
+          },
+          "reload": {
+            "type": "boolean"
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ok",
+          "command_id",
+          "postcondition"
+        ],
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "changed": {
+            "type": "boolean"
+          },
+          "before": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "after": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "postcondition": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "verified",
+              "checks"
+            ],
+            "properties": {
+              "verified": {
+                "type": "boolean"
+              },
+              "checks": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "undo_action": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "error": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "error_codes": [
+        "E_MISSING_REQUIRED",
+        "E_UNKNOWN_PARAM",
+        "E_INVALID_TYPE",
+        "E_OUT_OF_BOUNDS",
+        "E_UNKNOWN_ACTION",
+        "E_PROTOCOL_VERSION",
+        "E_ACTION_VERSION",
+        "E_CLIENT_ESCALATION",
+        "E_INVALID_COMMAND_ID",
+        "E_INVALID_ENVELOPE",
+        "E_UNVERIFIED"
+      ],
+      "postcondition": "observer_timeline_snapshot"
+    },
+    "observer.append": {
+      "method": "godot.observer",
+      "verb": "append",
+      "action_version": "1",
+      "side_effect": "view",
+      "undo": "n/a",
+      "timeout_ms": 15000,
+      "cancellable": false,
+      "required_policy": "OBSERVE",
+      "checkpoint_required": false,
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "count"
+        ],
+        "properties": {
+          "count": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10000
+          },
+          "actor": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "scene": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ok",
+          "command_id",
+          "postcondition"
+        ],
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "changed": {
+            "type": "boolean"
+          },
+          "before": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "after": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "postcondition": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "verified",
+              "checks"
+            ],
+            "properties": {
+              "verified": {
+                "type": "boolean"
+              },
+              "checks": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "undo_action": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "error": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "error_codes": [
+        "E_MISSING_REQUIRED",
+        "E_UNKNOWN_PARAM",
+        "E_INVALID_TYPE",
+        "E_OUT_OF_BOUNDS",
+        "E_UNKNOWN_ACTION",
+        "E_PROTOCOL_VERSION",
+        "E_ACTION_VERSION",
+        "E_CLIENT_ESCALATION",
+        "E_INVALID_COMMAND_ID",
+        "E_INVALID_ENVELOPE",
+        "E_UNVERIFIED"
+      ],
+      "postcondition": "observer_rows_appended"
     },
     "play.start": {
       "method": "godot.play",

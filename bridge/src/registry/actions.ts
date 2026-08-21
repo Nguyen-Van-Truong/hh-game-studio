@@ -90,8 +90,9 @@ function read(
   input: JsonSchema,
   example: Record<string, unknown>,
   undo: UndoStrategy = "none",
+  extra?: { timeout_ms?: number },
 ): ActionSpec {
-  return {
+  const spec: ActionSpec = {
     summary,
     side_effect: "read",
     undo,
@@ -100,6 +101,10 @@ function read(
     example,
     postcondition: post,
   };
+  if (extra?.timeout_ms !== undefined) {
+    spec.timeout_ms = extra.timeout_ms;
+  }
+  return spec;
 }
 
 function view(
@@ -108,8 +113,9 @@ function view(
   input: JsonSchema,
   example: Record<string, unknown>,
   undo: UndoStrategy = "n/a",
+  extra?: { timeout_ms?: number },
 ): ActionSpec {
-  return {
+  const spec: ActionSpec = {
     summary,
     side_effect: "view",
     undo,
@@ -118,6 +124,10 @@ function view(
     example,
     postcondition: post,
   };
+  if (extra?.timeout_ms !== undefined) {
+    spec.timeout_ms = extra.timeout_ms;
+  }
+  return spec;
 }
 
 const SCENE_MUTATE_ERRORS: readonly string[] = [
@@ -1187,10 +1197,46 @@ const SPECS: Record<string, ActionSpec> = {
   ),
 
   "editor.state": read(
-    "Read editor selection, main screen, and pause flag",
+    "Read editor selection, main screen, pause flag, and activity dock",
     "editor_state_snapshot",
-    obj(["detail"], { detail: DETAIL }),
+    obj(["detail"], {
+      detail: DETAIL,
+      cursor: CURSOR,
+      limit: LIMIT,
+      actor: IDENT,
+      scene: { type: "string", minLength: 1, maxLength: 256 },
+      status: { type: "string", enum: ["planned", "verified", "failed"] },
+      reload: BOOL,
+    }),
     { detail: "short" },
+  ),
+  "observer.timeline": read(
+    "Read the activity dock timeline page (virtualized, redacted)",
+    "observer_timeline_snapshot",
+    obj(["detail"], {
+      detail: DETAIL,
+      cursor: CURSOR,
+      limit: LIMIT,
+      actor: IDENT,
+      scene: { type: "string", minLength: 1, maxLength: 256 },
+      status: { type: "string", enum: ["planned", "verified", "failed"] },
+      reload: BOOL,
+    }),
+    { detail: "short" },
+    "none",
+    { timeout_ms: 15_000 },
+  ),
+  "observer.append": view(
+    "Append synthetic observer rows (test helper; not a scene mutation)",
+    "observer_rows_appended",
+    obj(["count"], {
+      count: { type: "integer", minimum: 1, maximum: 10000 },
+      actor: IDENT,
+      scene: { type: "string", minLength: 1, maxLength: 256 },
+    }),
+    { count: 1 },
+    "n/a",
+    { timeout_ms: 15_000 },
   ),
   "editor.select": view(
     "Select nodes in the Scene tree",

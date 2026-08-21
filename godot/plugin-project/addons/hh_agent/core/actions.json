@@ -1105,6 +1105,28 @@
       "postcondition": "pause_gate_ack",
       "checkpoint_required": false
     },
+    "observer.timeline": {
+      "method": "godot.observer",
+      "verb": "timeline",
+      "side_effect": "read",
+      "timeout_ms": 15000,
+      "required": [
+        "detail"
+      ],
+      "postcondition": "observer_timeline_snapshot",
+      "checkpoint_required": false
+    },
+    "observer.append": {
+      "method": "godot.observer",
+      "verb": "append",
+      "side_effect": "view",
+      "timeout_ms": 15000,
+      "required": [
+        "count"
+      ],
+      "postcondition": "observer_rows_appended",
+      "checkpoint_required": false
+    },
     "play.start": {
       "method": "godot.play",
       "verb": "start",

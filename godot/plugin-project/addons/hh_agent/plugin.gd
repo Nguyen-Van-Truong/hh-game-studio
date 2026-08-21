@@ -8,11 +8,12 @@ const _RouterScript: GDScript = preload("res://addons/hh_agent/core/hh_router.gd
 const _SessionScript: GDScript = preload("res://addons/hh_agent/core/hh_session.gd")
 const _ClientScript: GDScript = preload("res://addons/hh_agent/core/hh_bridge_client.gd")
 const _PostScript: GDScript = preload("res://addons/hh_agent/core/hh_postcondition.gd")
-const _DockScript: GDScript = preload("res://addons/hh_agent/ui/health/hh_health_dock.gd")
+const _DockScript: GDScript = preload("res://addons/hh_agent/ui/health/hh_activity_dock.gd")
+const _StoreScript: GDScript = preload("res://addons/hh_agent/core/hh_activity_store.gd")
 const _PauseScript: GDScript = preload("res://addons/hh_agent/core/hh_pause.gd")
 const _ErrorsScript: GDScript = preload("res://addons/hh_agent/core/hh_errors.gd")
 
-## hh_agent EditorPlugin: main-thread router + health dock + outbound sidecar client.
+## hh_agent EditorPlugin: main-thread router + activity dock + outbound sidecar client.
 ## Disable/reload must not leak sockets, signals, docks, or timers.
 
 const PLUGIN_PRINT: String = "[hh_agent]"
@@ -23,7 +24,8 @@ var _router: HHAgentRouter
 var _session: HHAgentSession
 var _client: HHAgentBridgeClient
 var _postcondition: HHAgentPostcondition
-var _dock: HHAgentHealthDock
+var _dock: HHAgentActivityDock
+var _store: HHAgentActivityStore
 var _pause_gate: HHAgentPauseGate
 var _errors: HHAgentErrors
 var _reconnect_timer: Timer
@@ -46,12 +48,18 @@ func _enter_tree() -> void:
 	_postcondition = HHAgentPostcondition.new()
 	_pause_gate = HHAgentPauseGate.new()
 	_errors = HHAgentErrors.new()
+	_store = HHAgentActivityStore.new()
+	_store.attach()
+	_store.load_from_disk()
 	_client.set_enqueue(Callable(self, "_enqueue_inbound"))
 	_client.set_hello_handler(Callable(self, "_on_hello"))
 	_client.set_readback(Callable(self, "_on_readback"))
 	_client.set_pause_handler(Callable(self, "_on_sidecar_pause"))
-	_dock = HHAgentHealthDock.new()
+	_dock = HHAgentActivityDock.new()
 	_dock.pause_requested.connect(_on_pause_requested)
+	_dock.pause_on_requested.connect(_on_pause_on_requested)
+	_dock.resume_requested.connect(_on_resume_requested)
+	_dock.mode_changed.connect(_on_mode_changed)
 	add_control_to_dock(DOCK_SLOT_LEFT_UL, _dock)
 	_reconnect_timer = Timer.new()
 	_reconnect_timer.one_shot = true
@@ -97,6 +105,20 @@ func _enqueue_inbound(envelope: Variant) -> bool:
 
 func _on_pause_requested() -> void:
 	_last_pause_ack = _apply_pause(not _paused)
+
+
+func _on_pause_on_requested() -> void:
+	_last_pause_ack = _apply_pause(true)
+
+
+func _on_resume_requested() -> void:
+	_last_pause_ack = _apply_pause(false)
+
+
+func _on_mode_changed(mode: String) -> void:
+	if _store != null:
+		_store.set_mode(mode)
+	_refresh_dock()
 
 
 func _on_sidecar_pause(paused: bool) -> void:
@@ -152,6 +174,7 @@ func _drain_mutating() -> void:
 		var result: Dictionary = _errors.fail(command_id, HHAgentErrors.E_PAUSED, "mutation gate is paused", "pause")
 		if _postcondition != null:
 			_postcondition.remember(command_id, result)
+		_record_result(item, result, HHAgentConstants.STATUS_FAILED)
 		if _client != null:
 			_client.send_dict(result)
 
@@ -159,11 +182,112 @@ func _drain_mutating() -> void:
 func _handle_item(item: Dictionary) -> void:
 	var queued_at: int = int(item.get("_queued_at_ms", 0))
 	var envelope_v: Variant = item.get("envelope", {})
+	_record_planned(item)
 	var result: Dictionary = _router.dispatch(envelope_v, _actions, queued_at, _pause_gate)
 	if _postcondition != null:
 		_postcondition.remember(str(result.get("command_id", "")), result)
+	var status: String = HHAgentConstants.STATUS_VERIFIED if result.get("ok", false) == true else HHAgentConstants.STATUS_FAILED
+	_record_result(item, result, status)
 	if _client != null:
 		_client.send_dict(result)
+
+
+func _mutating_side(envelope_v: Variant) -> bool:
+	var side: String = _envelope_side_effect(envelope_v)
+	return side == "mutate" or side == "destructive" or side == "external"
+
+
+func _record_planned(item: Dictionary) -> void:
+	if _store == null or not _mutating_side(item.get("envelope", {})):
+		return
+	var row: Dictionary = _row_from_item(item, {}, HHAgentConstants.STATUS_PLANNED)
+	if str(row.get("command_id", "")).is_empty():
+		return
+	_store.record_planned(row)
+
+
+func _record_result(item: Dictionary, result: Dictionary, status: String) -> void:
+	if _store == null or not _mutating_side(item.get("envelope", {})):
+		return
+	var row: Dictionary = _row_from_item(item, result, status)
+	if str(row.get("command_id", "")).is_empty():
+		return
+	_store.settle(row)
+
+
+func _row_from_item(item: Dictionary, result: Dictionary, status: String) -> Dictionary:
+	var envelope_v: Variant = item.get("envelope", {})
+	var envelope: Dictionary = envelope_v if envelope_v is Dictionary else {}
+	var params_v: Variant = envelope.get("params", {})
+	var params: Dictionary = params_v if params_v is Dictionary else {}
+	var method: String = str(envelope.get("method", ""))
+	var action: String = str(envelope.get("action", ""))
+	var command_id: String = str(result.get("command_id", envelope.get("command_id", "")))
+	var scene: String = str(params.get("scene", ""))
+	if scene.is_empty():
+		scene = str(params.get("path", ""))
+	var queued_at: int = int(item.get("_queued_at_ms", 0))
+	var elapsed_ms: int = 0
+	if queued_at > 0:
+		elapsed_ms = maxi(0, Time.get_ticks_msec() - queued_at)
+	var err_v: Variant = result.get("error", {})
+	var err_code: String = ""
+	if err_v is Dictionary:
+		err_code = str((err_v as Dictionary).get("code", ""))
+	var after_v: Variant = result.get("after", {})
+	var after: Dictionary = after_v if after_v is Dictionary else {}
+	var summary: String = _redacted_summary(method, action, params, err_code)
+	return {
+		"command_id": command_id,
+		"action": ("%s.%s" % [method.trim_prefix("godot."), action]) if method.begins_with("godot.") else action,
+		"method": method,
+		"status": status,
+		"scene": scene,
+		"actor": HHAgentConstants.OBSERVER_ACTOR,
+		"elapsed_ms": elapsed_ms,
+		"summary": summary,
+		"diff": _redacted_diff(action, params, after),
+		"undo": str(result.get("undo_action", "")),
+		"checkpoint": str(after.get("checkpoint", after.get("checkpoint_id", ""))),
+		"evidence": str(after.get("evidence", after.get("evidence_uri", ""))),
+		"error": err_code,
+		"ok": result.get("ok", false) == true,
+	}
+
+
+func _redacted_summary(method: String, action: String, params: Dictionary, err_code: String) -> String:
+	var parts: PackedStringArray = PackedStringArray()
+	parts.append("%s.%s" % [method, action])
+	var class_name_s: String = str(params.get("class_name", ""))
+	if not class_name_s.is_empty():
+		parts.append(class_name_s)
+	var name_s: String = str(params.get("name", ""))
+	if not name_s.is_empty():
+		parts.append("name=%s" % name_s)
+	var prop: String = str(params.get("property", ""))
+	if not prop.is_empty():
+		parts.append(prop)
+	if not err_code.is_empty():
+		parts.append(err_code)
+	var raw: String = " ".join(parts)
+	if _store != null:
+		return _store.redact_text(raw)
+	return raw
+
+
+func _redacted_diff(action: String, params: Dictionary, after: Dictionary) -> String:
+	var raw: String = ""
+	if action == "add":
+		raw = "+%s %s" % [str(params.get("class_name", "")), str(params.get("name", ""))]
+	elif action == "set":
+		raw = "%s -> %s" % [str(params.get("property", "")), str(after.get("property_hash", "set"))]
+	elif action == "write":
+		raw = "script %s" % str(params.get("path", ""))
+	else:
+		raw = action
+	if _store != null:
+		return _store.redact_text(raw)
+	return raw
 
 
 func _on_readback(command_id: String) -> Dictionary:
@@ -228,6 +352,8 @@ func _maybe_run_selftest() -> void:
 			"0123456789abcdef0123456789abcdef",
 			"0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
 		)
+		if _store != null:
+			_store.add_secret("0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef")
 		var start_err: Error = _client.start()
 		if start_err == ERR_INVALID_PARAMETER or not _client.has_configured_token():
 			failures.append("start() must not wipe the configured token")
@@ -267,6 +393,8 @@ func _try_connect() -> void:
 	var token: String = str(desc.get("token", ""))
 	_bridge_pid = int(desc.get("pid", 0))
 	_client.configure(host, port, project_id, token)
+	if _store != null:
+		_store.add_secret(token)
 	var err: Error = _client.start()
 	if err != OK:
 		_schedule_reconnect()
@@ -359,13 +487,36 @@ func _refresh_dock() -> void:
 	elif _client != null and not _client.host().is_empty():
 		bridge = "connecting %s:%d" % [_client.host(), _client.port()]
 	var pause_status: String = "active" if _paused else "inactive"
+	var queue_n: int = _queue.depth() if _queue != null else 0
+	if _store != null:
+		_store.set_runtime({
+			"policy": HHAgentConstants.POLICY_DISPLAY,
+			"queue": queue_n,
+			"pause": pause_status,
+			"agent": "hh_agent",
+		})
+	var dock_snap: Dictionary = {}
+	if _store != null:
+		var ui_cursor: String = str(maxi(0, _store.row_count() - HHAgentConstants.DEFAULT_PAGE))
+		dock_snap = _store.snapshot({
+			"detail": "short",
+			"limit": HHAgentConstants.DEFAULT_PAGE,
+			"cursor": ui_cursor,
+		})
 	_dock.set_status({
 		"version": version,
 		"project": project,
 		"bridge": bridge,
 		"policy": HHAgentConstants.POLICY_DISPLAY,
-		"queue": _queue.depth() if _queue != null else 0,
+		"queue": queue_n,
 		"pause": pause_status,
+		"task": str(dock_snap.get("task", "idle")),
+		"agent": str(dock_snap.get("agent", "hh_agent")),
+		"job": str(dock_snap.get("job", "—")),
+		"elapsed_ms": int(dock_snap.get("elapsed_ms", 0)),
+		"mode": str(dock_snap.get("mode", HHAgentConstants.MODE_WATCH)),
+		"dock": dock_snap,
+		"rows": dock_snap.get("rows", {}),
 	})
 
 
@@ -378,8 +529,19 @@ func _cleanup() -> void:
 		remove_child(_reconnect_timer)
 		_reconnect_timer.queue_free()
 		_reconnect_timer = null
-	if _dock != null and _dock.pause_requested.is_connected(_on_pause_requested):
-		_dock.pause_requested.disconnect(_on_pause_requested)
+	if _store != null:
+		_store.persist()
+		_store.detach()
+		_store = null
+	if _dock != null:
+		if _dock.pause_requested.is_connected(_on_pause_requested):
+			_dock.pause_requested.disconnect(_on_pause_requested)
+		if _dock.pause_on_requested.is_connected(_on_pause_on_requested):
+			_dock.pause_on_requested.disconnect(_on_pause_on_requested)
+		if _dock.resume_requested.is_connected(_on_resume_requested):
+			_dock.resume_requested.disconnect(_on_resume_requested)
+		if _dock.mode_changed.is_connected(_on_mode_changed):
+			_dock.mode_changed.disconnect(_on_mode_changed)
 	if _client != null:
 		_client.set_enqueue(Callable())
 		_client.set_hello_handler(Callable())
