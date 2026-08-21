@@ -499,7 +499,15 @@ def main() -> int:
                 "method": "tools/call",
                 "params": {
                     "name": "godot.node",
-                    "arguments": {"action": "add", "params": {"class": "Node2D"}},
+                    "arguments": {
+                        "action": "add",
+                        "params": {
+                            "scene": "res://main.tscn",
+                            "parent": ".",
+                            "class_name": "Node2D",
+                            "name": "X",
+                        },
+                    },
                 },
             }
             proc.stdin.write(json.dumps(call) + "\n")

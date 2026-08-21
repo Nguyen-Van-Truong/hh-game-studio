@@ -41,6 +41,21 @@ func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int) -> Dicti
 		var waited: int = Time.get_ticks_msec() - queued_at_ms
 		if waited > timeout_ms:
 			return _errors.fail(command_id, HHAgentErrors.E_BUSY, "request timed out in queue", "")
+	var params_v: Variant = envelope.get("params", {})
+	var params: Dictionary = params_v if params_v is Dictionary else {}
+	var required_v: Variant = def.get("required", [])
+	if required_v is Array:
+		for field_v: Variant in required_v:
+			var field: String = str(field_v)
+			if field.is_empty():
+				continue
+			if not params.has(field):
+				return _errors.fail(
+					command_id,
+					HHAgentErrors.E_MISSING_REQUIRED,
+					"missing required param %s" % field,
+					"params.%s" % field,
+				)
 	var side_effect: String = str(def.get("side_effect", ""))
 	if side_effect == "read" or side_effect == "view":
 		return _errors.fail(command_id, HHAgentErrors.E_UNVERIFIED, "no read adapter", "")
@@ -65,7 +80,18 @@ func run_selftest(actions: HHAgentActions) -> PackedStringArray:
 			failures.append("noop postcondition")
 	else:
 		failures.append("noop postcondition")
-	var mutate: Dictionary = dispatch(_sample("godot.node", "add", {"class": "Node2D"}), actions, 0)
+	var missing: Dictionary = dispatch(_sample("godot.node", "add", {"class": "Node2D"}), actions, 0)
+	if str(_error_of(missing).get("code", "")) != HHAgentErrors.E_MISSING_REQUIRED:
+		failures.append("mutate missing required must be E_MISSING_REQUIRED")
+	var mutate: Dictionary = dispatch(
+		_sample(
+			"godot.node",
+			"add",
+			{"scene": "res://main.tscn", "parent": ".", "class_name": "Node2D", "name": "X"},
+		),
+		actions,
+		0,
+	)
 	var mutate_err: Dictionary = _error_of(mutate)
 	if str(mutate_err.get("code", "")) != HHAgentErrors.E_UNVERIFIED or mutate.get("ok", true) == true:
 		failures.append("mutate must be E_UNVERIFIED")

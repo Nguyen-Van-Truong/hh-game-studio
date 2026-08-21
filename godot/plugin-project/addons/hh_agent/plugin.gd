@@ -97,6 +97,30 @@ func _maybe_run_selftest() -> void:
 		failures.append("router or catalog missing")
 	else:
 		failures = _router.run_selftest(_actions)
+	if _queue != null:
+		var flood: int = 0
+		_queue.clear()
+		while flood < HHAgentConstants.MAX_QUEUE:
+			if not _queue.push_request({"envelope": {"n": flood}}):
+				failures.append("queue rejected before cap")
+				break
+			flood += 1
+		if _queue.push_request({"envelope": {"n": flood}}):
+			failures.append("queue must reject at MAX_QUEUE")
+		_queue.clear()
+	if _client != null:
+		_client.configure(
+			"127.0.0.1",
+			1,
+			"0123456789abcdef0123456789abcdef",
+			"0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+		)
+		var start_err: Error = _client.start()
+		if start_err == ERR_INVALID_PARAMETER or not _client.has_configured_token():
+			failures.append("start() must not wipe the configured token")
+		_client.close()
+		if not _client.has_configured_token():
+			failures.append("close() must keep configured credentials")
 	var passed: bool = failures.is_empty()
 	var summary: String = "HH_AGENT_SELFTEST=PASS" if passed else "HH_AGENT_SELFTEST=FAIL"
 	print("%s %s" % [PLUGIN_PRINT, summary])

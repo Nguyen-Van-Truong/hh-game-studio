@@ -153,6 +153,10 @@ def catalog_errors() -> list[str]:
         for key in ("method", "verb", "side_effect", "timeout_ms"):
             if spec.get(key) != src.get(key):
                 errors.append(f"actions.json {action_id}.{key} drifted")
+        slim_req = spec.get("required") if isinstance(spec.get("required"), list) else None
+        full_req = (src.get("input_schema") or {}).get("required") or []
+        if slim_req != full_req:
+            errors.append(f"actions.json {action_id}.required drifted")
     return errors
 
 
@@ -175,6 +179,8 @@ def lifecycle_source_errors() -> list[str]:
             errors.append(f"plugin.gd missing lifecycle cleanup {needle!r}")
     if "func close" not in client or "_ws = null" not in client:
         errors.append("bridge client must null the WebSocketPeer on close")
+    if re.search(r"_token\s*=\s*\"\"", client):
+        errors.append("close()/start() must not wipe the configured token")
     dock = (ADDON / "ui" / "health" / "hh_health_dock.gd").read_text(encoding="utf-8")
     for field in ("version", "project", "bridge", "policy", "queue", "pause"):
         if field not in dock.lower() and f'"{field}"' not in plugin and field not in plugin:
@@ -328,16 +334,162 @@ def run_godot_checks() -> tuple[list[str], str, str]:
                 ],
                 90,
             )
+            out = (cycle.stdout or "") + (cycle.stderr or "")
             if cycle.returncode != 0:
-                errors.append(f"Godot editor reload {i + 1}/50 exited {cycle.returncode}")
+                errors.append(f"Godot editor enter/exit {i + 1}/50 exited {cycle.returncode}")
+                reload_status = f"failed after {reloads}"
+                return errors, selftest_status, reload_status
+            if "[hh_agent] event=enter" not in out or "[hh_agent] event=exit" not in out:
+                errors.append(
+                    f"Godot editor enter/exit {i + 1}/50 missing plugin lifecycle logs"
+                )
                 reload_status = f"failed after {reloads}"
                 return errors, selftest_status, reload_status
             reloads += 1
-        reload_status = "ran"
+        reload_status = "process-enter-exit-ran"
     except subprocess.TimeoutExpired:
         errors.append(f"Godot editor reload timed out after {reloads}")
         reload_status = f"failed after {reloads}"
     return errors, selftest_status, reload_status
+
+
+def run_godot_live_handshake() -> tuple[list[str], str]:
+    """Sidecar on plugin-project + real editor. Must see hello_ok and noop ACK."""
+    errors: list[str] = []
+    exe, pin_reason = find_pinned_godot()
+    if exe is None:
+        return [f"live Godot handshake required: {pin_reason}"], "failed"
+    version = godot_version(exe)
+    if version != PINNED_VERSION:
+        return [f"Godot --version {version!r} != {PINNED_VERSION}"], "failed"
+
+    proc: subprocess.Popen[str] | None = None
+    godot: subprocess.Popen[str] | None = None
+    desc_path: Path | None = None
+    secret = ""
+    err_lines: list[str] = []
+    godot_lines: list[str] = []
+    try:
+        proc = subprocess.Popen(
+            [sess.node(), str(BRIDGE / "dist" / "main.js"), "--project", str(PLUGIN_PROJECT)],
+            cwd=str(BRIDGE),
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+        threading.Thread(target=sess.drain_stderr, args=(proc, err_lines), daemon=True).start()
+        desc_path, desc = sess.find_descriptor(proc.pid)
+        secret = str(desc.get("token") or "")
+        if proc.stdin and proc.stdout:
+            proc.stdin.write(
+                json.dumps(
+                    {
+                        "jsonrpc": "2.0",
+                        "id": 1,
+                        "method": "initialize",
+                        "params": {
+                            "protocolVersion": "2024-11-05",
+                            "capabilities": {},
+                            "clientInfo": {"name": "test-live-hello", "version": "0"},
+                        },
+                    }
+                )
+                + "\n"
+            )
+            proc.stdin.flush()
+            init_line = sess.readline_timeout(proc.stdout, 5.0)
+            if "result" not in json.loads(init_line):
+                errors.append(f"live handshake MCP initialize failed: {init_line}")
+
+        env = os.environ.copy()
+        env.pop("HH_AGENT_SELFTEST", None)
+        env.pop("HH_AGENT_SELFTEST_OUT", None)
+        godot = subprocess.Popen(
+            [
+                str(exe),
+                "--headless",
+                "--editor",
+                "--path",
+                str(PLUGIN_PROJECT),
+            ],
+            cwd=str(REPO_ROOT),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            env=env,
+        )
+
+        def drain_out() -> None:
+            if godot is None or godot.stdout is None:
+                return
+            for line in godot.stdout:
+                godot_lines.append(line)
+
+        threading.Thread(target=drain_out, daemon=True).start()
+        threading.Thread(target=sess.drain_stderr, args=(godot, godot_lines), daemon=True).start()
+
+        hello = False
+        deadline = time.time() + 25.0
+        req_id = 2
+        last = {}
+        while time.time() < deadline:
+            if godot.poll() is not None:
+                break
+            if proc is None or proc.poll() is not None:
+                break
+            last = mcp_call(proc, req_id, "hh.plugin_noop", {})
+            req_id += 1
+            body = (last.get("result") or {}).get("structuredContent") or {}
+            if body.get("ok") is True and (body.get("postcondition") or {}).get("checks") == ["noop"]:
+                hello = True
+                break
+            time.sleep(0.25)
+
+        joined = "".join(godot_lines)
+        if "event=hello_ok" not in joined and not hello:
+            errors.append(
+                "Godot never completed sidecar hello; "
+                f"last noop={sess.redact(json.dumps(last), secret)}; "
+                f"godot_out={joined[-2000:]}"
+            )
+        elif not hello:
+            errors.append(
+                "Godot printed hello_ok but hh.plugin_noop did not ACK: "
+                f"{sess.redact(json.dumps(last), secret)}"
+            )
+    except Exception as exc:  # noqa: BLE001
+        errors.append(f"live Godot handshake failed: {type(exc).__name__}: {exc}")
+    finally:
+        if godot and godot.poll() is None:
+            godot.terminate()
+            try:
+                godot.wait(timeout=8)
+            except subprocess.TimeoutExpired:
+                godot.kill()
+        if proc and proc.poll() is None:
+            proc.terminate()
+            try:
+                proc.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                proc.kill()
+        if desc_path and desc_path.is_file():
+            try:
+                desc_path.unlink()
+            except OSError:
+                pass
+            lock = desc_path.with_name("sidecar.lock")
+            if lock.is_file():
+                try:
+                    lock.unlink()
+                except OSError:
+                    pass
+        if secret and secret in "".join(err_lines):
+            errors.append("session secret appeared in sidecar logs during live hello")
+
+    return errors, ("ran" if not errors else "failed")
 
 
 def mcp_call(proc: subprocess.Popen[str], req_id: int, name: str, arguments: dict) -> dict:
@@ -495,11 +647,31 @@ def main() -> int:
                 errors.append(f"MCP initialize failed: {sess.redact(init_line, secret)}")
 
             before = len(inbound)
-            mutate = mcp_call(
+            missing = mcp_call(
                 proc,
                 2,
                 "godot.node",
                 {"action": "add", "params": {"class": "Node2D"}},
+            )
+            missing_err = ((missing.get("result") or {}).get("structuredContent") or {}).get("error") or {}
+            if missing_err.get("code") != "E_MISSING_REQUIRED":
+                errors.append(
+                    f"invalid mutate must be E_MISSING_REQUIRED: {sess.redact(json.dumps(missing), secret)}"
+                )
+
+            mutate = mcp_call(
+                proc,
+                3,
+                "godot.node",
+                {
+                    "action": "add",
+                    "params": {
+                        "scene": "res://main.tscn",
+                        "parent": ".",
+                        "class_name": "Node2D",
+                        "name": "X",
+                    },
+                },
             )
             body = (mutate.get("result") or {}).get("structuredContent") or {}
             err = body.get("error") or {}
@@ -510,11 +682,13 @@ def main() -> int:
             dumped = json.dumps(mutate)
             if '"ok": true' in dumped or '"ok":true' in dumped:
                 errors.append("mutate path returned ok true")
+            if '"accepted": true' in dumped or '"accepted":true' in dumped:
+                errors.append("mutate reject must not nest registry.accepted true")
             time.sleep(0.2)
             if len(inbound) != before:
                 errors.append("mutate must not be forwarded to the plugin")
 
-            noop = mcp_call(proc, 3, "hh.plugin_noop", {})
+            noop = mcp_call(proc, 4, "hh.plugin_noop", {})
             noop_body = (noop.get("result") or {}).get("structuredContent") or {}
             deadline = time.time() + 4.0
             while time.time() < deadline and not inbound:
@@ -529,7 +703,7 @@ def main() -> int:
 
             read = mcp_call(
                 proc,
-                4,
+                5,
                 "godot.project",
                 {"action": "inspect", "params": {"detail": "short"}},
             )
@@ -567,6 +741,8 @@ def main() -> int:
 
     godot_errors, godot_selftest, godot_reload = run_godot_checks()
     errors.extend(godot_errors)
+    live_errors, godot_live = run_godot_live_handshake()
+    errors.extend(live_errors)
 
     if errors:
         print("FAIL: plugin router", file=sys.stderr)
@@ -576,9 +752,9 @@ def main() -> int:
 
     print(
         "PASS: hh_agent router + health dock; envelope second pass; "
-        "sidecar hello + noop forward; mutate not dispatched; "
-        f"GODOT_SELFTEST={godot_selftest}; GODOT_RELOAD_50={godot_reload}; "
-        "R2-WP3 stays unticked."
+        "python-mock sidecar noop; mutate not dispatched; "
+        f"GODOT_SELFTEST={godot_selftest}; GODOT_PROCESS_ENTER_EXIT_50={godot_reload}; "
+        f"GODOT_LIVE_HELLO={godot_live}; R2-WP3 stays unticked."
     )
     return 0
 

@@ -35,709 +35,1195 @@
       "method": "godot.capabilities",
       "verb": "describe",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "kind"
+      ]
     },
     "project.inspect": {
       "method": "godot.project",
       "verb": "inspect",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "detail"
+      ]
     },
     "project.settings": {
       "method": "godot.project",
       "verb": "settings",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "key",
+        "value"
+      ]
     },
     "project.input": {
       "method": "godot.project",
       "verb": "input",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "action_name",
+        "keycode"
+      ]
     },
     "project.autoload": {
       "method": "godot.project",
       "verb": "autoload",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "name",
+        "path"
+      ]
     },
     "project.plugin": {
       "method": "godot.project",
       "verb": "plugin",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "plugin_name",
+        "enabled"
+      ]
     },
     "project.doctor": {
       "method": "godot.project",
       "verb": "doctor",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "detail"
+      ]
     },
     "scene.create": {
       "method": "godot.scene",
       "verb": "create",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "path",
+        "root_class"
+      ]
     },
     "scene.open": {
       "method": "godot.scene",
       "verb": "open",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "path"
+      ]
     },
     "scene.read": {
       "method": "godot.scene",
       "verb": "read",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "path",
+        "detail"
+      ]
     },
     "scene.save": {
       "method": "godot.scene",
       "verb": "save",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "path"
+      ]
     },
     "scene.close": {
       "method": "godot.scene",
       "verb": "close",
       "side_effect": "destructive",
-      "timeout_ms": 30000
+      "timeout_ms": 30000,
+      "required": [
+        "path"
+      ]
     },
     "scene.instantiate": {
       "method": "godot.scene",
       "verb": "instantiate",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "packed",
+        "parent"
+      ]
     },
     "scene.dependencies": {
       "method": "godot.scene",
       "verb": "dependencies",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "path"
+      ]
     },
     "node.add": {
       "method": "godot.node",
       "verb": "add",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "parent",
+        "class_name",
+        "name"
+      ]
     },
     "node.remove": {
       "method": "godot.node",
       "verb": "remove",
       "side_effect": "destructive",
-      "timeout_ms": 30000
+      "timeout_ms": 30000,
+      "required": [
+        "scene",
+        "node_path"
+      ]
     },
     "node.rename": {
       "method": "godot.node",
       "verb": "rename",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path",
+        "name"
+      ]
     },
     "node.reparent": {
       "method": "godot.node",
       "verb": "reparent",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path",
+        "new_parent"
+      ]
     },
     "node.reorder": {
       "method": "godot.node",
       "verb": "reorder",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path",
+        "index"
+      ]
     },
     "node.duplicate": {
       "method": "godot.node",
       "verb": "duplicate",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path"
+      ]
     },
     "node.group": {
       "method": "godot.node",
       "verb": "group",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path",
+        "group",
+        "op"
+      ]
     },
     "node.query": {
       "method": "godot.node",
       "verb": "query",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "scene",
+        "by"
+      ]
     },
     "property.get": {
       "method": "godot.property",
       "verb": "get",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "scene",
+        "node_path",
+        "property"
+      ]
     },
     "property.set": {
       "method": "godot.property",
       "verb": "set",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path",
+        "property",
+        "value"
+      ]
     },
     "property.batch": {
       "method": "godot.property",
       "verb": "batch",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "items"
+      ]
     },
     "property.reset": {
       "method": "godot.property",
       "verb": "reset",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path",
+        "property"
+      ]
     },
     "resource.create": {
       "method": "godot.resource",
       "verb": "create",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "path",
+        "class_name"
+      ]
     },
     "resource.load": {
       "method": "godot.resource",
       "verb": "load",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "path"
+      ]
     },
     "resource.assign": {
       "method": "godot.resource",
       "verb": "assign",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path",
+        "property",
+        "resource"
+      ]
     },
     "resource.duplicate": {
       "method": "godot.resource",
       "verb": "duplicate",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "path",
+        "dest"
+      ]
     },
     "resource.edit": {
       "method": "godot.resource",
       "verb": "edit",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "path",
+        "property",
+        "value"
+      ]
     },
     "resource.save": {
       "method": "godot.resource",
       "verb": "save",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "path"
+      ]
     },
     "resource.uid": {
       "method": "godot.resource",
       "verb": "uid",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "uid"
+      ]
     },
     "signal.list": {
       "method": "godot.signal",
       "verb": "list",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "scene",
+        "node_path"
+      ]
     },
     "signal.connect": {
       "method": "godot.signal",
       "verb": "connect",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "source",
+        "signal",
+        "target",
+        "method"
+      ]
     },
     "signal.disconnect": {
       "method": "godot.signal",
       "verb": "disconnect",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "source",
+        "signal",
+        "target",
+        "method"
+      ]
     },
     "signal.inspect": {
       "method": "godot.signal",
       "verb": "inspect",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "scene",
+        "node_path",
+        "signal"
+      ]
     },
     "script.read": {
       "method": "godot.script",
       "verb": "read",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "path"
+      ]
     },
     "script.write": {
       "method": "godot.script",
       "verb": "write",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "path",
+        "contents"
+      ]
     },
     "script.patch": {
       "method": "godot.script",
       "verb": "patch",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "path",
+        "find",
+        "replace"
+      ]
     },
     "script.validate": {
       "method": "godot.script",
       "verb": "validate",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "path"
+      ]
     },
     "script.attach": {
       "method": "godot.script",
       "verb": "attach",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path",
+        "path"
+      ]
     },
     "script.open_at": {
       "method": "godot.script",
       "verb": "open_at",
       "side_effect": "view",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "path",
+        "line"
+      ]
     },
     "script.diagnostics": {
       "method": "godot.script",
       "verb": "diagnostics",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "path"
+      ]
     },
     "asset.import": {
       "method": "godot.asset",
       "verb": "import",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "path"
+      ]
     },
     "asset.reimport": {
       "method": "godot.asset",
       "verb": "reimport",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "path"
+      ]
     },
     "asset.move": {
       "method": "godot.asset",
       "verb": "move",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "from",
+        "to"
+      ]
     },
     "asset.rename": {
       "method": "godot.asset",
       "verb": "rename",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "path",
+        "name"
+      ]
     },
     "asset.delete": {
       "method": "godot.asset",
       "verb": "delete",
       "side_effect": "destructive",
-      "timeout_ms": 30000
+      "timeout_ms": 30000,
+      "required": [
+        "path"
+      ]
     },
     "asset.dependencies": {
       "method": "godot.asset",
       "verb": "dependencies",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "path"
+      ]
     },
     "asset.preview": {
       "method": "godot.asset",
       "verb": "preview",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "path"
+      ]
     },
     "tilemap.tileset": {
       "method": "godot.tilemap",
       "verb": "tileset",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path",
+        "tileset"
+      ]
     },
     "tilemap.source": {
       "method": "godot.tilemap",
       "verb": "source",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "tileset",
+        "source_id",
+        "texture"
+      ]
     },
     "tilemap.terrain": {
       "method": "godot.tilemap",
       "verb": "terrain",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "tileset",
+        "terrain_name"
+      ]
     },
     "tilemap.layer": {
       "method": "godot.tilemap",
       "verb": "layer",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path",
+        "enabled"
+      ]
     },
     "tilemap.cell": {
       "method": "godot.tilemap",
       "verb": "cell",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path",
+        "x",
+        "y",
+        "source_id",
+        "atlas_x",
+        "atlas_y"
+      ]
     },
     "tilemap.fill": {
       "method": "godot.tilemap",
       "verb": "fill",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path",
+        "x",
+        "y",
+        "w",
+        "h",
+        "source_id"
+      ]
     },
     "tilemap.stamp": {
       "method": "godot.tilemap",
       "verb": "stamp",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path",
+        "x",
+        "y",
+        "pattern"
+      ]
     },
     "tilemap.query": {
       "method": "godot.tilemap",
       "verb": "query",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "scene",
+        "node_path",
+        "x",
+        "y",
+        "w",
+        "h"
+      ]
     },
     "animation.library": {
       "method": "godot.animation",
       "verb": "library",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path",
+        "library"
+      ]
     },
     "animation.animation": {
       "method": "godot.animation",
       "verb": "animation",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path",
+        "name",
+        "length_sec"
+      ]
     },
     "animation.track": {
       "method": "godot.animation",
       "verb": "track",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path",
+        "animation",
+        "track_path"
+      ]
     },
     "animation.key": {
       "method": "godot.animation",
       "verb": "key",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path",
+        "animation",
+        "track",
+        "time_sec",
+        "value"
+      ]
     },
     "animation.state_machine": {
       "method": "godot.animation",
       "verb": "state_machine",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path",
+        "from",
+        "to"
+      ]
     },
     "animation.preview": {
       "method": "godot.animation",
       "verb": "preview",
       "side_effect": "view",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "scene",
+        "node_path",
+        "animation"
+      ]
     },
     "ui.control": {
       "method": "godot.ui",
       "verb": "control",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path",
+        "preset"
+      ]
     },
     "ui.theme": {
       "method": "godot.ui",
       "verb": "theme",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path",
+        "theme"
+      ]
     },
     "ui.layout": {
       "method": "godot.ui",
       "verb": "layout",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path",
+        "separation"
+      ]
     },
     "ui.anchor": {
       "method": "godot.ui",
       "verb": "anchor",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path",
+        "anchor_left",
+        "anchor_top"
+      ]
     },
     "ui.focus": {
       "method": "godot.ui",
       "verb": "focus",
       "side_effect": "view",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "scene",
+        "node_path"
+      ]
     },
     "ui.accessibility": {
       "method": "godot.ui",
       "verb": "accessibility",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "scene",
+        "node_path"
+      ]
     },
     "editor.state": {
       "method": "godot.editor",
       "verb": "state",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "detail"
+      ]
     },
     "editor.select": {
       "method": "godot.editor",
       "verb": "select",
       "side_effect": "view",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "scene",
+        "node_path"
+      ]
     },
     "editor.focus": {
       "method": "godot.editor",
       "verb": "focus",
       "side_effect": "view",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "scene",
+        "node_path"
+      ]
     },
     "editor.main_screen": {
       "method": "godot.editor",
       "verb": "main_screen",
       "side_effect": "view",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "screen"
+      ]
     },
     "editor.frame_view": {
       "method": "godot.editor",
       "verb": "frame_view",
       "side_effect": "view",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "scene",
+        "node_path"
+      ]
     },
     "editor.replay": {
       "method": "godot.editor",
       "verb": "replay",
       "side_effect": "view",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "command_id"
+      ]
     },
     "editor.pause": {
       "method": "godot.editor",
       "verb": "pause",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "op"
+      ]
     },
     "play.start": {
       "method": "godot.play",
       "verb": "start",
       "side_effect": "external",
-      "timeout_ms": 120000
+      "timeout_ms": 120000,
+      "required": [
+        "scene",
+        "mode"
+      ]
     },
     "play.stop": {
       "method": "godot.play",
       "verb": "stop",
       "side_effect": "external",
-      "timeout_ms": 120000
+      "timeout_ms": 120000,
+      "required": [
+        "reason"
+      ]
     },
     "play.restart": {
       "method": "godot.play",
       "verb": "restart",
       "side_effect": "external",
-      "timeout_ms": 120000
+      "timeout_ms": 120000,
+      "required": [
+        "scene"
+      ]
     },
     "play.debug": {
       "method": "godot.play",
       "verb": "debug",
       "side_effect": "external",
-      "timeout_ms": 120000
+      "timeout_ms": 120000,
+      "required": [
+        "scene"
+      ]
     },
     "play.status": {
       "method": "godot.play",
       "verb": "status",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "detail"
+      ]
     },
     "play.logs": {
       "method": "godot.play",
       "verb": "logs",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "limit"
+      ]
     },
     "input.action": {
       "method": "godot.input",
       "verb": "action",
       "side_effect": "external",
-      "timeout_ms": 120000
+      "timeout_ms": 120000,
+      "required": [
+        "action_name",
+        "phase"
+      ]
     },
     "input.key": {
       "method": "godot.input",
       "verb": "key",
       "side_effect": "external",
-      "timeout_ms": 120000
+      "timeout_ms": 120000,
+      "required": [
+        "keycode",
+        "phase"
+      ]
     },
     "input.mouse": {
       "method": "godot.input",
       "verb": "mouse",
       "side_effect": "external",
-      "timeout_ms": 120000
+      "timeout_ms": 120000,
+      "required": [
+        "button",
+        "x",
+        "y"
+      ]
     },
     "input.touch": {
       "method": "godot.input",
       "verb": "touch",
       "side_effect": "external",
-      "timeout_ms": 120000
+      "timeout_ms": 120000,
+      "required": [
+        "index",
+        "x",
+        "y",
+        "pressed"
+      ]
     },
     "input.sequence": {
       "method": "godot.input",
       "verb": "sequence",
       "side_effect": "external",
-      "timeout_ms": 120000
+      "timeout_ms": 120000,
+      "required": [
+        "steps"
+      ]
     },
     "input.release_all": {
       "method": "godot.input",
       "verb": "release_all",
       "side_effect": "external",
-      "timeout_ms": 120000
+      "timeout_ms": 120000,
+      "required": [
+        "scope"
+      ]
     },
     "runtime.tree": {
       "method": "godot.runtime",
       "verb": "tree",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "detail"
+      ]
     },
     "runtime.node": {
       "method": "godot.runtime",
       "verb": "node",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "node_path"
+      ]
     },
     "runtime.state": {
       "method": "godot.runtime",
       "verb": "state",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "key"
+      ]
     },
     "runtime.signal": {
       "method": "godot.runtime",
       "verb": "signal",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "signal",
+        "limit"
+      ]
     },
     "runtime.time": {
       "method": "godot.runtime",
       "verb": "time",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "detail"
+      ]
     },
     "runtime.freeze": {
       "method": "godot.runtime",
       "verb": "freeze",
       "side_effect": "external",
-      "timeout_ms": 120000
+      "timeout_ms": 120000,
+      "required": [
+        "frozen",
+        "reason"
+      ]
     },
     "runtime.step": {
       "method": "godot.runtime",
       "verb": "step",
       "side_effect": "external",
-      "timeout_ms": 120000
+      "timeout_ms": 120000,
+      "required": [
+        "frames"
+      ]
     },
     "runtime.screenshot": {
       "method": "godot.runtime",
       "verb": "screenshot",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "scale"
+      ]
     },
     "runtime.perf": {
       "method": "godot.runtime",
       "verb": "perf",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "detail"
+      ]
     },
     "test.define": {
       "method": "godot.test",
       "verb": "define",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "name",
+        "steps"
+      ]
     },
     "test.run": {
       "method": "godot.test",
       "verb": "run",
       "side_effect": "external",
-      "timeout_ms": 120000
+      "timeout_ms": 120000,
+      "required": [
+        "name"
+      ]
     },
     "test.assert": {
       "method": "godot.test",
       "verb": "assert",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "name",
+        "expect"
+      ]
     },
     "test.report": {
       "method": "godot.test",
       "verb": "report",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "name"
+      ]
     },
     "test.evidence": {
       "method": "godot.test",
       "verb": "evidence",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "name"
+      ]
     },
     "test.baseline": {
       "method": "godot.test",
       "verb": "baseline",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "name",
+        "hash"
+      ]
     },
     "export.preset": {
       "method": "godot.export",
       "verb": "preset",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "name",
+        "platform"
+      ]
     },
     "export.validate": {
       "method": "godot.export",
       "verb": "validate",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "name"
+      ]
     },
     "export.build": {
       "method": "godot.export",
       "verb": "build",
       "side_effect": "external",
-      "timeout_ms": 120000
+      "timeout_ms": 120000,
+      "required": [
+        "name"
+      ]
     },
     "export.cancel": {
       "method": "godot.export",
       "verb": "cancel",
       "side_effect": "destructive",
-      "timeout_ms": 30000
+      "timeout_ms": 30000,
+      "required": [
+        "job_id"
+      ]
     },
     "export.artifacts": {
       "method": "godot.export",
       "verb": "artifacts",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "name"
+      ]
     },
     "git.status": {
       "method": "godot.git",
       "verb": "status",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "detail"
+      ]
     },
     "git.diff": {
       "method": "godot.git",
       "verb": "diff",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "path"
+      ]
     },
     "git.checkpoint": {
       "method": "godot.git",
       "verb": "checkpoint",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "message"
+      ]
     },
     "git.revert_checkpoint": {
       "method": "godot.git",
       "verb": "revert_checkpoint",
       "side_effect": "destructive",
-      "timeout_ms": 30000
+      "timeout_ms": 30000,
+      "required": [
+        "ref"
+      ]
     },
     "job.status": {
       "method": "godot.job",
       "verb": "status",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "job_id"
+      ]
     },
     "job.list": {
       "method": "godot.job",
       "verb": "list",
       "side_effect": "read",
-      "timeout_ms": 5000
+      "timeout_ms": 5000,
+      "required": [
+        "limit"
+      ]
     },
     "job.cancel": {
       "method": "godot.job",
       "verb": "cancel",
       "side_effect": "destructive",
-      "timeout_ms": 30000
+      "timeout_ms": 30000,
+      "required": [
+        "job_id"
+      ]
     },
     "job.wait": {
       "method": "godot.job",
       "verb": "wait",
       "side_effect": "mutate",
-      "timeout_ms": 15000
+      "timeout_ms": 15000,
+      "required": [
+        "job_id",
+        "timeout_sec"
+      ]
     }
   }
 }

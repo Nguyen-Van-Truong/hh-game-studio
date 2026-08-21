@@ -143,7 +143,10 @@ async function handleTool(
     action,
     params,
   });
-  const resolvedId = accepted.accepted ? accepted.action_id : actionIdFromMethod(name, action);
+  if (!accepted.accepted) {
+    return { body: { error: accepted.error, registry: accepted }, isError: true };
+  }
+  const resolvedId = accepted.action_id || actionIdFromMethod(name, action);
   const def = resolvedId ? getAction(resolvedId) : undefined;
   if (
     def &&
@@ -156,13 +159,9 @@ async function handleTool(
           message: "not dispatched",
           path: "",
         },
-        registry: accepted,
       },
       isError: true,
     };
-  }
-  if (!accepted.accepted) {
-    return { body: { error: accepted.error, registry: accepted }, isError: true };
   }
   if (!def) {
     return {

@@ -43,12 +43,15 @@ func load_from_res() -> bool:
 				var verb: String = str(spec.get("verb", ""))
 				if method.is_empty() or verb.is_empty():
 					continue
+				var required: Array[String] = []
+				_fill_strings(spec.get("required", []), required)
 				_by_key[_key(method, verb)] = {
 					"id": str(action_id),
 					"method": method,
 					"verb": verb,
 					"side_effect": str(spec.get("side_effect", "")),
 					"timeout_ms": int(spec.get("timeout_ms", 5000)),
+					"required": required,
 				}
 	loaded = protocol == HHAgentConstants.PROTOCOL and not _by_key.is_empty()
 	return loaded

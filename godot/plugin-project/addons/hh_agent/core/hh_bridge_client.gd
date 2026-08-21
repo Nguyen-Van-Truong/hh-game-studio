@@ -36,7 +36,7 @@ func configure(host: String, port: int, project_id: String, token: String) -> vo
 
 func start() -> Error:
 	close()
-	if _host != "127.0.0.1" or _port <= 0 or _project_id.is_empty() or _token.length() != 64:
+	if _host != "127.0.0.1" or _port <= 0 or _project_id.is_empty() or not _token_ok(_token):
 		return ERR_INVALID_PARAMETER
 	_ws = WebSocketPeer.new()
 	_ws.handshake_headers = PackedStringArray()
@@ -106,7 +106,27 @@ func close() -> void:
 	if _ws != null:
 		_ws.close()
 		_ws = null
-	_token = ""
+
+
+func has_configured_token() -> bool:
+	return _token_ok(_token)
+
+
+func _token_ok(token: String) -> bool:
+	if token.length() != 64:
+		return false
+	var i: int = 0
+	while i < 64:
+		var code: int = token.unicode_at(i)
+		var hex: bool = (
+			(code >= 48 and code <= 57)
+			or (code >= 97 and code <= 102)
+			or (code >= 65 and code <= 70)
+		)
+		if not hex:
+			return false
+		i += 1
+	return true
 
 
 func _send_hello() -> void:
