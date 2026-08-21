@@ -19,6 +19,11 @@ const E_PROJECT_MISMATCH: String = "E_PROJECT_MISMATCH"
 const E_BUSY: String = "E_BUSY"
 const E_IDEMPOTENCY_CONFLICT: String = "E_IDEMPOTENCY_CONFLICT"
 const E_UNCERTAIN: String = "E_UNCERTAIN"
+const E_POLICY: String = "E_POLICY"
+const E_CHECKPOINT: String = "E_CHECKPOINT"
+const E_CONFLICT: String = "E_CONFLICT"
+const E_PAUSED: String = "E_PAUSED"
+const E_LEASE: String = "E_LEASE"
 
 
 func typed(code: String, message: String, path: String = "") -> Dictionary:

@@ -33,6 +33,7 @@ export interface PluginTransport {
   ) => Promise<PluginCommandResult>;
   readPostcondition: (commandId: string, timeoutMs: number) => Promise<PluginReadbackResult>;
   dropPlugin: () => void;
+  sendControl: (msg: Record<string, unknown>) => boolean;
 }
 
 export interface PluginTransportOpts {
@@ -42,6 +43,7 @@ export interface PluginTransportOpts {
   sessionId: string;
   log: SessionLog;
   heartbeatMs?: number;
+  onPluginPause?: (paused: boolean) => { paused: boolean; state: string; ack_ms: number };
 }
 
 interface SockState {
@@ -392,6 +394,21 @@ export async function startPluginTransport(opts: PluginTransportOpts): Promise<P
       sendText(state.socket, JSON.stringify({ type: "pong" }));
       return;
     }
+    if (parsed && typeof parsed === "object" && "type" in parsed && parsed.type === "pause") {
+      const rec = parsed as Record<string, unknown>;
+      const paused = rec.paused !== false;
+      const ack = opts.onPluginPause?.(paused);
+      sendText(
+        state.socket,
+        JSON.stringify({
+          type: "pause_ack",
+          paused,
+          state: ack?.state ?? (paused ? "draining" : "open"),
+          ack_ms: ack?.ack_ms ?? 0,
+        }),
+      );
+      return;
+    }
     const readback = parsePluginReadback(parsed);
     if (readback) {
       finishReadback(readback.command_id, readback);
@@ -451,6 +468,14 @@ export async function startPluginTransport(opts: PluginTransportOpts): Promise<P
       });
     },
     dropPlugin,
+    sendControl: (msg) => {
+      const sock = latest;
+      if (!sock || !sock.authed || sock.closed) {
+        return false;
+      }
+      sendText(sock.socket, JSON.stringify(msg));
+      return true;
+    },
     close: async () => {
       if (beats) {
         clearInterval(beats);

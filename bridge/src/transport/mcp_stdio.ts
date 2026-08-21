@@ -2,6 +2,8 @@ import { createInterface } from "node:readline";
 
 import { executeCommand, inspectRow, type LedgerBound, type LedgerRuntime } from "../ledger/execute.js";
 import type { CommandLedger } from "../ledger/store.js";
+import type { PauseGate } from "../policy/pause.js";
+import type { PolicyServices } from "../policy/engine.js";
 import { acceptCommand } from "../registry/dispatch.js";
 import { E } from "../registry/errors.js";
 import { allActionDefs } from "../registry/registry.js";
@@ -37,9 +39,12 @@ export interface McpStdioContext {
     ) => Promise<PluginCommandResult>;
     readPostcondition: (commandId: string, timeoutMs: number) => Promise<PluginReadbackResult>;
     dropPlugin: () => void;
+    sendControl?: (msg: Record<string, unknown>) => boolean;
   };
   ledger?: CommandLedger;
   bound?: LedgerBound;
+  pause?: PauseGate;
+  policy?: PolicyServices;
 }
 
 function writeRpc(obj: unknown): void {
@@ -110,6 +115,16 @@ function domainTools(): Array<{
         },
       },
     },
+    {
+      name: "hh.pause",
+      description: "Close the mutation gate. ACK is draining, not a kill.",
+      inputSchema: { type: "object", additionalProperties: false, properties: {} },
+    },
+    {
+      name: "hh.resume",
+      description: "Re-open the mutation gate. Does not apply uncertain commands.",
+      inputSchema: { type: "object", additionalProperties: false, properties: {} },
+    },
   ];
   for (const [name, verbs] of byMethod) {
     tools.push({
@@ -164,6 +179,7 @@ function runtimeOf(ctx: McpStdioContext): LedgerRuntime {
         postcondition: raw.postcondition,
       };
     },
+    ...(ctx.policy ? { policy: ctx.policy } : {}),
   };
 }
 
@@ -184,6 +200,16 @@ async function handleTool(
   name: string,
   args: Record<string, unknown>,
 ): Promise<{ body: unknown; isError: boolean }> {
+  if (name === "hh.pause") {
+    const ack = ctx.pause?.pause() ?? { paused: true, state: "draining", ack_ms: 0, cancelled_jobs: [] };
+    ctx.plugin?.sendControl?.({ type: "pause", paused: true, ack_ms: ack.ack_ms, state: ack.state });
+    return { body: { ok: true, ...ack }, isError: false };
+  }
+  if (name === "hh.resume") {
+    const ack = ctx.pause?.resume() ?? { paused: false, state: "open", ack_ms: 0, cancelled_jobs: [] };
+    ctx.plugin?.sendControl?.({ type: "pause", paused: false, ack_ms: ack.ack_ms, state: ack.state });
+    return { body: { ok: true, ...ack, uncertain_not_applied: true }, isError: false };
+  }
   if (name === "hh.session_status") {
     return { body: { ok: true, session: publicDescriptorView(ctx.descriptor()) }, isError: false };
   }

@@ -1,5 +1,6 @@
 import { spawn, spawnSync, type ChildProcess, type SpawnOptions } from "node:child_process";
 
+import { assertAgentProcess } from "../policy/allowlist.js";
 import { E, typedError } from "../registry/errors.js";
 
 function forbidShell(opts: SpawnOptions | undefined): void {
@@ -11,6 +12,11 @@ function forbidShell(opts: SpawnOptions | undefined): void {
 /** Argv-array supervisor. Spawn only; shell disabled. */
 export class ProcessSupervisor {
   private readonly children = new Set<ChildProcess>();
+
+  spawnAgent(file: string, argv: readonly string[], opts?: SpawnOptions): ChildProcess {
+    assertAgentProcess(file, argv, { shell: opts?.shell === true });
+    return this.spawn(file, argv, opts);
+  }
 
   spawn(file: string, argv: readonly string[], opts?: SpawnOptions): ChildProcess {
     forbidShell(opts);

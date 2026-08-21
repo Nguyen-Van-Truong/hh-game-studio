@@ -60,12 +60,15 @@ async function main(): Promise<void> {
       projectId: sidecar.project.projectId,
       policy: sidecar.policy,
     },
+    pause: sidecar.pause,
+    policy: sidecar.policyServices,
     plugin: {
       connected: () => sidecar.transport.pluginConnected(),
       dispatch: (envelope, timeoutMs) => sidecar.transport.dispatchToPlugin(envelope, timeoutMs),
       readPostcondition: (commandId, timeoutMs) =>
         sidecar.transport.readPostcondition(commandId, timeoutMs),
       dropPlugin: () => sidecar.transport.dropPlugin(),
+      sendControl: (msg) => sidecar.transport.sendControl(msg),
     },
   });
 }

@@ -21,6 +21,11 @@ export const E = {
   E_BUSY: "E_BUSY",
   E_IDEMPOTENCY_CONFLICT: "E_IDEMPOTENCY_CONFLICT",
   E_UNCERTAIN: "E_UNCERTAIN",
+  E_POLICY: "E_POLICY",
+  E_CHECKPOINT: "E_CHECKPOINT",
+  E_CONFLICT: "E_CONFLICT",
+  E_PAUSED: "E_PAUSED",
+  E_LEASE: "E_LEASE",
 } as const;
 
 export type ErrorCode = (typeof E)[keyof typeof E];

@@ -15,3 +15,6 @@ Each `fail_*.toml` is otherwise a complete policy with one defect:
 | `fail_addon_jail.toml` | `E_ADDON_JAIL` |
 
 Pass case: repo `.hh-agent/policy.example.toml`.
+
+Runtime A8 jail (dotdot, absolute, junction/symlink, device, overlong, addon lock)
+is executed by `tests/bootstrap/test_policy.py` against the sidecar policy engine.

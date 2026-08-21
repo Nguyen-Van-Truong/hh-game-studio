@@ -27,5 +27,26 @@ func take() -> Dictionary:
 	return _items.pop_front()
 
 
+func take_all() -> Array[Dictionary]:
+	var copy: Array[Dictionary] = _items.duplicate()
+	_items.clear()
+	return copy
+
+
+func drain_mutating(is_mutating: Callable) -> Array[Dictionary]:
+	var kept: Array[Dictionary] = []
+	var rejected: Array[Dictionary] = []
+	for item: Dictionary in _items:
+		var mutating: bool = false
+		if is_mutating.is_valid():
+			mutating = is_mutating.call(item) == true
+		if mutating:
+			rejected.append(item)
+		else:
+			kept.append(item)
+	_items = kept
+	return rejected
+
+
 func clear() -> void:
 	_items.clear()

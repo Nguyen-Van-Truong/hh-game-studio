@@ -17,6 +17,7 @@ var _closed: bool = true
 var _enqueue: Callable = Callable()
 var _on_hello: Callable = Callable()
 var _on_readback: Callable = Callable()
+var _on_pause: Callable = Callable()
 var _errors: HHAgentErrors = HHAgentErrors.new()
 
 
@@ -30,6 +31,10 @@ func set_hello_handler(cb: Callable) -> void:
 
 func set_readback(cb: Callable) -> void:
 	_on_readback = cb
+
+
+func set_pause_handler(cb: Callable) -> void:
+	_on_pause = cb
 
 
 func configure(host: String, port: int, project_id: String, token: String) -> void:
@@ -167,6 +172,10 @@ func _on_text(text: String) -> void:
 		return
 	if kind == HHAgentConstants.PING_TYPE:
 		send_dict({"type": HHAgentConstants.PONG_TYPE})
+		return
+	if kind == HHAgentConstants.PAUSE_TYPE or kind == HHAgentConstants.PAUSE_ACK_TYPE:
+		if _on_pause.is_valid() and kind == HHAgentConstants.PAUSE_TYPE:
+			_on_pause.call(rec.get("paused", false) == true)
 		return
 	if kind == HHAgentConstants.READBACK_TYPE:
 		if _on_readback.is_valid():

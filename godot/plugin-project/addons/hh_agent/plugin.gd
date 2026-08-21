@@ -9,6 +9,8 @@ const _SessionScript: GDScript = preload("res://addons/hh_agent/core/hh_session.
 const _ClientScript: GDScript = preload("res://addons/hh_agent/core/hh_bridge_client.gd")
 const _PostScript: GDScript = preload("res://addons/hh_agent/core/hh_postcondition.gd")
 const _DockScript: GDScript = preload("res://addons/hh_agent/ui/health/hh_health_dock.gd")
+const _PauseScript: GDScript = preload("res://addons/hh_agent/core/hh_pause.gd")
+const _ErrorsScript: GDScript = preload("res://addons/hh_agent/core/hh_errors.gd")
 
 ## hh_agent EditorPlugin: main-thread router + health dock + outbound sidecar client.
 ## Disable/reload must not leak sockets, signals, docks, or timers.
@@ -22,6 +24,8 @@ var _session: HHAgentSession
 var _client: HHAgentBridgeClient
 var _postcondition: HHAgentPostcondition
 var _dock: HHAgentHealthDock
+var _pause_gate: HHAgentPauseGate
+var _errors: HHAgentErrors
 var _reconnect_timer: Timer
 var _busy: bool = false
 var _paused: bool = false
@@ -39,10 +43,14 @@ func _enter_tree() -> void:
 	_session = HHAgentSession.new()
 	_client = HHAgentBridgeClient.new()
 	_postcondition = HHAgentPostcondition.new()
+	_pause_gate = HHAgentPauseGate.new()
+	_errors = HHAgentErrors.new()
 	_client.set_enqueue(Callable(self, "_enqueue_inbound"))
 	_client.set_hello_handler(Callable(self, "_on_hello"))
 	_client.set_readback(Callable(self, "_on_readback"))
+	_client.set_pause_handler(Callable(self, "_on_sidecar_pause"))
 	_dock = HHAgentHealthDock.new()
+	_dock.pause_requested.connect(_on_pause_requested)
 	add_control_to_dock(DOCK_SLOT_LEFT_UL, _dock)
 	_reconnect_timer = Timer.new()
 	_reconnect_timer.one_shot = true
@@ -85,10 +93,71 @@ func _enqueue_inbound(envelope: Variant) -> bool:
 	return _queue.push_request({"envelope": envelope})
 
 
+func _on_pause_requested() -> void:
+	_apply_pause(not _paused)
+
+
+func _on_sidecar_pause(paused: bool) -> void:
+	_apply_pause(paused, false)
+
+
+func _apply_pause(paused: bool, notify_sidecar: bool = true) -> Dictionary:
+	var t0: int = Time.get_ticks_usec()
+	_paused = paused
+	var ack: Dictionary = {}
+	if _pause_gate != null:
+		ack = _pause_gate.set_paused(paused)
+	if _paused:
+		_drain_mutating()
+	var ack_ms: float = float(Time.get_ticks_usec() - t0) / 1000.0
+	if ack.is_empty():
+		ack = {"paused": _paused, "state": "draining" if _paused else "open", "ack_ms": ack_ms}
+	else:
+		ack["ack_ms"] = ack_ms
+	if notify_sidecar and _client != null:
+		_client.send_dict({
+			"type": HHAgentConstants.PAUSE_TYPE,
+			"paused": _paused,
+			"ack_ms": ack_ms,
+			"state": str(ack.get("state", "")),
+		})
+	_refresh_dock()
+	return ack
+
+
+func _envelope_side_effect(envelope_v: Variant) -> String:
+	if _actions == null or typeof(envelope_v) != TYPE_DICTIONARY:
+		return ""
+	var envelope: Dictionary = envelope_v
+	var def: Dictionary = _actions.lookup(str(envelope.get("method", "")), str(envelope.get("action", "")))
+	return str(def.get("side_effect", ""))
+
+
+func _item_is_mutating(item: Dictionary) -> bool:
+	var side: String = _envelope_side_effect(item.get("envelope", {}))
+	return side == "mutate" or side == "destructive" or side == "external"
+
+
+func _drain_mutating() -> void:
+	if _queue == null or _errors == null:
+		return
+	var rejected: Array[Dictionary] = _queue.drain_mutating(Callable(self, "_item_is_mutating"))
+	for item: Dictionary in rejected:
+		var envelope_v: Variant = item.get("envelope", {})
+		var command_id: String = ""
+		if envelope_v is Dictionary:
+			command_id = str((envelope_v as Dictionary).get("command_id", ""))
+		var result: Dictionary = _errors.fail(command_id, HHAgentErrors.E_PAUSED, "mutation gate is paused", "pause")
+		if _postcondition != null:
+			_postcondition.remember(command_id, result)
+		if _client != null:
+			_client.send_dict(result)
+
+
 func _handle_item(item: Dictionary) -> void:
 	var queued_at: int = int(item.get("_queued_at_ms", 0))
 	var envelope_v: Variant = item.get("envelope", {})
-	var result: Dictionary = _router.dispatch(envelope_v, _actions, queued_at)
+	var result: Dictionary = _router.dispatch(envelope_v, _actions, queued_at, _pause_gate)
 	if _postcondition != null:
 		_postcondition.remember(str(result.get("command_id", "")), result)
 	if _client != null:
@@ -268,13 +337,18 @@ func _cleanup() -> void:
 		remove_child(_reconnect_timer)
 		_reconnect_timer.queue_free()
 		_reconnect_timer = null
+	if _dock != null and _dock.pause_requested.is_connected(_on_pause_requested):
+		_dock.pause_requested.disconnect(_on_pause_requested)
 	if _client != null:
 		_client.set_enqueue(Callable())
 		_client.set_hello_handler(Callable())
 		_client.set_readback(Callable())
+		_client.set_pause_handler(Callable())
 		_client.close()
 		_client = null
 	_postcondition = null
+	_pause_gate = null
+	_errors = null
 	if _queue != null:
 		_queue.clear()
 		_queue = null

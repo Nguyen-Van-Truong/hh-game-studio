@@ -1,9 +1,11 @@
 /** Durable command ledger: flush before dispatch, dedup, uncertain recovery. No scene writes. */
 
+import { runMutationGate, type PolicyServices } from "../policy/engine.js";
+import { DEFAULT_POLICY, normalizePolicy } from "../policy/profiles.js";
 import { acceptCommand } from "../registry/dispatch.js";
 import { E, typedError } from "../registry/errors.js";
 import { getAction } from "../registry/registry.js";
-import { PROTOCOL, type Policy } from "../registry/types.js";
+import { PROTOCOL } from "../registry/types.js";
 import { isUlid } from "../registry/ulid.js";
 import {
   isNoopEnvelope,
@@ -17,7 +19,7 @@ import { canonicalRequestHash } from "./hash.js";
 import { emptyRow, type CommandLedger, type CommandRow } from "./store.js";
 import type { LedgerState } from "./states.js";
 
-export const DEFAULT_LEDGER_POLICY = "OBSERVE" as const;
+export { DEFAULT_POLICY as DEFAULT_LEDGER_POLICY, normalizePolicy };
 
 export interface LedgerBound {
   actorId: string;
@@ -37,6 +39,7 @@ export interface LedgerRuntime {
   readPostcondition(commandId: string): Promise<PluginReadback>;
   pluginConnected(): boolean;
   killPlugin?: () => void;
+  policy?: PolicyServices;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -45,13 +48,6 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 export function isNoopVerified(post: { verified: boolean; checks: string[] }): boolean {
   return post.verified === true && post.checks.length === 1 && post.checks[0] === "noop";
-}
-
-export function normalizePolicy(raw: string | undefined): Policy {
-  if (raw === "EDIT") {
-    return "EDIT";
-  }
-  return "OBSERVE";
 }
 
 export function errorResult(
@@ -227,6 +223,65 @@ function classify(raw: Record<string, unknown>, commandId: string): Classified {
     actionId: accepted.action_id,
     result: unverifiedResult(commandId, message),
   };
+}
+
+function settleBlocked(
+  ledger: CommandLedger,
+  row: CommandRow,
+  envelope: Record<string, unknown>,
+  bound: LedgerBound,
+  runtime: LedgerRuntime,
+  classified: Extract<Classified, { kind: "blocked" }>,
+): PluginCommandResult {
+  const def = getAction(classified.actionId);
+  const fields = envelopeFields(envelope);
+  const gated = runMutationGate({
+    commandId: row.command_id,
+    sideEffect: classified.sideEffect,
+    actionId: classified.actionId,
+    checkpointRequired: def?.checkpoint_required === true,
+    policy: normalizePolicy(bound.policy),
+    params: fields.params,
+    ...(runtime.policy ? { services: runtime.policy } : {}),
+  });
+  if (!gated.ok) {
+    const result = errorResult(
+      row.command_id,
+      gated.error.code,
+      gated.error.message,
+      gated.error.path,
+    );
+    persistResult(row, result);
+    row.after_summary = JSON.stringify({ rejected: gated.error.code });
+    saveState(ledger, row, "failed");
+    return result;
+  }
+  const message = gated.checkpoint
+    ? `not dispatched; checkpoint ${gated.checkpoint.checkpoint_id} recorded`
+    : classified.result.error?.message || "not dispatched";
+  const result = unverifiedResult(row.command_id, message);
+  persistResult(row, result);
+  row.after_summary = JSON.stringify({
+    rejected: result.error?.code ?? E.E_UNVERIFIED,
+    ...(gated.checkpoint
+      ? {
+          checkpoint_id: gated.checkpoint.checkpoint_id,
+          checkpoint_dir: gated.checkpoint.dir,
+          manifest_path: gated.checkpoint.manifest_path,
+          hard_delete_blocked: gated.checkpoint.manifest.hard_delete_blocked,
+        }
+      : {}),
+  });
+  if (gated.checkpoint) {
+    row.evidence_json = JSON.stringify([gated.checkpoint.manifest_path]);
+    ledger.addCheckpoint(
+      gated.checkpoint.checkpoint_id,
+      [gated.checkpoint.manifest_path],
+      row.command_id,
+    );
+  }
+  saveState(ledger, row, "failed");
+  return result;
 }
 
 function handlePluginFault(runtime: LedgerRuntime, err: unknown): void {
@@ -408,6 +463,7 @@ async function continueAfterReceived(
   ledger: CommandLedger,
   row: CommandRow,
   envelope: Record<string, unknown>,
+  bound: LedgerBound,
   runtime: LedgerRuntime,
 ): Promise<PluginCommandResult> {
   const classified = classify(envelope, row.command_id);
@@ -431,10 +487,7 @@ async function continueAfterReceived(
     return classified.result;
   }
   if (classified.kind === "blocked") {
-    persistResult(row, classified.result);
-    row.after_summary = JSON.stringify({ rejected: classified.result.error?.code ?? E.E_UNVERIFIED });
-    saveState(ledger, row, "failed");
-    return classified.result;
+    return settleBlocked(ledger, row, envelope, bound, runtime, classified);
   }
   return applyNoopOnce(ledger, row, envelope, runtime, classified.timeoutMs);
 }
@@ -495,14 +548,12 @@ export async function executeCommand(
         return classified.result;
       }
       if (classified.kind === "blocked") {
-        persistResult(existing, classified.result);
-        saveState(ledger, existing, "failed");
-        return classified.result;
+        return settleBlocked(ledger, existing, envelope, bound, runtime, classified);
       }
       return applyNoopOnce(ledger, existing, envelope, runtime, classified.timeoutMs);
     }
     if (existing.state === "received") {
-      return continueAfterReceived(ledger, existing, envelope, runtime);
+      return continueAfterReceived(ledger, existing, envelope, bound, runtime);
     }
   }
 
@@ -536,7 +587,7 @@ export async function executeCommand(
   } catch (err) {
     handlePluginFault(runtime, err);
   }
-  return continueAfterReceived(ledger, row, envelope, runtime);
+  return continueAfterReceived(ledger, row, envelope, bound, runtime);
 }
 
 export function inspectRow(row: CommandRow): Record<string, unknown> {

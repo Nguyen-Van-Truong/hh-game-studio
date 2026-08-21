@@ -418,8 +418,8 @@ def test_blocked_and_compact(home: str, project_id: str) -> list[str]:
         },
     )
     row = mutate.get("ledger") or {}
-    if ((mutate.get("result") or {}).get("error") or {}).get("code") != "E_UNVERIFIED":
-        errors.append(f"mutate must be E_UNVERIFIED: {mutate}")
+    if ((mutate.get("result") or {}).get("error") or {}).get("code") != "E_POLICY":
+        errors.append(f"OBSERVE mutate must be E_POLICY: {mutate}")
     if row.get("state") == "applying" or row.get("apply_count"):
         errors.append(f"mutate entered applying: {row}")
     if row.get("state") != "failed":

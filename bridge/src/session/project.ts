@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 
+import { jailProjectPath } from "../policy/jail.js";
 import { E, typedError } from "../registry/errors.js";
 
 export interface DiscoveredProject {
@@ -39,11 +40,9 @@ export function discoverProject(inputPath: string): DiscoveredProject {
 }
 
 export function jailUnderProject(projectRoot: string, candidate: string): string {
-  const root = realPathOf(projectRoot);
-  const resolved = realPathOf(path.resolve(root, candidate));
-  const rel = path.relative(root, resolved);
-  if (rel.startsWith("..") || path.isAbsolute(rel)) {
-    throw typedError(E.E_PATH, "path escapes project root", candidate);
+  const jailed = jailProjectPath(projectRoot, candidate, { forWrite: true });
+  if (!jailed.ok) {
+    throw typedError(jailed.error.code, jailed.error.message, jailed.error.path);
   }
-  return resolved;
+  return jailed.abs;
 }

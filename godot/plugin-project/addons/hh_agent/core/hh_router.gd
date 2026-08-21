@@ -5,6 +5,7 @@ const _ConstantsScript: GDScript = preload("res://addons/hh_agent/core/hh_consta
 const _ErrorsScript: GDScript = preload("res://addons/hh_agent/core/hh_errors.gd")
 const _EnvelopeScript: GDScript = preload("res://addons/hh_agent/core/hh_envelope.gd")
 const _ActionsScript: GDScript = preload("res://addons/hh_agent/core/hh_actions.gd")
+const _PauseScript: GDScript = preload("res://addons/hh_agent/core/hh_pause.gd")
 
 ## Routes read/view (no live adapters yet) and the test noop. Never mutates the scene.
 
@@ -12,7 +13,7 @@ var _errors: HHAgentErrors = HHAgentErrors.new()
 var _envelope: HHAgentEnvelope = HHAgentEnvelope.new()
 
 
-func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int) -> Dictionary:
+func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_gate: HHAgentPauseGate = null) -> Dictionary:
 	var parsed: Dictionary = _envelope.parse(raw, actions)
 	if parsed.get("ok", false) != true:
 		var err_v: Variant = parsed.get("error", {})
@@ -57,6 +58,8 @@ func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int) -> Dicti
 					"params.%s" % field,
 				)
 	var side_effect: String = str(def.get("side_effect", ""))
+	if pause_gate != null and not pause_gate.allows_side_effect(side_effect):
+		return _errors.fail(command_id, HHAgentErrors.E_PAUSED, "mutation gate is paused", "pause")
 	if side_effect == "read" or side_effect == "view":
 		return _errors.fail(command_id, HHAgentErrors.E_UNVERIFIED, "no read adapter", "")
 	return _errors.fail(command_id, HHAgentErrors.E_UNVERIFIED, "not dispatched", "")
@@ -95,6 +98,23 @@ func run_selftest(actions: HHAgentActions) -> PackedStringArray:
 	var mutate_err: Dictionary = _error_of(mutate)
 	if str(mutate_err.get("code", "")) != HHAgentErrors.E_UNVERIFIED or mutate.get("ok", true) == true:
 		failures.append("mutate must be E_UNVERIFIED")
+	var gate: HHAgentPauseGate = HHAgentPauseGate.new()
+	gate.set_paused(true)
+	var paused_mutate: Dictionary = dispatch(
+		_sample(
+			"godot.node",
+			"add",
+			{"scene": "res://main.tscn", "parent": ".", "class_name": "Node2D", "name": "X"},
+		),
+		actions,
+		0,
+		gate,
+	)
+	if str(_error_of(paused_mutate).get("code", "")) != HHAgentErrors.E_PAUSED:
+		failures.append("paused mutate must be E_PAUSED")
+	var pause_samples: Dictionary = gate.measure_samples(20)
+	if float(pause_samples.get("p95", 999.0)) > 250.0:
+		failures.append("plugin Pause ACK p95 exceeded 250 ms")
 	var read_act: Dictionary = dispatch(_sample("godot.project", "inspect", {"detail": "short"}), actions, 0)
 	if str(_error_of(read_act).get("code", "")) != HHAgentErrors.E_UNVERIFIED:
 		failures.append("read without adapter must be E_UNVERIFIED")
