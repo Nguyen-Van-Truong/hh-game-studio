@@ -3,6 +3,8 @@ extends RefCounted
 
 ## Local mutation gate (A14). ACK is the closed/draining flag, measured with usec.
 
+static var last_paused: bool = false
+
 var _paused: bool = false
 var _last_ack_usec: int = 0
 
@@ -18,6 +20,7 @@ func last_ack_ms() -> float:
 func set_paused(value: bool) -> Dictionary:
 	var t0: int = Time.get_ticks_usec()
 	_paused = value
+	last_paused = value
 	_last_ack_usec = Time.get_ticks_usec() - t0
 	return {
 		"paused": _paused,

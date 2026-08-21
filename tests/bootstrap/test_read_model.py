@@ -9,6 +9,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -29,6 +30,25 @@ ADDON = PLUGIN_PROJECT / "addons" / "hh_agent"
 EDITOR_BAT = REPO_ROOT / "hh-godot-editor.bat"
 PINNED_VERSION = plug.PINNED_VERSION
 PROTOCOL = "hh-godot-agent/1"
+CROCKFORD = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"
+
+
+def new_ulid() -> str:
+    ms = int(time.time() * 1000)
+    chars: list[str] = []
+    t = ms
+    for _ in range(10):
+        chars.append(CROCKFORD[t % 32])
+        t //= 32
+    time_part = "".join(reversed(chars))
+    acc = int.from_bytes(os.urandom(10), "big")
+    rand: list[str] = []
+    for _ in range(16):
+        rand.append(CROCKFORD[acc % 32])
+        acc //= 32
+    return time_part + "".join(reversed(rand))
+
+
 VENDOR_NEEDLES = plug.VENDOR_NEEDLES
 TREE_FIXTURE = PLUGIN_PROJECT / "fixtures" / "tree_1k.tscn"
 
@@ -175,23 +195,62 @@ def test_skew_and_static() -> list[str]:
     if built2.returncode != 0:
         errors.append(f"npm run build failed:\n{built2.stdout}\n{built2.stderr}")
         return errors
-    godot_skew = doctor_cli(
-        PLUGIN_PROJECT,
-        ["--force-godot-version", "4.7.2.stable.official.deadbeef"],
-    )
+    fake = tmp / ("fake-godot.cmd" if os.name == "nt" else "fake-godot")
+    if os.name == "nt":
+        fake.write_text("@echo 4.7.2.stable.official.deadbeef\r\n", encoding="utf-8")
+    else:
+        fake.write_text("#!/bin/sh\necho 4.7.2.stable.official.deadbeef\n", encoding="utf-8")
+        fake.chmod(0o755)
+    godot_skew = doctor_cli(tmp, ["--godot-exe", str(fake)])
     err = godot_skew.get("error") or {}
     if godot_skew.get("ok") is True:
-        errors.append("wrong Godot version must not report ok true")
+        errors.append("wrong Godot --version must not report ok true")
     if err.get("code") != "E_VERSION_SKEW":
-        errors.append(f"wrong Godot must be E_VERSION_SKEW: {godot_skew}")
+        errors.append(f"measured wrong Godot must be E_VERSION_SKEW: {godot_skew}")
     if godot_skew.get("_exit") == 0:
         errors.append("version skew doctor must exit non-zero")
-    proto = doctor_cli(PLUGIN_PROJECT, ["--force-protocol", "hh-godot-agent/2"])
+    proto_root = Path(tempfile.mkdtemp(prefix="hh-r2wp6-proto-"))
+    (proto_root / "project.godot").write_text("; proto\nconfig_version=5\n", encoding="utf-8")
+    (proto_root / ".hh-agent").mkdir()
+    (proto_root / ".hh-agent" / "protocol").write_text("hh-godot-agent/2\n", encoding="utf-8")
+    proto = doctor_cli(proto_root)
     if proto.get("ok") is True or (proto.get("error") or {}).get("code") != "E_VERSION_SKEW":
-        errors.append(f"wrong protocol must be E_VERSION_SKEW: {proto}")
-    schema = doctor_cli(PLUGIN_PROJECT, ["--force-schema", "hh-godot-actions/99"])
+        errors.append(f"planted protocol file must be E_VERSION_SKEW: {proto}")
+    schema_root = Path(tempfile.mkdtemp(prefix="hh-r2wp6-schema-"))
+    (schema_root / "project.godot").write_text("; schema\nconfig_version=5\n", encoding="utf-8")
+    (schema_root / ".hh-agent").mkdir()
+    (schema_root / ".hh-agent" / "schema-version").write_text("hh-godot-actions/99\n", encoding="utf-8")
+    schema = doctor_cli(schema_root)
     if schema.get("ok") is True or (schema.get("error") or {}).get("code") != "E_VERSION_SKEW":
-        errors.append(f"wrong schema must be E_VERSION_SKEW: {schema}")
+        errors.append(f"planted schema file must be E_VERSION_SKEW: {schema}")
+    vendor_root = Path(tempfile.mkdtemp(prefix="hh-r2wp6-vendor-"))
+    (vendor_root / "project.godot").write_text("; satelliteoflove vendor\nconfig_version=5\n", encoding="utf-8")
+    vendor = doctor_cli(vendor_root)
+    policy_row = next(
+        (row for row in (vendor.get("check_details") or []) if isinstance(row, dict) and row.get("id") == "policy"),
+        {},
+    )
+    if policy_row.get("ok") is not False:
+        errors.append(f"vendor needle must fail policy: {vendor}")
+    scan = subprocess.run(
+        [
+            sess.node(),
+            "--input-type=module",
+            "-e",
+            "import { tokenAbsentFromBlob } from './dist/doctor/doctor.js'; "
+            "console.log(JSON.stringify({ ok: tokenAbsentFromBlob(JSON.stringify({t:'SECRET64'}), 'SECRET64') }))",
+        ],
+        cwd=str(BRIDGE),
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    scan_body = {}
+    for line in (scan.stdout or "").splitlines():
+        if line.startswith("{"):
+            scan_body = json.loads(line)
+    if scan_body.get("ok") is not False:
+        errors.append(f"token scanner must fail when the secret is in the blob: {scan.stdout} {scan.stderr}")
     baseline = doctor_cli(PLUGIN_PROJECT)
     if baseline.get("token_in_report") is not False:
         errors.append("doctor must set token_in_report false")
@@ -211,6 +270,16 @@ def test_skew_and_static() -> list[str]:
     ):
         if needed not in ids:
             errors.append(f"doctor missing check {needed}")
+    policy_ok = next(
+        (row for row in (baseline.get("check_details") or []) if isinstance(row, dict) and row.get("id") == "policy"),
+        {},
+    )
+    if policy_ok.get("ok") is not True:
+        errors.append(f"plugin-project policy should pass: {policy_ok}")
+    shutil.rmtree(tmp, ignore_errors=True)
+    shutil.rmtree(proto_root, ignore_errors=True)
+    shutil.rmtree(schema_root, ignore_errors=True)
+    shutil.rmtree(vendor_root, ignore_errors=True)
     return errors
 
 
@@ -218,11 +287,7 @@ def run_live() -> tuple[list[str], str, str]:
     errors: list[str] = []
     exe, pin_reason = plug.find_pinned_godot()
     if exe is None:
-        return (
-            errors,
-            f"skipped ({pin_reason})",
-            "mock-only: pin exe missing; doctor/resources/skew still ran",
-        )
+        return [f"live editor required (pin missing is a hard fail): {pin_reason}"], "failed", "failed"
     version = plug.godot_version(exe)
     if version != PINNED_VERSION:
         return [f"Godot --version {version!r} != {PINNED_VERSION}"], "failed", "failed"
@@ -268,6 +333,7 @@ def run_live() -> tuple[list[str], str, str]:
         env.pop("HH_AGENT_SELFTEST_OUT", None)
         env.pop("HH_AGENT_RELOAD_N", None)
         env.pop("HH_AGENT_RELOAD_OUT", None)
+        env["HH_READ_OPEN_SCENE"] = "res://fixtures/tree_1k.tscn"
         godot = subprocess.Popen(
             [str(exe), "--headless", "--editor", "--path", str(PLUGIN_PROJECT)],
             cwd=str(REPO_ROOT),
@@ -309,6 +375,25 @@ def run_live() -> tuple[list[str], str, str]:
             )
             return errors, live, "live Godot connected=no"
 
+        opened = False
+        open_deadline = time.time() + 15.0
+        while time.time() < open_deadline:
+            state_wait = plug.mcp_call(
+                proc,
+                req_id,
+                "godot.editor",
+                {"action": "state", "params": {"detail": "short"}},
+            )
+            req_id += 1
+            wait_body = (state_wait.get("result") or {}).get("structuredContent") or {}
+            edited = str(((wait_body.get("after") or {}).get("edited_scene") or ""))
+            if "tree_1k" in edited:
+                opened = True
+                break
+            time.sleep(0.2)
+        if not opened:
+            errors.append("HH_READ_OPEN_SCENE did not make tree_1k the edited scene")
+
         listed = mcp_rpc(proc, req_id, "resources/list")
         req_id += 1
         resources = (listed.get("result") or {}).get("resources") or []
@@ -335,8 +420,25 @@ def run_live() -> tuple[list[str], str, str]:
                 payload = {}
             if uri == "capability://matrix" and payload.get("mutate_dispatched") is not False:
                 errors.append("capability://matrix must declare mutate_dispatched false")
+            if uri == "capability://matrix":
+                select = next(
+                    (
+                        row
+                        for row in (payload.get("actions") or [])
+                        if isinstance(row, dict) and row.get("id") == "editor.select"
+                    ),
+                    {},
+                )
+                if select.get("adapter") != "view-state-mutate-not-wp6":
+                    errors.append(f"editor.select must not be labeled a read adapter: {select}")
             if uri == "editor://state" and payload.get("connected") is not True:
                 errors.append(f"editor://state must hit the live plugin: {payload}")
+            if uri == "editor://state" and "tree_1k" not in str(payload.get("edited_scene") or ""):
+                errors.append(f"editor://state must show the opened 1k fixture: {payload}")
+            if uri == "project://summary":
+                inspect = payload.get("inspect") if isinstance(payload.get("inspect"), dict) else {}
+                if inspect.get("source") != "editor":
+                    errors.append(f"project://summary must come from the live plugin: {payload}")
 
         doctor = plug.mcp_call(proc, req_id, "hh.doctor", {})
         req_id += 1
@@ -409,6 +511,8 @@ def run_live() -> tuple[list[str], str, str]:
         items1 = tree1.get("items") or []
         if p1.get("ok") is not True:
             errors.append(f"1k scene.read page1 failed: {sess.redact(json.dumps(page1), secret)}")
+        if (p1.get("after") or {}).get("source") != "edited":
+            errors.append(f"1k scene.read must walk the edited tree, not instantiate: {p1.get('after')}")
         if len(items1) > 40:
             errors.append(f"1k page1 dumped {len(items1)} nodes")
         if int(tree1.get("total") or 0) < 1000:
@@ -440,6 +544,113 @@ def run_live() -> tuple[list[str], str, str]:
             errors.append("1k pages overlapped")
         if len(items2) > 40:
             errors.append(f"1k page2 dumped {len(items2)} nodes")
+
+        prop = plug.mcp_call(
+            proc,
+            req_id,
+            "godot.property",
+            {
+                "action": "get",
+                "params": {
+                    "scene": "res://fixtures/tree_1k.tscn",
+                    "node_path": ".",
+                    "property": "name",
+                },
+            },
+        )
+        req_id += 1
+        prop_body = (prop.get("result") or {}).get("structuredContent") or {}
+        if prop_body.get("ok") is not True:
+            errors.append(f"live property.get must ACK: {sess.redact(json.dumps(prop), secret)}")
+        query = plug.mcp_call(
+            proc,
+            req_id,
+            "godot.node",
+            {
+                "action": "query",
+                "params": {
+                    "scene": "res://fixtures/tree_1k.tscn",
+                    "by": "type",
+                    "class_name": "Node",
+                    "limit": 20,
+                },
+            },
+        )
+        req_id += 1
+        query_body = (query.get("result") or {}).get("structuredContent") or {}
+        if query_body.get("ok") is not True:
+            errors.append(f"live node.query must ACK: {sess.redact(json.dumps(query), secret)}")
+        script_read = plug.mcp_call(
+            proc,
+            req_id,
+            "godot.script",
+            {
+                "action": "read",
+                "params": {"path": "res://addons/hh_agent/plugin.gd", "limit": 8},
+            },
+        )
+        req_id += 1
+        script_body = (script_read.get("result") or {}).get("structuredContent") or {}
+        if script_body.get("ok") is not True:
+            errors.append(f"live script.read must ACK: {sess.redact(json.dumps(script_read), secret)}")
+        play_status = plug.mcp_call(
+            proc,
+            req_id,
+            "godot.play",
+            {"action": "status", "params": {"detail": "short"}},
+        )
+        req_id += 1
+        play_body = (play_status.get("result") or {}).get("structuredContent") or {}
+        if play_body.get("ok") is not True:
+            errors.append(f"live play.status must ACK: {sess.redact(json.dumps(play_status), secret)}")
+        class_page = plug.mcp_call(
+            proc,
+            req_id,
+            "godot.capabilities",
+            {"action": "describe", "params": {"kind": "class", "class_name": "Node2D", "limit": 8}},
+        )
+        req_id += 1
+        class_body = (class_page.get("result") or {}).get("structuredContent") or {}
+        if class_body.get("ok") is not True:
+            errors.append(f"live capabilities.describe class must ACK: {sess.redact(json.dumps(class_page), secret)}")
+        diag = plug.mcp_call(
+            proc,
+            req_id,
+            "godot.script",
+            {"action": "diagnostics", "params": {"path": "res://addons/hh_agent/plugin.gd"}},
+        )
+        req_id += 1
+        diag_body = (diag.get("result") or {}).get("structuredContent") or {}
+        if (diag_body.get("error") or {}).get("code") != "E_UNVERIFIED":
+            errors.append(f"script.diagnostics must stay E_UNVERIFIED: {diag_body}")
+        logs = plug.mcp_call(
+            proc,
+            req_id,
+            "hh.command",
+            {
+                "command_id": new_ulid(),
+                "method": "godot.play",
+                "action": "logs",
+                "params": {"limit": 50},
+            },
+        )
+        req_id += 1
+        logs_body = (logs.get("result") or {}).get("structuredContent") or {}
+        if (logs_body.get("error") or {}).get("code") != "E_UNVERIFIED":
+            errors.append(f"play.logs must stay E_UNVERIFIED: {logs_body}")
+        select = plug.mcp_call(
+            proc,
+            req_id,
+            "godot.editor",
+            {
+                "action": "select",
+                "params": {"scene": "res://fixtures/tree_1k.tscn", "node_path": "N0000"},
+            },
+        )
+        req_id += 1
+        select_body = (select.get("result") or {}).get("structuredContent") or {}
+        if (select_body.get("error") or {}).get("code") != "E_UNVERIFIED":
+            errors.append(f"editor.select must stay E_UNVERIFIED: {select_body}")
 
         mutate = plug.mcp_call(
             proc,
@@ -514,8 +725,8 @@ def main() -> int:
     print(
         "PASS: read adapters + doctor E2E + MCP resources; "
         f"LIVE_EDITOR={live_editor}; {live_note}; "
-        "1k paging proven; version skew is E_VERSION_SKEW; mutate still not applied; "
-        "R2-WP6 stays [ ]."
+        "1k paging on edited tree; version skew from planted files/--version; "
+        "mutate still not applied; R2-WP6 stays [ ]."
     )
     return 0
 

@@ -40,6 +40,10 @@ async function main(): Promise<void> {
     if (desc) {
       opts.desc = desc;
     }
+    const godotExe = argValue("--godot-exe");
+    if (godotExe) {
+      opts.godotExe = godotExe;
+    }
     const forcedGodot = argValue("--force-godot-version");
     if (forcedGodot) {
       opts.forceGodotVersion = forcedGodot;

@@ -54,7 +54,7 @@ func handle(command_id: String, method: String, action: String, params: Dictiona
 	if method == "godot.play" and action == "status":
 		return _play_status(command_id, params, post)
 	if method == "godot.play" and action == "logs":
-		return _ok(command_id, post, {"logs": [], "playing": EditorInterface.is_playing_scene()})
+		return _unverified(command_id, "play logs require the Play process log ring (R6)")
 	if method == "godot.tilemap" and action == "query":
 		return _tilemap_query(command_id, params, post)
 	if method == "godot.ui" and action == "accessibility":
@@ -382,7 +382,7 @@ func _editor_state(command_id: String, params: Dictionary, post: String) -> Dict
 		"selection": selected,
 		"playing": EditorInterface.is_playing_scene(),
 		"playing_scene": playing_scene,
-		"paused": false,
+		"paused": HHAgentPauseGate.last_paused,
 		"godot": _godot_string(),
 		"detail": str(params.get("detail", "short")),
 	}
@@ -406,28 +406,8 @@ func _selection_paths() -> Array:
 	return out
 
 
-func _editor_select(command_id: String, params: Dictionary, post: String) -> Dictionary:
-	var scene: String = str(params.get("scene", ""))
-	var node_path: String = str(params.get("node_path", ""))
-	var jail: Dictionary = _jail(command_id, scene)
-	if jail.get("ok", false) != true:
-		return jail
-	var node: Node = _find_node(scene, node_path)
-	if node == null:
-		return _unverified(command_id, "node %s not in %s" % [node_path, scene])
-	if node.owner == null and node != EditorInterface.get_edited_scene_root():
-		return _unverified(command_id, "cannot select a disk-instanced node; open the scene first")
-	var selection: EditorSelection = EditorInterface.get_selection()
-	selection.clear()
-	selection.add_node(node)
-	var paths: Array = _selection_paths()
-	var matched: bool = false
-	for item_v: Variant in paths:
-		if str(item_v).ends_with(node.name) or str(item_v).contains(node_path):
-			matched = true
-	if not matched:
-		return _unverified(command_id, "selection did not include %s" % node_path)
-	return _ok(command_id, post, {"scene": scene, "node_path": node_path, "selection": paths})
+func _editor_select(command_id: String, _params: Dictionary, _post: String) -> Dictionary:
+	return _unverified(command_id, "editor.select mutates EditorSelection; not a R2-WP6 read")
 
 
 func _scene_read(command_id: String, params: Dictionary, post: String) -> Dictionary:
@@ -449,6 +429,7 @@ func _scene_read(command_id: String, params: Dictionary, post: String) -> Dictio
 		"path": scene,
 		"root": str(walk.get("root", "")),
 		"root_class": str(walk.get("root_class", "")),
+		"source": str(walk.get("source", "")),
 		"tree": page,
 		"detail": str(params.get("detail", "short")),
 	}
@@ -659,7 +640,7 @@ func _script_diagnostics(command_id: String, params: Dictionary, post: String) -
 		return jail
 	if not FileAccess.file_exists(res_path):
 		return _unverified(command_id, "script missing")
-	return _ok(command_id, post, {"path": res_path, "diagnostics": []})
+	return _unverified(command_id, "script diagnostics API is not proven on this EditorInterface")
 
 
 func _script_open_at(command_id: String, params: Dictionary, post: String) -> Dictionary:
@@ -772,6 +753,7 @@ func _walk_scene(scene: String) -> Dictionary:
 		"ok": true,
 		"root": root.name,
 		"root_class": root.get_class(),
+		"source": "edited" if hold.get("borrowed", false) == true else "instantiate",
 		"nodes": nodes,
 	}
 	if hold.get("borrowed", false) != true:

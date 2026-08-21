@@ -399,13 +399,31 @@ async function readMcpResource(
     return [resourceBody(uri, capabilityMatrix(), secret)];
   }
   if (uri === "project://summary") {
-    const inspect = trySidecarRead({
-      actionId: "project.inspect",
-      commandId: newUlid(),
-      params: { detail: "short" },
-      projectRoot: ctx.descriptor().project_root,
-    });
-    const after = inspect?.after;
+    let after: Record<string, unknown> | undefined;
+    if (ctx.plugin?.connected()) {
+      const live = await ctx.plugin.dispatch(
+        {
+          protocol: PROTOCOL,
+          command_id: newUlid(),
+          method: "godot.project",
+          action: "inspect",
+          params: { detail: "short" },
+        },
+        5_000,
+      );
+      if (live.ok && live.after) {
+        after = live.after;
+      }
+    }
+    if (!after) {
+      const inspect = trySidecarRead({
+        actionId: "project.inspect",
+        commandId: newUlid(),
+        params: { detail: "short" },
+        projectRoot: ctx.descriptor().project_root,
+      });
+      after = inspect?.after;
+    }
     return [
       resourceBody(
         uri,

@@ -80,7 +80,11 @@ export function capabilityMatrix(): Record<string, unknown> {
       policy: def.required_policy,
       postcondition: def.postcondition,
       adapter:
-        def.side_effect === "read" || def.side_effect === "view" ? "read-or-view" : "not-dispatched",
+        def.id === "editor.select"
+          ? "view-state-mutate-not-wp6"
+          : def.side_effect === "read" || def.side_effect === "view"
+            ? "read-or-view"
+            : "not-dispatched",
     })),
   };
 }

@@ -45,9 +45,118 @@ export interface DoctorOptions {
   desc?: SessionDescriptor;
   home?: string;
   projectRoot?: string;
+  godotExe?: string;
   forceGodotVersion?: string;
   forceProtocol?: string;
   forceSchema?: string;
+}
+
+const VENDOR_POLICY_NEEDLES = ["satellite" + "oflove", "MCPGame" + "Bridge", "godot" + "_mcp"];
+
+export function tokenAbsentFromBlob(blob: string, token: string): boolean {
+  return !token || !blob.includes(token);
+}
+
+function readTextIfFile(abs: string): string {
+  try {
+    if (fs.existsSync(abs) && fs.statSync(abs).isFile()) {
+      return fs.readFileSync(abs, "utf8").trim();
+    }
+  } catch {
+    /* ignore */
+  }
+  return "";
+}
+
+function schemaFromProject(projectRoot: string | undefined, repo: string | undefined): string {
+  if (projectRoot) {
+    const planted = readTextIfFile(path.join(projectRoot, ".hh-agent", "schema-version"));
+    if (planted) {
+      return planted;
+    }
+    const actions = path.join(projectRoot, "addons", "hh_agent", "core", "actions.json");
+    const raw = readTextIfFile(actions);
+    if (raw) {
+      try {
+        const parsed: unknown = JSON.parse(raw);
+        if (parsed && typeof parsed === "object" && "registry_version" in parsed) {
+          const ver = (parsed as { registry_version?: unknown }).registry_version;
+          if (typeof ver === "string" && ver) {
+            return ver;
+          }
+        }
+      } catch {
+        /* fall through */
+      }
+    }
+  }
+  if (repo) {
+    const generated = path.join(repo, "bridge", "generated", "plugin-validator.json");
+    const raw = readTextIfFile(generated);
+    if (raw) {
+      try {
+        const parsed: unknown = JSON.parse(raw);
+        if (parsed && typeof parsed === "object" && "registry_version" in parsed) {
+          const ver = (parsed as { registry_version?: unknown }).registry_version;
+          if (typeof ver === "string" && ver) {
+            return ver;
+          }
+        }
+      } catch {
+        /* fall through */
+      }
+    }
+  }
+  return REGISTRY_VERSION;
+}
+
+function protocolFromProject(projectRoot: string | undefined, desc?: SessionDescriptor): string {
+  if (projectRoot) {
+    const planted = readTextIfFile(path.join(projectRoot, ".hh-agent", "protocol"));
+    if (planted) {
+      return planted;
+    }
+    const actions = path.join(projectRoot, "addons", "hh_agent", "core", "actions.json");
+    const raw = readTextIfFile(actions);
+    if (raw) {
+      try {
+        const parsed: unknown = JSON.parse(raw);
+        if (parsed && typeof parsed === "object" && "protocol" in parsed) {
+          const proto = (parsed as { protocol?: unknown }).protocol;
+          if (typeof proto === "string" && proto) {
+            return proto;
+          }
+        }
+      } catch {
+        /* fall through */
+      }
+    }
+  }
+  return desc?.protocol ?? PROTOCOL;
+}
+
+function policyOk(projectRoot: string | undefined): { ok: boolean; detail: string } {
+  if (!projectRoot) {
+    return { ok: false, detail: "no project root; OWNER_AUTOPILOT cannot be proven" };
+  }
+  const godot = path.join(projectRoot, "project.godot");
+  const text = readTextIfFile(godot);
+  for (const needle of VENDOR_POLICY_NEEDLES) {
+    if (text.includes(needle)) {
+      return { ok: false, detail: `vendor MCP needle ${needle} in project.godot` };
+    }
+  }
+  const addons = path.join(projectRoot, "addons");
+  if (fs.existsSync(addons)) {
+    const names = fs.readdirSync(addons);
+    for (const name of names) {
+      const lower = name.toLowerCase();
+      if (VENDOR_POLICY_NEEDLES.some((needle) => lower.includes(needle.toLowerCase()))) {
+        return { ok: false, detail: `vendor addon ${name}` };
+      }
+    }
+  }
+  return { ok: true, detail: "OWNER_AUTOPILOT is project-scoped; no vendor MCP in project" };
 }
 
 function add(
@@ -137,8 +246,9 @@ export function runDoctor(opts: DoctorOptions = {}): DoctorReport {
   let view: Record<string, unknown> | undefined;
   let skew: { code: string; message: string; path: string } | undefined;
 
-  const protocolSeen = opts.forceProtocol ?? opts.desc?.protocol ?? PROTOCOL;
-  const schemaSeen = opts.forceSchema ?? REGISTRY_VERSION;
+  const repo = opts.projectRoot ? findRepoRoot(opts.projectRoot) : undefined;
+  const protocolSeen = opts.forceProtocol ?? protocolFromProject(opts.projectRoot, opts.desc);
+  const schemaSeen = opts.forceSchema ?? schemaFromProject(opts.projectRoot, repo);
 
   if (protocolSeen !== PROTOCOL) {
     skew = typedError(
@@ -179,7 +289,7 @@ export function runDoctor(opts: DoctorOptions = {}): DoctorReport {
     add(details, checks, "loopback", true, LOOPBACK_HOST);
   }
 
-  const consoleExe = pinnedConsolePath(home);
+  const consoleExe = opts.godotExe ?? pinnedConsolePath(home);
   const binaryPresent = fs.existsSync(consoleExe);
   add(
     details,
@@ -256,15 +366,30 @@ export function runDoctor(opts: DoctorOptions = {}): DoctorReport {
     );
     const git = runGit(projectRoot, ["rev-parse", "--is-inside-work-tree"]);
     add(details, checks, "git", git.ok && git.text === "true", git.ok ? "git work tree" : git.text || "git missing");
-    add(details, checks, "policy", true, "OWNER_AUTOPILOT is project-scoped; Pause + jail required");
+    const policy = policyOk(projectRoot);
+    add(details, checks, "policy", policy.ok, policy.detail);
   } else {
     add(details, checks, "plugin", false, "no project root");
     add(details, checks, "bridge", false, "no project root");
     add(details, checks, "git", false, "no project root");
-    add(details, checks, "policy", true, "OWNER_AUTOPILOT is project-scoped; Pause + jail required");
+    const policy = policyOk(undefined);
+    add(details, checks, "policy", policy.ok, policy.detail);
   }
 
-  add(details, checks, "token_redacted", true, "token_in_report=false");
+  const preview = JSON.stringify({
+    checks,
+    check_details: details,
+    session: view,
+  });
+  const token = opts.desc?.token ?? "";
+  const redacted = tokenAbsentFromBlob(preview, token);
+  add(
+    details,
+    checks,
+    "token_redacted",
+    redacted,
+    redacted ? "token absent from doctor body" : "session token leaked into doctor body",
+  );
 
   const error = firstError(details, skew);
   const ok = error === undefined && details.every((item) => item.ok);

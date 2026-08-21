@@ -60,6 +60,7 @@ func _enter_tree() -> void:
 	_try_connect()
 	_refresh_dock()
 	print("%s event=enter" % PLUGIN_PRINT)
+	_maybe_open_read_fixture()
 	_maybe_run_selftest()
 
 
@@ -173,6 +174,14 @@ func _on_readback(command_id: String) -> Dictionary:
 			"postcondition": {"verified": false, "checks": []},
 		}
 	return _postcondition.readback(command_id)
+
+
+func _maybe_open_read_fixture() -> void:
+	var scene_path: String = OS.get_environment("HH_READ_OPEN_SCENE")
+	if scene_path.is_empty():
+		return
+	EditorInterface.open_scene_from_path(scene_path)
+	print("%s event=open_read_fixture path=%s" % [PLUGIN_PRINT, scene_path])
 
 
 func _maybe_run_selftest() -> void:
