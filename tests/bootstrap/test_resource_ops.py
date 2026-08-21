@@ -121,6 +121,24 @@ def src_scan_errors() -> list[str]:
             errors.append("failed create/unique must delete the new dest file")
         if "get_open_scenes" not in text:
             errors.append("shared owner count must include EditorInterface.get_open_scenes")
+        if "ur.undo()" not in text:
+            errors.append("unique+assign fail must history-undo the assign before dest cleanup")
+        edit_entry = re.search(r"func _edit\b.*?func _unique_then_edit\b", text, re.S)
+        if edit_entry is None:
+            errors.append("missing _edit")
+        elif "_walk_property" not in edit_entry.group(0):
+            errors.append("_edit must walk nested externals before the shared/unique gate")
+        uniq_fn = re.search(r"func _unique_then_edit\b.*?func _gated_edit_resource\b", text, re.S)
+        if uniq_fn is None:
+            uniq_fn = re.search(r"func _unique_then_edit\b.*?func _edit_resource\b", text, re.S)
+        if uniq_fn is None:
+            errors.append("missing _unique_then_edit")
+        else:
+            uniq_body = uniq_fn.group(0)
+            if 'after["disk_hash"]' in uniq_body or "after['disk_hash']" in uniq_body:
+                errors.append("unique edit must not stamp dest disk_hash from the pre-edit clone")
+            if "_rollback_unique_assign" not in uniq_body and "ur.undo()" not in uniq_body:
+                errors.append("unique+assign fail must undo assign then cleanup dest")
         edit_fn = re.search(r"func _edit_resource\b.*?func _save\b", text, re.S)
         if edit_fn is None:
             errors.append("missing _edit_resource")
@@ -128,6 +146,11 @@ def src_scan_errors() -> list[str]:
             body = edit_fn.group(0)
             if "_persist_external" in body or "ResourceSaver.save" in body:
                 errors.append("_edit_resource must not persist; disk write is resource.save")
+        disk_fn = re.search(r"func _count_disk_scene_owners\b.*?func _cleanup_new_external\b", text, re.S)
+        if disk_fn is None:
+            errors.append("missing _count_disk_scene_owners")
+        elif ".tres" not in disk_fn.group(0) or ".res" not in disk_fn.group(0):
+            errors.append("disk owner scan must include .tres/.res referencers, not only .tscn")
         if re.search(r"\bcallv\b", text) or "Object.call" in text:
             errors.append("resource adapter has a generic invoke path")
     if reads.is_file():
@@ -146,12 +169,28 @@ def src_scan_errors() -> list[str]:
                 errors.append("resource.uid must FileAccess-check the mapped path")
     if life_ts.is_file():
         life_text = life_ts.read_text(encoding="utf-8")
-        if "params.unique === true" not in life_text:
-            errors.append("mutationNeedsDiskHash must treat unique dest as the durable write")
+        needs_fn = re.search(
+            r"export function mutationNeedsDiskHash\b.*?^export function ",
+            life_text,
+            re.S | re.M,
+        )
+        if needs_fn is None:
+            errors.append("missing mutationNeedsDiskHash")
+        elif "params.unique === true" in needs_fn.group(0):
+            errors.append(
+                "mutationNeedsDiskHash must not durable-ACK unique dest "
+                "(file copy + RAM edit; resource.save persists the field)"
+            )
         if not re.search(r'actionId === "resource.edit"', life_text):
             errors.append("durableResPath must handle resource.edit dest after.path")
     if '"unique": True' not in self_text:
         errors.append("official test must send resource.edit unique=true + dest")
+    if '"path": tex_unique' not in self_text:
+        errors.append("official test must resource.save the unique dest after ACK")
+    if "assign_property" not in self_text:
+        errors.append("official test must unique=true + assign_property then fail and rollback")
+    if "next_pass/" not in self_text:
+        errors.append("official test must edit a nested external (next_pass/...) without flags")
     if not signal.is_file():
         errors.append("missing signal adapter")
     else:
@@ -236,6 +275,22 @@ def variant_xy(body: dict) -> tuple[float, float] | None:
     return float(val.get("x") or 0), float(val.get("y") or 0)
 
 
+def tres_has_vec2(text: str, x: float, y: float) -> bool:
+    xs = {str(x), f"{x:g}"}
+    ys = {str(y), f"{y:g}"}
+    if float(x) == int(x):
+        xs.add(str(int(x)))
+        xs.add(f"{int(x)}.0")
+    if float(y) == int(y):
+        ys.add(str(int(y)))
+        ys.add(f"{int(y)}.0")
+    for xv in xs:
+        for yv in ys:
+            if f"Vector2({xv}, {yv})" in text or f"Vector2({xv},{yv})" in text:
+                return True
+    return False
+
+
 def live_errors(exe: Path) -> list[str]:
     errors: list[str] = []
     cleanup_temp()
@@ -251,6 +306,7 @@ def live_errors(exe: Path) -> list[str]:
     tex = "res://r3w4/tex.tres"
     tex2 = "res://r3w4/tex2.tres"
     tex_unique = "res://r3w4/tex_unique.tres"
+    tex_orphan = "res://r3w4/tex_orphan.tres"
     undo_tex = "res://r3w4/undo_tex.tres"
     ghost = "res://r3w4/ghost.tres"
     other = "res://r3w4/other.tscn"
@@ -258,10 +314,17 @@ def live_errors(exe: Path) -> list[str]:
     box2 = "res://r3w4/box2.tres"
     mat_a = "res://r3w4/mat_a.tres"
     mat_b = "res://r3w4/mat_b.tres"
+    nest_inner = "res://r3w4/nest_inner.tres"
+    nest_outer = "res://r3w4/nest_outer.tres"
+    nest_outer2 = "res://r3w4/nest_outer2.tres"
+    shared_tex = "res://r3w4/shared_tex.tres"
+    atlas_a = "res://r3w4/atlas_a.tres"
+    atlas_b = "res://r3w4/atlas_b.tres"
     tiles_abs = life.res_to_abs(tiles)
     tex_abs = life.res_to_abs(tex)
     tex2_abs = life.res_to_abs(tex2)
     tex_unique_abs = life.res_to_abs(tex_unique)
+    tex_orphan_abs = life.res_to_abs(tex_orphan)
     undo_abs = life.res_to_abs(undo_tex)
     ghost_abs = life.res_to_abs(ghost)
     box2_abs = life.res_to_abs(box2)
@@ -300,6 +363,7 @@ def live_errors(exe: Path) -> list[str]:
             ("SpriteB", "Sprite2D"),
             ("Mark", "Sprite2D"),
             ("UndoSpr", "Sprite2D"),
+            ("PeekSpr", "Sprite2D"),
             ("Clock", "Timer"),
         ):
             req_id, added = tool_call(
@@ -453,6 +517,38 @@ def live_errors(exe: Path) -> list[str]:
         if not ack_ok(back_main, errors, "scene.open main after other"):
             return errors
 
+        req_id, unique_orphan = tool_call(
+            proc,
+            req_id,
+            "godot.resource",
+            "edit",
+            {
+                "path": tex,
+                "unique": True,
+                "dest": tex_orphan,
+                "scene": scene,
+                "node_path": "Sprite",
+                "assign_property": "texture",
+                "property": "no_such_leaf",
+                "value": variant("Vector2", {"x": 3, "y": 4}),
+            },
+        )
+        expect_code(
+            unique_orphan,
+            ("E_UNVERIFIED", "E_MISSING_REQUIRED", "E_INVALID_TYPE"),
+            errors,
+            "unique=true assign_property then missing leaf",
+        )
+        req_id, still_tex = tool_call(
+            proc, req_id, "godot.property", "get", {"scene": scene, "node_path": "Sprite", "property": "texture"}
+        )
+        still_val = ((still_tex.get("after") or {}).get("value") or {}).get("value") or {}
+        still_path = str(still_val.get("path") or "") if isinstance(still_val, dict) else ""
+        if tex not in still_path:
+            errors.append(f"unique+assign fail must keep original node.texture: {still_tex}")
+        if tex_orphan_abs.is_file():
+            errors.append("unique+assign fail must not leave dest on disk while/after rollback")
+
         tex_hash_before_unique = sha256_file(tex_abs)
         req_id, size_before_unique = tool_call(
             proc, req_id, "godot.property", "get", {"scene": scene, "node_path": "Sprite", "property": "texture/size"}
@@ -487,6 +583,162 @@ def live_errors(exe: Path) -> list[str]:
             errors.append(f"unique=true mutated the original in-memory field: {size_after_unique}")
         if after_xy is not None and before_xy is not None and after_xy != before_xy:
             errors.append(f"unique=true changed original Sprite size {before_xy} -> {after_xy}")
+        dest_before_save = tex_unique_abs.read_text(encoding="utf-8") if tex_unique_abs.is_file() else ""
+        if tres_has_vec2(dest_before_save, 99, 88):
+            errors.append("unique=true must not persist the dest field before resource.save")
+        req_id, saved_unique = tool_call(proc, req_id, "godot.resource", "save", {"path": tex_unique})
+        if not ack_ok(saved_unique, errors, "resource.save unique dest"):
+            return errors
+        req_id, peek_assign = tool_call(
+            proc,
+            req_id,
+            "godot.resource",
+            "assign",
+            {"scene": scene, "node_path": "PeekSpr", "property": "texture", "resource": tex_unique},
+        )
+        if ack_ok(peek_assign, errors, "assign unique dest after save", undo=True):
+            req_id, peek_size = tool_call(
+                proc,
+                req_id,
+                "godot.property",
+                "get",
+                {"scene": scene, "node_path": "PeekSpr", "property": "texture/size"},
+            )
+            if variant_xy(peek_size) != (99.0, 88.0):
+                errors.append(f"resource.save dest must persist the unique edit field: {peek_size}")
+
+        req_id, shared_tex_body = tool_call(
+            proc, req_id, "godot.resource", "create", {"path": shared_tex, "class_name": "PlaceholderTexture2D"}
+        )
+        req_id, atlas_a_body = tool_call(
+            proc, req_id, "godot.resource", "create", {"path": atlas_a, "class_name": "AtlasTexture"}
+        )
+        req_id, atlas_b_body = tool_call(
+            proc, req_id, "godot.resource", "create", {"path": atlas_b, "class_name": "AtlasTexture"}
+        )
+        if (
+            ack_ok(shared_tex_body, errors, "create shared_tex")
+            and ack_ok(atlas_a_body, errors, "create atlas_a")
+            and ack_ok(atlas_b_body, errors, "create atlas_b")
+        ):
+            req_id, link_atlas_a = tool_call(
+                proc,
+                req_id,
+                "godot.resource",
+                "edit",
+                {"path": atlas_a, "property": "atlas", "value": variant("Resource", {"path": shared_tex})},
+            )
+            req_id, link_atlas_b = tool_call(
+                proc,
+                req_id,
+                "godot.resource",
+                "edit",
+                {"path": atlas_b, "property": "atlas", "value": variant("Resource", {"path": shared_tex})},
+            )
+            if ack_ok(link_atlas_a, errors, "edit atlas_a.atlas", undo=True) and ack_ok(
+                link_atlas_b, errors, "edit atlas_b.atlas", undo=True
+            ):
+                req_id, saved_atlas_a = tool_call(proc, req_id, "godot.resource", "save", {"path": atlas_a})
+                req_id, saved_atlas_b = tool_call(proc, req_id, "godot.resource", "save", {"path": atlas_b})
+                if ack_ok(saved_atlas_a, errors, "resource.save atlas_a") and ack_ok(
+                    saved_atlas_b, errors, "resource.save atlas_b"
+                ):
+                    req_id, tex_shared_edit = tool_call(
+                        proc,
+                        req_id,
+                        "godot.resource",
+                        "edit",
+                        {"path": shared_tex, "property": "size", "value": variant("Vector2", {"x": 5, "y": 6})},
+                    )
+                    expect_code(
+                        tex_shared_edit,
+                        ("E_CONFLICT",),
+                        errors,
+                        "two .tres owners of one texture without flags",
+                    )
+                    req_id, atlas_nested = tool_call(
+                        proc,
+                        req_id,
+                        "godot.resource",
+                        "edit",
+                        {
+                            "path": atlas_a,
+                            "property": "atlas/size",
+                            "value": variant("Vector2", {"x": 5, "y": 6}),
+                        },
+                    )
+                    expect_code(
+                        atlas_nested,
+                        ("E_CONFLICT",),
+                        errors,
+                        "nested external atlas/ edit without flags",
+                    )
+
+        req_id, nest_inner_body = tool_call(
+            proc, req_id, "godot.resource", "create", {"path": nest_inner, "class_name": "ShaderMaterial"}
+        )
+        req_id, nest_outer_body = tool_call(
+            proc, req_id, "godot.resource", "create", {"path": nest_outer, "class_name": "ShaderMaterial"}
+        )
+        req_id, nest_outer2_body = tool_call(
+            proc, req_id, "godot.resource", "create", {"path": nest_outer2, "class_name": "ShaderMaterial"}
+        )
+        if (
+            ack_ok(nest_inner_body, errors, "create nest_inner")
+            and ack_ok(nest_outer_body, errors, "create nest_outer")
+            and ack_ok(nest_outer2_body, errors, "create nest_outer2")
+        ):
+            req_id, link_outer = tool_call(
+                proc,
+                req_id,
+                "godot.resource",
+                "edit",
+                {"path": nest_outer, "property": "next_pass", "value": variant("Resource", {"path": nest_inner})},
+            )
+            req_id, link_outer2 = tool_call(
+                proc,
+                req_id,
+                "godot.resource",
+                "edit",
+                {"path": nest_outer2, "property": "next_pass", "value": variant("Resource", {"path": nest_inner})},
+            )
+            if ack_ok(link_outer, errors, "edit nest_outer next_pass", undo=True) and ack_ok(
+                link_outer2, errors, "edit nest_outer2 next_pass", undo=True
+            ):
+                req_id, inner_shared = tool_call(
+                    proc,
+                    req_id,
+                    "godot.resource",
+                    "edit",
+                    {"path": nest_inner, "property": "render_priority", "value": variant("int", 4)},
+                )
+                expect_code(
+                    inner_shared,
+                    ("E_CONFLICT",),
+                    errors,
+                    "two .tres owners of inner without flags",
+                )
+                req_id, nested_shared = tool_call(
+                    proc,
+                    req_id,
+                    "godot.resource",
+                    "edit",
+                    {
+                        "path": nest_outer,
+                        "property": "next_pass/render_priority",
+                        "value": variant("int", 5),
+                    },
+                )
+                expect_code(
+                    nested_shared,
+                    ("E_CONFLICT",),
+                    errors,
+                    "nested external next_pass/ edit without flags",
+                )
+                req_id, saved_outer = tool_call(proc, req_id, "godot.resource", "save", {"path": nest_outer})
+                ack_ok(saved_outer, errors, "resource.save nest_outer")
+                req_id, saved_outer2 = tool_call(proc, req_id, "godot.resource", "save", {"path": nest_outer2})
+                ack_ok(saved_outer2, errors, "resource.save nest_outer2")
 
         req_id, undo_created = tool_call(
             proc, req_id, "godot.resource", "create", {"path": undo_tex, "class_name": "PlaceholderTexture2D"}
@@ -808,6 +1060,31 @@ def live_errors(exe: Path) -> list[str]:
         )
         if variant_xy(reopen_undo) != (22.0, 23.0):
             errors.append(f"edit+save+reopen did not keep new field: {reopen_undo}")
+        req_id, unique_spr = tool_call(
+            proc,
+            req_id,
+            "godot.node",
+            "add",
+            {"scene": scene, "parent": ".", "class_name": "Sprite2D", "name": "UniqueSpr"},
+        )
+        if ack_ok(unique_spr, errors, "node.add UniqueSpr after reopen", undo=True):
+            req_id, dest_assign = tool_call(
+                proc,
+                req_id,
+                "godot.resource",
+                "assign",
+                {"scene": scene, "node_path": "UniqueSpr", "property": "texture", "resource": tex_unique},
+            )
+            if ack_ok(dest_assign, errors, "assign unique dest after reopen", undo=True):
+                req_id, dest_reopen = tool_call(
+                    proc,
+                    req_id,
+                    "godot.property",
+                    "get",
+                    {"scene": scene, "node_path": "UniqueSpr", "property": "texture/size"},
+                )
+                if variant_xy(dest_reopen) != (99.0, 88.0):
+                    errors.append(f"reopen dest field != unique edit: {dest_reopen}")
         req_id, reopen_insp = tool_call(
             proc, req_id, "godot.signal", "inspect", {"scene": scene, "node_path": "Clock", "signal": "timeout"}
         )

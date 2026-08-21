@@ -969,13 +969,16 @@ async function applyMutateOnce(
       saveState(ledger, row, "failed");
       return diskFail;
     }
-    if (runtime.policy && mutationNeedsDiskHash(classified.actionId, fields.params)) {
+    if (runtime.policy) {
       const rawPath = durableResPath(
         classified.actionId,
         fields.params,
         isRecord(result.after) ? result.after : undefined,
       );
-      if (rawPath) {
+      const shouldNote =
+        mutationNeedsDiskHash(classified.actionId, fields.params) ||
+        (classified.actionId === "resource.edit" && fields.params.unique === true);
+      if (shouldNote && rawPath) {
         const jailed = jailProjectPath(projectRoot, rawPath, { forWrite: true });
         if (jailed.ok) {
           runtime.policy.leases.noteWritten(runtime.policy.writerId, jailed.rel, jailed.abs);

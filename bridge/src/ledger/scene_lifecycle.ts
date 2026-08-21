@@ -100,9 +100,7 @@ export function mutationNeedsDiskHash(actionId: string, params: Record<string, u
   if (actionId === "resource.create" || actionId === "resource.save") {
     return typeof params.path === "string" && isExternalResPath(params.path);
   }
-  if (actionId === "resource.edit") {
-    return params.unique === true;
-  }
+  // unique=true is dest file-copy + RAM edit; the field is durable only after resource.save.
   if (actionId === "resource.duplicate") {
     return typeof params.dest === "string" && isExternalResPath(params.dest);
   }

@@ -5208,6 +5208,12 @@
             "minLength": 6,
             "maxLength": 256,
             "pattern": "^res://[^\\s]+$"
+          },
+          "assign_property": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*(?:[/:][A-Za-z_][A-Za-z0-9_]*)*$"
           }
         }
       },

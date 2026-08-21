@@ -630,6 +630,7 @@ const SPECS: Record<string, ActionSpec> = {
       scene: RES_PATH,
       node_path: NODE_PATH,
       dest: RES_PATH,
+      assign_property: PROP_PATH,
     }),
     {
       path: "res://res/tile_set.tres",

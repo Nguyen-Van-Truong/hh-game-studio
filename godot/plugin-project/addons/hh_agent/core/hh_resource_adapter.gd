@@ -307,17 +307,20 @@ func _edit(command_id: String, params: Dictionary, precondition: Dictionary, pos
 	var unique_flag: bool = params.get("unique", false) == true
 	if shared_flag and unique_flag:
 		return _errors.fail(command_id, HHAgentErrors.E_CONFLICT, "shared and unique cannot both be true", "params.shared")
-	var owners: int = _owner_count(res)
-	if owners > 1 and not shared_flag and not unique_flag:
+	if unique_flag:
+		return _unique_then_edit(command_id, params, precondition, post, res)
+	var walked: Dictionary = _walk_property(command_id, res, str(params.get("property", "")), res_path, true)
+	if walked.get("ok", false) != true:
+		return walked
+	var gated: Resource = _gated_edit_resource(res, walked)
+	var owners: int = _owner_count(gated)
+	if owners > 1 and not shared_flag:
 		return _errors.fail(
 			command_id,
 			HHAgentErrors.E_CONFLICT,
 			"resource is shared by %d owners; pass shared=true or unique=true" % owners,
-			"params.path",
+			"params.path" if gated == res else "params.property",
 		)
-	if unique_flag:
-		var uniqued: Dictionary = _unique_then_edit(command_id, params, precondition, post, res)
-		return uniqued
 	return _edit_resource(command_id, params, post, res, res_path, owners, shared_flag)
 
 
@@ -347,36 +350,129 @@ func _unique_then_edit(
 	var persisted: Dictionary = _persist_external(command_id, copy, dest)
 	if persisted.get("ok", false) != true:
 		return persisted
+	var dest_res: Resource = _load_res(dest)
+	if dest_res == null:
+		dest_res = copy
 	var scene_path: String = str(params.get("scene", ""))
 	var node_path: String = str(params.get("node_path", ""))
 	var assign_prop: String = str(params.get("assign_property", ""))
+	var assigned_ok: bool = false
 	if scene_path.is_empty() == false and node_path.is_empty() == false:
 		if assign_prop.is_empty():
 			assign_prop = "texture"
 		var assigned: Dictionary = _assign_loaded(
-			command_id, scene_path, node_path, assign_prop, copy, precondition, "resource_property_path_equals", false
+			command_id, scene_path, node_path, assign_prop, dest_res, precondition, "resource_property_path_equals", false
 		)
 		if assigned.get("ok", false) != true:
 			_cleanup_new_external(dest)
 			return assigned
+		assigned_ok = true
 	var edit_params: Dictionary = params.duplicate()
 	edit_params["path"] = dest
-	var edited: Dictionary = _edit_resource(command_id, edit_params, post, copy, dest, 1, false)
+	var edited: Dictionary = _edit_resource(command_id, edit_params, post, dest_res, dest, 1, false)
 	if edited.get("ok", false) != true:
-		_cleanup_new_external(dest)
+		if assigned_ok:
+			_rollback_unique_assign(scene_path, node_path, assign_prop, dest, dest_res)
+		else:
+			_cleanup_new_external(dest)
 		return edited
 	var after_v: Variant = edited.get("after", {})
 	if after_v is Dictionary:
 		var after: Dictionary = after_v
 		after["path"] = dest
-		after["disk_hash"] = str(persisted.get("disk_hash", ""))
 		after["uid"] = str(persisted.get("uid", ""))
 		after["unique"] = true
 		after["source_path"] = src_path
 	else:
-		_cleanup_new_external(dest)
+		if assigned_ok:
+			_rollback_unique_assign(scene_path, node_path, assign_prop, dest, dest_res)
+		else:
+			_cleanup_new_external(dest)
 		return _unverified(command_id, "unique edit missing after")
 	return edited
+
+
+func _gated_edit_resource(host: Resource, walked: Dictionary) -> Resource:
+	var target: Object = walked.get("target") as Object
+	if target == null or not (target is Resource):
+		return host
+	var leaf_res: Resource = target as Resource
+	var leaf_path: String = leaf_res.resource_path
+	if leaf_path.is_empty() or leaf_path.contains("::"):
+		return host
+	if not _is_external_res(leaf_path):
+		return host
+	if host != null and leaf_path.simplify_path() == host.resource_path.simplify_path():
+		return host
+	return leaf_res
+
+
+func _rollback_unique_assign(
+	scene_path: String,
+	node_path: String,
+	assign_prop: String,
+	dest: String,
+	copy: Resource,
+) -> void:
+	_undo_last_scene(scene_path)
+	if _assignment_points_at(scene_path, node_path, assign_prop, dest, copy):
+		_undo_last_scene(scene_path)
+	if _assignment_points_at(scene_path, node_path, assign_prop, dest, copy):
+		return
+	_cleanup_new_external(dest)
+
+
+func _undo_last_scene(scene_path: String) -> void:
+	var edited: Node = EditorInterface.get_edited_scene_root()
+	if edited == null:
+		return
+	if not scene_path.is_empty() and edited.scene_file_path != scene_path:
+		EditorInterface.open_scene_from_path(scene_path)
+		edited = EditorInterface.get_edited_scene_root()
+	if edited == null:
+		return
+	var mgr: EditorUndoRedoManager = _mgr()
+	if mgr == null:
+		return
+	var hid: int = _meta.history_id(edited)
+	if hid == 0 or not mgr.has_method("get_history_undo_redo"):
+		return
+	var ur: UndoRedo = mgr.get_history_undo_redo(hid)
+	if ur != null and ur.has_undo():
+		ur.undo()
+
+
+func _assignment_points_at(
+	scene_path: String,
+	node_path: String,
+	assign_prop: String,
+	dest: String,
+	copy: Resource,
+) -> bool:
+	var edited: Node = EditorInterface.get_edited_scene_root()
+	if edited == null:
+		return false
+	if not scene_path.is_empty() and edited.scene_file_path != scene_path:
+		return false
+	var node: Node = _resolve(edited, node_path)
+	if node == null:
+		return false
+	var walked: Dictionary = _walk_property("rollback", node, assign_prop, edited.scene_file_path, true)
+	if walked.get("ok", false) != true:
+		return false
+	var target: Object = walked.get("target") as Object
+	var leaf: String = str(walked.get("leaf", ""))
+	if target == null or leaf.is_empty():
+		return false
+	var val: Variant = target.get(leaf)
+	if not (val is Resource):
+		return false
+	var other: Resource = val as Resource
+	if copy != null and other == copy:
+		return true
+	if dest.is_empty() or other.resource_path.is_empty():
+		return false
+	return other.resource_path.simplify_path() == dest.simplify_path()
 
 
 func _edit_resource(
@@ -801,13 +897,14 @@ func _owner_count(res: Resource) -> int:
 
 func _count_in_tree(root: Node, res: Resource) -> int:
 	var n: int = 0
+	var walk_seen: Dictionary = {}
 	var stack: Array = [root]
 	while not stack.is_empty():
 		var node_v: Variant = stack.pop_back()
 		if not (node_v is Node):
 			continue
 		var node: Node = node_v
-		n += _count_on_object(node, res)
+		n += _count_on_object(node, res, walk_seen)
 		var i: int = 0
 		while i < node.get_child_count():
 			stack.append(node.get_child(i))
@@ -815,15 +912,18 @@ func _count_in_tree(root: Node, res: Resource) -> int:
 	return n
 
 
-func _count_on_object(obj: Object, res: Resource) -> int:
+func _count_on_object(obj: Object, res: Resource, walk_seen: Dictionary) -> int:
+	if obj == null or res == null:
+		return 0
+	var key: int = obj.get_instance_id()
+	if walk_seen.has(key):
+		return 0
+	walk_seen[key] = true
 	var n: int = 0
 	for item_v: Variant in obj.get_property_list():
 		if not (item_v is Dictionary):
 			continue
 		var info: Dictionary = item_v
-		var usage: int = int(info.get("usage", 0))
-		if (usage & PROPERTY_USAGE_STORAGE) == 0:
-			continue
 		if int(info.get("type", 0)) != TYPE_OBJECT:
 			continue
 		var val: Variant = obj.get(str(info.get("name", "")))
@@ -833,6 +933,8 @@ func _count_on_object(obj: Object, res: Resource) -> int:
 				n += 1
 			elif not res.resource_path.is_empty() and other.resource_path == res.resource_path:
 				n += 1
+			else:
+				n += _count_on_object(other, res, walk_seen)
 	return n
 
 
@@ -875,7 +977,10 @@ func _file_refs(file_path: String, res_path: String, uid_text: String) -> bool:
 
 
 func _collect_files(dir_path: String, out: PackedStringArray) -> void:
-	var da: DirAccess = DirAccess.open(dir_path)
+	var abs_dir: String = ProjectSettings.globalize_path(dir_path)
+	var da: DirAccess = DirAccess.open(abs_dir)
+	if da == null:
+		da = DirAccess.open(dir_path)
 	if da == null:
 		return
 	da.list_dir_begin()
@@ -924,12 +1029,27 @@ func _count_disk_scene_owners(res_path: String, seen: Dictionary) -> int:
 	var n: int = 0
 	var files: PackedStringArray = PackedStringArray()
 	_collect_files("res://", files)
+	var uid_text: String = _uid_of(res_path)
+	var target: Resource = _load_res(res_path)
 	for item: String in files:
 		if seen.has(item):
 			continue
-		if not item.ends_with(".tscn") and not item.ends_with(".scn"):
+		if item == res_path or item == res_path + ".uid" or item == res_path + ".import":
 			continue
-		if _scene_file_refs_path(item, res_path):
+		if (
+			not item.ends_with(".tscn")
+			and not item.ends_with(".scn")
+			and not item.ends_with(".tres")
+			and not item.ends_with(".res")
+		):
+			continue
+		var hit: bool = _file_refs(item, res_path, uid_text)
+		if not hit and target != null and (item.ends_with(".tres") or item.ends_with(".res")):
+			var loaded: Resource = _load_res(item)
+			if loaded != null:
+				var walk_seen: Dictionary = {}
+				hit = _count_on_object(loaded, target, walk_seen) > 0
+		if hit:
 			n += 1
 			seen[item] = true
 	return n
