@@ -60,6 +60,20 @@ export const LIMIT: JsonSchema = {
   maximum: 100,
 };
 
+export const CURSOR: JsonSchema = {
+  type: "string",
+  minLength: 1,
+  maxLength: 64,
+  pattern: "^[0-9A-Za-z_.:-]+$",
+};
+
+export const PREFIX: JsonSchema = {
+  type: "string",
+  minLength: 1,
+  maxLength: 128,
+  pattern: "^[A-Za-z_][A-Za-z0-9_]*$",
+};
+
 export const VARIANT: JsonSchema = {
   hhCodec: "variant",
 };
@@ -121,4 +135,7 @@ export const DESCRIBE_INPUT: JsonSchema = obj(["kind"], {
   property_name: IDENT,
   method_name: IDENT,
   action_id: ACTION_ID,
+  limit: LIMIT,
+  cursor: CURSOR,
+  prefix: PREFIX,
 });

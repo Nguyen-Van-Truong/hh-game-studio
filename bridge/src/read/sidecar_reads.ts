@@ -1,0 +1,238 @@
+import { spawnSync } from "node:child_process";
+import fs from "node:fs";
+import path from "node:path";
+
+import { runDoctor } from "../doctor/doctor.js";
+import { PINNED_VERSION_ID, pinnedConsolePath, versionIsRefused } from "../doctor/pin.js";
+import { jailProjectPath, stripResScheme } from "../policy/jail.js";
+import type { PauseGate } from "../policy/pause.js";
+import { E, typedError } from "../registry/errors.js";
+import { getAction } from "../registry/registry.js";
+import { PROTOCOL, REGISTRY_VERSION } from "../registry/types.js";
+import type { SessionDescriptor } from "../session/descriptor.js";
+import { agentHome } from "../session/paths.js";
+import type { PluginCommandResult } from "../transport/plugin_rpc.js";
+import { unverifiedResult } from "../transport/plugin_rpc.js";
+
+export interface SidecarReadInput {
+  actionId: string;
+  commandId: string;
+  params: Record<string, unknown>;
+  projectRoot: string;
+  pause?: PauseGate;
+  desc?: SessionDescriptor;
+}
+
+const SIDECAR_ONLY = new Set([
+  "project.doctor",
+  "git.status",
+  "git.diff",
+  "job.status",
+  "job.list",
+]);
+
+function ok(
+  commandId: string,
+  check: string,
+  after: Record<string, unknown>,
+): PluginCommandResult {
+  return {
+    type: "result",
+    ok: true,
+    command_id: commandId,
+    changed: false,
+    after,
+    postcondition: { verified: true, checks: [check] },
+  };
+}
+
+function fail(
+  commandId: string,
+  code: string,
+  message: string,
+  pathName = "",
+): PluginCommandResult {
+  return {
+    type: "result",
+    ok: false,
+    command_id: commandId,
+    changed: false,
+    postcondition: { verified: false, checks: [] },
+    error: typedError(code, message, pathName),
+  };
+}
+
+function parseProjectGodot(projectRoot: string): Record<string, unknown> {
+  const dest = path.join(projectRoot, "project.godot");
+  const text = fs.existsSync(dest) ? fs.readFileSync(dest, "utf8") : "";
+  const name = text.match(/config\/name="([^"]*)"/)?.[1] ?? "";
+  const main = text.match(/run\/main_scene="([^"]*)"/)?.[1] ?? "";
+  const features = text.match(/config\/features=PackedStringArray\(([^)]*)\)/)?.[1] ?? "";
+  const plugin = text.includes("res://addons/hh_agent/plugin.cfg");
+  return {
+    name,
+    main_scene: main,
+    features,
+    hh_agent_enabled: plugin,
+    project_godot: "res://project.godot",
+    source: "disk",
+  };
+}
+
+function git(projectRoot: string, args: string[]): { ok: boolean; text: string } {
+  const proc = spawnSync("git", ["-C", projectRoot, ...args], {
+    encoding: "utf8",
+    timeout: 15_000,
+    windowsHide: true,
+  });
+  return { ok: proc.status === 0, text: `${proc.stdout ?? ""}${proc.stderr ?? ""}` };
+}
+
+function describeAction(actionId: string): Record<string, unknown> | undefined {
+  const def = getAction(actionId);
+  if (!def) {
+    return undefined;
+  }
+  return {
+    id: def.id,
+    method: def.method,
+    verb: def.verb,
+    side_effect: def.side_effect,
+    required_policy: def.required_policy,
+    postcondition: def.postcondition,
+    timeout_ms: def.timeout_ms,
+    undo: def.undo,
+    checkpoint_required: def.checkpoint_required,
+  };
+}
+
+function describeVersion(home: string): { after: Record<string, unknown> } {
+  const exe = pinnedConsolePath(home);
+  if (!fs.existsSync(exe)) {
+    return { after: { pin: PINNED_VERSION_ID, binary: "", observed: "", source: "pin-file" } };
+  }
+  const proc = spawnSync(exe, ["--version"], {
+    encoding: "utf8",
+    timeout: 15_000,
+    windowsHide: true,
+  });
+  const observed = `${proc.stdout ?? ""}${proc.stderr ?? ""}`.trim().split(/\r?\n/)[0] ?? "";
+  return {
+    after: {
+      pin: PINNED_VERSION_ID,
+      binary: exe,
+      observed,
+      protocol: PROTOCOL,
+      registry_version: REGISTRY_VERSION,
+      source: "godot-cli",
+    },
+  };
+}
+
+export function isSidecarOnlyAction(actionId: string, params: Record<string, unknown>): boolean {
+  if (SIDECAR_ONLY.has(actionId)) {
+    return true;
+  }
+  if (actionId === "capabilities.describe" && params.kind === "action") {
+    return true;
+  }
+  return false;
+}
+
+export function trySidecarRead(input: SidecarReadInput): PluginCommandResult | undefined {
+  const { actionId, commandId, params, projectRoot } = input;
+  if (actionId === "project.doctor") {
+    const report = runDoctor({
+      ...(input.desc ? { desc: input.desc } : {}),
+      projectRoot,
+      home: agentHome(),
+    });
+    if (!report.ok && report.error) {
+      return {
+        type: "result",
+        ok: false,
+        command_id: commandId,
+        changed: false,
+        after: report as unknown as Record<string, unknown>,
+        postcondition: { verified: false, checks: ["doctor_report_complete"] },
+        error: report.error,
+      };
+    }
+    return ok(commandId, "doctor_report_complete", report as unknown as Record<string, unknown>);
+  }
+  if (actionId === "project.inspect") {
+    const after = parseProjectGodot(projectRoot);
+    const again = parseProjectGodot(projectRoot);
+    if (after.name !== again.name || after.main_scene !== again.main_scene) {
+      return unverifiedResult(commandId, "project.godot changed during readback");
+    }
+    return ok(commandId, "project_inspect_matches_project_godot", after);
+  }
+  if (actionId === "git.status") {
+    const status = git(projectRoot, ["status", "--porcelain=v1", "-b"]);
+    if (!status.ok) {
+      return fail(commandId, E.E_UNVERIFIED, status.text || "git status failed", "git");
+    }
+    return ok(commandId, "git_status_parsed", { text: status.text, source: "git" });
+  }
+  if (actionId === "git.diff") {
+    const raw = typeof params.path === "string" ? params.path : "";
+    const jailed = jailProjectPath(projectRoot, stripResScheme(raw), { forWrite: false });
+    if (!jailed.ok) {
+      return fail(commandId, jailed.error.code, jailed.error.message, jailed.error.path);
+    }
+    const rel = jailed.rel;
+    const diff = git(projectRoot, ["diff", "--", rel]);
+    if (!diff.ok) {
+      return fail(commandId, E.E_UNVERIFIED, diff.text || "git diff failed", "git");
+    }
+    return ok(commandId, "git_diff_text", { path: raw, text: diff.text, source: "git" });
+  }
+  if (actionId === "job.list") {
+    const limit = typeof params.limit === "number" ? params.limit : 20;
+    const jobs = input.pause ? [{ id: "mutate-lane", paused: input.pause.isPaused() }] : [];
+    return ok(commandId, "job_list_returned", { jobs: jobs.slice(0, limit), total: jobs.length });
+  }
+  if (actionId === "job.status") {
+    const jobId = typeof params.job_id === "string" ? params.job_id : "";
+    const job = input.pause?.job(jobId);
+    if (!job) {
+      return fail(commandId, E.E_UNVERIFIED, `job ${jobId} not found`, "job_id");
+    }
+    return ok(commandId, "job_status_known", {
+      job_id: job.id,
+      cancelled: job.cancelled,
+      finished: job.finished,
+      paused: input.pause?.isPaused() === true,
+    });
+  }
+  if (actionId === "capabilities.describe") {
+    const kind = params.kind;
+    if (kind === "action") {
+      const action = typeof params.action_id === "string" ? params.action_id : "";
+      const payload = describeAction(action);
+      if (!payload) {
+        return fail(commandId, E.E_UNKNOWN_ACTION, `unknown action ${action}`, "action_id");
+      }
+      return ok(commandId, "describe_kind_payload_present", { kind: "action", action: payload });
+    }
+    if (kind === "version") {
+      const described = describeVersion(agentHome());
+      const after = described.after ?? {};
+      const observed = typeof after.observed === "string" ? after.observed : "";
+      if (observed && (versionIsRefused(observed) || observed !== PINNED_VERSION_ID)) {
+        return fail(
+          commandId,
+          E.E_VERSION_SKEW,
+          `Godot ${observed} != pin ${PINNED_VERSION_ID}`,
+          "godot.version",
+        );
+      }
+      if (!observed) {
+        return unverifiedResult(commandId, "pinned Godot --version unavailable");
+      }
+      return ok(commandId, "describe_kind_payload_present", { kind: "version", ...after });
+    }
+  }
+  return undefined;
+}

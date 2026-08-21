@@ -19,6 +19,7 @@ import {
   BOOL,
   DETAIL,
   DESCRIBE_INPUT,
+  CURSOR,
   HASH,
   IDENT,
   INDEX,
@@ -183,6 +184,7 @@ const SPECS: Record<string, ActionSpec> = {
     input: DESCRIBE_INPUT,
     example: { kind: "version" },
     postcondition: "describe_kind_payload_present",
+    extra_errors: [E.E_VERSION_SKEW],
   },
 
   "project.inspect": read(
@@ -246,7 +248,12 @@ const SPECS: Record<string, ActionSpec> = {
   "scene.read": read(
     "Read the edited or disk scene tree summary",
     "scene_tree_summary_matches",
-    obj(["path", "detail"], { path: RES_PATH, detail: DETAIL }),
+    obj(["path", "detail"], {
+      path: RES_PATH,
+      detail: DETAIL,
+      limit: LIMIT,
+      cursor: CURSOR,
+    }),
     { path: "res://scenes/world.tscn", detail: "short" },
   ),
   "scene.save": mutate(
@@ -377,6 +384,8 @@ const SPECS: Record<string, ActionSpec> = {
       class_name: IDENT,
       group: IDENT,
       prefix: NODE_PATH,
+      limit: LIMIT,
+      cursor: CURSOR,
     }),
     { scene: "res://scenes/world.tscn", by: "group", group: "interactable" },
   ),
@@ -580,7 +589,11 @@ const SPECS: Record<string, ActionSpec> = {
   "script.read": read(
     "Read a GDScript file",
     "script_text_matches_disk",
-    obj(["path"], { path: RES_PATH }),
+    obj(["path"], {
+      path: RES_PATH,
+      limit: LIMIT,
+      cursor: CURSOR,
+    }),
     { path: "res://scripts/player.gd" },
   ),
   "script.write": mutate(

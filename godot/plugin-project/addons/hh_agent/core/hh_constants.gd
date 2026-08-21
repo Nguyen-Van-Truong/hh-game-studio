@@ -6,7 +6,10 @@ extends RefCounted
 const PROTOCOL: String = "hh-godot-agent/1"
 const ACTION_VERSION: String = "1"
 const PLUGIN_ID: String = "hh_agent"
-const PLUGIN_VERSION: String = "0.3.0"
+const PLUGIN_VERSION: String = "0.4.0"
+const PINNED_GODOT: String = "4.7.1.stable.official.a13da4feb"
+const DEFAULT_PAGE: int = 50
+const MAX_PAGE: int = 100
 const AGENT_DIR: String = "HHGodotAgent"
 const SESSIONS_DIR: String = "sessions"
 const DESCRIPTOR_FILE: String = "session.json"

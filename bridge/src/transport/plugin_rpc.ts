@@ -10,6 +10,10 @@ export interface PluginCommandResult {
   changed: boolean;
   postcondition: { verified: boolean; checks: string[] };
   error?: { code: string; message: string; path: string };
+  after?: Record<string, unknown>;
+  before?: Record<string, unknown>;
+  warnings?: string[];
+  evidence?: string[];
 }
 
 export function isNoopEnvelope(env: { method?: unknown; action?: unknown }): boolean {
@@ -121,6 +125,18 @@ export function parsePluginResult(raw: unknown): PluginCommandResult | null {
       message: typeof raw.error.message === "string" ? raw.error.message : "",
       path: typeof raw.error.path === "string" ? raw.error.path : "",
     };
+  }
+  if (isRecord(raw.after)) {
+    result.after = raw.after;
+  }
+  if (isRecord(raw.before)) {
+    result.before = raw.before;
+  }
+  if (Array.isArray(raw.warnings)) {
+    result.warnings = raw.warnings.filter((item): item is string => typeof item === "string");
+  }
+  if (Array.isArray(raw.evidence)) {
+    result.evidence = raw.evidence.filter((item): item is string => typeof item === "string");
   }
   return result;
 }

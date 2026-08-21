@@ -13,6 +13,16 @@ import { isUlid, newUlid } from "../registry/ulid.js";
 import type { SessionLog } from "../session/log.js";
 import { publicDescriptorView, type SessionDescriptor } from "../session/descriptor.js";
 import type { DoctorReport } from "../doctor/doctor.js";
+import { trySidecarRead } from "../read/sidecar_reads.js";
+import {
+  capabilityMatrix,
+  editorStateFromResult,
+  isResourceUri,
+  listResources,
+  projectSummary,
+  resourceBody,
+} from "../resources/mcp_resources.js";
+import { PROTOCOL } from "../registry/types.js";
 import {
   emptyReadback,
   PLUGIN_NOOP_ACTION,
@@ -76,7 +86,7 @@ function domainTools(): Array<{
     },
     {
       name: "hh.doctor",
-      description: "Session/transport doctor. Secrets are redacted.",
+      description: "Pin/plugin/bridge/schema/Git/policy doctor. Secrets are redacted.",
       inputSchema: { type: "object", additionalProperties: false, properties: {} },
     },
     {
@@ -147,7 +157,7 @@ function domainTools(): Array<{
   for (const [name, verbs] of byMethod) {
     tools.push({
       name,
-      description: `Domain tool ${name}. Discriminator is action. Editor dispatch is not live.`,
+      description: `Domain tool ${name}. Discriminator is action. Read/view may dispatch; mutate is not applied.`,
       inputSchema: {
         type: "object",
         additionalProperties: false,
@@ -223,6 +233,7 @@ function runtimeOf(ctx: McpStdioContext): LedgerRuntime {
   return {
     pluginConnected: () => ctx.plugin?.connected() ?? false,
     killPlugin: () => ctx.plugin?.dropPlugin(),
+    projectRoot: ctx.descriptor().project_root,
     dispatch: (envelope, timeoutMs) => {
       const commandId = typeof envelope.command_id === "string" ? envelope.command_id : "";
       if (!ctx.plugin) {
@@ -376,6 +387,52 @@ async function handleTool(
   });
 }
 
+async function readMcpResource(
+  ctx: McpStdioContext,
+  uri: string,
+): Promise<Array<{ uri: string; mimeType: string; text: string }>> {
+  if (!isResourceUri(uri)) {
+    throw new Error(`unknown resource ${uri}`);
+  }
+  const secret = ctx.descriptor().token;
+  if (uri === "capability://matrix") {
+    return [resourceBody(uri, capabilityMatrix(), secret)];
+  }
+  if (uri === "project://summary") {
+    const inspect = trySidecarRead({
+      actionId: "project.inspect",
+      commandId: newUlid(),
+      params: { detail: "short" },
+      projectRoot: ctx.descriptor().project_root,
+    });
+    const after = inspect?.after;
+    return [
+      resourceBody(
+        uri,
+        projectSummary({
+          descriptor: ctx.descriptor(),
+          ...(after ? { inspect: after } : {}),
+        }),
+        secret,
+      ),
+    ];
+  }
+  let editor: PluginCommandResult | undefined;
+  if (ctx.plugin?.connected()) {
+    editor = await ctx.plugin.dispatch(
+      {
+        protocol: PROTOCOL,
+        command_id: newUlid(),
+        method: "godot.editor",
+        action: "state",
+        params: { detail: "short" },
+      },
+      5_000,
+    );
+  }
+  return [resourceBody(uri, editorStateFromResult(editor), secret)];
+}
+
 export function startMcpStdio(ctx: McpStdioContext): void {
   const rl = createInterface({ input: process.stdin, crlfDelay: Infinity });
   rl.on("line", (line) => {
@@ -399,7 +456,7 @@ export function startMcpStdio(ctx: McpStdioContext): void {
         id,
         result: {
           protocolVersion: requested,
-          capabilities: { tools: {} },
+          capabilities: { tools: {}, resources: {} },
           serverInfo: { name: "hh-godot-bridge", version: "0.0.0" },
         },
       });
@@ -410,6 +467,28 @@ export function startMcpStdio(ctx: McpStdioContext): void {
     }
     if (method === "ping") {
       writeRpc({ jsonrpc: "2.0", id, result: {} });
+      return;
+    }
+    if (method === "resources/list") {
+      writeRpc({ jsonrpc: "2.0", id, result: { resources: listResources() } });
+      return;
+    }
+    if (method === "resources/read") {
+      const params = msg.params && typeof msg.params === "object" ? (msg.params as Record<string, unknown>) : {};
+      const uri = typeof params.uri === "string" ? params.uri : "";
+      void (async () => {
+        try {
+          const contents = await readMcpResource(ctx, uri);
+          writeRpc({ jsonrpc: "2.0", id, result: { contents } });
+        } catch (err) {
+          ctx.log.error(`resources/read failed: ${err instanceof Error ? err.message : "error"}`);
+          writeRpc({
+            jsonrpc: "2.0",
+            id,
+            error: { code: -32602, message: err instanceof Error ? err.message : "resource read failed" },
+          });
+        }
+      })();
       return;
     }
     if (method === "tools/list") {

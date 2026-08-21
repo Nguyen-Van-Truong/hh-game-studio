@@ -2,6 +2,7 @@
 
 import { runMutationGate, type PolicyServices } from "../policy/engine.js";
 import { DEFAULT_POLICY, normalizePolicy } from "../policy/profiles.js";
+import { isSidecarOnlyAction, trySidecarRead } from "../read/sidecar_reads.js";
 import { acceptCommand } from "../registry/dispatch.js";
 import { E, typedError } from "../registry/errors.js";
 import { getAction } from "../registry/registry.js";
@@ -40,6 +41,7 @@ export interface LedgerRuntime {
   pluginConnected(): boolean;
   killPlugin?: () => void;
   policy?: PolicyServices;
+  projectRoot?: string;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -96,6 +98,9 @@ export function parseStoredResult(raw: string, commandId: string): PluginCommand
         message: typeof parsed.error.message === "string" ? parsed.error.message : "",
         path: typeof parsed.error.path === "string" ? parsed.error.path : "",
       };
+    }
+    if (isRecord(parsed.after)) {
+      result.after = parsed.after;
     }
     return result;
   } catch {
@@ -178,8 +183,27 @@ function saveState(
 
 type Classified =
   | { kind: "noop"; timeoutMs: number }
+  | { kind: "forward"; sideEffect: string; actionId: string; timeoutMs: number }
   | { kind: "blocked"; sideEffect: string; actionId: string; result: PluginCommandResult }
   | { kind: "invalid"; result: PluginCommandResult };
+
+export function isReadVerified(post: { verified: boolean; checks: string[] }, actionId: string): boolean {
+  const expected = getAction(actionId)?.postcondition;
+  return post.verified === true && expected !== undefined && post.checks.includes(expected);
+}
+
+function commitReady(result: PluginCommandResult, row: CommandRow): boolean {
+  if (!result.ok) {
+    return false;
+  }
+  if (row.action_id === "hh.plugin/noop" || row.method === PLUGIN_NOOP_METHOD) {
+    return isNoopVerified(result.postcondition);
+  }
+  if (row.action_id) {
+    return isReadVerified(result.postcondition, row.action_id);
+  }
+  return false;
+}
 
 function classify(raw: Record<string, unknown>, commandId: string): Classified {
   const fields = envelopeFields(raw);
@@ -215,13 +239,19 @@ function classify(raw: Record<string, unknown>, commandId: string): Classified {
   }
   const def = getAction(accepted.action_id);
   const side = def?.side_effect ?? "";
-  const message =
-    side === "read" || side === "view" ? "no read adapter" : "not dispatched";
+  if (side === "read" || side === "view") {
+    return {
+      kind: "forward",
+      sideEffect: side,
+      actionId: accepted.action_id,
+      timeoutMs: def?.timeout_ms ?? 5_000,
+    };
+  }
   return {
     kind: "blocked",
     sideEffect: side,
     actionId: accepted.action_id,
-    result: unverifiedResult(commandId, message),
+    result: unverifiedResult(commandId, "not dispatched"),
   };
 }
 
@@ -382,6 +412,103 @@ async function applyNoopOnce(
   }
 }
 
+async function applyReadOnce(
+  ledger: CommandLedger,
+  row: CommandRow,
+  envelope: Record<string, unknown>,
+  bound: LedgerBound,
+  runtime: LedgerRuntime,
+  classified: Extract<Classified, { kind: "forward" }>,
+): Promise<PluginCommandResult> {
+  if (row.apply_count > 0 || row.dispatch_attempted > 0) {
+    return markUncertain(ledger, row, "already attempted; refusing blind replay");
+  }
+  const fields = envelopeFields(envelope);
+  runtime.policy?.pause.registerJob(row.command_id, { atomic: true });
+  try {
+    const gated = runMutationGate({
+      commandId: row.command_id,
+      sideEffect: classified.sideEffect,
+      actionId: classified.actionId,
+      checkpointRequired: false,
+      policy: normalizePolicy(bound.policy),
+      params: fields.params,
+      requestHash: row.request_hash,
+      ...(runtime.policy ? { services: runtime.policy } : {}),
+    });
+    if (!gated.ok) {
+      const result = errorResult(
+        row.command_id,
+        gated.error.code,
+        gated.error.message,
+        gated.error.path,
+      );
+      persistResult(row, result);
+      saveState(ledger, row, "failed");
+      return result;
+    }
+    saveState(ledger, row, "applying", {
+      before_summary: JSON.stringify({ kind: "read", action_id: classified.actionId }),
+      side_effect: classified.sideEffect,
+      action_id: classified.actionId,
+    });
+    const projectRoot = runtime.projectRoot ?? runtime.policy?.projectRoot ?? "";
+    const sidecarOnly = isSidecarOnlyAction(classified.actionId, fields.params);
+    let result: PluginCommandResult | undefined;
+    if (sidecarOnly || !runtime.pluginConnected()) {
+      result = trySidecarRead({
+        actionId: classified.actionId,
+        commandId: row.command_id,
+        params: fields.params,
+        projectRoot,
+        ...(runtime.policy?.pause ? { pause: runtime.policy.pause } : {}),
+      });
+    }
+    if (!result && runtime.pluginConnected()) {
+      row.dispatch_attempted = 1;
+      row.updated_at = nowIso();
+      ledger.save(row);
+      try {
+        result = await runtime.dispatch(envelope, classified.timeoutMs);
+      } catch (err) {
+        if (err instanceof LedgerPluginDeath) {
+          runtime.killPlugin?.();
+        }
+        return markUncertain(ledger, row, "dispatch interrupted; postcondition unknown");
+      }
+    }
+    if (!result && !runtime.pluginConnected()) {
+      result = unverifiedResult(row.command_id, "no plugin");
+    }
+    if (!result) {
+      result = unverifiedResult(row.command_id, "no read adapter");
+    }
+    row.apply_count = 1;
+    persistResult(row, result);
+    row.after_summary = JSON.stringify({
+      kind: "read",
+      action_id: classified.actionId,
+      checks: result.postcondition.checks,
+    });
+    saveState(ledger, row, "applied_volatile");
+    if (!result.ok) {
+      saveState(ledger, row, "failed");
+      return result;
+    }
+    if (!isReadVerified(result.postcondition, classified.actionId)) {
+      const failed = unverifiedResult(row.command_id, "read postcondition failed");
+      persistResult(row, failed);
+      saveState(ledger, row, "failed");
+      return failed;
+    }
+    saveState(ledger, row, "verified");
+    saveState(ledger, row, "committed_durable");
+    return result;
+  } finally {
+    runtime.policy?.pause.finishJob(row.command_id);
+  }
+}
+
 function markUncertain(
   ledger: CommandLedger,
   row: CommandRow,
@@ -418,7 +545,14 @@ async function recoverFromReadback(
   } catch {
     return undefined;
   }
-  if (readback.found && readback.ok && isNoopVerified(readback.postcondition)) {
+  const noopOk = readback.found && readback.ok && isNoopVerified(readback.postcondition);
+  const readOk =
+    readback.found &&
+    readback.ok &&
+    row.action_id !== "" &&
+    row.action_id !== "hh.plugin/noop" &&
+    isReadVerified(readback.postcondition, row.action_id);
+  if (noopOk || readOk) {
     const result: PluginCommandResult = {
       type: "result",
       ok: true,
@@ -427,7 +561,10 @@ async function recoverFromReadback(
       postcondition: readback.postcondition,
     };
     persistResult(row, result);
-    row.after_summary = JSON.stringify({ kind: "noop", checks: readback.postcondition.checks });
+    row.after_summary = JSON.stringify({
+      kind: noopOk ? "noop" : "read",
+      checks: readback.postcondition.checks,
+    });
     return commitVerified(ledger, row, result);
   }
   return undefined;
@@ -437,6 +574,7 @@ async function recoverApplying(
   ledger: CommandLedger,
   row: CommandRow,
   envelope: Record<string, unknown>,
+  bound: LedgerBound,
   runtime: LedgerRuntime,
   timeoutMs: number,
 ): Promise<PluginCommandResult> {
@@ -445,11 +583,17 @@ async function recoverApplying(
     return fromReadback;
   }
   const stored = parseStoredResult(row.result_json, row.command_id);
-  if (stored && stored.ok && isNoopVerified(stored.postcondition)) {
+  if (stored && stored.ok && commitReady(stored, row)) {
     return commitVerified(ledger, row, stored);
   }
-  if (row.dispatch_attempted === 0 && row.apply_count === 0 && isNoopEnvelope(envelope)) {
-    return applyNoopOnce(ledger, row, envelope, runtime, timeoutMs);
+  if (row.dispatch_attempted === 0 && row.apply_count === 0) {
+    const classified = classify(envelope, row.command_id);
+    if (classified.kind === "noop") {
+      return applyNoopOnce(ledger, row, envelope, runtime, timeoutMs);
+    }
+    if (classified.kind === "forward") {
+      return applyReadOnce(ledger, row, envelope, bound, runtime, classified);
+    }
   }
   return markUncertain(ledger, row, "applying crashed; cannot confirm postcondition");
 }
@@ -458,19 +602,26 @@ async function recoverVolatile(
   ledger: CommandLedger,
   row: CommandRow,
   envelope: Record<string, unknown>,
+  bound: LedgerBound,
   runtime: LedgerRuntime,
   timeoutMs: number,
 ): Promise<PluginCommandResult> {
   const stored = parseStoredResult(row.result_json, row.command_id);
-  if (stored && stored.ok && isNoopVerified(stored.postcondition)) {
+  if (stored && stored.ok && commitReady(stored, row)) {
     return commitVerified(ledger, row, stored);
   }
   const fromReadback = await recoverFromReadback(ledger, row, runtime);
   if (fromReadback) {
     return fromReadback;
   }
-  if (row.dispatch_attempted === 0 && row.apply_count === 0 && isNoopEnvelope(envelope)) {
-    return applyNoopOnce(ledger, row, envelope, runtime, timeoutMs);
+  if (row.dispatch_attempted === 0 && row.apply_count === 0) {
+    const classified = classify(envelope, row.command_id);
+    if (classified.kind === "noop") {
+      return applyNoopOnce(ledger, row, envelope, runtime, timeoutMs);
+    }
+    if (classified.kind === "forward") {
+      return applyReadOnce(ledger, row, envelope, bound, runtime, classified);
+    }
   }
   return markUncertain(ledger, row, "applied_volatile without durable verify");
 }
@@ -484,11 +635,15 @@ async function continueAfterReceived(
 ): Promise<PluginCommandResult> {
   const classified = classify(envelope, row.command_id);
   row.side_effect =
-    classified.kind === "noop" ? "read" : classified.kind === "blocked" ? classified.sideEffect : "";
+    classified.kind === "noop"
+      ? "read"
+      : classified.kind === "blocked" || classified.kind === "forward"
+        ? classified.sideEffect
+        : "";
   row.action_id =
     classified.kind === "noop"
       ? "hh.plugin/noop"
-      : classified.kind === "blocked"
+      : classified.kind === "blocked" || classified.kind === "forward"
         ? classified.actionId
         : "";
   saveState(ledger, row, "validated");
@@ -504,6 +659,9 @@ async function continueAfterReceived(
   }
   if (classified.kind === "blocked") {
     return settleBlocked(ledger, row, envelope, bound, runtime, classified);
+  }
+  if (classified.kind === "forward") {
+    return applyReadOnce(ledger, row, envelope, bound, runtime, classified);
   }
   return applyNoopOnce(ledger, row, envelope, runtime, classified.timeoutMs);
 }
@@ -545,16 +703,16 @@ export async function executeCommand(
     }
     if (existing.state === "verified") {
       const stored = parseStoredResult(existing.result_json, existing.command_id);
-      if (stored && stored.ok && isNoopVerified(stored.postcondition)) {
+      if (stored && stored.ok && commitReady(stored, existing)) {
         return commitVerified(ledger, existing, stored);
       }
-      return markUncertain(ledger, existing, "verified without noop postcondition");
+      return markUncertain(ledger, existing, "verified without matching postcondition");
     }
     if (existing.state === "applied_volatile") {
-      return recoverVolatile(ledger, existing, envelope, runtime, 5_000);
+      return recoverVolatile(ledger, existing, envelope, bound, runtime, 5_000);
     }
     if (existing.state === "applying") {
-      return recoverApplying(ledger, existing, envelope, runtime, 5_000);
+      return recoverApplying(ledger, existing, envelope, bound, runtime, 5_000);
     }
     if (existing.state === "validated") {
       const classified = classify(envelope, existing.command_id);
@@ -565,6 +723,9 @@ export async function executeCommand(
       }
       if (classified.kind === "blocked") {
         return settleBlocked(ledger, existing, envelope, bound, runtime, classified);
+      }
+      if (classified.kind === "forward") {
+        return applyReadOnce(ledger, existing, envelope, bound, runtime, classified);
       }
       return applyNoopOnce(ledger, existing, envelope, runtime, classified.timeoutMs);
     }

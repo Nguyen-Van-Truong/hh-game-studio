@@ -6,11 +6,13 @@ const _ErrorsScript: GDScript = preload("res://addons/hh_agent/core/hh_errors.gd
 const _EnvelopeScript: GDScript = preload("res://addons/hh_agent/core/hh_envelope.gd")
 const _ActionsScript: GDScript = preload("res://addons/hh_agent/core/hh_actions.gd")
 const _PauseScript: GDScript = preload("res://addons/hh_agent/core/hh_pause.gd")
+const _ReadsScript: GDScript = preload("res://addons/hh_agent/core/hh_read_adapters.gd")
 
-## Routes read/view (no live adapters yet) and the test noop. Never mutates the scene.
+## Routes read/view adapters and the test noop. Never mutates the scene.
 
 var _errors: HHAgentErrors = HHAgentErrors.new()
 var _envelope: HHAgentEnvelope = HHAgentEnvelope.new()
+var _reads: HHAgentReadAdapters = HHAgentReadAdapters.new()
 
 
 func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_gate: HHAgentPauseGate = null) -> Dictionary:
@@ -61,7 +63,7 @@ func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_ga
 	if pause_gate != null and not pause_gate.allows_side_effect(side_effect):
 		return _errors.fail(command_id, HHAgentErrors.E_PAUSED, "mutation gate is paused", "pause")
 	if side_effect == "read" or side_effect == "view":
-		return _errors.fail(command_id, HHAgentErrors.E_UNVERIFIED, "no read adapter", "")
+		return _reads.handle(command_id, method, action, params, actions)
 	return _errors.fail(command_id, HHAgentErrors.E_UNVERIFIED, "not dispatched", "")
 
 
@@ -116,8 +118,39 @@ func run_selftest(actions: HHAgentActions) -> PackedStringArray:
 	if float(pause_samples.get("p95", 999.0)) > 250.0:
 		failures.append("plugin Pause ACK p95 exceeded 250 ms")
 	var read_act: Dictionary = dispatch(_sample("godot.project", "inspect", {"detail": "short"}), actions, 0)
-	if str(_error_of(read_act).get("code", "")) != HHAgentErrors.E_UNVERIFIED:
-		failures.append("read without adapter must be E_UNVERIFIED")
+	if read_act.get("ok", false) != true:
+		failures.append("project.inspect must ACK with a read adapter")
+	else:
+		var post_read: Variant = read_act.get("postcondition", {})
+		if post_read is Dictionary:
+			var checks_r: Variant = (post_read as Dictionary).get("checks", [])
+			if not (checks_r is Array) or not ((checks_r as Array).has("project_inspect_matches_project_godot")):
+				failures.append("project.inspect postcondition")
+	var describe: Dictionary = dispatch(_sample("godot.capabilities", "describe", {"kind": "version", "limit": 5}), actions, 0)
+	if describe.get("ok", false) != true:
+		failures.append("capabilities.describe version must ACK")
+	else:
+		var after_v: Variant = describe.get("after", {})
+		if after_v is Dictionary:
+			var classes_v: Variant = (after_v as Dictionary).get("classes", {})
+			if classes_v is Dictionary:
+				var items_v: Variant = (classes_v as Dictionary).get("items", [])
+				var total: int = int((classes_v as Dictionary).get("total", 0))
+				if not (items_v is Array) or (items_v as Array).size() > 5:
+					failures.append("class page exceeded limit")
+				if total < 6:
+					failures.append("ClassDB page total too small")
+	var mutate_still: Dictionary = dispatch(
+		_sample(
+			"godot.node",
+			"add",
+			{"scene": "res://main.tscn", "parent": ".", "class_name": "Node2D", "name": "X"},
+		),
+		actions,
+		0,
+	)
+	if str(_error_of(mutate_still).get("code", "")) != HHAgentErrors.E_UNVERIFIED:
+		failures.append("mutate must stay E_UNVERIFIED after read adapters")
 	var forbidden: Dictionary = dispatch(
 		{
 			"protocol": HHAgentConstants.PROTOCOL,

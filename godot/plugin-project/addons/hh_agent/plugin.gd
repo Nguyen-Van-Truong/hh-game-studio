@@ -71,9 +71,7 @@ func _exit_tree() -> void:
 func _process(_delta: float) -> void:
 	if _client != null:
 		_client.poll()
-	if _busy:
-		_refresh_dock()
-		return
+	_busy = false
 	var n: int = 0
 	while n < HHAgentConstants.DRAIN_PER_FRAME:
 		if _queue == null:

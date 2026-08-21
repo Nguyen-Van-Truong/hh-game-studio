@@ -26,6 +26,7 @@ export const E = {
   E_CONFLICT: "E_CONFLICT",
   E_PAUSED: "E_PAUSED",
   E_LEASE: "E_LEASE",
+  E_VERSION_SKEW: "E_VERSION_SKEW",
 } as const;
 
 export type ErrorCode = (typeof E)[keyof typeof E];

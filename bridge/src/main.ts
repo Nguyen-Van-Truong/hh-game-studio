@@ -1,4 +1,4 @@
-import { runSessionDoctor } from "./doctor/doctor.js";
+import { runDoctor, type DoctorOptions } from "./doctor/doctor.js";
 import { readDescriptor } from "./session/descriptor.js";
 import { agentHome } from "./session/paths.js";
 import { discoverProject } from "./session/project.js";
@@ -27,12 +27,32 @@ async function main(): Promise<void> {
 
   if (flag("--doctor")) {
     const found = discoverProject(project);
-    let report;
+    let desc;
     try {
-      report = runSessionDoctor(readDescriptor(found.projectId, agentHome()), agentHome());
+      desc = readDescriptor(found.projectId, agentHome());
     } catch {
-      report = runSessionDoctor(undefined, agentHome());
+      desc = undefined;
     }
+    const opts: DoctorOptions = {
+      home: agentHome(),
+      projectRoot: found.root,
+    };
+    if (desc) {
+      opts.desc = desc;
+    }
+    const forcedGodot = argValue("--force-godot-version");
+    if (forcedGodot) {
+      opts.forceGodotVersion = forcedGodot;
+    }
+    const forcedProtocol = argValue("--force-protocol");
+    if (forcedProtocol) {
+      opts.forceProtocol = forcedProtocol;
+    }
+    const forcedSchema = argValue("--force-schema");
+    if (forcedSchema) {
+      opts.forceSchema = forcedSchema;
+    }
+    const report = runDoctor(opts);
     process.stdout.write(`${JSON.stringify(report)}\n`);
     process.exitCode = report.ok ? 0 : 1;
     return;
@@ -52,7 +72,12 @@ async function main(): Promise<void> {
   sidecar.log.info("sidecar listening (stdio MCP + plugin socket)");
   startMcpStdio({
     descriptor: () => sidecar.descriptor,
-    doctor: () => runSessionDoctor(sidecar.descriptor),
+    doctor: () =>
+      runDoctor({
+        desc: sidecar.descriptor,
+        home: agentHome(),
+        projectRoot: sidecar.project.root,
+      }),
     log: sidecar.log,
     ledger: sidecar.ledger,
     bound: {

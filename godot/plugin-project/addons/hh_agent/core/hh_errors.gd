@@ -24,6 +24,8 @@ const E_CHECKPOINT: String = "E_CHECKPOINT"
 const E_CONFLICT: String = "E_CONFLICT"
 const E_PAUSED: String = "E_PAUSED"
 const E_LEASE: String = "E_LEASE"
+const E_PATH: String = "E_PATH"
+const E_VERSION_SKEW: String = "E_VERSION_SKEW"
 
 
 func typed(code: String, message: String, path: String = "") -> Dictionary:
@@ -38,6 +40,22 @@ func fail(command_id: String, code: String, message: String, path: String = "") 
 		"changed": false,
 		"postcondition": {"verified": false, "checks": []},
 		"error": typed(code, message, path),
+	}
+
+
+func ok_read(command_id: String, checks: PackedStringArray, after: Dictionary) -> Dictionary:
+	var check_list: Array = []
+	for item: String in checks:
+		check_list.append(item)
+	if check_list.is_empty():
+		return fail(command_id, E_UNVERIFIED, "read adapter produced empty postcondition checks", "")
+	return {
+		"type": HHAgentConstants.RESULT_TYPE,
+		"ok": true,
+		"command_id": command_id,
+		"changed": false,
+		"after": after,
+		"postcondition": {"verified": true, "checks": check_list},
 	}
 
 

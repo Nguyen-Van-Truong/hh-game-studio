@@ -1,4 +1,4 @@
-/** Registry lookup + param validation. Stubs are not dispatched; no editor I/O. */
+/** Registry lookup + param validation. Mutate stubs stay blocked; read/view may dispatch. */
 
 import { describeExample } from "./actions.js";
 import { E, typedError } from "./errors.js";
