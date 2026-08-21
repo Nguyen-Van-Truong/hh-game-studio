@@ -1,6 +1,6 @@
 AUTHORITATIVE_PLAN=1
 STATUS=ACTIVE
-CURRENT_VALID_WP=R3-WP7
+CURRENT_VALID_WP=R3-WP8
 
 ================================================================================
 BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
@@ -11,7 +11,7 @@ BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
 | 0 | R0 — Cutover an toàn | Đóng băng engine Rust cũ, pin Godot, đổi bootstrap sang plan này, không mất lịch sử | Governance + Toolchain | G0 | [x] 4/4 WP |
 | 1 | R1 — Spike và chọn nền MCP | Chứng minh agent tạo/sửa/chạy/nhìn một scene thật trong editor; chốt upstream hay tự làm | Research + Security + POC | G1 NO-FORK | [x] 5/5 WP |
 | 2 | R2 — Control plane | Plugin, sidecar, Agent Host, MCP, auth, registry, ledger, pause và OWNER_AUTOPILOT hoạt động | Bridge + Plugin + Security | — | [x] 7/7 WP |
-| 3 | R3 — Quyền editor ngữ nghĩa | Scene/node/property/resource/script/asset/project settings có undo, dedup và postcondition | Scene + Script + Asset | — | [ ] 6/8 WP |
+| 3 | R3 — Quyền editor ngữ nghĩa | Scene/node/property/resource/script/asset/project settings có undo, dedup và postcondition | Scene + Script + Asset | — | [ ] 7/8 WP |
 | 4 | R4 — Người xem được agent làm | Activity Dock, chọn node, focus inspector, cursor/gizmo ảo, replay kéo-thả, Watch/Fast mode | Observer UI + Editor UX | G2 VISIBLE | [ ] 0/6 WP |
 | 5 | R5 — Bộ công cụ làm game 2D | TileMapLayer, animation, UI, audio, physics, navigation, shader/particles được agent thao tác đầy đủ | 2D-A + 2D-B + Assets | — | [ ] 0/7 WP |
 | 6 | R6 — Agent tự chơi và tự kiểm | Play/debug, input, runtime state, deterministic step, screenshot/diff/perf, test evidence | Runtime + Test + Vision | G3 SELF-VERIFY | [ ] 0/7 WP |
@@ -24,7 +24,7 @@ VIỆC PHẢI LÀM TRƯỚC: R0-WP1 → R0-WP2 → R0-WP3 → R0-WP4 → R1-WP1.
 Không được bắt đầu R2
 trước G1. Từ R2 trở đi chỉ song song các track có ranh giới file rõ ràng.
 
-Tiến độ tổng: [ ] 22/60 WP. First valid WP: R3-WP7.
+Tiến độ tổng: [ ] 23/60 WP. First valid WP: R3-WP8.
 Ngày lập: 20-8-2026 (Asia/Saigon).
 
 ================================================================================
@@ -1356,7 +1356,7 @@ R3-WP6 — Asset ingest/import/reimport/move/delete an toàn                [x]
         dbc16b6 refresh leases and live UID after rewrite;
         6cd7f32 lock project.godot and scan autoload refs
 
-R3-WP7 — Project settings, input map, autoload và plugin policy          [ ]
+R3-WP7 — Project settings, input map, autoload và plugin policy          [x]
   Phụ thuộc: R3-WP3, R2-WP5.
   Track/file: B; project settings adapter.
   Làm:
@@ -1368,7 +1368,25 @@ R3-WP7 — Project settings, input map, autoload và plugin policy          [ ]
   Verify: atomic project.godot update, invalid input event/path, restart persistence;
           plugin allowlist negative tests.
   DoD: project configuration đầy đủ mà không mở dialog/click tay.
-  LOG: (trống)
+  LOG:
+    LOG 2026-08-21 18:10 Asia/Saigon — agent=coordinator
+      Base: 52e7ff9 settings/input/autoload; cheap-fix 4df7839 atomic save +
+        reserved-key policy.
+        Godot=4.7.1.stable.official.a13da4feb, schema=hh-godot-actions/1
+      Files/leases: godot/plugin-project/addons/hh_agent/core/hh_settings_adapter.gd,
+        tests/bootstrap/test_project_settings.py
+      Verify: test_project_settings.py → 0 (set/get/remove + ConfigFile;
+        InputMap; autoload; vendor E_POLICY; hh_agent disable E_POLICY;
+        reserved keys E_POLICY; Pause); g1/registry/asset_ingest → 0
+      E2E/artifacts: save_custom tmp + bak+rename; no FileAccess.WRITE of
+        project.godot; only hh_agent enabled
+      Critic: FAIL tick no (43796004) on 52e7ff9 — in-place save + generic
+        key bypass. Closed on 4df7839 (051fe6b3 PASS-WITH-GAPS, prior P0/P1s
+        dead, recommend tick).
+      Gaps: play.input inject E_UNVERIFIED; reserved GET allowed; no
+        Godot-restart persistence test; input disk is key existence.
+      Commit: 52e7ff9 R3-WP7: project settings input map and autoload;
+        4df7839 atomic project.godot save and key policy
 
 R3-WP8 — Transaction, checkpoint và editor-mutation gauntlet            [ ]
   Phụ thuộc: R3-WP1..7.
@@ -2079,15 +2097,14 @@ thuận nếu ảnh hưởng G5/G6.
 14. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Hiện tại R0 (4/4) + R1 (5/5, G1) + R2 (7/7) + R3-WP1..WP6 đã xong. Agent tiếp theo làm **R3-WP7**.
-KHÔNG vendor A/C as-is, KHÔNG M6, KHÔNG fork Godot. Scene + node + property +
-resource + script + asset ingest exist; project settings is next. Do not claim
-the agent drives a full game.
+Hiện tại R0 (4/4) + R1 (5/5, G1) + R2 (7/7) + R3-WP1..WP7 đã xong. Agent tiếp theo làm **R3-WP8**.
+KHÔNG vendor A/C as-is, KHÔNG M6, KHÔNG fork Godot. Semantic editor verbs exist;
+mutation gauntlet is next. Do not claim the agent drives a full game.
 
 Lệnh hợp lệ:
 
-  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R3-WP7`);
-  2) R3-WP7: Project settings, input map, autoload và plugin policy;
+  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R3-WP8`);
+  2) R3-WP8: Transaction, checkpoint và editor-mutation gauntlet;
   3) mở editor fixture: `hh-godot-editor.bat` (Godot 4.7.1-stable pin, minimal-2d);
   4) không copy hh_stock_poc; không npx -y; không bump 4.7.2; không raw-write
      .tscn; plugin is the only writer.
