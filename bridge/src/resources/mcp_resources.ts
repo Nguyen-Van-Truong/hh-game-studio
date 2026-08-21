@@ -5,6 +5,7 @@ import {
   isPropertyApply,
   isResourceApply,
   isSceneLifecycleApply,
+  isScriptApply,
   isSignalApply,
 } from "../ledger/scene_lifecycle.js";
 import { allActionDefs } from "../registry/registry.js";
@@ -79,11 +80,12 @@ export function capabilityMatrix(): Record<string, unknown> {
     protocol: PROTOCOL,
     registry_version: REGISTRY_VERSION,
     godot_pin: PINNED_VERSION_ID,
-    mutate_dispatched: "scene-lifecycle+node-crud+property+resource+signal",
+    mutate_dispatched: "scene-lifecycle+node-crud+property+resource+signal+script",
     node_crud_dispatched: true,
     property_dispatched: true,
     resource_dispatched: true,
-    note: "Scene/node/property/resource/signal ACK after EditorUndoRedo or plugin disk SHA readback. script.write stays E_UNVERIFIED.",
+    script_dispatched: true,
+    note: "Scene/node/property/resource/signal/script ACK after EditorUndoRedo or plugin disk SHA readback. project.settings stays E_UNVERIFIED.",
     actions: allActionDefs().map((def) => ({
       id: def.id,
       method: def.method,
@@ -99,7 +101,9 @@ export function capabilityMatrix(): Record<string, unknown> {
               ? "resource-ops"
               : isSignalApply(def.id)
                 ? "signal-ops"
-                : isNodeCrudApply(def.id)
+                : isScriptApply(def.id)
+                  ? "script-ops"
+                  : isNodeCrudApply(def.id)
                   ? "node-crud"
                   : isSceneLifecycleApply(def.id)
                     ? "scene-lifecycle"

@@ -1,4 +1,4 @@
-/** Proven editor apply verbs. Scene, node, property, resource, signal, asset-ref. */
+/** Proven editor apply verbs. Scene, node, property, resource, signal, script, asset-ref. */
 
 export const SCENE_LIFECYCLE_APPLY = [
   "scene.create",
@@ -38,6 +38,14 @@ export const SIGNAL_APPLY = ["signal.connect", "signal.disconnect"] as const;
 
 export const ASSET_REF_APPLY = ["asset.move", "asset.rename", "asset.delete"] as const;
 
+export const SCRIPT_APPLY = [
+  "script.write",
+  "script.patch",
+  "script.attach",
+  "script.detach",
+  "script.rename",
+] as const;
+
 export const NODE_UID_AFTER = [
   "node.add",
   "node.rename",
@@ -74,6 +82,10 @@ export function isAssetRefApply(actionId: string): boolean {
   return (ASSET_REF_APPLY as readonly string[]).includes(actionId);
 }
 
+export function isScriptApply(actionId: string): boolean {
+  return (SCRIPT_APPLY as readonly string[]).includes(actionId);
+}
+
 export function isProvenEditorApply(actionId: string): boolean {
   return (
     isSceneLifecycleApply(actionId) ||
@@ -81,7 +93,8 @@ export function isProvenEditorApply(actionId: string): boolean {
     isPropertyApply(actionId) ||
     isResourceApply(actionId) ||
     isSignalApply(actionId) ||
-    isAssetRefApply(actionId)
+    isAssetRefApply(actionId) ||
+    isScriptApply(actionId)
   );
 }
 
@@ -91,6 +104,10 @@ export function sceneNeedsDiskHash(actionId: string): boolean {
 
 function isExternalResPath(path: string): boolean {
   return (path.endsWith(".tres") || path.endsWith(".res")) && !path.includes("::");
+}
+
+function isGdPath(path: string): boolean {
+  return path.endsWith(".gd") && path.startsWith("res://") && !path.includes("::");
 }
 
 export function mutationNeedsDiskHash(actionId: string, params: Record<string, unknown>): boolean {
@@ -103,6 +120,15 @@ export function mutationNeedsDiskHash(actionId: string, params: Record<string, u
   // unique=true is dest file-copy + RAM edit; the field is durable only after resource.save.
   if (actionId === "resource.duplicate") {
     return typeof params.dest === "string" && isExternalResPath(params.dest);
+  }
+  if (actionId === "script.write") {
+    return typeof params.path === "string" && isGdPath(params.path);
+  }
+  if (actionId === "script.patch") {
+    return params.buffer_only !== true && typeof params.path === "string" && isGdPath(params.path);
+  }
+  if (actionId === "script.rename") {
+    return true;
   }
   return actionId === "asset.move" || actionId === "asset.rename";
 }
@@ -117,9 +143,14 @@ export function durableResPath(
     after &&
     typeof after.path === "string" &&
     after.path.startsWith("res://") &&
-    isExternalResPath(after.path)
+    (isExternalResPath(after.path) || isGdPath(after.path))
   ) {
-    if (actionId === "asset.move" || actionId === "asset.rename" || actionId === "resource.duplicate") {
+    if (
+      actionId === "asset.move" ||
+      actionId === "asset.rename" ||
+      actionId === "resource.duplicate" ||
+      actionId === "script.rename"
+    ) {
       return after.path;
     }
     if (actionId === "resource.edit" && after.path !== source) {

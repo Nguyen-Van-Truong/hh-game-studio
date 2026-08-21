@@ -28,6 +28,7 @@ import {
   isProvenEditorApply,
   isResourceApply,
   isSceneLifecycleApply,
+  isScriptApply,
   isSignalApply,
   mutationNeedsDiskHash,
   nodeNeedsUidAfter,
@@ -546,6 +547,65 @@ function resourceApplyOk(
   return undefined;
 }
 
+function scriptApplyOk(
+  result: PluginCommandResult,
+  actionId: string,
+  params: Record<string, unknown>,
+): PluginCommandResult | undefined {
+  if (!isScriptApply(actionId)) {
+    return undefined;
+  }
+  if (!result.ok) {
+    return result;
+  }
+  const after = result.after;
+  const needsUndo = actionId === "script.attach" || actionId === "script.detach";
+  if (needsUndo && (typeof result.undo_action !== "string" || !result.undo_action.startsWith("Agent: "))) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, `${actionId} missing Agent UndoRedo name`);
+  }
+  if (actionId === "script.write" || actionId === "script.patch") {
+    if (actionId === "script.patch" && params.buffer_only === true) {
+      if (!isRecord(after) || after.buffer_only !== true) {
+        return errorResult(result.command_id, E.E_UNVERIFIED, "buffer_only patch missing buffer readback");
+      }
+      return undefined;
+    }
+    if (!isRecord(after) || typeof after.disk_hash !== "string" || after.disk_hash.length < 16) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, `${actionId} missing disk hash`);
+    }
+    const want = typeof params.path === "string" ? params.path : "";
+    const got = typeof after.path === "string" ? after.path : "";
+    if (want && got && want !== got) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, `${actionId} path mismatch`);
+    }
+    return undefined;
+  }
+  if (actionId === "script.attach") {
+    if (!isRecord(after) || after.readback_equals !== true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "script.attach readback failed");
+    }
+    const want = typeof params.path === "string" ? params.path : "";
+    const got = typeof after.path === "string" ? after.path : "";
+    if (want && got && want !== got) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "script.attach path mismatch");
+    }
+    return undefined;
+  }
+  if (actionId === "script.detach") {
+    if (!isRecord(after) || after.attached === true || (typeof after.path === "string" && after.path.length > 0)) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "script.detach still attached");
+    }
+    return undefined;
+  }
+  if (actionId === "script.rename") {
+    if (!isRecord(after) || after.old_path_absent !== true || typeof after.path !== "string") {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "script.rename missing dest path");
+    }
+    return undefined;
+  }
+  return undefined;
+}
+
 function durableDiskOk(
   result: PluginCommandResult,
   actionId: string,
@@ -917,9 +977,11 @@ async function applyMutateOnce(
           ? "resource"
           : isSignalApply(classified.actionId)
             ? "signal"
-            : isSceneLifecycleApply(classified.actionId)
-              ? "scene"
-              : "node",
+            : isScriptApply(classified.actionId)
+              ? "script"
+              : isSceneLifecycleApply(classified.actionId)
+                ? "scene"
+                : "node",
       action_id: classified.actionId,
       checks: result.postcondition.checks,
       disk_hash: isRecord(result.after) ? result.after.disk_hash ?? "" : "",
@@ -961,6 +1023,12 @@ async function applyMutateOnce(
       persistResult(row, resourceFail);
       saveState(ledger, row, "failed");
       return resourceFail;
+    }
+    const scriptFail = scriptApplyOk(result, classified.actionId, fields.params);
+    if (scriptFail) {
+      persistResult(row, scriptFail);
+      saveState(ledger, row, "failed");
+      return scriptFail;
     }
     const projectRoot = runtime.projectRoot ?? runtime.policy?.projectRoot ?? "";
     const diskFail = durableDiskOk(result, classified.actionId, fields.params, projectRoot);
@@ -1045,7 +1113,8 @@ async function recoverFromReadback(
     if (
       sceneNeedsDiskHash(row.action_id) ||
       isResourceApply(row.action_id) ||
-      isAssetRefApply(row.action_id)
+      isAssetRefApply(row.action_id) ||
+      isScriptApply(row.action_id)
     ) {
       return undefined;
     }

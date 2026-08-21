@@ -433,6 +433,8 @@ def run_live() -> tuple[list[str], str, str]:
                 "scene-lifecycle",
                 "scene-lifecycle+node-crud",
                 "scene-lifecycle+node-crud+property",
+                "scene-lifecycle+node-crud+property+resource+signal",
+                "scene-lifecycle+node-crud+property+resource+signal+script",
             ):
                 errors.append(
                     f"capability://matrix mutate_dispatched must include scene-lifecycle: {payload.get('mutate_dispatched')}"
@@ -649,8 +651,8 @@ def run_live() -> tuple[list[str], str, str]:
         )
         req_id += 1
         diag_body = (diag.get("result") or {}).get("structuredContent") or {}
-        if (diag_body.get("error") or {}).get("code") != "E_UNVERIFIED":
-            errors.append(f"script.diagnostics must stay E_UNVERIFIED: {diag_body}")
+        if diag_body.get("ok") is not True:
+            errors.append(f"live script.diagnostics must ACK: {sess.redact(json.dumps(diag), secret)}")
         logs = plug.mcp_call(
             proc,
             req_id,
@@ -683,20 +685,20 @@ def run_live() -> tuple[list[str], str, str]:
         mutate = plug.mcp_call(
             proc,
             req_id,
-            "godot.script",
+            "godot.project",
             {
-                "action": "write",
+                "action": "settings",
                 "params": {
-                    "path": "res://fixtures/unproven.gd",
-                    "contents": "extends Node",
+                    "key": "application/config/name",
+                    "value": {"schema": "hh-godot-variant/1", "type": "int", "value": 1},
                 },
             },
         )
         mutate_body = (mutate.get("result") or {}).get("structuredContent") or {}
         if (mutate_body.get("error") or {}).get("code") != "E_UNVERIFIED":
-            errors.append(f"script.write must stay E_UNVERIFIED: {mutate_body}")
+            errors.append(f"project.settings must stay E_UNVERIFIED: {mutate_body}")
         if mutate_body.get("ok") is True:
-            errors.append("unproven script.write returned ok true")
+            errors.append("unproven project.settings returned ok true")
         if TREE_FIXTURE.read_text(encoding="utf-8").count("AgentWroteThis"):
             errors.append("read-model path wrote a node into the fixture scene")
     except Exception as exc:  # noqa: BLE001

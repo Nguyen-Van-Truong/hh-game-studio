@@ -689,12 +689,12 @@ def main() -> int:
             mutate = mcp_call(
                 proc,
                 3,
-                "godot.script",
+                "godot.project",
                 {
-                    "action": "write",
+                    "action": "settings",
                     "params": {
-                        "path": "res://scripts/unproven.gd",
-                        "contents": "extends Node",
+                        "key": "application/config/name",
+                        "value": {"schema": "hh-godot-variant/1", "type": "int", "value": 1},
                     },
                 },
             )

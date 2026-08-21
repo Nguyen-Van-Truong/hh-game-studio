@@ -35,7 +35,7 @@ export const REQUIRED_VERBS: Readonly<Record<string, readonly string[]>> = {
   property: ["get", "set", "batch", "reset"],
   resource: ["create", "load", "assign", "duplicate", "edit", "save", "uid"],
   signal: ["list", "connect", "disconnect", "inspect"],
-  script: ["read", "write", "patch", "validate", "attach", "open_at", "diagnostics"],
+  script: ["read", "write", "patch", "validate", "attach", "detach", "rename", "open_at", "diagnostics"],
   asset: ["import", "reimport", "move", "rename", "delete", "dependencies", "preview"],
   tilemap: ["tileset", "source", "terrain", "layer", "cell", "fill", "stamp", "query"],
   animation: ["library", "animation", "track", "key", "state_machine", "preview"],

@@ -747,16 +747,22 @@ func _script_validate(command_id: String, params: Dictionary, post: String) -> D
 	var jail: Dictionary = _jail(command_id, res_path)
 	if jail.get("ok", false) != true:
 		return jail
-	if not ResourceLoader.exists(res_path):
+	if not FileAccess.file_exists(res_path):
 		return _unverified(command_id, "script missing")
-	var loaded: Resource = ResourceLoader.load(res_path)
-	if loaded == null or not (loaded is Script):
-		return _unverified(command_id, "script load failed")
-	var script: Script = loaded as Script
-	var base: String = script.get_instance_base_type()
-	if base.is_empty():
-		return _unverified(command_id, "script has no instance base type")
-	return _ok(command_id, post, {"path": res_path, "base": base})
+	var text: String = FileAccess.get_file_as_bytes(res_path).get_string_from_utf8()
+	var parsed: Dictionary = _parse_gdscript(text)
+	if parsed.get("ok", false) != true:
+		return _errors.fail(
+			command_id,
+			str(parsed.get("code", HHAgentErrors.E_INVALID_TYPE)),
+			str(parsed.get("message", "GDScript validate failed")),
+			res_path,
+		)
+	return _ok(command_id, post, {
+		"path": res_path,
+		"base": str(parsed.get("base", "")),
+		"valid": true,
+	})
 
 
 func _script_diagnostics(command_id: String, params: Dictionary, post: String) -> Dictionary:
@@ -766,7 +772,39 @@ func _script_diagnostics(command_id: String, params: Dictionary, post: String) -
 		return jail
 	if not FileAccess.file_exists(res_path):
 		return _unverified(command_id, "script missing")
-	return _unverified(command_id, "script diagnostics API is not proven on this EditorInterface")
+	var text: String = FileAccess.get_file_as_bytes(res_path).get_string_from_utf8()
+	var parsed: Dictionary = _parse_gdscript(text)
+	var items: Array = []
+	if parsed.get("ok", false) != true:
+		items.append({
+			"line": 0,
+			"code": str(parsed.get("code", "")),
+			"message": str(parsed.get("message", "")),
+		})
+	return _ok(command_id, post, {
+		"path": res_path,
+		"valid": parsed.get("ok", false) == true,
+		"base": str(parsed.get("base", "")),
+		"diagnostics": items,
+	})
+
+
+func _parse_gdscript(contents: String) -> Dictionary:
+	if contents.begins_with("\ufeff"):
+		return {"ok": false, "code": HHAgentErrors.E_INVALID_TYPE, "message": "UTF-8 BOM is not allowed"}
+	var probe: GDScript = GDScript.new()
+	probe.source_code = contents
+	var err: Error = probe.reload()
+	if err != OK:
+		return {
+			"ok": false,
+			"code": HHAgentErrors.E_INVALID_TYPE,
+			"message": "GDScript parse failed: %s" % error_string(err),
+		}
+	var base: String = probe.get_instance_base_type()
+	if base.is_empty() and contents.contains("extends "):
+		return {"ok": false, "code": HHAgentErrors.E_INVALID_TYPE, "message": "GDScript has no instance base type"}
+	return {"ok": true, "base": base}
 
 
 func _script_open_at(command_id: String, params: Dictionary, post: String) -> Dictionary:
@@ -775,11 +813,16 @@ func _script_open_at(command_id: String, params: Dictionary, post: String) -> Di
 	var jail: Dictionary = _jail(command_id, res_path)
 	if jail.get("ok", false) != true:
 		return jail
-	if not ResourceLoader.exists(res_path):
+	if not FileAccess.file_exists(res_path):
 		return _unverified(command_id, "script missing")
-	var loaded: Resource = ResourceLoader.load(res_path)
+	var loaded: Resource = ResourceLoader.load(res_path, "", ResourceLoader.CACHE_MODE_REPLACE)
 	if loaded == null or not (loaded is Script):
-		return _unverified(command_id, "script load failed")
+		var probe: GDScript = GDScript.new()
+		probe.source_code = FileAccess.get_file_as_bytes(res_path).get_string_from_utf8()
+		probe.resource_path = res_path
+		if probe.reload() != OK:
+			return _unverified(command_id, "script load failed")
+		loaded = probe
 	EditorInterface.edit_script(loaded as Script, line, 0, true)
 	var editor: ScriptEditor = EditorInterface.get_script_editor()
 	if editor == null:

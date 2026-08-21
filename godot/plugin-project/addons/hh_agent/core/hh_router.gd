@@ -12,8 +12,9 @@ const _NodeScript: GDScript = preload("res://addons/hh_agent/core/hh_node_adapte
 const _PropertyScript: GDScript = preload("res://addons/hh_agent/core/hh_property_adapter.gd")
 const _ResourceScript: GDScript = preload("res://addons/hh_agent/core/hh_resource_adapter.gd")
 const _SignalScript: GDScript = preload("res://addons/hh_agent/core/hh_signal_adapter.gd")
+const _ScriptScript: GDScript = preload("res://addons/hh_agent/core/hh_script_adapter.gd")
 
-## Routes read/view adapters, scene/node/property/resource/signal apply.
+## Routes read/view adapters, scene/node/property/resource/signal/script apply.
 
 var _errors: HHAgentErrors = HHAgentErrors.new()
 var _envelope: HHAgentEnvelope = HHAgentEnvelope.new()
@@ -23,6 +24,7 @@ var _nodes: HHAgentNodeAdapter = HHAgentNodeAdapter.new()
 var _props: HHAgentPropertyAdapter = HHAgentPropertyAdapter.new()
 var _resources: HHAgentResourceAdapter = HHAgentResourceAdapter.new()
 var _signals: HHAgentSignalAdapter = HHAgentSignalAdapter.new()
+var _scripts: HHAgentScriptAdapter = HHAgentScriptAdapter.new()
 
 
 func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_gate: HHAgentPauseGate = null) -> Dictionary:
@@ -87,6 +89,8 @@ func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_ga
 		return _signals.handle(command_id, method, action, params, actions, pre)
 	if method == "godot.asset" and _resources.handles_asset(action):
 		return _resources.handle_asset(command_id, method, action, params, actions, pre)
+	if method == "godot.script" and _scripts.handles(action):
+		return _scripts.handle(command_id, method, action, params, actions, pre)
 	if method == "godot.scene" and _scenes.handles(action):
 		return _scenes.handle(command_id, method, action, params, actions, pre)
 	if side_effect == "read" or side_effect == "view":
@@ -232,17 +236,20 @@ func run_selftest(actions: HHAgentActions) -> PackedStringArray:
 			)
 	var mutate_still: Dictionary = dispatch(
 		_sample(
-			"godot.script",
-			"write",
-			{"path": "res://r3w4/unproven.gd", "contents": "extends Node"},
+			"godot.project",
+			"settings",
+			{
+				"key": "application/config/name",
+				"value": {"schema": "hh-godot-variant/1", "type": "int", "value": 1},
+			},
 		),
 		actions,
 		0,
 	)
 	if str(_error_of(mutate_still).get("code", "")) != HHAgentErrors.E_UNVERIFIED:
-		failures.append("script.write must stay E_UNVERIFIED")
+		failures.append("project.settings must stay E_UNVERIFIED")
 	if mutate_still.get("ok", true) == true:
-		failures.append("script.write must not paper-ok")
+		failures.append("project.settings must not paper-ok")
 	var forbidden: Dictionary = dispatch(
 		{
 			"protocol": HHAgentConstants.PROTOCOL,

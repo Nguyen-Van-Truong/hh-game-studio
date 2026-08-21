@@ -95,8 +95,8 @@ def src_scan_errors() -> list[str]:
     router = (ADDON / "core" / "hh_router.gd").read_text(encoding="utf-8")
     if "hh_resource_adapter" not in router or "hh_signal_adapter" not in router:
         errors.append("router must dispatch resource/signal adapters")
-    if "script.write" not in router or "resource.create must stay" in router:
-        errors.append("unproven-mutate sentinel must move off resource.create")
+    if "project.settings must stay" not in router or "resource.create must stay" in router:
+        errors.append("unproven-mutate sentinel must stay on project.settings")
     resource = ADDON / "core" / "hh_resource_adapter.gd"
     signal = ADDON / "core" / "hh_signal_adapter.gd"
     reads = ADDON / "core" / "hh_read_adapters.gd"

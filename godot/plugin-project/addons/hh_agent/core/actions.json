@@ -625,6 +625,30 @@
       "postcondition": "node_script_path_equals",
       "checkpoint_required": false
     },
+    "script.detach": {
+      "method": "godot.script",
+      "verb": "detach",
+      "side_effect": "mutate",
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path"
+      ],
+      "postcondition": "node_script_path_equals",
+      "checkpoint_required": false
+    },
+    "script.rename": {
+      "method": "godot.script",
+      "verb": "rename",
+      "side_effect": "mutate",
+      "timeout_ms": 15000,
+      "required": [
+        "path",
+        "name"
+      ],
+      "postcondition": "script_renamed",
+      "checkpoint_required": true
+    },
     "script.open_at": {
       "method": "godot.script",
       "verb": "open_at",
