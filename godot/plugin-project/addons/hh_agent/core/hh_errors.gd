@@ -17,6 +17,8 @@ const E_UNVERIFIED: String = "E_UNVERIFIED"
 const E_AUTH: String = "E_AUTH"
 const E_PROJECT_MISMATCH: String = "E_PROJECT_MISMATCH"
 const E_BUSY: String = "E_BUSY"
+const E_IDEMPOTENCY_CONFLICT: String = "E_IDEMPOTENCY_CONFLICT"
+const E_UNCERTAIN: String = "E_UNCERTAIN"
 
 
 func typed(code: String, message: String, path: String = "") -> Dictionary:

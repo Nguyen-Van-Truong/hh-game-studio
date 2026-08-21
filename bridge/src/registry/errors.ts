@@ -19,6 +19,8 @@ export const E = {
   E_PROJECT_MISMATCH: "E_PROJECT_MISMATCH",
   E_PATH: "E_PATH",
   E_BUSY: "E_BUSY",
+  E_IDEMPOTENCY_CONFLICT: "E_IDEMPOTENCY_CONFLICT",
+  E_UNCERTAIN: "E_UNCERTAIN",
 } as const;
 
 export type ErrorCode = (typeof E)[keyof typeof E];

@@ -22,5 +22,7 @@ const REQUEST_TYPE: String = "request"
 const RESULT_TYPE: String = "result"
 const PING_TYPE: String = "ping"
 const PONG_TYPE: String = "pong"
+const READBACK_TYPE: String = "readback"
+const READBACK_RESULT_TYPE: String = "readback_result"
 const RECONNECT_BASE_MS: int = 500
 const RECONNECT_CAP_MS: int = 5000

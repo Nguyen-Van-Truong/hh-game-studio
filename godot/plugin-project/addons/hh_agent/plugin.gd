@@ -7,6 +7,7 @@ const _QueueScript: GDScript = preload("res://addons/hh_agent/core/hh_queue.gd")
 const _RouterScript: GDScript = preload("res://addons/hh_agent/core/hh_router.gd")
 const _SessionScript: GDScript = preload("res://addons/hh_agent/core/hh_session.gd")
 const _ClientScript: GDScript = preload("res://addons/hh_agent/core/hh_bridge_client.gd")
+const _PostScript: GDScript = preload("res://addons/hh_agent/core/hh_postcondition.gd")
 const _DockScript: GDScript = preload("res://addons/hh_agent/ui/health/hh_health_dock.gd")
 
 ## hh_agent EditorPlugin: main-thread router + health dock + outbound sidecar client.
@@ -19,6 +20,7 @@ var _queue: HHAgentQueue
 var _router: HHAgentRouter
 var _session: HHAgentSession
 var _client: HHAgentBridgeClient
+var _postcondition: HHAgentPostcondition
 var _dock: HHAgentHealthDock
 var _reconnect_timer: Timer
 var _busy: bool = false
@@ -36,8 +38,10 @@ func _enter_tree() -> void:
 	_router = HHAgentRouter.new()
 	_session = HHAgentSession.new()
 	_client = HHAgentBridgeClient.new()
+	_postcondition = HHAgentPostcondition.new()
 	_client.set_enqueue(Callable(self, "_enqueue_inbound"))
 	_client.set_hello_handler(Callable(self, "_on_hello"))
+	_client.set_readback(Callable(self, "_on_readback"))
 	_dock = HHAgentHealthDock.new()
 	add_control_to_dock(DOCK_SLOT_LEFT_UL, _dock)
 	_reconnect_timer = Timer.new()
@@ -85,8 +89,22 @@ func _handle_item(item: Dictionary) -> void:
 	var queued_at: int = int(item.get("_queued_at_ms", 0))
 	var envelope_v: Variant = item.get("envelope", {})
 	var result: Dictionary = _router.dispatch(envelope_v, _actions, queued_at)
+	if _postcondition != null:
+		_postcondition.remember(str(result.get("command_id", "")), result)
 	if _client != null:
 		_client.send_dict(result)
+
+
+func _on_readback(command_id: String) -> Dictionary:
+	if _postcondition == null:
+		return {
+			"type": HHAgentConstants.READBACK_RESULT_TYPE,
+			"command_id": command_id,
+			"found": false,
+			"ok": false,
+			"postcondition": {"verified": false, "checks": []},
+		}
+	return _postcondition.readback(command_id)
 
 
 func _maybe_run_selftest() -> void:
@@ -97,6 +115,22 @@ func _maybe_run_selftest() -> void:
 		failures.append("router or catalog missing")
 	else:
 		failures = _router.run_selftest(_actions)
+		var post: HHAgentPostcondition = HHAgentPostcondition.new()
+		var noop: Dictionary = _router.dispatch(
+			{
+				"protocol": HHAgentConstants.PROTOCOL,
+				"command_id": "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+				"method": HHAgentConstants.NOOP_METHOD,
+				"action": HHAgentConstants.NOOP_ACTION,
+				"params": {},
+			},
+			_actions,
+			0,
+		)
+		post.remember(str(noop.get("command_id", "")), noop)
+		var rb: Dictionary = post.readback(str(noop.get("command_id", "")))
+		if rb.get("found", false) != true:
+			failures.append("postcondition readback")
 	if _queue != null:
 		var flood: int = 0
 		_queue.clear()
@@ -237,8 +271,10 @@ func _cleanup() -> void:
 	if _client != null:
 		_client.set_enqueue(Callable())
 		_client.set_hello_handler(Callable())
+		_client.set_readback(Callable())
 		_client.close()
 		_client = null
+	_postcondition = null
 	if _queue != null:
 		_queue.clear()
 		_queue = null

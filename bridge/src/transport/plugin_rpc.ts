@@ -16,6 +16,54 @@ export function isNoopEnvelope(env: { method?: unknown; action?: unknown }): boo
   return env.method === PLUGIN_NOOP_METHOD && env.action === PLUGIN_NOOP_ACTION;
 }
 
+export const PLUGIN_READBACK_TYPE = "readback" as const;
+export const PLUGIN_READBACK_RESULT_TYPE = "readback_result" as const;
+
+export interface PluginReadbackResult {
+  type: typeof PLUGIN_READBACK_RESULT_TYPE;
+  command_id: string;
+  found: boolean;
+  ok: boolean;
+  postcondition: { verified: boolean; checks: string[] };
+}
+
+export function emptyReadback(commandId: string): PluginReadbackResult {
+  return {
+    type: PLUGIN_READBACK_RESULT_TYPE,
+    command_id: commandId,
+    found: false,
+    ok: false,
+    postcondition: { verified: false, checks: [] },
+  };
+}
+
+export function parsePluginReadback(raw: unknown): PluginReadbackResult | null {
+  if (!isRecord(raw)) {
+    return null;
+  }
+  if (raw.type !== PLUGIN_READBACK_RESULT_TYPE) {
+    return null;
+  }
+  if (typeof raw.command_id !== "string" || raw.command_id.length < 1) {
+    return null;
+  }
+  const postRaw = raw.postcondition;
+  let postcondition = { verified: false, checks: [] as string[] };
+  if (isRecord(postRaw)) {
+    const checks = Array.isArray(postRaw.checks)
+      ? postRaw.checks.filter((c): c is string => typeof c === "string")
+      : [];
+    postcondition = { verified: postRaw.verified === true, checks };
+  }
+  return {
+    type: PLUGIN_READBACK_RESULT_TYPE,
+    command_id: raw.command_id,
+    found: raw.found === true,
+    ok: raw.ok === true,
+    postcondition,
+  };
+}
+
 export function unverifiedResult(commandId: string, message: string): PluginCommandResult {
   return {
     type: "result",

@@ -1,0 +1,561 @@
+/** Durable command ledger: flush before dispatch, dedup, uncertain recovery. No scene writes. */
+
+import { acceptCommand } from "../registry/dispatch.js";
+import { E, typedError } from "../registry/errors.js";
+import { getAction } from "../registry/registry.js";
+import { PROTOCOL, type Policy } from "../registry/types.js";
+import { isUlid } from "../registry/ulid.js";
+import {
+  isNoopEnvelope,
+  PLUGIN_NOOP_ACTION,
+  PLUGIN_NOOP_METHOD,
+  unverifiedResult,
+  type PluginCommandResult,
+} from "../transport/plugin_rpc.js";
+import { LedgerPluginDeath, maybeCrashAfterDispatchAttempt, maybeFault } from "./fault.js";
+import { canonicalRequestHash } from "./hash.js";
+import { emptyRow, type CommandLedger, type CommandRow } from "./store.js";
+import type { LedgerState } from "./states.js";
+
+export const DEFAULT_LEDGER_POLICY = "OBSERVE" as const;
+
+export interface LedgerBound {
+  actorId: string;
+  projectId: string;
+  policy: string;
+}
+
+export interface PluginReadback {
+  command_id: string;
+  found: boolean;
+  ok: boolean;
+  postcondition: { verified: boolean; checks: string[] };
+}
+
+export interface LedgerRuntime {
+  dispatch(envelope: Record<string, unknown>, timeoutMs: number): Promise<PluginCommandResult>;
+  readPostcondition(commandId: string): Promise<PluginReadback>;
+  pluginConnected(): boolean;
+  killPlugin?: () => void;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+export function isNoopVerified(post: { verified: boolean; checks: string[] }): boolean {
+  return post.verified === true && post.checks.length === 1 && post.checks[0] === "noop";
+}
+
+export function normalizePolicy(raw: string | undefined): Policy {
+  if (raw === "EDIT") {
+    return "EDIT";
+  }
+  return "OBSERVE";
+}
+
+export function errorResult(
+  commandId: string,
+  code: string,
+  message: string,
+  path = "",
+): PluginCommandResult {
+  return {
+    type: "result",
+    ok: false,
+    command_id: commandId,
+    changed: false,
+    postcondition: { verified: false, checks: [] },
+    error: typedError(code, message, path),
+  };
+}
+
+export function parseStoredResult(raw: string, commandId: string): PluginCommandResult | undefined {
+  if (!raw) {
+    return undefined;
+  }
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    if (!isRecord(parsed)) {
+      return undefined;
+    }
+    const postRaw = parsed.postcondition;
+    const checks =
+      isRecord(postRaw) && Array.isArray(postRaw.checks)
+        ? postRaw.checks.filter((item): item is string => typeof item === "string")
+        : [];
+    const result: PluginCommandResult = {
+      type: "result",
+      ok: parsed.ok === true,
+      command_id: typeof parsed.command_id === "string" ? parsed.command_id : commandId,
+      changed: parsed.changed === true,
+      postcondition: {
+        verified: isRecord(postRaw) && postRaw.verified === true,
+        checks,
+      },
+    };
+    if (isRecord(parsed.error) && typeof parsed.error.code === "string") {
+      result.error = {
+        code: parsed.error.code,
+        message: typeof parsed.error.message === "string" ? parsed.error.message : "",
+        path: typeof parsed.error.path === "string" ? parsed.error.path : "",
+      };
+    }
+    return result;
+  } catch {
+    return undefined;
+  }
+}
+
+function nowIso(): string {
+  return new Date().toISOString();
+}
+
+function envelopeFields(raw: Record<string, unknown>): {
+  command_id: string;
+  method: string;
+  action: string;
+  params: Record<string, unknown>;
+} {
+  const params = isRecord(raw.params) ? raw.params : {};
+  return {
+    command_id: typeof raw.command_id === "string" ? raw.command_id : "",
+    method: typeof raw.method === "string" ? raw.method : "",
+    action: typeof raw.action === "string" ? raw.action : "",
+    params,
+  };
+}
+
+function identityConflict(row: CommandRow, hash: string, bound: LedgerBound): boolean {
+  return (
+    row.request_hash !== hash ||
+    row.actor_id !== bound.actorId ||
+    row.project_id !== bound.projectId ||
+    row.policy !== bound.policy
+  );
+}
+
+function persistResult(row: CommandRow, result: PluginCommandResult): void {
+  row.result_json = JSON.stringify(result);
+  row.postcondition_json = JSON.stringify(result.postcondition);
+  row.error_code = result.error?.code ?? "";
+  row.error_message = result.error?.message ?? "";
+}
+
+function cachedOrError(row: CommandRow): PluginCommandResult {
+  if (row.state === "uncertain") {
+    return errorResult(
+      row.command_id,
+      E.E_UNCERTAIN,
+      row.error_message || "command is uncertain; will not apply blind",
+    );
+  }
+  const stored = parseStoredResult(row.result_json, row.command_id);
+  if (stored) {
+    return stored;
+  }
+  if (row.state === "failed") {
+    return errorResult(
+      row.command_id,
+      row.error_code || E.E_UNVERIFIED,
+      row.error_message || "failed",
+    );
+  }
+  return errorResult(row.command_id, E.E_UNVERIFIED, "cached result missing");
+}
+
+function saveState(
+  ledger: CommandLedger,
+  row: CommandRow,
+  state: LedgerState,
+  extras?: Partial<CommandRow>,
+): void {
+  row.state = state;
+  row.updated_at = nowIso();
+  if (extras) {
+    Object.assign(row, extras);
+    row.state = state;
+    row.updated_at = nowIso();
+  }
+  ledger.save(row);
+}
+
+type Classified =
+  | { kind: "noop"; timeoutMs: number }
+  | { kind: "blocked"; sideEffect: string; actionId: string; result: PluginCommandResult }
+  | { kind: "invalid"; result: PluginCommandResult };
+
+function classify(raw: Record<string, unknown>, commandId: string): Classified {
+  const fields = envelopeFields(raw);
+  if (fields.method === PLUGIN_NOOP_METHOD) {
+    if (fields.action !== PLUGIN_NOOP_ACTION) {
+      return {
+        kind: "invalid",
+        result: errorResult(commandId, E.E_UNKNOWN_ACTION, "unknown plugin action", "action"),
+      };
+    }
+    return { kind: "noop", timeoutMs: 5_000 };
+  }
+  const accepted = acceptCommand({
+    protocol: typeof raw.protocol === "string" ? raw.protocol : PROTOCOL,
+    command_id: commandId,
+    method: fields.method,
+    action: fields.action,
+    params: fields.params,
+    ...(typeof raw.action_version === "string" ? { action_version: raw.action_version } : {}),
+    ...(isRecord(raw.precondition) ? { precondition: raw.precondition } : {}),
+    ...(isRecord(raw.presentation) ? { presentation: raw.presentation } : {}),
+  });
+  if (!accepted.accepted) {
+    return {
+      kind: "invalid",
+      result: errorResult(
+        commandId,
+        accepted.error.code,
+        accepted.error.message,
+        accepted.error.path,
+      ),
+    };
+  }
+  const def = getAction(accepted.action_id);
+  const side = def?.side_effect ?? "";
+  const message =
+    side === "read" || side === "view" ? "no read adapter" : "not dispatched";
+  return {
+    kind: "blocked",
+    sideEffect: side,
+    actionId: accepted.action_id,
+    result: unverifiedResult(commandId, message),
+  };
+}
+
+function handlePluginFault(runtime: LedgerRuntime, err: unknown): void {
+  if (err instanceof LedgerPluginDeath) {
+    runtime.killPlugin?.();
+    return;
+  }
+  throw err;
+}
+
+async function applyNoopOnce(
+  ledger: CommandLedger,
+  row: CommandRow,
+  envelope: Record<string, unknown>,
+  runtime: LedgerRuntime,
+  timeoutMs: number,
+): Promise<PluginCommandResult> {
+  if (row.apply_count > 0 || row.dispatch_attempted > 0) {
+    return markUncertain(ledger, row, "already attempted; refusing blind replay");
+  }
+  if (!isNoopEnvelope(envelope)) {
+    return markUncertain(ledger, row, "only hh.plugin/noop may apply");
+  }
+  if (!runtime.pluginConnected()) {
+    const result = unverifiedResult(row.command_id, "no plugin");
+    persistResult(row, result);
+    saveState(ledger, row, "failed");
+    return result;
+  }
+  saveState(ledger, row, "applying", {
+    before_summary: '{"kind":"noop"}',
+    side_effect: "read",
+    action_id: "hh.plugin/noop",
+  });
+  try {
+    maybeFault("applying", row.command_id);
+  } catch (err) {
+    handlePluginFault(runtime, err);
+  }
+  if (!runtime.pluginConnected()) {
+    return unverifiedResult(row.command_id, "no plugin");
+  }
+  row.dispatch_attempted = 1;
+  row.updated_at = nowIso();
+  ledger.save(row);
+  maybeCrashAfterDispatchAttempt(row.command_id);
+  let result: PluginCommandResult;
+  try {
+    result = await runtime.dispatch(envelope, timeoutMs);
+  } catch (err) {
+    if (err instanceof LedgerPluginDeath) {
+      runtime.killPlugin?.();
+    }
+    return markUncertain(
+      ledger,
+      row,
+      "dispatch interrupted; postcondition unknown",
+    );
+  }
+  row.apply_count = 1;
+  persistResult(row, result);
+  row.after_summary = JSON.stringify({
+    kind: "noop",
+    checks: result.postcondition.checks,
+  });
+  saveState(ledger, row, "applied_volatile");
+  if (!result.ok || !isNoopVerified(result.postcondition)) {
+    const failed = result.ok
+      ? errorResult(row.command_id, E.E_UNVERIFIED, "noop postcondition failed")
+      : result;
+    persistResult(row, failed);
+    saveState(ledger, row, "failed");
+    return failed;
+  }
+  saveState(ledger, row, "verified");
+  try {
+    maybeFault("verified", row.command_id);
+  } catch (err) {
+    handlePluginFault(runtime, err);
+  }
+  saveState(ledger, row, "committed_durable");
+  return result;
+}
+
+function markUncertain(
+  ledger: CommandLedger,
+  row: CommandRow,
+  message: string,
+): PluginCommandResult {
+  const result = errorResult(row.command_id, E.E_UNCERTAIN, message);
+  persistResult(row, result);
+  saveState(ledger, row, "uncertain");
+  return result;
+}
+
+function commitVerified(ledger: CommandLedger, row: CommandRow, result: PluginCommandResult): PluginCommandResult {
+  persistResult(row, result);
+  if (row.state !== "verified" && row.state !== "committed_durable") {
+    saveState(ledger, row, "verified");
+  }
+  try {
+    maybeFault("verified", row.command_id);
+  } catch {
+    /* already verified; commit next */
+  }
+  saveState(ledger, row, "committed_durable");
+  return result;
+}
+
+async function recoverFromReadback(
+  ledger: CommandLedger,
+  row: CommandRow,
+  runtime: LedgerRuntime,
+): Promise<PluginCommandResult | undefined> {
+  let readback: PluginReadback;
+  try {
+    readback = await runtime.readPostcondition(row.command_id);
+  } catch {
+    return undefined;
+  }
+  if (readback.found && readback.ok && isNoopVerified(readback.postcondition)) {
+    const result: PluginCommandResult = {
+      type: "result",
+      ok: true,
+      command_id: row.command_id,
+      changed: false,
+      postcondition: readback.postcondition,
+    };
+    persistResult(row, result);
+    row.after_summary = JSON.stringify({ kind: "noop", checks: readback.postcondition.checks });
+    return commitVerified(ledger, row, result);
+  }
+  return undefined;
+}
+
+async function recoverApplying(
+  ledger: CommandLedger,
+  row: CommandRow,
+  envelope: Record<string, unknown>,
+  runtime: LedgerRuntime,
+  timeoutMs: number,
+): Promise<PluginCommandResult> {
+  const fromReadback = await recoverFromReadback(ledger, row, runtime);
+  if (fromReadback) {
+    return fromReadback;
+  }
+  const stored = parseStoredResult(row.result_json, row.command_id);
+  if (stored && stored.ok && isNoopVerified(stored.postcondition)) {
+    return commitVerified(ledger, row, stored);
+  }
+  if (row.dispatch_attempted === 0 && row.apply_count === 0 && isNoopEnvelope(envelope)) {
+    return applyNoopOnce(ledger, row, envelope, runtime, timeoutMs);
+  }
+  return markUncertain(ledger, row, "applying crashed; cannot confirm postcondition");
+}
+
+async function recoverVolatile(
+  ledger: CommandLedger,
+  row: CommandRow,
+  envelope: Record<string, unknown>,
+  runtime: LedgerRuntime,
+  timeoutMs: number,
+): Promise<PluginCommandResult> {
+  const stored = parseStoredResult(row.result_json, row.command_id);
+  if (stored && stored.ok && isNoopVerified(stored.postcondition)) {
+    return commitVerified(ledger, row, stored);
+  }
+  const fromReadback = await recoverFromReadback(ledger, row, runtime);
+  if (fromReadback) {
+    return fromReadback;
+  }
+  if (row.dispatch_attempted === 0 && row.apply_count === 0 && isNoopEnvelope(envelope)) {
+    return applyNoopOnce(ledger, row, envelope, runtime, timeoutMs);
+  }
+  return markUncertain(ledger, row, "applied_volatile without durable verify");
+}
+
+async function continueAfterReceived(
+  ledger: CommandLedger,
+  row: CommandRow,
+  envelope: Record<string, unknown>,
+  runtime: LedgerRuntime,
+): Promise<PluginCommandResult> {
+  const classified = classify(envelope, row.command_id);
+  row.side_effect =
+    classified.kind === "noop" ? "read" : classified.kind === "blocked" ? classified.sideEffect : "";
+  row.action_id =
+    classified.kind === "noop"
+      ? "hh.plugin/noop"
+      : classified.kind === "blocked"
+        ? classified.actionId
+        : "";
+  saveState(ledger, row, "validated");
+  try {
+    maybeFault("validated", row.command_id);
+  } catch (err) {
+    handlePluginFault(runtime, err);
+  }
+  if (classified.kind === "invalid") {
+    persistResult(row, classified.result);
+    saveState(ledger, row, "failed");
+    return classified.result;
+  }
+  if (classified.kind === "blocked") {
+    persistResult(row, classified.result);
+    row.after_summary = JSON.stringify({ rejected: classified.result.error?.code ?? E.E_UNVERIFIED });
+    saveState(ledger, row, "failed");
+    return classified.result;
+  }
+  return applyNoopOnce(ledger, row, envelope, runtime, classified.timeoutMs);
+}
+
+export async function executeCommand(
+  ledger: CommandLedger,
+  envelope: Record<string, unknown>,
+  bound: LedgerBound,
+  runtime: LedgerRuntime,
+): Promise<PluginCommandResult> {
+  const fields = envelopeFields(envelope);
+  if (!isUlid(fields.command_id)) {
+    return errorResult(fields.command_id, E.E_INVALID_COMMAND_ID, "command_id must be a ULID", "command_id");
+  }
+  const hash = canonicalRequestHash({
+    command_id: fields.command_id,
+    method: fields.method,
+    action: fields.action,
+    params: fields.params,
+    precondition: envelope.precondition,
+    presentation: envelope.presentation,
+    action_version: envelope.action_version,
+  });
+  const existing = ledger.get(fields.command_id);
+  if (existing) {
+    if (identityConflict(existing, hash, bound)) {
+      return errorResult(
+        fields.command_id,
+        E.E_IDEMPOTENCY_CONFLICT,
+        "same command_id with different request hash or bound identity",
+        "command_id",
+      );
+    }
+    if (existing.state === "uncertain") {
+      return cachedOrError(existing);
+    }
+    if (existing.state === "committed_durable" || existing.state === "failed") {
+      return cachedOrError(existing);
+    }
+    if (existing.state === "verified") {
+      const stored = parseStoredResult(existing.result_json, existing.command_id);
+      if (stored && stored.ok && isNoopVerified(stored.postcondition)) {
+        return commitVerified(ledger, existing, stored);
+      }
+      return markUncertain(ledger, existing, "verified without noop postcondition");
+    }
+    if (existing.state === "applied_volatile") {
+      return recoverVolatile(ledger, existing, envelope, runtime, 5_000);
+    }
+    if (existing.state === "applying") {
+      return recoverApplying(ledger, existing, envelope, runtime, 5_000);
+    }
+    if (existing.state === "validated") {
+      const classified = classify(envelope, existing.command_id);
+      if (classified.kind === "invalid") {
+        persistResult(existing, classified.result);
+        saveState(ledger, existing, "failed");
+        return classified.result;
+      }
+      if (classified.kind === "blocked") {
+        persistResult(existing, classified.result);
+        saveState(ledger, existing, "failed");
+        return classified.result;
+      }
+      return applyNoopOnce(ledger, existing, envelope, runtime, classified.timeoutMs);
+    }
+    if (existing.state === "received") {
+      return continueAfterReceived(ledger, existing, envelope, runtime);
+    }
+  }
+
+  const precondition = isRecord(envelope.precondition) ? JSON.stringify(envelope.precondition) : "";
+  const row = emptyRow({
+    command_id: fields.command_id,
+    request_hash: hash,
+    actor_id: bound.actorId,
+    project_id: bound.projectId,
+    policy: bound.policy,
+    method: fields.method,
+    action: fields.action,
+    action_id: "",
+    side_effect: "",
+    state: "received",
+    envelope_json: JSON.stringify(envelope),
+    result_json: "",
+    error_code: "",
+    error_message: "",
+    postcondition_json: "",
+    precondition_json: precondition,
+    before_summary: "",
+    after_summary: "",
+    apply_count: 0,
+    dispatch_attempted: 0,
+    evidence_json: "[]",
+  });
+  ledger.insertReceived(row);
+  try {
+    maybeFault("received", fields.command_id);
+  } catch (err) {
+    handlePluginFault(runtime, err);
+  }
+  return continueAfterReceived(ledger, row, envelope, runtime);
+}
+
+export function inspectRow(row: CommandRow): Record<string, unknown> {
+  return {
+    command_id: row.command_id,
+    state: row.state,
+    request_hash: row.request_hash,
+    actor_id: row.actor_id,
+    project_id: row.project_id,
+    policy: row.policy,
+    method: row.method,
+    action: row.action,
+    action_id: row.action_id,
+    side_effect: row.side_effect,
+    apply_count: row.apply_count,
+    dispatch_attempted: row.dispatch_attempted,
+    error_code: row.error_code,
+    evidence: JSON.parse(row.evidence_json) as unknown,
+    before_summary: row.before_summary,
+    after_summary: row.after_summary,
+  };
+}

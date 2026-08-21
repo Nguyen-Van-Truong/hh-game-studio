@@ -6,10 +6,14 @@ import { evaluateHello, parseHello, type HelloErr, type HelloOk } from "./handsh
 import { listenLoopback } from "./loopback.js";
 import {
   busyResult,
+  emptyReadback,
   guardPaperSuccess,
+  parsePluginReadback,
   parsePluginResult,
+  PLUGIN_READBACK_TYPE,
   unverifiedResult,
   type PluginCommandResult,
+  type PluginReadbackResult,
 } from "./plugin_rpc.js";
 
 const WS_GUID = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
@@ -27,6 +31,8 @@ export interface PluginTransport {
     envelope: Record<string, unknown>,
     timeoutMs: number,
   ) => Promise<PluginCommandResult>;
+  readPostcondition: (commandId: string, timeoutMs: number) => Promise<PluginReadbackResult>;
+  dropPlugin: () => void;
 }
 
 export interface PluginTransportOpts {
@@ -238,6 +244,10 @@ export async function startPluginTransport(opts: PluginTransportOpts): Promise<P
     string,
     { resolve: (result: PluginCommandResult) => void; timer: ReturnType<typeof setTimeout> }
   >();
+  const pendingReadback = new Map<
+    string,
+    { resolve: (result: PluginReadbackResult) => void; timer: ReturnType<typeof setTimeout> }
+  >();
   let beats: ReturnType<typeof setInterval> | undefined;
 
   const pickLatest = (): void => {
@@ -257,6 +267,26 @@ export async function startPluginTransport(opts: PluginTransportOpts): Promise<P
     clearTimeout(wait.timer);
     pending.delete(commandId);
     wait.resolve(result);
+  };
+
+  const finishReadback = (commandId: string, result: PluginReadbackResult): void => {
+    const wait = pendingReadback.get(commandId);
+    if (!wait) {
+      return;
+    }
+    clearTimeout(wait.timer);
+    pendingReadback.delete(commandId);
+    wait.resolve(result);
+  };
+
+  const dropPlugin = (): void => {
+    for (const state of sockets) {
+      if (state.authed && !state.closed) {
+        state.closed = true;
+        state.socket.destroy();
+      }
+    }
+    pickLatest();
   };
 
   const server = net.createServer((socket) => {
@@ -362,6 +392,11 @@ export async function startPluginTransport(opts: PluginTransportOpts): Promise<P
       sendText(state.socket, JSON.stringify({ type: "pong" }));
       return;
     }
+    const readback = parsePluginReadback(parsed);
+    if (readback) {
+      finishReadback(readback.command_id, readback);
+      return;
+    }
     const result = parsePluginResult(parsed);
     if (result) {
       failPending(result.command_id, result);
@@ -402,12 +437,29 @@ export async function startPluginTransport(opts: PluginTransportOpts): Promise<P
         sendText(sock.socket, JSON.stringify({ type: "request", envelope }));
       });
     },
+    readPostcondition: (commandId, timeoutMs) => {
+      const sock = latest;
+      if (!sock || !sock.authed || sock.closed || !commandId) {
+        return Promise.resolve(emptyReadback(commandId));
+      }
+      return new Promise<PluginReadbackResult>((resolve) => {
+        const timer = setTimeout(() => {
+          finishReadback(commandId, emptyReadback(commandId));
+        }, timeoutMs);
+        pendingReadback.set(commandId, { resolve, timer });
+        sendText(sock.socket, JSON.stringify({ type: PLUGIN_READBACK_TYPE, command_id: commandId }));
+      });
+    },
+    dropPlugin,
     close: async () => {
       if (beats) {
         clearInterval(beats);
       }
       for (const [commandId] of pending) {
         failPending(commandId, unverifiedResult(commandId, "no plugin"));
+      }
+      for (const [commandId] of pendingReadback) {
+        finishReadback(commandId, emptyReadback(commandId));
       }
       for (const state of sockets) {
         state.closed = true;

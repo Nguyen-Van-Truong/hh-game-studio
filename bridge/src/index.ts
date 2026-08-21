@@ -36,3 +36,6 @@ export { generateSessionToken } from "./session/token.js";
 export { listenLoopback, listenExplicit } from "./transport/loopback.js";
 export { startMcpStdio } from "./transport/mcp_stdio.js";
 export { runSessionDoctor } from "./doctor/doctor.js";
+export { openLedger } from "./ledger/store.js";
+export { executeCommand } from "./ledger/execute.js";
+export { ledgerFilePath } from "./ledger/paths.js";

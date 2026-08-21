@@ -16,6 +16,7 @@ var _ready: bool = false
 var _closed: bool = true
 var _enqueue: Callable = Callable()
 var _on_hello: Callable = Callable()
+var _on_readback: Callable = Callable()
 var _errors: HHAgentErrors = HHAgentErrors.new()
 
 
@@ -25,6 +26,10 @@ func set_enqueue(cb: Callable) -> void:
 
 func set_hello_handler(cb: Callable) -> void:
 	_on_hello = cb
+
+
+func set_readback(cb: Callable) -> void:
+	_on_readback = cb
 
 
 func configure(host: String, port: int, project_id: String, token: String) -> void:
@@ -162,6 +167,12 @@ func _on_text(text: String) -> void:
 		return
 	if kind == HHAgentConstants.PING_TYPE:
 		send_dict({"type": HHAgentConstants.PONG_TYPE})
+		return
+	if kind == HHAgentConstants.READBACK_TYPE:
+		if _on_readback.is_valid():
+			var answer: Variant = _on_readback.call(str(rec.get("command_id", "")))
+			if answer is Dictionary:
+				send_dict(answer)
 		return
 	if kind == HHAgentConstants.REQUEST_TYPE:
 		_offer_request(rec)

@@ -1,5 +1,7 @@
 import { randomBytes } from "node:crypto";
 
+import { openLedger, type CommandLedger } from "../ledger/store.js";
+import { DEFAULT_LEDGER_POLICY, normalizePolicy } from "../ledger/execute.js";
 import { PROTOCOL } from "../registry/types.js";
 import { startPluginTransport, type PluginTransport } from "../transport/websocket.js";
 import { applyCurrentUserAcl } from "./acl.js";
@@ -22,6 +24,9 @@ export interface SidecarHandle {
   transport: PluginTransport;
   supervisor: ProcessSupervisor;
   log: SessionLog;
+  ledger: CommandLedger;
+  actorId: string;
+  policy: string;
   close: () => Promise<void>;
 }
 
@@ -37,6 +42,7 @@ export async function startSidecar(projectInput: string): Promise<SidecarHandle>
   const sessionId = randomBytes(16).toString("hex");
 
   let transport: PluginTransport | undefined;
+  let ledger: CommandLedger | undefined;
   try {
     transport = await startPluginTransport({
       protocol: PROTOCOL,
@@ -47,6 +53,10 @@ export async function startSidecar(projectInput: string): Promise<SidecarHandle>
       heartbeatMs: 1_000,
     });
     applyCurrentUserAcl(sessionDir(project.projectId, home), supervisor);
+    ledger = openLedger({ projectId: project.projectId, supervisor, home });
+    const liveLedger = ledger;
+    const actorId = (process.env.HH_LEDGER_ACTOR ?? "").trim() || `sidecar:${sessionId}`;
+    const policy = normalizePolicy(process.env.HH_LEDGER_POLICY ?? DEFAULT_LEDGER_POLICY);
     const descriptor: SessionDescriptor = {
       protocol: PROTOCOL,
       project_id: project.projectId,
@@ -65,13 +75,20 @@ export async function startSidecar(projectInput: string): Promise<SidecarHandle>
       transport: live,
       supervisor,
       log,
+      ledger: liveLedger,
+      actorId,
+      policy,
       close: async () => {
         await live.close();
+        liveLedger.close();
         await supervisor.shutdown();
         removeSessionFiles(project.projectId, home);
       },
     };
   } catch (err) {
+    if (ledger) {
+      ledger.close();
+    }
     if (transport) {
       await transport.close();
     }

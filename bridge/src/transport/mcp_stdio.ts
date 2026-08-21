@@ -1,17 +1,21 @@
 import { createInterface } from "node:readline";
 
+import { executeCommand, inspectRow, type LedgerBound, type LedgerRuntime } from "../ledger/execute.js";
+import type { CommandLedger } from "../ledger/store.js";
 import { acceptCommand } from "../registry/dispatch.js";
 import { E } from "../registry/errors.js";
-import { actionIdFromMethod, allActionDefs, getAction } from "../registry/registry.js";
-import { newUlid } from "../registry/ulid.js";
+import { allActionDefs } from "../registry/registry.js";
+import { isUlid, newUlid } from "../registry/ulid.js";
 import type { SessionLog } from "../session/log.js";
 import { publicDescriptorView, type SessionDescriptor } from "../session/descriptor.js";
 import type { DoctorReport } from "../doctor/doctor.js";
 import {
+  emptyReadback,
   PLUGIN_NOOP_ACTION,
   PLUGIN_NOOP_METHOD,
   unverifiedResult,
   type PluginCommandResult,
+  type PluginReadbackResult,
 } from "./plugin_rpc.js";
 
 interface JsonRpcReq {
@@ -31,7 +35,11 @@ export interface McpStdioContext {
       envelope: Record<string, unknown>,
       timeoutMs: number,
     ) => Promise<PluginCommandResult>;
+    readPostcondition: (commandId: string, timeoutMs: number) => Promise<PluginReadbackResult>;
+    dropPlugin: () => void;
   };
+  ledger?: CommandLedger;
+  bound?: LedgerBound;
 }
 
 function writeRpc(obj: unknown): void {
@@ -67,7 +75,40 @@ function domainTools(): Array<{
     {
       name: "hh.plugin_noop",
       description: "Test noop ACK through a connected plugin. Does not mutate the scene.",
-      inputSchema: { type: "object", additionalProperties: false, properties: {} },
+      inputSchema: {
+        type: "object",
+        additionalProperties: false,
+        properties: {
+          command_id: { type: "string", minLength: 26, maxLength: 26 },
+        },
+      },
+    },
+    {
+      name: "hh.command",
+      description: "Submit an envelope through the durable ledger. Bindings are session-assigned.",
+      inputSchema: {
+        type: "object",
+        additionalProperties: false,
+        required: ["command_id", "method", "action", "params"],
+        properties: {
+          command_id: { type: "string", minLength: 26, maxLength: 26 },
+          method: { type: "string" },
+          action: { type: "string" },
+          params: { type: "object" },
+        },
+      },
+    },
+    {
+      name: "hh.ledger_inspect",
+      description: "Read a ledger row. Never returns session secrets.",
+      inputSchema: {
+        type: "object",
+        additionalProperties: false,
+        required: ["command_id"],
+        properties: {
+          command_id: { type: "string", minLength: 26, maxLength: 26 },
+        },
+      },
     },
   ];
   for (const [name, verbs] of byMethod) {
@@ -100,6 +141,44 @@ function toolResult(id: string | number | null | undefined, body: unknown, isErr
   });
 }
 
+function runtimeOf(ctx: McpStdioContext): LedgerRuntime {
+  return {
+    pluginConnected: () => ctx.plugin?.connected() ?? false,
+    killPlugin: () => ctx.plugin?.dropPlugin(),
+    dispatch: (envelope, timeoutMs) => {
+      const commandId = typeof envelope.command_id === "string" ? envelope.command_id : "";
+      if (!ctx.plugin) {
+        return Promise.resolve(unverifiedResult(commandId, "no plugin"));
+      }
+      return ctx.plugin.dispatch(envelope, timeoutMs);
+    },
+    readPostcondition: async (commandId) => {
+      if (!ctx.plugin) {
+        return emptyReadback(commandId);
+      }
+      const raw = await ctx.plugin.readPostcondition(commandId, 2_000);
+      return {
+        command_id: raw.command_id,
+        found: raw.found,
+        ok: raw.ok,
+        postcondition: raw.postcondition,
+      };
+    },
+  };
+}
+
+async function runThroughLedger(
+  ctx: McpStdioContext,
+  envelope: Record<string, unknown>,
+): Promise<{ body: unknown; isError: boolean }> {
+  if (!ctx.ledger || !ctx.bound) {
+    const commandId = typeof envelope.command_id === "string" ? envelope.command_id : "";
+    return { body: unverifiedResult(commandId, "ledger unavailable"), isError: true };
+  }
+  const result = await executeCommand(ctx.ledger, envelope, ctx.bound, runtimeOf(ctx));
+  return { body: result, isError: !result.ok };
+}
+
 async function handleTool(
   ctx: McpStdioContext,
   name: string,
@@ -111,19 +190,60 @@ async function handleTool(
   if (name === "hh.doctor") {
     return { body: ctx.doctor(), isError: false };
   }
+  if (name === "hh.ledger_inspect") {
+    const commandId = typeof args.command_id === "string" ? args.command_id : "";
+    if (!isUlid(commandId)) {
+      return {
+        body: { error: { code: E.E_INVALID_COMMAND_ID, message: "command_id must be a ULID", path: "command_id" } },
+        isError: true,
+      };
+    }
+    const row = ctx.ledger?.get(commandId);
+    return {
+      body: {
+        ok: true,
+        path: ctx.ledger?.filePath ?? "",
+        row: row ? inspectRow(row) : null,
+      },
+      isError: false,
+    };
+  }
   if (name === "hh.plugin_noop") {
-    const envelope = {
+    const commandId = typeof args.command_id === "string" ? args.command_id : newUlid();
+    if (!isUlid(commandId)) {
+      return {
+        body: { error: { code: E.E_INVALID_COMMAND_ID, message: "command_id must be a ULID", path: "command_id" } },
+        isError: true,
+      };
+    }
+    return runThroughLedger(ctx, {
       protocol: ctx.descriptor().protocol,
-      command_id: newUlid(),
+      command_id: commandId,
       method: PLUGIN_NOOP_METHOD,
       action: PLUGIN_NOOP_ACTION,
       params: {},
-    };
-    if (!ctx.plugin?.connected()) {
-      return { body: unverifiedResult(envelope.command_id, "no plugin"), isError: true };
+    });
+  }
+  if (name === "hh.command") {
+    const commandId = typeof args.command_id === "string" ? args.command_id : "";
+    const method = typeof args.method === "string" ? args.method : "";
+    const action = typeof args.action === "string" ? args.action : "";
+    const params = args.params;
+    if (!isUlid(commandId) || !method || !action || !params || typeof params !== "object" || Array.isArray(params)) {
+      return {
+        body: {
+          error: { code: E.E_INVALID_ENVELOPE, message: "command_id, method, action, params required", path: "params" },
+        },
+        isError: true,
+      };
     }
-    const result = await ctx.plugin.dispatch(envelope, 5_000);
-    return { body: result, isError: !result.ok };
+    return runThroughLedger(ctx, {
+      protocol: ctx.descriptor().protocol,
+      command_id: commandId,
+      method,
+      action,
+      params,
+    });
   }
   const action = args.action;
   const params = args.params;
@@ -135,7 +255,7 @@ async function handleTool(
       isError: true,
     };
   }
-  const command_id = newUlid();
+  const command_id = typeof args.command_id === "string" ? args.command_id : newUlid();
   const accepted = acceptCommand({
     protocol: ctx.descriptor().protocol,
     command_id,
@@ -146,46 +266,13 @@ async function handleTool(
   if (!accepted.accepted) {
     return { body: { error: accepted.error, registry: accepted }, isError: true };
   }
-  const resolvedId = accepted.action_id || actionIdFromMethod(name, action);
-  const def = resolvedId ? getAction(resolvedId) : undefined;
-  if (
-    def &&
-    (def.side_effect === "mutate" || def.side_effect === "destructive" || def.side_effect === "external")
-  ) {
-    return {
-      body: {
-        error: {
-          code: E.E_UNVERIFIED,
-          message: "not dispatched",
-          path: "",
-        },
-      },
-      isError: true,
-    };
-  }
-  if (!def) {
-    return {
-      body: {
-        error: { code: E.E_UNVERIFIED, message: "not dispatched", path: "" },
-        registry: accepted,
-      },
-      isError: true,
-    };
-  }
-  if (!ctx.plugin?.connected()) {
-    return { body: unverifiedResult(command_id, "no plugin"), isError: true };
-  }
-  const result = await ctx.plugin.dispatch(
-    {
-      protocol: ctx.descriptor().protocol,
-      command_id,
-      method: name,
-      action,
-      params,
-    },
-    def.timeout_ms,
-  );
-  return { body: result, isError: !result.ok };
+  return runThroughLedger(ctx, {
+    protocol: ctx.descriptor().protocol,
+    command_id,
+    method: name,
+    action,
+    params,
+  });
 }
 
 export function startMcpStdio(ctx: McpStdioContext): void {

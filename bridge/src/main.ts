@@ -54,9 +54,18 @@ async function main(): Promise<void> {
     descriptor: () => sidecar.descriptor,
     doctor: () => runSessionDoctor(sidecar.descriptor),
     log: sidecar.log,
+    ledger: sidecar.ledger,
+    bound: {
+      actorId: sidecar.actorId,
+      projectId: sidecar.project.projectId,
+      policy: sidecar.policy,
+    },
     plugin: {
       connected: () => sidecar.transport.pluginConnected(),
       dispatch: (envelope, timeoutMs) => sidecar.transport.dispatchToPlugin(envelope, timeoutMs),
+      readPostcondition: (commandId, timeoutMs) =>
+        sidecar.transport.readPostcondition(commandId, timeoutMs),
+      dropPlugin: () => sidecar.transport.dropPlugin(),
     },
   });
 }
