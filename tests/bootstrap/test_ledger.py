@@ -12,6 +12,7 @@ import json
 import os
 import re
 import shutil
+import socket
 import sqlite3
 import subprocess
 import sys
@@ -163,6 +164,11 @@ def src_scan_errors() -> list[str]:
     pkg = (BRIDGE / "package.json").read_text(encoding="utf-8")
     if "better-sqlite3" in pkg:
         errors.append("bridge/package.json added better-sqlite3")
+    session = (BRIDGE / "src" / "session" / "session.ts").read_text(encoding="utf-8")
+    if "sidecar:${sessionId}" in session or "sidecar:`" in session:
+        errors.append("sidecar actor_id must not be minted from sessionId")
+    if "durableActorId" not in session:
+        errors.append("sidecar must bind durableActorId(projectId)")
     return errors
 
 
@@ -707,6 +713,216 @@ def test_sidecar_localappdata() -> tuple[list[str], str]:
     return errors, ledger_path
 
 
+def _stop_sidecar(proc: subprocess.Popen[str] | None, desc_path: Path | None) -> None:
+    if proc and proc.poll() is None:
+        proc.terminate()
+        try:
+            proc.wait(timeout=5)
+        except subprocess.TimeoutExpired:
+            proc.kill()
+            proc.wait(timeout=5)
+    if desc_path and desc_path.is_file():
+        try:
+            desc_path.unlink()
+        except OSError:
+            pass
+        lock = desc_path.with_name("sidecar.lock")
+        if lock.is_file():
+            try:
+                lock.unlink()
+            except OSError:
+                pass
+
+
+def _open_sidecar(
+    project: Path, env: dict | None = None
+) -> tuple[subprocess.Popen[str], Path, dict, socket.socket, list[str]]:
+    run_env = os.environ.copy()
+    if env:
+        run_env.update(env)
+    err_lines: list[str] = []
+    proc = subprocess.Popen(
+        [sess.node(), str(BRIDGE / "dist" / "main.js"), "--project", str(project)],
+        cwd=str(BRIDGE),
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        env=run_env,
+    )
+    threading.Thread(target=sess.drain_stderr, args=(proc, err_lines), daemon=True).start()
+    desc_path, desc = sess.find_descriptor(proc.pid)
+    host = str(desc.get("host") or "")
+    port = int(desc.get("port") or 0)
+    project_id = str(desc.get("project_id") or "")
+    secret = str(desc.get("token") or "")
+    sock = sess.ws_connect(host, port)
+    sess.ws_send_text(sock, json.dumps(sess.hello_payload(project_id, secret)))
+    hello = json.loads(sess.ws_recv_text(sock))
+    if hello.get("ok") is not True:
+        sock.close()
+        raise RuntimeError(f"hello failed: {hello}")
+
+    def plugin_loop() -> None:
+        try:
+            while True:
+                msg = json.loads(sess.ws_recv_text(sock))
+                if msg.get("type") == "readback":
+                    sess.ws_send_text(
+                        sock,
+                        json.dumps(
+                            {
+                                "type": "readback_result",
+                                "command_id": msg.get("command_id"),
+                                "found": False,
+                                "ok": False,
+                                "postcondition": {"verified": False, "checks": []},
+                            }
+                        ),
+                    )
+                    continue
+                if msg.get("type") != "request":
+                    continue
+                env_msg = msg.get("envelope") if isinstance(msg.get("envelope"), dict) else {}
+                command_id = str(env_msg.get("command_id") or "")
+                if env_msg.get("method") == "hh.plugin" and env_msg.get("action") == "noop":
+                    sess.ws_send_text(
+                        sock,
+                        json.dumps(
+                            {
+                                "type": "result",
+                                "ok": True,
+                                "command_id": command_id,
+                                "changed": False,
+                                "postcondition": {"verified": True, "checks": ["noop"]},
+                            }
+                        ),
+                    )
+        except OSError:
+            return
+
+    threading.Thread(target=plugin_loop, daemon=True).start()
+    time.sleep(0.1)
+    assert proc.stdin and proc.stdout
+    proc.stdin.write(
+        json.dumps(
+            {
+                "jsonrpc": "2.0",
+                "id": 1,
+                "method": "initialize",
+                "params": {
+                    "protocolVersion": "2024-11-05",
+                    "capabilities": {},
+                    "clientInfo": {"name": "test-ledger-restart", "version": "0"},
+                },
+            }
+        )
+        + "\n"
+    )
+    proc.stdin.flush()
+    sess.readline_timeout(proc.stdout, 5.0)
+    return proc, desc_path, desc, sock, err_lines
+
+
+def test_sidecar_restart() -> list[str]:
+    """New sidecar process must resume/cache — not E_IDEMPOTENCY_CONFLICT."""
+    errors: list[str] = []
+    tmp = Path(tempfile.mkdtemp(prefix="hh-r2wp4-restart-"))
+    (tmp / "project.godot").write_text("; r2-wp4 restart\nconfig_version=5\n", encoding="utf-8")
+    proc: subprocess.Popen[str] | None = None
+    desc_path: Path | None = None
+    sock: socket.socket | None = None
+    try:
+        proc, desc_path, desc, sock, _err = _open_sidecar(tmp)
+        project_id = str(desc.get("project_id") or "")
+        cached_id = new_ulid()
+        first = mcp_call(proc, 2, "hh.plugin_noop", {"command_id": cached_id})
+        body = (first.get("result") or {}).get("structuredContent") or {}
+        if body.get("ok") is not True:
+            errors.append(f"restart-test first noop failed: {body}")
+        inspect = mcp_call(proc, 3, "hh.ledger_inspect", {"command_id": cached_id})
+        row = ((inspect.get("result") or {}).get("structuredContent") or {}).get("row") or {}
+        if row.get("state") != "committed_durable":
+            errors.append(f"restart-test first state={row}")
+        if not str(row.get("actor_id") or "").startswith("project:"):
+            errors.append(f"actor_id must be project-stable, got {row.get('actor_id')!r}")
+        if sock is not None:
+            sock.close()
+        _stop_sidecar(proc, desc_path)
+        proc = None
+        desc_path = None
+
+        proc, desc_path, desc2, sock, _err2 = _open_sidecar(tmp)
+        if str(desc2.get("project_id") or "") != project_id:
+            errors.append("restart used a different project_id")
+        cached = mcp_call(proc, 2, "hh.plugin_noop", {"command_id": cached_id})
+        cached_body = (cached.get("result") or {}).get("structuredContent") or {}
+        cached_err = (cached_body.get("error") or {}).get("code")
+        if cached_err == "E_IDEMPOTENCY_CONFLICT":
+            errors.append("sidecar restart treated a new session actor as idempotency conflict")
+        if cached_body.get("ok") is not True:
+            errors.append(f"sidecar restart lost cached durable result: {cached_body}")
+        inspect2 = mcp_call(proc, 3, "hh.ledger_inspect", {"command_id": cached_id})
+        row2 = ((inspect2.get("result") or {}).get("structuredContent") or {}).get("row") or {}
+        if row2.get("apply_count") != 1:
+            errors.append(f"sidecar restart re-applied cached noop: {row2}")
+
+        applying_id = new_ulid()
+        if sock is not None:
+            sock.close()
+            sock = None
+        _stop_sidecar(proc, desc_path)
+        proc = None
+        desc_path = None
+
+        proc, desc_path, _desc3, sock, _err3 = _open_sidecar(
+            tmp, env={"HH_LEDGER_FAULT_AT": "applying", "HH_LEDGER_FAULT_MODE": "sidecar"}
+        )
+        try:
+            mcp_call(proc, 2, "hh.plugin_noop", {"command_id": applying_id})
+        except (OSError, RuntimeError, json.JSONDecodeError, TimeoutError):
+            pass
+        deadline = time.time() + 8.0
+        while proc.poll() is None and time.time() < deadline:
+            time.sleep(0.05)
+        if proc.poll() != 99:
+            errors.append(f"applying kill sidecar expected exit 99, got {proc.poll()}")
+        if sock is not None:
+            try:
+                sock.close()
+            except OSError:
+                pass
+            sock = None
+        _stop_sidecar(None, desc_path)
+        desc_path = None
+        proc = None
+
+        proc, desc_path, _desc4, sock, _err4 = _open_sidecar(tmp)
+        resumed = mcp_call(proc, 2, "hh.plugin_noop", {"command_id": applying_id})
+        resumed_body = (resumed.get("result") or {}).get("structuredContent") or {}
+        if (resumed_body.get("error") or {}).get("code") == "E_IDEMPOTENCY_CONFLICT":
+            errors.append("sidecar restart after applying kill returned E_IDEMPOTENCY_CONFLICT")
+        if resumed_body.get("ok") is not True:
+            errors.append(f"sidecar restart after applying kill did not recover: {resumed_body}")
+        inspect3 = mcp_call(proc, 3, "hh.ledger_inspect", {"command_id": applying_id})
+        row3 = ((inspect3.get("result") or {}).get("structuredContent") or {}).get("row") or {}
+        if row3.get("apply_count") != 1:
+            errors.append(f"applying-kill resume apply_count={row3.get('apply_count')}")
+        if row3.get("state") != "committed_durable":
+            errors.append(f"applying-kill resume state={row3}")
+    except Exception as exc:  # noqa: BLE001
+        errors.append(f"sidecar restart test failed: {type(exc).__name__}: {exc}")
+    finally:
+        if sock is not None:
+            try:
+                sock.close()
+            except OSError:
+                pass
+        _stop_sidecar(proc, desc_path)
+        shutil.rmtree(tmp, ignore_errors=True)
+    return errors
+
+
 def main() -> int:
     errors: list[str] = []
     errors.extend(hh_agent_only_addon_errors(PLUGIN_PROJECT, REPO_ROOT))
@@ -744,6 +960,7 @@ def main() -> int:
 
     sidecar_errors, ledger_path = test_sidecar_localappdata()
     errors.extend(sidecar_errors)
+    errors.extend(test_sidecar_restart())
 
     if errors:
         print("FAIL: ledger", file=sys.stderr)
@@ -755,7 +972,7 @@ def main() -> int:
         "PASS: 200 randomized idempotent commands; conflict on payload/actor; "
         ".godot delete keeps LocalAppData dedup; killed received/validated/applying/verified; "
         "uncertain stays unsuccessful; mutate never applying; compaction keeps checkpoint evidence; "
-        f"sidecar ledger={ledger_path}; R2-WP4 stays [ ]."
+        f"sidecar ledger={ledger_path}; sidecar restart resumes/caches; R2-WP4 stays [ ]."
     )
     return 0
 

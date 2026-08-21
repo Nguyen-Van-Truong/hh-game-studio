@@ -2,6 +2,7 @@ import { randomBytes } from "node:crypto";
 
 import { openLedger, type CommandLedger } from "../ledger/store.js";
 import { DEFAULT_LEDGER_POLICY, normalizePolicy } from "../ledger/execute.js";
+import { durableActorId } from "../ledger/paths.js";
 import { PROTOCOL } from "../registry/types.js";
 import { startPluginTransport, type PluginTransport } from "../transport/websocket.js";
 import { applyCurrentUserAcl } from "./acl.js";
@@ -55,7 +56,7 @@ export async function startSidecar(projectInput: string): Promise<SidecarHandle>
     applyCurrentUserAcl(sessionDir(project.projectId, home), supervisor);
     ledger = openLedger({ projectId: project.projectId, supervisor, home });
     const liveLedger = ledger;
-    const actorId = (process.env.HH_LEDGER_ACTOR ?? "").trim() || `sidecar:${sessionId}`;
+    const actorId = (process.env.HH_LEDGER_ACTOR ?? "").trim() || durableActorId(project.projectId);
     const policy = normalizePolicy(process.env.HH_LEDGER_POLICY ?? DEFAULT_LEDGER_POLICY);
     const descriptor: SessionDescriptor = {
       protocol: PROTOCOL,
