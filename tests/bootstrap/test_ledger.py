@@ -972,7 +972,8 @@ def main() -> int:
         "PASS: 200 randomized idempotent commands; conflict on payload/actor; "
         ".godot delete keeps LocalAppData dedup; killed received/validated/applying/verified; "
         "uncertain stays unsuccessful; mutate never applying; compaction keeps checkpoint evidence; "
-        f"sidecar ledger={ledger_path}; sidecar restart resumes/caches; R2-WP4 stays [ ]."
+        f"sidecar ledger={ledger_path}; sidecar restart resumes/caches; "
+        "plan R2-WP4 progress consistent."
     )
     return 0
 
