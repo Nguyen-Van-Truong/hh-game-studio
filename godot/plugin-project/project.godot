@@ -9,6 +9,10 @@ config/name="HH Plugin Host"
 config/description="Godot 4.7 addon host for hh_agent. Do not copy vendor MCP addons here."
 config/features=PackedStringArray("4.7", "Forward Plus")
 
+[autoload]
+
+HhReloadDriver="*res://hh_reload_driver.gd"
+
 [debug]
 
 gdscript/warnings/untyped_declaration=1

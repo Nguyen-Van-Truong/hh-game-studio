@@ -198,6 +198,15 @@ def enablement_errors() -> list[str]:
         errors.append("plugin-project must enable res://addons/hh_agent/plugin.cfg")
     if "until R2" in host:
         errors.append("plugin-project description still says do not add hh_agent until R2")
+    if 'HhReloadDriver="*res://hh_reload_driver.gd"' not in host:
+        errors.append("plugin-project must autoload hh_reload_driver.gd for in-editor reload tests")
+    driver = PLUGIN_PROJECT / "hh_reload_driver.gd"
+    if not driver.is_file():
+        errors.append("missing godot/plugin-project/hh_reload_driver.gd")
+    else:
+        text = driver.read_text(encoding="utf-8")
+        if "set_plugin_enabled" not in text or "HH_AGENT_RELOAD_N" not in text:
+            errors.append("reload driver must call EditorInterface.set_plugin_enabled")
     for project in (MINIMAL_2D / "project.godot", STOCK_POC / "project.godot"):
         text = project.read_text(encoding="utf-8")
         if "res://addons/hh_agent/plugin.cfg" in text:
@@ -282,6 +291,8 @@ def run_godot_checks() -> tuple[list[str], str, str]:
     selftest_dir = Path(tempfile.mkdtemp(prefix="hh-r2wp3-selftest-"))
     try:
         env = os.environ.copy()
+        env.pop("HH_AGENT_RELOAD_N", None)
+        env.pop("HH_AGENT_RELOAD_OUT", None)
         env["HH_AGENT_SELFTEST"] = "1"
         env["HH_AGENT_SELFTEST_OUT"] = str(selftest_dir)
         selftest = subprocess.run(
@@ -314,42 +325,56 @@ def run_godot_checks() -> tuple[list[str], str, str]:
             selftest_status = "ran"
     except subprocess.TimeoutExpired:
         errors.append("Godot editor selftest timed out")
-    reloads = 0
+    reload_dir = Path(tempfile.mkdtemp(prefix="hh-r2wp3-reload-"))
     try:
         run_godot(
             exe,
             ["--headless", "--path", str(PLUGIN_PROJECT), "--import"],
             180,
         )
-        for i in range(50):
-            cycle = run_godot(
-                exe,
-                [
-                    "--headless",
-                    "--editor",
-                    "--path",
-                    str(PLUGIN_PROJECT),
-                    "--quit-after",
-                    "5",
-                ],
-                90,
+        env = os.environ.copy()
+        env.pop("HH_AGENT_SELFTEST", None)
+        env["HH_AGENT_RELOAD_N"] = "50"
+        env["HH_AGENT_RELOAD_OUT"] = str(reload_dir)
+        cycle = subprocess.run(
+            [
+                str(exe),
+                "--headless",
+                "--editor",
+                "--path",
+                str(PLUGIN_PROJECT),
+            ],
+            cwd=str(REPO_ROOT),
+            check=False,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=180,
+            env=env,
+        )
+        out = (cycle.stdout or "") + (cycle.stderr or "")
+        marker = reload_dir / "hh_agent_reload.txt"
+        marker_text = marker.read_text(encoding="utf-8") if marker.is_file() else ""
+        combined = out + "\n" + marker_text
+        if "HH_AGENT_RELOAD=PASS" not in combined:
+            errors.append(
+                f"in-editor disable/enable 50× failed (exit {cycle.returncode}): {combined[-2500:]}"
             )
-            out = (cycle.stdout or "") + (cycle.stderr or "")
-            if cycle.returncode != 0:
-                errors.append(f"Godot editor enter/exit {i + 1}/50 exited {cycle.returncode}")
-                reload_status = f"failed after {reloads}"
-                return errors, selftest_status, reload_status
-            if "[hh_agent] event=enter" not in out or "[hh_agent] event=exit" not in out:
+            reload_status = "failed"
+        else:
+            enters = combined.count("[hh_agent] event=enter")
+            exits = combined.count("[hh_agent] event=exit")
+            if enters < 50 or exits < 50:
                 errors.append(
-                    f"Godot editor enter/exit {i + 1}/50 missing plugin lifecycle logs"
+                    f"in-editor reload did not cycle lifecycle 50× (enter={enters} exit={exits})"
                 )
-                reload_status = f"failed after {reloads}"
-                return errors, selftest_status, reload_status
-            reloads += 1
-        reload_status = "process-enter-exit-ran"
+                reload_status = "failed"
+            else:
+                reload_status = "in-editor-disable-enable-ran"
     except subprocess.TimeoutExpired:
-        errors.append(f"Godot editor reload timed out after {reloads}")
-        reload_status = f"failed after {reloads}"
+        errors.append("in-editor disable/enable 50× timed out")
+        reload_status = "failed"
     return errors, selftest_status, reload_status
 
 
@@ -405,6 +430,8 @@ def run_godot_live_handshake() -> tuple[list[str], str]:
         env = os.environ.copy()
         env.pop("HH_AGENT_SELFTEST", None)
         env.pop("HH_AGENT_SELFTEST_OUT", None)
+        env.pop("HH_AGENT_RELOAD_N", None)
+        env.pop("HH_AGENT_RELOAD_OUT", None)
         godot = subprocess.Popen(
             [
                 str(exe),
@@ -753,7 +780,7 @@ def main() -> int:
     print(
         "PASS: hh_agent router + health dock; envelope second pass; "
         "python-mock sidecar noop; mutate not dispatched; "
-        f"GODOT_SELFTEST={godot_selftest}; GODOT_PROCESS_ENTER_EXIT_50={godot_reload}; "
+        f"GODOT_SELFTEST={godot_selftest}; GODOT_IN_EDITOR_RELOAD_50={godot_reload}; "
         f"GODOT_LIVE_HELLO={godot_live}; R2-WP3 stays unticked."
     )
     return 0
