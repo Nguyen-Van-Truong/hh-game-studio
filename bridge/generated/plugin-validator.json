@@ -486,8 +486,7 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "key",
-          "value"
+          "key"
         ],
         "properties": {
           "key": {
@@ -498,6 +497,14 @@
           },
           "value": {
             "hhCodec": "variant"
+          },
+          "op": {
+            "type": "string",
+            "enum": [
+              "get",
+              "set",
+              "remove"
+            ]
           }
         }
       },
@@ -591,7 +598,13 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_CONFLICT",
+        "E_PATH",
+        "E_PAUSED",
+        "E_LEASE",
+        "E_CHECKPOINT",
+        "E_POLICY"
       ],
       "postcondition": "setting_equals_after_save"
     },
@@ -609,8 +622,7 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "action_name",
-          "keycode"
+          "action_name"
         ],
         "properties": {
           "action_name": {
@@ -624,6 +636,13 @@
             "minLength": 1,
             "maxLength": 128,
             "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "op": {
+            "type": "string",
+            "enum": [
+              "add",
+              "remove"
+            ]
           }
         }
       },
@@ -717,7 +736,13 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_CONFLICT",
+        "E_PATH",
+        "E_PAUSED",
+        "E_LEASE",
+        "E_CHECKPOINT",
+        "E_POLICY"
       ],
       "postcondition": "input_action_present"
     },
@@ -735,8 +760,7 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "name",
-          "path"
+          "name"
         ],
         "properties": {
           "name": {
@@ -750,6 +774,19 @@
             "minLength": 6,
             "maxLength": 256,
             "pattern": "^res://[^\\s]+$"
+          },
+          "op": {
+            "type": "string",
+            "enum": [
+              "add",
+              "remove",
+              "reorder"
+            ]
+          },
+          "index": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4096
           }
         }
       },
@@ -843,7 +880,13 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_CONFLICT",
+        "E_PATH",
+        "E_PAUSED",
+        "E_LEASE",
+        "E_CHECKPOINT",
+        "E_POLICY"
       ],
       "postcondition": "autoload_singleton_registered"
     },
@@ -868,8 +911,8 @@
           "plugin_name": {
             "type": "string",
             "minLength": 1,
-            "maxLength": 128,
-            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+            "maxLength": 256,
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$|^res://[A-Za-z0-9_./-]+$"
           },
           "enabled": {
             "type": "boolean"
@@ -966,7 +1009,13 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_CONFLICT",
+        "E_PATH",
+        "E_PAUSED",
+        "E_LEASE",
+        "E_CHECKPOINT",
+        "E_POLICY"
       ],
       "postcondition": "plugin_enabled_matches"
     },

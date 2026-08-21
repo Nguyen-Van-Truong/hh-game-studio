@@ -14,8 +14,9 @@ const _ResourceScript: GDScript = preload("res://addons/hh_agent/core/hh_resourc
 const _SignalScript: GDScript = preload("res://addons/hh_agent/core/hh_signal_adapter.gd")
 const _ScriptScript: GDScript = preload("res://addons/hh_agent/core/hh_script_adapter.gd")
 const _AssetScript: GDScript = preload("res://addons/hh_agent/core/hh_asset_adapter.gd")
+const _SettingsScript: GDScript = preload("res://addons/hh_agent/core/hh_settings_adapter.gd")
 
-## Routes read/view adapters, scene/node/property/resource/signal/script/asset apply.
+## Routes read/view adapters, scene/node/property/resource/signal/script/asset/project apply.
 
 var _errors: HHAgentErrors = HHAgentErrors.new()
 var _envelope: HHAgentEnvelope = HHAgentEnvelope.new()
@@ -27,6 +28,7 @@ var _resources: HHAgentResourceAdapter = HHAgentResourceAdapter.new()
 var _signals: HHAgentSignalAdapter = HHAgentSignalAdapter.new()
 var _scripts: HHAgentScriptAdapter = HHAgentScriptAdapter.new()
 var _assets: HHAgentAssetAdapter = HHAgentAssetAdapter.new()
+var _settings: HHAgentSettingsAdapter = HHAgentSettingsAdapter.new()
 
 
 func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_gate: HHAgentPauseGate = null) -> Dictionary:
@@ -93,6 +95,8 @@ func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_ga
 		return _assets.handle(command_id, method, action, params, actions, pre, pause_gate)
 	if method == "godot.script" and _scripts.handles(action):
 		return _scripts.handle(command_id, method, action, params, actions, pre)
+	if method == "godot.project" and action != "inspect" and action != "doctor" and _settings.handles(action):
+		return _settings.handle(command_id, method, action, params, actions, pre)
 	if method == "godot.scene" and _scenes.handles(action):
 		return _scenes.handle(command_id, method, action, params, actions, pre)
 	if side_effect == "read" or side_effect == "view":
@@ -236,22 +240,48 @@ func run_selftest(actions: HHAgentActions) -> PackedStringArray:
 				actions,
 				0,
 			)
-	var mutate_still: Dictionary = dispatch(
+	var settings_get: Dictionary = dispatch(
+		_sample("godot.project", "settings", {"key": "application/config/name", "op": "get"}),
+		actions,
+		0,
+	)
+	if settings_get.get("ok", false) != true:
+		failures.append("project.settings get must ACK")
+	gate.set_paused(true)
+	var paused_settings: Dictionary = dispatch(
 		_sample(
 			"godot.project",
 			"settings",
 			{
-				"key": "application/config/name",
-				"value": {"schema": "hh-godot-variant/1", "type": "int", "value": 1},
+				"key": "hh_test/selftest",
+				"op": "set",
+				"value": {"schema": "hh-godot-variant/1", "type": "string", "value": "no"},
 			},
 		),
 		actions,
 		0,
+		gate,
+	)
+	if str(_error_of(paused_settings).get("code", "")) != HHAgentErrors.E_PAUSED:
+		failures.append("paused project.settings must be E_PAUSED")
+	gate.set_paused(false)
+	var vendor_plugin: Dictionary = dispatch(
+		_sample("godot.project", "plugin", {"plugin_name": "fake_vendor", "enabled": true}),
+		actions,
+		0,
+	)
+	var vendor_code: String = str(_error_of(vendor_plugin).get("code", ""))
+	if vendor_code != HHAgentErrors.E_POLICY and vendor_code != HHAgentErrors.E_CONFLICT:
+		failures.append("third-party plugin enable must be E_POLICY")
+	var mutate_still: Dictionary = dispatch(
+		_sample("godot.input", "action", {"action_name": "interact", "phase": "press"}),
+		actions,
+		0,
 	)
 	if str(_error_of(mutate_still).get("code", "")) != HHAgentErrors.E_UNVERIFIED:
-		failures.append("project.settings must stay E_UNVERIFIED")
+		failures.append("play.input inject must stay E_UNVERIFIED")
 	if mutate_still.get("ok", true) == true:
-		failures.append("project.settings must not paper-ok")
+		failures.append("play.input inject must not paper-ok")
 	var forbidden: Dictionary = dispatch(
 		{
 			"protocol": HHAgentConstants.PROTOCOL,

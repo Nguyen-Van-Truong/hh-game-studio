@@ -48,6 +48,13 @@ export const SCRIPT_APPLY = [
   "script.rename",
 ] as const;
 
+export const PROJECT_SETTINGS_APPLY = [
+  "project.settings",
+  "project.input",
+  "project.autoload",
+  "project.plugin",
+] as const;
+
 export const NODE_UID_AFTER = [
   "node.add",
   "node.rename",
@@ -92,6 +99,10 @@ export function isScriptApply(actionId: string): boolean {
   return (SCRIPT_APPLY as readonly string[]).includes(actionId);
 }
 
+export function isProjectSettingsApply(actionId: string): boolean {
+  return (PROJECT_SETTINGS_APPLY as readonly string[]).includes(actionId);
+}
+
 export function isProvenEditorApply(actionId: string): boolean {
   return (
     isSceneLifecycleApply(actionId) ||
@@ -101,7 +112,8 @@ export function isProvenEditorApply(actionId: string): boolean {
     isSignalApply(actionId) ||
     isAssetRefApply(actionId) ||
     isAssetIngestApply(actionId) ||
-    isScriptApply(actionId)
+    isScriptApply(actionId) ||
+    isProjectSettingsApply(actionId)
   );
 }
 

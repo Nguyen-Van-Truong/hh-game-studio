@@ -128,6 +128,22 @@ const SCENE_MUTATE_ERRORS: readonly string[] = [
   E.E_CHECKPOINT,
 ];
 
+const PROJECT_MUTATE_ERRORS: readonly string[] = [
+  E.E_CONFLICT,
+  E.E_PATH,
+  E.E_PAUSED,
+  E.E_LEASE,
+  E.E_CHECKPOINT,
+  E.E_POLICY,
+];
+
+const PLUGIN_NAME = {
+  type: "string",
+  minLength: 1,
+  maxLength: 256,
+  pattern: "^[A-Za-z_][A-Za-z0-9_]*$|^res://[A-Za-z0-9_./-]+$",
+} as const;
+
 function mutate(
   summary: string,
   undo: UndoStrategy,
@@ -226,35 +242,49 @@ const SPECS: Record<string, ActionSpec> = {
     { detail: "short" },
   ),
   "project.settings": mutate(
-    "Set a ProjectSettings key and save",
+    "Get, set, or remove a ProjectSettings key and save",
     "project_settings_save",
     "setting_equals_after_save",
-    obj(["key", "value"], {
+    obj(["key"], {
       key: { type: "string", minLength: 1, maxLength: 256, pattern: "^[A-Za-z0-9_/.]+$" },
       value: VARIANT,
+      op: { type: "string", enum: ["get", "set", "remove"] },
     }),
-    { key: "application/config/name", value: exampleVariantInt(1) },
+    { key: "application/config/name", value: exampleVariantInt(1), op: "set" },
+    { extra_errors: PROJECT_MUTATE_ERRORS },
   ),
   "project.input": mutate(
-    "Add or replace an InputMap action binding",
+    "Add or remove an InputMap action binding",
     "project_settings_save",
     "input_action_present",
-    obj(["action_name", "keycode"], { action_name: IDENT, keycode: IDENT }),
-    { action_name: "move_left", keycode: "KEY_A" },
+    obj(["action_name"], {
+      action_name: IDENT,
+      keycode: IDENT,
+      op: { type: "string", enum: ["add", "remove"] },
+    }),
+    { action_name: "move_left", keycode: "KEY_A", op: "add" },
+    { extra_errors: PROJECT_MUTATE_ERRORS },
   ),
   "project.autoload": mutate(
-    "Register or update an autoload singleton",
+    "Add, remove, or reorder an autoload singleton",
     "project_settings_save",
     "autoload_singleton_registered",
-    obj(["name", "path"], { name: IDENT, path: RES_PATH }),
-    { name: "SaveService", path: "res://autoload/save_service.gd" },
+    obj(["name"], {
+      name: IDENT,
+      path: RES_PATH,
+      op: { type: "string", enum: ["add", "remove", "reorder"] },
+      index: INDEX,
+    }),
+    { name: "SaveService", path: "res://autoload/save_service.gd", op: "add" },
+    { extra_errors: PROJECT_MUTATE_ERRORS },
   ),
   "project.plugin": mutate(
     "Enable or disable an editor plugin by name",
     "project_settings_save",
     "plugin_enabled_matches",
-    obj(["plugin_name", "enabled"], { plugin_name: IDENT, enabled: BOOL }),
+    obj(["plugin_name", "enabled"], { plugin_name: PLUGIN_NAME, enabled: BOOL }),
     { plugin_name: "hh_agent", enabled: true },
+    { extra_errors: PROJECT_MUTATE_ERRORS },
   ),
   "project.doctor": read(
     "Report pin, path jail, and sidecar health (schema-only here)",

@@ -699,20 +699,17 @@ def run_live() -> tuple[list[str], str, str]:
         mutate = plug.mcp_call(
             proc,
             req_id,
-            "godot.project",
+            "godot.input",
             {
-                "action": "settings",
-                "params": {
-                    "key": "application/config/name",
-                    "value": {"schema": "hh-godot-variant/1", "type": "int", "value": 1},
-                },
+                "action": "action",
+                "params": {"action_name": "interact", "phase": "press"},
             },
         )
         mutate_body = (mutate.get("result") or {}).get("structuredContent") or {}
         if (mutate_body.get("error") or {}).get("code") != "E_UNVERIFIED":
-            errors.append(f"project.settings must stay E_UNVERIFIED: {mutate_body}")
+            errors.append(f"play.input inject must stay E_UNVERIFIED: {mutate_body}")
         if mutate_body.get("ok") is True:
-            errors.append("unproven project.settings returned ok true")
+            errors.append("unproven play.input inject returned ok true")
         if TREE_FIXTURE.read_text(encoding="utf-8").count("AgentWroteThis"):
             errors.append("read-model path wrote a node into the fixture scene")
     except Exception as exc:  # noqa: BLE001

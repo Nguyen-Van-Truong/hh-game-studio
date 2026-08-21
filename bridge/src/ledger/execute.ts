@@ -1,6 +1,7 @@
 /** Durable command ledger: flush before dispatch, dedup, uncertain recovery. */
 
 import fs from "node:fs";
+import path from "node:path";
 
 import { runMutationGate, type PolicyServices } from "../policy/engine.js";
 import { jailProjectPath } from "../policy/jail.js";
@@ -25,6 +26,7 @@ import {
   durableResPath,
   isAssetIngestApply,
   isAssetRefApply,
+  isProjectSettingsApply,
   isPropertyApply,
   isProvenEditorApply,
   isResourceApply,
@@ -634,6 +636,42 @@ function scriptApplyOk(
   return undefined;
 }
 
+function projectSettingsApplyOk(
+  result: PluginCommandResult,
+  actionId: string,
+  projectRoot: string,
+): PluginCommandResult | undefined {
+  if (!isProjectSettingsApply(actionId)) {
+    return undefined;
+  }
+  if (!result.ok) {
+    return result;
+  }
+  const after = result.after;
+  if (!isRecord(after) || after.readback_equals !== true) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, `${actionId} disk parse readback failed`);
+  }
+  const source = after.disk_source === "project.binary" ? "project.binary" : "project.godot";
+  if (after.disk_source !== "project.godot" && after.disk_source !== "project.binary") {
+    return errorResult(result.command_id, E.E_UNVERIFIED, `${actionId} missing project file source`);
+  }
+  if (typeof after.disk_hash !== "string" || after.disk_hash.length < 16) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, `${actionId} missing project disk hash`);
+  }
+  if (!projectRoot) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, `${actionId} missing project root for disk hash`);
+  }
+  const abs = path.join(projectRoot, source);
+  if (!fs.existsSync(abs) || !fs.statSync(abs).isFile()) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, `${actionId} project file missing after save`, source);
+  }
+  const disk = contentHash(abs);
+  if (!disk || disk === "missing" || disk !== after.disk_hash) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, `${actionId} project disk hash mismatch`, source);
+  }
+  return undefined;
+}
+
 function durableDiskOk(
   result: PluginCommandResult,
   actionId: string,
@@ -1017,7 +1055,9 @@ async function applyMutateOnce(
               ? "script"
               : isSceneLifecycleApply(classified.actionId)
                 ? "scene"
-                : "node",
+                : isProjectSettingsApply(classified.actionId)
+                  ? "project"
+                  : "node",
       action_id: classified.actionId,
       checks: result.postcondition.checks,
       disk_hash: isRecord(result.after) ? result.after.disk_hash ?? "" : "",
@@ -1067,6 +1107,12 @@ async function applyMutateOnce(
       return scriptFail;
     }
     const projectRoot = runtime.projectRoot ?? runtime.policy?.projectRoot ?? "";
+    const settingsFail = projectSettingsApplyOk(result, classified.actionId, projectRoot);
+    if (settingsFail) {
+      persistResult(row, settingsFail);
+      saveState(ledger, row, "failed");
+      return settingsFail;
+    }
     const diskFail = durableDiskOk(result, classified.actionId, fields.params, projectRoot);
     if (diskFail) {
       persistResult(row, diskFail);
@@ -1167,7 +1213,8 @@ async function recoverFromReadback(
       isResourceApply(row.action_id) ||
       isAssetRefApply(row.action_id) ||
       isAssetIngestApply(row.action_id) ||
-      isScriptApply(row.action_id)
+      isScriptApply(row.action_id) ||
+      isProjectSettingsApply(row.action_id)
     ) {
       return undefined;
     }

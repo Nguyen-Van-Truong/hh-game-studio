@@ -69,7 +69,7 @@ export function runMutationGate(input: GateInput): GateResult {
       error: typedError(E.E_PATH, "project root required for mutation gates", "project"),
     };
   }
-  const targets = extractTargetPaths(input.params);
+  const targets = isProjectSettingsAction(input.actionId) ? [] : extractTargetPaths(input.params);
   const jailed: JailOk[] = [];
   for (const target of targets) {
     const result = jailProjectPath(services.projectRoot, target, { forWrite: true });
@@ -109,6 +109,17 @@ export function runMutationGate(input: GateInput): GateResult {
     return { ok: false, error: created.error };
   }
   return { ok: true, jailed, checkpoint: created };
+}
+
+const PROJECT_SETTINGS_APPLY = new Set([
+  "project.settings",
+  "project.input",
+  "project.autoload",
+  "project.plugin",
+]);
+
+function isProjectSettingsAction(actionId: string): boolean {
+  return PROJECT_SETTINGS_APPLY.has(actionId);
 }
 
 function consumeEditApproval(

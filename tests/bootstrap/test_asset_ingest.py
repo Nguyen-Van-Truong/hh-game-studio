@@ -126,8 +126,10 @@ def src_scan_errors() -> list[str]:
     router = (ADDON / "core" / "hh_router.gd").read_text(encoding="utf-8")
     if "hh_asset_adapter" not in router:
         errors.append("router must dispatch the asset adapter")
-    if "project.settings must stay" not in router:
-        errors.append("unproven-mutate sentinel must stay on project.settings")
+    if "play.input inject must stay" not in router:
+        errors.append("unproven-mutate sentinel must move off project.settings onto play.input inject")
+    if "project.settings must stay" in router:
+        errors.append("project.settings sentinel must not remain after R3-WP7")
     if "4.7.2" in router:
         errors.append("router mentions 4.7.2")
     asset = ADDON / "core" / "hh_asset_adapter.gd"
@@ -565,14 +567,11 @@ def live_errors(exe: Path) -> list[str]:
         req_id, settings = tool_call(
             proc,
             req_id,
-            "godot.project",
-            "settings",
-            {
-                "key": "application/config/name",
-                "value": {"schema": "hh-godot-variant/1", "type": "int", "value": 1},
-            },
+            "godot.input",
+            "action",
+            {"action_name": "interact", "phase": "press"},
         )
-        expect_code(settings, ("E_UNVERIFIED",), errors, "unproven project.settings")
+        expect_code(settings, ("E_UNVERIFIED",), errors, "unproven play.input inject")
 
         paused = body_of(mcp_call(proc, req_id, "hh.pause", {}))
         req_id += 1

@@ -95,8 +95,10 @@ def src_scan_errors() -> list[str]:
     router = (ADDON / "core" / "hh_router.gd").read_text(encoding="utf-8")
     if "hh_resource_adapter" not in router or "hh_signal_adapter" not in router:
         errors.append("router must dispatch resource/signal adapters")
-    if "project.settings must stay" not in router or "resource.create must stay" in router:
-        errors.append("unproven-mutate sentinel must stay on project.settings")
+    if "play.input inject must stay" not in router or "resource.create must stay" in router:
+        errors.append("unproven-mutate sentinel must move off project.settings onto play.input inject")
+    if "project.settings must stay" in router:
+        errors.append("project.settings sentinel must not remain after R3-WP7")
     resource = ADDON / "core" / "hh_resource_adapter.gd"
     signal = ADDON / "core" / "hh_signal_adapter.gd"
     reads = ADDON / "core" / "hh_read_adapters.gd"

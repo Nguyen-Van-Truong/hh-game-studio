@@ -2,6 +2,7 @@ import { PINNED_VERSION_ID } from "../doctor/pin.js";
 import {
   isAssetRefApply,
   isNodeCrudApply,
+  isProjectSettingsApply,
   isPropertyApply,
   isResourceApply,
   isSceneLifecycleApply,
@@ -80,12 +81,12 @@ export function capabilityMatrix(): Record<string, unknown> {
     protocol: PROTOCOL,
     registry_version: REGISTRY_VERSION,
     godot_pin: PINNED_VERSION_ID,
-    mutate_dispatched: "scene-lifecycle+node-crud+property+resource+signal+script",
+    mutate_dispatched: "scene-lifecycle+node-crud+property+resource+signal+script+project-settings",
     node_crud_dispatched: true,
     property_dispatched: true,
     resource_dispatched: true,
     script_dispatched: true,
-    note: "Scene/node/property/resource/signal/script ACK after EditorUndoRedo or plugin disk SHA readback. project.settings stays E_UNVERIFIED.",
+    note: "Scene/node/property/resource/signal/script/project.settings ACK after EditorUndoRedo or ProjectSettings.save + ConfigFile disk parse. play.input inject stays E_UNVERIFIED.",
     actions: allActionDefs().map((def) => ({
       id: def.id,
       method: def.method,
@@ -95,6 +96,8 @@ export function capabilityMatrix(): Record<string, unknown> {
       adapter:
         def.id === "editor.select"
           ? "view-state-mutate-not-wp6"
+          : isProjectSettingsApply(def.id)
+            ? "project-settings"
           : isPropertyApply(def.id)
             ? "property-codec"
             : isResourceApply(def.id) || isAssetRefApply(def.id)
