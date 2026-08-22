@@ -1,6 +1,6 @@
 AUTHORITATIVE_PLAN=1
 STATUS=ACTIVE
-CURRENT_VALID_WP=R5-WP1
+CURRENT_VALID_WP=R5-WP2
 
 ================================================================================
 BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
@@ -13,7 +13,7 @@ BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
 | 2 | R2 — Control plane | Plugin, sidecar, Agent Host, MCP, auth, registry, ledger, pause và OWNER_AUTOPILOT hoạt động | Bridge + Plugin + Security | — | [x] 7/7 WP |
 | 3 | R3 — Quyền editor ngữ nghĩa | Scene/node/property/resource/script/asset/project settings có undo, dedup và postcondition | Scene + Script + Asset | — | [x] 8/8 WP |
 | 4 | R4 — Người xem được agent làm | Activity Dock, chọn node, focus inspector, cursor/gizmo ảo, replay kéo-thả, Watch/Fast mode | Observer UI + Editor UX | G2 VISIBLE | [x] 6/6 WP |
-| 5 | R5 — Bộ công cụ làm game 2D | TileMapLayer, animation, UI, audio, physics, navigation, shader/particles được agent thao tác đầy đủ | 2D-A + 2D-B + Assets | — | [ ] 0/7 WP |
+| 5 | R5 — Bộ công cụ làm game 2D | TileMapLayer, animation, UI, audio, physics, navigation, shader/particles được agent thao tác đầy đủ | 2D-A + 2D-B + Assets | — | [ ] 1/7 WP |
 | 6 | R6 — Agent tự chơi và tự kiểm | Play/debug, input, runtime state, deterministic step, screenshot/diff/perf, test evidence | Runtime + Test + Vision | G3 SELF-VERIFY | [ ] 0/7 WP |
 | 7 | R7 — Autopilot dài hạn | Nhận brief một lần, tự plan→làm→test→sửa→commit→resume; nhiều agent không đạp nhau | Orchestrator + Git + Recovery | G4 AUTONOMY | [ ] 0/6 WP |
 | 8 | R8 — Dogfood game thật | Từ project trống tạo game top-down 2D có art/audio/UI/save, người chỉ xem/review | Game + Art + QA song song theo DAG | G5 DOGFOOD | [ ] 0/6 WP |
@@ -24,7 +24,7 @@ VIỆC PHẢI LÀM TRƯỚC: R0-WP1 → R0-WP2 → R0-WP3 → R0-WP4 → R1-WP1.
 Không được bắt đầu R2
 trước G1. Từ R2 trở đi chỉ song song các track có ranh giới file rõ ràng.
 
-Tiến độ tổng: [ ] 30/60 WP. First valid WP: R5-WP1.
+Tiến độ tổng: [ ] 31/60 WP. First valid WP: R5-WP2.
 Ngày lập: 20-8-2026 (Asia/Saigon).
 
 ================================================================================
@@ -1567,13 +1567,13 @@ R4-WP6 — Nghiệm thu visible thật + Gate G2                            [x] 
         PlaceholderTexture2D magenta, not a real art asset;
         agent overlay #3db8ff not proven vs Godot gizmo;
         video/screenshot event-sync SKIP in headless
-      Commit: (this tick)
+      Commit: cc7e178 R4-WP6: tick visible G2 after human sign
 
 --------------------------------------------------------------------------------
 R5 — COVERAGE LÀM GAME 2D THỰC TẾ (7 WP)
 --------------------------------------------------------------------------------
 
-R5-WP1 — Transform/Canvas/Camera/visual 2D adapters                    [ ]
+R5-WP1 — Transform/Canvas/Camera/visual 2D adapters                    [x]
   Phụ thuộc: R3, G2.
   Track/file: E; 2D adapters + coverage fixture.
   Làm:
@@ -1583,7 +1583,21 @@ R5-WP1 — Transform/Canvas/Camera/visual 2D adapters                    [ ]
     - bulk layout operation là một transaction/postcondition.
   Verify: nested transform/reparent keep-global, negative scale/rotation, camera screenshot.
   DoD: agent bố trí một scene top-down đúng hình và nhìn thấy kết quả.
-  LOG: (trống)
+  LOG:
+    LOG 2026-08-22 19:40 Asia/Saigon — agent=coordinator
+      Base: 79f27a3 canvas/camera adapters + ledger apply.
+        Godot=4.7.1.stable.official.a13da4feb
+      Files/leases: hh_canvas_adapter.gd, execute.ts canvasApplyOk/cameraApplyOk,
+        test_transform_2d.py, generated catalogs action_count=142
+      Verify: python tests/bootstrap/test_transform_2d.py → PASS
+        (keep_global, negative scale, typed make_current, TextureRect flip,
+        y_sort; screenshots=SKIP Alternative; no dummy PNG)
+      Critic: 18d27d4a TICK no (ledger unbound) cheap-fixed;
+        90d5c813 TICK yes overlay; 20cc6f81 TICK no (mcp-tools needle);
+        9fe593bc FINAL TICK yes after PASS
+      Gaps: Node2D origin degenerate_extent; overlay items[0] only;
+        camera screenshot SKIP (R6); job.transaction omits canvas/camera
+      Commit: (this tick)
 
 R5-WP2 — TileSet/TileMapLayer/terrain workflow                          [ ]
   Phụ thuộc: R5-WP1, R3-WP4.
@@ -2189,14 +2203,14 @@ thuận nếu ảnh hưởng G5/G6.
 14. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Hiện tại R0 (4/4) + R1 (5/5, G1) + R2 (7/7) + R3 (8/8) + R4 (6/6, G2) đã xong. Agent tiếp theo làm **R5-WP1**.
+Hiện tại R0 (4/4) + R1 (5/5, G1) + R2 (7/7) + R3 (8/8) + R4 (6/6, G2) + R5-WP1 đã xong. Agent tiếp theo làm **R5-WP2**.
 KHÔNG vendor A/C as-is, KHÔNG M6, KHÔNG fork Godot. Do not claim the agent drives a full game.
 Gate G2 was signed 2026-08-22 with Alternatives (Play/Replay/overlay/placeholder). Do not hide those gaps.
 
 Lệnh hợp lệ:
 
-  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R5-WP1`);
-  2) R5-WP1: Track E 2D transform/canvas/camera adapters + test_transform_2d.py;
+  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R5-WP2`);
+  2) R5-WP2: TileSet/TileMapLayer/terrain workflow + official test;
   3) mở editor fixture: `hh-godot-editor.bat` (Godot 4.7.1-stable pin, minimal-2d);
   4) không copy hh_stock_poc; không npx -y; không bump 4.7.2; không raw-write
      .tscn; plugin is the only writer. Không paper-ACK play.start.
