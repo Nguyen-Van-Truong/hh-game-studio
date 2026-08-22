@@ -1,12 +1,14 @@
 # Godot Agent security / license docs (R0-WP4)
 
-Baseline **before** any third-party Godot MCP plugin is enabled in
-`godot/plugin-project/` (audit is R1-WP2; E2E bake-off is R1-WP3;
-`addons/hh_agent` is R2).
+`addons/hh_agent` **exists** under `godot/plugin-project/addons/hh_agent`.
+Vendor MCP addons and GUT stay out of that project. The 2D museum sidecar
+is `godot/plugin-project/r5w7/` (same `project.godot`). There is no second
+`godot/test-projects/coverage-2d/` Godot project.
 
 | File | What it is |
 |------|------------|
-| [CAPABILITY_MATRIX.md](CAPABILITY_MATRIX.md) | R1-WP1: measurable 2D workflows (not “all buttons”). Status is honest: no hh_agent yet. |
+| [CAPABILITY_MATRIX.md](CAPABILITY_MATRIX.md) | Measurable 2D workflows. Supported = named action + official E2E ACK, or stock Godot CLI. Not every P0 is Supported. |
+| [COVERAGE_2D.md](COVERAGE_2D.md) | R5-WP7 TRACE REPORT: every P0/P1 2D row → action + official test **or** Alternative/Gap + owner. |
 | [MCP_BAKEOFF.md](MCP_BAKEOFF.md) | R1-WP2 audit + R1-WP3 E2E scorecard on disposable copies ([tests/e2e/bakeoff/](../../tests/e2e/bakeoff/)). Shortlist A+C Lite. Do not enable in `plugin-project`. |
 | [THREAT_MODEL.md](THREAT_MODEL.md) | Threats → controls (reject / jail / strip / Pause). A8–A10. |
 | [SBOM_BASELINE.md](SBOM_BASELINE.md) | Godot 4.7.1-stable, GUT 9.7.1, Node/TS pins, MCP candidate pins (R1-WP2). |
@@ -24,6 +26,7 @@ python tools/godot/policy_validate.py --self-test
 python tests/bootstrap/test_policy.py
 python tests/bootstrap/test_no_secrets.py
 python tests/bootstrap/test_capability_matrix.py
+python tests/bootstrap/test_coverage_2d.py
 python tests/bootstrap/test_mcp_bakeoff.py
 python tests/bootstrap/test_bakeoff_guard.py
 ```

@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-"""Parse docs/godot-agent/CAPABILITY_MATRIX.md (R1-WP1).
+"""Parse docs/godot-agent/CAPABILITY_MATRIX.md (R1-WP1 / R5-WP7).
 
 Fails (exit != 0) if:
-  - a Supported row names EditorInterface (plugin does not exist)
   - unique CM-xxx IDs or distinct Workflow/Semantic strings < 100
   - a WP group is missing
   - R8 traces section is missing or a required R8 keyword has no CM-ID
   - an R8 keyword's CM-IDs do not mention that work in Workflow/Semantic/Notes
-  - a Supported P0 row lacks Godot CLI or a godot/ path
+  - a Supported P0 row lacks an official test path or Godot CLI
 
-Stdlib only. Do not use cargo.
+Supported may name EditorInterface (plugin exists). Not every P0 must be
+Supported. Stdlib only. Do not use cargo.
 """
 
 from __future__ import annotations
@@ -66,6 +66,7 @@ R8_KEYWORDS = (
 
 MIN_UNIQUE_IDS = 100
 EXPECTED_COLS = 12
+OFFICIAL_TEST_RE = re.compile(r"tests/bootstrap/test_[a-z0-9_]+\.py")
 
 # Header names (lowercase) -> index in a matrix data row.
 COL_ID = 0
@@ -126,9 +127,11 @@ def keyword_line_pattern(keyword: str) -> re.Pattern[str]:
     return re.compile(re.escape(keyword), re.IGNORECASE)
 
 
-def stock_hint(api: str, headless: str, notes: str) -> bool:
+def supported_p0_cited(api: str, headless: str, notes: str) -> bool:
     blob = f"{api} {headless} {notes}"
-    return "Godot CLI" in blob or "godot/" in blob
+    if "Godot CLI" in blob:
+        return True
+    return OFFICIAL_TEST_RE.search(blob) is not None
 
 
 def main() -> int:
@@ -172,15 +175,11 @@ def main() -> int:
             errors.append(f"{r[COL_ID]} Status={status!r} not Supported/Alternative/Gap")
         if pri not in {"P0", "P1", "P2"}:
             errors.append(f"{r[COL_ID]} Pri={pri!r} not P0/P1/P2")
-        if status == "Supported":
-            if "EditorInterface" in r[COL_API]:
+        if status == "Supported" and pri == "P0":
+            if not supported_p0_cited(r[COL_API], r[COL_HEADLESS], r[COL_NOTES]):
                 errors.append(
-                    f"{r[COL_ID]} Supported but API names EditorInterface "
-                    "(plugin does not exist yet)"
-                )
-            if pri == "P0" and not stock_hint(r[COL_API], r[COL_HEADLESS], r[COL_NOTES]):
-                errors.append(
-                    f"{r[COL_ID]} Supported P0 lacks Godot CLI or godot/ in API/Notes/headless"
+                    f"{r[COL_ID]} Supported P0 lacks official test path or Godot CLI "
+                    "in API/Notes/headless"
                 )
 
     actions = [r[2] for r in rows if len(r) > 2]

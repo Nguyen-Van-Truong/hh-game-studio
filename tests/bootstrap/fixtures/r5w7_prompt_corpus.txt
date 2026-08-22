@@ -1,0 +1,72 @@
+# R5-WP7 50-prompt corpus — tool-select, not wall-clock
+#
+# Benchmark wall-clock / latency: Alternative
+# Reason: no real perf harness in this WP. Do not invent timings.
+#
+# MEASURED from bridge/generated/mcp-tools.json (read at authoring; re-check in
+# tests/bootstrap/test_coverage_2d.py):
+#   tool_count=27
+#   action_count=157
+#   shape=domain-tools-plus-action-discriminator
+#   verbs_per_tool:
+#     godot.capabilities=1 godot.project=6 godot.scene=11 godot.node=11
+#     godot.property=4 godot.resource=7 godot.signal=4 godot.script=9
+#     godot.asset=7 godot.tilemap=8 godot.animation=7 godot.ui=6
+#     godot.editor=7 godot.observer=6 godot.review=5 godot.play=6
+#     godot.input=6 godot.runtime=9 godot.test=6 godot.export=5
+#     godot.git=4 godot.job=5 godot.canvas=2 godot.camera=1
+#     godot.physics=8 godot.audio=3 godot.render=3
+#
+# Each line: NN. <prompt title>  =>  <domain tool> <verb>
+# Agent picks one domain tool + action discriminator. Not a timing run.
+
+01. Create an empty Node2D world scene                  => godot.scene create
+02. Open the museum scene in the editor                 => godot.scene open
+03. Save the edited scene to disk                       => godot.scene save
+04. Reload the scene from the last disk hash            => godot.scene reload
+05. Instance a packed key scene under World             => godot.scene instantiate
+06. Add a Node2D child named Prop                       => godot.node add
+07. Rename Temp to Door                                 => godot.node rename
+08. Reparent Door under World/Doors                     => godot.node reparent
+09. Duplicate the selected prop                         => godot.node duplicate
+10. Delete the unused placeholder node                  => godot.node remove
+11. Reorder HUD so it draws last                        => godot.node reorder
+12. Add the Door to group interactable                  => godot.node group
+13. Set Player position to a tile pixel                 => godot.property set
+14. Batch-set visible and z_index on a sprite           => godot.property batch
+15. Assign PlaceholderTexture2D to Sprite2D.texture     => godot.resource assign
+16. Create a TileSet resource on disk                   => godot.resource create
+17. Connect Area2D.body_entered to a typed handler      => godot.signal connect
+18. Write a typed player.gd                             => godot.script write
+19. Attach player.gd to the Player node                 => godot.script attach
+20. Detach the wrong script from a node                 => godot.script detach
+21. Open player.gd at the move function line            => godot.script open_at
+22. Import a PNG under res://assets/tiles               => godot.asset import
+23. Reimport one dirty tileset texture                  => godot.asset reimport
+24. Rename key.tres to key_gold.tres with rewrite_plan  => godot.asset rename
+25. Quarantine an unreferenced spare asset              => godot.asset delete
+26. Assign a TileSet to TileMapLayer Ground             => godot.tilemap tileset
+27. Add a 16x16 atlas source                            => godot.tilemap source
+28. Paint one Ground cell                               => godot.tilemap cell
+29. Erase one Ground cell                               => godot.tilemap cell
+30. Fill a graybox room rectangle                       => godot.tilemap fill
+31. Add a Walls TileMapLayer                            => godot.tilemap layer
+32. Query a page of cells after fill                    => godot.tilemap query
+33. Add an AnimationPlayer named Anim                   => godot.node add
+34. Create a walk Animation on Anim                     => godot.animation animation
+35. Build SpriteFrames idle and walk                    => godot.animation sprite_frames
+36. Add NPC SpriteFrames (same adapter)                 => godot.animation sprite_frames
+37. Add CanvasLayer HUD at layer 10                     => godot.node add
+38. Add KeyCount Label on the HUD                       => godot.node add
+39. Add PauseMenu Control with process_mode ALWAYS      => godot.node add
+40. Add Resume/Restart/Quit buttons                     => godot.node add
+41. Wire focus_neighbor on pause buttons                => godot.property set
+42. Apply a contrast Theme to the HUD                   => godot.ui theme
+43. Add AudioStreamPlayer on SFX bus                    => godot.audio player
+44. Create an isolated SFX bus and set volume_db        => godot.audio bus
+45. Add player CollisionShape2D from sprite rect        => godot.physics shape
+46. Set player/world/interact collision layers          => godot.physics layers
+47. Bake a NavigationRegion2D outline                   => godot.physics nav_region
+48. Point NavigationAgent2D at the player               => godot.physics nav_agent
+49. Switch the editor main screen to 2D                 => godot.editor main_screen
+50. Select Player and focus the Inspector               => godot.editor focus
