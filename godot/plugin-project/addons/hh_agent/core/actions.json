@@ -1839,6 +1839,77 @@
       ],
       "postcondition": "physics_debug_engine_bounds",
       "checkpoint_required": false
+    },
+    "audio.player": {
+      "method": "godot.audio",
+      "verb": "player",
+      "side_effect": "mutate",
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path"
+      ],
+      "postcondition": "audio_player_stream_bus_matches",
+      "checkpoint_required": false
+    },
+    "audio.bus": {
+      "method": "godot.audio",
+      "verb": "bus",
+      "side_effect": "mutate",
+      "timeout_ms": 15000,
+      "required": [
+        "bus"
+      ],
+      "postcondition": "audio_bus_layout_matches",
+      "checkpoint_required": false
+    },
+    "audio.preview": {
+      "method": "godot.audio",
+      "verb": "preview",
+      "side_effect": "view",
+      "timeout_ms": 5000,
+      "required": [
+        "scene",
+        "node_path"
+      ],
+      "postcondition": "audio_preview_editor_only",
+      "checkpoint_required": false
+    },
+    "render.shader": {
+      "method": "godot.render",
+      "verb": "shader",
+      "side_effect": "mutate",
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path"
+      ],
+      "postcondition": "render_shader_mode_uniforms_match",
+      "checkpoint_required": false
+    },
+    "render.particles": {
+      "method": "godot.render",
+      "verb": "particles",
+      "side_effect": "mutate",
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path"
+      ],
+      "postcondition": "render_particles_amount_lifetime_match",
+      "checkpoint_required": false
+    },
+    "render.quality": {
+      "method": "godot.render",
+      "verb": "quality",
+      "side_effect": "mutate",
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path"
+      ],
+      "postcondition": "render_quality_readback_matches",
+      "checkpoint_required": false
     }
   }
 }

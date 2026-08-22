@@ -10,6 +10,7 @@ const _StoreScript: GDScript = preload("res://addons/hh_agent/core/hh_activity_s
 const _ReviewDockScript: GDScript = preload("res://addons/hh_agent/ui/review/hh_review_dock.gd")
 const _CanvasScript: GDScript = preload("res://addons/hh_agent/core/hh_canvas_adapter.gd")
 const _PhysicsScript: GDScript = preload("res://addons/hh_agent/core/hh_physics_adapter.gd")
+const _RenderScript: GDScript = preload("res://addons/hh_agent/core/hh_render_adapter.gd")
 
 ## Presentation-only viewport overlay + semantic drag replay.
 ## Draws from a live model (rects/labels/cursor/ghost). Never writes .tscn.
@@ -364,6 +365,10 @@ func _record_from_mutate(method: String, action: String, params: Dictionary, res
 		var phys_path: String = str(after.get("node_path", params.get("node_path", "")))
 		if not phys_path.is_empty():
 			path_s = phys_path
+	if method == "godot.audio" or method == "godot.render":
+		var ar_path: String = str(after.get("node_path", params.get("node_path", "")))
+		if not ar_path.is_empty():
+			path_s = ar_path
 	if method == "godot.canvas" and action == "layout_batch":
 		var batch_items: Variant = after.get("items", params.get("items", []))
 		if typeof(batch_items) == TYPE_ARRAY and (batch_items as Array).size() > 0:
@@ -485,6 +490,10 @@ func _is_presentable_mutate(method: String, action: String) -> bool:
 			or action == "nav_region"
 			or action == "nav_agent"
 		)
+	if method == "godot.audio":
+		return action == "player" or action == "bus"
+	if method == "godot.render":
+		return action == "shader" or action == "particles" or action == "quality"
 	return false
 
 
@@ -659,6 +668,13 @@ func _world_rect(node: Node) -> Rect2:
 			var pr: Rect2 = phys_rect
 			if pr.size.x > 0.0 and pr.size.y > 0.0:
 				return pr
+	var rend: Dictionary = _RenderScript.engine_world_rect(node)
+	if rend.get("ok", false) == true and rend.get("invented_box", false) != true:
+		var rend_rect: Variant = rend.get("rect")
+		if rend_rect is Rect2:
+			var rr: Rect2 = rend_rect
+			if rr.size.x > 0.0 and rr.size.y > 0.0:
+				return rr
 	if node is CanvasItem:
 		var packed: Dictionary = _CanvasScript.engine_world_rect(node)
 		if packed.get("ok", false) == true and packed.get("invented_box", false) != true:

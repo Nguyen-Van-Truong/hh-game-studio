@@ -59,6 +59,10 @@ export const PHYSICS_APPLY = [
   "physics.nav_agent",
 ] as const;
 
+export const AUDIO_APPLY = ["audio.player", "audio.bus"] as const;
+
+export const RENDER_APPLY = ["render.shader", "render.particles", "render.quality"] as const;
+
 export const RESOURCE_APPLY = [
   "resource.create",
   "resource.assign",
@@ -140,6 +144,14 @@ export function isPhysicsApply(actionId: string): boolean {
   return (PHYSICS_APPLY as readonly string[]).includes(actionId);
 }
 
+export function isAudioApply(actionId: string): boolean {
+  return (AUDIO_APPLY as readonly string[]).includes(actionId);
+}
+
+export function isRenderApply(actionId: string): boolean {
+  return (RENDER_APPLY as readonly string[]).includes(actionId);
+}
+
 export function isResourceApply(actionId: string): boolean {
   return (RESOURCE_APPLY as readonly string[]).includes(actionId);
 }
@@ -183,6 +195,8 @@ export function isProvenEditorApply(actionId: string): boolean {
     isAnimationApply(actionId) ||
     isUiApply(actionId) ||
     isPhysicsApply(actionId) ||
+    isAudioApply(actionId) ||
+    isRenderApply(actionId) ||
     isResourceApply(actionId) ||
     isSignalApply(actionId) ||
     isAssetRefApply(actionId) ||
@@ -203,6 +217,10 @@ function isExternalResPath(path: string): boolean {
 
 function isGdPath(path: string): boolean {
   return path.endsWith(".gd") && path.startsWith("res://") && !path.includes("::");
+}
+
+function isGdshaderPath(path: string): boolean {
+  return path.endsWith(".gdshader") && path.startsWith("res://") && !path.includes("::");
 }
 
 export function mutationNeedsDiskHash(actionId: string, params: Record<string, unknown>): boolean {
@@ -253,6 +271,23 @@ export function mutationNeedsDiskHash(actionId: string, params: Record<string, u
   if (actionId === "physics.nav_region") {
     return typeof params.navpoly_path === "string" && isExternalResPath(params.navpoly_path);
   }
+  if (actionId === "audio.player") {
+    return typeof params.stream === "string" && isExternalResPath(params.stream);
+  }
+  if (actionId === "audio.bus") {
+    return typeof params.layout === "string" && isExternalResPath(params.layout);
+  }
+  if (actionId === "render.shader") {
+    const shader = typeof params.shader === "string" ? params.shader : "";
+    const material = typeof params.material === "string" ? params.material : "";
+    return isGdshaderPath(shader) || isExternalResPath(shader) || isExternalResPath(material);
+  }
+  if (actionId === "render.particles") {
+    return typeof params.process_material === "string" && isExternalResPath(params.process_material);
+  }
+  if (actionId === "render.quality") {
+    return typeof params.environment === "string" && isExternalResPath(params.environment);
+  }
   if (actionId === "job.transaction") {
     if (params.save === true) {
       return true;
@@ -279,7 +314,7 @@ export function durableResPath(
     after &&
     typeof after.path === "string" &&
     after.path.startsWith("res://") &&
-    (isExternalResPath(after.path) || isGdPath(after.path))
+    (isExternalResPath(after.path) || isGdPath(after.path) || isGdshaderPath(after.path))
   ) {
     if (
       actionId === "asset.move" ||
@@ -335,6 +370,34 @@ export function durableResPath(
     isExternalResPath(params.navpoly_path)
   ) {
     return params.navpoly_path;
+  }
+  if (actionId === "audio.player" && typeof params.stream === "string" && isExternalResPath(params.stream)) {
+    return params.stream;
+  }
+  if (actionId === "audio.bus" && typeof params.layout === "string" && isExternalResPath(params.layout)) {
+    return params.layout;
+  }
+  if (actionId === "render.shader") {
+    if (typeof params.shader === "string" && (isGdshaderPath(params.shader) || isExternalResPath(params.shader))) {
+      return params.shader;
+    }
+    if (typeof params.material === "string" && isExternalResPath(params.material)) {
+      return params.material;
+    }
+  }
+  if (
+    actionId === "render.particles" &&
+    typeof params.process_material === "string" &&
+    isExternalResPath(params.process_material)
+  ) {
+    return params.process_material;
+  }
+  if (
+    actionId === "render.quality" &&
+    typeof params.environment === "string" &&
+    isExternalResPath(params.environment)
+  ) {
+    return params.environment;
   }
   if (actionId === "resource.duplicate" && typeof params.dest === "string") {
     return params.dest;

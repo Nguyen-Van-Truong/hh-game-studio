@@ -41,6 +41,8 @@ import {
   isTransactionApply,
   isUiApply,
   isPhysicsApply,
+  isAudioApply,
+  isRenderApply,
   mutationNeedsDiskHash,
   nodeNeedsUidAfter,
   sceneNeedsDiskHash,
@@ -905,6 +907,148 @@ function physicsApplyOk(
   return undefined;
 }
 
+function audioApplyOk(
+  result: PluginCommandResult,
+  actionId: string,
+  params: Record<string, unknown>,
+): PluginCommandResult | undefined {
+  if (!isAudioApply(actionId)) {
+    return undefined;
+  }
+  if (!result.ok) {
+    return result;
+  }
+  if (typeof result.undo_action !== "string" || !result.undo_action.startsWith("Agent: ")) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "audio missing Agent UndoRedo name");
+  }
+  const after = result.after;
+  if (!isRecord(after)) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "audio missing after readback");
+  }
+  if (after.invented_box === true) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "audio invented a bounds box");
+  }
+  for (const key of ["stream", "layout", "path"] as const) {
+    const raw = params[key];
+    if (typeof raw === "string" && raw.includes("::")) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "refusing RAM-only audio durable ACK");
+    }
+  }
+  if (after.durable === true && (typeof after.disk_hash !== "string" || after.disk_hash.length < 16)) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "refusing RAM-only audio durable ACK");
+  }
+  if (actionId === "audio.player") {
+    if (after.node_path !== params.node_path) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "audio node_path bind mismatch");
+    }
+    if (after.stream_class !== "AudioStreamGenerator") {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "audio stream class bind mismatch");
+    }
+    if (typeof after.bus !== "string" || after.bus.length < 1) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "audio bus bind mismatch");
+    }
+    if (typeof params.bus === "string" && after.bus !== params.bus) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "audio bus bind mismatch");
+    }
+    if (typeof after.volume_db !== "number") {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "audio volume_db bind mismatch");
+    }
+    if (typeof params.volume_db === "number" && after.volume_db !== params.volume_db) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "audio volume_db bind mismatch");
+    }
+    if (after.heard === true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "audio player must not paper-ACK heard SFX");
+    }
+  }
+  if (actionId === "audio.bus") {
+    if (typeof after.bus !== "string" || after.bus.length < 1) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "audio bus bind mismatch");
+    }
+    if (typeof params.bus === "string" && after.bus !== params.bus) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "audio bus bind mismatch");
+    }
+    if (typeof params.mute === "boolean" && after.mute !== params.mute) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "audio bus mute bind mismatch");
+    }
+    if (typeof params.volume_db === "number" && after.volume_db !== params.volume_db) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "audio volume_db bind mismatch");
+    }
+  }
+  return undefined;
+}
+
+function renderApplyOk(
+  result: PluginCommandResult,
+  actionId: string,
+  params: Record<string, unknown>,
+): PluginCommandResult | undefined {
+  if (!isRenderApply(actionId)) {
+    return undefined;
+  }
+  if (!result.ok) {
+    return result;
+  }
+  if (typeof result.undo_action !== "string" || !result.undo_action.startsWith("Agent: ")) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "render missing Agent UndoRedo name");
+  }
+  const after = result.after;
+  if (!isRecord(after)) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "render missing after readback");
+  }
+  if (after.node_path !== params.node_path) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "render node_path bind mismatch");
+  }
+  if (after.invented_box === true) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "render invented a bounds box");
+  }
+  for (const key of ["shader", "material", "process_material", "environment", "texture", "path"] as const) {
+    const raw = params[key];
+    if (typeof raw === "string" && raw.includes("::")) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "refusing RAM-only render durable ACK");
+    }
+  }
+  if (after.durable === true && (typeof after.disk_hash !== "string" || after.disk_hash.length < 16)) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "refusing RAM-only render durable ACK");
+  }
+  if (actionId === "render.shader") {
+    if (typeof after.shader !== "string" || after.shader.length < 1) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "render shader path bind mismatch");
+    }
+    if (typeof params.shader === "string" && after.shader !== params.shader) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "render shader path bind mismatch");
+    }
+    if (after.mode !== "MODE_CANVAS_ITEM" && after.mode !== 1) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "render shader mode bind mismatch");
+    }
+    if (!Array.isArray(after.uniforms)) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "render shader missing uniform list");
+    }
+    if (typeof params.required_uniform === "string" && params.required_uniform) {
+      const names = after.uniforms.map((item) =>
+        isRecord(item) ? String(item.name ?? "") : String(item),
+      );
+      if (!names.includes(params.required_uniform)) {
+        return errorResult(result.command_id, E.E_UNVERIFIED, "render shader required uniform missing");
+      }
+    }
+  }
+  if (actionId === "render.particles") {
+    if (typeof after.amount !== "number") {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "render particles amount bind mismatch");
+    }
+    if (typeof after.lifetime !== "number") {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "render particles lifetime bind mismatch");
+    }
+    if (typeof params.amount === "number" && after.amount !== params.amount) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "render particles amount bind mismatch");
+    }
+    if (typeof params.lifetime === "number" && after.lifetime !== params.lifetime) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "render particles lifetime bind mismatch");
+    }
+  }
+  return undefined;
+}
+
 function cameraApplyOk(
   result: PluginCommandResult,
   actionId: string,
@@ -1622,6 +1766,10 @@ async function applyMutateOnce(
             ? "ui"
           : isPhysicsApply(classified.actionId)
             ? "physics"
+          : isAudioApply(classified.actionId)
+            ? "audio"
+          : isRenderApply(classified.actionId)
+            ? "render"
           : isResourceApply(classified.actionId) ||
               isAssetRefApply(classified.actionId) ||
               isAssetIngestApply(classified.actionId)
@@ -1714,6 +1862,18 @@ async function applyMutateOnce(
       saveState(ledger, row, "failed");
       return physicsFail;
     }
+    const audioFail = audioApplyOk(result, classified.actionId, fields.params);
+    if (audioFail) {
+      persistResult(row, audioFail);
+      saveState(ledger, row, "failed");
+      return audioFail;
+    }
+    const renderFail = renderApplyOk(result, classified.actionId, fields.params);
+    if (renderFail) {
+      persistResult(row, renderFail);
+      saveState(ledger, row, "failed");
+      return renderFail;
+    }
     const resourceFail = resourceApplyOk(result, classified.actionId, fields.params);
     if (resourceFail) {
       persistResult(row, resourceFail);
@@ -1769,6 +1929,14 @@ async function applyMutateOnce(
         const jailed = jailProjectPath(projectRoot, rawPath, { forWrite: true });
         if (jailed.ok) {
           runtime.policy.leases.noteWritten(runtime.policy.writerId, jailed.rel, jailed.abs);
+        }
+      }
+      if (isAudioApply(classified.actionId)) {
+        for (const target of extractTargetPaths(fields.params, classified.actionId)) {
+          const jailed = jailProjectPath(projectRoot, target, { forWrite: true });
+          if (jailed.ok && fs.existsSync(jailed.abs)) {
+            runtime.policy.leases.noteWritten(runtime.policy.writerId, jailed.rel, jailed.abs);
+          }
         }
       }
       if (isTransactionApply(classified.actionId)) {

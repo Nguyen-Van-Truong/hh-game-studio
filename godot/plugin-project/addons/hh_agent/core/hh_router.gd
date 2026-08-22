@@ -21,12 +21,14 @@ const _TilemapScript: GDScript = preload("res://addons/hh_agent/core/hh_tilemap_
 const _AnimationScript: GDScript = preload("res://addons/hh_agent/core/hh_animation_adapter.gd")
 const _UiScript: GDScript = preload("res://addons/hh_agent/core/hh_ui_adapter.gd")
 const _PhysicsScript: GDScript = preload("res://addons/hh_agent/core/hh_physics_adapter.gd")
+const _AudioScript: GDScript = preload("res://addons/hh_agent/core/hh_audio_adapter.gd")
+const _RenderScript: GDScript = preload("res://addons/hh_agent/core/hh_render_adapter.gd")
 const _PresenterScript: GDScript = preload("res://addons/hh_agent/core/hh_presenter.gd")
 const _OverlayScript: GDScript = preload("res://addons/hh_agent/ui/overlay/hh_overlay.gd")
 const _SchedulerScript: GDScript = preload("res://addons/hh_agent/core/hh_scheduler.gd")
 const _StoreScript: GDScript = preload("res://addons/hh_agent/core/hh_activity_store.gd")
 
-## Routes read/view adapters, scene/node/property/resource/signal/script/asset/project/transaction/tilemap/animation/ui/physics apply.
+## Routes read/view adapters, scene/node/property/resource/signal/script/asset/project/transaction/tilemap/animation/ui/physics/audio/render apply.
 
 var _errors: HHAgentErrors = HHAgentErrors.new()
 var _envelope: HHAgentEnvelope = HHAgentEnvelope.new()
@@ -45,6 +47,8 @@ var _tilemap: HHAgentTilemapAdapter = HHAgentTilemapAdapter.new()
 var _animation: HHAgentAnimationAdapter = HHAgentAnimationAdapter.new()
 var _ui: HHAgentUiAdapter = HHAgentUiAdapter.new()
 var _physics: HHAgentPhysicsAdapter = HHAgentPhysicsAdapter.new()
+var _audio: HHAgentAudioAdapter = HHAgentAudioAdapter.new()
+var _render: HHAgentRenderAdapter = HHAgentRenderAdapter.new()
 var _presenter: HHAgentPresenter = HHAgentPresenter.new()
 var _overlay_local: HHAgentOverlay = HHAgentOverlay.new()
 var _scheduler_local: HHAgentScheduler = HHAgentScheduler.new()
@@ -151,6 +155,16 @@ func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_ga
 			result = _physics.handle(command_id, method, action, params, actions, pre)
 		else:
 			return _errors.fail(command_id, HHAgentErrors.E_UNKNOWN_ACTION, "unknown physics action", "action")
+	elif method == "godot.audio":
+		if _audio.handles(action):
+			result = _audio.handle(command_id, method, action, params, actions, pre)
+		else:
+			return _errors.fail(command_id, HHAgentErrors.E_UNKNOWN_ACTION, "unknown audio action", "action")
+	elif method == "godot.render":
+		if _render.handles(action):
+			result = _render.handle(command_id, method, action, params, actions, pre)
+		else:
+			return _errors.fail(command_id, HHAgentErrors.E_UNKNOWN_ACTION, "unknown render action", "action")
 	elif method == "godot.editor" and (action == "frame_view" or action == "replay"):
 		result = _overlay().handle(command_id, method, action, params, actions, envelope)
 	elif method == "godot.review" and action == "replay":
@@ -339,6 +353,12 @@ func run_selftest(actions: HHAgentActions) -> PackedStringArray:
 	var physics_missing: Dictionary = dispatch(_sample("godot.physics", "body", {}), actions, 0)
 	if str(_error_of(physics_missing).get("code", "")) != HHAgentErrors.E_MISSING_REQUIRED:
 		failures.append("physics.body missing required must be E_MISSING_REQUIRED")
+	var audio_missing: Dictionary = dispatch(_sample("godot.audio", "player", {}), actions, 0)
+	if str(_error_of(audio_missing).get("code", "")) != HHAgentErrors.E_MISSING_REQUIRED:
+		failures.append("audio.player missing required must be E_MISSING_REQUIRED")
+	var render_missing: Dictionary = dispatch(_sample("godot.render", "shader", {}), actions, 0)
+	if str(_error_of(render_missing).get("code", "")) != HHAgentErrors.E_MISSING_REQUIRED:
+		failures.append("render.shader missing required must be E_MISSING_REQUIRED")
 	var vendor_plugin: Dictionary = dispatch(
 		_sample("godot.project", "plugin", {"plugin_name": "fake_vendor", "enabled": true}),
 		actions,

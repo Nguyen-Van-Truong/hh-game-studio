@@ -14,6 +14,8 @@ import {
   isSignalApply,
   isUiApply,
   isPhysicsApply,
+  isAudioApply,
+  isRenderApply,
 } from "../ledger/scene_lifecycle.js";
 import { allActionDefs } from "../registry/registry.js";
 import { PROTOCOL, REGISTRY_VERSION } from "../registry/types.js";
@@ -88,7 +90,7 @@ export function capabilityMatrix(): Record<string, unknown> {
     registry_version: REGISTRY_VERSION,
     godot_pin: PINNED_VERSION_ID,
     mutate_dispatched:
-      "scene-lifecycle+node-crud+property+resource+signal+script+project-settings+tilemap+animation+ui+physics",
+      "scene-lifecycle+node-crud+property+resource+signal+script+project-settings+tilemap+animation+ui+physics+audio+render",
     node_crud_dispatched: true,
     property_dispatched: true,
     resource_dispatched: true,
@@ -97,7 +99,9 @@ export function capabilityMatrix(): Record<string, unknown> {
     animation_dispatched: true,
     ui_dispatched: true,
     physics_dispatched: true,
-    note: "Scene/node/property/resource/signal/script/project.settings/tilemap/animation/ui/physics ACK after EditorUndoRedo or ProjectSettings.save + ConfigFile disk parse. play.input inject stays E_UNVERIFIED.",
+    audio_dispatched: true,
+    render_dispatched: true,
+    note: "Scene/node/property/resource/signal/script/project.settings/tilemap/animation/ui/physics/audio/render ACK after EditorUndoRedo or ProjectSettings.save + ConfigFile disk parse. play.input inject stays E_UNVERIFIED.",
     actions: allActionDefs().map((def) => ({
       id: def.id,
       method: def.method,
@@ -121,6 +125,10 @@ export function capabilityMatrix(): Record<string, unknown> {
               ? "ui"
             : isPhysicsApply(def.id)
               ? "physics"
+            : isAudioApply(def.id)
+              ? "audio"
+            : isRenderApply(def.id)
+              ? "render"
             : isResourceApply(def.id) || isAssetRefApply(def.id)
               ? "resource-ops"
               : isSignalApply(def.id)
