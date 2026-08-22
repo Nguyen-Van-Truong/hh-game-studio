@@ -1,6 +1,6 @@
 AUTHORITATIVE_PLAN=1
 STATUS=ACTIVE
-CURRENT_VALID_WP=R5-WP3
+CURRENT_VALID_WP=R5-WP4
 
 ================================================================================
 BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
@@ -13,7 +13,7 @@ BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
 | 2 | R2 — Control plane | Plugin, sidecar, Agent Host, MCP, auth, registry, ledger, pause và OWNER_AUTOPILOT hoạt động | Bridge + Plugin + Security | — | [x] 7/7 WP |
 | 3 | R3 — Quyền editor ngữ nghĩa | Scene/node/property/resource/script/asset/project settings có undo, dedup và postcondition | Scene + Script + Asset | — | [x] 8/8 WP |
 | 4 | R4 — Người xem được agent làm | Activity Dock, chọn node, focus inspector, cursor/gizmo ảo, replay kéo-thả, Watch/Fast mode | Observer UI + Editor UX | G2 VISIBLE | [x] 6/6 WP |
-| 5 | R5 — Bộ công cụ làm game 2D | TileMapLayer, animation, UI, audio, physics, navigation, shader/particles được agent thao tác đầy đủ | 2D-A + 2D-B + Assets | — | [ ] 2/7 WP |
+| 5 | R5 — Bộ công cụ làm game 2D | TileMapLayer, animation, UI, audio, physics, navigation, shader/particles được agent thao tác đầy đủ | 2D-A + 2D-B + Assets | — | [ ] 3/7 WP |
 | 6 | R6 — Agent tự chơi và tự kiểm | Play/debug, input, runtime state, deterministic step, screenshot/diff/perf, test evidence | Runtime + Test + Vision | G3 SELF-VERIFY | [ ] 0/7 WP |
 | 7 | R7 — Autopilot dài hạn | Nhận brief một lần, tự plan→làm→test→sửa→commit→resume; nhiều agent không đạp nhau | Orchestrator + Git + Recovery | G4 AUTONOMY | [ ] 0/6 WP |
 | 8 | R8 — Dogfood game thật | Từ project trống tạo game top-down 2D có art/audio/UI/save, người chỉ xem/review | Game + Art + QA song song theo DAG | G5 DOGFOOD | [ ] 0/6 WP |
@@ -24,7 +24,7 @@ VIỆC PHẢI LÀM TRƯỚC: R0-WP1 → R0-WP2 → R0-WP3 → R0-WP4 → R1-WP1.
 Không được bắt đầu R2
 trước G1. Từ R2 trở đi chỉ song song các track có ranh giới file rõ ràng.
 
-Tiến độ tổng: [ ] 32/60 WP. First valid WP: R5-WP3.
+Tiến độ tổng: [ ] 33/60 WP. First valid WP: R5-WP4.
 Ngày lập: 20-8-2026 (Asia/Saigon).
 
 ================================================================================
@@ -1623,9 +1623,9 @@ R5-WP2 — TileSet/TileMapLayer/terrain workflow                          [x]
       Gaps: terrain continuity is occupancy not autotile peering;
         collision is editor polygons not Play; stamp IDENT not TileMapPattern;
         100x100 undone before save; terrain add UndoRedo is weak
-      Commit: (this tick)
+      Commit: de4d411 R5-WP2: tick after critic and official PASS
 
-R5-WP3 — Animation/SpriteFrames/AnimationTree                           [ ]
+R5-WP3 — Animation/SpriteFrames/AnimationTree                           [x]
   Phụ thuộc: R5-WP1, R3-WP4.
   Track/file: E; animation adapter/tests.
   Làm:
@@ -1635,7 +1635,24 @@ R5-WP3 — Animation/SpriteFrames/AnimationTree                           [ ]
     - batch key operation compact + undo, validate time/path/value compatibility.
   Verify: idle/walk/interact state, transition condition, save/reopen, screenshot sequence.
   DoD: agent tạo/chỉnh animation có thể preview/test, không chỉ gán ảnh tĩnh.
-  LOG: (trống)
+  LOG:
+    LOG 2026-08-22 20:30 Asia/Saigon — agent=coordinator
+      Base: 1994daf SpriteFrames/AnimationPlayer/AnimationTree + ledger apply.
+        Godot=4.7.1.stable.official.a13da4feb
+      Files/leases: hh_animation_adapter.gd, ANIMATION_APPLY, animationApplyOk,
+        test_animation.py, preview current_animation readback
+      Verify: python tests/bootstrap/test_animation.py → PASS
+        (SpriteFrames idle/walk/interact, value keys, idle→walk is_walking,
+        editor preview, one-undo, save/reopen; screenshots=SKIP)
+      Critic: 1213dbd5 TICK no (time echo / preview playing);
+        9131be12 TICK no (live skip, get_start_node, assigned_animation write);
+        cheap-fixed removed 4.7 start-node APIs + preview write;
+        live re-ran PASS; d3487905 FINAL TICK yes
+      Gaps: key time bind is param echo; readback_equals plugin-trust;
+        SM occupancy idle→walk only (no interact fire / travel);
+        SpriteFrames undo RAM-only after persist; screenshots=SKIP;
+        headless is_playing may be false (Alternative)
+      Commit: (this tick)
 
 R5-WP4 — UI/Control/theme/layout/accessibility                          [ ]
   Phụ thuộc: R3-WP3, R5-WP1.
@@ -2217,14 +2234,14 @@ thuận nếu ảnh hưởng G5/G6.
 14. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Hiện tại R0 (4/4) + R1 (5/5, G1) + R2 (7/7) + R3 (8/8) + R4 (6/6, G2) + R5-WP1 + R5-WP2 đã xong. Agent tiếp theo làm **R5-WP3**.
+Hiện tại R0 (4/4) + R1 (5/5, G1) + R2 (7/7) + R3 (8/8) + R4 (6/6, G2) + R5-WP1 + R5-WP2 + R5-WP3 đã xong. Agent tiếp theo làm **R5-WP4**.
 KHÔNG vendor A/C as-is, KHÔNG M6, KHÔNG fork Godot. Do not claim the agent drives a full game.
 Gate G2 was signed 2026-08-22 with Alternatives (Play/Replay/overlay/placeholder). Do not hide those gaps.
 
 Lệnh hợp lệ:
 
-  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R5-WP3`);
-  2) R5-WP3: Animation/SpriteFrames/AnimationTree + official test;
+  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R5-WP4`);
+  2) R5-WP4: UI/Control/theme/layout/accessibility + official test;
   3) mở editor fixture: `hh-godot-editor.bat` (Godot 4.7.1-stable pin, minimal-2d);
   4) không copy hh_stock_poc; không npx -y; không bump 4.7.2; không raw-write
      .tscn; plugin is the only writer. Không paper-ACK play.start.
