@@ -456,6 +456,8 @@ func _is_presentable_mutate(method: String, action: String) -> bool:
 		return action == "layout_batch"
 	if method == "godot.camera":
 		return action == "make_current"
+	if method == "godot.tilemap":
+		return action == "cell" or action == "fill" or action == "stamp" or action == "terrain"
 	return false
 
 

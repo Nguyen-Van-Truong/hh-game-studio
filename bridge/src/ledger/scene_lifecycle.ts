@@ -30,6 +30,16 @@ export const CANVAS_APPLY = ["canvas.layout_batch"] as const;
 
 export const CAMERA_APPLY = ["camera.make_current"] as const;
 
+export const TILEMAP_APPLY = [
+  "tilemap.tileset",
+  "tilemap.source",
+  "tilemap.terrain",
+  "tilemap.layer",
+  "tilemap.cell",
+  "tilemap.fill",
+  "tilemap.stamp",
+] as const;
+
 export const RESOURCE_APPLY = [
   "resource.create",
   "resource.assign",
@@ -95,6 +105,10 @@ export function isCameraApply(actionId: string): boolean {
   return (CAMERA_APPLY as readonly string[]).includes(actionId);
 }
 
+export function isTilemapApply(actionId: string): boolean {
+  return (TILEMAP_APPLY as readonly string[]).includes(actionId);
+}
+
 export function isResourceApply(actionId: string): boolean {
   return (RESOURCE_APPLY as readonly string[]).includes(actionId);
 }
@@ -134,6 +148,7 @@ export function isProvenEditorApply(actionId: string): boolean {
     isPropertyApply(actionId) ||
     isCanvasApply(actionId) ||
     isCameraApply(actionId) ||
+    isTilemapApply(actionId) ||
     isResourceApply(actionId) ||
     isSignalApply(actionId) ||
     isAssetRefApply(actionId) ||
@@ -179,6 +194,13 @@ export function mutationNeedsDiskHash(actionId: string, params: Record<string, u
   if (actionId === "asset.import" || actionId === "asset.reimport") {
     return typeof params.path === "string" && params.path.startsWith("res://");
   }
+  if (
+    actionId === "tilemap.source" ||
+    actionId === "tilemap.terrain" ||
+    actionId === "tilemap.tileset"
+  ) {
+    return typeof params.tileset === "string" && isExternalResPath(params.tileset);
+  }
   if (actionId === "job.transaction") {
     if (params.save === true) {
       return true;
@@ -218,6 +240,15 @@ export function durableResPath(
     if (actionId === "resource.edit" && after.path !== source) {
       return after.path;
     }
+  }
+  if (
+    (actionId === "tilemap.source" ||
+      actionId === "tilemap.terrain" ||
+      actionId === "tilemap.tileset") &&
+    typeof params.tileset === "string" &&
+    isExternalResPath(params.tileset)
+  ) {
+    return params.tileset;
   }
   if (actionId === "resource.duplicate" && typeof params.dest === "string") {
     return params.dest;

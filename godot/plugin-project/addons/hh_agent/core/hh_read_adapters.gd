@@ -1209,23 +1209,101 @@ func _tilemap_query(command_id: String, params: Dictionary, post: String) -> Dic
 	var y0: int = int(params.get("y", 0))
 	var w: int = int(params.get("w", 1))
 	var h: int = int(params.get("h", 1))
+	if w < 1 or h < 1:
+		return _errors.fail(command_id, HHAgentErrors.E_OUT_OF_BOUNDS, "query region must be positive", "params.w")
+	var total: int = w * h
+	var offset: int = int(params.get("offset", 0))
+	var limit: int = int(params.get("limit", 0))
+	if offset < 0:
+		offset = 0
+	if limit <= 0:
+		limit = HHAgentConstants.MAX_PAGE
+	if limit > HHAgentConstants.MAX_PAGE:
+		limit = HHAgentConstants.MAX_PAGE
+	if offset == 0 and not params.has("offset") and not params.has("limit") and total > HHAgentConstants.MAX_PAGE:
+		return _unverified(command_id, "tilemap region exceeds one page")
 	var cells: Array = []
+	var idx: int = 0
 	var y: int = y0
 	while y < y0 + h:
 		var x: int = x0
 		while x < x0 + w:
-			var cell: Vector2i = Vector2i(x, y)
-			cells.append({
-				"x": x,
-				"y": y,
-				"source_id": layer.get_cell_source_id(cell),
-				"atlas": {"x": layer.get_cell_atlas_coords(cell).x, "y": layer.get_cell_atlas_coords(cell).y},
-			})
+			if idx >= offset and cells.size() < limit:
+				var cell: Vector2i = Vector2i(x, y)
+				cells.append({
+					"x": x,
+					"y": y,
+					"source_id": layer.get_cell_source_id(cell),
+					"atlas": {"x": layer.get_cell_atlas_coords(cell).x, "y": layer.get_cell_atlas_coords(cell).y},
+				})
+			idx += 1
 			x += 1
 		y += 1
 	if cells.size() > HHAgentConstants.MAX_PAGE:
 		return _unverified(command_id, "tilemap region exceeds one page")
-	return _ok(command_id, post, {"cells": cells})
+	var next_offset: int = offset + cells.size()
+	var after: Dictionary = {
+		"cells": cells,
+		"node_path": str(params.get("node_path", "")),
+		"class_name": "TileMapLayer",
+		"total": total,
+		"offset": offset,
+		"limit": limit,
+		"next_offset": next_offset if next_offset < total else -1,
+		"truncated": next_offset < total,
+		"source": "engine",
+	}
+	if params.get("include_collision", false) == true:
+		after["collision"] = _tilemap_collision_readback(layer)
+	return _ok(command_id, post, after)
+
+
+func _tilemap_collision_readback(layer: TileMapLayer) -> Dictionary:
+	var tileset: TileSet = layer.tile_set
+	if tileset == null:
+		return {"ok": false, "reason": "no tileset", "invented_box": false}
+	var tiles: Array = []
+	var si: int = 0
+	while si < tileset.get_source_count():
+		var sid: int = tileset.get_source_id(si)
+		var src: TileSetSource = tileset.get_source(sid)
+		if src is TileSetAtlasSource:
+			var atlas: TileSetAtlasSource = src as TileSetAtlasSource
+			var sz: Vector2i = atlas.texture_region_size
+			var size_source: String = "texture_region_size"
+			if sz.x <= 0 or sz.y <= 0:
+				sz = tileset.tile_size
+				size_source = "tile_size"
+			var ti: int = 0
+			while ti < atlas.get_tiles_count():
+				var coords: Vector2i = atlas.get_tile_id(ti)
+				var data: TileData = atlas.get_tile_data(coords, 0)
+				if data != null and tileset.get_physics_layers_count() > 0:
+					var count: int = data.get_collision_polygons_count(0)
+					var points: Array = []
+					if count > 0:
+						var pts: PackedVector2Array = data.get_collision_polygon_points(0, 0)
+						var pi: int = 0
+						while pi < pts.size():
+							points.append({"x": pts[pi].x, "y": pts[pi].y})
+							pi += 1
+					tiles.append({
+						"source_id": sid,
+						"atlas": {"x": coords.x, "y": coords.y},
+						"polygon_count": count,
+						"points": points,
+						"size_source": size_source,
+						"size": {"x": sz.x, "y": sz.y},
+					})
+				ti += 1
+		si += 1
+	return {
+		"ok": true,
+		"invented_box": false,
+		"physics_layers": tileset.get_physics_layers_count(),
+		"collision_layer": tileset.get_physics_layer_collision_layer(0) if tileset.get_physics_layers_count() > 0 else 0,
+		"tiles": tiles,
+	}
 
 
 func _ui_access(command_id: String, params: Dictionary, post: String) -> Dictionary:

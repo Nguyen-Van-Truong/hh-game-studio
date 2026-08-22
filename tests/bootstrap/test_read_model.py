@@ -448,6 +448,7 @@ def run_live() -> tuple[list[str], str, str]:
                 "scene-lifecycle+node-crud+property+resource+signal",
                 "scene-lifecycle+node-crud+property+resource+signal+script",
                 "scene-lifecycle+node-crud+property+resource+signal+script+project-settings",
+                "scene-lifecycle+node-crud+property+resource+signal+script+project-settings+tilemap",
             ):
                 errors.append(
                     f"capability://matrix mutate_dispatched must include scene-lifecycle: {payload.get('mutate_dispatched')}"

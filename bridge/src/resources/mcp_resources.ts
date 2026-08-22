@@ -4,6 +4,7 @@ import {
   isCameraApply,
   isCanvasApply,
   isNodeCrudApply,
+  isTilemapApply,
   isProjectSettingsApply,
   isPropertyApply,
   isResourceApply,
@@ -83,12 +84,14 @@ export function capabilityMatrix(): Record<string, unknown> {
     protocol: PROTOCOL,
     registry_version: REGISTRY_VERSION,
     godot_pin: PINNED_VERSION_ID,
-    mutate_dispatched: "scene-lifecycle+node-crud+property+resource+signal+script+project-settings",
+    mutate_dispatched:
+      "scene-lifecycle+node-crud+property+resource+signal+script+project-settings+tilemap",
     node_crud_dispatched: true,
     property_dispatched: true,
     resource_dispatched: true,
     script_dispatched: true,
-    note: "Scene/node/property/resource/signal/script/project.settings ACK after EditorUndoRedo or ProjectSettings.save + ConfigFile disk parse. play.input inject stays E_UNVERIFIED.",
+    tilemap_dispatched: true,
+    note: "Scene/node/property/resource/signal/script/project.settings/tilemap ACK after EditorUndoRedo or ProjectSettings.save + ConfigFile disk parse. play.input inject stays E_UNVERIFIED.",
     actions: allActionDefs().map((def) => ({
       id: def.id,
       method: def.method,
@@ -104,6 +107,8 @@ export function capabilityMatrix(): Record<string, unknown> {
             ? "property-codec"
             : isCameraApply(def.id)
               ? "camera-current"
+            : isTilemapApply(def.id)
+              ? "tilemap"
             : isResourceApply(def.id) || isAssetRefApply(def.id)
               ? "resource-ops"
               : isSignalApply(def.id)

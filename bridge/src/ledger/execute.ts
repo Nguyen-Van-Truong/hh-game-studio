@@ -29,6 +29,7 @@ import {
   isCameraApply,
   isCanvasApply,
   isProjectSettingsApply,
+  isTilemapApply,
   isPropertyApply,
   isProvenEditorApply,
   isResourceApply,
@@ -451,6 +452,141 @@ function canvasApplyOk(
       ) {
         return errorResult(result.command_id, E.E_UNVERIFIED, `canvas.layout_batch item ${i} readback != set`);
       }
+    }
+  }
+  return undefined;
+}
+
+function tilemapApplyOk(
+  result: PluginCommandResult,
+  actionId: string,
+  params: Record<string, unknown>,
+): PluginCommandResult | undefined {
+  if (!isTilemapApply(actionId)) {
+    return undefined;
+  }
+  if (!result.ok) {
+    return result;
+  }
+  if (typeof result.undo_action !== "string" || !result.undo_action.startsWith("Agent: ")) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "tilemap missing Agent UndoRedo name");
+  }
+  const after = result.after;
+  if (!isRecord(after)) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "tilemap missing after readback");
+  }
+  if (Array.isArray(after.cells) && after.cells.length > 100) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "tilemap after returned more than one page of cells");
+  }
+  if (
+    (actionId === "tilemap.tileset" ||
+      actionId === "tilemap.layer" ||
+      actionId === "tilemap.cell" ||
+      actionId === "tilemap.fill" ||
+      actionId === "tilemap.stamp") &&
+    after.node_path !== params.node_path
+  ) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "tilemap node_path bind mismatch");
+  }
+  if (actionId === "tilemap.tileset") {
+    if (after.tileset !== params.tileset) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "tilemap.tileset path bind mismatch");
+    }
+    if (after.class_name !== "TileSet" && after.tileset_class !== "TileSet") {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "tilemap.tileset class bind mismatch");
+    }
+  }
+  if (actionId === "tilemap.source") {
+    if (after.tileset !== params.tileset) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "tilemap.source tileset bind mismatch");
+    }
+    if (after.source_id !== params.source_id) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "tilemap.source source_id bind mismatch");
+    }
+    if (params.op !== "remove" && after.has_source !== true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "tilemap.source has_source readback failed");
+    }
+    if (typeof after.tile_count !== "number") {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "tilemap.source missing tile_count");
+    }
+  }
+  if (actionId === "tilemap.terrain") {
+    if (after.tileset !== params.tileset) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "tilemap.terrain tileset bind mismatch");
+    }
+    if (after.terrain_name !== params.terrain_name) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "tilemap.terrain name bind mismatch");
+    }
+    if (params.op === "connect") {
+      if (after.node_path !== params.node_path) {
+        return errorResult(result.command_id, E.E_UNVERIFIED, "tilemap.terrain connect node_path bind mismatch");
+      }
+      const wantCells = Array.isArray(params.cells) ? params.cells.length : 0;
+      if (typeof after.cell_count !== "number" || (wantCells > 0 && after.cell_count !== wantCells)) {
+        return errorResult(result.command_id, E.E_UNVERIFIED, "tilemap.terrain connect cell count mismatch");
+      }
+    }
+  }
+  if (actionId === "tilemap.layer") {
+    if (after.enabled !== params.enabled && params.op !== "remove" && params.op !== "reorder") {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "tilemap.layer enabled bind mismatch");
+    }
+    if (after.class_name !== "TileMapLayer" && params.op !== "remove") {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "tilemap.layer class bind mismatch");
+    }
+  }
+  if (actionId === "tilemap.cell") {
+    const chunk = Array.isArray(params.cells) ? params.cells : [];
+    if (chunk.length > 0) {
+      if (after.cell_count !== chunk.length && after.cell_count !== chunk.length + 1) {
+        return errorResult(result.command_id, E.E_UNVERIFIED, "tilemap.cell chunk count mismatch");
+      }
+    } else if (after.x !== params.x || after.y !== params.y) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "tilemap.cell coord bind mismatch");
+    }
+    if (params.erase !== true && chunk.length === 0) {
+      if (after.source_id !== params.source_id) {
+        return errorResult(result.command_id, E.E_UNVERIFIED, "tilemap.cell source_id bind mismatch");
+      }
+      if (after.atlas_x !== params.atlas_x || after.atlas_y !== params.atlas_y) {
+        return errorResult(result.command_id, E.E_UNVERIFIED, "tilemap.cell atlas bind mismatch");
+      }
+    }
+    if (after.readback_equals !== true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "tilemap.cell readback did not equal set");
+    }
+  }
+  if (actionId === "tilemap.fill") {
+    const w = typeof params.w === "number" ? params.w : -1;
+    const h = typeof params.h === "number" ? params.h : -1;
+    if (after.x !== params.x || after.y !== params.y || after.w !== params.w || after.h !== params.h) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "tilemap.fill region bind mismatch");
+    }
+    if (after.source_id !== params.source_id) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "tilemap.fill source_id bind mismatch");
+    }
+    if (after.cell_count !== w * h) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "tilemap.fill cell count mismatch");
+    }
+    if (after.compact !== true && w * h > 16) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "tilemap.fill must use a compact after payload");
+    }
+    if (after.readback_equals !== true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "tilemap.fill readback did not equal set");
+    }
+  }
+  if (actionId === "tilemap.stamp") {
+    if (after.x !== params.x || after.y !== params.y) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "tilemap.stamp origin bind mismatch");
+    }
+    if (after.pattern !== params.pattern) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "tilemap.stamp pattern bind mismatch");
+    }
+    if (typeof after.cell_count !== "number" || after.cell_count < 1) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "tilemap.stamp missing cell_count");
+    }
+    if (after.readback_equals !== true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "tilemap.stamp readback did not equal set");
     }
   }
   return undefined;
@@ -1165,6 +1301,8 @@ async function applyMutateOnce(
           ? "property"
           : isCameraApply(classified.actionId)
             ? "camera"
+          : isTilemapApply(classified.actionId)
+            ? "tilemap"
           : isResourceApply(classified.actionId) ||
               isAssetRefApply(classified.actionId) ||
               isAssetIngestApply(classified.actionId)
@@ -1232,6 +1370,12 @@ async function applyMutateOnce(
       persistResult(row, cameraFail);
       saveState(ledger, row, "failed");
       return cameraFail;
+    }
+    const tilemapFail = tilemapApplyOk(result, classified.actionId, fields.params);
+    if (tilemapFail) {
+      persistResult(row, tilemapFail);
+      saveState(ledger, row, "failed");
+      return tilemapFail;
     }
     const resourceFail = resourceApplyOk(result, classified.actionId, fields.params);
     if (resourceFail) {
