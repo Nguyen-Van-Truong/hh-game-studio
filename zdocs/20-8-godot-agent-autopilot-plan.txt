@@ -1,6 +1,6 @@
 AUTHORITATIVE_PLAN=1
 STATUS=ACTIVE
-CURRENT_VALID_WP=R5-WP6
+CURRENT_VALID_WP=R5-WP7
 
 ================================================================================
 BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
@@ -13,7 +13,7 @@ BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
 | 2 | R2 — Control plane | Plugin, sidecar, Agent Host, MCP, auth, registry, ledger, pause và OWNER_AUTOPILOT hoạt động | Bridge + Plugin + Security | — | [x] 7/7 WP |
 | 3 | R3 — Quyền editor ngữ nghĩa | Scene/node/property/resource/script/asset/project settings có undo, dedup và postcondition | Scene + Script + Asset | — | [x] 8/8 WP |
 | 4 | R4 — Người xem được agent làm | Activity Dock, chọn node, focus inspector, cursor/gizmo ảo, replay kéo-thả, Watch/Fast mode | Observer UI + Editor UX | G2 VISIBLE | [x] 6/6 WP |
-| 5 | R5 — Bộ công cụ làm game 2D | TileMapLayer, animation, UI, audio, physics, navigation, shader/particles được agent thao tác đầy đủ | 2D-A + 2D-B + Assets | — | [ ] 5/7 WP |
+| 5 | R5 — Bộ công cụ làm game 2D | TileMapLayer, animation, UI, audio, physics, navigation, shader/particles được agent thao tác đầy đủ | 2D-A + 2D-B + Assets | — | [ ] 6/7 WP |
 | 6 | R6 — Agent tự chơi và tự kiểm | Play/debug, input, runtime state, deterministic step, screenshot/diff/perf, test evidence | Runtime + Test + Vision | G3 SELF-VERIFY | [ ] 0/7 WP |
 | 7 | R7 — Autopilot dài hạn | Nhận brief một lần, tự plan→làm→test→sửa→commit→resume; nhiều agent không đạp nhau | Orchestrator + Git + Recovery | G4 AUTONOMY | [ ] 0/6 WP |
 | 8 | R8 — Dogfood game thật | Từ project trống tạo game top-down 2D có art/audio/UI/save, người chỉ xem/review | Game + Art + QA song song theo DAG | G5 DOGFOOD | [ ] 0/6 WP |
@@ -24,7 +24,7 @@ VIỆC PHẢI LÀM TRƯỚC: R0-WP1 → R0-WP2 → R0-WP3 → R0-WP4 → R1-WP1.
 Không được bắt đầu R2
 trước G1. Từ R2 trở đi chỉ song song các track có ranh giới file rõ ràng.
 
-Tiến độ tổng: [ ] 35/60 WP. First valid WP: R5-WP6.
+Tiến độ tổng: [ ] 36/60 WP. First valid WP: R5-WP7.
 Ngày lập: 20-8-2026 (Asia/Saigon).
 
 ================================================================================
@@ -1705,9 +1705,9 @@ R5-WP5 — Physics/navigation/collision adapters                          [x]
         deferred R6; path Alternative; polygon_count not required;
         PhysicsMaterial persist unexercised; Wall sibling not
         parsed into bake; screenshots=SKIP
-      Commit: (this tick)
+      Commit: 96a01f7 R5-WP5: tick after critic and official PASS
 
-R5-WP6 — Audio, shader, particles và quality adapters                   [ ]
+R5-WP6 — Audio, shader, particles và quality adapters                   [x]
   Phụ thuộc: R3-WP4, R5-WP1.
   Track/file: E; audio/render adapters.
   Làm:
@@ -1717,7 +1717,22 @@ R5-WP6 — Audio, shader, particles và quality adapters                   [ ]
     - audio/image asset license/source manifest linked.
   Verify: SFX event, bus mute/volume, shader compile diagnostic, particles screenshot/perf.
   DoD: game có feedback hình/âm; shader lỗi không được “ok” im lặng.
-  LOG: (trống)
+  LOG:
+    LOG 2026-08-22 21:25 Asia/Saigon — agent=coordinator
+      Base: b8d6bc6 audio/shader/particles/quality + ledger apply.
+        Godot=4.7.1.stable.official.a13da4feb
+      Files/leases: hh_audio_adapter.gd, hh_render_adapter.gd,
+        AUDIO_APPLY/RENDER_APPLY, audioApplyOk/renderApplyOk,
+        test_audio_render.py; ProjectSettings.clear on empty restore
+      Verify: python tests/bootstrap/test_audio_render.py → PASS
+        (player/bus + shader/particles/quality; bad shader refused;
+        one-undo; restore leaves no r5w6 in project.godot)
+      Critic: b4178d08 FINAL TICK yes after coordinator live PASS
+      Gaps: shader_type+garbage still ACK (no compile query API);
+        bus mutates AudioServer before UndoRedo; effects/manifest
+        string only; heard SFX + particle screenshot deferred R6;
+        screenshots=SKIP
+      Commit: (this tick)
 
 R5-WP7 — Capability coverage gauntlet và docs                           [ ]
   Phụ thuộc: R5-WP1..6.
@@ -2263,14 +2278,14 @@ thuận nếu ảnh hưởng G5/G6.
 14. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Hiện tại R0 (4/4) + R1 (5/5, G1) + R2 (7/7) + R3 (8/8) + R4 (6/6, G2) + R5-WP1..WP5 đã xong. Agent tiếp theo làm **R5-WP6**.
+Hiện tại R0 (4/4) + R1 (5/5, G1) + R2 (7/7) + R3 (8/8) + R4 (6/6, G2) + R5-WP1..WP6 đã xong. Agent tiếp theo làm **R5-WP7**.
 KHÔNG vendor A/C as-is, KHÔNG M6, KHÔNG fork Godot. Do not claim the agent drives a full game.
 Gate G2 was signed 2026-08-22 with Alternatives (Play/Replay/overlay/placeholder). Do not hide those gaps.
 
 Lệnh hợp lệ:
 
-  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R5-WP6`);
-  2) R5-WP6: Audio/shader/particles/quality adapters + official test;
+  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R5-WP7`);
+  2) R5-WP7: 2D coverage gauntlet + museum scene + official test;
   3) mở editor fixture: `hh-godot-editor.bat` (Godot 4.7.1-stable pin, minimal-2d);
   4) không copy hh_stock_poc; không npx -y; không bump 4.7.2; không raw-write
      .tscn; plugin is the only writer. Không paper-ACK play.start.
