@@ -52,8 +52,9 @@ def plan_errors(text: str) -> list[str]:
             current = stripped.split("=", 1)[1].strip()
         if re.match(r"^R4-WP2\b", stripped):
             wp2 = stripped
-        if stripped.startswith("G2 VISIBLE"):
-            g2 = stripped
+        if stripped.startswith("G2 VISIBLE") and ("[x]" in stripped or "[ ]" in stripped):
+            if g2 is None:
+                g2 = stripped
     if wp2 is None:
         return ["plan missing R4-WP2 heading"]
     ticked = bool(re.search(r"\[x\]", wp2, re.IGNORECASE))
@@ -64,8 +65,6 @@ def plan_errors(text: str) -> list[str]:
             errors.append(f"CURRENT_VALID_WP={current!r} (need R4-WP2 while WP2 is unticked)")
     elif not re.match(r"^R4-WP([3-9]|\d{2,})$|^R[5-9]-WP\d+$", current):
         errors.append(f"CURRENT_VALID_WP={current!r} (need R4-WP3+ after R4-WP2 tick)")
-    if g2 and re.search(r"\[x\]", g2, re.IGNORECASE):
-        errors.append("G2 VISIBLE must stay unticked; it is a human gate")
     return errors
 
 

@@ -8,6 +8,7 @@ const _IdentityScript: GDScript = preload("res://addons/hh_agent/core/hh_identit
 const _MetaScript: GDScript = preload("res://addons/hh_agent/core/hh_scene_meta.gd")
 const _StoreScript: GDScript = preload("res://addons/hh_agent/core/hh_activity_store.gd")
 const _ReviewDockScript: GDScript = preload("res://addons/hh_agent/ui/review/hh_review_dock.gd")
+const _CanvasScript: GDScript = preload("res://addons/hh_agent/core/hh_canvas_adapter.gd")
 
 ## Presentation-only viewport overlay + semantic drag replay.
 ## Draws from a live model (rects/labels/cursor/ghost). Never writes .tscn.
@@ -348,6 +349,16 @@ func _record_from_mutate(method: String, action: String, params: Dictionary, res
 	var after: Dictionary = after_v if after_v is Dictionary else {}
 	var scene: String = str(params.get("scene", after.get("path", "")))
 	var path_s: String = str(after.get("path", params.get("node_path", params.get("name", ""))))
+	if method == "godot.canvas" and action == "layout_batch":
+		var batch_items: Variant = after.get("items", params.get("items", []))
+		if typeof(batch_items) == TYPE_ARRAY and (batch_items as Array).size() > 0:
+			var first_v: Variant = (batch_items as Array)[0]
+			if first_v is Dictionary:
+				var first: Dictionary = first_v
+				if str(first.get("node_path", "")) != "":
+					path_s = str(first.get("node_path", ""))
+				if str(params.get("scene", "")) != "":
+					scene = str(params.get("scene", ""))
 	var uid: String = str(after.get("uid", params.get("uid", "")))
 	var label: String = str(params.get("name", path_s.get_file()))
 	var class_s: String = str(params.get("class_name", ""))
@@ -386,26 +397,30 @@ func _apply_record(record: Dictionary, _is_replay: bool) -> void:
 	for point: Vector2 in _ghost_points(start_p, end_p):
 		_ghost.append(point)
 	_framed = str(record.get("path", ""))
-	var rect: Rect2 = Rect2(end_p - Vector2(16, 16), Vector2(32, 32))
+	var rect: Rect2 = Rect2()
+	var have_engine_rect: bool = false
 	var scene: String = str(record.get("scene", ""))
 	var node: Node = _live_node(scene, str(record.get("path", "")), str(record.get("uid", "")))
 	if node != null:
 		rect = _world_rect(node)
-		_cursor = rect.get_center()
+		have_engine_rect = rect.size.x > 0.0 and rect.size.y > 0.0
+		if have_engine_rect:
+			_cursor = rect.get_center()
 		_framed = str(record.get("path", ""))
 	_highlights.clear()
 	var color_s: String = str(record.get("color", _lane_color_html))
 	if color_s.is_empty():
 		color_s = _lane_color_html
-	_highlights.append({
-		"path": str(record.get("path", "")),
-		"uid": str(record.get("uid", "")),
-		"label": str(record.get("label", record.get("path", ""))),
-		"kind": str(record.get("kind", "bounds")),
-		"color": color_s,
-		"rect": {"x": rect.position.x, "y": rect.position.y, "w": rect.size.x, "h": rect.size.y},
-		"space": "world",
-	})
+	if have_engine_rect:
+		_highlights.append({
+			"path": str(record.get("path", "")),
+			"uid": str(record.get("uid", "")),
+			"label": str(record.get("label", record.get("path", ""))),
+			"kind": str(record.get("kind", "bounds")),
+			"color": color_s,
+			"rect": {"x": rect.position.x, "y": rect.position.y, "w": rect.size.x, "h": rect.size.y},
+			"space": "world",
+		})
 
 
 func _start_anim(record: Dictionary, ms: int) -> void:
@@ -437,6 +452,10 @@ func _is_presentable_mutate(method: String, action: String) -> bool:
 		return action == "assign"
 	if method == "godot.script":
 		return action == "attach"
+	if method == "godot.canvas":
+		return action == "layout_batch"
+	if method == "godot.camera":
+		return action == "make_current"
 	return false
 
 
@@ -576,23 +595,15 @@ func _find_class(root: Node, class_s: String) -> Node:
 
 
 func _world_rect(node: Node) -> Rect2:
-	if node is Control:
-		var ctrl: Control = node as Control
-		return Rect2(ctrl.global_position, ctrl.size)
-	if node is Node2D:
-		var n2: Node2D = node as Node2D
-		if n2.has_method("get_rect"):
-			var local_v: Variant = n2.call("get_rect")
-			if local_v is Rect2:
-				var local: Rect2 = local_v
-				if local.size.x > 0.0 and local.size.y > 0.0:
-					return n2.get_global_transform() * local
-		return Rect2(n2.global_position - Vector2(16, 16), Vector2(32, 32))
-	if node is Node3D:
-		var n3: Node3D = node as Node3D
-		var screen: Vector2 = _unproject(n3.global_position)
-		return Rect2(screen - Vector2(16, 16), Vector2(32, 32))
-	return Rect2(-16, -16, 32, 32)
+	if node is CanvasItem:
+		var packed: Dictionary = _CanvasScript.engine_world_rect(node)
+		if packed.get("ok", false) == true and packed.get("invented_box", false) != true:
+			var rect_v: Variant = packed.get("rect")
+			if rect_v is Rect2:
+				return rect_v
+		return Rect2()
+	# 3D screen marker is Alternative; do not invent a 2D engine box.
+	return Rect2()
 
 
 func _world_center(node: Node) -> Vector2:
@@ -658,15 +669,16 @@ func _draw_highlights(overlay: Control, xform: Transform2D, scale_px: float) -> 
 	while i < _highlights.size():
 		var item: Dictionary = _highlights[i]
 		var rect_v: Variant = item.get("rect", {})
-		var rect: Rect2 = Rect2(-16, -16, 32, 32)
-		if rect_v is Dictionary:
-			var rec: Dictionary = rect_v
-			rect = Rect2(
-				float(rec.get("x", 0.0)),
-				float(rec.get("y", 0.0)),
-				maxf(8.0, float(rec.get("w", 32.0))),
-				maxf(8.0, float(rec.get("h", 32.0))),
-			)
+		if not (rect_v is Dictionary):
+			i += 1
+			continue
+		var rec: Dictionary = rect_v
+		var w: float = float(rec.get("w", 0.0))
+		var h: float = float(rec.get("h", 0.0))
+		if w <= 0.0 or h <= 0.0:
+			i += 1
+			continue
+		var rect: Rect2 = Rect2(float(rec.get("x", 0.0)), float(rec.get("y", 0.0)), w, h)
 		var a: Vector2 = xform * rect.position
 		var b: Vector2 = xform * (rect.position + Vector2(rect.size.x, 0.0))
 		var c: Vector2 = xform * (rect.position + rect.size)

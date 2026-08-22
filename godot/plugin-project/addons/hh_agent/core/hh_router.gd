@@ -16,6 +16,7 @@ const _ScriptScript: GDScript = preload("res://addons/hh_agent/core/hh_script_ad
 const _AssetScript: GDScript = preload("res://addons/hh_agent/core/hh_asset_adapter.gd")
 const _SettingsScript: GDScript = preload("res://addons/hh_agent/core/hh_settings_adapter.gd")
 const _TxScript: GDScript = preload("res://addons/hh_agent/core/hh_transaction_adapter.gd")
+const _CanvasScript: GDScript = preload("res://addons/hh_agent/core/hh_canvas_adapter.gd")
 const _PresenterScript: GDScript = preload("res://addons/hh_agent/core/hh_presenter.gd")
 const _OverlayScript: GDScript = preload("res://addons/hh_agent/ui/overlay/hh_overlay.gd")
 const _SchedulerScript: GDScript = preload("res://addons/hh_agent/core/hh_scheduler.gd")
@@ -35,6 +36,7 @@ var _scripts: HHAgentScriptAdapter = HHAgentScriptAdapter.new()
 var _assets: HHAgentAssetAdapter = HHAgentAssetAdapter.new()
 var _settings: HHAgentSettingsAdapter = HHAgentSettingsAdapter.new()
 var _tx: HHAgentTransactionAdapter = HHAgentTransactionAdapter.new()
+var _canvas: HHAgentCanvasAdapter = HHAgentCanvasAdapter.new()
 var _presenter: HHAgentPresenter = HHAgentPresenter.new()
 var _overlay_local: HHAgentOverlay = HHAgentOverlay.new()
 var _scheduler_local: HHAgentScheduler = HHAgentScheduler.new()
@@ -114,6 +116,11 @@ func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_ga
 		result = _scenes.handle(command_id, method, action, params, actions, pre)
 	elif method == "godot.editor" and (action == "select" or action == "focus" or action == "main_screen"):
 		result = _presenter.handle(command_id, method, action, params, actions, envelope)
+	elif method == "godot.canvas" or method == "godot.camera":
+		if _canvas.handles(method, action):
+			result = _canvas.handle(command_id, method, action, params, actions, pre)
+		else:
+			return _errors.fail(command_id, HHAgentErrors.E_UNKNOWN_ACTION, "unknown canvas/camera action", "action")
 	elif method == "godot.editor" and (action == "frame_view" or action == "replay"):
 		result = _overlay().handle(command_id, method, action, params, actions, envelope)
 	elif method == "godot.review" and action == "replay":
@@ -287,6 +294,9 @@ func run_selftest(actions: HHAgentActions) -> PackedStringArray:
 	if str(_error_of(paused_settings).get("code", "")) != HHAgentErrors.E_PAUSED:
 		failures.append("paused project.settings must be E_PAUSED")
 	gate.set_paused(false)
+	var cam_missing: Dictionary = dispatch(_sample("godot.camera", "make_current", {}), actions, 0)
+	if str(_error_of(cam_missing).get("code", "")) != HHAgentErrors.E_MISSING_REQUIRED:
+		failures.append("camera.make_current missing required must be E_MISSING_REQUIRED")
 	var vendor_plugin: Dictionary = dispatch(
 		_sample("godot.project", "plugin", {"plugin_name": "fake_vendor", "enabled": true}),
 		actions,

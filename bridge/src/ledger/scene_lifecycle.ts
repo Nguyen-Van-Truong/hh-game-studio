@@ -26,6 +26,10 @@ export const NODE_CRUD_APPLY = [
 
 export const PROPERTY_APPLY = ["property.set", "property.batch", "property.reset"] as const;
 
+export const CANVAS_APPLY = ["canvas.layout_batch"] as const;
+
+export const CAMERA_APPLY = ["camera.make_current"] as const;
+
 export const RESOURCE_APPLY = [
   "resource.create",
   "resource.assign",
@@ -83,6 +87,14 @@ export function isPropertyApply(actionId: string): boolean {
   return (PROPERTY_APPLY as readonly string[]).includes(actionId);
 }
 
+export function isCanvasApply(actionId: string): boolean {
+  return (CANVAS_APPLY as readonly string[]).includes(actionId);
+}
+
+export function isCameraApply(actionId: string): boolean {
+  return (CAMERA_APPLY as readonly string[]).includes(actionId);
+}
+
 export function isResourceApply(actionId: string): boolean {
   return (RESOURCE_APPLY as readonly string[]).includes(actionId);
 }
@@ -120,6 +132,8 @@ export function isProvenEditorApply(actionId: string): boolean {
     isSceneLifecycleApply(actionId) ||
     isNodeCrudApply(actionId) ||
     isPropertyApply(actionId) ||
+    isCanvasApply(actionId) ||
+    isCameraApply(actionId) ||
     isResourceApply(actionId) ||
     isSignalApply(actionId) ||
     isAssetRefApply(actionId) ||

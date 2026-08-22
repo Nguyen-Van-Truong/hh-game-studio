@@ -1692,6 +1692,42 @@
       ],
       "postcondition": "transaction_steps_verified",
       "checkpoint_required": true
+    },
+    "canvas.bounds": {
+      "method": "godot.canvas",
+      "verb": "bounds",
+      "side_effect": "read",
+      "timeout_ms": 5000,
+      "required": [
+        "scene",
+        "node_path"
+      ],
+      "postcondition": "canvas_bounds_engine_rect",
+      "checkpoint_required": false
+    },
+    "canvas.layout_batch": {
+      "method": "godot.canvas",
+      "verb": "layout_batch",
+      "side_effect": "mutate",
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "items"
+      ],
+      "postcondition": "layout_batch_one_undo",
+      "checkpoint_required": false
+    },
+    "camera.make_current": {
+      "method": "godot.camera",
+      "verb": "make_current",
+      "side_effect": "mutate",
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path"
+      ],
+      "postcondition": "camera_is_current",
+      "checkpoint_required": false
     }
   }
 }

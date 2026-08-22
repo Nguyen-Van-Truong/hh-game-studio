@@ -1798,6 +1798,57 @@ const SPECS: Record<string, ActionSpec> = {
     },
     { extra_errors: SCENE_MUTATE_ERRORS, timeout_ms: 60_000, checkpoint: true, cancel: true },
   ),
+
+  "canvas.bounds": read(
+    "Read engine-computed CanvasItem bounds (get_global_transform + get_rect)",
+    "canvas_bounds_engine_rect",
+    obj(["scene", "node_path"], {
+      scene: RES_PATH,
+      node_path: NODE_PATH,
+    }),
+    { scene: "res://scenes/world.tscn", node_path: "Player/Sprite" },
+  ),
+  "canvas.layout_batch": mutate(
+    "Bulk 2D layout in one UndoRedo (wraps property.batch)",
+    "editor_undo_redo",
+    "layout_batch_one_undo",
+    obj(["scene", "items"], {
+      scene: RES_PATH,
+      items: {
+        type: "array",
+        minItems: 1,
+        maxItems: 64,
+        items: obj(["node_path", "property", "value"], {
+          node_path: NODE_PATH,
+          property: PROP_PATH,
+          value: VARIANT,
+          expected_old_hash: HASH,
+        }),
+      },
+    }),
+    {
+      scene: "res://scenes/world.tscn",
+      items: [
+        {
+          node_path: "Player",
+          property: "position",
+          value: exampleVariantVec2(64, 96),
+        },
+      ],
+    },
+    { extra_errors: [...SCENE_MUTATE_ERRORS, E.E_INVALID_VARIANT, E.E_UNKNOWN_VARIANT_TYPE] },
+  ),
+  "camera.make_current": mutate(
+    "Make a Camera2D current via the typed Camera2D.make_current method",
+    "editor_undo_redo",
+    "camera_is_current",
+    obj(["scene", "node_path"], {
+      scene: RES_PATH,
+      node_path: NODE_PATH,
+    }),
+    { scene: "res://scenes/world.tscn", node_path: "World/Camera" },
+    { extra_errors: SCENE_MUTATE_ERRORS },
+  ),
 };
 
 function expand(id: string, spec: ActionSpec): ActionDef {

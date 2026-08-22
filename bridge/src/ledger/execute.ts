@@ -26,6 +26,8 @@ import {
   durableResPath,
   isAssetIngestApply,
   isAssetRefApply,
+  isCameraApply,
+  isCanvasApply,
   isProjectSettingsApply,
   isPropertyApply,
   isProvenEditorApply,
@@ -407,6 +409,73 @@ function propertyApplyOk(
   }
   if (actionId === "property.reset" && after.is_default !== true && after.reverted !== true) {
     return errorResult(result.command_id, E.E_UNVERIFIED, "property.reset missing default readback");
+  }
+  return undefined;
+}
+
+function canvasApplyOk(
+  result: PluginCommandResult,
+  actionId: string,
+  params: Record<string, unknown>,
+): PluginCommandResult | undefined {
+  if (!isCanvasApply(actionId)) {
+    return undefined;
+  }
+  if (!result.ok) {
+    return result;
+  }
+  if (typeof result.undo_action !== "string" || !result.undo_action.startsWith("Agent: ")) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "canvas missing Agent UndoRedo name");
+  }
+  const after = result.after;
+  if (!isRecord(after) || after.readback_equals !== true) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "canvas readback did not equal set");
+  }
+  if (actionId === "canvas.layout_batch") {
+    if (!Array.isArray(after.items) || after.items.length < 1) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "canvas.layout_batch missing items readback");
+    }
+    const requested = Array.isArray(params.items) ? params.items : [];
+    if (after.items.length !== requested.length) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "canvas.layout_batch item count mismatch");
+    }
+    for (let i = 0; i < requested.length; i += 1) {
+      const want = requested[i];
+      const got = after.items[i];
+      if (
+        !isRecord(want) ||
+        !isRecord(got) ||
+        got.node_path !== want.node_path ||
+        got.property !== want.property ||
+        !encodedClose(got.value, want.value)
+      ) {
+        return errorResult(result.command_id, E.E_UNVERIFIED, `canvas.layout_batch item ${i} readback != set`);
+      }
+    }
+  }
+  return undefined;
+}
+
+function cameraApplyOk(
+  result: PluginCommandResult,
+  actionId: string,
+  params: Record<string, unknown>,
+): PluginCommandResult | undefined {
+  if (!isCameraApply(actionId)) {
+    return undefined;
+  }
+  if (!result.ok) {
+    return result;
+  }
+  if (typeof result.undo_action !== "string" || !result.undo_action.startsWith("Agent: ")) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "camera missing Agent UndoRedo name");
+  }
+  const after = result.after;
+  if (!isRecord(after) || after.is_current !== true) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "camera.make_current readback is not current");
+  }
+  if (after.node_path !== params.node_path || after.class_name !== "Camera2D") {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "camera.make_current node bind mismatch");
   }
   return undefined;
 }
@@ -1092,8 +1161,10 @@ async function applyMutateOnce(
     row.after_summary = JSON.stringify({
       kind: isTransactionApply(classified.actionId)
         ? "transaction"
-        : isPropertyApply(classified.actionId)
+        : isPropertyApply(classified.actionId) || isCanvasApply(classified.actionId)
           ? "property"
+          : isCameraApply(classified.actionId)
+            ? "camera"
           : isResourceApply(classified.actionId) ||
               isAssetRefApply(classified.actionId) ||
               isAssetIngestApply(classified.actionId)
@@ -1149,6 +1220,18 @@ async function applyMutateOnce(
       persistResult(row, propertyFail);
       saveState(ledger, row, "failed");
       return propertyFail;
+    }
+    const canvasFail = canvasApplyOk(result, classified.actionId, fields.params);
+    if (canvasFail) {
+      persistResult(row, canvasFail);
+      saveState(ledger, row, "failed");
+      return canvasFail;
+    }
+    const cameraFail = cameraApplyOk(result, classified.actionId, fields.params);
+    if (cameraFail) {
+      persistResult(row, cameraFail);
+      saveState(ledger, row, "failed");
+      return cameraFail;
     }
     const resourceFail = resourceApplyOk(result, classified.actionId, fields.params);
     if (resourceFail) {

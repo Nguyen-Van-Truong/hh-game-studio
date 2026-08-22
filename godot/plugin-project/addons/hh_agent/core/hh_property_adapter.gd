@@ -27,6 +27,7 @@ func plan_item_on(
 	node_path: String,
 	prop: String,
 	raw_value: Variant,
+	expected_hash: String = "",
 ) -> Dictionary:
 	if node == null:
 		return _unverified(command_id, "node not found")
@@ -56,6 +57,15 @@ func plan_item_on(
 	if not hint_err.is_empty():
 		return _errors.fail(command_id, str((hint_err.get("error") as Dictionary).get("code", "")), str((hint_err.get("error") as Dictionary).get("message", "")), "params.value")
 	var old_v: Variant = target.get(leaf)
+	if not expected_hash.is_empty():
+		var cur_hash: String = _codec.hash_of(old_v)
+		if cur_hash.is_empty() or cur_hash != expected_hash:
+			return _errors.fail(
+				command_id,
+				HHAgentErrors.E_CONFLICT,
+				"Inspector/value drifted from expected-old-hash",
+				"params.expected_old_hash",
+			)
 	return {
 		"ok": true,
 		"target": target,

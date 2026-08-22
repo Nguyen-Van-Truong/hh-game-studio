@@ -1,6 +1,8 @@
 import { PINNED_VERSION_ID } from "../doctor/pin.js";
 import {
   isAssetRefApply,
+  isCameraApply,
+  isCanvasApply,
   isNodeCrudApply,
   isProjectSettingsApply,
   isPropertyApply,
@@ -98,8 +100,10 @@ export function capabilityMatrix(): Record<string, unknown> {
           ? "view-state-mutate-not-wp6"
           : isProjectSettingsApply(def.id)
             ? "project-settings"
-          : isPropertyApply(def.id)
+          : isPropertyApply(def.id) || isCanvasApply(def.id)
             ? "property-codec"
+            : isCameraApply(def.id)
+              ? "camera-current"
             : isResourceApply(def.id) || isAssetRefApply(def.id)
               ? "resource-ops"
               : isSignalApply(def.id)

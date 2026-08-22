@@ -4,8 +4,8 @@
   "protocol": "hh-godot-agent/1",
   "registry_version": "hh-godot-actions/1",
   "action_version": "1",
-  "tool_count": 22,
-  "action_count": 139,
+  "tool_count": 24,
+  "action_count": 142,
   "tools": [
     {
       "name": "godot.capabilities",
@@ -916,6 +916,81 @@
               "cancel",
               "wait",
               "transaction"
+            ]
+          },
+          "params": {
+            "type": "object",
+            "description": "Per-action params. The matched ActionDef input_schema sets additionalProperties false."
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "precondition": {
+            "type": "object",
+            "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
+          },
+          "presentation": {
+            "type": "object",
+            "description": "Optional Watch/Fast presentation hint. Does not mutate the document."
+          }
+        }
+      }
+    },
+    {
+      "name": "godot.canvas",
+      "description": "Domain tool for canvas.* actions. Discriminator is action.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "action",
+          "params"
+        ],
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "bounds",
+              "layout_batch"
+            ]
+          },
+          "params": {
+            "type": "object",
+            "description": "Per-action params. The matched ActionDef input_schema sets additionalProperties false."
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "precondition": {
+            "type": "object",
+            "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
+          },
+          "presentation": {
+            "type": "object",
+            "description": "Optional Watch/Fast presentation hint. Does not mutate the document."
+          }
+        }
+      }
+    },
+    {
+      "name": "godot.camera",
+      "description": "Domain tool for camera.* actions. Discriminator is action.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "action",
+          "params"
+        ],
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "make_current"
             ]
           },
           "params": {
