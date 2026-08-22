@@ -1,6 +1,6 @@
 AUTHORITATIVE_PLAN=1
 STATUS=ACTIVE
-CURRENT_VALID_WP=R4-WP5
+CURRENT_VALID_WP=R4-WP6
 
 ================================================================================
 BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
@@ -12,7 +12,7 @@ BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
 | 1 | R1 — Spike và chọn nền MCP | Chứng minh agent tạo/sửa/chạy/nhìn một scene thật trong editor; chốt upstream hay tự làm | Research + Security + POC | G1 NO-FORK | [x] 5/5 WP |
 | 2 | R2 — Control plane | Plugin, sidecar, Agent Host, MCP, auth, registry, ledger, pause và OWNER_AUTOPILOT hoạt động | Bridge + Plugin + Security | — | [x] 7/7 WP |
 | 3 | R3 — Quyền editor ngữ nghĩa | Scene/node/property/resource/script/asset/project settings có undo, dedup và postcondition | Scene + Script + Asset | — | [x] 8/8 WP |
-| 4 | R4 — Người xem được agent làm | Activity Dock, chọn node, focus inspector, cursor/gizmo ảo, replay kéo-thả, Watch/Fast mode | Observer UI + Editor UX | G2 VISIBLE | [ ] 4/6 WP |
+| 4 | R4 — Người xem được agent làm | Activity Dock, chọn node, focus inspector, cursor/gizmo ảo, replay kéo-thả, Watch/Fast mode | Observer UI + Editor UX | G2 VISIBLE | [ ] 5/6 WP |
 | 5 | R5 — Bộ công cụ làm game 2D | TileMapLayer, animation, UI, audio, physics, navigation, shader/particles được agent thao tác đầy đủ | 2D-A + 2D-B + Assets | — | [ ] 0/7 WP |
 | 6 | R6 — Agent tự chơi và tự kiểm | Play/debug, input, runtime state, deterministic step, screenshot/diff/perf, test evidence | Runtime + Test + Vision | G3 SELF-VERIFY | [ ] 0/7 WP |
 | 7 | R7 — Autopilot dài hạn | Nhận brief một lần, tự plan→làm→test→sửa→commit→resume; nhiều agent không đạp nhau | Orchestrator + Git + Recovery | G4 AUTONOMY | [ ] 0/6 WP |
@@ -24,7 +24,7 @@ VIỆC PHẢI LÀM TRƯỚC: R0-WP1 → R0-WP2 → R0-WP3 → R0-WP4 → R1-WP1.
 Không được bắt đầu R2
 trước G1. Từ R2 trở đi chỉ song song các track có ranh giới file rõ ràng.
 
-Tiến độ tổng: [ ] 28/60 WP. First valid WP: R4-WP5.
+Tiến độ tổng: [ ] 29/60 WP. First valid WP: R4-WP6.
 Ngày lập: 20-8-2026 (Asia/Saigon).
 
 ================================================================================
@@ -1515,7 +1515,7 @@ R4-WP4 — Watch/Fast/Replay scheduler và backpressure                    [x]
         never increments; lanes via stress; G2 stays human
       Commit: 71d5cc7 R4-WP4: watch fast replay scheduler and backpressure
 
-R4-WP5 — Review Center: diff, assumptions, evidence và checkpoint       [ ]
+R4-WP5 — Review Center: diff, assumptions, evidence và checkpoint       [x]
   Phụ thuộc: R4-WP1, R3-WP8.
   Track/file: C/G; review UI + artifact index.
   Làm:
@@ -1525,7 +1525,21 @@ R4-WP5 — Review Center: diff, assumptions, evidence và checkpoint       [ ]
     - review là async: agent tiếp tục milestone được phép, không cần approve từng action.
   Verify: missing/corrupt artifact rõ ràng; revert checkpoint recoverable; large diff paging.
   DoD: người review chất lượng/kết quả thay vì làm hộ thao tác.
-  LOG: (trống)
+  LOG:
+    LOG 2026-08-22 08:20 Asia/Saigon — agent=coordinator
+      Base: 878dcd4 Review Center; cheap-fix 307f629 wire dock.
+        Godot=4.7.1.stable.official.a13da4feb
+      Files/leases: review dock, godot.review card/diff/write_card/replay,
+        test_review_center.py
+      Verify: test_review_center.py → 0 (~93s; missing/empty fail;
+        write_card; Before/After/Diff/Revert wired; dest SHA restore;
+        2000-line page; selected replay; miss E_UNVERIFIED)
+      Critic: c9e8facd FAIL tick no (dead buttons). Closed on 307f629
+        (c6d73fd0 PASS-WITH-GAPS, prior P0s dead, TICK yes R4-WP5 only)
+      Gaps: press=replay leftover ACK; revert disk not scene reload;
+        before/after captions; G2 stays human
+      Commit: 878dcd4 R4-WP5: review center diff evidence and checkpoint;
+        307f629 wire review dock and fail missing card
 
 R4-WP6 — Nghiệm thu visible thật + Gate G2                            [ ]
   Phụ thuộc: R4-WP1..5.
@@ -2159,15 +2173,15 @@ thuận nếu ảnh hưởng G5/G6.
 14. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Hiện tại R0 (4/4) + R1 (5/5, G1) + R2 (7/7) + R3 (8/8) + R4-WP1..WP4 đã xong. Agent tiếp theo làm **R4-WP5**.
+Hiện tại R0 (4/4) + R1 (5/5, G1) + R2 (7/7) + R3 (8/8) + R4-WP1..WP5 đã xong. Agent tiếp theo làm **R4-WP6**.
 KHÔNG vendor A/C as-is, KHÔNG M6, KHÔNG fork Godot. Semantic editor verbs exist;
-Review Center is next. Do not claim the agent drives a full game. G2 VISIBLE
-stays a human review gate — do not fake it.
+G2 visible E2E harness is next. Do not claim the agent drives a full game.
+G2 VISIBLE is a HUMAN review gate — do not fake it. Do not start R5 until G2.
 
 Lệnh hợp lệ:
 
-  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R4-WP5`);
-  2) R4-WP5: Review Center (diff, assumptions, evidence, checkpoint);
+  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R4-WP6`);
+  2) R4-WP6: visible E2E harness (do NOT tick G2);
   3) mở editor fixture: `hh-godot-editor.bat` (Godot 4.7.1-stable pin, minimal-2d);
   4) không copy hh_stock_poc; không npx -y; không bump 4.7.2; không raw-write
      .tscn; plugin is the only writer.
