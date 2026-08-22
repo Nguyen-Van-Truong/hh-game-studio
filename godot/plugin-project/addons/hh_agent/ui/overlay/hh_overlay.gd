@@ -7,6 +7,7 @@ const _ActionsScript: GDScript = preload("res://addons/hh_agent/core/hh_actions.
 const _IdentityScript: GDScript = preload("res://addons/hh_agent/core/hh_identity.gd")
 const _MetaScript: GDScript = preload("res://addons/hh_agent/core/hh_scene_meta.gd")
 const _StoreScript: GDScript = preload("res://addons/hh_agent/core/hh_activity_store.gd")
+const _ReviewDockScript: GDScript = preload("res://addons/hh_agent/ui/review/hh_review_dock.gd")
 
 ## Presentation-only viewport overlay + semantic drag replay.
 ## Draws from a live model (rects/labels/cursor/ghost). Never writes .tscn.
@@ -77,7 +78,7 @@ func handle(
 	var def: Dictionary = actions.lookup(method, action)
 	var post: String = str(def.get("postcondition", ""))
 	if method == "godot.review" and action == "replay":
-		return _replay(command_id, params, envelope, post)
+		return _replay(command_id, params, envelope, post, true)
 	if method != "godot.editor":
 		return _errors.fail(command_id, HHAgentErrors.E_UNVERIFIED, "not an editor presentation verb", "")
 	if action == "frame_view":
@@ -157,6 +158,10 @@ func is_presentable_mutate(method: String, action: String) -> bool:
 
 func replay_last() -> Dictionary:
 	return _replay("", {"command_id": str(_last.get("command_id", ""))}, {}, "replay_started")
+
+
+func replay_command(command_id: String) -> Dictionary:
+	return _replay("", {"command_id": command_id}, {}, "replay_started", true)
 
 
 func snapshot(envelope: Dictionary = {}) -> Dictionary:
@@ -281,11 +286,27 @@ func _frame_view(command_id: String, params: Dictionary, envelope: Dictionary, p
 	return _errors.ok_read(command_id, checks, after)
 
 
-func _replay(command_id: String, params: Dictionary, envelope: Dictionary, post: String) -> Dictionary:
+func _replay(command_id: String, params: Dictionary, envelope: Dictionary, post: String, strict_id: bool = false) -> Dictionary:
 	if post.is_empty():
 		post = "replay_started"
 	var want: String = str(params.get("command_id", ""))
-	var record: Dictionary = _lookup_record(want)
+	var dock: HHAgentReviewDock = HHAgentReviewDock.current()
+	if dock != null and not want.is_empty():
+		dock.set_selected_command_id(want)
+	var record: Dictionary = _lookup_record(want, not strict_id)
+	if strict_id and record.is_empty():
+		var failed: Dictionary = snapshot(envelope)
+		failed["presentation_failed"] = true
+		failed["replayed_command_id"] = want
+		failed["last_replay"] = {"action": "", "ms": 0, "drawn": false}
+		var result: Dictionary = _errors.fail(
+			command_id,
+			HHAgentErrors.E_UNVERIFIED,
+			"review.replay command_id not in overlay log",
+			"params.command_id",
+		)
+		result["after"] = failed
+		return result
 	var drawn: bool = is_draw_enabled_for(envelope) and not record.is_empty()
 	var ms: int = 0
 	var action_s: String = str(record.get("action", ""))
@@ -306,17 +327,18 @@ func _replay(command_id: String, params: Dictionary, envelope: Dictionary, post:
 		"drawn": drawn,
 	}
 	after["replayed_command_id"] = want
+	after["presentation_failed"] = false
 	return _errors.ok_read(command_id, checks, after)
 
 
-func _lookup_record(command_id: String) -> Dictionary:
+func _lookup_record(command_id: String, fallback_last: bool = true) -> Dictionary:
 	if not command_id.is_empty() and _records.has(command_id):
 		var found_v: Variant = _records[command_id]
 		if found_v is Dictionary:
 			return found_v
 	if not command_id.is_empty() and str(_last.get("command_id", "")) == command_id:
 		return _last
-	if not _last.is_empty():
+	if fallback_last and not _last.is_empty():
 		return _last
 	return {}
 

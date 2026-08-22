@@ -12,6 +12,10 @@ const _StoreScript: GDScript = preload("res://addons/hh_agent/core/hh_activity_s
 static var _current: HHAgentReviewStore
 
 var _cached: Dictionary = {}
+var _view: String = ""
+var _paged_diff: Dictionary = {}
+var _last_revert: Dictionary = {}
+var _last_press: String = ""
 
 
 static func current() -> HHAgentReviewStore:
@@ -21,32 +25,69 @@ static func current() -> HHAgentReviewStore:
 func attach() -> void:
 	_current = self
 	_cached = _card_snapshot({})
+	_view = ""
+	_paged_diff = {}
+	_last_revert = {}
+	_last_press = ""
 
 
 func detach() -> void:
 	if _current == self:
 		_current = null
 	_cached = {}
+	_view = ""
+	_paged_diff = {}
+	_last_revert = {}
+	_last_press = ""
 
 
 func last_card() -> Dictionary:
 	if _cached.is_empty():
 		_cached = _card_snapshot({})
-	return _cached
+	var out: Dictionary = _cached.duplicate(true)
+	if not _view.is_empty():
+		out["view"] = _view
+		out["opened"] = _view
+	if not _paged_diff.is_empty():
+		out["diff"] = _paged_diff
+	if _view == "before":
+		out["opened_text"] = str(out.get("before", ""))
+	elif _view == "after":
+		out["opened_text"] = str(out.get("after", ""))
+	if not _last_revert.is_empty():
+		out["last_revert"] = _last_revert
+	if not _last_press.is_empty():
+		out["dock_pressed"] = _last_press
+	return out
+
+
+func last_revert() -> Dictionary:
+	return _last_revert.duplicate(true)
+
+
+func remember_press(press: String) -> void:
+	_last_press = press
 
 
 func snapshot(params: Dictionary) -> Dictionary:
 	_cached = _card_snapshot(params)
-	return _redact(_cached.duplicate(true))
+	return _redact(last_card())
 
 
 func page_diff(params: Dictionary) -> Dictionary:
-	return _redact(_diff_snapshot(params))
+	var page: Dictionary = _diff_snapshot(params)
+	if page.get("diff") is Dictionary:
+		_paged_diff = page.get("diff") as Dictionary
+		_view = "diff"
+	_cached = page
+	return _redact(page)
 
 
 func open_view(params: Dictionary) -> Dictionary:
 	var view_s: String = str(params.get("view", "diff"))
 	var card: Dictionary = _card_snapshot(params)
+	_cached = card
+	_view = view_s
 	card["view"] = view_s
 	card["opened"] = view_s
 	if view_s == "diff":
@@ -56,14 +97,24 @@ func open_view(params: Dictionary) -> Dictionary:
 		if not diff_params.has("limit"):
 			diff_params["limit"] = HHAgentConstants.DEFAULT_PAGE
 		var page: Dictionary = _diff_snapshot(diff_params)
-		card["diff"] = page.get("diff", {})
-		if page.get("artifact_ok", false) != true and card.get("artifact_ok", false) == true:
+		var diff_v: Variant = page.get("diff", {})
+		_paged_diff = diff_v if diff_v is Dictionary else {}
+		card["diff"] = _paged_diff
+		card["diff_ok"] = page.get("diff_ok", false) == true
+		if page.get("diff_ok", false) != true:
 			card["diff_ok"] = false
-			card["error"] = page.get("error", {})
+			if page.has("error"):
+				card["error"] = page.get("error", {})
 	elif view_s == "before":
-		card["opened_text"] = str(card.get("before", ""))
+		var before_s: String = str(card.get("before", ""))
+		card["opened_text"] = before_s
+		_paged_diff = _lines_page(before_s if not before_s.is_empty() else "before: —")
+		card["diff"] = _paged_diff
 	elif view_s == "after":
-		card["opened_text"] = str(card.get("after", ""))
+		var after_s: String = str(card.get("after", ""))
+		card["opened_text"] = after_s
+		_paged_diff = _lines_page(after_s if not after_s.is_empty() else "after: —")
+		card["diff"] = _paged_diff
 	return _redact(card)
 
 
@@ -88,15 +139,16 @@ func _card_snapshot(params: Dictionary) -> Dictionary:
 			"path": rel_path,
 		})
 	var body: Dictionary = parsed
-	if body.is_empty() and raw.strip_edges() != "{}":
+	if not _body_has_required(body):
 		return _fail_card({
-			"code": HHAgentErrors.E_INVALID_TYPE,
-			"message": "review artifact corrupt",
+			"code": HHAgentErrors.E_UNVERIFIED,
+			"message": "review card needs goal and files/scenes/tests",
 			"path": rel_path,
 		})
 	var screenshots: Array = _screenshot_status(body.get("screenshots", []))
 	var gaps: Array = _as_str_array(body.get("gaps", body.get("known_gaps", [])))
 	var checkpoint: Dictionary = _checkpoint_of(body.get("checkpoint", {}))
+	var listed_diff: Dictionary = _listed_diff_state(body, abs_path)
 	return {
 		"artifact_ok": true,
 		"schema": str(body.get("schema", HHAgentConstants.REVIEW_SCHEMA)),
@@ -109,6 +161,8 @@ func _card_snapshot(params: Dictionary) -> Dictionary:
 		"tests": _as_str_array(body.get("tests", [])),
 		"screenshots": screenshots,
 		"screenshots_ok": _screenshots_all_ok(screenshots),
+		"diff_ok": listed_diff.get("ok", false) == true,
+		"diff_path": str(listed_diff.get("rel", "")),
 		"perf": _as_dict(body.get("perf", {})),
 		"license": str(body.get("license", "")),
 		"gaps": gaps,
@@ -139,11 +193,19 @@ func _diff_snapshot(params: Dictionary) -> Dictionary:
 	var abs_card: String = str(resolved.get("abs", ""))
 	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(abs_card))
 	var body: Dictionary = parsed if parsed is Dictionary else {}
+	var listed: Dictionary = _listed_diff_state(body, abs_card)
 	var lines: PackedStringArray = _load_diff_lines(body, abs_card)
 	var page: Dictionary = _page_lines(lines, params)
 	card["diff"] = page
-	card["diff_ok"] = true
+	card["diff_ok"] = listed.get("ok", false) == true and not lines.is_empty()
+	card["diff_path"] = str(listed.get("rel", ""))
 	card["path"] = rel_card
+	if card.get("diff_ok", false) != true:
+		card["error"] = {
+			"code": HHAgentErrors.E_UNVERIFIED,
+			"message": "listed review diff missing",
+			"path": str(listed.get("rel", "large.diff")),
+		}
 	return card
 
 
@@ -167,6 +229,7 @@ func _fail_card(err: Dictionary) -> Dictionary:
 		"tests": [],
 		"screenshots": [],
 		"screenshots_ok": false,
+		"diff_ok": false,
 		"perf": {},
 		"license": "",
 		"gaps": [],
@@ -431,6 +494,392 @@ func _as_dict(raw: Variant) -> Dictionary:
 	if typeof(raw) == TYPE_STRING:
 		return {"notes": str(raw)}
 	return {}
+
+
+func write_card(params: Dictionary) -> Dictionary:
+	var body: Dictionary = {
+		"schema": HHAgentConstants.REVIEW_SCHEMA,
+		"goal": str(params.get("goal", "")),
+		"assumptions": _as_str_array(params.get("assumptions", [])),
+		"files": _as_str_array(params.get("files", [])),
+		"scenes": _as_str_array(params.get("scenes", [])),
+		"assets": _as_str_array(params.get("assets", [])),
+		"tests": _as_str_array(params.get("tests", [])),
+		"screenshots": _as_str_array(params.get("screenshots", [])),
+		"perf": _as_dict(params.get("perf", {"notes": "headless; no pixel golden"})),
+		"license": str(params.get("license", "MIT")),
+		"gaps": _as_str_array(params.get("gaps", [])),
+		"before": str(params.get("before", "")),
+		"after": str(params.get("after", "")),
+	}
+	var diff_path_s: String = str(params.get("diff_path", ""))
+	if not diff_path_s.is_empty():
+		body["diff_path"] = diff_path_s
+	var ckpt_id: String = str(params.get("checkpoint_id", ""))
+	if params.get("checkpoint") is Dictionary:
+		ckpt_id = str((params.get("checkpoint") as Dictionary).get("id", ckpt_id))
+	if params.get("auto", false) == true:
+		_autofill_card(body)
+		if ckpt_id.is_empty():
+			ckpt_id = str(body.get("checkpoint_id", ""))
+	if not ckpt_id.is_empty():
+		body["checkpoint"] = {"id": ckpt_id}
+		body.erase("checkpoint_id")
+	elif body.has("checkpoint_id"):
+		body["checkpoint"] = {"id": str(body.get("checkpoint_id", ""))}
+		body.erase("checkpoint_id")
+	if not _body_has_required(body):
+		return _fail_card({
+			"code": HHAgentErrors.E_UNVERIFIED,
+			"message": "write_card needs goal and files/scenes/tests",
+			"path": HHAgentConstants.REVIEW_DIR + "/" + HHAgentConstants.REVIEW_FILE,
+		})
+	var wrote: Dictionary = _atomic_write_card(body, str(params.get("path", "")))
+	if wrote.get("ok", false) != true:
+		return _fail_card({
+			"code": str(wrote.get("code", HHAgentErrors.E_UNVERIFIED)),
+			"message": str(wrote.get("message", "review card write failed")),
+			"path": str(wrote.get("path", "")),
+		})
+	_cached = _card_snapshot({"path": str(wrote.get("rel", ""))})
+	var out: Dictionary = last_card()
+	out["written"] = true
+	out["writer"] = "godot.review.write_card"
+	return out
+
+
+func revert_checkpoint(ref: String) -> Dictionary:
+	var result: Dictionary = _restore_checkpoint(ref)
+	result["action"] = "git.revert_checkpoint"
+	_last_revert = result.duplicate(true)
+	_last_press = "revert"
+	return result
+
+
+func card_checkpoint_ref(card: Dictionary = {}) -> String:
+	var snap: Dictionary = card if not card.is_empty() else last_card()
+	var ckpt_v: Variant = snap.get("checkpoint", {})
+	if ckpt_v is Dictionary:
+		var id_s: String = str((ckpt_v as Dictionary).get("id", ""))
+		if id_s.is_empty():
+			id_s = str((ckpt_v as Dictionary).get("ref", ""))
+		return id_s
+	return str(ckpt_v)
+
+
+func _body_has_required(body: Dictionary) -> bool:
+	if str(body.get("goal", "")).strip_edges().is_empty():
+		return false
+	var files: Array = _as_str_array(body.get("files", []))
+	var scenes: Array = _as_str_array(body.get("scenes", []))
+	var tests: Array = _as_str_array(body.get("tests", []))
+	return files.size() + scenes.size() + tests.size() > 0
+
+
+func _listed_diff_state(body: Dictionary, abs_card: String) -> Dictionary:
+	var inline: String = str(body.get("diff", body.get("unified_diff", "")))
+	if not inline.is_empty() and not inline.begins_with(".") and not inline.ends_with(".diff"):
+		return {"ok": true, "rel": "", "inline": true}
+	var rel_diff: String = str(body.get("diff_path", ""))
+	if rel_diff.is_empty() and body.get("diff") is Dictionary:
+		rel_diff = str((body.get("diff") as Dictionary).get("path", ""))
+	if rel_diff.is_empty() and inline.ends_with(".diff"):
+		rel_diff = inline
+	if rel_diff.is_empty():
+		rel_diff = "large.diff"
+	rel_diff = rel_diff.replace("\\", "/")
+	if rel_diff.begins_with(".hh-agent/review/"):
+		rel_diff = rel_diff.trim_prefix(".hh-agent/review/")
+	var abs_diff: String = abs_card.get_base_dir().path_join(rel_diff.get_file() if rel_diff.contains("/") else rel_diff)
+	if rel_diff.contains("/"):
+		abs_diff = _review_root().path_join(rel_diff)
+	return {
+		"ok": FileAccess.file_exists(abs_diff),
+		"rel": rel_diff,
+		"abs": abs_diff,
+		"inline": false,
+	}
+
+
+func _lines_page(text: String) -> Dictionary:
+	var lines: PackedStringArray = text.replace("\r\n", "\n").split("\n")
+	return _page_lines(lines, {"offset": 0, "limit": HHAgentConstants.DEFAULT_PAGE})
+
+
+func _autofill_card(body: Dictionary) -> void:
+	var ckpt_id: String = str(body.get("checkpoint_id", ""))
+	if body.get("checkpoint") is Dictionary:
+		var existing: String = str((body.get("checkpoint") as Dictionary).get("id", ""))
+		if not existing.is_empty():
+			ckpt_id = existing
+	if ckpt_id.is_empty():
+		ckpt_id = _latest_checkpoint_id()
+	if not ckpt_id.is_empty():
+		body["checkpoint_id"] = ckpt_id
+		var enriched: Dictionary = _enrich_checkpoint({"id": ckpt_id})
+		var files_v: Variant = enriched.get("files", [])
+		if (body.get("files") as Array).is_empty() and files_v is Array:
+			var files: Array = []
+			var scenes: Array = []
+			for row_v: Variant in files_v:
+				if not (row_v is Dictionary):
+					continue
+				var rel_s: String = str((row_v as Dictionary).get("rel", ""))
+				if rel_s.is_empty():
+					continue
+				var res_s: String = rel_s if rel_s.begins_with("res://") else "res://%s" % rel_s
+				files.append(res_s)
+				if res_s.ends_with(".tscn"):
+					scenes.append(res_s)
+			if (body.get("files") as Array).is_empty() and not files.is_empty():
+				body["files"] = files
+			if (body.get("scenes") as Array).is_empty() and not scenes.is_empty():
+				body["scenes"] = scenes
+	var store: HHAgentActivityStore = HHAgentActivityStore.current()
+	if store != null:
+		var ids: PackedStringArray = store.last_command_ids(8)
+		if (body.get("assumptions") as Array).is_empty():
+			body["assumptions"] = [
+				"Pause stays global A14",
+				"observer commands=%d" % ids.size(),
+			]
+	if (body.get("assumptions") as Array).is_empty():
+		body["assumptions"] = ["Pause stays global A14"]
+	if (body.get("gaps") as Array).is_empty():
+		body["gaps"] = ["G2 stays human"]
+	if str(body.get("before", "")).is_empty():
+		body["before"] = "checkpoint dest"
+	if str(body.get("after", "")).is_empty():
+		body["after"] = "working tree"
+	if str(body.get("diff_path", "")).is_empty() and FileAccess.file_exists(_review_root().path_join("large.diff")):
+		body["diff_path"] = "large.diff"
+
+
+func _latest_checkpoint_id() -> String:
+	var root: String = ProjectSettings.globalize_path("res://").rstrip("/\\")
+	if root.is_empty():
+		return ""
+	var ckpt_root: String = root.path_join(".hh-agent").path_join("checkpoints")
+	var dir: DirAccess = DirAccess.open(ckpt_root)
+	if dir == null:
+		return ""
+	var best: String = ""
+	var best_mtime: int = -1
+	dir.list_dir_begin()
+	var name_s: String = dir.get_next()
+	while not name_s.is_empty():
+		if dir.current_is_dir() and not name_s.begins_with("."):
+			var man: String = ckpt_root.path_join(name_s).path_join("manifest.json")
+			if FileAccess.file_exists(man):
+				var mt: int = int(FileAccess.get_modified_time(man))
+				if mt >= best_mtime:
+					best_mtime = mt
+					best = name_s
+		name_s = dir.get_next()
+	dir.list_dir_end()
+	return best
+
+
+func _atomic_write_card(body: Dictionary, raw_path: String) -> Dictionary:
+	var resolved: Dictionary = _resolve_artifact({"path": raw_path})
+	if resolved.get("ok", false) != true:
+		return resolved
+	var abs_path: String = str(resolved.get("abs", ""))
+	var rel_path: String = str(resolved.get("rel", ""))
+	var root: String = _review_root()
+	if root.is_empty():
+		return {"ok": false, "code": HHAgentErrors.E_PATH, "message": "review dir missing", "path": rel_path}
+	DirAccess.make_dir_recursive_absolute(root)
+	var tmp: String = abs_path + ".tmp"
+	var f: FileAccess = FileAccess.open(tmp, FileAccess.WRITE)
+	if f == null:
+		return {
+			"ok": false,
+			"code": HHAgentErrors.E_UNVERIFIED,
+			"message": "could not open review card tmp",
+			"path": rel_path,
+		}
+	f.store_string(JSON.stringify(body, "\t"))
+	f.flush()
+	f.close()
+	if FileAccess.file_exists(abs_path):
+		DirAccess.remove_absolute(abs_path)
+	var ren: Error = DirAccess.rename_absolute(tmp, abs_path)
+	if ren != OK:
+		return {
+			"ok": false,
+			"code": HHAgentErrors.E_UNVERIFIED,
+			"message": "atomic review card rename failed",
+			"path": rel_path,
+		}
+	return {"ok": true, "abs": abs_path, "rel": rel_path}
+
+
+func _restore_checkpoint(ref: String) -> Dictionary:
+	var id_s: String = ref.strip_edges()
+	if id_s.is_empty():
+		return {
+			"ok": false,
+			"code": HHAgentErrors.E_CHECKPOINT,
+			"message": "checkpoint ref missing",
+			"ref": "",
+		}
+	id_s = id_s.replace("refs/hh-ckpt/", "").replace("hh-ckpt/", "")
+	var root: String = ProjectSettings.globalize_path("res://").rstrip("/\\")
+	if root.is_empty():
+		return {
+			"ok": false,
+			"code": HHAgentErrors.E_PATH,
+			"message": "project root missing",
+			"ref": id_s,
+		}
+	var man_path: String = root.path_join(".hh-agent").path_join("checkpoints").path_join(id_s).path_join("manifest.json")
+	if not FileAccess.file_exists(man_path):
+		man_path = _find_checkpoint_manifest(root, ref)
+	if man_path.is_empty() or not FileAccess.file_exists(man_path):
+		return {
+			"ok": false,
+			"code": HHAgentErrors.E_CHECKPOINT,
+			"message": "checkpoint ref not found: %s" % ref,
+			"ref": ref,
+		}
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(man_path))
+	if not (parsed is Dictionary):
+		return {
+			"ok": false,
+			"code": HHAgentErrors.E_CHECKPOINT,
+			"message": "checkpoint manifest unreadable",
+			"ref": id_s,
+		}
+	var man: Dictionary = parsed
+	var files_v: Variant = man.get("files", [])
+	if not (files_v is Array):
+		return {
+			"ok": false,
+			"code": HHAgentErrors.E_CHECKPOINT,
+			"message": "checkpoint manifest has no files",
+			"ref": id_s,
+		}
+	var files_dir: String = man_path.get_base_dir().path_join("files")
+	var restored: Array = []
+	var deleted: Array = []
+	for row_v: Variant in files_v:
+		if not (row_v is Dictionary):
+			continue
+		var row: Dictionary = row_v
+		var rel_s: String = str(row.get("rel", "")).replace("\\", "/")
+		if not _dest_allowed(rel_s):
+			return {
+				"ok": false,
+				"code": HHAgentErrors.E_CHECKPOINT,
+				"message": "refusing restore outside product files %s" % rel_s,
+				"ref": id_s,
+			}
+		var dest: String = root.path_join(rel_s)
+		if row.get("missing", false) == true:
+			if FileAccess.file_exists(dest):
+				DirAccess.remove_absolute(dest)
+				deleted.append(rel_s)
+			continue
+		var src: String = files_dir.path_join(rel_s.replace("/", "__").replace("\\", "__"))
+		if not FileAccess.file_exists(src):
+			return {
+				"ok": false,
+				"code": HHAgentErrors.E_CHECKPOINT,
+				"message": "quarantine missing %s" % rel_s,
+				"ref": id_s,
+			}
+		var want_sha: String = str(row.get("sha256", ""))
+		if not want_sha.is_empty() and FileAccess.get_sha256(src) != want_sha:
+			return {
+				"ok": false,
+				"code": HHAgentErrors.E_CHECKPOINT,
+				"message": "quarantine hash mismatch %s" % rel_s,
+				"ref": id_s,
+			}
+		var copy_err: Dictionary = _atomic_restore_file(src, dest)
+		if copy_err.get("ok", false) != true:
+			copy_err["ref"] = id_s
+			return copy_err
+		if not want_sha.is_empty() and FileAccess.get_sha256(dest) != want_sha:
+			return {
+				"ok": false,
+				"code": HHAgentErrors.E_CHECKPOINT,
+				"message": "restore hash mismatch %s" % rel_s,
+				"ref": id_s,
+			}
+		restored.append(rel_s)
+	return {
+		"ok": true,
+		"ref": id_s,
+		"action": "git.revert_checkpoint",
+		"restored": restored,
+		"deleted": deleted,
+		"source": "plugin_local_restore",
+	}
+
+
+func _find_checkpoint_manifest(root: String, raw: String) -> String:
+	var ckpt_root: String = root.path_join(".hh-agent").path_join("checkpoints")
+	var dir: DirAccess = DirAccess.open(ckpt_root)
+	if dir == null:
+		return ""
+	dir.list_dir_begin()
+	var name_s: String = dir.get_next()
+	while not name_s.is_empty():
+		if dir.current_is_dir() and not name_s.begins_with("."):
+			var man: String = ckpt_root.path_join(name_s).path_join("manifest.json")
+			if FileAccess.file_exists(man):
+				var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(man))
+				if parsed is Dictionary:
+					var rec: Dictionary = parsed
+					if str(rec.get("checkpoint_id", "")) == raw or str(rec.get("git_ref", "")) == raw:
+						dir.list_dir_end()
+						return man
+		name_s = dir.get_next()
+	dir.list_dir_end()
+	return ""
+
+
+func _dest_allowed(rel: String) -> bool:
+	var posix: String = rel.replace("\\", "/")
+	if posix.is_empty() or posix.contains("..") or posix.begins_with("/"):
+		return false
+	if posix.begins_with("addons/hh_agent") or posix.begins_with(".hh-agent/"):
+		return false
+	return true
+
+
+func _atomic_restore_file(src: String, dest: String) -> Dictionary:
+	var bytes: PackedByteArray = FileAccess.get_file_as_bytes(src)
+	if bytes.is_empty() and FileAccess.get_file_as_bytes(src).is_empty() and not FileAccess.file_exists(src):
+		return {
+			"ok": false,
+			"code": HHAgentErrors.E_CHECKPOINT,
+			"message": "restore source missing",
+		}
+	DirAccess.make_dir_recursive_absolute(dest.get_base_dir())
+	var tmp: String = dest + ".hh-restore.tmp"
+	var f: FileAccess = FileAccess.open(tmp, FileAccess.WRITE)
+	if f == null:
+		return {
+			"ok": false,
+			"code": HHAgentErrors.E_CHECKPOINT,
+			"message": "could not open restore tmp",
+		}
+	f.store_buffer(bytes)
+	f.flush()
+	f.close()
+	if FileAccess.file_exists(dest):
+		DirAccess.remove_absolute(dest)
+	var ren: Error = DirAccess.rename_absolute(tmp, dest)
+	if ren != OK:
+		return {
+			"ok": false,
+			"code": HHAgentErrors.E_CHECKPOINT,
+			"message": "restore rename failed",
+		}
+	return {"ok": true}
 
 
 func _redact(after: Dictionary) -> Dictionary:

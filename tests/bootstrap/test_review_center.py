@@ -122,12 +122,20 @@ def src_scan_errors() -> list[str]:
             errors.append("plugin must host the Review Center dock")
         if "remove_control_from_docks" not in text:
             errors.append("plugin must still clean docks on exit")
+        if "view_changed.connect" not in text:
+            errors.append("plugin must connect review dock view_changed")
+        if "revert_requested.connect" not in text:
+            errors.append("plugin must connect review dock revert_requested")
+        if "git.revert_checkpoint" not in text and "revert_checkpoint" not in text:
+            errors.append("plugin revert must reach git.revert_checkpoint / local restore")
     if reads.is_file():
         text = reads.read_text(encoding="utf-8")
         if "_review_card" not in text:
             errors.append("godot.review card adapter missing")
         if "_review_diff" not in text:
             errors.append("godot.review diff adapter missing")
+        if "_review_write_card" not in text and "write_card" not in text:
+            errors.append("godot.review write_card adapter missing")
         if "_observer_review" not in text:
             errors.append("godot.observer review adapter missing")
     if router.is_file():
@@ -140,6 +148,8 @@ def src_scan_errors() -> list[str]:
             errors.append("overlay must accept review.replay")
         if "HHAgentNodeAdapter" in text or "create_action" in text:
             errors.append("review replay must stay presentation-only")
+        if "fallback_last" not in text and "strict_id" not in text:
+            errors.append("overlay must not fall back to last record on review.replay miss")
     for path in (BRIDGE / "src").rglob("*.ts"):
         blob = path.read_text(encoding="utf-8", errors="replace")
         posix = rel(path)
@@ -190,6 +200,27 @@ def token_in(obj: object, secret: str) -> bool:
 
 def sha256_file(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def unproven_card_errors(body: dict, after: dict, label: str) -> list[str]:
+    errors: list[str] = []
+    post = body.get("postcondition") if isinstance(body.get("postcondition"), dict) else {}
+    checks = post.get("checks") if isinstance(post.get("checks"), list) else []
+    if post.get("verified") is True:
+        errors.append(f"{label} must not stamp verified=true: {post}")
+    if "review_card_snapshot" in checks and post.get("verified") is True:
+        errors.append(f"{label} must not stamp review_card_snapshot as proven: {post}")
+    if body.get("ok") is True:
+        if after.get("artifact_ok") is not False:
+            errors.append(f"{label} ok envelope must still set artifact_ok=false: {after}")
+    else:
+        err = body.get("error") if isinstance(body.get("error"), dict) else {}
+        after_err = after.get("error") if isinstance(after.get("error"), dict) else {}
+        if not (err.get("code") or after_err.get("code")):
+            errors.append(f"{label} must carry a typed error: {sess.redact(json.dumps(body), '')}")
+    if after.get("artifact_ok") is not False:
+        errors.append(f"{label} artifact_ok must be false: {after}")
+    return errors
 
 
 def write_card(payload: dict, name: str = "card.json") -> Path:
@@ -290,11 +321,7 @@ def live_errors(exe: Path) -> list[str]:
             proc, req_id, "godot.review", "card", {"detail": "short"}
         )
         miss_after = after_of(missing)
-        if miss_after.get("artifact_ok") is not False:
-            errors.append(f"missing artifact must set artifact_ok=false: {miss_after}")
-        miss_err = miss_after.get("error") if isinstance(miss_after.get("error"), dict) else {}
-        if not miss_err.get("code"):
-            errors.append(f"missing artifact must carry a typed error: {miss_after}")
+        errors.extend(unproven_card_errors(missing, miss_after, "missing artifact"))
         if miss_after.get("goal"):
             errors.append("missing artifact must not fake a green goal")
         if token_in(missing, secret):
@@ -303,8 +330,7 @@ def live_errors(exe: Path) -> list[str]:
         req_id, _obs_id, obs_miss = call_tool(
             proc, req_id, "godot.observer", "review", {"detail": "short"}
         )
-        if after_of(obs_miss).get("artifact_ok") is not False:
-            errors.append(f"observer.review missing artifact must be artifact_ok=false: {after_of(obs_miss)}")
+        errors.extend(unproven_card_errors(obs_miss, after_of(obs_miss), "observer.review missing"))
 
         REVIEW_DIR.mkdir(parents=True, exist_ok=True)
         (REVIEW_DIR / "card.json").write_text("{not-json", encoding="utf-8")
@@ -312,61 +338,19 @@ def live_errors(exe: Path) -> list[str]:
             proc, req_id, "godot.review", "card", {"detail": "short"}
         )
         bad_after = after_of(corrupt)
-        if bad_after.get("artifact_ok") is not False:
-            errors.append(f"corrupt JSON must set artifact_ok=false: {bad_after}")
+        errors.extend(unproven_card_errors(corrupt, bad_after, "corrupt JSON"))
         bad_err = bad_after.get("error") if isinstance(bad_after.get("error"), dict) else {}
-        if str(bad_err.get("code") or "") not in ("E_INVALID_TYPE", "E_UNVERIFIED"):
+        top_err = corrupt.get("error") if isinstance(corrupt.get("error"), dict) else {}
+        if str(bad_err.get("code") or top_err.get("code") or "") not in ("E_INVALID_TYPE", "E_UNVERIFIED"):
             errors.append(f"corrupt JSON must be a typed error: {bad_after}")
         if bad_after.get("goal"):
             errors.append("corrupt artifact must not fake a green goal")
 
-        write_card(
-            {
-                "schema": "hh-review-card/1",
-                "goal": "Ship Review Center evidence without per-action approve",
-                "assumptions": ["Pause stays global A14", "G2 stays human"],
-                "files": ["res://r4w5/review.tscn"],
-                "scenes": ["res://r4w5/review.tscn"],
-                "assets": [],
-                "tests": ["tests/bootstrap/test_review_center.py"],
-                "screenshots": [".hh-agent/review/missing-shot.png"],
-                "perf": {"notes": "headless; no pixel golden"},
-                "license": "MIT",
-                "gaps": ["G2 visible E2E is R4-WP6 / human"],
-                "checkpoint": {"id": "pending"},
-                "diff_path": "large.diff",
-                "before": "empty scene",
-                "after": "sprite added",
-            }
-        )
-        req_id, _ok_id, valid = call_tool(
+        write_card({})
+        req_id, _empty_id, empty = call_tool(
             proc, req_id, "godot.review", "card", {"detail": "short"}
         )
-        card = after_of(valid)
-        if card.get("artifact_ok") is not True:
-            errors.append(f"valid card must set artifact_ok=true: {card}")
-        for key in ("goal", "assumptions", "files", "tests", "gaps", "checkpoint"):
-            if key not in card or card.get(key) in (None, "", []):
-                if key == "checkpoint" and isinstance(card.get("checkpoint"), dict):
-                    continue
-                errors.append(f"valid card missing {key}: {card}")
-        if not str(card.get("goal") or ""):
-            errors.append("valid card goal empty")
-        shots = card.get("screenshots") if isinstance(card.get("screenshots"), list) else []
-        if not shots or all(isinstance(row, dict) and row.get("ok") is True for row in shots if isinstance(row, dict)):
-            errors.append(f"missing screenshot must be listed as missing, not OK: {shots}")
-        if card.get("screenshots_ok") is True:
-            errors.append("screenshots_ok must be false when a listed shot is missing")
-        if card.get("approve_required") is True:
-            errors.append("review must stay async; no per-action approve_required")
-        if token_in(valid, secret):
-            errors.append("valid card snapshot leaked the session token")
-
-        req_id, _obs2_id, obs_ok = call_tool(
-            proc, req_id, "godot.observer", "review", {"detail": "short"}
-        )
-        if after_of(obs_ok).get("artifact_ok") is not True:
-            errors.append(f"observer.review valid card must ACK: {after_of(obs_ok)}")
+        errors.extend(unproven_card_errors(empty, after_of(empty), "empty {} card"))
 
         req_id, _create_id, created = call_tool(
             proc, req_id, "godot.scene", "create", {"path": scene, "root_class": "Node2D"}
@@ -402,23 +386,45 @@ def live_errors(exe: Path) -> list[str]:
         if len(ckpt_ref) < 7:
             errors.append(f"git.checkpoint missing checkpoint_id: {ckpt}")
             return errors
-        write_card(
+        req_id, _w1_id, written = call_tool(
+            proc,
+            req_id,
+            "godot.review",
+            "write_card",
             {
-                "schema": "hh-review-card/1",
                 "goal": "Ship Review Center evidence without per-action approve",
-                "assumptions": ["Pause stays global A14"],
-                "files": ["res://r4w5/review.tscn"],
-                "scenes": ["res://r4w5/review.tscn"],
-                "assets": [],
-                "tests": ["tests/bootstrap/test_review_center.py"],
+                "auto": True,
+                "checkpoint_id": ckpt_ref,
                 "screenshots": [".hh-agent/review/missing-shot.png"],
-                "perf": {"notes": "headless"},
-                "license": "MIT",
-                "gaps": ["G2 stays human"],
-                "checkpoint": {"id": ckpt_ref},
                 "diff_path": "large.diff",
-            }
+                "tests": ["tests/bootstrap/test_review_center.py"],
+                "before": "empty scene",
+                "after": "sprite added",
+            },
         )
+        wrote_after = after_of(written)
+        if wrote_after.get("artifact_ok") is not True:
+            errors.append(f"write_card must produce a live card: {wrote_after}")
+        if wrote_after.get("writer") != "godot.review.write_card" and wrote_after.get("written") is not True:
+            errors.append(f"write_card must mark a product writer: {wrote_after}")
+        if not str(wrote_after.get("goal") or ""):
+            errors.append("write_card goal empty")
+        if not (
+            wrote_after.get("files") or wrote_after.get("scenes") or wrote_after.get("tests")
+        ):
+            errors.append(f"write_card must include files/scenes/tests: {wrote_after}")
+        if wrote_after.get("diff_ok") is True:
+            errors.append("diff_ok must be false when listed large.diff is missing")
+        if wrote_after.get("screenshots_ok") is True:
+            errors.append("screenshots_ok must be false when a listed shot is missing")
+        shots = wrote_after.get("screenshots") if isinstance(wrote_after.get("screenshots"), list) else []
+        if not shots or all(isinstance(row, dict) and row.get("ok") is True for row in shots if isinstance(row, dict)):
+            errors.append(f"missing screenshot must be listed as missing, not OK: {shots}")
+        if wrote_after.get("approve_required") is True:
+            errors.append("review must stay async; no per-action approve_required")
+        if token_in(written, secret):
+            errors.append("write_card leaked the session token")
+
         req_id, _ckcard_id, ck_card = call_tool(
             proc, req_id, "godot.review", "card", {"detail": "short"}
         )
@@ -429,6 +435,12 @@ def live_errors(exe: Path) -> list[str]:
         dest_sha = str(ckpt_snap.get("dest_sha") or "")
         if not dest_sha or dest_sha == "pending":
             errors.append(f"card checkpoint dest_sha missing vs snapshot: {ckpt_snap}")
+
+        req_id, _obs2_id, obs_ok = call_tool(
+            proc, req_id, "godot.observer", "review", {"detail": "short"}
+        )
+        if after_of(obs_ok).get("artifact_ok") is not True:
+            errors.append(f"observer.review valid card must ACK: {after_of(obs_ok)}")
 
         req_id, _mut_id, mutated = call_tool(
             proc,
@@ -444,15 +456,19 @@ def live_errors(exe: Path) -> list[str]:
             errors.append(f"checkpoint-probe save must ACK: {sess.redact(json.dumps(saved2), secret)}")
         if sha256_file(scene_abs) == dest_sha:
             errors.append("checkpoint-probe mutate did not change dest SHA")
-        req_id, _rev_id, restored = call_tool(
-            proc, req_id, "godot.git", "revert_checkpoint", {"ref": ckpt_ref}
+        req_id, _press_rev_id, dock_rev = call_tool(
+            proc, req_id, "godot.review", "card", {"detail": "short", "press": "revert"}
         )
-        if restored.get("ok") is not True:
-            errors.append(f"git.revert_checkpoint must ACK: {sess.redact(json.dumps(restored), secret)}")
+        dock_rev_after = after_of(dock_rev)
+        last_rev = dock_rev_after.get("last_revert") if isinstance(dock_rev_after.get("last_revert"), dict) else {}
+        if dock_rev_after.get("dock_pressed") != "revert" and last_rev.get("action") != "git.revert_checkpoint":
+            errors.append(f"dock Revert must run git.revert_checkpoint / local restore: {dock_rev_after}")
+        if last_rev.get("ok") is not True and dock_rev.get("ok") is not True:
+            errors.append(f"dock revert path must restore: {sess.redact(json.dumps(dock_rev), secret)}")
         errors.extend(checkpoint_sha_errors(ckpt_ref, [scene_abs]))
         if dest_sha and sha256_file(scene_abs) != dest_sha:
             errors.append(
-                f"revert dest SHA {sha256_file(scene_abs)} != card/checkpoint snapshot {dest_sha}"
+                f"dock revert dest SHA {sha256_file(scene_abs)} != card/checkpoint snapshot {dest_sha}"
             )
 
         write_large_diff(DIFF_LINES)
@@ -489,6 +505,31 @@ def live_errors(exe: Path) -> list[str]:
         open_items = ((open_after.get("diff") or {}).get("items") or [])
         if len(open_items) > PAGE_CAP:
             errors.append(f"review.open dumped {len(open_items)} diff lines")
+        if not open_items:
+            errors.append("review.open / Diff must populate a live paged diff, not an empty ItemList")
+        if open_after.get("dock_pressed") not in ("diff", None) and not open_items:
+            errors.append(f"dock Diff press must populate the live view: {open_after}")
+
+        for view_name in ("before", "after"):
+            req_id, _pv_id, pressed = call_tool(
+                proc, req_id, "godot.review", "card", {"detail": "short", "press": view_name}
+            )
+            press_after = after_of(pressed)
+            press_items = ((press_after.get("diff") or {}).get("items") or [])
+            if press_after.get("dock_pressed") != view_name and str(press_after.get("view") or "") != view_name:
+                errors.append(f"dock {view_name} must run the view_changed path: {press_after}")
+            if not press_items and not str(press_after.get("opened_text") or press_after.get("opened") or ""):
+                errors.append(f"dock {view_name} must populate a live view: {press_after}")
+
+        req_id, _pd_id, press_diff = call_tool(
+            proc, req_id, "godot.review", "card", {"detail": "short", "press": "diff"}
+        )
+        pd_after = after_of(press_diff)
+        pd_items = ((pd_after.get("diff") or {}).get("items") or [])
+        if pd_after.get("dock_pressed") != "diff" and str(pd_after.get("view") or "") != "diff":
+            errors.append(f"dock Diff must run view_changed: {pd_after}")
+        if not pd_items:
+            errors.append("dock Diff must fill the ItemList with paged diff lines")
 
         before_sha = sha256_file(scene_abs)
         req_id, _rep_id, replayed = call_tool(
@@ -498,10 +539,44 @@ def live_errors(exe: Path) -> list[str]:
             errors.append(f"review.replay must ACK: {sess.redact(json.dumps(replayed), secret)}")
         if replayed.get("changed") is True:
             errors.append("review.replay must not report a document change")
+        replay_after = after_of(replayed)
+        if str(replay_after.get("replayed_command_id") or "") != add_id:
+            errors.append(f"dock/review.replay selected id must be {add_id}: {replay_after}")
         if sha256_file(scene_abs) != before_sha:
             errors.append("review.replay changed scene SHA")
         if token_in(replayed, secret):
             errors.append("review.replay leaked the session token")
+
+        miss_ulid = "01ARZ3NDEKTSV4RRFFQ69G5FAV"
+        req_id, _miss_rep_id, miss_replay = call_tool(
+            proc, req_id, "godot.review", "replay", {"command_id": miss_ulid}
+        )
+        miss_rep_after = after_of(miss_replay)
+        miss_post = miss_replay.get("postcondition") if isinstance(miss_replay.get("postcondition"), dict) else {}
+        miss_err = miss_replay.get("error") if isinstance(miss_replay.get("error"), dict) else {}
+        if miss_replay.get("ok") is True and miss_post.get("verified") is True:
+            errors.append(f"review.replay missing command_id must not ok_read replay_started: {miss_replay}")
+        if "replay_started" in (miss_post.get("checks") or []) and miss_post.get("verified") is True:
+            errors.append("missing review.replay must not stamp replay_started")
+        if str(miss_err.get("code") or "") != "E_UNVERIFIED" and miss_rep_after.get("presentation_failed") is not True:
+            errors.append(
+                f"review.replay miss must be E_UNVERIFIED / presentation_failed: {sess.redact(json.dumps(miss_replay), secret)}"
+            )
+
+        req_id, _press_rep_id, press_replay = call_tool(
+            proc,
+            req_id,
+            "godot.review",
+            "card",
+            {"detail": "short", "press": "replay", "command_id": add_id},
+        )
+        press_rep_after = after_of(press_replay)
+        if str(press_rep_after.get("replayed_command_id") or "") not in ("", add_id):
+            errors.append(f"dock Replay of a selected row must use that id: {press_rep_after}")
+        if press_rep_after.get("dock_pressed") not in ("replay", None) and str(
+            press_rep_after.get("replayed_command_id") or ""
+        ) not in ("", add_id):
+            errors.append(f"dock Replay press must target the selected command_id: {press_rep_after}")
     except Exception as exc:  # noqa: BLE001
         errors.append(sess.redact(f"live review center failed: {type(exc).__name__}: {exc}", secret))
     finally:
@@ -586,9 +661,9 @@ def main() -> int:
         return 1
 
     print(
-        "PASS: review center; missing/corrupt artifact_ok=false; valid card fields; "
-        "checkpoint dest SHA restored; 2000-line diff paged; review.replay SHA stable; "
-        "token redacted; R4-WP5 and G2 stay unticked."
+        "PASS: review center; missing/corrupt/empty fail honestly; write_card product path; "
+        "dock Before/After/Diff/Revert wired; selected replay; missing replay E_UNVERIFIED; "
+        "checkpoint dest SHA restored; 2000-line diff paged; R4-WP5 and G2 stay unticked."
     )
     return 0
 

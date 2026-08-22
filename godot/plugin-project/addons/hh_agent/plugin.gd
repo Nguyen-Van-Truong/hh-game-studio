@@ -16,6 +16,7 @@ const _OverlayScript: GDScript = preload("res://addons/hh_agent/ui/overlay/hh_ov
 const _SchedulerScript: GDScript = preload("res://addons/hh_agent/core/hh_scheduler.gd")
 const _PauseScript: GDScript = preload("res://addons/hh_agent/core/hh_pause.gd")
 const _ErrorsScript: GDScript = preload("res://addons/hh_agent/core/hh_errors.gd")
+const _PresenterScript: GDScript = preload("res://addons/hh_agent/core/hh_presenter.gd")
 
 ## hh_agent EditorPlugin: main-thread router + activity/review docks + outbound sidecar client.
 ## Disable/reload must not leak sockets, signals, docks, or timers.
@@ -79,7 +80,9 @@ func _enter_tree() -> void:
 	_dock.mode_changed.connect(_on_mode_changed)
 	add_control_to_dock(DOCK_SLOT_LEFT_UL, _dock)
 	_review = HHAgentReviewDock.new()
+	_review.view_changed.connect(_on_review_view)
 	_review.replay_requested.connect(_on_review_replay)
+	_review.revert_requested.connect(_on_review_revert)
 	add_control_to_dock(DOCK_SLOT_LEFT_BL, _review)
 	_reconnect_timer = Timer.new()
 	_reconnect_timer.one_shot = true
@@ -475,9 +478,52 @@ func _on_hello(ok: bool) -> void:
 	_refresh_review()
 
 
-func _on_review_replay() -> void:
+func _on_review_view(view: String) -> void:
+	if _review_store == null:
+		return
+	_review_store.remember_press(view)
+	var snap: Dictionary = _review_store.open_view({"view": view})
+	_present_review_view(view, snap)
+	if _review != null:
+		_review.set_status(_review_store.last_card())
+
+
+func _on_review_replay(command_id: String) -> void:
+	if _review != null and not command_id.is_empty():
+		_review.set_selected_command_id(command_id)
 	if _overlay != null:
-		_overlay.replay_last()
+		_overlay.replay_command(command_id)
+
+
+func _on_review_revert() -> void:
+	if _review_store == null:
+		return
+	var ref: String = _review_store.card_checkpoint_ref()
+	# Same COW dest-hash restore as sidecar git.revert_checkpoint (R3). Not git reset --hard.
+	var _ignored: Dictionary = _review_store.revert_checkpoint(ref)
+	if _review != null:
+		_review.set_status(_review_store.last_card())
+
+
+func _present_review_view(view: String, snap: Dictionary) -> void:
+	var path_s: String = ""
+	var files_v: Variant = snap.get("files", [])
+	var scenes_v: Variant = snap.get("scenes", [])
+	if files_v is Array and not (files_v as Array).is_empty():
+		path_s = str((files_v as Array)[0])
+	elif scenes_v is Array and not (scenes_v as Array).is_empty():
+		path_s = str((scenes_v as Array)[0])
+	if path_s.is_empty():
+		return
+	if not path_s.begins_with("res://"):
+		path_s = "res://%s" % path_s
+	var presenter: HHAgentPresenter = HHAgentPresenter.new()
+	var hint: Dictionary = {"filesystem_path": path_s}
+	if path_s.ends_with(".gd") or path_s.ends_with(".cs"):
+		hint["script_path"] = path_s
+	elif path_s.ends_with(".tscn") and view != "diff":
+		hint["scene"] = path_s
+	presenter.apply_presentation(hint, {}, false)
 
 
 func _wire_pause_bench() -> void:
@@ -592,6 +638,13 @@ func _refresh_review() -> void:
 	var snap: Dictionary = {}
 	if _review_store != null:
 		snap = _review_store.last_card()
+	if _store != null:
+		var ids: PackedStringArray = _store.last_command_ids(20)
+		var actions: Array = []
+		for cid: String in ids:
+			if not cid.is_empty():
+				actions.append(cid)
+		snap["actions"] = actions
 	_review.set_status(snap)
 
 
@@ -618,8 +671,12 @@ func _cleanup() -> void:
 		_review_store.detach()
 		_review_store = null
 	if _review != null:
+		if _review.view_changed.is_connected(_on_review_view):
+			_review.view_changed.disconnect(_on_review_view)
 		if _review.replay_requested.is_connected(_on_review_replay):
 			_review.replay_requested.disconnect(_on_review_replay)
+		if _review.revert_requested.is_connected(_on_review_revert):
+			_review.revert_requested.disconnect(_on_review_revert)
 	if _dock != null:
 		if _dock.pause_requested.is_connected(_on_pause_requested):
 			_dock.pause_requested.disconnect(_on_pause_requested)

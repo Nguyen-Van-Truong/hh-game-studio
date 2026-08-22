@@ -1216,6 +1216,17 @@
       "postcondition": "replay_started",
       "checkpoint_required": false
     },
+    "review.write_card": {
+      "method": "godot.review",
+      "verb": "write_card",
+      "side_effect": "read",
+      "timeout_ms": 15000,
+      "required": [
+        "goal"
+      ],
+      "postcondition": "review_card_written",
+      "checkpoint_required": false
+    },
     "play.start": {
       "method": "godot.play",
       "verb": "start",

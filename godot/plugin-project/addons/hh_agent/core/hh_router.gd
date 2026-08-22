@@ -128,7 +128,7 @@ func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_ga
 
 func run_selftest(actions: HHAgentActions) -> PackedStringArray:
 	var failures: PackedStringArray = PackedStringArray()
-	if not actions.loaded or actions.action_count() < 122:
+	if not actions.loaded or actions.action_count() < 123:
 		failures.append("catalog load")
 	if not actions.allowed_fields.has("command_id"):
 		failures.append("allowed missing command_id")

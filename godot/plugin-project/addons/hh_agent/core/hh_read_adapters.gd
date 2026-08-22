@@ -11,6 +11,7 @@ const _PresenterScript: GDScript = preload("res://addons/hh_agent/core/hh_presen
 const _OverlayScript: GDScript = preload("res://addons/hh_agent/ui/overlay/hh_overlay.gd")
 const _SchedulerScript: GDScript = preload("res://addons/hh_agent/core/hh_scheduler.gd")
 const _ReviewScript: GDScript = preload("res://addons/hh_agent/core/hh_review_store.gd")
+const _ReviewDockScript: GDScript = preload("res://addons/hh_agent/ui/review/hh_review_dock.gd")
 
 ## Main-thread read/view adapters. Mutate is never applied here.
 
@@ -52,6 +53,8 @@ func handle(
 		return _observer_review(command_id, params, post)
 	if method == "godot.review" and action == "card":
 		return _review_card(command_id, params, post)
+	if method == "godot.review" and action == "write_card":
+		return _review_write_card(command_id, params, post)
 	if method == "godot.review" and action == "diff":
 		return _review_diff(command_id, params, post)
 	if method == "godot.review" and action == "open":
@@ -142,6 +145,7 @@ func _post_name(def: Dictionary, method: String, action: String) -> String:
 			"observer.scheduler": "observer_scheduler_snapshot",
 			"observer.review": "observer_review_snapshot",
 			"review.card": "review_card_snapshot",
+			"review.write_card": "review_card_written",
 			"review.diff": "review_diff_page",
 			"review.open": "review_view_open",
 			"review.replay": "replay_started",
@@ -535,34 +539,124 @@ func _review_store() -> HHAgentReviewStore:
 	return store
 
 
+func _review_honest(command_id: String, post: String, after: Dictionary, require_diff_ok: bool = false) -> Dictionary:
+	var cleaned: Dictionary = _redact_after(after)
+	var artifact_ok: bool = cleaned.get("artifact_ok", false) == true
+	var diff_ok: bool = cleaned.get("diff_ok", false) == true
+	if artifact_ok and (not require_diff_ok or diff_ok):
+		return _ok(command_id, post, cleaned)
+	var err_v: Variant = cleaned.get("error", {})
+	var err: Dictionary = err_v if err_v is Dictionary else {}
+	var code: String = str(err.get("code", HHAgentErrors.E_UNVERIFIED))
+	if code.is_empty():
+		code = HHAgentErrors.E_UNVERIFIED
+	var message: String = str(err.get("message", "review artifact unreadable"))
+	var path_s: String = str(err.get("path", ""))
+	var result: Dictionary = _errors.fail(command_id, code, message, path_s)
+	result["after"] = cleaned
+	return result
+
+
+func _press_review(press: String, params: Dictionary) -> Dictionary:
+	var store: HHAgentReviewStore = _review_store()
+	store.remember_press(press)
+	var dock: HHAgentReviewDock = HHAgentReviewDock.current()
+	if press == "before" or press == "after" or press == "diff":
+		if dock != null:
+			dock.press_view(press)
+		else:
+			store.open_view({"view": press, "offset": params.get("offset", 0), "limit": params.get("limit", HHAgentConstants.DEFAULT_PAGE)})
+	elif press == "revert":
+		if dock != null:
+			dock.press_revert()
+		else:
+			store.revert_checkpoint(store.card_checkpoint_ref())
+	elif press == "replay":
+		var cid: String = str(params.get("command_id", ""))
+		if dock != null:
+			if not cid.is_empty():
+				dock.set_selected_command_id(cid)
+			dock.press_replay()
+		else:
+			var overlay: HHAgentOverlay = HHAgentOverlay.current()
+			if overlay != null:
+				overlay.replay_command(cid)
+	var after: Dictionary = store.last_card()
+	after["dock_pressed"] = press
+	after["dock_listeners"] = true
+	if press == "revert":
+		after["last_revert"] = store.last_revert()
+	if press == "replay":
+		var overlay_now: HHAgentOverlay = HHAgentOverlay.current()
+		if overlay_now != null:
+			var snap: Dictionary = overlay_now.snapshot({})
+			after["last_replay"] = snap.get("last_replay", {})
+		if dock != null:
+			after["replayed_command_id"] = dock.selected_command_id()
+	return after
+
+
 func _review_card(command_id: String, params: Dictionary, post: String) -> Dictionary:
 	var after: Dictionary = _review_store().snapshot(params)
+	var press: String = str(params.get("press", ""))
+	if not press.is_empty():
+		after = _press_review(press, params)
 	after["detail"] = str(params.get("detail", "short"))
-	return _ok(command_id, post, _redact_after(after))
+	if press == "revert":
+		var rev_v: Variant = after.get("last_revert", {})
+		var rev: Dictionary = rev_v if rev_v is Dictionary else {}
+		if rev.get("ok", false) != true:
+			var result: Dictionary = _errors.fail(
+				command_id,
+				str(rev.get("code", HHAgentErrors.E_CHECKPOINT)),
+				str(rev.get("message", "review revert failed")),
+				"git.revert_checkpoint",
+			)
+			result["after"] = _redact_after(after)
+			return result
+		return _ok(command_id, post, _redact_after(after))
+	if press == "replay":
+		return _ok(command_id, post, _redact_after(after))
+	return _review_honest(command_id, post, after)
+
+
+func _review_write_card(command_id: String, params: Dictionary, post: String) -> Dictionary:
+	var after: Dictionary = _review_store().write_card(params)
+	after["detail"] = "short"
+	return _review_honest(command_id, post, after)
 
 
 func _observer_review(command_id: String, params: Dictionary, post: String) -> Dictionary:
 	var after: Dictionary = _review_store().snapshot(params)
 	after["detail"] = str(params.get("detail", "short"))
 	after["review"] = after.duplicate(true)
-	return _ok(command_id, post, _redact_after(after))
+	return _review_honest(command_id, post, after)
 
 
 func _review_diff(command_id: String, params: Dictionary, post: String) -> Dictionary:
 	var after: Dictionary = _review_store().page_diff(params)
-	return _ok(command_id, post, _redact_after(after))
+	return _review_honest(command_id, post, after, true)
 
 
 func _review_open(command_id: String, params: Dictionary, post: String) -> Dictionary:
-	var after: Dictionary = _review_store().open_view(params)
-	return _ok(command_id, post, _redact_after(after))
+	var view_s: String = str(params.get("view", "diff"))
+	var after: Dictionary = _press_review(view_s, params)
+	if after.is_empty() or not after.has("view"):
+		after = _review_store().open_view(params)
+	after["view"] = view_s
+	after["opened"] = view_s
+	return _review_honest(command_id, post, after, view_s == "diff")
 
 
 func _review_replay(command_id: String, params: Dictionary, envelope: Dictionary, post: String) -> Dictionary:
 	var overlay: HHAgentOverlay = HHAgentOverlay.current()
 	if overlay == null:
 		overlay = HHAgentOverlay.new()
-	return overlay.handle(command_id, "godot.editor", "replay", params, HHAgentActions.new(), envelope)
+	var dock: HHAgentReviewDock = HHAgentReviewDock.current()
+	var want: String = str(params.get("command_id", ""))
+	if dock != null and not want.is_empty():
+		dock.set_selected_command_id(want)
+	return overlay.handle(command_id, "godot.review", "replay", params, HHAgentActions.new(), envelope)
 
 
 func _observer_append(command_id: String, params: Dictionary, post: String) -> Dictionary:

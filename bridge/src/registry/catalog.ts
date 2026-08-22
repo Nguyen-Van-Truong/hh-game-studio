@@ -42,7 +42,7 @@ export const REQUIRED_VERBS: Readonly<Record<string, readonly string[]>> = {
   ui: ["control", "theme", "layout", "anchor", "focus", "accessibility"],
   editor: ["state", "select", "focus", "main_screen", "frame_view", "replay", "pause"],
   observer: ["timeline", "append", "focus", "overlay", "scheduler", "review"],
-  review: ["card", "diff", "open", "replay"],
+  review: ["card", "diff", "open", "replay", "write_card"],
   play: ["start", "stop", "restart", "debug", "status", "logs"],
   input: ["action", "key", "mouse", "touch", "sequence", "release_all"],
   runtime: [

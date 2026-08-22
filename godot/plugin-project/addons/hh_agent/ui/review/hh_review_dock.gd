@@ -2,15 +2,16 @@ class_name HHAgentReviewDock
 extends VBoxContainer
 
 const _ConstantsScript: GDScript = preload("res://addons/hh_agent/core/hh_constants.gd")
-const _OverlayScript: GDScript = preload("res://addons/hh_agent/ui/overlay/hh_overlay.gd")
 
 ## Review Center next to Activity Dock: milestone card, before/after/diff, replay, revert.
 ## Review is async. Pause stays global on the Activity/Health dock.
 ## Never displays the session token.
 
 signal view_changed(view: String)
-signal replay_requested
+signal replay_requested(command_id: String)
 signal revert_requested
+
+static var _current: HHAgentReviewDock
 
 var _title: Label
 var _status: Label
@@ -31,9 +32,19 @@ var _after_btn: Button
 var _diff_btn: Button
 var _replay_btn: Button
 var _revert_btn: Button
+var _action_meta: Label
+var _action_list: ItemList
+var _action_ids: PackedStringArray = PackedStringArray()
+var _selected_command_id: String = ""
+var _last_press: String = ""
+
+
+static func current() -> HHAgentReviewDock:
+	return _current
 
 
 func _ready() -> void:
+	_current = self
 	name = "HHAgentReview"
 	size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -70,8 +81,20 @@ func _ready() -> void:
 	_diff_list.custom_minimum_size = Vector2(0, 120)
 	_diff_list.max_text_lines = 1
 	add_child(_diff_list)
+	_action_meta = _add_label("actions: 0")
+	_action_list = ItemList.new()
+	_action_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_action_list.custom_minimum_size = Vector2(0, 72)
+	_action_list.max_text_lines = 1
+	_action_list.item_selected.connect(_on_action_selected)
+	add_child(_action_list)
 	_note = _add_label("Review is async. Agent continues allowed work. Pause is global. Replay is presentation only.")
 	_force_buttons_visible()
+
+
+func _exit_tree() -> void:
+	if _current == self:
+		_current = null
 
 
 func buttons_visible() -> Dictionary:
@@ -122,6 +145,7 @@ func set_status(info: Dictionary) -> void:
 	else:
 		_checkpoint.text = "checkpoint: %s" % _dash(ckpt_v)
 	_refresh_diff(info)
+	_refresh_actions(info)
 	_force_buttons_visible()
 
 
@@ -177,26 +201,93 @@ func _is_visible(btn: Button) -> bool:
 	return btn != null and btn.visible and not btn.text.is_empty()
 
 
+func selected_command_id() -> String:
+	return _selected_command_id
+
+
+func set_selected_command_id(command_id: String) -> void:
+	_selected_command_id = command_id
+
+
+func last_press() -> String:
+	return _last_press
+
+
+func press_view(view: String) -> void:
+	if view == "before":
+		_on_before()
+	elif view == "after":
+		_on_after()
+	elif view == "diff":
+		_on_diff()
+
+
+func press_revert() -> void:
+	_on_revert()
+
+
+func press_replay() -> void:
+	_on_replay()
+
+
+func _refresh_actions(info: Dictionary) -> void:
+	if _action_list == null:
+		return
+	var raw: Variant = info.get("actions", info.get("command_ids", []))
+	var items: Array = raw if raw is Array else []
+	var next_ids: PackedStringArray = PackedStringArray()
+	for item_v: Variant in items:
+		var cid: String = str(item_v)
+		if not cid.is_empty():
+			next_ids.append(cid)
+	var same: bool = next_ids.size() == _action_ids.size()
+	if same:
+		var i: int = 0
+		while i < next_ids.size():
+			if next_ids[i] != _action_ids[i]:
+				same = false
+				break
+			i += 1
+	if not same:
+		_action_ids = next_ids
+		_action_list.clear()
+		var j: int = 0
+		while j < _action_ids.size():
+			_action_list.add_item(_action_ids[j])
+			if _action_ids[j] == _selected_command_id:
+				_action_list.select(j)
+			j += 1
+	if _action_meta != null:
+		_action_meta.text = "actions: %d selected=%s" % [_action_ids.size(), _dash(_selected_command_id)]
+
+
+func _on_action_selected(index: int) -> void:
+	if index >= 0 and index < _action_ids.size():
+		_selected_command_id = _action_ids[index]
+
+
 func _on_before() -> void:
+	_last_press = "before"
 	view_changed.emit("before")
 
 
 func _on_after() -> void:
+	_last_press = "after"
 	view_changed.emit("after")
 
 
 func _on_diff() -> void:
+	_last_press = "diff"
 	view_changed.emit("diff")
 
 
 func _on_replay() -> void:
-	var overlay: HHAgentOverlay = HHAgentOverlay.current()
-	if overlay != null:
-		overlay.replay_last()
-	replay_requested.emit()
+	_last_press = "replay"
+	replay_requested.emit(_selected_command_id)
 
 
 func _on_revert() -> void:
+	_last_press = "revert"
 	revert_requested.emit()
 
 

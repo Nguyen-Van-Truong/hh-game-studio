@@ -3,7 +3,7 @@
   "protocol": "hh-godot-agent/1",
   "registry_version": "hh-godot-actions/1",
   "variant_schema": "hh-godot-variant/1",
-  "action_count": 138,
+  "action_count": 139,
   "envelope": {
     "allowed": [
       "protocol",
@@ -12804,6 +12804,21 @@
           },
           "reload": {
             "type": "boolean"
+          },
+          "press": {
+            "type": "string",
+            "enum": [
+              "before",
+              "after",
+              "diff",
+              "replay",
+              "revert"
+            ]
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
           }
         }
       },
@@ -13297,6 +13312,214 @@
         "E_UNVERIFIED"
       ],
       "postcondition": "replay_started"
+    },
+    "review.write_card": {
+      "method": "godot.review",
+      "verb": "write_card",
+      "action_version": "1",
+      "side_effect": "read",
+      "undo": "none",
+      "timeout_ms": 15000,
+      "cancellable": false,
+      "required_policy": "OBSERVE",
+      "checkpoint_required": false,
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "goal"
+        ],
+        "properties": {
+          "goal": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000
+          },
+          "auto": {
+            "type": "boolean"
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_./-]*$"
+          },
+          "files": {
+            "type": "array",
+            "maxItems": 64,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            }
+          },
+          "scenes": {
+            "type": "array",
+            "maxItems": 64,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            }
+          },
+          "tests": {
+            "type": "array",
+            "maxItems": 64,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            }
+          },
+          "screenshots": {
+            "type": "array",
+            "maxItems": 32,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            }
+          },
+          "assumptions": {
+            "type": "array",
+            "maxItems": 32,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4000
+            }
+          },
+          "gaps": {
+            "type": "array",
+            "maxItems": 32,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4000
+            }
+          },
+          "license": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "before": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000
+          },
+          "after": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000
+          },
+          "diff_path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_./-]*$"
+          },
+          "checkpoint_id": {
+            "type": "string",
+            "minLength": 7,
+            "maxLength": 64,
+            "pattern": "^[A-Za-z0-9_./-]+$"
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ok",
+          "command_id",
+          "postcondition"
+        ],
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "changed": {
+            "type": "boolean"
+          },
+          "before": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "after": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "postcondition": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "verified",
+              "checks"
+            ],
+            "properties": {
+              "verified": {
+                "type": "boolean"
+              },
+              "checks": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "undo_action": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "error": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "error_codes": [
+        "E_MISSING_REQUIRED",
+        "E_UNKNOWN_PARAM",
+        "E_INVALID_TYPE",
+        "E_OUT_OF_BOUNDS",
+        "E_UNKNOWN_ACTION",
+        "E_PROTOCOL_VERSION",
+        "E_ACTION_VERSION",
+        "E_CLIENT_ESCALATION",
+        "E_INVALID_COMMAND_ID",
+        "E_INVALID_ENVELOPE",
+        "E_UNVERIFIED"
+      ],
+      "postcondition": "review_card_written"
     },
     "play.start": {
       "method": "godot.play",
