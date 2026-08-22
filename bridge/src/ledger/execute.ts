@@ -39,6 +39,7 @@ import {
   isSidecarMutateApply,
   isSignalApply,
   isTransactionApply,
+  isUiApply,
   mutationNeedsDiskHash,
   nodeNeedsUidAfter,
   sceneNeedsDiskHash,
@@ -686,6 +687,105 @@ function animationApplyOk(
     }
     if (typeof params.condition === "string" && params.condition && after.condition !== params.condition) {
       return errorResult(result.command_id, E.E_UNVERIFIED, "animation state_machine condition bind mismatch");
+    }
+  }
+  return undefined;
+}
+
+function uiApplyOk(
+  result: PluginCommandResult,
+  actionId: string,
+  params: Record<string, unknown>,
+): PluginCommandResult | undefined {
+  if (!isUiApply(actionId)) {
+    return undefined;
+  }
+  if (!result.ok) {
+    return result;
+  }
+  if (typeof result.undo_action !== "string" || !result.undo_action.startsWith("Agent: ")) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "ui missing Agent UndoRedo name");
+  }
+  const after = result.after;
+  if (!isRecord(after)) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "ui missing after readback");
+  }
+  if (after.node_path !== params.node_path) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "ui node_path bind mismatch");
+  }
+  if (after.invented_box === true) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "ui invented a bounds box");
+  }
+  if (actionId === "ui.control") {
+    if (after.preset !== params.preset) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "ui control preset bind mismatch");
+    }
+    if (after.container_child_anchors_acked === true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "anchors on Container child must not paper-ACK");
+    }
+    for (const key of [
+      "offset_left",
+      "offset_top",
+      "offset_right",
+      "offset_bottom",
+      "anchor_left",
+      "anchor_top",
+      "anchor_right",
+      "anchor_bottom",
+    ]) {
+      if (typeof after[key] !== "number") {
+        return errorResult(result.command_id, E.E_UNVERIFIED, `ui control missing ${key} readback`);
+      }
+    }
+    if (!isRecord(after.size) || !isRecord(after.position) || !isRecord(after.rect)) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "ui control missing size/position/rect readback");
+    }
+  }
+  if (actionId === "ui.theme") {
+    if (after.theme !== params.theme) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "ui theme path bind mismatch");
+    }
+    if (after.theme_assigned !== true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "ui theme not assigned on Control");
+    }
+    if (typeof params.theme === "string" && params.theme.includes("::")) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "refusing RAM-only Theme durable ACK");
+    }
+  }
+  if (actionId === "ui.layout") {
+    if (after.separation !== params.separation) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "ui layout separation bind mismatch");
+    }
+    if (after.queue_sort !== true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "ui layout missing queue_sort");
+    }
+    if (after.container_child_anchors_acked === true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "anchors on Container child must not paper-ACK");
+    }
+    if (!Array.isArray(after.rects)) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "ui layout missing computed rects");
+    }
+  }
+  if (actionId === "ui.anchor") {
+    if (after.container_child_anchors_acked === true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "anchors on Container child must not paper-ACK");
+    }
+    for (const key of [
+      "anchor_left",
+      "anchor_top",
+      "anchor_right",
+      "anchor_bottom",
+      "offset_left",
+      "offset_top",
+      "offset_right",
+      "offset_bottom",
+    ]) {
+      if (typeof after[key] !== "number") {
+        return errorResult(result.command_id, E.E_UNVERIFIED, `ui anchor missing ${key} readback`);
+      }
+    }
+    if (after.anchor_left !== params.anchor_left || after.anchor_top !== params.anchor_top) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "ui anchor left/top bind mismatch");
     }
   }
   return undefined;
@@ -1404,6 +1504,8 @@ async function applyMutateOnce(
             ? "tilemap"
           : isAnimationApply(classified.actionId)
             ? "animation"
+          : isUiApply(classified.actionId)
+            ? "ui"
           : isResourceApply(classified.actionId) ||
               isAssetRefApply(classified.actionId) ||
               isAssetIngestApply(classified.actionId)
@@ -1483,6 +1585,12 @@ async function applyMutateOnce(
       persistResult(row, animationFail);
       saveState(ledger, row, "failed");
       return animationFail;
+    }
+    const uiFail = uiApplyOk(result, classified.actionId, fields.params);
+    if (uiFail) {
+      persistResult(row, uiFail);
+      saveState(ledger, row, "failed");
+      return uiFail;
     }
     const resourceFail = resourceApplyOk(result, classified.actionId, fields.params);
     if (resourceFail) {

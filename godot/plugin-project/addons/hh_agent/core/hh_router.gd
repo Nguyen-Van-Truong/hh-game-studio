@@ -19,12 +19,13 @@ const _TxScript: GDScript = preload("res://addons/hh_agent/core/hh_transaction_a
 const _CanvasScript: GDScript = preload("res://addons/hh_agent/core/hh_canvas_adapter.gd")
 const _TilemapScript: GDScript = preload("res://addons/hh_agent/core/hh_tilemap_adapter.gd")
 const _AnimationScript: GDScript = preload("res://addons/hh_agent/core/hh_animation_adapter.gd")
+const _UiScript: GDScript = preload("res://addons/hh_agent/core/hh_ui_adapter.gd")
 const _PresenterScript: GDScript = preload("res://addons/hh_agent/core/hh_presenter.gd")
 const _OverlayScript: GDScript = preload("res://addons/hh_agent/ui/overlay/hh_overlay.gd")
 const _SchedulerScript: GDScript = preload("res://addons/hh_agent/core/hh_scheduler.gd")
 const _StoreScript: GDScript = preload("res://addons/hh_agent/core/hh_activity_store.gd")
 
-## Routes read/view adapters, scene/node/property/resource/signal/script/asset/project/transaction/tilemap/animation apply.
+## Routes read/view adapters, scene/node/property/resource/signal/script/asset/project/transaction/tilemap/animation/ui apply.
 
 var _errors: HHAgentErrors = HHAgentErrors.new()
 var _envelope: HHAgentEnvelope = HHAgentEnvelope.new()
@@ -41,6 +42,7 @@ var _tx: HHAgentTransactionAdapter = HHAgentTransactionAdapter.new()
 var _canvas: HHAgentCanvasAdapter = HHAgentCanvasAdapter.new()
 var _tilemap: HHAgentTilemapAdapter = HHAgentTilemapAdapter.new()
 var _animation: HHAgentAnimationAdapter = HHAgentAnimationAdapter.new()
+var _ui: HHAgentUiAdapter = HHAgentUiAdapter.new()
 var _presenter: HHAgentPresenter = HHAgentPresenter.new()
 var _overlay_local: HHAgentOverlay = HHAgentOverlay.new()
 var _scheduler_local: HHAgentScheduler = HHAgentScheduler.new()
@@ -137,6 +139,11 @@ func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_ga
 			result = _animation.handle(command_id, method, action, params, actions, pre)
 		else:
 			return _errors.fail(command_id, HHAgentErrors.E_UNKNOWN_ACTION, "unknown animation action", "action")
+	elif method == "godot.ui":
+		if _ui.handles(action):
+			result = _ui.handle(command_id, method, action, params, actions, pre)
+		else:
+			return _errors.fail(command_id, HHAgentErrors.E_UNKNOWN_ACTION, "unknown ui action", "action")
 	elif method == "godot.editor" and (action == "frame_view" or action == "replay"):
 		result = _overlay().handle(command_id, method, action, params, actions, envelope)
 	elif method == "godot.review" and action == "replay":
@@ -319,6 +326,9 @@ func run_selftest(actions: HHAgentActions) -> PackedStringArray:
 	var animation_missing: Dictionary = dispatch(_sample("godot.animation", "library", {}), actions, 0)
 	if str(_error_of(animation_missing).get("code", "")) != HHAgentErrors.E_MISSING_REQUIRED:
 		failures.append("animation.library missing required must be E_MISSING_REQUIRED")
+	var ui_missing: Dictionary = dispatch(_sample("godot.ui", "control", {}), actions, 0)
+	if str(_error_of(ui_missing).get("code", "")) != HHAgentErrors.E_MISSING_REQUIRED:
+		failures.append("ui.control missing required must be E_MISSING_REQUIRED")
 	var vendor_plugin: Dictionary = dispatch(
 		_sample("godot.project", "plugin", {"plugin_name": "fake_vendor", "enabled": true}),
 		actions,

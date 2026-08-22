@@ -13,6 +13,7 @@ const _SchedulerScript: GDScript = preload("res://addons/hh_agent/core/hh_schedu
 const _ReviewScript: GDScript = preload("res://addons/hh_agent/core/hh_review_store.gd")
 const _ReviewDockScript: GDScript = preload("res://addons/hh_agent/ui/review/hh_review_dock.gd")
 const _AnimationScript: GDScript = preload("res://addons/hh_agent/core/hh_animation_adapter.gd")
+const _UiScript: GDScript = preload("res://addons/hh_agent/core/hh_ui_adapter.gd")
 
 ## Main-thread read/view adapters. Mutate is never applied here.
 
@@ -21,6 +22,7 @@ var _meta: HHAgentSceneMeta = HHAgentSceneMeta.new()
 var _codec: HHAgentVariantCodec = HHAgentVariantCodec.new()
 var _presenter: HHAgentPresenter = HHAgentPresenter.new()
 var _animation: HHAgentAnimationAdapter = HHAgentAnimationAdapter.new()
+var _ui: HHAgentUiAdapter = HHAgentUiAdapter.new()
 
 
 func handle(
@@ -102,7 +104,7 @@ func handle(
 	if method == "godot.tilemap" and action == "query":
 		return _tilemap_query(command_id, params, post)
 	if method == "godot.ui" and action == "accessibility":
-		return _ui_access(command_id, params, post)
+		return _ui.handle(command_id, method, action, params, actions, {})
 	if method.begins_with("godot.runtime"):
 		return _unverified(command_id, "runtime observation requires Play process (R6)")
 	if method == "godot.test" or method == "godot.export":
@@ -112,7 +114,7 @@ func handle(
 	if method == "godot.editor":
 		return _unverified(command_id, "editor.%s has no proven readback on stock EditorInterface" % action)
 	if method == "godot.ui" and action == "focus":
-		return _unverified(command_id, "focus owner getter not proven for this Control")
+		return _ui.handle(command_id, method, action, params, actions, {})
 	return _unverified(command_id, "no read adapter")
 
 
@@ -139,6 +141,7 @@ func _post_name(def: Dictionary, method: String, action: String) -> String:
 			"tilemap.query": "cell_query_matches_layer",
 			"animation.preview": "animation_preview_playing",
 			"ui.accessibility": "accessibility_fields_present",
+			"ui.focus": "focus_owner_matches",
 			"editor.state": "editor_state_snapshot",
 			"observer.timeline": "observer_timeline_snapshot",
 			"observer.append": "observer_rows_appended",
@@ -1310,15 +1313,7 @@ func _tilemap_collision_readback(layer: TileMapLayer) -> Dictionary:
 
 
 func _ui_access(command_id: String, params: Dictionary, post: String) -> Dictionary:
-	var node: Node = _find_node(str(params.get("scene", "")), str(params.get("node_path", "")))
-	if node == null or not (node is Control):
-		return _unverified(command_id, "Control not found")
-	var control: Control = node as Control
-	return _ok(command_id, post, {
-		"tooltip": control.tooltip_text,
-		"focus_mode": control.focus_mode,
-		"visible": control.visible,
-	})
+	return _ui.handle(command_id, "godot.ui", "accessibility", params, HHAgentActions.new(), {})
 
 
 func _acquire_root(scene: String) -> Dictionary:

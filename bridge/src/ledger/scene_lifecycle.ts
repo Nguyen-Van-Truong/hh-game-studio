@@ -49,6 +49,8 @@ export const ANIMATION_APPLY = [
   "animation.state_machine",
 ] as const;
 
+export const UI_APPLY = ["ui.control", "ui.theme", "ui.layout", "ui.anchor"] as const;
+
 export const RESOURCE_APPLY = [
   "resource.create",
   "resource.assign",
@@ -122,6 +124,10 @@ export function isAnimationApply(actionId: string): boolean {
   return (ANIMATION_APPLY as readonly string[]).includes(actionId);
 }
 
+export function isUiApply(actionId: string): boolean {
+  return (UI_APPLY as readonly string[]).includes(actionId);
+}
+
 export function isResourceApply(actionId: string): boolean {
   return (RESOURCE_APPLY as readonly string[]).includes(actionId);
 }
@@ -163,6 +169,7 @@ export function isProvenEditorApply(actionId: string): boolean {
     isCameraApply(actionId) ||
     isTilemapApply(actionId) ||
     isAnimationApply(actionId) ||
+    isUiApply(actionId) ||
     isResourceApply(actionId) ||
     isSignalApply(actionId) ||
     isAssetRefApply(actionId) ||
@@ -220,6 +227,9 @@ export function mutationNeedsDiskHash(actionId: string, params: Record<string, u
   }
   if (actionId === "animation.library") {
     return typeof params.library_path === "string" && isExternalResPath(params.library_path);
+  }
+  if (actionId === "ui.theme") {
+    return typeof params.theme === "string" && isExternalResPath(params.theme);
   }
   if (actionId === "job.transaction") {
     if (params.save === true) {
@@ -283,6 +293,9 @@ export function durableResPath(
     isExternalResPath(params.library_path)
   ) {
     return params.library_path;
+  }
+  if (actionId === "ui.theme" && typeof params.theme === "string" && isExternalResPath(params.theme)) {
+    return params.theme;
   }
   if (actionId === "resource.duplicate" && typeof params.dest === "string") {
     return params.dest;
