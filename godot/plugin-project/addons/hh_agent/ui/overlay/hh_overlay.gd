@@ -76,6 +76,8 @@ func handle(
 ) -> Dictionary:
 	var def: Dictionary = actions.lookup(method, action)
 	var post: String = str(def.get("postcondition", ""))
+	if method == "godot.review" and action == "replay":
+		return _replay(command_id, params, envelope, post)
 	if method != "godot.editor":
 		return _errors.fail(command_id, HHAgentErrors.E_UNVERIFIED, "not an editor presentation verb", "")
 	if action == "frame_view":

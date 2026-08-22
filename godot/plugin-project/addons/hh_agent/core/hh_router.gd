@@ -116,6 +116,8 @@ func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_ga
 		result = _presenter.handle(command_id, method, action, params, actions, envelope)
 	elif method == "godot.editor" and (action == "frame_view" or action == "replay"):
 		result = _overlay().handle(command_id, method, action, params, actions, envelope)
+	elif method == "godot.review" and action == "replay":
+		result = _overlay().handle(command_id, method, action, params, actions, envelope)
 	elif side_effect == "read" or side_effect == "view":
 		result = _reads.handle(command_id, method, action, params, actions, envelope)
 	else:

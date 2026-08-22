@@ -53,3 +53,7 @@ const LANE_COLOR_D: String = "#d37ae8"
 const STATUS_PLANNED: String = "planned"
 const STATUS_VERIFIED: String = "verified"
 const STATUS_FAILED: String = "failed"
+const REVIEW_DIR: String = ".hh-agent/review"
+const REVIEW_FILE: String = "card.json"
+const REVIEW_SCHEMA: String = "hh-review-card/1"
+const REVIEW_DIFF_CAP: int = 100

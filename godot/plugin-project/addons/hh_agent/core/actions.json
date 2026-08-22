@@ -1160,6 +1160,62 @@
       "postcondition": "observer_scheduler_snapshot",
       "checkpoint_required": false
     },
+    "observer.review": {
+      "method": "godot.observer",
+      "verb": "review",
+      "side_effect": "read",
+      "timeout_ms": 15000,
+      "required": [
+        "detail"
+      ],
+      "postcondition": "observer_review_snapshot",
+      "checkpoint_required": false
+    },
+    "review.card": {
+      "method": "godot.review",
+      "verb": "card",
+      "side_effect": "read",
+      "timeout_ms": 15000,
+      "required": [
+        "detail"
+      ],
+      "postcondition": "review_card_snapshot",
+      "checkpoint_required": false
+    },
+    "review.diff": {
+      "method": "godot.review",
+      "verb": "diff",
+      "side_effect": "read",
+      "timeout_ms": 15000,
+      "required": [
+        "offset",
+        "limit"
+      ],
+      "postcondition": "review_diff_page",
+      "checkpoint_required": false
+    },
+    "review.open": {
+      "method": "godot.review",
+      "verb": "open",
+      "side_effect": "read",
+      "timeout_ms": 15000,
+      "required": [
+        "view"
+      ],
+      "postcondition": "review_view_open",
+      "checkpoint_required": false
+    },
+    "review.replay": {
+      "method": "godot.review",
+      "verb": "replay",
+      "side_effect": "view",
+      "timeout_ms": 5000,
+      "required": [
+        "command_id"
+      ],
+      "postcondition": "replay_started",
+      "checkpoint_required": false
+    },
     "play.start": {
       "method": "godot.play",
       "verb": "start",

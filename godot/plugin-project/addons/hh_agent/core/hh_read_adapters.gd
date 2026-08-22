@@ -10,6 +10,7 @@ const _StoreScript: GDScript = preload("res://addons/hh_agent/core/hh_activity_s
 const _PresenterScript: GDScript = preload("res://addons/hh_agent/core/hh_presenter.gd")
 const _OverlayScript: GDScript = preload("res://addons/hh_agent/ui/overlay/hh_overlay.gd")
 const _SchedulerScript: GDScript = preload("res://addons/hh_agent/core/hh_scheduler.gd")
+const _ReviewScript: GDScript = preload("res://addons/hh_agent/core/hh_review_store.gd")
 
 ## Main-thread read/view adapters. Mutate is never applied here.
 
@@ -47,6 +48,16 @@ func handle(
 		return _observer_overlay(command_id, params, envelope, post)
 	if method == "godot.observer" and action == "scheduler":
 		return _observer_scheduler(command_id, params, envelope, post)
+	if method == "godot.observer" and action == "review":
+		return _observer_review(command_id, params, post)
+	if method == "godot.review" and action == "card":
+		return _review_card(command_id, params, post)
+	if method == "godot.review" and action == "diff":
+		return _review_diff(command_id, params, post)
+	if method == "godot.review" and action == "open":
+		return _review_open(command_id, params, post)
+	if method == "godot.review" and action == "replay":
+		return _review_replay(command_id, params, envelope, post)
 	if method == "godot.editor" and action == "select":
 		return _presenter.handle(command_id, method, action, params, actions, {})
 	if method == "godot.scene" and action == "read":
@@ -129,6 +140,11 @@ func _post_name(def: Dictionary, method: String, action: String) -> String:
 			"observer.focus": "observer_focus_snapshot",
 			"observer.overlay": "observer_overlay_snapshot",
 			"observer.scheduler": "observer_scheduler_snapshot",
+			"observer.review": "observer_review_snapshot",
+			"review.card": "review_card_snapshot",
+			"review.diff": "review_diff_page",
+			"review.open": "review_view_open",
+			"review.replay": "replay_started",
 			"play.status": "play_status_known",
 			"play.logs": "play_logs_returned",
 		}
@@ -510,6 +526,43 @@ func _merge_focus(after: Dictionary, focus: Dictionary) -> void:
 		"presentation_failed",
 	]:
 		after[key] = focus.get(key)
+
+
+func _review_store() -> HHAgentReviewStore:
+	var store: HHAgentReviewStore = HHAgentReviewStore.current()
+	if store == null:
+		store = HHAgentReviewStore.new()
+	return store
+
+
+func _review_card(command_id: String, params: Dictionary, post: String) -> Dictionary:
+	var after: Dictionary = _review_store().snapshot(params)
+	after["detail"] = str(params.get("detail", "short"))
+	return _ok(command_id, post, _redact_after(after))
+
+
+func _observer_review(command_id: String, params: Dictionary, post: String) -> Dictionary:
+	var after: Dictionary = _review_store().snapshot(params)
+	after["detail"] = str(params.get("detail", "short"))
+	after["review"] = after.duplicate(true)
+	return _ok(command_id, post, _redact_after(after))
+
+
+func _review_diff(command_id: String, params: Dictionary, post: String) -> Dictionary:
+	var after: Dictionary = _review_store().page_diff(params)
+	return _ok(command_id, post, _redact_after(after))
+
+
+func _review_open(command_id: String, params: Dictionary, post: String) -> Dictionary:
+	var after: Dictionary = _review_store().open_view(params)
+	return _ok(command_id, post, _redact_after(after))
+
+
+func _review_replay(command_id: String, params: Dictionary, envelope: Dictionary, post: String) -> Dictionary:
+	var overlay: HHAgentOverlay = HHAgentOverlay.current()
+	if overlay == null:
+		overlay = HHAgentOverlay.new()
+	return overlay.handle(command_id, "godot.editor", "replay", params, HHAgentActions.new(), envelope)
 
 
 func _observer_append(command_id: String, params: Dictionary, post: String) -> Dictionary:

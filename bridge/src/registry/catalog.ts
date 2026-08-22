@@ -41,7 +41,8 @@ export const REQUIRED_VERBS: Readonly<Record<string, readonly string[]>> = {
   animation: ["library", "animation", "track", "key", "state_machine", "preview"],
   ui: ["control", "theme", "layout", "anchor", "focus", "accessibility"],
   editor: ["state", "select", "focus", "main_screen", "frame_view", "replay", "pause"],
-  observer: ["timeline", "append", "focus", "overlay", "scheduler"],
+  observer: ["timeline", "append", "focus", "overlay", "scheduler", "review"],
+  review: ["card", "diff", "open", "replay"],
   play: ["start", "stop", "restart", "debug", "status", "logs"],
   input: ["action", "key", "mouse", "touch", "sequence", "release_all"],
   runtime: [

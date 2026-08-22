@@ -67,6 +67,19 @@ export const LIMIT: JsonSchema = {
   maximum: 100,
 };
 
+export const OFFSET: JsonSchema = {
+  type: "integer",
+  minimum: 0,
+  maximum: 100000,
+};
+
+export const REVIEW_REL: JsonSchema = {
+  type: "string",
+  minLength: 1,
+  maxLength: 256,
+  pattern: "^[A-Za-z0-9][A-Za-z0-9_./-]*$",
+};
+
 export const CURSOR: JsonSchema = {
   type: "string",
   minLength: 1,

@@ -10,12 +10,14 @@ const _ClientScript: GDScript = preload("res://addons/hh_agent/core/hh_bridge_cl
 const _PostScript: GDScript = preload("res://addons/hh_agent/core/hh_postcondition.gd")
 const _DockScript: GDScript = preload("res://addons/hh_agent/ui/health/hh_activity_dock.gd")
 const _StoreScript: GDScript = preload("res://addons/hh_agent/core/hh_activity_store.gd")
+const _ReviewStoreScript: GDScript = preload("res://addons/hh_agent/core/hh_review_store.gd")
+const _ReviewDockScript: GDScript = preload("res://addons/hh_agent/ui/review/hh_review_dock.gd")
 const _OverlayScript: GDScript = preload("res://addons/hh_agent/ui/overlay/hh_overlay.gd")
 const _SchedulerScript: GDScript = preload("res://addons/hh_agent/core/hh_scheduler.gd")
 const _PauseScript: GDScript = preload("res://addons/hh_agent/core/hh_pause.gd")
 const _ErrorsScript: GDScript = preload("res://addons/hh_agent/core/hh_errors.gd")
 
-## hh_agent EditorPlugin: main-thread router + activity dock + outbound sidecar client.
+## hh_agent EditorPlugin: main-thread router + activity/review docks + outbound sidecar client.
 ## Disable/reload must not leak sockets, signals, docks, or timers.
 
 const PLUGIN_PRINT: String = "[hh_agent]"
@@ -28,6 +30,8 @@ var _client: HHAgentBridgeClient
 var _postcondition: HHAgentPostcondition
 var _dock: HHAgentActivityDock
 var _store: HHAgentActivityStore
+var _review_store: HHAgentReviewStore
+var _review: HHAgentReviewDock
 var _overlay: HHAgentOverlay
 var _scheduler: HHAgentScheduler
 var _pause_gate: HHAgentPauseGate
@@ -55,6 +59,8 @@ func _enter_tree() -> void:
 	_store = HHAgentActivityStore.new()
 	_store.attach()
 	_store.load_from_disk()
+	_review_store = HHAgentReviewStore.new()
+	_review_store.attach()
 	_overlay = HHAgentOverlay.new()
 	_overlay.attach()
 	_overlay.set_mode(_store.mode())
@@ -72,12 +78,16 @@ func _enter_tree() -> void:
 	_dock.resume_requested.connect(_on_resume_requested)
 	_dock.mode_changed.connect(_on_mode_changed)
 	add_control_to_dock(DOCK_SLOT_LEFT_UL, _dock)
+	_review = HHAgentReviewDock.new()
+	_review.replay_requested.connect(_on_review_replay)
+	add_control_to_dock(DOCK_SLOT_LEFT_BL, _review)
 	_reconnect_timer = Timer.new()
 	_reconnect_timer.one_shot = true
 	_reconnect_timer.timeout.connect(_on_reconnect_timeout)
 	add_child(_reconnect_timer)
 	_try_connect()
 	_refresh_dock()
+	_refresh_review()
 	print("%s event=enter" % PLUGIN_PRINT)
 	_maybe_open_read_fixture()
 	_maybe_run_selftest()
@@ -112,6 +122,7 @@ func _process(_delta: float) -> void:
 		if _overlay.is_draw_enabled():
 			update_overlays()
 	_refresh_dock()
+	_refresh_review()
 
 
 func _enqueue_inbound(envelope: Variant) -> bool:
@@ -461,6 +472,12 @@ func _on_hello(ok: bool) -> void:
 		print("%s event=hello_err" % PLUGIN_PRINT)
 		_schedule_reconnect()
 	_refresh_dock()
+	_refresh_review()
+
+
+func _on_review_replay() -> void:
+	if _overlay != null:
+		_overlay.replay_last()
 
 
 func _wire_pause_bench() -> void:
@@ -569,6 +586,15 @@ func _refresh_dock() -> void:
 	})
 
 
+func _refresh_review() -> void:
+	if _review == null:
+		return
+	var snap: Dictionary = {}
+	if _review_store != null:
+		snap = _review_store.last_card()
+	_review.set_status(snap)
+
+
 func _cleanup() -> void:
 	set_process(false)
 	if _reconnect_timer != null:
@@ -588,6 +614,12 @@ func _cleanup() -> void:
 		_store.persist()
 		_store.detach()
 		_store = null
+	if _review_store != null:
+		_review_store.detach()
+		_review_store = null
+	if _review != null:
+		if _review.replay_requested.is_connected(_on_review_replay):
+			_review.replay_requested.disconnect(_on_review_replay)
 	if _dock != null:
 		if _dock.pause_requested.is_connected(_on_pause_requested):
 			_dock.pause_requested.disconnect(_on_pause_requested)
@@ -614,6 +646,10 @@ func _cleanup() -> void:
 		remove_control_from_docks(_dock)
 		_dock.queue_free()
 		_dock = null
+	if _review != null:
+		remove_control_from_docks(_review)
+		_review.queue_free()
+		_review = null
 	_router = null
 	_session = null
 	_actions = null

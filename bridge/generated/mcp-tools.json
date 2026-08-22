@@ -4,8 +4,8 @@
   "protocol": "hh-godot-agent/1",
   "registry_version": "hh-godot-actions/1",
   "action_version": "1",
-  "tool_count": 21,
-  "action_count": 133,
+  "tool_count": 22,
+  "action_count": 138,
   "tools": [
     {
       "name": "godot.capabilities",
@@ -580,7 +580,48 @@
               "append",
               "focus",
               "overlay",
-              "scheduler"
+              "scheduler",
+              "review"
+            ]
+          },
+          "params": {
+            "type": "object",
+            "description": "Per-action params. The matched ActionDef input_schema sets additionalProperties false."
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "precondition": {
+            "type": "object",
+            "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
+          },
+          "presentation": {
+            "type": "object",
+            "description": "Optional Watch/Fast presentation hint. Does not mutate the document."
+          }
+        }
+      }
+    },
+    {
+      "name": "godot.review",
+      "description": "Domain tool for review.* actions. Discriminator is action.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "action",
+          "params"
+        ],
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "card",
+              "diff",
+              "open",
+              "replay"
             ]
           },
           "params": {
