@@ -51,6 +51,14 @@ export const ANIMATION_APPLY = [
 
 export const UI_APPLY = ["ui.control", "ui.theme", "ui.layout", "ui.anchor"] as const;
 
+export const PHYSICS_APPLY = [
+  "physics.body",
+  "physics.shape",
+  "physics.layers",
+  "physics.nav_region",
+  "physics.nav_agent",
+] as const;
+
 export const RESOURCE_APPLY = [
   "resource.create",
   "resource.assign",
@@ -128,6 +136,10 @@ export function isUiApply(actionId: string): boolean {
   return (UI_APPLY as readonly string[]).includes(actionId);
 }
 
+export function isPhysicsApply(actionId: string): boolean {
+  return (PHYSICS_APPLY as readonly string[]).includes(actionId);
+}
+
 export function isResourceApply(actionId: string): boolean {
   return (RESOURCE_APPLY as readonly string[]).includes(actionId);
 }
@@ -170,6 +182,7 @@ export function isProvenEditorApply(actionId: string): boolean {
     isTilemapApply(actionId) ||
     isAnimationApply(actionId) ||
     isUiApply(actionId) ||
+    isPhysicsApply(actionId) ||
     isResourceApply(actionId) ||
     isSignalApply(actionId) ||
     isAssetRefApply(actionId) ||
@@ -230,6 +243,15 @@ export function mutationNeedsDiskHash(actionId: string, params: Record<string, u
   }
   if (actionId === "ui.theme") {
     return typeof params.theme === "string" && isExternalResPath(params.theme);
+  }
+  if (actionId === "physics.shape") {
+    return typeof params.shape_path === "string" && isExternalResPath(params.shape_path);
+  }
+  if (actionId === "physics.body") {
+    return typeof params.material === "string" && isExternalResPath(params.material);
+  }
+  if (actionId === "physics.nav_region") {
+    return typeof params.navpoly_path === "string" && isExternalResPath(params.navpoly_path);
   }
   if (actionId === "job.transaction") {
     if (params.save === true) {
@@ -296,6 +318,23 @@ export function durableResPath(
   }
   if (actionId === "ui.theme" && typeof params.theme === "string" && isExternalResPath(params.theme)) {
     return params.theme;
+  }
+  if (
+    actionId === "physics.shape" &&
+    typeof params.shape_path === "string" &&
+    isExternalResPath(params.shape_path)
+  ) {
+    return params.shape_path;
+  }
+  if (actionId === "physics.body" && typeof params.material === "string" && isExternalResPath(params.material)) {
+    return params.material;
+  }
+  if (
+    actionId === "physics.nav_region" &&
+    typeof params.navpoly_path === "string" &&
+    isExternalResPath(params.navpoly_path)
+  ) {
+    return params.navpoly_path;
   }
   if (actionId === "resource.duplicate" && typeof params.dest === "string") {
     return params.dest;

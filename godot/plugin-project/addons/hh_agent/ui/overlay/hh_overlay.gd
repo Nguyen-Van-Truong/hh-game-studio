@@ -9,6 +9,7 @@ const _MetaScript: GDScript = preload("res://addons/hh_agent/core/hh_scene_meta.
 const _StoreScript: GDScript = preload("res://addons/hh_agent/core/hh_activity_store.gd")
 const _ReviewDockScript: GDScript = preload("res://addons/hh_agent/ui/review/hh_review_dock.gd")
 const _CanvasScript: GDScript = preload("res://addons/hh_agent/core/hh_canvas_adapter.gd")
+const _PhysicsScript: GDScript = preload("res://addons/hh_agent/core/hh_physics_adapter.gd")
 
 ## Presentation-only viewport overlay + semantic drag replay.
 ## Draws from a live model (rects/labels/cursor/ghost). Never writes .tscn.
@@ -359,6 +360,10 @@ func _record_from_mutate(method: String, action: String, params: Dictionary, res
 		var ui_path: String = str(after.get("node_path", params.get("node_path", "")))
 		if not ui_path.is_empty():
 			path_s = ui_path
+	if method == "godot.physics":
+		var phys_path: String = str(after.get("node_path", params.get("node_path", "")))
+		if not phys_path.is_empty():
+			path_s = phys_path
 	if method == "godot.canvas" and action == "layout_batch":
 		var batch_items: Variant = after.get("items", params.get("items", []))
 		if typeof(batch_items) == TYPE_ARRAY and (batch_items as Array).size() > 0:
@@ -472,6 +477,14 @@ func _is_presentable_mutate(method: String, action: String) -> bool:
 		return action == "key" or action == "track"
 	if method == "godot.ui":
 		return action == "control" or action == "theme" or action == "layout" or action == "anchor"
+	if method == "godot.physics":
+		return (
+			action == "body"
+			or action == "shape"
+			or action == "layers"
+			or action == "nav_region"
+			or action == "nav_agent"
+		)
 	return false
 
 
@@ -610,7 +623,42 @@ func _find_class(root: Node, class_s: String) -> Node:
 	return null
 
 
+func show_engine_bounds(items: Array) -> void:
+	_highlights.clear()
+	var i: int = 0
+	while i < items.size():
+		var item_v: Variant = items[i]
+		if item_v is Dictionary:
+			var item: Dictionary = item_v
+			if item.get("invented_box", false) == true:
+				i += 1
+				continue
+			var rect_v: Variant = item.get("rect", {})
+			if rect_v is Dictionary:
+				var rec: Dictionary = rect_v
+				var w: float = float(rec.get("w", 0.0))
+				var h: float = float(rec.get("h", 0.0))
+				if w > 0.0 and h > 0.0:
+					_highlights.append({
+						"path": str(item.get("node_path", "")),
+						"uid": "",
+						"label": str(item.get("class_name", item.get("node_path", ""))),
+						"kind": "physics",
+						"color": _lane_color_html,
+						"rect": {"x": float(rec.get("x", 0.0)), "y": float(rec.get("y", 0.0)), "w": w, "h": h},
+						"space": "world",
+					})
+		i += 1
+
+
 func _world_rect(node: Node) -> Rect2:
+	var phys: Dictionary = _PhysicsScript.engine_world_rect(node)
+	if phys.get("ok", false) == true and phys.get("invented_box", false) != true:
+		var phys_rect: Variant = phys.get("rect")
+		if phys_rect is Rect2:
+			var pr: Rect2 = phys_rect
+			if pr.size.x > 0.0 and pr.size.y > 0.0:
+				return pr
 	if node is CanvasItem:
 		var packed: Dictionary = _CanvasScript.engine_world_rect(node)
 		if packed.get("ok", false) == true and packed.get("invented_box", false) != true:
@@ -618,7 +666,8 @@ func _world_rect(node: Node) -> Rect2:
 			if rect_v is Rect2:
 				return rect_v
 		return Rect2()
-	# 3D screen marker is Alternative; do not invent a 2D engine box.
+	# 3D screen marker is Alternative; do not invent a 2D engine box
+	# and do not copy that spatial marker for 2D collision.
 	return Rect2()
 
 

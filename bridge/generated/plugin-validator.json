@@ -3,7 +3,7 @@
   "protocol": "hh-godot-agent/1",
   "registry_version": "hh-godot-actions/1",
   "variant_schema": "hh-godot-variant/1",
-  "action_count": 143,
+  "action_count": 151,
   "envelope": {
     "allowed": [
       "protocol",
@@ -20054,6 +20054,1402 @@
         "E_CHECKPOINT"
       ],
       "postcondition": "camera_is_current"
+    },
+    "physics.body": {
+      "method": "godot.physics",
+      "verb": "body",
+      "action_version": "1",
+      "side_effect": "mutate",
+      "undo": "editor_undo_redo",
+      "timeout_ms": 15000,
+      "cancellable": false,
+      "required_policy": "EDIT",
+      "checkpoint_required": false,
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "scene",
+          "node_path"
+        ],
+        "properties": {
+          "scene": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 256,
+            "pattern": "^res://[^\\s]+$"
+          },
+          "node_path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
+          },
+          "motion_mode": {
+            "type": "string",
+            "enum": [
+              "grounded",
+              "floating"
+            ]
+          },
+          "velocity": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "x",
+              "y"
+            ],
+            "properties": {
+              "x": {
+                "type": "number",
+                "minimum": -65536,
+                "maximum": 65536
+              },
+              "y": {
+                "type": "number",
+                "minimum": -65536,
+                "maximum": 65536
+              }
+            }
+          },
+          "mass": {
+            "type": "number",
+            "minimum": 0.001,
+            "maximum": 100000
+          },
+          "gravity_scale": {
+            "type": "number",
+            "minimum": -64,
+            "maximum": 64
+          },
+          "linear_velocity": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "x",
+              "y"
+            ],
+            "properties": {
+              "x": {
+                "type": "number",
+                "minimum": -65536,
+                "maximum": 65536
+              },
+              "y": {
+                "type": "number",
+                "minimum": -65536,
+                "maximum": 65536
+              }
+            }
+          },
+          "contact_monitor": {
+            "type": "boolean"
+          },
+          "max_contacts_reported": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 256
+          },
+          "freeze": {
+            "type": "boolean"
+          },
+          "monitoring": {
+            "type": "boolean"
+          },
+          "monitorable": {
+            "type": "boolean"
+          },
+          "material": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 256,
+            "pattern": "^res://[^\\s]+$"
+          },
+          "friction": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 128
+          },
+          "bounce": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ok",
+          "command_id",
+          "postcondition"
+        ],
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "changed": {
+            "type": "boolean"
+          },
+          "before": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "after": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "postcondition": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "verified",
+              "checks"
+            ],
+            "properties": {
+              "verified": {
+                "type": "boolean"
+              },
+              "checks": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "undo_action": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "error": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "error_codes": [
+        "E_MISSING_REQUIRED",
+        "E_UNKNOWN_PARAM",
+        "E_INVALID_TYPE",
+        "E_OUT_OF_BOUNDS",
+        "E_UNKNOWN_ACTION",
+        "E_PROTOCOL_VERSION",
+        "E_ACTION_VERSION",
+        "E_CLIENT_ESCALATION",
+        "E_INVALID_COMMAND_ID",
+        "E_INVALID_ENVELOPE",
+        "E_UNVERIFIED",
+        "E_CONFLICT",
+        "E_PATH",
+        "E_PAUSED",
+        "E_LEASE",
+        "E_CHECKPOINT"
+      ],
+      "postcondition": "physics_body_matches"
+    },
+    "physics.shape": {
+      "method": "godot.physics",
+      "verb": "shape",
+      "action_version": "1",
+      "side_effect": "mutate",
+      "undo": "editor_undo_redo",
+      "timeout_ms": 15000,
+      "cancellable": false,
+      "required_policy": "EDIT",
+      "checkpoint_required": false,
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "scene",
+          "node_path",
+          "shape"
+        ],
+        "properties": {
+          "scene": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 256,
+            "pattern": "^res://[^\\s]+$"
+          },
+          "node_path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
+          },
+          "shape": {
+            "type": "string",
+            "enum": [
+              "rectangle",
+              "circle",
+              "capsule",
+              "convex",
+              "polygon"
+            ]
+          },
+          "size": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "x",
+              "y"
+            ],
+            "properties": {
+              "x": {
+                "type": "number",
+                "minimum": 0.01,
+                "maximum": 65536
+              },
+              "y": {
+                "type": "number",
+                "minimum": 0.01,
+                "maximum": 65536
+              }
+            }
+          },
+          "radius": {
+            "type": "number",
+            "minimum": 0.01,
+            "maximum": 65536
+          },
+          "height": {
+            "type": "number",
+            "minimum": 0.01,
+            "maximum": 65536
+          },
+          "points": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 64,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "x",
+                "y"
+              ],
+              "properties": {
+                "x": {
+                  "type": "number",
+                  "minimum": -65536,
+                  "maximum": 65536
+                },
+                "y": {
+                  "type": "number",
+                  "minimum": -65536,
+                  "maximum": 65536
+                }
+              }
+            }
+          },
+          "from_sprite": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
+          },
+          "from_texture": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 256,
+            "pattern": "^res://[^\\s]+$"
+          },
+          "shape_path": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 256,
+            "pattern": "^res://[^\\s]+$"
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ok",
+          "command_id",
+          "postcondition"
+        ],
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "changed": {
+            "type": "boolean"
+          },
+          "before": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "after": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "postcondition": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "verified",
+              "checks"
+            ],
+            "properties": {
+              "verified": {
+                "type": "boolean"
+              },
+              "checks": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "undo_action": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "error": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "error_codes": [
+        "E_MISSING_REQUIRED",
+        "E_UNKNOWN_PARAM",
+        "E_INVALID_TYPE",
+        "E_OUT_OF_BOUNDS",
+        "E_UNKNOWN_ACTION",
+        "E_PROTOCOL_VERSION",
+        "E_ACTION_VERSION",
+        "E_CLIENT_ESCALATION",
+        "E_INVALID_COMMAND_ID",
+        "E_INVALID_ENVELOPE",
+        "E_UNVERIFIED",
+        "E_CONFLICT",
+        "E_PATH",
+        "E_PAUSED",
+        "E_LEASE",
+        "E_CHECKPOINT"
+      ],
+      "postcondition": "physics_shape_geometry_matches"
+    },
+    "physics.layers": {
+      "method": "godot.physics",
+      "verb": "layers",
+      "action_version": "1",
+      "side_effect": "mutate",
+      "undo": "editor_undo_redo",
+      "timeout_ms": 15000,
+      "cancellable": false,
+      "required_policy": "EDIT",
+      "checkpoint_required": false,
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "scene",
+          "node_path"
+        ],
+        "properties": {
+          "scene": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 256,
+            "pattern": "^res://[^\\s]+$"
+          },
+          "node_path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
+          },
+          "collision_layer": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4294967295
+          },
+          "collision_mask": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4294967295
+          },
+          "fixture": {
+            "type": "string",
+            "enum": [
+              "player",
+              "world",
+              "interact"
+            ]
+          },
+          "layer_bits": {
+            "type": "array",
+            "maxItems": 32,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "layer",
+                "enabled"
+              ],
+              "properties": {
+                "layer": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 32
+                },
+                "enabled": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "mask_bits": {
+            "type": "array",
+            "maxItems": 32,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "layer",
+                "enabled"
+              ],
+              "properties": {
+                "layer": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 32
+                },
+                "enabled": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ok",
+          "command_id",
+          "postcondition"
+        ],
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "changed": {
+            "type": "boolean"
+          },
+          "before": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "after": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "postcondition": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "verified",
+              "checks"
+            ],
+            "properties": {
+              "verified": {
+                "type": "boolean"
+              },
+              "checks": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "undo_action": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "error": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "error_codes": [
+        "E_MISSING_REQUIRED",
+        "E_UNKNOWN_PARAM",
+        "E_INVALID_TYPE",
+        "E_OUT_OF_BOUNDS",
+        "E_UNKNOWN_ACTION",
+        "E_PROTOCOL_VERSION",
+        "E_ACTION_VERSION",
+        "E_CLIENT_ESCALATION",
+        "E_INVALID_COMMAND_ID",
+        "E_INVALID_ENVELOPE",
+        "E_UNVERIFIED",
+        "E_CONFLICT",
+        "E_PATH",
+        "E_PAUSED",
+        "E_LEASE",
+        "E_CHECKPOINT"
+      ],
+      "postcondition": "physics_layer_matrix_matches"
+    },
+    "physics.nav_region": {
+      "method": "godot.physics",
+      "verb": "nav_region",
+      "action_version": "1",
+      "side_effect": "mutate",
+      "undo": "editor_undo_redo",
+      "timeout_ms": 15000,
+      "cancellable": false,
+      "required_policy": "EDIT",
+      "checkpoint_required": false,
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "scene",
+          "node_path",
+          "outline"
+        ],
+        "properties": {
+          "scene": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 256,
+            "pattern": "^res://[^\\s]+$"
+          },
+          "node_path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
+          },
+          "outline": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 64,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "x",
+                "y"
+              ],
+              "properties": {
+                "x": {
+                  "type": "number",
+                  "minimum": -65536,
+                  "maximum": 65536
+                },
+                "y": {
+                  "type": "number",
+                  "minimum": -65536,
+                  "maximum": 65536
+                }
+              }
+            }
+          },
+          "obstructions": {
+            "type": "array",
+            "maxItems": 16,
+            "items": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 64,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "x",
+                  "y"
+                ],
+                "properties": {
+                  "x": {
+                    "type": "number",
+                    "minimum": -65536,
+                    "maximum": 65536
+                  },
+                  "y": {
+                    "type": "number",
+                    "minimum": -65536,
+                    "maximum": 65536
+                  }
+                }
+              }
+            }
+          },
+          "navpoly_path": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 256,
+            "pattern": "^res://[^\\s]+$"
+          },
+          "parse_static_colliders": {
+            "type": "boolean"
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ok",
+          "command_id",
+          "postcondition"
+        ],
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "changed": {
+            "type": "boolean"
+          },
+          "before": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "after": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "postcondition": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "verified",
+              "checks"
+            ],
+            "properties": {
+              "verified": {
+                "type": "boolean"
+              },
+              "checks": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "undo_action": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "error": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "error_codes": [
+        "E_MISSING_REQUIRED",
+        "E_UNKNOWN_PARAM",
+        "E_INVALID_TYPE",
+        "E_OUT_OF_BOUNDS",
+        "E_UNKNOWN_ACTION",
+        "E_PROTOCOL_VERSION",
+        "E_ACTION_VERSION",
+        "E_CLIENT_ESCALATION",
+        "E_INVALID_COMMAND_ID",
+        "E_INVALID_ENVELOPE",
+        "E_UNVERIFIED",
+        "E_CONFLICT",
+        "E_PATH",
+        "E_PAUSED",
+        "E_LEASE",
+        "E_CHECKPOINT"
+      ],
+      "postcondition": "physics_nav_region_baked"
+    },
+    "physics.nav_agent": {
+      "method": "godot.physics",
+      "verb": "nav_agent",
+      "action_version": "1",
+      "side_effect": "mutate",
+      "undo": "editor_undo_redo",
+      "timeout_ms": 15000,
+      "cancellable": false,
+      "required_policy": "EDIT",
+      "checkpoint_required": false,
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "scene",
+          "node_path",
+          "target_position"
+        ],
+        "properties": {
+          "scene": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 256,
+            "pattern": "^res://[^\\s]+$"
+          },
+          "node_path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
+          },
+          "target_position": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "x",
+              "y"
+            ],
+            "properties": {
+              "x": {
+                "type": "number",
+                "minimum": -65536,
+                "maximum": 65536
+              },
+              "y": {
+                "type": "number",
+                "minimum": -65536,
+                "maximum": 65536
+              }
+            }
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ok",
+          "command_id",
+          "postcondition"
+        ],
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "changed": {
+            "type": "boolean"
+          },
+          "before": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "after": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "postcondition": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "verified",
+              "checks"
+            ],
+            "properties": {
+              "verified": {
+                "type": "boolean"
+              },
+              "checks": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "undo_action": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "error": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "error_codes": [
+        "E_MISSING_REQUIRED",
+        "E_UNKNOWN_PARAM",
+        "E_INVALID_TYPE",
+        "E_OUT_OF_BOUNDS",
+        "E_UNKNOWN_ACTION",
+        "E_PROTOCOL_VERSION",
+        "E_ACTION_VERSION",
+        "E_CLIENT_ESCALATION",
+        "E_INVALID_COMMAND_ID",
+        "E_INVALID_ENVELOPE",
+        "E_UNVERIFIED",
+        "E_CONFLICT",
+        "E_PATH",
+        "E_PAUSED",
+        "E_LEASE",
+        "E_CHECKPOINT"
+      ],
+      "postcondition": "physics_nav_agent_target_matches"
+    },
+    "physics.path": {
+      "method": "godot.physics",
+      "verb": "path",
+      "action_version": "1",
+      "side_effect": "read",
+      "undo": "none",
+      "timeout_ms": 5000,
+      "cancellable": false,
+      "required_policy": "OBSERVE",
+      "checkpoint_required": false,
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "scene",
+          "from",
+          "to"
+        ],
+        "properties": {
+          "scene": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 256,
+            "pattern": "^res://[^\\s]+$"
+          },
+          "from": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "x",
+              "y"
+            ],
+            "properties": {
+              "x": {
+                "type": "number",
+                "minimum": -65536,
+                "maximum": 65536
+              },
+              "y": {
+                "type": "number",
+                "minimum": -65536,
+                "maximum": 65536
+              }
+            }
+          },
+          "to": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "x",
+              "y"
+            ],
+            "properties": {
+              "x": {
+                "type": "number",
+                "minimum": -65536,
+                "maximum": 65536
+              },
+              "y": {
+                "type": "number",
+                "minimum": -65536,
+                "maximum": 65536
+              }
+            }
+          },
+          "node_path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
+          },
+          "optimize": {
+            "type": "boolean"
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ok",
+          "command_id",
+          "postcondition"
+        ],
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "changed": {
+            "type": "boolean"
+          },
+          "before": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "after": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "postcondition": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "verified",
+              "checks"
+            ],
+            "properties": {
+              "verified": {
+                "type": "boolean"
+              },
+              "checks": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "undo_action": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "error": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "error_codes": [
+        "E_MISSING_REQUIRED",
+        "E_UNKNOWN_PARAM",
+        "E_INVALID_TYPE",
+        "E_OUT_OF_BOUNDS",
+        "E_UNKNOWN_ACTION",
+        "E_PROTOCOL_VERSION",
+        "E_ACTION_VERSION",
+        "E_CLIENT_ESCALATION",
+        "E_INVALID_COMMAND_ID",
+        "E_INVALID_ENVELOPE",
+        "E_UNVERIFIED"
+      ],
+      "postcondition": "physics_nav_path_or_unverified"
+    },
+    "physics.lint": {
+      "method": "godot.physics",
+      "verb": "lint",
+      "action_version": "1",
+      "side_effect": "read",
+      "undo": "none",
+      "timeout_ms": 5000,
+      "cancellable": false,
+      "required_policy": "OBSERVE",
+      "checkpoint_required": false,
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "scene"
+        ],
+        "properties": {
+          "scene": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 256,
+            "pattern": "^res://[^\\s]+$"
+          },
+          "node_path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ok",
+          "command_id",
+          "postcondition"
+        ],
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "changed": {
+            "type": "boolean"
+          },
+          "before": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "after": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "postcondition": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "verified",
+              "checks"
+            ],
+            "properties": {
+              "verified": {
+                "type": "boolean"
+              },
+              "checks": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "undo_action": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "error": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "error_codes": [
+        "E_MISSING_REQUIRED",
+        "E_UNKNOWN_PARAM",
+        "E_INVALID_TYPE",
+        "E_OUT_OF_BOUNDS",
+        "E_UNKNOWN_ACTION",
+        "E_PROTOCOL_VERSION",
+        "E_ACTION_VERSION",
+        "E_CLIENT_ESCALATION",
+        "E_INVALID_COMMAND_ID",
+        "E_INVALID_ENVELOPE",
+        "E_UNVERIFIED"
+      ],
+      "postcondition": "physics_lint_report"
+    },
+    "physics.debug": {
+      "method": "godot.physics",
+      "verb": "debug",
+      "action_version": "1",
+      "side_effect": "view",
+      "undo": "n/a",
+      "timeout_ms": 5000,
+      "cancellable": false,
+      "required_policy": "OBSERVE",
+      "checkpoint_required": false,
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "scene"
+        ],
+        "properties": {
+          "scene": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 256,
+            "pattern": "^res://[^\\s]+$"
+          },
+          "node_path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ok",
+          "command_id",
+          "postcondition"
+        ],
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "changed": {
+            "type": "boolean"
+          },
+          "before": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "after": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "postcondition": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "verified",
+              "checks"
+            ],
+            "properties": {
+              "verified": {
+                "type": "boolean"
+              },
+              "checks": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "undo_action": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "error": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "error_codes": [
+        "E_MISSING_REQUIRED",
+        "E_UNKNOWN_PARAM",
+        "E_INVALID_TYPE",
+        "E_OUT_OF_BOUNDS",
+        "E_UNKNOWN_ACTION",
+        "E_PROTOCOL_VERSION",
+        "E_ACTION_VERSION",
+        "E_CLIENT_ESCALATION",
+        "E_INVALID_COMMAND_ID",
+        "E_INVALID_ENVELOPE",
+        "E_UNVERIFIED"
+      ],
+      "postcondition": "physics_debug_engine_bounds"
     }
   }
 }

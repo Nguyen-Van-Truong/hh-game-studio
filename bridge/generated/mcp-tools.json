@@ -4,8 +4,8 @@
   "protocol": "hh-godot-agent/1",
   "registry_version": "hh-godot-actions/1",
   "action_version": "1",
-  "tool_count": 24,
-  "action_count": 143,
+  "tool_count": 25,
+  "action_count": 151,
   "tools": [
     {
       "name": "godot.capabilities",
@@ -992,6 +992,50 @@
             "type": "string",
             "enum": [
               "make_current"
+            ]
+          },
+          "params": {
+            "type": "object",
+            "description": "Per-action params. The matched ActionDef input_schema sets additionalProperties false."
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "precondition": {
+            "type": "object",
+            "description": "Optional fingerprint/history/disk hash for E_CONFLICT."
+          },
+          "presentation": {
+            "type": "object",
+            "description": "Optional Watch/Fast presentation hint. Does not mutate the document."
+          }
+        }
+      }
+    },
+    {
+      "name": "godot.physics",
+      "description": "Domain tool for physics.* actions. Discriminator is action.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "action",
+          "params"
+        ],
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "body",
+              "shape",
+              "layers",
+              "nav_region",
+              "nav_agent",
+              "path",
+              "lint",
+              "debug"
             ]
           },
           "params": {

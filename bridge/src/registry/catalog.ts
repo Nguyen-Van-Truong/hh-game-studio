@@ -62,6 +62,7 @@ export const REQUIRED_VERBS: Readonly<Record<string, readonly string[]>> = {
   job: ["status", "list", "cancel", "wait", "transaction"],
   canvas: ["bounds", "layout_batch"],
   camera: ["make_current"],
+  physics: ["body", "shape", "layers", "nav_region", "nav_agent", "path", "lint", "debug"],
 };
 
 export function requiredActionIds(): string[] {

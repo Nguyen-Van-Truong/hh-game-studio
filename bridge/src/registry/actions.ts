@@ -1440,6 +1440,212 @@ const SPECS: Record<string, ActionSpec> = {
     { scene: "res://scenes/hud.tscn", node_path: "HUD/StartButton" },
   ),
 
+  "physics.body": mutate(
+    "Configure CharacterBody2D/RigidBody2D/Area2D/StaticBody2D (editor; velocity stored only)",
+    "editor_undo_redo",
+    "physics_body_matches",
+    obj(["scene", "node_path"], {
+      scene: RES_PATH,
+      node_path: NODE_PATH,
+      motion_mode: { type: "string", enum: ["grounded", "floating"] },
+      velocity: obj(["x", "y"], {
+        x: { type: "number", minimum: -65536, maximum: 65536 },
+        y: { type: "number", minimum: -65536, maximum: 65536 },
+      }),
+      mass: { type: "number", minimum: 0.001, maximum: 100000 },
+      gravity_scale: { type: "number", minimum: -64, maximum: 64 },
+      linear_velocity: obj(["x", "y"], {
+        x: { type: "number", minimum: -65536, maximum: 65536 },
+        y: { type: "number", minimum: -65536, maximum: 65536 },
+      }),
+      contact_monitor: BOOL,
+      max_contacts_reported: { type: "integer", minimum: 0, maximum: 256 },
+      freeze: BOOL,
+      monitoring: BOOL,
+      monitorable: BOOL,
+      material: RES_PATH,
+      friction: { type: "number", minimum: 0, maximum: 128 },
+      bounce: { type: "number", minimum: 0, maximum: 1 },
+    }),
+    {
+      scene: "res://scenes/world.tscn",
+      node_path: "Player",
+      motion_mode: "grounded",
+    },
+    { extra_errors: SCENE_MUTATE_ERRORS },
+  ),
+  "physics.shape": mutate(
+    "Assign explicit CollisionShape2D/CollisionPolygon2D geometry (no invented 32px box)",
+    "editor_undo_redo",
+    "physics_shape_geometry_matches",
+    obj(["scene", "node_path", "shape"], {
+      scene: RES_PATH,
+      node_path: NODE_PATH,
+      shape: {
+        type: "string",
+        enum: ["rectangle", "circle", "capsule", "convex", "polygon"],
+      },
+      size: obj(["x", "y"], {
+        x: { type: "number", minimum: 0.01, maximum: 65536 },
+        y: { type: "number", minimum: 0.01, maximum: 65536 },
+      }),
+      radius: { type: "number", minimum: 0.01, maximum: 65536 },
+      height: { type: "number", minimum: 0.01, maximum: 65536 },
+      points: {
+        type: "array",
+        minItems: 3,
+        maxItems: 64,
+        items: obj(["x", "y"], {
+          x: { type: "number", minimum: -65536, maximum: 65536 },
+          y: { type: "number", minimum: -65536, maximum: 65536 },
+        }),
+      },
+      from_sprite: NODE_PATH,
+      from_texture: RES_PATH,
+      shape_path: RES_PATH,
+    }),
+    {
+      scene: "res://scenes/world.tscn",
+      node_path: "Player/CollisionShape2D",
+      shape: "rectangle",
+      size: { x: 16, y: 16 },
+    },
+    { extra_errors: SCENE_MUTATE_ERRORS },
+  ),
+  "physics.layers": mutate(
+    "Set collision layer/mask bitmask and per-layer values 1–32",
+    "editor_undo_redo",
+    "physics_layer_matrix_matches",
+    obj(["scene", "node_path"], {
+      scene: RES_PATH,
+      node_path: NODE_PATH,
+      collision_layer: { type: "integer", minimum: 0, maximum: 4294967295 },
+      collision_mask: { type: "integer", minimum: 0, maximum: 4294967295 },
+      fixture: { type: "string", enum: ["player", "world", "interact"] },
+      layer_bits: {
+        type: "array",
+        maxItems: 32,
+        items: obj(["layer", "enabled"], {
+          layer: { type: "integer", minimum: 1, maximum: 32 },
+          enabled: BOOL,
+        }),
+      },
+      mask_bits: {
+        type: "array",
+        maxItems: 32,
+        items: obj(["layer", "enabled"], {
+          layer: { type: "integer", minimum: 1, maximum: 32 },
+          enabled: BOOL,
+        }),
+      },
+    }),
+    {
+      scene: "res://scenes/world.tscn",
+      node_path: "Player",
+      collision_layer: 1,
+      collision_mask: 2,
+      fixture: "player",
+    },
+    { extra_errors: SCENE_MUTATE_ERRORS },
+  ),
+  "physics.nav_region": mutate(
+    "Add NavigationPolygon outline and bake synchronously (never on_thread)",
+    "editor_undo_redo",
+    "physics_nav_region_baked",
+    obj(["scene", "node_path", "outline"], {
+      scene: RES_PATH,
+      node_path: NODE_PATH,
+      outline: {
+        type: "array",
+        minItems: 3,
+        maxItems: 64,
+        items: obj(["x", "y"], {
+          x: { type: "number", minimum: -65536, maximum: 65536 },
+          y: { type: "number", minimum: -65536, maximum: 65536 },
+        }),
+      },
+      obstructions: {
+        type: "array",
+        maxItems: 16,
+        items: {
+          type: "array",
+          minItems: 3,
+          maxItems: 64,
+          items: obj(["x", "y"], {
+            x: { type: "number", minimum: -65536, maximum: 65536 },
+            y: { type: "number", minimum: -65536, maximum: 65536 },
+          }),
+        },
+      },
+      navpoly_path: RES_PATH,
+      parse_static_colliders: BOOL,
+    }),
+    {
+      scene: "res://scenes/world.tscn",
+      node_path: "Nav",
+      outline: [
+        { x: 0, y: 0 },
+        { x: 640, y: 0 },
+        { x: 640, y: 360 },
+        { x: 0, y: 360 },
+      ],
+    },
+    { extra_errors: SCENE_MUTATE_ERRORS },
+  ),
+  "physics.nav_agent": mutate(
+    "Bind NavigationAgent2D.target_position",
+    "editor_undo_redo",
+    "physics_nav_agent_target_matches",
+    obj(["scene", "node_path", "target_position"], {
+      scene: RES_PATH,
+      node_path: NODE_PATH,
+      target_position: obj(["x", "y"], {
+        x: { type: "number", minimum: -65536, maximum: 65536 },
+        y: { type: "number", minimum: -65536, maximum: 65536 },
+      }),
+    }),
+    {
+      scene: "res://scenes/world.tscn",
+      node_path: "Player/Agent",
+      target_position: { x: 200, y: 96 },
+    },
+    { extra_errors: SCENE_MUTATE_ERRORS },
+  ),
+  "physics.path": read(
+    "Query NavigationServer2D.map_get_path when the editor map is synced",
+    "physics_nav_path_or_unverified",
+    obj(["scene", "from", "to"], {
+      scene: RES_PATH,
+      from: obj(["x", "y"], {
+        x: { type: "number", minimum: -65536, maximum: 65536 },
+        y: { type: "number", minimum: -65536, maximum: 65536 },
+      }),
+      to: obj(["x", "y"], {
+        x: { type: "number", minimum: -65536, maximum: 65536 },
+        y: { type: "number", minimum: -65536, maximum: 65536 },
+      }),
+      node_path: NODE_PATH,
+      optimize: BOOL,
+    }),
+    {
+      scene: "res://scenes/world.tscn",
+      from: { x: 32, y: 96 },
+      to: { x: 200, y: 96 },
+    },
+  ),
+  "physics.lint": read(
+    "Lint physics owner/null-shape/layer0/mask0/non-uniform scale",
+    "physics_lint_report",
+    obj(["scene"], { scene: RES_PATH, node_path: NODE_PATH }),
+    { scene: "res://scenes/world.tscn" },
+  ),
+  "physics.debug": view(
+    "Overlay engine shape/nav AABB (invented_box=false; not Visible Collision Shapes)",
+    "physics_debug_engine_bounds",
+    obj(["scene"], { scene: RES_PATH, node_path: NODE_PATH }),
+    { scene: "res://scenes/world.tscn" },
+  ),
+
   "editor.state": read(
     "Read editor selection, main screen, pause flag, and activity dock",
     "editor_state_snapshot",

@@ -40,6 +40,7 @@ import {
   isSignalApply,
   isTransactionApply,
   isUiApply,
+  isPhysicsApply,
   mutationNeedsDiskHash,
   nodeNeedsUidAfter,
   sceneNeedsDiskHash,
@@ -791,6 +792,119 @@ function uiApplyOk(
   return undefined;
 }
 
+function physicsApplyOk(
+  result: PluginCommandResult,
+  actionId: string,
+  params: Record<string, unknown>,
+): PluginCommandResult | undefined {
+  if (!isPhysicsApply(actionId)) {
+    return undefined;
+  }
+  if (!result.ok) {
+    return result;
+  }
+  if (typeof result.undo_action !== "string" || !result.undo_action.startsWith("Agent: ")) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "physics missing Agent UndoRedo name");
+  }
+  const after = result.after;
+  if (!isRecord(after)) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "physics missing after readback");
+  }
+  if (after.node_path !== params.node_path) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "physics node_path bind mismatch");
+  }
+  if (after.invented_box === true) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "physics invented a bounds box");
+  }
+  if (typeof after.class_name !== "string" || after.class_name.length < 1) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "physics class bind mismatch");
+  }
+  for (const key of ["material", "shape_path", "navpoly_path", "path"] as const) {
+    const raw = params[key];
+    if (typeof raw === "string" && raw.includes("::")) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "refusing RAM-only physics durable ACK");
+    }
+  }
+  if (after.durable === true && (typeof after.disk_hash !== "string" || after.disk_hash.length < 16)) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "refusing RAM-only physics durable ACK");
+  }
+  if (actionId === "physics.body") {
+    const allowed = ["CharacterBody2D", "RigidBody2D", "Area2D", "StaticBody2D"];
+    if (!allowed.includes(after.class_name)) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "physics class bind mismatch");
+    }
+  }
+  if (actionId === "physics.shape") {
+    if (typeof after.shape_class !== "string" || after.shape_class.length < 1) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "physics shape class bind mismatch");
+    }
+    if (!isRecord(after.geometry)) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "physics missing explicit geometry");
+    }
+    if (params.shape === "rectangle" && !isRecord(after.geometry.size)) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "physics rectangle size bind mismatch");
+    }
+    if (params.shape === "circle" && typeof after.geometry.radius !== "number") {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "physics circle radius bind mismatch");
+    }
+    if (
+      params.shape === "capsule" &&
+      (typeof after.geometry.radius !== "number" || typeof after.geometry.height !== "number")
+    ) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "physics capsule geometry bind mismatch");
+    }
+    if (
+      (params.shape === "convex" || params.shape === "polygon") &&
+      !Array.isArray(after.geometry.points)
+    ) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "physics polygon points bind mismatch");
+    }
+  }
+  if (actionId === "physics.layers") {
+    if (typeof after.collision_layer !== "number" || typeof after.collision_mask !== "number") {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "physics layer/mask bind mismatch");
+    }
+    if (!isRecord(after.layer_values) || !isRecord(after.mask_values)) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "physics missing per-layer values");
+    }
+    if (typeof params.collision_layer === "number" && after.collision_layer !== params.collision_layer) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "physics collision_layer bind mismatch");
+    }
+    if (typeof params.collision_mask === "number" && after.collision_mask !== params.collision_mask) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "physics collision_mask bind mismatch");
+    }
+  }
+  if (actionId === "physics.nav_region") {
+    if (typeof after.outline_count !== "number" || typeof after.polygon_count !== "number") {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "physics nav counts bind mismatch");
+    }
+    if (after.is_baking === true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "physics nav bake still running");
+    }
+  }
+  if (actionId === "physics.nav_agent") {
+    if (!isRecord(after.target_position)) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "physics nav agent target bind mismatch");
+    }
+    const want = isRecord(params.target_position) ? params.target_position : {};
+    if (
+      typeof want.x === "number" &&
+      typeof after.target_position.x === "number" &&
+      after.target_position.x !== want.x
+    ) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "physics nav agent target bind mismatch");
+    }
+    if (
+      typeof want.y === "number" &&
+      typeof after.target_position.y === "number" &&
+      after.target_position.y !== want.y
+    ) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "physics nav agent target bind mismatch");
+    }
+  }
+  return undefined;
+}
+
 function cameraApplyOk(
   result: PluginCommandResult,
   actionId: string,
@@ -1506,6 +1620,8 @@ async function applyMutateOnce(
             ? "animation"
           : isUiApply(classified.actionId)
             ? "ui"
+          : isPhysicsApply(classified.actionId)
+            ? "physics"
           : isResourceApply(classified.actionId) ||
               isAssetRefApply(classified.actionId) ||
               isAssetIngestApply(classified.actionId)
@@ -1591,6 +1707,12 @@ async function applyMutateOnce(
       persistResult(row, uiFail);
       saveState(ledger, row, "failed");
       return uiFail;
+    }
+    const physicsFail = physicsApplyOk(result, classified.actionId, fields.params);
+    if (physicsFail) {
+      persistResult(row, physicsFail);
+      saveState(ledger, row, "failed");
+      return physicsFail;
     }
     const resourceFail = resourceApplyOk(result, classified.actionId, fields.params);
     if (resourceFail) {

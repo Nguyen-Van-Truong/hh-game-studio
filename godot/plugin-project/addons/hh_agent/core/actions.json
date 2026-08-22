@@ -1741,6 +1741,104 @@
       ],
       "postcondition": "camera_is_current",
       "checkpoint_required": false
+    },
+    "physics.body": {
+      "method": "godot.physics",
+      "verb": "body",
+      "side_effect": "mutate",
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path"
+      ],
+      "postcondition": "physics_body_matches",
+      "checkpoint_required": false
+    },
+    "physics.shape": {
+      "method": "godot.physics",
+      "verb": "shape",
+      "side_effect": "mutate",
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path",
+        "shape"
+      ],
+      "postcondition": "physics_shape_geometry_matches",
+      "checkpoint_required": false
+    },
+    "physics.layers": {
+      "method": "godot.physics",
+      "verb": "layers",
+      "side_effect": "mutate",
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path"
+      ],
+      "postcondition": "physics_layer_matrix_matches",
+      "checkpoint_required": false
+    },
+    "physics.nav_region": {
+      "method": "godot.physics",
+      "verb": "nav_region",
+      "side_effect": "mutate",
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path",
+        "outline"
+      ],
+      "postcondition": "physics_nav_region_baked",
+      "checkpoint_required": false
+    },
+    "physics.nav_agent": {
+      "method": "godot.physics",
+      "verb": "nav_agent",
+      "side_effect": "mutate",
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path",
+        "target_position"
+      ],
+      "postcondition": "physics_nav_agent_target_matches",
+      "checkpoint_required": false
+    },
+    "physics.path": {
+      "method": "godot.physics",
+      "verb": "path",
+      "side_effect": "read",
+      "timeout_ms": 5000,
+      "required": [
+        "scene",
+        "from",
+        "to"
+      ],
+      "postcondition": "physics_nav_path_or_unverified",
+      "checkpoint_required": false
+    },
+    "physics.lint": {
+      "method": "godot.physics",
+      "verb": "lint",
+      "side_effect": "read",
+      "timeout_ms": 5000,
+      "required": [
+        "scene"
+      ],
+      "postcondition": "physics_lint_report",
+      "checkpoint_required": false
+    },
+    "physics.debug": {
+      "method": "godot.physics",
+      "verb": "debug",
+      "side_effect": "view",
+      "timeout_ms": 5000,
+      "required": [
+        "scene"
+      ],
+      "postcondition": "physics_debug_engine_bounds",
+      "checkpoint_required": false
     }
   }
 }
