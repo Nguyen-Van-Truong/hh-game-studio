@@ -3,7 +3,7 @@
   "protocol": "hh-godot-agent/1",
   "registry_version": "hh-godot-actions/1",
   "variant_schema": "hh-godot-variant/1",
-  "action_count": 142,
+  "action_count": 143,
   "envelope": {
     "allowed": [
       "protocol",
@@ -9721,6 +9721,19 @@
             "minLength": 1,
             "maxLength": 128,
             "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "library_path": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 256,
+            "pattern": "^res://[^\\s]+$"
+          },
+          "op": {
+            "type": "string",
+            "enum": [
+              "add",
+              "select"
+            ]
           }
         }
       },
@@ -9814,7 +9827,12 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_CONFLICT",
+        "E_PATH",
+        "E_PAUSED",
+        "E_LEASE",
+        "E_CHECKPOINT"
       ],
       "postcondition": "animation_library_present"
     },
@@ -9860,6 +9878,15 @@
             "type": "number",
             "minimum": 0.01,
             "maximum": 3600
+          },
+          "library": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "loop": {
+            "type": "boolean"
           }
         }
       },
@@ -9953,7 +9980,12 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_CONFLICT",
+        "E_PATH",
+        "E_PAUSED",
+        "E_LEASE",
+        "E_CHECKPOINT"
       ],
       "postcondition": "animation_named_exists"
     },
@@ -10000,6 +10032,21 @@
             "minLength": 1,
             "maxLength": 256,
             "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
+          },
+          "library": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "track_type": {
+            "type": "string",
+            "enum": [
+              "value",
+              "method",
+              "audio",
+              "bezier"
+            ]
           }
         }
       },
@@ -10093,7 +10140,12 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_CONFLICT",
+        "E_PATH",
+        "E_PAUSED",
+        "E_LEASE",
+        "E_CHECKPOINT"
       ],
       "postcondition": "animation_track_present"
     },
@@ -10149,6 +10201,40 @@
           },
           "value": {
             "hhCodec": "variant"
+          },
+          "library": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "keys": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 256,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "time_sec",
+                "value"
+              ],
+              "properties": {
+                "time_sec": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 3600
+                },
+                "value": {
+                  "hhCodec": "variant"
+                },
+                "track": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 4096
+                }
+              }
+            }
           }
         }
       },
@@ -10242,9 +10328,213 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_CONFLICT",
+        "E_PATH",
+        "E_PAUSED",
+        "E_LEASE",
+        "E_CHECKPOINT"
       ],
       "postcondition": "animation_key_at_time"
+    },
+    "animation.sprite_frames": {
+      "method": "godot.animation",
+      "verb": "sprite_frames",
+      "action_version": "1",
+      "side_effect": "mutate",
+      "undo": "editor_undo_redo",
+      "timeout_ms": 15000,
+      "cancellable": false,
+      "required_policy": "EDIT",
+      "checkpoint_required": false,
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "scene",
+          "node_path",
+          "animation"
+        ],
+        "properties": {
+          "scene": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 256,
+            "pattern": "^res://[^\\s]+$"
+          },
+          "node_path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
+          },
+          "animation": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "path": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 256,
+            "pattern": "^res://[^\\s]+$"
+          },
+          "op": {
+            "type": "string",
+            "enum": [
+              "add_animation",
+              "add_frame",
+              "configure"
+            ]
+          },
+          "texture": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 256,
+            "pattern": "^res://[^\\s]+$"
+          },
+          "duration": {
+            "type": "number",
+            "minimum": 0.01,
+            "maximum": 60
+          },
+          "speed": {
+            "type": "number",
+            "minimum": 0.01,
+            "maximum": 120
+          },
+          "loop": {
+            "type": "boolean"
+          },
+          "frame": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4096
+          },
+          "frames": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 64,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [],
+              "properties": {
+                "texture": {
+                  "type": "string",
+                  "minLength": 6,
+                  "maxLength": 256,
+                  "pattern": "^res://[^\\s]+$"
+                },
+                "duration": {
+                  "type": "number",
+                  "minimum": 0.01,
+                  "maximum": 60
+                }
+              }
+            }
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ok",
+          "command_id",
+          "postcondition"
+        ],
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "changed": {
+            "type": "boolean"
+          },
+          "before": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "after": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "postcondition": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "verified",
+              "checks"
+            ],
+            "properties": {
+              "verified": {
+                "type": "boolean"
+              },
+              "checks": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "undo_action": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "error": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "error_codes": [
+        "E_MISSING_REQUIRED",
+        "E_UNKNOWN_PARAM",
+        "E_INVALID_TYPE",
+        "E_OUT_OF_BOUNDS",
+        "E_UNKNOWN_ACTION",
+        "E_PROTOCOL_VERSION",
+        "E_ACTION_VERSION",
+        "E_CLIENT_ESCALATION",
+        "E_INVALID_COMMAND_ID",
+        "E_INVALID_ENVELOPE",
+        "E_UNVERIFIED",
+        "E_CONFLICT",
+        "E_PATH",
+        "E_PAUSED",
+        "E_LEASE",
+        "E_CHECKPOINT"
+      ],
+      "postcondition": "sprite_frames_animation_present"
     },
     "animation.state_machine": {
       "method": "godot.animation",
@@ -10289,6 +10579,33 @@
             "minLength": 1,
             "maxLength": 128,
             "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "condition": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "switch_mode": {
+            "type": "string",
+            "enum": [
+              "immediate",
+              "sync",
+              "at_end"
+            ]
+          },
+          "anim_player": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
+          },
+          "op": {
+            "type": "string",
+            "enum": [
+              "add_transition",
+              "add_node"
+            ]
           }
         }
       },
@@ -10382,7 +10699,12 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_CONFLICT",
+        "E_PATH",
+        "E_PAUSED",
+        "E_LEASE",
+        "E_CHECKPOINT"
       ],
       "postcondition": "state_machine_transition_present"
     },
@@ -10422,6 +10744,25 @@
             "minLength": 1,
             "maxLength": 128,
             "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "library": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100000
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "include_keys": {
+            "type": "boolean"
           }
         }
       },

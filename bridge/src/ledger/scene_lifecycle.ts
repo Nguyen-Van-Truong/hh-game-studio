@@ -40,6 +40,15 @@ export const TILEMAP_APPLY = [
   "tilemap.stamp",
 ] as const;
 
+export const ANIMATION_APPLY = [
+  "animation.library",
+  "animation.animation",
+  "animation.track",
+  "animation.key",
+  "animation.sprite_frames",
+  "animation.state_machine",
+] as const;
+
 export const RESOURCE_APPLY = [
   "resource.create",
   "resource.assign",
@@ -109,6 +118,10 @@ export function isTilemapApply(actionId: string): boolean {
   return (TILEMAP_APPLY as readonly string[]).includes(actionId);
 }
 
+export function isAnimationApply(actionId: string): boolean {
+  return (ANIMATION_APPLY as readonly string[]).includes(actionId);
+}
+
 export function isResourceApply(actionId: string): boolean {
   return (RESOURCE_APPLY as readonly string[]).includes(actionId);
 }
@@ -149,6 +162,7 @@ export function isProvenEditorApply(actionId: string): boolean {
     isCanvasApply(actionId) ||
     isCameraApply(actionId) ||
     isTilemapApply(actionId) ||
+    isAnimationApply(actionId) ||
     isResourceApply(actionId) ||
     isSignalApply(actionId) ||
     isAssetRefApply(actionId) ||
@@ -201,6 +215,12 @@ export function mutationNeedsDiskHash(actionId: string, params: Record<string, u
   ) {
     return typeof params.tileset === "string" && isExternalResPath(params.tileset);
   }
+  if (actionId === "animation.sprite_frames") {
+    return typeof params.path === "string" && isExternalResPath(params.path);
+  }
+  if (actionId === "animation.library") {
+    return typeof params.library_path === "string" && isExternalResPath(params.library_path);
+  }
   if (actionId === "job.transaction") {
     if (params.save === true) {
       return true;
@@ -249,6 +269,20 @@ export function durableResPath(
     isExternalResPath(params.tileset)
   ) {
     return params.tileset;
+  }
+  if (
+    actionId === "animation.sprite_frames" &&
+    typeof params.path === "string" &&
+    isExternalResPath(params.path)
+  ) {
+    return params.path;
+  }
+  if (
+    actionId === "animation.library" &&
+    typeof params.library_path === "string" &&
+    isExternalResPath(params.library_path)
+  ) {
+    return params.library_path;
   }
   if (actionId === "resource.duplicate" && typeof params.dest === "string") {
     return params.dest;

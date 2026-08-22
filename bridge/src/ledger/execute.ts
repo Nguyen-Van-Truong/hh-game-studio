@@ -24,6 +24,7 @@ import { LedgerPluginDeath, maybeCrashAfterDispatchAttempt, maybeFault } from ".
 import { canonicalRequestHash } from "./hash.js";
 import {
   durableResPath,
+  isAnimationApply,
   isAssetIngestApply,
   isAssetRefApply,
   isCameraApply,
@@ -587,6 +588,104 @@ function tilemapApplyOk(
     }
     if (after.readback_equals !== true) {
       return errorResult(result.command_id, E.E_UNVERIFIED, "tilemap.stamp readback did not equal set");
+    }
+  }
+  return undefined;
+}
+
+function animationApplyOk(
+  result: PluginCommandResult,
+  actionId: string,
+  params: Record<string, unknown>,
+): PluginCommandResult | undefined {
+  if (!isAnimationApply(actionId)) {
+    return undefined;
+  }
+  if (!result.ok) {
+    return result;
+  }
+  if (typeof result.undo_action !== "string" || !result.undo_action.startsWith("Agent: ")) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "animation missing Agent UndoRedo name");
+  }
+  const after = result.after;
+  if (!isRecord(after)) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "animation missing after readback");
+  }
+  if (Array.isArray(after.keys) && after.keys.length > 100) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "animation after dumped more than one page of keys");
+  }
+  if (after.node_path !== params.node_path) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "animation node_path bind mismatch");
+  }
+  if (actionId === "animation.library") {
+    if (after.library !== params.library) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "animation library name bind mismatch");
+    }
+    if (params.op !== "remove" && after.has_library !== true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "animation library missing after add");
+    }
+  }
+  if (actionId === "animation.animation") {
+    if (after.name !== params.name && after.animation !== params.name) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "animation name bind mismatch");
+    }
+    if (after.has_animation !== true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "animation named clip missing after add");
+    }
+  }
+  if (actionId === "animation.track") {
+    if (typeof after.track !== "number" || after.track < 0) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "animation track index bind mismatch");
+    }
+    if (after.track_path !== params.track_path) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "animation track path bind mismatch");
+    }
+    if (after.animation !== params.animation) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "animation name bind mismatch");
+    }
+  }
+  if (actionId === "animation.key") {
+    if (after.track !== params.track) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "animation track index bind mismatch");
+    }
+    if (after.animation !== params.animation) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "animation name bind mismatch");
+    }
+    if (typeof after.time_sec !== "number" || after.time_sec !== params.time_sec) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "animation key time bind mismatch");
+    }
+    const batch = Array.isArray(params.keys) ? params.keys.length : 1;
+    if (typeof after.key_count !== "number" || after.key_count < batch) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "animation key count mismatch");
+    }
+    if (after.readback_equals !== true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "animation key readback did not equal set");
+    }
+  }
+  if (actionId === "animation.sprite_frames") {
+    if (after.animation !== params.animation) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "animation name bind mismatch");
+    }
+    if (typeof after.frame_count !== "number") {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "animation sprite_frames missing frame_count");
+    }
+    const wantFrames = Array.isArray(params.frames) ? params.frames.length : 0;
+    if (wantFrames > 0 && after.frame_count < wantFrames) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "animation sprite_frames frame count mismatch");
+    }
+    if (after.has_animation !== true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "animation sprite_frames clip missing");
+    }
+  }
+  if (actionId === "animation.state_machine") {
+    if (after.from !== params.from || after.to !== params.to) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "animation state_machine from/to bind mismatch");
+    }
+    if (after.has_transition !== true && params.op !== "add_node") {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "animation state_machine transition missing");
+    }
+    if (typeof params.condition === "string" && params.condition && after.condition !== params.condition) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "animation state_machine condition bind mismatch");
     }
   }
   return undefined;
@@ -1303,6 +1402,8 @@ async function applyMutateOnce(
             ? "camera"
           : isTilemapApply(classified.actionId)
             ? "tilemap"
+          : isAnimationApply(classified.actionId)
+            ? "animation"
           : isResourceApply(classified.actionId) ||
               isAssetRefApply(classified.actionId) ||
               isAssetIngestApply(classified.actionId)
@@ -1376,6 +1477,12 @@ async function applyMutateOnce(
       persistResult(row, tilemapFail);
       saveState(ledger, row, "failed");
       return tilemapFail;
+    }
+    const animationFail = animationApplyOk(result, classified.actionId, fields.params);
+    if (animationFail) {
+      persistResult(row, animationFail);
+      saveState(ledger, row, "failed");
+      return animationFail;
     }
     const resourceFail = resourceApplyOk(result, classified.actionId, fields.params);
     if (resourceFail) {

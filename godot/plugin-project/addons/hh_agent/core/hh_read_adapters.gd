@@ -12,6 +12,7 @@ const _OverlayScript: GDScript = preload("res://addons/hh_agent/ui/overlay/hh_ov
 const _SchedulerScript: GDScript = preload("res://addons/hh_agent/core/hh_scheduler.gd")
 const _ReviewScript: GDScript = preload("res://addons/hh_agent/core/hh_review_store.gd")
 const _ReviewDockScript: GDScript = preload("res://addons/hh_agent/ui/review/hh_review_dock.gd")
+const _AnimationScript: GDScript = preload("res://addons/hh_agent/core/hh_animation_adapter.gd")
 
 ## Main-thread read/view adapters. Mutate is never applied here.
 
@@ -19,6 +20,7 @@ var _errors: HHAgentErrors = HHAgentErrors.new()
 var _meta: HHAgentSceneMeta = HHAgentSceneMeta.new()
 var _codec: HHAgentVariantCodec = HHAgentVariantCodec.new()
 var _presenter: HHAgentPresenter = HHAgentPresenter.new()
+var _animation: HHAgentAnimationAdapter = HHAgentAnimationAdapter.new()
 
 
 func handle(
@@ -106,7 +108,7 @@ func handle(
 	if method == "godot.test" or method == "godot.export":
 		return _unverified(command_id, "%s read is not proven in R2-WP6" % method)
 	if method == "godot.animation" and action == "preview":
-		return _unverified(command_id, "animation preview has no proven playback getter")
+		return _animation.handle(command_id, method, action, params, actions, {})
 	if method == "godot.editor":
 		return _unverified(command_id, "editor.%s has no proven readback on stock EditorInterface" % action)
 	if method == "godot.ui" and action == "focus":
@@ -135,6 +137,7 @@ func _post_name(def: Dictionary, method: String, action: String) -> String:
 			"script.open_at": "script_editor_line_visible",
 			"asset.dependencies": "dependency_owners_listed",
 			"tilemap.query": "cell_query_matches_layer",
+			"animation.preview": "animation_preview_playing",
 			"ui.accessibility": "accessibility_fields_present",
 			"editor.state": "editor_state_snapshot",
 			"observer.timeline": "observer_timeline_snapshot",

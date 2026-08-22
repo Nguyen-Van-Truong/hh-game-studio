@@ -921,6 +921,19 @@
       "postcondition": "animation_key_at_time",
       "checkpoint_required": false
     },
+    "animation.sprite_frames": {
+      "method": "godot.animation",
+      "verb": "sprite_frames",
+      "side_effect": "mutate",
+      "timeout_ms": 15000,
+      "required": [
+        "scene",
+        "node_path",
+        "animation"
+      ],
+      "postcondition": "sprite_frames_animation_present",
+      "checkpoint_required": false
+    },
     "animation.state_machine": {
       "method": "godot.animation",
       "verb": "state_machine",

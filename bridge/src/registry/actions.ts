@@ -1119,8 +1119,11 @@ const SPECS: Record<string, ActionSpec> = {
       scene: RES_PATH,
       node_path: NODE_PATH,
       library: IDENT,
+      library_path: RES_PATH,
+      op: { type: "string", enum: ["add", "select"] },
     }),
     { scene: "res://scenes/world.tscn", node_path: "Player/Anim", library: "player" },
+    { extra_errors: SCENE_MUTATE_ERRORS },
   ),
   "animation.animation": mutate(
     "Create or update a named Animation",
@@ -1131,6 +1134,8 @@ const SPECS: Record<string, ActionSpec> = {
       node_path: NODE_PATH,
       name: IDENT,
       length_sec: { type: "number", minimum: 0.01, maximum: 3600 },
+      library: IDENT,
+      loop: BOOL,
     }),
     {
       scene: "res://scenes/world.tscn",
@@ -1138,6 +1143,7 @@ const SPECS: Record<string, ActionSpec> = {
       name: "walk",
       length_sec: 0.4,
     },
+    { extra_errors: SCENE_MUTATE_ERRORS },
   ),
   "animation.track": mutate(
     "Add a track to an Animation",
@@ -1148,6 +1154,8 @@ const SPECS: Record<string, ActionSpec> = {
       node_path: NODE_PATH,
       animation: IDENT,
       track_path: NODE_PATH,
+      library: IDENT,
+      track_type: { type: "string", enum: ["value", "method", "audio", "bezier"] },
     }),
     {
       scene: "res://scenes/world.tscn",
@@ -1155,6 +1163,7 @@ const SPECS: Record<string, ActionSpec> = {
       animation: "walk",
       track_path: "Sprite2D:frame",
     },
+    { extra_errors: SCENE_MUTATE_ERRORS },
   ),
   "animation.key": mutate(
     "Insert a key on an animation track",
@@ -1167,6 +1176,17 @@ const SPECS: Record<string, ActionSpec> = {
       track: INDEX,
       time_sec: { type: "number", minimum: 0, maximum: 3600 },
       value: VARIANT,
+      library: IDENT,
+      keys: {
+        type: "array",
+        minItems: 1,
+        maxItems: 256,
+        items: obj(["time_sec", "value"], {
+          time_sec: { type: "number", minimum: 0, maximum: 3600 },
+          value: VARIANT,
+          track: INDEX,
+        }),
+      },
     }),
     {
       scene: "res://scenes/world.tscn",
@@ -1176,6 +1196,39 @@ const SPECS: Record<string, ActionSpec> = {
       time_sec: 0.2,
       value: exampleVariantInt(2),
     },
+    { extra_errors: SCENE_MUTATE_ERRORS },
+  ),
+  "animation.sprite_frames": mutate(
+    "Create or edit SpriteFrames animations, frames, speed, and loop",
+    "editor_undo_redo",
+    "sprite_frames_animation_present",
+    obj(["scene", "node_path", "animation"], {
+      scene: RES_PATH,
+      node_path: NODE_PATH,
+      animation: IDENT,
+      path: RES_PATH,
+      op: { type: "string", enum: ["add_animation", "add_frame", "configure"] },
+      texture: RES_PATH,
+      duration: { type: "number", minimum: 0.01, maximum: 60 },
+      speed: { type: "number", minimum: 0.01, maximum: 120 },
+      loop: BOOL,
+      frame: INDEX,
+      frames: {
+        type: "array",
+        minItems: 1,
+        maxItems: 64,
+        items: obj([], {
+          texture: RES_PATH,
+          duration: { type: "number", minimum: 0.01, maximum: 60 },
+        }),
+      },
+    }),
+    {
+      scene: "res://scenes/world.tscn",
+      node_path: "Player/Sprite",
+      animation: "idle",
+    },
+    { extra_errors: SCENE_MUTATE_ERRORS },
   ),
   "animation.state_machine": mutate(
     "Edit an AnimationNodeStateMachine transition",
@@ -1186,6 +1239,10 @@ const SPECS: Record<string, ActionSpec> = {
       node_path: NODE_PATH,
       from: IDENT,
       to: IDENT,
+      condition: IDENT,
+      switch_mode: { type: "string", enum: ["immediate", "sync", "at_end"] },
+      anim_player: NODE_PATH,
+      op: { type: "string", enum: ["add_transition", "add_node"] },
     }),
     {
       scene: "res://scenes/world.tscn",
@@ -1193,6 +1250,7 @@ const SPECS: Record<string, ActionSpec> = {
       from: "idle",
       to: "walk",
     },
+    { extra_errors: SCENE_MUTATE_ERRORS },
   ),
   "animation.preview": view(
     "Preview an animation in the editor",
@@ -1201,6 +1259,10 @@ const SPECS: Record<string, ActionSpec> = {
       scene: RES_PATH,
       node_path: NODE_PATH,
       animation: IDENT,
+      library: IDENT,
+      offset: OFFSET,
+      limit: LIMIT,
+      include_keys: BOOL,
     }),
     { scene: "res://scenes/world.tscn", node_path: "Player/Anim", animation: "walk" },
   ),

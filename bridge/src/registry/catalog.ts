@@ -38,7 +38,7 @@ export const REQUIRED_VERBS: Readonly<Record<string, readonly string[]>> = {
   script: ["read", "write", "patch", "validate", "attach", "detach", "rename", "open_at", "diagnostics"],
   asset: ["import", "reimport", "move", "rename", "delete", "dependencies", "preview"],
   tilemap: ["tileset", "source", "terrain", "layer", "cell", "fill", "stamp", "query"],
-  animation: ["library", "animation", "track", "key", "state_machine", "preview"],
+  animation: ["library", "animation", "track", "key", "sprite_frames", "state_machine", "preview"],
   ui: ["control", "theme", "layout", "anchor", "focus", "accessibility"],
   editor: ["state", "select", "focus", "main_screen", "frame_view", "replay", "pause"],
   observer: ["timeline", "append", "focus", "overlay", "scheduler", "review"],

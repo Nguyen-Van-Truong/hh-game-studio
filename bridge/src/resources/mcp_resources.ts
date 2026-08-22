@@ -1,5 +1,6 @@
 import { PINNED_VERSION_ID } from "../doctor/pin.js";
 import {
+  isAnimationApply,
   isAssetRefApply,
   isCameraApply,
   isCanvasApply,
@@ -85,13 +86,14 @@ export function capabilityMatrix(): Record<string, unknown> {
     registry_version: REGISTRY_VERSION,
     godot_pin: PINNED_VERSION_ID,
     mutate_dispatched:
-      "scene-lifecycle+node-crud+property+resource+signal+script+project-settings+tilemap",
+      "scene-lifecycle+node-crud+property+resource+signal+script+project-settings+tilemap+animation",
     node_crud_dispatched: true,
     property_dispatched: true,
     resource_dispatched: true,
     script_dispatched: true,
     tilemap_dispatched: true,
-    note: "Scene/node/property/resource/signal/script/project.settings/tilemap ACK after EditorUndoRedo or ProjectSettings.save + ConfigFile disk parse. play.input inject stays E_UNVERIFIED.",
+    animation_dispatched: true,
+    note: "Scene/node/property/resource/signal/script/project.settings/tilemap/animation ACK after EditorUndoRedo or ProjectSettings.save + ConfigFile disk parse. play.input inject stays E_UNVERIFIED.",
     actions: allActionDefs().map((def) => ({
       id: def.id,
       method: def.method,
@@ -109,6 +111,8 @@ export function capabilityMatrix(): Record<string, unknown> {
               ? "camera-current"
             : isTilemapApply(def.id)
               ? "tilemap"
+            : isAnimationApply(def.id)
+              ? "animation"
             : isResourceApply(def.id) || isAssetRefApply(def.id)
               ? "resource-ops"
               : isSignalApply(def.id)

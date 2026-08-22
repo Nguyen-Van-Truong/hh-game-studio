@@ -349,6 +349,12 @@ func _record_from_mutate(method: String, action: String, params: Dictionary, res
 	var after: Dictionary = after_v if after_v is Dictionary else {}
 	var scene: String = str(params.get("scene", after.get("path", "")))
 	var path_s: String = str(after.get("path", params.get("node_path", params.get("name", ""))))
+	if method == "godot.animation":
+		var target_s: String = str(after.get("target_path", ""))
+		if target_s.is_empty():
+			target_s = str(params.get("track_path", ""))
+		if not target_s.is_empty():
+			path_s = target_s.get_slice(":", 0)
 	if method == "godot.canvas" and action == "layout_batch":
 		var batch_items: Variant = after.get("items", params.get("items", []))
 		if typeof(batch_items) == TYPE_ARRAY and (batch_items as Array).size() > 0:
@@ -458,6 +464,8 @@ func _is_presentable_mutate(method: String, action: String) -> bool:
 		return action == "make_current"
 	if method == "godot.tilemap":
 		return action == "cell" or action == "fill" or action == "stamp" or action == "terrain"
+	if method == "godot.animation":
+		return action == "key" or action == "track"
 	return false
 
 
