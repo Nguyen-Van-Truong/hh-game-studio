@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://c6b7mvvukkchr"]
+
+[ext_resource type="Texture2D" uid="uid://c2ctj50nt12m7" path="res://r4w6/sprite_tex.tres" id="1_33h7d"]
+[ext_resource type="Script" uid="uid://ccrve2kuaq27k" path="res://r4w6/visible_sprite.gd" id="2_lmyxp"]
+
+[node name="visible" type="Node2D" unique_id=299466520]
+metadata/hh_agent_uid = "hhuid_231312608_2"
+metadata/_hh_agent_uid = "hhuid_231312608_2"
+
+[node name="VisibleSprite" type="Sprite2D" parent="." unique_id=2123770606]
+position = Vector2(180, 120)
+texture = ExtResource("1_33h7d")
+script = ExtResource("2_lmyxp")
+metadata/hh_agent_uid = "hhuid_231312380_1"
+metadata/_hh_agent_uid = "hhuid_231312380_1"

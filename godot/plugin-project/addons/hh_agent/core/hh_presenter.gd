@@ -128,7 +128,7 @@ func _select(
 	params: Dictionary,
 	envelope: Dictionary,
 	post: String,
-	_focus_inspector: bool,
+	focus_inspector: bool,
 ) -> Dictionary:
 	var applied: Dictionary = apply_presentation(params, envelope, true)
 	if applied.get("ok", true) == false:
@@ -138,6 +138,12 @@ func _select(
 			str(applied.get("message", "presentation target missing")),
 			"params.node_path",
 		)
+	# select and focus both present Inspector. hide_inspector stays a probe.
+	# Do not change the read snapshot shape (applied is already _read_live).
+	if params.get("hide_inspector", false) != true:
+		_set_inspector_visible(true)
+		if focus_inspector:
+			_set_inspector_visible(true)
 	return _errors.ok_read(command_id, _checks(post), applied)
 
 
@@ -161,12 +167,33 @@ func _hint_from_mutation(method: String, action: String, params: Dictionary, res
 			"scene": str(params.get("scene", "")),
 			"node_path": str(after.get("path", params.get("name", ""))),
 			"uid": str(after.get("uid", "")),
+			"screen": "2D",
+		}
+	if method == "godot.scene" and action == "create":
+		return {
+			"scene": str(params.get("path", "")),
+			"node_path": ".",
+			"screen": "2D",
 		}
 	if method == "godot.property" and action == "set":
 		return {
 			"scene": str(params.get("scene", "")),
 			"node_path": str(params.get("node_path", "")),
 			"property": str(params.get("property", "")),
+			"screen": "2D",
+		}
+	if method == "godot.resource" and action == "assign":
+		return {
+			"scene": str(params.get("scene", "")),
+			"node_path": str(params.get("node_path", "")),
+			"property": str(params.get("property", "")),
+			"screen": "2D",
+		}
+	if method == "godot.script" and action == "attach":
+		return {
+			"scene": str(params.get("scene", "")),
+			"node_path": str(params.get("node_path", "")),
+			"screen": "2D",
 		}
 	if method == "godot.script" and action == "write":
 		var path_s: String = str(after.get("path", params.get("path", "")))

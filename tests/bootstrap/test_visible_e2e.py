@@ -48,7 +48,7 @@ def rel(path: Path) -> str:
 
 
 def plan_errors(text: str) -> list[str]:
-    """Keep R4-WP6 [ ] while unticked; after coordinator tick of WP6 only (not G2) allow R5-WP1+."""
+    """R4-WP6 [ ] until coordinator tick; after human G2 sign both WP6 and G2 are [x]."""
     errors: list[str] = []
     current = ""
     wp6 = None
@@ -62,11 +62,13 @@ def plan_errors(text: str) -> list[str]:
             wp6 = stripped
         if re.match(r"^R5-WP1\b", stripped):
             r5wp1 = stripped
-        if stripped.startswith("G2 VISIBLE"):
-            g2 = stripped
+        if stripped.startswith("G2 VISIBLE") and ("[x]" in stripped or "[ ]" in stripped):
+            if g2 is None:
+                g2 = stripped
     if wp6 is None:
         return ["plan missing R4-WP6 heading"]
     ticked = bool(re.search(r"\[x\]", wp6, re.IGNORECASE))
+    g2_ticked = bool(g2 and re.search(r"\[x\]", g2, re.IGNORECASE))
     if not ticked:
         if "[ ]" not in wp6:
             errors.append("R4-WP6 heading must keep [ ] until coordinator tick")
@@ -74,12 +76,17 @@ def plan_errors(text: str) -> list[str]:
             errors.append(f"CURRENT_VALID_WP={current!r} (need R4-WP6 while WP6 is unticked)")
         if r5wp1 and re.search(r"\[x\]", r5wp1, re.IGNORECASE):
             errors.append("R5-WP1 must stay unticked; R5 depends on human G2")
-    elif not re.match(r"^R5-WP\d+$|^R[6-9]-WP\d+$|^RX-WP\d+$", current):
-        errors.append(f"CURRENT_VALID_WP={current!r} (need R5-WP1+ after R4-WP6 tick; G2 stays human)")
+        if g2_ticked:
+            errors.append("G2 VISIBLE must stay [ ] until human sign + coordinator tick")
+    else:
+        if not re.match(r"^R5-WP\d+$|^R[6-9]-WP\d+$|^RX-WP\d+$", current):
+            errors.append(f"CURRENT_VALID_WP={current!r} (need R5-WP1+ after R4-WP6 tick)")
+        if g2 is None:
+            errors.append("plan missing G2 VISIBLE gate")
+        elif not g2_ticked:
+            errors.append("G2 VISIBLE must be [x] after human sign when R4-WP6 is ticked")
     if g2 is None:
         errors.append("plan missing G2 VISIBLE gate")
-    elif re.search(r"\[x\]", g2, re.IGNORECASE):
-        errors.append("G2 VISIBLE must stay unticked; it is a human gate")
     return errors
 
 
@@ -118,6 +125,12 @@ def src_scan_errors() -> list[str]:
         errors.append("official test must report screenshots=SKIP in headless")
     if re.search(r"\.write_bytes\(|Image\.new\b|write_text\([^\n]*\.png", self_text):
         errors.append("official test must not bless dummy screenshot PNGs")
+    if self_text.count('"name": "VisibleSprite"') < 2:
+        errors.append("official test must call node.add again with the same name VisibleSprite")
+    if "E_CONFLICT" not in self_text:
+        errors.append("official test must expect E_CONFLICT on second node.add same name")
+    if "*2" not in self_text and "VisibleSprite2" not in self_text:
+        errors.append("official test must fail if second add creates a *2 sibling")
     if "play.start" not in self_text or "play.input" not in self_text:
         errors.append("official test must run play.start and play.input")
     if "paper-ACK" not in self_text and "paper_ack" not in self_text:
@@ -228,6 +241,31 @@ def err_code(body: dict) -> str:
     return str(err.get("code") or "")
 
 
+def second_add_same_name_errors(body: dict, secret: str, name: str) -> list[str]:
+    """Second node.add of an existing sibling name must be E_CONFLICT, not ACK or *2."""
+    found: list[str] = []
+    after = after_of(body)
+    got_name = str(after.get("name") or "")
+    got_path = str(after.get("path") or after.get("node_path") or "")
+    blob = sess.redact(json.dumps(body), secret)
+    if body.get("ok") is True:
+        found.append(
+            f"second node.add same name {name} ACK-succeeded (must be E_CONFLICT): {blob}"
+        )
+    if err_code(body) != "E_CONFLICT":
+        found.append(
+            f"second node.add same name {name} error.code must be E_CONFLICT: {blob}"
+        )
+    two_name = f"{name}2"
+    renamed = bool(got_name) and got_name != name
+    if renamed or two_name in got_name or two_name in got_path:
+        found.append(
+            f"second node.add created *2 sibling name={got_name!r} path={got_path!r} "
+            f"(must be E_CONFLICT)"
+        )
+    return found
+
+
 def slim_focus(after: dict) -> dict:
     return {
         "selected_paths": after.get("selected_paths"),
@@ -288,6 +326,17 @@ def observe(
         "overlay": slim_overlay(after_of(overlay)),
         "screenshot": "SKIP",
     }
+    label_l = label.lower()
+    if "play" not in label_l and "pause" not in label_l:
+        selected = after_of(focus).get("selected_paths")
+        inspector_class = after_of(focus).get("inspector_class")
+        sel_empty = selected is None or selected == [] or selected == ""
+        insp_empty = inspector_class is None or inspector_class == ""
+        if sel_empty or insp_empty:
+            errors.append(
+                f"observer.focus after mutate {label} empty selected_paths or inspector_class: "
+                f"selected_paths={selected!r} inspector_class={inspector_class!r}"
+            )
     return req_id, step
 
 
@@ -457,6 +506,26 @@ def live_errors(exe: Path) -> list[str]:
         if step.get("timeline") is not True:
             errors.append(f"observer timeline missing node.add {add_id}")
         steps.append(step)
+
+        req_id, add2_id, added2 = call_tool(
+            proc,
+            req_id,
+            "godot.node",
+            "add",
+            {"scene": scene, "parent": ".", "class_name": "Sprite2D", "name": "VisibleSprite"},
+            presentation=watch,
+        )
+        errors.extend(second_add_same_name_errors(added2, secret, "VisibleSprite"))
+        steps.append(
+            {
+                "name": "node.add VisibleSprite second (expect E_CONFLICT)",
+                "command_id": add2_id,
+                "ts_ms": int(time.time() * 1000),
+                "ok": added2.get("ok") is True,
+                "error": err_code(added2),
+                "screenshot": "SKIP",
+            }
+        )
 
         req_id, tex_id, tex_body = call_tool(
             proc,

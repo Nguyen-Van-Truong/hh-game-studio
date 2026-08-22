@@ -21,7 +21,17 @@ if not exist "%GODOT_GUI%" (
   exit /b 1
 )
 
+echo [hh] CHECKLIST for the human reviewer:
+echo [hh]   1. Look at res://r4w6/visible.tscn (this scene only).
+echo [hh]   2. Confirm ONE VisibleSprite selected, Inspector shows Sprite2D,
+echo [hh]      cyan overlay on the sprite, and timeline rows in HH Agent dock.
+echo [hh]   3. Press Pause / Replay / Revert yourself on the dock.
+echo [hh]   4. This run does not sign G2. Play is Alternative (not success).
+echo [hh] Revert should use the drive checkpoint of visible.tscn, not snake.
 echo [hh] Opening editor: godot\plugin-project
+echo [hh] Then starting sidecar + visible drive (no second Godot).
+echo [hh] Watch HH Agent Activity: bridge should become connected, timeline fills.
 echo [hh] G2 VISIBLE is a HUMAN gate. Do not treat Start as a signed review.
 start "" "%GODOT_GUI%" --editor --path "%~dp0godot\plugin-project"
+python tools\godot\drive_visible.py
 endlocal

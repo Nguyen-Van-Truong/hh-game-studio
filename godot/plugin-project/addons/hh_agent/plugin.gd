@@ -104,6 +104,9 @@ func _exit_tree() -> void:
 func _process(_delta: float) -> void:
 	if _client != null:
 		_client.poll()
+		# Sidecar exit used to leave the dock on "disconnected" forever.
+		if _client.is_closed() and (_reconnect_timer == null or _reconnect_timer.is_stopped()):
+			_schedule_reconnect()
 	var inbound_this_frame: bool = false
 	if not _busy:
 		var n: int = 0

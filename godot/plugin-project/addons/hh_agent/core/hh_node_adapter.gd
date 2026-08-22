@@ -81,6 +81,9 @@ func queue_add(mgr: EditorUndoRedoManager, command_id: String, edited: Node, par
 		return class_err
 	var child: Node = class_err.get("node") as Node
 	child.name = name_s
+	if _sibling_taken(parent, name_s, child):
+		child.free()
+		return _errors.fail(command_id, HHAgentErrors.E_CONFLICT, "sibling name already used", "params.name")
 	var owner: Node = _identity.pick_owner(parent, edited)
 	var uid: String = _identity.mint()
 	_identity.stamp(child, uid)
@@ -158,6 +161,9 @@ func _add(command_id: String, params: Dictionary, precondition: Dictionary, post
 		return class_err
 	var child: Node = class_err.get("node") as Node
 	child.name = name_s
+	if _sibling_taken(parent, name_s, child):
+		child.free()
+		return _errors.fail(command_id, HHAgentErrors.E_CONFLICT, "sibling name already used", "params.name")
 	var owner: Node = _identity.pick_owner(parent, edited)
 	var uid: String = _identity.mint()
 	_identity.stamp(child, uid)
@@ -178,6 +184,15 @@ func _add(command_id: String, params: Dictionary, precondition: Dictionary, post
 	mgr.commit_action()
 	if child.get_parent() != parent:
 		return _unverified(command_id, "add_child did not attach")
+	if str(child.name) != name_s:
+		if mgr.has_undo():
+			mgr.undo()
+		return _errors.fail(
+			command_id,
+			HHAgentErrors.E_CONFLICT,
+			"add_child renamed sibling; refusing force-readable name",
+			"params.name",
+		)
 	if child.owner != owner:
 		return _unverified(command_id, "owner was not set")
 	if _identity.read_uid(child) != uid:
