@@ -1,6 +1,6 @@
 AUTHORITATIVE_PLAN=1
 STATUS=ACTIVE
-CURRENT_VALID_WP=R7-WP2
+CURRENT_VALID_WP=R7-WP3
 
 ================================================================================
 BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
@@ -15,7 +15,7 @@ BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
 | 4 | R4 — Người xem được agent làm | Activity Dock, chọn node, focus inspector, cursor/gizmo ảo, replay kéo-thả, Watch/Fast mode | Observer UI + Editor UX | G2 VISIBLE | [x] 6/6 WP |
 | 5 | R5 — Bộ công cụ làm game 2D | TileMapLayer, animation, UI, audio, physics, navigation, shader/particles được agent thao tác đầy đủ | 2D-A + 2D-B + Assets | — | [x] 7/7 WP |
 | 6 | R6 — Agent tự chơi và tự kiểm | Play/debug, input, runtime state, deterministic step, screenshot/diff/perf, test evidence | Runtime + Test + Vision | G3 SELF-VERIFY | [x] 7/7 WP |
-| 7 | R7 — Autopilot dài hạn | Nhận brief một lần, tự plan→làm→test→sửa→commit→resume; nhiều agent không đạp nhau | Orchestrator + Git + Recovery | G4 AUTONOMY | [ ] 1/6 WP |
+| 7 | R7 — Autopilot dài hạn | Nhận brief một lần, tự plan→làm→test→sửa→commit→resume; nhiều agent không đạp nhau | Orchestrator + Git + Recovery | G4 AUTONOMY | [ ] 2/6 WP |
 | 8 | R8 — Dogfood game thật | Từ project trống tạo game top-down 2D có art/audio/UI/save, người chỉ xem/review | Game + Art + QA song song theo DAG | G5 DOGFOOD | [ ] 0/6 WP |
 | 9 | R9 — Export và vận hành | Windows build sạch, addon/sidecar đóng gói, update pin, tài liệu review | Release + Docs + Compatibility | G6 RELEASE | [ ] 0/4 WP |
 | 10 | RX — Ngoại lệ engine | Chỉ mở khi public API/GDExtension không giải được một capability bắt buộc | C++ patch riêng | GX FORK | [ ] khóa |
@@ -24,7 +24,7 @@ VIỆC PHẢI LÀM TRƯỚC: R0-WP1 → R0-WP2 → R0-WP3 → R0-WP4 → R1-WP1.
 Không được bắt đầu R2
 trước G1. Từ R2 trở đi chỉ song song các track có ranh giới file rõ ràng.
 
-Tiến độ tổng: [ ] 45/60 WP. First valid WP: R7-WP2.
+Tiến độ tổng: [ ] 46/60 WP. First valid WP: R7-WP3.
 Ngày lập: 20-8-2026 (Asia/Saigon).
 
 ================================================================================
@@ -2013,7 +2013,7 @@ R7-WP1 — Brief compiler và task DAG tự động                            [
         section/bullet heuristics not LLM
       Commit: (this tick)
 
-R7-WP2 — Orchestrator state machine và bounded repair loop              [ ]
+R7-WP2 — Orchestrator state machine và bounded repair loop              [x]
   Phụ thuộc: R7-WP1, R2-WP4, R6-WP6.
   Track/file: A; orchestrator/jobs/state store.
   Làm:
@@ -2023,7 +2023,26 @@ R7-WP2 — Orchestrator state machine và bounded repair loop              [ ]
     - process restart không mất current task, không replay committed command.
   Verify: kill/restart mọi state; dependency fail/cancel; infinite repair fixture bị chặn.
   DoD: một phiên dài tự tiếp tục đúng chỗ, không cần người nhắc “continue”.
-  LOG: (trống)
+  LOG:
+    LOG 2026-08-23 18:50 Asia/Saigon — agent=coordinator
+      Base: c5f7cc3 persist orchestrator jobs and resume after process kill.
+        Godot=4.7.1.stable.official.a13da4feb
+      Files/leases: orchestrator/machine.ts, hh_orchestrator_adapter.gd,
+        test_orchestrator.py, job.run/status/wait/cancel, r7w2 jail
+      Verify: python tests/bootstrap/test_orchestrator.py → PASS
+        LIVE=ran; KILL_RESTART=proven; DEP_FAIL=proven; CANCEL=proven;
+        REPAIR_CAP=proven; RESUME=proven
+      Critic: 07313175 TICK no x3 (wait ignore timeout; execute/verify
+        tautology; broken stamp tautology) then TICK yes on seed.json
+        split; a57ee37f TICK yes after wait/pause/Godot-kill-continue,
+        re-confirmed TICK yes after seed split
+      Gaps: orch.mark is jailed evidence not Play test.run; seed.json is
+        plan-time fixture oracle; KILL_RESTART is 7 Node linger + 1
+        Godot kill at execute; dual TS/GD machines; r7w2 JSON
+        checkpoint not Git (R7-WP3); soak 2h/500 is R7-WP5; job.run
+        leases no files; repair cap then blocked (no critic escalate);
+        brief compile seed empty fail_tasks
+      Commit: (this tick)
 
 R7-WP3 — Git checkpoint, asset LFS và rollback policy                   [ ]
   Phụ thuộc: R7-WP2, R3-WP8.
@@ -2439,7 +2458,7 @@ thuận nếu ảnh hưởng G5/G6.
 14. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Hiện tại R0 (4/4) + R1 (5/5, G1) + R2 (7/7) + R3 (8/8) + R4 (6/6, G2) + R5 (7/7) + R6 (7/7, G3) + R7 (1/6) đã xong qua R7-WP1. Agent tiếp theo làm **R7-WP2**.
+Hiện tại R0 (4/4) + R1 (5/5, G1) + R2 (7/7) + R3 (8/8) + R4 (6/6, G2) + R5 (7/7) + R6 (7/7, G3) + R7 (2/6) đã xong qua R7-WP2. Agent tiếp theo làm **R7-WP3**.
 KHÔNG vendor A/C as-is, KHÔNG M6, KHÔNG fork Godot. Do not claim the agent drives a full game.
 Gate G2 was signed 2026-08-22 with Alternatives (Play/Replay/overlay/placeholder). Do not hide those gaps.
 Gate G3 was signed 2026-08-23 auto (heuristic inspect gauntlet, not LLM repair).
@@ -2447,9 +2466,9 @@ Gate G4 stays [ ]. Do not start R8 / G5 human.
 
 Lệnh hợp lệ:
 
-  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R7-WP2`);
-  2) R7-WP2: orchestrator state machine + bounded repair loop;
-     kill/restart every state; infinite repair fixture blocked;
+  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R7-WP3`);
+  2) R7-WP3: Git checkpoint, asset LFS và rollback policy;
+     dirty user file / untracked asset / conflict / large binary / detached;
   3) mở editor fixture: `hh-godot-editor.bat` (Godot 4.7.1-stable pin, minimal-2d);
   4) không copy hh_stock_poc; không npx -y; không bump 4.7.2; không raw-write
      .tscn; plugin is the only writer. Không paper-ACK play.start.
