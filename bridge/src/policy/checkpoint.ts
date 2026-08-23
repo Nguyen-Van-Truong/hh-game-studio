@@ -4,9 +4,9 @@ import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 
+import { resolveJailedGit, runJailedGit, verifyToplevel } from "../ledger/git_jail.js";
 import { E, typedError } from "../registry/errors.js";
 import { newUlid } from "../registry/ulid.js";
-import { ProcessSupervisor } from "../session/supervisor.js";
 import { jailProjectPath } from "./jail.js";
 
 export interface CheckpointFile {
@@ -56,17 +56,20 @@ function fsyncPath(abs: string): void {
 }
 
 function gitCleanHead(projectRoot: string): { head: string; clean: boolean } {
-  const supervisor = new ProcessSupervisor();
-  const status = supervisor.runSync("git", ["-C", projectRoot, "status", "--porcelain"]);
+  const scoped = resolveJailedGit(projectRoot);
+  if (!scoped.ok || !verifyToplevel(scoped.git)) {
+    return { head: "", clean: false };
+  }
+  const status = runJailedGit(scoped.git, ["status", "--porcelain"]);
   if (status.status !== 0) {
     return { head: "", clean: false };
   }
   const dirty = status.stdout
     .split(/\r?\n/)
     .map((line) => line.trim())
-    .filter((line) => line && !line.includes(".hh-agent"));
+    .filter((line) => line && !line.includes(".hh-agent") && !line.includes("r7w3/"));
   const clean = dirty.length === 0;
-  const head = supervisor.runSync("git", ["-C", projectRoot, "rev-parse", "HEAD"]);
+  const head = runJailedGit(scoped.git, ["rev-parse", "HEAD"]);
   if (head.status !== 0) {
     return { head: "", clean: false };
   }
@@ -77,9 +80,12 @@ function tryGitRef(projectRoot: string, checkpointId: string, head: string): str
   if (!head) {
     return "";
   }
+  const scoped = resolveJailedGit(projectRoot);
+  if (!scoped.ok || !verifyToplevel(scoped.git)) {
+    return "";
+  }
   const ref = `refs/hh-ckpt/${checkpointId}`;
-  const supervisor = new ProcessSupervisor();
-  const updated = supervisor.runSync("git", ["-C", projectRoot, "update-ref", ref, head]);
+  const updated = runJailedGit(scoped.git, ["update-ref", ref, head]);
   return updated.status === 0 ? ref : "";
 }
 

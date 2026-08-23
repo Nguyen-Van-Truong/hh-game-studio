@@ -145,7 +145,13 @@ export class LeaseTable {
     return lock;
   }
 
-  acquireFile(writerId: string, rel: string, abs: string, ttlMs = DEFAULT_LEASE_TTL_MS): FileLease {
+  acquireFile(
+    writerId: string,
+    rel: string,
+    abs: string,
+    ttlMs = DEFAULT_LEASE_TTL_MS,
+    opts: { allowHashRefresh?: boolean } = {},
+  ): FileLease {
     this.acquireWriter(writerId, ttlMs);
     const files = this.readFiles();
     const now = nowMs();
@@ -154,7 +160,7 @@ export class LeaseTable {
     if (held && held.expires_at > now && held.writer_id !== writerId) {
       throw typedError(E.E_LEASE, "file/scene lease held by another writer", rel);
     }
-    if (held && held.expires_at > now && held.hash !== current) {
+    if (held && held.expires_at > now && held.hash !== current && opts.allowHashRefresh !== true) {
       throw typedError(E.E_CONFLICT, "human-edit drift on leased file", rel);
     }
     const lease: FileLease = { writer_id: writerId, hash: current, expires_at: now + ttlMs, rel };

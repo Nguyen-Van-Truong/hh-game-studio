@@ -4,6 +4,7 @@ import { E, typedError } from "../registry/errors.js";
 import type { Policy, SideEffect } from "../registry/types.js";
 import { ApprovalBinder, projectRevision } from "./approve.js";
 import { createRecoveryCheckpoint, type CheckpointOk } from "./checkpoint.js";
+import { peekGitCkptFilePaths } from "./git_ckpt_paths.js";
 import { extractTargetPaths, jailProjectPath, type JailOk } from "./jail.js";
 import { LeaseTable } from "./leases.js";
 import { PauseGate } from "./pause.js";
@@ -47,7 +48,8 @@ export type GateResult = GateDenied | GateAllowed;
 export function runMutationGate(input: GateInput): GateResult {
   const services = input.services;
   const orchControl = input.actionId === "job.run" || input.actionId === "job.cancel" || input.actionId === "job.wait";
-  if (services && !orchControl && !services.pause.allowsSideEffect(input.sideEffect)) {
+  const pauseControl = input.actionId === "editor.pause";
+  if (services && !orchControl && !pauseControl && !services.pause.allowsSideEffect(input.sideEffect)) {
     return {
       ok: false,
       error: typedError(E.E_PAUSED, "mutation gate is paused", "pause"),
@@ -70,7 +72,11 @@ export function runMutationGate(input: GateInput): GateResult {
       error: typedError(E.E_PATH, "project root required for mutation gates", "project"),
     };
   }
-  const targets = extractTargetPaths(input.params, input.actionId);
+  let targets = extractTargetPaths(input.params, input.actionId);
+  if (input.actionId === "git.revert_checkpoint" && targets.length === 0 && services) {
+    const ref = typeof input.params.ref === "string" ? input.params.ref : "";
+    targets = peekGitCkptFilePaths(services.projectRoot, ref);
+  }
   const jailed: JailOk[] = [];
   for (const target of targets) {
     const result = jailProjectPath(services.projectRoot, target, {
@@ -84,11 +90,16 @@ export function runMutationGate(input: GateInput): GateResult {
   }
   try {
     services.leases.acquireWriter(services.writerId);
+    const gitSlice = input.actionId === "git.checkpoint" || input.actionId === "git.revert_checkpoint";
     for (const item of jailed) {
-      services.leases.acquireFile(services.writerId, item.rel, item.abs);
+      services.leases.acquireFile(services.writerId, item.rel, item.abs, undefined, {
+        allowHashRefresh: gitSlice,
+      });
     }
-    for (const item of jailed) {
-      services.leases.assertUnchanged(item.rel, item.abs);
+    if (!gitSlice) {
+      for (const item of jailed) {
+        services.leases.assertUnchanged(item.rel, item.abs);
+      }
     }
   } catch (err) {
     if (err && typeof err === "object" && "code" in err && typeof err.code === "string") {

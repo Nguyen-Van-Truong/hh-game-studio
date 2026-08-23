@@ -2491,13 +2491,24 @@ const SPECS: Record<string, ActionSpec> = {
   "git.status": read(
     "Read project-scoped git status",
     "git_status_parsed",
-    obj(["detail"], { detail: DETAIL }),
+    obj(["detail"], {
+      detail: DETAIL,
+      repo: REVIEW_REL,
+      run_id: JOB_ID,
+      project: IDENT,
+      allowlist: {
+        type: "array",
+        minItems: 1,
+        maxItems: 64,
+        items: RES_PATH,
+      },
+    }),
     { detail: "short" },
   ),
   "git.diff": read(
     "Read a project-scoped git diff",
     "git_diff_text",
-    obj(["path"], { path: RES_PATH }),
+    obj(["path"], { path: RES_PATH, repo: REVIEW_REL }),
     { path: "res://scenes/world.tscn" },
   ),
   "git.checkpoint": mutate(
@@ -2512,14 +2523,40 @@ const SPECS: Record<string, ActionSpec> = {
         maxItems: 64,
         items: RES_PATH,
       },
+      allowlist: {
+        type: "array",
+        minItems: 1,
+        maxItems: 64,
+        items: RES_PATH,
+      },
+      repo: REVIEW_REL,
+      run_id: JOB_ID,
+      project: IDENT,
+      resume: BOOL,
     }),
     { message: "before destructive node.remove", paths: ["res://scenes/world.tscn"] },
+    { extra_errors: [E.E_CONFLICT, E.E_PATH, E.E_POLICY, E.E_CHECKPOINT, E.E_PAUSED, E.E_LEASE] },
   ),
   "git.revert_checkpoint": dest(
     "Revert the project to a checkpoint",
     "tree_matches_checkpoint",
-    obj(["ref"], { ref: { type: "string", minLength: 7, maxLength: 64, pattern: "^[A-Za-z0-9_./-]+$" } }),
+    obj(["ref"], {
+      ref: { type: "string", minLength: 7, maxLength: 64, pattern: "^[A-Za-z0-9_./-]+$" },
+      paths: {
+        type: "array",
+        minItems: 1,
+        maxItems: 64,
+        items: RES_PATH,
+      },
+      allowlist: {
+        type: "array",
+        minItems: 1,
+        maxItems: 64,
+        items: RES_PATH,
+      },
+    }),
     { ref: "hh-ckpt/abc1234" },
+    { extra_errors: [E.E_CONFLICT, E.E_PATH, E.E_POLICY, E.E_CHECKPOINT] },
   ),
 
   "job.status": read(

@@ -4,7 +4,7 @@ import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 
-import { ProcessSupervisor } from "../session/supervisor.js";
+import { resolveJailedGit, runJailedGit, verifyToplevel } from "../ledger/git_jail.js";
 
 export function approvalToken(actorId: string, requestHash: string, revision: string): string {
   return createHash("sha256").update(`${actorId}\0${requestHash}\0${revision}`, "utf8").digest("hex");
@@ -14,8 +14,11 @@ export function projectRevision(projectRoot: string): string {
   if (!projectRoot) {
     return "none";
   }
-  const supervisor = new ProcessSupervisor();
-  const head = supervisor.runSync("git", ["-C", projectRoot, "rev-parse", "HEAD"]);
+  const scoped = resolveJailedGit(projectRoot);
+  if (!scoped.ok || !verifyToplevel(scoped.git)) {
+    return "none";
+  }
+  const head = runJailedGit(scoped.git, ["rev-parse", "HEAD"]);
   const rev = head.stdout.trim();
   return head.status === 0 && rev ? rev : "none";
 }

@@ -261,8 +261,14 @@ export function extractTargetPaths(params: Record<string, unknown>, actionId?: s
   if (actionId && PROJECT_FILE_ACTIONS.has(actionId)) {
     return ["res://project.godot"];
   }
-  if (actionId === "git.checkpoint" && Array.isArray(params.paths)) {
-    return params.paths.filter((item): item is string => typeof item === "string" && item.length > 0);
+  if (actionId === "git.checkpoint" || actionId === "git.revert_checkpoint") {
+    const paths = Array.isArray(params.paths)
+      ? params.paths.filter((item): item is string => typeof item === "string" && item.length > 0)
+      : [];
+    const extra = Array.isArray(params.allowlist)
+      ? params.allowlist.filter((item): item is string => typeof item === "string" && item.length > 0)
+      : [];
+    return [...paths, ...extra.filter((item) => !paths.includes(item))];
   }
   if (actionId === "job.transaction" && Array.isArray(params.steps)) {
     const nested: string[] = [];

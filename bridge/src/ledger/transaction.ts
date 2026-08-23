@@ -3,6 +3,8 @@
 import { createRecoveryCheckpoint, resolveCheckpointRef, restoreCheckpoint, type CheckpointOk } from "../policy/checkpoint.js";
 import { E, typedError } from "../registry/errors.js";
 import type { PluginCommandResult } from "../transport/plugin_rpc.js";
+import { applyGitSliceCheckpoint, applyGitSliceRevert, resolveGitManifest } from "./git_adapter.js";
+import { findJailedGitFromPaths, verifyToplevel } from "./git_jail.js";
 
 export interface RecoveryReport {
   restored: boolean;
@@ -46,7 +48,22 @@ export function applyGitCheckpoint(opts: {
   projectRoot: string;
   message: string;
   paths: readonly string[];
+  allowlist?: readonly string[];
+  repo?: string;
+  runId?: string;
+  project?: string;
+  resume?: boolean;
+  pause?: { pause: () => { paused: boolean; state?: string; ack_ms?: number } };
 }): PluginCommandResult {
+  const probePaths = (opts.allowlist && opts.allowlist.length > 0 ? opts.allowlist : opts.paths) ?? [];
+  const scoped = findJailedGitFromPaths(opts.projectRoot, probePaths, opts.repo);
+  const fromRun = opts.runId ? resolveGitManifest(opts.projectRoot, opts.runId) : undefined;
+  const canGit =
+    (scoped.ok && verifyToplevel(scoped.git)) ||
+    (fromRun !== undefined && findJailedGitFromPaths(opts.projectRoot, [], fromRun.manifest.repo_rel).ok);
+  if (canGit || opts.resume === true) {
+    return applyGitSliceCheckpoint(opts);
+  }
   const created = createRecoveryCheckpoint({
     projectRoot: opts.projectRoot,
     commandId: opts.commandId,
@@ -70,10 +87,13 @@ export function applyGitCheckpoint(opts: {
     after: {
       ...checkpointEvidence(created),
       message: opts.message,
-      git_ref: created.manifest.git_ref,
-      git_head: created.manifest.git_head,
+      git_ref: "",
+      git_head: "",
+      git_commit: "",
+      git_real: false,
+      branch: "",
       files: created.manifest.files,
-      source: "sidecar",
+      source: "sidecar-cow",
     },
     postcondition: { verified: true, checks: ["checkpoint_ref_present"] },
   };
@@ -83,7 +103,11 @@ export function applyGitRevert(opts: {
   commandId: string;
   projectRoot: string;
   ref: string;
+  pause?: { pause: () => { paused: boolean; state?: string; ack_ms?: number } };
 }): PluginCommandResult {
+  if (resolveGitManifest(opts.projectRoot, opts.ref)) {
+    return applyGitSliceRevert(opts);
+  }
   const manifestPath = resolveCheckpointRef(opts.projectRoot, opts.ref);
   if (!manifestPath) {
     return {

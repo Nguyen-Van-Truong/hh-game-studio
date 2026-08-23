@@ -4,6 +4,7 @@ import path from "node:path";
 
 import { runDoctor } from "../doctor/doctor.js";
 import { PINNED_VERSION_ID, pinnedConsolePath, versionIsRefused } from "../doctor/pin.js";
+import { readGitDiff, readGitStatus } from "../ledger/git_adapter.js";
 import { jailProjectPath, stripResScheme } from "../policy/jail.js";
 import type { PauseGate } from "../policy/pause.js";
 import { E, typedError } from "../registry/errors.js";
@@ -81,13 +82,11 @@ function parseProjectGodot(projectRoot: string): Record<string, unknown> {
   };
 }
 
-function git(projectRoot: string, args: string[]): { ok: boolean; text: string } {
-  const proc = spawnSync("git", ["-C", projectRoot, ...args], {
-    encoding: "utf8",
-    timeout: 15_000,
-    windowsHide: true,
-  });
-  return { ok: proc.status === 0, text: `${proc.stdout ?? ""}${proc.stderr ?? ""}` };
+function stringList(value: unknown): string[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+  return value.filter((item): item is string => typeof item === "string" && item.length > 0);
 }
 
 function describeAction(actionId: string): Record<string, unknown> | undefined {
@@ -171,11 +170,17 @@ export function trySidecarRead(input: SidecarReadInput): PluginCommandResult | u
     return ok(commandId, "project_inspect_matches_project_godot", after);
   }
   if (actionId === "git.status") {
-    const status = git(projectRoot, ["status", "--porcelain=v1", "-b"]);
-    if (!status.ok) {
-      return fail(commandId, E.E_UNVERIFIED, status.text || "git status failed", "git");
-    }
-    return ok(commandId, "git_status_parsed", { text: status.text, source: "git" });
+    const status = readGitStatus({
+      projectRoot,
+      ...(typeof params.repo === "string" ? { repo: params.repo } : {}),
+      ...(typeof params.run_id === "string" ? { runId: params.run_id } : {}),
+      ...(stringList(params.allowlist).length > 0 ? { allowlist: stringList(params.allowlist) } : {}),
+    });
+    return ok(commandId, "git_status_parsed", {
+      ...status,
+      detail: typeof params.detail === "string" ? params.detail : "short",
+      text: status.parent_walk_refused ? "" : `${status.branch} ${status.head}`.trim(),
+    });
   }
   if (actionId === "git.diff") {
     const raw = typeof params.path === "string" ? params.path : "";
@@ -183,12 +188,15 @@ export function trySidecarRead(input: SidecarReadInput): PluginCommandResult | u
     if (!jailed.ok) {
       return fail(commandId, jailed.error.code, jailed.error.message, jailed.error.path);
     }
-    const rel = jailed.rel;
-    const diff = git(projectRoot, ["diff", "--", rel]);
+    const diff = readGitDiff({
+      projectRoot,
+      path: raw,
+      ...(typeof params.repo === "string" ? { repo: params.repo } : {}),
+    });
     if (!diff.ok) {
-      return fail(commandId, E.E_UNVERIFIED, diff.text || "git diff failed", "git");
+      return fail(commandId, diff.error.code, diff.error.message, diff.error.path);
     }
-    return ok(commandId, "git_diff_text", { path: raw, text: diff.text, source: "git" });
+    return ok(commandId, "git_diff_text", { path: raw, text: diff.text, source: diff.source });
   }
   if (actionId === "job.list") {
     const limit = typeof params.limit === "number" ? params.limit : 20;

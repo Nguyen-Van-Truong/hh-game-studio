@@ -323,7 +323,8 @@ function classify(raw: Record<string, unknown>, commandId: string): Classified {
     isInputApply(accepted.action_id) ||
     isRuntimeApply(accepted.action_id) ||
     isTestApply(accepted.action_id) ||
-    isOrchestratorApply(accepted.action_id)
+    isOrchestratorApply(accepted.action_id) ||
+    accepted.action_id === "editor.pause"
   ) {
     return {
       kind: "mutate",
@@ -2046,7 +2047,8 @@ async function applyMutateOnce(
     !isInputApply(classified.actionId) &&
     !isRuntimeApply(classified.actionId) &&
     !isTestApply(classified.actionId) &&
-    !isOrchestratorApply(classified.actionId)
+    !isOrchestratorApply(classified.actionId) &&
+    !(classified.actionId === "editor.pause" && !runtime.pluginConnected())
   ) {
     return markUncertain(ledger, row, "only proven editor apply verbs may apply");
   }
@@ -2076,6 +2078,17 @@ async function applyMutateOnce(
       return result;
     }
     const projectRoot = runtime.projectRoot ?? runtime.policy?.projectRoot ?? "";
+    if (classified.actionId === "editor.pause" && !runtime.pluginConnected()) {
+      return finishSidecarMutate(
+        ledger,
+        row,
+        classified.actionId,
+        fields.params,
+        projectRoot,
+        gated,
+        runtime.policy,
+      );
+    }
     if (isSidecarMutateApply(classified.actionId)) {
       return finishSidecarMutate(
         ledger,
@@ -2519,25 +2532,55 @@ function finishSidecarMutate(
   row.updated_at = nowIso();
   ledger.save(row);
   let result: PluginCommandResult;
-  if (actionId === "git.checkpoint") {
+  if (actionId === "editor.pause") {
+    const op = params.op === "resume" ? "resume" : "pause";
+    if (!policy?.pause) {
+      result = unverifiedResult(row.command_id, "pause gate missing");
+    } else {
+      const ack = op === "resume" ? policy.pause.resume() : policy.pause.pause();
+      result = {
+        type: "result",
+        ok: true,
+        command_id: row.command_id,
+        changed: true,
+        after: { ...ack, op, source: "sidecar" },
+        postcondition: { verified: true, checks: ["pause_gate_ack"] },
+      };
+    }
+  } else if (actionId === "git.checkpoint") {
     const paths = extractTargetPaths(params, actionId);
+    const allowlist = Array.isArray(params.allowlist)
+      ? params.allowlist.filter((item): item is string => typeof item === "string" && item.length > 0)
+      : undefined;
     result = applyGitCheckpoint({
       commandId: row.command_id,
       projectRoot,
       message: typeof params.message === "string" ? params.message : "",
       paths,
+      ...(allowlist && allowlist.length > 0 ? { allowlist } : {}),
+      ...(typeof params.repo === "string" ? { repo: params.repo } : {}),
+      ...(typeof params.run_id === "string" ? { runId: params.run_id } : {}),
+      ...(typeof params.project === "string" ? { project: params.project } : {}),
+      ...(params.resume === true ? { resume: true } : {}),
+      ...(policy?.pause ? { pause: policy.pause } : {}),
     });
   } else if (actionId === "git.revert_checkpoint") {
     result = applyGitRevert({
       commandId: row.command_id,
       projectRoot,
       ref: typeof params.ref === "string" ? params.ref : "",
+      ...(policy?.pause ? { pause: policy.pause } : {}),
     });
   } else {
     result = unverifiedResult(row.command_id, "sidecar mutate not implemented");
   }
   if (gated.checkpoint) {
-    mergeAfter(result, checkpointEvidence(gated.checkpoint));
+    const gitReal = isRecord(result.after) && result.after.git_real === true;
+    if (gitReal) {
+      mergeAfter(result, { dest_preimage: checkpointEvidence(gated.checkpoint) });
+    } else {
+      mergeAfter(result, checkpointEvidence(gated.checkpoint));
+    }
     row.evidence_json = JSON.stringify([gated.checkpoint.manifest_path]);
     ledger.addCheckpoint(
       gated.checkpoint.checkpoint_id,
