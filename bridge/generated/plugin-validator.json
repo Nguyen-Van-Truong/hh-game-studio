@@ -3,7 +3,7 @@
   "protocol": "hh-godot-agent/1",
   "registry_version": "hh-godot-actions/1",
   "variant_schema": "hh-godot-variant/1",
-  "action_count": 158,
+  "action_count": 159,
   "envelope": {
     "allowed": [
       "protocol",
@@ -18856,6 +18856,140 @@
         "E_PAUSED"
       ],
       "postcondition": "baseline_hash_saved"
+    },
+    "test.repair": {
+      "method": "godot.test",
+      "verb": "repair",
+      "action_version": "1",
+      "side_effect": "external",
+      "undo": "job_supervisor",
+      "timeout_ms": 300000,
+      "cancellable": true,
+      "required_policy": "OWNER_AUTOPILOT",
+      "checkpoint_required": false,
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "report_json": {
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 32000
+          },
+          "max_loops": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 3
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ok",
+          "command_id",
+          "postcondition"
+        ],
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "changed": {
+            "type": "boolean"
+          },
+          "before": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "after": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "postcondition": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "verified",
+              "checks"
+            ],
+            "properties": {
+              "verified": {
+                "type": "boolean"
+              },
+              "checks": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "undo_action": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "error": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "error_codes": [
+        "E_MISSING_REQUIRED",
+        "E_UNKNOWN_PARAM",
+        "E_INVALID_TYPE",
+        "E_OUT_OF_BOUNDS",
+        "E_UNKNOWN_ACTION",
+        "E_PROTOCOL_VERSION",
+        "E_ACTION_VERSION",
+        "E_CLIENT_ESCALATION",
+        "E_INVALID_COMMAND_ID",
+        "E_INVALID_ENVELOPE",
+        "E_UNVERIFIED",
+        "E_TIMEOUT",
+        "E_BUSY",
+        "E_CONFLICT",
+        "E_PATH",
+        "E_POLICY"
+      ],
+      "postcondition": "repair_loop_recorded"
     },
     "export.preset": {
       "method": "godot.export",

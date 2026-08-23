@@ -224,7 +224,7 @@ function ext(
   input: JsonSchema,
   example: Record<string, unknown>,
   undo: UndoStrategy = "job_supervisor",
-  extra?: { extra_errors?: readonly string[] },
+  extra?: { extra_errors?: readonly string[]; timeout_ms?: number },
 ): ActionSpec {
   const spec: ActionSpec = {
     summary,
@@ -237,6 +237,9 @@ function ext(
   };
   if (extra?.extra_errors) {
     spec.extra_errors = extra.extra_errors;
+  }
+  if (extra?.timeout_ms !== undefined) {
+    spec.timeout_ms = extra.timeout_ms;
   }
   return spec;
 }
@@ -2435,6 +2438,18 @@ const SPECS: Record<string, ActionSpec> = {
     }),
     { name: "pickup_key", hash: "deadbeefcafebabe" },
     { extra_errors: [E.E_PATH, E.E_PAUSED] },
+  ),
+  "test.repair": ext(
+    "Inspect a failing test symptom, patch the product, retest, and checkpoint (max 3 loops)",
+    "repair_loop_recorded",
+    obj(["name"], {
+      name: IDENT,
+      report_json: { type: "string", minLength: 0, maxLength: 32000 },
+      max_loops: { type: "integer", minimum: 1, maximum: 3 },
+    }),
+    { name: "pickup_key" },
+    "job_supervisor",
+    { extra_errors: [E.E_TIMEOUT, E.E_BUSY, E.E_CONFLICT, E.E_PATH, E.E_POLICY], timeout_ms: 300_000 },
   ),
 
   "export.preset": mutate(

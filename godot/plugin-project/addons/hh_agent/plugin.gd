@@ -22,6 +22,7 @@ const _PlayDbgScript: GDScript = preload("res://addons/hh_agent/core/hh_play_deb
 const _RuntimeScript: GDScript = preload("res://addons/hh_agent/core/hh_runtime_adapter.gd")
 const _RuntimeDbgScript: GDScript = preload("res://addons/hh_agent/core/hh_runtime_debugger.gd")
 const _TestScript: GDScript = preload("res://addons/hh_agent/core/hh_test_adapter.gd")
+const _RepairScript: GDScript = preload("res://addons/hh_agent/core/hh_repair_adapter.gd")
 const _ExportScript: GDScript = preload("res://addons/hh_agent/core/hh_export_plugin.gd")
 
 ## hh_agent EditorPlugin: main-thread router + activity/review docks + outbound sidecar client.
@@ -58,6 +59,8 @@ var _export_plugin: EditorExportPlugin
 var _runtime_wait: Dictionary = {}
 var _test: HHAgentTestAdapter
 var _test_wait: Dictionary = {}
+var _repair: HHAgentRepairAdapter
+var _repair_wait: Dictionary = {}
 var _project_text_before_runtime: String = ""
 var _runtime_autoload_on: bool = false
 
@@ -95,6 +98,8 @@ func _enter_tree() -> void:
 	_runtime.attach()
 	_test = HHAgentTestAdapter.new()
 	_test.attach()
+	_repair = HHAgentRepairAdapter.new()
+	_repair.attach()
 	_play_debugger = HHAgentPlayDebugger.new()
 	add_debugger_plugin(_play_debugger)
 	_runtime_debugger = HHAgentRuntimeDebugger.new()
@@ -148,6 +153,8 @@ func _process(_delta: float) -> void:
 		_poll_runtime_wait()
 	if not _test_wait.is_empty():
 		_poll_test_wait()
+	if not _repair_wait.is_empty():
+		_poll_repair_wait()
 	var inbound_this_frame: bool = false
 	if not _busy:
 		var n: int = 0
@@ -160,7 +167,12 @@ func _process(_delta: float) -> void:
 			inbound_this_frame = true
 			_busy = true
 			_handle_item(item)
-			if not _play_wait.is_empty() or not _runtime_wait.is_empty() or not _test_wait.is_empty():
+			if (
+				not _play_wait.is_empty()
+				or not _runtime_wait.is_empty()
+				or not _test_wait.is_empty()
+				or not _repair_wait.is_empty()
+			):
 				break
 			_busy = false
 			n += 1
@@ -302,6 +314,9 @@ func _handle_item(item: Dictionary) -> void:
 	if result.get("_hh_test_pending", false) == true:
 		_test_wait = {"item": item, "command_id": str(result.get("command_id", ""))}
 		return
+	if result.get("_hh_repair_pending", false) == true:
+		_repair_wait = {"item": item, "command_id": str(result.get("command_id", ""))}
+		return
 	_finish_item(item, result)
 
 
@@ -369,6 +384,31 @@ func _finish_test_wait(result: Dictionary) -> void:
 	var item_v: Variant = _test_wait.get("item", {})
 	var item: Dictionary = item_v if item_v is Dictionary else {}
 	_test_wait = {}
+	_busy = false
+	_finish_item(item, result)
+
+
+func _poll_repair_wait() -> void:
+	if _repair == null:
+		_finish_repair_wait(
+			_errors.fail(
+				str(_repair_wait.get("command_id", "")),
+				HHAgentErrors.E_UNVERIFIED,
+				"repair adapter gone",
+				"repair",
+			)
+		)
+		return
+	var result: Dictionary = _repair.poll_pending()
+	if result.is_empty() or result.get("_hh_repair_pending", false) == true:
+		return
+	_finish_repair_wait(result)
+
+
+func _finish_repair_wait(result: Dictionary) -> void:
+	var item_v: Variant = _repair_wait.get("item", {})
+	var item: Dictionary = item_v if item_v is Dictionary else {}
+	_repair_wait = {}
 	_busy = false
 	_finish_item(item, result)
 
@@ -860,6 +900,10 @@ func _cleanup() -> void:
 		_test.shutdown()
 		_test = null
 	_test_wait = {}
+	if _repair != null:
+		_repair.shutdown()
+		_repair = null
+	_repair_wait = {}
 	if _play_debugger != null:
 		remove_debugger_plugin(_play_debugger)
 		_play_debugger = null

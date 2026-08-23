@@ -5,7 +5,7 @@
   "registry_version": "hh-godot-actions/1",
   "action_version": "1",
   "tool_count": 27,
-  "action_count": 158,
+  "action_count": 159,
   "tools": [
     {
       "name": "godot.capabilities",
@@ -795,7 +795,8 @@
               "assert",
               "report",
               "evidence",
-              "baseline"
+              "baseline",
+              "repair"
             ]
           },
           "params": {

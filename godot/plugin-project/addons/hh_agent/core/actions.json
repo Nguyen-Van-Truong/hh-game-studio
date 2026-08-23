@@ -1561,6 +1561,17 @@
       "postcondition": "baseline_hash_saved",
       "checkpoint_required": false
     },
+    "test.repair": {
+      "method": "godot.test",
+      "verb": "repair",
+      "side_effect": "external",
+      "timeout_ms": 300000,
+      "required": [
+        "name"
+      ],
+      "postcondition": "repair_loop_recorded",
+      "checkpoint_required": false
+    },
     "export.preset": {
       "method": "godot.export",
       "verb": "preset",

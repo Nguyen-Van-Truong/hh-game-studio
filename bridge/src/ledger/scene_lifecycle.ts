@@ -116,7 +116,13 @@ export const RUNTIME_APPLY = [
 ] as const;
 
 /** EXTERNAL/mutate test runner. Not UndoRedo / isProvenEditorApply. */
-export const TEST_APPLY = ["test.define", "test.run", "test.assert", "test.baseline"] as const;
+export const TEST_APPLY = [
+  "test.define",
+  "test.run",
+  "test.assert",
+  "test.baseline",
+  "test.repair",
+] as const;
 
 export const TRANSACTION_APPLY = ["job.transaction"] as const;
 

@@ -950,6 +950,8 @@ func _load_manifest(name_s: String) -> Dictionary:
 	var candidates: PackedStringArray = PackedStringArray()
 	candidates.append("res://%s/%s.hh-test.json" % [HHAgentConstants.TEST_FIXTURE_DIR, name_s])
 	candidates.append("res://%s/manifests/%s.hh-test.json" % [HHAgentConstants.TEST_DIR, name_s])
+	candidates.append("res://%s/%s.hh-test.json" % [HHAgentConstants.REPAIR_FIXTURE_DIR, name_s])
+	candidates.append("res://%s/%s/%s.hh-test.json" % [HHAgentConstants.REPAIR_FIXTURE_DIR, name_s, name_s])
 	candidates.append("res://.hh-test.json")
 	var i: int = 0
 	while i < candidates.size():
@@ -1206,12 +1208,16 @@ func _jail(command_id: String, res_path: String) -> Dictionary:
 		or rest == "r6w6"
 		or rest.begins_with(".hh-agent/r6w6/")
 		or rest == ".hh-agent/r6w6"
+		or rest.begins_with("r6w7/")
+		or rest == "r6w7"
+		or rest.begins_with(".hh-agent/r6w7/")
+		or rest == ".hh-agent/r6w7"
 	)
 	if not allowed:
 		return _errors.fail(
 			command_id,
 			HHAgentErrors.E_PATH,
-			"test artifacts must stay under r6w6/ or .hh-agent/r6w6/",
+			"test artifacts must stay under r6w6/ or r6w7/ or .hh-agent/r6w6|r6w7/",
 			p,
 		)
 	var abs_path: String = ProjectSettings.globalize_path(p)
@@ -1232,6 +1238,7 @@ func _jail_shot(command_id: String, res_path: String) -> Dictionary:
 		rest.begins_with(".hh-agent/")
 		or rest.begins_with("r6w5/")
 		or rest.begins_with("r6w6/")
+		or rest.begins_with("r6w7/")
 	):
 		return _errors.fail(command_id, HHAgentErrors.E_PATH, "screenshot is outside project artifacts", p)
 	return {"ok": true, "res": p, "abs": ProjectSettings.globalize_path(p)}

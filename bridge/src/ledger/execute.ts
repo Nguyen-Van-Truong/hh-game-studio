@@ -1307,6 +1307,8 @@ function testPathOk(path: string): boolean {
   return (
     p.includes("r6w6/") ||
     p.includes(".hh-agent/r6w6") ||
+    p.includes("r6w7/") ||
+    p.includes(".hh-agent/r6w7") ||
     p.endsWith(".hh-test.json") ||
     p.includes("/.hh-test.json")
   );
@@ -1362,6 +1364,38 @@ function testApplyOk(
     }
     if (after.source !== "hh_agent_runtime") {
       return errorResult(result.command_id, E.E_UNVERIFIED, "test.assert must come from Play hh_agent_runtime");
+    }
+    return undefined;
+  }
+  if (actionId === "test.repair") {
+    const root = typeof after.root_cause === "string" ? after.root_cause : "";
+    const artifact = typeof after.artifact_uri === "string" ? after.artifact_uri : "";
+    if (root.length < 4) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "test.repair requires a root_cause string");
+    }
+    if (!testPathOk(artifact)) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "test.repair artifact must stay under r6w7");
+    }
+    if (after.edited_test === true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "test.repair must not edit the official test");
+    }
+    if (after.false_pass === true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "test.repair refused a false pass");
+    }
+    if (result.ok) {
+      if (after.retest_status !== "pass" || after.status === "fail") {
+        return errorResult(
+          result.command_id,
+          E.E_UNVERIFIED,
+          "test.repair ACK requires retest_status=pass",
+        );
+      }
+    } else if (after.status === "pass" || after.retest_status === "pass") {
+      return errorResult(
+        result.command_id,
+        E.E_UNVERIFIED,
+        "test.repair must not stamp pass on a failed ACK",
+      );
     }
     return undefined;
   }
