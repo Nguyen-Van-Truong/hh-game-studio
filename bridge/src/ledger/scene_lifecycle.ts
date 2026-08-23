@@ -108,7 +108,12 @@ export const INPUT_APPLY = [
 ] as const;
 
 /** EXTERNAL Play-process freeze/step. Not UndoRedo / isProvenEditorApply. */
-export const RUNTIME_APPLY = ["runtime.freeze", "runtime.step"] as const;
+export const RUNTIME_APPLY = [
+  "runtime.freeze",
+  "runtime.step",
+  "runtime.screenshot",
+  "runtime.perf",
+] as const;
 
 export const TRANSACTION_APPLY = ["job.transaction"] as const;
 

@@ -12,7 +12,8 @@ Verify (encoded here; this file is the official harness):
   - secret property redaction
   - release scan negative (skip() + project.godot no HHAgentRuntime)
   - debug-only autoload, never persist after play.stop / suite
-  - screenshots=SKIP; screenshot/perf stay E_UNVERIFIED; freeze/step proven by later WP when requested
+  - screenshots=SKIP for this WP2 harness; screenshot/perf may ACK when Play is proven;
+    idle/no-Play stay E_UNVERIFIED; freeze/step honesty is unchanged
 
 If headless --editor never flips is_playing_scene or never delivers hh_runtime
 replies: label Alternative, do not invent remote_tree=true. Try exclusive GUI
@@ -319,8 +320,8 @@ def src_scan_errors() -> list[str]:
             errors.append("runtime adapter must require product source hh_agent_runtime")
 
     reads = (ADDON / "core" / "hh_read_adapters.gd").read_text(encoding="utf-8")
-    if "runtime screenshot/perf is a later WP" not in reads:
-        errors.append("screenshot/perf must stay E_UNVERIFIED")
+    if "runtime screenshot/perf must use Play capture apply" not in reads:
+        errors.append("screenshot/perf must use Play apply (idle/no-Play stays E_UNVERIFIED)")
     if "_runtime_read" not in reads:
         errors.append("read adapters must dispatch runtime.tree/node/state")
 
@@ -620,6 +621,15 @@ def wait_runtime_tree(
 def verify_runtime_suite(proc, req_id: int, errors: list[str], scene: str) -> tuple[int, bool]:
     req_id, idle = runtime_tree(proc, req_id)
     expect_not_remote(idle, errors, "runtime.tree before Play")
+    for method, action, params, label in (
+        ("godot.runtime", "screenshot", {"scale": 1}, "runtime.screenshot"),
+        ("godot.runtime", "perf", {"detail": "short"}, "runtime.perf"),
+    ):
+        req_id, idle_cap = tool_call(proc, req_id, method, action, params)
+        if idle_cap.get("ok") is True:
+            errors.append(f"{label} must stay E_UNVERIFIED when Play is not running")
+        if str((idle_cap.get("error") or {}).get("code") or "") != "E_UNVERIFIED":
+            errors.append(f"idle/no-Play {label} must be E_UNVERIFIED: {idle_cap}")
 
     req_id = editor_scene_is_small(proc, req_id, scene, errors)
 
@@ -738,9 +748,11 @@ def verify_runtime_suite(proc, req_id: int, errors: list[str], scene: str) -> tu
     ):
         req_id, later = tool_call(proc, req_id, method, action, params)
         if later.get("ok") is True:
-            errors.append(f"{label} must stay E_UNVERIFIED (do not ACK)")
-        if str((later.get("error") or {}).get("code") or "") != "E_UNVERIFIED":
-            errors.append(f"{label} must stay E_UNVERIFIED: {later}")
+            after_later = after_of(later)
+            if after_later.get("is_playing_scene") is not True or after_later.get("source") != "hh_agent_runtime":
+                errors.append(f"{label} ACK requires proven Play: {later}")
+        elif str((later.get("error") or {}).get("code") or "") not in ("E_UNVERIFIED", "E_TIMEOUT", "E_BUSY"):
+            errors.append(f"{label} may ACK when Play is proven; idle stays E_UNVERIFIED: {later}")
 
     req_id, _stopped = play_stop(proc, req_id, run_id=run_id)
     time.sleep(0.4)

@@ -252,6 +252,9 @@ const PROJECT_FILE_ACTIONS = new Set([
 ]);
 
 export function extractTargetPaths(params: Record<string, unknown>, actionId?: string): string[] {
+  if (actionId === "runtime.screenshot" || actionId === "runtime.perf") {
+    return [];
+  }
   if (actionId && PROJECT_FILE_ACTIONS.has(actionId)) {
     return ["res://project.godot"];
   }

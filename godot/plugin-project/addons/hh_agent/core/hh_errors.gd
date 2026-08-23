@@ -46,6 +46,19 @@ func fail(command_id: String, code: String, message: String, path: String = "") 
 	}
 
 
+func fail_after(
+	command_id: String,
+	code: String,
+	message: String,
+	path: String,
+	after: Dictionary,
+) -> Dictionary:
+	var out: Dictionary = fail(command_id, code, message, path)
+	if after.size() > 0:
+		out["after"] = after.duplicate(true)
+	return out
+
+
 func ok_read(command_id: String, checks: PackedStringArray, after: Dictionary) -> Dictionary:
 	var check_list: Array = []
 	for item: String in checks:

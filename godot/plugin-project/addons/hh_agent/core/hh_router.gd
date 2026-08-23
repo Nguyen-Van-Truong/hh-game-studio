@@ -173,6 +173,8 @@ func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_ga
 		result = _input_apply(command_id, action, params, actions)
 	elif method == "godot.runtime" and (action == "freeze" or action == "step"):
 		result = _time_apply(command_id, action, params, actions)
+	elif method == "godot.runtime" and (action == "screenshot" or action == "perf"):
+		result = _capture_apply(command_id, action, params, actions)
 	elif method == "godot.editor" and (action == "frame_view" or action == "replay"):
 		result = _overlay().handle(command_id, method, action, params, actions, envelope)
 	elif method == "godot.review" and action == "replay":
@@ -405,6 +407,24 @@ func run_selftest(actions: HHAgentActions) -> PackedStringArray:
 		failures.append("runtime freeze/step idle must stay E_UNVERIFIED")
 	if step_idle.get("ok", true) == true:
 		failures.append("runtime freeze/step idle must not paper-ok")
+	var shot_idle: Dictionary = dispatch(
+		_sample("godot.runtime", "screenshot", {"scale": 1}),
+		actions,
+		0,
+	)
+	if str(_error_of(shot_idle).get("code", "")) != HHAgentErrors.E_UNVERIFIED:
+		failures.append("runtime screenshot/perf idle must stay E_UNVERIFIED")
+	if shot_idle.get("ok", true) == true:
+		failures.append("runtime screenshot/perf idle must not paper-ok")
+	var perf_idle: Dictionary = dispatch(
+		_sample("godot.runtime", "perf", {"detail": "short"}),
+		actions,
+		0,
+	)
+	if str(_error_of(perf_idle).get("code", "")) != HHAgentErrors.E_UNVERIFIED:
+		failures.append("runtime screenshot/perf idle must stay E_UNVERIFIED")
+	if perf_idle.get("ok", true) == true:
+		failures.append("runtime screenshot/perf idle must not paper-ok")
 	var tx_missing: Dictionary = dispatch(
 		_sample(
 			"godot.job",
@@ -525,6 +545,30 @@ func _time_apply(
 		else:
 			post = "runtime_stepped_frames"
 	return live.begin_time(command_id, action, params, post)
+
+
+func _capture_apply(
+	command_id: String,
+	action: String,
+	params: Dictionary,
+	actions: HHAgentActions,
+) -> Dictionary:
+	var live: HHAgentRuntimeAdapter = HHAgentRuntimeAdapter.current()
+	if live == null:
+		return _errors.fail(
+			command_id,
+			HHAgentErrors.E_UNVERIFIED,
+			"runtime screenshot/perf requires Play process (R6)",
+			"runtime",
+		)
+	var def: Dictionary = actions.lookup("godot.runtime", action)
+	var post: String = str(def.get("postcondition", ""))
+	if post.is_empty():
+		if action == "screenshot":
+			post = "screenshot_artifact_present"
+		else:
+			post = "perf_counters_present"
+	return live.begin_capture(command_id, action, params, post)
 
 
 func _play() -> HHAgentPlayAdapter:

@@ -8,6 +8,8 @@ const CAPTURE: String = "hh_runtime"
 const MAX_PAGE: int = 100
 const REDACT: String = "***"
 const HELLO_MS: int = 1000
+const SHOT_DIR: String = ".hh-agent/r6w5"
+const PINNED_ENGINE: String = "4.7.1.stable.official.a13da4feb"
 
 var _last_hello_ms: int = 0
 @export var dummy_secret: String = ""
@@ -128,6 +130,10 @@ func _dispatch(op: String, payload: Dictionary) -> Dictionary:
 		return _merge(base, extra)
 	if op == "freeze" or op == "step":
 		return _merge(base, _time_op(op, payload, base))
+	if op == "screenshot" or op == "perf":
+		return _merge(base, _capture_op(op, payload, base))
+	if op == "assert":
+		return _merge(base, _assert_op(payload))
 	if (
 		op == "action"
 		or op == "key"
@@ -331,8 +337,10 @@ func _allowlisted_prop(pname: String) -> bool:
 		or pname == "scale"
 		or pname == "modulate"
 		or pname == "process_mode"
-		or pname == "z_index"
+		or 		pname == "z_index"
 		or pname == "text"
+		or pname == "color"
+		or pname == "size"
 	)
 
 
@@ -1530,3 +1538,819 @@ func _compare_pred(got_v: Variant, op: String, want_v: Variant) -> bool:
 		if op == "lte":
 			return gi <= wi
 	return false
+
+
+func _capture_op(op: String, payload: Dictionary, base: Dictionary) -> Dictionary:
+	_kick_capture(op, payload, base)
+	return {"async": true}
+
+
+func _kick_capture(op: String, payload: Dictionary, base: Dictionary) -> void:
+	_run_capture(op, payload, base.duplicate(true))
+
+
+func _run_capture(op: String, payload: Dictionary, base: Dictionary) -> void:
+	var extra: Dictionary = await _capture_async(op, payload)
+	EngineDebugger.send_message("%s:reply" % CAPTURE, [JSON.stringify(_merge(base, extra))])
+
+
+func _capture_async(op: String, payload: Dictionary) -> Dictionary:
+	var stable: Dictionary = await _wait_stable(maxi(1, int(payload.get("stable_frames", 2))))
+	if op == "perf":
+		return await _perf_async(payload, stable)
+	return await _screenshot_async(payload, stable)
+
+
+func _wait_stable(frames: int) -> Dictionary:
+	# Frame wait then two blits. Not sleep 2s. Not a stamped true.
+	var tree: SceneTree = get_tree()
+	var start_f: int = Engine.get_process_frames()
+	var waited: int = 0
+	while waited < frames and tree != null:
+		await tree.process_frame
+		waited += 1
+	var first: Image = _viewport_image(1.0)
+	if tree != null:
+		await tree.process_frame
+		waited += 1
+	var second: Image = _viewport_image(1.0)
+	var h0: String = _sample_hash(first)
+	var h1: String = _sample_hash(second)
+	var pixel_stable: bool = not h0.is_empty() and h0 == h1
+	return {
+		"stable": pixel_stable,
+		"pixel_stable": pixel_stable,
+		"frames_waited": waited,
+		"frames": Engine.get_process_frames(),
+		"frames_before": start_f,
+		"used_sleep": false,
+		"frozen": _frozen,
+	}
+
+
+func _screenshot_async(payload: Dictionary, stable: Dictionary) -> Dictionary:
+	var target: String = str(payload.get("target", "game"))
+	if target != "game":
+		return {
+			"ok": false,
+			"code": "E_UNVERIFIED",
+			"message": "editor viewport blit is not owned by hh_agent_runtime; use target=game",
+			"dummy": false,
+			"source": "hh_agent_runtime",
+			"playing": true,
+			"is_playing_scene": true,
+			"screenshot_artifact_present": false,
+			"stable": stable,
+			"time": _time_snap(),
+		}
+	if _is_headless():
+		var headless_img: Image = _viewport_image(float(payload.get("scale", 1.0)))
+		if headless_img == null or not _is_real_blit(headless_img):
+			return {
+				"ok": false,
+				"code": "E_UNVERIFIED",
+				"message": "headless DisplayServer cannot blit a Play viewport",
+				"headless_shot": "Alternative",
+				"dummy": false,
+				"source": "hh_agent_runtime",
+				"playing": true,
+				"is_playing_scene": true,
+				"screenshot_artifact_present": false,
+				"stable": stable,
+				"time": _time_snap(),
+			}
+	var img: Image = _viewport_image(float(payload.get("scale", 1.0)))
+	if img == null or not _is_real_blit(img):
+		return {
+			"ok": false,
+			"code": "E_UNVERIFIED",
+			"message": "Play viewport blit was empty; refusing dummy PNG",
+			"dummy": false,
+			"source": "hh_agent_runtime",
+			"playing": true,
+			"is_playing_scene": true,
+			"screenshot_artifact_present": false,
+			"stable": stable,
+			"time": _time_snap(),
+		}
+	var region: Dictionary = _region_mean(img, payload)
+	var token: String = str(payload.get("token", ""))
+	if token.is_empty():
+		token = str(Time.get_ticks_msec())
+	var rel_path: String = "%s/shot_%s.png" % [SHOT_DIR, token.substr(0, 12)]
+	var saved: Dictionary = _save_png(img, "res://%s" % rel_path)
+	if saved.get("ok", false) != true:
+		return saved
+	var update_b: bool = payload.get("update_baseline", false) == true
+	var reviewed: bool = payload.get("reviewed", false) == true
+	var compare: bool = payload.get("compare", false) == true or payload.has("baseline")
+	if update_b and not reviewed:
+		return {
+			"ok": false,
+			"code": "E_UNVERIFIED",
+			"message": "baseline update requires explicit reviewed action",
+			"dummy": false,
+			"path": str(saved.get("path", "")),
+			"bytes": int(saved.get("bytes", 0)),
+			"screenshot_artifact_present": true,
+			"source": "hh_agent_runtime",
+			"playing": true,
+			"is_playing_scene": true,
+			"stable": stable,
+			"time": _time_snap(),
+		}
+	if update_b and reviewed:
+		var base_path: String = _baseline_path_of(payload)
+		var copied: Dictionary = _save_png(img, base_path)
+		if copied.get("ok", false) != true:
+			return copied
+		return _shot_ok(saved, stable, img, _merge({
+			"baseline": base_path,
+			"baseline_updated": true,
+			"reviewed": true,
+			"visual_pass": true,
+			"bit_exact": false,
+		}, region))
+	if compare:
+		var base_path: String = _baseline_path_of(payload)
+		var want: Image = _load_png(base_path)
+		if want == null:
+			return {
+				"ok": false,
+				"code": "E_UNVERIFIED",
+				"message": "missing baseline",
+				"dummy": false,
+				"path": str(saved.get("path", "")),
+				"bytes": int(saved.get("bytes", 0)),
+				"screenshot_artifact_present": true,
+				"baseline": base_path,
+				"source": "hh_agent_runtime",
+				"playing": true,
+				"is_playing_scene": true,
+				"stable": stable,
+				"time": _time_snap(),
+			}
+		var diff: Dictionary = _diff_images(img, want, payload)
+		if diff.get("visual_pass", false) != true:
+			return _merge({
+				"ok": false,
+				"code": "E_UNVERIFIED",
+				"message": "visual diff failed",
+				"dummy": false,
+				"path": str(saved.get("path", "")),
+				"bytes": int(saved.get("bytes", 0)),
+				"screenshot_artifact_present": true,
+				"baseline": base_path,
+				"visual_pass": false,
+				"bit_exact": false,
+				"diff": diff,
+				"source": "hh_agent_runtime",
+				"playing": true,
+				"is_playing_scene": true,
+				"stable": stable,
+				"time": _time_snap(),
+			}, region)
+		return _shot_ok(saved, stable, img, _merge({
+			"baseline": base_path,
+			"visual_pass": true,
+			"bit_exact": false,
+			"diff": diff,
+		}, region))
+	return _shot_ok(saved, stable, img, region)
+
+
+func _shot_ok(saved: Dictionary, stable: Dictionary, img: Image, extra: Dictionary) -> Dictionary:
+	var out: Dictionary = {
+		"ok": true,
+		"dummy": false,
+		"path": str(saved.get("path", "")),
+		"abs_path": str(saved.get("abs_path", "")),
+		"bytes": int(saved.get("bytes", 0)),
+		"width": img.get_width(),
+		"height": img.get_height(),
+		"hash": str(saved.get("hash", "")),
+		"screenshot_artifact_present": true,
+		"bit_exact": false,
+		"luminance_span": _blit_span(img),
+		"region_mean_r": 0.0,
+		"region_mean_g": 0.0,
+		"region_mean_b": 0.0,
+		"source": "hh_agent_runtime",
+		"tree_kind": "remote",
+		"remote_tree": true,
+		"playing": true,
+		"is_playing_scene": true,
+		"stable": stable,
+		"headless_shot": (
+			"proven"
+			if _is_headless() and _blit_span(img) > 0.05
+			else ("Alternative" if _is_headless() else "n/a")
+		),
+		"time": _time_snap(),
+	}
+	return _merge(out, extra)
+
+
+func _viewport_image(scale: float) -> Image:
+	var vp: Viewport = get_viewport()
+	if vp == null:
+		return null
+	var tex: ViewportTexture = vp.get_texture()
+	if tex == null:
+		return null
+	var img: Image = tex.get_image()
+	if img == null or img.is_empty():
+		return null
+	if img.get_format() != Image.FORMAT_RGBA8:
+		img.convert(Image.FORMAT_RGBA8)
+	if scale > 0.0 and absf(scale - 1.0) > 0.001:
+		var w: int = maxi(1, int(round(float(img.get_width()) * scale)))
+		var h: int = maxi(1, int(round(float(img.get_height()) * scale)))
+		img.resize(w, h, Image.INTERPOLATE_BILINEAR)
+	return img
+
+
+func _sample_hash(img: Image) -> String:
+	if img == null or img.is_empty():
+		return ""
+	var acc: int = img.get_width() * 131 + img.get_height()
+	var step_x: int = maxi(1, int(img.get_width() / 16))
+	var step_y: int = maxi(1, int(img.get_height() / 16))
+	var y: int = 0
+	while y < img.get_height():
+		var x: int = 0
+		while x < img.get_width():
+			var c: Color = img.get_pixel(x, y)
+			acc = (acc * 33 + int(c.r * 255.0) + int(c.g * 255.0) * 3 + int(c.b * 255.0) * 7) % 2147483647
+			x += step_x
+		y += step_y
+	return "%08x" % acc
+
+
+func _region_mean(img: Image, payload: Dictionary) -> Dictionary:
+	var rx: int = int(payload.get("region_x", 0))
+	var ry: int = int(payload.get("region_y", 0))
+	var rw: int = int(payload.get("region_w", img.get_width()))
+	var rh: int = int(payload.get("region_h", img.get_height()))
+	if rx < 0:
+		rx = 0
+	if ry < 0:
+		ry = 0
+	if rx + rw > img.get_width():
+		rw = img.get_width() - rx
+	if ry + rh > img.get_height():
+		rh = img.get_height() - ry
+	var n: int = 0
+	var sr: float = 0.0
+	var sg: float = 0.0
+	var sb: float = 0.0
+	if rw > 0 and rh > 0:
+		var step: int = maxi(1, int(mini(rw, rh) / 16))
+		var y: int = ry
+		while y < ry + rh:
+			var x: int = rx
+			while x < rx + rw:
+				var c: Color = img.get_pixel(x, y)
+				sr += c.r
+				sg += c.g
+				sb += c.b
+				n += 1
+				x += step
+			y += step
+	if n < 1:
+		return {"region_mean_r": 0.0, "region_mean_g": 0.0, "region_mean_b": 0.0, "region_samples": 0}
+	return {
+		"region_mean_r": sr / float(n),
+		"region_mean_g": sg / float(n),
+		"region_mean_b": sb / float(n),
+		"region_samples": n,
+	}
+
+
+func _blit_span(img: Image) -> float:
+	if img == null or img.is_empty():
+		return 0.0
+	var min_l: float = 1.0
+	var max_l: float = 0.0
+	var step_x: int = maxi(1, int(img.get_width() / 16))
+	var step_y: int = maxi(1, int(img.get_height() / 16))
+	var y: int = 0
+	while y < img.get_height():
+		var x: int = 0
+		while x < img.get_width():
+			var c: Color = img.get_pixel(x, y)
+			var lum: float = (c.r + c.g + c.b) / 3.0
+			if lum < min_l:
+				min_l = lum
+			if lum > max_l:
+				max_l = lum
+			x += step_x
+		y += step_y
+	return max_l - min_l
+
+
+func _is_real_blit(img: Image) -> bool:
+	if img == null or img.is_empty():
+		return false
+	if img.get_width() < 16 or img.get_height() < 16:
+		return false
+	# Flat or near-black frames are not a Play viewport blit.
+	return _blit_span(img) > 0.05
+
+
+func _save_png(img: Image, res_path: String) -> Dictionary:
+	var jailed: String = _artifact_jail(res_path)
+	if jailed.is_empty():
+		return {
+			"ok": false,
+			"code": "E_PATH",
+			"message": "screenshot path is outside .hh-agent/ or r6w5/",
+			"dummy": false,
+		}
+	var abs_path: String = ProjectSettings.globalize_path(jailed)
+	var dir_s: String = abs_path.get_base_dir()
+	var mk: Error = DirAccess.make_dir_recursive_absolute(dir_s)
+	if mk != OK and not DirAccess.dir_exists_absolute(dir_s):
+		return {
+			"ok": false,
+			"code": "E_UNVERIFIED",
+			"message": "could not create screenshot directory",
+			"dummy": false,
+		}
+	var err: Error = img.save_png(abs_path)
+	if err != OK:
+		return {
+			"ok": false,
+			"code": "E_UNVERIFIED",
+			"message": "viewport image save_png failed",
+			"dummy": false,
+		}
+	if not FileAccess.file_exists(abs_path):
+		return {
+			"ok": false,
+			"code": "E_UNVERIFIED",
+			"message": "screenshot file missing after save",
+			"dummy": false,
+		}
+	var bytes: int = FileAccess.get_file_as_bytes(abs_path).size()
+	if bytes < 32:
+		return {
+			"ok": false,
+			"code": "E_UNVERIFIED",
+			"message": "captured PNG too small; refusing dummy",
+			"dummy": false,
+		}
+	return {
+		"ok": true,
+		"path": jailed,
+		"abs_path": abs_path,
+		"bytes": bytes,
+		"hash": FileAccess.get_sha256(abs_path),
+	}
+
+
+func _load_png(res_path: String) -> Image:
+	var jailed: String = _artifact_jail(res_path)
+	if jailed.is_empty():
+		return null
+	var abs_path: String = ProjectSettings.globalize_path(jailed)
+	if not FileAccess.file_exists(abs_path) and not FileAccess.file_exists(jailed):
+		return null
+	var img: Image = Image.new()
+	var err: Error = img.load(abs_path if FileAccess.file_exists(abs_path) else jailed)
+	if err != OK or img.is_empty():
+		return null
+	if img.get_format() != Image.FORMAT_RGBA8:
+		img.convert(Image.FORMAT_RGBA8)
+	return img
+
+
+func _baseline_path_of(payload: Dictionary) -> String:
+	var raw: String = str(payload.get("baseline", ""))
+	if raw.is_empty():
+		return "res://r6w5/baselines/default.png"
+	if raw.begins_with("res://"):
+		return raw
+	if not _ident_ok(raw):
+		return "res://r6w5/baselines/default.png"
+	return "res://r6w5/baselines/%s.png" % raw
+
+
+func _artifact_jail(path_s: String) -> String:
+	var p: String = path_s.strip_edges().replace("\\", "/")
+	if p.is_empty():
+		return ""
+	if not p.begins_with("res://"):
+		if p.begins_with(".hh-agent/") or p.begins_with("r6w5/"):
+			p = "res://%s" % p
+		else:
+			return ""
+	var rest: String = p.substr(6)
+	var parts: PackedStringArray = rest.split("/")
+	var i: int = 0
+	while i < parts.size():
+		if parts[i] == "..":
+			return ""
+		i += 1
+	if rest.begins_with(".hh-agent/") or rest.begins_with("r6w5/"):
+		return p
+	return ""
+
+
+func _diff_images(got: Image, want: Image, payload: Dictionary) -> Dictionary:
+	# GPU variance: region/mask/tolerance. Never claim bit-exact.
+	if got.get_width() != want.get_width() or got.get_height() != want.get_height():
+		return {
+			"visual_pass": false,
+			"compared": 0,
+			"mismatched": 0,
+			"mismatch_ratio": 1.0,
+			"max_delta": 1.0,
+			"tolerance": 0.0,
+			"bit_exact": false,
+			"message": "baseline size mismatch",
+		}
+	var tolerance: float = 0.08
+	if payload.has("tolerance"):
+		tolerance = clampf(float(payload.get("tolerance")), 0.0, 1.0)
+	var rx: int = 0
+	var ry: int = 0
+	var rw: int = got.get_width()
+	var rh: int = got.get_height()
+	if payload.has("region_w") and payload.has("region_h"):
+		rx = maxi(0, int(payload.get("region_x", 0)))
+		ry = maxi(0, int(payload.get("region_y", 0)))
+		rw = maxi(1, int(payload.get("region_w")))
+		rh = maxi(1, int(payload.get("region_h")))
+	if rx >= got.get_width() or ry >= got.get_height():
+		return {"visual_pass": false, "compared": 0, "mismatched": 0, "max_delta": 1.0, "tolerance": tolerance}
+	rw = mini(rw, got.get_width() - rx)
+	rh = mini(rh, got.get_height() - ry)
+	var mx: int = -1
+	var my: int = -1
+	var mw: int = 0
+	var mh: int = 0
+	if payload.has("mask_w") and payload.has("mask_h"):
+		mx = int(payload.get("mask_x", 0))
+		my = int(payload.get("mask_y", 0))
+		mw = int(payload.get("mask_w"))
+		mh = int(payload.get("mask_h"))
+	var compared: int = 0
+	var mismatched: int = 0
+	var max_delta: float = 0.0
+	var y: int = ry
+	while y < ry + rh:
+		var x: int = rx
+		while x < rx + rw:
+			var masked: bool = mx >= 0 and x >= mx and x < mx + mw and y >= my and y < my + mh
+			if not masked:
+				var gc: Color = got.get_pixel(x, y)
+				var wx: int = x
+				var wy: int = y
+				if wx >= want.get_width():
+					wx = want.get_width() - 1
+				if wy >= want.get_height():
+					wy = want.get_height() - 1
+				if wx < 0 or wy < 0:
+					mismatched += 1
+					compared += 1
+				else:
+					var wc: Color = want.get_pixel(wx, wy)
+					var d: float = maxf(maxf(absf(gc.r - wc.r), absf(gc.g - wc.g)), absf(gc.b - wc.b))
+					if d > max_delta:
+						max_delta = d
+					compared += 1
+					if d > tolerance:
+						mismatched += 1
+			x += 1
+		y += 1
+	var ratio: float = 0.0
+	if compared > 0:
+		ratio = float(mismatched) / float(compared)
+	return {
+		"visual_pass": compared > 0 and ratio <= 0.02 and max_delta <= tolerance + 0.02,
+		"compared": compared,
+		"mismatched": mismatched,
+		"mismatch_ratio": ratio,
+		"max_delta": max_delta,
+		"tolerance": tolerance,
+		"bit_exact": false,
+		"region": {"x": rx, "y": ry, "w": rw, "h": rh},
+	}
+
+
+func _perf_async(payload: Dictionary, stable: Dictionary) -> Dictionary:
+	var warmup: int = maxi(0, int(payload.get("warmup_frames", 4)))
+	var samples_n: int = maxi(1, int(payload.get("samples", 12)))
+	var tree: SceneTree = get_tree()
+	var was_paused: bool = tree != null and tree.paused
+	if tree != null:
+		tree.paused = false
+	var fixture: Node = _resolve("Fixture")
+	if fixture != null:
+		fixture.set("last_spike_elapsed_ms", 0)
+		if payload.get("inject_spike", false) == true:
+			fixture.set("spike_ms", 50)
+		else:
+			fixture.set("spike_ms", 0)
+	var i: int = 0
+	while i < warmup and tree != null:
+		await tree.process_frame
+		i += 1
+	var series: Array = []
+	var process_ms: Array = []
+	var fps_s: Array = []
+	var mem_s: Array = []
+	i = 0
+	while i < samples_n and tree != null:
+		var one: Dictionary = _perf_sample()
+		series.append(one)
+		if one.get("time_process_ms_status", "") == "computed":
+			process_ms.append(float(one.get("time_process_ms", 0.0)))
+		if one.get("fps_status", "") == "computed":
+			fps_s.append(float(one.get("fps", 0.0)))
+		if one.get("memory_static_status", "") == "computed":
+			mem_s.append(int(one.get("memory_static", 0)))
+		await tree.process_frame
+		i += 1
+	var fixture_elapsed: int = 0
+	if fixture != null:
+		fixture_elapsed = int(fixture.get("last_spike_elapsed_ms"))
+		fixture.set("spike_ms", 0)
+	if was_paused and tree != null:
+		tree.paused = true
+	var p95: Dictionary = _p95(process_ms)
+	var spike: Dictionary = _spike_of(process_ms)
+	var counters_present: bool = series.size() > 0
+	var out: Dictionary = {
+		"ok": counters_present,
+		"dummy": false,
+		"perf_counters_present": counters_present,
+		"warmup_frames": warmup,
+		"samples": series.size(),
+		"series": series if str(payload.get("detail", "short")) == "full" else series.slice(0, mini(4, series.size())),
+		"p95_process_ms": p95,
+		"spike": spike,
+		"fixture_spike_elapsed_ms": fixture_elapsed,
+		"fps": _p95(fps_s),
+		"memory": {
+			"static_last": mem_s[mem_s.size() - 1] if mem_s.size() > 0 else 0,
+			"status": "computed" if mem_s.size() > 0 else "Alternative",
+		},
+		"hardware_manifest": _hardware_manifest(),
+		"stable": stable,
+		"source": "hh_agent_runtime",
+		"tree_kind": "remote",
+		"remote_tree": true,
+		"playing": true,
+		"is_playing_scene": true,
+		"time": _time_snap(),
+	}
+	if not counters_present:
+		out["code"] = "E_UNVERIFIED"
+		out["message"] = "Play perf counters were not present"
+		return out
+	if payload.has("budget_ms"):
+		var budget: float = float(payload.get("budget_ms"))
+		var spike_v: float = float(spike.get("value", 0.0))
+		var inject: bool = payload.get("inject_spike", false) == true
+		if inject and fixture_elapsed < 40:
+			out["ok"] = false
+			out["code"] = "E_UNVERIFIED"
+			out["message"] = "perf regression: fixture spike did not run"
+			out["perf_pass"] = false
+			out["budget_ms"] = budget
+			return out
+		var over: bool = spike.get("status", "") == "computed" and spike_v > budget
+		if inject and float(fixture_elapsed) > budget:
+			over = true
+		if over:
+			out["ok"] = false
+			out["code"] = "E_UNVERIFIED"
+			out["message"] = "perf regression: spike exceeded budget"
+			out["perf_pass"] = false
+			out["budget_ms"] = budget
+			return out
+		out["perf_pass"] = true
+		out["budget_ms"] = budget
+	return out
+
+
+func _perf_sample() -> Dictionary:
+	var process_s: float = Performance.get_monitor(Performance.TIME_PROCESS)
+	var physics_s: float = Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS)
+	var fps: float = Performance.get_monitor(Performance.TIME_FPS)
+	var mem: int = int(Performance.get_monitor(Performance.MEMORY_STATIC))
+	if mem <= 0:
+		mem = int(OS.get_static_memory_usage())
+	var objects: int = int(Performance.get_monitor(Performance.OBJECT_COUNT))
+	var process_status: String = "computed" if process_s > 0.0 else "Alternative"
+	var fps_status: String = "computed" if fps > 0.0 else "Alternative"
+	var mem_status: String = "computed" if mem > 0 else "Alternative"
+	return {
+		"time_process_ms": process_s * 1000.0,
+		"time_process_ms_status": process_status,
+		"time_physics_ms": physics_s * 1000.0,
+		"fps": fps,
+		"fps_status": fps_status,
+		"memory_static": mem,
+		"memory_static_status": mem_status,
+		"object_count": objects,
+		"frames": Engine.get_process_frames(),
+		"ticks_msec": Time.get_ticks_msec(),
+	}
+
+
+func _p95(values: Array) -> Dictionary:
+	if values.size() < 5:
+		return {"status": "Alternative", "reason": "too few samples", "value": null}
+	var sorted: Array = values.duplicate()
+	sorted.sort()
+	var idx: int = int(ceil(0.95 * float(sorted.size()))) - 1
+	if idx < 0:
+		idx = 0
+	if idx >= sorted.size():
+		idx = sorted.size() - 1
+	return {"status": "computed", "value": sorted[idx], "n": sorted.size()}
+
+
+func _spike_of(values: Array) -> Dictionary:
+	if values.is_empty():
+		return {"status": "Alternative", "reason": "no samples", "value": null}
+	var peak: float = float(values[0])
+	var i: int = 1
+	while i < values.size():
+		var v: float = float(values[i])
+		if v > peak:
+			peak = v
+		i += 1
+	return {"status": "computed", "value": peak, "n": values.size()}
+
+
+func _hardware_manifest() -> Dictionary:
+	var info: Dictionary = Engine.get_version_info()
+	var gpu: String = str(RenderingServer.get_video_adapter_name())
+	return {
+		"os": OS.get_name(),
+		"processor": OS.get_processor_name(),
+		"processor_count": OS.get_processor_count(),
+		"display_server": DisplayServer.get_name(),
+		"video_adapter": gpu,
+		"gpu_status": "computed" if not gpu.is_empty() else "Alternative",
+		"engine": PINNED_ENGINE,
+		"engine_hash": str(info.get("hash", "")),
+		"headless": _is_headless(),
+	}
+
+
+func _assert_op(payload: Dictionary) -> Dictionary:
+	var kind: String = str(payload.get("kind", ""))
+	var path_s: String = str(payload.get("node_path", "Fixture"))
+	var node: Node = _resolve(path_s)
+	var base: Dictionary = {
+		"kind": kind,
+		"node_path": path_s,
+		"source": "hh_agent_runtime",
+		"tree_kind": "remote",
+		"remote_tree": true,
+		"playing": true,
+		"is_playing_scene": true,
+		"time": _time_snap(),
+	}
+	if (
+		kind != "tree"
+		and kind != "property"
+		and kind != "signal"
+		and kind != "ui_layout"
+		and kind != "audio_event"
+		and kind != "world"
+	):
+		base["ok"] = false
+		base["code"] = "E_INVALID_TYPE"
+		base["message"] = "assert kind is not allowlisted"
+		return base
+	if kind == "tree":
+		base["ok"] = true
+		base["found"] = node != null
+		base["matched"] = node != null
+		return base
+	if node == null:
+		base["ok"] = true
+		base["found"] = false
+		base["matched"] = false
+		base["message"] = "assert node not found"
+		return base
+	if kind == "signal":
+		var sig: String = str(payload.get("signal", payload.get("key", "")))
+		var listed: Array = _signals_of(node)
+		var obs_s: Dictionary = _observe_of(node)
+		var emits: int = int(obs_s.get("signal_emits", 0))
+		var want_emits: int = int(payload.get("value_int", 1))
+		base["ok"] = true
+		base["found"] = listed.has(sig)
+		base["matched"] = listed.has(sig) and emits >= want_emits
+		base["key"] = sig
+		base["emitted"] = emits
+		return base
+	if kind == "ui_layout":
+		var w: float = 0.0
+		var h: float = 0.0
+		if node is Control:
+			var ctrl: Control = node
+			w = ctrl.size.x
+			h = ctrl.size.y
+		var obs: Dictionary = _observe_of(node)
+		if obs.has("ui_w"):
+			w = float(obs.get("ui_w"))
+		if obs.has("ui_h"):
+			h = float(obs.get("ui_h"))
+		var want_w: int = int(payload.get("value_int", 0))
+		var matched_ui: bool = w >= 1.0 and h >= 1.0
+		if payload.has("value_int"):
+			matched_ui = int(round(w)) == want_w or int(round(h)) == want_w
+		base["ok"] = true
+		base["found"] = true
+		base["matched"] = matched_ui
+		base["ui_w"] = w
+		base["ui_h"] = h
+		return base
+	if kind == "audio_event":
+		var obs_a: Dictionary = _observe_of(node)
+		var key_a: String = str(payload.get("key", "last_audio"))
+		var found_a: bool = obs_a.has(key_a)
+		var got_a: Variant = obs_a.get(key_a, "")
+		var want_a: String = str(payload.get("value_string", ""))
+		var playing: bool = false
+		var pos: float = float(obs_a.get("playback_pos", 0.0))
+		var frames_a: int = int(obs_a.get("audio_frames", 0))
+		var tone: Node = node.get_node_or_null("Tone")
+		if tone is AudioStreamPlayer:
+			var player: AudioStreamPlayer = tone as AudioStreamPlayer
+			playing = player.playing
+			pos = maxf(pos, player.get_playback_position())
+		# Frames must come from fixture observe (generator push_frame), never WAV byte size.
+		var matched_a: bool = found_a and str(got_a) == want_a and frames_a > 0
+		base["ok"] = true
+		base["found"] = found_a
+		base["matched"] = matched_a
+		base["key"] = key_a
+		base["got"] = _jsonable(got_a)
+		base["playing"] = playing
+		base["playback_pos"] = pos
+		base["audio_frames"] = frames_a
+		return base
+	if kind == "world":
+		var hits: int = 0
+		var area_n: Node = node.get_node_or_null("HitA")
+		if area_n is Area2D:
+			hits = (area_n as Area2D).get_overlapping_areas().size()
+		var obs_hits: int = int(_observe_of(node).get("world_hits", 0))
+		var live_hits: int = hits if hits > obs_hits else obs_hits
+		var want_hits: int = int(payload.get("value_int", 1))
+		base["ok"] = true
+		base["found"] = true
+		base["matched"] = live_hits >= want_hits
+		base["key"] = "world_hits"
+		base["got"] = live_hits
+		base["world_hits"] = live_hits
+		return base
+	var key: String = str(payload.get("key", ""))
+	var obs_p: Dictionary = _observe_of(node)
+	var got_v: Variant = null
+	var found: bool = false
+	if obs_p.has(key):
+		got_v = obs_p[key]
+		found = true
+	elif _has_property(node, key):
+		got_v = node.get(key)
+		found = true
+	if not found:
+		base["ok"] = true
+		base["found"] = false
+		base["matched"] = false
+		base["key"] = key
+		return base
+	var compare_op: String = str(payload.get("compare_op", payload.get("op", "eq")))
+	if compare_op == "assert" or compare_op.is_empty():
+		compare_op = "eq"
+	if compare_op == "exists":
+		base["ok"] = true
+		base["found"] = true
+		base["matched"] = true
+		base["key"] = key
+		base["got"] = _jsonable(got_v)
+		return base
+	var pred_p: Dictionary = {"key": key, "op": compare_op, "node_path": path_s}
+	if payload.has("value_int"):
+		pred_p["value_int"] = int(payload.get("value_int"))
+	elif payload.has("value_bool"):
+		pred_p["value_bool"] = payload.get("value_bool") == true
+	else:
+		pred_p["value_string"] = str(payload.get("value_string", ""))
+	var ev_p: Dictionary = _eval_predicate(pred_p)
+	base["ok"] = ev_p.get("ok", false) == true
+	base["found"] = true
+	base["matched"] = ev_p.get("matched", false) == true
+	base["key"] = key
+	base["got"] = ev_p.get("got", _jsonable(got_v))
+	return base

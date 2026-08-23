@@ -577,7 +577,7 @@
       "method": "godot.script",
       "verb": "write",
       "side_effect": "mutate",
-      "timeout_ms": 15000,
+      "timeout_ms": 60000,
       "required": [
         "path",
         "contents"
@@ -1462,8 +1462,8 @@
     "runtime.screenshot": {
       "method": "godot.runtime",
       "verb": "screenshot",
-      "side_effect": "read",
-      "timeout_ms": 5000,
+      "side_effect": "external",
+      "timeout_ms": 120000,
       "required": [
         "scale"
       ],
@@ -1473,12 +1473,23 @@
     "runtime.perf": {
       "method": "godot.runtime",
       "verb": "perf",
-      "side_effect": "read",
-      "timeout_ms": 5000,
+      "side_effect": "external",
+      "timeout_ms": 120000,
       "required": [
         "detail"
       ],
       "postcondition": "perf_counters_present",
+      "checkpoint_required": false
+    },
+    "runtime.assert": {
+      "method": "godot.runtime",
+      "verb": "assert",
+      "side_effect": "read",
+      "timeout_ms": 15000,
+      "required": [
+        "kind"
+      ],
+      "postcondition": "assertion_evaluated",
       "checkpoint_required": false
     },
     "test.define": {

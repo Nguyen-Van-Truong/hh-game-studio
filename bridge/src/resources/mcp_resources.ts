@@ -104,7 +104,7 @@ export function capabilityMatrix(): Record<string, unknown> {
     physics_dispatched: true,
     audio_dispatched: true,
     render_dispatched: true,
-    note: "Scene/node/property/resource/signal/script/project.settings/tilemap/animation/ui/physics/audio/render ACK after EditorUndoRedo or ProjectSettings.save + ConfigFile disk parse. play.start/stop/restart/debug ACK after is_playing_scene + get_playing_scene (EXTERNAL, not UndoRedo). play.input ACK after Play-process parse_input_event + _input seen (EXTERNAL; idle/no-Play stays E_UNVERIFIED).",
+    note: "Scene/node/property/resource/signal/script/project.settings/tilemap/animation/ui/physics/audio/render ACK after EditorUndoRedo or ProjectSettings.save + ConfigFile disk parse. play.start/stop/restart/debug ACK after is_playing_scene + get_playing_scene (EXTERNAL, not UndoRedo). play.input ACK after Play-process parse_input_event + _input seen (EXTERNAL; idle/no-Play stays E_UNVERIFIED). runtime.screenshot/perf ACK after Play-proven hh_agent_runtime blit/counters (idle/no-Play stays E_UNVERIFIED).",
     actions: allActionDefs().map((def) => ({
       id: def.id,
       method: def.method,

@@ -13,7 +13,7 @@ Verify (encoded here; this file is the official harness):
   - idle / no-Play freeze/step stay E_UNVERIFIED
   - 10-run same seed + same input + freeze/step → canonical logic state equal
   - step-until a predicate that never happens → E_TIMEOUT (missed event), no hang
-  - screenshot/perf stay E_UNVERIFIED
+  - screenshot/perf may ACK when Play is proven; idle/no-Play stay E_UNVERIFIED
   - screenshots=SKIP
   - tests do not use sleep 2s as the observation strategy (setup waits of ~1s
     for Play attach are labeled)
@@ -237,8 +237,8 @@ def src_scan_errors() -> list[str]:
         errors.append("router self-test must keep idle/no-Play freeze/step E_UNVERIFIED")
 
     reads = (ADDON / "core" / "hh_read_adapters.gd").read_text(encoding="utf-8")
-    if "runtime screenshot/perf is a later WP" not in reads:
-        errors.append("screenshot/perf must stay E_UNVERIFIED")
+    if "runtime screenshot/perf must use Play capture apply" not in reads:
+        errors.append("screenshot/perf must use Play apply (idle/no-Play stays E_UNVERIFIED)")
 
     for dbg_name in ("hh_play_debugger.gd", "hh_runtime_debugger.gd"):
         dbg = ADDON / "core" / dbg_name
@@ -401,9 +401,11 @@ def verify_later_wps(proc, req_id: int, errors: list[str]) -> int:
     ):
         req_id, later = tool_call(proc, req_id, method, action, params)
         if later.get("ok") is True:
-            errors.append(f"{label} must stay E_UNVERIFIED (do not ACK)")
-        if err_code(later) != "E_UNVERIFIED":
-            errors.append(f"{label} must stay E_UNVERIFIED: {later}")
+            after = after_of(later)
+            if after.get("is_playing_scene") is not True or after.get("source") != "hh_agent_runtime":
+                errors.append(f"{label} ACK requires proven Play: {later}")
+        elif err_code(later) not in ("E_UNVERIFIED", "E_TIMEOUT", "E_BUSY"):
+            errors.append(f"{label} may ACK when Play is proven; idle stays E_UNVERIFIED: {later}")
     return req_id
 
 
@@ -522,6 +524,13 @@ def verify_freeze_suite(
     req_id, idle_step = tool_call(proc, req_id, "godot.runtime", "step", {"frames": 1})
     if idle_step.get("ok") is True or err_code(idle_step) != "E_UNVERIFIED":
         errors.append(f"idle/no-Play step must be E_UNVERIFIED: {idle_step}")
+    for method, action, params, label in (
+        ("godot.runtime", "screenshot", {"scale": 1}, "runtime.screenshot"),
+        ("godot.runtime", "perf", {"detail": "short"}, "runtime.perf"),
+    ):
+        req_id, idle_cap = tool_call(proc, req_id, method, action, params)
+        if idle_cap.get("ok") is True or err_code(idle_cap) != "E_UNVERIFIED":
+            errors.append(f"idle/no-Play {label} must be E_UNVERIFIED: {idle_cap}")
 
     req_id, start_body = play_start(proc, req_id, scene, mode="debug")
     if start_body.get("ok") is not True or after_of(start_body).get("playing") is not True:

@@ -161,6 +161,7 @@ func _post_name(def: Dictionary, method: String, action: String) -> String:
 			"runtime.node": "remote_node_snapshot",
 			"runtime.state": "runtime_state_keys_present",
 			"runtime.time": "runtime_time_snapshot",
+			"runtime.assert": "assertion_evaluated",
 		}
 		var action_id: String = "%s.%s" % [method.trim_prefix("godot."), action]
 		if method == "godot.capabilities":
@@ -1203,10 +1204,16 @@ func _runtime_read(command_id: String, action: String, params: Dictionary, post:
 	if action == "freeze" or action == "step":
 		return _unverified(command_id, "runtime freeze/step must use Play time apply")
 	if action == "screenshot" or action == "perf":
-		return _unverified(command_id, "runtime screenshot/perf is a later WP")
+		return _unverified(command_id, "runtime screenshot/perf must use Play capture apply")
 	if action == "signal":
 		return _unverified(command_id, "runtime signal log is a later WP")
-	if action != "tree" and action != "node" and action != "state" and action != "time":
+	if (
+		action != "tree"
+		and action != "node"
+		and action != "state"
+		and action != "time"
+		and action != "assert"
+	):
 		return _unverified(command_id, "runtime observation requires Play process (R6)")
 	var live: HHAgentRuntimeAdapter = HHAgentRuntimeAdapter.current()
 	if live == null:

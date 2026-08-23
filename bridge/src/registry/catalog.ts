@@ -55,6 +55,7 @@ export const REQUIRED_VERBS: Readonly<Record<string, readonly string[]>> = {
     "step",
     "screenshot",
     "perf",
+    "assert",
   ],
   test: ["define", "run", "assert", "report", "evidence", "baseline"],
   export: ["preset", "validate", "build", "cancel", "artifacts"],

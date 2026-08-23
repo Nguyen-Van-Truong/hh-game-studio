@@ -1229,6 +1229,40 @@ function runtimeApplyOk(
   if (!isUlid(runId)) {
     return errorResult(result.command_id, E.E_UNVERIFIED, "freeze/step missing Play run_id");
   }
+  if (actionId === "runtime.screenshot" || actionId === "runtime.perf") {
+    if (after.source !== "hh_agent_runtime") {
+      return errorResult(
+        result.command_id,
+        E.E_UNVERIFIED,
+        "screenshot/perf reply is not from Play hh_agent_runtime",
+      );
+    }
+    if (after.dummy === true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "refusing dummy screenshot/perf ACK");
+    }
+    if (actionId === "runtime.screenshot") {
+      if (after.screenshot_artifact_present !== true) {
+        return errorResult(result.command_id, E.E_UNVERIFIED, "screenshot_artifact_present failed");
+      }
+      const path = typeof after.path === "string" ? after.path.replace(/\\/g, "/") : "";
+      if (!path || path.includes("..") || (!path.includes(".hh-agent/") && !path.includes("r6w5/"))) {
+        return errorResult(result.command_id, E.E_UNVERIFIED, "screenshot path is not under project artifacts");
+      }
+      const bytes = after.bytes;
+      if (typeof bytes !== "number" || !Number.isFinite(bytes) || bytes < 32) {
+        return errorResult(result.command_id, E.E_UNVERIFIED, "screenshot ACK requires a real captured file");
+      }
+    }
+    if (actionId === "runtime.perf") {
+      if (after.perf_counters_present !== true) {
+        return errorResult(result.command_id, E.E_UNVERIFIED, "perf_counters_present failed");
+      }
+      if (!isRecord(after.hardware_manifest)) {
+        return errorResult(result.command_id, E.E_UNVERIFIED, "perf ACK requires a hardware manifest");
+      }
+    }
+    return undefined;
+  }
   if (after.source !== "hh_agent_runtime") {
     return errorResult(result.command_id, E.E_UNVERIFIED, "freeze/step reply is not from Play hh_agent_runtime");
   }

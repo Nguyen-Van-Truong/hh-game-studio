@@ -3,7 +3,7 @@
   "protocol": "hh-godot-agent/1",
   "registry_version": "hh-godot-actions/1",
   "variant_schema": "hh-godot-variant/1",
-  "action_count": 157,
+  "action_count": 158,
   "envelope": {
     "allowed": [
       "protocol",
@@ -6307,7 +6307,7 @@
       "action_version": "1",
       "side_effect": "mutate",
       "undo": "atomic_file",
-      "timeout_ms": 15000,
+      "timeout_ms": 60000,
       "cancellable": false,
       "required_policy": "EDIT",
       "checkpoint_required": false,
@@ -17290,11 +17290,11 @@
       "method": "godot.runtime",
       "verb": "screenshot",
       "action_version": "1",
-      "side_effect": "read",
-      "undo": "none",
-      "timeout_ms": 5000,
-      "cancellable": false,
-      "required_policy": "OBSERVE",
+      "side_effect": "external",
+      "undo": "job_supervisor",
+      "timeout_ms": 120000,
+      "cancellable": true,
+      "required_policy": "OWNER_AUTOPILOT",
       "checkpoint_required": false,
       "input_schema": {
         "type": "object",
@@ -17307,6 +17307,84 @@
             "type": "number",
             "minimum": 0.25,
             "maximum": 2
+          },
+          "target": {
+            "type": "string",
+            "enum": [
+              "game",
+              "editor"
+            ]
+          },
+          "stable_frames": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 30
+          },
+          "region_x": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 8192
+          },
+          "region_y": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 8192
+          },
+          "region_w": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 8192
+          },
+          "region_h": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 8192
+          },
+          "mask_x": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 8192
+          },
+          "mask_y": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 8192
+          },
+          "mask_w": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 8192
+          },
+          "mask_h": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 8192
+          },
+          "tolerance": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "baseline": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "update_baseline": {
+            "type": "boolean"
+          },
+          "reviewed": {
+            "type": "boolean"
+          },
+          "compare": {
+            "type": "boolean"
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26,
+            "pattern": "^[0-7][0-9A-HJKMNPQRSTVWXYZ]{25}$"
           }
         }
       },
@@ -17400,7 +17478,10 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_TIMEOUT",
+        "E_BUSY",
+        "E_CONFLICT"
       ],
       "postcondition": "screenshot_artifact_present"
     },
@@ -17408,11 +17489,11 @@
       "method": "godot.runtime",
       "verb": "perf",
       "action_version": "1",
-      "side_effect": "read",
-      "undo": "none",
-      "timeout_ms": 5000,
-      "cancellable": false,
-      "required_policy": "OBSERVE",
+      "side_effect": "external",
+      "undo": "job_supervisor",
+      "timeout_ms": 120000,
+      "cancellable": true,
+      "required_policy": "OWNER_AUTOPILOT",
       "checkpoint_required": false,
       "input_schema": {
         "type": "object",
@@ -17427,6 +17508,206 @@
               "short",
               "full"
             ]
+          },
+          "warmup_frames": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 120
+          },
+          "samples": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 120
+          },
+          "budget_ms": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10000
+          },
+          "inject_spike": {
+            "type": "boolean"
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26,
+            "pattern": "^[0-7][0-9A-HJKMNPQRSTVWXYZ]{25}$"
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ok",
+          "command_id",
+          "postcondition"
+        ],
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "changed": {
+            "type": "boolean"
+          },
+          "before": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "after": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "postcondition": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "verified",
+              "checks"
+            ],
+            "properties": {
+              "verified": {
+                "type": "boolean"
+              },
+              "checks": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "undo_action": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "error": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "error_codes": [
+        "E_MISSING_REQUIRED",
+        "E_UNKNOWN_PARAM",
+        "E_INVALID_TYPE",
+        "E_OUT_OF_BOUNDS",
+        "E_UNKNOWN_ACTION",
+        "E_PROTOCOL_VERSION",
+        "E_ACTION_VERSION",
+        "E_CLIENT_ESCALATION",
+        "E_INVALID_COMMAND_ID",
+        "E_INVALID_ENVELOPE",
+        "E_UNVERIFIED",
+        "E_TIMEOUT",
+        "E_BUSY",
+        "E_CONFLICT"
+      ],
+      "postcondition": "perf_counters_present"
+    },
+    "runtime.assert": {
+      "method": "godot.runtime",
+      "verb": "assert",
+      "action_version": "1",
+      "side_effect": "read",
+      "undo": "none",
+      "timeout_ms": 15000,
+      "cancellable": false,
+      "required_policy": "OBSERVE",
+      "checkpoint_required": false,
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "tree",
+              "property",
+              "signal",
+              "ui_layout",
+              "audio_event",
+              "world"
+            ]
+          },
+          "node_path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
+          },
+          "key": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "op": {
+            "type": "string",
+            "enum": [
+              "eq",
+              "neq",
+              "gt",
+              "gte",
+              "lt",
+              "lte",
+              "exists"
+            ]
+          },
+          "value_int": {
+            "type": "integer",
+            "minimum": -2147483648,
+            "maximum": 2147483647
+          },
+          "value_bool": {
+            "type": "boolean"
+          },
+          "value_string": {
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 128
+          },
+          "signal": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26,
+            "pattern": "^[0-7][0-9A-HJKMNPQRSTVWXYZ]{25}$"
           }
         }
       },
@@ -17522,7 +17803,7 @@
         "E_INVALID_ENVELOPE",
         "E_UNVERIFIED"
       ],
-      "postcondition": "perf_counters_present"
+      "postcondition": "assertion_evaluated"
     },
     "test.define": {
       "method": "godot.test",
@@ -17798,6 +18079,29 @@
             "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
           },
           "expect": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "tree",
+              "property",
+              "signal",
+              "ui_layout",
+              "audio_event",
+              "world"
+            ]
+          },
+          "node_path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
+          },
+          "key": {
             "type": "string",
             "minLength": 1,
             "maxLength": 128,
@@ -18166,6 +18470,15 @@
             "minLength": 8,
             "maxLength": 128,
             "pattern": "^[A-Fa-f0-9]+$"
+          },
+          "reviewed": {
+            "type": "boolean"
+          },
+          "path": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 256,
+            "pattern": "^res://[^\\s]+$"
           }
         }
       },

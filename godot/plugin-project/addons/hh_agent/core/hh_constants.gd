@@ -72,3 +72,6 @@ const RUNTIME_MAX_RESEND: int = 8
 const INPUT_WAIT_MS: int = 15000
 const INPUT_STEAL_MS: int = 280
 const TIME_WAIT_MS: int = 25000
+const CAPTURE_WAIT_MS: int = 25000
+const PERF_WAIT_MS: int = 25000
+const SHOT_DIR: String = ".hh-agent/r6w5"

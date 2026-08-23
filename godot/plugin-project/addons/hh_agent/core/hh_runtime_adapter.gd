@@ -44,7 +44,13 @@ func begin_query(
 	params: Dictionary,
 	post: String,
 ) -> Dictionary:
-	if action != "tree" and action != "node" and action != "state" and action != "time":
+	if (
+		action != "tree"
+		and action != "node"
+		and action != "state"
+		and action != "time"
+		and action != "assert"
+	):
 		return _errors.fail(
 			command_id,
 			HHAgentErrors.E_UNVERIFIED,
@@ -101,7 +107,16 @@ func begin_query(
 		"cursor": str(params.get("cursor", "")),
 		"node_path": str(params.get("node_path", ".")),
 		"key": str(params.get("key", "")),
+		"kind": str(params.get("kind", "")),
+		"compare_op": str(params.get("op", "")),
+		"signal": str(params.get("signal", "")),
 	}
+	if params.has("value_int"):
+		payload["value_int"] = int(params.get("value_int"))
+	if params.has("value_bool"):
+		payload["value_bool"] = params.get("value_bool") == true
+	if params.has("value_string"):
+		payload["value_string"] = str(params.get("value_string", ""))
 	_pending = {
 		PENDING_KEY: true,
 		"command_id": command_id,
@@ -273,6 +288,74 @@ func begin_time(
 	return {PENDING_KEY: true, "ok": false, "command_id": command_id}
 
 
+func begin_capture(
+	command_id: String,
+	action: String,
+	params: Dictionary,
+	post: String,
+) -> Dictionary:
+	if action != "screenshot" and action != "perf":
+		return _errors.fail(
+			command_id,
+			HHAgentErrors.E_UNVERIFIED,
+			"not a proven Play screenshot/perf verb",
+			"",
+		)
+	if not EditorInterface.is_playing_scene():
+		return _errors.fail(
+			command_id,
+			HHAgentErrors.E_UNVERIFIED,
+			"runtime screenshot/perf requires a proven Play process (is_playing_scene)",
+			"play",
+		)
+	var play: HHAgentPlayAdapter = HHAgentPlayAdapter.current()
+	if play == null:
+		return _errors.fail(
+			command_id,
+			HHAgentErrors.E_UNVERIFIED,
+			"runtime screenshot/perf requires a proven Play process (R6)",
+			"play",
+		)
+	var stale: Dictionary = play.stale_run_reject(command_id, params)
+	if not stale.is_empty():
+		return stale
+	var run_id: String = play.current_run_id()
+	if run_id.is_empty():
+		return _errors.fail(
+			command_id,
+			HHAgentErrors.E_UNVERIFIED,
+			"runtime screenshot/perf missing Play run_id bind",
+			"run_id",
+		)
+	if not _pending.is_empty():
+		return _errors.fail(command_id, HHAgentErrors.E_BUSY, "runtime/input channel busy", "runtime")
+	var token: String = _mint_token()
+	var payload: Dictionary = params.duplicate(true)
+	payload["op"] = action
+	payload["token"] = token
+	payload["run_id"] = run_id
+	var now: int = Time.get_ticks_msec()
+	var wait_ms: int = HHAgentConstants.CAPTURE_WAIT_MS
+	if action == "perf":
+		wait_ms = HHAgentConstants.PERF_WAIT_MS
+	_pending = {
+		PENDING_KEY: true,
+		"kind": "capture",
+		"command_id": command_id,
+		"post": post,
+		"action": action,
+		"token": token,
+		"run_id": run_id,
+		"payload": payload,
+		"sent": false,
+		"sends": 0,
+		"sent_ms": 0,
+		"deadline_ms": now + wait_ms,
+	}
+	_try_send()
+	return {PENDING_KEY: true, "ok": false, "command_id": command_id}
+
+
 func poll_pending() -> Dictionary:
 	if _pending.is_empty():
 		return {}
@@ -289,7 +372,11 @@ func poll_pending() -> Dictionary:
 				else (
 					"runtime freeze/step debugger reply timed out"
 					if kind == "time"
-					else "runtime debugger reply timed out (no remote tree invented)"
+					else (
+						"runtime screenshot/perf debugger reply timed out"
+						if kind == "capture"
+						else "runtime debugger reply timed out (no remote tree invented)"
+					)
 				)
 			),
 		)
@@ -320,6 +407,7 @@ func poll_pending() -> Dictionary:
 		elif (
 			kind != "input"
 			and kind != "time"
+			and kind != "capture"
 			and sent_ms > 0
 			and now - sent_ms >= HHAgentConstants.RUNTIME_RESEND_MS
 			and sends < HHAgentConstants.RUNTIME_MAX_RESEND
@@ -330,6 +418,8 @@ func poll_pending() -> Dictionary:
 		return _finish_input(command_id, reply)
 	if str(_pending.get("kind", "")) == "time":
 		return _finish_time(command_id, reply)
+	if str(_pending.get("kind", "")) == "capture":
+		return _finish_capture(command_id, reply)
 	return _finish(command_id, reply)
 
 
@@ -555,6 +645,86 @@ func _finish_time(command_id: String, reply: Dictionary) -> Dictionary:
 	var checks: PackedStringArray = PackedStringArray()
 	checks.append(post)
 	return _errors.ok_changed(command_id, checks, after, true)
+
+
+func _finish_capture(command_id: String, reply: Dictionary) -> Dictionary:
+	var post: String = str(_pending.get("post", "screenshot_artifact_present"))
+	var want_run: String = str(_pending.get("run_id", ""))
+	var want_token: String = str(_pending.get("token", ""))
+	var verb: String = str(_pending.get("action", ""))
+	_pending = {}
+	if not EditorInterface.is_playing_scene():
+		return _errors.fail(
+			command_id,
+			HHAgentErrors.E_CONFLICT,
+			"Play stopped before screenshot/perf reply",
+			"play",
+		)
+	if str(reply.get("token", "")) != want_token:
+		return _errors.fail(command_id, HHAgentErrors.E_CONFLICT, "screenshot/perf reply token mismatch", "token")
+	if str(reply.get("run_id", "")) != want_run:
+		return _errors.fail(command_id, HHAgentErrors.E_CONFLICT, "screenshot/perf reply run_id mismatch", "run_id")
+	if str(reply.get("source", "")) != "hh_agent_runtime":
+		return _errors.fail(
+			command_id,
+			HHAgentErrors.E_UNVERIFIED,
+			"screenshot/perf reply is not from Play hh_agent_runtime",
+			"runtime",
+		)
+	if reply.get("ok", false) != true:
+		var code: String = str(reply.get("code", HHAgentErrors.E_UNVERIFIED))
+		if code.is_empty():
+			code = HHAgentErrors.E_UNVERIFIED
+		var fail_after: Dictionary = reply.duplicate(true)
+		fail_after["run_id"] = want_run
+		fail_after["playing"] = true
+		fail_after["is_playing_scene"] = true
+		fail_after["playing_scene"] = _normalize_res(str(EditorInterface.get_playing_scene()))
+		fail_after["game_tree_source"] = "hh_agent_runtime"
+		fail_after["source"] = "hh_agent_runtime"
+		return _errors.fail_after(
+			command_id,
+			code,
+			str(reply.get("message", "Play screenshot/perf failed")),
+			"runtime",
+			fail_after,
+		)
+	if reply.get("dummy", false) == true:
+		return _errors.fail(command_id, HHAgentErrors.E_UNVERIFIED, "refusing dummy screenshot/perf ACK", "runtime")
+	if verb == "screenshot":
+		if reply.get("screenshot_artifact_present", false) != true:
+			return _errors.fail(command_id, HHAgentErrors.E_UNVERIFIED, "screenshot_artifact_present failed", "runtime")
+		var path_s: String = str(reply.get("path", "")).replace("\\", "/")
+		if path_s.is_empty() or path_s.contains("..") or (not path_s.contains(".hh-agent/") and not path_s.contains("r6w5/")):
+			return _errors.fail(command_id, HHAgentErrors.E_UNVERIFIED, "screenshot path is not under project artifacts", "runtime")
+		if int(reply.get("bytes", 0)) < 32:
+			return _errors.fail(command_id, HHAgentErrors.E_UNVERIFIED, "screenshot ACK requires a real captured file", "runtime")
+		if not _artifact_exists(path_s):
+			return _errors.fail(command_id, HHAgentErrors.E_UNVERIFIED, "screenshot file missing on disk after capture", "runtime")
+	if verb == "perf":
+		if reply.get("perf_counters_present", false) != true:
+			return _errors.fail(command_id, HHAgentErrors.E_UNVERIFIED, "perf_counters_present failed", "runtime")
+		if typeof(reply.get("hardware_manifest", {})) != TYPE_DICTIONARY:
+			return _errors.fail(command_id, HHAgentErrors.E_UNVERIFIED, "perf ACK requires a hardware manifest", "runtime")
+	var after: Dictionary = reply.duplicate(true)
+	after["run_id"] = want_run
+	after["playing"] = true
+	after["is_playing_scene"] = true
+	after["playing_scene"] = _normalize_res(str(EditorInterface.get_playing_scene()))
+	after["game_tree_source"] = "hh_agent_runtime"
+	after["source"] = "hh_agent_runtime"
+	after["dummy"] = false
+	var checks: PackedStringArray = PackedStringArray()
+	checks.append(post)
+	return _errors.ok_changed(command_id, checks, after, true)
+
+
+func _artifact_exists(path_s: String) -> bool:
+	var p: String = path_s.strip_edges().replace("\\", "/")
+	if p.begins_with("res://"):
+		var abs_p: String = ProjectSettings.globalize_path(p)
+		return FileAccess.file_exists(p) or FileAccess.file_exists(abs_p)
+	return FileAccess.file_exists(p)
 
 
 func _replay_header_fail(command_id: String, params: Dictionary, run_id: String) -> Dictionary:

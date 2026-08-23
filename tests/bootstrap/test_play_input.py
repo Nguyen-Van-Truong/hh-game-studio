@@ -14,7 +14,8 @@ Verify (encoded here; this file is the official harness):
     stay Alternative (do not fake hashes)
   - movement OR action press seen by the fixture; typing or click fixture;
     release_all clears held; focus-loss typed fail; replay mismatch typed fail
-  - screenshot/perf stay E_UNVERIFIED; freeze/step are proven by R6-WP4 when requested
+  - screenshot/perf may ACK when Play is proven; idle/no-Play stay E_UNVERIFIED;
+    freeze/step honesty is unchanged
   - screenshots=SKIP
 
 If headless --editor never delivers game-window input: label Alternative,
@@ -380,8 +381,8 @@ def src_scan_errors() -> list[str]:
         errors.append("router must dispatch godot.input when Play can be proven")
 
     reads = (ADDON / "core" / "hh_read_adapters.gd").read_text(encoding="utf-8")
-    if "runtime screenshot/perf is a later WP" not in reads:
-        errors.append("screenshot/perf must stay E_UNVERIFIED")
+    if "runtime screenshot/perf must use Play capture apply" not in reads:
+        errors.append("screenshot/perf must use Play apply (idle/no-Play stays E_UNVERIFIED)")
 
     for dbg_name in ("hh_play_debugger.gd", "hh_runtime_debugger.gd"):
         dbg = ADDON / "core" / dbg_name
@@ -648,9 +649,11 @@ def verify_later_wps(proc, req_id: int, errors: list[str]) -> int:
     ):
         req_id, later = tool_call(proc, req_id, method, action, params)
         if later.get("ok") is True:
-            errors.append(f"{label} must stay E_UNVERIFIED (do not ACK)")
-        if err_code(later) != "E_UNVERIFIED":
-            errors.append(f"{label} must stay E_UNVERIFIED: {later}")
+            after = after_of(later)
+            if after.get("is_playing_scene") is not True or after.get("source") != "hh_agent_runtime":
+                errors.append(f"{label} ACK requires proven Play: {later}")
+        elif err_code(later) not in ("E_UNVERIFIED", "E_TIMEOUT", "E_BUSY"):
+            errors.append(f"{label} may ACK when Play is proven; idle stays E_UNVERIFIED: {later}")
     return req_id
 
 
@@ -672,6 +675,13 @@ def verify_input_suite(
         errors.append("play.input must stay E_UNVERIFIED when Play is not running (paper-ACK)")
     if err_code(idle) != "E_UNVERIFIED":
         errors.append(f"idle/no-Play input must be E_UNVERIFIED: {idle}")
+    for method, action, params, label in (
+        ("godot.runtime", "screenshot", {"scale": 1}, "runtime.screenshot"),
+        ("godot.runtime", "perf", {"detail": "short"}, "runtime.perf"),
+    ):
+        req_id, idle_cap = tool_call(proc, req_id, method, action, params)
+        if idle_cap.get("ok") is True or err_code(idle_cap) != "E_UNVERIFIED":
+            errors.append(f"idle/no-Play {label} must be E_UNVERIFIED: {idle_cap}")
 
     req_id, start_body = play_start(proc, req_id, scene, mode="debug")
     if start_body.get("ok") is not True or after_of(start_body).get("playing") is not True:

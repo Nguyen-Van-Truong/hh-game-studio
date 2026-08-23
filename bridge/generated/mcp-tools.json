@@ -5,7 +5,7 @@
   "registry_version": "hh-godot-actions/1",
   "action_version": "1",
   "tool_count": 27,
-  "action_count": 157,
+  "action_count": 158,
   "tools": [
     {
       "name": "godot.capabilities",
@@ -752,7 +752,8 @@
               "freeze",
               "step",
               "screenshot",
-              "perf"
+              "perf",
+              "assert"
             ]
           },
           "params": {
