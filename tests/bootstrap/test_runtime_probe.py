@@ -2,7 +2,7 @@
 """R6-WP2: Runtime probe/autoload and structured state.
 
 Does not tick the 20-8 plan. Does not change CURRENT_VALID_WP.
-Keep R6-WP2 [ ]; CURRENT_VALID_WP=R6-WP2.
+Keep R6-WP2 [ ]; while unticked CURRENT_VALID_WP=R6-WP2.
 Pin 4.7.1-stable only. Refuse later 4.7 patches past .1-stable. No skip-PASS.
 No dummy screenshot PNG. Do not paper-ACK runtime.tree from the editor scene.
 
@@ -62,7 +62,7 @@ def rel(path: Path) -> str:
 
 
 def plan_errors(text: str) -> list[str]:
-    """Keep R6-WP2 [ ]; require CURRENT_VALID_WP=R6-WP2."""
+    """Keep R6-WP2 [ ]; while unticked require CURRENT_VALID_WP=R6-WP2."""
     errors: list[str] = []
     current = ""
     wp2 = None
@@ -74,12 +74,14 @@ def plan_errors(text: str) -> list[str]:
             wp2 = stripped
     if wp2 is None:
         return ["plan missing R6-WP2 heading"]
-    if re.search(r"\[x\]", wp2, re.IGNORECASE):
-        errors.append("R6-WP2 heading must keep [ ] until coordinator tick")
-    if "[ ]" not in wp2:
-        errors.append("R6-WP2 heading must keep [ ] until coordinator tick")
-    if current != "R6-WP2":
-        errors.append(f"CURRENT_VALID_WP={current!r} (need R6-WP2)")
+    ticked = bool(re.search(r"\[x\]", wp2, re.IGNORECASE))
+    if not ticked:
+        if "[ ]" not in wp2:
+            errors.append("R6-WP2 heading must keep [ ] until coordinator tick")
+        if current != "R6-WP2":
+            errors.append(f"CURRENT_VALID_WP={current!r} (need R6-WP2 while WP2 is unticked)")
+    elif not re.match(r"^R6-WP([3-9]|\d{2,})$|^R[7-9]-WP\d+$|^RX-WP\d+$", current):
+        errors.append(f"CURRENT_VALID_WP={current!r} (need R6-WP3+ after R6-WP2 tick)")
     return errors
 
 
