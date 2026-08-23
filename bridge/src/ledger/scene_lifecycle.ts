@@ -92,7 +92,7 @@ export const PROJECT_SETTINGS_APPLY = [
   "project.plugin",
 ] as const;
 
-export const SIDECAR_MUTATE_APPLY = ["git.checkpoint", "git.revert_checkpoint"] as const;
+export const SIDECAR_MUTATE_APPLY = ["git.checkpoint", "git.revert_checkpoint", "job.schedule"] as const;
 
 /** EXTERNAL Play apply. Not UndoRedo / isProvenEditorApply. */
 export const PLAY_APPLY = ["play.start", "play.stop", "play.restart", "play.debug"] as const;

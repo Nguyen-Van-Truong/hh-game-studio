@@ -1750,6 +1750,18 @@
       "postcondition": "orchestrator_state_persisted",
       "checkpoint_required": false
     },
+    "job.schedule": {
+      "method": "godot.job",
+      "verb": "schedule",
+      "side_effect": "mutate",
+      "timeout_ms": 120000,
+      "required": [
+        "job_id",
+        "op"
+      ],
+      "postcondition": "scheduler_job_persisted",
+      "checkpoint_required": false
+    },
     "canvas.bounds": {
       "method": "godot.canvas",
       "verb": "bounds",

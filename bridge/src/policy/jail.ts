@@ -255,8 +255,17 @@ export function extractTargetPaths(params: Record<string, unknown>, actionId?: s
   if (actionId === "runtime.screenshot" || actionId === "runtime.perf") {
     return [];
   }
-  if (actionId === "job.run" || actionId === "job.cancel" || actionId === "job.wait" || actionId === "job.status") {
+  if (
+    actionId === "job.run" ||
+    actionId === "job.cancel" ||
+    actionId === "job.wait" ||
+    actionId === "job.status"
+  ) {
     return [];
+  }
+  if (actionId === "job.schedule") {
+    const p = typeof params.path === "string" && params.path.length > 0 ? params.path : "";
+    return p ? [p] : [];
   }
   if (actionId && PROJECT_FILE_ACTIONS.has(actionId)) {
     return ["res://project.godot"];

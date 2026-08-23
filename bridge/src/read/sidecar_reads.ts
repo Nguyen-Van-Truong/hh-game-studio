@@ -17,6 +17,7 @@ import { unverifiedResult } from "../transport/plugin_rpc.js";
 import { compileBrief, writePlanEvidence } from "../planner/brief_compiler.js";
 import { playJob, playJobs } from "../ledger/play_session.js";
 import { listJobs, statusJob } from "../orchestrator/machine.js";
+import { listSchedJobs, statusSchedJob } from "../scheduler/machine.js";
 
 export interface SidecarReadInput {
   actionId: string;
@@ -222,6 +223,12 @@ export function trySidecarRead(input: SidecarReadInput): PluginCommandResult | u
       for (const row of extra) {
         jobs.push({ ...row, kind: "orchestrator" });
       }
+      for (const row of listSchedJobs(
+        { projectRoot, commandId, now: Date.now(), paused: input.pause?.isPaused() === true },
+        limit,
+      )) {
+        jobs.push(row);
+      }
     }
     return ok(commandId, "job_list_returned", { jobs: jobs.slice(0, limit), total: jobs.length });
   }
@@ -257,6 +264,13 @@ export function trySidecarRead(input: SidecarReadInput): PluginCommandResult | u
   if (actionId === "job.status") {
     const jobId = typeof params.job_id === "string" ? params.job_id : "";
     if (projectRoot) {
+      const sched = statusSchedJob(
+        { projectRoot, commandId, now: Date.now(), paused: input.pause?.isPaused() === true },
+        { job_id: jobId },
+      );
+      if (sched.ok) {
+        return sched;
+      }
       const orch = statusJob(
         { projectRoot, commandId, now: Date.now(), paused: input.pause?.isPaused() === true },
         { job_id: jobId },

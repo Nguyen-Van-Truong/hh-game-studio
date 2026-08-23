@@ -54,6 +54,7 @@ import {
 } from "./scene_lifecycle.js";
 import { notePlayAfter } from "./play_session.js";
 import { handleOrchAction } from "../orchestrator/machine.js";
+import { handleScheduleAction } from "../scheduler/machine.js";
 import { emptyRow, type CommandLedger, type CommandRow } from "./store.js";
 import type { LedgerState } from "./states.js";
 import {
@@ -2079,7 +2080,7 @@ async function applyMutateOnce(
     }
     const projectRoot = runtime.projectRoot ?? runtime.policy?.projectRoot ?? "";
     if (classified.actionId === "editor.pause" && !runtime.pluginConnected()) {
-      return finishSidecarMutate(
+      return await finishSidecarMutate(
         ledger,
         row,
         classified.actionId,
@@ -2089,8 +2090,11 @@ async function applyMutateOnce(
         runtime.policy,
       );
     }
-    if (isSidecarMutateApply(classified.actionId)) {
-      return finishSidecarMutate(
+    if (
+      isSidecarMutateApply(classified.actionId) &&
+      !(classified.actionId === "job.schedule" && runtime.pluginConnected())
+    ) {
+      return await finishSidecarMutate(
         ledger,
         row,
         classified.actionId,
@@ -2510,7 +2514,7 @@ function finishSidecarOrchestrator(
   return result;
 }
 
-function finishSidecarMutate(
+async function finishSidecarMutate(
   ledger: CommandLedger,
   row: CommandRow,
   actionId: string,
@@ -2518,7 +2522,7 @@ function finishSidecarMutate(
   projectRoot: string,
   gated: Extract<GateResult, { ok: true }>,
   policy?: PolicyServices,
-): PluginCommandResult {
+): Promise<PluginCommandResult> {
   saveState(ledger, row, "applying", {
     before_summary: JSON.stringify({
       kind: "sidecar",
@@ -2571,6 +2575,16 @@ function finishSidecarMutate(
       ref: typeof params.ref === "string" ? params.ref : "",
       ...(policy?.pause ? { pause: policy.pause } : {}),
     });
+  } else if (actionId === "job.schedule") {
+    result = await handleScheduleAction(
+      {
+        projectRoot,
+        commandId: row.command_id,
+        now: Date.now(),
+        paused: policy?.pause.isPaused() === true,
+      },
+      params,
+    );
   } else {
     result = unverifiedResult(row.command_id, "sidecar mutate not implemented");
   }

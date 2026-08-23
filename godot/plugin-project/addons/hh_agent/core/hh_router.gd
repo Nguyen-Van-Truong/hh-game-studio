@@ -28,6 +28,7 @@ const _TestScript: GDScript = preload("res://addons/hh_agent/core/hh_test_adapte
 const _RepairScript: GDScript = preload("res://addons/hh_agent/core/hh_repair_adapter.gd")
 const _PlanScript: GDScript = preload("res://addons/hh_agent/core/hh_plan_adapter.gd")
 const _OrchScript: GDScript = preload("res://addons/hh_agent/core/hh_orchestrator_adapter.gd")
+const _MultiAgentScript: GDScript = preload("res://addons/hh_agent/core/hh_multi_agent_adapter.gd")
 const _PresenterScript: GDScript = preload("res://addons/hh_agent/core/hh_presenter.gd")
 const _OverlayScript: GDScript = preload("res://addons/hh_agent/ui/overlay/hh_overlay.gd")
 const _SchedulerScript: GDScript = preload("res://addons/hh_agent/core/hh_scheduler.gd")
@@ -59,6 +60,7 @@ var _test_local: HHAgentTestAdapter = HHAgentTestAdapter.new()
 var _repair_local: HHAgentRepairAdapter = HHAgentRepairAdapter.new()
 var _plan_local: HHAgentPlanAdapter = HHAgentPlanAdapter.new()
 var _orch_local: HHAgentOrchestratorAdapter = HHAgentOrchestratorAdapter.new()
+var _multi_agent_local = _MultiAgentScript.new()
 var _presenter: HHAgentPresenter = HHAgentPresenter.new()
 var _overlay_local: HHAgentOverlay = HHAgentOverlay.new()
 var _scheduler_local: HHAgentScheduler = HHAgentScheduler.new()
@@ -118,8 +120,19 @@ func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_ga
 	if envelope.has("precondition") and envelope.get("precondition") is Dictionary:
 		pre = envelope.get("precondition") as Dictionary
 	var result: Dictionary = {}
+	var mutating_godot: bool = (
+		(method == "godot.scene" and action != "query")
+		or (method == "godot.node" and action != "query")
+		or (method == "godot.property" and action != "get")
+		or (method == "godot.resource" and action != "load" and action != "uid")
+		or (method == "godot.script")
+	)
+	if mutating_godot and _MultiAgentScript.lane_is_busy():
+		return _errors.fail(command_id, HHAgentErrors.E_BUSY, "godot mutation lane held by another writer", "lane")
 	if method == "godot.job" and action == "plan":
 		result = _plan().handle(command_id, method, action, params, actions, pre)
+	elif method == "godot.job" and action == "schedule":
+		result = _multi_agent().handle(command_id, method, action, params, actions, pre)
 	elif method == "godot.job" and _orch().handles(action):
 		result = _orch().handle(command_id, method, action, params, actions, pre)
 	elif method == "godot.job" and action == "transaction":
@@ -703,6 +716,10 @@ func _orch() -> HHAgentOrchestratorAdapter:
 	if live != null:
 		return live
 	return _orch_local
+
+
+func _multi_agent():
+	return _multi_agent_local
 
 
 func _overlay() -> HHAgentOverlay:

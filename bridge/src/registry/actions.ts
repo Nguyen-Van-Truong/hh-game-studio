@@ -2685,6 +2685,36 @@ const SPECS: Record<string, ActionSpec> = {
     { job_id: "r7w2-demo", fixture: "ok_slice", hold_after: "inspect" },
     { extra_errors: [E.E_PAUSED, E.E_POLICY, E.E_CONFLICT], timeout_ms: 60_000, cancel: true },
   ),
+  "job.schedule": mutate(
+    "Run the multi-agent scheduler: four worker roles, one Godot mutation lane, lease/merge by base hash",
+    "job_supervisor",
+    "scheduler_job_persisted",
+    obj(["job_id", "op"], {
+      job_id: JOB_ID,
+      op: {
+        type: "string",
+        enum: ["run", "propose", "lease", "heartbeat", "release", "merge", "status", "apply", "hold_lane", "release_lane"],
+      },
+      fixture: { type: "string", enum: ["overlap", "throughput", "crash", "dag"] },
+      role: {
+        type: "string",
+        enum: ["research", "code_staging", "asset_generation", "test_analysis"],
+      },
+      writer_id: JOB_ID,
+      path: RES_PATH,
+      base_hash: HASH,
+      contents: SCRIPT_TEXT,
+      proposal_id: RUN_ID,
+      ttl_ms: { type: "integer", minimum: 50, maximum: 120_000 },
+      work_units: { type: "integer", minimum: 64, maximum: 200_000 },
+    }),
+    { job_id: "r7w4-demo", op: "run", fixture: "overlap" },
+    {
+      extra_errors: [E.E_PAUSED, E.E_POLICY, E.E_CONFLICT, E.E_LEASE, E.E_BUSY],
+      timeout_ms: 120_000,
+      cancel: true,
+    },
+  ),
   "job.plan": read(
     "Compile PROJECT_BRIEF into an acyclic task DAG with acceptance traces",
     "plan_dag_compiled",

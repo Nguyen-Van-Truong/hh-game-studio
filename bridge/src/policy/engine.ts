@@ -91,12 +91,13 @@ export function runMutationGate(input: GateInput): GateResult {
   try {
     services.leases.acquireWriter(services.writerId);
     const gitSlice = input.actionId === "git.checkpoint" || input.actionId === "git.revert_checkpoint";
+    const schedSlice = input.actionId === "job.schedule";
     for (const item of jailed) {
       services.leases.acquireFile(services.writerId, item.rel, item.abs, undefined, {
-        allowHashRefresh: gitSlice,
+        allowHashRefresh: gitSlice || schedSlice,
       });
     }
-    if (!gitSlice) {
+    if (!gitSlice && !schedSlice) {
       for (const item of jailed) {
         services.leases.assertUnchanged(item.rel, item.abs);
       }

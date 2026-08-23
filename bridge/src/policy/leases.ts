@@ -20,6 +20,13 @@ export interface FileLease {
   hash: string;
   expires_at: number;
   rel: string;
+  pid: number;
+  heartbeat_at: number;
+}
+
+export interface LeaseTableOptions {
+  /** Relative dir under project root. Default `.hh-agent` (R2-WP5). */
+  dir?: string;
 }
 
 function nowMs(): number {
@@ -59,16 +66,70 @@ function atomicWrite(file: string, body: string): void {
   fs.renameSync(tmp, file);
 }
 
+function sleepMs(ms: number): void {
+  Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
+}
+
+function fileStale(held: FileLease, now: number, currentHash?: string): boolean {
+  if (held.expires_at <= now) {
+    return true;
+  }
+  // Dead pid is a crash only when the bytes still match. Hash drift is human-edit / E_CONFLICT.
+  if (held.pid > 0 && !pidAlive(held.pid) && (currentHash === undefined || currentHash === held.hash)) {
+    return true;
+  }
+  return false;
+}
+
 export class LeaseTable {
   readonly projectRoot: string;
   readonly writerPath: string;
   readonly filesPath: string;
 
-  constructor(projectRoot: string) {
+  constructor(projectRoot: string, opts?: LeaseTableOptions) {
     this.projectRoot = projectRoot;
-    const dir = path.join(projectRoot, ".hh-agent");
+    const dir = path.join(projectRoot, opts?.dir ?? ".hh-agent");
     this.writerPath = path.join(dir, "writer.lock");
     this.filesPath = path.join(dir, "file-leases.json");
+  }
+
+  private withFilesLock<T>(fn: () => T): T {
+    const lock = `${this.filesPath}.lock`;
+    fs.mkdirSync(path.dirname(lock), { recursive: true });
+    const deadline = nowMs() + 2_000;
+    for (;;) {
+      try {
+        fs.writeFileSync(lock, `${process.pid}\n`, { encoding: "utf8", flag: "wx" });
+        break;
+      } catch {
+        let holder = 0;
+        try {
+          holder = Number.parseInt(fs.readFileSync(lock, "utf8").trim(), 10);
+        } catch {
+          holder = 0;
+        }
+        if (holder > 0 && !pidAlive(holder)) {
+          try {
+            fs.unlinkSync(lock);
+          } catch {
+            /* retry */
+          }
+        } else if (nowMs() >= deadline) {
+          throw typedError(E.E_BUSY, "file lease table busy", "lease");
+        } else {
+          sleepMs(5);
+        }
+      }
+    }
+    try {
+      return fn();
+    } finally {
+      try {
+        fs.unlinkSync(lock);
+      } catch {
+        /* ignore */
+      }
+    }
   }
 
   private readWriter(): WriterLock | undefined {
@@ -96,6 +157,8 @@ export class LeaseTable {
         hash: value.hash,
         expires_at: typeof value.expires_at === "number" ? value.expires_at : 0,
         rel,
+        pid: typeof value.pid === "number" ? value.pid : 0,
+        heartbeat_at: typeof value.heartbeat_at === "number" ? value.heartbeat_at : 0,
       };
     }
     return out;
@@ -150,23 +213,90 @@ export class LeaseTable {
     rel: string,
     abs: string,
     ttlMs = DEFAULT_LEASE_TTL_MS,
-    opts: { allowHashRefresh?: boolean } = {},
+    opts: { allowHashRefresh?: boolean; skipWriter?: boolean } = {},
   ): FileLease {
-    this.acquireWriter(writerId, ttlMs);
-    const files = this.readFiles();
+    if (opts.skipWriter !== true) {
+      this.acquireWriter(writerId, ttlMs);
+    }
+    return this.withFilesLock(() => {
+      const files = this.readFiles();
+      const now = nowMs();
+      const current = contentHash(abs);
+      const held = files[rel];
+      if (held && held.writer_id !== writerId && !fileStale(held, now, current)) {
+        throw typedError(E.E_LEASE, "file/scene lease held by another writer", rel);
+      }
+      if (held && !fileStale(held, now, current) && held.hash !== current && opts.allowHashRefresh !== true) {
+        throw typedError(E.E_CONFLICT, "human-edit drift on leased file", rel);
+      }
+      const lease: FileLease = {
+        writer_id: writerId,
+        hash: current,
+        expires_at: now + ttlMs,
+        rel,
+        pid: process.pid,
+        heartbeat_at: now,
+      };
+      files[rel] = lease;
+      atomicWrite(this.filesPath, `${JSON.stringify(files)}\n`);
+      return lease;
+    });
+  }
+
+  heartbeat(writerId: string, rel: string, ttlMs = DEFAULT_LEASE_TTL_MS): FileLease {
+    return this.withFilesLock(() => {
+      const files = this.readFiles();
+      const now = nowMs();
+      const held = files[rel];
+      if (!held || held.writer_id !== writerId || fileStale(held, now)) {
+        throw typedError(E.E_LEASE, "cannot heartbeat a file lease this writer does not hold", rel);
+      }
+      const lease: FileLease = {
+        ...held,
+        expires_at: now + ttlMs,
+        pid: process.pid,
+        heartbeat_at: now,
+      };
+      files[rel] = lease;
+      atomicWrite(this.filesPath, `${JSON.stringify(files)}\n`);
+      return lease;
+    });
+  }
+
+  releaseFile(writerId: string, rel: string): void {
+    this.withFilesLock(() => {
+      const files = this.readFiles();
+      const held = files[rel];
+      if (!held) {
+        return;
+      }
+      const now = nowMs();
+      if (held.writer_id !== writerId && !fileStale(held, now)) {
+        throw typedError(E.E_LEASE, "cannot release a file lease held by another writer", rel);
+      }
+      delete files[rel];
+      atomicWrite(this.filesPath, `${JSON.stringify(files)}\n`);
+    });
+  }
+
+  releaseWriter(writerId: string): void {
+    const existing = this.readWriter();
+    if (!existing) {
+      return;
+    }
     const now = nowMs();
-    const current = contentHash(abs);
-    const held = files[rel];
-    if (held && held.expires_at > now && held.writer_id !== writerId) {
-      throw typedError(E.E_LEASE, "file/scene lease held by another writer", rel);
+    if (
+      existing.writer_id !== writerId &&
+      existing.expires_at > now &&
+      !(existing.pid > 0 && !pidAlive(existing.pid))
+    ) {
+      throw typedError(E.E_BUSY, "project writer lease held by another actor", "lease");
     }
-    if (held && held.expires_at > now && held.hash !== current && opts.allowHashRefresh !== true) {
-      throw typedError(E.E_CONFLICT, "human-edit drift on leased file", rel);
+    try {
+      fs.unlinkSync(this.writerPath);
+    } catch {
+      /* gone */
     }
-    const lease: FileLease = { writer_id: writerId, hash: current, expires_at: now + ttlMs, rel };
-    files[rel] = lease;
-    atomicWrite(this.filesPath, `${JSON.stringify(files)}\n`);
-    return lease;
   }
 
   assertUnchanged(rel: string, abs: string): void {
@@ -190,16 +320,20 @@ export class LeaseTable {
   }
 
   noteWritten(writerId: string, rel: string, abs: string, ttlMs = DEFAULT_LEASE_TTL_MS): FileLease {
-    const files = this.readFiles();
-    const now = nowMs();
-    const lease: FileLease = {
-      writer_id: writerId,
-      hash: contentHash(abs),
-      expires_at: now + ttlMs,
-      rel,
-    };
-    files[rel] = lease;
-    atomicWrite(this.filesPath, `${JSON.stringify(files)}\n`);
-    return lease;
+    return this.withFilesLock(() => {
+      const files = this.readFiles();
+      const now = nowMs();
+      const lease: FileLease = {
+        writer_id: writerId,
+        hash: contentHash(abs),
+        expires_at: now + ttlMs,
+        rel,
+        pid: process.pid,
+        heartbeat_at: now,
+      };
+      files[rel] = lease;
+      atomicWrite(this.filesPath, `${JSON.stringify(files)}\n`);
+      return lease;
+    });
   }
 }
