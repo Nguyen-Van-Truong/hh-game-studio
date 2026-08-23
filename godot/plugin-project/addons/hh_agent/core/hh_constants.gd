@@ -85,3 +85,6 @@ const REPAIR_FIXTURE_DIR: String = "r6w7"
 const REPAIR_SCHEMA: String = "hh-repair/1"
 const REPAIR_WAIT_MS: int = 240000
 const REPAIR_MAX_LOOPS: int = 3
+const PLAN_DIR: String = ".hh-agent/evidence"
+const PLAN_SCHEMA: String = "hh-plan/1"
+const PLAN_FIXTURE_DIR: String = "r7w1"

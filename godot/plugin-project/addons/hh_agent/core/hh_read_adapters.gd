@@ -12,6 +12,7 @@ const _OverlayScript: GDScript = preload("res://addons/hh_agent/ui/overlay/hh_ov
 const _SchedulerScript: GDScript = preload("res://addons/hh_agent/core/hh_scheduler.gd")
 const _ReviewScript: GDScript = preload("res://addons/hh_agent/core/hh_review_store.gd")
 const _ReviewDockScript: GDScript = preload("res://addons/hh_agent/ui/review/hh_review_dock.gd")
+const _ActivityDockScript: GDScript = preload("res://addons/hh_agent/ui/health/hh_activity_dock.gd")
 const _AnimationScript: GDScript = preload("res://addons/hh_agent/core/hh_animation_adapter.gd")
 const _UiScript: GDScript = preload("res://addons/hh_agent/core/hh_ui_adapter.gd")
 
@@ -475,8 +476,13 @@ func _observer_timeline(command_id: String, params: Dictionary, post: String) ->
 		if store != null:
 			store.reload_from_disk()
 	var dock: Dictionary = _dock_snapshot(params)
+	var plan_list: Dictionary = {}
+	var activity: HHAgentActivityDock = HHAgentActivityDock.current()
+	if activity != null:
+		plan_list = activity.plan_list_snapshot()
 	return _ok(command_id, post, _redact_after({
 		"dock": dock,
+		"plan_list": plan_list,
 		"detail": str(params.get("detail", "short")),
 		"scheduler": _scheduler_snapshot(),
 	}))

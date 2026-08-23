@@ -13,6 +13,7 @@ import type { SessionDescriptor } from "../session/descriptor.js";
 import { agentHome } from "../session/paths.js";
 import type { PluginCommandResult } from "../transport/plugin_rpc.js";
 import { unverifiedResult } from "../transport/plugin_rpc.js";
+import { compileBrief, writePlanEvidence } from "../planner/brief_compiler.js";
 import { playJob, playJobs } from "../ledger/play_session.js";
 
 export interface SidecarReadInput {
@@ -204,6 +205,35 @@ export function trySidecarRead(input: SidecarReadInput): PluginCommandResult | u
       });
     }
     return ok(commandId, "job_list_returned", { jobs: jobs.slice(0, limit), total: jobs.length });
+  }
+  if (actionId === "job.plan") {
+    const brief = typeof params.brief === "string" ? params.brief : "";
+    const runId = typeof params.run_id === "string" ? params.run_id : undefined;
+    const fields =
+      params.fields !== null && typeof params.fields === "object" && !Array.isArray(params.fields)
+        ? (params.fields as Record<string, unknown>)
+        : undefined;
+    const plan = compileBrief({
+      brief,
+      ...(runId ? { run_id: runId } : {}),
+      ...(fields ? { fields } : {}),
+      ...(params.inject_cycle === true ? { inject_cycle: true } : {}),
+    });
+    if (!plan.ok || plan.tasks.length === 0) {
+      return fail(
+        commandId,
+        plan.error?.code ?? E.E_UNVERIFIED,
+        plan.error?.message ?? "empty DAG",
+        plan.error?.path ?? "dag",
+      );
+    }
+    const evidence = projectRoot ? writePlanEvidence(projectRoot, plan) : { assumptions: "", plan: "" };
+    return ok(commandId, "plan_dag_compiled", {
+      plan,
+      cards: plan.cards,
+      evidence,
+      dock: { plan_cards: plan.cards.length, task_count: plan.tasks.length },
+    });
   }
   if (actionId === "job.status") {
     const jobId = typeof params.job_id === "string" ? params.job_id : "";

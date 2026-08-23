@@ -20,6 +20,7 @@ var _elapsed_ms: int = 0
 var _pause: String = "inactive"
 var _mode: String = HHAgentConstants.MODE_WATCH
 var _replay_code: String = ""
+var _plan: Dictionary = {}
 var _session_re: RegEx = RegEx.new()
 var _bearer_re: RegEx = RegEx.new()
 
@@ -92,6 +93,30 @@ func mark_replay_unverified() -> void:
 
 func mark_replay_ready() -> void:
 	_replay_code = ""
+
+
+func set_plan(plan: Dictionary) -> void:
+	_plan = plan.duplicate(true)
+	_task = "job.plan"
+	if plan.has("run_id"):
+		_job = redact_text(str(plan.get("run_id", _job)))
+
+
+func plan_snapshot() -> Dictionary:
+	var cards_v: Variant = _plan.get("cards", [])
+	var cards: Array = cards_v if cards_v is Array else []
+	var shown: Array = cards
+	if shown.size() > HHAgentConstants.MAX_PAGE:
+		shown = shown.slice(0, HHAgentConstants.MAX_PAGE)
+	return {
+		"run_id": redact_text(str(_plan.get("run_id", ""))),
+		"status": str(_plan.get("status", "")),
+		"complete": _plan.get("complete", false) == true,
+		"acyclic": _plan.get("acyclic", false) == true,
+		"task_count": int(_plan.get("tasks", []).size()) if _plan.get("tasks", []) is Array else 0,
+		"blocker_count": int(_plan.get("blockers", []).size()) if _plan.get("blockers", []) is Array else 0,
+		"cards": shown,
+	}
 
 
 func record_planned(row: Dictionary) -> void:
@@ -320,6 +345,7 @@ func snapshot(params: Dictionary) -> Dictionary:
 			"code": _replay_code,
 			"message": "replay is presentation-only; does not call the command router",
 		},
+		"plan": plan_snapshot(),
 	}
 
 

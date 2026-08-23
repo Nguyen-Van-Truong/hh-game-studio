@@ -1728,6 +1728,17 @@
       "postcondition": "transaction_steps_verified",
       "checkpoint_required": true
     },
+    "job.plan": {
+      "method": "godot.job",
+      "verb": "plan",
+      "side_effect": "read",
+      "timeout_ms": 15000,
+      "required": [
+        "brief"
+      ],
+      "postcondition": "plan_dag_compiled",
+      "checkpoint_required": false
+    },
     "canvas.bounds": {
       "method": "godot.canvas",
       "verb": "bounds",

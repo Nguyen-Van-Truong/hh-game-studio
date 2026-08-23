@@ -23,6 +23,7 @@ const _RuntimeScript: GDScript = preload("res://addons/hh_agent/core/hh_runtime_
 const _RuntimeDbgScript: GDScript = preload("res://addons/hh_agent/core/hh_runtime_debugger.gd")
 const _TestScript: GDScript = preload("res://addons/hh_agent/core/hh_test_adapter.gd")
 const _RepairScript: GDScript = preload("res://addons/hh_agent/core/hh_repair_adapter.gd")
+const _PlanScript: GDScript = preload("res://addons/hh_agent/core/hh_plan_adapter.gd")
 const _ExportScript: GDScript = preload("res://addons/hh_agent/core/hh_export_plugin.gd")
 
 ## hh_agent EditorPlugin: main-thread router + activity/review docks + outbound sidecar client.
@@ -61,6 +62,7 @@ var _test: HHAgentTestAdapter
 var _test_wait: Dictionary = {}
 var _repair: HHAgentRepairAdapter
 var _repair_wait: Dictionary = {}
+var _plan: HHAgentPlanAdapter
 var _project_text_before_runtime: String = ""
 var _runtime_autoload_on: bool = false
 
@@ -100,6 +102,8 @@ func _enter_tree() -> void:
 	_test.attach()
 	_repair = HHAgentRepairAdapter.new()
 	_repair.attach()
+	_plan = HHAgentPlanAdapter.new()
+	_plan.attach()
 	_play_debugger = HHAgentPlayDebugger.new()
 	add_debugger_plugin(_play_debugger)
 	_runtime_debugger = HHAgentRuntimeDebugger.new()
@@ -904,6 +908,9 @@ func _cleanup() -> void:
 		_repair.shutdown()
 		_repair = null
 	_repair_wait = {}
+	if _plan != null:
+		_plan.shutdown()
+		_plan = null
 	if _play_debugger != null:
 		remove_debugger_plugin(_play_debugger)
 		_play_debugger = null

@@ -120,6 +120,13 @@ export const SCRIPT_TEXT: JsonSchema = {
   maxLength: 262144,
 };
 
+/** PROJECT_BRIEF markdown. Longer than TEXT; shorter than a full script. */
+export const BRIEF_TEXT: JsonSchema = {
+  type: "string",
+  minLength: 1,
+  maxLength: 32000,
+};
+
 export const JOB_ID: JsonSchema = {
   type: "string",
   minLength: 1,

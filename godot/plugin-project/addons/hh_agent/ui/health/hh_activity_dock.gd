@@ -26,12 +26,17 @@ var _fast_btn: Button
 var _replay_btn: Button
 var _timeline_meta: Label
 var _list: ItemList
+var _plan_meta: Label
+var _plan_list: ItemList
 var _summary: Label
 var _links: Label
 var _replay_note: Label
 
+static var _current: HHAgentActivityDock
+
 
 func _ready() -> void:
+	_current = self
 	name = "HHAgentActivity"
 	size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -64,10 +69,38 @@ func _ready() -> void:
 	_list.custom_minimum_size = Vector2(0, 180)
 	_list.max_text_lines = 1
 	add_child(_list)
+	_plan_meta = _add_label("plan cards: 0")
+	_plan_list = ItemList.new()
+	_plan_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_plan_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_plan_list.custom_minimum_size = Vector2(0, 120)
+	_plan_list.max_text_lines = 1
+	add_child(_plan_list)
 	_summary = _add_label("summary: —")
 	_links = _add_label("undo / checkpoint / evidence: —")
 	_replay_note = _add_label("Replay: presentation only (does not call the command router)")
 	_force_buttons_visible()
+
+
+func _exit_tree() -> void:
+	if _current == self:
+		_current = null
+
+
+static func current() -> HHAgentActivityDock:
+	return _current
+
+
+func plan_list_snapshot() -> Dictionary:
+	var items: Array = []
+	if _plan_list == null:
+		return {"count": 0, "items": items, "bound": false}
+	var n: int = _plan_list.item_count
+	var i: int = 0
+	while i < n:
+		items.append(_plan_list.get_item_text(i))
+		i += 1
+	return {"count": n, "items": items, "bound": true}
 
 
 func health() -> HHAgentHealthDock:
@@ -95,6 +128,7 @@ func set_status(info: Dictionary) -> void:
 	_elapsed.text = "elapsed: %s ms" % str(info.get("elapsed_ms", info.get("elapsed", 0)))
 	_mode_label.text = "mode: %s" % str(info.get("mode", HHAgentConstants.MODE_WATCH))
 	_refresh_page(info)
+	_refresh_plan(info)
 	_force_buttons_visible()
 
 
@@ -142,6 +176,32 @@ func _refresh_page(info: Dictionary) -> void:
 			str(last.get("checkpoint", "—")),
 			str(last.get("evidence", "—")),
 		]
+
+
+func _refresh_plan(info: Dictionary) -> void:
+	if _plan_list == null:
+		return
+	var dock_v: Variant = info.get("dock", {})
+	var dock: Dictionary = dock_v if dock_v is Dictionary else {}
+	var plan_v: Variant = dock.get("plan", info.get("plan", {}))
+	var plan: Dictionary = plan_v if plan_v is Dictionary else {}
+	var cards_v: Variant = plan.get("cards", [])
+	var cards: Array = cards_v if cards_v is Array else []
+	if cards.size() > HHAgentConstants.MAX_PAGE:
+		cards = cards.slice(0, HHAgentConstants.MAX_PAGE)
+	_plan_meta.text = "plan cards: %d  status=%s" % [int(plan.get("task_count", cards.size())), str(plan.get("status", "—"))]
+	_plan_list.clear()
+	var i: int = 0
+	while i < cards.size():
+		var card_v: Variant = cards[i]
+		if card_v is Dictionary:
+			var card: Dictionary = card_v
+			_plan_list.add_item("%s  %s  %s" % [
+				str(card.get("kind", "")),
+				str(card.get("id", "")),
+				str(card.get("summary", "")),
+			])
+		i += 1
 
 
 func _force_buttons_visible() -> void:

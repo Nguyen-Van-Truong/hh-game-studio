@@ -1,0 +1,26 @@
+{
+  "schema": "hh-r7w1-briefs/1",
+  "count": 20,
+  "briefs": [
+    {"id": "vague_bare_2d", "class": "vague", "file": "01_vague_bare_2d.md", "expect_assumptions": true, "expect_blockers": []},
+    {"id": "vague_puzzle", "class": "vague", "file": "02_vague_puzzle.md", "expect_assumptions": true, "expect_blockers": []},
+    {"id": "vague_sword", "class": "vague", "file": "03_vague_sword.md", "expect_assumptions": true, "expect_blockers": []},
+    {"id": "vague_platformer_win", "class": "vague", "file": "04_vague_platformer_win.md", "expect_assumptions": true, "expect_blockers": []},
+    {"id": "vague_save", "class": "vague", "file": "05_vague_save.md", "expect_assumptions": true, "expect_blockers": []},
+    {"id": "vague_pixel", "class": "vague", "file": "06_vague_pixel.md", "expect_assumptions": true, "expect_blockers": []},
+    {"id": "complete_topdown", "class": "complete", "file": "07_complete_topdown.md", "expect_assumptions": false, "expect_blockers": [], "first_kind": ["test", "verify"]},
+    {"id": "complete_platformer", "class": "complete", "file": "08_complete_platformer.md", "expect_assumptions": false, "expect_blockers": [], "first_kind": ["test", "verify"]},
+    {"id": "complete_match3", "class": "complete", "file": "09_complete_match3.md", "expect_assumptions": false, "expect_blockers": [], "first_kind": ["test", "verify"]},
+    {"id": "complete_twin_stick", "class": "complete", "file": "10_complete_twin_stick.md", "expect_assumptions": false, "expect_blockers": [], "first_kind": ["test", "verify"]},
+    {"id": "complete_farming", "class": "complete", "file": "11_complete_farming.md", "expect_assumptions": false, "expect_blockers": [], "first_kind": ["test", "verify"]},
+    {"id": "complete_dialogue", "class": "complete", "file": "12_complete_dialogue.md", "expect_assumptions": false, "expect_blockers": [], "first_kind": ["test", "verify"]},
+    {"id": "complete_tower", "class": "complete", "file": "13_complete_tower.md", "expect_assumptions": false, "expect_blockers": [], "first_kind": ["test", "verify"]},
+    {"id": "e1_openai_key", "class": "contradictory", "file": "14_e1_openai_key.md", "expect_assumptions": false, "expect_blockers": ["E1"]},
+    {"id": "e2_paid_pack", "class": "contradictory", "file": "15_e2_paid_pack.md", "expect_assumptions": false, "expect_blockers": ["E2"]},
+    {"id": "e3_steam_publish", "class": "contradictory", "file": "16_e3_steam_publish.md", "expect_assumptions": false, "expect_blockers": ["E3"]},
+    {"id": "e4_genre_conflict", "class": "contradictory", "file": "17_e4_genre_conflict.md", "expect_assumptions": false, "expect_blockers": ["E4"]},
+    {"id": "e4_2d_vs_3d", "class": "contradictory", "file": "18_e4_2d_vs_3d.md", "expect_assumptions": false, "expect_blockers": ["E4"]},
+    {"id": "e4_save_conflict", "class": "contradictory", "file": "19_e4_save_conflict.md", "expect_assumptions": false, "expect_blockers": ["E4"]},
+    {"id": "e4_audience_pivot", "class": "contradictory", "file": "20_e4_audience_pivot.md", "expect_assumptions": false, "expect_blockers": ["E4"]}
+  ]
+}

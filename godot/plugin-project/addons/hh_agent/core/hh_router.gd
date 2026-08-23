@@ -26,6 +26,7 @@ const _RenderScript: GDScript = preload("res://addons/hh_agent/core/hh_render_ad
 const _PlayScript: GDScript = preload("res://addons/hh_agent/core/hh_play_adapter.gd")
 const _TestScript: GDScript = preload("res://addons/hh_agent/core/hh_test_adapter.gd")
 const _RepairScript: GDScript = preload("res://addons/hh_agent/core/hh_repair_adapter.gd")
+const _PlanScript: GDScript = preload("res://addons/hh_agent/core/hh_plan_adapter.gd")
 const _PresenterScript: GDScript = preload("res://addons/hh_agent/core/hh_presenter.gd")
 const _OverlayScript: GDScript = preload("res://addons/hh_agent/ui/overlay/hh_overlay.gd")
 const _SchedulerScript: GDScript = preload("res://addons/hh_agent/core/hh_scheduler.gd")
@@ -55,6 +56,7 @@ var _render: HHAgentRenderAdapter = HHAgentRenderAdapter.new()
 var _play_local: HHAgentPlayAdapter = HHAgentPlayAdapter.new()
 var _test_local: HHAgentTestAdapter = HHAgentTestAdapter.new()
 var _repair_local: HHAgentRepairAdapter = HHAgentRepairAdapter.new()
+var _plan_local: HHAgentPlanAdapter = HHAgentPlanAdapter.new()
 var _presenter: HHAgentPresenter = HHAgentPresenter.new()
 var _overlay_local: HHAgentOverlay = HHAgentOverlay.new()
 var _scheduler_local: HHAgentScheduler = HHAgentScheduler.new()
@@ -112,7 +114,9 @@ func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_ga
 	if envelope.has("precondition") and envelope.get("precondition") is Dictionary:
 		pre = envelope.get("precondition") as Dictionary
 	var result: Dictionary = {}
-	if method == "godot.job" and action == "transaction":
+	if method == "godot.job" and action == "plan":
+		result = _plan().handle(command_id, method, action, params, actions, pre)
+	elif method == "godot.job" and action == "transaction":
 		result = _tx.handle(command_id, method, action, params, actions, pre)
 	elif method == "godot.scene" and action == "instantiate":
 		result = _nodes.handle(command_id, method, action, params, actions, pre)
@@ -491,6 +495,49 @@ func run_selftest(actions: HHAgentActions) -> PackedStringArray:
 	if str(_error_of(paused_tx).get("code", "")) != HHAgentErrors.E_PAUSED:
 		failures.append("paused job.transaction must be E_PAUSED")
 	gate.set_paused(false)
+	var plan_missing: Dictionary = dispatch(_sample("godot.job", "plan", {}), actions, 0)
+	if str(_error_of(plan_missing).get("code", "")) != HHAgentErrors.E_MISSING_REQUIRED:
+		failures.append("job.plan missing required must be E_MISSING_REQUIRED")
+	var plan_ok: Dictionary = dispatch(
+		_sample(
+			"godot.job",
+			"plan",
+			{
+				"brief": "# PROJECT_BRIEF\n## genre\n- **value:** puzzle\n## camera\n- **mode:** follow\n## resolution\n- **base design resolution:** 1280x720\n## input\n- **devices:** keyboard\n## platform\n- **ship target:** Windows desktop\n## art\n- **style:** PLACEHOLDER labeled sprites\n## audio\n- **bus layout:** Master / Music / SFX\n## save\n- **needed:** no\n## acceptance\n- player can start a round\n- tests encode the vertical slice before bulk art\n",
+			},
+		),
+		actions,
+		0,
+	)
+	if plan_ok.get("ok", false) != true:
+		failures.append("job.plan complete brief must ACK")
+	else:
+		var plan_after_v: Variant = plan_ok.get("after", {})
+		if plan_after_v is Dictionary:
+			var compiled_v: Variant = (plan_after_v as Dictionary).get("plan", {})
+			if compiled_v is Dictionary:
+				var compiled: Dictionary = compiled_v
+				var tasks_v: Variant = compiled.get("tasks", [])
+				if not (tasks_v is Array) or (tasks_v as Array).is_empty():
+					failures.append("job.plan must not paper-ACK an empty DAG")
+				if compiled.get("acyclic", false) != true:
+					failures.append("job.plan DAG must be acyclic")
+				var first_kind: String = ""
+				if tasks_v is Array and not (tasks_v as Array).is_empty():
+					var first_v: Variant = (tasks_v as Array)[0]
+					if first_v is Dictionary:
+						first_kind = str((first_v as Dictionary).get("kind", ""))
+				if first_kind != "test" and first_kind != "verify":
+					failures.append("job.plan complete slices must start with test/verify")
+			else:
+				failures.append("job.plan ACK missing plan")
+	var cycle_left: PackedStringArray = _plan().detect_cycle([
+		{"id": "a", "deps": ["b"]},
+		{"id": "b", "deps": ["c"]},
+		{"id": "c", "deps": ["a"]},
+	])
+	if cycle_left.is_empty():
+		failures.append("detect_cycle must fail a circular DAG")
 	var forbidden: Dictionary = dispatch(
 		{
 			"protocol": HHAgentConstants.PROTOCOL,
@@ -615,6 +662,13 @@ func _repair() -> HHAgentRepairAdapter:
 	if live != null:
 		return live
 	return _repair_local
+
+
+func _plan() -> HHAgentPlanAdapter:
+	var live: HHAgentPlanAdapter = HHAgentPlanAdapter.current()
+	if live != null:
+		return live
+	return _plan_local
 
 
 func _overlay() -> HHAgentOverlay:
