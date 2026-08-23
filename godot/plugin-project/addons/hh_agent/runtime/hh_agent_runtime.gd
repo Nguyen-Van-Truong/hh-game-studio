@@ -1864,7 +1864,7 @@ func _save_png(img: Image, res_path: String) -> Dictionary:
 		return {
 			"ok": false,
 			"code": "E_PATH",
-			"message": "screenshot path is outside .hh-agent/ or r6w5/",
+			"message": "screenshot path is outside .hh-agent/ or r6w5/ or r6w6/",
 			"dummy": false,
 		}
 	var abs_path: String = ProjectSettings.globalize_path(jailed)
@@ -1941,7 +1941,7 @@ func _artifact_jail(path_s: String) -> String:
 	if p.is_empty():
 		return ""
 	if not p.begins_with("res://"):
-		if p.begins_with(".hh-agent/") or p.begins_with("r6w5/"):
+		if p.begins_with(".hh-agent/") or p.begins_with("r6w5/") or p.begins_with("r6w6/"):
 			p = "res://%s" % p
 		else:
 			return ""
@@ -1952,7 +1952,7 @@ func _artifact_jail(path_s: String) -> String:
 		if parts[i] == "..":
 			return ""
 		i += 1
-	if rest.begins_with(".hh-agent/") or rest.begins_with("r6w5/"):
+	if rest.begins_with(".hh-agent/") or rest.begins_with("r6w5/") or rest.begins_with("r6w6/"):
 		return p
 	return ""
 

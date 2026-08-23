@@ -695,7 +695,7 @@ func _finish_capture(command_id: String, reply: Dictionary) -> Dictionary:
 		if reply.get("screenshot_artifact_present", false) != true:
 			return _errors.fail(command_id, HHAgentErrors.E_UNVERIFIED, "screenshot_artifact_present failed", "runtime")
 		var path_s: String = str(reply.get("path", "")).replace("\\", "/")
-		if path_s.is_empty() or path_s.contains("..") or (not path_s.contains(".hh-agent/") and not path_s.contains("r6w5/")):
+		if path_s.is_empty() or path_s.contains("..") or (not path_s.contains(".hh-agent/") and not path_s.contains("r6w5/") and not path_s.contains("r6w6/")):
 			return _errors.fail(command_id, HHAgentErrors.E_UNVERIFIED, "screenshot path is not under project artifacts", "runtime")
 		if int(reply.get("bytes", 0)) < 32:
 			return _errors.fail(command_id, HHAgentErrors.E_UNVERIFIED, "screenshot ACK requires a real captured file", "runtime")

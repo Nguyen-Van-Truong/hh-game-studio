@@ -115,6 +115,9 @@ export const RUNTIME_APPLY = [
   "runtime.perf",
 ] as const;
 
+/** EXTERNAL/mutate test runner. Not UndoRedo / isProvenEditorApply. */
+export const TEST_APPLY = ["test.define", "test.run", "test.assert", "test.baseline"] as const;
+
 export const TRANSACTION_APPLY = ["job.transaction"] as const;
 
 export const NODE_UID_AFTER = [
@@ -211,6 +214,10 @@ export function isInputApply(actionId: string): boolean {
 
 export function isRuntimeApply(actionId: string): boolean {
   return (RUNTIME_APPLY as readonly string[]).includes(actionId);
+}
+
+export function isTestApply(actionId: string): boolean {
+  return (TEST_APPLY as readonly string[]).includes(actionId);
 }
 
 export function isTransactionApply(actionId: string): boolean {

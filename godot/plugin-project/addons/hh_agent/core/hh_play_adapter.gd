@@ -63,6 +63,22 @@ func current_run_id() -> String:
 	return _run_id
 
 
+func last_stop_reason() -> String:
+	return _stop_reason
+
+
+func snapshot_logs() -> Array:
+	_scrape_all_logs()
+	var out: Array = []
+	var i: int = 0
+	while i < _logs.size():
+		var item_v: Variant = _logs[i]
+		if item_v is Dictionary:
+			out.append((item_v as Dictionary).duplicate(true))
+		i += 1
+	return out
+
+
 func stale_run_reject(command_id: String, params: Dictionary) -> Dictionary:
 	return _reject_stale(command_id, params)
 

@@ -17838,6 +17838,188 @@
               "minLength": 1,
               "maxLength": 256
             }
+          },
+          "suite": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "path": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 256,
+            "pattern": "^res://[^\\s]+$"
+          },
+          "filter": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 32,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+            }
+          },
+          "retry_max": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 3
+          },
+          "flaky_is_not_pass": {
+            "type": "boolean"
+          },
+          "scene": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 256,
+            "pattern": "^res://[^\\s]+$"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "play",
+              "debug"
+            ]
+          },
+          "timeout_ms": {
+            "type": "integer",
+            "minimum": 100,
+            "maximum": 120000
+          },
+          "step_frames": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 240
+          },
+          "step_timeout_ms": {
+            "type": "integer",
+            "minimum": 50,
+            "maximum": 30000
+          },
+          "until_key": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "until_op": {
+            "type": "string",
+            "enum": [
+              "eq",
+              "neq",
+              "gt",
+              "gte",
+              "lt",
+              "lte"
+            ]
+          },
+          "until_value_bool": {
+            "type": "boolean"
+          },
+          "until_value_int": {
+            "type": "integer",
+            "minimum": -2147483648,
+            "maximum": 2147483647
+          },
+          "until_value_string": {
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 128
+          },
+          "assert_kind": {
+            "type": "string",
+            "enum": [
+              "tree",
+              "property",
+              "signal",
+              "ui_layout",
+              "audio_event",
+              "world"
+            ]
+          },
+          "assert_node_path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
+          },
+          "assert_key": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "assert_op": {
+            "type": "string",
+            "enum": [
+              "eq",
+              "neq",
+              "gt",
+              "gte",
+              "lt",
+              "lte",
+              "exists"
+            ]
+          },
+          "assert_value_string": {
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 128
+          },
+          "assert_value_int": {
+            "type": "integer",
+            "minimum": -2147483648,
+            "maximum": 2147483647
+          },
+          "assert_value_bool": {
+            "type": "boolean"
+          },
+          "assert_signal": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "input_action": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "input_phase": {
+            "type": "string",
+            "enum": [
+              "press",
+              "release"
+            ]
+          },
+          "visual_compare": {
+            "type": "boolean"
+          },
+          "visual_baseline": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "visual_update_baseline": {
+            "type": "boolean"
+          },
+          "visual_reviewed": {
+            "type": "boolean"
+          },
+          "perf_budget_ms": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10000
+          },
+          "perf_inject_spike": {
+            "type": "boolean"
+          },
+          "teardown_stop": {
+            "type": "boolean"
           }
         }
       },
@@ -17931,7 +18113,9 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_PATH",
+        "E_PAUSED"
       ],
       "postcondition": "test_definition_saved"
     },
@@ -17957,6 +18141,33 @@
             "minLength": 1,
             "maxLength": 128,
             "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "suite": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "filter": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 32,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+            }
+          },
+          "retry_max": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 3
+          },
+          "retention_hours": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 720
           }
         }
       },
@@ -18050,7 +18261,11 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_TIMEOUT",
+        "E_BUSY",
+        "E_CONFLICT",
+        "E_PATH"
       ],
       "postcondition": "test_run_recorded"
     },
@@ -18106,6 +18321,43 @@
             "minLength": 1,
             "maxLength": 128,
             "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "op": {
+            "type": "string",
+            "enum": [
+              "eq",
+              "neq",
+              "gt",
+              "gte",
+              "lt",
+              "lte",
+              "exists"
+            ]
+          },
+          "value_int": {
+            "type": "integer",
+            "minimum": -2147483648,
+            "maximum": 2147483647
+          },
+          "value_bool": {
+            "type": "boolean"
+          },
+          "value_string": {
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 128
+          },
+          "signal": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26,
+            "pattern": "^[0-7][0-9A-HJKMNPQRSTVWXYZ]{25}$"
           }
         }
       },
@@ -18199,7 +18451,10 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_TIMEOUT",
+        "E_BUSY",
+        "E_CONFLICT"
       ],
       "postcondition": "assertion_recorded"
     },
@@ -18225,6 +18480,12 @@
             "minLength": 1,
             "maxLength": 128,
             "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "path": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 256,
+            "pattern": "^res://[^\\s]+$"
           }
         }
       },
@@ -18344,6 +18605,24 @@
             "minLength": 1,
             "maxLength": 128,
             "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "op": {
+            "type": "string",
+            "enum": [
+              "list",
+              "get"
+            ]
+          },
+          "uri": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 256,
+            "pattern": "^res://[^\\s]+$"
+          },
+          "retention_hours": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 720
           }
         }
       },
@@ -18572,7 +18851,9 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_PATH",
+        "E_PAUSED"
       ],
       "postcondition": "baseline_hash_saved"
     },

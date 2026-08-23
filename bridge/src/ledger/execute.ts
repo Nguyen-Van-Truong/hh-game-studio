@@ -46,6 +46,7 @@ import {
   isPlayApply,
   isInputApply,
   isRuntimeApply,
+  isTestApply,
   mutationNeedsDiskHash,
   nodeNeedsUidAfter,
   sceneNeedsDiskHash,
@@ -318,7 +319,8 @@ function classify(raw: Record<string, unknown>, commandId: string): Classified {
     isSidecarMutateApply(accepted.action_id) ||
     isPlayApply(accepted.action_id) ||
     isInputApply(accepted.action_id) ||
-    isRuntimeApply(accepted.action_id)
+    isRuntimeApply(accepted.action_id) ||
+    isTestApply(accepted.action_id)
   ) {
     return {
       kind: "mutate",
@@ -328,7 +330,8 @@ function classify(raw: Record<string, unknown>, commandId: string): Classified {
         def?.timeout_ms ??
         (isPlayApply(accepted.action_id) ||
         isInputApply(accepted.action_id) ||
-        isRuntimeApply(accepted.action_id)
+        isRuntimeApply(accepted.action_id) ||
+        isTestApply(accepted.action_id)
           ? 120_000
           : 15_000),
     };
@@ -1245,7 +1248,11 @@ function runtimeApplyOk(
         return errorResult(result.command_id, E.E_UNVERIFIED, "screenshot_artifact_present failed");
       }
       const path = typeof after.path === "string" ? after.path.replace(/\\/g, "/") : "";
-      if (!path || path.includes("..") || (!path.includes(".hh-agent/") && !path.includes("r6w5/"))) {
+      if (
+        !path ||
+        path.includes("..") ||
+        (!path.includes(".hh-agent/") && !path.includes("r6w5/") && !path.includes("r6w6/"))
+      ) {
         return errorResult(result.command_id, E.E_UNVERIFIED, "screenshot path is not under project artifacts");
       }
       const bytes = after.bytes;
@@ -1288,6 +1295,103 @@ function runtimeApplyOk(
     if (isRecord(params.until) && after.matched !== true) {
       return errorResult(result.command_id, E.E_UNVERIFIED, "step-until ACK requires matched predicate");
     }
+  }
+  return undefined;
+}
+
+function testPathOk(path: string): boolean {
+  const p = path.replace(/\\/g, "/");
+  if (!p || p.includes("..")) {
+    return false;
+  }
+  return (
+    p.includes("r6w6/") ||
+    p.includes(".hh-agent/r6w6") ||
+    p.endsWith(".hh-test.json") ||
+    p.includes("/.hh-test.json")
+  );
+}
+
+function testApplyOk(
+  result: PluginCommandResult,
+  actionId: string,
+): PluginCommandResult | undefined {
+  if (!isTestApply(actionId)) {
+    return undefined;
+  }
+  if (!result.ok) {
+    const afterFail = result.after;
+    if (isRecord(afterFail) && afterFail.status === "pass") {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "test.run must not stamp pass on a failed ACK");
+    }
+    if (isRecord(afterFail) && afterFail.flaky === true && afterFail.status === "pass") {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "flaky retry must not become pass");
+    }
+    return result;
+  }
+  const after = result.after;
+  if (!isRecord(after)) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "test apply missing after readback");
+  }
+  if (actionId === "test.define") {
+    const path = typeof after.path === "string" ? after.path : "";
+    if (!testPathOk(path)) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "test.define path is not under r6w6");
+    }
+    if (after.test_definition_saved !== true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "test_definition_saved failed");
+    }
+    return undefined;
+  }
+  if (actionId === "test.baseline") {
+    if (after.reviewed !== true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "baseline update requires explicit reviewed action");
+    }
+    if (after.invented === true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "refusing invented baseline hash");
+    }
+    const hash = typeof after.hash === "string" ? after.hash : "";
+    if (hash.length < 8) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "baseline_hash_saved failed");
+    }
+    return undefined;
+  }
+  if (actionId === "test.assert") {
+    if (after.matched !== true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "test.assert ACK requires a matched state assertion");
+    }
+    if (after.source !== "hh_agent_runtime") {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "test.assert must come from Play hh_agent_runtime");
+    }
+    return undefined;
+  }
+  if (actionId !== "test.run") {
+    return undefined;
+  }
+  if (after.status !== "pass") {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "test.run ACK requires status=pass");
+  }
+  if (after.flaky === true) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "flaky retry must not become pass");
+  }
+  if (after.play_proven !== true) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "test.run pass requires proven Play");
+  }
+  if (after.invented_hashes === true) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "refusing invented test hashes");
+  }
+  const report = typeof after.report_path === "string" ? after.report_path : "";
+  const html = typeof after.html_path === "string" ? after.html_path : "";
+  if (!testPathOk(report) || !testPathOk(html)) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "test.report must point at a real project file");
+  }
+  const index = after.evidence_index;
+  if (!Array.isArray(index) || index.length < 1) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "test.run pass requires an evidence index with file URIs");
+  }
+  const hashes = after.hashes;
+  if (!isRecord(hashes)) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "test.run pass requires computed hashes");
   }
   return undefined;
 }
@@ -1902,7 +2006,8 @@ async function applyMutateOnce(
     !isSidecarMutateApply(classified.actionId) &&
     !isPlayApply(classified.actionId) &&
     !isInputApply(classified.actionId) &&
-    !isRuntimeApply(classified.actionId)
+    !isRuntimeApply(classified.actionId) &&
+    !isTestApply(classified.actionId)
   ) {
     return markUncertain(ledger, row, "only proven editor apply verbs may apply");
   }
@@ -2037,6 +2142,8 @@ async function applyMutateOnce(
                       ? "input"
                     : isRuntimeApply(classified.actionId)
                       ? "runtime"
+                    : isTestApply(classified.actionId)
+                      ? "test"
                     : "node",
       action_id: classified.actionId,
       checks: result.postcondition.checks,
@@ -2054,6 +2161,12 @@ async function applyMutateOnce(
     }
     saveState(ledger, row, "applied_volatile");
     if (!result.ok) {
+      const testFailEarly = testApplyOk(result, classified.actionId);
+      if (testFailEarly && testFailEarly !== result) {
+        persistResult(row, testFailEarly);
+        saveState(ledger, row, "failed");
+        return testFailEarly;
+      }
       saveState(ledger, row, "failed");
       return result;
     }
@@ -2146,6 +2259,12 @@ async function applyMutateOnce(
       persistResult(row, runtimeFail);
       saveState(ledger, row, "failed");
       return runtimeFail;
+    }
+    const testFail = testApplyOk(result, classified.actionId);
+    if (testFail) {
+      persistResult(row, testFail);
+      saveState(ledger, row, "failed");
+      return testFail;
     }
     const resourceFail = resourceApplyOk(result, classified.actionId, fields.params);
     if (resourceFail) {

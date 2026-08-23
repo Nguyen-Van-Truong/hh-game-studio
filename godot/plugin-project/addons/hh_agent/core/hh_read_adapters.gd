@@ -107,7 +107,9 @@ func handle(
 		return _ui.handle(command_id, method, action, params, actions, {})
 	if method == "godot.runtime":
 		return _runtime_read(command_id, action, params, post)
-	if method == "godot.test" or method == "godot.export":
+	if method == "godot.test":
+		return _test_read(command_id, action, params, post)
+	if method == "godot.export":
 		return _unverified(command_id, "%s read is not proven in R2-WP6" % method)
 	if method == "godot.animation" and action == "preview":
 		return _animation.handle(command_id, method, action, params, actions, {})
@@ -157,6 +159,8 @@ func _post_name(def: Dictionary, method: String, action: String) -> String:
 			"review.replay": "replay_started",
 			"play.status": "play_status_known",
 			"play.logs": "play_logs_returned",
+			"test.report": "test_report_present",
+			"test.evidence": "evidence_index_present",
 			"runtime.tree": "remote_tree_snapshot",
 			"runtime.node": "remote_node_snapshot",
 			"runtime.state": "runtime_state_keys_present",
@@ -1250,6 +1254,15 @@ func _play_logs(command_id: String, params: Dictionary, post: String) -> Diction
 	if live != null:
 		return live.logs_read(command_id, params, post)
 	return _unverified(command_id, "play logs require a Play run (R6)")
+
+
+func _test_read(command_id: String, action: String, params: Dictionary, _post: String) -> Dictionary:
+	if action != "report" and action != "evidence":
+		return _unverified(command_id, "test.%s is not a read; use the test apply adapter" % action)
+	var live: HHAgentTestAdapter = HHAgentTestAdapter.current()
+	if live == null:
+		live = HHAgentTestAdapter.new()
+	return live.handle(command_id, "godot.test", action, params, HHAgentActions.new(), {})
 
 
 func _tilemap_query(command_id: String, params: Dictionary, post: String) -> Dictionary:

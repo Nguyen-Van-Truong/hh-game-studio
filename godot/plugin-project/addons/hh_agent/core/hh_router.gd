@@ -24,6 +24,7 @@ const _PhysicsScript: GDScript = preload("res://addons/hh_agent/core/hh_physics_
 const _AudioScript: GDScript = preload("res://addons/hh_agent/core/hh_audio_adapter.gd")
 const _RenderScript: GDScript = preload("res://addons/hh_agent/core/hh_render_adapter.gd")
 const _PlayScript: GDScript = preload("res://addons/hh_agent/core/hh_play_adapter.gd")
+const _TestScript: GDScript = preload("res://addons/hh_agent/core/hh_test_adapter.gd")
 const _PresenterScript: GDScript = preload("res://addons/hh_agent/core/hh_presenter.gd")
 const _OverlayScript: GDScript = preload("res://addons/hh_agent/ui/overlay/hh_overlay.gd")
 const _SchedulerScript: GDScript = preload("res://addons/hh_agent/core/hh_scheduler.gd")
@@ -51,6 +52,7 @@ var _physics: HHAgentPhysicsAdapter = HHAgentPhysicsAdapter.new()
 var _audio: HHAgentAudioAdapter = HHAgentAudioAdapter.new()
 var _render: HHAgentRenderAdapter = HHAgentRenderAdapter.new()
 var _play_local: HHAgentPlayAdapter = HHAgentPlayAdapter.new()
+var _test_local: HHAgentTestAdapter = HHAgentTestAdapter.new()
 var _presenter: HHAgentPresenter = HHAgentPresenter.new()
 var _overlay_local: HHAgentOverlay = HHAgentOverlay.new()
 var _scheduler_local: HHAgentScheduler = HHAgentScheduler.new()
@@ -169,6 +171,8 @@ func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_ga
 			return _errors.fail(command_id, HHAgentErrors.E_UNKNOWN_ACTION, "unknown render action", "action")
 	elif method == "godot.play" and _play().handles(action):
 		result = _play().handle(command_id, method, action, params, actions, pre)
+	elif method == "godot.test" and _test().handles(action):
+		result = _test().handle(command_id, method, action, params, actions, pre)
 	elif method == "godot.input":
 		result = _input_apply(command_id, action, params, actions)
 	elif method == "godot.runtime" and (action == "freeze" or action == "step"):
@@ -425,6 +429,20 @@ func run_selftest(actions: HHAgentActions) -> PackedStringArray:
 		failures.append("runtime screenshot/perf idle must stay E_UNVERIFIED")
 	if perf_idle.get("ok", true) == true:
 		failures.append("runtime screenshot/perf idle must not paper-ok")
+	var test_idle: Dictionary = dispatch(_sample("godot.test", "run", {"name": "pickup_key"}), actions, 0)
+	if str(_error_of(test_idle).get("code", "")) != HHAgentErrors.E_UNVERIFIED:
+		failures.append("test.run idle/no-Play must stay E_UNVERIFIED")
+	if test_idle.get("ok", true) == true:
+		failures.append("test.run idle/no-Play must not paper-ok")
+	var test_base: Dictionary = dispatch(
+		_sample("godot.test", "baseline", {"name": "pickup_key", "hash": "deadbeefcafebabe"}),
+		actions,
+		0,
+	)
+	if test_base.get("ok", true) == true:
+		failures.append("test.baseline without reviewed must not auto-bless")
+	elif not str(_error_of(test_base).get("message", "")).to_lower().contains("reviewed"):
+		failures.append("test.baseline without reviewed must name reviewed action")
 	var tx_missing: Dictionary = dispatch(
 		_sample(
 			"godot.job",
@@ -576,6 +594,13 @@ func _play() -> HHAgentPlayAdapter:
 	if live != null:
 		return live
 	return _play_local
+
+
+func _test() -> HHAgentTestAdapter:
+	var live: HHAgentTestAdapter = HHAgentTestAdapter.current()
+	if live != null:
+		return live
+	return _test_local
 
 
 func _overlay() -> HHAgentOverlay:
