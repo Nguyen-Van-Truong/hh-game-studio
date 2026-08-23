@@ -16130,7 +16130,7 @@
       "action_version": "1",
       "side_effect": "read",
       "undo": "none",
-      "timeout_ms": 5000,
+      "timeout_ms": 15000,
       "cancellable": false,
       "required_policy": "OBSERVE",
       "checkpoint_required": false,
@@ -16147,6 +16147,28 @@
               "short",
               "full"
             ]
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "cursor": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "pattern": "^[0-9A-Za-z_.:-]+$"
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100000
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26,
+            "pattern": "^[0-7][0-9A-HJKMNPQRSTVWXYZ]{25}$"
           }
         }
       },
@@ -16250,7 +16272,7 @@
       "action_version": "1",
       "side_effect": "read",
       "undo": "none",
-      "timeout_ms": 5000,
+      "timeout_ms": 15000,
       "cancellable": false,
       "required_policy": "OBSERVE",
       "checkpoint_required": false,
@@ -16266,6 +16288,19 @@
             "minLength": 1,
             "maxLength": 256,
             "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26,
+            "pattern": "^[0-7][0-9A-HJKMNPQRSTVWXYZ]{25}$"
+          },
+          "detail": {
+            "type": "string",
+            "enum": [
+              "short",
+              "full"
+            ]
           }
         }
       },
@@ -16369,7 +16404,7 @@
       "action_version": "1",
       "side_effect": "read",
       "undo": "none",
-      "timeout_ms": 5000,
+      "timeout_ms": 15000,
       "cancellable": false,
       "required_policy": "OBSERVE",
       "checkpoint_required": false,
@@ -16385,6 +16420,18 @@
             "minLength": 1,
             "maxLength": 128,
             "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "node_path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26,
+            "pattern": "^[0-7][0-9A-HJKMNPQRSTVWXYZ]{25}$"
           }
         }
       },

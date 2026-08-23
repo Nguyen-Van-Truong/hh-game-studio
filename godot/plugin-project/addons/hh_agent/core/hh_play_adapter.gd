@@ -46,10 +46,25 @@ var _session_seen: Dictionary = {}
 var _last_editor_log: String = ""
 var _last_debug_panel: String = ""
 var _file_log_offsets: Dictionary = {}
+var _on_runtime_autoload: Callable
+var _off_runtime_autoload: Callable
 
 
 static func current() -> HHAgentPlayAdapter:
 	return _current
+
+
+func set_runtime_autoload_hooks(on_hook: Callable, off_hook: Callable) -> void:
+	_on_runtime_autoload = on_hook
+	_off_runtime_autoload = off_hook
+
+
+func current_run_id() -> String:
+	return _run_id
+
+
+func stale_run_reject(command_id: String, params: Dictionary) -> Dictionary:
+	return _reject_stale(command_id, params)
 
 
 func attach() -> void:
@@ -70,6 +85,7 @@ func shutdown() -> void:
 	if _playing_expected and EditorInterface.is_playing_scene():
 		EditorInterface.stop_playing_scene()
 		_release_all()
+	_drop_runtime_autoload()
 	detach()
 
 
@@ -411,6 +427,7 @@ func _finish_stop(command_id: String, post: String) -> Dictionary:
 		_dead_run_ids[_run_id] = true
 	_rescan_recent_file_logs()
 	_scrape_debugger_panel()
+	_drop_runtime_autoload()
 	_emit_event("play.stopped", {"reason": _stop_reason})
 	var after: Dictionary = _status_after(false, "")
 	after["changed"] = true
@@ -423,6 +440,8 @@ func _fail_pending(command_id: String, code: String, message: String) -> Diction
 	if EditorInterface.is_playing_scene() and not _scenes_match(_scene, _normalize_res(str(EditorInterface.get_playing_scene()))):
 		EditorInterface.stop_playing_scene()
 		_release_all()
+	if not EditorInterface.is_playing_scene():
+		_drop_runtime_autoload()
 	return _errors.fail(command_id, code, message, "play")
 
 
@@ -475,6 +494,9 @@ func _status_after(playing: bool, live_scene: String) -> Dictionary:
 		"pid_source": "unproven",
 		"stop_reason": _stop_reason,
 		"evidence": "%s/%s" % [EVIDENCE_ROOT, _run_id] if not _run_id.is_empty() else "",
+		"runtime_autoload": ProjectSettings.has_setting(
+			"autoload/%s" % HHAgentConstants.RUNTIME_AUTOLOAD_NAME
+		),
 	}
 
 
@@ -973,6 +995,7 @@ func _on_unexpected_stop() -> void:
 	_release_all()
 	_rescan_recent_file_logs()
 	_scrape_debugger_panel()
+	_drop_runtime_autoload()
 	_ingest_text(LOG_KIND_RUNTIME, "play process stopped unexpectedly", _scene, 0, [])
 	_emit_event("play.stopped", {"reason": _stop_reason})
 
@@ -980,6 +1003,16 @@ func _on_unexpected_stop() -> void:
 func _release_all() -> void:
 	# Internal only. Empty set is OK. Never ACK input.action.
 	_held_inputs = PackedStringArray()
+
+
+func _install_runtime_autoload() -> void:
+	if _on_runtime_autoload.is_valid():
+		_on_runtime_autoload.call()
+
+
+func _drop_runtime_autoload() -> void:
+	if _off_runtime_autoload.is_valid():
+		_off_runtime_autoload.call()
 
 
 func _emit_event(name: String, payload: Dictionary) -> void:

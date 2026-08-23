@@ -118,9 +118,9 @@ MCP surface is **few domain tools + action discriminator**, not one tool per ver
 | input.touch | godot.input | external | job_supervisor | OWNER_AUTOPILOT | 120000 | true | false | input_touch_injected |
 | input.sequence | godot.input | external | job_supervisor | OWNER_AUTOPILOT | 120000 | true | false | input_sequence_accepted |
 | input.release_all | godot.input | external | job_supervisor | OWNER_AUTOPILOT | 120000 | true | false | all_injected_inputs_released |
-| runtime.tree | godot.runtime | read | none | OBSERVE | 5000 | false | false | remote_tree_snapshot |
-| runtime.node | godot.runtime | read | none | OBSERVE | 5000 | false | false | remote_node_snapshot |
-| runtime.state | godot.runtime | read | none | OBSERVE | 5000 | false | false | runtime_state_keys_present |
+| runtime.tree | godot.runtime | read | none | OBSERVE | 15000 | false | false | remote_tree_snapshot |
+| runtime.node | godot.runtime | read | none | OBSERVE | 15000 | false | false | remote_node_snapshot |
+| runtime.state | godot.runtime | read | none | OBSERVE | 15000 | false | false | runtime_state_keys_present |
 | runtime.signal | godot.runtime | read | none | OBSERVE | 5000 | false | false | runtime_signal_log |
 | runtime.time | godot.runtime | read | none | OBSERVE | 5000 | false | false | runtime_time_snapshot |
 | runtime.freeze | godot.runtime | external | job_supervisor | OWNER_AUTOPILOT | 120000 | true | false | runtime_frozen_matches |

@@ -2123,20 +2123,40 @@ const SPECS: Record<string, ActionSpec> = {
   "runtime.tree": read(
     "Read the remote Play scene tree",
     "remote_tree_snapshot",
-    obj(["detail"], { detail: DETAIL }),
+    obj(["detail"], {
+      detail: DETAIL,
+      limit: LIMIT,
+      cursor: CURSOR,
+      offset: OFFSET,
+      run_id: RUN_ID,
+    }),
     { detail: "short" },
+    "none",
+    { timeout_ms: 15_000 },
   ),
   "runtime.node": read(
     "Read one remote node",
     "remote_node_snapshot",
-    obj(["node_path"], { node_path: NODE_PATH }),
+    obj(["node_path"], {
+      node_path: NODE_PATH,
+      run_id: RUN_ID,
+      detail: DETAIL,
+    }),
     { node_path: "Player" },
+    "none",
+    { timeout_ms: 15_000 },
   ),
   "runtime.state": read(
     "Read named runtime state keys",
     "runtime_state_keys_present",
-    obj(["key"], { key: IDENT }),
+    obj(["key"], {
+      key: IDENT,
+      node_path: NODE_PATH,
+      run_id: RUN_ID,
+    }),
     { key: "hp" },
+    "none",
+    { timeout_ms: 15_000 },
   ),
   "runtime.signal": read(
     "Read recent remote signal events",

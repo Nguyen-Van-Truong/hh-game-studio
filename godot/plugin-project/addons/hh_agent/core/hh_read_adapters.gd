@@ -105,8 +105,8 @@ func handle(
 		return _tilemap_query(command_id, params, post)
 	if method == "godot.ui" and action == "accessibility":
 		return _ui.handle(command_id, method, action, params, actions, {})
-	if method.begins_with("godot.runtime"):
-		return _unverified(command_id, "runtime observation requires Play process (R6)")
+	if method == "godot.runtime":
+		return _runtime_read(command_id, action, params, post)
 	if method == "godot.test" or method == "godot.export":
 		return _unverified(command_id, "%s read is not proven in R2-WP6" % method)
 	if method == "godot.animation" and action == "preview":
@@ -157,6 +157,10 @@ func _post_name(def: Dictionary, method: String, action: String) -> String:
 			"review.replay": "replay_started",
 			"play.status": "play_status_known",
 			"play.logs": "play_logs_returned",
+			"runtime.tree": "remote_tree_snapshot",
+			"runtime.node": "remote_node_snapshot",
+			"runtime.state": "runtime_state_keys_present",
+			"runtime.time": "runtime_time_snapshot",
 		}
 		var action_id: String = "%s.%s" % [method.trim_prefix("godot."), action]
 		if method == "godot.capabilities":
@@ -1193,6 +1197,21 @@ func _asset_deps(command_id: String, params: Dictionary, post: String) -> Dictio
 		"dependencies": deps,
 		"import_sidecar": import_sidecar,
 	})
+
+
+func _runtime_read(command_id: String, action: String, params: Dictionary, post: String) -> Dictionary:
+	if action == "freeze" or action == "step":
+		return _unverified(command_id, "runtime freeze/step is R6-WP4")
+	if action == "screenshot" or action == "perf":
+		return _unverified(command_id, "runtime screenshot/perf is a later WP")
+	if action == "signal":
+		return _unverified(command_id, "runtime signal log is a later WP")
+	if action != "tree" and action != "node" and action != "state" and action != "time":
+		return _unverified(command_id, "runtime observation requires Play process (R6)")
+	var live: HHAgentRuntimeAdapter = HHAgentRuntimeAdapter.current()
+	if live == null:
+		return _unverified(command_id, "runtime adapter not attached")
+	return live.begin_query(command_id, action, params, post)
 
 
 func _play_status(command_id: String, params: Dictionary, post: String) -> Dictionary:

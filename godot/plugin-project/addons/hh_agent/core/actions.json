@@ -1384,7 +1384,7 @@
       "method": "godot.runtime",
       "verb": "tree",
       "side_effect": "read",
-      "timeout_ms": 5000,
+      "timeout_ms": 15000,
       "required": [
         "detail"
       ],
@@ -1395,7 +1395,7 @@
       "method": "godot.runtime",
       "verb": "node",
       "side_effect": "read",
-      "timeout_ms": 5000,
+      "timeout_ms": 15000,
       "required": [
         "node_path"
       ],
@@ -1406,7 +1406,7 @@
       "method": "godot.runtime",
       "verb": "state",
       "side_effect": "read",
-      "timeout_ms": 5000,
+      "timeout_ms": 15000,
       "required": [
         "key"
       ],

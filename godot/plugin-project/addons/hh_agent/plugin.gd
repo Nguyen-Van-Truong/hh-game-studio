@@ -19,6 +19,9 @@ const _ErrorsScript: GDScript = preload("res://addons/hh_agent/core/hh_errors.gd
 const _PresenterScript: GDScript = preload("res://addons/hh_agent/core/hh_presenter.gd")
 const _PlayScript: GDScript = preload("res://addons/hh_agent/core/hh_play_adapter.gd")
 const _PlayDbgScript: GDScript = preload("res://addons/hh_agent/core/hh_play_debugger.gd")
+const _RuntimeScript: GDScript = preload("res://addons/hh_agent/core/hh_runtime_adapter.gd")
+const _RuntimeDbgScript: GDScript = preload("res://addons/hh_agent/core/hh_runtime_debugger.gd")
+const _ExportScript: GDScript = preload("res://addons/hh_agent/core/hh_export_plugin.gd")
 
 ## hh_agent EditorPlugin: main-thread router + activity/review docks + outbound sidecar client.
 ## Disable/reload must not leak sockets, signals, docks, or timers.
@@ -48,6 +51,12 @@ var _last_pause_ack: Dictionary = {}
 var _play: HHAgentPlayAdapter
 var _play_debugger: EditorDebuggerPlugin
 var _play_wait: Dictionary = {}
+var _runtime: HHAgentRuntimeAdapter
+var _runtime_debugger: EditorDebuggerPlugin
+var _export_plugin: EditorExportPlugin
+var _runtime_wait: Dictionary = {}
+var _project_text_before_runtime: String = ""
+var _runtime_autoload_on: bool = false
 
 
 func _enter_tree() -> void:
@@ -75,8 +84,18 @@ func _enter_tree() -> void:
 	_scheduler.set_mode(_store.mode())
 	_play = HHAgentPlayAdapter.new()
 	_play.attach()
+	_play.set_runtime_autoload_hooks(
+		Callable(self, "_install_runtime_autoload"),
+		Callable(self, "_remove_runtime_autoload"),
+	)
+	_runtime = HHAgentRuntimeAdapter.new()
+	_runtime.attach()
 	_play_debugger = HHAgentPlayDebugger.new()
 	add_debugger_plugin(_play_debugger)
+	_runtime_debugger = HHAgentRuntimeDebugger.new()
+	add_debugger_plugin(_runtime_debugger)
+	_export_plugin = HHAgentExportPlugin.new()
+	add_export_plugin(_export_plugin)
 	set_force_draw_over_forwarding_enabled()
 	_client.set_enqueue(Callable(self, "_enqueue_inbound"))
 	_client.set_hello_handler(Callable(self, "_on_hello"))
@@ -120,6 +139,8 @@ func _process(_delta: float) -> void:
 		_play.tick_watchdog()
 	if not _play_wait.is_empty():
 		_poll_play_wait()
+	if not _runtime_wait.is_empty():
+		_poll_runtime_wait()
 	var inbound_this_frame: bool = false
 	if not _busy:
 		var n: int = 0
@@ -132,7 +153,7 @@ func _process(_delta: float) -> void:
 			inbound_this_frame = true
 			_busy = true
 			_handle_item(item)
-			if not _play_wait.is_empty():
+			if not _play_wait.is_empty() or not _runtime_wait.is_empty():
 				break
 			_busy = false
 			n += 1
@@ -268,6 +289,9 @@ func _handle_item(item: Dictionary) -> void:
 	if result.get("_hh_play_pending", false) == true:
 		_play_wait = {"item": item, "command_id": str(result.get("command_id", ""))}
 		return
+	if result.get("_hh_runtime_pending", false) == true:
+		_runtime_wait = {"item": item, "command_id": str(result.get("command_id", ""))}
+		return
 	_finish_item(item, result)
 
 
@@ -285,6 +309,31 @@ func _finish_play_wait(result: Dictionary) -> void:
 	var item_v: Variant = _play_wait.get("item", {})
 	var item: Dictionary = item_v if item_v is Dictionary else {}
 	_play_wait = {}
+	_busy = false
+	_finish_item(item, result)
+
+
+func _poll_runtime_wait() -> void:
+	if _runtime == null:
+		_finish_runtime_wait(
+			_errors.fail(
+				str(_runtime_wait.get("command_id", "")),
+				HHAgentErrors.E_UNVERIFIED,
+				"runtime adapter gone",
+				"runtime",
+			)
+		)
+		return
+	var result: Dictionary = _runtime.poll_pending()
+	if result.is_empty() or result.get("_hh_runtime_pending", false) == true:
+		return
+	_finish_runtime_wait(result)
+
+
+func _finish_runtime_wait(result: Dictionary) -> void:
+	var item_v: Variant = _runtime_wait.get("item", {})
+	var item: Dictionary = item_v if item_v is Dictionary else {}
+	_runtime_wait = {}
 	_busy = false
 	_finish_item(item, result)
 
@@ -691,8 +740,87 @@ func _refresh_review() -> void:
 	_review.set_status(snap)
 
 
+func _install_runtime_autoload() -> void:
+	# Never call add_autoload_singleton: it writes project.godot and the
+	# editor reloads ~8s later, which kills Play. The Play process reads
+	# autoloads from disk, so an in-memory name is not a proven probe.
+	# Official Play attaches hh_agent_runtime.gd bytes as the played scene
+	# script. This hook only snapshots and strips a leaked name.
+	if _project_text_before_runtime.is_empty():
+		_project_text_before_runtime = FileAccess.get_file_as_string("res://project.godot")
+	_runtime_autoload_on = false
+	_restore_project_godot_if_leaked()
+
+
+func _remove_runtime_autoload() -> void:
+	var key: String = "autoload/%s" % HHAgentConstants.RUNTIME_AUTOLOAD_NAME
+	if _runtime_autoload_on or ProjectSettings.has_setting(key):
+		remove_autoload_singleton(HHAgentConstants.RUNTIME_AUTOLOAD_NAME)
+	if ProjectSettings.has_setting(key):
+		ProjectSettings.clear(key)
+	_runtime_autoload_on = false
+	_restore_project_godot_if_leaked()
+
+
+func _restore_project_godot_if_leaked() -> void:
+	var path_s: String = ProjectSettings.globalize_path("res://project.godot")
+	var now: String = FileAccess.get_file_as_string(path_s)
+	if now.is_empty() or not now.contains("HHAgentRuntime"):
+		return
+	var restored: String = ""
+	if (
+		not _project_text_before_runtime.is_empty()
+		and not _project_text_before_runtime.contains("HHAgentRuntime")
+	):
+		restored = _project_text_before_runtime
+	else:
+		restored = _strip_runtime_autoload_lines(now)
+	if restored.is_empty() or restored.contains("HHAgentRuntime"):
+		push_warning("%s refused to persist HHAgentRuntime in project.godot" % PLUGIN_PRINT)
+		return
+	var tmp: String = "%s.hh-runtime-tmp" % path_s
+	var f: FileAccess = FileAccess.open(tmp, FileAccess.WRITE)
+	if f == null:
+		push_warning("%s could not drop HHAgentRuntime from project.godot" % PLUGIN_PRINT)
+		return
+	f.store_string(restored)
+	f.flush()
+	f.close()
+	if DirAccess.rename_absolute(tmp, path_s) != OK:
+		DirAccess.remove_absolute(tmp)
+		push_warning("%s could not replace leaked project.godot" % PLUGIN_PRINT)
+		return
+	_project_text_before_runtime = ""
+
+
+func _strip_runtime_autoload_lines(text: String) -> String:
+	var kept: PackedStringArray = PackedStringArray()
+	var lines: PackedStringArray = text.split("\n")
+	var i: int = 0
+	while i < lines.size():
+		var line: String = lines[i]
+		i += 1
+		if line.contains("HHAgentRuntime") or line.contains("hh_agent_runtime"):
+			continue
+		kept.append(line)
+	return "\n".join(kept)
+
+
 func _cleanup() -> void:
 	set_process(false)
+	_remove_runtime_autoload()
+	if _runtime_debugger != null:
+		remove_debugger_plugin(_runtime_debugger)
+		if _runtime_debugger is HHAgentRuntimeDebugger:
+			(_runtime_debugger as HHAgentRuntimeDebugger).detach()
+		_runtime_debugger = null
+	if _export_plugin != null:
+		remove_export_plugin(_export_plugin)
+		_export_plugin = null
+	if _runtime != null:
+		_runtime.shutdown()
+		_runtime = null
+	_runtime_wait = {}
 	if _play_debugger != null:
 		remove_debugger_plugin(_play_debugger)
 		_play_debugger = null
