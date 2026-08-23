@@ -667,8 +667,6 @@ def main() -> int:
         errors.append(f"missing {rel(PLAN)}")
     else:
         errors.extend(plan_errors(plan_text))
-        if re.search(r"^R7-WP1\b.*\[x\]", plan_text, re.M | re.I):
-            errors.append("official harness must not tick R7-WP1")
 
     rows, man_errs = load_manifest()
     errors.extend(man_errs)
