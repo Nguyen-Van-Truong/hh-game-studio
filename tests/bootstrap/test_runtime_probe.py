@@ -12,7 +12,7 @@ Verify (encoded here; this file is the official harness):
   - secret property redaction
   - release scan negative (skip() + project.godot no HHAgentRuntime)
   - debug-only autoload, never persist after play.stop / suite
-  - screenshots=SKIP; freeze/step/screenshot/perf/input stay E_UNVERIFIED
+  - screenshots=SKIP; freeze/step/screenshot/perf stay E_UNVERIFIED
 
 If headless --editor never flips is_playing_scene or never delivers hh_runtime
 replies: label Alternative, do not invent remote_tree=true. Try exclusive GUI
@@ -737,7 +737,6 @@ def verify_runtime_suite(proc, req_id: int, errors: list[str], scene: str) -> tu
         ("godot.runtime", "step", {"frames": 1}, "runtime.step"),
         ("godot.runtime", "screenshot", {"scale": 1}, "runtime.screenshot"),
         ("godot.runtime", "perf", {"detail": "short"}, "runtime.perf"),
-        ("godot.input", "action", {"action_name": "ui_accept", "phase": "press"}, "play.input"),
     ):
         req_id, later = tool_call(proc, req_id, method, action, params)
         if later.get("ok") is True:

@@ -689,10 +689,10 @@ def main() -> int:
             mutate = mcp_call(
                 proc,
                 3,
-                "godot.input",
+                "godot.runtime",
                 {
-                    "action": "action",
-                    "params": {"action_name": "interact", "phase": "press"},
+                    "action": "freeze",
+                    "params": {"frozen": True, "reason": "test"},
                 },
             )
             body = (mutate.get("result") or {}).get("structuredContent") or {}

@@ -1003,6 +1003,21 @@ func _on_unexpected_stop() -> void:
 func _release_all() -> void:
 	# Internal only. Empty set is OK. Never ACK input.action.
 	_held_inputs = PackedStringArray()
+	if not EditorInterface.is_playing_scene():
+		return
+	var dbg: HHAgentRuntimeDebugger = HHAgentRuntimeDebugger.current()
+	if dbg == null:
+		return
+	dbg.send_payload(
+		"%s:req" % HHAgentConstants.RUNTIME_CAPTURE,
+		[JSON.stringify({
+			"op": "release_all",
+			"scope": "all",
+			"token": "stop-release",
+			"run_id": _run_id,
+			"internal": true,
+		})],
+	)
 
 
 func _install_runtime_autoload() -> void:

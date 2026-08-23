@@ -736,11 +736,11 @@ def live_errors(exe: Path) -> list[str]:
         )
         input_ok = input_body.get("ok") is True
         input_code = err_code(input_body)
-        if input_ok:
-            errors.append("play.input inject must not paper-ACK: returned ok true")
-        if input_code != "E_UNVERIFIED":
+        if input_ok and not play_ok:
+            errors.append("play.input must not paper-ACK without proven Play")
+        if not play_ok and input_code != "E_UNVERIFIED":
             errors.append(
-                f"play.input inject must stay E_UNVERIFIED: {sess.redact(json.dumps(input_body), secret)}"
+                f"play.input inject must stay E_UNVERIFIED without Play: {sess.redact(json.dumps(input_body), secret)}"
             )
         alternatives.append(
             {

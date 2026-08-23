@@ -169,6 +169,8 @@ func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_ga
 			return _errors.fail(command_id, HHAgentErrors.E_UNKNOWN_ACTION, "unknown render action", "action")
 	elif method == "godot.play" and _play().handles(action):
 		result = _play().handle(command_id, method, action, params, actions, pre)
+	elif method == "godot.input":
+		result = _input_apply(command_id, action, params, actions)
 	elif method == "godot.editor" and (action == "frame_view" or action == "replay"):
 		result = _overlay().handle(command_id, method, action, params, actions, envelope)
 	elif method == "godot.review" and action == "replay":
@@ -453,6 +455,32 @@ func run_selftest(actions: HHAgentActions) -> PackedStringArray:
 	if str(_error_of(unknown).get("code", "")) != HHAgentErrors.E_INVALID_ENVELOPE:
 		failures.append("unknown field must be E_INVALID_ENVELOPE")
 	return failures
+
+
+func _input_apply(
+	command_id: String,
+	action: String,
+	params: Dictionary,
+	actions: HHAgentActions,
+) -> Dictionary:
+	var live: HHAgentRuntimeAdapter = HHAgentRuntimeAdapter.current()
+	if live == null:
+		return _errors.fail(
+			command_id,
+			HHAgentErrors.E_UNVERIFIED,
+			"play.input requires Play process (R6)",
+			"input",
+		)
+	var def: Dictionary = actions.lookup("godot.input", action)
+	var post: String = str(def.get("postcondition", ""))
+	if post.is_empty():
+		if action == "release_all":
+			post = "all_injected_inputs_released"
+		elif action == "sequence":
+			post = "input_sequence_accepted"
+		else:
+			post = "input_%s_injected" % action
+	return live.begin_input(command_id, action, params, post)
 
 
 func _play() -> HHAgentPlayAdapter:

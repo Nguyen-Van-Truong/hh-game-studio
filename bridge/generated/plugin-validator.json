@@ -15370,6 +15370,40 @@
               "press",
               "release"
             ]
+          },
+          "strength": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26,
+            "pattern": "^[0-7][0-9A-HJKMNPQRSTVWXYZ]{25}$"
+          },
+          "device": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4096
+          },
+          "axis": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4096
+          },
+          "axis_value": {
+            "type": "number",
+            "minimum": -1,
+            "maximum": 1
+          },
+          "button_index": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4096
+          },
+          "editor_foreground": {
+            "type": "boolean"
           }
         }
       },
@@ -15463,7 +15497,10 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_TIMEOUT",
+        "E_BUSY",
+        "E_CONFLICT"
       ],
       "postcondition": "input_action_injected"
     },
@@ -15497,6 +15534,27 @@
               "press",
               "release"
             ]
+          },
+          "shift": {
+            "type": "boolean"
+          },
+          "ctrl": {
+            "type": "boolean"
+          },
+          "alt": {
+            "type": "boolean"
+          },
+          "meta": {
+            "type": "boolean"
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26,
+            "pattern": "^[0-7][0-9A-HJKMNPQRSTVWXYZ]{25}$"
+          },
+          "editor_foreground": {
+            "type": "boolean"
           }
         }
       },
@@ -15590,7 +15648,10 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_TIMEOUT",
+        "E_BUSY",
+        "E_CONFLICT"
       ],
       "postcondition": "input_key_injected"
     },
@@ -15631,6 +15692,40 @@
             "type": "number",
             "minimum": 0,
             "maximum": 8192
+          },
+          "phase": {
+            "type": "string",
+            "enum": [
+              "press",
+              "release",
+              "motion"
+            ]
+          },
+          "wheel": {
+            "type": "string",
+            "enum": [
+              "up",
+              "down"
+            ]
+          },
+          "dx": {
+            "type": "number",
+            "minimum": -8192,
+            "maximum": 8192
+          },
+          "dy": {
+            "type": "number",
+            "minimum": -8192,
+            "maximum": 8192
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26,
+            "pattern": "^[0-7][0-9A-HJKMNPQRSTVWXYZ]{25}$"
+          },
+          "editor_foreground": {
+            "type": "boolean"
           }
         }
       },
@@ -15724,7 +15819,10 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_TIMEOUT",
+        "E_BUSY",
+        "E_CONFLICT"
       ],
       "postcondition": "input_mouse_injected"
     },
@@ -15765,6 +15863,15 @@
           },
           "pressed": {
             "type": "boolean"
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26,
+            "pattern": "^[0-7][0-9A-HJKMNPQRSTVWXYZ]{25}$"
+          },
+          "editor_foreground": {
+            "type": "boolean"
           }
         }
       },
@@ -15858,7 +15965,10 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_TIMEOUT",
+        "E_BUSY",
+        "E_CONFLICT"
       ],
       "postcondition": "input_touch_injected"
     },
@@ -15903,7 +16013,61 @@
                     "press",
                     "release"
                   ]
+                },
+                "delay_ms": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 5000
+                },
+                "delay_ticks": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 120
                 }
+              }
+            }
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26,
+            "pattern": "^[0-7][0-9A-HJKMNPQRSTVWXYZ]{25}$"
+          },
+          "replay": {
+            "type": "boolean"
+          },
+          "editor_foreground": {
+            "type": "boolean"
+          },
+          "header": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [],
+            "properties": {
+              "engine": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "project": {
+                "type": "string",
+                "minLength": 8,
+                "maxLength": 128,
+                "pattern": "^[A-Fa-f0-9]+$"
+              },
+              "run_id": {
+                "type": "string",
+                "minLength": 26,
+                "maxLength": 26,
+                "pattern": "^[0-7][0-9A-HJKMNPQRSTVWXYZ]{25}$"
+              },
+              "seed": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 2147483647
+              },
+              "fixed_step": {
+                "type": "boolean"
               }
             }
           }
@@ -15999,7 +16163,10 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_TIMEOUT",
+        "E_BUSY",
+        "E_CONFLICT"
       ],
       "postcondition": "input_sequence_accepted"
     },
@@ -16027,6 +16194,12 @@
               "keyboard",
               "mouse"
             ]
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26,
+            "pattern": "^[0-7][0-9A-HJKMNPQRSTVWXYZ]{25}$"
           }
         }
       },
@@ -16120,7 +16293,10 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_TIMEOUT",
+        "E_BUSY",
+        "E_CONFLICT"
       ],
       "postcondition": "all_injected_inputs_released"
     },

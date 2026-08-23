@@ -44,6 +44,7 @@ import {
   isAudioApply,
   isRenderApply,
   isPlayApply,
+  isInputApply,
   mutationNeedsDiskHash,
   nodeNeedsUidAfter,
   sceneNeedsDiskHash,
@@ -314,13 +315,16 @@ function classify(raw: Record<string, unknown>, commandId: string): Classified {
   if (
     isProvenEditorApply(accepted.action_id) ||
     isSidecarMutateApply(accepted.action_id) ||
-    isPlayApply(accepted.action_id)
+    isPlayApply(accepted.action_id) ||
+    isInputApply(accepted.action_id)
   ) {
     return {
       kind: "mutate",
       sideEffect: side,
       actionId: accepted.action_id,
-      timeoutMs: def?.timeout_ms ?? (isPlayApply(accepted.action_id) ? 120_000 : 15_000),
+      timeoutMs:
+        def?.timeout_ms ??
+        (isPlayApply(accepted.action_id) || isInputApply(accepted.action_id) ? 120_000 : 15_000),
     };
   }
   return {
@@ -1145,6 +1149,51 @@ function playApplyOk(
   return undefined;
 }
 
+function inputApplyOk(
+  result: PluginCommandResult,
+  actionId: string,
+): PluginCommandResult | undefined {
+  if (!isInputApply(actionId)) {
+    return undefined;
+  }
+  if (!result.ok) {
+    return result;
+  }
+  const after = result.after;
+  if (!isRecord(after)) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "input missing after readback");
+  }
+  if (after.send_input === true || after.rpa === true) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "refusing desktop SendInput/RPA input ACK");
+  }
+  if (after.playing !== true || after.is_playing_scene !== true) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "input ACK requires proven Play");
+  }
+  const runId = typeof after.run_id === "string" ? after.run_id : "";
+  if (!isUlid(runId)) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "input missing Play run_id");
+  }
+  if (after.source !== "hh_agent_runtime") {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "input reply is not from Play hh_agent_runtime");
+  }
+  if (after.injected !== true && after.released !== true) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "Play process did not confirm injected input");
+  }
+  if (actionId !== "input.release_all" && after.seen !== true) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "Play process _input did not see the event");
+  }
+  const scene =
+    typeof after.playing_scene === "string"
+      ? after.playing_scene
+      : typeof after.scene === "string"
+        ? after.scene
+        : "";
+  if (!scene) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "input missing get_playing_scene bind");
+  }
+  return undefined;
+}
+
 function cameraApplyOk(
   result: PluginCommandResult,
   actionId: string,
@@ -1753,7 +1802,8 @@ async function applyMutateOnce(
   if (
     !isProvenEditorApply(classified.actionId) &&
     !isSidecarMutateApply(classified.actionId) &&
-    !isPlayApply(classified.actionId)
+    !isPlayApply(classified.actionId) &&
+    !isInputApply(classified.actionId)
   ) {
     return markUncertain(ledger, row, "only proven editor apply verbs may apply");
   }
@@ -1884,6 +1934,8 @@ async function applyMutateOnce(
                     ? "project"
                     : isPlayApply(classified.actionId)
                       ? "play"
+                    : isInputApply(classified.actionId)
+                      ? "input"
                     : "node",
       action_id: classified.actionId,
       checks: result.postcondition.checks,
@@ -1981,6 +2033,12 @@ async function applyMutateOnce(
       persistResult(row, playFail);
       saveState(ledger, row, "failed");
       return playFail;
+    }
+    const inputFail = inputApplyOk(result, classified.actionId);
+    if (inputFail) {
+      persistResult(row, inputFail);
+      saveState(ledger, row, "failed");
+      return inputFail;
     }
     const resourceFail = resourceApplyOk(result, classified.actionId, fields.params);
     if (resourceFail) {

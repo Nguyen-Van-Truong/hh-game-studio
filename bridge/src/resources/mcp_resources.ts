@@ -17,6 +17,7 @@ import {
   isAudioApply,
   isRenderApply,
   isPlayApply,
+  isInputApply,
 } from "../ledger/scene_lifecycle.js";
 import { allActionDefs } from "../registry/registry.js";
 import { PROTOCOL, REGISTRY_VERSION } from "../registry/types.js";
@@ -102,7 +103,7 @@ export function capabilityMatrix(): Record<string, unknown> {
     physics_dispatched: true,
     audio_dispatched: true,
     render_dispatched: true,
-    note: "Scene/node/property/resource/signal/script/project.settings/tilemap/animation/ui/physics/audio/render ACK after EditorUndoRedo or ProjectSettings.save + ConfigFile disk parse. play.start/stop/restart/debug ACK after is_playing_scene + get_playing_scene (EXTERNAL, not UndoRedo). play.input inject stays E_UNVERIFIED.",
+    note: "Scene/node/property/resource/signal/script/project.settings/tilemap/animation/ui/physics/audio/render ACK after EditorUndoRedo or ProjectSettings.save + ConfigFile disk parse. play.start/stop/restart/debug ACK after is_playing_scene + get_playing_scene (EXTERNAL, not UndoRedo). play.input ACK after Play-process parse_input_event + _input seen (EXTERNAL; idle/no-Play stays E_UNVERIFIED).",
     actions: allActionDefs().map((def) => ({
       id: def.id,
       method: def.method,
@@ -132,6 +133,8 @@ export function capabilityMatrix(): Record<string, unknown> {
               ? "render"
             : isPlayApply(def.id)
               ? "play-external"
+            : isInputApply(def.id)
+              ? "input-external"
             : isResourceApply(def.id) || isAssetRefApply(def.id)
               ? "resource-ops"
               : isSignalApply(def.id)

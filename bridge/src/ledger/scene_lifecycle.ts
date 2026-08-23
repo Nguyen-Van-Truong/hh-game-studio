@@ -97,6 +97,16 @@ export const SIDECAR_MUTATE_APPLY = ["git.checkpoint", "git.revert_checkpoint"] 
 /** EXTERNAL Play apply. Not UndoRedo / isProvenEditorApply. */
 export const PLAY_APPLY = ["play.start", "play.stop", "play.restart", "play.debug"] as const;
 
+/** EXTERNAL Play-process input. Not UndoRedo / isProvenEditorApply. */
+export const INPUT_APPLY = [
+  "input.action",
+  "input.key",
+  "input.mouse",
+  "input.touch",
+  "input.sequence",
+  "input.release_all",
+] as const;
+
 export const TRANSACTION_APPLY = ["job.transaction"] as const;
 
 export const NODE_UID_AFTER = [
@@ -185,6 +195,10 @@ export function isSidecarMutateApply(actionId: string): boolean {
 
 export function isPlayApply(actionId: string): boolean {
   return (PLAY_APPLY as readonly string[]).includes(actionId);
+}
+
+export function isInputApply(actionId: string): boolean {
+  return (INPUT_APPLY as readonly string[]).includes(actionId);
 }
 
 export function isTransactionApply(actionId: string): boolean {
