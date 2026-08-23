@@ -16977,6 +16977,27 @@
               "test",
               "user"
             ]
+          },
+          "seed": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 2147483647
+          },
+          "physics_ticks": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 240
+          },
+          "frame": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 0
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26,
+            "pattern": "^[0-7][0-9A-HJKMNPQRSTVWXYZ]{25}$"
           }
         }
       },
@@ -17070,7 +17091,10 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_TIMEOUT",
+        "E_BUSY",
+        "E_CONFLICT"
       ],
       "postcondition": "runtime_frozen_matches"
     },
@@ -17095,6 +17119,73 @@
             "type": "integer",
             "minimum": 1,
             "maximum": 600
+          },
+          "ms": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10000
+          },
+          "timeout_ms": {
+            "type": "integer",
+            "minimum": 50,
+            "maximum": 30000
+          },
+          "until": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "key",
+              "op"
+            ],
+            "properties": {
+              "key": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128,
+                "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+              },
+              "op": {
+                "type": "string",
+                "enum": [
+                  "eq",
+                  "neq",
+                  "gt",
+                  "gte",
+                  "lt",
+                  "lte"
+                ]
+              },
+              "node_path": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256,
+                "pattern": "^[A-Za-z_./%:@][A-Za-z0-9_./%:@-]*$"
+              },
+              "value_int": {
+                "type": "integer",
+                "minimum": -2147483648,
+                "maximum": 2147483647
+              },
+              "value_bool": {
+                "type": "boolean"
+              },
+              "value_string": {
+                "type": "string",
+                "minLength": 0,
+                "maxLength": 128
+              }
+            }
+          },
+          "seed": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 2147483647
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26,
+            "pattern": "^[0-7][0-9A-HJKMNPQRSTVWXYZ]{25}$"
           }
         }
       },
@@ -17188,7 +17279,10 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_TIMEOUT",
+        "E_BUSY",
+        "E_CONFLICT"
       ],
       "postcondition": "runtime_stepped_frames"
     },

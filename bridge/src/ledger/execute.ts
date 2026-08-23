@@ -45,6 +45,7 @@ import {
   isRenderApply,
   isPlayApply,
   isInputApply,
+  isRuntimeApply,
   mutationNeedsDiskHash,
   nodeNeedsUidAfter,
   sceneNeedsDiskHash,
@@ -316,7 +317,8 @@ function classify(raw: Record<string, unknown>, commandId: string): Classified {
     isProvenEditorApply(accepted.action_id) ||
     isSidecarMutateApply(accepted.action_id) ||
     isPlayApply(accepted.action_id) ||
-    isInputApply(accepted.action_id)
+    isInputApply(accepted.action_id) ||
+    isRuntimeApply(accepted.action_id)
   ) {
     return {
       kind: "mutate",
@@ -324,7 +326,11 @@ function classify(raw: Record<string, unknown>, commandId: string): Classified {
       actionId: accepted.action_id,
       timeoutMs:
         def?.timeout_ms ??
-        (isPlayApply(accepted.action_id) || isInputApply(accepted.action_id) ? 120_000 : 15_000),
+        (isPlayApply(accepted.action_id) ||
+        isInputApply(accepted.action_id) ||
+        isRuntimeApply(accepted.action_id)
+          ? 120_000
+          : 15_000),
     };
   }
   return {
@@ -1194,6 +1200,64 @@ function inputApplyOk(
   return undefined;
 }
 
+function runtimeApplyOk(
+  result: PluginCommandResult,
+  actionId: string,
+  params: Record<string, unknown>,
+): PluginCommandResult | undefined {
+  if (!isRuntimeApply(actionId)) {
+    return undefined;
+  }
+  if (!result.ok) {
+    return result;
+  }
+  const after = result.after;
+  if (!isRecord(after)) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "runtime freeze/step missing after readback");
+  }
+  if (after.editor_time_scale === true) {
+    return errorResult(
+      result.command_id,
+      E.E_UNVERIFIED,
+      "refusing editor-only Engine.time_scale paper freeze/step",
+    );
+  }
+  if (after.playing !== true || after.is_playing_scene !== true) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "freeze/step ACK requires proven Play");
+  }
+  const runId = typeof after.run_id === "string" ? after.run_id : "";
+  if (!isUlid(runId)) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "freeze/step missing Play run_id");
+  }
+  if (after.source !== "hh_agent_runtime") {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "freeze/step reply is not from Play hh_agent_runtime");
+  }
+  if (actionId === "runtime.freeze") {
+    if (after.frozen !== params.frozen) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "runtime_frozen_matches failed");
+    }
+    if (params.frozen === true && after.observed_frozen !== true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "Play fixture/probe did not observe freeze");
+    }
+    if (params.frozen === true && after.paused !== true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "Play tree was not paused");
+    }
+  }
+  if (actionId === "runtime.step") {
+    if (after.stepped !== true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "Play process did not confirm a step");
+    }
+    const advanced = after.frames_advanced;
+    if (typeof advanced !== "number" || !Number.isInteger(advanced) || advanced < 1) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "step ACK requires observed frames_advanced");
+    }
+    if (isRecord(params.until) && after.matched !== true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "step-until ACK requires matched predicate");
+    }
+  }
+  return undefined;
+}
+
 function cameraApplyOk(
   result: PluginCommandResult,
   actionId: string,
@@ -1803,7 +1867,8 @@ async function applyMutateOnce(
     !isProvenEditorApply(classified.actionId) &&
     !isSidecarMutateApply(classified.actionId) &&
     !isPlayApply(classified.actionId) &&
-    !isInputApply(classified.actionId)
+    !isInputApply(classified.actionId) &&
+    !isRuntimeApply(classified.actionId)
   ) {
     return markUncertain(ledger, row, "only proven editor apply verbs may apply");
   }
@@ -1936,6 +2001,8 @@ async function applyMutateOnce(
                       ? "play"
                     : isInputApply(classified.actionId)
                       ? "input"
+                    : isRuntimeApply(classified.actionId)
+                      ? "runtime"
                     : "node",
       action_id: classified.actionId,
       checks: result.postcondition.checks,
@@ -2039,6 +2106,12 @@ async function applyMutateOnce(
       persistResult(row, inputFail);
       saveState(ledger, row, "failed");
       return inputFail;
+    }
+    const runtimeFail = runtimeApplyOk(result, classified.actionId, fields.params);
+    if (runtimeFail) {
+      persistResult(row, runtimeFail);
+      saveState(ledger, row, "failed");
+      return runtimeFail;
     }
     const resourceFail = resourceApplyOk(result, classified.actionId, fields.params);
     if (resourceFail) {

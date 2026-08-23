@@ -35,4 +35,6 @@ func _should_skip(path: String) -> bool:
 		return true
 	if p.contains("/r6w3/") or p.contains("r6w3/"):
 		return true
+	if p.contains("/r6w4/") or p.contains("r6w4/"):
+		return true
 	return false

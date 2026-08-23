@@ -107,6 +107,9 @@ export const INPUT_APPLY = [
   "input.release_all",
 ] as const;
 
+/** EXTERNAL Play-process freeze/step. Not UndoRedo / isProvenEditorApply. */
+export const RUNTIME_APPLY = ["runtime.freeze", "runtime.step"] as const;
+
 export const TRANSACTION_APPLY = ["job.transaction"] as const;
 
 export const NODE_UID_AFTER = [
@@ -199,6 +202,10 @@ export function isPlayApply(actionId: string): boolean {
 
 export function isInputApply(actionId: string): boolean {
   return (INPUT_APPLY as readonly string[]).includes(actionId);
+}
+
+export function isRuntimeApply(actionId: string): boolean {
+  return (RUNTIME_APPLY as readonly string[]).includes(actionId);
 }
 
 export function isTransactionApply(actionId: string): boolean {

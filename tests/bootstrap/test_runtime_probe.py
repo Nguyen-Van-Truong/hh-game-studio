@@ -12,7 +12,7 @@ Verify (encoded here; this file is the official harness):
   - secret property redaction
   - release scan negative (skip() + project.godot no HHAgentRuntime)
   - debug-only autoload, never persist after play.stop / suite
-  - screenshots=SKIP; freeze/step/screenshot/perf stay E_UNVERIFIED
+  - screenshots=SKIP; screenshot/perf stay E_UNVERIFIED; freeze/step proven by later WP when requested
 
 If headless --editor never flips is_playing_scene or never delivers hh_runtime
 replies: label Alternative, do not invent remote_tree=true. Try exclusive GUI
@@ -319,8 +319,8 @@ def src_scan_errors() -> list[str]:
             errors.append("runtime adapter must require product source hh_agent_runtime")
 
     reads = (ADDON / "core" / "hh_read_adapters.gd").read_text(encoding="utf-8")
-    if "runtime freeze/step is R6-WP4" not in reads:
-        errors.append("freeze/step must stay E_UNVERIFIED in this WP")
+    if "runtime screenshot/perf is a later WP" not in reads:
+        errors.append("screenshot/perf must stay E_UNVERIFIED")
     if "_runtime_read" not in reads:
         errors.append("read adapters must dispatch runtime.tree/node/state")
 
@@ -733,8 +733,6 @@ def verify_runtime_suite(proc, req_id: int, errors: list[str], scene: str) -> tu
             errors.append(f"runtime.state hp must come from a property, got {state_body}")
 
     for method, action, params, label in (
-        ("godot.runtime", "freeze", {"frozen": True, "reason": "test"}, "runtime.freeze"),
-        ("godot.runtime", "step", {"frames": 1}, "runtime.step"),
         ("godot.runtime", "screenshot", {"scale": 1}, "runtime.screenshot"),
         ("godot.runtime", "perf", {"detail": "short"}, "runtime.perf"),
     ):

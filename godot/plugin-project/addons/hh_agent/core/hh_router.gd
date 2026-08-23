@@ -171,6 +171,8 @@ func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_ga
 		result = _play().handle(command_id, method, action, params, actions, pre)
 	elif method == "godot.input":
 		result = _input_apply(command_id, action, params, actions)
+	elif method == "godot.runtime" and (action == "freeze" or action == "step"):
+		result = _time_apply(command_id, action, params, actions)
 	elif method == "godot.editor" and (action == "frame_view" or action == "replay"):
 		result = _overlay().handle(command_id, method, action, params, actions, envelope)
 	elif method == "godot.review" and action == "replay":
@@ -385,6 +387,24 @@ func run_selftest(actions: HHAgentActions) -> PackedStringArray:
 		failures.append("play.input inject must stay E_UNVERIFIED")
 	if mutate_still.get("ok", true) == true:
 		failures.append("play.input inject must not paper-ok")
+	var freeze_idle: Dictionary = dispatch(
+		_sample("godot.runtime", "freeze", {"frozen": true, "reason": "test"}),
+		actions,
+		0,
+	)
+	if str(_error_of(freeze_idle).get("code", "")) != HHAgentErrors.E_UNVERIFIED:
+		failures.append("runtime freeze/step idle must stay E_UNVERIFIED")
+	if freeze_idle.get("ok", true) == true:
+		failures.append("runtime freeze/step idle must not paper-ok")
+	var step_idle: Dictionary = dispatch(
+		_sample("godot.runtime", "step", {"frames": 1}),
+		actions,
+		0,
+	)
+	if str(_error_of(step_idle).get("code", "")) != HHAgentErrors.E_UNVERIFIED:
+		failures.append("runtime freeze/step idle must stay E_UNVERIFIED")
+	if step_idle.get("ok", true) == true:
+		failures.append("runtime freeze/step idle must not paper-ok")
 	var tx_missing: Dictionary = dispatch(
 		_sample(
 			"godot.job",
@@ -481,6 +501,30 @@ func _input_apply(
 		else:
 			post = "input_%s_injected" % action
 	return live.begin_input(command_id, action, params, post)
+
+
+func _time_apply(
+	command_id: String,
+	action: String,
+	params: Dictionary,
+	actions: HHAgentActions,
+) -> Dictionary:
+	var live: HHAgentRuntimeAdapter = HHAgentRuntimeAdapter.current()
+	if live == null:
+		return _errors.fail(
+			command_id,
+			HHAgentErrors.E_UNVERIFIED,
+			"runtime freeze/step requires Play process (R6)",
+			"runtime",
+		)
+	var def: Dictionary = actions.lookup("godot.runtime", action)
+	var post: String = str(def.get("postcondition", ""))
+	if post.is_empty():
+		if action == "freeze":
+			post = "runtime_frozen_matches"
+		else:
+			post = "runtime_stepped_frames"
+	return live.begin_time(command_id, action, params, post)
 
 
 func _play() -> HHAgentPlayAdapter:

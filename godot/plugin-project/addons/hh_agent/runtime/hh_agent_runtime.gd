@@ -18,6 +18,15 @@ var _last_hello_ms: int = 0
 var _held: Dictionary = {}
 var _seen_flush: bool = false
 var _input_seen: int = 0
+var _frozen: bool = false
+var _seed: int = 0
+var _seed_pinned: bool = false
+var _fixed_step: bool = false
+var _physics_hz: int = 0
+var _events_subscribed: bool = false
+var _event_count: int = 0
+var _probe: Node
+var _rng: RandomNumberGenerator
 var _secret_needles: PackedStringArray = PackedStringArray([
 	"password",
 	"passwd",
@@ -32,6 +41,7 @@ var _secret_needles: PackedStringArray = PackedStringArray([
 
 func _ready() -> void:
 	set_process_input(true)
+	_bind_clock()
 	_bind_debugger()
 	if spawn_count > 0:
 		var i: int = 0
@@ -111,7 +121,13 @@ func _dispatch(op: String, payload: Dictionary) -> Dictionary:
 	if op == "state":
 		return _merge(base, _state_snap(payload))
 	if op == "time":
-		return _merge(base, _time_snap())
+		var snap: Dictionary = _time_snap()
+		var extra: Dictionary = snap.duplicate(true)
+		extra["ok"] = true
+		extra["time"] = snap
+		return _merge(base, extra)
+	if op == "freeze" or op == "step":
+		return _merge(base, _time_op(op, payload, base))
 	if (
 		op == "action"
 		or op == "key"
@@ -208,10 +224,23 @@ func _state_snap(payload: Dictionary) -> Dictionary:
 
 
 func _time_snap() -> Dictionary:
+	var tree: SceneTree = get_tree()
+	var paused: bool = tree != null and tree.paused
 	return {
 		"ticks_msec": Time.get_ticks_msec(),
 		"frames": Engine.get_process_frames(),
 		"physics_frames": Engine.get_physics_frames(),
+		"frozen": _frozen,
+		"paused": paused,
+		"seed": _seed,
+		"seed_pinned": _seed_pinned,
+		"fixed_step": _fixed_step,
+		"physics_hz": _physics_hz,
+		"events_subscribed": _events_subscribed,
+		"event_count": _event_count,
+		"probe_process": _probe_process(),
+		"probe_physics": _probe_physics(),
+		"editor_time_scale": false,
 	}
 
 
@@ -456,7 +485,10 @@ func _input_op(op: String, payload: Dictionary, base: Dictionary) -> Dictionary:
 	var replay_fail: Dictionary = _replay_fail(payload)
 	if not replay_fail.is_empty():
 		return replay_fail
-	if payload.get("internal", false) != true:
+	# OS window focus is reported on ACK. Agent parse_input_event /
+	# action_press does not need the Play window focused. Only the
+	# explicit editor_foreground steal path may return E_CONFLICT.
+	if payload.get("editor_foreground", false) == true:
 		var focus_fail: Dictionary = _focus_fail()
 		if not focus_fail.is_empty():
 			return focus_fail
@@ -567,8 +599,7 @@ func _apply_verb(op: String, payload: Dictionary) -> Dictionary:
 		if ev_v is InputEvent:
 			Input.parse_input_event(ev_v as InputEvent)
 	Input.flush_buffered_events()
-	var seen: bool = _seen_flush
-	return _input_ok(seen, evs.size(), op)
+	return _input_ok(_seen_flush, evs.size(), op)
 
 
 func _events_of(op: String, payload: Dictionary) -> Array:
@@ -704,6 +735,14 @@ func _do_release_all(scope: String) -> Dictionary:
 		if scope == "mouse" and kind != "mouse":
 			continue
 		_emit_release(rec)
+	if scope == "all" or scope == "keyboard":
+		var mapped: PackedStringArray = InputMap.get_actions()
+		var j: int = 0
+		while j < mapped.size():
+			var mapped_name: String = str(mapped[j])
+			j += 1
+			if Input.is_action_pressed(mapped_name):
+				Input.action_release(mapped_name)
 	Input.flush_buffered_events()
 	_held.clear()
 	return {
@@ -978,3 +1017,516 @@ func _keycode_of(name_s: String) -> int:
 		if ch >= "0" and ch <= "9":
 			return int(KEY_0) + (ch.unicode_at(0) - 48)
 	return -1
+
+
+class TickProbe extends Node:
+	signal physics_ticked
+
+	var process_ticks: int = 0
+	var physics_ticks: int = 0
+	var arm_pause: bool = false
+
+	func _ready() -> void:
+		set_process(true)
+		set_physics_process(true)
+
+	func _process(_delta: float) -> void:
+		process_ticks += 1
+
+	func _physics_process(_delta: float) -> void:
+		physics_ticks += 1
+		physics_ticked.emit()
+		if arm_pause:
+			var tree: SceneTree = get_tree()
+			if tree != null:
+				tree.paused = true
+
+	func agent_observe() -> Dictionary:
+		return {
+			"process_ticks": process_ticks,
+			"physics_ticks": physics_ticks,
+		}
+
+
+func _bind_clock() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	if _probe == null:
+		_probe = TickProbe.new()
+		_probe.name = "HHAgentTickProbe"
+		_probe.process_mode = Node.PROCESS_MODE_PAUSABLE
+		add_child(_probe)
+	var tree: SceneTree = get_tree()
+	if tree != null and not tree.node_added.is_connected(_on_tree_node_added):
+		tree.node_added.connect(_on_tree_node_added)
+		_events_subscribed = true
+	_pin_descendants()
+
+
+func _on_tree_node_added(node: Node) -> void:
+	_event_count += 1
+	if node == self or node == _probe:
+		return
+	if not _is_under_self(node):
+		return
+	if node.process_mode == Node.PROCESS_MODE_INHERIT:
+		node.process_mode = Node.PROCESS_MODE_PAUSABLE
+
+
+func _is_under_self(node: Node) -> bool:
+	var cur: Node = node
+	while cur != null:
+		if cur == self:
+			return true
+		cur = cur.get_parent()
+	return false
+
+
+func _pin_descendants() -> void:
+	var nodes: Array = _flatten()
+	var i: int = 0
+	while i < nodes.size():
+		var node_v: Variant = nodes[i]
+		i += 1
+		if not (node_v is Node):
+			continue
+		var node: Node = node_v
+		if node == self or node == _probe:
+			continue
+		if not _is_under_self(node):
+			continue
+		if node.process_mode == Node.PROCESS_MODE_INHERIT:
+			node.process_mode = Node.PROCESS_MODE_PAUSABLE
+
+
+func _probe_process() -> int:
+	if _probe == null or not (_probe is TickProbe):
+		return -1
+	return (_probe as TickProbe).process_ticks
+
+
+func _probe_physics() -> int:
+	if _probe == null or not (_probe is TickProbe):
+		return -1
+	return (_probe as TickProbe).physics_ticks
+
+
+func _pin_seed(seed_v: int) -> void:
+	_seed = seed_v
+	_seed_pinned = true
+	seed(seed_v)
+	if _rng == null:
+		_rng = RandomNumberGenerator.new()
+	_rng.seed = seed_v
+
+
+func _pin_physics(ticks: int) -> void:
+	if ticks < 1:
+		ticks = 60
+	if ticks > 240:
+		ticks = 240
+	Engine.physics_ticks_per_second = ticks
+	Engine.max_physics_steps_per_frame = 1
+	_physics_hz = ticks
+	_fixed_step = true
+
+
+func _time_op(op: String, payload: Dictionary, base: Dictionary) -> Dictionary:
+	if op == "freeze":
+		return _freeze_op(payload, base)
+	return _step_op(payload, base)
+
+
+func _apply_pins(payload: Dictionary) -> void:
+	if payload.has("seed"):
+		_pin_seed(int(payload.get("seed", 0)))
+	if payload.has("physics_ticks"):
+		_pin_physics(int(payload.get("physics_ticks", 60)))
+
+
+func _freeze_op(payload: Dictionary, base: Dictionary) -> Dictionary:
+	var want: bool = payload.get("frozen", true) == true
+	_apply_pins(payload)
+	if want and not _fixed_step:
+		_pin_physics(60)
+	_frozen = want
+	var tree: SceneTree = get_tree()
+	if tree != null:
+		tree.paused = want
+	_pin_descendants()
+	if want:
+		_kick_freeze_proof(base)
+		return {"async": true}
+	return _freeze_reply(false, _probe_physics(), _probe_physics(), true)
+
+
+func _kick_freeze_proof(base: Dictionary) -> void:
+	_run_freeze_proof(base.duplicate(true))
+
+
+func _run_freeze_proof(base: Dictionary) -> void:
+	var t0: int = _probe_physics()
+	var p0: int = _probe_process()
+	var tree: SceneTree = get_tree()
+	if tree != null:
+		# ignore_pause so this is not a running-game observation race.
+		await tree.create_timer(0.04, true, true, true).timeout
+	var t1: int = _probe_physics()
+	var p1: int = _probe_process()
+	var observed: bool = t1 == t0 and p1 == p0
+	var extra: Dictionary = _freeze_reply(true, t0, t1, observed)
+	EngineDebugger.send_message("%s:reply" % CAPTURE, [JSON.stringify(_merge(base, extra))])
+
+
+func _freeze_reply(frozen: bool, before_n: int, after_n: int, observed: bool) -> Dictionary:
+	var tree: SceneTree = get_tree()
+	var paused: bool = tree != null and tree.paused
+	var ok: bool = true
+	var code: String = ""
+	var message: String = ""
+	if frozen and not observed:
+		ok = false
+		code = "E_UNVERIFIED"
+		message = "Play freeze did not stop pausable ticks"
+	if frozen and not paused:
+		ok = false
+		code = "E_UNVERIFIED"
+		message = "Play SceneTree.paused was not set"
+	var out: Dictionary = {
+		"ok": ok,
+		"frozen": frozen,
+		"paused": paused,
+		"observed_frozen": observed and frozen,
+		"probe_before": before_n,
+		"probe_after": after_n,
+		"probe_process": _probe_process(),
+		"probe_physics": _probe_physics(),
+		"seed": _seed,
+		"seed_pinned": _seed_pinned,
+		"fixed_step": _fixed_step,
+		"physics_hz": _physics_hz,
+		"events_subscribed": _events_subscribed,
+		"event_count": _event_count,
+		"editor_time_scale": false,
+		"source": "hh_agent_runtime",
+		"tree_kind": "remote",
+		"remote_tree": true,
+		"playing": true,
+		"is_playing_scene": true,
+		"time": _time_snap(),
+	}
+	if not ok:
+		out["code"] = code
+		out["message"] = message
+	return out
+
+
+func _step_op(payload: Dictionary, base: Dictionary) -> Dictionary:
+	_apply_pins(payload)
+	var pred_v: Variant = payload.get("until", {})
+	var has_until: bool = typeof(pred_v) == TYPE_DICTIONARY and not (pred_v as Dictionary).is_empty()
+	if has_until:
+		var pred_err: Dictionary = _predicate_shape_fail(pred_v as Dictionary)
+		if not pred_err.is_empty():
+			return pred_err
+	_kick_step(payload, base)
+	return {"async": true}
+
+
+func _kick_step(payload: Dictionary, base: Dictionary) -> void:
+	_run_step(payload, base.duplicate(true))
+
+
+func _run_step(payload: Dictionary, base: Dictionary) -> void:
+	var extra: Dictionary = await _step_async(payload)
+	EngineDebugger.send_message("%s:reply" % CAPTURE, [JSON.stringify(_merge(base, extra))])
+
+
+func _step_async(payload: Dictionary) -> Dictionary:
+	var frames: int = maxi(1, int(payload.get("frames", 1)))
+	if payload.has("ms") and not payload.has("until"):
+		var hz: int = _physics_hz
+		if hz < 1:
+			hz = Engine.physics_ticks_per_second
+		if hz < 1:
+			hz = 60
+		frames = maxi(1, int(ceil(float(int(payload.get("ms", 1))) * float(hz) / 1000.0)))
+	var pred_v: Variant = payload.get("until", {})
+	var has_until: bool = typeof(pred_v) == TYPE_DICTIONARY and not (pred_v as Dictionary).is_empty()
+	var timeout_ms: int = int(payload.get("timeout_ms", 2000 if has_until else 20000))
+	if timeout_ms < 50:
+		timeout_ms = 50
+	var before: int = _probe_physics()
+	var fixture_before: int = _fixture_physics(payload)
+	var started_ms: int = Time.get_ticks_msec()
+	if has_until:
+		var pred: Dictionary = pred_v as Dictionary
+		var first: Dictionary = _eval_predicate(pred)
+		if first.get("ok", false) == true and first.get("matched", false) == true:
+			return _step_reply(true, 0, before, _probe_physics(), fixture_before, true, false, "")
+		var advanced: int = 0
+		while Time.get_ticks_msec() - started_ms < timeout_ms:
+			var one: int = await _step_physics(frames)
+			advanced += one
+			var now: Dictionary = _eval_predicate(pred)
+			if now.get("ok", false) != true:
+				return now
+			if now.get("matched", false) == true:
+				return _step_reply(true, advanced, before, _probe_physics(), fixture_before, true, false, "")
+		return {
+			"ok": false,
+			"code": "E_TIMEOUT",
+			"message": "step-until missed event: predicate never matched",
+			"missed_event": true,
+			"stepped": false,
+			"matched": false,
+			"frames_advanced": advanced,
+			"probe_before": before,
+			"probe_after": _probe_physics(),
+			"editor_time_scale": false,
+			"source": "hh_agent_runtime",
+			"frozen": _frozen,
+			"paused": get_tree() != null and get_tree().paused,
+			"events_subscribed": _events_subscribed,
+			"time": _time_snap(),
+		}
+	var advanced_n: int = await _step_physics(frames)
+	var after_n: int = _probe_physics()
+	var observed: int = after_n - before
+	if observed < 1 and advanced_n < 1:
+		return {
+			"ok": false,
+			"code": "E_UNVERIFIED",
+			"message": "Play step did not advance a pausable physics counter",
+			"stepped": false,
+			"frames_advanced": 0,
+			"probe_before": before,
+			"probe_after": after_n,
+			"editor_time_scale": false,
+			"source": "hh_agent_runtime",
+			"time": _time_snap(),
+		}
+	return _step_reply(true, maxi(observed, advanced_n), before, after_n, fixture_before, false, false, "")
+
+
+func _step_physics(frames: int) -> int:
+	var tree: SceneTree = get_tree()
+	if tree == null:
+		return 0
+	var start: int = _probe_physics()
+	var i: int = 0
+	while i < frames:
+		await _step_one_physics()
+		i += 1
+	if _frozen:
+		tree.paused = true
+	return maxi(0, _probe_physics() - start)
+
+
+func _step_one_physics() -> void:
+	var tree: SceneTree = get_tree()
+	if tree == null:
+		return
+	var start: int = _probe_physics()
+	if _probe is TickProbe:
+		(_probe as TickProbe).arm_pause = true
+	tree.paused = false
+	var started_ms: int = Time.get_ticks_msec()
+	# Poll process_frame (root is PROCESS_MODE_ALWAYS). A missed signal
+	# must not hang the debugger capture. arm_pause re-pauses on the
+	# same physics callback.
+	while _probe_physics() <= start and Time.get_ticks_msec() - started_ms < 2000:
+		await tree.process_frame
+	tree.paused = true
+	if _probe is TickProbe:
+		(_probe as TickProbe).arm_pause = false
+
+
+func _step_reply(
+	ok: bool,
+	advanced: int,
+	before_n: int,
+	after_n: int,
+	fixture_before: int,
+	matched: bool,
+	_missed: bool,
+	_message: String,
+) -> Dictionary:
+	return {
+		"ok": ok,
+		"stepped": ok and (advanced >= 1 or matched),
+		"frames_advanced": advanced,
+		"matched": matched,
+		"missed_event": false,
+		"probe_before": before_n,
+		"probe_after": after_n,
+		"fixture_before": fixture_before,
+		"fixture_after": _fixture_physics({}),
+		"frozen": _frozen,
+		"paused": get_tree() != null and get_tree().paused,
+		"seed": _seed,
+		"seed_pinned": _seed_pinned,
+		"fixed_step": _fixed_step,
+		"physics_hz": _physics_hz,
+		"events_subscribed": _events_subscribed,
+		"event_count": _event_count,
+		"editor_time_scale": false,
+		"source": "hh_agent_runtime",
+		"tree_kind": "remote",
+		"remote_tree": true,
+		"playing": true,
+		"is_playing_scene": true,
+		"time": _time_snap(),
+	}
+
+
+func _fixture_physics(payload: Dictionary) -> int:
+	var path_s: String = str(payload.get("node_path", "Fixture"))
+	var node: Node = _resolve(path_s)
+	if node == null:
+		node = _resolve("/root")
+	if node == null:
+		return _probe_physics()
+	var obs: Dictionary = _observe_of(node)
+	if obs.has("physics_ticks"):
+		return int(obs.get("physics_ticks"))
+	if _has_property(node, "physics_ticks"):
+		return int(node.get("physics_ticks"))
+	return _probe_physics()
+
+
+func _predicate_shape_fail(pred: Dictionary) -> Dictionary:
+	var key: String = str(pred.get("key", ""))
+	if key.is_empty() or not _ident_ok(key):
+		return {
+			"ok": false,
+			"code": "E_INVALID_TYPE",
+			"message": "predicate key is not an allowlisted identifier",
+		}
+	var op: String = str(pred.get("op", ""))
+	if (
+		op != "eq"
+		and op != "neq"
+		and op != "gt"
+		and op != "gte"
+		and op != "lt"
+		and op != "lte"
+	):
+		return {
+			"ok": false,
+			"code": "E_INVALID_TYPE",
+			"message": "predicate op is not allowlisted",
+		}
+	var n: int = 0
+	if pred.has("value_int"):
+		n += 1
+	if pred.has("value_bool"):
+		n += 1
+	if pred.has("value_string"):
+		n += 1
+	if n != 1:
+		return {
+			"ok": false,
+			"code": "E_INVALID_TYPE",
+			"message": "predicate needs exactly one of value_int/value_bool/value_string",
+		}
+	return {}
+
+
+func _ident_ok(name_s: String) -> bool:
+	if name_s.is_empty():
+		return false
+	var i: int = 0
+	while i < name_s.length():
+		var code: int = name_s.unicode_at(i)
+		var ok_ch: bool = (
+			(code >= 65 and code <= 90)
+			or (code >= 97 and code <= 122)
+			or code == 95
+			or (i > 0 and code >= 48 and code <= 57)
+		)
+		if not ok_ch:
+			return false
+		i += 1
+	return true
+
+
+func _eval_predicate(pred: Dictionary) -> Dictionary:
+	# Allowlisted compare only. Never eval / Expression / GDScript inject.
+	var shape: Dictionary = _predicate_shape_fail(pred)
+	if not shape.is_empty():
+		return shape
+	var key: String = str(pred.get("key", ""))
+	var op: String = str(pred.get("op", "eq"))
+	var path_s: String = str(pred.get("node_path", "Fixture"))
+	var node: Node = _resolve(path_s)
+	if node == null:
+		return {"ok": true, "matched": false, "found": false, "key": key}
+	var got_v: Variant = null
+	var found: bool = false
+	var obs: Dictionary = _observe_of(node)
+	if obs.has(key):
+		got_v = obs[key]
+		found = true
+	elif _has_property(node, key):
+		got_v = node.get(key)
+		found = true
+	if not found:
+		return {"ok": true, "matched": false, "found": false, "key": key}
+	var want_v: Variant = null
+	if pred.has("value_int"):
+		want_v = int(pred.get("value_int"))
+	elif pred.has("value_bool"):
+		want_v = pred.get("value_bool") == true
+	else:
+		want_v = str(pred.get("value_string", ""))
+	var matched: bool = _compare_pred(got_v, op, want_v)
+	return {
+		"ok": true,
+		"matched": matched,
+		"found": true,
+		"key": key,
+		"got": _jsonable(got_v),
+	}
+
+
+func _compare_pred(got_v: Variant, op: String, want_v: Variant) -> bool:
+	var gt: int = typeof(got_v)
+	var wt: int = typeof(want_v)
+	if wt == TYPE_BOOL:
+		if gt != TYPE_BOOL:
+			return false
+		var gb: bool = got_v
+		var wb: bool = want_v
+		if op == "eq":
+			return gb == wb
+		if op == "neq":
+			return gb != wb
+		return false
+	if wt == TYPE_STRING:
+		if gt != TYPE_STRING:
+			return false
+		var gs: String = got_v
+		var ws: String = want_v
+		if op == "eq":
+			return gs == ws
+		if op == "neq":
+			return gs != ws
+		return false
+	if wt == TYPE_INT or wt == TYPE_FLOAT:
+		if gt != TYPE_INT and gt != TYPE_FLOAT:
+			return false
+		var gi: int = int(got_v)
+		var wi: int = int(want_v)
+		if op == "eq":
+			return gi == wi
+		if op == "neq":
+			return gi != wi
+		if op == "gt":
+			return gi > wi
+		if op == "gte":
+			return gi >= wi
+		if op == "lt":
+			return gi < wi
+		if op == "lte":
+			return gi <= wi
+	return false

@@ -1201,7 +1201,7 @@ func _asset_deps(command_id: String, params: Dictionary, post: String) -> Dictio
 
 func _runtime_read(command_id: String, action: String, params: Dictionary, post: String) -> Dictionary:
 	if action == "freeze" or action == "step":
-		return _unverified(command_id, "runtime freeze/step is R6-WP4")
+		return _unverified(command_id, "runtime freeze/step must use Play time apply")
 	if action == "screenshot" or action == "perf":
 		return _unverified(command_id, "runtime screenshot/perf is a later WP")
 	if action == "signal":

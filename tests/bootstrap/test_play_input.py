@@ -14,7 +14,7 @@ Verify (encoded here; this file is the official harness):
     stay Alternative (do not fake hashes)
   - movement OR action press seen by the fixture; typing or click fixture;
     release_all clears held; focus-loss typed fail; replay mismatch typed fail
-  - freeze/step/screenshot/perf stay E_UNVERIFIED
+  - screenshot/perf stay E_UNVERIFIED; freeze/step are proven by R6-WP4 when requested
   - screenshots=SKIP
 
 If headless --editor never delivers game-window input: label Alternative,
@@ -380,8 +380,8 @@ def src_scan_errors() -> list[str]:
         errors.append("router must dispatch godot.input when Play can be proven")
 
     reads = (ADDON / "core" / "hh_read_adapters.gd").read_text(encoding="utf-8")
-    if "runtime freeze/step is R6-WP4" not in reads:
-        errors.append("freeze/step must stay E_UNVERIFIED in this WP")
+    if "runtime screenshot/perf is a later WP" not in reads:
+        errors.append("screenshot/perf must stay E_UNVERIFIED")
 
     for dbg_name in ("hh_play_debugger.gd", "hh_runtime_debugger.gd"):
         dbg = ADDON / "core" / dbg_name
@@ -643,8 +643,6 @@ def setup_scene(proc, req_id: int, errors: list[str]) -> tuple[int, str]:
 
 def verify_later_wps(proc, req_id: int, errors: list[str]) -> int:
     for method, action, params, label in (
-        ("godot.runtime", "freeze", {"frozen": True, "reason": "test"}, "runtime.freeze"),
-        ("godot.runtime", "step", {"frames": 1}, "runtime.step"),
         ("godot.runtime", "screenshot", {"scale": 1}, "runtime.screenshot"),
         ("godot.runtime", "perf", {"detail": "short"}, "runtime.perf"),
     ):

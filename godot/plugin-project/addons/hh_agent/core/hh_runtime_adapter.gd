@@ -205,6 +205,74 @@ func begin_input(
 	return {PENDING_KEY: true, "ok": false, "command_id": command_id}
 
 
+func begin_time(
+	command_id: String,
+	action: String,
+	params: Dictionary,
+	post: String,
+) -> Dictionary:
+	if action != "freeze" and action != "step":
+		return _errors.fail(
+			command_id,
+			HHAgentErrors.E_UNVERIFIED,
+			"not a proven Play freeze/step verb",
+			"",
+		)
+	if not EditorInterface.is_playing_scene():
+		return _errors.fail(
+			command_id,
+			HHAgentErrors.E_UNVERIFIED,
+			"runtime freeze/step requires a proven Play process (is_playing_scene)",
+			"play",
+		)
+	var play: HHAgentPlayAdapter = HHAgentPlayAdapter.current()
+	if play == null:
+		return _errors.fail(
+			command_id,
+			HHAgentErrors.E_UNVERIFIED,
+			"runtime freeze/step requires a proven Play process (R6)",
+			"play",
+		)
+	var stale: Dictionary = play.stale_run_reject(command_id, params)
+	if not stale.is_empty():
+		return stale
+	var run_id: String = play.current_run_id()
+	if run_id.is_empty():
+		return _errors.fail(
+			command_id,
+			HHAgentErrors.E_UNVERIFIED,
+			"runtime freeze/step missing Play run_id bind",
+			"run_id",
+		)
+	if not _pending.is_empty():
+		return _errors.fail(command_id, HHAgentErrors.E_BUSY, "runtime/input channel busy", "runtime")
+	var token: String = _mint_token()
+	var payload: Dictionary = params.duplicate(true)
+	payload["op"] = action
+	payload["token"] = token
+	payload["run_id"] = run_id
+	var now: int = Time.get_ticks_msec()
+	var wait_ms: int = HHAgentConstants.TIME_WAIT_MS
+	if action == "step" and params.has("timeout_ms"):
+		wait_ms = maxi(wait_ms, int(params.get("timeout_ms")) + 4000)
+	_pending = {
+		PENDING_KEY: true,
+		"kind": "time",
+		"command_id": command_id,
+		"post": post,
+		"action": action,
+		"token": token,
+		"run_id": run_id,
+		"payload": payload,
+		"sent": false,
+		"sends": 0,
+		"sent_ms": 0,
+		"deadline_ms": now + wait_ms,
+	}
+	_try_send()
+	return {PENDING_KEY: true, "ok": false, "command_id": command_id}
+
+
 func poll_pending() -> Dictionary:
 	if _pending.is_empty():
 		return {}
@@ -218,7 +286,11 @@ func poll_pending() -> Dictionary:
 			(
 				"play.input debugger reply timed out"
 				if kind == "input"
-				else "runtime debugger reply timed out (no remote tree invented)"
+				else (
+					"runtime freeze/step debugger reply timed out"
+					if kind == "time"
+					else "runtime debugger reply timed out (no remote tree invented)"
+				)
 			),
 		)
 	if not EditorInterface.is_playing_scene():
@@ -247,6 +319,7 @@ func poll_pending() -> Dictionary:
 			_try_send()
 		elif (
 			kind != "input"
+			and kind != "time"
 			and sent_ms > 0
 			and now - sent_ms >= HHAgentConstants.RUNTIME_RESEND_MS
 			and sends < HHAgentConstants.RUNTIME_MAX_RESEND
@@ -255,6 +328,8 @@ func poll_pending() -> Dictionary:
 		return {PENDING_KEY: true, "command_id": command_id}
 	if str(_pending.get("kind", "")) == "input":
 		return _finish_input(command_id, reply)
+	if str(_pending.get("kind", "")) == "time":
+		return _finish_time(command_id, reply)
 	return _finish(command_id, reply)
 
 
@@ -391,6 +466,92 @@ func _finish_input(command_id: String, reply: Dictionary) -> Dictionary:
 	after["header"] = _live_header(want_run)
 	after["send_input"] = false
 	after["rpa"] = false
+	var checks: PackedStringArray = PackedStringArray()
+	checks.append(post)
+	return _errors.ok_changed(command_id, checks, after, true)
+
+
+func _finish_time(command_id: String, reply: Dictionary) -> Dictionary:
+	var post: String = str(_pending.get("post", "runtime_frozen_matches"))
+	var want_run: String = str(_pending.get("run_id", ""))
+	var want_token: String = str(_pending.get("token", ""))
+	var verb: String = str(_pending.get("action", ""))
+	var payload_v: Variant = _pending.get("payload", {})
+	var payload: Dictionary = payload_v if payload_v is Dictionary else {}
+	_pending = {}
+	if not EditorInterface.is_playing_scene():
+		return _errors.fail(
+			command_id,
+			HHAgentErrors.E_CONFLICT,
+			"Play stopped before freeze/step reply",
+			"play",
+		)
+	if str(reply.get("token", "")) != want_token:
+		return _errors.fail(command_id, HHAgentErrors.E_CONFLICT, "freeze/step reply token mismatch", "token")
+	if str(reply.get("run_id", "")) != want_run:
+		return _errors.fail(command_id, HHAgentErrors.E_CONFLICT, "freeze/step reply run_id mismatch", "run_id")
+	if str(reply.get("source", "")) != "hh_agent_runtime":
+		return _errors.fail(
+			command_id,
+			HHAgentErrors.E_UNVERIFIED,
+			"freeze/step reply is not from Play hh_agent_runtime",
+			"runtime",
+		)
+	if reply.get("editor_time_scale", false) == true:
+		return _errors.fail(
+			command_id,
+			HHAgentErrors.E_UNVERIFIED,
+			"refusing editor-only Engine.time_scale paper freeze/step",
+			"runtime",
+		)
+	if reply.get("ok", false) != true:
+		var code: String = str(reply.get("code", HHAgentErrors.E_UNVERIFIED))
+		if code.is_empty():
+			code = HHAgentErrors.E_UNVERIFIED
+		return _errors.fail(
+			command_id,
+			code,
+			str(reply.get("message", "Play freeze/step failed")),
+			"runtime",
+		)
+	if verb == "freeze":
+		if reply.get("frozen", false) != (payload.get("frozen", true) == true):
+			return _errors.fail(command_id, HHAgentErrors.E_UNVERIFIED, "runtime_frozen_matches failed", "runtime")
+		if payload.get("frozen", true) == true:
+			if reply.get("observed_frozen", false) != true:
+				return _errors.fail(
+					command_id,
+					HHAgentErrors.E_UNVERIFIED,
+					"Play fixture/probe did not observe freeze",
+					"runtime",
+				)
+			if reply.get("paused", false) != true:
+				return _errors.fail(command_id, HHAgentErrors.E_UNVERIFIED, "Play tree was not paused", "runtime")
+	if verb == "step":
+		if reply.get("stepped", false) != true:
+			return _errors.fail(command_id, HHAgentErrors.E_UNVERIFIED, "Play process did not confirm a step", "runtime")
+		if int(reply.get("frames_advanced", 0)) < 1:
+			return _errors.fail(
+				command_id,
+				HHAgentErrors.E_UNVERIFIED,
+				"step ACK requires observed frames_advanced",
+				"runtime",
+			)
+		if payload.has("until") and reply.get("matched", false) != true:
+			return _errors.fail(
+				command_id,
+				HHAgentErrors.E_UNVERIFIED,
+				"step-until ACK requires matched predicate",
+				"runtime",
+			)
+	var after: Dictionary = reply.duplicate(true)
+	after["run_id"] = want_run
+	after["playing"] = true
+	after["is_playing_scene"] = true
+	after["playing_scene"] = _normalize_res(str(EditorInterface.get_playing_scene()))
+	after["game_tree_source"] = "hh_agent_runtime"
+	after["editor_time_scale"] = false
+	after["source"] = "hh_agent_runtime"
 	var checks: PackedStringArray = PackedStringArray()
 	checks.append(post)
 	return _errors.ok_changed(command_id, checks, after, true)

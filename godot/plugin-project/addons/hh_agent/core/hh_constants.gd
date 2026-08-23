@@ -71,3 +71,4 @@ const RUNTIME_RATE_MIN_MS: int = 15
 const RUNTIME_MAX_RESEND: int = 8
 const INPUT_WAIT_MS: int = 15000
 const INPUT_STEAL_MS: int = 280
+const TIME_WAIT_MS: int = 25000

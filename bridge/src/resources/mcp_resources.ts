@@ -18,6 +18,7 @@ import {
   isRenderApply,
   isPlayApply,
   isInputApply,
+  isRuntimeApply,
 } from "../ledger/scene_lifecycle.js";
 import { allActionDefs } from "../registry/registry.js";
 import { PROTOCOL, REGISTRY_VERSION } from "../registry/types.js";
@@ -135,6 +136,8 @@ export function capabilityMatrix(): Record<string, unknown> {
               ? "play-external"
             : isInputApply(def.id)
               ? "input-external"
+            : isRuntimeApply(def.id)
+              ? "runtime-external"
             : isResourceApply(def.id) || isAssetRefApply(def.id)
               ? "resource-ops"
               : isSignalApply(def.id)
