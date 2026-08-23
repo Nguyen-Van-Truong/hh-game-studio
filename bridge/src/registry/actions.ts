@@ -32,6 +32,7 @@ import {
   OS_SOURCE,
   PROP_PATH,
   RES_PATH,
+  RUN_ID,
   SCRIPT_TEXT,
   TEXT,
   VARIANT,
@@ -223,8 +224,9 @@ function ext(
   input: JsonSchema,
   example: Record<string, unknown>,
   undo: UndoStrategy = "job_supervisor",
+  extra?: { extra_errors?: readonly string[] },
 ): ActionSpec {
-  return {
+  const spec: ActionSpec = {
     summary,
     side_effect: "external",
     undo,
@@ -233,6 +235,10 @@ function ext(
     example,
     postcondition: post,
   };
+  if (extra?.extra_errors) {
+    spec.extra_errors = extra.extra_errors;
+  }
+  return spec;
 }
 
 const SPECS: Record<string, ActionSpec> = {
@@ -2009,37 +2015,46 @@ const SPECS: Record<string, ActionSpec> = {
       mode: { type: "string", enum: ["play", "debug"] },
     }),
     { scene: "res://scenes/world.tscn", mode: "play" },
+    "job_supervisor",
+    { extra_errors: [E.E_TIMEOUT, E.E_BUSY, E.E_CONFLICT] },
   ),
   "play.stop": ext(
     "Stop the running Play process",
     "play_process_stopped",
     obj(["reason"], {
       reason: { type: "string", enum: ["user", "test", "error"] },
+      run_id: RUN_ID,
     }),
     { reason: "user" },
+    "job_supervisor",
+    { extra_errors: [E.E_TIMEOUT, E.E_BUSY, E.E_CONFLICT] },
   ),
   "play.restart": ext(
     "Restart Play from the same scene",
     "play_process_restarted",
-    obj(["scene"], { scene: RES_PATH }),
+    obj(["scene"], { scene: RES_PATH, run_id: RUN_ID }),
     { scene: "res://scenes/world.tscn" },
+    "job_supervisor",
+    { extra_errors: [E.E_TIMEOUT, E.E_BUSY, E.E_CONFLICT] },
   ),
   "play.debug": ext(
     "Start Play with the debugger attached",
     "play_debug_attached",
     obj(["scene"], { scene: RES_PATH }),
     { scene: "res://scenes/world.tscn" },
+    "job_supervisor",
+    { extra_errors: [E.E_TIMEOUT, E.E_BUSY, E.E_CONFLICT] },
   ),
   "play.status": read(
     "Read Play process status",
     "play_status_known",
-    obj(["detail"], { detail: DETAIL }),
+    obj(["detail"], { detail: DETAIL, run_id: RUN_ID }),
     { detail: "short" },
   ),
   "play.logs": read(
     "Read recent Play logs",
     "play_logs_returned",
-    obj(["limit"], { limit: LIMIT }),
+    obj(["limit"], { limit: LIMIT, run_id: RUN_ID }),
     { limit: 50 },
   ),
 

@@ -17,6 +17,8 @@ const _SchedulerScript: GDScript = preload("res://addons/hh_agent/core/hh_schedu
 const _PauseScript: GDScript = preload("res://addons/hh_agent/core/hh_pause.gd")
 const _ErrorsScript: GDScript = preload("res://addons/hh_agent/core/hh_errors.gd")
 const _PresenterScript: GDScript = preload("res://addons/hh_agent/core/hh_presenter.gd")
+const _PlayScript: GDScript = preload("res://addons/hh_agent/core/hh_play_adapter.gd")
+const _PlayDbgScript: GDScript = preload("res://addons/hh_agent/core/hh_play_debugger.gd")
 
 ## hh_agent EditorPlugin: main-thread router + activity/review docks + outbound sidecar client.
 ## Disable/reload must not leak sockets, signals, docks, or timers.
@@ -43,6 +45,9 @@ var _paused: bool = false
 var _bridge_pid: int = 0
 var _reconnect_attempt: int = 0
 var _last_pause_ack: Dictionary = {}
+var _play: HHAgentPlayAdapter
+var _play_debugger: EditorDebuggerPlugin
+var _play_wait: Dictionary = {}
 
 
 func _enter_tree() -> void:
@@ -68,6 +73,10 @@ func _enter_tree() -> void:
 	_scheduler = HHAgentScheduler.new()
 	_scheduler.attach()
 	_scheduler.set_mode(_store.mode())
+	_play = HHAgentPlayAdapter.new()
+	_play.attach()
+	_play_debugger = HHAgentPlayDebugger.new()
+	add_debugger_plugin(_play_debugger)
 	set_force_draw_over_forwarding_enabled()
 	_client.set_enqueue(Callable(self, "_enqueue_inbound"))
 	_client.set_hello_handler(Callable(self, "_on_hello"))
@@ -107,6 +116,10 @@ func _process(_delta: float) -> void:
 		# Sidecar exit used to leave the dock on "disconnected" forever.
 		if _client.is_closed() and (_reconnect_timer == null or _reconnect_timer.is_stopped()):
 			_schedule_reconnect()
+	if _play != null:
+		_play.tick_watchdog()
+	if not _play_wait.is_empty():
+		_poll_play_wait()
 	var inbound_this_frame: bool = false
 	if not _busy:
 		var n: int = 0
@@ -119,6 +132,8 @@ func _process(_delta: float) -> void:
 			inbound_this_frame = true
 			_busy = true
 			_handle_item(item)
+			if not _play_wait.is_empty():
+				break
 			_busy = false
 			n += 1
 	if _scheduler != null:
@@ -250,6 +265,31 @@ func _handle_item(item: Dictionary) -> void:
 	var envelope_v: Variant = item.get("envelope", {})
 	_record_planned(item)
 	var result: Dictionary = _router.dispatch(envelope_v, _actions, queued_at, _pause_gate)
+	if result.get("_hh_play_pending", false) == true:
+		_play_wait = {"item": item, "command_id": str(result.get("command_id", ""))}
+		return
+	_finish_item(item, result)
+
+
+func _poll_play_wait() -> void:
+	if _play == null:
+		_finish_play_wait(_errors.fail(str(_play_wait.get("command_id", "")), HHAgentErrors.E_UNVERIFIED, "play adapter gone", "play"))
+		return
+	var result: Dictionary = _play.poll_pending()
+	if result.is_empty() or result.get("_hh_play_pending", false) == true:
+		return
+	_finish_play_wait(result)
+
+
+func _finish_play_wait(result: Dictionary) -> void:
+	var item_v: Variant = _play_wait.get("item", {})
+	var item: Dictionary = item_v if item_v is Dictionary else {}
+	_play_wait = {}
+	_busy = false
+	_finish_item(item, result)
+
+
+func _finish_item(item: Dictionary, result: Dictionary) -> void:
 	if _postcondition != null:
 		_postcondition.remember(str(result.get("command_id", "")), result)
 	var status: String = HHAgentConstants.STATUS_VERIFIED if result.get("ok", false) == true else HHAgentConstants.STATUS_FAILED
@@ -653,6 +693,13 @@ func _refresh_review() -> void:
 
 func _cleanup() -> void:
 	set_process(false)
+	if _play_debugger != null:
+		remove_debugger_plugin(_play_debugger)
+		_play_debugger = null
+	if _play != null:
+		_play.shutdown()
+		_play = null
+	_play_wait = {}
 	if _reconnect_timer != null:
 		if _reconnect_timer.timeout.is_connected(_on_reconnect_timeout):
 			_reconnect_timer.timeout.disconnect(_on_reconnect_timeout)

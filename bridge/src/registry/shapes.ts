@@ -127,6 +127,13 @@ export const JOB_ID: JsonSchema = {
   pattern: "^[A-Za-z0-9_-]+$",
 };
 
+export const RUN_ID: JsonSchema = {
+  type: "string",
+  minLength: 26,
+  maxLength: 26,
+  pattern: "^[0-7][0-9A-HJKMNPQRSTVWXYZ]{25}$",
+};
+
 export const HASH: JsonSchema = {
   type: "string",
   minLength: 8,

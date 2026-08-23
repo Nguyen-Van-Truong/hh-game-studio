@@ -23,12 +23,13 @@ const _UiScript: GDScript = preload("res://addons/hh_agent/core/hh_ui_adapter.gd
 const _PhysicsScript: GDScript = preload("res://addons/hh_agent/core/hh_physics_adapter.gd")
 const _AudioScript: GDScript = preload("res://addons/hh_agent/core/hh_audio_adapter.gd")
 const _RenderScript: GDScript = preload("res://addons/hh_agent/core/hh_render_adapter.gd")
+const _PlayScript: GDScript = preload("res://addons/hh_agent/core/hh_play_adapter.gd")
 const _PresenterScript: GDScript = preload("res://addons/hh_agent/core/hh_presenter.gd")
 const _OverlayScript: GDScript = preload("res://addons/hh_agent/ui/overlay/hh_overlay.gd")
 const _SchedulerScript: GDScript = preload("res://addons/hh_agent/core/hh_scheduler.gd")
 const _StoreScript: GDScript = preload("res://addons/hh_agent/core/hh_activity_store.gd")
 
-## Routes read/view adapters, scene/node/property/resource/signal/script/asset/project/transaction/tilemap/animation/ui/physics/audio/render apply.
+## Routes read/view adapters, scene/node/property/resource/signal/script/asset/project/transaction/tilemap/animation/ui/physics/audio/render/play apply.
 
 var _errors: HHAgentErrors = HHAgentErrors.new()
 var _envelope: HHAgentEnvelope = HHAgentEnvelope.new()
@@ -49,6 +50,7 @@ var _ui: HHAgentUiAdapter = HHAgentUiAdapter.new()
 var _physics: HHAgentPhysicsAdapter = HHAgentPhysicsAdapter.new()
 var _audio: HHAgentAudioAdapter = HHAgentAudioAdapter.new()
 var _render: HHAgentRenderAdapter = HHAgentRenderAdapter.new()
+var _play_local: HHAgentPlayAdapter = HHAgentPlayAdapter.new()
 var _presenter: HHAgentPresenter = HHAgentPresenter.new()
 var _overlay_local: HHAgentOverlay = HHAgentOverlay.new()
 var _scheduler_local: HHAgentScheduler = HHAgentScheduler.new()
@@ -165,6 +167,8 @@ func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_ga
 			result = _render.handle(command_id, method, action, params, actions, pre)
 		else:
 			return _errors.fail(command_id, HHAgentErrors.E_UNKNOWN_ACTION, "unknown render action", "action")
+	elif method == "godot.play" and _play().handles(action):
+		result = _play().handle(command_id, method, action, params, actions, pre)
 	elif method == "godot.editor" and (action == "frame_view" or action == "replay"):
 		result = _overlay().handle(command_id, method, action, params, actions, envelope)
 	elif method == "godot.review" and action == "replay":
@@ -359,6 +363,9 @@ func run_selftest(actions: HHAgentActions) -> PackedStringArray:
 	var render_missing: Dictionary = dispatch(_sample("godot.render", "shader", {}), actions, 0)
 	if str(_error_of(render_missing).get("code", "")) != HHAgentErrors.E_MISSING_REQUIRED:
 		failures.append("render.shader missing required must be E_MISSING_REQUIRED")
+	var play_missing: Dictionary = dispatch(_sample("godot.play", "start", {}), actions, 0)
+	if str(_error_of(play_missing).get("code", "")) != HHAgentErrors.E_MISSING_REQUIRED:
+		failures.append("play.start missing required must be E_MISSING_REQUIRED")
 	var vendor_plugin: Dictionary = dispatch(
 		_sample("godot.project", "plugin", {"plugin_name": "fake_vendor", "enabled": true}),
 		actions,
@@ -446,6 +453,13 @@ func run_selftest(actions: HHAgentActions) -> PackedStringArray:
 	if str(_error_of(unknown).get("code", "")) != HHAgentErrors.E_INVALID_ENVELOPE:
 		failures.append("unknown field must be E_INVALID_ENVELOPE")
 	return failures
+
+
+func _play() -> HHAgentPlayAdapter:
+	var live: HHAgentPlayAdapter = HHAgentPlayAdapter.current()
+	if live != null:
+		return live
+	return _play_local
 
 
 func _overlay() -> HHAgentOverlay:

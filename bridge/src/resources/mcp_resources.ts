@@ -16,6 +16,7 @@ import {
   isPhysicsApply,
   isAudioApply,
   isRenderApply,
+  isPlayApply,
 } from "../ledger/scene_lifecycle.js";
 import { allActionDefs } from "../registry/registry.js";
 import { PROTOCOL, REGISTRY_VERSION } from "../registry/types.js";
@@ -90,7 +91,7 @@ export function capabilityMatrix(): Record<string, unknown> {
     registry_version: REGISTRY_VERSION,
     godot_pin: PINNED_VERSION_ID,
     mutate_dispatched:
-      "scene-lifecycle+node-crud+property+resource+signal+script+project-settings+tilemap+animation+ui+physics+audio+render",
+      "scene-lifecycle+node-crud+property+resource+signal+script+project-settings+tilemap+animation+ui+physics+audio+render+play-external",
     node_crud_dispatched: true,
     property_dispatched: true,
     resource_dispatched: true,
@@ -101,7 +102,7 @@ export function capabilityMatrix(): Record<string, unknown> {
     physics_dispatched: true,
     audio_dispatched: true,
     render_dispatched: true,
-    note: "Scene/node/property/resource/signal/script/project.settings/tilemap/animation/ui/physics/audio/render ACK after EditorUndoRedo or ProjectSettings.save + ConfigFile disk parse. play.input inject stays E_UNVERIFIED.",
+    note: "Scene/node/property/resource/signal/script/project.settings/tilemap/animation/ui/physics/audio/render ACK after EditorUndoRedo or ProjectSettings.save + ConfigFile disk parse. play.start/stop/restart/debug ACK after is_playing_scene + get_playing_scene (EXTERNAL, not UndoRedo). play.input inject stays E_UNVERIFIED.",
     actions: allActionDefs().map((def) => ({
       id: def.id,
       method: def.method,
@@ -129,6 +130,8 @@ export function capabilityMatrix(): Record<string, unknown> {
               ? "audio"
             : isRenderApply(def.id)
               ? "render"
+            : isPlayApply(def.id)
+              ? "play-external"
             : isResourceApply(def.id) || isAssetRefApply(def.id)
               ? "resource-ops"
               : isSignalApply(def.id)

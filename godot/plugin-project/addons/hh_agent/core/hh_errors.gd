@@ -28,6 +28,7 @@ const E_PAUSED: String = "E_PAUSED"
 const E_LEASE: String = "E_LEASE"
 const E_PATH: String = "E_PATH"
 const E_VERSION_SKEW: String = "E_VERSION_SKEW"
+const E_TIMEOUT: String = "E_TIMEOUT"
 
 
 func typed(code: String, message: String, path: String = "") -> Dictionary:

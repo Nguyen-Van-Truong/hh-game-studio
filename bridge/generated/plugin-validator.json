@@ -14703,7 +14703,10 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_TIMEOUT",
+        "E_BUSY",
+        "E_CONFLICT"
       ],
       "postcondition": "play_process_running"
     },
@@ -14731,6 +14734,12 @@
               "test",
               "error"
             ]
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26,
+            "pattern": "^[0-7][0-9A-HJKMNPQRSTVWXYZ]{25}$"
           }
         }
       },
@@ -14824,7 +14833,10 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_TIMEOUT",
+        "E_BUSY",
+        "E_CONFLICT"
       ],
       "postcondition": "play_process_stopped"
     },
@@ -14850,6 +14862,12 @@
             "minLength": 6,
             "maxLength": 256,
             "pattern": "^res://[^\\s]+$"
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26,
+            "pattern": "^[0-7][0-9A-HJKMNPQRSTVWXYZ]{25}$"
           }
         }
       },
@@ -14943,7 +14961,10 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_TIMEOUT",
+        "E_BUSY",
+        "E_CONFLICT"
       ],
       "postcondition": "play_process_restarted"
     },
@@ -15062,7 +15083,10 @@
         "E_CLIENT_ESCALATION",
         "E_INVALID_COMMAND_ID",
         "E_INVALID_ENVELOPE",
-        "E_UNVERIFIED"
+        "E_UNVERIFIED",
+        "E_TIMEOUT",
+        "E_BUSY",
+        "E_CONFLICT"
       ],
       "postcondition": "play_debug_attached"
     },
@@ -15089,6 +15113,12 @@
               "short",
               "full"
             ]
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26,
+            "pattern": "^[0-7][0-9A-HJKMNPQRSTVWXYZ]{25}$"
           }
         }
       },
@@ -15207,6 +15237,12 @@
             "type": "integer",
             "minimum": 1,
             "maximum": 100
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26,
+            "pattern": "^[0-7][0-9A-HJKMNPQRSTVWXYZ]{25}$"
           }
         }
       },

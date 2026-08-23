@@ -57,3 +57,7 @@ const REVIEW_DIR: String = ".hh-agent/review"
 const REVIEW_FILE: String = "card.json"
 const REVIEW_SCHEMA: String = "hh-review-card/1"
 const REVIEW_DIFF_CAP: int = 100
+const PLAY_LOG_RING: int = 200
+const PLAY_START_WAIT_MS: int = 8000
+const PLAY_HANG_MS: int = 10000
+const PLAY_HANG_GRACE_MS: int = 2500

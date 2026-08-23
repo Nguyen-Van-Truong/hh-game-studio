@@ -43,10 +43,12 @@ import {
   isPhysicsApply,
   isAudioApply,
   isRenderApply,
+  isPlayApply,
   mutationNeedsDiskHash,
   nodeNeedsUidAfter,
   sceneNeedsDiskHash,
 } from "./scene_lifecycle.js";
+import { notePlayAfter } from "./play_session.js";
 import { emptyRow, type CommandLedger, type CommandRow } from "./store.js";
 import type { LedgerState } from "./states.js";
 import {
@@ -309,12 +311,16 @@ function classify(raw: Record<string, unknown>, commandId: string): Classified {
       timeoutMs: def?.timeout_ms ?? 5_000,
     };
   }
-  if (isProvenEditorApply(accepted.action_id) || isSidecarMutateApply(accepted.action_id)) {
+  if (
+    isProvenEditorApply(accepted.action_id) ||
+    isSidecarMutateApply(accepted.action_id) ||
+    isPlayApply(accepted.action_id)
+  ) {
     return {
       kind: "mutate",
       sideEffect: side,
       actionId: accepted.action_id,
-      timeoutMs: def?.timeout_ms ?? 15_000,
+      timeoutMs: def?.timeout_ms ?? (isPlayApply(accepted.action_id) ? 120_000 : 15_000),
     };
   }
   return {
@@ -1049,6 +1055,96 @@ function renderApplyOk(
   return undefined;
 }
 
+function normalizeResPath(path: string): string {
+  const trimmed = path.trim().replace(/\\/g, "/");
+  if (!trimmed) {
+    return "";
+  }
+  if (trimmed.startsWith("res://")) {
+    return trimmed;
+  }
+  return `res://${trimmed.replace(/^\/+/, "")}`;
+}
+
+function playApplyOk(
+  result: PluginCommandResult,
+  actionId: string,
+  params: Record<string, unknown>,
+): PluginCommandResult | undefined {
+  if (!isPlayApply(actionId)) {
+    return undefined;
+  }
+  if (!result.ok) {
+    return result;
+  }
+  const after = result.after;
+  if (!isRecord(after)) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "play missing after readback");
+  }
+  if (after.tree_kind === "remote") {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "play apply must label tree_kind=editor");
+  }
+  if (after.remote_tree === true) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "never claim editor tree is remote");
+  }
+  if (after.game_tree_source === "get_edited_scene_root") {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "never return get_edited_scene_root as the game tree");
+  }
+  if (after.pid_source === "editor") {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "refusing editor OS.get_process_id as play PID");
+  }
+  const wantPlaying = actionId !== "play.stop";
+  if (after.playing !== wantPlaying) {
+    return errorResult(
+      result.command_id,
+      E.E_UNVERIFIED,
+      `play after.playing must be ${wantPlaying} for ${actionId}`,
+    );
+  }
+  if (after.is_playing_scene !== wantPlaying) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "play is_playing_scene bind mismatch");
+  }
+  if (wantPlaying && after.headless_play === "unproven") {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "refusing invented playing=true when headless_play=unproven");
+  }
+  if (wantPlaying) {
+    const runId = typeof after.run_id === "string" ? after.run_id : "";
+    if (!isUlid(runId)) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "play missing run_id");
+    }
+    const wantScene = typeof params.scene === "string" ? normalizeResPath(params.scene) : "";
+    const gotScene =
+      typeof after.playing_scene === "string"
+        ? normalizeResPath(after.playing_scene)
+        : typeof after.scene === "string"
+          ? normalizeResPath(after.scene)
+          : "";
+    if (wantScene && gotScene !== wantScene) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "get_playing_scene bind mismatch");
+    }
+    if (!gotScene) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "get_playing_scene bind mismatch");
+    }
+  }
+  if (actionId === "play.debug" && after.debugger_attached !== true) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "play.debug requires debugger session attached");
+  }
+  if (actionId === "play.start" && params.mode === "debug" && after.debugger_attached !== true) {
+    return errorResult(result.command_id, E.E_UNVERIFIED, "play.start mode=debug requires debugger session attached");
+  }
+  if (actionId === "play.restart") {
+    const runId = typeof after.run_id === "string" ? after.run_id : "";
+    const prev = typeof after.previous_run_id === "string" ? after.previous_run_id : "";
+    if (prev && prev === runId) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "play.restart must mint a new run_id");
+    }
+    if (after.previous_alive === true) {
+      return errorResult(result.command_id, E.E_UNVERIFIED, "play.restart left the previous run alive");
+    }
+  }
+  return undefined;
+}
+
 function cameraApplyOk(
   result: PluginCommandResult,
   actionId: string,
@@ -1654,7 +1750,11 @@ async function applyMutateOnce(
   if (isNoopEnvelope(envelope)) {
     return markUncertain(ledger, row, "noop cannot use scene mutate apply");
   }
-  if (!isProvenEditorApply(classified.actionId) && !isSidecarMutateApply(classified.actionId)) {
+  if (
+    !isProvenEditorApply(classified.actionId) &&
+    !isSidecarMutateApply(classified.actionId) &&
+    !isPlayApply(classified.actionId)
+  ) {
     return markUncertain(ledger, row, "only proven editor apply verbs may apply");
   }
   const fields = envelopeFields(envelope);
@@ -1782,6 +1882,8 @@ async function applyMutateOnce(
                   ? "scene"
                   : isProjectSettingsApply(classified.actionId)
                     ? "project"
+                    : isPlayApply(classified.actionId)
+                      ? "play"
                     : "node",
       action_id: classified.actionId,
       checks: result.postcondition.checks,
@@ -1873,6 +1975,12 @@ async function applyMutateOnce(
       persistResult(row, renderFail);
       saveState(ledger, row, "failed");
       return renderFail;
+    }
+    const playFail = playApplyOk(result, classified.actionId, fields.params);
+    if (playFail) {
+      persistResult(row, playFail);
+      saveState(ledger, row, "failed");
+      return playFail;
     }
     const resourceFail = resourceApplyOk(result, classified.actionId, fields.params);
     if (resourceFail) {
@@ -1972,6 +2080,9 @@ async function applyMutateOnce(
           }
         }
       }
+    }
+    if (isPlayApply(classified.actionId) && isRecord(result.after)) {
+      notePlayAfter(classified.actionId, result.after);
     }
     saveState(ledger, row, "verified");
     try {

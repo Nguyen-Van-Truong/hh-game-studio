@@ -100,7 +100,7 @@ func handle(
 	if method == "godot.play" and action == "status":
 		return _play_status(command_id, params, post)
 	if method == "godot.play" and action == "logs":
-		return _unverified(command_id, "play logs require the Play process log ring (R6)")
+		return _play_logs(command_id, params, post)
 	if method == "godot.tilemap" and action == "query":
 		return _tilemap_query(command_id, params, post)
 	if method == "godot.ui" and action == "accessibility":
@@ -1195,15 +1195,35 @@ func _asset_deps(command_id: String, params: Dictionary, post: String) -> Dictio
 	})
 
 
-func _play_status(command_id: String, _params: Dictionary, post: String) -> Dictionary:
+func _play_status(command_id: String, params: Dictionary, post: String) -> Dictionary:
+	var live: HHAgentPlayAdapter = HHAgentPlayAdapter.current()
+	if live != null:
+		return live.status_read(command_id, params, post)
 	var playing: bool = EditorInterface.is_playing_scene()
 	var again: bool = EditorInterface.is_playing_scene()
 	if playing != again:
 		return _unverified(command_id, "play flag changed during readback")
+	var live_scene: String = ""
+	if playing:
+		live_scene = str(EditorInterface.get_playing_scene())
 	return _ok(command_id, post, {
 		"playing": playing,
-		"scene": EditorInterface.get_playing_scene(),
+		"is_playing_scene": playing,
+		"scene": live_scene,
+		"playing_scene": live_scene,
+		"tree_kind": "editor",
+		"remote_tree": false,
+		"game_tree_source": "is_playing_scene",
+		"play_pid": 0,
+		"pid_source": "unproven",
 	})
+
+
+func _play_logs(command_id: String, params: Dictionary, post: String) -> Dictionary:
+	var live: HHAgentPlayAdapter = HHAgentPlayAdapter.current()
+	if live != null:
+		return live.logs_read(command_id, params, post)
+	return _unverified(command_id, "play logs require a Play run (R6)")
 
 
 func _tilemap_query(command_id: String, params: Dictionary, post: String) -> Dictionary:

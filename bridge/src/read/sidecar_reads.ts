@@ -13,6 +13,7 @@ import type { SessionDescriptor } from "../session/descriptor.js";
 import { agentHome } from "../session/paths.js";
 import type { PluginCommandResult } from "../transport/plugin_rpc.js";
 import { unverifiedResult } from "../transport/plugin_rpc.js";
+import { playJob, playJobs } from "../ledger/play_session.js";
 
 export interface SidecarReadInput {
   actionId: string;
@@ -190,11 +191,35 @@ export function trySidecarRead(input: SidecarReadInput): PluginCommandResult | u
   }
   if (actionId === "job.list") {
     const limit = typeof params.limit === "number" ? params.limit : 20;
-    const jobs = input.pause ? [{ id: "mutate-lane", paused: input.pause.isPaused() }] : [];
+    const jobs: Array<Record<string, unknown>> = input.pause
+      ? [{ id: "mutate-lane", paused: input.pause.isPaused() }]
+      : [];
+    for (const play of playJobs()) {
+      jobs.push({
+        id: play.id,
+        kind: play.kind,
+        playing: play.playing,
+        scene: play.scene,
+        run_id: play.id,
+      });
+    }
     return ok(commandId, "job_list_returned", { jobs: jobs.slice(0, limit), total: jobs.length });
   }
   if (actionId === "job.status") {
     const jobId = typeof params.job_id === "string" ? params.job_id : "";
+    const play = playJob(jobId);
+    if (play) {
+      return ok(commandId, "job_status_known", {
+        job_id: play.id,
+        kind: "play",
+        playing: play.playing,
+        scene: play.scene,
+        run_id: play.id,
+        finished: play.playing !== true,
+        cancelled: false,
+        paused: input.pause?.isPaused() === true,
+      });
+    }
     const job = input.pause?.job(jobId);
     if (!job) {
       return fail(commandId, E.E_UNVERIFIED, `job ${jobId} not found`, "job_id");
