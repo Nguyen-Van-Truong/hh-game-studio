@@ -21,6 +21,7 @@ var _pause: String = "inactive"
 var _mode: String = HHAgentConstants.MODE_WATCH
 var _replay_code: String = ""
 var _plan: Dictionary = {}
+var _orch: Dictionary = {}
 var _session_re: RegEx = RegEx.new()
 var _bearer_re: RegEx = RegEx.new()
 
@@ -100,6 +101,24 @@ func set_plan(plan: Dictionary) -> void:
 	_task = "job.plan"
 	if plan.has("run_id"):
 		_job = redact_text(str(plan.get("run_id", _job)))
+
+
+func set_orch(view: Dictionary) -> void:
+	_orch = view.duplicate(true)
+	_task = "job.run"
+	if view.has("job_id"):
+		_job = redact_text(str(view.get("job_id", _job)))
+
+
+func orch_snapshot() -> Dictionary:
+	return {
+		"job_id": redact_text(str(_orch.get("job_id", ""))),
+		"state": str(_orch.get("state", "")),
+		"current_task_id": str(_orch.get("current_task_id", "")),
+		"blocked_reason": str(_orch.get("blocked_reason", "")),
+		"cancelled": _orch.get("cancelled", false) == true,
+		"fixture": str(_orch.get("fixture", "")),
+	}
 
 
 func plan_snapshot() -> Dictionary:
@@ -346,6 +365,7 @@ func snapshot(params: Dictionary) -> Dictionary:
 			"message": "replay is presentation-only; does not call the command router",
 		},
 		"plan": plan_snapshot(),
+		"orch": orch_snapshot(),
 	}
 
 

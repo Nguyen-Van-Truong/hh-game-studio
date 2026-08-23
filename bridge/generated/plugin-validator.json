@@ -3,7 +3,7 @@
   "protocol": "hh-godot-agent/1",
   "registry_version": "hh-godot-actions/1",
   "variant_schema": "hh-godot-variant/1",
-  "action_count": 160,
+  "action_count": 161,
   "envelope": {
     "allowed": [
       "protocol",
@@ -20851,6 +20851,212 @@
         "E_UNVERIFIED"
       ],
       "postcondition": "plan_dag_compiled"
+    },
+    "job.run": {
+      "method": "godot.job",
+      "verb": "run",
+      "action_version": "1",
+      "side_effect": "mutate",
+      "undo": "job_supervisor",
+      "timeout_ms": 60000,
+      "cancellable": true,
+      "required_policy": "EDIT",
+      "checkpoint_required": false,
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "job_id"
+        ],
+        "properties": {
+          "job_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "pattern": "^[A-Za-z0-9_-]+$"
+          },
+          "brief": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 32000
+          },
+          "path": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 256,
+            "pattern": "^res://[^\\s]+$"
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26,
+            "pattern": "^[0-7][0-9A-HJKMNPQRSTVWXYZ]{25}$"
+          },
+          "fixture": {
+            "type": "string",
+            "enum": [
+              "ok_slice",
+              "infinite_repair",
+              "dep_fail"
+            ]
+          },
+          "hold_after": {
+            "type": "string",
+            "enum": [
+              "inspect",
+              "plan",
+              "checkpoint",
+              "execute",
+              "verify",
+              "repair",
+              "review-ready",
+              "done",
+              "blocked",
+              "cancelled"
+            ]
+          },
+          "max_steps": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 64
+          },
+          "resume": {
+            "type": "boolean"
+          },
+          "inject_illegal": {
+            "type": "boolean"
+          },
+          "fail_task": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "pattern": "^[A-Za-z0-9_-]+$"
+          },
+          "budgets": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [],
+            "properties": {
+              "commands": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 10000
+              },
+              "wall_ms": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 3600000
+              },
+              "retries": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 64
+              },
+              "context_tokens": {
+                "type": "integer",
+                "minimum": 256,
+                "maximum": 2000000
+              }
+            }
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ok",
+          "command_id",
+          "postcondition"
+        ],
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "changed": {
+            "type": "boolean"
+          },
+          "before": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "after": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "postcondition": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "verified",
+              "checks"
+            ],
+            "properties": {
+              "verified": {
+                "type": "boolean"
+              },
+              "checks": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "undo_action": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "error": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "error_codes": [
+        "E_MISSING_REQUIRED",
+        "E_UNKNOWN_PARAM",
+        "E_INVALID_TYPE",
+        "E_OUT_OF_BOUNDS",
+        "E_UNKNOWN_ACTION",
+        "E_PROTOCOL_VERSION",
+        "E_ACTION_VERSION",
+        "E_CLIENT_ESCALATION",
+        "E_INVALID_COMMAND_ID",
+        "E_INVALID_ENVELOPE",
+        "E_UNVERIFIED",
+        "E_PAUSED",
+        "E_POLICY",
+        "E_CONFLICT"
+      ],
+      "postcondition": "orchestrator_state_persisted"
     },
     "canvas.bounds": {
       "method": "godot.canvas",

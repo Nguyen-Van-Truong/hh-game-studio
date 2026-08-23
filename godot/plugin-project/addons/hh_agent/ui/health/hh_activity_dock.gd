@@ -28,6 +28,7 @@ var _timeline_meta: Label
 var _list: ItemList
 var _plan_meta: Label
 var _plan_list: ItemList
+var _orch_meta: Label
 var _summary: Label
 var _links: Label
 var _replay_note: Label
@@ -76,6 +77,7 @@ func _ready() -> void:
 	_plan_list.custom_minimum_size = Vector2(0, 120)
 	_plan_list.max_text_lines = 1
 	add_child(_plan_list)
+	_orch_meta = _add_label("orch: —")
 	_summary = _add_label("summary: —")
 	_links = _add_label("undo / checkpoint / evidence: —")
 	_replay_note = _add_label("Replay: presentation only (does not call the command router)")
@@ -129,6 +131,7 @@ func set_status(info: Dictionary) -> void:
 	_mode_label.text = "mode: %s" % str(info.get("mode", HHAgentConstants.MODE_WATCH))
 	_refresh_page(info)
 	_refresh_plan(info)
+	_refresh_orch(info)
 	_force_buttons_visible()
 
 
@@ -202,6 +205,23 @@ func _refresh_plan(info: Dictionary) -> void:
 				str(card.get("summary", "")),
 			])
 		i += 1
+
+
+func _refresh_orch(info: Dictionary) -> void:
+	if _orch_meta == null:
+		return
+	var dock_v: Variant = info.get("dock", {})
+	var dock: Dictionary = dock_v if dock_v is Dictionary else {}
+	var orch_v: Variant = dock.get("orch", info.get("orch", {}))
+	var orch: Dictionary = orch_v if orch_v is Dictionary else {}
+	if orch.is_empty():
+		_orch_meta.text = "orch: —"
+		return
+	_orch_meta.text = "orch: %s  %s  task=%s" % [
+		str(orch.get("job_id", "—")),
+		str(orch.get("state", "—")),
+		str(orch.get("current_task_id", "—")),
+	]
 
 
 func _force_buttons_visible() -> void:

@@ -1739,6 +1739,17 @@
       "postcondition": "plan_dag_compiled",
       "checkpoint_required": false
     },
+    "job.run": {
+      "method": "godot.job",
+      "verb": "run",
+      "side_effect": "mutate",
+      "timeout_ms": 60000,
+      "required": [
+        "job_id"
+      ],
+      "postcondition": "orchestrator_state_persisted",
+      "checkpoint_required": false
+    },
     "canvas.bounds": {
       "method": "godot.canvas",
       "verb": "bounds",

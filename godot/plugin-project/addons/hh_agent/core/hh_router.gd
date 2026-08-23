@@ -27,6 +27,7 @@ const _PlayScript: GDScript = preload("res://addons/hh_agent/core/hh_play_adapte
 const _TestScript: GDScript = preload("res://addons/hh_agent/core/hh_test_adapter.gd")
 const _RepairScript: GDScript = preload("res://addons/hh_agent/core/hh_repair_adapter.gd")
 const _PlanScript: GDScript = preload("res://addons/hh_agent/core/hh_plan_adapter.gd")
+const _OrchScript: GDScript = preload("res://addons/hh_agent/core/hh_orchestrator_adapter.gd")
 const _PresenterScript: GDScript = preload("res://addons/hh_agent/core/hh_presenter.gd")
 const _OverlayScript: GDScript = preload("res://addons/hh_agent/ui/overlay/hh_overlay.gd")
 const _SchedulerScript: GDScript = preload("res://addons/hh_agent/core/hh_scheduler.gd")
@@ -57,6 +58,7 @@ var _play_local: HHAgentPlayAdapter = HHAgentPlayAdapter.new()
 var _test_local: HHAgentTestAdapter = HHAgentTestAdapter.new()
 var _repair_local: HHAgentRepairAdapter = HHAgentRepairAdapter.new()
 var _plan_local: HHAgentPlanAdapter = HHAgentPlanAdapter.new()
+var _orch_local: HHAgentOrchestratorAdapter = HHAgentOrchestratorAdapter.new()
 var _presenter: HHAgentPresenter = HHAgentPresenter.new()
 var _overlay_local: HHAgentOverlay = HHAgentOverlay.new()
 var _scheduler_local: HHAgentScheduler = HHAgentScheduler.new()
@@ -109,13 +111,17 @@ func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_ga
 				)
 	var side_effect: String = str(def.get("side_effect", ""))
 	if pause_gate != null and not pause_gate.allows_side_effect(side_effect):
-		return _errors.fail(command_id, HHAgentErrors.E_PAUSED, "mutation gate is paused", "pause")
+		var orch_control: bool = method == "godot.job" and (action == "run" or action == "cancel" or action == "wait")
+		if not orch_control:
+			return _errors.fail(command_id, HHAgentErrors.E_PAUSED, "mutation gate is paused", "pause")
 	var pre: Dictionary = {}
 	if envelope.has("precondition") and envelope.get("precondition") is Dictionary:
 		pre = envelope.get("precondition") as Dictionary
 	var result: Dictionary = {}
 	if method == "godot.job" and action == "plan":
 		result = _plan().handle(command_id, method, action, params, actions, pre)
+	elif method == "godot.job" and _orch().handles(action):
+		result = _orch().handle(command_id, method, action, params, actions, pre)
 	elif method == "godot.job" and action == "transaction":
 		result = _tx.handle(command_id, method, action, params, actions, pre)
 	elif method == "godot.scene" and action == "instantiate":
@@ -495,6 +501,9 @@ func run_selftest(actions: HHAgentActions) -> PackedStringArray:
 	if str(_error_of(paused_tx).get("code", "")) != HHAgentErrors.E_PAUSED:
 		failures.append("paused job.transaction must be E_PAUSED")
 	gate.set_paused(false)
+	var run_missing: Dictionary = dispatch(_sample("godot.job", "run", {}), actions, 0)
+	if str(_error_of(run_missing).get("code", "")) != HHAgentErrors.E_MISSING_REQUIRED:
+		failures.append("job.run missing required must be E_MISSING_REQUIRED")
 	var plan_missing: Dictionary = dispatch(_sample("godot.job", "plan", {}), actions, 0)
 	if str(_error_of(plan_missing).get("code", "")) != HHAgentErrors.E_MISSING_REQUIRED:
 		failures.append("job.plan missing required must be E_MISSING_REQUIRED")
@@ -531,6 +540,24 @@ func run_selftest(actions: HHAgentActions) -> PackedStringArray:
 					failures.append("job.plan complete slices must start with test/verify")
 			else:
 				failures.append("job.plan ACK missing plan")
+	var orch_missing: Dictionary = dispatch(_sample("godot.job", "run", {}), actions, 0)
+	if str(_error_of(orch_missing).get("code", "")) != HHAgentErrors.E_MISSING_REQUIRED:
+		failures.append("job.run missing required must be E_MISSING_REQUIRED")
+	gate.set_paused(true)
+	var paused_run: Dictionary = dispatch(
+		_sample("godot.job", "run", {"job_id": "r7w2-selftest-pause", "fixture": "ok_slice", "hold_after": "execute"}),
+		actions,
+		0,
+		gate,
+	)
+	var paused_code: String = str(_error_of(paused_run).get("code", ""))
+	if paused_code != HHAgentErrors.E_PAUSED:
+		var paused_state: String = ""
+		if paused_run.get("after", {}) is Dictionary:
+			paused_state = str((paused_run.get("after") as Dictionary).get("state", ""))
+		if paused_code != "" and paused_state != "inspect" and paused_state != "plan":
+			failures.append("paused job.run must be E_PAUSED or stop before mutate, got %s %s" % [paused_code, paused_state])
+	gate.set_paused(false)
 	var cycle_left: PackedStringArray = _plan().detect_cycle([
 		{"id": "a", "deps": ["b"]},
 		{"id": "b", "deps": ["c"]},
@@ -669,6 +696,13 @@ func _plan() -> HHAgentPlanAdapter:
 	if live != null:
 		return live
 	return _plan_local
+
+
+func _orch() -> HHAgentOrchestratorAdapter:
+	var live: HHAgentOrchestratorAdapter = HHAgentOrchestratorAdapter.current()
+	if live != null:
+		return live
+	return _orch_local
 
 
 func _overlay() -> HHAgentOverlay:

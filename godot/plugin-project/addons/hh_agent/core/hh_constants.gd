@@ -88,3 +88,7 @@ const REPAIR_MAX_LOOPS: int = 3
 const PLAN_DIR: String = ".hh-agent/evidence"
 const PLAN_SCHEMA: String = "hh-plan/1"
 const PLAN_FIXTURE_DIR: String = "r7w1"
+const ORCH_DIR: String = "r7w2"
+const ORCH_SCHEMA: String = "hh-orch/1"
+const ORCH_HEARTBEAT_STALE_MS: int = 5000
+const ORCH_MAX_SAME_REPAIR: int = 3

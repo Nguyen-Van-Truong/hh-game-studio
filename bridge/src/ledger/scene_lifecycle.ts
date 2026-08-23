@@ -126,6 +126,9 @@ export const TEST_APPLY = [
 
 export const TRANSACTION_APPLY = ["job.transaction"] as const;
 
+/** Orchestrator job.run / cancel / wait. Plugin when live; sidecar when plugin is down. */
+export const ORCHESTRATOR_APPLY = ["job.run", "job.cancel", "job.wait"] as const;
+
 export const NODE_UID_AFTER = [
   "node.add",
   "node.rename",
@@ -228,6 +231,10 @@ export function isTestApply(actionId: string): boolean {
 
 export function isTransactionApply(actionId: string): boolean {
   return (TRANSACTION_APPLY as readonly string[]).includes(actionId);
+}
+
+export function isOrchestratorApply(actionId: string): boolean {
+  return (ORCHESTRATOR_APPLY as readonly string[]).includes(actionId);
 }
 
 export function isProvenEditorApply(actionId: string): boolean {

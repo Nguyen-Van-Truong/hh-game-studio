@@ -255,6 +255,9 @@ export function extractTargetPaths(params: Record<string, unknown>, actionId?: s
   if (actionId === "runtime.screenshot" || actionId === "runtime.perf") {
     return [];
   }
+  if (actionId === "job.run" || actionId === "job.cancel" || actionId === "job.wait" || actionId === "job.status") {
+    return [];
+  }
   if (actionId && PROJECT_FILE_ACTIONS.has(actionId)) {
     return ["res://project.godot"];
   }

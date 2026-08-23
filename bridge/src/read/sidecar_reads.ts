@@ -15,6 +15,7 @@ import type { PluginCommandResult } from "../transport/plugin_rpc.js";
 import { unverifiedResult } from "../transport/plugin_rpc.js";
 import { compileBrief, writePlanEvidence } from "../planner/brief_compiler.js";
 import { playJob, playJobs } from "../ledger/play_session.js";
+import { listJobs, statusJob } from "../orchestrator/machine.js";
 
 export interface SidecarReadInput {
   actionId: string;
@@ -29,7 +30,6 @@ const SIDECAR_ONLY = new Set([
   "project.doctor",
   "git.status",
   "git.diff",
-  "job.status",
   "job.list",
 ]);
 
@@ -204,6 +204,17 @@ export function trySidecarRead(input: SidecarReadInput): PluginCommandResult | u
         run_id: play.id,
       });
     }
+    if (projectRoot) {
+      const orch = listJobs(
+        { projectRoot, commandId, now: Date.now(), paused: input.pause?.isPaused() === true },
+        { limit },
+      );
+      const after = orch.after && typeof orch.after === "object" ? orch.after : {};
+      const extra = Array.isArray((after as { jobs?: unknown }).jobs) ? (after as { jobs: Record<string, unknown>[] }).jobs : [];
+      for (const row of extra) {
+        jobs.push({ ...row, kind: "orchestrator" });
+      }
+    }
     return ok(commandId, "job_list_returned", { jobs: jobs.slice(0, limit), total: jobs.length });
   }
   if (actionId === "job.plan") {
@@ -237,6 +248,15 @@ export function trySidecarRead(input: SidecarReadInput): PluginCommandResult | u
   }
   if (actionId === "job.status") {
     const jobId = typeof params.job_id === "string" ? params.job_id : "";
+    if (projectRoot) {
+      const orch = statusJob(
+        { projectRoot, commandId, now: Date.now(), paused: input.pause?.isPaused() === true },
+        { job_id: jobId },
+      );
+      if (orch.ok) {
+        return orch;
+      }
+    }
     const play = playJob(jobId);
     if (play) {
       return ok(commandId, "job_status_known", {

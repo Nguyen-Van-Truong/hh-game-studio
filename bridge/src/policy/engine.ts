@@ -46,7 +46,8 @@ export type GateResult = GateDenied | GateAllowed;
 
 export function runMutationGate(input: GateInput): GateResult {
   const services = input.services;
-  if (services && !services.pause.allowsSideEffect(input.sideEffect)) {
+  const orchControl = input.actionId === "job.run" || input.actionId === "job.cancel" || input.actionId === "job.wait";
+  if (services && !orchControl && !services.pause.allowsSideEffect(input.sideEffect)) {
     return {
       ok: false,
       error: typedError(E.E_PAUSED, "mutation gate is paused", "pause"),

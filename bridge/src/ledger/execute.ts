@@ -47,11 +47,13 @@ import {
   isInputApply,
   isRuntimeApply,
   isTestApply,
+  isOrchestratorApply,
   mutationNeedsDiskHash,
   nodeNeedsUidAfter,
   sceneNeedsDiskHash,
 } from "./scene_lifecycle.js";
 import { notePlayAfter } from "./play_session.js";
+import { handleOrchAction } from "../orchestrator/machine.js";
 import { emptyRow, type CommandLedger, type CommandRow } from "./store.js";
 import type { LedgerState } from "./states.js";
 import {
@@ -320,7 +322,8 @@ function classify(raw: Record<string, unknown>, commandId: string): Classified {
     isPlayApply(accepted.action_id) ||
     isInputApply(accepted.action_id) ||
     isRuntimeApply(accepted.action_id) ||
-    isTestApply(accepted.action_id)
+    isTestApply(accepted.action_id) ||
+    isOrchestratorApply(accepted.action_id)
   ) {
     return {
       kind: "mutate",
@@ -331,7 +334,8 @@ function classify(raw: Record<string, unknown>, commandId: string): Classified {
         (isPlayApply(accepted.action_id) ||
         isInputApply(accepted.action_id) ||
         isRuntimeApply(accepted.action_id) ||
-        isTestApply(accepted.action_id)
+        isTestApply(accepted.action_id) ||
+        isOrchestratorApply(accepted.action_id)
           ? 120_000
           : 15_000),
     };
@@ -2041,7 +2045,8 @@ async function applyMutateOnce(
     !isPlayApply(classified.actionId) &&
     !isInputApply(classified.actionId) &&
     !isRuntimeApply(classified.actionId) &&
-    !isTestApply(classified.actionId)
+    !isTestApply(classified.actionId) &&
+    !isOrchestratorApply(classified.actionId)
   ) {
     return markUncertain(ledger, row, "only proven editor apply verbs may apply");
   }
@@ -2073,6 +2078,17 @@ async function applyMutateOnce(
     const projectRoot = runtime.projectRoot ?? runtime.policy?.projectRoot ?? "";
     if (isSidecarMutateApply(classified.actionId)) {
       return finishSidecarMutate(
+        ledger,
+        row,
+        classified.actionId,
+        fields.params,
+        projectRoot,
+        gated,
+        runtime.policy,
+      );
+    }
+    if (isOrchestratorApply(classified.actionId) && !runtime.pluginConnected()) {
+      return finishSidecarOrchestrator(
         ledger,
         row,
         classified.actionId,
@@ -2178,6 +2194,8 @@ async function applyMutateOnce(
                       ? "runtime"
                     : isTestApply(classified.actionId)
                       ? "test"
+                    : isOrchestratorApply(classified.actionId)
+                      ? "orchestrator"
                     : "node",
       action_id: classified.actionId,
       checks: result.postcondition.checks,
@@ -2413,6 +2431,70 @@ async function applyMutateOnce(
   } finally {
     runtime.policy?.pause.finishJob(row.command_id);
   }
+}
+
+function finishSidecarOrchestrator(
+  ledger: CommandLedger,
+  row: CommandRow,
+  actionId: string,
+  params: Record<string, unknown>,
+  projectRoot: string,
+  gated: Extract<GateResult, { ok: true }>,
+  policy?: PolicyServices,
+): PluginCommandResult {
+  saveState(ledger, row, "applying", {
+    before_summary: JSON.stringify({
+      kind: "orchestrator",
+      action_id: actionId,
+      ...(gated.checkpoint ? { checkpoint_id: gated.checkpoint.checkpoint_id } : {}),
+    }),
+    side_effect: actionId === "job.cancel" ? "destructive" : "mutate",
+    action_id: actionId,
+  });
+  row.dispatch_attempted = 1;
+  row.updated_at = nowIso();
+  ledger.save(row);
+  const result = handleOrchAction(
+    actionId,
+    {
+      projectRoot,
+      commandId: row.command_id,
+      now: Date.now(),
+      paused: policy?.pause.isPaused() === true,
+    },
+    params,
+  );
+  if (gated.checkpoint) {
+    mergeAfter(result, checkpointEvidence(gated.checkpoint));
+    row.evidence_json = JSON.stringify([gated.checkpoint.manifest_path]);
+    ledger.addCheckpoint(
+      gated.checkpoint.checkpoint_id,
+      [gated.checkpoint.manifest_path],
+      row.command_id,
+    );
+  }
+  row.apply_count = 1;
+  persistResult(row, result);
+  row.after_summary = JSON.stringify({
+    kind: "orchestrator",
+    action_id: actionId,
+    checks: result.postcondition.checks,
+    ...(gated.checkpoint ? { checkpoint_id: gated.checkpoint.checkpoint_id } : {}),
+  });
+  saveState(ledger, row, "applied_volatile");
+  if (!result.ok) {
+    saveState(ledger, row, "failed");
+    return result;
+  }
+  if (!isReadVerified(result.postcondition, actionId)) {
+    const failed = unverifiedResult(row.command_id, "orchestrator postcondition failed");
+    persistResult(row, failed);
+    saveState(ledger, row, "failed");
+    return failed;
+  }
+  saveState(ledger, row, "verified");
+  saveState(ledger, row, "committed_durable");
+  return result;
 }
 
 function finishSidecarMutate(
