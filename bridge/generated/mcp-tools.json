@@ -5,7 +5,7 @@
   "registry_version": "hh-godot-actions/1",
   "action_version": "1",
   "tool_count": 27,
-  "action_count": 162,
+  "action_count": 163,
   "tools": [
     {
       "name": "godot.capabilities",
@@ -921,7 +921,8 @@
               "transaction",
               "plan",
               "run",
-              "schedule"
+              "schedule",
+              "compact"
             ]
           },
           "params": {

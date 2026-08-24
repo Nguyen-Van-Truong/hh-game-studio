@@ -259,7 +259,8 @@ export function extractTargetPaths(params: Record<string, unknown>, actionId?: s
     actionId === "job.run" ||
     actionId === "job.cancel" ||
     actionId === "job.wait" ||
-    actionId === "job.status"
+    actionId === "job.status" ||
+    actionId === "job.compact"
   ) {
     return [];
   }

@@ -25,6 +25,7 @@ const _TestScript: GDScript = preload("res://addons/hh_agent/core/hh_test_adapte
 const _RepairScript: GDScript = preload("res://addons/hh_agent/core/hh_repair_adapter.gd")
 const _PlanScript: GDScript = preload("res://addons/hh_agent/core/hh_plan_adapter.gd")
 const _OrchScript: GDScript = preload("res://addons/hh_agent/core/hh_orchestrator_adapter.gd")
+const _SoakScript: GDScript = preload("res://addons/hh_agent/core/hh_soak_adapter.gd")
 const _MultiAgentScript: GDScript = preload("res://addons/hh_agent/core/hh_multi_agent_adapter.gd")
 const _ExportScript: GDScript = preload("res://addons/hh_agent/core/hh_export_plugin.gd")
 
@@ -66,6 +67,7 @@ var _repair: HHAgentRepairAdapter
 var _repair_wait: Dictionary = {}
 var _plan: HHAgentPlanAdapter
 var _orch: HHAgentOrchestratorAdapter
+var _soak: HHAgentSoakAdapter
 var _multi_agent
 var _project_text_before_runtime: String = ""
 var _runtime_autoload_on: bool = false
@@ -110,6 +112,8 @@ func _enter_tree() -> void:
 	_plan.attach()
 	_orch = HHAgentOrchestratorAdapter.new()
 	_orch.attach()
+	_soak = HHAgentSoakAdapter.new()
+	_soak.attach()
 	_multi_agent = _MultiAgentScript.new()
 	_multi_agent.attach()
 	_play_debugger = HHAgentPlayDebugger.new()
@@ -922,6 +926,9 @@ func _cleanup() -> void:
 	if _orch != null:
 		_orch.shutdown()
 		_orch = null
+	if _soak != null:
+		_soak.shutdown()
+		_soak = null
 	if _multi_agent != null:
 		_multi_agent.shutdown()
 		_multi_agent = null

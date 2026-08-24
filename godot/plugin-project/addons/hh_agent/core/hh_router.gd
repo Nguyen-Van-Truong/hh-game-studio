@@ -28,6 +28,7 @@ const _TestScript: GDScript = preload("res://addons/hh_agent/core/hh_test_adapte
 const _RepairScript: GDScript = preload("res://addons/hh_agent/core/hh_repair_adapter.gd")
 const _PlanScript: GDScript = preload("res://addons/hh_agent/core/hh_plan_adapter.gd")
 const _OrchScript: GDScript = preload("res://addons/hh_agent/core/hh_orchestrator_adapter.gd")
+const _SoakScript: GDScript = preload("res://addons/hh_agent/core/hh_soak_adapter.gd")
 const _MultiAgentScript: GDScript = preload("res://addons/hh_agent/core/hh_multi_agent_adapter.gd")
 const _PresenterScript: GDScript = preload("res://addons/hh_agent/core/hh_presenter.gd")
 const _OverlayScript: GDScript = preload("res://addons/hh_agent/ui/overlay/hh_overlay.gd")
@@ -60,6 +61,7 @@ var _test_local: HHAgentTestAdapter = HHAgentTestAdapter.new()
 var _repair_local: HHAgentRepairAdapter = HHAgentRepairAdapter.new()
 var _plan_local: HHAgentPlanAdapter = HHAgentPlanAdapter.new()
 var _orch_local: HHAgentOrchestratorAdapter = HHAgentOrchestratorAdapter.new()
+var _soak_local: HHAgentSoakAdapter = HHAgentSoakAdapter.new()
 var _multi_agent_local = _MultiAgentScript.new()
 var _presenter: HHAgentPresenter = HHAgentPresenter.new()
 var _overlay_local: HHAgentOverlay = HHAgentOverlay.new()
@@ -113,7 +115,7 @@ func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_ga
 				)
 	var side_effect: String = str(def.get("side_effect", ""))
 	if pause_gate != null and not pause_gate.allows_side_effect(side_effect):
-		var orch_control: bool = method == "godot.job" and (action == "run" or action == "cancel" or action == "wait")
+		var orch_control: bool = method == "godot.job" and (action == "run" or action == "cancel" or action == "wait" or action == "compact")
 		if not orch_control:
 			return _errors.fail(command_id, HHAgentErrors.E_PAUSED, "mutation gate is paused", "pause")
 	var pre: Dictionary = {}
@@ -133,6 +135,10 @@ func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_ga
 		result = _plan().handle(command_id, method, action, params, actions, pre)
 	elif method == "godot.job" and action == "schedule":
 		result = _multi_agent().handle(command_id, method, action, params, actions, pre)
+	elif method == "godot.job" and action == "compact":
+		result = _soak().handle(command_id, method, action, params, actions, pre)
+	elif method == "godot.job" and action == "status" and _soak().exists(str(params.get("job_id", ""))):
+		result = _soak().handle(command_id, method, action, params, actions, pre)
 	elif method == "godot.job" and _orch().handles(action):
 		result = _orch().handle(command_id, method, action, params, actions, pre)
 	elif method == "godot.job" and action == "transaction":
@@ -556,6 +562,9 @@ func run_selftest(actions: HHAgentActions) -> PackedStringArray:
 	var orch_missing: Dictionary = dispatch(_sample("godot.job", "run", {}), actions, 0)
 	if str(_error_of(orch_missing).get("code", "")) != HHAgentErrors.E_MISSING_REQUIRED:
 		failures.append("job.run missing required must be E_MISSING_REQUIRED")
+	var compact_missing: Dictionary = dispatch(_sample("godot.job", "compact", {}), actions, 0)
+	if str(_error_of(compact_missing).get("code", "")) != HHAgentErrors.E_MISSING_REQUIRED:
+		failures.append("job.compact missing required must be E_MISSING_REQUIRED")
 	gate.set_paused(true)
 	var paused_run: Dictionary = dispatch(
 		_sample("godot.job", "run", {"job_id": "r7w2-selftest-pause", "fixture": "ok_slice", "hold_after": "execute"}),
@@ -716,6 +725,13 @@ func _orch() -> HHAgentOrchestratorAdapter:
 	if live != null:
 		return live
 	return _orch_local
+
+
+func _soak() -> HHAgentSoakAdapter:
+	var live: HHAgentSoakAdapter = HHAgentSoakAdapter.current()
+	if live != null:
+		return live
+	return _soak_local
 
 
 func _multi_agent():

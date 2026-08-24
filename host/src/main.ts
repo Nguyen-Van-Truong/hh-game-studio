@@ -91,6 +91,7 @@ function main(): void {
           "  --provider fake|configured  --mode persistent|interactive\n" +
           "  --resume <session_id>  --hold-after-decision\n" +
           "  --show|--compact|--cancel <session_id>\n" +
+          "  --compact <session_id> [--project <godot-project> --job-id <id>]\n" +
           `  session length ${SESSION_MS} ms (90 minutes)\n`,
       );
       process.exitCode = 0;
@@ -104,8 +105,20 @@ function main(): void {
     }
     const compactId = argValue("--compact");
     if (compactId) {
-      const state = Host.compact(compactId);
-      writeReport(showSession(state.session_id));
+      const projectRoot = argValue("--project");
+      const jobId = argValue("--job-id");
+      const state = Host.compact(compactId, {
+        ...(projectRoot ? { projectRoot } : {}),
+        ...(jobId ? { jobId } : {}),
+      });
+      const shown = showSession(state.session_id);
+      if (projectRoot && jobId) {
+        shown.resource_uri = "session://state";
+        shown.resource_path = `r7w5/${jobId}/state.json`;
+        shown.job_id = jobId;
+        shown.transcript = [];
+      }
+      writeReport(shown);
       return;
     }
     const cancelId = argValue("--cancel");

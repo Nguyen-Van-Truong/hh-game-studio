@@ -47,7 +47,11 @@ export type GateResult = GateDenied | GateAllowed;
 
 export function runMutationGate(input: GateInput): GateResult {
   const services = input.services;
-  const orchControl = input.actionId === "job.run" || input.actionId === "job.cancel" || input.actionId === "job.wait";
+  const orchControl =
+    input.actionId === "job.run" ||
+    input.actionId === "job.cancel" ||
+    input.actionId === "job.wait" ||
+    input.actionId === "job.compact";
   const pauseControl = input.actionId === "editor.pause";
   if (services && !orchControl && !pauseControl && !services.pause.allowsSideEffect(input.sideEffect)) {
     return {

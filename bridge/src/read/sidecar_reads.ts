@@ -18,6 +18,7 @@ import { compileBrief, writePlanEvidence } from "../planner/brief_compiler.js";
 import { playJob, playJobs } from "../ledger/play_session.js";
 import { listJobs, statusJob } from "../orchestrator/machine.js";
 import { listSchedJobs, statusSchedJob } from "../scheduler/machine.js";
+import { listSoakJobs, statusSoakJob } from "../soak/machine.js";
 
 export interface SidecarReadInput {
   actionId: string;
@@ -229,6 +230,9 @@ export function trySidecarRead(input: SidecarReadInput): PluginCommandResult | u
       )) {
         jobs.push(row);
       }
+      for (const row of listSoakJobs(projectRoot)) {
+        jobs.push(row);
+      }
     }
     return ok(commandId, "job_list_returned", { jobs: jobs.slice(0, limit), total: jobs.length });
   }
@@ -264,6 +268,13 @@ export function trySidecarRead(input: SidecarReadInput): PluginCommandResult | u
   if (actionId === "job.status") {
     const jobId = typeof params.job_id === "string" ? params.job_id : "";
     if (projectRoot) {
+      const soak = statusSoakJob(
+        { projectRoot, commandId, now: Date.now() },
+        { job_id: jobId },
+      );
+      if (soak.ok) {
+        return soak;
+      }
       const sched = statusSchedJob(
         { projectRoot, commandId, now: Date.now(), paused: input.pause?.isPaused() === true },
         { job_id: jobId },

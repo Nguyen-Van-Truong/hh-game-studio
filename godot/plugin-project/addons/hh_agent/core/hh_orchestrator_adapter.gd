@@ -943,6 +943,12 @@ func _list(command_id: String, params: Dictionary) -> Dictionary:
 					jobs.append(row)
 			name_s = da.get_next()
 		da.list_dir_end()
+	var soak: HHAgentSoakAdapter = HHAgentSoakAdapter.current()
+	if soak == null:
+		soak = HHAgentSoakAdapter.new()
+	for row_v: Variant in soak.list_jobs():
+		if row_v is Dictionary:
+			jobs.append(row_v)
 	if jobs.size() > limit_n:
 		jobs = jobs.slice(0, limit_n)
 	return _errors.ok_read(command_id, PackedStringArray(["job_list_returned"]), {"jobs": jobs, "total": jobs.size()})

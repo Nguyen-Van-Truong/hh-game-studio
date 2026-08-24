@@ -29,6 +29,7 @@ export const RESOURCE_URIS = [
   "project://summary",
   "editor://state",
   "capability://matrix",
+  "session://state",
 ] as const;
 
 export type ResourceUri = (typeof RESOURCE_URIS)[number];
@@ -58,6 +59,12 @@ export function listResources(): McpResource[] {
       uri: "capability://matrix",
       name: "Capability matrix",
       description: "Pinned Godot + action wiring. Scene lifecycle and node CRUD may apply.",
+      mimeType: "application/json",
+    },
+    {
+      uri: "session://state",
+      name: "Compacted soak state",
+      description: "Durable r7w5 state resource: task/command_id/brief/progress without transcript.",
       mimeType: "application/json",
     },
   ];

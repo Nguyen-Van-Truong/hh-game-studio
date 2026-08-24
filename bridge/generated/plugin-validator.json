@@ -3,7 +3,7 @@
   "protocol": "hh-godot-agent/1",
   "registry_version": "hh-godot-actions/1",
   "variant_schema": "hh-godot-variant/1",
-  "action_count": 162,
+  "action_count": 163,
   "envelope": {
     "allowed": [
       "protocol",
@@ -21353,6 +21353,258 @@
         "E_BUSY"
       ],
       "postcondition": "scheduler_job_persisted"
+    },
+    "job.compact": {
+      "method": "godot.job",
+      "verb": "compact",
+      "action_version": "1",
+      "side_effect": "mutate",
+      "undo": "job_supervisor",
+      "timeout_ms": 15000,
+      "cancellable": true,
+      "required_policy": "EDIT",
+      "checkpoint_required": false,
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "job_id"
+        ],
+        "properties": {
+          "job_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "pattern": "^[A-Za-z0-9_-]+$"
+          },
+          "op": {
+            "type": "string",
+            "enum": [
+              "compact",
+              "note",
+              "wake",
+              "rotate"
+            ]
+          },
+          "session_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26,
+            "pattern": "^[0-7][0-9A-HJKMNPQRSTVWXYZ]{25}$"
+          },
+          "task_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26,
+            "pattern": "^[0-7][0-9A-HJKMNPQRSTVWXYZ]{25}$"
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26,
+            "pattern": "^[0-7][0-9A-HJKMNPQRSTVWXYZ]{25}$"
+          },
+          "brief": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000
+          },
+          "context_summary": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000
+          },
+          "phase": {
+            "type": "string",
+            "enum": [
+              "running",
+              "idle",
+              "done",
+              "blocked"
+            ]
+          },
+          "blocked_reason": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000
+          },
+          "project_hash": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128,
+            "pattern": "^[A-Fa-f0-9]+$"
+          },
+          "scene_hash": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128,
+            "pattern": "^[A-Fa-f0-9]+$"
+          },
+          "version_pin": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000
+          },
+          "committed_command_ids": {
+            "type": "array",
+            "maxItems": 2048,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64
+            }
+          },
+          "checkpoint_refs": {
+            "type": "array",
+            "maxItems": 64,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            }
+          },
+          "progress": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [],
+            "properties": {
+              "applied": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 100000
+              },
+              "play_runs": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 10000
+              },
+              "next_step": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 100000
+              },
+              "restarts": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [],
+                "properties": {
+                  "sidecar": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 64
+                  },
+                  "editor": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 64
+                  },
+                  "host": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 64
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ok",
+          "command_id",
+          "postcondition"
+        ],
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "command_id": {
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+          },
+          "changed": {
+            "type": "boolean"
+          },
+          "before": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "after": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "postcondition": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "verified",
+              "checks"
+            ],
+            "properties": {
+              "verified": {
+                "type": "boolean"
+              },
+              "checks": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "undo_action": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "error": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "error_codes": [
+        "E_MISSING_REQUIRED",
+        "E_UNKNOWN_PARAM",
+        "E_INVALID_TYPE",
+        "E_OUT_OF_BOUNDS",
+        "E_UNKNOWN_ACTION",
+        "E_PROTOCOL_VERSION",
+        "E_ACTION_VERSION",
+        "E_CLIENT_ESCALATION",
+        "E_INVALID_COMMAND_ID",
+        "E_INVALID_ENVELOPE",
+        "E_UNVERIFIED",
+        "E_PAUSED",
+        "E_POLICY",
+        "E_PATH"
+      ],
+      "postcondition": "soak_state_compacted"
     },
     "canvas.bounds": {
       "method": "godot.canvas",

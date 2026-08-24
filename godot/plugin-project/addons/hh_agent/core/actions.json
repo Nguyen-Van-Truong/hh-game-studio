@@ -1762,6 +1762,17 @@
       "postcondition": "scheduler_job_persisted",
       "checkpoint_required": false
     },
+    "job.compact": {
+      "method": "godot.job",
+      "verb": "compact",
+      "side_effect": "mutate",
+      "timeout_ms": 15000,
+      "required": [
+        "job_id"
+      ],
+      "postcondition": "soak_state_compacted",
+      "checkpoint_required": false
+    },
     "canvas.bounds": {
       "method": "godot.canvas",
       "verb": "bounds",

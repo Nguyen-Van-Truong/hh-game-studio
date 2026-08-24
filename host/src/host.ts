@@ -17,6 +17,7 @@ import {
   type HostState,
   type ToolRecord,
 } from "./session.js";
+import { writeHostSoakResource } from "./soak_resource.js";
 import { newUlid, parseUlid } from "./ulid.js";
 
 export interface HostOptions {
@@ -148,9 +149,17 @@ export class Host {
     return loadHostState(parseUlid(sessionId, "session_id"));
   }
 
-  static compact(sessionId: string): HostState {
+  static compact(
+    sessionId: string,
+    opts?: { projectRoot?: string; jobId?: string },
+  ): HostState {
     const state = compactState(loadHostState(parseUlid(sessionId, "session_id")));
     saveHostState(state);
+    const projectRoot = opts?.projectRoot;
+    const jobId = opts?.jobId;
+    if (projectRoot && jobId) {
+      writeHostSoakResource({ projectRoot, jobId, state });
+    }
     return state;
   }
 

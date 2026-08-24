@@ -55,6 +55,8 @@ import {
 import { notePlayAfter } from "./play_session.js";
 import { handleOrchAction } from "../orchestrator/machine.js";
 import { handleScheduleAction } from "../scheduler/machine.js";
+import { handleSoakAction } from "../soak/machine.js";
+import { lookupSoakCached, rememberSoakResult } from "../soak/store.js";
 import { emptyRow, type CommandLedger, type CommandRow } from "./store.js";
 import type { LedgerState } from "./states.js";
 import {
@@ -192,6 +194,20 @@ function persistResult(row: CommandRow, result: PluginCommandResult): void {
   row.error_message = result.error?.message ?? "";
 }
 
+function asCachedReplay(stored: PluginCommandResult): PluginCommandResult {
+  const after = isRecord(stored.after) ? { ...stored.after, soak_cached: true } : { soak_cached: true };
+  const checks = stored.postcondition?.checks ?? [];
+  return {
+    ...stored,
+    changed: false,
+    after,
+    postcondition: {
+      verified: stored.postcondition?.verified === true || stored.ok === true,
+      checks: checks.includes("soak_cached") ? checks : [...checks, "soak_cached"],
+    },
+  };
+}
+
 function cachedOrError(row: CommandRow): PluginCommandResult {
   if (row.state === "uncertain") {
     return errorResult(
@@ -202,6 +218,10 @@ function cachedOrError(row: CommandRow): PluginCommandResult {
   }
   const stored = parseStoredResult(row.result_json, row.command_id);
   if (stored) {
+    // Durable replay must not look like a second apply (changed:true, no soak_cached).
+    if (row.state === "committed_durable") {
+      return asCachedReplay(stored);
+    }
     return stored;
   }
   if (row.state === "failed") {
@@ -2585,6 +2605,15 @@ async function finishSidecarMutate(
       },
       params,
     );
+  } else if (actionId === "job.compact") {
+    result = handleSoakAction(
+      {
+        projectRoot,
+        commandId: row.command_id,
+        now: Date.now(),
+      },
+      params,
+    );
   } else {
     result = unverifiedResult(row.command_id, "sidecar mutate not implemented");
   }
@@ -2834,6 +2863,13 @@ export async function executeCommand(
     action_version: envelope.action_version,
   });
   const existing = ledger.get(fields.command_id);
+  if (!existing) {
+    const projectRoot = runtime.projectRoot ?? runtime.policy?.projectRoot ?? "";
+    const soakHit = projectRoot ? lookupSoakCached(projectRoot, fields.command_id) : undefined;
+    if (soakHit) {
+      return soakHit;
+    }
+  }
   if (existing) {
     if (identityConflict(existing, hash, bound)) {
       return errorResult(
@@ -2915,7 +2951,12 @@ export async function executeCommand(
   } catch (err) {
     handlePluginFault(runtime, err);
   }
-  return continueAfterReceived(ledger, row, envelope, bound, runtime);
+  const result = await continueAfterReceived(ledger, row, envelope, bound, runtime);
+  const projectRoot = runtime.projectRoot ?? runtime.policy?.projectRoot ?? "";
+  if (result.ok && projectRoot) {
+    rememberSoakResult(projectRoot, fields.command_id, result);
+  }
+  return result;
 }
 
 export function inspectRow(row: CommandRow): Record<string, unknown> {

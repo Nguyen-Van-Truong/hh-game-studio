@@ -22,6 +22,7 @@ import {
   projectSummary,
   resourceBody,
 } from "../resources/mcp_resources.js";
+import { publicStateResource } from "../soak/store.js";
 import { PROTOCOL } from "../registry/types.js";
 import {
   emptyReadback,
@@ -447,6 +448,9 @@ async function readMcpResource(
         secret,
       ),
     ];
+  }
+  if (uri === "session://state") {
+    return [resourceBody(uri, publicStateResource(ctx.descriptor().project_root), secret)];
   }
   let editor: PluginCommandResult | undefined;
   if (ctx.plugin?.connected()) {

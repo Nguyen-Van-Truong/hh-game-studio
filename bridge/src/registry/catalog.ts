@@ -60,7 +60,7 @@ export const REQUIRED_VERBS: Readonly<Record<string, readonly string[]>> = {
   test: ["define", "run", "assert", "report", "evidence", "baseline", "repair"],
   export: ["preset", "validate", "build", "cancel", "artifacts"],
   git: ["status", "diff", "checkpoint", "revert_checkpoint"],
-  job: ["status", "list", "cancel", "wait", "transaction", "plan", "run", "schedule"],
+  job: ["status", "list", "cancel", "wait", "transaction", "plan", "run", "schedule", "compact"],
   canvas: ["bounds", "layout_batch"],
   camera: ["make_current"],
   physics: ["body", "shape", "layers", "nav_region", "nav_agent", "path", "lint", "debug"],
