@@ -9,6 +9,8 @@ var test_driven: bool = false
 
 
 func _enter_tree() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	RenderingServer.set_default_clear_color(UiTheme.INDIGO)
 	if title != null:
 		return
 	InputActions.install()
@@ -28,19 +30,20 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
 	_refresh_title()
-	if test_driven:
-		return
 
 
-func _process(_delta: float) -> void:
-	if test_driven:
-		return
+func _input(event: InputEvent) -> void:
 	if session == null or session.state.outcome != "play":
 		return
-	if Input.is_action_just_pressed("pause"):
-		var tree: SceneTree = get_tree()
-		if tree != null:
-			session.set_paused(not tree.paused)
+	if event.is_echo() or not event.is_pressed():
+		return
+	if not event.is_action("pause"):
+		return
+	var tree: SceneTree = get_tree()
+	if tree == null:
+		return
+	session.set_paused(not tree.paused)
+	get_viewport().set_input_as_handled()
 
 
 func start_new_run() -> void:

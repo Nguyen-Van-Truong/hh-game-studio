@@ -11,9 +11,11 @@ var warden: Warden
 var world: Node2D
 var hud: Hud
 var pause_screen: PauseScreen
+var sfx: SfxBank
 var test_driven: bool = false
 var _first_move_done: bool = false
 var _first_interact_done: bool = false
+var _pulse_left: float = 0.0
 
 
 func setup(saved: Dictionary) -> void:
@@ -32,9 +34,16 @@ func setup(saved: Dictionary) -> void:
 	pause_screen = PauseScreen.new()
 	pause_screen.resume_pressed.connect(set_paused.bind(false))
 	add_child(pause_screen)
+	sfx = SfxBank.new()
+	add_child(sfx)
+	sfx.start_music()
 	_apply_saved(saved)
 	hud.set_has_key(inventory.has_item("key"))
 	hud.set_hint("WASD / stick: move")
+	var vp: Viewport = get_viewport()
+	if vp != null and not vp.size_changed.is_connected(refit_view):
+		vp.size_changed.connect(refit_view)
+	refit_view()
 
 
 func _physics_process(delta: float) -> void:
@@ -57,12 +66,38 @@ func step_fixed(delta: float, move: Vector2, interact: bool) -> void:
 	player.step_move(delta, dir)
 	warden.step_patrol(delta)
 	state.room_id = VaultMap.room_id_at(player.global_position)
+	_tick_pulse(delta)
 	if warden.touches_player(player):
 		_set_lose()
 		return
 	if interact:
 		_interact()
 	hud.set_has_key(inventory.has_item("key"))
+
+
+func refit_view() -> void:
+	var vp: Viewport = get_viewport()
+	if vp == null or player == null:
+		return
+	player.fit_camera(vp.get_visible_rect().size)
+	if hud != null:
+		hud.layout_on_playfield(playfield_screen_rect())
+
+
+func playfield_screen_rect() -> Rect2:
+	var vp: Viewport = get_viewport()
+	if vp == null:
+		return Rect2(Vector2.ZERO, VaultMap.DESIGNED_VIEW)
+	var xform: Transform2D = vp.get_canvas_transform()
+	var map: Vector2 = VaultMap.map_size_px()
+	var tl: Vector2 = xform * Vector2.ZERO
+	var br: Vector2 = xform * map
+	var world_r: Rect2 = Rect2(tl, br - tl)
+	var view_r: Rect2 = Rect2(Vector2.ZERO, vp.get_visible_rect().size)
+	var hit: Rect2 = world_r.intersection(view_r)
+	if hit.size.x < 8.0 or hit.size.y < 8.0:
+		return view_r
+	return hit
 
 
 func set_paused(active: bool) -> void:
@@ -72,6 +107,8 @@ func set_paused(active: bool) -> void:
 	if tree == null:
 		return
 	tree.paused = active
+	if sfx != null:
+		sfx.duck(active)
 	if active:
 		pause_screen.show_pause()
 	else:
@@ -116,6 +153,11 @@ func _interact() -> void:
 	if not _first_interact_done:
 		_first_interact_done = true
 		hud.set_hint("")
+	_pulse_left = 0.12
+	player.pulse()
+	_spawn_vfx(player.global_position)
+	if sfx != null:
+		sfx.play("interact")
 	var kind: String = _nearest_kind()
 	if kind == "key":
 		_pickup_key()
@@ -155,6 +197,8 @@ func _pickup_key() -> void:
 	state.has_key = true
 	_set_prop_visible("Key", false)
 	hud.set_hint("Key taken")
+	if sfx != null:
+		sfx.play("pickup")
 	_persist()
 
 
@@ -165,6 +209,8 @@ func _try_open_door() -> void:
 	state.door_open = true
 	_open_door_collision()
 	hud.set_hint("Door open")
+	if sfx != null:
+		sfx.play("door")
 	_persist()
 
 
@@ -174,12 +220,17 @@ func _reach_relic() -> void:
 		return
 	state.relic_reached = true
 	state.outcome = "win"
+	if sfx != null:
+		sfx.play("win")
 	_persist()
 	won.emit()
 
 
 func _set_lose() -> void:
 	state.outcome = "lose"
+	if sfx != null:
+		sfx.play("caught")
+		sfx.play("lose")
 	lost.emit()
 
 
@@ -190,7 +241,11 @@ func _open_door_collision() -> void:
 	door.collision_layer = 0
 	var body: ColorRect = door.get_node_or_null("Body") as ColorRect
 	if body != null:
-		body.color = Color(0.40, 0.34, 0.22, 0.45)
+		body.visible = false
+		body.color = Color(0.40, 0.34, 0.22, 0.0)
+	var sprite: Sprite2D = door.get_node_or_null("Sprite") as Sprite2D
+	if sprite != null:
+		sprite.modulate = Color(1.0, 1.0, 1.0, 0.35)
 
 
 func _set_prop_visible(prop_name: String, on: bool) -> void:
@@ -206,3 +261,28 @@ func _persist() -> void:
 	var saver: Node = tree.root.get_node_or_null("SaveService")
 	if saver != null:
 		saver.call("autosave", state)
+
+
+func _spawn_vfx(at: Vector2) -> void:
+	var burst: AnimatedSprite2D = AnimatedSprite2D.new()
+	burst.name = "InteractVfx"
+	burst.centered = true
+	burst.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	burst.sprite_frames = load(Visuals.VFX_FRAMES) as SpriteFrames
+	burst.global_position = at
+	add_child(burst)
+	burst.play("burst")
+	burst.animation_finished.connect(_free_vfx.bind(burst))
+
+
+func _free_vfx(node: Node) -> void:
+	if is_instance_valid(node):
+		node.queue_free()
+
+
+func _tick_pulse(delta: float) -> void:
+	if _pulse_left <= 0.0:
+		return
+	_pulse_left -= delta
+	if _pulse_left <= 0.0 and player != null and player.sprite != null:
+		player.sprite.modulate = Color.WHITE

@@ -13,27 +13,48 @@ var restart_btn: Button
 func _ready() -> void:
 	name = "Title"
 	set_anchors_preset(Control.PRESET_FULL_RECT)
+	UiTheme.apply(self)
 	var bg: ColorRect = ColorRect.new()
+	bg.name = "Backdrop"
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
-	bg.color = Color(0.07, 0.09, 0.16)
+	bg.color = UiTheme.INDIGO
 	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(bg)
 	var title: Label = Label.new()
-	title.text = "Kho Bi An"
-	title.position = Vector2(80, 160)
-	title.size = Vector2(600, 48)
-	title.add_theme_color_override("font_color", Color(0.93, 0.86, 0.70))
+	title.name = "TitleLabel"
+	title.text = "Kho Bí Ẩn"
+	title.position = Vector2(80, 120)
+	title.size = Vector2(720, 56)
+	title.add_theme_font_size_override("font_size", 36)
+	title.add_theme_color_override("font_color", UiTheme.CREAM)
 	add_child(title)
-	play_btn = _make_btn("Play", Vector2(80, 260))
-	continue_btn = _make_btn("Continue", Vector2(80, 320))
-	restart_btn = _make_btn("Restart", Vector2(80, 380))
+	var sub: Label = Label.new()
+	sub.name = "Subtitle"
+	sub.text = "Relic-reached is win. Door-open is not win."
+	sub.position = Vector2(80, 184)
+	sub.size = Vector2(900, 32)
+	sub.add_theme_color_override("font_color", UiTheme.BRASS)
+	add_child(sub)
+	var hint: Label = Label.new()
+	hint.name = "InputHint"
+	hint.text = "WASD / stick move · E / South interact · Esc / Start pause"
+	hint.position = Vector2(80, 224)
+	hint.size = Vector2(1000, 32)
+	hint.add_theme_font_size_override("font_size", 18)
+	hint.add_theme_color_override("font_color", UiTheme.CREAM)
+	add_child(hint)
+	play_btn = _make_btn("Play", Vector2(80, 300))
+	continue_btn = _make_btn("Continue", Vector2(80, 360))
+	restart_btn = _make_btn("Restart", Vector2(80, 420))
 	play_btn.pressed.connect(_on_play)
 	continue_btn.pressed.connect(_on_continue)
 	restart_btn.pressed.connect(_on_restart)
 	play_btn.focus_neighbor_bottom = continue_btn.get_path()
+	play_btn.focus_neighbor_top = restart_btn.get_path()
 	continue_btn.focus_neighbor_top = play_btn.get_path()
 	continue_btn.focus_neighbor_bottom = restart_btn.get_path()
 	restart_btn.focus_neighbor_top = continue_btn.get_path()
+	restart_btn.focus_neighbor_bottom = play_btn.get_path()
 	play_btn.grab_focus()
 
 
@@ -45,7 +66,7 @@ func _make_btn(text: String, at: Vector2) -> Button:
 	var btn: Button = Button.new()
 	btn.text = text
 	btn.position = at
-	btn.size = Vector2(220, 44)
+	btn.size = Vector2(240, 48)
 	add_child(btn)
 	return btn
 

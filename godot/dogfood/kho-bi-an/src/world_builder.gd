@@ -12,16 +12,35 @@ const WALL: Vector2i = Vector2i(3, 0)
 func build() -> Node2D:
 	var world: Node2D = Node2D.new()
 	world.name = "Overworld"
+	world.add_child(_make_backdrop())
 	var layer: TileMapLayer = TileMapLayer.new()
 	layer.name = "VaultRooms"
 	layer.tile_set = _make_tileset()
 	layer.collision_enabled = true
 	_paint(layer)
 	world.add_child(layer)
-	world.add_child(_color_prop("Key", VaultMap.tile_center(VaultMap.KEY_CELL), Vector2(16, 16), Color(0.85, 0.70, 0.22)))
+	world.add_child(Visuals.make_shade())
+	world.add_child(_color_prop("Key", VaultMap.tile_center(VaultMap.KEY_CELL), Vector2(16, 16), Color(0.85, 0.70, 0.22), Visuals.KEY_TEX))
 	world.add_child(_make_door())
-	world.add_child(_color_prop("Relic", VaultMap.tile_center(VaultMap.RELIC_CELL), Vector2(16, 16), Color(0.35, 0.72, 0.62)))
+	world.add_child(_color_prop("Relic", VaultMap.tile_center(VaultMap.RELIC_CELL), Vector2(16, 16), Color(0.35, 0.72, 0.62), Visuals.RELIC_TEX))
+	var relic_light: PointLight2D = Visuals.make_lantern("RelicLantern", 0.55, 1.8)
+	relic_light.position = VaultMap.tile_center(VaultMap.RELIC_CELL)
+	world.add_child(relic_light)
+	var door_light: PointLight2D = Visuals.make_lantern("DoorLantern", 0.40, 1.4)
+	door_light.position = VaultMap.tile_center(VaultMap.DOOR_CELL)
+	world.add_child(door_light)
 	return world
+
+
+func _make_backdrop() -> ColorRect:
+	var back: ColorRect = ColorRect.new()
+	back.name = "VaultBackdrop"
+	back.color = UiTheme.INDIGO
+	back.position = Vector2(-4096, -4096)
+	back.size = Vector2(8192, 8192)
+	back.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	back.z_index = -10
+	return back
 
 
 func _make_tileset() -> TileSet:
@@ -92,10 +111,11 @@ func _make_door() -> StaticBody2D:
 	body.color = Color(0.72, 0.58, 0.28)
 	body.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	door.add_child(body)
+	Visuals.attach_sprite(door, Visuals.DOOR_TEX)
 	return door
 
 
-func _color_prop(prop_name: String, at: Vector2, size: Vector2, color: Color) -> Node2D:
+func _color_prop(prop_name: String, at: Vector2, size: Vector2, color: Color, tex_path: String) -> Node2D:
 	var node: Node2D = Node2D.new()
 	node.name = prop_name
 	node.position = at
@@ -106,4 +126,5 @@ func _color_prop(prop_name: String, at: Vector2, size: Vector2, color: Color) ->
 	body.color = color
 	body.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	node.add_child(body)
+	Visuals.attach_sprite(node, tex_path)
 	return node

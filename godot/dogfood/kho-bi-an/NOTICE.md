@@ -1,9 +1,10 @@
 # NOTICE — Kho Bí Ẩn
 
-Original procedural art and audio for R8-WP3. No third-party sprites
-or sound packs are shipped. No remote imagegen. Live tiles use
-`res://assets/tiles/tileset_vault.png`. ColorRect actors/items remain
-the playable colliders until R8-WP4 / G5.
+Original procedural art and audio for R8-WP3, wired in R8-WP4. No
+third-party sprites or sound packs are shipped. No remote imagegen.
+Live tiles use `res://assets/tiles/tileset_vault.png`. ColorRect
+Body nodes stay as invisible colliders; sprites are children.
+Relic-reached is the only win. G5 is not claimed.
 
 - Game code: original, this repository
 - Tiles, actors, items, door, VFX, UI icon, SFX, music: original

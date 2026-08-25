@@ -2,8 +2,8 @@
 """R8-WP2: skeleton gameplay + executable graybox (does not tick the plan).
 
 Does not tick the 20-8 plan. Does not change CURRENT_VALID_WP.
-Keep R8-WP2 [ ]; CURRENT_VALID_WP=R8-WP2; progress stays 51/60.
-Does not start R8-WP3 art. Does not fake G5 human dogfood. Does not touch GX.
+Stays runnable while CURRENT_VALID_WP is R8-WP2..R8-WP6 (including R8-WP4+).
+Does not start R8-WP5. Does not fake G5 human dogfood. Does not touch GX.
 No snake demo. No r7w6 trial. No secret material. No skip-PASS.
 --provider plan stays unused here.
 
@@ -79,20 +79,20 @@ def plan_errors(text: str) -> list[str]:
             total = stripped
         if "| 8 |" in stripped and "G5" in stripped:
             r8_row = stripped
-    if current not in ("R8-WP2", "R8-WP3"):
-        errors.append(f"CURRENT_VALID_WP={current!r} (must stay R8-WP2 or R8-WP3)")
+    if not re.match(r"^R8-WP[2-6]$", current):
+        errors.append(f"CURRENT_VALID_WP={current!r} (must stay an R8-WP2..R8-WP6 gameplay WP)")
     if wp2 is None:
         errors.append("plan missing R8-WP2 heading")
-    if wp3 is not None and re.search(r"\[x\]", wp3, re.I):
-        errors.append("R8-WP3 must stay unticked; graybox must not start polish")
     if PATH_LABEL not in text:
         errors.append("plan must keep verify path start→key→door→relic→win")
     if OLD_PATH in text:
         errors.append("plan must not use start→key→door→win without relic")
-    if total and "51/60" not in total and "52/60" not in total:
-        errors.append(f"progress must stay 51/60 or 52/60 while graybox is closed: {total}")
-    if r8_row and not re.search(r"\[ \]\s*[12]/6", r8_row):
-        errors.append(f"R8 row must stay 1/6 or 2/6 while WP3 is unticked: {r8_row}")
+    if total:
+        progress = re.search(r"(\d+)/60", total)
+        if progress is None or not (51 <= int(progress.group(1)) <= 56):
+            errors.append(f"progress must stay 51/60..56/60 while R8 graybox is valid: {total}")
+    if r8_row and not re.search(r"\[[ xX]\]\s*[1-6]/6", r8_row):
+        errors.append(f"R8 row must stay 1/6..6/6 while graybox remains valid: {r8_row}")
     if g5 is not None and re.search(r"\[x\]", g5, re.I):
         errors.append("official harness must not tick G5")
     if gx is not None and re.search(r"\[x\]", gx, re.I):

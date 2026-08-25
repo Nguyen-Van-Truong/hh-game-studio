@@ -10,6 +10,7 @@ const WARDEN_TOUCH: float = 22.0
 const PLAYER_SPEED: float = 120.0
 const WARDEN_SPEED: float = 36.0
 const CAMERA_ZOOM: float = 2.0
+const DESIGNED_VIEW: Vector2 = Vector2(1280.0, 720.0)
 
 const PLAYER_SPAWN: Vector2i = Vector2i(4, 8)
 const KEY_CELL: Vector2i = Vector2i(10, 8)
@@ -40,6 +41,18 @@ static func tile_center(cell: Vector2i) -> Vector2:
 
 static func map_size_px() -> Vector2:
 	return Vector2(float(MAP_W * TILE), float(MAP_H * TILE))
+
+
+static func zoom_for_size(vp: Vector2) -> float:
+	var map_h: float = float(MAP_H * TILE)
+	if vp.y < 8.0:
+		return CAMERA_ZOOM
+	var fill_h: float = vp.y / map_h
+	# 854 is a tighter designed crop so the three layouts are not the
+	# same world postage-stamp at three pixel scales.
+	if vp.x <= 900.0:
+		return maxf(fill_h, 2.45)
+	return fill_h
 
 
 static func room_id_at(world: Vector2) -> String:
