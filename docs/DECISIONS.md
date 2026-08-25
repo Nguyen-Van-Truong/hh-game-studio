@@ -260,3 +260,24 @@ canvas_items stretch; PLACEHOLDER lint is exact token in `src/`;
 `hud_on_playfield` is a gray-band bool; `copy_shots` can overwrite PNGs if
 REVIEW later fails; `kill_kho_path_holders` can miss a GUI child after PASS.
 Do not treat these as G5 or as a reason to untick WP4.
+
+## 2026-08-25 — R8-WP5 residual honesty (không đổi spec)
+
+`decision_id: GODOT-R8-WP5-RESIDUAL-2026-08-25`
+`status: residual-honesty`
+`plan_tick: R8-WP5 [x]; CURRENT_VALID_WP=R8-WP6; 55/60; G5 stays [ ]; R8-WP6 [ ]`
+
+Official playtest `python tests/bootstrap/test_kho_bi_an_playtest.py` PASS
+(RUNS/SOAK/STUCK/VISUAL/CLEAN proven; PERF=unproven). Win = relic_reached.
+Windowed 600s production `_physics_process` soak is plan §7.3 verify,
+**not** G5 human dogfood. 20 seeded RUNS remain step_fixed (A13 suite).
+
+Critics II and HH both TICK yes on leftover-0 official Python PASS
+(~10.2 min; II wall 613.7s / 35846 frames; HH wall 613.8s / 35866 frames).
+
+P2/P1 residuals live in the R8-WP5 LOG only: dual-path input
+(`parse_input_event` + `action_press`); load is in-process free+new App
+not OS kill; `queue_free` can overlap two GameSessions; soak
+`process_frame` ≠ physics tick; soak often 0 wins; STUCK predetermined
+cells; VISUAL unique≥6 is a weak gate; p95 ~22–24 ms vs 16.67.
+Do not treat these as G5 or as a reason to untick WP5.
