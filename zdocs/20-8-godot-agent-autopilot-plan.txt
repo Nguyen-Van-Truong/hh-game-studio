@@ -1,6 +1,6 @@
 AUTHORITATIVE_PLAN=1
 STATUS=ACTIVE
-CURRENT_VALID_WP=R8-WP3
+CURRENT_VALID_WP=R8-WP4
 
 ================================================================================
 BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
@@ -16,7 +16,7 @@ BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
 | 5 | R5 — Bộ công cụ làm game 2D | TileMapLayer, animation, UI, audio, physics, navigation, shader/particles được agent thao tác đầy đủ | 2D-A + 2D-B + Assets | — | [x] 7/7 WP |
 | 6 | R6 — Agent tự chơi và tự kiểm | Play/debug, input, runtime state, deterministic step, screenshot/diff/perf, test evidence | Runtime + Test + Vision | G3 SELF-VERIFY | [x] 7/7 WP |
 | 7 | R7 — Autopilot dài hạn | Nhận brief một lần, tự plan→làm→test→sửa→commit→resume; nhiều agent không đạp nhau | Orchestrator + Git + Recovery | G4 AUTONOMY | [x] 6/6 WP |
-| 8 | R8 — Dogfood game thật | Từ project trống tạo game top-down 2D có art/audio/UI/save, người chỉ xem/review | Game + Art + QA song song theo DAG | G5 DOGFOOD | [ ] 2/6 WP |
+| 8 | R8 — Dogfood game thật | Từ project trống tạo game top-down 2D có art/audio/UI/save, người chỉ xem/review | Game + Art + QA song song theo DAG | G5 DOGFOOD | [ ] 3/6 WP |
 | 9 | R9 — Export và vận hành | Windows build sạch, addon/sidecar đóng gói, update pin, tài liệu review | Release + Docs + Compatibility | G6 RELEASE | [ ] 0/4 WP |
 | 10 | RX — Ngoại lệ engine | Chỉ mở khi public API/GDExtension không giải được một capability bắt buộc | C++ patch riêng | GX FORK | [ ] khóa |
 
@@ -24,7 +24,7 @@ VIỆC PHẢI LÀM TRƯỚC: R0-WP1 → R0-WP2 → R0-WP3 → R0-WP4 → R1-WP1.
 Không được bắt đầu R2
 trước G1. Từ R2 trở đi chỉ song song các track có ranh giới file rõ ràng.
 
-Tiến độ tổng: [ ] 52/60 WP. First valid WP: R8-WP3.
+Tiến độ tổng: [ ] 53/60 WP. First valid WP: R8-WP4.
 Ngày lập: 20-8-2026 (Asia/Saigon).
 
 ================================================================================
@@ -2247,7 +2247,7 @@ R8-WP2 — Skeleton gameplay first + executable graybox                  [x]
         R8-WP3 not started
       Commit: (this tick)
 
-R8-WP3 — Art/animation/audio pipeline và license manifest               [ ]
+R8-WP3 — Art/animation/audio pipeline và license manifest               [x]
   Phụ thuộc: R8-WP1; song song R8-WP2 qua asset staging.
   Track/file: F/E; assets, source manifests, import presets.
   Làm:
@@ -2258,7 +2258,29 @@ R8-WP3 — Art/animation/audio pipeline và license manifest               [ ]
       MIT/CC0 được pin hoặc procedural art chất lượng, không dừng project vì API key.
   Verify: contact sheet/animation preview/audio audit; missing attribution/placeholder fail.
   DoD: visual/audio cohesive; release asset manifest không có UNKNOWN.
-  LOG: (trống)
+  LOG:
+    LOG 2026-08-25 14:55 Asia/Saigon — agent=coordinator
+      Base: 55d8f5c pin Kho Bi An procedural art and license manifest.
+        Godot=4.7.1.stable.official.a13da4feb
+      Files/leases: godot/dogfood/kho-bi-an/{assets,NOTICE,project,
+        src/world_builder,tests/run_art,tests/run_all},
+        tools/godot/gen_kho_bi_an_art.py,
+        tests/bootstrap/test_kho_bi_an_art.py,
+        .hh-agent/evidence/01R8WP3ART00000000KBA00001/assumptions.md
+      Verify: python tests/bootstrap/test_kho_bi_an_art.py → PASS
+        CONTACT=proven; ANIM=proven; AUDIO=proven; ATTRIB=proven;
+        LICENSE=proven; graybox still PASS
+        pin=4.7.1-stable run_id=01R8WP3ART00000000KBA00001
+        live TileMap=tileset_vault.png; walk_up unique
+      Honesty:
+        ColorRects stay playable colliders until R8-WP4 / G5
+        no remote imagegen; original procedural only
+      Critic: EE 8505a8a0 TICK yes;
+        FF 28984da1 TICK no (P1 residuals);
+        GG a0e3e9d2 TICK yes — FF over-refused P1 residuals
+      Gaps: P1 LOG: preview walk_down, .ctex unsampled, user:// audit;
+        G5 stays [ ]; GX stays [ ]; R8-WP4 not started
+      Commit: (this tick)
 
 R8-WP4 — Integrate art, UI, feedback, accessibility và polish          [ ]
   Phụ thuộc: R8-WP2, R8-WP3.
@@ -2584,7 +2606,7 @@ thuận nếu ảnh hưởng G5/G6.
 14. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Hiện tại R0 (4/4) + R1 (5/5, G1) + R2 (7/7) + R3 (8/8) + R4 (6/6, G2) + R5 (7/7) + R6 (7/7, G3) + R7 (6/6, G4) + R8 (2/6) đã xong qua R8-WP2. Agent tiếp theo làm **R8-WP3**.
+Hiện tại R0 (4/4) + R1 (5/5, G1) + R2 (7/7) + R3 (8/8) + R4 (6/6, G2) + R5 (7/7) + R6 (7/7, G3) + R7 (6/6, G4) + R8 (3/6) đã xong qua R8-WP3. Agent tiếp theo làm **R8-WP4**.
 KHÔNG vendor A/C as-is, KHÔNG M6, KHÔNG fork Godot. Do not claim the agent drives a full game.
 Gate G2 was signed 2026-08-22 with Alternatives (Play/Replay/overlay/placeholder). Do not hide those gaps.
 Gate G3 was signed 2026-08-23 auto (heuristic inspect gauntlet, not LLM repair).
@@ -2593,9 +2615,9 @@ Gate G5 stays [ ]. Do not start G5 human. Do not fake G5.
 
 Lệnh hợp lệ:
 
-  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R8-WP3`);
-  2) R8-WP3: art/animation/audio pipeline và license manifest;
-     graybox loop already closed; do not re-open WP2; G5 stays [ ];
+  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R8-WP4`);
+  2) R8-WP4: integrate art, UI, feedback, accessibility và polish;
+     ColorRects stay until this WP replaces them; G5 stays [ ];
   3) mở editor fixture: `hh-godot-editor.bat` (Godot 4.7.1-stable pin, minimal-2d);
   4) không copy hh_stock_poc; không npx -y; không bump 4.7.2; không raw-write
      .tscn; plugin is the only writer. Không paper-ACK play.start.
