@@ -13,7 +13,7 @@ func _ready() -> void:
 	collision_mask = VaultMap.COL_WORLD | VaultMap.COL_DOOR
 	var shape: CollisionShape2D = CollisionShape2D.new()
 	var rect: RectangleShape2D = RectangleShape2D.new()
-	rect.size = Vector2(12, 12)
+	rect.size = Vector2(10, 10)
 	shape.shape = rect
 	add_child(shape)
 	var body: ColorRect = ColorRect.new()

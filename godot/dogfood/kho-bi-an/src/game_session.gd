@@ -49,6 +49,9 @@ func setup(saved: Dictionary) -> void:
 func _physics_process(delta: float) -> void:
 	if test_driven:
 		return
+	var tree: SceneTree = get_tree()
+	if tree != null and tree.paused:
+		return
 	if state.outcome != "play":
 		return
 	var move: Vector2 = InputActions.read_move()
@@ -58,6 +61,9 @@ func _physics_process(delta: float) -> void:
 
 func step_fixed(delta: float, move: Vector2, interact: bool) -> void:
 	if state.outcome != "play":
+		return
+	var tree: SceneTree = get_tree()
+	if tree != null and tree.paused:
 		return
 	var dir: Vector2 = InputActions.cardinal(move)
 	if dir != Vector2.ZERO and not _first_move_done:
@@ -263,7 +269,24 @@ func _persist() -> void:
 		saver.call("autosave", state)
 
 
+func live_vfx_count() -> int:
+	var n: int = 0
+	var kids: Array = get_children()
+	var i: int = 0
+	while i < kids.size():
+		var node: Node = kids[i] as Node
+		if (
+			node != null
+			and String(node.name).begins_with("InteractVfx")
+			and not node.is_queued_for_deletion()
+		):
+			n += 1
+		i += 1
+	return n
+
+
 func _spawn_vfx(at: Vector2) -> void:
+	_prune_vfx(3)
 	var burst: AnimatedSprite2D = AnimatedSprite2D.new()
 	burst.name = "InteractVfx"
 	burst.centered = true
@@ -273,6 +296,24 @@ func _spawn_vfx(at: Vector2) -> void:
 	add_child(burst)
 	burst.play("burst")
 	burst.animation_finished.connect(_free_vfx.bind(burst))
+
+
+func _prune_vfx(keep: int) -> void:
+	var found: Array[Node] = []
+	var kids: Array = get_children()
+	var i: int = 0
+	while i < kids.size():
+		var node: Node = kids[i] as Node
+		if node != null and String(node.name).begins_with("InteractVfx"):
+			found.append(node)
+		i += 1
+	var extra: int = found.size() - keep
+	var j: int = 0
+	while j < extra:
+		var old: Node = found[j]
+		if is_instance_valid(old):
+			old.free()
+		j += 1
 
 
 func _free_vfx(node: Node) -> void:
