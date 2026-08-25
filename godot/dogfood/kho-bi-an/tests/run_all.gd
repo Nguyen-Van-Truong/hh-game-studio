@@ -76,6 +76,15 @@ func _test_critical_path(app: App) -> void:
 	var layer: TileMapLayer = session.world.get_node_or_null("VaultRooms") as TileMapLayer
 	if layer == null:
 		_fail("LOOP overworld missing TileMapLayer VaultRooms")
+	elif layer.tile_set == null:
+		_fail("LOOP VaultRooms missing TileSet")
+	else:
+		var atlas_src: TileSetSource = layer.tile_set.get_source(0)
+		var atlas: TileSetAtlasSource = atlas_src as TileSetAtlasSource
+		if atlas == null or atlas.texture == null:
+			_fail("LOOP VaultRooms missing atlas texture")
+		elif atlas.texture.resource_path != "res://assets/tiles/tileset_vault.png":
+			_fail("LOOP live TileMapLayer must use tileset_vault.png")
 	if VaultMap.room_id_at(VaultMap.tile_center(VaultMap.DOOR_CELL)) == "relic":
 		_fail("LOOP door tile must not be room_id relic")
 	if VaultMap.room_id_at(VaultMap.tile_center(VaultMap.RELIC_CELL)) != "relic":

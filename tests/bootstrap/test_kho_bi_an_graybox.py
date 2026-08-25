@@ -79,22 +79,20 @@ def plan_errors(text: str) -> list[str]:
             total = stripped
         if "| 8 |" in stripped and "G5" in stripped:
             r8_row = stripped
-    if current != "R8-WP2":
-        errors.append(f"CURRENT_VALID_WP={current!r} (must stay R8-WP2)")
+    if current not in ("R8-WP2", "R8-WP3"):
+        errors.append(f"CURRENT_VALID_WP={current!r} (must stay R8-WP2 or R8-WP3)")
     if wp2 is None:
         errors.append("plan missing R8-WP2 heading")
-    elif re.search(r"\[x\]", wp2, re.I):
-        errors.append("R8-WP2 must stay unticked")
     if wp3 is not None and re.search(r"\[x\]", wp3, re.I):
-        errors.append("R8-WP3 must stay unticked; this WP does not start art")
+        errors.append("R8-WP3 must stay unticked; graybox must not start polish")
     if PATH_LABEL not in text:
         errors.append("plan must keep verify path start→key→door→relic→win")
     if OLD_PATH in text:
         errors.append("plan must not use start→key→door→win without relic")
-    if total and "51/60" not in total:
-        errors.append(f"progress must stay 51/60 while R8-WP2 is unticked: {total}")
-    if r8_row and not re.search(r"\[ \]\s*1/6", r8_row):
-        errors.append(f"R8 row must stay 1/6 while WP2 is unticked: {r8_row}")
+    if total and "51/60" not in total and "52/60" not in total:
+        errors.append(f"progress must stay 51/60 or 52/60 while graybox is closed: {total}")
+    if r8_row and not re.search(r"\[ \]\s*[12]/6", r8_row):
+        errors.append(f"R8 row must stay 1/6 or 2/6 while WP3 is unticked: {r8_row}")
     if g5 is not None and re.search(r"\[x\]", g5, re.I):
         errors.append("official harness must not tick G5")
     if gx is not None and re.search(r"\[x\]", gx, re.I):
@@ -159,10 +157,6 @@ def tree_errors() -> list[str]:
     snake = DOGFOOD / "snake"
     if snake.exists():
         errors.append("dogfood must not use plugin-project snake/")
-    for png in DOGFOOD.rglob("*.png"):
-        errors.append(f"R8-WP3 theater: {rel(png)}")
-    for wav in DOGFOOD.rglob("*.wav"):
-        errors.append(f"R8-WP3 theater: {rel(wav)}")
     for path in DOGFOOD.rglob("*"):
         if path.is_file() and "PLACEHOLDER" in path.name.upper():
             errors.append(f"PLACEHOLDER asset not allowed: {rel(path)}")

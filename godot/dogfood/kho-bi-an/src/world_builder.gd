@@ -2,6 +2,7 @@ class_name WorldBuilder
 extends RefCounted
 
 const SRC_ID: int = 0
+const TILESET_PATH: String = "res://assets/tiles/tileset_vault.png"
 const FLOOR_START: Vector2i = Vector2i(0, 0)
 const FLOOR_DOOR: Vector2i = Vector2i(1, 0)
 const FLOOR_RELIC: Vector2i = Vector2i(2, 0)
@@ -29,12 +30,9 @@ func _make_tileset() -> TileSet:
 	ts.add_physics_layer(-1)
 	ts.set_physics_layer_collision_layer(0, VaultMap.COL_WORLD)
 	ts.set_physics_layer_collision_mask(0, 0)
-	var img: Image = Image.create(64, 16, false, Image.FORMAT_RGBA8)
-	img.fill_rect(Rect2i(0, 0, 16, 16), Color(0.14, 0.18, 0.30))
-	img.fill_rect(Rect2i(16, 0, 16, 16), Color(0.20, 0.14, 0.16))
-	img.fill_rect(Rect2i(32, 0, 16, 16), Color(0.12, 0.22, 0.22))
-	img.fill_rect(Rect2i(48, 0, 16, 16), Color(0.06, 0.07, 0.11))
-	var tex: ImageTexture = ImageTexture.create_from_image(img)
+	var tex: Texture2D = load(TILESET_PATH) as Texture2D
+	if tex == null:
+		push_error("WorldBuilder live TileMapLayer missing %s" % TILESET_PATH)
 	var atlas: TileSetAtlasSource = TileSetAtlasSource.new()
 	atlas.texture = tex
 	atlas.texture_region_size = Vector2i(VaultMap.TILE, VaultMap.TILE)

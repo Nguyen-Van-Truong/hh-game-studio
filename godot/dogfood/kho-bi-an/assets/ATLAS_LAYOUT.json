@@ -1,0 +1,116 @@
+{
+  "frame": [
+    32,
+    32
+  ],
+  "filter": "nearest",
+  "mipmaps": false,
+  "pivot": [
+    16,
+    16
+  ],
+  "rows": [
+    "down",
+    "left",
+    "right",
+    "up"
+  ],
+  "cols": [
+    "idle_0",
+    "idle_1",
+    "walk_0",
+    "walk_1",
+    "walk_2",
+    "walk_3"
+  ],
+  "fps_idle": 4.0,
+  "fps_walk": 8.0,
+  "actors": {
+    "actor_player": "res://assets/art/actor_player.png",
+    "actor_warden": "res://assets/art/actor_warden.png"
+  },
+  "vfx_interact": {
+    "path": "res://assets/vfx/vfx_interact.png",
+    "frame": [
+      16,
+      16
+    ],
+    "frames": 4,
+    "fps": 10.0,
+    "animation": "burst"
+  },
+  "contact_slots": [
+    {
+      "id": "tileset_vault",
+      "region": [
+        0,
+        0,
+        64,
+        16
+      ]
+    },
+    {
+      "id": "actor_player",
+      "region": [
+        0,
+        0,
+        32,
+        32
+      ]
+    },
+    {
+      "id": "actor_warden",
+      "region": [
+        0,
+        0,
+        32,
+        32
+      ]
+    },
+    {
+      "id": "item_key",
+      "region": [
+        0,
+        0,
+        32,
+        32
+      ]
+    },
+    {
+      "id": "prop_door",
+      "region": [
+        0,
+        0,
+        16,
+        48
+      ]
+    },
+    {
+      "id": "item_relic",
+      "region": [
+        0,
+        0,
+        32,
+        32
+      ]
+    },
+    {
+      "id": "ui_icon_key",
+      "region": [
+        0,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "vfx_interact",
+      "region": [
+        0,
+        0,
+        16,
+        16
+      ]
+    }
+  ]
+}
