@@ -599,6 +599,7 @@ func _on_step_result(step: Dictionary, result: Dictionary) -> Dictionary:
 			))
 		return {"done": false}
 	if kind == "assert":
+		_pending["assert_after"] = after
 		if result.get("ok", false) != true or after.get("matched", false) != true:
 			return _done(_finish_attempt(
 				STATUS_FAIL,
@@ -742,6 +743,22 @@ func _finish_status(status: String, code: String, message: String, reason: Strin
 	after["run_id"] = str(_pending.get("run_id", ""))
 	after["attempt"] = int(_pending.get("attempt", 0)) + 1
 	after["retry_max"] = int(_pending.get("retry_max", 0))
+	var assert_after: Dictionary = _pending.get("assert_after") if _pending.get("assert_after") is Dictionary else {}
+	if assert_after.has("got"):
+		after["got"] = assert_after.get("got")
+	if assert_after.has("key"):
+		after["assert_key"] = assert_after.get("key")
+	if assert_after.has("matched"):
+		after["matched"] = assert_after.get("matched")
+	var lifted_key: String = str(assert_after.get("key", ""))
+	if lifted_key == "won":
+		after["won"] = assert_after.get("got")
+	elif lifted_key == "matches":
+		after["matches"] = assert_after.get("got")
+	elif lifted_key == "flips":
+		after["flips"] = assert_after.get("got")
+	elif lifted_key == "score":
+		after["score"] = assert_after.get("got")
 	_last_by_name[name_s] = after.duplicate(true)
 	_pending = {}
 	if status == STATUS_PASS:
@@ -881,7 +898,23 @@ func _build_plan(manifest: Dictionary, scene: String) -> Array:
 		step["until"] = until
 		step["timeout_ms"] = int(manifest.get("step_timeout_ms", 2000))
 	plan.append(step)
-	if manifest.has("input_action"):
+	var input_names: PackedStringArray = _input_names_of(manifest)
+	var in_i: int = 0
+	while in_i < input_names.size():
+		var action_name: String = input_names[in_i]
+		in_i += 1
+		plan.append({
+			"kind": "input",
+			"action_name": action_name,
+			"phase": "press",
+		})
+		plan.append({"kind": "step", "frames": maxi(1, int(manifest.get("step_frames", 2)))})
+		plan.append({
+			"kind": "input",
+			"action_name": action_name,
+			"phase": "release",
+		})
+	if input_names.is_empty() and manifest.has("input_action"):
 		plan.append({
 			"kind": "input",
 			"action_name": str(manifest.get("input_action")),
@@ -927,6 +960,40 @@ func _build_plan(manifest: Dictionary, scene: String) -> Array:
 	return plan
 
 
+func _input_names_of(manifest: Dictionary) -> PackedStringArray:
+	var names: PackedStringArray = PackedStringArray()
+	if manifest.get("inputs") is Array:
+		var raw: Array = manifest.get("inputs")
+		var i: int = 0
+		while i < raw.size():
+			var item_v: Variant = raw[i]
+			i += 1
+			if item_v is Dictionary:
+				var action_s: String = str((item_v as Dictionary).get("action_name", (item_v as Dictionary).get("action", "")))
+				if action_s.begins_with("ui_"):
+					names.append(action_s)
+			else:
+				var token: String = str(item_v)
+				if token.begins_with("input:"):
+					token = token.substr(6)
+				if token.begins_with("ui_"):
+					names.append(token)
+		if not names.is_empty():
+			return names
+	var steps_v: Variant = manifest.get("steps", [])
+	if steps_v is Array:
+		var steps: Array = steps_v
+		var si: int = 0
+		while si < steps.size():
+			var token2: String = str(steps[si])
+			si += 1
+			if token2.begins_with("input:"):
+				token2 = token2.substr(6)
+			if token2.begins_with("ui_"):
+				names.append(token2)
+	return names
+
+
 func _scene_of(manifest: Dictionary) -> String:
 	var scene: String = str(manifest.get("scene", ""))
 	if not scene.is_empty():
@@ -950,6 +1017,8 @@ func _load_manifest(name_s: String) -> Dictionary:
 	var candidates: PackedStringArray = PackedStringArray()
 	candidates.append("res://%s/%s.hh-test.json" % [HHAgentConstants.TEST_FIXTURE_DIR, name_s])
 	candidates.append("res://%s/manifests/%s.hh-test.json" % [HHAgentConstants.TEST_DIR, name_s])
+	candidates.append("res://%s/%s.hh-test.json" % [HHAgentConstants.ZERO_TOUCH_DIR, name_s])
+	candidates.append("res://.hh-agent/%s/manifests/%s.hh-test.json" % [HHAgentConstants.ZERO_TOUCH_DIR, name_s])
 	candidates.append("res://%s/%s.hh-test.json" % [HHAgentConstants.REPAIR_FIXTURE_DIR, name_s])
 	candidates.append("res://%s/%s/%s.hh-test.json" % [HHAgentConstants.REPAIR_FIXTURE_DIR, name_s, name_s])
 	candidates.append("res://.hh-test.json")
@@ -1212,12 +1281,16 @@ func _jail(command_id: String, res_path: String) -> Dictionary:
 		or rest == "r6w7"
 		or rest.begins_with(".hh-agent/r6w7/")
 		or rest == ".hh-agent/r6w7"
+		or rest.begins_with("r7w6/")
+		or rest == "r7w6"
+		or rest.begins_with(".hh-agent/r7w6/")
+		or rest == ".hh-agent/r7w6"
 	)
 	if not allowed:
 		return _errors.fail(
 			command_id,
 			HHAgentErrors.E_PATH,
-			"test artifacts must stay under r6w6/ or r6w7/ or .hh-agent/r6w6|r6w7/",
+			"test artifacts must stay under r6w6/ or r6w7/ or r7w6/ or .hh-agent/r6w6|r6w7|r7w6/",
 			p,
 		)
 	var abs_path: String = ProjectSettings.globalize_path(p)
@@ -1239,6 +1312,7 @@ func _jail_shot(command_id: String, res_path: String) -> Dictionary:
 		or rest.begins_with("r6w5/")
 		or rest.begins_with("r6w6/")
 		or rest.begins_with("r6w7/")
+		or rest.begins_with("r7w6/")
 	):
 		return _errors.fail(command_id, HHAgentErrors.E_PATH, "screenshot is outside project artifacts", p)
 	return {"ok": true, "res": p, "abs": ProjectSettings.globalize_path(p)}

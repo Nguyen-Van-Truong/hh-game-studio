@@ -1,4 +1,5 @@
 import { E, typedError, type TypedError } from "./errors.js";
+import { newUlid } from "./ulid.js";
 
 export interface ToolRequest {
   tool: string;
@@ -15,12 +16,13 @@ export interface ToolSuccess {
 export interface ToolFailure {
   ok: false;
   error: TypedError;
+  after?: Record<string, unknown>;
 }
 
 export type ToolResult = ToolSuccess | ToolFailure;
 
 export interface ToolExecutor {
-  execute(req: ToolRequest): ToolResult;
+  execute(req: ToolRequest): ToolResult | Promise<ToolResult>;
 }
 
 /** Same stdio MCP tools/call shape as tests/bootstrap/test_session.py. */
@@ -29,6 +31,7 @@ export function mcpToolsCall(
   action: string,
   params: Record<string, unknown>,
   id: number,
+  commandId?: string,
 ): Record<string, unknown> {
   return {
     jsonrpc: "2.0",
@@ -39,6 +42,7 @@ export function mcpToolsCall(
       arguments: {
         action,
         params,
+        ...(commandId ? { command_id: commandId } : {}),
       },
     },
   };
@@ -55,6 +59,10 @@ export function parseMcpToolResult(msg: unknown): ToolResult {
     const err = content.error;
     if (err !== null && typeof err === "object") {
       const e = err as { code?: unknown; message?: unknown; path?: unknown };
+      const after =
+        content.after !== null && typeof content.after === "object" && !Array.isArray(content.after)
+          ? (content.after as Record<string, unknown>)
+          : undefined;
       return {
         ok: false,
         error: typedError(
@@ -62,6 +70,7 @@ export function parseMcpToolResult(msg: unknown): ToolResult {
           typeof e.message === "string" ? e.message : "MCP tool error",
           typeof e.path === "string" ? e.path : "",
         ),
+        ...(after ? { after } : {}),
       };
     }
     if (content.ok === true) {
@@ -123,24 +132,61 @@ export class FakeExecutor implements ToolExecutor {
 
 export interface LineStdio {
   writeLine(line: string): void;
-  readLine(): string;
+  readLine(timeoutMs?: number): string | Promise<string>;
+}
+
+const HH_TOOLS = new Set([
+  "hh.pause",
+  "hh.resume",
+  "hh.plugin_noop",
+  "hh.session_status",
+  "hh.doctor",
+  "hh.ledger_inspect",
+]);
+
+function timeoutFor(req: ToolRequest): number {
+  if (req.tool === "godot.play" || req.tool === "godot.test" || req.action === "repair") {
+    return 180_000;
+  }
+  if (req.action === "screenshot" || req.action === "checkpoint") {
+    return 60_000;
+  }
+  return 30_000;
 }
 
 /** Sidecar MCP over newline JSON-RPC. Sidecar stays deterministic execution. */
 export class McpStdioExecutor implements ToolExecutor {
   private nextId = 1;
+  private initialized = false;
 
   constructor(private readonly io: LineStdio) {}
 
-  execute(req: ToolRequest): ToolResult {
+  async execute(req: ToolRequest): Promise<ToolResult> {
+    if (!this.initialized) {
+      const maybeInit = this.io as LineStdio & { initialize?: () => Promise<void> };
+      if (typeof maybeInit.initialize === "function") {
+        await maybeInit.initialize();
+      }
+      this.initialized = true;
+    }
     const id = this.nextId;
     this.nextId += 1;
-    this.io.writeLine(JSON.stringify(mcpToolsCall(req.tool, req.action, req.params, id)));
+    const payload = HH_TOOLS.has(req.tool)
+      ? {
+          jsonrpc: "2.0",
+          id,
+          method: "tools/call",
+          params: { name: req.tool, arguments: { ...req.params } },
+        }
+      : mcpToolsCall(req.tool, req.action, req.params, id, newUlid());
+    this.io.writeLine(JSON.stringify(payload));
     let parsed: unknown;
     try {
-      parsed = JSON.parse(this.io.readLine());
-    } catch {
-      return { ok: false, error: typedError(E.E_UNVERIFIED, "MCP line is not JSON", "mcp") };
+      const line = await Promise.resolve(this.io.readLine(timeoutFor(req)));
+      parsed = JSON.parse(line);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "MCP line is not JSON";
+      return { ok: false, error: typedError(E.E_UNVERIFIED, message, "mcp") };
     }
     return parseMcpToolResult(parsed);
   }

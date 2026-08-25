@@ -211,6 +211,15 @@ func _state_snap(payload: Dictionary) -> Dictionary:
 			"time": _time_snap(),
 		}
 	if _has_property(node, key):
+		if _is_answer_map_name(key):
+			return {
+				"ok": true,
+				"key": key,
+				"found": true,
+				"value": {"type": "PackedInt32Array"},
+				"value_source": "property",
+				"time": _time_snap(),
+			}
 		return {
 			"ok": true,
 			"key": key,
@@ -325,6 +334,8 @@ func _properties_of(node: Node) -> Dictionary:
 		if _is_secret_name(pname):
 			out[pname] = REDACT
 			continue
+		if _is_answer_map_name(pname):
+			continue
 		out[pname] = _jsonable(node.get(pname))
 	return out
 
@@ -413,6 +424,11 @@ func _is_secret_name(name_s: String) -> bool:
 	return false
 
 
+func _is_answer_map_name(name_s: String) -> bool:
+	var lower: String = name_s.to_lower()
+	return lower == "tiles" or lower == "revealed"
+
+
 func _jsonable(value: Variant) -> Variant:
 	var kind: int = typeof(value)
 	if kind == TYPE_NIL or kind == TYPE_BOOL or kind == TYPE_INT or kind == TYPE_FLOAT or kind == TYPE_STRING:
@@ -428,6 +444,12 @@ func _jsonable(value: Variant) -> Variant:
 	if kind == TYPE_COLOR:
 		var c: Color = value
 		return {"r": c.r, "g": c.g, "b": c.b, "a": c.a}
+	if (
+		kind == TYPE_PACKED_BYTE_ARRAY
+		or kind == TYPE_PACKED_INT32_ARRAY
+		or kind == TYPE_PACKED_INT64_ARRAY
+	):
+		return {"type": type_string(kind)}
 	if kind == TYPE_ARRAY:
 		var arr: Array = []
 		var src: Array = value

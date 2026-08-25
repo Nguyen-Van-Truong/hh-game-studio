@@ -32,12 +32,12 @@ function parseMode(): "persistent" | "interactive" {
   throw new HostError(E.E_POLICY, "mode must be persistent or interactive", "mode");
 }
 
-function parseProvider(): "fake" | "configured" {
+function parseProvider(): "fake" | "configured" | "plan" {
   const raw = argValue("--provider") ?? "fake";
-  if (raw === "fake" || raw === "configured") {
+  if (raw === "fake" || raw === "configured" || raw === "plan") {
     return raw;
   }
-  throw new HostError(E.E_POLICY, "provider must be fake or configured", "provider");
+  throw new HostError(E.E_POLICY, "provider must be fake, configured, or plan", "provider");
 }
 
 function parseBudget(): number | undefined {
@@ -80,16 +80,31 @@ function commonOpts(mode: "persistent" | "interactive"): HostOptions {
   if (flag("--hold-after-decision")) {
     opts.holdAfterDecision = true;
   }
+  if (flag("--hold-until-deadline")) {
+    opts.holdUntilDeadline = true;
+  }
+  if (flag("--fast") || process.env.HH_ZERO_TOUCH_FAST === "1") {
+    opts.fast = true;
+  }
+  const brief = argValue("--brief");
+  if (brief) {
+    opts.briefPath = brief;
+  }
+  const project = argValue("--mcp-project") ?? argValue("--project");
+  if (project) {
+    opts.mcpProject = project;
+  }
   return opts;
 }
 
-function main(): void {
+async function main(): Promise<void> {
   try {
     if (flag("--help")) {
       process.stderr.write(
         "hh-godot-host: persistent Agent Host. Interactive IDE clients are the host.\n" +
-          "  --provider fake|configured  --mode persistent|interactive\n" +
-          "  --resume <session_id>  --hold-after-decision\n" +
+          "  --provider fake|configured|plan  --mode persistent|interactive\n" +
+          "  --resume <session_id>  --hold-after-decision --hold-until-deadline --fast\n" +
+          "  --brief <PROJECT_BRIEF.md> --mcp-project <godot-project>\n" +
           "  --show|--compact|--cancel <session_id>\n" +
           "  --compact <session_id> [--project <godot-project> --job-id <id>]\n" +
           `  session length ${SESSION_MS} ms (90 minutes)\n`,
@@ -139,22 +154,32 @@ function main(): void {
     const mode = parseMode();
     if (resumeId) {
       const host = Host.resume({ ...commonOpts(mode), sessionId: resumeId });
-      const report = host.run();
-      writeReport(report);
-      if (!report.ok) {
-        process.exitCode = 1;
+      try {
+        const report = await host.run();
+        writeReport(report);
+        if (!report.ok) {
+          process.exitCode = 1;
+        }
+      } finally {
+        host.close();
       }
       return;
     }
 
     const host = Host.create(commonOpts(mode));
-    const report = host.run();
-    writeReport(report);
-    if (report.phase === "held_after_decision") {
-      return;
-    }
-    if (!report.ok) {
-      process.exitCode = 1;
+    try {
+      const report = await host.run();
+      writeReport(report);
+      if (report.phase === "held_after_decision") {
+        return;
+      }
+      if (!report.ok) {
+        process.exitCode = 1;
+      }
+    } finally {
+      if (!flag("--hold-after-decision")) {
+        host.close();
+      }
     }
   } catch (err) {
     if (err instanceof HostError) {

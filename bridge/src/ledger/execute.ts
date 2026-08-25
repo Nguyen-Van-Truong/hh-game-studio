@@ -1335,6 +1335,8 @@ function testPathOk(path: string): boolean {
     p.includes(".hh-agent/r6w6") ||
     p.includes("r6w7/") ||
     p.includes(".hh-agent/r6w7") ||
+    p.includes("r7w6/") ||
+    p.includes(".hh-agent/r7w6") ||
     p.endsWith(".hh-test.json") ||
     p.includes("/.hh-test.json")
   );

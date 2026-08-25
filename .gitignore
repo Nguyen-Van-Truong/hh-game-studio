@@ -59,3 +59,13 @@ tests/e2e/bakeoff/evidence/*.bin
 
 # R1-WP4 stock-poc disposable copies (never vendor into plugin-project).
 tests/e2e/stock_poc/work/
+
+# Local reference clones (not product). Do not commit.
+/repothamkhao/
+
+# R7-WP6 trial trees (T0 scaffold + nested git + addon copy stay local)
+godot/trials/
+
+# R7-WP6 official zero-touch durable log (Cursor TTY is not the record)
+tests/bootstrap/.zero_touch_official.log
+tests/bootstrap/.zero_touch_fast.log

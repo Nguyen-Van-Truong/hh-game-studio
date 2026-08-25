@@ -12,6 +12,12 @@ export interface ModelTurnDone {
 
 export type ModelTurn = ModelTurnTool | ModelTurnDone;
 
+export interface ToolResultView {
+  ok: boolean;
+  after: Record<string, unknown>;
+  error?: { code: string; message: string; path: string };
+}
+
 /** Compact context — not an infinite chat transcript. */
 export interface ModelContext {
   task_id: string;
@@ -19,6 +25,10 @@ export interface ModelContext {
   plan_summary: string;
   step: number;
   last_tools: Array<{ tool: string; action: string }>;
+  last_results: ToolResultView[];
+  brief?: string;
+  deadline_at?: number;
+  now?: number;
 }
 
 export interface Provider {

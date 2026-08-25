@@ -7,7 +7,7 @@ const _ActionsScript: GDScript = preload("res://addons/hh_agent/core/hh_actions.
 const _StoreScript: GDScript = preload("res://addons/hh_agent/core/hh_activity_store.gd")
 const _ActivityDockScript: GDScript = preload("res://addons/hh_agent/ui/health/hh_activity_dock.gd")
 
-## Compile PROJECT_BRIEF into an acyclic task DAG. Tests first, then produce.
+## Compile PROJECT_BRIEF into an acyclic task DAG. test-define, then produce, then verify-run.
 ## Vague fields become §6.2 assumptions. E1–E4 are blocker nodes, never silent picks.
 
 const PLAN_SCHEMA: String = "hh-plan/1"
@@ -663,13 +663,11 @@ func _build_tasks(doc: Dictionary, run_id: String, blockers: Array) -> Array:
 		var aid2: String = acc_ids[i]
 		var rid: String = "verify_run_%s" % aid2
 		run_ids.append(rid)
-		var deps: Array = []
-		if blockers.size() > 0:
+		var deps: Array = ["produce_script", "produce_scene"]
+		if i < define_ids.size():
 			deps.append(define_ids[i])
-			for bb: String in blocker_ids:
-				deps.append(bb)
-		else:
-			deps.append(mapped[i] if i < mapped.size() else "produce_scene")
+		for bb: String in blocker_ids:
+			deps.append(bb)
 		nodes.append(_task({
 			"id": rid,
 			"kind": "verify",
@@ -793,9 +791,9 @@ func _task_less(a: Dictionary, b: Dictionary) -> bool:
 func _kind_order(kind: String) -> int:
 	if kind == "test":
 		return 0
-	if kind == "verify":
-		return 1
 	if kind == "produce":
+		return 1
+	if kind == "verify":
 		return 2
 	if kind == "checkpoint":
 		return 3
@@ -1098,9 +1096,9 @@ func _produce_kind_for(text: String) -> String:
 	var t: String = text.to_lower()
 	if _re(t, "(?i)\\b(audio|sfx|sound|music|wav)\\b"):
 		return "produce_audio"
-	if _re(t, "(?i)\\b(art|sprite|tile|portrait|png|palette|pixel|gem art)\\b"):
+	if _re(t, "(?i)\\b(art|sprite|png|palette|portrait)\\b") or _re(t, "(?i)\\b(pixel art|gem art|tile art)\\b"):
 		return "produce_art"
-	if _re(t, "(?i)\\b(script|code|logic|input|move|play|swap|shoot|farm|dialogue|choice|save|key|door|match)\\b"):
+	if _re(t, "(?i)\\b(script|code|logic|input|move|play|swap|shoot|farm|dialogue|choice|save|key|door|match|matches|matching|won|pair|flip|flips)\\b"):
 		return "produce_script"
 	return "produce_scene"
 
@@ -1112,6 +1110,38 @@ func _produce_spec(doc: Dictionary) -> Dictionary:
 		str(doc.get("out_of_scope", "")),
 	]
 	var low: String = hay.to_lower()
+	if _re(low, "(?i)\\b(memory|tile[- ]?flip|card[- ]?match)\\b"):
+		return {
+			"slug": "memory",
+			"scene": "res://scenes/memory/board.tscn",
+			"script": "res://scripts/memory/board.gd",
+			"art": "res://art/memory/tile.png",
+			"audio": "res://audio/memory/flip.wav",
+		}
+	if _re(low, "(?i)\\b(breakout|brick[- ]?breaker)\\b"):
+		return {
+			"slug": "breakout",
+			"scene": "res://scenes/breakout/table.tscn",
+			"script": "res://scripts/breakout/paddle.gd",
+			"art": "res://art/breakout/brick.png",
+			"audio": "res://audio/breakout/hit.wav",
+		}
+	if _re(low, "(?i)\\b(dodge|meteor|starfall)\\b"):
+		return {
+			"slug": "dodge",
+			"scene": "res://scenes/dodge/lane.tscn",
+			"script": "res://scripts/dodge/runner.gd",
+			"art": "res://art/dodge/rock.png",
+			"audio": "res://audio/dodge/near.wav",
+		}
+	if _re(low, "(?i)\\bcatch\\b") and _re(low, "(?i)\\b(orb|fruit|drop)\\b"):
+		return {
+			"slug": "catch",
+			"scene": "res://scenes/catch/bowl.tscn",
+			"script": "res://scripts/catch/catcher.gd",
+			"art": "res://art/catch/orb.png",
+			"audio": "res://audio/catch/catch.wav",
+		}
 	if _re(low, "(?i)\\bmatch[- ]?3\\b"):
 		return {
 			"slug": "match3",

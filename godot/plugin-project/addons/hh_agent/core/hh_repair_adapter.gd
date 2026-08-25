@@ -237,7 +237,12 @@ func _inspect() -> Dictionary:
 	}
 	if not scene.is_empty():
 		_scenes.handle(str(_pending.get("command_id", "")), "godot.scene", "open", {"path": scene}, _actions, {})
+		for miss_scene: Variant in _missing_res_paths(_read_text(scene)):
+			out["missing_paths"].append(miss_scene)
 	var scripts: Array = _scripts_for(scene)
+	var edited: Node = EditorInterface.get_edited_scene_root()
+	if edited != null:
+		_collect_attached_scripts(edited, scripts)
 	var script_rows: Array = []
 	for path_v: Variant in scripts:
 		var path_s: String = str(path_v)
@@ -252,7 +257,6 @@ func _inspect() -> Dictionary:
 		for miss_v: Variant in _missing_res_paths(text):
 			out["missing_paths"].append(miss_v)
 	out["scripts"] = script_rows
-	var edited: Node = EditorInterface.get_edited_scene_root()
 	if edited != null:
 		_walk_nodes(edited, edited, out)
 	return out
@@ -664,6 +668,8 @@ func _load_manifest(name_s: String) -> Dictionary:
 	candidates.append("res://%s/%s/%s.hh-test.json" % [HHAgentConstants.REPAIR_FIXTURE_DIR, name_s, name_s])
 	candidates.append("res://%s/%s.hh-test.json" % [HHAgentConstants.TEST_FIXTURE_DIR, name_s])
 	candidates.append("res://%s/manifests/%s.hh-test.json" % [HHAgentConstants.TEST_DIR, name_s])
+	candidates.append("res://%s/%s.hh-test.json" % [HHAgentConstants.ZERO_TOUCH_DIR, name_s])
+	candidates.append("res://.hh-agent/%s/manifests/%s.hh-test.json" % [HHAgentConstants.ZERO_TOUCH_DIR, name_s])
 	var i: int = 0
 	while i < candidates.size():
 		var path_s: String = candidates[i]
@@ -684,16 +690,61 @@ func _scripts_for(scene: String) -> Array:
 	var dir_s: String = scene.get_base_dir()
 	if dir_s.is_empty():
 		dir_s = "res://%s" % HHAgentConstants.REPAIR_FIXTURE_DIR
+	_add_script_dir(dir_s, out)
+	if dir_s.contains("/scenes/"):
+		_add_script_dir(dir_s.replace("/scenes/", "/scripts/"), out)
+	if FileAccess.file_exists(scene):
+		for gd_v: Variant in _gd_paths_in_text(_read_text(scene)):
+			var gd_s: String = str(gd_v)
+			if not out.has(gd_s):
+				out.append(gd_s)
+	return out
+
+
+func _add_script_dir(dir_s: String, out: Array) -> void:
 	var da: DirAccess = DirAccess.open(dir_s)
 	if da == null:
-		return out
+		return
 	da.list_dir_begin()
 	var name_s: String = da.get_next()
 	while not name_s.is_empty():
 		if not da.current_is_dir() and name_s.ends_with(".gd"):
-			out.append("%s/%s" % [dir_s, name_s])
+			var path_s: String = "%s/%s" % [dir_s, name_s]
+			if not out.has(path_s):
+				out.append(path_s)
 		name_s = da.get_next()
 	da.list_dir_end()
+
+
+func _collect_attached_scripts(node: Node, out: Array) -> void:
+	var scr: Variant = node.get_script()
+	if scr is GDScript:
+		var path_s: String = (scr as GDScript).resource_path
+		if not path_s.is_empty() and not out.has(path_s):
+			out.append(path_s)
+	var i: int = 0
+	while i < node.get_child_count():
+		_collect_attached_scripts(node.get_child(i), out)
+		i += 1
+
+
+func _gd_paths_in_text(text: String) -> Array:
+	var out: Array = []
+	var i: int = 0
+	while true:
+		var at: int = text.find("res://", i)
+		if at < 0:
+			break
+		var end: int = at + 6
+		while end < text.length():
+			var ch: String = text.substr(end, 1)
+			if ch == "\"" or ch == "'" or ch == "\n" or ch == " " or ch == ")":
+				break
+			end += 1
+		var path_s: String = text.substr(at, end - at)
+		if path_s.ends_with(".gd") and not out.has(path_s):
+			out.append(path_s)
+		i = end
 	return out
 
 
@@ -836,7 +887,11 @@ func _spike_literal(text: String) -> int:
 func _create_placeholder(res_path: String) -> bool:
 	if not res_path.begins_with("res://") or res_path.contains(".."):
 		return false
-	if not res_path.begins_with("res://%s/" % HHAgentConstants.REPAIR_FIXTURE_DIR):
+	if res_path.begins_with("res://addons/") or res_path.begins_with("res://tests/"):
+		return false
+	var fixture_ok: bool = res_path.begins_with("res://%s/" % HHAgentConstants.REPAIR_FIXTURE_DIR)
+	var art_ok: bool = res_path.begins_with("res://art/")
+	if not fixture_ok and not art_ok:
 		return false
 	var abs_p: String = ProjectSettings.globalize_path(res_path)
 	DirAccess.make_dir_recursive_absolute(abs_p.get_base_dir())

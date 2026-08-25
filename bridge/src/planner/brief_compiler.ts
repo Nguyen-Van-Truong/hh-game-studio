@@ -90,8 +90,8 @@ export const CYCLIC_FIXTURE: Array<{ id: string; deps: string[] }> = [
 
 const KIND_ORDER: Record<TaskKind, number> = {
   test: 0,
-  verify: 1,
-  produce: 2,
+  produce: 1,
+  verify: 2,
   checkpoint: 3,
   blocker: 4,
 };
@@ -654,6 +654,42 @@ type ProduceId = "produce_scene" | "produce_script" | "produce_art" | "produce_a
 
 function produceSpec(doc: BriefDoc): ProduceSpec {
   const hay = lower(`${doc.genre} ${doc.fantasy} ${doc.out_of_scope}`);
+  if (/\b(memory|tile[- ]?flip|card[- ]?match)\b/.test(hay)) {
+    return {
+      slug: "memory",
+      scene: "res://scenes/memory/board.tscn",
+      script: "res://scripts/memory/board.gd",
+      art: "res://art/memory/tile.png",
+      audio: "res://audio/memory/flip.wav",
+    };
+  }
+  if (/\b(breakout|brick[- ]?breaker)\b/.test(hay)) {
+    return {
+      slug: "breakout",
+      scene: "res://scenes/breakout/table.tscn",
+      script: "res://scripts/breakout/paddle.gd",
+      art: "res://art/breakout/brick.png",
+      audio: "res://audio/breakout/hit.wav",
+    };
+  }
+  if (/\b(dodge|meteor|starfall)\b/.test(hay)) {
+    return {
+      slug: "dodge",
+      scene: "res://scenes/dodge/lane.tscn",
+      script: "res://scripts/dodge/runner.gd",
+      art: "res://art/dodge/rock.png",
+      audio: "res://audio/dodge/near.wav",
+    };
+  }
+  if (/\bcatch\b/.test(hay) && /\b(orb|fruit|drop)\b/.test(hay)) {
+    return {
+      slug: "catch",
+      scene: "res://scenes/catch/bowl.tscn",
+      script: "res://scripts/catch/catcher.gd",
+      art: "res://art/catch/orb.png",
+      audio: "res://audio/catch/catch.wav",
+    };
+  }
   if (/\bmatch[- ]?3\b/.test(hay)) {
     return {
       slug: "match3",
@@ -731,10 +767,14 @@ function produceKindForAcceptance(text: string): ProduceId {
   if (/\b(audio|sfx|sound|music|wav)\b/.test(t)) {
     return "produce_audio";
   }
-  if (/\b(art|sprite|tile|portrait|png|palette|pixel|gem art)\b/.test(t)) {
+  if (/\b(art|sprite|png|palette|portrait)\b/.test(t) || /\b(pixel art|gem art|tile art)\b/.test(t)) {
     return "produce_art";
   }
-  if (/\b(script|code|logic|input|move|play|swap|shoot|farm|dialogue|choice|save|key|door|match)\b/.test(t)) {
+  if (
+    /\b(script|code|logic|input|move|play|swap|shoot|farm|dialogue|choice|save|key|door|match|matches|matching|won|pair|flip|flips)\b/.test(
+      t,
+    )
+  ) {
     return "produce_script";
   }
   return "produce_scene";
@@ -892,9 +932,7 @@ function buildTasks(
   for (let i = 0; i < doc.acceptance.length; i += 1) {
     const id = `verify_run_${accIds[i]}`;
     runIds.push(id);
-    const mappedId = mapped[i] ?? "produce_scene";
-    const deps =
-      blockers.length > 0 ? [defineIds[i] ?? "", ...blockerIds] : [mappedId];
+    const deps = ["produce_script", "produce_scene", defineIds[i] ?? "", ...blockerIds];
     nodes.push(
       task({
         id,

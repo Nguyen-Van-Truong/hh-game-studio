@@ -209,3 +209,34 @@ compile phải nằm trong 4ms thì đây là chỗ cần bác — nói để ho
 ## 2026-08-17 — Critic #2: hoàn tác tick M7A-1/M7A-3
 
 Parent đã tick rồi hoàn tác. G3=B+C và G4=Inno giữ. M6-3 flipbook bị recall (phụ thuộc M6-2). `entity.lock` phải nằm trong `Dispatcher`, không editor RAM. Worker Python chỉ ghi staging.
+
+## 2026-08-24 — R7-WP6 / G4: STOP — không tick, không planted REPAIR
+
+`decision_id: GODOT-G4-REPAIR-2026-08-24`
+`status: user-chose-door-2-2026-08-24`
+`plan_tick: R7-WP6 and G4 stay [ ] until official 90 + two critics`
+
+Zero-touch Host (`--provider plan`) là compiler heuristic + DAG walker, không LLM.
+`ConfiguredProvider` hết `E_EXTERNAL` (không có API key — E1).
+
+Hostile critics (I/J, K/L, M/N, O/P, Q/R) đã bác mọi cách **trồng** fail→sửa:
+
+- lỗ `if same: pass` / `matches += 0` / `pair_bug`
+- complete first write gọi là “pre-applied patch”
+- `asset_ok` / `TILE_ART` / `planned_art` / `PlannedArt` tripwire
+- vacuous REPAIR (bỏ label khỏi `G4_NEED` vì “không có bug”)
+
+G3 đã tick trên **8 seed ngoài** (harness gieo, adapter sửa). WP6 zero-touch cấm người/harness sửa file game sau T0, nên Host vừa viết vừa sửa — mọi defect đều là plant hoặc không xảy ra.
+
+Coordinator đã xóa inject `planned_art` / `PlannedArt` / cặp pause-resume kề nhau. `maybeQueueRepair` vẫn gọi `godot.test repair` nếu `test.run` thật sự fail. Không đốt official 90. Không tick.
+
+Hai cửa, chỉ người chọn một:
+
+1. **E1** — cấp credential model (không bịa key). Planner/repair không còn là tape Host.
+2. **Chấp nhận G4 heuristic** — DoD chữ “không human-work; output chạy; test xanh”; Làm “repair” = khả năng, không bắt buộc planted defect. LOG giống G3 (heuristic, not LLM). `REPAIR` có thể unproven.
+
+Người đã chọn cửa 2 và bảo “cứ chọn cách tốt nhất rồi làm”: Godot-control,
+không API key, `--provider plan` stays. Không trồng bug. REPAIR = khả năng
+(`maybeQueueRepair` + `godot.test repair` nếu test thật fail). DoD G4 thắng
+Làm “repair” khi không có defect: stamp `unused` (không xóa khỏi `G4_NEED`).
+Không mở R8 / G5 trước tick. GX vẫn khóa.

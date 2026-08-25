@@ -94,6 +94,7 @@ const SCHED_DIR: String = "r7w4"
 const SCHED_SCHEMA: String = "hh-sched/1"
 const SOAK_DIR: String = "r7w5"
 const SOAK_SCHEMA: String = "hh-soak/1"
+const ZERO_TOUCH_DIR: String = "r7w6"
 const SOAK_EVENT_MAX_LINES: int = 256
 const SOAK_CACHE_MAX: int = 512
 const SCHED_COORDINATOR: String = "coordinator"

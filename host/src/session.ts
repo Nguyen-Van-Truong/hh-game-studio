@@ -9,6 +9,7 @@ export type HostPhase =
   | "running"
   | "held_after_decision"
   | "awaiting_model"
+  | "observing"
   | "done"
   | "failed"
   | "cancelled";
@@ -27,6 +28,7 @@ export interface ToolRecord {
   tool: string;
   action: string;
   result: ToolResult;
+  params?: Record<string, unknown>;
 }
 
 export interface HostState {
@@ -46,10 +48,13 @@ export interface HostState {
   compacted: boolean;
   plan: { summary: string };
   context_summary: string;
+  /** Dedicated HOST stamp. Set after waitForPlugin / first MCP ACK, or fake at create. */
+  executor?: "mcp-stdio" | "fake";
   tools: ToolRecord[];
   transcript: unknown[];
   writer_pid: number;
   persist_path: string;
+  last_observe_ok_at?: number;
   inflight?: InFlight;
   wakeup_at?: number;
   handoff?: { from_pid: number; to_pid: number; at: number };
@@ -126,12 +131,17 @@ export function parseHostState(value: unknown): HostState {
     if (result === null || typeof result !== "object") {
       throw new HostError(E.E_POLICY, "tool record missing result", "tools");
     }
+    const params =
+      item.params !== null && typeof item.params === "object" && !Array.isArray(item.params)
+        ? (item.params as Record<string, unknown>)
+        : undefined;
     tools.push({
       task_id: requireString(item, "task_id"),
       command_id: requireString(item, "command_id"),
       tool: requireString(item, "tool"),
       action: requireString(item, "action"),
       result: result as ToolResult,
+      ...(params ? { params } : {}),
     });
   }
   const state: HostState = {
@@ -159,6 +169,9 @@ export function parseHostState(value: unknown): HostState {
     writer_pid: typeof rec.writer_pid === "number" ? rec.writer_pid : 0,
     persist_path: requireString(rec, "persist_path"),
   };
+  if (rec.executor === "mcp-stdio" || rec.executor === "fake") {
+    state.executor = rec.executor;
+  }
   if (rec.inflight !== null && typeof rec.inflight === "object") {
     const inf = asRecord(rec.inflight);
     state.inflight = {
@@ -171,6 +184,9 @@ export function parseHostState(value: unknown): HostState {
       command_id: requireString(inf, "command_id"),
       task_id: requireString(inf, "task_id"),
     };
+  }
+  if (typeof rec.last_observe_ok_at === "number" && Number.isFinite(rec.last_observe_ok_at)) {
+    state.last_observe_ok_at = rec.last_observe_ok_at;
   }
   if (typeof rec.wakeup_at === "number") {
     state.wakeup_at = rec.wakeup_at;
@@ -207,6 +223,12 @@ export function compactState(state: HostState): HostState {
     context_summary: `task=${state.task_id} command=${state.command_id} plan=${state.plan.summary}`,
     heartbeat_at: Date.now(),
   };
+  // Copy the dedicated field only. Do not invent mcp-stdio from a substring.
+  // Do not drop live mcp-stdio because plan.summary contains executor=fake.
+  if (state.executor === "mcp-stdio" || state.executor === "fake") {
+    next.executor = state.executor;
+    next.context_summary = `${next.context_summary} executor=${state.executor}`;
+  }
   return next;
 }
 
@@ -214,7 +236,7 @@ export function assertRunnable(state: HostState, now = Date.now()): void {
   if (state.cancelled) {
     throw new HostError(E.E_CANCELLED, "host session cancelled", "cancel");
   }
-  if (now > state.deadline_at) {
+  if (state.phase !== "observing" && now > state.deadline_at) {
     throw new HostError(E.E_TIMEOUT, "90-minute host session expired", "deadline");
   }
   if (state.budget.used_steps >= state.budget.max_steps) {
