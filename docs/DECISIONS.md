@@ -240,3 +240,23 @@ không API key, `--provider plan` stays. Không trồng bug. REPAIR = khả năn
 (`maybeQueueRepair` + `godot.test repair` nếu test thật fail). DoD G4 thắng
 Làm “repair” khi không có defect: stamp `unused` (không xóa khỏi `G4_NEED`).
 Không mở R8 / G5 trước tick. GX vẫn khóa.
+
+## 2026-08-25 — R8-WP4 residual honesty (không đổi spec)
+
+`decision_id: GODOT-R8-WP4-RESIDUAL-2026-08-25`
+`status: residual-honesty`
+`plan_tick: R8-WP4 [x]; CURRENT_VALID_WP=R8-WP5; 54/60; G5 stays [ ]; R8-WP5 [ ]`
+
+Official polish `python tests/bootstrap/test_kho_bi_an_polish.py` PASS
+(VISUAL/INPUT/REVIEW). Graybox still PASS. Win = relic_reached. Windowed
+`Viewport.get_image` is plan §7.3 verify, **not** G5 human dogfood.
+
+Tie-break TICK yes after Critic II yes / Critic HH no (leftover-0 flake after
+art_wired; not reproduced on tie-break leftover-0 PASS).
+
+P1 residuals live in the R8-WP4 LOG only: leftover-0 flake; 76,76,76 canary
+dead after indigo backdrop; 1280/1920 same 16:9 crop; capture disables
+canvas_items stretch; PLACEHOLDER lint is exact token in `src/`;
+`hud_on_playfield` is a gray-band bool; `copy_shots` can overwrite PNGs if
+REVIEW later fails; `kill_kho_path_holders` can miss a GUI child after PASS.
+Do not treat these as G5 or as a reason to untick WP4.

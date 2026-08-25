@@ -1,6 +1,6 @@
 AUTHORITATIVE_PLAN=1
 STATUS=ACTIVE
-CURRENT_VALID_WP=R8-WP4
+CURRENT_VALID_WP=R8-WP5
 
 ================================================================================
 BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
@@ -16,7 +16,7 @@ BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
 | 5 | R5 — Bộ công cụ làm game 2D | TileMapLayer, animation, UI, audio, physics, navigation, shader/particles được agent thao tác đầy đủ | 2D-A + 2D-B + Assets | — | [x] 7/7 WP |
 | 6 | R6 — Agent tự chơi và tự kiểm | Play/debug, input, runtime state, deterministic step, screenshot/diff/perf, test evidence | Runtime + Test + Vision | G3 SELF-VERIFY | [x] 7/7 WP |
 | 7 | R7 — Autopilot dài hạn | Nhận brief một lần, tự plan→làm→test→sửa→commit→resume; nhiều agent không đạp nhau | Orchestrator + Git + Recovery | G4 AUTONOMY | [x] 6/6 WP |
-| 8 | R8 — Dogfood game thật | Từ project trống tạo game top-down 2D có art/audio/UI/save, người chỉ xem/review | Game + Art + QA song song theo DAG | G5 DOGFOOD | [ ] 3/6 WP |
+| 8 | R8 — Dogfood game thật | Từ project trống tạo game top-down 2D có art/audio/UI/save, người chỉ xem/review | Game + Art + QA song song theo DAG | G5 DOGFOOD | [ ] 4/6 WP |
 | 9 | R9 — Export và vận hành | Windows build sạch, addon/sidecar đóng gói, update pin, tài liệu review | Release + Docs + Compatibility | G6 RELEASE | [ ] 0/4 WP |
 | 10 | RX — Ngoại lệ engine | Chỉ mở khi public API/GDExtension không giải được một capability bắt buộc | C++ patch riêng | GX FORK | [ ] khóa |
 
@@ -24,7 +24,7 @@ VIỆC PHẢI LÀM TRƯỚC: R0-WP1 → R0-WP2 → R0-WP3 → R0-WP4 → R1-WP1.
 Không được bắt đầu R2
 trước G1. Từ R2 trở đi chỉ song song các track có ranh giới file rõ ràng.
 
-Tiến độ tổng: [ ] 53/60 WP. First valid WP: R8-WP4.
+Tiến độ tổng: [ ] 54/60 WP. First valid WP: R8-WP5.
 Ngày lập: 20-8-2026 (Asia/Saigon).
 
 ================================================================================
@@ -2282,7 +2282,7 @@ R8-WP3 — Art/animation/audio pipeline và license manifest               [x]
         G5 stays [ ]; GX stays [ ]; R8-WP4 not started
       Commit: (this tick)
 
-R8-WP4 — Integrate art, UI, feedback, accessibility và polish          [ ]
+R8-WP4 — Integrate art, UI, feedback, accessibility và polish          [x]
   Phụ thuộc: R8-WP2, R8-WP3.
   Track/file: F; game integration.
   Làm:
@@ -2292,7 +2292,36 @@ R8-WP4 — Integrate art, UI, feedback, accessibility và polish          [ ]
     - lint PLACEHOLDER, broken refs, unused asset/node/script.
   Verify: visual baselines nhiều resolution; keyboard/gamepad full flow; screenshot review.
   DoD: game trông có chủ đích, không phải demo kỹ thuật bằng ô màu.
-  LOG: (trống)
+  LOG:
+    LOG 2026-08-25 16:20 Asia/Saigon — agent=coordinator
+      Base: b48af77 polish Kho Bi An viewport, input, HUD.
+        Godot=4.7.1.stable.official.a13da4feb
+      Files/leases: godot/dogfood/kho-bi-an/{NOTICE,project,src,tests/run_polish},
+        tests/bootstrap/test_kho_bi_an_polish.py,
+        tests/bootstrap/test_kho_bi_an_graybox.py (harness unlock R8-WP2..WP6),
+        .hh-agent/evidence/01R8WP4PLZ00000000KBA00001/assumptions.md
+      Verify: python tests/bootstrap/test_kho_bi_an_polish.py → PASS
+        VISUAL=proven; INPUT=proven; REVIEW=proven
+        graybox still PASS (python tests/bootstrap/test_kho_bi_an_graybox.py)
+        pin=4.7.1-stable run_id=01R8WP4PLZ00000000KBA00001
+        win=relic_reached; path=start→key→door→relic→win
+      Honesty:
+        windowed Viewport.get_image is plan §7.3 verify, not G5 human dogfood
+        ColorRect Body nodes stay invisible colliders; sprites are children
+      Critic: II cfea5104 TICK yes;
+        HH 0af4a883 TICK no (leftover-0 flake after art_wired);
+        Tie-break dee1f8ac TICK yes — leftover-0 PASS not reproduced
+      Gaps: P1 leftover-0 flake can die after art_wired
+        (joy just_pressed / windowed SceneTree); not reproduced on tie-break
+        P1: 76,76,76 canary dead after indigo backdrop (1920 tiles still to edges)
+        P1: 1280 and 1920 same 16:9 crop; 854 tighter
+        P1: capture disables canvas_items stretch (player resize ≠ official zoom)
+        P1: PLACEHOLDER lint is exact token in src/ only
+        P1: hud_on_playfield is a gray-band bool
+        P1: copy_shots can overwrite PNGs if REVIEW later fails
+        P1: kill_kho_path_holders can miss a GUI child after PASS
+        G5 stays [ ]; GX stays [ ]; R8-WP5 not started
+      Commit: (this tick)
 
 R8-WP5 — Agent playtest, balance, save/load và bug bash                  [ ]
   Phụ thuộc: R8-WP4.
@@ -2606,7 +2635,7 @@ thuận nếu ảnh hưởng G5/G6.
 14. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Hiện tại R0 (4/4) + R1 (5/5, G1) + R2 (7/7) + R3 (8/8) + R4 (6/6, G2) + R5 (7/7) + R6 (7/7, G3) + R7 (6/6, G4) + R8 (3/6) đã xong qua R8-WP3. Agent tiếp theo làm **R8-WP4**.
+Hiện tại R0 (4/4) + R1 (5/5, G1) + R2 (7/7) + R3 (8/8) + R4 (6/6, G2) + R5 (7/7) + R6 (7/7, G3) + R7 (6/6, G4) + R8 (4/6) đã xong qua R8-WP4. Agent tiếp theo làm **R8-WP5**.
 KHÔNG vendor A/C as-is, KHÔNG M6, KHÔNG fork Godot. Do not claim the agent drives a full game.
 Gate G2 was signed 2026-08-22 with Alternatives (Play/Replay/overlay/placeholder). Do not hide those gaps.
 Gate G3 was signed 2026-08-23 auto (heuristic inspect gauntlet, not LLM repair).
@@ -2615,9 +2644,9 @@ Gate G5 stays [ ]. Do not start G5 human. Do not fake G5.
 
 Lệnh hợp lệ:
 
-  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R8-WP4`);
-  2) R8-WP4: integrate art, UI, feedback, accessibility và polish;
-     ColorRects stay until this WP replaces them; G5 stays [ ];
+  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R8-WP5`);
+  2) R8-WP5: agent playtest, balance, save/load và bug bash;
+     polish already closed; do not re-open WP4; G5 stays [ ];
   3) mở editor fixture: `hh-godot-editor.bat` (Godot 4.7.1-stable pin, minimal-2d);
   4) không copy hh_stock_poc; không npx -y; không bump 4.7.2; không raw-write
      .tscn; plugin is the only writer. Không paper-ACK play.start.
