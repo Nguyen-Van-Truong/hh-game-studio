@@ -303,3 +303,15 @@ addons / tests).
 Queued after remaining plan WPs (R9/G6): a new-folder game with Super
 Fighter (Y8) mechanics and original skins/maps. Original art only. No
 Y8 asset rip. Do not start that project in this closeout.
+
+## 2026-08-26 — R9-WP1 clean VM maps to G6 (không đổi spec)
+
+`decision_id: GODOT-R9-WP1-VM-2026-08-26`
+`status: residual-honesty`
+`plan_tick: R9-WP1 [x]; CURRENT_VALID_WP=R9-WP2; 57/60; G6 stays [ ]; R9-WP2 [ ]`
+
+AC-20 assigns Windows clean VM export to G6, not a WP1 deadlock.
+WP1 ticks on honest standalone export (exe + no bridge; official
+TEMPLATES/PRESET/EXPORT/SCAN proven). CLEAN_VM stays unproven;
+smoke ≠ VM. Critics II/HH TICK no because Verify names VM;
+tie-break TICK yes. No spec rewrite of G6.
