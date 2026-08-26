@@ -14,6 +14,7 @@ is `godot/plugin-project/r5w7/` (same `project.godot`). There is no second
 | [SBOM_BASELINE.md](SBOM_BASELINE.md) | Godot 4.7.1-stable, GUT 9.7.1, Node/TS pins, MCP candidate pins (R1-WP2). |
 | [../../PROJECT_BRIEF.template.md](../../PROJECT_BRIEF.template.md) | Brief schema (not the dogfood brief). |
 | [HOST.md](HOST.md) | R2-WP7: Agent Host session contract. Interactive IDE is the host; unattended uses `host/`. Sidecar never holds model keys. |
+| [INSTALL.md](INSTALL.md) | R9-WP2: current-user package/install/doctor/rollback. Unsigned internal. CLEAN_VM unproven. |
 | [../../.hh-agent/policy.example.toml](../../.hh-agent/policy.example.toml) | `OWNER_AUTOPILOT` + E1–E4 + jail + process allowlist. Deny includes `godot/plugin-project/addons/` and `res://addons/`. |
 
 Live policy is a **copy** to `.hh-agent/policy.toml` (gitignored). Tokens stay in

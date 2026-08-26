@@ -23,13 +23,19 @@ function bridgeMainJs(): string {
     return path.resolve(fromEnv);
   }
   const here = path.dirname(fileURLToPath(import.meta.url));
+  // Installed bundle: launcher/mcp_child.js lives next to ../sidecar/main.js.
+  // Do not require the git tree's ../../bridge/dist/main.js on that layout.
+  const bundled = path.resolve(here, "..", "sidecar", "main.js");
+  if (fs.existsSync(bundled)) {
+    return bundled;
+  }
   return path.resolve(here, "..", "..", "bridge", "dist", "main.js");
 }
 
 export function spawnMcpChild(opts: { projectRoot: string; logDir?: string }): McpChild {
   const main = bridgeMainJs();
   if (!fs.existsSync(main)) {
-    throw new HostError(E.E_PATH, "bridge dist/main.js missing (build the sidecar)", "mcp");
+    throw new HostError(E.E_PATH, "sidecar main.js missing (install bundle or build the sidecar)", "mcp");
   }
   const child: ChildProcessWithoutNullStreams = spawn(
     process.execPath,

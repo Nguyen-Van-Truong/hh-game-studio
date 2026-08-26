@@ -39,3 +39,23 @@ From repo root:
 Expected `--version`: `4.7.1.stable.official.a13da4feb`
 
 See `docs/VERSIONS_GODOT.md`.
+
+## Package / install / launch (R9-WP2)
+
+Business logic is Python (`package.py`, `install.py`, `launch.py`,
+`studio_bundle.py`). The `.ps1` files are thin wrappers.
+
+```powershell
+python tools/godot/package.py --out "$env:LOCALAPPDATA\HHGodotAgent\packages\hh-godot-agent"
+python tools/godot/install.py setup --from "$env:LOCALAPPDATA\HHGodotAgent\packages\hh-godot-agent" --project <user-project>
+python tools/godot/install.py doctor --project <user-project>
+python tools/godot/launch.py --project <user-project> --godot
+```
+
+Current-user only (`%LOCALAPPDATA%\HHGodotAgent\install`). No admin. Exact
+addon/sidecar/launcher + checksums + licenses. No online-latest bootstrap.
+Unsigned; signing is E3. Rollback keeps one previous version. Uninstall keeps
+the user project.
+
+Official verify: `python tests/bootstrap/test_package_install.py`
+(`CLEAN_VM=unproven`). Details: `docs/godot-agent/INSTALL.md`.
