@@ -281,3 +281,25 @@ not OS kill; `queue_free` can overlap two GameSessions; soak
 `process_frame` ≠ physics tick; soak often 0 wins; STUCK predetermined
 cells; VISUAL unique≥6 is a weak gate; p95 ~22–24 ms vs 16.67.
 Do not treat these as G5 or as a reason to untick WP5.
+
+## 2026-08-26 — G5 human accept (không đổi spec)
+
+`decision_id: GODOT-G5-HUMAN-2026-08-26`
+`status: human-accept`
+`plan_tick: R8-WP6 [x]; G5 [x]; CURRENT_VALID_WP=R9-WP1; 56/60; R9 [ ]; GX stays [ ]`
+
+Human wrote “Chấp nhận — game đạt” after play of Kho Bi An (~10 min /
+REVIEW_RUBRIC; `artifacts/kho-bi-an-review/KhoBiAn.exe` open). This is
+Gate G5. Not an agent play. Official
+`python tests/bootstrap/test_kho_bi_an_recreation.py` PASS with
+RECREATE/HASHES/CRITIC/RUBRIC unproven, EXPORT=proven, not_g5=1, then
+human. Critics II/HH TICK no until that human accept.
+
+Residuals stay in the R8-WP6 LOG (no spec rewrite): recreate is
+template/snapshot not brief compiler; exe sha drifts; harness
+critic/rubric unproven; export strip held (no hh_agent / HH_TOKEN /
+addons / tests).
+
+Queued after remaining plan WPs (R9/G6): a new-folder game with Super
+Fighter (Y8) mechanics and original skins/maps. Original art only. No
+Y8 asset rip. Do not start that project in this closeout.

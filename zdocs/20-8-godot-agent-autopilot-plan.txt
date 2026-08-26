@@ -1,6 +1,6 @@
 AUTHORITATIVE_PLAN=1
 STATUS=ACTIVE
-CURRENT_VALID_WP=R8-WP6
+CURRENT_VALID_WP=R9-WP1
 
 ================================================================================
 BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
@@ -16,7 +16,7 @@ BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
 | 5 | R5 — Bộ công cụ làm game 2D | TileMapLayer, animation, UI, audio, physics, navigation, shader/particles được agent thao tác đầy đủ | 2D-A + 2D-B + Assets | — | [x] 7/7 WP |
 | 6 | R6 — Agent tự chơi và tự kiểm | Play/debug, input, runtime state, deterministic step, screenshot/diff/perf, test evidence | Runtime + Test + Vision | G3 SELF-VERIFY | [x] 7/7 WP |
 | 7 | R7 — Autopilot dài hạn | Nhận brief một lần, tự plan→làm→test→sửa→commit→resume; nhiều agent không đạp nhau | Orchestrator + Git + Recovery | G4 AUTONOMY | [x] 6/6 WP |
-| 8 | R8 — Dogfood game thật | Từ project trống tạo game top-down 2D có art/audio/UI/save, người chỉ xem/review | Game + Art + QA song song theo DAG | G5 DOGFOOD | [ ] 5/6 WP |
+| 8 | R8 — Dogfood game thật | Từ project trống tạo game top-down 2D có art/audio/UI/save, người chỉ xem/review | Game + Art + QA song song theo DAG | G5 DOGFOOD | [x] 6/6 WP |
 | 9 | R9 — Export và vận hành | Windows build sạch, addon/sidecar đóng gói, update pin, tài liệu review | Release + Docs + Compatibility | G6 RELEASE | [ ] 0/4 WP |
 | 10 | RX — Ngoại lệ engine | Chỉ mở khi public API/GDExtension không giải được một capability bắt buộc | C++ patch riêng | GX FORK | [ ] khóa |
 
@@ -24,7 +24,7 @@ VIỆC PHẢI LÀM TRƯỚC: R0-WP1 → R0-WP2 → R0-WP3 → R0-WP4 → R1-WP1.
 Không được bắt đầu R2
 trước G1. Từ R2 trở đi chỉ song song các track có ranh giới file rõ ràng.
 
-Tiến độ tổng: [ ] 55/60 WP. First valid WP: R8-WP6.
+Tiến độ tổng: [ ] 56/60 WP. First valid WP: R9-WP1.
 Ngày lập: 20-8-2026 (Asia/Saigon).
 
 ================================================================================
@@ -628,7 +628,7 @@ single-writer queue dù code được viết song song.
   G2 VISIBLE     [x] người review 2026-08-22: selection/Inspector/timeline trên editor thật. Overlay cyan không chứng minh ảnh; Replay presentation-only; Play Alternative.
   G3 SELF-VERIFY [x] 2026-08-23 auto: gauntlet + critic, 8/8 × 3 clones, 0 false pass. Heuristic inspect (not LLM); animation seed is speed_scale, not SM transition.
   G4 AUTONOMY    [x] 2026-08-25 auto: official 90 zero-touch + critic O+P. --provider plan is keyword compiler+DAG (not LLM); TEST_GREEN=play-blob matches>=2 AND won=true; HOST=executor field after plugin_noop.
-  G5 DOGFOOD     [ ] người review chất lượng game; không làm hộ thao tác.
+  G5 DOGFOOD     [x] người review 2026-08-26: “Chấp nhận — game đạt”. Human played Kho Bi An ~10 min / REVIEW_RUBRIC (exe open). Official recreation PASS (EXPORT=proven; RECREATE/HASHES/CRITIC/RUBRIC unproven; not_g5=1 then human). Critics II/HH TICK no until human. Residuals in WP6 LOG. GX stays [ ].
   G6 RELEASE     [ ] auto kỹ thuật: clean VM/package/rollback; publish vẫn E3.
   GX FORK        [ ] chỉ người tick sau gap report; mặc định khóa vĩnh viễn.
 
@@ -2366,7 +2366,7 @@ R8-WP5 — Agent playtest, balance, save/load và bug bash                  [x]
         G5 stays [ ]; GX stays [ ]; R8-WP6 not started
       Commit: (this tick)
 
-R8-WP6 — Fresh-project recreation + human review Gate G5               [ ]
+R8-WP6 — Fresh-project recreation + human review Gate G5               [x]
   Phụ thuộc: R8-WP5.
   Track/file: F/Test/Product.
   Làm:
@@ -2376,7 +2376,33 @@ R8-WP6 — Fresh-project recreation + human review Gate G5               [ ]
     - nếu fail chất lượng, quay lại đúng WP, không mở R9 bằng checkbox test xanh.
   Verify: independent critic + người chơi 10 phút; artifact/version hashes reproducible.
   DoD/G5: người chấp nhận game đạt mục tiêu; không cần tự vào editor sửa hộ.
-  LOG: (trống)
+  LOG:
+    LOG 2026-08-26 14:00 Asia/Saigon — agent=coordinator
+      Base: 363055e Kho Bi An recreation package and review export.
+        Godot=4.7.1.stable.official.a13da4feb
+      Files/leases: godot/dogfood/kho-bi-an/{README,REVIEW_RUBRIC,KNOWN_ISSUES,
+        NOTICE,export_presets,project},
+        tests/bootstrap/test_kho_bi_an_recreation.py,
+        tools/godot/{recreate_kho_bi_an,kho_bi_an_fresh_sources}.py
+      Verify: python tests/bootstrap/test_kho_bi_an_recreation.py → PASS
+        RECREATE=unproven; HASHES=unproven; CRITIC=unproven; RUBRIC=unproven;
+        EXPORT=proven; HUMAN=unproven then human accept
+        pin=4.7.1-stable run_id=01R8WP6REC00000000KBA00001
+        path=start→key→door→relic→win; leftover_godot=0; not_g5=1
+        godot_wall_s=1.7 templates=4.7.1.stable sidecar=none
+      Honesty:
+        human wrote “Chấp nhận — game đạt” 2026-08-26 (REVIEW_RUBRIC / ~10 min)
+        this is G5; not an agent play; no invented play log
+        RECREATE is snapshot/template, not brief→game compiler
+        HASHES unproven (review exe sha drifts)
+        CRITIC/RUBRIC harness-unproven; human is the critic now
+        EXPORT strip held (no hh_agent / HH_TOKEN / addons / tests)
+      Critic: II 6d3e0a78 TICK no (HUMAN missing);
+        HH 6671c9ca TICK no (HUMAN missing);
+        human accept 2026-08-26 clears that blocker
+      Gaps: P2 residuals stay (divider/warden/p95; see KNOWN_ISSUES)
+        R9 not started; GX stays [ ]
+      Commit: (this tick)
 
 --------------------------------------------------------------------------------
 R9 — EXPORT, PHÂN PHỐI VÀ VẬN HÀNH (4 WP)
@@ -2666,18 +2692,18 @@ thuận nếu ảnh hưởng G5/G6.
 14. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Hiện tại R0 (4/4) + R1 (5/5, G1) + R2 (7/7) + R3 (8/8) + R4 (6/6, G2) + R5 (7/7) + R6 (7/7, G3) + R7 (6/6, G4) + R8 (5/6) đã xong qua R8-WP5. Agent tiếp theo làm **R8-WP6**.
+Hiện tại R0 (4/4) + R1 (5/5, G1) + R2 (7/7) + R3 (8/8) + R4 (6/6, G2) + R5 (7/7) + R6 (7/7, G3) + R7 (6/6, G4) + R8 (6/6, G5) đã xong qua R8-WP6. Agent tiếp theo làm **R9-WP1**.
 KHÔNG vendor A/C as-is, KHÔNG M6, KHÔNG fork Godot. Do not claim the agent drives a full game.
 Gate G2 was signed 2026-08-22 with Alternatives (Play/Replay/overlay/placeholder). Do not hide those gaps.
 Gate G3 was signed 2026-08-23 auto (heuristic inspect gauntlet, not LLM repair).
 Gate G4 was signed 2026-08-25 auto (official 90 zero-touch, --provider plan heuristic not LLM).
-Gate G5 stays [ ]. Do not start G5 human. Do not fake G5.
+Gate G5 was signed 2026-08-26 by the human (“Chấp nhận — game đạt”). Do not invent agent play. Do not start Superfighter. Do not tick GX.
 
 Lệnh hợp lệ:
 
-  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R8-WP6`);
-  2) R8-WP6: fresh-project recreation + human review Gate G5;
-     playtest already closed; do not re-open WP5; G5 stays [ ] until human;
+  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R9-WP1`);
+  2) R9-WP1: Export job/preset/validation và clean build;
+     G5 is human-signed; do not re-open WP6; do not start a Superfighter folder;
   3) mở editor fixture: `hh-godot-editor.bat` (Godot 4.7.1-stable pin, minimal-2d);
   4) không copy hh_stock_poc; không npx -y; không bump 4.7.2; không raw-write
      .tscn; plugin is the only writer. Không paper-ACK play.start.
