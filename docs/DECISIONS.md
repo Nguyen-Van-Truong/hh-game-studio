@@ -315,3 +315,17 @@ WP1 ticks on honest standalone export (exe + no bridge; official
 TEMPLATES/PRESET/EXPORT/SCAN proven). CLEAN_VM stays unproven;
 smoke ≠ VM. Critics II/HH TICK no because Verify names VM;
 tie-break TICK yes. No spec rewrite of G6.
+
+## 2026-08-26 — R9-WP2 does not map to AC-20 (không đổi spec)
+
+`decision_id: GODOT-R9-WP2-VM-2026-08-26`
+`status: residual-honesty`
+`plan_tick: R9-WP2 [x]; CURRENT_VALID_WP=R9-WP3; 58/60; G6 stays [ ]; R9-WP3 [ ]`
+
+G6 owns real clean VM. WP2 ticks on honest current-user install
+(INSTALL/CONNECT/MICROGAME/UNINSTALL/ROLLBACK/TAMPER proven). AC-20 is
+Windows clean-VM **export** (G6), not WP2. Official docs/harness must
+not say “VM is AC-20.” CLEAN_VM stays unproven on this Godot/Node
+machine. smoke ≠ VM. `not_g6=1`. Critics II/HH TICK no because Verify
+names VM; tie-break TICK yes. No fake VM. No G6 tick. No spec rewrite
+of G6.

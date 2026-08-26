@@ -1,6 +1,6 @@
 AUTHORITATIVE_PLAN=1
 STATUS=ACTIVE
-CURRENT_VALID_WP=R9-WP2
+CURRENT_VALID_WP=R9-WP3
 
 ================================================================================
 BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
@@ -17,14 +17,14 @@ BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
 | 6 | R6 — Agent tự chơi và tự kiểm | Play/debug, input, runtime state, deterministic step, screenshot/diff/perf, test evidence | Runtime + Test + Vision | G3 SELF-VERIFY | [x] 7/7 WP |
 | 7 | R7 — Autopilot dài hạn | Nhận brief một lần, tự plan→làm→test→sửa→commit→resume; nhiều agent không đạp nhau | Orchestrator + Git + Recovery | G4 AUTONOMY | [x] 6/6 WP |
 | 8 | R8 — Dogfood game thật | Từ project trống tạo game top-down 2D có art/audio/UI/save, người chỉ xem/review | Game + Art + QA song song theo DAG | G5 DOGFOOD | [x] 6/6 WP |
-| 9 | R9 — Export và vận hành | Windows build sạch, addon/sidecar đóng gói, update pin, tài liệu review | Release + Docs + Compatibility | G6 RELEASE | [ ] 1/4 WP |
+| 9 | R9 — Export và vận hành | Windows build sạch, addon/sidecar đóng gói, update pin, tài liệu review | Release + Docs + Compatibility | G6 RELEASE | [ ] 2/4 WP |
 | 10 | RX — Ngoại lệ engine | Chỉ mở khi public API/GDExtension không giải được một capability bắt buộc | C++ patch riêng | GX FORK | [ ] khóa |
 
 VIỆC PHẢI LÀM TRƯỚC: R0-WP1 → R0-WP2 → R0-WP3 → R0-WP4 → R1-WP1.
 Không được bắt đầu R2
 trước G1. Từ R2 trở đi chỉ song song các track có ranh giới file rõ ràng.
 
-Tiến độ tổng: [ ] 57/60 WP. First valid WP: R9-WP2.
+Tiến độ tổng: [ ] 58/60 WP. First valid WP: R9-WP3.
 Ngày lập: 20-8-2026 (Asia/Saigon).
 
 ================================================================================
@@ -2448,7 +2448,7 @@ R9-WP1 — Export job/preset/validation và clean build                    [x]
         G6 stays [ ]; R9-WP2 not started
       Commit: (this tick)
 
-R9-WP2 — Package addon + sidecar + doctor/installer                     [ ]
+R9-WP2 — Package addon + sidecar + doctor/installer                     [x]
   Phụ thuộc: R9-WP1.
   Track/file: G; release bundle/installer/docs.
   Làm:
@@ -2458,7 +2458,35 @@ R9-WP2 — Package addon + sidecar + doctor/installer                     [ ]
     - signing/publish là E3: unsigned internal build được, public release phải user cấp cert.
   Verify: clean VM install/connect/create microgame/uninstall/rollback; tampered hash reject.
   DoD: setup không yêu cầu người copy nhiều folder/config thủ công.
-  LOG: (trống)
+  LOG:
+    LOG 2026-08-26 16:05 Asia/Saigon — agent=coordinator
+      Base: 3b1f6ef package addon sidecar doctor and current-user install.
+        Godot=4.7.1.stable.official.a13da4feb
+      Files/leases: tests/bootstrap/test_package_install.py,
+        tools/godot/{package,install,launch,studio_bundle}.py + .ps1 wrappers,
+        docs/godot-agent/INSTALL.md, host/src/mcp_child.ts
+      Verify: python tests/bootstrap/test_package_install.py → PASS
+        INSTALL=proven; CONNECT=proven; MICROGAME=proven;
+        UNINSTALL=proven; ROLLBACK=proven; TAMPER=proven;
+        CLEAN_VM=unproven
+        pin=4.7.1-stable
+        sidecar-bytes tamper REJECT; leftover_godot=0; not_g6=1
+      Honesty:
+        Official PASS; CLEAN_VM=unproven; smoke≠VM
+        Tie-break TICK yes after II/HH TICK no
+      Critic: II b94770d8 TICK no;
+        HH 0be3149f TICK no;
+        tie-break 2c678e4e TICK yes
+      Gaps: P1:
+        unsigned checksums.txt rewrite (E3);
+        doctor --install network;
+        rollback keeps v2;
+        Node 24.10 vs 24.19;
+        MICROGAME never Play;
+        launcher repo fallback;
+        studio-install.json leftover pointer
+        G6 stays [ ]; R9-WP3 not started
+      Commit: (this tick)
 
 R9-WP3 — Compatibility/update matrix                                   [ ]
   Phụ thuộc: R9-WP2.
@@ -2720,7 +2748,7 @@ thuận nếu ảnh hưởng G5/G6.
 14. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Hiện tại R0 (4/4) + R1 (5/5, G1) + R2 (7/7) + R3 (8/8) + R4 (6/6, G2) + R5 (7/7) + R6 (7/7, G3) + R7 (6/6, G4) + R8 (6/6, G5) + R9 (1/4) đã xong qua R9-WP1. Agent tiếp theo làm **R9-WP2**.
+Hiện tại R0 (4/4) + R1 (5/5, G1) + R2 (7/7) + R3 (8/8) + R4 (6/6, G2) + R5 (7/7) + R6 (7/7, G3) + R7 (6/6, G4) + R8 (6/6, G5) + R9 (2/4) đã xong qua R9-WP2. Agent tiếp theo làm **R9-WP3**.
 KHÔNG vendor A/C as-is, KHÔNG M6, KHÔNG fork Godot. Do not claim the agent drives a full game.
 Gate G2 was signed 2026-08-22 with Alternatives (Play/Replay/overlay/placeholder). Do not hide those gaps.
 Gate G3 was signed 2026-08-23 auto (heuristic inspect gauntlet, not LLM repair).
@@ -2729,10 +2757,10 @@ Gate G5 was signed 2026-08-26 by the human (“Chấp nhận — game đạt”)
 
 Lệnh hợp lệ:
 
-  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R9-WP2`);
-  2) R9-WP2: Package addon + sidecar + doctor/installer;
-     WP1 ticked on honest export (CLEAN_VM=unproven; AC-20/G6 owns real VM);
-     do not re-open WP1; do not start a Superfighter folder; G6 stays [ ];
+  1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R9-WP3`);
+  2) R9-WP3: Compatibility/update matrix;
+     WP2 ticked on honest install (CLEAN_VM=unproven; AC-20/G6 owns real VM);
+     do not re-open WP2; do not start a Superfighter folder; G6 stays [ ];
   3) mở editor fixture: `hh-godot-editor.bat` (Godot 4.7.1-stable pin, minimal-2d);
   4) không copy hh_stock_poc; không npx -y; không bump 4.7.2; không raw-write
      .tscn; plugin is the only writer. Không paper-ACK play.start.
