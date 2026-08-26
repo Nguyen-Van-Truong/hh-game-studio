@@ -181,10 +181,52 @@ export function isLockedProjectRel(rel: string): boolean {
   return false;
 }
 
+export function jailExportOutDir(
+  candidate: string,
+  repoRoot?: string,
+  opts: { maxPathChars?: number } = {},
+): JailResult {
+  const maxChars = opts.maxPathChars ?? DEFAULT_MAX_PATH_CHARS;
+  if (!candidate || typeof candidate !== "string") {
+    return fail("export out_dir required", String(candidate ?? ""));
+  }
+  if (candidate.includes("\0") || hasDotdot(candidate) || hasNtfsStream(candidate) || hasReservedDevice(candidate)) {
+    return fail("export out_dir fails A8 path rules", candidate);
+  }
+  if (candidate.length > maxChars) {
+    return fail("export out_dir too long", candidate);
+  }
+  const resolved = stripLongPathPrefix(path.resolve(candidate));
+  const { base, rest } = existingPrefix(resolved);
+  let realBase: string;
+  try {
+    realBase = stripLongPathPrefix(fs.realpathSync.native(base));
+  } catch {
+    realBase = stripLongPathPrefix(path.resolve(base));
+  }
+  const combined = rest ? path.resolve(realBase, rest) : realBase;
+  const local = process.env.LOCALAPPDATA ?? "";
+  const allowed: string[] = [];
+  if (local) {
+    allowed.push(path.resolve(local, "HHGodotAgent", "exports"));
+  }
+  if (repoRoot) {
+    allowed.push(path.resolve(repoRoot, "artifacts"));
+  }
+  const okRoot = allowed.some((root) => {
+    const relTo = path.relative(root, combined);
+    return relTo === "" || (!relTo.startsWith("..") && !path.isAbsolute(relTo));
+  });
+  if (!okRoot) {
+    return fail("export out_dir is not allowlisted", candidate);
+  }
+  return { ok: true, abs: combined, rel: posixish(path.basename(combined)) };
+}
+
 export function jailProjectPath(
   projectRoot: string,
   candidate: string,
-  opts: { maxPathChars?: number; forWrite?: boolean; allowProjectGodot?: boolean } = {},
+  opts: { maxPathChars?: number; forWrite?: boolean; allowProjectGodot?: boolean; allowExportPresets?: boolean } = {},
 ): JailResult {
   const maxChars = opts.maxPathChars ?? DEFAULT_MAX_PATH_CHARS;
   if (!candidate || typeof candidate !== "string") {
@@ -234,7 +276,10 @@ export function jailProjectPath(
   const relPosix = posixish(relToRoot);
   if (opts.forWrite !== false && isLockedProjectRel(relPosix)) {
     const name = relPosix.split("/").pop() ?? "";
-    if (!(opts.allowProjectGodot === true && name === "project.godot")) {
+    if (
+      !(opts.allowProjectGodot === true && name === "project.godot") &&
+      !(opts.allowExportPresets === true && name === "export_presets.cfg")
+    ) {
       return fail("generic write/delete is locked for this path", candidate, E.E_PATH);
     }
   }
@@ -260,9 +305,16 @@ export function extractTargetPaths(params: Record<string, unknown>, actionId?: s
     actionId === "job.cancel" ||
     actionId === "job.wait" ||
     actionId === "job.status" ||
-    actionId === "job.compact"
+    actionId === "job.compact" ||
+    actionId === "export.build" ||
+    actionId === "export.cancel" ||
+    actionId === "export.validate" ||
+    actionId === "export.artifacts"
   ) {
     return [];
+  }
+  if (actionId === "export.preset") {
+    return ["res://export_presets.cfg"];
   }
   if (actionId === "job.schedule") {
     const p = typeof params.path === "string" && params.path.length > 0 ? params.path : "";

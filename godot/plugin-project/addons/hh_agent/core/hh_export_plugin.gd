@@ -55,4 +55,16 @@ func _should_skip(path: String) -> bool:
 		return true
 	if p.contains("/r7w6/") or p.contains("r7w6/"):
 		return true
+	if p.contains("token") or p.contains("HH_TOKEN"):
+		return true
+	if p.contains("evidence"):
+		return true
+	if p.contains("audit") or p.contains("contact_sheet"):
+		return true
+	if p.contains("/tests/") or p.contains("tests/"):
+		return true
+	if p.contains("sidecar") or p.contains("/bridge/") or p.contains("/host/"):
+		return true
+	if p.contains("probe"):
+		return true
 	return false

@@ -41,7 +41,7 @@ export { openLedger } from "./ledger/store.js";
 export { executeCommand } from "./ledger/execute.js";
 export { ledgerFilePath } from "./ledger/paths.js";
 export { runMutationGate } from "./policy/engine.js";
-export { jailProjectPath } from "./policy/jail.js";
+export { jailProjectPath, jailExportOutDir } from "./policy/jail.js";
 export { PauseGate } from "./policy/pause.js";
 export { DEFAULT_POLICY, normalizePolicy } from "./policy/profiles.js";
 export { ApprovalBinder, approvalToken } from "./policy/approve.js";

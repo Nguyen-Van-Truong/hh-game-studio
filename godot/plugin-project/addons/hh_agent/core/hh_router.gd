@@ -30,6 +30,7 @@ const _PlanScript: GDScript = preload("res://addons/hh_agent/core/hh_plan_adapte
 const _OrchScript: GDScript = preload("res://addons/hh_agent/core/hh_orchestrator_adapter.gd")
 const _SoakScript: GDScript = preload("res://addons/hh_agent/core/hh_soak_adapter.gd")
 const _MultiAgentScript: GDScript = preload("res://addons/hh_agent/core/hh_multi_agent_adapter.gd")
+const _ExportScript: GDScript = preload("res://addons/hh_agent/core/hh_export_adapter.gd")
 const _PresenterScript: GDScript = preload("res://addons/hh_agent/core/hh_presenter.gd")
 const _OverlayScript: GDScript = preload("res://addons/hh_agent/ui/overlay/hh_overlay.gd")
 const _SchedulerScript: GDScript = preload("res://addons/hh_agent/core/hh_scheduler.gd")
@@ -63,6 +64,7 @@ var _plan_local: HHAgentPlanAdapter = HHAgentPlanAdapter.new()
 var _orch_local: HHAgentOrchestratorAdapter = HHAgentOrchestratorAdapter.new()
 var _soak_local: HHAgentSoakAdapter = HHAgentSoakAdapter.new()
 var _multi_agent_local = _MultiAgentScript.new()
+var _export_local: HHAgentExportAdapter = HHAgentExportAdapter.new()
 var _presenter: HHAgentPresenter = HHAgentPresenter.new()
 var _overlay_local: HHAgentOverlay = HHAgentOverlay.new()
 var _scheduler_local: HHAgentScheduler = HHAgentScheduler.new()
@@ -206,6 +208,8 @@ func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_ga
 		result = _repair().handle(command_id, method, action, params, actions, pre)
 	elif method == "godot.test" and _test().handles(action):
 		result = _test().handle(command_id, method, action, params, actions, pre)
+	elif method == "godot.export" and _export().handles(action):
+		result = _export().handle(command_id, method, action, params, actions, pre)
 	elif method == "godot.input":
 		result = _input_apply(command_id, action, params, actions)
 	elif method == "godot.runtime" and (action == "freeze" or action == "step"):
@@ -736,6 +740,13 @@ func _soak() -> HHAgentSoakAdapter:
 
 func _multi_agent():
 	return _multi_agent_local
+
+
+func _export() -> HHAgentExportAdapter:
+	var live: HHAgentExportAdapter = HHAgentExportAdapter.current()
+	if live != null:
+		return live
+	return _export_local
 
 
 func _overlay() -> HHAgentOverlay:

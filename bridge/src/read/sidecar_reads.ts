@@ -19,6 +19,7 @@ import { playJob, playJobs } from "../ledger/play_session.js";
 import { listJobs, statusJob } from "../orchestrator/machine.js";
 import { listSchedJobs, statusSchedJob } from "../scheduler/machine.js";
 import { listSoakJobs, statusSoakJob } from "../soak/machine.js";
+import { handleExportAction } from "../export/job.js";
 
 export interface SidecarReadInput {
   actionId: string;
@@ -34,6 +35,8 @@ const SIDECAR_ONLY = new Set([
   "git.status",
   "git.diff",
   "job.list",
+  "export.validate",
+  "export.artifacts",
 ]);
 
 function ok(
@@ -341,6 +344,18 @@ export function trySidecarRead(input: SidecarReadInput): PluginCommandResult | u
       }
       return ok(commandId, "describe_kind_payload_present", { kind: "version", ...after });
     }
+  }
+  if (actionId === "export.validate" || actionId === "export.artifacts") {
+    return handleExportAction(
+      actionId,
+      {
+        projectRoot,
+        commandId,
+        now: Date.now(),
+        paused: input.pause?.isPaused() === true,
+      },
+      params,
+    );
   }
   return undefined;
 }

@@ -129,6 +129,9 @@ export const TRANSACTION_APPLY = ["job.transaction"] as const;
 /** Orchestrator job.run / cancel / wait. Plugin when live; sidecar when plugin is down. */
 export const ORCHESTRATOR_APPLY = ["job.run", "job.cancel", "job.wait"] as const;
 
+/** Export job. Plugin accepts; sidecar/export_job.py supervises Godot CLI. */
+export const EXPORT_APPLY = ["export.preset", "export.build", "export.cancel"] as const;
+
 export const NODE_UID_AFTER = [
   "node.add",
   "node.rename",
@@ -235,6 +238,10 @@ export function isTransactionApply(actionId: string): boolean {
 
 export function isOrchestratorApply(actionId: string): boolean {
   return (ORCHESTRATOR_APPLY as readonly string[]).includes(actionId);
+}
+
+export function isExportApply(actionId: string): boolean {
+  return (EXPORT_APPLY as readonly string[]).includes(actionId);
 }
 
 export function isProvenEditorApply(actionId: string): boolean {

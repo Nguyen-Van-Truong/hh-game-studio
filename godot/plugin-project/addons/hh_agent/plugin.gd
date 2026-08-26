@@ -28,6 +28,7 @@ const _OrchScript: GDScript = preload("res://addons/hh_agent/core/hh_orchestrato
 const _SoakScript: GDScript = preload("res://addons/hh_agent/core/hh_soak_adapter.gd")
 const _MultiAgentScript: GDScript = preload("res://addons/hh_agent/core/hh_multi_agent_adapter.gd")
 const _ExportScript: GDScript = preload("res://addons/hh_agent/core/hh_export_plugin.gd")
+const _ExportAdapterScript: GDScript = preload("res://addons/hh_agent/core/hh_export_adapter.gd")
 
 ## hh_agent EditorPlugin: main-thread router + activity/review docks + outbound sidecar client.
 ## Disable/reload must not leak sockets, signals, docks, or timers.
@@ -60,6 +61,8 @@ var _play_wait: Dictionary = {}
 var _runtime: HHAgentRuntimeAdapter
 var _runtime_debugger: EditorDebuggerPlugin
 var _export_plugin: EditorExportPlugin
+var _export: HHAgentExportAdapter
+var _export_wait: Dictionary = {}
 var _runtime_wait: Dictionary = {}
 var _test: HHAgentTestAdapter
 var _test_wait: Dictionary = {}
@@ -104,6 +107,8 @@ func _enter_tree() -> void:
 	)
 	_runtime = HHAgentRuntimeAdapter.new()
 	_runtime.attach()
+	_export = HHAgentExportAdapter.new()
+	_export.attach()
 	_test = HHAgentTestAdapter.new()
 	_test.attach()
 	_repair = HHAgentRepairAdapter.new()
@@ -171,6 +176,8 @@ func _process(_delta: float) -> void:
 		_poll_test_wait()
 	if not _repair_wait.is_empty():
 		_poll_repair_wait()
+	if not _export_wait.is_empty():
+		_poll_export_wait()
 	var inbound_this_frame: bool = false
 	if not _busy:
 		var n: int = 0
@@ -188,6 +195,7 @@ func _process(_delta: float) -> void:
 				or not _runtime_wait.is_empty()
 				or not _test_wait.is_empty()
 				or not _repair_wait.is_empty()
+				or not _export_wait.is_empty()
 			):
 				break
 			_busy = false
@@ -333,6 +341,9 @@ func _handle_item(item: Dictionary) -> void:
 	if result.get("_hh_repair_pending", false) == true:
 		_repair_wait = {"item": item, "command_id": str(result.get("command_id", ""))}
 		return
+	if result.get("_hh_export_pending", false) == true:
+		_export_wait = {"item": item, "command_id": str(result.get("command_id", ""))}
+		return
 	_finish_item(item, result)
 
 
@@ -425,6 +436,31 @@ func _finish_repair_wait(result: Dictionary) -> void:
 	var item_v: Variant = _repair_wait.get("item", {})
 	var item: Dictionary = item_v if item_v is Dictionary else {}
 	_repair_wait = {}
+	_busy = false
+	_finish_item(item, result)
+
+
+func _poll_export_wait() -> void:
+	if _export == null:
+		_finish_export_wait(
+			_errors.fail(
+				str(_export_wait.get("command_id", "")),
+				HHAgentErrors.E_UNVERIFIED,
+				"export adapter gone",
+				"export",
+			)
+		)
+		return
+	var result: Dictionary = _export.poll_pending()
+	if result.is_empty() or result.get("_hh_export_pending", false) == true:
+		return
+	_finish_export_wait(result)
+
+
+func _finish_export_wait(result: Dictionary) -> void:
+	var item_v: Variant = _export_wait.get("item", {})
+	var item: Dictionary = item_v if item_v is Dictionary else {}
+	_export_wait = {}
 	_busy = false
 	_finish_item(item, result)
 
@@ -908,6 +944,10 @@ func _cleanup() -> void:
 	if _export_plugin != null:
 		remove_export_plugin(_export_plugin)
 		_export_plugin = null
+	if _export != null:
+		_export.shutdown()
+		_export = null
+	_export_wait = {}
 	if _runtime != null:
 		_runtime.shutdown()
 		_runtime = null

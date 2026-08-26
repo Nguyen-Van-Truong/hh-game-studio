@@ -111,7 +111,7 @@ func handle(
 	if method == "godot.test":
 		return _test_read(command_id, action, params, post)
 	if method == "godot.export":
-		return _unverified(command_id, "%s read is not proven in R2-WP6" % method)
+		return _export_read(command_id, action, params, post)
 	if method == "godot.animation" and action == "preview":
 		return _animation.handle(command_id, method, action, params, actions, {})
 	if method == "godot.editor":
@@ -162,6 +162,8 @@ func _post_name(def: Dictionary, method: String, action: String) -> String:
 			"play.logs": "play_logs_returned",
 			"test.report": "test_report_present",
 			"test.evidence": "evidence_index_present",
+			"export.validate": "export_preset_valid",
+			"export.artifacts": "export_artifact_list",
 			"runtime.tree": "remote_tree_snapshot",
 			"runtime.node": "remote_node_snapshot",
 			"runtime.state": "runtime_state_keys_present",
@@ -1269,6 +1271,18 @@ func _test_read(command_id: String, action: String, params: Dictionary, _post: S
 	if live == null:
 		live = HHAgentTestAdapter.new()
 	return live.handle(command_id, "godot.test", action, params, HHAgentActions.new(), {})
+
+
+func _export_read(command_id: String, action: String, params: Dictionary, _post: String) -> Dictionary:
+	if action != "validate" and action != "artifacts":
+		return _unverified(command_id, "export.%s is not a read; use the export apply adapter" % action)
+	var live: HHAgentExportAdapter = HHAgentExportAdapter.current()
+	if live == null:
+		live = HHAgentExportAdapter.new()
+	var actions: HHAgentActions = HHAgentActions.new()
+	if not actions.loaded:
+		actions.load_from_res()
+	return live.handle(command_id, "godot.export", action, params, actions, {})
 
 
 func _tilemap_query(command_id: String, params: Dictionary, post: String) -> Dictionary:

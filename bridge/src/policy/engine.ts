@@ -86,6 +86,7 @@ export function runMutationGate(input: GateInput): GateResult {
     const result = jailProjectPath(services.projectRoot, target, {
       forWrite: true,
       allowProjectGodot: isProjectSettingsAction(input.actionId),
+      allowExportPresets: input.actionId === "export.preset",
     });
     if (!result.ok) {
       return { ok: false, error: result.error };

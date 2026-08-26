@@ -23,8 +23,9 @@ go back to the named WP. Do not open R9 on green checkboxes.
   is agent verify, not a player-facing control.
 - ColorRect Body nodes stay as invisible colliders; sprites
   are children. That is legal polish, not a color-rect release.
-- Windows review export is a dogfood review build. Clean-VM
-  ship without editor/Node/addon/token is R9 after G5.
+- Windows review export is a dogfood review build. R9-WP1
+  ships a clean-VM exe without editor/Node/addon/token;
+  G6 is still open.
 
 ## Win flag
 

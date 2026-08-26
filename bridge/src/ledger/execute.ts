@@ -48,12 +48,14 @@ import {
   isRuntimeApply,
   isTestApply,
   isOrchestratorApply,
+  isExportApply,
   mutationNeedsDiskHash,
   nodeNeedsUidAfter,
   sceneNeedsDiskHash,
 } from "./scene_lifecycle.js";
 import { notePlayAfter } from "./play_session.js";
 import { handleOrchAction } from "../orchestrator/machine.js";
+import { handleExportAction } from "../export/job.js";
 import { handleScheduleAction } from "../scheduler/machine.js";
 import { handleSoakAction } from "../soak/machine.js";
 import { lookupSoakCached, rememberSoakResult } from "../soak/store.js";
@@ -345,6 +347,7 @@ function classify(raw: Record<string, unknown>, commandId: string): Classified {
     isRuntimeApply(accepted.action_id) ||
     isTestApply(accepted.action_id) ||
     isOrchestratorApply(accepted.action_id) ||
+    isExportApply(accepted.action_id) ||
     accepted.action_id === "editor.pause"
   ) {
     return {
@@ -357,7 +360,8 @@ function classify(raw: Record<string, unknown>, commandId: string): Classified {
         isInputApply(accepted.action_id) ||
         isRuntimeApply(accepted.action_id) ||
         isTestApply(accepted.action_id) ||
-        isOrchestratorApply(accepted.action_id)
+        isOrchestratorApply(accepted.action_id) ||
+        isExportApply(accepted.action_id)
           ? 120_000
           : 15_000),
     };
@@ -2071,6 +2075,7 @@ async function applyMutateOnce(
     !isRuntimeApply(classified.actionId) &&
     !isTestApply(classified.actionId) &&
     !isOrchestratorApply(classified.actionId) &&
+    !isExportApply(classified.actionId) &&
     !(classified.actionId === "editor.pause" && !runtime.pluginConnected())
   ) {
     return markUncertain(ledger, row, "only proven editor apply verbs may apply");
@@ -2128,6 +2133,17 @@ async function applyMutateOnce(
     }
     if (isOrchestratorApply(classified.actionId) && !runtime.pluginConnected()) {
       return finishSidecarOrchestrator(
+        ledger,
+        row,
+        classified.actionId,
+        fields.params,
+        projectRoot,
+        gated,
+        runtime.policy,
+      );
+    }
+    if (isExportApply(classified.actionId) && !runtime.pluginConnected()) {
+      return finishSidecarExport(
         ledger,
         row,
         classified.actionId,
@@ -2235,6 +2251,8 @@ async function applyMutateOnce(
                       ? "test"
                     : isOrchestratorApply(classified.actionId)
                       ? "orchestrator"
+                    : isExportApply(classified.actionId)
+                      ? "export"
                     : "node",
       action_id: classified.actionId,
       checks: result.postcondition.checks,
@@ -2527,6 +2545,70 @@ function finishSidecarOrchestrator(
   }
   if (!isReadVerified(result.postcondition, actionId)) {
     const failed = unverifiedResult(row.command_id, "orchestrator postcondition failed");
+    persistResult(row, failed);
+    saveState(ledger, row, "failed");
+    return failed;
+  }
+  saveState(ledger, row, "verified");
+  saveState(ledger, row, "committed_durable");
+  return result;
+}
+
+function finishSidecarExport(
+  ledger: CommandLedger,
+  row: CommandRow,
+  actionId: string,
+  params: Record<string, unknown>,
+  projectRoot: string,
+  gated: Extract<GateResult, { ok: true }>,
+  policy?: PolicyServices,
+): PluginCommandResult {
+  saveState(ledger, row, "applying", {
+    before_summary: JSON.stringify({
+      kind: "export",
+      action_id: actionId,
+      ...(gated.checkpoint ? { checkpoint_id: gated.checkpoint.checkpoint_id } : {}),
+    }),
+    side_effect: actionId === "export.cancel" ? "destructive" : "external",
+    action_id: actionId,
+  });
+  row.dispatch_attempted = 1;
+  row.updated_at = nowIso();
+  ledger.save(row);
+  const result = handleExportAction(
+    actionId,
+    {
+      projectRoot,
+      commandId: row.command_id,
+      now: Date.now(),
+      paused: policy?.pause.isPaused() === true,
+    },
+    params,
+  );
+  if (gated.checkpoint) {
+    mergeAfter(result, checkpointEvidence(gated.checkpoint));
+    row.evidence_json = JSON.stringify([gated.checkpoint.manifest_path]);
+    ledger.addCheckpoint(
+      gated.checkpoint.checkpoint_id,
+      [gated.checkpoint.manifest_path],
+      row.command_id,
+    );
+  }
+  row.apply_count = 1;
+  persistResult(row, result);
+  row.after_summary = JSON.stringify({
+    kind: "export",
+    action_id: actionId,
+    checks: result.postcondition.checks,
+    ...(gated.checkpoint ? { checkpoint_id: gated.checkpoint.checkpoint_id } : {}),
+  });
+  saveState(ledger, row, "applied_volatile");
+  if (!result.ok) {
+    saveState(ledger, row, "failed");
+    return result;
+  }
+  if (!isReadVerified(result.postcondition, actionId)) {
+    const failed = unverifiedResult(row.command_id, "export postcondition failed");
     persistResult(row, failed);
     saveState(ledger, row, "failed");
     return failed;
