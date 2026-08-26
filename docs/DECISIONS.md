@@ -329,3 +329,16 @@ not say “VM is AC-20.” CLEAN_VM stays unproven on this Godot/Node
 machine. smoke ≠ VM. `not_g6=1`. Critics II/HH TICK no because Verify
 names VM; tie-break TICK yes. No fake VM. No G6 tick. No spec rewrite
 of G6.
+
+## 2026-08-26 — R9-WP3 pin unchanged (không đổi spec)
+
+`decision_id: GODOT-R9-WP3-COMPAT-2026-08-26`
+`status: residual-honesty`
+`plan_tick: R9-WP3 [x]; CURRENT_VALID_WP=R9-WP4; 59/60; G6 stays [ ]; R9-WP4 [ ]`
+
+WP3 ticks on honest compatibility lock migrate/downgrade/broken-API
+(OLD_LOCK/NEW_LOCK/DOWNGRADE/MIGRATE/BROKEN_API proven). Pin stays
+4.7.1-stable / a13da4feb. Probe is non-blocking. CLEAN_VM stays
+unproven on this Godot/Node machine. `not_g6=1`. Critics II/HH TICK no
+(flake); tie-break TICK yes after leftover-0 official PASS. No G6
+tick. No spec rewrite of G6. R9-WP4 not started.
