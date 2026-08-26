@@ -5,6 +5,9 @@ third-party sprites or sound packs are shipped. No remote imagegen.
 Live tiles use `res://assets/tiles/tileset_vault.png`. ColorRect
 Body nodes stay as invisible colliders; sprites are children.
 Relic-reached is the only win. G5 is not claimed.
+R8-WP6 adds a review package (README, rubric, known issues)
+and a Windows Desktop export preset with strip filters.
+That package is not a human dogfood signature.
 
 - Game code: original, this repository
 - Tiles, actors, items, door, VFX, UI icon, SFX, music: original
