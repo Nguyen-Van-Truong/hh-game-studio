@@ -1,0 +1,49 @@
+{
+  "schema": "hh-godot-compat-matrix/1",
+  "wp": "R9-WP3",
+  "auto_apply": false,
+  "mid_session_apply": false,
+  "probe_latest": "non-blocking",
+  "probe_approved_default": false,
+  "version_mismatch": "Observe/Doctor only",
+  "clean_vm": "unproven",
+  "provider": "plan",
+  "pin": {
+    "godot_tag": "4.7.1-stable",
+    "godot_version_id": "4.7.1.stable.official.a13da4feb",
+    "godot_commit_full": "a13da4feb8d8aefc283c3763d33a2f170a18d541",
+    "node": "24.19.0",
+    "protocol": "hh-godot-agent/1",
+    "registry": "hh-godot-actions/1",
+    "mcp_vendor": "none",
+    "patch_queue": "do-not-patch-vendor",
+    "update_cadence": "none"
+  },
+  "required_suites_before_patch_or_minor": [
+    {
+      "id": "contract",
+      "command": "python tests/bootstrap/test_registry.py"
+    },
+    {
+      "id": "e2e",
+      "command": "python tests/bootstrap/test_scene_lifecycle.py"
+    },
+    {
+      "id": "visible",
+      "command": "python tests/bootstrap/test_visible_e2e.py"
+    },
+    {
+      "id": "headless",
+      "command": "godot --headless --path <migration-copy> --quit"
+    },
+    {
+      "id": "export",
+      "command": "python tests/bootstrap/test_export_clean_build.py"
+    }
+  ],
+  "mcp_sync": {
+    "review": ["diff", "license", "security", "schema"],
+    "reapply": "minimal patch queue only; current queue is do-not-patch-vendor",
+    "vendor_source": false
+  }
+}

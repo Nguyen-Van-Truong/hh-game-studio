@@ -15,6 +15,7 @@ const _ReviewDockScript: GDScript = preload("res://addons/hh_agent/ui/review/hh_
 const _ActivityDockScript: GDScript = preload("res://addons/hh_agent/ui/health/hh_activity_dock.gd")
 const _AnimationScript: GDScript = preload("res://addons/hh_agent/core/hh_animation_adapter.gd")
 const _UiScript: GDScript = preload("res://addons/hh_agent/core/hh_ui_adapter.gd")
+const _CompatScript: GDScript = preload("res://addons/hh_agent/core/hh_compat.gd")
 
 ## Main-thread read/view adapters. Mutate is never applied here.
 
@@ -437,9 +438,13 @@ func _project_doctor(command_id: String, post: String) -> Dictionary:
 		"plugin": HHAgentConstants.PLUGIN_VERSION,
 		"hh_agent_enabled": _plugin_enabled(),
 		"source": "editor",
+		"lock": HHAgentCompat.lock_summary(),
 	}
 	if not match_pin:
 		return _skew(command_id, "Godot %s != pin %s" % [observed, HHAgentConstants.PINNED_GODOT])
+	var skew_reason: String = HHAgentCompat.observe_only_reason()
+	if not skew_reason.is_empty():
+		return _errors.fail(command_id, HHAgentErrors.E_VERSION_SKEW, skew_reason, "capability-lock")
 	return _ok(command_id, post, after)
 
 

@@ -8,6 +8,7 @@ import { peekGitCkptFilePaths } from "./git_ckpt_paths.js";
 import { extractTargetPaths, jailProjectPath, type JailOk } from "./jail.js";
 import { LeaseTable } from "./leases.js";
 import { PauseGate } from "./pause.js";
+import { observeOnlyReason } from "./compat_lock.js";
 import { denyProfile, isMutatingSideEffect } from "./profiles.js";
 
 export interface PolicyServices {
@@ -58,6 +59,15 @@ export function runMutationGate(input: GateInput): GateResult {
       ok: false,
       error: typedError(E.E_PAUSED, "mutation gate is paused", "pause"),
     };
+  }
+  if (services && !pauseControl && isMutatingSideEffect(input.sideEffect)) {
+    const skew = observeOnlyReason(services.projectRoot);
+    if (skew) {
+      return {
+        ok: false,
+        error: typedError(E.E_VERSION_SKEW, skew, "capability-lock"),
+      };
+    }
   }
   const denied = denyProfile(
     input.policy,

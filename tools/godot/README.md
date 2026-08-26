@@ -59,3 +59,18 @@ the user project.
 
 Official verify: `python tests/bootstrap/test_package_install.py`
 (`CLEAN_VM=unproven`). Details: `docs/godot-agent/INSTALL.md`.
+
+## Compatibility / update matrix (R9-WP3)
+
+`compat.py` keeps the exact 4.7.1-stable pin. Probe of a newer stable is
+non-blocking and never applied. Capability-lock migration copies the
+project first; downgrade restores the old lock. Version mismatch is
+Observe/Doctor only. `--provider plan` stays. CLEAN_VM stays unproven.
+
+```powershell
+python tools/godot/compat.py probe
+python tools/godot/compat.py mcp-sync
+python tests/bootstrap/test_compat_update.py
+```
+
+Playbook: `docs/godot-agent/COMPATIBILITY.md`.

@@ -4,6 +4,7 @@ extends RefCounted
 ## Protocol and plugin constants. No secrets.
 
 const PROTOCOL: String = "hh-godot-agent/1"
+const SCHEMA_VERSION: String = "hh-godot-actions/1"
 const ACTION_VERSION: String = "1"
 const PLUGIN_ID: String = "hh_agent"
 const PLUGIN_VERSION: String = "0.4.0"

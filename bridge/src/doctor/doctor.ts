@@ -8,6 +8,7 @@ import { PROTOCOL, REGISTRY_VERSION } from "../registry/types.js";
 import { publicDescriptorView, readDescriptor, type SessionDescriptor } from "../session/descriptor.js";
 import { agentHome, descriptorPath, isUnderAgentHome } from "../session/paths.js";
 import { pidAlive } from "../session/supervisor.js";
+import { assessCompatLock } from "../policy/compat_lock.js";
 import {
   findRepoRoot,
   installedTemplatesDir,
@@ -232,6 +233,9 @@ function firstError(
   if (failed.id === "godot_version") {
     return typedError(E.E_VERSION_SKEW, failed.detail, "godot.version");
   }
+  if (failed.id === "capability_lock") {
+    return typedError(E.E_VERSION_SKEW, failed.detail, "capability-lock");
+  }
   if (failed.id === "binary") {
     return typedError(E.E_UNVERIFIED, failed.detail, "godot.binary");
   }
@@ -360,6 +364,17 @@ export function runDoctor(opts: DoctorOptions = {}): DoctorReport {
 
   const projectRoot = opts.projectRoot ?? opts.desc?.project_root;
   if (projectRoot) {
+    const lock = assessCompatLock(projectRoot);
+    add(
+      details,
+      checks,
+      "capability_lock",
+      !lock.mismatch,
+      lock.mismatch ? lock.reason : "lock matches pin; Observe/Doctor only on mismatch",
+    );
+    if (lock.mismatch && !skew) {
+      skew = typedError(E.E_VERSION_SKEW, lock.reason, "capability-lock");
+    }
     const pluginOk = pluginEnabled(projectRoot);
     add(
       details,

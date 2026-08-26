@@ -31,6 +31,7 @@ const _OrchScript: GDScript = preload("res://addons/hh_agent/core/hh_orchestrato
 const _SoakScript: GDScript = preload("res://addons/hh_agent/core/hh_soak_adapter.gd")
 const _MultiAgentScript: GDScript = preload("res://addons/hh_agent/core/hh_multi_agent_adapter.gd")
 const _ExportScript: GDScript = preload("res://addons/hh_agent/core/hh_export_adapter.gd")
+const _CompatScript: GDScript = preload("res://addons/hh_agent/core/hh_compat.gd")
 const _PresenterScript: GDScript = preload("res://addons/hh_agent/core/hh_presenter.gd")
 const _OverlayScript: GDScript = preload("res://addons/hh_agent/ui/overlay/hh_overlay.gd")
 const _SchedulerScript: GDScript = preload("res://addons/hh_agent/core/hh_scheduler.gd")
@@ -120,6 +121,12 @@ func dispatch(raw: Variant, actions: HHAgentActions, queued_at_ms: int, pause_ga
 		var orch_control: bool = method == "godot.job" and (action == "run" or action == "cancel" or action == "wait" or action == "compact")
 		if not orch_control:
 			return _errors.fail(command_id, HHAgentErrors.E_PAUSED, "mutation gate is paused", "pause")
+	if side_effect == "mutate" or side_effect == "destructive" or side_effect == "external":
+		var pause_only: bool = method == "godot.editor" and action == "pause"
+		if not pause_only:
+			var skew_reason: String = HHAgentCompat.observe_only_reason()
+			if not skew_reason.is_empty():
+				return _errors.fail(command_id, HHAgentErrors.E_VERSION_SKEW, skew_reason, "capability-lock")
 	var pre: Dictionary = {}
 	if envelope.has("precondition") and envelope.get("precondition") is Dictionary:
 		pre = envelope.get("precondition") as Dictionary

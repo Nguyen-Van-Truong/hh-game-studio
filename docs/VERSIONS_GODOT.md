@@ -54,7 +54,7 @@ MIT. Pointers on tag `4.7.1-stable` (same commit as the binary):
 
 `zdocs/20-8-godot-agent-autopilot-plan.txt` §12 said (plan date 20-8-2026): “4.7.1-stable là stable; **4.7.2 chỉ RC1**, 4.8 là dev.”
 
-That sentence is **stale**. **4.7.2-stable already exists** as of **18-8-2026**, commit `ed1daf0bf`. This repo still freezes **4.7.1-stable** (`a13da4feb`). Upgrade is a later WP (plan: R9-WP3), not a drive-by bump (invariant A16).
+That sentence is **stale**. **4.7.2-stable already exists** as of **18-8-2026**, commit `ed1daf0bf`. This repo still freezes **4.7.1-stable** (`a13da4feb`). R9-WP3 is the compatibility/update matrix ([COMPATIBILITY.md](godot-agent/COMPATIBILITY.md)): probe is non-blocking, apply stays refused, pin does not bump (invariant A16).
 
 ## Refuse list
 

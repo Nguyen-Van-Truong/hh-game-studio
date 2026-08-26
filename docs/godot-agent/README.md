@@ -15,6 +15,7 @@ is `godot/plugin-project/r5w7/` (same `project.godot`). There is no second
 | [../../PROJECT_BRIEF.template.md](../../PROJECT_BRIEF.template.md) | Brief schema (not the dogfood brief). |
 | [HOST.md](HOST.md) | R2-WP7: Agent Host session contract. Interactive IDE is the host; unattended uses `host/`. Sidecar never holds model keys. |
 | [INSTALL.md](INSTALL.md) | R9-WP2: current-user package/install/doctor/rollback. Unsigned internal. CLEAN_VM unproven. |
+| [COMPATIBILITY.md](COMPATIBILITY.md) | R9-WP3: pin/probe/lock migrate/downgrade. Newer stable is non-blocking. Mismatch is Observe/Doctor only. |
 | [../../.hh-agent/policy.example.toml](../../.hh-agent/policy.example.toml) | `OWNER_AUTOPILOT` + E1–E4 + jail + process allowlist. Deny includes `godot/plugin-project/addons/` and `res://addons/`. |
 
 Live policy is a **copy** to `.hh-agent/policy.toml` (gitignored). Tokens stay in
@@ -30,4 +31,5 @@ python tests/bootstrap/test_capability_matrix.py
 python tests/bootstrap/test_coverage_2d.py
 python tests/bootstrap/test_mcp_bakeoff.py
 python tests/bootstrap/test_bakeoff_guard.py
+python tests/bootstrap/test_compat_update.py
 ```
