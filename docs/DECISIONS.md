@@ -342,3 +342,20 @@ WP3 ticks on honest compatibility lock migrate/downgrade/broken-API
 unproven on this Godot/Node machine. `not_g6=1`. Critics II/HH TICK no
 (flake); tie-break TICK yes after leftover-0 official PASS. No G6
 tick. No spec rewrite of G6. R9-WP4 not started.
+
+## 2026-08-28 — Stop at 59/60; Vault Fighters (Y8 Superfighters reference)
+
+`decision_id: GODOT-VF-Y8-2026-08-28`
+`status: owner-direction`
+`plan_tick: R9-WP4 [ ]; CURRENT_VALID_WP=R9-WP4; 59/60; G6 stays [ ]; GX stays [ ]`
+
+Owner stopped the 20-8 plan at 59/60. Do not tick R9-WP4, G6, GX, or
+60/60. Do not start a fake clean VM. Do not invent an API key.
+`--provider plan` stays. Plan Verify/DoD/G6 text is unchanged.
+
+Product work is a new-folder game under `godot/dogfood/superfighters/`
+(working title **Vault Fighters**). Mechanics and maps reference
+Superfighters on Y8 (https://www.y8.com/games/superfighters) — 2D
+arena deathmatch, not a Street Fighter clone. Original skins; no Y8
+asset rip; no Superfighters trademark on the title screen. Kho Bí Ẩn
+is untouched. This note is not a G6 or 60/60 claim.

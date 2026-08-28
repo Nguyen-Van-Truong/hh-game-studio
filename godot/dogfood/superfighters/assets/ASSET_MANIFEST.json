@@ -1,0 +1,165 @@
+{
+  "tool": "tools/godot/gen_vault_fighters_art.py",
+  "license": "original procedural",
+  "source": "hand-authored pixels/tones in this script; no Y8 rip",
+  "files": [
+    {
+      "path": "godot/dogfood/superfighters/assets/tiles/tileset_arena.png",
+      "sha256": "99c1d8fac29cbd544e7ed256e34962d65ce41f8f26d3fd3f7d3090cb0c3c3ae2",
+      "w": "128",
+      "h": "16"
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/tiles/tile_ladder.png",
+      "sha256": "d745a5e657fd23f32c9650fefdd2ad6027df91bb89d0ea10d6f865e3a43f9679",
+      "w": "16",
+      "h": "16"
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/actor_blue.png",
+      "sha256": "127e589e44ef7545269379efe5870073165c6902909e5d367790fdc6e8f124af",
+      "w": "256",
+      "h": "64"
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/actor_red.png",
+      "sha256": "54a67a7451e132299739fcea3e9183500e4deb3fce9be77f0583b18174b93020",
+      "w": "256",
+      "h": "64"
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/actor_gold.png",
+      "sha256": "bdcac6922d5e13e29d5e16079b12143366d9c86f5580fb10710effeaa07400be",
+      "w": "256",
+      "h": "64"
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/actor_teal.png",
+      "sha256": "1e20ed01715d2fc6d02c68b94c3b1e49af5ddae4dd888f62b78c277c5be977d5",
+      "w": "256",
+      "h": "64"
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/item_pistol.png",
+      "sha256": "cdcb82057238e681b5107851a4bc27bbdd8c7a144a11fd06314dd640f5f7b5d4",
+      "w": "16",
+      "h": "16"
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/item_shotgun.png",
+      "sha256": "7011852bd2a14aa3254435599ec080751c49797ed1b8a7dbb2908edb303ae9af",
+      "w": "16",
+      "h": "16"
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/item_uzi.png",
+      "sha256": "f6302e0bb2aa97b4dba993b2cfb1662090043dd216334ae9fc8745516e95cf82",
+      "w": "16",
+      "h": "16"
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/item_pipe.png",
+      "sha256": "5415a4a427948cd69b377d8758d3f3ca322e91b5ea72f4ebcbb2267822ca5899",
+      "w": "16",
+      "h": "16"
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/item_knife.png",
+      "sha256": "24f0a17f080719fae4cabd977e4b8e63630db36110b33efaeb26d3cf84f6bf93",
+      "w": "16",
+      "h": "16"
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/item_grenade.png",
+      "sha256": "bf57fd1d99c5aef393f2d3cd7035773b625850ecbd57a6cbdc2678c54cb7ace8",
+      "w": "16",
+      "h": "16"
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/prop_crate.png",
+      "sha256": "f3eccb2b6b7b4dbd3df5416d7f6fa1aa8f5d5dc362d264bbf661d49f7b05d09e",
+      "w": "16",
+      "h": "16"
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/prop_barrel.png",
+      "sha256": "37c7edf91eac822457df7a49032e70ca351a9ab3f71b9ee35f08b235f4934b1a",
+      "w": "16",
+      "h": "20"
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/bg/bg_city.png",
+      "sha256": "6bb1fe95eb1c6b04fe3b6ef1b8ff9a31578cbbb7c454d2adb17ac606ce118d33",
+      "w": "256",
+      "h": "128"
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/vfx/vfx_muzzle.png",
+      "sha256": "b1a8429451580f0f44dc6ad6b58e451c4c894d7127dff6317bdb584b08a5c05c",
+      "w": "16",
+      "h": "16"
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/vfx/vfx_blood.png",
+      "sha256": "f5ace224344e70f6814fd3cdb2183236772c8fae39e380728a137bca1ebc614d",
+      "w": "16",
+      "h": "16"
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/ui/ui_icon_fist.png",
+      "sha256": "c86010461f0e721f0466d84d5785a9e63a749c5e9555390b2492290881492264",
+      "w": "16",
+      "h": "16"
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/audio/sfx_punch.wav",
+      "sha256": "403789a689a7d3b35e0f3d50b9b819e0e1e7139a94173b325a8716d63006dc59",
+      "kind": "sfx_punch"
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/audio/sfx_shoot.wav",
+      "sha256": "5632c4549eac3f791284c099a40f31acadcba631240be6120b6f820540683c01",
+      "kind": "sfx_shoot"
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/audio/sfx_shotgun.wav",
+      "sha256": "d28ec3400423515b07c64d159ae939286fb74135e730c9322b900e2105aadb43",
+      "kind": "sfx_shotgun"
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/audio/sfx_pickup.wav",
+      "sha256": "74d6ba63b6cb317636876924946c627db3b7e6b2915bad7d24fafeae5b7352ad",
+      "kind": "sfx_pickup"
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/audio/sfx_explode.wav",
+      "sha256": "0ef38d5d68d68e4a9378e596075d7d42f84acc6e55684af932569f2ba65ebe5e",
+      "kind": "sfx_explode"
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/audio/sfx_jump.wav",
+      "sha256": "ed88ba2c1985054fc7f2d6761c56ebbf51937711c83311f4af42e0c9cdd7237e",
+      "kind": "sfx_jump"
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/audio/sfx_hit.wav",
+      "sha256": "9c25d8a7a1ff871e08a51fa12b7c9d1598644b91a680e091d86de7c5543de856",
+      "kind": "sfx_hit"
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/audio/sfx_win.wav",
+      "sha256": "a2578a272fb725e466eaa71ce7c427b326790a5431244cd1cffea72d1654889b",
+      "kind": "sfx_win"
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/audio/sfx_lose.wav",
+      "sha256": "3b1cebea25348b6370c5d8614302e98e511a2fceb30f80ee404349c913a499fb",
+      "kind": "sfx_lose"
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/audio/music_fight.wav",
+      "sha256": "05ecfcd29e8cf70a4961863af6b6d6aa616a2ec3167fd32b7f6e56e0e872ed96",
+      "kind": "music_fight"
+    }
+  ]
+}
