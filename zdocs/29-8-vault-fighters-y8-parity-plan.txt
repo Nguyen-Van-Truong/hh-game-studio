@@ -2,7 +2,7 @@ PLAN_SCOPE=godot/dogfood/superfighters
 PRODUCT_PLAN_AUTHORITY=1
 PARENT_PLATFORM_PLAN=zdocs/20-8-godot-agent-autopilot-plan.txt
 PARENT_PLATFORM_STATUS=OWNER_STOPPED_59_OF_60
-CURRENT_VALID_WP=VF2-WP4
+CURRENT_VALID_WP=VF2-WP5
 CORRECTION_GATE_VF2_WP2=CLEARED
 STATUS=ACTIVE
 PLAN_DATE=2026-08-29
@@ -21,7 +21,7 @@ một lần, tự làm, tự chạy, tự kiểm và tạo gói review; người
 |---:|---|---|---|---|---|
 | 0 | VF0 nền và routing | scope, provenance, test sạch, không lẫn plan | none | không | [x] 3/3 |
 | 1 | VF1 reference + contract | reference ledger, behavior spec, deterministic trace | VF0 | research/test | [x] 4/4 |
-| 2 | VF2 movement | chạy, nhảy, crouch, sprint, roll, dive, ladder, ledge | VF1 | input + physics | [ ] 3/5 |
+| 2 | VF2 movement | chạy, nhảy, crouch, sprint, roll, dive, ladder, ledge | VF1 | input + physics | [ ] 4/5 |
 | 3 | VF3 combat | melee/kick, hitbox, knockdown, disarm, aim/fire, grenade | VF2 | weapons + VFX | [ ] 0/6 |
 | 4 | VF4 world interaction | props, glass, barrels, containers, doors/elevators, hazards | VF2 | map fixtures | [ ] 0/5 |
 | 5 | VF5 map parity | 6 functional arenas; original geometry/names/art | VF3,VF4 | one map per agent lane | [ ] 0/6 |
@@ -30,7 +30,7 @@ một lần, tự làm, tự chạy, tự kiểm và tạo gói review; người
 | 8 | VF8 agent autonomy | brief→edit→play→observe→repair→checkpoint, no manual F6 | VF0..VF7 | host/bridge | [ ] 0/4 |
 | 9 | VF9 verification | trace replay, E2E, differential rubric, soak, leak proof | all above | QA | [ ] 0/5 |
 | 10 | VF10 package | Windows build, offline run, provenance/license, review bundle | VF9 | release | [ ] 0/3 |
-|   | **Tổng** | **50 WP nhỏ; chỉ coordinator tick sau DoD** |  |  | **10/50** |
+|   | **Tổng** | **50 WP nhỏ; chỉ coordinator tick sau DoD** |  |  | **11/50** |
 
 Gate nội bộ:
 
@@ -817,13 +817,63 @@ VF2-WP3 — Sprint, stamina và roll                                            
         Parent 20-8 unchanged: R9-WP4 [ ]; 59/60; G6 [ ].
       Commit: (this tick)
 
-VF2-WP4 — Dive, jump-kick impulse và fall behavior                                  [ ]
+VF2-WP4 — Dive, jump-kick impulse và fall behavior                                  [x]
   Phụ thuộc: VF2-WP3. Files: fighter/combat hooks, traces/tests.
   Làm: sprint+crouch dive, aerial kick, tackle/knockdown hook, no-fall-damage
   behavior chỉ trong dive theo reference; pit death vẫn đúng.
   Verify: real input trace trên từng map archetype; projectile dodge, landing,
   edge case ledge/pit; no infinite invulnerability.
   DoD: dive/roll/kick distinguishable in snapshot, animation and hit events.
+  LOG:
+    LOG 2026-08-29 14:26 Asia/Saigon — agent=coordinator
+      Base: be380bf dive, jump-kick, and fall behavior on VF2-WP3 tick 29795b8.
+      Files/leases: src/fighter.gd, src/game_session.gd,
+        src/hud.gd, src/visuals.gd, src/sfx_bank.gd,
+        src/input_actions.gd, src/sim/locomotion.gd,
+        src/sim/sim_snapshot.gd, data/sim/locomotion.json,
+        data/sim/input_actions.json, data/sim/schema.json,
+        tests/dive_cases.gd, tests/run_dive.gd,
+        tests/check_dive.py, tests/pack_dive_evidence.py,
+        tests/traces/dive/, docs/dive-kick.md,
+        docs/reference-ledger.md,
+        docs/evidence/VF2WP4-20260829-ASIA-SAIGON-01/
+        (V-A18 pack)
+      Verify: leftover-0; run VF2WP4-20260829-ASIA-SAIGON-01
+        source hash
+        3e0b3ffb76bfab730a6c0753e64d073da530cf8c919fdb63803680fabc7c6134
+        DIVE=pass KICK=pass FALL=pass PIT=pass
+        from structured outcomes; apply 1225/1225
+        python godot/dogfood/superfighters/tests/check_dive.py
+          EXIT 0
+        godot --headless --path godot/dogfood/superfighters
+          --script res://tests/run_dive.gd EXIT 0
+        godot --path godot/dogfood/superfighters
+          --script res://tests/run_dive.gd EXIT 0
+        leftover Godot on product --path = 0
+        python tests/bootstrap/test_authoritative_plan.py EXIT 0
+        python tests/bootstrap/test_vault_fighters_plan.py EXIT 0
+          PASS: 50 unique VF WPs; no-skip; next=VF2-WP4 (pre-tick);
+          ticked=VF0-WP1,VF0-WP2,VF0-WP3,VF1-WP1,VF1-WP2,VF1-WP3,
+          VF1-WP4,VF2-WP1,VF2-WP2,VF2-WP3;
+          parent 20-8 frozen 59/60 R9-WP4
+        post-tick expected next=VF2-WP5
+      Honesty:
+        60 Hz is V-A14 / ledger:RL-SIM-FIXED-60 assumption,
+        not observed Y8 clock. Hold-to-aim assumption.
+        Dive/kick/fall are ledger:RL-MOVE-DIVE /
+        RL-MOVE-JUMP-KICK / RL-MOVE-FALL assumption,
+        not observed. Y8 roll/dive observation stays
+        ledger:RL-MOVE-ROLL-DIVE unavailable.
+        Not Y8 parity. Not V0.
+      Critic: II 0ef27b20 TICK yes leftover-0
+        hash 3e0b3ffb… APPLY 1225/1225;
+        HH 5e5f9aca TICK yes leftover-0
+      Gaps: residual nits OK:
+        planted Bullet dodge;
+        last-session events.jsonl;
+        P2 teleport for tackle.
+        Parent 20-8 unchanged: R9-WP4 [ ]; 59/60; G6 [ ].
+      Commit: (this tick)
 
 VF2-WP5 — Ladder, ledge grab/recovery và traversal QA                                  [ ]
   Phụ thuộc: VF2-WP2,VF2-WP4 (dùng collision fixture tạm, không phụ thuộc map pass).
@@ -1400,7 +1450,7 @@ vào `KNOWN_ISSUES.md`; không đổi acceptance để làm cho pass.
 21. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Đọc `AGENTS.md`, sau đó đọc bảng đầu file này. WP đầu tiên chưa tick là **VF2-WP4**.
+Đọc `AGENTS.md`, sau đó đọc bảng đầu file này. WP đầu tiên chưa tick là **VF2-WP5**.
 
 Không làm R9-WP4/G6/GX; không mở Rust engine; không đụng Kho Bí Ẩn/Hoan Hao;
 không dùng Snake làm demo; không tải/rip Y8. Chỉ khi VF0-WP1 và VF0-WP2 đã có
@@ -1521,6 +1571,17 @@ dùng chỉ xem và review.
   Product 84bc2e8. Gate remains CLEARED. Parent 20-8 unchanged
   (R9-WP4 [ ], 59/60, G6 [ ]). VF2-WP3 ticked;
   CURRENT_VALID_WP=VF2-WP4; V0 not ticked. VF2-WP4 remains [ ].
+- COORDINATOR CLOSEOUT VF2-WP4 (2026-08-29 14:26 Asia/Saigon): leftover-0;
+  run VF2WP4-20260829-ASIA-SAIGON-01; source hash
+  3e0b3ffb76bfab730a6c0753e64d073da530cf8c919fdb63803680fabc7c6134;
+  DIVE/KICK/FALL/PIT from structured outcomes; apply 1225/1225;
+  V-A18 pack present. Critics TICK yes
+  (II 0ef27b20 leftover-0 hash 3e0b3ffb… APPLY 1225/1225;
+  HH 5e5f9aca leftover-0). Residual nits OK: planted Bullet dodge;
+  last-session events.jsonl; P2 teleport for tackle.
+  Product be380bf. Gate remains CLEARED. Parent 20-8 unchanged
+  (R9-WP4 [ ], 59/60, G6 [ ]). VF2-WP4 ticked;
+  CURRENT_VALID_WP=VF2-WP5; V0 not ticked. VF2-WP5 remains [ ].
 
 ================================================================================
 HẾT PLAN — 29-8-2026
