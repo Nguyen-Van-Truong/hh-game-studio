@@ -19,6 +19,21 @@ with typed frames (pressed/held/released). **No** `teleport`, **no**
 | `death_lose.json` | pit death / lose |
 | `win_restart.json` | last-standing win → restart |
 
+## locomotion/
+
+VF2-WP2 official InputFrame traces. Same schema as `official/`.
+Replay uses `apply_frames`. No teleport. No `step_fixed`.
+Clock stays `ledger:RL-SIM-FIXED-60` (`assumption`).
+
+| File | Beat |
+|---|---|
+| `walk_accel_friction.json` | walk ramp then friction |
+| `variable_jump.json` | held jump |
+| `crouch_shape.json` | crouch AABB |
+| `pit_fall.json` | walk off police pit |
+| `no_tunnel_solid.json` | walk into storage wall |
+| `no_tunnel_oneway.json` | idle on hazardous one-way |
+
 ## fixture/
 
 May use `teleport` / `force_kill` for fast unit setup. Fixture evidence

@@ -72,6 +72,15 @@ actors.
 `7 + stage * 13` — first-playable weapon-spawn RNG. Not an observed Y8
 table (ledger:RL-ITEM-RANDOM-SPAWN / ledger:RL-MODE-CHAOS).
 
+## Locomotion (VF2-WP2)
+
+Walk / jump / crouch / pit / camera numbers live in
+`data/sim/locomotion.json`. They are product tuning
+(`ledger:RL-MOVE-LOCO-BASE`, `assumption`), not Y8 play.
+Jump/crouch stay `ledger:RL-MOVE-JUMP-CROUCH`. Camera stays
+`ledger:RL-CAM-ARENA`. Official MATCH uses `apply_frames`.
+60 Hz stays ledger:RL-SIM-FIXED-60.
+
 ## Runtime observe (VF1-WP4)
 
 Agents read `RuntimeApi` (`docs/runtime-diagnostics.md`,

@@ -74,8 +74,9 @@ platform. They are not ripped collision maps.
 
 ## camera
 
-- **mode:** arena fit (whole stage), slight follow of living fighters
-- **zoom / limits:** fit 1280x720, no rotation
+- **mode:** arena fit (whole stage). Slight living follow is **not**
+  in this WP (`ledger:RL-CAM-ARENA`, `assumption`; no Y8 frame seen)
+- **zoom / limits:** fit 1280x720 from `data/sim/locomotion.json`, no rotation
 - **multi-camera:** no
 
 ## resolution

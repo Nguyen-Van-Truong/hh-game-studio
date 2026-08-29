@@ -684,15 +684,50 @@ func _fit_camera() -> void:
 	var size: Vector2 = Maps.pixel_size(map_id)
 	camera.position = size * 0.5
 	var vp: Viewport = get_viewport()
-	var view: Vector2 = Maps.DESIGNED_VIEW
+	var view: Vector2 = Locomotion.designed_view()
 	if vp != null:
-		view = vp.get_visible_rect().size
+		var vis: Vector2 = vp.get_visible_rect().size
+		if vis.x > 1.0 and vis.y > 1.0:
+			view = vis
 	var zx: float = view.x / maxf(size.x, 1.0)
 	var zy: float = view.y / maxf(size.y, 1.0)
 	var z: float = minf(zx, zy)
 	camera.zoom = Vector2(z, z)
 	if is_inside_tree():
 		camera.make_current()
+
+
+func camera_framing() -> Dictionary:
+	_fit_camera()
+	var size: Vector2 = Maps.pixel_size(map_id)
+	var view: Vector2 = Locomotion.designed_view()
+	var vp: Viewport = get_viewport()
+	if vp != null:
+		var vis: Vector2 = vp.get_visible_rect().size
+		if vis.x > 1.0 and vis.y > 1.0:
+			view = vis
+	var pos: Vector2 = Vector2.ZERO
+	var zoom: Vector2 = Vector2.ONE
+	if camera != null:
+		pos = camera.position
+		zoom = camera.zoom
+	var zx: float = maxf(zoom.x, 0.0001)
+	var zy: float = maxf(zoom.y, 0.0001)
+	var visible: Vector2 = Vector2(view.x / zx, view.y / zy)
+	var eps: float = Locomotion.epsilon()
+	var covers: bool = visible.x + eps >= size.x and visible.y + eps >= size.y
+	var centered: bool = absf(pos.x - size.x * 0.5) <= 1.0 and absf(pos.y - size.y * 0.5) <= 1.0
+	return {
+		"position": pos,
+		"zoom": zoom,
+		"arena_size": size,
+		"view_size": view,
+		"visible_world": visible,
+		"covers_arena": covers,
+		"centered": centered,
+		"mode": str(Locomotion.camera().get("mode", "arena_fit")),
+		"ledger": "RL-CAM-ARENA",
+	}
 
 
 func shutdown() -> void:

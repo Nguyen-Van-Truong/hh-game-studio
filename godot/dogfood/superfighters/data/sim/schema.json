@@ -34,6 +34,12 @@
     "hold_to_aim": "RL-CTRL-HOLD-AIM assumption, not observed",
     "roll_dive": "RL-MOVE-ROLL-DIVE unavailable",
     "jump_crouch": "RL-MOVE-JUMP-CROUCH assumption",
+    "loco_base": "RL-MOVE-LOCO-BASE assumption",
+    "camera": "RL-CAM-ARENA assumption, not live-observed",
     "map_geometry": "RL-MAP-LANDMARKS assumption, not live-observed"
+  },
+  "locomotion": {
+    "schema": "vf.sim.locomotion.v1",
+    "path": "res://data/sim/locomotion.json"
   }
 }

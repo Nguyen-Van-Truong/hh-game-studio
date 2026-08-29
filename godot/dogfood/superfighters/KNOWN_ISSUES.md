@@ -32,3 +32,11 @@ First playable slice. Not G6. Not 60/60.
   (ledger:RL-CTRL-SYNTH-PAD) unless a pad is plugged in for extra smoke.
   Hold-to-aim stays ledger:RL-CTRL-HOLD-AIM (`assumption`). Roll/dive
   stay ledger:RL-MOVE-ROLL-DIVE (`unavailable`).
+- VF2-WP2 ships data-driven walk/jump/crouch/pit/camera
+  (`data/sim/locomotion.json`). Official proof is InputFrame
+  `apply_frames` plus live InputEvent inject, not teleport-to-pit.
+  Jump/crouch stay ledger:RL-MOVE-JUMP-CROUCH (`assumption`). Camera
+  stays ledger:RL-CAM-ARENA (`assumption`). 60 Hz stays
+  ledger:RL-SIM-FIXED-60 (`assumption`). Hold-to-aim / roll are still
+  not observed. Sprint leftovers remain in the JSON; VF2-WP3 owns
+  sprint/stamina/roll.

@@ -19,6 +19,7 @@ Runtime observe/checkpoint (structured, not UI-pixel guess):
 `docs/runtime-diagnostics.md`.
 
 Input map / remap (VF2-WP1): `docs/input-mapping.md`.
+Locomotion / camera (VF2-WP2): `docs/locomotion.md`.
 
 Headless loop test:
 

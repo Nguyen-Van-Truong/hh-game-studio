@@ -1,21 +1,31 @@
 class_name Fighter
 extends CharacterBody2D
 
-const GRAVITY: float = 1700.0
-const JUMP_VEL: float = -430.0
-const WALK: float = 170.0
-const SPRINT: float = 260.0
-const CROUCH_SPEED: float = 70.0
-const AIM_SPEED: float = 55.0
-const CLIMB: float = 140.0
-const ACCEL: float = 2400.0
-const AIR_ACCEL: float = 1400.0
-const FRICTION: float = 2000.0
-const COYOTE: float = 0.09
-const JUMP_BUF: float = 0.10
-const TAP_WINDOW: float = 0.22
+## Locomotion numbers come from data/sim/locomotion.json (VF2-WP2).
+## Jump/crouch stay ledger:RL-MOVE-JUMP-CROUCH (assumption).
+## Roll/dive stay ledger:RL-MOVE-ROLL-DIVE (unavailable).
+
 const MAX_HP: float = 100.0
 const MAX_STAMINA: float = 100.0
+
+var gravity: float = 1700.0
+var jump_vel: float = -430.0
+var walk: float = 170.0
+var sprint: float = 260.0
+var crouch_speed: float = 70.0
+var aim_speed: float = 55.0
+var climb: float = 140.0
+var accel: float = 2400.0
+var air_accel: float = 1400.0
+var friction: float = 2000.0
+var coyote_time: float = 0.09
+var jump_buf_time: float = 0.10
+var tap_window: float = 0.22
+var variable_jump_cut: float = 0.45
+var variable_jump_cut_vy: float = -80.0
+var max_fall_speed: float = 800.0
+var stand_offset: Vector2 = Vector2(0, 1)
+var crouch_offset: Vector2 = Vector2(0, 5)
 
 var slot: int = 0
 var team: int = 0
@@ -81,8 +91,9 @@ func setup(p_slot: int, p_team: int, p_bot: bool) -> void:
 	crouch_shape = RectangleShape2D.new()
 	crouch_shape.size = Vector2(10, 14)
 	col_shape.shape = stand_shape
-	col_shape.position = Vector2(0, 1)
+	col_shape.position = stand_offset
 	add_child(col_shape)
+	Locomotion.apply_to(self)
 	var body: ColorRect = ColorRect.new()
 	body.name = "Body"
 	body.size = Vector2(12, 24)
@@ -99,13 +110,16 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	want_fire = false
 	want_grenade = false
 	if dead:
-		velocity.y += GRAVITY * delta
+		velocity.y += gravity * delta
+		velocity.y = minf(velocity.y, max_fall_speed)
 		move_and_slide()
 		_play_clip("dead")
 		return
 	if global_position.y > kill_plane:
 		_die("pit")
 		return
+	# Pit is a product kill plane (ledger:RL-MOVE-LOCO-BASE), not an
+	# observed Y8 height. Teleport-to-pit is not this WP's official proof.
 	melee_cd = maxf(melee_cd - delta, 0.0)
 	fire_cd = maxf(fire_cd - delta, 0.0)
 	grenade_cd = maxf(grenade_cd - delta, 0.0)
@@ -118,7 +132,7 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 		health = minf(MAX_HP, health + 4.0 * delta)
 	var on_floor_now: bool = is_on_floor()
 	if on_floor_now:
-		coyote = COYOTE
+		coyote = coyote_time
 	else:
 		coyote = maxf(coyote - delta, 0.0)
 	var x: float = float(cmd.get("x", 0.0))
@@ -129,7 +143,7 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	else:
 		x = 0.0
 	if x != 0.0 and last_held_x == 0.0:
-		if last_tap_dir == x and last_tap_at <= TAP_WINDOW:
+		if last_tap_dir == x and last_tap_at <= tap_window:
 			sprinting = true
 		last_tap_dir = x
 		last_tap_at = 0.0
@@ -149,46 +163,47 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 		last_jump = false
 		velocity.y = 0.0
 		if bool(cmd.get("jump", false)):
-			velocity.y = -CLIMB
+			velocity.y = -climb
 		elif bool(cmd.get("crouch", false)):
-			velocity.y = CLIMB
+			velocity.y = climb
 	elif bool(cmd.get("jump_pressed", false)) and not fire_held and not nade_held:
-		jump_buf = JUMP_BUF
+		jump_buf = jump_buf_time
 	else:
 		jump_buf = maxf(jump_buf - delta, 0.0)
 	var jump_held: bool = bool(cmd.get("jump", false)) and not fire_held and not nade_held
 	if not on_ladder and jump_buf > 0.0 and coyote > 0.0 and not fire_held and not nade_held:
-		velocity.y = JUMP_VEL
+		velocity.y = jump_vel
 		jump_buf = 0.0
 		coyote = 0.0
 		last_jump = true
-	elif last_jump and not jump_held and velocity.y < -80.0:
-		velocity.y *= 0.45
+	elif last_jump and not jump_held and velocity.y < variable_jump_cut_vy:
+		velocity.y *= variable_jump_cut
 		last_jump = false
 	if on_floor_now and velocity.y >= 0.0:
 		last_jump = false
-	var speed: float = WALK
+	var speed: float = walk
 	if crouched:
-		speed = CROUCH_SPEED
+		speed = crouch_speed
 		sprinting = false
 	elif aiming:
-		speed = AIM_SPEED
+		speed = aim_speed
 		sprinting = false
 	elif sprinting and stamina > 1.0:
-		speed = SPRINT
+		speed = sprint
 		stamina = maxf(0.0, stamina - 28.0 * delta)
 		if stamina <= 0.0:
 			sprinting = false
 	else:
 		stamina = minf(MAX_STAMINA, stamina + 22.0 * delta)
 	var target: float = x * speed
-	var acc: float = ACCEL if on_floor_now or on_ladder else AIR_ACCEL
+	var acc: float = accel if on_floor_now or on_ladder else air_accel
 	if x == 0.0:
-		velocity.x = move_toward(velocity.x, 0.0, FRICTION * delta)
+		velocity.x = move_toward(velocity.x, 0.0, friction * delta)
 	else:
 		velocity.x = move_toward(velocity.x, target, acc * delta)
 	if not on_floor_now and not on_ladder:
-		velocity.y += GRAVITY * delta
+		velocity.y += gravity * delta
+		velocity.y = minf(velocity.y, max_fall_speed)
 	if aiming:
 		aim_dir = _aim_from(cmd)
 	else:
@@ -301,10 +316,10 @@ func _apply_shape() -> void:
 		return
 	if crouched:
 		col_shape.shape = crouch_shape
-		col_shape.position = Vector2(0, 5)
+		col_shape.position = crouch_offset
 	else:
 		col_shape.shape = stand_shape
-		col_shape.position = Vector2(0, 1)
+		col_shape.position = stand_offset
 
 
 func _pose_clip() -> String:

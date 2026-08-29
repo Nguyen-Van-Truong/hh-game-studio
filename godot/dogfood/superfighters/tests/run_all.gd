@@ -12,6 +12,7 @@ var _sim: String = "unproven"
 var _trace: String = "unproven"
 var _runtime: String = "unproven"
 var _input: String = "unproven"
+var _loco: String = "unproven"
 
 
 func _initialize() -> void:
@@ -36,6 +37,7 @@ func _boot() -> void:
 	await _test_golden_traces(app)
 	_test_runtime(app)
 	await _test_input_map(app)
+	await _test_locomotion(app)
 	if _fails.is_empty():
 		_no_err = "proven"
 	_emit()
@@ -560,6 +562,16 @@ func _test_input_map(app: App) -> void:
 		_input = "proven"
 
 
+func _test_locomotion(app: App) -> void:
+	var errors: PackedStringArray = await LocomotionCases.run_all(app)
+	var i: int = 0
+	while i < errors.size():
+		_fail("LOCO %s" % String(errors[i]))
+		i += 1
+	if _count_prefix("LOCO ") == 0:
+		_loco = "proven"
+
+
 func _emit() -> void:
 	print("HH_VF_PATH title→fight→win/lose→restart")
 	print(
@@ -582,6 +594,13 @@ func _emit() -> void:
 		_runtime,
 	])
 	print("HH_VF_INPUT USED_STEP_FIXED=0 P1P2=split status=%s" % _input)
+	print("HH_VF_LOCO EPSILON=%s HASH2=%s TUNNEL=%s CAMERA=%s status=%s" % [
+		"0.001",
+		"match" if _loco == "proven" else "unproven",
+		"none" if _loco == "proven" else "unproven",
+		"arena_fit" if _loco == "proven" else "unproven",
+		_loco,
+	])
 	if _fails.is_empty():
 		print("PASS: Vault Fighters first playable")
 	else:

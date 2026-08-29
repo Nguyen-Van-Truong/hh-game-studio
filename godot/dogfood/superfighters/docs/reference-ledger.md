@@ -291,3 +291,22 @@ Hold-to-aim is still `ledger:RL-CTRL-HOLD-AIM` (`assumption`). VF1-WP1
 did **not** observe hold-to-aim or roll. Roll/dive stay
 `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). 60 Hz stays
 `ledger:RL-SIM-FIXED-60` (`assumption`).
+
+---
+
+## VF2-WP2 locomotion baseline (not a play observation)
+
+Dated 2026-08-29 Asia/Saigon. No in-game Y8 play. No HTML5/Flash
+package. Sidecar: `docs/locomotion.md` and
+`docs/evidence/VF2WP2-20260829-ASIA-SAIGON-01/`.
+
+Jump / crouch stay `ledger:RL-MOVE-JUMP-CROUCH` (`assumption`) — VF1-WP1
+did not observe them; this WP does **not** promote the class. Camera
+stays `ledger:RL-CAM-ARENA` (`assumption`). Hold-to-aim stays
+`ledger:RL-CTRL-HOLD-AIM` (`assumption`). Roll/dive stay
+`ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). 60 Hz stays
+`ledger:RL-SIM-FIXED-60` (`assumption`).
+
+| ID | Topic | Class | Conf. | Source | When | Behavior to reproduce | Tuning-only | Notes |
+|---|---|---|---|---|---|---|---|---|
+| RL-MOVE-LOCO-BASE | Walk / accel / friction / var-jump / coyote / buffer / crouch AABB / pit | `assumption` | none | VF2-WP2 product loco; **not** on Y8 listing or play | 2026-08-29 | Accel ramps; release frictions; tap jump lower than hold; coyote ~5 ticks; buffer on landing; crouch shrinks AABB; walk-off pit kills | gravity 1700, walk 170, accel 2400, friction 2000, coyote 0.09, jump_buf 0.10 | Not Y8 parity. Numbers are first-playable tuning. Sprint leftovers stay in JSON; VF2-WP3 owns sprint/roll. |
