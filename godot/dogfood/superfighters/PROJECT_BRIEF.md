@@ -40,6 +40,8 @@ https://mythologicinteractive.com/Superfighters
   `ledger:RL-MOVE-DROP`, `assumption`)
 - Hold-to-aim, aim with up/down, release to shoot
 - Three slots: melee + gun + grenades. Start fists + pistol×12 + 3 nades
+- Melee uses startup / active / recovery and AABB overlap
+  (`ledger:RL-HIT-PHASES` / `ledger:RL-HIT-BOX`, `assumption`)
 - Crouch + melee near a grounded weapon to pick up / swap (standing
   melee does not loot). A grenade pickup does not strip the gun
 - Hold comma (P2: 3) to aim a throw, release to throw

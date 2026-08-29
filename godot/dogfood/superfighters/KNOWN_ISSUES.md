@@ -62,3 +62,12 @@ First playable slice. Not G6. Not 60/60.
   Fixtures are
   temporary collision maps, not a VF5 pass (`MAPS=fixtures_only`).
   InputFrame `ledge` stays reserved.
+- VF3-WP1 ships melee startup/active/recovery, AABB hitboxes,
+  mode-scoped friendly-fire, and presentation hitstop as assumption
+  (`ledger:RL-HIT-PHASES`, `ledger:RL-HIT-BOX`, `ledger:RL-HIT-FF`,
+  `ledger:RL-HIT-HITSTOP`). Official proof is InputFrame
+  `apply_frames` plus live InputEvent inject. Hitstop does not freeze
+  the 60 Hz clock (`ledger:RL-SIM-FIXED-60` assumption). Kick stays
+  `ledger:RL-MOVE-JUMP-KICK` assumption. Hold-to-aim stays
+  `ledger:RL-CTRL-HOLD-AIM` assumption. Y8 roll/dive observation
+  stays `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). No new Y8 play.

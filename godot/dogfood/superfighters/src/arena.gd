@@ -9,6 +9,7 @@ var weapon_spawns: Array[Vector2] = []
 var ladder_cells: Array[Vector2i] = []
 var world: Node2D
 var layer: TileMapLayer
+var _slot_spawns: Dictionary = {}
 
 
 func build(p_map_id: String) -> Node2D:
@@ -16,6 +17,7 @@ func build(p_map_id: String) -> Node2D:
 	player_spawns.clear()
 	weapon_spawns.clear()
 	ladder_cells.clear()
+	_slot_spawns.clear()
 	world = Node2D.new()
 	world.name = "Arena"
 	world.add_child(_backdrop())
@@ -181,12 +183,21 @@ func _paint(target: TileMapLayer) -> void:
 				ladder_cells.append(Vector2i(x, y))
 				world.add_child(_ladder_sprite(at))
 			if ch == "P":
-				player_spawns.append(at)
-			elif ch == "1" or ch == "2" or ch == "3":
-				player_spawns.append(at)
+				_slot_spawns[0] = at
+			elif ch == "1":
+				_slot_spawns[1] = at
+			elif ch == "2":
+				_slot_spawns[2] = at
+			elif ch == "3":
+				_slot_spawns[3] = at
 			elif ch == "w":
 				weapon_spawns.append(at)
 			x += 1
 		y += 1
+	var slot: int = 0
+	while slot < 4:
+		if _slot_spawns.has(slot):
+			player_spawns.append(_slot_spawns[slot] as Vector2)
+		slot += 1
 	if player_spawns.is_empty():
 		player_spawns.append(Vector2(80, 80))

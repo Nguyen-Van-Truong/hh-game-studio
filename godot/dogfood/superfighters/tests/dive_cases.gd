@@ -347,6 +347,7 @@ static func tackle_knockdown(app: App) -> PackedStringArray:
 	p2.global_position = p1.global_position + Vector2(14.0, 0.0)
 	p2.velocity = Vector2.ZERO
 	_apply_p1_action(session, "kick", PackedStringArray(["right"]), 1, 1.0)
+	_apply_p1(session, PackedStringArray(["right"]), 4, 1.0)
 	var kick_hits: int = session.ledger.count_kind("kick_hit")
 	if kick_hits < 1:
 		errors.append("missing kick_hit event")

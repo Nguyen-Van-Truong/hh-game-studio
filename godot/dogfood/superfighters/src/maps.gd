@@ -20,8 +20,10 @@ const ATLAS_PLATFORM: Vector2i = Vector2i(5, 0)
 const ATLAS_HAZARD: Vector2i = Vector2i(6, 0)
 const ATLAS_WALL: Vector2i = Vector2i(7, 0)
 const TRAVERSAL_PATH: String = "res://data/sim/traversal.json"
+const COMBAT_PATH: String = "res://data/sim/combat.json"
 
 static var _trav_cache: Dictionary = {}
+static var _combat_cache: Dictionary = {}
 
 
 static func _trav() -> Dictionary:
@@ -30,30 +32,57 @@ static func _trav() -> Dictionary:
 	return _trav_cache
 
 
+static func _combat() -> Dictionary:
+	if _combat_cache.is_empty():
+		_combat_cache = SimConstants.load_json(COMBAT_PATH)
+	return _combat_cache
+
+
 static func has_fixture(map_id: String) -> bool:
-	var raw: Variant = _trav().get("fixtures", {})
-	return raw is Dictionary and (raw as Dictionary).has(map_id)
+	return _fixture_dict(_trav()).has(map_id) or _fixture_dict(_combat()).has(map_id)
 
 
 static func fixture_grid(map_id: String) -> PackedStringArray:
-	var raw: Variant = _trav().get("fixtures", {})
-	var out: PackedStringArray = PackedStringArray()
-	if raw is Dictionary:
-		var rows: Variant = (raw as Dictionary).get(map_id, [])
-		if rows is Array:
-			var arr: Array = rows as Array
-			var i: int = 0
-			while i < arr.size():
-				out.append(str(arr[i]))
-				i += 1
+	var out: PackedStringArray = _grid_from(_trav(), map_id)
+	if out.is_empty():
+		out = _grid_from(_combat(), map_id)
 	return out
 
 
 static func fixture_name(map_id: String) -> String:
-	var names: Variant = _trav().get("fixture_names", {})
-	if names is Dictionary:
-		return str((names as Dictionary).get(map_id, map_id))
+	var names: Dictionary = _name_dict(_trav())
+	if names.has(map_id):
+		return str(names.get(map_id, map_id))
+	names = _name_dict(_combat())
+	if names.has(map_id):
+		return str(names.get(map_id, map_id))
 	return map_id
+
+
+static func _fixture_dict(payload: Dictionary) -> Dictionary:
+	var raw: Variant = payload.get("fixtures", {})
+	if raw is Dictionary:
+		return raw as Dictionary
+	return {}
+
+
+static func _name_dict(payload: Dictionary) -> Dictionary:
+	var raw: Variant = payload.get("fixture_names", {})
+	if raw is Dictionary:
+		return raw as Dictionary
+	return {}
+
+
+static func _grid_from(payload: Dictionary, map_id: String) -> PackedStringArray:
+	var out: PackedStringArray = PackedStringArray()
+	var rows: Variant = _fixture_dict(payload).get(map_id, [])
+	if rows is Array:
+		var arr: Array = rows as Array
+		var i: int = 0
+		while i < arr.size():
+			out.append(str(arr[i]))
+			i += 1
+	return out
 
 
 static func display_name(map_id: String) -> String:

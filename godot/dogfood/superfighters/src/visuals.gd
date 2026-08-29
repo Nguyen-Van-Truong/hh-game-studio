@@ -125,6 +125,23 @@ static func make_frames(team: int) -> SpriteFrames:
 	return frames
 
 
+static func melee_flash_tex() -> Texture2D:
+	var img: Image = Image.create(16, 12, false, Image.FORMAT_RGBA8)
+	var y: int = 2
+	while y < 10:
+		var x: int = 1
+		while x < 15:
+			var dx: int = x - 10
+			var dy: int = y - 6
+			if dx * dx + dy * dy <= 18:
+				img.set_pixel(x, y, Color(0.95, 0.82, 0.35, 0.80))
+			x += 1
+		y += 1
+	img.set_pixel(13, 5, Color(1.0, 0.95, 0.7, 1.0))
+	img.set_pixel(14, 6, Color(1.0, 0.95, 0.7, 1.0))
+	return ImageTexture.create_from_image(img)
+
+
 static func roll_flash_tex() -> Texture2D:
 	var img: Image = Image.create(16, 16, false, Image.FORMAT_RGBA8)
 	var y: int = 7

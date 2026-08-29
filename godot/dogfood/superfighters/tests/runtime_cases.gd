@@ -3,6 +3,7 @@ extends RefCounted
 
 const STEP: float = 1.0 / 60.0
 const TOKEN: String = "test-fixture-not-a-secret"
+const _Combat: GDScript = preload("res://src/sim/combat.gd")
 
 
 static func run_all(app: App) -> PackedStringArray:
@@ -350,6 +351,7 @@ static func _drive_combat(session: GameSession) -> void:
 	var melee: Array[Dictionary] = _idle_cmds(session)
 	melee[0]["melee"] = true
 	session.step_fixed(STEP, melee)
+	_idle(session, _Combat.startup_ticks(p1.melee_id, "melee") + _Combat.active_ticks(p1.melee_id, "melee") + 2)
 	var fire: Array[Dictionary] = _idle_cmds(session)
 	fire[0]["fire_held"] = true
 	session.step_fixed(STEP, fire)

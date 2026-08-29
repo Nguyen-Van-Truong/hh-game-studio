@@ -165,6 +165,18 @@ func _exit_tree() -> void:
 	session = null
 
 
+func release_session() -> void:
+	if session == null:
+		return
+	var old: GameSession = session
+	session = null
+	if not is_instance_valid(old):
+		return
+	_disconnect_session(old)
+	old.shutdown()
+	old.free()
+
+
 func _clear_session() -> void:
 	if session == null:
 		return

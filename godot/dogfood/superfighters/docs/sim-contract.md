@@ -85,6 +85,15 @@ Jump/crouch stay `ledger:RL-MOVE-JUMP-CROUCH`. Camera stays
 `ledger:RL-CAM-ARENA`. Official MATCH uses `apply_frames`.
 60 Hz stays ledger:RL-SIM-FIXED-60.
 
+## Combat (VF3-WP1)
+
+Melee phases, AABB boxes, friendly-fire, and presentation hitstop
+live in `data/sim/combat.json`. They are product tuning
+(`ledger:RL-HIT-PHASES`, `ledger:RL-HIT-BOX`, `ledger:RL-HIT-FF`,
+`ledger:RL-HIT-HITSTOP`, `assumption`), not Y8 play. Kick stays
+`ledger:RL-MOVE-JUMP-KICK`. Official MATCH uses `apply_frames`.
+60 Hz stays ledger:RL-SIM-FIXED-60. Hitstop does not pause the clock.
+
 ## Runtime observe (VF1-WP4)
 
 Agents read `RuntimeApi` (`docs/runtime-diagnostics.md`,

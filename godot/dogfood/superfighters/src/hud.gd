@@ -69,8 +69,14 @@ func refresh(fighters: Array) -> void:
 		var pose: String = ""
 		if f.diving:
 			pose = " DIVE"
-		elif f.kicking:
+		elif f.kicking or f.attack_style == "kick":
 			pose = " KICK"
+		elif f.attack_phase == "startup":
+			pose = " START"
+		elif f.attack_phase == "active":
+			pose = " ACTIVE"
+		elif f.attack_phase == "recovery":
+			pose = " RECOV"
 		elif f.rolling:
 			pose = " ROLL"
 		elif f.hanging or f.recover_left > 0.0:

@@ -4,6 +4,8 @@ const STEP: float = 1.0 / 60.0
 const SprintCasesScript: GDScript = preload("res://tests/sprint_cases.gd")
 const DiveCasesScript: GDScript = preload("res://tests/dive_cases.gd")
 const TraversalCasesScript: GDScript = preload("res://tests/traversal_cases.gd")
+const CombatCasesScript: GDScript = preload("res://tests/combat_cases.gd")
+const _Combat: GDScript = preload("res://src/sim/combat.gd")
 
 var _fails: PackedStringArray = PackedStringArray()
 var _loop: String = "unproven"
@@ -19,6 +21,7 @@ var _loco: String = "unproven"
 var _sprint: String = "unproven"
 var _dive: String = "unproven"
 var _trav: String = "unproven"
+var _melee: String = "unproven"
 
 
 func _initialize() -> void:
@@ -47,6 +50,7 @@ func _boot() -> void:
 	await _test_sprint(app)
 	await _test_dive(app)
 	await _test_traversal(app)
+	await _test_melee(app)
 	if _fails.is_empty():
 		_no_err = "proven"
 	_emit()
@@ -182,8 +186,16 @@ func _test_combat(app: App) -> void:
 	var cmds: Array[Dictionary] = _idle_cmds(session)
 	cmds[0]["melee"] = true
 	session.step_fixed(STEP, cmds)
+	var wait: int = 0
+	var startup: int = _Combat.startup_ticks(p1.melee_id, "melee")
+	var active: int = _Combat.active_ticks(p1.melee_id, "melee")
+	while wait < startup + active + 2 and foe.health >= hp0:
+		session.step_fixed(STEP, _idle_cmds(session))
+		wait += 1
 	if foe.health >= hp0:
-		_fail("COMBAT melee must deal damage")
+		_fail("COMBAT melee must deal damage after startup/active")
+	if p1.attack_phase == "idle" and wait < startup:
+		_fail("COMBAT melee must spend startup frames before damage")
 	if session.pickups.is_empty():
 		_fail("COMBAT storage must spawn weapons")
 	else:
@@ -704,6 +716,64 @@ func _test_traversal(app: App) -> void:
 		_trav = "proven"
 
 
+func _test_melee(app: App) -> void:
+	var errors: PackedStringArray = await CombatCasesScript.run_all(app)
+	var i: int = 0
+	while i < errors.size():
+		_fail("MELEE %s" % String(errors[i]))
+		i += 1
+	var hit: String = str(CombatCasesScript.outcome_hit.get("verdict", "unproven"))
+	var miss: String = str(CombatCasesScript.outcome_miss.get("verdict", "unproven"))
+	var behind: String = str(CombatCasesScript.outcome_behind.get("verdict", "unproven"))
+	var above: String = str(CombatCasesScript.outcome_above.get("verdict", "unproven"))
+	var below: String = str(CombatCasesScript.outcome_below.get("verdict", "unproven"))
+	var once: String = str(CombatCasesScript.outcome_once.get("verdict", "unproven"))
+	var snap: String = str(CombatCasesScript.outcome_snap.get("verdict", "unproven"))
+	var pause: String = str(CombatCasesScript.outcome_pause.get("verdict", "unproven"))
+	var live: String = str(CombatCasesScript.outcome_live.get("verdict", "unproven"))
+	var replay: String = str(CombatCasesScript.outcome_replay.get("verdict", "unproven"))
+	var phases: String = str(CombatCasesScript.outcome_phases.get("verdict", "unproven"))
+	var reach: String = str(CombatCasesScript.outcome_reach.get("verdict", "unproven"))
+	var ff: String = str(CombatCasesScript.outcome_ff.get("verdict", "unproven"))
+	var hitstop: String = str(CombatCasesScript.outcome_hitstop.get("verdict", "unproven"))
+	var crouch: String = str(CombatCasesScript.outcome_crouch.get("verdict", "unproven"))
+	var kick: String = str(CombatCasesScript.outcome_kick.get("verdict", "unproven"))
+	if hit != "pass":
+		_fail("MELEE HIT outcome is %s" % hit)
+	if miss != "pass":
+		_fail("MELEE MISS outcome is %s" % miss)
+	if behind != "pass":
+		_fail("MELEE BEHIND outcome is %s" % behind)
+	if above != "pass":
+		_fail("MELEE ABOVE outcome is %s" % above)
+	if below != "pass":
+		_fail("MELEE BELOW outcome is %s" % below)
+	if once != "pass":
+		_fail("MELEE ONCE outcome is %s" % once)
+	if snap != "pass":
+		_fail("MELEE SNAP outcome is %s" % snap)
+	if pause != "pass":
+		_fail("MELEE PAUSE outcome is %s" % pause)
+	if live != "pass":
+		_fail("MELEE LIVE outcome is %s" % live)
+	if replay != "match":
+		_fail("MELEE REPLAY outcome is %s" % replay)
+	if phases != "pass":
+		_fail("MELEE PHASES outcome is %s" % phases)
+	if reach != "pass":
+		_fail("MELEE REACH outcome is %s" % reach)
+	if ff != "pass":
+		_fail("MELEE FF outcome is %s" % ff)
+	if hitstop != "pass":
+		_fail("MELEE HITSTOP outcome is %s" % hitstop)
+	if crouch != "pass":
+		_fail("MELEE CROUCH outcome is %s" % crouch)
+	if kick != "pass":
+		_fail("MELEE KICK outcome is %s" % kick)
+	if _count_prefix("MELEE ") == 0:
+		_melee = "proven"
+
+
 func _emit() -> void:
 	print("HH_VF_PATH title→fight→win/lose→restart")
 	print(
@@ -765,6 +835,30 @@ func _emit() -> void:
 			DiveCasesScript.used_apply_frames_succeeded,
 			DiveCasesScript.used_apply_frames_attempted,
 			_dive,
+		]
+	)
+	print(
+		"HH_VF_MELEE HIT=%s MISS=%s BEHIND=%s ABOVE=%s BELOW=%s ONCE=%s SNAP=%s PAUSE=%s LIVE=%s REPLAY=%s PHASES=%s REACH=%s FF=%s HITSTOP=%s CROUCH=%s KICK=%s APPLY=%d/%d status=%s"
+		% [
+			str(CombatCasesScript.outcome_hit.get("verdict", "unproven")),
+			str(CombatCasesScript.outcome_miss.get("verdict", "unproven")),
+			str(CombatCasesScript.outcome_behind.get("verdict", "unproven")),
+			str(CombatCasesScript.outcome_above.get("verdict", "unproven")),
+			str(CombatCasesScript.outcome_below.get("verdict", "unproven")),
+			str(CombatCasesScript.outcome_once.get("verdict", "unproven")),
+			str(CombatCasesScript.outcome_snap.get("verdict", "unproven")),
+			str(CombatCasesScript.outcome_pause.get("verdict", "unproven")),
+			str(CombatCasesScript.outcome_live.get("verdict", "unproven")),
+			str(CombatCasesScript.outcome_replay.get("verdict", "unproven")),
+			str(CombatCasesScript.outcome_phases.get("verdict", "unproven")),
+			str(CombatCasesScript.outcome_reach.get("verdict", "unproven")),
+			str(CombatCasesScript.outcome_ff.get("verdict", "unproven")),
+			str(CombatCasesScript.outcome_hitstop.get("verdict", "unproven")),
+			str(CombatCasesScript.outcome_crouch.get("verdict", "unproven")),
+			str(CombatCasesScript.outcome_kick.get("verdict", "unproven")),
+			CombatCasesScript.used_apply_frames_succeeded,
+			CombatCasesScript.used_apply_frames_attempted,
+			_melee,
 		]
 	)
 	print(

@@ -1,0 +1,146 @@
+{
+  "schema": "vf.sim.combat.v1",
+  "schema_version": 1,
+  "title": "Vault Fighters",
+  "y8_parity_claimed": false,
+  "y8_tick_rate_claimed": false,
+  "ledger_clock": "RL-SIM-FIXED-60",
+  "phases_ledger": "RL-HIT-PHASES",
+  "phases_class": "assumption",
+  "hitbox_ledger": "RL-HIT-BOX",
+  "hitbox_class": "assumption",
+  "ff_ledger": "RL-HIT-FF",
+  "ff_class": "assumption",
+  "hitstop_ledger": "RL-HIT-HITSTOP",
+  "hitstop_class": "assumption",
+  "hold_to_aim_ledger": "RL-CTRL-HOLD-AIM",
+  "hold_to_aim_class": "assumption",
+  "kick_ledger": "RL-MOVE-JUMP-KICK",
+  "kick_class": "assumption",
+  "roll_dive_ledger": "RL-MOVE-ROLL-DIVE",
+  "roll_dive_class": "unavailable",
+  "tick_hz": 60,
+  "hitstop_ticks": 2,
+  "hitstop_clock": "presentation_only",
+  "one_hit_per_window": true,
+  "friendly_fire": {
+    "vs1": false,
+    "vs2": true,
+    "stage": false
+  },
+  "hurtbox": {
+    "stand": [10.0, 22.0],
+    "crouch": [10.0, 14.0]
+  },
+  "styles": {
+    "melee": {
+      "knock_x": 80.0,
+      "knock_y": -40.0
+    },
+    "crouch": {
+      "knock_x": 70.0,
+      "knock_y": -24.0
+    },
+    "kick": {
+      "knock_x": 110.0,
+      "knock_y": 40.0,
+      "knockdown": true
+    }
+  },
+  "weapons": {
+    "fists": {
+      "startup": 3,
+      "active": 3,
+      "recovery": 8,
+      "damage": 10.0,
+      "hitbox": [16.0, 12.0],
+      "offset": [10.0, -2.0],
+      "crouch_hitbox": [14.0, 10.0],
+      "crouch_offset": [10.0, 4.0]
+    },
+    "knife": {
+      "startup": 2,
+      "active": 2,
+      "recovery": 6,
+      "damage": 14.0,
+      "hitbox": [14.0, 10.0],
+      "offset": [8.0, -2.0],
+      "crouch_hitbox": [12.0, 8.0],
+      "crouch_offset": [8.0, 4.0]
+    },
+    "pipe": {
+      "startup": 5,
+      "active": 4,
+      "recovery": 14,
+      "damage": 20.0,
+      "hitbox": [26.0, 14.0],
+      "offset": [16.0, -2.0],
+      "crouch_hitbox": [24.0, 12.0],
+      "crouch_offset": [16.0, 4.0]
+    },
+    "kick": {
+      "startup": 2,
+      "active": 4,
+      "recovery": 5,
+      "damage": 12.0,
+      "hitbox": [20.0, 24.0],
+      "offset": [8.0, 10.0],
+      "crouch_hitbox": [20.0, 24.0],
+      "crouch_offset": [8.0, 10.0]
+    }
+  },
+  "fixtures": {
+    "fx_melee_close": [
+      "################",
+      "#..............#",
+      "#..P1..........#",
+      "################"
+    ],
+    "fx_melee_far": [
+      "################",
+      "#..............#",
+      "#..P.........1.#",
+      "################"
+    ],
+    "fx_melee_behind": [
+      "################",
+      "#..............#",
+      "#..1......P....#",
+      "################"
+    ],
+    "fx_melee_above": [
+      "################",
+      "#..............#",
+      "#....1.........#",
+      "##############.#",
+      "#..............#",
+      "#..............#",
+      "#....P.........#",
+      "################"
+    ],
+    "fx_melee_below": [
+      "################",
+      "#..............#",
+      "#....P.........#",
+      "##############.#",
+      "#..............#",
+      "#..............#",
+      "#.............1#",
+      "################"
+    ],
+    "fx_melee_mid": [
+      "################",
+      "#..............#",
+      "#..P.1.........#",
+      "################"
+    ]
+  },
+  "fixture_names": {
+    "fx_melee_close": "Close Clinch",
+    "fx_melee_far": "Long Gap",
+    "fx_melee_behind": "Rear Mark",
+    "fx_melee_above": "High Shelf",
+    "fx_melee_below": "Low Pit",
+    "fx_melee_mid": "Mid Reach"
+  }
+}

@@ -10,13 +10,18 @@ extends CharacterBody2D
 ## ledger:RL-MOVE-FALL (assumption). Ladder stays
 ## ledger:RL-MOVE-LADDER (assumption). Ledge stays
 ## ledger:RL-MOVE-LEDGE (assumption). Drop stays
-## ledger:RL-MOVE-DROP (assumption). InputFrame `ledge`
-## stays reserved. Y8 observation stays
+## ledger:RL-MOVE-DROP (assumption). Melee phases stay
+## ledger:RL-HIT-PHASES (assumption). Hitboxes stay
+## ledger:RL-HIT-BOX (assumption). Friendly-fire stays
+## ledger:RL-HIT-FF (assumption). Hitstop stays
+## ledger:RL-HIT-HITSTOP (assumption, presentation only).
+## InputFrame `ledge` stays reserved. Y8 observation stays
 ## ledger:RL-MOVE-ROLL-DIVE (unavailable). Not a Y8 observation.
 
 const MAX_HP: float = 100.0
 const MAX_STAMINA: float = 100.0
 const _Traversal: GDScript = preload("res://src/sim/traversal.gd")
+const _Combat: GDScript = preload("res://src/sim/combat.gd")
 
 var gravity: float = 1700.0
 var jump_vel: float = -430.0
@@ -159,6 +164,18 @@ var want_kick: bool = false
 var want_fire: bool = false
 var want_grenade: bool = false
 var last_jump: bool = false
+var attack_phase: String = "idle"
+var attack_age: int = 0
+var attack_seq: int = 0
+var attack_style: String = ""
+var attack_weapon: String = ""
+var attack_hits: PackedInt32Array = PackedInt32Array()
+var attack_started: bool = false
+var attack_active_entered: bool = false
+var attack_recovery_entered: bool = false
+var attack_ended: bool = false
+var attack_missed: bool = false
+var hitstop_left: int = 0
 
 
 func setup(p_slot: int, p_team: int, p_bot: bool) -> void:
@@ -207,6 +224,11 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	want_kick = false
 	want_fire = false
 	want_grenade = false
+	attack_started = false
+	attack_active_entered = false
+	attack_recovery_entered = false
+	attack_ended = false
+	attack_missed = false
 	roll_started = false
 	roll_ended = false
 	dive_started = false
@@ -248,6 +270,9 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	# Pit is a product kill plane (ledger:RL-MOVE-LOCO-BASE), not an
 	# observed Y8 height. Teleport-to-pit is not this WP's official proof.
 	# Dive does not cancel pit death (ledger:RL-MOVE-DIVE assumption).
+	_advance_attack()
+	if hitstop_left > 0:
+		hitstop_left -= 1
 	melee_cd = maxf(melee_cd - delta, 0.0)
 	fire_cd = maxf(fire_cd - delta, 0.0)
 	grenade_cd = maxf(grenade_cd - delta, 0.0)
@@ -425,15 +450,16 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	else:
 		aim_dir = Vector2(facing, 0.0)
 	var melee_pressed: bool = bool(cmd.get("melee", false)) or kick_pressed
-	if not rolling and not diving and not hanging and not climbing and knockdown_left <= 0.0 and melee_pressed and melee_cd <= 0.0:
-		if not on_floor_now and not on_ladder:
-			_try_start_kick()
-		elif kick_pressed and on_floor_now:
-			last_kick_block = "ground"
-		else:
+	if not rolling and not diving and not hanging and not climbing and knockdown_left <= 0.0 and melee_pressed:
+		if crouched and on_floor_now:
 			want_melee = true
-			melee_cd = float(WeaponDefs.data(melee_id).get("cooldown", 0.28))
-			melee_flash = 0.12
+		elif melee_cd <= 0.0 and attack_phase == "idle":
+			if not on_floor_now and not on_ladder:
+				_try_start_kick()
+			elif kick_pressed and on_floor_now:
+				last_kick_block = "ground"
+			else:
+				want_melee = true
 	if not rolling and not diving and _gun_ready() and fire_cd <= 0.0:
 		if _is_auto() and fire_held:
 			want_fire = true
@@ -478,7 +504,9 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 			kick_ended = true
 	if sprite != null:
 		sprite.flip_h = facing < 0.0
-	_play_clip(_pose_clip())
+		sprite.speed_scale = 0.0 if hitstop_left > 0 else 1.0
+	if hitstop_left <= 0:
+		_play_clip(_pose_clip())
 
 
 func _tick_drop_through(delta: float, on_floor_now: bool, crouch_held: bool, one_way_under: bool) -> void:
@@ -851,11 +879,72 @@ func _try_start_kick() -> void:
 	kick_seq += 1
 	kick_started = true
 	want_kick = true
-	melee_cd = maxf(melee_cd, kick_duration)
-	melee_flash = 0.12
+	begin_attack("kick")
 	velocity.x += facing * kick_impulse_x
 	velocity.y = maxf(velocity.y, kick_impulse_y)
 	last_kick_block = ""
+
+
+func begin_attack(style: String) -> void:
+	if attack_phase != "idle":
+		return
+	attack_style = style
+	if style == "kick":
+		attack_weapon = "kick"
+	else:
+		attack_weapon = melee_id
+	attack_phase = "startup"
+	attack_age = 0
+	attack_seq += 1
+	attack_hits = PackedInt32Array()
+	attack_started = true
+	attack_missed = false
+	var total: int = _Combat.total_ticks(attack_weapon, style)
+	melee_cd = float(total) * SimConstants.TICK_DT
+	melee_flash = melee_cd
+
+
+func already_hit(target_slot: int) -> bool:
+	var i: int = 0
+	while i < attack_hits.size():
+		if attack_hits[i] == target_slot:
+			return true
+		i += 1
+	return false
+
+
+func mark_hit(target_slot: int) -> void:
+	if not already_hit(target_slot):
+		attack_hits.append(target_slot)
+
+
+func _advance_attack() -> void:
+	if attack_phase == "idle":
+		return
+	attack_age += 1
+	if attack_phase == "startup" and attack_age >= _Combat.startup_ticks(attack_weapon, attack_style):
+		attack_phase = "active"
+		attack_age = 0
+		attack_active_entered = true
+	elif attack_phase == "active" and attack_age >= _Combat.active_ticks(attack_weapon, attack_style):
+		attack_phase = "recovery"
+		attack_age = 0
+		attack_recovery_entered = true
+		if attack_hits.is_empty():
+			attack_missed = true
+	elif attack_phase == "recovery" and attack_age >= _Combat.recovery_ticks(attack_weapon, attack_style):
+		attack_phase = "idle"
+		attack_age = 0
+		attack_ended = true
+
+
+func _cancel_attack() -> void:
+	attack_phase = "idle"
+	attack_age = 0
+	attack_style = ""
+	attack_weapon = ""
+	attack_hits = PackedInt32Array()
+	melee_flash = 0.0
 
 
 func apply_knockdown(dir: Vector2) -> void:
@@ -871,6 +960,7 @@ func apply_knockdown(dir: Vector2) -> void:
 	climbing = false
 	hanging = false
 	recover_left = 0.0
+	_cancel_attack()
 
 
 func take_damage(amount: float, knock: Vector2) -> void:
@@ -896,6 +986,7 @@ func _die(cause: String) -> void:
 	death_cause = cause
 	collision_layer = 0
 	velocity = Vector2(facing * -40.0, -120.0)
+	_cancel_attack()
 	_play_clip("dead")
 
 
@@ -979,9 +1070,11 @@ func _pose_clip() -> String:
 		return "dead"
 	if throw_flash > 0.0:
 		return "throw"
+	if attack_phase != "idle" and attack_style == "kick":
+		return "kick"
 	if kicking or (melee_flash > 0.0 and not is_on_floor()):
 		return "kick"
-	if melee_flash > 0.0:
+	if attack_phase != "idle" or melee_flash > 0.0:
 		return "melee"
 	if diving:
 		return "dive"
@@ -1040,6 +1133,10 @@ func apply_runtime_row(row: Dictionary) -> void:
 	diving = int(row.get("diving", 0)) != 0
 	kicking = int(row.get("kicking", 0)) != 0
 	sprinting = int(row.get("sprinting", 0)) != 0
+	attack_phase = str(row.get("attack_phase", attack_phase))
+	attack_seq = int(row.get("attack_seq", attack_seq))
+	attack_style = str(row.get("attack_style", attack_style))
+	attack_age = int(row.get("attack_age", attack_age))
 	on_ladder = int(row.get("on_ladder", 0)) != 0
 	climbing = int(row.get("climbing", 0)) != 0
 	hanging = int(row.get("hanging", 0)) != 0
@@ -1120,4 +1217,16 @@ func apply_runtime_extra(extra: Dictionary) -> void:
 		fire_extinguish_count = int(extra.get("fire_extinguish_count", fire_extinguish_count))
 	if extra.has("burning"):
 		burning = bool(extra.get("burning", false))
+	if extra.has("attack_phase"):
+		attack_phase = str(extra.get("attack_phase", attack_phase))
+	if extra.has("attack_seq"):
+		attack_seq = int(extra.get("attack_seq", attack_seq))
+	if extra.has("attack_style"):
+		attack_style = str(extra.get("attack_style", attack_style))
+	if extra.has("attack_weapon"):
+		attack_weapon = str(extra.get("attack_weapon", attack_weapon))
+	if extra.has("attack_age"):
+		attack_age = int(extra.get("attack_age", attack_age))
+	if extra.has("hitstop_left"):
+		hitstop_left = int(extra.get("hitstop_left", hitstop_left))
 	_apply_shape()

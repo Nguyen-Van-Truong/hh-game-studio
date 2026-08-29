@@ -394,3 +394,35 @@ collision maps, not a VF5 pass.
 | RL-MOVE-LADDER | Ladder attach / snap / climb / drop | `assumption` | none | VF2-WP5 product contract; **not** observed on Y8 this session | 2026-08-29 | Vertical intent attaches; snap to column; climb blocked by solid | climb 140, snap 1 | Not Y8 parity. Do not mark observed. |
 | RL-MOVE-LEDGE | Ledge grab / hang / recover | `assumption` | none | VF2-WP5 product contract; **not** observed on Y8 this session | 2026-08-29 | Fall past a lip grabs; jump/up recovers outside-then-board onto the lip floor; down drops | grab 12/18, recover 0.28s step | InputFrame `ledge` stays reserved. Not observed. Official LEDGE requires on_floor + stand epsilon, not rise-only. |
 | RL-MOVE-DROP | One-way drop-through | `assumption` | none | VF2-WP5 product contract; **not** observed on Y8 this session | 2026-08-29 | Hold crouch on `=` past 0.25s clears COL_PLATFORM; Y must increase | hold 0.25s, fall>=8 | Short crouch stays crouched. Not observed. |
+
+---
+
+## VF3-WP1 melee phases and hitboxes (not a play observation)
+
+Dated 2026-08-29 Asia/Saigon. No in-game Y8 play. No HTML5/Flash
+package. Sidecar: `docs/combat.md` and
+`docs/evidence/VF3WP1-20260829-ASIA-SAIGON-01/`.
+
+Phases stay `ledger:RL-HIT-PHASES` (`assumption`). Boxes stay
+`ledger:RL-HIT-BOX` (`assumption`). Friendly-fire stays
+`ledger:RL-HIT-FF` (`assumption`). Hitstop stays
+`ledger:RL-HIT-HITSTOP` (`assumption`, presentation only). None of
+these rows is promoted to `observed`. Kick stays
+`ledger:RL-MOVE-JUMP-KICK` (`assumption`). Hold-to-aim stays
+`ledger:RL-CTRL-HOLD-AIM` (`assumption`). Y8 observation stays
+`ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). 60 Hz stays
+`ledger:RL-SIM-FIXED-60` (`assumption`).
+
+Product contract: melee press enters startup, then active, then
+recovery. Hits are AABB overlap during active only, one target per
+window. vs1 same-team is blocked; vs2 PVP hits. Hitstop freezes the
+sprite scale, not `SimClock`. Official proof uses `apply_frames`
+plus live InputEvent inject. Fixtures are temporary collision maps,
+not a VF5 pass.
+
+| ID | Topic | Class | Conf. | Source | When | Behavior to reproduce | Tuning-only | Notes |
+|---|---|---|---|---|---|---|---|---|
+| RL-HIT-PHASES | Melee startup / active / recovery | `assumption` | none | VF3-WP1 product contract; **not** observed on Y8 this session | 2026-08-29 | Press is startup with no HP change; active may hit; then recovery | fists 3/3/8 | Not Y8 parity. Do not mark observed. |
+| RL-HIT-BOX | AABB hitbox vs hurtbox | `assumption` | none | VF3-WP1 product contract; **not** observed on Y8 this session | 2026-08-29 | Overlap hits; miss classifies behind/above/below/reach | fists 16x12 offset 10,-2 | Not a distance check. Not observed. |
+| RL-HIT-FF | Mode-scoped friendly-fire | `assumption` | none | VF3-WP1 product contract; **not** observed on Y8 this session | 2026-08-29 | vs1 same-team HP frozen; vs2 different teams take damage | vs1=false vs2=true stage=false | Not observed. |
+| RL-HIT-HITSTOP | Presentation hitstop | `assumption` | none | VF3-WP1 product contract; **not** observed on Y8 this session | 2026-08-29 | Sprite scale 0 for 2 ticks; SimClock still +1 | 2 ticks | Clock stays RL-SIM-FIXED-60. Not observed. |

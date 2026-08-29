@@ -2,6 +2,7 @@ class_name GameSession
 extends Node2D
 
 const _Traversal: GDScript = preload("res://src/sim/traversal.gd")
+const _Combat: GDScript = preload("res://src/sim/combat.gd")
 
 signal won
 signal lost
@@ -195,10 +196,9 @@ func _step_one_tick(cmds: Array[Dictionary]) -> void:
 		_log_death_if_new(f)
 		if f.last_jump and before_y >= 0.0 and f.velocity.y < 0.0 and sfx != null:
 			sfx.play("jump")
-		if f.want_kick:
-			_do_kick(f)
-		elif f.want_melee:
-			_do_melee(f)
+		if f.want_melee:
+			_try_start_melee(f)
+		_resolve_attack(f)
 		if f.diving and not f.dive_did_tackle:
 			_try_dive_tackle(f)
 		if f.want_fire:
@@ -443,33 +443,109 @@ func _add_pickup(pid: String, at: Vector2, from_world: bool) -> Pickup:
 	return drop
 
 
-func _do_melee(f: Fighter) -> void:
+func _try_start_melee(f: Fighter) -> void:
 	if f.crouched:
 		if _try_pickup(f):
 			return
-	var spec: Dictionary = WeaponDefs.data(f.melee_id)
-	if sfx != null:
-		sfx.play("punch")
-	var reach: float = float(spec.get("range", 18.0))
+	if f.attack_phase != "idle":
+		return
+	var style: String = "crouch" if f.crouched else "melee"
+	f.begin_attack(style)
+
+
+func _resolve_attack(f: Fighter) -> void:
+	if f.attack_started:
+		var kind: String = "startup"
+		if f.attack_style == "kick":
+			kind = "kick_start"
+			if sfx != null:
+				sfx.play("kick")
+		else:
+			if sfx != null:
+				sfx.play("punch")
+			_spawn_melee_fx(f)
+		ledger.push(clock.tick, "melee", kind, {
+			"attacker": f.slot,
+			"style": f.attack_style,
+			"weapon": f.attack_weapon,
+			"seq": f.attack_seq,
+			"seed": sim_seed,
+		})
+	if f.attack_active_entered:
+		ledger.push(clock.tick, "melee", "active", {
+			"attacker": f.slot,
+			"style": f.attack_style,
+			"weapon": f.attack_weapon,
+			"seq": f.attack_seq,
+			"seed": sim_seed,
+		})
+	if f.attack_phase == "active":
+		_resolve_hitbox(f)
+	if f.attack_recovery_entered:
+		ledger.push(clock.tick, "melee", "recovery", {
+			"attacker": f.slot,
+			"style": f.attack_style,
+			"weapon": f.attack_weapon,
+			"seq": f.attack_seq,
+			"seed": sim_seed,
+		})
+	if f.attack_missed:
+		ledger.push(clock.tick, "melee", "miss", {
+			"attacker": f.slot,
+			"style": f.attack_style,
+			"weapon": f.attack_weapon,
+			"seq": f.attack_seq,
+			"seed": sim_seed,
+		})
+
+
+func _resolve_hitbox(f: Fighter) -> void:
+	var box: Rect2 = _Combat.hitbox_rect(f)
 	var i: int = 0
 	while i < fighters.size():
 		var other: Fighter = fighters[i]
 		i += 1
 		if other == f or other.dead:
 			continue
-		var delta: Vector2 = other.global_position - f.global_position
-		if absf(delta.y) > 16.0:
+		if f.already_hit(other.slot):
 			continue
-		if absf(delta.x) > reach + 4.0:
+		if not _Combat.allows_hit(mode, f, other):
+			if other.team == f.team:
+				ledger.push(clock.tick, "melee", "friendly_block", {
+					"attacker": f.slot,
+					"target": other.slot,
+					"mode": mode,
+					"seed": sim_seed,
+				})
+				f.mark_hit(other.slot)
 			continue
-		if signf(delta.x) != 0.0 and signf(delta.x) != signf(f.facing):
+		if not _Combat.overlaps(box, _Combat.hurtbox_rect(other)):
 			continue
-		other.take_damage(float(spec.get("damage", 10.0)), Vector2(f.facing * 80.0, -40.0))
-		ledger.push(clock.tick, "melee", "hit", {
+		var dmg: float = _Combat.damage_of(f.attack_weapon, f.attack_style)
+		var knock: Vector2 = _Combat.knock_of(f.attack_style, f.facing)
+		other.take_damage(dmg, knock)
+		if _Combat.style_knocks_down(f.attack_style):
+			other.apply_knockdown(Vector2(f.facing * 70.0, 20.0))
+			ledger.push(clock.tick, "melee", "knockdown", {
+				"attacker": f.slot,
+				"target": other.slot,
+				"source": f.attack_style,
+				"seed": sim_seed,
+			})
+		f.mark_hit(other.slot)
+		f.hitstop_left = maxi(f.hitstop_left, _Combat.hitstop_ticks())
+		other.hitstop_left = maxi(other.hitstop_left, _Combat.hitstop_ticks())
+		var kind: String = "kick_hit" if f.attack_style == "kick" else "hit"
+		ledger.push(clock.tick, "melee", kind, {
 			"attacker": f.slot,
 			"target": other.slot,
-			"style": "melee",
-			"damage": SimConstants.quantize(float(spec.get("damage", 10.0))),
+			"style": f.attack_style,
+			"weapon": f.attack_weapon,
+			"damage": SimConstants.quantize(dmg),
+			"knock_x": SimConstants.quantize(knock.x),
+			"knock_y": SimConstants.quantize(knock.y),
+			"seq": f.attack_seq,
+			"seed": sim_seed,
 		})
 		_log_death_if_new(other)
 		_splat(other.global_position)
@@ -477,45 +553,9 @@ func _do_melee(f: Fighter) -> void:
 			sfx.play("hit")
 
 
-func _do_kick(f: Fighter) -> void:
-	if sfx != null:
-		sfx.play("kick")
-	ledger.push(clock.tick, "melee", "kick_start", {
-		"slot": f.slot,
-		"seq": f.kick_seq,
-	})
-	var reach: float = 22.0
-	var i: int = 0
-	while i < fighters.size():
-		var other: Fighter = fighters[i]
-		i += 1
-		if other == f or other.dead:
-			continue
-		var delta: Vector2 = other.global_position - f.global_position
-		if absf(delta.y) > 22.0:
-			continue
-		if absf(delta.x) > reach + 6.0:
-			continue
-		if signf(delta.x) != 0.0 and signf(delta.x) != signf(f.facing):
-			continue
-		other.take_damage(f.kick_damage, Vector2(f.facing * 110.0, 40.0))
-		other.apply_knockdown(Vector2(f.facing * 70.0, 20.0))
-		ledger.push(clock.tick, "melee", "kick_hit", {
-			"attacker": f.slot,
-			"target": other.slot,
-			"style": "kick",
-			"damage": SimConstants.quantize(f.kick_damage),
-			"seq": f.kick_seq,
-		})
-		ledger.push(clock.tick, "melee", "knockdown", {
-			"attacker": f.slot,
-			"target": other.slot,
-			"source": "kick",
-		})
-		_log_death_if_new(other)
-		_splat(other.global_position)
-		if sfx != null:
-			sfx.play("hit")
+func _spawn_melee_fx(f: Fighter) -> void:
+	var box: Rect2 = _Combat.hitbox_rect(f)
+	_attach_fx_sprite(Visuals.melee_flash_tex(), box.get_center(), 0.10)
 
 
 func _try_dive_tackle(f: Fighter) -> void:

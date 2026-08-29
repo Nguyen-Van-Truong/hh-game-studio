@@ -116,6 +116,8 @@ static func play(app: App, trace: Dictionary) -> Dictionary:
 	result["ticks"] = i
 	result["used_apply_frames"] = true
 	result["used_cmd_dicts"] = false
+	if app.session != null:
+		app.release_session()
 	return result
 
 

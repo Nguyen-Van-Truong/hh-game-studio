@@ -44,7 +44,15 @@
     "jump_crouch": "RL-MOVE-JUMP-CROUCH assumption",
     "loco_base": "RL-MOVE-LOCO-BASE assumption",
     "camera": "RL-CAM-ARENA assumption, not live-observed",
-    "map_geometry": "RL-MAP-LANDMARKS assumption, not live-observed"
+    "map_geometry": "RL-MAP-LANDMARKS assumption, not live-observed",
+    "melee_phases": "RL-HIT-PHASES assumption, not observed",
+    "hitbox": "RL-HIT-BOX assumption, not observed",
+    "friendly_fire": "RL-HIT-FF assumption, not observed",
+    "hitstop": "RL-HIT-HITSTOP assumption, presentation only, clock still advances"
+  },
+  "combat": {
+    "schema": "vf.sim.combat.v1",
+    "path": "res://data/sim/combat.json"
   },
   "locomotion": {
     "schema": "vf.sim.locomotion.v1",

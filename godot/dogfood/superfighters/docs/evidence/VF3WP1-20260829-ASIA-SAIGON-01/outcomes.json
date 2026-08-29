@@ -1,0 +1,237 @@
+{
+	"above": {
+		"dx": 0.0,
+		"dy": -64.0,
+		"facing": 1.0,
+		"hit_events": 0,
+		"hp0": 100.0,
+		"hp1": 100.0,
+		"miss_kind": "above",
+		"source": "apply_frames fx_melee_above HP unchanged + geometry above",
+		"verdict": "pass"
+	},
+	"apply": {
+		"attempted": 931,
+		"succeeded": 930,
+		"used_action_press": 0,
+		"used_apply_frames": 930,
+		"used_parse_input_event": 1,
+		"used_step_fixed": 0
+	},
+	"behind": {
+		"dx": -112.0,
+		"dy": 0.0,
+		"facing": 1.0,
+		"hit_events": 0,
+		"hp0": 100.0,
+		"hp1": 100.0,
+		"miss_kind": "behind",
+		"source": "apply_frames fx_melee_behind HP unchanged + geometry behind",
+		"verdict": "pass"
+	},
+	"below": {
+		"dx": 144.0,
+		"dy": 64.0,
+		"facing": 1.0,
+		"hit_events": 0,
+		"hp0": 100.0,
+		"hp1": 100.0,
+		"miss_kind": "below",
+		"source": "apply_frames fx_melee_below HP unchanged + geometry below",
+		"verdict": "pass"
+	},
+	"crouch": {
+		"hp0": 100.0,
+		"hp1": 90.0,
+		"source": "apply_frames crouch+melee uses crouch hitbox",
+		"style": "crouch",
+		"verdict": "pass"
+	},
+	"ff": {
+		"source": "vs1 same-team HP frozen; vs2 PVP HP drops",
+		"verdict": "pass",
+		"vs1_block": true,
+		"vs1_ff": false,
+		"vs2_ff": true,
+		"vs2_hit": true
+	},
+	"hit": {
+		"damage": 10.0,
+		"dx": 17.0918807983398,
+		"dy": -0.00290679931640625,
+		"expected": 10.0,
+		"hit_events": 1,
+		"hp0": 100.0,
+		"hp1": 90.0,
+		"phases": [
+			"startup",
+			"active",
+			"recovery",
+			"idle"
+		],
+		"press_phase": "startup",
+		"source": "apply_frames fx_melee_close HP/knock after startup",
+		"startup_hp": 100.0,
+		"verdict": "pass",
+		"vx0": 0.0,
+		"vx1": 46.6666679382324,
+		"vx_hit": 46.6666679382324
+	},
+	"hitstop": {
+		"hitstop_left": 1,
+		"source": "hitstop presentation; clock still advances",
+		"tick0": 13,
+		"tick1": 14,
+		"verdict": "pass"
+	},
+	"kick": {
+		"hp0": 100.0,
+		"hp1": 88.0,
+		"kick_seq": 1,
+		"source": "apply_frames jump then kick hitbox",
+		"style": "kick",
+		"verdict": "pass"
+	},
+	"live": {
+		"hp0": 100.0,
+		"hp1": 90.0,
+		"phase": "recovery",
+		"pose": "melee",
+		"source": "parse_input_event KEY_N + step_from_live_input",
+		"verdict": "pass"
+	},
+	"miss": {
+		"dx": 160.0,
+		"dy": 0.0,
+		"facing": 1.0,
+		"hit_events": 0,
+		"hp0": 100.0,
+		"hp1": 100.0,
+		"miss_kind": "reach",
+		"source": "apply_frames fx_melee_far HP unchanged + geometry reach",
+		"verdict": "pass"
+	},
+	"once": {
+		"damage": 10.0,
+		"expected": 10.0,
+		"hit_events": 1,
+		"hp0": 100.0,
+		"hp1": 90.0,
+		"source": "one HP drop equals one fists hit across active window",
+		"verdict": "pass"
+	},
+	"pause": {
+		"hp0": 100.0,
+		"hp_end": 90.0,
+		"hp_paused": 100.0,
+		"phase0": "startup",
+		"phase1": "startup",
+		"rejected": true,
+		"source": "pause mid-startup freezes tick/phase/HP; resume finishes hit",
+		"tick0": 9,
+		"tick1": 9,
+		"verdict": "pass"
+	},
+	"phases": {
+		"phases": [
+			"startup",
+			"active",
+			"recovery",
+			"idle"
+		],
+		"press_phase": "startup",
+		"source": "phase log ticks, not event-only",
+		"startup_hp": 100.0,
+		"verdict": "pass"
+	},
+	"reach": {
+		"dx": 32.0,
+		"fists_miss": true,
+		"hp0": 100.0,
+		"hp1": 80.0,
+		"pipe_hit": true,
+		"source": "same spawn gap: fists miss, pipe hitbox connects",
+		"verdict": "pass"
+	},
+	"replay": {
+		"pair_count": 8,
+		"pairs": [
+			{
+				"hash_a": "7f945e43847a39b0fa53b62b43b33583970eceea6f9186cabeb5f923de8ed123",
+				"hash_b": "7f945e43847a39b0fa53b62b43b33583970eceea6f9186cabeb5f923de8ed123",
+				"hash_match": true,
+				"name": "melee_above",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "f6b7761f9e0e67680c2c76cedda162b456c1b18ac8ba60b8a0e44f0378497993",
+				"hash_b": "f6b7761f9e0e67680c2c76cedda162b456c1b18ac8ba60b8a0e44f0378497993",
+				"hash_match": true,
+				"name": "melee_behind",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "d52d72774f0c27f8ceb205795770587a0c3a9a6ea90d705b46207a3ef4d83f6d",
+				"hash_b": "d52d72774f0c27f8ceb205795770587a0c3a9a6ea90d705b46207a3ef4d83f6d",
+				"hash_match": true,
+				"name": "melee_below",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "e0ff5ca725e192186ce717864c8b074436fc49a13297fa65dd6d0f1ac24d64de",
+				"hash_b": "e0ff5ca725e192186ce717864c8b074436fc49a13297fa65dd6d0f1ac24d64de",
+				"hash_match": true,
+				"name": "melee_crouch",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "d9d65b3edfcafe41f2fa71fa681a8fb9b81bd669c8dbb09d6a31e702d17f45ac",
+				"hash_b": "d9d65b3edfcafe41f2fa71fa681a8fb9b81bd669c8dbb09d6a31e702d17f45ac",
+				"hash_match": true,
+				"name": "melee_hit",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "9729155c3fdf12b9558ba80f40f156d233f1762686290aeb311d414b98b15447",
+				"hash_b": "9729155c3fdf12b9558ba80f40f156d233f1762686290aeb311d414b98b15447",
+				"hash_match": true,
+				"name": "melee_kick",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "a3caf14396086181be615bf855fd73522b44683bb694ac5794578d8b68146df2",
+				"hash_b": "a3caf14396086181be615bf855fd73522b44683bb694ac5794578d8b68146df2",
+				"hash_match": true,
+				"name": "melee_miss",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "5ee1ad055c48d5ab3604781c16742ba083c7f4ab9b0ebd112583604351e553ee",
+				"hash_b": "5ee1ad055c48d5ab3604781c16742ba083c7f4ab9b0ebd112583604351e553ee",
+				"hash_match": true,
+				"name": "melee_once",
+				"ok_a": true,
+				"ok_b": true
+			}
+		],
+		"source": "SimReplay.final_hash twice",
+		"verdict": "match"
+	},
+	"snap": {
+		"expected_q": 90000,
+		"hash0": "f4dbd5aa580360a78a1b33bd04867e6421bb594ed40a3ec3435ead383b255d62",
+		"hash1": "f0a75548ee0c1205e8fdca6573cb0c00ab3bc763dc4114644b5c94b1f77651ff",
+		"hp0": 100.0,
+		"hp_q": 90000,
+		"source": "snapshot fighter hp/vx after apply_frames",
+		"verdict": "pass",
+		"vx_q": 13333
+	}
+}
