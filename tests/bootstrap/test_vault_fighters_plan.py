@@ -29,6 +29,7 @@ DECISION_ID = "GODOT-VF-PLAN-2026-08-29"
 OWNER_DECISION_ID = "GODOT-VF-Y8-2026-08-28"
 WP_HEADING = re.compile(r"^(VF\d+-WP\d+)\s+—.+\[([ xX])\]\s*$")
 CURRENT_WP_LINE = re.compile(r"^CURRENT_VALID_WP=(\S+)\s*$")
+VF2_WP2_CORRECTION = "CORRECTION_GATE_VF2_WP2=REQUIRED"
 OLD_SOLE_PLAN = "Kế hoạch quyền lực duy nhất"
 OLD_FIRST_PRODUCT_WP = "WP sản phẩm đầu tiên của agent mới là R0-WP3"
 FORBIDDEN_SUPERFIGHTER_START_LINES = (
@@ -285,6 +286,21 @@ def main() -> int:
     nxt, choose_errors = choose_next_product_wp(agents, product)
     errors.extend(choose_errors)
     ticked = [wp_id for wp_id, tick in headings if tick.lower() == "x"]
+
+    # An owner audit may reopen a previously committed WP. Keep this guard
+    # machine-readable so a stale coordinator cannot simply tick the next WP.
+    if exact_lines(product, VF2_WP2_CORRECTION) == 1:
+        heading_state = {wp_id: tick.lower() for wp_id, tick in headings}
+        if heading_state.get("VF2-WP2") == "x":
+            errors.append("VF2-WP2 correction gate is REQUIRED but the WP is ticked")
+        if header_current_wp(product) != "VF2-WP2":
+            errors.append("VF2-WP2 correction gate is REQUIRED but CURRENT_VALID_WP differs")
+        if "CORRECTION GATE 2026-08-29" not in product:
+            errors.append("VF2-WP2 correction gate details are missing")
+    elif "CORRECTION GATE 2026-08-29" in product:
+        errors.append(
+            "VF2-WP2 correction gate details exist but the REQUIRED machine guard is missing"
+        )
 
     check_agents_product_route(agents, errors)
     check_decisions(decisions, errors)
