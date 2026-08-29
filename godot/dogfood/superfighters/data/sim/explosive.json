@@ -64,6 +64,30 @@
     "ammo": 3,
     "icon": "res://assets/art/item_grenade.png"
   },
+  "cinder": {
+    "id": "cinder",
+    "name": "Cinder Flask",
+    "kind": "throw",
+    "slot": "power",
+    "throw_speed": 260.0,
+    "throw_up": -70.0,
+    "throw_bias_y": -0.35,
+    "throw_forward": 10.0,
+    "throw_lift": -8.0,
+    "gravity": 900.0,
+    "bounce_x": 0.45,
+    "bounce_y": 0.30,
+    "rest_vy": 24.0,
+    "fuse_ticks": 48,
+    "life_ticks": 150,
+    "throw_cd_ticks": 48,
+    "damage": 22.0,
+    "radius": 56.0,
+    "knock": 110.0,
+    "knock_y": -60.0,
+    "ammo": 1,
+    "icon": "res://assets/art/item_cinder.png"
+  },
   "fixtures": {
     "fx_nade_open": [
       "################",

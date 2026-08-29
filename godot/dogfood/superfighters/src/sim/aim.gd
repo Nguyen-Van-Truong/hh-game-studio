@@ -17,6 +17,7 @@ extends RefCounted
 
 const PATH: String = "res://data/sim/aim.json"
 const SCHEMA_ID: String = "vf.sim.aim.v1"
+const _Roster: GDScript = preload("res://src/data/weapons/roster.gd")
 
 static var _cache: Dictionary = {}
 
@@ -31,6 +32,9 @@ static func gun(weapon_id: String) -> Dictionary:
 	var guns: Dictionary = _dict(data().get("guns", {}))
 	if guns.has(weapon_id):
 		return _dict(guns.get(weapon_id, {}))
+	var from_roster: Dictionary = _Roster.item(weapon_id)
+	if str(from_roster.get("kind", "")) == "gun":
+		return from_roster
 	return {}
 
 

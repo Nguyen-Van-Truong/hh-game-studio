@@ -5,6 +5,7 @@ const _Traversal: GDScript = preload("res://src/sim/traversal.gd")
 const _Combat: GDScript = preload("res://src/sim/combat.gd")
 const _Aim: GDScript = preload("res://src/sim/aim.gd")
 const _Expl: GDScript = preload("res://src/sim/explosive.gd")
+const _Inv: GDScript = preload("res://src/data/weapons/inventory.gd")
 
 signal won
 signal lost
@@ -655,12 +656,9 @@ func _try_pickup(f: Fighter) -> bool:
 	if best_i < 0:
 		return false
 	var chosen: Pickup = pickups[best_i]
-	var spec: Dictionary = WeaponDefs.data(chosen.weapon_id)
-	var slot_kind: String = str(spec.get("slot", "melee"))
-	if slot_kind == "gun" and f.gun_id != "" and f.ammo > 0:
-		_drop_specific(f.gun_id, f.global_position + Vector2(0, 8), false)
-	elif slot_kind == "melee" and f.melee_id != "fists":
-		_drop_specific(f.melee_id, f.global_position + Vector2(0, 8), false)
+	var dropped: String = _Inv.dropped_on_pickup(f, chosen.weapon_id)
+	if dropped != "":
+		_drop_specific(dropped, f.global_position + Vector2(0, 8), false)
 	if chosen.from_world:
 		respawns.append({
 			"id": chosen.weapon_id,
@@ -683,10 +681,19 @@ func _try_pickup(f: Fighter) -> bool:
 	return true
 
 
-func _drop_specific(pid: String, at: Vector2, from_world: bool) -> void:
-	if pid == "" or pid == "fists":
-		return
-	_add_pickup(pid, at, from_world)
+func _drop_specific(pid: String, at: Vector2, from_world: bool) -> Pickup:
+	if pid == "":
+		return null
+	return _add_pickup(pid, at, from_world)
+
+
+func drop_held_slot(f: Fighter, slot: String) -> Pickup:
+	if f == null:
+		return null
+	var dropped: String = _Inv.eject_slot(f, slot)
+	if dropped == "":
+		return null
+	return _drop_specific(dropped, f.global_position + Vector2(0, 8), false)
 
 
 func _drop_disarmed(f: Fighter, pid: String) -> void:
@@ -763,20 +770,28 @@ func _do_fire(f: Fighter) -> void:
 
 
 func _do_grenade(f: Fighter) -> void:
-	if f.grenades <= 0:
+	var payload_id: String = ""
+	if f.grenades > 0:
+		f.consume_grenade()
+		payload_id = f.explosive_id if f.explosive_id != "" else "grenade"
+	elif _Inv.power_throw_ready(f):
+		payload_id = f.power_id
+		f.consume_power()
+	else:
 		return
-	f.consume_grenade()
 	var dir: Vector2 = _Expl.throw_dir(f)
 	var posed: Vector2 = _Expl.throw_origin(f)
 	var origin: Vector2 = _uncollide_point(posed, dir)
 	var nade: ThrownGrenade = ThrownGrenade.new()
-	nade.setup(origin, dir, f.slot, f.team)
+	nade.setup(origin, dir, f.slot, f.team, payload_id)
 	add_child(nade)
 	grenades.append(nade)
 	ledger.push(clock.tick, "grenade_spawn", "nade", {
 		"owner": f.slot,
 		"team": f.team,
 		"nades": f.grenades,
+		"power": f.power_id,
+		"payload": payload_id,
 		"dir_x": SimConstants.quantize(dir.x),
 		"dir_y": SimConstants.quantize(dir.y),
 		"x": SimConstants.quantize(origin.x),

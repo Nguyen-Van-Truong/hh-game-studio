@@ -98,6 +98,16 @@
       "crouch_hitbox": [24.0, 12.0],
       "crouch_offset": [16.0, 4.0]
     },
+    "baton": {
+      "startup": 4,
+      "active": 3,
+      "recovery": 10,
+      "damage": 16.0,
+      "hitbox": [20.0, 13.0],
+      "offset": [13.0, -2.0],
+      "crouch_hitbox": [18.0, 11.0],
+      "crouch_offset": [13.0, 4.0]
+    },
     "kick": {
       "startup": 2,
       "active": 4,

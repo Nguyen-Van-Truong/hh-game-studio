@@ -66,7 +66,12 @@
     "nade_once": "RL-NADE-ONCE assumption, one explosion event",
     "nade_timeout": "RL-NADE-TIMEOUT assumption, leftover cleanup",
     "nade_sweep": "RL-NADE-SWEEP assumption, not observed",
-    "nade_prop": "RL-NADE-PROP deferred VF4, event only"
+    "nade_prop": "RL-NADE-PROP deferred VF4, event only",
+    "item_slots": "RL-ITEM-SLOTS-4 assumption, not observed",
+    "item_roster": "RL-ITEM-ROSTER assumption, tuning values, not observed",
+    "item_pick_slot": "RL-ITEM-PICK-SLOT assumption, not observed",
+    "item_keep_gun": "RL-ITEM-KEEP-GUN assumption, not observed",
+    "item_ammo_reload": "RL-ITEM-AMMO-RELOAD assumption, not observed"
   },
   "combat": {
     "schema": "vf.sim.combat.v1",
@@ -79,6 +84,11 @@
   "explosive": {
     "schema": "vf.sim.explosive.v1",
     "path": "res://data/sim/explosive.json"
+  },
+  "weapons": {
+    "schema": "vf.weapons.roster.v1",
+    "path": "res://data/weapons/roster.json",
+    "gate": "res://data/weapons/schema.json"
   },
   "locomotion": {
     "schema": "vf.sim.locomotion.v1",

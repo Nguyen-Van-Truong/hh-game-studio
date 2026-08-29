@@ -1,0 +1,561 @@
+{
+	"ammo": {
+		"ammo": 8,
+		"copied_reserve": true,
+		"empty_ok": true,
+		"reload_ok": true,
+		"reload_ticks": 40,
+		"reserve": 0,
+		"roster_mag": 8,
+		"roster_reserve": 8,
+		"source": "0 ammo no fire; empty gun stays; rifle reload from roster-copied reserve/mag",
+		"verdict": "pass"
+	},
+	"apply": {
+		"attempted": 563,
+		"succeeded": 563,
+		"used_action_press": 0,
+		"used_apply_frames": 563,
+		"used_parse_input_event": 1,
+		"used_step_fixed": 0
+	},
+	"attack": {
+		"attacked": 11,
+		"expected": 11,
+		"ids": [
+			"baton",
+			"cinder",
+			"fists",
+			"grenade",
+			"knife",
+			"launcher",
+			"pipe",
+			"pistol",
+			"rifle",
+			"shotgun",
+			"uzi"
+		],
+		"source": "apply_frames melee/fire/throw per roster id",
+		"verdict": "pass"
+	},
+	"data": {
+		"original_exact_numbers_claimed": false,
+		"source": "roster values are tuning",
+		"tuning": true,
+		"verdict": "pass"
+	},
+	"drop": {
+		"expected": 11,
+		"ids": [
+			"baton",
+			"cinder",
+			"fists",
+			"grenade",
+			"knife",
+			"launcher",
+			"pipe",
+			"pistol",
+			"rifle",
+			"shotgun",
+			"uzi"
+		],
+		"rows": [
+			{
+				"clones": 0,
+				"id": "baton",
+				"path": "pickup_replace",
+				"uid": 2
+			},
+			{
+				"clones": 0,
+				"id": "cinder",
+				"path": "held_eject",
+				"uid": 1
+			},
+			{
+				"clones": 0,
+				"id": "fists",
+				"path": "pickup_replace",
+				"uid": 2
+			},
+			{
+				"clones": 0,
+				"id": "grenade",
+				"path": "held_eject",
+				"uid": 1
+			},
+			{
+				"clones": 0,
+				"id": "knife",
+				"path": "pickup_replace",
+				"uid": 2
+			},
+			{
+				"clones": 0,
+				"id": "launcher",
+				"path": "pickup_replace",
+				"uid": 2
+			},
+			{
+				"clones": 0,
+				"id": "pipe",
+				"path": "pickup_replace",
+				"uid": 2
+			},
+			{
+				"clones": 0,
+				"id": "pistol",
+				"path": "pickup_replace",
+				"uid": 2
+			},
+			{
+				"clones": 0,
+				"id": "rifle",
+				"path": "pickup_replace",
+				"uid": 2
+			},
+			{
+				"clones": 0,
+				"id": "shotgun",
+				"path": "pickup_replace",
+				"uid": 2
+			},
+			{
+				"clones": 0,
+				"id": "uzi",
+				"path": "pickup_replace",
+				"uid": 2
+			}
+		],
+		"source": "pickup-replace when a same-slot partner exists; held_eject via drop_held_slot/_drop_specific for singleton slots",
+		"verdict": "pass"
+	},
+	"equip": {
+		"equipped": 11,
+		"expected": 11,
+		"ids": [
+			"baton",
+			"cinder",
+			"fists",
+			"grenade",
+			"knife",
+			"launcher",
+			"pipe",
+			"pistol",
+			"rifle",
+			"shotgun",
+			"uzi"
+		],
+		"source": "give_weapon every roster id",
+		"verdict": "pass"
+	},
+	"keep": {
+		"after_melee": true,
+		"after_nade": true,
+		"after_power": true,
+		"source": "crouch pickup pipe/grenade/cinder keeps pistol",
+		"verdict": "pass"
+	},
+	"live": {
+		"gun": "uzi",
+		"melee": "pipe",
+		"source": "parse_input_event KEY_DOWN+KEY_N + step_from_live_input",
+		"verdict": "pass"
+	},
+	"replay": {
+		"pairs": [
+			{
+				"hash_a": "5345a045710cb92e2e088bcf3ccda3f1362ee0f21b2f34875e1df5b788cca2bb",
+				"hash_b": "5345a045710cb92e2e088bcf3ccda3f1362ee0f21b2f34875e1df5b788cca2bb",
+				"hash_match": true,
+				"name": "roster_idle",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "2900cb819043695722435202fa39fcc4ca0d35907d4f967f7fd770805cb79bf5",
+				"hash_b": "2900cb819043695722435202fa39fcc4ca0d35907d4f967f7fd770805cb79bf5",
+				"hash_match": true,
+				"name": "roster_keep",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "e495cb26f785f9945f1edf5e559c7a4ae9bdad0c17208913a9258515324e17f3",
+				"hash_b": "e495cb26f785f9945f1edf5e559c7a4ae9bdad0c17208913a9258515324e17f3",
+				"hash_match": true,
+				"name": "roster_melee",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "f9ab54be919d93f412057a334852ef5cce7d6dc12d0b91ef7f89d115981ef05f",
+				"hash_b": "f9ab54be919d93f412057a334852ef5cce7d6dc12d0b91ef7f89d115981ef05f",
+				"hash_match": true,
+				"name": "roster_throw",
+				"ok_a": true,
+				"ok_b": true
+			}
+		],
+		"source": "apply_frames roster traces twice",
+		"verdict": "match"
+	},
+	"schema": {
+		"ids": 11,
+		"reject_bad_weight": true,
+		"reject_missing_id": true,
+		"source": "data/weapons/roster.json + schema.json + validate_payload reject-invalid",
+		"verdict": "pass"
+	},
+	"serialize": {
+		"expected": 11,
+		"hash_fields": true,
+		"ids": [
+			"baton",
+			"cinder",
+			"fists",
+			"grenade",
+			"knife",
+			"launcher",
+			"pipe",
+			"pistol",
+			"rifle",
+			"shotgun",
+			"uzi"
+		],
+		"rows": [
+			{
+				"back": {
+					"ammo": 12,
+					"explosive": "grenade",
+					"firearm": "pistol",
+					"melee": "baton",
+					"nades": 3,
+					"power": "",
+					"power_ammo": 0,
+					"reload_left": 0,
+					"reserve": 0,
+					"weapon": "pistol"
+				},
+				"id": "baton",
+				"ok": true,
+				"snap": {
+					"ammo": 12,
+					"explosive": "grenade",
+					"firearm": "pistol",
+					"melee": "baton",
+					"nades": 3,
+					"power": "",
+					"power_ammo": 0,
+					"reload_left": 0,
+					"reserve": 0,
+					"weapon": "pistol"
+				}
+			},
+			{
+				"back": {
+					"ammo": 12,
+					"explosive": "grenade",
+					"firearm": "pistol",
+					"melee": "fists",
+					"nades": 3,
+					"power": "cinder",
+					"power_ammo": 1,
+					"reload_left": 0,
+					"reserve": 0,
+					"weapon": "pistol"
+				},
+				"id": "cinder",
+				"ok": true,
+				"snap": {
+					"ammo": 12,
+					"explosive": "grenade",
+					"firearm": "pistol",
+					"melee": "fists",
+					"nades": 3,
+					"power": "cinder",
+					"power_ammo": 1,
+					"reload_left": 0,
+					"reserve": 0,
+					"weapon": "pistol"
+				}
+			},
+			{
+				"back": {
+					"ammo": 12,
+					"explosive": "grenade",
+					"firearm": "pistol",
+					"melee": "fists",
+					"nades": 3,
+					"power": "",
+					"power_ammo": 0,
+					"reload_left": 0,
+					"reserve": 0,
+					"weapon": "pistol"
+				},
+				"id": "fists",
+				"ok": true,
+				"snap": {
+					"ammo": 12,
+					"explosive": "grenade",
+					"firearm": "pistol",
+					"melee": "fists",
+					"nades": 3,
+					"power": "",
+					"power_ammo": 0,
+					"reload_left": 0,
+					"reserve": 0,
+					"weapon": "pistol"
+				}
+			},
+			{
+				"back": {
+					"ammo": 12,
+					"explosive": "grenade",
+					"firearm": "pistol",
+					"melee": "fists",
+					"nades": 6,
+					"power": "",
+					"power_ammo": 0,
+					"reload_left": 0,
+					"reserve": 0,
+					"weapon": "pistol"
+				},
+				"id": "grenade",
+				"ok": true,
+				"snap": {
+					"ammo": 12,
+					"explosive": "grenade",
+					"firearm": "pistol",
+					"melee": "fists",
+					"nades": 6,
+					"power": "",
+					"power_ammo": 0,
+					"reload_left": 0,
+					"reserve": 0,
+					"weapon": "pistol"
+				}
+			},
+			{
+				"back": {
+					"ammo": 12,
+					"explosive": "grenade",
+					"firearm": "pistol",
+					"melee": "knife",
+					"nades": 3,
+					"power": "",
+					"power_ammo": 0,
+					"reload_left": 0,
+					"reserve": 0,
+					"weapon": "pistol"
+				},
+				"id": "knife",
+				"ok": true,
+				"snap": {
+					"ammo": 12,
+					"explosive": "grenade",
+					"firearm": "pistol",
+					"melee": "knife",
+					"nades": 3,
+					"power": "",
+					"power_ammo": 0,
+					"reload_left": 0,
+					"reserve": 0,
+					"weapon": "pistol"
+				}
+			},
+			{
+				"back": {
+					"ammo": 2,
+					"explosive": "grenade",
+					"firearm": "launcher",
+					"melee": "fists",
+					"nades": 3,
+					"power": "",
+					"power_ammo": 0,
+					"reload_left": 0,
+					"reserve": 0,
+					"weapon": "launcher"
+				},
+				"id": "launcher",
+				"ok": true,
+				"snap": {
+					"ammo": 2,
+					"explosive": "grenade",
+					"firearm": "launcher",
+					"melee": "fists",
+					"nades": 3,
+					"power": "",
+					"power_ammo": 0,
+					"reload_left": 0,
+					"reserve": 0,
+					"weapon": "launcher"
+				}
+			},
+			{
+				"back": {
+					"ammo": 12,
+					"explosive": "grenade",
+					"firearm": "pistol",
+					"melee": "pipe",
+					"nades": 3,
+					"power": "",
+					"power_ammo": 0,
+					"reload_left": 0,
+					"reserve": 0,
+					"weapon": "pistol"
+				},
+				"id": "pipe",
+				"ok": true,
+				"snap": {
+					"ammo": 12,
+					"explosive": "grenade",
+					"firearm": "pistol",
+					"melee": "pipe",
+					"nades": 3,
+					"power": "",
+					"power_ammo": 0,
+					"reload_left": 0,
+					"reserve": 0,
+					"weapon": "pistol"
+				}
+			},
+			{
+				"back": {
+					"ammo": 12,
+					"explosive": "grenade",
+					"firearm": "pistol",
+					"melee": "fists",
+					"nades": 3,
+					"power": "",
+					"power_ammo": 0,
+					"reload_left": 0,
+					"reserve": 0,
+					"weapon": "pistol"
+				},
+				"id": "pistol",
+				"ok": true,
+				"snap": {
+					"ammo": 12,
+					"explosive": "grenade",
+					"firearm": "pistol",
+					"melee": "fists",
+					"nades": 3,
+					"power": "",
+					"power_ammo": 0,
+					"reload_left": 0,
+					"reserve": 0,
+					"weapon": "pistol"
+				}
+			},
+			{
+				"back": {
+					"ammo": 8,
+					"explosive": "grenade",
+					"firearm": "rifle",
+					"melee": "fists",
+					"nades": 3,
+					"power": "",
+					"power_ammo": 0,
+					"reload_left": 0,
+					"reserve": 8,
+					"weapon": "rifle"
+				},
+				"id": "rifle",
+				"ok": true,
+				"snap": {
+					"ammo": 8,
+					"explosive": "grenade",
+					"firearm": "rifle",
+					"melee": "fists",
+					"nades": 3,
+					"power": "",
+					"power_ammo": 0,
+					"reload_left": 0,
+					"reserve": 8,
+					"weapon": "rifle"
+				}
+			},
+			{
+				"back": {
+					"ammo": 6,
+					"explosive": "grenade",
+					"firearm": "shotgun",
+					"melee": "fists",
+					"nades": 3,
+					"power": "",
+					"power_ammo": 0,
+					"reload_left": 0,
+					"reserve": 0,
+					"weapon": "shotgun"
+				},
+				"id": "shotgun",
+				"ok": true,
+				"snap": {
+					"ammo": 6,
+					"explosive": "grenade",
+					"firearm": "shotgun",
+					"melee": "fists",
+					"nades": 3,
+					"power": "",
+					"power_ammo": 0,
+					"reload_left": 0,
+					"reserve": 0,
+					"weapon": "shotgun"
+				}
+			},
+			{
+				"back": {
+					"ammo": 24,
+					"explosive": "grenade",
+					"firearm": "uzi",
+					"melee": "fists",
+					"nades": 3,
+					"power": "",
+					"power_ammo": 0,
+					"reload_left": 0,
+					"reserve": 0,
+					"weapon": "uzi"
+				},
+				"id": "uzi",
+				"ok": true,
+				"snap": {
+					"ammo": 24,
+					"explosive": "grenade",
+					"firearm": "uzi",
+					"melee": "fists",
+					"nades": 3,
+					"power": "",
+					"power_ammo": 0,
+					"reload_left": 0,
+					"reserve": 0,
+					"weapon": "uzi"
+				}
+			}
+		],
+		"source": "per-id _Inv.snapshot / apply_snapshot after disturbing melee/firearm/explosive/power/ammo/reserve/reload",
+		"verdict": "pass"
+	},
+	"spawn": {
+		"default_equip": [
+			"fists"
+		],
+		"expected": 11,
+		"ids": [
+			"baton",
+			"cinder",
+			"fists",
+			"grenade",
+			"knife",
+			"launcher",
+			"pipe",
+			"pistol",
+			"rifle",
+			"shotgun",
+			"uzi"
+		],
+		"source": "default-equip fists plus _add_pickup every roster id",
+		"spawned": 11,
+		"verdict": "pass"
+	}
+}

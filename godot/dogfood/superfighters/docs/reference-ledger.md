@@ -154,7 +154,7 @@ invariants. Calibrate later with traces (VF1-WP3+).
 | ID | Topic | Class | Conf. | Source | When | Behavior to reproduce | Tuning-only | Notes |
 |---|---|---|---|---|---|---|---|---|
 | RL-ITEM-GRAB-GUNS | Grab guns, shoot, last standing | `observed` | med | live Y8 “intense shooting” / “survive in the chaotic arenas” plus 2011 “grab guns … blast the AI” | 2026-08-29 | Pickup + shoot + arena survival | — | Win condition “last standing” is first-playable + plan, not a live Y8 sentence. |
-| RL-ITEM-13-WEAPONS | 13 weapons (2011) | `secondary` | med | RL-SRC-NG-INDEX | 2026-08-29 | Broad roster, not fists-only | which 13 | First-playable roster is smaller (fists/pistol/uzi/shotgun/pipe/knife/grenade). |
+| RL-ITEM-13-WEAPONS | 13 weapons (2011) | `secondary` | med | RL-SRC-NG-INDEX | 2026-08-29 | Broad roster, not fists-only | which 13 | VF3-WP5 product roster is 11 original items; not a claim that it matches the 2011 13. |
 | RL-ITEM-RANDOM-SPAWN | Random weapon/object spawn | `secondary` | med | RL-SRC-NG-INDEX | 2026-08-29 | Spawns are not a fixed fair draft | period, tables | `maps.gd` `WEAPON_RESPAWN = 20.0` is a **tuning target**, not observed. |
 | RL-ITEM-BULLET-TIME | Bullet-time power-up | `secondary` | med | RL-SRC-NG-INDEX + 2011 power-up keys | 2026-08-29 | Reference had a combat speed power-up | duration | First-playable / `KNOWN_ISSUES.md`: not in this slice. |
 | RL-ITEM-BOX2D | Box2D spectacle | `secondary` | low | RL-SRC-NG-INDEX | 2026-08-29 | Physics debris/gibs were a reference feature | — | Product uses Godot physics; no Box2D rip. Not a VF1-WP1 ship claim. |
@@ -539,3 +539,39 @@ collision maps, not a VF5 pass.
 | RL-NADE-TIMEOUT | Timeout cleanup | `assumption` | none | VF3-WP4 product contract; **not** observed on Y8 this session | 2026-08-29 | life_ticks expiry frees the node | 180 | Not observed. |
 | RL-NADE-SWEEP | Continuous nade collision | `assumption` | none | VF3-WP4 product contract; **not** observed on Y8 this session | 2026-08-29 | Segment from last_pos to predicted hits wall first | 4000 px/s proof | Not observed. |
 | RL-NADE-PROP | Explosion prop event | `deferred` | none | VF3-WP4 event only; destroy waits VF4 | 2026-08-29 | explosion payload prop_break=deferred_vf4 | VF4 | Not a prop destroy. |
+
+---
+
+## VF3-WP5 data-driven roster and inventory slots (not a play observation)
+
+Dated 2026-08-29 Asia/Saigon. No in-game Y8 play. No HTML5/Flash
+package. Sidecar: `docs/roster.md` and
+`docs/evidence/VF3WP5-20260829-ASIA-SAIGON-02/`.
+Prior remint `VF3WP5-20260829-ASIA-SAIGON-01` is not reused.
+
+Four slots stay `ledger:RL-ITEM-SLOTS-4` (`assumption`). Roster stays
+`ledger:RL-ITEM-ROSTER` (`assumption`). Pickup slot replace stays
+`ledger:RL-ITEM-PICK-SLOT` (`assumption`). Keep-gun stays
+`ledger:RL-ITEM-KEEP-GUN` (`assumption`). Ammo/reload stay
+`ledger:RL-ITEM-AMMO-RELOAD` (`assumption`). None of these rows is
+promoted to `observed`. Hold-to-aim stays
+`ledger:RL-CTRL-HOLD-AIM` (`assumption`). Y8 observation stays
+`ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). 60 Hz stays
+`ledger:RL-SIM-FIXED-60` (`assumption`). Values are tuning; this
+WP does **not** claim original exact numbers.
+
+Product contract: melee / firearm / explosive / power slots;
+original item names and art; fists + three melee + pistol + Uzi +
+shotgun + Longarm + Thumper + grenade + Cinder Flask; pickup
+replaces the matching slot and drops the old item; grenade/melee/
+power pickups do not strip the gun; empty firearm stays equipped;
+rifle can reload from reserve. Official proof uses `apply_frames`
+plus live InputEvent inject.
+
+| ID | Topic | Class | Conf. | Source | When | Behavior to reproduce | Tuning-only | Notes |
+|---|---|---|---|---|---|---|---|---|
+| RL-ITEM-SLOTS-4 | Four inventory slots | `assumption` | none | VF3-WP5 product contract; **not** observed on Y8 this session | 2026-08-29 | melee / firearm / explosive / power | slot names | Do **not** cite as observed. |
+| RL-ITEM-ROSTER | Data-driven roster | `assumption` | none | VF3-WP5 product contract; **not** observed on Y8 this session | 2026-08-29 | schema rejects missing fields; 11 original ids | all numbers | Tuning, not Y8 tables. |
+| RL-ITEM-PICK-SLOT | Pickup replaces slot | `assumption` | none | VF3-WP5 product contract; **not** observed on Y8 this session | 2026-08-29 | new item occupies its slot; old item drops | same-id stacks | Not observed. |
+| RL-ITEM-KEEP-GUN | Nade/melee keep gun | `assumption` | none | VF3-WP5 product contract; **not** observed on Y8 this session | 2026-08-29 | pipe / grenade / cinder pickup leaves pistol | — | Not observed. |
+| RL-ITEM-AMMO-RELOAD | Ammo / reload data | `assumption` | none | VF3-WP5 product contract; **not** observed on Y8 this session | 2026-08-29 | 0 ammo no fire; empty gun stays; rifle reloads | reload_ticks | Weight is data only. |

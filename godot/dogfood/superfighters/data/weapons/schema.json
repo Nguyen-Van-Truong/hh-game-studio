@@ -1,0 +1,45 @@
+{
+  "schema": "vf.weapons.schema.v1",
+  "schema_version": 1,
+  "title": "Vault Fighters",
+  "y8_parity_claimed": false,
+  "roster_schema": "vf.weapons.roster.v1",
+  "roster_path": "res://data/weapons/roster.json",
+  "allowed_slots": ["melee", "firearm", "explosive", "power"],
+  "slot_aliases": {
+    "gun": "firearm",
+    "nade": "explosive"
+  },
+  "required_item_fields": [
+    "id",
+    "name",
+    "kind",
+    "slot",
+    "ammo",
+    "reload_ticks",
+    "cooldown",
+    "weight",
+    "icon"
+  ],
+  "required_ids": [
+    "fists",
+    "pipe",
+    "knife",
+    "baton",
+    "pistol",
+    "uzi",
+    "shotgun",
+    "rifle",
+    "launcher",
+    "grenade",
+    "cinder"
+  ],
+  "honesty": {
+    "slots": "RL-ITEM-SLOTS-4 assumption, not observed",
+    "roster": "RL-ITEM-ROSTER assumption, original names, tuning values",
+    "pickup_slot": "RL-ITEM-PICK-SLOT assumption, not observed",
+    "keep_gun": "RL-ITEM-KEEP-GUN assumption, not observed",
+    "ammo_reload": "RL-ITEM-AMMO-RELOAD assumption, not observed",
+    "weight": "tuning only; does not change VF2 locomotion this WP"
+  }
+}

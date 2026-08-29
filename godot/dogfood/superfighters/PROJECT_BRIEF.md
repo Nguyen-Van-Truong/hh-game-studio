@@ -41,7 +41,11 @@ https://mythologicinteractive.com/Superfighters
 - Hold-to-aim, aim with up/down, release to shoot
   (`ledger:RL-CTRL-HOLD-AIM` / `ledger:RL-AIM-DIRS` /
   `ledger:RL-FIRE-SEMI`, `assumption`)
-- Three slots: melee + gun + grenades. Start fists + pistol×12 + 3 nades
+- Four slots: melee + firearm + explosive + power
+  (`ledger:RL-ITEM-SLOTS-4`, `assumption`). Start fists +
+  pistol×12 + 3 nades; power empty. Roster is data-driven
+  (`ledger:RL-ITEM-ROSTER`, `assumption`; tuning, not original
+  exact numbers)
 - Melee uses startup / active / recovery and AABB overlap
   (`ledger:RL-HIT-PHASES` / `ledger:RL-HIT-BOX`, `assumption`)
 - Hit impulse / knockdown / get-up / exact-tick invuln; punch
@@ -49,7 +53,10 @@ https://mythologicinteractive.com/Superfighters
   `ledger:RL-HIT-DOWN` / `ledger:RL-HIT-INVULN` /
   `ledger:RL-HIT-DISARM`, `assumption`)
 - Crouch + melee near a grounded weapon to pick up / swap (standing
-  melee does not loot). A grenade pickup does not strip the gun
+  melee does not loot). Pickup replaces the matching slot and drops
+  the old item (`ledger:RL-ITEM-PICK-SLOT`, `assumption`). A grenade
+  or melee pickup does not strip the gun
+  (`ledger:RL-ITEM-KEEP-GUN`, `assumption`)
 - Hold comma (P2: 3) to aim a throw, release to throw
   (`ledger:RL-NADE-HOLD` / `ledger:RL-NADE-ARC` /
   `ledger:RL-NADE-BOUNCE` / `ledger:RL-NADE-FUSE`, `assumption`)
@@ -57,8 +64,8 @@ https://mythologicinteractive.com/Superfighters
   (`ledger:RL-NADE-FALLOFF` / `ledger:RL-NADE-OWNER` /
   `ledger:RL-NADE-ONCE`, `assumption`). Prop destroy waits VF4.
 - Health + stamina bars; stamina drains on sprint
-- Random-ish weapon spawns (~20s respawn): pipe, knife, pistol, shotgun,
-  uzi, grenade
+- Random-ish weapon spawns (~20s respawn): pipe, knife, baton, pistol,
+  shotgun, uzi, Longarm, Thumper, grenade, Cinder Flask
 - VS 1P (vs bots), local VS 2P, and Stage (Rooftops → Storage →
   Police Station → Hazardous — the Y8 Stage order)
 - Camera frames the whole arena
@@ -117,7 +124,9 @@ platform. They are not ripped collision maps.
   (`ledger:RL-CTRL-HOLD-AIM`), still `assumption`, not an observed
   listing behavior. Semi/auto/muzzle/recoil/sweep cite
   `ledger:RL-FIRE-*` (`assumption`). Guns are ballistic, not
-  hitscan (`ledger:RL-FIRE-BALLISTIC`).
+  hitscan (`ledger:RL-FIRE-BALLISTIC`). Ammo empty + reload from
+  reserve is product tuning (`ledger:RL-ITEM-AMMO-RELOAD`,
+  `assumption`).
 
 ## platform
 
@@ -134,7 +143,8 @@ platform. They are not ripped collision maps.
 ## ui
 
 - **flow:** Title to Fight to Pause to Resume; Win and Lose offer Restart
-- **hud:** health + stamina per living fighter, weapon name, map name
+- **hud:** health + stamina per living fighter, melee / firearm /
+  explosive / power names, map name
 
 ## forbidden
 

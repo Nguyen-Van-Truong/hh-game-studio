@@ -1,0 +1,28 @@
+{
+  "schema": "vf.sim.trace.v1",
+  "schema_version": 1,
+  "title": "Vault Fighters",
+  "kind": "official",
+  "name": "roster_keep",
+  "record_source": "scripted_input_frames",
+  "mode": "vs2",
+  "map_id": "fx_roster_open",
+  "stage_index": 0,
+  "seed": 7,
+  "fighter_count": 2,
+  "tick_hz": 60,
+  "snapshot_every": 15,
+  "ledger_clock": "RL-SIM-FIXED-60",
+  "y8_tick_rate_claimed": false,
+  "y8_parity_claimed": false,
+  "hold_to_aim": "RL-CTRL-HOLD-AIM assumption, not observed",
+  "keep_gun": "RL-ITEM-KEEP-GUN assumption, not observed",
+  "used_step_fixed": false,
+  "used_action_press": false,
+  "segments": [
+    {"ticks": 8, "p1": {}},
+    {"ticks": 6, "p1": {"held": ["fire"]}},
+    {"ticks": 1, "p1": {"released": ["fire"]}},
+    {"ticks": 16, "p1": {}}
+  ]
+}

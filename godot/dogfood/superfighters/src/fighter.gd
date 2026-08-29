@@ -24,6 +24,11 @@ extends CharacterBody2D
 ## Semi release stays ledger:RL-FIRE-SEMI (assumption).
 ## Auto cadence stays ledger:RL-FIRE-AUTO (assumption).
 ## Hold-to-throw stays ledger:RL-NADE-HOLD (assumption).
+## Four slots stay ledger:RL-ITEM-SLOTS-4 (assumption).
+## Roster stays ledger:RL-ITEM-ROSTER (assumption).
+## Pickup slot replace stays ledger:RL-ITEM-PICK-SLOT (assumption).
+## Keep-gun stays ledger:RL-ITEM-KEEP-GUN (assumption).
+## Ammo/reload stay ledger:RL-ITEM-AMMO-RELOAD (assumption).
 ## InputFrame `ledge` stays reserved. Y8 observation stays
 ## ledger:RL-MOVE-ROLL-DIVE (unavailable). Not a Y8 observation.
 
@@ -33,6 +38,8 @@ const _Traversal: GDScript = preload("res://src/sim/traversal.gd")
 const _Combat: GDScript = preload("res://src/sim/combat.gd")
 const _Aim: GDScript = preload("res://src/sim/aim.gd")
 const _Expl: GDScript = preload("res://src/sim/explosive.gd")
+const _Roster: GDScript = preload("res://src/data/weapons/roster.gd")
+const _Inv: GDScript = preload("res://src/data/weapons/inventory.gd")
 
 var gravity: float = 1700.0
 var jump_vel: float = -430.0
@@ -94,8 +101,14 @@ var on_ladder: bool = false
 var melee_id: String = "fists"
 var gun_id: String = "pistol"
 var weapon_id: String = "pistol"
+var explosive_id: String = "grenade"
+var power_id: String = ""
 var ammo: int = 12
+var reserve: int = 0
+var mag_size: int = 12
+var reload_left: int = 0
 var grenades: int = 3
+var power_ammo: int = 0
 var melee_cd: float = 0.0
 var fire_cd: float = 0.0
 var grenade_cd: float = 0.0
@@ -221,11 +234,17 @@ func setup(p_slot: int, p_team: int, p_bot: bool) -> void:
 	floor_stop_on_slope = true
 	floor_snap_length = 4.0
 	safe_margin = 0.2
-	melee_id = "fists"
+	melee_id = _Roster.start_melee()
 	gun_id = WeaponDefs.start_gun()
 	weapon_id = gun_id
+	explosive_id = _Roster.start_explosive()
+	power_id = _Roster.start_power()
 	ammo = WeaponDefs.start_ammo()
+	reserve = int(_Roster.item(gun_id).get("reserve", 0))
+	mag_size = maxi(int(_Roster.item(gun_id).get("mag_size", ammo)), 0)
+	reload_left = 0
 	grenades = WeaponDefs.start_nades()
+	power_ammo = int(_Roster.start_row().get("power_ammo", 0))
 	col_shape = CollisionShape2D.new()
 	stand_shape = RectangleShape2D.new()
 	stand_shape.size = Vector2(10, 22)
@@ -306,6 +325,7 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	melee_cd = maxf(melee_cd - delta, 0.0)
 	fire_cd = maxf(fire_cd - delta, 0.0)
 	grenade_cd = maxf(grenade_cd - delta, 0.0)
+	_tick_reload()
 	melee_flash = maxf(melee_flash - delta, 0.0)
 	throw_flash = maxf(throw_flash - delta, 0.0)
 	_tick_invuln()
@@ -345,8 +365,9 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 		facing = x
 	var fire_held: bool = bool(cmd.get("fire_held", false))
 	var fire_released: bool = bool(cmd.get("fire_released", false))
-	var nade_held: bool = bool(cmd.get("grenade_held", false)) and grenades > 0
-	var nade_released: bool = bool(cmd.get("grenade_released", false)) and grenades > 0
+	var can_throw: bool = grenades > 0 or _Inv.power_throw_ready(self)
+	var nade_held: bool = bool(cmd.get("grenade_held", false)) and can_throw
+	var nade_released: bool = bool(cmd.get("grenade_released", false)) and can_throw
 	on_ladder = bool(cmd.get("on_ladder", false))
 	var snap_x: float = float(cmd.get("ladder_snap_x", global_position.x))
 	var climb_up_blocked: bool = bool(cmd.get("climb_up_blocked", false))
@@ -1069,6 +1090,8 @@ func disarm_gun() -> String:
 	var dropped: String = gun_id
 	gun_id = ""
 	ammo = 0
+	reserve = 0
+	reload_left = 0
 	weapon_id = melee_id
 	disarm_weapon = dropped
 	return dropped
@@ -1120,26 +1143,7 @@ func _die(cause: String) -> void:
 
 
 func give_weapon(next_id: String) -> String:
-	var spec: Dictionary = WeaponDefs.data(next_id)
-	var slot_kind: String = str(spec.get("slot", "melee"))
-	if slot_kind == "nade" or next_id == "grenade":
-		grenades += maxi(int(spec.get("ammo", 3)), 1)
-		return ""
-	if slot_kind == "gun":
-		var dropped: String = ""
-		if gun_id != "" and ammo > 0:
-			dropped = gun_id
-		gun_id = next_id
-		ammo = int(spec.get("ammo", 0))
-		weapon_id = next_id
-		return dropped
-	var dropped_melee: String = ""
-	if melee_id != "fists" and melee_id != next_id:
-		dropped_melee = melee_id
-	melee_id = next_id
-	if ammo <= 0:
-		weapon_id = next_id
-	return dropped_melee
+	return _Inv.give(self, next_id)
 
 
 func consume_ammo() -> void:
@@ -1147,15 +1151,46 @@ func consume_ammo() -> void:
 		ammo -= 1
 		if ammo <= 0:
 			weapon_id = melee_id
+			_start_reload()
 
 
 func consume_grenade() -> void:
 	grenades = maxi(grenades - 1, 0)
 
 
+func consume_power() -> void:
+	power_ammo = maxi(power_ammo - 1, 0)
+	if power_ammo <= 0:
+		power_id = ""
+
+
+func _start_reload() -> void:
+	if gun_id == "" or reserve <= 0 or reload_left > 0:
+		return
+	var spec: Dictionary = WeaponDefs.data(gun_id)
+	var ticks: int = int(spec.get("reload_ticks", 0))
+	if ticks > 0:
+		reload_left = ticks
+
+
+func _tick_reload() -> void:
+	if reload_left <= 0:
+		return
+	reload_left -= 1
+	if reload_left > 0:
+		return
+	if reserve <= 0 or mag_size <= 0:
+		return
+	var fill: int = mini(mag_size, reserve)
+	ammo = fill
+	reserve -= fill
+	if ammo > 0:
+		weapon_id = gun_id
+
+
 func _gun_ready() -> bool:
 	var spec: Dictionary = WeaponDefs.data(gun_id)
-	return str(spec.get("kind", "")) == "gun" and ammo > 0
+	return str(spec.get("kind", "")) == "gun" and ammo > 0 and reload_left <= 0
 
 
 func _is_auto() -> bool:
@@ -1281,10 +1316,16 @@ func apply_runtime_row(row: Dictionary) -> void:
 	dead = int(row.get("dead", 0)) != 0
 	death_cause = str(row.get("death_cause", ""))
 	weapon_id = str(row.get("weapon", weapon_id))
-	gun_id = str(row.get("gun", gun_id))
+	gun_id = str(row.get("gun", row.get("firearm", gun_id)))
 	melee_id = str(row.get("melee", melee_id))
 	grenades = int(row.get("nades", grenades))
 	ammo = int(row.get("ammo", ammo))
+	explosive_id = str(row.get("explosive", explosive_id))
+	power_id = str(row.get("power", power_id))
+	power_ammo = int(row.get("power_ammo", power_ammo))
+	reserve = int(row.get("reserve", reserve))
+	mag_size = int(row.get("mag_size", mag_size))
+	reload_left = int(row.get("reload_left", reload_left))
 	facing = SimConstants.dequantize(int(row.get("facing", SimConstants.quantize(facing))))
 	crouched = int(row.get("crouched", 0)) != 0
 	rolling = int(row.get("rolling", 0)) != 0
@@ -1395,4 +1436,16 @@ func apply_runtime_extra(extra: Dictionary) -> void:
 		attack_age = int(extra.get("attack_age", attack_age))
 	if extra.has("hitstop_left"):
 		hitstop_left = int(extra.get("hitstop_left", hitstop_left))
+	if extra.has("explosive"):
+		explosive_id = str(extra.get("explosive", explosive_id))
+	if extra.has("power"):
+		power_id = str(extra.get("power", power_id))
+	if extra.has("reserve"):
+		reserve = int(extra.get("reserve", reserve))
+	if extra.has("mag_size"):
+		mag_size = int(extra.get("mag_size", mag_size))
+	if extra.has("reload_left"):
+		reload_left = int(extra.get("reload_left", reload_left))
+	if extra.has("power_ammo"):
+		power_ammo = int(extra.get("power_ammo", power_ammo))
 	_apply_shape()

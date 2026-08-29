@@ -61,6 +61,7 @@ func refresh(fighters: Array) -> void:
 			continue
 		var melee: Dictionary = WeaponDefs.data(f.melee_id)
 		var gun: Dictionary = WeaponDefs.data(f.gun_id)
+		var power: Dictionary = WeaponDefs.data(f.power_id)
 		var who: String = "P1"
 		if f.slot == 1 and f.is_human:
 			who = "P2"
@@ -87,7 +88,10 @@ func refresh(fighters: Array) -> void:
 			pose = " DROP"
 		elif f.sprinting:
 			pose = " SPRINT"
-		line.text = "%s  HP %d  ST %d%s  %s / %s x%d  G%d" % [
+		var power_name: String = str(power.get("name", "-"))
+		if f.power_id == "" or f.power_ammo <= 0:
+			power_name = "-"
+		line.text = "%s  HP %d  ST %d%s  %s / %s x%d  G%d  %s x%d" % [
 			who,
 			int(f.health),
 			int(f.stamina),
@@ -95,7 +99,9 @@ func refresh(fighters: Array) -> void:
 			str(melee.get("name", "Fists")),
 			str(gun.get("name", "Pistol")),
 			f.ammo,
-			f.grenades
+			f.grenades,
+			power_name,
+			f.power_ammo
 		]
 		if f.team == 0:
 			line.add_theme_color_override("font_color", UiTheme.BLUE)

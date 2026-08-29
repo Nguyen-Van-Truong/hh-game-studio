@@ -117,6 +117,20 @@ Hold-to-aim / fire stay `assumption`. Clock stays
 | `fire_edges.json` | fire pressed / held / released |
 | `fire_wall.json` | pistol shot stops at Cover Wall |
 
+## roster/
+
+VF3-WP5 official InputFrame traces. Same schema as `official/`.
+Replay uses `apply_frames`. No teleport. No `step_fixed`.
+Roster / slots stay `assumption`. Clock stays
+`ledger:RL-SIM-FIXED-60`.
+
+| File | Beat |
+|---|---|
+| `roster_idle.json` | settle on Roster Lane |
+| `roster_keep.json` | start pistol hold/release fire |
+| `roster_melee.json` | fists melee |
+| `roster_throw.json` | hold/release grenade |
+
 ## fixture/
 
 May use `teleport` / `force_kill` for fast unit setup. Fixture evidence

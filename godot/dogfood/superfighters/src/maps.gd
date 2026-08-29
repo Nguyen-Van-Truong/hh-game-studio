@@ -23,11 +23,13 @@ const TRAVERSAL_PATH: String = "res://data/sim/traversal.json"
 const COMBAT_PATH: String = "res://data/sim/combat.json"
 const AIM_PATH: String = "res://data/sim/aim.json"
 const EXPLOSIVE_PATH: String = "res://data/sim/explosive.json"
+const ROSTER_PATH: String = "res://data/weapons/roster.json"
 
 static var _trav_cache: Dictionary = {}
 static var _combat_cache: Dictionary = {}
 static var _aim_cache: Dictionary = {}
 static var _expl_cache: Dictionary = {}
+static var _roster_cache: Dictionary = {}
 
 
 static func _trav() -> Dictionary:
@@ -54,12 +56,19 @@ static func _expl() -> Dictionary:
 	return _expl_cache
 
 
+static func _roster() -> Dictionary:
+	if _roster_cache.is_empty():
+		_roster_cache = SimConstants.load_json(ROSTER_PATH)
+	return _roster_cache
+
+
 static func has_fixture(map_id: String) -> bool:
 	return (
 		_fixture_dict(_trav()).has(map_id)
 		or _fixture_dict(_combat()).has(map_id)
 		or _fixture_dict(_aim()).has(map_id)
 		or _fixture_dict(_expl()).has(map_id)
+		or _fixture_dict(_roster()).has(map_id)
 	)
 
 
@@ -71,6 +80,8 @@ static func fixture_grid(map_id: String) -> PackedStringArray:
 		out = _grid_from(_aim(), map_id)
 	if out.is_empty():
 		out = _grid_from(_expl(), map_id)
+	if out.is_empty():
+		out = _grid_from(_roster(), map_id)
 	return out
 
 
@@ -85,6 +96,9 @@ static func fixture_name(map_id: String) -> String:
 	if names.has(map_id):
 		return str(names.get(map_id, map_id))
 	names = _name_dict(_expl())
+	if names.has(map_id):
+		return str(names.get(map_id, map_id))
+	names = _name_dict(_roster())
 	if names.has(map_id):
 		return str(names.get(map_id, map_id))
 	return map_id

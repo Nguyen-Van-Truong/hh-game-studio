@@ -1,0 +1,9 @@
+{"kind":"bullet","payload":{"ammo":11,"dir_x":1000,"dir_y":0,"gun":"pistol","mode":"semi","muzzle_x":70000,"muzzle_y":31999,"owner":0,"pellets":1,"recoil":24000},"phase":"fire_spawn","tick":14}
+{"kind":"knockback_start","payload":{"slot":1,"vx":36667,"vy":-30000},"phase":"melee","tick":29}
+{"kind":"airborne_start","payload":{"slot":1},"phase":"melee","tick":29}
+{"kind":"invuln_start","payload":{"slot":1,"ticks":4},"phase":"melee","tick":29}
+{"kind":"startup","payload":{"attacker":0,"seed":7,"seq":1,"style":"melee","weapon":"fists"},"phase":"melee","tick":8}
+{"kind":"active","payload":{"attacker":0,"seed":7,"seq":1,"style":"melee","weapon":"fists"},"phase":"melee","tick":11}
+{"kind":"recovery","payload":{"attacker":0,"seed":7,"seq":1,"style":"melee","weapon":"fists"},"phase":"melee","tick":14}
+{"kind":"miss","payload":{"attacker":0,"seed":7,"seq":1,"style":"melee","weapon":"fists"},"phase":"melee","tick":14}
+{"kind":"nade","payload":{"dir_x":1000,"dir_y":0,"fuse_ticks":81,"nades":2,"owner":0,"payload":"grenade","power":"","team":0,"x":66000,"y":27999},"phase":"grenade_spawn","tick":14}

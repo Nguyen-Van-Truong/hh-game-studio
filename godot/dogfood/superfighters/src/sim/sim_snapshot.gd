@@ -86,6 +86,9 @@ static func from_session(session: GameSession) -> Dictionary:
 		"p1_gun": p1.gun_id if p1 != null else "",
 		"p1_melee": p1.melee_id if p1 != null else "",
 		"p1_nades": p1.grenades if p1 != null else 0,
+		"p1_explosive": p1.explosive_id if p1 != null else "",
+		"p1_power": p1.power_id if p1 != null else "",
+		"p1_power_ammo": p1.power_ammo if p1 != null else 0,
 		"p1_x": p1.global_position.x if p1 != null else 0.0,
 		"p1_y": p1.global_position.y if p1 != null else 0.0,
 		"win": session.outcome == "win",
@@ -93,6 +96,8 @@ static func from_session(session: GameSession) -> Dictionary:
 
 
 static func hash_payload(snap: Dictionary) -> Dictionary:
+	## Fighter rows carry explosive/power/reserve/reload. Those fields
+	## are hashed here via `fighters`; they are not p1_* display extras.
 	return {
 		"schema": str(snap.get("schema", "")),
 		"schema_version": int(snap.get("schema_version", 0)),
@@ -166,8 +171,13 @@ static func _fighter_row(f: Fighter) -> Dictionary:
 		"weapon": f.weapon_id,
 		"gun": f.gun_id,
 		"melee": f.melee_id,
+		"explosive": f.explosive_id,
+		"power": f.power_id,
+		"power_ammo": f.power_ammo,
 		"nades": f.grenades,
 		"ammo": f.ammo,
+		"reserve": f.reserve,
+		"reload": f.reload_left,
 		"facing": SimConstants.quantize(f.facing),
 		"crouched": 1 if f.crouched else 0,
 		"sprinting": 1 if f.sprinting else 0,

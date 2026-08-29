@@ -112,3 +112,15 @@ First playable slice. Not G6. Not 60/60.
   bullet sweep). Owner self-damage stays off. Hold-to-aim is
   **not** promoted to `observed`. Y8 roll/dive observation stays
   `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). No new Y8 play.
+  Residual: nade bounce vs live `=` / `COL_PLATFORM` rooftops can
+  fall through ~156px; official BOUNCE/SWEEP used `#` only. VF3-WP5
+  official paths stay on `#` fixtures and do not expand that fix.
+- VF3-WP5 ships a data-driven roster and four slots as assumption
+  (`ledger:RL-ITEM-SLOTS-4`, `ledger:RL-ITEM-ROSTER`,
+  `ledger:RL-ITEM-PICK-SLOT`, `ledger:RL-ITEM-KEEP-GUN`,
+  `ledger:RL-ITEM-AMMO-RELOAD`). Official proof is InputFrame
+  `apply_frames` plus live InputEvent inject. Values are tuning;
+  this WP does not claim original exact numbers. Weight is data
+  only and does not change VF2 locomotion. Hold-to-aim is **not**
+  promoted to `observed`. Y8 roll/dive observation stays
+  `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). No new Y8 play.

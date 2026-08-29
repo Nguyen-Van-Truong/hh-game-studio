@@ -14,19 +14,22 @@ var exploded: bool = false
 var applied: bool = false
 var bounce_count: int = 0
 var last_pos: Vector2 = Vector2.ZERO
+var payload_id: String = "grenade"
 
 
-func setup(at: Vector2, dir: Vector2, slot: int, team: int) -> void:
+func setup(at: Vector2, dir: Vector2, slot: int, team: int, p_id: String = "grenade") -> void:
 	global_position = at
 	last_pos = at
 	owner_slot = slot
 	owner_team = team
-	name = "Grenade"
+	payload_id = p_id if p_id != "" else "grenade"
+	name = "Grenade" if payload_id == "grenade" else "Throw_%s" % payload_id
 	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
 	collision_layer = Maps.COL_HURT
 	collision_mask = Maps.COL_WORLD | Maps.COL_PROP | Maps.COL_PLATFORM
-	_apply_spec(_Expl.nade())
-	velocity = _Expl.throw_velocity(dir)
+	var spec: Dictionary = _Expl.throwable(payload_id)
+	_apply_spec(spec)
+	velocity = _Expl.throw_velocity_of(dir, spec)
 	var shape: CollisionShape2D = CollisionShape2D.new()
 	var circle: CircleShape2D = CircleShape2D.new()
 	circle.radius = 4.0
@@ -39,7 +42,7 @@ func setup(at: Vector2, dir: Vector2, slot: int, team: int) -> void:
 	body.color = Color(0.25, 0.35, 0.3, 1.0)
 	body.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(body)
-	Visuals.attach_sprite(self, "res://assets/art/item_grenade.png")
+	Visuals.attach_sprite(self, str(spec.get("icon", "res://assets/art/item_grenade.png")))
 
 
 func _apply_spec(spec: Dictionary) -> void:

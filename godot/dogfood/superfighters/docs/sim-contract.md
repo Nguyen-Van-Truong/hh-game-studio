@@ -127,6 +127,16 @@ explosion, timeout cleanup, and swept nade collision live in
 stays `ledger:RL-NADE-PROP` (`deferred`). Official MATCH uses
 `apply_frames`. 60 Hz stays ledger:RL-SIM-FIXED-60.
 
+## Roster / inventory (VF3-WP5)
+
+Four slots and the original roster live in
+`data/weapons/roster.json`. They are product tuning
+(`ledger:RL-ITEM-SLOTS-4`, `ledger:RL-ITEM-ROSTER`,
+`ledger:RL-ITEM-PICK-SLOT`, `ledger:RL-ITEM-KEEP-GUN`,
+`ledger:RL-ITEM-AMMO-RELOAD`, `assumption`), not Y8 play.
+Values are not claimed as original exact numbers. Official
+MATCH uses `apply_frames`. 60 Hz stays ledger:RL-SIM-FIXED-60.
+
 ## Runtime observe (VF1-WP4)
 
 Agents read `RuntimeApi` (`docs/runtime-diagnostics.md`,

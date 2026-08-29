@@ -8,6 +8,7 @@ const CombatCasesScript: GDScript = preload("res://tests/combat_cases.gd")
 const ReactionCasesScript: GDScript = preload("res://tests/reaction_cases.gd")
 const AimCasesScript: GDScript = preload("res://tests/aim_cases.gd")
 const ExplosiveCasesScript: GDScript = preload("res://tests/explosive_cases.gd")
+const RosterCasesScript: GDScript = preload("res://tests/roster_cases.gd")
 const _Combat: GDScript = preload("res://src/sim/combat.gd")
 
 var _fails: PackedStringArray = PackedStringArray()
@@ -28,6 +29,7 @@ var _melee: String = "unproven"
 var _react: String = "unproven"
 var _aim: String = "unproven"
 var _expl: String = "unproven"
+var _roster: String = "unproven"
 
 
 func _initialize() -> void:
@@ -60,6 +62,7 @@ func _boot() -> void:
 	await _test_react(app)
 	await _test_aim(app)
 	await _test_expl(app)
+	await _test_roster(app)
 	if _fails.is_empty():
 		_no_err = "proven"
 	_emit()
@@ -941,6 +944,49 @@ func _test_expl(app: App) -> void:
 		_expl = "proven"
 
 
+func _test_roster(app: App) -> void:
+	var errors: PackedStringArray = await RosterCasesScript.run_all(app)
+	var i: int = 0
+	while i < errors.size():
+		_fail("ROSTER %s" % String(errors[i]))
+		i += 1
+	var schema: String = str(RosterCasesScript.outcome_schema.get("verdict", "unproven"))
+	var spawn: String = str(RosterCasesScript.outcome_spawn.get("verdict", "unproven"))
+	var equip: String = str(RosterCasesScript.outcome_equip.get("verdict", "unproven"))
+	var attack: String = str(RosterCasesScript.outcome_attack.get("verdict", "unproven"))
+	var dropv: String = str(RosterCasesScript.outcome_drop.get("verdict", "unproven"))
+	var ser: String = str(RosterCasesScript.outcome_serialize.get("verdict", "unproven"))
+	var keep: String = str(RosterCasesScript.outcome_keep.get("verdict", "unproven"))
+	var ammo: String = str(RosterCasesScript.outcome_ammo.get("verdict", "unproven"))
+	var data: String = str(RosterCasesScript.outcome_data.get("verdict", "unproven"))
+	var live: String = str(RosterCasesScript.outcome_live.get("verdict", "unproven"))
+	var replay: String = str(RosterCasesScript.outcome_replay.get("verdict", "unproven"))
+	if schema != "pass":
+		_fail("ROSTER SCHEMA outcome is %s" % schema)
+	if spawn != "pass":
+		_fail("ROSTER SPAWN outcome is %s" % spawn)
+	if equip != "pass":
+		_fail("ROSTER EQUIP outcome is %s" % equip)
+	if attack != "pass":
+		_fail("ROSTER ATTACK outcome is %s" % attack)
+	if dropv != "pass":
+		_fail("ROSTER DROP outcome is %s" % dropv)
+	if ser != "pass":
+		_fail("ROSTER SERIALIZE outcome is %s" % ser)
+	if keep != "pass":
+		_fail("ROSTER KEEP outcome is %s" % keep)
+	if ammo != "pass":
+		_fail("ROSTER AMMO outcome is %s" % ammo)
+	if data != "pass":
+		_fail("ROSTER DATA outcome is %s" % data)
+	if live != "pass":
+		_fail("ROSTER LIVE outcome is %s" % live)
+	if replay != "match":
+		_fail("ROSTER REPLAY outcome is %s" % replay)
+	if _count_prefix("ROSTER ") == 0:
+		_roster = "proven"
+
+
 func _emit() -> void:
 	print("HH_VF_PATH title→fight→win/lose→restart")
 	print(
@@ -1087,6 +1133,25 @@ func _emit() -> void:
 			ExplosiveCasesScript.used_apply_frames_succeeded,
 			ExplosiveCasesScript.used_apply_frames_attempted,
 			_expl,
+		]
+	)
+	print(
+		"HH_VF_ROSTER SCHEMA=%s SPAWN=%s EQUIP=%s ATTACK=%s DROP=%s SERIALIZE=%s KEEP=%s AMMO=%s DATA=%s LIVE=%s REPLAY=%s APPLY=%d/%d status=%s"
+		% [
+			str(RosterCasesScript.outcome_schema.get("verdict", "unproven")),
+			str(RosterCasesScript.outcome_spawn.get("verdict", "unproven")),
+			str(RosterCasesScript.outcome_equip.get("verdict", "unproven")),
+			str(RosterCasesScript.outcome_attack.get("verdict", "unproven")),
+			str(RosterCasesScript.outcome_drop.get("verdict", "unproven")),
+			str(RosterCasesScript.outcome_serialize.get("verdict", "unproven")),
+			str(RosterCasesScript.outcome_keep.get("verdict", "unproven")),
+			str(RosterCasesScript.outcome_ammo.get("verdict", "unproven")),
+			str(RosterCasesScript.outcome_data.get("verdict", "unproven")),
+			str(RosterCasesScript.outcome_live.get("verdict", "unproven")),
+			str(RosterCasesScript.outcome_replay.get("verdict", "unproven")),
+			RosterCasesScript.used_apply_frames_succeeded,
+			RosterCasesScript.used_apply_frames_attempted,
+			_roster,
 		]
 	)
 	print(

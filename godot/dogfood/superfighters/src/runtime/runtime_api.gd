@@ -372,6 +372,9 @@ func _weapon_view(session: GameSession, snap: Dictionary) -> Array:
 				"melee": f.melee_id,
 				"nades": f.grenades,
 				"ammo": f.ammo,
+				"explosive": f.explosive_id,
+				"power": f.power_id,
+				"power_ammo": f.power_ammo,
 			})
 		i += 1
 	return out

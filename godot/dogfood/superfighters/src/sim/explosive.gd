@@ -34,13 +34,28 @@ static func nade() -> Dictionary:
 	return _dict(data().get("grenade", {}))
 
 
+static func throwable(weapon_id: String) -> Dictionary:
+	if weapon_id == "cinder":
+		var row: Dictionary = _dict(data().get("cinder", {}))
+		if not row.is_empty():
+			return row
+	return nade()
+
+
 static func weapon_row() -> Dictionary:
-	var spec: Dictionary = nade()
+	return weapon_row_for("grenade")
+
+
+static func weapon_row_for(weapon_id: String) -> Dictionary:
+	var spec: Dictionary = throwable(weapon_id)
+	var slot_name: String = "explosive"
+	if weapon_id == "cinder":
+		slot_name = "power"
 	return {
-		"id": "grenade",
+		"id": weapon_id if weapon_id != "" else "grenade",
 		"name": str(spec.get("name", "Grenade")),
 		"kind": "throw",
-		"slot": "nade",
+		"slot": slot_name,
 		"damage": float(spec.get("damage", 42.0)),
 		"range": float(spec.get("radius", 48.0)),
 		"cooldown": throw_cd(),
@@ -131,7 +146,10 @@ static func throw_dir(fighter: Fighter) -> Vector2:
 
 
 static func throw_velocity(dir: Vector2) -> Vector2:
-	var spec: Dictionary = nade()
+	return throw_velocity_of(dir, nade())
+
+
+static func throw_velocity_of(dir: Vector2, spec: Dictionary) -> Vector2:
 	var aim: Vector2 = dir
 	if aim == Vector2.ZERO:
 		aim = Vector2.RIGHT
