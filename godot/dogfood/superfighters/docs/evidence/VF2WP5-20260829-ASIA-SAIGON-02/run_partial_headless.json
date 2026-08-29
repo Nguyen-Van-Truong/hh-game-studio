@@ -1,0 +1,49 @@
+{
+	"command_id": "cmd.vf2-wp5.ladder-ledge.2",
+	"display": "headless",
+	"ended_at": "2026-08-29T15:10:13+07:00",
+	"ended_unix": 1787991013.768,
+	"epsilon": 0.001,
+	"fail_count": 0,
+	"godot": {
+		"build": "official",
+		"hash": "a13da4feb8d8aefc283c3763d33a2f170a18d541",
+		"hex": 263937,
+		"major": 4,
+		"minor": 7,
+		"patch": 1,
+		"status": "stable",
+		"string": "4.7.1-stable (official)",
+		"timestamp": 0
+	},
+	"map_id": "fx_ladder",
+	"mode": "vs2",
+	"os_name": "Windows",
+	"outcomes": {
+		"BLOCK": "pass",
+		"CONTACT": "pass",
+		"DIRS": "pass",
+		"DROP": "pass",
+		"LADDER": "pass",
+		"LEDGE": "pass",
+		"LIVE": "pass",
+		"MAPS": "fixtures_only",
+		"REPLAY": "match",
+		"STUCK": "pass",
+		"USED_APPLY_ATTEMPTED": 2462,
+		"USED_APPLY_FRAMES": 2462,
+		"USED_APPLY_SUCCEEDED": 2462
+	},
+	"run_id": "VF2WP5-20260829-ASIA-SAIGON-02",
+	"schema": "vault-fighters.vf2-wp5.run.v1",
+	"seed": 1,
+	"started_at": "2026-08-29T15:10:12+07:00",
+	"started_unix": 1787991012.024,
+	"tick_hz": 60,
+	"timezone": "Asia/Saigon",
+	"viewport": {
+		"h": 720.0,
+		"w": 1280.0
+	},
+	"wp": "VF2-WP5"
+}

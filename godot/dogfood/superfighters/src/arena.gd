@@ -34,6 +34,8 @@ func has_ladder_at(world_pos: Vector2) -> bool:
 		world_pos,
 		world_pos + Vector2(0, 8),
 		world_pos + Vector2(0, -8),
+		world_pos + Vector2(10, 0),
+		world_pos + Vector2(-10, 0),
 	]
 	var i: int = 0
 	while i < pts.size():
@@ -57,7 +59,15 @@ func platform_is_one_way() -> bool:
 	var data: TileData = atlas.get_tile_data(Maps.ATLAS_PLATFORM, 0)
 	if data == null:
 		return false
-	return data.is_collision_polygon_one_way(0, 0)
+	return data.is_collision_polygon_one_way(1, 0)
+
+
+func platform_collision_bit() -> int:
+	if layer == null or layer.tile_set == null:
+		return 0
+	if layer.tile_set.get_physics_layers_count() < 2:
+		return 0
+	return layer.tile_set.get_physics_layer_collision_layer(1)
 
 
 func _ladder_sprite(at: Vector2) -> Sprite2D:
@@ -102,6 +112,9 @@ func _make_tileset() -> TileSet:
 	ts.add_physics_layer(-1)
 	ts.set_physics_layer_collision_layer(0, Maps.COL_WORLD)
 	ts.set_physics_layer_collision_mask(0, 0)
+	ts.add_physics_layer(-1)
+	ts.set_physics_layer_collision_layer(1, Maps.COL_PLATFORM)
+	ts.set_physics_layer_collision_mask(1, 0)
 	var tex: Texture2D = load(Visuals.TILESET) as Texture2D
 	var atlas: TileSetAtlasSource = TileSetAtlasSource.new()
 	atlas.texture = tex
@@ -121,33 +134,33 @@ func _make_tileset() -> TileSet:
 		atlas.create_tile(coords[i])
 		i += 1
 	ts.add_source(atlas, SRC_ID)
-	_solid_tile(atlas, Maps.ATLAS_CONCRETE, false)
-	_solid_tile(atlas, Maps.ATLAS_BRICK, false)
-	_solid_tile(atlas, Maps.ATLAS_CRATE, false)
-	_solid_tile(atlas, Maps.ATLAS_METAL, false)
-	_solid_tile(atlas, Maps.ATLAS_POLICE, false)
-	_solid_tile(atlas, Maps.ATLAS_HAZARD, false)
-	_solid_tile(atlas, Maps.ATLAS_WALL, false)
-	_solid_tile(atlas, Maps.ATLAS_PLATFORM, true)
+	_solid_tile(atlas, Maps.ATLAS_CONCRETE, false, 0)
+	_solid_tile(atlas, Maps.ATLAS_BRICK, false, 0)
+	_solid_tile(atlas, Maps.ATLAS_CRATE, false, 0)
+	_solid_tile(atlas, Maps.ATLAS_METAL, false, 0)
+	_solid_tile(atlas, Maps.ATLAS_POLICE, false, 0)
+	_solid_tile(atlas, Maps.ATLAS_HAZARD, false, 0)
+	_solid_tile(atlas, Maps.ATLAS_WALL, false, 0)
+	_solid_tile(atlas, Maps.ATLAS_PLATFORM, true, 1)
 	return ts
 
 
-func _solid_tile(atlas: TileSetAtlasSource, cell: Vector2i, one_way: bool) -> void:
+func _solid_tile(atlas: TileSetAtlasSource, cell: Vector2i, one_way: bool, phys_layer: int) -> void:
 	var data: TileData = atlas.get_tile_data(cell, 0)
 	if data == null:
 		return
-	if data.get_collision_polygons_count(0) < 1:
-		data.add_collision_polygon(0)
+	if data.get_collision_polygons_count(phys_layer) < 1:
+		data.add_collision_polygon(phys_layer)
 	var half: float = float(Maps.TILE) * 0.5
 	var poly: PackedVector2Array = PackedVector2Array()
 	poly.append(Vector2(-half, -half))
 	poly.append(Vector2(half, -half))
 	poly.append(Vector2(half, half))
 	poly.append(Vector2(-half, half))
-	data.set_collision_polygon_points(0, 0, poly)
+	data.set_collision_polygon_points(phys_layer, 0, poly)
 	if one_way:
-		data.set_collision_polygon_one_way(0, 0, true)
-		data.set_collision_polygon_one_way_margin(0, 0, 2.0)
+		data.set_collision_polygon_one_way(phys_layer, 0, true)
+		data.set_collision_polygon_one_way_margin(phys_layer, 0, 2.0)
 
 
 func _paint(target: TileMapLayer) -> void:

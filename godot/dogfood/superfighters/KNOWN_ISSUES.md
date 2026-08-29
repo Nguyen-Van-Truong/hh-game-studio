@@ -3,7 +3,9 @@
 First playable slice. Not G6. Not 60/60.
 
 - No bullet-time, no destroyable floors, no Box2D gibs
-- Ledge grab is not in this slice (reserved for VF2-WP5)
+- Ledge grab / ladder snap / one-way drop-through are product-shipped
+  as assumption (`ledger:RL-MOVE-LEDGE`, `ledger:RL-MOVE-LADDER`,
+  `ledger:RL-MOVE-DROP`). InputFrame action `ledge` stays reserved.
 - Dive / jump-kick / fall are product-shipped as assumption
   (`ledger:RL-MOVE-DIVE`, `ledger:RL-MOVE-JUMP-KICK`,
   `ledger:RL-MOVE-FALL`). Y8 observation stays
@@ -50,4 +52,13 @@ First playable slice. Not G6. Not 60/60.
   assumption (`ledger:RL-MOVE-DIVE`, `ledger:RL-MOVE-JUMP-KICK`,
   `ledger:RL-MOVE-FALL`). Official proof is InputFrame
   `apply_frames` plus live InputEvent inject. Pit death still kills.
-  Dive invuln is finite. Ledge remains reserved. No new Y8 play.
+  Dive invuln is finite. No new Y8 play.
+- VF2-WP5 ships ladder attach/snap/climb, ledge grab/recover, and
+  one-way drop-through as assumption. Official proof is InputFrame
+  `apply_frames` plus live InputEvent inject. `=` one-way tiles live
+  on `COL_PLATFORM` so drop actually falls. Ledge recover is a
+  velocity step around the lip (`outside_then_board`), not a
+  `global_position` teleport, and must finish on the floor.
+  Fixtures are
+  temporary collision maps, not a VF5 pass (`MAPS=fixtures_only`).
+  InputFrame `ledge` stays reserved.

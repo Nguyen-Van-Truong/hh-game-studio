@@ -102,8 +102,8 @@ static func schema_and_data() -> PackedStringArray:
 	var reserved: Array = loco.get("reserved_not_shipped", []) as Array
 	if reserved.has("dive") or reserved.has("kick"):
 		errors.append("dive/kick must not stay reserved")
-	if not reserved.has("ledge"):
-		errors.append("ledge must stay reserved")
+	if reserved.has("ledge"):
+		errors.append("ledge mechanic must be shipped")
 	if not SimValidator.ALLOWED.has("dive"):
 		errors.append("InputFrame must allow dive")
 	if not SimValidator.ALLOWED.has("kick"):

@@ -1,6 +1,8 @@
 class_name GameSession
 extends Node2D
 
+const _Traversal: GDScript = preload("res://src/sim/traversal.gd")
+
 signal won
 signal lost
 
@@ -180,7 +182,13 @@ func _step_one_tick(cmds: Array[Dictionary]) -> void:
 		var cmd: Dictionary = InputActions.empty_cmd()
 		if i < cmds.size():
 			cmd = cmds[i]
-		cmd["on_ladder"] = arena != null and arena.has_ladder_at(f.global_position)
+		var sample: Dictionary = _Traversal.sample(arena, f)
+		cmd["on_ladder"] = bool(sample.get("on_ladder", false))
+		cmd["ladder_snap_x"] = float(sample.get("snap_x", f.global_position.x))
+		cmd["climb_up_blocked"] = bool(sample.get("climb_up_blocked", false))
+		cmd["climb_down_blocked"] = bool(sample.get("climb_down_blocked", false))
+		cmd["one_way_under"] = bool(sample.get("one_way_under", false))
+		cmd["ledge"] = sample.get("ledge", {})
 		var before_y: float = f.velocity.y
 		f.step(dt, cmd, kill_plane)
 		_emit_loco_feedback(f)
@@ -982,6 +990,53 @@ func _emit_loco_feedback(f: Fighter) -> void:
 		ledger.push(clock.tick, "melee", "knockdown_start", {
 			"slot": f.slot,
 		})
+	if f.attach_started:
+		ledger.push(clock.tick, "locomotion", "ladder_attach", {
+			"slot": f.slot,
+			"seq": f.climb_seq,
+			"x": SimConstants.quantize(f.global_position.x),
+		})
+		if sfx != null:
+			sfx.play("climb")
+	if f.detach_started:
+		ledger.push(clock.tick, "locomotion", "ladder_detach", {
+			"slot": f.slot,
+			"seq": f.climb_seq,
+			"block": f.last_climb_block,
+		})
+	if f.climb_blocked_now:
+		ledger.push(clock.tick, "locomotion", "ladder_block", {
+			"slot": f.slot,
+			"nx": SimConstants.quantize(f.last_contact_nx),
+			"ny": SimConstants.quantize(f.last_contact_ny),
+		})
+	if f.hang_started:
+		ledger.push(clock.tick, "locomotion", "ledge_grab", {
+			"slot": f.slot,
+			"seq": f.hang_seq,
+			"nx": SimConstants.quantize(f.last_contact_nx),
+			"ny": SimConstants.quantize(f.last_contact_ny),
+		})
+		if sfx != null:
+			sfx.play("ledge")
+	if f.recover_started:
+		ledger.push(clock.tick, "locomotion", "ledge_recover", {
+			"slot": f.slot,
+			"seq": f.hang_seq,
+		})
+		if sfx != null:
+			sfx.play("climb")
+	if f.hang_ended and not f.recover_started:
+		ledger.push(clock.tick, "locomotion", "ledge_drop", {
+			"slot": f.slot,
+			"seq": f.hang_seq,
+		})
+	if f.drop_started:
+		ledger.push(clock.tick, "locomotion", "drop_through", {
+			"slot": f.slot,
+		})
+		if sfx != null:
+			sfx.play("drop")
 
 
 func _log_death_if_new(f: Fighter) -> void:

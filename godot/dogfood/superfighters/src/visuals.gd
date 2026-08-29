@@ -23,6 +23,8 @@ const SHEET: Dictionary = {
 	"roll": [Vector2i(0, 1), Vector2i(2, 0), Vector2i(3, 0), Vector2i(4, 0)],
 	"dive": [Vector2i(7, 0), Vector2i(5, 1)],
 	"kick": [Vector2i(2, 1), Vector2i(6, 0)],
+	"climb": [Vector2i(2, 0), Vector2i(3, 0)],
+	"hang": [Vector2i(6, 0)],
 }
 
 
@@ -82,7 +84,7 @@ static func make_frames(team: int) -> SpriteFrames:
 	var keys: PackedStringArray = PackedStringArray([
 		"idle", "walk", "jump", "fall", "crouch", "melee",
 		"aim_side", "aim_up", "aim_down", "dead", "throw", "roll",
-		"dive", "kick"
+		"dive", "kick", "climb", "hang"
 	])
 	var k: int = 0
 	while k < keys.size():
@@ -101,6 +103,9 @@ static func make_frames(team: int) -> SpriteFrames:
 			speed = 12.0
 		elif key == "kick":
 			speed = 16.0
+		elif key == "climb":
+			speed = 8.0
+			frames.set_animation_loop(key, true)
 		frames.set_animation_speed(key, speed)
 		var cells: Array = SHEET[key] as Array
 		var i: int = 0

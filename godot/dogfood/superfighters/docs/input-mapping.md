@@ -35,7 +35,8 @@ Roll is a shipped InputFrame action (`ledger:RL-MOVE-ROLL`,
 Dive / kick are shipped InputFrame actions (`ledger:RL-MOVE-DIVE` /
 `ledger:RL-MOVE-JUMP-KICK`, `assumption`) via airborne sprint+crouch
 and aerial melee; no dedicated remap keys. Y8 observation stays
-`ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). Ledge stays reserved.
+`ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). InputFrame `ledge` stays
+reserved. Ledge recover uses jump/up; one-way drop uses crouch/down.
 
 ## Clock (ledger:RL-SIM-FIXED-60)
 

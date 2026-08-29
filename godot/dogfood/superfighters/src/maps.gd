@@ -19,9 +19,46 @@ const ATLAS_POLICE: Vector2i = Vector2i(4, 0)
 const ATLAS_PLATFORM: Vector2i = Vector2i(5, 0)
 const ATLAS_HAZARD: Vector2i = Vector2i(6, 0)
 const ATLAS_WALL: Vector2i = Vector2i(7, 0)
+const TRAVERSAL_PATH: String = "res://data/sim/traversal.json"
+
+static var _trav_cache: Dictionary = {}
+
+
+static func _trav() -> Dictionary:
+	if _trav_cache.is_empty():
+		_trav_cache = SimConstants.load_json(TRAVERSAL_PATH)
+	return _trav_cache
+
+
+static func has_fixture(map_id: String) -> bool:
+	var raw: Variant = _trav().get("fixtures", {})
+	return raw is Dictionary and (raw as Dictionary).has(map_id)
+
+
+static func fixture_grid(map_id: String) -> PackedStringArray:
+	var raw: Variant = _trav().get("fixtures", {})
+	var out: PackedStringArray = PackedStringArray()
+	if raw is Dictionary:
+		var rows: Variant = (raw as Dictionary).get(map_id, [])
+		if rows is Array:
+			var arr: Array = rows as Array
+			var i: int = 0
+			while i < arr.size():
+				out.append(str(arr[i]))
+				i += 1
+	return out
+
+
+static func fixture_name(map_id: String) -> String:
+	var names: Variant = _trav().get("fixture_names", {})
+	if names is Dictionary:
+		return str((names as Dictionary).get(map_id, map_id))
+	return map_id
 
 
 static func display_name(map_id: String) -> String:
+	if has_fixture(map_id):
+		return fixture_name(map_id)
 	if map_id == "rooftops":
 		return "Rooftops"
 	if map_id == "storage":
@@ -61,6 +98,8 @@ static func stage_map_at(index: int) -> String:
 
 
 static func grid(map_id: String) -> PackedStringArray:
+	if has_fixture(map_id):
+		return fixture_grid(map_id)
 	if map_id == "storage":
 		return _storage()
 	if map_id == "police":

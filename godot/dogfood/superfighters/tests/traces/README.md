@@ -65,6 +65,26 @@ Y8 observation stays `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`).
 | `dive_storage.json` | storage dive |
 | `dive_hazardous.json` | hazardous in-place dive |
 
+## traversal/
+
+VF2-WP5 official InputFrame traces. Same schema as `official/`.
+Replay uses `apply_frames`. No teleport. No `step_fixed`.
+Ladder/ledge/drop stay `assumption`. Clock stays `ledger:RL-SIM-FIXED-60`.
+Y8 observation stays `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`).
+InputFrame `ledge` stays reserved.
+
+| File | Beat |
+|---|---|
+| `ladder_up_down.json` | Climb Shaft attach / climb / down |
+| `ladder_block.json` | Blocked Shaft climb into solid |
+| `ledge_recover.json` | Lip Rail grab / recover |
+| `drop_through.json` | Drop Decks one-way crouch |
+| `cross_dirs.json` | Cross Walk four directions |
+| `map_rooftops.json` | rooftops walk / climb |
+| `map_storage.json` | storage climb |
+| `map_police.json` | police walk |
+| `map_hazardous.json` | hazardous walk |
+
 ## fixture/
 
 May use `teleport` / `force_kill` for fast unit setup. Fixture evidence

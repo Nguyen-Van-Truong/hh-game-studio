@@ -365,3 +365,32 @@ sprint+crouch remains a roll.
 | RL-MOVE-DIVE | Airborne dive + finite invuln + fall-immune land | `assumption` | none | VF2-WP4 product contract; **not** observed on Y8 this session | 2026-08-29 | Sprint+crouch in air or InputFrame `dive`; AABB differs from roll; pit still kills | dive 0.36s, invuln 0.16s, cost 18 | Not Y8 parity. Do not mark observed. Y8 row stays RL-MOVE-ROLL-DIVE unavailable. |
 | RL-MOVE-JUMP-KICK | Aerial kick impulse | `assumption` | none | VF2-WP4 product contract; **not** observed on Y8 this session | 2026-08-29 | Aerial melee or InputFrame `kick`; grounded kick blocked; pose is kick not melee | impulse 90/220, 0.18s | Not Y8 parity. Do not mark observed. |
 | RL-MOVE-FALL | Fall damage vs dive immunity | `assumption` | none | VF2-WP4 product contract; **not** observed on Y8 this session | 2026-08-29 | High drop without dive can damage; dive landing emits fall_immune; spawn land does not | drop_min 28, dmg 16 | Not Y8 parity. Do not mark observed. |
+
+---
+
+## VF2-WP5 ladder, ledge, drop (not a play observation)
+
+Dated 2026-08-29 Asia/Saigon. No in-game Y8 play. No HTML5/Flash
+package. Sidecar: `docs/traversal.md` and
+`docs/evidence/VF2WP5-20260829-ASIA-SAIGON-03/`.
+
+Ladder stays `ledger:RL-MOVE-LADDER` (`assumption`). Ledge stays
+`ledger:RL-MOVE-LEDGE` (`assumption`). Drop stays
+`ledger:RL-MOVE-DROP` (`assumption`). None of these rows is promoted
+to `observed`. InputFrame action `ledge` stays reserved (no dedicated
+remap). Hold-to-aim stays `ledger:RL-CTRL-HOLD-AIM` (`assumption`).
+Y8 observation stays `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`).
+60 Hz stays `ledger:RL-SIM-FIXED-60` (`assumption`).
+
+Product contract: overlapping a ladder plus up/down attaches and
+snaps X to the column center. Climb is blocked by solid cells.
+Crouch/down on a one-way platform drops through. Falling past a
+solid/platform lip can grab; jump/up recovers. Official proof uses
+`apply_frames` plus live InputEvent inject. Fixtures are temporary
+collision maps, not a VF5 pass.
+
+| ID | Topic | Class | Conf. | Source | When | Behavior to reproduce | Tuning-only | Notes |
+|---|---|---|---|---|---|---|---|---|
+| RL-MOVE-LADDER | Ladder attach / snap / climb / drop | `assumption` | none | VF2-WP5 product contract; **not** observed on Y8 this session | 2026-08-29 | Vertical intent attaches; snap to column; climb blocked by solid | climb 140, snap 1 | Not Y8 parity. Do not mark observed. |
+| RL-MOVE-LEDGE | Ledge grab / hang / recover | `assumption` | none | VF2-WP5 product contract; **not** observed on Y8 this session | 2026-08-29 | Fall past a lip grabs; jump/up recovers outside-then-board onto the lip floor; down drops | grab 12/18, recover 0.28s step | InputFrame `ledge` stays reserved. Not observed. Official LEDGE requires on_floor + stand epsilon, not rise-only. |
+| RL-MOVE-DROP | One-way drop-through | `assumption` | none | VF2-WP5 product contract; **not** observed on Y8 this session | 2026-08-29 | Hold crouch on `=` past 0.25s clears COL_PLATFORM; Y must increase | hold 0.25s, fall>=8 | Short crouch stays crouched. Not observed. |

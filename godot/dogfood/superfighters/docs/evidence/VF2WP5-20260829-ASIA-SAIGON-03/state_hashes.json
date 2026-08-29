@@ -1,0 +1,84 @@
+{
+	"map_id": "fx_ladder",
+	"mode": "vs2",
+	"replay": {
+		"pair_count": 9,
+		"pairs": [
+			{
+				"hash_a": "828066bd0e2e18d47988db519b7e78ed2bbe68b18bdf0a462b8a7e7e939bc09a",
+				"hash_b": "828066bd0e2e18d47988db519b7e78ed2bbe68b18bdf0a462b8a7e7e939bc09a",
+				"hash_match": true,
+				"name": "cross_dirs",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "4307ac3c247002b6487346a6a1bb811cab6bc2e5ee109d37e59aa6f694e27861",
+				"hash_b": "4307ac3c247002b6487346a6a1bb811cab6bc2e5ee109d37e59aa6f694e27861",
+				"hash_match": true,
+				"name": "drop_through",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "ba904b21931027af0a3e47af50c9aff8c5a6df3e598b109f347bd5a0bb136788",
+				"hash_b": "ba904b21931027af0a3e47af50c9aff8c5a6df3e598b109f347bd5a0bb136788",
+				"hash_match": true,
+				"name": "ladder_block",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "bec30285d21a3f129eaca10c82fd45660dcdc8b479552f9f81ec9358fa85eff6",
+				"hash_b": "bec30285d21a3f129eaca10c82fd45660dcdc8b479552f9f81ec9358fa85eff6",
+				"hash_match": true,
+				"name": "ladder_up_down",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "9f0c02bf41491c82d357b734abeb308148b2df10fc886cae51d841b0ce366f9d",
+				"hash_b": "9f0c02bf41491c82d357b734abeb308148b2df10fc886cae51d841b0ce366f9d",
+				"hash_match": true,
+				"name": "ledge_recover",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "7c1d4c7ccd657ed6d7b51d13cb3aa6ee4961ed8f116fb5f4797a8283bc993d2d",
+				"hash_b": "7c1d4c7ccd657ed6d7b51d13cb3aa6ee4961ed8f116fb5f4797a8283bc993d2d",
+				"hash_match": true,
+				"name": "map_hazardous",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "6dadd327c3e5176b15ca2b7daf4b6aa018a47bdcbee26943a3bc94ac78fed6af",
+				"hash_b": "6dadd327c3e5176b15ca2b7daf4b6aa018a47bdcbee26943a3bc94ac78fed6af",
+				"hash_match": true,
+				"name": "map_police",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "1162beb7f6d7552e4b3ad2a7adc4fcc7c73cd03ad384846620cda289f2bac9ce",
+				"hash_b": "1162beb7f6d7552e4b3ad2a7adc4fcc7c73cd03ad384846620cda289f2bac9ce",
+				"hash_match": true,
+				"name": "map_rooftops",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "a83fef23aeb059eae59274acc500478dbde5f9d744c8ed17f79c1418e76556c0",
+				"hash_b": "a83fef23aeb059eae59274acc500478dbde5f9d744c8ed17f79c1418e76556c0",
+				"hash_match": true,
+				"name": "map_storage",
+				"ok_a": true,
+				"ok_b": true
+			}
+		],
+		"source": "SimReplay.final_hash twice",
+		"verdict": "match"
+	},
+	"seed": 1
+}

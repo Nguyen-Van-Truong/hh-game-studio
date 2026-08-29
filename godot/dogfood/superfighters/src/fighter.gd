@@ -7,11 +7,16 @@ extends CharacterBody2D
 ## Roll stays ledger:RL-MOVE-ROLL (assumption). Dive stays
 ## ledger:RL-MOVE-DIVE (assumption). Jump-kick stays
 ## ledger:RL-MOVE-JUMP-KICK (assumption). Fall stays
-## ledger:RL-MOVE-FALL (assumption). Y8 observation stays
+## ledger:RL-MOVE-FALL (assumption). Ladder stays
+## ledger:RL-MOVE-LADDER (assumption). Ledge stays
+## ledger:RL-MOVE-LEDGE (assumption). Drop stays
+## ledger:RL-MOVE-DROP (assumption). InputFrame `ledge`
+## stays reserved. Y8 observation stays
 ## ledger:RL-MOVE-ROLL-DIVE (unavailable). Not a Y8 observation.
 
 const MAX_HP: float = 100.0
 const MAX_STAMINA: float = 100.0
+const _Traversal: GDScript = preload("res://src/sim/traversal.gd")
 
 var gravity: float = 1700.0
 var jump_vel: float = -430.0
@@ -115,6 +120,34 @@ var fire_extinguish_count: int = 0
 var last_tap_dir: float = 0.0
 var last_tap_at: float = 99.0
 var last_held_x: float = 0.0
+var climbing: bool = false
+var climb_seq: int = 0
+var attach_started: bool = false
+var detach_started: bool = false
+var last_climb_block: String = ""
+var climb_blocked_now: bool = false
+var hanging: bool = false
+var hang_time: float = 0.0
+var hang_seq: int = 0
+var hang_started: bool = false
+var hang_ended: bool = false
+var recover_left: float = 0.0
+var recover_total: float = 0.0
+var recover_hold_left: float = 0.0
+var recover_started: bool = false
+var recover_max_step: float = 0.0
+var last_ledge_block: String = ""
+var hang_anchor: Vector2 = Vector2.ZERO
+var hang_from: Vector2 = Vector2.ZERO
+var hang_stand: Vector2 = Vector2.ZERO
+var ledge_lock_left: float = 0.0
+var drop_through_left: float = 0.0
+var drop_hold: float = 0.0
+var drop_started: bool = false
+var drop_ended: bool = false
+var last_drop_block: String = ""
+var last_contact_nx: float = 0.0
+var last_contact_ny: float = 0.0
 var sprite: AnimatedSprite2D
 var stand_shape: RectangleShape2D
 var crouch_shape: RectangleShape2D
@@ -185,10 +218,25 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	fall_immune_landed = false
 	sprint_started = false
 	sprint_ended = false
+	attach_started = false
+	detach_started = false
+	hang_started = false
+	hang_ended = false
+	recover_started = false
+	drop_started = false
+	drop_ended = false
+	climb_blocked_now = false
+	if ledge_lock_left > 0.0:
+		ledge_lock_left = maxf(ledge_lock_left - SimConstants.TICK_DT, 0.0)
+	if recover_hold_left > 0.0:
+		recover_hold_left = maxf(recover_hold_left - SimConstants.TICK_DT, 0.0)
 	if dead:
 		last_roll_block = "dead"
 		last_dive_block = "dead"
 		last_kick_block = "dead"
+		last_climb_block = "dead"
+		last_ledge_block = "dead"
+		last_drop_block = "dead"
 		velocity.y += gravity * delta
 		velocity.y = minf(velocity.y, max_fall_speed)
 		move_and_slide()
@@ -240,9 +288,18 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	var fire_held: bool = bool(cmd.get("fire_held", false))
 	var nade_held: bool = bool(cmd.get("grenade_held", false)) and grenades > 0
 	on_ladder = bool(cmd.get("on_ladder", false))
+	var snap_x: float = float(cmd.get("ladder_snap_x", global_position.x))
+	var climb_up_blocked: bool = bool(cmd.get("climb_up_blocked", false))
+	var climb_down_blocked: bool = bool(cmd.get("climb_down_blocked", false))
+	var one_way_under: bool = bool(cmd.get("one_way_under", false))
+	var ledge: Dictionary = {}
+	if cmd.get("ledge") is Dictionary:
+		ledge = cmd.get("ledge") as Dictionary
 	aiming = (fire_held and _gun_ready()) or nade_held
 	var crouch_held: bool = bool(cmd.get("crouch", false))
 	var crouch_pressed: bool = bool(cmd.get("crouch_pressed", false))
+	var jump_cmd: bool = bool(cmd.get("jump", false))
+	var jump_pressed: bool = bool(cmd.get("jump_pressed", false))
 	var roll_pressed: bool = bool(cmd.get("roll", false))
 	var dive_pressed: bool = bool(cmd.get("dive", false))
 	var kick_pressed: bool = bool(cmd.get("kick", false))
@@ -250,6 +307,9 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 		last_roll_block = "knockdown"
 		last_dive_block = "knockdown"
 		last_kick_block = "knockdown"
+		last_climb_block = "knockdown"
+		last_ledge_block = "knockdown"
+		last_drop_block = "knockdown"
 	if rolling:
 		roll_time = maxf(roll_time - delta, 0.0)
 		if roll_pressed or crouch_pressed:
@@ -283,30 +343,28 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 		elif want_dive:
 			_try_start_dive(on_floor_now, aiming)
 		if not rolling and not diving:
-			crouched = crouch_held and on_floor_now and not aiming and not on_ladder
+			crouched = crouch_held and on_floor_now and not aiming and not climbing and not hanging
 	if kicking:
 		kick_time = maxf(kick_time - delta, 0.0)
 		if kick_time <= 0.0 or on_floor_now:
 			kicking = false
 			kick_ended = true
+	_tick_drop_through(delta, on_floor_now, crouch_held, one_way_under)
+	_tick_hang(delta, jump_cmd, jump_pressed, crouch_held, crouch_pressed, ledge)
+	_tick_ladder(delta, x, jump_cmd, jump_pressed, crouch_held, snap_x, climb_up_blocked, climb_down_blocked)
 	_apply_shape()
-	if rolling or diving or kicking or knockdown_left > 0.0:
+	if rolling or diving or kicking or knockdown_left > 0.0 or hanging or recover_left > 0.0 or recover_hold_left > 0.0:
 		jump_buf = 0.0
 		last_jump = false
-	elif on_ladder:
+	elif climbing:
 		jump_buf = 0.0
 		last_jump = false
-		velocity.y = 0.0
-		if bool(cmd.get("jump", false)):
-			velocity.y = -climb
-		elif crouch_held:
-			velocity.y = climb
-	elif bool(cmd.get("jump_pressed", false)) and not fire_held and not nade_held:
+	elif jump_pressed and not fire_held and not nade_held:
 		jump_buf = jump_buf_time
 	else:
 		jump_buf = maxf(jump_buf - delta, 0.0)
 	var jump_held: bool = bool(cmd.get("jump", false)) and not fire_held and not nade_held
-	if not rolling and not diving and not kicking and knockdown_left <= 0.0 and not on_ladder and jump_buf > 0.0 and coyote > 0.0 and not fire_held and not nade_held:
+	if not rolling and not diving and not kicking and knockdown_left <= 0.0 and not climbing and not hanging and recover_left <= 0.0 and jump_buf > 0.0 and coyote > 0.0 and not fire_held and not nade_held:
 		velocity.y = jump_vel
 		jump_buf = 0.0
 		coyote = 0.0
@@ -341,8 +399,12 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	if was_sprinting and not sprinting:
 		sprint_ended = true
 	var target: float = facing * speed if rolling or diving else x * speed
-	var acc: float = accel if on_floor_now or on_ladder else air_accel
-	if rolling:
+	var acc: float = accel if on_floor_now or climbing else air_accel
+	if hanging or recover_left > 0.0 or recover_hold_left > 0.0:
+		pass
+	elif climbing:
+		velocity.x = 0.0
+	elif rolling:
 		velocity.x = move_toward(velocity.x, facing * roll_speed, accel * delta)
 	elif diving:
 		velocity.x = move_toward(velocity.x, facing * dive_speed, accel * delta)
@@ -353,7 +415,7 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 		velocity.x = move_toward(velocity.x, 0.0, friction * delta)
 	else:
 		velocity.x = move_toward(velocity.x, target, acc * delta)
-	if not on_floor_now and not on_ladder:
+	if not on_floor_now and not climbing and not hanging and recover_left <= 0.0 and recover_hold_left <= 0.0:
 		if not diving:
 			velocity.y += gravity * delta
 		velocity.y = minf(velocity.y, max_fall_speed)
@@ -363,7 +425,7 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	else:
 		aim_dir = Vector2(facing, 0.0)
 	var melee_pressed: bool = bool(cmd.get("melee", false)) or kick_pressed
-	if not rolling and not diving and knockdown_left <= 0.0 and melee_pressed and melee_cd <= 0.0:
+	if not rolling and not diving and not hanging and not climbing and knockdown_left <= 0.0 and melee_pressed and melee_cd <= 0.0:
 		if not on_floor_now and not on_ladder:
 			_try_start_kick()
 		elif kick_pressed and on_floor_now:
@@ -381,7 +443,21 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 		want_grenade = true
 		grenade_cd = 0.8
 		throw_flash = 0.16
+	_apply_ledge_motion(delta)
+	var recover_pos0: Vector2 = global_position
 	move_and_slide()
+	if recover_left > 0.0:
+		recover_max_step = maxf(recover_max_step, global_position.distance_to(recover_pos0))
+		if _ledge_recover_boarded():
+			_finish_ledge_recover()
+	_record_contacts()
+	if climbing and is_on_ceiling():
+		if last_climb_block != "solid":
+			climb_blocked_now = true
+		last_climb_block = "solid"
+		velocity.y = 0.0
+	if not hanging and not climbing and recover_left <= 0.0:
+		_try_ledge_grab(ledge)
 	var landed: bool = is_on_floor() and not on_floor_now
 	if landed:
 		var drop: float = global_position.y - air_origin_y
@@ -403,6 +479,265 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	if sprite != null:
 		sprite.flip_h = facing < 0.0
 	_play_clip(_pose_clip())
+
+
+func _tick_drop_through(delta: float, on_floor_now: bool, crouch_held: bool, one_way_under: bool) -> void:
+	if drop_through_left > 0.0:
+		drop_through_left = maxf(drop_through_left - delta, 0.0)
+		collision_mask = Maps.COL_WORLD | Maps.COL_PROP
+		floor_snap_length = 0.0
+		if drop_through_left <= 0.0:
+			collision_mask = Maps.COL_WORLD | Maps.COL_PLATFORM | Maps.COL_PROP
+			floor_snap_length = 4.0
+			drop_ended = true
+		return
+	if hanging or climbing or recover_left > 0.0:
+		drop_hold = 0.0
+		last_drop_block = "busy"
+		return
+	if rolling or diving or kicking or knockdown_left > 0.0:
+		drop_hold = 0.0
+		last_drop_block = "busy"
+		return
+	if not on_floor_now:
+		drop_hold = 0.0
+		last_drop_block = "air"
+		return
+	if not one_way_under or not crouch_held:
+		drop_hold = 0.0
+		if not crouch_held:
+			return
+		last_drop_block = "solid"
+		return
+	drop_hold += delta
+	var hold_min: float = _Traversal.f("drop_hold_min", 0.25)
+	if drop_hold + 0.0001 < hold_min:
+		last_drop_block = "crouch"
+		return
+	drop_hold = 0.0
+	drop_through_left = _Traversal.f("drop_through", 0.20)
+	drop_started = true
+	collision_mask = Maps.COL_WORLD | Maps.COL_PROP
+	floor_snap_length = 0.0
+	velocity.y = maxf(velocity.y, 80.0)
+	crouched = false
+	last_drop_block = ""
+
+
+func _tick_hang(
+	delta: float,
+	jump_cmd: bool,
+	jump_pressed: bool,
+	crouch_held: bool,
+	crouch_pressed: bool,
+	_ledge: Dictionary
+) -> void:
+	if recover_left > 0.0:
+		return
+	if not hanging:
+		return
+	if jump_cmd or jump_pressed:
+		recover_total = _Traversal.f("recover_duration", 0.28)
+		recover_left = recover_total
+		hang_from = global_position
+		recover_started = true
+		recover_max_step = 0.0
+		hanging = false
+		last_ledge_block = ""
+		return
+	if crouch_held or crouch_pressed:
+		hanging = false
+		hang_ended = true
+		ledge_lock_left = 0.12
+		velocity.y = 40.0
+		if drop_through_left <= 0.0:
+			floor_snap_length = 4.0
+		last_ledge_block = ""
+
+
+func _tick_ladder(
+	_delta: float,
+	x: float,
+	jump_cmd: bool,
+	jump_pressed: bool,
+	crouch_held: bool,
+	snap_x: float,
+	climb_up_blocked: bool,
+	climb_down_blocked: bool
+) -> void:
+	if hanging or recover_left > 0.0:
+		return
+	if rolling or diving or kicking or knockdown_left > 0.0:
+		if climbing:
+			climbing = false
+			detach_started = true
+			last_climb_block = "busy"
+		return
+	var want_vert: bool = jump_cmd or crouch_held
+	if not climbing:
+		if not on_ladder:
+			return
+		if not want_vert:
+			return
+		climbing = true
+		climb_seq += 1
+		attach_started = true
+		global_position.x = snap_x
+		velocity.x = 0.0
+		sprinting = false
+		crouched = false
+		last_climb_block = ""
+	if not on_ladder:
+		climbing = false
+		detach_started = true
+		return
+	global_position.x = snap_x
+	velocity.x = 0.0
+	if x != 0.0 and not want_vert:
+		climbing = false
+		detach_started = true
+		return
+	if jump_pressed and x != 0.0:
+		climbing = false
+		detach_started = true
+		velocity.x = x * walk
+		velocity.y = jump_vel * _Traversal.f("hop_off", 0.55)
+		return
+	velocity.y = 0.0
+	if jump_cmd:
+		if climb_up_blocked:
+			velocity.y = 0.0
+			if last_climb_block != "solid":
+				climb_blocked_now = true
+			last_climb_block = "solid"
+		else:
+			velocity.y = -climb
+			last_climb_block = ""
+	elif crouch_held:
+		if climb_down_blocked:
+			velocity.y = 0.0
+			if last_climb_block != "solid":
+				climb_blocked_now = true
+			last_climb_block = "solid"
+		else:
+			velocity.y = climb
+			last_climb_block = ""
+
+
+func _ledge_recover_target() -> Vector2:
+	## Climb outside the lip first, then board. A diagonal into hang_stand
+	## wedges on the solid corner (~15px short) at climb-step speed.
+	if global_position.y > hang_stand.y + 1.5:
+		return Vector2(hang_anchor.x, hang_stand.y)
+	return hang_stand
+
+
+func _ledge_recover_boarded() -> bool:
+	if hanging:
+		return false
+	if not is_on_floor():
+		return false
+	return global_position.distance_to(hang_stand) < _Traversal.f("recover_board_eps", 8.0)
+
+
+func _finish_ledge_recover() -> void:
+	recover_left = 0.0
+	hanging = false
+	hang_ended = true
+	ledge_lock_left = maxf(ledge_lock_left, 0.28)
+	recover_hold_left = 0.16
+	velocity = Vector2.ZERO
+	floor_snap_length = 4.0
+
+
+func _apply_ledge_motion(delta: float) -> void:
+	var dt: float = maxf(delta, 0.0001)
+	var max_step: float = minf(float(Maps.TILE) * 0.75, climb * dt)
+	if hanging:
+		floor_snap_length = 0.0
+		var to_hang: Vector2 = hang_anchor - global_position
+		var dist: float = to_hang.length()
+		if dist <= 2.0:
+			velocity = Vector2.ZERO
+		else:
+			velocity = to_hang.normalized() * (minf(dist, max_step) / dt)
+		return
+	if recover_left > 0.0:
+		recover_left = maxf(recover_left - dt, 0.0)
+		if _ledge_recover_boarded():
+			_finish_ledge_recover()
+			return
+		if global_position.y <= hang_stand.y + 2.0:
+			floor_snap_length = 4.0
+		else:
+			floor_snap_length = 0.0
+		var to_target: Vector2 = _ledge_recover_target() - global_position
+		var dist: float = to_target.length()
+		if dist <= 1.5:
+			velocity = Vector2(0.0, 60.0)
+		else:
+			velocity = to_target.normalized() * (minf(dist, max_step) / dt)
+		if recover_left <= 0.0 and not _ledge_recover_boarded():
+			recover_left = dt
+		return
+	if recover_hold_left > 0.0:
+		velocity = Vector2.ZERO
+		floor_snap_length = 4.0
+		return
+	if drop_through_left <= 0.0:
+		floor_snap_length = 4.0
+
+
+func _record_contacts() -> void:
+	if hanging or recover_left > 0.0 or recover_hold_left > 0.0:
+		return
+	var n: Vector2 = Vector2.ZERO
+	if is_on_floor():
+		n = get_floor_normal()
+	elif is_on_wall():
+		n = get_wall_normal()
+	elif get_slide_collision_count() > 0:
+		var col: KinematicCollision2D = get_last_slide_collision()
+		if col != null:
+			n = col.get_normal()
+	var q: Vector2 = _Traversal.quantize_normal(n)
+	last_contact_nx = q.x
+	last_contact_ny = q.y
+
+
+func _try_ledge_grab(ledge: Dictionary) -> void:
+	if hanging or climbing or recover_left > 0.0 or ledge_lock_left > 0.0 or recover_hold_left > 0.0:
+		return
+	if rolling or diving or kicking or knockdown_left > 0.0:
+		last_ledge_block = "busy"
+		return
+	if dead:
+		last_ledge_block = "dead"
+		return
+	if is_on_floor():
+		last_ledge_block = "ground"
+		return
+	if velocity.y <= 20.0:
+		last_ledge_block = "rising"
+		return
+	if not bool(ledge.get("valid", false)):
+		last_ledge_block = "none"
+		return
+	hanging = true
+	hang_seq += 1
+	hang_started = true
+	climbing = false
+	sprinting = false
+	crouched = false
+	kicking = false
+	hang_anchor = Vector2(float(ledge.get("x", global_position.x)), float(ledge.get("y", global_position.y)))
+	hang_from = global_position
+	hang_stand = Vector2(float(ledge.get("stand_x", global_position.x)), float(ledge.get("stand_y", global_position.y)))
+	recover_max_step = 0.0
+	velocity = Vector2.ZERO
+	last_contact_nx = float(ledge.get("nx", 0.0))
+	last_contact_ny = float(ledge.get("ny", 0.0))
+	last_ledge_block = ""
 
 
 func extinguish_fire() -> void:
@@ -427,7 +762,7 @@ func _try_start_roll(on_floor_now: bool, is_aiming: bool) -> void:
 	if not on_floor_now:
 		last_roll_block = "air"
 		return
-	if on_ladder:
+	if on_ladder or climbing or hanging:
 		last_roll_block = "ladder"
 		return
 	if is_aiming:
@@ -464,7 +799,7 @@ func _try_start_dive(on_floor_now: bool, is_aiming: bool) -> void:
 	if on_floor_now:
 		last_dive_block = "ground"
 		return
-	if on_ladder:
+	if on_ladder or climbing or hanging:
 		last_dive_block = "ladder"
 		return
 	if is_aiming:
@@ -505,7 +840,7 @@ func _try_start_kick() -> void:
 	if kicking:
 		last_kick_block = "kicking"
 		return
-	if on_ladder:
+	if on_ladder or climbing or hanging:
 		last_kick_block = "ladder"
 		return
 	if is_on_floor():
@@ -533,6 +868,9 @@ func apply_knockdown(dir: Vector2) -> void:
 	rolling = false
 	diving = false
 	kicking = false
+	climbing = false
+	hanging = false
+	recover_left = 0.0
 
 
 func take_damage(amount: float, knock: Vector2) -> void:
@@ -657,6 +995,12 @@ func _pose_clip() -> String:
 		return "aim_side"
 	if crouched:
 		return "crouch"
+	if hanging or recover_left > 0.0:
+		return "hang"
+	if recover_hold_left > 0.0:
+		return "idle"
+	if climbing:
+		return "climb"
 	if on_ladder:
 		return "walk"
 	if not is_on_floor():
@@ -696,6 +1040,13 @@ func apply_runtime_row(row: Dictionary) -> void:
 	diving = int(row.get("diving", 0)) != 0
 	kicking = int(row.get("kicking", 0)) != 0
 	sprinting = int(row.get("sprinting", 0)) != 0
+	on_ladder = int(row.get("on_ladder", 0)) != 0
+	climbing = int(row.get("climbing", 0)) != 0
+	hanging = int(row.get("hanging", 0)) != 0
+	climb_seq = int(row.get("climb_seq", climb_seq))
+	hang_seq = int(row.get("hang_seq", hang_seq))
+	last_contact_nx = SimConstants.dequantize(int(row.get("contact_nx", 0)))
+	last_contact_ny = SimConstants.dequantize(int(row.get("contact_ny", 0)))
 	if dead:
 		collision_layer = 0
 		health = 0.0
@@ -727,6 +1078,20 @@ func apply_runtime_extra(extra: Dictionary) -> void:
 		)
 	if extra.has("on_ladder"):
 		on_ladder = bool(extra.get("on_ladder", false))
+	if extra.has("climbing"):
+		climbing = bool(extra.get("climbing", false))
+	if extra.has("hanging"):
+		hanging = bool(extra.get("hanging", false))
+	if extra.has("climb_seq"):
+		climb_seq = int(extra.get("climb_seq", climb_seq))
+	if extra.has("hang_seq"):
+		hang_seq = int(extra.get("hang_seq", hang_seq))
+	if extra.has("contact_nx"):
+		last_contact_nx = SimConstants.dequantize(int(extra.get("contact_nx", 0)))
+	if extra.has("contact_ny"):
+		last_contact_ny = SimConstants.dequantize(int(extra.get("contact_ny", 0)))
+	if extra.has("drop_through_left"):
+		drop_through_left = SimConstants.dequantize(int(extra.get("drop_through_left", 0)))
 	if extra.has("sprinting"):
 		sprinting = bool(extra.get("sprinting", false))
 	if extra.has("rolling"):

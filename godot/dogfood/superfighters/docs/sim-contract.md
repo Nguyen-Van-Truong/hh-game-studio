@@ -40,7 +40,9 @@ ledger:RL-CTRL-HOLD-AIM (`assumption`) — **not** promoted to `observed`.
 `roll` is a shipped action (`ledger:RL-MOVE-ROLL`, `assumption`).
 `dive` / `kick` are shipped (`ledger:RL-MOVE-DIVE` /
 `ledger:RL-MOVE-JUMP-KICK`, `assumption`). Y8 observation stays
-ledger:RL-MOVE-ROLL-DIVE (`unavailable`). `ledge` stays reserved.
+ledger:RL-MOVE-ROLL-DIVE (`unavailable`). InputFrame `ledge` stays
+reserved; ledge *behavior* is shipped (`ledger:RL-MOVE-LEDGE`,
+`assumption`).
 F11 is page chrome, not a fighter action (ledger:RL-CTRL-FULLSCREEN).
 
 Malformed frames (missing tick, negative tick, tick mismatch, unknown

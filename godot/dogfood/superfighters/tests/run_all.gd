@@ -3,6 +3,7 @@ extends SceneTree
 const STEP: float = 1.0 / 60.0
 const SprintCasesScript: GDScript = preload("res://tests/sprint_cases.gd")
 const DiveCasesScript: GDScript = preload("res://tests/dive_cases.gd")
+const TraversalCasesScript: GDScript = preload("res://tests/traversal_cases.gd")
 
 var _fails: PackedStringArray = PackedStringArray()
 var _loop: String = "unproven"
@@ -17,6 +18,7 @@ var _input: String = "unproven"
 var _loco: String = "unproven"
 var _sprint: String = "unproven"
 var _dive: String = "unproven"
+var _trav: String = "unproven"
 
 
 func _initialize() -> void:
@@ -44,6 +46,7 @@ func _boot() -> void:
 	await _test_locomotion(app)
 	await _test_sprint(app)
 	await _test_dive(app)
+	await _test_traversal(app)
 	if _fails.is_empty():
 		_no_err = "proven"
 	_emit()
@@ -661,6 +664,46 @@ func _test_dive(app: App) -> void:
 		_dive = "proven"
 
 
+func _test_traversal(app: App) -> void:
+	var errors: PackedStringArray = await TraversalCasesScript.run_all(app)
+	var i: int = 0
+	while i < errors.size():
+		_fail("TRAV %s" % String(errors[i]))
+		i += 1
+	var ladder: String = str(TraversalCasesScript.outcome_ladder.get("verdict", "unproven"))
+	var ledge: String = str(TraversalCasesScript.outcome_ledge.get("verdict", "unproven"))
+	var drop: String = str(TraversalCasesScript.outcome_drop.get("verdict", "unproven"))
+	var block: String = str(TraversalCasesScript.outcome_block.get("verdict", "unproven"))
+	var dirs: String = str(TraversalCasesScript.outcome_dirs.get("verdict", "unproven"))
+	var maps: String = str(TraversalCasesScript.outcome_maps.get("verdict", "unproven"))
+	var stuck: String = str(TraversalCasesScript.outcome_stuck.get("verdict", "unproven"))
+	var contact: String = str(TraversalCasesScript.outcome_contact.get("verdict", "unproven"))
+	var live: String = str(TraversalCasesScript.outcome_live.get("verdict", "unproven"))
+	var replay: String = str(TraversalCasesScript.outcome_replay.get("verdict", "unproven"))
+	if ladder != "pass":
+		_fail("TRAV LADDER outcome is %s" % ladder)
+	if ledge != "pass":
+		_fail("TRAV LEDGE outcome is %s" % ledge)
+	if drop != "pass":
+		_fail("TRAV DROP outcome is %s" % drop)
+	if block != "pass":
+		_fail("TRAV BLOCK outcome is %s" % block)
+	if dirs != "pass":
+		_fail("TRAV DIRS outcome is %s" % dirs)
+	if maps != "fixtures_only":
+		_fail("TRAV MAPS outcome is %s (stage maps not claimed)" % maps)
+	if stuck != "pass":
+		_fail("TRAV STUCK outcome is %s" % stuck)
+	if contact != "pass":
+		_fail("TRAV CONTACT outcome is %s" % contact)
+	if live != "pass":
+		_fail("TRAV LIVE outcome is %s" % live)
+	if replay != "match":
+		_fail("TRAV REPLAY outcome is %s" % replay)
+	if _count_prefix("TRAV ") == 0:
+		_trav = "proven"
+
+
 func _emit() -> void:
 	print("HH_VF_PATH title→fight→win/lose→restart")
 	print(
@@ -722,6 +765,24 @@ func _emit() -> void:
 			DiveCasesScript.used_apply_frames_succeeded,
 			DiveCasesScript.used_apply_frames_attempted,
 			_dive,
+		]
+	)
+	print(
+		"HH_VF_TRAV LADDER=%s LEDGE=%s DROP=%s BLOCK=%s DIRS=%s MAPS=%s STUCK=%s CONTACT=%s LIVE=%s REPLAY=%s APPLY=%d/%d status=%s"
+		% [
+			str(TraversalCasesScript.outcome_ladder.get("verdict", "unproven")),
+			str(TraversalCasesScript.outcome_ledge.get("verdict", "unproven")),
+			str(TraversalCasesScript.outcome_drop.get("verdict", "unproven")),
+			str(TraversalCasesScript.outcome_block.get("verdict", "unproven")),
+			str(TraversalCasesScript.outcome_dirs.get("verdict", "unproven")),
+			str(TraversalCasesScript.outcome_maps.get("verdict", "unproven")),
+			str(TraversalCasesScript.outcome_stuck.get("verdict", "unproven")),
+			str(TraversalCasesScript.outcome_contact.get("verdict", "unproven")),
+			str(TraversalCasesScript.outcome_live.get("verdict", "unproven")),
+			str(TraversalCasesScript.outcome_replay.get("verdict", "unproven")),
+			TraversalCasesScript.used_apply_frames_succeeded,
+			TraversalCasesScript.used_apply_frames_attempted,
+			_trav,
 		]
 	)
 	if _fails.is_empty():

@@ -1,0 +1,14 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+HH_VF_PATH title→fight→win/lose→restart
+HH_VF LOOP=proven COMBAT=proven MAPS=proven NO_ERRORS=proven
+HH_VF_HYGIENE sessions=20 muted=1 music=off status=proven
+HH_VF_SIM HASH3=match PAUSE_TICK=stable MALFORMED=reject status=proven
+HH_VF_TRACE MATCH=1 status=proven
+HH_VF_RUNTIME PAUSE_SNAP=stable RESTORE_HASH=match AUTH=reject status=proven
+HH_VF_INPUT USED_STEP_FIXED=0 P1P2=split status=proven
+HH_VF_LOCO EPSILON=0.001 HASH2=match TUNNEL=none CAMERA=arena_fit status=proven
+HH_VF_SPRINT TAP=pass STAMINA=pass ROLL=pass INVULN=pass DUP=pass LIVE=pass REPLAY=match APPLY=717/718 status=proven
+HH_VF_DIVE DIVE=pass KICK=pass TACKLE=pass FALL=pass PIT=pass DODGE=pass INVULN=pass DIST=pass MAPS=pass LIVE=pass REPLAY=match APPLY=1225/1225 status=proven
+HH_VF_TRAV LADDER=pass LEDGE=pass DROP=pass BLOCK=pass DIRS=pass MAPS=fixtures_only STUCK=pass CONTACT=pass LIVE=pass REPLAY=match APPLY=2462/2462 status=proven
+PASS: Vault Fighters first playable

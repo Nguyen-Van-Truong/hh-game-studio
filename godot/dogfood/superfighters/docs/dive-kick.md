@@ -22,7 +22,8 @@ Hold-to-aim stays `ledger:RL-CTRL-HOLD-AIM` (`assumption`).
 Sprint / roll stay `ledger:RL-MOVE-SPRINT` / `ledger:RL-MOVE-ROLL`
 (`assumption`). Y8 observation stays `ledger:RL-MOVE-ROLL-DIVE`
 (`unavailable`). 60 Hz stays `ledger:RL-SIM-FIXED-60` (`assumption`).
-Ledge stays reserved for VF2-WP5.
+Ledge behavior is VF2-WP5 (`ledger:RL-MOVE-LEDGE`). InputFrame
+`ledge` stays reserved.
 
 ## Clock (ledger:RL-SIM-FIXED-60)
 

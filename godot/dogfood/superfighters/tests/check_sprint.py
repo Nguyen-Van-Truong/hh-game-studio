@@ -165,8 +165,8 @@ def main() -> int:
         reserved = payload.get("reserved_not_shipped", [])
         if "roll" in reserved or "dive" in reserved or "kick" in reserved:
             errors.append("roll/dive/kick must be shipped")
-        if "ledge" not in reserved:
-            errors.append("ledge must stay reserved")
+        if "ledge" in reserved:
+            errors.append("ledge mechanic must be shipped")
         move = payload.get("movement", {})
         for key in (
             "tap_window",

@@ -35,6 +35,9 @@ https://mythologicinteractive.com/Superfighters
   (`ledger:RL-MOVE-SPRINT` / `ledger:RL-MOVE-ROLL`, `assumption`)
 - Airborne sprint+crouch dives; aerial melee jump-kicks
   (`ledger:RL-MOVE-DIVE` / `ledger:RL-MOVE-JUMP-KICK`, `assumption`)
+- Ladder attach/snap/climb; ledge grab/recover; one-way drop-through
+  (`ledger:RL-MOVE-LADDER` / `ledger:RL-MOVE-LEDGE` /
+  `ledger:RL-MOVE-DROP`, `assumption`)
 - Hold-to-aim, aim with up/down, release to shoot
 - Three slots: melee + gun + grenades. Start fists + pistol×12 + 3 nades
 - Crouch + melee near a grounded weapon to pick up / swap (standing

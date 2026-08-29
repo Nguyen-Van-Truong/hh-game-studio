@@ -174,6 +174,13 @@ static func _fighter_row(f: Fighter) -> Dictionary:
 		"roll_seq": f.roll_seq,
 		"dive_seq": f.dive_seq,
 		"kick_seq": f.kick_seq,
+		"on_ladder": 1 if f.on_ladder else 0,
+		"climbing": 1 if f.climbing else 0,
+		"hanging": 1 if f.hanging else 0,
+		"climb_seq": f.climb_seq,
+		"hang_seq": f.hang_seq,
+		"contact_nx": SimConstants.quantize(f.last_contact_nx),
+		"contact_ny": SimConstants.quantize(f.last_contact_ny),
 	}
 
 
