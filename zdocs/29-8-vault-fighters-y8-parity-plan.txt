@@ -1,0 +1,1038 @@
+PLAN_SCOPE=godot/dogfood/superfighters
+PRODUCT_PLAN_AUTHORITY=1
+PARENT_PLATFORM_PLAN=zdocs/20-8-godot-agent-autopilot-plan.txt
+PARENT_PLATFORM_STATUS=OWNER_STOPPED_59_OF_60
+CURRENT_VALID_WP=VF0-WP2
+STATUS=ACTIVE
+PLAN_DATE=2026-08-29
+TIMEZONE=Asia/Saigon
+
+================================================================================
+BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
+================================================================================
+
+Mục tiêu cuối: một game Godot độc lập, tên làm việc **Vault Fighters**, có cảm
+giác chơi và cấu trúc trận đấu gần nhất có thể với Superfighters bản Y8, nhưng
+toàn bộ code, art, audio, tên hiển thị và asset là nguyên bản. Agent nhận brief
+một lần, tự làm, tự chạy, tự kiểm và tạo gói review; người dùng chỉ xem/review.
+
+| Thứ tự | Nhóm | Kết quả bắt buộc | Phụ thuộc | Chạy song song | Trạng thái |
+|---:|---|---|---|---|---|
+| 0 | VF0 nền và routing | scope, provenance, test sạch, không lẫn plan | none | không | [ ] 1/3 |
+| 1 | VF1 reference + contract | reference ledger, behavior spec, deterministic trace | VF0 | research/test | [ ] 0/4 |
+| 2 | VF2 movement | chạy, nhảy, crouch, sprint, roll, dive, ladder, ledge | VF1 | input + physics | [ ] 0/5 |
+| 3 | VF3 combat | melee/kick, hitbox, knockdown, disarm, aim/fire, grenade | VF2 | weapons + VFX | [ ] 0/6 |
+| 4 | VF4 world interaction | props, glass, barrels, containers, doors/elevators, hazards | VF2 | map fixtures | [ ] 0/5 |
+| 5 | VF5 map parity | 6 functional arenas; original geometry/names/art | VF3,VF4 | one map per agent lane | [ ] 0/6 |
+| 6 | VF6 modes + AI | VS, local 2P, Stage, Survival, competent bots | VF3,VF5 | mode/UI/AI | [ ] 0/5 |
+| 7 | VF7 presentation | original skins, animation, audio, HUD, menu, accessibility | VF5,VF6 | art/audio/UI | [ ] 0/4 |
+| 8 | VF8 agent autonomy | brief→edit→play→observe→repair→checkpoint, no manual F6 | VF0..VF7 | host/bridge | [ ] 0/4 |
+| 9 | VF9 verification | trace replay, E2E, differential rubric, soak, leak proof | all above | QA | [ ] 0/5 |
+| 10 | VF10 package | Windows build, offline run, provenance/license, review bundle | VF9 | release | [ ] 0/3 |
+|   | **Tổng** | **50 WP nhỏ; chỉ coordinator tick sau DoD** |  |  | **1/50** |
+
+Gate nội bộ:
+
+| Gate | Điều kiện | Người ký |
+|---|---|---|
+| V0 scope | baseline và nguồn sự thật không mâu thuẫn | coordinator + critic |
+| V1 simulation | deterministic trace và invariant xanh | coordinator + critic |
+| V2 mechanics | movement/combat/world tests + real window | coordinator + critic |
+| V3 maps/modes | 6 map topology + 4 mode smoke/E2E | coordinator + critic |
+| V4 autonomy | agent làm task mới không cần thao tác người | coordinator + independent critic |
+| V5 quality | người dùng chơi/review và chấp nhận cảm giác game | **người dùng** |
+| V6 package | build sạch/offline/reproducible; không phải public signing | coordinator + critic |
+
+Quy tắc trạng thái: bảng trên là roadmap sản phẩm mới, không thay checkbox hay
+G6/GX của plan nền. `59/60` chỉ là trạng thái closeout nền; không được cộng vào
+`VF0..VF10`. Không báo “80% hoàn thành” chỉ vì số WP đã tick.
+
+================================================================================
+1. QUYẾT ĐỊNH VÀ PHẠM VI KHÔNG ĐƯỢC ĐỔI NGẦM
+================================================================================
+
+1.1 Mục tiêu trải nghiệm
+
+- Góc nhìn side-view 2D platform arena, nhiều tầng, hố chết, vật thể làm cover.
+- Trận đấu hỗn loạn nhưng đọc được: chạy, nhảy, crouch, aim lên/xuống, nhặt
+  vũ khí, bắn/ném/đấm, knockdown và trở thành người cuối cùng sống.
+- Có VS 1P (bot), local VS 2P cùng bàn phím, Stage liên tiếp và Survival.
+- Camera bao quát toàn arena; không biến thành top-down hoặc Street Fighter 1v1.
+- “Giống nhất” nghĩa là hành vi, nhịp độ, affordance và topology chức năng;
+  không có nghĩa sao chép pixel, sprite, mã, âm thanh, screenshot hay bố cục
+  tọa độ 1:1 của tác phẩm tham chiếu.
+
+1.2 Phạm vi bản phát hành mục tiêu
+
+Must-have trước V5:
+
+- movement: walk, jump, variable jump, crouch, double-tap sprint, stamina,
+  roll, dive, fall/dive behavior, ladder climb, ledge/edge recovery;
+- combat: fists, kick/jump-kick, melee weapons, aim hold/release fire,
+  directional aim, knockback/knockdown, brief invulnerability, disarm,
+  grenade arc/bounce/explosion, friendly-fire rules rõ ràng;
+- weapons: pistol, UZI/SMG, shotgun, rifle/long-range, heavy launcher,
+  melee variants, grenades/molotov-like original item; data-driven tuning;
+- world: destructible glass/wood, throwable/shootable props, explosive
+  barrel/container, elevators or moving platforms, doors, ladders, toxic
+  hazard, map-specific machinery;
+- maps: bốn stage-archetype tương ứng rooftop/warehouse/station/sewer và hai
+  VS-archetype bổ sung; tên hiển thị, tile, landmark, art phải nguyên bản;
+- modes: VS 1P, local 2P, Stage progression, Survival score/spawn loop;
+- presentation: 4+ original fighter identities, readable animation states,
+  hit/death feedback, health/stamina/ammo HUD, pause/restart/settings;
+- agent workflow: semantic commands only, real Godot window observation,
+  runtime input injection, screenshot/assert/repair/checkpoint, no human
+  editing in happy path.
+
+Nice-to-have sau V5, không chặn parity gate: online multiplayer, map editor
+cho người chơi, C# support, bullet-time nâng cao, ragdoll/gore phức tạp,
+console/mobile export, workshop. Không tự mở các mục này giữa WP bắt buộc.
+
+1.3 Những điều cấm
+
+- Không tải, rip, trace, bundle hoặc ship asset/code/audio/SWF/Flash/HTML5
+  package/screenshot của Y8, Newgrounds, MythoLogic hay wiki.
+- Không dùng “Superfighters”/“Super Fighter” làm tên sản phẩm, title card,
+  nhân vật, map name thương mại hoặc metadata phát hành.
+- Không fork/sửa C++ Godot; dùng Godot stock 4.7.1-stable đã pin.
+- Không đụng `godot/dogfood/kho-bi-an/`, Hoan Hao social, Rust `gs-*` legacy,
+  plan G6/GX, hoặc các file Snake ngoài scope.
+- Không dùng fixture/teleport/force-kill làm bằng chứng duy nhất cho tính năng
+  gameplay; fixture chỉ được dùng để unit-test nhanh và phải có trace thật.
+- Không tick WP/gate bằng unit test xanh nếu DoD yêu cầu cửa sổ, replay, build,
+  review người hoặc evidence độc lập.
+
+1.4 Nguồn sự thật và đường dẫn
+
+- Plan nền platform: `zdocs/20-8-godot-agent-autopilot-plan.txt`; giữ nguyên
+  lịch sử 59/60, R9-WP4/G6/GX không tự tick.
+- Quyết định owner: `docs/DECISIONS.md`, entry `GODOT-VF-Y8-2026-08-28`.
+- Project hiện tại: `godot/dogfood/superfighters/`, baseline commit
+  `094822467edfe97d20f99890366a0103dc93b9b1` (first playable slice).
+- Plan sản phẩm này có authority **theo scope project trên**, không tạo một
+  bộ checkbox thứ hai cho platform plan.
+
+================================================================================
+2. BASELINE AUDIT — ĐIỂM XUẤT PHÁT THẬT
+================================================================================
+
+Baseline hiện có title→fight→win/lose→restart, VS 1P/2P, bốn grid map,
+movement cơ bản, ladder đơn giản, fists/pistol/UZI/shotgun/pipe/knife/grenade,
+pickup/respawn, bullet/grenade, HUD/pause và headless test. Lệnh test đã chạy:
+
+`Godot_v4.7.1-stable_win64_console.exe --headless --path godot/dogfood/superfighters --script res://tests/run_all.gd`
+
+Kết quả functional là PASS, nhưng process còn cảnh báo ObjectDB/AudioStream
+leak khi thoát. Đây là lỗi nghiệm thu phải xử lý ở VF0, không được giấu bằng
+cách tắt cảnh báo.
+
+Gaps đã xác nhận trong `KNOWN_ISSUES.md` và source:
+
+- không có roll, dive, kick, fall-damage/dive immunity, cover/ledge behavior;
+- không có bullet-time/power-up, destructible glass/terrain, fire/burning,
+  explosive containers, moving elevator, toxic pool, windmill/door behavior;
+- chỉ 4 map grid đơn giản; thiếu Backstreets/Testing-Floor archetypes;
+- Stage hiện một win/map, không có difficulty/reward loop đầy đủ; Survival thiếu;
+- bot greedy, navigation và tactical behavior yếu;
+- test hiện teleport/reset state và chưa chứng minh real input, visual/audio,
+  deterministic replay, screenshot diff, export hoặc process leak trend;
+- các file `snake/` và `drive_snake*.py` là untracked ngoài scope, không được
+  đưa vào commit hay dùng làm VF evidence.
+
+Do đó baseline là **prototype có thể chạy**, chưa phải “gần nhất Y8”. Mọi WP sau
+đây phải cải thiện một gap có acceptance cụ thể; không chỉ thêm code hoặc asset.
+
+================================================================================
+3. REFERENCE / CLEAN-ROOM PROTOCOL
+================================================================================
+
+3.1 Mỗi WP có reference note
+
+Trước khi implement behavior có ảnh hưởng parity, agent phải tạo hoặc cập nhật
+`godot/dogfood/superfighters/docs/reference-ledger.md` (hoặc sidecar evidence
+được liên kết) với:
+
+- URL, ngày/giờ Asia/Saigon, phiên bản/trạng thái trang;
+- quan sát trực tiếp hoặc mô tả nguồn thứ cấp; phân biệt `observed`,
+  `reported`, `assumption`;
+- behavior/invariant cần tái tạo, tham số chỉ là tuning target;
+- phần đã cố ý đổi để giữ sản phẩm nguyên bản (tên, art, topology delta);
+- hash của trace/spec, không lưu asset tham chiếu vào project shipping.
+
+Agent có thể mở Y8 để quan sát khi công cụ/browser cho phép, nhưng không được
+coi mạng là dependency runtime và không được tự động tải game package. Nếu Y8
+không mở được, ghi `unavailable`, dùng nguồn độc lập đã trích dẫn và đánh dấu
+độ tin cậy; không đoán rồi ghi là fact.
+
+3.2 Nguồn tham chiếu tối thiểu
+
+- Y8 game page: https://www.y8.com/games/superfighters — controls, 1/2-player,
+  PVP/PVE, stages/weapons và nền tảng HTML5.
+- Original game page: https://www.newgrounds.com/portal/view/575163 — release
+  context, local play, arena/action description; dùng để cross-check, không lấy
+  file nhúng.
+- Developer page: https://mythologicinteractive.com/Superfighters — nếu truy cập
+  được, ghi ngày quan sát và dùng cho control/loop cross-check.
+- Community references (wiki/walkthrough) chỉ là secondary: map landmarks,
+  weapon categories, special movement; mọi số cụ thể phải calibrate bằng trace
+  và ghi uncertainty.
+
+3.3 Legal/product gate
+
+Mechanics/genre ideas và functional behaviors là mục tiêu học tập; code, art,
+audio, characters, exact names và expressive map artwork phải original. Map
+passes phải giữ functional beats (cao độ, pit, traversal, cover, hazard) nhưng
+thay đổi kích thước, landmark, tile language, item placement và tên hiển thị.
+Nếu muốn phát hành thương mại với layout quá gần, dừng tại V5 và yêu cầu legal
+review; agent không tự kết luận “fair use”.
+
+================================================================================
+4. KIẾN TRÚC MỤC TIÊU VÀ BẤT BIẾN
+================================================================================
+
+4.1 Luồng runtime
+
+`brief → planner → semantic command bus → Godot EditorPlugin → UndoRedo /
+atomic file write → runtime process → input trace → snapshot/screenshot /
+assert → repair → checkpoint → review package`
+
+Agent được phép dùng API editor, bridge/MCP hiện có và các công cụ Windows để
+đọc/ghi trong project. Mọi mutation có ý nghĩa phải đi qua command có schema,
+postcondition và command id; không raw-write `.tscn` từ script ngoài plugin,
+không giả ACK.
+
+4.2 Quyền và file ownership
+
+- Một writer cho mỗi file tại một thời điểm; scheduler cấp lease có expiry,
+  owner và authenticated release. Các thay đổi cùng file phải FIFO.
+- `godot/dogfood/superfighters/` là product tree mới; `godot/plugin-project/`
+  và `bridge/` là platform tooling, chỉ sửa khi WP ghi rõ.
+- Agent không tự sửa plan checkbox. Coordinator là người duy nhất tick và cập
+  nhật `CURRENT_VALID_WP` sau Verify + DoD + LOG + critic.
+- Mỗi commit chỉ chứa một WP hoặc một nhóm WP đã ghi rõ; loại `snake/`,
+  `drive_snake*.py`, `.godot/`, token, cache, build output khỏi commit.
+
+4.3 Invariants V-A1…V-A20
+
+- V-A1: Godot stock 4.7.1-stable; không C++ fork/GDExtension trừ khi owner mở
+  gate riêng sau gap report.
+- V-A2: mutation semantic, schema versioned, validate trước apply.
+- V-A3: UndoRedo hoặc transaction atomic cho thay đổi editor; không partial
+  scene/resource khi lỗi.
+- V-A4: mọi mutating command có unique `command_id`; retry là idempotent.
+- V-A5: ACK chỉ sau postcondition đọc lại từ Godot/runtime.
+- V-A6: file path nằm dưới project root; không path traversal/symlink escape.
+- V-A7: Godot object chỉ thao tác main thread; runtime/editor tách process.
+- V-A8: bridge chỉ loopback + token; secret không vào log/evidence/screenshot.
+- V-A9: một writer/file; conflict đóng lane, reconcile rồi mới tiếp tục.
+- V-A10: checkpoint trước destructive mutation; rollback thử được.
+- V-A11: Play chạy process riêng từ project snapshot; editor không điều khiển
+  state runtime bằng biến dùng chung.
+- V-A12: pause ưu tiên; khi pause/stop phải drain/cancel an toàn, không mất ACK.
+- V-A13: save dùng temp+rename/atomic replace; hash và schema ghi trong manifest.
+- V-A14: input trace dùng tick 60 Hz, event down/up rõ ràng, có seed.
+- V-A15: physics/combat deterministic trong cùng pin và seed; epsilon ghi rõ.
+- V-A16: không dùng teleport/force-kill/fixture-only để chứng minh E2E.
+- V-A17: typed GDScript, không warning/error runtime trong official run.
+- V-A18: evidence có timestamp, command/trace/hash, repro command và verdict.
+- V-A19: không claim feature từ code chưa chạy hoặc ảnh tĩnh chưa đối chiếu.
+- V-A20: mọi claim “giống Y8” phải trỏ reference ledger + acceptance case;
+  uncertain value phải được gắn `tuning`, không ghi như fact.
+
+4.4 Data model tối thiểu
+
+Tạo resource/data typed cho `FighterState`, `WeaponSpec`, `ArenaSpec`,
+`PropSpec`, `MatchRules`, `InputFrame`, `ReplayHeader`, `RunEvidence`. Không
+hard-code tuning rải trong nhiều script. Mỗi state có version và serializer;
+snapshot không chứa object reference hoặc secret.
+
+4.5 Các lớp gameplay
+
+1. Simulation: fixed 60 Hz, seed, collision/query, event queue.
+2. Actor: locomotion/state machine, hitbox/hurtbox, inventory, animation cues.
+3. World: tile geometry, one-way surfaces, props, hazards, moving bodies.
+4. Match: spawn, teams, scoring, round/mode transitions, pause/restart.
+5. Presentation: camera, HUD, audio/VFX, menus, accessibility.
+6. Automation: semantic editor actions, runtime input, observation, repair,
+   checkpoint and review bundle.
+
+================================================================================
+5. WORK PACKAGE CHI TIẾT — VF0 NỀN VÀ ROUTING
+================================================================================
+
+Mỗi WP dưới đây là một slice độc lập. Agent phải đọc đúng WP đầu tiên chưa tick,
+không nhảy sang slice xa chỉ vì code “dễ”. Mẫu commit: `VF<n>-WP<n>: <mô tả>`.
+
+VF0-WP1 — Freeze baseline và provenance                                      [x]
+  Phụ thuộc: none. Owner: coordinator/audit. Files: plan, baseline manifest,
+  `godot/dogfood/superfighters/docs/`.
+  Làm:
+    - ghi HEAD `094822467...`, Godot version/hash, OS, toolchain và dirty-file
+      list; không reset/xóa thay đổi người dùng;
+    - tạo `baseline-manifest.json` gồm file hash, project settings hash,
+      current known issues, test command/output hash;
+    - phân loại file untracked Snake là OUT_OF_SCOPE, không gắn vào VF commit;
+    - ghi quyết định new-folder và clean-room status vào reference ledger.
+  Verify:
+    - `git diff --check` (chỉ product diff được xem xét);
+    - Godot headless baseline command chạy được;
+    - manifest đọc lại khớp hash; không có token/asset tham chiếu.
+  DoD: mọi agent thấy cùng baseline; không có claim parity hoặc gate tick.
+  LOG:
+    LOG 2026-08-29 08:16 Asia/Saigon — agent=coordinator
+      Base: be77f95 freeze baseline and provenance on frozen HEAD
+        094822467edfe97d20f99890366a0103dc93b9b1.
+        Godot=4.7.1.stable.official.a13da4feb
+      Files/leases: godot/dogfood/superfighters/docs/ (baseline-manifest,
+        reference-ledger, out-of-scope, evidence VF0WP1-20260829-ASIA-SAIGON-01),
+        godot/dogfood/superfighters/.gitignore
+      Verify: leftover-0 PASS (critics re-ran git archive of frozen HEAD);
+        EXIT 0; HH_VF LOOP=proven COMBAT=proven MAPS=proven NO_ERRORS=proven;
+        PASS: Vault Fighters first playable;
+        stdout SHA-256 c1b78162…; stderr SHA-256 1b6671de…;
+        ObjectDB 31 + 5 resources still in use = freeze truth;
+        leftover_godot=0
+      Honesty:
+        Official PASS is first-playable freeze, not Y8 parity, not V0.
+        Unpublished mute overlay in game_session.gd / sfx_bank.gd is VF0-WP2;
+        live empty stderr is not freeze truth.
+      Critic: II 90007a64 TICK yes leftover-0 HEAD archive;
+        HH 4666d663 TICK yes leftover-0 HEAD archive
+      Gaps: residual nits OK:
+        unreproduced aggregate mixer (head_files_aggregate_sha256);
+        hashes.txt truncated extra paths.
+        VF0-WP2 owns mute. VF0-WP3 owns AGENTS/DECISIONS/checker.
+        Parent 20-8 unchanged: R9-WP4 [ ]; 59/60; G6 [ ].
+      Commit: (this tick)
+
+VF0-WP2 — Headless teardown và resource hygiene                           [ ]
+  Phụ thuộc: VF0-WP1. Owner: test/runtime. Files: `tests/run_all.gd`,
+  `src/sfx_bank.gd`, lifecycle scripts và regression test.
+  Làm:
+    - tìm nguyên nhân ObjectDB/AudioStream leak khi title→fight→restart→quit;
+    - dừng/giải phóng AudioStreamPlayer, transient VFX, timers và sessions theo
+      thứ tự; không chỉ thêm delay để che warning;
+    - chạy nhiều (>=20) create/clear session trong headless và cửa sổ thật;
+    - nếu Godot giữ resource do backend audio, tách test audio khỏi logic và
+      ghi giới hạn rõ ràng, nhưng official process phải có zero unexpected leak.
+  Verify:
+    - headless `--verbose` không có `Leaked instance`, `Resource still in use`,
+      `ObjectDB instances were leaked`;
+    - exit code 0 và functional labels vẫn PASS;
+    - lặp 3 lần, output normalized hash giống nhau.
+  DoD: teardown sạch hoặc gap report có reproduction/owner, không tick V0 nếu
+  chỉ còn warning chưa giải thích.
+
+VF0-WP3 — Scoped plan routing và safe commit boundary                         [ ]
+  Phụ thuộc: VF0-WP1. Owner: governance. Files: `AGENTS.md`, `docs/DECISIONS.md`,
+  this plan, optional plan-scope checker.
+  Làm:
+    - giữ plan 20-8 là lịch sử/platform authority cho closeout 59/60, G6/GX
+      vẫn mở; không tự tick hoặc sửa checkbox cũ;
+    - route agent product tree tới plan này bằng `PLAN_SCOPE` và
+      `PRODUCT_PLAN_AUTHORITY`, tránh hai bộ checkbox cùng scope;
+    - thêm checker bảo đảm product agent đọc VF plan và không mở R9-WP4;
+    - ghi ngày, lý do, impact/migration trong DECISIONS.
+  Verify: checker authoritative cũ vẫn PASS; checker scope mới PASS; đọc mới
+  từ một agent test không chọn Snake/R9 làm WP tiếp theo.
+  DoD: không còn câu chỉ dẫn mâu thuẫn “đừng start Superfighter” trong đường
+  product hiện hành; lịch sử cũ vẫn nguyên vẹn.
+
+================================================================================
+6. WORK PACKAGE CHI TIẾT — VF1 REFERENCE VÀ SIMULATION CONTRACT
+================================================================================
+
+VF1-WP1 — Reference observation ledger                                        [ ]
+  Phụ thuộc: VF0-WP1. Files: product docs/reference-ledger.md.
+  Làm:
+    - mở Y8/original source khi có thể; ghi controls, camera, mode, map
+      landmarks, item loop, special movement và confidence;
+    - tách `observed` / `secondary` / `assumption`; không tải hoặc lưu asset;
+    - lập delta table: behavior giữ, tên/art/geometry đổi, lý do legal.
+  Verify: URL/date/source/hash đầy đủ; reviewer có thể tái lập ghi chú offline.
+  DoD: mọi tuning/parity claim sau này trỏ tới một row ledger.
+
+VF1-WP2 — Typed simulation schema và fixed-step clock                           [ ]
+  Phụ thuộc: VF1-WP1. Files: product `src/sim/`, data/resources, tests.
+  Làm:
+    - định nghĩa `InputFrame` (tick, held, pressed, released), seed, event
+      order, collision layers và snapshot schema;
+    - chuyển gameplay từ frame delta tùy ý sang fixed 60 Hz accumulator;
+    - expose snapshot/hash không làm mutate state.
+  Verify: cùng seed + trace tạo cùng hash trên >=3 runs; pause/resume không
+  nhảy tick; malformed frame bị reject.
+  DoD: simulation contract là nền cho replay và mọi gameplay WP.
+
+VF1-WP3 — Golden input traces và replay harness                                  [ ]
+  Phụ thuộc: VF1-WP2. Files: `tests/traces/`, `tools/godot/`, product test.
+  Làm:
+    - tạo trace title→fight, walk/jump/crouch, fire/throw, death/win/restart;
+    - hỗ trợ record từ real input và replay headless/window; hash snapshot mỗi
+      N ticks, lưu final state và event ledger;
+    - phân biệt test fixture với official trace.
+  Verify: replay original và replay lần hai cùng hash; đổi một key làm fail;
+  không teleport/force_kill trong official trace.
+  DoD: mọi bug parity có thể ghi thành trace tái hiện được.
+
+VF1-WP4 — Runtime state, diagnostics và checkpoint API                              [ ]
+  Phụ thuộc: VF1-WP2. Files: runtime diagnostics, bridge schema, docs.
+  Làm: expose read-only snapshot, actor/weapon/prop events, pause reason,
+  seed/map/mode, checkpoint create/restore; redact token/path secrets.
+  Verify: snapshot trước/sau pause và restart; checkpoint restore hash đúng;
+  malformed/unauthorized request không mutate.
+  DoD: agent quan sát được game bằng dữ liệu có cấu trúc, không cần đoán từ UI.
+
+================================================================================
+7. WORK PACKAGE CHI TIẾT — VF2 MOVEMENT
+================================================================================
+
+VF2-WP1 — Input mapping thật cho P1/P2/gamepad                                    [ ]
+  Phụ thuộc: VF1-WP3. Files: `src/input_actions.gd`, settings, input tests.
+  Làm: physical key và gamepad mapping có dead-zone; distinguish pressed,
+  held, released; remap UI lưu atomic; P2 không bị P1 gamepad đè.
+  Verify: inject real InputEvent vào running window; trace P1/P2 độc lập;
+  gamepad smoke nếu thiết bị có, otherwise deterministic synthetic device
+  được đánh dấu non-hardware.
+  DoD: input behavior khớp ledger; không chỉ gọi `step_fixed` trực tiếp.
+
+VF2-WP2 — Locomotion baseline và camera framing                                  [ ]
+  Phụ thuộc: VF1-WP2. Files: fighter/simulation/camera tests.
+  Làm: acceleration/friction, variable jump, coyote/jump buffer, crouch shape,
+  fall/pit death, arena fit camera; data-driven constants.
+  Verify: 60-Hz trace + real window; no tunneling through solid/one-way surface;
+  snapshot positions within explicit epsilon across runs.
+  DoD: movement stable trước khi thêm special moves.
+
+VF2-WP3 — Sprint, stamina và roll                                                     [ ]
+  Phụ thuộc: VF2-WP2. Files: fighter state/animation/VFX/tests.
+  Làm: double-tap direction window, stamina drain/recovery, crouch-roll
+  transition, collision footprint, invulnerability window và extinguish-fire
+  hook; không cho roll khi dead/blocked/paused.
+  Verify: trace tap timing; damage projectile trong/outside invuln; stamina
+  conservation; repeated roll cannot duplicate state/events.
+  DoD: roll có cảm giác/feedback và contract rõ, không chỉ đổi velocity.
+
+VF2-WP4 — Dive, jump-kick impulse và fall behavior                                  [ ]
+  Phụ thuộc: VF2-WP3. Files: fighter/combat hooks, traces/tests.
+  Làm: sprint+crouch dive, aerial kick, tackle/knockdown hook, no-fall-damage
+  behavior chỉ trong dive theo reference; pit death vẫn đúng.
+  Verify: real input trace trên từng map archetype; projectile dodge, landing,
+  edge case ledge/pit; no infinite invulnerability.
+  DoD: dive/roll/kick distinguishable in snapshot, animation and hit events.
+
+VF2-WP5 — Ladder, ledge grab/recovery và traversal QA                                  [ ]
+  Phụ thuộc: VF2-WP2,VF2-WP4 (dùng collision fixture tạm, không phụ thuộc map pass).
+  Files:
+  traversal component, map fixtures, tests.
+  Làm: ladder attach/snap/climb/drop, ledge detection/recovery, one-way drop
+  input, blocked transitions and deterministic contact normals.
+  Verify: traverse up/down/all four directions on every map fixture; no stuck,
+  teleport or ladder climb through solid; replay hash stable.
+  DoD: topology can actually be navigated, not merely drawn.
+
+================================================================================
+8. WORK PACKAGE CHI TIẾT — VF3 COMBAT VÀ WEAPON SYSTEM
+================================================================================
+
+VF3-WP1 — Hitbox/hurtbox, attack phases và melee feedback                         [ ]
+  Phụ thuộc: VF1-WP2,VF2-WP2. Files: combat component, fighter, VFX/audio,
+  deterministic tests.
+  Làm: tách startup/active/recovery frames; fists, weapon reach, crouch attack,
+  aerial jump-kick; team/friendly-fire rules theo mode; hitstop nhẹ không làm
+  lệch fixed tick; event có attacker/target/seed.
+  Verify: frame-by-frame trace cho miss/hit/behind/above/below; one hit per
+  active window; damage/knockback snapshot; pause trong attack an toàn.
+  DoD: melee không còn là distance check đơn giản không có phase.
+
+VF3-WP2 — Knockback, knockdown, invulnerability và disarm                         [ ]
+  Phụ thuộc: VF3-WP1,VF2-WP3. Files: fighter state machine, combat tests.
+  Làm: impulse/airborne/knockdown recovery, brief invulnerability, punch
+  disarm khi đối thủ đang cầm gun, dropped item lifecycle; tránh chain-lock.
+  Verify: damage/knockdown/disarm traces; invulnerability exact ticks;
+  dropped item không mất hoặc nhân đôi; death cause chỉ từ event hợp lệ.
+  DoD: các trạng thái có entry/exit event và replay hash.
+
+VF3-WP3 — Aim model và fire/release semantics                                      [ ]
+  Phụ thuộc: VF2-WP1,VF2-WP2. Files: input/combat/projectile/tests.
+  Làm: hold-to-aim, up/down/side aim, release-to-fire cho semi-auto, cadence
+  cho auto, muzzle origin, ammo exhaustion, recoil/spread và hit scan/ballistic
+  decision; giữ controls dễ remap.
+  Verify: pressed/held/released trace; 0 ammo không bắn; projectile collision
+  continuous (không xuyên vật thể ở tốc độ cao); aim pose/hit direction đúng.
+  DoD: pistol/SMG/shotgun khác nhau bằng data, không copy stat mù quáng.
+
+VF3-WP4 — Projectile, explosive và grenade physics                                      [ ]
+  Phụ thuộc: VF3-WP3,VF2-WP2. Files: projectile/grenade/explosion, tests.
+  Làm: swept collision hoặc substep; bounce/fuse/arc; radial damage falloff,
+  knockback, owner/team; grenade throw hold/release; explosion event phá prop
+  sau VF4.
+  Verify: high-speed collision no tunneling; deterministic grenade trace;
+  owner không tự damage nếu rule cấm; explosion chỉ một lần; timeout cleanup.
+  DoD: bắn/ném có tác động quan sát được trong real window.
+
+VF3-WP5 — Data-driven weapon roster và inventory slots                              [ ]
+  Phụ thuộc: VF3-WP3,VF3-WP4. Files: `src/data/weapons/`, inventory/HUD/tests.
+  Làm: slots melee/firearm/explosive/power; original item names/art; tối thiểu
+  fists + 3 melee variants + pistol + SMG/UZI-like + shotgun + rifle/precision
+  + heavy launcher + grenade + one fire/area item; ammo/reload/cooldown/weight
+  data; pickup replaces correct slot and drops old item.
+  Verify: schema validation; every roster item spawns, equips, attacks, drops,
+  serializes; no gun loss when grenade/melee picked; ammo edge cases.
+  DoD: roster đủ để tạo chiến thuật đa dạng; values là tuning, không claim
+  original exact numbers.
+
+VF3-WP6 — Critical/chaos tuning and combat balance harness                              [ ]
+  Phụ thuộc: VF3-WP1..5. Files: tuning resources, balance tests/report.
+  Làm: seed-controlled random crit/knockback/spread, damage caps, stamina and
+  recovery tuning; add scripted scenarios (close melee, high ground, pit,
+  grenade chain, two-player friendly fire).
+  Verify: 1000 seeded scenarios no NaN/infinite damage; distribution report,
+  no weapon always dominates; all scenarios replayable; no copied stat table.
+  DoD: combat feels chaotic yet bounded, with documented tuning rationale.
+
+================================================================================
+9. WORK PACKAGE CHI TIẾT — VF4 WORLD INTERACTION VÀ HAZARDS
+================================================================================
+
+VF4-WP1 — World/prop schema và collision ownership                                    [ ]
+  Phụ thuộc: VF1-WP2. Files: `src/world/`, prop resources, test fixtures.
+  Làm: typed `PropSpec` cho static, dynamic, one-way, breakable, pickup,
+  explosive; layer/mask contract; spawn/despawn ownership; no direct mutation
+  from presentation.
+  Verify: schema rejects missing collision/visual; prop snapshot/hash stable;
+  no orphan after restart; editor/runtime paths remain inside product root.
+  DoD: map authoring không cần hard-code từng node trong GameSession.
+
+VF4-WP2 — Breakable glass/wood và throwable/shootable objects                          [ ]
+  Phụ thuộc: VF4-WP1,VF3-WP4. Files: prop scripts/assets/tests.
+  Làm: health/material resistance, break event, fragments/VFX cleanup, bullets
+  and melee interaction, carry/throw or shove where reference supports it;
+  preserve cover until destroyed.
+  Verify: one break event, deterministic debris count, projectile passes only
+  after break, no collision ghost; screenshot before/after and replay hash.
+  DoD: destructibility changes tactics, not cosmetic-only animation.
+
+VF4-WP3 — Explosive barrels, hanging containers và fire/burning                         [ ]
+  Phụ thuộc: VF4-WP2,VF3-WP4. Files: hazard/prop/audio/VFX/tests.
+  Làm: chain explosion, flammable state, burn timer, extinguish by roll/water
+  rule if selected, hanging/drop container impulse; cap chain depth and VFX.
+  Verify: seeded chain scenario; fire damage ticks and cleanup; roll behavior;
+  no duplicate explosion or unbounded particles.
+  DoD: hazards interact with fighters and props in a visible real run.
+
+VF4-WP4 — Doors, elevators/moving platforms và traversal triggers                     [ ]
+  Phụ thuộc: VF4-WP1,VF2-WP5. Files: moving-body component, map fixture/tests.
+  Làm: deterministic platform path, boarding/unboarding, door collision/open
+  state, trigger/elevator timing, pause/resume and restart reset.
+  Verify: actors ride without tunneling, platform carries/drop safely, door
+  blocks/opens at correct state, fixed-tick replay equal.
+  DoD: vertical map routes are functional rather than decorative.
+
+VF4-WP5 — Toxic pits, fall damage, environmental machines và hazard contract          [ ]
+  Phụ thuộc: VF4-WP2..4,VF2-WP4. Files: hazard resources, map hooks, tests.
+  Làm: instant/deferred death zones, fall damage and dive immunity policy,
+  windmill/rotor or equivalent machine, acid/water feedback, safe spawn zones;
+  make each hazard explicit in `ArenaSpec`.
+  Verify: each hazard has enter/exit/damage/death trace; no spawn soft-lock;
+  pause and restart clear hazard state; screenshot/evidence per map.
+  DoD: hazards are readable, deterministic and materially affect match.
+
+================================================================================
+10. WORK PACKAGE CHI TIẾT — VF5 MAP PARITY
+================================================================================
+
+Nguyên tắc map: giữ “combat grammar” (nhiều cao độ, tuyến vòng, pit, cover,
+ladder, pickup risk/reward, một hazard/landmark đặc trưng) nhưng đổi kích thước,
+tọa độ, tile language, tên và art. Không tracing screenshot hoặc sao chép file
+map. Mỗi map phải có `ArenaSpec`, collision graph, spawn graph, landmark list,
+weapon spawn table và navigation test.
+
+VF5-WP1 — Map schema, topology validator và authoring tools                           [ ]
+  Phụ thuộc: VF1-WP2,VF4-WP1. Files: `src/maps/`, resources/tools/tests.
+  Làm: chuyển ASCII prototype sang data/resource có layers (solid, one-way,
+  ladder, hazard, prop, spawn, pickup); validator kiểm width/connectivity,
+  reachable spawn, pit boundary, safe camera, no overlapping blockers.
+  Verify: serialize/deserialize hash; graph reaches every required platform;
+  validator bắt map hỏng; editor agent tạo map bằng semantic commands.
+  DoD: map không còn phụ thuộc chuỗi ký tự khó mở rộng.
+
+VF5-WP2 — Rooftop-like arena: vertical routes và open pit                             [ ]
+  Phụ thuộc: VF5-WP1,VF2-WP5,VF4-WP4. Files: one ArenaSpec + original assets/tests.
+  Làm: 3+ distinct elevations, rooftop/bridge routes, ladder/elevator or
+  moving route, breakable panel/cover, bottomless gaps, varied weapon risk;
+  dùng tên hiển thị nguyên bản (ví dụ `Skyline Relay`).
+  Verify: P1/P2/bot reach all combat zones; pit and fallback tests; screenshot
+  landmarks; no copied billboard/geometry.
+  DoD: vertical scramble và high-ground tactics hoạt động.
+
+VF5-WP3 — Warehouse/storage-like arena: cover, crates và cargo route                  [ ]
+  Phụ thuộc: VF5-WP1,VF4-WP2,VF4-WP4. Files: one ArenaSpec + assets/tests.
+  Làm: enclosed warehouse feel, crate/barrel stacks, catwalks, door/elevator,
+  hanging cargo/container, alternate office/side route; original name/art.
+  Verify: cover blocks then breaks, cargo interacts, all spawns reachable,
+  camera fits, weapon respawn positions safe.
+  DoD: close-quarters cover and vertical ambushes are functional.
+
+VF5-WP4 — Station-like arena: multi-floor interior và machine landmark                 [ ]
+  Phụ thuộc: VF5-WP1,VF4-WP4,VF4-WP5. Files: one ArenaSpec + assets/tests.
+  Làm: 3 floors/interior + open courtyard, door shortcut, elevator/ladder,
+  shootable rotor/machine or original equivalent, breakable windows/cover.
+  Verify: traversal graph, machine event, safe floor collision, no pit spawn,
+  screenshot and trace for each floor.
+  DoD: multi-route station fight, not a flat rectangular grid.
+
+VF5-WP5 — Sewer/hazard arena: pipes, toxic zone và suspended route                    [ ]
+  Phụ thuộc: VF5-WP1,VF4-WP3,VF4-WP5. Files: one ArenaSpec + assets/tests.
+  Làm: wide toxic pit/liquid, isolated pipes/platforms, ladders, suspended
+  containers or moving route, hazard telegraph and safe crossing; original name.
+  Verify: toxic contact/death, dive/roll edge cases, route connectivity,
+  suspended object collision, camera bounds.
+  DoD: hazard changes movement and weapon strategy.
+
+VF5-WP6 — Two additional VS arenas + map roster contract                            [ ]
+  Phụ thuộc: VF5-WP2..5. Files: two ArenaSpecs, menu/registry/tests.
+  Làm: add two distinct original arenas with the functional roles of a compact
+  backstreet and a training/test floor (not copied names/layouts); include
+  doors/ladders/platforms/props and a different tactical silhouette. Register
+  all six in VS selection; stage roster remains explicit.
+  Verify: six maps load from clean project; each has >=2 routes, valid spawns,
+  weapon points, camera fit and one unique interaction; map-cycle wraps safely.
+  DoD: six-map VS coverage; no hidden map only in code.
+
+================================================================================
+11. WORK PACKAGE CHI TIẾT — VF6 MODES, MATCH FLOW VÀ AI
+================================================================================
+
+VF6-WP1 — Match rules, teams và round lifecycle                                      [ ]
+  Phụ thuộc: VF1-WP4,VF3-WP2,VF5-WP1. Files: match rules/session/UI tests.
+  Làm: free-for-all/team rules, spawn seed, last-standing resolution, round
+  timer (if observed), restart/quit/pause, friendly-fire policy, end reason;
+  remove test-only `force_kill` from official path.
+  Verify: real input traces for win/loss/tie/quit/restart; no double signal;
+  snapshot after every transition; pause cannot advance simulation.
+  DoD: one canonical match state machine used by every mode.
+
+VF6-WP2 — VS 1P and local VS 2P production flow                                      [ ]
+  Phụ thuộc: VF6-WP1,VF2-WP1,VF5-WP6. Files: menu/session/input/HUD/E2E.
+  Làm: mode/map/options selection, P1 vs bots, P1/P2 same keyboard, remap,
+  ready/start, restart; maintain independent controls and team colors.
+  Verify: real window E2E with injected keyboard events; two players can move,
+  attack, die and resolve; no P1 input leakage to P2; capture timeline.
+  DoD: no manual editor clicks or teleports in official evidence.
+
+VF6-WP3 — Stage progression and difficulty/reward loop                                  [ ]
+  Phụ thuộc: VF6-WP1,VF6-WP2,VF5-WP2..5. Files: stage rules/save/UI/tests.
+  Làm: four core stage arenas in observed order, progression after win,
+  difficulty tiers or explicitly documented approximation, persistent score/
+  unlock/reward; reset and continue semantics.
+  Verify: clean save + full stage trace; each stage loads correct map and bot
+  roster; loss/restart does not skip or duplicate stage; reward hash stable.
+  DoD: stage is more than one isolated win per map; any unobserved tier is
+  labeled approximation, not claimed exact.
+
+VF6-WP4 — Survival mode and spawn director                                             [ ]
+  Phụ thuộc: VF6-WP1,VF3-WP6,VF5-WP6. Files: survival director/UI/tests.
+  Làm: endless/wave score loop based on observed behavior, escalating bot
+  roster, timed weapon/prop respawn, score/combo/records, game-over/restart;
+  cap entities and keep deterministic seed option.
+  Verify: 10-minute headless + 5-minute window run; score monotonic, spawn
+  budget bounded, pause/resume, restart clears director; no soft-lock.
+  DoD: Survival is playable and distinct from Stage, or a reference note
+  explicitly records why the observed Y8 version lacks it.
+
+VF6-WP5 — Bot navigation, tactics và difficulty                                        [ ]
+  Phụ thuộc: VF2-WP5,VF3-WP6,VF4-WP4,VF6-WP2. Files: bot brain/nav/tests.
+  Làm: platform/ladder graph navigation, threat/cover/weapon selection,
+  aim/throw timing, pit avoidance, knockdown recovery, difficulty profiles;
+  deterministic planner with bounded decision cost.
+  Verify: seeded scenarios across all six maps; bots reach goals, avoid known
+  pits, use at least two weapon classes and can finish matches; no infinite
+  loop; compare telemetry against baseline greedy bot.
+  DoD: bot is a credible opponent, not a scripted target or SHA worker.
+
+================================================================================
+12. WORK PACKAGE CHI TIẾT — VF7 PRESENTATION VÀ QUALITY OF FEEL
+================================================================================
+
+VF7-WP1 — Original fighter roster, silhouettes và animation state coverage              [ ]
+  Phụ thuộc: VF2-WP4,VF3-WP2. Files: art generator/assets/manifest/visuals/tests.
+  Làm: >=4 distinct original identities (silhouette, palette, gear, face/visor
+  language), idle/walk/jump/fall/crouch/aim/melee/throw/roll/dive/knockdown/
+  dead animations; nearest-neighbor pixel style; no tracing or original names.
+  Verify: manifest provenance, hash and license; every state visible in a real
+  run; color/shape readability at 1280x720 and scaled window; no placeholder
+  ColorRect as final visible body.
+  DoD: “skin khác một tí” được nâng thành identity đủ nguyên bản và production-
+  safe; mechanics remain reference-like.
+
+VF7-WP2 — Weapons, props, VFX và audio feedback                                        [ ]
+  Phụ thuộc: VF3-WP4,VF4-WP3,VF7-WP1. Files: original art/audio/resources/tests.
+  Làm: muzzle/tracer, impact/knockdown, break/explosion/fire cues, pickup/drop,
+  footstep/jump/roll/dive/weapon sounds, music loop and pause ducking; avoid
+  recreating Y8 melody or sound recording.
+  Verify: event→cue mapping; no missing resource; volume buses/pause behavior;
+  repeated session cleanup; asset manifest says generated/hand-authored source.
+  DoD: every gameplay event is readable without relying on debug text.
+
+VF7-WP3 — HUD, menus, accessibility và controller UX                                  [ ]
+  Phụ thuộc: VF6-WP2,VF7-WP1. Files: UI scripts/theme/settings/tests.
+  Làm: title/mode/map/stage/survival screens, health/stamina/ammo/score,
+  weapon slot display, pause/restart/quit, key remap, fullscreen/scale,
+  colorblind-safe team cues, audio sliders and tutorial overlay.
+  Verify: keyboard/gamepad navigation; 854x480/1280x720/1920x1080 no cutoff;
+  pause focus; every button invokes semantic action and has screenshot evidence.
+  DoD: player can understand controls and state without developer console.
+
+VF7-WP4 — Camera, screen effects và performance budget                                  [ ]
+  Phụ thuộc: VF5-WP2..6,VF7-WP2. Files: camera/render/perf tests.
+  Làm: arena framing with bounded follow, shake/hitstop budget, particles
+  pooling/cleanup, render layers and pixel snap; define target 60 FPS at base
+  resolution on pinned dev GPU without claiming universal hardware.
+  Verify: 5-minute combat performance trace, frame-time p50/p95, entity count,
+  no camera clipping or UI drift; compare before/after screenshots.
+  DoD: presentation supports action and stays within measured budget.
+
+================================================================================
+13. WORK PACKAGE CHI TIẾT — VF8 AGENT AUTONOMY / OBSERVABILITY
+================================================================================
+
+VF8-WP1 — Product command catalog và project capability map                            [ ]
+  Phụ thuộc: VF0-WP3,VF1-WP4. Files: scoped bridge/plugin/registry/docs.
+  Làm: khai báo semantic actions cho map/actor/weapon/prop/mode/script/asset,
+  play/input/observe/assert/checkpoint; mỗi action có schema, permission,
+  precondition, postcondition, inverse và error code. Map capability tới Godot
+  API; không tuyên bố “mọi nút” nếu chưa có adapter/test.
+  Verify: catalog round-trip; unknown field preserved; unauthorized/path escape
+  rejected; action thực sự đổi state hoặc trả lý do unsupported.
+  DoD: agent có interface đầy đủ để làm game, không cần thao tác chuột giả.
+
+VF8-WP2 — Real editor manipulation và visible replay                                  [ ]
+  Phụ thuộc: VF8-WP1,VF7-WP3. Files: plugin observer/overlay/bridge/E2E.
+  Làm: agent tạo scene/node/resource/script qua Godot EditorPlugin + UndoRedo;
+  chọn node, focus inspector, highlight hierarchy, animate cursor/gizmo replay
+  sau mutation; UI replay chỉ là quan sát, không phải nguồn mutation. Hỗ trợ
+  kéo-thả ngữ nghĩa (assign/reparent/import) và hiển thị thao tác trên cửa sổ.
+  Verify: một task tạo map+fighter+weapon từ project trống; cửa sổ thật cho
+  thấy hierarchy/inspector/viewport đổi; undo/redo và postcondition đúng; không
+  dùng SendInput/RPA pixel click làm đường chính.
+  DoD: người dùng xem được agent làm và có thể Pause, nhưng không phải làm hộ.
+
+VF8-WP3 — Brief-to-game planner, scheduler và repair loop                           [ ]
+  Phụ thuộc: VF8-WP1,VF8-WP2,VF2-WP1,VF3-WP5. Files: host/orchestrator/ledger.
+  Làm: brief một lần → chia DAG WP → cấp lane/file lease → implement/test/
+  observe/repair → checkpoint; critic feedback bắt buộc đi vào repair queue;
+  retry idempotent; context compact thành state resource; real workers làm
+  code/art/audio/test, không thay bằng `sha256 cpuWork` hoặc fixture oracle.
+  Verify: fresh brief không có file chuẩn bị sẵn; agent tự gọi play/input/
+  screenshot/assert; một lỗi cố ý được phát hiện và sửa; kill/restart host
+  resume cùng checkpoint; ledger chứng minh mỗi mutation.
+  DoD: zero-touch happy path, chỉ dừng ở E1–E4 hoặc lỗi cần người quyết định.
+
+VF8-WP4 — Human observer controls và safety pause                                     [ ]
+  Phụ thuộc: VF8-WP2,VF8-WP3. Files: observer UI, permissions, tests/docs.
+  Làm: Watch/Fast mode, Pause/Resume/Stop, current action, diff preview,
+  confirmation cho destructive/export/publish, redacted logs, emergency stop;
+  không tự upload/sign/chi tiền.
+  Verify: Pause trong mutation/play/repair; safe drain; Stop không để process
+  mồ côi; resume không duplicate; observer không thể vô tình mutate bằng click.
+  DoD: người chỉ xem/review vẫn kiểm soát an toàn mà không làm gameplay.
+
+================================================================================
+14. WORK PACKAGE CHI TIẾT — VF9 VERIFICATION, EVIDENCE VÀ GATES
+================================================================================
+
+VF9-WP1 — Test harness hardening và chống PASS giả                                    [ ]
+  Phụ thuộc: VF1-WP3,VF8-WP3. Files: `tests/`, tools, evidence schema.
+  Làm:
+    - sửa NODUP: replay cũ phải trả thành công + durable cached/dedup marker,
+      cùng result/postcondition, scene không đổi; lỗi replay là FAIL;
+    - tính EQUAL/final snapshot sau khi duration kết thúc, không trước idle;
+    - đo RSS/private bytes/handles của Godot, sidecar, host theo mốc warm-up;
+    - phân bố workload thật trong toàn soak; giữ host sống hoặc chứng minh
+      restart/resume có workload sau restart;
+    - ghi source HEAD/diff/untracked hash đầu-cuối, fail nếu source đổi ngoài
+      lease; tách mutation count khỏi read/wake count.
+  Verify: mutation tests cố ý làm từng lỗi trên và harness phải FAIL; clean run
+  phải PASS; no secret in evidence; normalized report deterministic.
+  DoD: harness chứng minh property, không chỉ thời gian process còn sống.
+
+VF9-WP2 — Gameplay coverage matrix và golden trace suite                                [ ]
+  Phụ thuộc: VF1-WP3,VF2-WP1,VF3-WP5,VF4-WP5,VF6-WP4. Files: traces/tests.
+  Làm: matrix rows cho mọi must-have × 6 maps × VS/Stage/Survival where valid;
+  traces cho movement, every weapon class, break/explode/hazard, pause,
+  restart, win/loss, P1/P2; add negative/error cases.
+  Verify: headless deterministic replay + real window sample; no row marked
+  proven from direct state assignment; coverage report lists unproven gaps.
+  DoD: reviewer thấy chính xác tính năng nào đã chứng minh.
+
+VF9-WP3 — Visual/audio differential review package                                      [ ]
+  Phụ thuộc: VF7-WP1..4,VF9-WP2. Files: evidence tooling/docs.
+  Làm: capture same scripted scenarios at fixed resolution/seed; compare
+  layout/topology landmarks, pose transitions, HUD, effects and audio event
+  timeline against reference notes—not copied screenshots/assets. Add human-
+  readable contact sheet and machine hashes; mark subjective feel separately.
+  Verify: no missing/cutoff UI, no placeholder final body, event timestamps
+  align with simulation; evidence package contains provenance and licenses.
+  DoD: visual quality reviewable without opening editor internals.
+
+VF9-WP4 — Long-session soak, restart, recovery và leak proof                           [ ]
+  Phụ thuộc: VF8-WP3,VF9-WP1,VF9-WP2. Files: soak harness/evidence only.
+  Làm: official >=2h session with >=500 unique mutating commands, >=20 real
+  Play runs, sidecar/editor/host restarts at >=3 planned points, compact/resume,
+  distributed workload, bounded logs/cache/evidence, final state equal to
+  uninterrupted control run.
+  Verify: process metrics slope within documented budget; zero duplicate/lost
+  update; all restart points reconnect/version/hash reconcile; no leaked
+  Godot resources; critic audits exact source/evidence hash.
+  DoD: coordinator may mark V4-ready only after independent critic PASS; no
+  human gameplay step hidden in “official” run.
+
+VF9-WP5 — V4 autonomy trial and V5 review handoff                                      [ ]
+  Phụ thuộc: VF9-WP1..4,VF8-WP4. Files: fresh brief/evidence/timeline.
+  Làm: fresh product task (not a fixture) from empty copy; owner presses Start
+  once, then agent works 90 minutes, plays/tests/repairs/checkpoints and emits
+  review bundle; observer video/timeline shows no human editing. Record every
+  input request and classify E1–E4.
+  Verify: independent critic reproduces from commit/hash; output launches and
+  tests green; ledger has no unowned mutation; if quality requires a human to
+  fix code, V4 fails and task returns to VF8.
+  DoD: V4 may be ticked automatically; V5 remains **human-only** and waits for
+  actual player review. Never invent a human approval.
+
+================================================================================
+15. WORK PACKAGE CHI TIẾT — VF10 PACKAGE VÀ HANDOFF
+================================================================================
+
+VF10-WP1 — Windows export and standalone smoke                                        [ ]
+  Phụ thuộc: VF9-WP5,VF7-WP3. Files: export preset/scripts/docs.
+  Làm: export Vault Fighters with pinned Godot templates; include only product
+  assets/code; strip editor, bridge, token, evidence and dev tools; write
+  manifest with executable/hash/version.
+  Verify: export starts without editor/Node/addon/token; title→fight→win/
+  lose/restart and input trace smoke; scan package for forbidden names/assets.
+  DoD: standalone smoke proven on this machine; do not call it clean VM/G6.
+
+VF10-WP2 — Offline/reproducible package and rollback                                    [ ]
+  Phụ thuộc: VF10-WP1. Files: lock/manifest/installer/runbook.
+  Làm: build from clean checkout with cached pinned dependencies; verify source,
+  asset and executable hashes; rollback to prior package; document minimum
+  Windows/runtime requirements and known hardware limits.
+  Verify: two clean builds same normalized hash or documented nondeterministic
+  fields; offline run; tamper/version skew rejected; rollback restores launch.
+  DoD: reproducible internal package, no public upload/signing.
+
+VF10-WP3 — Final review bundle and handoff                                          [ ]
+  Phụ thuộc: VF10-WP1,VF10-WP2. Files: product README, NOTICE, review bundle.
+  Làm: bundle build, controls, map/mode matrix, trace/evidence index,
+  provenance/license manifest, known limitations, reproduction commands and
+  human review rubric; explicitly distinguish “reference-like” from “copied”.
+  Verify: a new agent can run/review from bundle without chat history; links and
+  hashes resolve; no secrets or untracked Snake files included.
+  DoD: ready for owner V5 review and optional commercial/legal review.
+
+================================================================================
+16. DAG, PARALLELISM VÀ QUY TẮC LEASE
+================================================================================
+
+16.1 Critical path
+
+`VF0-WP1 → VF0-WP2/VF0-WP3 → VF1-WP1..4 → VF2-WP1..4 → VF3-WP1..4 →
+VF4-WP1..5 → VF5-WP1 → VF5-WP2..5 → VF6-WP1..4 → VF7 → VF8 → VF9 → VF10`.
+
+VF2-WP5 có thể chạy sau VF2-WP4 trên collision fixture tạm. VF5-WP6, bot,
+presentation và tool adapters chỉ được song song khi file ownership rõ. Không
+cho hai agent sửa cùng `fighter.gd`, `game_session.gd`, `maps.gd` hoặc cùng
+resource/art manifest; dùng interface/data file riêng rồi một integrator merge.
+
+16.2 Mỗi agent trước khi làm
+
+1. Đọc `AGENTS.md`, bảng đầu file này và WP đầu tiên chưa tick.
+2. Kiểm tra `CURRENT_VALID_WP`, git status, baseline hash và active leases.
+3. Đọc chỉ invariant/reference mà WP trỏ tới; không mở/sửa WP xa để “tiện”.
+4. Ghi plan nội bộ 3–7 bước, nêu file mình sở hữu và command verify.
+5. Nếu phát hiện mâu thuẫn requirement, ghi DECISIONS/gap report rồi dừng phần
+   lệch; không sửa acceptance âm thầm.
+
+16.3 Trong khi làm
+
+- Ưu tiên test trước cho behavior; giữ thay đổi nhỏ, typed, reversible.
+- Mỗi mutation qua semantic adapter; mọi run có `run_id`, `command_id`, seed,
+  map/mode và source hash.
+- Quan sát cửa sổ thật ở các mốc quan trọng; screenshot chỉ là evidence,
+  không thay postcondition đọc từ runtime.
+- Khi agent khác bận cùng lane, xếp FIFO hoặc chờ lease; không bypass bằng
+  raw-write/file copy.
+- Không mở Y8 bằng automation tải package; chỉ quan sát trang/reference hợp lệ.
+
+16.4 Khi kết thúc WP
+
+Agent không tick checkbox. Gửi report theo mẫu:
+
+`WP=<id>; Base=<commit/hash>; Files=<list>; Verify=<exact commands + counts>;
+E2E=<run_id/trace/evidence hashes>; Critic=<id/result>; Gaps=<typed list>;
+Commit=<hash or uncommitted reason>`
+
+Coordinator chỉ tick khi: dependency xanh, test/real window pass, evidence hash
+đủ, no secret, diff sạch, critic độc lập đồng ý và mọi gap được ghi. Một critic
+“yes” không override một failing required check.
+
+================================================================================
+17. ACCEPTANCE MATRIX — KHÔNG ĐƯỢC ĐÁNH GIÁ BẰNG CẢM TÍNH DUY NHẤT
+================================================================================
+
+| ID | Acceptance | Bằng chứng tối thiểu | Chặn |
+|---|---|---|---|
+| VF-AC01 | fresh project boot/title | real window + headless | V2 |
+| VF-AC02 | P1/P2 input independent | injected key trace + window | V2 |
+| VF-AC03 | fixed-step deterministic | 3 replay hashes | V1 |
+| VF-AC04 | walk/jump/crouch/sprint/stamina | trace + telemetry | V2 |
+| VF-AC05 | roll/dive/kick/ledge/ladder | trace on 4 fixtures + video | V2 |
+| VF-AC06 | melee phases/knockdown/disarm | frame event ledger | V2 |
+| VF-AC07 | aim/fire/release/projectile | semi/auto/high-speed trace | V2 |
+| VF-AC08 | grenade/area/fire/explosion | seeded chain + cleanup | V2 |
+| VF-AC09 | inventory/pickup/drop/respawn | all roster data cases | V2 |
+| VF-AC10 | destructible/throwable props | before/after collision hash | V2 |
+| VF-AC11 | doors/elevators/machines/hazards | traversal + hazard traces | V2 |
+| VF-AC12 | six functional arenas | topology graph + screenshots | V3 |
+| VF-AC13 | VS 1P/local VS 2P | real window match | V3 |
+| VF-AC14 | Stage progression | clean-save full trace | V3 |
+| VF-AC15 | Survival | 10-minute bounded run | V3 |
+| VF-AC16 | bots tactical and bounded | telemetry across maps | V3 |
+| VF-AC17 | original skins/art/audio | manifest/license/provenance | V3 |
+| VF-AC18 | menus/HUD/accessibility | 3 resolutions + controller | V3 |
+| VF-AC19 | semantic editor + visible replay | fresh brief video/ledger | V4 |
+| VF-AC20 | repair after induced defect | critic→repair trace | V4 |
+| VF-AC21 | pause/restart/recovery safe | process kill/reconnect trace | V4 |
+| VF-AC22 | 2h soak and no duplicate/lost state | process + file metrics | V4 |
+| VF-AC23 | no unexpected resource leak | verbose exit + repeated run | V4 |
+| VF-AC24 | human can review without coding | review package | V5 |
+| VF-AC25 | standalone Windows package | package scan + smoke | V6 |
+| VF-AC26 | offline/reproducible/rollback | two builds + tamper test | V6 |
+
+“Chặn” là gate tối thiểu, không phải lời hứa rằng một unit test đơn lẻ đủ.
+
+================================================================================
+18. VERIFY COMMANDS VÀ EVIDENCE LAYOUT
+================================================================================
+
+18.1 Fast checks (được chạy sau mỗi slice)
+
+PowerShell:
+
+`$godot = Join-Path $env:LOCALAPPDATA 'HHGodotAgent/tooling/godot-4.7.1-stable/bin/Godot_v4.7.1-stable_win64_console.exe'`
+
+`& $godot --headless --path godot/dogfood/superfighters --script res://tests/run_all.gd`
+
+`git diff --check`
+
+Mỗi WP bổ sung command riêng trong LOG; không dùng `cargo test --workspace` làm
+verify cho game Godot. Nếu chạy test cũ platform, giữ đúng điều kiện của plan
+20-8 và không đổi checkbox.
+
+18.2 Real-window checks
+
+- chỉ một Godot process cho mỗi run; ghi PID/start/end, resolution, input device;
+- launch từ clean product copy khi DoD yêu cầu fresh project;
+- capture event ledger, runtime snapshot, screenshot/video và normalized hashes;
+- kết thúc process sạch, kiểm tra no orphan/no token/no bridge in package.
+
+18.3 Evidence layout
+
+`godot/dogfood/superfighters/.evidence/<run_id>/`
+
+Chỉ dùng cho local review và `.gitignore` nếu chứa output lớn. Manifest ngoài
+evidence phải ghi hash, không commit secret. Mỗi run có:
+
+- `run.json`: WP, base commit, Godot hash, OS, seed, trace hash;
+- `events.jsonl`: semantic events, no token;
+- `snapshot_start.json`, `snapshot_end.json`, `state_hashes.json`;
+- `screens/` hoặc `video/` với resolution và timestamp;
+- `metrics.json`: frame time, entities, process RSS/private/handles, budgets;
+- `verdict.md`: PASS/FAIL, gaps, exact reproduction command.
+
+================================================================================
+19. CÁC LỖI ĐÃ BIẾT VÀ CÁCH KHÔNG LẶP LẠI
+================================================================================
+
+- Không gọi first-playable headless PASS là parity. Nó hiện còn resource leak
+  warning và test trực tiếp teleport/reset state.
+- Không gọi 59/60 platform closeout là 59/60 game feature. Hai con số thuộc
+  scope khác nhau.
+- Không dùng Critic/LOG cũ nếu source hash hoặc harness thay đổi.
+- Không coi “2 giờ process còn sống” là soak có tải: workload phải phân bố,
+  host/restart phải được chứng minh, EQUAL kiểm tra sau cùng.
+- Không chấp nhận NODUP chỉ vì node count không tăng; phải có durable cached
+  replay và cùng postcondition.
+- Không coi bốn worker SHA-256 là bốn agent làm game; V4 cần workers thật
+  (code/art/audio/test) và ledger mutation.
+- Không ship `snake/`, `drive_snake*.py`, `.godot/`, generated cache hoặc
+  reference asset trong Vault Fighters.
+- Không gọi map có cùng tên/khung generic là “copy hợp pháp” tự động; giữ
+  provenance/delta và dừng hỏi legal nếu layout quá gần.
+
+================================================================================
+20. DEFINITION OF DONE CHO MỤC TIÊU NGƯỜI DÙNG
+================================================================================
+
+Plan chỉ hoàn thành khi tất cả điều sau đúng:
+
+1. Người dùng đưa một brief mới và bấm Start một lần.
+2. Agent tự tạo/sửa project, map, code, art/audio, test và build; không cần
+   người kéo node, sửa file, bấm F6 hay nhập thông tin giữa happy path.
+3. Người dùng nhìn thấy editor/runtime qua observer/replay và có thể Pause/Stop.
+4. Game có các behavior ở VF-AC01..18, với mọi approximation được ghi rõ.
+5. Agent tự phát hiện/sửa lỗi trong VF-AC20, checkpoint và resume sau restart.
+6. Evidence/trace chứng minh VF-AC19..23; independent critic tái lập được.
+7. Người dùng chơi/review thật và tự quyết V5; agent không tự giả chữ ký.
+8. Build VF10 chạy độc lập; không chứa Godot editor dependency, Node, token,
+   bridge, evidence hoặc asset tham chiếu.
+
+Nếu một mục chỉ có code nhưng chưa có evidence, trạng thái là `implemented /
+unverified`, không phải `[x]`. Nếu một mục bị cắt, ghi `out-of-scope` và impact
+vào `KNOWN_ISSUES.md`; không đổi acceptance để làm cho pass.
+
+================================================================================
+21. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
+================================================================================
+
+Đọc `AGENTS.md`, sau đó đọc bảng đầu file này. WP đầu tiên chưa tick là **VF0-WP2**.
+
+Không làm R9-WP4/G6/GX; không mở Rust engine; không đụng Kho Bí Ẩn/Hoan Hao;
+không dùng Snake làm demo; không tải/rip Y8. Chỉ khi VF0-WP1 và VF0-WP2 đã có
+baseline/teardown report mới được sửa gameplay. Khi một WP xong, gửi report
+theo §16.4 và chờ coordinator/critic; không tự tick.
+
+Mục tiêu ngắn hạn: biến prototype `Vault Fighters` thành một game arena
+platform shooter có behavior và map topology sát trải nghiệm Y8 nhất trong
+giới hạn clean-room, sau đó chứng minh agent có thể tự làm toàn bộ để người
+dùng chỉ xem và review.
+
+================================================================================
+22. AUDIT LOG NGÀY 29-8-2026
+================================================================================
+
+- Đã kiểm tra baseline commit `094822467edfe97d20f99890366a0103dc93b9b1` và
+  source product. Functional headless labels hiện PASS, nhưng trước audit có
+  ObjectDB/AudioStream leak warning khi test phát SFX rồi quit.
+- Đã sửa tối thiểu để `test_driven` mute playback (runtime bình thường vẫn
+  phát audio). Verify verbose headless sau sửa: exit 0, functional labels
+  `LOOP=proven COMBAT=proven MAPS=proven NO_ERRORS=proven`, không còn leak line.
+  Đây là hygiene fix, không phải bằng chứng parity; VF0-WP2 vẫn cần lặp session
+  ở cửa sổ thật và process-metric check.
+- Đã tạo plan này và route product trong `AGENTS.md`/`docs/DECISIONS.md`.
+  Không tick parent 20-8, không tick VF WP, không sửa/xóa Snake hoặc Kho Bí Ẩn.
+- Y8 page observation hiện dùng cho behavior reference; mọi chi tiết không
+  quan sát được vẫn gắn uncertainty trong ledger. Không có Y8 asset/code/audio
+  nào được thêm vào commit.
+- COORDINATOR CLOSEOUT VF0-WP1 (2026-08-29 08:16 Asia/Saigon): leftover-0 PASS
+  on frozen HEAD `094822467edfe97d20f99890366a0103dc93b9b1`. Critics TICK yes
+  (II 90007a64, HH 4666d663). ObjectDB 31 + 5 resources still in use is freeze
+  truth; VF0-WP2 owns mute/teardown (unpublished `game_session.gd` /
+  `sfx_bank.gd` overlay not in product freeze `be77f95`). Residual nits OK:
+  unreproduced aggregate mixer; hashes.txt truncated extra paths. Parent 20-8
+  unchanged (R9-WP4 [ ], 59/60, G6 [ ]). VF0-WP1 ticked; VF0-WP2 still [ ].
+
+================================================================================
+HẾT PLAN — 29-8-2026
+================================================================================
