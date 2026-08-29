@@ -18,8 +18,11 @@ Product movement contract. This file does **not** claim Y8 parity.
 - Repeated roll presses do not duplicate `roll_start` / `roll_seq`
 
 Hold-to-aim stays `ledger:RL-CTRL-HOLD-AIM` (`assumption`).
-Dive / kick stay `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`).
-60 Hz stays `ledger:RL-SIM-FIXED-60` (`assumption`).
+Y8 observation stays `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`).
+Product dive / kick / fall are VF2-WP4 (`ledger:RL-MOVE-DIVE` /
+`ledger:RL-MOVE-JUMP-KICK` / `ledger:RL-MOVE-FALL`, `assumption`).
+See `docs/dive-kick.md`. 60 Hz stays `ledger:RL-SIM-FIXED-60`
+(`assumption`).
 
 ## Clock (ledger:RL-SIM-FIXED-60)
 

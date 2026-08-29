@@ -33,6 +33,8 @@ https://mythologicinteractive.com/Superfighters
 - P2 (same keyboard): WASD + 1 melee / hold 2 fire / hold 3 throw
 - Double-tap left/right to sprint (stamina); crouch-while-sprint rolls
   (`ledger:RL-MOVE-SPRINT` / `ledger:RL-MOVE-ROLL`, `assumption`)
+- Airborne sprint+crouch dives; aerial melee jump-kicks
+  (`ledger:RL-MOVE-DIVE` / `ledger:RL-MOVE-JUMP-KICK`, `assumption`)
 - Hold-to-aim, aim with up/down, release to shoot
 - Three slots: melee + gun + grenades. Start fists + pistol×12 + 3 nades
 - Crouch + melee near a grounded weapon to pick up / swap (standing

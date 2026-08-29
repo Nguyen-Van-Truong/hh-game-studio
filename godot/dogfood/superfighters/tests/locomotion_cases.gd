@@ -4,7 +4,8 @@ extends RefCounted
 ## VF2-WP2 official locomotion cases. Proof is InputFrame apply_frames
 ## plus live InputEvent inject. Must not use Input.action_press or
 ## cmd-dict step_fixed. 60 Hz is ledger:RL-SIM-FIXED-60 (assumption).
-## Hold-to-aim stays assumption. Roll/dive stay unavailable.
+## Hold-to-aim stays assumption. Y8 roll/dive observation stays
+## unavailable. Product dive/kick are VF2-WP4 assumption.
 
 static var used_step_fixed: int = 0
 static var used_apply_frames: int = 0
@@ -74,7 +75,11 @@ static func schema_and_data() -> PackedStringArray:
 	if str(loco.get("hold_to_aim_class", "")) != "assumption":
 		errors.append("hold-to-aim must stay assumption")
 	if str(loco.get("roll_dive_class", "")) != "unavailable":
-		errors.append("roll/dive must stay unavailable")
+		errors.append("Y8 roll/dive observation must stay unavailable")
+	if str(loco.get("dive_class", "")) != "assumption":
+		errors.append("product dive must stay assumption")
+	if str(loco.get("kick_class", "")) != "assumption":
+		errors.append("product kick must stay assumption")
 	if absf(Locomotion.epsilon() - SimConstants.EPSILON) > 0.0000001:
 		errors.append("locomotion epsilon must match sim epsilon 0.001")
 	if absf(Locomotion.f("walk", 0.0) - 170.0) > 0.01:
@@ -89,10 +94,10 @@ static func schema_and_data() -> PackedStringArray:
 	if absf(float(cam.get("designed_view_x", 0.0)) - 1280.0) > 0.01:
 		errors.append("designed view width must be 1280")
 	var reserved: Array = loco.get("reserved_not_shipped", []) as Array
-	if reserved.has("roll"):
-		errors.append("roll is shipped by VF2-WP3 and must not stay reserved")
-	if not reserved.has("dive"):
-		errors.append("dive must stay reserved_not_shipped")
+	if reserved.has("roll") or reserved.has("dive") or reserved.has("kick"):
+		errors.append("roll/dive/kick must not stay reserved")
+	if not reserved.has("ledge"):
+		errors.append("ledge must stay reserved_not_shipped")
 	return errors
 
 

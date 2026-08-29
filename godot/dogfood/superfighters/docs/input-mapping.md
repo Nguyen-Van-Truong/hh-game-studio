@@ -32,7 +32,10 @@ Hold-to-aim / release-to-fire stays first-playable semantics:
 `ledger:RL-CTRL-HOLD-AIM` (`assumption`). Not promoted to `observed`.
 Roll is a shipped InputFrame action (`ledger:RL-MOVE-ROLL`,
 `assumption`) via crouch-while-sprint; no dedicated remap key.
-Dive / kick stay `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`).
+Dive / kick are shipped InputFrame actions (`ledger:RL-MOVE-DIVE` /
+`ledger:RL-MOVE-JUMP-KICK`, `assumption`) via airborne sprint+crouch
+and aerial melee; no dedicated remap keys. Y8 observation stays
+`ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). Ledge stays reserved.
 
 ## Clock (ledger:RL-SIM-FIXED-60)
 

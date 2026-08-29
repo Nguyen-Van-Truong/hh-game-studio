@@ -21,6 +21,8 @@ const SHEET: Dictionary = {
 	"dead": [Vector2i(6, 1)],
 	"throw": [Vector2i(7, 1)],
 	"roll": [Vector2i(0, 1), Vector2i(2, 0), Vector2i(3, 0), Vector2i(4, 0)],
+	"dive": [Vector2i(7, 0), Vector2i(5, 1)],
+	"kick": [Vector2i(2, 1), Vector2i(6, 0)],
 }
 
 
@@ -79,7 +81,8 @@ static func make_frames(team: int) -> SpriteFrames:
 	var tex: Texture2D = load(actor_path(team)) as Texture2D
 	var keys: PackedStringArray = PackedStringArray([
 		"idle", "walk", "jump", "fall", "crouch", "melee",
-		"aim_side", "aim_up", "aim_down", "dead", "throw", "roll"
+		"aim_side", "aim_up", "aim_down", "dead", "throw", "roll",
+		"dive", "kick"
 	])
 	var k: int = 0
 	while k < keys.size():
@@ -88,12 +91,16 @@ static func make_frames(team: int) -> SpriteFrames:
 			frames.clear(key)
 		else:
 			frames.add_animation(key)
-		frames.set_animation_loop(key, key == "idle" or key == "walk" or key == "roll")
+		frames.set_animation_loop(key, key == "idle" or key == "walk" or key == "roll" or key == "dive")
 		var speed: float = 10.0
 		if key == "walk":
 			speed = 8.0
 		elif key == "roll":
 			speed = 14.0
+		elif key == "dive":
+			speed = 12.0
+		elif key == "kick":
+			speed = 16.0
 		frames.set_animation_speed(key, speed)
 		var cells: Array = SHEET[key] as Array
 		var i: int = 0

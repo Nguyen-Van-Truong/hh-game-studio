@@ -1,0 +1,50 @@
+{
+	"command_id": "cmd.vf2-wp4.dive-jump-kick.1",
+	"display": "headless",
+	"ended_at": "2026-08-29T14:12:31+07:00",
+	"ended_unix": 1787987551.387,
+	"epsilon": 0.001,
+	"fail_count": 0,
+	"godot": {
+		"build": "official",
+		"hash": "a13da4feb8d8aefc283c3763d33a2f170a18d541",
+		"hex": 263937,
+		"major": 4,
+		"minor": 7,
+		"patch": 1,
+		"status": "stable",
+		"string": "4.7.1-stable (official)",
+		"timestamp": 0
+	},
+	"map_id": "police",
+	"mode": "vs2",
+	"os_name": "Windows",
+	"outcomes": {
+		"DIST": "pass",
+		"DIVE": "pass",
+		"DODGE": "pass",
+		"FALL": "pass",
+		"INVULN": "pass",
+		"KICK": "pass",
+		"LIVE": "pass",
+		"MAPS": "pass",
+		"PIT": "pass",
+		"REPLAY": "match",
+		"TACKLE": "pass",
+		"USED_APPLY_ATTEMPTED": 1225,
+		"USED_APPLY_FRAMES": 1225,
+		"USED_APPLY_SUCCEEDED": 1225
+	},
+	"run_id": "VF2WP4-20260829-ASIA-SAIGON-01",
+	"schema": "vault-fighters.vf2-wp4.run.v1",
+	"seed": 1,
+	"started_at": "2026-08-29T14:12:30+07:00",
+	"started_unix": 1787987550.297,
+	"tick_hz": 60,
+	"timezone": "Asia/Saigon",
+	"viewport": {
+		"h": 720.0,
+		"w": 1280.0
+	},
+	"wp": "VF2-WP4"
+}

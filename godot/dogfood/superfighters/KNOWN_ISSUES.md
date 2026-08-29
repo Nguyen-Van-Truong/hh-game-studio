@@ -3,7 +3,11 @@
 First playable slice. Not G6. Not 60/60.
 
 - No bullet-time, no destroyable floors, no Box2D gibs
-- Kick / dive not in this slice (roll shipped in VF2-WP3 as assumption)
+- Ledge grab is not in this slice (reserved for VF2-WP5)
+- Dive / jump-kick / fall are product-shipped as assumption
+  (`ledger:RL-MOVE-DIVE`, `ledger:RL-MOVE-JUMP-KICK`,
+  `ledger:RL-MOVE-FALL`). Y8 observation stays
+  `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). Not observed.
 - Bots are greedy (weapon then chase); they can walk into fire
 - Stage is one win per map (Bronze-like), not Bronze/Silver/Gold ×4
 - Survival mode is out of this slice
@@ -40,4 +44,10 @@ First playable slice. Not G6. Not 60/60.
   ledger:RL-SIM-FIXED-60 (`assumption`). Hold-to-aim stays
   not observed. Sprint/roll are product-shipped as
   ledger:RL-MOVE-SPRINT / ledger:RL-MOVE-ROLL (`assumption`), not
-  observed. Dive/kick stay ledger:RL-MOVE-ROLL-DIVE (`unavailable`).
+  observed. Y8 dive/kick observation stays ledger:RL-MOVE-ROLL-DIVE
+  (`unavailable`). Product dive/kick/fall are VF2-WP4 assumption rows.
+- VF2-WP4 ships dive, jump-kick, and fall-immune landing as
+  assumption (`ledger:RL-MOVE-DIVE`, `ledger:RL-MOVE-JUMP-KICK`,
+  `ledger:RL-MOVE-FALL`). Official proof is InputFrame
+  `apply_frames` plus live InputEvent inject. Pit death still kills.
+  Dive invuln is finite. Ledge remains reserved. No new Y8 play.

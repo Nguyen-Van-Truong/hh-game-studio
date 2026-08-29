@@ -10,6 +10,8 @@ const PATHS: Dictionary = {
 	"explode": "res://assets/audio/sfx_explode.wav",
 	"jump": "res://assets/audio/sfx_jump.wav",
 	"roll": "res://assets/audio/sfx_roll.wav",
+	"dive": "res://assets/audio/sfx_jump.wav",
+	"kick": "res://assets/audio/sfx_punch.wav",
 	"hit": "res://assets/audio/sfx_hit.wav",
 	"win": "res://assets/audio/sfx_win.wav",
 	"lose": "res://assets/audio/sfx_lose.wav",

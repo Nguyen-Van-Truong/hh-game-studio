@@ -12,8 +12,8 @@
   "input_frame": {
     "id": "vf.sim.input_frame.v1",
     "fields": ["schema_version", "tick", "slot", "held", "pressed", "released", "move_x", "move_y"],
-    "allowed_actions": ["left", "right", "up", "down", "jump", "crouch", "melee", "fire", "grenade", "roll"],
-    "reserved_not_shipped": ["dive", "kick"]
+    "allowed_actions": ["left", "right", "up", "down", "jump", "crouch", "melee", "fire", "grenade", "roll", "dive", "kick"],
+    "reserved_not_shipped": ["ledge"]
   },
   "snapshot": {
     "id": "vf.sim.snapshot.v1",
@@ -34,7 +34,10 @@
     "hold_to_aim": "RL-CTRL-HOLD-AIM assumption, not observed",
     "roll": "RL-MOVE-ROLL assumption, not observed",
     "sprint": "RL-MOVE-SPRINT assumption, not observed",
-    "roll_dive": "RL-MOVE-ROLL-DIVE dive/kick unavailable",
+    "roll_dive": "RL-MOVE-ROLL-DIVE Y8 observation unavailable; product dive/kick are assumption",
+    "dive": "RL-MOVE-DIVE assumption, not observed",
+    "kick": "RL-MOVE-JUMP-KICK assumption, not observed",
+    "fall": "RL-MOVE-FALL assumption, not observed",
     "jump_crouch": "RL-MOVE-JUMP-CROUCH assumption",
     "loco_base": "RL-MOVE-LOCO-BASE assumption",
     "camera": "RL-CAM-ARENA assumption, not live-observed",

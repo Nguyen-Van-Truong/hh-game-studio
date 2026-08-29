@@ -155,14 +155,18 @@ def main() -> int:
         if payload.get("hold_to_aim_class") != "assumption":
             errors.append("hold-to-aim must stay assumption")
         if payload.get("roll_dive_class") != "unavailable":
-            errors.append("dive/kick must stay unavailable")
+            errors.append("Y8 roll/dive observation must stay unavailable")
+        if payload.get("dive_class") != "assumption":
+            errors.append("product dive must stay assumption")
+        if payload.get("kick_class") != "assumption":
+            errors.append("product kick must stay assumption")
         if payload.get("y8_parity_claimed") is True:
             errors.append("locomotion claimed Y8 parity")
         reserved = payload.get("reserved_not_shipped", [])
-        if "roll" in reserved:
-            errors.append("roll must be shipped")
-        if "dive" not in reserved:
-            errors.append("dive must stay reserved")
+        if "roll" in reserved or "dive" in reserved or "kick" in reserved:
+            errors.append("roll/dive/kick must be shipped")
+        if "ledge" not in reserved:
+            errors.append("ledge must stay reserved")
         move = payload.get("movement", {})
         for key in (
             "tap_window",

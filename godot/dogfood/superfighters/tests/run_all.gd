@@ -2,6 +2,7 @@ extends SceneTree
 
 const STEP: float = 1.0 / 60.0
 const SprintCasesScript: GDScript = preload("res://tests/sprint_cases.gd")
+const DiveCasesScript: GDScript = preload("res://tests/dive_cases.gd")
 
 var _fails: PackedStringArray = PackedStringArray()
 var _loop: String = "unproven"
@@ -15,6 +16,7 @@ var _runtime: String = "unproven"
 var _input: String = "unproven"
 var _loco: String = "unproven"
 var _sprint: String = "unproven"
+var _dive: String = "unproven"
 
 
 func _initialize() -> void:
@@ -41,6 +43,7 @@ func _boot() -> void:
 	await _test_input_map(app)
 	await _test_locomotion(app)
 	await _test_sprint(app)
+	await _test_dive(app)
 	if _fails.is_empty():
 		_no_err = "proven"
 	_emit()
@@ -615,6 +618,49 @@ func _test_sprint(app: App) -> void:
 		_sprint = "proven"
 
 
+func _test_dive(app: App) -> void:
+	var errors: PackedStringArray = await DiveCasesScript.run_all(app)
+	var i: int = 0
+	while i < errors.size():
+		_fail("DIVE %s" % String(errors[i]))
+		i += 1
+	var dive: String = str(DiveCasesScript.outcome_dive.get("verdict", "unproven"))
+	var kick: String = str(DiveCasesScript.outcome_kick.get("verdict", "unproven"))
+	var tackle: String = str(DiveCasesScript.outcome_tackle.get("verdict", "unproven"))
+	var fall: String = str(DiveCasesScript.outcome_fall.get("verdict", "unproven"))
+	var pit: String = str(DiveCasesScript.outcome_pit.get("verdict", "unproven"))
+	var dodge: String = str(DiveCasesScript.outcome_dodge.get("verdict", "unproven"))
+	var invuln: String = str(DiveCasesScript.outcome_invuln.get("verdict", "unproven"))
+	var dist: String = str(DiveCasesScript.outcome_dist.get("verdict", "unproven"))
+	var maps: String = str(DiveCasesScript.outcome_maps.get("verdict", "unproven"))
+	var live: String = str(DiveCasesScript.outcome_live.get("verdict", "unproven"))
+	var replay: String = str(DiveCasesScript.outcome_replay.get("verdict", "unproven"))
+	if dive != "pass":
+		_fail("DIVE DIVE outcome is %s" % dive)
+	if kick != "pass":
+		_fail("DIVE KICK outcome is %s" % kick)
+	if tackle != "pass":
+		_fail("DIVE TACKLE outcome is %s" % tackle)
+	if fall != "pass":
+		_fail("DIVE FALL outcome is %s" % fall)
+	if pit != "pass":
+		_fail("DIVE PIT outcome is %s" % pit)
+	if dodge != "pass":
+		_fail("DIVE DODGE outcome is %s" % dodge)
+	if invuln != "pass":
+		_fail("DIVE INVULN outcome is %s" % invuln)
+	if dist != "pass":
+		_fail("DIVE DIST outcome is %s" % dist)
+	if maps != "pass":
+		_fail("DIVE MAPS outcome is %s" % maps)
+	if live != "pass":
+		_fail("DIVE LIVE outcome is %s" % live)
+	if replay != "match":
+		_fail("DIVE REPLAY outcome is %s" % replay)
+	if _count_prefix("DIVE ") == 0:
+		_dive = "proven"
+
+
 func _emit() -> void:
 	print("HH_VF_PATH title→fight→win/lose→restart")
 	print(
@@ -657,6 +703,25 @@ func _emit() -> void:
 			SprintCasesScript.used_apply_frames_succeeded,
 			SprintCasesScript.used_apply_frames_attempted,
 			_sprint,
+		]
+	)
+	print(
+		"HH_VF_DIVE DIVE=%s KICK=%s TACKLE=%s FALL=%s PIT=%s DODGE=%s INVULN=%s DIST=%s MAPS=%s LIVE=%s REPLAY=%s APPLY=%d/%d status=%s"
+		% [
+			str(DiveCasesScript.outcome_dive.get("verdict", "unproven")),
+			str(DiveCasesScript.outcome_kick.get("verdict", "unproven")),
+			str(DiveCasesScript.outcome_tackle.get("verdict", "unproven")),
+			str(DiveCasesScript.outcome_fall.get("verdict", "unproven")),
+			str(DiveCasesScript.outcome_pit.get("verdict", "unproven")),
+			str(DiveCasesScript.outcome_dodge.get("verdict", "unproven")),
+			str(DiveCasesScript.outcome_invuln.get("verdict", "unproven")),
+			str(DiveCasesScript.outcome_dist.get("verdict", "unproven")),
+			str(DiveCasesScript.outcome_maps.get("verdict", "unproven")),
+			str(DiveCasesScript.outcome_live.get("verdict", "unproven")),
+			str(DiveCasesScript.outcome_replay.get("verdict", "unproven")),
+			DiveCasesScript.used_apply_frames_succeeded,
+			DiveCasesScript.used_apply_frames_attempted,
+			_dive,
 		]
 	)
 	if _fails.is_empty():

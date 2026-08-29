@@ -17,9 +17,10 @@ Product movement contract. This file does **not** claim Y8 parity.
 
 Jump / crouch stay `ledger:RL-MOVE-JUMP-CROUCH` (`assumption`).
 Hold-to-aim stays `ledger:RL-CTRL-HOLD-AIM` (`assumption`).
-Dive / kick stay `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`).
+Y8 observation stays `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`).
 Sprint / roll are owned by VF2-WP3 (`ledger:RL-MOVE-SPRINT` /
-`ledger:RL-MOVE-ROLL`, `assumption`).
+`ledger:RL-MOVE-ROLL`, `assumption`). Product dive / kick / fall
+are VF2-WP4 (`assumption`). See `docs/dive-kick.md`.
 
 ## Clock (ledger:RL-SIM-FIXED-60)
 

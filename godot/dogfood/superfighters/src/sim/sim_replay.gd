@@ -5,7 +5,9 @@ extends RefCounted
 ## Official path never calls step_fixed with cmd dicts, teleport, or force_kill.
 ## Clock: ledger:RL-SIM-FIXED-60 (assumption). Hold-to-aim stays
 ## ledger:RL-CTRL-HOLD-AIM (assumption). Roll is ledger:RL-MOVE-ROLL
-## (assumption). Dive/kick stay unavailable.
+## (assumption). Dive/kick stay ledger:RL-MOVE-DIVE /
+## RL-MOVE-JUMP-KICK (assumption). Y8 observation stays
+## ledger:RL-MOVE-ROLL-DIVE (unavailable).
 
 
 static func supports_window() -> bool:

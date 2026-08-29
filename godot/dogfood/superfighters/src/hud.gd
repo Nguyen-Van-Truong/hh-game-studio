@@ -67,7 +67,11 @@ func refresh(fighters: Array) -> void:
 		elif f.is_bot:
 			who = "Bot%d" % f.slot
 		var pose: String = ""
-		if f.rolling:
+		if f.diving:
+			pose = " DIVE"
+		elif f.kicking:
+			pose = " KICK"
+		elif f.rolling:
 			pose = " ROLL"
 		elif f.sprinting:
 			pose = " SPRINT"

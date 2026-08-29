@@ -153,7 +153,9 @@ def main() -> int:
             if payload.get("hold_to_aim_class") != "assumption":
                 errors.append("hold-to-aim must stay assumption")
             if payload.get("roll_dive_class") != "unavailable":
-                errors.append("roll/dive must stay unavailable")
+                errors.append("Y8 roll/dive observation must stay unavailable")
+            if payload.get("dive_class") != "assumption":
+                errors.append("product dive must stay assumption")
             if payload.get("jump_crouch_class") != "assumption":
                 errors.append("jump/crouch must stay assumption")
             if payload.get("camera_class") != "assumption":

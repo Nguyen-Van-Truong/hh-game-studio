@@ -2,7 +2,7 @@ class_name SimValidator
 extends RefCounted
 
 static var ALLOWED: PackedStringArray = PackedStringArray([
-	"left", "right", "up", "down", "jump", "crouch", "melee", "fire", "grenade", "roll"
+	"left", "right", "up", "down", "jump", "crouch", "melee", "fire", "grenade", "roll", "dive", "kick"
 ])
 
 

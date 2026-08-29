@@ -39,8 +39,10 @@ static func schema_and_map() -> PackedStringArray:
 		errors.append("hold-to-aim must stay assumption")
 	if (actions.get("reserved_not_shipped", []) as Array).has("roll"):
 		errors.append("roll must be a shipped InputFrame action")
-	if not (actions.get("reserved_not_shipped", []) as Array).has("dive"):
-		errors.append("dive must stay reserved_not_shipped")
+	if (actions.get("reserved_not_shipped", []) as Array).has("dive"):
+		errors.append("dive must be a shipped InputFrame action")
+	if not (actions.get("reserved_not_shipped", []) as Array).has("ledge"):
+		errors.append("ledge must stay reserved_not_shipped")
 	if str(actions.get("roll_class", "")) != "assumption":
 		errors.append("roll must stay assumption")
 	InputActions.install()

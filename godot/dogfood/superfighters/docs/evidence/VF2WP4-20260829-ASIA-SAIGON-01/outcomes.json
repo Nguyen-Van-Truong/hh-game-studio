@@ -1,0 +1,161 @@
+{
+	"apply": {
+		"attempted": 1225,
+		"succeeded": 1225,
+		"used_action_press": 0,
+		"used_apply_frames": 1225,
+		"used_parse_input_event": 1,
+		"used_step_fixed": 0
+	},
+	"dist": {
+		"dive_pose": "dive",
+		"kick_pose": "kick",
+		"roll_pose": "roll",
+		"snapshot_distinct": true,
+		"source": "snapshot + pose + events for roll/dive/kick",
+		"verdict": "pass"
+	},
+	"dive": {
+		"aabb_distinct_from_roll": true,
+		"dive_start_events": 1,
+		"footprint_swapped": true,
+		"hud_dive": true,
+		"invuln": 0.06,
+		"pose": "walk",
+		"seq": 1,
+		"sfx_last_id": "dive",
+		"source": "apply_frames sprint+jump+dive pose/AABB/SFX/HUD",
+		"started": true,
+		"verdict": "pass"
+	},
+	"dodge": {
+		"inside_invuln_undamaged": true,
+		"source": "Bullet vs dive invuln window",
+		"verdict": "pass"
+	},
+	"fall": {
+		"dive_fall_immune": true,
+		"dive_no_fall_event": true,
+		"fall_damage_without_dive": true,
+		"source": "apply_frames storage crate drop vs dive landing",
+		"verdict": "pass"
+	},
+	"invuln": {
+		"outside_invuln_damaged": true,
+		"source": "dive invuln expires; not infinite",
+		"verdict": "pass",
+		"window_expired": true
+	},
+	"kick": {
+		"ground_blocked": true,
+		"impulse": true,
+		"kick_start_events": 1,
+		"not_melee": true,
+		"pose": true,
+		"source": "apply_frames aerial kick vs grounded block",
+		"started": true,
+		"verdict": "pass"
+	},
+	"live": {
+		"live_dive": true,
+		"live_kick": true,
+		"pose": "kick",
+		"source": "parse_input_event + step_from_live_input",
+		"verdict": "pass"
+	},
+	"maps": {
+		"maps": [
+			{
+				"dived": true,
+				"map_id": "rooftops",
+				"trace_ok": true
+			},
+			{
+				"dived": true,
+				"map_id": "storage",
+				"trace_ok": true
+			},
+			{
+				"dived": true,
+				"map_id": "police",
+				"trace_ok": true
+			},
+			{
+				"dived": true,
+				"map_id": "hazardous",
+				"trace_ok": true
+			}
+		],
+		"source": "real InputFrame dive on each archetype",
+		"verdict": "pass"
+	},
+	"pit": {
+		"dead": true,
+		"death_cause": "pit",
+		"source": "apply_frames dive into police pit",
+		"verdict": "pass"
+	},
+	"replay": {
+		"pair_count": 6,
+		"pairs": [
+			{
+				"hash_a": "7fefc93a7f8d90d7e5dc4735cd3a2bb7617524ac946bcce845acc1b73d85eb74",
+				"hash_b": "7fefc93a7f8d90d7e5dc4735cd3a2bb7617524ac946bcce845acc1b73d85eb74",
+				"hash_match": true,
+				"name": "dive_hazardous",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "ae5cdd313dbd215608d1df2ea37e86957effc0879872310527149a5dfc81d3b8",
+				"hash_b": "ae5cdd313dbd215608d1df2ea37e86957effc0879872310527149a5dfc81d3b8",
+				"hash_match": true,
+				"name": "dive_pit",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "479a0022a3d67a01ba0016600bd40e05ded8c03f64834451782843b9dbb9e1c1",
+				"hash_b": "479a0022a3d67a01ba0016600bd40e05ded8c03f64834451782843b9dbb9e1c1",
+				"hash_match": true,
+				"name": "dive_rooftops",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "d57f1051893ef46224a4b2f05f8bce6d76a5d2da0cf62505829f1189d5f9f692",
+				"hash_b": "d57f1051893ef46224a4b2f05f8bce6d76a5d2da0cf62505829f1189d5f9f692",
+				"hash_match": true,
+				"name": "dive_sprint_crouch",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "1e5410aa7e6e88d203b5ea4812b02a03d8d1d7e98df2bdba83b07e72a38dda04",
+				"hash_b": "1e5410aa7e6e88d203b5ea4812b02a03d8d1d7e98df2bdba83b07e72a38dda04",
+				"hash_match": true,
+				"name": "dive_storage",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "7242f3e36e6398d2ac4a974e0a692aabbaa0e67a99966bbd7d93c3a5762455b6",
+				"hash_b": "7242f3e36e6398d2ac4a974e0a692aabbaa0e67a99966bbd7d93c3a5762455b6",
+				"hash_match": true,
+				"name": "jump_kick",
+				"ok_a": true,
+				"ok_b": true
+			}
+		],
+		"source": "SimReplay.final_hash twice",
+		"verdict": "match"
+	},
+	"tackle": {
+		"dive_tackle_events": 1,
+		"kick_hit_events": 1,
+		"knockdown_events": 1,
+		"p2_knocked_down": true,
+		"source": "apply_frames dive tackle + aerial kick hit",
+		"verdict": "pass"
+	}
+}

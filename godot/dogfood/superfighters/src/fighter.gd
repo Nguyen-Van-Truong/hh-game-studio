@@ -4,7 +4,10 @@ extends CharacterBody2D
 ## Locomotion numbers come from data/sim/locomotion.json.
 ## Jump/crouch stay ledger:RL-MOVE-JUMP-CROUCH (assumption).
 ## Sprint stays ledger:RL-MOVE-SPRINT (assumption).
-## Roll stays ledger:RL-MOVE-ROLL (assumption). Dive/kick stay
+## Roll stays ledger:RL-MOVE-ROLL (assumption). Dive stays
+## ledger:RL-MOVE-DIVE (assumption). Jump-kick stays
+## ledger:RL-MOVE-JUMP-KICK (assumption). Fall stays
+## ledger:RL-MOVE-FALL (assumption). Y8 observation stays
 ## ledger:RL-MOVE-ROLL-DIVE (unavailable). Not a Y8 observation.
 
 const MAX_HP: float = 100.0
@@ -26,15 +29,30 @@ var tap_window: float = 0.22
 var stamina_sprint_drain: float = 28.0
 var stamina_recover: float = 22.0
 var stamina_roll_cost: float = 22.0
+var stamina_dive_cost: float = 18.0
 var roll_duration: float = 0.28
 var roll_invuln: float = 0.20
 var roll_speed: float = 320.0
+var dive_duration: float = 0.36
+var dive_invuln: float = 0.16
+var dive_speed: float = 300.0
+var dive_down: float = 420.0
+var kick_duration: float = 0.18
+var kick_impulse_x: float = 90.0
+var kick_impulse_y: float = 220.0
+var kick_damage: float = 12.0
+var dive_tackle_damage: float = 14.0
+var fall_damage_speed: float = 560.0
+var fall_drop_min: float = 28.0
+var fall_damage: float = 16.0
+var knockdown_time: float = 0.28
 var variable_jump_cut: float = 0.45
 var variable_jump_cut_vy: float = -80.0
 var max_fall_speed: float = 800.0
 var stand_offset: Vector2 = Vector2(0, 1)
 var crouch_offset: Vector2 = Vector2(0, 5)
 var roll_offset: Vector2 = Vector2(0, 6)
+var dive_offset: Vector2 = Vector2(0, 7)
 
 var slot: int = 0
 var team: int = 0
@@ -72,6 +90,26 @@ var roll_ended: bool = false
 var sprint_started: bool = false
 var sprint_ended: bool = false
 var last_roll_block: String = ""
+var diving: bool = false
+var dive_time: float = 0.0
+var dive_seq: int = 0
+var dive_started: bool = false
+var dive_ended: bool = false
+var dive_did_tackle: bool = false
+var last_dive_block: String = ""
+var kicking: bool = false
+var kick_time: float = 0.0
+var kick_seq: int = 0
+var kick_started: bool = false
+var kick_ended: bool = false
+var last_kick_block: String = ""
+var knockdown_left: float = 0.0
+var knockdown_started: bool = false
+var peak_fall_vy: float = 0.0
+var air_origin_y: float = 0.0
+var fall_armed: bool = false
+var fall_damage_applied: bool = false
+var fall_immune_landed: bool = false
 var burning: bool = false
 var fire_extinguish_count: int = 0
 var last_tap_dir: float = 0.0
@@ -81,8 +119,10 @@ var sprite: AnimatedSprite2D
 var stand_shape: RectangleShape2D
 var crouch_shape: RectangleShape2D
 var roll_shape: RectangleShape2D
+var dive_shape: RectangleShape2D
 var col_shape: CollisionShape2D
 var want_melee: bool = false
+var want_kick: bool = false
 var want_fire: bool = false
 var want_grenade: bool = false
 var last_jump: bool = false
@@ -112,6 +152,8 @@ func setup(p_slot: int, p_team: int, p_bot: bool) -> void:
 	crouch_shape.size = Vector2(10, 14)
 	roll_shape = RectangleShape2D.new()
 	roll_shape.size = Vector2(14, 12)
+	dive_shape = RectangleShape2D.new()
+	dive_shape.size = Vector2(12, 11)
 	col_shape.shape = stand_shape
 	col_shape.position = stand_offset
 	add_child(col_shape)
@@ -129,14 +171,24 @@ func setup(p_slot: int, p_team: int, p_bot: bool) -> void:
 
 func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	want_melee = false
+	want_kick = false
 	want_fire = false
 	want_grenade = false
 	roll_started = false
 	roll_ended = false
+	dive_started = false
+	dive_ended = false
+	kick_started = false
+	kick_ended = false
+	knockdown_started = false
+	fall_damage_applied = false
+	fall_immune_landed = false
 	sprint_started = false
 	sprint_ended = false
 	if dead:
 		last_roll_block = "dead"
+		last_dive_block = "dead"
+		last_kick_block = "dead"
 		velocity.y += gravity * delta
 		velocity.y = minf(velocity.y, max_fall_speed)
 		move_and_slide()
@@ -147,6 +199,7 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 		return
 	# Pit is a product kill plane (ledger:RL-MOVE-LOCO-BASE), not an
 	# observed Y8 height. Teleport-to-pit is not this WP's official proof.
+	# Dive does not cancel pit death (ledger:RL-MOVE-DIVE assumption).
 	melee_cd = maxf(melee_cd - delta, 0.0)
 	fire_cd = maxf(fire_cd - delta, 0.0)
 	grenade_cd = maxf(grenade_cd - delta, 0.0)
@@ -154,12 +207,15 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	throw_flash = maxf(throw_flash - delta, 0.0)
 	invuln = maxf(invuln - delta, 0.0)
 	combat_timer = maxf(combat_timer - delta, 0.0)
+	knockdown_left = maxf(knockdown_left - delta, 0.0)
 	last_tap_at += delta
 	if combat_timer <= 0.0:
 		health = minf(MAX_HP, health + 4.0 * delta)
 	var on_floor_now: bool = is_on_floor()
 	if on_floor_now:
 		coyote = coyote_time
+		air_origin_y = global_position.y
+		fall_armed = true
 	else:
 		coyote = maxf(coyote - delta, 0.0)
 	var x: float = float(cmd.get("x", 0.0))
@@ -170,7 +226,7 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	else:
 		x = 0.0
 	var was_sprinting: bool = sprinting
-	if not rolling:
+	if not rolling and not diving:
 		if x != 0.0 and last_held_x == 0.0:
 			if last_tap_dir == x and last_tap_at <= tap_window:
 				sprinting = true
@@ -179,7 +235,7 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 		if x == 0.0:
 			sprinting = false
 	last_held_x = x
-	if x != 0.0 and not rolling:
+	if x != 0.0 and not rolling and not diving:
 		facing = x
 	var fire_held: bool = bool(cmd.get("fire_held", false))
 	var nade_held: bool = bool(cmd.get("grenade_held", false)) and grenades > 0
@@ -188,6 +244,12 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	var crouch_held: bool = bool(cmd.get("crouch", false))
 	var crouch_pressed: bool = bool(cmd.get("crouch_pressed", false))
 	var roll_pressed: bool = bool(cmd.get("roll", false))
+	var dive_pressed: bool = bool(cmd.get("dive", false))
+	var kick_pressed: bool = bool(cmd.get("kick", false))
+	if knockdown_left > 0.0:
+		last_roll_block = "knockdown"
+		last_dive_block = "knockdown"
+		last_kick_block = "knockdown"
 	if rolling:
 		roll_time = maxf(roll_time - delta, 0.0)
 		if roll_pressed or crouch_pressed:
@@ -199,14 +261,36 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 		else:
 			crouched = false
 			sprinting = false
+	elif diving:
+		dive_time = maxf(dive_time - delta, 0.0)
+		if dive_pressed or (crouch_pressed and sprinting):
+			last_dive_block = "diving"
+		if on_floor_now or dive_time <= 0.0:
+			diving = false
+			dive_ended = true
+			if on_floor_now:
+				fall_immune_landed = true
+				peak_fall_vy = 0.0
+			crouched = crouch_held and on_floor_now and not aiming and not on_ladder
+		else:
+			crouched = false
+			sprinting = false
 	else:
-		var want_roll: bool = roll_pressed or (crouch_pressed and sprinting)
+		var want_roll: bool = roll_pressed or (crouch_pressed and sprinting and on_floor_now)
+		var want_dive: bool = dive_pressed or (crouch_pressed and sprinting and not on_floor_now)
 		if want_roll:
 			_try_start_roll(on_floor_now, aiming)
-		if not rolling:
+		elif want_dive:
+			_try_start_dive(on_floor_now, aiming)
+		if not rolling and not diving:
 			crouched = crouch_held and on_floor_now and not aiming and not on_ladder
+	if kicking:
+		kick_time = maxf(kick_time - delta, 0.0)
+		if kick_time <= 0.0 or on_floor_now:
+			kicking = false
+			kick_ended = true
 	_apply_shape()
-	if rolling:
+	if rolling or diving or kicking or knockdown_left > 0.0:
 		jump_buf = 0.0
 		last_jump = false
 	elif on_ladder:
@@ -222,7 +306,7 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	else:
 		jump_buf = maxf(jump_buf - delta, 0.0)
 	var jump_held: bool = bool(cmd.get("jump", false)) and not fire_held and not nade_held
-	if not rolling and not on_ladder and jump_buf > 0.0 and coyote > 0.0 and not fire_held and not nade_held:
+	if not rolling and not diving and not kicking and knockdown_left <= 0.0 and not on_ladder and jump_buf > 0.0 and coyote > 0.0 and not fire_held and not nade_held:
 		velocity.y = jump_vel
 		jump_buf = 0.0
 		coyote = 0.0
@@ -235,6 +319,9 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	var speed: float = walk
 	if rolling:
 		speed = roll_speed
+		sprinting = false
+	elif diving:
+		speed = dive_speed
 		sprinting = false
 	elif crouched:
 		speed = crouch_speed
@@ -253,35 +340,66 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 		sprint_started = true
 	if was_sprinting and not sprinting:
 		sprint_ended = true
-	var target: float = facing * speed if rolling else x * speed
+	var target: float = facing * speed if rolling or diving else x * speed
 	var acc: float = accel if on_floor_now or on_ladder else air_accel
 	if rolling:
 		velocity.x = move_toward(velocity.x, facing * roll_speed, accel * delta)
+	elif diving:
+		velocity.x = move_toward(velocity.x, facing * dive_speed, accel * delta)
+		velocity.y = maxf(velocity.y, dive_down)
+	elif knockdown_left > 0.0:
+		velocity.x = move_toward(velocity.x, 0.0, friction * delta)
 	elif x == 0.0:
 		velocity.x = move_toward(velocity.x, 0.0, friction * delta)
 	else:
 		velocity.x = move_toward(velocity.x, target, acc * delta)
 	if not on_floor_now and not on_ladder:
-		velocity.y += gravity * delta
+		if not diving:
+			velocity.y += gravity * delta
 		velocity.y = minf(velocity.y, max_fall_speed)
+		peak_fall_vy = maxf(peak_fall_vy, velocity.y)
 	if aiming:
 		aim_dir = _aim_from(cmd)
 	else:
 		aim_dir = Vector2(facing, 0.0)
-	if not rolling and bool(cmd.get("melee", false)) and melee_cd <= 0.0:
-		want_melee = true
-		melee_cd = float(WeaponDefs.data(melee_id).get("cooldown", 0.28))
-		melee_flash = 0.12
-	if not rolling and _gun_ready() and fire_cd <= 0.0:
+	var melee_pressed: bool = bool(cmd.get("melee", false)) or kick_pressed
+	if not rolling and not diving and knockdown_left <= 0.0 and melee_pressed and melee_cd <= 0.0:
+		if not on_floor_now and not on_ladder:
+			_try_start_kick()
+		elif kick_pressed and on_floor_now:
+			last_kick_block = "ground"
+		else:
+			want_melee = true
+			melee_cd = float(WeaponDefs.data(melee_id).get("cooldown", 0.28))
+			melee_flash = 0.12
+	if not rolling and not diving and _gun_ready() and fire_cd <= 0.0:
 		if _is_auto() and fire_held:
 			want_fire = true
 		elif bool(cmd.get("fire_released", false)):
 			want_fire = true
-	if not rolling and bool(cmd.get("grenade_released", false)) and grenade_cd <= 0.0 and grenades > 0:
+	if not rolling and not diving and bool(cmd.get("grenade_released", false)) and grenade_cd <= 0.0 and grenades > 0:
 		want_grenade = true
 		grenade_cd = 0.8
 		throw_flash = 0.16
 	move_and_slide()
+	var landed: bool = is_on_floor() and not on_floor_now
+	if landed:
+		var drop: float = global_position.y - air_origin_y
+		if diving or fall_immune_landed:
+			fall_immune_landed = true
+			diving = false
+			if not dive_ended:
+				dive_ended = true
+			peak_fall_vy = 0.0
+		elif fall_armed and (drop + 0.0001 >= fall_drop_min or peak_fall_vy + 0.0001 >= fall_damage_speed):
+			var hp0: float = health
+			take_damage(fall_damage, Vector2.ZERO)
+			if health < hp0 - 0.01:
+				fall_damage_applied = true
+		peak_fall_vy = 0.0
+		if kicking:
+			kicking = false
+			kick_ended = true
 	if sprite != null:
 		sprite.flip_h = facing < 0.0
 	_play_clip(_pose_clip())
@@ -328,6 +446,93 @@ func _try_start_roll(on_floor_now: bool, is_aiming: bool) -> void:
 	crouched = false
 	last_roll_block = ""
 	extinguish_fire()
+
+
+func _try_start_dive(on_floor_now: bool, is_aiming: bool) -> void:
+	if dead:
+		last_dive_block = "dead"
+		return
+	if knockdown_left > 0.0:
+		last_dive_block = "knockdown"
+		return
+	if diving:
+		last_dive_block = "diving"
+		return
+	if rolling:
+		last_dive_block = "rolling"
+		return
+	if on_floor_now:
+		last_dive_block = "ground"
+		return
+	if on_ladder:
+		last_dive_block = "ladder"
+		return
+	if is_aiming:
+		last_dive_block = "aiming"
+		return
+	if stamina + 0.0001 < stamina_dive_cost:
+		last_dive_block = "stamina"
+		return
+	stamina = maxf(0.0, stamina - stamina_dive_cost)
+	diving = true
+	dive_time = dive_duration
+	invuln = maxf(invuln, dive_invuln)
+	dive_seq += 1
+	dive_started = true
+	dive_did_tackle = false
+	sprinting = false
+	crouched = false
+	kicking = false
+	velocity.x = facing * dive_speed
+	velocity.y = maxf(velocity.y, dive_down)
+	last_dive_block = ""
+	extinguish_fire()
+
+
+func _try_start_kick() -> void:
+	if dead:
+		last_kick_block = "dead"
+		return
+	if knockdown_left > 0.0:
+		last_kick_block = "knockdown"
+		return
+	if rolling:
+		last_kick_block = "rolling"
+		return
+	if diving:
+		last_kick_block = "diving"
+		return
+	if kicking:
+		last_kick_block = "kicking"
+		return
+	if on_ladder:
+		last_kick_block = "ladder"
+		return
+	if is_on_floor():
+		last_kick_block = "ground"
+		return
+	kicking = true
+	kick_time = kick_duration
+	kick_seq += 1
+	kick_started = true
+	want_kick = true
+	melee_cd = maxf(melee_cd, kick_duration)
+	melee_flash = 0.12
+	velocity.x += facing * kick_impulse_x
+	velocity.y = maxf(velocity.y, kick_impulse_y)
+	last_kick_block = ""
+
+
+func apply_knockdown(dir: Vector2) -> void:
+	if dead:
+		return
+	knockdown_left = maxf(knockdown_left, knockdown_time)
+	knockdown_started = true
+	velocity += dir
+	sprinting = false
+	rolling = false
+	diving = false
+	kicking = false
 
 
 func take_damage(amount: float, knock: Vector2) -> void:
@@ -417,7 +622,10 @@ func _aim_from(cmd: Dictionary) -> Vector2:
 func _apply_shape() -> void:
 	if col_shape == null:
 		return
-	if rolling and roll_shape != null:
+	if diving and dive_shape != null:
+		col_shape.shape = dive_shape
+		col_shape.position = dive_offset
+	elif rolling and roll_shape != null:
 		col_shape.shape = roll_shape
 		col_shape.position = roll_offset
 	elif crouched:
@@ -433,8 +641,12 @@ func _pose_clip() -> String:
 		return "dead"
 	if throw_flash > 0.0:
 		return "throw"
+	if kicking or (melee_flash > 0.0 and not is_on_floor()):
+		return "kick"
 	if melee_flash > 0.0:
 		return "melee"
+	if diving:
+		return "dive"
 	if rolling:
 		return "roll"
 	if aiming:
@@ -481,6 +693,8 @@ func apply_runtime_row(row: Dictionary) -> void:
 	facing = SimConstants.dequantize(int(row.get("facing", SimConstants.quantize(facing))))
 	crouched = int(row.get("crouched", 0)) != 0
 	rolling = int(row.get("rolling", 0)) != 0
+	diving = int(row.get("diving", 0)) != 0
+	kicking = int(row.get("kicking", 0)) != 0
 	sprinting = int(row.get("sprinting", 0)) != 0
 	if dead:
 		collision_layer = 0
@@ -488,6 +702,10 @@ func apply_runtime_row(row: Dictionary) -> void:
 	else:
 		collision_layer = Maps.COL_FIGHTER
 	_apply_shape()
+	var pose: String = str(row.get("pose", ""))
+	if pose == "":
+		pose = _pose_clip()
+	_play_clip(pose)
 
 
 func apply_runtime_extra(extra: Dictionary) -> void:
@@ -517,6 +735,22 @@ func apply_runtime_extra(extra: Dictionary) -> void:
 		roll_seq = int(extra.get("roll_seq", roll_seq))
 	if extra.has("roll_time"):
 		roll_time = SimConstants.dequantize(int(extra.get("roll_time", 0)))
+	if extra.has("diving"):
+		diving = bool(extra.get("diving", false))
+	if extra.has("dive_seq"):
+		dive_seq = int(extra.get("dive_seq", dive_seq))
+	if extra.has("dive_time"):
+		dive_time = SimConstants.dequantize(int(extra.get("dive_time", 0)))
+	if extra.has("kicking"):
+		kicking = bool(extra.get("kicking", false))
+	if extra.has("kick_seq"):
+		kick_seq = int(extra.get("kick_seq", kick_seq))
+	if extra.has("kick_time"):
+		kick_time = SimConstants.dequantize(int(extra.get("kick_time", 0)))
+	if extra.has("knockdown_left"):
+		knockdown_left = SimConstants.dequantize(int(extra.get("knockdown_left", 0)))
+	if extra.has("peak_fall_vy"):
+		peak_fall_vy = SimConstants.dequantize(int(extra.get("peak_fall_vy", 0)))
 	if extra.has("fire_extinguish_count"):
 		fire_extinguish_count = int(extra.get("fire_extinguish_count", fire_extinguish_count))
 	if extra.has("burning"):

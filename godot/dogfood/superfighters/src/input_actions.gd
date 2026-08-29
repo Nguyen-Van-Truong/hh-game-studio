@@ -4,7 +4,10 @@ extends RefCounted
 ## Physical-key + device-split gamepad map (VF2-WP1).
 ## Listing keys cite ledger:RL-CTRL-*. Hold-to-aim stays
 ## ledger:RL-CTRL-HOLD-AIM (assumption). Roll is InputFrame
-## ledger:RL-MOVE-ROLL (assumption). Dive/kick stay unavailable.
+## ledger:RL-MOVE-ROLL (assumption). Dive stays
+## ledger:RL-MOVE-DIVE (assumption). Kick stays
+## ledger:RL-MOVE-JUMP-KICK (assumption). Y8 observation stays
+## ledger:RL-MOVE-ROLL-DIVE (unavailable).
 
 
 static var _held_prev: Array[PackedStringArray] = [PackedStringArray(), PackedStringArray()]
@@ -37,6 +40,8 @@ static func empty_cmd() -> Dictionary:
 		"on_ladder": false,
 		"crouch_pressed": false,
 		"roll": false,
+		"dive": false,
+		"kick": false,
 	}
 
 
@@ -105,7 +110,9 @@ static func cmd_from_frame(frame: InputFrame) -> Dictionary:
 	cmd["crouch"] = frame.is_held("crouch") or frame.is_held("down")
 	cmd["crouch_pressed"] = frame.is_pressed("crouch") or frame.is_pressed("down")
 	cmd["roll"] = frame.is_pressed("roll")
-	cmd["melee"] = frame.is_pressed("melee")
+	cmd["dive"] = frame.is_pressed("dive")
+	cmd["kick"] = frame.is_pressed("kick")
+	cmd["melee"] = frame.is_pressed("melee") or frame.is_pressed("kick")
 	cmd["fire_held"] = frame.is_held("fire")
 	cmd["fire_released"] = frame.is_released("fire")
 	cmd["grenade_held"] = frame.is_held("grenade")
@@ -147,6 +154,10 @@ static func frame_from_cmd(cmd: Dictionary, tick: int, slot: int) -> InputFrame:
 		frame.pressed.append("crouch")
 	if bool(cmd.get("roll", false)):
 		frame.pressed.append("roll")
+	if bool(cmd.get("dive", false)):
+		frame.pressed.append("dive")
+	if bool(cmd.get("kick", false)):
+		frame.pressed.append("kick")
 	if bool(cmd.get("melee", false)):
 		frame.pressed.append("melee")
 	if bool(cmd.get("fire_held", false)):

@@ -57,7 +57,7 @@ func setup(p_mode: String, p_map: String, p_stage: int) -> void:
 	hud = Hud.new()
 	add_child(hud)
 	hud.set_map_name(Maps.display_name(map_id))
-	hud.set_hint("Last standing · double-tap sprint · crouch-while-sprint rolls · hold M fire")
+	hud.set_hint("Last standing · sprint+crouch dive in air · aerial melee kicks · hold M fire")
 	pause_screen = PauseScreen.new()
 	_resume_cb = set_paused.bind(false)
 	pause_screen.resume_pressed.connect(_resume_cb)
@@ -187,8 +187,12 @@ func _step_one_tick(cmds: Array[Dictionary]) -> void:
 		_log_death_if_new(f)
 		if f.last_jump and before_y >= 0.0 and f.velocity.y < 0.0 and sfx != null:
 			sfx.play("jump")
-		if f.want_melee:
+		if f.want_kick:
+			_do_kick(f)
+		elif f.want_melee:
 			_do_melee(f)
+		if f.diving and not f.dive_did_tackle:
+			_try_dive_tackle(f)
 		if f.want_fire:
 			_do_fire(f)
 		if f.want_grenade:
@@ -456,12 +460,89 @@ func _do_melee(f: Fighter) -> void:
 		ledger.push(clock.tick, "melee", "hit", {
 			"attacker": f.slot,
 			"target": other.slot,
+			"style": "melee",
 			"damage": SimConstants.quantize(float(spec.get("damage", 10.0))),
 		})
 		_log_death_if_new(other)
 		_splat(other.global_position)
 		if sfx != null:
 			sfx.play("hit")
+
+
+func _do_kick(f: Fighter) -> void:
+	if sfx != null:
+		sfx.play("kick")
+	ledger.push(clock.tick, "melee", "kick_start", {
+		"slot": f.slot,
+		"seq": f.kick_seq,
+	})
+	var reach: float = 22.0
+	var i: int = 0
+	while i < fighters.size():
+		var other: Fighter = fighters[i]
+		i += 1
+		if other == f or other.dead:
+			continue
+		var delta: Vector2 = other.global_position - f.global_position
+		if absf(delta.y) > 22.0:
+			continue
+		if absf(delta.x) > reach + 6.0:
+			continue
+		if signf(delta.x) != 0.0 and signf(delta.x) != signf(f.facing):
+			continue
+		other.take_damage(f.kick_damage, Vector2(f.facing * 110.0, 40.0))
+		other.apply_knockdown(Vector2(f.facing * 70.0, 20.0))
+		ledger.push(clock.tick, "melee", "kick_hit", {
+			"attacker": f.slot,
+			"target": other.slot,
+			"style": "kick",
+			"damage": SimConstants.quantize(f.kick_damage),
+			"seq": f.kick_seq,
+		})
+		ledger.push(clock.tick, "melee", "knockdown", {
+			"attacker": f.slot,
+			"target": other.slot,
+			"source": "kick",
+		})
+		_log_death_if_new(other)
+		_splat(other.global_position)
+		if sfx != null:
+			sfx.play("hit")
+
+
+func _try_dive_tackle(f: Fighter) -> void:
+	if f == null or not f.diving or f.dead:
+		return
+	var i: int = 0
+	while i < fighters.size():
+		var other: Fighter = fighters[i]
+		i += 1
+		if other == f or other.dead:
+			continue
+		var delta: Vector2 = other.global_position - f.global_position
+		if absf(delta.y) > 20.0:
+			continue
+		if absf(delta.x) > 22.0:
+			continue
+		other.take_damage(f.dive_tackle_damage, Vector2(f.facing * 120.0, 30.0))
+		other.apply_knockdown(Vector2(f.facing * 80.0, 24.0))
+		ledger.push(clock.tick, "locomotion", "dive_tackle", {
+			"attacker": f.slot,
+			"target": other.slot,
+			"seq": f.dive_seq,
+			"damage": SimConstants.quantize(f.dive_tackle_damage),
+		})
+		ledger.push(clock.tick, "melee", "knockdown", {
+			"attacker": f.slot,
+			"target": other.slot,
+			"source": "dive",
+		})
+		_log_death_if_new(other)
+		_splat(other.global_position)
+		if sfx != null:
+			sfx.play("hit")
+		f.dive_did_tackle = true
+		return
 
 
 func _try_pickup(f: Fighter) -> bool:
@@ -863,6 +944,43 @@ func _emit_loco_feedback(f: Fighter) -> void:
 		ledger.push(clock.tick, "locomotion", "roll_end", {
 			"slot": f.slot,
 			"seq": f.roll_seq,
+		})
+	if f.dive_started:
+		ledger.push(clock.tick, "locomotion", "dive_start", {
+			"slot": f.slot,
+			"seq": f.dive_seq,
+			"invuln": SimConstants.quantize(f.invuln),
+		})
+		ledger.push(clock.tick, "locomotion", "dive_extinguish", {
+			"slot": f.slot,
+			"seq": f.dive_seq,
+			"count": f.fire_extinguish_count,
+		})
+		if sfx != null:
+			sfx.play("dive")
+		_spawn_roll_fx(f.global_position + Vector2(0.0, 10.0))
+	if f.dive_ended:
+		ledger.push(clock.tick, "locomotion", "dive_end", {
+			"slot": f.slot,
+			"seq": f.dive_seq,
+			"fall_immune": 1 if f.fall_immune_landed else 0,
+		})
+	if f.kick_started:
+		if sfx != null and sfx.last_id != "kick":
+			sfx.play("kick")
+	if f.fall_damage_applied:
+		ledger.push(clock.tick, "locomotion", "fall_damage", {
+			"slot": f.slot,
+			"hp": SimConstants.quantize(f.health),
+		})
+	if f.fall_immune_landed:
+		ledger.push(clock.tick, "locomotion", "fall_immune", {
+			"slot": f.slot,
+			"seq": f.dive_seq,
+		})
+	if f.knockdown_started:
+		ledger.push(clock.tick, "melee", "knockdown_start", {
+			"slot": f.slot,
 		})
 
 

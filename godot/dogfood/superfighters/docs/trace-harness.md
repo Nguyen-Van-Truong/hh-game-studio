@@ -22,7 +22,8 @@ Does **not** claim Y8 parity, V0–V6, R9-WP4, G6, GX, or 60/60.
 Class: `assumption`. **Do not** cite 60 Hz as “Y8-like”.
 Hold-to-aim stays `ledger:RL-CTRL-HOLD-AIM` (`assumption`).
 Roll stays `ledger:RL-MOVE-ROLL` (`assumption`). Dive/kick stay
-`ledger:RL-MOVE-ROLL-DIVE` (`unavailable`).
+`ledger:RL-MOVE-DIVE` / `ledger:RL-MOVE-JUMP-KICK` (`assumption`).
+Y8 observation stays `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`).
 
 ## Official vs fixture
 

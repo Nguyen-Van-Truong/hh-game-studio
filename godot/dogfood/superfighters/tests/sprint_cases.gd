@@ -5,7 +5,8 @@ extends RefCounted
 ## Proof is InputFrame apply_frames plus live InputEvent inject.
 ## 60 Hz is ledger:RL-SIM-FIXED-60 (assumption).
 ## Sprint/roll stay ledger:RL-MOVE-SPRINT / RL-MOVE-ROLL (assumption).
-## Hold-to-aim stays assumption. Dive/kick stay unavailable.
+## Hold-to-aim stays assumption. Dive/kick are VF2-WP4 assumption.
+## Y8 observation stays unavailable.
 ## USED_APPLY_FRAMES counts successful apply_frames only.
 
 static var used_step_fixed: int = 0
@@ -74,20 +75,24 @@ static func schema_and_data() -> PackedStringArray:
 	if str(loco.get("hold_to_aim_class", "")) != "assumption":
 		errors.append("hold-to-aim must stay assumption")
 	if str(loco.get("roll_dive_class", "")) != "unavailable":
-		errors.append("dive/kick must stay unavailable")
+		errors.append("Y8 roll/dive observation must stay unavailable")
+	if str(loco.get("dive_class", "")) != "assumption":
+		errors.append("product dive must stay assumption")
 	if str(loco.get("sprint_ledger", "")) != "RL-MOVE-SPRINT":
 		errors.append("sprint must cite RL-MOVE-SPRINT")
 	if str(loco.get("roll_ledger", "")) != "RL-MOVE-ROLL":
 		errors.append("roll must cite RL-MOVE-ROLL")
 	var reserved: Array = loco.get("reserved_not_shipped", []) as Array
-	if reserved.has("roll"):
-		errors.append("roll must not stay reserved")
-	if not reserved.has("dive"):
-		errors.append("dive must stay reserved")
+	if reserved.has("roll") or reserved.has("dive") or reserved.has("kick"):
+		errors.append("roll/dive/kick must not stay reserved")
+	if not reserved.has("ledge"):
+		errors.append("ledge must stay reserved")
 	if not SimValidator.ALLOWED.has("roll"):
 		errors.append("InputFrame must allow roll")
-	if SimValidator.ALLOWED.has("dive"):
-		errors.append("InputFrame must not allow dive")
+	if not SimValidator.ALLOWED.has("dive"):
+		errors.append("InputFrame must allow dive")
+	if not SimValidator.ALLOWED.has("kick"):
+		errors.append("InputFrame must allow kick")
 	return errors
 
 

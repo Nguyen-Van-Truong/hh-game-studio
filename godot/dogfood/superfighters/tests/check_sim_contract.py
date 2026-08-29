@@ -77,8 +77,12 @@ def main() -> int:
         if "roll" in reserved:
             errors.append("schema must not reserve shipped roll")
         for action in ("dive", "kick"):
-            if action not in reserved:
-                errors.append(f"schema must reserve {action} as not shipped")
+            if action not in allowed:
+                errors.append(f"schema must allow shipped {action}")
+            if action in reserved:
+                errors.append(f"schema must not reserve shipped {action}")
+        if "ledge" not in reserved:
+            errors.append("schema must reserve ledge as not shipped")
     title = TITLE.read_text(encoding="utf-8")
     if 'text = "Vault Fighters"' not in title:
         errors.append("title card is not Vault Fighters")

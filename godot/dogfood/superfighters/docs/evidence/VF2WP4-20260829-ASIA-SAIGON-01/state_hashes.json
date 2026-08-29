@@ -1,0 +1,60 @@
+{
+	"map_id": "police",
+	"mode": "vs2",
+	"replay": {
+		"pair_count": 6,
+		"pairs": [
+			{
+				"hash_a": "7fefc93a7f8d90d7e5dc4735cd3a2bb7617524ac946bcce845acc1b73d85eb74",
+				"hash_b": "7fefc93a7f8d90d7e5dc4735cd3a2bb7617524ac946bcce845acc1b73d85eb74",
+				"hash_match": true,
+				"name": "dive_hazardous",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "ae5cdd313dbd215608d1df2ea37e86957effc0879872310527149a5dfc81d3b8",
+				"hash_b": "ae5cdd313dbd215608d1df2ea37e86957effc0879872310527149a5dfc81d3b8",
+				"hash_match": true,
+				"name": "dive_pit",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "479a0022a3d67a01ba0016600bd40e05ded8c03f64834451782843b9dbb9e1c1",
+				"hash_b": "479a0022a3d67a01ba0016600bd40e05ded8c03f64834451782843b9dbb9e1c1",
+				"hash_match": true,
+				"name": "dive_rooftops",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "d57f1051893ef46224a4b2f05f8bce6d76a5d2da0cf62505829f1189d5f9f692",
+				"hash_b": "d57f1051893ef46224a4b2f05f8bce6d76a5d2da0cf62505829f1189d5f9f692",
+				"hash_match": true,
+				"name": "dive_sprint_crouch",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "1e5410aa7e6e88d203b5ea4812b02a03d8d1d7e98df2bdba83b07e72a38dda04",
+				"hash_b": "1e5410aa7e6e88d203b5ea4812b02a03d8d1d7e98df2bdba83b07e72a38dda04",
+				"hash_match": true,
+				"name": "dive_storage",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "7242f3e36e6398d2ac4a974e0a692aabbaa0e67a99966bbd7d93c3a5762455b6",
+				"hash_b": "7242f3e36e6398d2ac4a974e0a692aabbaa0e67a99966bbd7d93c3a5762455b6",
+				"hash_match": true,
+				"name": "jump_kick",
+				"ok_a": true,
+				"ok_b": true
+			}
+		],
+		"source": "SimReplay.final_hash twice",
+		"verdict": "match"
+	},
+	"seed": 1
+}

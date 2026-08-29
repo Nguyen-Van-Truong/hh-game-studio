@@ -335,4 +335,33 @@ does not emit another `roll_start`.
 
 | ID | Topic | Class | Conf. | Source | When | Behavior to reproduce | Tuning-only | Notes |
 |---|---|---|---|---|---|---|---|---|
-| RL-MOVE-ROLL | Grounded roll + i-frame window + extinguish hook | `assumption` | none | VF2-WP3 product contract; **not** observed on Y8 this session | 2026-08-29 | Crouch-while-sprint or InputFrame `roll` starts a committed roll; AABB shrinks; invuln ticks; unique `roll_start` | tap_window 0.22, roll 0.28s, invuln 0.20s, cost 22 | Not Y8 parity. Do not mark observed. Dive/kick stay RL-MOVE-ROLL-DIVE. |
+| RL-MOVE-ROLL | Grounded roll + i-frame window + extinguish hook | `assumption` | none | VF2-WP3 product contract; **not** observed on Y8 this session | 2026-08-29 | Crouch-while-sprint or InputFrame `roll` starts a committed roll; AABB shrinks; invuln ticks; unique `roll_start` | tap_window 0.22, roll 0.28s, invuln 0.20s, cost 22 | Not Y8 parity. Do not mark observed. Y8 dive/kick observation stays RL-MOVE-ROLL-DIVE. |
+
+---
+
+## VF2-WP4 dive, jump-kick, fall (not a play observation)
+
+Dated 2026-08-29 Asia/Saigon. No in-game Y8 play. No HTML5/Flash
+package. Sidecar: `docs/dive-kick.md` and
+`docs/evidence/VF2WP4-20260829-ASIA-SAIGON-01/`.
+
+Dive stays `ledger:RL-MOVE-DIVE` (`assumption`). Jump-kick stays
+`ledger:RL-MOVE-JUMP-KICK` (`assumption`). Fall stays
+`ledger:RL-MOVE-FALL` (`assumption`). None of these rows is promoted
+to `observed`. Sprint / roll stay assumption. Hold-to-aim stays
+`ledger:RL-CTRL-HOLD-AIM` (`assumption`). Y8 observation stays
+`ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). 60 Hz stays
+`ledger:RL-SIM-FIXED-60` (`assumption`). Ledge stays reserved.
+
+Product contract: airborne sprint+crouch or InputFrame `dive` starts
+a dive with a distinct AABB, finite invuln, and fall-immune landing.
+Aerial melee or InputFrame `kick` applies a downward impulse. Dive
+tackle and kick hit apply knockdown. A high drop without dive can
+hurt. Pit death still kills. Grounded `kick` is blocked. Grounded
+sprint+crouch remains a roll.
+
+| ID | Topic | Class | Conf. | Source | When | Behavior to reproduce | Tuning-only | Notes |
+|---|---|---|---|---|---|---|---|---|
+| RL-MOVE-DIVE | Airborne dive + finite invuln + fall-immune land | `assumption` | none | VF2-WP4 product contract; **not** observed on Y8 this session | 2026-08-29 | Sprint+crouch in air or InputFrame `dive`; AABB differs from roll; pit still kills | dive 0.36s, invuln 0.16s, cost 18 | Not Y8 parity. Do not mark observed. Y8 row stays RL-MOVE-ROLL-DIVE unavailable. |
+| RL-MOVE-JUMP-KICK | Aerial kick impulse | `assumption` | none | VF2-WP4 product contract; **not** observed on Y8 this session | 2026-08-29 | Aerial melee or InputFrame `kick`; grounded kick blocked; pose is kick not melee | impulse 90/220, 0.18s | Not Y8 parity. Do not mark observed. |
+| RL-MOVE-FALL | Fall damage vs dive immunity | `assumption` | none | VF2-WP4 product contract; **not** observed on Y8 this session | 2026-08-29 | High drop without dive can damage; dive landing emits fall_immune; spawn land does not | drop_min 28, dmg 16 | Not Y8 parity. Do not mark observed. |

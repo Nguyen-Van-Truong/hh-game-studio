@@ -3,8 +3,9 @@
 Display title: **Vault Fighters**. Clock is product 60 Hz
 (`ledger:RL-SIM-FIXED-60`, class=`assumption`). Not a Y8 tick-rate claim.
 Hold-to-aim stays `ledger:RL-CTRL-HOLD-AIM` (`assumption`). Roll is
-`ledger:RL-MOVE-ROLL` (`assumption`). Dive/kick stay
-`ledger:RL-MOVE-ROLL-DIVE` (`unavailable`).
+`ledger:RL-MOVE-ROLL` (`assumption`). Dive/kick are
+`ledger:RL-MOVE-DIVE` / `ledger:RL-MOVE-JUMP-KICK` (`assumption`).
+Y8 observation stays `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`).
 
 ## official/
 
@@ -47,6 +48,22 @@ Sprint/roll stay `assumption`. Clock stays `ledger:RL-SIM-FIXED-60`.
 | `tap_window_miss.json` | late second tap stays walk |
 | `crouch_roll.json` | sprint then explicit roll |
 | `stamina_drain.json` | sprint drain then recover |
+
+## dive/
+
+VF2-WP4 official InputFrame traces. Same schema as `official/`.
+Replay uses `apply_frames`. No teleport. No `step_fixed`.
+Dive/kick/fall stay `assumption`. Clock stays `ledger:RL-SIM-FIXED-60`.
+Y8 observation stays `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`).
+
+| File | Beat |
+|---|---|
+| `dive_sprint_crouch.json` | police sprint + jump + dive |
+| `jump_kick.json` | police aerial kick |
+| `dive_pit.json` | police dive into pit still kills |
+| `dive_rooftops.json` | rooftops dive |
+| `dive_storage.json` | storage dive |
+| `dive_hazardous.json` | hazardous in-place dive |
 
 ## fixture/
 

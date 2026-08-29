@@ -111,7 +111,9 @@ func observe() -> Dictionary:
 			"hold_to_aim": "ledger:RL-CTRL-HOLD-AIM assumption",
 			"roll": "ledger:RL-MOVE-ROLL assumption",
 			"sprint": "ledger:RL-MOVE-SPRINT assumption",
-			"roll_dive": "ledger:RL-MOVE-ROLL-DIVE dive/kick unavailable",
+			"dive": "ledger:RL-MOVE-DIVE assumption",
+			"kick": "ledger:RL-MOVE-JUMP-KICK assumption",
+			"roll_dive": "ledger:RL-MOVE-ROLL-DIVE Y8 observation unavailable",
 			"prop_events": "empty in first-playable slice",
 		},
 	}
