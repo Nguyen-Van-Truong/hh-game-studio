@@ -66,10 +66,16 @@ func refresh(fighters: Array) -> void:
 			who = "P2"
 		elif f.is_bot:
 			who = "Bot%d" % f.slot
-		line.text = "%s  HP %d  ST %d  %s / %s x%d  G%d" % [
+		var pose: String = ""
+		if f.rolling:
+			pose = " ROLL"
+		elif f.sprinting:
+			pose = " SPRINT"
+		line.text = "%s  HP %d  ST %d%s  %s / %s x%d  G%d" % [
 			who,
 			int(f.health),
 			int(f.stamina),
+			pose,
 			str(melee.get("name", "Fists")),
 			str(gun.get("name", "Pistol")),
 			f.ammo,

@@ -118,7 +118,9 @@ func to_trace_dict() -> Dictionary:
 		"y8_tick_rate_claimed": false,
 		"y8_parity_claimed": false,
 		"hold_to_aim": "RL-CTRL-HOLD-AIM assumption, not observed",
-		"roll_dive": "RL-MOVE-ROLL-DIVE unavailable",
+		"roll": "RL-MOVE-ROLL assumption, not observed",
+		"sprint": "RL-MOVE-SPRINT assumption, not observed",
+		"roll_dive": "RL-MOVE-ROLL-DIVE dive/kick unavailable",
 		"frames": frames_out,
 		"hashes": hashes.duplicate(true),
 	}

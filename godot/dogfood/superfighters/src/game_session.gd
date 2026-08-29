@@ -57,7 +57,7 @@ func setup(p_mode: String, p_map: String, p_stage: int) -> void:
 	hud = Hud.new()
 	add_child(hud)
 	hud.set_map_name(Maps.display_name(map_id))
-	hud.set_hint("Last standing wins · crouch+N pickup · hold M fire · hold comma throw")
+	hud.set_hint("Last standing · double-tap sprint · crouch-while-sprint rolls · hold M fire")
 	pause_screen = PauseScreen.new()
 	_resume_cb = set_paused.bind(false)
 	pause_screen.resume_pressed.connect(_resume_cb)
@@ -183,6 +183,7 @@ func _step_one_tick(cmds: Array[Dictionary]) -> void:
 		cmd["on_ladder"] = arena != null and arena.has_ladder_at(f.global_position)
 		var before_y: float = f.velocity.y
 		f.step(dt, cmd, kill_plane)
+		_emit_loco_feedback(f)
 		_log_death_if_new(f)
 		if f.last_jump and before_y >= 0.0 and f.velocity.y < 0.0 and sfx != null:
 			sfx.play("jump")
@@ -782,8 +783,26 @@ func _muzzle(at: Vector2) -> void:
 
 
 func _spawn_fx(tex_path: String, at: Vector2, life: float) -> void:
+	if not ResourceLoader.exists(tex_path):
+		return
+	var tex: Texture2D = load(tex_path) as Texture2D
+	if tex == null:
+		return
+	_attach_fx_sprite(tex, at, life)
+
+
+func _spawn_roll_fx(at: Vector2) -> void:
+	if ResourceLoader.exists(Visuals.ROLL):
+		_spawn_fx(Visuals.ROLL, at, 0.18)
+	else:
+		_attach_fx_sprite(Visuals.roll_flash_tex(), at, 0.18)
+
+
+func _attach_fx_sprite(tex: Texture2D, at: Vector2, life: float) -> void:
+	if tex == null:
+		return
 	var spr: Sprite2D = Sprite2D.new()
-	spr.texture = load(tex_path) as Texture2D
+	spr.texture = tex
 	spr.centered = true
 	spr.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	spr.global_position = at
@@ -811,6 +830,40 @@ func _free_fx() -> void:
 		i += 1
 	_fx.clear()
 	_fx_life.clear()
+
+
+func _emit_loco_feedback(f: Fighter) -> void:
+	if f == null:
+		return
+	if f.sprint_started:
+		ledger.push(clock.tick, "locomotion", "sprint_start", {
+			"slot": f.slot,
+			"stamina": SimConstants.quantize(f.stamina),
+		})
+	if f.sprint_ended:
+		ledger.push(clock.tick, "locomotion", "sprint_end", {
+			"slot": f.slot,
+			"stamina": SimConstants.quantize(f.stamina),
+		})
+	if f.roll_started:
+		ledger.push(clock.tick, "locomotion", "roll_start", {
+			"slot": f.slot,
+			"seq": f.roll_seq,
+			"invuln": SimConstants.quantize(f.invuln),
+		})
+		ledger.push(clock.tick, "locomotion", "roll_extinguish", {
+			"slot": f.slot,
+			"seq": f.roll_seq,
+			"count": f.fire_extinguish_count,
+		})
+		if sfx != null:
+			sfx.play("roll")
+		_spawn_roll_fx(f.global_position + Vector2(0.0, 8.0))
+	if f.roll_ended:
+		ledger.push(clock.tick, "locomotion", "roll_end", {
+			"slot": f.slot,
+			"seq": f.roll_seq,
+		})
 
 
 func _log_death_if_new(f: Fighter) -> void:

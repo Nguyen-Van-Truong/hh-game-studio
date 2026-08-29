@@ -17,9 +17,9 @@ Product movement contract. This file does **not** claim Y8 parity.
 
 Jump / crouch stay `ledger:RL-MOVE-JUMP-CROUCH` (`assumption`).
 Hold-to-aim stays `ledger:RL-CTRL-HOLD-AIM` (`assumption`).
-Roll / dive stay `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`).
-Sprint numbers remain in the JSON because first-playable already had
-them; VF2-WP3 owns the sprint / roll contract.
+Dive / kick stay `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`).
+Sprint / roll are owned by VF2-WP3 (`ledger:RL-MOVE-SPRINT` /
+`ledger:RL-MOVE-ROLL`, `assumption`).
 
 ## Clock (ledger:RL-SIM-FIXED-60)
 

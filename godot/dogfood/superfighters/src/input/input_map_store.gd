@@ -67,7 +67,7 @@ static func validate(payload: Dictionary) -> PackedStringArray:
 	if _payload_binds_f11(actions):
 		errors.append("F11 must not be a fighter action")
 	if _payload_binds_reserved(actions):
-		errors.append("roll/dive/kick must stay unshipped")
+		errors.append("dive/kick must stay unshipped")
 	return errors
 
 
@@ -281,7 +281,7 @@ static func _payload_binds_f11(actions: Dictionary) -> bool:
 
 
 static func _payload_binds_reserved(actions: Dictionary) -> bool:
-	var reserved: PackedStringArray = PackedStringArray(["roll", "dive", "kick"])
+	var reserved: PackedStringArray = PackedStringArray(["dive", "kick"])
 	var i: int = 0
 	while i < reserved.size():
 		if actions.has(String(reserved[i])):

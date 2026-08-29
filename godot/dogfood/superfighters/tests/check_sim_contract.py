@@ -71,7 +71,12 @@ def main() -> int:
         if schema.get("ledger_clock") != "RL-SIM-FIXED-60":
             errors.append("schema must cite ledger:RL-SIM-FIXED-60")
         reserved = schema.get("input_frame", {}).get("reserved_not_shipped", [])
-        for action in ("roll", "dive", "kick"):
+        allowed = schema.get("input_frame", {}).get("allowed_actions", [])
+        if "roll" not in allowed:
+            errors.append("schema must allow shipped roll")
+        if "roll" in reserved:
+            errors.append("schema must not reserve shipped roll")
+        for action in ("dive", "kick"):
             if action not in reserved:
                 errors.append(f"schema must reserve {action} as not shipped")
     title = TITLE.read_text(encoding="utf-8")

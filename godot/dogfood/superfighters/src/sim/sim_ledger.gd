@@ -22,6 +22,17 @@ func push(tick: int, phase: String, kind: String, payload: Dictionary) -> void:
 	events.append(row)
 
 
+func count_kind(kind: String) -> int:
+	var n: int = 0
+	var i: int = 0
+	while i < events.size():
+		var row: Dictionary = events[i] as Dictionary
+		if str(row.get("kind", "")) == kind:
+			n += 1
+		i += 1
+	return n
+
+
 func has_kind(kind: String) -> bool:
 	var i: int = 0
 	while i < events.size():

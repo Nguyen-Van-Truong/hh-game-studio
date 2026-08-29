@@ -30,14 +30,15 @@ or play session. **Do not** cite 60 Hz as “Y8-like”.
 
 ## InputFrame
 
-Allowed actions: `left right up down jump crouch melee fire grenade`.
+Allowed actions: `left right up down jump crouch melee fire grenade roll`.
 
 Listing-page keys stay on ledger:RL-CTRL-P1-MOVE, RL-CTRL-P1-PUNCH,
 RL-CTRL-P1-SHOOT, RL-CTRL-P1-NADE, RL-CTRL-P2-MOVE, RL-CTRL-P2-ATK.
 Jump/crouch vs aim-up/down is ledger:RL-MOVE-JUMP-CROUCH (`assumption`).
 Hold-to-aim / release-to-fire is first-playable behavior and
 ledger:RL-CTRL-HOLD-AIM (`assumption`) — **not** promoted to `observed`.
-`roll` / `dive` / `kick` are reserved and **rejected** as unknown
+`roll` is a shipped action (`ledger:RL-MOVE-ROLL`, `assumption`).
+`dive` / `kick` stay reserved and **rejected** as unknown
 (ledger:RL-MOVE-ROLL-DIVE `unavailable`).
 F11 is page chrome, not a fighter action (ledger:RL-CTRL-FULLSCREEN).
 

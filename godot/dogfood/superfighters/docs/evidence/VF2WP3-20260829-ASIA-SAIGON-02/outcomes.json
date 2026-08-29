@@ -1,0 +1,106 @@
+{
+	"apply": {
+		"attempted": 718,
+		"succeeded": 717,
+		"used_action_press": 0,
+		"used_apply_frames": 717,
+		"used_parse_input_event": 1,
+		"used_step_fixed": 0
+	},
+	"dup": {
+		"extinguish_events": 1,
+		"roll_start_events": 1,
+		"seq": 1,
+		"seq0": 1,
+		"source": "10 extra roll presses during committed roll",
+		"verdict": "pass"
+	},
+	"invuln": {
+		"hp_inside": 80.0,
+		"hp_outside": 55.0,
+		"inside_invuln_undamaged": true,
+		"outside_invuln_damaged": true,
+		"source": "Bullet vs roll invuln window",
+		"verdict": "pass",
+		"window_expired": true
+	},
+	"live": {
+		"live_roll": true,
+		"live_sprint": true,
+		"pose": "roll",
+		"source": "parse_input_event + step_from_live_input",
+		"verdict": "pass"
+	},
+	"replay": {
+		"pair_count": 4,
+		"pairs": [
+			{
+				"hash_a": "db907ce2249e7c513b6497818bf76c8e4c777e822857a4644f8bd7d5c8650ea9",
+				"hash_b": "db907ce2249e7c513b6497818bf76c8e4c777e822857a4644f8bd7d5c8650ea9",
+				"hash_match": true,
+				"name": "crouch_roll",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "a8976ca0a970fe92be85c748625b7ef89f6bb0f2d99302c1edfa27a768be288e",
+				"hash_b": "a8976ca0a970fe92be85c748625b7ef89f6bb0f2d99302c1edfa27a768be288e",
+				"hash_match": true,
+				"name": "double_tap_sprint",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "1bc9396b9b6e77082065c774bc33b5de9b694bb5caf5770be91681f6fabe30db",
+				"hash_b": "1bc9396b9b6e77082065c774bc33b5de9b694bb5caf5770be91681f6fabe30db",
+				"hash_match": true,
+				"name": "stamina_drain",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "1362f29d5e477abe1829f5f2a08f60fe6f28402202b9b4453c967c5196f2b963",
+				"hash_b": "1362f29d5e477abe1829f5f2a08f60fe6f28402202b9b4453c967c5196f2b963",
+				"hash_match": true,
+				"name": "tap_window_miss",
+				"ok_a": true,
+				"ok_b": true
+			}
+		],
+		"source": "SimReplay.final_hash twice",
+		"verdict": "match"
+	},
+	"roll": {
+		"aabb_shrunk": true,
+		"extinguish_count": 1,
+		"extinguish_events": 1,
+		"footprint_swapped": true,
+		"hud_roll": true,
+		"invuln": 0.2,
+		"pose": "roll",
+		"roll_start_events": 1,
+		"sfx_last_id": "roll",
+		"source": "apply_frames roll pose/AABB/SFX/HUD/VFX hook",
+		"started": true,
+		"verdict": "pass"
+	},
+	"stamina": {
+		"after_roll_cost": 73.5,
+		"after_sprint": 94.4,
+		"before_roll": 94.4,
+		"drained_while_sprinting": true,
+		"in_legal_range": true,
+		"roll_flat_cost": true,
+		"source": "apply_frames stamina drain + roll cost",
+		"start": 100.0,
+		"verdict": "pass"
+	},
+	"tap": {
+		"inside_window_speed": true,
+		"inside_window_sprint": true,
+		"outside_window_sprint": false,
+		"source": "apply_frames tap_window vs late tap",
+		"sprint_start_event": true,
+		"verdict": "pass"
+	}
+}

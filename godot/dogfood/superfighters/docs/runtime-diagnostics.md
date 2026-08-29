@@ -19,7 +19,8 @@ This is **not** the live editor MCP socket. VF8-WP1 owns that adapter.
 
 Class: `assumption`. **Do not** cite 60 Hz as “Y8-like”.
 Hold-to-aim stays `ledger:RL-CTRL-HOLD-AIM` (`assumption`).
-Roll/dive stay `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`).
+Roll stays `ledger:RL-MOVE-ROLL` (`assumption`). Dive/kick stay
+`ledger:RL-MOVE-ROLL-DIVE` (`unavailable`).
 
 ## Observe (ledger:RL-RUNTIME-OBSERVE)
 

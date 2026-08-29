@@ -30,7 +30,9 @@ and does **not** use cmd-dict `step_fixed`.
 
 Hold-to-aim / release-to-fire stays first-playable semantics:
 `ledger:RL-CTRL-HOLD-AIM` (`assumption`). Not promoted to `observed`.
-Roll / dive stay `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`).
+Roll is a shipped InputFrame action (`ledger:RL-MOVE-ROLL`,
+`assumption`) via crouch-while-sprint; no dedicated remap key.
+Dive / kick stay `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`).
 
 ## Clock (ledger:RL-SIM-FIXED-60)
 

@@ -3,8 +3,8 @@ extends RefCounted
 
 ## Product input contract (VF2-WP1). Listing keys cite ledger:RL-CTRL-*.
 ## 60 Hz is ledger:RL-SIM-FIXED-60 (assumption). Hold-to-aim stays
-## ledger:RL-CTRL-HOLD-AIM (assumption). Roll/dive stay
-## ledger:RL-MOVE-ROLL-DIVE (unavailable).
+## ledger:RL-CTRL-HOLD-AIM (assumption). Roll is ledger:RL-MOVE-ROLL
+## (assumption). Dive/kick stay ledger:RL-MOVE-ROLL-DIVE (unavailable).
 
 const SCHEMA_ID: String = "vf.input.remap.v1"
 const SCHEMA_VERSION: int = 1

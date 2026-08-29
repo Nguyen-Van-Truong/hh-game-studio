@@ -3,7 +3,8 @@ extends RefCounted
 
 ## Physical-key + device-split gamepad map (VF2-WP1).
 ## Listing keys cite ledger:RL-CTRL-*. Hold-to-aim stays
-## ledger:RL-CTRL-HOLD-AIM (assumption). Roll/dive stay unavailable.
+## ledger:RL-CTRL-HOLD-AIM (assumption). Roll is InputFrame
+## ledger:RL-MOVE-ROLL (assumption). Dive/kick stay unavailable.
 
 
 static var _held_prev: Array[PackedStringArray] = [PackedStringArray(), PackedStringArray()]
@@ -34,6 +35,8 @@ static func empty_cmd() -> Dictionary:
 		"grenade_held": false,
 		"grenade_released": false,
 		"on_ladder": false,
+		"crouch_pressed": false,
+		"roll": false,
 	}
 
 
@@ -100,6 +103,8 @@ static func cmd_from_frame(frame: InputFrame) -> Dictionary:
 	cmd["jump"] = frame.is_held("jump") or frame.is_held("up")
 	cmd["jump_pressed"] = frame.is_pressed("jump") or frame.is_pressed("up")
 	cmd["crouch"] = frame.is_held("crouch") or frame.is_held("down")
+	cmd["crouch_pressed"] = frame.is_pressed("crouch") or frame.is_pressed("down")
+	cmd["roll"] = frame.is_pressed("roll")
 	cmd["melee"] = frame.is_pressed("melee")
 	cmd["fire_held"] = frame.is_held("fire")
 	cmd["fire_released"] = frame.is_released("fire")
@@ -138,6 +143,10 @@ static func frame_from_cmd(cmd: Dictionary, tick: int, slot: int) -> InputFrame:
 		frame.pressed.append("jump")
 	if bool(cmd.get("crouch", false)):
 		frame.held.append("crouch")
+	if bool(cmd.get("crouch_pressed", false)) and not frame.pressed.has("crouch"):
+		frame.pressed.append("crouch")
+	if bool(cmd.get("roll", false)):
+		frame.pressed.append("roll")
 	if bool(cmd.get("melee", false)):
 		frame.pressed.append("melee")
 	if bool(cmd.get("fire_held", false)):

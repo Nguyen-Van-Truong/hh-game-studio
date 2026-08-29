@@ -50,7 +50,7 @@ func _ready() -> void:
 	add_child(hint)
 	var hint2: Label = Label.new()
 	hint2.name = "InputHint2"
-	hint2.text = "P2 WASD · 1 melee · hold 2 fire · hold 3 throw · double-tap to sprint"
+	hint2.text = "P2 WASD · 1 melee · hold 2 fire · hold 3 throw · double-tap sprint · crouch-roll"
 	hint2.position = Vector2(80, 204)
 	hint2.size = Vector2(1100, 28)
 	hint2.add_theme_font_size_override("font_size", 16)

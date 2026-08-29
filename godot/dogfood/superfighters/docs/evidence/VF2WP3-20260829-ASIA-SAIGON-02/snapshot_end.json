@@ -1,0 +1,89 @@
+{
+	"bullets": [],
+	"epsilon": 0.001,
+	"event_order": "vf.sim.event_order.v1",
+	"fighters": [
+		{
+			"ammo": 12,
+			"crouched": 0,
+			"dead": 0,
+			"death_cause": "",
+			"facing": 1000,
+			"gun": "pistol",
+			"hp": 100000,
+			"invuln": 167,
+			"melee": "fists",
+			"nades": 3,
+			"roll_seq": 1,
+			"rolling": 1,
+			"slot": 0,
+			"sprinting": 0,
+			"stamina": 74267,
+			"team": 0,
+			"vx": 320000,
+			"vy": 0,
+			"weapon": "pistol",
+			"x": 153444,
+			"y": 179999
+		},
+		{
+			"ammo": 12,
+			"crouched": 0,
+			"dead": 0,
+			"death_cause": "",
+			"facing": -1000,
+			"gun": "pistol",
+			"hp": 100000,
+			"invuln": 0,
+			"melee": "fists",
+			"nades": 3,
+			"roll_seq": 0,
+			"rolling": 0,
+			"slot": 1,
+			"sprinting": 0,
+			"stamina": 100000,
+			"team": 1,
+			"vx": 0,
+			"vy": 0,
+			"weapon": "pistol",
+			"x": 280000,
+			"y": 179999
+		}
+	],
+	"grenades": [],
+	"living": 2,
+	"map_id": "police",
+	"mode": "vs2",
+	"outcome": "play",
+	"p1_dead": false,
+	"p1_gun": "pistol",
+	"p1_hp": 100.0,
+	"p1_melee": "fists",
+	"p1_nades": 3,
+	"p1_weapon": "pistol",
+	"p1_x": 153.444412231445,
+	"p1_y": 179.999145507813,
+	"pickups": [
+		{
+			"id": "uzi",
+			"x": 232000,
+			"y": 138000
+		},
+		{
+			"id": "knife",
+			"x": 520000,
+			"y": 106000
+		},
+		{
+			"id": "grenade",
+			"x": 664000,
+			"y": 58000
+		}
+	],
+	"respawn_count": 0,
+	"schema": "vf.sim.snapshot.v1",
+	"schema_version": 1,
+	"seed": 7,
+	"tick": 24,
+	"win": false
+}

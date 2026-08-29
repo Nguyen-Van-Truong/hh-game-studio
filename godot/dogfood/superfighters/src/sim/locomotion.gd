@@ -1,11 +1,13 @@
 class_name Locomotion
 extends RefCounted
 
-## Data-driven walk/jump/crouch/pit/camera constants (VF2-WP2).
+## Data-driven walk/jump/crouch/sprint/roll/pit/camera constants.
 ## Clock is ledger:RL-SIM-FIXED-60 (assumption). Jump/crouch stay
-## ledger:RL-MOVE-JUMP-CROUCH (assumption). Camera stays
+## ledger:RL-MOVE-JUMP-CROUCH (assumption). Sprint stays
+## ledger:RL-MOVE-SPRINT (assumption). Roll stays
+## ledger:RL-MOVE-ROLL (assumption). Camera stays
 ## ledger:RL-CAM-ARENA (assumption). Hold-to-aim stays
-## ledger:RL-CTRL-HOLD-AIM (assumption). Roll/dive stay
+## ledger:RL-CTRL-HOLD-AIM (assumption). Dive/kick stay
 ## ledger:RL-MOVE-ROLL-DIVE (unavailable). Not a Y8 play observation.
 
 const PATH: String = "res://data/sim/locomotion.json"
@@ -75,17 +77,28 @@ static func apply_to(fighter: Fighter) -> void:
 	fighter.coyote_time = f("coyote", 0.09)
 	fighter.jump_buf_time = f("jump_buf", 0.10)
 	fighter.tap_window = f("tap_window", 0.22)
+	fighter.stamina_sprint_drain = f("stamina_sprint_drain", 28.0)
+	fighter.stamina_recover = f("stamina_recover", 22.0)
+	fighter.stamina_roll_cost = f("stamina_roll_cost", 22.0)
+	fighter.roll_duration = f("roll_duration", 0.28)
+	fighter.roll_invuln = f("roll_invuln", 0.20)
+	fighter.roll_speed = f("roll_speed", 320.0)
 	fighter.variable_jump_cut = f("variable_jump_cut", 0.45)
 	fighter.variable_jump_cut_vy = f("variable_jump_cut_vy", -80.0)
 	fighter.max_fall_speed = f("max_fall_speed", 800.0)
 	var stand: Vector2 = vec2("stand_size", Vector2(10, 22))
 	var crouch: Vector2 = vec2("crouch_size", Vector2(10, 14))
+	var roll: Vector2 = vec2("roll_size", Vector2(14, 12))
 	var stand_off: Vector2 = vec2("stand_offset", Vector2(0, 1))
 	var crouch_off: Vector2 = vec2("crouch_offset", Vector2(0, 5))
+	var roll_off: Vector2 = vec2("roll_offset", Vector2(0, 6))
 	if fighter.stand_shape != null:
 		fighter.stand_shape.size = stand
 	if fighter.crouch_shape != null:
 		fighter.crouch_shape.size = crouch
+	if fighter.roll_shape != null:
+		fighter.roll_shape.size = roll
 	fighter.stand_offset = stand_off
 	fighter.crouch_offset = crouch_off
+	fighter.roll_offset = roll_off
 	fighter._apply_shape()

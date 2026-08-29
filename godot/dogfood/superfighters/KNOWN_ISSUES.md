@@ -3,7 +3,7 @@
 First playable slice. Not G6. Not 60/60.
 
 - No bullet-time, no destroyable floors, no Box2D gibs
-- Kick / roll / dive not in this slice
+- Kick / dive not in this slice (roll shipped in VF2-WP3 as assumption)
 - Bots are greedy (weapon then chase); they can walk into fire
 - Stage is one win per map (Bronze-like), not Bronze/Silver/Gold ×4
 - Survival mode is out of this slice
@@ -37,6 +37,7 @@ First playable slice. Not G6. Not 60/60.
   `apply_frames` plus live InputEvent inject, not teleport-to-pit.
   Jump/crouch stay ledger:RL-MOVE-JUMP-CROUCH (`assumption`). Camera
   stays ledger:RL-CAM-ARENA (`assumption`). 60 Hz stays
-  ledger:RL-SIM-FIXED-60 (`assumption`). Hold-to-aim / roll are still
-  not observed. Sprint leftovers remain in the JSON; VF2-WP3 owns
-  sprint/stamina/roll.
+  ledger:RL-SIM-FIXED-60 (`assumption`). Hold-to-aim stays
+  not observed. Sprint/roll are product-shipped as
+  ledger:RL-MOVE-SPRINT / ledger:RL-MOVE-ROLL (`assumption`), not
+  observed. Dive/kick stay ledger:RL-MOVE-ROLL-DIVE (`unavailable`).

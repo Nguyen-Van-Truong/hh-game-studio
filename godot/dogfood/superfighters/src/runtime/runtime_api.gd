@@ -109,7 +109,9 @@ func observe() -> Dictionary:
 			"y8_parity": false,
 			"tick_hz": "ledger:RL-SIM-FIXED-60 assumption",
 			"hold_to_aim": "ledger:RL-CTRL-HOLD-AIM assumption",
-			"roll_dive": "ledger:RL-MOVE-ROLL-DIVE unavailable",
+			"roll": "ledger:RL-MOVE-ROLL assumption",
+			"sprint": "ledger:RL-MOVE-SPRINT assumption",
+			"roll_dive": "ledger:RL-MOVE-ROLL-DIVE dive/kick unavailable",
 			"prop_events": "empty in first-playable slice",
 		},
 	}

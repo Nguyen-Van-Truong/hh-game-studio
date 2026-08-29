@@ -207,6 +207,11 @@ static func _fighter_extras(session: GameSession) -> Array:
 				"aim_y": SimConstants.quantize(f.aim_dir.y),
 				"on_ladder": f.on_ladder,
 				"sprinting": f.sprinting,
+				"rolling": f.rolling,
+				"roll_seq": f.roll_seq,
+				"roll_time": SimConstants.quantize(f.roll_time),
+				"fire_extinguish_count": f.fire_extinguish_count,
+				"burning": f.burning,
 			})
 		i += 1
 	return out

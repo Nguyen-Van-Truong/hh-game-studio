@@ -4,8 +4,9 @@ extends Resource
 ## One fighter's input for one 60 Hz tick (V-A14).
 ## Actions are product names. Listing keys cite ledger:RL-CTRL-*.
 ## Hold-to-aim is first-playable semantics, not observed
-## (ledger:RL-CTRL-HOLD-AIM). Roll/dive are not live actions
-## (ledger:RL-MOVE-ROLL-DIVE).
+## (ledger:RL-CTRL-HOLD-AIM). Roll is a product action
+## (ledger:RL-MOVE-ROLL, assumption). Dive/kick stay
+## ledger:RL-MOVE-ROLL-DIVE (unavailable).
 
 @export var schema_version: int = 1
 @export var tick: int = 0

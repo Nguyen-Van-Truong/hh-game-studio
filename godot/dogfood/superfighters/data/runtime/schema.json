@@ -28,7 +28,9 @@
   "pause_reasons": ["", "player", "agent"],
   "honesty": {
     "hold_to_aim": "RL-CTRL-HOLD-AIM assumption, not observed",
-    "roll_dive": "RL-MOVE-ROLL-DIVE unavailable",
+    "roll": "RL-MOVE-ROLL assumption, not observed",
+    "sprint": "RL-MOVE-SPRINT assumption, not observed",
+    "roll_dive": "RL-MOVE-ROLL-DIVE dive/kick unavailable",
     "tick_hz": "RL-SIM-FIXED-60 assumption, not observed Y8 clock",
     "prop_events": "no interactive props in first-playable slice",
     "y8_parity": false

@@ -120,7 +120,7 @@ static func malformed_rejected(app: App) -> PackedStringArray:
 	var cases: Array = [
 		{},
 		{"tick": -1, "slot": 0, "held": [], "pressed": [], "released": []},
-		{"tick": tick, "slot": 0, "held": ["roll"], "pressed": [], "released": []},
+		{"tick": tick, "slot": 0, "held": ["dive"], "pressed": [], "released": []},
 		{"tick": tick, "slot": 0, "held": "fire", "pressed": [], "released": []},
 		{"tick": tick, "slot": 0, "held": [], "pressed": [], "released": [], "move_x": NAN},
 		{"tick": tick + 3, "slot": 0, "held": [], "pressed": [], "released": []},

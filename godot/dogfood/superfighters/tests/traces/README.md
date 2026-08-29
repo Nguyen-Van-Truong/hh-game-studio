@@ -2,7 +2,8 @@
 
 Display title: **Vault Fighters**. Clock is product 60 Hz
 (`ledger:RL-SIM-FIXED-60`, class=`assumption`). Not a Y8 tick-rate claim.
-Hold-to-aim stays `ledger:RL-CTRL-HOLD-AIM` (`assumption`). Roll/dive stay
+Hold-to-aim stays `ledger:RL-CTRL-HOLD-AIM` (`assumption`). Roll is
+`ledger:RL-MOVE-ROLL` (`assumption`). Dive/kick stay
 `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`).
 
 ## official/
@@ -33,6 +34,19 @@ Clock stays `ledger:RL-SIM-FIXED-60` (`assumption`).
 | `pit_fall.json` | walk off police pit |
 | `no_tunnel_solid.json` | walk into storage wall |
 | `no_tunnel_oneway.json` | idle on hazardous one-way |
+
+## sprint/
+
+VF2-WP3 official InputFrame traces. Same schema as `official/`.
+Replay uses `apply_frames`. No teleport. No `step_fixed`.
+Sprint/roll stay `assumption`. Clock stays `ledger:RL-SIM-FIXED-60`.
+
+| File | Beat |
+|---|---|
+| `double_tap_sprint.json` | tap window starts sprint |
+| `tap_window_miss.json` | late second tap stays walk |
+| `crouch_roll.json` | sprint then explicit roll |
+| `stamina_drain.json` | sprint drain then recover |
 
 ## fixture/
 

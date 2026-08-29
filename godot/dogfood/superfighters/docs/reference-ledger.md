@@ -310,3 +310,29 @@ stays `ledger:RL-CAM-ARENA` (`assumption`). Hold-to-aim stays
 | ID | Topic | Class | Conf. | Source | When | Behavior to reproduce | Tuning-only | Notes |
 |---|---|---|---|---|---|---|---|---|
 | RL-MOVE-LOCO-BASE | Walk / accel / friction / var-jump / coyote / buffer / crouch AABB / pit | `assumption` | none | VF2-WP2 product loco; **not** on Y8 listing or play | 2026-08-29 | Accel ramps; release frictions; tap jump lower than hold; coyote ~5 ticks; buffer on landing; crouch shrinks AABB; walk-off pit kills | gravity 1700, walk 170, accel 2400, friction 2000, coyote 0.09, jump_buf 0.10 | Not Y8 parity. Numbers are first-playable tuning. Sprint leftovers stay in JSON; VF2-WP3 owns sprint/roll. |
+
+---
+
+## VF2-WP3 sprint, stamina, roll (not a play observation)
+
+Dated 2026-08-29 Asia/Saigon. No in-game Y8 play. No HTML5/Flash
+package. Sidecar: `docs/sprint-roll.md` and
+`docs/evidence/VF2WP3-20260829-ASIA-SAIGON-02/`.
+
+Sprint stays `ledger:RL-MOVE-SPRINT` (`assumption`). Roll stays
+`ledger:RL-MOVE-ROLL` (`assumption`). Neither row is promoted to
+`observed`. Hold-to-aim stays `ledger:RL-CTRL-HOLD-AIM`
+(`assumption`). Dive / kick stay `ledger:RL-MOVE-ROLL-DIVE`
+(`unavailable`). 60 Hz stays `ledger:RL-SIM-FIXED-60` (`assumption`).
+
+Product contract: double-tap same direction inside `tap_window`
+starts sprint and drains stamina; crouch-while-sprint or InputFrame
+`roll` starts a grounded roll with a distinct AABB, invuln window,
+animation / SFX / HUD / VFX, and an `extinguish_fire` hook. Dead,
+paused, airborne, aiming, ladder, already-rolling, and low-stamina
+inputs do not start a roll. A second roll press during the same seq
+does not emit another `roll_start`.
+
+| ID | Topic | Class | Conf. | Source | When | Behavior to reproduce | Tuning-only | Notes |
+|---|---|---|---|---|---|---|---|---|
+| RL-MOVE-ROLL | Grounded roll + i-frame window + extinguish hook | `assumption` | none | VF2-WP3 product contract; **not** observed on Y8 this session | 2026-08-29 | Crouch-while-sprint or InputFrame `roll` starts a committed roll; AABB shrinks; invuln ticks; unique `roll_start` | tap_window 0.22, roll 0.28s, invuln 0.20s, cost 22 | Not Y8 parity. Do not mark observed. Dive/kick stay RL-MOVE-ROLL-DIVE. |

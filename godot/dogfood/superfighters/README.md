@@ -48,6 +48,7 @@ melee · RT or Y fire · LB grenade · Start pause
 Title / Pause **Controls** remaps keyboard binds (atomic save). F11 is
 not a fighter key.
 
-Double-tap left/right to sprint (stamina).
+Double-tap left/right to sprint (stamina). Crouch while sprinting
+to roll (`ledger:RL-MOVE-SPRINT` / `ledger:RL-MOVE-ROLL`, assumption).
 Hold-to-aim is a product assumption (`ledger:RL-CTRL-HOLD-AIM`), not an
 observed listing behavior.

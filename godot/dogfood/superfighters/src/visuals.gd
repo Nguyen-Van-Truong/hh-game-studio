@@ -6,6 +6,7 @@ const LADDER: String = "res://assets/tiles/tile_ladder.png"
 const BG_CITY: String = "res://assets/bg/bg_city.png"
 const MUZZLE: String = "res://assets/vfx/vfx_muzzle.png"
 const BLOOD: String = "res://assets/vfx/vfx_blood.png"
+const ROLL: String = "res://assets/vfx/vfx_roll.png"
 const FRAME: int = 32
 const SHEET: Dictionary = {
 	"idle": [Vector2i(0, 0), Vector2i(1, 0)],
@@ -19,6 +20,7 @@ const SHEET: Dictionary = {
 	"aim_down": [Vector2i(5, 1)],
 	"dead": [Vector2i(6, 1)],
 	"throw": [Vector2i(7, 1)],
+	"roll": [Vector2i(0, 1), Vector2i(2, 0), Vector2i(3, 0), Vector2i(4, 0)],
 }
 
 
@@ -77,7 +79,7 @@ static func make_frames(team: int) -> SpriteFrames:
 	var tex: Texture2D = load(actor_path(team)) as Texture2D
 	var keys: PackedStringArray = PackedStringArray([
 		"idle", "walk", "jump", "fall", "crouch", "melee",
-		"aim_side", "aim_up", "aim_down", "dead", "throw"
+		"aim_side", "aim_up", "aim_down", "dead", "throw", "roll"
 	])
 	var k: int = 0
 	while k < keys.size():
@@ -86,8 +88,13 @@ static func make_frames(team: int) -> SpriteFrames:
 			frames.clear(key)
 		else:
 			frames.add_animation(key)
-		frames.set_animation_loop(key, key == "idle" or key == "walk")
-		frames.set_animation_speed(key, 8.0 if key == "walk" else 10.0)
+		frames.set_animation_loop(key, key == "idle" or key == "walk" or key == "roll")
+		var speed: float = 10.0
+		if key == "walk":
+			speed = 8.0
+		elif key == "roll":
+			speed = 14.0
+		frames.set_animation_speed(key, speed)
 		var cells: Array = SHEET[key] as Array
 		var i: int = 0
 		while i < cells.size():
@@ -104,6 +111,23 @@ static func make_frames(team: int) -> SpriteFrames:
 			i += 1
 		k += 1
 	return frames
+
+
+static func roll_flash_tex() -> Texture2D:
+	var img: Image = Image.create(16, 16, false, Image.FORMAT_RGBA8)
+	var y: int = 7
+	while y < 13:
+		var x: int = 2
+		while x < 14:
+			var dx: int = x - 8
+			var dy: int = y - 10
+			if dx * dx + dy * dy <= 16:
+				img.set_pixel(x, y, Color(0.91, 0.66, 0.19, 0.85))
+			x += 1
+		y += 1
+	img.set_pixel(7, 7, Color(0.93, 0.89, 0.82, 1.0))
+	img.set_pixel(8, 7, Color(0.93, 0.89, 0.82, 1.0))
+	return ImageTexture.create_from_image(img)
 
 
 static func play_fighter(sprite: AnimatedSprite2D, clip: String) -> void:

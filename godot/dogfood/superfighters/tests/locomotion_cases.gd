@@ -89,8 +89,10 @@ static func schema_and_data() -> PackedStringArray:
 	if absf(float(cam.get("designed_view_x", 0.0)) - 1280.0) > 0.01:
 		errors.append("designed view width must be 1280")
 	var reserved: Array = loco.get("reserved_not_shipped", []) as Array
-	if not reserved.has("roll"):
-		errors.append("roll must stay reserved_not_shipped")
+	if reserved.has("roll"):
+		errors.append("roll is shipped by VF2-WP3 and must not stay reserved")
+	if not reserved.has("dive"):
+		errors.append("dive must stay reserved_not_shipped")
 	return errors
 
 

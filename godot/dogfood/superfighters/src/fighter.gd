@@ -1,9 +1,11 @@
 class_name Fighter
 extends CharacterBody2D
 
-## Locomotion numbers come from data/sim/locomotion.json (VF2-WP2).
+## Locomotion numbers come from data/sim/locomotion.json.
 ## Jump/crouch stay ledger:RL-MOVE-JUMP-CROUCH (assumption).
-## Roll/dive stay ledger:RL-MOVE-ROLL-DIVE (unavailable).
+## Sprint stays ledger:RL-MOVE-SPRINT (assumption).
+## Roll stays ledger:RL-MOVE-ROLL (assumption). Dive/kick stay
+## ledger:RL-MOVE-ROLL-DIVE (unavailable). Not a Y8 observation.
 
 const MAX_HP: float = 100.0
 const MAX_STAMINA: float = 100.0
@@ -21,11 +23,18 @@ var friction: float = 2000.0
 var coyote_time: float = 0.09
 var jump_buf_time: float = 0.10
 var tap_window: float = 0.22
+var stamina_sprint_drain: float = 28.0
+var stamina_recover: float = 22.0
+var stamina_roll_cost: float = 22.0
+var roll_duration: float = 0.28
+var roll_invuln: float = 0.20
+var roll_speed: float = 320.0
 var variable_jump_cut: float = 0.45
 var variable_jump_cut_vy: float = -80.0
 var max_fall_speed: float = 800.0
 var stand_offset: Vector2 = Vector2(0, 1)
 var crouch_offset: Vector2 = Vector2(0, 5)
+var roll_offset: Vector2 = Vector2(0, 6)
 
 var slot: int = 0
 var team: int = 0
@@ -55,12 +64,23 @@ var combat_timer: float = 0.0
 var coyote: float = 0.0
 var jump_buf: float = 0.0
 var sprinting: bool = false
+var rolling: bool = false
+var roll_time: float = 0.0
+var roll_seq: int = 0
+var roll_started: bool = false
+var roll_ended: bool = false
+var sprint_started: bool = false
+var sprint_ended: bool = false
+var last_roll_block: String = ""
+var burning: bool = false
+var fire_extinguish_count: int = 0
 var last_tap_dir: float = 0.0
 var last_tap_at: float = 99.0
 var last_held_x: float = 0.0
 var sprite: AnimatedSprite2D
 var stand_shape: RectangleShape2D
 var crouch_shape: RectangleShape2D
+var roll_shape: RectangleShape2D
 var col_shape: CollisionShape2D
 var want_melee: bool = false
 var want_fire: bool = false
@@ -90,6 +110,8 @@ func setup(p_slot: int, p_team: int, p_bot: bool) -> void:
 	stand_shape.size = Vector2(10, 22)
 	crouch_shape = RectangleShape2D.new()
 	crouch_shape.size = Vector2(10, 14)
+	roll_shape = RectangleShape2D.new()
+	roll_shape.size = Vector2(14, 12)
 	col_shape.shape = stand_shape
 	col_shape.position = stand_offset
 	add_child(col_shape)
@@ -109,7 +131,12 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	want_melee = false
 	want_fire = false
 	want_grenade = false
+	roll_started = false
+	roll_ended = false
+	sprint_started = false
+	sprint_ended = false
 	if dead:
+		last_roll_block = "dead"
 		velocity.y += gravity * delta
 		velocity.y = minf(velocity.y, max_fall_speed)
 		move_and_slide()
@@ -142,36 +169,60 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 		x = -1.0
 	else:
 		x = 0.0
-	if x != 0.0 and last_held_x == 0.0:
-		if last_tap_dir == x and last_tap_at <= tap_window:
-			sprinting = true
-		last_tap_dir = x
-		last_tap_at = 0.0
-	if x == 0.0:
-		sprinting = false
+	var was_sprinting: bool = sprinting
+	if not rolling:
+		if x != 0.0 and last_held_x == 0.0:
+			if last_tap_dir == x and last_tap_at <= tap_window:
+				sprinting = true
+			last_tap_dir = x
+			last_tap_at = 0.0
+		if x == 0.0:
+			sprinting = false
 	last_held_x = x
-	if x != 0.0:
+	if x != 0.0 and not rolling:
 		facing = x
 	var fire_held: bool = bool(cmd.get("fire_held", false))
 	var nade_held: bool = bool(cmd.get("grenade_held", false)) and grenades > 0
 	on_ladder = bool(cmd.get("on_ladder", false))
 	aiming = (fire_held and _gun_ready()) or nade_held
-	crouched = bool(cmd.get("crouch", false)) and on_floor_now and not aiming and not on_ladder
+	var crouch_held: bool = bool(cmd.get("crouch", false))
+	var crouch_pressed: bool = bool(cmd.get("crouch_pressed", false))
+	var roll_pressed: bool = bool(cmd.get("roll", false))
+	if rolling:
+		roll_time = maxf(roll_time - delta, 0.0)
+		if roll_pressed or crouch_pressed:
+			last_roll_block = "rolling"
+		if roll_time <= 0.0:
+			rolling = false
+			roll_ended = true
+			crouched = crouch_held and on_floor_now and not aiming and not on_ladder
+		else:
+			crouched = false
+			sprinting = false
+	else:
+		var want_roll: bool = roll_pressed or (crouch_pressed and sprinting)
+		if want_roll:
+			_try_start_roll(on_floor_now, aiming)
+		if not rolling:
+			crouched = crouch_held and on_floor_now and not aiming and not on_ladder
 	_apply_shape()
-	if on_ladder:
+	if rolling:
+		jump_buf = 0.0
+		last_jump = false
+	elif on_ladder:
 		jump_buf = 0.0
 		last_jump = false
 		velocity.y = 0.0
 		if bool(cmd.get("jump", false)):
 			velocity.y = -climb
-		elif bool(cmd.get("crouch", false)):
+		elif crouch_held:
 			velocity.y = climb
 	elif bool(cmd.get("jump_pressed", false)) and not fire_held and not nade_held:
 		jump_buf = jump_buf_time
 	else:
 		jump_buf = maxf(jump_buf - delta, 0.0)
 	var jump_held: bool = bool(cmd.get("jump", false)) and not fire_held and not nade_held
-	if not on_ladder and jump_buf > 0.0 and coyote > 0.0 and not fire_held and not nade_held:
+	if not rolling and not on_ladder and jump_buf > 0.0 and coyote > 0.0 and not fire_held and not nade_held:
 		velocity.y = jump_vel
 		jump_buf = 0.0
 		coyote = 0.0
@@ -182,7 +233,10 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	if on_floor_now and velocity.y >= 0.0:
 		last_jump = false
 	var speed: float = walk
-	if crouched:
+	if rolling:
+		speed = roll_speed
+		sprinting = false
+	elif crouched:
 		speed = crouch_speed
 		sprinting = false
 	elif aiming:
@@ -190,14 +244,20 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 		sprinting = false
 	elif sprinting and stamina > 1.0:
 		speed = sprint
-		stamina = maxf(0.0, stamina - 28.0 * delta)
+		stamina = maxf(0.0, stamina - stamina_sprint_drain * delta)
 		if stamina <= 0.0:
 			sprinting = false
 	else:
-		stamina = minf(MAX_STAMINA, stamina + 22.0 * delta)
-	var target: float = x * speed
+		stamina = minf(MAX_STAMINA, stamina + stamina_recover * delta)
+	if sprinting and not was_sprinting:
+		sprint_started = true
+	if was_sprinting and not sprinting:
+		sprint_ended = true
+	var target: float = facing * speed if rolling else x * speed
 	var acc: float = accel if on_floor_now or on_ladder else air_accel
-	if x == 0.0:
+	if rolling:
+		velocity.x = move_toward(velocity.x, facing * roll_speed, accel * delta)
+	elif x == 0.0:
 		velocity.x = move_toward(velocity.x, 0.0, friction * delta)
 	else:
 		velocity.x = move_toward(velocity.x, target, acc * delta)
@@ -208,16 +268,16 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 		aim_dir = _aim_from(cmd)
 	else:
 		aim_dir = Vector2(facing, 0.0)
-	if bool(cmd.get("melee", false)) and melee_cd <= 0.0:
+	if not rolling and bool(cmd.get("melee", false)) and melee_cd <= 0.0:
 		want_melee = true
 		melee_cd = float(WeaponDefs.data(melee_id).get("cooldown", 0.28))
 		melee_flash = 0.12
-	if _gun_ready() and fire_cd <= 0.0:
+	if not rolling and _gun_ready() and fire_cd <= 0.0:
 		if _is_auto() and fire_held:
 			want_fire = true
 		elif bool(cmd.get("fire_released", false)):
 			want_fire = true
-	if bool(cmd.get("grenade_released", false)) and grenade_cd <= 0.0 and grenades > 0:
+	if not rolling and bool(cmd.get("grenade_released", false)) and grenade_cd <= 0.0 and grenades > 0:
 		want_grenade = true
 		grenade_cd = 0.8
 		throw_flash = 0.16
@@ -225,6 +285,49 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	if sprite != null:
 		sprite.flip_h = facing < 0.0
 	_play_clip(_pose_clip())
+
+
+func extinguish_fire() -> void:
+	## VF4 fire/burning hook. This WP only proves the roll calls it.
+	fire_extinguish_count += 1
+	burning = false
+
+
+func current_pose() -> String:
+	if sprite != null and sprite.animation != "":
+		return sprite.animation
+	return _pose_clip()
+
+
+func _try_start_roll(on_floor_now: bool, is_aiming: bool) -> void:
+	if dead:
+		last_roll_block = "dead"
+		return
+	if rolling:
+		last_roll_block = "rolling"
+		return
+	if not on_floor_now:
+		last_roll_block = "air"
+		return
+	if on_ladder:
+		last_roll_block = "ladder"
+		return
+	if is_aiming:
+		last_roll_block = "aiming"
+		return
+	if stamina + 0.0001 < stamina_roll_cost:
+		last_roll_block = "stamina"
+		return
+	stamina = maxf(0.0, stamina - stamina_roll_cost)
+	rolling = true
+	roll_time = roll_duration
+	invuln = maxf(invuln, roll_invuln)
+	roll_seq += 1
+	roll_started = true
+	sprinting = false
+	crouched = false
+	last_roll_block = ""
+	extinguish_fire()
 
 
 func take_damage(amount: float, knock: Vector2) -> void:
@@ -314,7 +417,10 @@ func _aim_from(cmd: Dictionary) -> Vector2:
 func _apply_shape() -> void:
 	if col_shape == null:
 		return
-	if crouched:
+	if rolling and roll_shape != null:
+		col_shape.shape = roll_shape
+		col_shape.position = roll_offset
+	elif crouched:
 		col_shape.shape = crouch_shape
 		col_shape.position = crouch_offset
 	else:
@@ -329,6 +435,8 @@ func _pose_clip() -> String:
 		return "throw"
 	if melee_flash > 0.0:
 		return "melee"
+	if rolling:
+		return "roll"
 	if aiming:
 		if aim_dir.y < -0.4:
 			return "aim_up"
@@ -372,6 +480,8 @@ func apply_runtime_row(row: Dictionary) -> void:
 	ammo = int(row.get("ammo", ammo))
 	facing = SimConstants.dequantize(int(row.get("facing", SimConstants.quantize(facing))))
 	crouched = int(row.get("crouched", 0)) != 0
+	rolling = int(row.get("rolling", 0)) != 0
+	sprinting = int(row.get("sprinting", 0)) != 0
 	if dead:
 		collision_layer = 0
 		health = 0.0
@@ -401,3 +511,14 @@ func apply_runtime_extra(extra: Dictionary) -> void:
 		on_ladder = bool(extra.get("on_ladder", false))
 	if extra.has("sprinting"):
 		sprinting = bool(extra.get("sprinting", false))
+	if extra.has("rolling"):
+		rolling = bool(extra.get("rolling", false))
+	if extra.has("roll_seq"):
+		roll_seq = int(extra.get("roll_seq", roll_seq))
+	if extra.has("roll_time"):
+		roll_time = SimConstants.dequantize(int(extra.get("roll_time", 0)))
+	if extra.has("fire_extinguish_count"):
+		fire_extinguish_count = int(extra.get("fire_extinguish_count", fire_extinguish_count))
+	if extra.has("burning"):
+		burning = bool(extra.get("burning", false))
+	_apply_shape()

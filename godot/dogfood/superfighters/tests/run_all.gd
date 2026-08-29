@@ -1,6 +1,7 @@
 extends SceneTree
 
 const STEP: float = 1.0 / 60.0
+const SprintCasesScript: GDScript = preload("res://tests/sprint_cases.gd")
 
 var _fails: PackedStringArray = PackedStringArray()
 var _loop: String = "unproven"
@@ -13,6 +14,7 @@ var _trace: String = "unproven"
 var _runtime: String = "unproven"
 var _input: String = "unproven"
 var _loco: String = "unproven"
+var _sprint: String = "unproven"
 
 
 func _initialize() -> void:
@@ -38,6 +40,7 @@ func _boot() -> void:
 	_test_runtime(app)
 	await _test_input_map(app)
 	await _test_locomotion(app)
+	await _test_sprint(app)
 	if _fails.is_empty():
 		_no_err = "proven"
 	_emit()
@@ -581,6 +584,37 @@ func _test_locomotion(app: App) -> void:
 		_loco = "proven"
 
 
+func _test_sprint(app: App) -> void:
+	var errors: PackedStringArray = await SprintCasesScript.run_all(app)
+	var i: int = 0
+	while i < errors.size():
+		_fail("SPRINT %s" % String(errors[i]))
+		i += 1
+	var tap: String = str(SprintCasesScript.outcome_tap.get("verdict", "unproven"))
+	var stamina: String = str(SprintCasesScript.outcome_stamina.get("verdict", "unproven"))
+	var roll: String = str(SprintCasesScript.outcome_roll.get("verdict", "unproven"))
+	var invuln: String = str(SprintCasesScript.outcome_invuln.get("verdict", "unproven"))
+	var dup: String = str(SprintCasesScript.outcome_dup.get("verdict", "unproven"))
+	var live: String = str(SprintCasesScript.outcome_live.get("verdict", "unproven"))
+	var replay: String = str(SprintCasesScript.outcome_replay.get("verdict", "unproven"))
+	if tap != "pass":
+		_fail("SPRINT TAP outcome is %s" % tap)
+	if stamina != "pass":
+		_fail("SPRINT STAMINA outcome is %s" % stamina)
+	if roll != "pass":
+		_fail("SPRINT ROLL outcome is %s" % roll)
+	if invuln != "pass":
+		_fail("SPRINT INVULN outcome is %s" % invuln)
+	if dup != "pass":
+		_fail("SPRINT DUP outcome is %s" % dup)
+	if live != "pass":
+		_fail("SPRINT LIVE outcome is %s" % live)
+	if replay != "match":
+		_fail("SPRINT REPLAY outcome is %s" % replay)
+	if _count_prefix("SPRINT ") == 0:
+		_sprint = "proven"
+
+
 func _emit() -> void:
 	print("HH_VF_PATH title→fight→win/lose→restart")
 	print(
@@ -610,6 +644,21 @@ func _emit() -> void:
 		str(LocomotionCases.outcome_camera.get("verdict", "unproven")),
 		_loco,
 	])
+	print(
+		"HH_VF_SPRINT TAP=%s STAMINA=%s ROLL=%s INVULN=%s DUP=%s LIVE=%s REPLAY=%s APPLY=%d/%d status=%s"
+		% [
+			str(SprintCasesScript.outcome_tap.get("verdict", "unproven")),
+			str(SprintCasesScript.outcome_stamina.get("verdict", "unproven")),
+			str(SprintCasesScript.outcome_roll.get("verdict", "unproven")),
+			str(SprintCasesScript.outcome_invuln.get("verdict", "unproven")),
+			str(SprintCasesScript.outcome_dup.get("verdict", "unproven")),
+			str(SprintCasesScript.outcome_live.get("verdict", "unproven")),
+			str(SprintCasesScript.outcome_replay.get("verdict", "unproven")),
+			SprintCasesScript.used_apply_frames_succeeded,
+			SprintCasesScript.used_apply_frames_attempted,
+			_sprint,
+		]
+	)
 	if _fails.is_empty():
 		print("PASS: Vault Fighters first playable")
 	else:
