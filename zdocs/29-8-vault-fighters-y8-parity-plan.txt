@@ -2,7 +2,7 @@ PLAN_SCOPE=godot/dogfood/superfighters
 PRODUCT_PLAN_AUTHORITY=1
 PARENT_PLATFORM_PLAN=zdocs/20-8-godot-agent-autopilot-plan.txt
 PARENT_PLATFORM_STATUS=OWNER_STOPPED_59_OF_60
-CURRENT_VALID_WP=VF4-WP1
+CURRENT_VALID_WP=VF4-WP2
 CORRECTION_GATE_VF2_WP2=CLEARED
 STATUS=ACTIVE
 PLAN_DATE=2026-08-29
@@ -23,14 +23,14 @@ một lần, tự làm, tự chạy, tự kiểm và tạo gói review; người
 | 1 | VF1 reference + contract | reference ledger, behavior spec, deterministic trace | VF0 | research/test | [x] 4/4 |
 | 2 | VF2 movement | chạy, nhảy, crouch, sprint, roll, dive, ladder, ledge | VF1 | input + physics | [x] 5/5 |
 | 3 | VF3 combat | melee/kick, hitbox, knockdown, disarm, aim/fire, grenade | VF2 | weapons + VFX | [x] 6/6 |
-| 4 | VF4 world interaction | props, glass, barrels, containers, doors/elevators, hazards | VF2 | map fixtures | [ ] 0/5 |
+| 4 | VF4 world interaction | props, glass, barrels, containers, doors/elevators, hazards | VF2 | map fixtures | [ ] 1/5 |
 | 5 | VF5 map parity | 6 functional arenas; original geometry/names/art | VF3,VF4 | one map per agent lane | [ ] 0/6 |
 | 6 | VF6 modes + AI | VS, local 2P, Stage, Survival, competent bots | VF3,VF5 | mode/UI/AI | [ ] 0/5 |
 | 7 | VF7 presentation | original skins, animation, audio, HUD, menu, accessibility | VF5,VF6 | art/audio/UI | [ ] 0/4 |
 | 8 | VF8 agent autonomy | brief→edit→play→observe→repair→checkpoint, no manual F6 | VF0..VF7 | host/bridge | [ ] 0/4 |
 | 9 | VF9 verification | trace replay, E2E, differential rubric, soak, leak proof | all above | QA | [ ] 0/5 |
 | 10 | VF10 package | Windows build, offline run, provenance/license, review bundle | VF9 | release | [ ] 0/3 |
-|   | **Tổng** | **50 WP nhỏ; chỉ coordinator tick sau DoD** |  |  | **18/50** |
+|   | **Tổng** | **50 WP nhỏ; chỉ coordinator tick sau DoD** |  |  | **19/50** |
 
 Gate nội bộ:
 
@@ -1353,7 +1353,7 @@ VF3-WP6 — Critical/chaos tuning and combat balance harness                    
 9. WORK PACKAGE CHI TIẾT — VF4 WORLD INTERACTION VÀ HAZARDS
 ================================================================================
 
-VF4-WP1 — World/prop schema và collision ownership                                    [ ]
+VF4-WP1 — World/prop schema và collision ownership                                    [x]
   Phụ thuộc: VF1-WP2. Files: `src/world/`, prop resources, test fixtures.
   Làm: typed `PropSpec` cho static, dynamic, one-way, breakable, pickup,
   explosive; layer/mask contract; spawn/despawn ownership; no direct mutation
@@ -1361,6 +1361,65 @@ VF4-WP1 — World/prop schema và collision ownership                           
   Verify: schema rejects missing collision/visual; prop snapshot/hash stable;
   no orphan after restart; editor/runtime paths remain inside product root.
   DoD: map authoring không cần hard-code từng node trong GameSession.
+  LOG:
+    LOG 2026-08-29 22:47 Asia/Saigon — agent=coordinator
+      Base: 20567be own props via catalog schema so maps do
+        not hard-code GameSession nodes on VF3-WP6 tick
+        7747ad2.
+      Files/leases: src/world/, data/world/,
+        data/sim/collision_layers.json, data/sim/schema.json,
+        src/game_session.gd, src/maps.gd,
+        src/sim/sim_constants.gd, src/sim/sim_replay.gd,
+        src/runtime/runtime_api.gd,
+        tests/world_cases.gd, tests/run_world.gd,
+        tests/check_world.py, tests/pack_world_evidence.py,
+        tests/traces/world/, tests/run_all.gd,
+        tests/traces/README.md, docs/world.md,
+        docs/reference-ledger.md, KNOWN_ISSUES.md,
+        PROJECT_BRIEF.md,
+        docs/evidence/VF4WP1-20260829-ASIA-SAIGON-01/
+        (V-A18 pack; official leftover-0; logs +
+        screens/world_1280x720.png).
+      Verify: leftover-0; run VF4WP1-20260829-ASIA-SAIGON-01
+        source hash
+        c6632f0bb0e297ad343d99ed7323f6f1b8f6d1156bcd94aeceee77ceabc1f1cd
+        SCHEMA=pass LAYERS=pass SPAWN=pass HASH=pass
+        ORPHAN=pass PATH=pass PRESENT=pass AUTHOR=pass
+        DATA=pass LIVE=pass REPLAY=match from structured
+        outcomes; APPLY 116/116
+        python godot/dogfood/superfighters/tests/check_world.py
+          EXIT 0
+        godot --headless --path godot/dogfood/superfighters
+          --script res://tests/run_world.gd EXIT 0
+        godot --path godot/dogfood/superfighters
+          --script res://tests/run_world.gd EXIT 0
+        leftover Godot on product --path = 0
+        python tests/bootstrap/test_authoritative_plan.py EXIT 0
+        python tests/bootstrap/test_vault_fighters_plan.py EXIT 0
+          PASS: 50 unique VF WPs; no-skip; next=VF4-WP1 (pre-tick);
+          ticked=VF0-WP1,VF0-WP2,VF0-WP3,VF1-WP1,VF1-WP2,VF1-WP3,
+          VF1-WP4,VF2-WP1,VF2-WP2,VF2-WP3,VF2-WP4,VF2-WP5,VF3-WP1,
+          VF3-WP2,VF3-WP3,VF3-WP4,VF3-WP5,VF3-WP6;
+          parent 20-8 frozen 59/60 R9-WP4
+        post-tick expected next=VF4-WP2
+      Honesty:
+        60 Hz is V-A14 / ledger:RL-SIM-FIXED-60 assumption,
+        not observed Y8 clock. Hold-to-aim assumption.
+        RL-WORLD-* / RL-PROP-BREAK / RL-PROP-EXPL stay
+        assumption, not Y8 observed.
+        RL-NADE-PROP deferred. Live maps still paint c/b
+        as tiles. Throw waits VF4-WP2.
+        Y8 roll/dive observation stays
+        ledger:RL-MOVE-ROLL-DIVE unavailable.
+        Not Y8 parity. Not V0.
+      Critic: leftover-0. Both critics TICK=yes
+        (II c988dc84 leftover-0 hash c6632f0b… APPLY 116/116;
+        HH bfef88e6 leftover-0).
+      Gaps: residual nits OK: honesty only
+        (assumption not Y8 observed; live c/b still tiles;
+        throw deferred WP2).
+        Parent 20-8 unchanged: R9-WP4 [ ]; 59/60; G6 [ ].
+      Commit: (this tick)
 
 VF4-WP2 — Breakable glass/wood và throwable/shootable objects                          [ ]
   Phụ thuộc: VF4-WP1,VF3-WP4. Files: prop scripts/assets/tests.
@@ -1854,7 +1913,7 @@ vào `KNOWN_ISSUES.md`; không đổi acceptance để làm cho pass.
 21. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Đọc `AGENTS.md`, sau đó đọc bảng đầu file này. WP đầu tiên chưa tick là **VF4-WP1**.
+Đọc `AGENTS.md`, sau đó đọc bảng đầu file này. WP đầu tiên chưa tick là **VF4-WP2**.
 
 Không làm R9-WP4/G6/GX; không mở Rust engine; không đụng Kho Bí Ẩn/Hoan Hao;
 không dùng Snake làm demo; không tải/rip Y8. Chỉ khi VF0-WP1 và VF0-WP2 đã có
@@ -2085,6 +2144,19 @@ dùng chỉ xem và review.
   Product af03b69. Gate remains CLEARED. Parent 20-8
   unchanged (R9-WP4 [ ], 59/60, G6 [ ]). VF3-WP6 ticked;
   CURRENT_VALID_WP=VF4-WP1; V0 not ticked. VF4-WP1 remains [ ].
+- COORDINATOR CLOSEOUT VF4-WP1 (2026-08-29 22:47 Asia/Saigon): leftover-0;
+  critics II c988dc84 + HH bfef88e6 TICK=yes; run
+  VF4WP1-20260829-ASIA-SAIGON-01; source
+  c6632f0bb0e297ad343d99ed7323f6f1b8f6d1156bcd94aeceee77ceabc1f1cd;
+  APPLY 116/116; honesty assumption not Y8 observed.
+  Residual nits OK: honesty only (RL-WORLD-* /
+  RL-PROP-BREAK / RL-PROP-EXPL assumption, not Y8
+  observed; live c/b still tiles; throw deferred WP2;
+  60 Hz / hold-to-aim assumption; Y8 roll/dive
+  unavailable).
+  Product 20567be. Gate remains CLEARED. Parent 20-8
+  unchanged (R9-WP4 [ ], 59/60, G6 [ ]). VF4-WP1 ticked;
+  CURRENT_VALID_WP=VF4-WP2; V0 not ticked. VF4-WP2 remains [ ].
 
 ================================================================================
 HẾT PLAN — 29-8-2026
