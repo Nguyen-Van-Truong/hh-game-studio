@@ -2,7 +2,7 @@ PLAN_SCOPE=godot/dogfood/superfighters
 PRODUCT_PLAN_AUTHORITY=1
 PARENT_PLATFORM_PLAN=zdocs/20-8-godot-agent-autopilot-plan.txt
 PARENT_PLATFORM_STATUS=OWNER_STOPPED_59_OF_60
-CURRENT_VALID_WP=VF0-WP3
+CURRENT_VALID_WP=VF1-WP1
 STATUS=ACTIVE
 PLAN_DATE=2026-08-29
 TIMEZONE=Asia/Saigon
@@ -18,7 +18,7 @@ một lần, tự làm, tự chạy, tự kiểm và tạo gói review; người
 
 | Thứ tự | Nhóm | Kết quả bắt buộc | Phụ thuộc | Chạy song song | Trạng thái |
 |---:|---|---|---|---|---|
-| 0 | VF0 nền và routing | scope, provenance, test sạch, không lẫn plan | none | không | [ ] 2/3 |
+| 0 | VF0 nền và routing | scope, provenance, test sạch, không lẫn plan | none | không | [x] 3/3 |
 | 1 | VF1 reference + contract | reference ledger, behavior spec, deterministic trace | VF0 | research/test | [ ] 0/4 |
 | 2 | VF2 movement | chạy, nhảy, crouch, sprint, roll, dive, ladder, ledge | VF1 | input + physics | [ ] 0/5 |
 | 3 | VF3 combat | melee/kick, hitbox, knockdown, disarm, aim/fire, grenade | VF2 | weapons + VFX | [ ] 0/6 |
@@ -29,7 +29,7 @@ một lần, tự làm, tự chạy, tự kiểm và tạo gói review; người
 | 8 | VF8 agent autonomy | brief→edit→play→observe→repair→checkpoint, no manual F6 | VF0..VF7 | host/bridge | [ ] 0/4 |
 | 9 | VF9 verification | trace replay, E2E, differential rubric, soak, leak proof | all above | QA | [ ] 0/5 |
 | 10 | VF10 package | Windows build, offline run, provenance/license, review bundle | VF9 | release | [ ] 0/3 |
-|   | **Tổng** | **50 WP nhỏ; chỉ coordinator tick sau DoD** |  |  | **2/50** |
+|   | **Tổng** | **50 WP nhỏ; chỉ coordinator tick sau DoD** |  |  | **3/50** |
 
 Gate nội bộ:
 
@@ -351,7 +351,7 @@ VF0-WP2 — Headless teardown và resource hygiene                           [x]
         Parent 20-8 unchanged: R9-WP4 [ ]; 59/60; G6 [ ].
       Commit: (this tick)
 
-VF0-WP3 — Scoped plan routing và safe commit boundary                         [ ]
+VF0-WP3 — Scoped plan routing và safe commit boundary                         [x]
   Phụ thuộc: VF0-WP1. Owner: governance. Files: `AGENTS.md`, `docs/DECISIONS.md`,
   this plan, optional plan-scope checker.
   Làm:
@@ -365,6 +365,35 @@ VF0-WP3 — Scoped plan routing và safe commit boundary                        
   từ một agent test không chọn Snake/R9 làm WP tiếp theo.
   DoD: không còn câu chỉ dẫn mâu thuẫn “đừng start Superfighter” trong đường
   product hiện hành; lịch sử cũ vẫn nguyên vẹn.
+  LOG:
+    LOG 2026-08-29 10:20 Asia/Saigon — agent=coordinator
+      Base: 0ffc4e8 route product agents to 29-8 plan on VF0-WP2 freeze
+        708f92f / tick ac157b1.
+      Files/leases: AGENTS.md, docs/DECISIONS.md,
+        tests/bootstrap/test_vault_fighters_plan.py,
+        tests/bootstrap/README.md
+      Verify: leftover checkers PASS
+        python tests/bootstrap/test_authoritative_plan.py EXIT 0
+          PASS: AUTHORITATIVE_PLAN singleton OK
+        python tests/bootstrap/test_vault_fighters_plan.py EXIT 0
+          PASS: 50 unique VF WPs; no-skip; next=VF0-WP3 (pre-tick);
+          ticked=VF0-WP1,VF0-WP2; parent 20-8 frozen 59/60 R9-WP4
+        post-tick expected next=VF1-WP1
+      Honesty:
+        Routing only; not V0; not Y8 parity; not VF1.
+        Historical 20-8 “do not start Superfighter folder” remains
+        parent closeout history and does not govern this product path.
+      Critic: II 2644fc22 TICK yes (both checkers PASS, next=VF0-WP3);
+        HH 7e8a3904 officially errored (usage limit) — not TICK;
+        coordinator-HH re-ran hunts TICK yes (checkers PASS, AGENTS
+        routes to 29-8, no-skip, parent freeze, DECISIONS append-only
+        GODOT-VF-PLAN-2026-08-29, simulated next ≠ Snake/R9-WP4)
+      Gaps: residual nits OK:
+        extra dirty R9 docs/studio_bundle leftover not in this WP;
+        CI.yml still cargo-only (bootstrap listed in tests/bootstrap/README.md);
+        official authoritative walker is slow on .hh-agent evidence tree.
+        Parent 20-8 unchanged: R9-WP4 [ ]; 59/60; G6 [ ].
+      Commit: (this tick)
 
 ================================================================================
 6. WORK PACKAGE CHI TIẾT — VF1 REFERENCE VÀ SIMULATION CONTRACT
@@ -1023,7 +1052,7 @@ vào `KNOWN_ISSUES.md`; không đổi acceptance để làm cho pass.
 21. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Đọc `AGENTS.md`, sau đó đọc bảng đầu file này. WP đầu tiên chưa tick là **VF0-WP3**.
+Đọc `AGENTS.md`, sau đó đọc bảng đầu file này. WP đầu tiên chưa tick là **VF1-WP1**.
 
 Không làm R9-WP4/G6/GX; không mở Rust engine; không đụng Kho Bí Ẩn/Hoan Hao;
 không dùng Snake làm demo; không tải/rip Y8. Chỉ khi VF0-WP1 và VF0-WP2 đã có
@@ -1066,6 +1095,12 @@ dùng chỉ xem và review.
   b53758c7… vs official_headless.banners.txt 503aadf3…. Mute is
   test_driven-only. Product 708f92f. Parent 20-8 unchanged (R9-WP4 [ ],
   59/60, G6 [ ]). VF0-WP2 ticked; VF0-WP3 still [ ]; V0 not ticked.
+- COORDINATOR CLOSEOUT VF0-WP3 (2026-08-29 10:20 Asia/Saigon): leftover
+  checkers PASS (authoritative singleton EXIT 0; VF routing EXIT 0,
+  50 unique WPs, no-skip, next was VF0-WP3). Critics TICK yes (II 2644fc22;
+  HH coordinator re-run after 7e8a3904 usage-limit error). Product 0ffc4e8.
+  Parent 20-8 unchanged (R9-WP4 [ ], 59/60, G6 [ ]). VF0-WP3 ticked;
+  CURRENT_VALID_WP=VF1-WP1; V0 not ticked.
 
 ================================================================================
 HẾT PLAN — 29-8-2026
