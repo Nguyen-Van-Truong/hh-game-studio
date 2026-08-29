@@ -9,6 +9,7 @@ var test_driven: bool = false
 var mode: String = "vs1"
 var map_id: String = "rooftops"
 var stage_index: int = 0
+var runtime: RuntimeApi = RuntimeApi.new()
 
 
 func _enter_tree() -> void:
@@ -18,6 +19,7 @@ func _enter_tree() -> void:
 		return
 	InputActions.install()
 	seed(1)
+	runtime.bind(self, OS.get_environment("HH_VF_RUNTIME_TOKEN"))
 	title = TitleScreen.new()
 	title.vs_one_pressed.connect(_on_vs_one)
 	title.vs_two_pressed.connect(_on_vs_two)
@@ -42,7 +44,7 @@ func _input(event: InputEvent) -> void:
 	var tree: SceneTree = get_tree()
 	if tree == null:
 		return
-	session.set_paused(not tree.paused)
+	session.set_paused(not tree.paused, RuntimeConstants.REASON_PLAYER)
 	get_viewport().set_input_as_handled()
 
 

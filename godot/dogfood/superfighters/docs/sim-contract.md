@@ -71,3 +71,9 @@ actors.
 
 `7 + stage * 13` — first-playable weapon-spawn RNG. Not an observed Y8
 table (ledger:RL-ITEM-RANDOM-SPAWN / ledger:RL-MODE-CHAOS).
+
+## Runtime observe (VF1-WP4)
+
+Agents read `RuntimeApi` (`docs/runtime-diagnostics.md`,
+ledger:RL-RUNTIME-OBSERVE). That WP does not change this snapshot
+hash payload. 60 Hz stays ledger:RL-SIM-FIXED-60.

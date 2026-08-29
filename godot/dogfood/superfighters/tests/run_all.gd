@@ -10,6 +10,7 @@ var _hygiene: String = "unproven"
 var _no_err: String = "unproven"
 var _sim: String = "unproven"
 var _trace: String = "unproven"
+var _runtime: String = "unproven"
 
 
 func _initialize() -> void:
@@ -32,6 +33,7 @@ func _boot() -> void:
 	_test_session_hygiene(app)
 	_test_sim_contract(app)
 	await _test_golden_traces(app)
+	_test_runtime(app)
 	if _fails.is_empty():
 		_no_err = "proven"
 	_emit()
@@ -531,6 +533,16 @@ func _test_golden_traces(app: App) -> void:
 		_trace = "proven"
 
 
+func _test_runtime(app: App) -> void:
+	var errors: PackedStringArray = RuntimeCases.run_all(app)
+	var i: int = 0
+	while i < errors.size():
+		_fail("RUNTIME %s" % String(errors[i]))
+		i += 1
+	if _count_prefix("RUNTIME ") == 0:
+		_runtime = "proven"
+
+
 func _emit() -> void:
 	print("HH_VF_PATH title→fight→win/lose→restart")
 	print(
@@ -545,6 +557,12 @@ func _emit() -> void:
 	print("HH_VF_TRACE MATCH=%s status=%s" % [
 		"1" if _trace == "proven" else "0",
 		_trace,
+	])
+	print("HH_VF_RUNTIME PAUSE_SNAP=%s RESTORE_HASH=%s AUTH=%s status=%s" % [
+		"stable" if _runtime == "proven" else "unproven",
+		"match" if _runtime == "proven" else "unproven",
+		"reject" if _runtime == "proven" else "unproven",
+		_runtime,
 	])
 	if _fails.is_empty():
 		print("PASS: Vault Fighters first playable")

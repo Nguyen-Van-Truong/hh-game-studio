@@ -33,6 +33,7 @@ var sim_seed: int = 0
 var last_reject: PackedStringArray = PackedStringArray()
 var ledger: SimEventLedger = SimEventLedger.new()
 var recorder: SimRecorder = null
+var pause_reason: String = ""
 
 
 func setup(p_mode: String, p_map: String, p_stage: int) -> void:
@@ -45,6 +46,7 @@ func setup(p_mode: String, p_map: String, p_stage: int) -> void:
 	sim_seed = SimSeed.for_match(p_mode, p_map, p_stage)
 	rng.seed = sim_seed
 	clock.reset()
+	pause_reason = ""
 	last_reject = PackedStringArray()
 	ledger = SimEventLedger.new()
 	arena = Arena.new()
@@ -178,13 +180,18 @@ func _step_one_tick(cmds: Array[Dictionary]) -> void:
 	_fit_camera()
 
 
-func set_paused(active: bool) -> void:
+func set_paused(active: bool, reason: String = "") -> void:
 	if outcome != "play" and active:
 		return
 	if active:
 		clock.pause()
+		if reason != "":
+			pause_reason = reason
+		elif pause_reason == "":
+			pause_reason = RuntimeConstants.REASON_PLAYER
 	else:
 		clock.resume()
+		pause_reason = ""
 	var tree: SceneTree = get_tree()
 	if tree == null:
 		return
@@ -205,6 +212,121 @@ func snapshot() -> Dictionary:
 
 func snapshot_hash() -> String:
 	return SimSnapshot.stable_hash(snapshot())
+
+
+func fighter_at_slot(slot: int) -> Fighter:
+	var i: int = 0
+	while i < fighters.size():
+		var f: Fighter = fighters[i]
+		if f != null and f.slot == slot:
+			return f
+		i += 1
+	return null
+
+
+func replace_pickups(rows: Array) -> void:
+	var i: int = 0
+	while i < pickups.size():
+		_free_node(pickups[i])
+		i += 1
+	pickups.clear()
+	i = 0
+	while i < rows.size():
+		var row: Dictionary = rows[i] as Dictionary
+		var at: Vector2 = Vector2(
+			SimConstants.dequantize(int(row.get("x", 0))),
+			SimConstants.dequantize(int(row.get("y", 0)))
+		)
+		var drop: Pickup = _add_pickup(str(row.get("id", "pistol")), at, bool(row.get("from_world", true)))
+		drop.global_position = at
+		if row.has("home_x") or row.has("home_y"):
+			drop.home = Vector2(
+				SimConstants.dequantize(int(row.get("home_x", 0))),
+				SimConstants.dequantize(int(row.get("home_y", 0)))
+			)
+		i += 1
+
+
+func replace_bullets(rows: Array) -> void:
+	var i: int = 0
+	while i < bullets.size():
+		_free_node(bullets[i])
+		i += 1
+	bullets.clear()
+	i = 0
+	while i < rows.size():
+		var row: Dictionary = rows[i] as Dictionary
+		var shot: Bullet = Bullet.new()
+		var at: Vector2 = Vector2(
+			SimConstants.dequantize(int(row.get("x", 0))),
+			SimConstants.dequantize(int(row.get("y", 0)))
+		)
+		var vel: Vector2 = Vector2(
+			SimConstants.dequantize(int(row.get("vx", 0))),
+			SimConstants.dequantize(int(row.get("vy", 0)))
+		)
+		shot.setup(
+			at,
+			Vector2.RIGHT,
+			1.0,
+			SimConstants.dequantize(int(row.get("damage", SimConstants.quantize(10.0)))),
+			int(row.get("owner", -1)),
+			int(row.get("team", -1))
+		)
+		add_child(shot)
+		shot.global_position = at
+		shot.velocity = vel
+		if row.has("life"):
+			shot.life = SimConstants.dequantize(int(row.get("life", 0)))
+		bullets.append(shot)
+		i += 1
+
+
+func replace_grenades(rows: Array) -> void:
+	var i: int = 0
+	while i < grenades.size():
+		_free_node(grenades[i])
+		i += 1
+	grenades.clear()
+	i = 0
+	while i < rows.size():
+		var row: Dictionary = rows[i] as Dictionary
+		var nade: ThrownGrenade = ThrownGrenade.new()
+		var at: Vector2 = Vector2(
+			SimConstants.dequantize(int(row.get("x", 0))),
+			SimConstants.dequantize(int(row.get("y", 0)))
+		)
+		nade.setup(at, Vector2.RIGHT, int(row.get("owner", -1)), int(row.get("team", -1)))
+		add_child(nade)
+		nade.global_position = at
+		nade.velocity = Vector2(
+			SimConstants.dequantize(int(row.get("vx", 0))),
+			SimConstants.dequantize(int(row.get("vy", 0)))
+		)
+		if row.has("fuse"):
+			nade.fuse = SimConstants.dequantize(int(row.get("fuse", 0)))
+		if row.has("damage"):
+			nade.damage = SimConstants.dequantize(int(row.get("damage", 0)))
+		if row.has("radius"):
+			nade.radius = SimConstants.dequantize(int(row.get("radius", 0)))
+		grenades.append(nade)
+		i += 1
+
+
+func replace_respawns(rows: Array) -> void:
+	respawns.clear()
+	var i: int = 0
+	while i < rows.size():
+		var row: Dictionary = rows[i] as Dictionary
+		respawns.append({
+			"id": str(row.get("id", "pistol")),
+			"pos": Vector2(
+				SimConstants.dequantize(int(row.get("x", 0))),
+				SimConstants.dequantize(int(row.get("y", 0)))
+			),
+			"t": SimConstants.dequantize(int(row.get("t", 0))),
+		})
+		i += 1
 
 
 func player1() -> Fighter:
@@ -573,6 +695,7 @@ func shutdown() -> void:
 	grenades.clear()
 	if clock != null:
 		clock.reset()
+	pause_reason = ""
 	last_reject = PackedStringArray()
 	if ledger != null:
 		ledger.reset()

@@ -15,6 +15,9 @@ Kill leftover Godot first. Sequential `--path` only.
 %LOCALAPPDATA%\HHGodotAgent\tooling\godot-4.7.1-stable\bin\Godot_v4.7.1-stable_win64.exe --path godot/dogfood/superfighters
 ```
 
+Runtime observe/checkpoint (structured, not UI-pixel guess):
+`docs/runtime-diagnostics.md`.
+
 Headless loop test:
 
 ```

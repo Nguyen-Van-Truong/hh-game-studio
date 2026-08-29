@@ -1,0 +1,66 @@
+{
+  "schema": "vf.runtime.bridge.v1",
+  "schema_version": 1,
+  "title": "Vault Fighters",
+  "transport": "in-process",
+  "note": "Product request/response schema. VF8-WP1 owns the live editor bridge/MCP adapter. This WP does not open a socket.",
+  "auth": {
+    "type": "shared-token",
+    "loopback_only": true,
+    "echo_token": false,
+    "fail_closed_if_empty": true
+  },
+  "command_id": {
+    "required": true,
+    "retry": "idempotent-for-mutating-ops"
+  },
+  "ops": {
+    "observe": {
+      "permission": "observe",
+      "mutate": false,
+      "precondition": "none",
+      "postcondition": "same tick/hash as before call"
+    },
+    "checkpoint.create": {
+      "permission": "checkpoint",
+      "mutate": false,
+      "precondition": "session exists",
+      "postcondition": "store has id; game hash unchanged"
+    },
+    "checkpoint.restore": {
+      "permission": "checkpoint",
+      "mutate": true,
+      "precondition": "known checkpoint_id; authorized token",
+      "postcondition": "snapshot_hash equals stored hash"
+    },
+    "pause": {
+      "permission": "control",
+      "mutate": true,
+      "precondition": "session outcome=play",
+      "postcondition": "paused=true; snapshot_hash unchanged"
+    },
+    "resume": {
+      "permission": "control",
+      "mutate": true,
+      "precondition": "session exists",
+      "postcondition": "paused=false; tick unchanged"
+    }
+  },
+  "error_codes": ["malformed", "unauthorized", "not_found", "unsupported"],
+  "redact_keys": [
+    "token",
+    "secret",
+    "password",
+    "authorization",
+    "api_key",
+    "access_token",
+    "session_token",
+    "hh_token"
+  ],
+  "path_rules": {
+    "client_filesystem_path": false,
+    "checkpoint_id_charset": "A-Za-z0-9._-",
+    "checkpoint_id_max": 64,
+    "store": "user://vf_runtime/"
+  }
+}

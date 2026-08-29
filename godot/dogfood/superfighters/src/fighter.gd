@@ -335,3 +335,54 @@ func _pose_clip() -> String:
 
 func _play_clip(clip: String) -> void:
 	Visuals.play_fighter(sprite, clip)
+
+
+func apply_runtime_row(row: Dictionary) -> void:
+	global_position = Vector2(
+		SimConstants.dequantize(int(row.get("x", 0))),
+		SimConstants.dequantize(int(row.get("y", 0)))
+	)
+	velocity = Vector2(
+		SimConstants.dequantize(int(row.get("vx", 0))),
+		SimConstants.dequantize(int(row.get("vy", 0)))
+	)
+	health = SimConstants.dequantize(int(row.get("hp", 0)))
+	stamina = SimConstants.dequantize(int(row.get("stamina", 0)))
+	dead = int(row.get("dead", 0)) != 0
+	death_cause = str(row.get("death_cause", ""))
+	weapon_id = str(row.get("weapon", weapon_id))
+	gun_id = str(row.get("gun", gun_id))
+	melee_id = str(row.get("melee", melee_id))
+	grenades = int(row.get("nades", grenades))
+	ammo = int(row.get("ammo", ammo))
+	facing = SimConstants.dequantize(int(row.get("facing", SimConstants.quantize(facing))))
+	crouched = int(row.get("crouched", 0)) != 0
+	if dead:
+		collision_layer = 0
+		health = 0.0
+	else:
+		collision_layer = Maps.COL_FIGHTER
+	_apply_shape()
+
+
+func apply_runtime_extra(extra: Dictionary) -> void:
+	if extra.has("is_bot"):
+		is_bot = bool(extra.get("is_bot", is_bot))
+		is_human = not is_bot
+	if extra.has("invuln"):
+		invuln = SimConstants.dequantize(int(extra.get("invuln", 0)))
+	if extra.has("melee_cd"):
+		melee_cd = SimConstants.dequantize(int(extra.get("melee_cd", 0)))
+	if extra.has("fire_cd"):
+		fire_cd = SimConstants.dequantize(int(extra.get("fire_cd", 0)))
+	if extra.has("grenade_cd"):
+		grenade_cd = SimConstants.dequantize(int(extra.get("grenade_cd", 0)))
+	if extra.has("aim_x") or extra.has("aim_y"):
+		aim_dir = Vector2(
+			SimConstants.dequantize(int(extra.get("aim_x", 0))),
+			SimConstants.dequantize(int(extra.get("aim_y", 0)))
+		)
+	if extra.has("on_ladder"):
+		on_ladder = bool(extra.get("on_ladder", false))
+	if extra.has("sprinting"):
+		sprinting = bool(extra.get("sprinting", false))

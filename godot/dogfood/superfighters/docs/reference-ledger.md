@@ -254,3 +254,16 @@ recorded and replayed. Sidecar: `docs/trace-harness.md` and
 | ID | Topic | Class | Conf. | Source | When | Behavior to reproduce | Tuning-only | Notes |
 |---|---|---|---|---|---|---|---|---|
 | RL-SIM-TRACE-REPLAY | Official InputFrame record/replay | `assumption` | none | V-A14 + VF1-WP2 contract | 2026-08-29 | Same seed+frames → same snapshot/event hashes twice; one key change fails; official forbids teleport/force_kill | snapshot_every=15 | Not Y8 parity. Clock stays RL-SIM-FIXED-60. Hold-to-aim stays RL-CTRL-HOLD-AIM. Roll/dive stay RL-MOVE-ROLL-DIVE. |
+
+---
+
+## VF1-WP4 runtime observe (not a play observation)
+
+Dated 2026-08-29 Asia/Saigon. No in-game Y8 play. No HTML5/Flash
+package. `src/runtime/` is a **product** observe/checkpoint API so an
+agent can read structured state. Sidecar: `docs/runtime-diagnostics.md`
+and `docs/evidence/VF1WP4-20260829-ASIA-SAIGON-01/`.
+
+| ID | Topic | Class | Conf. | Source | When | Behavior to reproduce | Tuning-only | Notes |
+|---|---|---|---|---|---|---|---|---|
+| RL-RUNTIME-OBSERVE | Structured observe + checkpoint | `assumption` | none | V-A8 / V-A10 / VF1-WP2 snapshot | 2026-08-29 | observe is read-only; pause keeps snapshot hash; restore hash matches capture; unauthorized/malformed do not mutate | — | Not Y8 parity. Clock stays RL-SIM-FIXED-60. Hold-to-aim stays RL-CTRL-HOLD-AIM. Roll/dive stay RL-MOVE-ROLL-DIVE. Prop events empty in this slice. |

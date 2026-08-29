@@ -22,3 +22,8 @@ First playable slice. Not G6. Not 60/60.
   not hold streams at process exit (VF0-WP2). Normal play
   (`test_driven=false`) still starts music and SFX; `shutdown()` stops
   players, clears streams, and restores the Music bus before free.
+- Runtime observe/checkpoint (`src/runtime/`, VF1-WP4) is an in-process
+  API, not the VF8 editor bridge. Prop event channel is empty because
+  this slice has no interactive barrels/glass. 60 Hz remains
+  ledger:RL-SIM-FIXED-60 (`assumption`). Hold-to-aim / roll are still
+  not observed.

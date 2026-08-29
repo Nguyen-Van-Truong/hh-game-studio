@@ -25,6 +25,11 @@
     "official_forbids": ["teleport", "force_kill"],
     "snapshot_every_default": 15
   },
+  "runtime": {
+    "schema": "vf.runtime.v1",
+    "path": "res://data/runtime/schema.json",
+    "bridge": "res://data/runtime/bridge.json"
+  },
   "honesty": {
     "hold_to_aim": "RL-CTRL-HOLD-AIM assumption, not observed",
     "roll_dive": "RL-MOVE-ROLL-DIVE unavailable",

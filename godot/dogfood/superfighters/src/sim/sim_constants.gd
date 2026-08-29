@@ -26,10 +26,16 @@ const EVENT_ORDER_PATH: String = "res://data/sim/event_order.json"
 const TRACE_SCHEMA_PATH: String = "res://data/sim/trace.json"
 const OFFICIAL_TRACE_DIR: String = "res://tests/traces/official"
 const FIXTURE_TRACE_DIR: String = "res://tests/traces/fixture"
+const RUNTIME_SCHEMA_PATH: String = "res://data/runtime/schema.json"
+const RUNTIME_BRIDGE_PATH: String = "res://data/runtime/bridge.json"
 
 
 static func quantize(value: float) -> int:
 	return int(round(value * HASH_SCALE))
+
+
+static func dequantize(value: int) -> float:
+	return float(value) / HASH_SCALE
 
 
 static func load_json(path: String) -> Dictionary:

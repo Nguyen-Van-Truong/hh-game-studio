@@ -1,0 +1,36 @@
+{
+  "schema": "vf.runtime.v1",
+  "schema_version": 1,
+  "title": "Vault Fighters",
+  "tick_hz": 60,
+  "y8_tick_rate_claimed": false,
+  "ledger_clock": "RL-SIM-FIXED-60",
+  "ledger_observe": "RL-RUNTIME-OBSERVE",
+  "request": {
+    "id": "vf.runtime.request.v1",
+    "fields": ["schema", "schema_version", "command_id", "op", "auth", "payload"]
+  },
+  "response": {
+    "id": "vf.runtime.response.v1",
+    "echo_token": false
+  },
+  "observe": {
+    "id": "vf.runtime.observe.v1",
+    "mutate": false,
+    "fields": ["seed", "map_id", "mode", "tick", "paused", "pause_reason", "snapshot", "events"]
+  },
+  "checkpoint": {
+    "id": "vf.runtime.checkpoint.v1",
+    "create_mutates_game": false,
+    "restore_mutates_game": true
+  },
+  "event_channels": ["actor", "weapon", "prop"],
+  "pause_reasons": ["", "player", "agent"],
+  "honesty": {
+    "hold_to_aim": "RL-CTRL-HOLD-AIM assumption, not observed",
+    "roll_dive": "RL-MOVE-ROLL-DIVE unavailable",
+    "tick_hz": "RL-SIM-FIXED-60 assumption, not observed Y8 clock",
+    "prop_events": "no interactive props in first-playable slice",
+    "y8_parity": false
+  }
+}
