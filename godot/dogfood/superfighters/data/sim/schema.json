@@ -19,6 +19,12 @@
     "id": "vf.sim.snapshot.v1",
     "mutate": false
   },
+  "trace": {
+    "id": "vf.sim.trace.v1",
+    "ledger_id": "vf.sim.event_ledger.v1",
+    "official_forbids": ["teleport", "force_kill"],
+    "snapshot_every_default": 15
+  },
   "honesty": {
     "hold_to_aim": "RL-CTRL-HOLD-AIM assumption, not observed",
     "roll_dive": "RL-MOVE-ROLL-DIVE unavailable",

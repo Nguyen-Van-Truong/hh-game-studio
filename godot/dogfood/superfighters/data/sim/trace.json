@@ -1,0 +1,20 @@
+{
+  "schema": "vf.sim.trace.v1",
+  "schema_version": 1,
+  "title": "Vault Fighters",
+  "tick_hz": 60,
+  "snapshot_every_default": 15,
+  "ledger_id": "vf.sim.event_ledger.v1",
+  "y8_tick_rate_claimed": false,
+  "y8_parity_claimed": false,
+  "ledger_clock": "RL-SIM-FIXED-60",
+  "kinds": ["official", "fixture"],
+  "official_forbids": ["teleport", "force_kill"],
+  "record_sources": ["live_input", "scripted_input_frames"],
+  "replay_path": "GameSession.apply_frames(InputFrame)",
+  "honesty": {
+    "clock": "RL-SIM-FIXED-60 assumption, not observed Y8 tick rate",
+    "hold_to_aim": "RL-CTRL-HOLD-AIM assumption, not observed",
+    "roll_dive": "RL-MOVE-ROLL-DIVE unavailable"
+  }
+}

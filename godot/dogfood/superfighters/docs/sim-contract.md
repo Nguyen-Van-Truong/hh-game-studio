@@ -12,8 +12,9 @@ Does **not** claim Y8 parity, V0–V6, R9-WP4, G6, GX, or 60/60.
 - Gameplay steps at fixed **60 Hz** through an accumulator
 - `snapshot()` / `snapshot_hash()` are read-only (no state mutate)
 
-Replay traces themselves are **VF1-WP3**. This file is the contract those
-traces must obey.
+Replay traces are **VF1-WP3** (`tests/traces/`, `SimReplay`). Official
+MATCH uses typed `InputFrame` + `apply_frames`, not cmd-dict
+`step_fixed`. This file is the clock/schema those traces obey.
 
 ## Clock (ledger:RL-SIM-FIXED-60)
 

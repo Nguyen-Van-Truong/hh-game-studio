@@ -104,6 +104,38 @@ static func cmd_from_variant(raw: Variant) -> Dictionary:
 	return empty_cmd()
 
 
+static func frame_from_cmd(cmd: Dictionary, tick: int, slot: int) -> InputFrame:
+	var frame: InputFrame = InputFrame.new()
+	frame.schema_version = SimConstants.SCHEMA_VERSION
+	frame.tick = tick
+	frame.slot = slot
+	if cmd.is_empty():
+		return frame
+	var x: float = clampf(float(cmd.get("x", 0.0)), -1.0, 1.0)
+	frame.move_x = x
+	if x > 0.35:
+		frame.held.append("right")
+	elif x < -0.35:
+		frame.held.append("left")
+	if bool(cmd.get("jump", false)) or bool(cmd.get("jump_pressed", false)):
+		frame.held.append("jump")
+	if bool(cmd.get("jump_pressed", false)):
+		frame.pressed.append("jump")
+	if bool(cmd.get("crouch", false)):
+		frame.held.append("crouch")
+	if bool(cmd.get("melee", false)):
+		frame.pressed.append("melee")
+	if bool(cmd.get("fire_held", false)):
+		frame.held.append("fire")
+	if bool(cmd.get("fire_released", false)):
+		frame.released.append("fire")
+	if bool(cmd.get("grenade_held", false)):
+		frame.held.append("grenade")
+	if bool(cmd.get("grenade_released", false)):
+		frame.released.append("grenade")
+	return frame
+
+
 static func empty_frame(tick: int, slot: int) -> Dictionary:
 	return {
 		"schema": SimConstants.INPUT_FRAME_ID,

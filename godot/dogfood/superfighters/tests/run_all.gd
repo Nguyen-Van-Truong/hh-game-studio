@@ -9,6 +9,7 @@ var _maps: String = "unproven"
 var _hygiene: String = "unproven"
 var _no_err: String = "unproven"
 var _sim: String = "unproven"
+var _trace: String = "unproven"
 
 
 func _initialize() -> void:
@@ -30,6 +31,7 @@ func _boot() -> void:
 	await _test_stage_advance(app)
 	_test_session_hygiene(app)
 	_test_sim_contract(app)
+	await _test_golden_traces(app)
 	if _fails.is_empty():
 		_no_err = "proven"
 	_emit()
@@ -519,6 +521,16 @@ func _test_sim_contract(app: App) -> void:
 		_sim = "proven"
 
 
+func _test_golden_traces(app: App) -> void:
+	var errors: PackedStringArray = await TraceCases.run_all(app)
+	var i: int = 0
+	while i < errors.size():
+		_fail("TRACE %s" % String(errors[i]))
+		i += 1
+	if _count_prefix("TRACE ") == 0:
+		_trace = "proven"
+
+
 func _emit() -> void:
 	print("HH_VF_PATH title→fight→win/lose→restart")
 	print(
@@ -529,6 +541,10 @@ func _emit() -> void:
 	print("HH_VF_SIM HASH3=%s PAUSE_TICK=stable MALFORMED=reject status=%s" % [
 		"match" if _sim == "proven" else "unproven",
 		_sim,
+	])
+	print("HH_VF_TRACE MATCH=%s status=%s" % [
+		"1" if _trace == "proven" else "0",
+		_trace,
 	])
 	if _fails.is_empty():
 		print("PASS: Vault Fighters first playable")

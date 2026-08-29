@@ -1,0 +1,56 @@
+{
+  "schema": "vault-fighters.vf1-wp3.run.v1",
+  "run_id": "VF1WP3-20260829-ASIA-SAIGON-01",
+  "command_id": "cmd.vf1-wp3.golden-input-traces.1",
+  "wp": "VF1-WP3",
+  "timezone": "Asia/Saigon",
+  "recorded_at": "2026-08-29T11:05:00+07:00",
+  "base_head": "219dcbd4a779d1afcc3c4223afe48ded1fe4df13",
+  "godot": "4.7.1.stable.official.a13da4feb",
+  "seed": 7,
+  "map_id": "police",
+  "mode": "vs2",
+  "tick_hz": 60,
+  "snapshot_every": 15,
+  "epsilon": 0.001,
+  "claims": {
+    "y8_parity": false,
+    "y8_tick_rate": false,
+    "hold_to_aim_observed": false,
+    "roll_dive_observed": false,
+    "in_game_y8_play": false,
+    "game_package_fetched": false,
+    "plan_checkbox_ticked": false,
+    "implementer_commit": false,
+    "r9_wp4": false,
+    "g6": false,
+    "gx": false,
+    "progress_60_of_60": false
+  },
+  "ledger": [
+    "RL-SIM-FIXED-60",
+    "RL-SIM-INPUT-FRAME",
+    "RL-SIM-TRACE-REPLAY",
+    "RL-CTRL-HOLD-AIM",
+    "RL-MOVE-ROLL-DIVE"
+  ],
+  "verify": {
+    "official": [
+      "python godot/dogfood/superfighters/tests/check_golden_traces.py",
+      "%LOCALAPPDATA%\\HHGodotAgent\\tooling\\godot-4.7.1-stable\\bin\\Godot_v4.7.1-stable_win64_console.exe --headless --path godot/dogfood/superfighters --script res://tests/run_golden_traces.gd"
+    ],
+    "regression": [
+      "%LOCALAPPDATA%\\HHGodotAgent\\tooling\\godot-4.7.1-stable\\bin\\Godot_v4.7.1-stable_win64_console.exe --headless --path godot/dogfood/superfighters --script res://tests/run_all.gd"
+    ],
+    "file_check_exit": 0,
+    "golden_traces_exit": 0,
+    "run_all_exit": 0,
+    "replay_twice_match": true,
+    "mutate_one_key": "fail",
+    "official_forbids_teleport_force_kill": true,
+    "record_from_real_input": true,
+    "used_apply_frames": true,
+    "used_cmd_dicts": false,
+    "leftover_godot": 0
+  }
+}

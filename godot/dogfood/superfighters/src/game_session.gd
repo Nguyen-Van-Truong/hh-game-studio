@@ -31,6 +31,8 @@ var _resume_cb: Callable = Callable()
 var clock: SimClock = SimClock.new()
 var sim_seed: int = 0
 var last_reject: PackedStringArray = PackedStringArray()
+var ledger: SimEventLedger = SimEventLedger.new()
+var recorder: SimRecorder = null
 
 
 func setup(p_mode: String, p_map: String, p_stage: int) -> void:
@@ -44,6 +46,7 @@ func setup(p_mode: String, p_map: String, p_stage: int) -> void:
 	rng.seed = sim_seed
 	clock.reset()
 	last_reject = PackedStringArray()
+	ledger = SimEventLedger.new()
 	arena = Arena.new()
 	world = arena.build(map_id)
 	add_child(world)
@@ -79,7 +82,11 @@ func _physics_process(delta: float) -> void:
 	var steps: int = clock.feed(delta)
 	var s: int = 0
 	while s < steps:
-		_step_one_tick(_gather_live_cmds())
+		if recorder != null and recorder.active:
+			if not recorder.step_session(self):
+				break
+		else:
+			_step_one_tick(_gather_live_cmds())
 		s += 1
 
 
@@ -97,6 +104,9 @@ func apply_frames(frames: Array) -> bool:
 	var errors: PackedStringArray = SimValidator.validate_bundle(frames, clock.tick, fighters.size())
 	if not errors.is_empty():
 		last_reject = errors
+		ledger.push(clock.tick, "input_validate", "reject", {
+			"count": errors.size(),
+		})
 		return false
 	var cmds: Array[Dictionary] = []
 	var i: int = 0
@@ -148,6 +158,7 @@ func _step_one_tick(cmds: Array[Dictionary]) -> void:
 		cmd["on_ladder"] = arena != null and arena.has_ladder_at(f.global_position)
 		var before_y: float = f.velocity.y
 		f.step(dt, cmd, kill_plane)
+		_log_death_if_new(f)
 		if f.last_jump and before_y >= 0.0 and f.velocity.y < 0.0 and sfx != null:
 			sfx.play("jump")
 		if f.want_melee:
@@ -203,10 +214,12 @@ func player1() -> Fighter:
 
 
 func force_kill(slot: int) -> void:
+	ledger.push(clock.tick, "fixture", "force_kill", {"slot": slot})
 	var i: int = 0
 	while i < fighters.size():
 		if fighters[i].slot == slot:
 			fighters[i].kill()
+			_log_death_if_new(fighters[i])
 		i += 1
 	_resolve_end()
 
@@ -294,6 +307,12 @@ func _do_melee(f: Fighter) -> void:
 		if signf(delta.x) != 0.0 and signf(delta.x) != signf(f.facing):
 			continue
 		other.take_damage(float(spec.get("damage", 10.0)), Vector2(f.facing * 80.0, -40.0))
+		ledger.push(clock.tick, "melee", "hit", {
+			"attacker": f.slot,
+			"target": other.slot,
+			"damage": SimConstants.quantize(float(spec.get("damage", 10.0))),
+		})
+		_log_death_if_new(other)
 		_splat(other.global_position)
 		if sfx != null:
 			sfx.play("hit")
@@ -358,6 +377,12 @@ func _do_fire(f: Fighter) -> void:
 		bullets.append(shot)
 		p += 1
 	f.consume_ammo()
+	ledger.push(clock.tick, "fire_spawn", "bullet", {
+		"owner": f.slot,
+		"gun": f.gun_id,
+		"ammo": f.ammo,
+		"pellets": pellets,
+	})
 	if sfx != null:
 		if f.gun_id == "shotgun":
 			sfx.play("shotgun")
@@ -377,6 +402,10 @@ func _do_grenade(f: Fighter) -> void:
 	nade.setup(f.global_position + Vector2(f.facing * 10.0, -8.0), dir, f.slot, f.team)
 	add_child(nade)
 	grenades.append(nade)
+	ledger.push(clock.tick, "grenade_spawn", "nade", {
+		"owner": f.slot,
+		"nades": f.grenades,
+	})
 
 
 func _step_respawns(delta: float) -> void:
@@ -431,6 +460,7 @@ func _bullet_hit_fighter(shot: Bullet) -> bool:
 			continue
 		if f.global_position.distance_to(shot.global_position) <= 10.0:
 			f.take_damage(shot.damage, shot.velocity.normalized() * 70.0 + Vector2(0, -30))
+			_log_death_if_new(f)
 			_splat(f.global_position)
 			if sfx != null:
 				sfx.play("hit")
@@ -468,6 +498,7 @@ func _explode(nade: ThrownGrenade) -> void:
 			var falloff: float = 1.0 - (d / nade.radius)
 			var dir: Vector2 = (f.global_position - nade.global_position).normalized()
 			f.take_damage(nade.damage * falloff, dir * 140.0 + Vector2(0, -80))
+			_log_death_if_new(f)
 			_splat(f.global_position)
 
 
@@ -478,6 +509,9 @@ func _resolve_end() -> void:
 	if p1 != null and p1.dead:
 		outcome = "lose"
 		lose_title = "Down"
+		ledger.push(clock.tick, "match_resolve", "lose", {
+			"cause": p1.death_cause if p1 != null else "",
+		})
 		if sfx != null:
 			sfx.play("lose")
 		lost.emit()
@@ -493,6 +527,7 @@ func _resolve_end() -> void:
 	if foes_alive == 0:
 		outcome = "win"
 		win_title = "Last standing"
+		ledger.push(clock.tick, "match_resolve", "win", {})
 		if sfx != null:
 			sfx.play("win")
 		won.emit()
@@ -539,6 +574,9 @@ func shutdown() -> void:
 	if clock != null:
 		clock.reset()
 	last_reject = PackedStringArray()
+	if ledger != null:
+		ledger.reset()
+	recorder = null
 	if arena != null:
 		arena.layer = null
 		arena.world = null
@@ -592,6 +630,17 @@ func _free_fx() -> void:
 		i += 1
 	_fx.clear()
 	_fx_life.clear()
+
+
+func _log_death_if_new(f: Fighter) -> void:
+	if f == null or not f.dead:
+		return
+	if ledger.has_death(f.slot):
+		return
+	ledger.push(clock.tick, "match_resolve", "death", {
+		"slot": f.slot,
+		"cause": f.death_cause,
+	})
 
 
 func _free_node(node: Node) -> void:
