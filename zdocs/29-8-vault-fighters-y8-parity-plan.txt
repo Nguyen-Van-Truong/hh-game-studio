@@ -2,8 +2,8 @@ PLAN_SCOPE=godot/dogfood/superfighters
 PRODUCT_PLAN_AUTHORITY=1
 PARENT_PLATFORM_PLAN=zdocs/20-8-godot-agent-autopilot-plan.txt
 PARENT_PLATFORM_STATUS=OWNER_STOPPED_59_OF_60
-CURRENT_VALID_WP=VF2-WP2
-CORRECTION_GATE_VF2_WP2=REQUIRED
+CURRENT_VALID_WP=VF2-WP3
+CORRECTION_GATE_VF2_WP2=CLEARED
 STATUS=ACTIVE
 PLAN_DATE=2026-08-29
 TIMEZONE=Asia/Saigon
@@ -21,7 +21,7 @@ một lần, tự làm, tự chạy, tự kiểm và tạo gói review; người
 |---:|---|---|---|---|---|
 | 0 | VF0 nền và routing | scope, provenance, test sạch, không lẫn plan | none | không | [x] 3/3 |
 | 1 | VF1 reference + contract | reference ledger, behavior spec, deterministic trace | VF0 | research/test | [x] 4/4 |
-| 2 | VF2 movement | chạy, nhảy, crouch, sprint, roll, dive, ladder, ledge | VF1 | input + physics | [ ] 1/5 |
+| 2 | VF2 movement | chạy, nhảy, crouch, sprint, roll, dive, ladder, ledge | VF1 | input + physics | [ ] 2/5 |
 | 3 | VF3 combat | melee/kick, hitbox, knockdown, disarm, aim/fire, grenade | VF2 | weapons + VFX | [ ] 0/6 |
 | 4 | VF4 world interaction | props, glass, barrels, containers, doors/elevators, hazards | VF2 | map fixtures | [ ] 0/5 |
 | 5 | VF5 map parity | 6 functional arenas; original geometry/names/art | VF3,VF4 | one map per agent lane | [ ] 0/6 |
@@ -30,7 +30,7 @@ một lần, tự làm, tự chạy, tự kiểm và tạo gói review; người
 | 8 | VF8 agent autonomy | brief→edit→play→observe→repair→checkpoint, no manual F6 | VF0..VF7 | host/bridge | [ ] 0/4 |
 | 9 | VF9 verification | trace replay, E2E, differential rubric, soak, leak proof | all above | QA | [ ] 0/5 |
 | 10 | VF10 package | Windows build, offline run, provenance/license, review bundle | VF9 | release | [ ] 0/3 |
-|   | **Tổng** | **50 WP nhỏ; chỉ coordinator tick sau DoD** |  |  | **8/50** |
+|   | **Tổng** | **50 WP nhỏ; chỉ coordinator tick sau DoD** |  |  | **9/50** |
 
 Gate nội bộ:
 
@@ -639,7 +639,7 @@ VF2-WP1 — Input mapping thật cho P1/P2/gamepad                              
         Parent 20-8 unchanged: R9-WP4 [ ]; 59/60; G6 [ ].
       Commit: (this tick)
 
-VF2-WP2 — Locomotion baseline và camera framing                                  [ ]
+VF2-WP2 — Locomotion baseline và camera framing                                  [x]
   Phụ thuộc: VF1-WP2. Files: fighter/simulation/camera tests.
   Làm: acceleration/friction, variable jump, coyote/jump buffer, crouch shape,
   fall/pit death, arena fit camera; data-driven constants.
@@ -692,7 +692,52 @@ VF2-WP2 — Locomotion baseline và camera framing                              
         run_all loco banner derived.
         Parent 20-8 unchanged: R9-WP4 [ ]; 59/60; G6 [ ].
       Commit: (this tick)
-  CORRECTION GATE 2026-08-29 — owner audit, WP REOPENED:
+    LOG 2026-08-29 13:30 Asia/Saigon — agent=coordinator
+      Base: 82feb32 structured locomotion evidence on audit
+        reopen 30720a2; first product d97c2d5 / voided tick 1ffdc77.
+      Files/leases: tests/locomotion_cases.gd,
+        tests/run_locomotion.gd, tests/check_locomotion.py,
+        tests/pack_locomotion_evidence.py, tests/run_all.gd
+        (isolated/commit_ready; no sprint section),
+        docs/locomotion.md, docs/reference-ledger.md
+        (cite -03 only),
+        docs/evidence/VF2WP2-20260829-ASIA-SAIGON-03/
+      Verify: leftover-0 isolated official tree
+        D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\_vf2wp2_gate_product
+        run VF2WP2-20260829-ASIA-SAIGON-03
+        source hash
+        2e9c3bb3778812acb2c078cb7faac1d0e5fed0c403b01704b48574b67e531831
+        HASH2=match TUNNEL=none CAMERA=arena_fit
+        from structured outcomes; apply 1205/1205
+        python godot/dogfood/superfighters/tests/check_locomotion.py
+          EXIT 0
+        godot --headless --path godot/dogfood/superfighters
+          --script res://tests/run_locomotion.gd EXIT 0
+        godot --path godot/dogfood/superfighters
+          --script res://tests/run_locomotion.gd EXIT 0
+        leftover Godot on product --path = 0
+        python tests/bootstrap/test_authoritative_plan.py EXIT 0
+        python tests/bootstrap/test_vault_fighters_plan.py EXIT 0
+          PASS: 50 unique VF WPs; no-skip; next=VF2-WP2 (pre-tick);
+          ticked=VF0-WP1,VF0-WP2,VF0-WP3,VF1-WP1,VF1-WP2,VF1-WP3,
+          VF1-WP4,VF2-WP1;
+          parent 20-8 frozen 59/60 R9-WP4
+        post-tick expected next=VF2-WP3
+      Honesty:
+        60 Hz is V-A14 / ledger:RL-SIM-FIXED-60 assumption,
+        not observed Y8 clock. Hold-to-aim assumption.
+        Roll/dive unavailable. Camera arena_fit assumption.
+        Not Y8 parity. Not V0.
+      Critic: II ce434feb TICK yes leftover-0 isolated
+        hash 2e9c3bb3…;
+        HH a98644f9 TICK yes leftover-0 headless+windowed
+      Gaps: residual nits OK:
+        packed run_partial last write is headless;
+        evidence dumped to dirty-main .evidence;
+        snapshot seed 7 vs run seed 1.
+        Parent 20-8 unchanged: R9-WP4 [ ]; 59/60; G6 [ ].
+      Commit: (this tick)
+  CORRECTION GATE SATISFIED 2026-08-29 — owner audit, WP RECLOSED:
     - Commit code `d97c2d5` và tick commit `1ffdc77` được giữ nguyên để bảo toàn
       lịch sử; checkbox mở lại vì closeout đã chấp nhận gap trái V-A18,
       §16.3, §16.4 và §18.3.
@@ -711,6 +756,10 @@ VF2-WP2 — Locomotion baseline và camera framing                              
       governance exit 0.
     - Mọi thay đổi VF2-WP3 hiện có trong working tree bị quarantine: không
       commit/tick/mở rộng cho tới khi VF2-WP2 được re-close hợp lệ.
+    - Re-close 2026-08-29 13:30: leftover-0 isolated run `-03`; source
+      `2e9c3bb3…`; HASH2/TUNNEL/CAMERA from outcomes; apply 1205/1205;
+      critics II ce434feb + HH a98644f9 TICK yes. Machine guard
+      `CORRECTION_GATE_VF2_WP2=CLEARED`. VF2-WP3 dirty remains uncommitted.
 
 VF2-WP3 — Sprint, stamina và roll                                                     [ ]
   Phụ thuộc: VF2-WP2. Files: fighter state/animation/VFX/tests.
@@ -1304,7 +1353,7 @@ vào `KNOWN_ISSUES.md`; không đổi acceptance để làm cho pass.
 21. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Đọc `AGENTS.md`, sau đó đọc bảng đầu file này. WP đầu tiên chưa tick là **VF2-WP2**.
+Đọc `AGENTS.md`, sau đó đọc bảng đầu file này. WP đầu tiên chưa tick là **VF2-WP3**.
 
 Không làm R9-WP4/G6/GX; không mở Rust engine; không đụng Kho Bí Ẩn/Hoan Hao;
 không dùng Snake làm demo; không tải/rip Y8. Chỉ khi VF0-WP1 và VF0-WP2 đã có
@@ -1403,6 +1452,17 @@ dùng chỉ xem và review.
   evidence run dùng lại cùng run_id. Giữ commits `d97c2d5`/`1ffdc77` làm lịch
   sử, mở lại checkbox; CURRENT_VALID_WP=VF2-WP2; tổng trở lại 8/50. Mọi dirty
   VF2-WP3 bị quarantine tới khi correction gate trong WP2 PASS trên exact hash.
+- COORDINATOR CLOSEOUT VF2-WP2 CORRECTION (2026-08-29 13:30 Asia/Saigon):
+  leftover-0 isolated; run VF2WP2-20260829-ASIA-SAIGON-03; source hash
+  2e9c3bb3778812acb2c078cb7faac1d0e5fed0c403b01704b48574b67e531831;
+  HASH2=match TUNNEL=none CAMERA=arena_fit from outcomes; apply 1205/1205.
+  Critics TICK yes (II ce434feb leftover-0 isolated hash 2e9c3bb3…;
+  HH a98644f9 leftover-0 headless+windowed). Residual nits OK:
+  packed run_partial last write is headless; evidence dumped to
+  dirty-main .evidence; snapshot seed 7 vs run seed 1.
+  Product 82feb32. Gate CLEARED. Parent 20-8 unchanged (R9-WP4 [ ],
+  59/60, G6 [ ]). VF2-WP2 ticked; CURRENT_VALID_WP=VF2-WP3;
+  V0 not ticked. VF2-WP3 remains [ ] and quarantined dirty.
 
 ================================================================================
 HẾT PLAN — 29-8-2026
