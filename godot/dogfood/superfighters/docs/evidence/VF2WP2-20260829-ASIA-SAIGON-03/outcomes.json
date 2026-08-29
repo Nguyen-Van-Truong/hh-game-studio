@@ -1,0 +1,181 @@
+{
+	"apply": {
+		"attempted": 1205,
+		"succeeded": 1205,
+		"used_action_press": 0,
+		"used_apply_frames": 1205,
+		"used_parse_input_event": 1,
+		"used_step_fixed": 0
+	},
+	"camera": {
+		"arena_size": {
+			"x": 1024.0,
+			"y": 256.0
+		},
+		"camera_position": {
+			"x": 512.0,
+			"y": 128.0
+		},
+		"camera_zoom": {
+			"x": 1.25,
+			"y": 1.25
+		},
+		"centered": true,
+		"covers_arena": true,
+		"current_is_session_camera": true,
+		"ledger": "RL-CAM-ARENA",
+		"map_id": "rooftops",
+		"mode": "arena_fit",
+		"not_product_helper": true,
+		"source": "Viewport.get_visible_rect+get_camera_2d+Camera2D.zoom/position",
+		"verdict": "arena_fit",
+		"viewport_visible_rect": {
+			"h": 720.0,
+			"w": 1280.0,
+			"x": 0.0,
+			"y": 0.0
+		},
+		"visible_world": {
+			"x": 1024.0,
+			"y": 576.0
+		}
+	},
+	"hash2": {
+		"compared_axes": [
+			"x",
+			"y"
+		],
+		"epsilon": 0.001,
+		"pair_count": 6,
+		"pairs": [
+			{
+				"compared_axes": [
+					"x",
+					"y"
+				],
+				"hash_a": "7c571cc18ebda95fb3ae24e23d7ceafc9a6a156350d97e32327a0cd0a802cf01",
+				"hash_b": "7c571cc18ebda95fb3ae24e23d7ceafc9a6a156350d97e32327a0cd0a802cf01",
+				"hash_match": true,
+				"max_dx": 0.0,
+				"max_dy": 0.0,
+				"name": "crouch_shape",
+				"ok_a": true,
+				"ok_b": true,
+				"ticks_a": 28,
+				"ticks_b": 28,
+				"within_epsilon": true
+			},
+			{
+				"compared_axes": [
+					"x",
+					"y"
+				],
+				"hash_a": "7d2cbf868e998c08a377c1d7219724a41750d23ce78f72e601cf6ffde4788301",
+				"hash_b": "7d2cbf868e998c08a377c1d7219724a41750d23ce78f72e601cf6ffde4788301",
+				"hash_match": true,
+				"max_dx": 0.0,
+				"max_dy": 0.0,
+				"name": "no_tunnel_oneway",
+				"ok_a": true,
+				"ok_b": true,
+				"ticks_a": 48,
+				"ticks_b": 48,
+				"within_epsilon": true
+			},
+			{
+				"compared_axes": [
+					"x",
+					"y"
+				],
+				"hash_a": "66141a01d412384e50c44fea5ecc5ecab112f81c06a38c5cb040755974104c23",
+				"hash_b": "66141a01d412384e50c44fea5ecc5ecab112f81c06a38c5cb040755974104c23",
+				"hash_match": true,
+				"max_dx": 0.0,
+				"max_dy": 0.0,
+				"name": "no_tunnel_solid",
+				"ok_a": true,
+				"ok_b": true,
+				"ticks_a": 100,
+				"ticks_b": 100,
+				"within_epsilon": true
+			},
+			{
+				"compared_axes": [
+					"x",
+					"y"
+				],
+				"hash_a": "ab1eea4d7fa0b800aa8359ada4756dd03005ea29b41018dcdb863a1a0c692332",
+				"hash_b": "ab1eea4d7fa0b800aa8359ada4756dd03005ea29b41018dcdb863a1a0c692332",
+				"hash_match": true,
+				"max_dx": 0.0,
+				"max_dy": 0.0,
+				"name": "pit_fall",
+				"ok_a": true,
+				"ok_b": true,
+				"ticks_a": 36,
+				"ticks_b": 36,
+				"within_epsilon": true
+			},
+			{
+				"compared_axes": [
+					"x",
+					"y"
+				],
+				"hash_a": "74a42e7cfd60545568b3204c21dd03c71d5c1fc5b614d9ef214fea7838798aba",
+				"hash_b": "74a42e7cfd60545568b3204c21dd03c71d5c1fc5b614d9ef214fea7838798aba",
+				"hash_match": true,
+				"max_dx": 0.0,
+				"max_dy": 0.0,
+				"name": "variable_jump",
+				"ok_a": true,
+				"ok_b": true,
+				"ticks_a": 66,
+				"ticks_b": 66,
+				"within_epsilon": true
+			},
+			{
+				"compared_axes": [
+					"x",
+					"y"
+				],
+				"hash_a": "e3ab900ac90adc3072333e8927ad4030ec88aac7121d619eae35c857cc6c8efe",
+				"hash_b": "e3ab900ac90adc3072333e8927ad4030ec88aac7121d619eae35c857cc6c8efe",
+				"hash_match": true,
+				"max_dx": 0.0,
+				"max_dy": 0.0,
+				"name": "walk_accel_friction",
+				"ok_a": true,
+				"ok_b": true,
+				"ticks_a": 54,
+				"ticks_b": 54,
+				"within_epsilon": true
+			}
+		],
+		"source": "SimReplay.final_hash+quantized_xy",
+		"verdict": "match"
+	},
+	"tunnel": {
+		"oneway": {
+			"dead": 0,
+			"fell_through": false,
+			"kill_y": 276.0,
+			"map_id": "hazardous",
+			"y": 131.999
+		},
+		"oneway_jump_land": {
+			"death_cause": "",
+			"sank": false,
+			"y0": 131.999145507813,
+			"y1": 90.0015335083008
+		},
+		"solid": {
+			"dead": 0,
+			"map_id": "storage",
+			"min_legal_x": 16.0,
+			"tunneled": false,
+			"x": 21.008
+		},
+		"source": "trace_final_state+live_oneway_land",
+		"verdict": "none"
+	}
+}

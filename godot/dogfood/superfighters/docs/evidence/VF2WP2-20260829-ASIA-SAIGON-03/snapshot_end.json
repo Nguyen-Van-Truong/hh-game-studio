@@ -1,0 +1,86 @@
+{
+	"bullets": [],
+	"epsilon": 0.001,
+	"event_order": "vf.sim.event_order.v1",
+	"fighters": [
+		{
+			"ammo": 12,
+			"crouched": 0,
+			"dead": 0,
+			"death_cause": "",
+			"facing": 1000,
+			"gun": "pistol",
+			"hp": 100000,
+			"melee": "fists",
+			"nades": 3,
+			"slot": 0,
+			"stamina": 100000,
+			"team": 0,
+			"vx": 0,
+			"vy": 0,
+			"weapon": "pistol",
+			"x": 72000,
+			"y": 112000
+		},
+		{
+			"ammo": 12,
+			"crouched": 0,
+			"dead": 0,
+			"death_cause": "",
+			"facing": -1000,
+			"gun": "pistol",
+			"hp": 100000,
+			"melee": "fists",
+			"nades": 3,
+			"slot": 1,
+			"stamina": 100000,
+			"team": 1,
+			"vx": 0,
+			"vy": 0,
+			"weapon": "pistol",
+			"x": 456000,
+			"y": 112000
+		}
+	],
+	"grenades": [],
+	"living": 2,
+	"map_id": "rooftops",
+	"mode": "vs2",
+	"outcome": "play",
+	"p1_dead": false,
+	"p1_gun": "pistol",
+	"p1_hp": 100.0,
+	"p1_melee": "fists",
+	"p1_nades": 3,
+	"p1_weapon": "pistol",
+	"p1_x": 72.0,
+	"p1_y": 112.0,
+	"pickups": [
+		{
+			"id": "uzi",
+			"x": 264000,
+			"y": 170000
+		},
+		{
+			"id": "grenade",
+			"x": 328000,
+			"y": 74000
+		},
+		{
+			"id": "grenade",
+			"x": 680000,
+			"y": 170000
+		},
+		{
+			"id": "knife",
+			"x": 712000,
+			"y": 74000
+		}
+	],
+	"respawn_count": 0,
+	"schema": "vf.sim.snapshot.v1",
+	"schema_version": 1,
+	"seed": 7,
+	"tick": 0,
+	"win": false
+}
