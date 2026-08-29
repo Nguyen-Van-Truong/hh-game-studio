@@ -4,11 +4,16 @@ extends Area2D
 var weapon_id: String = "pistol"
 var from_world: bool = true
 var home: Vector2 = Vector2.ZERO
+var drop_uid: int = 0
 
 
-func setup(p_id: String, at: Vector2) -> void:
+func setup(p_id: String, at: Vector2, p_uid: int = 0) -> void:
 	weapon_id = p_id
-	name = "Pickup_%s" % p_id
+	drop_uid = p_uid
+	if p_uid > 0:
+		name = "Pickup_%s_%d" % [p_id, p_uid]
+	else:
+		name = "Pickup_%s" % p_id
 	global_position = at
 	collision_layer = Maps.COL_PICKUP
 	collision_mask = 0

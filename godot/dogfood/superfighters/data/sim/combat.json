@@ -19,10 +19,27 @@
   "kick_class": "assumption",
   "roll_dive_ledger": "RL-MOVE-ROLL-DIVE",
   "roll_dive_class": "unavailable",
+  "knock_ledger": "RL-HIT-KNOCK",
+  "knock_class": "assumption",
+  "down_ledger": "RL-HIT-DOWN",
+  "down_class": "assumption",
+  "invuln_ledger": "RL-HIT-INVULN",
+  "invuln_class": "assumption",
+  "disarm_ledger": "RL-HIT-DISARM",
+  "disarm_class": "assumption",
   "tick_hz": 60,
   "hitstop_ticks": 2,
   "hitstop_clock": "presentation_only",
   "one_hit_per_window": true,
+  "hit_reaction": {
+    "hit_invuln_ticks": 5,
+    "knockdown_ticks": 18,
+    "getup_ticks": 10,
+    "knockdown_invuln_ticks": 28,
+    "chain_lock_block": true,
+    "disarm_on_punch_gun": true,
+    "valid_death_causes": ["damage", "pit"]
+  },
   "friendly_fire": {
     "vs1": false,
     "vs2": true,
@@ -35,16 +52,19 @@
   "styles": {
     "melee": {
       "knock_x": 80.0,
-      "knock_y": -40.0
+      "knock_y": -40.0,
+      "disarm": true
     },
     "crouch": {
       "knock_x": 70.0,
-      "knock_y": -24.0
+      "knock_y": -24.0,
+      "disarm": true
     },
     "kick": {
       "knock_x": 110.0,
       "knock_y": 40.0,
-      "knockdown": true
+      "knockdown": true,
+      "disarm": false
     }
   },
   "weapons": {

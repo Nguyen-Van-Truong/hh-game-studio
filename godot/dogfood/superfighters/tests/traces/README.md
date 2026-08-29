@@ -85,6 +85,22 @@ InputFrame `ledge` stays reserved.
 | `map_police.json` | police walk |
 | `map_hazardous.json` | hazardous walk |
 
+## reaction/
+
+VF3-WP2 official InputFrame traces. Same schema as `official/`.
+Replay uses `apply_frames`. No teleport. No `step_fixed`.
+Knock/down/invuln/disarm stay `assumption`. Clock stays
+`ledger:RL-SIM-FIXED-60`.
+
+| File | Beat |
+|---|---|
+| `reaction_knock.json` | punch impulse |
+| `reaction_down.json` | kick knockdown + get-up |
+| `reaction_invuln.json` | punch then second swing after window |
+| `reaction_disarm.json` | punch drops a gun |
+| `reaction_drop.json` | drop persists; crouch pickup |
+| `reaction_chain.json` | punch during knockdown is blocked |
+
 ## fixture/
 
 May use `teleport` / `force_kill` for fast unit setup. Fixture evidence

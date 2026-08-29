@@ -15,6 +15,10 @@ extends CharacterBody2D
 ## ledger:RL-HIT-BOX (assumption). Friendly-fire stays
 ## ledger:RL-HIT-FF (assumption). Hitstop stays
 ## ledger:RL-HIT-HITSTOP (assumption, presentation only).
+## Knockback stays ledger:RL-HIT-KNOCK (assumption).
+## Knockdown/getup stay ledger:RL-HIT-DOWN (assumption).
+## Hit invuln stays ledger:RL-HIT-INVULN (assumption).
+## Punch disarm stays ledger:RL-HIT-DISARM (assumption).
 ## InputFrame `ledge` stays reserved. Y8 observation stays
 ## ledger:RL-MOVE-ROLL-DIVE (unavailable). Not a Y8 observation.
 
@@ -115,6 +119,21 @@ var kick_ended: bool = false
 var last_kick_block: String = ""
 var knockdown_left: float = 0.0
 var knockdown_started: bool = false
+var knockdown_ended: bool = false
+var knockdown_blocked: bool = false
+var getup_left: float = 0.0
+var getup_started: bool = false
+var getup_ended: bool = false
+var hit_airborne: bool = false
+var hit_airborne_started: bool = false
+var hit_airborne_ended: bool = false
+var knockback_started: bool = false
+var knockback_ended: bool = false
+var knockback_grounded_end: bool = false
+var invuln_ticks: int = 0
+var invuln_started: bool = false
+var invuln_ended: bool = false
+var disarm_weapon: String = ""
 var peak_fall_vy: float = 0.0
 var air_origin_y: float = 0.0
 var fall_armed: bool = false
@@ -235,7 +254,6 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	dive_ended = false
 	kick_started = false
 	kick_ended = false
-	knockdown_started = false
 	fall_damage_applied = false
 	fall_immune_landed = false
 	sprint_started = false
@@ -278,9 +296,12 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	grenade_cd = maxf(grenade_cd - delta, 0.0)
 	melee_flash = maxf(melee_flash - delta, 0.0)
 	throw_flash = maxf(throw_flash - delta, 0.0)
-	invuln = maxf(invuln - delta, 0.0)
+	_tick_invuln()
 	combat_timer = maxf(combat_timer - delta, 0.0)
-	knockdown_left = maxf(knockdown_left - delta, 0.0)
+	_tick_knock_reaction(delta)
+	if knockback_grounded_end:
+		knockback_ended = true
+		knockback_grounded_end = false
 	last_tap_at += delta
 	if combat_timer <= 0.0:
 		health = minf(MAX_HP, health + 4.0 * delta)
@@ -328,7 +349,7 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	var roll_pressed: bool = bool(cmd.get("roll", false))
 	var dive_pressed: bool = bool(cmd.get("dive", false))
 	var kick_pressed: bool = bool(cmd.get("kick", false))
-	if knockdown_left > 0.0:
+	if reaction_locked():
 		last_roll_block = "knockdown"
 		last_dive_block = "knockdown"
 		last_kick_block = "knockdown"
@@ -378,7 +399,7 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	_tick_hang(delta, jump_cmd, jump_pressed, crouch_held, crouch_pressed, ledge)
 	_tick_ladder(delta, x, jump_cmd, jump_pressed, crouch_held, snap_x, climb_up_blocked, climb_down_blocked)
 	_apply_shape()
-	if rolling or diving or kicking or knockdown_left > 0.0 or hanging or recover_left > 0.0 or recover_hold_left > 0.0:
+	if rolling or diving or kicking or reaction_locked() or hanging or recover_left > 0.0 or recover_hold_left > 0.0:
 		jump_buf = 0.0
 		last_jump = false
 	elif climbing:
@@ -389,7 +410,7 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	else:
 		jump_buf = maxf(jump_buf - delta, 0.0)
 	var jump_held: bool = bool(cmd.get("jump", false)) and not fire_held and not nade_held
-	if not rolling and not diving and not kicking and knockdown_left <= 0.0 and not climbing and not hanging and recover_left <= 0.0 and jump_buf > 0.0 and coyote > 0.0 and not fire_held and not nade_held:
+	if not rolling and not diving and not kicking and not reaction_locked() and not climbing and not hanging and recover_left <= 0.0 and jump_buf > 0.0 and coyote > 0.0 and not fire_held and not nade_held:
 		velocity.y = jump_vel
 		jump_buf = 0.0
 		coyote = 0.0
@@ -434,7 +455,7 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	elif diving:
 		velocity.x = move_toward(velocity.x, facing * dive_speed, accel * delta)
 		velocity.y = maxf(velocity.y, dive_down)
-	elif knockdown_left > 0.0:
+	elif reaction_locked():
 		velocity.x = move_toward(velocity.x, 0.0, friction * delta)
 	elif x == 0.0:
 		velocity.x = move_toward(velocity.x, 0.0, friction * delta)
@@ -450,7 +471,7 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	else:
 		aim_dir = Vector2(facing, 0.0)
 	var melee_pressed: bool = bool(cmd.get("melee", false)) or kick_pressed
-	if not rolling and not diving and not hanging and not climbing and knockdown_left <= 0.0 and melee_pressed:
+	if not rolling and not diving and not hanging and not climbing and not reaction_locked() and melee_pressed:
 		if crouched and on_floor_now:
 			want_melee = true
 		elif melee_cd <= 0.0 and attack_phase == "idle":
@@ -485,6 +506,10 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	if not hanging and not climbing and recover_left <= 0.0:
 		_try_ledge_grab(ledge)
 	var landed: bool = is_on_floor() and not on_floor_now
+	if hit_airborne and is_on_floor() and velocity.y >= 0.0:
+		hit_airborne = false
+		hit_airborne_ended = true
+		knockback_ended = true
 	if landed:
 		var drop: float = global_position.y - air_origin_y
 		if diving or fall_immune_landed:
@@ -523,7 +548,7 @@ func _tick_drop_through(delta: float, on_floor_now: bool, crouch_held: bool, one
 		drop_hold = 0.0
 		last_drop_block = "busy"
 		return
-	if rolling or diving or kicking or knockdown_left > 0.0:
+	if rolling or diving or kicking or reaction_locked():
 		drop_hold = 0.0
 		last_drop_block = "busy"
 		return
@@ -595,7 +620,7 @@ func _tick_ladder(
 ) -> void:
 	if hanging or recover_left > 0.0:
 		return
-	if rolling or diving or kicking or knockdown_left > 0.0:
+	if rolling or diving or kicking or reaction_locked():
 		if climbing:
 			climbing = false
 			detach_started = true
@@ -736,7 +761,7 @@ func _record_contacts() -> void:
 func _try_ledge_grab(ledge: Dictionary) -> void:
 	if hanging or climbing or recover_left > 0.0 or ledge_lock_left > 0.0 or recover_hold_left > 0.0:
 		return
-	if rolling or diving or kicking or knockdown_left > 0.0:
+	if rolling or diving or kicking or reaction_locked():
 		last_ledge_block = "busy"
 		return
 	if dead:
@@ -784,6 +809,9 @@ func _try_start_roll(on_floor_now: bool, is_aiming: bool) -> void:
 	if dead:
 		last_roll_block = "dead"
 		return
+	if reaction_locked():
+		last_roll_block = "knockdown"
+		return
 	if rolling:
 		last_roll_block = "rolling"
 		return
@@ -802,7 +830,7 @@ func _try_start_roll(on_floor_now: bool, is_aiming: bool) -> void:
 	stamina = maxf(0.0, stamina - stamina_roll_cost)
 	rolling = true
 	roll_time = roll_duration
-	invuln = maxf(invuln, roll_invuln)
+	grant_invuln_ticks(int(round(roll_invuln / SimConstants.TICK_DT)))
 	roll_seq += 1
 	roll_started = true
 	sprinting = false
@@ -815,7 +843,7 @@ func _try_start_dive(on_floor_now: bool, is_aiming: bool) -> void:
 	if dead:
 		last_dive_block = "dead"
 		return
-	if knockdown_left > 0.0:
+	if reaction_locked():
 		last_dive_block = "knockdown"
 		return
 	if diving:
@@ -839,7 +867,7 @@ func _try_start_dive(on_floor_now: bool, is_aiming: bool) -> void:
 	stamina = maxf(0.0, stamina - stamina_dive_cost)
 	diving = true
 	dive_time = dive_duration
-	invuln = maxf(invuln, dive_invuln)
+	grant_invuln_ticks(int(round(dive_invuln / SimConstants.TICK_DT)))
 	dive_seq += 1
 	dive_started = true
 	dive_did_tackle = false
@@ -856,7 +884,7 @@ func _try_start_kick() -> void:
 	if dead:
 		last_kick_block = "dead"
 		return
-	if knockdown_left > 0.0:
+	if reaction_locked():
 		last_kick_block = "knockdown"
 		return
 	if rolling:
@@ -947,12 +975,62 @@ func _cancel_attack() -> void:
 	melee_flash = 0.0
 
 
-func apply_knockdown(dir: Vector2) -> void:
-	if dead:
+func clear_reaction_pulse() -> void:
+	knockdown_started = false
+	knockdown_ended = false
+	knockdown_blocked = false
+	getup_started = false
+	getup_ended = false
+	hit_airborne_started = false
+	hit_airborne_ended = false
+	knockback_started = false
+	knockback_ended = false
+	invuln_started = false
+	invuln_ended = false
+	disarm_weapon = ""
+
+
+func reaction_locked() -> bool:
+	return knockdown_left > 0.0 or getup_left > 0.0
+
+
+func holds_gun() -> bool:
+	return gun_id != "" and ammo > 0
+
+
+func grant_invuln_ticks(ticks: int) -> void:
+	if ticks <= 0:
 		return
-	knockdown_left = maxf(knockdown_left, knockdown_time)
+	if invuln_ticks <= 0:
+		invuln_started = true
+	invuln_ticks = maxi(invuln_ticks, ticks)
+	invuln = float(invuln_ticks) * SimConstants.TICK_DT
+
+
+func apply_impulse(knock: Vector2) -> void:
+	if absf(knock.x) < 0.01 and absf(knock.y) < 0.01:
+		return
+	velocity += knock
+	knockback_started = true
+	if knock.y < -1.0 or not is_on_floor():
+		if not hit_airborne:
+			hit_airborne_started = true
+		hit_airborne = true
+	else:
+		knockback_grounded_end = true
+
+
+func apply_knockdown(dir: Vector2) -> bool:
+	if dead:
+		return false
+	if _Combat.chain_lock_block() and reaction_locked():
+		knockdown_blocked = true
+		return false
+	knockdown_left = float(_Combat.knockdown_ticks()) * SimConstants.TICK_DT
 	knockdown_started = true
-	velocity += dir
+	getup_left = 0.0
+	apply_impulse(dir)
+	grant_invuln_ticks(_Combat.knockdown_invuln_ticks())
 	sprinting = false
 	rolling = false
 	diving = false
@@ -961,17 +1039,53 @@ func apply_knockdown(dir: Vector2) -> void:
 	hanging = false
 	recover_left = 0.0
 	_cancel_attack()
+	return true
 
 
 func take_damage(amount: float, knock: Vector2) -> void:
-	if dead or invuln > 0.0:
+	if dead or invuln_ticks > 0 or invuln > 0.0:
 		return
 	health -= amount
 	combat_timer = 3.0
-	velocity += knock
-	invuln = 0.08
+	apply_impulse(knock)
+	grant_invuln_ticks(_Combat.hit_invuln_ticks())
 	if health <= 0.0:
 		_die("damage")
+
+
+func disarm_gun() -> String:
+	if not holds_gun():
+		return ""
+	var dropped: String = gun_id
+	gun_id = ""
+	ammo = 0
+	weapon_id = melee_id
+	disarm_weapon = dropped
+	return dropped
+
+
+func _tick_invuln() -> void:
+	if invuln_ticks > 0:
+		invuln_ticks -= 1
+		invuln = float(invuln_ticks) * SimConstants.TICK_DT
+		if invuln_ticks <= 0:
+			invuln = 0.0
+			invuln_ended = true
+	else:
+		invuln = 0.0
+
+
+func _tick_knock_reaction(delta: float) -> void:
+	if knockdown_left > 0.0:
+		knockdown_left = maxf(knockdown_left - delta, 0.0)
+		if knockdown_left <= 0.0:
+			knockdown_ended = true
+			getup_left = float(_Combat.getup_ticks()) * SimConstants.TICK_DT
+			getup_started = true
+	elif getup_left > 0.0:
+		getup_left = maxf(getup_left - delta, 0.0)
+		if getup_left <= 0.0:
+			getup_ended = true
 
 
 func kill() -> void:
@@ -986,6 +1100,11 @@ func _die(cause: String) -> void:
 	death_cause = cause
 	collision_layer = 0
 	velocity = Vector2(facing * -40.0, -120.0)
+	knockdown_left = 0.0
+	getup_left = 0.0
+	hit_airborne = false
+	invuln_ticks = 0
+	invuln = 0.0
 	_cancel_attack()
 	_play_clip("dead")
 
@@ -1076,6 +1195,8 @@ func _pose_clip() -> String:
 		return "kick"
 	if attack_phase != "idle" or melee_flash > 0.0:
 		return "melee"
+	if knockdown_left > 0.0 or getup_left > 0.0:
+		return "crouch"
 	if diving:
 		return "dive"
 	if rolling:
@@ -1162,6 +1283,7 @@ func apply_runtime_extra(extra: Dictionary) -> void:
 		is_human = not is_bot
 	if extra.has("invuln"):
 		invuln = SimConstants.dequantize(int(extra.get("invuln", 0)))
+		invuln_ticks = int(round(invuln / SimConstants.TICK_DT))
 	if extra.has("melee_cd"):
 		melee_cd = SimConstants.dequantize(int(extra.get("melee_cd", 0)))
 	if extra.has("fire_cd"):
@@ -1211,6 +1333,13 @@ func apply_runtime_extra(extra: Dictionary) -> void:
 		kick_time = SimConstants.dequantize(int(extra.get("kick_time", 0)))
 	if extra.has("knockdown_left"):
 		knockdown_left = SimConstants.dequantize(int(extra.get("knockdown_left", 0)))
+	if extra.has("getup_left"):
+		getup_left = SimConstants.dequantize(int(extra.get("getup_left", 0)))
+	if extra.has("hit_airborne"):
+		hit_airborne = bool(extra.get("hit_airborne", false))
+	if extra.has("invuln_ticks"):
+		invuln_ticks = int(extra.get("invuln_ticks", invuln_ticks))
+		invuln = float(invuln_ticks) * SimConstants.TICK_DT
 	if extra.has("peak_fall_vy"):
 		peak_fall_vy = SimConstants.dequantize(int(extra.get("peak_fall_vy", 0)))
 	if extra.has("fire_extinguish_count"):

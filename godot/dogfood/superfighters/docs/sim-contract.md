@@ -94,6 +94,15 @@ live in `data/sim/combat.json`. They are product tuning
 `ledger:RL-MOVE-JUMP-KICK`. Official MATCH uses `apply_frames`.
 60 Hz stays ledger:RL-SIM-FIXED-60. Hitstop does not pause the clock.
 
+## Hit reaction (VF3-WP2)
+
+Knockback, knockdown/get-up, exact-tick invuln, and punch disarm
+live in `data/sim/combat.json` `hit_reaction`. They are product
+tuning (`ledger:RL-HIT-KNOCK`, `ledger:RL-HIT-DOWN`,
+`ledger:RL-HIT-INVULN`, `ledger:RL-HIT-DISARM`, `assumption`),
+not Y8 play. Official MATCH uses `apply_frames`. Official death
+causes stay `damage` / `pit`. 60 Hz stays ledger:RL-SIM-FIXED-60.
+
 ## Runtime observe (VF1-WP4)
 
 Agents read `RuntimeApi` (`docs/runtime-diagnostics.md`,

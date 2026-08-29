@@ -5,6 +5,7 @@ const SprintCasesScript: GDScript = preload("res://tests/sprint_cases.gd")
 const DiveCasesScript: GDScript = preload("res://tests/dive_cases.gd")
 const TraversalCasesScript: GDScript = preload("res://tests/traversal_cases.gd")
 const CombatCasesScript: GDScript = preload("res://tests/combat_cases.gd")
+const ReactionCasesScript: GDScript = preload("res://tests/reaction_cases.gd")
 const _Combat: GDScript = preload("res://src/sim/combat.gd")
 
 var _fails: PackedStringArray = PackedStringArray()
@@ -22,6 +23,7 @@ var _sprint: String = "unproven"
 var _dive: String = "unproven"
 var _trav: String = "unproven"
 var _melee: String = "unproven"
+var _react: String = "unproven"
 
 
 func _initialize() -> void:
@@ -51,6 +53,7 @@ func _boot() -> void:
 	await _test_dive(app)
 	await _test_traversal(app)
 	await _test_melee(app)
+	await _test_react(app)
 	if _fails.is_empty():
 		_no_err = "proven"
 	_emit()
@@ -419,8 +422,7 @@ func _fight_until_p1_wins(session: GameSession, max_frames: int) -> void:
 			session.step_fixed(STEP, _idle_cmds(session))
 			frames += 1
 			continue
-		var floor_y: float = foe.global_position.y
-		p1.global_position = Vector2(foe.global_position.x - 16.0, floor_y)
+		p1.global_position = Vector2(foe.global_position.x - 16.0, foe.global_position.y)
 		p1.velocity = Vector2.ZERO
 		foe.velocity = Vector2.ZERO
 		p1.facing = 1.0
@@ -429,10 +431,10 @@ func _fight_until_p1_wins(session: GameSession, max_frames: int) -> void:
 		if p1.ammo < 4:
 			p1.ammo = 12
 		p1.invuln = 0.2
+		p1.grant_invuln_ticks(3)
 		var cmds: Array[Dictionary] = _idle_cmds(session)
-		cmds[0]["melee"] = true
-		cmds[0]["fire_held"] = (frames % 20) < 12
-		cmds[0]["fire_released"] = (frames % 20) == 12
+		cmds[0]["fire_held"] = (frames % 16) < 10
+		cmds[0]["fire_released"] = (frames % 16) == 10
 		session.step_fixed(STEP, cmds)
 		frames += 1
 	if session.outcome != "win":
@@ -774,6 +776,55 @@ func _test_melee(app: App) -> void:
 		_melee = "proven"
 
 
+func _test_react(app: App) -> void:
+	var errors: PackedStringArray = await ReactionCasesScript.run_all(app)
+	var i: int = 0
+	while i < errors.size():
+		_fail("REACT %s" % String(errors[i]))
+		i += 1
+	var damage: String = str(ReactionCasesScript.outcome_damage.get("verdict", "unproven"))
+	var knock: String = str(ReactionCasesScript.outcome_knock.get("verdict", "unproven"))
+	var air: String = str(ReactionCasesScript.outcome_air.get("verdict", "unproven"))
+	var down: String = str(ReactionCasesScript.outcome_down.get("verdict", "unproven"))
+	var getup: String = str(ReactionCasesScript.outcome_getup.get("verdict", "unproven"))
+	var invuln: String = str(ReactionCasesScript.outcome_invuln.get("verdict", "unproven"))
+	var chain: String = str(ReactionCasesScript.outcome_chain.get("verdict", "unproven"))
+	var disarm: String = str(ReactionCasesScript.outcome_disarm.get("verdict", "unproven"))
+	var drop: String = str(ReactionCasesScript.outcome_drop.get("verdict", "unproven"))
+	var death: String = str(ReactionCasesScript.outcome_death.get("verdict", "unproven"))
+	var events: String = str(ReactionCasesScript.outcome_events.get("verdict", "unproven"))
+	var live: String = str(ReactionCasesScript.outcome_live.get("verdict", "unproven"))
+	var replay: String = str(ReactionCasesScript.outcome_replay.get("verdict", "unproven"))
+	if damage != "pass":
+		_fail("REACT DAMAGE outcome is %s" % damage)
+	if knock != "pass":
+		_fail("REACT KNOCK outcome is %s" % knock)
+	if air != "pass":
+		_fail("REACT AIR outcome is %s" % air)
+	if down != "pass":
+		_fail("REACT DOWN outcome is %s" % down)
+	if getup != "pass":
+		_fail("REACT GETUP outcome is %s" % getup)
+	if invuln != "pass":
+		_fail("REACT INVULN outcome is %s" % invuln)
+	if chain != "pass":
+		_fail("REACT CHAIN outcome is %s" % chain)
+	if disarm != "pass":
+		_fail("REACT DISARM outcome is %s" % disarm)
+	if drop != "pass":
+		_fail("REACT DROP outcome is %s" % drop)
+	if death != "pass":
+		_fail("REACT DEATH outcome is %s" % death)
+	if events != "pass":
+		_fail("REACT EVENTS outcome is %s" % events)
+	if live != "pass":
+		_fail("REACT LIVE outcome is %s" % live)
+	if replay != "match":
+		_fail("REACT REPLAY outcome is %s" % replay)
+	if _count_prefix("REACT ") == 0:
+		_react = "proven"
+
+
 func _emit() -> void:
 	print("HH_VF_PATH title→fight→win/lose→restart")
 	print(
@@ -859,6 +910,27 @@ func _emit() -> void:
 			CombatCasesScript.used_apply_frames_succeeded,
 			CombatCasesScript.used_apply_frames_attempted,
 			_melee,
+		]
+	)
+	print(
+		"HH_VF_REACT DAMAGE=%s KNOCK=%s AIR=%s DOWN=%s GETUP=%s INVULN=%s CHAIN=%s DISARM=%s DROP=%s DEATH=%s EVENTS=%s LIVE=%s REPLAY=%s APPLY=%d/%d status=%s"
+		% [
+			str(ReactionCasesScript.outcome_damage.get("verdict", "unproven")),
+			str(ReactionCasesScript.outcome_knock.get("verdict", "unproven")),
+			str(ReactionCasesScript.outcome_air.get("verdict", "unproven")),
+			str(ReactionCasesScript.outcome_down.get("verdict", "unproven")),
+			str(ReactionCasesScript.outcome_getup.get("verdict", "unproven")),
+			str(ReactionCasesScript.outcome_invuln.get("verdict", "unproven")),
+			str(ReactionCasesScript.outcome_chain.get("verdict", "unproven")),
+			str(ReactionCasesScript.outcome_disarm.get("verdict", "unproven")),
+			str(ReactionCasesScript.outcome_drop.get("verdict", "unproven")),
+			str(ReactionCasesScript.outcome_death.get("verdict", "unproven")),
+			str(ReactionCasesScript.outcome_events.get("verdict", "unproven")),
+			str(ReactionCasesScript.outcome_live.get("verdict", "unproven")),
+			str(ReactionCasesScript.outcome_replay.get("verdict", "unproven")),
+			ReactionCasesScript.used_apply_frames_succeeded,
+			ReactionCasesScript.used_apply_frames_attempted,
+			_react,
 		]
 	)
 	print(

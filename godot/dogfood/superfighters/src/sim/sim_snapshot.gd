@@ -21,6 +21,7 @@ static func from_session(session: GameSession) -> Dictionary:
 		if drop != null and is_instance_valid(drop):
 			pickups_out.append({
 				"id": drop.weapon_id,
+				"uid": drop.drop_uid,
 				"x": SimConstants.quantize(drop.global_position.x),
 				"y": SimConstants.quantize(drop.global_position.y),
 			})
@@ -171,6 +172,10 @@ static func _fighter_row(f: Fighter) -> Dictionary:
 		"kicking": 1 if f.kicking else 0,
 		"pose": f.current_pose(),
 		"invuln": SimConstants.quantize(f.invuln),
+		"invuln_ticks": f.invuln_ticks,
+		"knockdown": 1 if f.knockdown_left > 0.0 else 0,
+		"getup": 1 if f.getup_left > 0.0 else 0,
+		"hit_airborne": 1 if f.hit_airborne else 0,
 		"roll_seq": f.roll_seq,
 		"dive_seq": f.dive_seq,
 		"kick_seq": f.kick_seq,

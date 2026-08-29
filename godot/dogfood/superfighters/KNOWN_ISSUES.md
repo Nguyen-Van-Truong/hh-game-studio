@@ -71,3 +71,13 @@ First playable slice. Not G6. Not 60/60.
   `ledger:RL-MOVE-JUMP-KICK` assumption. Hold-to-aim stays
   `ledger:RL-CTRL-HOLD-AIM` assumption. Y8 roll/dive observation
   stays `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). No new Y8 play.
+- VF3-WP2 ships knockback, knockdown/get-up, exact-tick invuln,
+  and punch disarm as assumption (`ledger:RL-HIT-KNOCK`,
+  `ledger:RL-HIT-DOWN`, `ledger:RL-HIT-INVULN`,
+  `ledger:RL-HIT-DISARM`). Official proof is InputFrame
+  `apply_frames` plus live InputEvent inject. Knockdown pose
+  reuses the crouch clip (no new art this WP). Official death
+  cause is `damage` or `pit` only. Invuln whiffs do not consume the
+  melee window. Crouch-pickup takes the nearest drop. The vs1 LOOP
+  smoke in `tests/run_all.gd` glues P1 and fires only so aerial
+  kick + knockdown invuln does not stall last-standing. No new Y8 play.

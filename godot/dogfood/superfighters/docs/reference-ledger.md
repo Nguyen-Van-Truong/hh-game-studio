@@ -426,3 +426,34 @@ not a VF5 pass.
 | RL-HIT-BOX | AABB hitbox vs hurtbox | `assumption` | none | VF3-WP1 product contract; **not** observed on Y8 this session | 2026-08-29 | Overlap hits; miss classifies behind/above/below/reach | fists 16x12 offset 10,-2 | Not a distance check. Not observed. |
 | RL-HIT-FF | Mode-scoped friendly-fire | `assumption` | none | VF3-WP1 product contract; **not** observed on Y8 this session | 2026-08-29 | vs1 same-team HP frozen; vs2 different teams take damage | vs1=false vs2=true stage=false | Not observed. |
 | RL-HIT-HITSTOP | Presentation hitstop | `assumption` | none | VF3-WP1 product contract; **not** observed on Y8 this session | 2026-08-29 | Sprite scale 0 for 2 ticks; SimClock still +1 | 2 ticks | Clock stays RL-SIM-FIXED-60. Not observed. |
+
+---
+
+## VF3-WP2 knockback, knockdown, invuln, disarm (not a play observation)
+
+Dated 2026-08-29 Asia/Saigon. No in-game Y8 play. No HTML5/Flash
+package. Sidecar: `docs/reaction.md` and
+`docs/evidence/VF3WP2-20260829-ASIA-SAIGON-01/`.
+
+Knockback stays `ledger:RL-HIT-KNOCK` (`assumption`). Knockdown /
+get-up stay `ledger:RL-HIT-DOWN` (`assumption`). Hit invuln stays
+`ledger:RL-HIT-INVULN` (`assumption`). Punch disarm stays
+`ledger:RL-HIT-DISARM` (`assumption`). None of these rows is
+promoted to `observed`. Hold-to-aim stays
+`ledger:RL-CTRL-HOLD-AIM` (`assumption`). Y8 observation stays
+`ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). 60 Hz stays
+`ledger:RL-SIM-FIXED-60` (`assumption`).
+
+Product contract: a landed punch applies impulse and may launch.
+A knockdown style (kick / dive tackle) enters knockdown, then
+get-up. Invuln is tick-exact. A second knockdown while down is
+blocked. Punch (not kick) disarms a held gun; the drop has a uid
+and is not duplicated. Official death cause is `damage` or `pit`.
+Official proof uses `apply_frames` plus live InputEvent inject.
+
+| ID | Topic | Class | Conf. | Source | When | Behavior to reproduce | Tuning-only | Notes |
+|---|---|---|---|---|---|---|---|---|
+| RL-HIT-KNOCK | Hit impulse / airborne | `assumption` | none | VF3-WP2 product contract; **not** observed on Y8 this session | 2026-08-29 | Landed hit adds knock vector; negative Y tags airborne | melee 80/-40 | Not Y8 parity. Do not mark observed. |
+| RL-HIT-DOWN | Knockdown then get-up | `assumption` | none | VF3-WP2 product contract; **not** observed on Y8 this session | 2026-08-29 | Kick/dive enter knockdown; then getup; chain-lock blocks refresh | 18 + 10 ticks | Not observed. |
+| RL-HIT-INVULN | Exact-tick hit invuln | `assumption` | none | VF3-WP2 product contract; **not** observed on Y8 this session | 2026-08-29 | Punch 5 ticks; knockdown covers down+getup; then damage lands | 5 / 28 ticks | Not infinite. Not observed. |
+| RL-HIT-DISARM | Punch disarms a gun | `assumption` | none | VF3-WP2 product contract; **not** observed on Y8 this session | 2026-08-29 | Melee/crouch punch vs gun-holder drops one uid; pickup consumes it | punch only | Kick does not disarm. Not observed. |

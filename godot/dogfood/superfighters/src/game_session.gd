@@ -37,6 +37,7 @@ var last_reject: PackedStringArray = PackedStringArray()
 var ledger: SimEventLedger = SimEventLedger.new()
 var recorder: SimRecorder = null
 var pause_reason: String = ""
+var pickup_seq: int = 0
 
 
 func setup(p_mode: String, p_map: String, p_stage: int) -> void:
@@ -52,6 +53,7 @@ func setup(p_mode: String, p_map: String, p_stage: int) -> void:
 	pause_reason = ""
 	last_reject = PackedStringArray()
 	ledger = SimEventLedger.new()
+	pickup_seq = 0
 	arena = Arena.new()
 	world = arena.build(map_id)
 	add_child(world)
@@ -198,13 +200,22 @@ func _step_one_tick(cmds: Array[Dictionary]) -> void:
 			sfx.play("jump")
 		if f.want_melee:
 			_try_start_melee(f)
-		_resolve_attack(f)
-		if f.diving and not f.dive_did_tackle:
-			_try_dive_tackle(f)
-		if f.want_fire:
-			_do_fire(f)
-		if f.want_grenade:
-			_do_grenade(f)
+		i += 1
+	i = 0
+	while i < fighters.size():
+		var actor: Fighter = fighters[i]
+		_resolve_attack(actor)
+		if actor.diving and not actor.dive_did_tackle:
+			_try_dive_tackle(actor)
+		if actor.want_fire:
+			_do_fire(actor)
+		if actor.want_grenade:
+			_do_grenade(actor)
+		i += 1
+	i = 0
+	while i < fighters.size():
+		_emit_reaction_feedback(fighters[i])
+		fighters[i].clear_reaction_pulse()
 		i += 1
 	_step_respawns(dt)
 	_step_bullets(dt)
@@ -274,6 +285,10 @@ func replace_pickups(rows: Array) -> void:
 			SimConstants.dequantize(int(row.get("y", 0)))
 		)
 		var drop: Pickup = _add_pickup(str(row.get("id", "pistol")), at, bool(row.get("from_world", true)))
+		if row.has("uid"):
+			drop.drop_uid = int(row.get("uid", drop.drop_uid))
+			if drop.drop_uid > pickup_seq:
+				pickup_seq = drop.drop_uid
 		drop.global_position = at
 		if row.has("home_x") or row.has("home_y"):
 			drop.home = Vector2(
@@ -434,8 +449,9 @@ func _spawn_weapons() -> void:
 
 
 func _add_pickup(pid: String, at: Vector2, from_world: bool) -> Pickup:
+	pickup_seq += 1
 	var drop: Pickup = Pickup.new()
-	drop.setup(pid, at)
+	drop.setup(pid, at, pickup_seq)
 	drop.from_world = from_world
 	drop.home = at
 	world.add_child(drop)
@@ -521,17 +537,32 @@ func _resolve_hitbox(f: Fighter) -> void:
 			continue
 		if not _Combat.overlaps(box, _Combat.hurtbox_rect(other)):
 			continue
+		if other.invuln_ticks > 0 or other.invuln > 0.0:
+			continue
 		var dmg: float = _Combat.damage_of(f.attack_weapon, f.attack_style)
 		var knock: Vector2 = _Combat.knock_of(f.attack_style, f.facing)
+		var hp0: float = other.health
 		other.take_damage(dmg, knock)
-		if _Combat.style_knocks_down(f.attack_style):
-			other.apply_knockdown(Vector2(f.facing * 70.0, 20.0))
-			ledger.push(clock.tick, "melee", "knockdown", {
-				"attacker": f.slot,
-				"target": other.slot,
-				"source": f.attack_style,
-				"seed": sim_seed,
-			})
+		var landed: bool = other.health < hp0 - 0.01 or other.dead
+		if landed and _Combat.style_knocks_down(f.attack_style):
+			if other.apply_knockdown(Vector2(f.facing * 70.0, 20.0)):
+				ledger.push(clock.tick, "melee", "knockdown", {
+					"attacker": f.slot,
+					"target": other.slot,
+					"source": f.attack_style,
+					"seed": sim_seed,
+				})
+			else:
+				ledger.push(clock.tick, "melee", "knockdown_block", {
+					"attacker": f.slot,
+					"target": other.slot,
+					"source": f.attack_style,
+					"seed": sim_seed,
+				})
+		if landed and _Combat.style_disarms(f.attack_style):
+			var dropped: String = other.disarm_gun()
+			if dropped != "":
+				_drop_disarmed(other, dropped)
 		f.mark_hit(other.slot)
 		f.hitstop_left = maxi(f.hitstop_left, _Combat.hitstop_ticks())
 		other.hitstop_left = maxi(other.hitstop_left, _Combat.hitstop_ticks())
@@ -596,37 +627,73 @@ func _try_dive_tackle(f: Fighter) -> void:
 func _try_pickup(f: Fighter) -> bool:
 	if not f.crouched:
 		return false
+	var best_i: int = -1
+	var best_d: float = 28.0001
 	var i: int = 0
 	while i < pickups.size():
 		var drop: Pickup = pickups[i]
 		if drop != null and is_instance_valid(drop):
-			if f.global_position.distance_to(drop.global_position) <= 28.0:
-				var spec: Dictionary = WeaponDefs.data(drop.weapon_id)
-				var slot_kind: String = str(spec.get("slot", "melee"))
-				if slot_kind == "gun" and f.gun_id != "" and f.ammo > 0:
-					_drop_specific(f.gun_id, f.global_position + Vector2(0, 8), false)
-				elif slot_kind == "melee" and f.melee_id != "fists":
-					_drop_specific(f.melee_id, f.global_position + Vector2(0, 8), false)
-				if drop.from_world:
-					respawns.append({
-						"id": drop.weapon_id,
-						"pos": drop.home,
-						"t": Maps.WEAPON_RESPAWN,
-					})
-				f.give_weapon(drop.weapon_id)
-				if sfx != null:
-					sfx.play("pickup")
-				drop.queue_free()
-				pickups.remove_at(i)
-				return true
+			var dist: float = f.global_position.distance_to(drop.global_position)
+			if dist <= 28.0 and dist < best_d:
+				best_d = dist
+				best_i = i
 		i += 1
-	return false
+	if best_i < 0:
+		return false
+	var chosen: Pickup = pickups[best_i]
+	var spec: Dictionary = WeaponDefs.data(chosen.weapon_id)
+	var slot_kind: String = str(spec.get("slot", "melee"))
+	if slot_kind == "gun" and f.gun_id != "" and f.ammo > 0:
+		_drop_specific(f.gun_id, f.global_position + Vector2(0, 8), false)
+	elif slot_kind == "melee" and f.melee_id != "fists":
+		_drop_specific(f.melee_id, f.global_position + Vector2(0, 8), false)
+	if chosen.from_world:
+		respawns.append({
+			"id": chosen.weapon_id,
+			"pos": chosen.home,
+			"t": Maps.WEAPON_RESPAWN,
+		})
+	var picked: String = chosen.weapon_id
+	var uid: int = chosen.drop_uid
+	f.give_weapon(picked)
+	ledger.push(clock.tick, "melee", "item_pickup", {
+		"slot": f.slot,
+		"id": picked,
+		"uid": uid,
+		"seed": sim_seed,
+	})
+	if sfx != null:
+		sfx.play("pickup")
+	chosen.queue_free()
+	pickups.remove_at(best_i)
+	return true
 
 
 func _drop_specific(pid: String, at: Vector2, from_world: bool) -> void:
 	if pid == "" or pid == "fists":
 		return
 	_add_pickup(pid, at, from_world)
+
+
+func _drop_disarmed(f: Fighter, pid: String) -> void:
+	if pid == "" or pid == "fists":
+		return
+	var at: Vector2 = f.global_position + Vector2(0.0, 8.0)
+	var drop: Pickup = _add_pickup(pid, at, false)
+	ledger.push(clock.tick, "melee", "disarm", {
+		"slot": f.slot,
+		"item": pid,
+		"uid": drop.drop_uid,
+		"seed": sim_seed,
+	})
+	ledger.push(clock.tick, "melee", "item_drop", {
+		"id": pid,
+		"uid": drop.drop_uid,
+		"x": SimConstants.quantize(at.x),
+		"y": SimConstants.quantize(at.y),
+		"source": "disarm",
+		"seed": sim_seed,
+	})
 
 
 func _do_fire(f: Fighter) -> void:
@@ -734,6 +801,8 @@ func _bullet_hit_fighter(shot: Bullet) -> bool:
 		if f.dead or f.slot == shot.owner_slot:
 			continue
 		if f.global_position.distance_to(shot.global_position) <= 10.0:
+			if f.invuln_ticks > 0 or f.invuln > 0.0:
+				return true
 			f.take_damage(shot.damage, shot.velocity.normalized() * 70.0 + Vector2(0, -30))
 			_log_death_if_new(f)
 			_splat(f.global_position)
@@ -1026,10 +1095,6 @@ func _emit_loco_feedback(f: Fighter) -> void:
 			"slot": f.slot,
 			"seq": f.dive_seq,
 		})
-	if f.knockdown_started:
-		ledger.push(clock.tick, "melee", "knockdown_start", {
-			"slot": f.slot,
-		})
 	if f.attach_started:
 		ledger.push(clock.tick, "locomotion", "ladder_attach", {
 			"slot": f.slot,
@@ -1077,6 +1142,58 @@ func _emit_loco_feedback(f: Fighter) -> void:
 		})
 		if sfx != null:
 			sfx.play("drop")
+
+
+func _emit_reaction_feedback(f: Fighter) -> void:
+	if f == null:
+		return
+	if f.knockback_started:
+		ledger.push(clock.tick, "melee", "knockback_start", {
+			"slot": f.slot,
+			"vx": SimConstants.quantize(f.velocity.x),
+			"vy": SimConstants.quantize(f.velocity.y),
+		})
+	if f.knockback_ended:
+		ledger.push(clock.tick, "melee", "knockback_end", {
+			"slot": f.slot,
+		})
+	if f.hit_airborne_started:
+		ledger.push(clock.tick, "melee", "airborne_start", {
+			"slot": f.slot,
+		})
+	if f.hit_airborne_ended:
+		ledger.push(clock.tick, "melee", "airborne_end", {
+			"slot": f.slot,
+		})
+	if f.knockdown_started:
+		ledger.push(clock.tick, "melee", "knockdown_start", {
+			"slot": f.slot,
+		})
+	if f.knockdown_ended:
+		ledger.push(clock.tick, "melee", "knockdown_end", {
+			"slot": f.slot,
+		})
+	if f.knockdown_blocked:
+		ledger.push(clock.tick, "melee", "knockdown_block", {
+			"slot": f.slot,
+		})
+	if f.getup_started:
+		ledger.push(clock.tick, "melee", "getup_start", {
+			"slot": f.slot,
+		})
+	if f.getup_ended:
+		ledger.push(clock.tick, "melee", "getup_end", {
+			"slot": f.slot,
+		})
+	if f.invuln_started:
+		ledger.push(clock.tick, "melee", "invuln_start", {
+			"slot": f.slot,
+			"ticks": f.invuln_ticks,
+		})
+	if f.invuln_ended:
+		ledger.push(clock.tick, "melee", "invuln_end", {
+			"slot": f.slot,
+		})
 
 
 func _log_death_if_new(f: Fighter) -> void:

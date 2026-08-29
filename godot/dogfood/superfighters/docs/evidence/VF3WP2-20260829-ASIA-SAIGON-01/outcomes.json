@@ -1,0 +1,168 @@
+{
+	"air": {
+		"airborne_start": 1,
+		"hit_airborne": true,
+		"source": "punch knock_y lifts or tags hit_airborne",
+		"verdict": "pass",
+		"vy0": 0.0,
+		"vy1": -40.0
+	},
+	"apply": {
+		"attempted": 1038,
+		"succeeded": 1038,
+		"used_action_press": 0,
+		"used_apply_frames": 1038,
+		"used_parse_input_event": 1,
+		"used_step_fixed": 0
+	},
+	"chain": {
+		"after_hit": true,
+		"free_after": true,
+		"hp_same": true,
+		"locked": true,
+		"no_refresh": true,
+		"source": "knockdown invuln blocks chain; getup restores hit",
+		"verdict": "pass"
+	},
+	"damage": {
+		"damage": 10.0,
+		"expected": 10.0,
+		"hp0": 100.0,
+		"hp1": 90.0,
+		"source": "apply_frames punch HP delta equals fists damage",
+		"verdict": "pass"
+	},
+	"death": {
+		"cause": "damage",
+		"dead": true,
+		"death_events": 1,
+		"source": "apply_frames punches until HP 0; cause from event",
+		"swings": 10,
+		"verdict": "pass"
+	},
+	"disarm": {
+		"disarm_events": 1,
+		"held_before": true,
+		"holds_after": false,
+		"item_drop_events": 1,
+		"pick0": 0,
+		"pick1": 1,
+		"source": "punch vs gun-holder drops one pistol",
+		"verdict": "pass"
+	},
+	"down": {
+		"knockdown_left": 0.0,
+		"knockdown_start": 1,
+		"source": "apply_frames jump+kick enters knockdown",
+		"style": "kick",
+		"verdict": "pass"
+	},
+	"drop": {
+		"after_hit": 1,
+		"after_pick": 0,
+		"item_pickup": 1,
+		"persist": 1,
+		"picked": true,
+		"source": "disarmed gun persists one uid then one pickup",
+		"uid0": 1,
+		"uid1": 1,
+		"verdict": "pass"
+	},
+	"events": {
+		"hash0": "49b1c22fb69629be149415f025e2f70c011d85a95586ac8f9f016984a8661e9f",
+		"hash1": "5b82651c1f04436a4f10de3e4326f3e75ddde7cca6bf7a68f87f16b0682843ab",
+		"missing": [],
+		"source": "kick knockdown emits entry/exit kinds",
+		"verdict": "pass"
+	},
+	"getup": {
+		"getup_end": 1,
+		"getup_start": 1,
+		"knockdown_end": 1,
+		"locked_after": false,
+		"source": "knockdown ticks then getup entry/exit",
+		"verdict": "pass"
+	},
+	"invuln": {
+		"after_damaged": true,
+		"armed_ticks": 5,
+		"blocked_inside": true,
+		"expected_ticks": 5,
+		"expired": true,
+		"hp0": 100.0,
+		"invuln_end": 1,
+		"invuln_start": 1,
+		"mid_ticks": 4,
+		"source": "exact hit_invuln_ticks; damage blocked then allowed",
+		"verdict": "pass"
+	},
+	"knock": {
+		"knockback_start": 1,
+		"source": "apply_frames punch impulse + knockback_start",
+		"verdict": "pass",
+		"vx0": 0.0,
+		"vx1": 46.6666679382324
+	},
+	"live": {
+		"holds_gun": false,
+		"hp0": 100.0,
+		"hp1": 90.0,
+		"source": "parse_input_event KEY_N + step_from_live_input",
+		"verdict": "pass"
+	},
+	"replay": {
+		"pair_count": 6,
+		"pairs": [
+			{
+				"hash_a": "bf643574a9664421a24aeee4c76ca342a84945d099ca23da4c3aae4eb99583d9",
+				"hash_b": "bf643574a9664421a24aeee4c76ca342a84945d099ca23da4c3aae4eb99583d9",
+				"hash_match": true,
+				"name": "reaction_chain",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "cc2d37ad6570bdc433433217a580191a352b5a01804a080b5783d4a22a95cf2a",
+				"hash_b": "cc2d37ad6570bdc433433217a580191a352b5a01804a080b5783d4a22a95cf2a",
+				"hash_match": true,
+				"name": "reaction_disarm",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "e2db00452d060f26a044c1665604aa92aa88f1b1b7c5f2efed4a6cc239a6475a",
+				"hash_b": "e2db00452d060f26a044c1665604aa92aa88f1b1b7c5f2efed4a6cc239a6475a",
+				"hash_match": true,
+				"name": "reaction_down",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "c5326efe7f547f110dd6b666be83e98322c61eeabe1f423845ea4d5eb292f58f",
+				"hash_b": "c5326efe7f547f110dd6b666be83e98322c61eeabe1f423845ea4d5eb292f58f",
+				"hash_match": true,
+				"name": "reaction_drop",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "16af950cda2334b95c274ca97b392f5125a7a207ce492b6425478e786ee5c60f",
+				"hash_b": "16af950cda2334b95c274ca97b392f5125a7a207ce492b6425478e786ee5c60f",
+				"hash_match": true,
+				"name": "reaction_invuln",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "9befe65009b333cc563c4690c21145b4ddb76e02852f41fef15e8a7bafcfa690",
+				"hash_b": "9befe65009b333cc563c4690c21145b4ddb76e02852f41fef15e8a7bafcfa690",
+				"hash_match": true,
+				"name": "reaction_knock",
+				"ok_a": true,
+				"ok_b": true
+			}
+		],
+		"source": "SimReplay.final_hash twice",
+		"verdict": "match"
+	}
+}

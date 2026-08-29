@@ -126,6 +126,7 @@ static func _pickup_extras(session: GameSession) -> Array:
 				"x": SimConstants.quantize(drop.global_position.x),
 				"y": SimConstants.quantize(drop.global_position.y),
 				"from_world": drop.from_world,
+				"uid": drop.drop_uid,
 				"home_x": SimConstants.quantize(drop.home.x),
 				"home_y": SimConstants.quantize(drop.home.y),
 			})
@@ -229,6 +230,9 @@ static func _fighter_extras(session: GameSession) -> Array:
 				"attack_age": f.attack_age,
 				"hitstop_left": f.hitstop_left,
 				"knockdown_left": SimConstants.quantize(f.knockdown_left),
+				"getup_left": SimConstants.quantize(f.getup_left),
+				"hit_airborne": f.hit_airborne,
+				"invuln_ticks": f.invuln_ticks,
 				"fire_extinguish_count": f.fire_extinguish_count,
 				"burning": f.burning,
 			})

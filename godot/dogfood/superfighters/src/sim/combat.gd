@@ -8,6 +8,10 @@ extends RefCounted
 ## ledger:RL-HIT-FF (assumption). Hitstop stays
 ## ledger:RL-HIT-HITSTOP (assumption, presentation only).
 ## Jump-kick stay ledger:RL-MOVE-JUMP-KICK (assumption).
+## Knockback stays ledger:RL-HIT-KNOCK (assumption).
+## Knockdown/getup stay ledger:RL-HIT-DOWN (assumption).
+## Hit invuln stays ledger:RL-HIT-INVULN (assumption).
+## Punch disarm stays ledger:RL-HIT-DISARM (assumption).
 ## Hold-to-aim stays ledger:RL-CTRL-HOLD-AIM (assumption).
 ## Y8 observation stays ledger:RL-MOVE-ROLL-DIVE (unavailable).
 ## Not a Y8 play observation.
@@ -77,6 +81,41 @@ static func knock_of(style: String, facing: float) -> Vector2:
 
 static func style_knocks_down(style: String) -> bool:
 	return bool(style_spec(style).get("knockdown", false))
+
+
+static func style_disarms(style: String) -> bool:
+	return bool(style_spec(style).get("disarm", false))
+
+
+static func reaction() -> Dictionary:
+	return _dict(data().get("hit_reaction", {}))
+
+
+static func hit_invuln_ticks() -> int:
+	return maxi(int(reaction().get("hit_invuln_ticks", 5)), 1)
+
+
+static func knockdown_ticks() -> int:
+	return maxi(int(reaction().get("knockdown_ticks", 18)), 1)
+
+
+static func getup_ticks() -> int:
+	return maxi(int(reaction().get("getup_ticks", 10)), 1)
+
+
+static func knockdown_invuln_ticks() -> int:
+	return maxi(int(reaction().get("knockdown_invuln_ticks", 28)), hit_invuln_ticks())
+
+
+static func chain_lock_block() -> bool:
+	return bool(reaction().get("chain_lock_block", true))
+
+
+static func valid_death_cause(cause: String) -> bool:
+	var allowed: Variant = reaction().get("valid_death_causes", ["damage", "pit"])
+	if allowed is Array:
+		return (allowed as Array).has(cause)
+	return cause == "damage" or cause == "pit"
 
 
 static func friendly_fire_on(mode: String) -> bool:
