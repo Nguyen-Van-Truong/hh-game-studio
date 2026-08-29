@@ -2,7 +2,7 @@ PLAN_SCOPE=godot/dogfood/superfighters
 PRODUCT_PLAN_AUTHORITY=1
 PARENT_PLATFORM_PLAN=zdocs/20-8-godot-agent-autopilot-plan.txt
 PARENT_PLATFORM_STATUS=OWNER_STOPPED_59_OF_60
-CURRENT_VALID_WP=VF3-WP2
+CURRENT_VALID_WP=VF3-WP3
 CORRECTION_GATE_VF2_WP2=CLEARED
 STATUS=ACTIVE
 PLAN_DATE=2026-08-29
@@ -22,7 +22,7 @@ một lần, tự làm, tự chạy, tự kiểm và tạo gói review; người
 | 0 | VF0 nền và routing | scope, provenance, test sạch, không lẫn plan | none | không | [x] 3/3 |
 | 1 | VF1 reference + contract | reference ledger, behavior spec, deterministic trace | VF0 | research/test | [x] 4/4 |
 | 2 | VF2 movement | chạy, nhảy, crouch, sprint, roll, dive, ladder, ledge | VF1 | input + physics | [x] 5/5 |
-| 3 | VF3 combat | melee/kick, hitbox, knockdown, disarm, aim/fire, grenade | VF2 | weapons + VFX | [ ] 1/6 |
+| 3 | VF3 combat | melee/kick, hitbox, knockdown, disarm, aim/fire, grenade | VF2 | weapons + VFX | [ ] 2/6 |
 | 4 | VF4 world interaction | props, glass, barrels, containers, doors/elevators, hazards | VF2 | map fixtures | [ ] 0/5 |
 | 5 | VF5 map parity | 6 functional arenas; original geometry/names/art | VF3,VF4 | one map per agent lane | [ ] 0/6 |
 | 6 | VF6 modes + AI | VS, local 2P, Stage, Survival, competent bots | VF3,VF5 | mode/UI/AI | [ ] 0/5 |
@@ -30,7 +30,7 @@ một lần, tự làm, tự chạy, tự kiểm và tạo gói review; người
 | 8 | VF8 agent autonomy | brief→edit→play→observe→repair→checkpoint, no manual F6 | VF0..VF7 | host/bridge | [ ] 0/4 |
 | 9 | VF9 verification | trace replay, E2E, differential rubric, soak, leak proof | all above | QA | [ ] 0/5 |
 | 10 | VF10 package | Windows build, offline run, provenance/license, review bundle | VF9 | release | [ ] 0/3 |
-|   | **Tổng** | **50 WP nhỏ; chỉ coordinator tick sau DoD** |  |  | **13/50** |
+|   | **Tổng** | **50 WP nhỏ; chỉ coordinator tick sau DoD** |  |  | **14/50** |
 
 Gate nội bộ:
 
@@ -1012,13 +1012,65 @@ VF3-WP1 — Hitbox/hurtbox, attack phases và melee feedback                    
         Parent 20-8 unchanged: R9-WP4 [ ]; 59/60; G6 [ ].
       Commit: (this tick)
 
-VF3-WP2 — Knockback, knockdown, invulnerability và disarm                         [ ]
+VF3-WP2 — Knockback, knockdown, invulnerability và disarm                         [x]
   Phụ thuộc: VF3-WP1,VF2-WP3. Files: fighter state machine, combat tests.
   Làm: impulse/airborne/knockdown recovery, brief invulnerability, punch
   disarm khi đối thủ đang cầm gun, dropped item lifecycle; tránh chain-lock.
   Verify: damage/knockdown/disarm traces; invulnerability exact ticks;
   dropped item không mất hoặc nhân đôi; death cause chỉ từ event hợp lệ.
   DoD: các trạng thái có entry/exit event và replay hash.
+  LOG:
+    LOG 2026-08-29 18:07 Asia/Saigon — agent=coordinator
+      Base: dea5082 knockback knockdown invuln disarm
+        on VF3-WP1 tick e831f81.
+      Files/leases: src/fighter.gd, src/game_session.gd,
+        src/pickup.gd, src/sim/combat.gd,
+        src/sim/sim_snapshot.gd, src/sim/sim_constants.gd,
+        src/runtime/runtime_checkpoint.gd,
+        data/sim/combat.json, tests/reaction_cases.gd,
+        tests/run_reaction.gd, tests/check_reaction.py,
+        tests/pack_reaction_evidence.py, tests/traces/reaction/,
+        tests/run_all.gd, tests/traces/README.md,
+        docs/reaction.md, docs/reference-ledger.md,
+        docs/sim-contract.md, KNOWN_ISSUES.md, PROJECT_BRIEF.md,
+        docs/evidence/VF3WP2-20260829-ASIA-SAIGON-01/
+        (V-A18 pack; official leftover-0).
+      Verify: leftover-0; run VF3WP2-20260829-ASIA-SAIGON-01
+        source hash
+        bcec2614f997c79434fb77c01d977c981d7fe78ab81d68286c3cab67e0b5e742
+        DAMAGE=pass KNOCK=pass AIR=pass DOWN=pass GETUP=pass
+        INVULN=pass CHAIN=pass DISARM=pass DROP=pass DEATH=pass
+        EVENTS=pass LIVE=pass REPLAY=match from structured
+        outcomes; apply 1038/1038
+        python godot/dogfood/superfighters/tests/check_reaction.py
+          EXIT 0
+        godot --headless --path godot/dogfood/superfighters
+          --script res://tests/run_reaction.gd EXIT 0
+        godot --path godot/dogfood/superfighters
+          --script res://tests/run_reaction.gd EXIT 0
+        leftover Godot on product --path = 0
+        python tests/bootstrap/test_authoritative_plan.py EXIT 0
+        python tests/bootstrap/test_vault_fighters_plan.py EXIT 0
+          PASS: 50 unique VF WPs; no-skip; next=VF3-WP2 (pre-tick);
+          ticked=VF0-WP1,VF0-WP2,VF0-WP3,VF1-WP1,VF1-WP2,VF1-WP3,
+          VF1-WP4,VF2-WP1,VF2-WP2,VF2-WP3,VF2-WP4,VF2-WP5,VF3-WP1;
+          parent 20-8 frozen 59/60 R9-WP4
+        post-tick expected next=VF3-WP3
+      Honesty:
+        60 Hz is V-A14 / ledger:RL-SIM-FIXED-60 assumption,
+        not observed Y8 clock. Hold-to-aim assumption.
+        Knock/down/invuln/disarm stay ledger:RL-HIT-KNOCK /
+        RL-HIT-DOWN / RL-HIT-INVULN / RL-HIT-DISARM assumption,
+        not Y8 observed. Y8 roll/dive observation stays
+        ledger:RL-MOVE-ROLL-DIVE unavailable.
+        Not Y8 parity. Not V0.
+      Critic: II a55bebdf TICK yes leftover-0
+        hash bcec2614… APPLY 1038/1038;
+        HH 2e0e2043 TICK yes leftover-0
+      Gaps: residual nits OK: none blocking; honesty only
+        (assumption not Y8 observed).
+        Parent 20-8 unchanged: R9-WP4 [ ]; 59/60; G6 [ ].
+      Commit: (this tick)
 
 VF3-WP3 — Aim model và fire/release semantics                                      [ ]
   Phụ thuộc: VF2-WP1,VF2-WP2. Files: input/combat/projectile/tests.
@@ -1563,7 +1615,7 @@ vào `KNOWN_ISSUES.md`; không đổi acceptance để làm cho pass.
 21. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Đọc `AGENTS.md`, sau đó đọc bảng đầu file này. WP đầu tiên chưa tick là **VF3-WP2**.
+Đọc `AGENTS.md`, sau đó đọc bảng đầu file này. WP đầu tiên chưa tick là **VF3-WP3**.
 
 Không làm R9-WP4/G6/GX; không mở Rust engine; không đụng Kho Bí Ẩn/Hoan Hao;
 không dùng Snake làm demo; không tải/rip Y8. Chỉ khi VF0-WP1 và VF0-WP2 đã có
@@ -1719,6 +1771,19 @@ dùng chỉ xem và review.
   Product e2b82cf. Gate remains CLEARED. Parent 20-8
   unchanged (R9-WP4 [ ], 59/60, G6 [ ]). VF3-WP1 ticked;
   CURRENT_VALID_WP=VF3-WP2; V0 not ticked. VF3-WP2 remains [ ].
+- COORDINATOR CLOSEOUT VF3-WP2 (2026-08-29 18:07 Asia/Saigon): leftover-0;
+  run VF3WP2-20260829-ASIA-SAIGON-01; source hash
+  bcec2614f997c79434fb77c01d977c981d7fe78ab81d68286c3cab67e0b5e742;
+  DAMAGE/KNOCK/AIR/DOWN/GETUP/INVULN/CHAIN/DISARM/DROP/DEATH/
+  EVENTS/LIVE/REPLAY from structured outcomes;
+  apply 1038/1038; V-A18 pack present. Critics TICK yes
+  (II a55bebdf leftover-0 hash bcec2614… APPLY 1038/1038;
+  HH 2e0e2043 leftover-0). Residual nits OK: honesty only
+  (knock/down/invuln/disarm/60 Hz/hold-to-aim assumption,
+  not Y8 observed; Y8 roll/dive unavailable).
+  Product dea5082. Gate remains CLEARED. Parent 20-8
+  unchanged (R9-WP4 [ ], 59/60, G6 [ ]). VF3-WP2 ticked;
+  CURRENT_VALID_WP=VF3-WP3; V0 not ticked. VF3-WP3 remains [ ].
 
 ================================================================================
 HẾT PLAN — 29-8-2026
