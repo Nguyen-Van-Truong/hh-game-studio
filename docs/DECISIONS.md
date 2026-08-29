@@ -359,3 +359,39 @@ Superfighters on Y8 (https://www.y8.com/games/superfighters) — 2D
 arena deathmatch, not a Street Fighter clone. Original skins; no Y8
 asset rip; no Superfighters trademark on the title screen. Kho Bí Ẩn
 is untouched. This note is not a G6 or 60/60 claim.
+
+## 2026-08-29 — Vault Fighters product plan supersedes product routing only
+
+`decision_id: GODOT-VF-PLAN-2026-08-29`
+`status: owner-direction`
+`date: 2026-08-29`
+`product_plan: zdocs/29-8-vault-fighters-y8-parity-plan.txt`
+`product_scope: godot/dogfood/superfighters/`
+`parent_closeout: zdocs/20-8-godot-agent-autopilot-plan.txt at 59/60`
+
+`reason:` Owner opened the Vault Fighters folder (`GODOT-VF-Y8-2026-08-28`)
+and the 29-8 product plan, but `AGENTS.md` still sent new agents to the 20-8
+cutover (`R0-WP3` / sole `AUTHORITATIVE_PLAN=1` execution). That left a
+contradictory product path: closeout text said not to open a Superfighter
+folder, while product work is exactly `godot/dogfood/superfighters/` under
+the display title **Vault Fighters**.
+
+`impact:` Two authorities, two scopes. Parent 20-8 stays frozen at R9-WP4,
+59/60, G6 `[ ]`, GX `[ ]` — platform files, pin, MCP lock, and historical
+checkboxes. Product agents follow only the 29-8 plan (`PLAN_SCOPE` +
+`PRODUCT_PLAN_AUTHORITY=1`). This is not a second global checkbox authority
+and not a waiver of parent platform invariants. Snake / Kho Bí Ẩn / Rust
+`gs-*` stay out of this route.
+
+`migration:` Rewrite `AGENTS.md` current route to 29-8; keep 20-8 as parent
+closeout history; add `tests/bootstrap/test_vault_fighters_plan.py` (50 unique
+VF WPs, no skip, `CURRENT_VALID_WP` = first unticked VF WP, parent freeze).
+Do **not** add `AUTHORITATIVE_PLAN=1` to the 29-8 plan. Do **not** tick 20-8
+boxes. Historical 20-8 / R9 tool lines about not starting a Superfighter
+folder remain as closeout history; they no longer govern the Vault Fighters
+product path.
+
+The target is behavior/topology parity with the Y8 Superfighters reference as
+far as clean-room and legal constraints allow. All shipped code, art, audio,
+names and map geometry remain original; no Y8/SWF/Flash/package/asset/code rip.
+Human V5 quality review and any commercial/legal decision remain human gates.

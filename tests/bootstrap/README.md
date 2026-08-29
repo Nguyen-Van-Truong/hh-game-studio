@@ -4,6 +4,7 @@ Governance checks for the Godot cutover. Do **not** run `cargo test` for these.
 
 ```text
 python tests/bootstrap/test_authoritative_plan.py
+python tests/bootstrap/test_vault_fighters_plan.py
 python tests/bootstrap/test_policy.py
 python tests/bootstrap/test_no_secrets.py
 python tests/bootstrap/test_capability_matrix.py
@@ -22,6 +23,7 @@ python tools/godot/policy_validate.py .hh-agent/policy.example.toml
 Exit 0 = pass.
 
 - `test_authoritative_plan.py` — exactly one `AUTHORITATIVE_PLAN=1` (the 20-8 plan).
+- `test_vault_fighters_plan.py` — VF0-WP3: 29-8 `PRODUCT_PLAN_AUTHORITY` routing; 50 unique VF WPs; no skip; next WP is first unticked VF WP (not Snake/R9-WP4); parent 20-8 stays frozen at 59/60.
 - `test_policy.py` — R0 TOML fixtures plus R2-WP5 runtime jail/leases/checkpoint/Pause ACK (plan box stays `[ ]`).
 - `test_no_secrets.py` — tree scan (skips `.git`, `target`, `node_modules`, `.godot`). Policy fail fixtures must not contain PAT-shaped blobs.
 - `test_capability_matrix.py` — `docs/godot-agent/CAPABILITY_MATRIX.md` has ≥100 unique `CM-xxx` workflows, all R1-WP1 groups, R8 traces, and no fake Supported P0 rows.
