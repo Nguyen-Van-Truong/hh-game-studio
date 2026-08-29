@@ -102,7 +102,7 @@ func observe() -> Dictionary:
 		"events": events,
 		"actors": snap.get("fighters", []),
 		"weapons": _weapon_view(session, snap),
-		"props": [],
+		"props": _prop_view(session),
 		"ui": _ui_flags(),
 		"diagnostics": _diagnostics(session),
 		"honesty": {
@@ -117,7 +117,7 @@ func observe() -> Dictionary:
 			"ledge": "ledger:RL-MOVE-LEDGE assumption",
 			"drop": "ledger:RL-MOVE-DROP assumption",
 			"roll_dive": "ledger:RL-MOVE-ROLL-DIVE Y8 observation unavailable",
-			"prop_events": "empty in first-playable slice",
+			"prop_events": "schema-owned; break deferred VF4-WP2",
 		},
 	}
 
@@ -347,6 +347,15 @@ func _diagnostics(session: GameSession) -> Dictionary:
 		"event_count": event_count,
 		"session": session != null,
 	}
+
+
+func _prop_view(session: GameSession) -> Array:
+	if session == null or session.world_owner == null:
+		return []
+	var rows: Variant = session.world_owner.call("snapshot")
+	if rows is Array:
+		return rows as Array
+	return []
 
 
 func _weapon_view(session: GameSession, snap: Dictionary) -> Array:

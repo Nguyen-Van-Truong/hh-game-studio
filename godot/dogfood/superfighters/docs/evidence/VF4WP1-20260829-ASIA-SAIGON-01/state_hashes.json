@@ -1,0 +1,40 @@
+{
+	"hash": {
+		"hash": "f32265df824023f778597089f1a812b291a4b2f611873b68ada8a37fe573b53d",
+		"idle": true,
+		"reboot": true,
+		"source": "WorldOwner.stable_hash idle + reboot",
+		"verdict": "pass"
+	},
+	"map_id": "fx_world_open",
+	"mode": "vs2",
+	"replay": {
+		"pairs": [
+			{
+				"hash_a": "cd7949c98d1120afea20f9f24bccbe94f46ce39340b2e9b1fcfe4c7611085778",
+				"hash_b": "cd7949c98d1120afea20f9f24bccbe94f46ce39340b2e9b1fcfe4c7611085778",
+				"hash_match": true,
+				"name": "world_idle",
+				"ok_a": true,
+				"ok_b": true,
+				"world_a": "f32265df824023f778597089f1a812b291a4b2f611873b68ada8a37fe573b53d",
+				"world_b": "f32265df824023f778597089f1a812b291a4b2f611873b68ada8a37fe573b53d",
+				"world_hash_match": true
+			},
+			{
+				"hash_a": "ed2ba74342a42271252cd19e745df6f9be7138734cd9b304d8b8807f120ce502",
+				"hash_b": "ed2ba74342a42271252cd19e745df6f9be7138734cd9b304d8b8807f120ce502",
+				"hash_match": true,
+				"name": "world_walk",
+				"ok_a": true,
+				"ok_b": true,
+				"world_a": "f32265df824023f778597089f1a812b291a4b2f611873b68ada8a37fe573b53d",
+				"world_b": "f32265df824023f778597089f1a812b291a4b2f611873b68ada8a37fe573b53d",
+				"world_hash_match": true
+			}
+		],
+		"source": "apply_frames world traces twice",
+		"verdict": "match"
+	},
+	"seed": 7
+}

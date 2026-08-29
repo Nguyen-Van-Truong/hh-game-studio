@@ -1,0 +1,50 @@
+{
+	"command_id": "cmd.vf4-wp1.world.1",
+	"display": "headless",
+	"ended_at": "2026-08-29T22:34:06+07:00",
+	"ended_unix": 1788017646.02,
+	"epsilon": 0.001,
+	"fail_count": 0,
+	"godot": {
+		"build": "official",
+		"hash": "a13da4feb8d8aefc283c3763d33a2f170a18d541",
+		"hex": 263937,
+		"major": 4,
+		"minor": 7,
+		"patch": 1,
+		"status": "stable",
+		"string": "4.7.1-stable (official)",
+		"timestamp": 0
+	},
+	"map_id": "fx_world_open",
+	"mode": "vs2",
+	"os_name": "Windows",
+	"outcomes": {
+		"AUTHOR": "pass",
+		"DATA": "pass",
+		"HASH": "pass",
+		"LAYERS": "pass",
+		"LIVE": "pass",
+		"ORPHAN": "pass",
+		"PATH": "pass",
+		"PRESENT": "pass",
+		"REPLAY": "match",
+		"SCHEMA": "pass",
+		"SPAWN": "pass",
+		"USED_APPLY_ATTEMPTED": 116,
+		"USED_APPLY_FRAMES": 116,
+		"USED_APPLY_SUCCEEDED": 116
+	},
+	"run_id": "VF4WP1-20260829-ASIA-SAIGON-01",
+	"schema": "vault-fighters.vf4-wp1.run.v1",
+	"seed": 7,
+	"started_at": "2026-08-29T22:34:05+07:00",
+	"started_unix": 1788017645.302,
+	"tick_hz": 60,
+	"timezone": "Asia/Saigon",
+	"viewport": {
+		"h": 720.0,
+		"w": 1280.0
+	},
+	"wp": "VF4-WP1"
+}

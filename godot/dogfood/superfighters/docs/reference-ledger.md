@@ -618,3 +618,42 @@ scenarios plus OVERCAP replay through `apply_frames`.
 | RL-BAL-SPREAD-RNG | Seeded spread jitter | `assumption` | none | VF3-WP6 product contract; **not** observed on Y8 this session | 2026-08-29 | Chaos-on adds jitter on top of deterministic fan | 0.55 × spread | Base fan stays VF3-WP3. Not observed. |
 | RL-BAL-CAP | Damage / knock caps | `assumption` | none | VF3-WP6 product contract; **not** observed on Y8 this session | 2026-08-29 | Reject NaN/inf; hit ≤56; tick ≤80; fire-path overcap through take_damage | 56 / 80 | Always on. Not observed. Not a 999 poke. |
 | RL-BAL-STAMINA | Stamina recover tune | `assumption` | none | VF3-WP6 documents VF2-WP3 numbers | 2026-08-29 | drain 28 / recover 22 / roll 22 / dive 18 | those four | Same numbers so sprint hashes stay. Not observed. |
+
+---
+
+## VF4-WP1 world/prop schema and collision ownership (not a play observation)
+
+Dated 2026-08-29 Asia/Saigon. No in-game Y8 play. No HTML5/Flash
+package. Sidecar: `docs/world.md` and
+`docs/evidence/VF4WP1-20260829-ASIA-SAIGON-01/`.
+
+Schema stays `ledger:RL-WORLD-SCHEMA` (`assumption`). Layers stay
+`ledger:RL-WORLD-LAYERS` (`assumption`). Ownership stays
+`ledger:RL-WORLD-OWN` (`assumption`). Static / dynamic / one-way /
+pickup stay `assumption`. Breakable is schema only
+(`ledger:RL-PROP-BREAK`). Explosive prop is schema only
+(`ledger:RL-PROP-EXPL`). `ledger:RL-NADE-PROP` stays `deferred`.
+None of these rows is promoted to `observed`. Hold-to-aim stays
+`ledger:RL-CTRL-HOLD-AIM` (`assumption`). Y8 observation stays
+`ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). 60 Hz stays
+`ledger:RL-SIM-FIXED-60` (`assumption`).
+
+Product contract: typed PropSpec; named layer/mask contract;
+WorldOwner is the only spawn/despawn writer; presentation cannot
+mutate; editor/runtime paths stay under the product root; restart
+leaves no orphan PropBody; map authoring is catalog placements,
+not GameSession node hard-codes. Official proof uses
+`apply_frames` plus live InputEvent inject. Live maps do not
+receive world placements this WP.
+
+| ID | Topic | Class | Conf. | Source | When | Behavior to reproduce | Tuning-only | Notes |
+|---|---|---|---|---|---|---|---|---|
+| RL-WORLD-SCHEMA | Typed PropSpec catalog | `assumption` | none | VF4-WP1 product contract; **not** observed on Y8 this session | 2026-08-29 | schema rejects missing collision/visual | kind list | Do **not** cite as observed. |
+| RL-WORLD-LAYERS | Named layer/mask contract | `assumption` | none | VF4-WP1 product contract; **not** observed on Y8 this session | 2026-08-29 | static/break/expl on prop; one-way on platform; pickup on pickup | bits 1/2/8/32 | Not observed. |
+| RL-WORLD-OWN | Spawn/despawn ownership | `assumption` | none | VF4-WP1 product contract; **not** observed on Y8 this session | 2026-08-29 | WorldOwner only; PropView mutate rejected; no orphan after restart | — | Not observed. |
+| RL-PROP-STATIC | Static cover prop | `assumption` | none | VF4-WP1 product contract; **not** observed on Y8 this session | 2026-08-29 | catalog crate_static on COL_PROP | 16×16 | Tile `c` still paints live maps. |
+| RL-PROP-DYNAMIC | Dynamic prop kind | `assumption` | none | VF4-WP1 schema only; throw waits VF4-WP2 | 2026-08-29 | kind exists; motion frozen this WP | mask world+platform | Not a throw. |
+| RL-PROP-ONEWAY | One-way prop kind | `assumption` | none | VF4-WP1 product contract; **not** observed on Y8 this session | 2026-08-29 | COL_PLATFORM + one_way_collision | 16×8 | Live `=` tiles unchanged. |
+| RL-PROP-BREAK | Breakable schema | `assumption` | none | VF4-WP1 schema only; destroy waits VF4-WP2 | 2026-08-29 | health stored; no break event | 12 | Not observed. |
+| RL-PROP-PICKUP | World pickup marker | `assumption` | none | VF4-WP1 product contract; **not** observed on Y8 this session | 2026-08-29 | COL_PICKUP Area2D; not a roster item | — | Distinct from RL-ITEM-*. |
+| RL-PROP-EXPL | Explosive prop schema | `assumption` | none | VF4-WP1 schema only; chain waits VF4-WP3 | 2026-08-29 | barrel spec exists; no chain | 8 | RL-NADE-PROP stays deferred. |

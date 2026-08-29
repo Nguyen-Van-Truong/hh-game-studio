@@ -62,7 +62,11 @@ https://mythologicinteractive.com/Superfighters
   `ledger:RL-NADE-BOUNCE` / `ledger:RL-NADE-FUSE`, `assumption`)
 - Explosion is one radial blast; owner is not self-damaged
   (`ledger:RL-NADE-FALLOFF` / `ledger:RL-NADE-OWNER` /
-  `ledger:RL-NADE-ONCE`, `assumption`). Prop destroy waits VF4.
+  `ledger:RL-NADE-ONCE`, `assumption`). Prop destroy stays
+  `ledger:RL-NADE-PROP` (`deferred`). World props are a typed
+  catalog + WorldOwner (`ledger:RL-WORLD-SCHEMA` /
+  `ledger:RL-WORLD-OWN`, `assumption`); break/throw/chain wait
+  later VF4 WPs.
 - Health + stamina bars; stamina drains on sprint
 - Random-ish weapon spawns (~20s respawn): pipe, knife, baton, pistol,
   shotgun, uzi, Longarm, Thumper, grenade, Cinder Flask

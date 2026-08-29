@@ -1,0 +1,118 @@
+{
+	"apply": {
+		"attempted": 116,
+		"succeeded": 116,
+		"used_action_press": 0,
+		"used_apply_frames": 116,
+		"used_parse_input_event": 1,
+		"used_step_fixed": 0
+	},
+	"author": {
+		"fixture": 6,
+		"placements": 6,
+		"rooftops": 0,
+		"source": "catalog placements; GameSession has no per-prop spawn",
+		"verdict": "pass"
+	},
+	"data": {
+		"break_implemented": false,
+		"chain_implemented": false,
+		"nade_prop": "deferred",
+		"source": "world values are tuning; break/chain stay unimplemented",
+		"tuning": true,
+		"verdict": "pass"
+	},
+	"hash": {
+		"hash": "f32265df824023f778597089f1a812b291a4b2f611873b68ada8a37fe573b53d",
+		"idle": true,
+		"reboot": true,
+		"source": "WorldOwner.stable_hash idle + reboot",
+		"verdict": "pass"
+	},
+	"layers": {
+		"pickup": 8,
+		"platform": 2,
+		"prop": 32,
+		"source": "data/sim/collision_layers.json prop_masks",
+		"verdict": "pass"
+	},
+	"live": {
+		"count": 6,
+		"hash_stable": true,
+		"source": "parse_input_event KEY_RIGHT + step_from_live_input",
+		"verdict": "pass"
+	},
+	"orphan": {
+		"new_count": 6,
+		"old_count": 6,
+		"old_ids": 6,
+		"source": "restart frees prior PropBody instance ids",
+		"title_leftover": 0,
+		"verdict": "pass"
+	},
+	"path": {
+		"accept_product": true,
+		"reject_absolute": true,
+		"reject_traversal": true,
+		"reject_user": true,
+		"source": "WorldPaths editor/runtime product-root gate",
+		"verdict": "pass"
+	},
+	"present": {
+		"count": 6,
+		"despawn": "presentation cannot despawn",
+		"health": "presentation cannot mutate health",
+		"move": "presentation cannot move props",
+		"source": "PropView mutate requests rejected by WorldOwner",
+		"verdict": "pass"
+	},
+	"replay": {
+		"pairs": [
+			{
+				"hash_a": "cd7949c98d1120afea20f9f24bccbe94f46ce39340b2e9b1fcfe4c7611085778",
+				"hash_b": "cd7949c98d1120afea20f9f24bccbe94f46ce39340b2e9b1fcfe4c7611085778",
+				"hash_match": true,
+				"name": "world_idle",
+				"ok_a": true,
+				"ok_b": true,
+				"world_a": "f32265df824023f778597089f1a812b291a4b2f611873b68ada8a37fe573b53d",
+				"world_b": "f32265df824023f778597089f1a812b291a4b2f611873b68ada8a37fe573b53d",
+				"world_hash_match": true
+			},
+			{
+				"hash_a": "ed2ba74342a42271252cd19e745df6f9be7138734cd9b304d8b8807f120ce502",
+				"hash_b": "ed2ba74342a42271252cd19e745df6f9be7138734cd9b304d8b8807f120ce502",
+				"hash_match": true,
+				"name": "world_walk",
+				"ok_a": true,
+				"ok_b": true,
+				"world_a": "f32265df824023f778597089f1a812b291a4b2f611873b68ada8a37fe573b53d",
+				"world_b": "f32265df824023f778597089f1a812b291a4b2f611873b68ada8a37fe573b53d",
+				"world_hash_match": true
+			}
+		],
+		"source": "apply_frames world traces twice",
+		"verdict": "match"
+	},
+	"schema": {
+		"kinds": 6,
+		"reject_missing_collision": true,
+		"reject_missing_visual": true,
+		"source": "data/world/catalog.json + schema.json + validate_payload reject-invalid",
+		"verdict": "pass"
+	},
+	"spawn": {
+		"count": 6,
+		"expected": 6,
+		"kinds": [
+			"breakable",
+			"dynamic",
+			"explosive",
+			"one-way",
+			"pickup",
+			"static"
+		],
+		"source": "WorldOwner.spawn_map from catalog placements",
+		"verdict": "pass"
+	}
+}

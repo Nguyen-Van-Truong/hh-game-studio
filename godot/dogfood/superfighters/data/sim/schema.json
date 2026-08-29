@@ -77,7 +77,17 @@
     "balance_knock": "RL-BAL-KNOCK-JITTER assumption, not observed",
     "balance_spread": "RL-BAL-SPREAD-RNG assumption, not observed",
     "balance_cap": "RL-BAL-CAP assumption, not observed",
-    "balance_stamina": "RL-BAL-STAMINA assumption, not observed"
+    "balance_stamina": "RL-BAL-STAMINA assumption, not observed",
+    "world_schema": "RL-WORLD-SCHEMA assumption, not observed",
+    "world_layers": "RL-WORLD-LAYERS assumption, not observed",
+    "world_own": "RL-WORLD-OWN assumption, not observed",
+    "prop_static": "RL-PROP-STATIC assumption, not observed",
+    "prop_dynamic": "RL-PROP-DYNAMIC assumption, throw waits VF4-WP2",
+    "prop_oneway": "RL-PROP-ONEWAY assumption, not observed",
+    "prop_break": "RL-PROP-BREAK schema only; destroy waits VF4-WP2",
+    "prop_pickup": "RL-PROP-PICKUP assumption, world marker not roster",
+    "prop_expl": "RL-PROP-EXPL schema only; chain waits VF4-WP3",
+    "nade_prop": "RL-NADE-PROP deferred VF4, event only"
   },
   "combat": {
     "schema": "vf.sim.combat.v1",
@@ -103,5 +113,10 @@
   "balance": {
     "schema": "vf.sim.balance.v1",
     "path": "res://data/sim/balance.json"
+  },
+  "world": {
+    "schema": "vf.world.catalog.v1",
+    "path": "res://data/world/catalog.json",
+    "gate": "res://data/world/schema.json"
   }
 }

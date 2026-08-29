@@ -1,0 +1,51 @@
+{
+  "schema": "vf.world.schema.v1",
+  "schema_version": 1,
+  "title": "Vault Fighters",
+  "y8_parity_claimed": false,
+  "catalog_schema": "vf.world.catalog.v1",
+  "catalog_path": "res://data/world/catalog.json",
+  "allowed_kinds": [
+    "static",
+    "dynamic",
+    "one-way",
+    "breakable",
+    "pickup",
+    "explosive"
+  ],
+  "required_spec_fields": [
+    "id",
+    "kind",
+    "name",
+    "collision",
+    "visual"
+  ],
+  "required_collision_fields": [
+    "layer",
+    "mask",
+    "shape",
+    "width",
+    "height"
+  ],
+  "required_visual_fields": [
+    "path"
+  ],
+  "required_ids": [
+    "crate_static",
+    "crate_dynamic",
+    "panel_oneway",
+    "crate_breakable",
+    "kit_pickup",
+    "barrel_explosive"
+  ],
+  "allowed_shapes": ["rect"],
+  "product_root": "res://",
+  "honesty": {
+    "schema": "RL-WORLD-SCHEMA assumption, not observed",
+    "layers": "RL-WORLD-LAYERS assumption, not observed",
+    "ownership": "RL-WORLD-OWN assumption, not observed",
+    "break": "RL-PROP-BREAK schema only; destroy waits VF4-WP2",
+    "explosive": "RL-PROP-EXPL schema only; chain waits VF4-WP3",
+    "nade_prop": "RL-NADE-PROP stays deferred"
+  }
+}

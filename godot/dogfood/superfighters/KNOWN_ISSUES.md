@@ -29,10 +29,10 @@ First playable slice. Not G6. Not 60/60.
   (`test_driven=false`) still starts music and SFX; `shutdown()` stops
   players, clears streams, and restores the Music bus before free.
 - Runtime observe/checkpoint (`src/runtime/`, VF1-WP4) is an in-process
-  API, not the VF8 editor bridge. Prop event channel is empty because
-  this slice has no interactive barrels/glass. 60 Hz remains
-  ledger:RL-SIM-FIXED-60 (`assumption`). Hold-to-aim / roll are still
-  not observed.
+  API, not the VF8 editor bridge. Observe `props` is the WorldOwner
+  snapshot (empty on live maps this WP). Break events stay deferred.
+  60 Hz remains ledger:RL-SIM-FIXED-60 (`assumption`). Hold-to-aim /
+  roll are still not observed.
 - VF2-WP1 maps real InputEvents for P1/P2/gamepad and an atomic remap
   UI. Official pad proof is a synthetic non-hardware device
   (ledger:RL-CTRL-SYNTH-PAD) unless a pad is plugged in for extra smoke.
@@ -112,6 +112,16 @@ First playable slice. Not G6. Not 60/60.
   `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). No new Y8 play.
   Residual: nade bounce vs live `=` / `COL_PLATFORM` rooftops is
   unchanged; official CHAIN uses `#` only.
+- VF4-WP1 ships a typed PropSpec catalog, named layer/mask
+  contract, and WorldOwner spawn/despawn as assumption
+  (`ledger:RL-WORLD-SCHEMA`, `ledger:RL-WORLD-LAYERS`,
+  `ledger:RL-WORLD-OWN`, `ledger:RL-PROP-*`). Official proof is
+  InputFrame `apply_frames` plus live InputEvent inject. Break /
+  throw / chain are schema only. `ledger:RL-NADE-PROP` stays
+  `deferred`. Live maps do not receive world placements; ASCII
+  `c`/`b` stay tiles. Hold-to-aim is **not** promoted to
+  `observed`. Y8 roll/dive observation stays
+  `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). No new Y8 play.
 - VF3-WP4 ships grenade hold/release throw, gravity arc, bounce,
   fuse, radial falloff, owner skip, one explosion, timeout
   cleanup, and swept nade collision as assumption
@@ -120,7 +130,7 @@ First playable slice. Not G6. Not 60/60.
   `ledger:RL-NADE-FALLOFF`, `ledger:RL-NADE-OWNER`,
   `ledger:RL-NADE-ONCE`, `ledger:RL-NADE-TIMEOUT`,
   `ledger:RL-NADE-SWEEP`). Prop break is an explosion event
-  only (`ledger:RL-NADE-PROP`, `deferred`); VF4 destroys props.
+  only (`ledger:RL-NADE-PROP`, `deferred`); VF4-WP2 destroys props.
   Official proof is InputFrame `apply_frames` plus live
   InputEvent inject. High-speed no-tunnel proof plants a 4000
   px/s nade at Nade Cover (fixture spawn, same class as VF3-WP3

@@ -10,6 +10,7 @@ const AimCasesScript: GDScript = preload("res://tests/aim_cases.gd")
 const ExplosiveCasesScript: GDScript = preload("res://tests/explosive_cases.gd")
 const RosterCasesScript: GDScript = preload("res://tests/roster_cases.gd")
 const BalanceCasesScript: GDScript = preload("res://tests/balance_cases.gd")
+const WorldCasesScript: GDScript = preload("res://tests/world_cases.gd")
 const _Combat: GDScript = preload("res://src/sim/combat.gd")
 
 var _fails: PackedStringArray = PackedStringArray()
@@ -32,6 +33,7 @@ var _aim: String = "unproven"
 var _expl: String = "unproven"
 var _roster: String = "unproven"
 var _balance: String = "unproven"
+var _world: String = "unproven"
 
 
 func _initialize() -> void:
@@ -66,6 +68,7 @@ func _boot() -> void:
 	await _test_expl(app)
 	await _test_roster(app)
 	await _test_balance(app)
+	await _test_world(app)
 	if _fails.is_empty():
 		_no_err = "proven"
 	_emit()
@@ -1042,6 +1045,49 @@ func _test_balance(app: App) -> void:
 		_balance = "proven"
 
 
+func _test_world(app: App) -> void:
+	var errors: PackedStringArray = await WorldCasesScript.run_all(app)
+	var i: int = 0
+	while i < errors.size():
+		_fail("WORLD %s" % String(errors[i]))
+		i += 1
+	var schema: String = str(WorldCasesScript.outcome_schema.get("verdict", "unproven"))
+	var layers: String = str(WorldCasesScript.outcome_layers.get("verdict", "unproven"))
+	var spawn: String = str(WorldCasesScript.outcome_spawn.get("verdict", "unproven"))
+	var hashv: String = str(WorldCasesScript.outcome_hash.get("verdict", "unproven"))
+	var orphan: String = str(WorldCasesScript.outcome_orphan.get("verdict", "unproven"))
+	var pathv: String = str(WorldCasesScript.outcome_path.get("verdict", "unproven"))
+	var present: String = str(WorldCasesScript.outcome_present.get("verdict", "unproven"))
+	var author: String = str(WorldCasesScript.outcome_author.get("verdict", "unproven"))
+	var data: String = str(WorldCasesScript.outcome_data.get("verdict", "unproven"))
+	var live: String = str(WorldCasesScript.outcome_live.get("verdict", "unproven"))
+	var replay: String = str(WorldCasesScript.outcome_replay.get("verdict", "unproven"))
+	if schema != "pass":
+		_fail("WORLD SCHEMA outcome is %s" % schema)
+	if layers != "pass":
+		_fail("WORLD LAYERS outcome is %s" % layers)
+	if spawn != "pass":
+		_fail("WORLD SPAWN outcome is %s" % spawn)
+	if hashv != "pass":
+		_fail("WORLD HASH outcome is %s" % hashv)
+	if orphan != "pass":
+		_fail("WORLD ORPHAN outcome is %s" % orphan)
+	if pathv != "pass":
+		_fail("WORLD PATH outcome is %s" % pathv)
+	if present != "pass":
+		_fail("WORLD PRESENT outcome is %s" % present)
+	if author != "pass":
+		_fail("WORLD AUTHOR outcome is %s" % author)
+	if data != "pass":
+		_fail("WORLD DATA outcome is %s" % data)
+	if live != "pass":
+		_fail("WORLD LIVE outcome is %s" % live)
+	if replay != "match":
+		_fail("WORLD REPLAY outcome is %s" % replay)
+	if _count_prefix("WORLD ") == 0:
+		_world = "proven"
+
+
 func _emit() -> void:
 	print("HH_VF_PATH title→fight→win/lose→restart")
 	print(
@@ -1229,6 +1275,25 @@ func _emit() -> void:
 			BalanceCasesScript.used_apply_frames_succeeded,
 			BalanceCasesScript.used_apply_frames_attempted,
 			_balance,
+		]
+	)
+	print(
+		"HH_VF_WORLD SCHEMA=%s LAYERS=%s SPAWN=%s HASH=%s ORPHAN=%s PATH=%s PRESENT=%s AUTHOR=%s DATA=%s LIVE=%s REPLAY=%s APPLY=%d/%d status=%s"
+		% [
+			str(WorldCasesScript.outcome_schema.get("verdict", "unproven")),
+			str(WorldCasesScript.outcome_layers.get("verdict", "unproven")),
+			str(WorldCasesScript.outcome_spawn.get("verdict", "unproven")),
+			str(WorldCasesScript.outcome_hash.get("verdict", "unproven")),
+			str(WorldCasesScript.outcome_orphan.get("verdict", "unproven")),
+			str(WorldCasesScript.outcome_path.get("verdict", "unproven")),
+			str(WorldCasesScript.outcome_present.get("verdict", "unproven")),
+			str(WorldCasesScript.outcome_author.get("verdict", "unproven")),
+			str(WorldCasesScript.outcome_data.get("verdict", "unproven")),
+			str(WorldCasesScript.outcome_live.get("verdict", "unproven")),
+			str(WorldCasesScript.outcome_replay.get("verdict", "unproven")),
+			WorldCasesScript.used_apply_frames_succeeded,
+			WorldCasesScript.used_apply_frames_attempted,
+			_world,
 		]
 	)
 	print(

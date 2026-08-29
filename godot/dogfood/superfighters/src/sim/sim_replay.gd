@@ -95,6 +95,11 @@ static func play(app: App, trace: Dictionary) -> Dictionary:
 	if session != null:
 		result["final_hash"] = session.snapshot_hash()
 		result["final_state"] = session.snapshot()
+		if session.world_owner != null:
+			result["world_hash"] = str(session.world_owner.call("stable_hash"))
+			var wsnap: Variant = session.world_owner.call("snapshot")
+			if wsnap is Array:
+				result["world_snapshot"] = wsnap
 		if session.ledger != null:
 			result["events"] = session.ledger.to_array()
 			result["events_hash"] = session.ledger.stable_hash()

@@ -7,6 +7,7 @@ const _Aim: GDScript = preload("res://src/sim/aim.gd")
 const _Expl: GDScript = preload("res://src/sim/explosive.gd")
 const _Inv: GDScript = preload("res://src/data/weapons/inventory.gd")
 const _Bal: GDScript = preload("res://src/sim/balance.gd")
+const _WorldOwner: GDScript = preload("res://src/world/world_owner.gd")
 
 signal won
 signal lost
@@ -23,6 +24,7 @@ var brains: Array[BotBrain] = []
 var respawns: Array[Dictionary] = []
 var arena: Arena
 var world: Node2D
+var world_owner: RefCounted
 var hud: Hud
 var pause_screen: PauseScreen
 var sfx: SfxBank
@@ -71,6 +73,11 @@ func setup(p_mode: String, p_map: String, p_stage: int) -> void:
 	arena = Arena.new()
 	world = arena.build(map_id)
 	add_child(world)
+	world_owner = _WorldOwner.new()
+	world_owner.call("bind", self)
+	world_owner.call("attach", world)
+	# world_owner.spawn_map — catalog placements, no per-node GameSession hard-code
+	world_owner.call("spawn_map", map_id)
 	_spawn_fighters()
 	_spawn_weapons()
 	hud = Hud.new()
@@ -1232,6 +1239,9 @@ func shutdown() -> void:
 	if sfx != null and is_instance_valid(sfx):
 		sfx.shutdown()
 	_free_fx()
+	if world_owner != null:
+		world_owner.call("clear")
+		world_owner = null
 	pickups.clear()
 	fighters.clear()
 	brains.clear()

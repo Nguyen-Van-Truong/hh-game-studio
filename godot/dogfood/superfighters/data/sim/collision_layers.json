@@ -1,6 +1,8 @@
 {
   "schema": "vf.sim.collision_layers.v1",
   "ledger": "RL-DELTA-PHYSICS",
+  "world_layers_ledger": "RL-WORLD-LAYERS",
+  "world_layers_class": "assumption",
   "layers": {
     "world": 1,
     "platform": 2,
@@ -8,5 +10,31 @@
     "pickup": 8,
     "hurt": 16,
     "prop": 32
+  },
+  "prop_masks": {
+    "static": {
+      "layer": "prop",
+      "mask": []
+    },
+    "dynamic": {
+      "layer": "prop",
+      "mask": ["world", "platform"]
+    },
+    "one-way": {
+      "layer": "platform",
+      "mask": []
+    },
+    "breakable": {
+      "layer": "prop",
+      "mask": []
+    },
+    "pickup": {
+      "layer": "pickup",
+      "mask": []
+    },
+    "explosive": {
+      "layer": "prop",
+      "mask": []
+    }
   }
 }

@@ -146,6 +146,18 @@ Chaos / crit / caps stay `assumption`. Clock stays
 | `balance_chain.json` | Twin Fuse two nades on `#` |
 | `balance_ff.json` | Cross Fire vs2 melee |
 
+## world/
+
+VF4-WP1 official InputFrame traces. Same schema as `official/`.
+Replay uses `apply_frames`. No teleport. No `step_fixed`.
+World schema / ownership stay `assumption`. Clock stays
+`ledger:RL-SIM-FIXED-60`.
+
+| File | Beat |
+|---|---|
+| `world_idle.json` | settle on Prop Yard |
+| `world_walk.json` | short walk that does not reach the prop alcove |
+
 ## fixture/
 
 May use `teleport` / `force_kill` for fast unit setup. Fixture evidence
