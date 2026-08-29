@@ -2,7 +2,7 @@ PLAN_SCOPE=godot/dogfood/superfighters
 PRODUCT_PLAN_AUTHORITY=1
 PARENT_PLATFORM_PLAN=zdocs/20-8-godot-agent-autopilot-plan.txt
 PARENT_PLATFORM_STATUS=OWNER_STOPPED_59_OF_60
-CURRENT_VALID_WP=VF0-WP2
+CURRENT_VALID_WP=VF0-WP3
 STATUS=ACTIVE
 PLAN_DATE=2026-08-29
 TIMEZONE=Asia/Saigon
@@ -18,7 +18,7 @@ một lần, tự làm, tự chạy, tự kiểm và tạo gói review; người
 
 | Thứ tự | Nhóm | Kết quả bắt buộc | Phụ thuộc | Chạy song song | Trạng thái |
 |---:|---|---|---|---|---|
-| 0 | VF0 nền và routing | scope, provenance, test sạch, không lẫn plan | none | không | [ ] 1/3 |
+| 0 | VF0 nền và routing | scope, provenance, test sạch, không lẫn plan | none | không | [ ] 2/3 |
 | 1 | VF1 reference + contract | reference ledger, behavior spec, deterministic trace | VF0 | research/test | [ ] 0/4 |
 | 2 | VF2 movement | chạy, nhảy, crouch, sprint, roll, dive, ladder, ledge | VF1 | input + physics | [ ] 0/5 |
 | 3 | VF3 combat | melee/kick, hitbox, knockdown, disarm, aim/fire, grenade | VF2 | weapons + VFX | [ ] 0/6 |
@@ -29,7 +29,7 @@ một lần, tự làm, tự chạy, tự kiểm và tạo gói review; người
 | 8 | VF8 agent autonomy | brief→edit→play→observe→repair→checkpoint, no manual F6 | VF0..VF7 | host/bridge | [ ] 0/4 |
 | 9 | VF9 verification | trace replay, E2E, differential rubric, soak, leak proof | all above | QA | [ ] 0/5 |
 | 10 | VF10 package | Windows build, offline run, provenance/license, review bundle | VF9 | release | [ ] 0/3 |
-|   | **Tổng** | **50 WP nhỏ; chỉ coordinator tick sau DoD** |  |  | **1/50** |
+|   | **Tổng** | **50 WP nhỏ; chỉ coordinator tick sau DoD** |  |  | **2/50** |
 
 Gate nội bộ:
 
@@ -306,7 +306,7 @@ VF0-WP1 — Freeze baseline và provenance                                      
         Parent 20-8 unchanged: R9-WP4 [ ]; 59/60; G6 [ ].
       Commit: (this tick)
 
-VF0-WP2 — Headless teardown và resource hygiene                           [ ]
+VF0-WP2 — Headless teardown và resource hygiene                           [x]
   Phụ thuộc: VF0-WP1. Owner: test/runtime. Files: `tests/run_all.gd`,
   `src/sfx_bank.gd`, lifecycle scripts và regression test.
   Làm:
@@ -323,6 +323,33 @@ VF0-WP2 — Headless teardown và resource hygiene                           [ ]
     - lặp 3 lần, output normalized hash giống nhau.
   DoD: teardown sạch hoặc gap report có reproduction/owner, không tick V0 nếu
   chỉ còn warning chưa giải thích.
+  LOG:
+    LOG 2026-08-29 08:32 Asia/Saigon — agent=coordinator
+      Base: 708f92f headless teardown and resource hygiene on VF0-WP1 freeze
+        be77f95 / tick cf2c7fe.
+        Godot=4.7.1.stable.official.a13da4feb
+      Files/leases: src/sfx_bank.gd, src/game_session.gd, src/app.gd,
+        tests/run_all.gd, tests/run_window_hygiene.gd,
+        assets/audio/music_fight.wav.import, KNOWN_ISSUES.md,
+        docs/reference-ledger.md,
+        docs/evidence/VF0WP2-20260829-ASIA-SAIGON-01/
+      Verify: leftover-0 PASS; official --verbose leak phrases 0 (×3);
+        EXIT 0; HH_VF LOOP=proven COMBAT=proven MAPS=proven NO_ERRORS=proven;
+        HH_VF_HYGIENE sessions=20 muted=1 music=off status=proven;
+        windowed WASAPI music=on sfx=on display=Windows 1280x720;
+        leftover_godot=0
+      Honesty:
+        Mute is test_driven-only; play path still starts music/SFX.
+        Hygiene is not Y8 parity, not V0.
+      Critic: II 24dffff6 TICK yes leftover-0 official ×2 + windowed WASAPI;
+        HH cee0c533 TICK yes leftover-0 official ×3
+      Gaps: residual nits OK:
+        run.json normalized_banner_sha256 b53758c7… vs actual
+        official_headless.banners.txt SHA-256 503aadf3…;
+        mute is test_driven-only.
+        VF0-WP3 owns AGENTS/DECISIONS/checker.
+        Parent 20-8 unchanged: R9-WP4 [ ]; 59/60; G6 [ ].
+      Commit: (this tick)
 
 VF0-WP3 — Scoped plan routing và safe commit boundary                         [ ]
   Phụ thuộc: VF0-WP1. Owner: governance. Files: `AGENTS.md`, `docs/DECISIONS.md`,
@@ -996,7 +1023,7 @@ vào `KNOWN_ISSUES.md`; không đổi acceptance để làm cho pass.
 21. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Đọc `AGENTS.md`, sau đó đọc bảng đầu file này. WP đầu tiên chưa tick là **VF0-WP2**.
+Đọc `AGENTS.md`, sau đó đọc bảng đầu file này. WP đầu tiên chưa tick là **VF0-WP3**.
 
 Không làm R9-WP4/G6/GX; không mở Rust engine; không đụng Kho Bí Ẩn/Hoan Hao;
 không dùng Snake làm demo; không tải/rip Y8. Chỉ khi VF0-WP1 và VF0-WP2 đã có
@@ -1032,6 +1059,13 @@ dùng chỉ xem và review.
   `sfx_bank.gd` overlay not in product freeze `be77f95`). Residual nits OK:
   unreproduced aggregate mixer; hashes.txt truncated extra paths. Parent 20-8
   unchanged (R9-WP4 [ ], 59/60, G6 [ ]). VF0-WP1 ticked; VF0-WP2 still [ ].
+- COORDINATOR CLOSEOUT VF0-WP2 (2026-08-29 08:32 Asia/Saigon): leftover-0 PASS;
+  official --verbose leak phrases 0 (×3); windowed WASAPI music=on sfx=on.
+  Critics TICK yes (II 24dffff6 leftover-0 official ×2 + windowed WASAPI;
+  HH cee0c533 leftover-0 official ×3). Residual nit OK: run.json banner SHA
+  b53758c7… vs official_headless.banners.txt 503aadf3…. Mute is
+  test_driven-only. Product 708f92f. Parent 20-8 unchanged (R9-WP4 [ ],
+  59/60, G6 [ ]). VF0-WP2 ticked; VF0-WP3 still [ ]; V0 not ticked.
 
 ================================================================================
 HẾT PLAN — 29-8-2026
