@@ -1,0 +1,9 @@
+{
+  "schema": "vf.sim.input_actions.v1",
+  "allowed": ["left", "right", "up", "down", "jump", "crouch", "melee", "fire", "grenade"],
+  "reserved_not_shipped": ["roll", "dive", "kick"],
+  "p1_binding_ledger": ["RL-CTRL-P1-MOVE", "RL-CTRL-P1-PUNCH", "RL-CTRL-P1-SHOOT", "RL-CTRL-P1-NADE"],
+  "p2_binding_ledger": ["RL-CTRL-P2-MOVE", "RL-CTRL-P2-ATK"],
+  "hold_to_aim_ledger": "RL-CTRL-HOLD-AIM",
+  "fullscreen_not_fighter_action": "RL-CTRL-FULLSCREEN"
+}

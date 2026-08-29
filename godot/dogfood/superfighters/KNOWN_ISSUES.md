@@ -10,6 +10,10 @@ First playable slice. Not G6. Not 60/60.
 - 2P shares one keyboard; no online
 - Procedural SFX, not the Y8 soundtrack
 - Skins intentionally differ (helmet crew, not ripped Flash sheets)
+- Live play now steps through a 60 Hz accumulator (`src/sim/`). That
+  clock is a product contract (V-A14, ledger:RL-SIM-FIXED-60
+  `assumption`), not an observed Y8 tick rate. Official replay traces
+  are still VF1-WP3.
 - Official headless tests set `test_driven`, which mutes `SfxBank`: no
   `AudioStreamPlayer` allocation and no stream load/play. Fight logic
   still records `last_id`. This split exists so WASAPI/AudioServer does

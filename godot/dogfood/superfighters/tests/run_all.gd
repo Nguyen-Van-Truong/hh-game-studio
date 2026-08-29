@@ -8,6 +8,7 @@ var _combat: String = "unproven"
 var _maps: String = "unproven"
 var _hygiene: String = "unproven"
 var _no_err: String = "unproven"
+var _sim: String = "unproven"
 
 
 func _initialize() -> void:
@@ -28,6 +29,7 @@ func _boot() -> void:
 	_test_pit(app)
 	await _test_stage_advance(app)
 	_test_session_hygiene(app)
+	_test_sim_contract(app)
 	if _fails.is_empty():
 		_no_err = "proven"
 	_emit()
@@ -507,6 +509,16 @@ func _test_session_hygiene(app: App) -> void:
 		_hygiene = "proven"
 
 
+func _test_sim_contract(app: App) -> void:
+	var errors: PackedStringArray = SimContractCases.run_all(app)
+	var i: int = 0
+	while i < errors.size():
+		_fail("SIM %s" % String(errors[i]))
+		i += 1
+	if _count_prefix("SIM ") == 0:
+		_sim = "proven"
+
+
 func _emit() -> void:
 	print("HH_VF_PATH title→fight→win/lose→restart")
 	print(
@@ -514,6 +526,10 @@ func _emit() -> void:
 		% [_loop, _combat, _maps, _no_err]
 	)
 	print("HH_VF_HYGIENE sessions=20 muted=1 music=off status=%s" % _hygiene)
+	print("HH_VF_SIM HASH3=%s PAUSE_TICK=stable MALFORMED=reject status=%s" % [
+		"match" if _sim == "proven" else "unproven",
+		_sim,
+	])
 	if _fails.is_empty():
 		print("PASS: Vault Fighters first playable")
 	else:

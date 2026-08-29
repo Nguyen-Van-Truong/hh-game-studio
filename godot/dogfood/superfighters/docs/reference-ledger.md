@@ -224,3 +224,20 @@ resources. That is hygiene, not parity.
 - Camera framing **not observed**.
 - Item respawn `20s` is first-playable tuning, not observed.
 - Parent 20-8 unchanged: R9-WP4 `[ ]`, 59/60, G6 `[ ]`.
+
+---
+
+## VF1-WP2 simulation contract (not a play observation)
+
+Dated 2026-08-29 Asia/Saigon. No in-game Y8 play. No HTML5/Flash
+package. `src/sim/` and `data/sim/` are a **product** clock/schema so
+later WPs can replay. Sidecar: `docs/sim-contract.md` and
+`docs/evidence/VF1WP2-20260829-ASIA-SAIGON-01/`.
+
+| ID | Topic | Class | Conf. | Source | When | Behavior to reproduce | Tuning-only | Notes |
+|---|---|---|---|---|---|---|---|---|
+| RL-SIM-FIXED-60 | Fixed 60 Hz accumulator | `assumption` | none | product V-A14; **not** on Y8 listing | 2026-08-29 | Gameplay ticks at 1/60; pause/resume must not jump tick | catch-up cap=8 | **Not a Y8 tick-rate claim.** Do not promote to `observed` without a dated play row. |
+| RL-SIM-INPUT-FRAME | InputFrame tick/held/pressed/released | `assumption` | none | V-A14 + first-playable `input_actions.gd` | 2026-08-29 | One frame per fighter per tick; malformed rejected | — | Action names map listing keys via RL-CTRL-*. Hold-to-aim stays RL-CTRL-HOLD-AIM. Roll/dive stay RL-MOVE-ROLL-DIVE and are rejected if sent. |
+
+How later WPs must cite: `ledger:RL-SIM-FIXED-60` for the clock,
+`ledger:RL-CTRL-*` for keys, never “60 Hz like Y8”.

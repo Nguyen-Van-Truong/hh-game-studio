@@ -1,0 +1,12 @@
+{
+  "schema": "vf.sim.collision_layers.v1",
+  "ledger": "RL-DELTA-PHYSICS",
+  "layers": {
+    "world": 1,
+    "platform": 2,
+    "fighter": 4,
+    "pickup": 8,
+    "hurt": 16,
+    "prop": 32
+  }
+}

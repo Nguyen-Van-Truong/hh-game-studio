@@ -1,0 +1,53 @@
+{
+  "schema": "vault-fighters.vf1-wp2.run.v1",
+  "run_id": "VF1WP2-20260829-ASIA-SAIGON-01",
+  "command_id": "cmd.vf1-wp2.fixed-step-schema.1",
+  "wp": "VF1-WP2",
+  "timezone": "Asia/Saigon",
+  "recorded_at": "2026-08-29T10:40:20+07:00",
+  "base_head": "8482054f2c9fb16980adeb8a9210076d867f6e5d",
+  "godot": "4.7.1.stable.official.a13da4feb",
+  "seed": 7,
+  "map_id": "rooftops",
+  "mode": "vs1",
+  "tick_hz": 60,
+  "epsilon": 0.001,
+  "claims": {
+    "y8_parity": false,
+    "y8_tick_rate": false,
+    "hold_to_aim_observed": false,
+    "roll_dive_observed": false,
+    "in_game_y8_play": false,
+    "game_package_fetched": false,
+    "plan_checkbox_ticked": false,
+    "implementer_commit": false,
+    "r9_wp4": false,
+    "g6": false,
+    "gx": false,
+    "progress_60_of_60": false
+  },
+  "ledger": [
+    "RL-SIM-FIXED-60",
+    "RL-SIM-INPUT-FRAME",
+    "RL-CTRL-HOLD-AIM",
+    "RL-MOVE-ROLL-DIVE"
+  ],
+  "verify": {
+    "official": [
+      "python godot/dogfood/superfighters/tests/check_sim_contract.py",
+      "%LOCALAPPDATA%\\HHGodotAgent\\tooling\\godot-4.7.1-stable\\bin\\Godot_v4.7.1-stable_win64_console.exe --headless --path godot/dogfood/superfighters --script res://tests/run_sim_contract.gd"
+    ],
+    "regression": [
+      "%LOCALAPPDATA%\\HHGodotAgent\\tooling\\godot-4.7.1-stable\\bin\\Godot_v4.7.1-stable_win64_console.exe --headless --path godot/dogfood/superfighters --script res://tests/run_all.gd"
+    ],
+    "sim_contract_exit": 0,
+    "run_all_exit": 0,
+    "file_check_exit": 0,
+    "hash_runs": 3,
+    "hash_match": true,
+    "pause_tick": "stable",
+    "malformed": "rejected",
+    "snapshot_pure": true,
+    "leftover_godot": 0
+  }
+}

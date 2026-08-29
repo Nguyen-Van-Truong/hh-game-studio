@@ -44,20 +44,78 @@ static func empty_cmd() -> Dictionary:
 
 
 static func read_player(slot: int) -> Dictionary:
+	return cmd_from_frame(read_player_frame(slot, 0))
+
+
+static func read_player_frame(slot: int, tick: int) -> InputFrame:
 	var prefix: String = "p1_" if slot == 0 else "p2_"
-	var cmd: Dictionary = empty_cmd()
+	var frame: InputFrame = InputFrame.new()
+	frame.schema_version = SimConstants.SCHEMA_VERSION
+	frame.tick = tick
+	frame.slot = slot
 	var left: float = Input.get_action_strength(prefix + "left")
 	var right: float = Input.get_action_strength(prefix + "right")
-	cmd["x"] = right - left
-	cmd["jump"] = Input.is_action_pressed(prefix + "jump") or Input.is_action_pressed(prefix + "up")
-	cmd["jump_pressed"] = Input.is_action_just_pressed(prefix + "jump") or Input.is_action_just_pressed(prefix + "up")
-	cmd["crouch"] = Input.is_action_pressed(prefix + "crouch") or Input.is_action_pressed(prefix + "down")
-	cmd["melee"] = Input.is_action_just_pressed(prefix + "melee")
-	cmd["fire_held"] = Input.is_action_pressed(prefix + "fire")
-	cmd["fire_released"] = Input.is_action_just_released(prefix + "fire")
-	cmd["grenade_held"] = Input.is_action_pressed(prefix + "grenade")
-	cmd["grenade_released"] = Input.is_action_just_released(prefix + "grenade")
+	var up: float = Input.get_action_strength(prefix + "up")
+	var down: float = Input.get_action_strength(prefix + "down")
+	frame.move_x = clampf(right - left, -1.0, 1.0)
+	frame.move_y = clampf(down - up, -1.0, 1.0)
+	_fill_edge(frame, "left", prefix + "left")
+	_fill_edge(frame, "right", prefix + "right")
+	_fill_edge(frame, "up", prefix + "up")
+	_fill_edge(frame, "down", prefix + "down")
+	_fill_edge(frame, "jump", prefix + "jump")
+	_fill_edge(frame, "crouch", prefix + "crouch")
+	_fill_edge(frame, "melee", prefix + "melee")
+	_fill_edge(frame, "fire", prefix + "fire")
+	_fill_edge(frame, "grenade", prefix + "grenade")
+	return frame
+
+
+static func cmd_from_frame(frame: InputFrame) -> Dictionary:
+	var cmd: Dictionary = empty_cmd()
+	if frame == null:
+		return cmd
+	var x: float = frame.move_x
+	if absf(x) < 0.01:
+		if frame.is_held("right"):
+			x = 1.0
+		elif frame.is_held("left"):
+			x = -1.0
+	cmd["x"] = x
+	cmd["jump"] = frame.is_held("jump") or frame.is_held("up")
+	cmd["jump_pressed"] = frame.is_pressed("jump") or frame.is_pressed("up")
+	cmd["crouch"] = frame.is_held("crouch") or frame.is_held("down")
+	cmd["melee"] = frame.is_pressed("melee")
+	cmd["fire_held"] = frame.is_held("fire")
+	cmd["fire_released"] = frame.is_released("fire")
+	cmd["grenade_held"] = frame.is_held("grenade")
+	cmd["grenade_released"] = frame.is_released("grenade")
 	return cmd
+
+
+static func cmd_from_variant(raw: Variant) -> Dictionary:
+	if raw is InputFrame:
+		return cmd_from_frame(raw as InputFrame)
+	if raw is Dictionary:
+		var d: Dictionary = raw as Dictionary
+		if d.has("held") or d.has("pressed") or d.has("schema_version"):
+			return cmd_from_frame(InputFrame.from_dict(d))
+		return d.duplicate()
+	return empty_cmd()
+
+
+static func empty_frame(tick: int, slot: int) -> Dictionary:
+	return {
+		"schema": SimConstants.INPUT_FRAME_ID,
+		"schema_version": SimConstants.SCHEMA_VERSION,
+		"tick": tick,
+		"slot": slot,
+		"held": [],
+		"pressed": [],
+		"released": [],
+		"move_x": 0.0,
+		"move_y": 0.0,
+	}
 
 
 static func has_keyboard_and_gamepad(action: String) -> bool:
@@ -73,6 +131,15 @@ static func has_keyboard_and_gamepad(action: String) -> bool:
 			pad_ok = true
 		i += 1
 	return key_ok and pad_ok
+
+
+static func _fill_edge(frame: InputFrame, action: String, map_name: String) -> void:
+	if Input.is_action_pressed(map_name):
+		frame.held.append(action)
+	if Input.is_action_just_pressed(map_name):
+		frame.pressed.append(action)
+	if Input.is_action_just_released(map_name):
+		frame.released.append(action)
 
 
 static func _bind_axis(action: String, key: Key, dpad: JoyButton, axis: JoyAxis, axis_value: float) -> void:

@@ -1,0 +1,28 @@
+{
+  "schema": "vf.sim.v1",
+  "schema_version": 1,
+  "title": "Vault Fighters",
+  "tick_hz": 60,
+  "tick_dt": 0.016666666666666666,
+  "epsilon": 0.001,
+  "hash_scale": 1000,
+  "max_catchup_ticks": 8,
+  "y8_tick_rate_claimed": false,
+  "ledger_clock": "RL-SIM-FIXED-60",
+  "input_frame": {
+    "id": "vf.sim.input_frame.v1",
+    "fields": ["schema_version", "tick", "slot", "held", "pressed", "released", "move_x", "move_y"],
+    "allowed_actions": ["left", "right", "up", "down", "jump", "crouch", "melee", "fire", "grenade"],
+    "reserved_not_shipped": ["roll", "dive", "kick"]
+  },
+  "snapshot": {
+    "id": "vf.sim.snapshot.v1",
+    "mutate": false
+  },
+  "honesty": {
+    "hold_to_aim": "RL-CTRL-HOLD-AIM assumption, not observed",
+    "roll_dive": "RL-MOVE-ROLL-DIVE unavailable",
+    "jump_crouch": "RL-MOVE-JUMP-CROUCH assumption",
+    "map_geometry": "RL-MAP-LANDMARKS assumption, not live-observed"
+  }
+}

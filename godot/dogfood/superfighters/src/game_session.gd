@@ -28,6 +28,9 @@ var _fx: Array[Sprite2D] = []
 var _fx_life: Array[float] = []
 var _shut_down: bool = false
 var _resume_cb: Callable = Callable()
+var clock: SimClock = SimClock.new()
+var sim_seed: int = 0
+var last_reject: PackedStringArray = PackedStringArray()
 
 
 func setup(p_mode: String, p_map: String, p_stage: int) -> void:
@@ -37,7 +40,10 @@ func setup(p_mode: String, p_map: String, p_stage: int) -> void:
 	map_id = p_map
 	stage_index = p_stage
 	outcome = "play"
-	rng.seed = 7 + p_stage * 13
+	sim_seed = SimSeed.for_match(p_mode, p_map, p_stage)
+	rng.seed = sim_seed
+	clock.reset()
+	last_reject = PackedStringArray()
 	arena = Arena.new()
 	world = arena.build(map_id)
 	add_child(world)
@@ -66,11 +72,49 @@ func setup(p_mode: String, p_map: String, p_stage: int) -> void:
 func _physics_process(delta: float) -> void:
 	if test_driven:
 		return
-	var tree: SceneTree = get_tree()
-	if tree != null and tree.paused:
+	if _is_sim_paused():
 		return
 	if outcome != "play":
 		return
+	var steps: int = clock.feed(delta)
+	var s: int = 0
+	while s < steps:
+		_step_one_tick(_gather_live_cmds())
+		s += 1
+
+
+func step_fixed(_delta: float, cmds: Array[Dictionary]) -> void:
+	if _is_sim_paused():
+		return
+	_step_one_tick(cmds)
+
+
+func apply_frames(frames: Array) -> bool:
+	last_reject = PackedStringArray()
+	if _is_sim_paused():
+		last_reject.append("paused")
+		return false
+	var errors: PackedStringArray = SimValidator.validate_bundle(frames, clock.tick, fighters.size())
+	if not errors.is_empty():
+		last_reject = errors
+		return false
+	var cmds: Array[Dictionary] = []
+	var i: int = 0
+	while i < frames.size():
+		cmds.append(InputActions.cmd_from_variant(frames[i]))
+		i += 1
+	_step_one_tick(cmds)
+	return true
+
+
+func _is_sim_paused() -> bool:
+	if clock != null and clock.paused:
+		return true
+	var tree: SceneTree = get_tree()
+	return tree != null and tree.paused
+
+
+func _gather_live_cmds() -> Array[Dictionary]:
 	var cmds: Array[Dictionary] = []
 	var i: int = 0
 	while i < fighters.size():
@@ -78,22 +122,20 @@ func _physics_process(delta: float) -> void:
 		if f.is_bot:
 			if i >= brains.size():
 				brains.append(BotBrain.new())
-			cmds.append(brains[i].think(f, fighters, pickups, delta))
+			cmds.append(brains[i].think(f, fighters, pickups, SimConstants.TICK_DT))
 		elif f.slot == 0:
-			cmds.append(InputActions.read_player(0))
+			cmds.append(InputActions.cmd_from_frame(InputActions.read_player_frame(0, clock.tick)))
 		elif f.slot == 1 and f.is_human:
-			cmds.append(InputActions.read_player(1))
+			cmds.append(InputActions.cmd_from_frame(InputActions.read_player_frame(1, clock.tick)))
 		else:
 			cmds.append(InputActions.empty_cmd())
 		i += 1
-	step_fixed(delta, cmds)
+	return cmds
 
 
-func step_fixed(delta: float, cmds: Array[Dictionary]) -> void:
-	var tree: SceneTree = get_tree()
-	if tree != null and tree.paused:
-		return
-	_tick_fx(delta)
+func _step_one_tick(cmds: Array[Dictionary]) -> void:
+	var dt: float = SimConstants.TICK_DT
+	_tick_fx(dt)
 	if outcome != "play":
 		return
 	var kill_plane: float = Maps.kill_y(map_id)
@@ -105,7 +147,7 @@ func step_fixed(delta: float, cmds: Array[Dictionary]) -> void:
 			cmd = cmds[i]
 		cmd["on_ladder"] = arena != null and arena.has_ladder_at(f.global_position)
 		var before_y: float = f.velocity.y
-		f.step(delta, cmd, kill_plane)
+		f.step(dt, cmd, kill_plane)
 		if f.last_jump and before_y >= 0.0 and f.velocity.y < 0.0 and sfx != null:
 			sfx.play("jump")
 		if f.want_melee:
@@ -115,10 +157,11 @@ func step_fixed(delta: float, cmds: Array[Dictionary]) -> void:
 		if f.want_grenade:
 			_do_grenade(f)
 		i += 1
-	_step_respawns(delta)
-	_step_bullets(delta)
-	_step_grenades(delta)
+	_step_respawns(dt)
+	_step_bullets(dt)
+	_step_grenades(dt)
 	_resolve_end()
+	clock.advance()
 	if hud != null:
 		hud.refresh(fighters)
 	_fit_camera()
@@ -127,12 +170,18 @@ func step_fixed(delta: float, cmds: Array[Dictionary]) -> void:
 func set_paused(active: bool) -> void:
 	if outcome != "play" and active:
 		return
+	if active:
+		clock.pause()
+	else:
+		clock.resume()
 	var tree: SceneTree = get_tree()
 	if tree == null:
 		return
 	tree.paused = active
 	if sfx != null:
 		sfx.duck(active)
+	if pause_screen == null:
+		return
 	if active:
 		pause_screen.show_pause()
 	else:
@@ -140,28 +189,11 @@ func set_paused(active: bool) -> void:
 
 
 func snapshot() -> Dictionary:
-	var living: int = 0
-	var i: int = 0
-	while i < fighters.size():
-		if not fighters[i].dead:
-			living += 1
-		i += 1
-	var p1: Fighter = player1()
-	return {
-		"outcome": outcome,
-		"map_id": map_id,
-		"mode": mode,
-		"living": living,
-		"p1_hp": p1.health if p1 != null else 0.0,
-		"p1_dead": p1.dead if p1 != null else true,
-		"p1_weapon": p1.weapon_id if p1 != null else "",
-		"p1_gun": p1.gun_id if p1 != null else "",
-		"p1_melee": p1.melee_id if p1 != null else "",
-		"p1_nades": p1.grenades if p1 != null else 0,
-		"p1_x": p1.global_position.x if p1 != null else 0.0,
-		"p1_y": p1.global_position.y if p1 != null else 0.0,
-		"win": outcome == "win",
-	}
+	return SimSnapshot.from_session(self)
+
+
+func snapshot_hash() -> String:
+	return SimSnapshot.stable_hash(snapshot())
 
 
 func player1() -> Fighter:
@@ -504,6 +536,9 @@ func shutdown() -> void:
 	respawns.clear()
 	bullets.clear()
 	grenades.clear()
+	if clock != null:
+		clock.reset()
+	last_reject = PackedStringArray()
 	if arena != null:
 		arena.layer = null
 		arena.world = null

@@ -1,0 +1,14 @@
+{
+  "schema": "vf.sim.event_order.v1",
+  "phases": [
+    "input_validate",
+    "locomotion",
+    "melee",
+    "fire_spawn",
+    "grenade_spawn",
+    "weapon_respawn",
+    "projectiles",
+    "explosives",
+    "match_resolve"
+  ]
+}
