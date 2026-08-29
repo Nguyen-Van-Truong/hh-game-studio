@@ -1,0 +1,164 @@
+{
+  "schema": "vf.input.event_trace.v1",
+  "schema_version": 1,
+  "title": "Vault Fighters",
+  "kind": "official",
+  "name": "p1_p2_independent",
+  "used_step_fixed": false,
+  "used_action_press": false,
+  "source": "Input.parse_input_event",
+  "tick_hz": 60,
+  "ledger_clock": "RL-SIM-FIXED-60",
+  "y8_parity_claimed": false,
+  "y8_tick_rate_claimed": false,
+  "hold_to_aim": "RL-CTRL-HOLD-AIM assumption, not observed",
+  "roll": "RL-MOVE-ROLL-DIVE unavailable",
+  "gamepad": {
+    "hardware": false,
+    "kind": "synthetic",
+    "non_hardware": true,
+    "ledger": "RL-CTRL-SYNTH-PAD"
+  },
+  "ledger": [
+    "RL-CTRL-P1-MOVE",
+    "RL-CTRL-P1-PUNCH",
+    "RL-CTRL-P1-SHOOT",
+    "RL-CTRL-P1-NADE",
+    "RL-CTRL-P2-MOVE",
+    "RL-CTRL-P2-ATK",
+    "RL-CTRL-FULLSCREEN",
+    "RL-CTRL-DEVICE-SPLIT",
+    "RL-CTRL-DEADZONE",
+    "RL-SIM-INPUT-FRAME"
+  ],
+  "steps": [
+    {
+      "id": "p1_right_press",
+      "inject": {"class": "InputEventKey", "physical": "RIGHT", "pressed": true},
+      "expect_p1": {"pressed_has": ["right"], "held_has": ["right"]},
+      "expect_p2": {"empty": true}
+    },
+    {
+      "id": "p1_right_release",
+      "inject": {"class": "InputEventKey", "physical": "RIGHT", "pressed": false},
+      "expect_p1": {"released_has": ["right"]},
+      "expect_p2": {"empty": true}
+    },
+    {
+      "id": "p2_d_press",
+      "inject": {"class": "InputEventKey", "physical": "D", "pressed": true},
+      "expect_p1": {"empty": true},
+      "expect_p2": {"pressed_has": ["right"], "held_has": ["right"]}
+    },
+    {
+      "id": "p2_d_release",
+      "inject": {"class": "InputEventKey", "physical": "D", "pressed": false},
+      "expect_p2": {"released_has": ["right"]}
+    },
+    {
+      "id": "both_left",
+      "injects": [
+        {"class": "InputEventKey", "physical": "LEFT", "pressed": true},
+        {"class": "InputEventKey", "physical": "A", "pressed": true}
+      ],
+      "expect_p1": {"held_has": ["left"]},
+      "expect_p2": {"held_has": ["left"]}
+    },
+    {
+      "id": "both_left_up",
+      "injects": [
+        {"class": "InputEventKey", "physical": "LEFT", "pressed": false},
+        {"class": "InputEventKey", "physical": "A", "pressed": false}
+      ]
+    },
+    {
+      "id": "p1_n_press",
+      "inject": {"class": "InputEventKey", "physical": "N", "pressed": true},
+      "expect_p1": {"pressed_has": ["melee"], "held_has": ["melee"]},
+      "expect_p2": {"empty": true}
+    },
+    {
+      "id": "p1_n_release",
+      "inject": {"class": "InputEventKey", "physical": "N", "pressed": false},
+      "expect_p1": {"released_has": ["melee"]}
+    },
+    {
+      "id": "p2_1_press",
+      "inject": {"class": "InputEventKey", "physical": "1", "pressed": true},
+      "expect_p1": {"empty": true},
+      "expect_p2": {"pressed_has": ["melee"]}
+    },
+    {
+      "id": "p2_1_release",
+      "inject": {"class": "InputEventKey", "physical": "1", "pressed": false}
+    },
+    {
+      "id": "p1_m_press",
+      "inject": {"class": "InputEventKey", "physical": "M", "pressed": true},
+      "expect_p1": {"pressed_has": ["fire"], "held_has": ["fire"]}
+    },
+    {
+      "id": "p1_m_held_tick",
+      "wait_frame": true,
+      "expect_p1": {"held_has": ["fire"], "not_pressed": ["fire"]}
+    },
+    {
+      "id": "p1_m_release",
+      "inject": {"class": "InputEventKey", "physical": "M", "pressed": false},
+      "expect_p1": {"released_has": ["fire"]}
+    },
+    {
+      "id": "p1_comma_press",
+      "inject": {"class": "InputEventKey", "physical": "COMMA", "pressed": true},
+      "expect_p1": {"held_has": ["grenade"]},
+      "expect_p2": {"empty": true}
+    },
+    {
+      "id": "p1_comma_release",
+      "inject": {"class": "InputEventKey", "physical": "COMMA", "pressed": false},
+      "expect_p1": {"released_has": ["grenade"]}
+    },
+    {
+      "id": "p1_pad_jump",
+      "inject": {"class": "InputEventJoypadButton", "device": 0, "button": "A", "pressed": true},
+      "expect_p1": {"pressed_has": ["jump"]},
+      "expect_p2": {"empty": true}
+    },
+    {
+      "id": "p1_pad_jump_up",
+      "inject": {"class": "InputEventJoypadButton", "device": 0, "button": "A", "pressed": false}
+    },
+    {
+      "id": "p2_pad_jump",
+      "inject": {"class": "InputEventJoypadButton", "device": 1, "button": "A", "pressed": true},
+      "expect_p1": {"empty": true},
+      "expect_p2": {"pressed_has": ["jump"]}
+    },
+    {
+      "id": "p2_pad_jump_up",
+      "inject": {"class": "InputEventJoypadButton", "device": 1, "button": "A", "pressed": false}
+    },
+    {
+      "id": "p1_stick_dead",
+      "inject": {"class": "InputEventJoypadMotion", "device": 0, "axis": "LEFT_X", "axis_value": 0.1},
+      "expect_p1": {"move_x_max": 0.01, "not_held": ["right"]},
+      "expect_p2": {"empty": true}
+    },
+    {
+      "id": "p1_stick_live",
+      "inject": {"class": "InputEventJoypadMotion", "device": 0, "axis": "LEFT_X", "axis_value": 0.85},
+      "expect_p1": {"held_has": ["right"], "move_x_min": 0.35},
+      "expect_p2": {"empty": true}
+    },
+    {
+      "id": "p1_stick_zero",
+      "inject": {"class": "InputEventJoypadMotion", "device": 0, "axis": "LEFT_X", "axis_value": 0.0}
+    },
+    {
+      "id": "f11_not_fighter",
+      "inject": {"class": "InputEventKey", "physical": "F11", "pressed": true},
+      "expect_p1": {"empty": true},
+      "expect_p2": {"empty": true}
+    }
+  ]
+}

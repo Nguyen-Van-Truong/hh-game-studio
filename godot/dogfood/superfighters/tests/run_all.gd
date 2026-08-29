@@ -11,6 +11,7 @@ var _no_err: String = "unproven"
 var _sim: String = "unproven"
 var _trace: String = "unproven"
 var _runtime: String = "unproven"
+var _input: String = "unproven"
 
 
 func _initialize() -> void:
@@ -34,6 +35,7 @@ func _boot() -> void:
 	_test_sim_contract(app)
 	await _test_golden_traces(app)
 	_test_runtime(app)
+	await _test_input_map(app)
 	if _fails.is_empty():
 		_no_err = "proven"
 	_emit()
@@ -79,16 +81,21 @@ func _test_input_binds() -> void:
 			_fail("action %s missing keyboard+gamepad" % action)
 		i += 1
 	var p2: PackedStringArray = PackedStringArray([
-		"p2_left", "p2_right", "p2_up", "p2_down", "p2_melee", "p2_fire", "p2_grenade"
+		"p2_left", "p2_right", "p2_up", "p2_down", "p2_jump", "p2_crouch",
+		"p2_melee", "p2_fire", "p2_grenade"
 	])
 	var j: int = 0
 	while j < p2.size():
 		var a2: String = String(p2[j])
 		if not InputMap.has_action(a2):
 			_fail("missing P2 action %s" % a2)
-		elif InputMap.action_get_events(a2).is_empty():
-			_fail("P2 action %s has no events" % a2)
+		elif not InputActions.has_keyboard_and_gamepad(a2):
+			_fail("P2 action %s missing keyboard+gamepad" % a2)
 		j += 1
+	var p1_dev: PackedInt32Array = InputMapStore.action_joy_devices("p1_melee")
+	var p2_dev: PackedInt32Array = InputMapStore.action_joy_devices("p2_melee")
+	if p1_dev.has(1) or p2_dev.has(0):
+		_fail("P1/P2 gamepad devices must stay split 0/1")
 
 
 func _test_buses() -> void:
@@ -543,6 +550,16 @@ func _test_runtime(app: App) -> void:
 		_runtime = "proven"
 
 
+func _test_input_map(app: App) -> void:
+	var errors: PackedStringArray = await InputMapCases.run_all(app)
+	var i: int = 0
+	while i < errors.size():
+		_fail("INPUT %s" % String(errors[i]))
+		i += 1
+	if _count_prefix("INPUT ") == 0:
+		_input = "proven"
+
+
 func _emit() -> void:
 	print("HH_VF_PATH title→fight→win/lose→restart")
 	print(
@@ -564,6 +581,7 @@ func _emit() -> void:
 		"reject" if _runtime == "proven" else "unproven",
 		_runtime,
 	])
+	print("HH_VF_INPUT USED_STEP_FIXED=0 P1P2=split status=%s" % _input)
 	if _fails.is_empty():
 		print("PASS: Vault Fighters first playable")
 	else:

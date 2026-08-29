@@ -4,6 +4,7 @@ extends Node
 var title: TitleScreen
 var win_screen: WinScreen
 var lose_screen: LoseScreen
+var remap_screen: RemapScreen
 var session: GameSession
 var test_driven: bool = false
 var mode: String = "vs1"
@@ -18,6 +19,8 @@ func _enter_tree() -> void:
 	if title != null:
 		return
 	InputActions.install()
+	if not test_driven:
+		InputMapStore.apply_saved_if_any()
 	seed(1)
 	runtime.bind(self, OS.get_environment("HH_VF_RUNTIME_TOKEN"))
 	title = TitleScreen.new()
@@ -25,7 +28,10 @@ func _enter_tree() -> void:
 	title.vs_two_pressed.connect(_on_vs_two)
 	title.stage_pressed.connect(_on_stage)
 	title.map_cycle_pressed.connect(_on_map_cycle)
+	title.controls_pressed.connect(_on_controls)
 	add_child(title)
+	remap_screen = RemapScreen.new()
+	add_child(remap_screen)
 	win_screen = WinScreen.new()
 	win_screen.restart_pressed.connect(restart_to_title)
 	add_child(win_screen)
@@ -35,6 +41,8 @@ func _enter_tree() -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if remap_screen != null and remap_screen.visible:
+		return
 	if session == null or session.outcome != "play":
 		return
 	if event.is_echo() or not event.is_pressed():
@@ -68,6 +76,8 @@ func start_fight(p_mode: String, p_map: String, p_stage: int) -> void:
 	session.lost.connect(_on_lost)
 	add_child(session)
 	session.setup(p_mode, p_map, p_stage)
+	if session.pause_screen != null:
+		session.pause_screen.controls_pressed.connect(_on_controls)
 
 
 func restart_to_title() -> void:
@@ -105,6 +115,11 @@ func _on_map_cycle() -> void:
 	map_id = Maps.next_vs_map(map_id)
 	if title != null:
 		title.set_map_id(map_id)
+
+
+func _on_controls() -> void:
+	if remap_screen != null:
+		remap_screen.show_remap()
 
 
 func _on_won() -> void:
@@ -167,3 +182,5 @@ func _disconnect_session(old: GameSession) -> void:
 		old.won.disconnect(_on_won)
 	if old.lost.is_connected(_on_lost):
 		old.lost.disconnect(_on_lost)
+	if old.pause_screen != null and old.pause_screen.controls_pressed.is_connected(_on_controls):
+		old.pause_screen.controls_pressed.disconnect(_on_controls)

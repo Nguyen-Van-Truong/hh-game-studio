@@ -89,8 +89,12 @@ platform. They are not ripped collision maps.
 - **devices:** keyboard and gamepad
 - **P1 keyboard:** arrows, N, M, comma, Escape
 - **P2 keyboard:** WASD, 1, 2, 3
-- **gamepad P1:** stick/dpad move, South jump, East crouch, West melee,
-  RT/Y fire, LB grenade, Start pause
+- **gamepad P1 (device 0):** stick/dpad move, South jump, East crouch,
+  West melee, RT/Y fire, LB grenade, Start pause
+- **gamepad P2 (device 1):** same layout; must not share P1's device
+- **remap:** title/pause Controls UI; atomic temp+rename save
+- **hold-to-aim:** first-playable assumption (`ledger:RL-CTRL-HOLD-AIM`),
+  not an observed listing behavior
 
 ## platform
 

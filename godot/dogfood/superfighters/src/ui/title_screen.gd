@@ -5,11 +5,13 @@ signal vs_one_pressed
 signal vs_two_pressed
 signal stage_pressed
 signal map_cycle_pressed
+signal controls_pressed
 
 var vs_one_btn: Button
 var vs_two_btn: Button
 var stage_btn: Button
 var map_btn: Button
+var controls_btn: Button
 var map_id: String = "rooftops"
 
 
@@ -54,23 +56,28 @@ func _ready() -> void:
 	hint2.add_theme_font_size_override("font_size", 16)
 	hint2.add_theme_color_override("font_color", UiTheme.CREAM)
 	add_child(hint2)
-	vs_one_btn = _make_btn("VS 1P", Vector2(80, 280))
-	vs_two_btn = _make_btn("VS 2P", Vector2(80, 340))
-	stage_btn = _make_btn("Stage", Vector2(80, 400))
-	map_btn = _make_btn("Map: Rooftops", Vector2(80, 460))
+	vs_one_btn = _make_btn("VS 1P", Vector2(80, 256))
+	vs_two_btn = _make_btn("VS 2P", Vector2(80, 312))
+	stage_btn = _make_btn("Stage", Vector2(80, 368))
+	map_btn = _make_btn("Map: Rooftops", Vector2(80, 424))
 	map_btn.name = "MapCycle"
+	controls_btn = _make_btn("Controls", Vector2(80, 480))
+	controls_btn.name = "Controls"
 	vs_one_btn.pressed.connect(_on_vs_one)
 	vs_two_btn.pressed.connect(_on_vs_two)
 	stage_btn.pressed.connect(_on_stage)
 	map_btn.pressed.connect(_on_map)
+	controls_btn.pressed.connect(_on_controls)
 	vs_one_btn.focus_neighbor_bottom = vs_two_btn.get_path()
-	vs_one_btn.focus_neighbor_top = map_btn.get_path()
+	vs_one_btn.focus_neighbor_top = controls_btn.get_path()
 	vs_two_btn.focus_neighbor_top = vs_one_btn.get_path()
 	vs_two_btn.focus_neighbor_bottom = stage_btn.get_path()
 	stage_btn.focus_neighbor_top = vs_two_btn.get_path()
 	stage_btn.focus_neighbor_bottom = map_btn.get_path()
 	map_btn.focus_neighbor_top = stage_btn.get_path()
-	map_btn.focus_neighbor_bottom = vs_one_btn.get_path()
+	map_btn.focus_neighbor_bottom = controls_btn.get_path()
+	controls_btn.focus_neighbor_top = map_btn.get_path()
+	controls_btn.focus_neighbor_bottom = vs_one_btn.get_path()
 	vs_one_btn.grab_focus()
 
 
@@ -103,3 +110,7 @@ func _on_stage() -> void:
 
 func _on_map() -> void:
 	map_cycle_pressed.emit()
+
+
+func _on_controls() -> void:
+	controls_pressed.emit()

@@ -1,31 +1,25 @@
 class_name InputActions
 extends RefCounted
 
+## Physical-key + device-split gamepad map (VF2-WP1).
+## Listing keys cite ledger:RL-CTRL-*. Hold-to-aim stays
+## ledger:RL-CTRL-HOLD-AIM (assumption). Roll/dive stay unavailable.
+
+
+static var _held_prev: Array[PackedStringArray] = [PackedStringArray(), PackedStringArray()]
+
 
 static func install() -> void:
-	_bind_axis("p1_left", KEY_LEFT, JOY_BUTTON_DPAD_LEFT, JOY_AXIS_LEFT_X, -1.0)
-	_bind_axis("p1_right", KEY_RIGHT, JOY_BUTTON_DPAD_RIGHT, JOY_AXIS_LEFT_X, 1.0)
-	_bind_axis("p1_up", KEY_UP, JOY_BUTTON_DPAD_UP, JOY_AXIS_LEFT_Y, -1.0)
-	_bind_axis("p1_down", KEY_DOWN, JOY_BUTTON_DPAD_DOWN, JOY_AXIS_LEFT_Y, 1.0)
-	_bind_button("p1_jump", KEY_UP, JOY_BUTTON_A)
-	_bind_button("p1_crouch", KEY_DOWN, JOY_BUTTON_B)
-	_bind_button("p1_melee", KEY_N, JOY_BUTTON_X)
-	_bind_button("p1_fire", KEY_M, JOY_BUTTON_Y)
-	_bind_trigger("p1_fire", JOY_AXIS_TRIGGER_RIGHT, 1.0)
-	_bind_button("p1_grenade", KEY_COMMA, JOY_BUTTON_LEFT_SHOULDER)
-	_bind_axis("p2_left", KEY_A, JOY_BUTTON_INVALID, JOY_AXIS_INVALID, 0.0)
-	_bind_axis("p2_right", KEY_D, JOY_BUTTON_INVALID, JOY_AXIS_INVALID, 0.0)
-	_bind_axis("p2_up", KEY_W, JOY_BUTTON_INVALID, JOY_AXIS_INVALID, 0.0)
-	_bind_axis("p2_down", KEY_S, JOY_BUTTON_INVALID, JOY_AXIS_INVALID, 0.0)
-	_bind_button("p2_jump", KEY_W, JOY_BUTTON_INVALID)
-	_bind_button("p2_crouch", KEY_S, JOY_BUTTON_INVALID)
-	_bind_button("p2_melee", KEY_1, JOY_BUTTON_INVALID)
-	_bind_button("p2_fire", KEY_2, JOY_BUTTON_INVALID)
-	_bind_button("p2_grenade", KEY_3, JOY_BUTTON_INVALID)
-	_ensure("pause")
-	if InputMap.action_get_events("pause").is_empty():
-		_add_key("pause", KEY_ESCAPE)
-		_add_joy_button("pause", JOY_BUTTON_START)
+	Input.set_use_accumulated_input(false)
+	var errors: PackedStringArray = InputMapStore.apply(InputMapStore.default_payload())
+	reset_edges()
+	if errors.is_empty():
+		return
+	push_warning("InputActions.install defaults failed: %s" % String(errors[0]))
+
+
+static func reset_edges() -> void:
+	_held_prev = [PackedStringArray(), PackedStringArray()]
 
 
 static func empty_cmd() -> Dictionary:
@@ -53,21 +47,42 @@ static func read_player_frame(slot: int, tick: int) -> InputFrame:
 	frame.schema_version = SimConstants.SCHEMA_VERSION
 	frame.tick = tick
 	frame.slot = slot
-	var left: float = Input.get_action_strength(prefix + "left")
-	var right: float = Input.get_action_strength(prefix + "right")
-	var up: float = Input.get_action_strength(prefix + "up")
-	var down: float = Input.get_action_strength(prefix + "down")
+	var left: float = _map_strength(prefix + "left")
+	var right: float = _map_strength(prefix + "right")
+	var up: float = _map_strength(prefix + "up")
+	var down: float = _map_strength(prefix + "down")
 	frame.move_x = clampf(right - left, -1.0, 1.0)
 	frame.move_y = clampf(down - up, -1.0, 1.0)
-	_fill_edge(frame, "left", prefix + "left")
-	_fill_edge(frame, "right", prefix + "right")
-	_fill_edge(frame, "up", prefix + "up")
-	_fill_edge(frame, "down", prefix + "down")
-	_fill_edge(frame, "jump", prefix + "jump")
-	_fill_edge(frame, "crouch", prefix + "crouch")
-	_fill_edge(frame, "melee", prefix + "melee")
-	_fill_edge(frame, "fire", prefix + "fire")
-	_fill_edge(frame, "grenade", prefix + "grenade")
+	var now: PackedStringArray = PackedStringArray()
+	_collect_held(now, "left", prefix + "left")
+	_collect_held(now, "right", prefix + "right")
+	_collect_held(now, "up", prefix + "up")
+	_collect_held(now, "down", prefix + "down")
+	_collect_held(now, "jump", prefix + "jump")
+	_collect_held(now, "crouch", prefix + "crouch")
+	_collect_held(now, "melee", prefix + "melee")
+	_collect_held(now, "fire", prefix + "fire")
+	_collect_held(now, "grenade", prefix + "grenade")
+	frame.held = now
+	var prev: PackedStringArray = PackedStringArray()
+	if slot >= 0 and slot < _held_prev.size():
+		prev = _held_prev[slot]
+	var i: int = 0
+	while i < now.size():
+		var action: String = String(now[i])
+		if not prev.has(action):
+			frame.pressed.append(action)
+		i += 1
+	i = 0
+	while i < prev.size():
+		var old: String = String(prev[i])
+		if not now.has(old):
+			frame.released.append(old)
+		i += 1
+	if slot >= 0:
+		while _held_prev.size() <= slot:
+			_held_prev.append(PackedStringArray())
+		_held_prev[slot] = now
 	return frame
 
 
@@ -165,59 +180,80 @@ static func has_keyboard_and_gamepad(action: String) -> bool:
 	return key_ok and pad_ok
 
 
-static func _fill_edge(frame: InputFrame, action: String, map_name: String) -> void:
-	if Input.is_action_pressed(map_name):
-		frame.held.append(action)
-	if Input.is_action_just_pressed(map_name):
-		frame.pressed.append(action)
-	if Input.is_action_just_released(map_name):
-		frame.released.append(action)
-
-
-static func _bind_axis(action: String, key: Key, dpad: JoyButton, axis: JoyAxis, axis_value: float) -> void:
-	_ensure(action)
-	if not InputMap.action_get_events(action).is_empty():
-		return
-	_add_key(action, key)
-	if dpad != JOY_BUTTON_INVALID:
-		_add_joy_button(action, dpad)
-	if axis != JOY_AXIS_INVALID:
-		_add_joy_axis(action, axis, axis_value)
-
-
-static func _bind_button(action: String, key: Key, joy: JoyButton) -> void:
-	_ensure(action)
-	if not InputMap.action_get_events(action).is_empty():
-		return
-	_add_key(action, key)
-	if joy != JOY_BUTTON_INVALID:
-		_add_joy_button(action, joy)
-
-
-static func _bind_trigger(action: String, axis: JoyAxis, axis_value: float) -> void:
-	_ensure(action)
-	_add_joy_axis(action, axis, axis_value)
-
-
-static func _ensure(action: String) -> void:
+static func uses_physical_keys(action: String) -> bool:
 	if not InputMap.has_action(action):
-		InputMap.add_action(action, 0.5)
+		return false
+	var events: Array = InputMap.action_get_events(action)
+	var saw_key: bool = false
+	var i: int = 0
+	while i < events.size():
+		var ev: InputEvent = events[i] as InputEvent
+		if ev is InputEventKey:
+			saw_key = true
+			if int((ev as InputEventKey).physical_keycode) == 0:
+				return false
+		i += 1
+	return saw_key
 
 
-static func _add_key(action: String, keycode: Key) -> void:
-	var ev: InputEventKey = InputEventKey.new()
-	ev.physical_keycode = keycode
-	InputMap.action_add_event(action, ev)
+static func snapshot_edges(slot: int, tick: int) -> Dictionary:
+	var frame: InputFrame = read_player_frame(slot, tick)
+	return {
+		"slot": slot,
+		"tick": tick,
+		"held": Array(frame.held),
+		"pressed": Array(frame.pressed),
+		"released": Array(frame.released),
+		"move_x": frame.move_x,
+		"move_y": frame.move_y,
+	}
 
 
-static func _add_joy_button(action: String, button: JoyButton) -> void:
-	var ev: InputEventJoypadButton = InputEventJoypadButton.new()
-	ev.button_index = button
-	InputMap.action_add_event(action, ev)
+static func _collect_held(into: PackedStringArray, action: String, map_name: String) -> void:
+	if _map_held(map_name):
+		into.append(action)
 
 
-static func _add_joy_axis(action: String, axis: JoyAxis, axis_value: float) -> void:
-	var ev: InputEventJoypadMotion = InputEventJoypadMotion.new()
-	ev.axis = axis
-	ev.axis_value = axis_value
-	InputMap.action_add_event(action, ev)
+static func _map_held(map_name: String) -> bool:
+	return _map_strength(map_name) >= InputConstants.DEADZONE
+
+
+static func _map_strength(map_name: String) -> float:
+	if not InputMap.has_action(map_name):
+		return 0.0
+	var best: float = 0.0
+	var joy_busy: bool = false
+	var events: Array = InputMap.action_get_events(map_name)
+	var i: int = 0
+	while i < events.size():
+		var ev: InputEvent = events[i] as InputEvent
+		if ev is InputEventKey:
+			var key: InputEventKey = ev as InputEventKey
+			if Input.is_physical_key_pressed(key.physical_keycode):
+				best = maxf(best, 1.0)
+		elif ev is InputEventJoypadButton:
+			var joy: InputEventJoypadButton = ev as InputEventJoypadButton
+			if Input.is_joy_button_pressed(joy.device, joy.button_index):
+				best = maxf(best, 1.0)
+			if Input.is_joy_button_pressed(InputConstants.P1_DEVICE, joy.button_index):
+				joy_busy = true
+			if Input.is_joy_button_pressed(InputConstants.P2_DEVICE, joy.button_index):
+				joy_busy = true
+		elif ev is InputEventJoypadMotion:
+			var axis: InputEventJoypadMotion = ev as InputEventJoypadMotion
+			var value: float = Input.get_joy_axis(axis.device, axis.axis)
+			if absf(value) >= InputConstants.DEADZONE:
+				if axis.axis_value < 0.0 and value <= -InputConstants.DEADZONE:
+					best = maxf(best, absf(value))
+				elif axis.axis_value > 0.0 and value >= InputConstants.DEADZONE:
+					best = maxf(best, absf(value))
+			if absf(Input.get_joy_axis(InputConstants.P1_DEVICE, axis.axis)) >= InputConstants.DEADZONE:
+				joy_busy = true
+			if absf(Input.get_joy_axis(InputConstants.P2_DEVICE, axis.axis)) >= InputConstants.DEADZONE:
+				joy_busy = true
+		i += 1
+	if best < InputConstants.DEADZONE and not joy_busy and Input.is_action_pressed(map_name):
+		best = maxf(best, Input.get_action_strength(map_name))
+		if best < InputConstants.DEADZONE:
+			best = 1.0
+	return best

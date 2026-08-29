@@ -1,0 +1,122 @@
+{
+  "schema": "vf.input.remap.v1",
+  "schema_version": 1,
+  "title": "Vault Fighters",
+  "deadzone": 0.25,
+  "p1_device": 0,
+  "p2_device": 1,
+  "y8_parity_claimed": false,
+  "hold_to_aim_ledger": "RL-CTRL-HOLD-AIM",
+  "hold_to_aim_class": "assumption",
+  "fullscreen_not_fighter_action": "RL-CTRL-FULLSCREEN",
+  "ledger": {
+    "p1_left": "RL-CTRL-P1-MOVE",
+    "p1_right": "RL-CTRL-P1-MOVE",
+    "p1_up": "RL-CTRL-P1-MOVE",
+    "p1_down": "RL-CTRL-P1-MOVE",
+    "p1_jump": "RL-CTRL-P1-MOVE",
+    "p1_crouch": "RL-CTRL-P1-MOVE",
+    "p1_melee": "RL-CTRL-P1-PUNCH",
+    "p1_fire": "RL-CTRL-P1-SHOOT",
+    "p1_grenade": "RL-CTRL-P1-NADE",
+    "p2_left": "RL-CTRL-P2-MOVE",
+    "p2_right": "RL-CTRL-P2-MOVE",
+    "p2_up": "RL-CTRL-P2-MOVE",
+    "p2_down": "RL-CTRL-P2-MOVE",
+    "p2_jump": "RL-CTRL-P2-MOVE",
+    "p2_crouch": "RL-CTRL-P2-MOVE",
+    "p2_melee": "RL-CTRL-P2-ATK",
+    "p2_fire": "RL-CTRL-P2-ATK",
+    "p2_grenade": "RL-CTRL-P2-ATK",
+    "pause": "RL-CTRL-P1-MOVE"
+  },
+  "actions": {
+    "p1_left": [
+      {"kind": "key", "physical": "LEFT"},
+      {"kind": "joy_button", "device": 0, "button": "DPAD_LEFT"},
+      {"kind": "joy_axis", "device": 0, "axis": "LEFT_X", "axis_value": -1.0}
+    ],
+    "p1_right": [
+      {"kind": "key", "physical": "RIGHT"},
+      {"kind": "joy_button", "device": 0, "button": "DPAD_RIGHT"},
+      {"kind": "joy_axis", "device": 0, "axis": "LEFT_X", "axis_value": 1.0}
+    ],
+    "p1_up": [
+      {"kind": "key", "physical": "UP"},
+      {"kind": "joy_button", "device": 0, "button": "DPAD_UP"},
+      {"kind": "joy_axis", "device": 0, "axis": "LEFT_Y", "axis_value": -1.0}
+    ],
+    "p1_down": [
+      {"kind": "key", "physical": "DOWN"},
+      {"kind": "joy_button", "device": 0, "button": "DPAD_DOWN"},
+      {"kind": "joy_axis", "device": 0, "axis": "LEFT_Y", "axis_value": 1.0}
+    ],
+    "p1_jump": [
+      {"kind": "key", "physical": "UP"},
+      {"kind": "joy_button", "device": 0, "button": "A"}
+    ],
+    "p1_crouch": [
+      {"kind": "key", "physical": "DOWN"},
+      {"kind": "joy_button", "device": 0, "button": "B"}
+    ],
+    "p1_melee": [
+      {"kind": "key", "physical": "N"},
+      {"kind": "joy_button", "device": 0, "button": "X"}
+    ],
+    "p1_fire": [
+      {"kind": "key", "physical": "M"},
+      {"kind": "joy_button", "device": 0, "button": "Y"},
+      {"kind": "joy_axis", "device": 0, "axis": "TRIGGER_RIGHT", "axis_value": 1.0}
+    ],
+    "p1_grenade": [
+      {"kind": "key", "physical": "COMMA"},
+      {"kind": "joy_button", "device": 0, "button": "LEFT_SHOULDER"}
+    ],
+    "p2_left": [
+      {"kind": "key", "physical": "A"},
+      {"kind": "joy_button", "device": 1, "button": "DPAD_LEFT"},
+      {"kind": "joy_axis", "device": 1, "axis": "LEFT_X", "axis_value": -1.0}
+    ],
+    "p2_right": [
+      {"kind": "key", "physical": "D"},
+      {"kind": "joy_button", "device": 1, "button": "DPAD_RIGHT"},
+      {"kind": "joy_axis", "device": 1, "axis": "LEFT_X", "axis_value": 1.0}
+    ],
+    "p2_up": [
+      {"kind": "key", "physical": "W"},
+      {"kind": "joy_button", "device": 1, "button": "DPAD_UP"},
+      {"kind": "joy_axis", "device": 1, "axis": "LEFT_Y", "axis_value": -1.0}
+    ],
+    "p2_down": [
+      {"kind": "key", "physical": "S"},
+      {"kind": "joy_button", "device": 1, "button": "DPAD_DOWN"},
+      {"kind": "joy_axis", "device": 1, "axis": "LEFT_Y", "axis_value": 1.0}
+    ],
+    "p2_jump": [
+      {"kind": "key", "physical": "W"},
+      {"kind": "joy_button", "device": 1, "button": "A"}
+    ],
+    "p2_crouch": [
+      {"kind": "key", "physical": "S"},
+      {"kind": "joy_button", "device": 1, "button": "B"}
+    ],
+    "p2_melee": [
+      {"kind": "key", "physical": "1"},
+      {"kind": "joy_button", "device": 1, "button": "X"}
+    ],
+    "p2_fire": [
+      {"kind": "key", "physical": "2"},
+      {"kind": "joy_button", "device": 1, "button": "Y"},
+      {"kind": "joy_axis", "device": 1, "axis": "TRIGGER_RIGHT", "axis_value": 1.0}
+    ],
+    "p2_grenade": [
+      {"kind": "key", "physical": "3"},
+      {"kind": "joy_button", "device": 1, "button": "LEFT_SHOULDER"}
+    ],
+    "pause": [
+      {"kind": "key", "physical": "ESCAPE"},
+      {"kind": "joy_button", "device": 0, "button": "START"},
+      {"kind": "joy_button", "device": 1, "button": "START"}
+    ]
+  }
+}

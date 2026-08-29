@@ -18,6 +18,8 @@ Kill leftover Godot first. Sequential `--path` only.
 Runtime observe/checkpoint (structured, not UI-pixel guess):
 `docs/runtime-diagnostics.md`.
 
+Input map / remap (VF2-WP1): `docs/input-mapping.md`.
+
 Headless loop test:
 
 ```
@@ -37,7 +39,14 @@ release fire · hold comma aim/release throw · Esc pause
 
 **Player 2:** WASD · 1 melee · hold 2 fire · hold 3 throw
 
-**Gamepad (P1):** stick/dpad · South jump · East crouch · West melee ·
-RT or Y fire · LB grenade · Start pause
+**Gamepad (P1 device 0):** stick/dpad · South jump · East crouch · West
+melee · RT or Y fire · LB grenade · Start pause
+
+**Gamepad (P2 device 1):** same layout; P1 pad must not drive P2.
+
+Title / Pause **Controls** remaps keyboard binds (atomic save). F11 is
+not a fighter key.
 
 Double-tap left/right to sprint (stamina).
+Hold-to-aim is a product assumption (`ledger:RL-CTRL-HOLD-AIM`), not an
+observed listing behavior.

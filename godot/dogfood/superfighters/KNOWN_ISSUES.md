@@ -27,3 +27,8 @@ First playable slice. Not G6. Not 60/60.
   this slice has no interactive barrels/glass. 60 Hz remains
   ledger:RL-SIM-FIXED-60 (`assumption`). Hold-to-aim / roll are still
   not observed.
+- VF2-WP1 maps real InputEvents for P1/P2/gamepad and an atomic remap
+  UI. Official pad proof is a synthetic non-hardware device
+  (ledger:RL-CTRL-SYNTH-PAD) unless a pad is plugged in for extra smoke.
+  Hold-to-aim stays ledger:RL-CTRL-HOLD-AIM (`assumption`). Roll/dive
+  stay ledger:RL-MOVE-ROLL-DIVE (`unavailable`).

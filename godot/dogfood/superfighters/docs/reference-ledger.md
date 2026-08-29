@@ -267,3 +267,27 @@ and `docs/evidence/VF1WP4-20260829-ASIA-SAIGON-01/`.
 | ID | Topic | Class | Conf. | Source | When | Behavior to reproduce | Tuning-only | Notes |
 |---|---|---|---|---|---|---|---|---|
 | RL-RUNTIME-OBSERVE | Structured observe + checkpoint | `assumption` | none | V-A8 / V-A10 / VF1-WP2 snapshot | 2026-08-29 | observe is read-only; pause keeps snapshot hash; restore hash matches capture; unauthorized/malformed do not mutate | — | Not Y8 parity. Clock stays RL-SIM-FIXED-60. Hold-to-aim stays RL-CTRL-HOLD-AIM. Roll/dive stay RL-MOVE-ROLL-DIVE. Prop events empty in this slice. |
+
+---
+
+## VF2-WP1 product input map (not a play observation)
+
+Dated 2026-08-29 Asia/Saigon. No in-game Y8 play. No HTML5/Flash
+package. Sidecar: `docs/input-mapping.md` and
+`docs/evidence/VF2WP1-20260829-ASIA-SAIGON-01/`.
+
+Listing keys stay `observed` from VF1-WP1 (`ledger:RL-CTRL-P1-*` /
+`ledger:RL-CTRL-P2-*`). The rows below are **product** mapping rules
+so P1/P2 and gamepad can be tested with real `InputEvent`s.
+
+| ID | Topic | Class | Conf. | Source | When | Behavior to reproduce | Tuning-only | Notes |
+|---|---|---|---|---|---|---|---|---|
+| RL-CTRL-DEADZONE | Analog dead-zone | `assumption` | none | VF2-WP1 product map; **not** on Y8 listing | 2026-08-29 | Stick values below 0.25 do not become held left/right | 0.25 | Not a Y8 stick claim. Clock stays RL-SIM-FIXED-60. |
+| RL-CTRL-DEVICE-SPLIT | P1 pad 0 / P2 pad 1 | `assumption` | none | VF2-WP1; keyboard split is RL-CTRL-P1-MOVE + RL-CTRL-P2-MOVE | 2026-08-29 | Device-0 joy must not fill P2 InputFrame; device-1 must not fill P1 | — | Keyboard still arrows vs WASD. Do not mark observed. |
+| RL-CTRL-REMAP | Atomic remap persist | `assumption` | none | V-A13 + title/pause Controls UI | 2026-08-29 | temp+rename; schema hash stored; F11 rejected; same-device payload rejected | — | Not Y8. Hold-to-aim stays RL-CTRL-HOLD-AIM. |
+| RL-CTRL-SYNTH-PAD | Synthetic non-hardware pad | `assumption` | none | VF2-WP1 verify when no hardware | 2026-08-29 | Official inject uses InputEventJoypad* marked non-hardware | — | Hardware smoke is extra if a pad is connected; golden trace stays synthetic. |
+
+Hold-to-aim is still `ledger:RL-CTRL-HOLD-AIM` (`assumption`). VF1-WP1
+did **not** observe hold-to-aim or roll. Roll/dive stay
+`ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). 60 Hz stays
+`ledger:RL-SIM-FIXED-60` (`assumption`).

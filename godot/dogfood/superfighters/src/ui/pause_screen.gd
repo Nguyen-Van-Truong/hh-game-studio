@@ -2,8 +2,10 @@ class_name PauseScreen
 extends Control
 
 signal resume_pressed
+signal controls_pressed
 
 var resume_btn: Button
+var controls_btn: Button
 
 
 func _ready() -> void:
@@ -33,10 +35,17 @@ func _ready() -> void:
 	resume_btn.size = Vector2(240, 48)
 	resume_btn.pressed.connect(_on_resume)
 	add_child(resume_btn)
+	controls_btn = Button.new()
+	controls_btn.name = "Controls"
+	controls_btn.text = "Controls"
+	controls_btn.position = Vector2(80, 300)
+	controls_btn.size = Vector2(240, 48)
+	controls_btn.pressed.connect(_on_controls)
+	add_child(controls_btn)
 	var hint: Label = Label.new()
 	hint.name = "InputHint"
-	hint.text = "Esc / Start resume · last standing wins · pits kill"
-	hint.position = Vector2(80, 320)
+	hint.text = "Esc / Start resume · Controls remaps keys · last standing wins"
+	hint.position = Vector2(80, 368)
 	hint.size = Vector2(1000, 32)
 	hint.add_theme_font_size_override("font_size", 18)
 	hint.add_theme_color_override("font_color", UiTheme.CREAM)
@@ -54,3 +63,7 @@ func hide_pause() -> void:
 
 func _on_resume() -> void:
 	resume_pressed.emit()
+
+
+func _on_controls() -> void:
+	controls_pressed.emit()

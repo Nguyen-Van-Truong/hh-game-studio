@@ -71,6 +71,7 @@ func setup(p_mode: String, p_map: String, p_stage: int) -> void:
 	camera.name = "ArenaCam"
 	add_child(camera)
 	_fit_camera()
+	InputActions.reset_edges()
 	hud.refresh(fighters)
 
 
@@ -96,6 +97,28 @@ func step_fixed(_delta: float, cmds: Array[Dictionary]) -> void:
 	if _is_sim_paused():
 		return
 	_step_one_tick(cmds)
+
+
+func step_from_live_input() -> bool:
+	if _is_sim_paused():
+		last_reject = PackedStringArray(["paused"])
+		return false
+	var frames: Array = []
+	var i: int = 0
+	while i < fighters.size():
+		var f: Fighter = fighters[i]
+		if f.is_bot:
+			if i >= brains.size():
+				brains.append(BotBrain.new())
+			frames.append(InputActions.frame_from_cmd(
+				brains[i].think(f, fighters, pickups, SimConstants.TICK_DT),
+				clock.tick,
+				f.slot
+			))
+		else:
+			frames.append(InputActions.read_player_frame(f.slot, clock.tick))
+		i += 1
+	return apply_frames(frames)
 
 
 func apply_frames(frames: Array) -> bool:
