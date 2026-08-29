@@ -51,6 +51,11 @@ https://mythologicinteractive.com/Superfighters
 - Crouch + melee near a grounded weapon to pick up / swap (standing
   melee does not loot). A grenade pickup does not strip the gun
 - Hold comma (P2: 3) to aim a throw, release to throw
+  (`ledger:RL-NADE-HOLD` / `ledger:RL-NADE-ARC` /
+  `ledger:RL-NADE-BOUNCE` / `ledger:RL-NADE-FUSE`, `assumption`)
+- Explosion is one radial blast; owner is not self-damaged
+  (`ledger:RL-NADE-FALLOFF` / `ledger:RL-NADE-OWNER` /
+  `ledger:RL-NADE-ONCE`, `assumption`). Prop destroy waits VF4.
 - Health + stamina bars; stamina drains on sprint
 - Random-ish weapon spawns (~20s respawn): pipe, knife, pistol, shotgun,
   uzi, grenade

@@ -1,0 +1,28 @@
+{
+  "schema": "vf.sim.trace.v1",
+  "schema_version": 1,
+  "title": "Vault Fighters",
+  "kind": "official",
+  "name": "nade_wall",
+  "record_source": "scripted_input_frames",
+  "mode": "vs2",
+  "map_id": "fx_nade_wall",
+  "stage_index": 0,
+  "seed": 7,
+  "fighter_count": 2,
+  "tick_hz": 60,
+  "snapshot_every": 15,
+  "ledger_clock": "RL-SIM-FIXED-60",
+  "y8_tick_rate_claimed": false,
+  "y8_parity_claimed": false,
+  "hold_to_aim": "RL-CTRL-HOLD-AIM assumption, not observed",
+  "sweep": "RL-NADE-SWEEP assumption, not observed",
+  "used_step_fixed": false,
+  "used_action_press": false,
+  "segments": [
+    {"ticks": 8, "p1": {}},
+    {"ticks": 4, "p1": {"held": ["grenade"]}},
+    {"ticks": 1, "p1": {"released": ["grenade"]}},
+    {"ticks": 30, "p1": {}}
+  ]
+}

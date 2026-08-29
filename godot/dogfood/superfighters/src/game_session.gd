@@ -4,6 +4,7 @@ extends Node2D
 const _Traversal: GDScript = preload("res://src/sim/traversal.gd")
 const _Combat: GDScript = preload("res://src/sim/combat.gd")
 const _Aim: GDScript = preload("res://src/sim/aim.gd")
+const _Expl: GDScript = preload("res://src/sim/explosive.gd")
 
 signal won
 signal lost
@@ -356,12 +357,23 @@ func replace_grenades(rows: Array) -> void:
 			SimConstants.dequantize(int(row.get("vx", 0))),
 			SimConstants.dequantize(int(row.get("vy", 0)))
 		)
-		if row.has("fuse"):
+		if row.has("fuse_ticks"):
+			nade.fuse_ticks = maxi(int(row.get("fuse_ticks", nade.fuse_ticks)), 0)
+			nade.fuse = float(nade.fuse_ticks) * SimConstants.TICK_DT
+		elif row.has("fuse"):
 			nade.fuse = SimConstants.dequantize(int(row.get("fuse", 0)))
+			nade.fuse_ticks = maxi(int(round(nade.fuse / SimConstants.TICK_DT)), 0)
+		if row.has("life_ticks"):
+			nade.life_ticks = maxi(int(row.get("life_ticks", nade.life_ticks)), 0)
 		if row.has("damage"):
 			nade.damage = SimConstants.dequantize(int(row.get("damage", 0)))
 		if row.has("radius"):
 			nade.radius = SimConstants.dequantize(int(row.get("radius", 0)))
+		if row.has("bounce_count"):
+			nade.bounce_count = maxi(int(row.get("bounce_count", 0)), 0)
+		nade.exploded = bool(row.get("exploded", false))
+		nade.applied = bool(row.get("applied", false))
+		nade.last_pos = at
 		grenades.append(nade)
 		i += 1
 
@@ -754,16 +766,22 @@ func _do_grenade(f: Fighter) -> void:
 	if f.grenades <= 0:
 		return
 	f.consume_grenade()
-	var dir: Vector2 = f.aim_dir
-	if dir == Vector2.ZERO:
-		dir = Vector2(f.facing, -0.35)
+	var dir: Vector2 = _Expl.throw_dir(f)
+	var posed: Vector2 = _Expl.throw_origin(f)
+	var origin: Vector2 = _uncollide_point(posed, dir)
 	var nade: ThrownGrenade = ThrownGrenade.new()
-	nade.setup(f.global_position + Vector2(f.facing * 10.0, -8.0), dir, f.slot, f.team)
+	nade.setup(origin, dir, f.slot, f.team)
 	add_child(nade)
 	grenades.append(nade)
 	ledger.push(clock.tick, "grenade_spawn", "nade", {
 		"owner": f.slot,
+		"team": f.team,
 		"nades": f.grenades,
+		"dir_x": SimConstants.quantize(dir.x),
+		"dir_y": SimConstants.quantize(dir.y),
+		"x": SimConstants.quantize(origin.x),
+		"y": SimConstants.quantize(origin.y),
+		"fuse_ticks": nade.fuse_ticks,
 	})
 
 
@@ -931,7 +949,11 @@ func _step_grenades(delta: float) -> void:
 		if nade == null or not is_instance_valid(nade):
 			grenades.remove_at(i)
 			continue
-		nade.step(delta)
+		if nade.applied:
+			nade.queue_free()
+			grenades.remove_at(i)
+			continue
+		_advance_nade(nade, delta)
 		if nade.exploded:
 			_explode(nade)
 			nade.queue_free()
@@ -940,22 +962,92 @@ func _step_grenades(delta: float) -> void:
 		i += 1
 
 
+func _advance_nade(nade: ThrownGrenade, delta: float) -> void:
+	var from: Vector2 = nade.global_position
+	var to: Vector2 = nade.predicted_pos(delta)
+	var next_vel: Vector2 = nade.predicted_vel(delta)
+	var sweep: Dictionary = _sweep_nade(nade, from, to)
+	if str(sweep.get("kind", "")) == "world":
+		var hit: Vector2 = sweep.get("point", from) as Vector2
+		var travel: Vector2 = to - from
+		if travel.length() > SimConstants.EPSILON:
+			hit = hit - travel.normalized() * 1.5
+		var bounced: Vector2 = _nade_bounce(nade, next_vel, hit)
+		nade.commit_step(hit, bounced, delta)
+		nade.bounce_count += 1
+		return
+	nade.commit_step(to, next_vel, delta)
+
+
+func _sweep_nade(nade: ThrownGrenade, from: Vector2, to: Vector2) -> Dictionary:
+	var best: Dictionary = {"kind": "", "t": 2.0, "point": to}
+	var travel: float = from.distance_to(to)
+	if travel <= SimConstants.EPSILON:
+		return best
+	var space: PhysicsDirectSpaceState2D = get_world_2d().direct_space_state
+	if space != null:
+		var query: PhysicsRayQueryParameters2D = PhysicsRayQueryParameters2D.create(from, to)
+		query.collision_mask = Maps.COL_WORLD | Maps.COL_PROP
+		query.collide_with_bodies = true
+		query.collide_with_areas = true
+		query.hit_from_inside = false
+		query.exclude = [nade.get_rid()]
+		var hit: Dictionary = space.intersect_ray(query)
+		if not hit.is_empty():
+			var at: Vector2 = hit.get("position", to) as Vector2
+			var t_wall: float = from.distance_to(at) / travel
+			best = {"kind": "world", "t": t_wall, "point": at}
+	var grid_hit: Dictionary = _grid_block_t(from, to)
+	if str(grid_hit.get("kind", "")) == "world" and float(grid_hit.get("t", 2.0)) < float(best.get("t", 2.0)):
+		best = {"kind": "world", "t": float(grid_hit.get("t", 2.0)), "point": grid_hit.get("point", to)}
+	return best
+
+
+func _nade_bounce(nade: ThrownGrenade, incoming: Vector2, at: Vector2) -> Vector2:
+	var hit_floor: bool = Maps.solid_at(map_id, at + Vector2(0.0, 2.0))
+	var hit_ceil: bool = Maps.solid_at(map_id, at + Vector2(0.0, -2.0))
+	var hit_wall: bool = (
+		Maps.solid_at(map_id, at + Vector2(2.0, 0.0))
+		or Maps.solid_at(map_id, at + Vector2(-2.0, 0.0))
+	)
+	return _Expl.bounce_velocity(incoming, hit_floor, hit_ceil, hit_wall)
+
+
 func _explode(nade: ThrownGrenade) -> void:
+	if nade == null or nade.applied:
+		return
+	nade.applied = true
+	nade.exploded = true
+	ledger.push(clock.tick, "explosives", "explosion", {
+		"owner": nade.owner_slot,
+		"team": nade.owner_team,
+		"x": SimConstants.quantize(nade.global_position.x),
+		"y": SimConstants.quantize(nade.global_position.y),
+		"radius": SimConstants.quantize(nade.radius),
+		"damage": SimConstants.quantize(nade.damage),
+		"prop_break": _Expl.prop_break_mode(),
+		"once": true,
+	})
 	if sfx != null:
 		sfx.play("explode")
+	_splat(nade.global_position)
 	var i: int = 0
 	while i < fighters.size():
 		var f: Fighter = fighters[i]
 		i += 1
-		if f.dead:
+		if not _Expl.allows_damage(mode, nade.owner_slot, nade.owner_team, f):
+			continue
+		if f.invuln_ticks > 0 or f.invuln > 0.0:
 			continue
 		var d: float = f.global_position.distance_to(nade.global_position)
-		if d <= nade.radius:
-			var falloff: float = 1.0 - (d / nade.radius)
-			var dir: Vector2 = (f.global_position - nade.global_position).normalized()
-			f.take_damage(nade.damage * falloff, dir * 140.0 + Vector2(0, -80))
-			_log_death_if_new(f)
-			_splat(f.global_position)
+		if d > nade.radius:
+			continue
+		f.take_damage(
+			_Expl.blast_damage_of(nade.damage, d, nade.radius),
+			_Expl.blast_knock_of(nade.global_position, f.global_position, d, nade.radius)
+		)
+		_log_death_if_new(f)
+		_splat(f.global_position)
 
 
 func _resolve_end() -> void:

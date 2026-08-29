@@ -97,3 +97,18 @@ First playable slice. Not G6. Not 60/60.
   is **not** promoted
   to `observed`. Y8 roll/dive observation stays
   `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). No new Y8 play.
+- VF3-WP4 ships grenade hold/release throw, gravity arc, bounce,
+  fuse, radial falloff, owner skip, one explosion, timeout
+  cleanup, and swept nade collision as assumption
+  (`ledger:RL-NADE-HOLD`, `ledger:RL-NADE-ARC`,
+  `ledger:RL-NADE-BOUNCE`, `ledger:RL-NADE-FUSE`,
+  `ledger:RL-NADE-FALLOFF`, `ledger:RL-NADE-OWNER`,
+  `ledger:RL-NADE-ONCE`, `ledger:RL-NADE-TIMEOUT`,
+  `ledger:RL-NADE-SWEEP`). Prop break is an explosion event
+  only (`ledger:RL-NADE-PROP`, `deferred`); VF4 destroys props.
+  Official proof is InputFrame `apply_frames` plus live
+  InputEvent inject. High-speed no-tunnel proof plants a 4000
+  px/s nade at Nade Cover (fixture spawn, same class as VF3-WP3
+  bullet sweep). Owner self-damage stays off. Hold-to-aim is
+  **not** promoted to `observed`. Y8 roll/dive observation stays
+  `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). No new Y8 play.

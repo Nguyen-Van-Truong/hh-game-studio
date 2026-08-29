@@ -168,6 +168,9 @@ static func _grenade_extras(session: GameSession) -> Array:
 				"owner": nade.owner_slot,
 				"team": nade.owner_team,
 				"fuse": SimConstants.quantize(nade.fuse),
+				"fuse_ticks": nade.fuse_ticks,
+				"life_ticks": nade.life_ticks,
+				"bounce_count": nade.bounce_count,
 				"damage": SimConstants.quantize(nade.damage),
 				"radius": SimConstants.quantize(nade.radius),
 			})

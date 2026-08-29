@@ -2,10 +2,13 @@ class_name WeaponDefs
 extends RefCounted
 
 ## Gun fire numbers live in data/sim/aim.json (VF3-WP3).
-## Pistol / Uzi / Shotgun differ by data. Melee/nade stay here.
+## Grenade numbers live in data/sim/explosive.json (VF3-WP4).
+## Pistol / Uzi / Shotgun differ by data. Melee stays here.
 ## Hold-to-aim stays ledger:RL-CTRL-HOLD-AIM (assumption).
+## Hold-to-throw stays ledger:RL-NADE-HOLD (assumption).
 
 const _Aim: GDScript = preload("res://src/sim/aim.gd")
+const _Expl: GDScript = preload("res://src/sim/explosive.gd")
 
 
 static func data(weapon_id: String) -> Dictionary:
@@ -45,21 +48,7 @@ static func data(weapon_id: String) -> Dictionary:
 			"icon": "res://assets/art/item_knife.png",
 		}
 	if weapon_id == "grenade":
-		return {
-			"id": "grenade",
-			"name": "Grenade",
-			"kind": "throw",
-			"slot": "nade",
-			"damage": 42.0,
-			"range": 48.0,
-			"cooldown": 0.80,
-			"ammo": 3,
-			"pellets": 1,
-			"spread": 0.0,
-			"speed": 280.0,
-			"auto": false,
-			"icon": "res://assets/art/item_grenade.png",
-		}
+		return _Expl.weapon_row()
 	return {
 		"id": "fists",
 		"name": "Fists",

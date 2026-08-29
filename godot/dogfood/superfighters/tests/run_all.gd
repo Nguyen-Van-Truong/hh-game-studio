@@ -7,6 +7,7 @@ const TraversalCasesScript: GDScript = preload("res://tests/traversal_cases.gd")
 const CombatCasesScript: GDScript = preload("res://tests/combat_cases.gd")
 const ReactionCasesScript: GDScript = preload("res://tests/reaction_cases.gd")
 const AimCasesScript: GDScript = preload("res://tests/aim_cases.gd")
+const ExplosiveCasesScript: GDScript = preload("res://tests/explosive_cases.gd")
 const _Combat: GDScript = preload("res://src/sim/combat.gd")
 
 var _fails: PackedStringArray = PackedStringArray()
@@ -26,6 +27,7 @@ var _trav: String = "unproven"
 var _melee: String = "unproven"
 var _react: String = "unproven"
 var _aim: String = "unproven"
+var _expl: String = "unproven"
 
 
 func _initialize() -> void:
@@ -57,6 +59,7 @@ func _boot() -> void:
 	await _test_melee(app)
 	await _test_react(app)
 	await _test_aim(app)
+	await _test_expl(app)
 	if _fails.is_empty():
 		_no_err = "proven"
 	_emit()
@@ -889,6 +892,55 @@ func _test_aim(app: App) -> void:
 		_aim = "proven"
 
 
+func _test_expl(app: App) -> void:
+	var errors: PackedStringArray = await ExplosiveCasesScript.run_all(app)
+	var i: int = 0
+	while i < errors.size():
+		_fail("EXPL %s" % String(errors[i]))
+		i += 1
+	var hold: String = str(ExplosiveCasesScript.outcome_hold.get("verdict", "unproven"))
+	var throwv: String = str(ExplosiveCasesScript.outcome_throw.get("verdict", "unproven"))
+	var arc: String = str(ExplosiveCasesScript.outcome_arc.get("verdict", "unproven"))
+	var bounce: String = str(ExplosiveCasesScript.outcome_bounce.get("verdict", "unproven"))
+	var fuse: String = str(ExplosiveCasesScript.outcome_fuse.get("verdict", "unproven"))
+	var falloff: String = str(ExplosiveCasesScript.outcome_falloff.get("verdict", "unproven"))
+	var owner: String = str(ExplosiveCasesScript.outcome_owner.get("verdict", "unproven"))
+	var once: String = str(ExplosiveCasesScript.outcome_once.get("verdict", "unproven"))
+	var timeout: String = str(ExplosiveCasesScript.outcome_timeout.get("verdict", "unproven"))
+	var sweep: String = str(ExplosiveCasesScript.outcome_sweep.get("verdict", "unproven"))
+	var data: String = str(ExplosiveCasesScript.outcome_data.get("verdict", "unproven"))
+	var live: String = str(ExplosiveCasesScript.outcome_live.get("verdict", "unproven"))
+	var replay: String = str(ExplosiveCasesScript.outcome_replay.get("verdict", "unproven"))
+	if hold != "pass":
+		_fail("EXPL HOLD outcome is %s" % hold)
+	if throwv != "pass":
+		_fail("EXPL THROW outcome is %s" % throwv)
+	if arc != "pass":
+		_fail("EXPL ARC outcome is %s" % arc)
+	if bounce != "pass":
+		_fail("EXPL BOUNCE outcome is %s" % bounce)
+	if fuse != "pass":
+		_fail("EXPL FUSE outcome is %s" % fuse)
+	if falloff != "pass":
+		_fail("EXPL FALLOFF outcome is %s" % falloff)
+	if owner != "pass":
+		_fail("EXPL OWNER outcome is %s" % owner)
+	if once != "pass":
+		_fail("EXPL ONCE outcome is %s" % once)
+	if timeout != "pass":
+		_fail("EXPL TIMEOUT outcome is %s" % timeout)
+	if sweep != "pass":
+		_fail("EXPL SWEEP outcome is %s" % sweep)
+	if data != "pass":
+		_fail("EXPL DATA outcome is %s" % data)
+	if live != "pass":
+		_fail("EXPL LIVE outcome is %s" % live)
+	if replay != "match":
+		_fail("EXPL REPLAY outcome is %s" % replay)
+	if _count_prefix("EXPL ") == 0:
+		_expl = "proven"
+
+
 func _emit() -> void:
 	print("HH_VF_PATH title→fight→win/lose→restart")
 	print(
@@ -1014,6 +1066,27 @@ func _emit() -> void:
 			AimCasesScript.used_apply_frames_succeeded,
 			AimCasesScript.used_apply_frames_attempted,
 			_aim,
+		]
+	)
+	print(
+		"HH_VF_EXPL HOLD=%s THROW=%s ARC=%s BOUNCE=%s FUSE=%s FALLOFF=%s OWNER=%s ONCE=%s TIMEOUT=%s SWEEP=%s DATA=%s LIVE=%s REPLAY=%s APPLY=%d/%d status=%s"
+		% [
+			str(ExplosiveCasesScript.outcome_hold.get("verdict", "unproven")),
+			str(ExplosiveCasesScript.outcome_throw.get("verdict", "unproven")),
+			str(ExplosiveCasesScript.outcome_arc.get("verdict", "unproven")),
+			str(ExplosiveCasesScript.outcome_bounce.get("verdict", "unproven")),
+			str(ExplosiveCasesScript.outcome_fuse.get("verdict", "unproven")),
+			str(ExplosiveCasesScript.outcome_falloff.get("verdict", "unproven")),
+			str(ExplosiveCasesScript.outcome_owner.get("verdict", "unproven")),
+			str(ExplosiveCasesScript.outcome_once.get("verdict", "unproven")),
+			str(ExplosiveCasesScript.outcome_timeout.get("verdict", "unproven")),
+			str(ExplosiveCasesScript.outcome_sweep.get("verdict", "unproven")),
+			str(ExplosiveCasesScript.outcome_data.get("verdict", "unproven")),
+			str(ExplosiveCasesScript.outcome_live.get("verdict", "unproven")),
+			str(ExplosiveCasesScript.outcome_replay.get("verdict", "unproven")),
+			ExplosiveCasesScript.used_apply_frames_succeeded,
+			ExplosiveCasesScript.used_apply_frames_attempted,
+			_expl,
 		]
 	)
 	print(

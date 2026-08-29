@@ -496,3 +496,46 @@ pass.
 | RL-FIRE-RECOIL | Recoil and spread | `assumption` | none | VF3-WP3 product contract; **not** observed on Y8 this session | 2026-08-29 | Fire kicks opposite aim; shotgun fans pellets | 24 / 10 / 56 | Deterministic fan; no RNG. |
 | RL-FIRE-BALLISTIC | Ballistic, not hitscan | `assumption` | none | VF3-WP3 product decision; **not** observed on Y8 this session | 2026-08-29 | Pistol/Uzi/Shotgun spawn traveling bullets | speeds 560/580/500 | Hitscan rejected. Not observed. |
 | RL-FIRE-SWEEP | Continuous bullet collision | `assumption` | none | VF3-WP3 product contract; **not** observed on Y8 this session | 2026-08-29 | Segment from last_pos to predicted hits wall first | 4000 px/s proof | No 4px probe. Not observed. |
+
+---
+
+## VF3-WP4 projectile / grenade / explosion (not a play observation)
+
+Dated 2026-08-29 Asia/Saigon. No in-game Y8 play. No HTML5/Flash
+package. Sidecar: `docs/explosive.md` and
+`docs/evidence/VF3WP4-20260829-ASIA-SAIGON-01/`.
+
+Hold-to-throw stays `ledger:RL-NADE-HOLD` (`assumption`). Arc stays
+`ledger:RL-NADE-ARC` (`assumption`). Bounce stays
+`ledger:RL-NADE-BOUNCE` (`assumption`). Fuse stays
+`ledger:RL-NADE-FUSE` (`assumption`). Falloff stays
+`ledger:RL-NADE-FALLOFF` (`assumption`). Owner skip stays
+`ledger:RL-NADE-OWNER` (`assumption`). One explosion stays
+`ledger:RL-NADE-ONCE` (`assumption`). Timeout cleanup stays
+`ledger:RL-NADE-TIMEOUT` (`assumption`). Swept nade collision stays
+`ledger:RL-NADE-SWEEP` (`assumption`). Prop break stays
+`ledger:RL-NADE-PROP` (`deferred`). None of these rows is promoted
+to `observed`. Hold-to-aim stays `ledger:RL-CTRL-HOLD-AIM`
+(`assumption`). Y8 observation stays `ledger:RL-MOVE-ROLL-DIVE`
+(`unavailable`). 60 Hz stays `ledger:RL-SIM-FIXED-60` (`assumption`).
+
+Product contract: hold comma aims a throw; release throws one
+ballistic nade; gravity makes an arc; floor/wall bounce; fuse then
+exactly one explosion; radial falloff; owner is not self-damaged;
+timeout frees leftovers; high-speed sweep does not tunnel. Prop
+destroy is deferred to VF4 (event only). Official proof uses
+`apply_frames` plus live InputEvent inject. Fixtures are temporary
+collision maps, not a VF5 pass.
+
+| ID | Topic | Class | Conf. | Source | When | Behavior to reproduce | Tuning-only | Notes |
+|---|---|---|---|---|---|---|---|---|
+| RL-NADE-HOLD | Hold-to-aim throw | `assumption` | none | VF3-WP4 product contract; **not** observed on Y8 this session | 2026-08-29 | Hold grenade aims; no spawn until release | throw_cd 48 | Do **not** cite as observed. |
+| RL-NADE-ARC | Gravity arc | `assumption` | none | VF3-WP4 product contract; **not** observed on Y8 this session | 2026-08-29 | Thrown nade vy increases under data gravity | 900 | Not observed. |
+| RL-NADE-BOUNCE | Floor / wall bounce | `assumption` | none | VF3-WP4 product contract; **not** observed on Y8 this session | 2026-08-29 | Contact flips/damps velocity; rest_vy stops chatter | 0.55 / 0.35 | Not observed. |
+| RL-NADE-FUSE | Fuse then blast | `assumption` | none | VF3-WP4 product contract; **not** observed on Y8 this session | 2026-08-29 | fuse_ticks then explosion event | 81 ticks | Not observed. |
+| RL-NADE-FALLOFF | Radial damage falloff | `assumption` | none | VF3-WP4 product contract; **not** observed on Y8 this session | 2026-08-29 | Closer fighter takes more damage | 42 / 48 | Not observed. |
+| RL-NADE-OWNER | Owner self-damage off | `assumption` | none | VF3-WP4 product contract; **not** observed on Y8 this session | 2026-08-29 | Owner HP unchanged inside radius | owner_self_damage=false | Not observed. |
+| RL-NADE-ONCE | One explosion | `assumption` | none | VF3-WP4 product contract; **not** observed on Y8 this session | 2026-08-29 | applied flag; second pulse does not fire | once | Not observed. |
+| RL-NADE-TIMEOUT | Timeout cleanup | `assumption` | none | VF3-WP4 product contract; **not** observed on Y8 this session | 2026-08-29 | life_ticks expiry frees the node | 180 | Not observed. |
+| RL-NADE-SWEEP | Continuous nade collision | `assumption` | none | VF3-WP4 product contract; **not** observed on Y8 this session | 2026-08-29 | Segment from last_pos to predicted hits wall first | 4000 px/s proof | Not observed. |
+| RL-NADE-PROP | Explosion prop event | `deferred` | none | VF3-WP4 event only; destroy waits VF4 | 2026-08-29 | explosion payload prop_break=deferred_vf4 | VF4 | Not a prop destroy. |

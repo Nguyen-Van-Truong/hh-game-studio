@@ -52,6 +52,10 @@ static func from_session(session: GameSession) -> Dictionary:
 				"vx": SimConstants.quantize(nade.velocity.x),
 				"vy": SimConstants.quantize(nade.velocity.y),
 				"owner": nade.owner_slot,
+				"team": nade.owner_team,
+				"fuse_ticks": nade.fuse_ticks,
+				"life_ticks": nade.life_ticks,
+				"bounce": nade.bounce_count,
 			})
 		i += 1
 	_sort_by_xy_id(nades_out)

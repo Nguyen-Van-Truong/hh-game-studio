@@ -1,0 +1,158 @@
+{
+	"apply": {
+		"attempted": 807,
+		"succeeded": 807,
+		"used_action_press": 0,
+		"used_apply_frames": 807,
+		"used_parse_input_event": 1,
+		"used_step_fixed": 0
+	},
+	"arc": {
+		"source": "hold up, release, gravity on ballistic nade",
+		"verdict": "pass",
+		"vy0": -345.0,
+		"vy1": 230.25,
+		"y0": 22.2491302490234,
+		"y1": 41.2000007629395
+	},
+	"bounce": {
+		"bounces": 4,
+		"floor_y": 48.0,
+		"source": "throw then idle until floor contact",
+		"verdict": "pass",
+		"y": 47.4378547668457
+	},
+	"data": {
+		"fuse_ticks": 81,
+		"owner_self_damage": false,
+		"prop_break": "deferred_vf4",
+		"radius": 48.0,
+		"source": "explosive.json grenade + fixtures",
+		"verdict": "pass"
+	},
+	"falloff": {
+		"expect_far": 10.5,
+		"expect_near": 31.5,
+		"far": 10.4992389678955,
+		"near": 31.4977219104767,
+		"source": "same blast data, 12px vs 36px",
+		"verdict": "pass"
+	},
+	"fuse": {
+		"blasts": 1,
+		"fuse_ticks": 81,
+		"leftover": 0,
+		"prop_break": "deferred_vf4",
+		"source": "throw then idle fuse_ticks",
+		"verdict": "pass"
+	},
+	"hold": {
+		"aiming": true,
+		"nades": 3,
+		"source": "apply_frames hold grenade, no release",
+		"spawns": 0,
+		"verdict": "pass"
+	},
+	"live": {
+		"held_aiming": true,
+		"live": 1,
+		"nades": 2,
+		"source": "parse_input_event KEY_COMMA + step_from_live_input",
+		"verdict": "pass"
+	},
+	"once": {
+		"blasts": 1,
+		"blasts_later": 1,
+		"source": "one explosion event, no second pulse",
+		"verdict": "pass"
+	},
+	"owner": {
+		"hp0": 100.0,
+		"hp1": 100.0,
+		"rule": "owner_self_damage=false",
+		"source": "planted blast at owner feet",
+		"verdict": "pass"
+	},
+	"replay": {
+		"pair_count": 6,
+		"pairs": [
+			{
+				"hash_a": "0f560aacc1411c2c5b487225f7bee120066c23d5aa6449821da1516d64d1524a",
+				"hash_b": "0f560aacc1411c2c5b487225f7bee120066c23d5aa6449821da1516d64d1524a",
+				"hash_match": true,
+				"name": "nade_arc",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "d1767668c9b25b42e93cb36b827edc2888ae8fc61933ea828bb9d1a9ab0ed090",
+				"hash_b": "d1767668c9b25b42e93cb36b827edc2888ae8fc61933ea828bb9d1a9ab0ed090",
+				"hash_match": true,
+				"name": "nade_bounce",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "174a5dcdd9c3638cf404d42ae5d0f6638b0a451693906f16cbf34ff65c147054",
+				"hash_b": "174a5dcdd9c3638cf404d42ae5d0f6638b0a451693906f16cbf34ff65c147054",
+				"hash_match": true,
+				"name": "nade_fuse",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "d022e6815a45bef243b627c1080f646235bcb3e7f4b88c09a1c082e5e19a69ca",
+				"hash_b": "d022e6815a45bef243b627c1080f646235bcb3e7f4b88c09a1c082e5e19a69ca",
+				"hash_match": true,
+				"name": "nade_hold",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "813dca253438217394e5fd5ab415d518d80c46a74704f691eba3658a80bedde9",
+				"hash_b": "813dca253438217394e5fd5ab415d518d80c46a74704f691eba3658a80bedde9",
+				"hash_match": true,
+				"name": "nade_throw",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "c5ac422826d698b3d59baa53764e035ab28ff780065667366ae4460b9683740f",
+				"hash_b": "c5ac422826d698b3d59baa53764e035ab28ff780065667366ae4460b9683740f",
+				"hash_match": true,
+				"name": "nade_wall",
+				"ok_a": true,
+				"ok_b": true
+			}
+		],
+		"source": "SimReplay.final_hash twice",
+		"verdict": "match"
+	},
+	"sweep": {
+		"farthest": 80.0,
+		"hp0": 100.0,
+		"hp1": 100.0,
+		"map_id": "fx_nade_wall",
+		"past_wall": 0,
+		"source": "4000 px/s ballistic nade sweep vs Nade Cover",
+		"speed": 4000.0,
+		"verdict": "pass",
+		"wall_solid": true
+	},
+	"throw": {
+		"after": 1,
+		"during": 0,
+		"live": 1,
+		"nades0": 3,
+		"nades1": 2,
+		"source": "apply_frames hold then released grenade",
+		"verdict": "pass"
+	},
+	"timeout": {
+		"blasts": 1,
+		"leftover": 0,
+		"life_ticks": 6,
+		"source": "life_ticks expires, node leaves the array",
+		"verdict": "pass"
+	}
+}

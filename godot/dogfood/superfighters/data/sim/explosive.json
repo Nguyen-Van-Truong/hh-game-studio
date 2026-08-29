@@ -1,0 +1,93 @@
+{
+  "schema": "vf.sim.explosive.v1",
+  "schema_version": 1,
+  "title": "Vault Fighters",
+  "y8_parity_claimed": false,
+  "y8_tick_rate_claimed": false,
+  "ledger_clock": "RL-SIM-FIXED-60",
+  "hold_throw_ledger": "RL-NADE-HOLD",
+  "hold_throw_class": "assumption",
+  "arc_ledger": "RL-NADE-ARC",
+  "arc_class": "assumption",
+  "bounce_ledger": "RL-NADE-BOUNCE",
+  "bounce_class": "assumption",
+  "fuse_ledger": "RL-NADE-FUSE",
+  "fuse_class": "assumption",
+  "falloff_ledger": "RL-NADE-FALLOFF",
+  "falloff_class": "assumption",
+  "owner_ledger": "RL-NADE-OWNER",
+  "owner_class": "assumption",
+  "once_ledger": "RL-NADE-ONCE",
+  "once_class": "assumption",
+  "timeout_ledger": "RL-NADE-TIMEOUT",
+  "timeout_class": "assumption",
+  "sweep_ledger": "RL-NADE-SWEEP",
+  "sweep_class": "assumption",
+  "prop_break_ledger": "RL-NADE-PROP",
+  "prop_break_class": "deferred",
+  "hold_to_aim_ledger": "RL-CTRL-HOLD-AIM",
+  "hold_to_aim_class": "assumption",
+  "roll_dive_ledger": "RL-MOVE-ROLL-DIVE",
+  "roll_dive_class": "unavailable",
+  "tick_hz": 60,
+  "collision": "swept",
+  "projectile_mode": "ballistic",
+  "hitscan": false,
+  "owner_self_damage": false,
+  "prop_break": "deferred_vf4",
+  "team_damage": {
+    "vs1": false,
+    "vs2": true,
+    "stage": false
+  },
+  "grenade": {
+    "id": "grenade",
+    "name": "Grenade",
+    "kind": "throw",
+    "slot": "nade",
+    "throw_speed": 280.0,
+    "throw_up": -80.0,
+    "throw_bias_y": -0.35,
+    "throw_forward": 10.0,
+    "throw_lift": -8.0,
+    "gravity": 900.0,
+    "bounce_x": 0.55,
+    "bounce_y": 0.35,
+    "rest_vy": 24.0,
+    "fuse_ticks": 81,
+    "life_ticks": 180,
+    "throw_cd_ticks": 48,
+    "damage": 42.0,
+    "radius": 48.0,
+    "knock": 140.0,
+    "knock_y": -80.0,
+    "ammo": 3,
+    "icon": "res://assets/art/item_grenade.png"
+  },
+  "fixtures": {
+    "fx_nade_open": [
+      "################",
+      "#..............#",
+      "#..P.........1.#",
+      "################"
+    ],
+    "fx_nade_wall": [
+      "####################",
+      "#........#.........#",
+      "#..P.....#.......1.#",
+      "#........#.........#",
+      "####################"
+    ],
+    "fx_nade_blast": [
+      "################",
+      "#..............#",
+      "#..P..1........#",
+      "################"
+    ]
+  },
+  "fixture_names": {
+    "fx_nade_open": "Nade Lane",
+    "fx_nade_wall": "Nade Cover",
+    "fx_nade_blast": "Blast Pocket"
+  }
+}

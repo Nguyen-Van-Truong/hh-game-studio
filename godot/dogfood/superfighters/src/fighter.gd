@@ -23,6 +23,7 @@ extends CharacterBody2D
 ## Aim dirs stay ledger:RL-AIM-DIRS (assumption).
 ## Semi release stays ledger:RL-FIRE-SEMI (assumption).
 ## Auto cadence stays ledger:RL-FIRE-AUTO (assumption).
+## Hold-to-throw stays ledger:RL-NADE-HOLD (assumption).
 ## InputFrame `ledge` stays reserved. Y8 observation stays
 ## ledger:RL-MOVE-ROLL-DIVE (unavailable). Not a Y8 observation.
 
@@ -31,6 +32,7 @@ const MAX_STAMINA: float = 100.0
 const _Traversal: GDScript = preload("res://src/sim/traversal.gd")
 const _Combat: GDScript = preload("res://src/sim/combat.gd")
 const _Aim: GDScript = preload("res://src/sim/aim.gd")
+const _Expl: GDScript = preload("res://src/sim/explosive.gd")
 
 var gravity: float = 1700.0
 var jump_vel: float = -430.0
@@ -344,6 +346,7 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	var fire_held: bool = bool(cmd.get("fire_held", false))
 	var fire_released: bool = bool(cmd.get("fire_released", false))
 	var nade_held: bool = bool(cmd.get("grenade_held", false)) and grenades > 0
+	var nade_released: bool = bool(cmd.get("grenade_released", false)) and grenades > 0
 	on_ladder = bool(cmd.get("on_ladder", false))
 	var snap_x: float = float(cmd.get("ladder_snap_x", global_position.x))
 	var climb_up_blocked: bool = bool(cmd.get("climb_up_blocked", false))
@@ -352,7 +355,7 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	var ledge: Dictionary = {}
 	if cmd.get("ledge") is Dictionary:
 		ledge = cmd.get("ledge") as Dictionary
-	_update_aim(cmd, fire_held, fire_released, nade_held)
+	_update_aim(cmd, fire_held, fire_released, nade_held, nade_released)
 	var crouch_held: bool = bool(cmd.get("crouch", false))
 	var crouch_pressed: bool = bool(cmd.get("crouch_pressed", false))
 	var jump_cmd: bool = bool(cmd.get("jump", false))
@@ -493,9 +496,9 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 			want_fire = true
 		elif fire_released:
 			want_fire = true
-	if not rolling and not diving and bool(cmd.get("grenade_released", false)) and grenade_cd <= 0.0 and grenades > 0:
+	if not rolling and not diving and nade_released and grenade_cd <= 0.0:
 		want_grenade = true
-		grenade_cd = 0.8
+		grenade_cd = _Expl.throw_cd()
 		throw_flash = 0.16
 	_apply_ledge_motion(delta)
 	var recover_pos0: Vector2 = global_position
@@ -1159,7 +1162,7 @@ func _is_auto() -> bool:
 	return _Aim.is_auto(gun_id)
 
 
-func _update_aim(cmd: Dictionary, fire_held: bool, fire_released: bool, nade_held: bool) -> void:
+func _update_aim(cmd: Dictionary, fire_held: bool, fire_released: bool, nade_held: bool, nade_released: bool) -> void:
 	var gun_ready: bool = _gun_ready()
 	if fire_held and gun_ready:
 		aiming = true
@@ -1175,6 +1178,12 @@ func _update_aim(cmd: Dictionary, fire_held: bool, fire_released: bool, nade_hel
 		aiming = true
 		aim_dir = _aim_from(cmd)
 		last_aim_dir = aim_dir
+	elif nade_released:
+		aiming = true
+		if last_aim_dir != Vector2.ZERO:
+			aim_dir = last_aim_dir
+		else:
+			aim_dir = _aim_from(cmd)
 	else:
 		aiming = false
 		aim_dir = Vector2(facing, 0.0)

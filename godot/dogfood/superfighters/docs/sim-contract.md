@@ -114,6 +114,19 @@ are product tuning (`ledger:RL-CTRL-HOLD-AIM`, `ledger:RL-AIM-DIRS`,
 not Y8 play. Hitscan is rejected. Official MATCH uses
 `apply_frames`. 60 Hz stays ledger:RL-SIM-FIXED-60.
 
+## Grenade / explosive (VF3-WP4)
+
+Arc, bounce, fuse, radial falloff, owner/team rules, one-shot
+explosion, timeout cleanup, and swept nade collision live in
+`data/sim/explosive.json`. They are product tuning
+(`ledger:RL-NADE-HOLD`, `ledger:RL-NADE-ARC`,
+`ledger:RL-NADE-BOUNCE`, `ledger:RL-NADE-FUSE`,
+`ledger:RL-NADE-FALLOFF`, `ledger:RL-NADE-OWNER`,
+`ledger:RL-NADE-ONCE`, `ledger:RL-NADE-TIMEOUT`,
+`ledger:RL-NADE-SWEEP`, `assumption`), not Y8 play. Prop break
+stays `ledger:RL-NADE-PROP` (`deferred`). Official MATCH uses
+`apply_frames`. 60 Hz stays ledger:RL-SIM-FIXED-60.
+
 ## Runtime observe (VF1-WP4)
 
 Agents read `RuntimeApi` (`docs/runtime-diagnostics.md`,

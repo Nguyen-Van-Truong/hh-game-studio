@@ -56,7 +56,17 @@
     "fire_muzzle": "RL-FIRE-MUZZLE assumption, not observed",
     "fire_recoil": "RL-FIRE-RECOIL assumption, not observed",
     "fire_ballistic": "RL-FIRE-BALLISTIC assumption, ballistic not hitscan",
-    "fire_sweep": "RL-FIRE-SWEEP assumption, not observed"
+    "fire_sweep": "RL-FIRE-SWEEP assumption, not observed",
+    "nade_hold": "RL-NADE-HOLD assumption, not observed",
+    "nade_arc": "RL-NADE-ARC assumption, not observed",
+    "nade_bounce": "RL-NADE-BOUNCE assumption, not observed",
+    "nade_fuse": "RL-NADE-FUSE assumption, not observed",
+    "nade_falloff": "RL-NADE-FALLOFF assumption, not observed",
+    "nade_owner": "RL-NADE-OWNER assumption, owner self-damage forbidden",
+    "nade_once": "RL-NADE-ONCE assumption, one explosion event",
+    "nade_timeout": "RL-NADE-TIMEOUT assumption, leftover cleanup",
+    "nade_sweep": "RL-NADE-SWEEP assumption, not observed",
+    "nade_prop": "RL-NADE-PROP deferred VF4, event only"
   },
   "combat": {
     "schema": "vf.sim.combat.v1",
@@ -65,6 +75,10 @@
   "aim": {
     "schema": "vf.sim.aim.v1",
     "path": "res://data/sim/aim.json"
+  },
+  "explosive": {
+    "schema": "vf.sim.explosive.v1",
+    "path": "res://data/sim/explosive.json"
   },
   "locomotion": {
     "schema": "vf.sim.locomotion.v1",
