@@ -1,0 +1,64 @@
+{
+  "schema": "vault-fighters.evidence-run.v1",
+  "wp": "VF0-WP2",
+  "run_id": "VF0WP2-20260829-ASIA-SAIGON-01",
+  "command_id": "cmd.vf0-wp2.headless-teardown.1",
+  "recorded_at": "2026-08-29T08:24:49+07:00",
+  "timezone": "Asia/Saigon",
+  "base_commit": "cf2c7fe6f07a8ca3deac33ce54ec016af8d365af",
+  "product_freeze_commit": "be77f95db0518b8c224bf1f4a773e439566f3c03",
+  "first_playable_head": "094822467edfe97d20f99890366a0103dc93b9b1",
+  "godot": "4.7.1.stable.official.a13da4feb",
+  "godot_console_sha256": "35dab11e04ece16a2b93035e65204f4a944a3e00b020d43e54409193379d5eef",
+  "os": "Windows NT 10.0.26200",
+  "seed": 1,
+  "map_mode": "headless tests/run_all.gd plus windowed tests/run_window_hygiene.gd",
+  "claims": {
+    "headless_teardown_clean": true,
+    "play_mode_audio_on": true,
+    "test_driven_audio_muted": true,
+    "y8_parity": false,
+    "gate_v0": false,
+    "r9_wp4": false,
+    "g6": false,
+    "gx": false,
+    "progress_60_of_60": false,
+    "plan_checkbox_ticked": false
+  },
+  "verify": {
+    "official_command": "$godot --headless --verbose --path godot/dogfood/superfighters --script res://tests/run_all.gd",
+    "window_command": "$godot --verbose --path godot/dogfood/superfighters --script res://tests/run_window_hygiene.gd",
+    "loops": 3,
+    "normalized_banner_sha256": "b53758c77339499ecfdc9ef524e41a3372fda11a6709214423dca59f901934d4",
+    "normalized_equal": true,
+    "official_exit": [0, 0, 0],
+    "window_exit": 0,
+    "leftover_godot": 0,
+    "leak_scan_headless": {
+      "Leaked instance": 0,
+      "Resource still in use": 0,
+      "ObjectDB instances were leaked": 0
+    },
+    "leak_scan_window": {
+      "Leaked instance": 0,
+      "Resource still in use": 0,
+      "ObjectDB instances were leaked": 0
+    },
+    "headless_stderr_bytes": 0,
+    "headless_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "labels": "HH_VF LOOP=proven COMBAT=proven MAPS=proven NO_ERRORS=proven",
+    "hygiene": "HH_VF_HYGIENE sessions=20 muted=1 music=off status=proven",
+    "window": "HH_VF_HYGIENE_WINDOW sessions=20 music=on sfx=on audio_driver=WASAPI display=Windows 1280x720"
+  },
+  "source_sha256": {
+    "src/sfx_bank.gd": "4b63f6661c1725bd83857208c271f76d6c0f4f7848a6d323980ee936252cab0b",
+    "src/game_session.gd": "62243749200d741bdf746d0fbd8e58f66ccce145a38b7952379d0a0862b633bb",
+    "src/app.gd": "1dab715b7953d8d6aea33c6c134bb341b585c58fb5e2bf4be5138b9a5434726a",
+    "tests/run_all.gd": "48c1f218a28059a13a3ad0c620e6ded7b1797e6171487eca46d5fc2994d1e944",
+    "tests/run_window_hygiene.gd": "e650b88d32b1d867484eee3034a319271260e9e16a7fa156834246eaabf5df61",
+    "KNOWN_ISSUES.md": "c730b6e09ea8000a7c4f13dbebab4206931aead5a9d350bd0cf777865878cf00",
+    "docs/reference-ledger.md": "193f03cebe94fcafa64a058d01d3daf42cdabcca2813ec4ef1449048bd31b193",
+    "assets/audio/music_fight.wav.import": "03374250e03bfc5f4359f55d2c940d749ba7c2e933bfc2c700ad2de531849132"
+  },
+  "verdict": "PASS hygiene: headless mute+teardown has empty stderr and no ObjectDB/AudioStream leak lines; windowed play still starts WASAPI music and SFX across 20 create/clear cycles, then shutdown. NOT y8 parity. NOT V0 tick."
+}

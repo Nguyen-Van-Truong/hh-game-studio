@@ -6,6 +6,7 @@ var _fails: PackedStringArray = PackedStringArray()
 var _loop: String = "unproven"
 var _combat: String = "unproven"
 var _maps: String = "unproven"
+var _hygiene: String = "unproven"
 var _no_err: String = "unproven"
 
 
@@ -26,11 +27,15 @@ func _boot() -> void:
 	_test_pause(app)
 	_test_pit(app)
 	await _test_stage_advance(app)
+	_test_session_hygiene(app)
 	if _fails.is_empty():
 		_no_err = "proven"
 	_emit()
 	if is_instance_valid(app):
+		app.shutdown()
 		app.queue_free()
+	await process_frame
+	await process_frame
 	quit(0 if _fails.is_empty() else 1)
 
 
@@ -465,12 +470,50 @@ func _count_prefix(prefix: String) -> int:
 	return n
 
 
+func _test_session_hygiene(app: App) -> void:
+	const CYCLES: int = 20
+	var n: int = 0
+	while n < CYCLES:
+		app.start_fight("vs1", "rooftops", 0)
+		var session: GameSession = app.session
+		if session == null:
+			_fail("HYGIENE missing session at cycle %d" % n)
+			return
+		if not session.test_driven:
+			_fail("HYGIENE official test session must be test_driven")
+			return
+		if session.sfx == null:
+			_fail("HYGIENE missing SfxBank at cycle %d" % n)
+			return
+		if not session.sfx.muted:
+			_fail("HYGIENE test session must mute playback")
+			return
+		if session.sfx.has_audio_players():
+			_fail("HYGIENE muted test must not allocate AudioStreamPlayer")
+			return
+		session.sfx.play("punch")
+		if session.sfx.last_id != "punch":
+			_fail("HYGIENE muted play must still record last_id")
+			return
+		if session.sfx.is_music_playing():
+			_fail("HYGIENE test must not play music")
+			return
+		n += 1
+	app.restart_to_title()
+	if app.session != null:
+		_fail("HYGIENE restart_to_title must clear session")
+		return
+	if _count_prefix("HYGIENE ") == 0:
+		_hygiene = "proven"
+
+
 func _emit() -> void:
 	print("HH_VF_PATH title→fight→win/lose→restart")
 	print(
 		"HH_VF LOOP=%s COMBAT=%s MAPS=%s NO_ERRORS=%s"
 		% [_loop, _combat, _maps, _no_err]
 	)
+	print("HH_VF_HYGIENE sessions=20 muted=1 music=off status=%s" % _hygiene)
 	if _fails.is_empty():
 		print("PASS: Vault Fighters first playable")
 	else:

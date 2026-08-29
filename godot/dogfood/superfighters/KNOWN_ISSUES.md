@@ -10,3 +10,9 @@ First playable slice. Not G6. Not 60/60.
 - 2P shares one keyboard; no online
 - Procedural SFX, not the Y8 soundtrack
 - Skins intentionally differ (helmet crew, not ripped Flash sheets)
+- Official headless tests set `test_driven`, which mutes `SfxBank`: no
+  `AudioStreamPlayer` allocation and no stream load/play. Fight logic
+  still records `last_id`. This split exists so WASAPI/AudioServer does
+  not hold streams at process exit (VF0-WP2). Normal play
+  (`test_driven=false`) still starts music and SFX; `shutdown()` stops
+  players, clears streams, and restores the Music bus before free.

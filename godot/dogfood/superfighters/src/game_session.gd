@@ -24,6 +24,10 @@ var test_driven: bool = false
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var win_title: String = "Last standing"
 var lose_title: String = "Down"
+var _fx: Array[Sprite2D] = []
+var _fx_life: Array[float] = []
+var _shut_down: bool = false
+var _resume_cb: Callable = Callable()
 
 
 func setup(p_mode: String, p_map: String, p_stage: int) -> void:
@@ -44,9 +48,11 @@ func setup(p_mode: String, p_map: String, p_stage: int) -> void:
 	hud.set_map_name(Maps.display_name(map_id))
 	hud.set_hint("Last standing wins · crouch+N pickup · hold M fire · hold comma throw")
 	pause_screen = PauseScreen.new()
-	pause_screen.resume_pressed.connect(set_paused.bind(false))
+	_resume_cb = set_paused.bind(false)
+	pause_screen.resume_pressed.connect(_resume_cb)
 	add_child(pause_screen)
 	sfx = SfxBank.new()
+	sfx.muted = test_driven
 	add_child(sfx)
 	if not test_driven:
 		sfx.start_music()
@@ -84,10 +90,11 @@ func _physics_process(delta: float) -> void:
 
 
 func step_fixed(delta: float, cmds: Array[Dictionary]) -> void:
-	if outcome != "play":
-		return
 	var tree: SceneTree = get_tree()
 	if tree != null and tree.paused:
+		return
+	_tick_fx(delta)
+	if outcome != "play":
 		return
 	var kill_plane: float = Maps.kill_y(map_id)
 	var i: int = 0
@@ -476,27 +483,86 @@ func _fit_camera() -> void:
 		camera.make_current()
 
 
-func _splat(at: Vector2) -> void:
-	var spr: Sprite2D = Sprite2D.new()
-	spr.texture = load(Visuals.BLOOD) as Texture2D
-	spr.centered = true
-	spr.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	spr.global_position = at
-	add_child(spr)
+func shutdown() -> void:
+	if _shut_down:
+		return
+	_shut_down = true
+	set_physics_process(false)
+	set_process(false)
 	var tree: SceneTree = get_tree()
 	if tree != null:
-		var timer: SceneTreeTimer = tree.create_timer(0.35)
-		timer.timeout.connect(spr.queue_free)
+		tree.paused = false
+	if pause_screen != null and is_instance_valid(pause_screen):
+		if _resume_cb.is_valid() and pause_screen.resume_pressed.is_connected(_resume_cb):
+			pause_screen.resume_pressed.disconnect(_resume_cb)
+	if sfx != null and is_instance_valid(sfx):
+		sfx.shutdown()
+	_free_fx()
+	pickups.clear()
+	fighters.clear()
+	brains.clear()
+	respawns.clear()
+	bullets.clear()
+	grenades.clear()
+	if arena != null:
+		arena.layer = null
+		arena.world = null
+		arena = null
+	world = null
+	hud = null
+	pause_screen = null
+	camera = null
+	sfx = null
+
+
+func _exit_tree() -> void:
+	shutdown()
+
+
+func _splat(at: Vector2) -> void:
+	_spawn_fx(Visuals.BLOOD, at, 0.35)
 
 
 func _muzzle(at: Vector2) -> void:
+	_spawn_fx(Visuals.MUZZLE, at, 0.08)
+
+
+func _spawn_fx(tex_path: String, at: Vector2, life: float) -> void:
 	var spr: Sprite2D = Sprite2D.new()
-	spr.texture = load(Visuals.MUZZLE) as Texture2D
+	spr.texture = load(tex_path) as Texture2D
 	spr.centered = true
 	spr.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	spr.global_position = at
 	add_child(spr)
-	var tree: SceneTree = get_tree()
-	if tree != null:
-		var timer: SceneTreeTimer = tree.create_timer(0.08)
-		timer.timeout.connect(spr.queue_free)
+	_fx.append(spr)
+	_fx_life.append(life)
+
+
+func _tick_fx(delta: float) -> void:
+	var i: int = 0
+	while i < _fx.size():
+		_fx_life[i] = _fx_life[i] - delta
+		if _fx_life[i] <= 0.0:
+			_free_node(_fx[i])
+			_fx.remove_at(i)
+			_fx_life.remove_at(i)
+			continue
+		i += 1
+
+
+func _free_fx() -> void:
+	var i: int = 0
+	while i < _fx.size():
+		_free_node(_fx[i])
+		i += 1
+	_fx.clear()
+	_fx_life.clear()
+
+
+func _free_node(node: Node) -> void:
+	if node == null or not is_instance_valid(node):
+		return
+	var parent: Node = node.get_parent()
+	if parent != null:
+		parent.remove_child(node)
+	node.free()

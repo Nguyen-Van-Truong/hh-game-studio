@@ -132,8 +132,36 @@ func _on_lost() -> void:
 		lose_screen.show_lose("Down", "Pits and bullets end the run. Restart from title.")
 
 
+func shutdown() -> void:
+	_clear_session()
+	var tree: SceneTree = get_tree()
+	if tree != null:
+		tree.paused = false
+
+
+func _exit_tree() -> void:
+	if session == null or not is_instance_valid(session):
+		session = null
+		return
+	_disconnect_session(session)
+	session.shutdown()
+	session = null
+
+
 func _clear_session() -> void:
 	if session == null:
 		return
-	session.queue_free()
+	var old: GameSession = session
 	session = null
+	if not is_instance_valid(old):
+		return
+	_disconnect_session(old)
+	old.shutdown()
+	old.queue_free()
+
+
+func _disconnect_session(old: GameSession) -> void:
+	if old.won.is_connected(_on_won):
+		old.won.disconnect(_on_won)
+	if old.lost.is_connected(_on_lost):
+		old.lost.disconnect(_on_lost)

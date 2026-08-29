@@ -133,3 +133,13 @@ VF1-WP1 (and later) must append dated rows with:
 - hash of the related spec/trace — **no reference assets**
 
 Until those rows exist, no agent may claim Y8 parity.
+
+---
+
+## VF0-WP2 hygiene note (not Y8 observation)
+
+Headless `tests/run_all.gd` uses `App.test_driven` → `SfxBank.muted` so
+the official process does not load or play `AudioStream` resources.
+Windowed `tests/run_window_hygiene.gd` uses live music/SFX and must
+`shutdown()` stop/clear players. This is resource hygiene, not a
+parity claim.

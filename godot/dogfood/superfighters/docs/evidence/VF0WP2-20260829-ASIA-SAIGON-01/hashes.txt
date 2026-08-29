@@ -1,0 +1,35 @@
+# VF0-WP2 evidence hashes — 2026-08-29 Asia/Saigon
+# run_id=VF0WP2-20260829-ASIA-SAIGON-01
+
+# Product sources (working tree)
+4b63f6661c1725bd83857208c271f76d6c0f4f7848a6d323980ee936252cab0b  godot/dogfood/superfighters/src/sfx_bank.gd
+62243749200d741bdf746d0fbd8e58f66ccce145a38b7952379d0a0862b633bb  godot/dogfood/superfighters/src/game_session.gd
+1dab715b7953d8d6aea33c6c134bb341b585c58fb5e2bf4be5138b9a5434726a  godot/dogfood/superfighters/src/app.gd
+48c1f218a28059a13a3ad0c620e6ded7b1797e6171487eca46d5fc2994d1e944  godot/dogfood/superfighters/tests/run_all.gd
+e650b88d32b1d867484eee3034a319271260e9e16a7fa156834246eaabf5df61  godot/dogfood/superfighters/tests/run_window_hygiene.gd
+c730b6e09ea8000a7c4f13dbebab4206931aead5a9d350bd0cf777865878cf00  godot/dogfood/superfighters/KNOWN_ISSUES.md
+193f03cebe94fcafa64a058d01d3daf42cdabcca2813ec4ef1449048bd31b193  godot/dogfood/superfighters/docs/reference-ledger.md
+03374250e03bfc5f4359f55d2c940d749ba7c2e933bfc2c700ad2de531849132  godot/dogfood/superfighters/assets/audio/music_fight.wav.import
+
+# Official headless logs (local .evidence; 1=2=3 stdout)
+6eb0986d63147728b4d1843d5b4b9db5fdfbe203b38d0f8635d4667bfe0c3064  .evidence/VF0WP2-20260829-ASIA-SAIGON-01/official_headless_1.stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  .evidence/VF0WP2-20260829-ASIA-SAIGON-01/official_headless_1.stderr.log
+6eb0986d63147728b4d1843d5b4b9db5fdfbe203b38d0f8635d4667bfe0c3064  .evidence/VF0WP2-20260829-ASIA-SAIGON-01/official_headless_2.stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  .evidence/VF0WP2-20260829-ASIA-SAIGON-01/official_headless_2.stderr.log
+6eb0986d63147728b4d1843d5b4b9db5fdfbe203b38d0f8635d4667bfe0c3064  .evidence/VF0WP2-20260829-ASIA-SAIGON-01/official_headless_3.stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  .evidence/VF0WP2-20260829-ASIA-SAIGON-01/official_headless_3.stderr.log
+b53758c77339499ecfdc9ef524e41a3372fda11a6709214423dca59f901934d4  normalized official HH_/PASS banners UTF-8
+
+# Windowed
+4be3385963c5b7b64b9058dd2d1908549397e9562702ff3bc2a9ddeba9137ad8  .evidence/VF0WP2-20260829-ASIA-SAIGON-01/window_hygiene.stdout.log
+ce6ef353c34f76ce504b11b6d3a3d1ab3b54606e486928a02971cc0dad7caedb  .evidence/VF0WP2-20260829-ASIA-SAIGON-01/window_hygiene.stderr.log
+b84a729013669c967ace5d4bef638129f96365b52b1b7ccb40ccc1e9681c59e2  normalized window HH_/PASS banners UTF-8
+6c0948084a8db9d8c5a95ebd4de25bde61e995c08cd43966c3a5c0454f50eb97  .evidence/VF0WP2-20260829-ASIA-SAIGON-01/screens/title_1280x720.png
+b090e31a982a276c64f09c4842bb2d12da5ff408a8915320047f4675be74b0d8  .evidence/VF0WP2-20260829-ASIA-SAIGON-01/screens/play_1280x720.png
+6c0948084a8db9d8c5a95ebd4de25bde61e995c08cd43966c3a5c0454f50eb97  .evidence/VF0WP2-20260829-ASIA-SAIGON-01/screens/title_after_20_1280x720.png
+
+# Review copies under docs/evidence/VF0WP2-20260829-ASIA-SAIGON-01/
+2931b2b6f920f67eaa0334e9a453152b093e711af1840a2328f4f3123f346900  docs/evidence/VF0WP2-20260829-ASIA-SAIGON-01/run.json
+4c975a3a968276c62cfed1cb93d30336d9b6d10209803aed1fad17062c61840c  docs/evidence/VF0WP2-20260829-ASIA-SAIGON-01/verdict.md
+b84a729013669c967ace5d4bef638129f96365b52b1b7ccb40ccc1e9681c59e2  docs/evidence/VF0WP2-20260829-ASIA-SAIGON-01/window_hygiene.banners.txt
+ce6ef353c34f76ce504b11b6d3a3d1ab3b54606e486928a02971cc0dad7caedb  docs/evidence/VF0WP2-20260829-ASIA-SAIGON-01/window_hygiene.stderr.log
