@@ -1,0 +1,825 @@
+{
+  "schema": "vault-fighters.baseline-manifest.v1",
+  "wp": "VF0-WP1",
+  "run_id": "VF0WP1-20260829-ASIA-SAIGON-01",
+  "command_id": "cmd.vf0-wp1.freeze-baseline.1",
+  "recorded_at": "2026-08-29T08:07:46.646739+07:00",
+  "timezone": "Asia/Saigon",
+  "claims": {
+    "first_playable": true,
+    "y8_parity": false,
+    "gate_v0": false,
+    "r9_wp4": false,
+    "g6": false,
+    "gx": false,
+    "progress_60_of_60": false,
+    "plan_checkbox_ticked": false
+  },
+  "git": {
+    "head": "094822467edfe97d20f99890366a0103dc93b9b1",
+    "short": "0948224",
+    "subject": "Vault Fighters: Y8 Superfighters first playable slice",
+    "committed_at": "2026-08-28T08:39:37+07:00",
+    "product_tree": "aa2e2c998e64f39efa9e10f905d0320f602a760e",
+    "product_tree_note": "git rev-parse HEAD:godot/dogfood/superfighters"
+  },
+  "godot": {
+    "pin": "4.7.1-stable",
+    "version_string": "4.7.1.stable.official.a13da4feb",
+    "upstream_commit": "a13da4feb8d8aefc283c3763d33a2f170a18d541",
+    "exe": "C:\\Users\\truon\\AppData\\Local\\HHGodotAgent\\tooling\\godot-4.7.1-stable\\bin\\Godot_v4.7.1-stable_win64.exe",
+    "exe_sha256": "323F9C4CC5DB674E98815CDD8E69DA007D5EFC779ABEDC8C0E42883B7FDEA12A",
+    "console_exe": "C:\\Users\\truon\\AppData\\Local\\HHGodotAgent\\tooling\\godot-4.7.1-stable\\bin\\Godot_v4.7.1-stable_win64_console.exe",
+    "console_exe_sha256": "35DAB11E04ECE16A2B93035E65204F4A944A3E00B020D43E54409193379D5EEF"
+  },
+  "os": {
+    "system": "nt",
+    "windows_nt": "10.0.26200",
+    "platform": "win32"
+  },
+  "toolchain": {
+    "python": "3.11.9",
+    "powershell": "see host Windows PowerShell / 5.x or pwsh",
+    "git_head_verified": true
+  },
+  "product_plan": {
+    "path": "zdocs/29-8-vault-fighters-y8-parity-plan.txt",
+    "authority": "PRODUCT_PLAN_AUTHORITY=1",
+    "plan_scope": "godot/dogfood/superfighters",
+    "current_valid_wp": "VF0-WP1",
+    "worktree_sha256": "e32a48cb23aa97108775f029619719b9894c723e574de86fcbd036bc361c4b14",
+    "vf0_wp1_checkbox": "unticked",
+    "parent_plan": "zdocs/20-8-godot-agent-autopilot-plan.txt",
+    "parent_status": "OWNER_STOPPED_59_OF_60; R9-WP4/G6/GX not opened"
+  },
+  "decisions": [
+    "GODOT-VF-Y8-2026-08-28",
+    "GODOT-VF-PLAN-2026-08-29"
+  ],
+  "clean_room": {
+    "status": "in_force",
+    "display_title": "Vault Fighters",
+    "reference_url": "https://www.y8.com/games/superfighters",
+    "observation_this_wp": "deferred_to_VF1-WP1",
+    "no_reference_assets_in_tree": true,
+    "ledger": "godot/dogfood/superfighters/docs/reference-ledger.md"
+  },
+  "project_settings": {
+    "path": "godot/dogfood/superfighters/project.godot",
+    "config_name": "Vault Fighters",
+    "sha256": "53d787b3ca750e71251997e214bc34f827065d2eff9662a12dfc8b27af4cb807",
+    "bytes": 1732,
+    "source": "git HEAD blob"
+  },
+  "known_issues": {
+    "path": "godot/dogfood/superfighters/KNOWN_ISSUES.md",
+    "sha256": "9b6e39245d05e2996147062186b63d26313d4fbe9eaf08750d78e67fcb408c4d",
+    "bytes": 484,
+    "items": [
+      "No bullet-time, no destroyable floors, no Box2D gibs",
+      "Kick / roll / dive not in this slice",
+      "Bots are greedy (weapon then chase); they can walk into fire",
+      "Stage is one win per map (Bronze-like), not Bronze/Silver/Gold \u00d74",
+      "Survival mode is out of this slice",
+      "2P shares one keyboard; no online",
+      "Procedural SFX, not the Y8 soundtrack",
+      "Skins intentionally differ (helmet crew, not ripped Flash sheets)"
+    ],
+    "baseline_audit_addenda": [
+      "Headless title\u2192fight\u2192restart\u2192quit leaks ObjectDB instances and resources still in use (frozen HEAD stderr). VF0-WP2 owns teardown.",
+      "tests/run_all.gd teleports/resets fighters; not sole E2E proof (V-A16).",
+      "First playable is not Y8 parity."
+    ]
+  },
+  "head_file_count": 104,
+  "head_files_aggregate_sha256": "1699f18108659e8707d2f3a071734e72ba57182b8af161ba6aef018df6ae4825",
+  "head_files": [
+    {
+      "path": "godot/dogfood/superfighters/KNOWN_ISSUES.md",
+      "sha256": "9b6e39245d05e2996147062186b63d26313d4fbe9eaf08750d78e67fcb408c4d",
+      "bytes": 484
+    },
+    {
+      "path": "godot/dogfood/superfighters/NOTICE.md",
+      "sha256": "55ceafc7cd44f0ad51641a5bd55a961716468b81af6fc8b0b7d0e5ed6d569cb2",
+      "bytes": 630
+    },
+    {
+      "path": "godot/dogfood/superfighters/PROJECT_BRIEF.md",
+      "sha256": "184e4b57191316552b7db0079c7fb614c3aa34cec9708fdafcf49aa3c33c83f7",
+      "bytes": 4335
+    },
+    {
+      "path": "godot/dogfood/superfighters/README.md",
+      "sha256": "0eb551345dc36d9984ec40bc535c67667166123181ae332a444d5c012ea43ef7",
+      "bytes": 1246
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/ASSET_MANIFEST.json",
+      "sha256": "600fad925765f57a1431e1312eb1c8bce2ba2fe34d9aab0cb7d4b792c4dffe0b",
+      "bytes": 5758
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/actor_blue.png",
+      "sha256": "127e589e44ef7545269379efe5870073165c6902909e5d367790fdc6e8f124af",
+      "bytes": 1145
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/actor_blue.png.import",
+      "sha256": "272d138225d1885eb0d778ff9e0eb3e7b675df34b0904ac34886302d0d6ceb6d",
+      "bytes": 944
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/actor_gold.png",
+      "sha256": "bdcac6922d5e13e29d5e16079b12143366d9c86f5580fb10710effeaa07400be",
+      "bytes": 1144
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/actor_gold.png.import",
+      "sha256": "b3c2259081daf34a50f941af39de4a9aab535e49d0dec93424f54e6ff80abe21",
+      "bytes": 945
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/actor_red.png",
+      "sha256": "54a67a7451e132299739fcea3e9183500e4deb3fce9be77f0583b18174b93020",
+      "bytes": 1145
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/actor_red.png.import",
+      "sha256": "0b2a728650df577c92e003acbb6e3d4760a69732a39b5228a75db761dc29a535",
+      "bytes": 941
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/actor_teal.png",
+      "sha256": "1e20ed01715d2fc6d02c68b94c3b1e49af5ddae4dd888f62b78c277c5be977d5",
+      "bytes": 1146
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/actor_teal.png.import",
+      "sha256": "7250d293923c605d0d8130588db7e35ed8192b80efb9290d4656124de5610a92",
+      "bytes": 945
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/item_grenade.png",
+      "sha256": "bf57fd1d99c5aef393f2d3cd7035773b625850ecbd57a6cbdc2678c54cb7ace8",
+      "bytes": 110
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/item_grenade.png.import",
+      "sha256": "7133c36f4dd5836c7624356908a7e5c8ad8a610d93b12a9a94cef71716f8faf6",
+      "bytes": 950
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/item_knife.png",
+      "sha256": "24f0a17f080719fae4cabd977e4b8e63630db36110b33efaeb26d3cf84f6bf93",
+      "bytes": 107
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/item_knife.png.import",
+      "sha256": "c5613c8531782ee28a124330d01518c492b01f60f8d0e532372d795625e08799",
+      "bytes": 945
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/item_pipe.png",
+      "sha256": "5415a4a427948cd69b377d8758d3f3ca322e91b5ea72f4ebcbb2267822ca5899",
+      "bytes": 98
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/item_pipe.png.import",
+      "sha256": "facafed93f7ba5cafacb906831821e68376c47d9b7ca94f07758c6c8a7c4e7c3",
+      "bytes": 942
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/item_pistol.png",
+      "sha256": "cdcb82057238e681b5107851a4bc27bbdd8c7a144a11fd06314dd640f5f7b5d4",
+      "bytes": 106
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/item_pistol.png.import",
+      "sha256": "4b4f7ec60939d114ddd81aa5647d9666da624f0d7317324c3699ee4d7ca7c36c",
+      "bytes": 948
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/item_shotgun.png",
+      "sha256": "7011852bd2a14aa3254435599ec080751c49797ed1b8a7dbb2908edb303ae9af",
+      "bytes": 113
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/item_shotgun.png.import",
+      "sha256": "ec6ed1cff4cf1eae5b2975a43bec5dcd141f3dfd1c38a3b487010432a095a682",
+      "bytes": 950
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/item_uzi.png",
+      "sha256": "f6302e0bb2aa97b4dba993b2cfb1662090043dd216334ae9fc8745516e95cf82",
+      "bytes": 118
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/item_uzi.png.import",
+      "sha256": "5a9aa74b132ffe5859b24da901ccce93d532a5fa3dbb178525ce004ae90a02c6",
+      "bytes": 939
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/prop_barrel.png",
+      "sha256": "37c7edf91eac822457df7a49032e70ca351a9ab3f71b9ee35f08b235f4934b1a",
+      "bytes": 122
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/prop_barrel.png.import",
+      "sha256": "b1d2fa3e8ac52ceb448cc2fc7378555054d4726aee2c0bfcb98d12014ee8897d",
+      "bytes": 948
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/prop_crate.png",
+      "sha256": "f3eccb2b6b7b4dbd3df5416d7f6fa1aa8f5d5dc362d264bbf661d49f7b05d09e",
+      "bytes": 143
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/art/prop_crate.png.import",
+      "sha256": "4c4d101b4a9d7fd84676a27ac203dd01992f7f15b18830f5352eb04b71d351a5",
+      "bytes": 945
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/audio/music_fight.wav",
+      "sha256": "05ecfcd29e8cf70a4961863af6b6d6aa616a2ec3167fd32b7f6e56e0e872ed96",
+      "bytes": 176444
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/audio/music_fight.wav.import",
+      "sha256": "48851cf5a6082d1ec58d5f1b6b6dcca9584f75d3ec80d3a6cdc46046863762e2",
+      "bytes": 504
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/audio/sfx_explode.wav",
+      "sha256": "0ef38d5d68d68e4a9378e596075d7d42f84acc6e55684af932569f2ba65ebe5e",
+      "bytes": 14156
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/audio/sfx_explode.wav.import",
+      "sha256": "383d09d1b512f39b1ea2537c1357c9c1e99251119b54a4ca0faab709c2a7f25c",
+      "bytes": 503
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/audio/sfx_hit.wav",
+      "sha256": "9c25d8a7a1ff871e08a51fa12b7c9d1598644b91a680e091d86de7c5543de856",
+      "bytes": 4894
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/audio/sfx_hit.wav.import",
+      "sha256": "9f6e6a02f6cc64624b1c021aa09da090e2ea754c3d42614af27a4cb44a1b5912",
+      "bytes": 492
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/audio/sfx_jump.wav",
+      "sha256": "ed88ba2c1985054fc7f2d6761c56ebbf51937711c83311f4af42e0c9cdd7237e",
+      "bytes": 4454
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/audio/sfx_jump.wav.import",
+      "sha256": "fc0f115b410e6f05a21cbe868b04bf8546466582583b863daa14ab5bf9091fc3",
+      "bytes": 494
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/audio/sfx_lose.wav",
+      "sha256": "3b1cebea25348b6370c5d8614302e98e511a2fceb30f80ee404349c913a499fb",
+      "bytes": 18566
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/audio/sfx_lose.wav.import",
+      "sha256": "6810e3850892f8200282a98bb6e79adf8e64edc88220df1efc9085c508897d26",
+      "bytes": 495
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/audio/sfx_pickup.wav",
+      "sha256": "74d6ba63b6cb317636876924946c627db3b7e6b2915bad7d24fafeae5b7352ad",
+      "bytes": 6218
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/audio/sfx_pickup.wav.import",
+      "sha256": "f6029497a472f9339e21614de56a9df9b2239e57881951fd00538a2ed31e5f9b",
+      "bytes": 501
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/audio/sfx_punch.wav",
+      "sha256": "403789a689a7d3b35e0f3d50b9b819e0e1e7139a94173b325a8716d63006dc59",
+      "bytes": 4012
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/audio/sfx_punch.wav.import",
+      "sha256": "77e6a532c79a381b91c1e241eddea62f2979b8568692fc3753ac1e68d7ff9f47",
+      "bytes": 496
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/audio/sfx_shoot.wav",
+      "sha256": "5632c4549eac3f791284c099a40f31acadcba631240be6120b6f820540683c01",
+      "bytes": 5336
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/audio/sfx_shoot.wav.import",
+      "sha256": "f9898335315aae0d8a4ed8eb9a57e059e0ec90b84e46569b0852cd8f5521ca0c",
+      "bytes": 498
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/audio/sfx_shotgun.wav",
+      "sha256": "d28ec3400423515b07c64d159ae939286fb74135e730c9322b900e2105aadb43",
+      "bytes": 7982
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/audio/sfx_shotgun.wav.import",
+      "sha256": "bd6e80fac570b28a50563534a43a0bdbfbfcd6cd276315e3025961abe756fdd8",
+      "bytes": 504
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/audio/sfx_win.wav",
+      "sha256": "a2578a272fb725e466eaa71ce7c427b326790a5431244cd1cffea72d1654889b",
+      "bytes": 24298
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/audio/sfx_win.wav.import",
+      "sha256": "57c63b10e2ab9579232925f794d3bc041b34e99d2498394bd5c23f27fd98a458",
+      "bytes": 492
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/bg/bg_city.png",
+      "sha256": "6bb1fe95eb1c6b04fe3b6ef1b8ff9a31578cbbb7c454d2adb17ac606ce118d33",
+      "bytes": 1058
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/bg/bg_city.png.import",
+      "sha256": "1735f8f49ededd6eec3f4de4b0514f7c161e57c9582a8e70b45d93f1212cf9fb",
+      "bytes": 935
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/tiles/tile_ladder.png",
+      "sha256": "d745a5e657fd23f32c9650fefdd2ad6027df91bb89d0ea10d6f865e3a43f9679",
+      "bytes": 109
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/tiles/tile_ladder.png.import",
+      "sha256": "fd4004d57a69b0a8feddccc8f2068a34b1fbe879405c7adeaf2188df4452b6a6",
+      "bytes": 950
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/tiles/tileset_arena.png",
+      "sha256": "99c1d8fac29cbd544e7ed256e34962d65ce41f8f26d3fd3f7d3090cb0c3c3ae2",
+      "bytes": 402
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/tiles/tileset_arena.png.import",
+      "sha256": "30448ce3e2217845be6047cc4d972aa225b85739b7bf2712b33c5763f666ff84",
+      "bytes": 956
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/ui/ui_icon_fist.png",
+      "sha256": "c86010461f0e721f0466d84d5785a9e63a749c5e9555390b2492290881492264",
+      "bytes": 104
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/ui/ui_icon_fist.png.import",
+      "sha256": "92ab5dc02d36c20b98fd211349a9fa198df89b2bff547fb6a8808a76fe2471e5",
+      "bytes": 950
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/vfx/vfx_blood.png",
+      "sha256": "f5ace224344e70f6814fd3cdb2183236772c8fae39e380728a137bca1ebc614d",
+      "bytes": 91
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/vfx/vfx_blood.png.import",
+      "sha256": "9d547a051908380b0aedca2a90d4c222af6b8c531529d35a719b2bbd98bd4c6e",
+      "bytes": 942
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/vfx/vfx_muzzle.png",
+      "sha256": "b1a8429451580f0f44dc6ad6b58e451c4c894d7127dff6317bdb584b08a5c05c",
+      "bytes": 109
+    },
+    {
+      "path": "godot/dogfood/superfighters/assets/vfx/vfx_muzzle.png.import",
+      "sha256": "50c394ae5390ddf97ac2c5269db352440bf413d8b7dcdc69ad7c262446ef9438",
+      "bytes": 944
+    },
+    {
+      "path": "godot/dogfood/superfighters/default_bus_layout.tres",
+      "sha256": "9cdfc52bfbf3735a4fccdfcb479c12c739c87746915f99f47b6700f3bd527f02",
+      "bytes": 311
+    },
+    {
+      "path": "godot/dogfood/superfighters/project.godot",
+      "sha256": "53d787b3ca750e71251997e214bc34f827065d2eff9662a12dfc8b27af4cb807",
+      "bytes": 1732
+    },
+    {
+      "path": "godot/dogfood/superfighters/scenes/main.tscn",
+      "sha256": "de80175ec7ec113f62f29228e428009162c87cb8ebbdaf3516ec2b2014f81879",
+      "bytes": 176
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/app.gd",
+      "sha256": "72875be69b14ff2f4b9e6aa5c0dc97b357e4d0b66e2395020e4eea907bce7dbe",
+      "bytes": 3354
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/app.gd.uid",
+      "sha256": "d05642f6091aab2be040fee75814f9f5dbb573b185987c54bd891a9770cc1ae8",
+      "bytes": 20
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/arena.gd",
+      "sha256": "935802bc816de9499d89248e6826da2794f49b28ef3d97b2b2dc63a6a5846894",
+      "bytes": 5103
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/arena.gd.uid",
+      "sha256": "84620931f15c21221dd159966447ed63e7cb68eae65f71b66455c7bbe37e577b",
+      "bytes": 19
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/bot_brain.gd",
+      "sha256": "79b0d986923b01b1cdfe119fe837b2ae2a1460e531f9630dfdc6fe3de71f5538",
+      "bytes": 4385
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/bot_brain.gd.uid",
+      "sha256": "44c0524bc9a4f553a18599eda729fdd45eb2492405fcab37cda425ef97910674",
+      "bytes": 19
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/bullet.gd",
+      "sha256": "75458bc16f641b50af04a83d31b7c9cdbdd88278aabd05678d50e89249b7c8ed",
+      "bytes": 1128
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/bullet.gd.uid",
+      "sha256": "8e32d96bceac6bc96ad250c75ca24149924845eda673dd877731161b263cb072",
+      "bytes": 20
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/fighter.gd",
+      "sha256": "5629c44f0e54231620072c94521c4554de16c9e7972b7eb076a5ff56aa4cb933",
+      "bytes": 8802
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/fighter.gd.uid",
+      "sha256": "01d2c88fb4f1e522db6a245a31bee60de07a06143b993129d619599094bc0f2d",
+      "bytes": 20
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/game_session.gd",
+      "sha256": "b7323650d52094aeafb236cb36a33a93710d613bc26c2679ecd6bdb55d613062",
+      "bytes": 13238
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/game_session.gd.uid",
+      "sha256": "0403a1cdb4b4f570756fb44dc29cfd94de65fb6065ee39687d4e1466ff81d2cc",
+      "bytes": 19
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/grenade.gd",
+      "sha256": "907e0d82c8d07916a2f35201c2608aca3ed39830c72d197683b2973b5a8451ad",
+      "bytes": 1316
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/grenade.gd.uid",
+      "sha256": "cf051f25198f81114089ffcc910ceb3feb953bad205e1060670ac05ce5536835",
+      "bytes": 20
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/hud.gd",
+      "sha256": "7741a3272cb72eeb74335ec35958b0f0967c14b8a364195fe852a1e8fd029cd1",
+      "bytes": 2117
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/hud.gd.uid",
+      "sha256": "4f909e1920e23f4205228521f9860549aa3fe599830f613c06a9a357dbb86158",
+      "bytes": 20
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/input_actions.gd",
+      "sha256": "d781949d84775bc298de7fb8119fb443e7336077cbb5227b841806ec86533b8a",
+      "bytes": 4520
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/input_actions.gd.uid",
+      "sha256": "a1d3c6944ac48ff14ff0e98eaf6e0da326abc63e59b82c3cde8fc5ee59ab760c",
+      "bytes": 20
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/maps.gd",
+      "sha256": "cf404d5b77e0020e03ed09ba3ad31cdba0035f6befb1aa548c2b238e8e2809b5",
+      "bytes": 9243
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/maps.gd.uid",
+      "sha256": "aa0c7cc9fdb27dd465a1f3be0f3e28427455d59a7a90af1e2dba4fb402c31a2a",
+      "bytes": 20
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/pickup.gd",
+      "sha256": "9405487c4e024293b842a66eaa678b6d2a29c3cc10eb54a36c4f099a3ec63336",
+      "bytes": 874
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/pickup.gd.uid",
+      "sha256": "7b9cdf93d1bdd41aa07bb11148c9d81257d4284411b59713ab9a28730b5ee48f",
+      "bytes": 20
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/sfx_bank.gd",
+      "sha256": "18341b66ab98f3b48a429f567cade4892acb932a21be04267d9984ece1194978",
+      "bytes": 2099
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/sfx_bank.gd.uid",
+      "sha256": "9bbe7239e434d5a53cfd7d0f9cd0731575839cee4ab87ab32fcdc1b7476afe1d",
+      "bytes": 20
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/ui/lose_screen.gd",
+      "sha256": "1d4591b463899e2051ad0a3930b3181d3f1ed26f81380a7eaa08c6dcfa9ac75d",
+      "bytes": 1502
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/ui/lose_screen.gd.uid",
+      "sha256": "c7eb1357f08f9778747b5c2e98c614509753a49c3056f68b8c1c4bf93985dc3a",
+      "bytes": 20
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/ui/pause_screen.gd",
+      "sha256": "abfdb6cb3e3882d577178437633676df5400c2f227be3e16257875918e6358b6",
+      "bytes": 1458
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/ui/pause_screen.gd.uid",
+      "sha256": "03590003419618ae5a70b1bb02045fd57997794c686b50a7c3e98c400f2abacd",
+      "bytes": 19
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/ui/title_screen.gd",
+      "sha256": "80aab5038df1f317f848cbad59a24408b4ed71520cd1017cee4dbc4869bf1178",
+      "bytes": 3157
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/ui/title_screen.gd.uid",
+      "sha256": "c21e61ca0e1d1ed9641bc142319fcd4437dd6c3a7aa1f80aa5bb081f53ebe816",
+      "bytes": 19
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/ui/ui_theme.gd",
+      "sha256": "4d44b6c6c653deda1f66f23a671debb4af328ba62d01674cda17a29aeed6e43c",
+      "bytes": 2143
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/ui/ui_theme.gd.uid",
+      "sha256": "0801896a30f27e992591d1064128caf0720cbb8ddef11615854f4ba3302a1e97",
+      "bytes": 19
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/ui/win_screen.gd",
+      "sha256": "f37155bf113b3ebc7beeab3dab04687603f06b96d24bf735dd4f1cddae8b4d20",
+      "bytes": 1487
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/ui/win_screen.gd.uid",
+      "sha256": "218a54df09ced2bd283f68de396331723dfbd0d3587a159d1b98c481a76960f7",
+      "bytes": 20
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/visuals.gd",
+      "sha256": "05144570eb44868daea9426763eeeb7d0a72a0cd84175d62b4c43b111081cfd1",
+      "bytes": 3539
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/visuals.gd.uid",
+      "sha256": "16eaf069928370409f5da00acf7a2ceb8c5e5a6bab2fb9f02800f947c2ee8e15",
+      "bytes": 20
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/weapon_defs.gd",
+      "sha256": "abbd447dd8d2bfd8cd8def7a623a629aae4a056325f08223bd3f5a54aa0544a6",
+      "bytes": 2649
+    },
+    {
+      "path": "godot/dogfood/superfighters/src/weapon_defs.gd.uid",
+      "sha256": "e7c90eb29edd57384cc71e34f08fa1fb5e3a90561d4f1cc8e15d2bcac5619e18",
+      "bytes": 20
+    },
+    {
+      "path": "godot/dogfood/superfighters/tests/run_all.gd",
+      "sha256": "39257826a41b8ffff92af478a817d06fce7af42afee29935479f8e3f3c6d433e",
+      "bytes": 15202
+    },
+    {
+      "path": "godot/dogfood/superfighters/tests/run_all.gd.uid",
+      "sha256": "d749b41598ab2a87b704ec6b7822041d939bc7072a3cddb0aa9df59f045a6e28",
+      "bytes": 19
+    }
+  ],
+  "dirty_working_tree": {
+    "note": "Do not git reset. Overlay is not the frozen baseline.",
+    "product_modified": [
+      {
+        "path": "godot/dogfood/superfighters/src/game_session.gd",
+        "git_status": "M",
+        "owner_wp": "VF0-WP2",
+        "head_sha256": "b7323650d52094aeafb236cb36a33a93710d613bc26c2679ecd6bdb55d613062",
+        "worktree_sha256": "d2cb12bff7c618efe2fd51ea84cef7c0c224df60fe5dd58c431eb9aeba3a94b7",
+        "note": "Unpublished test_driven audio mute. Not part of frozen HEAD. Do not reset."
+      },
+      {
+        "path": "godot/dogfood/superfighters/src/sfx_bank.gd",
+        "git_status": "M",
+        "owner_wp": "VF0-WP2",
+        "head_sha256": "18341b66ab98f3b48a429f567cade4892acb932a21be04267d9984ece1194978",
+        "worktree_sha256": "02cca666206b1bafdf8691bb62005f582fb04c2aa1b4289ec8ea108bdea1b140",
+        "note": "Unpublished muted flag. Not part of frozen HEAD. Do not reset."
+      }
+    ],
+    "other_modified_not_this_wp": [
+      "AGENTS.md",
+      "docs/DECISIONS.md",
+      "docs/godot-agent/CAPABILITY_MATRIX.md",
+      "docs/godot-agent/COVERAGE_2D.md",
+      "docs/godot-agent/README.md",
+      "tools/godot/README.md",
+      "tools/godot/studio_bundle.py"
+    ],
+    "untracked_not_this_wp": [
+      "tests/bootstrap/test_vault_fighters_plan.py",
+      "tools/godot/gen_vault_fighters_art.py",
+      "zdocs/29-8-vault-fighters-y8-parity-plan.txt"
+    ]
+  },
+  "out_of_scope": {
+    "doc": "godot/dogfood/superfighters/docs/out-of-scope.md",
+    "snake": [
+      "godot/plugin-project/snake/",
+      "godot/plugin-project/snake/snake.tscn",
+      "godot/plugin-project/snake/snake_game.gd",
+      "tools/godot/drive_snake.py",
+      "tools/godot/drive_snake_polish.py",
+      "tools/godot/drive_snake_reload.py",
+      "tools/godot/drive_snake_show.py"
+    ],
+    "also": [
+      "godot/dogfood/kho-bi-an/",
+      ".hh-agent/evidence/*KBA*",
+      "godot/plugin-project/snake/",
+      "**/.godot/",
+      "R9-WP4 / G6 / GX / 60/60 ticks"
+    ]
+  },
+  "wp_docs": [
+    {
+      "path": "godot/dogfood/superfighters/docs/reference-ledger.md",
+      "sha256": "048c233e412fd02c74957c318fe77089b13ffd88fd8bc70027158bd976c3537e",
+      "bytes": 5914
+    },
+    {
+      "path": "godot/dogfood/superfighters/docs/out-of-scope.md",
+      "sha256": "149a259505c6e1311b153d824e39334694d5f595d427567d79b4c4b4a43fe0f1",
+      "bytes": 2605
+    },
+    {
+      "path": "godot/dogfood/superfighters/.gitignore",
+      "sha256": "5b839f86781e4a3955fdcbe9fc4b87f106af5919141160b576b299a56798fe39",
+      "bytes": 79
+    },
+    {
+      "path": "godot/dogfood/superfighters/docs/evidence/VF0WP1-20260829-ASIA-SAIGON-01/head_snapshot.stdout.log",
+      "sha256": "c1b78162fdc9cccb5d9f315456441f4323b2ca1fed6edfd25cd6e55d3ab82093",
+      "bytes": 221
+    },
+    {
+      "path": "godot/dogfood/superfighters/docs/evidence/VF0WP1-20260829-ASIA-SAIGON-01/head_snapshot.stderr.log",
+      "sha256": "1b6671ded516c84383d813b052a85c43eb3a92eed777a704393be82a2546ede7",
+      "bytes": 250
+    },
+    {
+      "path": "godot/dogfood/superfighters/docs/evidence/VF0WP1-20260829-ASIA-SAIGON-01/head_snapshot.combined.log",
+      "sha256": "9af860ede26360ec0f64b5c31a816172695b441981e9bd5c0e8cd7e550f0d044",
+      "bytes": 485
+    },
+    {
+      "path": "godot/dogfood/superfighters/docs/evidence/VF0WP1-20260829-ASIA-SAIGON-01/head_snapshot.meta.json",
+      "sha256": "c75b18e006edce165a6270ed8c64e20a61240df5ecbe0f4f4f05d48460c3b34e",
+      "bytes": 1569
+    },
+    {
+      "path": "godot/dogfood/superfighters/docs/evidence/VF0WP1-20260829-ASIA-SAIGON-01/working_tree.stdout.log",
+      "sha256": "c1b78162fdc9cccb5d9f315456441f4323b2ca1fed6edfd25cd6e55d3ab82093",
+      "bytes": 221
+    },
+    {
+      "path": "godot/dogfood/superfighters/docs/evidence/VF0WP1-20260829-ASIA-SAIGON-01/working_tree.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "godot/dogfood/superfighters/docs/evidence/VF0WP1-20260829-ASIA-SAIGON-01/working_tree.combined.log",
+      "sha256": "3102cede33e94b388f62ffc249a0840f0e16df2e4a7a6e9f356b32b74e8a59ef",
+      "bytes": 235
+    },
+    {
+      "path": "godot/dogfood/superfighters/docs/evidence/VF0WP1-20260829-ASIA-SAIGON-01/working_tree.meta.json",
+      "sha256": "2e1a8914596467a0288d1a94104fe3c3f5a007682f3652c01acc5b8c9188b24e",
+      "bytes": 1598
+    }
+  ],
+  "tests": {
+    "seed": 1,
+    "script": "res://tests/run_all.gd",
+    "official_command": [
+      "$godot = Join-Path $env:LOCALAPPDATA 'HHGodotAgent/tooling/godot-4.7.1-stable/bin/Godot_v4.7.1-stable_win64_console.exe'",
+      "& $godot --headless --path godot/dogfood/superfighters --script res://tests/run_all.gd"
+    ],
+    "frozen_head_snapshot": {
+      "note": "git archive of HEAD then --import then run_all.gd. This is the frozen baseline process, including leaks.",
+      "exit_code": 0,
+      "elapsed_s": 0.984,
+      "stdout_sha256": "c1b78162fdc9cccb5d9f315456441f4323b2ca1fed6edfd25cd6e55d3ab82093",
+      "stderr_sha256": "1b6671ded516c84383d813b052a85c43eb3a92eed777a704393be82a2546ede7",
+      "combined_sha256": "9af860ede26360ec0f64b5c31a816172695b441981e9bd5c0e8cd7e550f0d044",
+      "banners": [
+        "HH_VF_PATH title\u2192fight\u2192win/lose\u2192restart",
+        "HH_VF LOOP=proven COMBAT=proven MAPS=proven NO_ERRORS=proven",
+        "PASS: Vault Fighters first playable"
+      ],
+      "status_line": "HH_VF LOOP=proven COMBAT=proven MAPS=proven NO_ERRORS=proven",
+      "objectdb_leak_warning": true,
+      "objectdb_instances_leaked": 31,
+      "resources_still_in_use": 5,
+      "leftover_godot": 0
+    },
+    "working_tree_official_path": {
+      "note": "Plan \u00a718.1 command on live --path. Two unpublished VF0-WP2 files mute audio in test_driven mode, so stderr has no leak lines. Not the frozen HEAD process.",
+      "exit_code": 0,
+      "elapsed_s": 0.962,
+      "stdout_sha256": "c1b78162fdc9cccb5d9f315456441f4323b2ca1fed6edfd25cd6e55d3ab82093",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "combined_sha256": "3102cede33e94b388f62ffc249a0840f0e16df2e4a7a6e9f356b32b74e8a59ef",
+      "banners": [
+        "HH_VF_PATH title\u2192fight\u2192win/lose\u2192restart",
+        "HH_VF LOOP=proven COMBAT=proven MAPS=proven NO_ERRORS=proven",
+        "PASS: Vault Fighters first playable"
+      ],
+      "status_line": "HH_VF LOOP=proven COMBAT=proven MAPS=proven NO_ERRORS=proven",
+      "objectdb_leak_warning": false,
+      "leftover_godot": 0
+    }
+  },
+  "evidence": {
+    "run_id": "VF0WP1-20260829-ASIA-SAIGON-01",
+    "dir": "godot/dogfood/superfighters/.evidence/VF0WP1-20260829-ASIA-SAIGON-01/",
+    "files": [
+      {
+        "path": "godot/dogfood/superfighters/.evidence/VF0WP1-20260829-ASIA-SAIGON-01/head_snapshot.stdout.log",
+        "sha256": "c1b78162fdc9cccb5d9f315456441f4323b2ca1fed6edfd25cd6e55d3ab82093",
+        "bytes": 221
+      },
+      {
+        "path": "godot/dogfood/superfighters/.evidence/VF0WP1-20260829-ASIA-SAIGON-01/head_snapshot.stderr.log",
+        "sha256": "1b6671ded516c84383d813b052a85c43eb3a92eed777a704393be82a2546ede7",
+        "bytes": 250
+      },
+      {
+        "path": "godot/dogfood/superfighters/.evidence/VF0WP1-20260829-ASIA-SAIGON-01/head_snapshot.combined.log",
+        "sha256": "9af860ede26360ec0f64b5c31a816172695b441981e9bd5c0e8cd7e550f0d044",
+        "bytes": 485
+      },
+      {
+        "path": "godot/dogfood/superfighters/.evidence/VF0WP1-20260829-ASIA-SAIGON-01/head_snapshot.meta.json",
+        "sha256": "c75b18e006edce165a6270ed8c64e20a61240df5ecbe0f4f4f05d48460c3b34e",
+        "bytes": 1569
+      },
+      {
+        "path": "godot/dogfood/superfighters/.evidence/VF0WP1-20260829-ASIA-SAIGON-01/working_tree.stdout.log",
+        "sha256": "c1b78162fdc9cccb5d9f315456441f4323b2ca1fed6edfd25cd6e55d3ab82093",
+        "bytes": 221
+      },
+      {
+        "path": "godot/dogfood/superfighters/.evidence/VF0WP1-20260829-ASIA-SAIGON-01/working_tree.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "godot/dogfood/superfighters/.evidence/VF0WP1-20260829-ASIA-SAIGON-01/working_tree.combined.log",
+        "sha256": "3102cede33e94b388f62ffc249a0840f0e16df2e4a7a6e9f356b32b74e8a59ef",
+        "bytes": 235
+      },
+      {
+        "path": "godot/dogfood/superfighters/.evidence/VF0WP1-20260829-ASIA-SAIGON-01/working_tree.meta.json",
+        "sha256": "2e1a8914596467a0288d1a94104fe3c3f5a007682f3652c01acc5b8c9188b24e",
+        "bytes": 1598
+      }
+    ]
+  },
+  "verify": {
+    "git_diff_check_product": {
+      "command": "git diff --check -- godot/dogfood/superfighters/",
+      "exit_code": 0,
+      "note": "CRLF warnings on two dirty VF0-WP2 files; no conflict markers."
+    },
+    "no_token_or_reference_asset": true
+  }
+}

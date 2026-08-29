@@ -1,0 +1,16 @@
+{
+  "wp": "VF0-WP1",
+  "run_id": "VF0WP1-20260829-ASIA-SAIGON-01",
+  "command_id": "cmd.vf0-wp1.freeze-baseline.1",
+  "base_commit": "094822467edfe97d20f99890366a0103dc93b9b1",
+  "godot": "4.7.1.stable.official.a13da4feb",
+  "godot_console_sha256": "35DAB11E04ECE16A2B93035E65204F4A944A3E00B020D43E54409193379D5EEF",
+  "os": "Windows NT 10.0.26200",
+  "seed": 1,
+  "map_mode": "headless tests/run_all.gd (not a single map)",
+  "source_hash": "1699f18108659e8707d2f3a071734e72ba57182b8af161ba6aef018df6ae4825",
+  "manifest_sha256": "96cae5c5038ce8427d87f9f294665c2fe9f636faf00106fafcec9b2603f2e1c8",
+  "head_test_stdout_sha256": "c1b78162fdc9cccb5d9f315456441f4323b2ca1fed6edfd25cd6e55d3ab82093",
+  "head_test_stderr_sha256": "1b6671ded516c84383d813b052a85c43eb3a92eed777a704393be82a2546ede7",
+  "verdict": "PASS functional first-playable; NOT y8 parity; ObjectDB leak on frozen HEAD"
+}
