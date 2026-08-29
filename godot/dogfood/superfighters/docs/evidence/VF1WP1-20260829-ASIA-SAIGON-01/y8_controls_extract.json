@@ -1,0 +1,36 @@
+{
+  "schema": "vault-fighters.vf1-wp1.y8-controls-extract.v1",
+  "run_id": "VF1WP1-20260829-ASIA-SAIGON-01",
+  "command_id": "cmd.vf1-wp1.extract-y8-controls.1",
+  "fetched_at_asia_saigon": "2026-08-29T10:24:04+07:00",
+  "url": "https://www.y8.com/games/superfighters",
+  "http_status": 200,
+  "listing_html_bytes": 687608,
+  "game_package_fetched": false,
+  "html5_embed_followed": false,
+  "html5_embed_host_seen": "html5.gamedistribution.com",
+  "observed_control_css_classes": {
+    "player_1": [
+      {"css": "key-arrows", "action": "Move"},
+      {"css": "key-n", "action": "Punch"},
+      {"css": "key-comma", "action": "Throw Grenade"},
+      {"css": "key-m", "action": "Shoot"}
+    ],
+    "player_2": [
+      {"css": "key-wasd", "action": "Move"},
+      {"css": "key-1 key-2 key-3", "action": "Punch/Shoot/Throw"}
+    ],
+    "other": [
+      {"css": "key-f11", "action": "Fullscreen (page)"}
+    ]
+  },
+  "not_on_live_controls_block": [
+    "hold-to-aim",
+    "double-tap sprint",
+    "roll",
+    "dive",
+    "power-up / period / key-4",
+    "camera framing",
+    "map names"
+  ]
+}

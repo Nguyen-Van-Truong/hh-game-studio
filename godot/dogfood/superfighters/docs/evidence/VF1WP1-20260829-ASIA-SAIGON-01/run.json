@@ -1,0 +1,34 @@
+{
+  "schema": "vault-fighters.vf1-wp1.run.v1",
+  "run_id": "VF1WP1-20260829-ASIA-SAIGON-01",
+  "command_id": "cmd.vf1-wp1.observe-public-pages.1",
+  "wp": "VF1-WP1",
+  "timezone": "Asia/Saigon",
+  "recorded_at": "2026-08-29T10:25:00+07:00",
+  "base_head": "5ec84bb59551261fa774c31dabc4db6c0ac44c3e",
+  "product_tree": "9b05a2c299e42fd46ea7aecbf211d67aec2e7440",
+  "claims": {
+    "y8_parity": false,
+    "in_game_play": false,
+    "game_package_fetched": false,
+    "screenshots_saved": false,
+    "plan_checkbox_ticked": false,
+    "r9_wp4": false,
+    "g6": false,
+    "gx": false,
+    "progress_60_of_60": false
+  },
+  "clean_room": {
+    "status": "in_force",
+    "html5_embed_followed": false,
+    "html5_embed_host_seen": "html5.gamedistribution.com"
+  },
+  "verify": {
+    "official": [
+      "python godot/dogfood/superfighters/tests/check_reference_ledger.py"
+    ],
+    "exit_code": 0,
+    "leftover_godot": 0,
+    "godot_launched": false
+  }
+}
