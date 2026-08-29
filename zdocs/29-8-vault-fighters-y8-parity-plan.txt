@@ -2,7 +2,7 @@ PLAN_SCOPE=godot/dogfood/superfighters
 PRODUCT_PLAN_AUTHORITY=1
 PARENT_PLATFORM_PLAN=zdocs/20-8-godot-agent-autopilot-plan.txt
 PARENT_PLATFORM_STATUS=OWNER_STOPPED_59_OF_60
-CURRENT_VALID_WP=VF2-WP1
+CURRENT_VALID_WP=VF2-WP2
 STATUS=ACTIVE
 PLAN_DATE=2026-08-29
 TIMEZONE=Asia/Saigon
@@ -20,7 +20,7 @@ một lần, tự làm, tự chạy, tự kiểm và tạo gói review; người
 |---:|---|---|---|---|---|
 | 0 | VF0 nền và routing | scope, provenance, test sạch, không lẫn plan | none | không | [x] 3/3 |
 | 1 | VF1 reference + contract | reference ledger, behavior spec, deterministic trace | VF0 | research/test | [x] 4/4 |
-| 2 | VF2 movement | chạy, nhảy, crouch, sprint, roll, dive, ladder, ledge | VF1 | input + physics | [ ] 0/5 |
+| 2 | VF2 movement | chạy, nhảy, crouch, sprint, roll, dive, ladder, ledge | VF1 | input + physics | [ ] 1/5 |
 | 3 | VF3 combat | melee/kick, hitbox, knockdown, disarm, aim/fire, grenade | VF2 | weapons + VFX | [ ] 0/6 |
 | 4 | VF4 world interaction | props, glass, barrels, containers, doors/elevators, hazards | VF2 | map fixtures | [ ] 0/5 |
 | 5 | VF5 map parity | 6 functional arenas; original geometry/names/art | VF3,VF4 | one map per agent lane | [ ] 0/6 |
@@ -29,7 +29,7 @@ một lần, tự làm, tự chạy, tự kiểm và tạo gói review; người
 | 8 | VF8 agent autonomy | brief→edit→play→observe→repair→checkpoint, no manual F6 | VF0..VF7 | host/bridge | [ ] 0/4 |
 | 9 | VF9 verification | trace replay, E2E, differential rubric, soak, leak proof | all above | QA | [ ] 0/5 |
 | 10 | VF10 package | Windows build, offline run, provenance/license, review bundle | VF9 | release | [ ] 0/3 |
-|   | **Tổng** | **50 WP nhỏ; chỉ coordinator tick sau DoD** |  |  | **7/50** |
+|   | **Tổng** | **50 WP nhỏ; chỉ coordinator tick sau DoD** |  |  | **8/50** |
 
 Gate nội bộ:
 
@@ -584,7 +584,7 @@ VF1-WP4 — Runtime state, diagnostics và checkpoint API                       
 7. WORK PACKAGE CHI TIẾT — VF2 MOVEMENT
 ================================================================================
 
-VF2-WP1 — Input mapping thật cho P1/P2/gamepad                                    [ ]
+VF2-WP1 — Input mapping thật cho P1/P2/gamepad                                    [x]
   Phụ thuộc: VF1-WP3. Files: `src/input_actions.gd`, settings, input tests.
   Làm: physical key và gamepad mapping có dead-zone; distinguish pressed,
   held, released; remap UI lưu atomic; P2 không bị P1 gamepad đè.
@@ -592,6 +592,51 @@ VF2-WP1 — Input mapping thật cho P1/P2/gamepad                              
   gamepad smoke nếu thiết bị có, otherwise deterministic synthetic device
   được đánh dấu non-hardware.
   DoD: input behavior khớp ledger; không chỉ gọi `step_fixed` trực tiếp.
+  LOG:
+    LOG 2026-08-29 11:50 Asia/Saigon — agent=coordinator
+      Base: 9f0a246 InputEvent mapping and atomic remap on VF1-WP4
+        tick ffdeb07.
+      Files/leases: src/input/, src/input_actions.gd, src/app.gd,
+        src/game_session.gd, src/ui/title_screen.gd,
+        src/ui/pause_screen.gd, src/ui/remap_screen.gd,
+        src/sim/sim_constants.gd, data/input/,
+        data/sim/input_actions.json, tests/run_all.gd,
+        tests/input_map_cases.gd, tests/run_input_map.gd,
+        tests/check_input_map.py, tests/traces/input/,
+        docs/input-mapping.md, docs/reference-ledger.md,
+        docs/evidence/VF2WP1-20260829-ASIA-SAIGON-01/,
+        KNOWN_ISSUES.md, README.md, PROJECT_BRIEF.md
+      Verify: leftover-0; parse_input_event; P1P2 split;
+        synth pad non-hardware; remap atomic
+        python godot/dogfood/superfighters/tests/check_input_map.py
+          EXIT 0
+        godot --headless --path godot/dogfood/superfighters
+          --script res://tests/run_input_map.gd EXIT 0
+        godot --path godot/dogfood/superfighters
+          --script res://tests/run_input_map.gd EXIT 0
+        godot --headless --path godot/dogfood/superfighters
+          --script res://tests/run_all.gd EXIT 0
+        leftover Godot on product --path = 0
+        python tests/bootstrap/test_authoritative_plan.py EXIT 0
+        python tests/bootstrap/test_vault_fighters_plan.py EXIT 0
+          PASS: 50 unique VF WPs; no-skip; next=VF2-WP1 (pre-tick);
+          ticked=VF0-WP1,VF0-WP2,VF0-WP3,VF1-WP1,VF1-WP2,VF1-WP3,
+          VF1-WP4;
+          parent 20-8 frozen 59/60 R9-WP4
+        post-tick expected next=VF2-WP2
+      Honesty:
+        Official pad proof is synthetic non-hardware
+        (ledger:RL-CTRL-SYNTH-PAD). Hardware pad unproven.
+        60 Hz is V-A14 / ledger:RL-SIM-FIXED-60 assumption,
+        not observed Y8 clock. Not Y8 parity. Not V0.
+      Critic: II 81eed448 TICK yes leftover-0 headless+windowed;
+        HH 324bfbeb TICK yes leftover-0
+      Gaps: residual nits OK:
+        hardware pad unproven;
+        delete-then-rename;
+        hardcoded USED_STEP_FIXED banner.
+        Parent 20-8 unchanged: R9-WP4 [ ]; 59/60; G6 [ ].
+      Commit: (this tick)
 
 VF2-WP2 — Locomotion baseline và camera framing                                  [ ]
   Phụ thuộc: VF1-WP2. Files: fighter/simulation/camera tests.
@@ -1193,7 +1238,7 @@ vào `KNOWN_ISSUES.md`; không đổi acceptance để làm cho pass.
 21. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Đọc `AGENTS.md`, sau đó đọc bảng đầu file này. WP đầu tiên chưa tick là **VF2-WP1**.
+Đọc `AGENTS.md`, sau đó đọc bảng đầu file này. WP đầu tiên chưa tick là **VF2-WP2**.
 
 Không làm R9-WP4/G6/GX; không mở Rust engine; không đụng Kho Bí Ẩn/Hoan Hao;
 không dùng Snake làm demo; không tải/rip Y8. Chỉ khi VF0-WP1 và VF0-WP2 đã có
@@ -1271,6 +1316,13 @@ dùng chỉ xem và review.
   checkpoint store in user://; LOOP teleport residual. Product 2dd04ee.
   Parent 20-8 unchanged (R9-WP4 [ ], 59/60, G6 [ ]). VF1-WP4 ticked;
   CURRENT_VALID_WP=VF2-WP1; V0 not ticked.
+- COORDINATOR CLOSEOUT VF2-WP1 (2026-08-29 11:50 Asia/Saigon): leftover-0;
+  parse_input_event; P1P2 split; synth pad non-hardware; remap atomic.
+  Critics TICK yes (II 81eed448 leftover-0 headless+windowed;
+  HH 324bfbeb leftover-0). Residual nits OK: hardware pad unproven;
+  delete-then-rename; hardcoded USED_STEP_FIXED banner. Product 9f0a246.
+  Parent 20-8 unchanged (R9-WP4 [ ], 59/60, G6 [ ]). VF2-WP1 ticked;
+  CURRENT_VALID_WP=VF2-WP2; V0 not ticked.
 
 ================================================================================
 HẾT PLAN — 29-8-2026
