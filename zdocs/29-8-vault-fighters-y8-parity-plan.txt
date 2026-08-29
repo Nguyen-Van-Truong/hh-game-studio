@@ -2,7 +2,7 @@ PLAN_SCOPE=godot/dogfood/superfighters
 PRODUCT_PLAN_AUTHORITY=1
 PARENT_PLATFORM_PLAN=zdocs/20-8-godot-agent-autopilot-plan.txt
 PARENT_PLATFORM_STATUS=OWNER_STOPPED_59_OF_60
-CURRENT_VALID_WP=VF1-WP1
+CURRENT_VALID_WP=VF1-WP2
 STATUS=ACTIVE
 PLAN_DATE=2026-08-29
 TIMEZONE=Asia/Saigon
@@ -19,7 +19,7 @@ một lần, tự làm, tự chạy, tự kiểm và tạo gói review; người
 | Thứ tự | Nhóm | Kết quả bắt buộc | Phụ thuộc | Chạy song song | Trạng thái |
 |---:|---|---|---|---|---|
 | 0 | VF0 nền và routing | scope, provenance, test sạch, không lẫn plan | none | không | [x] 3/3 |
-| 1 | VF1 reference + contract | reference ledger, behavior spec, deterministic trace | VF0 | research/test | [ ] 0/4 |
+| 1 | VF1 reference + contract | reference ledger, behavior spec, deterministic trace | VF0 | research/test | [ ] 1/4 |
 | 2 | VF2 movement | chạy, nhảy, crouch, sprint, roll, dive, ladder, ledge | VF1 | input + physics | [ ] 0/5 |
 | 3 | VF3 combat | melee/kick, hitbox, knockdown, disarm, aim/fire, grenade | VF2 | weapons + VFX | [ ] 0/6 |
 | 4 | VF4 world interaction | props, glass, barrels, containers, doors/elevators, hazards | VF2 | map fixtures | [ ] 0/5 |
@@ -29,7 +29,7 @@ một lần, tự làm, tự chạy, tự kiểm và tạo gói review; người
 | 8 | VF8 agent autonomy | brief→edit→play→observe→repair→checkpoint, no manual F6 | VF0..VF7 | host/bridge | [ ] 0/4 |
 | 9 | VF9 verification | trace replay, E2E, differential rubric, soak, leak proof | all above | QA | [ ] 0/5 |
 | 10 | VF10 package | Windows build, offline run, provenance/license, review bundle | VF9 | release | [ ] 0/3 |
-|   | **Tổng** | **50 WP nhỏ; chỉ coordinator tick sau DoD** |  |  | **3/50** |
+|   | **Tổng** | **50 WP nhỏ; chỉ coordinator tick sau DoD** |  |  | **4/50** |
 
 Gate nội bộ:
 
@@ -399,7 +399,7 @@ VF0-WP3 — Scoped plan routing và safe commit boundary                        
 6. WORK PACKAGE CHI TIẾT — VF1 REFERENCE VÀ SIMULATION CONTRACT
 ================================================================================
 
-VF1-WP1 — Reference observation ledger                                        [ ]
+VF1-WP1 — Reference observation ledger                                        [x]
   Phụ thuộc: VF0-WP1. Files: product docs/reference-ledger.md.
   Làm:
     - mở Y8/original source khi có thể; ghi controls, camera, mode, map
@@ -408,6 +408,38 @@ VF1-WP1 — Reference observation ledger                                        
     - lập delta table: behavior giữ, tên/art/geometry đổi, lý do legal.
   Verify: URL/date/source/hash đầy đủ; reviewer có thể tái lập ghi chú offline.
   DoD: mọi tuning/parity claim sau này trỏ tới một row ledger.
+  LOG:
+    LOG 2026-08-29 10:32 Asia/Saigon — agent=coordinator
+      Base: 99a802e dated clean-room observation ledger on VF0-WP3 tick
+        5ec84bb.
+      Files/leases: docs/reference-ledger.md,
+        docs/evidence/VF1WP1-20260829-ASIA-SAIGON-01/,
+        tests/check_reference_ledger.py
+      Verify: listing-only observation PASS
+        python godot/dogfood/superfighters/tests/check_reference_ledger.py
+          EXIT 0
+          PASS: Vault Fighters VF1-WP1 ledger
+          rows=51 required=27
+          ledger_sha256=4567831cf29b9cff9c3048bb4803d1df2e3a6224f55b5aa3a20e87982118c52d
+          game_package_fetched=0 screenshots=0 godot_not_required=1
+        leftover Godot on product --path = 0; Godot not launched
+        python tests/bootstrap/test_authoritative_plan.py EXIT 0
+        python tests/bootstrap/test_vault_fighters_plan.py EXIT 0
+          PASS: 50 unique VF WPs; no-skip; next=VF1-WP1 (pre-tick);
+          ticked=VF0-WP1,VF0-WP2,VF0-WP3; parent 20-8 frozen 59/60 R9-WP4
+        post-tick expected next=VF1-WP2
+      Honesty:
+        Listing-page observation only; not in-game play; not Y8 parity; not V0.
+        Hold-to-aim (RL-CTRL-HOLD-AIM) and roll/dive not observed.
+        HTML5 embed host seen, not fetched.
+      Critic: II 68098787 TICK yes;
+        HH d51e287e TICK yes
+      Gaps: residual nits OK:
+        stale NG hash in page_fetch.manifest.json;
+        embed host not in stored HTML;
+        checker does not audit class honesty (class rubber-stamp).
+        Parent 20-8 unchanged: R9-WP4 [ ]; 59/60; G6 [ ].
+      Commit: (this tick)
 
 VF1-WP2 — Typed simulation schema và fixed-step clock                           [ ]
   Phụ thuộc: VF1-WP1. Files: product `src/sim/`, data/resources, tests.
@@ -1052,7 +1084,7 @@ vào `KNOWN_ISSUES.md`; không đổi acceptance để làm cho pass.
 21. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Đọc `AGENTS.md`, sau đó đọc bảng đầu file này. WP đầu tiên chưa tick là **VF1-WP1**.
+Đọc `AGENTS.md`, sau đó đọc bảng đầu file này. WP đầu tiên chưa tick là **VF1-WP2**.
 
 Không làm R9-WP4/G6/GX; không mở Rust engine; không đụng Kho Bí Ẩn/Hoan Hao;
 không dùng Snake làm demo; không tải/rip Y8. Chỉ khi VF0-WP1 và VF0-WP2 đã có
@@ -1101,6 +1133,12 @@ dùng chỉ xem và review.
   HH coordinator re-run after 7e8a3904 usage-limit error). Product 0ffc4e8.
   Parent 20-8 unchanged (R9-WP4 [ ], 59/60, G6 [ ]). VF0-WP3 ticked;
   CURRENT_VALID_WP=VF1-WP1; V0 not ticked.
+- COORDINATOR CLOSEOUT VF1-WP1 (2026-08-29 10:32 Asia/Saigon): ledger
+  checker EXIT 0 (listing-only; hold-to-aim/roll not observed). Critics
+  TICK yes (II 68098787; HH d51e287e). Residual nits OK: stale NG
+  manifest hash; embed host not in stored HTML; checker class
+  rubber-stamp. Product 99a802e. Parent 20-8 unchanged (R9-WP4 [ ],
+  59/60, G6 [ ]). VF1-WP1 ticked; CURRENT_VALID_WP=VF1-WP2; V0 not ticked.
 
 ================================================================================
 HẾT PLAN — 29-8-2026
