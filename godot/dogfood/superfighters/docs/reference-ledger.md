@@ -575,3 +575,46 @@ plus live InputEvent inject.
 | RL-ITEM-PICK-SLOT | Pickup replaces slot | `assumption` | none | VF3-WP5 product contract; **not** observed on Y8 this session | 2026-08-29 | new item occupies its slot; old item drops | same-id stacks | Not observed. |
 | RL-ITEM-KEEP-GUN | Nade/melee keep gun | `assumption` | none | VF3-WP5 product contract; **not** observed on Y8 this session | 2026-08-29 | pipe / grenade / cinder pickup leaves pistol | — | Not observed. |
 | RL-ITEM-AMMO-RELOAD | Ammo / reload data | `assumption` | none | VF3-WP5 product contract; **not** observed on Y8 this session | 2026-08-29 | 0 ammo no fire; empty gun stays; rifle reloads | reload_ticks | Weight is data only. |
+
+---
+
+## VF3-WP6 critical / chaos tuning (not a play observation)
+
+Dated 2026-08-29 Asia/Saigon. No in-game Y8 play. No HTML5/Flash
+package. Sidecar: `docs/balance.md` and
+`docs/evidence/VF3WP6-20260829-ASIA-SAIGON-03/`.
+First-pass pack `VF3WP6-20260829-ASIA-SAIGON-01` and retry
+`VF3WP6-20260829-ASIA-SAIGON-02` are not reminted.
+
+`ledger:RL-MODE-CHAOS` stays `secondary` (2011 developer note) and is
+**not** promoted to `observed`. Product chaos is
+`assumption`. Crit / knock jitter / spread jitter / caps / stamina
+stay `assumption`. Hold-to-aim stays
+`ledger:RL-CTRL-HOLD-AIM` (`assumption`). Y8 observation stays
+`ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). 60 Hz stays
+`ledger:RL-SIM-FIXED-60` (`assumption`). Values are original
+tuning; this WP does **not** ship a copied stat table and does
+**not** claim original exact numbers.
+
+Product contract: a dedicated chaos stream (match seed + salt)
+rolls crit, knock variance, and pellet jitter when chaos is on.
+Live play enables chaos; official VF3-WP1..5 traces stay
+chaos-off so their hashes do not drift. Hit damage is capped
+(56, per-hit) and per-tick incoming is capped (80). The live
+cap proof is a fire-path `overcap_rifle` shot through
+`_do_fire` / `take_damage`, not a later `take_damage(999)`
+poke. 1000 seeded formula rolls (not live matches) must stay
+finite and replay-equal. Slot context fitness is published in
+`docs/balance.md` before the batch; the bar is
+`win_rate_max < 0.55` and `>=3` distinct `context_best`.
+Knife 0.761 / 5-of-5 fails that bar. Soft 0.72 and
+`dominates = (win_rate >= 1.0)` are rejected. Five scripted
+scenarios plus OVERCAP replay through `apply_frames`.
+
+| ID | Topic | Class | Conf. | Source | When | Behavior to reproduce | Tuning-only | Notes |
+|---|---|---|---|---|---|---|---|---|
+| RL-BAL-CRIT | Seeded crit chance | `assumption` | none | VF3-WP6 product contract; **not** observed on Y8 this session | 2026-08-29 | Chaos-on hits roll 12% × 1.35 then cap | 0.12 / 1.35 | Cites RL-MODE-CHAOS note only. Not observed. |
+| RL-BAL-KNOCK-JITTER | Seeded knock variance | `assumption` | none | VF3-WP6 product contract; **not** observed on Y8 this session | 2026-08-29 | Knock scaled ±18% then capped | 0.18 / 240 | Not observed. |
+| RL-BAL-SPREAD-RNG | Seeded spread jitter | `assumption` | none | VF3-WP6 product contract; **not** observed on Y8 this session | 2026-08-29 | Chaos-on adds jitter on top of deterministic fan | 0.55 × spread | Base fan stays VF3-WP3. Not observed. |
+| RL-BAL-CAP | Damage / knock caps | `assumption` | none | VF3-WP6 product contract; **not** observed on Y8 this session | 2026-08-29 | Reject NaN/inf; hit ≤56; tick ≤80; fire-path overcap through take_damage | 56 / 80 | Always on. Not observed. Not a 999 poke. |
+| RL-BAL-STAMINA | Stamina recover tune | `assumption` | none | VF3-WP6 documents VF2-WP3 numbers | 2026-08-29 | drain 28 / recover 22 / roll 22 / dive 18 | those four | Same numbers so sprint hashes stay. Not observed. |

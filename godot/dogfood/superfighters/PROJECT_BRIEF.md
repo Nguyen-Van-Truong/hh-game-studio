@@ -126,7 +126,13 @@ platform. They are not ripped collision maps.
   `ledger:RL-FIRE-*` (`assumption`). Guns are ballistic, not
   hitscan (`ledger:RL-FIRE-BALLISTIC`). Ammo empty + reload from
   reserve is product tuning (`ledger:RL-ITEM-AMMO-RELOAD`,
-  `assumption`).
+  `assumption`). Seed-controlled crit / knock jitter / spread
+  jitter and damage caps (`ledger:RL-BAL-CRIT` /
+  `ledger:RL-BAL-KNOCK-JITTER` / `ledger:RL-BAL-SPREAD-RNG` /
+  `ledger:RL-BAL-CAP`, `assumption`). Live play is
+  chaotic-but-bounded; official prior traces stay chaos-off.
+  Not a copied Y8 table (`ledger:RL-MODE-CHAOS` stays
+  secondary / not observed).
 
 ## platform
 

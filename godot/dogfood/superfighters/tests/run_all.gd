@@ -9,6 +9,7 @@ const ReactionCasesScript: GDScript = preload("res://tests/reaction_cases.gd")
 const AimCasesScript: GDScript = preload("res://tests/aim_cases.gd")
 const ExplosiveCasesScript: GDScript = preload("res://tests/explosive_cases.gd")
 const RosterCasesScript: GDScript = preload("res://tests/roster_cases.gd")
+const BalanceCasesScript: GDScript = preload("res://tests/balance_cases.gd")
 const _Combat: GDScript = preload("res://src/sim/combat.gd")
 
 var _fails: PackedStringArray = PackedStringArray()
@@ -30,6 +31,7 @@ var _react: String = "unproven"
 var _aim: String = "unproven"
 var _expl: String = "unproven"
 var _roster: String = "unproven"
+var _balance: String = "unproven"
 
 
 func _initialize() -> void:
@@ -63,6 +65,7 @@ func _boot() -> void:
 	await _test_aim(app)
 	await _test_expl(app)
 	await _test_roster(app)
+	await _test_balance(app)
 	if _fails.is_empty():
 		_no_err = "proven"
 	_emit()
@@ -987,6 +990,58 @@ func _test_roster(app: App) -> void:
 		_roster = "proven"
 
 
+func _test_balance(app: App) -> void:
+	var errors: PackedStringArray = await BalanceCasesScript.run_all(app)
+	var i: int = 0
+	while i < errors.size():
+		_fail("BALANCE %s" % String(errors[i]))
+		i += 1
+	var schema: String = str(BalanceCasesScript.outcome_schema.get("verdict", "unproven"))
+	var batch: String = str(BalanceCasesScript.outcome_batch.get("verdict", "unproven"))
+	var dist: String = str(BalanceCasesScript.outcome_dist.get("verdict", "unproven"))
+	var dom: String = str(BalanceCasesScript.outcome_dom.get("verdict", "unproven"))
+	var melee: String = str(BalanceCasesScript.outcome_melee.get("verdict", "unproven"))
+	var high: String = str(BalanceCasesScript.outcome_high.get("verdict", "unproven"))
+	var overcap: String = str(BalanceCasesScript.outcome_overcap.get("verdict", "unproven"))
+	var pit: String = str(BalanceCasesScript.outcome_pit.get("verdict", "unproven"))
+	var chain: String = str(BalanceCasesScript.outcome_chain.get("verdict", "unproven"))
+	var ff: String = str(BalanceCasesScript.outcome_ff.get("verdict", "unproven"))
+	var stamina: String = str(BalanceCasesScript.outcome_stamina.get("verdict", "unproven"))
+	var data: String = str(BalanceCasesScript.outcome_data.get("verdict", "unproven"))
+	var live: String = str(BalanceCasesScript.outcome_live.get("verdict", "unproven"))
+	var replay: String = str(BalanceCasesScript.outcome_replay.get("verdict", "unproven"))
+	if schema != "pass":
+		_fail("BALANCE SCHEMA outcome is %s" % schema)
+	if batch != "pass":
+		_fail("BALANCE BATCH outcome is %s" % batch)
+	if dist != "pass":
+		_fail("BALANCE DIST outcome is %s" % dist)
+	if dom != "pass":
+		_fail("BALANCE DOM outcome is %s" % dom)
+	if melee != "pass":
+		_fail("BALANCE MELEE outcome is %s" % melee)
+	if high != "pass":
+		_fail("BALANCE HIGH outcome is %s" % high)
+	if overcap != "pass":
+		_fail("BALANCE OVERCAP outcome is %s" % overcap)
+	if pit != "pass":
+		_fail("BALANCE PIT outcome is %s" % pit)
+	if chain != "pass":
+		_fail("BALANCE CHAIN outcome is %s" % chain)
+	if ff != "pass":
+		_fail("BALANCE FF outcome is %s" % ff)
+	if stamina != "pass":
+		_fail("BALANCE STAMINA outcome is %s" % stamina)
+	if data != "pass":
+		_fail("BALANCE DATA outcome is %s" % data)
+	if live != "pass":
+		_fail("BALANCE LIVE outcome is %s" % live)
+	if replay != "match":
+		_fail("BALANCE REPLAY outcome is %s" % replay)
+	if _count_prefix("BALANCE ") == 0:
+		_balance = "proven"
+
+
 func _emit() -> void:
 	print("HH_VF_PATH title→fight→win/lose→restart")
 	print(
@@ -1152,6 +1207,28 @@ func _emit() -> void:
 			RosterCasesScript.used_apply_frames_succeeded,
 			RosterCasesScript.used_apply_frames_attempted,
 			_roster,
+		]
+	)
+	print(
+		"HH_VF_BALANCE SCHEMA=%s BATCH=%s DIST=%s DOM=%s MELEE=%s HIGH=%s OVERCAP=%s PIT=%s CHAIN=%s FF=%s STAMINA=%s DATA=%s LIVE=%s REPLAY=%s APPLY=%d/%d status=%s"
+		% [
+			str(BalanceCasesScript.outcome_schema.get("verdict", "unproven")),
+			str(BalanceCasesScript.outcome_batch.get("verdict", "unproven")),
+			str(BalanceCasesScript.outcome_dist.get("verdict", "unproven")),
+			str(BalanceCasesScript.outcome_dom.get("verdict", "unproven")),
+			str(BalanceCasesScript.outcome_melee.get("verdict", "unproven")),
+			str(BalanceCasesScript.outcome_high.get("verdict", "unproven")),
+			str(BalanceCasesScript.outcome_overcap.get("verdict", "unproven")),
+			str(BalanceCasesScript.outcome_pit.get("verdict", "unproven")),
+			str(BalanceCasesScript.outcome_chain.get("verdict", "unproven")),
+			str(BalanceCasesScript.outcome_ff.get("verdict", "unproven")),
+			str(BalanceCasesScript.outcome_stamina.get("verdict", "unproven")),
+			str(BalanceCasesScript.outcome_data.get("verdict", "unproven")),
+			str(BalanceCasesScript.outcome_live.get("verdict", "unproven")),
+			str(BalanceCasesScript.outcome_replay.get("verdict", "unproven")),
+			BalanceCasesScript.used_apply_frames_succeeded,
+			BalanceCasesScript.used_apply_frames_attempted,
+			_balance,
 		]
 	)
 	print(

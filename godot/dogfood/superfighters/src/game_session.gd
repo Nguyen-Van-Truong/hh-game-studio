@@ -6,6 +6,7 @@ const _Combat: GDScript = preload("res://src/sim/combat.gd")
 const _Aim: GDScript = preload("res://src/sim/aim.gd")
 const _Expl: GDScript = preload("res://src/sim/explosive.gd")
 const _Inv: GDScript = preload("res://src/data/weapons/inventory.gd")
+const _Bal: GDScript = preload("res://src/sim/balance.gd")
 
 signal won
 signal lost
@@ -28,6 +29,8 @@ var sfx: SfxBank
 var camera: Camera2D
 var test_driven: bool = false
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
+var chaos_rng: RandomNumberGenerator = RandomNumberGenerator.new()
+var chaos_enabled: bool = false
 var win_title: String = "Last standing"
 var lose_title: String = "Down"
 var _fx: Array[Sprite2D] = []
@@ -41,6 +44,12 @@ var ledger: SimEventLedger = SimEventLedger.new()
 var recorder: SimRecorder = null
 var pause_reason: String = ""
 var pickup_seq: int = 0
+var last_hit_raw: float = 0.0
+var last_hit_applied: float = 0.0
+var last_hit_path: String = ""
+var last_hit_weapon: String = ""
+var last_fire_weapon: String = ""
+var last_fire_raw_spawn: float = 0.0
 
 
 func setup(p_mode: String, p_map: String, p_stage: int) -> void:
@@ -52,6 +61,8 @@ func setup(p_mode: String, p_map: String, p_stage: int) -> void:
 	outcome = "play"
 	sim_seed = SimSeed.for_match(p_mode, p_map, p_stage)
 	rng.seed = sim_seed
+	chaos_enabled = not test_driven
+	reset_chaos_rng()
 	clock.reset()
 	pause_reason = ""
 	last_reject = PackedStringArray()
@@ -129,6 +140,18 @@ func step_from_live_input() -> bool:
 	return apply_frames(frames)
 
 
+func reset_chaos_rng() -> void:
+	var mixed: int = sim_seed + _Bal.chaos_salt()
+	if mixed < 0:
+		mixed = 0
+	chaos_rng.seed = mixed
+
+
+func enable_chaos() -> void:
+	chaos_enabled = true
+	reset_chaos_rng()
+
+
 func apply_frames(frames: Array) -> bool:
 	last_reject = PackedStringArray()
 	if _is_sim_paused():
@@ -181,6 +204,11 @@ func _step_one_tick(cmds: Array[Dictionary]) -> void:
 	_tick_fx(dt)
 	if outcome != "play":
 		return
+	var r: int = 0
+	while r < fighters.size():
+		fighters[r].damage_taken_tick = 0.0
+		fighters[r].last_crit = false
+		r += 1
 	var kill_plane: float = Maps.kill_y(map_id)
 	var i: int = 0
 	while i < fighters.size():
@@ -556,8 +584,14 @@ func _resolve_hitbox(f: Fighter) -> void:
 			continue
 		var dmg: float = _Combat.damage_of(f.attack_weapon, f.attack_style)
 		var knock: Vector2 = _Combat.knock_of(f.attack_style, f.facing)
+		var rolled: Dictionary = _Bal.roll_hit(chaos_rng, chaos_enabled, dmg, knock)
+		var raw: float = float(rolled.get("raw", dmg))
+		dmg = float(rolled.get("damage", dmg))
+		knock = rolled.get("knock", knock) as Vector2
+		other.last_crit = bool(rolled.get("crit", false))
 		var hp0: float = other.health
-		other.take_damage(dmg, knock)
+		other.take_damage(raw, knock)
+		_record_hit_cap(other, raw, hp0, "melee", f.attack_weapon)
 		var landed: bool = other.health < hp0 - 0.01 or other.dead
 		if landed and _Combat.style_knocks_down(f.attack_style):
 			if other.apply_knockdown(Vector2(f.facing * 70.0, 20.0)):
@@ -590,9 +624,17 @@ func _resolve_hitbox(f: Fighter) -> void:
 			"damage": SimConstants.quantize(dmg),
 			"knock_x": SimConstants.quantize(knock.x),
 			"knock_y": SimConstants.quantize(knock.y),
+			"crit": 1 if other.last_crit else 0,
 			"seq": f.attack_seq,
 			"seed": sim_seed,
 		})
+		if other.last_crit:
+			ledger.push(clock.tick, "combat", "crit", {
+				"attacker": f.slot,
+				"target": other.slot,
+				"weapon": f.attack_weapon,
+				"seed": sim_seed,
+			})
 		_log_death_if_new(other)
 		_splat(other.global_position)
 		if sfx != null:
@@ -727,6 +769,8 @@ func _do_fire(f: Fighter) -> void:
 	var spread: float = _Aim.spread(f.gun_id)
 	var speed: float = _Aim.speed(f.gun_id)
 	var dmg: float = _Aim.damage(f.gun_id)
+	last_fire_weapon = f.gun_id
+	last_fire_raw_spawn = dmg
 	var base: Vector2 = f.aim_dir
 	if base == Vector2.ZERO:
 		base = Vector2(f.facing, 0.0)
@@ -743,6 +787,7 @@ func _do_fire(f: Fighter) -> void:
 	var p: int = 0
 	while p < pellets:
 		var dir: Vector2 = _Aim.pellet_dir(base, p, pellets, spread)
+		dir = _Bal.jitter_dir(chaos_rng, dir, spread, chaos_enabled)
 		var shot: Bullet = Bullet.new()
 		shot.setup(muzzle, dir, speed, dmg, f.slot, f.team)
 		add_child(shot)
@@ -937,7 +982,20 @@ func _apply_bullet_hit(shot: Bullet, f: Fighter) -> void:
 		return
 	if f.invuln_ticks > 0 or f.invuln > 0.0:
 		return
-	f.take_damage(shot.damage, shot.velocity.normalized() * 70.0 + Vector2(0, -30))
+	var knock: Vector2 = shot.velocity.normalized() * 70.0 + Vector2(0, -30)
+	var rolled: Dictionary = _Bal.roll_hit(chaos_rng, chaos_enabled, shot.damage, knock)
+	var raw: float = float(rolled.get("raw", shot.damage))
+	f.last_crit = bool(rolled.get("crit", false))
+	var hp0: float = f.health
+	f.take_damage(raw, rolled.get("knock", knock) as Vector2)
+	_record_hit_cap(f, raw, hp0, "bullet", last_fire_weapon)
+	if f.last_crit:
+		ledger.push(clock.tick, "combat", "crit", {
+			"attacker": shot.owner_slot,
+			"target": f.slot,
+			"weapon": "bullet",
+			"seed": sim_seed,
+		})
 	_log_death_if_new(f)
 	_splat(f.global_position)
 	if sfx != null:
@@ -1057,10 +1115,21 @@ func _explode(nade: ThrownGrenade) -> void:
 		var d: float = f.global_position.distance_to(nade.global_position)
 		if d > nade.radius:
 			continue
-		f.take_damage(
-			_Expl.blast_damage_of(nade.damage, d, nade.radius),
-			_Expl.blast_knock_of(nade.global_position, f.global_position, d, nade.radius)
-		)
+		var blast: float = _Expl.blast_damage_of(nade.damage, d, nade.radius)
+		var knock: Vector2 = _Expl.blast_knock_of(nade.global_position, f.global_position, d, nade.radius)
+		var rolled: Dictionary = _Bal.roll_hit(chaos_rng, chaos_enabled, blast, knock)
+		var raw: float = float(rolled.get("raw", blast))
+		f.last_crit = bool(rolled.get("crit", false))
+		var hp0: float = f.health
+		f.take_damage(raw, rolled.get("knock", knock) as Vector2)
+		_record_hit_cap(f, raw, hp0, "blast", nade.payload_id)
+		if f.last_crit:
+			ledger.push(clock.tick, "combat", "crit", {
+				"attacker": nade.owner_slot,
+				"target": f.slot,
+				"weapon": "nade",
+				"seed": sim_seed,
+			})
 		_log_death_if_new(f)
 		_splat(f.global_position)
 
@@ -1412,6 +1481,26 @@ func _emit_reaction_feedback(f: Fighter) -> void:
 	if f.invuln_ended:
 		ledger.push(clock.tick, "melee", "invuln_end", {
 			"slot": f.slot,
+		})
+
+
+func _record_hit_cap(target: Fighter, raw: float, hp0: float, path: String, weapon: String) -> void:
+	if target == null:
+		return
+	var applied: float = hp0 - target.health
+	last_hit_raw = raw
+	last_hit_applied = applied
+	last_hit_path = path
+	last_hit_weapon = weapon
+	if raw > _Bal.hit_cap() + 0.001:
+		ledger.push(clock.tick, "combat", "clamp", {
+			"target": target.slot,
+			"path": path,
+			"weapon": weapon,
+			"raw": SimConstants.quantize(raw),
+			"applied": SimConstants.quantize(applied),
+			"cap": SimConstants.quantize(_Bal.hit_cap()),
+			"incoming": SimConstants.quantize(target.last_incoming_raw),
 		})
 
 

@@ -1,0 +1,29 @@
+{
+  "schema": "vf.sim.trace.v1",
+  "schema_version": 1,
+  "title": "Vault Fighters",
+  "kind": "official",
+  "name": "balance_high",
+  "record_source": "scripted_input_frames",
+  "mode": "vs2",
+  "map_id": "fx_balance_high",
+  "stage_index": 0,
+  "seed": 7,
+  "chaos": true,
+  "fighter_count": 2,
+  "tick_hz": 60,
+  "snapshot_every": 15,
+  "ledger_clock": "RL-SIM-FIXED-60",
+  "y8_tick_rate_claimed": false,
+  "y8_parity_claimed": false,
+  "hold_to_aim": "RL-CTRL-HOLD-AIM assumption, not observed",
+  "chaos_row": "RL-MODE-CHAOS assumption, not observed",
+  "used_step_fixed": false,
+  "used_action_press": false,
+  "segments": [
+    {"ticks": 10, "p1": {}},
+    {"ticks": 3, "p1": {"held": ["fire", "crouch", "right"]}},
+    {"ticks": 1, "p1": {"released": ["fire"], "held": ["crouch"]}},
+    {"ticks": 28, "p1": {}}
+  ]
+}

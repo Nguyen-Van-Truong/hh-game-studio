@@ -1,0 +1,116 @@
+{
+  "schema": "vf.sim.balance.v1",
+  "schema_version": 1,
+  "title": "Vault Fighters",
+  "y8_parity_claimed": false,
+  "y8_tick_rate_claimed": false,
+  "original_exact_numbers_claimed": false,
+  "copied_stat_table": false,
+  "values_are_tuning": true,
+  "ledger_clock": "RL-SIM-FIXED-60",
+  "chaos_ledger": "RL-MODE-CHAOS",
+  "chaos_class": "assumption",
+  "crit_ledger": "RL-BAL-CRIT",
+  "crit_class": "assumption",
+  "knock_ledger": "RL-BAL-KNOCK-JITTER",
+  "knock_class": "assumption",
+  "spread_ledger": "RL-BAL-SPREAD-RNG",
+  "spread_class": "assumption",
+  "cap_ledger": "RL-BAL-CAP",
+  "cap_class": "assumption",
+  "stamina_ledger": "RL-BAL-STAMINA",
+  "stamina_class": "assumption",
+  "hold_to_aim_ledger": "RL-CTRL-HOLD-AIM",
+  "hold_to_aim_class": "assumption",
+  "roll_dive_ledger": "RL-MOVE-ROLL-DIVE",
+  "roll_dive_class": "unavailable",
+  "tick_hz": 60,
+  "scenario_count": 1000,
+  "chaos_salt": 10007,
+  "crit": {
+    "chance": 0.12,
+    "multiplier": 1.35
+  },
+  "knock": {
+    "jitter": 0.18
+  },
+  "spread": {
+    "jitter": 0.55
+  },
+  "caps": {
+    "hit": 56.0,
+    "tick": 80.0,
+    "knock": 240.0
+  },
+  "stamina": {
+    "sprint_drain": 28.0,
+    "recover": 22.0,
+    "roll_cost": 22.0,
+    "dive_cost": 18.0,
+    "rationale": "Keep VF2-WP3 sprint length (~3.5s full drain) and recover (~4.5s). Roll still costs a slice so you cannot chain roll-sprint forever. Numbers are product tuning, not a copied Y8 table."
+  },
+  "dominance": {
+    "max_win_rate": 0.55,
+    "require_distinct_winners": 2,
+    "require_distinct_contexts": 3,
+    "method": "formula_rolls",
+    "hardcoded_winners": false,
+    "slot_context_fitness": true,
+    "hardcoded_winner_ids": false,
+    "note": "1000 scenarios are seed-controlled resolution rolls, not 1000 live matches. Score is damage*rate plus knock, then slot context fitness. Winner ids are computed, never hard-coded. Published bar: win_rate_max < 0.55 and >=3 distinct context_best. Knife 0.761 / 5-of-5 fails this bar. Soft 0.72 and dominates>=1.0 are rejected."
+  },
+  "contexts": {
+    "close_melee": { "melee": 1.35, "firearm": 0.55, "explosive": 0.40, "power": 0.40 },
+    "high_ground": { "melee": 0.45, "firearm": 1.40, "explosive": 0.70, "power": 0.70 },
+    "pit": { "melee": 0.70, "firearm": 0.80, "explosive": 1.35, "power": 1.20 },
+    "grenade_chain": { "melee": 0.35, "firearm": 0.50, "explosive": 1.80, "power": 1.50 },
+    "friendly_fire": { "melee": 1.20, "firearm": 0.85, "explosive": 0.30, "power": 0.30 }
+  },
+  "overcap": {
+    "weapon_id": "overcap_rifle",
+    "test_only": true,
+    "in_spawn_pool": false,
+    "note": "Harness-only fire-path overcap. Goes through _do_fire. Not a roster spawn."
+  },
+  "fixtures": {
+    "fx_balance_melee": [
+      "################",
+      "#..............#",
+      "#..P1..........#",
+      "################"
+    ],
+    "fx_balance_high": [
+      "################",
+      "#..............#",
+      "#..P...........#",
+      "####...........#",
+      "#....1.........#",
+      "################"
+    ],
+    "fx_balance_pit": [
+      "################",
+      "#..............#",
+      "#..P........1..#",
+      "####........####"
+    ],
+    "fx_balance_chain": [
+      "################",
+      "#..............#",
+      "#..P.1.........#",
+      "################"
+    ],
+    "fx_balance_ff": [
+      "################",
+      "#..............#",
+      "#..P1..........#",
+      "################"
+    ]
+  },
+  "fixture_names": {
+    "fx_balance_melee": "Clinch Alley",
+    "fx_balance_high": "Shelf Shot",
+    "fx_balance_pit": "Gap Fall",
+    "fx_balance_chain": "Twin Fuse",
+    "fx_balance_ff": "Cross Fire"
+  }
+}

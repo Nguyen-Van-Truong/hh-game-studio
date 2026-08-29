@@ -54,6 +54,9 @@ static func play(app: App, trace: Dictionary) -> Dictionary:
 	var expected_seed: int = int(trace.get("seed", SimSeed.for_match(mode, map_id, stage)))
 	if session.sim_seed != expected_seed:
 		errors.append("seed drifted got=%d expected=%d" % [session.sim_seed, expected_seed])
+	if bool(trace.get("chaos", false)):
+		session.chaos_enabled = true
+		session.reset_chaos_rng()
 	await sync_physics(app)
 	session = app.session
 	if session == null:

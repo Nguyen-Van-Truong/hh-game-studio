@@ -97,6 +97,21 @@ First playable slice. Not G6. Not 60/60.
   is **not** promoted
   to `observed`. Y8 roll/dive observation stays
   `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). No new Y8 play.
+- VF3-WP6 ships seed-controlled crit / knock jitter / spread
+  jitter, hit/tick caps, and a 1000-scenario balance harness as
+  assumption (`ledger:RL-MODE-CHAOS`, `ledger:RL-BAL-CRIT`,
+  `ledger:RL-BAL-KNOCK-JITTER`, `ledger:RL-BAL-SPREAD-RNG`,
+  `ledger:RL-BAL-CAP`, `ledger:RL-BAL-STAMINA`). Live play
+  enables chaos; official VF3-WP1..5 traces stay chaos-off.
+  The 1000-batch is formula rolls, not 1000 live matches.
+  HIGH must land live damage then prove `take_damage(999)`
+  clamps to 56. CHAIN must land live blast damage on a fighter
+  (owner-skip stays off; once-per-nade). Values are original
+  tuning, not a copied stat table. Hold-to-aim is **not**
+  promoted to `observed`. Y8 roll/dive observation stays
+  `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). No new Y8 play.
+  Residual: nade bounce vs live `=` / `COL_PLATFORM` rooftops is
+  unchanged; official CHAIN uses `#` only.
 - VF3-WP4 ships grenade hold/release throw, gravity arc, bounce,
   fuse, radial falloff, owner skip, one explosion, timeout
   cleanup, and swept nade collision as assumption

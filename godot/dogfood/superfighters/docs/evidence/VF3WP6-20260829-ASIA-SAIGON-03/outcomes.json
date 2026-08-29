@@ -1,0 +1,295 @@
+{
+	"apply": {
+		"attempted": 1052,
+		"succeeded": 1052,
+		"used_action_press": 0,
+		"used_apply_frames": 1052,
+		"used_parse_input_event": 1,
+		"used_step_fixed": 0
+	},
+	"batch": {
+		"count": 1000,
+		"inf": 0,
+		"method": "formula_rolls",
+		"nan": 0,
+		"replay": true,
+		"source": "Balance.run_seeded_batch seed 7 twice (formula rolls, not live matches)",
+		"verdict": "pass"
+	},
+	"chain": {
+		"cap_model": "per_hit via take_damage/clamp_hit; per_tick via tick_room; two nades on different ticks",
+		"damage": 40.9162886142731,
+		"explosions": 2,
+		"leftover_nades": 0,
+		"once_per_nade": true,
+		"source": "apply_frames two downward throws on # floor, P2 inside radius",
+		"verdict": "pass"
+	},
+	"data": {
+		"copied_stat_table": false,
+		"original_exact_numbers_claimed": false,
+		"source": "balance values are original tuning",
+		"tuning": true,
+		"verdict": "pass"
+	},
+	"dist": {
+		"max": 56.0,
+		"mean": 24.3387363546545,
+		"min": 7.0,
+		"n": 11000,
+		"p50": 20.0,
+		"p95": 42.0,
+		"source": "1000-seed formula-roll damage distribution",
+		"verdict": "pass"
+	},
+	"dom": {
+		"bar_max_win_rate": 0.55,
+		"context_best": {
+			"close_melee": "knife",
+			"friendly_fire": "knife",
+			"grenade_chain": "grenade",
+			"high_ground": "uzi",
+			"pit": "grenade"
+		},
+		"distinct_contexts": 3,
+		"distinct_winners": 4,
+		"dominates": false,
+		"hardcoded_winners": false,
+		"live_weapon_count": 3,
+		"live_weapons": {
+			"fists": 10.0,
+			"grenade": 40.9162886142731,
+			"pistol": 18.0
+		},
+		"method": "formula_rolls",
+		"source": "1000 formula rolls (not live matches) + live MELEE/HIGH/CHAIN weapons",
+		"verdict": "pass",
+		"win_counts": {
+			"baton": 1,
+			"cinder": 0,
+			"fists": 0,
+			"grenade": 371,
+			"knife": 406,
+			"launcher": 0,
+			"pipe": 0,
+			"pistol": 0,
+			"rifle": 0,
+			"shotgun": 0,
+			"uzi": 222
+		},
+		"win_leader": "knife",
+		"win_rate_max": 0.406
+	},
+	"ff": {
+		"damage": 10.0,
+		"mode": "vs2",
+		"source": "apply_frames vs2 melee on Cross Fire",
+		"teams": [
+			0,
+			1
+		],
+		"verdict": "pass"
+	},
+	"high": {
+		"aim_y": 0.70710676908493,
+		"applied": 18.0,
+		"damage": 18.0,
+		"fired": true,
+		"incoming_raw": 18.0,
+		"path": "bullet",
+		"source": "apply_frames hold-to-aim down-right pistol hit (live damage>0; cap is OVERCAP)",
+		"verdict": "pass"
+	},
+	"live": {
+		"damage": 10.0,
+		"source": "parse_input_event KEY_N + step_from_live_input",
+		"verdict": "pass"
+	},
+	"melee": {
+		"damage": 10.0,
+		"finite": true,
+		"source": "apply_frames fists on Clinch Alley with chaos",
+		"verdict": "pass"
+	},
+	"overcap": {
+		"aim_y": 0.70710676908493,
+		"alive": true,
+		"applied": 56.0,
+		"cap": 56.0,
+		"damage": 56.0,
+		"fired": true,
+		"identity_clamp_would_fail": true,
+		"incoming_raw": 90.0,
+		"path": "bullet",
+		"source": "apply_frames _do_fire overcap_rifle -> bullet sweep -> take_damage/clamp_hit",
+		"spawn_raw": 90.0,
+		"uncapped_would_apply": 80.0,
+		"verdict": "pass",
+		"weapon": "overcap_rifle"
+	},
+	"pit": {
+		"cause": "pit",
+		"dead": true,
+		"source": "apply_frames P2 walk into Gap Fall",
+		"verdict": "pass"
+	},
+	"replay": {
+		"pair_count": 5,
+		"pairs": [
+			{
+				"hash_a": "5678c090235e9d6bc0c128490e6c121143d64474ee424b201c66fb485c7ff695",
+				"hash_b": "5678c090235e9d6bc0c128490e6c121143d64474ee424b201c66fb485c7ff695",
+				"hash_match": true,
+				"name": "balance_chain",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "ec4a7c3ecee0798039354ce066826a223fff08e1fa8b3b35b14d27a1467df1f3",
+				"hash_b": "ec4a7c3ecee0798039354ce066826a223fff08e1fa8b3b35b14d27a1467df1f3",
+				"hash_match": true,
+				"name": "balance_ff",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "38555f63c545e06b7ba023e36688e5ed783b317c24180c1521d0df512fef2a52",
+				"hash_b": "38555f63c545e06b7ba023e36688e5ed783b317c24180c1521d0df512fef2a52",
+				"hash_match": true,
+				"name": "balance_high",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "3ded15918915049fd473220ba8e07b2777afe5f9c815acee0ac20e65ff59e938",
+				"hash_b": "3ded15918915049fd473220ba8e07b2777afe5f9c815acee0ac20e65ff59e938",
+				"hash_match": true,
+				"name": "balance_melee",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "4c2fc1e93a163bd8635472917c5042d185598ea163818813f7b182a4cdf346f7",
+				"hash_b": "4c2fc1e93a163bd8635472917c5042d185598ea163818813f7b182a4cdf346f7",
+				"hash_match": true,
+				"name": "balance_pit",
+				"ok_a": true,
+				"ok_b": true
+			}
+		],
+		"source": "SimReplay.final_hash twice",
+		"verdict": "match"
+	},
+	"report": {
+		"context_best": {
+			"close_melee": "knife",
+			"friendly_fire": "knife",
+			"grenade_chain": "grenade",
+			"high_ground": "uzi",
+			"pit": "grenade"
+		},
+		"count": 1000,
+		"distinct_contexts": 3,
+		"distinct_winners": 4,
+		"dominates": false,
+		"finite": true,
+		"hardcoded_winners": false,
+		"inf": 0,
+		"method": "formula_rolls",
+		"nan": 0,
+		"per_weapon": {
+			"baton": {
+				"max": 21.6,
+				"n": 1000,
+				"sum": 16716.8
+			},
+			"cinder": {
+				"max": 29.7,
+				"n": 1000,
+				"sum": 22962.5000000001
+			},
+			"fists": {
+				"max": 13.5,
+				"n": 1000,
+				"sum": 10462.0
+			},
+			"grenade": {
+				"max": 56.0,
+				"n": 1000,
+				"sum": 43694.0
+			},
+			"knife": {
+				"max": 18.9,
+				"n": 1000,
+				"sum": 14612.5
+			},
+			"launcher": {
+				"max": 54.0,
+				"n": 1000,
+				"sum": 41764.0
+			},
+			"pipe": {
+				"max": 27.0,
+				"n": 1000,
+				"sum": 20889.0
+			},
+			"pistol": {
+				"max": 24.3,
+				"n": 1000,
+				"sum": 18711.9
+			},
+			"rifle": {
+				"max": 37.8,
+				"n": 1000,
+				"sum": 29107.3999999999
+			},
+			"shotgun": {
+				"max": 54.0,
+				"n": 1000,
+				"sum": 41512.0
+			},
+			"uzi": {
+				"max": 9.45,
+				"n": 1000,
+				"sum": 7293.99999999998
+			}
+		},
+		"seed": 7,
+		"stats": {
+			"max": 56.0,
+			"mean": 24.3387363546545,
+			"min": 7.0,
+			"n": 11000,
+			"p50": 20.0,
+			"p95": 42.0
+		},
+		"win_counts": {
+			"baton": 1,
+			"cinder": 0,
+			"fists": 0,
+			"grenade": 371,
+			"knife": 406,
+			"launcher": 0,
+			"pipe": 0,
+			"pistol": 0,
+			"rifle": 0,
+			"shotgun": 0,
+			"uzi": 222
+		},
+		"win_leader": "knife",
+		"win_rate_max": 0.406
+	},
+	"schema": {
+		"reject_copied_table": true,
+		"reject_small_cap": true,
+		"source": "data/sim/balance.json + validate_payload reject-invalid",
+		"verdict": "pass"
+	},
+	"stamina": {
+		"after": 100.0,
+		"drain": 28.0,
+		"recover": 22.0,
+		"source": "balance.json stamina applied through Locomotion",
+		"verdict": "pass"
+	}
+}

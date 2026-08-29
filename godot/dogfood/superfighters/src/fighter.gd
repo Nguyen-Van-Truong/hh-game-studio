@@ -29,6 +29,10 @@ extends CharacterBody2D
 ## Pickup slot replace stays ledger:RL-ITEM-PICK-SLOT (assumption).
 ## Keep-gun stays ledger:RL-ITEM-KEEP-GUN (assumption).
 ## Ammo/reload stay ledger:RL-ITEM-AMMO-RELOAD (assumption).
+## Chaos crit/knock/spread stay ledger:RL-BAL-CRIT /
+## RL-BAL-KNOCK-JITTER / RL-BAL-SPREAD-RNG (assumption).
+## Damage caps stay ledger:RL-BAL-CAP (assumption).
+## Stamina stays ledger:RL-BAL-STAMINA (assumption).
 ## InputFrame `ledge` stays reserved. Y8 observation stays
 ## ledger:RL-MOVE-ROLL-DIVE (unavailable). Not a Y8 observation.
 
@@ -40,6 +44,7 @@ const _Aim: GDScript = preload("res://src/sim/aim.gd")
 const _Expl: GDScript = preload("res://src/sim/explosive.gd")
 const _Roster: GDScript = preload("res://src/data/weapons/roster.gd")
 const _Inv: GDScript = preload("res://src/data/weapons/inventory.gd")
+const _Bal: GDScript = preload("res://src/sim/balance.gd")
 
 var gravity: float = 1700.0
 var jump_vel: float = -430.0
@@ -220,6 +225,10 @@ var attack_recovery_entered: bool = false
 var attack_ended: bool = false
 var attack_missed: bool = false
 var hitstop_left: int = 0
+var damage_taken_tick: float = 0.0
+var last_crit: bool = false
+var last_incoming_raw: float = 0.0
+var last_applied_damage: float = 0.0
 
 
 func setup(p_slot: int, p_team: int, p_bot: bool) -> void:
@@ -1074,8 +1083,19 @@ func apply_knockdown(dir: Vector2) -> bool:
 
 
 func take_damage(amount: float, knock: Vector2) -> void:
+	last_incoming_raw = amount
+	last_applied_damage = 0.0
 	if dead or invuln_ticks > 0 or invuln > 0.0:
 		return
+	# Caps via Balance.clamp_hit / tick_room (preload; class_name cycle).
+	amount = _Bal.clamp_hit(amount)
+	amount = minf(amount, _Bal.tick_room(damage_taken_tick))
+	if amount <= 0.0:
+		return
+	if not _Bal.is_finite_number(amount):
+		return
+	last_applied_damage = amount
+	damage_taken_tick += amount
 	health -= amount
 	combat_timer = 3.0
 	apply_impulse(knock)

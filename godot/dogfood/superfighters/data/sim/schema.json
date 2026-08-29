@@ -71,7 +71,13 @@
     "item_roster": "RL-ITEM-ROSTER assumption, tuning values, not observed",
     "item_pick_slot": "RL-ITEM-PICK-SLOT assumption, not observed",
     "item_keep_gun": "RL-ITEM-KEEP-GUN assumption, not observed",
-    "item_ammo_reload": "RL-ITEM-AMMO-RELOAD assumption, not observed"
+    "item_ammo_reload": "RL-ITEM-AMMO-RELOAD assumption, not observed",
+    "balance_chaos": "RL-MODE-CHAOS assumption, not observed",
+    "balance_crit": "RL-BAL-CRIT assumption, not observed",
+    "balance_knock": "RL-BAL-KNOCK-JITTER assumption, not observed",
+    "balance_spread": "RL-BAL-SPREAD-RNG assumption, not observed",
+    "balance_cap": "RL-BAL-CAP assumption, not observed",
+    "balance_stamina": "RL-BAL-STAMINA assumption, not observed"
   },
   "combat": {
     "schema": "vf.sim.combat.v1",
@@ -93,5 +99,9 @@
   "locomotion": {
     "schema": "vf.sim.locomotion.v1",
     "path": "res://data/sim/locomotion.json"
+  },
+  "balance": {
+    "schema": "vf.sim.balance.v1",
+    "path": "res://data/sim/balance.json"
   }
 }

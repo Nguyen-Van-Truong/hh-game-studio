@@ -80,10 +80,15 @@ static func apply_to(fighter: Fighter) -> void:
 	fighter.coyote_time = f("coyote", 0.09)
 	fighter.jump_buf_time = f("jump_buf", 0.10)
 	fighter.tap_window = f("tap_window", 0.22)
-	fighter.stamina_sprint_drain = f("stamina_sprint_drain", 28.0)
-	fighter.stamina_recover = f("stamina_recover", 22.0)
-	fighter.stamina_roll_cost = f("stamina_roll_cost", 22.0)
-	fighter.stamina_dive_cost = f("stamina_dive_cost", 18.0)
+	var stam: Dictionary = {}
+	var bal: Dictionary = SimConstants.load_json(SimConstants.BALANCE_PATH)
+	var raw_stam: Variant = bal.get("stamina", {})
+	if raw_stam is Dictionary:
+		stam = raw_stam as Dictionary
+	fighter.stamina_sprint_drain = float(stam.get("sprint_drain", f("stamina_sprint_drain", 28.0)))
+	fighter.stamina_recover = float(stam.get("recover", f("stamina_recover", 22.0)))
+	fighter.stamina_roll_cost = float(stam.get("roll_cost", f("stamina_roll_cost", 22.0)))
+	fighter.stamina_dive_cost = float(stam.get("dive_cost", f("stamina_dive_cost", 18.0)))
 	fighter.roll_duration = f("roll_duration", 0.28)
 	fighter.roll_invuln = f("roll_invuln", 0.20)
 	fighter.roll_speed = f("roll_speed", 320.0)

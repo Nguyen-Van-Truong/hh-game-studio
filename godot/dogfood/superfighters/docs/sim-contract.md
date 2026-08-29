@@ -137,6 +137,16 @@ Four slots and the original roster live in
 Values are not claimed as original exact numbers. Official
 MATCH uses `apply_frames`. 60 Hz stays ledger:RL-SIM-FIXED-60.
 
+## Balance / chaos (VF3-WP6)
+
+Seed-controlled crit, knock jitter, spread jitter, damage caps,
+and stamina rationale live in `data/sim/balance.json`. They
+are product tuning (`ledger:RL-MODE-CHAOS`, `ledger:RL-BAL-CRIT`,
+`ledger:RL-BAL-KNOCK-JITTER`, `ledger:RL-BAL-SPREAD-RNG`,
+`ledger:RL-BAL-CAP`, `ledger:RL-BAL-STAMINA`, `assumption`),
+not Y8 play. Official MATCH uses `apply_frames`. 60 Hz stays
+ledger:RL-SIM-FIXED-60.
+
 ## Runtime observe (VF1-WP4)
 
 Agents read `RuntimeApi` (`docs/runtime-diagnostics.md`,

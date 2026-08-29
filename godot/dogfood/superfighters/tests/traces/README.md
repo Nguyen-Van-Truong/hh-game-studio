@@ -131,6 +131,21 @@ Roster / slots stay `assumption`. Clock stays
 | `roster_melee.json` | fists melee |
 | `roster_throw.json` | hold/release grenade |
 
+## balance/
+
+VF3-WP6 official InputFrame traces. Same schema as `official/`.
+Replay uses `apply_frames`. No teleport. No `step_fixed`.
+Chaos / crit / caps stay `assumption`. Clock stays
+`ledger:RL-SIM-FIXED-60`. Traces set `"chaos": true`.
+
+| File | Beat |
+|---|---|
+| `balance_melee.json` | Clinch Alley fists |
+| `balance_high.json` | Shelf Shot aim-down fire |
+| `balance_pit.json` | Gap Fall P2 pit death |
+| `balance_chain.json` | Twin Fuse two nades on `#` |
+| `balance_ff.json` | Cross Fire vs2 melee |
+
 ## fixture/
 
 May use `teleport` / `force_kill` for fast unit setup. Fixture evidence
