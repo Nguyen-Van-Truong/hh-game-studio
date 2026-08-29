@@ -101,6 +101,22 @@ Knock/down/invuln/disarm stay `assumption`. Clock stays
 | `reaction_drop.json` | drop persists; crouch pickup |
 | `reaction_chain.json` | punch during knockdown is blocked |
 
+## aim/
+
+VF3-WP3 official InputFrame traces. Same schema as `official/`.
+Replay uses `apply_frames`. No teleport. No `step_fixed`.
+Hold-to-aim / fire stay `assumption`. Clock stays
+`ledger:RL-SIM-FIXED-60`.
+
+| File | Beat |
+|---|---|
+| `aim_hold.json` | hold fire aims, no spawn |
+| `aim_up.json` | hold fire + jump aims up |
+| `aim_down.json` | hold fire + crouch aims down |
+| `fire_semi.json` | pistol release-to-fire |
+| `fire_edges.json` | fire pressed / held / released |
+| `fire_wall.json` | pistol shot stops at Cover Wall |
+
 ## fixture/
 
 May use `teleport` / `force_kill` for fast unit setup. Fixture evidence

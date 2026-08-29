@@ -103,6 +103,17 @@ tuning (`ledger:RL-HIT-KNOCK`, `ledger:RL-HIT-DOWN`,
 not Y8 play. Official MATCH uses `apply_frames`. Official death
 causes stay `damage` / `pit`. 60 Hz stays ledger:RL-SIM-FIXED-60.
 
+## Aim / fire (VF3-WP3)
+
+Hold-to-aim, aim dirs, semi release, auto cadence, muzzle, recoil,
+and swept ballistic collision live in `data/sim/aim.json`. They
+are product tuning (`ledger:RL-CTRL-HOLD-AIM`, `ledger:RL-AIM-DIRS`,
+`ledger:RL-FIRE-SEMI`, `ledger:RL-FIRE-AUTO`, `ledger:RL-FIRE-AMMO`,
+`ledger:RL-FIRE-MUZZLE`, `ledger:RL-FIRE-RECOIL`,
+`ledger:RL-FIRE-BALLISTIC`, `ledger:RL-FIRE-SWEEP`, `assumption`),
+not Y8 play. Hitscan is rejected. Official MATCH uses
+`apply_frames`. 60 Hz stays ledger:RL-SIM-FIXED-60.
+
 ## Runtime observe (VF1-WP4)
 
 Agents read `RuntimeApi` (`docs/runtime-diagnostics.md`,

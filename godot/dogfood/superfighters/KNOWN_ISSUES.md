@@ -79,5 +79,21 @@ First playable slice. Not G6. Not 60/60.
   reuses the crouch clip (no new art this WP). Official death
   cause is `damage` or `pit` only. Invuln whiffs do not consume the
   melee window. Crouch-pickup takes the nearest drop. The vs1 LOOP
-  smoke in `tests/run_all.gd` glues P1 and fires only so aerial
-  kick + knockdown invuln does not stall last-standing. No new Y8 play.
+  smoke in `tests/run_all.gd` pins P1 and the living foe at the
+  map spawn (after flushing the prior session TileMap) and uses
+  pistol release plus melee so leftover geometry / pit does not
+  stall last-standing. No new Y8 play.
+- VF3-WP3 ships hold-to-aim, up/down/side aim, release-to-fire
+  semi, auto cadence, muzzle, recoil/spread, and swept ballistic
+  collision as assumption (`ledger:RL-CTRL-HOLD-AIM`,
+  `ledger:RL-AIM-DIRS`, `ledger:RL-FIRE-SEMI`,
+  `ledger:RL-FIRE-AUTO`, `ledger:RL-FIRE-AMMO`,
+  `ledger:RL-FIRE-MUZZLE`, `ledger:RL-FIRE-RECOIL`,
+  `ledger:RL-FIRE-BALLISTIC`, `ledger:RL-FIRE-SWEEP`). Official
+  proof is InputFrame `apply_frames` plus live InputEvent inject.
+  Guns are ballistic, not hitscan. Sweep uncollides a muzzle that
+  clips the stand-on floor tile so live-map shots are not spent at
+  t=0; high-speed first entry into cover still blocks. Hold-to-aim
+  is **not** promoted
+  to `observed`. Y8 roll/dive observation stays
+  `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). No new Y8 play.

@@ -1,0 +1,164 @@
+{
+	"ammo": {
+		"ammo": 0,
+		"shots": 0,
+		"source": "apply_frames hold+release with ammo=0",
+		"spawns": 0,
+		"verdict": "pass"
+	},
+	"apply": {
+		"attempted": 508,
+		"succeeded": 508,
+		"used_action_press": 0,
+		"used_apply_frames": 508,
+		"used_parse_input_event": 1,
+		"used_step_fixed": 0
+	},
+	"auto": {
+		"cadence_ticks": 5,
+		"hold_ticks": 26,
+		"pistol_shots": 0,
+		"source": "apply_frames hold fire uzi vs pistol",
+		"uzi_shots": 5,
+		"verdict": "pass"
+	},
+	"data": {
+		"diffs": [
+			"auto",
+			"cadence_ticks",
+			"damage",
+			"pellets",
+			"spread",
+			"speed",
+			"recoil",
+			"ammo",
+			"muzzle_forward",
+			"muzzle_lift"
+		],
+		"hitscan": false,
+		"pistol_cadence": 23,
+		"pistol_recoil": 24.0,
+		"shotgun_cadence": 42,
+		"shotgun_recoil": 56.0,
+		"source": "aim.json pistol/uzi/shotgun distinct data",
+		"uzi_cadence": 5,
+		"uzi_recoil": 10.0,
+		"verdict": "pass"
+	},
+	"dirs": {
+		"down": true,
+		"down_y": 1.0,
+		"side": true,
+		"side_y": 0.0,
+		"source": "apply_frames hold fire with jump/crouch/none",
+		"up": true,
+		"up_y": -1.0,
+		"verdict": "pass"
+	},
+	"hold": {
+		"aim_y": 0.0,
+		"aiming": true,
+		"pose": "aim_side",
+		"source": "apply_frames hold fire, no release",
+		"spawns": 0,
+		"verdict": "pass"
+	},
+	"live": {
+		"held_aiming": true,
+		"shots": 1,
+		"source": "parse_input_event KEY_M + step_from_live_input",
+		"verdict": "pass"
+	},
+	"muzzle": {
+		"dir_y": -1.0,
+		"expected_x": 56.0,
+		"expected_y": 17.9991302490234,
+		"muzzle_x": 56.0,
+		"muzzle_y": 17.9991302490234,
+		"source": "hold up, release fire; last_aim_dir kept",
+		"spawn_ok": true,
+		"verdict": "pass"
+	},
+	"recoil": {
+		"pellets": 5,
+		"recoil": 24.0,
+		"source": "pistol recoil impulse; shotgun pellet fan",
+		"verdict": "pass",
+		"vx0": 0.0,
+		"vx1": -56.0
+	},
+	"replay": {
+		"pair_count": 6,
+		"pairs": [
+			{
+				"hash_a": "68caf4b5ee8f5b6e6983dd1dd57fc65d225eef7b5bbc5cac1b637423f262118c",
+				"hash_b": "68caf4b5ee8f5b6e6983dd1dd57fc65d225eef7b5bbc5cac1b637423f262118c",
+				"hash_match": true,
+				"name": "aim_down",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "7d96f23c3915c8a3f7b588bb2c477e7448b67c812517163324ba2a168b9d255c",
+				"hash_b": "7d96f23c3915c8a3f7b588bb2c477e7448b67c812517163324ba2a168b9d255c",
+				"hash_match": true,
+				"name": "aim_hold",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "77eba36aee7c780f13014c3a42153907b439124b09c5dc75f79cf29d6128fb0b",
+				"hash_b": "77eba36aee7c780f13014c3a42153907b439124b09c5dc75f79cf29d6128fb0b",
+				"hash_match": true,
+				"name": "aim_up",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "ecb4caee8f3aa2925a575378dc05e424423e0b6287f3b72bc92a10aee3060a71",
+				"hash_b": "ecb4caee8f3aa2925a575378dc05e424423e0b6287f3b72bc92a10aee3060a71",
+				"hash_match": true,
+				"name": "fire_edges",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "c323d27210e10265d4a80f33ea421c287132743824d39ff2f2a1dca2b127be91",
+				"hash_b": "c323d27210e10265d4a80f33ea421c287132743824d39ff2f2a1dca2b127be91",
+				"hash_match": true,
+				"name": "fire_semi",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "d250f64eec66a546bc4ddd8ad725272e6c2ee9a9d13e0d2eaa616e322e01ea1a",
+				"hash_b": "d250f64eec66a546bc4ddd8ad725272e6c2ee9a9d13e0d2eaa616e322e01ea1a",
+				"hash_match": true,
+				"name": "fire_wall",
+				"ok_a": true,
+				"ok_b": true
+			}
+		],
+		"source": "SimReplay.final_hash twice",
+		"verdict": "match"
+	},
+	"semi": {
+		"after": 1,
+		"ammo0": 12,
+		"ammo1": 11,
+		"during": 0,
+		"shots": 1,
+		"source": "apply_frames hold then released fire",
+		"verdict": "pass"
+	},
+	"sweep": {
+		"hp0": 100.0,
+		"hp1": 100.0,
+		"map_id": "fx_aim_wall",
+		"past_wall": 0,
+		"source": "4000 px/s ballistic sweep vs Cover Wall",
+		"speed": 4000.0,
+		"verdict": "pass",
+		"wall_solid": true
+	}
+}

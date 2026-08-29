@@ -3,6 +3,7 @@ extends Node2D
 
 const _Traversal: GDScript = preload("res://src/sim/traversal.gd")
 const _Combat: GDScript = preload("res://src/sim/combat.gd")
+const _Aim: GDScript = preload("res://src/sim/aim.gd")
 
 signal won
 signal lost
@@ -326,6 +327,7 @@ func replace_bullets(rows: Array) -> void:
 		)
 		add_child(shot)
 		shot.global_position = at
+		shot.last_pos = at
 		shot.velocity = vel
 		if row.has("life"):
 			shot.life = SimConstants.dequantize(int(row.get("life", 0)))
@@ -700,20 +702,29 @@ func _do_fire(f: Fighter) -> void:
 	var spec: Dictionary = WeaponDefs.data(f.gun_id)
 	if str(spec.get("kind", "")) != "gun" or f.ammo <= 0:
 		return
-	f.fire_cd = float(spec.get("cooldown", 0.4))
-	var pellets: int = int(spec.get("pellets", 1))
-	var spread: float = float(spec.get("spread", 0.0))
-	var speed: float = float(spec.get("speed", 520.0))
-	var dmg: float = float(spec.get("damage", 10.0))
+	var cadence: int = _Aim.cadence_ticks(f.gun_id)
+	f.fire_cd = float(cadence) * SimConstants.TICK_DT
+	var pellets: int = _Aim.pellets(f.gun_id)
+	var spread: float = _Aim.spread(f.gun_id)
+	var speed: float = _Aim.speed(f.gun_id)
+	var dmg: float = _Aim.damage(f.gun_id)
 	var base: Vector2 = f.aim_dir
 	if base == Vector2.ZERO:
 		base = Vector2(f.facing, 0.0)
+	base = base.normalized()
+	var posed: Vector2 = _Aim.muzzle_origin(f)
+	var muzzle: Vector2 = _uncollide_point(posed, base)
+	f.last_muzzle = posed
+	f.last_fire_dir = base
+	f.last_fire_gun = f.gun_id
+	f.shots_fired += 1
+	var recoil: float = _Aim.recoil_of(f.gun_id)
+	if recoil > 0.0:
+		f.velocity += -base * recoil
 	var p: int = 0
 	while p < pellets:
-		var ang: float = (float(p) - float(pellets - 1) * 0.5) * spread
-		var dir: Vector2 = base.rotated(ang)
+		var dir: Vector2 = _Aim.pellet_dir(base, p, pellets, spread)
 		var shot: Bullet = Bullet.new()
-		var muzzle: Vector2 = f.global_position + dir * 14.0 + Vector2(0, -4)
 		shot.setup(muzzle, dir, speed, dmg, f.slot, f.team)
 		add_child(shot)
 		bullets.append(shot)
@@ -724,13 +735,19 @@ func _do_fire(f: Fighter) -> void:
 		"gun": f.gun_id,
 		"ammo": f.ammo,
 		"pellets": pellets,
+		"mode": _Aim.fire_mode(f.gun_id),
+		"dir_x": SimConstants.quantize(base.x),
+		"dir_y": SimConstants.quantize(base.y),
+		"muzzle_x": SimConstants.quantize(muzzle.x),
+		"muzzle_y": SimConstants.quantize(muzzle.y),
+		"recoil": SimConstants.quantize(recoil),
 	})
 	if sfx != null:
 		if f.gun_id == "shotgun":
 			sfx.play("shotgun")
 		else:
 			sfx.play("shoot")
-	_muzzle(f.global_position + base * 14.0)
+	_muzzle(muzzle)
 
 
 func _do_grenade(f: Fighter) -> void:
@@ -772,44 +789,139 @@ func _step_bullets(delta: float) -> void:
 				shot.queue_free()
 			bullets.remove_at(i)
 			continue
-		shot.step(delta)
-		if _bullet_blocked(shot) or _bullet_hit_fighter(shot):
+		var from: Vector2 = shot.global_position
+		var to: Vector2 = shot.predicted_pos(delta)
+		var sweep: Dictionary = _sweep_bullet(shot, from, to)
+		var kind: String = str(sweep.get("kind", ""))
+		if kind == "world" or kind == "fighter":
+			shot.commit_step(sweep.get("point", from) as Vector2, delta)
 			shot.spent = true
+			if kind == "fighter":
+				_apply_bullet_hit(shot, sweep.get("fighter") as Fighter)
+			shot.queue_free()
+			bullets.remove_at(i)
+			continue
+		shot.commit_step(to, delta)
+		if shot.spent:
 			shot.queue_free()
 			bullets.remove_at(i)
 			continue
 		i += 1
 
 
-func _bullet_blocked(shot: Bullet) -> bool:
+func _sweep_bullet(shot: Bullet, from: Vector2, to: Vector2) -> Dictionary:
+	var best: Dictionary = {"kind": "", "t": 2.0, "point": to, "fighter": null}
+	var travel: float = from.distance_to(to)
+	if travel <= SimConstants.EPSILON:
+		return best
 	var space: PhysicsDirectSpaceState2D = get_world_2d().direct_space_state
-	if space == null:
-		return false
-	var query: PhysicsRayQueryParameters2D = PhysicsRayQueryParameters2D.create(
-		shot.global_position, shot.global_position + shot.velocity.normalized() * 4.0
-	)
-	query.collision_mask = Maps.COL_WORLD | Maps.COL_PROP
-	var hit: Dictionary = space.intersect_ray(query)
-	return not hit.is_empty()
-
-
-func _bullet_hit_fighter(shot: Bullet) -> bool:
+	if space != null:
+		var query: PhysicsRayQueryParameters2D = PhysicsRayQueryParameters2D.create(from, to)
+		query.collision_mask = Maps.COL_WORLD | Maps.COL_PROP
+		query.collide_with_bodies = true
+		query.collide_with_areas = true
+		query.hit_from_inside = false
+		query.exclude = [shot.get_rid()]
+		var hit: Dictionary = space.intersect_ray(query)
+		if not hit.is_empty():
+			var at: Vector2 = hit.get("position", to) as Vector2
+			var t_wall: float = from.distance_to(at) / travel
+			best = {"kind": "world", "t": t_wall, "point": at, "fighter": null}
+	var grid_hit: Dictionary = _grid_block_t(from, to)
+	if str(grid_hit.get("kind", "")) == "world" and float(grid_hit.get("t", 2.0)) < float(best.get("t", 2.0)):
+		best = grid_hit
 	var i: int = 0
 	while i < fighters.size():
 		var f: Fighter = fighters[i]
 		i += 1
-		if f.dead or f.slot == shot.owner_slot:
+		if f == null or f.dead or f.slot == shot.owner_slot:
 			continue
-		if f.global_position.distance_to(shot.global_position) <= 10.0:
-			if f.invuln_ticks > 0 or f.invuln > 0.0:
-				return true
-			f.take_damage(shot.damage, shot.velocity.normalized() * 70.0 + Vector2(0, -30))
-			_log_death_if_new(f)
-			_splat(f.global_position)
-			if sfx != null:
-				sfx.play("hit")
-			return true
-	return false
+		var t_f: float = _segment_fighter_t(from, to, f)
+		if t_f < 0.0:
+			continue
+		if t_f < float(best.get("t", 2.0)):
+			var at_f: Vector2 = from.lerp(to, t_f)
+			best = {"kind": "fighter", "t": t_f, "point": at_f, "fighter": f}
+	return best
+
+
+func _uncollide_point(from: Vector2, dir: Vector2) -> Vector2:
+	# Muzzle pose can clip the floor tile the shooter stands on.
+	# Lift, then step back along -aim, so spawn-overlap is not a
+	# world hit. High-speed entry into a new solid still counts.
+	var at: Vector2 = from
+	var n: int = 0
+	while n < 12 and Maps.solid_at(map_id, at):
+		at.y -= 1.0
+		n += 1
+	if not Maps.solid_at(map_id, at):
+		return at
+	var back: Vector2 = -dir
+	if back == Vector2.ZERO:
+		back = Vector2.UP
+	back = back.normalized()
+	at = from
+	n = 0
+	while n < 16 and Maps.solid_at(map_id, at):
+		at += back
+		n += 1
+	return at
+
+
+func _grid_block_t(from: Vector2, to: Vector2) -> Dictionary:
+	var delta: Vector2 = to - from
+	var dist: float = delta.length()
+	if dist <= SimConstants.EPSILON:
+		return {"kind": "", "t": 2.0, "point": to, "fighter": null}
+	var step: float = 2.0 / dist
+	var t: float = 0.0
+	var prev_solid: bool = Maps.solid_at(map_id, from)
+	while t <= 1.0001:
+		var at: Vector2 = from.lerp(to, clampf(t, 0.0, 1.0))
+		var now_solid: bool = Maps.solid_at(map_id, at)
+		if now_solid and not prev_solid:
+			return {"kind": "world", "t": clampf(t, 0.0, 1.0), "point": at, "fighter": null}
+		prev_solid = now_solid
+		t += step
+	return {"kind": "", "t": 2.0, "point": to, "fighter": null}
+
+
+func _segment_fighter_t(from: Vector2, to: Vector2, f: Fighter) -> float:
+	var target: Vector2 = f.global_position
+	var delta: Vector2 = to - from
+	var len2: float = delta.length_squared()
+	var t: float = 0.0
+	if len2 > SimConstants.EPSILON:
+		t = clampf((target - from).dot(delta) / len2, 0.0, 1.0)
+	var closest: Vector2 = from.lerp(to, t)
+	if closest.distance_to(target) > 10.0:
+		return -1.0
+	return t
+
+
+func _apply_bullet_hit(shot: Bullet, f: Fighter) -> void:
+	if f == null or f.dead:
+		return
+	if f.invuln_ticks > 0 or f.invuln > 0.0:
+		return
+	f.take_damage(shot.damage, shot.velocity.normalized() * 70.0 + Vector2(0, -30))
+	_log_death_if_new(f)
+	_splat(f.global_position)
+	if sfx != null:
+		sfx.play("hit")
+
+
+func _bullet_blocked(shot: Bullet) -> bool:
+	var sweep: Dictionary = _sweep_bullet(shot, shot.last_pos, shot.global_position)
+	return str(sweep.get("kind", "")) == "world"
+
+
+func _bullet_hit_fighter(shot: Bullet) -> bool:
+	var sweep: Dictionary = _sweep_bullet(shot, shot.last_pos, shot.global_position)
+	if str(sweep.get("kind", "")) != "fighter":
+		return false
+	_apply_bullet_hit(shot, sweep.get("fighter") as Fighter)
+	return true
 
 
 func _step_grenades(delta: float) -> void:

@@ -48,11 +48,23 @@
     "melee_phases": "RL-HIT-PHASES assumption, not observed",
     "hitbox": "RL-HIT-BOX assumption, not observed",
     "friendly_fire": "RL-HIT-FF assumption, not observed",
-    "hitstop": "RL-HIT-HITSTOP assumption, presentation only, clock still advances"
+    "hitstop": "RL-HIT-HITSTOP assumption, presentation only, clock still advances",
+    "aim_dirs": "RL-AIM-DIRS assumption, not observed",
+    "fire_semi": "RL-FIRE-SEMI assumption, not observed",
+    "fire_auto": "RL-FIRE-AUTO assumption, not observed",
+    "fire_ammo": "RL-FIRE-AMMO assumption, not observed",
+    "fire_muzzle": "RL-FIRE-MUZZLE assumption, not observed",
+    "fire_recoil": "RL-FIRE-RECOIL assumption, not observed",
+    "fire_ballistic": "RL-FIRE-BALLISTIC assumption, ballistic not hitscan",
+    "fire_sweep": "RL-FIRE-SWEEP assumption, not observed"
   },
   "combat": {
     "schema": "vf.sim.combat.v1",
     "path": "res://data/sim/combat.json"
+  },
+  "aim": {
+    "schema": "vf.sim.aim.v1",
+    "path": "res://data/sim/aim.json"
   },
   "locomotion": {
     "schema": "vf.sim.locomotion.v1",

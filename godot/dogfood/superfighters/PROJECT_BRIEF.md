@@ -39,6 +39,8 @@ https://mythologicinteractive.com/Superfighters
   (`ledger:RL-MOVE-LADDER` / `ledger:RL-MOVE-LEDGE` /
   `ledger:RL-MOVE-DROP`, `assumption`)
 - Hold-to-aim, aim with up/down, release to shoot
+  (`ledger:RL-CTRL-HOLD-AIM` / `ledger:RL-AIM-DIRS` /
+  `ledger:RL-FIRE-SEMI`, `assumption`)
 - Three slots: melee + gun + grenades. Start fists + pistol×12 + 3 nades
 - Melee uses startup / active / recovery and AABB overlap
   (`ledger:RL-HIT-PHASES` / `ledger:RL-HIT-BOX`, `assumption`)
@@ -106,8 +108,11 @@ platform. They are not ripped collision maps.
   West melee, RT/Y fire, LB grenade, Start pause
 - **gamepad P2 (device 1):** same layout; must not share P1's device
 - **remap:** title/pause Controls UI; atomic temp+rename save
-- **hold-to-aim:** first-playable assumption (`ledger:RL-CTRL-HOLD-AIM`),
-  not an observed listing behavior
+- **hold-to-aim:** VF3-WP3 product contract
+  (`ledger:RL-CTRL-HOLD-AIM`), still `assumption`, not an observed
+  listing behavior. Semi/auto/muzzle/recoil/sweep cite
+  `ledger:RL-FIRE-*` (`assumption`). Guns are ballistic, not
+  hitscan (`ledger:RL-FIRE-BALLISTIC`).
 
 ## platform
 

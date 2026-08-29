@@ -457,3 +457,42 @@ Official proof uses `apply_frames` plus live InputEvent inject.
 | RL-HIT-DOWN | Knockdown then get-up | `assumption` | none | VF3-WP2 product contract; **not** observed on Y8 this session | 2026-08-29 | Kick/dive enter knockdown; then getup; chain-lock blocks refresh | 18 + 10 ticks | Not observed. |
 | RL-HIT-INVULN | Exact-tick hit invuln | `assumption` | none | VF3-WP2 product contract; **not** observed on Y8 this session | 2026-08-29 | Punch 5 ticks; knockdown covers down+getup; then damage lands | 5 / 28 ticks | Not infinite. Not observed. |
 | RL-HIT-DISARM | Punch disarms a gun | `assumption` | none | VF3-WP2 product contract; **not** observed on Y8 this session | 2026-08-29 | Melee/crouch punch vs gun-holder drops one uid; pickup consumes it | punch only | Kick does not disarm. Not observed. |
+
+---
+
+## VF3-WP3 aim model and fire/release (not a play observation)
+
+Dated 2026-08-29 Asia/Saigon. No in-game Y8 play. No HTML5/Flash
+package. Sidecar: `docs/aim.md` and
+`docs/evidence/VF3WP3-20260829-ASIA-SAIGON-01/`.
+
+Hold-to-aim stays `ledger:RL-CTRL-HOLD-AIM` (`assumption`). Aim
+dirs stay `ledger:RL-AIM-DIRS` (`assumption`). Semi release stays
+`ledger:RL-FIRE-SEMI` (`assumption`). Auto cadence stays
+`ledger:RL-FIRE-AUTO` (`assumption`). Empty ammo stays
+`ledger:RL-FIRE-AMMO` (`assumption`). Muzzle stays
+`ledger:RL-FIRE-MUZZLE` (`assumption`). Recoil/spread stay
+`ledger:RL-FIRE-RECOIL` (`assumption`). Ballistic-not-hitscan stays
+`ledger:RL-FIRE-BALLISTIC` (`assumption`). Swept collision stays
+`ledger:RL-FIRE-SWEEP` (`assumption`). None of these rows is
+promoted to `observed`. Y8 observation stays
+`ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). 60 Hz stays
+`ledger:RL-SIM-FIXED-60` (`assumption`).
+
+Product contract: hold fire aims; pistol/shotgun fire on release;
+Uzi fires on cadence while held; 0 ammo does not fire; muzzle and
+recoil are data-driven; all three guns are ballistic projectiles
+with swept collision. Official proof uses `apply_frames` plus live
+InputEvent inject. Fixtures are temporary collision maps, not a VF5
+pass.
+
+| ID | Topic | Class | Conf. | Source | When | Behavior to reproduce | Tuning-only | Notes |
+|---|---|---|---|---|---|---|---|---|
+| RL-AIM-DIRS | Up / down / side aim | `assumption` | none | VF3-WP3 product contract; **not** observed on Y8 this session | 2026-08-29 | Hold fire + jump/crouch/none sets aim_up/aim_down/aim_side | cone | Not Y8 parity. Do not mark observed. |
+| RL-FIRE-SEMI | Release-to-fire semi | `assumption` | none | VF3-WP3 product contract; **not** observed on Y8 this session | 2026-08-29 | Hold pistol does not spawn; release spawns one | cadence 23 | Keep last_aim_dir on the release tick. |
+| RL-FIRE-AUTO | Hold cadence auto | `assumption` | none | VF3-WP3 product contract; **not** observed on Y8 this session | 2026-08-29 | Held Uzi fires every cadence tick | 5 ticks | Not observed. |
+| RL-FIRE-AMMO | 0 ammo no fire | `assumption` | none | VF3-WP3 product contract; **not** observed on Y8 this session | 2026-08-29 | Empty gun hold/release spawns nothing | start 12/24/6 | Not observed. |
+| RL-FIRE-MUZZLE | Data muzzle origin | `assumption` | none | VF3-WP3 product contract; **not** observed on Y8 this session | 2026-08-29 | Shot starts at aim * forward + lift | 14/-4 pistol | Per-gun data. Not observed. |
+| RL-FIRE-RECOIL | Recoil and spread | `assumption` | none | VF3-WP3 product contract; **not** observed on Y8 this session | 2026-08-29 | Fire kicks opposite aim; shotgun fans pellets | 24 / 10 / 56 | Deterministic fan; no RNG. |
+| RL-FIRE-BALLISTIC | Ballistic, not hitscan | `assumption` | none | VF3-WP3 product decision; **not** observed on Y8 this session | 2026-08-29 | Pistol/Uzi/Shotgun spawn traveling bullets | speeds 560/580/500 | Hitscan rejected. Not observed. |
+| RL-FIRE-SWEEP | Continuous bullet collision | `assumption` | none | VF3-WP3 product contract; **not** observed on Y8 this session | 2026-08-29 | Segment from last_pos to predicted hits wall first | 4000 px/s proof | No 4px probe. Not observed. |

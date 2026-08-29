@@ -7,10 +7,12 @@ var owner_slot: int = -1
 var owner_team: int = -1
 var life: float = 0.9
 var spent: bool = false
+var last_pos: Vector2 = Vector2.ZERO
 
 
 func setup(at: Vector2, dir: Vector2, speed: float, dmg: float, slot: int, team: int) -> void:
 	global_position = at
+	last_pos = at
 	velocity = dir.normalized() * speed
 	damage = dmg
 	owner_slot = slot
@@ -35,10 +37,21 @@ func setup(at: Vector2, dir: Vector2, speed: float, dmg: float, slot: int, team:
 	rotation = velocity.angle()
 
 
-func step(delta: float) -> void:
+func predicted_pos(delta: float) -> Vector2:
+	return global_position + velocity * delta
+
+
+func commit_step(at: Vector2, delta: float) -> void:
 	if spent:
 		return
-	global_position += velocity * delta
+	last_pos = global_position
+	global_position = at
 	life -= delta
 	if life <= 0.0:
 		spent = true
+
+
+func step(delta: float) -> void:
+	if spent:
+		return
+	commit_step(predicted_pos(delta), delta)

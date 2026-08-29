@@ -21,9 +21,11 @@ const ATLAS_HAZARD: Vector2i = Vector2i(6, 0)
 const ATLAS_WALL: Vector2i = Vector2i(7, 0)
 const TRAVERSAL_PATH: String = "res://data/sim/traversal.json"
 const COMBAT_PATH: String = "res://data/sim/combat.json"
+const AIM_PATH: String = "res://data/sim/aim.json"
 
 static var _trav_cache: Dictionary = {}
 static var _combat_cache: Dictionary = {}
+static var _aim_cache: Dictionary = {}
 
 
 static func _trav() -> Dictionary:
@@ -38,14 +40,26 @@ static func _combat() -> Dictionary:
 	return _combat_cache
 
 
+static func _aim() -> Dictionary:
+	if _aim_cache.is_empty():
+		_aim_cache = SimConstants.load_json(AIM_PATH)
+	return _aim_cache
+
+
 static func has_fixture(map_id: String) -> bool:
-	return _fixture_dict(_trav()).has(map_id) or _fixture_dict(_combat()).has(map_id)
+	return (
+		_fixture_dict(_trav()).has(map_id)
+		or _fixture_dict(_combat()).has(map_id)
+		or _fixture_dict(_aim()).has(map_id)
+	)
 
 
 static func fixture_grid(map_id: String) -> PackedStringArray:
 	var out: PackedStringArray = _grid_from(_trav(), map_id)
 	if out.is_empty():
 		out = _grid_from(_combat(), map_id)
+	if out.is_empty():
+		out = _grid_from(_aim(), map_id)
 	return out
 
 
@@ -54,6 +68,9 @@ static func fixture_name(map_id: String) -> String:
 	if names.has(map_id):
 		return str(names.get(map_id, map_id))
 	names = _name_dict(_combat())
+	if names.has(map_id):
+		return str(names.get(map_id, map_id))
+	names = _name_dict(_aim())
 	if names.has(map_id):
 		return str(names.get(map_id, map_id))
 	return map_id
@@ -260,6 +277,18 @@ static func atlas_for(map_id: String, ch: String) -> Vector2i:
 
 static func is_solid(ch: String) -> bool:
 	return ch == "#" or ch == "c" or ch == "b"
+
+
+static func solid_at(map_id: String, world_pos: Vector2) -> bool:
+	var rows: PackedStringArray = grid(map_id)
+	var cx: int = int(floor(world_pos.x / float(TILE)))
+	var cy: int = int(floor(world_pos.y / float(TILE)))
+	if cy < 0 or cy >= rows.size():
+		return false
+	var row: String = String(rows[cy])
+	if cx < 0 or cx >= row.length():
+		return false
+	return is_solid(row.substr(cx, 1))
 
 
 static func is_platform(ch: String) -> bool:

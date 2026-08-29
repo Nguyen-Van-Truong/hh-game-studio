@@ -19,6 +19,10 @@ extends CharacterBody2D
 ## Knockdown/getup stay ledger:RL-HIT-DOWN (assumption).
 ## Hit invuln stays ledger:RL-HIT-INVULN (assumption).
 ## Punch disarm stays ledger:RL-HIT-DISARM (assumption).
+## Hold-to-aim stays ledger:RL-CTRL-HOLD-AIM (assumption).
+## Aim dirs stay ledger:RL-AIM-DIRS (assumption).
+## Semi release stays ledger:RL-FIRE-SEMI (assumption).
+## Auto cadence stays ledger:RL-FIRE-AUTO (assumption).
 ## InputFrame `ledge` stays reserved. Y8 observation stays
 ## ledger:RL-MOVE-ROLL-DIVE (unavailable). Not a Y8 observation.
 
@@ -26,6 +30,7 @@ const MAX_HP: float = 100.0
 const MAX_STAMINA: float = 100.0
 const _Traversal: GDScript = preload("res://src/sim/traversal.gd")
 const _Combat: GDScript = preload("res://src/sim/combat.gd")
+const _Aim: GDScript = preload("res://src/sim/aim.gd")
 
 var gravity: float = 1700.0
 var jump_vel: float = -430.0
@@ -77,6 +82,11 @@ var stamina: float = MAX_STAMINA
 var facing: float = 1.0
 var aiming: bool = false
 var aim_dir: Vector2 = Vector2.RIGHT
+var last_aim_dir: Vector2 = Vector2.RIGHT
+var last_muzzle: Vector2 = Vector2.ZERO
+var last_fire_dir: Vector2 = Vector2.ZERO
+var last_fire_gun: String = ""
+var shots_fired: int = 0
 var crouched: bool = false
 var on_ladder: bool = false
 var melee_id: String = "fists"
@@ -332,6 +342,7 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	if x != 0.0 and not rolling and not diving:
 		facing = x
 	var fire_held: bool = bool(cmd.get("fire_held", false))
+	var fire_released: bool = bool(cmd.get("fire_released", false))
 	var nade_held: bool = bool(cmd.get("grenade_held", false)) and grenades > 0
 	on_ladder = bool(cmd.get("on_ladder", false))
 	var snap_x: float = float(cmd.get("ladder_snap_x", global_position.x))
@@ -341,7 +352,7 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	var ledge: Dictionary = {}
 	if cmd.get("ledge") is Dictionary:
 		ledge = cmd.get("ledge") as Dictionary
-	aiming = (fire_held and _gun_ready()) or nade_held
+	_update_aim(cmd, fire_held, fire_released, nade_held)
 	var crouch_held: bool = bool(cmd.get("crouch", false))
 	var crouch_pressed: bool = bool(cmd.get("crouch_pressed", false))
 	var jump_cmd: bool = bool(cmd.get("jump", false))
@@ -466,10 +477,6 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 			velocity.y += gravity * delta
 		velocity.y = minf(velocity.y, max_fall_speed)
 		peak_fall_vy = maxf(peak_fall_vy, velocity.y)
-	if aiming:
-		aim_dir = _aim_from(cmd)
-	else:
-		aim_dir = Vector2(facing, 0.0)
 	var melee_pressed: bool = bool(cmd.get("melee", false)) or kick_pressed
 	if not rolling and not diving and not hanging and not climbing and not reaction_locked() and melee_pressed:
 		if crouched and on_floor_now:
@@ -484,7 +491,7 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	if not rolling and not diving and _gun_ready() and fire_cd <= 0.0:
 		if _is_auto() and fire_held:
 			want_fire = true
-		elif bool(cmd.get("fire_released", false)):
+		elif fire_released:
 			want_fire = true
 	if not rolling and not diving and bool(cmd.get("grenade_released", false)) and grenade_cd <= 0.0 and grenades > 0:
 		want_grenade = true
@@ -1149,7 +1156,28 @@ func _gun_ready() -> bool:
 
 
 func _is_auto() -> bool:
-	return bool(WeaponDefs.data(gun_id).get("auto", false))
+	return _Aim.is_auto(gun_id)
+
+
+func _update_aim(cmd: Dictionary, fire_held: bool, fire_released: bool, nade_held: bool) -> void:
+	var gun_ready: bool = _gun_ready()
+	if fire_held and gun_ready:
+		aiming = true
+		aim_dir = _aim_from(cmd)
+		last_aim_dir = aim_dir
+	elif fire_released and gun_ready:
+		aiming = true
+		if last_aim_dir != Vector2.ZERO:
+			aim_dir = last_aim_dir
+		else:
+			aim_dir = _aim_from(cmd)
+	elif nade_held:
+		aiming = true
+		aim_dir = _aim_from(cmd)
+		last_aim_dir = aim_dir
+	else:
+		aiming = false
+		aim_dir = Vector2(facing, 0.0)
 
 
 func _aim_from(cmd: Dictionary) -> Vector2:

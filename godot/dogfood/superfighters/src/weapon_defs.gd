@@ -1,8 +1,17 @@
 class_name WeaponDefs
 extends RefCounted
 
+## Gun fire numbers live in data/sim/aim.json (VF3-WP3).
+## Pistol / Uzi / Shotgun differ by data. Melee/nade stay here.
+## Hold-to-aim stays ledger:RL-CTRL-HOLD-AIM (assumption).
+
+const _Aim: GDScript = preload("res://src/sim/aim.gd")
+
 
 static func data(weapon_id: String) -> Dictionary:
+	var from_aim: Dictionary = _Aim.gun(weapon_id)
+	if not from_aim.is_empty():
+		return from_aim
 	if weapon_id == "pipe":
 		return {
 			"id": "pipe",
@@ -34,54 +43,6 @@ static func data(weapon_id: String) -> Dictionary:
 			"speed": 0.0,
 			"auto": false,
 			"icon": "res://assets/art/item_knife.png",
-		}
-	if weapon_id == "pistol":
-		return {
-			"id": "pistol",
-			"name": "Pistol",
-			"kind": "gun",
-			"slot": "gun",
-			"damage": 18.0,
-			"range": 0.0,
-			"cooldown": 0.38,
-			"ammo": 12,
-			"pellets": 1,
-			"spread": 0.03,
-			"speed": 560.0,
-			"auto": false,
-			"icon": "res://assets/art/item_pistol.png",
-		}
-	if weapon_id == "shotgun":
-		return {
-			"id": "shotgun",
-			"name": "Shotgun",
-			"kind": "gun",
-			"slot": "gun",
-			"damage": 8.0,
-			"range": 0.0,
-			"cooldown": 0.70,
-			"ammo": 6,
-			"pellets": 5,
-			"spread": 0.20,
-			"speed": 500.0,
-			"auto": false,
-			"icon": "res://assets/art/item_shotgun.png",
-		}
-	if weapon_id == "uzi":
-		return {
-			"id": "uzi",
-			"name": "Uzi",
-			"kind": "gun",
-			"slot": "gun",
-			"damage": 7.0,
-			"range": 0.0,
-			"cooldown": 0.09,
-			"ammo": 24,
-			"pellets": 1,
-			"spread": 0.08,
-			"speed": 580.0,
-			"auto": true,
-			"icon": "res://assets/art/item_uzi.png",
 		}
 	if weapon_id == "grenade":
 		return {

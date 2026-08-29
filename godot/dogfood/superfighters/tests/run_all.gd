@@ -6,6 +6,7 @@ const DiveCasesScript: GDScript = preload("res://tests/dive_cases.gd")
 const TraversalCasesScript: GDScript = preload("res://tests/traversal_cases.gd")
 const CombatCasesScript: GDScript = preload("res://tests/combat_cases.gd")
 const ReactionCasesScript: GDScript = preload("res://tests/reaction_cases.gd")
+const AimCasesScript: GDScript = preload("res://tests/aim_cases.gd")
 const _Combat: GDScript = preload("res://src/sim/combat.gd")
 
 var _fails: PackedStringArray = PackedStringArray()
@@ -24,6 +25,7 @@ var _dive: String = "unproven"
 var _trav: String = "unproven"
 var _melee: String = "unproven"
 var _react: String = "unproven"
+var _aim: String = "unproven"
 
 
 func _initialize() -> void:
@@ -54,6 +56,7 @@ func _boot() -> void:
 	await _test_traversal(app)
 	await _test_melee(app)
 	await _test_react(app)
+	await _test_aim(app)
 	if _fails.is_empty():
 		_no_err = "proven"
 	_emit()
@@ -154,6 +157,8 @@ func _test_vs_loop(app: App) -> void:
 	if p1.global_position.x <= start_x + 2.0:
 		_fail("LOOP P1 did not move right")
 	app.start_fight("vs1", "storage", 0)
+	await process_frame
+	await process_frame
 	session = app.session
 	_fight_until_p1_wins(session, 1200)
 	await process_frame
@@ -404,6 +409,8 @@ func _test_pit(app: App) -> void:
 
 func _test_stage_advance(app: App) -> void:
 	app.start_fight("stage", "rooftops", 0)
+	await process_frame
+	await process_frame
 	_fight_until_p1_wins(app.session, 900)
 	await process_frame
 	if app.session == null or app.session.map_id != "storage":
@@ -422,11 +429,10 @@ func _fight_until_p1_wins(session: GameSession, max_frames: int) -> void:
 			session.step_fixed(STEP, _idle_cmds(session))
 			frames += 1
 			continue
-		p1.global_position = Vector2(foe.global_position.x - 16.0, foe.global_position.y)
-		p1.velocity = Vector2.ZERO
-		foe.velocity = Vector2.ZERO
+		_place_duel(session, p1, foe)
 		p1.facing = 1.0
 		p1.aim_dir = Vector2.RIGHT
+		p1.last_aim_dir = Vector2.RIGHT
 		p1.gun_id = "pistol"
 		if p1.ammo < 4:
 			p1.ammo = 12
@@ -435,10 +441,25 @@ func _fight_until_p1_wins(session: GameSession, max_frames: int) -> void:
 		var cmds: Array[Dictionary] = _idle_cmds(session)
 		cmds[0]["fire_held"] = (frames % 16) < 10
 		cmds[0]["fire_released"] = (frames % 16) == 10
+		cmds[0]["melee"] = (frames % 8) == 0
 		session.step_fixed(STEP, cmds)
 		frames += 1
 	if session.outcome != "win":
 		_fail("LOOP live fight did not reach a damage/pit win in %d frames" % max_frames)
+
+
+func _place_duel(session: GameSession, p1: Fighter, foe: Fighter) -> void:
+	var base: Vector2 = Vector2(80.0, 80.0)
+	if session.arena != null and not session.arena.player_spawns.is_empty():
+		base = session.arena.player_spawns[0] + Vector2(0.0, -8.0)
+	var n: int = 0
+	while n < 8 and Maps.solid_at(session.map_id, base):
+		base.y -= 1.0
+		n += 1
+	p1.global_position = base
+	foe.global_position = base + Vector2(16.0, 0.0)
+	p1.velocity = Vector2.ZERO
+	foe.velocity = Vector2.ZERO
 
 
 func _first_living_foe(session: GameSession) -> Fighter:
@@ -825,6 +846,49 @@ func _test_react(app: App) -> void:
 		_react = "proven"
 
 
+func _test_aim(app: App) -> void:
+	var errors: PackedStringArray = await AimCasesScript.run_all(app)
+	var i: int = 0
+	while i < errors.size():
+		_fail("AIM %s" % String(errors[i]))
+		i += 1
+	var hold: String = str(AimCasesScript.outcome_hold.get("verdict", "unproven"))
+	var dirs: String = str(AimCasesScript.outcome_dirs.get("verdict", "unproven"))
+	var semi: String = str(AimCasesScript.outcome_semi.get("verdict", "unproven"))
+	var auto: String = str(AimCasesScript.outcome_auto.get("verdict", "unproven"))
+	var ammo: String = str(AimCasesScript.outcome_ammo.get("verdict", "unproven"))
+	var muzzle: String = str(AimCasesScript.outcome_muzzle.get("verdict", "unproven"))
+	var recoil: String = str(AimCasesScript.outcome_recoil.get("verdict", "unproven"))
+	var data: String = str(AimCasesScript.outcome_data.get("verdict", "unproven"))
+	var sweep: String = str(AimCasesScript.outcome_sweep.get("verdict", "unproven"))
+	var live: String = str(AimCasesScript.outcome_live.get("verdict", "unproven"))
+	var replay: String = str(AimCasesScript.outcome_replay.get("verdict", "unproven"))
+	if hold != "pass":
+		_fail("AIM HOLD outcome is %s" % hold)
+	if dirs != "pass":
+		_fail("AIM DIRS outcome is %s" % dirs)
+	if semi != "pass":
+		_fail("AIM SEMI outcome is %s" % semi)
+	if auto != "pass":
+		_fail("AIM AUTO outcome is %s" % auto)
+	if ammo != "pass":
+		_fail("AIM AMMO outcome is %s" % ammo)
+	if muzzle != "pass":
+		_fail("AIM MUZZLE outcome is %s" % muzzle)
+	if recoil != "pass":
+		_fail("AIM RECOIL outcome is %s" % recoil)
+	if data != "pass":
+		_fail("AIM DATA outcome is %s" % data)
+	if sweep != "pass":
+		_fail("AIM SWEEP outcome is %s" % sweep)
+	if live != "pass":
+		_fail("AIM LIVE outcome is %s" % live)
+	if replay != "match":
+		_fail("AIM REPLAY outcome is %s" % replay)
+	if _count_prefix("AIM ") == 0:
+		_aim = "proven"
+
+
 func _emit() -> void:
 	print("HH_VF_PATH title→fight→win/lose→restart")
 	print(
@@ -931,6 +995,25 @@ func _emit() -> void:
 			ReactionCasesScript.used_apply_frames_succeeded,
 			ReactionCasesScript.used_apply_frames_attempted,
 			_react,
+		]
+	)
+	print(
+		"HH_VF_AIM HOLD=%s DIRS=%s SEMI=%s AUTO=%s AMMO=%s MUZZLE=%s RECOIL=%s DATA=%s SWEEP=%s LIVE=%s REPLAY=%s APPLY=%d/%d status=%s"
+		% [
+			str(AimCasesScript.outcome_hold.get("verdict", "unproven")),
+			str(AimCasesScript.outcome_dirs.get("verdict", "unproven")),
+			str(AimCasesScript.outcome_semi.get("verdict", "unproven")),
+			str(AimCasesScript.outcome_auto.get("verdict", "unproven")),
+			str(AimCasesScript.outcome_ammo.get("verdict", "unproven")),
+			str(AimCasesScript.outcome_muzzle.get("verdict", "unproven")),
+			str(AimCasesScript.outcome_recoil.get("verdict", "unproven")),
+			str(AimCasesScript.outcome_data.get("verdict", "unproven")),
+			str(AimCasesScript.outcome_sweep.get("verdict", "unproven")),
+			str(AimCasesScript.outcome_live.get("verdict", "unproven")),
+			str(AimCasesScript.outcome_replay.get("verdict", "unproven")),
+			AimCasesScript.used_apply_frames_succeeded,
+			AimCasesScript.used_apply_frames_attempted,
+			_aim,
 		]
 	)
 	print(
