@@ -2,7 +2,7 @@ PLAN_SCOPE=godot/dogfood/superfighters
 PRODUCT_PLAN_AUTHORITY=1
 PARENT_PLATFORM_PLAN=zdocs/20-8-godot-agent-autopilot-plan.txt
 PARENT_PLATFORM_STATUS=OWNER_STOPPED_59_OF_60
-CURRENT_VALID_WP=VF3-WP6
+CURRENT_VALID_WP=VF4-WP1
 CORRECTION_GATE_VF2_WP2=CLEARED
 STATUS=ACTIVE
 PLAN_DATE=2026-08-29
@@ -22,7 +22,7 @@ một lần, tự làm, tự chạy, tự kiểm và tạo gói review; người
 | 0 | VF0 nền và routing | scope, provenance, test sạch, không lẫn plan | none | không | [x] 3/3 |
 | 1 | VF1 reference + contract | reference ledger, behavior spec, deterministic trace | VF0 | research/test | [x] 4/4 |
 | 2 | VF2 movement | chạy, nhảy, crouch, sprint, roll, dive, ladder, ledge | VF1 | input + physics | [x] 5/5 |
-| 3 | VF3 combat | melee/kick, hitbox, knockdown, disarm, aim/fire, grenade | VF2 | weapons + VFX | [ ] 5/6 |
+| 3 | VF3 combat | melee/kick, hitbox, knockdown, disarm, aim/fire, grenade | VF2 | weapons + VFX | [x] 6/6 |
 | 4 | VF4 world interaction | props, glass, barrels, containers, doors/elevators, hazards | VF2 | map fixtures | [ ] 0/5 |
 | 5 | VF5 map parity | 6 functional arenas; original geometry/names/art | VF3,VF4 | one map per agent lane | [ ] 0/6 |
 | 6 | VF6 modes + AI | VS, local 2P, Stage, Survival, competent bots | VF3,VF5 | mode/UI/AI | [ ] 0/5 |
@@ -30,7 +30,7 @@ một lần, tự làm, tự chạy, tự kiểm và tạo gói review; người
 | 8 | VF8 agent autonomy | brief→edit→play→observe→repair→checkpoint, no manual F6 | VF0..VF7 | host/bridge | [ ] 0/4 |
 | 9 | VF9 verification | trace replay, E2E, differential rubric, soak, leak proof | all above | QA | [ ] 0/5 |
 | 10 | VF10 package | Windows build, offline run, provenance/license, review bundle | VF9 | release | [ ] 0/3 |
-|   | **Tổng** | **50 WP nhỏ; chỉ coordinator tick sau DoD** |  |  | **17/50** |
+|   | **Tổng** | **50 WP nhỏ; chỉ coordinator tick sau DoD** |  |  | **18/50** |
 
 Gate nội bộ:
 
@@ -1273,7 +1273,7 @@ VF3-WP5 — Data-driven weapon roster và inventory slots                       
         Parent 20-8 unchanged: R9-WP4 [ ]; 59/60; G6 [ ].
       Commit: (this tick)
 
-VF3-WP6 — Critical/chaos tuning and combat balance harness                              [ ]
+VF3-WP6 — Critical/chaos tuning and combat balance harness                              [x]
   Phụ thuộc: VF3-WP1..5. Files: tuning resources, balance tests/report.
   Làm: seed-controlled random crit/knockback/spread, damage caps, stamina and
   recovery tuning; add scripted scenarios (close melee, high ground, pit,
@@ -1281,6 +1281,73 @@ VF3-WP6 — Critical/chaos tuning and combat balance harness                    
   Verify: 1000 seeded scenarios no NaN/infinite damage; distribution report,
   no weapon always dominates; all scenarios replayable; no copied stat table.
   DoD: combat feels chaotic yet bounded, with documented tuning rationale.
+  LOG:
+    LOG 2026-08-29 22:12 Asia/Saigon — agent=coordinator
+      Base: af03b69 seed-controlled combat chaos with bounded caps
+        on VF3-WP5 tick ebc9f82.
+      Files/leases: data/sim/balance.json, data/sim/schema.json,
+        data/sim/aim.json, src/sim/balance.gd,
+        src/sim/locomotion.gd, src/sim/sim_replay.gd,
+        src/sim/sim_constants.gd, src/fighter.gd,
+        src/game_session.gd, src/maps.gd,
+        tests/balance_cases.gd, tests/run_balance.gd,
+        tests/check_balance.py, tests/pack_balance_evidence.py,
+        tests/traces/balance/, tests/run_all.gd,
+        tests/traces/README.md, docs/balance.md,
+        docs/reference-ledger.md, docs/sim-contract.md,
+        KNOWN_ISSUES.md, PROJECT_BRIEF.md,
+        docs/evidence/VF3WP6-20260829-ASIA-SAIGON-03/
+        (V-A18 pack; official leftover-0; logs +
+        screens/balance_1280x720.png). First-pass
+        VF3WP6-20260829-ASIA-SAIGON-01 void (II TICK=no:
+        HIGH/CHAIN 0 dmg). Retry -02 void (II TICK=no:
+        poke + knife 0.761 / 5-of-5).
+      Verify: leftover-0; run VF3WP6-20260829-ASIA-SAIGON-03
+        source hash
+        9a42744a3b53c3e45c2b9bd5749dd3e640b1ba506bdf265bf26ae13a8d610526
+        SCHEMA/BATCH/DIST/DOM/MELEE/HIGH/OVERCAP/PIT/CHAIN/FF/
+        STAMINA/DATA/LIVE/REPLAY from structured outcomes;
+        APPLY 1052/1052; OVERCAP 90→56 fire path; HIGH 18;
+        CHAIN 40.92 / 2; DOM knife 0.406, 4 winners, 3
+        context_best
+        python godot/dogfood/superfighters/tests/check_balance.py
+          EXIT 0
+        godot --headless --path godot/dogfood/superfighters
+          --script res://tests/run_balance.gd EXIT 0
+        godot --path godot/dogfood/superfighters
+          --script res://tests/run_balance.gd EXIT 0
+        leftover Godot on product --path = 0
+        python tests/bootstrap/test_authoritative_plan.py EXIT 0
+        python tests/bootstrap/test_vault_fighters_plan.py EXIT 0
+          PASS: 50 unique VF WPs; no-skip; next=VF3-WP6 (pre-tick);
+          ticked=VF0-WP1,VF0-WP2,VF0-WP3,VF1-WP1,VF1-WP2,VF1-WP3,
+          VF1-WP4,VF2-WP1,VF2-WP2,VF2-WP3,VF2-WP4,VF2-WP5,VF3-WP1,
+          VF3-WP2,VF3-WP3,VF3-WP4,VF3-WP5;
+          parent 20-8 frozen 59/60 R9-WP4
+        post-tick expected next=VF4-WP1
+      Honesty:
+        60 Hz is V-A14 / ledger:RL-SIM-FIXED-60 assumption,
+        not observed Y8 clock. Hold-to-aim assumption.
+        1000-batch is formula rolls, not 1000 live matches.
+        Chaos / crit / caps / stamina stay assumption
+        (RL-BAL-*), not Y8 observed.
+        overcap_rifle is harness-only.
+        Y8 roll/dive observation stays
+        ledger:RL-MOVE-ROLL-DIVE unavailable.
+        First-pass packs -01 and -02 void. HH TICK=yes on
+        those packs is void.
+        Not Y8 parity. Not V0.
+      Critic: first II TICK=no on -01 (HIGH/CHAIN 0 dmg).
+        II TICK=no on -02 (poke + knife 0.761).
+        Retry -03 leftover-0. Retry critics TICK yes
+        (II ef133e44 leftover-0 hash 9a42744a… APPLY 1052/1052;
+        HH bb441011 leftover-0). HH on -01/-02 void for
+        closeout.
+      Gaps: residual nits OK: honesty only
+        (1000-batch formula rolls; assumption not Y8
+        observed). -01 and -02 void.
+        Parent 20-8 unchanged: R9-WP4 [ ]; 59/60; G6 [ ].
+      Commit: (this tick)
 
 ================================================================================
 9. WORK PACKAGE CHI TIẾT — VF4 WORLD INTERACTION VÀ HAZARDS
@@ -1787,7 +1854,7 @@ vào `KNOWN_ISSUES.md`; không đổi acceptance để làm cho pass.
 21. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Đọc `AGENTS.md`, sau đó đọc bảng đầu file này. WP đầu tiên chưa tick là **VF3-WP6**.
+Đọc `AGENTS.md`, sau đó đọc bảng đầu file này. WP đầu tiên chưa tick là **VF4-WP1**.
 
 Không làm R9-WP4/G6/GX; không mở Rust engine; không đụng Kho Bí Ẩn/Hoan Hao;
 không dùng Snake làm demo; không tải/rip Y8. Chỉ khi VF0-WP1 và VF0-WP2 đã có
@@ -2003,6 +2070,21 @@ dùng chỉ xem và review.
   Product 5e1c8c8. Gate remains CLEARED. Parent 20-8
   unchanged (R9-WP4 [ ], 59/60, G6 [ ]). VF3-WP5 ticked;
   CURRENT_VALID_WP=VF3-WP6; V0 not ticked. VF3-WP6 remains [ ].
+- COORDINATOR CLOSEOUT VF3-WP6 (2026-08-29 22:12 Asia/Saigon): leftover-0;
+  -01 II TICK=no (HIGH/CHAIN 0 dmg); -02 II TICK=no
+  (poke + knife 0.761); -03 leftover-0; critics II
+  ef133e44 + HH bb441011 TICK=yes; run
+  VF3WP6-20260829-ASIA-SAIGON-03; source
+  9a42744a3b53c3e45c2b9bd5749dd3e640b1ba506bdf265bf26ae13a8d610526;
+  APPLY 1052/1052; OVERCAP 90→56 fire path; DOM 0.406 /
+  3 contexts; 1000-batch is formula rolls; honesty
+  assumption not Y8 observed. Residual nits OK: honesty
+  only (RL-BAL-* / 60 Hz / hold-to-aim assumption, not
+  Y8 observed; Y8 roll/dive unavailable;
+  overcap_rifle harness-only).
+  Product af03b69. Gate remains CLEARED. Parent 20-8
+  unchanged (R9-WP4 [ ], 59/60, G6 [ ]). VF3-WP6 ticked;
+  CURRENT_VALID_WP=VF4-WP1; V0 not ticked. VF4-WP1 remains [ ].
 
 ================================================================================
 HẾT PLAN — 29-8-2026
