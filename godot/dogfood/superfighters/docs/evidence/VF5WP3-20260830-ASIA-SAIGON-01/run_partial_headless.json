@@ -1,0 +1,62 @@
+{
+	"command_id": "cmd.vf5-wp3.pallet-annex.1",
+	"display": "headless",
+	"ended_at": "2026-08-30T15:35:58+07:00",
+	"ended_unix": 1788078971.07,
+	"epsilon": 0.001,
+	"fail_count": 0,
+	"godot": {
+		"build": "official",
+		"hash": "a13da4feb8d8aefc283c3763d33a2f170a18d541",
+		"hex": 263937,
+		"major": 4,
+		"minor": 7,
+		"patch": 1,
+		"status": "stable",
+		"string": "4.7.1-stable (official)",
+		"timestamp": 0
+	},
+	"map_id": "storage",
+	"mode": "vs2",
+	"os_name": "Windows",
+	"outcomes": {
+		"BOT": "pass",
+		"CAMERA": "pass",
+		"CARGO": "pass",
+		"COVER": "pass",
+		"DOOR": "pass",
+		"LIVE": "pass",
+		"NAME": "pass",
+		"P1": "pass",
+		"P2": "pass",
+		"REPLAY": "match",
+		"SPAWN": "pass",
+		"USED_APPLY_ATTEMPTED": 2647,
+		"USED_APPLY_FRAMES": 2647,
+		"USED_APPLY_SUCCEEDED": 2647,
+		"WEAPON": "pass",
+		"ZONE": "pass"
+	},
+	"run_id": "VF5WP3-20260830-ASIA-SAIGON-01",
+	"schema": "vault-fighters.vf5-wp3.run.v1",
+	"screens": {
+		"live": {
+			"cargo": "",
+			"catwalk": "",
+			"cover": "",
+			"office": "",
+			"title": ""
+		},
+		"setup": ""
+	},
+	"seed": 13,
+	"started_at": "2026-08-30T15:34:47+07:00",
+	"started_unix": 1788078887.869,
+	"tick_hz": 60,
+	"timezone": "Asia/Saigon",
+	"viewport": {
+		"h": 720.0,
+		"w": 1280.0
+	},
+	"wp": "VF5-WP3"
+}

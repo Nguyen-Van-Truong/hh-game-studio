@@ -7,6 +7,8 @@ extends RefCounted
 const PATH: String = "res://data/maps/arena_spec.json"
 const SCHEMA_ID: String = "vf.maps.arena.v1"
 const _Env: GDScript = preload("res://src/world/env_spec.gd")
+const _MapCatalog: GDScript = preload("res://src/maps/map_catalog.gd")
+const _MapCodec: GDScript = preload("res://src/maps/map_codec.gd")
 
 static var _cache: Dictionary = {}
 
@@ -117,6 +119,17 @@ static func validate_payload(row: Dictionary) -> PackedStringArray:
 	if landmarks("rooftops").is_empty():
 		errors.append("Skyline Relay must list landmarks")
 	_append(errors, _validate_skyline_zones(roof))
+	var annex: Dictionary = _dict(all_maps.get("storage", {}))
+	if str(annex.get("display_name", "")) != "Pallet Annex":
+		errors.append("storage display name must be Pallet Annex")
+	if int(annex.get("elevations", 0)) < 3:
+		errors.append("Pallet Annex must declare 3+ elevations")
+	if combat_zones("storage").size() < 5:
+		errors.append("Pallet Annex must list combat zones")
+	if landmarks("storage").is_empty():
+		errors.append("Pallet Annex must list landmarks")
+	_append(errors, _validate_pallet_zones(annex))
+	_append(errors, validate_weapon_cells_safe("storage"))
 	if not _to_packed(_dict(all_maps.get("police", {})).get("hazards", [])).has("pit"):
 		errors.append("police must declare pit")
 	if not _to_packed(_dict(all_maps.get("hazardous", {})).get("hazards", [])).has("pit"):
@@ -169,6 +182,69 @@ static func _validate_skyline_zones(roof: Dictionary) -> PackedStringArray:
 		i += 1
 	if seen_y.size() < 3:
 		errors.append("Skyline Relay combat zones must span 3+ elevations")
+	return errors
+
+
+static func _validate_pallet_zones(annex: Dictionary) -> PackedStringArray:
+	var errors: PackedStringArray = PackedStringArray()
+	var seen_y: Dictionary = {}
+	var need: PackedStringArray = PackedStringArray([
+		"west_floor", "mid_floor", "east_floor", "office_loft",
+		"west_catwalk", "mid_catwalk", "east_catwalk"
+	])
+	var found: Dictionary = {}
+	var zones: Array = _as_array(annex.get("combat_zones", []))
+	var i: int = 0
+	while i < zones.size():
+		var zone: Dictionary = _dict(zones[i])
+		var zid: String = str(zone.get("id", ""))
+		if zid == "":
+			errors.append("Pallet Annex combat zone missing id")
+		found[zid] = true
+		seen_y[int(zone.get("y", -1))] = true
+		i += 1
+	i = 0
+	while i < need.size():
+		var zid: String = String(need[i])
+		if not found.has(zid):
+			errors.append("Pallet Annex missing combat zone %s" % zid)
+		i += 1
+	if seen_y.size() < 3:
+		errors.append("Pallet Annex combat zones must span 3+ elevations")
+	return errors
+
+
+static func validate_weapon_cells_safe(map_id: String) -> PackedStringArray:
+	var errors: PackedStringArray = PackedStringArray()
+	var doc: Dictionary = _MapCatalog.document(map_id)
+	if doc.is_empty():
+		errors.append("%s weapon safety missing layered doc" % map_id)
+		return errors
+	var cells: Array = _MapCodec.layer_cells(doc, "pickup")
+	if cells.is_empty():
+		errors.append("%s has no weapon cells" % map_id)
+		return errors
+	var i: int = 0
+	while i < cells.size():
+		var cell: Array = _as_array(cells[i])
+		if cell.size() < 2:
+			errors.append("%s weapon cell missing xy" % map_id)
+			i += 1
+			continue
+		var x: int = int(cell[0])
+		var y: int = int(cell[1])
+		if _MapCodec.is_blocker(doc, x, y):
+			errors.append("%s weapon %d,%d inside blocker" % [map_id, x, y])
+		var floor_ok: bool = false
+		var dy: int = 1
+		while dy <= 6:
+			if _MapCodec.is_walk_support(doc, x, y + dy):
+				floor_ok = true
+				break
+			dy += 1
+		if not floor_ok:
+			errors.append("%s weapon %d,%d has no walkable floor" % [map_id, x, y])
+		i += 1
 	return errors
 
 

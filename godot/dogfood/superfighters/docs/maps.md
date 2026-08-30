@@ -35,15 +35,16 @@ Official author proof rebuilds **Draft Yard** (`fx_map_author`) from
 
 ## Live maps
 
-Geometry of storage / police / hazardous is unchanged since VF5-WP1.
-Rooftops (id kept) is now **Skyline Relay**: additive ladders to the
-bridges and west_spire, a walkable sky catwalk (mid mast opened at
-shoulder height), plus original breakable cover. Official reach is
-live `apply_frames` bodies holding `up` on ladders, not the graph. Display names Storage / Police
-Station / Hazardous stay first-playable debt
-(`ledger:RL-DELTA-MAP-NAMES`) until VF5-WP3+. `c` / `b` still **paint
-as tiles** except Skyline Relay cover, which uses world placements.
-Combat/env fixture ASCII rows stay import-only.
+Police / hazardous geometry is unchanged since VF5-WP1.
+Rooftops (id kept) is **Skyline Relay**. Storage (id kept) is now
+**Pallet Annex**: enclosed warehouse, crate stacks, catwalks, office
+loft behind a plate door, hanging cargo, and a cargo lift. Official
+reach is live `apply_frames` bodies holding `up` on ladders, not the
+graph. Display names Police Station / Hazardous stay first-playable
+debt (`ledger:RL-DELTA-MAP-NAMES`) until VF5-WP4+. `c` / `b` still
+**paint as tiles** except Skyline Relay cover and Pallet Annex
+cover/cargo, which use world placements. Combat/env fixture ASCII
+rows stay import-only.
 
 ## Honesty
 
@@ -55,7 +56,8 @@ Combat/env fixture ASCII rows stay import-only.
 - Y8 roll/dive stays `ledger:RL-MOVE-ROLL-DIVE` unavailable.
 - Values are tuning. No copied Y8 table. Not a VF7 art rewrite.
 - No new in-game Y8 play. VF5-WP2 owns Skyline Relay
-  (`docs/rooftop.md`, `ledger:RL-MAP-SKYLINE`).
+  (`docs/rooftop.md`, `ledger:RL-MAP-SKYLINE`). VF5-WP3 owns
+  Pallet Annex (`docs/warehouse.md`, `ledger:RL-MAP-PALLET`).
 
 DoD window stills wait for `frame_post_draw` after `start_fight` and
 a standing settle. Setup is rooftops. Rooftops / storage / police /

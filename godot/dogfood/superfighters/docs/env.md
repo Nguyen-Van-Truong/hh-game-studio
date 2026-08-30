@@ -59,10 +59,12 @@ VF5-WP1 retires ASCII as the live source (`layered_maps`). Live
 - `fx_env_fall` display **Drop Well** — standing walk-off
 - `fx_env_yard` display **Hazard Yard** — water, mill, acid (no instant)
 
-Live storage/police/hazardous paint `c`/`b` as tiles from
+Live police/hazardous paint `c`/`b` as tiles from
 prop/hazard layers (VF5-WP1). Skyline Relay (VF5-WP2) adds original
-breakable cover placements; lifts/doors stay fixture-only. Character/map
-readability art is VF7.
+breakable cover placements. Pallet Annex (VF5-WP3) places cover,
+hanging cargo, door, and lift because that WP asks for them.
+Machines/water/toxic stay fixture-only. Character/map readability
+art is VF7.
 
 DoD window stills wait for `frame_post_draw` after the matching
 `start_fight` and after the frames that wet, spin, acid, kill, or

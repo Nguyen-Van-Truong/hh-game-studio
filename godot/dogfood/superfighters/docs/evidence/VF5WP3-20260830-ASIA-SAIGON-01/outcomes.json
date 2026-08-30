@@ -1,0 +1,238 @@
+{
+	"apply": {
+		"attempted": 2647,
+		"succeeded": 2647,
+		"used_action_press": 0,
+		"used_apply_frames": 2647,
+		"used_parse_input_event": 0,
+		"used_step_fixed": 0
+	},
+	"bot": {
+		"climb_up_on_ladder": 31,
+		"climbing_frames": 31,
+		"dead": false,
+		"hits": {
+			"mid_catwalk": true,
+			"mid_floor": true
+		},
+		"routed_dead": false,
+		"slot": 1,
+		"source": "apply_frames vs1 bot holds up on ladder onto a non-spawn zone",
+		"verdict": "pass"
+	},
+	"camera": {
+		"arena_size": [
+			1024.0,
+			192.0
+		],
+		"centered": true,
+		"covers_arena": true,
+		"source": "GameSession.camera_framing + MapValidator",
+		"verdict": "pass"
+	},
+	"cargo": {
+		"drops": 1,
+		"hung_after": false,
+		"hung_before": true,
+		"pos": [
+			410.813049316406,
+			19.813081741333
+		],
+		"source": "P1 melee releases hanging cargo",
+		"verdict": "pass"
+	},
+	"cargo_still": {
+		"alive": true,
+		"allow_lose": false,
+		"climbing": false,
+		"hanging": false,
+		"lose_visible": false,
+		"on_floor": true,
+		"on_ladder": false,
+		"x": 410.813049316406,
+		"y": 19.813081741333,
+		"zone": "west_catwalk"
+	},
+	"catwalk_still": {
+		"alive": true,
+		"allow_lose": false,
+		"climbing": false,
+		"hanging": false,
+		"lose_visible": false,
+		"on_floor": true,
+		"on_ladder": false,
+		"x": 401.834594726563,
+		"y": 19.9934940338135,
+		"zone": "west_catwalk"
+	},
+	"cover": {
+		"blocked_before": true,
+		"breaks": 1,
+		"source": "P2 melee vs pallet_cover_wood on mid floor",
+		"verdict": "pass",
+		"wood_alive": false
+	},
+	"cover_still": {
+		"alive": true,
+		"allow_lose": false,
+		"climbing": false,
+		"hanging": false,
+		"lose_visible": false,
+		"on_floor": true,
+		"on_ladder": false,
+		"x": 216.0,
+		"y": 163.98112487793,
+		"zone": "west_floor"
+	},
+	"door": {
+		"closed_before": true,
+		"in_office": true,
+		"opened": true,
+		"source": "stand-still plate opens annex_door; live walk into office",
+		"verdict": "pass"
+	},
+	"live": {
+		"hud": "Pallet Annex",
+		"source": "HUD + title display Pallet Annex",
+		"verdict": "pass"
+	},
+	"name": {
+		"display": "Pallet Annex",
+		"source": "catalog + ArenaSpec Pallet Annex",
+		"verdict": "pass"
+	},
+	"office_still": {
+		"alive": true,
+		"allow_lose": false,
+		"climbing": false,
+		"hanging": false,
+		"lose_visible": false,
+		"on_floor": true,
+		"on_ladder": false,
+		"x": 599.389099121094,
+		"y": 163.813125610352,
+		"zone": "office_loft"
+	},
+	"p1": {
+		"climb_up_on_ladder": 146,
+		"climbing_frames": 252,
+		"dead": false,
+		"hits": {
+			"east_catwalk": true,
+			"east_floor": true,
+			"mid_catwalk": true,
+			"mid_floor": true,
+			"office_loft": true,
+			"west_catwalk": true,
+			"west_floor": true
+		},
+		"office_standing": true,
+		"on_floor": true,
+		"pos": [
+			869.059875488281,
+			163.81005859375
+		],
+		"source": "apply_frames live body; P1 holds up on ladders through every zone",
+		"verdict": "pass"
+	},
+	"p2": {
+		"climb_up_on_ladder": 31,
+		"climbing_frames": 31,
+		"dead": false,
+		"hits": {
+			"mid_catwalk": true,
+			"mid_floor": true
+		},
+		"source": "apply_frames P2 holds up on mid ladder onto mid_catwalk",
+		"verdict": "pass"
+	},
+	"replay": {
+		"pairs": [
+			{
+				"hash": "b0ad87ec9b2212770b0e1a44e92e0f623e59ce059bd1bfdf96a5a4de1360c017",
+				"id": "storage",
+				"match": true
+			}
+		],
+		"source": "catalog reload hash twice",
+		"verdict": "match"
+	},
+	"spawn": {
+		"bot": {
+			"mid_catwalk": true,
+			"mid_floor": true
+		},
+		"p1": {
+			"east_catwalk": true,
+			"east_floor": true,
+			"mid_catwalk": true,
+			"mid_floor": true,
+			"office_loft": true,
+			"west_catwalk": true,
+			"west_floor": true
+		},
+		"p2": {
+			"mid_catwalk": true,
+			"mid_floor": true
+		},
+		"source": "live apply_frames bodies reach every spawn combat zone",
+		"verdict": "pass"
+	},
+	"weapon": {
+		"homes_ok": 4,
+		"pickups": 4,
+		"respawn_tuning": 20.0,
+		"source": "layered pickup cells + live world homes stay walkable",
+		"spots": 4,
+		"verdict": "pass"
+	},
+	"zone": {
+		"climb_up_on_ladder": 208,
+		"climbing_frames": 314,
+		"east_catwalk_live": true,
+		"graph_helper": [
+			{
+				"graph": true,
+				"id": "west_floor"
+			},
+			{
+				"graph": true,
+				"id": "mid_floor"
+			},
+			{
+				"graph": false,
+				"id": "east_floor"
+			},
+			{
+				"graph": false,
+				"id": "office_loft"
+			},
+			{
+				"graph": true,
+				"id": "west_catwalk"
+			},
+			{
+				"graph": true,
+				"id": "mid_catwalk"
+			},
+			{
+				"graph": true,
+				"id": "east_catwalk"
+			}
+		],
+		"missing": [],
+		"office_standing": true,
+		"p1_all": true,
+		"source": "apply_frames live body positions (graph helper only)",
+		"union": {
+			"east_catwalk": true,
+			"east_floor": true,
+			"mid_catwalk": true,
+			"mid_floor": true,
+			"office_loft": true,
+			"west_catwalk": true,
+			"west_floor": true
+		},
+		"verdict": "pass"
+	}
+}

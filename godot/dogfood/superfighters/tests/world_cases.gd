@@ -418,7 +418,10 @@ static func authoring_is_data(app: App) -> PackedStringArray:
 			errors.append("AUTHOR rooftops count must follow catalog placements")
 		if roof_want < 2:
 			errors.append("AUTHOR Skyline Relay must keep catalog cover")
-		var other: PackedStringArray = PackedStringArray(["storage", "police", "hazardous"])
+		var store_want: int = _Catalog.placements_for("storage").size()
+		if store_want < 3:
+			errors.append("AUTHOR Pallet Annex must keep cover and cargo placements")
+		var other: PackedStringArray = PackedStringArray(["police", "hazardous"])
 		var oi: int = 0
 		while oi < other.size():
 			if not _Catalog.placements_for(String(other[oi])).is_empty():

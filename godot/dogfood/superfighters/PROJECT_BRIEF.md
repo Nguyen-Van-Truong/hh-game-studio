@@ -83,8 +83,8 @@ https://mythologicinteractive.com/Superfighters
 - Health + stamina bars; stamina drains on sprint
 - Random-ish weapon spawns (~20s respawn): pipe, knife, baton, pistol,
   shotgun, uzi, Longarm, Thumper, grenade, Cinder Flask
-- VS 1P (vs bots), local VS 2P, and Stage (Skyline Relay → Storage →
-  Police Station → Hazardous — Storage/Police/Hazardous names remain
+- VS 1P (vs bots), local VS 2P, and Stage (Skyline Relay → Pallet Annex →
+  Police Station → Hazardous — Police/Hazardous names remain
   `ledger:RL-DELTA-MAP-NAMES` debt)
 - Camera frames the whole arena
 - Title → fight → win/lose → restart; Escape / Start pause
@@ -93,8 +93,9 @@ Map layouts **echo** the four Y8 Stage arenas (platforms, pits, crates,
 ladders, cover) with original tiles. Live maps are layered JSON
 (`ledger:RL-MAP-LAYERS`, `assumption`); `=` is a Godot one-way /
 jump-through platform on the one-way layer. They are not ripped
-collision maps. VF5-WP2 renames the rooftops arena to **Skyline Relay**;
-the other three live display names stay debt until later VF5 WPs.
+collision maps. VF5-WP2 renames the rooftops arena to **Skyline Relay**.
+VF5-WP3 renames the storage arena to **Pallet Annex**. Police Station
+and Hazardous stay debt until later VF5 WPs.
 
 ---
 

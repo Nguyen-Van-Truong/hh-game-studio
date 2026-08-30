@@ -28,10 +28,11 @@ Map authors add a catalog spec and a placement row. GameSession calls
 `world_owner.spawn_map(map_id)` once. It does **not** hard-code a node
 per crate/barrel/glass.
 
-Live storage/police/hazardous have **no** world placements this
-WP. `c`/`b` stay painted tiles (VF5-WP1 prop/hazard layers) so prior
-official hashes do not drift. VF5-WP2 places original breakable cover
-on Skyline Relay only (`docs/rooftop.md`).
+Live police/hazardous still have **no** world placements. `c`/`b`
+stay painted tiles (VF5-WP1 prop/hazard layers). VF5-WP2 places
+original breakable cover on Skyline Relay (`docs/rooftop.md`).
+VF5-WP3 places original cover, hanging cargo, door, and lift on
+Pallet Annex (`docs/warehouse.md`).
 
 Fixture `fx_world_open` (display **Prop Yard**) places one of each kind.
 

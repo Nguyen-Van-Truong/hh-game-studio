@@ -63,9 +63,32 @@
     },
     "storage": {
       "id": "storage",
-      "display_name": "Storage",
+      "display_name": "Pallet Annex",
       "hazards": ["fall"],
-      "notes": "Enclosed floor. Fall from crate stacks. No pit columns."
+      "notes": "Original enclosed warehouse. Office loft behind a plate door, crate stacks, catwalks, hanging cargo, cargo lift. No pit columns. No machines/water/toxic.",
+      "elevations": 3,
+      "combat_zones": [
+        {"id": "west_floor", "x": 10, "y": 8, "w": 8, "h": 2},
+        {"id": "mid_floor", "x": 20, "y": 8, "w": 10, "h": 2},
+        {"id": "east_floor", "x": 50, "y": 8, "w": 12, "h": 2},
+        {"id": "office_loft", "x": 36, "y": 8, "w": 4, "h": 2},
+        {"id": "west_catwalk", "x": 20, "y": 1, "w": 10, "h": 3},
+        {"id": "mid_catwalk", "x": 33, "y": 6, "w": 7, "h": 2},
+        {"id": "east_catwalk", "x": 44, "y": 1, "w": 12, "h": 5}
+      ],
+      "landmarks": [
+        {"id": "office_loft", "kind": "side_route"},
+        {"id": "annex_door", "kind": "door"},
+        {"id": "annex_lift", "kind": "elevator"},
+        {"id": "pallet_cover", "kind": "breakable_cover"},
+        {"id": "pallet_cargo", "kind": "hanging_cargo"}
+      ],
+      "weapon_risk": [
+        {"cell": [5, 4], "risk": "office"},
+        {"cell": [36, 5], "risk": "catwalk"},
+        {"cell": [48, 1], "risk": "catwalk"},
+        {"cell": [30, 10], "risk": "floor"}
+      ]
     },
     "police": {
       "id": "police",

@@ -17,6 +17,7 @@ const MovingCasesScript: GDScript = preload("res://tests/moving_cases.gd")
 const EnvCasesScript: GDScript = preload("res://tests/env_cases.gd")
 const MapCasesScript: GDScript = preload("res://tests/map_cases.gd")
 const RooftopCasesScript: GDScript = preload("res://tests/rooftop_cases.gd")
+const WarehouseCasesScript: GDScript = preload("res://tests/warehouse_cases.gd")
 const _Combat: GDScript = preload("res://src/sim/combat.gd")
 
 var _fails: PackedStringArray = PackedStringArray()
@@ -46,6 +47,7 @@ var _moving: String = "unproven"
 var _env: String = "unproven"
 var _mapschema: String = "unproven"
 var _rooftop: String = "unproven"
+var _warehouse: String = "unproven"
 
 
 func _initialize() -> void:
@@ -87,6 +89,7 @@ func _boot() -> void:
 	await _test_env(app)
 	await _test_mapschema(app)
 	await _test_rooftop(app)
+	await _test_warehouse(app)
 	if _fails.is_empty():
 		_no_err = "proven"
 	_emit()
@@ -1361,6 +1364,55 @@ func _test_rooftop(app: App) -> void:
 		_rooftop = "proven"
 
 
+func _test_warehouse(app: App) -> void:
+	var errors: PackedStringArray = await WarehouseCasesScript.run_all(app)
+	var i: int = 0
+	while i < errors.size():
+		_fail("WARE %s" % String(errors[i]))
+		i += 1
+	var name_v: String = str(WarehouseCasesScript.outcome_name.get("verdict", "unproven"))
+	var cover: String = str(WarehouseCasesScript.outcome_cover.get("verdict", "unproven"))
+	var cargo: String = str(WarehouseCasesScript.outcome_cargo.get("verdict", "unproven"))
+	var spawn: String = str(WarehouseCasesScript.outcome_spawn.get("verdict", "unproven"))
+	var camera: String = str(WarehouseCasesScript.outcome_camera.get("verdict", "unproven"))
+	var weapon: String = str(WarehouseCasesScript.outcome_weapon.get("verdict", "unproven"))
+	var p1: String = str(WarehouseCasesScript.outcome_p1.get("verdict", "unproven"))
+	var p2: String = str(WarehouseCasesScript.outcome_p2.get("verdict", "unproven"))
+	var bot: String = str(WarehouseCasesScript.outcome_bot.get("verdict", "unproven"))
+	var zone: String = str(WarehouseCasesScript.outcome_zone.get("verdict", "unproven"))
+	var door: String = str(WarehouseCasesScript.outcome_door.get("verdict", "unproven"))
+	var live: String = str(WarehouseCasesScript.outcome_live.get("verdict", "unproven"))
+	var replay: String = str(WarehouseCasesScript.outcome_replay.get("verdict", "unproven"))
+	if name_v != "pass":
+		_fail("WARE NAME outcome is %s" % name_v)
+	if cover != "pass":
+		_fail("WARE COVER outcome is %s" % cover)
+	if cargo != "pass":
+		_fail("WARE CARGO outcome is %s" % cargo)
+	if spawn != "pass":
+		_fail("WARE SPAWN outcome is %s" % spawn)
+	if camera != "pass":
+		_fail("WARE CAMERA outcome is %s" % camera)
+	if weapon != "pass":
+		_fail("WARE WEAPON outcome is %s" % weapon)
+	if p1 != "pass":
+		_fail("WARE P1 outcome is %s" % p1)
+	if p2 != "pass":
+		_fail("WARE P2 outcome is %s" % p2)
+	if bot != "pass":
+		_fail("WARE BOT outcome is %s" % bot)
+	if zone != "pass":
+		_fail("WARE ZONE outcome is %s" % zone)
+	if door != "pass":
+		_fail("WARE DOOR outcome is %s" % door)
+	if live != "pass":
+		_fail("WARE LIVE outcome is %s" % live)
+	if replay != "match":
+		_fail("WARE REPLAY outcome is %s" % replay)
+	if _count_prefix("WARE ") == 0:
+		_warehouse = "proven"
+
+
 func _emit() -> void:
 	print("HH_VF_PATH title→fight→win/lose→restart")
 	print(
@@ -1680,6 +1732,27 @@ func _emit() -> void:
 			RooftopCasesScript.used_apply_frames_succeeded,
 			RooftopCasesScript.used_apply_frames_attempted,
 			_rooftop,
+		]
+	)
+	print(
+		"HH_VF_WARE NAME=%s NAME_SOURCE=outcome_name COVER=%s COVER_SOURCE=outcome_cover CARGO=%s CARGO_SOURCE=outcome_cargo SPAWN=%s CAMERA=%s WEAPON=%s P1=%s P1_SOURCE=outcome_p1 P2=%s BOT=%s BOT_SOURCE=outcome_bot ZONE=%s DOOR=%s LIVE=%s REPLAY=%s REPLAY_SOURCE=outcome_replay APPLY=%d/%d status=%s"
+		% [
+			str(WarehouseCasesScript.outcome_name.get("verdict", "unproven")),
+			str(WarehouseCasesScript.outcome_cover.get("verdict", "unproven")),
+			str(WarehouseCasesScript.outcome_cargo.get("verdict", "unproven")),
+			str(WarehouseCasesScript.outcome_spawn.get("verdict", "unproven")),
+			str(WarehouseCasesScript.outcome_camera.get("verdict", "unproven")),
+			str(WarehouseCasesScript.outcome_weapon.get("verdict", "unproven")),
+			str(WarehouseCasesScript.outcome_p1.get("verdict", "unproven")),
+			str(WarehouseCasesScript.outcome_p2.get("verdict", "unproven")),
+			str(WarehouseCasesScript.outcome_bot.get("verdict", "unproven")),
+			str(WarehouseCasesScript.outcome_zone.get("verdict", "unproven")),
+			str(WarehouseCasesScript.outcome_door.get("verdict", "unproven")),
+			str(WarehouseCasesScript.outcome_live.get("verdict", "unproven")),
+			str(WarehouseCasesScript.outcome_replay.get("verdict", "unproven")),
+			WarehouseCasesScript.used_apply_frames_succeeded,
+			WarehouseCasesScript.used_apply_frames_attempted,
+			_warehouse,
 		]
 	)
 	print(

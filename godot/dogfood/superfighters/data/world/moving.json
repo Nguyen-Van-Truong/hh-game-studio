@@ -112,6 +112,21 @@
         "to_y": 84
       },
       {"id": "yard_lift_plate", "spec": "call_plate", "x": 144, "y": 173, "target": "yard_car"}
+    ],
+    "storage": [
+      {"id": "annex_door", "spec": "gate_door", "x": 560, "y": 168},
+      {"id": "annex_door_plate", "spec": "call_plate", "x": 256, "y": 173, "target": "annex_door"},
+      {
+        "id": "annex_lift",
+        "spec": "shaft_lift",
+        "x": 640,
+        "y": 180,
+        "from_x": 640,
+        "from_y": 180,
+        "to_x": 640,
+        "to_y": 100
+      },
+      {"id": "annex_lift_plate", "spec": "call_plate", "x": 608, "y": 173, "target": "annex_lift"}
     ]
   },
   "fixtures": {
