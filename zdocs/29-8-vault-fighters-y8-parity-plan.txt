@@ -2,7 +2,7 @@ PLAN_SCOPE=godot/dogfood/superfighters
 PRODUCT_PLAN_AUTHORITY=1
 PARENT_PLATFORM_PLAN=zdocs/20-8-godot-agent-autopilot-plan.txt
 PARENT_PLATFORM_STATUS=OWNER_STOPPED_59_OF_60
-CURRENT_VALID_WP=VF4-WP3
+CURRENT_VALID_WP=VF4-WP4
 CORRECTION_GATE_VF2_WP2=CLEARED
 STATUS=ACTIVE
 PLAN_DATE=2026-08-29
@@ -23,14 +23,14 @@ một lần, tự làm, tự chạy, tự kiểm và tạo gói review; người
 | 1 | VF1 reference + contract | reference ledger, behavior spec, deterministic trace | VF0 | research/test | [x] 4/4 |
 | 2 | VF2 movement | chạy, nhảy, crouch, sprint, roll, dive, ladder, ledge | VF1 | input + physics | [x] 5/5 |
 | 3 | VF3 combat | melee/kick, hitbox, knockdown, disarm, aim/fire, grenade | VF2 | weapons + VFX | [x] 6/6 |
-| 4 | VF4 world interaction | props, glass, barrels, containers, doors/elevators, hazards | VF2 | map fixtures | [ ] 2/5 |
+| 4 | VF4 world interaction | props, glass, barrels, containers, doors/elevators, hazards | VF2 | map fixtures | [ ] 3/5 |
 | 5 | VF5 map parity | 6 functional arenas; original geometry/names/art | VF3,VF4 | one map per agent lane | [ ] 0/6 |
 | 6 | VF6 modes + AI | VS, local 2P, Stage, Survival, competent bots | VF3,VF5 | mode/UI/AI | [ ] 0/5 |
 | 7 | VF7 presentation | original skins, animation, audio, HUD, menu, accessibility | VF5,VF6 | art/audio/UI | [ ] 0/4 |
 | 8 | VF8 agent autonomy | brief→edit→play→observe→repair→checkpoint, no manual F6 | VF0..VF7 | host/bridge | [ ] 0/4 |
 | 9 | VF9 verification | trace replay, E2E, differential rubric, soak, leak proof | all above | QA | [ ] 0/5 |
 | 10 | VF10 package | Windows build, offline run, provenance/license, review bundle | VF9 | release | [ ] 0/3 |
-|   | **Tổng** | **50 WP nhỏ; chỉ coordinator tick sau DoD** |  |  | **20/50** |
+|   | **Tổng** | **50 WP nhỏ; chỉ coordinator tick sau DoD** |  |  | **21/50** |
 
 Gate nội bộ:
 
@@ -1493,13 +1493,79 @@ VF4-WP2 — Breakable glass/wood và throwable/shootable objects                
         Parent 20-8 unchanged: R9-WP4 [ ]; 59/60; G6 [ ].
       Commit: (this tick)
 
-VF4-WP3 — Explosive barrels, hanging containers và fire/burning                         [ ]
+VF4-WP3 — Explosive barrels, hanging containers và fire/burning                         [x]
   Phụ thuộc: VF4-WP2,VF3-WP4. Files: hazard/prop/audio/VFX/tests.
   Làm: chain explosion, flammable state, burn timer, extinguish by roll/water
   rule if selected, hanging/drop container impulse; cap chain depth and VFX.
   Verify: seeded chain scenario; fire damage ticks and cleanup; roll behavior;
   no duplicate explosion or unbounded particles.
   DoD: hazards interact with fighters and props in a visible real run.
+  LOG:
+    LOG 2026-08-30 08:22 Asia/Saigon — agent=coordinator
+      Base: ece7d50 barrels chain, burn, and hanging drop
+        change the fight on VF4-WP2 tick 14b99cc.
+      Files/leases: src/world/prop_hazard.gd, world_owner.gd,
+        prop_body.gd, world_catalog.gd, prop_spec.gd,
+        prop_break.gd, src/game_session.gd, src/fighter.gd,
+        src/visuals.gd, src/hud.gd, src/sim/sim_constants.gd,
+        data/world/hazard.json, data/world/catalog.json,
+        data/world/schema.json, data/sim/schema.json,
+        tests/hazard_cases.gd, tests/run_hazard.gd,
+        tests/check_hazard.py, tests/pack_hazard_evidence.py,
+        tests/traces/hazard/, tests/run_all.gd,
+        tests/break_cases.gd, tests/check_break.py,
+        tests/world_cases.gd, tests/check_world.py,
+        tests/traces/README.md, docs/hazard.md,
+        docs/break.md, docs/world.md,
+        docs/reference-ledger.md, KNOWN_ISSUES.md,
+        PROJECT_BRIEF.md, assets/vfx/vfx_explode.png,
+        assets/vfx/vfx_fire.png, assets/ASSET_MANIFEST.json,
+        docs/evidence/VF4WP3-20260830-ASIA-SAIGON-02/
+        (V-A18 pack; official leftover-0; four distinct
+        stills hazard_setup/chain/fire/hang_1280x720.png).
+        Voided -01 pack not staged.
+      Verify: leftover-0; run VF4WP3-20260830-ASIA-SAIGON-02
+        cmd.vf4-wp3.hazard.2 seed 7 map fx_hazard_yard
+        mode vs2; source hash
+        d0b95a18f5357f3a1627fd87e8c0d7492db6f8e5561149f84f67a1d1518a4ded
+        DATA=pass CHAIN=pass FIRE=pass CLEANUP=pass
+        ROLL=pass DUP=pass VFX=pass HANG=pass LIVE=pass
+        REPLAY=match from structured outcomes; APPLY 723/723
+        python godot/dogfood/superfighters/tests/check_hazard.py
+          EXIT 0
+        godot --headless --path godot/dogfood/superfighters
+          --script res://tests/run_hazard.gd EXIT 0
+        godot --path godot/dogfood/superfighters
+          --script res://tests/run_hazard.gd EXIT 0
+        leftover Godot on product --path = 0
+        python tests/bootstrap/test_authoritative_plan.py EXIT 0
+        python tests/bootstrap/test_vault_fighters_plan.py EXIT 0
+          PASS: 50 unique VF WPs; no-skip; next=VF4-WP3 (pre-tick);
+          ticked=VF0-WP1,VF0-WP2,VF0-WP3,VF1-WP1,VF1-WP2,VF1-WP3,
+          VF1-WP4,VF2-WP1,VF2-WP2,VF2-WP3,VF2-WP4,VF2-WP5,VF3-WP1,
+          VF3-WP2,VF3-WP3,VF3-WP4,VF3-WP5,VF3-WP6,VF4-WP1,
+          VF4-WP2;
+          parent 20-8 frozen 59/60 R9-WP4
+        post-tick expected next=VF4-WP4
+      Honesty:
+        60 Hz is V-A14 / ledger:RL-SIM-FIXED-60 assumption,
+        not observed Y8 clock. Hold-to-aim assumption.
+        RL-PROP-* (EXPL/CHAIN/FIRE/HANG/EXTINGUISH) stay
+        assumption, not Y8 observed. RL-NADE-PROP deferred.
+        Live maps still paint c/b as tiles.
+        Y8 roll/dive observation stays
+        ledger:RL-MOVE-ROLL-DIVE unavailable.
+        Not Y8 parity. Not V0. No Y8 rip.
+      Critic: -01 both TICK=no (identical stills, void).
+        leftover-0 -02 both TICK=yes
+        (II 9d12f8c9 leftover-0 hash d0b95a18… APPLY 723/723;
+        HH 46b2a5ea leftover-0).
+      Gaps: residual nits OK: honesty only
+        (RL-PROP-* assumption not Y8 observed;
+        RL-NADE-PROP deferred; 60 Hz / hold-to-aim
+        assumption; Y8 roll/dive unavailable).
+        Parent 20-8 unchanged: R9-WP4 [ ]; 59/60; G6 [ ].
+      Commit: (this tick)
 
 VF4-WP4 — Doors, elevators/moving platforms và traversal triggers                     [ ]
   Phụ thuộc: VF4-WP1,VF2-WP5. Files: moving-body component, map fixture/tests.
@@ -1976,7 +2042,7 @@ vào `KNOWN_ISSUES.md`; không đổi acceptance để làm cho pass.
 21. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Đọc `AGENTS.md`, sau đó đọc bảng đầu file này. WP đầu tiên chưa tick là **VF4-WP3**.
+Đọc `AGENTS.md`, sau đó đọc bảng đầu file này. WP đầu tiên chưa tick là **VF4-WP4**.
 
 Không làm R9-WP4/G6/GX; không mở Rust engine; không đụng Kho Bí Ẩn/Hoan Hao;
 không dùng Snake làm demo; không tải/rip Y8. Chỉ khi VF0-WP1 và VF0-WP2 đã có
@@ -2234,6 +2300,20 @@ dùng chỉ xem và review.
   Product 76852eb. Gate remains CLEARED. Parent 20-8
   unchanged (R9-WP4 [ ], 59/60, G6 [ ]). VF4-WP2 ticked;
   CURRENT_VALID_WP=VF4-WP3; V0 not ticked. VF4-WP3 remains [ ].
+- COORDINATOR CLOSEOUT VF4-WP3 (2026-08-30 08:22 Asia/Saigon): leftover-0;
+  -01 both TICK=no (identical stills, void); -02 leftover-0;
+  II 9d12f8c9 + HH 46b2a5ea TICK=yes; run
+  VF4WP3-20260830-ASIA-SAIGON-02; source
+  d0b95a18f5357f3a1627fd87e8c0d7492db6f8e5561149f84f67a1d1518a4ded;
+  APPLY 723/723; four distinct stills. Honesty
+  assumption not Y8 observed. Residual nits OK:
+  honesty only (RL-PROP-* assumption, not Y8
+  observed; RL-NADE-PROP deferred; 60 Hz /
+  hold-to-aim assumption; Y8 roll/dive
+  unavailable). No Y8 rip.
+  Product ece7d50. Gate remains CLEARED. Parent 20-8
+  unchanged (R9-WP4 [ ], 59/60, G6 [ ]). VF4-WP3 ticked;
+  CURRENT_VALID_WP=VF4-WP4; V0 not ticked. VF4-WP4 remains [ ].
 
 ================================================================================
 HẾT PLAN — 29-8-2026
