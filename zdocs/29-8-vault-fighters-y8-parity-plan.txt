@@ -2,7 +2,7 @@ PLAN_SCOPE=godot/dogfood/superfighters
 PRODUCT_PLAN_AUTHORITY=1
 PARENT_PLATFORM_PLAN=zdocs/20-8-godot-agent-autopilot-plan.txt
 PARENT_PLATFORM_STATUS=OWNER_STOPPED_59_OF_60
-CURRENT_VALID_WP=VF5-WP3
+CURRENT_VALID_WP=VF5-WP4
 CORRECTION_GATE_VF2_WP2=CLEARED
 STATUS=ACTIVE
 PLAN_DATE=2026-08-29
@@ -24,13 +24,13 @@ một lần, tự làm, tự chạy, tự kiểm và tạo gói review; người
 | 2 | VF2 movement | chạy, nhảy, crouch, sprint, roll, dive, ladder, ledge | VF1 | input + physics | [x] 5/5 |
 | 3 | VF3 combat | melee/kick, hitbox, knockdown, disarm, aim/fire, grenade | VF2 | weapons + VFX | [x] 6/6 |
 | 4 | VF4 world interaction | props, glass, barrels, containers, doors/elevators, hazards | VF2 | map fixtures | [x] 5/5 |
-| 5 | VF5 map parity | 6 functional arenas; original geometry/names/art | VF3,VF4 | one map per agent lane | [ ] 2/6 |
+| 5 | VF5 map parity | 6 functional arenas; original geometry/names/art | VF3,VF4 | one map per agent lane | [ ] 3/6 |
 | 6 | VF6 modes + AI | VS, local 2P, Stage, Survival, competent bots | VF3,VF5 | mode/UI/AI | [ ] 0/5 |
 | 7 | VF7 presentation | original skins, animation, audio, HUD, menu, accessibility | VF5,VF6 | art/audio/UI | [ ] 0/4 |
 | 8 | VF8 agent autonomy | brief→edit→play→observe→repair→checkpoint, no manual F6 | VF0..VF7 | host/bridge | [ ] 0/4 |
 | 9 | VF9 verification | trace replay, E2E, differential rubric, soak, leak proof | all above | QA | [ ] 0/5 |
 | 10 | VF10 package | Windows build, offline run, provenance/license, review bundle | VF9 | release | [ ] 0/3 |
-|   | **Tổng** | **50 WP nhỏ; chỉ coordinator tick sau DoD** |  |  | **25/50** |
+|   | **Tổng** | **50 WP nhỏ; chỉ coordinator tick sau DoD** |  |  | **26/50** |
 
 Gate nội bộ:
 
@@ -1902,13 +1902,98 @@ VF5-WP2 — Rooftop-like arena: vertical routes và open pit                    
         Parent 20-8 unchanged: R9-WP4 [ ]; 59/60; G6 [ ].
       Commit: (this tick)
 
-VF5-WP3 — Warehouse/storage-like arena: cover, crates và cargo route                  [ ]
+VF5-WP3 — Warehouse/storage-like arena: cover, crates và cargo route                  [x]
   Phụ thuộc: VF5-WP1,VF4-WP2,VF4-WP4. Files: one ArenaSpec + assets/tests.
   Làm: enclosed warehouse feel, crate/barrel stacks, catwalks, door/elevator,
   hanging cargo/container, alternate office/side route; original name/art.
   Verify: cover blocks then breaks, cargo interacts, all spawns reachable,
   camera fits, weapon respawn positions safe.
   DoD: close-quarters cover and vertical ambushes are functional.
+  LOG:
+    LOG 2026-08-30 16:15 Asia/Saigon — agent=coordinator
+      Base: 715fa34 prove Pallet Annex cover, cargo,
+        and live warehouse routes
+        on VF5-WP2 tick 535e29d.
+      Files/leases: data/maps/arenas/storage.json,
+        data/maps/arena_spec.json, catalog.json,
+        schema.json, data/world/catalog.json,
+        data/world/moving.json,
+        src/maps/arena_spec.gd, map_catalog.gd,
+        src/app.gd,
+        tests/warehouse_cases.gd, tests/run_warehouse.gd,
+        tests/check_warehouse.py,
+        tests/pack_warehouse_evidence.py,
+        tests/_gen_map_layers.py, tests/map_cases.gd,
+        tests/run_all.gd, tests/world_cases.gd,
+        docs/warehouse.md, docs/maps.md, docs/env.md,
+        docs/world.md, docs/moving.md, docs/rooftop.md,
+        docs/reference-ledger.md, KNOWN_ISSUES.md,
+        PROJECT_BRIEF.md,
+        docs/evidence/VF5WP3-20260830-ASIA-SAIGON-01/
+        (V-A18 pack; official leftover-0; six distinct
+        stills warehouse_setup/title/catwalk/cover/
+        cargo/office; P1 live-stood all seven zones;
+        cover/cargo/zones live apply_frames; door is
+        walk-through after plate, not teleport).
+      Verify: leftover-0; run VF5WP3-20260830-ASIA-SAIGON-01
+        cmd.vf5-wp3.pallet-annex.1 seed 13 map storage
+        mode vs2; source hash
+        e24d46bf2d2d90ea4739377d6777ecab9f822344531e3b2991be10cc90878649
+        NAME=pass COVER=pass CARGO=pass SPAWN=pass
+        CAMERA=pass WEAPON=pass P1=pass P2=pass BOT=pass
+        ZONE=pass DOOR=pass LIVE=pass REPLAY=match
+        from structured outcomes;
+        APPLY 2647/2647
+        python godot/dogfood/superfighters/tests/check_warehouse.py
+          EXIT 0
+        godot --headless --path godot/dogfood/superfighters
+          --script res://tests/run_warehouse.gd EXIT 0
+        godot --path godot/dogfood/superfighters
+          --script res://tests/run_warehouse.gd EXIT 0
+        leftover Godot on product --path = 0
+        python tests/bootstrap/test_authoritative_plan.py EXIT 0
+        python tests/bootstrap/test_vault_fighters_plan.py EXIT 0
+          PASS: 50 unique VF WPs; no-skip; next=VF5-WP3 (pre-tick);
+          ticked=VF0-WP1,VF0-WP2,VF0-WP3,VF1-WP1,VF1-WP2,VF1-WP3,
+          VF1-WP4,VF2-WP1,VF2-WP2,VF2-WP3,VF2-WP4,VF2-WP5,VF3-WP1,
+          VF3-WP2,VF3-WP3,VF3-WP4,VF3-WP5,VF3-WP6,VF4-WP1,
+          VF4-WP2,VF4-WP3,VF4-WP4,VF4-WP5,VF5-WP1,VF5-WP2;
+          parent 20-8 frozen 59/60 R9-WP4
+        post-tick expected next=VF5-WP4
+      Honesty:
+        60 Hz is V-A14 / ledger:RL-SIM-FIXED-60 assumption,
+        not observed Y8 clock. Hold-to-aim assumption.
+        RL-MAP-* stay assumption, not Y8 observed.
+        Jump envelope is product tuning (dx=10 / dy=4).
+        RL-NADE-PROP deferred.
+        P2/bot 2/7 zones (P1 7/7). Unused annex_lift.
+        Live c/b still tiles. Machines/water/toxic
+        fixture-only. Display-name debt
+        police/hazardous
+        ledger:RL-DELTA-MAP-NAMES.
+        Y8 roll/dive observation stays
+        ledger:RL-MOVE-ROLL-DIVE unavailable.
+        Not Y8 parity. Not V0. No Y8 rip.
+      Critic: leftover-0 both TICK=yes
+        (II 3d4a9767 leftover-0 hash e24d46bf… APPLY 2647/2647
+        Pallet Annex / Vault Fighters; cover/cargo/zones
+        live apply_frames; HH 356580fb leftover-0
+        windowed; stills byte-identical; run_all
+        ENV 1723 / MOVING 1800 / HAZARD 723 /
+        BREAK 880; door walk-through after plate,
+        not teleport).
+      Gaps: residual nits OK: honesty only
+        (RL-MAP-* assumption not Y8 observed;
+        jump envelope tuning; unused annex_lift;
+        first-hit AABB slack; P2/bot 2/7;
+        cover blocked_before is occupancy;
+        two mid-air weapon homes above one_way;
+        banner APPLY 2101 vs outcomes 2647 from
+        staging; Police/Hazardous name-debt;
+        60 Hz / hold-to-aim assumption;
+        Y8 roll/dive unavailable).
+        Parent 20-8 unchanged: R9-WP4 [ ]; 59/60; G6 [ ].
+      Commit: (this tick)
 
 VF5-WP4 — Station-like arena: multi-floor interior và machine landmark                 [ ]
   Phụ thuộc: VF5-WP1,VF4-WP4,VF4-WP5. Files: one ArenaSpec + assets/tests.
@@ -2332,7 +2417,7 @@ vào `KNOWN_ISSUES.md`; không đổi acceptance để làm cho pass.
 21. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Đọc `AGENTS.md`, sau đó đọc bảng đầu file này. WP đầu tiên chưa tick là **VF5-WP3**.
+Đọc `AGENTS.md`, sau đó đọc bảng đầu file này. WP đầu tiên chưa tick là **VF5-WP4**.
 
 Không làm R9-WP4/G6/GX; không mở Rust engine; không đụng Kho Bí Ẩn/Hoan Hao;
 không dùng Snake làm demo; không tải/rip Y8. Chỉ khi VF0-WP1 và VF0-WP2 đã có
@@ -2666,6 +2751,22 @@ dùng chỉ xem và review.
   Product 60d1ebf. Gate remains CLEARED. Parent 20-8
   unchanged (R9-WP4 [ ], 59/60, G6 [ ]). VF5-WP2 ticked;
   CURRENT_VALID_WP=VF5-WP3; V0 not ticked. VF5-WP3 remains [ ].
+- COORDINATOR CLOSEOUT VF5-WP3 (2026-08-30 16:15 Asia/Saigon): leftover-0;
+  II 3d4a9767 + HH 356580fb TICK=yes; run
+  VF5WP3-20260830-ASIA-SAIGON-01; source
+  e24d46bf2d2d90ea4739377d6777ecab9f822344531e3b2991be10cc90878649;
+  APPLY 2647/2647. Honesty
+  assumption not Y8 observed. Residual nits OK:
+  honesty only (RL-MAP-* assumption, not Y8
+  observed; jump envelope tuning; unused
+  annex_lift; first-hit AABB slack; P2/bot 2/7;
+  cover blocked_before is occupancy; two mid-air
+  weapon homes above one_way; banner APPLY 2101
+  vs outcomes 2647 from staging; Police/Hazardous
+  name-debt). No Y8 rip.
+  Product 715fa34. Gate remains CLEARED. Parent 20-8
+  unchanged (R9-WP4 [ ], 59/60, G6 [ ]). VF5-WP3 ticked;
+  CURRENT_VALID_WP=VF5-WP4; V0 not ticked. VF5-WP4 remains [ ].
 
 ================================================================================
 HẾT PLAN — 29-8-2026
