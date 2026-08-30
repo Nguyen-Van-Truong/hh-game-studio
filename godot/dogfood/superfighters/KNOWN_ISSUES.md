@@ -182,10 +182,23 @@ First playable slice. Not G6. Not 60/60.
   `ledger:RL-MAP-VALID`, `ledger:RL-MAP-AUTHOR`). Jump envelope
   is product tuning, not observed. Live `c`/`b` still paint as
   tiles. Combat/env fixture ASCII stays import-only. Display
-  names Rooftops/Storage/Police Station/Hazardous stay
-  `ledger:RL-DELTA-MAP-NAMES` debt. Draft Yard is an authoring
-  demo, not a VS roster map. No new Y8 play. Not a VF5-WP2
-  layout pass.
+  names Storage/Police Station/Hazardous stay
+  `ledger:RL-DELTA-MAP-NAMES` debt. Rooftops display is now
+  **Skyline Relay** (VF5-WP2). Draft Yard is an authoring
+  demo, not a VS roster map. No new Y8 play.
+- VF5-WP2 ships Skyline Relay as assumption
+  (`ledger:RL-MAP-SKYLINE`): 3+ elevations, rooftop/bridge
+  routes, ladders to the catwalk (west_spire boarded from the
+  west climb), a walkable sky catwalk (mid mast opened at
+  shoulder height),
+  open pits, varied weapon risk, and original breakable cover.
+  Official proof is InputFrame `apply_frames` live body
+  positions: P1 tours every combat zone, P2/bot leave spawn,
+  routes hold `up` on ladder cells, pit, fallback, and cover.
+  Jump envelope stays product tuning. Lifts/doors/machines/
+  water/toxic stay fixture-only. Live `c`/`b` still tiles
+  except this arena's cover placements. No new Y8 play. Not a
+  VF7 art rewrite.
 - VF3-WP4 ships grenade hold/release throw, gravity arc, bounce,
   fuse, radial falloff, owner skip, one explosion, timeout
   cleanup, and swept nade collision as assumption

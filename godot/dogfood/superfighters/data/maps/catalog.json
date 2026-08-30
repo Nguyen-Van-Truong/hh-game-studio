@@ -29,7 +29,9 @@
   "nade_prop_ledger": "RL-NADE-PROP",
   "nade_prop_class": "deferred",
   "name_delta_ledger": "RL-DELTA-MAP-NAMES",
-  "name_delta_class": "debt",
+  "name_delta_class": "partial",
+  "skyline_ledger": "RL-MAP-SKYLINE",
+  "skyline_class": "assumption",
   "maps": {
     "rooftops": "res://data/maps/arenas/rooftops.json",
     "storage": "res://data/maps/arenas/storage.json",

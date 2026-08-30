@@ -121,6 +121,36 @@ static func reach_from_spawns(doc: Dictionary) -> Dictionary:
 	return reached
 
 
+static func elevation_count(doc: Dictionary) -> int:
+	var seen: Dictionary = {}
+	var plats: Array = platforms(doc)
+	var i: int = 0
+	while i < plats.size():
+		var run: Array = plats[i] as Array
+		if not run.is_empty():
+			var cell: Array = run[0] as Array
+			seen[int(cell[1])] = true
+		i += 1
+	return seen.size()
+
+
+static func zone_reached(doc: Dictionary, zone: Dictionary) -> bool:
+	var reached: Dictionary = reach_from_spawns(doc)
+	var x0: int = int(zone.get("x", 0))
+	var y0: int = int(zone.get("y", 0))
+	var w: int = int(zone.get("w", 1))
+	var h: int = int(zone.get("h", 1))
+	var y: int = y0
+	while y < y0 + h:
+		var x: int = x0
+		while x < x0 + w:
+			if reached.has(_key(x, y)) or reached.has(_key(x, y - 1)):
+				return true
+			x += 1
+		y += 1
+	return false
+
+
 static func missing_platforms(doc: Dictionary) -> PackedStringArray:
 	var errors: PackedStringArray = PackedStringArray()
 	var reached: Dictionary = reach_from_spawns(doc)

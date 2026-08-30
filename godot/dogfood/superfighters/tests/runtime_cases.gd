@@ -4,6 +4,7 @@ extends RefCounted
 const STEP: float = 1.0 / 60.0
 const TOKEN: String = "test-fixture-not-a-secret"
 const _Combat: GDScript = preload("res://src/sim/combat.gd")
+const _World: GDScript = preload("res://src/world/world_catalog.gd")
 
 
 static func run_all(app: App) -> PackedStringArray:
@@ -77,8 +78,9 @@ static func observe_is_structured(app: App) -> PackedStringArray:
 		errors.append("observe weapon events empty after fire")
 	if (events.get("actor", []) as Array).is_empty():
 		errors.append("observe actor events empty after melee")
-	if (obs.get("props", []) as Array).size() != 0:
-		errors.append("prop list must stay empty in this slice")
+	var want_props: int = _World.placements_for("rooftops").size()
+	if (obs.get("props", []) as Array).size() != want_props:
+		errors.append("prop list must match rooftops catalog placements")
 	var ui: Dictionary = obs.get("ui", {}) as Dictionary
 	if bool(ui.get("title", true)):
 		errors.append("observe ui.title should be false in a fight")

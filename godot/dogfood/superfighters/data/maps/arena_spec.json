@@ -35,9 +35,31 @@
   "maps": {
     "rooftops": {
       "id": "rooftops",
-      "display_name": "Rooftops",
+      "display_name": "Skyline Relay",
       "hazards": ["pit", "fall"],
-      "notes": "Kill-plane pits and fall policy. No env placements this WP."
+      "notes": "Original rooftop/bridge arena. Additive catwalk-lip ladders; west_spire boarded from the west climb. Breakable cover on mid deck. No machines/water/toxic/lifts.",
+      "elevations": 3,
+      "combat_zones": [
+        {"id": "west_deck", "x": 3, "y": 7, "w": 7, "h": 1},
+        {"id": "mid_deck", "x": 22, "y": 7, "w": 14, "h": 1},
+        {"id": "east_deck", "x": 49, "y": 7, "w": 7, "h": 1},
+        {"id": "west_bridge", "x": 11, "y": 4, "w": 12, "h": 1},
+        {"id": "east_bridge", "x": 41, "y": 4, "w": 8, "h": 1},
+        {"id": "west_spire", "x": 6, "y": 3, "w": 4, "h": 1}
+      ],
+      "landmarks": [
+        {"id": "west_spire", "kind": "high_ground"},
+        {"id": "west_bridge", "kind": "bridge"},
+        {"id": "east_bridge", "kind": "bridge"},
+        {"id": "west_gap", "kind": "pit", "x": 12, "y": 14},
+        {"id": "mid_cover", "kind": "breakable_cover"}
+      ],
+      "weapon_risk": [
+        {"cell": [20, 4], "risk": "bridge"},
+        {"cell": [44, 4], "risk": "bridge"},
+        {"cell": [16, 10], "risk": "gap"},
+        {"cell": [42, 10], "risk": "gap"}
+      ]
     },
     "storage": {
       "id": "storage",

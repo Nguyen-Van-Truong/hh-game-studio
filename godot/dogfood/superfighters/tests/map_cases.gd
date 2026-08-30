@@ -81,8 +81,8 @@ static func schema_and_data() -> PackedStringArray:
 		errors.append("DATA catalog missing live or author map")
 	if Maps.display_name("fx_map_author") != "Draft Yard":
 		errors.append("DATA authored display name must be Draft Yard")
-	if Maps.display_name("rooftops") != "Rooftops":
-		errors.append("DATA rooftops display name kept this WP")
+	if Maps.display_name("rooftops") != "Skyline Relay":
+		errors.append("DATA rooftops display name must be Skyline Relay")
 	if Maps.display_name("fx_map_author").to_lower().contains("superfighter"):
 		errors.append("DATA display name uses Superfighters trademark")
 	var live: PackedStringArray = PackedStringArray(["rooftops", "storage", "police", "hazardous"])

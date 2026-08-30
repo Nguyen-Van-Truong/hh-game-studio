@@ -413,8 +413,17 @@ static func authoring_is_data(app: App) -> PackedStringArray:
 		errors.append("AUTHOR rooftops missing owner")
 	else:
 		rooftops_n = _wcount(app.session)
-		if rooftops_n != 0:
-			errors.append("AUTHOR live maps must not grow hard-coded props")
+		var roof_want: int = _Catalog.placements_for("rooftops").size()
+		if rooftops_n != roof_want:
+			errors.append("AUTHOR rooftops count must follow catalog placements")
+		if roof_want < 2:
+			errors.append("AUTHOR Skyline Relay must keep catalog cover")
+		var other: PackedStringArray = PackedStringArray(["storage", "police", "hazardous"])
+		var oi: int = 0
+		while oi < other.size():
+			if not _Catalog.placements_for(String(other[oi])).is_empty():
+				errors.append("AUTHOR %s must not grow catalog props" % String(other[oi]))
+			oi += 1
 	app.start_fight("vs2", "fx_world_open", 0)
 	await SimReplay.sync_physics(app)
 	var session: GameSession = app.session

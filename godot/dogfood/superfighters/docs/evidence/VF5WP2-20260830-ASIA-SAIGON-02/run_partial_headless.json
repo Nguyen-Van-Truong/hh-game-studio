@@ -1,0 +1,59 @@
+{
+	"command_id": "cmd.vf5-wp2.skyline-relay.2",
+	"display": "headless",
+	"ended_at": "2026-08-30T12:47:46+07:00",
+	"ended_unix": 1788068874.659,
+	"epsilon": 0.001,
+	"fail_count": 0,
+	"godot": {
+		"build": "official",
+		"hash": "a13da4feb8d8aefc283c3763d33a2f170a18d541",
+		"hex": 263937,
+		"major": 4,
+		"minor": 7,
+		"patch": 1,
+		"status": "stable",
+		"string": "4.7.1-stable (official)",
+		"timestamp": 0
+	},
+	"map_id": "rooftops",
+	"mode": "vs2",
+	"os_name": "Windows",
+	"outcomes": {
+		"BOT": "pass",
+		"COVER": "pass",
+		"ELEV": "pass",
+		"FALLBACK": "pass",
+		"LIVE": "pass",
+		"NAME": "pass",
+		"P1": "pass",
+		"P2": "pass",
+		"PIT": "pass",
+		"REPLAY": "match",
+		"USED_APPLY_ATTEMPTED": 1624,
+		"USED_APPLY_FRAMES": 1624,
+		"USED_APPLY_SUCCEEDED": 1624,
+		"ZONE": "pass"
+	},
+	"run_id": "VF5WP2-20260830-ASIA-SAIGON-02",
+	"schema": "vault-fighters.vf5-wp2.run.v1",
+	"screens": {
+		"live": {
+			"bridge": "",
+			"cover": "",
+			"pit": "",
+			"title": ""
+		},
+		"setup": ""
+	},
+	"seed": 12,
+	"started_at": "2026-08-30T12:46:34+07:00",
+	"started_unix": 1788068794.526,
+	"tick_hz": 60,
+	"timezone": "Asia/Saigon",
+	"viewport": {
+		"h": 720.0,
+		"w": 1280.0
+	},
+	"wp": "VF5-WP2"
+}

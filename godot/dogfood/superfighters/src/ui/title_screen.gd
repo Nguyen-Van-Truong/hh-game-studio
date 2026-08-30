@@ -59,7 +59,7 @@ func _ready() -> void:
 	vs_one_btn = _make_btn("VS 1P", Vector2(80, 256))
 	vs_two_btn = _make_btn("VS 2P", Vector2(80, 312))
 	stage_btn = _make_btn("Stage", Vector2(80, 368))
-	map_btn = _make_btn("Map: Rooftops", Vector2(80, 424))
+	map_btn = _make_btn("Map: %s" % Maps.display_name("rooftops"), Vector2(80, 424))
 	map_btn.name = "MapCycle"
 	controls_btn = _make_btn("Controls", Vector2(80, 480))
 	controls_btn.name = "Controls"

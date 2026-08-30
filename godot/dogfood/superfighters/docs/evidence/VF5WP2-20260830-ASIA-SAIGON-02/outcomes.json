@@ -1,0 +1,244 @@
+{
+	"apply": {
+		"attempted": 1624,
+		"succeeded": 1624,
+		"used_action_press": 0,
+		"used_apply_frames": 1624,
+		"used_parse_input_event": 0,
+		"used_step_fixed": 0
+	},
+	"bot": {
+		"climb_up_on_ladder": 18,
+		"climbing_frames": 18,
+		"dead": false,
+		"hits": {
+			"east_bridge": true,
+			"mid_deck": true
+		},
+		"routed_dead": false,
+		"slot": 1,
+		"source": "apply_frames vs1 bot holds up on ladder onto a non-spawn zone",
+		"verdict": "pass"
+	},
+	"bridge_still": {
+		"alive": true,
+		"allow_lose": false,
+		"climbing": false,
+		"hanging": false,
+		"lose_visible": false,
+		"on_floor": true,
+		"on_ladder": false,
+		"x": 218.833267211914,
+		"y": 67.8131866455078,
+		"zone": "west_bridge"
+	},
+	"cover": {
+		"blocked_before": true,
+		"breaks": 1,
+		"source": "P2 melee vs sky_cover_wood on mid deck",
+		"verdict": "pass",
+		"wood_alive": false
+	},
+	"cover_still": {
+		"alive": true,
+		"allow_lose": false,
+		"climbing": false,
+		"hanging": false,
+		"lose_visible": false,
+		"on_floor": true,
+		"on_ladder": false,
+		"x": 153.000030517578,
+		"y": 51.9999389648438,
+		"zone": "west_spire"
+	},
+	"elev": {
+		"elevations": 4,
+		"graph_helper": [
+			{
+				"graph": true,
+				"id": "west_deck"
+			},
+			{
+				"graph": true,
+				"id": "mid_deck"
+			},
+			{
+				"graph": true,
+				"id": "east_deck"
+			},
+			{
+				"graph": true,
+				"id": "west_bridge"
+			},
+			{
+				"graph": true,
+				"id": "east_bridge"
+			},
+			{
+				"graph": true,
+				"id": "west_spire"
+			}
+		],
+		"source": "MapGraph platform y-rows (helper, not Verify)",
+		"verdict": "pass"
+	},
+	"fallback": {
+		"dead": false,
+		"on_floor": true,
+		"source": "apply_frames short walk stays on west deck",
+		"verdict": "pass"
+	},
+	"live": {
+		"hud": "Skyline Relay",
+		"source": "HUD + title display Skyline Relay",
+		"verdict": "pass"
+	},
+	"name": {
+		"display": "Skyline Relay",
+		"source": "catalog + ArenaSpec Skyline Relay",
+		"verdict": "pass"
+	},
+	"p1": {
+		"climb_up_on_ladder": 51,
+		"climbing_frames": 105,
+		"dead": false,
+		"hits": {
+			"east_bridge": true,
+			"east_deck": true,
+			"mid_deck": true,
+			"west_bridge": true,
+			"west_deck": true,
+			"west_spire": true
+		},
+		"on_floor": true,
+		"pos": [
+			850.666381835938,
+			115.813064575195
+		],
+		"source": "apply_frames live body; P1 holds up on ladders through every zone",
+		"verdict": "pass",
+		"west_spire_standing": true
+	},
+	"p2": {
+		"climb_up_on_ladder": 18,
+		"climbing_frames": 18,
+		"dead": false,
+		"hits": {
+			"east_bridge": true,
+			"mid_deck": true
+		},
+		"source": "apply_frames P2 holds up on mid ladder onto east_bridge",
+		"verdict": "pass"
+	},
+	"pit": {
+		"cause": "pit",
+		"dead": true,
+		"source": "apply_frames dedicated fallback walk-off into open gap",
+		"verdict": "pass"
+	},
+	"pit_still": {
+		"alive": false,
+		"allow_lose": true,
+		"climbing": false,
+		"hanging": false,
+		"lose_visible": true,
+		"on_floor": false,
+		"on_ladder": false,
+		"x": 239.610946655273,
+		"y": 281.563171386719,
+		"zone": ""
+	},
+	"replay": {
+		"pairs": [
+			{
+				"hash": "71e20fdf00d80a1d78d1c9eb7181cfe20a9485ee78d1895857e3da928fb5af96",
+				"id": "rooftops",
+				"match": true
+			}
+		],
+		"source": "catalog reload hash twice",
+		"verdict": "match"
+	},
+	"zone": {
+		"climb_up_on_ladder": 87,
+		"climbing_frames": 141,
+		"east_deck_live": true,
+		"graph_helper": [
+			{
+				"graph": true,
+				"id": "west_deck"
+			},
+			{
+				"graph": true,
+				"id": "mid_deck"
+			},
+			{
+				"graph": true,
+				"id": "east_deck"
+			},
+			{
+				"graph": true,
+				"id": "west_bridge"
+			},
+			{
+				"graph": true,
+				"id": "east_bridge"
+			},
+			{
+				"graph": true,
+				"id": "west_spire"
+			}
+		],
+		"missing": [],
+		"p1_all": true,
+		"source": "apply_frames live body positions (graph helper only)",
+		"union": {
+			"east_bridge": true,
+			"east_deck": true,
+			"mid_deck": true,
+			"west_bridge": true,
+			"west_deck": true,
+			"west_spire": true
+		},
+		"verdict": "pass",
+		"west_spire_standing": true,
+		"zones": [
+			{
+				"bot": false,
+				"id": "west_deck",
+				"p1": true,
+				"p2": false
+			},
+			{
+				"bot": true,
+				"id": "mid_deck",
+				"p1": true,
+				"p2": true
+			},
+			{
+				"bot": false,
+				"id": "east_deck",
+				"p1": true,
+				"p2": false
+			},
+			{
+				"bot": false,
+				"id": "west_bridge",
+				"p1": true,
+				"p2": false
+			},
+			{
+				"bot": true,
+				"id": "east_bridge",
+				"p1": true,
+				"p2": true
+			},
+			{
+				"bot": false,
+				"id": "west_spire",
+				"p1": true,
+				"p2": false
+			}
+		]
+	}
+}

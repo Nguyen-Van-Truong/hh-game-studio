@@ -107,6 +107,16 @@ static func validate_payload(row: Dictionary) -> PackedStringArray:
 		errors.append("rooftops must declare pit")
 	if not _to_packed(_dict(all_maps.get("rooftops", {})).get("hazards", [])).has("fall"):
 		errors.append("rooftops must declare fall")
+	var roof: Dictionary = _dict(all_maps.get("rooftops", {}))
+	if str(roof.get("display_name", "")) != "Skyline Relay":
+		errors.append("rooftops display name must be Skyline Relay")
+	if int(roof.get("elevations", 0)) < 3:
+		errors.append("Skyline Relay must declare 3+ elevations")
+	if combat_zones("rooftops").size() < 3:
+		errors.append("Skyline Relay must list combat zones")
+	if landmarks("rooftops").is_empty():
+		errors.append("Skyline Relay must list landmarks")
+	_append(errors, _validate_skyline_zones(roof))
 	if not _to_packed(_dict(all_maps.get("police", {})).get("hazards", [])).has("pit"):
 		errors.append("police must declare pit")
 	if not _to_packed(_dict(all_maps.get("hazardous", {})).get("hazards", [])).has("pit"):
@@ -123,6 +133,49 @@ static func validate_payload(row: Dictionary) -> PackedStringArray:
 		errors.append("Drop Well must declare fall")
 	_append(errors, validate_spawns_safe())
 	return errors
+
+
+static func combat_zones(map_id: String) -> Array:
+	return _as_array(map_row(map_id).get("combat_zones", []))
+
+
+static func landmarks(map_id: String) -> Array:
+	return _as_array(map_row(map_id).get("landmarks", []))
+
+
+static func weapon_risk(map_id: String) -> Array:
+	return _as_array(map_row(map_id).get("weapon_risk", []))
+
+
+static func zone_contains(zone: Dictionary, world_pos: Vector2) -> bool:
+	var x0: float = float(int(zone.get("x", 0))) * float(Maps.TILE)
+	var y0: float = float(int(zone.get("y", 0))) * float(Maps.TILE)
+	var w: float = float(int(zone.get("w", 1))) * float(Maps.TILE)
+	var h: float = float(int(zone.get("h", 1))) * float(Maps.TILE)
+	var box: Rect2 = Rect2(x0 - 4.0, y0 - 12.0, w + 8.0, h + 20.0)
+	return box.has_point(world_pos)
+
+
+static func _validate_skyline_zones(roof: Dictionary) -> PackedStringArray:
+	var errors: PackedStringArray = PackedStringArray()
+	var seen_y: Dictionary = {}
+	var zones: Array = _as_array(roof.get("combat_zones", []))
+	var i: int = 0
+	while i < zones.size():
+		var zone: Dictionary = _dict(zones[i])
+		if str(zone.get("id", "")) == "":
+			errors.append("Skyline Relay combat zone missing id")
+		seen_y[int(zone.get("y", -1))] = true
+		i += 1
+	if seen_y.size() < 3:
+		errors.append("Skyline Relay combat zones must span 3+ elevations")
+	return errors
+
+
+static func _as_array(value: Variant) -> Array:
+	if value is Array:
+		return value as Array
+	return []
 
 
 static func spawn_points(map_id: String) -> Array:

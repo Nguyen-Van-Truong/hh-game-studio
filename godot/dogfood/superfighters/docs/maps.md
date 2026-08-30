@@ -35,11 +35,15 @@ Official author proof rebuilds **Draft Yard** (`fx_map_author`) from
 
 ## Live maps
 
-Geometry of rooftops / storage / police / hazardous is unchanged this
-WP. Display names stay as first-playable debt
-(`ledger:RL-DELTA-MAP-NAMES`) until VF5-WP2+. `c` / `b` now live on
-prop / hazard layers but still **paint as tiles**. Combat/env fixture
-ASCII rows stay import-only.
+Geometry of storage / police / hazardous is unchanged since VF5-WP1.
+Rooftops (id kept) is now **Skyline Relay**: additive ladders to the
+bridges and west_spire, a walkable sky catwalk (mid mast opened at
+shoulder height), plus original breakable cover. Official reach is
+live `apply_frames` bodies holding `up` on ladders, not the graph. Display names Storage / Police
+Station / Hazardous stay first-playable debt
+(`ledger:RL-DELTA-MAP-NAMES`) until VF5-WP3+. `c` / `b` still **paint
+as tiles** except Skyline Relay cover, which uses world placements.
+Combat/env fixture ASCII rows stay import-only.
 
 ## Honesty
 
@@ -50,7 +54,8 @@ ASCII rows stay import-only.
 - Hold-to-aim stays `ledger:RL-CTRL-HOLD-AIM` assumption.
 - Y8 roll/dive stays `ledger:RL-MOVE-ROLL-DIVE` unavailable.
 - Values are tuning. No copied Y8 table. Not a VF7 art rewrite.
-- No new in-game Y8 play. Not a VF5-WP2 layout pass.
+- No new in-game Y8 play. VF5-WP2 owns Skyline Relay
+  (`docs/rooftop.md`, `ledger:RL-MAP-SKYLINE`).
 
 DoD window stills wait for `frame_post_draw` after `start_fight` and
 a standing settle. Setup is rooftops. Rooftops / storage / police /

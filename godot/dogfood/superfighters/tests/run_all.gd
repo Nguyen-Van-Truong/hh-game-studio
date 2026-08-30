@@ -16,6 +16,7 @@ const HazardCasesScript: GDScript = preload("res://tests/hazard_cases.gd")
 const MovingCasesScript: GDScript = preload("res://tests/moving_cases.gd")
 const EnvCasesScript: GDScript = preload("res://tests/env_cases.gd")
 const MapCasesScript: GDScript = preload("res://tests/map_cases.gd")
+const RooftopCasesScript: GDScript = preload("res://tests/rooftop_cases.gd")
 const _Combat: GDScript = preload("res://src/sim/combat.gd")
 
 var _fails: PackedStringArray = PackedStringArray()
@@ -44,6 +45,7 @@ var _hazard: String = "unproven"
 var _moving: String = "unproven"
 var _env: String = "unproven"
 var _mapschema: String = "unproven"
+var _rooftop: String = "unproven"
 
 
 func _initialize() -> void:
@@ -84,6 +86,7 @@ func _boot() -> void:
 	await _test_moving(app)
 	await _test_env(app)
 	await _test_mapschema(app)
+	await _test_rooftop(app)
 	if _fails.is_empty():
 		_no_err = "proven"
 	_emit()
@@ -1315,6 +1318,49 @@ func _test_mapschema(app: App) -> void:
 		_mapschema = "proven"
 
 
+func _test_rooftop(app: App) -> void:
+	var errors: PackedStringArray = await RooftopCasesScript.run_all(app)
+	var i: int = 0
+	while i < errors.size():
+		_fail("ROOF %s" % String(errors[i]))
+		i += 1
+	var name_v: String = str(RooftopCasesScript.outcome_name.get("verdict", "unproven"))
+	var elev: String = str(RooftopCasesScript.outcome_elev.get("verdict", "unproven"))
+	var zone: String = str(RooftopCasesScript.outcome_zone.get("verdict", "unproven"))
+	var cover: String = str(RooftopCasesScript.outcome_cover.get("verdict", "unproven"))
+	var p1: String = str(RooftopCasesScript.outcome_p1.get("verdict", "unproven"))
+	var p2: String = str(RooftopCasesScript.outcome_p2.get("verdict", "unproven"))
+	var bot: String = str(RooftopCasesScript.outcome_bot.get("verdict", "unproven"))
+	var pit: String = str(RooftopCasesScript.outcome_pit.get("verdict", "unproven"))
+	var fallback: String = str(RooftopCasesScript.outcome_fallback.get("verdict", "unproven"))
+	var live: String = str(RooftopCasesScript.outcome_live.get("verdict", "unproven"))
+	var replay: String = str(RooftopCasesScript.outcome_replay.get("verdict", "unproven"))
+	if name_v != "pass":
+		_fail("ROOF NAME outcome is %s" % name_v)
+	if elev != "pass":
+		_fail("ROOF ELEV outcome is %s" % elev)
+	if zone != "pass":
+		_fail("ROOF ZONE outcome is %s" % zone)
+	if cover != "pass":
+		_fail("ROOF COVER outcome is %s" % cover)
+	if p1 != "pass":
+		_fail("ROOF P1 outcome is %s" % p1)
+	if p2 != "pass":
+		_fail("ROOF P2 outcome is %s" % p2)
+	if bot != "pass":
+		_fail("ROOF BOT outcome is %s" % bot)
+	if pit != "pass":
+		_fail("ROOF PIT outcome is %s" % pit)
+	if fallback != "pass":
+		_fail("ROOF FALLBACK outcome is %s" % fallback)
+	if live != "pass":
+		_fail("ROOF LIVE outcome is %s" % live)
+	if replay != "match":
+		_fail("ROOF REPLAY outcome is %s" % replay)
+	if _count_prefix("ROOF ") == 0:
+		_rooftop = "proven"
+
+
 func _emit() -> void:
 	print("HH_VF_PATH title→fight→win/lose→restart")
 	print(
@@ -1615,6 +1661,25 @@ func _emit() -> void:
 			MapCasesScript.used_apply_frames_succeeded,
 			MapCasesScript.used_apply_frames_attempted,
 			_mapschema,
+		]
+	)
+	print(
+		"HH_VF_ROOF NAME=%s NAME_SOURCE=outcome_name ELEV=%s ZONE=%s COVER=%s P1=%s P1_SOURCE=outcome_p1 P2=%s BOT=%s BOT_SOURCE=outcome_bot PIT=%s FALLBACK=%s LIVE=%s REPLAY=%s REPLAY_SOURCE=outcome_replay APPLY=%d/%d status=%s"
+		% [
+			str(RooftopCasesScript.outcome_name.get("verdict", "unproven")),
+			str(RooftopCasesScript.outcome_elev.get("verdict", "unproven")),
+			str(RooftopCasesScript.outcome_zone.get("verdict", "unproven")),
+			str(RooftopCasesScript.outcome_cover.get("verdict", "unproven")),
+			str(RooftopCasesScript.outcome_p1.get("verdict", "unproven")),
+			str(RooftopCasesScript.outcome_p2.get("verdict", "unproven")),
+			str(RooftopCasesScript.outcome_bot.get("verdict", "unproven")),
+			str(RooftopCasesScript.outcome_pit.get("verdict", "unproven")),
+			str(RooftopCasesScript.outcome_fallback.get("verdict", "unproven")),
+			str(RooftopCasesScript.outcome_live.get("verdict", "unproven")),
+			str(RooftopCasesScript.outcome_replay.get("verdict", "unproven")),
+			RooftopCasesScript.used_apply_frames_succeeded,
+			RooftopCasesScript.used_apply_frames_attempted,
+			_rooftop,
 		]
 	)
 	print(
