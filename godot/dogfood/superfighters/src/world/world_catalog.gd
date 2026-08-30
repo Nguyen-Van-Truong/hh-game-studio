@@ -98,6 +98,12 @@ static func validate_payload(row: Dictionary) -> PackedStringArray:
 		errors.append("break must be implemented this WP")
 	if not bool(row.get("chain_implemented", false)):
 		errors.append("explosive chain must be implemented this WP")
+	if not bool(row.get("moving_implemented", false)):
+		errors.append("moving bodies must be implemented this WP")
+	if str(row.get("door_class", "")) != "assumption":
+		errors.append("door must stay assumption")
+	if str(row.get("lift_class", "")) != "assumption":
+		errors.append("lift must stay assumption")
 	if not bool(row.get("throw_implemented", false)):
 		errors.append("dynamic throw must be implemented this WP")
 	if str(row.get("schema_class", "")) != "assumption":

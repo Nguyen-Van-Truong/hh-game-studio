@@ -48,6 +48,10 @@
     "break": "RL-PROP-BREAK assumption; glass/wood destroy this WP",
     "throw": "RL-PROP-DYNAMIC assumption; shove/throw this WP",
     "explosive": "RL-PROP-EXPL assumption; chain/fire/hang this WP",
+    "door": "RL-WORLD-DOOR assumption; closed blocks, trigger opens",
+    "lift": "RL-WORLD-LIFT assumption; deterministic tick path",
+    "board": "RL-WORLD-BOARD assumption; ride without tunneling",
+    "trigger": "RL-WORLD-TRIGGER assumption; arm ticks then call",
     "nade_prop": "RL-NADE-PROP stays deferred for glass/wood"
   }
 }

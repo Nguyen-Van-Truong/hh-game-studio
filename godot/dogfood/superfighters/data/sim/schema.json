@@ -87,7 +87,11 @@
     "prop_break": "RL-PROP-BREAK assumption; glass/wood destroy this WP",
     "prop_pickup": "RL-PROP-PICKUP assumption, world marker not roster",
     "prop_expl": "RL-PROP-EXPL assumption; chain/fire/hang this WP",
-    "nade_prop": "RL-NADE-PROP deferred VF4, glass/wood stay"
+    "nade_prop": "RL-NADE-PROP deferred VF4, glass/wood stay",
+    "world_door": "RL-WORLD-DOOR assumption, not observed",
+    "world_lift": "RL-WORLD-LIFT assumption, not observed",
+    "world_board": "RL-WORLD-BOARD assumption, not observed",
+    "world_trigger": "RL-WORLD-TRIGGER assumption, not observed"
   },
   "combat": {
     "schema": "vf.sim.combat.v1",

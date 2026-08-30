@@ -12,11 +12,24 @@ const _Spec: GDScript = preload("res://src/world/prop_spec.gd")
 const _Break: GDScript = preload("res://src/world/prop_break.gd")
 const _Hazard: GDScript = preload("res://src/world/prop_hazard.gd")
 const _View: GDScript = preload("res://src/world/prop_view.gd")
+const _Moving: GDScript = preload("res://src/world/moving_spec.gd")
+const _Mover: GDScript = preload("res://src/world/moving_body.gd")
 
 var session: GameSession
 var root: Node2D
 var bodies: Array = []
+var movers: Array = []
 var seq: int = 0
+var mover_seq: int = 0
+var door_open_events: int = 0
+var board_events: int = 0
+var unboard_events: int = 0
+var trigger_events: int = 0
+var call_events: int = 0
+var tunnel_events: int = 0
+var max_board_dy: float = 0.0
+var _unboard_tick: Dictionary = {}
+var _unboard_y: Dictionary = {}
 var last_errors: PackedStringArray = PackedStringArray()
 var break_events: int = 0
 var last_debris_count: int = 0
@@ -57,6 +70,13 @@ func spawn_map(map_id: String) -> PackedStringArray:
 		var place: Dictionary = rows[i] as Dictionary
 		_append(last_errors, _spawn_placement(place))
 		i += 1
+	_append(last_errors, _Moving.validate())
+	var movers_rows: Array = _Moving.placements_for(map_id)
+	i = 0
+	while i < movers_rows.size():
+		var mplace: Dictionary = movers_rows[i] as Dictionary
+		_append(last_errors, _spawn_mover(mplace))
+		i += 1
 	return last_errors
 
 
@@ -70,7 +90,18 @@ func clear() -> void:
 			body.queue_free()
 		i += 1
 	bodies.clear()
+	_clear_movers()
 	seq = 0
+	mover_seq = 0
+	door_open_events = 0
+	board_events = 0
+	unboard_events = 0
+	trigger_events = 0
+	call_events = 0
+	tunnel_events = 0
+	max_board_dy = 0.0
+	_unboard_tick.clear()
+	_unboard_y.clear()
 	break_events = 0
 	last_debris_count = 0
 	last_break_id = ""
@@ -116,6 +147,12 @@ func snapshot() -> Array:
 		var body: Node2D = bodies[i] as Node2D
 		if body != null and is_instance_valid(body) and body.has_method("snapshot_row"):
 			rows.append(body.call("snapshot_row"))
+		i += 1
+	i = 0
+	while i < movers.size():
+		var mover: Node2D = movers[i] as Node2D
+		if mover != null and is_instance_valid(mover) and mover.has_method("snapshot_row"):
+			rows.append(mover.call("snapshot_row"))
 		i += 1
 	rows.sort_custom(_row_less)
 	return rows
@@ -176,6 +213,12 @@ func find_by_id(placement_id: String) -> Node2D:
 		var body: Node2D = bodies[i] as Node2D
 		if body != null and is_instance_valid(body) and str(body.get("placement_id")) == placement_id:
 			return body
+		i += 1
+	i = 0
+	while i < movers.size():
+		var mover: Node2D = movers[i] as Node2D
+		if mover != null and is_instance_valid(mover) and str(mover.get("placement_id")) == placement_id:
+			return mover
 		i += 1
 	return null
 
@@ -415,6 +458,7 @@ func vfx_live_count() -> int:
 func step(dt: float) -> void:
 	_tick_vfx()
 	_sync_fighter_fire()
+	_step_movers()
 	var i: int = 0
 	while i < bodies.size():
 		var body: Node2D = bodies[i] as Node2D
@@ -670,6 +714,362 @@ func _fighter(slot: int) -> Fighter:
 			return f
 		i += 1
 	return null
+
+
+func _spawn_mover(place: Dictionary) -> PackedStringArray:
+	var errors: PackedStringArray = PackedStringArray()
+	if root == null or not is_instance_valid(root):
+		errors.append("world owner has no root")
+		return errors
+	var spec_id: String = str(place.get("spec", ""))
+	var spec: Dictionary = _Moving.spec(spec_id)
+	if spec.is_empty():
+		errors.append("unknown mover spec %s" % spec_id)
+		return errors
+	var vpath: String = str(_Spec.visual_path(spec))
+	if not _Paths.visual_ok(vpath):
+		errors.append("mover rejected path %s" % _Paths.reject_reason(vpath))
+		return errors
+	mover_seq += 1
+	var body: Node2D = _Mover.new() as Node2D
+	root.add_child(body)
+	var setup_v: Variant = body.call("setup", place, spec, mover_seq, _Catalog.layers())
+	if setup_v is PackedStringArray:
+		_append(errors, setup_v as PackedStringArray)
+	if not errors.is_empty():
+		body.queue_free()
+		return errors
+	movers.append(body)
+	if session != null and session.ledger != null:
+		session.ledger.push(session.clock.tick if session.clock != null else 0, "world_move", "mover_spawn", {
+			"id": str(place.get("id", "")),
+			"spec": spec_id,
+			"kind": str(spec.get("kind", "")),
+			"uid": mover_seq,
+			"x": SimConstants.quantize(body.global_position.x),
+			"y": SimConstants.quantize(body.global_position.y),
+		})
+	return errors
+
+
+func _clear_movers() -> void:
+	var i: int = 0
+	while i < movers.size():
+		var mover: Node2D = movers[i] as Node2D
+		if mover != null and is_instance_valid(mover):
+			mover.queue_free()
+		i += 1
+	movers.clear()
+
+
+func _step_movers() -> void:
+	_tick_triggers()
+	_clear_riding()
+	var i: int = 0
+	while i < movers.size():
+		var mover: Node2D = movers[i] as Node2D
+		i += 1
+		if mover == null or not is_instance_valid(mover):
+			continue
+		if str(mover.get("kind")) != "platform":
+			continue
+		_maybe_auto_call(mover)
+		var old_aabb: Rect2 = mover.call("aabb") as Rect2
+		var delta: Vector2 = mover.call("advance_path") as Vector2
+		_carry_riders(mover, old_aabb, delta)
+
+
+func _tick_triggers() -> void:
+	var i: int = 0
+	while i < movers.size():
+		var mover: Node2D = movers[i] as Node2D
+		i += 1
+		if mover == null or not is_instance_valid(mover):
+			continue
+		if str(mover.get("kind")) != "trigger":
+			continue
+		var held: bool = _any_fighter_overlaps(mover)
+		if held:
+			mover.set("hold_ticks", int(mover.get("hold_ticks")) + 1)
+		else:
+			mover.set("hold_ticks", 0)
+		if held and int(mover.get("hold_ticks")) == int(_Moving.arm_ticks()):
+			var tid: String = str(mover.get("target_id"))
+			if _call_id(tid):
+				trigger_events += 1
+				if session != null and session.ledger != null:
+					session.ledger.push(session.clock.tick if session.clock != null else 0, "world_move", "trigger_fire", {
+						"id": str(mover.get("placement_id")),
+						"target": tid,
+					})
+
+
+func _maybe_auto_call(mover: Node2D) -> void:
+	if not bool(mover.call("auto_call_on_board")):
+		return
+	if str(mover.get("phase")) != "idle":
+		return
+	if not _any_standing_rider(mover, mover.call("aabb") as Rect2):
+		return
+	mover.set("hold_ticks", int(mover.get("hold_ticks")) + 1)
+	if int(mover.get("hold_ticks")) < int(_Moving.arm_ticks()):
+		return
+	if bool(mover.call("call_now")):
+		call_events += 1
+		_log_call(mover)
+
+
+func _call_id(placement_id: String) -> bool:
+	if placement_id == "":
+		return false
+	var mover: Node2D = find_by_id(placement_id)
+	if mover == null or not mover.has_method("call_now"):
+		return false
+	if not bool(mover.call("call_now")):
+		return false
+	if str(mover.get("kind")) == "door":
+		door_open_events += 1
+		if session != null and session.ledger != null:
+			session.ledger.push(session.clock.tick if session.clock != null else 0, "world_move", "door_open", {
+				"id": placement_id,
+			})
+	else:
+		call_events += 1
+		_log_call(mover)
+	return true
+
+
+func _log_call(mover: Node2D) -> void:
+	if session == null or session.ledger == null or mover == null:
+		return
+	session.ledger.push(session.clock.tick if session.clock != null else 0, "world_move", "platform_call", {
+		"id": str(mover.get("placement_id")),
+		"phase": str(mover.get("phase")),
+	})
+
+
+func _carry_riders(mover: Node2D, old_aabb: Rect2, delta: Vector2) -> void:
+	if session == null:
+		return
+	var next_boarded: PackedInt32Array = PackedInt32Array()
+	var prev: PackedInt32Array = mover.get("boarded") as PackedInt32Array
+	var now_box: Rect2 = mover.call("aabb") as Rect2
+	var tick: int = session.clock.tick if session.clock != null else 0
+	var warp: float = float(_Moving.warp_px())
+	var i: int = 0
+	while i < session.fighters.size():
+		var f: Fighter = session.fighters[i]
+		i += 1
+		if f == null or f.dead:
+			continue
+		var was: bool = _slot_in(prev, f.slot)
+		var now: bool = _can_ride(f, mover, old_aabb, was) or (was and _can_ride(f, mover, now_box, true))
+		if now and f.velocity.y < -40.0:
+			now = false
+		if now:
+			var y0: float = f.global_position.y
+			if delta != Vector2.ZERO:
+				f.global_position += delta
+			var would: float = _snap_would_dy(f, mover)
+			if absf(would) > max_board_dy:
+				max_board_dy = absf(would)
+			if absf(would) + 0.0001 >= warp:
+				tunnel_events += 1
+				if session.ledger != null:
+					session.ledger.push(tick, "world_move", "ride_warp", {
+						"id": str(mover.get("placement_id")),
+						"slot": f.slot,
+						"dy": would,
+					})
+			else:
+				_snap_rider(f, mover)
+			if f.velocity.y > 0.0:
+				f.velocity.y = 0.0
+			var extra: float = absf((f.global_position.y - y0) - delta.y)
+			if extra > max_board_dy:
+				max_board_dy = extra
+			if extra + 0.0001 >= warp:
+				tunnel_events += 1
+				if session.ledger != null:
+					session.ledger.push(tick, "world_move", "ride_warp", {
+						"id": str(mover.get("placement_id")),
+						"slot": f.slot,
+						"dy": extra,
+					})
+			if _fighter_tunneled(f):
+				tunnel_events += 1
+				f.global_position -= delta
+				if session.ledger != null:
+					session.ledger.push(tick, "world_move", "ride_tunnel", {
+						"id": str(mover.get("placement_id")),
+						"slot": f.slot,
+					})
+			if not was:
+				_note_reboard_warp(f, tick)
+				board_events += 1
+				if session.ledger != null:
+					session.ledger.push(tick, "world_move", "board", {
+						"id": str(mover.get("placement_id")),
+						"slot": f.slot,
+					})
+			f.platform_riding = true
+			next_boarded.append(f.slot)
+		elif was:
+			unboard_events += 1
+			_unboard_tick[f.slot] = tick
+			_unboard_y[f.slot] = f.global_position.y
+			f.ledge_lock_left = maxf(f.ledge_lock_left, 0.12)
+			if session.ledger != null:
+				session.ledger.push(tick, "world_move", "unboard", {
+					"id": str(mover.get("placement_id")),
+					"slot": f.slot,
+				})
+	mover.set("boarded", next_boarded)
+
+
+func _any_rider(mover: Node2D, box: Rect2) -> bool:
+	if session == null:
+		return false
+	var i: int = 0
+	while i < session.fighters.size():
+		var f: Fighter = session.fighters[i]
+		i += 1
+		if _is_rider(f, mover, box):
+			return true
+	return false
+
+
+func _any_standing_rider(mover: Node2D, box: Rect2) -> bool:
+	if session == null:
+		return false
+	var i: int = 0
+	while i < session.fighters.size():
+		var f: Fighter = session.fighters[i]
+		i += 1
+		if f == null or f.dead:
+			continue
+		if absf(f.velocity.x) > 48.0:
+			continue
+		if _is_rider(f, mover, box):
+			return true
+	return false
+
+
+func _snap_rider(fighter: Fighter, mover: Node2D) -> void:
+	if fighter == null or mover == null:
+		return
+	var would: float = _snap_would_dy(fighter, mover)
+	if absf(would) <= float(_Moving.snap_eps()):
+		fighter.global_position.y += would
+
+
+func _snap_would_dy(fighter: Fighter, mover: Node2D) -> float:
+	if fighter == null or mover == null:
+		return 0.0
+	var box: Rect2 = mover.call("aabb") as Rect2
+	return box.position.y - _feet_half(fighter) - fighter.global_position.y
+
+
+func _feet_half(fighter: Fighter) -> float:
+	var feet: float = 12.0
+	if fighter != null and fighter.stand_shape != null:
+		feet = fighter.stand_shape.size.y * 0.5 + fighter.stand_offset.y
+	return feet
+
+
+func _clear_riding() -> void:
+	if session == null:
+		return
+	var i: int = 0
+	while i < session.fighters.size():
+		var f: Fighter = session.fighters[i]
+		i += 1
+		if f != null:
+			f.platform_riding = false
+
+
+func _note_reboard_warp(fighter: Fighter, tick: int) -> void:
+	if fighter == null:
+		return
+	if not _unboard_tick.has(fighter.slot):
+		return
+	var prev_tick: int = int(_unboard_tick[fighter.slot])
+	if tick - prev_tick > 8:
+		return
+	var prev_y: float = float(_unboard_y.get(fighter.slot, fighter.global_position.y))
+	var dy: float = absf(fighter.global_position.y - prev_y)
+	if dy > max_board_dy:
+		max_board_dy = dy
+	if dy + 0.0001 < float(_Moving.warp_px()):
+		return
+	tunnel_events += 1
+	if session != null and session.ledger != null:
+		session.ledger.push(tick, "world_move", "ride_warp", {
+			"slot": fighter.slot,
+			"dy": dy,
+			"reboard": 1,
+		})
+
+
+func _any_fighter_overlaps(mover: Node2D) -> bool:
+	if session == null or mover == null:
+		return false
+	var box: Rect2 = mover.call("aabb") as Rect2
+	box = box.grow(2.0)
+	var i: int = 0
+	while i < session.fighters.size():
+		var f: Fighter = session.fighters[i]
+		i += 1
+		if f == null or f.dead:
+			continue
+		# Walk-across must not arm: stand on the plate (low vx) for arm_ticks.
+		if absf(f.velocity.x) > 48.0:
+			continue
+		if box.intersects(_Moving.fighter_aabb(f), false):
+			return true
+	return false
+
+
+func _is_rider(fighter: Fighter, mover: Node2D, box: Rect2) -> bool:
+	return _can_ride(fighter, mover, box, true)
+
+
+func _can_ride(fighter: Fighter, mover: Node2D, box: Rect2, was: bool) -> bool:
+	if fighter == null or fighter.dead or mover == null:
+		return false
+	if fighter.hanging or fighter.recover_left > 0.0:
+		return false
+	var fa: Rect2 = _Moving.fighter_aabb(fighter)
+	var pad: Rect2 = Rect2(
+		box.position + Vector2(-3.0, -float(_Moving.board_eps())),
+		box.size + Vector2(6.0, float(_Moving.board_eps()))
+	)
+	if not fa.intersects(pad, false):
+		return false
+	var feet_y: float = fighter.global_position.y + _feet_half(fighter)
+	if absf(feet_y - box.position.y) > float(_Moving.board_eps()):
+		return false
+	if was:
+		return true
+	return fighter.is_on_floor() or fighter.platform_riding
+
+
+func _fighter_tunneled(fighter: Fighter) -> bool:
+	if fighter == null or session == null:
+		return false
+	var map_id: String = session.map_id
+	if Maps.solid_at(map_id, fighter.global_position):
+		return true
+	return Maps.solid_at(map_id, fighter.global_position + Vector2(0.0, 10.0))
+
+
+func _slot_in(slots: PackedInt32Array, slot: int) -> bool:
+	var i: int = 0
+	while i < slots.size():
+		if int(slots[i]) == slot:
+			return true
+		i += 1
+	return false
 
 
 func _spawn_placement(place: Dictionary) -> PackedStringArray:

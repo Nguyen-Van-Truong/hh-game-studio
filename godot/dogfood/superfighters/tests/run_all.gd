@@ -13,6 +13,7 @@ const BalanceCasesScript: GDScript = preload("res://tests/balance_cases.gd")
 const WorldCasesScript: GDScript = preload("res://tests/world_cases.gd")
 const BreakCasesScript: GDScript = preload("res://tests/break_cases.gd")
 const HazardCasesScript: GDScript = preload("res://tests/hazard_cases.gd")
+const MovingCasesScript: GDScript = preload("res://tests/moving_cases.gd")
 const _Combat: GDScript = preload("res://src/sim/combat.gd")
 
 var _fails: PackedStringArray = PackedStringArray()
@@ -38,6 +39,7 @@ var _balance: String = "unproven"
 var _world: String = "unproven"
 var _break: String = "unproven"
 var _hazard: String = "unproven"
+var _moving: String = "unproven"
 
 
 func _initialize() -> void:
@@ -75,6 +77,7 @@ func _boot() -> void:
 	await _test_world(app)
 	await _test_break(app)
 	await _test_hazard(app)
+	await _test_moving(app)
 	if _fails.is_empty():
 		_no_err = "proven"
 	_emit()
@@ -1177,6 +1180,46 @@ func _test_hazard(app: App) -> void:
 		_hazard = "proven"
 
 
+func _test_moving(app: App) -> void:
+	var errors: PackedStringArray = await MovingCasesScript.run_all(app)
+	var i: int = 0
+	while i < errors.size():
+		_fail("MOVING %s" % String(errors[i]))
+		i += 1
+	var data: String = str(MovingCasesScript.outcome_data.get("verdict", "unproven"))
+	var ride: String = str(MovingCasesScript.outcome_ride.get("verdict", "unproven"))
+	var carry: String = str(MovingCasesScript.outcome_carry.get("verdict", "unproven"))
+	var drop: String = str(MovingCasesScript.outcome_drop.get("verdict", "unproven"))
+	var door: String = str(MovingCasesScript.outcome_door.get("verdict", "unproven"))
+	var trigger: String = str(MovingCasesScript.outcome_trigger.get("verdict", "unproven"))
+	var pause: String = str(MovingCasesScript.outcome_pause.get("verdict", "unproven"))
+	var reset: String = str(MovingCasesScript.outcome_reset.get("verdict", "unproven"))
+	var live: String = str(MovingCasesScript.outcome_live.get("verdict", "unproven"))
+	var replay: String = str(MovingCasesScript.outcome_replay.get("verdict", "unproven"))
+	if data != "pass":
+		_fail("MOVING DATA outcome is %s" % data)
+	if ride != "pass":
+		_fail("MOVING RIDE outcome is %s" % ride)
+	if carry != "pass":
+		_fail("MOVING CARRY outcome is %s" % carry)
+	if drop != "pass":
+		_fail("MOVING DROP outcome is %s" % drop)
+	if door != "pass":
+		_fail("MOVING DOOR outcome is %s" % door)
+	if trigger != "pass":
+		_fail("MOVING TRIGGER outcome is %s" % trigger)
+	if pause != "pass":
+		_fail("MOVING PAUSE outcome is %s" % pause)
+	if reset != "pass":
+		_fail("MOVING RESET outcome is %s" % reset)
+	if live != "pass":
+		_fail("MOVING LIVE outcome is %s" % live)
+	if replay != "match":
+		_fail("MOVING REPLAY outcome is %s" % replay)
+	if _count_prefix("MOVING ") == 0:
+		_moving = "proven"
+
+
 func _emit() -> void:
 	print("HH_VF_PATH title→fight→win/lose→restart")
 	print(
@@ -1420,6 +1463,24 @@ func _emit() -> void:
 			HazardCasesScript.used_apply_frames_succeeded,
 			HazardCasesScript.used_apply_frames_attempted,
 			_hazard,
+		]
+	)
+	print(
+		"HH_VF_MOVING DATA=%s RIDE=%s RIDE_SOURCE=outcome_ride CARRY=%s DROP=%s DOOR=%s TRIGGER=%s PAUSE=%s RESET=%s LIVE=%s REPLAY=%s APPLY=%d/%d status=%s"
+		% [
+			str(MovingCasesScript.outcome_data.get("verdict", "unproven")),
+			str(MovingCasesScript.outcome_ride.get("verdict", "unproven")),
+			str(MovingCasesScript.outcome_carry.get("verdict", "unproven")),
+			str(MovingCasesScript.outcome_drop.get("verdict", "unproven")),
+			str(MovingCasesScript.outcome_door.get("verdict", "unproven")),
+			str(MovingCasesScript.outcome_trigger.get("verdict", "unproven")),
+			str(MovingCasesScript.outcome_pause.get("verdict", "unproven")),
+			str(MovingCasesScript.outcome_reset.get("verdict", "unproven")),
+			str(MovingCasesScript.outcome_live.get("verdict", "unproven")),
+			str(MovingCasesScript.outcome_replay.get("verdict", "unproven")),
+			MovingCasesScript.used_apply_frames_succeeded,
+			MovingCasesScript.used_apply_frames_attempted,
+			_moving,
 		]
 	)
 	print(

@@ -715,3 +715,36 @@ inject. Official maps use `#` floors only. Live `c`/`b` stay tiles.
 | RL-PROP-HANG | Hanging drop impulse | `assumption` | none | VF4-WP3 product contract; **not** observed on Y8 this session | 2026-08-30 | Drop Cage starts hanging; blast releases + vy | 280 | Not observed. |
 | RL-PROP-EXTINGUISH | Roll clears fire | `assumption` | none | VF4-WP3 product contract; **not** observed on Y8 this session | 2026-08-30 | roll sets burning false; water not selected | roll | Do **not** cite as observed. |
 
+---
+
+## VF4-WP4 doors, elevators, and traversal triggers (not a play observation)
+
+Dated 2026-08-30 Asia/Saigon. No in-game Y8 play. No HTML5/Flash
+package. Sidecar: `docs/moving.md` and
+`docs/evidence/VF4WP4-20260830-ASIA-SAIGON-02/`.
+That `run_id` is unique. Do **not** remint it.
+`VF4WP4-20260830-ASIA-SAIGON-01` is spent (hang/snap). Do **not** remint `-01`.
+
+Door stays `ledger:RL-WORLD-DOOR` (`assumption`). Lift stays
+`ledger:RL-WORLD-LIFT` (`assumption`). Boarding stays
+`ledger:RL-WORLD-BOARD` (`assumption`). Trigger stays
+`ledger:RL-WORLD-TRIGGER` (`assumption`). `ledger:RL-NADE-PROP`
+stays `deferred`. None of these rows is promoted to `observed`.
+Hold-to-aim stays `ledger:RL-CTRL-HOLD-AIM` (`assumption`). Y8
+observation stays `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). 60 Hz
+stays `ledger:RL-SIM-FIXED-60` (`assumption`).
+
+Product contract: closed door blocks; stand-still plate arms in 8
+ticks then opens; lift path 44/24/44 ticks docks onto the upper deck;
+board `on_floor` / walk off solid deck without ≥16 px Y warp; pause
+freezes path; restart rebuilds movers at rest.
+Official proof uses `apply_frames` plus live InputEvent inject.
+Official maps use `#` floors only. Live `c`/`b` stay tiles.
+
+| ID | Topic | Class | Conf. | Source | When | Behavior to reproduce | Tuning-only | Notes |
+|---|---|---|---|---|---|---|---|---|
+| RL-WORLD-DOOR | Closed door blocks; plate opens | `assumption` | none | VF4-WP4 product contract; **not** observed on Y8 this session | 2026-08-30 | walk-across stays closed; stand 8 ticks opens; P1 walks through | arm 8 | Do **not** cite as observed. |
+| RL-WORLD-LIFT | Deterministic elevator path | `assumption` | none | VF4-WP4 product contract; **not** observed on Y8 this session | 2026-08-30 | 176,180 → 188,84 in 44 ticks; dwell 24; return | 44 / 24 / 3 px | Dest docks over right deck. Not observed. |
+| RL-WORLD-BOARD | Ride / drop without tunnel | `assumption` | none | VF4-WP4 product contract; **not** observed on Y8 this session | 2026-08-30 | board on_floor; carry by delta; snap_eps 4; walk off solid deck standing | board_eps 8 / snap 4 / warp 16 | Not observed. Hang under the lip is a fail. |
+| RL-WORLD-TRIGGER | Stand-still call plate | `assumption` | none | VF4-WP4 product contract; **not** observed on Y8 this session | 2026-08-30 | hold_ticks == arm_ticks fires door/lift | arm 8 | Do **not** cite as observed. |
+

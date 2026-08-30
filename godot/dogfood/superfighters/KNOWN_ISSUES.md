@@ -146,6 +146,18 @@ First playable slice. Not G6. Not 60/60.
   **not** promoted to `observed`. Y8 roll/dive observation stays
   `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). No new Y8 play.
   Not a VF7 art rewrite.
+- VF4-WP4 ships closed-door block, stand-to-open plate, deterministic
+  lift path, boarding/unboarding, pause freeze, and restart reset as
+  assumption (`ledger:RL-WORLD-DOOR`, `ledger:RL-WORLD-LIFT`,
+  `ledger:RL-WORLD-BOARD`, `ledger:RL-WORLD-TRIGGER`). Official
+  proof is InputFrame `apply_frames` plus live InputEvent inject.
+  Board requires `on_floor`; walk-off must stand on the solid deck
+  (hang under the lip is a fail). Foot lock stays `snap_eps=4`;
+  Y warp `>=16` is a tunnel. `ledger:RL-NADE-PROP` stays `deferred`.
+  Live `c`/`b` stay tiles. Hold-to-aim is **not** promoted to
+  `observed`. Y8 roll/dive observation stays
+  `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). Water is not selected
+  (VF4-WP5). No new Y8 play. Not a VF7 art rewrite.
 - VF3-WP4 ships grenade hold/release throw, gravity arc, bounce,
   fuse, radial falloff, owner skip, one explosion, timeout
   cleanup, and swept nade collision as assumption

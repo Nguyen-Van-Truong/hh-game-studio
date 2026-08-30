@@ -71,7 +71,11 @@ https://mythologicinteractive.com/Superfighters
   roll extinguish, and hanging drop are VF4-WP3
   (`ledger:RL-PROP-EXPL` / `ledger:RL-PROP-CHAIN` /
   `ledger:RL-PROP-FIRE` / `ledger:RL-PROP-HANG` /
-  `ledger:RL-PROP-EXTINGUISH`, `assumption`).
+  `ledger:RL-PROP-EXTINGUISH`, `assumption`). Doors, lifts,
+  boarding, and call plates are VF4-WP4
+  (`ledger:RL-WORLD-DOOR` / `ledger:RL-WORLD-LIFT` /
+  `ledger:RL-WORLD-BOARD` / `ledger:RL-WORLD-TRIGGER`,
+  `assumption`).
 - Health + stamina bars; stamina drains on sprint
 - Random-ish weapon spawns (~20s respawn): pipe, knife, baton, pistol,
   shotgun, uzi, Longarm, Thumper, grenade, Cinder Flask

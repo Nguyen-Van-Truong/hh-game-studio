@@ -1,0 +1,59 @@
+{
+	"map_id": "fx_move_yard",
+	"mode": "vs2",
+	"replay": {
+		"pairs": [
+			{
+				"hash_a": "ceebe8eab4d384bbe6221522981401ccb95093da1ca149120327ce56eca3744c",
+				"hash_b": "ceebe8eab4d384bbe6221522981401ccb95093da1ca149120327ce56eca3744c",
+				"hash_match": true,
+				"name": "move_door",
+				"world_a": "66e701b5b982d0d36fe8ac493898657ea4a165c17474eea1944ac050d293e65c",
+				"world_b": "66e701b5b982d0d36fe8ac493898657ea4a165c17474eea1944ac050d293e65c",
+				"world_hash_match": true
+			},
+			{
+				"hash_a": "c11c44ddb24d66b747d61ad0a817f13cc7e4bf292ee09cf14e120a59223ff295",
+				"hash_b": "c11c44ddb24d66b747d61ad0a817f13cc7e4bf292ee09cf14e120a59223ff295",
+				"hash_match": true,
+				"name": "move_drop",
+				"world_a": "5d8284d5574859c0a111a238a0da4d8fae5e43ede4cd873a109aa1c4747e903a",
+				"world_b": "5d8284d5574859c0a111a238a0da4d8fae5e43ede4cd873a109aa1c4747e903a",
+				"world_hash_match": true
+			},
+			{
+				"hash_a": "dbbe16cb579deb2b6860a04643436f16ee93b9354b5bb0594ec5ee996c503e05",
+				"hash_b": "dbbe16cb579deb2b6860a04643436f16ee93b9354b5bb0594ec5ee996c503e05",
+				"hash_match": true,
+				"name": "move_ride",
+				"world_a": "afca3b9595e7259a30ad46cae5a6af48475dcb08c40af5609d0d5f34ef8ebc78",
+				"world_b": "afca3b9595e7259a30ad46cae5a6af48475dcb08c40af5609d0d5f34ef8ebc78",
+				"world_hash_match": true
+			},
+			{
+				"hash_a": "a4442728f7a225b17868c3d2bf78c2db8c5688cd7ea4863a2655b1464b5d8897",
+				"hash_b": "a4442728f7a225b17868c3d2bf78c2db8c5688cd7ea4863a2655b1464b5d8897",
+				"hash_match": true,
+				"name": "move_yard",
+				"world_a": "5736af9f5db87d056441c2bc7af4986b466511d9dc830678c0753926863954c1",
+				"world_b": "5736af9f5db87d056441c2bc7af4986b466511d9dc830678c0753926863954c1",
+				"world_hash_match": true
+			}
+		],
+		"source": "apply_frames moving traces twice",
+		"verdict": "match"
+	},
+	"ride": {
+		"hanging": false,
+		"max_board_dy": 2.171875,
+		"on_floor": true,
+		"owner_tunnels": 0,
+		"pose": "idle",
+		"source": "Lift Shaft ride without solid overlap or Y warp",
+		"tunnels": 0,
+		"verdict": "pass",
+		"y0": 160.0,
+		"y1": 68.0
+	},
+	"seed": 7
+}

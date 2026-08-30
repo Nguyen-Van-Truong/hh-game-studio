@@ -186,6 +186,20 @@ Chain / fire / hang stay `assumption`. Clock stays
 | `hazard_roll.json` | Ember Walk roll extinguishes fire |
 | `hazard_hang.json` | Blast Row hanging crate drops |
 
+## moving/
+
+VF4-WP4 official InputFrame traces. Same schema as `official/`.
+Replay uses `apply_frames`. No teleport. No `step_fixed`.
+Door / lift / board / trigger stay `assumption`. Clock stays
+`ledger:RL-SIM-FIXED-60`.
+
+| File | Beat |
+|---|---|
+| `move_door.json` | Gate Hall stand on plate then walk through |
+| `move_ride.json` | Lift Shaft board and ride without tunnel |
+| `move_drop.json` | Lift Shaft walk off at the top; lift returns |
+| `move_yard.json` | Relay Shaft door then lift |
+
 ## fixture/
 
 May use `teleport` / `force_kill` for fast unit setup. Fixture evidence

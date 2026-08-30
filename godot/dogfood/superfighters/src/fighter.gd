@@ -187,6 +187,7 @@ var detach_started: bool = false
 var last_climb_block: String = ""
 var climb_blocked_now: bool = false
 var hanging: bool = false
+var platform_riding: bool = false
 var hang_time: float = 0.0
 var hang_seq: int = 0
 var hang_started: bool = false
@@ -356,7 +357,7 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	last_tap_at += delta
 	if combat_timer <= 0.0:
 		health = minf(MAX_HP, health + 4.0 * delta)
-	var on_floor_now: bool = is_on_floor()
+	var on_floor_now: bool = is_on_floor() or platform_riding
 	if on_floor_now:
 		coyote = coyote_time
 		air_origin_y = global_position.y
@@ -811,13 +812,16 @@ func _record_contacts() -> void:
 func _try_ledge_grab(ledge: Dictionary) -> void:
 	if hanging or climbing or recover_left > 0.0 or ledge_lock_left > 0.0 or recover_hold_left > 0.0:
 		return
+	if platform_riding:
+		last_ledge_block = "ride"
+		return
 	if rolling or diving or kicking or reaction_locked():
 		last_ledge_block = "busy"
 		return
 	if dead:
 		last_ledge_block = "dead"
 		return
-	if is_on_floor():
+	if is_on_floor() or platform_riding:
 		last_ledge_block = "ground"
 		return
 	if velocity.y <= 20.0:
@@ -1378,7 +1382,7 @@ func _pose_clip() -> String:
 		return "climb"
 	if on_ladder:
 		return "walk"
-	if not is_on_floor():
+	if not is_on_floor() and not platform_riding:
 		if velocity.y < 0.0:
 			return "jump"
 		return "fall"
