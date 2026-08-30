@@ -85,6 +85,9 @@ static func from_ascii(map_id: String, rows: PackedStringArray, display_name: St
 				(layers["one_way"] as Array).append([x, y])
 			elif ch == "H":
 				(layers["ladder"] as Array).append([x, y])
+			elif ch == "L":
+				(layers["ladder"] as Array).append([x, y])
+				(layers["one_way"] as Array).append([x, y])
 			elif ch == "c":
 				(layers["prop"] as Array).append([x, y])
 			elif ch == "b":
@@ -126,6 +129,23 @@ static func to_ascii(doc: Dictionary) -> PackedStringArray:
 	_stamp_xy(grid, _dict(doc.get("layers", {})).get("hazard", []), "b")
 	_stamp_xy(grid, _dict(doc.get("layers", {})).get("prop", []), "c")
 	_stamp_xy(grid, _dict(doc.get("layers", {})).get("ladder", []), "H")
+	var decks: Array = _as_array(_dict(doc.get("layers", {})).get("one_way", []))
+	var ladders: Array = _as_array(_dict(doc.get("layers", {})).get("ladder", []))
+	var d: int = 0
+	while d < decks.size():
+		var deck: Array = _as_array(decks[d])
+		if deck.size() >= 2:
+			var dx: int = int(deck[0])
+			var dy: int = int(deck[1])
+			var li: int = 0
+			while li < ladders.size():
+				var lad: Array = _as_array(ladders[li])
+				if lad.size() >= 2 and int(lad[0]) == dx and int(lad[1]) == dy:
+					if dy >= 0 and dy < height and dx >= 0 and dx < width:
+						(grid[dy] as Array)[dx] = "L"
+					break
+				li += 1
+		d += 1
 	_stamp_xy(grid, _dict(doc.get("layers", {})).get("pickup", []), "w")
 	var spawns: Array = _as_array(_dict(doc.get("layers", {})).get("spawn", []))
 	var s: int = 0

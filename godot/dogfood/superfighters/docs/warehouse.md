@@ -26,8 +26,8 @@ The live grid keeps the VF5-WP1 layered source. This WP adds:
 - cargo lift from the east floor to the east landing
 - original name/art only
 
-Skyline Relay is unchanged. Police Station / Hazardous display names
-remain debt until VF5-WP4+.
+Skyline Relay is unchanged. Police display is now **Signal Court**
+(VF5-WP4). Hazardous remains debt until VF5-WP5+.
 
 ## Verify is live locomotion
 

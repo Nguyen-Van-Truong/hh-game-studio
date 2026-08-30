@@ -178,7 +178,7 @@ invariants. Calibrate later with traces (VF1-WP3+).
 | RL-DELTA-SKINS | **Change** | Fighter look / names | Original helmet-crew skins; no Jeff/Funnyman/etc. | No character or sprite rip. |
 | RL-DELTA-AUDIO | **Change** | Music / SFX | Procedural original tones (`NOTICE.md`) | No Y8/Newgrounds audio rip. |
 | RL-DELTA-ENGINE | **Change** | Runtime | Godot 4.7.1-stable Windows | Reference is Flash/HTML5 browser; not a dependency. |
-| RL-DELTA-MAP-NAMES | **Change** | Display map names | Rooftops display is **Skyline Relay** (VF5-WP2). Storage display is **Pallet Annex** (VF5-WP3). Police Station / Hazardous still echo first-playable names. | Plan §3.3: names must be original. Remaining echo names stay debt until VF5-WP4+. |
+| RL-DELTA-MAP-NAMES | **Change** | Display map names | Rooftops display is **Skyline Relay** (VF5-WP2). Storage display is **Pallet Annex** (VF5-WP3). Police display is **Signal Court** (VF5-WP4). Hazardous still echoes the first-playable name. | Plan §3.3: names must be original. Hazardous remains debt until VF5-WP5+. |
 | RL-DELTA-MAP-GEO | **Change** | Coordinates, landmarks, tiles | Echo functional beats (pit, ladder, cover, platforms); original tiles and grids | No collision-map rip. If a later pass is too close for commercial release, stop for legal review. Agents must not self-certify fair use. |
 | RL-DELTA-LOOP | **Keep** | Side-view chaotic arena; guns + melee + nades; 1P/2P; PVP/PVE | Functional target for VF2–VF6 | Mechanics/genre ideas; not assets. |
 | RL-DELTA-CTRL-LAYOUT | **Keep (intent)** | Split keyboard P1 arrows+N/M/, P2 WASD+1/2/3 | Already in `input_actions.gd` | Cite RL-CTRL-* . Hold-to-aim stays assumption (RL-CTRL-HOLD-AIM). |
@@ -874,7 +874,8 @@ Hold-to-aim stays `ledger:RL-CTRL-HOLD-AIM` (`assumption`). Y8
 observation stays `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). 60 Hz
 stays `ledger:RL-SIM-FIXED-60` (`assumption`). `ledger:RL-NADE-PROP`
 stays `deferred`. Remaining display-name debt stays
-`ledger:RL-DELTA-MAP-NAMES` for Police Station / Hazardous.
+`ledger:RL-DELTA-MAP-NAMES` for Hazardous after VF5-WP4
+renamed Police to **Signal Court**.
 
 Product contract: original enclosed warehouse with crate stacks,
 catwalks, office loft behind a plate door, hanging cargo, cargo
@@ -886,4 +887,36 @@ unchanged.
 | ID | Topic | Class | Conf. | Source | When | Behavior to reproduce | Tuning-only | Notes |
 |---|---|---|---|---|---|---|---|---|
 | RL-MAP-PALLET | Pallet Annex arena | `assumption` | none | VF5-WP3 product contract; **not** observed on Y8 this session | 2026-08-30 | cover, cargo, catwalks, office door, lift | original name | Do **not** cite as observed. |
+
+---
+
+## VF5-WP4 Signal Court (not a play observation)
+
+Dated 2026-08-30 Asia/Saigon. No in-game Y8 play. No HTML5/Flash
+package. Sidecar: `docs/station.md` and
+`docs/evidence/VF5WP4-20260830-ASIA-SAIGON-01/`.
+That `run_id` is unique. Do **not** remint it.
+
+Signal Court stays `ledger:RL-MAP-SIGNAL` (`assumption`). Graph
+stay `ledger:RL-MAP-GRAPH` (`assumption`). Door / lift stay
+`ledger:RL-WORLD-DOOR` / `ledger:RL-WORLD-LIFT` (`assumption`).
+Rotor stay `ledger:RL-ENV-ROTOR` (`assumption`). Hold-to-aim
+stays `ledger:RL-CTRL-HOLD-AIM` (`assumption`). Y8 observation
+stays `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). 60 Hz stays
+`ledger:RL-SIM-FIXED-60` (`assumption`). `ledger:RL-NADE-PROP`
+stays `deferred`. Remaining display-name debt stays
+`ledger:RL-DELTA-MAP-NAMES` for Hazardous.
+
+Product contract: original multi-floor station with an open
+courtyard, a plate door shortcut, west/east ladders, a court
+lift, a shootable signal rotor, and breakable window panes.
+Internal id stays `police`. Jump envelope is product tuning
+(10 / 4); live apex is about 3.4 tiles. No copied billboard.
+Water / toxic stay fixture-only. Skyline Relay and Pallet Annex
+are unchanged. Do **not** cite as observed. Do not self-conclude
+the layout is close enough to Y8 to ship.
+
+| ID | Topic | Class | Conf. | Source | When | Behavior to reproduce | Tuning-only | Notes |
+|---|---|---|---|---|---|---|---|---|
+| RL-MAP-SIGNAL | Signal Court arena | `assumption` | none | VF5-WP4 product contract; **not** observed on Y8 this session | 2026-08-30 | 3 floors, courtyard, door, ladders, shootable rotor, panes | original name | Do **not** cite as observed. |
 

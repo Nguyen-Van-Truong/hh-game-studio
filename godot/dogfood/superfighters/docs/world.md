@@ -28,11 +28,13 @@ Map authors add a catalog spec and a placement row. GameSession calls
 `world_owner.spawn_map(map_id)` once. It does **not** hard-code a node
 per crate/barrel/glass.
 
-Live police/hazardous still have **no** world placements. `c`/`b`
-stay painted tiles (VF5-WP1 prop/hazard layers). VF5-WP2 places
+Live hazardous still has **no** world placements. `c`/`b` stay
+painted tiles (VF5-WP1 prop/hazard layers). VF5-WP2 places
 original breakable cover on Skyline Relay (`docs/rooftop.md`).
 VF5-WP3 places original cover, hanging cargo, door, and lift on
-Pallet Annex (`docs/warehouse.md`).
+Pallet Annex (`docs/warehouse.md`). VF5-WP4 places original
+window cover, door, lift, and a shootable rotor on Signal Court
+(`docs/station.md`).
 
 Fixture `fx_world_open` (display **Prop Yard**) places one of each kind.
 

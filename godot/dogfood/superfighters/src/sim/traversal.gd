@@ -119,7 +119,7 @@ static func is_ladder_cell(map_id: String, cell: Vector2i) -> bool:
 
 static func is_empty_cell(map_id: String, cell: Vector2i) -> bool:
 	var ch: String = char_at(map_id, cell)
-	return ch == "." or ch == "P" or ch == "1" or ch == "2" or ch == "3" or ch == "w" or ch == "H"
+	return ch == "." or ch == "P" or ch == "1" or ch == "2" or ch == "3" or ch == "w" or ch == "H" or ch == "L"
 
 
 static func nearest_ladder_cell(arena: Arena, pos: Vector2) -> Vector2i:

@@ -1,0 +1,297 @@
+{
+	"apply": {
+		"attempted": 4205,
+		"succeeded": 4205,
+		"used_action_press": 0,
+		"used_apply_frames": 4205,
+		"used_parse_input_event": 0,
+		"used_step_fixed": 0
+	},
+	"bot": {
+		"climb_up_on_ladder": 46,
+		"climbing_frames": 51,
+		"dead": false,
+		"hits": {
+			"east_hall": true,
+			"east_mid": true,
+			"east_top": true
+		},
+		"routed_dead": false,
+		"slot": 2,
+		"source": "apply_frames vs1 bot holds up on a live ladder onto a non-spawn floor",
+		"verdict": "pass"
+	},
+	"camera": {
+		"arena_size": [
+			1024.0,
+			256.0
+		],
+		"centered": true,
+		"covers_arena": true,
+		"source": "GameSession.camera_framing + MapValidator",
+		"verdict": "pass"
+	},
+	"court_still": {
+		"alive": true,
+		"allow_lose": false,
+		"climbing": false,
+		"hanging": false,
+		"lose_visible": false,
+		"on_floor": true,
+		"on_ladder": false,
+		"x": 72.0,
+		"y": 115.999130249023,
+		"zone": "court_mid"
+	},
+	"cover": {
+		"blocked_before": true,
+		"breaks": 1,
+		"source": "apply_frames melee vs signal_cover_wood window stack",
+		"verdict": "pass",
+		"wood_alive": false
+	},
+	"door": {
+		"closed_before": true,
+		"in_hall": true,
+		"opened": true,
+		"source": "stand-still plate opens signal_door; live walk into west_hall",
+		"verdict": "pass"
+	},
+	"floor": {
+		"floors": {
+			"east_top": true,
+			"west_hall": true,
+			"west_loft": true
+		},
+		"interior_solid": true,
+		"source": "apply_frames standing settle on each named floor",
+		"verdict": "pass"
+	},
+	"floor1_still": {
+		"alive": true,
+		"allow_lose": false,
+		"climbing": false,
+		"hanging": false,
+		"lose_visible": false,
+		"on_floor": true,
+		"on_ladder": false,
+		"x": 475.611602783203,
+		"y": 179.985626220703,
+		"zone": "west_hall"
+	},
+	"floor2_still": {
+		"alive": true,
+		"allow_lose": false,
+		"climbing": false,
+		"hanging": false,
+		"lose_visible": false,
+		"on_floor": true,
+		"on_ladder": false,
+		"x": 491.612396240234,
+		"y": 99.9934997558594,
+		"zone": "west_loft"
+	},
+	"floor3_still": {
+		"alive": true,
+		"allow_lose": false,
+		"climbing": false,
+		"hanging": false,
+		"lose_visible": false,
+		"on_floor": true,
+		"on_ladder": false,
+		"x": 837.702270507813,
+		"y": 19.813138961792,
+		"zone": "east_top"
+	},
+	"graph": {
+		"elevations": 8,
+		"source": "MapGraph helper; official reach is apply_frames",
+		"verdict": "pass",
+		"zones": [
+			{
+				"graph": true,
+				"id": "court_mid"
+			},
+			{
+				"graph": true,
+				"id": "court_low"
+			},
+			{
+				"graph": true,
+				"id": "court_ground"
+			},
+			{
+				"graph": true,
+				"id": "west_hall"
+			},
+			{
+				"graph": true,
+				"id": "west_loft"
+			},
+			{
+				"graph": true,
+				"id": "sky_bridge"
+			},
+			{
+				"graph": true,
+				"id": "east_hall"
+			},
+			{
+				"graph": true,
+				"id": "east_mid"
+			},
+			{
+				"graph": true,
+				"id": "east_top"
+			}
+		]
+	},
+	"live": {
+		"hud": "Signal Court",
+		"source": "HUD + title display Signal Court",
+		"verdict": "pass"
+	},
+	"machine": {
+		"jammed": true,
+		"jams": 1,
+		"ledger_jam": 1,
+		"shots": 2,
+		"source": "apply_frames fire jams signal_rotor; give_weapon is inventory only",
+		"spin_before": true,
+		"verdict": "pass"
+	},
+	"machine_still": {
+		"alive": true,
+		"allow_lose": false,
+		"climbing": false,
+		"hanging": false,
+		"lose_visible": false,
+		"on_floor": true,
+		"on_ladder": false,
+		"x": 152.666610717773,
+		"y": 179.985626220703,
+		"zone": "court_ground"
+	},
+	"name": {
+		"display": "Signal Court",
+		"source": "catalog + ArenaSpec Signal Court",
+		"verdict": "pass"
+	},
+	"p1": {
+		"climb_up_on_ladder": 61,
+		"climbing_frames": 250,
+		"dead": false,
+		"floor_standing": {
+			"east_mid": true,
+			"east_top": true,
+			"west_hall": true,
+			"west_loft": true
+		},
+		"hits": {
+			"court_ground": true,
+			"court_low": true,
+			"court_mid": true,
+			"east_hall": true,
+			"east_mid": true,
+			"east_top": true,
+			"sky_bridge": true,
+			"west_hall": true,
+			"west_loft": true
+		},
+		"on_floor": true,
+		"pos": [
+			843.16650390625,
+			131.992858886719
+		],
+		"source": "apply_frames live body; P1 holds up on ladders through every zone",
+		"verdict": "pass"
+	},
+	"p2": {
+		"climb_up_on_ladder": 31,
+		"climbing_frames": 31,
+		"dead": false,
+		"hits": {
+			"court_ground": true,
+			"court_low": true,
+			"west_hall": true,
+			"west_loft": true
+		},
+		"source": "apply_frames P2 holds up on west ladder onto west_loft",
+		"verdict": "pass"
+	},
+	"replay": {
+		"pairs": [
+			{
+				"hash": "b0d22a455e4b74f882a4dc5cf013284d03babdf726aefc6abd5b8036563f44b4",
+				"id": "police",
+				"match": true
+			}
+		],
+		"source": "catalog reload hash twice",
+		"verdict": "match"
+	},
+	"spawn": {
+		"p1_dead": false,
+		"p2_dead": false,
+		"source": "idle apply_frames; spawn AABB off pit/rotor",
+		"verdict": "pass"
+	},
+	"zone": {
+		"climb_up_on_ladder": 138,
+		"climbing_frames": 332,
+		"east_top_live": true,
+		"graph_helper": [
+			{
+				"graph": true,
+				"id": "court_mid"
+			},
+			{
+				"graph": true,
+				"id": "court_low"
+			},
+			{
+				"graph": true,
+				"id": "court_ground"
+			},
+			{
+				"graph": true,
+				"id": "west_hall"
+			},
+			{
+				"graph": true,
+				"id": "west_loft"
+			},
+			{
+				"graph": true,
+				"id": "sky_bridge"
+			},
+			{
+				"graph": true,
+				"id": "east_hall"
+			},
+			{
+				"graph": true,
+				"id": "east_mid"
+			},
+			{
+				"graph": true,
+				"id": "east_top"
+			}
+		],
+		"missing": [],
+		"p1_all": true,
+		"source": "apply_frames live body positions (graph helper only)",
+		"union": {
+			"court_ground": true,
+			"court_low": true,
+			"court_mid": true,
+			"east_hall": true,
+			"east_mid": true,
+			"east_top": true,
+			"sky_bridge": true,
+			"west_hall": true,
+			"west_loft": true
+		},
+		"verdict": "pass"
+	}
+}

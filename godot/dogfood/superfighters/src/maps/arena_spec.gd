@@ -130,8 +130,21 @@ static func validate_payload(row: Dictionary) -> PackedStringArray:
 		errors.append("Pallet Annex must list landmarks")
 	_append(errors, _validate_pallet_zones(annex))
 	_append(errors, validate_weapon_cells_safe("storage"))
+	var court: Dictionary = _dict(all_maps.get("police", {}))
+	if str(court.get("display_name", "")) != "Signal Court":
+		errors.append("police display name must be Signal Court")
+	if int(court.get("elevations", 0)) < 3:
+		errors.append("Signal Court must declare 3+ elevations")
+	if combat_zones("police").size() < 6:
+		errors.append("Signal Court must list combat zones")
+	if landmarks("police").is_empty():
+		errors.append("Signal Court must list landmarks")
+	_append(errors, _validate_signal_zones(court))
+	_append(errors, validate_weapon_cells_safe("police"))
 	if not _to_packed(_dict(all_maps.get("police", {})).get("hazards", [])).has("pit"):
 		errors.append("police must declare pit")
+	if not _to_packed(_dict(all_maps.get("police", {})).get("hazards", [])).has("rotor"):
+		errors.append("Signal Court must declare rotor")
 	if not _to_packed(_dict(all_maps.get("hazardous", {})).get("hazards", [])).has("pit"):
 		errors.append("hazardous must declare pit")
 	if not _to_packed(_dict(all_maps.get("fx_env_instant", {})).get("hazards", [])).has("instant"):
@@ -211,6 +224,35 @@ static func _validate_pallet_zones(annex: Dictionary) -> PackedStringArray:
 		i += 1
 	if seen_y.size() < 3:
 		errors.append("Pallet Annex combat zones must span 3+ elevations")
+	return errors
+
+
+static func _validate_signal_zones(court: Dictionary) -> PackedStringArray:
+	var errors: PackedStringArray = PackedStringArray()
+	var seen_y: Dictionary = {}
+	var need: PackedStringArray = PackedStringArray([
+		"court_mid", "court_low", "court_ground", "west_hall", "west_loft",
+		"sky_bridge", "east_hall", "east_mid", "east_top"
+	])
+	var found: Dictionary = {}
+	var zones: Array = _as_array(court.get("combat_zones", []))
+	var i: int = 0
+	while i < zones.size():
+		var zone: Dictionary = _dict(zones[i])
+		var zid: String = str(zone.get("id", ""))
+		if zid == "":
+			errors.append("Signal Court combat zone missing id")
+		found[zid] = true
+		seen_y[int(zone.get("y", -1))] = true
+		i += 1
+	i = 0
+	while i < need.size():
+		var zid: String = String(need[i])
+		if not found.has(zid):
+			errors.append("Signal Court missing combat zone %s" % zid)
+		i += 1
+	if seen_y.size() < 3:
+		errors.append("Signal Court combat zones must span 3+ elevations")
 	return errors
 
 

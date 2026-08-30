@@ -82,7 +82,7 @@ InputFrame `ledge` stays reserved.
 | `cross_dirs.json` | Cross Walk four directions |
 | `map_rooftops.json` | rooftops walk / climb |
 | `map_storage.json` | storage climb |
-| `map_police.json` | police walk |
+| `map_police.json` | Signal Court walk |
 | `map_hazardous.json` | hazardous walk |
 
 ## reaction/

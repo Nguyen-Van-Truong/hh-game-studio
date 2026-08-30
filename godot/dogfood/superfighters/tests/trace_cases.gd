@@ -114,6 +114,10 @@ static func record_from_real_input(app: App) -> PackedStringArray:
 	rec.begin(session, "live_input")
 	Input.action_press("p1_right")
 	var ok: bool = rec.record_live_tick(session)
+	var live_n: int = 0
+	while live_n < 24:
+		ok = rec.record_live_tick(session) and ok
+		live_n += 1
 	Input.action_release("p1_right")
 	if not ok:
 		errors.append("record_live_tick rejected real Input")

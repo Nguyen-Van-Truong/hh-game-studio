@@ -255,7 +255,7 @@ static func kill_y(map_id: String) -> float:
 
 
 static func atlas_for(map_id: String, ch: String) -> Vector2i:
-	if ch == "=":
+	if ch == "=" or ch == "L":
 		return ATLAS_PLATFORM
 	if ch == "c":
 		return ATLAS_CRATE
@@ -289,11 +289,11 @@ static func solid_at(map_id: String, world_pos: Vector2) -> bool:
 
 
 static func is_platform(ch: String) -> bool:
-	return ch == "="
+	return ch == "=" or ch == "L"
 
 
 static func is_ladder(ch: String) -> bool:
-	return ch == "H"
+	return ch == "H" or ch == "L"
 
 
 static func count_char(map_id: String, ch: String) -> int:

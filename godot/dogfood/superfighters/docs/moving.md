@@ -50,8 +50,9 @@ Clock is `ledger:RL-SIM-FIXED-60` (`assumption`).
 - `fx_move_yard` display **Relay Shaft** — door on ground then lift to
   the upper deck (official window map)
 
-Live rooftops/police/hazardous still paint ASCII `c`/`b` as
-tiles. VF5-WP3 places a door and lift on Pallet Annex only.
+Live rooftops/hazardous still paint ASCII `c`/`b` as tiles.
+VF5-WP3 places a door and lift on Pallet Annex. VF5-WP4 places a
+door and lift on Signal Court.
 
 DoD window stills wait for `frame_post_draw` after the matching
 `start_fight` and after the frames that open the gate, raise the lift,

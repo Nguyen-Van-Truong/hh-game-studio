@@ -18,6 +18,7 @@ const EnvCasesScript: GDScript = preload("res://tests/env_cases.gd")
 const MapCasesScript: GDScript = preload("res://tests/map_cases.gd")
 const RooftopCasesScript: GDScript = preload("res://tests/rooftop_cases.gd")
 const WarehouseCasesScript: GDScript = preload("res://tests/warehouse_cases.gd")
+const StationCasesScript: GDScript = preload("res://tests/station_cases.gd")
 const _Combat: GDScript = preload("res://src/sim/combat.gd")
 
 var _fails: PackedStringArray = PackedStringArray()
@@ -48,6 +49,7 @@ var _env: String = "unproven"
 var _mapschema: String = "unproven"
 var _rooftop: String = "unproven"
 var _warehouse: String = "unproven"
+var _station: String = "unproven"
 
 
 func _initialize() -> void:
@@ -90,6 +92,7 @@ func _boot() -> void:
 	await _test_mapschema(app)
 	await _test_rooftop(app)
 	await _test_warehouse(app)
+	await _test_station(app)
 	if _fails.is_empty():
 		_no_err = "proven"
 	_emit()
@@ -1413,6 +1416,58 @@ func _test_warehouse(app: App) -> void:
 		_warehouse = "proven"
 
 
+func _test_station(app: App) -> void:
+	var errors: PackedStringArray = await StationCasesScript.run_all(app)
+	var i: int = 0
+	while i < errors.size():
+		_fail("STAT %s" % String(errors[i]))
+		i += 1
+	var name_v: String = str(StationCasesScript.outcome_name.get("verdict", "unproven"))
+	var graph: String = str(StationCasesScript.outcome_graph.get("verdict", "unproven"))
+	var machine: String = str(StationCasesScript.outcome_machine.get("verdict", "unproven"))
+	var floor_v: String = str(StationCasesScript.outcome_floor.get("verdict", "unproven"))
+	var spawn: String = str(StationCasesScript.outcome_spawn.get("verdict", "unproven"))
+	var cover: String = str(StationCasesScript.outcome_cover.get("verdict", "unproven"))
+	var door: String = str(StationCasesScript.outcome_door.get("verdict", "unproven"))
+	var camera: String = str(StationCasesScript.outcome_camera.get("verdict", "unproven"))
+	var p1: String = str(StationCasesScript.outcome_p1.get("verdict", "unproven"))
+	var p2: String = str(StationCasesScript.outcome_p2.get("verdict", "unproven"))
+	var bot: String = str(StationCasesScript.outcome_bot.get("verdict", "unproven"))
+	var zone: String = str(StationCasesScript.outcome_zone.get("verdict", "unproven"))
+	var live: String = str(StationCasesScript.outcome_live.get("verdict", "unproven"))
+	var replay: String = str(StationCasesScript.outcome_replay.get("verdict", "unproven"))
+	if name_v != "pass":
+		_fail("STAT NAME outcome is %s" % name_v)
+	if graph != "pass":
+		_fail("STAT GRAPH outcome is %s" % graph)
+	if machine != "pass":
+		_fail("STAT MACHINE outcome is %s" % machine)
+	if floor_v != "pass":
+		_fail("STAT FLOOR outcome is %s" % floor_v)
+	if spawn != "pass":
+		_fail("STAT SPAWN outcome is %s" % spawn)
+	if cover != "pass":
+		_fail("STAT COVER outcome is %s" % cover)
+	if door != "pass":
+		_fail("STAT DOOR outcome is %s" % door)
+	if camera != "pass":
+		_fail("STAT CAMERA outcome is %s" % camera)
+	if p1 != "pass":
+		_fail("STAT P1 outcome is %s" % p1)
+	if p2 != "pass":
+		_fail("STAT P2 outcome is %s" % p2)
+	if bot != "pass":
+		_fail("STAT BOT outcome is %s" % bot)
+	if zone != "pass":
+		_fail("STAT ZONE outcome is %s" % zone)
+	if live != "pass":
+		_fail("STAT LIVE outcome is %s" % live)
+	if replay != "match":
+		_fail("STAT REPLAY outcome is %s" % replay)
+	if _count_prefix("STAT ") == 0:
+		_station = "proven"
+
+
 func _emit() -> void:
 	print("HH_VF_PATH title→fight→win/lose→restart")
 	print(
@@ -1753,6 +1808,28 @@ func _emit() -> void:
 			WarehouseCasesScript.used_apply_frames_succeeded,
 			WarehouseCasesScript.used_apply_frames_attempted,
 			_warehouse,
+		]
+	)
+	print(
+		"HH_VF_STAT NAME=%s NAME_SOURCE=outcome_name GRAPH=%s GRAPH_SOURCE=outcome_graph MACHINE=%s MACHINE_SOURCE=outcome_machine FLOOR=%s FLOOR_SOURCE=outcome_floor SPAWN=%s COVER=%s DOOR=%s CAMERA=%s P1=%s P1_SOURCE=outcome_p1 P2=%s BOT=%s BOT_SOURCE=outcome_bot ZONE=%s LIVE=%s REPLAY=%s REPLAY_SOURCE=outcome_replay APPLY=%d/%d status=%s"
+		% [
+			str(StationCasesScript.outcome_name.get("verdict", "unproven")),
+			str(StationCasesScript.outcome_graph.get("verdict", "unproven")),
+			str(StationCasesScript.outcome_machine.get("verdict", "unproven")),
+			str(StationCasesScript.outcome_floor.get("verdict", "unproven")),
+			str(StationCasesScript.outcome_spawn.get("verdict", "unproven")),
+			str(StationCasesScript.outcome_cover.get("verdict", "unproven")),
+			str(StationCasesScript.outcome_door.get("verdict", "unproven")),
+			str(StationCasesScript.outcome_camera.get("verdict", "unproven")),
+			str(StationCasesScript.outcome_p1.get("verdict", "unproven")),
+			str(StationCasesScript.outcome_p2.get("verdict", "unproven")),
+			str(StationCasesScript.outcome_bot.get("verdict", "unproven")),
+			str(StationCasesScript.outcome_zone.get("verdict", "unproven")),
+			str(StationCasesScript.outcome_live.get("verdict", "unproven")),
+			str(StationCasesScript.outcome_replay.get("verdict", "unproven")),
+			StationCasesScript.used_apply_frames_succeeded,
+			StationCasesScript.used_apply_frames_attempted,
+			_station,
 		]
 	)
 	print(

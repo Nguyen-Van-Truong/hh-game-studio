@@ -182,10 +182,11 @@ First playable slice. Not G6. Not 60/60.
   `ledger:RL-MAP-VALID`, `ledger:RL-MAP-AUTHOR`). Jump envelope
   is product tuning, not observed. Live `c`/`b` still paint as
   tiles. Combat/env fixture ASCII stays import-only. Display
-  names Police Station/Hazardous stay
+  name Hazardous stays
   `ledger:RL-DELTA-MAP-NAMES` debt. Rooftops display is
   **Skyline Relay** (VF5-WP2). Storage display is
-  **Pallet Annex** (VF5-WP3). Draft Yard is an authoring
+  **Pallet Annex** (VF5-WP3). Police display is
+  **Signal Court** (VF5-WP4). Draft Yard is an authoring
   demo, not a VS roster map. No new Y8 play.
 - VF5-WP2 ships Skyline Relay as assumption
   (`ledger:RL-MAP-SKYLINE`): 3+ elevations, rooftop/bridge
@@ -205,8 +206,18 @@ First playable slice. Not G6. Not 60/60.
   catwalks, office loft behind a plate door, hanging cargo,
   cargo lift, and original breakable cover. Official proof is
   InputFrame `apply_frames` live body positions. Door/lift are
-  placed because this WP asks for them. Police/Hazardous names
-  stay debt. No new Y8 play. Not a VF7 art rewrite.
+  placed because this WP asks for them. Hazardous name stays
+  debt. No new Y8 play. Not a VF7 art rewrite.
+- VF5-WP4 ships Signal Court as assumption
+  (`ledger:RL-MAP-SIGNAL`): three interior floors, open
+  courtyard, plate door shortcut, west/east ladders, court
+  lift, shootable signal rotor, and breakable window panes.
+  Official proof is InputFrame `apply_frames` live body
+  positions. Door/lift/rotor are placed because this WP asks
+  for them. Water/toxic stay fixture-only. Hazardous name
+  stays debt. Unused `signal_lift` is honesty-only (same class
+  as unused `annex_lift`). Jump envelope stays product tuning.
+  No new Y8 play. Not a VF7 art rewrite.
 - VF3-WP4 ships grenade hold/release throw, gravity arc, bounce,
   fuse, radial falloff, owner skip, one explosion, timeout
   cleanup, and swept nade collision as assumption

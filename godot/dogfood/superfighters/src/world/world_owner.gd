@@ -39,6 +39,8 @@ var env_damage_events: int = 0
 var env_death_events: int = 0
 var env_extinguish_events: int = 0
 var rotor_hits: int = 0
+var rotor_jams: int = 0
+var rotor_shots: int = 0
 var _env_inside: Dictionary = {}
 var _unboard_tick: Dictionary = {}
 var _unboard_y: Dictionary = {}
@@ -122,6 +124,8 @@ func clear() -> void:
 	env_death_events = 0
 	env_extinguish_events = 0
 	rotor_hits = 0
+	rotor_jams = 0
+	rotor_shots = 0
 	_env_inside.clear()
 	board_events = 0
 	unboard_events = 0
@@ -946,6 +950,8 @@ func _apply_env(env: Node2D, fighter: Fighter) -> void:
 				_log_env(env, fighter, "env_death", {"cause": fighter.death_cause})
 		return
 	if kind == "rotor":
+		if bool(env.get("jammed")):
+			return
 		var hits: int = int(env.call("bump_contact", fighter.slot))
 		if hits % int(_Env.rotor_interval()) == 0:
 			var hp1: float = fighter.health
@@ -987,13 +993,40 @@ func _log_env(env: Node2D, fighter: Fighter, kind: String, extra: Dictionary) ->
 	_log_env_id(str(env.get("placement_id")), fighter, kind, extra)
 
 
+func apply_rotor_shot(env: Node2D, raw: float, attacker: int = -1) -> bool:
+	if env == null or not is_instance_valid(env):
+		return false
+	if str(env.get("kind")) != "rotor":
+		return false
+	if bool(env.get("jammed")):
+		return false
+	rotor_shots += 1
+	var newly: bool = bool(env.call("take_shot", raw))
+	var fighter: Fighter = null
+	if session != null:
+		fighter = session.fighter_at_slot(attacker)
+	if newly:
+		rotor_jams += 1
+		_log_env_id(str(env.get("placement_id")), fighter, "rotor_jam", {
+			"jams": rotor_jams,
+			"shots": rotor_shots,
+		})
+	else:
+		_log_env_id(str(env.get("placement_id")), fighter, "rotor_shot", {
+			"hp": SimConstants.quantize(float(env.get("health"))),
+			"shots": rotor_shots,
+		})
+	return true
+
+
 func _log_env_id(env_id: String, fighter: Fighter, kind: String, extra: Dictionary) -> void:
-	if session == null or session.ledger == null or fighter == null:
+	if session == null or session.ledger == null:
 		return
 	var row: Dictionary = {
 		"id": env_id,
-		"slot": fighter.slot,
 	}
+	if fighter != null:
+		row["slot"] = fighter.slot
 	var keys: Array = extra.keys()
 	var i: int = 0
 	while i < keys.size():

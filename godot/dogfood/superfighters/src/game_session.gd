@@ -895,11 +895,18 @@ func _step_bullets(delta: float) -> void:
 		var to: Vector2 = shot.predicted_pos(delta)
 		var sweep: Dictionary = _sweep_bullet(shot, from, to)
 		var kind: String = str(sweep.get("kind", ""))
-		if kind == "world" or kind == "prop" or kind == "fighter":
+		if kind == "world" or kind == "prop" or kind == "fighter" or kind == "env":
 			shot.commit_step(sweep.get("point", from) as Vector2, delta)
 			shot.spent = true
 			if kind == "fighter":
 				_apply_bullet_hit(shot, sweep.get("fighter") as Fighter)
+			if kind == "env" and world_owner != null:
+				world_owner.call(
+					"apply_rotor_shot",
+					sweep.get("env") as Node2D,
+					shot.damage,
+					shot.owner_slot
+				)
 			shot.queue_free()
 			bullets.remove_at(i)
 			continue
@@ -954,7 +961,52 @@ func _sweep_bullet(shot: Bullet, from: Vector2, to: Vector2) -> Dictionary:
 		if t_f < float(best.get("t", 2.0)):
 			var at_f: Vector2 = from.lerp(to, t_f)
 			best = {"kind": "fighter", "t": t_f, "point": at_f, "fighter": f}
+	var rotor_hit: Dictionary = _sweep_rotor(from, to)
+	if str(rotor_hit.get("kind", "")) == "env" and float(rotor_hit.get("t", 2.0)) < float(best.get("t", 2.0)):
+		best = rotor_hit
 	return best
+
+
+func _sweep_rotor(from: Vector2, to: Vector2) -> Dictionary:
+	var best: Dictionary = {"kind": "", "t": 2.0, "point": to, "env": null}
+	if world_owner == null:
+		return best
+	var rows: Array = world_owner.envs
+	var i: int = 0
+	while i < rows.size():
+		var env: Node2D = rows[i] as Node2D
+		i += 1
+		if env == null or not is_instance_valid(env):
+			continue
+		if str(env.get("kind")) != "rotor":
+			continue
+		if bool(env.get("jammed")):
+			continue
+		var box: Rect2 = env.call("aabb") as Rect2
+		var t_r: float = _segment_aabb_t(from, to, box)
+		if t_r < 0.0:
+			continue
+		if t_r < float(best.get("t", 2.0)):
+			best = {
+				"kind": "env",
+				"t": t_r,
+				"point": from.lerp(to, t_r),
+				"env": env,
+				"fighter": null,
+			}
+	return best
+
+
+func _segment_aabb_t(from: Vector2, to: Vector2, box: Rect2) -> float:
+	var delta: Vector2 = to - from
+	var len2: float = delta.length_squared()
+	var t: float = 0.0
+	if len2 > SimConstants.EPSILON:
+		t = clampf((box.get_center() - from).dot(delta) / len2, 0.0, 1.0)
+	var closest: Vector2 = from.lerp(to, t)
+	if box.grow(2.0).has_point(closest):
+		return t
+	return -1.0
 
 
 func _uncollide_point(from: Vector2, dir: Vector2) -> Vector2:

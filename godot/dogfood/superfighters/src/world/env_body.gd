@@ -15,6 +15,8 @@ var spec_id: String = ""
 var kind: String = ""
 var uid: int = 0
 var angle: float = 0.0
+var health: float = 0.0
+var jammed: bool = false
 var contact_ticks: Dictionary = {}
 var view: Sprite2D
 var area: Area2D
@@ -34,6 +36,8 @@ func setup(p_place: Dictionary, spec: Dictionary, p_uid: int, layers: Dictionary
 	add_to_group(GROUP)
 	global_position = Vector2(float(p_place.get("x", 0.0)), float(p_place.get("y", 0.0)))
 	angle = 0.0
+	jammed = false
+	health = float(p_place.get("health", spec.get("health", 0.0)))
 	contact_ticks.clear()
 	_layer_bit = int(_Spec.layer_bit(_Spec.layer_name(spec), layers))
 	_mask_bits = int(_Spec.bits_of(_Spec.mask_names(spec), layers))
@@ -61,6 +65,8 @@ func snapshot_row() -> Dictionary:
 		"x": SimConstants.quantize(global_position.x),
 		"y": SimConstants.quantize(global_position.y),
 		"angle": SimConstants.quantize(angle),
+		"health": SimConstants.quantize(health),
+		"jammed": jammed,
 		"layer": _layer_bit,
 		"mask": _mask_bits,
 	}
@@ -68,12 +74,27 @@ func snapshot_row() -> Dictionary:
 
 func reset_motion() -> void:
 	angle = 0.0
+	jammed = false
 	contact_ticks.clear()
 	_apply_spin()
 
 
+func take_shot(dmg: float) -> bool:
+	if kind != "rotor" or jammed:
+		return false
+	if health <= 0.0:
+		return false
+	health -= dmg
+	if health > 0.0:
+		return false
+	health = 0.0
+	jammed = true
+	_apply_spin()
+	return true
+
+
 func advance_spin() -> void:
-	if kind != "rotor":
+	if kind != "rotor" or jammed:
 		return
 	angle += float(_Env.rotor_deg())
 	if angle >= 360.0:

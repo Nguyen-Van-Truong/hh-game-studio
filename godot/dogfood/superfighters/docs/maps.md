@@ -35,16 +35,16 @@ Official author proof rebuilds **Draft Yard** (`fx_map_author`) from
 
 ## Live maps
 
-Police / hazardous geometry is unchanged since VF5-WP1.
-Rooftops (id kept) is **Skyline Relay**. Storage (id kept) is now
-**Pallet Annex**: enclosed warehouse, crate stacks, catwalks, office
-loft behind a plate door, hanging cargo, and a cargo lift. Official
+Police (id kept) is now **Signal Court**: three interior floors, an
+open courtyard, a door shortcut, ladders plus a court lift, a
+shootable rotor, and breakable panes. Rooftops (id kept) is
+**Skyline Relay**. Storage (id kept) is **Pallet Annex**. Official
 reach is live `apply_frames` bodies holding `up` on ladders, not the
-graph. Display names Police Station / Hazardous stay first-playable
-debt (`ledger:RL-DELTA-MAP-NAMES`) until VF5-WP4+. `c` / `b` still
-**paint as tiles** except Skyline Relay cover and Pallet Annex
-cover/cargo, which use world placements. Combat/env fixture ASCII
-rows stay import-only.
+graph. Hazardous display stays first-playable debt
+(`ledger:RL-DELTA-MAP-NAMES`) until VF5-WP5+. `c` / `b` still
+**paint as tiles** except Skyline Relay cover, Pallet Annex
+cover/cargo, and Signal Court window cover, which use world
+placements. Combat/env fixture ASCII rows stay import-only.
 
 ## Honesty
 
@@ -58,6 +58,8 @@ rows stay import-only.
 - No new in-game Y8 play. VF5-WP2 owns Skyline Relay
   (`docs/rooftop.md`, `ledger:RL-MAP-SKYLINE`). VF5-WP3 owns
   Pallet Annex (`docs/warehouse.md`, `ledger:RL-MAP-PALLET`).
+  VF5-WP4 owns Signal Court (`docs/station.md`,
+  `ledger:RL-MAP-SIGNAL`).
 
 DoD window stills wait for `frame_post_draw` after `start_fight` and
 a standing settle. Setup is rooftops. Rooftops / storage / police /

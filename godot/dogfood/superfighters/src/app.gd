@@ -139,7 +139,7 @@ func _show_win() -> void:
 	var detail: String = "The arena is yours."
 	if mode == "stage":
 		headline = "Stage cleared"
-		detail = "Skyline Relay → Pallet Annex → Police Station → Hazardous."
+		detail = "Skyline Relay → Pallet Annex → Signal Court → Hazardous."
 	if win_screen != null:
 		win_screen.show_win(headline, detail)
 

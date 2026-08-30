@@ -35,8 +35,8 @@ The live grid keeps the VF5-WP1 layered source. This WP adds:
 Machines, water, toxic, lifts, and doors stay fixture-only. Ladders
 satisfy the ladder / elevator / moving-route beat.
 
-Storage display is now **Pallet Annex** (VF5-WP3). Police Station /
-Hazardous display names remain debt until VF5-WP4+.
+Storage display is now **Pallet Annex** (VF5-WP3). Police display is
+now **Signal Court** (VF5-WP4). Hazardous remains debt until VF5-WP5+.
 
 ## Verify is live locomotion
 

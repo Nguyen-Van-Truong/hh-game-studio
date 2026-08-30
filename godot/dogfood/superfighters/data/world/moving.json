@@ -127,6 +127,21 @@
         "to_y": 100
       },
       {"id": "annex_lift_plate", "spec": "call_plate", "x": 608, "y": 173, "target": "annex_lift"}
+    ],
+    "police": [
+      {"id": "signal_door", "spec": "gate_door", "x": 408, "y": 184},
+      {"id": "signal_door_plate", "spec": "call_plate", "x": 300, "y": 189, "target": "signal_door"},
+      {
+        "id": "signal_lift",
+        "spec": "shaft_lift",
+        "x": 736,
+        "y": 196,
+        "from_x": 736,
+        "from_y": 196,
+        "to_x": 736,
+        "to_y": 80
+      },
+      {"id": "signal_lift_plate", "spec": "call_plate", "x": 704, "y": 189, "target": "signal_lift"}
     ]
   },
   "fixtures": {

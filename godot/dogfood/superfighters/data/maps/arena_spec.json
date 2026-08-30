@@ -92,9 +92,33 @@
     },
     "police": {
       "id": "police",
-      "display_name": "Police Station",
-      "hazards": ["pit", "fall"],
-      "notes": "Left pit kill-plane and fall policy. No env placements this WP."
+      "display_name": "Signal Court",
+      "hazards": ["pit", "fall", "rotor"],
+      "notes": "Original multi-floor station. Open courtyard, door shortcut, loft window, ladders, court lift, shootable signal rotor, breakable panes. Left pit. No water/toxic.",
+      "elevations": 4,
+      "combat_zones": [
+        {"id": "court_mid", "x": 4, "y": 7, "w": 7, "h": 1},
+        {"id": "court_low", "x": 11, "y": 9, "w": 7, "h": 1},
+        {"id": "court_ground", "x": 8, "y": 11, "w": 16, "h": 1},
+        {"id": "west_hall", "x": 27, "y": 11, "w": 5, "h": 1},
+        {"id": "west_loft", "x": 26, "y": 6, "w": 10, "h": 1},
+        {"id": "sky_bridge", "x": 36, "y": 6, "w": 14, "h": 1},
+        {"id": "east_hall", "x": 50, "y": 11, "w": 10, "h": 1},
+        {"id": "east_mid", "x": 50, "y": 4, "w": 4, "h": 1},
+        {"id": "east_top", "x": 50, "y": 1, "w": 4, "h": 2}
+      ],
+      "landmarks": [
+        {"id": "court_yard", "kind": "courtyard"},
+        {"id": "signal_door", "kind": "door"},
+        {"id": "signal_lift", "kind": "elevator"},
+        {"id": "signal_rotor", "kind": "machine"},
+        {"id": "pane_cover", "kind": "breakable_cover"}
+      ],
+      "weapon_risk": [
+        {"cell": [45, 3], "risk": "bridge"},
+        {"cell": [29, 6], "risk": "loft"},
+        {"cell": [44, 6], "risk": "bridge"}
+      ]
     },
     "hazardous": {
       "id": "hazardous",

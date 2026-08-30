@@ -85,6 +85,8 @@ static func schema_and_data() -> PackedStringArray:
 		errors.append("DATA rooftops display name must be Skyline Relay")
 	if Maps.display_name("storage") != "Pallet Annex":
 		errors.append("DATA storage display name must be Pallet Annex")
+	if Maps.display_name("police") != "Signal Court":
+		errors.append("DATA police display name must be Signal Court")
 	if Maps.display_name("fx_map_author").to_lower().contains("superfighter"):
 		errors.append("DATA display name uses Superfighters trademark")
 	var live: PackedStringArray = PackedStringArray(["rooftops", "storage", "police", "hazardous"])
