@@ -21,7 +21,8 @@
   "values_are_tuning": true,
   "original_exact_numbers_claimed": false,
   "env_implemented": true,
-  "ascii_maps_kept": true,
+  "ascii_maps_kept": false,
+  "layered_maps": true,
   "live_c_b_tiles": true,
   "fall": {
     "drop_min": 28.0,
@@ -85,6 +86,12 @@
       "id": "fx_env_yard",
       "display_name": "Hazard Yard",
       "hazards": ["water", "rotor", "toxic"]
+    },
+    "fx_map_author": {
+      "id": "fx_map_author",
+      "display_name": "Draft Yard",
+      "hazards": ["fall"],
+      "notes": "Semantic-author demo. Not a live VS roster map."
     }
   }
 }

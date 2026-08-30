@@ -1,9 +1,8 @@
 class_name ArenaSpec
 extends RefCounted
 
-## Per-map hazard contract (VF4-WP5). ASCII grids stay in Maps.
-## ledger:RL-ENV-ARENA / RL-ENV-SPAWN / RL-MOVE-FALL (assumption).
-## Not a VF5 authoring rewrite.
+## Per-map hazard contract (VF4-WP5) plus VF5-WP1 layered source.
+## ledger:RL-ENV-ARENA / RL-MAP-LAYERS (assumption).
 
 const PATH: String = "res://data/maps/arena_spec.json"
 const SCHEMA_ID: String = "vf.maps.arena.v1"
@@ -52,8 +51,10 @@ static func validate_payload(row: Dictionary) -> PackedStringArray:
 		errors.append("arena spec values must be marked tuning")
 	if not bool(row.get("env_implemented", false)):
 		errors.append("arena spec env contract must be implemented")
-	if not bool(row.get("ascii_maps_kept", false)):
-		errors.append("arena spec must keep ASCII maps this WP")
+	if bool(row.get("ascii_maps_kept", true)):
+		errors.append("arena spec ASCII source must be retired")
+	if not bool(row.get("layered_maps", false)):
+		errors.append("arena spec must use layered maps")
 	if not bool(row.get("live_c_b_tiles", false)):
 		errors.append("live c/b tiles must stay tiles")
 	if str(row.get("arena_class", "")) != "assumption":

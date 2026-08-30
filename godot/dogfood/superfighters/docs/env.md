@@ -45,7 +45,8 @@ env at rest (`wet`/`acid` clear).
 
 ArenaSpec (`ledger:RL-ENV-ARENA`) names hazards per map. Live maps
 declare pit/fall only. Machines/water/toxic stay on fixtures.
-ASCII maps stay (`ascii_maps_kept`). Live `c`/`b` stay tiles.
+VF5-WP1 retires ASCII as the live source (`layered_maps`). Live
+`c`/`b` stay painted tiles.
 
 `ledger:RL-NADE-PROP` stays `deferred`.
 
@@ -58,9 +59,9 @@ ASCII maps stay (`ascii_maps_kept`). Live `c`/`b` stay tiles.
 - `fx_env_fall` display **Drop Well** — standing walk-off
 - `fx_env_yard` display **Hazard Yard** — water, mill, acid (no instant)
 
-Live rooftops/storage/police/hazardous still paint ASCII `c`/`b` as
-tiles. This WP does not migrate them. Lifts/doors stay fixture-only
-(VF5). Character/map readability art is VF7.
+Live rooftops/storage/police/hazardous paint `c`/`b` as tiles from
+prop/hazard layers (VF5-WP1). Lifts/doors stay fixture-only until
+a later map WP places them. Character/map readability art is VF7.
 
 DoD window stills wait for `frame_post_draw` after the matching
 `start_fight` and after the frames that wet, spin, acid, kill, or

@@ -789,3 +789,38 @@ Official proof uses `apply_frames` plus live InputEvent inject.
 | RL-ENV-SPAWN | Safe spawn zones | `assumption` | none | VF4-WP5 product contract; **not** observed on Y8 this session | 2026-08-30 | P/1 AABB not in instant/toxic/rotor | spawn AABB | Do **not** cite as observed. |
 | RL-ENV-ARENA | ArenaSpec hazard list | `assumption` | none | VF4-WP5 product contract; **not** observed on Y8 this session | 2026-08-30 | live maps pit/fall; machines on fixtures | ArenaSpec | Do **not** cite as observed. |
 
+---
+
+## VF5-WP1 map schema, validator, and authoring (not a play observation)
+
+Dated 2026-08-30 Asia/Saigon. No in-game Y8 play. No HTML5/Flash
+package. Sidecar: `docs/maps.md` and
+`docs/evidence/VF5WP1-20260830-ASIA-SAIGON-01/`.
+That `run_id` is unique. Do **not** remint it.
+
+Layers stay `ledger:RL-MAP-LAYERS` (`assumption`). Graph stay
+`ledger:RL-MAP-GRAPH` (`assumption`). Validator stay
+`ledger:RL-MAP-VALID` (`assumption`). Author stay
+`ledger:RL-MAP-AUTHOR` (`assumption`). None of these rows is
+promoted to `observed`. Hold-to-aim stays
+`ledger:RL-CTRL-HOLD-AIM` (`assumption`). Y8 observation stays
+`ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). 60 Hz stays
+`ledger:RL-SIM-FIXED-60` (`assumption`). `ledger:RL-NADE-PROP`
+stays `deferred`. Display-name debt stays
+`ledger:RL-DELTA-MAP-NAMES`.
+
+Product contract: live arenas load from layered JSON (solid, one-way,
+ladder, hazard, prop, spawn, pickup). ASCII is a derived view only.
+Validator rejects width / overlap / spawn / pit / camera / disconnected
+platform graphs. Semantic commands rebuild Draft Yard with matching
+hash. Jump envelope is product tuning (10 / 4), not observed Y8 reach.
+Live `c`/`b` paint as tiles. Fixture ASCII stays import-only. Geometry
+of the four live maps is unchanged this WP.
+
+| ID | Topic | Class | Conf. | Source | When | Behavior to reproduce | Tuning-only | Notes |
+|---|---|---|---|---|---|---|---|---|
+| RL-MAP-LAYERS | Layered map resource | `assumption` | none | VF5-WP1 product contract; **not** observed on Y8 this session | 2026-08-30 | seven layers replace ASCII source | schema v1 | Do **not** cite as observed. |
+| RL-MAP-GRAPH | Platform reach graph | `assumption` | none | VF5-WP1 product contract; **not** observed on Y8 this session | 2026-08-30 | every required platform reachable from spawns | jump 10 / 4 | Do **not** cite as observed. |
+| RL-MAP-VALID | Topology validator | `assumption` | none | VF5-WP1 product contract; **not** observed on Y8 this session | 2026-08-30 | reject width/overlap/spawn/pit/camera/graph | 1280x720 | Do **not** cite as observed. |
+| RL-MAP-AUTHOR | Semantic map commands | `assumption` | none | VF5-WP1 product contract; **not** observed on Y8 this session | 2026-08-30 | create/paint/validate/serialize Draft Yard | command_id | Do **not** cite as observed. |
+

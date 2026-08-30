@@ -1,6 +1,12 @@
 class_name Maps
 extends RefCounted
 
+## Live arenas load from layered JSON (VF5-WP1). grid() is derived.
+## ledger:RL-MAP-LAYERS (assumption). Fixture ASCII stays import-only.
+
+const _MapCatalog: GDScript = preload("res://src/maps/map_catalog.gd")
+const _MapCodec: GDScript = preload("res://src/maps/map_codec.gd")
+
 const TILE: int = 16
 const COL_WORLD: int = 1
 const COL_PLATFORM: int = 2
@@ -28,6 +34,7 @@ const BALANCE_PATH: String = "res://data/sim/balance.json"
 const WORLD_PATH: String = "res://data/world/catalog.json"
 const MOVING_PATH: String = "res://data/world/moving.json"
 const ENV_PATH: String = "res://data/world/env.json"
+const MAP_CATALOG_PATH: String = "res://data/maps/catalog.json"
 
 static var _trav_cache: Dictionary = {}
 static var _combat_cache: Dictionary = {}
@@ -187,16 +194,10 @@ static func _grid_from(payload: Dictionary, map_id: String) -> PackedStringArray
 
 
 static func display_name(map_id: String) -> String:
+	if _MapCatalog.has_id(map_id):
+		return _MapCatalog.display_name(map_id)
 	if has_fixture(map_id):
 		return fixture_name(map_id)
-	if map_id == "rooftops":
-		return "Rooftops"
-	if map_id == "storage":
-		return "Storage"
-	if map_id == "police":
-		return "Police Station"
-	if map_id == "hazardous":
-		return "Hazardous"
 	return map_id
 
 
@@ -228,15 +229,11 @@ static func stage_map_at(index: int) -> String:
 
 
 static func grid(map_id: String) -> PackedStringArray:
+	if _MapCatalog.has_id(map_id):
+		return _MapCodec.to_ascii(_MapCatalog.document(map_id))
 	if has_fixture(map_id):
 		return fixture_grid(map_id)
-	if map_id == "storage":
-		return _storage()
-	if map_id == "police":
-		return _police()
-	if map_id == "hazardous":
-		return _hazardous()
-	return _rooftops()
+	return PackedStringArray()
 
 
 static func tile_size(map_id: String) -> Vector2i:
@@ -255,90 +252,6 @@ static func pixel_size(map_id: String) -> Vector2:
 
 static func kill_y(map_id: String) -> float:
 	return pixel_size(map_id).y + 20.0
-
-
-static func _rooftops() -> PackedStringArray:
-	# Three buildings + gaps (pits) + ladders + jump-throughs. Echoes Y8 Rooftops.
-	return PackedStringArray([
-		"................................................................",
-		"................................................................",
-		".......##................................................##.....",
-		".......##......................##........................##.....",
-		"......####..........w..........##...........w...........####....",
-		"...............========..................========...............",
-		"................................................................",
-		"....P.......................1.........................2.........",
-		"..H#######............#H############............H#######........",
-		"..H#######............#H############............H#######........",
-		"..H#######......w.....#H...........#......w.....#H.....#........",
-		"..H#######............#H############............H#######........",
-		"..H#######............#H############............H#######........",
-		"..H#######............#H############............H#######........",
-		"................................................................",
-		"................................................................",
-	])
-
-
-static func _storage() -> PackedStringArray:
-	# Enclosed warehouse, crate stacks, catwalks, ladders. Echoes Y8 Storage.
-	return PackedStringArray([
-		"################################################################",
-		"#..............................................................#",
-		"#......========............................========............#",
-		"#..H......................................................H....#",
-		"#....cccc............w.................w...........cccc........#",
-		"#....cccc..........................................cccc........#",
-		"#..............========........========........................#",
-		"#..............H................H..............................#",
-		"#..P....cccc..............1..............cccc..............2...#",
-		"#.......cccc.............................cccc..................#",
-		"#..............................................................#",
-		"################################################################",
-	])
-
-
-static func _police() -> PackedStringArray:
-	# Left pit, two-floor station with walkable ground, ladders, right tower.
-	return PackedStringArray([
-		"................................................................",
-		"......................................................####......",
-		"......................................................#H.#......",
-		".........................................w............#..#......",
-		"......................................========........####......",
-		".....................##########################.......#..#......",
-		".....................#..........w....H........#.......#H.#......",
-		".....................#....====.......H.====...#.......####......",
-		"..............w......#...............H........#.......#..#......",
-		".........========....#..cccc.........H.cccc...#.......#H.#......",
-		".....................#..cccc.........H.cccc...#.......####......",
-		"......P..........1...#...............H........#....2............",
-		"......##########################################################",
-		"......##########################################################",
-		"................................................................",
-		"................................................................",
-	])
-
-
-static func _hazardous() -> PackedStringArray:
-	# Isolated pipes over a wide pit, ladders, jump-throughs. Echoes Y8 Hazardous.
-	return PackedStringArray([
-		"................................................................",
-		"................................................................",
-		"........========............................========............",
-		"............w....................................w..............",
-		"....bbbb................========......................bbbb......",
-		"....H.....................................................H.....",
-		"========................w................w..............========",
-		"................................................................",
-		"....P...............1...............========................2...",
-		"...=======.........=======..............................=======.",
-		"..............bbbb................................bbbb..........",
-		"..............H......................................H..........",
-		"................................................................",
-		"................................................................",
-		"................................................................",
-		"................................................................",
-	])
 
 
 static func atlas_for(map_id: String, ch: String) -> Vector2i:
@@ -440,7 +353,7 @@ static func spawn_floor_solid(map_id: String) -> bool:
 
 
 static func police_interior_floor_solid() -> bool:
-	var rows: PackedStringArray = _police()
+	var rows: PackedStringArray = grid("police")
 	if rows.size() < 13:
 		return false
 	var floor_row: String = String(rows[12])

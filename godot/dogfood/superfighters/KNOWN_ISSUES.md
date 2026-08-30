@@ -176,6 +176,16 @@ First playable slice. Not G6. Not 60/60.
   is **not** promoted to `observed`. Y8 roll/dive observation
   stays `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). No new Y8
   play. Not a VF7 art rewrite.
+- VF5-WP1 retires ASCII as the live-map source. Layered JSON plus
+  `MapValidator` / `MapAuthor` ship as assumption
+  (`ledger:RL-MAP-LAYERS`, `ledger:RL-MAP-GRAPH`,
+  `ledger:RL-MAP-VALID`, `ledger:RL-MAP-AUTHOR`). Jump envelope
+  is product tuning, not observed. Live `c`/`b` still paint as
+  tiles. Combat/env fixture ASCII stays import-only. Display
+  names Rooftops/Storage/Police Station/Hazardous stay
+  `ledger:RL-DELTA-MAP-NAMES` debt. Draft Yard is an authoring
+  demo, not a VS roster map. No new Y8 play. Not a VF5-WP2
+  layout pass.
 - VF3-WP4 ships grenade hold/release throw, gravity arc, bounce,
   fuse, radial falloff, owner skip, one explosion, timeout
   cleanup, and swept nade collision as assumption

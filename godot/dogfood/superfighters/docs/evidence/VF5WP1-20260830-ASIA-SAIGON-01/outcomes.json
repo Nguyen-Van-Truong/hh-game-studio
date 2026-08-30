@@ -1,0 +1,166 @@
+{
+	"apply": {
+		"attempted": 36,
+		"succeeded": 36,
+		"used_action_press": 0,
+		"used_apply_frames": 36,
+		"used_parse_input_event": 0,
+		"used_step_fixed": 0
+	},
+	"author": {
+		"commands": 12,
+		"hash": "695e5643484a442eedd3630d1122e8bdd9a06b91b15a8e5d99f3f52f665cfe92",
+		"shipped": "695e5643484a442eedd3630d1122e8bdd9a06b91b15a8e5d99f3f52f665cfe92",
+		"source": "MapAuthor semantic commands vs shipped Draft Yard",
+		"store": "user://vf_maps/draft_yard.json",
+		"verdict": "pass"
+	},
+	"camera": {
+		"errors": 1,
+		"source": "broken_camera exceeds 1280x720",
+		"verdict": "pass"
+	},
+	"graph": {
+		"jump_dx": 10,
+		"jump_dy": 4,
+		"maps": [
+			{
+				"id": "fx_map_author",
+				"missing": 0,
+				"platforms": 2,
+				"walkable": 29
+			},
+			{
+				"id": "hazardous",
+				"missing": 0,
+				"platforms": 13,
+				"walkable": 87
+			},
+			{
+				"id": "police",
+				"missing": 0,
+				"platforms": 14,
+				"walkable": 130
+			},
+			{
+				"id": "rooftops",
+				"missing": 0,
+				"platforms": 10,
+				"walkable": 87
+			},
+			{
+				"id": "storage",
+				"missing": 0,
+				"platforms": 9,
+				"walkable": 114
+			}
+		],
+		"source": "MapGraph reach from spawns",
+		"verdict": "pass"
+	},
+	"live": {
+		"author_on_floor": true,
+		"moved": true,
+		"on_floor": true,
+		"source": "apply_frames walk on layered rooftops + Draft Yard",
+		"verdict": "pass"
+	},
+	"overlap": {
+		"errors": 1,
+		"source": "broken_overlap solid/one_way",
+		"verdict": "pass"
+	},
+	"pit": {
+		"rooftops": 64,
+		"source": "pit columns from layered blockers",
+		"storage": 0,
+		"verdict": "pass"
+	},
+	"reject": {
+		"camera": 1,
+		"graph": 1,
+		"overlap": 1,
+		"source": "MapValidator broken fixtures",
+		"spawn": 1,
+		"verdict": "pass",
+		"width": 3
+	},
+	"replay": {
+		"pairs": [
+			{
+				"hash": "695e5643484a442eedd3630d1122e8bdd9a06b91b15a8e5d99f3f52f665cfe92",
+				"id": "fx_map_author",
+				"match": true
+			},
+			{
+				"hash": "8871be2b5f33cbfd461d816aa63ecaa60bd1c715d2b1a537625a186b2b0ea84d",
+				"id": "hazardous",
+				"match": true
+			},
+			{
+				"hash": "132e6627c3ebc35d154931ccc1dfb4830bef71620cf6989899769ba59b2ae6d1",
+				"id": "police",
+				"match": true
+			},
+			{
+				"hash": "f1456defe5e39933577b03da6d97580f2366749ef4c73b68dfde9b2de2afd849",
+				"id": "rooftops",
+				"match": true
+			},
+			{
+				"hash": "f72065a5da707e081f3e808d7b9e173fc6aa84de7ceb28c1e9a0808c0f959754",
+				"id": "storage",
+				"match": true
+			}
+		],
+		"source": "catalog reload hash twice",
+		"verdict": "match"
+	},
+	"roundtrip": {
+		"pairs": [
+			{
+				"hash": "695e5643484a442eedd3630d1122e8bdd9a06b91b15a8e5d99f3f52f665cfe92",
+				"id": "fx_map_author",
+				"match": true
+			},
+			{
+				"hash": "8871be2b5f33cbfd461d816aa63ecaa60bd1c715d2b1a537625a186b2b0ea84d",
+				"id": "hazardous",
+				"match": true
+			},
+			{
+				"hash": "132e6627c3ebc35d154931ccc1dfb4830bef71620cf6989899769ba59b2ae6d1",
+				"id": "police",
+				"match": true
+			},
+			{
+				"hash": "f1456defe5e39933577b03da6d97580f2366749ef4c73b68dfde9b2de2afd849",
+				"id": "rooftops",
+				"match": true
+			},
+			{
+				"hash": "f72065a5da707e081f3e808d7b9e173fc6aa84de7ceb28c1e9a0808c0f959754",
+				"id": "storage",
+				"match": true
+			}
+		],
+		"source": "_MapCodec.serialize/deserialize SHA-256",
+		"verdict": "pass"
+	},
+	"schema": {
+		"ascii_retired": true,
+		"layered": true,
+		"source": "catalog.json + layered arenas",
+		"verdict": "pass"
+	},
+	"spawn": {
+		"errors": 1,
+		"source": "broken_spawn no floor",
+		"verdict": "pass"
+	},
+	"width": {
+		"errors": 3,
+		"source": "broken_width out of bounds",
+		"verdict": "pass"
+	}
+}

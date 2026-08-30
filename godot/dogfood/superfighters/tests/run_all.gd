@@ -15,6 +15,7 @@ const BreakCasesScript: GDScript = preload("res://tests/break_cases.gd")
 const HazardCasesScript: GDScript = preload("res://tests/hazard_cases.gd")
 const MovingCasesScript: GDScript = preload("res://tests/moving_cases.gd")
 const EnvCasesScript: GDScript = preload("res://tests/env_cases.gd")
+const MapCasesScript: GDScript = preload("res://tests/map_cases.gd")
 const _Combat: GDScript = preload("res://src/sim/combat.gd")
 
 var _fails: PackedStringArray = PackedStringArray()
@@ -42,6 +43,7 @@ var _break: String = "unproven"
 var _hazard: String = "unproven"
 var _moving: String = "unproven"
 var _env: String = "unproven"
+var _mapschema: String = "unproven"
 
 
 func _initialize() -> void:
@@ -81,6 +83,7 @@ func _boot() -> void:
 	await _test_hazard(app)
 	await _test_moving(app)
 	await _test_env(app)
+	await _test_mapschema(app)
 	if _fails.is_empty():
 		_no_err = "proven"
 	_emit()
@@ -1266,6 +1269,52 @@ func _test_env(app: App) -> void:
 		_env = "proven"
 
 
+func _test_mapschema(app: App) -> void:
+	var errors: PackedStringArray = await MapCasesScript.run_all(app)
+	var i: int = 0
+	while i < errors.size():
+		_fail("MAPSCHEMA %s" % String(errors[i]))
+		i += 1
+	var schema_v: String = str(MapCasesScript.outcome_schema.get("verdict", "unproven"))
+	var roundtrip: String = str(MapCasesScript.outcome_roundtrip.get("verdict", "unproven"))
+	var graph: String = str(MapCasesScript.outcome_graph.get("verdict", "unproven"))
+	var reject: String = str(MapCasesScript.outcome_reject.get("verdict", "unproven"))
+	var author: String = str(MapCasesScript.outcome_author.get("verdict", "unproven"))
+	var width_v: String = str(MapCasesScript.outcome_width.get("verdict", "unproven"))
+	var spawn_v: String = str(MapCasesScript.outcome_spawn.get("verdict", "unproven"))
+	var pit_v: String = str(MapCasesScript.outcome_pit.get("verdict", "unproven"))
+	var camera_v: String = str(MapCasesScript.outcome_camera.get("verdict", "unproven"))
+	var overlap_v: String = str(MapCasesScript.outcome_overlap.get("verdict", "unproven"))
+	var live: String = str(MapCasesScript.outcome_live.get("verdict", "unproven"))
+	var replay: String = str(MapCasesScript.outcome_replay.get("verdict", "unproven"))
+	if schema_v != "pass":
+		_fail("MAPSCHEMA SCHEMA outcome is %s" % schema_v)
+	if roundtrip != "pass":
+		_fail("MAPSCHEMA ROUNDTRIP outcome is %s" % roundtrip)
+	if graph != "pass":
+		_fail("MAPSCHEMA GRAPH outcome is %s" % graph)
+	if reject != "pass":
+		_fail("MAPSCHEMA REJECT outcome is %s" % reject)
+	if author != "pass":
+		_fail("MAPSCHEMA AUTHOR outcome is %s" % author)
+	if width_v != "pass":
+		_fail("MAPSCHEMA WIDTH outcome is %s" % width_v)
+	if spawn_v != "pass":
+		_fail("MAPSCHEMA SPAWN outcome is %s" % spawn_v)
+	if pit_v != "pass":
+		_fail("MAPSCHEMA PIT outcome is %s" % pit_v)
+	if camera_v != "pass":
+		_fail("MAPSCHEMA CAMERA outcome is %s" % camera_v)
+	if overlap_v != "pass":
+		_fail("MAPSCHEMA OVERLAP outcome is %s" % overlap_v)
+	if live != "pass":
+		_fail("MAPSCHEMA LIVE outcome is %s" % live)
+	if replay != "match":
+		_fail("MAPSCHEMA REPLAY outcome is %s" % replay)
+	if _count_prefix("MAPSCHEMA ") == 0:
+		_mapschema = "proven"
+
+
 func _emit() -> void:
 	print("HH_VF_PATH title→fight→win/lose→restart")
 	print(
@@ -1546,6 +1595,26 @@ func _emit() -> void:
 			EnvCasesScript.used_apply_frames_succeeded,
 			EnvCasesScript.used_apply_frames_attempted,
 			_env,
+		]
+	)
+	print(
+		"HH_VF_MAP SCHEMA=%s SCHEMA_SOURCE=outcome_schema ROUNDTRIP=%s ROUNDTRIP_SOURCE=outcome_roundtrip GRAPH=%s GRAPH_SOURCE=outcome_graph REJECT=%s REJECT_SOURCE=outcome_reject AUTHOR=%s AUTHOR_SOURCE=outcome_author WIDTH=%s SPAWN=%s PIT=%s CAMERA=%s OVERLAP=%s LIVE=%s REPLAY=%s REPLAY_SOURCE=outcome_replay APPLY=%d/%d status=%s"
+		% [
+			str(MapCasesScript.outcome_schema.get("verdict", "unproven")),
+			str(MapCasesScript.outcome_roundtrip.get("verdict", "unproven")),
+			str(MapCasesScript.outcome_graph.get("verdict", "unproven")),
+			str(MapCasesScript.outcome_reject.get("verdict", "unproven")),
+			str(MapCasesScript.outcome_author.get("verdict", "unproven")),
+			str(MapCasesScript.outcome_width.get("verdict", "unproven")),
+			str(MapCasesScript.outcome_spawn.get("verdict", "unproven")),
+			str(MapCasesScript.outcome_pit.get("verdict", "unproven")),
+			str(MapCasesScript.outcome_camera.get("verdict", "unproven")),
+			str(MapCasesScript.outcome_overlap.get("verdict", "unproven")),
+			str(MapCasesScript.outcome_live.get("verdict", "unproven")),
+			str(MapCasesScript.outcome_replay.get("verdict", "unproven")),
+			MapCasesScript.used_apply_frames_succeeded,
+			MapCasesScript.used_apply_frames_attempted,
+			_mapschema,
 		]
 	)
 	print(

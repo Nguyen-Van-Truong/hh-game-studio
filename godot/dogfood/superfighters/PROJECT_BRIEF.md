@@ -89,8 +89,10 @@ https://mythologicinteractive.com/Superfighters
 - Title → fight → win/lose → restart; Escape / Start pause
 
 Map layouts **echo** the four Y8 Stage arenas (platforms, pits, crates,
-ladders, cover) with original tiles. `=` is a Godot one-way / jump-through
-platform. They are not ripped collision maps.
+ladders, cover) with original tiles. Live maps are layered JSON
+(`ledger:RL-MAP-LAYERS`, `assumption`); `=` is a Godot one-way /
+jump-through platform on the one-way layer. They are not ripped
+collision maps. VF5-WP1 does not rename display names.
 
 ---
 

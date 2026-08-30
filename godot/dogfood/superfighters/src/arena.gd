@@ -1,6 +1,9 @@
 class_name Arena
 extends RefCounted
 
+const _MapCatalog: GDScript = preload("res://src/maps/map_catalog.gd")
+const _MapCodec: GDScript = preload("res://src/maps/map_codec.gd")
+
 const SRC_ID: int = 0
 
 var map_id: String = "rooftops"
@@ -166,34 +169,36 @@ func _solid_tile(atlas: TileSetAtlasSource, cell: Vector2i, one_way: bool, phys_
 
 
 func _paint(target: TileMapLayer) -> void:
-	var rows: PackedStringArray = Maps.grid(map_id)
-	var y: int = 0
-	while y < rows.size():
-		var row: String = String(rows[y])
-		var x: int = 0
-		while x < row.length():
-			var ch: String = row.substr(x, 1)
-			var at: Vector2 = Vector2(
-				float(x * Maps.TILE) + float(Maps.TILE) * 0.5,
-				float(y * Maps.TILE) + float(Maps.TILE) * 0.5
-			)
-			if Maps.is_solid(ch) or Maps.is_platform(ch):
-				target.set_cell(Vector2i(x, y), SRC_ID, Maps.atlas_for(map_id, ch))
-			if Maps.is_ladder(ch):
-				ladder_cells.append(Vector2i(x, y))
-				world.add_child(_ladder_sprite(at))
-			if ch == "P":
-				_slot_spawns[0] = at
-			elif ch == "1":
-				_slot_spawns[1] = at
-			elif ch == "2":
-				_slot_spawns[2] = at
-			elif ch == "3":
-				_slot_spawns[3] = at
-			elif ch == "w":
-				weapon_spawns.append(at)
-			x += 1
-		y += 1
+	var doc: Dictionary = _MapCatalog.document(map_id)
+	if doc.is_empty():
+		return
+	var theme: String = str(doc.get("theme", _MapCodec.theme_for(map_id)))
+	_paint_layer(target, doc, "solid", theme)
+	_paint_layer(target, doc, "prop", theme)
+	_paint_layer(target, doc, "hazard", theme)
+	_paint_layer(target, doc, "one_way", theme)
+	var ladders: Array = _MapCodec.layer_cells(doc, "ladder")
+	var i: int = 0
+	while i < ladders.size():
+		var cell: Array = ladders[i] as Array
+		var x: int = int(cell[0])
+		var y: int = int(cell[1])
+		ladder_cells.append(Vector2i(x, y))
+		world.add_child(_ladder_sprite(_cell_center(x, y)))
+		i += 1
+	var pickups: Array = _MapCodec.layer_cells(doc, "pickup")
+	i = 0
+	while i < pickups.size():
+		var pcell: Array = pickups[i] as Array
+		weapon_spawns.append(_cell_center(int(pcell[0]), int(pcell[1])))
+		i += 1
+	var spawns: Array = _MapCodec.layer_cells(doc, "spawn")
+	i = 0
+	while i < spawns.size():
+		var scell: Array = spawns[i] as Array
+		if scell.size() >= 3:
+			_slot_spawns[int(scell[2])] = _cell_center(int(scell[0]), int(scell[1]))
+		i += 1
 	var slot: int = 0
 	while slot < 4:
 		if _slot_spawns.has(slot):
@@ -201,3 +206,21 @@ func _paint(target: TileMapLayer) -> void:
 		slot += 1
 	if player_spawns.is_empty():
 		player_spawns.append(Vector2(80, 80))
+
+
+func _paint_layer(target: TileMapLayer, doc: Dictionary, layer: String, theme: String) -> void:
+	var atlas: Vector2i = _MapCodec.atlas_for(theme, layer)
+	var cells: Array = _MapCodec.layer_cells(doc, layer)
+	var i: int = 0
+	while i < cells.size():
+		var cell: Array = cells[i] as Array
+		if cell.size() >= 2:
+			target.set_cell(Vector2i(int(cell[0]), int(cell[1])), SRC_ID, atlas)
+		i += 1
+
+
+func _cell_center(x: int, y: int) -> Vector2:
+	return Vector2(
+		float(x * Maps.TILE) + float(Maps.TILE) * 0.5,
+		float(y * Maps.TILE) + float(Maps.TILE) * 0.5
+	)

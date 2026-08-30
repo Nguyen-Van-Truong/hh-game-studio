@@ -1,0 +1,67 @@
+{
+  "schema": "vf.maps.schema.v1",
+  "schema_version": 1,
+  "title": "Vault Fighters",
+  "y8_parity_claimed": false,
+  "catalog_schema": "vf.maps.catalog.v1",
+  "layers_schema": "vf.maps.layers.v1",
+  "command_schema": "vf.maps.command.v1",
+  "catalog_path": "res://data/maps/catalog.json",
+  "layers": [
+    "solid",
+    "one_way",
+    "ladder",
+    "hazard",
+    "prop",
+    "spawn",
+    "pickup"
+  ],
+  "blocker_layers": [
+    "solid",
+    "one_way",
+    "hazard",
+    "prop"
+  ],
+  "required_live_ids": [
+    "rooftops",
+    "storage",
+    "police",
+    "hazardous"
+  ],
+  "required_author_id": "fx_map_author",
+  "themes": [
+    "brick",
+    "concrete",
+    "police",
+    "metal"
+  ],
+  "tile": 16,
+  "designed_view": {
+    "x": 1280,
+    "y": 720
+  },
+  "limits": {
+    "width_min": 8,
+    "width_max": 96,
+    "height_min": 6,
+    "height_max": 48
+  },
+  "graph": {
+    "jump_dx": 10,
+    "jump_dy": 4,
+    "min_platform": 2
+  },
+  "product_root": "res://",
+  "honesty": {
+    "layers": "RL-MAP-LAYERS assumption, not observed",
+    "graph": "RL-MAP-GRAPH assumption; jump envelope is product tuning",
+    "valid": "RL-MAP-VALID assumption, not observed",
+    "author": "RL-MAP-AUTHOR assumption; semantic commands, not a Y8 editor",
+    "clock": "RL-SIM-FIXED-60 assumption",
+    "hold_to_aim": "RL-CTRL-HOLD-AIM assumption",
+    "roll_dive": "RL-MOVE-ROLL-DIVE unavailable",
+    "c_b_tiles": "live c/b stay painted tiles on prop/hazard layers",
+    "fixtures": "combat/env fixture ASCII rows stay import-only",
+    "names": "RL-DELTA-MAP-NAMES still a known debt until VF5-WP2+"
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "schema": "vf.maps.command_trace.v1",
+  "schema_version": 1,
+  "kind": "official",
+  "name": "map_author",
+  "title": "Vault Fighters",
+  "tick_hz": 60,
+  "y8_parity_claimed": false,
+  "y8_tick_rate_claimed": false,
+  "used_step_fixed": false,
+  "ledger_clock": "RL-SIM-FIXED-60",
+  "hold_to_aim": "assumption",
+  "roll_dive": "unavailable",
+  "target_id": "fx_map_author",
+  "target_display": "Draft Yard",
+  "target_path": "res://data/maps/arenas/fx_map_author.json",
+  "commands": [
+    {
+      "command_id": "cmd.vf5-wp1.map.create.1",
+      "op": "map.create",
+      "payload": {
+        "id": "fx_map_author",
+        "display_name": "Draft Yard",
+        "width": 20,
+        "height": 8,
+        "theme": "concrete"
+      }
+    },
+    {
+      "command_id": "cmd.vf5-wp1.map.paint.top.1",
+      "op": "map.paint_rect",
+      "payload": {"id": "fx_map_author", "layer": "solid", "x": 0, "y": 0, "w": 20, "h": 1}
+    },
+    {
+      "command_id": "cmd.vf5-wp1.map.paint.floor.1",
+      "op": "map.paint_rect",
+      "payload": {"id": "fx_map_author", "layer": "solid", "x": 0, "y": 7, "w": 20, "h": 1}
+    },
+    {
+      "command_id": "cmd.vf5-wp1.map.paint.left.1",
+      "op": "map.paint_rect",
+      "payload": {"id": "fx_map_author", "layer": "solid", "x": 0, "y": 1, "w": 1, "h": 6}
+    },
+    {
+      "command_id": "cmd.vf5-wp1.map.paint.right.1",
+      "op": "map.paint_rect",
+      "payload": {"id": "fx_map_author", "layer": "solid", "x": 19, "y": 1, "w": 1, "h": 6}
+    },
+    {
+      "command_id": "cmd.vf5-wp1.map.paint.oneway.1",
+      "op": "map.paint_rect",
+      "payload": {"id": "fx_map_author", "layer": "one_way", "x": 5, "y": 2, "w": 8, "h": 1}
+    },
+    {
+      "command_id": "cmd.vf5-wp1.map.cell.ladder.1",
+      "op": "map.set_cell",
+      "payload": {"id": "fx_map_author", "layer": "ladder", "x": 3, "y": 4}
+    },
+    {
+      "command_id": "cmd.vf5-wp1.map.cell.ladder.2",
+      "op": "map.set_cell",
+      "payload": {"id": "fx_map_author", "layer": "ladder", "x": 3, "y": 5}
+    },
+    {
+      "command_id": "cmd.vf5-wp1.map.cell.prop.1",
+      "op": "map.set_cell",
+      "payload": {"id": "fx_map_author", "layer": "prop", "x": 9, "y": 5}
+    },
+    {
+      "command_id": "cmd.vf5-wp1.map.pickup.1",
+      "op": "map.set_pickup",
+      "payload": {"id": "fx_map_author", "x": 14, "y": 4}
+    },
+    {
+      "command_id": "cmd.vf5-wp1.map.spawn.0",
+      "op": "map.set_spawn",
+      "payload": {"id": "fx_map_author", "x": 3, "y": 6, "slot": 0}
+    },
+    {
+      "command_id": "cmd.vf5-wp1.map.spawn.1",
+      "op": "map.set_spawn",
+      "payload": {"id": "fx_map_author", "x": 9, "y": 6, "slot": 1}
+    }
+  ]
+}

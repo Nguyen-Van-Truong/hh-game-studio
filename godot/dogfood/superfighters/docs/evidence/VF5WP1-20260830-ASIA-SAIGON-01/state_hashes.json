@@ -1,0 +1,75 @@
+{
+	"author": {
+		"commands": 12,
+		"hash": "695e5643484a442eedd3630d1122e8bdd9a06b91b15a8e5d99f3f52f665cfe92",
+		"shipped": "695e5643484a442eedd3630d1122e8bdd9a06b91b15a8e5d99f3f52f665cfe92",
+		"source": "MapAuthor semantic commands vs shipped Draft Yard",
+		"store": "user://vf_maps/draft_yard.json",
+		"verdict": "pass"
+	},
+	"map_id": "rooftops",
+	"mode": "vs2",
+	"replay": {
+		"pairs": [
+			{
+				"hash": "695e5643484a442eedd3630d1122e8bdd9a06b91b15a8e5d99f3f52f665cfe92",
+				"id": "fx_map_author",
+				"match": true
+			},
+			{
+				"hash": "8871be2b5f33cbfd461d816aa63ecaa60bd1c715d2b1a537625a186b2b0ea84d",
+				"id": "hazardous",
+				"match": true
+			},
+			{
+				"hash": "132e6627c3ebc35d154931ccc1dfb4830bef71620cf6989899769ba59b2ae6d1",
+				"id": "police",
+				"match": true
+			},
+			{
+				"hash": "f1456defe5e39933577b03da6d97580f2366749ef4c73b68dfde9b2de2afd849",
+				"id": "rooftops",
+				"match": true
+			},
+			{
+				"hash": "f72065a5da707e081f3e808d7b9e173fc6aa84de7ceb28c1e9a0808c0f959754",
+				"id": "storage",
+				"match": true
+			}
+		],
+		"source": "catalog reload hash twice",
+		"verdict": "match"
+	},
+	"roundtrip": {
+		"pairs": [
+			{
+				"hash": "695e5643484a442eedd3630d1122e8bdd9a06b91b15a8e5d99f3f52f665cfe92",
+				"id": "fx_map_author",
+				"match": true
+			},
+			{
+				"hash": "8871be2b5f33cbfd461d816aa63ecaa60bd1c715d2b1a537625a186b2b0ea84d",
+				"id": "hazardous",
+				"match": true
+			},
+			{
+				"hash": "132e6627c3ebc35d154931ccc1dfb4830bef71620cf6989899769ba59b2ae6d1",
+				"id": "police",
+				"match": true
+			},
+			{
+				"hash": "f1456defe5e39933577b03da6d97580f2366749ef4c73b68dfde9b2de2afd849",
+				"id": "rooftops",
+				"match": true
+			},
+			{
+				"hash": "f72065a5da707e081f3e808d7b9e173fc6aa84de7ceb28c1e9a0808c0f959754",
+				"id": "storage",
+				"match": true
+			}
+		],
+		"source": "_MapCodec.serialize/deserialize SHA-256",
+		"verdict": "pass"
+	},
+	"seed": 11
+}

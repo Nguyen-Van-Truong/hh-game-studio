@@ -29,7 +29,8 @@ Map authors add a catalog spec and a placement row. GameSession calls
 per crate/barrel/glass.
 
 Live rooftops/storage/police/hazardous have **no** world placements this
-WP. ASCII `c`/`b` stay tiles so prior official hashes do not drift.
+WP. `c`/`b` stay painted tiles (VF5-WP1 prop/hazard layers) so prior
+official hashes do not drift.
 
 Fixture `fx_world_open` (display **Prop Yard**) places one of each kind.
 
