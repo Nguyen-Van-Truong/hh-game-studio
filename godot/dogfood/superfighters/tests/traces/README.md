@@ -158,6 +158,20 @@ World schema / ownership stay `assumption`. Clock stays
 | `world_idle.json` | settle on Prop Yard |
 | `world_walk.json` | short walk that does not reach the prop alcove |
 
+## break/
+
+VF4-WP2 official InputFrame traces. Same schema as `official/`.
+Replay uses `apply_frames`. No teleport. No `step_fixed`.
+Break / throw stay `assumption`. Clock stays
+`ledger:RL-SIM-FIXED-60`.
+
+| File | Beat |
+|---|---|
+| `break_cover.json` | Shatter Lane pistol breaks glass then passes |
+| `break_melee.json` | Break Yard fists break wood |
+| `break_shove.json` | Break Yard melee shoves loose crate |
+| `break_throw.json` | Break Yard carry then throw on `#` |
+
 ## fixture/
 
 May use `teleport` / `force_kill` for fast unit setup. Fixture evidence

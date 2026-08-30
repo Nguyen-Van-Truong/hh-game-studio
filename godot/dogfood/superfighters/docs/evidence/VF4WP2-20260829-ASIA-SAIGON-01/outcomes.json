@@ -1,0 +1,128 @@
+{
+	"apply": {
+		"attempted": 880,
+		"succeeded": 880,
+		"used_action_press": 0,
+		"used_apply_frames": 880,
+		"used_parse_input_event": 1,
+		"used_step_fixed": 0
+	},
+	"break": {
+		"events": 1,
+		"id": "cover_glass",
+		"source": "one pistol shot vs Vault Pane",
+		"verdict": "pass"
+	},
+	"data": {
+		"break_implemented": true,
+		"chain_implemented": false,
+		"glass_debris": 6,
+		"nade_prop": "deferred",
+		"source": "catalog materials + fixtures Shatter Lane / Break Yard",
+		"throw_implemented": true,
+		"verdict": "pass",
+		"wood_debris": 4
+	},
+	"debris": {
+		"after_cleanup_ticks": 0,
+		"count": 6,
+		"expected": 6,
+		"source": "glass material debris_count=6",
+		"verdict": "pass"
+	},
+	"ghost": {
+		"cover_after": false,
+		"source": "has_cover_at after disable_cover",
+		"verdict": "pass"
+	},
+	"live": {
+		"breaks": 1,
+		"source": "parse_input_event KEY_M hold/release + step_from_live_input",
+		"verdict": "pass"
+	},
+	"melee": {
+		"alive": false,
+		"breaks": 1,
+		"debris": 4,
+		"source": "fists vs wood crate on Break Yard",
+		"verdict": "pass"
+	},
+	"pass": {
+		"blocked_before": true,
+		"p2_hp_after": 82.0,
+		"p2_hp_before": 100.0,
+		"p2_hp_mid": 100.0,
+		"source": "projectile spent on pane, then passes",
+		"verdict": "pass"
+	},
+	"replay": {
+		"pairs": [
+			{
+				"hash_a": "2df32cae41fd323102c72af0afbf2b2823382f4c3992c3c7c752c3f6bb35c975",
+				"hash_b": "2df32cae41fd323102c72af0afbf2b2823382f4c3992c3c7c752c3f6bb35c975",
+				"hash_match": true,
+				"name": "break_cover",
+				"ok_a": true,
+				"ok_b": true,
+				"world_a": "00ce5fb2d03a11b69b62aef2217bddad82cce3a8011a3fefd6a9f7d9d0bebccb",
+				"world_b": "00ce5fb2d03a11b69b62aef2217bddad82cce3a8011a3fefd6a9f7d9d0bebccb",
+				"world_hash_match": true
+			},
+			{
+				"hash_a": "9db18825adc4f2ca116f43544154c658e3aca133260bbe598f19fef4f27aedec",
+				"hash_b": "9db18825adc4f2ca116f43544154c658e3aca133260bbe598f19fef4f27aedec",
+				"hash_match": true,
+				"name": "break_melee",
+				"ok_a": true,
+				"ok_b": true,
+				"world_a": "f37496950083cd291e45422d5f21c67311a68715e5ac06f46e9365fc8dee5b06",
+				"world_b": "f37496950083cd291e45422d5f21c67311a68715e5ac06f46e9365fc8dee5b06",
+				"world_hash_match": true
+			},
+			{
+				"hash_a": "ed6743a6a9f1e246efb9c35ce49a2a3ba71ff8a13f6322fde12432d4e6538721",
+				"hash_b": "ed6743a6a9f1e246efb9c35ce49a2a3ba71ff8a13f6322fde12432d4e6538721",
+				"hash_match": true,
+				"name": "break_shove",
+				"ok_a": true,
+				"ok_b": true,
+				"world_a": "8ecafe10b74b33e34795285c8147720d7e33a7bd74a9a1a767d3742fc1744388",
+				"world_b": "8ecafe10b74b33e34795285c8147720d7e33a7bd74a9a1a767d3742fc1744388",
+				"world_hash_match": true
+			},
+			{
+				"hash_a": "a7d0bb1e493a51b933ce4b487cf1da6663b247ed5d10442b9c7e4463a6f4492c",
+				"hash_b": "a7d0bb1e493a51b933ce4b487cf1da6663b247ed5d10442b9c7e4463a6f4492c",
+				"hash_match": true,
+				"name": "break_throw",
+				"ok_a": true,
+				"ok_b": true,
+				"world_a": "8fb3270a43a10a318ac5644c1bc11b6f80dc0ca17ef03367fca3971967a0c201",
+				"world_b": "8fb3270a43a10a318ac5644c1bc11b6f80dc0ca17ef03367fca3971967a0c201",
+				"world_hash_match": true
+			}
+		],
+		"source": "apply_frames break traces twice",
+		"verdict": "match"
+	},
+	"shove": {
+		"events": 1,
+		"source": "melee shove on Loose Crate, # floor only",
+		"verdict": "pass",
+		"x0": 112.0,
+		"x1": 131.111114501953
+	},
+	"tactic": {
+		"lane_opens": true,
+		"source": "cover changes the fire lane, not cosmetic VFX",
+		"verdict": "pass"
+	},
+	"throw": {
+		"carried": true,
+		"source": "carry then grenade-release throw on # floor",
+		"thrown": true,
+		"verdict": "pass",
+		"x0": 112.0,
+		"x1": 223.146087646484
+	}
+}

@@ -258,6 +258,8 @@ func _step_one_tick(cmds: Array[Dictionary]) -> void:
 	_step_respawns(dt)
 	_step_bullets(dt)
 	_step_grenades(dt)
+	if world_owner != null:
+		world_owner.call("step", dt)
 	_resolve_end()
 	clock.advance()
 	if hud != null:
@@ -513,6 +515,8 @@ func _try_start_melee(f: Fighter) -> void:
 	if f.crouched:
 		if _try_pickup(f):
 			return
+		if world_owner != null and bool(world_owner.call("try_carry", f)):
+			return
 	if f.attack_phase != "idle":
 		return
 	var style: String = "crouch" if f.crouched else "melee"
@@ -547,6 +551,7 @@ func _resolve_attack(f: Fighter) -> void:
 		})
 	if f.attack_phase == "active":
 		_resolve_hitbox(f)
+		_resolve_prop_melee(f)
 	if f.attack_recovery_entered:
 		ledger.push(clock.tick, "melee", "recovery", {
 			"attacker": f.slot,
@@ -646,6 +651,14 @@ func _resolve_hitbox(f: Fighter) -> void:
 		_splat(other.global_position)
 		if sfx != null:
 			sfx.play("hit")
+
+
+func _resolve_prop_melee(f: Fighter) -> void:
+	if world_owner == null or f == null:
+		return
+	var box: Rect2 = _Combat.hitbox_rect(f)
+	var dmg: float = _Combat.damage_of(f.attack_weapon, f.attack_style)
+	world_owner.call("apply_melee", box, dmg, f.facing, f.slot, f.attack_seq)
 
 
 func _spawn_melee_fx(f: Fighter) -> void:
@@ -822,6 +835,10 @@ func _do_fire(f: Fighter) -> void:
 
 
 func _do_grenade(f: Fighter) -> void:
+	if world_owner != null and world_owner.call("carrier_of", f.slot) != null:
+		var dir: Vector2 = _Expl.throw_dir(f)
+		world_owner.call("try_throw", f, dir)
+		return
 	var payload_id: String = ""
 	if f.grenades > 0:
 		f.consume_grenade()
@@ -878,7 +895,7 @@ func _step_bullets(delta: float) -> void:
 		var to: Vector2 = shot.predicted_pos(delta)
 		var sweep: Dictionary = _sweep_bullet(shot, from, to)
 		var kind: String = str(sweep.get("kind", ""))
-		if kind == "world" or kind == "fighter":
+		if kind == "world" or kind == "prop" or kind == "fighter":
 			shot.commit_step(sweep.get("point", from) as Vector2, delta)
 			shot.spent = true
 			if kind == "fighter":
@@ -911,7 +928,15 @@ func _sweep_bullet(shot: Bullet, from: Vector2, to: Vector2) -> Dictionary:
 		if not hit.is_empty():
 			var at: Vector2 = hit.get("position", to) as Vector2
 			var t_wall: float = from.distance_to(at) / travel
-			best = {"kind": "world", "t": t_wall, "point": at, "fighter": null}
+			var prop: Node2D = null
+			if world_owner != null:
+				prop = world_owner.call("body_from_node", hit.get("collider")) as Node2D
+			if prop != null:
+				best = {"kind": "prop", "t": t_wall, "point": at, "fighter": null, "prop": prop}
+				if bool(prop.get("alive")) and str(prop.get("kind")) == "breakable":
+					world_owner.call("apply_damage", prop, shot.damage, "bullet", shot.owner_slot, -1)
+			else:
+				best = {"kind": "world", "t": t_wall, "point": at, "fighter": null}
 	var grid_hit: Dictionary = _grid_block_t(from, to)
 	if str(grid_hit.get("kind", "")) == "world" and float(grid_hit.get("t", 2.0)) < float(best.get("t", 2.0)):
 		best = grid_hit

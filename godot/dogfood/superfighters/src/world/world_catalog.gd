@@ -3,7 +3,8 @@ extends RefCounted
 
 ## Data-driven world catalog (VF4-WP1). Map authoring is placements,
 ## not GameSession node hard-codes. ledger:RL-WORLD-SCHEMA
-## (assumption). Break stays schema-only. RL-NADE-PROP stays deferred.
+## (assumption). Break/throw are VF4-WP2. Chain stays off.
+## RL-NADE-PROP stays deferred.
 
 const PATH: String = "res://data/world/catalog.json"
 const SCHEMA_PATH: String = "res://data/world/schema.json"
@@ -93,12 +94,12 @@ static func validate_payload(row: Dictionary) -> PackedStringArray:
 		errors.append("world catalog must not claim original exact numbers")
 	if not bool(row.get("values_are_tuning", false)):
 		errors.append("world catalog values must be marked tuning")
-	if bool(row.get("break_implemented", true)):
-		errors.append("break must stay unimplemented this WP")
+	if not bool(row.get("break_implemented", false)):
+		errors.append("break must be implemented this WP")
 	if bool(row.get("chain_implemented", true)):
 		errors.append("explosive chain must stay unimplemented this WP")
-	if bool(row.get("throw_implemented", true)):
-		errors.append("dynamic throw must stay unimplemented this WP")
+	if not bool(row.get("throw_implemented", false)):
+		errors.append("dynamic throw must be implemented this WP")
 	if str(row.get("schema_class", "")) != "assumption":
 		errors.append("world schema must stay assumption")
 	if str(row.get("layers_class", "")) != "assumption":
@@ -154,8 +155,23 @@ static func validate_payload(row: Dictionary) -> PackedStringArray:
 		k += 1
 	if not _dict(row.get("fixtures", {})).has("fx_world_open"):
 		errors.append("world fixture fx_world_open missing")
+	if not _dict(row.get("fixtures", {})).has("fx_break_cover"):
+		errors.append("world fixture fx_break_cover missing")
+	if not _dict(row.get("fixtures", {})).has("fx_break_yard"):
+		errors.append("world fixture fx_break_yard missing")
 	if placements_from(row, "fx_world_open").size() < 6:
 		errors.append("fx_world_open must place all six kinds")
+	if placements_from(row, "fx_break_cover").is_empty():
+		errors.append("fx_break_cover must place glass cover")
+	if placements_from(row, "fx_break_yard").size() < 2:
+		errors.append("fx_break_yard must place wood and a loose crate")
+	var mats: Dictionary = _dict(row.get("materials", {}))
+	if not mats.has("wood") or not mats.has("glass"):
+		errors.append("world catalog must define wood and glass materials")
+	if str(_dict(specs.get("pane_glass", {})).get("material", "")) != "glass":
+		errors.append("pane_glass must use glass material")
+	if str(_dict(specs.get("crate_breakable", {})).get("material", "")) != "wood":
+		errors.append("crate_breakable must use wood material")
 	_append(errors, _validate_placements(row, specs))
 	return errors
 

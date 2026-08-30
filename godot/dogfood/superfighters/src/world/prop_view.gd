@@ -16,10 +16,23 @@ func bind_visual(tex_path: String) -> PackedStringArray:
 	name = "PropView"
 	centered = true
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	texture = load(tex_path) as Texture2D
+	texture = load_texture(tex_path)
 	if texture == null:
 		errors.append("visual failed to load")
 	return errors
+
+
+static func load_texture(tex_path: String) -> Texture2D:
+	if ResourceLoader.exists(tex_path):
+		var loaded: Texture2D = load(tex_path) as Texture2D
+		if loaded != null:
+			return loaded
+	if not FileAccess.file_exists(tex_path):
+		return null
+	var img: Image = Image.new()
+	if img.load(tex_path) != OK:
+		return null
+	return ImageTexture.create_from_image(img)
 
 
 func request_despawn() -> PackedStringArray:

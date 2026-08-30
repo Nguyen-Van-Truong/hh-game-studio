@@ -32,9 +32,16 @@
   "tick_hz": 60,
   "values_are_tuning": true,
   "original_exact_numbers_claimed": false,
-  "break_implemented": false,
+  "break_implemented": true,
   "chain_implemented": false,
-  "throw_implemented": false,
+  "throw_implemented": true,
+  "debris_visual": "res://assets/vfx/vfx_break.png",
+  "throw_speed": 260.0,
+  "throw_lift": -160.0,
+  "shove_speed": 180.0,
+  "prop_gravity": 900.0,
+  "prop_friction": 1400.0,
+  "carry_radius": 20.0,
   "kinds": [
     "static",
     "dynamic",
@@ -43,6 +50,22 @@
     "pickup",
     "explosive"
   ],
+  "materials": {
+    "wood": {
+      "id": "wood",
+      "bullet_mult": 0.4,
+      "melee_mult": 1.0,
+      "debris_count": 4,
+      "debris_life_ticks": 24
+    },
+    "glass": {
+      "id": "glass",
+      "bullet_mult": 1.0,
+      "melee_mult": 0.25,
+      "debris_count": 6,
+      "debris_life_ticks": 18
+    }
+  },
   "specs": {
     "crate_static": {
       "id": "crate_static",
@@ -109,7 +132,26 @@
       "visual": {
         "path": "res://assets/art/prop_crate.png"
       },
-      "health": 12,
+      "health": 10,
+      "material": "wood",
+      "movable": false
+    },
+    "pane_glass": {
+      "id": "pane_glass",
+      "kind": "breakable",
+      "name": "Vault Pane",
+      "collision": {
+        "layer": "prop",
+        "mask": [],
+        "shape": "rect",
+        "width": 16,
+        "height": 20
+      },
+      "visual": {
+        "path": "res://assets/art/prop_glass.png"
+      },
+      "health": 4,
+      "material": "glass",
       "movable": false
     },
     "kit_pickup": {
@@ -155,6 +197,13 @@
       {"id": "p_break", "spec": "crate_breakable", "x": 448, "y": 40},
       {"id": "p_pickup", "spec": "kit_pickup", "x": 464, "y": 42},
       {"id": "p_expl", "spec": "barrel_explosive", "x": 480, "y": 38}
+    ],
+    "fx_break_cover": [
+      {"id": "cover_glass", "spec": "pane_glass", "x": 168, "y": 38}
+    ],
+    "fx_break_yard": [
+      {"id": "yard_wood", "spec": "crate_breakable", "x": 80, "y": 40},
+      {"id": "yard_loose", "spec": "crate_dynamic", "x": 112, "y": 40}
     ]
   },
   "fixtures": {
@@ -163,9 +212,23 @@
       "#..............................#",
       "#.P............1...............#",
       "################################"
+    ],
+    "fx_break_cover": [
+      "################################",
+      "#..............................#",
+      "#.P......................1.....#",
+      "################################"
+    ],
+    "fx_break_yard": [
+      "################################",
+      "#..............................#",
+      "#.P......................1.....#",
+      "################################"
     ]
   },
   "fixture_names": {
-    "fx_world_open": "Prop Yard"
+    "fx_world_open": "Prop Yard",
+    "fx_break_cover": "Shatter Lane",
+    "fx_break_yard": "Break Yard"
   }
 }

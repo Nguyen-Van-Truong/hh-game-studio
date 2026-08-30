@@ -116,12 +116,23 @@ First playable slice. Not G6. Not 60/60.
   contract, and WorldOwner spawn/despawn as assumption
   (`ledger:RL-WORLD-SCHEMA`, `ledger:RL-WORLD-LAYERS`,
   `ledger:RL-WORLD-OWN`, `ledger:RL-PROP-*`). Official proof is
-  InputFrame `apply_frames` plus live InputEvent inject. Break /
-  throw / chain are schema only. `ledger:RL-NADE-PROP` stays
-  `deferred`. Live maps do not receive world placements; ASCII
-  `c`/`b` stay tiles. Hold-to-aim is **not** promoted to
-  `observed`. Y8 roll/dive observation stays
-  `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). No new Y8 play.
+  InputFrame `apply_frames` plus live InputEvent inject. Chain
+  stays schema only. `ledger:RL-NADE-PROP` stays `deferred`.
+  Live maps do not receive world placements; ASCII `c`/`b` stay
+  tiles. Hold-to-aim is **not** promoted to `observed`. Y8
+  roll/dive observation stays `ledger:RL-MOVE-ROLL-DIVE`
+  (`unavailable`). No new Y8 play.
+- VF4-WP2 ships glass/wood health + resistance, one break event,
+  deterministic debris, bullet/melee destroy, cover-until-break,
+  melee shove, and crouch-carry / grenade-release throw as
+  assumption (`ledger:RL-PROP-BREAK`, `ledger:RL-PROP-DYNAMIC`).
+  Official proof is InputFrame `apply_frames` plus live
+  InputEvent inject. `ledger:RL-NADE-PROP` stays `deferred`.
+  Official throw/shove stays on `#` fixtures; the VF3-WP4 `=`
+  bounce residual is unchanged. Live `c`/`b` stay tiles.
+  Hold-to-aim is **not** promoted to `observed`. Y8 roll/dive
+  observation stays `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`).
+  No new Y8 play. Not a VF7 art rewrite.
 - VF3-WP4 ships grenade hold/release throw, gravity arc, bounce,
   fuse, radial falloff, owner skip, one explosion, timeout
   cleanup, and swept nade collision as assumption

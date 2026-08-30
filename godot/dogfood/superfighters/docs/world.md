@@ -33,9 +33,10 @@ WP. ASCII `c`/`b` stay tiles so prior official hashes do not drift.
 
 Fixture `fx_world_open` (display **Prop Yard**) places one of each kind.
 
-## Not this WP
+## Later WPs
 
-- Break / fragments / cover destroy: VF4-WP2 (`ledger:RL-PROP-BREAK`)
+- Break / fragments / cover destroy: VF4-WP2 (`docs/break.md`,
+  `ledger:RL-PROP-BREAK`)
 - Dynamic throw/shove: VF4-WP2 (`ledger:RL-PROP-DYNAMIC`)
 - Barrel chain / fire: VF4-WP3 (`ledger:RL-PROP-EXPL`)
 - Nade prop destroy stays `ledger:RL-NADE-PROP` (`deferred`)
@@ -47,7 +48,8 @@ Fixture `fx_world_open` (display **Prop Yard**) places one of each kind.
 - Schema / layers / ownership stay assumption:
   `ledger:RL-WORLD-SCHEMA`, `ledger:RL-WORLD-LAYERS`,
   `ledger:RL-WORLD-OWN`.
-- Breakable schema only: `ledger:RL-PROP-BREAK`.
+- Break / throw live in VF4-WP2 as assumption (`ledger:RL-PROP-BREAK`,
+  `ledger:RL-PROP-DYNAMIC`).
 - Nade destroy stays `ledger:RL-NADE-PROP` deferred.
 - Hold-to-aim stays `ledger:RL-CTRL-HOLD-AIM` assumption.
 - Y8 roll/dive stays `ledger:RL-MOVE-ROLL-DIVE` unavailable.

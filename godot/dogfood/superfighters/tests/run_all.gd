@@ -11,6 +11,7 @@ const ExplosiveCasesScript: GDScript = preload("res://tests/explosive_cases.gd")
 const RosterCasesScript: GDScript = preload("res://tests/roster_cases.gd")
 const BalanceCasesScript: GDScript = preload("res://tests/balance_cases.gd")
 const WorldCasesScript: GDScript = preload("res://tests/world_cases.gd")
+const BreakCasesScript: GDScript = preload("res://tests/break_cases.gd")
 const _Combat: GDScript = preload("res://src/sim/combat.gd")
 
 var _fails: PackedStringArray = PackedStringArray()
@@ -34,6 +35,7 @@ var _expl: String = "unproven"
 var _roster: String = "unproven"
 var _balance: String = "unproven"
 var _world: String = "unproven"
+var _break: String = "unproven"
 
 
 func _initialize() -> void:
@@ -69,6 +71,7 @@ func _boot() -> void:
 	await _test_roster(app)
 	await _test_balance(app)
 	await _test_world(app)
+	await _test_break(app)
 	if _fails.is_empty():
 		_no_err = "proven"
 	_emit()
@@ -1088,6 +1091,49 @@ func _test_world(app: App) -> void:
 		_world = "proven"
 
 
+func _test_break(app: App) -> void:
+	var errors: PackedStringArray = await BreakCasesScript.run_all(app)
+	var i: int = 0
+	while i < errors.size():
+		_fail("BREAK %s" % String(errors[i]))
+		i += 1
+	var data: String = str(BreakCasesScript.outcome_data.get("verdict", "unproven"))
+	var brk: String = str(BreakCasesScript.outcome_break.get("verdict", "unproven"))
+	var debris: String = str(BreakCasesScript.outcome_debris.get("verdict", "unproven"))
+	var passv: String = str(BreakCasesScript.outcome_pass.get("verdict", "unproven"))
+	var ghost: String = str(BreakCasesScript.outcome_ghost.get("verdict", "unproven"))
+	var melee: String = str(BreakCasesScript.outcome_melee.get("verdict", "unproven"))
+	var shove: String = str(BreakCasesScript.outcome_shove.get("verdict", "unproven"))
+	var throwv: String = str(BreakCasesScript.outcome_throw.get("verdict", "unproven"))
+	var tactic: String = str(BreakCasesScript.outcome_tactic.get("verdict", "unproven"))
+	var live: String = str(BreakCasesScript.outcome_live.get("verdict", "unproven"))
+	var replay: String = str(BreakCasesScript.outcome_replay.get("verdict", "unproven"))
+	if data != "pass":
+		_fail("BREAK DATA outcome is %s" % data)
+	if brk != "pass":
+		_fail("BREAK BREAK outcome is %s" % brk)
+	if debris != "pass":
+		_fail("BREAK DEBRIS outcome is %s" % debris)
+	if passv != "pass":
+		_fail("BREAK PASS outcome is %s" % passv)
+	if ghost != "pass":
+		_fail("BREAK GHOST outcome is %s" % ghost)
+	if melee != "pass":
+		_fail("BREAK MELEE outcome is %s" % melee)
+	if shove != "pass":
+		_fail("BREAK SHOVE outcome is %s" % shove)
+	if throwv != "pass":
+		_fail("BREAK THROW outcome is %s" % throwv)
+	if tactic != "pass":
+		_fail("BREAK TACTIC outcome is %s" % tactic)
+	if live != "pass":
+		_fail("BREAK LIVE outcome is %s" % live)
+	if replay != "match":
+		_fail("BREAK REPLAY outcome is %s" % replay)
+	if _count_prefix("BREAK ") == 0:
+		_break = "proven"
+
+
 func _emit() -> void:
 	print("HH_VF_PATH title→fight→win/lose→restart")
 	print(
@@ -1294,6 +1340,25 @@ func _emit() -> void:
 			WorldCasesScript.used_apply_frames_succeeded,
 			WorldCasesScript.used_apply_frames_attempted,
 			_world,
+		]
+	)
+	print(
+		"HH_VF_BREAK DATA=%s BREAK=%s DEBRIS=%s PASS=%s GHOST=%s MELEE=%s SHOVE=%s THROW=%s TACTIC=%s LIVE=%s REPLAY=%s APPLY=%d/%d status=%s"
+		% [
+			str(BreakCasesScript.outcome_data.get("verdict", "unproven")),
+			str(BreakCasesScript.outcome_break.get("verdict", "unproven")),
+			str(BreakCasesScript.outcome_debris.get("verdict", "unproven")),
+			str(BreakCasesScript.outcome_pass.get("verdict", "unproven")),
+			str(BreakCasesScript.outcome_ghost.get("verdict", "unproven")),
+			str(BreakCasesScript.outcome_melee.get("verdict", "unproven")),
+			str(BreakCasesScript.outcome_shove.get("verdict", "unproven")),
+			str(BreakCasesScript.outcome_throw.get("verdict", "unproven")),
+			str(BreakCasesScript.outcome_tactic.get("verdict", "unproven")),
+			str(BreakCasesScript.outcome_live.get("verdict", "unproven")),
+			str(BreakCasesScript.outcome_replay.get("verdict", "unproven")),
+			BreakCasesScript.used_apply_frames_succeeded,
+			BreakCasesScript.used_apply_frames_attempted,
+			_break,
 		]
 	)
 	print(

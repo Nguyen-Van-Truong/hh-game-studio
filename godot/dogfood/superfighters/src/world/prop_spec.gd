@@ -1,8 +1,8 @@
 class_name PropSpec
 extends RefCounted
 
-## Typed world prop contract (VF4-WP1). Kinds are schema only
-## this WP. Break / throw / chain wait later WPs.
+## Typed world prop contract (VF4-WP1/WP2). Break/throw are live.
+## Chain waits VF4-WP3.
 ## ledger:RL-WORLD-SCHEMA (assumption). Not observed.
 
 const _Paths: GDScript = preload("res://src/world/world_paths.gd")

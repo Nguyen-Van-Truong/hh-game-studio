@@ -65,8 +65,9 @@ https://mythologicinteractive.com/Superfighters
   `ledger:RL-NADE-ONCE`, `assumption`). Prop destroy stays
   `ledger:RL-NADE-PROP` (`deferred`). World props are a typed
   catalog + WorldOwner (`ledger:RL-WORLD-SCHEMA` /
-  `ledger:RL-WORLD-OWN`, `assumption`); break/throw/chain wait
-  later VF4 WPs.
+  `ledger:RL-WORLD-OWN`, `assumption`). Glass/wood break and
+  shove/throw are VF4-WP2 (`ledger:RL-PROP-BREAK` /
+  `ledger:RL-PROP-DYNAMIC`, `assumption`). Chain waits VF4-WP3.
 - Health + stamina bars; stamina drains on sprint
 - Random-ish weapon spawns (~20s respawn): pipe, knife, baton, pistol,
   shotgun, uzi, Longarm, Thumper, grenade, Cinder Flask

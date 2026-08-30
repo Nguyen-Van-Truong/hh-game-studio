@@ -44,7 +44,8 @@
     "schema": "RL-WORLD-SCHEMA assumption, not observed",
     "layers": "RL-WORLD-LAYERS assumption, not observed",
     "ownership": "RL-WORLD-OWN assumption, not observed",
-    "break": "RL-PROP-BREAK schema only; destroy waits VF4-WP2",
+    "break": "RL-PROP-BREAK assumption; glass/wood destroy this WP",
+    "throw": "RL-PROP-DYNAMIC assumption; shove/throw this WP",
     "explosive": "RL-PROP-EXPL schema only; chain waits VF4-WP3",
     "nade_prop": "RL-NADE-PROP stays deferred"
   }

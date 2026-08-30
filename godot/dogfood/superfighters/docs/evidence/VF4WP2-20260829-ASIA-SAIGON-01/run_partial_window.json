@@ -1,0 +1,54 @@
+{
+	"command_id": "cmd.vf4-wp2.break.1",
+	"display": "Windows",
+	"ended_at": "2026-08-30T05:35:33+07:00",
+	"ended_unix": 1788042933.076,
+	"epsilon": 0.001,
+	"fail_count": 0,
+	"godot": {
+		"build": "official",
+		"hash": "a13da4feb8d8aefc283c3763d33a2f170a18d541",
+		"hex": 263937,
+		"major": 4,
+		"minor": 7,
+		"patch": 1,
+		"status": "stable",
+		"string": "4.7.1-stable (official)",
+		"timestamp": 0
+	},
+	"map_id": "fx_break_cover",
+	"mode": "vs2",
+	"os_name": "Windows",
+	"outcomes": {
+		"BREAK": "pass",
+		"DATA": "pass",
+		"DEBRIS": "pass",
+		"GHOST": "pass",
+		"LIVE": "pass",
+		"MELEE": "pass",
+		"PASS": "pass",
+		"REPLAY": "match",
+		"SHOVE": "pass",
+		"TACTIC": "pass",
+		"THROW": "pass",
+		"USED_APPLY_ATTEMPTED": 880,
+		"USED_APPLY_FRAMES": 880,
+		"USED_APPLY_SUCCEEDED": 880
+	},
+	"run_id": "VF4WP2-20260829-ASIA-SAIGON-01",
+	"schema": "vault-fighters.vf4-wp2.run.v1",
+	"screens": {
+		"after": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\.hh-agent\\vf4wp2\\window/screens/break_after_1280x720.png",
+		"before": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\.hh-agent\\vf4wp2\\window/screens/break_before_1280x720.png"
+	},
+	"seed": 7,
+	"started_at": "2026-08-30T05:35:31+07:00",
+	"started_unix": 1788042931.264,
+	"tick_hz": 60,
+	"timezone": "Asia/Saigon",
+	"viewport": {
+		"h": 720.0,
+		"w": 1280.0
+	},
+	"wp": "VF4-WP2"
+}

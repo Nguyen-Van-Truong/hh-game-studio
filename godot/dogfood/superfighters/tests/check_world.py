@@ -193,8 +193,10 @@ def main() -> int:
             errors.append("Y8 roll/dive observation must stay unavailable")
         if payload.get("nade_prop_class") != "deferred":
             errors.append("RL-NADE-PROP must stay deferred")
-        if payload.get("break_implemented") is True:
-            errors.append("break must stay unimplemented this WP")
+        if payload.get("break_implemented") is not True:
+            errors.append("break must be implemented for VF4-WP2")
+        if payload.get("throw_implemented") is not True:
+            errors.append("throw must be implemented for VF4-WP2")
         if payload.get("chain_implemented") is True:
             errors.append("chain must stay unimplemented this WP")
         specs = payload.get("specs") or {}

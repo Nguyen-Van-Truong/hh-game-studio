@@ -37,7 +37,7 @@ static func is_inside_product(path: String) -> bool:
 static func visual_ok(path: String) -> bool:
 	if not is_inside_product(path):
 		return false
-	return ResourceLoader.exists(path)
+	return ResourceLoader.exists(path) or FileAccess.file_exists(path)
 
 
 static func reject_reason(path: String) -> String:
@@ -47,7 +47,7 @@ static func reject_reason(path: String) -> String:
 		return "path must be res:// under product root"
 	if not is_inside_product(path):
 		return "path escapes product root"
-	if not ResourceLoader.exists(path):
+	if not ResourceLoader.exists(path) and not FileAccess.file_exists(path):
 		return "visual missing"
 	return ""
 

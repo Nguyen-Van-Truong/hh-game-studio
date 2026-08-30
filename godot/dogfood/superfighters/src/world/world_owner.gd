@@ -1,7 +1,7 @@
 class_name WorldOwner
 extends RefCounted
 
-## Sole spawn/despawn writer for world props (VF4-WP1).
+## Sole spawn/despawn/break/throw writer for world props (VF4-WP2).
 ## Presentation cannot mutate. ledger:RL-WORLD-OWN (assumption).
 
 const ROOT_NAME: String = "WorldProps"
@@ -9,12 +9,16 @@ const _Catalog: GDScript = preload("res://src/world/world_catalog.gd")
 const _Paths: GDScript = preload("res://src/world/world_paths.gd")
 const _Body: GDScript = preload("res://src/world/prop_body.gd")
 const _Spec: GDScript = preload("res://src/world/prop_spec.gd")
+const _Break: GDScript = preload("res://src/world/prop_break.gd")
 
 var session: GameSession
 var root: Node2D
 var bodies: Array = []
 var seq: int = 0
 var last_errors: PackedStringArray = PackedStringArray()
+var break_events: int = 0
+var last_debris_count: int = 0
+var last_break_id: String = ""
 
 
 func bind(p_session: GameSession) -> void:
@@ -50,10 +54,15 @@ func clear() -> void:
 	while i < bodies.size():
 		var body: Node2D = bodies[i] as Node2D
 		if body != null and is_instance_valid(body):
+			if body.has_method("_clear_debris"):
+				body.call("_clear_debris")
 			body.queue_free()
 		i += 1
 	bodies.clear()
 	seq = 0
+	break_events = 0
+	last_debris_count = 0
+	last_break_id = ""
 	if root != null and is_instance_valid(root):
 		root.queue_free()
 	root = null
@@ -131,6 +140,267 @@ func kinds_present() -> PackedStringArray:
 		out.append(str(keys[k]))
 		k += 1
 	return out
+
+
+func body_from_node(node: Object) -> Node2D:
+	var cur: Node = node as Node
+	while cur != null:
+		if cur.is_in_group(str(_Body.GROUP)):
+			return cur as Node2D
+		cur = cur.get_parent()
+	return null
+
+
+func find_by_id(placement_id: String) -> Node2D:
+	var i: int = 0
+	while i < bodies.size():
+		var body: Node2D = bodies[i] as Node2D
+		if body != null and is_instance_valid(body) and str(body.get("placement_id")) == placement_id:
+			return body
+		i += 1
+	return null
+
+
+func apply_damage(body: Node2D, raw: float, source: String, attacker: int = -1, seq: int = -1) -> bool:
+	if body == null or not is_instance_valid(body):
+		return false
+	if not bool(body.get("alive")):
+		return false
+	if str(body.get("kind")) != "breakable":
+		return false
+	if seq >= 0 and bool(body.call("already_hit", attacker, seq)):
+		return false
+	if seq >= 0:
+		body.call("mark_hit", attacker, seq)
+	var spec: Dictionary = body.get("spec_cache") as Dictionary
+	var scaled: float = float(_Break.scale_damage(raw, spec, source))
+	var hp0: float = float(body.get("health"))
+	body.set("health", hp0 - scaled)
+	if session != null and session.ledger != null:
+		session.ledger.push(session.clock.tick if session.clock != null else 0, "prop_break", "prop_hit", {
+			"id": str(body.get("placement_id")),
+			"source": source,
+			"attacker": attacker,
+			"raw": SimConstants.quantize(raw),
+			"scaled": SimConstants.quantize(scaled),
+			"health": SimConstants.quantize(float(body.get("health"))),
+		})
+	if float(body.get("health")) > 0.0:
+		return false
+	_break_body(body, source)
+	return true
+
+
+func apply_melee(box: Rect2, raw: float, facing: float, attacker: int, seq: int) -> int:
+	var hits: int = 0
+	var i: int = 0
+	while i < bodies.size():
+		var body: Node2D = bodies[i] as Node2D
+		i += 1
+		if body == null or not is_instance_valid(body) or not bool(body.get("alive")):
+			continue
+		if int(body.get("carried_by")) >= 0:
+			continue
+		var rect: Rect2 = body.call("aabb") as Rect2
+		if not box.intersects(rect, false):
+			continue
+		if str(body.get("kind")) == "breakable":
+			if apply_damage(body, raw, "melee", attacker, seq):
+				hits += 1
+			else:
+				hits += 1
+		elif bool(body.get("movable")):
+			if apply_shove(body, facing, attacker, seq):
+				hits += 1
+	return hits
+
+
+func apply_shove(body: Node2D, facing: float, attacker: int, seq: int) -> bool:
+	if body == null or not is_instance_valid(body):
+		return false
+	if not bool(body.get("alive")) or not bool(body.get("movable")):
+		return false
+	if int(body.get("carried_by")) >= 0:
+		return false
+	if seq >= 0 and bool(body.call("already_hit", attacker, seq)):
+		return false
+	if seq >= 0:
+		body.call("mark_hit", attacker, seq)
+	var side: float = 1.0 if facing >= 0.0 else -1.0
+	body.set("velocity", Vector2(side * float(_Break.shove_speed()), 0.0))
+	if session != null and session.ledger != null:
+		session.ledger.push(session.clock.tick if session.clock != null else 0, "prop_motion", "prop_shove", {
+			"id": str(body.get("placement_id")),
+			"attacker": attacker,
+			"vx": SimConstants.quantize(float((body.get("velocity") as Vector2).x)),
+		})
+	return true
+
+
+func try_carry(fighter: Fighter) -> bool:
+	if fighter == null or fighter.dead:
+		return false
+	if carrier_of(fighter.slot) != null:
+		return false
+	var best: Node2D = null
+	var best_d: float = float(_Break.carry_radius())
+	var i: int = 0
+	while i < bodies.size():
+		var body: Node2D = bodies[i] as Node2D
+		i += 1
+		if body == null or not is_instance_valid(body) or not bool(body.get("alive")):
+			continue
+		if not bool(body.get("movable")):
+			continue
+		if int(body.get("carried_by")) >= 0:
+			continue
+		var d: float = body.global_position.distance_to(fighter.global_position)
+		if d <= best_d:
+			best_d = d
+			best = body
+	if best == null:
+		return false
+	best.set("carried_by", fighter.slot)
+	best.set("velocity", Vector2.ZERO)
+	best.call("set_solid_enabled", false)
+	_follow_carrier(best, fighter)
+	if session != null and session.ledger != null:
+		session.ledger.push(session.clock.tick if session.clock != null else 0, "prop_motion", "prop_carry", {
+			"id": str(best.get("placement_id")),
+			"carrier": fighter.slot,
+		})
+	return true
+
+
+func try_throw(fighter: Fighter, dir: Vector2) -> bool:
+	var body: Node2D = carrier_of(fighter.slot if fighter != null else -1)
+	if body == null or fighter == null:
+		return false
+	var aim: Vector2 = dir
+	if aim == Vector2.ZERO:
+		aim = Vector2(fighter.facing, 0.0)
+	aim = aim.normalized()
+	var origin: Vector2 = fighter.global_position + Vector2(aim.x * 16.0, -6.0)
+	body.global_position = origin
+	body.set("carried_by", -1)
+	body.set("velocity", Vector2(aim.x * float(_Break.throw_speed()), float(_Break.throw_lift())))
+	body.call("set_solid_enabled", true)
+	if session != null and session.ledger != null:
+		session.ledger.push(session.clock.tick if session.clock != null else 0, "prop_motion", "prop_throw", {
+			"id": str(body.get("placement_id")),
+			"carrier": fighter.slot,
+			"vx": SimConstants.quantize(float((body.get("velocity") as Vector2).x)),
+			"vy": SimConstants.quantize(float((body.get("velocity") as Vector2).y)),
+		})
+	return true
+
+
+func carrier_of(slot: int) -> Node2D:
+	if slot < 0:
+		return null
+	var i: int = 0
+	while i < bodies.size():
+		var body: Node2D = bodies[i] as Node2D
+		if body != null and is_instance_valid(body) and int(body.get("carried_by")) == slot:
+			return body
+		i += 1
+	return null
+
+
+func step(dt: float) -> void:
+	var i: int = 0
+	while i < bodies.size():
+		var body: Node2D = bodies[i] as Node2D
+		i += 1
+		if body == null or not is_instance_valid(body):
+			continue
+		body.call("tick_debris")
+		var carrier: int = int(body.get("carried_by"))
+		if carrier >= 0 and session != null:
+			var f: Fighter = _fighter(carrier)
+			if f != null and not f.dead:
+				_follow_carrier(body, f)
+				continue
+			body.set("carried_by", -1)
+			body.call("set_solid_enabled", true)
+		if not bool(body.get("alive")):
+			continue
+		if not bool(body.get("movable")):
+			continue
+		_step_motion(body, dt)
+
+
+func has_cover_at(at: Vector2) -> bool:
+	var i: int = 0
+	while i < bodies.size():
+		var body: Node2D = bodies[i] as Node2D
+		i += 1
+		if body == null or not is_instance_valid(body) or not bool(body.get("alive")):
+			continue
+		if str(body.get("kind")) != "breakable" and str(body.get("kind")) != "static":
+			continue
+		if (body.call("aabb") as Rect2).has_point(at):
+			return true
+	return false
+
+
+func _break_body(body: Node2D, source: String) -> void:
+	if body == null or not is_instance_valid(body):
+		return
+	if not bool(body.get("alive")):
+		return
+	body.call("disable_cover")
+	var debris_n: int = int(body.call("spawn_debris"))
+	break_events += 1
+	last_debris_count = debris_n
+	last_break_id = str(body.get("placement_id"))
+	if session != null and session.ledger != null:
+		session.ledger.push(session.clock.tick if session.clock != null else 0, "prop_break", "break", {
+			"id": last_break_id,
+			"spec": str(body.get("spec_id")),
+			"material": str(body.get("mat_id")),
+			"source": source,
+			"debris": debris_n,
+			"uid": int(body.get("uid")),
+		})
+
+
+func _follow_carrier(body: Node2D, fighter: Fighter) -> void:
+	var side: float = 1.0 if fighter.facing >= 0.0 else -1.0
+	body.global_position = fighter.global_position + Vector2(side * 12.0, -4.0)
+
+
+func _step_motion(body: Node2D, dt: float) -> void:
+	var vel: Vector2 = body.get("velocity") as Vector2
+	if vel == Vector2.ZERO:
+		return
+	vel.y += float(_Break.gravity()) * dt
+	var from: Vector2 = body.global_position
+	var to: Vector2 = from + vel * dt
+	var map_id: String = session.map_id if session != null else ""
+	if Maps.solid_at(map_id, to + Vector2(0.0, 7.0)) and vel.y > 0.0:
+		to.y = from.y
+		vel.y = 0.0
+		vel.x = move_toward(vel.x, 0.0, float(_Break.friction()) * dt)
+	if Maps.solid_at(map_id, to + Vector2(signf(vel.x) * 8.0, 0.0)):
+		to.x = from.x
+		vel.x = 0.0
+	body.global_position = to
+	if absf(vel.x) < 4.0 and absf(vel.y) < 4.0:
+		vel = Vector2.ZERO
+	body.set("velocity", vel)
+
+
+func _fighter(slot: int) -> Fighter:
+	if session == null:
+		return null
+	var i: int = 0
+	while i < session.fighters.size():
+		var f: Fighter = session.fighters[i]
+		if f != null and f.slot == slot:
+			return f
+		i += 1
+	return null
 
 
 func _spawn_placement(place: Dictionary) -> PackedStringArray:

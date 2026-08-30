@@ -10,7 +10,7 @@ const _Body: GDScript = preload("res://src/world/prop_body.gd")
 ## Proof is InputFrame apply_frames plus live InputEvent inject.
 ## 60 Hz is ledger:RL-SIM-FIXED-60 (assumption).
 ## Schema/layers/ownership stay assumption.
-## Break / chain / throw stay unimplemented.
+## Break / throw live in VF4-WP2 cases. Chain stays off.
 ## RL-NADE-PROP stays deferred.
 ## Hold-to-aim stays ledger:RL-CTRL-HOLD-AIM (assumption).
 ## Y8 roll/dive stays unavailable. USED_APPLY_FRAMES counts success only.
@@ -110,7 +110,7 @@ static func schema_and_data() -> PackedStringArray:
 		"break_implemented": bool(live.get("break_implemented", true)),
 		"chain_implemented": bool(live.get("chain_implemented", true)),
 		"nade_prop": str(live.get("nade_prop_class", "")),
-		"source": "world values are tuning; break/chain stay unimplemented",
+		"source": "world values are tuning; break/throw live; chain stays off",
 	}
 	return errors
 
