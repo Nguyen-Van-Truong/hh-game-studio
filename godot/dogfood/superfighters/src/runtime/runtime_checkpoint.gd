@@ -244,6 +244,8 @@ static func _fighter_extras(session: GameSession) -> Array:
 				"invuln_ticks": f.invuln_ticks,
 				"fire_extinguish_count": f.fire_extinguish_count,
 				"burning": f.burning,
+				"wet": f.wet,
+				"acid_contact": f.acid_contact,
 			})
 		i += 1
 	return out

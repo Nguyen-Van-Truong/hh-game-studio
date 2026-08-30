@@ -1,0 +1,90 @@
+{
+  "schema": "vf.maps.arena.v1",
+  "schema_version": 1,
+  "title": "Vault Fighters",
+  "y8_parity_claimed": false,
+  "y8_tick_rate_claimed": false,
+  "ledger_clock": "RL-SIM-FIXED-60",
+  "arena_ledger": "RL-ENV-ARENA",
+  "arena_class": "assumption",
+  "spawn_ledger": "RL-ENV-SPAWN",
+  "spawn_class": "assumption",
+  "fall_ledger": "RL-MOVE-FALL",
+  "fall_class": "assumption",
+  "hold_to_aim_ledger": "RL-CTRL-HOLD-AIM",
+  "hold_to_aim_class": "assumption",
+  "roll_dive_ledger": "RL-MOVE-ROLL-DIVE",
+  "roll_dive_class": "unavailable",
+  "nade_prop_ledger": "RL-NADE-PROP",
+  "nade_prop_class": "deferred",
+  "tick_hz": 60,
+  "values_are_tuning": true,
+  "original_exact_numbers_claimed": false,
+  "env_implemented": true,
+  "ascii_maps_kept": true,
+  "live_c_b_tiles": true,
+  "fall": {
+    "drop_min": 28.0,
+    "damage": 16.0,
+    "speed": 560.0,
+    "dive_immune": true,
+    "spawn_land_immune": true,
+    "pit_not_cancelled_by_dive": true
+  },
+  "maps": {
+    "rooftops": {
+      "id": "rooftops",
+      "display_name": "Rooftops",
+      "hazards": ["pit", "fall"],
+      "notes": "Kill-plane pits and fall policy. No env placements this WP."
+    },
+    "storage": {
+      "id": "storage",
+      "display_name": "Storage",
+      "hazards": ["fall"],
+      "notes": "Enclosed floor. Fall from crate stacks. No pit columns."
+    },
+    "police": {
+      "id": "police",
+      "display_name": "Police Station",
+      "hazards": ["pit", "fall"],
+      "notes": "Left pit kill-plane and fall policy. No env placements this WP."
+    },
+    "hazardous": {
+      "id": "hazardous",
+      "display_name": "Hazardous",
+      "hazards": ["pit", "fall"],
+      "notes": "Wide pit kill-plane and fall policy. Machines stay on fixtures (VF5)."
+    },
+    "fx_env_instant": {
+      "id": "fx_env_instant",
+      "display_name": "Void Cut",
+      "hazards": ["instant"]
+    },
+    "fx_env_toxic": {
+      "id": "fx_env_toxic",
+      "display_name": "Acid Trench",
+      "hazards": ["toxic"]
+    },
+    "fx_env_water": {
+      "id": "fx_env_water",
+      "display_name": "Wash Channel",
+      "hazards": ["water"]
+    },
+    "fx_env_rotor": {
+      "id": "fx_env_rotor",
+      "display_name": "Mill Shaft",
+      "hazards": ["rotor"]
+    },
+    "fx_env_fall": {
+      "id": "fx_env_fall",
+      "display_name": "Drop Well",
+      "hazards": ["fall"]
+    },
+    "fx_env_yard": {
+      "id": "fx_env_yard",
+      "display_name": "Hazard Yard",
+      "hazards": ["water", "rotor", "toxic"]
+    }
+  }
+}

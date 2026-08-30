@@ -52,6 +52,8 @@
     "lift": "RL-WORLD-LIFT assumption; deterministic tick path",
     "board": "RL-WORLD-BOARD assumption; ride without tunneling",
     "trigger": "RL-WORLD-TRIGGER assumption; arm ticks then call",
-    "nade_prop": "RL-NADE-PROP stays deferred for glass/wood"
+    "nade_prop": "RL-NADE-PROP stays deferred for glass/wood",
+    "env": "RL-ENV-ARENA assumption; instant/toxic/water/rotor this WP",
+    "water_env": "RL-ENV-WATER assumption; water extinguish selected; roll kept"
   }
 }

@@ -1,0 +1,83 @@
+{
+	"instant": {
+		"cause": "pit",
+		"dead": true,
+		"deaths": 1,
+		"enters": 1,
+		"hp0": 100.0,
+		"source": "Void Cut enter then pit death",
+		"verdict": "pass"
+	},
+	"map_id": "fx_env_yard",
+	"mode": "vs2",
+	"replay": {
+		"pairs": [
+			{
+				"hash_a": "58924ddfa67eeff1d80298c34f15431c01f107453defbe7bd477e82311f4fc75",
+				"hash_b": "58924ddfa67eeff1d80298c34f15431c01f107453defbe7bd477e82311f4fc75",
+				"hash_match": true,
+				"name": "env_fall",
+				"world_a": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+				"world_b": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+				"world_hash_match": true
+			},
+			{
+				"hash_a": "7bedc41450602da65594763eeb99dd52ef11cdc5ad862d8128a01a9dc83cfcea",
+				"hash_b": "7bedc41450602da65594763eeb99dd52ef11cdc5ad862d8128a01a9dc83cfcea",
+				"hash_match": true,
+				"name": "env_instant",
+				"world_a": "744a1ece021bf5cbfde117d8f00154b4002ce4a768faa0376b8fed70b51ed0ac",
+				"world_b": "744a1ece021bf5cbfde117d8f00154b4002ce4a768faa0376b8fed70b51ed0ac",
+				"world_hash_match": true
+			},
+			{
+				"hash_a": "ec42655688455a0eb56f53d90c9c3631a38cd55fb59ca1c824189ddb4c1201ce",
+				"hash_b": "ec42655688455a0eb56f53d90c9c3631a38cd55fb59ca1c824189ddb4c1201ce",
+				"hash_match": true,
+				"name": "env_rotor",
+				"world_a": "24e3c05233e6242ce0ca1a5b2a083044dd4c4e07d8708bbcf96481dbc2d38cdc",
+				"world_b": "24e3c05233e6242ce0ca1a5b2a083044dd4c4e07d8708bbcf96481dbc2d38cdc",
+				"world_hash_match": true
+			},
+			{
+				"hash_a": "2d96c9b2cfea11c41e0fea2ce30236317d8123b7791d1a14bbcda5c83828cb2d",
+				"hash_b": "2d96c9b2cfea11c41e0fea2ce30236317d8123b7791d1a14bbcda5c83828cb2d",
+				"hash_match": true,
+				"name": "env_toxic",
+				"world_a": "2845c51a4cdddd3579960ad832b99aa7ebb7ae56cd5b05958be2c17d3d8f57b5",
+				"world_b": "2845c51a4cdddd3579960ad832b99aa7ebb7ae56cd5b05958be2c17d3d8f57b5",
+				"world_hash_match": true
+			},
+			{
+				"hash_a": "fdda813836d7bfbb393e25e8f7a4b0dab18cb45366802fe771b5c164e49ec3f5",
+				"hash_b": "fdda813836d7bfbb393e25e8f7a4b0dab18cb45366802fe771b5c164e49ec3f5",
+				"hash_match": true,
+				"name": "env_toxic_death",
+				"world_a": "2845c51a4cdddd3579960ad832b99aa7ebb7ae56cd5b05958be2c17d3d8f57b5",
+				"world_b": "2845c51a4cdddd3579960ad832b99aa7ebb7ae56cd5b05958be2c17d3d8f57b5",
+				"world_hash_match": true
+			},
+			{
+				"hash_a": "00edf34eb11940b27f2fe60ae506690cb57f708d9f18072cfc680131d3815333",
+				"hash_b": "00edf34eb11940b27f2fe60ae506690cb57f708d9f18072cfc680131d3815333",
+				"hash_match": true,
+				"name": "env_water",
+				"world_a": "2a33091c55acb8194aeb256c64d84a55d0f6be26ca0140aa4da869fda1f98c40",
+				"world_b": "2a33091c55acb8194aeb256c64d84a55d0f6be26ca0140aa4da869fda1f98c40",
+				"world_hash_match": true
+			},
+			{
+				"hash_a": "94ec7927776e7752633db0989208eb5d8cfbf907313bbaac65761c5b4af4bf0e",
+				"hash_b": "94ec7927776e7752633db0989208eb5d8cfbf907313bbaac65761c5b4af4bf0e",
+				"hash_match": true,
+				"name": "env_yard",
+				"world_a": "b8d754e9055f640749700e91746b91acd84108c690539f746df6051e17d16619",
+				"world_b": "b8d754e9055f640749700e91746b91acd84108c690539f746df6051e17d16619",
+				"world_hash_match": true
+			}
+		],
+		"source": "apply_frames env traces twice",
+		"verdict": "match"
+	},
+	"seed": 7
+}

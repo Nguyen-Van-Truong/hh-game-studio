@@ -100,6 +100,12 @@ static func validate_payload(row: Dictionary) -> PackedStringArray:
 		errors.append("explosive chain must be implemented this WP")
 	if not bool(row.get("moving_implemented", false)):
 		errors.append("moving bodies must be implemented this WP")
+	if not bool(row.get("env_implemented", false)):
+		errors.append("env hazards must be implemented this WP")
+	if str(row.get("env_class", "")) != "assumption":
+		errors.append("env arena must stay assumption")
+	if str(row.get("water_env_class", "")) != "assumption":
+		errors.append("env water must stay assumption")
 	if str(row.get("door_class", "")) != "assumption":
 		errors.append("door must stay assumption")
 	if str(row.get("lift_class", "")) != "assumption":

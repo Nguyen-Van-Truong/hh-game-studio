@@ -1,0 +1,26 @@
+{
+  "schema": "vf.sim.trace.v1",
+  "schema_version": 1,
+  "title": "Vault Fighters",
+  "kind": "official",
+  "name": "env_instant",
+  "record_source": "scripted_input_frames",
+  "mode": "vs2",
+  "map_id": "fx_env_instant",
+  "stage_index": 0,
+  "seed": 7,
+  "fighter_count": 2,
+  "tick_hz": 60,
+  "snapshot_every": 15,
+  "ledger_clock": "RL-SIM-FIXED-60",
+  "y8_tick_rate_claimed": false,
+  "y8_parity_claimed": false,
+  "hold_to_aim": "RL-CTRL-HOLD-AIM assumption, not observed",
+  "env_instant": "RL-ENV-INSTANT assumption, not observed",
+  "nade_prop": "RL-NADE-PROP deferred",
+  "used_step_fixed": false,
+  "used_action_press": false,
+  "segments": [
+    {"ticks": 60, "p1": {"held": ["right"]}}
+  ]
+}

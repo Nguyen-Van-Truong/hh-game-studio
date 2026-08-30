@@ -204,6 +204,8 @@ static func _fighter_row(f: Fighter) -> Dictionary:
 		"hang_seq": f.hang_seq,
 		"contact_nx": SimConstants.quantize(f.last_contact_nx),
 		"contact_ny": SimConstants.quantize(f.last_contact_ny),
+		"wet": 1 if f.wet else 0,
+		"acid": 1 if f.acid_contact else 0,
 		"aiming": 1 if f.aiming else 0,
 		"aim_x": SimConstants.quantize(f.aim_dir.x),
 		"aim_y": SimConstants.quantize(f.aim_dir.y),

@@ -82,6 +82,10 @@ func refresh(fighters: Array) -> void:
 			pose = " ROLL"
 		elif f.burning:
 			pose = " BURN"
+		elif f.acid_contact:
+			pose = " ACID"
+		elif f.wet:
+			pose = " WET"
 		elif f.hanging or f.recover_left > 0.0:
 			pose = " HANG"
 		elif f.climbing:

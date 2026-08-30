@@ -16,7 +16,9 @@ A fourth/fifth neighbor stays intact.
 Fighters gain a flammable burn timer (`ledger:RL-PROP-FIRE`). Damage
 ticks every 12 ticks. Timer expiry emits `fire_end` and WorldOwner
 clears fire sprites. The selected extinguish rule is **roll**
-(`ledger:RL-PROP-EXTINGUISH`). Water is not selected (VF4-WP5).
+(`ledger:RL-PROP-EXTINGUISH`). Water is not selected in
+`hazard.json`. VF4-WP5 selects water extinguish in `env.json`
+(`docs/env.md`, `ledger:RL-ENV-WATER`).
 
 `Drop Cage` starts hanging (`ledger:RL-PROP-HANG`). A nearby blast or
 a direct hit releases it with a downward impulse. Official maps use

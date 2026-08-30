@@ -748,3 +748,44 @@ Official maps use `#` floors only. Live `c`/`b` stay tiles.
 | RL-WORLD-BOARD | Ride / drop without tunnel | `assumption` | none | VF4-WP4 product contract; **not** observed on Y8 this session | 2026-08-30 | board on_floor; carry by delta; snap_eps 4; walk off solid deck standing | board_eps 8 / snap 4 / warp 16 | Not observed. Hang under the lip is a fail. |
 | RL-WORLD-TRIGGER | Stand-still call plate | `assumption` | none | VF4-WP4 product contract; **not** observed on Y8 this session | 2026-08-30 | hold_ticks == arm_ticks fires door/lift | arm 8 | Do **not** cite as observed. |
 
+---
+
+## VF4-WP5 toxic pits, fall, water, and machines (not a play observation)
+
+Dated 2026-08-30 Asia/Saigon. No in-game Y8 play. No HTML5/Flash
+package. Sidecar: `docs/env.md` and
+`docs/evidence/VF4WP5-20260830-ASIA-SAIGON-01/`.
+That `run_id` is unique. Do **not** remint it.
+
+Instant stays `ledger:RL-ENV-INSTANT` (`assumption`). Deferred toxic
+stays `ledger:RL-ENV-DEFER` (`assumption`). Water stays
+`ledger:RL-ENV-WATER` (`assumption`). Rotor stays
+`ledger:RL-ENV-ROTOR` (`assumption`). Spawn stays
+`ledger:RL-ENV-SPAWN` (`assumption`). ArenaSpec stays
+`ledger:RL-ENV-ARENA` (`assumption`). Fall stays
+`ledger:RL-MOVE-FALL` (`assumption`). `ledger:RL-NADE-PROP`
+stays `deferred`. None of these rows is promoted to `observed`.
+Hold-to-aim stays `ledger:RL-CTRL-HOLD-AIM` (`assumption`). Y8
+observation stays `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). 60 Hz
+stays `ledger:RL-SIM-FIXED-60` (`assumption`).
+
+Product contract: Void Cut overlap kills with cause `pit`; Acid Trench
+ticks 12 HP / 8 ticks then death cause `damage`; Wash Channel sets
+`wet` and extinguishes burn; Mill Rotor ticks 8 HP / 10 ticks and
+spins 6 deg/tick; Drop Well walk-off applies fall damage while dive
+landing is immune; spawn AABBs stay off instant/toxic/rotor; pause
+freezes spin; restart rebuilds env at rest. ArenaSpec lists hazards
+per map. Live maps declare pit/fall only. Machines/water/toxic stay
+on fixtures. Live `c`/`b` stay tiles. Roll extinguish stays selected
+in hazard.json. Water extinguish is selected in env.json only.
+Official proof uses `apply_frames` plus live InputEvent inject.
+
+| ID | Topic | Class | Conf. | Source | When | Behavior to reproduce | Tuning-only | Notes |
+|---|---|---|---|---|---|---|---|---|
+| RL-ENV-INSTANT | Instant death zone | `assumption` | none | VF4-WP5 product contract; **not** observed on Y8 this session | 2026-08-30 | Void Cut walk-in dies cause pit | AABB 48×16 | Do **not** cite as observed. |
+| RL-ENV-DEFER | Deferred toxic ticks | `assumption` | none | VF4-WP5 product contract; **not** observed on Y8 this session | 2026-08-30 | Acid Trench enter/damage/exit; stay-to-death cause damage | 12 / 8 | Do **not** cite as observed. |
+| RL-ENV-WATER | Water extinguish | `assumption` | none | VF4-WP5 product contract; **not** observed on Y8 this session | 2026-08-30 | Wash Channel sets wet and clears burn | env.json | Do **not** cite as observed. |
+| RL-ENV-ROTOR | Windmill / mill machine | `assumption` | none | VF4-WP5 product contract; **not** observed on Y8 this session | 2026-08-30 | Mill Shaft overlap ticks + spin | 8 / 10 / 6° | Do **not** cite as observed. |
+| RL-ENV-SPAWN | Safe spawn zones | `assumption` | none | VF4-WP5 product contract; **not** observed on Y8 this session | 2026-08-30 | P/1 AABB not in instant/toxic/rotor | spawn AABB | Do **not** cite as observed. |
+| RL-ENV-ARENA | ArenaSpec hazard list | `assumption` | none | VF4-WP5 product contract; **not** observed on Y8 this session | 2026-08-30 | live maps pit/fall; machines on fixtures | ArenaSpec | Do **not** cite as observed. |
+

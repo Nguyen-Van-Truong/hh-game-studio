@@ -43,7 +43,10 @@ Fixture `fx_world_open` (display **Prop Yard**) places one of each kind.
 - Doors / elevators / boarding: VF4-WP4 (`docs/moving.md`,
   `ledger:RL-WORLD-DOOR`, `ledger:RL-WORLD-LIFT`,
   `ledger:RL-WORLD-BOARD`, `ledger:RL-WORLD-TRIGGER`)
-- Toxic / machines: VF4-WP5
+- Toxic / water / machines / ArenaSpec: VF4-WP5 (`docs/env.md`,
+  `ledger:RL-ENV-INSTANT`, `ledger:RL-ENV-DEFER`,
+  `ledger:RL-ENV-WATER`, `ledger:RL-ENV-ROTOR`,
+  `ledger:RL-ENV-SPAWN`, `ledger:RL-ENV-ARENA`)
 
 ## Honesty
 

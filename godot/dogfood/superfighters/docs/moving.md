@@ -68,6 +68,7 @@ Drop still is walk-off onto solid deck, not a hang under the lip.
 - `ledger:RL-NADE-PROP` stays deferred.
 - Hold-to-aim stays `ledger:RL-CTRL-HOLD-AIM` assumption.
 - Y8 roll/dive stays `ledger:RL-MOVE-ROLL-DIVE` unavailable.
-- Water is not selected (VF4-WP5).
+- Water is not selected in `hazard.json`. VF4-WP5 selects it in
+  `env.json` (`docs/env.md`, `ledger:RL-ENV-WATER`).
 - Values are tuning. No copied Y8 table. Not a VF7 art rewrite.
 - Original door/lift/trigger art only. No Y8 rip.

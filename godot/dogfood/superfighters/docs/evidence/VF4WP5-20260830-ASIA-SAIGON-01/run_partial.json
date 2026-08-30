@@ -1,0 +1,64 @@
+{
+	"command_id": "cmd.vf4-wp5.env.1",
+	"display": "Windows",
+	"ended_at": "2026-08-30T09:50:57+07:00",
+	"ended_unix": 1788058259.193,
+	"epsilon": 0.001,
+	"fail_count": 0,
+	"godot": {
+		"build": "official",
+		"hash": "a13da4feb8d8aefc283c3763d33a2f170a18d541",
+		"hex": 263937,
+		"major": 4,
+		"minor": 7,
+		"patch": 1,
+		"status": "stable",
+		"string": "4.7.1-stable (official)",
+		"timestamp": 0
+	},
+	"map_id": "fx_env_yard",
+	"mode": "vs2",
+	"os_name": "Windows",
+	"outcomes": {
+		"DATA": "pass",
+		"FALL": "pass",
+		"INSTANT": "pass",
+		"LIVE": "pass",
+		"PAUSE": "pass",
+		"REPLAY": "match",
+		"RESET": "pass",
+		"ROTOR": "pass",
+		"SPAWN": "pass",
+		"TOXIC": "pass",
+		"USED_APPLY_ATTEMPTED": 1724,
+		"USED_APPLY_FRAMES": 1723,
+		"USED_APPLY_SUCCEEDED": 1723,
+		"WATER": "pass"
+	},
+	"run_id": "VF4WP5-20260830-ASIA-SAIGON-01",
+	"schema": "vault-fighters.vf4-wp5.run.v1",
+	"screens": {
+		"fall": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\.hh-agent\\vf4wp5-official\\window/screens/env_fall_1280x720.png",
+		"instant": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\.hh-agent\\vf4wp5-official\\window/screens/env_instant_1280x720.png",
+		"live": {
+			"hazardous": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\.hh-agent\\vf4wp5-official\\window/screens/env_hazardous_1280x720.png",
+			"police": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\.hh-agent\\vf4wp5-official\\window/screens/env_police_1280x720.png",
+			"rooftops": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\.hh-agent\\vf4wp5-official\\window/screens/env_rooftops_1280x720.png",
+			"storage": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\.hh-agent\\vf4wp5-official\\window/screens/env_storage_1280x720.png"
+		},
+		"rotor": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\.hh-agent\\vf4wp5-official\\window/screens/env_rotor_1280x720.png",
+		"setup": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\.hh-agent\\vf4wp5-official\\window/screens/env_setup_1280x720.png",
+		"toxic": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\.hh-agent\\vf4wp5-official\\window/screens/env_toxic_1280x720.png",
+		"water": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\.hh-agent\\vf4wp5-official\\window/screens/env_water_1280x720.png"
+	},
+	"seed": 7,
+	"started_at": "2026-08-30T09:50:53+07:00",
+	"started_unix": 1788058253.716,
+	"tick_hz": 60,
+	"timezone": "Asia/Saigon",
+	"viewport": {
+		"h": 720.0,
+		"w": 1280.0
+	},
+	"wp": "VF4-WP5"
+}

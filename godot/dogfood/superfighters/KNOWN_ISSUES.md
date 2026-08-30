@@ -139,7 +139,8 @@ First playable slice. Not G6. Not 60/60.
   `ledger:RL-PROP-FIRE`, `ledger:RL-PROP-HANG`,
   `ledger:RL-PROP-EXTINGUISH`). Official proof is InputFrame
   `apply_frames` plus live InputEvent inject. Water extinguish is
-  **not** selected (VF4-WP5). `ledger:RL-NADE-PROP` stays
+  **not** selected in `hazard.json` (`water_selected` stays false).
+  VF4-WP5 selects water in `env.json`. `ledger:RL-NADE-PROP` stays
   `deferred` for glass/wood; a nade may start a barrel chain.
   Official maps use `#` floors only; the VF3-WP4 `=` bounce
   residual is unchanged. Live `c`/`b` stay tiles. Hold-to-aim is
@@ -157,7 +158,24 @@ First playable slice. Not G6. Not 60/60.
   Live `c`/`b` stay tiles. Hold-to-aim is **not** promoted to
   `observed`. Y8 roll/dive observation stays
   `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). Water is not selected
-  (VF4-WP5). No new Y8 play. Not a VF7 art rewrite.
+  in `hazard.json`; VF4-WP5 selects it in `env.json`. No new Y8 play.
+  Not a VF7 art rewrite.
+- VF4-WP5 ships instant death zones, deferred toxic, water
+  extinguish, mill/rotor machines, fall policy, and ArenaSpec
+  hazard lists as assumption (`ledger:RL-ENV-INSTANT`,
+  `ledger:RL-ENV-DEFER`, `ledger:RL-ENV-WATER`,
+  `ledger:RL-ENV-ROTOR`, `ledger:RL-ENV-SPAWN`,
+  `ledger:RL-ENV-ARENA`, `ledger:RL-MOVE-FALL`). Official proof
+  is InputFrame `apply_frames` plus live InputEvent inject.
+  Instant death uses cause `pit`. Toxic/rotor death uses `damage`.
+  Fall land must stand `on_floor` (hang is a fail). Water
+  extinguish is selected in `env.json`; roll extinguish stays
+  selected in `hazard.json`. `ledger:RL-NADE-PROP` stays
+  `deferred`. Live `c`/`b` stay tiles. Live maps declare pit/fall
+  only; machines/water/toxic stay on fixtures (VF5). Hold-to-aim
+  is **not** promoted to `observed`. Y8 roll/dive observation
+  stays `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). No new Y8
+  play. Not a VF7 art rewrite.
 - VF3-WP4 ships grenade hold/release throw, gravity arc, bounce,
   fuse, radial falloff, owner skip, one explosion, timeout
   cleanup, and swept nade collision as assumption

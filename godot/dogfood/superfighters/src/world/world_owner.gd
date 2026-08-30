@@ -14,13 +14,18 @@ const _Hazard: GDScript = preload("res://src/world/prop_hazard.gd")
 const _View: GDScript = preload("res://src/world/prop_view.gd")
 const _Moving: GDScript = preload("res://src/world/moving_spec.gd")
 const _Mover: GDScript = preload("res://src/world/moving_body.gd")
+const _Env: GDScript = preload("res://src/world/env_spec.gd")
+const _EnvBody: GDScript = preload("res://src/world/env_body.gd")
+const _Arena: GDScript = preload("res://src/maps/arena_spec.gd")
 
 var session: GameSession
 var root: Node2D
 var bodies: Array = []
 var movers: Array = []
+var envs: Array = []
 var seq: int = 0
 var mover_seq: int = 0
+var env_seq: int = 0
 var door_open_events: int = 0
 var board_events: int = 0
 var unboard_events: int = 0
@@ -28,6 +33,13 @@ var trigger_events: int = 0
 var call_events: int = 0
 var tunnel_events: int = 0
 var max_board_dy: float = 0.0
+var env_enter_events: int = 0
+var env_exit_events: int = 0
+var env_damage_events: int = 0
+var env_death_events: int = 0
+var env_extinguish_events: int = 0
+var rotor_hits: int = 0
+var _env_inside: Dictionary = {}
 var _unboard_tick: Dictionary = {}
 var _unboard_y: Dictionary = {}
 var last_errors: PackedStringArray = PackedStringArray()
@@ -77,6 +89,14 @@ func spawn_map(map_id: String) -> PackedStringArray:
 		var mplace: Dictionary = movers_rows[i] as Dictionary
 		_append(last_errors, _spawn_mover(mplace))
 		i += 1
+	_append(last_errors, _Env.validate())
+	_append(last_errors, _Arena.validate())
+	var env_rows: Array = _Env.placements_for(map_id)
+	i = 0
+	while i < env_rows.size():
+		var eplace: Dictionary = env_rows[i] as Dictionary
+		_append(last_errors, _spawn_env(eplace))
+		i += 1
 	return last_errors
 
 
@@ -91,9 +111,18 @@ func clear() -> void:
 		i += 1
 	bodies.clear()
 	_clear_movers()
+	_clear_envs()
 	seq = 0
 	mover_seq = 0
+	env_seq = 0
 	door_open_events = 0
+	env_enter_events = 0
+	env_exit_events = 0
+	env_damage_events = 0
+	env_death_events = 0
+	env_extinguish_events = 0
+	rotor_hits = 0
+	_env_inside.clear()
 	board_events = 0
 	unboard_events = 0
 	trigger_events = 0
@@ -153,6 +182,12 @@ func snapshot() -> Array:
 		var mover: Node2D = movers[i] as Node2D
 		if mover != null and is_instance_valid(mover) and mover.has_method("snapshot_row"):
 			rows.append(mover.call("snapshot_row"))
+		i += 1
+	i = 0
+	while i < envs.size():
+		var env: Node2D = envs[i] as Node2D
+		if env != null and is_instance_valid(env) and env.has_method("snapshot_row"):
+			rows.append(env.call("snapshot_row"))
 		i += 1
 	rows.sort_custom(_row_less)
 	return rows
@@ -219,6 +254,12 @@ func find_by_id(placement_id: String) -> Node2D:
 		var mover: Node2D = movers[i] as Node2D
 		if mover != null and is_instance_valid(mover) and str(mover.get("placement_id")) == placement_id:
 			return mover
+		i += 1
+	i = 0
+	while i < envs.size():
+		var env: Node2D = envs[i] as Node2D
+		if env != null and is_instance_valid(env) and str(env.get("placement_id")) == placement_id:
+			return env
 		i += 1
 	return null
 
@@ -459,6 +500,7 @@ func step(dt: float) -> void:
 	_tick_vfx()
 	_sync_fighter_fire()
 	_step_movers()
+	_step_envs()
 	var i: int = 0
 	while i < bodies.size():
 		var body: Node2D = bodies[i] as Node2D
@@ -760,6 +802,204 @@ func _clear_movers() -> void:
 			mover.queue_free()
 		i += 1
 	movers.clear()
+
+
+func _spawn_env(place: Dictionary) -> PackedStringArray:
+	var errors: PackedStringArray = PackedStringArray()
+	if root == null or not is_instance_valid(root):
+		errors.append("world owner has no root")
+		return errors
+	var spec_id: String = str(place.get("spec", ""))
+	var spec: Dictionary = _Env.spec(spec_id)
+	if spec.is_empty():
+		errors.append("unknown env spec %s" % spec_id)
+		return errors
+	var vpath: String = str(_Spec.visual_path(spec))
+	if not _Paths.visual_ok(vpath):
+		errors.append("env rejected path %s" % _Paths.reject_reason(vpath))
+		return errors
+	env_seq += 1
+	var body: Node2D = _EnvBody.new() as Node2D
+	root.add_child(body)
+	var setup_v: Variant = body.call("setup", place, spec, env_seq, _Catalog.layers())
+	if setup_v is PackedStringArray:
+		_append(errors, setup_v as PackedStringArray)
+	if not errors.is_empty():
+		body.queue_free()
+		return errors
+	envs.append(body)
+	if session != null and session.ledger != null:
+		session.ledger.push(session.clock.tick if session.clock != null else 0, "world_env", "env_spawn", {
+			"id": str(place.get("id", "")),
+			"spec": spec_id,
+			"kind": str(spec.get("kind", "")),
+			"uid": env_seq,
+			"x": SimConstants.quantize(body.global_position.x),
+			"y": SimConstants.quantize(body.global_position.y),
+		})
+	return errors
+
+
+func _clear_envs() -> void:
+	var i: int = 0
+	while i < envs.size():
+		var env: Node2D = envs[i] as Node2D
+		if env != null and is_instance_valid(env):
+			env.queue_free()
+		i += 1
+	envs.clear()
+	_env_inside.clear()
+
+
+func _step_envs() -> void:
+	if session == null:
+		return
+	var next_inside: Dictionary = {}
+	var i: int = 0
+	while i < session.fighters.size():
+		var f: Fighter = session.fighters[i]
+		i += 1
+		if f == null:
+			continue
+		f.wet = false
+		f.acid_contact = false
+		if f.dead:
+			f.apply_env_tint()
+			continue
+		var fa: Rect2 = _Env.fighter_aabb(f)
+		var was: PackedStringArray = _inside_of(f.slot)
+		var now: PackedStringArray = PackedStringArray()
+		var e: int = 0
+		while e < envs.size():
+			var env: Node2D = envs[e] as Node2D
+			e += 1
+			if env == null or not is_instance_valid(env):
+				continue
+			var box: Rect2 = env.call("aabb") as Rect2
+			if not fa.intersects(box, false):
+				env.call("clear_contact", f.slot)
+				continue
+			var eid: String = str(env.get("placement_id"))
+			now.append(eid)
+			if not was.has(eid):
+				env_enter_events += 1
+				f.env_entered = true
+				f.env_inside_id = eid
+				_log_env(env, f, "env_enter", {})
+			_apply_env(env, f)
+		var w: int = 0
+		while w < was.size():
+			var old_id: String = String(was[w])
+			if not now.has(old_id):
+				env_exit_events += 1
+				f.env_exited = true
+				_log_env_id(old_id, f, "env_exit", {})
+			w += 1
+		if not now.is_empty():
+			next_inside[f.slot] = now
+			f.env_inside_id = String(now[now.size() - 1])
+		else:
+			f.env_inside_id = ""
+		f.apply_env_tint()
+	_env_inside = next_inside
+	i = 0
+	while i < envs.size():
+		var spin: Node2D = envs[i] as Node2D
+		i += 1
+		if spin != null and is_instance_valid(spin):
+			spin.call("advance_spin")
+
+
+func _apply_env(env: Node2D, fighter: Fighter) -> void:
+	if env == null or fighter == null or fighter.dead:
+		return
+	var kind: String = str(env.get("kind"))
+	if kind == "zone_instant":
+		if not fighter.dead:
+			fighter.die_env("pit")
+			env_death_events += 1
+			_log_env(env, fighter, "env_death", {"cause": "pit"})
+		return
+	if kind == "zone_water":
+		fighter.wet = true
+		if fighter.burning:
+			fighter.extinguish_fire()
+			env_extinguish_events += 1
+			_log_env(env, fighter, "env_extinguish", {
+				"count": fighter.fire_extinguish_count,
+			})
+		return
+	if kind == "zone_toxic":
+		fighter.acid_contact = true
+		var n: int = int(env.call("bump_contact", fighter.slot))
+		if n % int(_Env.toxic_interval()) == 0:
+			var hp0: float = fighter.health
+			fighter.take_env_tick(float(_Env.toxic_damage()))
+			if fighter.env_damage_applied or fighter.health < hp0 - 0.01:
+				env_damage_events += 1
+				_log_env(env, fighter, "env_damage", {
+					"hp": SimConstants.quantize(fighter.health),
+					"kind": kind,
+				})
+			if fighter.dead:
+				env_death_events += 1
+				_log_env(env, fighter, "env_death", {"cause": fighter.death_cause})
+		return
+	if kind == "rotor":
+		var hits: int = int(env.call("bump_contact", fighter.slot))
+		if hits % int(_Env.rotor_interval()) == 0:
+			var hp1: float = fighter.health
+			fighter.take_env_tick(float(_Env.rotor_damage()))
+			rotor_hits += 1
+			if fighter.env_damage_applied or fighter.health < hp1 - 0.01:
+				env_damage_events += 1
+				_log_env(env, fighter, "env_damage", {
+					"hp": SimConstants.quantize(fighter.health),
+					"kind": kind,
+				})
+			_log_env(env, fighter, "rotor_hit", {
+				"hits": rotor_hits,
+			})
+			if fighter.dead:
+				env_death_events += 1
+				_log_env(env, fighter, "env_death", {"cause": fighter.death_cause})
+
+
+func _inside_of(slot: int) -> PackedStringArray:
+	if not _env_inside.has(slot):
+		return PackedStringArray()
+	var raw: Variant = _env_inside[slot]
+	if raw is PackedStringArray:
+		return raw as PackedStringArray
+	var out: PackedStringArray = PackedStringArray()
+	if raw is Array:
+		var arr: Array = raw as Array
+		var i: int = 0
+		while i < arr.size():
+			out.append(str(arr[i]))
+			i += 1
+	return out
+
+
+func _log_env(env: Node2D, fighter: Fighter, kind: String, extra: Dictionary) -> void:
+	if env == null:
+		return
+	_log_env_id(str(env.get("placement_id")), fighter, kind, extra)
+
+
+func _log_env_id(env_id: String, fighter: Fighter, kind: String, extra: Dictionary) -> void:
+	if session == null or session.ledger == null or fighter == null:
+		return
+	var row: Dictionary = {
+		"id": env_id,
+		"slot": fighter.slot,
+	}
+	var keys: Array = extra.keys()
+	var i: int = 0
+	while i < keys.size():
+		row[str(keys[i])] = extra[keys[i]]
+		i += 1
+	session.ledger.push(session.clock.tick if session.clock != null else 0, "world_env", kind, row)
 
 
 func _step_movers() -> void:

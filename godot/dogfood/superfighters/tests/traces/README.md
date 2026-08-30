@@ -200,6 +200,24 @@ Door / lift / board / trigger stay `assumption`. Clock stays
 | `move_drop.json` | Lift Shaft walk off at the top; lift returns |
 | `move_yard.json` | Relay Shaft door then lift |
 
+## env/
+
+VF4-WP5 official InputFrame traces. Same schema as `official/`.
+Replay uses `apply_frames`. No teleport. No `step_fixed`.
+Instant / toxic / water / rotor / spawn / arena stay `assumption`.
+Fall stays `ledger:RL-MOVE-FALL`. Clock stays
+`ledger:RL-SIM-FIXED-60`.
+
+| File | Beat |
+|---|---|
+| `env_instant.json` | Void Cut walk-in pit death |
+| `env_toxic.json` | Acid Trench enter / idle / exit |
+| `env_toxic_death.json` | Acid Trench stay-to-death |
+| `env_water.json` | Wash Channel extinguish |
+| `env_rotor.json` | Mill Shaft overlap + idle |
+| `env_fall.json` | Drop Well standing walk-off |
+| `env_yard.json` | Hazard Yard walk |
+
 ## fixture/
 
 May use `teleport` / `force_kill` for fast unit setup. Fixture evidence

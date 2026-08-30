@@ -14,6 +14,7 @@ const WorldCasesScript: GDScript = preload("res://tests/world_cases.gd")
 const BreakCasesScript: GDScript = preload("res://tests/break_cases.gd")
 const HazardCasesScript: GDScript = preload("res://tests/hazard_cases.gd")
 const MovingCasesScript: GDScript = preload("res://tests/moving_cases.gd")
+const EnvCasesScript: GDScript = preload("res://tests/env_cases.gd")
 const _Combat: GDScript = preload("res://src/sim/combat.gd")
 
 var _fails: PackedStringArray = PackedStringArray()
@@ -40,6 +41,7 @@ var _world: String = "unproven"
 var _break: String = "unproven"
 var _hazard: String = "unproven"
 var _moving: String = "unproven"
+var _env: String = "unproven"
 
 
 func _initialize() -> void:
@@ -78,6 +80,7 @@ func _boot() -> void:
 	await _test_break(app)
 	await _test_hazard(app)
 	await _test_moving(app)
+	await _test_env(app)
 	if _fails.is_empty():
 		_no_err = "proven"
 	_emit()
@@ -1220,6 +1223,49 @@ func _test_moving(app: App) -> void:
 		_moving = "proven"
 
 
+func _test_env(app: App) -> void:
+	var errors: PackedStringArray = await EnvCasesScript.run_all(app)
+	var i: int = 0
+	while i < errors.size():
+		_fail("ENV %s" % String(errors[i]))
+		i += 1
+	var data: String = str(EnvCasesScript.outcome_data.get("verdict", "unproven"))
+	var instant: String = str(EnvCasesScript.outcome_instant.get("verdict", "unproven"))
+	var toxic: String = str(EnvCasesScript.outcome_toxic.get("verdict", "unproven"))
+	var water: String = str(EnvCasesScript.outcome_water.get("verdict", "unproven"))
+	var rotor: String = str(EnvCasesScript.outcome_rotor.get("verdict", "unproven"))
+	var fall: String = str(EnvCasesScript.outcome_fall.get("verdict", "unproven"))
+	var spawn: String = str(EnvCasesScript.outcome_spawn.get("verdict", "unproven"))
+	var pause: String = str(EnvCasesScript.outcome_pause.get("verdict", "unproven"))
+	var reset: String = str(EnvCasesScript.outcome_reset.get("verdict", "unproven"))
+	var live: String = str(EnvCasesScript.outcome_live.get("verdict", "unproven"))
+	var replay: String = str(EnvCasesScript.outcome_replay.get("verdict", "unproven"))
+	if data != "pass":
+		_fail("ENV DATA outcome is %s" % data)
+	if instant != "pass":
+		_fail("ENV INSTANT outcome is %s" % instant)
+	if toxic != "pass":
+		_fail("ENV TOXIC outcome is %s" % toxic)
+	if water != "pass":
+		_fail("ENV WATER outcome is %s" % water)
+	if rotor != "pass":
+		_fail("ENV ROTOR outcome is %s" % rotor)
+	if fall != "pass":
+		_fail("ENV FALL outcome is %s" % fall)
+	if spawn != "pass":
+		_fail("ENV SPAWN outcome is %s" % spawn)
+	if pause != "pass":
+		_fail("ENV PAUSE outcome is %s" % pause)
+	if reset != "pass":
+		_fail("ENV RESET outcome is %s" % reset)
+	if live != "pass":
+		_fail("ENV LIVE outcome is %s" % live)
+	if replay != "match":
+		_fail("ENV REPLAY outcome is %s" % replay)
+	if _count_prefix("ENV ") == 0:
+		_env = "proven"
+
+
 func _emit() -> void:
 	print("HH_VF_PATH title→fight→win/lose→restart")
 	print(
@@ -1481,6 +1527,25 @@ func _emit() -> void:
 			MovingCasesScript.used_apply_frames_succeeded,
 			MovingCasesScript.used_apply_frames_attempted,
 			_moving,
+		]
+	)
+	print(
+		"HH_VF_ENV DATA=%s INSTANT=%s INSTANT_SOURCE=outcome_instant TOXIC=%s WATER=%s ROTOR=%s FALL=%s SPAWN=%s PAUSE=%s RESET=%s LIVE=%s REPLAY=%s APPLY=%d/%d status=%s"
+		% [
+			str(EnvCasesScript.outcome_data.get("verdict", "unproven")),
+			str(EnvCasesScript.outcome_instant.get("verdict", "unproven")),
+			str(EnvCasesScript.outcome_toxic.get("verdict", "unproven")),
+			str(EnvCasesScript.outcome_water.get("verdict", "unproven")),
+			str(EnvCasesScript.outcome_rotor.get("verdict", "unproven")),
+			str(EnvCasesScript.outcome_fall.get("verdict", "unproven")),
+			str(EnvCasesScript.outcome_spawn.get("verdict", "unproven")),
+			str(EnvCasesScript.outcome_pause.get("verdict", "unproven")),
+			str(EnvCasesScript.outcome_reset.get("verdict", "unproven")),
+			str(EnvCasesScript.outcome_live.get("verdict", "unproven")),
+			str(EnvCasesScript.outcome_replay.get("verdict", "unproven")),
+			EnvCasesScript.used_apply_frames_succeeded,
+			EnvCasesScript.used_apply_frames_attempted,
+			_env,
 		]
 	)
 	print(

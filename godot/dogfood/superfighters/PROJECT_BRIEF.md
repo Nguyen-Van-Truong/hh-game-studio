@@ -75,7 +75,11 @@ https://mythologicinteractive.com/Superfighters
   boarding, and call plates are VF4-WP4
   (`ledger:RL-WORLD-DOOR` / `ledger:RL-WORLD-LIFT` /
   `ledger:RL-WORLD-BOARD` / `ledger:RL-WORLD-TRIGGER`,
-  `assumption`).
+  `assumption`). Instant / toxic / water / rotor / ArenaSpec
+  hazards are VF4-WP5 (`ledger:RL-ENV-INSTANT` /
+  `ledger:RL-ENV-DEFER` / `ledger:RL-ENV-WATER` /
+  `ledger:RL-ENV-ROTOR` / `ledger:RL-ENV-SPAWN` /
+  `ledger:RL-ENV-ARENA` / `ledger:RL-MOVE-FALL`, `assumption`).
 - Health + stamina bars; stamina drains on sprint
 - Random-ish weapon spawns (~20s respawn): pipe, knife, baton, pistol,
   shotgun, uzi, Longarm, Thumper, grenade, Cinder Flask

@@ -177,6 +177,12 @@ var fire_extinguish_count: int = 0
 var fire_ignited: bool = false
 var fire_tick_applied: bool = false
 var fire_ended: bool = false
+var wet: bool = false
+var acid_contact: bool = false
+var env_inside_id: String = ""
+var env_entered: bool = false
+var env_exited: bool = false
+var env_damage_applied: bool = false
 var last_tap_dir: float = 0.0
 var last_tap_at: float = 99.0
 var last_held_x: float = 0.0
@@ -300,6 +306,9 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	fire_ignited = false
 	fire_tick_applied = false
 	fire_ended = false
+	env_entered = false
+	env_exited = false
+	env_damage_applied = false
 	dive_started = false
 	dive_ended = false
 	kick_started = false
@@ -848,7 +857,7 @@ func _try_ledge_grab(ledge: Dictionary) -> void:
 
 
 func extinguish_fire() -> void:
-	## Selected VF4-WP3 rule: roll clears burn timer. Water is not selected.
+	## Roll remains selected (VF4-WP3). Water is an extra env path (VF4-WP5).
 	fire_extinguish_count += 1
 	if burning:
 		fire_ended = true
@@ -867,6 +876,41 @@ func ignite_fire(ticks: int) -> void:
 	burning = true
 	if ticks > burn_left:
 		burn_left = ticks
+
+
+func take_env_tick(amount: float) -> void:
+	if dead:
+		return
+	amount = _Bal.clamp_hit(amount)
+	amount = minf(amount, _Bal.tick_room(damage_taken_tick))
+	if amount <= 0.0:
+		return
+	if not _Bal.is_finite_number(amount):
+		return
+	last_applied_damage = amount
+	damage_taken_tick += amount
+	health -= amount
+	combat_timer = 3.0
+	env_damage_applied = true
+	if health <= 0.0:
+		_die("damage")
+
+
+func die_env(cause: String) -> void:
+	if dead:
+		return
+	_die(cause)
+
+
+func apply_env_tint() -> void:
+	if sprite == null or not is_instance_valid(sprite):
+		return
+	if wet:
+		sprite.modulate = Color(0.70, 0.86, 1.0, 1.0)
+	elif acid_contact:
+		sprite.modulate = Color(0.72, 1.0, 0.58, 1.0)
+	else:
+		sprite.modulate = Color.WHITE
 
 
 func take_fire_tick(amount: float) -> void:
@@ -1517,6 +1561,10 @@ func apply_runtime_extra(extra: Dictionary) -> void:
 		fire_extinguish_count = int(extra.get("fire_extinguish_count", fire_extinguish_count))
 	if extra.has("burning"):
 		burning = bool(extra.get("burning", false))
+	if extra.has("wet"):
+		wet = bool(extra.get("wet", false))
+	if extra.has("acid_contact"):
+		acid_contact = bool(extra.get("acid_contact", false))
 	if extra.has("burn_left"):
 		burn_left = int(extra.get("burn_left", burn_left))
 	if extra.has("attack_phase"):
