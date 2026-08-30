@@ -143,8 +143,8 @@ def main() -> int:
             errors.append("catalog break_implemented must be true")
         if payload.get("throw_implemented") is not True:
             errors.append("catalog throw_implemented must be true")
-        if payload.get("chain_implemented") is True:
-            errors.append("catalog chain must stay unimplemented")
+        if payload.get("chain_implemented") is not True:
+            errors.append("catalog chain must be implemented")
         if payload.get("nade_prop_class") != "deferred":
             errors.append("RL-NADE-PROP must stay deferred")
         if payload.get("y8_parity_claimed") is True:

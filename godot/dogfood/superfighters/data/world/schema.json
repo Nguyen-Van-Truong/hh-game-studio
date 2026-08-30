@@ -36,7 +36,8 @@
     "panel_oneway",
     "crate_breakable",
     "kit_pickup",
-    "barrel_explosive"
+    "barrel_explosive",
+    "crate_hanging"
   ],
   "allowed_shapes": ["rect"],
   "product_root": "res://",
@@ -46,7 +47,7 @@
     "ownership": "RL-WORLD-OWN assumption, not observed",
     "break": "RL-PROP-BREAK assumption; glass/wood destroy this WP",
     "throw": "RL-PROP-DYNAMIC assumption; shove/throw this WP",
-    "explosive": "RL-PROP-EXPL schema only; chain waits VF4-WP3",
-    "nade_prop": "RL-NADE-PROP stays deferred"
+    "explosive": "RL-PROP-EXPL assumption; chain/fire/hang this WP",
+    "nade_prop": "RL-NADE-PROP stays deferred for glass/wood"
   }
 }

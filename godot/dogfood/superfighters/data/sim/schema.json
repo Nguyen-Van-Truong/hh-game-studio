@@ -86,8 +86,8 @@
     "prop_oneway": "RL-PROP-ONEWAY assumption, not observed",
     "prop_break": "RL-PROP-BREAK assumption; glass/wood destroy this WP",
     "prop_pickup": "RL-PROP-PICKUP assumption, world marker not roster",
-    "prop_expl": "RL-PROP-EXPL schema only; chain waits VF4-WP3",
-    "nade_prop": "RL-NADE-PROP deferred VF4, event only"
+    "prop_expl": "RL-PROP-EXPL assumption; chain/fire/hang this WP",
+    "nade_prop": "RL-NADE-PROP deferred VF4, glass/wood stay"
   },
   "combat": {
     "schema": "vf.sim.combat.v1",

@@ -1,8 +1,7 @@
 class_name PropSpec
 extends RefCounted
 
-## Typed world prop contract (VF4-WP1/WP2). Break/throw are live.
-## Chain waits VF4-WP3.
+## Typed world prop contract (VF4-WP1..WP3). Break/throw/chain are live.
 ## ledger:RL-WORLD-SCHEMA (assumption). Not observed.
 
 const _Paths: GDScript = preload("res://src/world/world_paths.gd")

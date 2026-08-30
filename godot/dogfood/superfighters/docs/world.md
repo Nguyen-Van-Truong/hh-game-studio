@@ -38,7 +38,7 @@ Fixture `fx_world_open` (display **Prop Yard**) places one of each kind.
 - Break / fragments / cover destroy: VF4-WP2 (`docs/break.md`,
   `ledger:RL-PROP-BREAK`)
 - Dynamic throw/shove: VF4-WP2 (`ledger:RL-PROP-DYNAMIC`)
-- Barrel chain / fire: VF4-WP3 (`ledger:RL-PROP-EXPL`)
+- Barrel chain / fire / hang: VF4-WP3 (`docs/hazard.md`, `ledger:RL-PROP-EXPL`)
 - Nade prop destroy stays `ledger:RL-NADE-PROP` (`deferred`)
 - Doors / elevators: VF4-WP4
 - Toxic / machines: VF4-WP5

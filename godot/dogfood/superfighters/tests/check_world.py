@@ -197,8 +197,8 @@ def main() -> int:
             errors.append("break must be implemented for VF4-WP2")
         if payload.get("throw_implemented") is not True:
             errors.append("throw must be implemented for VF4-WP2")
-        if payload.get("chain_implemented") is True:
-            errors.append("chain must stay unimplemented this WP")
+        if payload.get("chain_implemented") is not True:
+            errors.append("chain must be implemented for VF4-WP3")
         specs = payload.get("specs") or {}
         kinds = {str((specs[k] or {}).get("kind", "")) for k in specs}
         for kind in REQUIRED_KINDS:

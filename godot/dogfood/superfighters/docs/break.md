@@ -40,7 +40,7 @@ tiles. This WP does not migrate them.
 - Break stays assumption: `ledger:RL-PROP-BREAK`.
 - Shove/throw stay assumption: `ledger:RL-PROP-DYNAMIC`.
 - Nade destroy stays `ledger:RL-NADE-PROP` deferred.
-- Explosive chain waits VF4-WP3 (`ledger:RL-PROP-EXPL`).
+- Explosive chain is VF4-WP3 (`docs/hazard.md`, `ledger:RL-PROP-EXPL`).
 - Hold-to-aim stays `ledger:RL-CTRL-HOLD-AIM` assumption.
 - Y8 roll/dive stays `ledger:RL-MOVE-ROLL-DIVE` unavailable.
 - Values are tuning. No copied Y8 table. Original glass/debris art only.

@@ -110,7 +110,7 @@ static func schema_and_data() -> PackedStringArray:
 		"break_implemented": bool(live.get("break_implemented", true)),
 		"chain_implemented": bool(live.get("chain_implemented", true)),
 		"nade_prop": str(live.get("nade_prop_class", "")),
-		"source": "world values are tuning; break/throw live; chain stays off",
+		"source": "world values are tuning; break/throw/chain live; nade-prop deferred",
 	}
 	return errors
 

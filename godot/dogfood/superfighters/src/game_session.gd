@@ -933,8 +933,10 @@ func _sweep_bullet(shot: Bullet, from: Vector2, to: Vector2) -> Dictionary:
 				prop = world_owner.call("body_from_node", hit.get("collider")) as Node2D
 			if prop != null:
 				best = {"kind": "prop", "t": t_wall, "point": at, "fighter": null, "prop": prop}
-				if bool(prop.get("alive")) and str(prop.get("kind")) == "breakable":
-					world_owner.call("apply_damage", prop, shot.damage, "bullet", shot.owner_slot, -1)
+				if bool(prop.get("alive")):
+					var pkind: String = str(prop.get("kind"))
+					if pkind == "breakable" or pkind == "explosive" or bool(prop.get("hanging")):
+						world_owner.call("apply_damage", prop, shot.damage, "bullet", shot.owner_slot, -1)
 			else:
 				best = {"kind": "world", "t": t_wall, "point": at, "fighter": null}
 	var grid_hit: Dictionary = _grid_block_t(from, to)
@@ -1164,6 +1166,8 @@ func _explode(nade: ThrownGrenade) -> void:
 			})
 		_log_death_if_new(f)
 		_splat(f.global_position)
+	if world_owner != null:
+		world_owner.call("apply_blast", nade.global_position, nade.radius, nade.damage, "nade", 0)
 
 
 func _resolve_end() -> void:
@@ -1376,6 +1380,7 @@ func _emit_loco_feedback(f: Fighter) -> void:
 			"slot": f.slot,
 			"seq": f.roll_seq,
 			"count": f.fire_extinguish_count,
+			"burning": 1 if f.burning else 0,
 		})
 		if sfx != null:
 			sfx.play("roll")
@@ -1410,6 +1415,22 @@ func _emit_loco_feedback(f: Fighter) -> void:
 			sfx.play("kick")
 	if f.fall_damage_applied:
 		ledger.push(clock.tick, "locomotion", "fall_damage", {
+			"slot": f.slot,
+			"hp": SimConstants.quantize(f.health),
+		})
+	if f.fire_ignited:
+		ledger.push(clock.tick, "hazard", "fire_ignite", {
+			"slot": f.slot,
+			"burn_left": f.burn_left,
+		})
+	if f.fire_tick_applied:
+		ledger.push(clock.tick, "hazard", "fire_tick", {
+			"slot": f.slot,
+			"hp": SimConstants.quantize(f.health),
+			"burn_left": f.burn_left,
+		})
+	if f.fire_ended:
+		ledger.push(clock.tick, "hazard", "fire_end", {
 			"slot": f.slot,
 			"hp": SimConstants.quantize(f.health),
 		})

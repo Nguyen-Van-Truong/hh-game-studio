@@ -133,6 +133,19 @@ First playable slice. Not G6. Not 60/60.
   Hold-to-aim is **not** promoted to `observed`. Y8 roll/dive
   observation stays `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`).
   No new Y8 play. Not a VF7 art rewrite.
+- VF4-WP3 ships barrel chain (depth cap 2), burn ticks + cleanup,
+  roll extinguish, hanging drop impulse, and capped explosion VFX
+  as assumption (`ledger:RL-PROP-EXPL`, `ledger:RL-PROP-CHAIN`,
+  `ledger:RL-PROP-FIRE`, `ledger:RL-PROP-HANG`,
+  `ledger:RL-PROP-EXTINGUISH`). Official proof is InputFrame
+  `apply_frames` plus live InputEvent inject. Water extinguish is
+  **not** selected (VF4-WP5). `ledger:RL-NADE-PROP` stays
+  `deferred` for glass/wood; a nade may start a barrel chain.
+  Official maps use `#` floors only; the VF3-WP4 `=` bounce
+  residual is unchanged. Live `c`/`b` stay tiles. Hold-to-aim is
+  **not** promoted to `observed`. Y8 roll/dive observation stays
+  `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). No new Y8 play.
+  Not a VF7 art rewrite.
 - VF3-WP4 ships grenade hold/release throw, gravity arc, bounce,
   fuse, radial falloff, owner skip, one explosion, timeout
   cleanup, and swept nade collision as assumption

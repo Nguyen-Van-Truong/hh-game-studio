@@ -8,6 +8,7 @@ const GROUP: String = "vf_world_prop"
 const _Spec: GDScript = preload("res://src/world/prop_spec.gd")
 const _View: GDScript = preload("res://src/world/prop_view.gd")
 const _Break: GDScript = preload("res://src/world/prop_break.gd")
+const _Hazard: GDScript = preload("res://src/world/prop_hazard.gd")
 
 var placement_id: String = ""
 var spec_id: String = ""
@@ -16,6 +17,11 @@ var uid: int = 0
 var health: float = 0.0
 var alive: bool = true
 var movable: bool = false
+var hanging: bool = false
+var exploded: bool = false
+var burning: bool = false
+var burn_left: int = 0
+var flammable: bool = false
 var mat_id: String = ""
 var view: Sprite2D
 var solid: CollisionObject2D
@@ -40,6 +46,11 @@ func setup(p_place: Dictionary, spec: Dictionary, p_uid: int, layers: Dictionary
 	health = float(_Spec.health_of(spec))
 	alive = true
 	movable = bool(spec.get("movable", false)) or kind == "dynamic"
+	hanging = bool(_Hazard.is_hanging_spec(spec))
+	exploded = false
+	burning = false
+	burn_left = 0
+	flammable = bool(_Hazard.is_flammable_spec(spec))
 	mat_id = str(_Break.material_of(spec))
 	name = "Prop_%s_%d" % [placement_id, uid]
 	add_to_group(GROUP)

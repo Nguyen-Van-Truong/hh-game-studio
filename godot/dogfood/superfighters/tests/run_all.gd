@@ -12,6 +12,7 @@ const RosterCasesScript: GDScript = preload("res://tests/roster_cases.gd")
 const BalanceCasesScript: GDScript = preload("res://tests/balance_cases.gd")
 const WorldCasesScript: GDScript = preload("res://tests/world_cases.gd")
 const BreakCasesScript: GDScript = preload("res://tests/break_cases.gd")
+const HazardCasesScript: GDScript = preload("res://tests/hazard_cases.gd")
 const _Combat: GDScript = preload("res://src/sim/combat.gd")
 
 var _fails: PackedStringArray = PackedStringArray()
@@ -36,6 +37,7 @@ var _roster: String = "unproven"
 var _balance: String = "unproven"
 var _world: String = "unproven"
 var _break: String = "unproven"
+var _hazard: String = "unproven"
 
 
 func _initialize() -> void:
@@ -72,6 +74,7 @@ func _boot() -> void:
 	await _test_balance(app)
 	await _test_world(app)
 	await _test_break(app)
+	await _test_hazard(app)
 	if _fails.is_empty():
 		_no_err = "proven"
 	_emit()
@@ -1134,6 +1137,46 @@ func _test_break(app: App) -> void:
 		_break = "proven"
 
 
+func _test_hazard(app: App) -> void:
+	var errors: PackedStringArray = await HazardCasesScript.run_all(app)
+	var i: int = 0
+	while i < errors.size():
+		_fail("HAZARD %s" % String(errors[i]))
+		i += 1
+	var data: String = str(HazardCasesScript.outcome_data.get("verdict", "unproven"))
+	var chain: String = str(HazardCasesScript.outcome_chain.get("verdict", "unproven"))
+	var fire: String = str(HazardCasesScript.outcome_fire.get("verdict", "unproven"))
+	var cleanup: String = str(HazardCasesScript.outcome_cleanup.get("verdict", "unproven"))
+	var roll: String = str(HazardCasesScript.outcome_roll.get("verdict", "unproven"))
+	var dup: String = str(HazardCasesScript.outcome_dup.get("verdict", "unproven"))
+	var vfx: String = str(HazardCasesScript.outcome_vfx.get("verdict", "unproven"))
+	var hang: String = str(HazardCasesScript.outcome_hang.get("verdict", "unproven"))
+	var live: String = str(HazardCasesScript.outcome_live.get("verdict", "unproven"))
+	var replay: String = str(HazardCasesScript.outcome_replay.get("verdict", "unproven"))
+	if data != "pass":
+		_fail("HAZARD DATA outcome is %s" % data)
+	if chain != "pass":
+		_fail("HAZARD CHAIN outcome is %s" % chain)
+	if fire != "pass":
+		_fail("HAZARD FIRE outcome is %s" % fire)
+	if cleanup != "pass":
+		_fail("HAZARD CLEANUP outcome is %s" % cleanup)
+	if roll != "pass":
+		_fail("HAZARD ROLL outcome is %s" % roll)
+	if dup != "pass":
+		_fail("HAZARD DUP outcome is %s" % dup)
+	if vfx != "pass":
+		_fail("HAZARD VFX outcome is %s" % vfx)
+	if hang != "pass":
+		_fail("HAZARD HANG outcome is %s" % hang)
+	if live != "pass":
+		_fail("HAZARD LIVE outcome is %s" % live)
+	if replay != "match":
+		_fail("HAZARD REPLAY outcome is %s" % replay)
+	if _count_prefix("HAZARD ") == 0:
+		_hazard = "proven"
+
+
 func _emit() -> void:
 	print("HH_VF_PATH title→fight→win/lose→restart")
 	print(
@@ -1359,6 +1402,24 @@ func _emit() -> void:
 			BreakCasesScript.used_apply_frames_succeeded,
 			BreakCasesScript.used_apply_frames_attempted,
 			_break,
+		]
+	)
+	print(
+		"HH_VF_HAZARD DATA=%s CHAIN=%s FIRE=%s CLEANUP=%s ROLL=%s DUP=%s VFX=%s HANG=%s LIVE=%s REPLAY=%s APPLY=%d/%d status=%s"
+		% [
+			str(HazardCasesScript.outcome_data.get("verdict", "unproven")),
+			str(HazardCasesScript.outcome_chain.get("verdict", "unproven")),
+			str(HazardCasesScript.outcome_fire.get("verdict", "unproven")),
+			str(HazardCasesScript.outcome_cleanup.get("verdict", "unproven")),
+			str(HazardCasesScript.outcome_roll.get("verdict", "unproven")),
+			str(HazardCasesScript.outcome_dup.get("verdict", "unproven")),
+			str(HazardCasesScript.outcome_vfx.get("verdict", "unproven")),
+			str(HazardCasesScript.outcome_hang.get("verdict", "unproven")),
+			str(HazardCasesScript.outcome_live.get("verdict", "unproven")),
+			str(HazardCasesScript.outcome_replay.get("verdict", "unproven")),
+			HazardCasesScript.used_apply_frames_succeeded,
+			HazardCasesScript.used_apply_frames_attempted,
+			_hazard,
 		]
 	)
 	print(

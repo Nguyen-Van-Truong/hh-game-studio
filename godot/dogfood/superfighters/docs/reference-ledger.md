@@ -682,3 +682,36 @@ collision ghost; melee shove or crouch-carry + grenade-release
 throw on `#` floors. Official proof uses `apply_frames` plus live
 InputEvent inject. Live maps do not migrate `c`/`b` tiles.
 
+---
+
+## VF4-WP3 explosive barrels, hanging containers, and fire (not a play observation)
+
+Dated 2026-08-30 Asia/Saigon. No in-game Y8 play. No HTML5/Flash
+package. Sidecar: `docs/hazard.md` and
+`docs/evidence/VF4WP3-20260830-ASIA-SAIGON-02/`.
+`-01` was not reminted.
+
+Chain stays `ledger:RL-PROP-CHAIN` (`assumption`). Fire stays
+`ledger:RL-PROP-FIRE` (`assumption`). Hang/drop stays
+`ledger:RL-PROP-HANG` (`assumption`). Roll extinguish stays
+`ledger:RL-PROP-EXTINGUISH` (`assumption`). Explosive props stay
+`ledger:RL-PROP-EXPL` (`assumption`). `ledger:RL-NADE-PROP` stays
+`deferred` (nades may start a barrel chain; they still do not
+destroy glass/wood). None of these rows is promoted to `observed`.
+Hold-to-aim stays `ledger:RL-CTRL-HOLD-AIM` (`assumption`). Y8
+observation stays `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). 60 Hz
+stays `ledger:RL-SIM-FIXED-60` (`assumption`).
+
+Product contract: seeded barrel chain with depth cap 2; one explode
+event per drum; VFX cap 4 with rejects; burn ticks then cleanup;
+roll extinguishes (water not selected); hanging crate drops with
+impulse. Official proof uses `apply_frames` plus live InputEvent
+inject. Official maps use `#` floors only. Live `c`/`b` stay tiles.
+
+| ID | Topic | Class | Conf. | Source | When | Behavior to reproduce | Tuning-only | Notes |
+|---|---|---|---|---|---|---|---|---|
+| RL-PROP-CHAIN | Barrel chain + depth cap | `assumption` | none | VF4-WP3 product contract; **not** observed on Y8 this session | 2026-08-30 | first drum explodes two neighbors; drums 4–5 stay | depth 2 / radius 40 | Do **not** cite as observed. |
+| RL-PROP-FIRE | Burn timer + ticks | `assumption` | none | VF4-WP3 product contract; **not** observed on Y8 this session | 2026-08-30 | ignite; HP drops every 12 ticks; fire_end on expiry | 48 / 12 / 3 | Not observed. |
+| RL-PROP-HANG | Hanging drop impulse | `assumption` | none | VF4-WP3 product contract; **not** observed on Y8 this session | 2026-08-30 | Drop Cage starts hanging; blast releases + vy | 280 | Not observed. |
+| RL-PROP-EXTINGUISH | Roll clears fire | `assumption` | none | VF4-WP3 product contract; **not** observed on Y8 this session | 2026-08-30 | roll sets burning false; water not selected | roll | Do **not** cite as observed. |
+

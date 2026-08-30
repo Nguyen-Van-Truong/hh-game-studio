@@ -45,6 +45,7 @@ const _Expl: GDScript = preload("res://src/sim/explosive.gd")
 const _Roster: GDScript = preload("res://src/data/weapons/roster.gd")
 const _Inv: GDScript = preload("res://src/data/weapons/inventory.gd")
 const _Bal: GDScript = preload("res://src/sim/balance.gd")
+const _Hazard: GDScript = preload("res://src/world/prop_hazard.gd")
 
 var gravity: float = 1700.0
 var jump_vel: float = -430.0
@@ -170,7 +171,12 @@ var fall_armed: bool = false
 var fall_damage_applied: bool = false
 var fall_immune_landed: bool = false
 var burning: bool = false
+var burn_left: int = 0
+var burn_accum: int = 0
 var fire_extinguish_count: int = 0
+var fire_ignited: bool = false
+var fire_tick_applied: bool = false
+var fire_ended: bool = false
 var last_tap_dir: float = 0.0
 var last_tap_at: float = 99.0
 var last_held_x: float = 0.0
@@ -290,6 +296,9 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	attack_missed = false
 	roll_started = false
 	roll_ended = false
+	fire_ignited = false
+	fire_tick_applied = false
+	fire_ended = false
 	dive_started = false
 	dive_ended = false
 	kick_started = false
@@ -338,6 +347,7 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	melee_flash = maxf(melee_flash - delta, 0.0)
 	throw_flash = maxf(throw_flash - delta, 0.0)
 	_tick_invuln()
+	_tick_burn()
 	combat_timer = maxf(combat_timer - delta, 0.0)
 	_tick_knock_reaction(delta)
 	if knockback_grounded_end:
@@ -834,9 +844,68 @@ func _try_ledge_grab(ledge: Dictionary) -> void:
 
 
 func extinguish_fire() -> void:
-	## VF4 fire/burning hook. This WP only proves the roll calls it.
+	## Selected VF4-WP3 rule: roll clears burn timer. Water is not selected.
 	fire_extinguish_count += 1
+	if burning:
+		fire_ended = true
 	burning = false
+	burn_left = 0
+	burn_accum = 0
+
+
+func ignite_fire(ticks: int) -> void:
+	if dead:
+		return
+	if ticks <= 0:
+		return
+	if not burning:
+		fire_ignited = true
+	burning = true
+	if ticks > burn_left:
+		burn_left = ticks
+
+
+func take_fire_tick(amount: float) -> void:
+	if dead:
+		return
+	if rolling and (invuln_ticks > 0 or invuln > 0.0):
+		return
+	amount = _Bal.clamp_hit(amount)
+	amount = minf(amount, _Bal.tick_room(damage_taken_tick))
+	if amount <= 0.0:
+		return
+	if not _Bal.is_finite_number(amount):
+		return
+	last_applied_damage = amount
+	damage_taken_tick += amount
+	health -= amount
+	combat_timer = 3.0
+	fire_tick_applied = true
+	if health <= 0.0:
+		_die("fire")
+
+
+func _tick_burn() -> void:
+	if not burning:
+		return
+	if dead:
+		burning = false
+		burn_left = 0
+		burn_accum = 0
+		fire_ended = true
+		return
+	burn_left -= 1
+	burn_accum += 1
+	var interval: int = int(_Hazard.burn_interval())
+	var dmg: float = float(_Hazard.burn_damage())
+	if burn_accum >= interval:
+		burn_accum = 0
+		take_fire_tick(dmg)
+	if burn_left <= 0:
+		burning = false
+		burn_left = 0
+		burn_accum = 0
+		fire_ended = true
 
 
 func current_pose() -> String:
@@ -1444,6 +1513,8 @@ func apply_runtime_extra(extra: Dictionary) -> void:
 		fire_extinguish_count = int(extra.get("fire_extinguish_count", fire_extinguish_count))
 	if extra.has("burning"):
 		burning = bool(extra.get("burning", false))
+	if extra.has("burn_left"):
+		burn_left = int(extra.get("burn_left", burn_left))
 	if extra.has("attack_phase"):
 		attack_phase = str(extra.get("attack_phase", attack_phase))
 	if extra.has("attack_seq"):

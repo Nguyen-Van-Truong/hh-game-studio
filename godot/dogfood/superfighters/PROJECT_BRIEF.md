@@ -67,7 +67,11 @@ https://mythologicinteractive.com/Superfighters
   catalog + WorldOwner (`ledger:RL-WORLD-SCHEMA` /
   `ledger:RL-WORLD-OWN`, `assumption`). Glass/wood break and
   shove/throw are VF4-WP2 (`ledger:RL-PROP-BREAK` /
-  `ledger:RL-PROP-DYNAMIC`, `assumption`). Chain waits VF4-WP3.
+  `ledger:RL-PROP-DYNAMIC`, `assumption`). Barrel chain, fire,
+  roll extinguish, and hanging drop are VF4-WP3
+  (`ledger:RL-PROP-EXPL` / `ledger:RL-PROP-CHAIN` /
+  `ledger:RL-PROP-FIRE` / `ledger:RL-PROP-HANG` /
+  `ledger:RL-PROP-EXTINGUISH`, `assumption`).
 - Health + stamina bars; stamina drains on sprint
 - Random-ish weapon spawns (~20s respawn): pipe, knife, baton, pistol,
   shotgun, uzi, Longarm, Thumper, grenade, Cinder Flask

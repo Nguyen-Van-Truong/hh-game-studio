@@ -7,6 +7,8 @@ const BG_CITY: String = "res://assets/bg/bg_city.png"
 const MUZZLE: String = "res://assets/vfx/vfx_muzzle.png"
 const BLOOD: String = "res://assets/vfx/vfx_blood.png"
 const ROLL: String = "res://assets/vfx/vfx_roll.png"
+const EXPLODE: String = "res://assets/vfx/vfx_explode.png"
+const FIRE: String = "res://assets/vfx/vfx_fire.png"
 const FRAME: int = 32
 const SHEET: Dictionary = {
 	"idle": [Vector2i(0, 0), Vector2i(1, 0)],

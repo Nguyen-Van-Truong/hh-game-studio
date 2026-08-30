@@ -1,7 +1,7 @@
 class_name WorldOwner
 extends RefCounted
 
-## Sole spawn/despawn/break/throw writer for world props (VF4-WP2).
+## Sole spawn/despawn/break/throw/explode writer for world props.
 ## Presentation cannot mutate. ledger:RL-WORLD-OWN (assumption).
 
 const ROOT_NAME: String = "WorldProps"
@@ -10,6 +10,8 @@ const _Paths: GDScript = preload("res://src/world/world_paths.gd")
 const _Body: GDScript = preload("res://src/world/prop_body.gd")
 const _Spec: GDScript = preload("res://src/world/prop_spec.gd")
 const _Break: GDScript = preload("res://src/world/prop_break.gd")
+const _Hazard: GDScript = preload("res://src/world/prop_hazard.gd")
+const _View: GDScript = preload("res://src/world/prop_view.gd")
 
 var session: GameSession
 var root: Node2D
@@ -19,6 +21,15 @@ var last_errors: PackedStringArray = PackedStringArray()
 var break_events: int = 0
 var last_debris_count: int = 0
 var last_break_id: String = ""
+var explode_events: int = 0
+var last_explode_id: String = ""
+var max_chain_seen: int = 0
+var vfx_spawned: int = 0
+var vfx_rejected: int = 0
+var drop_events: int = 0
+var _vfx: Array = []
+var _vfx_life: Array = []
+var _fire_views: Dictionary = {}
 
 
 func bind(p_session: GameSession) -> void:
@@ -63,6 +74,14 @@ func clear() -> void:
 	break_events = 0
 	last_debris_count = 0
 	last_break_id = ""
+	explode_events = 0
+	last_explode_id = ""
+	max_chain_seen = 0
+	vfx_spawned = 0
+	vfx_rejected = 0
+	drop_events = 0
+	_clear_vfx()
+	_fire_views.clear()
 	if root != null and is_instance_valid(root):
 		root.queue_free()
 	root = null
@@ -161,12 +180,17 @@ func find_by_id(placement_id: String) -> Node2D:
 	return null
 
 
-func apply_damage(body: Node2D, raw: float, source: String, attacker: int = -1, seq: int = -1) -> bool:
+func apply_damage(body: Node2D, raw: float, source: String, attacker: int = -1, seq: int = -1, depth: int = 0) -> bool:
 	if body == null or not is_instance_valid(body):
 		return false
 	if not bool(body.get("alive")):
 		return false
-	if str(body.get("kind")) != "breakable":
+	if bool(body.get("hanging")):
+		return release_hang(body, source)
+	var kind: String = str(body.get("kind"))
+	if kind != "breakable" and kind != "explosive":
+		return false
+	if kind == "explosive" and bool(body.get("exploded")):
 		return false
 	if seq >= 0 and bool(body.call("already_hit", attacker, seq)):
 		return false
@@ -187,6 +211,9 @@ func apply_damage(body: Node2D, raw: float, source: String, attacker: int = -1, 
 		})
 	if float(body.get("health")) > 0.0:
 		return false
+	if kind == "explosive":
+		_explode_body(body, source, depth)
+		return true
 	_break_body(body, source)
 	return true
 
@@ -204,7 +231,15 @@ func apply_melee(box: Rect2, raw: float, facing: float, attacker: int, seq: int)
 		var rect: Rect2 = body.call("aabb") as Rect2
 		if not box.intersects(rect, false):
 			continue
-		if str(body.get("kind")) == "breakable":
+		if bool(body.get("hanging")):
+			if apply_damage(body, raw, "melee", attacker, seq):
+				hits += 1
+		elif str(body.get("kind")) == "explosive":
+			if apply_damage(body, raw, "melee", attacker, seq):
+				hits += 1
+			else:
+				hits += 1
+		elif str(body.get("kind")) == "breakable":
 			if apply_damage(body, raw, "melee", attacker, seq):
 				hits += 1
 			else:
@@ -307,7 +342,79 @@ func carrier_of(slot: int) -> Node2D:
 	return null
 
 
+func apply_blast(origin: Vector2, radius: float, raw: float, source: String, depth: int = 0) -> int:
+	var hits: int = 0
+	var i: int = 0
+	while i < bodies.size():
+		var body: Node2D = bodies[i] as Node2D
+		i += 1
+		if body == null or not is_instance_valid(body) or not bool(body.get("alive")):
+			continue
+		var d: float = body.global_position.distance_to(origin)
+		if d > radius:
+			continue
+		if bool(body.get("hanging")):
+			if release_hang(body, source):
+				hits += 1
+			continue
+		var kind: String = str(body.get("kind"))
+		if kind == "explosive":
+			if depth + 1 > int(_Hazard.chain_max_depth()):
+				continue
+			if apply_damage(body, raw, source, -1, -1, depth + 1):
+				hits += 1
+		elif bool(body.get("flammable")) and kind == "breakable":
+			body.set("burning", true)
+			body.set("burn_left", int(_Hazard.burn_ticks()))
+	return hits
+
+
+func release_hang(body: Node2D, source: String) -> bool:
+	if body == null or not is_instance_valid(body):
+		return false
+	if not bool(body.get("hanging")):
+		return false
+	body.set("hanging", false)
+	body.set("movable", true)
+	body.set("velocity", Vector2(0.0, float(_Hazard.drop_impulse())))
+	drop_events += 1
+	if session != null and session.ledger != null:
+		session.ledger.push(session.clock.tick if session.clock != null else 0, "prop_motion", "prop_drop", {
+			"id": str(body.get("placement_id")),
+			"source": source,
+			"vy": SimConstants.quantize(float(_Hazard.drop_impulse())),
+		})
+	return true
+
+
+func has_fire_view(slot: int) -> bool:
+	if not _fire_views.has(slot):
+		return false
+	var view: Node = _fire_views[slot] as Node
+	return view != null and is_instance_valid(view)
+
+
+func vfx_live_count() -> int:
+	var n: int = 0
+	var i: int = 0
+	while i < _vfx.size():
+		var spr: Node = _vfx[i] as Node
+		if spr != null and is_instance_valid(spr):
+			n += 1
+		i += 1
+	var keys: Array = _fire_views.keys()
+	var k: int = 0
+	while k < keys.size():
+		var view: Node = _fire_views[keys[k]] as Node
+		if view != null and is_instance_valid(view):
+			n += 1
+		k += 1
+	return n
+
+
 func step(dt: float) -> void:
+	_tick_vfx()
+	_sync_fighter_fire()
 	var i: int = 0
 	while i < bodies.size():
 		var body: Node2D = bodies[i] as Node2D
@@ -324,6 +431,8 @@ func step(dt: float) -> void:
 			body.set("carried_by", -1)
 			body.call("set_solid_enabled", true)
 		if not bool(body.get("alive")):
+			continue
+		if bool(body.get("hanging")):
 			continue
 		if not bool(body.get("movable")):
 			continue
@@ -342,6 +451,166 @@ func has_cover_at(at: Vector2) -> bool:
 		if (body.call("aabb") as Rect2).has_point(at):
 			return true
 	return false
+
+
+func _explode_body(body: Node2D, source: String, depth: int) -> void:
+	if body == null or not is_instance_valid(body):
+		return
+	if not bool(body.get("alive")) or bool(body.get("exploded")):
+		return
+	if depth > int(_Hazard.chain_max_depth()):
+		return
+	body.set("exploded", true)
+	body.call("disable_cover")
+	explode_events += 1
+	last_explode_id = str(body.get("placement_id"))
+	if depth > max_chain_seen:
+		max_chain_seen = depth
+	var sparks: int = _spawn_explode_vfx(body.global_position)
+	if session != null and session.ledger != null:
+		session.ledger.push(session.clock.tick if session.clock != null else 0, "prop_expl", "prop_explode", {
+			"id": last_explode_id,
+			"spec": str(body.get("spec_id")),
+			"source": source,
+			"depth": depth,
+			"vfx": sparks,
+			"uid": int(body.get("uid")),
+		})
+	if session != null and session.sfx != null:
+		session.sfx.play("explode")
+	var origin: Vector2 = body.global_position
+	_ignite_fighters(origin)
+	apply_blast(origin, float(_Hazard.chain_radius()), float(_Hazard.explode_damage()), "explosion", depth)
+
+
+func _ignite_fighters(origin: Vector2) -> void:
+	if session == null:
+		return
+	var rad: float = float(_Hazard.fire_radius())
+	var i: int = 0
+	while i < session.fighters.size():
+		var f: Fighter = session.fighters[i]
+		i += 1
+		if f == null or f.dead:
+			continue
+		if f.global_position.distance_to(origin) > rad:
+			continue
+		f.ignite_fire(int(_Hazard.burn_ticks()))
+
+
+func _spawn_explode_vfx(at: Vector2) -> int:
+	var spawned: int = 0
+	var want: int = int(_Hazard.vfx_per_explode())
+	var i: int = 0
+	while i < want:
+		if _try_spawn_vfx(str(_Hazard.explode_visual()), at + Vector2(float((i * 5) % 7) - 3.0, float((i * 3) % 5) - 2.0)):
+			spawned += 1
+		i += 1
+	return spawned
+
+
+func _try_spawn_vfx(tex_path: String, at: Vector2) -> bool:
+	if vfx_live_count() >= int(_Hazard.vfx_cap()):
+		vfx_rejected += 1
+		return false
+	if root == null or not is_instance_valid(root):
+		vfx_rejected += 1
+		return false
+	var tex: Texture2D = _View.load_texture(tex_path)
+	if tex == null:
+		vfx_rejected += 1
+		return false
+	var spr: Sprite2D = Sprite2D.new()
+	spr.name = "HazardVfx_%d" % vfx_spawned
+	spr.centered = true
+	spr.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	spr.texture = tex
+	spr.global_position = at
+	root.add_child(spr)
+	_vfx.append(spr)
+	_vfx_life.append(int(_Hazard.vfx_life()))
+	vfx_spawned += 1
+	return true
+
+
+func _tick_vfx() -> void:
+	var i: int = 0
+	while i < _vfx.size():
+		_vfx_life[i] = int(_vfx_life[i]) - 1
+		if int(_vfx_life[i]) > 0:
+			i += 1
+			continue
+		var spr: Node = _vfx[i] as Node
+		if spr != null and is_instance_valid(spr):
+			spr.queue_free()
+		_vfx.remove_at(i)
+		_vfx_life.remove_at(i)
+
+
+func _clear_vfx() -> void:
+	var i: int = 0
+	while i < _vfx.size():
+		var spr: Node = _vfx[i] as Node
+		if spr != null and is_instance_valid(spr):
+			spr.queue_free()
+		i += 1
+	_vfx.clear()
+	_vfx_life.clear()
+	var keys: Array = _fire_views.keys()
+	var k: int = 0
+	while k < keys.size():
+		var view: Node = _fire_views[keys[k]] as Node
+		if view != null and is_instance_valid(view):
+			view.queue_free()
+		k += 1
+	_fire_views.clear()
+
+
+func _sync_fighter_fire() -> void:
+	if session == null:
+		return
+	var seen: Dictionary = {}
+	var i: int = 0
+	while i < session.fighters.size():
+		var f: Fighter = session.fighters[i]
+		i += 1
+		if f == null or f.dead or not f.burning:
+			continue
+		seen[f.slot] = true
+		if _fire_views.has(f.slot):
+			var live: Node2D = _fire_views[f.slot] as Node2D
+			if live != null and is_instance_valid(live):
+				live.global_position = f.global_position + Vector2(0.0, -10.0)
+				continue
+		if vfx_live_count() >= int(_Hazard.vfx_cap()):
+			vfx_rejected += 1
+			continue
+		if root == null or not is_instance_valid(root):
+			continue
+		var tex: Texture2D = _View.load_texture(str(_Hazard.fire_visual()))
+		if tex == null:
+			continue
+		var spr: Sprite2D = Sprite2D.new()
+		spr.name = "FireView_%d" % f.slot
+		spr.centered = true
+		spr.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		spr.texture = tex
+		spr.global_position = f.global_position + Vector2(0.0, -10.0)
+		root.add_child(spr)
+		_fire_views[f.slot] = spr
+		vfx_spawned += 1
+	var keys: Array = _fire_views.keys()
+	var k: int = 0
+	while k < keys.size():
+		var slot: int = int(keys[k])
+		if seen.has(slot):
+			k += 1
+			continue
+		var view: Node = _fire_views[slot] as Node
+		if view != null and is_instance_valid(view):
+			view.queue_free()
+		_fire_views.erase(slot)
+		k += 1
 
 
 func _break_body(body: Node2D, source: String) -> void:

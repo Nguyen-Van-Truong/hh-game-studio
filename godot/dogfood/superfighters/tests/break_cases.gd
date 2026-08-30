@@ -83,8 +83,8 @@ static func schema_and_data() -> PackedStringArray:
 		errors.append("DATA break_implemented must be true")
 	if not bool(live.get("throw_implemented", false)):
 		errors.append("DATA throw_implemented must be true")
-	if bool(live.get("chain_implemented", true)):
-		errors.append("DATA chain must stay unimplemented")
+	if not bool(live.get("chain_implemented", false)):
+		errors.append("DATA chain must be implemented")
 	if str(live.get("nade_prop_class", "")) != "deferred":
 		errors.append("DATA RL-NADE-PROP must stay deferred")
 	if str(live.get("break_class", "")) != "assumption":
@@ -97,7 +97,7 @@ static func schema_and_data() -> PackedStringArray:
 		"verdict": "pass" if errors.is_empty() else "fail",
 		"break_implemented": true,
 		"throw_implemented": true,
-		"chain_implemented": false,
+		"chain_implemented": true,
 		"nade_prop": "deferred",
 		"glass_debris": 6,
 		"wood_debris": 4,

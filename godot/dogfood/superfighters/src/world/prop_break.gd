@@ -3,7 +3,7 @@ extends RefCounted
 
 ## Break / shove / throw helpers (VF4-WP2).
 ## ledger:RL-PROP-BREAK / RL-PROP-DYNAMIC (assumption). Not observed.
-## RL-NADE-PROP stays deferred.
+## Chain/fire live in PropHazard. RL-NADE-PROP stays deferred.
 
 const _Catalog: GDScript = preload("res://src/world/world_catalog.gd")
 

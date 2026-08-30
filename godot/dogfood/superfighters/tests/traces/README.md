@@ -172,6 +172,20 @@ Break / throw stay `assumption`. Clock stays
 | `break_shove.json` | Break Yard melee shoves loose crate |
 | `break_throw.json` | Break Yard carry then throw on `#` |
 
+## hazard/
+
+VF4-WP3 official InputFrame traces. Same schema as `official/`.
+Replay uses `apply_frames`. No teleport. No `step_fixed`.
+Chain / fire / hang stay `assumption`. Clock stays
+`ledger:RL-SIM-FIXED-60`.
+
+| File | Beat |
+|---|---|
+| `hazard_chain.json` | Blast Row pistol starts a depth-capped chain |
+| `hazard_fire.json` | Ember Walk ignite + burn ticks + cleanup |
+| `hazard_roll.json` | Ember Walk roll extinguishes fire |
+| `hazard_hang.json` | Blast Row hanging crate drops |
+
 ## fixture/
 
 May use `teleport` / `force_kill` for fast unit setup. Fixture evidence

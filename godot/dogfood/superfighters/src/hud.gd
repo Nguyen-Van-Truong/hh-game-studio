@@ -80,6 +80,8 @@ func refresh(fighters: Array) -> void:
 			pose = " RECOV"
 		elif f.rolling:
 			pose = " ROLL"
+		elif f.burning:
+			pose = " BURN"
 		elif f.hanging or f.recover_left > 0.0:
 			pose = " HANG"
 		elif f.climbing:

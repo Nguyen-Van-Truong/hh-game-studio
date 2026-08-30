@@ -23,6 +23,14 @@
   "pickup_class": "assumption",
   "expl_ledger": "RL-PROP-EXPL",
   "expl_class": "assumption",
+  "chain_ledger": "RL-PROP-CHAIN",
+  "chain_class": "assumption",
+  "fire_ledger": "RL-PROP-FIRE",
+  "fire_class": "assumption",
+  "hang_ledger": "RL-PROP-HANG",
+  "hang_class": "assumption",
+  "extinguish_ledger": "RL-PROP-EXTINGUISH",
+  "extinguish_class": "assumption",
   "nade_prop_ledger": "RL-NADE-PROP",
   "nade_prop_class": "deferred",
   "hold_to_aim_ledger": "RL-CTRL-HOLD-AIM",
@@ -33,7 +41,7 @@
   "values_are_tuning": true,
   "original_exact_numbers_claimed": false,
   "break_implemented": true,
-  "chain_implemented": false,
+  "chain_implemented": true,
   "throw_implemented": true,
   "debris_visual": "res://assets/vfx/vfx_break.png",
   "throw_speed": 260.0,
@@ -56,14 +64,16 @@
       "bullet_mult": 0.4,
       "melee_mult": 1.0,
       "debris_count": 4,
-      "debris_life_ticks": 24
+      "debris_life_ticks": 24,
+      "flammable": true
     },
     "glass": {
       "id": "glass",
       "bullet_mult": 1.0,
       "melee_mult": 0.25,
       "debris_count": 6,
-      "debris_life_ticks": 18
+      "debris_life_ticks": 18,
+      "flammable": false
     }
   },
   "specs": {
@@ -186,7 +196,26 @@
         "path": "res://assets/art/prop_barrel.png"
       },
       "health": 8,
-      "movable": false
+      "movable": false,
+      "flammable": false
+    },
+    "crate_hanging": {
+      "id": "crate_hanging",
+      "kind": "dynamic",
+      "name": "Drop Cage",
+      "collision": {
+        "layer": "prop",
+        "mask": ["world", "platform"],
+        "shape": "rect",
+        "width": 16,
+        "height": 16
+      },
+      "visual": {
+        "path": "res://assets/art/prop_crate.png"
+      },
+      "health": 1,
+      "movable": true,
+      "hanging": true
     }
   },
   "placements": {
@@ -204,6 +233,23 @@
     "fx_break_yard": [
       {"id": "yard_wood", "spec": "crate_breakable", "x": 80, "y": 40},
       {"id": "yard_loose", "spec": "crate_dynamic", "x": 112, "y": 40}
+    ],
+    "fx_hazard_chain": [
+      {"id": "chain_a", "spec": "barrel_explosive", "x": 136, "y": 38},
+      {"id": "chain_b", "spec": "barrel_explosive", "x": 168, "y": 38},
+      {"id": "chain_c", "spec": "barrel_explosive", "x": 200, "y": 38},
+      {"id": "chain_d", "spec": "barrel_explosive", "x": 232, "y": 22},
+      {"id": "chain_e", "spec": "barrel_explosive", "x": 264, "y": 22},
+      {"id": "chain_hang", "spec": "crate_hanging", "x": 168, "y": 24}
+    ],
+    "fx_hazard_fire": [
+      {"id": "ember_drum", "spec": "barrel_explosive", "x": 72, "y": 38}
+    ],
+    "fx_hazard_yard": [
+      {"id": "yard_a", "spec": "barrel_explosive", "x": 136, "y": 38},
+      {"id": "yard_b", "spec": "barrel_explosive", "x": 168, "y": 38},
+      {"id": "yard_c", "spec": "barrel_explosive", "x": 200, "y": 38},
+      {"id": "yard_hang", "spec": "crate_hanging", "x": 168, "y": 24}
     ]
   },
   "fixtures": {
@@ -224,11 +270,32 @@
       "#..............................#",
       "#.P......................1.....#",
       "################################"
+    ],
+    "fx_hazard_chain": [
+      "################################",
+      "#.........H....................#",
+      "#.P......................1.....#",
+      "################################"
+    ],
+    "fx_hazard_fire": [
+      "################################",
+      "#..............................#",
+      "#.P......................1.....#",
+      "################################"
+    ],
+    "fx_hazard_yard": [
+      "################################",
+      "#.........H....................#",
+      "#.P...........1................#",
+      "################################"
     ]
   },
   "fixture_names": {
     "fx_world_open": "Prop Yard",
     "fx_break_cover": "Shatter Lane",
-    "fx_break_yard": "Break Yard"
+    "fx_break_yard": "Break Yard",
+    "fx_hazard_chain": "Blast Row",
+    "fx_hazard_fire": "Ember Walk",
+    "fx_hazard_yard": "Drum Yard"
   }
 }
