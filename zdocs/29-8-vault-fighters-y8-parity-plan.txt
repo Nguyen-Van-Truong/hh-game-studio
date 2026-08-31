@@ -2,7 +2,7 @@ PLAN_SCOPE=godot/dogfood/superfighters
 PRODUCT_PLAN_AUTHORITY=1
 PARENT_PLATFORM_PLAN=zdocs/20-8-godot-agent-autopilot-plan.txt
 PARENT_PLATFORM_STATUS=OWNER_STOPPED_59_OF_60
-CURRENT_VALID_WP=VF5-WP5
+CURRENT_VALID_WP=VF5-WP6
 CORRECTION_GATE_VF2_WP2=CLEARED
 STATUS=ACTIVE
 PLAN_DATE=2026-08-29
@@ -24,13 +24,13 @@ một lần, tự làm, tự chạy, tự kiểm và tạo gói review; người
 | 2 | VF2 movement | chạy, nhảy, crouch, sprint, roll, dive, ladder, ledge | VF1 | input + physics | [x] 5/5 |
 | 3 | VF3 combat | melee/kick, hitbox, knockdown, disarm, aim/fire, grenade | VF2 | weapons + VFX | [x] 6/6 |
 | 4 | VF4 world interaction | props, glass, barrels, containers, doors/elevators, hazards | VF2 | map fixtures | [x] 5/5 |
-| 5 | VF5 map parity | 6 functional arenas; original geometry/names/art | VF3,VF4 | one map per agent lane | [ ] 4/6 |
+| 5 | VF5 map parity | 6 functional arenas; original geometry/names/art | VF3,VF4 | one map per agent lane | [ ] 5/6 |
 | 6 | VF6 modes + AI | VS, local 2P, Stage, Survival, competent bots | VF3,VF5 | mode/UI/AI | [ ] 0/5 |
 | 7 | VF7 presentation | original skins, animation, audio, HUD, menu, accessibility | VF5,VF6 | art/audio/UI | [ ] 0/4 |
 | 8 | VF8 agent autonomy | brief→edit→play→observe→repair→checkpoint, no manual F6 | VF0..VF7 | host/bridge | [ ] 0/4 |
 | 9 | VF9 verification | trace replay, E2E, differential rubric, soak, leak proof | all above | QA | [ ] 0/5 |
 | 10 | VF10 package | Windows build, offline run, provenance/license, review bundle | VF9 | release | [ ] 0/3 |
-|   | **Tổng** | **50 WP nhỏ; chỉ coordinator tick sau DoD** |  |  | **27/50** |
+|   | **Tổng** | **50 WP nhỏ; chỉ coordinator tick sau DoD** |  |  | **28/50** |
 
 Gate nội bộ:
 
@@ -2096,13 +2096,104 @@ VF5-WP4 — Station-like arena: multi-floor interior và machine landmark       
         Parent 20-8 unchanged: R9-WP4 [ ]; 59/60; G6 [ ].
       Commit: (this tick)
 
-VF5-WP5 — Sewer/hazard arena: pipes, toxic zone và suspended route                    [ ]
+VF5-WP5 — Sewer/hazard arena: pipes, toxic zone và suspended route                    [x]
   Phụ thuộc: VF5-WP1,VF4-WP3,VF4-WP5. Files: one ArenaSpec + assets/tests.
   Làm: wide toxic pit/liquid, isolated pipes/platforms, ladders, suspended
   containers or moving route, hazard telegraph and safe crossing; original name.
   Verify: toxic contact/death, dive/roll edge cases, route connectivity,
   suspended object collision, camera bounds.
   DoD: hazard changes movement and weapon strategy.
+  LOG:
+    LOG 2026-08-31 12:29 Asia/Saigon — agent=coordinator
+      Base: 505d49c prove sewer hazard changes fire
+        after a live pickup
+        on VF5-WP4 tick 0619739.
+      Files/leases: data/maps/arenas/hazardous.json,
+        data/maps/arena_spec.json, catalog.json,
+        schema.json, data/world/catalog.json,
+        data/world/env.json, src/maps/arena_spec.gd,
+        map_catalog.gd, src/app.gd,
+        tests/sewer_cases.gd, tests/run_sewer.gd,
+        tests/check_sewer.py,
+        tests/pack_sewer_evidence.py,
+        tests/_gen_map_layers.py, tests/map_cases.gd,
+        tests/run_all.gd, tests/world_cases.gd,
+        docs/sewer.md, docs/provenance.md,
+        docs/provenance-manifest.json,
+        docs/maps.md, docs/env.md, docs/world.md,
+        docs/station.md, docs/rooftop.md,
+        docs/warehouse.md, docs/reference-ledger.md,
+        KNOWN_ISSUES.md, PROJECT_BRIEF.md,
+        docs/evidence/VF5WP5-20260831-ASIA-SAIGON-07/
+        (official remint -07 only; -01…-06 void;
+        V-A18 freeze-before-Godot; leftover-0;
+        seven distinct stills sewer_setup/title/
+        pipes/crossing/cargo/lip/toxic; live
+        cinder pickup id 4 @ 459, no give_weapon;
+        dive acid y≈180).
+      Verify: leftover-0; run VF5WP5-20260831-ASIA-SAIGON-07
+        cmd.vf5-wp5.vitriol-sump.8 seed 15 map
+        hazardous mode vs2; source hash
+        b04556d6b3980a6411112e7967c7261cf583e1d062565f3df0f9f544acefffee
+        NAME=pass GRAPH=pass TOXIC=pass DIVE=pass
+        ROLL=pass CARGO=pass SPAWN=pass CAMERA=pass
+        TACTIC=pass P1=pass P2=pass BOT=pass
+        ZONE=pass LIVE=pass REPLAY=match
+        VARIANTS=pass
+        from structured outcomes;
+        APPLY banner 4255/4255 (outcomes 5523/5523)
+        python godot/dogfood/superfighters/tests/check_sewer.py
+          EXIT 0
+        godot --headless --path godot/dogfood/superfighters
+          --script res://tests/run_sewer.gd EXIT 0
+        godot --path godot/dogfood/superfighters
+          --script res://tests/run_sewer.gd EXIT 0
+        leftover Godot on product --path = 0
+        python tests/bootstrap/test_authoritative_plan.py EXIT 0
+        python tests/bootstrap/test_vault_fighters_plan.py EXIT 0
+          PASS: 50 unique VF WPs; no-skip; next=VF5-WP5 (pre-tick);
+          ticked=VF0-WP1,VF0-WP2,VF0-WP3,VF1-WP1,VF1-WP2,VF1-WP3,
+          VF1-WP4,VF2-WP1,VF2-WP2,VF2-WP3,VF2-WP4,VF2-WP5,VF3-WP1,
+          VF3-WP2,VF3-WP3,VF3-WP4,VF3-WP5,VF3-WP6,VF4-WP1,
+          VF4-WP2,VF4-WP3,VF4-WP4,VF4-WP5,VF5-WP1,VF5-WP2,
+          VF5-WP3,VF5-WP4;
+          parent 20-8 frozen 59/60 R9-WP4
+        post-tick expected next=VF5-WP6
+      Honesty:
+        60 Hz is V-A14 / ledger:RL-SIM-FIXED-60 assumption,
+        not observed Y8 clock. Hold-to-aim assumption.
+        RL-MAP-* stay assumption, not Y8 observed.
+        Jump envelope is product tuning (dx=10 / dy=4).
+        RL-NADE-PROP deferred.
+        Unused annex_lift / signal_lift.
+        P2/bot coverage is smoke only, not AI
+        and not Y8 parity.
+        Art still VF7.
+        Live c/b still tiles. Water fixture-only.
+        Hazardous display retired to Vitriol Sump
+        ledger:RL-DELTA-MAP-NAMES.
+        Y8 roll/dive observation stays
+        ledger:RL-MOVE-ROLL-DIVE unavailable.
+        Not Y8 parity. Not V0. No Y8 rip.
+      Critic: leftover-0 both TICK=yes
+        (II bb1f2787 leftover-0 hash b04556d6…
+        frozen before official Godot; window
+        APPLY 4255 live; cinder id 4 @ 459,
+        no give_weapon; dive acid y≈180;
+        HH d09d5bc8 leftover-0 same hash;
+        leftover-0 windowed outcomes bitwise
+        equal; no SOURCE_FILES after freeze;
+        remints -01…-06 void).
+      Gaps: residual nits OK: honesty only
+        (RL-MAP-* assumption not Y8 observed;
+        jump envelope tuning; unused prior
+        lifts; P2/bot smoke; art still VF7;
+        banner APPLY 4255 vs outcomes 5523
+        from still staging; 60 Hz /
+        hold-to-aim assumption; Y8 roll/dive
+        unavailable).
+        Parent 20-8 unchanged: R9-WP4 [ ]; 59/60; G6 [ ].
+      Commit: (this tick)
 
 VF5-WP6 — Two additional VS arenas + map roster contract                            [ ]
   Phụ thuộc: VF5-WP2..5. Files: two ArenaSpecs, menu/registry/tests.
@@ -2510,7 +2601,7 @@ vào `KNOWN_ISSUES.md`; không đổi acceptance để làm cho pass.
 21. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Đọc `AGENTS.md`, sau đó đọc bảng đầu file này. WP đầu tiên chưa tick là **VF5-WP5**.
+Đọc `AGENTS.md`, sau đó đọc bảng đầu file này. WP đầu tiên chưa tick là **VF5-WP6**.
 
 Không làm R9-WP4/G6/GX; không mở Rust engine; không đụng Kho Bí Ẩn/Hoan Hao;
 không dùng Snake làm demo; không tải/rip Y8. Chỉ khi VF0-WP1 và VF0-WP2 đã có
@@ -2877,6 +2968,23 @@ dùng chỉ xem và review.
   Product 135e56e. Gate remains CLEARED. Parent 20-8
   unchanged (R9-WP4 [ ], 59/60, G6 [ ]). VF5-WP4 ticked;
   CURRENT_VALID_WP=VF5-WP5; V0 not ticked. VF5-WP5 remains [ ].
+- COORDINATOR CLOSEOUT VF5-WP5 (2026-08-31 12:29 Asia/Saigon): leftover-0;
+  II bb1f2787 + HH d09d5bc8 TICK=yes; run
+  VF5WP5-20260831-ASIA-SAIGON-07; command
+  cmd.vf5-wp5.vitriol-sump.8; source
+  b04556d6b3980a6411112e7967c7261cf583e1d062565f3df0f9f544acefffee
+  freeze-before-Godot; APPLY banner 4255/4255
+  (outcomes 5523/5523). Official remint -07;
+  -01…-06 void. Live cinder pickup id 4 @ 459,
+  no give_weapon. Honesty assumption not Y8
+  observed. Residual nits OK: honesty only
+  (RL-MAP-* assumption, not Y8 observed; jump
+  envelope tuning; unused prior lifts; P2/bot
+  smoke; art still VF7; banner APPLY 4255 vs
+  outcomes 5523 from still staging). No Y8 rip.
+  Product 505d49c. Gate remains CLEARED. Parent 20-8
+  unchanged (R9-WP4 [ ], 59/60, G6 [ ]). VF5-WP5 ticked;
+  CURRENT_VALID_WP=VF5-WP6; V0 not ticked. VF5-WP6 remains [ ].
 
 ================================================================================
 HẾT PLAN — 29-8-2026
