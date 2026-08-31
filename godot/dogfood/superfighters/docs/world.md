@@ -34,7 +34,9 @@ VF5-WP2 places original breakable cover on Skyline Relay
 door, and lift on Pallet Annex (`docs/warehouse.md`). VF5-WP4 places
 original window cover, door, lift, and a shootable rotor on Signal
 Court (`docs/station.md`). VF5-WP5 places hanging cargo
-`sump_cargo_hang` on Vitriol Sump (`docs/sewer.md`).
+`sump_cargo_hang` on Vitriol Sump (`docs/sewer.md`). VF5-WP6 places a
+shutter door on Lantern Cut and a cage door plus observation lift on
+Gauge Deck (`docs/vs_roster.md`).
 
 Fixture `fx_world_open` (display **Prop Yard**) places one of each kind.
 

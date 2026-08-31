@@ -41,7 +41,11 @@ shootable rotor, and breakable panes. Rooftops (id kept) is
 **Skyline Relay**. Storage (id kept) is **Pallet Annex**. Official
 reach is live `apply_frames` bodies holding `up` on ladders, not the
 graph. Hazardous display is now **Vitriol Sump** (VF5-WP5,
-`ledger:RL-DELTA-MAP-NAMES`). `c` / `b` still
+`ledger:RL-DELTA-MAP-NAMES`). VF5-WP6 adds two VS-only arenas:
+**Lantern Cut** (`lantern`, compact backstreet + live gutter water)
+and **Gauge Deck** (`gauge`, training floor + live lift). Stage stays
+the four explicit ids. Draft Yard stays an authoring demo, not VS.
+`c` / `b` still
 **paint as tiles** except Skyline Relay cover, Pallet Annex
 cover/cargo, Signal Court window cover, and Vitriol Sump hanging
 cargo, which use world placements. Combat/env fixture ASCII rows stay
@@ -60,8 +64,11 @@ import-only.
   (`docs/rooftop.md`, `ledger:RL-MAP-SKYLINE`). VF5-WP3 owns
   Pallet Annex (`docs/warehouse.md`, `ledger:RL-MAP-PALLET`).
   VF5-WP4 owns Signal Court (`docs/station.md`,
-  `ledger:RL-MAP-SIGNAL`). VF5-WP5 owns Vitriol Sump
-  (`docs/sewer.md`, `ledger:RL-MAP-SUMP`).
+  `ledger:RL-MAP-SIGNAL`).   VF5-WP5 owns Vitriol Sump
+  (`docs/sewer.md`, `ledger:RL-MAP-SUMP`). VF5-WP6 owns the six-map
+  VS roster (`docs/vs_roster.md`, `ledger:RL-MAP-VS-ROSTER`) plus
+  Lantern Cut (`docs/lantern.md`, `ledger:RL-MAP-LANTERN`) and
+  Gauge Deck (`docs/gauge.md`, `ledger:RL-MAP-GAUGE`).
 
 DoD window stills wait for `frame_post_draw` after `start_fight` and
 a standing settle. Setup is rooftops. Rooftops / storage / police /

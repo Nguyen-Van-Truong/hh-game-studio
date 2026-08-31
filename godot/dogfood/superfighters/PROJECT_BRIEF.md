@@ -83,8 +83,9 @@ https://mythologicinteractive.com/Superfighters
 - Health + stamina bars; stamina drains on sprint
 - Random-ish weapon spawns (~20s respawn): pipe, knife, baton, pistol,
   shotgun, uzi, Longarm, Thumper, grenade, Cinder Flask
-- VS 1P (vs bots), local VS 2P, and Stage (Skyline Relay → Pallet Annex →
-  Signal Court → Vitriol Sump)
+- VS 1P (vs bots), local VS 2P (six maps: Skyline Relay, Pallet Annex,
+  Signal Court, Vitriol Sump, Lantern Cut, Gauge Deck), and Stage
+  (Skyline Relay → Pallet Annex → Signal Court → Vitriol Sump)
 - Camera frames the whole arena
 - Title → fight → win/lose → restart; Escape / Start pause
 
@@ -95,7 +96,9 @@ jump-through platform on the one-way layer. They are not ripped
 collision maps. VF5-WP2 renames the rooftops arena to **Skyline Relay**.
 VF5-WP3 renames the storage arena to **Pallet Annex**. VF5-WP4
 renames the police arena to **Signal Court**. VF5-WP5 renames the
-hazardous arena to **Vitriol Sump**.
+hazardous arena to **Vitriol Sump**. VF5-WP6 adds VS-only **Lantern Cut**
+and **Gauge Deck**. Stage remains the four named arenas. Draft Yard is
+an authoring demo, not a VS roster map.
 
 ---
 

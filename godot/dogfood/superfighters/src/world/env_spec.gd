@@ -184,6 +184,14 @@ static func water_extinguish() -> bool:
 	return bool(data().get("water_extinguish", true))
 
 
+static func wet_walk_mul() -> float:
+	return clampf(float(data().get("wet_walk_mul", 0.55)), 0.2, 0.9)
+
+
+static func wet_jump_mul() -> float:
+	return clampf(float(data().get("wet_jump_mul", 0.70)), 0.2, 0.9)
+
+
 static func fighter_aabb(fighter: Fighter) -> Rect2:
 	if fighter == null:
 		return Rect2()

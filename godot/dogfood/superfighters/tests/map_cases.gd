@@ -91,9 +91,15 @@ static func schema_and_data() -> PackedStringArray:
 		errors.append("DATA hazardous display name must be Vitriol Sump")
 	if Maps.display_name("hazardous") == "Hazardous":
 		errors.append("DATA must retire Hazardous display")
+	if Maps.display_name("lantern") != "Lantern Cut":
+		errors.append("DATA lantern display name must be Lantern Cut")
+	if Maps.display_name("gauge") != "Gauge Deck":
+		errors.append("DATA gauge display name must be Gauge Deck")
 	if Maps.display_name("fx_map_author").to_lower().contains("superfighter"):
 		errors.append("DATA display name uses Superfighters trademark")
-	var live: PackedStringArray = PackedStringArray(["rooftops", "storage", "police", "hazardous"])
+	var live: PackedStringArray = PackedStringArray([
+		"rooftops", "storage", "police", "hazardous", "lantern", "gauge"
+	])
 	var i: int = 0
 	while i < live.size():
 		var mid: String = String(live[i])

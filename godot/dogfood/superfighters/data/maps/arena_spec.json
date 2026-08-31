@@ -184,6 +184,63 @@
       "display_name": "Hazard Yard",
       "hazards": ["water", "rotor", "toxic"]
     },
+    "lantern": {
+      "id": "lantern",
+      "display_name": "Lantern Cut",
+      "hazards": ["pit", "fall", "water"],
+      "notes": "Original compact backstreet. Two stacked alleys, fire-escape ladders, clothesline, shutter door, street gutter water. Taller/narrower than the four Stage arenas. Tactic: take the clothesline for cover, or drop to the gutter and accept a wet trail. No rotor/toxic.",
+      "elevations": 4,
+      "combat_zones": [
+        {"id": "west_high", "x": 2, "y": 1, "w": 8, "h": 1},
+        {"id": "west_stoop", "x": 0, "y": 6, "w": 8, "h": 1},
+        {"id": "clothesline", "x": 5, "y": 8, "w": 28, "h": 1},
+        {"id": "east_stoop", "x": 42, "y": 6, "w": 6, "h": 1},
+        {"id": "west_street", "x": 0, "y": 14, "w": 10, "h": 1},
+        {"id": "east_street", "x": 38, "y": 14, "w": 10, "h": 1}
+      ],
+      "landmarks": [
+        {"id": "cut_gutter", "kind": "water"},
+        {"id": "cut_door", "kind": "door"},
+        {"id": "cut_line", "kind": "clothesline"},
+        {"id": "west_escape", "kind": "ladder"},
+        {"id": "east_escape", "kind": "ladder"},
+        {"id": "alley_gap", "kind": "pit", "x": 20, "y": 16}
+      ],
+      "weapon_risk": [
+        {"cell": [3, 1], "risk": "high"},
+        {"cell": [43, 1], "risk": "high"},
+        {"cell": [22, 8], "risk": "line"},
+        {"cell": [40, 12], "risk": "street"}
+      ]
+    },
+    "gauge": {
+      "id": "gauge",
+      "display_name": "Gauge Deck",
+      "hazards": ["pit", "fall"],
+      "notes": "Original training/test floor. Wide low hall, marked loft rails, mid crate lane, observation lift, west cage door. Wider/shorter than the four Stage arenas. Tactic: ride the lift to the east loft; east-corner pit punishes over-run. No water/toxic/rotor.",
+      "elevations": 3,
+      "combat_zones": [
+        {"id": "west_loft", "x": 4, "y": 1, "w": 8, "h": 1},
+        {"id": "west_rail", "x": 4, "y": 3, "w": 8, "h": 1},
+        {"id": "west_floor", "x": 0, "y": 11, "w": 12, "h": 1},
+        {"id": "mid_lane", "x": 14, "y": 11, "w": 12, "h": 1},
+        {"id": "east_loft", "x": 58, "y": 1, "w": 8, "h": 1},
+        {"id": "east_floor", "x": 50, "y": 11, "w": 16, "h": 1}
+      ],
+      "landmarks": [
+        {"id": "gauge_lift", "kind": "elevator"},
+        {"id": "gauge_door", "kind": "door"},
+        {"id": "range_loft", "kind": "high_ground"},
+        {"id": "west_ladder", "kind": "ladder"},
+        {"id": "east_ladder", "kind": "ladder"},
+        {"id": "foam_gap", "kind": "pit", "x": 66, "y": 13}
+      ],
+      "weapon_risk": [
+        {"cell": [6, 1], "risk": "loft"},
+        {"cell": [62, 1], "risk": "loft"},
+        {"cell": [42, 10], "risk": "lane"}
+      ]
+    },
     "fx_map_author": {
       "id": "fx_map_author",
       "display_name": "Draft Yard",

@@ -26,14 +26,18 @@
     "rooftops",
     "storage",
     "police",
-    "hazardous"
+    "hazardous",
+    "lantern",
+    "gauge"
   ],
   "required_author_id": "fx_map_author",
   "themes": [
     "brick",
     "concrete",
     "police",
-    "metal"
+    "metal",
+    "asphalt",
+    "range"
   ],
   "tile": 16,
   "designed_view": {
@@ -62,6 +66,6 @@
     "roll_dive": "RL-MOVE-ROLL-DIVE unavailable",
     "c_b_tiles": "live c/b stay painted tiles on prop/hazard layers",
     "fixtures": "combat/env fixture ASCII rows stay import-only",
-    "names": "RL-DELTA-MAP-NAMES: rooftops display is Skyline Relay; storage display is Pallet Annex; police display is Signal Court; hazardous display is Vitriol Sump"
+    "names": "RL-DELTA-MAP-NAMES: rooftops display is Skyline Relay; storage display is Pallet Annex; police display is Signal Court; hazardous display is Vitriol Sump; lantern display is Lantern Cut; gauge display is Gauge Deck"
   }
 }

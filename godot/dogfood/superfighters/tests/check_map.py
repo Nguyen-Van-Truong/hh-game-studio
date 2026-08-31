@@ -179,7 +179,15 @@ def main() -> int:
         if catalog.get("nade_prop_class") != "deferred":
             errors.append("RL-NADE-PROP must stay deferred")
         maps = catalog.get("maps") or {}
-        for mid in ("rooftops", "storage", "police", "hazardous", "fx_map_author"):
+        for mid in (
+            "rooftops",
+            "storage",
+            "police",
+            "hazardous",
+            "lantern",
+            "gauge",
+            "fx_map_author",
+        ):
             if mid not in maps:
                 errors.append(f"catalog missing {mid}")
         layers = schema.get("layers") or []

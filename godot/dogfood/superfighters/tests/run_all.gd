@@ -20,6 +20,7 @@ const RooftopCasesScript: GDScript = preload("res://tests/rooftop_cases.gd")
 const WarehouseCasesScript: GDScript = preload("res://tests/warehouse_cases.gd")
 const StationCasesScript: GDScript = preload("res://tests/station_cases.gd")
 const SewerCasesScript: GDScript = preload("res://tests/sewer_cases.gd")
+const VsRosterCasesScript: GDScript = preload("res://tests/vs_roster_cases.gd")
 const _Combat: GDScript = preload("res://src/sim/combat.gd")
 
 var _fails: PackedStringArray = PackedStringArray()
@@ -52,6 +53,7 @@ var _rooftop: String = "unproven"
 var _warehouse: String = "unproven"
 var _station: String = "unproven"
 var _sewer: String = "unproven"
+var _vs_roster: String = "unproven"
 
 
 func _initialize() -> void:
@@ -96,6 +98,7 @@ func _boot() -> void:
 	await _test_warehouse(app)
 	await _test_station(app)
 	await _test_sewer(app)
+	await _test_vs_roster(app)
 	if _fails.is_empty():
 		_no_err = "proven"
 	_emit()
@@ -348,7 +351,9 @@ func _test_weapon_respawn(session: GameSession, p1: Fighter) -> void:
 
 
 func _test_maps(app: App) -> void:
-	var ids: PackedStringArray = PackedStringArray(["rooftops", "storage", "police", "hazardous"])
+	var ids: PackedStringArray = PackedStringArray([
+		"rooftops", "storage", "police", "hazardous", "lantern", "gauge"
+	])
 	var i: int = 0
 	while i < ids.size():
 		var mid: String = String(ids[i])
@@ -1529,6 +1534,70 @@ func _test_sewer(app: App) -> void:
 		_sewer = "proven"
 
 
+func _test_vs_roster(app: App) -> void:
+	var errors: PackedStringArray = await VsRosterCasesScript.run_all(app)
+	var i: int = 0
+	while i < errors.size():
+		_fail("VS %s" % String(errors[i]))
+		i += 1
+	var roster: String = str(VsRosterCasesScript.outcome_roster.get("verdict", "unproven"))
+	var cycle: String = str(VsRosterCasesScript.outcome_cycle.get("verdict", "unproven"))
+	var load_v: String = str(VsRosterCasesScript.outcome_load.get("verdict", "unproven"))
+	var routes: String = str(VsRosterCasesScript.outcome_routes.get("verdict", "unproven"))
+	var cover: String = str(VsRosterCasesScript.outcome_cover.get("verdict", "unproven"))
+	var cargo: String = str(VsRosterCasesScript.outcome_cargo.get("verdict", "unproven"))
+	var door: String = str(VsRosterCasesScript.outcome_door.get("verdict", "unproven"))
+	var rotor: String = str(VsRosterCasesScript.outcome_rotor.get("verdict", "unproven"))
+	var toxic: String = str(VsRosterCasesScript.outcome_toxic.get("verdict", "unproven"))
+	var water: String = str(VsRosterCasesScript.outcome_water.get("verdict", "unproven"))
+	var lift: String = str(VsRosterCasesScript.outcome_lift.get("verdict", "unproven"))
+	var lantern: String = str(VsRosterCasesScript.outcome_lantern.get("verdict", "unproven"))
+	var gauge: String = str(VsRosterCasesScript.outcome_gauge.get("verdict", "unproven"))
+	var p2: String = str(VsRosterCasesScript.outcome_p2.get("verdict", "unproven"))
+	var bot: String = str(VsRosterCasesScript.outcome_bot.get("verdict", "unproven"))
+	var camera: String = str(VsRosterCasesScript.outcome_camera.get("verdict", "unproven"))
+	var live: String = str(VsRosterCasesScript.outcome_live.get("verdict", "unproven"))
+	var replay: String = str(VsRosterCasesScript.outcome_replay.get("verdict", "unproven"))
+	if roster != "pass":
+		_fail("VS ROSTER outcome is %s" % roster)
+	if cycle != "pass":
+		_fail("VS CYCLE outcome is %s" % cycle)
+	if load_v != "pass":
+		_fail("VS LOAD outcome is %s" % load_v)
+	if routes != "pass":
+		_fail("VS ROUTES outcome is %s" % routes)
+	if cover != "pass":
+		_fail("VS COVER outcome is %s" % cover)
+	if cargo != "pass":
+		_fail("VS CARGO outcome is %s" % cargo)
+	if door != "pass":
+		_fail("VS DOOR outcome is %s" % door)
+	if rotor != "pass":
+		_fail("VS ROTOR outcome is %s" % rotor)
+	if toxic != "pass":
+		_fail("VS TOXIC outcome is %s" % toxic)
+	if water != "pass":
+		_fail("VS WATER outcome is %s" % water)
+	if lift != "pass":
+		_fail("VS LIFT outcome is %s" % lift)
+	if lantern != "pass":
+		_fail("VS LANTERN outcome is %s" % lantern)
+	if gauge != "pass":
+		_fail("VS GAUGE outcome is %s" % gauge)
+	if p2 != "pass":
+		_fail("VS P2 outcome is %s" % p2)
+	if bot != "pass":
+		_fail("VS BOT outcome is %s" % bot)
+	if camera != "pass":
+		_fail("VS CAMERA outcome is %s" % camera)
+	if live != "pass":
+		_fail("VS LIVE outcome is %s" % live)
+	if replay != "match":
+		_fail("VS REPLAY outcome is %s" % replay)
+	if _count_prefix("VS ") == 0:
+		_vs_roster = "proven"
+
+
 func _emit() -> void:
 	print("HH_VF_PATH title→fight→win/lose→restart")
 	print(
@@ -1915,6 +1984,32 @@ func _emit() -> void:
 			SewerCasesScript.used_apply_frames_succeeded,
 			SewerCasesScript.used_apply_frames_attempted,
 			_sewer,
+		]
+	)
+	print(
+		"HH_VF_VS ROSTER=%s ROSTER_SOURCE=outcome_roster CYCLE=%s CYCLE_SOURCE=outcome_cycle LOAD=%s LOAD_SOURCE=outcome_load ROUTES=%s ROUTES_SOURCE=outcome_routes COVER=%s COVER_SOURCE=outcome_cover CARGO=%s CARGO_SOURCE=outcome_cargo DOOR=%s DOOR_SOURCE=outcome_door ROTOR=%s ROTOR_SOURCE=outcome_rotor TOXIC=%s TOXIC_SOURCE=outcome_toxic WATER=%s WATER_SOURCE=outcome_water LIFT=%s LIFT_SOURCE=outcome_lift LANTERN=%s LANTERN_SOURCE=outcome_lantern GAUGE=%s GAUGE_SOURCE=outcome_gauge CAMERA=%s P2=%s P2_COVERAGE=smoke BOT=%s BOT_COVERAGE=smoke LIVE=%s REPLAY=%s REPLAY_SOURCE=outcome_replay APPLY=%d/%d status=%s"
+		% [
+			str(VsRosterCasesScript.outcome_roster.get("verdict", "unproven")),
+			str(VsRosterCasesScript.outcome_cycle.get("verdict", "unproven")),
+			str(VsRosterCasesScript.outcome_load.get("verdict", "unproven")),
+			str(VsRosterCasesScript.outcome_routes.get("verdict", "unproven")),
+			str(VsRosterCasesScript.outcome_cover.get("verdict", "unproven")),
+			str(VsRosterCasesScript.outcome_cargo.get("verdict", "unproven")),
+			str(VsRosterCasesScript.outcome_door.get("verdict", "unproven")),
+			str(VsRosterCasesScript.outcome_rotor.get("verdict", "unproven")),
+			str(VsRosterCasesScript.outcome_toxic.get("verdict", "unproven")),
+			str(VsRosterCasesScript.outcome_water.get("verdict", "unproven")),
+			str(VsRosterCasesScript.outcome_lift.get("verdict", "unproven")),
+			str(VsRosterCasesScript.outcome_lantern.get("verdict", "unproven")),
+			str(VsRosterCasesScript.outcome_gauge.get("verdict", "unproven")),
+			str(VsRosterCasesScript.outcome_camera.get("verdict", "unproven")),
+			str(VsRosterCasesScript.outcome_p2.get("verdict", "unproven")),
+			str(VsRosterCasesScript.outcome_bot.get("verdict", "unproven")),
+			str(VsRosterCasesScript.outcome_live.get("verdict", "unproven")),
+			str(VsRosterCasesScript.outcome_replay.get("verdict", "unproven")),
+			VsRosterCasesScript.used_apply_frames_succeeded,
+			VsRosterCasesScript.used_apply_frames_attempted,
+			_vs_roster,
 		]
 	)
 	print(

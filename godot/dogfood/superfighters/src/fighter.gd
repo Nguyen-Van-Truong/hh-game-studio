@@ -46,6 +46,7 @@ const _Roster: GDScript = preload("res://src/data/weapons/roster.gd")
 const _Inv: GDScript = preload("res://src/data/weapons/inventory.gd")
 const _Bal: GDScript = preload("res://src/sim/balance.gd")
 const _Hazard: GDScript = preload("res://src/world/prop_hazard.gd")
+const _Env: GDScript = preload("res://src/world/env_spec.gd")
 
 var gravity: float = 1700.0
 var jump_vel: float = -430.0
@@ -384,7 +385,7 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	if not rolling and not diving:
 		if x != 0.0 and last_held_x == 0.0:
 			if last_tap_dir == x and last_tap_at <= tap_window:
-				sprinting = true
+				sprinting = not wet
 			last_tap_dir = x
 			last_tap_at = 0.0
 		if x == 0.0:
@@ -475,7 +476,7 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 		jump_buf = maxf(jump_buf - delta, 0.0)
 	var jump_held: bool = bool(cmd.get("jump", false)) and not fire_held and not nade_held
 	if not rolling and not diving and not kicking and not reaction_locked() and not climbing and not hanging and recover_left <= 0.0 and jump_buf > 0.0 and coyote > 0.0 and not fire_held and not nade_held:
-		velocity.y = jump_vel
+		velocity.y = jump_vel * (float(_Env.wet_jump_mul()) if wet else 1.0)
 		jump_buf = 0.0
 		coyote = 0.0
 		last_jump = true
@@ -485,6 +486,8 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 	if on_floor_now and velocity.y >= 0.0:
 		last_jump = false
 	var speed: float = walk
+	if wet:
+		sprinting = false
 	if rolling:
 		speed = roll_speed
 		sprinting = false
@@ -504,6 +507,8 @@ func step(delta: float, cmd: Dictionary, kill_plane: float) -> void:
 			sprinting = false
 	else:
 		stamina = minf(MAX_STAMINA, stamina + stamina_recover * delta)
+	if wet and not rolling and not diving:
+		speed *= float(_Env.wet_walk_mul())
 	if sprinting and not was_sprinting:
 		sprint_started = true
 	if was_sprinting and not sprinting:

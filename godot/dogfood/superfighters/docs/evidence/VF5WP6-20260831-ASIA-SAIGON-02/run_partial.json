@@ -1,0 +1,71 @@
+{
+	"command_id": "cmd.vf5-wp6.vs-roster.2",
+	"display": "Windows",
+	"ended_at": "2026-08-31T15:24:53+07:00",
+	"ended_unix": 1788164735.548,
+	"epsilon": 0.001,
+	"fail_count": 0,
+	"godot": {
+		"build": "official",
+		"hash": "a13da4feb8d8aefc283c3763d33a2f170a18d541",
+		"hex": 263937,
+		"major": 4,
+		"minor": 7,
+		"patch": 1,
+		"status": "stable",
+		"string": "4.7.1-stable (official)",
+		"timestamp": 0
+	},
+	"map_id": "rooftops",
+	"mode": "vs2",
+	"os_name": "Windows",
+	"outcomes": {
+		"BOT": "pass",
+		"CAMERA": "pass",
+		"CARGO": "pass",
+		"COVER": "pass",
+		"CYCLE": "pass",
+		"DOOR": "pass",
+		"GAUGE": "pass",
+		"LANTERN": "pass",
+		"LIFT": "pass",
+		"LIVE": "pass",
+		"LOAD": "pass",
+		"P2": "pass",
+		"REPLAY": "match",
+		"ROSTER": "pass",
+		"ROTOR": "pass",
+		"ROUTES": "pass",
+		"TOXIC": "pass",
+		"USED_APPLY_ATTEMPTED": 3695,
+		"USED_APPLY_FRAMES": 3695,
+		"USED_APPLY_SUCCEEDED": 3695,
+		"WATER": "pass"
+	},
+	"run_id": "VF5WP6-20260831-ASIA-SAIGON-02",
+	"schema": "vault-fighters.vf5-wp6.run.v1",
+	"screens": {
+		"live": {
+			"gauge": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\godot\\dogfood\\superfighters\\.evidence\\VF5WP6-20260831-ASIA-SAIGON-02-W/screens/vs_gauge_1280x720.png",
+			"gauge_lift": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\godot\\dogfood\\superfighters\\.evidence\\VF5WP6-20260831-ASIA-SAIGON-02-W/screens/vs_gauge_lift_1280x720.png",
+			"hazardous": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\godot\\dogfood\\superfighters\\.evidence\\VF5WP6-20260831-ASIA-SAIGON-02-W/screens/vs_hazardous_1280x720.png",
+			"lantern": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\godot\\dogfood\\superfighters\\.evidence\\VF5WP6-20260831-ASIA-SAIGON-02-W/screens/vs_lantern_1280x720.png",
+			"lantern_water": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\godot\\dogfood\\superfighters\\.evidence\\VF5WP6-20260831-ASIA-SAIGON-02-W/screens/vs_lantern_water_1280x720.png",
+			"police": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\godot\\dogfood\\superfighters\\.evidence\\VF5WP6-20260831-ASIA-SAIGON-02-W/screens/vs_police_1280x720.png",
+			"rooftops": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\godot\\dogfood\\superfighters\\.evidence\\VF5WP6-20260831-ASIA-SAIGON-02-W/screens/vs_rooftops_1280x720.png",
+			"storage": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\godot\\dogfood\\superfighters\\.evidence\\VF5WP6-20260831-ASIA-SAIGON-02-W/screens/vs_storage_1280x720.png",
+			"title": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\godot\\dogfood\\superfighters\\.evidence\\VF5WP6-20260831-ASIA-SAIGON-02-W/screens/vs_title_1280x720.png"
+		},
+		"setup": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\godot\\dogfood\\superfighters\\.evidence\\VF5WP6-20260831-ASIA-SAIGON-02-W/screens/vs_setup_1280x720.png"
+	},
+	"seed": 16,
+	"started_at": "2026-08-31T15:22:18+07:00",
+	"started_unix": 1788164538.208,
+	"tick_hz": 60,
+	"timezone": "Asia/Saigon",
+	"viewport": {
+		"h": 720.0,
+		"w": 1280.0
+	},
+	"wp": "VF5-WP6"
+}

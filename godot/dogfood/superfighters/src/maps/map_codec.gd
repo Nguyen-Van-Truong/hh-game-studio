@@ -206,6 +206,10 @@ static func theme_for(map_id: String) -> String:
 		return "police"
 	if map_id == "hazardous":
 		return "metal"
+	if map_id == "lantern":
+		return "asphalt"
+	if map_id == "gauge":
+		return "range"
 	return "concrete"
 
 
@@ -222,6 +226,10 @@ static func atlas_for(theme: String, layer: String) -> Vector2i:
 		return Maps.ATLAS_POLICE
 	if theme == "metal":
 		return Maps.ATLAS_METAL
+	if theme == "asphalt":
+		return Maps.ATLAS_BRICK
+	if theme == "range":
+		return Maps.ATLAS_CONCRETE
 	return Maps.ATLAS_CONCRETE
 
 

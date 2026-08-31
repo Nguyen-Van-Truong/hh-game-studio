@@ -133,6 +133,12 @@ static func validate_payload(row: Dictionary) -> PackedStringArray:
 		errors.append("Signal Court contract must stay assumption")
 	if str(row.get("sump_class", "")) != "" and str(row.get("sump_class", "")) != "assumption":
 		errors.append("Vitriol Sump contract must stay assumption")
+	if str(row.get("lantern_class", "")) != "" and str(row.get("lantern_class", "")) != "assumption":
+		errors.append("Lantern Cut contract must stay assumption")
+	if str(row.get("gauge_class", "")) != "" and str(row.get("gauge_class", "")) != "assumption":
+		errors.append("Gauge Deck contract must stay assumption")
+	if str(row.get("vs_class", "")) != "" and str(row.get("vs_class", "")) != "assumption":
+		errors.append("VS roster contract must stay assumption")
 	var required: PackedStringArray = _to_packed(gate.get("required_live_ids", []))
 	var maps: Dictionary = _dict(row.get("maps", {}))
 	var i: int = 0

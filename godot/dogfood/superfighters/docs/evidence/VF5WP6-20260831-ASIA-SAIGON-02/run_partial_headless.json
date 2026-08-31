@@ -1,0 +1,71 @@
+{
+	"command_id": "cmd.vf5-wp6.vs-roster.2",
+	"display": "headless",
+	"ended_at": "2026-08-31T15:21:27+07:00",
+	"ended_unix": 1788164529.515,
+	"epsilon": 0.001,
+	"fail_count": 0,
+	"godot": {
+		"build": "official",
+		"hash": "a13da4feb8d8aefc283c3763d33a2f170a18d541",
+		"hex": 263937,
+		"major": 4,
+		"minor": 7,
+		"patch": 1,
+		"status": "stable",
+		"string": "4.7.1-stable (official)",
+		"timestamp": 0
+	},
+	"map_id": "rooftops",
+	"mode": "vs2",
+	"os_name": "Windows",
+	"outcomes": {
+		"BOT": "pass",
+		"CAMERA": "pass",
+		"CARGO": "pass",
+		"COVER": "pass",
+		"CYCLE": "pass",
+		"DOOR": "pass",
+		"GAUGE": "pass",
+		"LANTERN": "pass",
+		"LIFT": "pass",
+		"LIVE": "pass",
+		"LOAD": "pass",
+		"P2": "pass",
+		"REPLAY": "match",
+		"ROSTER": "pass",
+		"ROTOR": "pass",
+		"ROUTES": "pass",
+		"TOXIC": "pass",
+		"USED_APPLY_ATTEMPTED": 3695,
+		"USED_APPLY_FRAMES": 3695,
+		"USED_APPLY_SUCCEEDED": 3695,
+		"WATER": "pass"
+	},
+	"run_id": "VF5WP6-20260831-ASIA-SAIGON-02",
+	"schema": "vault-fighters.vf5-wp6.run.v1",
+	"screens": {
+		"live": {
+			"gauge": "",
+			"gauge_lift": "",
+			"hazardous": "",
+			"lantern": "",
+			"lantern_water": "",
+			"police": "",
+			"rooftops": "",
+			"storage": "",
+			"title": ""
+		},
+		"setup": ""
+	},
+	"seed": 16,
+	"started_at": "2026-08-31T15:18:46+07:00",
+	"started_unix": 1788164326.197,
+	"tick_hz": 60,
+	"timezone": "Asia/Saigon",
+	"viewport": {
+		"h": 720.0,
+		"w": 1280.0
+	},
+	"wp": "VF5-WP6"
+}

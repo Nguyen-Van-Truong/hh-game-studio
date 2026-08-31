@@ -85,6 +85,7 @@ static func validate_payload(row: Dictionary) -> PackedStringArray:
 	var all_maps: Dictionary = _dict(row.get("maps", {}))
 	var required: PackedStringArray = PackedStringArray([
 		"rooftops", "storage", "police", "hazardous",
+		"lantern", "gauge",
 		"fx_env_instant", "fx_env_toxic", "fx_env_water",
 		"fx_env_rotor", "fx_env_fall", "fx_env_yard"
 	])
@@ -160,6 +161,40 @@ static func validate_payload(row: Dictionary) -> PackedStringArray:
 		errors.append("hazardous must declare pit")
 	if not _to_packed(sump.get("hazards", [])).has("toxic"):
 		errors.append("Vitriol Sump must declare toxic")
+	var cut: Dictionary = _dict(all_maps.get("lantern", {}))
+	if str(cut.get("display_name", "")) != "Lantern Cut":
+		errors.append("lantern display name must be Lantern Cut")
+	if int(cut.get("elevations", 0)) < 3:
+		errors.append("Lantern Cut must declare 3+ elevations")
+	if combat_zones("lantern").size() < 4:
+		errors.append("Lantern Cut must list combat zones")
+	if landmarks("lantern").is_empty():
+		errors.append("Lantern Cut must list landmarks")
+	_append(errors, _validate_named_zones(cut, "Lantern Cut", PackedStringArray([
+		"west_high", "west_stoop", "clothesline", "east_stoop",
+		"west_street", "east_street"
+	])))
+	_append(errors, validate_weapon_cells_safe("lantern"))
+	if not _to_packed(cut.get("hazards", [])).has("pit"):
+		errors.append("lantern must declare pit")
+	if not _to_packed(cut.get("hazards", [])).has("water"):
+		errors.append("Lantern Cut must declare water")
+	var deck: Dictionary = _dict(all_maps.get("gauge", {}))
+	if str(deck.get("display_name", "")) != "Gauge Deck":
+		errors.append("gauge display name must be Gauge Deck")
+	if int(deck.get("elevations", 0)) < 3:
+		errors.append("Gauge Deck must declare 3+ elevations")
+	if combat_zones("gauge").size() < 4:
+		errors.append("Gauge Deck must list combat zones")
+	if landmarks("gauge").is_empty():
+		errors.append("Gauge Deck must list landmarks")
+	_append(errors, _validate_named_zones(deck, "Gauge Deck", PackedStringArray([
+		"west_loft", "west_rail", "west_floor", "mid_lane",
+		"east_loft", "east_floor"
+	])))
+	_append(errors, validate_weapon_cells_safe("gauge"))
+	if not _to_packed(deck.get("hazards", [])).has("pit"):
+		errors.append("gauge must declare pit")
 	if not _to_packed(_dict(all_maps.get("fx_env_instant", {})).get("hazards", [])).has("instant"):
 		errors.append("Void Cut must declare instant")
 	if not _to_packed(_dict(all_maps.get("fx_env_toxic", {})).get("hazards", [])).has("toxic"):
@@ -266,6 +301,33 @@ static func _validate_signal_zones(court: Dictionary) -> PackedStringArray:
 		i += 1
 	if seen_y.size() < 3:
 		errors.append("Signal Court combat zones must span 3+ elevations")
+	return errors
+
+
+static func _validate_named_zones(
+	row: Dictionary, label: String, need: PackedStringArray
+) -> PackedStringArray:
+	var errors: PackedStringArray = PackedStringArray()
+	var seen_y: Dictionary = {}
+	var found: Dictionary = {}
+	var zones: Array = _as_array(row.get("combat_zones", []))
+	var i: int = 0
+	while i < zones.size():
+		var zone: Dictionary = _dict(zones[i])
+		var zid: String = str(zone.get("id", ""))
+		if zid == "":
+			errors.append("%s combat zone missing id" % label)
+		found[zid] = true
+		seen_y[int(zone.get("y", -1))] = true
+		i += 1
+	i = 0
+	while i < need.size():
+		var zid: String = String(need[i])
+		if not found.has(zid):
+			errors.append("%s missing combat zone %s" % [label, zid])
+		i += 1
+	if seen_y.size() < 3:
+		errors.append("%s combat zones must span 3+ elevations" % label)
 	return errors
 
 

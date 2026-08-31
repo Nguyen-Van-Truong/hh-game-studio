@@ -128,6 +128,25 @@
       },
       {"id": "annex_lift_plate", "spec": "call_plate", "x": 608, "y": 173, "target": "annex_lift"}
     ],
+    "lantern": [
+      {"id": "cut_door", "spec": "gate_door", "x": 680, "y": 112},
+      {"id": "cut_door_plate", "spec": "call_plate", "x": 648, "y": 237, "target": "cut_door"}
+    ],
+    "gauge": [
+      {"id": "gauge_door", "spec": "gate_door", "x": 216, "y": 184},
+      {"id": "gauge_door_plate", "spec": "call_plate", "x": 168, "y": 189, "target": "gauge_door"},
+      {
+        "id": "gauge_lift",
+        "spec": "shaft_lift",
+        "x": 992,
+        "y": 188,
+        "from_x": 992,
+        "from_y": 188,
+        "to_x": 992,
+        "to_y": 44
+      },
+      {"id": "gauge_lift_plate", "spec": "call_plate", "x": 960, "y": 189, "target": "gauge_lift"}
+    ],
     "police": [
       {"id": "signal_door", "spec": "gate_door", "x": 408, "y": 184},
       {"id": "signal_door_plate", "spec": "call_plate", "x": 300, "y": 189, "target": "signal_door"},

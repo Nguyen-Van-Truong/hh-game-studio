@@ -205,8 +205,14 @@ static func stage_ids() -> PackedStringArray:
 	return PackedStringArray(["rooftops", "storage", "police", "hazardous"])
 
 
+static func vs_ids() -> PackedStringArray:
+	return PackedStringArray([
+		"rooftops", "storage", "police", "hazardous", "lantern", "gauge"
+	])
+
+
 static func next_vs_map(map_id: String) -> String:
-	var ids: PackedStringArray = stage_ids()
+	var ids: PackedStringArray = vs_ids()
 	var i: int = 0
 	while i < ids.size():
 		if String(ids[i]) == map_id:
@@ -268,6 +274,10 @@ static func atlas_for(map_id: String, ch: String) -> Vector2i:
 	if map_id == "police":
 		if ch == "#":
 			return ATLAS_POLICE
+		return ATLAS_CONCRETE
+	if map_id == "lantern":
+		return ATLAS_BRICK
+	if map_id == "gauge":
 		return ATLAS_CONCRETE
 	return ATLAS_METAL
 

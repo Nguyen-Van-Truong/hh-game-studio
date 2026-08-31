@@ -149,6 +149,9 @@ invariants. Calibrate later with traces (VF1-WP3+).
 | RL-MAP-COUNT-6 | Six named arenas | `secondary` | med | RL-SRC-WIKI-INDEX | 2026-08-29 | Functional archetypes: Storage, Rooftops, Police Station, Hazardous, Backstreets, Testing Floor | geometry | **Names are reference archetypes only.** VF display names must be original (plan §3.3). |
 | RL-MAP-LANDMARKS | Pits, cover, ladders | `assumption` | low | plan §1.1 / first-playable grids; **not** seen in play this WP | 2026-08-29 | Keep functional beats, change size/landmarks/tiles | cell sizes | No wiki landmark page was retrieved. Do not claim observed rooftop/warehouse coordinates. |
 | RL-MAP-SUMP | Vitriol Sump arena | `assumption` | none | VF5-WP5 product contract; **not** observed on Y8 this session | 2026-08-31 | isolated pipes, toxic pool, ladders, hanging cargo, telegraph | original name | Do **not** cite as observed. |
+| RL-MAP-LANTERN | Lantern Cut arena | `assumption` | none | VF5-WP6 product contract; **not** observed on Y8 this session | 2026-08-31 | compact backstreet, fire-escape, clothesline, gutter water | original name | Do **not** cite as observed. |
+| RL-MAP-GAUGE | Gauge Deck arena | `assumption` | none | VF5-WP6 product contract; **not** observed on Y8 this session | 2026-08-31 | wide training floor, loft rails, observation lift | original name | Do **not** cite as observed. |
+| RL-MAP-VS-ROSTER | Six-map VS selection | `assumption` | none | VF5-WP6 product contract; **not** observed on Y8 this session | 2026-08-31 | stable six-id VS cycle; Stage stays four | order | Do **not** cite as observed. |
 
 ### Item / combat loop
 
@@ -179,7 +182,7 @@ invariants. Calibrate later with traces (VF1-WP3+).
 | RL-DELTA-SKINS | **Change** | Fighter look / names | Original helmet-crew skins; no Jeff/Funnyman/etc. | No character or sprite rip. |
 | RL-DELTA-AUDIO | **Change** | Music / SFX | Procedural original tones (`NOTICE.md`) | No Y8/Newgrounds audio rip. |
 | RL-DELTA-ENGINE | **Change** | Runtime | Godot 4.7.1-stable Windows | Reference is Flash/HTML5 browser; not a dependency. |
-| RL-DELTA-MAP-NAMES | **Change** | Display map names | Rooftops display is **Skyline Relay** (VF5-WP2). Storage display is **Pallet Annex** (VF5-WP3). Police display is **Signal Court** (VF5-WP4). Hazardous display is **Vitriol Sump** (VF5-WP5). | Plan §3.3: names must be original. Internal ids stay rooftops/storage/police/hazardous. |
+| RL-DELTA-MAP-NAMES | **Change** | Display map names | Rooftops display is **Skyline Relay** (VF5-WP2). Storage display is **Pallet Annex** (VF5-WP3). Police display is **Signal Court** (VF5-WP4). Hazardous display is **Vitriol Sump** (VF5-WP5). Lantern display is **Lantern Cut** (VF5-WP6). Gauge display is **Gauge Deck** (VF5-WP6). | Plan §3.3: names must be original. Internal ids stay rooftops/storage/police/hazardous/lantern/gauge. |
 | RL-DELTA-MAP-GEO | **Change** | Coordinates, landmarks, tiles | Echo functional beats (pit, ladder, cover, platforms); original tiles and grids | No collision-map rip. If a later pass is too close for commercial release, stop for legal review. Agents must not self-certify fair use. |
 | RL-DELTA-LOOP | **Keep** | Side-view chaotic arena; guns + melee + nades; 1P/2P; PVP/PVE | Functional target for VF2–VF6 | Mechanics/genre ideas; not assets. |
 | RL-DELTA-CTRL-LAYOUT | **Keep (intent)** | Split keyboard P1 arrows+N/M/, P2 WASD+1/2/3 | Already in `input_actions.gd` | Cite RL-CTRL-* . Hold-to-aim stays assumption (RL-CTRL-HOLD-AIM). |
@@ -772,7 +775,8 @@ stays `ledger:RL-SIM-FIXED-60` (`assumption`).
 
 Product contract: Void Cut overlap kills with cause `pit`; Acid Trench
 ticks 12 HP / 8 ticks then death cause `damage`; Wash Channel sets
-`wet` and extinguishes burn; Mill Rotor ticks 8 HP / 10 ticks and
+`wet`, extinguishes burn, slows walk, blocks sprint, and cuts jump;
+Mill Rotor ticks 8 HP / 10 ticks and
 spins 6 deg/tick; Drop Well walk-off applies fall damage while dive
 landing is immune; spawn AABBs stay off instant/toxic/rotor; pause
 freezes spin; restart rebuilds env at rest. ArenaSpec lists hazards
@@ -785,7 +789,7 @@ Official proof uses `apply_frames` plus live InputEvent inject.
 |---|---|---|---|---|---|---|---|---|
 | RL-ENV-INSTANT | Instant death zone | `assumption` | none | VF4-WP5 product contract; **not** observed on Y8 this session | 2026-08-30 | Void Cut walk-in dies cause pit | AABB 48×16 | Do **not** cite as observed. |
 | RL-ENV-DEFER | Deferred toxic ticks | `assumption` | none | VF4-WP5 product contract; **not** observed on Y8 this session | 2026-08-30 | Acid Trench enter/damage/exit; stay-to-death cause damage | 12 / 8 | Do **not** cite as observed. |
-| RL-ENV-WATER | Water extinguish | `assumption` | none | VF4-WP5 product contract; **not** observed on Y8 this session | 2026-08-30 | Wash Channel sets wet and clears burn | env.json | Do **not** cite as observed. |
+| RL-ENV-WATER | Water extinguish | `assumption` | none | VF4-WP5 product contract; **not** observed on Y8 this session | 2026-08-30 | Wash Channel sets wet, clears burn, slows walk, blocks sprint, cuts jump | env.json wet_walk_mul/wet_jump_mul | Do **not** cite as observed. |
 | RL-ENV-ROTOR | Windmill / mill machine | `assumption` | none | VF4-WP5 product contract; **not** observed on Y8 this session | 2026-08-30 | Mill Shaft overlap ticks + spin | 8 / 10 / 6° | Do **not** cite as observed. |
 | RL-ENV-SPAWN | Safe spawn zones | `assumption` | none | VF4-WP5 product contract; **not** observed on Y8 this session | 2026-08-30 | P/1 AABB not in instant/toxic/rotor | spawn AABB | Do **not** cite as observed. |
 | RL-ENV-ARENA | ArenaSpec hazard list | `assumption` | none | VF4-WP5 product contract; **not** observed on Y8 this session | 2026-08-30 | live maps pit/fall; machines on fixtures | ArenaSpec | Do **not** cite as observed. |
@@ -954,4 +958,30 @@ enough to Y8 to ship.
 | ID | Topic | Class | Conf. | Source | When | Behavior to reproduce | Tuning-only | Notes |
 |---|---|---|---|---|---|---|---|---|
 | RL-MAP-SUMP | Vitriol Sump arena | `assumption` | none | VF5-WP5 product contract; **not** observed on Y8 this session | 2026-08-31 | isolated pipes, toxic pool, ladders, hanging cargo, telegraph | original name | Do **not** cite as observed. |
+
+---
+
+## VF5-WP6 six-map VS roster (not a play observation)
+
+Dated 2026-08-31 Asia/Saigon. No in-game Y8 play. No HTML5/Flash
+package. Sidecar: `docs/vs_roster.md`, `docs/lantern.md`,
+`docs/gauge.md`. Official remint `run_id` is
+`VF5WP6-20260831-ASIA-SAIGON-02`. `-01` is void. Do **not** remint
+`-01` or `-02`.
+
+Lantern Cut stays `ledger:RL-MAP-LANTERN` (`assumption`). Gauge Deck
+stays `ledger:RL-MAP-GAUGE` (`assumption`). VS roster stays
+`ledger:RL-MAP-VS-ROSTER` (`assumption`). Graph stay
+`ledger:RL-MAP-GRAPH` (`assumption`). Hold-to-aim stays
+`ledger:RL-CTRL-HOLD-AIM` (`assumption`). Y8 observation stays
+`ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). 60 Hz stays
+`ledger:RL-SIM-FIXED-60` (`assumption`). Display names stay
+`ledger:RL-DELTA-MAP-NAMES`. Stage stays four ids. Draft Yard is
+author-only. Do **not** cite as observed.
+
+| ID | Topic | Class | Conf. | Source | When | Behavior to reproduce | Tuning-only | Notes |
+|---|---|---|---|---|---|---|---|---|
+| RL-MAP-LANTERN | Lantern Cut arena | `assumption` | none | VF5-WP6 product contract; **not** observed on Y8 this session | 2026-08-31 | compact backstreet, fire-escape, clothesline, gutter water | original name | Do **not** cite as observed. |
+| RL-MAP-GAUGE | Gauge Deck arena | `assumption` | none | VF5-WP6 product contract; **not** observed on Y8 this session | 2026-08-31 | wide training floor, loft rails, observation lift | original name | Do **not** cite as observed. |
+| RL-MAP-VS-ROSTER | Six-map VS selection | `assumption` | none | VF5-WP6 product contract; **not** observed on Y8 this session | 2026-08-31 | stable six-id VS cycle; Stage stays four | order | Do **not** cite as observed. |
 

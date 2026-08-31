@@ -38,11 +38,19 @@
   "signal_class": "assumption",
   "sump_ledger": "RL-MAP-SUMP",
   "sump_class": "assumption",
+  "lantern_ledger": "RL-MAP-LANTERN",
+  "lantern_class": "assumption",
+  "gauge_ledger": "RL-MAP-GAUGE",
+  "gauge_class": "assumption",
+  "vs_ledger": "RL-MAP-VS-ROSTER",
+  "vs_class": "assumption",
   "maps": {
     "rooftops": "res://data/maps/arenas/rooftops.json",
     "storage": "res://data/maps/arenas/storage.json",
     "police": "res://data/maps/arenas/police.json",
     "hazardous": "res://data/maps/arenas/hazardous.json",
+    "lantern": "res://data/maps/arenas/lantern.json",
+    "gauge": "res://data/maps/arenas/gauge.json",
     "fx_map_author": "res://data/maps/arenas/fx_map_author.json"
   }
 }

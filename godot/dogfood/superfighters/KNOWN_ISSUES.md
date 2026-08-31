@@ -225,12 +225,24 @@ First playable slice. Not G6. Not 60/60.
   body positions. Toxic is placed because this WP asks for it.
   Dive/roll invuln does not cancel toxic. P2/bot routes are
   **smoke** (preset ladder / short chase), not AI or Y8 parity.
-  Water stays fixture-only. Signal Court rotor is not reminted.
+  Water stays fixture-only on Stage maps. Signal Court rotor is not reminted.
   Unused prior lifts stay honesty nits. Jump envelope stays
   product tuning. No new Y8 play. Not a VF7 art rewrite.
   Q0 (31-8): repo-root `tmp_sf*` / `tmp_y8*` / `tmp_shot*` and
   sibling web dumps were hashed without reading and moved out
   of this tree. See `docs/provenance.md`.
+- VF5-WP6 ships a six-map VS roster as assumption
+  (`ledger:RL-MAP-VS-ROSTER`, `ledger:RL-MAP-LANTERN`,
+  `ledger:RL-MAP-GAUGE`): Skyline Relay, Pallet Annex, Signal
+  Court, Vitriol Sump, **Lantern Cut**, **Gauge Deck**. Stage
+  stays four ids. Draft Yard stays author-only. Official proof
+  is InputFrame `apply_frames` unique beats (cover, cargo/door,
+  rotor, toxic pickup, gutter water loco, lift ride). P2/bot routes
+  are **smoke**, not AI or Y8 parity. Water is live on Lantern
+  Cut only and changes walk/sprint. Jump envelope stays product
+  tuning. Art still VF7.
+  No new Y8 play. Overlay Q2 854×480 contact sheet is not a
+  second official size.
 - VF3-WP4 ships grenade hold/release throw, gravity arc, bounce,
   fuse, radial falloff, owner skip, one explosion, timeout
   cleanup, and swept nade collision as assumption

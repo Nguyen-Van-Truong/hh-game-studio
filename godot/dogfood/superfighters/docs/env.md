@@ -27,10 +27,11 @@ Deferred toxic (`ledger:RL-ENV-DEFER`): acid contact, then
 `take_env_tick` every 8 ticks (12 HP). Death cause is `damage`.
 Melee invuln does not grant.
 
-Water (`ledger:RL-ENV-WATER`): overlap sets `wet` and extinguishes
-burn. Selected in `env.json` (`water_extinguish: true`). Roll
-extinguish stays selected in `hazard.json`. `hazard.json`
-`water_selected` stays **false**.
+Water (`ledger:RL-ENV-WATER`): overlap sets `wet`, extinguishes
+burn, slows walk (`wet_walk_mul`), cuts jump (`wet_jump_mul`), and
+blocks sprint. Selected in `env.json` (`water_extinguish: true`).
+Values are product tuning. Roll extinguish stays selected in
+`hazard.json`. `hazard.json` `water_selected` stays **false**.
 
 Rotor (`ledger:RL-ENV-ROTOR`): mill overlap ticks every 10 ticks
 (8 HP) and advances 6 deg/tick. First hit is at contact count 10.
@@ -66,7 +67,8 @@ Pallet Annex (VF5-WP3) places cover, hanging cargo, door, and lift.
 Signal Court (VF5-WP4) places a shootable rotor plus window cover,
 door, and lift because that WP asks for them. Vitriol Sump (VF5-WP5)
 places a wide live toxic pool (`acid_trench`) because this WP asks
-for it. Water stays fixture-only. Character/map readability art is VF7.
+for it. Lantern Cut (VF5-WP6) places live wash gutters. Water stays
+fixture-only on Stage maps. Character/map readability art is VF7.
 
 DoD window stills wait for `frame_post_draw` after the matching
 `start_fight` and after the frames that wet, spin, acid, kill, or
