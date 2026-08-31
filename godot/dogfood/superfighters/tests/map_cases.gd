@@ -87,6 +87,10 @@ static func schema_and_data() -> PackedStringArray:
 		errors.append("DATA storage display name must be Pallet Annex")
 	if Maps.display_name("police") != "Signal Court":
 		errors.append("DATA police display name must be Signal Court")
+	if Maps.display_name("hazardous") != "Vitriol Sump":
+		errors.append("DATA hazardous display name must be Vitriol Sump")
+	if Maps.display_name("hazardous") == "Hazardous":
+		errors.append("DATA must retire Hazardous display")
 	if Maps.display_name("fx_map_author").to_lower().contains("superfighter"):
 		errors.append("DATA display name uses Superfighters trademark")
 	var live: PackedStringArray = PackedStringArray(["rooftops", "storage", "police", "hazardous"])

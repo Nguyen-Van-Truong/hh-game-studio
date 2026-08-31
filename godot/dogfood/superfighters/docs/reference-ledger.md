@@ -148,6 +148,7 @@ invariants. Calibrate later with traces (VF1-WP3+).
 | RL-MAP-COUNT-4 | Four maps (2011 NG) | `secondary` | med | RL-SRC-NG-INDEX “13 weapons and 4 maps” | 2026-08-29 | Early public build had 4 maps | — | Conflicts with 6-name wiki list; both are secondary. |
 | RL-MAP-COUNT-6 | Six named arenas | `secondary` | med | RL-SRC-WIKI-INDEX | 2026-08-29 | Functional archetypes: Storage, Rooftops, Police Station, Hazardous, Backstreets, Testing Floor | geometry | **Names are reference archetypes only.** VF display names must be original (plan §3.3). |
 | RL-MAP-LANDMARKS | Pits, cover, ladders | `assumption` | low | plan §1.1 / first-playable grids; **not** seen in play this WP | 2026-08-29 | Keep functional beats, change size/landmarks/tiles | cell sizes | No wiki landmark page was retrieved. Do not claim observed rooftop/warehouse coordinates. |
+| RL-MAP-SUMP | Vitriol Sump arena | `assumption` | none | VF5-WP5 product contract; **not** observed on Y8 this session | 2026-08-31 | isolated pipes, toxic pool, ladders, hanging cargo, telegraph | original name | Do **not** cite as observed. |
 
 ### Item / combat loop
 
@@ -178,7 +179,7 @@ invariants. Calibrate later with traces (VF1-WP3+).
 | RL-DELTA-SKINS | **Change** | Fighter look / names | Original helmet-crew skins; no Jeff/Funnyman/etc. | No character or sprite rip. |
 | RL-DELTA-AUDIO | **Change** | Music / SFX | Procedural original tones (`NOTICE.md`) | No Y8/Newgrounds audio rip. |
 | RL-DELTA-ENGINE | **Change** | Runtime | Godot 4.7.1-stable Windows | Reference is Flash/HTML5 browser; not a dependency. |
-| RL-DELTA-MAP-NAMES | **Change** | Display map names | Rooftops display is **Skyline Relay** (VF5-WP2). Storage display is **Pallet Annex** (VF5-WP3). Police display is **Signal Court** (VF5-WP4). Hazardous still echoes the first-playable name. | Plan §3.3: names must be original. Hazardous remains debt until VF5-WP5+. |
+| RL-DELTA-MAP-NAMES | **Change** | Display map names | Rooftops display is **Skyline Relay** (VF5-WP2). Storage display is **Pallet Annex** (VF5-WP3). Police display is **Signal Court** (VF5-WP4). Hazardous display is **Vitriol Sump** (VF5-WP5). | Plan §3.3: names must be original. Internal ids stay rooftops/storage/police/hazardous. |
 | RL-DELTA-MAP-GEO | **Change** | Coordinates, landmarks, tiles | Echo functional beats (pit, ladder, cover, platforms); original tiles and grids | No collision-map rip. If a later pass is too close for commercial release, stop for legal review. Agents must not self-certify fair use. |
 | RL-DELTA-LOOP | **Keep** | Side-view chaotic arena; guns + melee + nades; 1P/2P; PVP/PVE | Functional target for VF2–VF6 | Mechanics/genre ideas; not assets. |
 | RL-DELTA-CTRL-LAYOUT | **Keep (intent)** | Split keyboard P1 arrows+N/M/, P2 WASD+1/2/3 | Already in `input_actions.gd` | Cite RL-CTRL-* . Hold-to-aim stays assumption (RL-CTRL-HOLD-AIM). |
@@ -904,8 +905,8 @@ Rotor stay `ledger:RL-ENV-ROTOR` (`assumption`). Hold-to-aim
 stays `ledger:RL-CTRL-HOLD-AIM` (`assumption`). Y8 observation
 stays `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). 60 Hz stays
 `ledger:RL-SIM-FIXED-60` (`assumption`). `ledger:RL-NADE-PROP`
-stays `deferred`. Remaining display-name debt stays
-`ledger:RL-DELTA-MAP-NAMES` for Hazardous.
+stays `deferred`. Display-name debt for Hazardous is resolved in
+VF5-WP5 as **Vitriol Sump** (`ledger:RL-DELTA-MAP-NAMES`).
 
 Product contract: original multi-floor station with an open
 courtyard, a plate door shortcut, west/east ladders, a court
@@ -919,4 +920,38 @@ the layout is close enough to Y8 to ship.
 | ID | Topic | Class | Conf. | Source | When | Behavior to reproduce | Tuning-only | Notes |
 |---|---|---|---|---|---|---|---|---|
 | RL-MAP-SIGNAL | Signal Court arena | `assumption` | none | VF5-WP4 product contract; **not** observed on Y8 this session | 2026-08-30 | 3 floors, courtyard, door, ladders, shootable rotor, panes | original name | Do **not** cite as observed. |
+
+---
+
+## VF5-WP5 Vitriol Sump (not a play observation)
+
+Dated 2026-08-31 Asia/Saigon. No in-game Y8 play. No HTML5/Flash
+package. Sidecar: `docs/sewer.md` and
+`docs/evidence/VF5WP5-20260831-ASIA-SAIGON-07/`.
+That `run_id` is unique. WIP `…20260830…-01` and
+`…20260831…-01` through `-06` are superseded (`-06` packer
+treated `used_step_fixed=0` as falsy). Do **not** remint
+those ids.
+
+Vitriol Sump stays `ledger:RL-MAP-SUMP` (`assumption`). Graph
+stay `ledger:RL-MAP-GRAPH` (`assumption`). Toxic stay
+`ledger:RL-ENV-DEFER` (`assumption`). Hold-to-aim stays
+`ledger:RL-CTRL-HOLD-AIM` (`assumption`). Y8 observation stays
+`ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). 60 Hz stays
+`ledger:RL-SIM-FIXED-60` (`assumption`). `ledger:RL-NADE-PROP`
+stays `deferred`. Hazardous display is retired to **Vitriol Sump**
+(`ledger:RL-DELTA-MAP-NAMES`). Internal id stays `hazardous`.
+
+Product contract: original sewer/sump with isolated pipes, a wide
+vitriol pool, west/east ladders, painted telegraph tiles, hanging
+cargo, and an open pit. Jump envelope is product tuning (10 / 4);
+live apex is about 3.4 tiles. No copied billboard. Water stays
+fixture-only. Signal Court rotor is VF5-WP4 and is not reminted.
+Skyline Relay, Pallet Annex, and Signal Court are unchanged. Do
+**not** cite as observed. Do not self-conclude the layout is close
+enough to Y8 to ship.
+
+| ID | Topic | Class | Conf. | Source | When | Behavior to reproduce | Tuning-only | Notes |
+|---|---|---|---|---|---|---|---|---|
+| RL-MAP-SUMP | Vitriol Sump arena | `assumption` | none | VF5-WP5 product contract; **not** observed on Y8 this session | 2026-08-31 | isolated pipes, toxic pool, ladders, hanging cargo, telegraph | original name | Do **not** cite as observed. |
 

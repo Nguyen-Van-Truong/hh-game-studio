@@ -19,6 +19,7 @@ const MapCasesScript: GDScript = preload("res://tests/map_cases.gd")
 const RooftopCasesScript: GDScript = preload("res://tests/rooftop_cases.gd")
 const WarehouseCasesScript: GDScript = preload("res://tests/warehouse_cases.gd")
 const StationCasesScript: GDScript = preload("res://tests/station_cases.gd")
+const SewerCasesScript: GDScript = preload("res://tests/sewer_cases.gd")
 const _Combat: GDScript = preload("res://src/sim/combat.gd")
 
 var _fails: PackedStringArray = PackedStringArray()
@@ -50,6 +51,7 @@ var _mapschema: String = "unproven"
 var _rooftop: String = "unproven"
 var _warehouse: String = "unproven"
 var _station: String = "unproven"
+var _sewer: String = "unproven"
 
 
 func _initialize() -> void:
@@ -93,6 +95,7 @@ func _boot() -> void:
 	await _test_rooftop(app)
 	await _test_warehouse(app)
 	await _test_station(app)
+	await _test_sewer(app)
 	if _fails.is_empty():
 		_no_err = "proven"
 	_emit()
@@ -1468,6 +1471,64 @@ func _test_station(app: App) -> void:
 		_station = "proven"
 
 
+func _test_sewer(app: App) -> void:
+	var errors: PackedStringArray = await SewerCasesScript.run_all(app)
+	var i: int = 0
+	while i < errors.size():
+		_fail("SEWER %s" % String(errors[i]))
+		i += 1
+	var name_v: String = str(SewerCasesScript.outcome_name.get("verdict", "unproven"))
+	var graph: String = str(SewerCasesScript.outcome_graph.get("verdict", "unproven"))
+	var toxic: String = str(SewerCasesScript.outcome_toxic.get("verdict", "unproven"))
+	var dive: String = str(SewerCasesScript.outcome_dive.get("verdict", "unproven"))
+	var roll: String = str(SewerCasesScript.outcome_roll.get("verdict", "unproven"))
+	var cargo: String = str(SewerCasesScript.outcome_cargo.get("verdict", "unproven"))
+	var spawn: String = str(SewerCasesScript.outcome_spawn.get("verdict", "unproven"))
+	var camera: String = str(SewerCasesScript.outcome_camera.get("verdict", "unproven"))
+	var tactic: String = str(SewerCasesScript.outcome_tactic.get("verdict", "unproven"))
+	var p1: String = str(SewerCasesScript.outcome_p1.get("verdict", "unproven"))
+	var p2: String = str(SewerCasesScript.outcome_p2.get("verdict", "unproven"))
+	var bot: String = str(SewerCasesScript.outcome_bot.get("verdict", "unproven"))
+	var zone: String = str(SewerCasesScript.outcome_zone.get("verdict", "unproven"))
+	var live: String = str(SewerCasesScript.outcome_live.get("verdict", "unproven"))
+	var replay: String = str(SewerCasesScript.outcome_replay.get("verdict", "unproven"))
+	var variants: String = str(SewerCasesScript.outcome_variants.get("verdict", "unproven"))
+	if name_v != "pass":
+		_fail("SEWER NAME outcome is %s" % name_v)
+	if graph != "pass":
+		_fail("SEWER GRAPH outcome is %s" % graph)
+	if toxic != "pass":
+		_fail("SEWER TOXIC outcome is %s" % toxic)
+	if dive != "pass":
+		_fail("SEWER DIVE outcome is %s" % dive)
+	if roll != "pass":
+		_fail("SEWER ROLL outcome is %s" % roll)
+	if cargo != "pass":
+		_fail("SEWER CARGO outcome is %s" % cargo)
+	if spawn != "pass":
+		_fail("SEWER SPAWN outcome is %s" % spawn)
+	if camera != "pass":
+		_fail("SEWER CAMERA outcome is %s" % camera)
+	if tactic != "pass":
+		_fail("SEWER TACTIC outcome is %s" % tactic)
+	if p1 != "pass":
+		_fail("SEWER P1 outcome is %s" % p1)
+	if p2 != "pass":
+		_fail("SEWER P2 outcome is %s" % p2)
+	if bot != "pass":
+		_fail("SEWER BOT outcome is %s" % bot)
+	if zone != "pass":
+		_fail("SEWER ZONE outcome is %s" % zone)
+	if live != "pass":
+		_fail("SEWER LIVE outcome is %s" % live)
+	if replay != "match":
+		_fail("SEWER REPLAY outcome is %s" % replay)
+	if variants != "pass":
+		_fail("SEWER VARIANTS outcome is %s" % variants)
+	if _count_prefix("SEWER ") == 0:
+		_sewer = "proven"
+
+
 func _emit() -> void:
 	print("HH_VF_PATH title→fight→win/lose→restart")
 	print(
@@ -1830,6 +1891,30 @@ func _emit() -> void:
 			StationCasesScript.used_apply_frames_succeeded,
 			StationCasesScript.used_apply_frames_attempted,
 			_station,
+		]
+	)
+	print(
+		"HH_VF_SEWER NAME=%s NAME_SOURCE=outcome_name GRAPH=%s GRAPH_SOURCE=outcome_graph TOXIC=%s TOXIC_SOURCE=outcome_toxic DIVE=%s DIVE_SOURCE=outcome_dive ROLL=%s ROLL_SOURCE=outcome_roll CARGO=%s CARGO_SOURCE=outcome_cargo SPAWN=%s CAMERA=%s TACTIC=%s TACTIC_SOURCE=outcome_tactic P1=%s P1_SOURCE=outcome_p1 P2=%s P2_COVERAGE=smoke BOT=%s BOT_COVERAGE=smoke ZONE=%s LIVE=%s REPLAY=%s REPLAY_SOURCE=outcome_replay VARIANTS=%s APPLY=%d/%d status=%s"
+		% [
+			str(SewerCasesScript.outcome_name.get("verdict", "unproven")),
+			str(SewerCasesScript.outcome_graph.get("verdict", "unproven")),
+			str(SewerCasesScript.outcome_toxic.get("verdict", "unproven")),
+			str(SewerCasesScript.outcome_dive.get("verdict", "unproven")),
+			str(SewerCasesScript.outcome_roll.get("verdict", "unproven")),
+			str(SewerCasesScript.outcome_cargo.get("verdict", "unproven")),
+			str(SewerCasesScript.outcome_spawn.get("verdict", "unproven")),
+			str(SewerCasesScript.outcome_camera.get("verdict", "unproven")),
+			str(SewerCasesScript.outcome_tactic.get("verdict", "unproven")),
+			str(SewerCasesScript.outcome_p1.get("verdict", "unproven")),
+			str(SewerCasesScript.outcome_p2.get("verdict", "unproven")),
+			str(SewerCasesScript.outcome_bot.get("verdict", "unproven")),
+			str(SewerCasesScript.outcome_zone.get("verdict", "unproven")),
+			str(SewerCasesScript.outcome_live.get("verdict", "unproven")),
+			str(SewerCasesScript.outcome_replay.get("verdict", "unproven")),
+			str(SewerCasesScript.outcome_variants.get("verdict", "unproven")),
+			SewerCasesScript.used_apply_frames_succeeded,
+			SewerCasesScript.used_apply_frames_attempted,
+			_sewer,
 		]
 	)
 	print(

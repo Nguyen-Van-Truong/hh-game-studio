@@ -122,9 +122,37 @@
     },
     "hazardous": {
       "id": "hazardous",
-      "display_name": "Hazardous",
-      "hazards": ["pit", "fall"],
-      "notes": "Wide pit kill-plane and fall policy. Machines stay on fixtures (VF5)."
+      "display_name": "Vitriol Sump",
+      "hazards": ["pit", "fall", "toxic"],
+      "notes": "Original sewer/sump arena. Wide vitriol pool, isolated pipes, ladders, hanging cargo, painted hazard telegraph, safe pipe crossing. No unused lift. No water/rotor.",
+      "elevations": 4,
+      "combat_zones": [
+        {"id": "west_bank", "x": 0, "y": 8, "w": 10, "h": 1},
+        {"id": "west_span", "x": 15, "y": 8, "w": 6, "h": 1},
+        {"id": "west_high", "x": 6, "y": 1, "w": 8, "h": 1},
+        {"id": "west_mid", "x": 0, "y": 5, "w": 8, "h": 1},
+        {"id": "mid_west", "x": 14, "y": 4, "w": 13, "h": 1},
+        {"id": "mid_east", "x": 29, "y": 4, "w": 13, "h": 1},
+        {"id": "mid_low", "x": 25, "y": 8, "w": 8, "h": 1},
+        {"id": "east_high", "x": 50, "y": 1, "w": 8, "h": 1},
+        {"id": "east_bank", "x": 55, "y": 8, "w": 7, "h": 1},
+        {"id": "sump_lip", "x": 16, "y": 10, "w": 11, "h": 1},
+        {"id": "sump_wade", "x": 20, "y": 12, "w": 8, "h": 1}
+      ],
+      "landmarks": [
+        {"id": "vitriol_pool", "kind": "toxic"},
+        {"id": "sump_pipes", "kind": "pipes"},
+        {"id": "sump_cargo", "kind": "hanging_cargo"},
+        {"id": "west_ladder", "kind": "ladder"},
+        {"id": "east_ladder", "kind": "ladder"},
+        {"id": "west_gap", "kind": "pit", "x": 12, "y": 14}
+      ],
+      "weapon_risk": [
+        {"cell": [10, 1], "risk": "high"},
+        {"cell": [18, 4], "risk": "pipe"},
+        {"cell": [36, 4], "risk": "pipe"},
+        {"cell": [53, 1], "risk": "high"}
+      ]
     },
     "fx_env_instant": {
       "id": "fx_env_instant",

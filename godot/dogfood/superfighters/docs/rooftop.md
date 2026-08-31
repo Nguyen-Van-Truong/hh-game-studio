@@ -36,7 +36,8 @@ Machines, water, toxic, lifts, and doors stay fixture-only. Ladders
 satisfy the ladder / elevator / moving-route beat.
 
 Storage display is now **Pallet Annex** (VF5-WP3). Police display is
-now **Signal Court** (VF5-WP4). Hazardous remains debt until VF5-WP5+.
+now **Signal Court** (VF5-WP4). Hazardous display is now
+**Vitriol Sump** (VF5-WP5).
 
 ## Verify is live locomotion
 

@@ -26,8 +26,8 @@ The live grid keeps the VF5-WP1 layered source. This WP adds:
 - a left courtyard pit
 - original name/art only
 
-Skyline Relay and Pallet Annex are unchanged. Hazardous display
-remains debt until VF5-WP5+ (`ledger:RL-DELTA-MAP-NAMES`).
+Skyline Relay and Pallet Annex are unchanged. Hazardous display is
+now **Vitriol Sump** (VF5-WP5, `ledger:RL-DELTA-MAP-NAMES`).
 
 ## Verify is live locomotion
 

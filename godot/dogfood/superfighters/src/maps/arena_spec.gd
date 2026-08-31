@@ -145,8 +145,21 @@ static func validate_payload(row: Dictionary) -> PackedStringArray:
 		errors.append("police must declare pit")
 	if not _to_packed(_dict(all_maps.get("police", {})).get("hazards", [])).has("rotor"):
 		errors.append("Signal Court must declare rotor")
-	if not _to_packed(_dict(all_maps.get("hazardous", {})).get("hazards", [])).has("pit"):
+	var sump: Dictionary = _dict(all_maps.get("hazardous", {}))
+	if str(sump.get("display_name", "")) != "Vitriol Sump":
+		errors.append("hazardous display name must be Vitriol Sump")
+	if int(sump.get("elevations", 0)) < 3:
+		errors.append("Vitriol Sump must declare 3+ elevations")
+	if combat_zones("hazardous").size() < 6:
+		errors.append("Vitriol Sump must list combat zones")
+	if landmarks("hazardous").is_empty():
+		errors.append("Vitriol Sump must list landmarks")
+	_append(errors, _validate_sump_zones(sump))
+	_append(errors, validate_weapon_cells_safe("hazardous"))
+	if not _to_packed(sump.get("hazards", [])).has("pit"):
 		errors.append("hazardous must declare pit")
+	if not _to_packed(sump.get("hazards", [])).has("toxic"):
+		errors.append("Vitriol Sump must declare toxic")
 	if not _to_packed(_dict(all_maps.get("fx_env_instant", {})).get("hazards", [])).has("instant"):
 		errors.append("Void Cut must declare instant")
 	if not _to_packed(_dict(all_maps.get("fx_env_toxic", {})).get("hazards", [])).has("toxic"):
@@ -253,6 +266,35 @@ static func _validate_signal_zones(court: Dictionary) -> PackedStringArray:
 		i += 1
 	if seen_y.size() < 3:
 		errors.append("Signal Court combat zones must span 3+ elevations")
+	return errors
+
+
+static func _validate_sump_zones(sump: Dictionary) -> PackedStringArray:
+	var errors: PackedStringArray = PackedStringArray()
+	var seen_y: Dictionary = {}
+	var need: PackedStringArray = PackedStringArray([
+		"west_bank", "west_span", "west_high", "west_mid", "mid_west", "mid_east",
+		"mid_low", "east_high", "east_bank", "sump_lip", "sump_wade"
+	])
+	var found: Dictionary = {}
+	var zones: Array = _as_array(sump.get("combat_zones", []))
+	var i: int = 0
+	while i < zones.size():
+		var zone: Dictionary = _dict(zones[i])
+		var zid: String = str(zone.get("id", ""))
+		if zid == "":
+			errors.append("Vitriol Sump combat zone missing id")
+		found[zid] = true
+		seen_y[int(zone.get("y", -1))] = true
+		i += 1
+	i = 0
+	while i < need.size():
+		var zid: String = String(need[i])
+		if not found.has(zid):
+			errors.append("Vitriol Sump missing combat zone %s" % zid)
+		i += 1
+	if seen_y.size() < 3:
+		errors.append("Vitriol Sump combat zones must span 3+ elevations")
 	return errors
 
 

@@ -84,8 +84,7 @@ https://mythologicinteractive.com/Superfighters
 - Random-ish weapon spawns (~20s respawn): pipe, knife, baton, pistol,
   shotgun, uzi, Longarm, Thumper, grenade, Cinder Flask
 - VS 1P (vs bots), local VS 2P, and Stage (Skyline Relay → Pallet Annex →
-  Signal Court → Hazardous — Hazardous remains
-  `ledger:RL-DELTA-MAP-NAMES` debt)
+  Signal Court → Vitriol Sump)
 - Camera frames the whole arena
 - Title → fight → win/lose → restart; Escape / Start pause
 
@@ -95,8 +94,8 @@ ladders, cover) with original tiles. Live maps are layered JSON
 jump-through platform on the one-way layer. They are not ripped
 collision maps. VF5-WP2 renames the rooftops arena to **Skyline Relay**.
 VF5-WP3 renames the storage arena to **Pallet Annex**. VF5-WP4
-renames the police arena to **Signal Court**. Hazardous stays debt
-until later VF5 WPs.
+renames the police arena to **Signal Court**. VF5-WP5 renames the
+hazardous arena to **Vitriol Sump**.
 
 ---
 

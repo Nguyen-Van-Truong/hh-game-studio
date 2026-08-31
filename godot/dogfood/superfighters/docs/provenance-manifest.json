@@ -1,0 +1,2944 @@
+{
+  "schema": "vault-fighters.provenance.v1",
+  "title": "Vault Fighters",
+  "product_root": "godot/dogfood/superfighters",
+  "recorded_at": "2026-08-31T08:17:26+07:00",
+  "q0": {
+    "contents_read_for_re": false,
+    "used_as_assets": false,
+    "committed": false,
+    "see": "docs/provenance.md"
+  },
+  "y8_parity_claimed": false,
+  "entries": [
+    {
+      "path": ".gitignore",
+      "sha256": "5b839f86781e4a3955fdcbe9fc4b87f106af5919141160b576b299a56798fe39",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/art/actor_blue.png",
+      "sha256": "127e589e44ef7545269379efe5870073165c6902909e5d367790fdc6e8f124af",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/art/actor_gold.png",
+      "sha256": "bdcac6922d5e13e29d5e16079b12143366d9c86f5580fb10710effeaa07400be",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/art/actor_red.png",
+      "sha256": "54a67a7451e132299739fcea3e9183500e4deb3fce9be77f0583b18174b93020",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/art/actor_teal.png",
+      "sha256": "1e20ed01715d2fc6d02c68b94c3b1e49af5ddae4dd888f62b78c277c5be977d5",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/art/item_baton.png",
+      "sha256": "ad04d027983f986ffbb9f52923786340f53f37b744c844f601d836a8f9a9a106",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/art/item_cinder.png",
+      "sha256": "c17f9be3318b6265376fe546eef5d3c15e1f40de6c315ee1822f789132f61d07",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/art/item_grenade.png",
+      "sha256": "bf57fd1d99c5aef393f2d3cd7035773b625850ecbd57a6cbdc2678c54cb7ace8",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/art/item_knife.png",
+      "sha256": "24f0a17f080719fae4cabd977e4b8e63630db36110b33efaeb26d3cf84f6bf93",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/art/item_launcher.png",
+      "sha256": "6c86add89b83c32f6080edbf3f0af197dbc19f90c65a889d5bcee9bbebef2448",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/art/item_pipe.png",
+      "sha256": "5415a4a427948cd69b377d8758d3f3ca322e91b5ea72f4ebcbb2267822ca5899",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/art/item_pistol.png",
+      "sha256": "cdcb82057238e681b5107851a4bc27bbdd8c7a144a11fd06314dd640f5f7b5d4",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/art/item_rifle.png",
+      "sha256": "70b99192aa25a09ac2d0a2d41324b8a84fff5f0e1626fff79bc45914850e2354",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/art/item_shotgun.png",
+      "sha256": "7011852bd2a14aa3254435599ec080751c49797ed1b8a7dbb2908edb303ae9af",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/art/item_uzi.png",
+      "sha256": "f6302e0bb2aa97b4dba993b2cfb1662090043dd216334ae9fc8745516e95cf82",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/art/prop_barrel.png",
+      "sha256": "37c7edf91eac822457df7a49032e70ca351a9ab3f71b9ee35f08b235f4934b1a",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/art/prop_crate.png",
+      "sha256": "f3eccb2b6b7b4dbd3df5416d7f6fa1aa8f5d5dc362d264bbf661d49f7b05d09e",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/art/prop_door.png",
+      "sha256": "b034693479bb65af420b92f0ecdd01efbad88b2105049003d447352142e1d7b5",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/art/prop_glass.png",
+      "sha256": "38723ccfaa65a9f92b7583c155d90c4c4c73d3240610eedac6a8780dd9714ce7",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/art/prop_lift.png",
+      "sha256": "3c7ee283add43e5ffc71e90f593331a02d71c9258e5288763f38f7735dc3d289",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/art/prop_rotor.png",
+      "sha256": "cc0a72cb082828041e7dbc85e28e69c56dba7619979a4e48f9576d9f44e89108",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/art/prop_trigger.png",
+      "sha256": "af4f2709807f10ce02fdb5579e4d251fb7c8031a39ec97b59b2d43f0e8b04e38",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/art/zone_acid.png",
+      "sha256": "3abe54c3a0b8ef83e6563b7e5e34957138125a79a5ffeb50dc7615a62b4abdf6",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/art/zone_void.png",
+      "sha256": "eeb8a40b5eb509f1c166d4601b5fd3a2c695ee51922a4b213ab5b1d6c62dc900",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/art/zone_water.png",
+      "sha256": "9b7ddd1c784ce614837f8d225903186ca31ec2cd74941e53f50937f358890e03",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/ASSET_MANIFEST.json",
+      "sha256": "3770dad27bf9286115d614d2bcf4121ce94adac378fa8eafb40392c418b6ce27",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/audio/music_fight.wav",
+      "sha256": "05ecfcd29e8cf70a4961863af6b6d6aa616a2ec3167fd32b7f6e56e0e872ed96",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/audio/sfx_explode.wav",
+      "sha256": "0ef38d5d68d68e4a9378e596075d7d42f84acc6e55684af932569f2ba65ebe5e",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/audio/sfx_hit.wav",
+      "sha256": "9c25d8a7a1ff871e08a51fa12b7c9d1598644b91a680e091d86de7c5543de856",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/audio/sfx_jump.wav",
+      "sha256": "ed88ba2c1985054fc7f2d6761c56ebbf51937711c83311f4af42e0c9cdd7237e",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/audio/sfx_lose.wav",
+      "sha256": "3b1cebea25348b6370c5d8614302e98e511a2fceb30f80ee404349c913a499fb",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/audio/sfx_pickup.wav",
+      "sha256": "74d6ba63b6cb317636876924946c627db3b7e6b2915bad7d24fafeae5b7352ad",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/audio/sfx_punch.wav",
+      "sha256": "403789a689a7d3b35e0f3d50b9b819e0e1e7139a94173b325a8716d63006dc59",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/audio/sfx_roll.wav",
+      "sha256": "1547aa9e29fda176191dac0f797d1f1ce04d136141ab82e0daef3854dca8a2b7",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/audio/sfx_shoot.wav",
+      "sha256": "5632c4549eac3f791284c099a40f31acadcba631240be6120b6f820540683c01",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/audio/sfx_shotgun.wav",
+      "sha256": "d28ec3400423515b07c64d159ae939286fb74135e730c9322b900e2105aadb43",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/audio/sfx_win.wav",
+      "sha256": "a2578a272fb725e466eaa71ce7c427b326790a5431244cd1cffea72d1654889b",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/bg/bg_city.png",
+      "sha256": "6bb1fe95eb1c6b04fe3b6ef1b8ff9a31578cbbb7c454d2adb17ac606ce118d33",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/tiles/tile_ladder.png",
+      "sha256": "d745a5e657fd23f32c9650fefdd2ad6027df91bb89d0ea10d6f865e3a43f9679",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/tiles/tileset_arena.png",
+      "sha256": "99c1d8fac29cbd544e7ed256e34962d65ce41f8f26d3fd3f7d3090cb0c3c3ae2",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/ui/ui_icon_fist.png",
+      "sha256": "c86010461f0e721f0466d84d5785a9e63a749c5e9555390b2492290881492264",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/vfx/vfx_blood.png",
+      "sha256": "f5ace224344e70f6814fd3cdb2183236772c8fae39e380728a137bca1ebc614d",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/vfx/vfx_break.png",
+      "sha256": "e3d2985917359b74242fd285764cb0cd6913bd4dca571857c6cdb4f21d99f562",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/vfx/vfx_explode.png",
+      "sha256": "bc085e346eb2da0f3990b7ca61c40c4b3195f63e42a7e88c00873c905d03a4f2",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/vfx/vfx_fire.png",
+      "sha256": "e2477477c1bf2621d36563089ba4164e65ef331f0489c9096d211b3bc4d32fe4",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/vfx/vfx_muzzle.png",
+      "sha256": "b1a8429451580f0f44dc6ad6b58e451c4c894d7127dff6317bdb584b08a5c05c",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "assets/vfx/vfx_roll.png",
+      "sha256": "c9df0f4ad0ec266142a2a5aebe82787278a5ca0b46e1ce72ae132e5bdb7208b3",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "data/input/default_bindings.json",
+      "sha256": "07f49e1596893da0acd01d1c10b4450280df060fdce2c79150ce0f8d8a96aa70",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "data/input/remap_schema.json",
+      "sha256": "9b91bc9788c1a32946388dc118c198220e777e91a764acdcf81aa8626954dd7c",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "data/maps/arena_spec.json",
+      "sha256": "13e00acaa1812ca9cb03bfe0af3ff89b8993a9541dcab2586df43ca1bb479d85",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "data/maps/arenas/fx_map_author.json",
+      "sha256": "5536a4ab9a8641be22ce0358646314056f143c37ea369f5a5d13db8285d9eaaa",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "data/maps/arenas/hazardous.json",
+      "sha256": "fcfb859e996a053c00cc6519b08cad4cd27d4611e1b40af716a11b9b90b6c5c7",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "data/maps/arenas/police.json",
+      "sha256": "cfd293b3dc499a56e2c56108039ed057d287aeb870ccba7607090d3a7284e80d",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "data/maps/arenas/rooftops.json",
+      "sha256": "50360c47c34604568552104e68d3d390350783759255f928bb631c950dd81aa6",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "data/maps/arenas/storage.json",
+      "sha256": "56a434570db152ed06f83566cb5124e6f51a9b30a6fbe8aaac00568cbde53f8d",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "data/maps/catalog.json",
+      "sha256": "4a88a965f051fe98860ea7bb9890da1002e0cfabefdd30fd7b4aead4189df73a",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "data/maps/schema.json",
+      "sha256": "72de9ae1d26cd5a7e9ab62cc229ee37cd67588a8abb31082ab95c7e8895b0b55",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "data/runtime/bridge.json",
+      "sha256": "1245c4cdf6a1e92f64f17ac15be7b9d1caa09a4ff4b2486173df91f215483762",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "data/runtime/schema.json",
+      "sha256": "4097087013a992417b1f52d542758e1e220fd03d505eaab9a7e1aa38f60c6c91",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "data/sim/aim.json",
+      "sha256": "0ffdbc874a8419fd1a17e3b547fa819e8dcf6fb900fce97859f8fcce9a281ed9",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "data/sim/balance.json",
+      "sha256": "9463bc10c075a0afd1cc8f94a1718b8aaa8535d02fc4581fbe02a8998e9b0f63",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "data/sim/collision_layers.json",
+      "sha256": "9c13884316a0fcac6d20206d0f6eb420a64d0a66fae26110d8bd3984b47e9e74",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "data/sim/combat.json",
+      "sha256": "10097a6407c228e3da91e8f69c81392ac8cbb4320ffd60e8edb3a122025c1e23",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "data/sim/event_order.json",
+      "sha256": "1f587a3d9c921f2a23c1afe09ac890d2b2e799d534ee17e4e5377e0fc9220689",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "data/sim/explosive.json",
+      "sha256": "9034cc1e38bf61f0336e0cfa48d41238bc495fa1172d3b753446999c681202e9",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "data/sim/input_actions.json",
+      "sha256": "cfd24bf261c9f3a5d1187b270a44916ea1c7b5c775f6108062973314627888a7",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "data/sim/locomotion.json",
+      "sha256": "c5137df25770d9d62419119c951e1da0bda20c318a795528860f4a481d571f51",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "data/sim/schema.json",
+      "sha256": "492ef957a6a7d453844d75c294448a0b7b6b9d73838eea6fe2f9d466604f4555",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "data/sim/trace.json",
+      "sha256": "2669c24006e1f615f0f2fe293e8b070063020c431812a803eb30d695059aea95",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "data/sim/traversal.json",
+      "sha256": "f17342bc59bfcc4445490ab099e35cb6bc829c225f53885fb531dd9f2f90abc0",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "data/weapons/roster.json",
+      "sha256": "896efaa7eb10541bf2a2cb76a30a4ad6f218990e003762cb311a75d93bc08b2a",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "data/weapons/schema.json",
+      "sha256": "f717bcfb98dc6a4c6a29ae6704edbc4ca4362bd326f9f1e7d0ca508faa582cdb",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "data/world/catalog.json",
+      "sha256": "a37a9a6a6ab32a07fe9f01d8c1b27df357588a715e707044a7e2ee3f2775860b",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "data/world/env.json",
+      "sha256": "8db6dc6813b3ff6150854480d7a2060f2b27fee66fbadd7ea962adb72125b1ef",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "data/world/hazard.json",
+      "sha256": "fd9b3b23af4abdcd44ea806beaa6a936f2f81102ece5f66eaa6d94f1595776da",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "data/world/moving.json",
+      "sha256": "7b3813ceee614fb70b43a3b1ea0dfb45b702593d908a880778223ca26eab27f4",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "data/world/schema.json",
+      "sha256": "a53c03064e4ef8f153b703e84cf89d26b27628f79d8cb60016d3a5d2db441184",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "default_bus_layout.tres",
+      "sha256": "952631fd01b92a8716453448c44297199c971cf8a1ad3dcbb5edc2f3dc66f341",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "docs/aim.md",
+      "sha256": "0c8f6b20b0b07ff080bc4f27d38fc8dbcdf174c4f50e4ef9d52bc6c0cd99f93e",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "docs/balance.md",
+      "sha256": "2c83438bff96ed42c5735620acaeb23038e9f77bfd45a17a9786e204fe4dd7ca",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "docs/baseline-manifest.json",
+      "sha256": "96cae5c5038ce8427d87f9f294665c2fe9f636faf00106fafcec9b2603f2e1c8",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "docs/baseline-manifest.sha256",
+      "sha256": "1114f6ea9b13fdbfc41f3a73039ac6cd53e4c71ecbaa97efee49ef6cbe1e3e9a",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "docs/break.md",
+      "sha256": "a3732ff1c0f3736792e8aab4e3d6d217cb339475c2f9db319c468585d3061685",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "docs/combat.md",
+      "sha256": "34e05228c7ba2048e551fa48176f62bd900e8c2c42ade986411c072a9e5e5320",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "docs/dive-kick.md",
+      "sha256": "d87873de0d19ba4348206ef30b1abfadc9506cba16a3960f58961f609c63894f",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "docs/env.md",
+      "sha256": "65cb19992f871923f6096651e6485cbe0bbc5395baa0895282f43137fac202cd",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "docs/explosive.md",
+      "sha256": "c0fa1f6eb5373fda4710a8a410aad9fea838f08ba3c402c60c14e0a53a05e72f",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "docs/hazard.md",
+      "sha256": "fe02ea76b6731aa50820804d7f747fe1f16833ab900097ab6394d26b9d8afe76",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "docs/input-mapping.md",
+      "sha256": "f767ba391ebb7b890b34936965659fc43ff1a3ac3f26d3423cecb2b47c178f4c",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "docs/locomotion.md",
+      "sha256": "d03a7087591bad74e56131e8d39333d794622011fdd6543f9bd978d2248ec6f1",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "docs/maps.md",
+      "sha256": "7295e9cc17538a3f5992dbf84d29ce8d8dc366082877610b76c8a7efe50a8036",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "docs/moving.md",
+      "sha256": "b9a7fab760da2648cd9de5c6015d242374f1310ccc70d1ca6b2731b0e1538ec3",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "docs/out-of-scope.md",
+      "sha256": "149a259505c6e1311b153d824e39334694d5f595d427567d79b4c4b4a43fe0f1",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "docs/provenance.md",
+      "sha256": "7d38db59f1070266b9208116af6076b601ff3728c053b7e496d9a327ac8c3e22",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "docs/reaction.md",
+      "sha256": "21d1471627e298504dbec30805325d73077c7f87ea7c5d4a256810333a353d5f",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "docs/reference-ledger.md",
+      "sha256": "26088e7a34d71d90fdcb57ff8fff54b26ecddc44ef3f8b70cd248b05ca2f474b",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "docs/rooftop.md",
+      "sha256": "8e108dea3bc938260f83a82a3f08af10b3c07546eaa7e1a5be65881e8db042f7",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "docs/roster.md",
+      "sha256": "ffa0003c9a9fa5507baea142ac0eb3b10838a31cc7441d7c766b1f57098afe6f",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "docs/runtime-diagnostics.md",
+      "sha256": "38aa6e417325dee4a428bed28bcb80a9ff0ad7d2a74592f49b9e56fbe0719901",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "docs/sewer.md",
+      "sha256": "1a09345190c73070a3e53c7bd93117a01d0acd3e8d2a0e04badb73db6fe10a27",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "docs/sim-contract.md",
+      "sha256": "385be8685beb5eef4f6a1bb08f07fd5a3da94eaeecabc181cd2074e6714d621b",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "docs/sprint-roll.md",
+      "sha256": "e5772e37db2e1531375f59aeba35b0a9015b92b5b13e6f6f92214f5ab3cffbf8",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "docs/station.md",
+      "sha256": "3a4087b61aeb123ce51fcab2f6fe8ee778cdd06afdcafe1549001a2a2e4d435c",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "docs/trace-harness.md",
+      "sha256": "aca63952354278053e1e5753aee9a30de53dac3d7b708c8c28cf757f7bbf0ab9",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "docs/traversal.md",
+      "sha256": "c88b8be905515cc45293c68ec24fbb84bb5f7efeaca2fb045b0364797585b959",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "docs/warehouse.md",
+      "sha256": "9af90bd9e37edb9b882f6aa622848e7147dac724dc1f1fa9d0f704aac9ffc20a",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "docs/world.md",
+      "sha256": "a55132c6b526b2e34d2f875cd03248e0ef48a8be16f80c8be70aa46b840d6f09",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "KNOWN_ISSUES.md",
+      "sha256": "cb85f25f0e1b5df0a68bbedc2e19830d11b23a21fa0db743fd9e3a094a009f19",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "NOTICE.md",
+      "sha256": "4a1ef5d483727d05be7a91d607174409e76aadbcb774fe40e4d1c8dc9074bbed",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "project.godot",
+      "sha256": "d05f7a36073c3b06129bcfb4b98f3bbf5970aa28eac41c9d12a1389f16951708",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "PROJECT_BRIEF.md",
+      "sha256": "feaf92f8846db6b6250c7d7d46250b107ff26ca70b931d62b378df36572dbb66",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "README.md",
+      "sha256": "b5e03ac4bae3332e25cc9ee9cca8c95fba85b1460cce59a0fc2cac105960353f",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "scenes/main.tscn",
+      "sha256": "1a4e3b6da28bf669dd9be0fccd50f3be4f6cad54301f4ca806ef41be6ad11de7",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/app.gd",
+      "sha256": "3f5ae29fc660d2c1010abc71fd09e91a2593fce34b41b5163e3f4f027d04d835",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/arena.gd",
+      "sha256": "938f296f26103ff5c4d6e6d3ffa656c1142ab8833d328d4e53919aafe12de2ea",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/bot_brain.gd",
+      "sha256": "6e020e8eac413495f9053c9299ef88fa0aff550d0a4bb301e9fa646006b8f4a6",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/bullet.gd",
+      "sha256": "3ea5d691f7fc205fd2e9335f5c7a215026a2e821ee7ccdacf877ecd3a0129da4",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/data/weapons/inventory.gd",
+      "sha256": "a63e16aa4543fa36d6927de37c06259819b82e317b7a44dbeb53b3b0dd6e8022",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/data/weapons/roster.gd",
+      "sha256": "cc28c9dd0948dd64619d2053e18d7145d7617c353ba1344a87cab136e45b78f1",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/fighter.gd",
+      "sha256": "d9611a531222307ea7799a5a06723b1887c5720704f2ee3ba19582625126f37a",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/game_session.gd",
+      "sha256": "f2190af8ad634105aa56d08cfa4fb4ff1c0b5e78d2c83bd5fa93750aea5f0673",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/grenade.gd",
+      "sha256": "b8ad6d83ded48e5493b5f6df701e8e512275d058895156768ff6d804670cd2ed",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/hud.gd",
+      "sha256": "c944ecc55ddb748986f2b5eb73f6adc2913f3c703f7132cbefcff693ae9d4817",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/input/input_constants.gd",
+      "sha256": "5083cd0f48efa530ded9d0b6886b5b61cd45d786cdebf177773e92da5b31b121",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/input/input_injector.gd",
+      "sha256": "f5acd8a56d0381c2b23b26f989667cbf08e8a248863317f00d9933bd71e85ef3",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/input/input_map_store.gd",
+      "sha256": "b307040e75a749da8a567444027ae15adfe0dab669ddd12150c2359eb957220f",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/input_actions.gd",
+      "sha256": "39b9899c5ae7cad3c65562fce5c740df23ce98cff28a410a1d1310151889cd99",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/maps/arena_spec.gd",
+      "sha256": "ca5a743b58fa56115d41c3783c707fa46ce66a39418ebd20ac7e2952c96674c5",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/maps/map_author.gd",
+      "sha256": "ee45bdb3a95256c14fa9d833300ad99a871c278ce6174426566207c243e163e7",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/maps/map_catalog.gd",
+      "sha256": "98171ba7ceb888153135b7e37a7e82c7db83cc6dc1cbf000a2e07acd59c6aa10",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/maps/map_codec.gd",
+      "sha256": "73a78a071fe6e7f6396dd07c8dffa8ddbefe97c72b18b785f7d1a8f1143bb4e0",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/maps/map_graph.gd",
+      "sha256": "0811780beb810d793fab47854fb46ede827d63494cf27e51469f2d375caa31a2",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/maps/map_validator.gd",
+      "sha256": "9cc82da90269888ed0e0d484eb1055e283198cbaf5932b790b5e9cc8e8dac61b",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/maps.gd",
+      "sha256": "9d64f7232c34c837faa564320b1f4ef3645a0349b9b90fb6e6ebfae7b5b51d19",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/pickup.gd",
+      "sha256": "85b3ce68f7bd39249c5f2e6027a6805ebdeca3bc5d798266d1f416efd0965b6b",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/runtime/runtime_api.gd",
+      "sha256": "dabd773ae05d149748c46009d658fc3af266d62962b4b18800de5f5a6302d9fb",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/runtime/runtime_checkpoint.gd",
+      "sha256": "4f449af6ba4a4e75045a186c16bd82a73c43cb6ce5b484566c33034c3b140e24",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/runtime/runtime_constants.gd",
+      "sha256": "de3edf685baf2fe8f8d4aa8cc167049dac73b2336ab7ccb1517132f351964ff3",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/runtime/runtime_redact.gd",
+      "sha256": "0ccc9b2711a90207a9d1420381af477f9849a898a215d4a813a571f31737eb90",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/sfx_bank.gd",
+      "sha256": "56402c8c67ee8082f0cbea03aee3dd7b88d2a549ca43ec06d42728505120f038",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/sim/aim.gd",
+      "sha256": "96dc7e025d0dd6b16ec258dd24b664fb688d69271721948aa2018bdd7c288711",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/sim/balance.gd",
+      "sha256": "f6b200f97b7dd4fc5811c3a8a729ebda39909d824b47724d72c2e5d4a1fb000c",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/sim/collision_layers.gd",
+      "sha256": "4ca092c754e77ffffa9fac37d955525abc3b203f92bf0239585c13472808f9f5",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/sim/combat.gd",
+      "sha256": "ea59dc45ef83c6a9dfa2d4ce4c2eb1b42393934277d94c4a9d505786bff40760",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/sim/explosive.gd",
+      "sha256": "6f4cb59044cce34eaa8efba865c22fc71aa78541463d809f21d6aa6bc180d2c2",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/sim/input_frame.gd",
+      "sha256": "af577ea7ebe6df7f1f06ef9fbba53549f1e32a95d6831ecd33d6c5712d6f71df",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/sim/locomotion.gd",
+      "sha256": "9879b1503e18a431f04ea1e81395a32953ba91865eb49f5c5b56678fb15f14d1",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/sim/sim_clock.gd",
+      "sha256": "5ef8dee3308c03672a38860630b4b487a91f75ea98037a31a68d273b9eb6f6be",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/sim/sim_constants.gd",
+      "sha256": "329d89e65c26445cd8ab2fc171a5c6252dccce46b946eace63c3545d9273a8ab",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/sim/sim_events.gd",
+      "sha256": "66e86aa996306d323e8522735d76b7d6307c2427c480e841c3827ef95304b024",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/sim/sim_ledger.gd",
+      "sha256": "9d422d42af9d781f619689696095b8f5f3527d85fc87e11a70a2e8709fc61564",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/sim/sim_recorder.gd",
+      "sha256": "2cd817a3b28c033f9811fccff103949fdc72e553eaf14e704963cf76df75a4d8",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/sim/sim_replay.gd",
+      "sha256": "1ae9eda92a146708431511ad42499cb6af01d38ec34668b99d53cfcd49b1cdc0",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/sim/sim_seed.gd",
+      "sha256": "dd0b555a5750abb126ef3ea6c28158355dddf9ecc30b1442c514588e9d26f43c",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/sim/sim_snapshot.gd",
+      "sha256": "8077bd7634a2586fdef30bc16d1bd25f6aa8bb193fa992a2983025d22c5a5b54",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/sim/sim_trace.gd",
+      "sha256": "559737109ad7e389f03641557f610c164751d97a2eddb4ce011adad53c4879b0",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/sim/sim_validator.gd",
+      "sha256": "df783fd3fd5dc68e5846717aae7944609546b2a7ef008b5df9f7d44728e65c57",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/sim/traversal.gd",
+      "sha256": "bea48afda61ac2399f3680f92d1d235866f88515634f069dc16a4c9b4a7ad837",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/ui/lose_screen.gd",
+      "sha256": "908e8b2604e5a2c055ca8ce0fe4a009e9af1d8a4fb31386aaf7786b009b8848f",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/ui/pause_screen.gd",
+      "sha256": "0427220da35823010d4bda9cdeb5523485857388733062c8cac4e6baf79cbd92",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/ui/remap_screen.gd",
+      "sha256": "91fe389afddd16b3b200f89a3f6f6b5253c88d8d5c9a2f689c86157a2c594143",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/ui/title_screen.gd",
+      "sha256": "d6820879d8ef49b7e5b011da6d8b1bd5bb5ddf877950f66f114ea6cfe054c5b8",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/ui/ui_theme.gd",
+      "sha256": "11f6b5dc1a1af72dad7c4df946dd80c9afd62fc36d170be673d8377f812fc3e6",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/ui/win_screen.gd",
+      "sha256": "f78a2669e9f97210f8da2c5d954522c9df47b35ee61a43bde73fdd32d055f63b",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/visuals.gd",
+      "sha256": "f2097acbc429ff13a0bb99b70670272fccdbecc62c41d0bc7341f1b7cc9f23bf",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/weapon_defs.gd",
+      "sha256": "897d57b79bb00da11751b09f14b5c92819ec4e47b98c57288115817d0bcae225",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/world/env_body.gd",
+      "sha256": "30b4e3f1b38e56a1efbe9145d5c26062128b06c7b47e4a0ab559b39bf2e128bc",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/world/env_spec.gd",
+      "sha256": "3f8e514bafd3dde02d9f1e51696aeb759b36557b1994a539d833fd66dd26c57e",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/world/moving_body.gd",
+      "sha256": "e630010fe471f35d0e6a905da31d1a7bd40e222f108f02851672be1006628072",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/world/moving_spec.gd",
+      "sha256": "9dfc0789eb84b225254d79f2197918a4d5f38e321d3f9013794e3fc0d84c7115",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/world/prop_body.gd",
+      "sha256": "4dd530675bca937c32b0900990a48b0ef526c1ee77b512390e15c8c0c6f4e2e0",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/world/prop_break.gd",
+      "sha256": "01337f1529cf49a45886e34e9322f624eaaf11b1b7b03825f5a5a93ddaac248b",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/world/prop_hazard.gd",
+      "sha256": "9d2978e5382068d5f872678749a4f4e84e83f45b691d1bb487c78a519702844e",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/world/prop_spec.gd",
+      "sha256": "4658b9b5a6978229e43835c070a285289de6d55d6d505806403860e0cb857dd8",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/world/prop_view.gd",
+      "sha256": "c08b1e22dff62d57a9d3b8da8c54d6449f6fece8ec943c40105d31740b283ba3",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/world/world_catalog.gd",
+      "sha256": "8307a46c38151dbe52da713b02bc302aad803985e7eddd11b9513154b7bd4a83",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/world/world_owner.gd",
+      "sha256": "07677a984f40e8d13ab7736aa001f36944d7cc961caa69f14bd1f21a2ce093dc",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "src/world/world_paths.gd",
+      "sha256": "020182ddd10d010d0f5d78fb5d95714a92bbf930efb133ef284ced07d12ae953",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/_gen_env_art.py",
+      "sha256": "70256820a6eae0151a66b399b3aafe3ac92732a764af5f02dc2730d907009de9",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/_gen_map_layers.py",
+      "sha256": "25f9e727b2553ff0effcd9123506243398613a6ba0eee6c7e1dc487aa5aef2dd",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/_gen_moving_art.py",
+      "sha256": "c823ef8bf319d070cd485bf9e15632758c71ae7ebe66c2c23162f961e40bdfed",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/aim_cases.gd",
+      "sha256": "fba9809bd3e21692e5bccb5e90ff049c946fb3bc8c64f5324934cfd38182623b",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/balance_cases.gd",
+      "sha256": "d98b7514c2f0612d37d995b147d5e586beb2e569ae8b0d72e09c257f214327ad",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/break_cases.gd",
+      "sha256": "a4774d97e27d8154672427a34b541d0ce77ebfe23250fb65d1e604e05639cbf5",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/check_aim.py",
+      "sha256": "5bc81217235ff14a249b604fa3423526a7d4ccb9ba819c8cba9fcdf742685ced",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/check_balance.py",
+      "sha256": "6b78138284377c56073aa133b7f76948352ad5439b81e959e288cd55da0d3a10",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/check_break.py",
+      "sha256": "02471410ba13ac01be34e03b2fd4584ac24c8d4d142e3116f4362b4809b9aff4",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/check_combat.py",
+      "sha256": "73f9874cab29846226b68147035b48c74cafc330a8a88e5d0d7c64bb602900a4",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/check_dive.py",
+      "sha256": "a575369054a0e7ea11087151397740e21ce2a9a718b0d17799546a36f0141ef3",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/check_env.py",
+      "sha256": "f0ff8b5e80f7cf433beb96f206a1b72465750d5422cfe13b46a4bd37436eca86",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/check_explosive.py",
+      "sha256": "641ba1cb86e760cfafbb74131386435f3424aeb8b793c2e0e878ea4fa2e1a85e",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/check_golden_traces.py",
+      "sha256": "ddaa7277d7706a21ffeb35c7e48176cc6db7a55cada535d32e751d9dee5a8b43",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/check_hazard.py",
+      "sha256": "fba4ce49ee1fb9c0e17ff2b50b5ee85f2e16384c49a512099c9a148e8877dc3a",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/check_input_map.py",
+      "sha256": "6a80fae1b13914d5ced512e7548b2e15a0d06966ca8634a5f6dcddd1487f4546",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/check_locomotion.py",
+      "sha256": "50dd420d9ec95279c364cfebc7d54551e67a949374c1411b802cc955d1e62862",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/check_map.py",
+      "sha256": "a2fb80689e6dbaa47ed77d218128323851678ea0a741c0af51c10cb21e5115d4",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/check_moving.py",
+      "sha256": "949c54822f9986c0e66299e78dac88138152e266ea99d8791d256e13b89d5617",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/check_reaction.py",
+      "sha256": "ae361b569ef1583ac25d403d95cdf0a48480b312abc42f6063cc6117e49942a4",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/check_reference_ledger.py",
+      "sha256": "b46cd236bccfe793e594f9bd7ac22ba50e84903b47cc4f17ba644daa8dffb58f",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/check_rooftop.py",
+      "sha256": "1f2f507524cdff010ed1957988103579c1c964d5c91718d16e8a41a7d714f059",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/check_roster.py",
+      "sha256": "8e52c4f5bf2389fc4924b0e67dddd55167e5942cfd6cf7fb71cc963de4d37859",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/check_runtime_api.py",
+      "sha256": "c6984d4f6695e48b68ee5fc28c56ed9dc898ef978e95d1c7cce85d5af7f67262",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/check_sewer.py",
+      "sha256": "aab93aba6a61d7397a93d173e6341d25a9eac99f31a177711261effc84c011fd",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/check_sim_contract.py",
+      "sha256": "0e90c2ab7afdec5c3384a00288ac2a09bc9d72d9cafd275c116d6bb1e2dfd0cb",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/check_sprint.py",
+      "sha256": "83b2f4437f3417a1c9058512c83b6dc1d9976657f379b9442579acdf7c3d85ea",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/check_station.py",
+      "sha256": "3e415d8ea2ff80f9dfdf019c82f51599e44f86a89f43d66e8661eb3cad3affb3",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/check_traversal.py",
+      "sha256": "5f4d890fcf6fa10676804b11689a356b6f428c060940cbb18001ce1aa858ada7",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/check_warehouse.py",
+      "sha256": "d75b9a2c5a71b1371fd6cdfcbc4272a3281a3f303641135635ba9325c885ce37",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/check_world.py",
+      "sha256": "93f9017cfdd9d8a21d5dcdd4eb04df2d2ae91942222930afc36cd37b2ae6959e",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/combat_cases.gd",
+      "sha256": "e4941bcba8cea301317ae96d792a6e6607837e0c729b91a1146fca989d380966",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/dive_cases.gd",
+      "sha256": "85557262f132eb4cff37fc6b700601968ee3dbf1d2a7c0e92fd322db8c46f0b8",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/env_cases.gd",
+      "sha256": "122341686be8718240ed9b207019593906a525f633a8a2768c0bfe9f97a5c0fd",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/explosive_cases.gd",
+      "sha256": "4cc7793befd0a42f27b363b92a4fd5685fc083df96dce6b0e955d8c7fff80f8e",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/hazard_cases.gd",
+      "sha256": "9fb6f78fac06bef95d449214a3b81043315ede502098f0ae56db6f74c67a8a22",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/input_map_cases.gd",
+      "sha256": "eb22297d7a70c97800dd44c8d321b9bb506a5dbef2d9e9eb9a003c1cc6c4f07e",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/locomotion_cases.gd",
+      "sha256": "dc7bc8581094e98f8c1b1c9866b1dc1804afef642eb09a11537339d7e651990b",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/map_cases.gd",
+      "sha256": "28795a906eb99eaaac9fb57f84a7ee49dee53b770f586404345cb4aef5b7f141",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/moving_cases.gd",
+      "sha256": "a98e675904d5e20eea862a3baf01d298cd8a06a6b2bd4f4163e5093839a4d261",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/pack_aim_evidence.py",
+      "sha256": "073077c0ed53af3e29b78d4c4e1ba673dfab117d1deed849e987047fe5fd6865",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/pack_balance_evidence.py",
+      "sha256": "021c0dc580b7f35b05f76114301d3629a1f726974b2248904db13f7985c5e809",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/pack_break_evidence.py",
+      "sha256": "be2a24e934d23c606395162bb737a97e6db864a23f5fbbb6c1eb3cca303ef55e",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/pack_combat_evidence.py",
+      "sha256": "4a98ac008fe819a5ca16a9eb06f872a0427a9fce08f8e811d4d7350b98709fd3",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/pack_dive_evidence.py",
+      "sha256": "c113850415dc4f7479c2da94046fd48908498debaadd425c7cf2644f9b509f75",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/pack_env_evidence.py",
+      "sha256": "5d5228fec0ec63bf89b6b360a53b10f6e122328c0ccd07462bfe71ce3c3df418",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/pack_explosive_evidence.py",
+      "sha256": "6a4444b095126be56f57ec7c5b631c2697a93cbd06dfae158b56f396c4266eea",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/pack_hazard_evidence.py",
+      "sha256": "2185ff29a295b785b6aafca77c24bc7df1191d1a8214fe0d6a702a22bfbc84c1",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/pack_locomotion_evidence.py",
+      "sha256": "9ee51618b0fd01de5a419de6259de8aa56d7806e36b590c896d1bb1e2d2d28fb",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/pack_map_evidence.py",
+      "sha256": "20d7053f12039e82e603a6c9a3b19057ae53df968bedbea86dec4df0c5b2d967",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/pack_moving_evidence.py",
+      "sha256": "1a28a937721ba16d55e53a40db764438d3756e64b5e43b60859b61bd17ce6849",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/pack_reaction_evidence.py",
+      "sha256": "52504ceff4df2061b0a63aee47dad8b49a942b73898376eb56c2783e74828d9c",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/pack_rooftop_evidence.py",
+      "sha256": "be96a06738b4cd56a636b5396d988e39cca604d245e47f1677849857e114e184",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/pack_roster_evidence.py",
+      "sha256": "06098f3069a07ba6777340816a9cbe882fc42be3f1be53355814493a24fbfbc7",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/pack_sewer_evidence.py",
+      "sha256": "32bc4ca54354b3a9bd547fd1ad20671f53851446451a5b0b95c41452bc63b955",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/pack_sprint_evidence.py",
+      "sha256": "a67cf90472f28689d6c408c08b52ac09b5f11a45281d6b773500985d80125504",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/pack_station_evidence.py",
+      "sha256": "5d6e5c45f677452a833da0a543e8562d6ecef59af4d88d25b2cba8f63424c08c",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/pack_traversal_evidence.py",
+      "sha256": "6c679eef1f1801369473fbd6b0f8c7b31959d6e8489d5910bfdb315cf9e4b176",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/pack_warehouse_evidence.py",
+      "sha256": "dbba1b2e94ad0f8eb96a2fbcf2ade2fcc3d346c851b8d40406db580c22dd113c",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/pack_world_evidence.py",
+      "sha256": "db5ff0122fe7653125e2c70f1d0906bf6efa02126464c002cabd8acf6e127f85",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/reaction_cases.gd",
+      "sha256": "a031cc220b0dabbbc4cfdecbf6a0542849843a6b41794a8c0ca8041ed5a9ff51",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/rooftop_cases.gd",
+      "sha256": "9924486ebddade32392b867cd66f277a094dc8cb5f17fbd3be037404a52c5d1b",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/roster_cases.gd",
+      "sha256": "a65c22215b7e2dbd9de402ed73e4c880ad389b3a2ec04dfbd59b9370ff0faeb3",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/run_aim.gd",
+      "sha256": "36e071a6ee09abb2f49078ee45760986c1b43327d65ebba229230ade307a9e3d",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/run_all.gd",
+      "sha256": "ff1d068d39cb691ac3af8deb484b1e62c664f670861772a02aa2f8b5c3d92273",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/run_balance.gd",
+      "sha256": "49ac68fa97741f1fde6b66982a9acc9e18254e509da588b4908e4e54864f7653",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/run_break.gd",
+      "sha256": "aa49d639a3132a5bc1d35009364d87c59187d7785d6fde312c4cfda9add6c331",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/run_combat.gd",
+      "sha256": "2975694561898f1488dbf99121224b7a2b2b8e4ffb1b333690c481b6a159a8a6",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/run_dive.gd",
+      "sha256": "e03bacdb523e6a7423018aa87fe57bba7e81bdc6cd7e16d6798d571c3e527426",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/run_env.gd",
+      "sha256": "e4496921ffa34b6ea871e2fd4004825fdd8271a7788fca63894ba2603a928325",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/run_explosive.gd",
+      "sha256": "b9315327b661c1cd66451967817275e979ace60109dd0cb5a313e31137da91be",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/run_golden_traces.gd",
+      "sha256": "cb7743560ab967b1128704a50f029964a45802da8a36690840482f95c024d748",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/run_hazard.gd",
+      "sha256": "5419c22c0520f375101f62d72fbd964ca4f6d1262a9fdbca03931fc58c8832be",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/run_input_map.gd",
+      "sha256": "1db793a6fb4739a9e9b414bc33a42deaca3f8f9375cf7c8f949f9716eaf3c401",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/run_locomotion.gd",
+      "sha256": "36c37706128d8107778dc8d6bbac1e51f48f31dd3e41d9878a47e81f5afa9a9c",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/run_map.gd",
+      "sha256": "2a3f23f4fce48846b6671d43b4ce0d1ea3ae4b8f010a36205b46ae6f05ca2a48",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/run_moving.gd",
+      "sha256": "012739cf55f19771bbc298fb868700de5dc77bea260f8719a94294366ef061ac",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/run_reaction.gd",
+      "sha256": "8b39704516c59bf3c1382abe412f9f89897bf7306ee283c112a19ed9b40d7d32",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/run_rooftop.gd",
+      "sha256": "3664d4245643c8e5a2c2785c790b7f468ab479aaa3c47e705faca9c087e36b70",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/run_roster.gd",
+      "sha256": "96e4c6dcab4c9858b296c4b47dd8d9f389e103d81f28c04c8804a338d8ec3e1d",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/run_runtime_api.gd",
+      "sha256": "2a59c0dee7fc45425b6c3b6c63485c9ffc4faa954f2bd044ad94e3431b679c91",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/run_sewer.gd",
+      "sha256": "2a342fff7e26e28149c869156a9d214e54d4bbe8d2ee9909d22d43e8d84296a6",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/run_sim_contract.gd",
+      "sha256": "6df9128cc524f2dad7fb19f0d370fbc3ffe8877433ed8e81052c7c9c5e6129fa",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/run_sprint.gd",
+      "sha256": "ed2ce6986e9d21c8cdeed9d3c5826b7249624bad10d4477bf67da71444d28241",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/run_station.gd",
+      "sha256": "b6c1a448f59585ad85098fac0ad3ec3eeaafbe7423163f66c8e0ba8112170107",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/run_traversal.gd",
+      "sha256": "0458b3d128b43b9f27421b71c51ecb9905bc31601dad388b94e95cde7b235ba8",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/run_warehouse.gd",
+      "sha256": "7e75e7ea1f745acb1b118b1f8dd315297f3f70122185c105e173d6e7925056e7",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/run_window_hygiene.gd",
+      "sha256": "e650b88d32b1d867484eee3034a319271260e9e16a7fa156834246eaabf5df61",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/run_world.gd",
+      "sha256": "74aff1cccf298457898fb57a28a27f7c9a01ea55f915f71b5d3f0f17402c09b3",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/runtime_cases.gd",
+      "sha256": "05e2837310c8766b8c03921ac166620ced890bdeefbb8e5aa0c65e2bde8028c0",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/sewer_cases.gd",
+      "sha256": "ba310bbdf75ed47edea049ad61b4382957bf1150115bcd43ed6ce389724dbdbe",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/sim_contract_cases.gd",
+      "sha256": "27f991a6fa6be6a2f4de74c0c70dd8d06e8eb374966eb436e0fe5b763e3dc59d",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/sprint_cases.gd",
+      "sha256": "9278785cef2fce0b8cf734b689388d25cff08fa6bb5bf94bd9109a9ec7c045d8",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/station_cases.gd",
+      "sha256": "b21de1c5c2b283f9090e7b492981fa127e6df9b0fa88f7354178db72aebca164",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/trace_cases.gd",
+      "sha256": "396a1d9a8aff7a7fa3c789990db50bce9b3c2eadd3771740833824d81ac9c609",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/aim/aim_down.json",
+      "sha256": "588591c2287568f1c7bd4dc5c7ba8559873055a8c4691aa4a472c4d1ba1c737f",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/aim/aim_hold.json",
+      "sha256": "ad93176d7b60ddca12e9fdf03b2568008ac5ef29bb6d33daa1de56c1305c0a95",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/aim/aim_up.json",
+      "sha256": "e59cc38176480d0e4e995cb33fc3c519f1556d8e9a72b3a0fd6b6248229ea618",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/aim/fire_edges.json",
+      "sha256": "619e301f172ee3007f3b28cab752246c3ee86b947b29ac0859c962357b0ae00e",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/aim/fire_semi.json",
+      "sha256": "89df90ef44a51dca39871dbdce01882d390186cdb0647c05ef93027791ec3d5b",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/aim/fire_wall.json",
+      "sha256": "1fef489e3b9ed21b655a3fb62512468d70461f026f1c60ac1865e2d9c1b4ac31",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/balance/balance_chain.json",
+      "sha256": "52256c806fd2e6a1ca6437011014d111254fe9d7182098c53c7f5b22f39eb96c",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/balance/balance_ff.json",
+      "sha256": "13d572fcb99ac028d61b270ded22bad20e23b3cbac650d22a4b317772ec9a53e",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/balance/balance_high.json",
+      "sha256": "36c85d56b9a5ec291ea17e517ad479aaab0a1deb8d1830ac1daa67f29e9d4705",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/balance/balance_melee.json",
+      "sha256": "08365fd7a0c6607131bd36ae9d651d7ecfcef687dbc2e82399a84f0f4c90e4e0",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/balance/balance_pit.json",
+      "sha256": "474c3de0a38ae448216acf5bded8ae96d65d7ddc8530138b21ce1303b17a9e5c",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/break/break_cover.json",
+      "sha256": "8ebaa49cb03b26d3a75685bcb8c663b9c3fcfa94858e89191175dca402a393ea",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/break/break_melee.json",
+      "sha256": "39eddf9f0f65414c5dd3269d7b2c2f38091fff7e14dbdbf0cc8e771a5930fb1b",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/break/break_shove.json",
+      "sha256": "46de25d4f0484830274c6936cac55f5cacce2a755be335bca5249288a35ad129",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/break/break_throw.json",
+      "sha256": "a3ec78bb57ca49ed20f7338ba4a560ac99d5e13d7e6be16cd9d4e91f22def101",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/combat/melee_above.json",
+      "sha256": "327680200489a71209ac9e5a96b36caa50e952798745426f4b7e237178edfe4b",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/combat/melee_behind.json",
+      "sha256": "444a7320b73a9f1d4e1e5961e452c94e95007dc2e9ed19742a167cab8eb7d647",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/combat/melee_below.json",
+      "sha256": "1d55d21395c9aaba9afebb0c1acda0420be1d069a0fabfbfe65c10b08813b32d",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/combat/melee_crouch.json",
+      "sha256": "35d215fa38ced992074272c506c3c59a14915cd85a272033ad68ab42a92307bd",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/combat/melee_hit.json",
+      "sha256": "b5f0522760567322146c1e848c0ceedf994a1f0e5b70ab0f1d0e8d5087ef2800",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/combat/melee_kick.json",
+      "sha256": "39a1e7f1844000a0031a3dbe893921d411371d9056b1314ea45f7f242d5a3018",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/combat/melee_miss.json",
+      "sha256": "f9ecc3e1c132a0908000fb931a55830e9d34814392b2c7b3ff1f0aba17025f36",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/combat/melee_once.json",
+      "sha256": "8154446931330d169e2f52ba33acdd0c19c79d5b6a2d4ceb5e9a79dfbc0b4cdc",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/dive/dive_hazardous.json",
+      "sha256": "f4c7d23dd6a5a986dbe92568fb735751fb7c87440df2ba0935a00a4754a7fc9c",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/dive/dive_pit.json",
+      "sha256": "8d59e616290e1ccbaae75c3ed72c05c9465999479b04cba3778eb6abf21b3de6",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/dive/dive_rooftops.json",
+      "sha256": "b57437be8e56f0de18a6c504598f5bd987a4b1eb8a1fd4e014fb4214442e9156",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/dive/dive_sprint_crouch.json",
+      "sha256": "b2563e01ea2fd612ad8c72a4338ecbb5de56cbfd78e1d253196d1876279236d1",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/dive/dive_storage.json",
+      "sha256": "9e8930a7a2c324a92d846d81142434a74161ffd1e9e05366662d8915e08aa39d",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/dive/jump_kick.json",
+      "sha256": "0e01a9de2b213e25a9d06a97758792bbc788bf3e895a10c44b750fff4aa1fbb0",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/env/env_fall.json",
+      "sha256": "8e5fec1780f979620a61795de1b6e52468c74703f8e9bd1821f54fc481e0cf87",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/env/env_instant.json",
+      "sha256": "3f6f46865fdddf71e714c07023d1248d64d9648b47793515923016bfde4e70e3",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/env/env_rotor.json",
+      "sha256": "b6a9072c80157b0bae0f2c4d4a329acf5bac86183e6be7c51e7c41a443d95196",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/env/env_toxic.json",
+      "sha256": "1993c9dc8e52787158c1b3ead7d152bc06ca7402e646d59bf643cdfe53a8ce73",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/env/env_toxic_death.json",
+      "sha256": "2bb8e2359ee104bfa9164ee2228d36a0a284b2c3499d5aae584a4fc421b5bee3",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/env/env_water.json",
+      "sha256": "82d5eb09f00a17b07c461708bd4db4746703e3ce5fd115e42859b9e577e20914",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/env/env_yard.json",
+      "sha256": "634582bc72cd4d4bd97c02441ed7f80ca8c68403cbcb77cf3a9826134cd16af1",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/explosive/nade_arc.json",
+      "sha256": "53b8263688b0af7d113ebc09713d43cfa078620418122a18b101081b8c5037b1",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/explosive/nade_bounce.json",
+      "sha256": "95cab8caad5a5239184398e16af3d3823cc963ec3e305da436a6c5cddbbbfb9f",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/explosive/nade_fuse.json",
+      "sha256": "995caf3d186a114a80191b1efe2ef8fa3e9cc84114d7178da829b6eb76d8b036",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/explosive/nade_hold.json",
+      "sha256": "d43e22c4dec1cfa2538f95ec03f22d180e3939ce03a8fd05c3dddada2c4d4a91",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/explosive/nade_throw.json",
+      "sha256": "067d9605ad5801fea3938e9c723174907c08556064bafac7537d39edcf685849",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/explosive/nade_wall.json",
+      "sha256": "c8a9ba7ece39e6138d3ad524253ec378f7fbfed8bbc6338c6cbcf2990bfe2b0b",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/fixture/teleport_force_kill.json",
+      "sha256": "71e61329c66e7fe2c4201b1d4f3e527d7b0779c81ba637247587f3e2d952a356",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/hazard/hazard_chain.json",
+      "sha256": "0e1452d791acbc3b2339bf7881ae24ccdc16713afa0c17c976948f7762356332",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/hazard/hazard_fire.json",
+      "sha256": "d2c94122cddb1f1eb7115337d1bf1136a34cfe486b1f6296a199b19543b4f6c6",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/hazard/hazard_hang.json",
+      "sha256": "2f175728b9418d3de727eb53a6dc4d181ed2191fba0db1871e7aa67f31422324",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/hazard/hazard_roll.json",
+      "sha256": "8f5dcf1ba6b5a9b287f9819c7a6256bcc120f94b841a8efb36d176b54ea60655",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/input/p1_p2_independent.json",
+      "sha256": "7054c7a1c28d93dfca5556470e23553bb3a71611cb30ca3a2bf934aa628ce729",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/locomotion/crouch_shape.json",
+      "sha256": "2c7e83345917bfc842b837f808c9e08ee854848b8ea5fb9f86634dd034c71cf2",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/locomotion/no_tunnel_oneway.json",
+      "sha256": "57934ae07500fd03537050ab952efefa24d9faa8ff9728064577d64fea836668",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/locomotion/no_tunnel_solid.json",
+      "sha256": "3775bc45341ecdfad248d15cb8016a4a3982ea9167cbbbce29c56b0ab2767f19",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/locomotion/pit_fall.json",
+      "sha256": "57d9d78ca1e8c3deac247651e3726241498bce61e6286fb9ec085c6744842b1f",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/locomotion/variable_jump.json",
+      "sha256": "e8e763772ea3400ee7b6122a96dcf3a09ab20d5128521e81ada8f5e60706962b",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/locomotion/walk_accel_friction.json",
+      "sha256": "fc6462a591da84544310971d6ba1a40bdd9aca1ed78105ae80b577c7dd5a32fc",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/maps/map_author.json",
+      "sha256": "a6cd4db8ce22a4268464f5c0470c8eb80e6b0ae5fc198b442779ad68be40229a",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/moving/move_door.json",
+      "sha256": "8f792e0bc5868135e47c58e193853c226423ccee8860cf14fe4e9564c9ef2f49",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/moving/move_drop.json",
+      "sha256": "945dcd74a316b8792629bf2181c447cb69b0513028e8377e4989c2f686a61772",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/moving/move_ride.json",
+      "sha256": "dabffb0f4201479d226904798a24bf3638f66f6918aaa4267c5bee08baf9a80b",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/moving/move_yard.json",
+      "sha256": "6b75c739c1ba8b1c5b6474d0eaef481ba0e08af2a6c102e72fcee68e6e06a259",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/official/death_lose.json",
+      "sha256": "db6e2f61cc134ba04cb570ea3e4421f7fe155c3e17c69d641dbe68b3d7ca0a6f",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/official/fire_throw.json",
+      "sha256": "bedbbd2660356aa38c215848618f8e61bd03de43b1da72fd4dfc87cdcbd1cc99",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/official/title_fight_restart.json",
+      "sha256": "71bcb41a3f0708f49bddf92ee00756ada6626e5a6d04947111ee63be24f94b21",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/official/walk_jump_crouch.json",
+      "sha256": "6128caeb0dfa58ba0ac6f34cd29f8f387bedaa9f2eb0de29b41ba28c45fbe952",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/official/win_restart.json",
+      "sha256": "aac8b8d907af5f94292b9425acca6ad86edcb85fd7d789a41d645e2b275ae84e",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/reaction/reaction_chain.json",
+      "sha256": "7d47c569c38386c1ed45ed9777b896b3f1fc13ab9fb76a0f481ac7950ea1e16e",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/reaction/reaction_disarm.json",
+      "sha256": "367523cedd2a8103e6eb2786b281c7ce158f27769a3bd5679225b34c72cfcb3e",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/reaction/reaction_down.json",
+      "sha256": "3ac9f1a6dfeebdb46aeeac09a72e57f37cbc42d3716a6c96fa07ded51aec722c",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/reaction/reaction_drop.json",
+      "sha256": "ea74f7e0ee853b70c0b390427b2b9fbacc8dd6e51d7f5fe8264ef02aadcfcace",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/reaction/reaction_invuln.json",
+      "sha256": "ec3788690a430304a04ef8a9a24b4427d38aced0fab8bce9c70bb1014f119caa",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/reaction/reaction_knock.json",
+      "sha256": "be4761f34aaa7efac5d21fdbf0f3b75d6b237db47d0a7207bc749aa592a95a90",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/README.md",
+      "sha256": "80e225c31b14332525e44e72b65356d320e42d8eb7e3d0cd13e9b7e2c5a91ccd",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/roster/roster_idle.json",
+      "sha256": "f96c3b2bc4beb8c89d23ef53b12d9c47ef84037af1e79e936ee2a078f4469144",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/roster/roster_keep.json",
+      "sha256": "1fa041160a21896dbbc681806c65517a0d499c085a9126361fa5bfead386928b",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/roster/roster_melee.json",
+      "sha256": "826cfa35d856eb880a2a711b524f193eaa8aabe29885be94f049e1f817b4e841",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/roster/roster_throw.json",
+      "sha256": "ab2989d090497e85ee2a409d00eca6aec608b3444b315da699bcd68a38b388a6",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/sprint/crouch_roll.json",
+      "sha256": "87643930b46b3343194f59018abefd38cc28b38b87546fe147a8465d12b0c6ae",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/sprint/double_tap_sprint.json",
+      "sha256": "97c01c41cfd4c3655723b34e16cc933d9fa8aad3854915f81be6231b4ed99020",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/sprint/stamina_drain.json",
+      "sha256": "fae5efa0147c13b9a2a5bdd6a13c6de088a03acb15b576eecfbc25651b4dfe06",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/sprint/tap_window_miss.json",
+      "sha256": "aa017139a9e8f94379f06010b899d9de9fe5c0d512adcd9d0486ee4bb9d35d03",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/traversal/cross_dirs.json",
+      "sha256": "6783c281ae7050e4f86f9233f6ad083a9ff73496b46bd05284dfba03bd971917",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/traversal/drop_through.json",
+      "sha256": "94b87ff563891b8ca30b48901ee4ac09b9864853b1336ae729880c845432fe87",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/traversal/ladder_block.json",
+      "sha256": "a882f262ce5005247ae9e13041b53d3e1168f83c7c781b072c41eb9a2148fc8d",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/traversal/ladder_up_down.json",
+      "sha256": "bdfdf088d970e37b155154662c14e6b1f88e2cb8c8916aba6984e0f54b61922d",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/traversal/ledge_recover.json",
+      "sha256": "35f2d822014c0207824cb9ddae7e06f59feb0dca5fa3d6408d2af7444558ff23",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/traversal/map_hazardous.json",
+      "sha256": "98a0f136a20089d34119c6666e0e1ae580e3e1cd20b94eba2680ec94e4039db6",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/traversal/map_police.json",
+      "sha256": "c25af47638a6fa7ad8587255b3d38bba7c630a4ef42bb01f15d1e0781a067be8",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/traversal/map_rooftops.json",
+      "sha256": "c1d1e7f0772a24590040fe0dac1d7208eae575e090cf8cdcc24b48e6d88ff4b3",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/traversal/map_storage.json",
+      "sha256": "94754fb92bc406a28ddebf132b133243e8d9254ac5200d93bdce001cd9d405db",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/world/world_idle.json",
+      "sha256": "64ee1c7fda13335bc21bf2ee3af8f6c8305321c7e28a139ccf30e7dc99faa313",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traces/world/world_walk.json",
+      "sha256": "c37e995e8f4599fad802ef86d7cde5d911010158022c17b58921339789f4a0c0",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/traversal_cases.gd",
+      "sha256": "ffc825938548006e5622f3684088c408209c0a6402cf32adbb78a376940c948c",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/warehouse_cases.gd",
+      "sha256": "b70d545d31992a1c39a08477bff69ce2e773c4f07b541ef6da1c0cda2c9f5715",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    },
+    {
+      "path": "tests/world_cases.gd",
+      "sha256": "07628dd8715141b3e6733d4641bbc5de359574be97730ddc62183b9ccb530d75",
+      "origin": "original_authored",
+      "license": "product-original",
+      "generated_by": "hh-game-studio VF product tree",
+      "clean_room_reviewed": true
+    }
+  ],
+  "entry_count": 366
+}

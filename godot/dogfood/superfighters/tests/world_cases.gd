@@ -424,12 +424,9 @@ static func authoring_is_data(app: App) -> PackedStringArray:
 		var police_want: int = _Catalog.placements_for("police").size()
 		if police_want < 2:
 			errors.append("AUTHOR Signal Court must keep window cover placements")
-		var other: PackedStringArray = PackedStringArray(["hazardous"])
-		var oi: int = 0
-		while oi < other.size():
-			if not _Catalog.placements_for(String(other[oi])).is_empty():
-				errors.append("AUTHOR %s must not grow catalog props" % String(other[oi]))
-			oi += 1
+		var sump_want: int = _Catalog.placements_for("hazardous").size()
+		if sump_want < 1:
+			errors.append("AUTHOR Vitriol Sump must place hanging cargo")
 	app.start_fight("vs2", "fx_world_open", 0)
 	await SimReplay.sync_physics(app)
 	var session: GameSession = app.session

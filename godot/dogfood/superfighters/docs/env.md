@@ -64,8 +64,9 @@ Live hazardous paints `c`/`b` as tiles from prop/hazard layers
 (VF5-WP1). Skyline Relay (VF5-WP2) adds original breakable cover.
 Pallet Annex (VF5-WP3) places cover, hanging cargo, door, and lift.
 Signal Court (VF5-WP4) places a shootable rotor plus window cover,
-door, and lift because that WP asks for them. Water/toxic stay
-fixture-only. Character/map readability art is VF7.
+door, and lift because that WP asks for them. Vitriol Sump (VF5-WP5)
+places a wide live toxic pool (`acid_trench`) because this WP asks
+for it. Water stays fixture-only. Character/map readability art is VF7.
 
 DoD window stills wait for `frame_post_draw` after the matching
 `start_fight` and after the frames that wet, spin, acid, kill, or

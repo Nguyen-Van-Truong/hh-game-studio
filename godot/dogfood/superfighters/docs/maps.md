@@ -40,11 +40,12 @@ open courtyard, a door shortcut, ladders plus a court lift, a
 shootable rotor, and breakable panes. Rooftops (id kept) is
 **Skyline Relay**. Storage (id kept) is **Pallet Annex**. Official
 reach is live `apply_frames` bodies holding `up` on ladders, not the
-graph. Hazardous display stays first-playable debt
-(`ledger:RL-DELTA-MAP-NAMES`) until VF5-WP5+. `c` / `b` still
+graph. Hazardous display is now **Vitriol Sump** (VF5-WP5,
+`ledger:RL-DELTA-MAP-NAMES`). `c` / `b` still
 **paint as tiles** except Skyline Relay cover, Pallet Annex
-cover/cargo, and Signal Court window cover, which use world
-placements. Combat/env fixture ASCII rows stay import-only.
+cover/cargo, Signal Court window cover, and Vitriol Sump hanging
+cargo, which use world placements. Combat/env fixture ASCII rows stay
+import-only.
 
 ## Honesty
 
@@ -59,7 +60,8 @@ placements. Combat/env fixture ASCII rows stay import-only.
   (`docs/rooftop.md`, `ledger:RL-MAP-SKYLINE`). VF5-WP3 owns
   Pallet Annex (`docs/warehouse.md`, `ledger:RL-MAP-PALLET`).
   VF5-WP4 owns Signal Court (`docs/station.md`,
-  `ledger:RL-MAP-SIGNAL`).
+  `ledger:RL-MAP-SIGNAL`). VF5-WP5 owns Vitriol Sump
+  (`docs/sewer.md`, `ledger:RL-MAP-SUMP`).
 
 DoD window stills wait for `frame_post_draw` after `start_fight` and
 a standing settle. Setup is rooftops. Rooftops / storage / police /

@@ -1,0 +1,30 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+HH_VF_PATH title→fight→win/lose→restart
+HH_VF LOOP=proven COMBAT=proven MAPS=proven NO_ERRORS=proven
+HH_VF_HYGIENE sessions=20 muted=1 music=off status=proven
+HH_VF_SIM HASH3=match PAUSE_TICK=stable MALFORMED=reject status=proven
+HH_VF_TRACE MATCH=1 status=proven
+HH_VF_RUNTIME PAUSE_SNAP=stable RESTORE_HASH=match AUTH=reject status=proven
+HH_VF_INPUT USED_STEP_FIXED=0 P1P2=split status=proven
+HH_VF_LOCO EPSILON=0.001 HASH2=match TUNNEL=none CAMERA=arena_fit status=proven
+HH_VF_SPRINT TAP=pass STAMINA=pass ROLL=pass INVULN=pass DUP=pass LIVE=pass REPLAY=match APPLY=717/718 status=proven
+HH_VF_DIVE DIVE=pass KICK=pass TACKLE=pass FALL=pass PIT=pass DODGE=pass INVULN=pass DIST=pass MAPS=pass LIVE=pass REPLAY=match APPLY=1253/1253 status=proven
+HH_VF_MELEE HIT=pass MISS=pass BEHIND=pass ABOVE=pass BELOW=pass ONCE=pass SNAP=pass PAUSE=pass LIVE=pass REPLAY=match PHASES=pass REACH=pass FF=pass HITSTOP=pass CROUCH=pass KICK=pass APPLY=930/931 status=proven
+HH_VF_REACT DAMAGE=pass KNOCK=pass AIR=pass DOWN=pass GETUP=pass INVULN=pass CHAIN=pass DISARM=pass DROP=pass DEATH=pass EVENTS=pass LIVE=pass REPLAY=match APPLY=1038/1038 status=proven
+HH_VF_AIM HOLD=pass DIRS=pass SEMI=pass AUTO=pass AMMO=pass MUZZLE=pass RECOIL=pass DATA=pass SWEEP=pass LIVE=pass REPLAY=match APPLY=508/508 status=proven
+HH_VF_EXPL HOLD=pass THROW=pass ARC=pass BOUNCE=pass FUSE=pass FALLOFF=pass OWNER=pass ONCE=pass TIMEOUT=pass SWEEP=pass DATA=pass LIVE=pass REPLAY=match APPLY=807/807 status=proven
+HH_VF_ROSTER SCHEMA=pass SPAWN=pass EQUIP=pass ATTACK=pass DROP=pass SERIALIZE=pass KEEP=pass AMMO=pass DATA=pass LIVE=pass REPLAY=match APPLY=563/563 status=proven
+HH_VF_BALANCE SCHEMA=pass BATCH=pass DIST=pass DOM=pass MELEE=pass HIGH=pass OVERCAP=pass PIT=pass CHAIN=pass FF=pass STAMINA=pass DATA=pass LIVE=pass REPLAY=match APPLY=1052/1052 status=proven
+HH_VF_WORLD SCHEMA=pass LAYERS=pass SPAWN=pass HASH=pass ORPHAN=pass PATH=pass PRESENT=pass AUTHOR=pass DATA=pass LIVE=pass REPLAY=match APPLY=116/116 status=proven
+HH_VF_BREAK DATA=pass BREAK=pass DEBRIS=pass PASS=pass GHOST=pass MELEE=pass SHOVE=pass THROW=pass TACTIC=pass LIVE=pass REPLAY=match APPLY=880/880 status=proven
+HH_VF_HAZARD DATA=pass CHAIN=pass FIRE=pass CLEANUP=pass ROLL=pass DUP=pass VFX=pass HANG=pass LIVE=pass REPLAY=match APPLY=723/723 status=proven
+HH_VF_MOVING DATA=pass RIDE=pass RIDE_SOURCE=outcome_ride CARRY=pass DROP=pass DOOR=pass TRIGGER=pass PAUSE=pass RESET=pass LIVE=pass REPLAY=match APPLY=1800/1801 status=proven
+HH_VF_ENV DATA=pass INSTANT=pass INSTANT_SOURCE=outcome_instant TOXIC=pass WATER=pass ROTOR=pass FALL=pass SPAWN=pass PAUSE=pass RESET=pass LIVE=pass REPLAY=match APPLY=1723/1724 status=proven
+HH_VF_MAP SCHEMA=pass SCHEMA_SOURCE=outcome_schema ROUNDTRIP=pass ROUNDTRIP_SOURCE=outcome_roundtrip GRAPH=pass GRAPH_SOURCE=outcome_graph REJECT=pass REJECT_SOURCE=outcome_reject AUTHOR=pass AUTHOR_SOURCE=outcome_author WIDTH=pass SPAWN=pass PIT=pass CAMERA=pass OVERLAP=pass LIVE=pass REPLAY=match REPLAY_SOURCE=outcome_replay APPLY=36/36 status=proven
+HH_VF_ROOF NAME=pass NAME_SOURCE=outcome_name ELEV=pass ZONE=pass COVER=pass P1=pass P1_SOURCE=outcome_p1 P2=pass BOT=pass BOT_SOURCE=outcome_bot PIT=pass FALLBACK=pass LIVE=pass REPLAY=match REPLAY_SOURCE=outcome_replay APPLY=1229/1229 status=proven
+HH_VF_WARE NAME=pass NAME_SOURCE=outcome_name COVER=pass COVER_SOURCE=outcome_cover CARGO=pass CARGO_SOURCE=outcome_cargo SPAWN=pass CAMERA=pass WEAPON=pass P1=pass P1_SOURCE=outcome_p1 P2=pass BOT=pass BOT_SOURCE=outcome_bot ZONE=pass DOOR=pass LIVE=pass REPLAY=match REPLAY_SOURCE=outcome_replay APPLY=2101/2101 status=proven
+HH_VF_STAT NAME=pass NAME_SOURCE=outcome_name GRAPH=pass GRAPH_SOURCE=outcome_graph MACHINE=pass MACHINE_SOURCE=outcome_machine FLOOR=pass FLOOR_SOURCE=outcome_floor SPAWN=pass COVER=pass DOOR=pass CAMERA=pass P1=pass P1_SOURCE=outcome_p1 P2=pass BOT=pass BOT_SOURCE=outcome_bot ZONE=pass LIVE=pass REPLAY=match REPLAY_SOURCE=outcome_replay APPLY=2828/2828 status=proven
+HH_VF_SEWER NAME=pass NAME_SOURCE=outcome_name GRAPH=pass GRAPH_SOURCE=outcome_graph TOXIC=pass TOXIC_SOURCE=outcome_toxic DIVE=pass DIVE_SOURCE=outcome_dive ROLL=pass ROLL_SOURCE=outcome_roll CARGO=pass CARGO_SOURCE=outcome_cargo SPAWN=pass CAMERA=pass TACTIC=pass TACTIC_SOURCE=outcome_tactic P1=pass P1_SOURCE=outcome_p1 P2=pass P2_COVERAGE=smoke BOT=pass BOT_COVERAGE=smoke ZONE=pass LIVE=pass REPLAY=match REPLAY_SOURCE=outcome_replay VARIANTS=pass APPLY=4255/4255 status=proven
+HH_VF_TRAV LADDER=pass LEDGE=pass DROP=pass BLOCK=pass DIRS=pass MAPS=fixtures_only STUCK=pass CONTACT=pass LIVE=pass REPLAY=match APPLY=2614/2614 status=proven
+PASS: Vault Fighters first playable

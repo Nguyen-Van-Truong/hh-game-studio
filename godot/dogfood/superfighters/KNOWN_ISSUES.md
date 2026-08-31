@@ -182,8 +182,8 @@ First playable slice. Not G6. Not 60/60.
   `ledger:RL-MAP-VALID`, `ledger:RL-MAP-AUTHOR`). Jump envelope
   is product tuning, not observed. Live `c`/`b` still paint as
   tiles. Combat/env fixture ASCII stays import-only. Display
-  name Hazardous stays
-  `ledger:RL-DELTA-MAP-NAMES` debt. Rooftops display is
+  name Hazardous is now **Vitriol Sump** (VF5-WP5,
+  `ledger:RL-DELTA-MAP-NAMES`). Rooftops display is
   **Skyline Relay** (VF5-WP2). Storage display is
   **Pallet Annex** (VF5-WP3). Police display is
   **Signal Court** (VF5-WP4). Draft Yard is an authoring
@@ -206,18 +206,31 @@ First playable slice. Not G6. Not 60/60.
   catwalks, office loft behind a plate door, hanging cargo,
   cargo lift, and original breakable cover. Official proof is
   InputFrame `apply_frames` live body positions. Door/lift are
-  placed because this WP asks for them. Hazardous name stays
-  debt. No new Y8 play. Not a VF7 art rewrite.
+  placed because this WP asks for them. Hazardous name is now
+  **Vitriol Sump** (VF5-WP5). No new Y8 play. Not a VF7 art rewrite.
 - VF5-WP4 ships Signal Court as assumption
   (`ledger:RL-MAP-SIGNAL`): three interior floors, open
   courtyard, plate door shortcut, west/east ladders, court
   lift, shootable signal rotor, and breakable window panes.
   Official proof is InputFrame `apply_frames` live body
   positions. Door/lift/rotor are placed because this WP asks
-  for them. Water/toxic stay fixture-only. Hazardous name
-  stays debt. Unused `signal_lift` is honesty-only (same class
-  as unused `annex_lift`). Jump envelope stays product tuning.
-  No new Y8 play. Not a VF7 art rewrite.
+  for them. Water stays fixture-only. Hazardous name is now
+  **Vitriol Sump** (VF5-WP5). Unused `signal_lift` is honesty-only
+  (same class as unused `annex_lift`). Jump envelope stays product
+  tuning. No new Y8 play. Not a VF7 art rewrite.
+- VF5-WP5 ships Vitriol Sump as assumption
+  (`ledger:RL-MAP-SUMP`): isolated pipes, wide toxic pool,
+  west/east ladders, painted telegraph, hanging cargo, and an
+  open pit. Official proof is InputFrame `apply_frames` live
+  body positions. Toxic is placed because this WP asks for it.
+  Dive/roll invuln does not cancel toxic. P2/bot routes are
+  **smoke** (preset ladder / short chase), not AI or Y8 parity.
+  Water stays fixture-only. Signal Court rotor is not reminted.
+  Unused prior lifts stay honesty nits. Jump envelope stays
+  product tuning. No new Y8 play. Not a VF7 art rewrite.
+  Q0 (31-8): repo-root `tmp_sf*` / `tmp_y8*` / `tmp_shot*` and
+  sibling web dumps were hashed without reading and moved out
+  of this tree. See `docs/provenance.md`.
 - VF3-WP4 ships grenade hold/release throw, gravity arc, bounce,
   fuse, radial falloff, owner skip, one explosion, timeout
   cleanup, and swept nade collision as assumption

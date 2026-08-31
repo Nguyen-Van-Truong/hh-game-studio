@@ -27,7 +27,7 @@ The live grid keeps the VF5-WP1 layered source. This WP adds:
 - original name/art only
 
 Skyline Relay is unchanged. Police display is now **Signal Court**
-(VF5-WP4). Hazardous remains debt until VF5-WP5+.
+(VF5-WP4). Hazardous display is now **Vitriol Sump** (VF5-WP5).
 
 ## Verify is live locomotion
 

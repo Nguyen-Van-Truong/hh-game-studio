@@ -1,0 +1,66 @@
+{
+	"command_id": "cmd.vf5-wp5.vitriol-sump.8",
+	"display": "Windows",
+	"ended_at": "2026-08-31T11:44:58+07:00",
+	"ended_unix": 1788151593.531,
+	"epsilon": 0.001,
+	"fail_count": 0,
+	"godot": {
+		"build": "official",
+		"hash": "a13da4feb8d8aefc283c3763d33a2f170a18d541",
+		"hex": 263937,
+		"major": 4,
+		"minor": 7,
+		"patch": 1,
+		"status": "stable",
+		"string": "4.7.1-stable (official)",
+		"timestamp": 0
+	},
+	"map_id": "hazardous",
+	"mode": "vs2",
+	"os_name": "Windows",
+	"outcomes": {
+		"BOT": "pass",
+		"CAMERA": "pass",
+		"CARGO": "pass",
+		"DIVE": "pass",
+		"GRAPH": "pass",
+		"LIVE": "pass",
+		"NAME": "pass",
+		"P1": "pass",
+		"P2": "pass",
+		"REPLAY": "match",
+		"ROLL": "pass",
+		"SPAWN": "pass",
+		"TACTIC": "pass",
+		"TOXIC": "pass",
+		"USED_APPLY_ATTEMPTED": 5523,
+		"USED_APPLY_FRAMES": 5523,
+		"USED_APPLY_SUCCEEDED": 5523,
+		"VARIANTS": "pass",
+		"ZONE": "pass"
+	},
+	"run_id": "VF5WP5-20260831-ASIA-SAIGON-07",
+	"schema": "vault-fighters.vf5-wp5.run.v1",
+	"screens": {
+		"live": {
+			"cargo": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\godot\\dogfood\\superfighters\\docs\\evidence\\VF5WP5-20260831-ASIA-SAIGON-07/screens/sewer_cargo_1280x720.png",
+			"crossing": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\godot\\dogfood\\superfighters\\docs\\evidence\\VF5WP5-20260831-ASIA-SAIGON-07/screens/sewer_crossing_1280x720.png",
+			"lip": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\godot\\dogfood\\superfighters\\docs\\evidence\\VF5WP5-20260831-ASIA-SAIGON-07/screens/sewer_lip_1280x720.png",
+			"pipes": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\godot\\dogfood\\superfighters\\docs\\evidence\\VF5WP5-20260831-ASIA-SAIGON-07/screens/sewer_pipes_1280x720.png",
+			"title": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\godot\\dogfood\\superfighters\\docs\\evidence\\VF5WP5-20260831-ASIA-SAIGON-07/screens/sewer_title_1280x720.png",
+			"toxic": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\godot\\dogfood\\superfighters\\docs\\evidence\\VF5WP5-20260831-ASIA-SAIGON-07/screens/sewer_toxic_1280x720.png"
+		},
+		"setup": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\godot\\dogfood\\superfighters\\docs\\evidence\\VF5WP5-20260831-ASIA-SAIGON-07/screens/sewer_setup_1280x720.png"
+	},
+	"seed": 15,
+	"started_at": "2026-08-31T11:38:46+07:00",
+	"started_unix": 1788151126.359,
+	"tick_hz": 60,
+	"timezone": "Asia/Saigon",
+	"viewport": {
+		"h": 720.0,
+		"w": 1280.0
+	},
+	"wp": "VF5-WP5"
+}
