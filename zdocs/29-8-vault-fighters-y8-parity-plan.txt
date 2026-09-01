@@ -2,7 +2,7 @@ PLAN_SCOPE=godot/dogfood/superfighters
 PRODUCT_PLAN_AUTHORITY=1
 PARENT_PLATFORM_PLAN=zdocs/20-8-godot-agent-autopilot-plan.txt
 PARENT_PLATFORM_STATUS=OWNER_STOPPED_59_OF_60
-CURRENT_VALID_WP=VF6-WP1
+CURRENT_VALID_WP=VF6-WP2
 CORRECTION_GATE_VF2_WP2=CLEARED
 STATUS=ACTIVE
 PLAN_DATE=2026-08-29
@@ -25,12 +25,12 @@ một lần, tự làm, tự chạy, tự kiểm và tạo gói review; người
 | 3 | VF3 combat | melee/kick, hitbox, knockdown, disarm, aim/fire, grenade | VF2 | weapons + VFX | [x] 6/6 |
 | 4 | VF4 world interaction | props, glass, barrels, containers, doors/elevators, hazards | VF2 | map fixtures | [x] 5/5 |
 | 5 | VF5 map parity | 6 functional arenas; original geometry/names/art | VF3,VF4 | one map per agent lane | [x] 6/6 |
-| 6 | VF6 modes + AI | VS, local 2P, Stage, Survival, competent bots | VF3,VF5 | mode/UI/AI | [ ] 0/5 |
+| 6 | VF6 modes + AI | VS, local 2P, Stage, Survival, competent bots | VF3,VF5 | mode/UI/AI | [ ] 1/5 |
 | 7 | VF7 presentation | original skins, animation, audio, HUD, menu, accessibility | VF5,VF6 | art/audio/UI | [ ] 0/4 |
 | 8 | VF8 agent autonomy | brief→edit→play→observe→repair→checkpoint, no manual F6 | VF0..VF7 | host/bridge | [ ] 0/4 |
 | 9 | VF9 verification | trace replay, E2E, differential rubric, soak, leak proof | all above | QA | [ ] 0/5 |
 | 10 | VF10 package | Windows build, offline run, provenance/license, review bundle | VF9 | release | [ ] 0/3 |
-|   | **Tổng** | **50 WP nhỏ; chỉ coordinator tick sau DoD** |  |  | **29/50** |
+|   | **Tổng** | **50 WP nhỏ; chỉ coordinator tick sau DoD** |  |  | **30/50** |
 
 Gate nội bộ:
 
@@ -2292,7 +2292,7 @@ VF5-WP6 — Two additional VS arenas + map roster contract                      
 11. WORK PACKAGE CHI TIẾT — VF6 MODES, MATCH FLOW VÀ AI
 ================================================================================
 
-VF6-WP1 — Match rules, teams và round lifecycle                                      [ ]
+VF6-WP1 — Match rules, teams và round lifecycle                                      [x]
   Phụ thuộc: VF1-WP4,VF3-WP2,VF5-WP1. Files: match rules/session/UI tests.
   Làm: free-for-all/team rules, spawn seed, last-standing resolution, round
   timer (if observed), restart/quit/pause, friendly-fire policy, end reason;
@@ -2300,6 +2300,91 @@ VF6-WP1 — Match rules, teams và round lifecycle                              
   Verify: real input traces for win/loss/tie/quit/restart; no double signal;
   snapshot after every transition; pause cannot advance simulation.
   DoD: one canonical match state machine used by every mode.
+  LOG:
+    LOG 2026-09-01 17:55 Asia/Saigon — agent=coordinator
+      Base: e6d5f4a one match state machine for
+        win, loss, quit, and pause
+        on VF5-WP6 tick 2b1e0a2.
+      Files/leases: data/sim/match.json,
+        data/sim/schema.json, combat.json,
+        event_order.json, src/sim/match.gd,
+        src/sim/sim_replay.gd, sim_snapshot.gd,
+        sim_trace.gd, sim_constants.gd,
+        sim_events.gd, src/game_session.gd,
+        src/app.gd, src/ui/pause_screen.gd,
+        src/ui/title_screen.gd, src/ui/tie_screen.gd,
+        src/runtime/runtime_api.gd,
+        runtime_checkpoint.gd,
+        tests/match_cases.gd, tests/run_match.gd,
+        tests/check_match.py,
+        tests/pack_match_evidence.py,
+        tests/run_all.gd, tests/traces/match/,
+        tests/traces/README.md, docs/match.md,
+        docs/reference-ledger.md, KNOWN_ISSUES.md,
+        docs/evidence/VF6WP1-20260901-ASIA-SAIGON-04/
+        (official remint -04 only; -01…-03 void;
+        leftover-0; MACHINE vs2,vs1 only;
+        Survival unshipped; window ~85s host
+        exit 0 leftover 0).
+      Verify: leftover-0; run VF6WP1-20260901-ASIA-SAIGON-04
+        cmd.vf6-wp1.match-machine.4 seed 7 map
+        police / Signal Court mode vs2; source hash
+        2636b77489438a74e570b18cfbd61bce866506096bb8c3b17d686a1c9d00b461
+        SCHEMA=pass MACHINE=pass WIN=pass LOSE=pass
+        TIE=pass QUIT=pass RESTART=pass PAUSE=pass
+        SIGNAL=pass SEED=pass FF=pass LIVE=pass
+        REPLAY=match from structured outcomes;
+        APPLY 380/382 (USED_FORCE_KILL=0);
+        window ~85s host exit 0 leftover 0
+        python godot/dogfood/superfighters/tests/check_match.py
+          EXIT 0
+        godot --headless --path godot/dogfood/superfighters
+          --script res://tests/run_match.gd EXIT 0
+        godot --path godot/dogfood/superfighters
+          --script res://tests/run_match.gd EXIT 0
+        leftover Godot on product --path = 0
+        python tests/bootstrap/test_authoritative_plan.py EXIT 0
+        python tests/bootstrap/test_vault_fighters_plan.py EXIT 0
+          PASS: 50 unique VF WPs; no-skip; next=VF6-WP1 (pre-tick);
+          ticked=VF0-WP1,VF0-WP2,VF0-WP3,VF1-WP1,VF1-WP2,VF1-WP3,
+          VF1-WP4,VF2-WP1,VF2-WP2,VF2-WP3,VF2-WP4,VF2-WP5,VF3-WP1,
+          VF3-WP2,VF3-WP3,VF3-WP4,VF3-WP5,VF3-WP6,VF4-WP1,
+          VF4-WP2,VF4-WP3,VF4-WP4,VF4-WP5,VF5-WP1,VF5-WP2,
+          VF5-WP3,VF5-WP4,VF5-WP5,VF5-WP6;
+          parent 20-8 frozen 59/60 R9-WP4
+        post-tick expected next=VF6-WP2
+      Honesty:
+        60 Hz is V-A14 / ledger:RL-SIM-FIXED-60 assumption,
+        not observed Y8 clock. Hold-to-aim assumption.
+        Round timer / countdown stay assumption;
+        official tie is a labeled timeout
+        approximation (TIE_OBSERVED=0).
+        P2/bot coverage is smoke only, not AI
+        and not Y8 parity.
+        MACHINE vs2,vs1 only; Survival not shipped.
+        Title still leak win overlay.
+        Restart still not byte-stable.
+        run_all packed-log-only for HH.
+        Art still VF7.
+        Not Y8 parity. Not V0. No Y8 rip.
+      Critic: leftover-0 both TICK=yes
+        (II a783852b leftover-0 hash 2636b774…
+        MATCH; windowed console 85.1s host exit 0
+        leftover 0; MACHINE vs2,vs1 only;
+        Survival unshipped;
+        HH fcef305f leftover-0 same hash;
+        window 85s leftover 0; quit title
+        visible; tie labeled assumption;
+        remints -01…-03 void).
+      Gaps: residual nits OK: honesty only
+        (title still leak win overlay;
+        restart still not byte-stable;
+        run_all packed-log-only for HH;
+        tie assumption; P2/bot smoke;
+        Survival unshipped; art still VF7;
+        60 Hz / hold-to-aim assumption).
+        Parent 20-8 unchanged: R9-WP4 [ ]; 59/60; G6 [ ].
+      Commit: (this tick)
 
 VF6-WP2 — VS 1P and local VS 2P production flow                                      [ ]
   Phụ thuộc: VF6-WP1,VF2-WP1,VF5-WP6. Files: menu/session/input/HUD/E2E.
@@ -2684,7 +2769,7 @@ vào `KNOWN_ISSUES.md`; không đổi acceptance để làm cho pass.
 21. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Đọc `AGENTS.md`, sau đó đọc bảng đầu file này. WP đầu tiên chưa tick là **VF6-WP1**.
+Đọc `AGENTS.md`, sau đó đọc bảng đầu file này. WP đầu tiên chưa tick là **VF6-WP2**.
 
 Không làm R9-WP4/G6/GX; không mở Rust engine; không đụng Kho Bí Ẩn/Hoan Hao;
 không dùng Snake làm demo; không tải/rip Y8. Chỉ khi VF0-WP1 và VF0-WP2 đã có
@@ -3087,6 +3172,25 @@ dùng chỉ xem và review.
   Product c3ebe36. Gate remains CLEARED. Parent 20-8
   unchanged (R9-WP4 [ ], 59/60, G6 [ ]). VF5-WP6 ticked;
   CURRENT_VALID_WP=VF6-WP1; V0 not ticked. VF6-WP1 remains [ ].
+- COORDINATOR CLOSEOUT VF6-WP1 (2026-09-01 17:55 Asia/Saigon): leftover-0;
+  II a783852b + HH fcef305f TICK=yes; run
+  VF6WP1-20260901-ASIA-SAIGON-04; command
+  cmd.vf6-wp1.match-machine.4; source
+  2636b77489438a74e570b18cfbd61bce866506096bb8c3b17d686a1c9d00b461
+  leftover-0; window ~85s host exit 0;
+  APPLY 380/382 (USED_FORCE_KILL=0).
+  Official remint -04; -01…-03 void.
+  MACHINE vs2,vs1 only; Survival unshipped.
+  Quit title visible. Honesty assumption
+  not Y8 observed. Residual nits OK:
+  honesty only (title still leak win
+  overlay; restart still not byte-stable;
+  run_all packed-log-only for HH; tie
+  assumption; P2/bot smoke; art still VF7).
+  No Y8 rip.
+  Product e6d5f4a. Gate remains CLEARED. Parent 20-8
+  unchanged (R9-WP4 [ ], 59/60, G6 [ ]). VF6-WP1 ticked;
+  CURRENT_VALID_WP=VF6-WP2; V0 not ticked. VF6-WP2 remains [ ].
 
 ================================================================================
 HẾT PLAN — 29-8-2026
