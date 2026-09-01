@@ -2,7 +2,7 @@ PLAN_SCOPE=godot/dogfood/superfighters
 PRODUCT_PLAN_AUTHORITY=1
 PARENT_PLATFORM_PLAN=zdocs/20-8-godot-agent-autopilot-plan.txt
 PARENT_PLATFORM_STATUS=OWNER_STOPPED_59_OF_60
-CURRENT_VALID_WP=VF6-WP2
+CURRENT_VALID_WP=VF6-WP3
 CORRECTION_GATE_VF2_WP2=CLEARED
 STATUS=ACTIVE
 PLAN_DATE=2026-08-29
@@ -25,12 +25,12 @@ một lần, tự làm, tự chạy, tự kiểm và tạo gói review; người
 | 3 | VF3 combat | melee/kick, hitbox, knockdown, disarm, aim/fire, grenade | VF2 | weapons + VFX | [x] 6/6 |
 | 4 | VF4 world interaction | props, glass, barrels, containers, doors/elevators, hazards | VF2 | map fixtures | [x] 5/5 |
 | 5 | VF5 map parity | 6 functional arenas; original geometry/names/art | VF3,VF4 | one map per agent lane | [x] 6/6 |
-| 6 | VF6 modes + AI | VS, local 2P, Stage, Survival, competent bots | VF3,VF5 | mode/UI/AI | [ ] 1/5 |
+| 6 | VF6 modes + AI | VS, local 2P, Stage, Survival, competent bots | VF3,VF5 | mode/UI/AI | [ ] 2/5 |
 | 7 | VF7 presentation | original skins, animation, audio, HUD, menu, accessibility | VF5,VF6 | art/audio/UI | [ ] 0/4 |
 | 8 | VF8 agent autonomy | brief→edit→play→observe→repair→checkpoint, no manual F6 | VF0..VF7 | host/bridge | [ ] 0/4 |
 | 9 | VF9 verification | trace replay, E2E, differential rubric, soak, leak proof | all above | QA | [ ] 0/5 |
 | 10 | VF10 package | Windows build, offline run, provenance/license, review bundle | VF9 | release | [ ] 0/3 |
-|   | **Tổng** | **50 WP nhỏ; chỉ coordinator tick sau DoD** |  |  | **30/50** |
+|   | **Tổng** | **50 WP nhỏ; chỉ coordinator tick sau DoD** |  |  | **31/50** |
 
 Gate nội bộ:
 
@@ -2386,13 +2386,90 @@ VF6-WP1 — Match rules, teams và round lifecycle                              
         Parent 20-8 unchanged: R9-WP4 [ ]; 59/60; G6 [ ].
       Commit: (this tick)
 
-VF6-WP2 — VS 1P and local VS 2P production flow                                      [ ]
+VF6-WP2 — VS 1P and local VS 2P production flow                                      [x]
   Phụ thuộc: VF6-WP1,VF2-WP1,VF5-WP6. Files: menu/session/input/HUD/E2E.
   Làm: mode/map/options selection, P1 vs bots, P1/P2 same keyboard, remap,
   ready/start, restart; maintain independent controls and team colors.
   Verify: real window E2E with injected keyboard events; two players can move,
   attack, die and resolve; no P1 input leakage to P2; capture timeline.
   DoD: no manual editor clicks or teleports in official evidence.
+  LOG:
+    LOG 2026-09-01 20:14 Asia/Saigon — agent=coordinator
+      Base: 5ab444a title to rematch in three
+        taps and two players on one keyboard
+        on VF6-WP1 tick 2a93dfa.
+      Files/leases: data/sim/vs_flow.json,
+        data/sim/schema.json, src/sim/vs_flow.gd,
+        src/app.gd, src/game_session.gd,
+        src/hud.gd, src/input/input_injector.gd,
+        src/ui/lobby_screen.gd, title_screen.gd,
+        win_screen.gd, lose_screen.gd,
+        tie_screen.gd, tests/vs_flow_cases.gd,
+        tests/run_vs_flow.gd, tests/check_vs_flow.py,
+        tests/pack_vs_flow_evidence.py,
+        tests/run_all.gd, tests/match_cases.gd,
+        docs/vs_flow.md, docs/reference-ledger.md,
+        docs/match.md, KNOWN_ISSUES.md,
+        PROJECT_BRIEF.md,
+        docs/evidence/VF6WP2-20260901-ASIA-SAIGON-03/
+        (official remint -03 only; -01/-02 void;
+        leftover-0; Close Clinch damage KO;
+        window ~7s host exit 0 leftover 0).
+      Verify: leftover-0; run VF6WP2-20260901-ASIA-SAIGON-03
+        cmd.vf6-wp2.vs-flow.3 seed 7 map
+        fx_melee_close / Close Clinch mode vs2;
+        source hash
+        81c44f5bbe9a4c16c3fdd8599147309edc550228bdec79ed00a5fddcb8d3f55b
+        SCHEMA=pass FIRST=pass READY=pass LEAK=pass
+        PLAY=pass REMATCH=pass OVERLAY=pass
+        FEEDBACK=pass LIVE=pass
+        death_cause=damage; both moved+attacked;
+        6 stills on disk; no rooftops fallback;
+        APPLY 615/615 (USED_FORCE_KILL=0);
+        window ~7s host exit 0 leftover 0
+        python godot/dogfood/superfighters/tests/check_vs_flow.py
+          EXIT 0
+        godot --headless --path godot/dogfood/superfighters
+          --script res://tests/run_vs_flow.gd EXIT 0
+        godot --path godot/dogfood/superfighters
+          --script res://tests/run_vs_flow.gd EXIT 0
+        leftover Godot on product --path = 0
+        python tests/bootstrap/test_authoritative_plan.py EXIT 0
+        python tests/bootstrap/test_vault_fighters_plan.py EXIT 0
+          PASS: 50 unique VF WPs; no-skip; next=VF6-WP2 (pre-tick);
+          ticked=VF0-WP1,VF0-WP2,VF0-WP3,VF1-WP1,VF1-WP2,VF1-WP3,
+          VF1-WP4,VF2-WP1,VF2-WP2,VF2-WP3,VF2-WP4,VF2-WP5,VF3-WP1,
+          VF3-WP2,VF3-WP3,VF3-WP4,VF3-WP5,VF3-WP6,VF4-WP1,
+          VF4-WP2,VF4-WP3,VF4-WP4,VF4-WP5,VF5-WP1,VF5-WP2,
+          VF5-WP3,VF5-WP4,VF5-WP5,VF5-WP6,VF6-WP1;
+          parent 20-8 frozen 59/60 R9-WP4
+        post-tick expected next=VF6-WP3
+      Honesty:
+        PLAY KO uses start_fight after title
+        path already proven. P1 end HP 100 vs
+        hit event. Bots smoke. Art still VF7.
+        First-run/rematch caps are product UX
+        assumption, not observed Y8.
+        P2 is live_local keyboard, not VF6-WP5.
+        Survival unshipped. Stage stays VF6-WP3.
+        60 Hz / hold-to-aim assumption.
+        Not Y8 parity. Not V0. No Y8 rip.
+      Critic: leftover-0 both TICK=yes
+        (II 6557c788 leftover-0 hash 81c44f5b…
+        MATCH; window 7.1s host exit 0 leftover 0;
+        Close Clinch death_cause=damage;
+        both moved+attacked; 6 stills on disk;
+        HH 4f52d812 leftover-0 same hash;
+        window 6.9s leftover 0; no KEY_RIGHT 160
+        / rooftops fallback; remints -01/-02 void).
+      Gaps: residual nits OK: honesty only
+        (PLAY start_fight after title path;
+        P1 end HP 100 vs hit event; bots smoke;
+        art still VF7; first-run/rematch UX
+        assumption; Survival unshipped;
+        Stage stays VF6-WP3).
+        Parent 20-8 unchanged: R9-WP4 [ ]; 59/60; G6 [ ].
+      Commit: (this tick)
 
 VF6-WP3 — Stage progression and difficulty/reward loop                                  [ ]
   Phụ thuộc: VF6-WP1,VF6-WP2,VF5-WP2..5. Files: stage rules/save/UI/tests.
@@ -2769,7 +2846,7 @@ vào `KNOWN_ISSUES.md`; không đổi acceptance để làm cho pass.
 21. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Đọc `AGENTS.md`, sau đó đọc bảng đầu file này. WP đầu tiên chưa tick là **VF6-WP2**.
+Đọc `AGENTS.md`, sau đó đọc bảng đầu file này. WP đầu tiên chưa tick là **VF6-WP3**.
 
 Không làm R9-WP4/G6/GX; không mở Rust engine; không đụng Kho Bí Ẩn/Hoan Hao;
 không dùng Snake làm demo; không tải/rip Y8. Chỉ khi VF0-WP1 và VF0-WP2 đã có
@@ -3191,6 +3268,23 @@ dùng chỉ xem và review.
   Product e6d5f4a. Gate remains CLEARED. Parent 20-8
   unchanged (R9-WP4 [ ], 59/60, G6 [ ]). VF6-WP1 ticked;
   CURRENT_VALID_WP=VF6-WP2; V0 not ticked. VF6-WP2 remains [ ].
+- COORDINATOR CLOSEOUT VF6-WP2 (2026-09-01 20:14 Asia/Saigon): leftover-0;
+  II 6557c788 + HH 4f52d812 TICK=yes; run
+  VF6WP2-20260901-ASIA-SAIGON-03; command
+  cmd.vf6-wp2.vs-flow.3; source
+  81c44f5bbe9a4c16c3fdd8599147309edc550228bdec79ed00a5fddcb8d3f55b
+  leftover-0; window ~7s host exit 0;
+  APPLY 615/615 (USED_FORCE_KILL=0).
+  Official remint -03; -01/-02 void.
+  Close Clinch death_cause=damage.
+  Both moved+attacked. 6 stills.
+  Honesty: PLAY start_fight after title
+  path; P1 end HP 100 vs hit event;
+  bots smoke; art still VF7.
+  No Y8 rip.
+  Product 5ab444a. Gate remains CLEARED. Parent 20-8
+  unchanged (R9-WP4 [ ], 59/60, G6 [ ]). VF6-WP2 ticked;
+  CURRENT_VALID_WP=VF6-WP3; V0 not ticked. VF6-WP3 remains [ ].
 
 ================================================================================
 HẾT PLAN — 29-8-2026
