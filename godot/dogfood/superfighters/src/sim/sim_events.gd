@@ -15,6 +15,7 @@ static var PHASES: PackedStringArray = PackedStringArray([
 	"weapon_respawn",
 	"projectiles",
 	"explosives",
+	"match_phase",
 	"match_resolve",
 ])
 

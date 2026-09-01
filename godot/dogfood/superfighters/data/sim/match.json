@@ -1,0 +1,113 @@
+{
+  "schema": "vf.sim.match.v1",
+  "schema_version": 1,
+  "title": "Vault Fighters",
+  "y8_parity_claimed": false,
+  "y8_tick_rate_claimed": false,
+  "ledger_clock": "RL-SIM-FIXED-60",
+  "machine_ledger": "RL-MATCH-MACHINE",
+  "machine_class": "assumption",
+  "teams_ledger": "RL-MATCH-TEAMS",
+  "teams_class": "assumption",
+  "last_standing_ledger": "RL-MATCH-LAST",
+  "last_standing_class": "assumption",
+  "ff_ledger": "RL-HIT-FF",
+  "ff_class": "assumption",
+  "spawn_seed_ledger": "RL-MATCH-SEED",
+  "spawn_seed_class": "assumption",
+  "timer_ledger": "RL-MATCH-TIMER",
+  "timer_class": "assumption",
+  "timer_observed": false,
+  "countdown_ledger": "RL-MATCH-COUNTDOWN",
+  "countdown_class": "assumption",
+  "countdown_observed": false,
+  "hold_to_aim_ledger": "RL-CTRL-HOLD-AIM",
+  "hold_to_aim_class": "assumption",
+  "roll_dive_ledger": "RL-MOVE-ROLL-DIVE",
+  "roll_dive_class": "unavailable",
+  "official_forbids": ["teleport", "force_kill"],
+  "canonical": true,
+  "phases": [
+    "boot",
+    "menu",
+    "countdown",
+    "active",
+    "paused",
+    "resolved",
+    "quit"
+  ],
+  "outcomes": ["play", "win", "lose", "tie", "quit"],
+  "end_reasons": [
+    "last_standing",
+    "p1_down",
+    "all_down",
+    "timeout",
+    "quit",
+    "restart"
+  ],
+  "modes": {
+    "vs1": {
+      "alignment": "ffa",
+      "p1_team": 0,
+      "friendly_fire": false,
+      "uses_machine": true,
+      "official_lifecycle": false,
+      "note": "Title VS 1P starts MatchRules. Official VF6-WP1 lifecycle traces are vs2. vs1 is started for runtime friendly-fire on fx_melee_close only."
+    },
+    "vs2": {
+      "alignment": "team",
+      "p1_team": 0,
+      "p2_team": 1,
+      "friendly_fire": true,
+      "uses_machine": true,
+      "official_lifecycle": true
+    },
+    "stage": {
+      "alignment": "ffa",
+      "p1_team": 0,
+      "friendly_fire": false,
+      "uses_machine": true,
+      "official_lifecycle": false,
+      "note": "Title Stage button constructs MatchRules. No official stage win/lose/tie/quit/pause lifecycle this WP."
+    },
+    "survival": {
+      "alignment": "ffa",
+      "p1_team": 0,
+      "friendly_fire": false,
+      "uses_machine": false,
+      "shipped": false,
+      "official_lifecycle": false,
+      "note": "Not shipped. No title button. app.gd never starts survival. Reserved for VF6-WP4."
+    }
+  },
+  "spawn_seed": {
+    "formula": "7 + stage * 13",
+    "mode_mixed": false,
+    "map_mixed": false,
+    "note": "Unchanged first-playable formula. Mode/map are not mixed so official VF1–VF5 seeds stay 7."
+  },
+  "countdown": {
+    "ticks": 90,
+    "skip_when_test_driven": true,
+    "class": "assumption",
+    "observed": false,
+    "note": "Product pre-round beat. Not an observed Y8 countdown."
+  },
+  "round_timer": {
+    "enabled": false,
+    "ticks": 0,
+    "class": "assumption",
+    "observed": false,
+    "note": "Y8 round timer was not observed. Default is no timer. Timeout-tie is a labeled approximation when a trace enables the timer."
+  },
+  "pause": {
+    "freezes_sim": true,
+    "freezes_physics": true,
+    "freezes_combat": true,
+    "rejects_apply_frames": true
+  },
+  "signals": {
+    "once_per_round": true,
+    "kinds": ["win", "lose", "tie", "quit"]
+  }
+}

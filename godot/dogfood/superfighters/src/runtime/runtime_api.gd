@@ -320,7 +320,7 @@ func _session() -> GameSession:
 
 func _ui_flags() -> Dictionary:
 	if app == null:
-		return {"title": false, "win": false, "lose": false, "pause": false}
+		return {"title": false, "win": false, "lose": false, "tie": false, "pause": false}
 	var pause_vis: bool = false
 	if app.session != null and app.session.pause_screen != null:
 		pause_vis = app.session.pause_screen.visible
@@ -328,6 +328,7 @@ func _ui_flags() -> Dictionary:
 		"title": app.title != null and app.title.visible,
 		"win": app.win_screen != null and app.win_screen.visible,
 		"lose": app.lose_screen != null and app.lose_screen.visible,
+		"tie": app.tie_screen != null and app.tie_screen.visible,
 		"pause": pause_vis,
 	}
 

@@ -56,6 +56,76 @@ static func validate(trace: Dictionary) -> PackedStringArray:
 		_append(errors, official_forbidden(trace))
 	if not trace.has("segments") and not trace.has("frames"):
 		errors.append("trace missing segments and frames")
+	if trace.has("frames"):
+		errors.append_array(validate_frame_ticks(trace.get("frames", []) as Array))
+	if trace.has("segments"):
+		var segs: Array = trace.get("segments", []) as Array
+		var si: int = 0
+		while si < segs.size():
+			if not (segs[si] is Dictionary):
+				errors.append("segment %d must be object" % si)
+			else:
+				var seg: Dictionary = segs[si] as Dictionary
+				if int(seg.get("ticks", 1)) < 1 and not seg.has("repeat"):
+					errors.append("segment %d ticks must be positive" % si)
+			si += 1
+	var ops: Array = trace.get("match_ops", []) as Array
+	var seen_ticks: Dictionary = {}
+	var quit_seen: bool = false
+	var previous_op_tick: int = -1
+	var oi: int = 0
+	while oi < ops.size():
+		if not (ops[oi] is Dictionary):
+			errors.append("match_ops[%d] must be object" % oi)
+		else:
+			var op: Dictionary = ops[oi] as Dictionary
+			var name: String = str(op.get("op", ""))
+			var tick: int = int(op.get("tick", -1))
+			if not ["pause", "resume", "quit"].has(name):
+				errors.append("illegal match op %s" % name)
+			if tick < 0:
+				errors.append("match op tick must be non-negative")
+			elif tick < previous_op_tick:
+				errors.append("match op ticks must be non-decreasing")
+			previous_op_tick = maxi(previous_op_tick, tick)
+			if seen_ticks.has(tick):
+				errors.append("duplicate same-tick match op at %d" % tick)
+			seen_ticks[tick] = true
+			if quit_seen:
+				errors.append("match op %s occurs after terminal quit" % name)
+			if name == "quit":
+				quit_seen = true
+			oi += 1
+	return errors
+
+
+static func validate_frame_ticks(raw: Array) -> PackedStringArray:
+	## Validate authored tick continuity before _normalize_frames can synthesize
+	## missing slots or overwrite malformed indices.
+	var errors: PackedStringArray = PackedStringArray()
+	var i: int = 0
+	while i < raw.size():
+		var row: Variant = raw[i]
+		if row is Dictionary:
+			var d: Dictionary = row as Dictionary
+			if not d.has("tick"):
+				errors.append("frame row %d missing tick" % i)
+			elif int(d.get("tick", -1)) != i:
+				errors.append("frame row %d tick discontinuity expected=%d got=%d" % [i, i, int(d.get("tick", -1))])
+		elif row is Array:
+			var slots: Array = row as Array
+			var s: int = 0
+			while s < slots.size():
+				var frame: Variant = slots[s]
+				var tick: int = -1
+				if frame is InputFrame:
+					tick = (frame as InputFrame).tick
+				elif frame is Dictionary:
+					tick = int((frame as Dictionary).get("tick", -1))
+				if tick != i:
+					errors.append("frame row %d slot %d tick discontinuity expected=%d got=%d" % [i, s, i, tick])
+				s += 1
+		i += 1
 	return errors
 
 

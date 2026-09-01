@@ -1,0 +1,38 @@
+{
+  "schema": "vf.sim.trace.v1",
+  "schema_version": 1,
+  "title": "Vault Fighters",
+  "kind": "official",
+  "name": "match_restart",
+  "record_source": "scripted_input_frames",
+  "mode": "vs2",
+  "map_id": "police",
+  "stage_index": 0,
+  "seed": 7,
+  "fighter_count": 2,
+  "tick_hz": 60,
+  "snapshot_every": 15,
+  "ledger_clock": "RL-SIM-FIXED-60",
+  "y8_tick_rate_claimed": false,
+  "y8_parity_claimed": false,
+  "hold_to_aim": "RL-CTRL-HOLD-AIM assumption, not observed",
+  "roll_dive": "RL-MOVE-ROLL-DIVE unavailable",
+  "match_machine": "RL-MATCH-MACHINE assumption",
+  "app_ops": [
+    {"op": "title_to_fight"},
+    {"op": "restart_same"}
+  ],
+  "segments": [
+    {"ticks": 12, "p1": {}},
+    {"ticks": 48, "p1": {"held": ["right"], "move_x": 1.0}},
+    {
+      "repeat": 10,
+      "segments": [
+        {"ticks": 4, "p1": {"held": ["fire"]}},
+        {"ticks": 1, "p1": {"released": ["fire"]}},
+        {"ticks": 24, "p1": {}}
+      ]
+    },
+    {"ticks": 24, "p1": {}}
+  ]
+}

@@ -243,6 +243,20 @@ First playable slice. Not G6. Not 60/60.
   tuning. Art still VF7.
   No new Y8 play. Overlay Q2 854×480 contact sheet is not a
   second official size.
+- VF6-WP1 ships one canonical match state machine as assumption
+  (`ledger:RL-MATCH-MACHINE`, `ledger:RL-MATCH-TEAMS`,
+  `ledger:RL-MATCH-LAST`, `ledger:RL-MATCH-SEED`). Official proof
+  is InputFrame `apply_frames` for win/loss/tie/quit/restart plus
+  pause-freeze. `snapshot_hash()` stays physics/combat identity so
+  pause/restart/VF5 golden hashes do not drift; lifecycle is on
+  transition `post_phase` + `match_hash`. `force_kill` stays fixture-only. Round timer and
+  countdown are **not** observed (`ledger:RL-MATCH-TIMER`,
+  `ledger:RL-MATCH-COUNTDOWN`); official tie is a labeled timeout
+  approximation. P2/bot stay **smoke** until VF6-WP5. Survival is
+  **not shipped** (no title button, never started, not in MACHINE
+  pass list) until VF6-WP4. Official VF6-WP1 lifecycle is vs2
+  window/menu E2E; vs1 is FF fixture only; Stage is title-start
+  only. Art still VF7. No new Y8 play.
 - VF3-WP4 ships grenade hold/release throw, gravity arc, bounce,
   fuse, radial falloff, owner skip, one explosion, timeout
   cleanup, and swept nade collision as assumption

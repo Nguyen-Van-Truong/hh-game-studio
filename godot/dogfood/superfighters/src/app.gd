@@ -1,15 +1,19 @@
 class_name App
 extends Node
 
+const _TieScreen: GDScript = preload("res://src/ui/tie_screen.gd")
+
 var title: TitleScreen
 var win_screen: WinScreen
 var lose_screen: LoseScreen
+var tie_screen
 var remap_screen: RemapScreen
 var session: GameSession
 var test_driven: bool = false
 var mode: String = "vs1"
 var map_id: String = "rooftops"
 var stage_index: int = 0
+var next_round_id: int = 1
 var runtime: RuntimeApi = RuntimeApi.new()
 
 
@@ -38,6 +42,9 @@ func _enter_tree() -> void:
 	lose_screen = LoseScreen.new()
 	lose_screen.restart_pressed.connect(restart_to_title)
 	add_child(lose_screen)
+	tie_screen = _TieScreen.new()
+	tie_screen.restart_pressed.connect(restart_to_title)
+	add_child(tie_screen)
 
 
 func _input(event: InputEvent) -> void:
@@ -63,21 +70,30 @@ func start_fight(p_mode: String, p_map: String, p_stage: int) -> void:
 	_clear_session()
 	if title != null:
 		title.visible = false
+		title.clear_status()
 	if win_screen != null:
 		win_screen.visible = false
 	if lose_screen != null:
 		lose_screen.visible = false
+	if tie_screen != null:
+		tie_screen.visible = false
 	var tree: SceneTree = get_tree()
 	if tree != null:
 		tree.paused = false
 	session = GameSession.new()
 	session.test_driven = test_driven
+	session.match_rules.round_id = next_round_id
+	next_round_id += 1
 	session.won.connect(_on_won)
 	session.lost.connect(_on_lost)
+	session.tied.connect(_on_tied)
+	session.quit_match.connect(_on_quit_match)
 	add_child(session)
 	session.setup(p_mode, p_map, p_stage)
 	if session.pause_screen != null:
 		session.pause_screen.controls_pressed.connect(_on_controls)
+		session.pause_screen.restart_pressed.connect(_on_pause_restart)
+		session.pause_screen.quit_pressed.connect(_on_pause_quit)
 
 
 func restart_to_title() -> void:
@@ -86,9 +102,12 @@ func restart_to_title() -> void:
 		win_screen.visible = false
 	if lose_screen != null:
 		lose_screen.visible = false
+	if tie_screen != null:
+		tie_screen.visible = false
 	if title != null:
 		title.visible = true
 		title.set_map_id(map_id)
+		title.clear_status()
 		title.vs_one_btn.grab_focus()
 	var tree: SceneTree = get_tree()
 	if tree != null:
@@ -136,17 +155,67 @@ func _advance_stage() -> void:
 
 func _show_win() -> void:
 	var headline: String = "Last standing"
-	var detail: String = "The arena is yours."
+	var reason: String = "last_standing"
+	var team: int = -1
+	if session != null and session.match_rules != null:
+		if session.match_rules.end_reason != "":
+			reason = session.match_rules.end_reason
+		team = session.match_rules.winner_team
+	var detail: String = "You won. End reason: %s. Winner team %d. Restart from title." % [reason, team]
 	if mode == "stage":
 		headline = "Stage cleared"
-		detail = "Skyline Relay → Pallet Annex → Signal Court → Vitriol Sump."
+		detail = "Stage win. End reason: %s. Next arena or title restart." % reason
 	if win_screen != null:
 		win_screen.show_win(headline, detail)
 
 
 func _on_lost() -> void:
 	if lose_screen != null:
-		lose_screen.show_lose("Down", "Pits and bullets end the run. Restart from title.")
+		var reason: String = ""
+		if session != null and session.match_rules != null:
+			reason = session.match_rules.end_reason
+		var detail: String = "Pits and bullets end the run. Restart from title."
+		if reason != "":
+			detail = "End reason: %s. Restart from title." % reason
+		lose_screen.show_lose("Down", detail)
+
+
+func _on_tied() -> void:
+	if tie_screen != null:
+		var reason: String = "all_down"
+		if session != null and session.match_rules != null and session.match_rules.end_reason != "":
+			reason = session.match_rules.end_reason
+		var detail: String = "Last standing wiped. End reason: %s." % reason
+		if reason == "timeout":
+			detail = "Round timer ended with more than one side standing (approximation, not observed)."
+		tie_screen.show_tie("Draw", detail)
+
+
+func _on_quit_match() -> void:
+	# Player quit always returns to title. Official LIVE proof requires
+	# title_visible_after=true; test_driven must not swallow the transition.
+	quit_to_title()
+
+
+func quit_to_title() -> void:
+	if session != null:
+		session.set_paused(false)
+	restart_to_title()
+	if title != null:
+		title.set_status("Last match ended: quit. Choose a mode to start again.")
+
+
+func _on_pause_restart() -> void:
+	if session != null:
+		session.set_paused(false)
+	restart_same()
+
+
+func _on_pause_quit() -> void:
+	if session != null:
+		session.request_quit()
+	else:
+		quit_to_title()
 
 
 func shutdown() -> void:
@@ -194,5 +263,14 @@ func _disconnect_session(old: GameSession) -> void:
 		old.won.disconnect(_on_won)
 	if old.lost.is_connected(_on_lost):
 		old.lost.disconnect(_on_lost)
-	if old.pause_screen != null and old.pause_screen.controls_pressed.is_connected(_on_controls):
-		old.pause_screen.controls_pressed.disconnect(_on_controls)
+	if old.tied.is_connected(_on_tied):
+		old.tied.disconnect(_on_tied)
+	if old.quit_match.is_connected(_on_quit_match):
+		old.quit_match.disconnect(_on_quit_match)
+	if old.pause_screen != null:
+		if old.pause_screen.controls_pressed.is_connected(_on_controls):
+			old.pause_screen.controls_pressed.disconnect(_on_controls)
+		if old.pause_screen.restart_pressed.is_connected(_on_pause_restart):
+			old.pause_screen.restart_pressed.disconnect(_on_pause_restart)
+		if old.pause_screen.quit_pressed.is_connected(_on_pause_quit):
+			old.pause_screen.quit_pressed.disconnect(_on_pause_quit)

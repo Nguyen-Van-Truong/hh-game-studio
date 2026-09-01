@@ -48,6 +48,12 @@
     "melee_phases": "RL-HIT-PHASES assumption, not observed",
     "hitbox": "RL-HIT-BOX assumption, not observed",
     "friendly_fire": "RL-HIT-FF assumption, not observed",
+    "match_machine": "RL-MATCH-MACHINE assumption, not observed",
+    "match_teams": "RL-MATCH-TEAMS assumption, not observed",
+    "match_last": "RL-MATCH-LAST assumption, last standing, not observed",
+    "match_seed": "RL-MATCH-SEED assumption, 7 + stage * 13",
+    "match_timer": "RL-MATCH-TIMER assumption, not observed; default off",
+    "match_countdown": "RL-MATCH-COUNTDOWN assumption, not observed",
     "hitstop": "RL-HIT-HITSTOP assumption, presentation only, clock still advances",
     "aim_dirs": "RL-AIM-DIRS assumption, not observed",
     "fire_semi": "RL-FIRE-SEMI assumption, not observed",
@@ -109,6 +115,10 @@
     "schema": "vf.weapons.roster.v1",
     "path": "res://data/weapons/roster.json",
     "gate": "res://data/weapons/schema.json"
+  },
+  "match": {
+    "schema": "vf.sim.match.v1",
+    "path": "res://data/sim/match.json"
   },
   "locomotion": {
     "schema": "vf.sim.locomotion.v1",

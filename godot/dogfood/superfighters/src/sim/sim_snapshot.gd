@@ -64,6 +64,23 @@ static func from_session(session: GameSession) -> Dictionary:
 	var seed_v: int = session.sim_seed
 	if session.clock != null:
 		tick = session.clock.tick
+	var phase: String = "active"
+	var end_reason: String = ""
+	var round_id: int = 0
+	var timer_enabled: int = 0
+	var timer_left: int = -1
+	var countdown_left: int = 0
+	var winner_team: int = -1
+	var alignment: String = ""
+	if session.match_rules != null:
+		phase = session.match_rules.phase
+		end_reason = session.match_rules.end_reason
+		round_id = session.match_rules.round_id
+		timer_enabled = 1 if session.match_rules.timer_enabled else 0
+		timer_left = session.match_rules.timer_left
+		countdown_left = session.match_rules.countdown_left
+		winner_team = session.match_rules.winner_team
+		alignment = session.match_rules.alignment
 	return {
 		"schema": SimConstants.SNAPSHOT_ID,
 		"schema_version": SimConstants.SCHEMA_VERSION,
@@ -73,6 +90,14 @@ static func from_session(session: GameSession) -> Dictionary:
 		"event_order": SimEventOrder.SCHEMA_ID,
 		"map_id": session.map_id,
 		"mode": session.mode,
+		"phase": phase,
+		"end_reason": end_reason,
+		"round_id": round_id,
+		"timer_enabled": timer_enabled,
+		"timer_left": timer_left,
+		"countdown_left": countdown_left,
+		"winner_team": winner_team,
+		"alignment": alignment,
 		"outcome": session.outcome,
 		"living": living,
 		"fighters": fighters_out,
@@ -96,8 +121,9 @@ static func from_session(session: GameSession) -> Dictionary:
 
 
 static func hash_payload(snap: Dictionary) -> Dictionary:
-	## Fighter rows carry explosive/power/reserve/reload. Those fields
-	## are hashed here via `fighters`; they are not p1_* display extras.
+	## Physics/combat identity only. Lifecycle (phase/outcome/round_id)
+	## lives on the snapshot document and on match transition rows.
+	## Pause may change phase/UI without changing this digest (VF5 + VF6-WP1).
 	return {
 		"schema": str(snap.get("schema", "")),
 		"schema_version": int(snap.get("schema_version", 0)),
@@ -107,7 +133,6 @@ static func hash_payload(snap: Dictionary) -> Dictionary:
 		"event_order": str(snap.get("event_order", "")),
 		"map_id": str(snap.get("map_id", "")),
 		"mode": str(snap.get("mode", "")),
-		"outcome": str(snap.get("outcome", "")),
 		"living": int(snap.get("living", 0)),
 		"fighters": snap.get("fighters", []),
 		"pickups": snap.get("pickups", []),
@@ -117,10 +142,33 @@ static func hash_payload(snap: Dictionary) -> Dictionary:
 	}
 
 
+static func match_payload(snap: Dictionary) -> Dictionary:
+	## Recomputable match-identity digest: physics plus destination lifecycle.
+	var row: Dictionary = hash_payload(snap)
+	row["phase"] = str(snap.get("phase", ""))
+	row["end_reason"] = str(snap.get("end_reason", ""))
+	row["round_id"] = int(snap.get("round_id", 0))
+	row["timer_enabled"] = int(snap.get("timer_enabled", 0))
+	row["timer_left"] = int(snap.get("timer_left", -1))
+	row["countdown_left"] = int(snap.get("countdown_left", 0))
+	row["winner_team"] = int(snap.get("winner_team", -1))
+	row["alignment"] = str(snap.get("alignment", ""))
+	row["outcome"] = str(snap.get("outcome", ""))
+	return row
+
+
 static func stable_hash(snap: Dictionary) -> String:
+	return _sha256(canonical(hash_payload(snap)))
+
+
+static func match_hash(snap: Dictionary) -> String:
+	return _sha256(canonical(match_payload(snap)))
+
+
+static func _sha256(text: String) -> String:
 	var ctx: HashingContext = HashingContext.new()
 	ctx.start(HashingContext.HASH_SHA256)
-	ctx.update(canonical(hash_payload(snap)).to_utf8_buffer())
+	ctx.update(text.to_utf8_buffer())
 	return ctx.finish().hex_encode()
 
 

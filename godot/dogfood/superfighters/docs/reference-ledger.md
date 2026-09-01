@@ -985,3 +985,33 @@ author-only. Do **not** cite as observed.
 | RL-MAP-GAUGE | Gauge Deck arena | `assumption` | none | VF5-WP6 product contract; **not** observed on Y8 this session | 2026-08-31 | wide training floor, loft rails, observation lift | original name | Do **not** cite as observed. |
 | RL-MAP-VS-ROSTER | Six-map VS selection | `assumption` | none | VF5-WP6 product contract; **not** observed on Y8 this session | 2026-08-31 | stable six-id VS cycle; Stage stays four | order | Do **not** cite as observed. |
 
+---
+
+## VF6-WP1 match state machine (not a play observation)
+
+Dated 2026-08-31 Asia/Saigon. No in-game Y8 play. No HTML5/Flash
+package. Sidecar: `docs/match.md`. Official remint `run_id` is
+`VF6WP1-20260901-ASIA-SAIGON-04` (`cmd.vf6-wp1.match-machine.4`).
+Prior `-01`/`-02`/`-03` ids are void.
+
+The machine stays `ledger:RL-MATCH-MACHINE` (`assumption`). Teams stay
+`ledger:RL-MATCH-TEAMS` (`assumption`). Last-standing stays
+`ledger:RL-MATCH-LAST` (`assumption`). Spawn seed stays
+`ledger:RL-MATCH-SEED` (`assumption`). Round timer stays
+`ledger:RL-MATCH-TIMER` (`assumption`, **not observed**; official tie
+is a labeled timeout approximation). Countdown stays
+`ledger:RL-MATCH-COUNTDOWN` (`assumption`, not observed). Friendly-fire
+stays `ledger:RL-HIT-FF` (`assumption`). Hold-to-aim stays
+`ledger:RL-CTRL-HOLD-AIM` (`assumption`). Y8 observation stays
+`ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). 60 Hz stays
+`ledger:RL-SIM-FIXED-60` (`assumption`). Do **not** cite as observed.
+
+| ID | Topic | Class | Conf. | Source | When | Behavior to reproduce | Tuning-only | Notes |
+|---|---|---|---|---|---|---|---|---|
+| RL-MATCH-MACHINE | Canonical match phases | `assumption` | none | VF6-WP1 product contract; **not** observed on Y8 this session | 2026-08-31 | boot/menu/countdown/active/paused/resolved/quit used by every mode | — | One writer of outcome. |
+| RL-MATCH-TEAMS | FFA vs team alignment | `assumption` | none | VF6-WP1; cites RL-MODE-1P-2P / RL-HIT-FF | 2026-08-31 | vs1/stage FFA; vs2 two teams | — | Not observed team HUD. |
+| RL-MATCH-LAST | Last-standing resolve | `assumption` | none | VF6-WP1; cites RL-ITEM-GRAB-GUNS | 2026-08-31 | one living team wins; empty field is tie | — | Win sentence is first-playable, not a live Y8 quote. |
+| RL-MATCH-SEED | Spawn / match seed | `assumption` | none | first-playable `7 + stage * 13` | 2026-08-31 | seed 7 at stage 0 for all modes | formula | Mode/map not mixed. |
+| RL-MATCH-TIMER | Optional round timer | `assumption` | none | **not** observed; product default off | 2026-08-31 | timeout-tie only when a trace enables ticks | 36 ticks in official tie | Approximation. |
+| RL-MATCH-COUNTDOWN | Pre-round countdown | `assumption` | none | **not** observed; skipped when `test_driven` | 2026-08-31 | live 90 ticks, official 0 | 90 | Not Y8 parity. |
+

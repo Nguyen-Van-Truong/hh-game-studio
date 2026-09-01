@@ -8,14 +8,18 @@ const _Expl: GDScript = preload("res://src/sim/explosive.gd")
 const _Inv: GDScript = preload("res://src/data/weapons/inventory.gd")
 const _Bal: GDScript = preload("res://src/sim/balance.gd")
 const _WorldOwner: GDScript = preload("res://src/world/world_owner.gd")
+const _Match: GDScript = preload("res://src/sim/match.gd")
 
 signal won
 signal lost
+signal tied
+signal quit_match
 
 var mode: String = "vs1"
 var map_id: String = "rooftops"
 var stage_index: int = 0
 var outcome: String = "play"
+var match_rules = _Match.new()
 var fighters: Array[Fighter] = []
 var pickups: Array[Pickup] = []
 var bullets: Array[Bullet] = []
@@ -35,6 +39,7 @@ var chaos_rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var chaos_enabled: bool = false
 var win_title: String = "Last standing"
 var lose_title: String = "Down"
+var tie_title: String = "Draw"
 var _fx: Array[Sprite2D] = []
 var _fx_life: Array[float] = []
 var _shut_down: bool = false
@@ -80,6 +85,12 @@ func setup(p_mode: String, p_map: String, p_stage: int) -> void:
 	world_owner.call("spawn_map", map_id)
 	_spawn_fighters()
 	_spawn_weapons()
+	if match_rules == null:
+		match_rules = _Match.new()
+	match_rules.begin(self, match_rules.round_id)
+	if test_driven:
+		match_rules.countdown_left = 0
+		match_rules.ensure_active(self)
 	hud = Hud.new()
 	add_child(hud)
 	hud.set_map_name(Maps.display_name(map_id))
@@ -111,6 +122,14 @@ func _physics_process(delta: float) -> void:
 	var steps: int = clock.feed(delta)
 	var s: int = 0
 	while s < steps:
+		if match_rules != null and match_rules.phase == _Match.PHASE_COUNTDOWN:
+			if match_rules.countdown_left <= 0:
+				match_rules.ensure_active(self)
+			if match_rules.phase == _Match.PHASE_COUNTDOWN:
+				match_rules.tick_countdown(self)
+				clock.advance()
+				s += 1
+				continue
 		if recorder != null and recorder.active:
 			if not recorder.step_session(self):
 				break
@@ -122,12 +141,22 @@ func _physics_process(delta: float) -> void:
 func step_fixed(_delta: float, cmds: Array[Dictionary]) -> void:
 	if _is_sim_paused():
 		return
+	if match_rules != null and match_rules.phase == _Match.PHASE_COUNTDOWN:
+		if match_rules.countdown_left <= 0:
+			match_rules.ensure_active(self)
+		if match_rules.phase == _Match.PHASE_COUNTDOWN:
+			match_rules.tick_countdown(self)
+			clock.advance()
+			return
 	_step_one_tick(cmds)
 
 
 func step_from_live_input() -> bool:
 	if _is_sim_paused():
 		last_reject = PackedStringArray(["paused"])
+		return false
+	if match_rules != null and match_rules.phase == _Match.PHASE_COUNTDOWN:
+		last_reject = PackedStringArray(["countdown"])
 		return false
 	var frames: Array = []
 	var i: int = 0
@@ -161,10 +190,26 @@ func enable_chaos() -> void:
 
 func apply_frames(frames: Array) -> bool:
 	last_reject = PackedStringArray()
+	var pause_pressed: bool = _bundle_has_pressed(frames, "pause")
+	var cleaned: Array = frames
+	if pause_pressed:
+		cleaned = _bundle_without_action(frames, "pause")
 	if _is_sim_paused():
+		if pause_pressed:
+			set_paused(false)
+			return true
 		last_reject.append("paused")
 		return false
-	var errors: PackedStringArray = SimValidator.validate_bundle(frames, clock.tick, fighters.size())
+	if match_rules != null and match_rules.phase == _Match.PHASE_COUNTDOWN:
+		if match_rules.countdown_left <= 0:
+			match_rules.ensure_active(self)
+		if match_rules.phase == _Match.PHASE_COUNTDOWN:
+			last_reject.append("countdown")
+			return false
+	if pause_pressed:
+		set_paused(true, RuntimeConstants.REASON_PLAYER)
+		return true
+	var errors: PackedStringArray = SimValidator.validate_bundle(cleaned, clock.tick, fighters.size())
 	if not errors.is_empty():
 		last_reject = errors
 		ledger.push(clock.tick, "input_validate", "reject", {
@@ -173,8 +218,8 @@ func apply_frames(frames: Array) -> bool:
 		return false
 	var cmds: Array[Dictionary] = []
 	var i: int = 0
-	while i < frames.size():
-		cmds.append(InputActions.cmd_from_variant(frames[i]))
+	while i < cleaned.size():
+		cmds.append(InputActions.cmd_from_variant(cleaned[i]))
 		i += 1
 	_step_one_tick(cmds)
 	return true
@@ -209,6 +254,13 @@ func _gather_live_cmds() -> Array[Dictionary]:
 func _step_one_tick(cmds: Array[Dictionary]) -> void:
 	var dt: float = SimConstants.TICK_DT
 	_tick_fx(dt)
+	if match_rules != null and match_rules.phase == _Match.PHASE_COUNTDOWN:
+		if match_rules.countdown_left <= 0:
+			match_rules.ensure_active(self)
+		if match_rules.phase == _Match.PHASE_COUNTDOWN:
+			match_rules.tick_countdown(self)
+			clock.advance()
+			return
 	if outcome != "play":
 		return
 	var r: int = 0
@@ -260,6 +312,9 @@ func _step_one_tick(cmds: Array[Dictionary]) -> void:
 	_step_grenades(dt)
 	if world_owner != null:
 		world_owner.call("step", dt)
+	if match_rules != null and match_rules.timer_enabled and match_rules.phase == _Match.PHASE_ACTIVE:
+		if match_rules.timer_left > 0:
+			match_rules.timer_left -= 1
 	_resolve_end()
 	clock.advance()
 	if hud != null:
@@ -272,6 +327,8 @@ func set_paused(active: bool, reason: String = "") -> void:
 		return
 	if active:
 		clock.pause()
+		if match_rules != null:
+			match_rules.enter_pause(self)
 		if reason != "":
 			pause_reason = reason
 		elif pause_reason == "":
@@ -279,6 +336,8 @@ func set_paused(active: bool, reason: String = "") -> void:
 	else:
 		clock.resume()
 		pause_reason = ""
+		if match_rules != null:
+			match_rules.leave_pause(self)
 	var tree: SceneTree = get_tree()
 	if tree == null:
 		return
@@ -299,6 +358,10 @@ func snapshot() -> Dictionary:
 
 func snapshot_hash() -> String:
 	return SimSnapshot.stable_hash(snapshot())
+
+
+func match_hash() -> String:
+	return SimSnapshot.match_hash(snapshot())
 
 
 func fighter_at_slot(slot: int) -> Fighter:
@@ -438,7 +501,14 @@ func player1() -> Fighter:
 	return fighters[0]
 
 
+func request_quit() -> void:
+	if match_rules == null:
+		match_rules = _Match.new()
+	match_rules.request_quit(self)
+
+
 func force_kill(slot: int) -> void:
+	## Fixture-only. Official MATCH traces and apply_frames never call this.
 	ledger.push(clock.tick, "fixture", "force_kill", {"slot": slot})
 	var i: int = 0
 	while i < fighters.size():
@@ -1223,34 +1293,40 @@ func _explode(nade: ThrownGrenade) -> void:
 
 
 func _resolve_end() -> void:
-	if outcome != "play":
+	if match_rules == null:
+		match_rules = _Match.new()
+	if match_rules.outcome != "play":
+		return
+	## Canonical MatchRules.evaluate — preload avoids class-cache order issues.
+	var eval: Dictionary = _Match.evaluate(
+		fighters,
+		mode,
+		0,
+		match_rules.timer_enabled,
+		match_rules.timer_left
+	)
+	var next: String = str(eval.get("outcome", "play"))
+	if next == "play":
 		return
 	var p1: Fighter = player1()
-	if p1 != null and p1.dead:
-		outcome = "lose"
-		lose_title = "Down"
-		ledger.push(clock.tick, "match_resolve", "lose", {
-			"cause": p1.death_cause if p1 != null else "",
-		})
-		if sfx != null:
-			sfx.play("lose")
-		lost.emit()
-		return
-	var foes_alive: int = 0
-	var i: int = 0
-	while i < fighters.size():
-		var f: Fighter = fighters[i]
-		if f != p1 and not f.dead:
-			if mode == "vs2" or f.team != p1.team:
-				foes_alive += 1
-		i += 1
-	if foes_alive == 0:
-		outcome = "win"
-		win_title = "Last standing"
-		ledger.push(clock.tick, "match_resolve", "win", {})
-		if sfx != null:
+	var cause: String = ""
+	if p1 != null:
+		cause = p1.death_cause
+	ledger.push(clock.tick, "match_resolve", next, {
+		"reason": str(eval.get("end_reason", "")),
+		"winner_team": int(eval.get("winner_team", -1)),
+		"round_id": match_rules.round_id,
+		"cause": cause,
+		"living": int(eval.get("living", 0)),
+	})
+	if sfx != null:
+		if next == "win":
 			sfx.play("win")
-		won.emit()
+		elif next == "lose":
+			sfx.play("lose")
+		elif next == "tie":
+			sfx.play("lose")
+	match_rules.apply_eval(self, eval)
 
 
 func _fit_camera() -> void:
@@ -1621,6 +1697,72 @@ func _log_death_if_new(f: Fighter) -> void:
 		"slot": f.slot,
 		"cause": f.death_cause,
 	})
+
+
+func _bundle_has_pressed(frames: Array, action: String) -> bool:
+	var i: int = 0
+	while i < frames.size():
+		var raw: Variant = frames[i]
+		var pressed: Array = []
+		if raw is InputFrame:
+			var packed: PackedStringArray = (raw as InputFrame).pressed
+			var p: int = 0
+			while p < packed.size():
+				if String(packed[p]) == action:
+					return true
+				p += 1
+		elif raw is Dictionary:
+			pressed = (raw as Dictionary).get("pressed", []) as Array
+			var j: int = 0
+			while j < pressed.size():
+				if str(pressed[j]) == action:
+					return true
+				j += 1
+		i += 1
+	return false
+
+
+func _bundle_without_action(frames: Array, action: String) -> Array:
+	var out: Array = []
+	var i: int = 0
+	while i < frames.size():
+		var raw: Variant = frames[i]
+		if raw is InputFrame:
+			var copy: InputFrame = raw as InputFrame
+			copy.pressed = _packed_without(copy.pressed, action)
+			copy.held = _packed_without(copy.held, action)
+			copy.released = _packed_without(copy.released, action)
+			out.append(copy)
+		elif raw is Dictionary:
+			var d: Dictionary = (raw as Dictionary).duplicate(true)
+			d["pressed"] = _array_without(d.get("pressed", []) as Array, action)
+			d["held"] = _array_without(d.get("held", []) as Array, action)
+			d["released"] = _array_without(d.get("released", []) as Array, action)
+			out.append(d)
+		else:
+			out.append(raw)
+		i += 1
+	return out
+
+
+func _packed_without(values: PackedStringArray, action: String) -> PackedStringArray:
+	var out: PackedStringArray = PackedStringArray()
+	var i: int = 0
+	while i < values.size():
+		if String(values[i]) != action:
+			out.append(String(values[i]))
+		i += 1
+	return out
+
+
+func _array_without(values: Array, action: String) -> Array:
+	var out: Array = []
+	var i: int = 0
+	while i < values.size():
+		if str(values[i]) != action:
+			out.append(values[i])
+		i += 1
+	return out
 
 
 func _free_node(node: Node) -> void:

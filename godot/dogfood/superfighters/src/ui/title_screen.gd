@@ -12,6 +12,7 @@ var vs_two_btn: Button
 var stage_btn: Button
 var map_btn: Button
 var controls_btn: Button
+var status_label: Label
 var map_id: String = "rooftops"
 
 
@@ -63,6 +64,14 @@ func _ready() -> void:
 	map_btn.name = "MapCycle"
 	controls_btn = _make_btn("Controls", Vector2(80, 480))
 	controls_btn.name = "Controls"
+	status_label = Label.new()
+	status_label.name = "MatchStatus"
+	status_label.text = ""
+	status_label.position = Vector2(80, 544)
+	status_label.size = Vector2(1100, 28)
+	status_label.add_theme_font_size_override("font_size", 18)
+	status_label.add_theme_color_override("font_color", UiTheme.BRASS)
+	add_child(status_label)
 	vs_one_btn.pressed.connect(_on_vs_one)
 	vs_two_btn.pressed.connect(_on_vs_two)
 	stage_btn.pressed.connect(_on_stage)
@@ -85,6 +94,15 @@ func set_map_id(next_id: String) -> void:
 	map_id = next_id
 	if map_btn != null:
 		map_btn.text = "Map: %s" % Maps.display_name(map_id)
+
+
+func set_status(text: String) -> void:
+	if status_label != null:
+		status_label.text = text
+
+
+func clear_status() -> void:
+	set_status("")
 
 
 func _make_btn(text: String, at: Vector2) -> Button:

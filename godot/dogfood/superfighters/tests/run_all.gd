@@ -21,6 +21,7 @@ const WarehouseCasesScript: GDScript = preload("res://tests/warehouse_cases.gd")
 const StationCasesScript: GDScript = preload("res://tests/station_cases.gd")
 const SewerCasesScript: GDScript = preload("res://tests/sewer_cases.gd")
 const VsRosterCasesScript: GDScript = preload("res://tests/vs_roster_cases.gd")
+const MatchCasesScript: GDScript = preload("res://tests/match_cases.gd")
 const _Combat: GDScript = preload("res://src/sim/combat.gd")
 
 var _fails: PackedStringArray = PackedStringArray()
@@ -54,6 +55,7 @@ var _warehouse: String = "unproven"
 var _station: String = "unproven"
 var _sewer: String = "unproven"
 var _vs_roster: String = "unproven"
+var _match: String = "unproven"
 
 
 func _initialize() -> void:
@@ -63,6 +65,8 @@ func _initialize() -> void:
 func _boot() -> void:
 	seed(1)
 	InputActions.install()
+	if paused:
+		paused = false
 	var app: App = _make_app()
 	_test_title(app)
 	_test_input_binds()
@@ -99,6 +103,11 @@ func _boot() -> void:
 	await _test_station(app)
 	await _test_sewer(app)
 	await _test_vs_roster(app)
+	if paused:
+		paused = false
+	await _test_match(app)
+	if paused:
+		paused = false
 	if _fails.is_empty():
 		_no_err = "proven"
 	_emit()
@@ -1598,6 +1607,57 @@ func _test_vs_roster(app: App) -> void:
 		_vs_roster = "proven"
 
 
+func _test_match(app: App) -> void:
+	var errors: PackedStringArray = await MatchCasesScript.run_all(app)
+	var i: int = 0
+	while i < errors.size():
+		_fail("MATCH %s" % String(errors[i]))
+		i += 1
+	var schema: String = str(MatchCasesScript.outcome_schema.get("verdict", "unproven"))
+	var machine: String = str(MatchCasesScript.outcome_machine.get("verdict", "unproven"))
+	var win_v: String = str(MatchCasesScript.outcome_win.get("verdict", "unproven"))
+	var lose_v: String = str(MatchCasesScript.outcome_lose.get("verdict", "unproven"))
+	var tie_v: String = str(MatchCasesScript.outcome_tie.get("verdict", "unproven"))
+	var quit_v: String = str(MatchCasesScript.outcome_quit.get("verdict", "unproven"))
+	var restart_v: String = str(MatchCasesScript.outcome_restart.get("verdict", "unproven"))
+	var pause_v: String = str(MatchCasesScript.outcome_pause.get("verdict", "unproven"))
+	var signal_v: String = str(MatchCasesScript.outcome_signal.get("verdict", "unproven"))
+	var seed_v: String = str(MatchCasesScript.outcome_seed.get("verdict", "unproven"))
+	var ff: String = str(MatchCasesScript.outcome_ff.get("verdict", "unproven"))
+	var live: String = str(MatchCasesScript.outcome_live.get("verdict", "unproven"))
+	var replay: String = str(MatchCasesScript.outcome_replay.get("verdict", "unproven"))
+	if schema != "pass":
+		_fail("MATCH SCHEMA outcome is %s" % schema)
+	if machine != "pass":
+		_fail("MATCH MACHINE outcome is %s" % machine)
+	if win_v != "pass":
+		_fail("MATCH WIN outcome is %s" % win_v)
+	if lose_v != "pass":
+		_fail("MATCH LOSE outcome is %s" % lose_v)
+	if tie_v != "pass":
+		_fail("MATCH TIE outcome is %s" % tie_v)
+	if quit_v != "pass":
+		_fail("MATCH QUIT outcome is %s" % quit_v)
+	if restart_v != "pass":
+		_fail("MATCH RESTART outcome is %s" % restart_v)
+	if pause_v != "pass":
+		_fail("MATCH PAUSE outcome is %s" % pause_v)
+	if signal_v != "pass":
+		_fail("MATCH SIGNAL outcome is %s" % signal_v)
+	if seed_v != "pass":
+		_fail("MATCH SEED outcome is %s" % seed_v)
+	if ff != "pass":
+		_fail("MATCH FF outcome is %s" % ff)
+	if live != "pass":
+		_fail("MATCH LIVE outcome is %s" % live)
+	if replay != "match":
+		_fail("MATCH REPLAY outcome is %s" % replay)
+	if MatchCasesScript.used_force_kill != 0:
+		_fail("MATCH official path used force_kill")
+	if _count_prefix("MATCH ") == 0:
+		_match = "proven"
+
+
 func _emit() -> void:
 	print("HH_VF_PATH title→fight→win/lose→restart")
 	print(
@@ -2010,6 +2070,27 @@ func _emit() -> void:
 			VsRosterCasesScript.used_apply_frames_succeeded,
 			VsRosterCasesScript.used_apply_frames_attempted,
 			_vs_roster,
+		]
+	)
+	print(
+		"HH_VF_MATCH MACHINE=%s MACHINE_SOURCE=outcome_machine WIN=%s WIN_SOURCE=outcome_win LOSE=%s TIE=%s TIE_SOURCE=outcome_tie QUIT=%s RESTART=%s PAUSE=%s SIGNAL=%s SEED=%s FF=%s LIVE=%s REPLAY=%s REPLAY_SOURCE=outcome_replay APPLY=%d/%d FORCE_KILL=%d P2_COVERAGE=smoke BOT_COVERAGE=smoke NOT_AI=1 NOT_Y8_PARITY=1 status=%s"
+		% [
+			str(MatchCasesScript.outcome_machine.get("verdict", "unproven")),
+			str(MatchCasesScript.outcome_win.get("verdict", "unproven")),
+			str(MatchCasesScript.outcome_lose.get("verdict", "unproven")),
+			str(MatchCasesScript.outcome_tie.get("verdict", "unproven")),
+			str(MatchCasesScript.outcome_quit.get("verdict", "unproven")),
+			str(MatchCasesScript.outcome_restart.get("verdict", "unproven")),
+			str(MatchCasesScript.outcome_pause.get("verdict", "unproven")),
+			str(MatchCasesScript.outcome_signal.get("verdict", "unproven")),
+			str(MatchCasesScript.outcome_seed.get("verdict", "unproven")),
+			str(MatchCasesScript.outcome_ff.get("verdict", "unproven")),
+			str(MatchCasesScript.outcome_live.get("verdict", "unproven")),
+			str(MatchCasesScript.outcome_replay.get("verdict", "unproven")),
+			MatchCasesScript.used_apply_frames_succeeded,
+			MatchCasesScript.used_apply_frames_attempted,
+			MatchCasesScript.used_force_kill,
+			_match,
 		]
 	)
 	print(

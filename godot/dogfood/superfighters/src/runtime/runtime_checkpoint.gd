@@ -39,6 +39,11 @@ static func apply(session: GameSession, payload: Dictionary) -> PackedStringArra
 		errors.append("checkpoint missing snapshot")
 		return errors
 	session.outcome = str(snap.get("outcome", session.outcome))
+	if session.match_rules != null:
+		session.match_rules.outcome = session.outcome
+		session.match_rules.phase = str(snap.get("phase", session.match_rules.phase))
+		session.match_rules.end_reason = str(snap.get("end_reason", session.match_rules.end_reason))
+		session.match_rules.round_id = int(snap.get("round_id", session.match_rules.round_id))
 	session.sim_seed = int(snap.get("seed", session.sim_seed))
 	session.rng.seed = session.sim_seed
 	if payload.has("rng_state"):

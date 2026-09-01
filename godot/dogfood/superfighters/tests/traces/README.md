@@ -218,6 +218,22 @@ Fall stays `ledger:RL-MOVE-FALL`. Clock stays
 | `env_fall.json` | Drop Well standing walk-off |
 | `env_yard.json` | Hazard Yard walk |
 
+## match/
+
+VF6-WP1 official InputFrame traces. Same schema as `official/`.
+Replay uses `apply_frames`. No teleport. No `force_kill`.
+Match machine stays `assumption`. Timer/countdown stay `assumption`
+and are **not** observed. Clock stays `ledger:RL-SIM-FIXED-60`.
+
+| File | Beat |
+|---|---|
+| `match_win.json` | vs2 last-standing win |
+| `match_lose.json` | rooftops pit lose |
+| `match_tie.json` | timeout-tie approximation (`TIE_OBSERVED=0`) |
+| `match_quit.json` | walk then quit to title |
+| `match_restart.json` | win then restart_same (new `round_id`) |
+| `match_pause.json` | pause freezes sim then resume (dual-clock) |
+
 ## fixture/
 
 May use `teleport` / `force_kill` for fast unit setup. Fixture evidence
