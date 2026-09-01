@@ -850,10 +850,14 @@ static func _title_start_vs2(app: App, map_id: String) -> PackedStringArray:
 	if app.map_id != map_id:
 		errors.append("title map cycle did not reach %s (at %s)" % [map_id, app.map_id])
 		return errors
-	await _activate_button(app, app.title.vs_two_btn, "fight")
+	await _activate_button(app, app.title.vs_two_btn, "lobby")
+	if app.lobby == null or not app.lobby.visible or app.lobby.start_btn == null:
+		errors.append("title VS 2P did not open ready lobby")
+		return errors
+	await _activate_button(app, app.lobby.start_btn, "fight")
 	await SimReplay.sync_physics(app)
 	if app.session == null or app.session.mode != "vs2":
-		errors.append("title VS 2P did not start vs2")
+		errors.append("title VS 2P Start did not start vs2")
 	return errors
 
 
@@ -879,8 +883,14 @@ static func _activate_button(app: App, btn: Button, kind: String) -> void:
 static func _probe_ui(app: App, kind: String) -> String:
 	if kind == "map":
 		return app.map_id
+	if kind == "lobby":
+		return "1" if app.lobby != null and app.lobby.visible else "0"
 	if kind == "fight":
 		return "1" if app.session != null else "0"
+	if kind == "rematch":
+		if app.session != null and app.session.match_rules != null:
+			return "%d:%s" % [app.session.match_rules.round_id, app.session.get_instance_id()]
+		return "0"
 	if kind == "quit":
 		return "1" if app.title != null and app.title.visible else "0"
 	if kind == "restart":

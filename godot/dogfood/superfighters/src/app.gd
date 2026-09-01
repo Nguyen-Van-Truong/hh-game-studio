@@ -2,8 +2,10 @@ class_name App
 extends Node
 
 const _TieScreen: GDScript = preload("res://src/ui/tie_screen.gd")
+const _LobbyScreen: GDScript = preload("res://src/ui/lobby_screen.gd")
 
 var title: TitleScreen
+var lobby
 var win_screen: WinScreen
 var lose_screen: LoseScreen
 var tie_screen
@@ -14,6 +16,8 @@ var mode: String = "vs1"
 var map_id: String = "rooftops"
 var stage_index: int = 0
 var next_round_id: int = 1
+var flow_phase: String = "title"
+var result_token: int = 0
 var runtime: RuntimeApi = RuntimeApi.new()
 
 
@@ -34,21 +38,33 @@ func _enter_tree() -> void:
 	title.map_cycle_pressed.connect(_on_map_cycle)
 	title.controls_pressed.connect(_on_controls)
 	add_child(title)
+	lobby = _LobbyScreen.new()
+	lobby.start_pressed.connect(_on_lobby_start)
+	lobby.back_pressed.connect(_on_lobby_back)
+	lobby.map_cycle_pressed.connect(_on_map_cycle)
+	lobby.controls_pressed.connect(_on_controls)
+	add_child(lobby)
 	remap_screen = RemapScreen.new()
+	remap_screen.closed.connect(_on_remap_closed)
 	add_child(remap_screen)
 	win_screen = WinScreen.new()
-	win_screen.restart_pressed.connect(restart_to_title)
+	win_screen.rematch_pressed.connect(restart_same)
+	win_screen.title_pressed.connect(restart_to_title)
 	add_child(win_screen)
 	lose_screen = LoseScreen.new()
-	lose_screen.restart_pressed.connect(restart_to_title)
+	lose_screen.rematch_pressed.connect(restart_same)
+	lose_screen.title_pressed.connect(restart_to_title)
 	add_child(lose_screen)
 	tie_screen = _TieScreen.new()
-	tie_screen.restart_pressed.connect(restart_to_title)
+	tie_screen.rematch_pressed.connect(restart_same)
+	tie_screen.title_pressed.connect(restart_to_title)
 	add_child(tie_screen)
 
 
 func _input(event: InputEvent) -> void:
 	if remap_screen != null and remap_screen.visible:
+		return
+	if lobby != null and lobby.visible:
 		return
 	if session == null or session.outcome != "play":
 		return
@@ -63,20 +79,36 @@ func _input(event: InputEvent) -> void:
 	get_viewport().set_input_as_handled()
 
 
-func start_fight(p_mode: String, p_map: String, p_stage: int) -> void:
+func open_lobby(p_mode: String) -> void:
+	if p_mode != "vs1" and p_mode != "vs2":
+		return
 	mode = p_mode
-	map_id = p_map
-	stage_index = p_stage
+	_bump_result_token()
+	_hide_result_overlays()
 	_clear_session()
 	if title != null:
 		title.visible = false
 		title.clear_status()
-	if win_screen != null:
-		win_screen.visible = false
-	if lose_screen != null:
-		lose_screen.visible = false
-	if tie_screen != null:
-		tie_screen.visible = false
+	if lobby != null:
+		lobby.show_lobby(p_mode, map_id)
+	flow_phase = "lobby"
+	var tree: SceneTree = get_tree()
+	if tree != null:
+		tree.paused = false
+
+
+func start_fight(p_mode: String, p_map: String, p_stage: int) -> void:
+	mode = p_mode
+	map_id = p_map
+	stage_index = p_stage
+	_bump_result_token()
+	_hide_result_overlays()
+	_clear_session()
+	if title != null:
+		title.visible = false
+		title.clear_status()
+	if lobby != null:
+		lobby.hide_lobby()
 	var tree: SceneTree = get_tree()
 	if tree != null:
 		tree.paused = false
@@ -94,21 +126,22 @@ func start_fight(p_mode: String, p_map: String, p_stage: int) -> void:
 		session.pause_screen.controls_pressed.connect(_on_controls)
 		session.pause_screen.restart_pressed.connect(_on_pause_restart)
 		session.pause_screen.quit_pressed.connect(_on_pause_quit)
+	flow_phase = "fight"
 
 
 func restart_to_title() -> void:
+	_bump_result_token()
+	_hide_result_overlays()
 	_clear_session()
-	if win_screen != null:
-		win_screen.visible = false
-	if lose_screen != null:
-		lose_screen.visible = false
-	if tie_screen != null:
-		tie_screen.visible = false
+	if lobby != null:
+		lobby.hide_lobby()
 	if title != null:
 		title.visible = true
 		title.set_map_id(map_id)
 		title.clear_status()
-		title.vs_one_btn.grab_focus()
+		if title.vs_one_btn != null:
+			title.vs_one_btn.grab_focus()
+	flow_phase = "title"
 	var tree: SceneTree = get_tree()
 	if tree != null:
 		tree.paused = false
@@ -119,11 +152,11 @@ func restart_same() -> void:
 
 
 func _on_vs_one() -> void:
-	start_fight("vs1", map_id, 0)
+	open_lobby("vs1")
 
 
 func _on_vs_two() -> void:
-	start_fight("vs2", map_id, 0)
+	open_lobby("vs2")
 
 
 func _on_stage() -> void:
@@ -134,6 +167,8 @@ func _on_map_cycle() -> void:
 	map_id = Maps.next_vs_map(map_id)
 	if title != null:
 		title.set_map_id(map_id)
+	if lobby != null:
+		lobby.set_map_id(map_id)
 
 
 func _on_controls() -> void:
@@ -141,11 +176,30 @@ func _on_controls() -> void:
 		remap_screen.show_remap()
 
 
+func _on_remap_closed() -> void:
+	if lobby != null and lobby.visible and lobby.start_btn != null:
+		lobby.start_btn.grab_focus()
+		return
+	if title != null and title.visible and title.vs_one_btn != null:
+		title.vs_one_btn.grab_focus()
+
+
+func _on_lobby_start() -> void:
+	if lobby == null or not lobby.can_start():
+		return
+	start_fight(mode, map_id, 0)
+
+
+func _on_lobby_back() -> void:
+	restart_to_title()
+
+
 func _on_won() -> void:
 	if mode == "stage" and stage_index + 1 < Maps.stage_count():
 		call_deferred("_advance_stage")
 		return
-	call_deferred("_show_win")
+	var token: int = result_token
+	call_deferred("_show_win", token)
 
 
 func _advance_stage() -> void:
@@ -153,7 +207,9 @@ func _advance_stage() -> void:
 	start_fight("stage", Maps.stage_map_at(stage_index), stage_index)
 
 
-func _show_win() -> void:
+func _show_win(token: int = -1) -> void:
+	if token >= 0 and token != result_token:
+		return
 	var headline: String = "Last standing"
 	var reason: String = "last_standing"
 	var team: int = -1
@@ -161,26 +217,40 @@ func _show_win() -> void:
 		if session.match_rules.end_reason != "":
 			reason = session.match_rules.end_reason
 		team = session.match_rules.winner_team
-	var detail: String = "You won. End reason: %s. Winner team %d. Restart from title." % [reason, team]
+	var detail: String = "You won. End reason: %s. Winner team %d. Rematch or title." % [reason, team]
 	if mode == "stage":
 		headline = "Stage cleared"
 		detail = "Stage win. End reason: %s. Next arena or title restart." % reason
 	if win_screen != null:
-		win_screen.show_win(headline, detail)
+		win_screen.show_win(headline, detail, token)
+	flow_phase = "result"
 
 
 func _on_lost() -> void:
+	_show_lose(result_token)
+
+
+func _show_lose(token: int = -1) -> void:
+	if token >= 0 and token != result_token:
+		return
 	if lose_screen != null:
 		var reason: String = ""
 		if session != null and session.match_rules != null:
 			reason = session.match_rules.end_reason
-		var detail: String = "Pits and bullets end the run. Restart from title."
+		var detail: String = "Pits and bullets end the run. Rematch or title."
 		if reason != "":
-			detail = "End reason: %s. Restart from title." % reason
-		lose_screen.show_lose("Down", detail)
+			detail = "End reason: %s. Rematch or title." % reason
+		lose_screen.show_lose("Down", detail, token)
+	flow_phase = "result"
 
 
 func _on_tied() -> void:
+	_show_tie(result_token)
+
+
+func _show_tie(token: int = -1) -> void:
+	if token >= 0 and token != result_token:
+		return
 	if tie_screen != null:
 		var reason: String = "all_down"
 		if session != null and session.match_rules != null and session.match_rules.end_reason != "":
@@ -188,7 +258,8 @@ func _on_tied() -> void:
 		var detail: String = "Last standing wiped. End reason: %s." % reason
 		if reason == "timeout":
 			detail = "Round timer ended with more than one side standing (approximation, not observed)."
-		tie_screen.show_tie("Draw", detail)
+		tie_screen.show_tie("Draw", detail, token)
+	flow_phase = "result"
 
 
 func _on_quit_match() -> void:
@@ -256,6 +327,32 @@ func _clear_session() -> void:
 	_disconnect_session(old)
 	old.shutdown()
 	old.queue_free()
+
+
+func _bump_result_token() -> void:
+	result_token += 1
+
+
+func _hide_result_overlays() -> void:
+	if win_screen != null:
+		win_screen.hide_result()
+	if lose_screen != null:
+		lose_screen.hide_result()
+	if tie_screen != null:
+		tie_screen.hide_result()
+
+
+func overlay_leaking() -> bool:
+	var win_up: bool = win_screen != null and win_screen.visible
+	var lose_up: bool = lose_screen != null and lose_screen.visible
+	var tie_up: bool = tie_screen != null and tie_screen.visible
+	if title != null and title.visible:
+		return win_up or lose_up or tie_up
+	if lobby != null and lobby.visible:
+		return win_up or lose_up or tie_up
+	if flow_phase == "fight":
+		return win_up or lose_up or tie_up
+	return false
 
 
 func _disconnect_session(old: GameSession) -> void:

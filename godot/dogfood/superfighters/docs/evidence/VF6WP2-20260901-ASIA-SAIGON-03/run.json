@@ -1,0 +1,83 @@
+{
+  "schema": "vault-fighters.vf6-wp2.pack.v1",
+  "run_id": "VF6WP2-20260901-ASIA-SAIGON-03",
+  "command_id": "cmd.vf6-wp2.vs-flow.3",
+  "wp": "VF6-WP2",
+  "packed_at": "2026-09-01T19:59:02+07:00",
+  "base_head": "2a93dfa",
+  "source_tree_sha256": "81c44f5bbe9a4c16c3fdd8599147309edc550228bdec79ed00a5fddcb8d3f55b",
+  "godot_sha256": "35dab11e04ece16a2b93035e65204f4a944a3e00b020d43e54409193379d5eef",
+  "verdicts": {
+    "schema": "pass",
+    "first": "pass",
+    "ready": "pass",
+    "leak": "pass",
+    "play": "pass",
+    "rematch": "pass",
+    "overlay": "pass",
+    "feedback": "pass",
+    "live": "pass"
+  },
+  "first": {
+    "path": "title \u2192 VS 1P/2P \u2192 Start",
+    "source": "viewport button clicks; no editor; no teleport",
+    "verdict": "pass",
+    "vs1_actions": 2,
+    "vs1_seconds": 0.218,
+    "vs2_actions": 2,
+    "vs2_seconds": 0.267
+  },
+  "rematch": {
+    "actions": 1,
+    "round_after": 4,
+    "round_before": 3,
+    "seconds": 0.061,
+    "source": "result Rematch click; same mode/map; no lobby hunt",
+    "verdict": "pass"
+  },
+  "leak": {
+    "p1_melee": true,
+    "p1_moved": true,
+    "p1_still_on_p2": true,
+    "p2_idle_on_p1": true,
+    "p2_melee": true,
+    "p2_moved": true,
+    "p2_still_on_p1": true,
+    "source": "parse_input_event KEY_RIGHT/KEY_A/KEY_N/KEY_1 + live both slots",
+    "verdict": "pass"
+  },
+  "leftover": {
+    "window_elapsed_sec": 6.9,
+    "run_all_host_exit": 0,
+    "headless_host_exit": 0,
+    "headless_elapsed_sec": 4,
+    "window_exe": "C:\\Users\\truon\\AppData\\Local\\HHGodotAgent\\tooling\\godot-4.7.1-stable\\bin\\Godot_v4.7.1-stable_win64_console.exe",
+    "leftover": 0,
+    "after_headless": 0,
+    "host": "System.Diagnostics.Process WaitForExit",
+    "window_host_exit": 0,
+    "after_check": 0,
+    "run_all_elapsed_sec": 1582.5,
+    "path": "godot/dogfood/superfighters",
+    "note": "leftover-0 after each official console-twin process",
+    "after_window": 0,
+    "after_run_all": 0
+  },
+  "exits": {
+    "window": 0,
+    "host": "System.Diagnostics.Process.ExitCode",
+    "headless": 0,
+    "run_all": 0,
+    "check": 0
+  },
+  "live_logs_ok": true,
+  "run_all_ok": true,
+  "stills": [
+    "vs_flow_fight_1280x720.png",
+    "vs_flow_lobby_1280x720.png",
+    "vs_flow_rematch_1280x720.png",
+    "vs_flow_result_1280x720.png",
+    "vs_flow_title_1280x720.png",
+    "vs_flow_title_after_1280x720.png"
+  ]
+}

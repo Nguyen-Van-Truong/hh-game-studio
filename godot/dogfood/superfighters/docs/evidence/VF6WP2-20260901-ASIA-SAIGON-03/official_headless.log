@@ -1,0 +1,36 @@
+﻿Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+HH_VF_VS2 STEP=boot DISPLAY=headless
+HH_VF_VS2 STEP=first_run
+HH_VF_VS2 TIMELINE name=first_run_vs1_mode actions=1 ms=41
+HH_VF_VS2 TIMELINE name=first_run_vs1_start actions=2 ms=160
+HH_VF_VS2 TIMELINE name=first_run_vs2_mode actions=1 ms=41
+HH_VF_VS2 TIMELINE name=first_run_vs2_start actions=2 ms=141
+HH_VF_VS2 STEP=ready_remap
+HH_VF_VS2 STEP=play_resolve
+HH_VF_VS2 PLAY_TRACE map=fx_melee_close p1_moved=true p2_moved=true p1_attacked=true p2_attacked=true hit=true outcome=win death_cause=damage end_reason=last_standing hp=90.6666666666666/0.0
+HH_VF_VS2 STEP=rematch
+HH_VF_VS2 TIMELINE name=rematch actions=1 ms=78
+HH_VF_VS2 STEP=leak
+HH_VF_VS2 run_id=VF6WP2-20260901-ASIA-SAIGON-03
+HH_VF_VS2 command_id=cmd.vf6-wp2.vs-flow.3
+HH_VF_VS2 DISPLAY=headless
+HH_VF_VS2 SEED=7 MAP=fx_melee_close MODE=vs2 NAME=Close Clinch
+HH_VF_VS2 STARTED_AT=2026-09-01T19:31:34+07:00 ENDED_AT=2026-09-01T19:31:36+07:00
+HH_VF_VS2 USED_STEP_FIXED=0 USED_APPLY_FRAMES=235 USED_APPLY_ATTEMPTED=235 USED_APPLY_SUCCEEDED=235 USED_PARSE_INPUT_EVENT=91 USED_ACTION_PRESS=0 USED_FORCE_KILL=0 USED_TELEPORT=0
+HH_VF_VS2 SCHEMA=pass SCHEMA_SOURCE=outcome_schema
+HH_VF_VS2 FIRST=pass FIRST_SOURCE=outcome_first VS1_ACTIONS=2 VS1_SEC=0.16 VS2_ACTIONS=2 VS2_SEC=0.141
+HH_VF_VS2 READY=pass READY_SOURCE=outcome_ready
+HH_VF_VS2 LEAK=pass LEAK_SOURCE=outcome_leak
+HH_VF_VS2 PLAY=pass PLAY_SOURCE=outcome_play OUTCOME=win MAP=fx_melee_close DEATH_CAUSE=damage P1_MOVED=true P2_MOVED=true P1_ATTACKED=true P2_ATTACKED=true HIT=true PIT_FALLBACK=0
+HH_VF_VS2 REMATCH=pass REMATCH_SOURCE=outcome_rematch ACTIONS=1 SEC=0.078
+HH_VF_VS2 OVERLAY=pass OVERLAY_SOURCE=outcome_overlay
+HH_VF_VS2 FEEDBACK=pass FEEDBACK_SOURCE=outcome_feedback
+HH_VF_VS2 LIVE=pass LIVE_SOURCE=outcome_live
+HH_VF_VS2 HONESTY P2_COVERAGE=live_local BOT_COVERAGE=smoke NOT_AI=1 NOT_Y8_PARITY=1 SURVIVAL_SHIPPED=0 STAGE_LIFECYCLE=0
+HH_VF_VS2 FORCE_KILL_OFFICIAL=0 TELEPORT_OFFICIAL=0
+HH_VF_VS2 EVIDENCE_DIR=d:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\godot\dogfood\superfighters\.evidence\VF6WP2-20260901-ASIA-SAIGON-03\headless
+PASS: Vault Fighters vs production flow
+HH_VF_VS2 FINISHED=1
+HH_VF_VS2 PROCESS_EXIT=0
+

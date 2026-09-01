@@ -102,6 +102,7 @@ static func release_known(viewport: Viewport = null) -> void:
 	var keys: Array[Key] = [
 		KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN, KEY_A, KEY_D, KEY_W, KEY_S,
 		KEY_N, KEY_M, KEY_COMMA, KEY_1, KEY_2, KEY_3, KEY_B, KEY_ESCAPE, KEY_F11,
+		KEY_ENTER, KEY_SPACE,
 	]
 	var k: int = 0
 	while k < keys.size():

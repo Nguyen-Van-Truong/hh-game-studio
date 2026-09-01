@@ -28,7 +28,7 @@ not observed). Live play uses a short product countdown.
 | lose | `p1_down` | Window: title VS 2P on rooftops, then `parse_input_event` walk into pit; HUD "Down". `match_lose.json` is replay/supplemental. |
 | tie | `timeout` | Window: title VS 2P, labeled timer approximation, HUD "Draw". **Not observed.** |
 | quit | `quit` | Window: viewport pause + click Quit; title visible (`title_visible_after=true`). |
-| restart | fresh `play` | Window: pause overlay Restart click; new `round_id`. Rematch 2-tap stays VF6-WP2. |
+| restart | fresh `play` | Window: pause overlay Restart click; new `round_id`. Result Rematch (same mode/map) is VF6-WP2. |
 | pause | — | Window: `push_input`/`parse_input_event` Esc; HUD "Paused"; sim tick/body frozen. |
 
 `all_down` (same-tick wipe) is implemented in `MatchRules.evaluate` and

@@ -1,0 +1,37 @@
+{
+  "schema": "vf.sim.vs_flow.v1",
+  "schema_version": 1,
+  "title": "Vault Fighters",
+  "canonical_machine": "data/sim/match.json",
+  "modes": ["vs1", "vs2"],
+  "survival_shipped": false,
+  "stage_lifecycle_shipped": false,
+  "first_run": {
+    "max_actions": 3,
+    "max_seconds": 30,
+    "path": "title → VS 1P/2P → Start",
+    "default_map": "rooftops"
+  },
+  "rematch": {
+    "max_actions": 2,
+    "max_seconds": 5,
+    "path": "result → Rematch"
+  },
+  "input_feedback_frames": 2,
+  "p1_p2_isolated": true,
+  "same_keyboard": true,
+  "ready_start": true,
+  "remap": true,
+  "team_colors": true,
+  "bots": "smoke",
+  "p2_coverage": "live_local",
+  "y8_parity_claimed": false,
+  "not_ai": true,
+  "ledger": {
+    "flow": "RL-VS-FLOW",
+    "ready": "RL-VS-READY",
+    "isolate": "RL-VS-ISOLATE",
+    "rematch": "RL-VS-REMATCH",
+    "first_run": "RL-VS-FIRST-RUN"
+  }
+}

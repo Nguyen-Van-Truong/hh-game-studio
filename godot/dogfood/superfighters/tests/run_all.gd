@@ -22,6 +22,7 @@ const StationCasesScript: GDScript = preload("res://tests/station_cases.gd")
 const SewerCasesScript: GDScript = preload("res://tests/sewer_cases.gd")
 const VsRosterCasesScript: GDScript = preload("res://tests/vs_roster_cases.gd")
 const MatchCasesScript: GDScript = preload("res://tests/match_cases.gd")
+const VsFlowCasesScript: GDScript = preload("res://tests/vs_flow_cases.gd")
 const _Combat: GDScript = preload("res://src/sim/combat.gd")
 
 var _fails: PackedStringArray = PackedStringArray()
@@ -56,6 +57,7 @@ var _station: String = "unproven"
 var _sewer: String = "unproven"
 var _vs_roster: String = "unproven"
 var _match: String = "unproven"
+var _vs_flow: String = "unproven"
 
 
 func _initialize() -> void:
@@ -108,6 +110,9 @@ func _boot() -> void:
 	await _test_match(app)
 	if paused:
 		paused = false
+	await _test_vs_flow(app)
+	if paused:
+		paused = false
 	if _fails.is_empty():
 		_no_err = "proven"
 	_emit()
@@ -116,7 +121,10 @@ func _boot() -> void:
 		app.queue_free()
 	await process_frame
 	await process_frame
-	quit(0 if _fails.is_empty() else 1)
+	var code: int = 0 if _fails.is_empty() else 1
+	print("HH_VF_ALL FINISHED=1")
+	print("HH_VF_ALL PROCESS_EXIT=%d" % code)
+	quit(code)
 
 
 func _make_app() -> App:
@@ -1658,6 +1666,45 @@ func _test_match(app: App) -> void:
 		_match = "proven"
 
 
+func _test_vs_flow(app: App) -> void:
+	var errors: PackedStringArray = await VsFlowCasesScript.run_all(app)
+	var i: int = 0
+	while i < errors.size():
+		_fail("VS2 %s" % String(errors[i]))
+		i += 1
+	var schema: String = str(VsFlowCasesScript.outcome_schema.get("verdict", "unproven"))
+	var first_v: String = str(VsFlowCasesScript.outcome_first.get("verdict", "unproven"))
+	var ready_v: String = str(VsFlowCasesScript.outcome_ready.get("verdict", "unproven"))
+	var leak_v: String = str(VsFlowCasesScript.outcome_leak.get("verdict", "unproven"))
+	var play_v: String = str(VsFlowCasesScript.outcome_play.get("verdict", "unproven"))
+	var rematch_v: String = str(VsFlowCasesScript.outcome_rematch.get("verdict", "unproven"))
+	var overlay_v: String = str(VsFlowCasesScript.outcome_overlay.get("verdict", "unproven"))
+	var feedback_v: String = str(VsFlowCasesScript.outcome_feedback.get("verdict", "unproven"))
+	var live: String = str(VsFlowCasesScript.outcome_live.get("verdict", "unproven"))
+	if schema != "pass":
+		_fail("VS2 SCHEMA outcome is %s" % schema)
+	if first_v != "pass":
+		_fail("VS2 FIRST outcome is %s" % first_v)
+	if ready_v != "pass":
+		_fail("VS2 READY outcome is %s" % ready_v)
+	if leak_v != "pass":
+		_fail("VS2 LEAK outcome is %s" % leak_v)
+	if play_v != "pass":
+		_fail("VS2 PLAY outcome is %s" % play_v)
+	if rematch_v != "pass":
+		_fail("VS2 REMATCH outcome is %s" % rematch_v)
+	if overlay_v != "pass":
+		_fail("VS2 OVERLAY outcome is %s" % overlay_v)
+	if feedback_v != "pass":
+		_fail("VS2 FEEDBACK outcome is %s" % feedback_v)
+	if live != "pass":
+		_fail("VS2 LIVE outcome is %s" % live)
+	if VsFlowCasesScript.used_force_kill != 0:
+		_fail("VS2 official path used force_kill")
+	if _count_prefix("VS2 ") == 0:
+		_vs_flow = "proven"
+
+
 func _emit() -> void:
 	print("HH_VF_PATH title→fight→win/lose→restart")
 	print(
@@ -2091,6 +2138,22 @@ func _emit() -> void:
 			MatchCasesScript.used_apply_frames_attempted,
 			MatchCasesScript.used_force_kill,
 			_match,
+		]
+	)
+	print(
+		"HH_VF_VS2 SCHEMA=%s FIRST=%s FIRST_SOURCE=outcome_first READY=%s LEAK=%s PLAY=%s REMATCH=%s OVERLAY=%s FEEDBACK=%s LIVE=%s FORCE_KILL=%d P2_COVERAGE=live_local BOT_COVERAGE=smoke NOT_AI=1 NOT_Y8_PARITY=1 status=%s"
+		% [
+			str(VsFlowCasesScript.outcome_schema.get("verdict", "unproven")),
+			str(VsFlowCasesScript.outcome_first.get("verdict", "unproven")),
+			str(VsFlowCasesScript.outcome_ready.get("verdict", "unproven")),
+			str(VsFlowCasesScript.outcome_leak.get("verdict", "unproven")),
+			str(VsFlowCasesScript.outcome_play.get("verdict", "unproven")),
+			str(VsFlowCasesScript.outcome_rematch.get("verdict", "unproven")),
+			str(VsFlowCasesScript.outcome_overlay.get("verdict", "unproven")),
+			str(VsFlowCasesScript.outcome_feedback.get("verdict", "unproven")),
+			str(VsFlowCasesScript.outcome_live.get("verdict", "unproven")),
+			VsFlowCasesScript.used_force_kill,
+			_vs_flow,
 		]
 	)
 	print(

@@ -62,9 +62,9 @@ func refresh(fighters: Array) -> void:
 		var melee: Dictionary = WeaponDefs.data(f.melee_id)
 		var gun: Dictionary = WeaponDefs.data(f.gun_id)
 		var power: Dictionary = WeaponDefs.data(f.power_id)
-		var who: String = "P1"
+		var who: String = "P1 Blue"
 		if f.slot == 1 and f.is_human:
-			who = "P2"
+			who = "P2 Red"
 		elif f.is_bot:
 			who = "Bot%d" % f.slot
 		var pose: String = ""

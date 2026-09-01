@@ -43,31 +43,39 @@ func _ready() -> void:
 	add_child(sub)
 	var hint: Label = Label.new()
 	hint.name = "InputHint"
-	hint.text = "P1 arrows · N melee · hold M aim/release fire · hold comma throw · Esc pause"
+	hint.text = "Two taps: VS 1P or VS 2P, then Start. Rematch from the result screen."
 	hint.position = Vector2(80, 176)
 	hint.size = Vector2(1100, 28)
 	hint.add_theme_font_size_override("font_size", 16)
-	hint.add_theme_color_override("font_color", UiTheme.CREAM)
+	hint.add_theme_color_override("font_color", UiTheme.BRASS)
 	add_child(hint)
 	var hint2: Label = Label.new()
 	hint2.name = "InputHint2"
-	hint2.text = "P2 WASD · 1 melee · hold 2 fire · hold 3 throw · sprint+crouch dive · aerial kick"
+	hint2.text = "P1 arrows · N melee · hold M fire · hold comma throw · Esc pause"
 	hint2.position = Vector2(80, 204)
 	hint2.size = Vector2(1100, 28)
 	hint2.add_theme_font_size_override("font_size", 16)
 	hint2.add_theme_color_override("font_color", UiTheme.CREAM)
 	add_child(hint2)
-	vs_one_btn = _make_btn("VS 1P", Vector2(80, 256))
-	vs_two_btn = _make_btn("VS 2P", Vector2(80, 312))
-	stage_btn = _make_btn("Stage", Vector2(80, 368))
-	map_btn = _make_btn("Map: %s" % Maps.display_name("rooftops"), Vector2(80, 424))
+	var hint3: Label = Label.new()
+	hint3.name = "InputHint3"
+	hint3.text = "P2 WASD · 1 melee · hold 2 fire · hold 3 throw · same keyboard, no shared keys"
+	hint3.position = Vector2(80, 232)
+	hint3.size = Vector2(1100, 28)
+	hint3.add_theme_font_size_override("font_size", 16)
+	hint3.add_theme_color_override("font_color", UiTheme.CREAM)
+	add_child(hint3)
+	vs_one_btn = _make_btn("VS 1P", Vector2(80, 280))
+	vs_two_btn = _make_btn("VS 2P", Vector2(80, 336))
+	stage_btn = _make_btn("Stage", Vector2(80, 392))
+	map_btn = _make_btn("Map: %s" % Maps.display_name("rooftops"), Vector2(80, 448))
 	map_btn.name = "MapCycle"
-	controls_btn = _make_btn("Controls", Vector2(80, 480))
+	controls_btn = _make_btn("Controls", Vector2(80, 504))
 	controls_btn.name = "Controls"
 	status_label = Label.new()
 	status_label.name = "MatchStatus"
 	status_label.text = ""
-	status_label.position = Vector2(80, 544)
+	status_label.position = Vector2(80, 568)
 	status_label.size = Vector2(1100, 28)
 	status_label.add_theme_font_size_override("font_size", 18)
 	status_label.add_theme_color_override("font_color", UiTheme.BRASS)

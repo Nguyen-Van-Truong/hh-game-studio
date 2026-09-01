@@ -257,6 +257,19 @@ First playable slice. Not G6. Not 60/60.
   pass list) until VF6-WP4. Official VF6-WP1 lifecycle is vs2
   window/menu E2E; vs1 is FF fixture only; Stage is title-start
   only. Art still VF7. No new Y8 play.
+- VF6-WP2 ships the VS 1P / local VS 2P production path as
+  assumption (`ledger:RL-VS-FLOW`, `ledger:RL-VS-READY`,
+  `ledger:RL-VS-ISOLATE`, `ledger:RL-VS-REMATCH`,
+  `ledger:RL-VS-FIRST-RUN`): title → ready/start → fight →
+  rematch. Official proof is window/menu clicks plus
+  `parse_input_event` for two-player move/attack/die/resolve and
+  P1↛P2 leak. Official PLAY is one Close Clinch encounter; both
+  slots move and melee; the round ends from damage, not a rooftops
+  pit walk. First-run/rematch caps are product UX, not observed
+  Y8. Title win-overlay leak after rematch is closed with a result
+  token + CanvasLayer hide. Bots stay **smoke**. Survival stays
+  unshipped. Stage lifecycle stays VF6-WP3. Art still VF7. No new
+  Y8 play.
 - VF3-WP4 ships grenade hold/release throw, gravity arc, bounce,
   fuse, radial falloff, owner skip, one explosion, timeout
   cleanup, and swept nade collision as assumption

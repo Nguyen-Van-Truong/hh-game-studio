@@ -1015,3 +1015,30 @@ stays `ledger:RL-HIT-FF` (`assumption`). Hold-to-aim stays
 | RL-MATCH-TIMER | Optional round timer | `assumption` | none | **not** observed; product default off | 2026-08-31 | timeout-tie only when a trace enables ticks | 36 ticks in official tie | Approximation. |
 | RL-MATCH-COUNTDOWN | Pre-round countdown | `assumption` | none | **not** observed; skipped when `test_driven` | 2026-08-31 | live 90 ticks, official 0 | 90 | Not Y8 parity. |
 
+---
+
+## VF6-WP2 VS production flow (not a play observation)
+
+Dated 2026-09-01 Asia/Saigon. No in-game Y8 play. No HTML5/Flash
+package. Sidecar: `docs/vs_flow.md`. Official `run_id` is
+`VF6WP2-20260901-ASIA-SAIGON-02` (`cmd.vf6-wp2.vs-flow.2`).
+Prior `-01` is void after the lose-overlay remint.
+
+The player path stays `ledger:RL-VS-FLOW` (`assumption`). Ready/start
+stays `ledger:RL-VS-READY` (`assumption`). Same-keyboard isolation
+stays `ledger:RL-VS-ISOLATE` (`assumption`). Rematch stays
+`ledger:RL-VS-REMATCH` (`assumption`). First-run action/time caps stay
+`ledger:RL-VS-FIRST-RUN` (`assumption`, product UX, **not observed**).
+Hold-to-aim stays `ledger:RL-CTRL-HOLD-AIM` (`assumption`). Y8
+observation stays `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). 60 Hz
+stays `ledger:RL-SIM-FIXED-60` (`assumption`). Do **not** cite as
+observed. Survival stays unshipped. Bots stay smoke.
+
+| ID | Topic | Class | Conf. | Source | When | Behavior to reproduce | Tuning-only | Notes |
+|---|---|---|---|---|---|---|---|---|
+| RL-VS-FLOW | Title → lobby → fight → result → rematch | `assumption` | none | VF6-WP2 product contract; **not** observed on Y8 this session | 2026-09-01 | VS 1P/2P production path without debug UI | — | Stage lifecycle is WP3. |
+| RL-VS-READY | Ready seats + Start | `assumption` | none | VF6-WP2; local same-keyboard auto-ready | 2026-09-01 | P1 ready; vs1 bots ready; vs2 P2 ready; Start enabled | — | Not observed ready UI. |
+| RL-VS-ISOLATE | P1 input must not drive P2 | `assumption` | none | VF6-WP2; cites RL-CTRL-DEVICE-SPLIT | 2026-09-01 | arrows/N/M move only slot 0; WASD/1/2 move only slot 1 | — | Official leak reads both live slots. |
+| RL-VS-REMATCH | Result Rematch same mode/map | `assumption` | none | VF6-WP2 UX; ≤2 actions / ≤5s | 2026-09-01 | hide result overlays; new round_id | — | Fixes title win-overlay leak. |
+| RL-VS-FIRST-RUN | First-run into a match | `assumption` | none | owner UX attached to WP2; **not** observed | 2026-09-01 | ≤3 actions / ≤30s title → mode → Start | 2 taps official | Product target, not Y8. |
+

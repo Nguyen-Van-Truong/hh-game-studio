@@ -501,6 +501,16 @@ func player1() -> Fighter:
 	return fighters[0]
 
 
+func player2() -> Fighter:
+	var i: int = 0
+	while i < fighters.size():
+		var f: Fighter = fighters[i]
+		if f != null and f.slot == 1 and f.is_human:
+			return f
+		i += 1
+	return null
+
+
 func request_quit() -> void:
 	if match_rules == null:
 		match_rules = _Match.new()

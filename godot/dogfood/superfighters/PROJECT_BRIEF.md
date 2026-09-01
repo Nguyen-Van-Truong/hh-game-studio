@@ -173,7 +173,7 @@ an authoring demo, not a VS roster map.
 
 ## ui
 
-- **flow:** Title to Fight to Pause to Resume; Win and Lose offer Restart
+- **flow:** Title to ready/start to Fight to result Rematch or Title; Pause Resume/Restart/Quit
 - **hud:** health + stamina per living fighter, melee / firearm /
   explosive / power names, map name
 
