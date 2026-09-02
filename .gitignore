@@ -16,6 +16,11 @@ Thumbs.db
 .godot/
 **/.godot/
 
+# Sidecar import settings next to game assets are committed. Screenshot
+# evidence/review .import files are editor noise only.
+godot/dogfood/superfighters/docs/evidence/**/*.import
+godot/dogfood/superfighters/docs/review/**/*.import
+
 # Node sidecar / host
 node_modules/
 /bridge/dist/
