@@ -1,0 +1,293 @@
+HANDOFF 2026-09-02 — REVIEW SUBAGENT + BÀN GIAO LÀM TIẾP
+Hòn Gió / hh-3d/demo
+Timezone: Asia/Saigon
+Parent chat: bf3de5ba-6fce-4e43-9d60-c4bb1317d7ef
+
+ĐÂY LÀ FILE CHÍNH cho agent nhận việc CHECK + REVIEW + LÀM TIẾP demo Hòn Gió.
+Các file handoff-2026-09-01*.txt đã bị agent audit đêm 1–2/9 viết lại thành
+AUDIT_ONLY/freeze — đừng lấy chúng làm lệnh chạy. Đọc file NÀY + code.
+
+Owner query 2026-09-02 ~07:25: tổng hợp subagent, bàn giao check/review/làm tiếp.
+Phạm vi làm tiếp: CHỈ `hh-3d/demo/**`. Không Godot/VF, không hh-3d/app/, không
+tick zdocs 20-8/29-8.
+
+AGENTS.md vẫn có freeze VF/Godot (và câu “dừng demo”). Làm tiếp Hòn Gió chỉ
+khi owner đang nói về nhân vật/đấm/camera demo này. Không tự resume VF từ
+PASS banner. Không commit trừ owner xin.
+
+================================================================================
+0. SUBAGENT LÀM TỐT KHÔNG? — ĐIỂM THẬT
+================================================================================
+
+Tổng: ĐIỀU KHIỂN / CẢNH ổn. NHÂN VẬT lặp 3 vòng, 2 vòng fail visual,
+vòng 3 chưa được owner accept. ĐẤM có pose, chưa game. Docs sau đó bị
+agent khác overwrite sang freeze — dễ làm agent rẻ đứng im.
+
+Không tin tóm tắt subagent hơn code. Dưới đây đối chiếu source 2026-09-02.
+
+--------------------------------------------------------------------------------
+S1. [sửa hông](52fa9d38-93fa-4def-b4a1-9e051e795ff5)
+Ask: còn hở mông (ảnh sọc be giữa áo/quần).
+Làm: đoán đúng nguyên nhân = sash #d9c4a0 xuyên eo + áo ngắn; thêm khối
+     quần, áo dài hơn; nối punch (LMB sau lock, F).
+Review: CHẨN ĐOÁN TỐT. MESH CHƯA ĐỦ. Owner gửi ảnh sau đó VẪN sọc be —
+     áo capsule vẫn thon ở đai, ánh sáng trên hộp hông/sash đọc như da.
+Điểm: 6/10 — đúng bệnh, thuốc yếu.
+
+--------------------------------------------------------------------------------
+S2. [nhân vật mới](d7ac02e7-9118-4c2f-af3d-52897b548c0d)
+Ask: xấu; search internet; chọn hướng đẹp.
+Làm: hướng áo bà ba / A Short Hike+Alba (quần áo = thân); bỏ sash/yoke kem;
+     tunic RoundedBox; tóc helmet+gáy; research không rip asset.
+Review: HƯỚNG ĐÚNG. THỰC THI QUÁ TẢI HÔNG. Owner: “không hở nhưng không
+     tự nhiên” — hai khối cầu quần (bowling-ball) + gấu áo cắt cụt.
+     Không phải fail research; fail tỷ lệ.
+Điểm: 6.5/10 — chọn style tốt, silhouette fail.
+
+--------------------------------------------------------------------------------
+S3. [eo tự nhiên](80668b10-bbe6-45dd-9063-4bc3318552e7)
+Ask: kín rồi nhưng hình không tự nhiên; sửa hợp lý.
+Làm: XÓA cầu hông/đùi phình; tunic 0.4×0.98×0.34; pelvis mỏng 0.22×0.11×0.13
+     trên ROOT; idle tay không chống hông.
+Review: ĐÚNG HƯỚNG KỸ THUẬT. Chưa có ảnh owner accept sau Ctrl+F5.
+     Áo rất dài có thể thành “túi”. Tóc vẫn primitive (khoanh + hói đỉnh
+     nếu nhìn sau-trên). Punch pose vẫn sin(clock) giật.
+Điểm: 7.5/10 — sửa đúng yêu cầu; chưa đóng visual.
+
+--------------------------------------------------------------------------------
+S4. Parent (không phải subagent) — trước 18:12–19:00
+Camera look-aim, lookYawSign=-1, A/D screen-right, jump, thúng lathe,
+đảo/bến, HUD pointer-events, ẩn Điểm đến khi Chơi.
+Review: ĐÂY LÀ PHẦN TỐT NHẤT. Owner đã nói điều khiển “oke rồi”.
+Điểm: 8.5/10 — đừng đụng trừ owner báo đảo.
+
+--------------------------------------------------------------------------------
+S5. Agent audit đêm (zdoc / overwrite handoff-2026-09-01*)
+Làm: đánh freeze lên docs HH-3D; cheap-agent prompt; review-log.
+Review: Hữu ích chống agent rẻ chạy VF/Godot. HẠI: biến handoff Hòn Gió
+     thành “cấm runtime”, và review-log CŨ ghi IdleThung không có
+     reducedMotion — SAI so với code hiện tại (World.tsx truyền prop,
+     Boat.tsx IdleThung tôn trọng).
+Điểm: governance 7/10; độ đúng code 4/10 (stale gaps).
+
+================================================================================
+1. TRẠNG THÁI CODE HIỆN TẠI (OBSERVED 2026-09-02)
+================================================================================
+
+Stack: Vite 8.2.2, React 19.2.8, R3F 9.7.0, drei 10.7.8, three 0.182.0
+Git: toàn bộ `hh-3d/` UNTRACKED (`?? hh-3d/`). Chưa commit.
+Preview hợp đồng: http://127.0.0.1:4173/ only, Ctrl+F5 sau build.
+  cd hh-3d/demo && npm run typecheck && npm run build
+  kill LISTENING 127.0.0.1:4173 (không gán $pid PowerShell)
+  npm run preview -- --host 127.0.0.1 --port 4173 --strictPort
+
+--------------------------------------------------------------------------------
+1.1 Camera / input — GIỮ NGUYÊN trừ owner đảo
+--------------------------------------------------------------------------------
+sceneConfig.ts
+  lookYawSign = -1
+  lookYawScale 0.0025  lookPitchScale 0.0019
+  playMinDistance 4.2  playMaxDistance 11
+  playFollow.defaultPitch -0.14  minPitch -0.7  maxPitch 0.48
+  standDistance 6.2  boardDistance 6.6  sitLift 0.14
+  Hàm playLookCamera(): cam SAU người, pitch+ = nhìn lên.
+  KHÔNG crane polar.
+
+SimClock.tsx
+  yaw += dx * lookYawScale * lookYawSign
+  pitch -= dy * lookPitchScale
+  facing = (sin yaw, cos yaw)
+  right  = (-cos yaw, sin yaw)     // A/D
+  player.yaw = look.yaw
+  Owner: A/D đảo → CHỈ sửa right. Chuột ngang đảo → CHỈ sửa lookYawSign.
+  KHÔNG sửa cả hai.
+
+CameraRig.tsx
+  OrbitControls enabled={viewMode !== "play"}
+
+input.ts
+  WASD/arrows, Shift run, Space jumpEdge, E interactEdge, F punchEdge
+  LMB trên CANVAS: nếu pointerLockElement → punch; else requestPointerLock
+  lookEnabled = play && !help && !fallback (App.tsx)
+
+play.ts
+  WALK 2.55  RUN 4.35  BOAT 3.7  JUMP 6.1  GRAVITY 17
+  PUNCH_DURATION 0.4
+  PUNCH_COMBO_AFTER 0.3  ← KHÔNG DÙNG
+
+walk.ts
+  PLAYER_RADIUS 0.22  BOARD_DISTANCE 1.85  PIER_SURFACE_Y 0.33
+
+app.css (bắt buộc để lock được)
+  .ui-layer { pointer-events: none }
+  .ui-layer > * { pointer-events: auto }
+  .ui-layer > .hud { pointer-events: none }
+
+--------------------------------------------------------------------------------
+1.2 Nhân vật — vòng 3 (chưa accept)
+--------------------------------------------------------------------------------
+Person.tsx + World scale={1.36}
+personPalette: shirt #2a7d78  pants #2a3331  collar #1a5552
+  hair #1f1916  skin #e8c09a  (yoke/sash key còn nhưng không dùng ở eo)
+
+Mesh:
+  Tunic RoundedBox torso [0, 0.02, -0.02] args [0.4, 0.98, 0.34]
+  Pelvis ROOT [0, 0.5, 0] args [0.22, 0.11, 0.13] pants
+  Đùi capsule [0.062, 0.2] — KHÔNG sphere hông lớn
+  Tóc helmet + nape + 2 side
+  Cổ collar + cổ da ngắn + vai ngang
+
+CẤM khi “vá hở”: đắp lại hai cầu hông (owner đã chê).
+
+applyWalkPose(..., sailing, jumping, punching)
+  seated → sit + oar
+  jumping → jump, return (không punch trên không)
+  punching → applyPunchPose(limbs, time)  time = clock/stride, KHÔNG
+    progress punchLeft. jab = sin(time*18) — GIẬT.
+  idle flare tay 0.24 (không akimbo)
+
+--------------------------------------------------------------------------------
+1.3 Đấm — có, chưa xong
+--------------------------------------------------------------------------------
+Có: lock+LMB, F, boarded bỏ, punchLeft timer, pose tay phải.
+Không: HUD/Help/Touch chữ đấm; nút Đấm; combo; hitbox; NPC; VFX;
+       xen tay; punch khi nhảy; progress 0–1.
+
+--------------------------------------------------------------------------------
+1.4 Cảnh / HUD
+--------------------------------------------------------------------------------
+Boat ThungHull: latheGeometry (bát). torus chỉ vành.
+IdleThung: CÓ reducedMotion; World truyền reducedMotion||low. (review-log cũ SAI)
+Play: không LandmarkDock. TouchPad chỉ play; CSS coarse pointer.
+Help: chưa đấm. Hint: WASD / Space / E — chưa đấm.
+
+--------------------------------------------------------------------------------
+1.5 Docs lệch
+--------------------------------------------------------------------------------
+authored-experience-seed.md: pose API thiếu jumping/punching;
+  camera còn chữ playFollowCamera chest; input chưa punch.
+handoff-2026-09-01*.txt: bị harden freeze — lịch sử, không phải lệnh.
+zdoc/review-log.txt: IdleThung/TouchPad gap một phần STALE.
+hh-3d/README.md: `npm run dev` không ép 4173 — khi demo dùng 4173 preview.
+
+--------------------------------------------------------------------------------
+1.6 Chat bubble — added 2026-09-02
+--------------------------------------------------------------------------------
+Owner ask: Enter để chat; chữ đang gõ hiện realtime từng ký tự trên đầu nhân
+vật; kiến trúc phải dùng lại được cho remote player sau này.
+
+Implemented candidate:
+  src/lib/chat.ts
+    CHAT_MAX_LENGTH=96, CHAT_VISIBLE_MS=6500, phase typing|spoken.
+  src/ui/ChatComposer.tsx
+    Enter submit, Escape cancel, autofocus, maxLength.
+  src/scene/PlayerChatBubble.tsx
+    Drei Html bám player world transform ở trên đầu; pointer-events none.
+  App.tsx / World.tsx / SimClock.tsx / input.ts
+    Enter chỉ mở ở Play; release pointer lock; block gameplay input khi chat;
+    input/textarea không feed WASD/E/F/Space vào player controls.
+
+Runtime probe 1280x720 trên 4173:
+  typing sequence observed: x -> xi -> xin -> xin ... -> xin chào;
+  Enter: typing -> spoken; Escape: draft/bubble cancelled.
+  Bubble rect với "xin chào" khoảng 122x52, centered near player head.
+
+Future online rule:
+  không broadcast raw key event trực tiếp peer-to-peer. Nếu muốn người khác
+  thấy từng chữ, throttle typing preview; final spoken message phải qua server
+  validation/rate-limit/moderation rồi mới fan-out tới bubble của remote player.
+
+================================================================================
+2. CHECKLIST CHO AGENT NHẬN (PASS/FAIL + path)
+================================================================================
+
+ROUTE
+[ ] Chỉ hh-3d/demo. Không godot/**, không Snake, không tick 29-8/20-8.
+[ ] git status: hh-3d vẫn ??  — không add nhầm VF.
+
+CAMERA (play 4173, Ctrl+F5)
+[ ] Click canvas lock; Esc thả.
+[ ] Chuột phải = nhìn phải (sign -1). Xuống = đất. Lên = trời.
+[ ] W theo nhìn. A trái màn, D phải màn (cam sau lưng).
+[ ] Space nhảy đất, không nhảy thuyền.
+[ ] E lên/xuống thúng. W/S ga.
+[ ] Wheel 4.2–11. Orbit tắt khi Chơi.
+
+NHÂN VẬT (cam sau, nhìn xuống eo)
+[ ] Không sọc be/da ngang eo.
+[ ] Không hai quả bóng mông.
+[ ] Áo phủ hông. Tóc có gáy.
+[ ] Grep Person.tsx: tunic 0.98; pelvis 0.22 0.11 0.13; không hip sphere ≥0.11.
+
+ĐẤM
+[ ] Click đầu = lock, không đấm.
+[ ] Click sau lock / F = tay phải ~0.4s.
+[ ] Thuyền: không đấm.
+[ ] Help/Touch thiếu chữ đấm = FAIL đã biết, không phải regress mới.
+
+CẢNH
+[ ] Thúng bát (lathe), không torus thân.
+[ ] Chơi không có “Điểm đến”.
+
+BUILD
+[ ] npm run typecheck && npm run build trong hh-3d/demo
+[ ] Preview 4173 LISTENING
+
+================================================================================
+3. LÀM TIẾP — THỨ TỰ (một việc / một lượt)
+================================================================================
+
+WP-H1  Owner xem eo sau Ctrl+F5.
+       Còn xấu: thu gấu áo (vẫn overlap), thêm eo nhẹ, tóc đỉnh/gáy —
+       KHÔNG cầu hông.
+WP-H2  HelpPanel + App hint + TouchPad nút Đấm / chữ “chuột trái đấm, F”.
+WP-H3  Punch: progress 0–1 từ punchLeft; xen tay; giữ chân walk;
+       overlay được khi jump nếu owner muốn.
+WP-H4  Cập nhật authored-experience-seed.md cho khớp code.
+WP-H5  Commit `hh-3d/demo` CHỈ khi owner xin. Không VF.
+
+Không làm: OSM, Cesium, hh-3d/app, Unity/Unreal, GTA systems, rip asset.
+
+================================================================================
+4. FILE CHÍNH
+================================================================================
+
+hh-3d/demo/src/scene/Person.tsx
+hh-3d/demo/src/scene/sceneConfig.ts
+hh-3d/demo/src/scene/SimClock.tsx
+hh-3d/demo/src/scene/CameraRig.tsx
+hh-3d/demo/src/scene/World.tsx
+hh-3d/demo/src/scene/Boat.tsx
+hh-3d/demo/src/lib/input.ts
+hh-3d/demo/src/lib/play.ts
+hh-3d/demo/src/lib/walk.ts
+hh-3d/demo/src/App.tsx
+hh-3d/demo/src/ui/HelpPanel.tsx
+hh-3d/demo/src/ui/TouchPad.tsx
+hh-3d/demo/src/styles/app.css
+hh-3d/demo/docs/handoff-2026-09-02-subagent-review-and-continue.txt  ← file này
+
+================================================================================
+5. CẤM
+================================================================================
+
+Rip GTA/Y8/Superfighters/Nintendo.
+Fork Godot / G6 / GX / R9-WP4 / VF tick.
+Flip lookYawSign VÀ A/D cùng lúc.
+Preview ≠ 4173.
+Đắp bowling-ball hips.
+Claim “giống GTA” hoặc “map thật”.
+Commit không xin.
+Tin review-log/handoff-09-01 hơn source.
+
+================================================================================
+6. MẪU BÁO CÁO AGENT NHẬN
+================================================================================
+
+Subagent review: đã đọc file này. Đồng ý / lệch: …
+typecheck/build/4173: …
+Camera C: …
+Nhân vật (ảnh sau Ctrl+F5): hở? cầu? túi áo? tóc?
+Đấm: pose OK / HUD còn thiếu
+Làm tiếp: WP-H1 | H2 | H3
+Không đụng VF: yes
