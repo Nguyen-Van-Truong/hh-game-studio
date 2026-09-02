@@ -36,11 +36,16 @@ third_party/mcp-staging/**
 !third_party/mcp-staging/*/LICENSE
 !third_party/mcp-staging/*/PIN.json
 
-# Agent secrets / local session. Commit policy.example.toml only — never live tokens.
+# Local agent worktrees / critic isos / logs (Cargo target equivalent).
+# Keep the pin + example policy; never commit live tokens or iso copies.
+.hh-agent/**
+!.hh-agent/capability-lock.json
+!.hh-agent/policy.example.toml
 .hh-agent/policy.toml
 .hh-agent/secrets/
 .hh-agent/**/*.token
 .hh-agent/session.json
+godot/dogfood/superfighters/.hh-agent/
 .env
 .env.*
 
