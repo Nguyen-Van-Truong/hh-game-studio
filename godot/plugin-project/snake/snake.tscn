@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://c4yyugod264m4"]
+
+[ext_resource type="Script" uid="uid://nxe2nb60iivq" path="res://snake/snake_game.gd" id="1_j2kkt"]
+
+[node name="snake" type="Node2D" unique_id=1360453701]
+script = ExtResource("1_j2kkt")
+metadata/hh_agent_uid = "hhuid_471973270_2"
+metadata/_hh_agent_uid = "hhuid_471973270_2"
+
+[node name="Score" type="Label" parent="." unique_id=368396926]
+offset_left = 24.0
+offset_top = 12.0
+offset_right = 792.0
+offset_bottom = 48.0
+theme_override_colors/font_color = Color(0.92, 0.96, 0.9, 1)
+theme_override_font_sizes/font_size = 24
+text = "Snake    editor preview    press F6 to play"
+metadata/hh_agent_uid = "hhuid_550771326_6"
+metadata/_hh_agent_uid = "hhuid_550771326_6"
