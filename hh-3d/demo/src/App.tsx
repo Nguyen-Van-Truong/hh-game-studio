@@ -101,6 +101,14 @@ function readStart(): { viewMode: ViewMode; boarded: boolean; autoWalk: boolean 
   return { viewMode: viewModeFromQuery(requested), boarded, autoWalk };
 }
 
+function requestPlayLookLock(): void {
+  const canvas = document.querySelector(".canvas-layer canvas");
+  if (!(canvas instanceof HTMLElement) || !canvas.requestPointerLock) {
+    return;
+  }
+  void canvas.requestPointerLock();
+}
+
 function isTextEntryTarget(target: EventTarget | null): boolean {
   if (!(target instanceof HTMLElement)) {
     return false;
@@ -170,10 +178,10 @@ export default function App() {
     if (viewMode !== "play") {
       return null;
     }
-    if (chatOpen) {
+    if (chatOpen && chatDraft.trim()) {
       return { text: chatDraft, phase: "typing" };
     }
-    if (spokenChat) {
+    if (!chatOpen && spokenChat) {
       return { text: spokenChat, phase: "spoken" };
     }
     return null;
@@ -192,6 +200,9 @@ export default function App() {
     if (message) {
       setSpokenChat(message);
     }
+    window.requestAnimationFrame(() => {
+      requestPlayLookLock();
+    });
   }, [chatDraft]);
 
   const openChat = useCallback(() => {
@@ -390,12 +401,13 @@ export default function App() {
             />
             {viewMode === "play" && !lookLocked ? (
               <p className="control-hint">
-                Bấm vào cảnh để khóa chuột — WASD đi · Space nhảy · Enter chat
+                Bấm vào cảnh để khóa chuột — WASD đi · Space nhảy · click/F đấm
+                (pose) · Enter chat
               </p>
             ) : !hud.hasMoved ? (
               <p className="control-hint">
                 {viewMode === "play"
-                  ? "Chuột xoay hướng · WASD đi · Space nhảy · Shift chạy · E thuyền · Enter chat"
+                  ? "Chuột xoay · click/F đấm (pose) · WASD đi · Space nhảy · Shift chạy · E thuyền · Enter chat"
                   : "Kéo chuột để xoay · chọn một điểm · Chơi để đi bộ"}
               </p>
             ) : null}
@@ -438,7 +450,9 @@ export default function App() {
                 onSelect={setSelected}
               />
             ) : null}
-            {viewMode === "play" ? <TouchPad inputRef={inputRef} /> : null}
+            {viewMode === "play" && !chatOpen ? (
+              <TouchPad inputRef={inputRef} />
+            ) : null}
           </div>
         )}
       </div>

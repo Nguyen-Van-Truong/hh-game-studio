@@ -34,11 +34,11 @@ Later plans can drop this experience on a map marker. Do not start
 | --- | --- | --- |
 | Player root | `name="player"` in `src/scene/World.tsx` | Transform the later GLB keeps |
 | Person visual | `name="person"` in `src/scene/Person.tsx` | Mesh + pose API |
-| Pose API | `applyWalkPose(limbs, time, seated, moving, running, reducedMotion, sailing)` | Idle breathe, walk, run, sit, oar dip |
+| Pose API | `applyWalkPose(limbs, time, seated, moving, running, reducedMotion, sailing, jumping, punching)` | Idle breathe, walk, run, sit, oar dip, jump, punch. Jump pose wins over punch while airborne. |
 | Limbs | `PersonLimbs` in `Person.tsx` | root, torso, two-segment arms/legs, oar |
 | Boardable boat | `name="boat"` in `src/scene/Boat.tsx` | `ThungHull`, `occupied` hides hull oar |
 | Idle boat | `name="idle-thung"` | Decoration only |
-| Input | `src/lib/input.ts` | WASD / arrows, Shift run, `interactEdge` on E |
+| Input | `src/lib/input.ts` | WASD / arrows, Shift run, Space jump, E board, F / locked LMB punch |
 | Walk pads | `WALK_PADS`, `BOARD_DISTANCE` in `src/lib/walk.ts` | Collision + deboard landing |
 | Board loop | `src/scene/SimClock.tsx` | E when near; sit on boat; `nearestWalkable` on leave |
 | HUD | `PlayHud` in `src/lib/play.ts` | `boarded`, `nearBoat`, `hasMoved` |
@@ -68,8 +68,10 @@ Chat contract:
    blocked so typed WASD/F/E/Space cannot mutate gameplay.
 3. The local bubble is attached to the player world transform, not to a fixed
    screen coordinate. Draft characters render immediately with phase `typing`.
+   An empty draft does not show a placeholder bubble.
 4. Enter normalizes/submits the message as phase `spoken`; Escape discards the
    draft. Spoken bubbles currently expire locally after a short timeout.
+   Submit may re-request pointer lock; browsers can still require a click.
 5. Future multiplayer should reuse the same `PlayerChatBubble` view per remote
    player. Do not send raw keystrokes directly to every peer: throttle optional
    typing-preview updates, and send final spoken messages through a server-side

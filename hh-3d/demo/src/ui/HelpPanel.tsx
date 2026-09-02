@@ -30,6 +30,7 @@ export function HelpPanel({ open, onClose, onShowStatic }: HelpPanelProps) {
         <li>Shift — chạy</li>
         <li>Cuộn chuột — gần / xa</li>
         <li>E — lên / xuống thuyền</li>
+        <li>Sau khi khóa chuột: click trái hoặc F — đấm (chỉ pose, chưa trúng)</li>
         <li>Enter — chat; chữ hiện trực tiếp trên đầu nhân vật</li>
         <li>Esc — thả chuột, rồi đóng thẻ</li>
         <li>Chơi theo sát người; Toàn cảnh xem cả đảo</li>

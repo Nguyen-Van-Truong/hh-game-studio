@@ -6,7 +6,10 @@ type PlayerChatBubbleProps = {
 };
 
 export function PlayerChatBubble({ chat }: PlayerChatBubbleProps) {
-  const text = chat.text || "…";
+  const text = chat.text.trim();
+  if (!text) {
+    return null;
+  }
 
   return (
     <Html

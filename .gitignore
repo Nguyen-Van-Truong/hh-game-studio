@@ -79,3 +79,15 @@ godot/trials/
 # R7-WP6 official zero-touch durable log (Cursor TTY is not the record)
 tests/bootstrap/.zero_touch_official.log
 tests/bootstrap/.zero_touch_fast.log
+
+# Snake is out of Vault Fighters / Hòn Gió product scope (AGENTS.md).
+godot/plugin-project/snake/
+tools/godot/drive_snake*.py
+
+# Third-party zip dumps and extracted tools.
+testnewcodex/
+
+# Stale 2026-08-31 Hòn Gió dumps (moved aside). Official recapture names
+# in hh-3d/demo/evidence/ (overview-1280x720.png, play-walk.png, RUN-*.md)
+# stay commitable. Keep capture-running-app.mjs tracked.
+hh-3d/demo/evidence/stale-20260831/

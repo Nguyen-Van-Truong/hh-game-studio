@@ -142,6 +142,17 @@ export function TouchPad({ inputRef }: TouchPadProps) {
         >
           E
         </button>
+        <button
+          type="button"
+          className="touch-key touch-wide"
+          aria-label="Đấm"
+          onPointerDown={(event) => {
+            event.preventDefault();
+            inputRef.current.punchEdge = true;
+          }}
+        >
+          Đấm
+        </button>
       </div>
     </div>
   );

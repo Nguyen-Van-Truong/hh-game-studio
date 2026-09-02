@@ -11,6 +11,7 @@ export const BOAT_TURN = 1.85;
 export const JUMP_SPEED = 6.1;
 export const GRAVITY = 17;
 export const PUNCH_DURATION = 0.4;
+/** UNUSED. Pose-only punch uses PUNCH_DURATION. No combo window. */
 export const PUNCH_COMBO_AFTER = 0.3;
 export const MAX_STEP_DT = 0.05;
 
