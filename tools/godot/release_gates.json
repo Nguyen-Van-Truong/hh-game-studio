@@ -1,0 +1,127 @@
+{
+  "schema": "hh-godot-release-gates/1",
+  "wp": "R9-WP4",
+  "clean_vm": "unproven",
+  "not_g6": 1,
+  "signing": "unsigned",
+  "e3_public_release": false,
+  "gx": "locked",
+  "provider": "plan",
+  "note": "G6 stays unresolved. GATES stays unproven while G6 is open. CLEAN_VM stays unproven on a Godot/Node/source machine. Catalog file-exists is not a G6 close. Do not invent Hyper-V.",
+  "gates": [
+    {
+      "id": "G0",
+      "title": "DIRECTION",
+      "status": "resolved",
+      "plan": "[x]",
+      "artifacts": [
+        "zdocs/20-8-godot-agent-autopilot-plan.txt",
+        "AGENTS.md",
+        "docs/DECISIONS.md"
+      ]
+    },
+    {
+      "id": "G1",
+      "title": "NO-FORK",
+      "status": "resolved",
+      "plan": "[x]",
+      "artifacts": [
+        "docs/godot-agent/G1_BASE.md",
+        "docs/godot-agent/MCP_BAKEOFF.md",
+        "tests/bootstrap/test_g1_base.py",
+        ".hh-agent/capability-lock.json"
+      ]
+    },
+    {
+      "id": "G2",
+      "title": "VISIBLE",
+      "status": "resolved",
+      "plan": "[x]",
+      "artifacts": [
+        "tests/bootstrap/test_visible_e2e.py",
+        "docs/godot-agent/CAPABILITY_MATRIX.md"
+      ]
+    },
+    {
+      "id": "G3",
+      "title": "SELF-VERIFY",
+      "status": "resolved",
+      "plan": "[x]",
+      "artifacts": [
+        "tests/bootstrap/test_self_repair.py",
+        "tests/bootstrap/test_mutation_gauntlet.py"
+      ]
+    },
+    {
+      "id": "G4",
+      "title": "AUTONOMY",
+      "status": "resolved",
+      "plan": "[x]",
+      "artifacts": [
+        "tests/bootstrap/test_zero_touch.py",
+        "tests/bootstrap/test_soak.py",
+        "docs/godot-agent/HOST.md"
+      ]
+    },
+    {
+      "id": "G5",
+      "title": "DOGFOOD",
+      "status": "resolved",
+      "plan": "[x]",
+      "artifacts": [
+        "docs/DECISIONS.md",
+        "godot/dogfood/kho-bi-an/REVIEW_RUBRIC.md",
+        "tests/bootstrap/test_kho_bi_an_recreation.py"
+      ],
+      "optional_artifacts": [
+        "artifacts/kho-bi-an-review/KhoBiAn.exe"
+      ]
+    },
+    {
+      "id": "G6",
+      "title": "RELEASE",
+      "status": "unresolved",
+      "plan": "[ ]",
+      "reason": "CLEAN_VM stays unproven. This Godot/Node/source machine is not a clean VM. smoke!=VM. not_g6=1. Public upload/sign/channel is E3 after G6.",
+      "artifacts": [
+        "docs/godot-agent/RELEASE.md",
+        "docs/godot-agent/OPERATIONS.md",
+        "docs/godot-agent/EVIDENCE_REVIEW.md",
+        "artifacts/r9-wp1-export/sbom.json",
+        "artifacts/r9-wp1-export/NOTICE.md",
+        "artifacts/r9-wp1-export/hashes.txt",
+        "tests/bootstrap/test_export_clean_build.py",
+        "tests/bootstrap/test_package_install.py",
+        "tests/bootstrap/test_compat_update.py"
+      ]
+    },
+    {
+      "id": "GX",
+      "title": "FORK",
+      "status": "locked",
+      "plan": "[ ]",
+      "reason": "Default locked. Only a human ticks GX after a gap report. Do not start a C++ fork.",
+      "artifacts": []
+    }
+  ],
+  "acceptance": [
+    {
+      "id": "AC-20",
+      "owner": "G6",
+      "status": "unproven",
+      "note": "Windows clean VM export: game runs with no editor/Node/addon/token/evidence on the OS. Not this machine."
+    },
+    {
+      "id": "AC-21",
+      "owner": "G6",
+      "status": "partial",
+      "note": "R9-WP2 TAMPER proven on this Godot/Node machine (sidecar-bytes reject). Not a clean-VM tamper proof."
+    },
+    {
+      "id": "AC-22",
+      "owner": "G6",
+      "status": "unproven",
+      "note": "Clean clone offline with lock/cache. Not proven here."
+    }
+  ]
+}

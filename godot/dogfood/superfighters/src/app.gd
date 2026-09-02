@@ -35,6 +35,7 @@ func _enter_tree() -> void:
 	title.vs_one_pressed.connect(_on_vs_one)
 	title.vs_two_pressed.connect(_on_vs_two)
 	title.stage_pressed.connect(_on_stage)
+	title.reset_stage_pressed.connect(_on_reset_stage)
 	title.map_cycle_pressed.connect(_on_map_cycle)
 	title.controls_pressed.connect(_on_controls)
 	add_child(title)
@@ -138,6 +139,7 @@ func restart_to_title() -> void:
 	if title != null:
 		title.visible = true
 		title.set_map_id(map_id)
+		title.refresh_stage_caption()
 		title.clear_status()
 		if title.vs_one_btn != null:
 			title.vs_one_btn.grab_focus()
@@ -148,7 +150,10 @@ func restart_to_title() -> void:
 
 
 func restart_same() -> void:
-	start_fight(mode, map_id if mode != "stage" else Maps.stage_map_at(0), 0 if mode == "stage" else stage_index)
+	if mode == "stage":
+		start_fight("stage", StageRules.map_at(stage_index), stage_index)
+		return
+	start_fight(mode, map_id, stage_index)
 
 
 func _on_vs_one() -> void:
@@ -160,7 +165,18 @@ func _on_vs_two() -> void:
 
 
 func _on_stage() -> void:
-	start_fight("stage", Maps.stage_map_at(0), 0)
+	var progress: Dictionary = StageRules.load_or_empty()
+	var idx: int = int(progress.get("current_index", 0))
+	if bool(progress.get("cleared", false)):
+		idx = 0
+	start_fight("stage", StageRules.map_at(idx), idx)
+
+
+func _on_reset_stage() -> void:
+	StageRules.reset_progress()
+	if title != null:
+		title.refresh_stage_caption()
+		title.set_status("Stage save reset. Score and unlocks cleared.")
 
 
 func _on_map_cycle() -> void:
@@ -195,16 +211,18 @@ func _on_lobby_back() -> void:
 
 
 func _on_won() -> void:
-	if mode == "stage" and stage_index + 1 < Maps.stage_count():
-		call_deferred("_advance_stage")
-		return
+	if mode == "stage":
+		StageRules.record_win(stage_index)
+		if stage_index + 1 < StageRules.stage_count():
+			call_deferred("_advance_stage")
+			return
 	var token: int = result_token
 	call_deferred("_show_win", token)
 
 
 func _advance_stage() -> void:
 	stage_index += 1
-	start_fight("stage", Maps.stage_map_at(stage_index), stage_index)
+	start_fight("stage", StageRules.map_at(stage_index), stage_index)
 
 
 func _show_win(token: int = -1) -> void:
@@ -220,7 +238,11 @@ func _show_win(token: int = -1) -> void:
 	var detail: String = "You won. End reason: %s. Winner team %d. Rematch or title." % [reason, team]
 	if mode == "stage":
 		headline = "Stage cleared"
-		detail = "Stage win. End reason: %s. Next arena or title restart." % reason
+		var progress: Dictionary = StageRules.load_or_empty()
+		detail = "Campaign complete. Score %d. End reason: %s. Rematch last arena or title." % [
+			int(progress.get("score", 0)),
+			reason,
+		]
 	if win_screen != null:
 		win_screen.show_win(headline, detail, token)
 	flow_phase = "result"
@@ -238,8 +260,10 @@ func _show_lose(token: int = -1) -> void:
 		if session != null and session.match_rules != null:
 			reason = session.match_rules.end_reason
 		var detail: String = "Pits and bullets end the run. Rematch or title."
+		if mode == "stage":
+			detail = "Stage lost. Rematch stays on this arena. Title keeps the checkpoint."
 		if reason != "":
-			detail = "End reason: %s. Rematch or title." % reason
+			detail = "End reason: %s. Rematch stays here." % reason
 		lose_screen.show_lose("Down", detail, token)
 	flow_phase = "result"
 

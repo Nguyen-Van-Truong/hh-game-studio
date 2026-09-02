@@ -1,0 +1,399 @@
+PLAN_KIND=VF6_WP3_SPLIT_CRITIC_HANDOFF
+PRODUCT_SCOPE=godot/dogfood/superfighters
+PRODUCT_PLAN_AUTHORITY=0
+DATE=2026-09-02
+TIMEZONE=Asia/Saigon
+AUDITOR=read-only (this file only + 1-9 banner pointer)
+NO_TICK=1
+NO_COMMIT=1
+NO_PUSH=1
+NO_VF6_WP4=1
+NO_GODOT_OFFICIAL=1
+BASE_PRODUCT_PLAN=zdocs/29-8-vault-fighters-y8-parity-plan.txt
+QUALITY_OVERLAY=zdocs/31-8-vault-fighters-quality-completion-plan.txt
+PARENT_PLATFORM_PLAN=zdocs/20-8-godot-agent-autopilot-plan.txt
+FREEZE_HISTORY=zdocs/1-9-vault-fighters-owner-freeze-plan-audit-and-handoff.txt
+
+================================================================================
+0. ONE-SCREEN STATUS — ĐỌC ĐẦU TIÊN
+================================================================================
+
+HEAD:                 147331d14b7b5b252a115edad1c9c66c3af37ae3
+Last trusted commits: 5ab444a  VF6-WP2: title to rematch in three taps and two players on one keyboard
+                      147331d  VF6-WP2: tick after critic and official PASS
+                      (verified 2026-09-02; both still true)
+
+CURRENT_VALID_WP:     VF6-WP3
+VF6 tally:            2/5  (WP1 [x], WP2 [x], WP3 [ ], WP4 [ ], WP5 [ ])
+29-8 total:           31/50
+Parent 20-8:          59/60; CURRENT_VALID_WP=R9-WP4 [ ]; G6 [ ]; GX [ ]
+                      This auditor did **not** edit 20-8. File is already dirty from the
+                      2026-09-01 owner-freeze audit. Checkboxes unchanged.
+
+VF6-WP3 checkbox:     still [ ]
+Official -01:         VOID after critic split
+  run_id              VF6WP3-20260901-ASIA-SAIGON-01
+  command_id          cmd.vf6-wp3.stage-progress.1
+  frozen hash         ddb82205ff5a1819213bd286f49a516932c0eff5765cd1c85df4723bebf74e98
+                      (120 files; still on disk)
+
+Remint -02:           IN FLIGHT (orphaned / unfinished) — NOT READY_FOR_CRITICS
+  assigned agent      9d1dce16-15e8-4bcb-95ab-62d8ad557722
+  transcript          prompt-only, 1 line, mtime 2026-09-01 21:35:15 Asia/Saigon
+                      NO assistant turn. NO leftover table. NO freeze. NO pack.
+  intended ids        VF6WP3-20260901-ASIA-SAIGON-02 / cmd.vf6-wp3.stage.2
+  official pack dir   ABSENT (no docs/evidence/VF6WP3-20260901-ASIA-SAIGON-02/)
+  leftover Godot now  0 on product --path; 0 Godot processes visible
+
+**DO NOT TICK** until two leftover-0 critics both TICK=yes on the **same new
+frozen hash** (not ddb82205…). Split II=yes / HH=no on -01 is why -01 is void.
+
+**DO NOT START VF6-WP4.** Survival stays unshipped. Art = VF7. Bot fairness = VF6-WP5.
+
+Title on screen: **Vault Fighters**. No Y8 rip. Parent stays 59/60.
+
+================================================================================
+AGENTS.md / PROTOCOL (đọc, không tin chat)
+================================================================================
+
+OWNER FREEZE 2026-09-01 (still the first block of AGENTS.md): owner froze
+implement / demo / Godot / evidence / commit / tick. That header still says
+product frozen at VF6-WP1 / 29/50. That header is **stale relative to later
+explicit resume**. After freeze, owner/coordinator resumed: VF6-WP1 closed
+(-04, e6d5f4a / 2a93dfa) and VF6-WP2 closed (-03, 5ab444a / 147331d). Do not
+re-freeze or re-do those WPs from the 1-9 snapshot.
+
+Current route: product `godot/dogfood/superfighters/`, plan
+`zdocs/29-8-vault-fighters-y8-parity-plan.txt`
+(PLAN_SCOPE=godot/dogfood/superfighters, PRODUCT_PLAN_AUTHORITY=1, STATUS=ACTIVE,
+CURRENT_VALID_WP=VF6-WP3). Parent 20-8 is history 59/60 only.
+
+V-A1…V-A20 still bind. For this WP the hunts that landed are especially
+V-A16 (fixture/teleport/force-kill/`fx_melee_close`/`apply_eval` are not sole
+E2E) and V-A18 (freeze SOURCE_FILES before official Godot; live stdout + stills;
+host-captured exit). V-A19: do not claim stage from unrun code.
+
+Protocol to tick (coordinator only; implementer never ticks):
+
+1. Two independent leftover-0 critics on separate isos
+   `.hh-agent/critic-vf6wp3-*-02/iso` (do not reuse the -01 isos as official).
+2. Both TICK=yes on the **same new frozen source hash**.
+3. One `no` or a split → remint new run_id, do not tick, do not average votes.
+4. Two commits: product first, then
+   `VF6-WP3: tick after critic and official PASS`.
+5. If source changes after critic, re-audit the new hash. Do not reuse
+   VF6WP3-20260901-ASIA-SAIGON-01 or cmd.vf6-wp3.stage-progress.1.
+
+31-8 overlay: PRODUCT_PLAN_AUTHORITY=0, STATUS=OWNER_FROZEN_OVERLAY,
+CURRENT_VALID_WP_MIRROR=VF6-WP1 (stale). Rubric only. No second checkbox table.
+
+================================================================================
+29-8 — CURRENT WP + VERIFY/DOD VERBATIM
+================================================================================
+
+Quoted from zdocs/29-8-vault-fighters-y8-parity-plan.txt (checkbox still [ ]):
+
+VF6-WP3 — Stage progression and difficulty/reward loop                                  [ ]
+  Phụ thuộc: VF6-WP1,VF6-WP2,VF5-WP2..5. Files: stage rules/save/UI/tests.
+  Làm: four core stage arenas in observed order, progression after win,
+  difficulty tiers or explicitly documented approximation, persistent score/
+  unlock/reward; reset and continue semantics.
+  Verify: clean save + full stage trace; each stage loads correct map and bot
+  roster; loss/restart does not skip or duplicate stage; reward hash stable.
+  DoD: stage is more than one isolated win per map; any unobserved tier is
+  labeled approximation, not claimed exact.
+
+VF6-WP4+ titles only (do not implement):
+
+- VF6-WP4 — Survival mode and spawn director                                             [ ]
+- VF6-WP5 — Bot navigation, tactics và difficulty                                        [ ]
+- VF7-WP1 — Original fighter roster, silhouettes và animation state coverage              [ ]
+- VF7-WP2 — Weapons, props, VFX và audio feedback                                        [ ]
+- VF7-WP3 — HUD, menus, accessibility và controller UX                                  [ ]
+- VF7-WP4 — Camera, screen effects và performance budget                                  [ ]
+
+29-8 group table: VF0 3/3 [x], VF1 4/4 [x], VF2 5/5 [x], VF3 6/6 [x],
+VF4 5/5 [x], VF5 6/6 [x], VF6 2/5 [ ], VF7 0/4 [ ], VF8 0/4 [ ],
+VF9 0/5 [ ], VF10 0/3 [ ], total **31/50**.
+
+================================================================================
+1. DID SUBAGENTS DO WELL? (honest)
+================================================================================
+
+| Agent id | Role | Verdict | Proved vs claimed | Quality |
+|---|---|---|---|---|
+| 0f23ac7a-417b-4ed7-913b-0779d9a1a478 | Implementer -01 | Claimed READY_FOR_CRITICS=yes; leftover-0 harness; did not tick | Proved leftover-0 official headless 7.5s / window 11s / run_all 1519.9s, host exits 0, freeze 120 files `ddb82205…` **before** Godot 20:29:14. Claimed rooftops→storage→police advance + stable reward hash. Did **not** prove wins on catalog geometry, hazardous-by-win, combat loss, menu rematch, non-empty events, or cold Continue. Packer `ux_ok` baked `after_win1_map == police`. | split / fail vs DoD (good leftover-0 hygiene, bad E2E) |
+| 680ae106-d667-4e0a-9165-f2c728c633b5 | Critic II | TICK=yes on `ddb82205…` leftover-0 iso `.hh-agent/critic-vf6wp3-ii/iso` | Recomputed freeze MATCH 120/120. Iso leftover-0: check 1.1s, headless 9.1s APPLY 850/850, window 11.6s APPLY 870/870, run_all 1584.5s DIVE 1253/1253. Reward hashes from live formula. Saw LOAD 1/2/3/3 bots and Clinch advance storage then police. Called residuals **nits**. | split (harness PASS; DoD under-graded) |
+| 6124b1c0-f1c3-4b61-a13f-7046c9e41c74 | Critic HH | TICK=no on same `ddb82205…` leftover-0 iso `.hh-agent/critic-vf6wp3-hh/iso` | Same leftover-0 (check 0 / headless 8.1s / window 10.2s / leftover 0). Did not rerun run_all (accepted official 1519s FINISHED=1). Landed six hunts as DoD / V-A16 fails. HH was correct to block. | good |
+| 9d1dce16-15e8-4bcb-95ab-62d8ad557722 | Remint -02 | No verdict. Transcript is the user prompt only. | Coordinator launched 2026-09-01 21:35. Agent never wrote a turn. Product tree nonetheless has -02 IDs + catalog-hunt WIP + `.hh-agent/vf6wp3-02-diag/` logs. Official -02 pack / freeze / READY_FOR_CRITICS **absent**. | fail / orphaned |
+| 8bde2343-625e-46a9-97d0-a34bf890b8d2 | This auditor | n/a | Read-only handoff. Did not implement, tick, commit, push, start WP4, or launch official Godot. | n/a |
+
+II / HH split (same frozen hash `ddb82205…`):
+
+- II leftover-0 harness PASS + called residuals “nits”: hazardous only
+  LOAD/`start_fight`; mid-run police lose uses `apply_eval`; `title_after`
+  is the post-reset fight; `title_visible_after` is node existence.
+- HH treated the **same residuals** as DoD / V-A16 fails: Clinch-not-on-map,
+  hazardous never won, pit-loss idle bot, `apply_eval` rematch, empty events,
+  `title_after=fight`.
+
+Protocol: disagreement → remint, do not tick. **HH was correct to block.**
+II’s leftover-0 work is real and reusable as a harness template; it is not
+a tick. Do not “average” yes+no.
+
+Critic leftovers at finish (their claim, on -01 isos): both leftover 0.
+Product `--path` leftover now (this audit, process list only): **0**.
+
+================================================================================
+2. CLOSED TRUSTED PRODUCT (do not redo)
+================================================================================
+
+VF0–VF5 closed. VF6-WP1 and VF6-WP2 closed. Do not reopen unless a new
+critic finds a regression on a later remint `run_all`.
+
+| WP | Official run_id | command_id | Frozen hash (short) | Product / tick | Lesson (void packs) |
+|---|---|---|---|---|---|
+| VF6-WP1 | VF6WP1-20260901-ASIA-SAIGON-04 | cmd.vf6-wp1.match-machine.4 | 2636b774… | e6d5f4a / 2a93dfa | -01…-03 void. Need real menu/input, leftover-0, host exit, complete freeze. |
+| VF6-WP2 | VF6WP2-20260901-ASIA-SAIGON-03 | cmd.vf6-wp2.vs-flow.3 | 81c44f5b… | 5ab444a / 147331d | -01/-02 void. Close Clinch death_cause=damage held for VS. P2/bot smoke. |
+| VF6-WP3 | VF6WP3-20260901-ASIA-SAIGON-01 | cmd.vf6-wp3.stage-progress.1 | ddb82205… | none (WIP) | VOID. leftover-0 ≠ stage campaign. Do not reuse ids. |
+
+VF5 closeout (context only): VF5-WP6 official -02, product c3ebe36, tick 2b1e0a2;
+historical -01 void. Parent 20-8 never advanced.
+
+================================================================================
+3. VF6-WP3 `-01` CLAIM VS HUNTS
+================================================================================
+
+3.1 Official -01 (VOID, still on disk)
+
+Dir: godot/dogfood/superfighters/docs/evidence/VF6WP3-20260901-ASIA-SAIGON-01/
+Review twin: godot/dogfood/superfighters/docs/review/VF6WP3-20260901-ASIA-SAIGON-01/
+
+- Frozen 2026-09-01T20:29:07+07:00, 120 files,
+  `ddb82205ff5a1819213bd286f49a516932c0eff5765cd1c85df4723bebf74e98`
+  (HH + II both recomputed MATCH on product and their isos).
+- Godot pin sha256 `35dab11e04ece16a2b93035e65204f4a944a3e00b020d43e54409193379d5eef`
+  (4.7.1-stable console twin).
+- leftover-0: headless 7.5s exit 0, window 11s exit 0, run_all 1519.9s exit 0.
+- READY_FOR_CRITICS=yes in verdict.md — **void after split**.
+- Live work logs: `.hh-agent/vf6wp3-20260901-01/`
+- Stills on disk (8): title, fight, load, advance, continue, lose, reset,
+  title_after. `stage_reset_1280x720.png` is 44649 bytes, same size as
+  `stage_fight_1280x720.png`; HH: pixel-identical SHA. `title_after` 44608
+  bytes ≈ fight, not title.
+- `.evidence/.../headless/events.jsonl` and `window/events.jsonl` = **0 bytes**.
+  HH iso copies also 0 bytes. `outcomes.json` `timeline: []`.
+
+Stage order claimed (approximation, y8_order_observed=false):
+
+| Index | Map id | Display | Bots | Tier |
+|---:|---|---|---:|---|
+| 0 | rooftops | Skyline Relay | 1 | tier_1 |
+| 1 | storage | Pallet Annex | 2 | tier_2 |
+| 2 | police | Signal Court | 3 | tier_3 |
+| 3 | hazardous | Vitriol Sump | 3 | tier_4 |
+
+What -01 actually did:
+
+| Step | Claim | Actual |
+|---|---|---|
+| LOAD roster | four maps + live is_bot 1/2/3/3 | Held (isolated `start_fight` per index). Hazardous never reached by winning. |
+| ADVANCE | win → next map | `_clinch_win` / `start_fight("stage","fx_melee_close",index)` + `apply_frames` melee, then skin-swap catalog. AFTER0=storage AFTER1=police. Packer baked police as last. |
+| LOSS | stay rooftops | title Stage + KEY_RIGHT 160 ticks pit. Overlay Down / `p1_down`. Bot1 HP 100. `match.gd` maps any P1 death to `p1_down` (hides PIT). |
+| REMATCH | stay index | Mid-run after win1: `apply_eval({outcome:lose,end_reason:p1_down})` then Rematch click. |
+| CONTINUE | checkpoint police | Same-process title click after in-memory wins, not cold load of dirty save. |
+| RESET | wipe → rooftops | Reset still is the fight still, not title. |
+| HASH | live compute_hash | Held. empty/loss `a94ea313…`; win0 `46559b74…`; win1 `084aae64…`. Duplicate index stable. |
+| TRACE | full stage trace | Failed. timeline []; events 0 bytes. |
+
+Reward hashes (do not regress):
+
+- empty/loss: a94ea313475a85dff94945f19d6acc0cd4d3abc6ecd6c69ae0476e18b67b98e7
+- win0:       46559b7496990c7c7057b32e715a903e8037c6867f1a01a72a47c39e14f55a5e
+- win1:       084aae648db58353c5916fae0f21d508903451fa9a6141955f56ea17e115b98d
+
+3.2 HH hunts vs remint tree (from disk + remint transcript, not hope)
+
+Assigned remint transcript 9d1dce16 = prompt only → **no remint claim**.
+Product files already carry -02 IDs and a catalog-melee harness
+(`tests/stage_cases.gd`, `tests/run_stage.gd`, `tests/check_stage.py`,
+`tests/pack_stage_evidence.py`, `docs/stage.md`, ledger VF6-WP3 section).
+Diagnostic Godot: `.hh-agent/vf6wp3-02-diag/` (mtime ~2026-09-01 22:17).
+Official -02 pack / freeze: **none**. File mtimes on remint sources were
+bulk-stamped 2026-09-02 06:57:46 (same second as critic leftover scripts) —
+treat as filesystem touch, not an official run.
+
+| # | HH hunt | Closed by remint? |
+|---:|---|---|
+| 1 | Fourth stage never reached by winning. Hazardous only isolated `start_fight` in `load_roster`. Packer baked `after_win1_map == police`. | **NO.** Code now requires `_win_on_catalog(..., "police", "hazardous")`. Diag `diag-all.log` / `diag-police*.log`: police hunt often fails (P1 stuck x=238.5 or x=394.8; foe flees x=952; HP regenerates to 100). No official after_win2=hazardous. |
+| 2 | Wins are Close Clinch fixtures, not catalog maps. | **NO (partial diag only).** Code forbids `fx_melee_close` / `_clinch_win`. `diag-all.log` once: rooftops win death_cause=damage tick=400; storage win damage tick=880, both bots HP 0. `diag.log` rooftops failed (ok=false, 2404 ticks, foe never left 456). Police/hazardous not a reliable catalog win. No official -02 stills on those maps. |
+| 3 | Loss = KEY_RIGHT pit, idle bot 100 HP, overlay hides PIT as `p1_down`. | **NO.** Code now requires rooftops loss `death_cause==damage` and mid-run police damage KO. Not official-proved. Overlay/`p1_down` mapping still a risk if pit is used. |
+| 4 | Mid-run rematch is `apply_eval`, not input. | **NO.** Code forbids `apply_eval` (counter + check_stage + packer). Rematch is button `_activate_button`. Not official-proved. |
+| 5 | `timeline: []`; events.jsonl 0 bytes; snapshots tick 0. | **NO.** Code now `_note` / `_harvest` and `_require_outcomes` fails if empty. No -02 events on disk. -01 events still 0 bytes. |
+| 6 | `title_after` is a fight still; Continue is same-process, not cold dirty-save. | **NO.** Code now free App + cold instantiate + title Continue; `title_after` must be title phase. Not official-proved. |
+
+What HH said **held** on -01 (do not regress):
+
+- Reward hashes from live `StageRules.compute_hash` / save, not a hex in checker.
+- Isolated loads spawn live `is_bot` 1/2/3/3.
+- Tiers labeled approximation. Survival unshipped. NOT_AI.
+- USED_FORCE_KILL=0 USED_TELEPORT=0 USED_STEP_FIXED=0 on live -01 stdout.
+- leftover-0 harness.
+
+Latest remint-visible actions (disk, not transcript): rewrite harness to
+catalog melee + cold Continue; flip ids to `-02` / `cmd.vf6-wp3.stage.2`;
+run `tests/diag_stage_hunt.gd` on rooftops/storage/police. **Stopped short
+of freeze + official leftover-0 Godot + pack.** Police catalog win is the
+blocker seen in diag.
+
+If source drifted from any later edit, do **not** reuse
+VF6WP3-20260901-ASIA-SAIGON-02 — mint `-03` after a new freeze.
+
+================================================================================
+4. NEXT AGENT CHECKLIST (exact)
+================================================================================
+
+1. Audit remint `-02` (continue the orphaned WIP; do not wait for 9d1dce16).
+   If SOURCE_FILES drifted, new run_id (`-03`), new command_id. Never reuse
+   `-01` / `cmd.vf6-wp3.stage-progress.1`.
+2. Freeze complete SOURCE_FILES **before** official Godot. Console twin
+   `Godot_v4.7.1-stable_win64_console.exe`. leftover-0 one `--path`:
+   `check_stage.py` → headless `run_stage` → window `run_stage` →
+   leftover-0 `run_all`. Host-captured ExitCode (not PASS-banner-as-exit).
+   Pack live stdout + stills. If packer/source changes after Godot, remint
+   again.
+3. Two isolated critics `.hh-agent/critic-vf6wp3-hh-02/iso` and
+   `.hh-agent/critic-vf6wp3-ii-02/iso`. Do not write on product `--path`.
+   Both TICK=yes on the **same new** frozen hash. Split → remint, no tick.
+4. Coordinator two commits: product then
+   `VF6-WP3: tick after critic and official PASS`.
+   Implementer does not tick. Do not fake V5 / G6 / E3.
+5. Only then VF6-WP4 Survival (unshipped until then). Art = VF7.
+   Bots fairness = VF6-WP5. P2/BOT may stay smoke labels but stage foes
+   must be live `is_bot` actors that can take damage.
+6. Parent stays 59/60. No Y8 rip. Title **Vault Fighters**.
+   Do not edit 20-8 checkboxes. Do not touch Snake, Kho Bí Ẩn, or
+   `godot/plugin-project/snake/`.
+
+Must-fix still **open** unless a new official pack + two TICK=yes close them:
+
+- Wins **on** rooftops/storage/police(/hazardous) catalog geometry, not
+  `fx_melee_close` then skin-swap.
+- Hazardous reached by **winning** police.
+- Loss = combat (`death_cause` damage / last-standing), not KEY_RIGHT pit
+  + idle bot 100 HP + overlay hiding PIT.
+- Rematch/continue/reset via real menu/input, not `apply_eval` as sole E2E.
+- Non-empty `events.jsonl` / timeline with KO rows.
+- Cold load dirty save → Continue resumes correct index.
+- Reward hash live `StageRules.compute_hash`; tiers labeled approximation;
+  Survival unshipped; NOT_AI; leftover-0.
+
+Do not regress VF6-WP1 match machine or VF6-WP2 title→rematch / DIVE 1253 /
+six-map VS.
+
+================================================================================
+5. DIRTY TREE / LEFTOVER GODOT (do not stage)
+================================================================================
+
+HEAD 147331d. Working tree dirty. Do not `git add -A`. Do not reset.
+
+Unstaged / untracked groups (leave as leftover):
+
+1. `.hh-agent/` — critic isos (vf6wp3-hh/ii and older VF2–VF6), remint
+   `vf6wp3-02-diag/`, `vf6wp3-20260901-01/`, `vf6wp3-diag-0{1,2,3}/`,
+   historical probe logs, Kho Bí Ẩn evidence, art-draft iso under
+   `critic-vf5wp3-hh/iso/`.
+2. Product VF6-WP3 WIP (uncommitted): `data/sim/stage.json`,
+   `src/sim/stage.gd`, `tests/stage_cases.gd`, `tests/run_stage.gd`,
+   `tests/check_stage.py`, `tests/pack_stage_evidence.py`,
+   `tests/diag_stage_hunt.gd`, `docs/stage.md`, ledger VF6-WP3 block,
+   plus earlier VF6-WP1/WP2 dirty siblings (`app.gd`, `game_session.gd`,
+   `hud.gd`, title/lobby, match/vs_flow json, run_all, packers).
+3. Void / extra evidence packs (untracked):
+   `docs/evidence/VF6WP3-20260901-ASIA-SAIGON-01/` (VOID),
+   `docs/evidence/VF6WP2-20260901-ASIA-SAIGON-02/` (void WP2),
+   `docs/evidence/VF6WP1-20260901-ASIA-SAIGON-03/` (void WP1),
+   older VF2–VF5 evidence/import/.uid, `docs/review/`.
+4. Snake leftover: `godot/plugin-project/snake/`,
+   `tools/godot/drive_snake*.py`. Out of scope.
+5. 20-8 dirty (`M zdocs/20-8-godot-agent-autopilot-plan.txt`) from 1-9
+   freeze audit — **do not edit further; do not tick R9-WP4/G6/GX**.
+   29-8 is clean (this auditor did not touch it; checkbox still [ ]).
+6. 31-8 overlay untracked. 16-8 legacy dirty. `AGENTS.md` dirty (stale
+   freeze header). `zdocs/1-9-…` untracked history. This `zdocs/2-9-…`
+   is the new handoff (also untracked until someone asks to commit docs).
+7. Art drafts: `tools/godot/gen_vault_fighters_art.py` and
+   `.hh-agent/critic-vf5wp3-hh/iso/assets/`. Art stays VF7. Do not import
+   drafts into product because files exist.
+8. Other leftover: `hh-3d/`, `testnewcodex/`, `docs/godot-agent/*` extras,
+   product `.import` / `.uid`, `godot/dogfood/superfighters/.hh-agent/`.
+
+Leftover Godot (process list only; no new official run):
+
+- Godot process count: 0
+- Product `--path` `godot/dogfood/superfighters` count: 0
+
+Critic -01 isos still exist; do not run Godot on them as a new official.
+Do not kill unrelated Cursor/Codex processes.
+
+================================================================================
+6. RECOMMENDED COMMIT MESSAGE (do not commit)
+================================================================================
+
+VF6-WP3: stage progression that advances maps after a real win
+
+(Only after leftover-0 official -02-or-later + two TICK=yes on the same
+new frozen hash. Then a second coordinator commit:
+`VF6-WP3: tick after critic and official PASS`.)
+
+================================================================================
+8-LINE — NEXT AGENT STARTS HERE
+================================================================================
+
+1. HEAD 147331d; CURRENT_VALID_WP=VF6-WP3 [ ]; 31/50; parent 59/60.
+2. -01 VOID (II TICK=yes / HH TICK=no on ddb82205… 120 files). Do not tick.
+3. Remint 9d1dce16 orphaned (prompt-only). Tree has -02 WIP; no official pack.
+4. Continue remint: catalog wins on rooftops/storage/police(+hazardous), combat loss, menu rematch, events, cold Continue.
+5. Freeze SOURCE_FILES first. Console twin. leftover-0 headless+window+run_all.
+6. Two new leftover-0 critics on the same new hash; both TICK=yes or remint.
+7. Coordinator: product commit then tick commit. Do not start VF6-WP4.
+8. Title Vault Fighters. No Y8 rip. Art VF7. Bots fairness VF6-WP5.
+
+================================================================================
+EVIDENCE / TRANSCRIPT INDEX
+================================================================================
+
+Official WP2 (trusted):
+  godot/dogfood/superfighters/docs/evidence/VF6WP2-20260901-ASIA-SAIGON-03/
+  Critics that ticked WP2: II 6557c788-fac2-4acd-a31a-44586ac632d9,
+  HH 4f52d812-3ed2-4419-a719-cfce544cef59 (historical; not this WP).
+
+Official WP3 -01 (VOID):
+  godot/dogfood/superfighters/docs/evidence/VF6WP3-20260901-ASIA-SAIGON-01/
+
+Implementer -01:
+  …/agent-transcripts/ec185aca-…/subagents/0f23ac7a-417b-4ed7-913b-0779d9a1a478.jsonl
+  also …/agent-transcripts/0f23ac7a-417b-4ed7-913b-0779d9a1a478/
+
+Critic HH TICK=no:
+  …/subagents/6124b1c0-f1c3-4b61-a13f-7046c9e41c74.jsonl
+  iso `.hh-agent/critic-vf6wp3-hh/`
+
+Critic II TICK=yes:
+  …/subagents/680ae106-d667-4e0a-9165-f2c728c633b5.jsonl
+  iso `.hh-agent/critic-vf6wp3-ii/`
+
+Remint (orphaned):
+  …/subagents/9d1dce16-15e8-4bcb-95ab-62d8ad557722.jsonl
+  disk WIP `.hh-agent/vf6wp3-02-diag/` + product stage_* files
+
+Parent coordinator:
+  …/agent-transcripts/ec185aca-c75d-4390-a3f7-2b064d2931c2/ec185aca-….jsonl
+
+Pinned Godot:
+  %LOCALAPPDATA%\HHGodotAgent\tooling\godot-4.7.1-stable\bin
+  Godot_v4.7.1-stable_win64_console.exe
+
+================================================================================
+HẾT HANDOFF — 2-9-2026
+================================================================================

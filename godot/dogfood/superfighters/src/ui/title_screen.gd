@@ -4,12 +4,14 @@ extends Control
 signal vs_one_pressed
 signal vs_two_pressed
 signal stage_pressed
+signal reset_stage_pressed
 signal map_cycle_pressed
 signal controls_pressed
 
 var vs_one_btn: Button
 var vs_two_btn: Button
 var stage_btn: Button
+var reset_stage_btn: Button
 var map_btn: Button
 var controls_btn: Button
 var status_label: Label
@@ -68,6 +70,8 @@ func _ready() -> void:
 	vs_one_btn = _make_btn("VS 1P", Vector2(80, 280))
 	vs_two_btn = _make_btn("VS 2P", Vector2(80, 336))
 	stage_btn = _make_btn("Stage", Vector2(80, 392))
+	reset_stage_btn = _make_btn("Reset Stage", Vector2(380, 392))
+	reset_stage_btn.name = "ResetStage"
 	map_btn = _make_btn("Map: %s" % Maps.display_name("rooftops"), Vector2(80, 448))
 	map_btn.name = "MapCycle"
 	controls_btn = _make_btn("Controls", Vector2(80, 504))
@@ -83,6 +87,7 @@ func _ready() -> void:
 	vs_one_btn.pressed.connect(_on_vs_one)
 	vs_two_btn.pressed.connect(_on_vs_two)
 	stage_btn.pressed.connect(_on_stage)
+	reset_stage_btn.pressed.connect(_on_reset_stage)
 	map_btn.pressed.connect(_on_map)
 	controls_btn.pressed.connect(_on_controls)
 	vs_one_btn.focus_neighbor_bottom = vs_two_btn.get_path()
@@ -91,7 +96,11 @@ func _ready() -> void:
 	vs_two_btn.focus_neighbor_bottom = stage_btn.get_path()
 	stage_btn.focus_neighbor_top = vs_two_btn.get_path()
 	stage_btn.focus_neighbor_bottom = map_btn.get_path()
+	stage_btn.focus_neighbor_right = reset_stage_btn.get_path()
+	reset_stage_btn.focus_neighbor_left = stage_btn.get_path()
+	reset_stage_btn.focus_neighbor_bottom = map_btn.get_path()
 	map_btn.focus_neighbor_top = stage_btn.get_path()
+	refresh_stage_caption()
 	map_btn.focus_neighbor_bottom = controls_btn.get_path()
 	controls_btn.focus_neighbor_top = map_btn.get_path()
 	controls_btn.focus_neighbor_bottom = vs_one_btn.get_path()
@@ -130,8 +139,18 @@ func _on_vs_two() -> void:
 	vs_two_pressed.emit()
 
 
+func refresh_stage_caption() -> void:
+	if stage_btn == null:
+		return
+	stage_btn.text = StageRules.caption_for(StageRules.load_or_empty())
+
+
 func _on_stage() -> void:
 	stage_pressed.emit()
+
+
+func _on_reset_stage() -> void:
+	reset_stage_pressed.emit()
 
 
 func _on_map() -> void:

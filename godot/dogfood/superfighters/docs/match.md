@@ -4,8 +4,9 @@ Display title: **Vault Fighters**. One canonical match state machine
 (`src/sim/match.gd`, `data/sim/match.json`) is constructed whenever a
 started mode opens a `GameSession`. Official VF6-WP1 lifecycle is **vs2**.
 vs1 is started for runtime friendly-fire on `fx_melee_close` only. Stage
-has a title button that starts the same machine; there is no official
-stage win/lose/tie/quit/pause lifecycle this WP. Survival is **not
+has a title button that starts the same machine. Campaign order, save,
+and reward live in `data/sim/stage.json` (VF6-WP3). Match
+`official_lifecycle` stays vs2. Survival is **not
 shipped**: no title button, `app.gd` never calls `start_fight("survival")`,
 and `uses_machine` stays false until VF6-WP4.
 

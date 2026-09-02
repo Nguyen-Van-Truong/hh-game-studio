@@ -3,6 +3,7 @@ extends CanvasLayer
 
 var _lines: Array[Label] = []
 var _map_label: Label
+var _stage_label: Label
 var _hint: Label
 
 
@@ -27,6 +28,13 @@ func _ready() -> void:
 	UiTheme.apply(_map_label)
 	_map_label.add_theme_color_override("font_color", UiTheme.BRASS)
 	add_child(_map_label)
+	_stage_label = Label.new()
+	_stage_label.name = "StageLine"
+	_stage_label.position = Vector2(900, 40)
+	_stage_label.size = Vector2(360, 28)
+	UiTheme.apply(_stage_label)
+	_stage_label.add_theme_color_override("font_color", UiTheme.TEAL)
+	add_child(_stage_label)
 	_hint = Label.new()
 	_hint.name = "Hint"
 	_hint.position = Vector2(16, 680)
@@ -44,6 +52,11 @@ func set_map_name(text: String) -> void:
 func set_hint(text: String) -> void:
 	if _hint != null:
 		_hint.text = text
+
+
+func set_stage_line(text: String) -> void:
+	if _stage_label != null:
+		_stage_label.text = text
 
 
 func refresh(fighters: Array) -> void:

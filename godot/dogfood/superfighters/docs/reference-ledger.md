@@ -1042,3 +1042,30 @@ observed. Survival stays unshipped. Bots stay smoke.
 | RL-VS-REMATCH | Result Rematch same mode/map | `assumption` | none | VF6-WP2 UX; ≤2 actions / ≤5s | 2026-09-01 | hide result overlays; new round_id | — | Fixes title win-overlay leak. |
 | RL-VS-FIRST-RUN | First-run into a match | `assumption` | none | owner UX attached to WP2; **not** observed | 2026-09-01 | ≤3 actions / ≤30s title → mode → Start | 2 taps official | Product target, not Y8. |
 
+---
+
+## VF6-WP3 Stage progression (not a play observation)
+
+Dated 2026-09-01 Asia/Saigon. No in-game Y8 play. No HTML5/Flash
+package. Sidecar: `docs/stage.md`. Official `run_id` is
+`VF6WP3-20260901-ASIA-SAIGON-02` (`cmd.vf6-wp3.stage.2`).
+`-01` is void after Hostile Critic HH.
+
+Stage order stays `ledger:RL-STAGE-ORDER` (`approximation`, **not
+observed**). Progress stays `ledger:RL-STAGE-PROGRESS` (`assumption`).
+Atomic save stays `ledger:RL-STAGE-SAVE` (`assumption`). Reward hash
+stays `ledger:RL-STAGE-REWARD` (`assumption`). Difficulty tiers stay
+`ledger:RL-STAGE-TIER` (`approximation`, **not observed**). Hold-to-aim
+stays `ledger:RL-CTRL-HOLD-AIM` (`assumption`). 60 Hz stays
+`ledger:RL-SIM-FIXED-60` (`assumption`). Y8 observation stays
+`ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). Do **not** cite as observed.
+Survival stays unshipped. Bots stay smoke.
+
+| ID | Topic | Class | Conf. | Source | When | Behavior to reproduce | Tuning-only | Notes |
+|---|---|---|---|---|---|---|---|---|
+| RL-STAGE-ORDER | Four core stage arenas | `approximation` | none | VF6-WP3 product contract; **not** observed on Y8 this session | 2026-09-01 | rooftops → storage → police → hazardous | order | Not claimed Y8 order. |
+| RL-STAGE-PROGRESS | Win advances; loss/restart stays | `assumption` | none | VF6-WP3; cites RL-MATCH-LAST | 2026-09-01 | win loads next catalog map; rematch keeps index | — | More than one isolated win. |
+| RL-STAGE-SAVE | Atomic checkpoint | `assumption` | none | VF6-WP3; V-A13 temp+rename | 2026-09-01 | Continue loads current_index; Reset wipes | store | `user://vf_stage/`. |
+| RL-STAGE-REWARD | First-win score/unlock hash | `assumption` | none | VF6-WP3 product contract | 2026-09-01 | same award sequence → same SHA-256; no double pay | scores | Loss does not change hash. |
+| RL-STAGE-TIER | Bot-count difficulty labels | `approximation` | none | VF6-WP3; **not** observed Y8 Bronze/Silver/Gold | 2026-09-01 | bots 1/2/3/3 labeled tier_1..tier_4 | bot count | Not AI / not WP5. |
+

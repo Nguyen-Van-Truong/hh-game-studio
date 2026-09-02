@@ -23,6 +23,7 @@ const SewerCasesScript: GDScript = preload("res://tests/sewer_cases.gd")
 const VsRosterCasesScript: GDScript = preload("res://tests/vs_roster_cases.gd")
 const MatchCasesScript: GDScript = preload("res://tests/match_cases.gd")
 const VsFlowCasesScript: GDScript = preload("res://tests/vs_flow_cases.gd")
+const StageCasesScript: GDScript = preload("res://tests/stage_cases.gd")
 const _Combat: GDScript = preload("res://src/sim/combat.gd")
 
 var _fails: PackedStringArray = PackedStringArray()
@@ -58,6 +59,7 @@ var _sewer: String = "unproven"
 var _vs_roster: String = "unproven"
 var _match: String = "unproven"
 var _vs_flow: String = "unproven"
+var _stage: String = "unproven"
 
 
 func _initialize() -> void:
@@ -66,6 +68,8 @@ func _initialize() -> void:
 
 func _boot() -> void:
 	seed(1)
+	if OS.get_environment("HH_VF_STAGE_STORE") == "":
+		OS.set_environment("HH_VF_STAGE_STORE", "progress_vf6wp3.json")
 	InputActions.install()
 	if paused:
 		paused = false
@@ -111,6 +115,11 @@ func _boot() -> void:
 	if paused:
 		paused = false
 	await _test_vs_flow(app)
+	if paused:
+		paused = false
+	await _test_stage(app)
+	if StageCasesScript.live_app != null and is_instance_valid(StageCasesScript.live_app):
+		app = StageCasesScript.live_app
 	if paused:
 		paused = false
 	if _fails.is_empty():
@@ -469,6 +478,7 @@ func _test_pit(app: App) -> void:
 
 
 func _test_stage_advance(app: App) -> void:
+	StageRules.reset_progress()
 	app.start_fight("stage", "rooftops", 0)
 	await process_frame
 	await process_frame
@@ -1705,6 +1715,45 @@ func _test_vs_flow(app: App) -> void:
 		_vs_flow = "proven"
 
 
+func _test_stage(app: App) -> void:
+	if OS.get_environment("HH_VF_STAGE_STORE") == "":
+		OS.set_environment("HH_VF_STAGE_STORE", "progress_vf6wp3.json")
+	StageRules.reset_progress()
+	var errors: PackedStringArray = await StageCasesScript.run_all(app)
+	var i: int = 0
+	while i < errors.size():
+		_fail("STAGE %s" % String(errors[i]))
+		i += 1
+	var schema: String = str(StageCasesScript.outcome_schema.get("verdict", "unproven"))
+	var load_v: String = str(StageCasesScript.outcome_load.get("verdict", "unproven"))
+	var advance_v: String = str(StageCasesScript.outcome_advance.get("verdict", "unproven"))
+	var loss_v: String = str(StageCasesScript.outcome_loss.get("verdict", "unproven"))
+	var hash_v: String = str(StageCasesScript.outcome_hash.get("verdict", "unproven"))
+	var continue_v: String = str(StageCasesScript.outcome_continue.get("verdict", "unproven"))
+	var reset_v: String = str(StageCasesScript.outcome_reset.get("verdict", "unproven"))
+	var live: String = str(StageCasesScript.outcome_live.get("verdict", "unproven"))
+	if schema != "pass":
+		_fail("STAGE SCHEMA outcome is %s" % schema)
+	if load_v != "pass":
+		_fail("STAGE LOAD outcome is %s" % load_v)
+	if advance_v != "pass":
+		_fail("STAGE ADVANCE outcome is %s" % advance_v)
+	if loss_v != "pass":
+		_fail("STAGE LOSS outcome is %s" % loss_v)
+	if hash_v != "pass":
+		_fail("STAGE HASH outcome is %s" % hash_v)
+	if continue_v != "pass":
+		_fail("STAGE CONTINUE outcome is %s" % continue_v)
+	if reset_v != "pass":
+		_fail("STAGE RESET outcome is %s" % reset_v)
+	if live != "pass":
+		_fail("STAGE LIVE outcome is %s" % live)
+	if StageCasesScript.used_force_kill != 0:
+		_fail("STAGE official path used force_kill")
+	if _count_prefix("STAGE ") == 0:
+		_stage = "proven"
+
+
 func _emit() -> void:
 	print("HH_VF_PATH title→fight→win/lose→restart")
 	print(
@@ -2154,6 +2203,21 @@ func _emit() -> void:
 			str(VsFlowCasesScript.outcome_live.get("verdict", "unproven")),
 			VsFlowCasesScript.used_force_kill,
 			_vs_flow,
+		]
+	)
+	print(
+		"HH_VF_STAGE SCHEMA=%s LOAD=%s ADVANCE=%s LOSS=%s HASH=%s CONTINUE=%s RESET=%s LIVE=%s FORCE_KILL=%d BOT_COVERAGE=smoke NOT_AI=1 NOT_Y8_PARITY=1 SURVIVAL_SHIPPED=0 TIER=approximation status=%s"
+		% [
+			str(StageCasesScript.outcome_schema.get("verdict", "unproven")),
+			str(StageCasesScript.outcome_load.get("verdict", "unproven")),
+			str(StageCasesScript.outcome_advance.get("verdict", "unproven")),
+			str(StageCasesScript.outcome_loss.get("verdict", "unproven")),
+			str(StageCasesScript.outcome_hash.get("verdict", "unproven")),
+			str(StageCasesScript.outcome_continue.get("verdict", "unproven")),
+			str(StageCasesScript.outcome_reset.get("verdict", "unproven")),
+			str(StageCasesScript.outcome_live.get("verdict", "unproven")),
+			StageCasesScript.used_force_kill,
+			_stage,
 		]
 	)
 	print(

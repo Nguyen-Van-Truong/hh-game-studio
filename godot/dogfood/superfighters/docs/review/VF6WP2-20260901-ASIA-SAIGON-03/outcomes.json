@@ -1,0 +1,114 @@
+{
+	"apply": {
+		"attempted": 615,
+		"succeeded": 615,
+		"used_action_press": 0,
+		"used_apply_frames": 615,
+		"used_force_kill": 0,
+		"used_parse_input_event": 147,
+		"used_step_fixed": 0,
+		"used_teleport": 0
+	},
+	"feedback": {
+		"frames": 2,
+		"p1_moved": true,
+		"source": "P1 KEY_RIGHT acknowledge within 2 sim frames",
+		"verdict": "pass"
+	},
+	"first": {
+		"path": "title → VS 1P/2P → Start",
+		"source": "viewport button clicks; no editor; no teleport",
+		"verdict": "pass",
+		"vs1_actions": 2,
+		"vs1_seconds": 0.218,
+		"vs2_actions": 2,
+		"vs2_seconds": 0.267
+	},
+	"leak": {
+		"p1_melee": true,
+		"p1_moved": true,
+		"p1_still_on_p2": true,
+		"p2_idle_on_p1": true,
+		"p2_melee": true,
+		"p2_moved": true,
+		"p2_still_on_p1": true,
+		"source": "parse_input_event KEY_RIGHT/KEY_A/KEY_N/KEY_1 + live both slots",
+		"verdict": "pass"
+	},
+	"live": {
+		"first_run_actions": 2,
+		"rematch_actions": 1,
+		"source": "window/menu injected keyboard + viewport clicks",
+		"title_visible_after": true,
+		"verdict": "pass"
+	},
+	"overlay": {
+		"hidden_on_rematch": true,
+		"source": "result token + CanvasLayer hide_result",
+		"title_clean": true,
+		"verdict": "pass"
+	},
+	"play": {
+		"attacked": true,
+		"death_cause": "damage",
+		"died": true,
+		"end_reason": "last_standing",
+		"hit_landed": true,
+		"map_id": "fx_melee_close",
+		"moved": true,
+		"outcome": "win",
+		"p1_attacked": true,
+		"p1_moved": true,
+		"p2_attacked": true,
+		"p2_moved": true,
+		"source": "start_fight fx_melee_close + parse_input_event both slots move+melee; damage last-standing; no rooftops pit fallback",
+		"used_force_kill": 0,
+		"used_pit_fallback": 0,
+		"used_teleport": 0,
+		"verdict": "pass"
+	},
+	"ready": {
+		"remap": true,
+		"source": "lobby ready auto-seat + Start",
+		"verdict": "pass"
+	},
+	"rematch": {
+		"actions": 1,
+		"round_after": 4,
+		"round_before": 3,
+		"seconds": 0.061,
+		"source": "result Rematch click; same mode/map; no lobby hunt",
+		"verdict": "pass"
+	},
+	"schema": {
+		"source": "data/sim/vs_flow.json",
+		"verdict": "pass"
+	},
+	"timeline": [
+		{
+			"actions": 1,
+			"ms": 25.0,
+			"name": "first_run_vs1_mode"
+		},
+		{
+			"actions": 2,
+			"ms": 218.0,
+			"name": "first_run_vs1_start"
+		},
+		{
+			"actions": 1,
+			"ms": 68.0,
+			"name": "first_run_vs2_mode"
+		},
+		{
+			"actions": 2,
+			"ms": 267.0,
+			"name": "first_run_vs2_start"
+		},
+		{
+			"actions": 1,
+			"ms": 61.0,
+			"name": "rematch"
+		}
+	]
+}

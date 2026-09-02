@@ -1,0 +1,54 @@
+{
+	"chain": {
+		"alive_tail": 1,
+		"depth": 2,
+		"events": 3,
+		"source": "seeded pistol vs five Blast Drums, cap depth 2",
+		"verdict": "pass"
+	},
+	"map_id": "fx_hazard_yard",
+	"mode": "vs2",
+	"replay": {
+		"pairs": [
+			{
+				"hash_a": "f0755ac72b7431dcb4573308fb8ef4ae9978e0b313680e7de549ceea8b6f17d6",
+				"hash_b": "f0755ac72b7431dcb4573308fb8ef4ae9978e0b313680e7de549ceea8b6f17d6",
+				"hash_match": true,
+				"name": "hazard_chain",
+				"world_a": "b89591061d7048e353ccb904294ad1bbd16e6b621797c8c7bdf6d8812009c7b7",
+				"world_b": "b89591061d7048e353ccb904294ad1bbd16e6b621797c8c7bdf6d8812009c7b7",
+				"world_hash_match": true
+			},
+			{
+				"hash_a": "bec95b9c7c61d29e73867537cd76d0991b4f31bafca6c5ff172aa7be19d06164",
+				"hash_b": "bec95b9c7c61d29e73867537cd76d0991b4f31bafca6c5ff172aa7be19d06164",
+				"hash_match": true,
+				"name": "hazard_fire",
+				"world_a": "0bc9be83df14cab5a4950e6800ec06e61c9e8504d0595f8eef3a2c6ed09bd5d2",
+				"world_b": "0bc9be83df14cab5a4950e6800ec06e61c9e8504d0595f8eef3a2c6ed09bd5d2",
+				"world_hash_match": true
+			},
+			{
+				"hash_a": "f0755ac72b7431dcb4573308fb8ef4ae9978e0b313680e7de549ceea8b6f17d6",
+				"hash_b": "f0755ac72b7431dcb4573308fb8ef4ae9978e0b313680e7de549ceea8b6f17d6",
+				"hash_match": true,
+				"name": "hazard_hang",
+				"world_a": "b89591061d7048e353ccb904294ad1bbd16e6b621797c8c7bdf6d8812009c7b7",
+				"world_b": "b89591061d7048e353ccb904294ad1bbd16e6b621797c8c7bdf6d8812009c7b7",
+				"world_hash_match": true
+			},
+			{
+				"hash_a": "5307bfe2eba86730a8e1e139d72f5412178c12535419d18067334fa5c6756690",
+				"hash_b": "5307bfe2eba86730a8e1e139d72f5412178c12535419d18067334fa5c6756690",
+				"hash_match": true,
+				"name": "hazard_roll",
+				"world_a": "0bc9be83df14cab5a4950e6800ec06e61c9e8504d0595f8eef3a2c6ed09bd5d2",
+				"world_b": "0bc9be83df14cab5a4950e6800ec06e61c9e8504d0595f8eef3a2c6ed09bd5d2",
+				"world_hash_match": true
+			}
+		],
+		"source": "apply_frames hazard traces twice",
+		"verdict": "match"
+	},
+	"seed": 7
+}

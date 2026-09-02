@@ -16,6 +16,10 @@ is `godot/plugin-project/r5w7/` (same `project.godot`). There is no second
 | [HOST.md](HOST.md) | R2-WP7: Agent Host session contract. Interactive IDE is the host; unattended uses `host/`. Sidecar never holds model keys. |
 | [INSTALL.md](INSTALL.md) | R9-WP2: current-user package/install/doctor/rollback. Unsigned internal. CLEAN_VM unproven. |
 | [COMPATIBILITY.md](COMPATIBILITY.md) | R9-WP3: pin/probe/lock migrate/downgrade. Newer stable is non-blocking. Mismatch is Observe/Doctor only. |
+| [RELEASE.md](RELEASE.md) | R9-WP4: internal release checklist. E3 STOP for sign/upload/name/channel. G6 stays open. |
+| [OPERATIONS.md](OPERATIONS.md) | R9-WP4: backup/restore, logs, crash recover, token rotation, disaster drill. |
+| [EVIDENCE_REVIEW.md](EVIDENCE_REVIEW.md) | R9-WP4: security/privacy/license/SBOM/clean-VM/autonomy/dogfood review. |
+| [KNOWN_LIMITATIONS.md](KNOWN_LIMITATIONS.md) | R9-WP4: limitations mapped to Capability Matrix. Not “every button”. |
 | [../../.hh-agent/policy.example.toml](../../.hh-agent/policy.example.toml) | `OWNER_AUTOPILOT` + E1–E4 + jail + process allowlist. Deny includes `godot/plugin-project/addons/` and `res://addons/`. |
 
 Live policy is a **copy** to `.hh-agent/policy.toml` (gitignored). Tokens stay in
@@ -32,4 +36,5 @@ python tests/bootstrap/test_coverage_2d.py
 python tests/bootstrap/test_mcp_bakeoff.py
 python tests/bootstrap/test_bakeoff_guard.py
 python tests/bootstrap/test_compat_update.py
+python tests/bootstrap/test_release_handoff.py
 ```

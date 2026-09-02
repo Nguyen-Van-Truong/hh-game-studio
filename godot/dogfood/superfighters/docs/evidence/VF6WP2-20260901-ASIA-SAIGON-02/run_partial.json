@@ -1,0 +1,54 @@
+{
+	"command_id": "cmd.vf6-wp2.vs-flow.2",
+	"display": "Windows",
+	"ended_at": "2026-09-01T18:38:49+07:00",
+	"ended_unix": 1788262729.671,
+	"epsilon": 0.001,
+	"fail_count": 0,
+	"godot": {
+		"build": "official",
+		"hash": "a13da4feb8d8aefc283c3763d33a2f170a18d541",
+		"hex": 263937,
+		"major": 4,
+		"minor": 7,
+		"patch": 1,
+		"status": "stable",
+		"string": "4.7.1-stable (official)",
+		"timestamp": 0
+	},
+	"map_id": "police",
+	"mode": "vs2",
+	"os_name": "Windows",
+	"outcomes": {
+		"FEEDBACK": "pass",
+		"FIRST": "pass",
+		"LEAK": "pass",
+		"LIVE": "pass",
+		"OVERLAY": "pass",
+		"PLAY": "pass",
+		"READY": "pass",
+		"REMATCH": "pass",
+		"SCHEMA": "pass",
+		"USED_FORCE_KILL": 0
+	},
+	"run_id": "VF6WP2-20260901-ASIA-SAIGON-02",
+	"schema": "vault-fighters.vf6-wp2.run.v1",
+	"screens": {
+		"fight": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\godot\\dogfood\\superfighters\\.evidence\\VF6WP2-20260901-ASIA-SAIGON-02\\window/screens/vs_flow_fight_1280x720.png",
+		"lobby": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\godot\\dogfood\\superfighters\\.evidence\\VF6WP2-20260901-ASIA-SAIGON-02\\window/screens/vs_flow_lobby_1280x720.png",
+		"rematch": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\godot\\dogfood\\superfighters\\.evidence\\VF6WP2-20260901-ASIA-SAIGON-02\\window/screens/vs_flow_rematch_1280x720.png",
+		"result": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\godot\\dogfood\\superfighters\\.evidence\\VF6WP2-20260901-ASIA-SAIGON-02\\window/screens/vs_flow_result_1280x720.png",
+		"title": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\godot\\dogfood\\superfighters\\.evidence\\VF6WP2-20260901-ASIA-SAIGON-02\\window/screens/vs_flow_title_1280x720.png",
+		"title_after": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\godot\\dogfood\\superfighters\\.evidence\\VF6WP2-20260901-ASIA-SAIGON-02\\window/screens/vs_flow_title_after_1280x720.png"
+	},
+	"seed": 7,
+	"started_at": "2026-09-01T18:38:26+07:00",
+	"started_unix": 1788262706.889,
+	"tick_hz": 60,
+	"timezone": "Asia/Saigon",
+	"viewport": {
+		"h": 720.0,
+		"w": 1280.0
+	},
+	"wp": "VF6-WP2"
+}

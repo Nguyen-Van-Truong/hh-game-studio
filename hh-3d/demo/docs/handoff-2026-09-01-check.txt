@@ -1,0 +1,223 @@
+HANDOFF STATIC CHECKLIST — HÒN GIÓ / HH-3D
+Hardening audit: 2026-09-02
+
+OWNER_FREEZE=1
+MODE=AUDIT_ONLY
+OWNER_RESUME=0
+RUNTIME_CHECKS_FORBIDDEN_NOW=1
+PRODUCT_SOURCE_EDITS_FORBIDDEN_NOW=1
+
+Mục tiêu của checklist này là audit tĩnh và chống agent rẻ hiểu nhầm. Không có
+mục nào dưới đây cho phép chạy preview/build/typecheck/browser/Godot trong
+freeze hiện tại.
+
+================================================================================
+A. AUTHORITY / SCOPE
+================================================================================
+
+[ ] A1. Đã đọc `AGENTS.md` mới nhất trước mọi tài liệu HH-3D.
+[ ] A2. Xác nhận owner freeze còn hiệu lực: MODE=AUDIT_ONLY, OWNER_RESUME=0.
+[ ] A3. Không tự chọn demo hoặc HH World làm route resume.
+[ ] A4. Hòn Gió = authored WebGL demo; HH World = future real web application;
+    open-world/Unreal plan = background only.
+[ ] A5. Không reconcile hoặc sửa Vault Fighters/Godot từ tài liệu HH-3D.
+[ ] A6. Không commit/tick/state-change/plan-WP rewrite trong freeze.
+
+PASS A chỉ từ đọc file/status hiện tại. Không cần runtime.
+
+================================================================================
+B. STATIC TRUTH CLASSIFICATION
+================================================================================
+
+Mọi claim phải có một nhãn:
+
+OBSERVED  = đọc trực tiếp từ file/source/diff hiện tại.
+INFERRED  = suy luận hợp lý nhưng chưa có runtime/evidence trực tiếp.
+UNPROVEN  = cần runtime/device/provider/human proof chưa được phép/chưa có.
+BLOCKED   = cần owner decision/quyền/network/paid/legal/hardware.
+
+[ ] B1. Không dùng PASS banner/chat/screenshot cũ thay cho source/evidence hash.
+[ ] B2. Không gọi build/typecheck/runtime hiện tại PASS nếu chưa chạy sau freeze.
+[ ] B3. Không gọi nhân vật/cảnh final/production art; owner chưa accept final.
+[ ] B4. Không gọi map realtime/current tuyệt đối từ snapshot/as_of.
+[ ] B5. Không gọi demo là GTA/map thật/open-world.
+
+================================================================================
+C. LAST-OBSERVED CONSTANTS — KHÔNG PHẢI ACCEPTANCE
+================================================================================
+
+Các giá trị như `lookYawSign=-1`, strafe formula, scale `1.36`, tunic khoảng
+`0.4 x 0.98 x 0.34`, pelvis khoảng `0.22 x 0.11 x 0.13`, palette và camera
+distance chỉ là implementation candidate từng quan sát.
+
+[ ] C1. Agent không ghi “PHẢI giữ” các con số/sign này nếu WP tương lai không
+    khóa chúng.
+[ ] C2. Camera acceptance được mô tả bằng UX: look/strafe trực giác, không đảo.
+[ ] C3. Character acceptance bằng silhouette/framing/anatomy readability, không
+    bằng việc grep đúng một kích thước mesh.
+[ ] C4. Boat acceptance bằng khả năng đọc ra thúng ở view bình thường, không
+    bắt buộc một primitive/geometry cụ thể nếu art direction thay đổi.
+
+================================================================================
+D. KNOWN STATIC GAPS
+================================================================================
+
+Theo static audit hiện tại, cần phân biệt source gap với runtime chưa chứng minh:
+
+[ ] D1. `IdleThung`: static wiring hiện đã có (`Boat.tsx` nhận
+    `reducedMotion`; `World.tsx` truyền reduced-motion hoặc low tier). Không
+    gọi đây là known source bug nữa; runtime effect vẫn UNPROVEN trong freeze.
+[ ] D2. `TouchPad` keyboard/accessibility semantics gap.
+[ ] D3. Punch là pose/input demo; chưa hit/damage/feedback gameplay.
+[ ] D4. Help/HUD/Touch punch guidance chưa đầy đủ.
+[ ] D5. `PUNCH_COMBO_AFTER` hiện không có call-site ngoài definition; combo
+    chưa implement/prove.
+[ ] D6. `authored-experience-seed.md` stale so với implementation.
+[ ] D7. Evidence/runtime hiện tại không được coi official PASS cho source cuối.
+[ ] D8. Character/environment vẫn primitive và chưa owner-accepted final.
+[ ] D9. Punch/jump được mô tả đúng: punch edge có thể bị consume khi airborne,
+    nhưng jump pose có precedence nên punch pose không hiện; không claim input
+    bị reject nếu source không làm vậy.
+[ ] D10. `LandmarkDock`/“Điểm đến” chỉ render ngoài Play là OBSERVED static;
+    behavior runtime vẫn cần verify sau resume.
+[ ] D11. Demo plan đang split-brain: scope cũ loại WASD/combat khỏi demo pass,
+    nhưng source + audit override lại yêu cầu Play. Phải owner/coordinator
+    resolve trước execution, không tự chọn một phía.
+[ ] D12. Audit override gom `Boat.tsx`/`World.tsx`/`TouchPad.tsx` thành một WP
+    nhưng D0-WP4/D0-WP6 blocks tách scope. Không invent rework WP/allowed paths
+    từ checklist này.
+
+Không tick D để “đóng bug”; tick ở đây chỉ nghĩa auditor đã xác nhận gap được
+ghi đúng trong report, không thay đổi product progress.
+
+================================================================================
+E. USER-CENTRIC REVIEW CRITERIA CHO MỘT FUTURE RESUME
+================================================================================
+
+Không chạy các check này bây giờ. Chỉ đảm bảo plan/handoff tương lai có thể
+kiểm chứng chúng:
+
+[ ] E1. First 30 seconds: user hiểu app/demo là gì và hành động chính ở đâu.
+[ ] E2. Camera/input intuitive; UI không steal critical pointer input.
+[ ] E3. Character đọc ra người; không anatomy artifact/intersection; framing
+    không thường xuyên crop head/feet.
+[ ] E4. Foreground/midground/background và landmark hierarchy rõ.
+[ ] E5. Touch controls không che cảnh; keyboard/focus semantics tồn tại.
+[ ] E6. Reduced-motion/low-quality visibly giảm motion/work.
+[ ] E7. Boat đọc ra thúng Việt Nam.
+[ ] E8. Không claim GTA/map-real/open-world parity từ demo.
+[ ] E9. Performance claim có device/build/source hash; không fake 60 FPS.
+
+================================================================================
+F. HH WORLD HARDENING — STATIC PLAN AUDIT
+================================================================================
+
+Trong freeze hiện tại chỉ report các điểm plan cần harden; không sửa execution
+state hoặc tự mở R0.
+
+[ ] F1. Web-first core không phụ thuộc Unreal.
+[ ] F2. MapLibre/local approved snapshot là MVP proof mặc định.
+[ ] F3. Cesium/Google/provider online chỉ optional sau legal/token/quota/cost.
+[ ] F4. Backend/PostGIS chỉ mở khi local map/search/card/share chứng minh cần.
+[ ] F5. Bookmark local/public browse không bị khóa bởi auth.
+[ ] F6. `as_of`/currentness/provenance/confidence/attribution là first-class.
+[ ] F7. Degraded modes được định nghĩa: WebGL fail, weak GPU, offline, stale,
+    provider fail, auth fail, quota exhausted.
+[ ] F8. Core 2D/list/search/card/share vẫn hữu ích khi optional 3D/provider/auth
+    thất bại, nơi kỹ thuật cho phép.
+[ ] F9. Performance thresholds chỉ được quyết định sau hardware/device matrix;
+    không bịa target đẹp.
+[ ] F10. “Chợ ảo / walkable real streets / character on real snapshot” nếu còn
+    là owner goal phải được ghi thành scope riêng rõ ràng; không giả rằng map
+    AOI Bến Thành tự động đã đáp ứng những feature đó.
+[ ] F11. P3 summary `R4-WP1 -> R4-WP0A` phải được reconcile với dependency
+    blocks trước execution; summary text không được override dependency graph.
+[ ] F12. `acquired_at` vs `accessed_at` phải có một canonical schema/mapping.
+[ ] F13. `NETWORKING_STATUS=OUT_OF_SCOPE_FOR_FIRST_RELEASE` phải được reconcile
+    với STAGING/PUBLIC_BETA online exception; hiện chỉ hiểu là default OFF cho
+    local first proof.
+
+================================================================================
+G. OPEN-WORLD / UNREAL — STATIC PLAN AUDIT
+================================================================================
+
+[ ] G1. `DO_NOT_START_THIS_FILE_DIRECTLY=1` và
+    `NATIVE_EXECUTION_AUTHORIZATION=NONE` vẫn được coi là authority.
+[ ] G2. GTA-like/native sections chỉ là capability/risk research.
+[ ] G3. Không mở G0/G1/Unreal install chỉ vì milestone đã được mô tả.
+[ ] G4. Unreal chỉ được cân nhắc sau web MVP benchmark + owner native decision.
+[ ] G5. Google/Cesium visual content không tự trở thành offline collision/nav/
+    gameplay source.
+[ ] G6. `CURRENT_EXECUTION_PLAN=...demo... (PAUSED)` trong background plan chỉ
+    là routing history; owner freeze/NO EXECUTION mới là authority hiện tại.
+
+================================================================================
+H. FUTURE_RUNTIME_CHECKS_AFTER_OWNER_RESUME — FORBIDDEN NOW
+================================================================================
+
+Các check dưới đây chỉ tồn tại để không quên sau này. KHÔNG chạy bây giờ:
+
+- typecheck/build/preview;
+- port/listener/browser/Ctrl+F5;
+- desktop/mobile playtest;
+- pointer-lock/camera/WASD/jump/boat/punch behavior;
+- reduced-motion/low-quality/fallback/ErrorBoundary/context loss;
+- console scan;
+- download/parse/chunk/cache/frame-time/FPS/1% low/memory/VRAM;
+- accessibility/keyboard/touch human review;
+- fresh evidence capture trên cùng source hash;
+- independent critics trên frozen hash.
+
+Nếu owner resume, exact commands/device matrix phải đến từ exact active WP,
+không copy mù lệnh lịch sử từ handoff cũ.
+
+================================================================================
+I. CHEAP-AGENT SAFETY
+================================================================================
+
+[ ] I1. Một implementer chỉ nhận một exact WP khi OWNER_RESUME=1.
+[ ] I2. Allowed paths phải exact; wildcard chỉ là ceiling, không phải blanket
+    permission.
+[ ] I3. Implementer không tự PASS/tick.
+[ ] I4. Critic A = functional/scope/evidence read-only.
+[ ] I5. Critic B = adversarial UX/performance/accessibility/legal/privacy read-only.
+[ ] I6. Source đổi sau critic => verdict cũ invalid.
+[ ] I7. Historical/last-observed values không phải acceptance criteria.
+[ ] I8. Handoff commentary không được nâng thành requirement nếu active WP không
+    ghi nó.
+[ ] I9. Báo cáo phân biệt OBSERVED/INFERRED/UNPROVEN/BLOCKED.
+
+================================================================================
+J. CONTEXT RECOVERY / REPORT TEMPLATE
+================================================================================
+
+Sau compaction/ngắt task, trước khi làm gì:
+
+1. đọc AGENTS.md;
+2. đọc đúng plan header;
+3. đọc handoff này + audit summary + tail review log;
+4. kiểm git status read-only nếu cần;
+5. ghi lại:
+
+MODE:
+OWNER_RESUME:
+TARGET_PLAN:
+CURRENT_WP:
+ALLOWED_PATHS:
+FORBIDDEN_PATHS:
+OBSERVED:
+INFERRED:
+UNPROVEN:
+BLOCKED:
+KNOWN_GAPS:
+NEXT_SAFE_ACTION:
+
+Trong trạng thái hiện tại kết luận mặc định phải là:
+
+MODE=AUDIT_ONLY
+OWNER_RESUME=0
+RUNTIME=NOT_RUN_BY_DESIGN
+PRODUCT_SOURCE=UNCHANGED_BY_DESIGN
+PLAN_PROGRESS=UNCHANGED_BY_DESIGN
+
+END STATIC CHECKLIST

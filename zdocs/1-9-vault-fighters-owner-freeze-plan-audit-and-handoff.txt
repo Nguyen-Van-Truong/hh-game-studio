@@ -1,0 +1,552 @@
+================================================================================
+LATEST RESUME / HANDOFF — 2026-09-02
+================================================================================
+Latest VF6-WP3 split-critic handoff (read this first, then this 1-9 file as
+freeze history only):
+
+  zdocs/2-9-vault-fighters-vf6-wp3-split-critic-handoff.txt
+
+HEAD 147331d (VF6-WP2 tick). CURRENT_VALID_WP=VF6-WP3 still [ ]. 31/50.
+Official VF6WP3-…-01 VOID (critic split). Remint -02 orphaned / not
+READY_FOR_CRITICS. DO NOT TICK. DO NOT START VF6-WP4.
+Body below is the 2026-09-01 owner-freeze snapshot (29/50, VF6-WP1) and is
+not the current execution state.
+
+PLAN_KIND=OWNER_FREEZE_AUDIT_AND_HANDOFF
+PRODUCT_SCOPE=godot/dogfood/superfighters
+PRODUCT_PLAN_AUTHORITY=0
+STATUS=OWNER_FROZEN
+EXECUTION_FREEZE=1
+DATE=2026-09-01
+TIMEZONE=Asia/Saigon
+RESUME_AUTHORITY=EXPLICIT_OWNER_MESSAGE_ONLY
+BASE_PRODUCT_PLAN=zdocs/29-8-vault-fighters-y8-parity-plan.txt
+QUALITY_OVERLAY=zdocs/31-8-vault-fighters-quality-completion-plan.txt
+PARENT_PLATFORM_PLAN=zdocs/20-8-godot-agent-autopilot-plan.txt
+
+================================================================================
+BẢNG TỔNG HỢP — ĐỌC ĐẦU TIÊN
+================================================================================
+
+| Ưu tiên | Nguồn | Sự thật hiện tại | Được làm trong freeze | Cấm làm |
+|---:|---|---|---|---|
+| 0 | `AGENTS.md` | Owner freeze toàn bộ demo/implementation từ 1-9 | đọc, audit, kiểm kê, sửa tài liệu bàn giao | Godot run, gameplay edit, evidence, commit, tick |
+| 1 | `zdocs/29-8-vault-fighters-y8-parity-plan.txt` | product authority theo scope; 29/50; dừng tại VF6-WP1 | đối chiếu checkbox/Git/evidence | mở VF6-WP2, tự tick, gọi WIP là PASS |
+| 2 | file này | bản tổng hợp non-authoritative, không có checkbox tiến độ | dùng làm handoff và prompt | dùng để thay thứ tự WP hoặc hợp thức hóa source dirty |
+| 3 | `zdocs/31-8-vault-fighters-quality-completion-plan.txt` | overlay chất lượng; frozen/read-only | đọc tiêu chí gameplay/art/evidence | tạo bảng tick thứ hai, import draft art |
+| 4 | `zdocs/20-8-godot-agent-autopilot-plan.txt` | platform history 59/60; R9-WP4/G6/GX chưa làm | audit lịch sử | tiếp tục R9-WP4, G6, GX hoặc cộng 59/60 vào game |
+| 5 | hai file `zdocs/16-8-*` | legacy Rust history, authority off | chỉ tra cứu | tiếp tục M6/M7/M8/M9 hoặc chọn WP từ đây |
+
+KẾT LUẬN NGẮN:
+
+- Không có plan thứ ba để thi hành. Plan 29-8 vẫn là nguồn checkbox product
+  duy nhất, nhưng đang `OWNER_FROZEN`; file 31-8 và file 1-9 chỉ bổ sung chất
+  lượng/bàn giao.
+- Tiến độ Vault Fighters là 29/50 WP đã tick. Con số 59/60 thuộc platform cũ,
+  không phải tiến độ game.
+- WP chưa xong đầu tiên vẫn là VF6-WP1. Mọi source/evidence mới hơn commit đã
+  đóng `2b1e0a2` là WIP cho tới khi reconcile, chạy official và hai critic độc
+  lập cùng ký trên một frozen source hash.
+- Owner freeze không xóa code, không reset tree và không phủ nhận 29 WP đã
+  đóng. Nó chỉ chặn mọi thực thi cho tới lệnh resume mới.
+
+================================================================================
+1. BẰNG CHỨNG DỪNG VÀ SNAPSHOT BÀN GIAO
+================================================================================
+
+Snapshot kiểm kê khi tạo file này:
+
+- Git HEAD: `2b1e0a2` — closeout VF5-WP6 đã được tick trước freeze.
+- Branch: `main`, local đang ahead remote; không được push/force/rebase trong
+  phiên audit.
+- Working tree rất dirty: có VF6-WP1 WIP, nhiều evidence/import/cache/untracked
+  từ các lượt trước, cùng thay đổi ngoài scope. Không `git add -A`, không reset,
+  không checkout đè và không gom tất cả vào một commit.
+- Không có Godot process thuộc Vault Fighters được phép tiếp tục. Khi audit,
+  chỉ được kiểm process read-only; nếu còn đúng worker Vault Fighters treo thì
+  dừng đúng PID pair sau khi xác minh command line, không đóng Cursor/Codex hay
+  process không thuộc product.
+- Không có subagent nội bộ còn chạy sau lệnh stop. Không được coi task UI cũ,
+  log “PASS”, hoặc file `.hh-agent` là một worker được phép tự resume.
+
+Các file plan đã cập nhật trong audit 1-9:
+
+- `AGENTS.md`: owner freeze đặt trước route cũ.
+- `zdocs/20-8-godot-agent-autopilot-plan.txt`: status owner-frozen, vẫn 59/60.
+- `zdocs/29-8-vault-fighters-y8-parity-plan.txt`: status owner-frozen, vẫn
+  29/50 và VF6-WP1.
+- `zdocs/31-8-vault-fighters-quality-completion-plan.txt`: frozen overlay.
+- hai plan 16-8: header legacy chỉ đường tới audit 1-9, không bảo làm R0-WP3.
+- `PROJECT_BRIEF.md` được giữ nguyên trong product tree theo freeze; contract
+  source/world/screen pixel, guardrail fighter nhỏ, weapon theo class và
+  animation không đệm frame trùng nằm trong plan 29-8/overlay để đồng bộ ở
+  VF7 khi owner resume.
+- Product plan 29-8: thêm hợp đồng trải nghiệm người dùng, first-run/rematch,
+  bot fairness, feedback latency, AC27–AC30 và progressive review checkpoints.
+- VF7-WP2 hiện sở hữu map presentation (không để Q7 của overlay bị bỏ quên);
+  VF7 yêu cầu vertical art slice trước khi batch toàn bộ fighter/map, và cho
+  phép map-specific framing waiver có lý do/live review thay vì ép mọi arena
+  vào một tỉ lệ hình học.
+
+Không commit các thay đổi audit nếu owner chưa yêu cầu. Lý do: tree đã chứa
+WIP của agent khác; commit mù có thể lẫn gameplay/evidence ngoài lease.
+
+================================================================================
+2. AUDIT TỪNG PLAN — CÁI NÀO ĐÚNG, CÁI NÀO ĐÃ SỬA
+================================================================================
+
+2.1 Hai plan 16-8
+
+Vai trò đúng: lịch sử của engine/editor Rust tự xây. Chúng đã có marker
+legacy/non-authoritative và không được dùng để chọn WP mới. Lỗi còn sót trước
+audit là header vẫn bảo đọc 20-8 và bắt đầu R0-WP3; agent giá rẻ có thể làm
+theo dòng đó mà bỏ route Vault Fighters. Header đã được sửa thành audit-only
+trong freeze. Không sửa checkbox/log lịch sử bên trong.
+
+2.2 Plan platform 20-8
+
+Kiến trúc platform nhìn chung hợp mục tiêu agent có semantic control, observer,
+play/test/checkpoint. Tuy nhiên nó là closeout nền, không phải product game.
+Trước audit, status vẫn ghi ACTIVE và phần cuối bảo agent làm R9-WP4, mâu thuẫn
+với quyết định owner dừng 59/60. Đã đổi status thành OWNER_FROZEN, thêm freeze
+marker và biến lệnh cuối thành tài liệu lịch sử. Không tick R9-WP4/G6/GX.
+
+2.3 Plan product 29-8
+
+Đây vẫn là plan product hợp lý nhất: 50 WP theo thứ tự nền → input/sim →
+movement → combat → world → maps → modes/AI → presentation → autonomy → QA →
+package. Quy tắc không nhảy WP, real-input, deterministic replay, clean-room,
+hai critic và human V5 nên giữ.
+
+Các lỗi đã sửa:
+
+- status ACTIVE không phản ánh lệnh stop của owner;
+- không có freeze machine marker ngăn agent tự lấy VF6-WP1 để chạy;
+- tiêu chí VF7 trộn “logical/source/world/screen pixel”, có thể khiến agent đổi
+  viewport hoặc phóng sprite để đạt số giả;
+- acceptance VF6-WP1 trước đó chưa đủ chặt về menu/input E2E, post-transition
+  snapshot/hash, host exit, runtime team/friendly-fire và banner-only PASS.
+
+Hợp đồng visual sau sửa:
+
+- project base viewport giữ 1280×720; tile = 16 world px;
+- atlas cell = 32×32 source px;
+- opaque fighter trước camera = 14–18 source/world px rộng × 20–24 cao;
+- screen bbox sau uniform camera zoom = cao 20–32 px ở 1280×720, cao 14–24 px
+  ở 854×480;
+- evidence ghi zoom `z` và kiểm `screen_bbox ~= world_bbox * z` trong ±1 px;
+- không non-uniform scale, không đổi viewport 320×180 để lách acceptance.
+
+2.4 Quality overlay 31-8
+
+Overlay hữu ích vì mô tả sâu art/HUD/map/evidence/autonomy, nhưng không được
+thành plan tiến độ thứ hai. Trước audit, nó vẫn ghi ACTIVE_OVERLAY và có nhiều
+đoạn historical dùng chữ “current”. Đã thêm owner freeze ở đầu; current mirror
+giữ VF6-WP1 chỉ để phục hồi sau này. Khi resume, mục 20/21 mới hơn các đoạn
+historical. Q0..Q12 là rubric, không phải checkbox hoặc giấy phép chạy song
+song trái thứ tự 29-8.
+
+2.5 AGENTS.md và checker
+
+AGENTS.md đã có route tốt, nhưng cần owner freeze đứng trên mọi route cũ; đã
+thêm. Checker `test_vault_fighters_plan.py` vẫn kỳ vọng first unticked =
+VF6-WP1, đúng với snapshot. `test_authoritative_plan.py` đi recursive toàn repo
+và có thể rất chậm vì lượng evidence/untracked lớn; timeout của checker không
+được diễn giải là plan sai hay PASS. Không sửa checker chỉ để bỏ timeout trong
+phiên freeze; khi resume nên làm inventory/ignore policy có kiểm soát.
+
+================================================================================
+3. CHẤT LƯỢNG GAME HIỆN TẠI — CLAIM ĐƯỢC PHÉP VÀ KHÔNG ĐƯỢC PHÉP
+================================================================================
+
+Được phép nói:
+
+- VF0..VF5 đã được plan tick theo lịch sử: nền, input/sim, movement, combat,
+  world interaction và sáu arena functional.
+- Game đang là prototype/first playable có nhiều cơ chế; chưa phải product
+  hoàn thiện hoặc Y8 parity.
+- Map và character art hiện tại là prototype; visual pass thuộc VF7.
+
+Không được nói:
+
+- “game hoàn thiện”, “giống hệt Y8”, “bot tốt”, “P2 đã đầy đủ” hoặc “29/50 =
+  58% chất lượng”. Số WP không tuyến tính theo khối lượng/quality.
+- `VF6WP1-...-02` PASS là nghiệm thu. Gói đó provisional, source closure thiếu,
+  full `run_all` từng hang/exit -1 và có regression.
+- Art draft trong `.hh-agent` là asset production. Nó chỉ là bản nháp quarantine.
+- Platform 59/60 chứng minh Vault Fighters tự động hoàn chỉnh.
+
+Các vấn đề chất lượng quan trọng đã xác nhận:
+
+HIGH-1 — VF6-WP1 chưa đóng:
+
+- run headless/window riêng từng in PASS, nhưng full regression không có host
+  exit 0 đáng tin; một run cũ báo lỗi pit lose/overlay, deterministic hash,
+  pause/restart snapshot và sewer replay;
+- pause trace từng có authored tick 32 trong khi sim tick đúng ra vẫn 16;
+  WIP mới thêm dual-clock/retime evidence nhưng chưa có official runtime proof;
+- quit/restart/pause official tests còn gọi API trực tiếp hoặc synthetic button
+  signal; chưa chứng minh keyboard/menu/window E2E;
+- team/FFA/friendly-fire và seed/spawn chủ yếu static/unit, thiếu runtime proof;
+- packer còn nguy cơ trust PASS banner/caller exit, thiếu full transitive runtime
+  closure và package-local freeze;
+- chưa có hai critic read-only TICK=yes trên cùng frozen source hash.
+
+HIGH-2 — Presentation chưa đạt:
+
+- fighter hiện trông như khối nhỏ/recolor một silhouette; special pose có alias;
+- HUD còn debug token/ID; background `bg_city` bị reuse/stretch; arena có dải
+  trống indigo lớn; props/tile/value depth/landmark chưa đủ production;
+- người dùng yêu cầu đầu/tay/chân nhỏ, fighter nhỏ trong arena, dễ đọc như cảm
+  giác reference. Đây là target hợp lý, nhưng mọi clothing/face/gear/map art
+  phải nguyên bản và không trace/crop/rip ảnh Y8.
+
+HIGH-3 — Dirty tree/false evidence risk:
+
+- nhiều modified/untracked file thuộc các thời điểm/WP khác nhau;
+- `.godot`, `.import`, screenshot, evidence và draft không được add toàn bộ;
+- một agent vừa implement vừa critic chính mình hoặc remint run id sau source
+  drift mà không refreeze sẽ tạo PASS giả.
+
+MEDIUM — Plan/process:
+
+- run dài không có watchdog và real host exit dễ treo hàng chục phút;
+- static checker/needle banner chỉ là prerequisite, không phải gameplay proof;
+- hai critic phải độc lập thật: không sửa source, không chia cùng evidence do
+  implementer tự kể, phải reproduce trên same frozen source.
+
+================================================================================
+3A. REVIEW NHƯ MỘT NGƯỜI CHƠI — PLAN ĐÃ ĐỦ CHƯA?
+================================================================================
+
+Nếu tôi là người dùng chỉ muốn bấm Start rồi xem agent làm game, tôi không coi
+29/50 WP là thành công. Tôi chỉ thấy một sản phẩm tốt khi các câu hỏi này đều
+có câu trả lời bằng một lượt chơi thật, không phải bằng banner:
+
+- Mở game có vào title nhanh, không cần console/editor/file edit; controls và
+  mode/map được hiểu trước input đầu tiên.
+- Fighter nhỏ như reference nhưng không bị nền nuốt: đầu nhỏ, tay/chân gọn,
+  outline/shape/animation giúp nhận ra P1/P2, weapon, hazard và sàn trong một
+  khoảnh khắc ngắn ở cả 1280×720 và 854×480.
+- Một trận có nhịp side-view platform shooter rõ: đi, nhảy, crouch, aim, nhặt,
+  bắn/đánh, knockdown, rơi pit/hazard và kết thúc; route/cover/pickup tạo lựa
+  chọn chứ không phải một sân trống với mục tiêu đứng yên.
+- Bot có thể bị đánh lừa và mắc lỗi như người; độ khó tăng bằng delay/aim
+  error/tactical budget/recovery, không đọc hidden state, teleport hoặc aim
+  hoàn hảo. Spawn đầu round không tạo cái chết không thể tránh.
+- Hit, death, pickup, hazard, pause và result có phản hồi hình/âm thanh dễ
+  hiểu; HUD sản phẩm không lộ HP/ST/G3/x0/POSE/ID/debug footer.
+- Sau win/lose/tie, rematch nhanh; Pause/Resume/Restart/Quit không làm mất,
+  nhân đôi hoặc kẹt session. Settings và remap không gây bất ngờ.
+- Map có theme, landmark, prop, parallax và nhịp cao/thấp riêng; vẫn tham khảo
+  functional topology của Y8 nhưng không rip/trace/copy layout, sprite, audio,
+  screenshot, title hay trademark.
+
+Kết luận từ góc nhìn đó: plan hiện tại đã đủ tốt để điều phối agent và bắt lỗi
+PASS giả, nhưng chưa thể đảm bảo người dùng sẽ thích — phần cảm giác, thẩm mỹ
+và “vui khi chơi” vẫn cần owner V5 review. Vì vậy plan đã thêm target first-run,
+rematch, readability, bot fairness và progressive review bundles. Đây là các
+proxy đo được để giảm rủi ro, không thay thế lượt review người thật.
+
+Các checkpoint không chặn kỹ thuật nhưng bắt buộc phải gửi cho owner xem:
+
+| Mốc | Gói cần xem | Quyết định của owner |
+|---|---|---|
+| Sau VF6-WP2 | title → match → result → rematch, controls và input feel | chấp nhận loop cơ bản hoặc yêu cầu sửa UX |
+| Sau VF6-WP5 | mode/bot/map/game-feel review, route/cover/pickup và fairness | chấp nhận đối thủ đáng chơi hoặc yêu cầu sửa AI/gameplay |
+| Sau VF7-WP3 | contact sheet + live art/map/HUD ở 1280×720 và 854×480 | chấp nhận fighter/map/readability hoặc yêu cầu art repair |
+| Sau VF9-WP5 | 5–10 phút chơi thật, bot/mode/map/audio, không console | ký V5 hoặc mở quality repair trước package |
+
+Không được dùng “không bị người dùng chê” làm acceptance tự động. Chỉ owner có
+thể ký cảm nhận cuối; agent phải cung cấp replay, screenshot, timeline và gap
+report trung thực để owner review nhanh.
+
+================================================================================
+4. THỨ TỰ KHUYẾN NGHỊ SAU KHI OWNER RESUME
+================================================================================
+
+Không thực hiện phần này trong freeze. Đây là DAG phục hồi để agent rẻ không
+nhầm “làm nhiều một lần” với làm chồng WP hoặc làm sai evidence.
+
+PHASE A — Reconcile trước khi code (bắt buộc, một writer):
+
+1. Đọc `AGENTS.md`, bảng đầu plan 29-8, file này, rồi xác nhận
+   `CURRENT_VALID_WP=VF6-WP1`, 29/50, parent 59/60 frozen.
+2. Ghi `git status --short --branch`, HEAD, process list, active lease. Không
+   reset/checkout/xóa hàng loạt. Tách WIP VF6-WP1 khỏi generated evidence;
+   quarantine file không thuộc lease.
+3. Lập `SOURCE_FILES` closure bằng dependency scan từ project entry scenes và
+   preload/load/call dependencies; hash manifest trước Godot run. Gói evidence
+   phải chứa freeze manifest trong chính package và cùng source hash.
+4. Kiểm tra Godot pin bằng đường dẫn thực tế và version output; dùng một worker
+   duy nhất cho product path. Mọi run mới phải có run_id/command_id mới.
+5. Chỉ sau inventory mới mở implementation VF6-WP1; nếu dirty diff không phân
+   biệt được thì báo `BLOCKED_BY_DIRTY_SCOPE`, không đè code người khác.
+
+PHASE B — Đóng VF6-WP1 (lifecycle):
+
+1. Một state machine canonical cho menu/countdown/active/paused/win/lose/tie/
+   quit/restart; legal transition table, reason, round_id, winner/team/FFA,
+   timer và post-state snapshot/hash.
+2. Pause dùng dual clock rõ ràng: authored trace tick có thể tiếp tục ghi input
+   quan sát, nhưng sim tick/body/combat/hash physics không tiến; resume retime
+   qua helper tường minh và xuất mọi row retime. Test replay hai lần cùng hash.
+3. Win/loss/tie/quit/restart/pause phải có real typed input và real window/menu
+   path. `apply_eval`, `set_paused`, `request_quit`, private method, hoặc
+   `.pressed.emit()` chỉ là unit/supplemental, không phải official E2E duy nhất.
+   Quit phải chứng minh title hiện và session bị clear; restart phải có round_id
+   mới và hash fresh; pause phải chứng minh body/tick đứng yên.
+4. Runtime test friendly-fire: same-team hit không mất HP; khác team gây damage;
+   FFA winner semantics; seed/spawn deterministic từ session thật. Giữ các nhãn
+   `P2_COVERAGE=smoke`, `BOT_COVERAGE=smoke`, `NOT_AI=1`, `NOT_Y8_PARITY=1` khi
+   chưa có coverage thực.
+5. Packer fail-closed: không suy exit từ banner hoặc CLI caller; cần host-captured
+   exit + bounded watchdog, reject warning/error/assert/hung/stale/missing;
+   require window events cho claims E2E; kiểm transition post hash bằng cách
+   recompute snapshot; reject duplicate same-tick operation/IDs.
+6. Chạy static → headless → window → replay/hash → screenshot theo thứ tự,
+   tuần tự một worker. Implementer không tick. Hai critic độc lập đọc-only phải
+   ký `TICK=yes` cùng source hash; bất kỳ một `no` thì remint run id sau refreeze.
+
+PHASE C — VF6 còn lại, tuần tự:
+
+- VF6-WP2: menu VS 1P/2P production, local keyboard/gamepad isolation, round
+  start/end/restart, not just smoke. Depends on closed WP1.
+- VF6-WP3: Stage progression bốn map, reward/difficulty loop, save/checkpoint,
+  deterministic restart.
+- VF6-WP4: Survival spawn director, safe-zone/threat budget/cooldown, ten seeds.
+- VF6-WP5: bot perception/navigation/cover/pickup/attack/retreat/recovery;
+  route coverage and stuck/action-diversity metrics, never bot đứng yên rồi
+  fixture-kill.
+
+PHASE D — VF7 visual quality (sau gameplay state stable):
+
+- Q5 foundation: asset manifest/schema, 32×32 source cell, 16 world-px tile,
+  nearest-neighbor, anchor/socket data và measurement tool.
+- Q6 fighters: ít nhất bốn silhouette thật sự khác (không chỉ recolor), đầu nhỏ,
+  tay/chân gọn, clothing/face/gear khác; pose authored cho idle/walk/sprint/
+  jump/fall/crouch/aim/melee/kick/throw/roll/dive/climb/hang/hit/knockdown/
+  getup/dead. Giữ opaque body 14–18×20–24 source px ở atlas scale 1.0 (tức
+  14–18×20–24 world px trước camera); screen conversion theo z. Trước khi
+  batch toàn bộ pose, làm một vertical art slice (4 identity + idle/walk/attack
+  + một map background + HUD) và sửa mọi lỗi scale/anchor/readability.
+- Q7 map art (giao vào VF7-WP2): bắt đầu bằng một map vertical art slice có
+  fighter/HUD/weapon/hazard; sau critic mới nhân rộng. Mỗi arena có palette/tile edge/corner/
+  background/parallax và 2–3 landmark/prop riêng; giữ functional topology nhưng
+  đổi geometry/landmark đủ xa reference. Không stretch `bg_city` cho mọi map.
+- Q8 HUD/VFX/audio/accessibility: HUD sản phẩm không có HP/ST/G3/x0/POSE/ID/
+  debug footer; event có shape+color+animation+audio, pause/settings/gamepad.
+- Q9 camera/perf: whole-arena readable, integer scale, default playable-band
+  ≥55% và empty non-playable ≤30%; map-specific waiver chỉ khi có mask/lý do/
+  live review và không mất fighter/route/readability; contrast đo được, captures
+  1280×720 và 854×480.
+
+PHASE E — VF8→VF10 và review:
+
+- VF8 chứng minh semantic command → edit → play → observe → repair → checkpoint
+  bằng agent trên toàn bộ product surface (scene/node/resource/script/map/
+  actor/weapon/prop/mode/input/play/observe/assert/checkpoint); người chỉ
+  xem/review. Không RPA/raw `.tscn` mutation. Đây không phải lời hứa điều khiển
+  mọi nút nội bộ bất kỳ của Godot: capability matrix phải nêu supported/
+  unsupported và trả lỗi rõ cho phần ngoài scope.
+- VF9 thêm hostile verification, visual/audio regression, soak/restart/recovery,
+  leak/leftover proof và differential rubric; không dùng banner-only PASS.
+- VF10 tạo Windows offline/reproducible build sau source freeze; không ship
+  editor dependency, Node, bridge, token, evidence hoặc reference asset.
+- Human V5 là bước cuối: agent không tự ký thay người dùng; legal/brand nếu
+  geometry quá gần reference phải được owner/legal review.
+
+================================================================================
+5. QUY TẮC QUẢN LÝ AGENT GIÁ RẺ / CRITIC
+================================================================================
+
+Mô hình tiết kiệm nhưng không giảm chất lượng:
+
+1. Một implementer giá rẻ nhận đúng một WP và một lease file. Nó được tự đọc,
+   sửa, chạy và sửa lại; không được tick. Đầu ra bắt buộc là diff, command,
+   source hash, run/command id mới, evidence và danh sách gap.
+2. Một critic hostile độc lập chỉ đọc cùng frozen source hash, không dùng code
+   đang sửa của implementer, không tin chat/banner. Critic chạy lại những gì
+   DoD yêu cầu và trả `TICK=yes` hoặc `TICK=no` kèm blocker cụ thể.
+3. Critic thứ hai độc lập với critic thứ nhất (khác transcript/evidence path),
+   cũng chỉ đọc. Không cho implementer tự đóng vai cả hai critic.
+4. Coordinator đối chiếu hai chữ ký, source hash, process exit và plan; chỉ
+   coordinator mới commit/tick sau khi owner đã resume. Nếu một critic `no`,
+   giữ WP mở, gửi lỗi cho implementer, refreeze và remint mọi run id bị ảnh
+   hưởng.
+5. Không chạy nhiều Godot process trên cùng product path. Nếu cần song song,
+   dùng clone read-only riêng với source hash ghi rõ; không cho evidence của
+   clone thay evidence official.
+6. Mọi run dài phải có watchdog (thời hạn rõ), log stdout/stderr riêng, host
+   exit thật, leftover-0 sau mỗi lượt. Process bị kill/timeout/không có exit là
+   FAIL, dù log đã in PASS.
+7. Không cho agent tối ưu “test xanh” bằng cách nới acceptance, bỏ regression,
+   dùng teleport/force_kill, synthetic signal, direct private API, stale JSON,
+   fixed run id, hoặc đổi viewport/scale để đạt số art.
+
+Art draft hiện có:
+
+`godot/dogfood/superfighters/.hh-agent/vf7-art-draft/` chứa bản SVG deterministic
+quarantine với bốn identity, nhiều pose, manifest/provenance. Đây là nguyên
+bản hand-authored và có giá trị tham khảo cho integrator, nhưng chưa là asset
+live: thiếu PNG import/runtime capture, edge-mask measurement, socket/feet QA,
+theme integration và critic. Không tự copy/import trong freeze.
+
+================================================================================
+6. PROMPT COPY-PASTE CHO AGENT RẺ (MẶC ĐỊNH AUDIT-ONLY)
+================================================================================
+
+Dán nguyên khối dưới đây vào agent giá rẻ. Prompt cố ý bắt đầu audit-only để
+không vô tình phá owner freeze. Chỉ khi owner gửi một tin nhắn resume riêng,
+agent mới được chuyển sang implement theo Phase B; không tự đổi cờ trong prompt.
+
+```text
+Bạn là implementation/QA agent giá rẻ cho repo hh-game-studio. Làm chính xác,
+tiết kiệm lượt nhưng tuyệt đối không gian dối evidence. Đọc AGENTS.md trước,
+sau đó đọc phần bảng đầu và WP đầu tiên của
+zdocs/29-8-vault-fighters-y8-parity-plan.txt, quality overlay
+zdocs/31-8-vault-fighters-quality-completion-plan.txt, và toàn bộ file
+zdocs/1-9-vault-fighters-owner-freeze-plan-audit-and-handoff.txt.
+Mô hình/chi phí mục tiêu: GPT-5.6-sol, reasoning medium; nếu host không có
+đúng model thì báo rõ, không tự thay model thành nguồn authority mới.
+
+OWNER FREEZE HIỆN HÀNH (BẮT BUỘC):
+- Đây là phiên audit-only. Không chạy Godot/demo/runtime, không sửa product,
+  không sửa gameplay/art/evidence, không commit, không push, không tick và
+  không tự resume từ tin nhắn cũ.
+- Platform history là 59/60 tại R9-WP4 và đóng băng; tuyệt đối không mở
+  R9-WP4/G6/GX, không đụng Rust/gs-*, Snake, Kho Bí Ẩn hay Hoan Hao social.
+- Product Vault Fighters ở godot/dogfood/superfighters; product plan duy nhất
+  là zdocs/29-8-vault-fighters-y8-parity-plan.txt, đang dừng 29/50 tại VF6-WP1.
+- zdocs/31-8 và file audit handoff chỉ là rubric/handoff, không tạo bảng tick
+  thứ hai. Hai plan 16-8 là legacy, không chọn WP từ đó.
+
+NHIỆM VỤ AUDIT (CHỈ ĐỌC, KHÔNG MUTATE):
+1) Kiểm tra git status/branch/HEAD và liệt kê file modified/untracked theo nhóm:
+   product WIP, generated .godot/.import, evidence, docs, ngoài scope. Không
+   reset, checkout, clean, delete hay add toàn bộ.
+2) Đọc checkbox product plan và xác nhận first unticked/current WP; không cộng
+   59/60 vào 29/50. Xác nhận parent plan giữ R9-WP4 mở và mọi freeze marker
+   nhất quán. Nếu mâu thuẫn, báo BLOCKED_PLAN_CONFLICT, không tự sửa checkbox.
+3) Kiểm tra có Godot worker thuộc product đang chạy không. Không dừng process
+   nào nếu chưa xác minh command line; nếu không có thì ghi NONE. Không khởi
+   động worker trong audit-only.
+4) Đọc WIP VF6-WP1 và log/evidence hiện có nhưng không tin banner PASS. Ghi rõ:
+   - full run_all có host exit thật không;
+   - warning/error/assert/hang/timeout có không;
+   - pause authored tick và sim tick có dual-clock proof không;
+   - quit/restart/pause có real menu/input E2E hay direct API/synthetic signal;
+   - transition có post-phase + recomputable post-state hash không;
+   - team/FFA/friendly-fire/seed có runtime proof không;
+   - packer có package-local freeze, full transitive source closure, unique
+     run/command id và exit fail-closed không;
+   - hai critic có ký TICK=yes trên cùng frozen source hash chưa.
+5) Đọc đánh giá art: fighter hiện nhỏ/đọc được hay còn ColorRect/recolor/debug
+   HUD; map có bg stretch/empty band/landmark thiếu không. Chỉ ghi nhận; không
+   import draft art và không dùng ảnh reference người dùng làm texture.
+6) Kiểm tra mâu thuẫn pixel. Hợp đồng đúng là tile 16 world px, atlas cell
+   32×32 source px, opaque body 14–18×20–24 world px trước camera, screen cao
+   20–32 tại 1280×720 và 14–24 tại 854×480, với uniform zoom z và sai số ±1.
+   Không chấp nhận đổi viewport 320×180 hoặc non-uniform scale để lách.
+7) Trả báo cáo ngắn nhưng có đường dẫn/line evidence: TRUE, FALSE, UNKNOWN,
+   HIGH/MEDIUM/LOW gaps; kết luận tuyệt đối không phải PASS/ready. Không commit.
+
+KẾT THÚC AUDIT:
+- Chờ owner gửi lệnh resume tường minh. Không tự chuyển sang implement.
+- Nếu owner resume, vẫn bắt đầu bằng reconcile dirty tree và source closure;
+  chỉ implement một WP đầu tiên (VF6-WP1), không mở VF6-WP2/VF7 song song.
+
+QUY TẮC KHI ĐƯỢC RESUME (CHỈ ÁP DỤNG SAU LỆNH RESUME RIÊNG):
+- Một writer/lease; một Godot worker trên một product path; một WP một commit.
+- Freeze complete transitive source closure trước Godot. Mọi source change sau
+  freeze làm vô hiệu evidence và bắt buộc run_id/command_id mới.
+- VF6-WP1 phải chứng minh state machine canonical menu/countdown/active/paused/
+  win/lose/tie/quit/restart; legal transitions; reason/winner/team/round/timer;
+  transition post snapshots và hashes recomputable.
+- Pause dùng typed input/window/menu thật; sim tick/body/combat/hash physics
+  đứng yên trong pause. Authored trace tick có thể tiếp tục nhưng phải retime
+  tường minh, xuất retimed rows và chứng minh replay hai lần cùng final hash.
+- Quit phải đi qua UI và chứng minh title visible + session clear. Restart phải
+  đi qua UI và chứng minh round_id mới + fresh hash. Direct API, private method,
+  force_kill, teleport, .pressed.emit chỉ là supplemental, không là proof duy nhất.
+- Chạy runtime friendly-fire same-team block, cross-team damage, FFA/team winner
+  và seed/spawn deterministic. Giữ honesty labels P2/BOT smoke, NOT_AI=1,
+  NOT_Y8_PARITY=1 nếu coverage chưa đủ.
+- Packer phải fail-closed: actual host exit (không suy từ banner/caller),
+  watchdog, no warning/error/assert/hang, package-local freeze, full runtime
+  closure, window events bắt buộc cho E2E, no stale/missing/mismatched evidence.
+- Thứ tự verify: structural → headless → window → replay/hash → screenshot →
+  leftover-0. Hai critic độc lập read-only cùng source hash phải TICK=yes; agent
+  không tự tick. Một TICK=no giữ WP mở và yêu cầu sửa.
+
+SAU KHI VF6-WP1 ĐÓNG HỢP LỆ:
+- Làm lần lượt VF6-WP2 (VS 1P/local 2P), WP3 (Stage), WP4 (Survival), WP5
+  (bot). Mỗi WP lặp implement→verify→critic I/II→coordinator.
+- Sau VF6 mới làm VF7 art: bốn silhouette khác nhau, clothing/face/gear gốc,
+  đầu/tay/chân nhỏ, authored special poses, body đúng hợp đồng px; map có
+  theme/tile/landmark/background riêng; HUD không debug token; QA ở hai độ phân
+  giải. Art draft chỉ là input quarantine, phải tích hợp và đo lại.
+- Sau đó VF8 autonomy, VF9 hostile verification/soak, VF10 offline build.
+  Human V5/legal review không được agent giả chữ ký.
+
+CLEAN-ROOM:
+- Có thể quan sát Y8 để hiểu mechanic/readability nhưng không tải/rip/trace/
+  reverse-engineer/bundle sprite, audio, SWF/HTML5, code, screenshot, logo,
+  title card hoặc tên nhân vật. Tên sản phẩm là Vault Fighters.
+
+ĐẦU RA MỖI LƯỢT:
+- trạng thái hiện tại và WP;
+- files/lease đã đọc hoặc sửa;
+- commands + real exit + elapsed/watchdog;
+- source/run/command/evidence hashes;
+- critics và verdict;
+- gaps/unknowns, không che giấu;
+- next action đúng DAG hoặc BLOCKED_BY_OWNER_FREEZE.
+```
+
+================================================================================
+7. LỜI KHUYÊN VÀ CÁC ĐIỂM OWNER CẦN NHỚ
+================================================================================
+
+- Đừng đánh giá game qua số WP hoặc qua một ảnh đẹp. Hãy xem một lượt chơi
+  thật: fighter nhỏ nhưng nhận ra ngay, chân bám sàn/thang, vũ khí/hazard dễ
+  đọc, map có nhịp dọc/ngang và HUD không có chữ kỹ thuật.
+- “Giống Y8 nhất” nên hiểu là nhịp điều khiển, side-view, arena/pit, ladder,
+  cover, pickup, weapon/combat loop và mode flow. Không nên sao chép tọa độ,
+  sprite, âm thanh, tên, title card hoặc screenshot. Nếu map quá gần để bán,
+  dừng và xin legal review; agent không tự phán fair use.
+- Kích thước nhỏ không có nghĩa làm sprite mờ hoặc thu nhỏ vô hạn. Giữ integer
+  nearest scale, silhouette/outline rõ, tương phản đo được và camera dùng đủ
+  playable band. Hợp đồng px ở mục 2.3 là nguồn duy nhất cho art metric.
+- Cho agent tự làm nhiều việc chỉ sau khi lease và WP rõ. Song song hợp lệ là
+  critic đọc-only hoặc art draft quarantine; không song song hai writer sửa
+  `fighter.gd`, `game_session.gd`, `arena.gd`, packer hoặc plan.
+- Nếu muốn rút thời gian, chỉ song song asset lane độc lập trong worktree riêng;
+  một integration writer và một official evidence run vẫn là nguồn cuối. Không
+  để tốc độ tạo nhiều branch biến thành nhiều phiên bản game mà owner không biết
+  bản nào là bản thật.
+- Khi agent báo “đã xong”, yêu cầu bốn thứ: source hash, command/run id mới,
+  host exit/leftover proof và hai critic độc lập. Thiếu một thứ thì gọi là WIP.
+- Không cần stop mọi Cursor/Codex process của máy; chỉ stop chính xác worker
+  Godot/product được xác định bằng command line. Dừng nhầm process nền có thể
+  làm mất session hoặc bằng chứng của việc khác.
+- Không xóa generated evidence trong phiên này chỉ để làm tree sạch. Hãy ghi
+  inventory/quarantine, rồi để một WP governance sau resume định nghĩa policy
+  dọn dẹp an toàn.
+
+================================================================================
+8. TRẠNG THÁI KẾT THÚC CỦA FILE HANDOFF
+================================================================================
+
+OWNER_FREEZE_CONFIRMED=1
+PRODUCT_EXECUTION_ALLOWED=0
+PRODUCT_PLAN_CHECKBOXES_CHANGED=0
+PARENT_PLAN_CHECKBOXES_CHANGED=0
+GODOT_RUN_ALLOWED=0
+NEXT_PRODUCT_WP=VF6-WP1
+NEXT_REQUIRED_ACTION=READ_ONLY_RECONCILE_THEN_WAIT_FOR_EXPLICIT_RESUME
+QUALITY_VERDICT=prototype_with_accepted_foundation_but_not_finished
+LEGAL_VERDICT=clean_room_required; no copied Y8 expressive assets
+
+File này là bản bàn giao để giảm chi phí và tránh agent làm sai. Nó không thay
+thế plan product, không mở quyền thực thi và không phải chữ ký nghiệm thu.

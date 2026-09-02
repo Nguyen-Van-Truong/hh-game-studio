@@ -395,3 +395,25 @@ The target is behavior/topology parity with the Y8 Superfighters reference as
 far as clean-room and legal constraints allow. All shipped code, art, audio,
 names and map geometry remain original; no Y8/SWF/Flash/package/asset/code rip.
 Human V5 quality review and any commercial/legal decision remain human gates.
+
+## 2026-09-01 — Owner freeze and single handoff for Vault Fighters
+
+`decision_id: GODOT-VF-FREEZE-2026-09-01`
+`status: owner-direction`
+`product_plan: zdocs/29-8-vault-fighters-y8-parity-plan.txt`
+`handoff: zdocs/1-9-vault-fighters-owner-freeze-plan-audit-and-handoff.txt`
+
+Owner paused every demo, Godot run, implementation, evidence pack, commit and
+checkbox mutation while the complete plan set is audited. Product remains
+29/50 with first unfinished `VF6-WP1`; parent remains 59/60 at `R9-WP4`.
+`AGENTS.md`, the 20-8 platform plan, the 29-8 product plan and the 31-8
+quality overlay now carry an explicit owner-freeze state. The 1-9 file is a
+non-authoritative read-only handoff and contains the only copy-paste prompt for
+the next low-cost agent.
+
+This freeze does not erase WIP or authorize a cleanup/reset. Resume requires a
+new explicit owner message. On resume, reconcile the dirty tree first, then
+close VF6-WP1 with real menu/input E2E, dual-clock pause proof, runtime
+team/friendly-fire/seed checks, complete source closure and fail-closed host
+exit evidence. Only after two independent critics agree on one frozen source
+hash may the coordinator tick; human quality/legal review remains separate.

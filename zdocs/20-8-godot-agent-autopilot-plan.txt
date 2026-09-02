@@ -1,6 +1,24 @@
 AUTHORITATIVE_PLAN=1
-STATUS=ACTIVE
+STATUS=OWNER_FROZEN
 CURRENT_VALID_WP=R9-WP4
+EXECUTION_FREEZE=1
+FREEZE_DATE=2026-09-01
+FREEZE_REASON=OWNER_REQUESTED_PLAN_AUDIT
+RESUME_AUTHORITY=EXPLICIT_OWNER_MESSAGE
+
+================================================================================
+OWNER FREEZE — 2026-09-01 (DO NOT EXECUTE)
+================================================================================
+
+The owner has paused every implementation, demo run, Godot worker, commit and
+checkbox change covered by this historical platform plan.  This file remains
+the authoritative platform record and keeps `CURRENT_VALID_WP=R9-WP4` and the
+59/60 accounting unchanged, but the R9-WP4/G6/GX work must not start during
+the freeze.  Reading, auditing and preparing a handoff are allowed; mutation,
+launching a demo, or claiming a gate is not.  Resume requires a later explicit
+owner message that names the current product handoff; do not infer permission
+from an old chat, a PASS banner, or a stale agent task.
+
 
 ================================================================================
 BẢNG TỔNG QUAN / TIẾN ĐỘ — ĐỌC PHẦN NÀY TRƯỚC
@@ -2780,14 +2798,15 @@ thuận nếu ảnh hưởng G5/G6.
 14. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Hiện tại R0 (4/4) + R1 (5/5, G1) + R2 (7/7) + R3 (8/8) + R4 (6/6, G2) + R5 (7/7) + R6 (7/7, G3) + R7 (6/6, G4) + R8 (6/6, G5) + R9 (3/4) đã xong qua R9-WP3. Agent tiếp theo làm **R9-WP4**.
+Lịch sử: R0 (4/4) + R1 (5/5, G1) + R2 (7/7) + R3 (8/8) + R4 (6/6, G2) + R5 (7/7) + R6 (7/7, G3) + R7 (6/6, G4) + R8 (6/6, G5) + R9 (3/4) đã xong qua R9-WP3. R9-WP4 từng là bước kế tiếp, nhưng **đang bị owner freeze**; không khởi động trong phiên này.
 KHÔNG vendor A/C as-is, KHÔNG M6, KHÔNG fork Godot. Do not claim the agent drives a full game.
 Gate G2 was signed 2026-08-22 with Alternatives (Play/Replay/overlay/placeholder). Do not hide those gaps.
 Gate G3 was signed 2026-08-23 auto (heuristic inspect gauntlet, not LLM repair).
 Gate G4 was signed 2026-08-25 auto (official 90 zero-touch, --provider plan heuristic not LLM).
 Gate G5 was signed 2026-08-26 by the human (“Chấp nhận — game đạt”). Do not invent agent play. Do not start Superfighter. Do not tick G6 or GX.
 
-Lệnh hợp lệ:
+Các lệnh dưới đây là tài liệu lịch sử để tham khảo sau khi owner bỏ freeze,
+không phải lệnh được phép chạy lúc này:
 
   1) đọc AGENTS.md rồi bảng tổng quan (`CURRENT_VALID_WP=R9-WP4`);
   2) R9-WP4: Release gate G6 và operations handoff;

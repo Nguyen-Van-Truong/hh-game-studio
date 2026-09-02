@@ -1,0 +1,10 @@
+# VF6-WP2 verdict
+
+RUN_ID=VF6WP2-20260901-ASIA-SAIGON-02
+COMMAND_ID=cmd.vf6-wp2.vs-flow.2
+SOURCE=eaddfebe0fb320a2bd64a2df473dcccdd7fc42fcd13d3672bcf99a4699b0f5d6
+FIRST vs1=2a/0.265s vs2=2a/0.267s
+REMATCH=1a/0.084s
+LEAK=pass PLAY=pass
+READY_FOR_CRITICS=yes
+29-8 still [ ]. Parent 59/60.

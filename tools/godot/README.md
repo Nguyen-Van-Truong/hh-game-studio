@@ -74,3 +74,17 @@ python tests/bootstrap/test_compat_update.py
 ```
 
 Playbook: `docs/godot-agent/COMPATIBILITY.md`.
+
+## Release / operations (R9-WP4)
+
+`ops.py` is backup/restore, redacted log collection, crash recover,
+token rotation, gate catalog, and the official disaster drill.
+Signing/upload/publish are refused (E3). CLEAN_VM stays unproven.
+Do not invent Hyper-V. `not_g6=1`.
+
+```powershell
+python tools/godot/ops.py drill --home "$env:LOCALAPPDATA\HHGodotAgent\release\r9-wp4"
+python tests/bootstrap/test_release_handoff.py
+```
+
+Runbooks: `docs/godot-agent/RELEASE.md`, `OPERATIONS.md`.

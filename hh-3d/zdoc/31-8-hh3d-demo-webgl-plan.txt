@@ -1,0 +1,653 @@
+PLAN_ROLE=EXECUTION_PLAN
+PLAN_SCOPE=hh-3d/demo
+PLAN_DATE=2026-08-31
+LAST_AUDIT_DATE=2026-09-01
+TIMEZONE=Asia/Saigon
+STATUS=PAUSED_BY_OWNER_REWORK_NOT_ACCEPTED
+CURRENT_WP=NONE_PAUSED
+CURRENT_EXECUTION=NO_DEMO_MUTATION
+EXECUTION_AUTHORIZATION=REVOKED_UNTIL_OWNER_RESUMES
+RESUME_FROM=D0-WP4_D0-WP6_D0-WP7_D0-WP8_REVIEW
+DO_NOT_OPEN_FULL_PLAN_FROM_THIS_FILE=1
+LATER_PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+BACKGROUND_PLAN=hh-3d/zdoc/31-8-hh3d-real-world-open-world-plan.txt
+SOURCE_OF_TRUTH=THIS_FILE_FOR_DEMO_SCOPE
+AUDIT_SUMMARY=hh-3d/zdoc/01-9-hh3d-plan-audit-summary.txt
+CHEAP_AGENT_PROMPT=hh-3d/zdoc/01-9-hh3d-cheap-agent-handoff-prompt.txt
+
+================================================================================
+HH-3D DEMO PLAN — HÒN GIÓ WEBGL DIORAMA
+================================================================================
+
+Mục tiêu: tạo một ứng dụng web 3D chạy thật trong trình duyệt, lấy cảm hứng
+từ cảm giác của ảnh tham chiếu (canvas 3D + UI editorial), nhưng có cảnh,
+tên, màu, landmark, code và asset nguyên bản. Đây là demo ứng dụng tương tác,
+không phải video dựng sẵn và không phải game open-world.
+
+Địa điểm code: `hh-3d/demo/`.
+Không sửa: `godot/`, Vault Fighters, Kho Bí Ẩn, Snake, hoặc product khác.
+Không dùng file này để mở kế hoạch Unreal/full application.
+
+--------------------------------------------------------------------------------
+AUDIT OVERRIDE 2026-09-01 — ĐỌC TRƯỚC MỌI SECTION CŨ
+--------------------------------------------------------------------------------
+
+Owner đã yêu cầu dừng toàn bộ công việc demo. Từ thời điểm audit này:
+
+- không agent nào được sửa `hh-3d/demo/**`, chạy polish tiếp, thay asset hoặc
+  tự khởi động WP mới chỉ vì source đã tồn tại;
+- source hiện có là một implementation candidate, không phải release đã
+  nghiệm thu; plan/evidence cũ không được dùng để claim complete;
+- không tự tick hoặc đổi `STATUS` sang PASS. Chỉ coordinator sau một lệnh
+  resume mới được mở lại review;
+- full application và Unreal không được mở từ plan demo này.
+
+Tình trạng thực tế khi dừng:
+
+- D0-WP0..D0-WP5: implementation có trên đĩa, nhưng chưa có một package
+  official mới chứng minh đúng source cuối;
+- D0-WP4/D0-WP6: còn rework đã được critic chỉ ra: `IdleThung` chưa tôn trọng
+  reduced-motion/low tier; TouchPad chưa có keyboard semantics đầy đủ;
+- D0-WP7: ảnh/evidence có thật nhưng stale vì source được sửa sau lần capture;
+- D0-WP8: chưa thể closeout vì preview/browser/console/mobile Play chưa được
+  chứng minh lại trên cùng source hash;
+- D0-WP9: vẫn DEFERRED và không thuộc acceptance demo.
+
+Nếu owner resume demo, thứ tự duy nhất được phép là:
+
+1. freeze source + manifest/hash;
+2. một WP duy nhất sửa hai rework functional nhỏ (IdleThung + TouchPad);
+   không tách thành hai lượt và không recapture evidence trong cùng WP;
+   ALLOWED_PATHS của WP đó: `hh-3d/demo/src/scene/Boat.tsx`,
+   `hh-3d/demo/src/scene/World.tsx`, `hh-3d/demo/src/ui/TouchPad.tsx`;
+3. verify TouchPad ở keyboard và touch;
+4. test Play tại 1280x720, 390x844 và 320x568;
+5. test reduced-motion, low quality, fallback, ErrorBoundary và console;
+6. capture evidence mới sau thay đổi cuối, ghi source/lock hash;
+7. critic read-only độc lập trả PASS/REWORK;
+8. coordinator mới cập nhật trạng thái.
+
+Bước 3–5 là VERIFY của WP rework. Bước 6–8 là WP/handoff riêng sau khi
+source đã freeze lại; không gói evidence recapture vào cùng lượt sửa code.
+
+Visual truth: bản hiện tại đã dễ đọc hơn bản đầu, nhưng vẫn là primitive
+stylized prototype. Không gọi nhân vật/model/cảnh là production-art, không
+gọi là map thật, HH World, GTA-like hoặc final game.
+
+--------------------------------------------------------------------------------
+0. QUY TẮC CHO AGENT RẺ — ĐỌC PHẦN NÀY TRƯỚC
+--------------------------------------------------------------------------------
+
+Agent chỉ nhận đúng một WP trong một lượt. Không giao toàn bộ tài liệu này cho
+agent rồi bảo “làm hết”. Coordinator giữ `CURRENT_WP`, kiểm tra diff và chỉ
+chuyển WP sau khi Verify/DoD pass.
+
+Execution contract của mọi lượt:
+
+1. Đọc `CURRENT_WP`, `ALLOWED_PATHS`, `FORBIDDEN_PATHS`, `DONE_WHEN` của WP.
+2. Không tự đổi stack, địa điểm cảnh, tiêu chí pass hay phạm vi.
+3. Nếu thiếu công cụ/asset/quyền hoặc gặp lỗi ngoài scope: dừng, ghi
+   `BLOCKED_REASON` và đề xuất một lựa chọn; không tự bịa fallback làm thay đổi
+   mục tiêu.
+4. Chỉ sửa file trong `ALLOWED_PATHS`; không tạo file rải ngoài demo.
+5. Sau khi sửa: chạy đúng Verify command, ghi output và `git diff --check`.
+6. Không claim “xong” từ code chưa build/chưa mở trong browser/chưa có
+   postcondition.
+7. Không tự tick trạng thái trong tài liệu. Coordinator cập nhật trạng thái
+   sau review độc lập.
+
+Mẫu brief gửi cho agent rẻ:
+
+  CURRENT_WP: D0-WP<n>
+  GOAL: <một kết quả duy nhất>
+  ALLOWED_PATHS: <danh sách path tương đối>
+  FORBIDDEN_PATHS: <danh sách path>
+  DO_NOT_ADD_DEPENDENCY: true, trừ khi WP ghi rõ
+  DONE_WHEN: <các postcondition đo được>
+  VERIFY: <lệnh cụ thể>
+  REPORT: files changed, commands, result, blockers, next suggestion
+
+Agent không được tự chọn Spline, Next.js, Rapier, GSAP, Cesium, Google Tiles,
+API key, asset marketplace hoặc backend trong demo này. Những thứ đó thuộc
+plan khác hoặc một change request riêng.
+
+Visual intent lock:
+
+- mục tiêu là một authored diorama voxel/low-poly có biển pastel, đảo bậc
+  tầng, landmark dễ đọc và DOM editorial overlay; đây là cảm hứng về cảm giác
+  và interaction pattern, không phải bản sao pixel/layout của ảnh tham chiếu;
+- không dùng watermark, logo, text, tên sản phẩm, asset hoặc hình học trace
+  từ Pelago, Saltwind, GTA, Rockstar hay nguồn tham chiếu khác;
+- screenshot Overview phải đọc được biển, đảo, hải đăng, bến và thuyền ở
+  viewport chuẩn; nếu silhouette không đọc được thì verdict là REWORK dù build
+  vẫn pass.
+
+--------------------------------------------------------------------------------
+1. SCOPE CỐ ĐỊNH CỦA DEMO
+--------------------------------------------------------------------------------
+
+Tên cảnh: **Hòn Gió**.
+
+Cảnh bắt buộc:
+
+- mặt biển phẳng có các mảng màu/pattern nhẹ;
+- một đảo trung tâm tạo từ khối/primitives có tầng cao rõ;
+- một cầu gỗ và bến nhỏ;
+- một hải đăng sọc màu riêng;
+- một thuyền thúng hoặc thuyền nhỏ nguyên bản;
+- hai hoặc ba nhà mái ngói cách điệu;
+- cây/cỏ/đá lặp lại bằng instancing khi hợp lý;
+- một nhân vật/dummy rất đơn giản chỉ để tạo scale, không có combat;
+- ánh sáng, sương, bóng và animation idle nhẹ.
+
+Tương tác bắt buộc:
+
+- kéo chuột để orbit, zoom có giới hạn và camera không lộn ngoài kiểm soát;
+- bốn preset camera: `Overview`, `Harbor`, `Lighthouse`, `Island`;
+- nút preset và object click hoạt động bằng chuột lẫn keyboard focus;
+- click hải đăng/thuyền/cầu mở card HTML có title, mô tả và nút đóng;
+- hover/focus object có phản hồi rõ nhưng không làm rung camera;
+- loading state, error state và WebGL fallback có nội dung hữu ích;
+- responsive ở desktop và viewport hẹp;
+- reduced-motion mode giảm/tắt animation không cần thiết.
+
+UI tối thiểu:
+
+- logo/tên Hòn Gió ở góc trên trái;
+- status nhỏ: `Interactive demo`, FPS/quality chỉ hiện trong debug;
+- story card ở góc dưới trái;
+- panel object hiện khi chọn landmark;
+- navigation camera ở đáy;
+- attribution/credits cho asset tự tạo hoặc thư viện nếu có.
+
+Không thuộc demo pass:
+
+- nhân vật điều khiển WASD, súng, combat, NPC, traffic, nhiệm vụ;
+- map thành phố thật, OSM, Overture, Google 3D Tiles, Street View;
+- login, database, thanh toán, chat, user-generated content;
+- MMO, multiplayer, server authoritative state;
+- photogrammetry, hàng trăm file GLB, marketplace asset chưa audit;
+- “giống Pelago/Saltwind/GTA” ở tên, layout, asset hoặc branding.
+
+Demo không được gọi là bản đồ thật. Đây là một scene nguyên bản để kiểm chứng
+rendering, interaction, UI và quy trình agent.
+
+--------------------------------------------------------------------------------
+2. STACK ĐÃ KHÓA CHO DEMO
+--------------------------------------------------------------------------------
+
+Runtime:
+
+- Vite + React + TypeScript strict;
+- Three.js;
+- `@react-three/fiber`;
+- `@react-three/drei` cho controls/loading/helpers;
+- CSS/DOM React cho UI overlay;
+- npm và lockfile; version cụ thể được pin trong `package-lock.json` sau G0.
+
+Package allowlist tối thiểu cho D0-WP0:
+
+- runtime: react, react-dom, three, @react-three/fiber, @react-three/drei;
+- build/dev: vite, @vitejs/plugin-react, typescript và type packages cần thiết;
+- không thêm gsap, Rapier, Spline, Cesium, MapLibre, Next.js hoặc backend.
+
+Quyết định kỹ thuật:
+
+- dùng primitives/procedural geometry và SVG/CSS trước; chưa cần GLB;
+- `THREE.InstancedMesh` cho rock/tree/grass lặp lại;
+- dùng `useFrame` có kiểm soát cho animation; không tạo nhiều loop riêng;
+- camera transition tự viết hoặc helper nhẹ của Drei; chưa thêm GSAP;
+- chưa thêm Rapier vì demo không có physics gameplay;
+- `devicePixelRatio` có trần 1.5 và quality tier thấp/cao;
+- không tải mạng trong runtime ngoài dependency đã build vào bundle;
+- không dùng API key hoặc dữ liệu của bên thứ ba.
+
+Lý do: Three.js có `InstancedMesh` cho nhiều object dùng chung geometry/material,
+giúp giảm draw calls; R3F/Drei rút ngắn việc nối React với canvas. Đây là lựa
+chọn đúng cho diorama nhỏ, không phải quyết định cho full real-world app.
+
+--------------------------------------------------------------------------------
+3. TOPOLOGY MỤC TIÊU
+--------------------------------------------------------------------------------
+
+hh-3d/
+  README.md                         (không bắt buộc sửa ở lượt demo đầu)
+  IDEAS.md                          (không bắt buộc sửa ở lượt demo đầu)
+  demo/
+    package.json
+    package-lock.json
+    tsconfig*.json
+    vite.config.ts
+    index.html
+    public/
+      fallback-hon-gio.svg
+    src/
+      main.tsx
+      App.tsx
+      styles/
+        app.css
+      scene/
+        World.tsx
+        Ocean.tsx
+        Island.tsx
+        Lighthouse.tsx
+        Harbor.tsx
+        Boat.tsx
+        CameraRig.tsx
+        sceneConfig.ts
+      ui/
+        Header.tsx
+        StoryCard.tsx
+        ObjectCard.tsx
+        CameraNav.tsx
+        LoadingOverlay.tsx
+        ErrorFallback.tsx
+      lib/
+        quality.ts
+        seed.ts
+        types.ts
+      tests/
+        smoke.md
+    evidence/
+      .gitkeep                         (chỉ khi cần)
+
+Không commit `node_modules`, `.env*` có secret, cache, browser profile, build
+output hay screenshot tạm. Nếu test tool tạo file, đặt dưới staging đã ghi rõ
+và kiểm tra trước commit.
+
+--------------------------------------------------------------------------------
+4. WORK PACKAGE CHI TIẾT
+--------------------------------------------------------------------------------
+
+Các `STATE` dưới đây phản ánh audit 2026-09-01, không phải chữ ký nghiệm thu.
+Mọi WP đều bị khóa bởi `STATUS=PAUSED_BY_OWNER_REWORK_NOT_ACCEPTED`. Mỗi WP có
+một writer/agent tại một thời điểm; không gộp WP chỉ vì agent rẻ chạy nhanh.
+
+D0-WP0 — Environment and scope lock
+STATE: IMPLEMENTED_CANDIDATE_UNREVIEWED_PAUSED
+ALLOWED_PATHS: hh-3d/demo/package.json, hh-3d/demo/package-lock.json,
+  hh-3d/demo/.gitignore, hh-3d/demo/index.html,
+  hh-3d/demo/vite.config.ts, hh-3d/demo/tsconfig*.json,
+  hh-3d/demo/src/main.tsx, hh-3d/demo/src/App.tsx,
+  hh-3d/demo/src/vite-env.d.ts, hh-3d/demo/src/styles/app.css,
+  hh-3d/demo/README.md (nếu cần)
+
+Làm:
+
+- kiểm tra Node/npm phiên bản hiện có và browser test path;
+- tạo Vite React TypeScript project trong `hh-3d/demo`, không dùng root
+  `hh-3d` làm project runtime;
+- cài đúng dependency đã khóa ở Section 2;
+- bật TypeScript strict và script `dev`, `build`, `preview`, `typecheck`;
+  chỉ thêm `lint` nếu ESLint đã được duyệt và nằm trong allowlist;
+- tạo `.gitignore` cục bộ cho node_modules, dist, env và cache;
+- ghi README ngắn: mục tiêu, lệnh chạy, non-goals.
+- chỉ tạo starter/config files nằm trong allowlist của D0-WP0; xóa logo, asset,
+  ESLint config hoặc demo mặc định của Vite nếu không được plan cho phép;
+
+DONE_WHEN:
+
+- `npm ci` (hoặc lệnh install phù hợp với lockfile) chạy sạch;
+- `npm run build` pass với starter app;
+- không có dependency ngoài danh sách mà không có lý do được ghi;
+- file manifest trước WP và `git status --short -- hh-3d/demo` cho thấy chỉ
+  có thay đổi trong demo; `?? hh-3d/` ở cấp parent không tự động là failure
+  vì thư mục hh-3d hiện có thể đang untracked.
+
+VERIFY:
+
+  npm ci
+  npm run build
+  git diff --check
+
+Không làm scene/UI ở WP này. Nếu Node không phù hợp, chỉ báo version và dừng.
+
+D0-WP1 — Canvas shell and failure-safe states
+STATE: IMPLEMENTED_CANDIDATE_UNREVIEWED_PAUSED
+ALLOWED_PATHS: hh-3d/demo/src/main.tsx, hh-3d/demo/src/App.tsx,
+  hh-3d/demo/src/ui/LoadingOverlay.tsx, hh-3d/demo/src/ui/ErrorFallback.tsx,
+  hh-3d/demo/src/styles/app.css, hh-3d/demo/public/fallback-hon-gio.svg
+
+Làm:
+
+- tạo fullscreen canvas container và DOM UI layer;
+- thêm loading, runtime error boundary và fallback SVG tĩnh;
+- canvas không phá scroll/focus của UI;
+- thêm `prefers-reduced-motion` và keyboard focus baseline;
+- không tạo object scene thật ngoài placeholder.
+
+DONE_WHEN:
+
+- app mở được ở viewport desktop và hẹp;
+- cố ý bật fallback vẫn cho người dùng biết cách tiếp tục;
+- lỗi runtime không để màn hình trắng không giải thích;
+- UI button có accessible name và focus visible.
+
+VERIFY: `npm run build` + browser smoke mở route root và resize viewport.
+
+D0-WP2 — Ocean, lighting and camera rig
+STATE: IMPLEMENTED_CANDIDATE_UNREVIEWED_PAUSED
+ALLOWED_PATHS: hh-3d/demo/src/scene/Ocean.tsx,
+  hh-3d/demo/src/scene/CameraRig.tsx,
+  hh-3d/demo/src/scene/sceneConfig.ts, hh-3d/demo/src/App.tsx nếu nối component
+
+Làm:
+
+- ocean plane/material cách điệu, không shader nặng;
+- ambient/directional light, sky/background và fog nhẹ;
+- orbit controls có min/max distance, polar angle và damping;
+- bốn camera preset được định nghĩa bằng typed config;
+- transition mượt, có cancel khi người dùng bắt đầu orbit.
+
+DONE_WHEN:
+
+- canvas render ổn định không có error/warning chưa giải thích;
+- preset nào cũng đưa camera tới vùng nhìn hợp lệ;
+- không thể zoom vào vô hạn hoặc lật scene khó thoát;
+- reduced motion tắt transition animation.
+
+VERIFY: build + browser manual/automated smoke cho drag, zoom và bốn preset.
+
+D0-WP3 — Island and authored landmarks
+STATE: IMPLEMENTED_CANDIDATE_UNREVIEWED_PAUSED
+ALLOWED_PATHS: hh-3d/demo/src/scene/Island.tsx,
+  hh-3d/demo/src/scene/Lighthouse.tsx, hh-3d/demo/src/scene/Harbor.tsx,
+  hh-3d/demo/src/scene/Boat.tsx, hh-3d/demo/src/scene/World.tsx,
+  hh-3d/demo/src/scene/sceneConfig.ts, hh-3d/demo/src/lib/types.ts
+
+Làm:
+
+- tạo island silhouette bằng primitive/geometry gốc;
+- thêm lighthouse, harbor, boat, houses và vài foliage/rock;
+- mọi object có stable internal id và `onSelect` typed;
+- mỗi landmark có một DOM button/list item làm keyboard-accessible proxy cho
+  hit target 3D; không tuyên bố mesh Three.js tự có keyboard focus;
+- không tải model/texture ngoài và không trace ảnh tham chiếu;
+- dùng instancing cho loại lặp lại nếu profile cho thấy cần.
+
+DONE_WHEN:
+
+- Overview thấy rõ composition; từng landmark không chồng sai nghiêm trọng;
+- object scale nhất quán và boat/harbor không chìm dưới nước;
+- scene reload không đổi ngẫu nhiên nếu seed/config không đổi;
+- source code tách component, không dồn toàn bộ vào App.tsx.
+
+VERIFY: build + browser screenshot ở bốn preset + kiểm tra reload determinism.
+
+D0-WP4 — Idle animation and interaction contract
+STATE: REWORK_REQUIRED_PAUSED
+ALLOWED_PATHS: hh-3d/demo/src/scene/*,
+  hh-3d/demo/src/lib/seed.ts, hh-3d/demo/src/lib/types.ts,
+  hh-3d/demo/src/App.tsx
+
+Làm:
+
+- boat bob nhẹ, foliage/water motion tối thiểu, không animation loop vô hạn
+  ngoài một `useFrame`/clock path có cleanup tự nhiên;
+- hover/focus highlight không đổi layout;
+- click/keyboard select trả về `SelectedObject` typed;
+- click background đóng selection.
+
+DONE_WHEN:
+
+- mỗi landmark bắt được click và keyboard activation;
+- animation giảm/tắt với reduced motion hoặc quality thấp;
+- không có setInterval/requestAnimationFrame tự quản lý bị bỏ quên;
+- selection không bị mất khi camera preset đổi.
+
+VERIFY: build + browser interaction trace: focus -> select -> close -> select.
+
+D0-WP5 — Editorial UI and camera navigation
+STATE: IMPLEMENTED_CANDIDATE_UNREVIEWED_PAUSED
+ALLOWED_PATHS: hh-3d/demo/src/ui/*, hh-3d/demo/src/styles/app.css,
+  hh-3d/demo/src/App.tsx
+
+Làm:
+
+- header, status, story card, object card, camera nav;
+- typography/palette riêng cho Hòn Gió, không copy text/logo bố cục của ảnh;
+- UI không che toàn bộ landmark ở viewport chuẩn;
+- card có close, Escape, focus return và text fallback.
+
+DONE_WHEN:
+
+- người dùng hiểu đang xem cảnh gì mà không cần đọc source;
+- camera buttons và object cards hoạt động bằng keyboard;
+- viewport 1280x720, 1024x768 và mobile hẹp không vỡ layout;
+- no horizontal overflow ngoài chủ đích.
+
+VERIFY: build + browser keyboard trace + screenshot ba viewport.
+
+D0-WP6 — Quality tiers, fallback and accessibility
+STATE: REWORK_REQUIRED_PAUSED
+ALLOWED_PATHS: hh-3d/demo/src/lib/quality.ts,
+  hh-3d/demo/src/ui/LoadingOverlay.tsx, hh-3d/demo/src/ui/ErrorFallback.tsx,
+  hh-3d/demo/src/ui/TouchPad.tsx,
+  hh-3d/demo/src/styles/app.css, hh-3d/demo/src/App.tsx
+
+Làm:
+
+- quality `low`/`high` với instance count, shadows, pixel ratio;
+- cap DPR tối đa 1.5 và cho phép người dùng hạ quality;
+- WebGL unsupported/error fallback hữu ích;
+- alt/labels cho DOM, contrast/focus, reduced motion;
+- không giả lập FPS bằng số hard-code trong production UI; debug metric phải
+  lấy từ runtime hoặc ghi rõ là unavailable.
+
+DONE_WHEN:
+
+- low tier thực sự giảm work/render cost;
+- fallback SVG/HTML hiển thị được khi WebGL không sẵn;
+- toàn bộ action chính thực hiện được không cần chuột;
+- không có secret/network request không cần thiết.
+
+VERIFY: build + browser with reduced-motion + quality switch + WebGL error path.
+
+D0-WP7 — Test harness and evidence
+STATE: STALE_EVIDENCE_RECAPTURE_REQUIRED_PAUSED
+ALLOWED_PATHS: hh-3d/demo/tests/*, hh-3d/demo/evidence/*,
+  hh-3d/demo/README.md, hh-3d/demo/scripts/* nếu được duyệt trước
+
+Làm:
+
+- viết smoke checklist/trace có bước rõ: boot, loading, preset, select,
+  card, close, quality, resize, fallback;
+- nếu có browser automation, dùng tool/profile được phép và lưu command;
+- ghi timestamp, commit/source hash, browser/viewport, result;
+- không đưa token/profile/screenshot không cần vào repo.
+
+DONE_WHEN:
+
+- một người khác chạy được trace từ README;
+- mọi claim demo map vào một bước verify;
+- có ít nhất một build production preview và một screenshot scene/UI runtime
+  thật (không gọi là gameplay);
+- failure được ghi là failure, không đổi expected để làm xanh.
+
+VERIFY:
+
+  npm run build
+  npm run preview -- --host 127.0.0.1
+  git diff --check
+
+D0-WP8 — Polish and release handoff
+STATE: CLOSEOUT_NOT_ACCEPTED_PAUSED
+ALLOWED_PATHS: hh-3d/demo/**/* (chỉ file đã thuộc demo),
+  hh-3d/zdoc/review-log.txt nếu coordinator yêu cầu
+
+Làm:
+
+- sửa lỗi visual/interaction có bằng chứng từ WP trước;
+- kiểm tra bundle/build warning, missing asset, resize và cleanup;
+- viết README mở demo, build và giới hạn thật;
+- tạo review note với source hash, commands, screenshots và known gaps.
+
+DONE_WHEN:
+
+- clean install -> build -> preview -> smoke trace pass;
+- không có console error hoặc warning chưa giải thích trong official run;
+- app là một web application tương tác, không phải ảnh/video giả;
+- không thêm tính năng ngoài scope để “làm cho giống game”.
+
+VERIFY: clean checkout copy/staging, `npm ci`, `npm run build`, preview smoke,
+`git diff --check`, asset/license/secret scan.
+
+D0-WP9 — Optional real-map proof (not demo acceptance)
+STATE: DEFERRED
+ALLOWED_PATHS: none until a separate change request
+
+Không tự mở WP này. Nếu sau này muốn gắn địa lý thật vào browser, dùng
+`31-8-hh3d-real-application-plan.txt`; không nhét OSM/Overture/Google vào demo
+voxel chỉ để tăng cảm giác “thật”.
+
+--------------------------------------------------------------------------------
+5. VISUAL/TECHNICAL ACCEPTANCE BẢN DEMO
+--------------------------------------------------------------------------------
+
+Functional:
+
+- clean start hiển thị loading rồi scene;
+- bốn preset camera hợp lệ;
+- ba landmark click được và card đóng/mở đúng;
+- keyboard focus/Escape/reduced motion hoạt động;
+- fallback có thể đọc được;
+- `npm run build` pass và production preview mở được.
+
+Visual:
+
+- silhouette đảo/hải đăng/bến/thuyền đọc được ở viewport 1280x720;
+- màu và typography thống nhất, không dùng watermark/branding tham chiếu;
+- không có z-fighting, object nổi vô cớ, flicker hoặc texture missing;
+- animation nhẹ, không làm mất khả năng đọc UI.
+
+Performance:
+
+- đo trên máy/browser thực, không hard-code claim 60 FPS;
+- DPR cap 1.5, low tier có tác động đo được;
+- không có allocation lớn mỗi frame do component re-render;
+- không có memory leak quan sát được sau mở/đóng selection và đổi preset;
+- ghi FPS/frame time nếu tool đo được; nếu chưa đo, ghi `UNMEASURED`.
+
+Evidence:
+
+- run_id, source hash, dependency lock hash, browser/OS, viewport,
+  timestamp/timezone và repro commands;
+- screenshot phải là ảnh của app đang chạy, không phải mockup;
+- claim nào chưa chạy ghi `UNPROVEN`.
+
+--------------------------------------------------------------------------------
+6. CHECKLIST CHO COORDINATOR VÀ CRITIC
+--------------------------------------------------------------------------------
+
+Coordinator trước mỗi WP:
+
+- xác nhận working tree/lease không xung đột;
+- gửi đúng một brief theo Section 0;
+- giới hạn path và dependency;
+- lưu baseline source hash.
+
+Critic sau mỗi WP:
+
+- đọc diff và chạy Verify độc lập;
+- kiểm tra scene thật bằng browser, không chỉ đọc JSX;
+- đối chiếu `DONE_WHEN` từng dòng;
+- tìm secret, network request, unlicensed asset, console error, stale claim;
+- trả verdict `PASS`, `REWORK` hoặc `BLOCKED`, kèm evidence.
+
+Không cho agent tự “sửa acceptance” nếu test fail. Nếu visual chưa đẹp nhưng
+functional pass, mở polish task riêng; không kéo thêm backend/gameplay vào WP.
+
+--------------------------------------------------------------------------------
+7. CÁC LỖI DỄ GẶP VÀ PHẢN ỨNG BẮT BUỘC
+--------------------------------------------------------------------------------
+
+- Agent viết toàn bộ scene trong App.tsx: trả `REWORK`, tách component theo
+  topology, không chấp nhận chỉ vì chạy được.
+- Agent thêm Rapier/GSAP/Next/Spline để xử lý một lỗi nhỏ: trả `REWORK`, revert
+  dependency đó trong cùng WP nếu chưa được duyệt.
+- Agent dùng asset tải từ mạng không có license ledger: dừng và xóa/quarantine
+  asset; không đưa vào screenshot pass.
+- Agent tạo FPS “60” bằng text hoặc fake JSON: verdict `REWORK`.
+- Agent nói “map thật” vì có island primitive: verdict `UNPROVEN`; demo này
+  không có real-world map.
+- Browser không hỗ trợ WebGL: fallback pass nếu hiển thị hữu ích; không sửa
+  acceptance để loại người dùng.
+- Build fail do version drift: pin lockfile, ghi version và sửa trong WP hiện
+  tại; không nâng toàn bộ stack tùy ý.
+
+--------------------------------------------------------------------------------
+8. LỆNH CHẠY CHUẨN
+--------------------------------------------------------------------------------
+
+Từ thư mục `hh-3d/demo`:
+
+  npm ci
+  npm run build
+  npm run dev -- --host 127.0.0.1
+
+Production preview:
+
+  npm run preview -- --host 127.0.0.1
+
+Mỗi official run phải ghi:
+
+  run_id=<unique>
+  source_hash=<git/source tree hash>
+  lockfile_hash=<hash>
+  browser=<name/version>
+  viewport=<width>x<height>
+  started_at=<ISO-8601 +07:00>
+  repro=<commands>
+
+Không ghi environment secret vào report. Nếu dev server vẫn chạy sau test,
+agent phải dừng đúng process của mình và ghi leftover status; không dừng process
+Godot hay server của task khác.
+
+Vì `hh-3d` có thể đang là thư mục untracked ở parent, phải dùng file manifest
+và `git status --short --untracked-files=all -- hh-3d/demo` cùng kiểm tra
+`ALLOWED_PATHS`; không kết luận FAIL chỉ từ dòng rút gọn `?? hh-3d/`.
+
+--------------------------------------------------------------------------------
+9. HANDOFF PROMPT MẪU CHO TỪNG WP
+--------------------------------------------------------------------------------
+
+“Bạn chỉ làm D0-WP<n> trong
+`D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/hh-game-studio/hh-3d/demo`.
+Đọc phần D0-WP<n> của
+`../zdoc/31-8-hh3d-demo-webgl-plan.txt`. Chỉ sửa ALLOWED_PATHS; không sửa
+Godot/Vault Fighters/Snake/Kho Bí Ẩn và không thêm dependency ngoài plan. Không
+dùng asset/API/key từ bên ngoài. Hoàn thành đúng DONE_WHEN, chạy VERIFY, rồi
+báo files changed, commands, exit/result, source hash, known gaps và blocker.
+Nếu phải đổi scope hoặc tiêu chí, dừng và hỏi coordinator; không tự quyết.”
+
+--------------------------------------------------------------------------------
+10. DONE CUỐI CÙNG CỦA DEMO
+--------------------------------------------------------------------------------
+
+Demo được coi là complete chỉ khi:
+
+- D0-WP0 đến D0-WP8 có verdict pass/review tương ứng;
+- clean install/build/preview/smoke trace chạy được;
+- Hòn Gió là scene nguyên bản có camera, landmark, card và fallback;
+- có screenshot/runtime evidence và source/lockfile hash;
+- README nói đúng đây là interactive web demo, không phải GTA/open-world/map
+  thật;
+- không có thay đổi ngoài `hh-3d/demo` và tài liệu review được coordinator
+  cho phép;
+- phần full application vẫn ở plan riêng, chưa bị kéo vào demo.
+
+--------------------------------------------------------------------------------
+11. TÀI LIỆU THAM KHẢO KỸ THUẬT
+--------------------------------------------------------------------------------
+
+- React app guidance:
+  https://react.dev/learn/creating-a-react-app
+- Three.js InstancedMesh:
+  https://threejs.org/docs/pages/InstancedMesh.html
+- React Three Fiber:
+  https://docs.pmnd.rs/react-three-fiber/getting-started/introduction
+- Three.js examples:
+  https://threejs.org/examples/
+
+Các URL chỉ là reference kỹ thuật. Không copy scene, text, logo, asset hoặc
+layout biểu đạt từ trang/demo tham chiếu.

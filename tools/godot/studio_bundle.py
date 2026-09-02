@@ -72,8 +72,19 @@ TOOLS_SHIP = (
     "package.ps1",
     "install.ps1",
     "launch.ps1",
+    "ops.py",
+    "ops.ps1",
+    "release_gates.json",
     "pin.json",
     "README.md",
+)
+DOCS_SHIP = (
+    "INSTALL.md",
+    "RELEASE.md",
+    "OPERATIONS.md",
+    "EVIDENCE_REVIEW.md",
+    "KNOWN_LIMITATIONS.md",
+    "COMPATIBILITY.md",
 )
 TEXT_SUFFIXES = {
     ".py",
@@ -598,10 +609,12 @@ def build_package(repo: Path, out_dir: Path, version: str) -> dict[str, Any]:
         src = HERE / name
         if src.is_file():
             shutil.copy2(src, tools_dest / name)
-    install_doc = repo / "docs" / "godot-agent" / "INSTALL.md"
-    if install_doc.is_file():
-        (out_dir / "docs").mkdir(parents=True, exist_ok=True)
-        shutil.copy2(install_doc, out_dir / "docs" / "INSTALL.md")
+    docs_dest = out_dir / "docs"
+    docs_dest.mkdir(parents=True, exist_ok=True)
+    for name in DOCS_SHIP:
+        src = repo / "docs" / "godot-agent" / name
+        if src.is_file():
+            shutil.copy2(src, docs_dest / name)
     write_licenses(out_dir, repo, addon_version, version)
     write_launcher_cmd(out_dir)
     atomic_write_text(out_dir / "version-stamp.txt", version + "\n")
@@ -638,6 +651,7 @@ def build_package(repo: Path, out_dir: Path, version: str) -> dict[str, Any]:
         "hh-godot-agent.cmd",
         "tools/install.py",
         "tools/launch.py",
+        "tools/ops.py",
         "tools/studio_bundle.py",
         "version-stamp.txt",
     )

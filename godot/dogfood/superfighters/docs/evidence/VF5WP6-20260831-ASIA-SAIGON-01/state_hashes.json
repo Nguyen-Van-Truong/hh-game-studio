@@ -1,0 +1,49 @@
+{
+	"map_id": "rooftops",
+	"mode": "vs2",
+	"replay": {
+		"pairs": [
+			{
+				"hash": "71e20fdf00d80a1d78d1c9eb7181cfe20a9485ee78d1895857e3da928fb5af96",
+				"id": "rooftops",
+				"match": true
+			},
+			{
+				"hash": "b0ad87ec9b2212770b0e1a44e92e0f623e59ce059bd1bfdf96a5a4de1360c017",
+				"id": "storage",
+				"match": true
+			},
+			{
+				"hash": "b0d22a455e4b74f882a4dc5cf013284d03babdf726aefc6abd5b8036563f44b4",
+				"id": "police",
+				"match": true
+			},
+			{
+				"hash": "bed461c79d8b4f7f4708ea735659ebef1611a2dda4916594168aaafa233772d8",
+				"id": "hazardous",
+				"match": true
+			},
+			{
+				"hash": "7e52674aaae42ec5716c20cec1b2f8732cb2e33507fd7217ab38c74e286e7418",
+				"id": "lantern",
+				"match": true
+			},
+			{
+				"hash": "ae20bc5ce1c9ba97a20723f907a746c709e33da645359799bee6a7fa54ce7c48",
+				"id": "gauge",
+				"match": true
+			}
+		],
+		"source": "catalog reload hash twice per VS map",
+		"verdict": "match"
+	},
+	"seed": 16,
+	"vs_ids": [
+		"rooftops",
+		"storage",
+		"police",
+		"hazardous",
+		"lantern",
+		"gauge"
+	]
+}

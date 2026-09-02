@@ -1,0 +1,311 @@
+{
+	"apply": {
+		"attempted": 3543,
+		"succeeded": 3543,
+		"used_action_press": 0,
+		"used_apply_frames": 3543,
+		"used_parse_input_event": 0,
+		"used_step_fixed": 0
+	},
+	"bot": {
+		"BOT_COVERAGE": "smoke",
+		"NOT_AI": 1,
+		"alive": true,
+		"coverage": "smoke",
+		"source": "vs1 bot idle smoke; NOT_AI",
+		"verdict": "pass",
+		"x0": 296.0
+	},
+	"camera": {
+		"maps": [
+			{
+				"covers": true,
+				"id": "rooftops"
+			},
+			{
+				"covers": true,
+				"id": "storage"
+			},
+			{
+				"covers": true,
+				"id": "police"
+			},
+			{
+				"covers": true,
+				"id": "hazardous"
+			},
+			{
+				"covers": true,
+				"id": "lantern"
+			},
+			{
+				"covers": true,
+				"id": "gauge"
+			}
+		],
+		"source": "live camera_framing after start_fight",
+		"verdict": "pass"
+	},
+	"cargo": {
+		"drops": 1,
+		"hung_after": false,
+		"hung_before": true,
+		"pos": [
+			410.813049316406,
+			19.813081741333
+		],
+		"source": "P1 melee releases hanging cargo",
+		"verdict": "pass"
+	},
+	"cover": {
+		"blocked_before": true,
+		"breaks": 1,
+		"source": "P2 melee vs sky_cover_wood on mid deck",
+		"verdict": "pass",
+		"wood_alive": false
+	},
+	"cycle": {
+		"seen": [
+			"rooftops",
+			"storage",
+			"police",
+			"hazardous",
+			"lantern",
+			"gauge"
+		],
+		"source": "Maps.next_vs_map stable order, not filesystem sort",
+		"verdict": "pass",
+		"wrap": "rooftops"
+	},
+	"door": {
+		"closed_before": true,
+		"in_office": true,
+		"opened": true,
+		"source": "stand-still plate opens annex_door; live walk into office",
+		"verdict": "pass"
+	},
+	"gauge": {
+		"hits": {
+			"west_floor": true,
+			"west_loft": true,
+			"west_rail": true
+		},
+		"source": "apply_frames P1 west floor -> ladder -> loft/rail",
+		"verdict": "pass",
+		"zones": 3
+	},
+	"lantern": {
+		"hits": {
+			"clothesline": true,
+			"west_stoop": true,
+			"west_street": true
+		},
+		"source": "apply_frames P1 stoop -> ladder -> clothesline -> street",
+		"verdict": "pass",
+		"zones": 3
+	},
+	"lift": {
+		"boards": 1,
+		"ly0": 188.0,
+		"ly1": 56.0,
+		"source": "apply_frames walk to gauge_lift_plate then ride shaft_lift",
+		"verdict": "pass",
+		"y0": 96.0,
+		"y1": 40.0
+	},
+	"lift_still": {
+		"alive": true,
+		"hanging": false,
+		"map": "gauge",
+		"on_floor": false,
+		"x": 992.333374023438,
+		"y": 28.0,
+		"zone": "east_loft"
+	},
+	"live": {
+		"hud": [
+			"Skyline Relay",
+			"Pallet Annex",
+			"Signal Court",
+			"Vitriol Sump",
+			"Lantern Cut",
+			"Gauge Deck"
+		],
+		"source": "HUD display names for all six VS maps",
+		"verdict": "pass"
+	},
+	"load": {
+		"loaded": [
+			"rooftops",
+			"storage",
+			"police",
+			"hazardous",
+			"lantern",
+			"gauge"
+		],
+		"source": "start_fight vs2 each VS id",
+		"verdict": "pass"
+	},
+	"p2": {
+		"P2_COVERAGE": "smoke",
+		"coverage": "smoke",
+		"moved": true,
+		"source": "apply_frames P2 short walk; not AI",
+		"verdict": "pass"
+	},
+	"replay": {
+		"pairs": [
+			{
+				"hash": "71e20fdf00d80a1d78d1c9eb7181cfe20a9485ee78d1895857e3da928fb5af96",
+				"id": "rooftops",
+				"match": true
+			},
+			{
+				"hash": "b0ad87ec9b2212770b0e1a44e92e0f623e59ce059bd1bfdf96a5a4de1360c017",
+				"id": "storage",
+				"match": true
+			},
+			{
+				"hash": "b0d22a455e4b74f882a4dc5cf013284d03babdf726aefc6abd5b8036563f44b4",
+				"id": "police",
+				"match": true
+			},
+			{
+				"hash": "bed461c79d8b4f7f4708ea735659ebef1611a2dda4916594168aaafa233772d8",
+				"id": "hazardous",
+				"match": true
+			},
+			{
+				"hash": "7e52674aaae42ec5716c20cec1b2f8732cb2e33507fd7217ab38c74e286e7418",
+				"id": "lantern",
+				"match": true
+			},
+			{
+				"hash": "ae20bc5ce1c9ba97a20723f907a746c709e33da645359799bee6a7fa54ce7c48",
+				"id": "gauge",
+				"match": true
+			}
+		],
+		"source": "catalog reload hash twice per VS map",
+		"verdict": "match"
+	},
+	"roster": {
+		"author": "fx_map_author",
+		"source": "Maps.vs_ids + catalog required_live_ids",
+		"stage": [
+			"rooftops",
+			"storage",
+			"police",
+			"hazardous"
+		],
+		"unique": {
+			"gauge": "lift",
+			"hazardous": "toxic_pickup",
+			"lantern": "water",
+			"police": "rotor",
+			"rooftops": "cover",
+			"storage": "cargo"
+		},
+		"verdict": "pass",
+		"vs": [
+			"rooftops",
+			"storage",
+			"police",
+			"hazardous",
+			"lantern",
+			"gauge"
+		]
+	},
+	"rotor": {
+		"jammed": true,
+		"jams": 1,
+		"ledger_jam": 1,
+		"shots": 2,
+		"source": "apply_frames fire jams signal_rotor; give_weapon is inventory only",
+		"spin_before": true,
+		"verdict": "pass"
+	},
+	"routes": {
+		"maps": [
+			{
+				"elevations": 4,
+				"id": "rooftops",
+				"platforms": 9,
+				"spawns": 3,
+				"weapons": 4
+			},
+			{
+				"elevations": 6,
+				"id": "storage",
+				"platforms": 10,
+				"spawns": 3,
+				"weapons": 4
+			},
+			{
+				"elevations": 8,
+				"id": "police",
+				"platforms": 9,
+				"spawns": 3,
+				"weapons": 3
+			},
+			{
+				"elevations": 7,
+				"id": "hazardous",
+				"platforms": 14,
+				"spawns": 3,
+				"weapons": 4
+			},
+			{
+				"elevations": 6,
+				"id": "lantern",
+				"platforms": 9,
+				"spawns": 3,
+				"weapons": 3
+			},
+			{
+				"elevations": 4,
+				"id": "gauge",
+				"platforms": 10,
+				"spawns": 3,
+				"weapons": 3
+			}
+		],
+		"source": "MapValidator + MapGraph helper; live unique is apply_frames",
+		"verdict": "pass"
+	},
+	"toxic": {
+		"floor_cause": "pit",
+		"floor_dead": true,
+		"held_weapon": "pistol",
+		"item_pickup": true,
+		"observed": true,
+		"pickup_id": 4,
+		"pickup_tick": 459,
+		"pipe_alive": true,
+		"pipe_fired": true,
+		"pipe_zone": "mid_east",
+		"source": "live floor walk dies; pipe route overlaps world pickup then fires — hazard changes movement and weapon strategy",
+		"used_give_weapon": false,
+		"verdict": "pass",
+		"weapon_id": "cinder"
+	},
+	"water": {
+		"env_id": "cut_gutter_00",
+		"source": "apply_frames walk from west stoop down the fire escape into the gutter",
+		"verdict": "pass",
+		"wet_after": true,
+		"wet_before": false,
+		"x": 72.0,
+		"y": 227.994522094727
+	},
+	"water_still": {
+		"alive": true,
+		"hanging": false,
+		"map": "lantern",
+		"on_floor": true,
+		"wet": true,
+		"x": 72.0,
+		"y": 227.994522094727,
+		"zone": "west_street"
+	}
+}

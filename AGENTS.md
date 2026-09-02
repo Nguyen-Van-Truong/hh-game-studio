@@ -1,5 +1,22 @@
 # AGENTS.md — HH Game Studio
 
+## OWNER FREEZE TOÀN BỘ DEMO/PLAN — 2026-09-01
+
+Owner đã yêu cầu dừng mọi implement, demo, Godot run, test runtime, evidence
+packing, commit và tick plan. Trạng thái này ưu tiên hơn các câu “làm WP đầu
+tiên chưa tick” còn sót trong lịch sử bên dưới. Agent chỉ được đọc/audit,
+kiểm kê dirty tree và cập nhật tài liệu bàn giao; không được sửa product,
+không được tự resume từ chat cũ hoặc PASS banner.
+
+- Platform `zdocs/20-8-*`: frozen 59/60 tại R9-WP4; không mở G6/GX.
+- Product `zdocs/29-8-*`: frozen 29/50 tại VF6-WP1; dirty source là WIP.
+- Quality overlay `zdocs/31-8-*`: read-only/non-authoritative trong freeze.
+- Chỉ resume khi owner gửi một lệnh mới, tường minh, sau freeze và trỏ tới
+  `zdocs/1-9-vault-fighters-owner-freeze-plan-audit-and-handoff.txt`.
+- Khi resume vẫn phải bắt đầu bằng audit/reconcile VF6-WP1; không được nhảy
+  VF6-WP2 hoặc import art draft chỉ vì đã có file trong `.hh-agent/`.
+
+
 ## ROUTE HIỆN TẠI — VAULT FIGHTERS / Y8-LIKE CLEAN-ROOM
 
 Đây là route sản phẩm hiện hành cho `godot/dogfood/superfighters/`.
@@ -45,7 +62,11 @@ platform files; plan 29-8 thắng cho product files.
 2. Bảng tổng quan đầu `zdocs/29-8-vault-fighters-y8-parity-plan.txt`.
 3. WP đầu tiên chưa tick trong plan 29-8 và chỉ các invariant/reference mà WP
    đó trỏ tới.
-4. `PROJECT_BRIEF.md`, `KNOWN_ISSUES.md` và `NOTICE.md` trong product folder
+4. Sau WP hiện hành, đọc quality overlay
+   `zdocs/31-8-vault-fighters-quality-completion-plan.txt`. Overlay này là
+   **non-authoritative**: dùng để nâng chuẩn art/gameplay/evidence/autonomy,
+   không tạo checkbox, không đổi thứ tự WP và không được tự tick.
+5. `PROJECT_BRIEF.md`, `KNOWN_ISSUES.md` và `NOTICE.md` trong product folder
    khi WP yêu cầu.
 
 Không lấy hai file `zdocs/16-8-*` làm nguồn WP. Không lấy các checkbox trong
@@ -125,6 +146,79 @@ source thay đổi sau critic, phải audit lại đúng source hash. PASS funct
 nhưng còn leaked ObjectDB/AudioStream, duplicate/lost update, secret,
 unproven postcondition, hoặc dirty source ngoài lease thì **chưa** là PASS
 nghiệm thu.
+
+### Historical VF5-WP6 audit hold (resolved 2026-08-31)
+
+VF5-WP5 is already accepted in `eb26035` from the official `...-07` package.
+The first unticked product WP was **VF5-WP6**. Package `-01`
+(`RUN_ID=VF5WP6-20260831-ASIA-SAIGON-01`,
+`COMMAND_ID=cmd.vf5-wp6.vs-roster.1`) is void after Critic II
+`TICK=no`. The remint uses `RUN_ID=VF5WP6-20260831-ASIA-SAIGON-02`
+and `COMMAND_ID=cmd.vf5-wp6.vs-roster.2`; do not reuse either
+identifier after a source change. The package and review logs are
+provisional until both independent critics leave an explicit
+`TICK=yes` record for the same frozen source hash.
+
+The current WP6 evidence reports PASS for six-map loading/cycle and the two
+new map interactions, but it explicitly labels P2/BOT as smoke and the new
+maps/roster as assumptions, not observed Y8 parity. Critic review must still
+check that Lantern water changes gameplay (not only a flag), that the Signal
+rotor interaction is a real world hit rather than inventory setup, and that
+cycle wrap is exercised through the live menu path. A full `run_all.gd` must
+finish with a captured process exit; a banner or a killed/hung process is not
+PASS.
+
+One Godot process per product/clone path is mandatory. Never run two
+`run_all.gd`/roster commands against the same path or let a later process
+overwrite the earlier evidence. The known 14:05 HH diagnostic hang and its
+14:58 rerun are diagnostic only; the former was aborted, while the latter's
+log completed PASS but has no independent critic signature by itself.
+
+When it was open, VF5-WP6 could not be ticked until the official package had
+matching headless/window logs, required gameplay stills, parsed exit/leftover
+proof, a source manifest covering the complete runtime closure, and two
+read-only critics with `TICK=yes`. The historical packer was required to reject
+missing/mismatched/stale evidence and not trust caller-supplied exit integers or
+JSON fields alone. Keep
+`P2_COVERAGE=smoke`, `BOT_COVERAGE=smoke`, `NOT_AI=1`, and `NOT_Y8_PARITY=1`.
+See the non-authoritative detailed overlay
+`zdocs/31-8-vault-fighters-quality-completion-plan.txt` section 20.
+
+### Current VF6-WP1 audit hold (2026-08-31)
+
+The first unticked product WP is **VF6-WP1** (`29/50`); VF5 is closed at
+`6/6` by coordinator commit `2b1e0a2`. The current implementer tree is WIP:
+do not commit, tick, or start VF6-WP2 until the WP1 DoD and regression gate
+are green.
+
+The `VF6WP1-20260831-ASIA-SAIGON-02` `run_match` headless/window logs are
+provisional only. They report tie as a timeout assumption (`TIE_OBSERVED=0`)
+and P2/BOT as smoke (`NOT_AI=1`). The full `run_all.gd` attempt has no
+host-captured exit and the prior full run reported seven regressions (pit
+lose/overlay, deterministic hashes, pause/restart snapshot hashes, and sewer
+replay). A PASS banner or a killed/hung process is not acceptance evidence.
+
+The `-02` logs are also not paired with a freeze manifest in the same evidence
+directory: the sibling freeze file is provisional and its 47-file list is not
+a complete runtime dependency closure. Remint a fresh run id/command id only
+after freezing the complete source closure, then run exactly one Godot worker
+per product path at a time and capture the real host exit/leftover result.
+The pinned Godot executable is present at
+`%LOCALAPPDATA%\\HHGodotAgent\\tooling\\godot-4.7.1-stable\\bin`; a failed
+environment lookup is not evidence that Godot is unavailable. A bounded host
+diagnostic on 2026-08-31 reproduced a pause-trace tick mismatch (simulation
+clock correctly stayed at 16 while authored frame tick advanced to 32), so the
+trace/replay contract must be repaired before any remint.
+
+VF6-WP1 proof must exercise the real menu/input path for win, loss, tie, quit,
+restart and pause. Direct calls such as `apply_eval`, `set_paused`, or emitting
+a button signal may supplement unit tests but cannot be the sole E2E proof.
+Each transition record must contain a post-transition snapshot/hash (after the
+destination phase is applied), and pause must prove body/tick simulation is
+frozen while making the expected UI/phase change. The packer must fail closed
+on stale/missing evidence, parse process exits independently of caller fields,
+and reject warnings/errors/unproven rows. Only two independent read-only
+critics with explicit `TICK=yes` on the same frozen source may unlock a tick.
 
 STOP ngay khi agent định rip asset, fork Godot, mở G6/GX/R9-WP4, sửa Kho Bí Ẩn,
 đưa Snake vào product, hoặc thay acceptance để hợp code đã lỡ viết.

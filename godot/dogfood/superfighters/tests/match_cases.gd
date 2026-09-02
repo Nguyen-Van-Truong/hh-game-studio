@@ -141,7 +141,7 @@ static func schema_and_machine() -> PackedStringArray:
 		"modes": ["vs2", "vs1"],
 		"official_lifecycle": ["vs2"],
 		"vs1_note": "FF melee fixture + title VS 1P; no official vs1 lifecycle trace",
-		"stage_note": "title button starts MatchRules; no official stage lifecycle",
+		"stage_note": "title button starts MatchRules; campaign save/order is VF6-WP3 StageRules",
 		"survival_note": "not shipped; not started; not in MACHINE pass list",
 		"source": "modes that construct/run MatchRules this WP (vs2 official, vs1 FF)",
 	}

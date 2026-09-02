@@ -1,0 +1,52 @@
+{
+	"command_id": "cmd.vf3-wp6.balance.1",
+	"display": "Windows",
+	"ended_at": "2026-08-29T21:23:38+07:00",
+	"ended_unix": 1788013418.685,
+	"epsilon": 0.001,
+	"fail_count": 0,
+	"godot": {
+		"build": "official",
+		"hash": "a13da4feb8d8aefc283c3763d33a2f170a18d541",
+		"hex": 263937,
+		"major": 4,
+		"minor": 7,
+		"patch": 1,
+		"status": "stable",
+		"string": "4.7.1-stable (official)",
+		"timestamp": 0
+	},
+	"map_id": "fx_balance_melee",
+	"mode": "vs2",
+	"os_name": "Windows",
+	"outcomes": {
+		"BATCH": "pass",
+		"CHAIN": "pass",
+		"DATA": "pass",
+		"DIST": "pass",
+		"DOM": "pass",
+		"FF": "pass",
+		"HIGH": "pass",
+		"LIVE": "pass",
+		"MELEE": "pass",
+		"PIT": "pass",
+		"REPLAY": "match",
+		"SCHEMA": "pass",
+		"STAMINA": "pass",
+		"USED_APPLY_ATTEMPTED": 1025,
+		"USED_APPLY_FRAMES": 1025,
+		"USED_APPLY_SUCCEEDED": 1025
+	},
+	"run_id": "VF3WP6-20260829-ASIA-SAIGON-01",
+	"schema": "vault-fighters.vf3-wp6.run.v1",
+	"seed": 7,
+	"started_at": "2026-08-29T21:23:35+07:00",
+	"started_unix": 1788013415.733,
+	"tick_hz": 60,
+	"timezone": "Asia/Saigon",
+	"viewport": {
+		"h": 720.0,
+		"w": 1280.0
+	},
+	"wp": "VF3-WP6"
+}

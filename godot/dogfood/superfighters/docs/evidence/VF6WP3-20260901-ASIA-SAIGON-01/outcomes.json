@@ -1,0 +1,109 @@
+{
+	"advance": {
+		"after_win0_map": "storage",
+		"after_win1_map": "police",
+		"hash_after_loss": "084aae648db58353c5916fae0f21d508903451fa9a6141955f56ea17e115b98d",
+		"hash_win0": "46559b7496990c7c7057b32e715a903e8037c6867f1a01a72a47c39e14f55a5e",
+		"hash_win1": "084aae648db58353c5916fae0f21d508903451fa9a6141955f56ea17e115b98d",
+		"rematch_map": "police",
+		"source": "title Stage + Close Clinch apply_frames KO; auto-advance catalog; rematch stays",
+		"verdict": "pass"
+	},
+	"apply": {
+		"attempted": 854,
+		"succeeded": 854,
+		"used_action_press": 0,
+		"used_apply_frames": 854,
+		"used_force_kill": 0,
+		"used_parse_input_event": 203,
+		"used_step_fixed": 0,
+		"used_teleport": 0
+	},
+	"continue": {
+		"map_id": "police",
+		"source": "title Continue Stage loads checkpoint, not rooftops rematch",
+		"stage_index": 2,
+		"verdict": "pass"
+	},
+	"hash": {
+		"hash_win0": "46559b7496990c7c7057b32e715a903e8037c6867f1a01a72a47c39e14f55a5e",
+		"hash_win0_dup": "46559b7496990c7c7057b32e715a903e8037c6867f1a01a72a47c39e14f55a5e",
+		"hash_win1": "084aae648db58353c5916fae0f21d508903451fa9a6141955f56ea17e115b98d",
+		"live_hash_after_loss": "084aae648db58353c5916fae0f21d508903451fa9a6141955f56ea17e115b98d",
+		"live_hash_win0": "46559b7496990c7c7057b32e715a903e8037c6867f1a01a72a47c39e14f55a5e",
+		"live_hash_win1": "084aae648db58353c5916fae0f21d508903451fa9a6141955f56ea17e115b98d",
+		"source": "StageRules.record_win idempotent + sequence replay",
+		"verdict": "pass"
+	},
+	"live": {
+		"source": "window/menu Stage/Reset clicks + apply_frames Close Clinch",
+		"title_visible_after": true,
+		"verdict": "pass"
+	},
+	"load": {
+		"rows": [
+			{
+				"bots": 1,
+				"index": 0,
+				"loaded": true,
+				"map_id": "rooftops",
+				"tier": "tier_1",
+				"tier_class": "approximation",
+				"want_bots": 1
+			},
+			{
+				"bots": 2,
+				"index": 1,
+				"loaded": true,
+				"map_id": "storage",
+				"tier": "tier_2",
+				"tier_class": "approximation",
+				"want_bots": 2
+			},
+			{
+				"bots": 3,
+				"index": 2,
+				"loaded": true,
+				"map_id": "police",
+				"tier": "tier_3",
+				"tier_class": "approximation",
+				"want_bots": 3
+			},
+			{
+				"bots": 3,
+				"index": 3,
+				"loaded": true,
+				"map_id": "hazardous",
+				"tier": "tier_4",
+				"tier_class": "approximation",
+				"want_bots": 3
+			}
+		],
+		"source": "start_fight catalog maps; live_bot_count; no force_kill",
+		"verdict": "pass"
+	},
+	"loss": {
+		"hash_after": "a94ea313475a85dff94945f19d6acc0cd4d3abc6ecd6c69ae0476e18b67b98e7",
+		"hash_before": "a94ea313475a85dff94945f19d6acc0cd4d3abc6ecd6c69ae0476e18b67b98e7",
+		"lost": true,
+		"source": "title Stage rooftops + KEY_RIGHT pit + Rematch stays index 0",
+		"stayed_index": 0,
+		"stayed_map": "rooftops",
+		"verdict": "pass"
+	},
+	"reset": {
+		"index": 0,
+		"map_id": "rooftops",
+		"score": 0,
+		"source": "title Reset Stage wipe + Stage starts rooftops",
+		"verdict": "pass"
+	},
+	"schema": {
+		"order_class": "approximation",
+		"source": "data/sim/stage.json",
+		"tier_class": "approximation",
+		"verdict": "pass",
+		"y8_order_observed": false
+	},
+	"timeline": []
+}

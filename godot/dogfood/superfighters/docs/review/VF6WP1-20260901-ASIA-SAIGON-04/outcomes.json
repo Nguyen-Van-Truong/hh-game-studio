@@ -1,0 +1,442 @@
+{
+	"apply": {
+		"attempted": 382,
+		"succeeded": 380,
+		"used_action_press": 0,
+		"used_apply_frames": 380,
+		"used_force_kill": 0,
+		"used_parse_input_event": 41,
+		"used_step_fixed": 0
+	},
+	"ff": {
+		"class": "assumption",
+		"cross_team_damage": true,
+		"same_team_blocked": true,
+		"source": "apply_frames fx_melee_close vs1 same-team vs vs2 cross-team",
+		"stage": false,
+		"structural_only": false,
+		"verdict": "pass",
+		"vs1": false,
+		"vs2": true
+	},
+	"live": {
+		"end_reason": "quit",
+		"frozen": true,
+		"input_feedback_2f": true,
+		"input_latency_target": "2 simulation frames (product-tuning, not Y8)",
+		"outcome": "quit",
+		"paused": true,
+		"quit_live": true,
+		"quit_live_required": true,
+		"source": "viewport.push_input pause; click Quit; title visible after",
+		"title_visible_after": true,
+		"verdict": "pass"
+	},
+	"lose": {
+		"end_reason": "p1_down",
+		"hud": "Down End reason: p1_down. Restart from title.",
+		"outcome": "lose",
+		"p1_dead": true,
+		"source": "title VS2P click + parse_input_event KEY_RIGHT pit walk + apply_frames engine; lose overlay Down",
+		"used_force_kill": false,
+		"verdict": "pass"
+	},
+	"machine": {
+		"canonical": true,
+		"ffa_team_table": true,
+		"modes": [
+			"vs2",
+			"vs1"
+		],
+		"official_lifecycle": [
+			"vs2"
+		],
+		"source": "MatchRules.evaluate FFA + teammate-alive table",
+		"stage_note": "title button starts MatchRules; no official stage lifecycle",
+		"survival_note": "not shipped; not started; not in MACHINE pass list",
+		"verdict": "pass",
+		"vs1_note": "FF melee fixture + title VS 1P; no official vs1 lifecycle trace"
+	},
+	"pause": {
+		"apply_rejected": true,
+		"direct_harness_supplemental": true,
+		"dual_clock": true,
+		"hash_stable": true,
+		"hud": "Paused",
+		"pause_resolve_rejected": true,
+		"pause_rows": [
+			{
+				"authored_tick": 16,
+				"body_frozen": true,
+				"hash_after": "59c3c7649171143a389e4741553726dcd05e44fd43c2a762d11ae1f968d31025",
+				"hash_before": "59c3c7649171143a389e4741553726dcd05e44fd43c2a762d11ae1f968d31025",
+				"sim_tick_after": 16,
+				"sim_tick_before": 16
+			},
+			{
+				"authored_tick": 17,
+				"body_frozen": true,
+				"hash_after": "59c3c7649171143a389e4741553726dcd05e44fd43c2a762d11ae1f968d31025",
+				"hash_before": "59c3c7649171143a389e4741553726dcd05e44fd43c2a762d11ae1f968d31025",
+				"sim_tick_after": 16,
+				"sim_tick_before": 16
+			},
+			{
+				"authored_tick": 18,
+				"body_frozen": true,
+				"hash_after": "59c3c7649171143a389e4741553726dcd05e44fd43c2a762d11ae1f968d31025",
+				"hash_before": "59c3c7649171143a389e4741553726dcd05e44fd43c2a762d11ae1f968d31025",
+				"sim_tick_after": 16,
+				"sim_tick_before": 16
+			},
+			{
+				"authored_tick": 19,
+				"body_frozen": true,
+				"hash_after": "59c3c7649171143a389e4741553726dcd05e44fd43c2a762d11ae1f968d31025",
+				"hash_before": "59c3c7649171143a389e4741553726dcd05e44fd43c2a762d11ae1f968d31025",
+				"sim_tick_after": 16,
+				"sim_tick_before": 16
+			},
+			{
+				"authored_tick": 20,
+				"body_frozen": true,
+				"hash_after": "59c3c7649171143a389e4741553726dcd05e44fd43c2a762d11ae1f968d31025",
+				"hash_before": "59c3c7649171143a389e4741553726dcd05e44fd43c2a762d11ae1f968d31025",
+				"sim_tick_after": 16,
+				"sim_tick_before": 16
+			},
+			{
+				"authored_tick": 21,
+				"body_frozen": true,
+				"hash_after": "59c3c7649171143a389e4741553726dcd05e44fd43c2a762d11ae1f968d31025",
+				"hash_before": "59c3c7649171143a389e4741553726dcd05e44fd43c2a762d11ae1f968d31025",
+				"sim_tick_after": 16,
+				"sim_tick_before": 16
+			},
+			{
+				"authored_tick": 22,
+				"body_frozen": true,
+				"hash_after": "59c3c7649171143a389e4741553726dcd05e44fd43c2a762d11ae1f968d31025",
+				"hash_before": "59c3c7649171143a389e4741553726dcd05e44fd43c2a762d11ae1f968d31025",
+				"sim_tick_after": 16,
+				"sim_tick_before": 16
+			},
+			{
+				"authored_tick": 23,
+				"body_frozen": true,
+				"hash_after": "59c3c7649171143a389e4741553726dcd05e44fd43c2a762d11ae1f968d31025",
+				"hash_before": "59c3c7649171143a389e4741553726dcd05e44fd43c2a762d11ae1f968d31025",
+				"sim_tick_after": 16,
+				"sim_tick_before": 16
+			},
+			{
+				"authored_tick": 24,
+				"body_frozen": true,
+				"hash_after": "59c3c7649171143a389e4741553726dcd05e44fd43c2a762d11ae1f968d31025",
+				"hash_before": "59c3c7649171143a389e4741553726dcd05e44fd43c2a762d11ae1f968d31025",
+				"sim_tick_after": 16,
+				"sim_tick_before": 16
+			},
+			{
+				"authored_tick": 25,
+				"body_frozen": true,
+				"hash_after": "59c3c7649171143a389e4741553726dcd05e44fd43c2a762d11ae1f968d31025",
+				"hash_before": "59c3c7649171143a389e4741553726dcd05e44fd43c2a762d11ae1f968d31025",
+				"sim_tick_after": 16,
+				"sim_tick_before": 16
+			},
+			{
+				"authored_tick": 26,
+				"body_frozen": true,
+				"hash_after": "59c3c7649171143a389e4741553726dcd05e44fd43c2a762d11ae1f968d31025",
+				"hash_before": "59c3c7649171143a389e4741553726dcd05e44fd43c2a762d11ae1f968d31025",
+				"sim_tick_after": 16,
+				"sim_tick_before": 16
+			},
+			{
+				"authored_tick": 27,
+				"body_frozen": true,
+				"hash_after": "59c3c7649171143a389e4741553726dcd05e44fd43c2a762d11ae1f968d31025",
+				"hash_before": "59c3c7649171143a389e4741553726dcd05e44fd43c2a762d11ae1f968d31025",
+				"sim_tick_after": 16,
+				"sim_tick_before": 16
+			},
+			{
+				"authored_tick": 28,
+				"body_frozen": true,
+				"hash_after": "59c3c7649171143a389e4741553726dcd05e44fd43c2a762d11ae1f968d31025",
+				"hash_before": "59c3c7649171143a389e4741553726dcd05e44fd43c2a762d11ae1f968d31025",
+				"sim_tick_after": 16,
+				"sim_tick_before": 16
+			},
+			{
+				"authored_tick": 29,
+				"body_frozen": true,
+				"hash_after": "59c3c7649171143a389e4741553726dcd05e44fd43c2a762d11ae1f968d31025",
+				"hash_before": "59c3c7649171143a389e4741553726dcd05e44fd43c2a762d11ae1f968d31025",
+				"sim_tick_after": 16,
+				"sim_tick_before": 16
+			},
+			{
+				"authored_tick": 30,
+				"body_frozen": true,
+				"hash_after": "59c3c7649171143a389e4741553726dcd05e44fd43c2a762d11ae1f968d31025",
+				"hash_before": "59c3c7649171143a389e4741553726dcd05e44fd43c2a762d11ae1f968d31025",
+				"sim_tick_after": 16,
+				"sim_tick_before": 16
+			},
+			{
+				"authored_tick": 31,
+				"body_frozen": true,
+				"hash_after": "59c3c7649171143a389e4741553726dcd05e44fd43c2a762d11ae1f968d31025",
+				"hash_before": "59c3c7649171143a389e4741553726dcd05e44fd43c2a762d11ae1f968d31025",
+				"sim_tick_after": 16,
+				"sim_tick_before": 16
+			}
+		],
+		"phase": "paused",
+		"retimed_rows": [
+			{
+				"authored_tick": 17,
+				"retimed_due_to_pause": true,
+				"sim_tick": 16
+			},
+			{
+				"authored_tick": 18,
+				"retimed_due_to_pause": true,
+				"sim_tick": 16
+			},
+			{
+				"authored_tick": 19,
+				"retimed_due_to_pause": true,
+				"sim_tick": 16
+			},
+			{
+				"authored_tick": 20,
+				"retimed_due_to_pause": true,
+				"sim_tick": 16
+			},
+			{
+				"authored_tick": 21,
+				"retimed_due_to_pause": true,
+				"sim_tick": 16
+			},
+			{
+				"authored_tick": 22,
+				"retimed_due_to_pause": true,
+				"sim_tick": 16
+			},
+			{
+				"authored_tick": 23,
+				"retimed_due_to_pause": true,
+				"sim_tick": 16
+			},
+			{
+				"authored_tick": 24,
+				"retimed_due_to_pause": true,
+				"sim_tick": 16
+			},
+			{
+				"authored_tick": 25,
+				"retimed_due_to_pause": true,
+				"sim_tick": 16
+			},
+			{
+				"authored_tick": 26,
+				"retimed_due_to_pause": true,
+				"sim_tick": 16
+			},
+			{
+				"authored_tick": 27,
+				"retimed_due_to_pause": true,
+				"sim_tick": 16
+			},
+			{
+				"authored_tick": 28,
+				"retimed_due_to_pause": true,
+				"sim_tick": 16
+			},
+			{
+				"authored_tick": 29,
+				"retimed_due_to_pause": true,
+				"sim_tick": 16
+			},
+			{
+				"authored_tick": 30,
+				"retimed_due_to_pause": true,
+				"sim_tick": 16
+			},
+			{
+				"authored_tick": 31,
+				"retimed_due_to_pause": true,
+				"sim_tick": 16
+			},
+			{
+				"authored_tick": 32,
+				"retimed_due_to_pause": true,
+				"sim_tick": 16
+			},
+			{
+				"authored_tick": 33,
+				"retimed_due_to_pause": true,
+				"sim_tick": 17
+			},
+			{
+				"authored_tick": 34,
+				"retimed_due_to_pause": true,
+				"sim_tick": 18
+			},
+			{
+				"authored_tick": 35,
+				"retimed_due_to_pause": true,
+				"sim_tick": 19
+			},
+			{
+				"authored_tick": 36,
+				"retimed_due_to_pause": true,
+				"sim_tick": 20
+			},
+			{
+				"authored_tick": 37,
+				"retimed_due_to_pause": true,
+				"sim_tick": 21
+			},
+			{
+				"authored_tick": 38,
+				"retimed_due_to_pause": true,
+				"sim_tick": 22
+			},
+			{
+				"authored_tick": 39,
+				"retimed_due_to_pause": true,
+				"sim_tick": 23
+			},
+			{
+				"authored_tick": 40,
+				"retimed_due_to_pause": true,
+				"sim_tick": 24
+			},
+			{
+				"authored_tick": 41,
+				"retimed_due_to_pause": true,
+				"sim_tick": 25
+			},
+			{
+				"authored_tick": 42,
+				"retimed_due_to_pause": true,
+				"sim_tick": 26
+			},
+			{
+				"authored_tick": 43,
+				"retimed_due_to_pause": true,
+				"sim_tick": 27
+			}
+		],
+		"sim_frozen": true,
+		"source": "title VS2P click + viewport.push_input pause; pause overlay Paused; sim frozen",
+		"supplemental_set_paused": true,
+		"tick0": 9,
+		"tick1": 9,
+		"verdict": "pass"
+	},
+	"quit": {
+		"end_reason": "quit",
+		"session_cleared": true,
+		"source": "viewport.push_input pause + click Quit; title_visible_after=true",
+		"status": "Last match ended: quit. Choose a mode to start again.",
+		"title_visible": true,
+		"used_force_kill": false,
+		"verdict": "pass"
+	},
+	"replay": {
+		"pair_count": 6,
+		"pairs": [
+			{
+				"hash": "9278e1d5d58ff099cab3136989218faa97031e98ed41231f6fdd231bea604729",
+				"match": true,
+				"name": "match_lose.json",
+				"outcome": "lose"
+			},
+			{
+				"hash": "f348463a2f6b76aafeb7b24c184edce6d0fddcbd4cfb30d124fd3ddb11a9ff8f",
+				"match": true,
+				"name": "match_pause.json",
+				"outcome": "play"
+			},
+			{
+				"hash": "bf15c95af87f61dbd3def1a3f7f52b532d98634113a56b3385da2e8ff2aa6e34",
+				"match": true,
+				"name": "match_quit.json",
+				"outcome": ""
+			},
+			{
+				"hash": "a86609f470aab448ceb251dea215c6cad6e15f47102887d052656037eaf40dd7",
+				"match": true,
+				"name": "match_restart.json",
+				"outcome": "win"
+			},
+			{
+				"hash": "0291b23592d4048dba505c567d9c6e887841dcdc88210ddb10efda8d3fd2942c",
+				"match": true,
+				"name": "match_tie.json",
+				"outcome": "tie"
+			},
+			{
+				"hash": "a86609f470aab448ceb251dea215c6cad6e15f47102887d052656037eaf40dd7",
+				"match": true,
+				"name": "match_win.json",
+				"outcome": "win"
+			}
+		],
+		"source": "SimReplay.final_hash twice",
+		"verdict": "match"
+	},
+	"restart": {
+		"restarted_outcome": "play",
+		"round_after": 8,
+		"round_before": 7,
+		"source": "viewport.push_input pause + click Restart; new round_id (rematch 2-tap stays WP2)",
+		"verdict": "pass"
+	},
+	"schema": {
+		"source": "data/sim/match.json + traces",
+		"verdict": "pass"
+	},
+	"seed": {
+		"formula": "7 + stage * 13",
+		"machine_seed": 7,
+		"session_seed": 7,
+		"source": "live GameSession.sim_seed + match_rules.spawn_seed",
+		"stage1": 20,
+		"structural_only": false,
+		"verdict": "pass",
+		"vs1": 7,
+		"vs2": 7
+	},
+	"signal": {
+		"direct_harness_supplemental": true,
+		"emitted": 1,
+		"loses": 0,
+		"source": "apply_eval twice + _resolve_end (unit/supplemental; official no-double is emit-once on traces)",
+		"verdict": "pass",
+		"wins": 1
+	},
+	"tie": {
+		"end_reason": "timeout",
+		"hud": "Draw Round timer ended with more than one side standing (approximation, not observed).",
+		"outcome": "tie",
+		"source": "title VS2P click + parse_input_event idle + labeled timeout approximation; tie overlay Draw",
+		"timer_class": "assumption",
+		"timer_observed": false,
+		"used_force_kill": false,
+		"verdict": "pass"
+	},
+	"win": {
+		"end_reason": "last_standing",
+		"hud": "Last standing You won. End reason: last_standing. Winner team 0. Restart from title.",
+		"outcome": "win",
+		"source": "title Map+VS2P click + parse_input_event KEY_RIGHT/KEY_M + apply_frames engine; win overlay Last standing",
+		"used_force_kill": false,
+		"verdict": "pass"
+	}
+}

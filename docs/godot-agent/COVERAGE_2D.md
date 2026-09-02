@@ -24,7 +24,7 @@ It does **not** mean every P0 is Status=Supported.
 - 2D groups: TileMap, UI, animation, audio, filesystem, inspector, node, physics/navigation, project, scene, script
 - P0 2D rows: 96; P0 traceable: 96 (100%)
 - P1 2D rows: 40; P1 traceable: 40 (100%)
-- P0 left (not Supported; still traced as Alternative/Gap): CM-001, CM-002, CM-003, CM-004, CM-006, CM-007, CM-008, CM-009, CM-010, CM-011, CM-018, CM-020, CM-033, CM-042, CM-044, CM-046, CM-047, CM-051, CM-052, CM-061, CM-062, CM-063, CM-067, CM-068, CM-076, CM-077, CM-078, CM-079, CM-080, CM-081, CM-086, CM-088, CM-096, CM-104, CM-119, CM-120, CM-125, CM-129, CM-134, CM-135, CM-138, CM-140
+- P0 left (not Supported; still traced as Alternative/Gap): CM-001, CM-002, CM-003, CM-004, CM-006, CM-007, CM-008, CM-009, CM-010, CM-011, CM-020, CM-033, CM-042, CM-044, CM-046, CM-047, CM-051, CM-052, CM-061, CM-062, CM-063, CM-067, CM-068, CM-076, CM-077, CM-078, CM-079, CM-080, CM-081, CM-086, CM-088, CM-096, CM-104, CM-119, CM-120, CM-125, CM-129, CM-134, CM-135, CM-138, CM-140
 - Matrix IDs total: 159 (CM-001..CM-159). P2 addons excluded from percents.
 
 ## 2D P0/P1 rows
@@ -48,7 +48,7 @@ It does **not** mean every P0 is Status=Supported.
 | CM-015 | project | P0 | Supported | project.settings | tests/bootstrap/test_project_settings.py | — |
 | CM-016 | project | P1 | Alternative | project.settings | boot splash art later | R8-WP3 |
 | CM-017 | project | P1 | Alternative | project.input | deadzone text | R8 |
-| CM-018 | project | P0 | Alternative | export.preset | text export_presets.cfg stub | R9 |
+| CM-018 | project | P0 | Supported | export.preset | tests/bootstrap/test_export_clean_build.py | — |
 | CM-019 | project | P0 | Supported | project.read_fixture | Godot CLI / godot/ file on disk | — |
 | CM-020 | project | P0 | Alternative | project.settings | fixture untyped_declaration=1 | R8 |
 | CM-021 | scene | P0 | Supported | scene.create | tests/bootstrap/test_scene_lifecycle.py | — |
@@ -178,15 +178,15 @@ It does **not** mean every P0 is Status=Supported.
 | CM-145 | P0 | Supported | play.headless_quit_after | Supported: Godot CLI --quit-after 1 | — |
 | CM-146 | P0 | Supported | play.version_pin | Supported: Godot CLI --version | — |
 | CM-147 | P0 | Gap | runtime.screenshot | Gap: screenshots=SKIP; no dummy PNG | R6 |
-| CM-148 | P0 | Alternative | export.build | Alternative: Godot CLI --export-release after templates | R9 |
-| CM-149 | P0 | Alternative | export.validate | Alternative: 4.7.1 templates via doctor | R9 |
+| CM-148 | P0 | Supported | export.build | tests/bootstrap/test_export_clean_build.py | — |
+| CM-149 | P0 | Supported | export.validate | tests/bootstrap/test_export_clean_build.py | — |
 | CM-150 | P0 | Gap | runtime.tree | Gap: remote tree is not editor tree | R6 |
 | CM-151 | P0 | Gap | input.action | Gap: inject stays E_UNVERIFIED | R6 |
 | CM-152 | P1 | Supported | editor.main_screen | tests/bootstrap/test_coverage_2d.py | — |
 | CM-153 | P0 | Supported | editor.select | tests/bootstrap/test_editor_focus.py | — |
 | CM-154 | P1 | Gap | test.run | Gap: GUT not enabled in plugin-project | R9 |
 | CM-155 | P1 | Alternative | play.write_movie | Alternative: Godot CLI --write-movie | R6 |
-| CM-156 | P0 | Gap | export.build | Gap: release strip filters | R9 |
+| CM-156 | P0 | Supported | export.build | tests/bootstrap/test_export_clean_build.py | — |
 | CM-157 | P0 | Alternative | play.logs | Alternative: headless stdout; editor log scrape later | R6 |
 | CM-159 | P0 | Gap | play.seed_rng | Gap: seed before inject | R6 |
 

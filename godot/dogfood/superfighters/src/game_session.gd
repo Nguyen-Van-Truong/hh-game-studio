@@ -94,7 +94,21 @@ func setup(p_mode: String, p_map: String, p_stage: int) -> void:
 	hud = Hud.new()
 	add_child(hud)
 	hud.set_map_name(Maps.display_name(map_id))
-	hud.set_hint("Last standing · sprint+crouch dive in air · aerial melee kicks · hold M fire")
+	if mode == "stage":
+		var progress: Dictionary = StageRules.load_or_empty()
+		hud.set_stage_line(
+			"Stage %d/4 · %s · %s (approx) · Score %d"
+			% [
+				stage_index + 1,
+				Maps.display_name(map_id),
+				StageRules.tier_id(stage_index),
+				int(progress.get("score", 0)),
+			]
+		)
+		hud.set_hint("Stage campaign · win loads the next arena · rematch stays here")
+	else:
+		hud.set_stage_line("")
+		hud.set_hint("Last standing · sprint+crouch dive in air · aerial melee kicks · hold M fire")
 	pause_screen = PauseScreen.new()
 	_resume_cb = set_paused.bind(false)
 	pause_screen.resume_pressed.connect(_resume_cb)
@@ -517,6 +531,17 @@ func request_quit() -> void:
 	match_rules.request_quit(self)
 
 
+func live_bot_count() -> int:
+	var n: int = 0
+	var i: int = 0
+	while i < fighters.size():
+		var f: Fighter = fighters[i]
+		i += 1
+		if f != null and f.is_bot:
+			n += 1
+	return n
+
+
 func force_kill(slot: int) -> void:
 	## Fixture-only. Official MATCH traces and apply_frames never call this.
 	ledger.push(clock.tick, "fixture", "force_kill", {"slot": slot})
@@ -548,7 +573,7 @@ func _spawn_fighters() -> void:
 		return
 	var bots: int = 2
 	if mode == "stage":
-		bots = 1 + mini(stage_index, 2)
+		bots = StageRules.bot_count(stage_index)
 	var b: int = 0
 	while b < bots:
 		var bot: Fighter = Fighter.new()

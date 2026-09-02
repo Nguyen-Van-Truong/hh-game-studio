@@ -59,6 +59,11 @@
     "vs_isolate": "RL-VS-ISOLATE assumption, not observed",
     "vs_rematch": "RL-VS-REMATCH assumption, not observed",
     "vs_first_run": "RL-VS-FIRST-RUN assumption, product UX target",
+    "stage_order": "RL-STAGE-ORDER approximation, not observed Y8 order",
+    "stage_progress": "RL-STAGE-PROGRESS assumption, win advances catalog map",
+    "stage_save": "RL-STAGE-SAVE assumption, atomic user:// progress",
+    "stage_reward": "RL-STAGE-REWARD assumption, first-win score/unlock hash",
+    "stage_tier": "RL-STAGE-TIER approximation, bot-count tiers not Y8",
     "hitstop": "RL-HIT-HITSTOP assumption, presentation only, clock still advances",
     "aim_dirs": "RL-AIM-DIRS assumption, not observed",
     "fire_semi": "RL-FIRE-SEMI assumption, not observed",
@@ -125,9 +130,13 @@
     "schema": "vf.sim.match.v1",
     "path": "res://data/sim/match.json"
   },
-  "vs_flow": {
+    "vs_flow": {
     "schema": "vf.sim.vs_flow.v1",
     "path": "res://data/sim/vs_flow.json"
+  },
+  "stage": {
+    "schema": "vf.sim.stage.v1",
+    "path": "res://data/sim/stage.json"
   },
   "locomotion": {
     "schema": "vf.sim.locomotion.v1",

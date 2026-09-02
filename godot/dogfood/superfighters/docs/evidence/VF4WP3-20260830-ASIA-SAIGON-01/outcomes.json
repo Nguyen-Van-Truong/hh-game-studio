@@ -1,0 +1,116 @@
+{
+	"apply": {
+		"attempted": 723,
+		"succeeded": 723,
+		"used_action_press": 0,
+		"used_apply_frames": 723,
+		"used_parse_input_event": 1,
+		"used_step_fixed": 0
+	},
+	"chain": {
+		"alive_tail": 1,
+		"depth": 2,
+		"events": 3,
+		"source": "seeded pistol vs five Blast Drums, cap depth 2",
+		"verdict": "pass"
+	},
+	"cleanup": {
+		"burning": false,
+		"fire_end": 1,
+		"source": "burn timer expiry clears fire and VFX",
+		"verdict": "pass",
+		"vfx_live": 0
+	},
+	"data": {
+		"chain_implemented": true,
+		"chain_max_depth": 2,
+		"extinguish_rule": "roll",
+		"nade_prop": "deferred",
+		"source": "catalog + hazard.json Blast Row / Ember Walk / Drum Yard",
+		"verdict": "pass",
+		"vfx_cap": 4,
+		"water_selected": false
+	},
+	"dup": {
+		"events": 3,
+		"source": "second shot against already-exploded drums",
+		"verdict": "pass"
+	},
+	"fire": {
+		"hp0": 100.0,
+		"hp1": 88.0,
+		"source": "Ember Walk drum ignites P1; ticks subtract HP",
+		"ticks": 4,
+		"verdict": "pass"
+	},
+	"hang": {
+		"drops": 1,
+		"source": "Drop Cage released by chain blast",
+		"verdict": "pass",
+		"y0": 24.0,
+		"y1": 39.5000038146973
+	},
+	"live": {
+		"events": 3,
+		"source": "parse_input_event KEY_M hold/release + step_from_live_input",
+		"verdict": "pass"
+	},
+	"replay": {
+		"pairs": [
+			{
+				"hash_a": "f0755ac72b7431dcb4573308fb8ef4ae9978e0b313680e7de549ceea8b6f17d6",
+				"hash_b": "f0755ac72b7431dcb4573308fb8ef4ae9978e0b313680e7de549ceea8b6f17d6",
+				"hash_match": true,
+				"name": "hazard_chain",
+				"world_a": "b89591061d7048e353ccb904294ad1bbd16e6b621797c8c7bdf6d8812009c7b7",
+				"world_b": "b89591061d7048e353ccb904294ad1bbd16e6b621797c8c7bdf6d8812009c7b7",
+				"world_hash_match": true
+			},
+			{
+				"hash_a": "bec95b9c7c61d29e73867537cd76d0991b4f31bafca6c5ff172aa7be19d06164",
+				"hash_b": "bec95b9c7c61d29e73867537cd76d0991b4f31bafca6c5ff172aa7be19d06164",
+				"hash_match": true,
+				"name": "hazard_fire",
+				"world_a": "0bc9be83df14cab5a4950e6800ec06e61c9e8504d0595f8eef3a2c6ed09bd5d2",
+				"world_b": "0bc9be83df14cab5a4950e6800ec06e61c9e8504d0595f8eef3a2c6ed09bd5d2",
+				"world_hash_match": true
+			},
+			{
+				"hash_a": "f0755ac72b7431dcb4573308fb8ef4ae9978e0b313680e7de549ceea8b6f17d6",
+				"hash_b": "f0755ac72b7431dcb4573308fb8ef4ae9978e0b313680e7de549ceea8b6f17d6",
+				"hash_match": true,
+				"name": "hazard_hang",
+				"world_a": "b89591061d7048e353ccb904294ad1bbd16e6b621797c8c7bdf6d8812009c7b7",
+				"world_b": "b89591061d7048e353ccb904294ad1bbd16e6b621797c8c7bdf6d8812009c7b7",
+				"world_hash_match": true
+			},
+			{
+				"hash_a": "5307bfe2eba86730a8e1e139d72f5412178c12535419d18067334fa5c6756690",
+				"hash_b": "5307bfe2eba86730a8e1e139d72f5412178c12535419d18067334fa5c6756690",
+				"hash_match": true,
+				"name": "hazard_roll",
+				"world_a": "0bc9be83df14cab5a4950e6800ec06e61c9e8504d0595f8eef3a2c6ed09bd5d2",
+				"world_b": "0bc9be83df14cab5a4950e6800ec06e61c9e8504d0595f8eef3a2c6ed09bd5d2",
+				"world_hash_match": true
+			}
+		],
+		"source": "apply_frames hazard traces twice",
+		"verdict": "match"
+	},
+	"roll": {
+		"burning": false,
+		"extinguish_count": 1,
+		"hp_end": 97.0,
+		"hp_mid": 97.0,
+		"source": "selected extinguish rule is roll, not water",
+		"verdict": "pass"
+	},
+	"vfx": {
+		"cap": 4,
+		"live": 0,
+		"rejected": 2,
+		"source": "two flashes per explode, cap 4",
+		"spawned": 4,
+		"verdict": "pass"
+	}
+}

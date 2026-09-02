@@ -1,0 +1,85 @@
+{
+  "schema": "vault-fighters.vf6-wp3.pack.v1",
+  "run_id": "VF6WP3-20260901-ASIA-SAIGON-01",
+  "command_id": "cmd.vf6-wp3.stage-progress.1",
+  "wp": "VF6-WP3",
+  "packed_at": "2026-09-01T20:54:53+07:00",
+  "base_head": "147331d",
+  "source_tree_sha256": "ddb82205ff5a1819213bd286f49a516932c0eff5765cd1c85df4723bebf74e98",
+  "godot_sha256": "35dab11e04ece16a2b93035e65204f4a944a3e00b020d43e54409193379d5eef",
+  "verdicts": {
+    "schema": "pass",
+    "load": "pass",
+    "advance": "pass",
+    "loss": "pass",
+    "hash": "pass",
+    "continue": "pass",
+    "reset": "pass",
+    "live": "pass"
+  },
+  "advance": {
+    "after_win0_map": "storage",
+    "after_win1_map": "police",
+    "hash_after_loss": "084aae648db58353c5916fae0f21d508903451fa9a6141955f56ea17e115b98d",
+    "hash_win0": "46559b7496990c7c7057b32e715a903e8037c6867f1a01a72a47c39e14f55a5e",
+    "hash_win1": "084aae648db58353c5916fae0f21d508903451fa9a6141955f56ea17e115b98d",
+    "rematch_map": "police",
+    "source": "title Stage + Close Clinch apply_frames KO; auto-advance catalog; rematch stays",
+    "verdict": "pass"
+  },
+  "loss": {
+    "hash_after": "a94ea313475a85dff94945f19d6acc0cd4d3abc6ecd6c69ae0476e18b67b98e7",
+    "hash_before": "a94ea313475a85dff94945f19d6acc0cd4d3abc6ecd6c69ae0476e18b67b98e7",
+    "lost": true,
+    "source": "title Stage rooftops + KEY_RIGHT pit + Rematch stays index 0",
+    "stayed_index": 0,
+    "stayed_map": "rooftops",
+    "verdict": "pass"
+  },
+  "hash": {
+    "hash_win0": "46559b7496990c7c7057b32e715a903e8037c6867f1a01a72a47c39e14f55a5e",
+    "hash_win0_dup": "46559b7496990c7c7057b32e715a903e8037c6867f1a01a72a47c39e14f55a5e",
+    "hash_win1": "084aae648db58353c5916fae0f21d508903451fa9a6141955f56ea17e115b98d",
+    "live_hash_after_loss": "084aae648db58353c5916fae0f21d508903451fa9a6141955f56ea17e115b98d",
+    "live_hash_win0": "46559b7496990c7c7057b32e715a903e8037c6867f1a01a72a47c39e14f55a5e",
+    "live_hash_win1": "084aae648db58353c5916fae0f21d508903451fa9a6141955f56ea17e115b98d",
+    "source": "StageRules.record_win idempotent + sequence replay",
+    "verdict": "pass"
+  },
+  "leftover": {
+    "window_elapsed_sec": 11,
+    "run_all_host_exit": 0,
+    "headless_host_exit": 0,
+    "headless_elapsed_sec": 7.5,
+    "window_exe": "C:\\Users\\truon\\AppData\\Local\\HHGodotAgent\\tooling\\godot-4.7.1-stable\\bin\\Godot_v4.7.1-stable_win64_console.exe",
+    "leftover": 0,
+    "after_headless": 0,
+    "host": "System.Diagnostics.Process WaitForExit",
+    "window_host_exit": 0,
+    "after_check": 0,
+    "run_all_elapsed_sec": 1519.9,
+    "path": "godot/dogfood/superfighters",
+    "note": "leftover-0 after each official console-twin process",
+    "after_window": 0,
+    "after_run_all": 0
+  },
+  "exits": {
+    "window": 0,
+    "host": "System.Diagnostics.Process.ExitCode",
+    "headless": 0,
+    "run_all": 0,
+    "check": 0
+  },
+  "live_logs_ok": true,
+  "run_all_ok": true,
+  "stills": [
+    "stage_advance_1280x720.png",
+    "stage_continue_1280x720.png",
+    "stage_fight_1280x720.png",
+    "stage_load_1280x720.png",
+    "stage_lose_1280x720.png",
+    "stage_reset_1280x720.png",
+    "stage_title_1280x720.png",
+    "stage_title_after_1280x720.png"
+  ]
+}

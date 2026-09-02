@@ -11,8 +11,9 @@ First playable slice. Not G6. Not 60/60.
   `ledger:RL-MOVE-FALL`). Y8 observation stays
   `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). Not observed.
 - Bots are greedy (weapon then chase); they can walk into fire
-- Stage is one win per map (Bronze-like), not Bronze/Silver/Gold ×4
-- Survival mode is out of this slice
+- Stage now has a four-arena campaign with persist/reset (VF6-WP3).
+  Difficulty tiers are a labeled approximation, not Y8 Bronze/Silver/Gold.
+- Survival mode is out of this slice (VF6-WP4)
 - 2P shares one keyboard; no online
 - Procedural SFX, not the Y8 soundtrack
 - Skins intentionally differ (helmet crew, not ripped Flash sheets)
@@ -268,8 +269,17 @@ First playable slice. Not G6. Not 60/60.
   pit walk. First-run/rematch caps are product UX, not observed
   Y8. Title win-overlay leak after rematch is closed with a result
   token + CanvasLayer hide. Bots stay **smoke**. Survival stays
-  unshipped. Stage lifecycle stays VF6-WP3. Art still VF7. No new
+  unshipped. Stage lifecycle ships in VF6-WP3. Art still VF7. No new
   Y8 play.
+- VF6-WP3 ships Stage progression as approximation
+  (`ledger:RL-STAGE-ORDER`, `ledger:RL-STAGE-PROGRESS`,
+  `ledger:RL-STAGE-SAVE`, `ledger:RL-STAGE-REWARD`,
+  `ledger:RL-STAGE-TIER`): four core arenas, win advances the
+  catalog map, loss/restart stays, atomic save, stable reward hash.
+  Official proof is title Stage/Reset/Rematch plus live catalog-map
+  melee, not Close Clinch. Loss is damage KO. Continue is a cold
+  reload of the save. Tiers are labeled approximation, not observed
+  Y8. Bots stay **smoke**. Survival stays unshipped. Art still VF7.
 - VF3-WP4 ships grenade hold/release throw, gravity arc, bounce,
   fuse, radial falloff, owner skip, one explosion, timeout
   cleanup, and swept nade collision as assumption

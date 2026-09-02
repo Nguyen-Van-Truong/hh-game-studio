@@ -1,0 +1,217 @@
+{
+	"apply": {
+		"attempted": 2485,
+		"succeeded": 2485,
+		"used_action_press": 0,
+		"used_apply_frames": 2485,
+		"used_parse_input_event": 1,
+		"used_step_fixed": 0
+	},
+	"block": {
+		"block_events": 1,
+		"blocked": true,
+		"last_block": "solid",
+		"outside_solid": true,
+		"source": "apply_frames fx_block climb into solid",
+		"verdict": "pass"
+	},
+	"contact": {
+		"nx": 0.0,
+		"ny": -1.0,
+		"source": "two apply_frames runs quantized contact normal",
+		"stable": true,
+		"verdict": "pass"
+	},
+	"dirs": {
+		"fixtures": [
+			{
+				"down": true,
+				"left": true,
+				"map_id": "fx_block",
+				"right": true,
+				"stuck": false,
+				"up": true
+			},
+			{
+				"down": true,
+				"left": true,
+				"map_id": "fx_cross",
+				"right": true,
+				"stuck": false,
+				"up": true
+			},
+			{
+				"down": true,
+				"left": true,
+				"map_id": "fx_drop",
+				"right": true,
+				"stuck": false,
+				"up": true
+			},
+			{
+				"down": true,
+				"left": true,
+				"map_id": "fx_ladder",
+				"right": true,
+				"stuck": false,
+				"up": true
+			},
+			{
+				"down": true,
+				"left": true,
+				"map_id": "fx_ledge",
+				"right": true,
+				"stuck": false,
+				"up": true
+			}
+		],
+		"source": "apply_frames L/R/U/D on every fixture",
+		"verdict": "pass"
+	},
+	"drop": {
+		"drop_events": 1,
+		"dropped": true,
+		"source": "apply_frames fx_drop crouch drop-through",
+		"verdict": "pass",
+		"y0": 35.9991302490234,
+		"y1": 35.9991302490234
+	},
+	"ladder": {
+		"attach_events": 1,
+		"attached": true,
+		"climbed_down": true,
+		"climbed_up": true,
+		"hud_climb": true,
+		"pose": "climb",
+		"snapped": true,
+		"source": "apply_frames fx_ladder attach/snap/climb/drop",
+		"verdict": "pass"
+	},
+	"ledge": {
+		"grab_events": 1,
+		"grabbed": true,
+		"pose": "idle",
+		"recover_events": 1,
+		"recovered": true,
+		"source": "apply_frames fx_ledge grab/recover",
+		"verdict": "pass"
+	},
+	"live": {
+		"live_climb": true,
+		"pose": "climb",
+		"source": "parse_input_event + step_from_live_input",
+		"verdict": "pass"
+	},
+	"maps": {
+		"maps": [
+			{
+				"alive": true,
+				"map_id": "rooftops",
+				"trace_ok": true
+			},
+			{
+				"alive": true,
+				"map_id": "storage",
+				"trace_ok": true
+			},
+			{
+				"alive": true,
+				"map_id": "police",
+				"trace_ok": true
+			},
+			{
+				"alive": true,
+				"map_id": "hazardous",
+				"trace_ok": true
+			}
+		],
+		"source": "real InputFrame traverse on each archetype",
+		"verdict": "pass"
+	},
+	"replay": {
+		"pair_count": 9,
+		"pairs": [
+			{
+				"hash_a": "3f398bba69d054a70f5bd7373d234260599cd167c220e799a8742398660cd618",
+				"hash_b": "3f398bba69d054a70f5bd7373d234260599cd167c220e799a8742398660cd618",
+				"hash_match": true,
+				"name": "cross_dirs",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "4307ac3c247002b6487346a6a1bb811cab6bc2e5ee109d37e59aa6f694e27861",
+				"hash_b": "4307ac3c247002b6487346a6a1bb811cab6bc2e5ee109d37e59aa6f694e27861",
+				"hash_match": true,
+				"name": "drop_through",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "ba904b21931027af0a3e47af50c9aff8c5a6df3e598b109f347bd5a0bb136788",
+				"hash_b": "ba904b21931027af0a3e47af50c9aff8c5a6df3e598b109f347bd5a0bb136788",
+				"hash_match": true,
+				"name": "ladder_block",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "bec30285d21a3f129eaca10c82fd45660dcdc8b479552f9f81ec9358fa85eff6",
+				"hash_b": "bec30285d21a3f129eaca10c82fd45660dcdc8b479552f9f81ec9358fa85eff6",
+				"hash_match": true,
+				"name": "ladder_up_down",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "961b208bd08e796f6972d1bea51683892df9d220db23fea23f165af382099d67",
+				"hash_b": "961b208bd08e796f6972d1bea51683892df9d220db23fea23f165af382099d67",
+				"hash_match": true,
+				"name": "ledge_recover",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "7c1d4c7ccd657ed6d7b51d13cb3aa6ee4961ed8f116fb5f4797a8283bc993d2d",
+				"hash_b": "7c1d4c7ccd657ed6d7b51d13cb3aa6ee4961ed8f116fb5f4797a8283bc993d2d",
+				"hash_match": true,
+				"name": "map_hazardous",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "6dadd327c3e5176b15ca2b7daf4b6aa018a47bdcbee26943a3bc94ac78fed6af",
+				"hash_b": "6dadd327c3e5176b15ca2b7daf4b6aa018a47bdcbee26943a3bc94ac78fed6af",
+				"hash_match": true,
+				"name": "map_police",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "e90c4c65f3e3e1a33a243cf029f6a75d6979b4fcdc1a1d152aceb671def858e6",
+				"hash_b": "e90c4c65f3e3e1a33a243cf029f6a75d6979b4fcdc1a1d152aceb671def858e6",
+				"hash_match": true,
+				"name": "map_rooftops",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "a83fef23aeb059eae59274acc500478dbde5f9d744c8ed17f79c1418e76556c0",
+				"hash_b": "a83fef23aeb059eae59274acc500478dbde5f9d744c8ed17f79c1418e76556c0",
+				"hash_match": true,
+				"name": "map_storage",
+				"ok_a": true,
+				"ok_b": true
+			}
+		],
+		"source": "SimReplay.final_hash twice",
+		"verdict": "match"
+	},
+	"stuck": {
+		"dead": false,
+		"pose": "fall",
+		"source": "apply_frames fx_cross no mid-air freeze",
+		"stuck": false,
+		"verdict": "pass"
+	}
+}

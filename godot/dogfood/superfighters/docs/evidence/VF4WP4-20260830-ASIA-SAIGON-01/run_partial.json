@@ -1,0 +1,55 @@
+{
+	"command_id": "cmd.vf4-wp4.moving.1",
+	"display": "Windows",
+	"ended_at": "2026-08-30T08:49:35+07:00",
+	"ended_unix": 1788054576.73,
+	"epsilon": 0.001,
+	"fail_count": 0,
+	"godot": {
+		"build": "official",
+		"hash": "a13da4feb8d8aefc283c3763d33a2f170a18d541",
+		"hex": 263937,
+		"major": 4,
+		"minor": 7,
+		"patch": 1,
+		"status": "stable",
+		"string": "4.7.1-stable (official)",
+		"timestamp": 0
+	},
+	"map_id": "fx_move_yard",
+	"mode": "vs2",
+	"os_name": "Windows",
+	"outcomes": {
+		"CARRY": "pass",
+		"DATA": "pass",
+		"DOOR": "pass",
+		"DROP": "pass",
+		"LIVE": "pass",
+		"PAUSE": "pass",
+		"REPLAY": "match",
+		"RESET": "pass",
+		"RIDE": "pass",
+		"TRIGGER": "pass",
+		"USED_APPLY_ATTEMPTED": 1795,
+		"USED_APPLY_FRAMES": 1794,
+		"USED_APPLY_SUCCEEDED": 1794
+	},
+	"run_id": "VF4WP4-20260830-ASIA-SAIGON-01",
+	"schema": "vault-fighters.vf4-wp4.run.v1",
+	"screens": {
+		"door": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\.hh-agent\\vf4wp4-official\\window/screens/move_door_1280x720.png",
+		"drop": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\.hh-agent\\vf4wp4-official\\window/screens/move_drop_1280x720.png",
+		"ride": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\.hh-agent\\vf4wp4-official\\window/screens/move_ride_1280x720.png",
+		"setup": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\.hh-agent\\vf4wp4-official\\window/screens/move_setup_1280x720.png"
+	},
+	"seed": 7,
+	"started_at": "2026-08-30T08:49:32+07:00",
+	"started_unix": 1788054572.407,
+	"tick_hz": 60,
+	"timezone": "Asia/Saigon",
+	"viewport": {
+		"h": 720.0,
+		"w": 1280.0
+	},
+	"wp": "VF4-WP4"
+}

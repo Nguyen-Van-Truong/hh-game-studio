@@ -1,0 +1,116 @@
+{
+	"apply": {
+		"attempted": 1795,
+		"succeeded": 1794,
+		"used_action_press": 0,
+		"used_apply_frames": 1794,
+		"used_parse_input_event": 1,
+		"used_step_fixed": 0
+	},
+	"carry": {
+		"boards": 2,
+		"ly0": 180.0,
+		"ly1": 84.0,
+		"source": "platform delta carries the boarded fighter",
+		"verdict": "pass"
+	},
+	"data": {
+		"max_step_px": 3.0,
+		"moving_implemented": true,
+		"nade_prop": "deferred",
+		"source": "catalog + moving.json Gate Hall / Lift Shaft / Relay Shaft",
+		"travel_ticks": 44,
+		"verdict": "pass"
+	},
+	"door": {
+		"opens": 1,
+		"source": "Gate Hall closed blocks then plate opens",
+		"verdict": "pass",
+		"x_block": 234.992477416992,
+		"x_open": 339.111267089844
+	},
+	"drop": {
+		"ly_end": 180.0,
+		"source": "walk off at the top; lift returns; P1 stays",
+		"unboards": 3,
+		"verdict": "pass",
+		"y_end": 87.1818161010742,
+		"y_top": 68.0
+	},
+	"live": {
+		"open": true,
+		"source": "parse_input_event KEY_RIGHT + step_from_live_input",
+		"verdict": "pass",
+		"x": 341.389038085938
+	},
+	"pause": {
+		"phase_mid": "going",
+		"source": "clock.pause freezes path_tick; resume continues",
+		"verdict": "pass",
+		"y_mid": 158.181823730469,
+		"y_pause": 158.181823730469,
+		"y_res": 123.272727966309
+	},
+	"replay": {
+		"pairs": [
+			{
+				"hash_a": "ceebe8eab4d384bbe6221522981401ccb95093da1ca149120327ce56eca3744c",
+				"hash_b": "ceebe8eab4d384bbe6221522981401ccb95093da1ca149120327ce56eca3744c",
+				"hash_match": true,
+				"name": "move_door",
+				"world_a": "66e701b5b982d0d36fe8ac493898657ea4a165c17474eea1944ac050d293e65c",
+				"world_b": "66e701b5b982d0d36fe8ac493898657ea4a165c17474eea1944ac050d293e65c",
+				"world_hash_match": true
+			},
+			{
+				"hash_a": "fa71972a7232d29a6c87fbcc80a8e3999ef0e170467722f1bbd0c6b949b49d1d",
+				"hash_b": "fa71972a7232d29a6c87fbcc80a8e3999ef0e170467722f1bbd0c6b949b49d1d",
+				"hash_match": true,
+				"name": "move_drop",
+				"world_a": "5d8284d5574859c0a111a238a0da4d8fae5e43ede4cd873a109aa1c4747e903a",
+				"world_b": "5d8284d5574859c0a111a238a0da4d8fae5e43ede4cd873a109aa1c4747e903a",
+				"world_hash_match": true
+			},
+			{
+				"hash_a": "22a82b3cd03b65c0f362094ceaf3cb3fc5c0d2c71b0418821844acf86e1ecbab",
+				"hash_b": "22a82b3cd03b65c0f362094ceaf3cb3fc5c0d2c71b0418821844acf86e1ecbab",
+				"hash_match": true,
+				"name": "move_ride",
+				"world_a": "3907b21264ff628a9e9977ff34207e6fe17042e43e31ed7dd82ee3c8b891a598",
+				"world_b": "3907b21264ff628a9e9977ff34207e6fe17042e43e31ed7dd82ee3c8b891a598",
+				"world_hash_match": true
+			},
+			{
+				"hash_a": "1500dbdf8ec30b7a616a2adb0791c2759eac73009e162748ca30d50368753eff",
+				"hash_b": "1500dbdf8ec30b7a616a2adb0791c2759eac73009e162748ca30d50368753eff",
+				"hash_match": true,
+				"name": "move_yard",
+				"world_a": "4e7aa8315ab05fc8cbabc8f30ca531ce6612cdc06db33283d4fbbcef74aecb82",
+				"world_b": "4e7aa8315ab05fc8cbabc8f30ca531ce6612cdc06db33283d4fbbcef74aecb82",
+				"world_hash_match": true
+			}
+		],
+		"source": "apply_frames moving traces twice",
+		"verdict": "match"
+	},
+	"reset": {
+		"door_closed": true,
+		"lift_home": true,
+		"ly": 180.0,
+		"source": "start_fight rebuilds movers at rest",
+		"verdict": "pass"
+	},
+	"ride": {
+		"owner_tunnels": 0,
+		"source": "Lift Shaft ride without solid overlap",
+		"tunnels": 0,
+		"verdict": "pass",
+		"y0": 160.0,
+		"y1": 68.0
+	},
+	"trigger": {
+		"events": 1,
+		"source": "Call Plate arm ticks then door_open",
+		"verdict": "pass"
+	}
+}

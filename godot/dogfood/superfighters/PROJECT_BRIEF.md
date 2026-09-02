@@ -85,7 +85,8 @@ https://mythologicinteractive.com/Superfighters
   shotgun, uzi, Longarm, Thumper, grenade, Cinder Flask
 - VS 1P (vs bots), local VS 2P (six maps: Skyline Relay, Pallet Annex,
   Signal Court, Vitriol Sump, Lantern Cut, Gauge Deck), and Stage
-  (Skyline Relay → Pallet Annex → Signal Court → Vitriol Sump)
+  (Skyline Relay → Pallet Annex → Signal Court → Vitriol Sump;
+  persist/reset; difficulty tiers labeled approximation)
 - Camera frames the whole arena
 - Title → fight → win/lose → restart; Escape / Start pause
 

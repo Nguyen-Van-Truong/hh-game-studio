@@ -1,0 +1,43 @@
+{
+	"map_id": "fx_roster_open",
+	"mode": "vs2",
+	"replay": {
+		"pairs": [
+			{
+				"hash_a": "7b5d7df5f71c8ae78238e1ef044f6442ef40f197cac7321e607128c9646fb29a",
+				"hash_b": "7b5d7df5f71c8ae78238e1ef044f6442ef40f197cac7321e607128c9646fb29a",
+				"hash_match": true,
+				"name": "roster_idle",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "dd536c36295f23a6f54b7caef394d9339c4d88fbd3d66e0fde721c00db3c949e",
+				"hash_b": "dd536c36295f23a6f54b7caef394d9339c4d88fbd3d66e0fde721c00db3c949e",
+				"hash_match": true,
+				"name": "roster_keep",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "6af47c7648f219639921ae4a89959ed012ea9b8da71bab23f4f7300ca48e73fe",
+				"hash_b": "6af47c7648f219639921ae4a89959ed012ea9b8da71bab23f4f7300ca48e73fe",
+				"hash_match": true,
+				"name": "roster_melee",
+				"ok_a": true,
+				"ok_b": true
+			},
+			{
+				"hash_a": "89d5aa69b548751aaca16a46a79d8640ac6d1abd189281bce1ceca0782a9463e",
+				"hash_b": "89d5aa69b548751aaca16a46a79d8640ac6d1abd189281bce1ceca0782a9463e",
+				"hash_match": true,
+				"name": "roster_throw",
+				"ok_a": true,
+				"ok_b": true
+			}
+		],
+		"source": "apply_frames roster traces twice",
+		"verdict": "match"
+	},
+	"seed": 7
+}

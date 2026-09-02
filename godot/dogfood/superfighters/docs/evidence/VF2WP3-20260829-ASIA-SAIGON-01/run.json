@@ -1,0 +1,60 @@
+{
+  "schema": "vault-fighters.vf2-wp3.run.v1",
+  "run_id": "VF2WP3-20260829-ASIA-SAIGON-01",
+  "command_id": "cmd.vf2-wp3.sprint-stamina-roll.1",
+  "wp": "VF2-WP3",
+  "timezone": "Asia/Saigon",
+  "recorded_at": "2026-08-29T13:20:00+07:00",
+  "base_head": "1ffdc772517b90fe5ea4333aa0abdcacad8d8f62",
+  "godot": "4.7.1.stable.official.a13da4feb",
+  "seed": 1,
+  "map_id": "police",
+  "mode": "vs2",
+  "tick_hz": 60,
+  "epsilon": 0.001,
+  "claims": {
+    "y8_parity": false,
+    "y8_tick_rate": false,
+    "hold_to_aim_observed": false,
+    "roll_observed": false,
+    "sprint_observed": false,
+    "in_game_y8_play": false,
+    "game_package_fetched": false,
+    "plan_checkbox_ticked": false,
+    "implementer_commit": false,
+    "r9_wp4": false,
+    "g6": false,
+    "gx": false,
+    "progress_60_of_60": false
+  },
+  "ledger": [
+    "RL-MOVE-SPRINT",
+    "RL-MOVE-ROLL",
+    "RL-MOVE-ROLL-DIVE",
+    "RL-CTRL-HOLD-AIM",
+    "RL-SIM-FIXED-60",
+    "RL-SIM-INPUT-FRAME"
+  ],
+  "verify": {
+    "check_sprint": 0,
+    "check_locomotion": 0,
+    "check_sim_contract": 0,
+    "check_input_map": 0,
+    "run_sprint_headless": 0,
+    "run_sprint_windowed": 0,
+    "run_locomotion_headless": 0,
+    "run_all_headless": 0,
+    "leftover_godot": 0,
+    "used_step_fixed": 0,
+    "used_action_press": 0,
+    "used_apply_frames": 280,
+    "used_parse_input_event": 1
+  },
+  "honesty": {
+    "clock": "RL-SIM-FIXED-60 assumption",
+    "sprint": "RL-MOVE-SPRINT assumption, not observed",
+    "roll": "RL-MOVE-ROLL assumption, not observed",
+    "hold_to_aim": "RL-CTRL-HOLD-AIM assumption",
+    "dive_kick": "RL-MOVE-ROLL-DIVE unavailable"
+  }
+}

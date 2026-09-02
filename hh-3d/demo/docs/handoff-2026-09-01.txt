@@ -1,0 +1,303 @@
+HANDOFF — HÒN GIÓ / HH-3D — HARDENED OWNER-FREEZE VERSION
+Original handoff date: 2026-09-01
+Hardening audit: 2026-09-02
+Timezone: Asia/Saigon
+
+OWNER_FREEZE=1
+MODE=AUDIT_ONLY
+OWNER_RESUME=0
+NO_RUNTIME_OR_PRODUCT_MUTATION_AUTHORIZED=1
+NO_PLAN_STATE_OR_CHECKBOX_MUTATION_AUTHORIZED=1
+NO_COMMIT_AUTHORIZED=1
+AGENTS_MD_WINS_ON_CONFLICT=1
+
+================================================================================
+0. ĐÂY LÀ FILE BÀN GIAO, KHÔNG PHẢI LỆNH CHẠY
+================================================================================
+
+File này đã được sửa để không còn dụ agent rẻ chạy demo/build/preview khi owner
+đang freeze. Mọi câu cũ kiểu “chạy 4173”, “Ctrl+F5”, “npm run build”, “việc
+nên làm tiếp” chỉ là lịch sử; KHÔNG còn là quyền thực thi hiện tại.
+
+Trong freeze hiện tại agent chỉ được:
+
+- đọc/audit source và tài liệu;
+- kiểm kê dirty tree bằng lệnh read-only khi cần;
+- đối chiếu plan/handoff/review log;
+- cập nhật tài liệu bàn giao/audit mà owner cho phép;
+- báo OBSERVED / INFERRED / UNPROVEN / BLOCKED trung thực.
+
+Trong freeze hiện tại agent KHÔNG được:
+
+- start/stop/kill preview server;
+- mở 4173, Ctrl+F5 hoặc playtest browser;
+- chạy npm build/typecheck/test/preview/dev;
+- sửa `hh-3d/demo/src/**` hoặc asset/product source;
+- scaffold `hh-3d/app/`;
+- fetch map/data, cài package/SDK/provider/plugin;
+- chạy Godot hoặc sửa Vault Fighters/Kho Bí Ẩn/Snake;
+- commit, add, merge, publish;
+- tự tick plan, đổi CURRENT_WP/STATUS/PASS;
+- tự chọn demo hay HH World là route được resume.
+
+================================================================================
+1. ROUTE VÀ AUTHORITY — KHÔNG TRỘN
+================================================================================
+
+A. Hòn Gió demo
+   Root: `hh-3d/demo/`
+   Stack: Vite + React + TypeScript + Three.js/R3F.
+   Vai trò: authored voxel/low-poly WebGL diorama để thử rendering,
+   interaction và art direction.
+   Không phải map thật, chợ ảo, HH World production app hoặc GTA clone.
+
+B. HH World real application
+   Plan: `hh-3d/zdoc/31-8-hh3d-real-application-plan.txt`.
+   Hiện implementation = 0%; không có quyền scaffold/fetch/provider.
+   Hướng kiến trúc: web-first; MapLibre/local approved snapshot trước;
+   Cesium optional sau provider/legal/cost/performance gate; Unreal optional
+   native client sau khi web MVP chứng minh cần native value.
+
+C. Open-world/Unreal research
+   Plan: `hh-3d/zdoc/31-8-hh3d-real-world-open-world-plan.txt`.
+   Chỉ background feasibility/risk research. Không phải backlog đang mở.
+
+D. Vault Fighters / Godot
+   Không thuộc HH-3D. Không suy diễn trạng thái từ git drift trong file này.
+   `AGENTS.md` và freeze-audit riêng của Vault Fighters là nguồn có thẩm quyền.
+   Agent HH-3D không reconcile, test, sửa hoặc commit route đó.
+
+Authority khi có xung đột:
+
+1. owner instruction mới nhất + `AGENTS.md`;
+2. status/header của plan đúng scope;
+3. handoff/audit summary/review log;
+4. source/evidence cùng hash;
+5. chat cũ, screenshot, PASS banner và lời agent cũ chỉ là tham khảo.
+
+================================================================================
+2. LAST_OBSERVED_IMPLEMENTATION — NON-AUTHORITATIVE / NOT OWNER-ACCEPTED
+================================================================================
+
+Các chi tiết dưới đây chỉ ghi lại implementation candidate đã từng tồn tại.
+Chúng KHÔNG phải acceptance criteria và KHÔNG được dùng để buộc agent tương lai
+giữ nguyên nếu một WP được owner mở lại với mục tiêu UX tốt hơn.
+
+OBSERVED/HISTORICAL (chưa re-verify sau freeze):
+
+- Play từng dùng third-person pointer-lock look; WASD/Shift/Space/E/wheel.
+- LMB sau pointer lock và F từng kích hoạt punch pose; punch chưa có hit/damage.
+- Boat từng dùng lathe/bowl silhouette để đọc giống thúng hơn torus.
+- nhân vật từng được sửa để bỏ hai khối cầu hông và các dải be/kem dễ bị đọc
+  thành anatomy lỗi;
+- source từng có các giá trị như `lookYawSign=-1`, player scale `1.36`, tunic
+  khoảng `0.4 x 0.98 x 0.34`, pelvis khoảng `0.22 x 0.11 x 0.13`.
+
+Các con số/sign trên là LAST_OBSERVED_IMPLEMENTATION, không phải “PHẢI”.
+Acceptance đúng phải dựa trên hành vi/người dùng: camera trực giác, A/D đúng
+với màn hình, silhouette người rõ, không anatomy artifact, framing tốt và UI
+không cướp input.
+
+================================================================================
+3. KNOWN_GAPS — STATIC AUDIT, KHÔNG PHẢI RUNTIME VERDICT MỚI
+================================================================================
+
+OBSERVED từ source/audit trước freeze:
+
+- nhân vật/cảnh vẫn primitive stylized prototype; owner chưa accept final art;
+- `IdleThung` hiện đã có static wiring cho reduced-motion/low-tier:
+  `Boat.tsx` nhận `reducedMotion`, và `World.tsx` truyền
+  `reducedMotion || quality.tier === "low"`; đây KHÔNG còn là known static
+  wiring bug. Hiệu quả runtime trên source hiện tại vẫn UNPROVEN trong freeze;
+- `TouchPad` có gap keyboard/accessibility semantics;
+- punch mới là pose/input demo, chưa có hit target/damage/feedback gameplay;
+- Help/HUD/Touch chưa giải thích punch đầy đủ;
+- `PUNCH_COMBO_AFTER` đang được khai báo nhưng không có call-site ngoài chỗ
+  định nghĩa; không được claim combo đã implement;
+- LMB sau pointer lock và `F` đều set `punchEdge`; trên thuyền punch bị clear.
+  Khi đang airborne, input punch vẫn có thể được consume và clock vẫn chạy,
+  nhưng `applyWalkPose` ưu tiên jump pose trước punch pose, nên không có punch
+  pose nhìn thấy giữa cú nhảy. Đừng rút gọn sai thành “input punch bị chặn khi
+  nhảy”;
+- `LandmarkDock`/“Điểm đến” hiện chỉ render khi `viewMode !== "play"`;
+- `authored-experience-seed.md` bị lệch so với look/punch/pose implementation;
+- evidence cũ không được coi là official PASS cho source hiện tại.
+
+UNPROVEN trong freeze hiện tại:
+
+- build/typecheck hiện tại;
+- port 4173 có sống hay không;
+- desktop/mobile controls hiện còn đúng hay không;
+- FPS/frame-time/memory/VRAM;
+- WebGL/context-loss/fallback behavior;
+- reduced-motion/low-tier behavior runtime;
+- art quality sau cùng và user acceptance.
+
+Không được biến UNPROVEN thành PASS chỉ vì code nhìn có vẻ đúng.
+
+================================================================================
+3A. PLAN ERRATA ĐÃ XÁC NHẬN — KHÔNG TỰ REWRITE EXECUTION PLAN TRONG FREEZE
+================================================================================
+
+Static audit 2026-09-02 xác nhận các mâu thuẫn sau. Đây là errata/handoff để
+agent sau không chạy nhầm; KHÔNG phải quyền sửa `STATE`, `CURRENT_WP`, graph hay
+`ALLOWED_PATHS` của execution plan khi `OWNER_RESUME=0`.
+
+Demo plan `31-8-hh3d-demo-webgl-plan.txt`:
+
+- Section scope cũ nói WASD-controlled character/combat “không thuộc demo
+  pass”, nhưng source hiện có Play + WASD/jump/boat/punch pose và audit override
+  lại yêu cầu test Play desktop/mobile. Trước khi resume demo, owner/coordinator
+  phải chốt rõ: Play là accepted scope hay là out-of-scope prototype debt.
+- Audit override nói “một WP duy nhất” sửa `Boat.tsx` + `World.tsx` +
+  `TouchPad.tsx`, trong khi WP blocks hiện hữu tách scene ở D0-WP4 và
+  accessibility ở D0-WP6. Không invent `D0-WP6-REWORK` hay gom WP bằng handoff;
+  exact active WP/paths phải được owner/coordinator reconcile sau resume.
+- D0-WP7 wording “ảnh/evidence có thật nhưng stale” chỉ nên hiểu là artifacts
+  cũ tồn tại trên disk. Chúng không chứng minh source hiện tại và không nâng
+  verdict khỏi STALE/UNPROVEN.
+
+Real application plan `31-8-hh3d-real-application-plan.txt`:
+
+- P3 summary ghi `R4-WP1 -> R4-WP0A`, trong khi dependency blocks cho phép
+  R4-WP0A sau R2-WP0 còn R4-WP1 cần R2-WP0 + GATE-U1 + R3-WP1. Không coi dòng
+  P3 summary là dependency authority; cần reconcile graph trước execution.
+- Required currentness set dùng `acquired_at`, nhưng WorldManifest/release
+  checklist vẫn còn `accessed_at`. Cần chọn một canonical field hoặc ghi
+  mapping rõ; không phát hành schema với hai clock mơ hồ.
+- Header `NETWORKING_STATUS=OUT_OF_SCOPE_FOR_FIRST_RELEASE` tồn tại cùng các
+  profile STAGING/PUBLIC_BETA có online exception/provider. Tạm hiểu header là
+  “default OFF/not required for local first proof”, không phải lệnh phủ định
+  mọi networking về sau; plan cần wording thống nhất trước khi mở network WP.
+
+Open-world background plan:
+
+- `CURRENT_EXECUTION_PLAN=...demo... (PAUSED)` là routing history dễ gây hiểu
+  nhầm. Authority hiện tại vẫn là NO EXECUTION / owner freeze; không dùng field
+  đó như start ticket cho demo hay native work.
+
+================================================================================
+4. USER-CENTRIC ACCEPTANCE INVARIANTS NẾU DEMO ĐƯỢC OWNER RESUME
+================================================================================
+
+Đây là nguyên tắc sản phẩm, không phải WP đang mở:
+
+- người mới hiểu đây là authored WebGL diorama trong khoảng 30 giây;
+- camera/look/strafe/jump/board boat có cảm giác trực giác, không đảo khó hiểu;
+- UI/HUD không che cảnh hoặc cướp pointer interaction quan trọng;
+- nhân vật đọc ra người nhanh ở framing bình thường, không anatomy-breaking
+  intersection, “hai quả bóng hông”, sọc da/eo giả hoặc crop đầu/chân thường xuyên;
+- thúng đọc được là thuyền thúng Việt Nam từ góc chơi bình thường;
+- visual hierarchy có foreground/midground/background, landmark rõ và scene
+  không thành khoảng trống vô nghĩa khi vào Play;
+- touch controls không che nội dung cốt lõi; keyboard/focus có semantics;
+- reduced-motion/low-quality thực sự giảm motion/work, không chỉ đổi nhãn;
+- không claim GTA/map thật/open-world/production art từ demo này;
+- không fake 60 FPS hoặc dùng screenshot làm bằng chứng performance.
+
+Prototype constants được phép thay nếu thay đổi giúp các invariant trên tốt hơn
+và WP tương lai cho phép.
+
+================================================================================
+5. HH WORLD — HARDENING GHI NHỚ CHO TƯƠNG LAI
+================================================================================
+
+Nếu owner sau này resume HH World, agent không được biến “ứng dụng thật” thành
+“phải dùng Unreal”. Web MVP vẫn phải hữu ích khi 3D/provider/auth thất bại.
+
+Core graceful-degradation cần được quyết định/kiểm chứng trong plan tương lai:
+
+- WebGL2 unavailable -> 2D/list/search/card/share vẫn dùng được nếu khả thi;
+- weak GPU -> quality tier/DPR/content budget có tác dụng thật;
+- network unavailable -> local approved snapshot/stale state rõ ràng;
+- dataset stale -> hiện `as_of`/stale warning, không giả realtime;
+- optional 3D provider failed/quota exhausted -> core map app không dead-end;
+- auth unavailable -> public browse/search/card và local bookmark vẫn hoạt động
+  nếu feature đó được thiết kế là public/local.
+
+Performance/resource thresholds KHÔNG được agent tự bịa. R0 tương lai phải
+quyết định hardware/device/browser matrix và budget fields như:
+
+- compressed initial JS bytes;
+- initial map/dataset bytes;
+- texture/GPU memory budget;
+- visible feature/building budget;
+- draw-call/object budget;
+- time-to-first-useful-map / time-to-interactive;
+- search latency và interaction/camera latency;
+- offline cache ceiling;
+- mobile thermal-test duration nếu mobile thật sự in-scope.
+
+“Current map” luôn phải nghĩa là manifest-backed `as_of`/acquisition/release
+date; chỉ gọi realtime khi provider contract và evidence thật sự chứng minh.
+
+================================================================================
+6. FUTURE RESUME CONTRACT — KHÔNG ĐƯỢC TỰ ĐIỀN
+================================================================================
+
+Không có WP nào được mở từ file này. Khi owner thật sự resume, lệnh mới phải
+chỉ rõ tối thiểu:
+
+OWNER_RESUME=1
+TARGET_PLAN=<exact plan path>
+CURRENT_WP=<exact existing WP/GATE>
+RUN_MODE=EXECUTE_ONE_WP
+GOAL=<one measurable outcome>
+ALLOWED_PATHS=<exact paths>
+FORBIDDEN_PATHS=<exact paths>
+NETWORKING=OFF | APPROVED_EXCEPTION(...)
+PAID_SERVICE_AUTHORIZATION=NONE | exact provider/budget/owner record
+DEPENDENCY_POLICY=<no new dependency unless explicitly authorized>
+DONE_WHEN=<measurable postconditions>
+VERIFY=<exact static/runtime/device checks>
+
+Agent không được tự invent WP id, gom hai WP khác scope, hay tự chọn route.
+Implementer không tự PASS/tick. Critic A functional/scope và Critic B
+adversarial UX/performance/legal phải độc lập; source đổi sau critic => verdict
+cũ hết hiệu lực.
+
+================================================================================
+7. CONTEXT-RECOVERY PROTOCOL — CHỐNG QUÊN SAU COMPACTION/NGẮT TASK
+================================================================================
+
+Mỗi agent/turn mới, đặc biệt sau context compaction, phải làm theo thứ tự:
+
+1. đọc `AGENTS.md` hiện hành;
+2. đọc header/status của đúng plan mục tiêu;
+3. đọc file handoff này;
+4. đọc `hh-3d/zdoc/01-9-hh3d-plan-audit-summary.txt`;
+5. đọc phần cuối `hh-3d/zdoc/review-log.txt`;
+6. chạy read-only `git status --short` nếu cần biết dirty tree;
+7. ghi lại trước khi hành động:
+   MODE, OWNER_RESUME, TARGET_PLAN, CURRENT_WP, ALLOWED_PATHS,
+   FORBIDDEN_PATHS, LAST_KNOWN_GAPS, NEXT_SAFE_ACTION.
+
+Nếu thiếu/không khớp một trường trên: AUDIT_ONLY/BLOCKED, không tự suy diễn từ
+memory hoặc chat cũ. Đây là cách giữ continuity qua compacting context.
+
+================================================================================
+8. FILES CẦN ĐỌC TIẾP
+================================================================================
+
+Static checklist:
+  `hh-3d/demo/docs/handoff-2026-09-01-check.txt`
+
+Demo execution plan (read-only while frozen):
+  `hh-3d/zdoc/31-8-hh3d-demo-webgl-plan.txt`
+
+HH World future plan (read-only while frozen):
+  `hh-3d/zdoc/31-8-hh3d-real-application-plan.txt`
+
+Open-world background audit (never start directly):
+  `hh-3d/zdoc/31-8-hh3d-real-world-open-world-plan.txt`
+
+Plan audit summary:
+  `hh-3d/zdoc/01-9-hh3d-plan-audit-summary.txt`
+
+Cheap-agent handoff prompt:
+  `hh-3d/zdoc/01-9-hh3d-cheap-agent-handoff-prompt.txt`
+
+Review history:
+  `hh-3d/zdoc/review-log.txt`
+
+END HANDOFF — CURRENT MODE REMAINS AUDIT_ONLY / OWNER_RESUME=0
