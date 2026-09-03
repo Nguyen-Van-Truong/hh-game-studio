@@ -4,13 +4,13 @@
 
 Owner đã lệnh tiếp tục hoàn thiện sản phẩm. Freeze 2026-09-01 là lịch sử.
 Nguồn tiến độ duy nhất: `zdocs/29-8-vault-fighters-y8-parity-plan.txt`
-(`CURRENT_VALID_WP`, hiện **VF6-WP4**, **32/50**). Parent `zdocs/20-8-*`
+(`CURRENT_VALID_WP`, hiện **VF6-WP5**, **33/50**). Parent `zdocs/20-8-*`
 vẫn 59/60 tại R9-WP4; không mở G6/GX. Overlay 31-8 vẫn AUTHORITY=0.
 
 Handoff WP3: `zdocs/2-9-vault-fighters-vf6-wp3-split-critic-handoff.txt`
 (lịch sử freeze: `zdocs/1-9-vault-fighters-owner-freeze-plan-audit-and-handoff.txt`).
-VF6-WP1, VF6-WP2 và VF6-WP3 đã đóng. WP tiếp theo là VF6-WP4.
-Không nhảy VF6-WP5. Không mở G6/GX/R9-WP4.
+VF6-WP1, VF6-WP2, VF6-WP3 và VF6-WP4 đã đóng. WP tiếp theo là VF6-WP5.
+Không nhảy VF6-WP6. Không mở G6/GX/R9-WP4.
 
 Block “frozen 29/50 / VF6-WP1” bên dưới đây nếu còn sót là **stale**.
 

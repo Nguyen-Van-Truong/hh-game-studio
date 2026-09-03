@@ -2,7 +2,7 @@ PLAN_SCOPE=godot/dogfood/superfighters
 PRODUCT_PLAN_AUTHORITY=1
 PARENT_PLATFORM_PLAN=zdocs/20-8-godot-agent-autopilot-plan.txt
 PARENT_PLATFORM_STATUS=OWNER_STOPPED_59_OF_60
-CURRENT_VALID_WP=VF6-WP4
+CURRENT_VALID_WP=VF6-WP5
 CORRECTION_GATE_VF2_WP2=CLEARED
 STATUS=ACTIVE
 PLAN_DATE=2026-08-29
@@ -25,12 +25,12 @@ một lần, tự làm, tự chạy, tự kiểm và tạo gói review; người
 | 3 | VF3 combat | melee/kick, hitbox, knockdown, disarm, aim/fire, grenade | VF2 | weapons + VFX | [x] 6/6 |
 | 4 | VF4 world interaction | props, glass, barrels, containers, doors/elevators, hazards | VF2 | map fixtures | [x] 5/5 |
 | 5 | VF5 map parity | 6 functional arenas; original geometry/names/art | VF3,VF4 | one map per agent lane | [x] 6/6 |
-| 6 | VF6 modes + AI | VS, local 2P, Stage, Survival, competent bots | VF3,VF5 | mode/UI/AI | [ ] 3/5 |
+| 6 | VF6 modes + AI | VS, local 2P, Stage, Survival, competent bots | VF3,VF5 | mode/UI/AI | [ ] 4/5 |
 | 7 | VF7 presentation | original skins, animation, audio, HUD, menu, accessibility | VF5,VF6 | art/audio/UI | [ ] 0/4 |
 | 8 | VF8 agent autonomy | brief→edit→play→observe→repair→checkpoint, no manual F6 | VF0..VF7 | host/bridge | [ ] 0/4 |
 | 9 | VF9 verification | trace replay, E2E, differential rubric, soak, leak proof | all above | QA | [ ] 0/5 |
 | 10 | VF10 package | Windows build, offline run, provenance/license, review bundle | VF9 | release | [ ] 0/3 |
-|   | **Tổng** | **50 WP nhỏ; chỉ coordinator tick sau DoD** |  |  | **32/50** |
+|   | **Tổng** | **50 WP nhỏ; chỉ coordinator tick sau DoD** |  |  | **33/50** |
 
 Gate nội bộ:
 
@@ -2551,7 +2551,7 @@ VF6-WP3 — Stage progression and difficulty/reward loop                        
         Parent 20-8 unchanged: R9-WP4 [ ]; 59/60; G6 [ ].
       Commit: (this tick)
 
-VF6-WP4 — Survival mode and spawn director                                             [ ]
+VF6-WP4 — Survival mode and spawn director                                             [x]
   Phụ thuộc: VF6-WP1,VF3-WP6,VF5-WP6. Files: survival director/UI/tests.
   Làm: endless/wave score loop based on observed behavior, escalating bot
   roster, timed weapon/prop respawn, score/combo/records, game-over/restart;
@@ -2560,6 +2560,82 @@ VF6-WP4 — Survival mode and spawn director                                    
   budget bounded, pause/resume, restart clears director; no soft-lock.
   DoD: Survival is playable and distinct from Stage, or a reference note
   explicitly records why the observed Y8 version lacks it.
+  LOG:
+    LOG 2026-09-03 12:48 Asia/Saigon — agent=coordinator
+      Base: 00f0bb6 Survival run that is not
+        a Stage checkpoint
+        on VF6-WP3 tick 657634f.
+      Files/leases: data/sim/survival.json,
+        data/sim/schema.json, src/sim/survival.gd,
+        src/app.gd, src/game_session.gd,
+        src/fighter.gd, src/ui/title_screen.gd,
+        tests/survival_cases.gd, tests/run_survival.gd,
+        tests/check_survival.py,
+        tests/pack_survival_evidence.py,
+        tests/run_all.gd, docs/survival.md,
+        docs/reference-ledger.md,
+        docs/evidence/VF6WP4-20260903-ASIA-SAIGON-02/
+        (official remint -02 only; -01 void;
+        leftover-0; Survival != Stage;
+        score 1→1282 kills=5 wave=5;
+        spawn cap=6 living_cap; window
+        ~1145s host exit 0 leftover 0).
+      Verify: leftover-0; run VF6WP4-20260903-ASIA-SAIGON-02
+        cmd.vf6-wp4.survival.2 seed 7 map
+        rooftops / Skyline Relay mode survival;
+        source hash
+        85a0e32602975f6a52760e4b96e0bed9ca546e4f63fb7b8c58561797ae546790
+        SCHEMA=pass LOAD=pass DISTINCT=pass SCORE=pass
+        SPAWN=pass PAUSE=pass RESTART=pass LIVE=pass
+        SCORE 1→1282 kills=5 from_kills=500 wave=5
+        SPAWN max=6 cap=6 refused_cap=1 deny=living_cap
+        lose cause=damage PIT=0 rematch new run;
+        6 stills; APPLY 2078/2108 (USED_FORCE_KILL=0);
+        headless ~687s window ~1145s host exit 0 leftover 0
+        python godot/dogfood/superfighters/tests/check_survival.py
+          EXIT 0
+        godot --headless --path godot/dogfood/superfighters
+          --script res://tests/run_survival.gd EXIT 0
+        godot --path godot/dogfood/superfighters
+          --script res://tests/run_survival.gd EXIT 0
+        leftover Godot on product --path = 0
+        python tests/bootstrap/test_authoritative_plan.py EXIT 0
+        python tests/bootstrap/test_vault_fighters_plan.py EXIT 0
+          PASS: 50 unique VF WPs; no-skip; next=VF6-WP4 (pre-tick);
+          ticked=VF0-WP1,VF0-WP2,VF0-WP3,VF1-WP1,VF1-WP2,VF1-WP3,
+          VF1-WP4,VF2-WP1,VF2-WP2,VF2-WP3,VF2-WP4,VF2-WP5,VF3-WP1,
+          VF3-WP2,VF3-WP3,VF3-WP4,VF3-WP5,VF3-WP6,VF4-WP1,
+          VF4-WP2,VF4-WP3,VF4-WP4,VF4-WP5,VF5-WP1,VF5-WP2,
+          VF5-WP3,VF5-WP4,VF5-WP5,VF5-WP6,VF6-WP1,VF6-WP2,
+          VF6-WP3;
+          parent 20-8 frozen 59/60 R9-WP4
+        post-tick expected next=VF6-WP5
+      Honesty:
+        Wave/score/spawn numbers are
+        approximation, not observed Y8.
+        Bots smoke. Art still VF7.
+        60 Hz / hold-to-aim assumption.
+        Not Y8 parity. Not V0.
+        No Y8 rip.
+      Critic: leftover-0 both TICK=yes
+        (II fd491816 leftover-0 iso hash
+        85a0e326… MATCH; headless soak
+        600.01s host exit 0 leftover 0;
+        waves 0→5 living 1→6 score 1→1278
+        from_kills=500 living_cap at 6;
+        combat lose cause=damage;
+        HH 60b96a66 leftover-0 iso same hash;
+        headless 710.6s leftover 0;
+        remint -01 void).
+      Gaps: residual nits OK: honesty only
+        (wave/score/spawn approximation;
+        bots smoke; art still VF7;
+        60 Hz / hold-to-aim assumption;
+        HH nits: packer leftover-int trust;
+        used_pit hardcoded; run_all soak=8
+        SPAWN=pass without cap).
+        Parent 20-8 unchanged: R9-WP4 [ ]; 59/60; G6 [ ].
+      Commit: (this tick)
 
 VF6-WP5 — Bot navigation, tactics và difficulty                                        [ ]
   Phụ thuộc: VF2-WP5,VF3-WP6,VF4-WP4,VF6-WP2. Files: bot brain/nav/tests.
@@ -2916,7 +2992,7 @@ vào `KNOWN_ISSUES.md`; không đổi acceptance để làm cho pass.
 21. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Đọc `AGENTS.md`, sau đó đọc bảng đầu file này. WP đầu tiên chưa tick là **VF6-WP4**.
+Đọc `AGENTS.md`, sau đó đọc bảng đầu file này. WP đầu tiên chưa tick là **VF6-WP5**.
 
 Không làm R9-WP4/G6/GX; không mở Rust engine; không đụng Kho Bí Ẩn/Hoan Hao;
 không dùng Snake làm demo; không tải/rip Y8. Chỉ khi VF0-WP1 và VF0-WP2 đã có
@@ -3372,6 +3448,23 @@ dùng chỉ xem và review.
   Product 7066129. Gate remains CLEARED. Parent 20-8
   unchanged (R9-WP4 [ ], 59/60, G6 [ ]). VF6-WP3 ticked;
   CURRENT_VALID_WP=VF6-WP4; V0 not ticked. VF6-WP4 remains [ ].
+- COORDINATOR CLOSEOUT VF6-WP4 (2026-09-03 12:48 Asia/Saigon): leftover-0;
+  II fd491816 + HH 60b96a66 TICK=yes; run
+  VF6WP4-20260903-ASIA-SAIGON-02; command
+  cmd.vf6-wp4.survival.2; source
+  85a0e32602975f6a52760e4b96e0bed9ca546e4f63fb7b8c58561797ae546790
+  leftover-0; window ~1145s host exit 0;
+  APPLY 2078/2108 (USED_FORCE_KILL=0).
+  Official remint -02; -01 void.
+  Survival != Stage; score 1→1282
+  kills=5 wave=5 spawn cap=6 living_cap.
+  Lose cause=damage. 6 stills.
+  Honesty: wave/score/spawn approximation;
+  bots smoke; art still VF7.
+  No Y8 rip.
+  Product 00f0bb6. Gate remains CLEARED. Parent 20-8
+  unchanged (R9-WP4 [ ], 59/60, G6 [ ]). VF6-WP4 ticked;
+  CURRENT_VALID_WP=VF6-WP5; V0 not ticked. VF6-WP5 remains [ ].
 
 ================================================================================
 HẾT PLAN — 29-8-2026
