@@ -124,8 +124,10 @@ def main() -> int:
         errors.append("vs2 must use the machine as official lifecycle")
     if not vs1.get("uses_machine", False):
         errors.append("vs1 must construct the machine when started")
-    if survival.get("uses_machine", False) or survival.get("shipped", False):
-        errors.append("survival must stay unshipped and off uses_machine")
+    if not survival.get("uses_machine", False) or not survival.get("shipped", False):
+        errors.append("survival must ship and use the canonical machine")
+    if survival.get("official_lifecycle", False):
+        errors.append("survival must not steal official_lifecycle from vs2")
     cases = CASES.read_text(encoding="utf-8") if CASES.is_file() else ""
     if "window_menu_e2e" not in cases or "parse_input_event" not in cases:
         errors.append("match_cases must prove window/menu E2E")

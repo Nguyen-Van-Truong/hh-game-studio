@@ -87,8 +87,6 @@ def main() -> int:
     app = APP.read_text(encoding="utf-8") if APP.is_file() else ""
     if "open_lobby" not in app or "restart_same" not in app:
         errors.append("app must open lobby and rematch same")
-    if 'start_fight("survival"' in app:
-        errors.append("app must not start Survival")
     win = WIN.read_text(encoding="utf-8") if WIN.is_file() else ""
     if "rematch_pressed" not in win or "hide_result" not in win:
         errors.append("win overlay must offer rematch and hide_result")
@@ -104,7 +102,9 @@ def main() -> int:
     if flow.get("y8_parity_claimed", True):
         errors.append("vs_flow must not claim Y8 parity")
     if flow.get("survival_shipped", True):
-        errors.append("Survival must stay unshipped")
+        errors.append("vs_flow.json must keep survival_shipped false (VS does not start Survival)")
+    if not flow.get("title_survival_shipped", False):
+        errors.append("vs_flow.json must set title_survival_shipped true")
     first = flow.get("first_run", {})
     rematch = flow.get("rematch", {})
     if int(first.get("max_actions", 99)) > 3 or int(first.get("max_seconds", 99)) > 30:
@@ -143,7 +143,9 @@ def main() -> int:
     if "NOT_AI=1" not in run or "NOT_Y8_PARITY=1" not in run:
         errors.append("run_vs_flow banners must keep honesty flags")
     if "SURVIVAL_SHIPPED=0" not in run:
-        errors.append("run_vs_flow must declare Survival unshipped")
+        errors.append("run_vs_flow must declare Survival is not a VS path")
+    if "TITLE_SURVIVAL_SHIPPED=1" not in run:
+        errors.append("run_vs_flow must declare Title Survival shipped")
     run_all = RUN_ALL.read_text(encoding="utf-8") if RUN_ALL.is_file() else ""
     if "VsFlowCasesScript" not in run_all or "HH_VF_VS2" not in run_all:
         errors.append("run_all.gd must wire VF6-WP2 vs flow cases")

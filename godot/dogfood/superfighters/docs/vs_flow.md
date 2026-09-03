@@ -3,7 +3,11 @@
 Display title: **Vault Fighters**. VS 1P and local VS 2P now share one
 player path: **title → mode → ready/start → fight → result → rematch**.
 The canonical match machine from VF6-WP1 is unchanged. Survival is
-**not shipped**. Stage progression ships in VF6-WP3
+a **separate mode** (`data/sim/survival.json`, `docs/survival.md`).
+VS flow does not start Survival (`survival_shipped` stays false here;
+`title_survival_shipped` is true because Title Survival is a separate
+shipped mode).
+Stage progression stays in VF6-WP3
 (`data/sim/stage.json`, `docs/stage.md`). VS flow does not claim
 Stage.
 

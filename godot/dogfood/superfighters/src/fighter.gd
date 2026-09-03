@@ -124,6 +124,7 @@ var throw_flash: float = 0.0
 var invuln: float = 0.0
 var dead: bool = false
 var death_cause: String = ""
+var death_logged: bool = false
 var combat_timer: float = 0.0
 var coyote: float = 0.0
 var jump_buf: float = 0.0
@@ -1265,6 +1266,41 @@ func _tick_knock_reaction(delta: float) -> void:
 
 func kill() -> void:
 	_die("script")
+
+
+func recycle_alive() -> void:
+	dead = false
+	death_logged = false
+	death_cause = ""
+	health = MAX_HP
+	stamina = MAX_STAMINA
+	collision_layer = Maps.COL_FIGHTER
+	velocity = Vector2.ZERO
+	invuln_ticks = 0
+	invuln = 0.0
+	knockdown_left = 0.0
+	getup_left = 0.0
+	hit_airborne = false
+	sprinting = false
+	rolling = false
+	diving = false
+	kicking = false
+	climbing = false
+	hanging = false
+	recover_left = 0.0
+	visible = true
+	melee_id = _Roster.start_melee()
+	gun_id = WeaponDefs.start_gun()
+	weapon_id = gun_id
+	explosive_id = _Roster.start_explosive()
+	power_id = _Roster.start_power()
+	ammo = WeaponDefs.start_ammo()
+	reserve = int(_Roster.item(gun_id).get("reserve", 0))
+	mag_size = maxi(int(_Roster.item(gun_id).get("mag_size", ammo)), 0)
+	reload_left = 0
+	grenades = WeaponDefs.start_nades()
+	power_ammo = int(_Roster.start_row().get("power_ammo", 0))
+	_cancel_attack()
 
 
 func _die(cause: String) -> void:

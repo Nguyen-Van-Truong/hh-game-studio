@@ -117,6 +117,7 @@ static func from_session(session: GameSession) -> Dictionary:
 		"p1_x": p1.global_position.x if p1 != null else 0.0,
 		"p1_y": p1.global_position.y if p1 != null else 0.0,
 		"win": session.outcome == "win",
+		"survival": session.survival.snapshot_row() if session.survival != null else {},
 	}
 
 

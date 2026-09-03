@@ -80,8 +80,8 @@ def main() -> int:
         errors.append("app must award and advance after a stage win")
     if "StageRules.map_at(stage_index)" not in app:
         errors.append("stage rematch must stay on current catalog map")
-    if 'start_fight("survival"' in app:
-        errors.append("app must not start Survival")
+    if "start_fight(\"survival\"" not in app and "start_fight('survival'" not in app:
+        errors.append("app must start Survival as a separate mode")
     if not STAGE.is_file():
         errors.append("missing data/sim/stage.json")
         print_errors(errors)
@@ -100,7 +100,9 @@ def main() -> int:
     if stage.get("difficulty_class") != "approximation":
         errors.append("stage difficulty must stay approximation")
     if stage.get("survival_shipped", True):
-        errors.append("Survival must stay unshipped")
+        errors.append("stage.json must keep survival_shipped false (not a Stage arena)")
+    if not stage.get("title_survival_shipped", False):
+        errors.append("stage.json must set title_survival_shipped true")
     arenas = stage.get("arenas", [])
     want = ["rooftops", "storage", "police", "hazardous"]
     got = [row.get("map_id") for row in arenas]
@@ -143,7 +145,9 @@ def main() -> int:
     if "NOT_AI=1" not in run or "NOT_Y8_PARITY=1" not in run:
         errors.append("run_stage banners must keep honesty flags")
     if "SURVIVAL_SHIPPED=0" not in run:
-        errors.append("run_stage must declare Survival unshipped")
+        errors.append("run_stage must declare Survival is not a Stage arena")
+    if "TITLE_SURVIVAL_SHIPPED=1" not in run:
+        errors.append("run_stage must declare Title Survival shipped")
     run_all = RUN_ALL.read_text(encoding="utf-8") if RUN_ALL.is_file() else ""
     if "StageCasesScript" not in run_all or "HH_VF_STAGE" not in run_all:
         errors.append("run_all.gd must wire VF6-WP3 stage cases")

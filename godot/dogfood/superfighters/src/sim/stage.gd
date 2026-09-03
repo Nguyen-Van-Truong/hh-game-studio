@@ -3,7 +3,7 @@ extends RefCounted
 
 ## Stage campaign: four arenas, persist, reset/continue.
 ## Order and tiers are ledger:RL-STAGE-ORDER / RL-STAGE-TIER
-## (approximation, not observed). Survival stays VF6-WP4.
+## (approximation, not observed). Survival is a separate mode.
 
 const PATH: String = "res://data/sim/stage.json"
 const SCHEMA_ID: String = "vf.sim.stage.v1"
@@ -42,7 +42,11 @@ static func validate() -> PackedStringArray:
 	if bool(row.get("difficulty_observed", true)):
 		errors.append("stage difficulty must not be marked observed")
 	if bool(row.get("survival_shipped", true)):
-		errors.append("stage must not ship Survival")
+		errors.append("stage campaign must not ship Survival as a Stage arena")
+	if not bool(row.get("title_survival_shipped", false)):
+		errors.append("stage catalog must acknowledge Title Survival is shipped")
+	if bool(row.get("survival_as_stage", true)):
+		errors.append("stage must keep Survival as a separate Title mode")
 	if not bool(row.get("canonical", false)):
 		errors.append("stage catalog must be canonical")
 	var arenas: Array = _array(row.get("arenas", []))

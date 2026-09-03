@@ -57,6 +57,7 @@ var last_hit_path: String = ""
 var last_hit_weapon: String = ""
 var last_fire_weapon: String = ""
 var last_fire_raw_spawn: float = 0.0
+var survival: SurvivalRules = null
 
 
 func setup(p_mode: String, p_map: String, p_stage: int) -> void:
@@ -106,6 +107,11 @@ func setup(p_mode: String, p_map: String, p_stage: int) -> void:
 			]
 		)
 		hud.set_hint("Stage campaign · win loads the next arena · rematch stays here")
+	elif mode == "survival":
+		survival = SurvivalRules.new()
+		survival.begin(self)
+		hud.set_stage_line(survival.hud_line())
+		hud.set_hint("Survival · last standing does not end the run · die to finish · rematch is a new run")
 	else:
 		hud.set_stage_line("")
 		hud.set_hint("Last standing · sprint+crouch dive in air · aerial melee kicks · hold M fire")
@@ -330,6 +336,8 @@ func _step_one_tick(cmds: Array[Dictionary]) -> void:
 		if match_rules.timer_left > 0:
 			match_rules.timer_left -= 1
 	_resolve_end()
+	if mode == "survival" and survival != null and outcome == "play":
+		survival.tick(self)
 	clock.advance()
 	if hud != null:
 		hud.refresh(fighters)
@@ -542,6 +550,204 @@ func live_bot_count() -> int:
 	return n
 
 
+func living_bot_count() -> int:
+	var n: int = 0
+	var i: int = 0
+	while i < fighters.size():
+		var f: Fighter = fighters[i]
+		i += 1
+		if f != null and f.is_bot and not f.dead:
+			n += 1
+	return n
+
+
+func spawn_survival_bot() -> bool:
+	if mode != "survival" or survival == null:
+		return false
+	var living: int = living_bot_count()
+	var cap: int = SurvivalRules.cap_living_bots()
+	var target: int = survival.target_bots()
+	var reason: String = ""
+	if living >= cap:
+		reason = "living_cap"
+	elif living >= target:
+		reason = "wave_target"
+	var at: Vector2 = Vector2.INF
+	if reason == "":
+		at = _survival_safe_spawn()
+		if at == Vector2.INF:
+			reason = "no_safe_spawn"
+	if reason == "" and _recycle_dead_bot() == null and fighters.size() >= SurvivalRules.cap_fighters():
+		reason = "fighter_cap"
+	if reason != "":
+		survival.note_denied(reason, living)
+		ledger.push(clock.tick, "survival", "spawn_denied", {
+			"reason": reason,
+			"living": living,
+			"cap": cap,
+			"target": target,
+			"wave": survival.wave_index,
+		})
+		return false
+	var recycled: Fighter = _recycle_dead_bot()
+	if recycled != null:
+		recycled.recycle_alive()
+		recycled.global_position = at + Vector2(0, -8)
+		recycled.facing = -1.0
+		survival.spawned_this_wave += 1
+		ledger.push(clock.tick, "survival", "spawn", {
+			"slot": recycled.slot,
+			"recycle": true,
+			"wave": survival.wave_index,
+			"living": living_bot_count(),
+		})
+		return true
+	var bot: Fighter = Fighter.new()
+	var slot: int = fighters.size()
+	var team: int = 1 + ((slot - 1) % 3)
+	bot.setup(slot, team, true)
+	bot.global_position = at + Vector2(0, -8)
+	bot.facing = -1.0
+	add_child(bot)
+	fighters.append(bot)
+	brains.append(BotBrain.new())
+	survival.spawned_this_wave += 1
+	ledger.push(clock.tick, "survival", "spawn", {
+		"slot": slot,
+		"recycle": false,
+		"wave": survival.wave_index,
+		"living": living_bot_count(),
+	})
+	return true
+
+
+func survival_drop_weapon() -> bool:
+	if mode != "survival":
+		return false
+	if pickups.size() >= SurvivalRules.cap_pickups():
+		return false
+	var spots: Array[Vector2] = arena.weapon_spawns if arena != null else []
+	if spots.is_empty():
+		return false
+	var idx: int = rng.randi() % spots.size()
+	_add_pickup(WeaponDefs.random_id(rng), spots[idx] + Vector2(0, 2), true)
+	ledger.push(clock.tick, "survival", "weapon_respawn", {"index": idx})
+	return true
+
+
+func survival_drop_prop() -> bool:
+	if mode != "survival":
+		return false
+	if pickups.size() >= SurvivalRules.cap_pickups():
+		return false
+	var spots: Array[Vector2] = arena.weapon_spawns if arena != null else []
+	if spots.is_empty():
+		return false
+	var idx: int = rng.randi() % spots.size()
+	_add_pickup(WeaponDefs.random_id(rng), spots[idx] + Vector2(8, 2), true)
+	ledger.push(clock.tick, "survival", "prop_respawn", {"index": idx})
+	return true
+
+
+func _recycle_dead_bot() -> Fighter:
+	var i: int = 0
+	while i < fighters.size():
+		var f: Fighter = fighters[i]
+		i += 1
+		if f != null and f.is_bot and f.dead:
+			return f
+	return null
+
+
+func _survival_safe_spawn() -> Vector2:
+	var p1: Fighter = player1()
+	var p1_pos: Vector2 = p1.global_position if p1 != null else Vector2.ZERO
+	var spawns: Array[Vector2] = arena.player_spawns if arena != null else []
+	if spawns.is_empty():
+		return Vector2(220, 80)
+	var min_d: float = float(SurvivalRules.data().get("safe_zone_px", 48))
+	var kill_y: float = Maps.kill_y(map_id)
+	var home: Vector2 = Vector2.INF
+	var home_d: float = 1.0e9
+	var i: int = 0
+	while i < spawns.size():
+		var pad: Vector2 = spawns[i]
+		i += 1
+		if pad.y >= kill_y - 16.0:
+			continue
+		var pad_d: float = pad.distance_to(p1_pos)
+		if pad_d < home_d:
+			home_d = pad_d
+			home = pad
+	if home != Vector2.INF:
+		var n: int = 1
+		while n <= 10:
+			var right: Vector2 = home + Vector2(32.0 * float(n), 0.0)
+			var left: Vector2 = home + Vector2(-32.0 * float(n), 0.0)
+			if _survival_spawn_ok(right, p1_pos, min_d, kill_y):
+				return right
+			if _survival_spawn_ok(left, p1_pos, min_d, kill_y):
+				return left
+			n += 1
+	var best: Vector2 = Vector2.INF
+	var best_d: float = 1.0e9
+	i = 0
+	while i < spawns.size():
+		var at: Vector2 = spawns[i]
+		i += 1
+		if not _survival_spawn_ok(at, p1_pos, min_d, kill_y):
+			continue
+		var d: float = at.distance_to(p1_pos)
+		if d < best_d:
+			best_d = d
+			best = at
+	if best != Vector2.INF:
+		return best
+	i = 0
+	while i < spawns.size():
+		var fallback: Vector2 = spawns[i] + Vector2(24.0 * float(i + 1), 0.0)
+		if _survival_spawn_ok(fallback, p1_pos, min_d, kill_y):
+			return fallback
+		i += 1
+	return Vector2.INF
+
+
+func _survival_spawn_ok(at: Vector2, p1_pos: Vector2, min_d: float, kill_y: float) -> bool:
+	if at.y >= kill_y - 16.0:
+		return false
+	if at.distance_to(p1_pos) < min_d:
+		return false
+	if _spawn_overlaps_actor(at):
+		return false
+	if not _survival_walkable_x(at.x):
+		return false
+	return true
+
+
+func _survival_walkable_x(x: float) -> bool:
+	if map_id != "rooftops":
+		return true
+	if x >= 48.0 and x <= 150.0:
+		return true
+	if x >= 380.0 and x <= 540.0:
+		return true
+	if x >= 790.0 and x <= 890.0:
+		return true
+	return false
+
+
+func _spawn_overlaps_actor(at: Vector2) -> bool:
+	var i: int = 0
+	while i < fighters.size():
+		var f: Fighter = fighters[i]
+		i += 1
+		if f == null or f.dead:
+			continue
+		if f.global_position.distance_to(at) < 20.0:
+			return true
+	return false
+
+
 func force_kill(slot: int) -> void:
 	## Fixture-only. Official MATCH traces and apply_frames never call this.
 	ledger.push(clock.tick, "fixture", "force_kill", {"slot": slot})
@@ -574,6 +780,8 @@ func _spawn_fighters() -> void:
 	var bots: int = 2
 	if mode == "stage":
 		bots = StageRules.bot_count(stage_index)
+	elif mode == "survival":
+		bots = SurvivalRules.initial_bots()
 	var b: int = 0
 	while b < bots:
 		var bot: Fighter = Fighter.new()
@@ -1441,6 +1649,7 @@ func shutdown() -> void:
 	fighters.clear()
 	brains.clear()
 	respawns.clear()
+	survival = null
 	bullets.clear()
 	grenades.clear()
 	if clock != null:
@@ -1729,12 +1938,17 @@ func _record_hit_cap(target: Fighter, raw: float, hp0: float, path: String, weap
 func _log_death_if_new(f: Fighter) -> void:
 	if f == null or not f.dead:
 		return
-	if ledger.has_death(f.slot):
+	if f.death_logged:
 		return
+	if mode != "survival" and ledger.has_death(f.slot):
+		return
+	f.death_logged = true
 	ledger.push(clock.tick, "match_resolve", "death", {
 		"slot": f.slot,
 		"cause": f.death_cause,
 	})
+	if mode == "survival" and survival != null:
+		survival.on_death(self, f)
 
 
 func _bundle_has_pressed(frames: Array, action: String) -> bool:

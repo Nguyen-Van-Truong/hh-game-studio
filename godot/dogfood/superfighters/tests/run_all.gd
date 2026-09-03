@@ -24,6 +24,7 @@ const VsRosterCasesScript: GDScript = preload("res://tests/vs_roster_cases.gd")
 const MatchCasesScript: GDScript = preload("res://tests/match_cases.gd")
 const VsFlowCasesScript: GDScript = preload("res://tests/vs_flow_cases.gd")
 const StageCasesScript: GDScript = preload("res://tests/stage_cases.gd")
+const SurvivalCasesScript: GDScript = preload("res://tests/survival_cases.gd")
 const _Combat: GDScript = preload("res://src/sim/combat.gd")
 
 var _fails: PackedStringArray = PackedStringArray()
@@ -60,6 +61,7 @@ var _vs_roster: String = "unproven"
 var _match: String = "unproven"
 var _vs_flow: String = "unproven"
 var _stage: String = "unproven"
+var _survival: String = "unproven"
 
 
 func _initialize() -> void:
@@ -70,6 +72,10 @@ func _boot() -> void:
 	seed(1)
 	if OS.get_environment("HH_VF_STAGE_STORE") == "":
 		OS.set_environment("HH_VF_STAGE_STORE", "progress_vf6wp3.json")
+	if OS.get_environment("HH_VF_SURVIVAL_STORE") == "":
+		OS.set_environment("HH_VF_SURVIVAL_STORE", "records_vf6wp4.json")
+	if OS.get_environment("HH_VF_SURVIVAL_SOAK_SEC") == "":
+		OS.set_environment("HH_VF_SURVIVAL_SOAK_SEC", "8")
 	InputActions.install()
 	if paused:
 		paused = false
@@ -122,6 +128,11 @@ func _boot() -> void:
 		app = StageCasesScript.live_app
 	if paused:
 		paused = false
+	await _test_survival(app)
+	if SurvivalCasesScript.live_app != null and is_instance_valid(SurvivalCasesScript.live_app):
+		app = SurvivalCasesScript.live_app
+	if paused:
+		paused = false
 	if _fails.is_empty():
 		_no_err = "proven"
 	_emit()
@@ -151,6 +162,8 @@ func _test_title(app: App) -> void:
 	var label: Label = app.title.get_node_or_null("TitleLabel") as Label
 	if label == null or label.text != "Vault Fighters":
 		_fail("TITLE must be Vault Fighters")
+	if app.title.survival_btn == null or app.title.survival_btn.text != "Survival":
+		_fail("TITLE must expose Survival")
 	var sub: Label = app.title.get_node_or_null("Subtitle") as Label
 	if sub != null and sub.text.to_lower().contains("superfighter"):
 		_fail("TITLE card must not use the Superfighters trademark")
@@ -1754,6 +1767,47 @@ func _test_stage(app: App) -> void:
 		_stage = "proven"
 
 
+func _test_survival(app: App) -> void:
+	if OS.get_environment("HH_VF_SURVIVAL_STORE") == "":
+		OS.set_environment("HH_VF_SURVIVAL_STORE", "records_vf6wp4.json")
+	if OS.get_environment("HH_VF_SURVIVAL_SOAK_SEC") == "":
+		OS.set_environment("HH_VF_SURVIVAL_SOAK_SEC", "8")
+	SurvivalRules.reset_records()
+	var errors: PackedStringArray = await SurvivalCasesScript.run_all(app)
+	var i: int = 0
+	while i < errors.size():
+		_fail("SURVIVAL %s" % String(errors[i]))
+		i += 1
+	var schema: String = str(SurvivalCasesScript.outcome_schema.get("verdict", "unproven"))
+	var load_v: String = str(SurvivalCasesScript.outcome_load.get("verdict", "unproven"))
+	var distinct_v: String = str(SurvivalCasesScript.outcome_distinct.get("verdict", "unproven"))
+	var score_v: String = str(SurvivalCasesScript.outcome_score.get("verdict", "unproven"))
+	var spawn_v: String = str(SurvivalCasesScript.outcome_spawn.get("verdict", "unproven"))
+	var pause_v: String = str(SurvivalCasesScript.outcome_pause.get("verdict", "unproven"))
+	var restart_v: String = str(SurvivalCasesScript.outcome_restart.get("verdict", "unproven"))
+	var live: String = str(SurvivalCasesScript.outcome_live.get("verdict", "unproven"))
+	if schema != "pass":
+		_fail("SURVIVAL SCHEMA outcome is %s" % schema)
+	if load_v != "pass":
+		_fail("SURVIVAL LOAD outcome is %s" % load_v)
+	if distinct_v != "pass":
+		_fail("SURVIVAL DISTINCT outcome is %s" % distinct_v)
+	if score_v != "pass":
+		_fail("SURVIVAL SCORE outcome is %s" % score_v)
+	if spawn_v != "pass":
+		_fail("SURVIVAL SPAWN outcome is %s" % spawn_v)
+	if pause_v != "pass":
+		_fail("SURVIVAL PAUSE outcome is %s" % pause_v)
+	if restart_v != "pass":
+		_fail("SURVIVAL RESTART outcome is %s" % restart_v)
+	if live != "pass":
+		_fail("SURVIVAL LIVE outcome is %s" % live)
+	if SurvivalCasesScript.used_force_kill != 0:
+		_fail("SURVIVAL official path used force_kill")
+	if _count_prefix("SURVIVAL ") == 0:
+		_survival = "proven"
+
+
 func _emit() -> void:
 	print("HH_VF_PATH title→fight→win/lose→restart")
 	print(
@@ -2206,7 +2260,7 @@ func _emit() -> void:
 		]
 	)
 	print(
-		"HH_VF_STAGE SCHEMA=%s LOAD=%s ADVANCE=%s LOSS=%s HASH=%s CONTINUE=%s RESET=%s LIVE=%s FORCE_KILL=%d BOT_COVERAGE=smoke NOT_AI=1 NOT_Y8_PARITY=1 SURVIVAL_SHIPPED=0 TIER=approximation status=%s"
+		"HH_VF_STAGE SCHEMA=%s LOAD=%s ADVANCE=%s LOSS=%s HASH=%s CONTINUE=%s RESET=%s LIVE=%s FORCE_KILL=%d BOT_COVERAGE=smoke NOT_AI=1 NOT_Y8_PARITY=1 SURVIVAL_SHIPPED=0 TITLE_SURVIVAL_SHIPPED=1 SURVIVAL_AS_STAGE=0 TIER=approximation status=%s"
 		% [
 			str(StageCasesScript.outcome_schema.get("verdict", "unproven")),
 			str(StageCasesScript.outcome_load.get("verdict", "unproven")),
@@ -2218,6 +2272,21 @@ func _emit() -> void:
 			str(StageCasesScript.outcome_live.get("verdict", "unproven")),
 			StageCasesScript.used_force_kill,
 			_stage,
+		]
+	)
+	print(
+		"HH_VF_SURVIVAL SCHEMA=%s LOAD=%s DISTINCT=%s SCORE=%s SPAWN=%s PAUSE=%s RESTART=%s LIVE=%s FORCE_KILL=%d BOT_COVERAGE=smoke NOT_AI=1 NOT_Y8_PARITY=1 SURVIVAL_SHIPPED=1 TITLE_SURVIVAL_SHIPPED=1 SURVIVAL_AS_STAGE=0 LOOP=approximation status=%s"
+		% [
+			str(SurvivalCasesScript.outcome_schema.get("verdict", "unproven")),
+			str(SurvivalCasesScript.outcome_load.get("verdict", "unproven")),
+			str(SurvivalCasesScript.outcome_distinct.get("verdict", "unproven")),
+			str(SurvivalCasesScript.outcome_score.get("verdict", "unproven")),
+			str(SurvivalCasesScript.outcome_spawn.get("verdict", "unproven")),
+			str(SurvivalCasesScript.outcome_pause.get("verdict", "unproven")),
+			str(SurvivalCasesScript.outcome_restart.get("verdict", "unproven")),
+			str(SurvivalCasesScript.outcome_live.get("verdict", "unproven")),
+			SurvivalCasesScript.used_force_kill,
+			_survival,
 		]
 	)
 	print(

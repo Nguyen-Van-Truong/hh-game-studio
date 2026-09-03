@@ -136,7 +136,7 @@ invariants. Calibrate later with traces (VF1-WP3+).
 | RL-MODE-HTML5 | HTML5 remaster on Y8 | `observed` | high | live Y8 “Flash … remastered with HTML5” | 2026-08-29 10:23 +07 | Reference **platform** is browser HTML5 now | — | Product ships Godot Windows, not that remaster. |
 | RL-MODE-ADDED | Y8 add date | `observed` | high | live Y8 “Added on 23 Jul 2011” | 2026-08-29 10:23 +07 | Provenance only | — | Not a gameplay invariant. |
 | RL-MODE-STAGE | Stage, win-once | `secondary` | med | RL-SRC-NG-INDEX 2011-07-23 update | 2026-08-29 | Stage advances after **one** win (best-of-3 removed) | Bronze/Silver/Gold | First-playable Stage is one win/map; Deluxe-style 3-tier is **not** claimed from this excerpt. |
-| RL-MODE-SURVIVAL | Survival added 2011-07-28 | `secondary` | med | RL-SRC-NG-INDEX | 2026-08-29 | Endless spawn stand, solo or co-op | spawn rate | First-playable has **no** Survival (`KNOWN_ISSUES.md`). |
+| RL-MODE-SURVIVAL | Survival added 2011-07-28 | `secondary` | med | RL-SRC-NG-INDEX | 2026-08-29 | Endless spawn stand, solo or co-op | spawn rate | VF6-WP4 ships a product Survival loop. Spawn tables stay approximation; see RL-SURVIVAL-*. |
 | RL-MODE-CHAOS | Random spawns / crits | `secondary` | med | RL-SRC-NG-INDEX developer note | 2026-08-29 | Player/weapon/object spawns and gun crits described as random | tables | “IT AIN'T FAIR” is designer intent, not a RNG spec. |
 | RL-MODE-TEAMS-AI | Teams vs AI, 1 life/round | `secondary` | med | 2011 Y8 archive description | 2026-08-29 | Teams of player + computer; 1 life per round | stock lives | Live 2026 blurb does not repeat “1 life per round”. |
 
@@ -1069,4 +1069,30 @@ Survival stays unshipped. Bots stay smoke.
 | RL-STAGE-SAVE | Atomic checkpoint | `assumption` | none | VF6-WP3; V-A13 temp+rename | 2026-09-01 | Continue loads current_index; Reset wipes | store | `user://vf_stage/`. |
 | RL-STAGE-REWARD | First-win score/unlock hash | `assumption` | none | VF6-WP3 product contract | 2026-09-01 | same award sequence → same SHA-256; no double pay | scores | Loss does not change hash. |
 | RL-STAGE-TIER | Bot-count difficulty labels | `approximation` | none | VF6-WP3; **not** observed Y8 Bronze/Silver/Gold | 2026-09-01 | bots 1/2/3/3 labeled tier_1..tier_4 | bot count | Not AI / not WP5. |
+
+---
+
+## VF6-WP4 Survival director (not a play observation)
+
+Dated 2026-09-03 Asia/Saigon. No in-game Y8 play. No HTML5/Flash
+package. Sidecar: `docs/survival.md`. Official `run_id` is
+`VF6WP4-20260903-ASIA-SAIGON-01` (`cmd.vf6-wp4.survival.1`).
+
+Survival loop stays `ledger:RL-SURVIVAL-LOOP` (`approximation`, **not
+observed**). Waves stay `ledger:RL-SURVIVAL-WAVE` (`approximation`).
+Score/combo stay `ledger:RL-SURVIVAL-SCORE` (`approximation`). Spawn
+budget stays `ledger:RL-SURVIVAL-SPAWN` (`approximation`). Records stay
+`ledger:RL-SURVIVAL-RECORD` (`assumption`, not a Stage checkpoint).
+Hold-to-aim stays `ledger:RL-CTRL-HOLD-AIM` (`assumption`). 60 Hz stays
+`ledger:RL-SIM-FIXED-60` (`assumption`). Y8 observation stays
+`ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). Do **not** cite as observed.
+Bots stay smoke.
+
+| ID | Topic | Class | Conf. | Source | When | Behavior to reproduce | Tuning-only | Notes |
+|---|---|---|---|---|---|---|---|---|
+| RL-SURVIVAL-LOOP | Endless wave/score stand | `approximation` | none | VF6-WP4 product contract; cites RL-MODE-SURVIVAL secondary 2011-07-28 add | 2026-09-03 | Title Survival starts a run; last standing does not end it; P1 death is game over | — | Not a Stage continue. |
+| RL-SURVIVAL-WAVE | Escalating bot roster | `approximation` | none | VF6-WP4; **not** observed Y8 wave table | 2026-09-03 | waves 1..6 bots under a live cap | interval | Smoke bots, not WP5 AI. |
+| RL-SURVIVAL-SCORE | Kill/combo/wave-clear points | `approximation` | none | VF6-WP4 product tuning; **not** observed | 2026-09-03 | official score moves from live kills/combo/wave-clear; rematch resets to 0 | kill/combo/wave | Survive ticks are bonus, not the sole proof. |
+| RL-SURVIVAL-SPAWN | Director budget and respawn | `approximation` | none | VF6-WP4; cites RL-ITEM-RANDOM-SPAWN | 2026-09-03 | cooldown + safe-zone; living bots/pickups capped; timed weapon/prop drops | period, cap | Not claimed Y8 spawn math. |
+| RL-SURVIVAL-RECORD | Best-score file | `assumption` | none | VF6-WP4; V-A13 temp+rename | 2026-09-03 | persist best score; restart does not load a run checkpoint | store | `user://vf_survival/`. |
 

@@ -3,7 +3,7 @@ extends RefCounted
 
 ## VF6-WP2 production VS 1P / local VS 2P flow.
 ## Official proof is title/lobby/result clicks plus parse_input_event.
-## No teleport. No force_kill. Bots stay smoke. Survival unshipped.
+## No teleport. No force_kill. Bots stay smoke. VS does not start Survival; Title Survival is shipped separately.
 
 const _VsFlow: GDScript = preload("res://src/sim/vs_flow.gd")
 const RUN_ID := "VF6WP2-20260901-ASIA-SAIGON-03"
@@ -73,8 +73,10 @@ static func run_all(app: App) -> PackedStringArray:
 
 static func schema_contract() -> PackedStringArray:
 	var errors: PackedStringArray = _VsFlow.validate()
-	if "survival" in JSON.stringify(_VsFlow.payload()).to_lower() and bool(_VsFlow.payload().get("survival_shipped", false)):
-		errors.append("Survival must stay unshipped")
+	if bool(_VsFlow.payload().get("survival_shipped", false)):
+		errors.append("vs_flow must not start Survival as a VS path")
+	if not bool(_VsFlow.payload().get("title_survival_shipped", false)):
+		errors.append("vs_flow catalog must acknowledge Title Survival is shipped")
 	outcome_schema = {
 		"verdict": "pass" if errors.is_empty() else "fail",
 		"source": "data/sim/vs_flow.json",

@@ -6,9 +6,10 @@ started mode opens a `GameSession`. Official VF6-WP1 lifecycle is **vs2**.
 vs1 is started for runtime friendly-fire on `fx_melee_close` only. Stage
 has a title button that starts the same machine. Campaign order, save,
 and reward live in `data/sim/stage.json` (VF6-WP3). Match
-`official_lifecycle` stays vs2. Survival is **not
-shipped**: no title button, `app.gd` never calls `start_fight("survival")`,
-and `uses_machine` stays false until VF6-WP4.
+`official_lifecycle` stays vs2. Survival is **shipped** in VF6-WP4:
+title **Survival** starts the same machine. The endless score loop
+lives in `data/sim/survival.json`. Dying ends the run. Rematch is a
+new run, not a Stage checkpoint. `official_lifecycle` stays vs2.
 
 Clock is `ledger:RL-SIM-FIXED-60` (`assumption`). Hold-to-aim stays
 `ledger:RL-CTRL-HOLD-AIM` (`assumption`). Y8 roll/dive observation stays
@@ -42,7 +43,7 @@ the round ended and start again from the mode buttons.
 
 - vs1 / Stage: FFA, `friendly_fire=false` (`RL-HIT-FF`, assumption)
 - vs2: two teams, `friendly_fire=true`
-- Survival: not shipped
+- Survival: FFA, `friendly_fire=false`; no last-standing win; P1 death is game over
 
 Spawn seed stays `7 + stage * 13` (`RL-MATCH-SEED`). Mode/map are not
 mixed so VF1–VF5 official seeds stay 7.

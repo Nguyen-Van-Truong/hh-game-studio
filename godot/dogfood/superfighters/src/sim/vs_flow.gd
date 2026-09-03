@@ -22,7 +22,11 @@ static func validate() -> PackedStringArray:
 	if bool(row.get("y8_parity_claimed", true)):
 		errors.append("vs_flow must not claim Y8 parity")
 	if bool(row.get("survival_shipped", true)):
-		errors.append("vs_flow must not ship Survival")
+		errors.append("vs_flow must not start Survival as a VS path")
+	if not bool(row.get("title_survival_shipped", false)):
+		errors.append("vs_flow catalog must acknowledge Title Survival is shipped")
+	if bool(row.get("survival_as_stage", true)):
+		errors.append("vs_flow must keep Survival as a separate Title mode")
 	if bool(row.get("stage_lifecycle_shipped", true)):
 		errors.append("vs_flow must not claim Stage lifecycle")
 	var first: Dictionary = row.get("first_run", {}) as Dictionary

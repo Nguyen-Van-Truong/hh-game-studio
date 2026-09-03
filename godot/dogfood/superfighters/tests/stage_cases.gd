@@ -4,7 +4,7 @@ extends RefCounted
 ## VF6-WP3 stage campaign. Official proof is title clicks plus
 ## live catalog-map melee (rooftops → storage → police → hazardous).
 ## No Close Clinch skin-swap. No apply_eval rematch. No pit suicide.
-## Bots stay smoke. Survival unshipped. Tiers are approximation.
+## Bots stay smoke. Survival is not a Stage arena; Title Survival is shipped separately. Tiers are approximation.
 
 const _Stage: GDScript = preload("res://src/sim/stage.gd")
 const RUN_ID := "VF6WP3-20260901-ASIA-SAIGON-03"
@@ -84,7 +84,9 @@ static func schema_contract() -> PackedStringArray:
 	var errors: PackedStringArray = _Stage.validate()
 	var payload: Dictionary = _Stage.data()
 	if bool(payload.get("survival_shipped", false)):
-		errors.append("Survival must stay unshipped")
+		errors.append("stage campaign must not ship Survival as a Stage arena")
+	if not bool(payload.get("title_survival_shipped", false)):
+		errors.append("stage catalog must acknowledge Title Survival is shipped")
 	if str(payload.get("order_class", "")) != "approximation":
 		errors.append("stage order must stay approximation")
 	outcome_schema = {

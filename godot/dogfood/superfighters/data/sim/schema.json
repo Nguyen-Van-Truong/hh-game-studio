@@ -64,6 +64,11 @@
     "stage_save": "RL-STAGE-SAVE assumption, atomic user:// progress",
     "stage_reward": "RL-STAGE-REWARD assumption, first-win score/unlock hash",
     "stage_tier": "RL-STAGE-TIER approximation, bot-count tiers not Y8",
+    "survival_loop": "RL-SURVIVAL-LOOP approximation, endless wave/score, not observed Y8",
+    "survival_wave": "RL-SURVIVAL-WAVE approximation, escalating bot roster, not observed",
+    "survival_score": "RL-SURVIVAL-SCORE approximation, official proof is kill/combo/wave-clear, not idle AFK",
+    "survival_spawn": "RL-SURVIVAL-SPAWN approximation, budget/cooldown/safe-zone, not observed",
+    "survival_record": "RL-SURVIVAL-RECORD assumption, best-score file is not a Stage checkpoint",
     "hitstop": "RL-HIT-HITSTOP assumption, presentation only, clock still advances",
     "aim_dirs": "RL-AIM-DIRS assumption, not observed",
     "fire_semi": "RL-FIRE-SEMI assumption, not observed",
@@ -137,6 +142,10 @@
   "stage": {
     "schema": "vf.sim.stage.v1",
     "path": "res://data/sim/stage.json"
+  },
+  "survival": {
+    "schema": "vf.sim.survival.v1",
+    "path": "res://data/sim/survival.json"
   },
   "locomotion": {
     "schema": "vf.sim.locomotion.v1",

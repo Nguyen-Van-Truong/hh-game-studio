@@ -1,0 +1,77 @@
+{
+  "schema": "vf.sim.survival.v1",
+  "schema_version": 1,
+  "title": "Vault Fighters",
+  "y8_parity_claimed": false,
+  "loop_class": "approximation",
+  "loop_observed": false,
+  "loop_note": "Endless wave/score stand. Y8 Survival spawn tables were not observed this session.",
+  "wave_class": "approximation",
+  "wave_observed": false,
+  "wave_note": "Escalating bot counts 1..6 are a labeled product approximation, not claimed Y8 waves. One live kill clears a wave so the roster can be observed in an official run.",
+  "score_class": "approximation",
+  "score_observed": false,
+  "score_note": "Official score proof is kill / combo / wave-clear. Survive ticks are a small bonus, not the sole monotonic proof. Not observed Y8 scoring.",
+  "spawn_class": "approximation",
+  "spawn_observed": false,
+  "spawn_note": "Director budget, cooldown, and safe-zone are product rules, not observed Y8 spawn math. Extra bots prefer a walkable pad on the current island, not a far pad across a pit.",
+  "record_class": "assumption",
+  "record_observed": false,
+  "record_note": "Best-score file is a product record, not a Stage campaign checkpoint.",
+  "bots": "smoke",
+  "not_ai": true,
+  "canonical": true,
+  "default_map": "rooftops",
+  "default_seed": 7,
+  "seed_formula": "7 + stage * 13",
+  "seed_mode_mixed": false,
+  "store_dir": "user://vf_survival/",
+  "store_file": "records.json",
+  "atomic_save": "temp_rename",
+  "entity_caps": {
+    "living_bots": 6,
+    "fighters": 8,
+    "pickups": 12,
+    "bullets": 32,
+    "grenades": 8
+  },
+  "waves": [
+    {"index": 0, "bots": 1, "interval_ticks": 90, "quota": 1, "score": 50},
+    {"index": 1, "bots": 2, "interval_ticks": 75, "quota": 1, "score": 75},
+    {"index": 2, "bots": 3, "interval_ticks": 60, "quota": 1, "score": 100},
+    {"index": 3, "bots": 4, "interval_ticks": 50, "quota": 1, "score": 125},
+    {"index": 4, "bots": 5, "interval_ticks": 45, "quota": 1, "score": 150},
+    {"index": 5, "bots": 6, "interval_ticks": 40, "quota": 1, "score": 175}
+  ],
+  "score": {
+    "kill": 100,
+    "combo_window_ticks": 180,
+    "combo_step": 25,
+    "survive_every_ticks": 60,
+    "survive_points": 1,
+    "wave_clear": 50
+  },
+  "weapon_respawn_ticks": 1200,
+  "prop_respawn_ticks": 1800,
+  "safe_zone_px": 48,
+  "restart": {
+    "clears_director": true,
+    "clears_score": true,
+    "clears_wave": true,
+    "clears_combo": true,
+    "keeps_records": true,
+    "not_stage_checkpoint": true
+  },
+  "game_over": {
+    "on_p1_death": true,
+    "not_last_standing_win": true,
+    "shows_score": true
+  },
+  "ledger": {
+    "loop": "RL-SURVIVAL-LOOP",
+    "wave": "RL-SURVIVAL-WAVE",
+    "score": "RL-SURVIVAL-SCORE",
+    "spawn": "RL-SURVIVAL-SPAWN",
+    "record": "RL-SURVIVAL-RECORD"
+  }
+}

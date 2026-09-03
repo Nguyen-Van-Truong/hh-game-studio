@@ -88,10 +88,12 @@ static func validate() -> PackedStringArray:
 			continue
 		var mode_info: Dictionary = _dict(modes[mid])
 		if mid == "survival":
-			if bool(mode_info.get("shipped", false)):
-				errors.append("survival must stay unshipped this WP")
-			if bool(mode_info.get("uses_machine", false)):
-				errors.append("survival must not claim uses_machine while not started")
+			if not bool(mode_info.get("shipped", false)):
+				errors.append("survival must be shipped this WP")
+			if not bool(mode_info.get("uses_machine", false)):
+				errors.append("survival must use the canonical machine")
+			if bool(mode_info.get("official_lifecycle", false)):
+				errors.append("survival must not steal official_lifecycle from vs2")
 		elif mid == "vs2":
 			if not bool(mode_info.get("uses_machine", false)):
 				errors.append("mode vs2 must use the canonical machine")
@@ -106,6 +108,8 @@ static func validate() -> PackedStringArray:
 		errors.append("vs2 friendly_fire must stay true")
 	if _Combat.friendly_fire_on("stage") != false:
 		errors.append("stage friendly_fire must stay false")
+	if _Combat.friendly_fire_on("survival") != false:
+		errors.append("survival friendly_fire must stay false")
 	return errors
 
 
@@ -160,6 +164,25 @@ static func evaluate(
 	var team_ids: Array = living_teams.keys()
 	var p1_team: int = int(p1.team) if p1 != null else 0
 	var p1_team_alive: bool = living_teams.has(p1_team)
+	if mode == "survival":
+		var p1_dead: bool = p1 == null or bool(p1.dead)
+		if p1_dead or not p1_team_alive:
+			return {
+				"outcome": "lose",
+				"end_reason": "p1_down",
+				"winner_team": -1,
+				"living": living,
+				"living_teams": team_ids,
+				"mode": mode,
+			}
+		return {
+			"outcome": "play",
+			"end_reason": "",
+			"winner_team": -1,
+			"living": living,
+			"living_teams": team_ids,
+			"mode": mode,
+		}
 	if living <= 0 or team_ids.is_empty():
 		return {
 			"outcome": "tie",

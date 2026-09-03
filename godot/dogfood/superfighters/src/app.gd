@@ -37,6 +37,7 @@ func _enter_tree() -> void:
 	title.vs_two_pressed.connect(_on_vs_two)
 	title.stage_pressed.connect(_on_stage)
 	title.reset_stage_pressed.connect(_on_reset_stage)
+	title.survival_pressed.connect(_on_survival)
 	title.map_cycle_pressed.connect(_on_map_cycle)
 	title.controls_pressed.connect(_on_controls)
 	add_child(title)
@@ -102,7 +103,7 @@ func open_lobby(p_mode: String) -> void:
 func start_fight(p_mode: String, p_map: String, p_stage: int) -> void:
 	mode = p_mode
 	map_id = p_map
-	if p_mode != "stage":
+	if p_mode == "vs1" or p_mode == "vs2":
 		vs_map_id = p_map
 	stage_index = p_stage
 	_bump_result_token()
@@ -144,6 +145,7 @@ func restart_to_title() -> void:
 		map_id = vs_map_id
 		title.set_map_id(vs_map_id)
 		title.refresh_stage_caption()
+		title.refresh_survival_caption()
 		if title.vs_one_btn != null:
 			title.vs_one_btn.grab_focus()
 	flow_phase = "title"
@@ -155,6 +157,9 @@ func restart_to_title() -> void:
 func restart_same() -> void:
 	if mode == "stage":
 		start_fight("stage", StageRules.map_at(stage_index), stage_index)
+		return
+	if mode == "survival":
+		start_fight("survival", map_id, 0)
 		return
 	start_fight(mode, map_id, stage_index)
 
@@ -173,6 +178,13 @@ func _on_stage() -> void:
 	if bool(progress.get("cleared", false)):
 		idx = 0
 	start_fight("stage", StageRules.map_at(idx), idx)
+
+
+func _on_survival() -> void:
+	var survival_map: String = str(SurvivalRules.data().get("default_map", "rooftops"))
+	if survival_map == "":
+		survival_map = "rooftops"
+	start_fight("survival", survival_map, 0)
 
 
 func _on_reset_stage() -> void:
@@ -219,6 +231,9 @@ func _on_lobby_back() -> void:
 
 
 func _on_won() -> void:
+	if mode == "survival":
+		call_deferred("_show_lose", result_token)
+		return
 	if mode == "stage":
 		var awarded: Dictionary = StageRules.record_win(stage_index)
 		if StageRules.last_error != "" or StageRules.last_save_path == "":
@@ -272,11 +287,28 @@ func _show_lose(token: int = -1) -> void:
 		if session != null and session.match_rules != null:
 			reason = session.match_rules.end_reason
 		var detail: String = "Pits and bullets end the run. Rematch or title."
+		var headline: String = "Down"
 		if mode == "stage":
 			detail = "Stage lost. Rematch stays on this arena. Title keeps the checkpoint."
-		if reason != "":
+		if mode == "survival":
+			headline = "Run over"
+			var run_score: int = 0
+			var run_wave: int = 0
+			var run_combo: int = 0
+			if session != null and session.survival != null:
+				if not session.survival.finished:
+					session.survival.finish_run(session)
+				run_score = session.survival.score
+				run_wave = session.survival.wave_index + 1
+				run_combo = session.survival.combo
+			detail = "Score %d · wave %d · combo x%d. Rematch starts a new run, not a Stage checkpoint." % [
+				run_score,
+				run_wave,
+				run_combo,
+			]
+		if reason != "" and mode != "survival":
 			detail = "End reason: %s. Rematch stays here." % reason
-		lose_screen.show_lose("Down", detail, token)
+		lose_screen.show_lose(headline, detail, token)
 	flow_phase = "result"
 
 

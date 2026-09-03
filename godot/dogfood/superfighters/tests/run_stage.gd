@@ -120,7 +120,7 @@ func _boot() -> void:
 		StageCasesScript.timeline.size(),
 		StageCasesScript.events_all.size(),
 	])
-	print("HH_VF_STAGE HONESTY BOT_COVERAGE=smoke NOT_AI=1 NOT_Y8_PARITY=1 SURVIVAL_SHIPPED=0 TIER=approximation")
+	print("HH_VF_STAGE HONESTY BOT_COVERAGE=smoke NOT_AI=1 NOT_Y8_PARITY=1 SURVIVAL_SHIPPED=0 TITLE_SURVIVAL_SHIPPED=1 SURVIVAL_AS_STAGE=0 TIER=approximation")
 	print("HH_VF_STAGE FORCE_KILL_OFFICIAL=0 TELEPORT_OFFICIAL=0")
 	var closer: App = app
 	if StageCasesScript.live_app != null and is_instance_valid(StageCasesScript.live_app):

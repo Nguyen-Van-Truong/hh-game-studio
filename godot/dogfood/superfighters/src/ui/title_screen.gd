@@ -5,6 +5,7 @@ signal vs_one_pressed
 signal vs_two_pressed
 signal stage_pressed
 signal reset_stage_pressed
+signal survival_pressed
 signal map_cycle_pressed
 signal controls_pressed
 
@@ -12,6 +13,7 @@ var vs_one_btn: Button
 var vs_two_btn: Button
 var stage_btn: Button
 var reset_stage_btn: Button
+var survival_btn: Button
 var confirm_reset_btn: Button
 var map_btn: Button
 var controls_btn: Button
@@ -72,6 +74,8 @@ func _ready() -> void:
 	add_child(hint3)
 	vs_one_btn = _make_btn("VS 1P", Vector2(80, 280))
 	vs_two_btn = _make_btn("VS 2P", Vector2(80, 336))
+	survival_btn = _make_btn("Survival", Vector2(380, 336))
+	survival_btn.name = "Survival"
 	stage_btn = _make_btn("Stage", Vector2(80, 392))
 	reset_stage_btn = _make_btn("Reset Stage", Vector2(380, 392))
 	reset_stage_btn.name = "ResetStage"
@@ -94,6 +98,7 @@ func _ready() -> void:
 	vs_two_btn.pressed.connect(_on_vs_two)
 	stage_btn.pressed.connect(_on_stage)
 	reset_stage_btn.pressed.connect(_on_reset_stage)
+	survival_btn.pressed.connect(_on_survival)
 	confirm_reset_btn.pressed.connect(_on_confirm_reset)
 	map_btn.pressed.connect(_on_map)
 	controls_btn.pressed.connect(_on_controls)
@@ -101,6 +106,10 @@ func _ready() -> void:
 	vs_one_btn.focus_neighbor_top = controls_btn.get_path()
 	vs_two_btn.focus_neighbor_top = vs_one_btn.get_path()
 	vs_two_btn.focus_neighbor_bottom = stage_btn.get_path()
+	vs_two_btn.focus_neighbor_right = survival_btn.get_path()
+	survival_btn.focus_neighbor_left = vs_two_btn.get_path()
+	survival_btn.focus_neighbor_bottom = reset_stage_btn.get_path()
+	survival_btn.focus_neighbor_top = vs_one_btn.get_path()
 	stage_btn.focus_neighbor_top = vs_two_btn.get_path()
 	stage_btn.focus_neighbor_bottom = map_btn.get_path()
 	stage_btn.focus_neighbor_right = reset_stage_btn.get_path()
@@ -111,6 +120,7 @@ func _ready() -> void:
 	confirm_reset_btn.focus_neighbor_bottom = map_btn.get_path()
 	map_btn.focus_neighbor_top = stage_btn.get_path()
 	refresh_stage_caption()
+	refresh_survival_caption()
 	map_btn.focus_neighbor_bottom = controls_btn.get_path()
 	controls_btn.focus_neighbor_top = map_btn.get_path()
 	controls_btn.focus_neighbor_bottom = vs_one_btn.get_path()
@@ -163,14 +173,25 @@ func refresh_stage_caption() -> void:
 	if not unlocks.is_empty():
 		reward = str(unlocks[unlocks.size() - 1])
 	set_status(
-		"Stage: %s · score %d · last unlock %s. VS Map below is VS only."
-		% [Maps.display_name(StageRules.map_at(idx)), score, reward]
+		"Stage: %s · score %d · last unlock %s. %s (new run, not a Stage checkpoint). VS Map is VS/Survival."
+		% [Maps.display_name(StageRules.map_at(idx)), score, reward, SurvivalRules.caption_best()]
 	)
+
+
+func refresh_survival_caption() -> void:
+	if survival_btn != null:
+		survival_btn.text = "Survival"
+	refresh_stage_caption()
 
 
 func _on_stage() -> void:
 	_disarm_reset()
 	stage_pressed.emit()
+
+
+func _on_survival() -> void:
+	_disarm_reset()
+	survival_pressed.emit()
 
 
 func _disarm_reset() -> void:

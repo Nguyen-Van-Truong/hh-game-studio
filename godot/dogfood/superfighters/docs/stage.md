@@ -3,7 +3,10 @@
 Display title: **Vault Fighters**. Stage is a campaign, not one isolated
 win per map. Four core arenas load in documented order. A win starts the
 **next** catalog map. Loss or rematch stays on the current index.
-Survival is **not shipped**. Bots stay smoke. Art stays VF7.
+Survival is a **separate shipped Title mode** (VF6-WP4), not a Stage
+arena or Stage continue. `survival_shipped` stays false here;
+`title_survival_shipped` is true.
+Bots stay smoke. Art stays VF7.
 
 Order and difficulty are `ledger:RL-STAGE-ORDER` /
 `ledger:RL-STAGE-TIER` (**approximation**, not observed Y8). Do **not**

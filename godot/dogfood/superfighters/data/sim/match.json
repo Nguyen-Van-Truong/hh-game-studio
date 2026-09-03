@@ -74,10 +74,10 @@
       "alignment": "ffa",
       "p1_team": 0,
       "friendly_fire": false,
-      "uses_machine": false,
-      "shipped": false,
+      "uses_machine": true,
+      "shipped": true,
       "official_lifecycle": false,
-      "note": "Not shipped. No title button. app.gd never starts survival. Reserved for VF6-WP4."
+      "note": "Title Survival starts MatchRules. Endless score loop lives in data/sim/survival.json (VF6-WP4). Dying ends the run. Rematch is a new run, not a Stage checkpoint. official_lifecycle stays vs2."
     }
   },
   "spawn_seed": {

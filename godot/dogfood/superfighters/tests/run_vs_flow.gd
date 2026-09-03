@@ -114,7 +114,7 @@ func _boot() -> void:
 	print("HH_VF_VS2 OVERLAY=%s OVERLAY_SOURCE=outcome_overlay" % overlay_v)
 	print("HH_VF_VS2 FEEDBACK=%s FEEDBACK_SOURCE=outcome_feedback" % feedback_v)
 	print("HH_VF_VS2 LIVE=%s LIVE_SOURCE=outcome_live" % live)
-	print("HH_VF_VS2 HONESTY P2_COVERAGE=live_local BOT_COVERAGE=smoke NOT_AI=1 NOT_Y8_PARITY=1 SURVIVAL_SHIPPED=0 STAGE_LIFECYCLE=0")
+	print("HH_VF_VS2 HONESTY P2_COVERAGE=live_local BOT_COVERAGE=smoke NOT_AI=1 NOT_Y8_PARITY=1 SURVIVAL_SHIPPED=0 TITLE_SURVIVAL_SHIPPED=1 SURVIVAL_AS_STAGE=0 STAGE_LIFECYCLE=0")
 	print("HH_VF_VS2 FORCE_KILL_OFFICIAL=0 TELEPORT_OFFICIAL=0")
 	await _write_evidence(app, ended_at, schema, first_v, ready_v, leak_v, play_v, rematch_v, overlay_v, feedback_v, live)
 	if _fails.is_empty():

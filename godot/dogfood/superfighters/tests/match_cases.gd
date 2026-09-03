@@ -127,8 +127,10 @@ static func schema_and_machine() -> PackedStringArray:
 		errors.append("vs2 must use the canonical machine")
 	if not bool(vs1_row.get("uses_machine", false)):
 		errors.append("vs1 starts MatchRules for FF fixture")
-	if bool(survival_row.get("uses_machine", false)) or bool(survival_row.get("shipped", false)):
-		errors.append("survival must stay unshipped and off the MACHINE pass list")
+	if not bool(survival_row.get("uses_machine", false)) or not bool(survival_row.get("shipped", false)):
+		errors.append("survival must ship and use the canonical machine")
+	if bool(survival_row.get("official_lifecycle", false)):
+		errors.append("survival must not steal official_lifecycle from vs2")
 	if bool(stage_row.get("official_lifecycle", false)):
 		errors.append("stage must not claim official lifecycle this WP")
 	outcome_schema = {
@@ -138,12 +140,12 @@ static func schema_and_machine() -> PackedStringArray:
 	outcome_machine = {
 		"verdict": "pass" if errors.is_empty() else "fail",
 		"canonical": true,
-		"modes": ["vs2", "vs1"],
+		"modes": ["vs2", "vs1", "stage", "survival"],
 		"official_lifecycle": ["vs2"],
 		"vs1_note": "FF melee fixture + title VS 1P; no official vs1 lifecycle trace",
 		"stage_note": "title button starts MatchRules; campaign save/order is VF6-WP3 StageRules",
-		"survival_note": "not shipped; not started; not in MACHINE pass list",
-		"source": "modes that construct/run MatchRules this WP (vs2 official, vs1 FF)",
+		"survival_note": "shipped; title Survival starts MatchRules; official_lifecycle stays vs2",
+		"source": "modes that construct/run MatchRules this WP (vs2 official, vs1 FF, stage, survival)",
 	}
 	return errors
 

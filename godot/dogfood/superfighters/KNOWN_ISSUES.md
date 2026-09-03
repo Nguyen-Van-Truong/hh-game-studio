@@ -13,7 +13,9 @@ First playable slice. Not G6. Not 60/60.
 - Bots are greedy (weapon then chase); they can walk into fire
 - Stage now has a four-arena campaign with persist/reset (VF6-WP3).
   Difficulty tiers are a labeled approximation, not Y8 Bronze/Silver/Gold.
-- Survival mode is out of this slice (VF6-WP4)
+- Survival now ships as a separate endless score run (VF6-WP4).
+  Wave/score/spawn numbers are labeled approximation, not Y8. Bots
+  stay smoke. Survival rematch is a new run, not a Stage checkpoint.
 - 2P shares one keyboard; no online
 - Procedural SFX, not the Y8 soundtrack
 - Skins intentionally differ (helmet crew, not ripped Flash sheets)
@@ -279,7 +281,19 @@ First playable slice. Not G6. Not 60/60.
   Official proof is title Stage/Reset/Rematch plus live catalog-map
   melee, not Close Clinch. Loss is damage KO. Continue is a cold
   reload of the save. Tiers are labeled approximation, not observed
-  Y8. Bots stay **smoke**. Survival stays unshipped. Art still VF7.
+  Y8. Bots stay **smoke**. Survival ships in VF6-WP4 as a separate
+  mode. Art still VF7.
+- VF6-WP4 ships Survival as approximation (`ledger:RL-SURVIVAL-LOOP`,
+  `ledger:RL-SURVIVAL-WAVE`, `ledger:RL-SURVIVAL-SCORE`,
+  `ledger:RL-SURVIVAL-SPAWN`, `ledger:RL-SURVIVAL-RECORD`): endless
+  wave/score loop, escalating bot roster, timed weapon/prop respawn,
+  score/combo/records, game-over/restart that clears the director.
+  Official proof is title Survival click, live rooftops melee kills
+  that raise wave and living-bot count, kill/combo/wave-clear score,
+  a live cap-6 spawn_denied, pause freeze, and a 10-minute headless
+  plus 5-minute window soak. Dying ends the run and shows score.
+  Rematch is a new run, not a Stage checkpoint. Bots stay **smoke**.
+  Art still VF7.
 - VF3-WP4 ships grenade hold/release throw, gravity arc, bounce,
   fuse, radial falloff, owner skip, one explosion, timeout
   cleanup, and swept nade collision as assumption
