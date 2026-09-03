@@ -7,7 +7,7 @@ extends RefCounted
 ## Bots stay smoke. Survival unshipped. Tiers are approximation.
 
 const _Stage: GDScript = preload("res://src/sim/stage.gd")
-const RUN_ID := "VF6WP3-20260901-ASIA-SAIGON-02"
+const RUN_ID := "VF6WP3-20260901-ASIA-SAIGON-03"
 
 static var used_step_fixed: int = 0
 static var used_apply_frames: int = 0
@@ -34,6 +34,7 @@ static var events_all: Array = []
 static var load_rows: Array = []
 static var live_app: App = null
 static var win_rows: Array = []
+static var police_cross: int = 0
 
 
 static func run_all(app: App) -> PackedStringArray:
@@ -121,12 +122,38 @@ static func reward_hash_stable() -> PackedStringArray:
 		errors.append("HASH replay of first win must match")
 	if str(replay2.get("reward_hash", "")) != h2:
 		errors.append("HASH replay of two-win sequence must match")
+	_Stage.reset_progress()
+	var skipped: Dictionary = _Stage.record_win(3)
+	var skip_disk: Dictionary = _Stage.load_or_empty()
+	if (
+		_Stage.last_error == ""
+		or int(skipped.get("current_index", -1)) != 0
+		or int(skip_disk.get("score", -1)) != 0
+		or not _array(skip_disk.get("awarded", [])).is_empty()
+		or _Stage.last_save_path != ""
+	):
+		errors.append("HASH record_win must fail-closed on a skipped index")
+	_Stage.reset_progress()
+	var first_ok: Dictionary = _Stage.record_win(0)
+	if _Stage.last_error != "" or _Stage.last_save_path == "":
+		errors.append("HASH persist must return a path and leave last_error empty")
+	var rel: String = _Stage.store_rel()
+	var abs_final: String = ProjectSettings.globalize_path(rel)
+	var abs_bak: String = abs_final + ".bak"
+	if not FileAccess.file_exists(rel + ".bak"):
+		errors.append("HASH persist must keep parked .bak after a successful write")
+	if FileAccess.file_exists(rel):
+		DirAccess.copy_absolute(abs_final, abs_bak)
+		DirAccess.remove_absolute(abs_final)
+	var recovered: Dictionary = _Stage.load_or_empty()
+	if str(recovered.get("reward_hash", "")) != str(first_ok.get("reward_hash", "")):
+		errors.append("HASH load must recover parked .bak after a missing final")
 	outcome_hash = {
 		"verdict": "pass" if errors.is_empty() else "fail",
 		"hash_win0": h1,
 		"hash_win0_dup": h1b,
 		"hash_win1": h2,
-		"source": "StageRules.record_win idempotent + sequence replay",
+		"source": "StageRules.record_win idempotent + sequence replay + fail-closed persist + kept bak",
 	}
 	_Stage.reset_progress()
 	return errors
@@ -488,12 +515,36 @@ static func continue_and_reset(app: App) -> PackedStringArray:
 		errors.append("RESET missing Reset Stage")
 		outcome_reset = {"verdict": "fail"}
 		return errors
-	await _activate_button(fresh, fresh.title.reset_stage_btn, "reset")
+	var vs_label: String = str(fresh.title.map_btn.text) if fresh.title.map_btn != null else ""
+	if vs_label.contains("Vitriol Sump") or vs_label.contains("Signal Court"):
+		errors.append("VS Map must stay on the VS cycle, not the Stage map got %s" % vs_label)
+	if fresh.vs_map_id == "police" or fresh.vs_map_id == "hazardous":
+		errors.append("vs_map_id must not inherit the Stage map")
+	var score_before_reset: int = int(_Stage.load_or_empty().get("score", -1))
+	_sanitize_input(fresh)
+	await _ui_frames(fresh)
+	await _click_control_only(fresh, fresh.title.reset_stage_btn)
+	await _ui_frames(fresh)
+	var armed: bool = (
+		fresh.title.reset_armed
+		and fresh.title.confirm_reset_btn != null
+		and fresh.title.confirm_reset_btn.visible
+		and str(fresh.title.confirm_reset_btn.text) == "Confirm Reset"
+		and str(fresh.title.reset_stage_btn.text) == "Reset Stage"
+		and int(_Stage.load_or_empty().get("score", -2)) == score_before_reset
+	)
+	if not armed:
+		errors.append("RESET first click must arm Confirm Reset without wiping")
+	await _click_control_only(fresh, fresh.title.confirm_reset_btn)
+	await _ui_frames(fresh)
 	var wiped: Dictionary = _Stage.load_or_empty()
 	var reset_ok: bool = (
-		int(wiped.get("current_index", -1)) == 0
+		armed
+		and int(wiped.get("current_index", -1)) == 0
 		and int(wiped.get("score", -1)) == 0
 		and _array(wiped.get("awarded", [])).is_empty()
+		and str(fresh.title.reset_stage_btn.text) == "Reset Stage"
+		and (fresh.title.confirm_reset_btn == null or not fresh.title.confirm_reset_btn.visible)
 	)
 	still_paths["reset"] = await _capture_still(fresh, "stage_reset")
 	_append(errors, await _title_start_stage(fresh))
@@ -512,6 +563,8 @@ static func continue_and_reset(app: App) -> PackedStringArray:
 		and fresh.session == null
 		and fresh.flow_phase == "title"
 		and str(fresh.title.stage_btn.text) == "Stage"
+		and not str(fresh.title.map_btn.text).contains("Vitriol Sump")
+		and not str(fresh.title.map_btn.text).contains("Signal Court")
 	)
 	if not title_after_ok:
 		errors.append("title_after must be a title screen, not a fight")
@@ -522,7 +575,7 @@ static func continue_and_reset(app: App) -> PackedStringArray:
 		"index": int(wiped.get("current_index", -1)),
 		"map_id": session.map_id if session != null else "",
 		"title_after_phase": fresh.flow_phase,
-		"source": "title Reset Stage wipe + Stage starts rooftops + title_after is title",
+		"source": "two distinct clicks: Reset Stage then Confirm Reset; VS Map stays VS cycle",
 	}
 	outcome_live = {
 		"verdict": "pass" if errors.is_empty() else "fail",
@@ -563,7 +616,7 @@ static func _win_on_catalog(app: App, index: int, fight_map: String, next_map: S
 	var ok: bool = (
 		bool(fight.get("ok", false))
 		and str(fight.get("map_id", "")) == fight_map
-		and str(fight.get("death_cause", "")) != ""
+		and str(fight.get("death_cause", "")) == "damage"
 		and dest_ok
 		and str(progress.get("reward_hash", "")) != hash_before
 	)
@@ -603,14 +656,18 @@ static func _catalog_resolve(app: App, want: String) -> Dictionary:
 		return out
 	_sanitize_input(app)
 	await _typed_idle(app, 4)
+	police_cross = 0
 	var p1_tagged_bot: bool = false
 	var cycle: int = 0
 	var stuck: int = 0
 	var last_x: float = 0.0
+	var hunt_limit: int = 2400
+	if fight_map == "police" or fight_map == "hazardous":
+		hunt_limit = 3600
 	var p1: Fighter = session.player1()
 	if p1 != null:
 		last_x = p1.global_position.x
-	while cycle < 2400 and session != null and session.outcome == "play":
+	while cycle < hunt_limit and session != null and session.outcome == "play":
 		if session.map_id != fight_map:
 			out["error"] = "map_swapped"
 			break
@@ -631,10 +688,15 @@ static func _catalog_resolve(app: App, want: String) -> Dictionary:
 			else:
 				await _tick_driven(app, _intent_cmd(session, p1, foe, true, stuck), {})
 		else:
-			await _tick_driven(app, _intent_cmd(session, p1, foe, true, stuck), {})
+			var extra_bots: Dictionary = {}
+			if fight_map == "police":
+				extra_bots = _police_bot_cmds(session)
+			elif fight_map == "hazardous":
+				extra_bots = _hazardous_bot_cmds(session, p1)
+			await _tick_driven(app, _intent_cmd(session, p1, foe, true, stuck), extra_bots)
 		if cycle % 90 == 0:
 			print(
-				"HH_VF_STAGE HUNT want=%s map=%s tick=%d p1=(%.1f,%.1f) foe=%s hp=%.1f stuck=%d"
+				"HH_VF_STAGE HUNT want=%s map=%s tick=%d p1=(%.1f,%.1f) foe=%s foe_hp=%.1f p1_hp=%.1f stuck=%d live_bots=%d cross=%d bots=%s"
 				% [
 					want,
 					session.map_id,
@@ -642,8 +704,12 @@ static func _catalog_resolve(app: App, want: String) -> Dictionary:
 					p1.global_position.x,
 					p1.global_position.y,
 					str(foe.global_position if foe != null else Vector2.ZERO),
+					_first_bot_hp(session),
 					p1.health,
 					stuck,
+					_count_living_bots(session),
+					police_cross,
+					_bot_pos_debug(session),
 				]
 			)
 		cycle += 1
@@ -674,9 +740,16 @@ static func _catalog_resolve(app: App, want: String) -> Dictionary:
 		_harvest(session)
 	await _ui_frames(app)
 	var want_outcome: String = "win" if want == "win" else "lose"
-	var cause_ok: bool = death_cause == "damage" or (want == "win" and death_cause != "")
-	if want == "lose":
-		cause_ok = death_cause == "damage"
+	var bots_damage: bool = true
+	var d: int = 0
+	while d < bot_deaths.size():
+		var row: Dictionary = bot_deaths[d] as Dictionary
+		d += 1
+		if str(row.get("death_cause", "")) != "damage":
+			bots_damage = false
+	var cause_ok: bool = death_cause == "damage"
+	if want == "win":
+		cause_ok = death_cause == "damage" and bots_damage
 	out["ok"] = end_outcome == want_outcome and cause_ok and fight_map != "fx_melee_close"
 	out["outcome"] = end_outcome
 	out["map_id"] = fight_map
@@ -750,54 +823,120 @@ static func _police_intent(session: GameSession, actor: Fighter, target: Fighter
 	var cmd: Dictionary = _idle_cmd()
 	var x: float = actor.global_position.x
 	var y: float = actor.global_position.y
-	if x < 120.0:
-		cmd["x"] = 1.0
-		return cmd
-	if target != null and target.global_position.x > 500.0 and x >= 350.0 and x <= 480.0:
-		if y > 125.0:
-			cmd["jump"] = true
-			cmd["jump_pressed"] = (session.clock.tick % 6) == 0
-			cmd["x"] = 1.0
-			return cmd
-		cmd["x"] = 1.0
-		cmd["jump_pressed"] = (session.clock.tick % 6) == 0
-		return cmd
+	var wall_x: float = 400.0
+	var pit_x: float = 124.0
+	var ground_y: float = 168.0
+	var court_y: float = 136.0
 	if target != null:
-		var dx: float = target.global_position.x - x
-		var dy: float = target.global_position.y - y
-		if absf(dx) <= 20.0 and absf(dy) <= 18.0:
-			cmd["x"] = 1.0 if dx >= 0.0 else -1.0
+		var dx0: float = target.global_position.x - x
+		var dy0: float = target.global_position.y - y
+		if absf(dx0) <= 20.0 and absf(dy0) <= 18.0:
+			cmd["x"] = 1.0 if dx0 >= 0.0 else -1.0
 			if may_melee:
 				cmd["melee"] = (session.clock.tick % 12) == 0
 			return cmd
-		if y < 140.0 and x < 240.0:
-			cmd["x"] = 1.0
-			if x > 150.0:
-				cmd["jump"] = true
-				cmd["jump_pressed"] = (session.clock.tick % 8) == 0
-			return cmd
-		if dy > 14.0:
-			cmd["crouch"] = true
-			cmd["crouch_pressed"] = true
-			if absf(dx) > 8.0:
-				cmd["x"] = 1.0 if dx >= 0.0 else -1.0
-			return cmd
-		if dy < -16.0:
+	var foe_left: bool = target != null and target.global_position.x < wall_x
+	if x < pit_x:
+		cmd["x"] = 1.0
+		if y >= ground_y:
 			cmd["jump"] = true
-			cmd["jump_pressed"] = (session.clock.tick % 8) == 0
-			cmd["x"] = 1.0 if dx >= 0.0 else -1.0
+			cmd["jump_pressed"] = (session.clock.tick % 6) == 0
+		return cmd
+	if foe_left or x >= 420.0:
+		if x >= 420.0:
+			return _police_hunt_right(session, actor, target, may_melee, stuck)
+		return _police_hunt_left(session, actor, target, may_melee, stuck)
+	## Tile 25 blocks a ground crossing. Stay on the left court and wait
+	## for the right-court bot to come over the ladder.
+	if y >= ground_y:
+		if x < 180.0:
+			cmd["x"] = 1.0
 			return cmd
-		cmd["x"] = 1.0 if dx >= 0.0 else -1.0
-		if may_melee and absf(dx) <= 24.0:
-			cmd["melee"] = (session.clock.tick % 12) == 0
+		if x > 270.0:
+			cmd["x"] = -1.0
+			return cmd
+		cmd["jump"] = true
+		cmd["jump_pressed"] = (session.clock.tick % 6) == 0
+		return cmd
+	if x < 190.0:
+		cmd["x"] = 1.0
+		return cmd
+	if x > 270.0:
+		cmd["x"] = -1.0
+		return cmd
+	return cmd
+
+
+static func _police_hunt_left(session: GameSession, actor: Fighter, target: Fighter, may_melee: bool, stuck: int) -> Dictionary:
+	var cmd: Dictionary = _idle_cmd()
+	var x: float = actor.global_position.x
+	var y: float = actor.global_position.y
+	var ground_y: float = 168.0
+	var court_y: float = 136.0
+	if y >= ground_y:
+		if x < 180.0:
+			cmd["x"] = 1.0
+			return cmd
+		if x > 270.0:
+			cmd["x"] = -1.0
+			return cmd
+		cmd["jump"] = true
+		cmd["jump_pressed"] = (session.clock.tick % 6) == 0
+		return cmd
+	if y < court_y:
+		cmd["x"] = 1.0
+		return cmd
+	var dx: float = target.global_position.x - x
+	var dy: float = target.global_position.y - y
+	if dy < -20.0 and target.global_position.x > 300.0:
+		cmd["x"] = 1.0
+		cmd["jump"] = true
+		cmd["jump_pressed"] = (session.clock.tick % 6) == 0
+		if may_melee and absf(dx) <= 28.0 and absf(dy) <= 28.0:
+			cmd["melee"] = (session.clock.tick % 8) == 0
+		return cmd
+	cmd["x"] = 1.0 if dx >= 0.0 else -1.0
+	if may_melee and absf(dx) <= 28.0 and absf(dy) <= 28.0:
+		cmd["melee"] = (session.clock.tick % 8) == 0
+	if stuck > 24 and x > 200.0 and x < 280.0:
+		cmd["x"] = -1.0 if (session.clock.tick % 20) < 10 else 1.0
+	return cmd
+
+
+static func _police_hunt_right(session: GameSession, actor: Fighter, target: Fighter, may_melee: bool, stuck: int) -> Dictionary:
+	var cmd: Dictionary = _idle_cmd()
+	if target == null:
 		if stuck > 20:
 			cmd["jump"] = true
-			cmd["jump_pressed"] = (session.clock.tick % 10) == 0
+			cmd["jump_pressed"] = (stuck % 18) == 0
 		return cmd
-	return _generic_intent(session, actor, target, may_melee, stuck)
+	var dx: float = target.global_position.x - actor.global_position.x
+	var dy: float = target.global_position.y - actor.global_position.y
+	if absf(dx) <= 20.0 and absf(dy) <= 18.0:
+		cmd["x"] = 1.0 if dx >= 0.0 else -1.0
+		if may_melee:
+			cmd["melee"] = (session.clock.tick % 12) == 0
+		return cmd
+	cmd["x"] = 1.0 if dx >= 0.0 else -1.0
+	if dy < -20.0 and stuck > 10:
+		cmd["jump"] = true
+		cmd["jump_pressed"] = (session.clock.tick % 8) == 0
+	if may_melee and absf(dx) <= 24.0 and absf(dy) <= 24.0:
+		cmd["melee"] = (session.clock.tick % 12) == 0
+	if stuck > 20:
+		cmd["jump"] = true
+		cmd["jump_pressed"] = (session.clock.tick % 10) == 0
+	return cmd
 
 
 static func _hazardous_intent(session: GameSession, actor: Fighter, target: Fighter, may_melee: bool, stuck: int) -> Dictionary:
+	if target != null and actor.global_position.y < 80.0:
+		var drop: float = target.global_position.y - actor.global_position.y
+		if drop > 24.0 and _floor_under(session.map_id, actor.global_position + Vector2(0.0, 48.0)):
+			var cmd_drop: Dictionary = _idle_cmd()
+			cmd_drop["crouch"] = true
+			cmd_drop["crouch_pressed"] = true
+			return cmd_drop
 	var cmd: Dictionary = _generic_intent(session, actor, target, may_melee, stuck)
 	if _gap_ahead(session.map_id, actor.global_position, float(cmd.get("x", 1.0)) if absf(float(cmd.get("x", 0.0))) > 0.1 else 1.0):
 		cmd["jump"] = true
@@ -864,6 +1003,85 @@ static func _hold_cmd(session: GameSession, actor: Fighter, target: Fighter) -> 
 	return cmd
 
 
+static func _hazardous_bot_cmds(session: GameSession, p1: Fighter) -> Dictionary:
+	var out: Dictionary = {}
+	if session == null or p1 == null:
+		return out
+	var i: int = 0
+	while i < session.fighters.size():
+		var f: Fighter = session.fighters[i]
+		i += 1
+		if f == null or not f.is_bot or f.dead:
+			continue
+		if f.global_position.x <= p1.global_position.x + 40.0:
+			continue
+		var cmd: Dictionary = _idle_cmd()
+		cmd["x"] = -1.0
+		if _gap_ahead(session.map_id, f.global_position, -1.0):
+			cmd["jump"] = true
+			cmd["jump_pressed"] = (session.clock.tick % 8) == 0
+		out[f.slot] = cmd
+	return out
+
+
+static func _police_bot_cmds(session: GameSession) -> Dictionary:
+	var out: Dictionary = {}
+	if session == null:
+		return out
+	var i: int = 0
+	while i < session.fighters.size():
+		var f: Fighter = session.fighters[i]
+		i += 1
+		if f == null or not f.is_bot or f.dead:
+			continue
+		if f.global_position.x < 360.0 and f.global_position.y > 130.0:
+			continue
+		out[f.slot] = _police_bot_come_left(session, f)
+	return out
+
+
+static func _police_bot_come_left(session: GameSession, bot: Fighter) -> Dictionary:
+	var cmd: Dictionary = _idle_cmd()
+	var x: float = bot.global_position.x
+	var y: float = bot.global_position.y
+	var ladder50: float = 808.0
+	var ladder26: float = 424.0
+	var pillar_x: float = 528.0
+	if x >= 816.0:
+		cmd["x"] = -1.0 if x > ladder50 else 1.0
+		if absf(x - ladder50) <= 28.0:
+			cmd["jump"] = true
+			cmd["jump_pressed"] = true
+		return cmd
+	if y <= 130.0:
+		cmd["x"] = -1.0
+		if x <= 460.0:
+			cmd["jump"] = true
+			cmd["jump_pressed"] = (session.clock.tick % 8) == 0
+		return cmd
+	if x > pillar_x:
+		if absf(x - ladder50) <= 22.0:
+			cmd["jump"] = true
+			cmd["jump_pressed"] = true
+			return cmd
+		cmd["x"] = -1.0 if x > ladder50 else 1.0
+		if absf(x - ladder50) <= 36.0:
+			cmd["jump"] = true
+			cmd["jump_pressed"] = (session.clock.tick % 6) == 0
+		return cmd
+	if absf(x - ladder26) <= 22.0:
+		cmd["jump"] = true
+		cmd["jump_pressed"] = true
+		if y <= 112.0:
+			cmd["x"] = -1.0
+		return cmd
+	cmd["x"] = -1.0 if x > ladder26 else 1.0
+	if absf(x - ladder26) <= 36.0:
+		cmd["jump"] = true
+		cmd["jump_pressed"] = (session.clock.tick % 6) == 0
+	return cmd
+
+
 static func _bot_attack_cmd(session: GameSession, p1: Fighter) -> Dictionary:
 	var foe: Fighter = _first_living_foe(session)
 	if foe == null or p1 == null:
@@ -883,6 +1101,11 @@ static func _idle_cmd() -> Dictionary:
 		"crouch": false,
 		"crouch_pressed": false,
 		"melee": false,
+		"roll": false,
+		"dive": false,
+		"kick": false,
+		"fire_held": false,
+		"fire_released": false,
 	}
 
 
@@ -1094,6 +1317,36 @@ static func _count_is_bot(session: GameSession) -> int:
 	return n
 
 
+static func _count_living_bots(session: GameSession) -> int:
+	if session == null:
+		return 0
+	var n: int = 0
+	var i: int = 0
+	while i < session.fighters.size():
+		var f: Fighter = session.fighters[i]
+		i += 1
+		if f != null and f.is_bot and not f.dead:
+			n += 1
+	return n
+
+
+static func _bot_pos_debug(session: GameSession) -> String:
+	if session == null:
+		return ""
+	var parts: PackedStringArray = PackedStringArray()
+	var i: int = 0
+	while i < session.fighters.size():
+		var f: Fighter = session.fighters[i]
+		i += 1
+		if f == null or not f.is_bot:
+			continue
+		parts.append(
+			"%d:%s(%.0f,%.0f,hp=%.0f)"
+			% [f.slot, "dead" if f.dead else "live", f.global_position.x, f.global_position.y, f.health]
+		)
+	return ",".join(parts)
+
+
 static func _require_outcomes() -> PackedStringArray:
 	var errors: PackedStringArray = PackedStringArray()
 	var labels: PackedStringArray = PackedStringArray([
@@ -1124,6 +1377,15 @@ static func _require_outcomes() -> PackedStringArray:
 	if str(outcome_loss.get("death_cause", "")) == "pit":
 		errors.append("official E2E loss cannot be pit")
 	return errors
+
+
+static func _click_control_only(app: App, btn: Button) -> void:
+	if app == null or btn == null:
+		return
+	_sanitize_input(app)
+	await _ui_frames(app)
+	await _click_control_async(app, btn)
+	await _ui_frames(app)
 
 
 static func _activate_button(app: App, btn: Button, kind: String) -> void:
@@ -1183,22 +1445,39 @@ static func _ui_frames(app: App) -> void:
 	await tree.process_frame
 
 
+static func _mouse_at(ctrl: Control, pressed: bool) -> InputEventMouseButton:
+	var pos: Vector2 = ctrl.get_global_rect().get_center()
+	var ev: InputEventMouseButton = InputEventMouseButton.new()
+	ev.button_index = MOUSE_BUTTON_LEFT
+	ev.button_mask = MOUSE_BUTTON_MASK_LEFT if pressed else 0
+	ev.pressed = pressed
+	ev.position = pos
+	ev.global_position = pos
+	return ev
+
+
+static func _inject_mouse(app: App, ev: InputEventMouseButton) -> void:
+	if app == null or app.get_viewport() == null:
+		return
+	Input.parse_input_event(ev)
+	Input.flush_buffered_events()
+	app.get_viewport().push_input(ev, true)
+	used_parse_input_event += 1
+
+
 static func _click_control(app: App, ctrl: Control) -> void:
 	if app == null or ctrl == null or app.get_viewport() == null:
 		return
-	var pos: Vector2 = ctrl.get_global_transform_with_canvas().origin + ctrl.size * 0.5
-	var down: InputEventMouseButton = InputEventMouseButton.new()
-	down.button_index = MOUSE_BUTTON_LEFT
-	down.pressed = true
-	down.position = pos
-	down.global_position = pos
-	app.get_viewport().push_input(down)
-	var up: InputEventMouseButton = InputEventMouseButton.new()
-	up.button_index = MOUSE_BUTTON_LEFT
-	up.pressed = false
-	up.position = pos
-	up.global_position = pos
-	app.get_viewport().push_input(up)
+	_inject_mouse(app, _mouse_at(ctrl, true))
+	_inject_mouse(app, _mouse_at(ctrl, false))
+
+
+static func _click_control_async(app: App, ctrl: Control) -> void:
+	if app == null or ctrl == null or app.get_viewport() == null:
+		return
+	_inject_mouse(app, _mouse_at(ctrl, true))
+	await _ui_frames(app)
+	_inject_mouse(app, _mouse_at(ctrl, false))
 
 
 static func _push_key(app: App, key: Key) -> void:
@@ -1218,6 +1497,11 @@ static func _push_action(app: App, action: String) -> void:
 	ev.action = action
 	ev.pressed = true
 	app.get_viewport().push_input(ev)
+	used_parse_input_event += 1
+	var rel: InputEventAction = InputEventAction.new()
+	rel.action = action
+	rel.pressed = false
+	app.get_viewport().push_input(rel)
 	used_parse_input_event += 1
 
 

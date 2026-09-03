@@ -1048,8 +1048,9 @@ observed. Survival stays unshipped. Bots stay smoke.
 
 Dated 2026-09-01 Asia/Saigon. No in-game Y8 play. No HTML5/Flash
 package. Sidecar: `docs/stage.md`. Official `run_id` is
-`VF6WP3-20260901-ASIA-SAIGON-02` (`cmd.vf6-wp3.stage.2`).
-`-01` is void after Hostile Critic HH.
+`VF6WP3-20260901-ASIA-SAIGON-03` (`cmd.vf6-wp3.stage.3`).
+`-01` is void after Hostile Critic HH. `-02` is void after source
+changed following a failed official Reset proof.
 
 Stage order stays `ledger:RL-STAGE-ORDER` (`approximation`, **not
 observed**). Progress stays `ledger:RL-STAGE-PROGRESS` (`assumption`).

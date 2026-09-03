@@ -14,6 +14,7 @@ var session: GameSession
 var test_driven: bool = false
 var mode: String = "vs1"
 var map_id: String = "rooftops"
+var vs_map_id: String = "rooftops"
 var stage_index: int = 0
 var next_round_id: int = 1
 var flow_phase: String = "title"
@@ -101,6 +102,8 @@ func open_lobby(p_mode: String) -> void:
 func start_fight(p_mode: String, p_map: String, p_stage: int) -> void:
 	mode = p_mode
 	map_id = p_map
+	if p_mode != "stage":
+		vs_map_id = p_map
 	stage_index = p_stage
 	_bump_result_token()
 	_hide_result_overlays()
@@ -138,9 +141,9 @@ func restart_to_title() -> void:
 		lobby.hide_lobby()
 	if title != null:
 		title.visible = true
-		title.set_map_id(map_id)
+		map_id = vs_map_id
+		title.set_map_id(vs_map_id)
 		title.refresh_stage_caption()
-		title.clear_status()
 		if title.vs_one_btn != null:
 			title.vs_one_btn.grab_focus()
 	flow_phase = "title"
@@ -174,17 +177,22 @@ func _on_stage() -> void:
 
 func _on_reset_stage() -> void:
 	StageRules.reset_progress()
+	if StageRules.last_error != "" or StageRules.last_save_path == "":
+		if title != null:
+			title.set_status("Stage reset failed to persist. Save unchanged.")
+		return
 	if title != null:
 		title.refresh_stage_caption()
-		title.set_status("Stage save reset. Score and unlocks cleared.")
+		title.set_status("Stage save reset. Score and unlocks cleared. VS maps stay free.")
 
 
 func _on_map_cycle() -> void:
-	map_id = Maps.next_vs_map(map_id)
+	vs_map_id = Maps.next_vs_map(vs_map_id)
+	map_id = vs_map_id
 	if title != null:
-		title.set_map_id(map_id)
+		title.set_map_id(vs_map_id)
 	if lobby != null:
-		lobby.set_map_id(map_id)
+		lobby.set_map_id(vs_map_id)
 
 
 func _on_controls() -> void:
@@ -212,8 +220,12 @@ func _on_lobby_back() -> void:
 
 func _on_won() -> void:
 	if mode == "stage":
-		StageRules.record_win(stage_index)
-		if stage_index + 1 < StageRules.stage_count():
+		var awarded: Dictionary = StageRules.record_win(stage_index)
+		if StageRules.last_error != "" or StageRules.last_save_path == "":
+			call_deferred("_show_win", result_token)
+			return
+		var next_idx: int = int(awarded.get("current_index", stage_index))
+		if next_idx == stage_index + 1 and stage_index + 1 < StageRules.stage_count():
 			call_deferred("_advance_stage")
 			return
 	var token: int = result_token

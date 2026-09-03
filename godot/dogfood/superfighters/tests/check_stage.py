@@ -21,9 +21,10 @@ CASES = ROOT / "tests" / "stage_cases.gd"
 RUN = ROOT / "tests" / "run_stage.gd"
 RUN_ALL = ROOT / "tests" / "run_all.gd"
 PACKER = ROOT / "tests" / "pack_stage_evidence.py"
-GATE_RUN_ID = "VF6WP3-20260901-ASIA-SAIGON-02"
-COMMAND_ID = "cmd.vf6-wp3.stage.2"
+GATE_RUN_ID = "VF6WP3-20260901-ASIA-SAIGON-03"
+COMMAND_ID = "cmd.vf6-wp3.stage.3"
 FORBIDDEN_RUN_IDS = (
+    "VF6WP3-20260901-ASIA-SAIGON-02",
     "VF6WP3-20260901-ASIA-SAIGON-01",
     "VF6WP2-20260901-ASIA-SAIGON-03",
     "VF6WP2-20260901-ASIA-SAIGON-02",
@@ -117,6 +118,11 @@ def main() -> int:
         "cold",
         "Continue Stage",
         "Reset Stage",
+        "Confirm Reset",
+        "last_error",
+        "vs_map_id",
+        "_click_control_only",
+        "confirm_reset_btn",
     ):
         if needle not in cases:
             errors.append(f"stage_cases missing {needle}")

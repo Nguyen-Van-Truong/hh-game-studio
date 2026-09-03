@@ -25,7 +25,7 @@ Bot counts and tier ids are a labeled product approximation.
 | Step | What happens |
 |---|---|
 | Title **Stage** | Clean save starts rooftops. A checkpoint continues at `current_index`. |
-| Title **Reset Stage** | Wipes score, unlocks, awarded bits; next Stage starts at 0. |
+| Title **Reset Stage** | First click reveals **Confirm Reset**. Second click on that button wipes score, unlocks, awarded bits; next Stage starts at 0. |
 | Win | First-win score/unlock persist atomically; next catalog map loads. |
 | Loss / Rematch / pause Restart | Same `stage_index` and catalog map. No skip. No extra reward. |
 | Title after a mid-run win | **Continue Stage** resumes the checkpoint map. |
@@ -35,8 +35,18 @@ advanced. Rematch after a loss does not skip ahead.
 
 ## Save and reward
 
-Progress lives at `user://vf_stage/progress.json` (temp+rename,
-`ledger:RL-STAGE-SAVE`). Official/test runs may set `HH_VF_STAGE_STORE`.
+Progress lives at `user://vf_stage/progress.json` (write `.tmp` and flush,
+park the previous file as `.bak`, then rename; load recovers `.tmp` / `.bak`
+if the final is missing — `ledger:RL-STAGE-SAVE`). A successful write keeps
+the parked `.bak`. `record_win` / `reset_progress` fail-closed if
+`persist_atomic` returns `""`; the live campaign does not advance on a
+failed persist. Official/test runs may set `HH_VF_STAGE_STORE`. Title
+**Reset Stage** requires two distinct clicks on two controls: first
+reveals **Confirm Reset** without wiping, second clicks that button
+and wipes. Title **VS Map** stays on the VS cycle after
+a Stage fight; it must not inherit the campaign map name. Unlocks are
+persisted and shown on the title status line; they do not lock the VS map
+cycle. Official wins require `death_cause=damage` (pit is not a win).
 `reward_hash` is SHA-256 of schema, index, score, awarded, unlocks, and
 cleared. Winning the same index twice does not change the hash.
 

@@ -142,49 +142,77 @@ static func empty_progress() -> Dictionary:
 
 static func load_or_empty() -> Dictionary:
 	var rel: String = store_rel()
+	var loaded: Dictionary = _load_progress_file(rel)
+	if not loaded.is_empty():
+		return loaded
+	loaded = _load_progress_file(rel + ".tmp")
+	if not loaded.is_empty():
+		return loaded
+	loaded = _load_progress_file(rel + ".bak")
+	if not loaded.is_empty():
+		return loaded
+	return empty_progress()
+
+
+static func _load_progress_file(rel: String) -> Dictionary:
 	if not FileAccess.file_exists(rel):
-		return empty_progress()
+		return {}
 	var loaded: Dictionary = SimConstants.load_json(rel)
 	if loaded.is_empty() or str(loaded.get("schema", "")) != SCHEMA_ID:
-		return empty_progress()
+		return {}
 	if str(loaded.get("title", "")) != "Vault Fighters":
-		return empty_progress()
+		return {}
 	return loaded
 
 
 static func reset_progress() -> Dictionary:
 	var row: Dictionary = empty_progress()
-	persist_atomic(row)
+	if persist_atomic(row) == "":
+		return load_or_empty()
 	return row
 
 
 static func record_win(won_index: int) -> Dictionary:
+	last_error = ""
 	var progress: Dictionary = load_or_empty()
+	var current: int = int(progress.get("current_index", 0))
 	var awarded: Array = _array(progress.get("awarded", []))
 	var already: bool = _has_int(awarded, won_index)
-	if not already:
-		awarded.append(won_index)
-		progress["score"] = int(progress.get("score", 0)) + score_for(won_index)
-		var unlock: String = unlock_for(won_index)
-		var unlocks: Array = _array(progress.get("unlocks", []))
-		if unlock != "" and not unlocks.has(unlock):
-			unlocks.append(unlock)
-		progress["unlocks"] = unlocks
-		progress["awarded"] = awarded
+	if not already and won_index != current:
+		last_error = "stage win index mismatch"
+		last_save_path = ""
+		return progress
+	if already:
+		progress["reward_hash"] = compute_hash(progress)
+		if persist_atomic(progress) == "":
+			return load_or_empty()
+		return load_or_empty()
+	var next: Dictionary = progress.duplicate(true)
+	var next_awarded: Array = _array(next.get("awarded", [])).duplicate()
+	next_awarded.append(won_index)
+	next["score"] = int(next.get("score", 0)) + score_for(won_index)
+	var unlock: String = unlock_for(won_index)
+	var unlocks: Array = _array(next.get("unlocks", [])).duplicate()
+	if unlock != "" and not unlocks.has(unlock):
+		unlocks.append(unlock)
+	next["unlocks"] = unlocks
+	next["awarded"] = next_awarded
 	var last: int = stage_count() - 1
 	if won_index >= last:
-		progress["current_index"] = last
-		progress["cleared"] = true
+		next["current_index"] = last
+		next["cleared"] = true
 	else:
-		progress["current_index"] = won_index + 1
-		progress["cleared"] = false
-	progress["reward_hash"] = compute_hash(progress)
-	persist_atomic(progress)
-	return progress
+		next["current_index"] = won_index + 1
+		next["cleared"] = false
+	next["reward_hash"] = compute_hash(next)
+	if persist_atomic(next) == "":
+		return progress
+	return load_or_empty()
 
 
 static func persist_atomic(payload: Dictionary) -> String:
 	last_error = ""
+	last_save_path = ""
 	if str(payload.get("schema", "")) != SCHEMA_ID:
 		last_error = "stage save schema mismatch"
 		return ""
@@ -212,18 +240,39 @@ static func persist_atomic(payload: Dictionary) -> String:
 		last_error = "stage tmp open failed"
 		return ""
 	file.store_string(JSON.stringify(to_write))
+	file.flush()
 	file.close()
 	var abs_tmp: String = ProjectSettings.globalize_path(tmp)
 	var abs_final: String = ProjectSettings.globalize_path(rel)
+	var abs_bak: String = abs_final + ".bak"
+	if FileAccess.file_exists(rel + ".bak"):
+		var cleared: Error = DirAccess.remove_absolute(abs_bak)
+		if cleared != OK:
+			DirAccess.remove_absolute(abs_tmp)
+			last_error = "stage old bak remove failed"
+			last_save_path = ""
+			return ""
 	if FileAccess.file_exists(rel):
-		DirAccess.remove_absolute(abs_final)
+		var parked: Error = DirAccess.rename_absolute(abs_final, abs_bak)
+		if parked != OK:
+			DirAccess.remove_absolute(abs_tmp)
+			last_error = "stage bak park failed"
+			last_save_path = ""
+			return ""
 	var err: Error = DirAccess.rename_absolute(abs_tmp, abs_final)
 	if err != OK:
+		if FileAccess.file_exists(rel + ".bak"):
+			DirAccess.rename_absolute(abs_bak, abs_final)
 		DirAccess.remove_absolute(abs_tmp)
 		last_error = "stage rename failed"
+		last_save_path = ""
 		return ""
 	if FileAccess.file_exists(tmp):
-		last_error = "stage tmp leftover"
+		DirAccess.remove_absolute(abs_tmp)
+	var verify: Dictionary = _load_progress_file(rel)
+	if verify.is_empty() or str(verify.get("reward_hash", "")) != str(to_write.get("reward_hash", "")):
+		last_error = "stage persist verify failed"
+		last_save_path = ""
 		return ""
 	last_save_path = rel
 	return rel

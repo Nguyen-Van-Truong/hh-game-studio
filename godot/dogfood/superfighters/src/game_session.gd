@@ -589,11 +589,14 @@ func _spawn_fighters() -> void:
 
 func _spawn_at(index: int) -> Vector2:
 	var spawns: Array[Vector2] = arena.player_spawns
-	if index < spawns.size():
-		return spawns[index]
 	if spawns.is_empty():
 		return Vector2(120, 80)
-	return spawns[spawns.size() - 1] + Vector2(float(index) * 24.0, 0)
+	if index < spawns.size():
+		return spawns[index]
+	var extra: int = index - spawns.size() + 1
+	var slot: int = extra % spawns.size()
+	var nudge: float = 16.0 * float(1 + extra / spawns.size())
+	return spawns[slot] + Vector2(nudge, 0.0)
 
 
 func _spawn_weapons() -> void:

@@ -1,7 +1,7 @@
 extends SceneTree
 
-const RUN_ID := "VF6WP3-20260901-ASIA-SAIGON-02"
-const COMMAND_ID := "cmd.vf6-wp3.stage.2"
+const RUN_ID := "VF6WP3-20260901-ASIA-SAIGON-03"
+const COMMAND_ID := "cmd.vf6-wp3.stage.3"
 const SEED := 7
 const MODE := "stage"
 const MAP_ID := "rooftops"

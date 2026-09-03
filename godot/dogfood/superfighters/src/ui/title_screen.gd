@@ -12,10 +12,13 @@ var vs_one_btn: Button
 var vs_two_btn: Button
 var stage_btn: Button
 var reset_stage_btn: Button
+var confirm_reset_btn: Button
 var map_btn: Button
 var controls_btn: Button
 var status_label: Label
 var map_id: String = "rooftops"
+var reset_armed: bool = false
+var _reset_arm_frame: int = -1
 
 
 func _ready() -> void:
@@ -72,7 +75,10 @@ func _ready() -> void:
 	stage_btn = _make_btn("Stage", Vector2(80, 392))
 	reset_stage_btn = _make_btn("Reset Stage", Vector2(380, 392))
 	reset_stage_btn.name = "ResetStage"
-	map_btn = _make_btn("Map: %s" % Maps.display_name("rooftops"), Vector2(80, 448))
+	confirm_reset_btn = _make_btn("Confirm Reset", Vector2(680, 392))
+	confirm_reset_btn.name = "ConfirmReset"
+	confirm_reset_btn.visible = false
+	map_btn = _make_btn("VS Map: %s" % Maps.display_name("rooftops"), Vector2(80, 448))
 	map_btn.name = "MapCycle"
 	controls_btn = _make_btn("Controls", Vector2(80, 504))
 	controls_btn.name = "Controls"
@@ -88,6 +94,7 @@ func _ready() -> void:
 	vs_two_btn.pressed.connect(_on_vs_two)
 	stage_btn.pressed.connect(_on_stage)
 	reset_stage_btn.pressed.connect(_on_reset_stage)
+	confirm_reset_btn.pressed.connect(_on_confirm_reset)
 	map_btn.pressed.connect(_on_map)
 	controls_btn.pressed.connect(_on_controls)
 	vs_one_btn.focus_neighbor_bottom = vs_two_btn.get_path()
@@ -98,7 +105,10 @@ func _ready() -> void:
 	stage_btn.focus_neighbor_bottom = map_btn.get_path()
 	stage_btn.focus_neighbor_right = reset_stage_btn.get_path()
 	reset_stage_btn.focus_neighbor_left = stage_btn.get_path()
+	reset_stage_btn.focus_neighbor_right = confirm_reset_btn.get_path()
 	reset_stage_btn.focus_neighbor_bottom = map_btn.get_path()
+	confirm_reset_btn.focus_neighbor_left = reset_stage_btn.get_path()
+	confirm_reset_btn.focus_neighbor_bottom = map_btn.get_path()
 	map_btn.focus_neighbor_top = stage_btn.get_path()
 	refresh_stage_caption()
 	map_btn.focus_neighbor_bottom = controls_btn.get_path()
@@ -110,7 +120,7 @@ func _ready() -> void:
 func set_map_id(next_id: String) -> void:
 	map_id = next_id
 	if map_btn != null:
-		map_btn.text = "Map: %s" % Maps.display_name(map_id)
+		map_btn.text = "VS Map: %s" % Maps.display_name(map_id)
 
 
 func set_status(text: String) -> void:
@@ -140,16 +150,60 @@ func _on_vs_two() -> void:
 
 
 func refresh_stage_caption() -> void:
-	if stage_btn == null:
-		return
-	stage_btn.text = StageRules.caption_for(StageRules.load_or_empty())
+	_disarm_reset()
+	var progress: Dictionary = StageRules.load_or_empty()
+	if stage_btn != null:
+		stage_btn.text = StageRules.caption_for(progress)
+	var idx: int = int(progress.get("current_index", 0))
+	var score: int = int(progress.get("score", 0))
+	var unlocks: Array = []
+	if progress.get("unlocks", []) is Array:
+		unlocks = progress.get("unlocks", []) as Array
+	var reward: String = "none"
+	if not unlocks.is_empty():
+		reward = str(unlocks[unlocks.size() - 1])
+	set_status(
+		"Stage: %s · score %d · last unlock %s. VS Map below is VS only."
+		% [Maps.display_name(StageRules.map_at(idx)), score, reward]
+	)
 
 
 func _on_stage() -> void:
+	_disarm_reset()
 	stage_pressed.emit()
 
 
+func _disarm_reset() -> void:
+	reset_armed = false
+	_reset_arm_frame = -1
+	if reset_stage_btn != null:
+		reset_stage_btn.text = "Reset Stage"
+	if confirm_reset_btn != null:
+		confirm_reset_btn.visible = false
+		confirm_reset_btn.text = "Confirm Reset"
+
+
 func _on_reset_stage() -> void:
+	if reset_armed:
+		_disarm_reset()
+		set_status("Stage reset canceled.")
+		return
+	reset_armed = true
+	_reset_arm_frame = Engine.get_process_frames()
+	if reset_stage_btn != null:
+		reset_stage_btn.text = "Reset Stage"
+	if confirm_reset_btn != null:
+		confirm_reset_btn.visible = true
+		confirm_reset_btn.text = "Confirm Reset"
+	set_status("Click Confirm Reset to wipe Stage score and unlocks.")
+
+
+func _on_confirm_reset() -> void:
+	if not reset_armed:
+		return
+	if Engine.get_process_frames() <= _reset_arm_frame:
+		return
+	_disarm_reset()
 	reset_stage_pressed.emit()
 
 

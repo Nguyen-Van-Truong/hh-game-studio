@@ -1,0 +1,79 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+Vulkan 1.4.325 - Forward+ - Using Device #0: NVIDIA - NVIDIA GeForce GTX 1660 Ti
+
+HH_VF_STAGE STEP=boot DISPLAY=Windows
+HH_VF_STAGE STEP=hash
+HH_VF_STAGE STEP=load
+HH_VF_STAGE SCREENSHOT_stage_load err=0 path=d:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\.hh-agent\vf6wp3-03-official\VF6WP3-20260901-ASIA-SAIGON-03\window/screens/stage_load_1280x720.png
+HH_VF_STAGE STEP=title_loss
+HH_VF_STAGE SCREENSHOT_stage_title err=0 path=d:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\.hh-agent\vf6wp3-03-official\VF6WP3-20260901-ASIA-SAIGON-03\window/screens/stage_title_1280x720.png
+HH_VF_STAGE SCREENSHOT_stage_fight err=0 path=d:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\.hh-agent\vf6wp3-03-official\VF6WP3-20260901-ASIA-SAIGON-03\window/screens/stage_fight_1280x720.png
+HH_VF_STAGE HUNT want=lose map=rooftops tick=5 p1=(72.3,115.8) foe=(456.0, 115.9962) foe_hp=100.0 p1_hp=100.0 stuck=1 live_bots=1 cross=0 bots=1:live(456,116,hp=100)
+HH_VF_STAGE HUNT want=lose map=rooftops tick=95 p1=(201.6,67.8) foe=(456.0, 115.9962) foe_hp=100.0 p1_hp=100.0 stuck=0 live_bots=1 cross=0 bots=1:live(456,116,hp=100)
+HH_VF_STAGE HUNT want=lose map=rooftops tick=185 p1=(379.2,69.8) foe=(456.0, 115.9962) foe_hp=100.0 p1_hp=100.0 stuck=0 live_bots=1 cross=0 bots=1:live(456,116,hp=100)
+HH_VF_STAGE HUNT want=lose map=rooftops tick=275 p1=(455.0,116.0) foe=(453.4211, 115.8351) foe_hp=90.0 p1_hp=54.0 stuck=50 live_bots=1 cross=0 bots=1:live(453,116,hp=90)
+HH_VF_STAGE HUNT want=lose map=rooftops tick=365 p1=(454.3,115.5) foe=(452.4923, 115.8351) foe_hp=90.0 p1_hp=4.0 stuck=140 live_bots=1 cross=0 bots=1:live(452,116,hp=90)
+HH_VF_STAGE RESOLVE want=lose ok=true map=rooftops outcome=lose cause=damage tick=384
+HH_VF_STAGE SCREENSHOT_stage_lose err=0 path=d:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\.hh-agent\vf6wp3-03-official\VF6WP3-20260901-ASIA-SAIGON-03\window/screens/stage_lose_1280x720.png
+HH_VF_STAGE STEP=advance
+HH_VF_STAGE HUNT want=win map=rooftops tick=5 p1=(72.7,116.0) foe=(456.0, 115.9991) foe_hp=100.0 p1_hp=100.0 stuck=1 live_bots=1 cross=0 bots=1:live(456,116,hp=100)
+HH_VF_STAGE HUNT want=win map=rooftops tick=95 p1=(284.2,67.8) foe=(456.0, 115.9991) foe_hp=100.0 p1_hp=100.0 stuck=0 live_bots=1 cross=0 bots=1:live(456,116,hp=100)
+HH_VF_STAGE HUNT want=win map=rooftops tick=185 p1=(458.7,115.8) foe=(455.1303, 115.2537) foe_hp=90.0 p1_hp=84.0 stuck=0 live_bots=1 cross=0 bots=1:live(455,115,hp=90)
+HH_VF_STAGE HUNT want=win map=rooftops tick=275 p1=(462.0,115.8) foe=(458.1808, 115.9988) foe_hp=60.0 p1_hp=84.0 stuck=0 live_bots=1 cross=0 bots=1:live(458,116,hp=60)
+HH_VF_STAGE HUNT want=win map=rooftops tick=365 p1=(454.7,115.8) foe=(460.3616, 115.9988) foe_hp=20.0 p1_hp=84.7 stuck=0 live_bots=1 cross=0 bots=1:live(460,116,hp=20)
+HH_VF_STAGE RESOLVE want=win ok=true map=rooftops outcome=win cause=damage tick=400
+HH_VF_STAGE SCREENSHOT_stage_advance err=0 path=d:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\.hh-agent\vf6wp3-03-official\VF6WP3-20260901-ASIA-SAIGON-03\window/screens/stage_advance_1280x720.png
+HH_VF_STAGE HUNT want=win map=storage tick=5 p1=(216.4,135.1) foe=(424.0, 135.0833) foe_hp=100.0 p1_hp=100.0 stuck=1 live_bots=2 cross=0 bots=1:live(424,135,hp=100),2:live(952,135,hp=100)
+HH_VF_STAGE HUNT want=win map=storage tick=95 p1=(416.9,163.8) foe=(422.9168, 163.9989) foe_hp=90.0 p1_hp=100.0 stuck=0 live_bots=2 cross=0 bots=1:live(423,164,hp=90),2:live(952,164,hp=100)
+HH_VF_STAGE HUNT want=win map=storage tick=185 p1=(429.2,163.8) foe=(423.1418, 163.2519) foe_hp=50.0 p1_hp=100.0 stuck=0 live_bots=2 cross=0 bots=1:live(423,163,hp=50),2:live(952,164,hp=100)
+HH_VF_STAGE HUNT want=win map=storage tick=275 p1=(414.9,163.8) foe=(421.8292, 163.996) foe_hp=20.0 p1_hp=100.0 stuck=0 live_bots=2 cross=0 bots=1:live(422,164,hp=20),2:live(952,164,hp=100)
+HH_VF_STAGE HUNT want=win map=storage tick=365 p1=(547.0,164.0) foe=(952.0, 163.9811) foe_hp=100.0 p1_hp=100.0 stuck=12 live_bots=1 cross=0 bots=1:dead(461,164,hp=0),2:live(952,164,hp=100)
+HH_VF_STAGE HUNT want=win map=storage tick=455 p1=(659.0,95.1) foe=(952.0, 163.9811) foe_hp=100.0 p1_hp=100.0 stuck=0 live_bots=1 cross=0 bots=1:dead(522,164,hp=0),2:live(952,164,hp=100)
+HH_VF_STAGE HUNT want=win map=storage tick=545 p1=(711.0,19.1) foe=(952.0, 163.9811) foe_hp=100.0 p1_hp=100.0 stuck=0 live_bots=1 cross=0 bots=1:dead(547,164,hp=0),2:live(952,164,hp=100)
+HH_VF_STAGE HUNT want=win map=storage tick=635 p1=(928.3,14.9) foe=(952.0, 163.9811) foe_hp=100.0 p1_hp=84.0 stuck=0 live_bots=1 cross=0 bots=1:dead(547,164,hp=0),2:live(952,164,hp=100)
+HH_VF_STAGE HUNT want=win map=storage tick=725 p1=(942.2,163.8) foe=(947.4167, 163.9973) foe_hp=68.0 p1_hp=68.0 stuck=0 live_bots=1 cross=0 bots=1:dead(547,164,hp=0),2:live(947,164,hp=68)
+HH_VF_STAGE HUNT want=win map=storage tick=815 p1=(946.2,163.8) foe=(947.4191, 163.9962) foe_hp=28.0 p1_hp=68.0 stuck=3 live_bots=1 cross=0 bots=1:dead(547,164,hp=0),2:live(947,164,hp=28)
+HH_VF_STAGE RESOLVE want=win ok=true map=storage outcome=win cause=damage tick=880
+HH_VF_STAGE HUNT want=lose map=police tick=5 p1=(72.7,116.0) foe=(232.0, 147.9991) foe_hp=100.0 p1_hp=100.0 stuck=1 live_bots=3 cross=0 bots=1:live(232,148,hp=100),2:live(952,119,hp=100),3:live(248,148,hp=100)
+HH_VF_STAGE HUNT want=lose map=police tick=95 p1=(235.6,147.2) foe=(238.0737, 147.8864) foe_hp=90.0 p1_hp=64.0 stuck=19 live_bots=3 cross=0 bots=1:live(238,148,hp=90),2:live(952,180,hp=100),3:live(248,148,hp=100)
+HH_VF_STAGE HUNT want=lose map=police tick=185 p1=(227.5,148.0) foe=(227.7403, 147.8864) foe_hp=90.0 p1_hp=24.0 stuck=8 live_bots=3 cross=0 bots=1:live(228,148,hp=90),2:live(952,180,hp=100),3:live(250,148,hp=80)
+HH_VF_STAGE RESOLVE want=lose ok=true map=police outcome=lose cause=damage tick=234
+HH_VF_STAGE HUNT want=win map=police tick=5 p1=(72.7,116.0) foe=(232.0, 147.9991) foe_hp=100.0 p1_hp=100.0 stuck=1 live_bots=3 cross=0 bots=1:live(232,148,hp=100),2:live(952,119,hp=100),3:live(248,148,hp=100)
+HH_VF_STAGE HUNT want=win map=police tick=95 p1=(235.8,147.8) foe=(231.9986, 147.9989) foe_hp=80.0 p1_hp=84.0 stuck=0 live_bots=3 cross=0 bots=1:live(232,148,hp=80),2:live(814,98,hp=100),3:live(249,148,hp=90)
+HH_VF_STAGE HUNT want=win map=police tick=185 p1=(227.5,147.8) foe=(231.7736, 147.2519) foe_hp=40.0 p1_hp=84.0 stuck=0 live_bots=3 cross=0 bots=1:live(232,147,hp=40),2:live(596,100,hp=100),3:live(251,147,hp=70)
+HH_VF_STAGE HUNT want=win map=police tick=275 p1=(229.8,147.8) foe=(228.722, 147.996) foe_hp=10.0 p1_hp=86.5 stuck=0 live_bots=3 cross=0 bots=1:live(229,148,hp=10),2:live(409,68,hp=100),3:live(251,148,hp=70)
+HH_VF_STAGE HUNT want=win map=police tick=365 p1=(249.2,147.8) foe=(254.5518, 147.9989) foe_hp=40.0 p1_hp=92.5 stuck=0 live_bots=2 cross=0 bots=1:dead(286,148,hp=0),2:live(289,180,hp=84),3:live(255,148,hp=40)
+HH_VF_STAGE HUNT want=win map=police tick=455 p1=(266.5,147.8) foe=(288.7719, 179.8132) foe_hp=84.0 p1_hp=98.5 stuck=0 live_bots=1 cross=0 bots=1:dead(346,180,hp=0),2:live(289,180,hp=84),3:dead(260,147,hp=0)
+HH_VF_STAGE HUNT want=win map=police tick=545 p1=(301.1,179.8) foe=(295.0, 166.0) foe_hp=52.0 p1_hp=84.0 stuck=0 live_bots=1 cross=0 bots=1:dead(406,180,hp=0),2:live(295,166,hp=52),3:dead(320,180,hp=0)
+HH_VF_STAGE HUNT want=win map=police tick=635 p1=(301.1,179.8) foe=(295.0, 166.0) foe_hp=22.0 p1_hp=84.0 stuck=0 live_bots=1 cross=0 bots=1:dead(466,180,hp=0),2:live(295,166,hp=22),3:dead(380,180,hp=0)
+HH_VF_STAGE RESOLVE want=win ok=true map=police outcome=win cause=damage tick=688
+HH_VF_STAGE SCREENSHOT_stage_hazardous err=0 path=d:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\.hh-agent\vf6wp3-03-official\VF6WP3-20260901-ASIA-SAIGON-03\window/screens/stage_hazardous_1280x720.png
+HH_VF_STAGE STEP=continue_reset
+HH_VF_STAGE SCREENSHOT_stage_continue err=0 path=d:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\.hh-agent\vf6wp3-03-official\VF6WP3-20260901-ASIA-SAIGON-03\window/screens/stage_continue_1280x720.png
+HH_VF_STAGE HUNT want=win map=hazardous tick=5 p1=(72.7,132.0) foe=(295.3333, 131.9991) foe_hp=100.0 p1_hp=100.0 stuck=1 live_bots=3 cross=0 bots=1:live(295,132,hp=100),2:live(935,132,hp=100),3:live(311,132,hp=100)
+HH_VF_STAGE HUNT want=win map=hazardous tick=95 p1=(204.8,132.0) foe=(208.1823, 131.9989) foe_hp=80.0 p1_hp=100.0 stuck=0 live_bots=3 cross=0 bots=1:live(196,132,hp=80),2:live(816,122,hp=84),3:live(208,132,hp=80)
+HH_VF_STAGE HUNT want=win map=hazardous tick=185 p1=(209.8,132.0) foe=(208.1824, 131.9988) foe_hp=40.0 p1_hp=100.0 stuck=0 live_bots=3 cross=0 bots=1:live(192,132,hp=50),2:live(561,125,hp=84),3:live(208,132,hp=40)
+HH_VF_STAGE HUNT want=win map=hazardous tick=275 p1=(203.8,132.0) foe=(190.2092, 131.996) foe_hp=30.0 p1_hp=100.0 stuck=0 live_bots=2 cross=0 bots=1:live(190,132,hp=30),2:live(306,132,hp=84),3:dead(214,131,hp=0)
+HH_VF_STAGE HUNT want=win map=hazardous tick=365 p1=(219.5,132.0) foe=(220.0241, 131.2416) foe_hp=68.6 p1_hp=100.0 stuck=0 live_bots=1 cross=0 bots=1:dead(207,132,hp=0),2:live(220,131,hp=69),3:dead(274,132,hp=0)
+HH_VF_STAGE HUNT want=win map=hazardous tick=455 p1=(220.2,132.0) foe=(219.1568, 131.999) foe_hp=38.6 p1_hp=100.0 stuck=3 live_bots=1 cross=0 bots=1:dead(267,132,hp=0),2:live(219,132,hp=39),3:dead(334,132,hp=0)
+HH_VF_STAGE RESOLVE want=win ok=true map=hazardous outcome=win cause=damage tick=532
+HH_VF_STAGE SCREENSHOT_stage_reset err=0 path=d:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\.hh-agent\vf6wp3-03-official\VF6WP3-20260901-ASIA-SAIGON-03\window/screens/stage_reset_1280x720.png
+HH_VF_STAGE SCREENSHOT_stage_title_after err=0 path=d:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\.hh-agent\vf6wp3-03-official\VF6WP3-20260901-ASIA-SAIGON-03\window/screens/stage_title_after_1280x720.png
+HH_VF_STAGE run_id=VF6WP3-20260901-ASIA-SAIGON-03
+HH_VF_STAGE command_id=cmd.vf6-wp3.stage.3
+HH_VF_STAGE DISPLAY=Windows
+HH_VF_STAGE SEED=7 MAP=rooftops MODE=stage NAME=Skyline Relay
+HH_VF_STAGE STARTED_AT=2026-09-03T07:20:37+07:00 ENDED_AT=2026-09-03T07:25:15+07:00
+HH_VF_STAGE USED_STEP_FIXED=0 USED_APPLY_FRAMES=3118 USED_APPLY_ATTEMPTED=3118 USED_APPLY_SUCCEEDED=3118 USED_PARSE_INPUT_EVENT=3049 USED_ACTION_PRESS=0 USED_FORCE_KILL=0 USED_TELEPORT=0 USED_APPLY_EVAL=0
+HH_VF_STAGE SCHEMA=pass SCHEMA_SOURCE=outcome_schema
+HH_VF_STAGE LOAD=pass LOAD_SOURCE=outcome_load
+HH_VF_STAGE ADVANCE=pass AFTER0=storage AFTER1=police AFTER2=hazardous
+HH_VF_STAGE LOSS=pass STAYED=rooftops CAUSE=damage BOT_HP=90.0 PIT=0
+HH_VF_STAGE HASH=pass H0=46559b7496990c7c7057b32e715a903e8037c6867f1a01a72a47c39e14f55a5e H1=084aae648db58353c5916fae0f21d508903451fa9a6141955f56ea17e115b98d
+HH_VF_STAGE CONTINUE=pass COLD=true RESET=pass LIVE=pass TIMELINE=21 EVENTS=1233
+HH_VF_STAGE HONESTY BOT_COVERAGE=smoke NOT_AI=1 NOT_Y8_PARITY=1 SURVIVAL_SHIPPED=0 TIER=approximation
+HH_VF_STAGE FORCE_KILL_OFFICIAL=0 TELEPORT_OFFICIAL=0
+HH_VF_STAGE EVIDENCE_DIR=d:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\.hh-agent\vf6wp3-03-official\VF6WP3-20260901-ASIA-SAIGON-03\window
+PASS: Vault Fighters stage progression
+HH_VF_STAGE FINISHED=1
+HH_VF_STAGE PROCESS_EXIT=0

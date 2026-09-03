@@ -15,8 +15,8 @@ import shutil
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-RUN_ID = "VF6WP3-20260901-ASIA-SAIGON-02"
-COMMAND_ID = "cmd.vf6-wp3.stage.2"
+RUN_ID = "VF6WP3-20260901-ASIA-SAIGON-03"
+COMMAND_ID = "cmd.vf6-wp3.stage.3"
 WP = "VF6-WP3"
 SAIGON = timezone(timedelta(hours=7))
 SOURCE_SUFFIXES = {".gd", ".json", ".tscn", ".md"}
@@ -290,6 +290,7 @@ def main() -> int:
         and "storage" in win_maps
         and "police" in win_maps
         and "fx_melee_close" not in win_maps
+        and all(str(r.get("death_cause", "")) == "damage" for r in win_rows if isinstance(r, dict))
     )
     ux_ok = (
         str(advance_row.get("after_win0_map", "")) == "storage"

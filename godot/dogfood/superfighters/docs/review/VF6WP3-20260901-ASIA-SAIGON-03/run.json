@@ -1,0 +1,195 @@
+{
+  "schema": "vault-fighters.vf6-wp3.pack.v1",
+  "run_id": "VF6WP3-20260901-ASIA-SAIGON-03",
+  "command_id": "cmd.vf6-wp3.stage.3",
+  "wp": "VF6-WP3",
+  "packed_at": "2026-09-03T07:55:43+07:00",
+  "base_head": "ff702a7112cb00ef97160025d3006ecb75f415ee",
+  "source_tree_sha256": "0162046f8845af21a946527bfdccd5f5885639bb5a855b57f283493790c8a6ab",
+  "godot_sha256": "35dab11e04ece16a2b93035e65204f4a944a3e00b020d43e54409193379d5eef",
+  "verdicts": {
+    "schema": "pass",
+    "load": "pass",
+    "advance": "pass",
+    "loss": "pass",
+    "hash": "pass",
+    "continue": "pass",
+    "reset": "pass",
+    "live": "pass"
+  },
+  "advance": {
+    "after_win0_map": "storage",
+    "after_win1_map": "police",
+    "after_win2_map": "hazardous",
+    "hash_after_loss": "084aae648db58353c5916fae0f21d508903451fa9a6141955f56ea17e115b98d",
+    "hash_win0": "46559b7496990c7c7057b32e715a903e8037c6867f1a01a72a47c39e14f55a5e",
+    "hash_win1": "084aae648db58353c5916fae0f21d508903451fa9a6141955f56ea17e115b98d",
+    "hash_win2": "beb29344b4af509a7685d023c319fa2e3c2399686c640702fe5cff17b8824ae2",
+    "reached_maps": [
+      "rooftops",
+      "storage",
+      "police",
+      "hazardous"
+    ],
+    "rematch_map": "police",
+    "source": "title Stage + live catalog melee KO; win police loads hazardous; rematch is button",
+    "verdict": "pass",
+    "win_rows": [
+      {
+        "bot_deaths": [
+          {
+            "death_cause": "damage",
+            "hp": 0.0,
+            "slot": 1
+          }
+        ],
+        "death_cause": "damage",
+        "end_reason": "last_standing",
+        "fight_map": "rooftops",
+        "index": 0,
+        "next_map": "storage",
+        "reward_hash": "46559b7496990c7c7057b32e715a903e8037c6867f1a01a72a47c39e14f55a5e",
+        "score": 100,
+        "tick": 400
+      },
+      {
+        "bot_deaths": [
+          {
+            "death_cause": "damage",
+            "hp": 0.0,
+            "slot": 1
+          },
+          {
+            "death_cause": "damage",
+            "hp": 0.0,
+            "slot": 2
+          }
+        ],
+        "death_cause": "damage",
+        "end_reason": "last_standing",
+        "fight_map": "storage",
+        "index": 1,
+        "next_map": "police",
+        "reward_hash": "084aae648db58353c5916fae0f21d508903451fa9a6141955f56ea17e115b98d",
+        "score": 250,
+        "tick": 880
+      },
+      {
+        "bot_deaths": [
+          {
+            "death_cause": "damage",
+            "hp": 0.0,
+            "slot": 1
+          },
+          {
+            "death_cause": "damage",
+            "hp": 0.0,
+            "slot": 2
+          },
+          {
+            "death_cause": "damage",
+            "hp": 0.0,
+            "slot": 3
+          }
+        ],
+        "death_cause": "damage",
+        "end_reason": "last_standing",
+        "fight_map": "police",
+        "index": 2,
+        "next_map": "hazardous",
+        "reward_hash": "beb29344b4af509a7685d023c319fa2e3c2399686c640702fe5cff17b8824ae2",
+        "score": 450,
+        "tick": 688
+      },
+      {
+        "bot_deaths": [
+          {
+            "death_cause": "damage",
+            "hp": 0.0,
+            "slot": 1
+          },
+          {
+            "death_cause": "damage",
+            "hp": 0.0,
+            "slot": 2
+          },
+          {
+            "death_cause": "damage",
+            "hp": 0.0,
+            "slot": 3
+          }
+        ],
+        "death_cause": "damage",
+        "end_reason": "last_standing",
+        "fight_map": "hazardous",
+        "index": 3,
+        "next_map": "hazardous",
+        "reward_hash": "97e1a09ddc16b641a3eea388282252159a6ea98660935b2863eb9134064d227a",
+        "score": 700,
+        "tick": 532
+      }
+    ]
+  },
+  "loss": {
+    "bot_hp": 90.0,
+    "bot_hp0": 100.0,
+    "death_cause": "damage",
+    "end_reason": "",
+    "hash_after": "a94ea313475a85dff94945f19d6acc0cd4d3abc6ecd6c69ae0476e18b67b98e7",
+    "hash_before": "a94ea313475a85dff94945f19d6acc0cd4d3abc6ecd6c69ae0476e18b67b98e7",
+    "lost": true,
+    "pit_loss": 0,
+    "source": "title Stage rooftops + live bot melee damage KO + Rematch button stays index 0",
+    "stayed_index": 0,
+    "stayed_map": "rooftops",
+    "verdict": "pass"
+  },
+  "hash": {
+    "hash_win0": "46559b7496990c7c7057b32e715a903e8037c6867f1a01a72a47c39e14f55a5e",
+    "hash_win0_dup": "46559b7496990c7c7057b32e715a903e8037c6867f1a01a72a47c39e14f55a5e",
+    "hash_win1": "084aae648db58353c5916fae0f21d508903451fa9a6141955f56ea17e115b98d",
+    "live_hash_after_loss": "084aae648db58353c5916fae0f21d508903451fa9a6141955f56ea17e115b98d",
+    "live_hash_win0": "46559b7496990c7c7057b32e715a903e8037c6867f1a01a72a47c39e14f55a5e",
+    "live_hash_win1": "084aae648db58353c5916fae0f21d508903451fa9a6141955f56ea17e115b98d",
+    "live_hash_win2": "beb29344b4af509a7685d023c319fa2e3c2399686c640702fe5cff17b8824ae2",
+    "source": "StageRules.record_win idempotent + sequence replay + fail-closed persist + kept bak",
+    "verdict": "pass"
+  },
+  "leftover": {
+    "leftover": 0,
+    "after_check": 0,
+    "after_headless": 0,
+    "after_window": 0,
+    "after_run_all": 0,
+    "path": "godot/dogfood/superfighters",
+    "window_exe": "C:\\Users\\truon\\AppData\\Local\\HHGodotAgent\\tooling\\godot-4.7.1-stable\\bin\\Godot_v4.7.1-stable_win64_console.exe",
+    "window_host_exit": 0,
+    "window_elapsed_sec": 281.5,
+    "headless_host_exit": 0,
+    "headless_elapsed_sec": 274.5,
+    "run_all_host_exit": 0,
+    "run_all_elapsed_sec": 1721.6,
+    "host": "System.Diagnostics.Process WaitForExit",
+    "note": "leftover-0 after each official console-twin process"
+  },
+  "exits": {
+    "check": 0,
+    "headless": 0,
+    "window": 0,
+    "run_all": 0,
+    "host": "System.Diagnostics.Process.ExitCode"
+  },
+  "live_logs_ok": true,
+  "run_all_ok": true,
+  "stills": [
+    "stage_advance_1280x720.png",
+    "stage_continue_1280x720.png",
+    "stage_fight_1280x720.png",
+    "stage_hazardous_1280x720.png",
+    "stage_load_1280x720.png",
+    "stage_lose_1280x720.png",
+    "stage_reset_1280x720.png",
+    "stage_title_1280x720.png",
+    "stage_title_after_1280x720.png"
+  ]
+}
