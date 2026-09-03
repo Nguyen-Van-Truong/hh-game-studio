@@ -126,7 +126,11 @@ static func cmd_from_variant(raw: Variant) -> Dictionary:
 	if raw is Dictionary:
 		var d: Dictionary = raw as Dictionary
 		if d.has("held") or d.has("pressed") or d.has("schema_version"):
-			return cmd_from_frame(InputFrame.from_dict(d))
+			var cmd: Dictionary = cmd_from_frame(InputFrame.from_dict(d))
+			if d.has("aim_x") or d.has("aim_y"):
+				cmd["aim_x"] = float(d.get("aim_x", 0.0))
+				cmd["aim_y"] = float(d.get("aim_y", 0.0))
+			return cmd
 		return d.duplicate()
 	return empty_cmd()
 

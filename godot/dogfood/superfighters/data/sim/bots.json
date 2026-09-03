@@ -1,0 +1,62 @@
+{
+  "schema": "vf.sim.bots.v1",
+  "schema_version": 1,
+  "title": "Vault Fighters",
+  "y8_parity_claimed": false,
+  "original_exact_numbers_claimed": false,
+  "values_are_tuning": true,
+  "planner_class": "assumption",
+  "planner_observed": false,
+  "difficulty_class": "assumption",
+  "difficulty_observed": false,
+  "difficulty_note": "Difficulty is reaction delay, aim error, tactical budget, and recovery wait. Bots have no hidden HP/ammo through walls, no teleport, and no perfect aim. Perception is LOS-only; hearing_px is still blocked by world.",
+  "not_omniscient": true,
+  "no_teleport": true,
+  "no_perfect_aim": true,
+  "no_hidden_state": true,
+  "canonical": true,
+  "default_profile": "regular",
+  "max_expansions_cap": 64,
+  "profiles": {
+    "recruit": {
+      "reaction_ticks": 18,
+      "aim_error_deg": 18.0,
+      "tactical_budget": 4,
+      "recovery_wait_ticks": 20,
+      "replan_every": 12,
+      "max_expansions": 24,
+      "hearing_px": 64.0
+    },
+    "regular": {
+      "reaction_ticks": 10,
+      "aim_error_deg": 10.0,
+      "tactical_budget": 8,
+      "recovery_wait_ticks": 12,
+      "replan_every": 8,
+      "max_expansions": 40,
+      "hearing_px": 72.0
+    },
+    "veteran": {
+      "reaction_ticks": 6,
+      "aim_error_deg": 6.0,
+      "tactical_budget": 12,
+      "recovery_wait_ticks": 8,
+      "replan_every": 6,
+      "max_expansions": 56,
+      "hearing_px": 80.0
+    }
+  },
+  "tier_map": {
+    "tier_1": "recruit",
+    "tier_2": "regular",
+    "tier_3": "veteran",
+    "tier_4": "veteran"
+  },
+  "wave_map": {
+    "0": "recruit",
+    "1": "recruit",
+    "2": "regular",
+    "3": "regular",
+    "4": "veteran"
+  }
+}

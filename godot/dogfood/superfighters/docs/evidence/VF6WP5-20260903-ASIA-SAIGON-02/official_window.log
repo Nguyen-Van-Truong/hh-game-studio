@@ -1,0 +1,34 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+Vulkan 1.4.325 - Forward+ - Using Device #0: NVIDIA - NVIDIA GeForce GTX 1660 Ti
+
+HH_VF_BOTS STEP=boot DISPLAY=Windows
+HH_VF_BOTS STEP=schema ok=true
+HH_VF_BOTS STEP=maps six
+HH_VF_BOTS STEP=weapons_start nades=3 gun=pistol ammo=12
+HH_VF_BOTS STEP=weapons classes=2
+HH_VF_BOTS STEP=finish outcome=win
+HH_VF_BOTS STEP=greedy
+HH_VF_BOTS STEP=recover
+HH_VF_BOTS STEP=diff
+HH_VF_BOTS STEP=bound
+HH_VF_BOTS STEP=live
+HH_VF_BOTS run_id=VF6WP5-20260903-ASIA-SAIGON-02
+HH_VF_BOTS command_id=cmd.vf6-wp5.bots.2
+HH_VF_BOTS DISPLAY=Windows
+HH_VF_BOTS SEED=7 MAP=rooftops MODE=vs1 NAME=Skyline Relay
+HH_VF_BOTS STARTED_AT=2026-09-03T13:56:56+07:00 ENDED_AT=2026-09-03T14:02:11+07:00
+HH_VF_BOTS USED_STEP_FIXED=0 USED_APPLY_FRAMES=2739 USED_APPLY_ATTEMPTED=2739 USED_APPLY_SUCCEEDED=2739 USED_PARSE_INPUT_EVENT=0 USED_ACTION_PRESS=0 USED_FORCE_KILL=0 USED_TELEPORT=0 USED_APPLY_EVAL=0
+HH_VF_BOTS SCHEMA=pass SCHEMA_SOURCE=outcome_schema
+HH_VF_BOTS MAPS=pass WEAPONS=pass FINISH=pass GREEDY=pass RECOVER=pass DIFF=pass BOUND=pass LIVE=pass
+HH_VF_BOTS MAP_ROW id=rooftops name=Skyline Relay reach=true pit=true aim=true moved=80.9 pit_blocks=216 gun=0 melee=0 aim_err=0.0 cause=
+HH_VF_BOTS MAP_ROW id=storage name=Pallet Annex reach=true pit=true aim=true moved=36.6 pit_blocks=3 gun=175 melee=0 aim_err=-4.0 cause=
+HH_VF_BOTS MAP_ROW id=police name=Signal Court reach=true pit=true aim=true moved=23.6 pit_blocks=0 gun=175 melee=0 aim_err=-4.0 cause=
+HH_VF_BOTS MAP_ROW id=hazardous name=Vitriol Sump reach=true pit=true aim=true moved=23.6 pit_blocks=0 gun=175 melee=0 aim_err=-4.0 cause=
+HH_VF_BOTS MAP_ROW id=lantern name=Lantern Cut reach=true pit=true aim=true moved=32.0 pit_blocks=0 gun=172 melee=0 aim_err=-4.2 cause=
+HH_VF_BOTS MAP_ROW id=gauge name=Gauge Deck reach=true pit=true aim=true moved=86.2 pit_blocks=9 gun=159 melee=0 aim_err=4.1 cause=
+HH_VF_BOTS HONESTY BOT_COVERAGE=planner NOT_AI=0 NOT_Y8_PARITY=1 PLANNER_CLASS=assumption DIFF=tuning NO_TELEPORT=1 NO_PERFECT_AIM=1 NO_HIDDEN_STATE=1
+HH_VF_BOTS FORCE_KILL_OFFICIAL=0 TELEPORT_OFFICIAL=0
+HH_VF_BOTS EVIDENCE_DIR=D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\godot\dogfood\superfighters\.evidence\VF6WP5-20260903-ASIA-SAIGON-02-window
+PASS: Vault Fighters bot planner
+HH_VF_BOTS FINISHED=1
+HH_VF_BOTS PROCESS_EXIT=0

@@ -69,6 +69,13 @@
     "survival_score": "RL-SURVIVAL-SCORE approximation, official proof is kill/combo/wave-clear, not idle AFK",
     "survival_spawn": "RL-SURVIVAL-SPAWN approximation, budget/cooldown/safe-zone, not observed",
     "survival_record": "RL-SURVIVAL-RECORD assumption, best-score file is not a Stage checkpoint",
+    "bot_nav": "RL-BOT-NAV assumption, platform/ladder graph, not observed",
+    "bot_plan": "RL-BOT-PLAN assumption, deterministic planner, not observed",
+    "bot_aim": "RL-BOT-AIM assumption, aim error + reaction delay, no perfect aim",
+    "bot_pit": "RL-BOT-PIT assumption, pit/hazard/fire avoid, not observed",
+    "bot_recover": "RL-BOT-RECOVER assumption, knockdown recovery wait",
+    "bot_diff": "RL-BOT-DIFF assumption, recruit/regular/veteran tuning, not Y8",
+    "bot_bound": "RL-BOT-BOUND assumption, bounded A* expansions",
     "hitstop": "RL-HIT-HITSTOP assumption, presentation only, clock still advances",
     "aim_dirs": "RL-AIM-DIRS assumption, not observed",
     "fire_semi": "RL-FIRE-SEMI assumption, not observed",
@@ -146,6 +153,10 @@
   "survival": {
     "schema": "vf.sim.survival.v1",
     "path": "res://data/sim/survival.json"
+  },
+  "bots": {
+    "schema": "vf.sim.bots.v1",
+    "path": "res://data/sim/bots.json"
   },
   "locomotion": {
     "schema": "vf.sim.locomotion.v1",

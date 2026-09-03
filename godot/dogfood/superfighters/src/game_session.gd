@@ -9,6 +9,7 @@ const _Inv: GDScript = preload("res://src/data/weapons/inventory.gd")
 const _Bal: GDScript = preload("res://src/sim/balance.gd")
 const _WorldOwner: GDScript = preload("res://src/world/world_owner.gd")
 const _Match: GDScript = preload("res://src/sim/match.gd")
+const _BotRules: GDScript = preload("res://src/bot/bot_rules.gd")
 
 signal won
 signal lost
@@ -106,14 +107,20 @@ func setup(p_mode: String, p_map: String, p_stage: int) -> void:
 				int(progress.get("score", 0)),
 			]
 		)
-		hud.set_hint("Stage campaign · win loads the next arena · rematch stays here")
+		hud.set_hint(
+			"Stage campaign · win loads the next arena · rematch stays here · %s"
+			% _BotRules.hud_line(_bot_profile_id())
+		)
 	elif mode == "survival":
 		survival = SurvivalRules.new()
 		survival.begin(self)
 		hud.set_stage_line(survival.hud_line())
-		hud.set_hint("Survival · last standing does not end the run · die to finish · rematch is a new run")
+		hud.set_hint(
+			"Survival · last standing does not end the run · die to finish · rematch is a new run · %s"
+			% _BotRules.hud_line(_bot_profile_id())
+		)
 	else:
-		hud.set_stage_line("")
+		hud.set_stage_line(_BotRules.hud_line(_bot_profile_id()))
 		hud.set_hint("Last standing · sprint+crouch dive in air · aerial melee kicks · hold M fire")
 	pause_screen = PauseScreen.new()
 	_resume_cb = set_paused.bind(false)
@@ -184,7 +191,7 @@ func step_from_live_input() -> bool:
 		var f: Fighter = fighters[i]
 		if f.is_bot:
 			if i >= brains.size():
-				brains.append(BotBrain.new())
+				brains.append(_make_brain(f.slot))
 			frames.append(InputActions.frame_from_cmd(
 				brains[i].think(f, fighters, pickups, SimConstants.TICK_DT),
 				clock.tick,
@@ -259,7 +266,7 @@ func _gather_live_cmds() -> Array[Dictionary]:
 		var f: Fighter = fighters[i]
 		if f.is_bot:
 			if i >= brains.size():
-				brains.append(BotBrain.new())
+				brains.append(_make_brain(f.slot))
 			cmds.append(brains[i].think(f, fighters, pickups, SimConstants.TICK_DT))
 		elif f.slot == 0:
 			cmds.append(InputActions.cmd_from_frame(InputActions.read_player_frame(0, clock.tick)))
@@ -610,7 +617,7 @@ func spawn_survival_bot() -> bool:
 	bot.facing = -1.0
 	add_child(bot)
 	fighters.append(bot)
-	brains.append(BotBrain.new())
+	brains.append(_make_brain(slot))
 	survival.spawned_this_wave += 1
 	ledger.push(clock.tick, "survival", "spawn", {
 		"slot": slot,
@@ -748,6 +755,19 @@ func _spawn_overlaps_actor(at: Vector2) -> bool:
 	return false
 
 
+func _bot_profile_id() -> String:
+	var wave: int = 0
+	if survival != null:
+		wave = survival.wave_index
+	return _BotRules.profile_for_mode(mode, stage_index, wave)
+
+
+func _make_brain(slot: int) -> BotBrain:
+	var brain: BotBrain = BotBrain.new()
+	brain.bind(self, slot, _bot_profile_id())
+	return brain
+
+
 func force_kill(slot: int) -> void:
 	## Fixture-only. Official MATCH traces and apply_frames never call this.
 	ledger.push(clock.tick, "fixture", "force_kill", {"slot": slot})
@@ -767,7 +787,7 @@ func _spawn_fighters() -> void:
 	p1.facing = 1.0
 	add_child(p1)
 	fighters.append(p1)
-	brains.append(BotBrain.new())
+	brains.append(_make_brain(0))
 	if mode == "vs2":
 		var p2: Fighter = Fighter.new()
 		p2.setup(1, 1, false)
@@ -775,7 +795,7 @@ func _spawn_fighters() -> void:
 		p2.facing = -1.0
 		add_child(p2)
 		fighters.append(p2)
-		brains.append(BotBrain.new())
+		brains.append(_make_brain(1))
 		return
 	var bots: int = 2
 	if mode == "stage":
@@ -791,7 +811,7 @@ func _spawn_fighters() -> void:
 		bot.facing = -1.0
 		add_child(bot)
 		fighters.append(bot)
-		brains.append(BotBrain.new())
+		brains.append(_make_brain(b + 1))
 		b += 1
 
 

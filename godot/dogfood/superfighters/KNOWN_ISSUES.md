@@ -10,7 +10,13 @@ First playable slice. Not G6. Not 60/60.
   (`ledger:RL-MOVE-DIVE`, `ledger:RL-MOVE-JUMP-KICK`,
   `ledger:RL-MOVE-FALL`). Y8 observation stays
   `ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). Not observed.
-- Bots are greedy (weapon then chase); they can walk into fire
+- Bots now use a seeded planner (VF6-WP5): graph nav, pit/fire
+  avoid, aim error, recovery, recruit/regular/veteran. Residual:
+  perception is LOS + short hearing, not full hearing; aim error is
+  discrete hold-to-aim noise, not analog. Overlay 3×2×2 matrix is
+  not claimed. Survival/Stage official banners stay smoke/`NOT_AI`
+  because those packages did not remint planner postconditions.
+  Not Y8 parity.
 - Stage now has a four-arena campaign with persist/reset (VF6-WP3).
   Difficulty tiers are a labeled approximation, not Y8 Bronze/Silver/Gold.
 - Survival now ships as a separate endless score run (VF6-WP4).
@@ -294,6 +300,16 @@ First playable slice. Not G6. Not 60/60.
   plus 5-minute window soak. Dying ends the run and shows score.
   Rematch is a new run, not a Stage checkpoint. Bots stay **smoke**.
   Art still VF7.
+- VF6-WP5 ships a seeded bot planner as assumption
+  (`ledger:RL-BOT-NAV`, `ledger:RL-BOT-PLAN`, `ledger:RL-BOT-AIM`,
+  `ledger:RL-BOT-PIT`, `ledger:RL-BOT-RECOVER`, `ledger:RL-BOT-DIFF`,
+  `ledger:RL-BOT-BOUND`). Official proof is `think()` plus
+  `apply_frames` on the six VS catalog maps: reach a live goal,
+  avoid known pits/hazards, apply aim error, use two weapon
+  classes, and finish a match. No teleport. No perfect aim.
+  Difficulty is visible HUD knobs (delay / aim error / budget /
+  recovery). Survival/Stage leftover evidence stays smoke.
+  Art still VF7. No new Y8 play.
 - VF3-WP4 ships grenade hold/release throw, gravity arc, bounce,
   fuse, radial falloff, owner skip, one explosion, timeout
   cleanup, and swept nade collision as assumption

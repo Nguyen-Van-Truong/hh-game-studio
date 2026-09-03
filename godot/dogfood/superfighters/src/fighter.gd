@@ -1403,6 +1403,9 @@ func _update_aim(cmd: Dictionary, fire_held: bool, fire_released: bool, nade_hel
 
 
 func _aim_from(cmd: Dictionary) -> Vector2:
+	var override_dir: Vector2 = Vector2(float(cmd.get("aim_x", 0.0)), float(cmd.get("aim_y", 0.0)))
+	if override_dir.length() > 0.15:
+		return override_dir.normalized()
 	var dir: Vector2 = Vector2(facing, 0.0)
 	var up: bool = bool(cmd.get("jump", false))
 	var down: bool = bool(cmd.get("crouch", false))

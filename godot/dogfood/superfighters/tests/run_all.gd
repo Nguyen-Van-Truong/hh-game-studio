@@ -25,6 +25,7 @@ const MatchCasesScript: GDScript = preload("res://tests/match_cases.gd")
 const VsFlowCasesScript: GDScript = preload("res://tests/vs_flow_cases.gd")
 const StageCasesScript: GDScript = preload("res://tests/stage_cases.gd")
 const SurvivalCasesScript: GDScript = preload("res://tests/survival_cases.gd")
+const BotCasesScript: GDScript = preload("res://tests/bot_cases.gd")
 const _Combat: GDScript = preload("res://src/sim/combat.gd")
 
 var _fails: PackedStringArray = PackedStringArray()
@@ -62,6 +63,7 @@ var _match: String = "unproven"
 var _vs_flow: String = "unproven"
 var _stage: String = "unproven"
 var _survival: String = "unproven"
+var _bots: String = "unproven"
 
 
 func _initialize() -> void:
@@ -131,6 +133,11 @@ func _boot() -> void:
 	await _test_survival(app)
 	if SurvivalCasesScript.live_app != null and is_instance_valid(SurvivalCasesScript.live_app):
 		app = SurvivalCasesScript.live_app
+	if paused:
+		paused = false
+	await _test_bots(app)
+	if BotCasesScript.live_app != null and is_instance_valid(BotCasesScript.live_app):
+		app = BotCasesScript.live_app
 	if paused:
 		paused = false
 	if _fails.is_empty():
@@ -1808,6 +1815,47 @@ func _test_survival(app: App) -> void:
 		_survival = "proven"
 
 
+func _test_bots(app: App) -> void:
+	var errors: PackedStringArray = await BotCasesScript.run_all(app)
+	var i: int = 0
+	while i < errors.size():
+		_fail("BOTS %s" % String(errors[i]))
+		i += 1
+	var schema: String = str(BotCasesScript.outcome_schema.get("verdict", "unproven"))
+	var maps_v: String = str(BotCasesScript.outcome_maps.get("verdict", "unproven"))
+	var weapons: String = str(BotCasesScript.outcome_weapons.get("verdict", "unproven"))
+	var finish: String = str(BotCasesScript.outcome_finish.get("verdict", "unproven"))
+	var greedy: String = str(BotCasesScript.outcome_greedy.get("verdict", "unproven"))
+	var recover: String = str(BotCasesScript.outcome_recover.get("verdict", "unproven"))
+	var diff: String = str(BotCasesScript.outcome_diff.get("verdict", "unproven"))
+	var bound: String = str(BotCasesScript.outcome_bound.get("verdict", "unproven"))
+	var live: String = str(BotCasesScript.outcome_live.get("verdict", "unproven"))
+	if schema != "pass":
+		_fail("BOTS SCHEMA outcome is %s" % schema)
+	if maps_v != "pass":
+		_fail("BOTS MAPS outcome is %s" % maps_v)
+	if weapons != "pass":
+		_fail("BOTS WEAPONS outcome is %s" % weapons)
+	if finish != "pass":
+		_fail("BOTS FINISH outcome is %s" % finish)
+	if greedy != "pass":
+		_fail("BOTS GREEDY outcome is %s" % greedy)
+	if recover != "pass":
+		_fail("BOTS RECOVER outcome is %s" % recover)
+	if diff != "pass":
+		_fail("BOTS DIFF outcome is %s" % diff)
+	if bound != "pass":
+		_fail("BOTS BOUND outcome is %s" % bound)
+	if live != "pass":
+		_fail("BOTS LIVE outcome is %s" % live)
+	if BotCasesScript.used_force_kill != 0:
+		_fail("BOTS official path used force_kill")
+	if BotCasesScript.used_teleport != 0:
+		_fail("BOTS official path used teleport")
+	if _count_prefix("BOTS ") == 0:
+		_bots = "proven"
+
+
 func _emit() -> void:
 	print("HH_VF_PATH title→fight→win/lose→restart")
 	print(
@@ -2287,6 +2335,22 @@ func _emit() -> void:
 			str(SurvivalCasesScript.outcome_live.get("verdict", "unproven")),
 			SurvivalCasesScript.used_force_kill,
 			_survival,
+		]
+	)
+	print(
+		"HH_VF_BOTS SCHEMA=%s MAPS=%s WEAPONS=%s FINISH=%s GREEDY=%s RECOVER=%s DIFF=%s BOUND=%s LIVE=%s FORCE_KILL=%d BOT_COVERAGE=planner NOT_AI=0 NOT_Y8_PARITY=1 status=%s"
+		% [
+			str(BotCasesScript.outcome_schema.get("verdict", "unproven")),
+			str(BotCasesScript.outcome_maps.get("verdict", "unproven")),
+			str(BotCasesScript.outcome_weapons.get("verdict", "unproven")),
+			str(BotCasesScript.outcome_finish.get("verdict", "unproven")),
+			str(BotCasesScript.outcome_greedy.get("verdict", "unproven")),
+			str(BotCasesScript.outcome_recover.get("verdict", "unproven")),
+			str(BotCasesScript.outcome_diff.get("verdict", "unproven")),
+			str(BotCasesScript.outcome_bound.get("verdict", "unproven")),
+			str(BotCasesScript.outcome_live.get("verdict", "unproven")),
+			BotCasesScript.used_force_kill,
+			_bots,
 		]
 	)
 	print(

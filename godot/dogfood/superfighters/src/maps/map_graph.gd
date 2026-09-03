@@ -151,6 +151,78 @@ static func zone_reached(doc: Dictionary, zone: Dictionary) -> bool:
 	return false
 
 
+static func is_walkable_cell(doc: Dictionary, x: int, y: int) -> bool:
+	return _is_walkable(doc, x, y)
+
+
+static func neighbors_of(doc: Dictionary, x: int, y: int) -> Array:
+	return _neighbors(doc, x, y, jump_dx(), jump_dy())
+
+
+static func world_to_cell(pos: Vector2, tile: int = 16) -> Vector2i:
+	return Vector2i(int(floor(pos.x / float(tile))), int(floor(pos.y / float(tile))))
+
+
+static func cell_center(cell: Vector2i, tile: int = 16) -> Vector2:
+	return Vector2((float(cell.x) + 0.5) * float(tile), (float(cell.y) + 0.5) * float(tile))
+
+
+static func stand_cell(doc: Dictionary, pos: Vector2) -> Vector2i:
+	var cell: Vector2i = world_to_cell(pos)
+	if is_walkable_cell(doc, cell.x, cell.y):
+		return cell
+	if is_walkable_cell(doc, cell.x, cell.y + 1):
+		return Vector2i(cell.x, cell.y + 1)
+	if is_walkable_cell(doc, cell.x, cell.y - 1):
+		return Vector2i(cell.x, cell.y - 1)
+	return cell
+
+
+static func is_pit_column(doc: Dictionary, x: int) -> bool:
+	var height: int = int(doc.get("height", 0))
+	if height < 2:
+		return false
+	return (
+		not _MapCodec.is_walk_support(doc, x, height - 1)
+		and not _MapCodec.is_walk_support(doc, x, height - 2)
+	)
+
+
+static func is_hazard_cell(doc: Dictionary, x: int, y: int) -> bool:
+	return (
+		_MapCodec.has_xy(doc, "hazard", x, y)
+		or _MapCodec.has_xy(doc, "hazard", x, y + 1)
+		or _MapCodec.has_xy(doc, "hazard", x, y - 1)
+	)
+
+
+static func step_is_unsafe(doc: Dictionary, x: int, y: int, dir: int) -> bool:
+	if dir == 0:
+		return false
+	var nx: int = x + dir
+	if is_hazard_cell(doc, nx, y):
+		return true
+	if is_walkable_cell(doc, nx, y):
+		return false
+	if is_pit_column(doc, nx):
+		return true
+	var height: int = int(doc.get("height", 0))
+	var fy: int = y + 1
+	var saw_floor: bool = false
+	while fy < height:
+		if is_walkable_cell(doc, nx, fy):
+			saw_floor = true
+			if is_hazard_cell(doc, nx, fy):
+				return true
+			break
+		if _MapCodec.is_blocker(doc, nx, fy) and not _MapCodec.has_xy(doc, "one_way", nx, fy):
+			break
+		fy += 1
+	if not saw_floor:
+		return is_pit_column(doc, nx) or fy >= height - 1
+	return false
+
+
 static func missing_platforms(doc: Dictionary) -> PackedStringArray:
 	var errors: PackedStringArray = PackedStringArray()
 	var reached: Dictionary = reach_from_spawns(doc)

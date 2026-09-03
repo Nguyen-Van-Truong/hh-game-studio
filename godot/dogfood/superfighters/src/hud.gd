@@ -79,7 +79,11 @@ func refresh(fighters: Array) -> void:
 		if f.slot == 1 and f.is_human:
 			who = "P2 Red"
 		elif f.is_bot:
-			who = "Bot%d" % f.slot
+			var skill: String = ""
+			var session: GameSession = f.get_parent() as GameSession
+			if session != null and f.slot < session.brains.size() and session.brains[f.slot] != null:
+				skill = " %s" % session.brains[f.slot].profile_id
+			who = "Bot%d%s" % [f.slot, skill]
 		var pose: String = ""
 		if f.diving:
 			pose = " DIVE"

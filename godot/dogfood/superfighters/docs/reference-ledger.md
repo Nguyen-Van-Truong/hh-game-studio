@@ -1096,3 +1096,33 @@ Bots stay smoke.
 | RL-SURVIVAL-SPAWN | Director budget and respawn | `approximation` | none | VF6-WP4; cites RL-ITEM-RANDOM-SPAWN | 2026-09-03 | cooldown + safe-zone; living bots/pickups capped; timed weapon/prop drops | period, cap | Not claimed Y8 spawn math. |
 | RL-SURVIVAL-RECORD | Best-score file | `assumption` | none | VF6-WP4; V-A13 temp+rename | 2026-09-03 | persist best score; restart does not load a run checkpoint | store | `user://vf_survival/`. |
 
+---
+
+## VF6-WP5 Bot planner (not a play observation)
+
+Dated 2026-09-03 Asia/Saigon. No in-game Y8 play. No HTML5/Flash
+package. Sidecar: `docs/bots.md`. Official `run_id` is
+`VF6WP5-20260903-ASIA-SAIGON-03` (`cmd.vf6-wp5.bots.3`).
+Packs `-01` and `-02` are void.
+
+Planner stays `ledger:RL-BOT-PLAN` (`assumption`, **not observed**).
+Navigation stays `ledger:RL-BOT-NAV` (`assumption`). Aim error stays
+`ledger:RL-BOT-AIM` (`assumption`). Pit/fire avoid stays
+`ledger:RL-BOT-PIT` (`assumption`). Recovery stays
+`ledger:RL-BOT-RECOVER` (`assumption`). Difficulty profiles stay
+`ledger:RL-BOT-DIFF` (`assumption`, not Y8 Bronze/Silver/Gold).
+Bounded A* stays `ledger:RL-BOT-BOUND` (`assumption`). Hold-to-aim
+stays `ledger:RL-CTRL-HOLD-AIM` (`assumption`). 60 Hz stays
+`ledger:RL-SIM-FIXED-60` (`assumption`). Y8 observation stays
+`ledger:RL-MOVE-ROLL-DIVE` (`unavailable`). Do **not** cite as observed.
+
+| ID | Topic | Class | Conf. | Source | When | Behavior to reproduce | Tuning-only | Notes |
+|---|---|---|---|---|---|---|---|---|
+| RL-BOT-NAV | Platform/ladder graph | `assumption` | none | VF6-WP5; cites RL-MAP-GRAPH | 2026-09-03 | bots walk/jump/climb catalog cells; no teleport | jump envelope | Public map topology, not hidden state. |
+| RL-BOT-PLAN | Seeded intent planner | `assumption` | none | VF6-WP5 product contract | 2026-09-03 | pickup/cover/attack/retreat/hold; same seed same intents | budget | Official proof is think()+apply_frames. |
+| RL-BOT-AIM | Aim error + reaction delay | `assumption` | none | VF6-WP5; cites RL-CTRL-HOLD-AIM | 2026-09-03 | first shot waits reaction ticks; shot dir is rotated by aim_error_deg vs geometric center | degrees, delay | No perfect aim. Analog override, not HUD-only. |
+| RL-BOT-PIT | Pit/hazard/fire avoid | `assumption` | none | VF6-WP5; cites RL-ENV-ARENA | 2026-09-03 | bots route around known pit columns; greedy may fall | — | Route-around, not hold-still. |
+| RL-BOT-RECOVER | Knockdown recovery wait | `assumption` | none | VF6-WP5; cites RL-HIT-DOWN | 2026-09-03 | locked during knockdown; extra recovery ticks before acting | wait ticks | Not a teleport get-up. |
+| RL-BOT-DIFF | recruit/regular/veteran | `assumption` | none | VF6-WP5 product tuning; **not** observed Y8 | 2026-09-03 | HUD shows delay/aim/budget; Stage tier and Survival wave map onto profiles | four knobs | Visible/tunable, not Y8 ranks. |
+| RL-BOT-BOUND | Bounded decision cost | `assumption` | none | VF6-WP5 | 2026-09-03 | A* expansions ≤ profile max and ≤ 64 | cap | Fail if planner loops. |
+

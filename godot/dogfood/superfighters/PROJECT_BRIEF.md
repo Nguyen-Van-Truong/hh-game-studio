@@ -86,7 +86,11 @@ https://mythologicinteractive.com/Superfighters
 - VS 1P (vs bots), local VS 2P (six maps: Skyline Relay, Pallet Annex,
   Signal Court, Vitriol Sump, Lantern Cut, Gauge Deck), and Stage
   (Skyline Relay → Pallet Annex → Signal Court → Vitriol Sump;
-  persist/reset; difficulty tiers labeled approximation)
+  persist/reset; difficulty tiers labeled approximation).
+  VS 1P bots use a seeded planner (graph nav, pit/fire avoid, aim
+  error, recovery; `ledger:RL-BOT-*`, assumption). Not Y8 parity..
+  VS 1P bots use a seeded planner (graph nav, pit/fire avoid, aim
+  error, recovery; `ledger:RL-BOT-*`, assumption). Not Y8 parity.
 - Camera frames the whole arena
 - Title → fight → win/lose → restart; Escape / Start pause
 
