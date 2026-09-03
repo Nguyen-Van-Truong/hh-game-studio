@@ -2,7 +2,7 @@ PLAN_SCOPE=godot/dogfood/superfighters
 PRODUCT_PLAN_AUTHORITY=1
 PARENT_PLATFORM_PLAN=zdocs/20-8-godot-agent-autopilot-plan.txt
 PARENT_PLATFORM_STATUS=OWNER_STOPPED_59_OF_60
-CURRENT_VALID_WP=VF6-WP3
+CURRENT_VALID_WP=VF6-WP4
 CORRECTION_GATE_VF2_WP2=CLEARED
 STATUS=ACTIVE
 PLAN_DATE=2026-08-29
@@ -25,12 +25,12 @@ một lần, tự làm, tự chạy, tự kiểm và tạo gói review; người
 | 3 | VF3 combat | melee/kick, hitbox, knockdown, disarm, aim/fire, grenade | VF2 | weapons + VFX | [x] 6/6 |
 | 4 | VF4 world interaction | props, glass, barrels, containers, doors/elevators, hazards | VF2 | map fixtures | [x] 5/5 |
 | 5 | VF5 map parity | 6 functional arenas; original geometry/names/art | VF3,VF4 | one map per agent lane | [x] 6/6 |
-| 6 | VF6 modes + AI | VS, local 2P, Stage, Survival, competent bots | VF3,VF5 | mode/UI/AI | [ ] 2/5 |
+| 6 | VF6 modes + AI | VS, local 2P, Stage, Survival, competent bots | VF3,VF5 | mode/UI/AI | [ ] 3/5 |
 | 7 | VF7 presentation | original skins, animation, audio, HUD, menu, accessibility | VF5,VF6 | art/audio/UI | [ ] 0/4 |
 | 8 | VF8 agent autonomy | brief→edit→play→observe→repair→checkpoint, no manual F6 | VF0..VF7 | host/bridge | [ ] 0/4 |
 | 9 | VF9 verification | trace replay, E2E, differential rubric, soak, leak proof | all above | QA | [ ] 0/5 |
 | 10 | VF10 package | Windows build, offline run, provenance/license, review bundle | VF9 | release | [ ] 0/3 |
-|   | **Tổng** | **50 WP nhỏ; chỉ coordinator tick sau DoD** |  |  | **31/50** |
+|   | **Tổng** | **50 WP nhỏ; chỉ coordinator tick sau DoD** |  |  | **32/50** |
 
 Gate nội bộ:
 
@@ -2471,7 +2471,7 @@ VF6-WP2 — VS 1P and local VS 2P production flow                               
         Parent 20-8 unchanged: R9-WP4 [ ]; 59/60; G6 [ ].
       Commit: (this tick)
 
-VF6-WP3 — Stage progression and difficulty/reward loop                                  [ ]
+VF6-WP3 — Stage progression and difficulty/reward loop                                  [x]
   Phụ thuộc: VF6-WP1,VF6-WP2,VF5-WP2..5. Files: stage rules/save/UI/tests.
   Làm: four core stage arenas in observed order, progression after win,
   difficulty tiers or explicitly documented approximation, persistent score/
@@ -2480,6 +2480,76 @@ VF6-WP3 — Stage progression and difficulty/reward loop                        
   roster; loss/restart does not skip or duplicate stage; reward hash stable.
   DoD: stage is more than one isolated win per map; any unobserved tier is
   labeled approximation, not claimed exact.
+  LOG:
+    LOG 2026-09-03 08:19 Asia/Saigon — agent=coordinator
+      Base: 7066129 stage progression that
+        advances maps after a real win
+        on VF6-WP2 tick 147331d.
+      Files/leases: data/sim/stage.json,
+        data/sim/schema.json, src/sim/stage.gd,
+        src/app.gd, src/game_session.gd,
+        src/ui/title_screen.gd,
+        tests/stage_cases.gd, tests/run_stage.gd,
+        tests/check_stage.py,
+        tests/pack_stage_evidence.py,
+        tests/run_all.gd, docs/stage.md,
+        docs/reference-ledger.md,
+        docs/evidence/VF6WP3-20260901-ASIA-SAIGON-03/
+        (official remint -03 only; -01/-02 void;
+        leftover-0; rooftops→storage→police→
+        hazardous; window ~281s host exit 0
+        leftover 0).
+      Verify: leftover-0; run VF6WP3-20260901-ASIA-SAIGON-03
+        cmd.vf6-wp3.stage.3 seed 7 map
+        rooftops / Skyline Relay mode stage;
+        source hash
+        0162046f8845af21a946527bfdccd5f5885639bb5a855b57f283493790c8a6ab
+        SCHEMA=pass LOAD=pass ADVANCE=pass LOSS=pass
+        HASH=pass CONTINUE=pass RESET=pass LIVE=pass
+        AFTER0=storage AFTER1=police AFTER2=hazardous
+        LOSS stayed=rooftops cause=damage PIT=0
+        HASH win0!=win1 loss_stable; 9 stills;
+        APPLY 3118/3118 (USED_FORCE_KILL=0);
+        window ~281s host exit 0 leftover 0
+        python godot/dogfood/superfighters/tests/check_stage.py
+          EXIT 0
+        godot --headless --path godot/dogfood/superfighters
+          --script res://tests/run_stage.gd EXIT 0
+        godot --path godot/dogfood/superfighters
+          --script res://tests/run_stage.gd EXIT 0
+        leftover Godot on product --path = 0
+        python tests/bootstrap/test_authoritative_plan.py EXIT 0
+        python tests/bootstrap/test_vault_fighters_plan.py EXIT 0
+          PASS: 50 unique VF WPs; no-skip; next=VF6-WP3 (pre-tick);
+          ticked=VF0-WP1,VF0-WP2,VF0-WP3,VF1-WP1,VF1-WP2,VF1-WP3,
+          VF1-WP4,VF2-WP1,VF2-WP2,VF2-WP3,VF2-WP4,VF2-WP5,VF3-WP1,
+          VF3-WP2,VF3-WP3,VF3-WP4,VF3-WP5,VF3-WP6,VF4-WP1,
+          VF4-WP2,VF4-WP3,VF4-WP4,VF4-WP5,VF5-WP1,VF5-WP2,
+          VF5-WP3,VF5-WP4,VF5-WP5,VF5-WP6,VF6-WP1,VF6-WP2;
+          parent 20-8 frozen 59/60 R9-WP4
+        post-tick expected next=VF6-WP4
+      Honesty:
+        Order rooftops→storage→police→hazardous
+        is approximation, not observed Y8.
+        Tiers bot-count approximation.
+        Bots smoke. Art still VF7.
+        Survival unshipped. 60 Hz / hold-to-aim
+        assumption. Not Y8 parity. Not V0.
+        No Y8 rip.
+      Critic: leftover-0 both TICK=yes
+        (II b67d305a leftover-0 iso hash
+        0162046f… MATCH; window ~281s host
+        exit 0 leftover 0; advance
+        storage→police→hazardous rematch=police;
+        loss stayed rooftops cause=damage;
+        HH e064a022 leftover-0 iso same hash;
+        remints -01/-02 void).
+      Gaps: residual nits OK: honesty only
+        (order/tier approximation; bots smoke;
+        art still VF7; Survival unshipped;
+        60 Hz / hold-to-aim assumption).
+        Parent 20-8 unchanged: R9-WP4 [ ]; 59/60; G6 [ ].
+      Commit: (this tick)
 
 VF6-WP4 — Survival mode and spawn director                                             [ ]
   Phụ thuộc: VF6-WP1,VF3-WP6,VF5-WP6. Files: survival director/UI/tests.
@@ -2846,7 +2916,7 @@ vào `KNOWN_ISSUES.md`; không đổi acceptance để làm cho pass.
 21. LỆNH KHỞI ĐỘNG CHO AGENT TIẾP THEO
 ================================================================================
 
-Đọc `AGENTS.md`, sau đó đọc bảng đầu file này. WP đầu tiên chưa tick là **VF6-WP3**.
+Đọc `AGENTS.md`, sau đó đọc bảng đầu file này. WP đầu tiên chưa tick là **VF6-WP4**.
 
 Không làm R9-WP4/G6/GX; không mở Rust engine; không đụng Kho Bí Ẩn/Hoan Hao;
 không dùng Snake làm demo; không tải/rip Y8. Chỉ khi VF0-WP1 và VF0-WP2 đã có
@@ -3285,6 +3355,23 @@ dùng chỉ xem và review.
   Product 5ab444a. Gate remains CLEARED. Parent 20-8
   unchanged (R9-WP4 [ ], 59/60, G6 [ ]). VF6-WP2 ticked;
   CURRENT_VALID_WP=VF6-WP3; V0 not ticked. VF6-WP3 remains [ ].
+- COORDINATOR CLOSEOUT VF6-WP3 (2026-09-03 08:19 Asia/Saigon): leftover-0;
+  II b67d305a + HH e064a022 TICK=yes; run
+  VF6WP3-20260901-ASIA-SAIGON-03; command
+  cmd.vf6-wp3.stage.3; source
+  0162046f8845af21a946527bfdccd5f5885639bb5a855b57f283493790c8a6ab
+  leftover-0; window ~281s host exit 0;
+  APPLY 3118/3118 (USED_FORCE_KILL=0).
+  Official remint -03; -01/-02 void.
+  rooftops→storage→police→hazardous.
+  Loss stayed rooftops cause=damage.
+  9 stills.
+  Honesty: order/tier approximation;
+  bots smoke; art still VF7.
+  No Y8 rip.
+  Product 7066129. Gate remains CLEARED. Parent 20-8
+  unchanged (R9-WP4 [ ], 59/60, G6 [ ]). VF6-WP3 ticked;
+  CURRENT_VALID_WP=VF6-WP4; V0 not ticked. VF6-WP4 remains [ ].
 
 ================================================================================
 HẾT PLAN — 29-8-2026

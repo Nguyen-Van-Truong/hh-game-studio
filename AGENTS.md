@@ -1,20 +1,18 @@
 # AGENTS.md — HH Game Studio
 
-## OWNER FREEZE TOÀN BỘ DEMO/PLAN — 2026-09-01
+## OWNER RESUME — 2026-09-03
 
-Owner đã yêu cầu dừng mọi implement, demo, Godot run, test runtime, evidence
-packing, commit và tick plan. Trạng thái này ưu tiên hơn các câu “làm WP đầu
-tiên chưa tick” còn sót trong lịch sử bên dưới. Agent chỉ được đọc/audit,
-kiểm kê dirty tree và cập nhật tài liệu bàn giao; không được sửa product,
-không được tự resume từ chat cũ hoặc PASS banner.
+Owner đã lệnh tiếp tục hoàn thiện sản phẩm. Freeze 2026-09-01 là lịch sử.
+Nguồn tiến độ duy nhất: `zdocs/29-8-vault-fighters-y8-parity-plan.txt`
+(`CURRENT_VALID_WP`, hiện **VF6-WP4**, **32/50**). Parent `zdocs/20-8-*`
+vẫn 59/60 tại R9-WP4; không mở G6/GX. Overlay 31-8 vẫn AUTHORITY=0.
 
-- Platform `zdocs/20-8-*`: frozen 59/60 tại R9-WP4; không mở G6/GX.
-- Product `zdocs/29-8-*`: frozen 29/50 tại VF6-WP1; dirty source là WIP.
-- Quality overlay `zdocs/31-8-*`: read-only/non-authoritative trong freeze.
-- Chỉ resume khi owner gửi một lệnh mới, tường minh, sau freeze và trỏ tới
-  `zdocs/1-9-vault-fighters-owner-freeze-plan-audit-and-handoff.txt`.
-- Khi resume vẫn phải bắt đầu bằng audit/reconcile VF6-WP1; không được nhảy
-  VF6-WP2 hoặc import art draft chỉ vì đã có file trong `.hh-agent/`.
+Handoff WP3: `zdocs/2-9-vault-fighters-vf6-wp3-split-critic-handoff.txt`
+(lịch sử freeze: `zdocs/1-9-vault-fighters-owner-freeze-plan-audit-and-handoff.txt`).
+VF6-WP1, VF6-WP2 và VF6-WP3 đã đóng. WP tiếp theo là VF6-WP4.
+Không nhảy VF6-WP5. Không mở G6/GX/R9-WP4.
+
+Block “frozen 29/50 / VF6-WP1” bên dưới đây nếu còn sót là **stale**.
 
 
 ## ROUTE HIỆN TẠI — VAULT FIGHTERS / Y8-LIKE CLEAN-ROOM
