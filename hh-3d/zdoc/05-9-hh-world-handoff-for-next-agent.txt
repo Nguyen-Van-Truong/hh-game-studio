@@ -1,0 +1,357 @@
+HH WORLD — HANDOFF FOR NEXT AGENT (AUDIT / FIX PLAN / CONTINUE)
+DATE=2026-09-05
+TIMEZONE=Asia/Saigon
+TIME_LOCAL≈07:54 +07
+AUTHOR=outgoing implementer/coordinator (this chat)
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+DO_NOT_TICK_PLAN_CHECKBOXES=1
+NO_COMMIT_UNLESS_OWNER_ASKS=1
+PRODUCT=HH World only (hh-3d/app). Do NOT touch Vault Fighters / Godot / kho-bi-an / Snake.
+
+This file is a handoff, not a new authoritative plan. Do not tick anything from it.
+Another agent must evaluate, audit, and may DOCUMENTATION-ONLY-fix plans.
+Runtime leftover work is allowed under the recorded owner grant (HH World web,
+local 4175, no OSM fetch, no WAN bind, no fake OIDC, no fake GATE-U1).
+
+================================================================================
+0. READ ORDER
+================================================================================
+
+1. This file.
+2. hh-3d/app/PROGRESS.txt          ← live truth (READ_THIS_FIRST)
+3. hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+     PLAN_ROLE=CANONICAL_WP_ORDER_AND_ACCEPTANCE
+     PLAN_CHECKBOXES=UNCHANGED_DO_NOT_TICK
+     CURRENT_FIRST_LEFTOVER=GATE-U1
+     STATUS=LOCAL_PROOF_EXISTS_ACCEPTANCE_INCOMPLETE
+4. hh-3d/zdoc/03-9-hh-world-owner-modes.txt  (modes / friends / shops)
+5. Only the critic files named below for the slice you touch.
+
+Do not take checkbox [ ] in the 31-8 plan as “code does not exist”.
+Do not take PROGRESS street slices as plan PASS.
+Overlay hh-3d/zdoc/31-8-vault-fighters-quality… does not apply (wrong product).
+Quality overlay for VF is AUTHORITY=0 even on VF. Ignore VF entirely.
+
+Parent platform closeout zdocs/20-8-* is 59/60 R9-WP4 — do not open it.
+AGENTS.md at repo root still talks VF6-WP5; that is a different product lane.
+This thread owns HH World only.
+
+================================================================================
+1. LIVE PLAYER (verify before any remint)
+================================================================================
+
+  URL (only):  http://127.0.0.1:4175/
+  Never: 4173 (Hòn Gió demo), 4174, 5175 as a second HH World preview,
+         0.0.0.0 bind, WAN.
+
+  Claimed at last critic (2026-09-05 ~06:50 +07):
+    LIVE_JS=/assets/index-KZQAQdH6.js
+    LEN=2176239
+    SHA256=878eb28eea10fa2cb114421b8157f398e6977ca0cf3c8a404a95d39867bc56e7
+    LIVE_PID=388
+    LIVE_PID_STARTTIME=2026-09-05 06:42:59 +07
+    CSS=/assets/index-DsRW_q10.css  (may still be this)
+
+  GET / then GET the script as raw bytes. If name/LEN/SHA differ, treat
+  KZQAQdH6 notes as superseded. Do not recycle 4175 while a critic is in flight.
+
+  One Godot/preview worker rule analog: one 4175 listen pid. Kill ONLY that
+  LISTEN pid when recycling. Never PowerShell $PID.
+
+  Owner screenshot 2026-09-05 ~07:54: ?seat=a, HUD “A/D strafe”,
+  “16 FPS · NOT_60”, “Offline · Máy này · 4175”, looking, facing north.
+  Chrome DevTools console open (this alone drops FPS).
+
+================================================================================
+2. WHY FPS IS LOW (HONEST — DO NOT CLAIM 60)
+================================================================================
+
+The chip is working. Low numbers are real, not a broken counter.
+
+What the chip is:
+  hh-3d/app/web/src/play/FpsChip.tsx
+  rAF sample every ~400 ms. Label always “NOT_60”. data-claim=NOT_R2_WP1.
+  Hidden tab skips samples. Canvas frameloop pauses when tab hidden.
+
+Observed:
+  Owner headed + DevTools: ~16 FPS (screenshot).
+  Independent CDP headless on KZQAQdH6: ~5 then ~14 FPS.
+  Older Harbor Play (post far-LOD, not this hash): idle mean 44 / walk mean 50
+  after settle; first W after minimap mount min ≈10 / mean ≈24 (3 s rAF).
+  Plan R2-WP1 wants idle ≥50 and first-W min ≥20 (or ≥25). UNFILLED.
+  Old MapLibre-only idle was 56.82 — that was 2D map, not Play street.
+
+Why it cannot “just be 60” on this build:
+  1. Scene cost: ~60 extruded buildings + insets (windows/doors/bands),
+     kiosks, lamps, 15 scooters, 4 zebras, spill, haze, fixture walls,
+     drei <Html> nametags/shop boards (DOM portals — expensive),
+     follow camera + shadow map + R3F Canvas. Bundle JS ≈ 2.17 MB.
+  2. Cheap hitch already on: BasicShadowMap (not PCFSoft), dpr={[1,1.25]},
+     powerPreference high-performance, MapLibre minimap deferred until
+     Play idle (minimapDefer play-idle), far inner LOD >90 m, Html labels
+     skip >90 m (HTML_LOD remint), hidden-tab frameloop=never.
+  3. First W still compiles/mounts leftover work (minimap, audio, materials).
+     That hitch is the named R2 leftover, not a missing FPS chip.
+  4. Headed Chrome + second seat tab + DevTools + extensions (owner
+     “School” profile) is not the CDP number and not 60.
+  5. R2-WP1 is blocked by GATE-U1 in the plan. Street hitch slices are
+     allowed as local leftover work. They must stay labeled NOT_R2_WP1 /
+     NOT_60. Do not tick R2-WP1. Do not write “60 FPS” into honesty copy.
+
+To actually raise FPS (next implementer, not this report):
+  Measure headed 4175 with DevTools CLOSED, one tab, 1280×720, after 5 s idle.
+  Then cut cost, in order of likely win:
+    - dpr max 1.0 (drop 1.25)
+    - shadows off or only near caster / no shadow on far boxes
+    - replace drei Html shop/place/plaque with world-space meshes or
+      a single HUD list (Html LOD 90 m is not enough if many are near)
+    - instanced street props / merge static meshes
+    - skip far building insets entirely (already skip some >90 m)
+    - do not mount MapLibre until first idle AND keep it off during walk
+    - cap pixel lights; avoid per-frame layout on Html
+  Re-measure first-W min and idle mean. Keep NOT_60 until ≥50 idle headed
+  and first-W min ≥20 on the same live hash with an independent critic.
+  Demo Hòn Gió (4173) feels smoother because the island is tiny, few Html
+  portals, no 60-building Harbor, no minimap/presence bus.
+
+================================================================================
+3. WHAT THE PRODUCT IS
+================================================================================
+
+Authored 400 m block around 10.7725, 106.6980. NOT OSM. NOT 1:1 Saigon.
+NOT a digital twin. NOT GTA. Display name Vault Fighters is a different
+folder — this app is HH World.
+
+Stack: Vite + React + R3F + MapLibre (minimap / 2D), Godot stock unused here.
+Identity: local demo seats A/B/C via ?seat= + /demo-bus on 127.0.0.1.
+Online: 2 friendable seats (A/B) on THIS PC only. Seat C stranger.
+  Plan VISIBLE_FRIEND_CAP=20 is M2-WP1 unproven. Do not claim 20 live users.
+Walk: 2.55 m/s, sprint 4.35 (Hòn Gió play.ts).
+Connected HUD copy: “Máy này · 4175” when connected (was wrongly
+  “Đang kết nối”). Lost = “Mất kết nối”. Retry = “Đang kết nối lại”.
+
+Demo reference (read-only, do not ship demo assets):
+  hh-3d/demo/   Hòn Gió on 4173 if needed for feel, not as HH World preview.
+  lookYawSign=-1
+  A/D always strafe; from-behind uses flipped right (-cos, +sin)
+  Do not flip strafe when changing yaw sign.
+  playLookCamera keeps person in frame on pitch.
+
+================================================================================
+4. CONTROLS — CURRENT CONTRACT (KZQAQdH6)
+================================================================================
+
+LOOK_YAW_SIGN=-1  (hh-3d/app/web/src/avatar/look.ts)
+  Mouse-left (negative dx) INCREASES heading. Matches demo.
+  +1 was owner-rejected twice (felt inverted).
+
+A/D and pad ◀/▶ ALWAYS strafe via applyLookMove.
+  Do NOT use applyFacingMove on the play tick (that was in-place turn;
+  owner: “bấm trái thì đi phải”).
+  Three.js lookAt behind heading 0: camera-right ≈ west.
+  Demo flipped right: A from north walks EAST = opposite camera-right
+  = SCREEN-LEFT.
+  Heading must not spin from A alone.
+
+Pitch-up: follow camera look-at stays on chest (~camLookY 1.9–2.0).
+  Do not add +pitchDeg * 0.36 (that aimed ~10 m into the sky; tunic vanished).
+
+HUD compact: “A/D strafe” not “A/D turn”.
+WalkPad aria: “Move left/right” not “Turn”.
+
+If owner again says A goes right: CDP heading + lon + camera-right vector
+  AND a screenshot. Lon-west is NOT screen-left at heading 0.
+
+================================================================================
+5. DONE SLICES (code exists; plan still [ ]; NOT_PLAN_PASS)
+================================================================================
+
+Acceptance for a street slice = independent critic file with TICK=yes on
+the SAME live JS hash the player is served. Implementer notes are TICK=n/a.
+A TICK=yes on a superseded hash is history, not live proof.
+
+Just-accepted on LIVE KZQAQdH6 (2026-09-05):
+  LOOK_PITCH_FPS live reaudit
+    hh-3d/app/data-qa/CRITIC-3D-LOOK-PITCH-FPS-LIVE-REAUDIT-2026-09-05.txt
+    TICK=yes  HASH_MISMATCH=0  pid 388
+    A: heading 0→0, lon 106.6980400→106.6980629 (east / screen-left)
+    Pitch-up: tunic in frame, camLookY=1.98
+    FPS chip: 5 then 14 FPS · NOT_60
+  HTML_LOD
+    hh-3d/app/data-qa/CRITIC-3D-HTML-LOD-REAUDIT-2026-09-05.txt
+    TICK=yes on same KZQAQdH6
+    Html shop/place/plaque skip >90 m; meshes stay
+
+Prior LOOK_PITCH_FPS on BrVc4bRj (superseded JS, hunts held then):
+  hh-3d/app/data-qa/CRITIC-3D-LOOK-PITCH-FPS-REAUDIT-2026-09-05.txt
+  Treat as historical; live reaudit above replaces it for A/pitch/FPS.
+
+VOID / WRONG hunts (keep files, do not revive as acceptance):
+  LOOK_STRAFE TICK=yes on CoTKbFff
+    A lon-west treated as screen-left. Owner + Three camera-right = west
+    proved that was SCREEN-RIGHT. Yaw −1 result kept.
+  LOOK_YAW +1 remint DGX50qvn — owner still inverted.
+    Late REAUDIT TICK=yes on DGX50qvn is stale.
+    REAUDIT2 TICK=no HASH_MISMATCH=1 was correct (live already CoTKbFff).
+  LOOK_YAW BRKtMVXq TICK=yes required A to INCREASE heading (look-right).
+    Parent rebuttal: that hunt matched a bad remint, not owner visual.
+    hh-3d/app/data-qa/CRITIC-3D-LOOK-YAW-PARENT-REBUTTAL-2026-09-05.txt
+
+Accepted earlier (hashes replaced; do not remint those hunts unless
+regression). See PROGRESS PLAYER_SLICE history:
+  TAB_HIDE_GHOST     oRuAyVDb  hide tab leaves once; no leave-on-every-tick
+  VIEWING_OPEN_SHELF DHD8uCJ5  street “Mở kệ” Menu closed
+  VIEWING_STREET_HUD Ba8fGY2G  Đang xem cửa hàng on street HUD
+  VIEWING_NAMETAG    DScoMgU1  (first-sample leftover TICK=no kept)
+  HITCH3             B_vhyY5s  play-idle minimap defer; first-W still UNFILLED
+  HITCH2             keyup-mount MapLibre
+  LEFTOVER-KIND / LEFTOVER-GAP / leftover-panel
+  FRIEND-VIEWING / FRIEND-E-VIEWING / FRIEND-GAIT / FRIEND-STEPS
+  SHELF-ATTRIB, MINIMAP_STREET_SHOPS
+  HARBOR-SOUTH, TRAM-WEST, TRAM-NORTH, TRAM-XING, WEST-XING
+  CHE-BOARD, CREATE_SIDEWALK, STALL-*, CROSS-*, STREET-PROPS, etc.
+
+Street-play shops that must STAY (do not catalog_clear):
+  lantern fish, Quầy Phở Nhà, Quầy Chè Vỉa, Quay Kem Reaudit (when drawn)
+Leftover persist (draw=0, not street stalls): Shared PC, J6 Jump.
+
+================================================================================
+6. WHAT IS NOT DONE (OWNER / PLAN LEFTOVERS)
+================================================================================
+
+OWNER-ONLY (agent must not fake):
+  1. GATE-U1 — three independent humans, 5-minute journey (open app, find
+     landmark, card, 2D/3D, share link, fallback). First acceptance leftover.
+     Plan STATE still NOT_STARTED. Local proof ≠ PASS.
+  2. AUTHORIZE_MAP_FETCH=YES + license ledger before any OSM/Overture.
+  3. Real OIDC / Google account (R4-WP0B).
+  4. WAN / bind 0.0.0.0 / other-PC join.
+  5. OWNER_SIGN human name on decision record.
+  6. Tick any 31-8 checkbox.
+
+AGENT-ALLOWED NEXT (pick one named hole; one remint; one critic):
+  A. FPS/hitch (highest owner pain now). Headed measure, then cheap cuts
+     listed in §2. NOT_R2_WP1. Do not tick R2-WP1. Do not claim 60.
+     First-W min ≥20 and idle ≥50 still UNFILLED.
+  B. Shared PC / J6 leftover UX if they still confuse the street (persist
+     stays; no catalog_clear).
+  C. Modes copy: 03-9 still says internet words
+     “Đang kết nối / Mất kết nối / Đang kết nối lại”. Live connected
+     chip is “Máy này · 4175”. Documentation-only plan/modes honesty
+     if you edit 03-9 — do not invent M2.
+  D. Do not start R3/R5/R6/R7, Cesium, Unreal, Godot2 city, paid APIs.
+
+M0/M1/M2 plan WPs remain NOT_STARTED in the checkbox book.
+Local demo already has stroll + public shops + A/B Online on loopback.
+That is LOCAL_DEMO_EXISTS_NOT_PLAN_PASS, not M2-WP1.
+
+Online capacity TODAY: 2 people (seats A and B) on this PC. Not 20. Not a city.
+
+================================================================================
+7. PLAN FAULTS (for the agent who will audit/fix the plan)
+================================================================================
+
+Documentation-only unless owner opens a grant. Do not change WP order.
+Do not tick. Do not add a second AUTHORITATIVE_PLAN marker (platform
+checker wants exactly one repo-wide).
+
+Correct and keep:
+  CURRENT_FIRST_LEFTOVER=GATE-U1
+  LOCAL_PROOF_EXISTS_ACCEPTANCE_INCOMPLETE
+  PLAN_CHECKBOXES=UNCHANGED_DO_NOT_TICK
+  AUTHORIZE_MAP_FETCH=NO until ledger + YES
+
+Misleading / stale (fix as documentation if owner wants plan hygiene):
+  1. Almost every WP STATE=NOT_STARTED while PROGRESS has working street
+     Play. Header already says checkboxes are the acceptance book, not
+     “app missing”. A short CURRENT_EXECUTION pointer at GATE-U1 +
+     “street demo in PROGRESS” is enough; do not rewrite history ticks.
+  2. Modes §1 internet labels “Đang kết nối” as the connected word.
+     Live product uses “Máy này · 4175” to stop looking like a hung
+     connect. Align modes text or mark LOCAL_DEMO_OVERRIDE.
+  3. VISIBLE_FRIEND_CAP=20 / T11 in modes is M2 target, not 4175.
+     Live honesty: 2 friend seats. Plan must not be quoted as “20 online”.
+  4. GATE-U1 journey text is search/card/share (R2-WP0 map UX).
+     Owner now plays the 3D street. A later owner grant may add a street
+     journey; do not silently replace GATE-U1. Do not invent humans.
+  5. R2-WP1 depends on GATE-U1. Street hitch work is leftover, not that WP.
+  6. Demo is “not a dependency” in 31-8, but look/strafe/pitch/speed were
+     copied from hh-3d/demo as a play-feel reference. That is allowed
+     observation, not a plan tick and not a reason to edit the demo.
+  7. Quality overlay 31-8 VF file AUTHORITY=0 — never a HH World WP source.
+
+================================================================================
+8. WORKFLOW THE NEXT AGENT MUST KEEP
+================================================================================
+
+- One slice, one remint, one independent critic on THAT live hash.
+- Implementer writes TICK=n/a notes under hh-3d/app/data-qa/.
+- Critic writes ONLY the REAUDIT file. Tries to FAIL. Own CDP.
+  Unused ports (do not reuse 10014–10040 from this week).
+- HASH_MISMATCH or recycle during critic → TICK=no.
+- catalog_clear banned. graph_clear optional/read-only.
+- Tests: node --test tests/avatar.test.mjs tests/play.test.mjs
+  tests/modes.test.mjs in hh-3d/app/web. Not cargo test.
+- Preview: npm run preview -- --host 127.0.0.1 --port 4175 --strictPort
+  from hh-3d/app/web after npm run build.
+- Update PROGRESS PLAYER_SLICE. Do not tick 31-8.
+- Agents must find faults in each other. A TICK=yes hunt that ignores
+  owner visual (lon-west = screen-left) is how A stayed inverted.
+- Do not remint while a critic is running.
+
+Hard bans:
+  VF/Godot, plan tick, GATE-U1 fake, OSM fetch, 0.0.0.0, OIDC fake,
+  catalog_clear, fifth official street, commit unless owner asks.
+
+================================================================================
+9. KEY SOURCE FILES
+================================================================================
+
+hh-3d/app/web/src/avatar/look.ts          LOOK_YAW_SIGN
+hh-3d/app/web/src/avatar/walk.ts          cameraRelativeAxes, speeds, applyLookMove
+hh-3d/app/web/src/avatar/useAvatar.ts     always applyLookMove; no facing-turn tick
+hh-3d/app/web/src/avatar/StreetHelp.tsx   A/D strafe copy
+hh-3d/app/web/src/avatar/WalkPad.tsx      Move left/right
+hh-3d/app/web/src/play/world.ts           followCameraPose, followRigYaw, HTML 90 m
+hh-3d/app/web/src/play/PlayView.tsx       Canvas dpr/shadows, Html, frameloop
+hh-3d/app/web/src/play/FpsChip.tsx        honest rAF
+hh-3d/app/web/src/modes/modes.ts          connectionCopy Máy này · 4175
+hh-3d/app/web/src/friends/seats.ts        A/B/C; B heading 292
+hh-3d/app/web/src/map/minimapDefer.ts     play-idle
+hh-3d/demo/src/scene/{SimClock.tsx,sceneConfig.ts}   feel reference
+
+================================================================================
+10. AGENT QUALITY (so the next crew does not repeat)
+================================================================================
+
+Worked:
+  Independent critics caught nametag leftover, Menu-only viewing HUD,
+  leave-on-every-tick (TAB_HIDE), HASH_MISMATCH after mid-flight remint,
+  and forced visible-tab before hide tests.
+
+Failed:
+  Implementer copied demo lookYawSign then also flipped A to in-place
+  turn; owner said move-left goes right.
+  Then +1 remint “fixed” compass-left; owner still inverted (only +1
+  was play-tested).
+  LOOK_STRAFE critic scored lon-west as screen-left; Three camera-right
+  at heading 0 is west, so that remint made A go screen-right.
+  LOOK_PITCH_FPS TICK=yes was first written on BrVc4bRj then live JS
+  moved to KZQAQdH6; a live reaudit was required.
+  FPS chip is honesty, not a perf fix. Owner still sees ~16 FPS.
+
+================================================================================
+11. SUGGESTED FIRST TASK FOR THE INCOMING AGENT
+================================================================================
+
+Do not start GATE-U1. Do not tick. Do not fetch maps.
+
+1. Verify live 4175 hash (may have drifted if someone recycled).
+2. If owner still reports invert: CDP A + camera-right + screenshot on
+   THAT hash before any sign flip.
+3. Else: FPS/hitch slice — headed 4175, DevTools closed, one tab.
+   Cut dpr/shadows/Html first. Remint. Independent critic. NOT_60.
+4. Leave Shared PC / J6 persist. Leave GATE-U1 for three real humans.
+
+END

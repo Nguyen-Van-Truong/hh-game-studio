@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "kind": "PLAN_DESIGN_ONLY",
+  "frozen_at": "2026-09-05T10:11:50.0720006+07:00",
+  "source_baseline": "0d88141b1a5e085eb3661660e39597af8fb4f2c5",
+  "algorithm": "sha256(UTF8(sorted path + space + lowercase file sha256 joined LF, no final LF))",
+  "manifest_sha256": "3477424499f1922b003cf07638503c98a84fb1acd68cc107b5e15706f9c9934a",
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "929c91aaf887d73f577ce90ce7810e929517efaf053add80c4615e12d893915c"
+    },
+    {
+      "path": "zdoc/00-START-HERE.md",
+      "sha256": "f310b28ef7cb086fafdb5ae6dcb1d2253bfeda734d6c0b45c60e7924e130e182"
+    },
+    {
+      "path": "zdoc/01-DECISIONS.md",
+      "sha256": "cb1e50830636d0daa8092c9cd3c2a0dae52e7da5b5d5819276ef49dcf9fa8175"
+    },
+    {
+      "path": "zdoc/02-PRODUCT.md",
+      "sha256": "e6a5a591cf17c38389c6d4b62871f18c56884cb0067fe74da52a50241b4ea3a4"
+    },
+    {
+      "path": "zdoc/03-ARCHITECTURE.md",
+      "sha256": "1f52190aae29ea3285bc614df4f04d074d5422323aac7d1bd59f9624b7211099"
+    },
+    {
+      "path": "zdoc/04-GODOT-TOOLS.md",
+      "sha256": "4930b4d564793ee9102d1650d84744bc607c9760bc9005063efa149a44770bb1"
+    },
+    {
+      "path": "zdoc/05-QUALITY-GATES.md",
+      "sha256": "907fe8c0b4e6ac60edd4a04faecd473bbea25b6625f04177c8708ba5b5bd7255"
+    },
+    {
+      "path": "zdoc/06-ROADMAP.md",
+      "sha256": "ba6aa06c556c0f25d323f862a7fe183e2773c672b598a6b65ac4eba81f1e78e5"
+    },
+    {
+      "path": "zdoc/07-GEOGRAPHY.md",
+      "sha256": "aeae22b0d1fcdd930748d2562092131f4521a988816bd655ba3f4af70e2b3920"
+    },
+    {
+      "path": "zdoc/08-AGENT-WORKFLOW.md",
+      "sha256": "a1c8a445512140989a5fe8c282087a138f4a3bf751751658c99bfff75d2c3b58"
+    },
+    {
+      "path": "zdoc/09-RESEARCH.md",
+      "sha256": "596bf71e2cee224383a9734105cc60d5c26c7b7d8820f65a3dc8e0dc78d3b9e8"
+    },
+    {
+      "path": "zdoc/PROGRESS.md",
+      "sha256": "3b985928728b953ff87ff2c1b7a6659e31c2bf814311b25a82a43d7fbc4b4326"
+    }
+  ]
+}

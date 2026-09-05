@@ -9,3 +9,21 @@ HEADLESS_EXIT=0 leftover=0 elapsed=1616.6
 GODOT_PID=29984 exe=C:\Users\truon\AppData\Local\HHGodotAgent\tooling\godot-4.7.1-stable\bin\Godot_v4.7.1-stable_win64_console.exe
 WINDOW_EXIT=0 leftover=0 elapsed=1462.8
 GODOT_PID=29800 exe=C:\Users\truon\AppData\Local\HHGodotAgent\tooling\godot-4.7.1-stable\bin\Godot_v4.7.1-stable_win64.exe
+RUN_ALL_EXIT=0 leftover=0 elapsed=7562.8
+PROOF leftover=0 hl=1616.6 win=1462.8 all=7562.8 command=cmd.vf6-wp5.bots.8
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\godot\dogfood\superfighters\tests\pack_bots_evidence.py", line 497, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\godot\dogfood\superfighters\tests\pack_bots_evidence.py", line 458, in main
+    shutil.copy2(Path(args.headless_log), evidence / "official_headless.log")
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 448, in copy2
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 236, in copyfile
+    raise SameFileError("{!r} and {!r} are the same file".format(src, dst))
+shutil.SameFileError: WindowsPath('D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/hh-game-studio/godot/dogfood/superfighters/docs/evidence/VF6WP5-20260904-ASIA-SAIGON-08/official_headless.log') and WindowsPath('D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/hh-game-studio/godot/dogfood/superfighters/docs/evidence/VF6WP5-20260904-ASIA-SAIGON-08/official_headless.log') are the same file
+PACK_EXIT=1
+HOST_EXIT=1 
+LAUNCH_END Sat 09/05/2026  7:57:43.33 
+REPACK_START leftover_product=0
+REPACK_EXIT=0 note=same-file log copy workaround; freeze unchanged; host exits from leftover_proof
