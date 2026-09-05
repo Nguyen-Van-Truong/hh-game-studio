@@ -1,0 +1,1372 @@
+{
+  "run_id": "HH3D-J5-20260903-ASIA-SAIGON-35",
+  "player": "http://127.0.0.1:4175/",
+  "verdict": "J5_MARKET_SPILL_OK",
+  "not_plan_pass": true,
+  "not_gate_u1": true,
+  "lookPath": "cdp-mouse",
+  "lookDx": -70,
+  "spillDomOk": true,
+  "pixOk": true,
+  "scooterOk": true,
+  "walkOk": true,
+  "skyOk": true,
+  "shopOk": true,
+  "keptOk": true,
+  "honestyOk": true,
+  "spillN": 13,
+  "shopN": 10,
+  "streetN": 3,
+  "scooterN": 15,
+  "lanternSpill": [
+    {
+      "id": "spill-shop-lantern-fish-cooler",
+      "kind": "cooler",
+      "source": "shop",
+      "shop": "shop-lantern-fish",
+      "color": "#2a7a78",
+      "collide": "1",
+      "x": 2.28,
+      "z": -68.73
+    },
+    {
+      "id": "spill-shop-lantern-fish-crate-w",
+      "kind": "crate",
+      "source": "shop",
+      "shop": "shop-lantern-fish",
+      "color": "#8a5a32",
+      "collide": "1",
+      "x": 1.66,
+      "z": -68.55
+    },
+    {
+      "id": "spill-shop-lantern-fish-basket",
+      "kind": "basket",
+      "source": "shop",
+      "shop": "shop-lantern-fish",
+      "color": "#c4a06a",
+      "collide": "1",
+      "x": 5.72,
+      "z": -68.81
+    },
+    {
+      "id": "spill-shop-lantern-fish-stack-e",
+      "kind": "stack",
+      "source": "shop",
+      "shop": "shop-lantern-fish",
+      "color": "#8a5a32",
+      "collide": "1",
+      "x": 6.3,
+      "z": -68.51
+    }
+  ],
+  "streetSpill": [
+    {
+      "id": "spill-harbor-mid-w",
+      "kind": "stack",
+      "source": "street",
+      "shop": "",
+      "color": "#7a4a28",
+      "collide": "1",
+      "x": -3.1,
+      "z": -35.19
+    },
+    {
+      "id": "spill-harbor-north-e",
+      "kind": "stack",
+      "source": "street",
+      "shop": "",
+      "color": "#a06a3a",
+      "collide": "1",
+      "x": 8.61,
+      "z": 5
+    },
+    {
+      "id": "spill-harbor-far-w",
+      "kind": "stack",
+      "source": "street",
+      "shop": "",
+      "color": "#5a4030",
+      "collide": "1",
+      "x": -6.27,
+      "z": 28.25
+    }
+  ],
+  "lanternDelta": {
+    "east": 0,
+    "north": 24.63511599997304,
+    "moved": 24.63511599997304
+  },
+  "skyBand": {
+    "samples": 3090,
+    "meanR": 137.8,
+    "meanG": 145.6,
+    "meanB": 148.7,
+    "beigeRatio": 0.045,
+    "blueRatio": 0.411,
+    "woodRatio": 0.109,
+    "tealRatio": 0.005,
+    "spillRatio": 0.114,
+    "bluerThanRed": true
+  },
+  "stallBand": {
+    "samples": 29040,
+    "meanR": 87.8,
+    "meanG": 93.4,
+    "meanB": 93,
+    "beigeRatio": 0.007,
+    "blueRatio": 0.307,
+    "woodRatio": 0.012,
+    "tealRatio": 0.114,
+    "spillRatio": 0.126,
+    "bluerThanRed": false
+  },
+  "leftGoods": {
+    "samples": 11872,
+    "meanR": 94.5,
+    "meanG": 100,
+    "meanB": 100.5,
+    "beigeRatio": 0,
+    "blueRatio": 0.405,
+    "woodRatio": 0.006,
+    "tealRatio": 0.15,
+    "spillRatio": 0.156,
+    "bluerThanRed": false
+  },
+  "rightGoods": {
+    "samples": 11872,
+    "meanR": 119.3,
+    "meanG": 119.4,
+    "meanB": 109.5,
+    "beigeRatio": 0.029,
+    "blueRatio": 0.1,
+    "woodRatio": 0.004,
+    "tealRatio": 0.014,
+    "spillRatio": 0.018,
+    "bluerThanRed": false
+  },
+  "shopPanelId": "shop-lantern-fish",
+  "hash": "076dcb1fbfa60ddf",
+  "bytes": 159182,
+  "shot": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-market-spill.png",
+  "home": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/?seat=a",
+    "playReady": "yes",
+    "playEngine": "r3f",
+    "playCanvas": true,
+    "canvasBox": {
+      "x": 0,
+      "y": 0,
+      "w": 1280,
+      "h": 720
+    },
+    "avatar": {
+      "lon": 106.69804,
+      "lat": 10.77162,
+      "heading": 0,
+      "insideAabb": "0",
+      "insideRing": "0"
+    },
+    "proof": {
+      "camera": "behind",
+      "collision": "footprint-radius",
+      "sky": "gradient-hemisphere",
+      "sun": "disc",
+      "lamps": "38",
+      "planters": "4",
+      "scooters": "15",
+      "scooterKind": "parked-box-scooter",
+      "marketSpill": "crate-basket-stack",
+      "marketSpillCount": "13",
+      "marketSpillShop": "10",
+      "marketSpillStreet": "3",
+      "marketSpillCoolers": "1",
+      "marketSpillBaskets": "3",
+      "groundFloor": "door-glass-awning",
+      "roof": "parapet-ac-tank",
+      "shopStallKind": "awning-kiosk",
+      "camYaw": 0,
+      "camPitch": 0,
+      "insideAabb": "0",
+      "insideRing": "0",
+      "buildings": 60
+    },
+    "spill": [
+      {
+        "id": "spill-shop-lantern-fish-cooler",
+        "kind": "cooler",
+        "source": "shop",
+        "shop": "shop-lantern-fish",
+        "color": "#2a7a78",
+        "collide": "1",
+        "x": 2.28,
+        "z": -68.73
+      },
+      {
+        "id": "spill-shop-lantern-fish-crate-w",
+        "kind": "crate",
+        "source": "shop",
+        "shop": "shop-lantern-fish",
+        "color": "#8a5a32",
+        "collide": "1",
+        "x": 1.66,
+        "z": -68.55
+      },
+      {
+        "id": "spill-shop-lantern-fish-basket",
+        "kind": "basket",
+        "source": "shop",
+        "shop": "shop-lantern-fish",
+        "color": "#c4a06a",
+        "collide": "1",
+        "x": 5.72,
+        "z": -68.81
+      },
+      {
+        "id": "spill-shop-lantern-fish-stack-e",
+        "kind": "stack",
+        "source": "shop",
+        "shop": "shop-lantern-fish",
+        "color": "#8a5a32",
+        "collide": "1",
+        "x": 6.3,
+        "z": -68.51
+      },
+      {
+        "id": "spill-shop-local-sharedpc-crate-w",
+        "kind": "crate",
+        "source": "shop",
+        "shop": "shop-local-sharedpc",
+        "color": "#6e3d24",
+        "collide": "0",
+        "x": 2.65,
+        "z": -96.69
+      },
+      {
+        "id": "spill-shop-local-sharedpc-basket",
+        "kind": "basket",
+        "source": "shop",
+        "shop": "shop-local-sharedpc",
+        "color": "#916748",
+        "collide": "0",
+        "x": 3.2,
+        "z": -96.41
+      },
+      {
+        "id": "spill-shop-local-sharedpc-stack-e",
+        "kind": "stack",
+        "source": "shop",
+        "shop": "shop-local-sharedpc",
+        "color": "#6e3d24",
+        "collide": "0",
+        "x": 6.09,
+        "z": -96.59
+      },
+      {
+        "id": "spill-shop-local-mtl8ulddihjpre-crate-w",
+        "kind": "crate",
+        "source": "shop",
+        "shop": "shop-local-mtl8ulddihjpre",
+        "color": "#9a6a42",
+        "collide": "1",
+        "x": 14.65,
+        "z": -96.69
+      },
+      {
+        "id": "spill-shop-local-mtl8ulddihjpre-basket",
+        "kind": "basket",
+        "source": "shop",
+        "shop": "shop-local-mtl8ulddihjpre",
+        "color": "#ae845c",
+        "collide": "1",
+        "x": 15.2,
+        "z": -96.41
+      },
+      {
+        "id": "spill-shop-local-mtl8ulddihjpre-stack-e",
+        "kind": "stack",
+        "source": "shop",
+        "shop": "shop-local-mtl8ulddihjpre",
+        "color": "#9a6a42",
+        "collide": "1",
+        "x": 18.09,
+        "z": -96.59
+      },
+      {
+        "id": "spill-harbor-mid-w",
+        "kind": "stack",
+        "source": "street",
+        "shop": "",
+        "color": "#7a4a28",
+        "collide": "1",
+        "x": -3.1,
+        "z": -35.19
+      },
+      {
+        "id": "spill-harbor-north-e",
+        "kind": "stack",
+        "source": "street",
+        "shop": "",
+        "color": "#a06a3a",
+        "collide": "1",
+        "x": 8.61,
+        "z": 5
+      },
+      {
+        "id": "spill-harbor-far-w",
+        "kind": "stack",
+        "source": "street",
+        "shop": "",
+        "color": "#5a4030",
+        "collide": "1",
+        "x": -6.27,
+        "z": 28.25
+      }
+    ],
+    "scooters": [
+      {
+        "id": "scooter-harbor-near-e",
+        "street": "street-harbor-walk"
+      },
+      {
+        "id": "scooter-harbor-near-w",
+        "street": "street-harbor-walk"
+      },
+      {
+        "id": "scooter-street-tram-approach-0-w",
+        "street": "street-tram-approach"
+      },
+      {
+        "id": "scooter-street-tram-approach-2-e",
+        "street": "street-tram-approach"
+      },
+      {
+        "id": "scooter-street-tram-approach-4-e",
+        "street": "street-tram-approach"
+      },
+      {
+        "id": "scooter-street-tram-approach-5-w",
+        "street": "street-tram-approach"
+      },
+      {
+        "id": "scooter-street-tram-approach-8-w",
+        "street": "street-tram-approach"
+      },
+      {
+        "id": "scooter-street-tram-approach-10-e",
+        "street": "street-tram-approach"
+      },
+      {
+        "id": "scooter-street-tram-approach-10-w",
+        "street": "street-tram-approach"
+      },
+      {
+        "id": "scooter-street-harbor-walk-0-e",
+        "street": "street-harbor-walk"
+      },
+      {
+        "id": "scooter-street-harbor-walk-0-w",
+        "street": "street-harbor-walk"
+      },
+      {
+        "id": "scooter-street-harbor-walk-9-e",
+        "street": "street-harbor-walk"
+      },
+      {
+        "id": "scooter-street-harbor-walk-9-w",
+        "street": "street-harbor-walk"
+      },
+      {
+        "id": "scooter-street-harbor-walk-10-w",
+        "street": "street-harbor-walk"
+      },
+      {
+        "id": "scooter-street-harbor-walk-12-e",
+        "street": "street-harbor-walk"
+      }
+    ],
+    "shopMarker": false,
+    "shopPanel": false,
+    "shopPanelId": "",
+    "honesty": "Authored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:1 city. NOT_PLAN_PASS.\n\nFriend bodies use this PC's 4175 loopback store (two browsers here). Not a city shop server. Not a city presence server. Not another city's cloud. Not WAN. Not GPS. NOT_PLAN_PASS.",
+    "mode": "Offline — Stroll alone; shops still open.",
+    "gtaClaim": false
+  },
+  "midWalk": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/?seat=a",
+    "playReady": "yes",
+    "playEngine": "r3f",
+    "playCanvas": true,
+    "canvasBox": {
+      "x": 0,
+      "y": 0,
+      "w": 1280,
+      "h": 720
+    },
+    "avatar": {
+      "lon": 106.69804,
+      "lat": 10.7716811,
+      "heading": 0,
+      "insideAabb": "0",
+      "insideRing": "0"
+    },
+    "proof": {
+      "camera": "behind",
+      "collision": "footprint-radius",
+      "sky": "gradient-hemisphere",
+      "sun": "disc",
+      "lamps": "38",
+      "planters": "4",
+      "scooters": "15",
+      "scooterKind": "parked-box-scooter",
+      "marketSpill": "crate-basket-stack",
+      "marketSpillCount": "13",
+      "marketSpillShop": "10",
+      "marketSpillStreet": "3",
+      "marketSpillCoolers": "1",
+      "marketSpillBaskets": "3",
+      "groundFloor": "door-glass-awning",
+      "roof": "parapet-ac-tank",
+      "shopStallKind": "awning-kiosk",
+      "camYaw": 0,
+      "camPitch": 0,
+      "insideAabb": "0",
+      "insideRing": "0",
+      "buildings": 60
+    },
+    "spill": [
+      {
+        "id": "spill-shop-lantern-fish-cooler",
+        "kind": "cooler",
+        "source": "shop",
+        "shop": "shop-lantern-fish",
+        "color": "#2a7a78",
+        "collide": "1",
+        "x": 2.28,
+        "z": -68.73
+      },
+      {
+        "id": "spill-shop-lantern-fish-crate-w",
+        "kind": "crate",
+        "source": "shop",
+        "shop": "shop-lantern-fish",
+        "color": "#8a5a32",
+        "collide": "1",
+        "x": 1.66,
+        "z": -68.55
+      },
+      {
+        "id": "spill-shop-lantern-fish-basket",
+        "kind": "basket",
+        "source": "shop",
+        "shop": "shop-lantern-fish",
+        "color": "#c4a06a",
+        "collide": "1",
+        "x": 5.72,
+        "z": -68.81
+      },
+      {
+        "id": "spill-shop-lantern-fish-stack-e",
+        "kind": "stack",
+        "source": "shop",
+        "shop": "shop-lantern-fish",
+        "color": "#8a5a32",
+        "collide": "1",
+        "x": 6.3,
+        "z": -68.51
+      },
+      {
+        "id": "spill-shop-local-sharedpc-crate-w",
+        "kind": "crate",
+        "source": "shop",
+        "shop": "shop-local-sharedpc",
+        "color": "#6e3d24",
+        "collide": "0",
+        "x": 2.65,
+        "z": -96.69
+      },
+      {
+        "id": "spill-shop-local-sharedpc-basket",
+        "kind": "basket",
+        "source": "shop",
+        "shop": "shop-local-sharedpc",
+        "color": "#916748",
+        "collide": "0",
+        "x": 3.2,
+        "z": -96.41
+      },
+      {
+        "id": "spill-shop-local-sharedpc-stack-e",
+        "kind": "stack",
+        "source": "shop",
+        "shop": "shop-local-sharedpc",
+        "color": "#6e3d24",
+        "collide": "0",
+        "x": 6.09,
+        "z": -96.59
+      },
+      {
+        "id": "spill-shop-local-mtl8ulddihjpre-crate-w",
+        "kind": "crate",
+        "source": "shop",
+        "shop": "shop-local-mtl8ulddihjpre",
+        "color": "#9a6a42",
+        "collide": "1",
+        "x": 14.65,
+        "z": -96.69
+      },
+      {
+        "id": "spill-shop-local-mtl8ulddihjpre-basket",
+        "kind": "basket",
+        "source": "shop",
+        "shop": "shop-local-mtl8ulddihjpre",
+        "color": "#ae845c",
+        "collide": "1",
+        "x": 15.2,
+        "z": -96.41
+      },
+      {
+        "id": "spill-shop-local-mtl8ulddihjpre-stack-e",
+        "kind": "stack",
+        "source": "shop",
+        "shop": "shop-local-mtl8ulddihjpre",
+        "color": "#9a6a42",
+        "collide": "1",
+        "x": 18.09,
+        "z": -96.59
+      },
+      {
+        "id": "spill-harbor-mid-w",
+        "kind": "stack",
+        "source": "street",
+        "shop": "",
+        "color": "#7a4a28",
+        "collide": "1",
+        "x": -3.1,
+        "z": -35.19
+      },
+      {
+        "id": "spill-harbor-north-e",
+        "kind": "stack",
+        "source": "street",
+        "shop": "",
+        "color": "#a06a3a",
+        "collide": "1",
+        "x": 8.61,
+        "z": 5
+      },
+      {
+        "id": "spill-harbor-far-w",
+        "kind": "stack",
+        "source": "street",
+        "shop": "",
+        "color": "#5a4030",
+        "collide": "1",
+        "x": -6.27,
+        "z": 28.25
+      }
+    ],
+    "scooters": [
+      {
+        "id": "scooter-harbor-near-e",
+        "street": "street-harbor-walk"
+      },
+      {
+        "id": "scooter-harbor-near-w",
+        "street": "street-harbor-walk"
+      },
+      {
+        "id": "scooter-street-tram-approach-0-w",
+        "street": "street-tram-approach"
+      },
+      {
+        "id": "scooter-street-tram-approach-2-e",
+        "street": "street-tram-approach"
+      },
+      {
+        "id": "scooter-street-tram-approach-4-e",
+        "street": "street-tram-approach"
+      },
+      {
+        "id": "scooter-street-tram-approach-5-w",
+        "street": "street-tram-approach"
+      },
+      {
+        "id": "scooter-street-tram-approach-8-w",
+        "street": "street-tram-approach"
+      },
+      {
+        "id": "scooter-street-tram-approach-10-e",
+        "street": "street-tram-approach"
+      },
+      {
+        "id": "scooter-street-tram-approach-10-w",
+        "street": "street-tram-approach"
+      },
+      {
+        "id": "scooter-street-harbor-walk-0-e",
+        "street": "street-harbor-walk"
+      },
+      {
+        "id": "scooter-street-harbor-walk-0-w",
+        "street": "street-harbor-walk"
+      },
+      {
+        "id": "scooter-street-harbor-walk-9-e",
+        "street": "street-harbor-walk"
+      },
+      {
+        "id": "scooter-street-harbor-walk-9-w",
+        "street": "street-harbor-walk"
+      },
+      {
+        "id": "scooter-street-harbor-walk-10-w",
+        "street": "street-harbor-walk"
+      },
+      {
+        "id": "scooter-street-harbor-walk-12-e",
+        "street": "street-harbor-walk"
+      }
+    ],
+    "shopMarker": true,
+    "shopPanel": false,
+    "shopPanelId": "",
+    "honesty": "Authored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:1 city. NOT_PLAN_PASS.\n\nFriend bodies use this PC's 4175 loopback store (two browsers here). Not a city shop server. Not a city presence server. Not another city's cloud. Not WAN. Not GPS. NOT_PLAN_PASS.",
+    "mode": "Offline — Stroll alone; shops still open.",
+    "gtaClaim": false
+  },
+  "atLantern": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/?seat=a",
+    "playReady": "yes",
+    "playEngine": "r3f",
+    "playCanvas": true,
+    "canvasBox": {
+      "x": 0,
+      "y": 0,
+      "w": 1280,
+      "h": 720
+    },
+    "avatar": {
+      "lon": 106.69804,
+      "lat": 10.7718413,
+      "heading": 0,
+      "insideAabb": "0",
+      "insideRing": "0"
+    },
+    "proof": {
+      "camera": "behind",
+      "collision": "footprint-radius",
+      "sky": "gradient-hemisphere",
+      "sun": "disc",
+      "lamps": "38",
+      "planters": "4",
+      "scooters": "15",
+      "scooterKind": "parked-box-scooter",
+      "marketSpill": "crate-basket-stack",
+      "marketSpillCount": "13",
+      "marketSpillShop": "10",
+      "marketSpillStreet": "3",
+      "marketSpillCoolers": "1",
+      "marketSpillBaskets": "3",
+      "groundFloor": "door-glass-awning",
+      "roof": "parapet-ac-tank",
+      "shopStallKind": "awning-kiosk",
+      "camYaw": 0,
+      "camPitch": 0,
+      "insideAabb": "0",
+      "insideRing": "0",
+      "buildings": 60
+    },
+    "spill": [
+      {
+        "id": "spill-shop-lantern-fish-cooler",
+        "kind": "cooler",
+        "source": "shop",
+        "shop": "shop-lantern-fish",
+        "color": "#2a7a78",
+        "collide": "1",
+        "x": 2.28,
+        "z": -68.73
+      },
+      {
+        "id": "spill-shop-lantern-fish-crate-w",
+        "kind": "crate",
+        "source": "shop",
+        "shop": "shop-lantern-fish",
+        "color": "#8a5a32",
+        "collide": "1",
+        "x": 1.66,
+        "z": -68.55
+      },
+      {
+        "id": "spill-shop-lantern-fish-basket",
+        "kind": "basket",
+        "source": "shop",
+        "shop": "shop-lantern-fish",
+        "color": "#c4a06a",
+        "collide": "1",
+        "x": 5.72,
+        "z": -68.81
+      },
+      {
+        "id": "spill-shop-lantern-fish-stack-e",
+        "kind": "stack",
+        "source": "shop",
+        "shop": "shop-lantern-fish",
+        "color": "#8a5a32",
+        "collide": "1",
+        "x": 6.3,
+        "z": -68.51
+      },
+      {
+        "id": "spill-shop-local-sharedpc-crate-w",
+        "kind": "crate",
+        "source": "shop",
+        "shop": "shop-local-sharedpc",
+        "color": "#6e3d24",
+        "collide": "0",
+        "x": 2.65,
+        "z": -96.69
+      },
+      {
+        "id": "spill-shop-local-sharedpc-basket",
+        "kind": "basket",
+        "source": "shop",
+        "shop": "shop-local-sharedpc",
+        "color": "#916748",
+        "collide": "0",
+        "x": 3.2,
+        "z": -96.41
+      },
+      {
+        "id": "spill-shop-local-sharedpc-stack-e",
+        "kind": "stack",
+        "source": "shop",
+        "shop": "shop-local-sharedpc",
+        "color": "#6e3d24",
+        "collide": "0",
+        "x": 6.09,
+        "z": -96.59
+      },
+      {
+        "id": "spill-shop-local-mtl8ulddihjpre-crate-w",
+        "kind": "crate",
+        "source": "shop",
+        "shop": "shop-local-mtl8ulddihjpre",
+        "color": "#9a6a42",
+        "collide": "1",
+        "x": 14.65,
+        "z": -96.69
+      },
+      {
+        "id": "spill-shop-local-mtl8ulddihjpre-basket",
+        "kind": "basket",
+        "source": "shop",
+        "shop": "shop-local-mtl8ulddihjpre",
+        "color": "#ae845c",
+        "collide": "1",
+        "x": 15.2,
+        "z": -96.41
+      },
+      {
+        "id": "spill-shop-local-mtl8ulddihjpre-stack-e",
+        "kind": "stack",
+        "source": "shop",
+        "shop": "shop-local-mtl8ulddihjpre",
+        "color": "#9a6a42",
+        "collide": "1",
+        "x": 18.09,
+        "z": -96.59
+      },
+      {
+        "id": "spill-harbor-mid-w",
+        "kind": "stack",
+        "source": "street",
+        "shop": "",
+        "color": "#7a4a28",
+        "collide": "1",
+        "x": -3.1,
+        "z": -35.19
+      },
+      {
+        "id": "spill-harbor-north-e",
+        "kind": "stack",
+        "source": "street",
+        "shop": "",
+        "color": "#a06a3a",
+        "collide": "1",
+        "x": 8.61,
+        "z": 5
+      },
+      {
+        "id": "spill-harbor-far-w",
+        "kind": "stack",
+        "source": "street",
+        "shop": "",
+        "color": "#5a4030",
+        "collide": "1",
+        "x": -6.27,
+        "z": 28.25
+      }
+    ],
+    "scooters": [
+      {
+        "id": "scooter-harbor-near-e",
+        "street": "street-harbor-walk"
+      },
+      {
+        "id": "scooter-harbor-near-w",
+        "street": "street-harbor-walk"
+      },
+      {
+        "id": "scooter-street-tram-approach-0-w",
+        "street": "street-tram-approach"
+      },
+      {
+        "id": "scooter-street-tram-approach-2-e",
+        "street": "street-tram-approach"
+      },
+      {
+        "id": "scooter-street-tram-approach-4-e",
+        "street": "street-tram-approach"
+      },
+      {
+        "id": "scooter-street-tram-approach-5-w",
+        "street": "street-tram-approach"
+      },
+      {
+        "id": "scooter-street-tram-approach-8-w",
+        "street": "street-tram-approach"
+      },
+      {
+        "id": "scooter-street-tram-approach-10-e",
+        "street": "street-tram-approach"
+      },
+      {
+        "id": "scooter-street-tram-approach-10-w",
+        "street": "street-tram-approach"
+      },
+      {
+        "id": "scooter-street-harbor-walk-0-e",
+        "street": "street-harbor-walk"
+      },
+      {
+        "id": "scooter-street-harbor-walk-0-w",
+        "street": "street-harbor-walk"
+      },
+      {
+        "id": "scooter-street-harbor-walk-9-e",
+        "street": "street-harbor-walk"
+      },
+      {
+        "id": "scooter-street-harbor-walk-9-w",
+        "street": "street-harbor-walk"
+      },
+      {
+        "id": "scooter-street-harbor-walk-10-w",
+        "street": "street-harbor-walk"
+      },
+      {
+        "id": "scooter-street-harbor-walk-12-e",
+        "street": "street-harbor-walk"
+      }
+    ],
+    "shopMarker": true,
+    "shopPanel": false,
+    "shopPanelId": "",
+    "honesty": "Authored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:1 city. NOT_PLAN_PASS.\n\nFriend bodies use this PC's 4175 loopback store (two browsers here). Not a city shop server. Not a city presence server. Not another city's cloud. Not WAN. Not GPS. NOT_PLAN_PASS.",
+    "mode": "Offline — Stroll alone; shops still open.",
+    "gtaClaim": false
+  },
+  "looked": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/?seat=a",
+    "playReady": "yes",
+    "playEngine": "r3f",
+    "playCanvas": true,
+    "canvasBox": {
+      "x": 0,
+      "y": 0,
+      "w": 1280,
+      "h": 720
+    },
+    "avatar": {
+      "lon": 106.69804,
+      "lat": 10.7718413,
+      "heading": 350,
+      "insideAabb": "0",
+      "insideRing": "0"
+    },
+    "proof": {
+      "camera": "behind",
+      "collision": "footprint-radius",
+      "sky": "gradient-hemisphere",
+      "sun": "disc",
+      "lamps": "38",
+      "planters": "4",
+      "scooters": "15",
+      "scooterKind": "parked-box-scooter",
+      "marketSpill": "crate-basket-stack",
+      "marketSpillCount": "13",
+      "marketSpillShop": "10",
+      "marketSpillStreet": "3",
+      "marketSpillCoolers": "1",
+      "marketSpillBaskets": "3",
+      "groundFloor": "door-glass-awning",
+      "roof": "parapet-ac-tank",
+      "shopStallKind": "awning-kiosk",
+      "camYaw": 350.2,
+      "camPitch": -1.1,
+      "insideAabb": "0",
+      "insideRing": "0",
+      "buildings": 60
+    },
+    "spill": [
+      {
+        "id": "spill-shop-lantern-fish-cooler",
+        "kind": "cooler",
+        "source": "shop",
+        "shop": "shop-lantern-fish",
+        "color": "#2a7a78",
+        "collide": "1",
+        "x": 2.28,
+        "z": -68.73
+      },
+      {
+        "id": "spill-shop-lantern-fish-crate-w",
+        "kind": "crate",
+        "source": "shop",
+        "shop": "shop-lantern-fish",
+        "color": "#8a5a32",
+        "collide": "1",
+        "x": 1.66,
+        "z": -68.55
+      },
+      {
+        "id": "spill-shop-lantern-fish-basket",
+        "kind": "basket",
+        "source": "shop",
+        "shop": "shop-lantern-fish",
+        "color": "#c4a06a",
+        "collide": "1",
+        "x": 5.72,
+        "z": -68.81
+      },
+      {
+        "id": "spill-shop-lantern-fish-stack-e",
+        "kind": "stack",
+        "source": "shop",
+        "shop": "shop-lantern-fish",
+        "color": "#8a5a32",
+        "collide": "1",
+        "x": 6.3,
+        "z": -68.51
+      },
+      {
+        "id": "spill-shop-local-sharedpc-crate-w",
+        "kind": "crate",
+        "source": "shop",
+        "shop": "shop-local-sharedpc",
+        "color": "#6e3d24",
+        "collide": "0",
+        "x": 2.65,
+        "z": -96.69
+      },
+      {
+        "id": "spill-shop-local-sharedpc-basket",
+        "kind": "basket",
+        "source": "shop",
+        "shop": "shop-local-sharedpc",
+        "color": "#916748",
+        "collide": "0",
+        "x": 3.2,
+        "z": -96.41
+      },
+      {
+        "id": "spill-shop-local-sharedpc-stack-e",
+        "kind": "stack",
+        "source": "shop",
+        "shop": "shop-local-sharedpc",
+        "color": "#6e3d24",
+        "collide": "0",
+        "x": 6.09,
+        "z": -96.59
+      },
+      {
+        "id": "spill-shop-local-mtl8ulddihjpre-crate-w",
+        "kind": "crate",
+        "source": "shop",
+        "shop": "shop-local-mtl8ulddihjpre",
+        "color": "#9a6a42",
+        "collide": "1",
+        "x": 14.65,
+        "z": -96.69
+      },
+      {
+        "id": "spill-shop-local-mtl8ulddihjpre-basket",
+        "kind": "basket",
+        "source": "shop",
+        "shop": "shop-local-mtl8ulddihjpre",
+        "color": "#ae845c",
+        "collide": "1",
+        "x": 15.2,
+        "z": -96.41
+      },
+      {
+        "id": "spill-shop-local-mtl8ulddihjpre-stack-e",
+        "kind": "stack",
+        "source": "shop",
+        "shop": "shop-local-mtl8ulddihjpre",
+        "color": "#9a6a42",
+        "collide": "1",
+        "x": 18.09,
+        "z": -96.59
+      },
+      {
+        "id": "spill-harbor-mid-w",
+        "kind": "stack",
+        "source": "street",
+        "shop": "",
+        "color": "#7a4a28",
+        "collide": "1",
+        "x": -3.1,
+        "z": -35.19
+      },
+      {
+        "id": "spill-harbor-north-e",
+        "kind": "stack",
+        "source": "street",
+        "shop": "",
+        "color": "#a06a3a",
+        "collide": "1",
+        "x": 8.61,
+        "z": 5
+      },
+      {
+        "id": "spill-harbor-far-w",
+        "kind": "stack",
+        "source": "street",
+        "shop": "",
+        "color": "#5a4030",
+        "collide": "1",
+        "x": -6.27,
+        "z": 28.25
+      }
+    ],
+    "scooters": [
+      {
+        "id": "scooter-harbor-near-e",
+        "street": "street-harbor-walk"
+      },
+      {
+        "id": "scooter-harbor-near-w",
+        "street": "street-harbor-walk"
+      },
+      {
+        "id": "scooter-street-tram-approach-0-w",
+        "street": "street-tram-approach"
+      },
+      {
+        "id": "scooter-street-tram-approach-2-e",
+        "street": "street-tram-approach"
+      },
+      {
+        "id": "scooter-street-tram-approach-4-e",
+        "street": "street-tram-approach"
+      },
+      {
+        "id": "scooter-street-tram-approach-5-w",
+        "street": "street-tram-approach"
+      },
+      {
+        "id": "scooter-street-tram-approach-8-w",
+        "street": "street-tram-approach"
+      },
+      {
+        "id": "scooter-street-tram-approach-10-e",
+        "street": "street-tram-approach"
+      },
+      {
+        "id": "scooter-street-tram-approach-10-w",
+        "street": "street-tram-approach"
+      },
+      {
+        "id": "scooter-street-harbor-walk-0-e",
+        "street": "street-harbor-walk"
+      },
+      {
+        "id": "scooter-street-harbor-walk-0-w",
+        "street": "street-harbor-walk"
+      },
+      {
+        "id": "scooter-street-harbor-walk-9-e",
+        "street": "street-harbor-walk"
+      },
+      {
+        "id": "scooter-street-harbor-walk-9-w",
+        "street": "street-harbor-walk"
+      },
+      {
+        "id": "scooter-street-harbor-walk-10-w",
+        "street": "street-harbor-walk"
+      },
+      {
+        "id": "scooter-street-harbor-walk-12-e",
+        "street": "street-harbor-walk"
+      }
+    ],
+    "shopMarker": true,
+    "shopPanel": false,
+    "shopPanelId": "",
+    "honesty": "Authored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:1 city. NOT_PLAN_PASS.\n\nFriend bodies use this PC's 4175 loopback store (two browsers here). Not a city shop server. Not a city presence server. Not another city's cloud. Not WAN. Not GPS. NOT_PLAN_PASS.",
+    "mode": "Offline — Stroll alone; shops still open.",
+    "gtaClaim": false
+  },
+  "shopOpen": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/?seat=a&place=place-market-steps&shop=shop-lantern-fish",
+    "playReady": "yes",
+    "playEngine": "r3f",
+    "playCanvas": true,
+    "canvasBox": {
+      "x": 0,
+      "y": 0,
+      "w": 1280,
+      "h": 720
+    },
+    "avatar": {
+      "lon": 106.69804,
+      "lat": 10.7718413,
+      "heading": 350,
+      "insideAabb": "0",
+      "insideRing": "0"
+    },
+    "proof": {
+      "camera": "behind",
+      "collision": "footprint-radius",
+      "sky": "gradient-hemisphere",
+      "sun": "disc",
+      "lamps": "38",
+      "planters": "4",
+      "scooters": "15",
+      "scooterKind": "parked-box-scooter",
+      "marketSpill": "crate-basket-stack",
+      "marketSpillCount": "13",
+      "marketSpillShop": "10",
+      "marketSpillStreet": "3",
+      "marketSpillCoolers": "1",
+      "marketSpillBaskets": "3",
+      "groundFloor": "door-glass-awning",
+      "roof": "parapet-ac-tank",
+      "shopStallKind": "awning-kiosk",
+      "camYaw": 350.2,
+      "camPitch": -1.1,
+      "insideAabb": "0",
+      "insideRing": "0",
+      "buildings": 60
+    },
+    "spill": [
+      {
+        "id": "spill-shop-lantern-fish-cooler",
+        "kind": "cooler",
+        "source": "shop",
+        "shop": "shop-lantern-fish",
+        "color": "#2a7a78",
+        "collide": "1",
+        "x": 2.28,
+        "z": -68.73
+      },
+      {
+        "id": "spill-shop-lantern-fish-crate-w",
+        "kind": "crate",
+        "source": "shop",
+        "shop": "shop-lantern-fish",
+        "color": "#8a5a32",
+        "collide": "1",
+        "x": 1.66,
+        "z": -68.55
+      },
+      {
+        "id": "spill-shop-lantern-fish-basket",
+        "kind": "basket",
+        "source": "shop",
+        "shop": "shop-lantern-fish",
+        "color": "#c4a06a",
+        "collide": "1",
+        "x": 5.72,
+        "z": -68.81
+      },
+      {
+        "id": "spill-shop-lantern-fish-stack-e",
+        "kind": "stack",
+        "source": "shop",
+        "shop": "shop-lantern-fish",
+        "color": "#8a5a32",
+        "collide": "1",
+        "x": 6.3,
+        "z": -68.51
+      },
+      {
+        "id": "spill-shop-local-sharedpc-crate-w",
+        "kind": "crate",
+        "source": "shop",
+        "shop": "shop-local-sharedpc",
+        "color": "#6e3d24",
+        "collide": "0",
+        "x": 2.65,
+        "z": -96.69
+      },
+      {
+        "id": "spill-shop-local-sharedpc-basket",
+        "kind": "basket",
+        "source": "shop",
+        "shop": "shop-local-sharedpc",
+        "color": "#916748",
+        "collide": "0",
+        "x": 3.2,
+        "z": -96.41
+      },
+      {
+        "id": "spill-shop-local-sharedpc-stack-e",
+        "kind": "stack",
+        "source": "shop",
+        "shop": "shop-local-sharedpc",
+        "color": "#6e3d24",
+        "collide": "0",
+        "x": 6.09,
+        "z": -96.59
+      },
+      {
+        "id": "spill-shop-local-mtl8ulddihjpre-crate-w",
+        "kind": "crate",
+        "source": "shop",
+        "shop": "shop-local-mtl8ulddihjpre",
+        "color": "#9a6a42",
+        "collide": "1",
+        "x": 14.65,
+        "z": -96.69
+      },
+      {
+        "id": "spill-shop-local-mtl8ulddihjpre-basket",
+        "kind": "basket",
+        "source": "shop",
+        "shop": "shop-local-mtl8ulddihjpre",
+        "color": "#ae845c",
+        "collide": "1",
+        "x": 15.2,
+        "z": -96.41
+      },
+      {
+        "id": "spill-shop-local-mtl8ulddihjpre-stack-e",
+        "kind": "stack",
+        "source": "shop",
+        "shop": "shop-local-mtl8ulddihjpre",
+        "color": "#9a6a42",
+        "collide": "1",
+        "x": 18.09,
+        "z": -96.59
+      },
+      {
+        "id": "spill-harbor-mid-w",
+        "kind": "stack",
+        "source": "street",
+        "shop": "",
+        "color": "#7a4a28",
+        "collide": "1",
+        "x": -3.1,
+        "z": -35.19
+      },
+      {
+        "id": "spill-harbor-north-e",
+        "kind": "stack",
+        "source": "street",
+        "shop": "",
+        "color": "#a06a3a",
+        "collide": "1",
+        "x": 8.61,
+        "z": 5
+      },
+      {
+        "id": "spill-harbor-far-w",
+        "kind": "stack",
+        "source": "street",
+        "shop": "",
+        "color": "#5a4030",
+        "collide": "1",
+        "x": -6.27,
+        "z": 28.25
+      }
+    ],
+    "scooters": [
+      {
+        "id": "scooter-harbor-near-e",
+        "street": "street-harbor-walk"
+      },
+      {
+        "id": "scooter-harbor-near-w",
+        "street": "street-harbor-walk"
+      },
+      {
+        "id": "scooter-street-tram-approach-0-w",
+        "street": "street-tram-approach"
+      },
+      {
+        "id": "scooter-street-tram-approach-2-e",
+        "street": "street-tram-approach"
+      },
+      {
+        "id": "scooter-street-tram-approach-4-e",
+        "street": "street-tram-approach"
+      },
+      {
+        "id": "scooter-street-tram-approach-5-w",
+        "street": "street-tram-approach"
+      },
+      {
+        "id": "scooter-street-tram-approach-8-w",
+        "street": "street-tram-approach"
+      },
+      {
+        "id": "scooter-street-tram-approach-10-e",
+        "street": "street-tram-approach"
+      },
+      {
+        "id": "scooter-street-tram-approach-10-w",
+        "street": "street-tram-approach"
+      },
+      {
+        "id": "scooter-street-harbor-walk-0-e",
+        "street": "street-harbor-walk"
+      },
+      {
+        "id": "scooter-street-harbor-walk-0-w",
+        "street": "street-harbor-walk"
+      },
+      {
+        "id": "scooter-street-harbor-walk-9-e",
+        "street": "street-harbor-walk"
+      },
+      {
+        "id": "scooter-street-harbor-walk-9-w",
+        "street": "street-harbor-walk"
+      },
+      {
+        "id": "scooter-street-harbor-walk-10-w",
+        "street": "street-harbor-walk"
+      },
+      {
+        "id": "scooter-street-harbor-walk-12-e",
+        "street": "street-harbor-walk"
+      }
+    ],
+    "shopMarker": true,
+    "shopPanel": true,
+    "shopPanelId": "shop-lantern-fish",
+    "honesty": "Authored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:1 city. NOT_PLAN_PASS.\n\nFriend bodies use this PC's 4175 loopback store (two browsers here). Not a city shop server. Not a city presence server. Not another city's cloud. Not WAN. Not GPS. NOT_PLAN_PASS.",
+    "mode": "Offline — Stroll alone; shops still open.",
+    "gtaClaim": false
+  }
+}

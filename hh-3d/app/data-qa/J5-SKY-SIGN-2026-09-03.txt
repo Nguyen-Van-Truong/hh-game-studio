@@ -1,0 +1,174 @@
+{
+  "run_id": "HH3D-J5-20260903-ASIA-SAIGON-16",
+  "player": "http://127.0.0.1:4175/",
+  "verdict": "J5_SKY_SIGN_OK",
+  "not_plan_pass": true,
+  "not_gate_u1": true,
+  "not_osm": true,
+  "not_wan": true,
+  "skyOk": true,
+  "signOk": true,
+  "honestyOk": true,
+  "skyBand": {
+    "samples": 1462,
+    "meanR": 122.3,
+    "meanG": 142.2,
+    "meanB": 154.8,
+    "beigeRatio": 0.017,
+    "grayRatio": 0,
+    "blueRatio": 0.614,
+    "orangeRatio": 0.038,
+    "uniqueQ16": 48,
+    "bluerThanRed": true
+  },
+  "spawnSign": {
+    "samples": 14476,
+    "meanR": 104.8,
+    "meanG": 69.5,
+    "meanB": 59.5,
+    "beigeRatio": 0.014,
+    "grayRatio": 0.096,
+    "blueRatio": 0.004,
+    "orangeRatio": 0.246,
+    "uniqueQ16": 127,
+    "bluerThanRed": false
+  },
+  "midBand": {
+    "samples": 2987,
+    "meanR": 118.3,
+    "meanG": 100,
+    "meanB": 89.7,
+    "beigeRatio": 0.018,
+    "grayRatio": 0.062,
+    "blueRatio": 0.168,
+    "orangeRatio": 0.135,
+    "uniqueQ16": 152,
+    "bluerThanRed": false
+  },
+  "orangeInMid": 0.135,
+  "orangeAtSpawn": 0.246,
+  "hash": "1762461ba89c0aee",
+  "bytes": 129297,
+  "shotSky": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-sky.png",
+  "shot": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-sky-sign.png",
+  "spawnDom": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/?seat=a",
+    "playReady": "yes",
+    "canvas": {
+      "w": 1280,
+      "h": 720,
+      "cw": 1280,
+      "ch": 720,
+      "box": {
+        "w": 1280,
+        "h": 720,
+        "top": 0,
+        "left": 0
+      }
+    },
+    "sky": "gradient-hemisphere",
+    "sun": "disc",
+    "shopSigns": "3",
+    "shopSignKind": "pole-board",
+    "shopSignFaces": "2",
+    "shops": "3",
+    "buildings": "60",
+    "camPitch": "0.0",
+    "camYaw": "0.0",
+    "heading": "0.0",
+    "signs": [
+      {
+        "testid": "shop-sign-shop-lantern-fish",
+        "shop": "shop-lantern-fish",
+        "kind": "pole-board",
+        "e": "E",
+        "name": "Quầy Cá Đèn Lồng"
+      },
+      {
+        "testid": "shop-sign-shop-local-sharedpc",
+        "shop": "shop-local-sharedpc",
+        "kind": "pole-board",
+        "e": "E",
+        "name": "Quầy Shared PC"
+      },
+      {
+        "testid": "shop-sign-shop-local-mtl8ulddihjpre",
+        "shop": "shop-local-mtl8ulddihjpre",
+        "kind": "pole-board",
+        "e": "E",
+        "name": "Quay Critic J6 Jump"
+      }
+    ],
+    "lanternSign": {
+      "shop": "shop-lantern-fish",
+      "kind": "pole-board",
+      "e": "E",
+      "name": "Quầy Cá Đèn Lồng"
+    },
+    "lanternMarker": null,
+    "honesty": true
+  },
+  "dom": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/?seat=a",
+    "playReady": "yes",
+    "canvas": {
+      "w": 1280,
+      "h": 720,
+      "cw": 1280,
+      "ch": 720,
+      "box": {
+        "w": 1280,
+        "h": 720,
+        "top": 0,
+        "left": 0
+      }
+    },
+    "sky": "gradient-hemisphere",
+    "sun": "disc",
+    "shopSigns": "3",
+    "shopSignKind": "pole-board",
+    "shopSignFaces": "2",
+    "shops": "3",
+    "buildings": "60",
+    "camPitch": "0.0",
+    "camYaw": "0.0",
+    "heading": "0.0",
+    "signs": [
+      {
+        "testid": "shop-sign-shop-lantern-fish",
+        "shop": "shop-lantern-fish",
+        "kind": "pole-board",
+        "e": "E",
+        "name": "Quầy Cá Đèn Lồng"
+      },
+      {
+        "testid": "shop-sign-shop-local-sharedpc",
+        "shop": "shop-local-sharedpc",
+        "kind": "pole-board",
+        "e": "E",
+        "name": "Quầy Shared PC"
+      },
+      {
+        "testid": "shop-sign-shop-local-mtl8ulddihjpre",
+        "shop": "shop-local-mtl8ulddihjpre",
+        "kind": "pole-board",
+        "e": "E",
+        "name": "Quay Critic J6 Jump"
+      }
+    ],
+    "lanternSign": {
+      "shop": "shop-lantern-fish",
+      "kind": "pole-board",
+      "e": "E",
+      "name": "Quầy Cá Đèn Lồng"
+    },
+    "lanternMarker": {
+      "kind": "pole-board",
+      "e": "E",
+      "text": "Shop · Quầy Cá Đèn Lồng"
+    },
+    "honesty": true
+  }
+}

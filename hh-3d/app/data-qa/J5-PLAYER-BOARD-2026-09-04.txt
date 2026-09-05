@@ -1,0 +1,112 @@
+{
+  "run_id": "HH3D-J5-20260904-ASIA-SAIGON-22",
+  "player": "http://127.0.0.1:4175/",
+  "verdict": "J5_PLAYER_BOARD_OK",
+  "liveJs": "/assets/index-D4Sc2h68.js",
+  "liveLen": 2162025,
+  "liveSha": "76f9843d6e8cff47bc683e55bea928ac36797054d601a1e6f4ceec9ace4c64b2",
+  "created": null,
+  "usedExisting": "shop-local-mtmh45qxehxhvb",
+  "playerShopId": "shop-local-mtmh45qxehxhvb",
+  "playerBoardText": "Phở bò (mẫu)mẫu · not a live market Phở bò (mẫu) Phở bò (mẫu)",
+  "lanternBoardText": "Cá nục sương (mẫu)Túi cói chợ (mẫu)mẫu · not a live market Cá nục sương (mẫu) | Túi cói chợ (mẫu) Cá nục sương (mẫu) | Túi cói chợ (mẫu)",
+  "shopNorthM": 19.79,
+  "heading": 0,
+  "playerCrop": {
+    "stats": {
+      "samples": 5123,
+      "slateRatio": 0.533,
+      "chalkRatio": 0.038
+    },
+    "box": {
+      "x": 530,
+      "y": 642,
+      "w": 182,
+      "h": 58
+    },
+    "crop": {
+      "w": 218,
+      "h": 94
+    }
+  },
+  "lanternCrop": {
+    "stats": {
+      "samples": 5046,
+      "slateRatio": 0.516,
+      "chalkRatio": 0.084
+    },
+    "box": {
+      "x": 565,
+      "y": 578,
+      "w": 137,
+      "h": 79
+    },
+    "crop": {
+      "w": 173,
+      "h": 115
+    }
+  },
+  "shopOpen": "shop-local-mtmh45qxehxhvb",
+  "goods": [
+    {
+      "id": "listing-local-mtmh45qxhyu29f",
+      "kind": "other",
+      "status": "published",
+      "text": "Phở bòKhác / otherpublicLocal demo listing. Free-text sample. Not a real product.Liên hệ"
+    }
+  ],
+  "leftovers": [
+    {
+      "shop": "shop-local-sharedpc",
+      "source": "local-demo",
+      "draw": "0",
+      "keepOut": "1",
+      "titles": "Phở bò (mẫu)",
+      "count": 1
+    },
+    {
+      "shop": "shop-local-mtl8ulddihjpre",
+      "source": "local-demo",
+      "draw": "0",
+      "keepOut": "1",
+      "titles": "Sach phe binh J6 (mẫu)",
+      "count": 1
+    }
+  ],
+  "leftoverDrawn": [],
+  "leftoverPersist": [
+    {
+      "shop": "shop-local-sharedpc",
+      "name": "Quầy Shared PC",
+      "lat": 10.77162,
+      "lon": 106.69804,
+      "northM": 0
+    },
+    {
+      "shop": "shop-local-mtl8ulddihjpre",
+      "name": "Quay Critic J6 Jump",
+      "lat": 10.77162,
+      "lon": 106.69814973080383,
+      "northM": 0
+    },
+    {
+      "shop": "shop-local-mtmh45qxehxhvb",
+      "name": "Quầy Phở Nhà",
+      "lat": 10.771797831117475,
+      "lon": 106.69804,
+      "northM": 19.8
+    }
+  ],
+  "leftoverB": true,
+  "leftoverEStolen": false,
+  "leftoverBNearby": "",
+  "identity": "Guest · shops public; friends not required",
+  "oidc": false,
+  "honestyOk": true,
+  "playerBoardOk": true,
+  "lanternStillOk": true,
+  "eOpensPlayer": true,
+  "leftoverKeepOut": true,
+  "placedOffSpawn": true,
+  "didNotCatalogClear": true
+}

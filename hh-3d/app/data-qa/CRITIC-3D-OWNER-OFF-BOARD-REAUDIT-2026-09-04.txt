@@ -1,0 +1,445 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+BOOTED_4175=1
+DID_NOT_RECYCLE=1
+DID_NOT_REBUILD=1
+DID_NOT_REMINT=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M1=1
+NOT_M0_WP1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+CRITIC=INDEPENDENT_ADVERSARIAL_OWNER_OFF_BOARD_REAUDIT
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=12:31 +07
+MODEL=grok-4.6-extra-high
+SCOPE=Re-audit of claimed isolated A Offline + leave-demo-owner; guest B still reads Phở bò and E-opens shop-local-mtmh45qxehxhvb. Do not treat CRITIC-3D-OWNER-OFF-BOARD-2026-09-04.txt as TICK=yes.
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=04cb6ca92c482017c02d78e7885727f73b62103d
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-OWNER-OFF-BOARD-REAUDIT-2026-09-04.txt
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-OWNER-OFF-BOARD-2026-09-04.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+DID_NOT_TREAT_IMPLEMENTER_AS_TICK_YES=1
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+DID_NOT_UNFRIEND=1
+DID_NOT_ADD_FRIEND=1
+DID_NOT_ACCEPT_FRIEND=1
+DID_NOT_CLICK_ONLINE=1
+DID_NOT_CATALOG_CLEAR=1
+VITE_PREVIEW_PORT_PIN=4175
+LIVE_PID=68116
+LISTEN=127.0.0.1:4175
+CRITIC_CDP_PORTS=9993 (seat A become-owner / Offline / leave) / 9994 (seat B west-then-north + crop + E)
+VIEWPORT=1280x720
+ISOLATED_PROFILES=1
+HEADLESS_NEW=1
+ABOUT_BLANK_THEN_NAVIGATE=1
+SEAT_A=a
+SEAT_B=b
+
+CLAIM_JS=/assets/index-D4Sc2h68.js
+CLAIM_JS_LEN=2162025
+CLAIM_JS_SHA256=76f9843d6e8cff47bc683e55bea928ac36797054d601a1e6f4ceec9ace4c64b2
+LIVE_JS=/assets/index-D4Sc2h68.js
+LIVE_JS_LEN=2162025
+LIVE_JS_SHA256=76f9843d6e8cff47bc683e55bea928ac36797054d601a1e6f4ceec9ace4c64b2
+LIVE_JS_MATCHES_CLAIM=1
+HASH_MISMATCH=0
+
+A_SPAWN_IDENTITY=Guest · shops public; friends not required
+A_SPAWN_SIGNED=no
+A_SPAWN_MODE=Offline — Stroll alone; shops still open.
+A_AS_OWNER=Chủ quầy (máy này) · local demo, not a real account
+A_AS_OWNER_SIGNED=yes
+A_AS_OWNER_MODE=Offline — Stroll alone; shops still open.
+A_ONLINE_ACTIVE=no
+A_OFFLINE_ACTIVE=yes
+A_LEAVE_CONTROL=leave-demo-owner (exists while signed-in)
+A_LEFT_IDENTITY=Guest · shops public; friends not required
+A_LEFT_SIGNED=no
+A_LEFT_MODE=Offline — Stroll alone; shops still open.
+A_DURING_B_IDENTITY=Guest · shops public; friends not required
+A_DURING_B_SIGNED=no
+A_DURING_B_MODE=Offline — Stroll alone; shops still open.
+A_DURING_B_ONLINE_ACTIVE=no
+A_DURING_B_REMOTES=0
+A_STAYED_ONLINE=0
+A_ONLINE_INVENTED=0
+A_SHOP_STAYED_AFTER_LEAVE=1
+
+B_IDENTITY=Guest · shops public; friends not required
+B_SIGNED=no
+B_PRESENCE=Offline — Stroll alone; shops still open.
+B_ONLINE_ACTIVE=no
+B_OFFLINE_ACTIVE=yes
+B_FRIEND_A_RELATION=none
+B_FRIEND_A_TEXT=Bạn A (máy này) — not friends / Add friend
+B_ACCEPT_FRIEND_A=0
+B_UNFRIEND_A=0
+B_ADD_FRIEND_A_VISIBLE=1
+B_DID_CLICK_ADD_FRIEND=0
+B_REMOTES_PEOPLE=0
+B_REMOTES_ROWS=0
+B_REMOTES_BODIES=0
+B_STORAGE_PAIRS=[]
+B_STAYED_OFFLINE=1
+SECRET_FRIENDS=0
+
+PLAYER_SHOP=shop-local-mtmh45qxehxhvb
+PLAYER_SHOP_NAME=Quầy Phở Nhà
+B_WALK_NORTH_M=12.29
+B_WALK_EAST_M=-0.57
+B_HEADING=354
+B_NEARBY=shop-local-mtmh45qxehxhvb
+B_RANGE=Quầy Phở Nhà: 7.5 m away
+B_HINT=Press E or tap Open to enter Quầy Phở Nhà.
+B_CROP_TEXT=Phở bò (mẫu) / mẫu · not a live market
+B_CROP_BLANK=0
+B_CROP_GONE=0
+B_CROP_LANTERN_TEXT=0
+B_CROP_HAS_PHO=1
+B_CROP_HAS_BO=1
+B_CROP_BOX=583,219 145x46 (live overlay + pad 16 → 177x78)
+B_CROP_SLATE=0.528
+B_CROP_CHALK=0.041
+B_E_OPENED=shop-local-mtmh45qxehxhvb
+B_SHELF=Phở bò (listing-local-mtmh45qxhyu29f)
+B_DRAFT_ON_SHELF=0
+BOARD_VANISHED=0
+
+SEAT_B_SPAWN_NORTH_M=0
+SEAT_B_SPAWN_EAST_M=7
+SEAT_B_SPAWN_HEADING=270
+SEAT_B_SPAWN_NEARBY=
+LEFTOVER_DRAWN=0
+LEFTOVER_SHAREDPC_KEEP_OUT=1
+LEFTOVER_J6_KEEP_OUT=1
+
+CLAIM_1_LIVE_HASH=PASS
+CLAIM_2_ISOLATED_A_OFFLINE_LEFT_B_OFFLINE_NO_FRIENDS=PASS
+CLAIM_3_CROP_PHO_BO_NOT_BLANK_NOT_GONE=PASS
+CLAIM_4_E_OPENS_PLAYER_SHOP=PASS
+CLAIM_5_BOARD_DID_NOT_VANISH_BECAUSE_A_OFFLINE=PASS
+
+BIGGEST_MISS=None on the named hunts. Live hash matches D4Sc2h68 / 2162025 / 76f9843d… before and after CDP. Isolated A became Chủ quầy, stayed Offline (online-btn data-active=no), then leave-demo-owner → Guest / Offline. During B walk and after E, A was still Guest / Offline / remotes=0 — not invented Online. Isolated B stayed Guest / Offline / friendA=none / remotes=0. Player overlay crop at +12.29 m / −0.57 m east (7.5 m from Quầy Phở Nhà) reads Phở bò (mẫu) — not blank, not gone, not Cá/Túi. E opened shop-local-mtmh45qxehxhvb. Board stayed drawn (draw=1). NOT_PLAN_PASS.
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/ was already up. Bind 127.0.0.1 pid 68116
+(node vite preview --host 127.0.0.1 --port 4175 --strictPort).
+Did not recycle, rebuild, remint, kill, or start 4173 / 4174 / 5175.
+Did not bind 0.0.0.0.
+
+Did not treat CRITIC-3D-OWNER-OFF-BOARD-2026-09-04.txt as TICK=yes
+(ROLE=IMPLEMENTER, TICK=n/a). Did not run
+j5-owner-off-board-probe.mjs as proof. Did not write J5 packs.
+Did not tick any plan. Did not catalog_clear. Did not POST
+graph_op unfriend / add / accept. Did not click Online on A or B.
+
+Independent Chrome CDP, isolated temp profiles, 1280×720,
+about:blank then ?seat=a / ?seat=b. Tried to fail: hash drift;
+A secretly Online; leave-identity missing; B secretly friends
+(friend-row accepted / remotes>0); chalkboard blank or gone
+because A is Offline; crop is lantern Cá/Túi; E opens
+shop-lantern-fish or Shared PC / J6.
+
+Hash matches. A is Offline and left identity. Guest B still
+reads Phở bò and E-opens shop-local-mtmh45qxehxhvb. The board
+did not vanish. This is NOT_PLAN_PASS. GATE-U1 humans were
+not invented. Not M1.
+
+================================================================================
+LIVE JS
+================================================================================
+
+HTML script = /assets/index-D4Sc2h68.js
+http length = 2162025
+sha256 = 76f9843d6e8cff47bc683e55bea928ac36797054d601a1e6f4ceec9ace4c64b2
+Matches the claimed live name + length + hash.
+GET before CDP (12:27 +07), GET after A+B CDP, and GET
+after this write (12:31 +07) are the same bytes from
+pid 68116. HASH_MISMATCH=0. Did not stop.
+
+Bundle scan (live bytes, not source):
+  openstreetmap = 0
+  overture = 2   (honesty copy "not OSM/Overture", not a fetch)
+  0.0.0.0 = 0
+  shop-lantern-fish = 1
+  mtmh45qxehxhvb = 0   (this-PC shop id is persist, not bundled)
+  not a live market = 3
+  chalkboard-menu = 1
+  leave-demo-owner = 2
+  Simulate owner Offline = 1  (shop-panel label; see hunts)
+
+/demo-bus this_pc=true bind=127.0.0.1 not_wan=true.
+graph.pairs=[] (empty). presence={} (A left; no Online packet).
+Catalog leftover persist (not reminted, not cleared):
+  shop-local-sharedpc          Quầy Shared PC     owner_presence=offline status=published
+  shop-local-mtl8ulddihjpre    Quay Critic J6 Jump owner_presence=offline status=published
+  shop-local-mtmh45qxehxhvb    Quầy Phở Nhà       19.8 m N / 0 m E
+                                               owner_presence=offline status=published
+Listings: Shared PC Phở bò; J6 Sach phe binh J6;
+player listing-local-mtmh45qxhyu29f Phở bò.
+
+================================================================================
+CLAIM 1 — LIVE HASH IS THE CLAIMED BUNDLE — PASS
+================================================================================
+
+Tried to fail as a later/earlier bundle or SPA-shell fallback
+on the claimed name.
+
+  live = /assets/index-D4Sc2h68.js
+  len  = 2162025
+  sha  = 76f9843d6e8cff47bc683e55bea928ac36797054d601a1e6f4ceec9ace4c64b2
+
+Same name + length + hash before CDP and after CDP from
+pid 68116. HASH_MISMATCH=0.
+
+PASS.
+
+================================================================================
+CLAIM 2 — ISOLATED A OFFLINE + LEFT; B OFFLINE / NOT FRIENDS — PASS
+================================================================================
+
+Tried to fail: A stayed or flipped Online; leave-demo-owner
+missing; empty-profile B secretly friends (accepted / remotes>0).
+Did not invent that A stayed Online.
+
+Seat A (CDP 9993, isolated user-data-dir, about:blank then
+?seat=a). Did not click Online.
+
+  spawn: Guest / signed=no / Offline / online-btn data-active=no
+         become-demo-owner present; leave-demo-owner absent
+  after Become Chủ quầy: signed=yes / still Offline /
+         online-btn data-active=no / leave-demo-owner present
+  after leave-demo-owner: Guest / signed=no / Offline /
+         become-demo-owner back; leave gone
+  during B walk: Guest / Offline / online-active=no / remotes=0
+  during B E:    Guest / Offline / online-active=no / remotes=0
+
+A_STAYED_ONLINE=0. A_ONLINE_INVENTED=0.
+
+Seat B (CDP 9994, separate isolated profile, about:blank then
+?seat=b). Did not click Add friend / Accept / Unfriend / Online.
+Did not POST graph_op.
+
+  spawn / walk / after E:
+    identity = Guest · shops public; friends not required
+    data-signed-in = no
+    presence = Offline — Stroll alone; shops still open.
+    online-btn data-active = no
+    friend-row-a data-relation = none
+    friend-row-a text = "Bạn A (máy này) — not friends" + Add friend
+    accept-friend-a = absent
+    unfriend-a = absent
+    people-layer / people-rows / play-remote-bodies = 0
+    localStorage pairs = []
+    /demo-bus graph.pairs = []
+
+friend-row-a exists in the FriendsBar seat list. That is not
+an accepted pair. SECRET_FRIENDS=0.
+
+PASS.
+
+================================================================================
+CLAIM 3 — B CROP AT PHỞ KIOSK STILL PHỞ BÒ, NOT BLANK / GONE — PASS
+================================================================================
+
+Tried to fail: chalkboard blank, gone, or lantern Cá/Túi after
+A is Offline / left. Prefer TICK=no if the board vanished.
+
+Independent walk (port 9994): west on B spawn heading 270
+(chunks 2400 / 1600 / 900, not their 2200/1800/1200), then
+north (1400 / 1800 / 1200 / 1500 / 1000 / 800 / 600, not
+their 1300/1500/1700/1400/1600/1200/1100/700). Stopped at
++12.29 m north / −0.57 m east, heading 354.
+Nearby=shop-local-mtmh45qxehxhvb.
+Range=Quầy Phở Nhà: 7.5 m away.
+Shot BEFORE E.
+
+Live player overlay box 583,219 145×46.
+Critic crop 177×78 (pad 16).
+slateRatio=0.528 chalkRatio=0.041.
+
+Visual read of critic-b-overlay-crop.png (pixels, not
+data-titles):
+  dark-green chalkboard, thin brown frame
+  chalk line: Phở bò (mẫu)
+  footer: mẫu · not a live market
+
+Phở / bò are readable. This is not a blank green slab.
+This is not gone. This is not Cá / Túi / nục / cói on the
+player overlay. DOM count alone was not used.
+
+Same frame also shows a second, higher lantern overlay
+(box 653,184 93×53, titles Cá nục sương | Túi cói chợ).
+That distant board is a second overlay, not the player crop.
+Accept crop is shop-local-mtmh45qxehxhvb.
+
+B_CROP_BLANK=0
+B_CROP_GONE=0
+B_CROP_LANTERN_TEXT=0
+BOARD_VANISHED=0
+
+PASS.
+
+================================================================================
+CLAIM 4 — E STILL OPENS shop-local-mtmh45qxehxhvb — PASS
+================================================================================
+
+Tried to fail: shop/board missing because A is Offline, or E
+opens shop-lantern-fish / Shared PC / J6 / nothing.
+
+After the player crop, held E:
+  panel=true
+  shopPanelId=shop-local-mtmh45qxehxhvb
+  shelf = listing-local-mtmh45qxhyu29f  Phở bò
+  draft on shelf = 0
+  not shop-lantern-fish
+  not shop-local-sharedpc / mtl8ulddihjpre
+  identity still Guest / signed-in=no
+  presence still Offline
+  friendA still none
+  remotes still 0
+  after-E panel copy: "Guest on this machine. Browse does
+  not need friends or an account."
+  after-E panel also: "Shop owner: Offline. Public listings
+  stay open." (owner-offline-sim checkbox default; see hunts)
+
+Hint before E: "Press E or tap Open to enter Quầy Phở Nhà."
+
+PASS.
+
+================================================================================
+CLAIM 5 — BOARD DID NOT VANISH BECAUSE A IS OFFLINE — PASS
+================================================================================
+
+Tried to fail: published street board / E gone after A
+Offline + leave-demo-owner.
+
+After A left:
+  A boards still include shop-local-mtmh45qxehxhvb draw=1
+  B spawn already lists that shop draw=1 keep-out=0
+  B walk playerLive.onScreen=true titles=Phở bò (mẫu)
+  B E opens that shop
+  /demo-bus shop stays status=published owner_presence=offline
+
+leave-demo-owner cleared signed-in only. It did not unpublish.
+Offline presence left an empty presence map, not a catalog
+takedown. publicShops / publishedShopCatalog / street draw
+filter status === published only. owner_presence is stored,
+not a hide switch.
+
+If the board had vanished, this claim would be TICK=no.
+It did not vanish.
+
+PASS.
+
+================================================================================
+HUNTS (not named fails)
+================================================================================
+
+Shop panel ships a default-checked owner-offline-sim
+checkbox ("Simulate owner Offline / logged out / app closed.
+This label does not take the public shelf down."). That is
+a local UI label on B's shelf. It is not A's ModeBar and
+was not used as proof that A is Offline. A's Offline is
+from [data-testid=presence-mode] / offline-btn data-active
+on the isolated A profile. The named fail is board/shop
+missing because A is Offline. The board stayed.
+
+Online button is not disabled (onlineDisabled=no). "Inactive"
+here means data-active=no. Neither seat clicked Online.
+
+friend-row-a is always in the FriendsBar seat list. The
+named fail is secretly friends (accepted / remotes>0), not
+the existence of the row. Relation stayed none.
+
+At the approach two chalkboard overlays share the frame:
+near Phở bò, far Cá/Túi. Accept crop is the player overlay.
+
+Leftover persist (draw=0 keep-out=1):
+  shop-local-sharedpc          titles=Phở bò (mẫu)
+  shop-local-mtl8ulddihjpre    titles=Sach phe binh J6 (mẫu)
+B spawn Nearby empty. Shared PC also sells Phở bò — that
+persist title is not the drawn walk-up board.
+
+Honesty banner on A spawn / B spawn / B walk / after E:
+  Authored approximation. Not a live map, not OSM/Overture,
+  not photogrammetry, and not a digital twin. Menu boards
+  list authored fiction goods, not a live market.
+  NOT_PLAN_PASS.
+
+LIVE_INVENTORY_CLAIM=0. Local demo identity only. No OIDC.
+This is this-PC 4175 /demo-bus catalog, not a city shop
+server, not WAN.
+
+4175 vite preview argv has no --host 0.0.0.0. Listen is
+127.0.0.1:4175. netstat foreign 0.0.0.0:0 on a LISTENING
+row is not a bind.
+
+================================================================================
+METHOD
+================================================================================
+
+1. 4175 already up (pid 68116). Did not recycle / rebuild /
+   start other ports.
+2. GET /  /demo-bus  /data/shops.json  /assets/index-D4Sc2h68.js.
+   Recorded name+sha+len before CDP, after CDP, and after
+   this write.
+3. Read implementer note (TICK=n/a). Did not copy its probe
+   writer into product files. Did not run
+   j5-owner-off-board-probe.mjs as proof. Did not POST unfriend.
+4. Independent Chrome CDP 1280×720 isolated profiles.
+   Port 9993: about:blank → ?seat=a, Become Chủ quầy, stay
+   Offline, leave-demo-owner, hold A while B walks.
+   Port 9994: about:blank → ?seat=b, leftover check at spawn,
+   west then north (not their chunks), player overlay crop
+   BEFORE E, E.
+5. Did not write lead packs. Did not tick plan. Did not fake
+   GATE-U1.
+
+Temp only (not under data-qa):
+  %TEMP%\hh-owner-off-reaudit\hash-bus.mjs
+  %TEMP%\hh-owner-off-reaudit\hash-bus.json
+  %TEMP%\hh-owner-off-reaudit\scan-js.mjs
+  %TEMP%\hh-owner-off-reaudit\scan-js.json
+  %TEMP%\hh-owner-off-reaudit\critic-owner-off.mjs
+  %TEMP%\hh-owner-off-reaudit\critic-walk.json
+  %TEMP%\hh-owner-off-reaudit\critic-b-before-e.png
+  %TEMP%\hh-owner-off-reaudit\critic-b-overlay-crop.png
+  %TEMP%\hh-owner-off-reaudit\critic-b-after-e.png
+
+================================================================================
+STILL IMPOSSIBLE WITHOUT OWNER
+================================================================================
+
+- GATE-U1 three human reviewers (not faked)
+- AUTHORIZE_MAP_FETCH=YES + license ledger before any OSM/Overture
+- Other-PC / WAN join (store is this PC 4175 loopback)
+- Real account / OIDC
+
+================================================================================
+END
+================================================================================

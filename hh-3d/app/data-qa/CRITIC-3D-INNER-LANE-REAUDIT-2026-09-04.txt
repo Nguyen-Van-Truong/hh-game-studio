@@ -1,0 +1,323 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+BOOTED_4175=1
+DID_NOT_RECYCLE=1
+DID_NOT_REBUILD=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+CRITIC=INDEPENDENT_ADVERSARIAL_INNER_LANE_REAUDIT
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=08:23 +07
+MODEL=grok-4.6-extra-high
+SCOPE=Re-audit of implementer inner-lane remint. Do not treat CRITIC-3D-INNER-LANE-2026-09-04.txt as TICK=yes.
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=04cb6ca92c482017c02d78e7885727f73b62103d
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-INNER-LANE-REAUDIT-2026-09-04.txt
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-INNER-LANE-2026-09-04.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+DID_NOT_TREAT_IMPLEMENTER_AS_TICK_YES=1
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NOT_OSM=1
+NOT_WAN=1
+VITE_PREVIEW_PORT_PIN=4175
+LIVE_PID=30084
+LISTEN=127.0.0.1:4175
+CRITIC_CDP_PORTS=9961 / 9962
+VIEWPORT=1280x720
+ISOLATED_PROFILES=1
+HEADLESS_NEW=1
+
+LIVE_JS=/assets/index-Y4m4boSF.js
+LIVE_JS_LEN=2139698
+LIVE_JS_SHA256=8cfbcabf0181ab95b8b76d1a88984acae67c8af93d0ac311dcfec361d621eef0
+LIVE_JS_MATCHES_CLAIM=1
+HASH_MISMATCH=0
+
+LEFT_HARBOR_WALK=1
+HARBOR_M_SPAWN=0.40
+HARBOR_M_INNER=13.66
+HARBOR_M_ROSE=13.26
+PAST_WEST_FACE_M=2.15
+INNER_LUM_ROAD=11.7
+INNER_LUM_WALK=101.2
+INNER_LUM_DELTA=89.5
+INNER_FLOOR_ONE_LIGHT_PLAZA=0
+DOOR_RATIO_NEAR_ZERO=0
+
+CLAIM_1_WALK_OFF_HARBOR_INNER_DARKER_CENTER=PASS
+CLAIM_2_DOOR_GLASS_STILL_VISIBLE=PASS
+CLAIM_3_LANTERN_BOUND_FOOTSTEPS_LEFTOVER=PASS
+CLAIM_4_LIVE_UI_NO_NEW_CITY_GRID=PASS
+
+BIGGEST_MISS=None on the named hunts. Independent east walk left Harbor Walk (harborM 0.40 → 13.66, pastWestFace +2.15 m) into the Steps East gap. Inner-shot floor strip is darker-center (road 11.7 / walk 101.2 / delta 89.5), not one light plaza. Door/glass still on the inner faces. Live UI does not claim a new city grid or new GeoJSON roads. GeoJSON street count still 2. NOT_PLAN_PASS.
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/ was already up. Bind 127.0.0.1 pid 30084
+(node vite preview). Did not recycle, rebuild, kill, or start
+4173 / 4174 / 5175. Did not bind 0.0.0.0.
+
+Did not treat CRITIC-3D-INNER-LANE-2026-09-04.txt as TICK=yes
+(ROLE=IMPLEMENTER, TICK=n/a). Did not run j5-inner-lane-probe.mjs.
+
+Independent Chrome CDP, isolated temp profiles, ?seat=a / ?seat=b.
+Tried to fail: still-on-Harbor, lum measured on Harbor Walk,
+inner floor still one light plaza (delta ~0), door/glass hidden
+by lanes, leftover E, dead south bound, footsteps drop while W,
+live UI city-grid / new-GeoJSON claim.
+
+Live hash matches the claimed remint. Inner path is darker-center
+after leaving Harbor Walk. Hunts 1–4 held. This is NOT_PLAN_PASS.
+GATE-U1 humans were not invented.
+
+================================================================================
+LIVE JS
+================================================================================
+
+HTML script = /assets/index-Y4m4boSF.js
+http length = 2139698
+sha256 = 8cfbcabf0181ab95b8b76d1a88984acae67c8af93d0ac311dcfec361d621eef0
+Matches the claimed remint name + length + hash.
+After CDP the same name/len/hash is still served from pid 30084.
+
+Bundle scan (live bytes, not source):
+  openstreetmap = 0
+  0.0.0.0 = 0
+  gta 6 / rockstar = 0
+  hip sphere / bowling-ball = 0
+  door-glass-lamp = 1
+  shop-lantern-fish = 1
+  procedural-thump = 1
+  distance-haze = 1
+  curb-wall-lot = 1
+  Inner Lane = 1
+  asphalt-walk-edge = 1
+  city grid = 1 (honesty denial only: "not a city grid")
+  new GeoJSON = 0
+  1:1 city / digital twin / photogrammetry = honesty denials only
+
+Live authored GeoJSON kind=street count = 2
+(street-tram-approach, street-harbor-walk). No third LineString
+road. Inner lanes are derived parcel centerlines, not new fixture
+streets.
+
+/demo-bus still this_pc leftovers shop-local-sharedpc and
+shop-local-mtl8ulddihjpre. Did not catalog_clear.
+
+================================================================================
+CLAIM 1 — WALK OFF HARBOR; INNER SHOT DARKER-CENTER — PASS
+================================================================================
+
+Tried to fail: stay on Harbor Walk and measure Harbor asphalt;
+or leave Harbor but the inner floor is still one light plaza
+(delta ~0).
+
+Seat A spawn 106.69804, 10.77162  harborM=0.40  alt=0
+heading 0 (north). Harbor Walk asphalt. Footsteps=1 after 0.9 s W.
+
+North on Harbor to the Steps East alley latitude
+(gap between bldg-steps-e-00 north 10.7717837 and
+bldg-steps-e-10 south 10.7718251, ~4.6 m):
+
+  after-north  lon=106.69804  lat=10.7718195  harborM=0.11
+  heading 0  nearby=shop-lantern-fish  inside-aabb=0
+
+Turn D ~900 ms → heading 75 then 95 (east). Then hold W.
+Path sampled every ~450 ms (18 east ticks). Lon advanced every
+sample. inside-aabb=0 inside-ring=0 blocked=0 alt=0 on every tick.
+clipHits=0.
+
+  east-0   harborM=0.53   pastWestFace=-10.99
+  east-6   harborM>4.3    offHarborRoad
+  east-14  harborM=11.30  pastWestFace=-0.21
+  east-15  harborM=11.93  pastWestFace=+0.43  leftHarborWalk
+  stop     lon=106.698166  lat=10.7718095  heading=95
+           harborM=13.66  pastWestFace=+2.15
+           inAlleyLat=1  offHarborRoad=1  offHarborWalkBand=1
+           alt=0  eastM=+13.78  northM=+21.10
+
+Harbor road half-width is 4.3 m; Harbor walk band ~8.2 m.
+13.66 m from the Harbor polyline and 2.15 m east of the Steps
+East west face (106.6981463) is the inner E–W parcel gap, not
+Harbor Walk. Walker sits 1.74 m south of e-10 and 2.87 m north
+of e-00.
+
+Independent shot inner-alley.png (sha16=d66c319844726cfa),
+facing east down that corridor, 1280x720. Luminance measured
+on THIS inner floor, not on the Harbor spawn shot:
+
+  floor strip x 38–64% y 78–92%
+    road lum=11.7  RGB 11.1/12.1/9.9
+    walk lum=101.2 RGB 92.9/103.5/102.4
+    delta=89.5
+  tighter mid x 42–60% y 81–86%
+    road lum=8.5  walk lum=158.1  delta=149.6
+    (mid walk bin is the bright walk/paint; still darker-center)
+
+Look-down on the same inner pose (not a Harbor crop):
+  road lum=1.9  walk lum=124.7  delta=122.7
+
+The inner floor is a dark asphalt ribbon with light walk edges
+and thin yellow paint. It is not one light plaza (delta ~0).
+Harbor spawn north still reads Harbor language (dark road +
+light walk + lamps + Market Hall). That Harbor delta was NOT
+used as the inner proof.
+
+LEFT_HARBOR_WALK=1
+INNER_LUM_DELTA=89.5
+PASS.
+
+================================================================================
+CLAIM 2 — DOOR / GLASS STILL ON THE INNER FACE — PASS
+================================================================================
+
+Tried to fail: lanes wallpaper the dressing so doorRatio ~0.
+
+Same inner-alley shot, facing east between e-00 and e-10:
+
+  mid        doorRatio=0.105  glassRatio=0.040
+  right face doorRatio=0.134  glassRatio=0.066
+  left face  doorRatio=0.081  glassRatio=0.000
+
+doorRatio is not ~0. Right/left bands are the north face of
+e-00 and the south face of e-10 — inner faces, not Harbor
+west storefronts. Dark door/glass rectangles sit above the
+lane, not covered by the asphalt ribbon.
+
+Look-down body crop goldHipRatio=0. Teal tunic capsule, no
+bowling-ball hips.
+
+PASS.
+
+================================================================================
+CLAIM 3 — LANTERN / BOUND / FOOTSTEPS / SEAT B — PASS
+================================================================================
+
+Tried to fail: E stolen by leftover; bound dead; footsteps drop
+while W.
+
+Harbor W ~0.9 s after spawn: pose=walk  footsteps=1
+north +1.1 m. Not trapped. East ticks also footsteps=1 while W.
+
+After the inner walk, back toward Harbor lantern:
+  nearby=shop-lantern-fish
+  E opened shop-lantern-fish
+  Close restored Play (panel false)
+
+South Shift+W:
+  first at-bound=1  lat=10.7707258  alt=0  heading=178
+  +1.8 s extra     lat=10.7707218  at-bound=1  alt=0
+                   pose=walk  footsteps=1
+  insideAoi=true
+
+Seat B isolated spawn:
+  nearbyShop=""
+  stallHint="E opens a stall when you are next to it."
+  shopRange="Quầy Cá Đèn Lồng: 29 m away"
+  leftover names / ids are NOT the E target
+  Press E: shopPanelId=""  panel=false
+
+PASS. Leftovers still in /demo-bus (intended). Seat B E not stolen.
+
+================================================================================
+CLAIM 4 — LIVE UI DOES NOT CLAIM A NEW CITY GRID — PASS
+================================================================================
+
+Tried to fail: live UI claims a new city grid or new GeoJSON roads.
+
+Honesty banner on spawn / inner / lantern / bound:
+  Authored approximation. Not a live map, not OSM/Overture,
+  not photogrammetry, and not a digital twin. No GTA claim,
+  no 1:1 city. Authored 400 m: two official named streets
+  plus inner parcel lanes, not a city grid. This frame ends
+  at an authored wall — fixture edge, not a city. NOT_PLAN_PASS.
+
+Live body text does not say “new GeoJSON road” / “new downtown
+street” / “added OSM street” / “new city grid” as a fact.
+“city grid” appears only as the denial “not a city grid”.
+
+Live fixture GeoJSON kind=street count = 2. DOM:
+  innerLane=asphalt-walk-edge  roads=31  walks=31  edges=62
+  faces=168  main=38  inner=130  sideStreets=31
+  sideLamps=10  sideScooters=8  lamps=48  scooters=23
+
+PASS.
+
+================================================================================
+HUNTS (not named fails)
+================================================================================
+
+Stop is +2.15 m past the Steps East west face. Named bar is
+walk OFF Harbor onto the inner gap and measure that floor,
+not a full-block stroll. Lon was still increasing at east-17
+(blocked=0).
+
+Implementer CDP reported road 2.7 / walk 94.3 / delta 91.6 on
+their crop. This critic’s independent inner-shot strip is
+11.7 / 101.2 / 89.5. Same darker-center read; numbers are not
+copied from the implementer file.
+
+Harbor spawn floor also has a large road/walk delta (expected;
+Harbor language was not the hunt). Proof used the inner shot
+after harborM rose.
+
+Inner-alley top band mixes tan wall (beigeRatio=0.188). Sky
+verdict uses the spawn north band: RGB 133.0 / 179.2 / 205.4
+blueRatio=0.617 beige=0.
+
+4175 vite preview argv has no --host 0.0.0.0. Listen is
+127.0.0.1:4175. UDP 51750/51752 on another pid is not TCP 5175.
+
+================================================================================
+METHOD
+================================================================================
+
+1. 4175 already up. Did not recycle / rebuild / start other ports.
+2. GET /  /demo-bus  /assets/index-Y4m4boSF.js
+   /data/ben-thanh-400m.authored.geojson. Recorded name+sha+len
+   and live street count=2.
+3. Read implementer note (TICK=n/a). Did not copy its probe writer.
+4. Independent Chrome CDP 1280x720 isolated profiles, ports 9961/9962.
+   Spawn north. W prove Harbor + footsteps. Turn east at the
+   Steps alley lat. Sample the east path. Inner + look-down shots.
+   Lane lum on the inner floor (not Harbor). Lantern E.
+   Shift+W south to data-at-bound. Seat B leftover E.
+5. Did not write lead packs. Did not tick plan. Did not fake GATE-U1.
+
+Temp only (not under data-qa):
+  %TEMP%\hh-inner-lane-reaudit\hunt.json
+  %TEMP%\hh-inner-lane-reaudit\spawn-north.png
+  %TEMP%\hh-inner-lane-reaudit\inner-alley.png
+  %TEMP%\hh-inner-lane-reaudit\inner-lookdown.png
+  %TEMP%\hh-inner-lane-reaudit\critic-walk.mjs
+
+================================================================================
+STILL IMPOSSIBLE WITHOUT OWNER
+================================================================================
+
+- GATE-U1 three human reviewers (not faked)
+- AUTHORIZE_MAP_FETCH=YES + license ledger before any OSM/Overture
+- Other-PC / WAN join (store is this PC 4175 loopback)
+- Real account / OIDC
+
+================================================================================
+END
+================================================================================

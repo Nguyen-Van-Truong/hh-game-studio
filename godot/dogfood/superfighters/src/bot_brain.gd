@@ -21,6 +21,7 @@ var replan_left: int = 0
 var path_cells: Array = []
 var path_i: int = 0
 var intent: String = "hold"
+var intent_at: Vector2 = Vector2.ZERO
 var seen_foe: Fighter = null
 var seen_at: Vector2 = Vector2.ZERO
 var seen_tick: int = -999
@@ -31,6 +32,7 @@ var pit_blocks: int = 0
 var pit_reroutes: int = 0
 var detour_dir: float = 0.0
 var detour_left: int = 0
+var air_hop: bool = false
 var fire_blocks: int = 0
 var gun_used: int = 0
 var melee_used: int = 0
@@ -46,6 +48,11 @@ var think_ticks: int = 0
 var moved_px: float = 0.0
 var last_pos: Vector2 = Vector2.ZERO
 var observed_shots: int = 0
+var ledger_i: int = 0
+var _map_doc: Dictionary = {}
+var _map_doc_id: String = ""
+var patrol_pad_i: int = 0
+var lock_foe_slot: int = -1
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
 
@@ -61,6 +68,15 @@ func bind(session: GameSession, slot: int, p_profile: String) -> void:
 		bound_seed = -bound_seed
 	rng.seed = bound_seed
 	bound = true
+	ledger_i = 0
+	nade_used = 0
+	melee_used = 0
+	observed_shots = 0
+	gun_used = 0
+	shots_with_error = 0
+	perfect_aim_shots = 0
+	_map_doc = {}
+	_map_doc_id = ""
 
 
 func think(bot: Fighter, others: Array, pickups: Array, delta: float) -> Dictionary:
@@ -69,6 +85,8 @@ func think(bot: Fighter, others: Array, pickups: Array, delta: float) -> Diction
 		return cmd
 	_ensure_bound(bot)
 	think_ticks += 1
+	if bot.is_on_floor() or bot.on_ladder:
+		air_hop = false
 	if last_pos != Vector2.ZERO:
 		moved_px += bot.global_position.distance_to(last_pos)
 	last_pos = bot.global_position
@@ -180,7 +198,11 @@ func _spec() -> Dictionary:
 func _doc(session: GameSession) -> Dictionary:
 	if session == null:
 		return {}
-	return MapCatalog.document(session.map_id)
+	if _map_doc_id == session.map_id and not _map_doc.is_empty():
+		return _map_doc
+	_map_doc = MapCatalog.document(session.map_id)
+	_map_doc_id = session.map_id
+	return _map_doc
 
 
 func _sync_from_world(bot: Fighter, session: GameSession) -> void:
@@ -198,42 +220,23 @@ func _sync_from_world(bot: Fighter, session: GameSession) -> void:
 			first_fire_tick = think_ticks
 		observed_shots = bot.shots_fired
 	gun_used = bot.shots_fired
-	if session != null and session.ledger != null:
-		nade_used = _count_owned(session, "explosion", bot.slot)
-		melee_used = _count_melee_hits(session, bot.slot)
+	_ingest_ledger(session, bot)
 
 
-func _count_owned(session: GameSession, kind: String, slot: int) -> int:
-	var n: int = 0
+func _ingest_ledger(session: GameSession, bot: Fighter) -> void:
+	if session == null or session.ledger == null or bot == null:
+		return
 	var events: Array = session.ledger.events
-	var i: int = 0
-	while i < events.size():
-		var row: Dictionary = events[i] as Dictionary
-		i += 1
-		if str(row.get("kind", "")) != kind:
-			continue
-		var payload: Dictionary = row.get("payload", {}) as Dictionary
-		if int(payload.get("owner", -1)) == slot:
-			n += 1
-	return n
-
-
-func _count_melee_hits(session: GameSession, slot: int) -> int:
-	var n: int = 0
-	var events: Array = session.ledger.events
-	var i: int = 0
-	while i < events.size():
-		var row: Dictionary = events[i] as Dictionary
-		i += 1
+	while ledger_i < events.size():
+		var row: Dictionary = events[ledger_i] as Dictionary
+		ledger_i += 1
 		var kind: String = str(row.get("kind", ""))
-		if kind != "hit" and kind != "kick_hit":
-			continue
-		if str(row.get("phase", "")) != "melee":
-			continue
 		var payload: Dictionary = row.get("payload", {}) as Dictionary
-		if int(payload.get("attacker", -1)) == slot:
-			n += 1
-	return n
+		if kind == "explosion" and int(payload.get("owner", -1)) == bot.slot:
+			nade_used += 1
+		elif (kind == "hit" or kind == "kick_hit") and str(row.get("phase", "")) == "melee":
+			if int(payload.get("attacker", -1)) == bot.slot:
+				melee_used += 1
 
 
 func _replan(
@@ -244,17 +247,39 @@ func _replan(
 	var scored: Array = []
 	var has_gun: bool = bot.holds_gun()
 	var pickup: Pickup = _nearest_pickup(bot, pickups, 160.0, true)
-	if (not has_gun) and pickup != null and scored.size() < budget:
-		scored.append({"intent": "pickup", "at": pickup.global_position, "cost": 1})
-	if incoming and scored.size() < budget:
-		scored.append({"intent": "cover", "at": _cover_point(bot, foe, doc), "cost": 2})
-	if foe != null and scored.size() < budget:
-		var attack_at: Vector2 = foe.global_position
-		if bot.health < 28.0:
-			attack_at = bot.global_position + (bot.global_position - foe.global_position).normalized() * 48.0
-			scored.append({"intent": "retreat", "at": attack_at, "cost": 3})
-		else:
-			scored.append({"intent": "attack", "at": attack_at, "cost": 2})
+	## A locked 1v1/reach target is the job. Do not wander to a pickup
+	## or cover pad that walks away from the named foe.
+	if lock_foe_slot >= 0:
+		if foe != null and scored.size() < budget:
+			if bot.health < 28.0:
+				var retreat_at: Vector2 = bot.global_position + (bot.global_position - foe.global_position).normalized() * 48.0
+				scored.append({"intent": "retreat", "at": retreat_at, "cost": 3})
+			else:
+				scored.append({"intent": "attack", "at": foe.global_position, "cost": 1})
+		elif scored.size() < budget:
+			scored.append({"intent": "hunt", "at": _locked_pad(session, lock_foe_slot), "cost": 1})
+		if (not has_gun) and pickup != null and bot.global_position.distance_to(pickup.global_position) < 24.0 and scored.size() < budget:
+			scored.append({"intent": "pickup", "at": pickup.global_position, "cost": 2})
+	else:
+		if (not has_gun) and pickup != null and scored.size() < budget:
+			scored.append({"intent": "pickup", "at": pickup.global_position, "cost": 1})
+		if incoming and foe == null and scored.size() < budget:
+			scored.append({"intent": "cover", "at": _cover_point(bot, foe, doc), "cost": 2})
+		if foe == null and seen_had_los and scored.size() < budget:
+			var age: int = 999
+			if session != null and session.clock != null:
+				age = session.clock.tick - seen_tick
+			if age <= 16:
+				scored.append({"intent": "hunt", "at": seen_at, "cost": 3})
+		if foe != null and scored.size() < budget:
+			var attack_at: Vector2 = foe.global_position
+			if bot.health < 28.0:
+				attack_at = bot.global_position + (bot.global_position - foe.global_position).normalized() * 48.0
+				scored.append({"intent": "retreat", "at": attack_at, "cost": 3})
+			else:
+				scored.append({"intent": "attack", "at": attack_at, "cost": 2})
+		if scored.is_empty():
+			scored.append({"intent": "patrol", "at": _patrol_point(bot, session, doc), "cost": 4})
 	if scored.is_empty():
 		scored.append({"intent": "patrol", "at": _patrol_point(bot, session, doc), "cost": 4})
 	var best: Dictionary = scored[0] as Dictionary
@@ -266,6 +291,7 @@ func _replan(
 		i += 1
 	intent = str(best.get("intent", "hold"))
 	var target: Vector2 = best.get("at", bot.global_position) as Vector2
+	intent_at = target
 	var planned: Dictionary = _BotNav.path_to(doc, bot.global_position, target, cap)
 	expansions_last = int(planned.get("expansions", 0))
 	if expansions_last > expansions_peak:
@@ -292,30 +318,38 @@ func _follow_or_fight(
 		else:
 			return _throw_nade(bot, nade_foe, delta)
 	var waypoint: Vector2 = _waypoint(bot, doc)
-	var fight_now: bool = foe != null and reaction_left <= 0 and not incoming
+	var fight_now: bool = foe != null and reaction_left <= 0
 	if fight_now:
 		var to: Vector2 = foe.global_position - bot.global_position
 		var dist: float = to.length()
-		if dist < 34.0:
+		if dist < 48.0:
 			cmd["melee"] = true
 			if to.x != 0.0:
 				cmd["x"] = _step_or_detour(bot, signf(to.x), foe.global_position, doc)
 			return cmd
 		if not bot.holds_gun():
 			return _go_to(bot, foe.global_position, false, doc)
-		if _want_nade(bot, dist):
+		if dist <= 140.0 and _want_nade(bot, dist):
 			return _throw_nade(bot, foe, delta)
-		if bot.holds_gun() and dist < 280.0:
+		var go: Dictionary = _go_to(bot, waypoint if not path_cells.is_empty() else foe.global_position, false, doc)
+		if bot.holds_gun() and dist <= 130.0:
 			cmd = _aim_and_fire(bot, foe, delta)
-			if dist > 56.0:
-				var close_dir: float = signf(to.x) if absf(to.x) > 6.0 else 0.0
-				if not path_cells.is_empty():
-					cmd["x"] = _step_or_detour(bot, close_dir, waypoint, doc)
-				else:
-					cmd["x"] = _step_or_detour(bot, close_dir, foe.global_position, doc)
+			## Keep closing after fire starts. Fire from range is fine;
+			## parking at a harness gate (72 / 48) is not. Walk-stop is
+			## the melee pocket only — not the reach constant.
+			if dist > 28.0:
+				cmd["x"] = float(go.get("x", 0.0))
+				cmd["jump"] = bool(go.get("jump", false))
+				cmd["jump_pressed"] = bool(go.get("jump_pressed", false))
+				cmd["crouch"] = bool(go.get("crouch", false))
+				if bool(go.get("jump", false)) or bool(go.get("crouch", false)):
+					cmd["fire_held"] = false
+					cmd["fire_released"] = false
+					holding_fire = false
+					fire_hold = 0.0
 			return cmd
-		return _go_to(bot, foe.global_position, false, doc)
-	if incoming:
+		return go
+	if incoming and intent == "cover":
 		var away: float = -1.0
 		if foe != null and foe.global_position.x > bot.global_position.x:
 			away = 1.0
@@ -335,7 +369,7 @@ func _follow_or_fight(
 
 func _waypoint(bot: Fighter, doc: Dictionary) -> Vector2:
 	if path_cells.is_empty():
-		return bot.global_position
+		return intent_at if intent_at != Vector2.ZERO else bot.global_position
 	if path_i >= path_cells.size():
 		path_i = path_cells.size() - 1
 	var cell: Vector2i = path_cells[path_i] as Vector2i
@@ -344,6 +378,8 @@ func _waypoint(bot: Fighter, doc: Dictionary) -> Vector2:
 		path_i += 1
 		cell = path_cells[path_i] as Vector2i
 		at = MapGraph.cell_center(cell)
+	if path_i >= path_cells.size() - 1 and intent_at != Vector2.ZERO and bot.global_position.distance_to(intent_at) > 36.0:
+		return intent_at
 	if doc.is_empty():
 		return at
 	return at
@@ -377,7 +413,7 @@ func _aim_and_fire(bot: Fighter, foe: Fighter, delta: float) -> Dictionary:
 		if fire_hold >= 0.45:
 			holding_fire = false
 			fire_hold = 0.0
-	elif fire_hold >= 0.28:
+	elif fire_hold >= 0.16:
 		cmd["fire_released"] = true
 		holding_fire = false
 		fire_hold = 0.0
@@ -387,11 +423,14 @@ func _aim_and_fire(bot: Fighter, foe: Fighter, delta: float) -> Dictionary:
 func _want_nade(bot: Fighter, dist: float) -> bool:
 	if bot == null or bot.grenades <= 0:
 		return false
-	if dist < 48.0 or dist > 220.0:
+	## After a gun fight close, not a start-of-test dump at 48–220.
+	if dist < 36.0 or dist > 90.0:
 		return false
 	if nade_used >= 1:
 		return false
-	return think_ticks > int(_spec().get("reaction_ticks", 10)) + 8
+	if first_fire_tick < 0 or gun_used < 1:
+		return false
+	return think_ticks > first_fire_tick + 18
 
 
 func _throw_nade(bot: Fighter, foe: Fighter, delta: float) -> Dictionary:
@@ -423,10 +462,9 @@ func _throw_nade(bot: Fighter, foe: Fighter, delta: float) -> Dictionary:
 
 func _roll_aim_error() -> float:
 	var mag: float = maxf(float(_spec().get("aim_error_deg", 10.0)), 4.0)
-	var err: float = (rng.randf() * 2.0 - 1.0) * mag
-	if absf(err) < 3.0:
-		err = 3.0 if err >= 0.0 else -3.0
-	return err
+	## Real analog roll. A near-zero miss may count as perfect_aim;
+	## that counter is telemetry, not proof.
+	return (rng.randf() * 2.0 - 1.0) * mag
 
 
 func _go_to(bot: Fighter, target: Vector2, pickup: bool, doc: Dictionary) -> Dictionary:
@@ -439,10 +477,60 @@ func _go_to(bot: Fighter, target: Vector2, pickup: bool, doc: Dictionary) -> Dic
 	var dir: float = 0.0
 	if absf(dx) > 6.0:
 		dir = signf(dx)
+	var climb_up: bool = false
+	var climb_down: bool = false
+	var nxt: Vector2i = Vector2i.ZERO
+	var here: Vector2i = Vector2i.ZERO
+	var have_path: bool = not path_cells.is_empty() and not doc.is_empty()
+	if have_path:
+		nxt = path_cells[mini(path_i, path_cells.size() - 1)] as Vector2i
+		here = MapGraph.stand_cell(doc, bot.global_position)
+		if nxt.y < here.y:
+			climb_up = true
+		elif nxt.y > here.y:
+			climb_down = true
 	cmd["x"] = _step_or_detour(bot, dir, at, doc)
-	if (dir != 0.0 and float(cmd.get("x", 0.0)) != dir) or dy < -28.0 or _wall_ahead(bot, float(cmd.get("x", 0.0))):
+	## Diagonal off a rung/lip: climb first so A* (10,6)->(9,7) does not walk the pit.
+	if (climb_up or climb_down) and (
+		bot.on_ladder or _BotNav.unsafe_world_step(doc, bot.global_position, dir)
+	):
+		cmd["x"] = 0.0
+	var need_hop: bool = (
+		climb_up
+		or dy < -28.0
+		or _wall_ahead(bot, float(cmd.get("x", 0.0)))
+		or _want_gap_jump(bot, dir, doc)
+	)
+	if (
+		dir != 0.0
+		and float(cmd.get("x", 0.0)) != dir
+		and not climb_down
+		and (bot.is_on_floor() or bot.on_ladder)
+	):
+		need_hop = true
+	if need_hop and (bot.is_on_floor() or bot.on_ladder):
 		cmd["jump"] = true
-		cmd["jump_pressed"] = bot.is_on_floor()
+		cmd["jump_pressed"] = true
+		air_hop = true
+	elif air_hop and not bot.is_on_floor() and not bot.on_ladder:
+		## Hold the hop so variable-jump cut does not stall on a door face.
+		cmd["jump"] = true
+	if climb_down:
+		if _on_one_way(doc, bot.global_position) and not bot.climbing:
+			## Crouch on a one-way deck drops through the bridge. Attach first.
+			cmd["jump"] = true
+			cmd["jump_pressed"] = bot.on_ladder or bot.is_on_floor()
+			if bot.on_ladder or bot.is_on_floor():
+				air_hop = true
+			cmd["crouch"] = false
+		else:
+			cmd["crouch"] = true
+	if climb_down and bot.on_ladder:
+		## Jump wins over crouch on a ladder. A leftover hop holds them
+		## at the west rooftops rung (10,5) for 80 ticks.
+		cmd["jump"] = false
+		cmd["jump_pressed"] = false
+		cmd["crouch"] = true
 	if pickup and absf(dx) < 16.0 and absf(dy) < 18.0:
 		cmd["crouch"] = true
 		cmd["melee"] = true
@@ -459,27 +547,51 @@ func _step_or_detour(bot: Fighter, dir: float, target: Vector2, doc: Dictionary)
 	var stepped: float = _safe_x(bot, dir, doc)
 	if stepped != 0.0 or dir == 0.0:
 		return stepped
+	## Climb/drop is the path. A 20-tick walk-around burns the rooftops
+	## compare window and walks off the ladder.
+	if not path_cells.is_empty() and not doc.is_empty():
+		var here: Vector2i = MapGraph.stand_cell(doc, bot.global_position)
+		var nxt: Vector2i = path_cells[mini(path_i, path_cells.size() - 1)] as Vector2i
+		if nxt.y != here.y:
+			return 0.0
 	var around: float = _detour_x(bot, dir, target, doc)
 	if around != 0.0:
 		detour_dir = around
-		detour_left = 20
+		detour_left = 8 if around == dir else 4
 	return around
 
 
 func _safe_x(bot: Fighter, dir: float, doc: Dictionary) -> float:
 	if dir == 0.0:
 		return 0.0
-	if _BotNav.unsafe_world_step(doc, bot.global_position, dir):
+	## Air-walking before a hop pins on crate sides (gauge spawn).
+	## Keep x for the whole hop so a tap-jump still clears a 24px door.
+	if not bot.is_on_floor() and not bot.on_ladder and not air_hop:
+		return 0.0
+	var gap_jump: bool = _want_gap_jump(bot, dir, doc)
+	if _BotNav.unsafe_world_step(doc, bot.global_position, dir) and not gap_jump:
 		pit_blocks += 1
 		return 0.0
-	if not _floor_ahead(bot, dir) and not _want_drop(bot, dir, doc):
+	if not _floor_ahead(bot, dir) and not _want_drop(bot, dir, doc) and not gap_jump:
+		if _adjacent_walk(doc, bot.global_position, dir):
+			return dir
 		pit_blocks += 1
 		return 0.0
 	return dir
 
 
+func _adjacent_walk(doc: Dictionary, pos: Vector2, dir: float) -> bool:
+	if doc.is_empty() or absf(dir) < 0.2:
+		return false
+	var here: Vector2i = MapGraph.stand_cell(doc, pos)
+	var step_dir: int = 1 if dir > 0.0 else -1
+	if MapGraph.step_is_unsafe(doc, here.x, here.y, step_dir):
+		return false
+	return MapGraph.is_walkable_cell(doc, here.x + step_dir, here.y)
+
+
 func _detour_x(bot: Fighter, blocked: float, target: Vector2, doc: Dictionary) -> float:
-	pit_reroutes += 1
+	var chosen: float = 0.0
 	if not path_cells.is_empty():
 		var here: Vector2i = MapGraph.stand_cell(doc, bot.global_position)
 		var nxt: Vector2i = path_cells[mini(path_i, path_cells.size() - 1)] as Vector2i
@@ -489,22 +601,26 @@ func _detour_x(bot: Fighter, blocked: float, target: Vector2, doc: Dictionary) -
 		if ndir != 0.0 and ndir != blocked:
 			var alt: float = _safe_x(bot, ndir, doc)
 			if alt != 0.0:
-				return alt
-		if nxt.y < here.y:
+				chosen = alt
+		if chosen == 0.0 and nxt.y < here.y:
 			var up_dir: float = ndir if ndir != 0.0 else -blocked
 			var hopped: float = _safe_x(bot, up_dir, doc)
 			if hopped != 0.0:
-				return hopped
-	var back: float = _safe_x(bot, -blocked, doc)
-	if back != 0.0:
-		return back
-	var around: Vector2 = _around_pit(bot, blocked, target, doc)
-	var adx: float = around.x - bot.global_position.x
-	if absf(adx) > 4.0:
-		var around_dir: float = _safe_x(bot, signf(adx), doc)
-		if around_dir != 0.0:
-			return around_dir
-	return 0.0
+				chosen = hopped
+	if chosen == 0.0:
+		var back: float = _safe_x(bot, -blocked, doc)
+		if back != 0.0:
+			chosen = back
+	if chosen == 0.0:
+		var around: Vector2 = _around_pit(bot, blocked, target, doc)
+		var adx: float = around.x - bot.global_position.x
+		if absf(adx) > 4.0:
+			var around_dir: float = _safe_x(bot, signf(adx), doc)
+			if around_dir != 0.0:
+				chosen = around_dir
+	if chosen != 0.0:
+		pit_reroutes += 1
+	return chosen
 
 
 func _around_pit(bot: Fighter, blocked: float, target: Vector2, doc: Dictionary) -> Vector2:
@@ -534,6 +650,13 @@ func _around_pit(bot: Fighter, blocked: float, target: Vector2, doc: Dictionary)
 	return best
 
 
+func _on_one_way(doc: Dictionary, pos: Vector2) -> bool:
+	if doc.is_empty():
+		return false
+	var cell: Vector2i = MapGraph.stand_cell(doc, pos)
+	return MapCodec.has_xy(doc, "one_way", cell.x, cell.y + 1)
+
+
 func _want_drop(bot: Fighter, dir: float, doc: Dictionary) -> bool:
 	if doc.is_empty() or path_cells.is_empty():
 		return false
@@ -544,9 +667,37 @@ func _want_drop(bot: Fighter, dir: float, doc: Dictionary) -> bool:
 	return not MapGraph.step_is_unsafe(doc, here.x, here.y, 1 if dir > 0.0 else -1)
 
 
+func _want_gap_jump(bot: Fighter, dir: float, doc: Dictionary) -> bool:
+	## Path says jump to another walkable cell. Still refuse a same-Y pit step.
+	if dir == 0.0 or doc.is_empty() or path_cells.is_empty():
+		return false
+	var nxt: Vector2i = path_cells[mini(path_i, path_cells.size() - 1)] as Vector2i
+	var here: Vector2i = MapGraph.stand_cell(doc, bot.global_position)
+	var step_dir: int = 1 if dir > 0.0 else -1
+	if MapGraph.step_is_unsafe(doc, here.x, here.y, step_dir) and nxt.y == here.y:
+		return false
+	if not MapGraph.is_walkable_cell(doc, nxt.x, nxt.y):
+		return false
+	var dx: int = absi(nxt.x - here.x)
+	var up: int = here.y - nxt.y
+	if up > 0 and up <= 3 and dx <= 6:
+		return true
+	if nxt.y == here.y and dx >= 2 and dx <= 6 and not MapGraph.step_is_unsafe(doc, here.x, here.y, step_dir):
+		if not _BotNav._same_y_walk_clear(doc, here.x, nxt.x, here.y):
+			return true
+	return false
+
+
+func _locked_pad(session: GameSession, slot: int) -> Vector2:
+	if session != null and session.arena != null and slot >= 0 and slot < session.arena.player_spawns.size():
+		return session.arena.player_spawns[slot]
+	return seen_at
+
+
 func _perceive_foe(bot: Fighter, others: Array, session: GameSession) -> Fighter:
 	## LOS only. hearing_px is a nearer react range, still blocked by world.
 	## No through-wall last-seen. Null physics space is not a foe.
+	## lock_foe_slot is a 1v1 designation (public spawn), not wallhacks.
 	var hear: float = float(_spec().get("hearing_px", 72.0))
 	var best: Fighter = null
 	var best_d: float = 99999.0
@@ -556,11 +707,11 @@ func _perceive_foe(bot: Fighter, others: Array, session: GameSession) -> Fighter
 		i += 1
 		if f == null or f.dead or f.team == bot.team:
 			continue
+		if lock_foe_slot >= 0 and f.slot != lock_foe_slot:
+			continue
 		if not _has_los(bot, f):
 			continue
 		var d: float = bot.global_position.distance_to(f.global_position)
-		if d > 320.0:
-			continue
 		var score: float = d
 		if d > hear:
 			score += 8.0
@@ -642,23 +793,21 @@ func _cover_point(bot: Fighter, foe: Fighter, doc: Dictionary) -> Vector2:
 func _patrol_point(bot: Fighter, session: GameSession, doc: Dictionary) -> Vector2:
 	if session != null and session.arena != null:
 		var pads: Array[Vector2] = session.arena.player_spawns
-		var best: Vector2 = bot.global_position
-		var best_d: float = 99999.0
+		var reachable: Array = []
 		var i: int = 0
 		while i < pads.size():
 			var pad: Vector2 = pads[i]
 			i += 1
-			var d: float = bot.global_position.distance_to(pad)
-			if d <= 40.0:
+			if bot.global_position.distance_to(pad) <= 40.0:
 				continue
 			var planned: Dictionary = _BotNav.path_to(doc, bot.global_position, pad, 40)
 			if (planned.get("cells", []) as Array).size() < 2:
 				continue
-			if d < best_d:
-				best_d = d
-				best = pad
-		if best_d < 99999.0:
-			return best
+			reachable.append(pad)
+		if not reachable.is_empty():
+			var pick: Vector2 = reachable[patrol_pad_i % reachable.size()] as Vector2
+			patrol_pad_i += 1
+			return pick
 		if not session.arena.weapon_spawns.is_empty():
 			return session.arena.weapon_spawns[0]
 	return bot.global_position + Vector2(-bot.facing * 48.0, 0.0)

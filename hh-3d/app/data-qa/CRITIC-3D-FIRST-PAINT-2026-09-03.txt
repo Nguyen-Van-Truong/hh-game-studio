@@ -1,0 +1,305 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+MESH_COUNT=60
+J5_FIRST_PAINT_OK=CONFIRMED_INDEPENDENT
+BIGGEST_MISS=First paint is a labeled “authored 400 m block” boot, then a beige extrusion street — still not a city. NOT_PLAN_PASS.
+
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-03
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=14:15 +07
+MODEL=grok-4.6
+SCOPE=HH World first paint on already-up 4175 (labeled authored-400 m boot then street; NOT GTA / NOT 1:1 / NOT a city)
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=1567956b35dbe78e938280f930ad711a5fb68de4
+PROGRESS_CLAIMS_HEAD=1567956b35dbe78e938280f930ad711a5fb68de4
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-FIRST-PAINT-2026-09-03.txt
+PRIOR_CRITIC=hh-3d/app/data-qa/CRITIC-3D-BLOCK-2026-09-03.txt
+LEAD_PROBE=hh-3d/app/data-qa/j5-first-paint-probe.mjs
+LEAD_PACK=hh-3d/app/data-qa/J5-FIRST-PAINT-2026-09-03.txt
+LEAD_SHOT=hh-3d/app/data-qa/j5-first-paint.png
+LEAD_RUN_ID_CLAIM=HH3D-J5-20260903-ASIA-SAIGON-06
+PROGRESS_TRUSTED_ALONE=NO
+J5_FIRST_PAINT_OK_TRUSTED_ALONE=NO
+LEAD_PACK_TRUSTED_ALONE=NO
+LEAD_SHOT_TRUSTED_ALONE=NO
+LEAD_PROBE_TRUSTED_ALONE=NO
+DATA_BUILDINGS_ATTR_TRUSTED_ALONE=NO
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_VF_TOUCH=1
+NO_UNREAL=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_RUN_LEAD_PROBE_WRITER=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M0_WP1=1
+NOT_GTA=1
+NOT_1TO1=1
+NOT_A_CITY=1
+CRITIC_CDP_PORT=9357
+LIVE_JS=/assets/index-VQf98DhM.js
+LIVE_PID=66700
+LIVE_CMD=node .../hh-3d/app/web/node_modules/vite/bin/vite.js preview
+VITE_PREVIEW_PORT_PIN=4175
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/
+MESH_COUNT=60
+
+4175 was already up (vite preview pid 66700). This critic used that preview
+and did not start 4173, 4174, 5175, or a second HH World preview. Independent
+Chrome CDP (debug 9357, about:blank then navigate, temp profile only,
+headless=new 1280x720) took the first screenshot immediately after
+Page.loadEventFired — no wait for WebGL / play-ready.
+
+That first frame is not mysterious gray. It is a full-viewport labeled
+PlayLoading overlay: “HH World” / dark road bar / “Loading the authored
+400 m block” / “Ground, buildings, and your character. Authored
+approximation — not a city, not OSM, not 1:1.” Honesty banner already
+says NOT_PLAN_PASS. Pixel emptyGray=false (mean RGB 215.8/210.9/200.3,
+std 20.4, uniqueQ16=89). Then the overlay drops and Play is the same
+third-person beige extrusion street as the block remint. Hold W 3.5 s
+moved 5.615 m north (lat 10.7716200 → 10.7716705). Stall copy 28 m → 22 m.
+
+Live authored GeoJSON still has 60 kind=building features. Unchanged.
+No public OSM / Cesium / Google tile URL. This is NOT_PLAN_PASS.
+GATE-U1 humans were not invented.
+
+J5_FIRST_PAINT_OK from the lead pack is independently confirmed. The lead
+probe writer was not run. Lead PNGs / J5-FIRST-PAINT JSON were not used
+as proof.
+
+Biggest miss: still a small authored 400 m beige extrusion block, not a
+city. First paint itself is honest/visible. NOT a plan PASS.
+
+================================================================================
+METHOD
+================================================================================
+
+Read on disk (not PROGRESS / J5 alone):
+  hh-3d/app/web/index.html
+    Static play-boot in #root: same “Loading the authored 400 m block”
+    copy, inline #d8d3c8 background, before the module script.
+  hh-3d/app/web/src/app/App.tsx
+    PlayLoading while !collection || !playPainted; PlayView only after
+    collection; onFirstFrame → setPlayPainted(true).
+  hh-3d/app/web/src/play/PlayView.tsx
+    PlayLoading labeled overlay. FirstFrameReady waits canvas >= 200²
+    before clearing the overlay. Clear color #8fa6b4 is covered until
+    then.
+  hh-3d/app/web/src/app/app.css  .play-loading beige #d8d3c8 + road bar.
+  hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+    CURRENT_FIRST_LEFTOVER=GATE-U1; GATE-U1 STATE: NOT_STARTED (line 862).
+  hh-3d/app/docs/review/README.txt
+    "GATE-U1 is NOT done."
+  Prior critic CRITIC-3D-BLOCK named first blank-gray WebGL frames as a
+    leftover miss. This remint is that leftover, not a new city claim.
+  Lead pack J5-FIRST-PAINT / j5-first-paint.png / SAIGON-06 read only
+    as claim. Probe source read to know J5_FIRST_PAINT_OK means
+    !emptyGray && (labeled || street) plus ready street.
+
+Live (existing 4175 only; did not start another HH World preview):
+  TCP 127.0.0.1:4175 LISTEN pid 66700 node vite preview
+  4173 DOWN  4174 DOWN  5175 DOWN
+  GET /                         200  title=HH World
+                                script /assets/index-VQf98DhM.js
+  GET /data/ben-thanh-400m.authored.geojson  200  92096 B
+    features=68  kind.building=60  park=1  street=2  place=4  aoi=1
+  Live JS Content-Length=2067820
+    HAS "Loading the authored 400 m block"=1  HAS play-loading=1
+    HAS_EXTRUDEGEOMETRY=1
+    openstreetmap/cesium/googleapis = ABSENT
+    HAS_NO_GTA=1  HAS_NOT_PLAN_PASS=1
+  Independent Chrome CDP vs 4175
+    debug 9357; about:blank → navigate http://127.0.0.1:4175/
+    first shot immediately after loadEventFired (no play-ready wait)
+    then wait play-ready, then hold W 3500 ms
+    shots TEMP only (not written under data-qa):
+      C:\Users\truon\AppData\Local\Temp\hh-critic-3d-first-paint\critic-first.png    34371 B  sha 365e8b0fbc0a83ee
+      C:\Users\truon\AppData\Local\Temp\hh-critic-3d-first-paint\critic-ready.png    73268 B  sha 87bc37df03e48899
+      C:\Users\truon\AppData\Local\Temp\hh-critic-3d-first-paint\critic-after-w.png   72953 B  sha 93f56a939f562092
+  Did not run j5-first-paint-probe.mjs. Did not write J5-FIRST-PAINT-2026-09-03.txt.
+  Did not run npm build. Did not recycle the preview.
+
+================================================================================
+PROCESS / GIT
+================================================================================
+
+RESULT=PASS_ON_STATED_FAIL_RULE
+
+Stated fail: VF / AGENTS.md staged with this if they committed.
+Observed:
+  git diff --cached --name-only  = empty
+  last commit = 1567956 VF6-WP4: tick after critic and official PASS
+  No hh-3d/app commit in HEAD
+  Critic did not commit, did not tick plan, did not touch VF.
+
+================================================================================
+ATTACK 1 — FIRST SCREENSHOT AFTER NAVIGATION MUST NOT BE EMPTY GRAY
+================================================================================
+
+RESULT=PASS  FIRST_FRAME=LABELED_LOADING  emptyGray=false
+
+Required: first CDP screenshot after navigation is either labeled loading
+or the 3D street. Mysterious unlabeled gray = TICK=no.
+
+Independent first frame (loadEventFired, no extra sleep):
+
+  href=http://127.0.0.1:4175/  title=HH World  readyState=complete
+  play-boot vis=null (React already replaced the static HTML boot)
+  play-loading vis=1280x720
+    text="HH World / Loading the authored 400 m block / Ground,
+    buildings, and your character. Authored approximation — not a
+    city, not OSM, not 1:1."
+  playReady=""  canvas=null
+  labeled body copy = true
+  NOT_PLAN_PASS already in honesty banner
+  gtaRaw=false
+
+  Pixels: emptyGray=false
+    mean 215.8/210.9/200.3 matches #d8d3c8 beige, not WebGL #8fa6b4
+    std=20.4  uniqueQ16=89  darkRatio=0.007 (road bar + type)
+  Guest pixels: centered title, dark road bar, loading sentence,
+  HUD/honesty/pad/2D-map chrome. Not a blank play surface.
+
+Static index.html play-boot carries the same label for pre-JS HTML
+paint. By loadEventFired the guest sees PlayLoading, not a hole.
+
+Same sha as the lead first shot is expected: deterministic labeled
+UI at 1280x720. This file used TEMP critic-first.png from this CDP
+session, not the lead PNG.
+
+TICK=no trigger (mysterious gray first frame) does not fire.
+
+================================================================================
+ATTACK 2 — AFTER BOOT, PLAY IS STILL A 3D WALK (60 BUILDINGS UNCHANGED)
+================================================================================
+
+RESULT=PASS  MESH_COUNT=60  WALK=5.615 m north
+
+Ready (playReady=yes, canvas 1280x720):
+  loading overlay gone
+  Shot: third-person tunic body from behind, dark road, lighter walks,
+  many tan extruded volumes, Shop · Quầy Cá Đèn Lồng / Market Steps /
+  Roundabout Green, stall 28 m
+  emptyGray=false  darkRatio=0.41  uniqueQ16=129  beigeRatio=0.074
+  hash 87bc37df03e48899 ≠ first
+
+Hold W 3500 ms (did not reset heading 0):
+  home  lon=106.6980400  lat=10.7716200  heading=0
+  after lon=106.6980400  lat=10.7716705  heading=0
+  east=0  north=5.615 m  moved=5.615 m
+  speed 5.615/3.5 = 1.60 m/s (WALK_SPEED)
+  Stall copy 28 m → 22 m (visual, not only dataset.lat)
+  after-W hash 93f56a939f562092 ≠ ready
+  Still third-person street, labels closer
+
+60 buildings unchanged:
+  Live GET /data/ben-thanh-400m.authored.geojson  kind=building=60
+  CDP Network fetched that same local GeoJSON only
+  Ready/after-W pixels: a parcel street of many beige volumes, not
+  five mega-boxes
+  data-buildings="60" exists — NOT used as sole mesh proof
+
+================================================================================
+ATTACK 3 — NO PUBLIC OSM / CESIUM / GOOGLE TILE URL; HONESTY HOLDS
+================================================================================
+
+RESULT=PASS
+
+CDP Network unique URLs on the 4175 session:
+  /  /assets/index-VQf98DhM.js  /assets/index-Ba7m2pDq.css
+  /styles/local-style.json  /demo-bus
+  /data/ben-thanh-400m.authored.geojson
+  /data/world-manifest.json  /data/shops.json
+  /favicon.ico  data:  blob:http://127.0.0.1:4175/...
+
+tileHits=[]
+No openstreetmap / cesium / googleapis / maps.google / maptiler /
+mapbox:// / cartocdn / overture / demotiles.
+
+Live honesty (first + ready + after-W):
+  "Authored approximation. Not a live map, not OSM/Overture, not
+  photogrammetry, and not a digital twin. No GTA claim, no 1:1 city.
+  NOT_PLAN_PASS."
+gtaRaw=false  notPlanPass=true
+
+Plan: CURRENT_FIRST_LEFTOVER=GATE-U1
+GATE-U1 STATE: NOT_STARTED (line 862)
+docs/review/README.txt: "GATE-U1 is NOT done."
+No invented human reviewers. No WP STATE flipped by this critic.
+
+================================================================================
+LEAD CLAIMS vs INDEPENDENT LIVE
+================================================================================
+
+Claim                                         Verdict
+First paint labeled “authored 400 m block”    CONFIRMED (own first shot +
+  not blank gray                                play-loading 1280x720;
+                                                emptyGray=false)
+Then the street                               CONFIRMED (ready shot 3D
+                                                walk; overlay gone)
+J5_FIRST_PAINT_OK                             CONFIRMED independently
+                                                (firstOk && readyOk).
+                                                Lead writer not re-run.
+60 buildings unchanged                        CONFIRMED (live GeoJSON 60
+                                                + guest street of many
+                                                parcels)
+Play still 3D walk                            CONFIRMED (W 5.615 m north;
+                                                stall 28→22)
+NOT_PLAN_PASS                                 CONFIRMED
+GATE-U1 not faked                             CONFIRMED
+4175 existing preview                         CONFIRMED pid 66700
+4173/4174 / second preview                    NOT STARTED by this critic
+Lead pack / lead PNGs as proof                REJECTED (claim only)
+
+================================================================================
+HARD FAIL CHECK (TICK=no triggers)
+================================================================================
+
+First frame still mysterious gray               NO  (labeled PlayLoading;
+                                                emptyGray=false)
+Play broken after boot (no 3D / WASD dead)      NO  (ready street + W
+                                                5.615 m)
+Building count collapsed off 60                 NO  (live GeoJSON 60)
+Public OSM/Cesium/Google tile URL in 3D path    NO
+GTA / 1:1 / city claimed in chrome              NO
+Probe-only / lead pack used as proof            NO
+Plan STATE/PASS ticked                          NO
+GATE-U1 humans invented                         NO
+4173/4174 / second preview started              NO
+
+Therefore TICK=yes: first paint is honest/visible (labeled authored
+400 m boot, then the street). NOT a plan PASS. NOT GATE-U1.
+
+================================================================================
+NOT GRANTED
+================================================================================
+
+- GATE-U1 / M0-WP1 / M1-WP0 / M2 / R2-WP0 / R2-WP1
+- A city, a canyon, photogrammetry, or 1:1 streets
+- Permission to treat data-buildings as Three.js proof
+- Permission to treat J5-FIRST-PAINT JSON or lead PNGs as proof
+- Shop E on this remint (not re-run; walk-only after first paint)
+- Headed-OS paint before loadEventFired as a separate fail (static
+  HTML play-boot is already labeled; first critic shot is labeled)
+- Permission to start 4173/4174, fetch maps, Unreal, VF, or tick [x]
+
+================================================================================
+END
+================================================================================

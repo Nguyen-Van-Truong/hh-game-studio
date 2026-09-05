@@ -1,0 +1,124 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=08:56 +07
+ROLE=IMPLEMENTER
+TICK=n/a (do not treat this file as TICK=yes)
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M0_WP1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+PLAYER_URL=http://127.0.0.1:4175/
+RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-09
+COMMAND=node hh-3d/app/data-qa/j5-street-hud-probe.mjs
+VERDICT_IMPLEMENTER_CDP=J5_STREET_HUD_OK
+LIVE_JS=/assets/index-DF4TvR_E.js
+LIVE_JS_LEN=2146024
+LIVE_JS_SHA256=9eb88fce4b24620d8d91d78a3377e58ccc3c91346ae97dea8dc609f1388700be
+ONE_RECYCLE_AFTER_BUILD=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NO_COMMIT=1
+NO_HIP_SPHERES=1
+DID_NOT_RIP_PLAQUES=1
+DID_NOT_RIP_INNER_LANES=1
+DID_NOT_RIP_SIDE_STREET=1
+DID_NOT_RIP_FOG_EDGE=1
+DID_NOT_RIP_FOOTSTEPS=1
+DID_NOT_RIP_FRIEND_GAIT=1
+DID_NOT_RIP_STREET_PLAY_SHOPS=1
+DID_NOT_RIP_SKY=1
+DID_NOT_RIP_CAM_HIT=1
+NO_NPC=1
+NO_INTERIOR=1
+NO_MAP_FETCH=1
+ACCEPTED_PRIOR=CRITIC-3D-STREET-NAME-REAUDIT-2026-09-04.txt TICK=yes on BzqNNsdo
+
+================================================================================
+SLICE
+================================================================================
+
+Plaques exist, but you miss them if you look away. This slice
+adds one slim HUD chip for the current authored street / inner
+lane. Same four names as the plaques:
+
+  Harbor Walk · Tram Approach · Steps East · Steps West
+
+One 22 px line in the existing slim hud-top. Not a new panel.
+Not the old fat dashboard. Menu/Tab lists stay behind Tab.
+Shows "—" when the body is not near those four. Title says
+authored fixture name, not GPS, not OSM.
+
+Nearest in-band wins: official streets use the GeoJSON
+centerline + walk half-width; Steps East/West use the
+Harbor-facing inner gap of the Steps blocks. Walking Harbor
+→ Steps East changes the chip. Honesty still authored 400 m,
+two official named streets + inner parcel lanes, not a city.
+
+Did not rip plaques, inner lanes, side-street dressing,
+fog/edge, footsteps, friend gait, streetPlayShops, sky, or
+cam-hit. No NPCs. No interiors. No map fetch.
+
+================================================================================
+CHIP
+================================================================================
+
+  data-testid=play-street-chip  kind=named-chip
+  Harbor  text=Harbor Walk   role=official   box 92×22 @ 724,23
+  Steps   text=Steps East    role=inner      box 76×22 @ 724,23
+  Empty   text=—
+
+data-street-hud=named-chip on play-view + play-proof.
+Plaques still 4 (pole-board, official=2, inner=2).
+GeoJSON kind=street count stays 2.
+
+================================================================================
+PROOF (implementer CDP vs recycled 4175)
+================================================================================
+
+typecheck EXIT=0
+npm test EXIT=0 (69 tests)
+npm run build EXIT=0  dist/assets/index-DF4TvR_E.js
+Recycled 4175 once after that remint build (127.0.0.1 only).
+Did not start 4173 / 4174 / 5175. Did not bind 0.0.0.0.
+
+Probe node hh-3d/app/data-qa/j5-street-hud-probe.mjs EXIT=0
+  Isolated headless Chrome 1280x720, seats A + B, ports 9571 / 9572.
+
+  Harbor walk: chip=Harbor Walk on-screen. Menu hidden.
+  Walk Harbor then east into Steps: +7.2 m east / +19.83 m
+  north; heading 94; inside-ring=0 inside-aabb=0 alt=0.
+  Steps shot: chip=Steps East. Plaques still 4.
+  Then lantern: E opened shop-lantern-fish (8.6 m).
+  Seat B leftover nearby none; E did not open sharedpc / J6.
+  Honesty: authored 400 m, two official named streets + inner
+  parcel lanes, not a city grid. Not GPS on the chip.
+  Fog / edge / sky / door-glass / inner-lane held.
+
+================================================================================
+OWNER LEFTOVERS (unchanged)
+================================================================================
+
+GATE-U1 three human reviewers — first plan leftover. Not faked.
+Leftover this-PC shops shop-local-sharedpc and
+shop-local-mtl8ulddihjpre stay in the catalog. They still do not
+own Nearby E / street play. Do not catalog_clear.
+OSM / Overture still NO. WAN / other-PC still NO.
+Plan checkboxes still [ ]. Not a city.
+
+================================================================================
+HONESTY
+================================================================================
+
+Still the authored 400 m box set. Two official named streets
+plus inner parcel lanes, now with a slim chip so the current
+fixture name is readable without facing a plaque. Not a
+downtown. Not OSM. Not GPS. NOT_PLAN_PASS. Independent critic
+may review; implementer TICK=n/a.

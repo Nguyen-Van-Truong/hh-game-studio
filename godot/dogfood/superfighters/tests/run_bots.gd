@@ -1,7 +1,7 @@
 extends SceneTree
 
-const RUN_ID := "VF6WP5-20260903-ASIA-SAIGON-03"
-const COMMAND_ID := "cmd.vf6-wp5.bots.3"
+const RUN_ID := "VF6WP5-20260904-ASIA-SAIGON-08"
+const COMMAND_ID := "cmd.vf6-wp5.bots.8"
 const SEED := 7
 const MODE := "vs1"
 const MAP_ID := "rooftops"
@@ -18,6 +18,8 @@ func _initialize() -> void:
 
 
 func _boot() -> void:
+	Engine.max_fps = 0
+	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
 	_started_unix = Time.get_unix_time_from_system()
 	_started_at = _iso_local()
 	seed(SEED)
@@ -129,17 +131,21 @@ func _print_map_table() -> void:
 		if BotCasesScript.map_rows.has(mid):
 			row = BotCasesScript.map_rows[mid] as Dictionary
 		print(
-			"HH_VF_BOTS MAP_ROW id=%s name=%s reach=%s pit=%s aim=%s combat=%s moved=%.1f toward=%.1f goal_dist=%.1f pit_blocks=%s pit_reroutes=%s gun=%s melee=%s aim_err=%.1f shot_off=%.1f cause=%s"
+			"HH_VF_BOTS MAP_ROW id=%s name=%s reach=%s reason=%s pit=%s aim=%s combat=%s moved=%.1f toward=%.1f goal_dist=%.1f waypoint_dist=%.1f engage=%.1f closest=%.1f pit_blocks=%s pit_reroutes=%s gun=%s melee=%s aim_err=%.1f shot_off=%.1f cause=%s"
 			% [
 				mid,
 				str(row.get("display", Maps.display_name(mid))),
 				str(row.get("reach_ok", false)),
+				str(row.get("reach_reason", "none")),
 				str(row.get("pit_ok", false)),
 				str(row.get("aim_ok", false)),
 				str(row.get("combat_ok", false)),
 				float(row.get("moved", 0.0)),
 				float(row.get("toward", 0.0)),
 				float(row.get("goal_dist", 0.0)),
+				float(row.get("waypoint_dist", 0.0)),
+				float(row.get("engage_dist", 0.0)),
+				float(row.get("closest_engage", 0.0)),
 				str(row.get("pit_blocks", "")),
 				str(row.get("pit_reroutes", "")),
 				str(row.get("gun_used", "")),

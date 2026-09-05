@@ -1,0 +1,308 @@
+TICK=yes
+BIGGEST_MISS=None on the named hunts. Live KZQAQdH6 / 2176239 / 878eb28eea10fa2cb114421b8157f398e6977ca0cf3c8a404a95d39867bc56e7 matched before and after CDP on the same LISTEN pid 388. play-proof data-html-lod=far-html. Spawn street had 4 shop-marker Html (Harbor lantern-fish + Phở Nhà + Chè Vỉa + Kem Reaudit). GET /demo-bus still had Quầy Shared PC and Quay Critic J6 Jump; those two were draw=0 stalls and 0 shop-marker nodes. Seat A heading 0 KeyA: heading frozen, lon +0.0000229 east. Mouse-left heading 0.0→19.6. Pitch-up onCanvas=1 camLookY=1.98. FPS “N FPS · NOT_60” data-claim=NOT_R2_WP1. HUD Máy này · 4175. Live bytes var w=2.55,T=4.35.
+HASH_MATCH=1
+DID_NOT_RECYCLE=1
+LIVE_JS=/assets/index-KZQAQdH6.js
+LIVE_JS_LEN=2176239
+LIVE_JS_SHA256=878eb28eea10fa2cb114421b8157f398e6977ca0cf3c8a404a95d39867bc56e7
+LIVE_PID=388
+CDP_PORTS=10070 / 10072 (primary A/B); 10074 reserved unused
+
+HUNT1_HASH=PASS
+HUNT2_HTML_LOD=PASS
+HUNT2_SPAWN_SHOP_MARKER=4
+HUNT2_LEFTOVER_MARKER=0
+HUNT2_SHARED_PC_PERSIST=1
+HUNT2_J6_JUMP_PERSIST=1
+HUNT3_KEYA_SCREEN_LEFT=PASS
+HUNT3_MOUSE_LEFT=PASS
+HUNT3_PITCH_UP=PASS
+HUNT4_FPS_CHIP=PASS
+HUNT5_HONESTY=PASS
+
+SEAT_A_HTML_LOD=far-html
+SEAT_B_HTML_LOD=far-html
+SEAT_A_MARKER_COUNT=4
+SEAT_B_MARKER_COUNT=4
+SEAT_A_LEFTOVER_MARKERS=0
+SEAT_B_LEFTOVER_MARKERS=0
+SPAWN_MARKERS=shop-lantern-fish|shop-local-mtmh45qxehxhvb|shop-local-mtmrbdjffjdkg8|shop-local-mtmrq33hoq4phb
+SPAWN_MARKER_TEXTS=Shop · Quầy Cá Đèn Lồng|Shop · Quầy Phở Nhà|Shop · Quầy Chè Vỉa|Shop · Quay Kem Reaudit
+LEFTOVER_STALL_SHARED_PC_DRAW=0
+LEFTOVER_STALL_J6_JUMP_DRAW=0
+CATALOG_COUNT=5
+SEAT_A_HEADING_BEFORE_A=0.0
+SEAT_A_HEADING_AFTER_A=0.0
+SEAT_A_DLON_A=+0.0000229
+SEAT_A_LON_BEFORE_A=106.6980400
+SEAT_A_LON_AFTER_A=106.6980629
+SEAT_A_DLAT_A=0
+SEAT_B_HEADING_BEFORE_A=292
+SEAT_B_HEADING_AFTER_A=292
+SEAT_B_DLON_A=+0.0000130
+SEAT_B_DLAT_A=+0.0000316
+SEAT_B_LON_BEFORE_A=106.6981040
+SEAT_B_LON_AFTER_A=106.6981170
+SEAT_A_HEADING_BEFORE_MOUSE=0.0
+SEAT_A_HEADING_AFTER_MOUSE=19.6
+SEAT_A_DHEADING_MOUSE=+19.6
+SEAT_B_HEADING_BEFORE_MOUSE=292
+SEAT_B_HEADING_AFTER_MOUSE=311.6
+SEAT_B_DHEADING_MOUSE=+19.6
+SEAT_A_ONCANVAS_PITCH=1
+SEAT_A_CAMLOOKY_PITCH=1.98
+SEAT_A_CAMPITCH_PITCH=28
+SEAT_B_ONCANVAS_PITCH=1
+SEAT_B_CAMLOOKY_PITCH=1.92
+SEAT_B_CAMPITCH_PITCH=25.6
+FPS_TEXT_A=4 FPS · NOT_60
+FPS_CLAIM_A=NOT_R2_WP1
+FPS_TEXT_B=7 FPS · NOT_60
+FPS_CLAIM_B=NOT_R2_WP1
+HUD_CONNECTION=Máy này · 4175
+
+ROLE=CRITIC
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-05
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=06:47 +07
+PLAYER_URL=http://127.0.0.1:4175/
+LISTEN=127.0.0.1:4175
+LIVE_PID_STARTTIME=2026-09-05 06:42:59 +07
+LIVE_PID_AFTER_CDP=388
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-HTML-LOD-REAUDIT-2026-09-05.txt
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-HTML-LOD-2026-09-05.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+DID_NOT_TREAT_IMPLEMENTER_AS_ACCEPTANCE=1
+SUPERSEDED_LOOK_PITCH_FPS_ON=BrVc4bRj
+DID_NOT_TREAT_BRVC4BRJ_TICK_AS_THIS_REMINT=1
+DID_NOT_RUN_IMPLEMENTER_PROBES_AS_PROOF=1
+DID_NOT_COPY_IMPLEMENTER_JSON=1
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_SECOND_PREVIEW=1
+DID_NOT_RECYCLE_4175=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+DID_NOT_USE_RESERVED_CDP_10014_10036=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_R2_WP1=1
+NOT_60=1
+NOT_WAN=1
+VIEWPORT=1280x720
+HEADLESS_NEW=1
+ISOLATED_PROFILES=1
+MOUSE_HUNT=right-drag-left
+POINTER_LOCK=0
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+Tried to FAIL every named hunt on the live claimed remint. Did not
+trust implementer CRITIC-3D-HTML-LOD-2026-09-05.txt (ROLE=IMPLEMENTER,
+TICK=n/a). Did not treat the superseded BrVc4bRj LOOK_PITCH_FPS
+reaudit TICK=yes as this remint. Own CDP only.
+
+URL=http://127.0.0.1:4175/ already up. Bind 127.0.0.1 pid 388
+(node, vite preview --host 127.0.0.1 --port 4175 --strictPort,
+StartTime 2026-09-05 06:42:59 +07). Same pid after every seat.
+Did not recycle, kill, rebuild, or start 4173 / 4174 / 5175.
+Did not catalog_clear. Did not tick any plan. GATE-U1 humans
+were not invented.
+
+Primary seats: Chrome headless=new 1280×720, isolated temp
+profiles, CDP 10070 (?seat=a) and 10072 (?seat=b). 10074 stayed
+free and unused. Those ports were free before Chrome launch.
+10014–10036 were not used. 10030 was already Listen on another
+pid and was left alone.
+
+================================================================================
+HUNT 1 — HASH / PID — PASS
+================================================================================
+
+Tried to fail a swapped bundle vs KZQAQdH6 / 2176239 /
+878eb28eea10fa2cb114421b8157f398e6977ca0cf3c8a404a95d39867bc56e7,
+or a recycled preview pid. If pid 388 were gone or the JS hash
+differed, TICK=no.
+
+GET / then GET /assets/index-KZQAQdH6.js as raw bytes before CDP
+and after both Chrome seats exited.
+
+BEFORE:
+  HTML script = /assets/index-KZQAQdH6.js
+  http file length = 2176239
+  sha256 = 878eb28eea10fa2cb114421b8157f398e6977ca0cf3c8a404a95d39867bc56e7
+  LISTEN 127.0.0.1:4175 pid 388
+  StartTime 2026-09-05 06:42:59 +07
+
+AFTER:
+  HTML script = /assets/index-KZQAQdH6.js
+  http file length = 2176239
+  sha256 = 878eb28eea10fa2cb114421b8157f398e6977ca0cf3c8a404a95d39867bc56e7
+  LISTEN 127.0.0.1:4175 pid 388
+  StartTime 2026-09-05 06:42:59 +07 (unchanged)
+
+Pid still 388. Command still vite preview --host 127.0.0.1
+--port 4175 --strictPort. 4173 / 4174 / 5175 still not listening.
+HASH_MATCH=1. DID_NOT_RECYCLE=1. PASS.
+
+================================================================================
+HUNT 2 — HTML LOD / SPAWN SHOP-MARKER / LEFTOVERS — PASS
+================================================================================
+
+Tried to fail missing data-html-lod, empty spawn-street
+shop-marker Html, leftover Shared PC / J6 Jump drawn as
+shop-marker, or a vanished catalog after a silent clear.
+
+play-proof at spawn:
+  Seat A data-html-lod=far-html
+  Seat B data-html-lod=far-html
+If the attribute had been absent or not far-html, TICK=no.
+
+Spawn street [data-testid^=shop-marker-] count = 4 both seats:
+  shop-lantern-fish / Shop · Quầy Cá Đèn Lồng / authored
+    lon=106.6980366 lat=10.7718712 (Harbor Walk, north of spawn)
+  shop-local-mtmh45qxehxhvb / Shop · Quầy Phở Nhà / local-demo
+  shop-local-mtmrbdjffjdkg8 / Shop · Quầy Chè Vỉa / local-demo
+  shop-local-mtmrq33hoq4phb / Shop · Quay Kem Reaudit / local-demo
+
+Zero would have been the miss. At least one Harbor street
+shop-marker Html exists. Screenshots a-spawn / a-after-A show
+the orange Shop · labels on Harbor Walk sidewalks.
+
+GET /demo-bus read-only (before CDP and after last seat):
+  kind=local-demo-bus this_pc=true bind=127.0.0.1 not_wan=true
+  persist=catalog+graph
+  leftover catalog count = 5
+  Quầy Shared PC (shop-local-sharedpc) still present
+  Quay Critic J6 Jump (shop-local-mtl8ulddihjpre) still present
+  Quầy Phở Nhà / Quầy Chè Vỉa / Quay Kem Reaudit still present
+  graph pairs = one accepted a↔b. Not 20. Not WAN.
+
+Those leftover names did NOT appear as shop-marker:
+  leftoverMarkerCount = 0 both seats
+  hidden stall list: Shared PC draw=0 x=-2.43 z=-97.33
+  hidden stall list: J6 Jump draw=0 x=16.37 z=-97.24
+  both street=street-harbor-walk, keep-out persist, not Html
+
+Did not POST catalog_clear. catalog_clear count in live JS = 0.
+If Shared PC / J6 Jump had been shop-marker nodes, TICK=no.
+They were persist-only. PASS.
+
+================================================================================
+HUNT 3 — LOOK_PITCH_FPS REGRESSION — PASS
+================================================================================
+
+Tried to fail heading turn on KeyA, lon west (old CoTKbFff
+screen-left story), mouse-left heading decrease, or pitch-up
+sky yeet (onCanvas≠1 or camLookY>6).
+
+Seat A ?seat=a CDP 10070, menu closed, look=off, no pointer-lock.
+Canvas focused. KeyA held ~1800 ms (keyDown + rawKeyDown, then keyUp).
+
+  self-avatar / play-proof before A:
+    headingSelf=0 headingProof=0.0 lon=106.6980400 lat=10.7716200
+    onCanvas=1 turning=0 look=off camYaw=0.0
+  after KeyA:
+    headingSelf=0 headingProof=0.0 lon=106.6980629 lat=10.7716200
+    onCanvas=1 turning=0 look=off camYaw=0.0
+
+  dHeading A = 0.0 (frozen). dLon = +0.0000229 (east).
+  If A had decreased lon or turned heading, TICK=no.
+  Lon increased. Heading frozen. PASS for KeyA.
+
+Seat B heading 292, CDP 10072, same hold:
+  headingSelf 292 → 292  headingProof 292 → 292  (frozen)
+  lon 106.6981040 → 106.6981170  dLon = +0.0000130
+  lat 10.7716200 → 10.7716516  dLat = +0.0000316
+  Behind-cam at 292: A moved east+north = opposite camera-right
+  (west+south) = screen-left. PASS.
+
+Mouse-left, required right-drag left (dx negative). No
+pointer-lock. Did not flip yaw back to +1.
+
+  Seat A: play-proof heading 0.0 → 19.6  self 0 → 20
+          cam-yaw 0.0 → 19.6  dHeading = +19.6
+  Seat B: heading 292 → 311.6  self 292 → 312  dHeading = +19.6
+
+Heading INCREASED on both seats. The rejected +1 path
+(0 → 343-ish) did not reproduce. PASS.
+
+Pitch-up, large mouse-up look (dy = −240, right-drag).
+
+  Seat A: onCanvas=1  camPitch=28  camY=0.92  camLookY=1.98
+          lookYSky=(1.98>6)=0
+          screenshot a-pitch-up.png: teal tunic + black head on
+          asphalt, street ahead, not sky-only.
+  Seat B: onCanvas=1  camPitch=25.6  camY=1.13  camLookY=1.92
+          screenshot b-pitch-up.png: yellow tunic visible, not sky.
+
+Chest band ~1–3 held. Pitch-down not required. PASS.
+
+================================================================================
+HUNT 4 — FPS CHIP — PASS
+================================================================================
+
+Tried to fail missing/empty chip or a 60 / R2-WP1 PASS claim.
+
+[data-testid=play-fps] present on-street both seats, visible
+(rect w≈101–108 h≈21), text contains NOT_60, data-claim=NOT_R2_WP1.
+
+  Seat A spawn: text="4 FPS · NOT_60"  data-claim=NOT_R2_WP1  data-fps=4
+  Seat A later: 14 / 12 / 6 FPS · NOT_60
+  Seat B spawn: text="7 FPS · NOT_60"  data-claim=NOT_R2_WP1  data-fps=7
+  Seat B later: 27 / 9 FPS · NOT_60
+  play-proof data-fps-claim=NOT_R2_WP1
+  Visible in screenshots (top-right chip). Live JS: NOT_60=1
+  NOT_R2_WP1=2  R2-WP1 PASS=0
+
+Headless rAF is low. That is honest. Does not claim 60 FPS.
+Does not claim R2-WP1 PASS. Empty/missing chip did not
+reproduce. PASS.
+
+================================================================================
+HUNT 5 — CONNECTION / WALK 2.55 4.35 — PASS
+================================================================================
+
+Tried to fail rewritten walk pace or a lost/reconnecting /
+WAN connection chip.
+
+HUD connection textContent = Máy này · 4175
+data-connection=on
+Mode-status visible “Offline · Máy này · 4175” in screenshots.
+
+Source grep (walk.ts): WALK_SPEED_MPS = 2.55
+SPRINT_SPEED_MPS = 4.35
+modes.ts connected copy = Máy này · 4175
+
+Live bytes:
+  2.55 = 3  (pair var w=2.55,T=4.35)
+  4.35 = 2
+  catalog_clear = 0
+  Máy này · 4175 = 2
+  far-html = 1
+  20 live city friends = 0
+
+PASS. Does not invent GATE-U1 or plan PASS.
+
+================================================================================
+NOT CLAIMED
+================================================================================
+
+NOT_PLAN_PASS. NOT_R2_WP1. NOT_60. GATE-U1 three-human review
+was not invented. No OSM fetch. No 4173 / 4174 / 5175. No
+0.0.0.0 bind. No recycle of 4175. Implementer notes are not
+acceptance. BrVc4bRj LOOK_PITCH_FPS TICK is accepted prior on
+a superseded hash only — not this remint’s proof. Hitch3
+idle-minimap was not re-opened. This file is HTML_LOD +
+regression only.

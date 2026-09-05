@@ -1,0 +1,2324 @@
+{
+  "run_id": "HH3D-J5-20260903-ASIA-SAIGON-07",
+  "player": "http://127.0.0.1:4175/",
+  "verdict": "J5_COLLISION_OK",
+  "not_plan_pass": true,
+  "not_gate_u1": true,
+  "playOk": true,
+  "streetOk": true,
+  "walkTowardOk": true,
+  "blockedOk": true,
+  "stayOnSlabOk": true,
+  "turnOk": true,
+  "honestyOk": true,
+  "shopOk": true,
+  "street": {
+    "east": 0,
+    "north": 12.801799999910841,
+    "moved": 12.801799999910841
+  },
+  "toward": {
+    "east": 11.06707955316852,
+    "north": 0.04452800012487046,
+    "moved": 11.067169131216701
+  },
+  "extra": {
+    "east": 0,
+    "north": 0.011131999932345593,
+    "moved": 0.011131999932345593
+  },
+  "nearest": {
+    "id": "bldg-steps-e-00",
+    "dist": 0.5577283179866374
+  },
+  "hitAfter": {
+    "live": [],
+    "dom": []
+  },
+  "hitStill": {
+    "live": [],
+    "dom": []
+  },
+  "liveBuildingCount": 60,
+  "home": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/?seat=a",
+    "playReady": "yes",
+    "playEngine": "r3f",
+    "playCanvas": true,
+    "avatar": {
+      "lon": 106.69804,
+      "lat": 10.77162,
+      "heading": 0,
+      "pose": "idle",
+      "groundY": "0",
+      "insideAabb": "0",
+      "blocked": "0",
+      "collision": "aabb-radius"
+    },
+    "proof": {
+      "camera": "behind",
+      "follow": "heading",
+      "heading": 0,
+      "camYaw": 0,
+      "buildings": 60,
+      "extruded": "footprint",
+      "collision": "aabb-radius",
+      "groundY": "0",
+      "insideAabb": "0",
+      "blocked": "0",
+      "hitBuilding": ""
+    },
+    "boxes": [
+      {
+        "id": "bldg-market-hall",
+        "west": 106.6981646,
+        "south": 10.7726437,
+        "east": 106.6982899,
+        "north": 10.7727848
+      },
+      {
+        "id": "bldg-hall-01",
+        "west": 106.6983319,
+        "south": 10.7726437,
+        "east": 106.6984572,
+        "north": 10.7727848
+      },
+      {
+        "id": "bldg-hall-10",
+        "west": 106.6981646,
+        "south": 10.7728261,
+        "east": 106.6982899,
+        "north": 10.7729671
+      },
+      {
+        "id": "bldg-hall-11",
+        "west": 106.6983319,
+        "south": 10.7728261,
+        "east": 106.6984572,
+        "north": 10.7729671
+      },
+      {
+        "id": "bldg-hall-w-00",
+        "west": 106.6975885,
+        "south": 10.7726437,
+        "east": 106.6977092,
+        "north": 10.7727848
+      },
+      {
+        "id": "bldg-hall-w-01",
+        "west": 106.6977513,
+        "south": 10.7726437,
+        "east": 106.697872,
+        "north": 10.7727848
+      },
+      {
+        "id": "bldg-hall-w-10",
+        "west": 106.6975885,
+        "south": 10.7728261,
+        "east": 106.6977092,
+        "north": 10.7729671
+      },
+      {
+        "id": "bldg-hall-w-11",
+        "west": 106.6977513,
+        "south": 10.7728261,
+        "east": 106.697872,
+        "north": 10.7729671
+      },
+      {
+        "id": "bldg-hall-se-00",
+        "west": 106.6981646,
+        "south": 10.7722754,
+        "east": 106.6982899,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-hall-se-01",
+        "west": 106.6983319,
+        "south": 10.7722754,
+        "east": 106.6984572,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-hall-sw-00",
+        "west": 106.6975885,
+        "south": 10.7722754,
+        "east": 106.6977092,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-hall-sw-01",
+        "west": 106.6977513,
+        "south": 10.7722754,
+        "east": 106.697872,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-west-block",
+        "west": 106.6964455,
+        "south": 10.7720508,
+        "east": 106.696646,
+        "north": 10.7721829
+      },
+      {
+        "id": "bldg-west-01",
+        "west": 106.6966881,
+        "south": 10.7720508,
+        "east": 106.6968887,
+        "north": 10.7721829
+      },
+      {
+        "id": "bldg-west-02",
+        "west": 106.6969307,
+        "south": 10.7720508,
+        "east": 106.6971313,
+        "north": 10.7721829
+      },
+      {
+        "id": "bldg-west-10",
+        "west": 106.6964455,
+        "south": 10.7722242,
+        "east": 106.696646,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-west-11",
+        "west": 106.6966881,
+        "south": 10.7722242,
+        "east": 106.6968887,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-west-12",
+        "west": 106.6969307,
+        "south": 10.7722242,
+        "east": 106.6971313,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-west-n-00",
+        "west": 106.6964455,
+        "south": 10.7726437,
+        "east": 106.696646,
+        "north": 10.7729042
+      },
+      {
+        "id": "bldg-west-n-01",
+        "west": 106.6966881,
+        "south": 10.7726437,
+        "east": 106.6968887,
+        "north": 10.7729042
+      },
+      {
+        "id": "bldg-west-n-02",
+        "west": 106.6969307,
+        "south": 10.7726437,
+        "east": 106.6971313,
+        "north": 10.7729042
+      },
+      {
+        "id": "bldg-east-arcade",
+        "west": 106.6988687,
+        "south": 10.7716915,
+        "east": 106.6990693,
+        "north": 10.7718856
+      },
+      {
+        "id": "bldg-east-01",
+        "west": 106.6991113,
+        "south": 10.7716915,
+        "east": 106.6993119,
+        "north": 10.7718856
+      },
+      {
+        "id": "bldg-east-02",
+        "west": 106.699354,
+        "south": 10.7716915,
+        "east": 106.6995545,
+        "north": 10.7718856
+      },
+      {
+        "id": "bldg-east-10",
+        "west": 106.6988687,
+        "south": 10.7719269,
+        "east": 106.6990693,
+        "north": 10.7721209
+      },
+      {
+        "id": "bldg-east-11",
+        "west": 106.6991113,
+        "south": 10.7719269,
+        "east": 106.6993119,
+        "north": 10.7721209
+      },
+      {
+        "id": "bldg-east-12",
+        "west": 106.699354,
+        "south": 10.7719269,
+        "east": 106.6995545,
+        "north": 10.7721209
+      },
+      {
+        "id": "bldg-east-20",
+        "west": 106.6988687,
+        "south": 10.7721622,
+        "east": 106.6990693,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-east-21",
+        "west": 106.6991113,
+        "south": 10.7721622,
+        "east": 106.6993119,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-east-22",
+        "west": 106.699354,
+        "south": 10.7721622,
+        "east": 106.6995545,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-east-n-00",
+        "west": 106.6988687,
+        "south": 10.7726437,
+        "east": 106.6990693,
+        "north": 10.7727246
+      },
+      {
+        "id": "bldg-east-n-01",
+        "west": 106.6991113,
+        "south": 10.7726437,
+        "east": 106.6993119,
+        "north": 10.7727246
+      },
+      {
+        "id": "bldg-east-n-02",
+        "west": 106.699354,
+        "south": 10.7726437,
+        "east": 106.6995545,
+        "north": 10.7727246
+      },
+      {
+        "id": "bldg-north-stall",
+        "west": 106.6982012,
+        "south": 10.7731468,
+        "east": 106.6983926,
+        "north": 10.7733468
+      },
+      {
+        "id": "bldg-north-01",
+        "west": 106.6984347,
+        "south": 10.7731468,
+        "east": 106.6986261,
+        "north": 10.7733468
+      },
+      {
+        "id": "bldg-north-02",
+        "west": 106.6986681,
+        "south": 10.7731468,
+        "east": 106.6988596,
+        "north": 10.7733468
+      },
+      {
+        "id": "bldg-north-10",
+        "west": 106.6982012,
+        "south": 10.7733881,
+        "east": 106.6983926,
+        "north": 10.7735882
+      },
+      {
+        "id": "bldg-north-11",
+        "west": 106.6984347,
+        "south": 10.7733881,
+        "east": 106.6986261,
+        "north": 10.7735882
+      },
+      {
+        "id": "bldg-north-12",
+        "west": 106.6986681,
+        "south": 10.7733881,
+        "east": 106.6988596,
+        "north": 10.7735882
+      },
+      {
+        "id": "bldg-north-20",
+        "west": 106.6982012,
+        "south": 10.7736295,
+        "east": 106.6983926,
+        "north": 10.7738295
+      },
+      {
+        "id": "bldg-north-21",
+        "west": 106.6984347,
+        "south": 10.7736295,
+        "east": 106.6986261,
+        "north": 10.7738295
+      },
+      {
+        "id": "bldg-north-22",
+        "west": 106.6986681,
+        "south": 10.7736295,
+        "east": 106.6988596,
+        "north": 10.7738295
+      },
+      {
+        "id": "bldg-south-shed",
+        "west": 106.69768,
+        "south": 10.770928,
+        "east": 106.697872,
+        "north": 10.771101
+      },
+      {
+        "id": "bldg-south-10",
+        "west": 106.69768,
+        "south": 10.7711424,
+        "east": 106.697872,
+        "north": 10.7713154
+      },
+      {
+        "id": "bldg-south-20",
+        "west": 106.69768,
+        "south": 10.7713567,
+        "east": 106.697872,
+        "north": 10.7715298
+      },
+      {
+        "id": "bldg-south-e-00",
+        "west": 106.6981463,
+        "south": 10.770928,
+        "east": 106.6983658,
+        "north": 10.771101
+      },
+      {
+        "id": "bldg-south-e-10",
+        "west": 106.6981463,
+        "south": 10.7711424,
+        "east": 106.6983658,
+        "north": 10.7713154
+      },
+      {
+        "id": "bldg-south-e-20",
+        "west": 106.6981463,
+        "south": 10.7713567,
+        "east": 106.6983658,
+        "north": 10.7715298
+      },
+      {
+        "id": "bldg-steps-w-00",
+        "west": 106.6975611,
+        "south": 10.7716017,
+        "east": 106.6976955,
+        "north": 10.7717837
+      },
+      {
+        "id": "bldg-steps-w-01",
+        "west": 106.6977376,
+        "south": 10.7716017,
+        "east": 106.697872,
+        "north": 10.7717837
+      },
+      {
+        "id": "bldg-steps-w-10",
+        "west": 106.6975611,
+        "south": 10.7718251,
+        "east": 106.6976955,
+        "north": 10.7720071
+      },
+      {
+        "id": "bldg-steps-w-11",
+        "west": 106.6977376,
+        "south": 10.7718251,
+        "east": 106.697872,
+        "north": 10.7720071
+      },
+      {
+        "id": "bldg-steps-w-20",
+        "west": 106.6975611,
+        "south": 10.7720484,
+        "east": 106.6976955,
+        "north": 10.7722305
+      },
+      {
+        "id": "bldg-steps-w-21",
+        "west": 106.6977376,
+        "south": 10.7720484,
+        "east": 106.697872,
+        "north": 10.7722305
+      },
+      {
+        "id": "bldg-steps-e-00",
+        "west": 106.6981463,
+        "south": 10.7716017,
+        "east": 106.6982899,
+        "north": 10.7717837
+      },
+      {
+        "id": "bldg-steps-e-01",
+        "west": 106.6983319,
+        "south": 10.7716017,
+        "east": 106.6984755,
+        "north": 10.7717837
+      },
+      {
+        "id": "bldg-steps-e-10",
+        "west": 106.6981463,
+        "south": 10.7718251,
+        "east": 106.6982899,
+        "north": 10.7720071
+      },
+      {
+        "id": "bldg-steps-e-11",
+        "west": 106.6983319,
+        "south": 10.7718251,
+        "east": 106.6984755,
+        "north": 10.7720071
+      },
+      {
+        "id": "bldg-steps-e-20",
+        "west": 106.6981463,
+        "south": 10.7720484,
+        "east": 106.6982899,
+        "north": 10.7722305
+      },
+      {
+        "id": "bldg-steps-e-21",
+        "west": 106.6983319,
+        "south": 10.7720484,
+        "east": 106.6984755,
+        "north": 10.7722305
+      }
+    ],
+    "honesty": "Authored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:1 city. NOT_PLAN_PASS.\n\nFriend bodies are a this-machine local demo (tabs or browser profiles on 4175). Not a city presence server. Position is in-app, not GPS. NOT_PLAN_PASS.",
+    "mode": "Offline — Stroll alone; shops still open.",
+    "shopMarker": true,
+    "gtaClaim": false
+  },
+  "upStreet": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/?seat=a",
+    "playReady": "yes",
+    "playEngine": "r3f",
+    "playCanvas": true,
+    "avatar": {
+      "lon": 106.69804,
+      "lat": 10.771735,
+      "heading": 0,
+      "pose": "idle",
+      "groundY": "0",
+      "insideAabb": "0",
+      "blocked": "0",
+      "collision": "aabb-radius"
+    },
+    "proof": {
+      "camera": "behind",
+      "follow": "heading",
+      "heading": 0,
+      "camYaw": 0,
+      "buildings": 60,
+      "extruded": "footprint",
+      "collision": "aabb-radius",
+      "groundY": "0",
+      "insideAabb": "0",
+      "blocked": "0",
+      "hitBuilding": ""
+    },
+    "boxes": [
+      {
+        "id": "bldg-market-hall",
+        "west": 106.6981646,
+        "south": 10.7726437,
+        "east": 106.6982899,
+        "north": 10.7727848
+      },
+      {
+        "id": "bldg-hall-01",
+        "west": 106.6983319,
+        "south": 10.7726437,
+        "east": 106.6984572,
+        "north": 10.7727848
+      },
+      {
+        "id": "bldg-hall-10",
+        "west": 106.6981646,
+        "south": 10.7728261,
+        "east": 106.6982899,
+        "north": 10.7729671
+      },
+      {
+        "id": "bldg-hall-11",
+        "west": 106.6983319,
+        "south": 10.7728261,
+        "east": 106.6984572,
+        "north": 10.7729671
+      },
+      {
+        "id": "bldg-hall-w-00",
+        "west": 106.6975885,
+        "south": 10.7726437,
+        "east": 106.6977092,
+        "north": 10.7727848
+      },
+      {
+        "id": "bldg-hall-w-01",
+        "west": 106.6977513,
+        "south": 10.7726437,
+        "east": 106.697872,
+        "north": 10.7727848
+      },
+      {
+        "id": "bldg-hall-w-10",
+        "west": 106.6975885,
+        "south": 10.7728261,
+        "east": 106.6977092,
+        "north": 10.7729671
+      },
+      {
+        "id": "bldg-hall-w-11",
+        "west": 106.6977513,
+        "south": 10.7728261,
+        "east": 106.697872,
+        "north": 10.7729671
+      },
+      {
+        "id": "bldg-hall-se-00",
+        "west": 106.6981646,
+        "south": 10.7722754,
+        "east": 106.6982899,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-hall-se-01",
+        "west": 106.6983319,
+        "south": 10.7722754,
+        "east": 106.6984572,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-hall-sw-00",
+        "west": 106.6975885,
+        "south": 10.7722754,
+        "east": 106.6977092,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-hall-sw-01",
+        "west": 106.6977513,
+        "south": 10.7722754,
+        "east": 106.697872,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-west-block",
+        "west": 106.6964455,
+        "south": 10.7720508,
+        "east": 106.696646,
+        "north": 10.7721829
+      },
+      {
+        "id": "bldg-west-01",
+        "west": 106.6966881,
+        "south": 10.7720508,
+        "east": 106.6968887,
+        "north": 10.7721829
+      },
+      {
+        "id": "bldg-west-02",
+        "west": 106.6969307,
+        "south": 10.7720508,
+        "east": 106.6971313,
+        "north": 10.7721829
+      },
+      {
+        "id": "bldg-west-10",
+        "west": 106.6964455,
+        "south": 10.7722242,
+        "east": 106.696646,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-west-11",
+        "west": 106.6966881,
+        "south": 10.7722242,
+        "east": 106.6968887,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-west-12",
+        "west": 106.6969307,
+        "south": 10.7722242,
+        "east": 106.6971313,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-west-n-00",
+        "west": 106.6964455,
+        "south": 10.7726437,
+        "east": 106.696646,
+        "north": 10.7729042
+      },
+      {
+        "id": "bldg-west-n-01",
+        "west": 106.6966881,
+        "south": 10.7726437,
+        "east": 106.6968887,
+        "north": 10.7729042
+      },
+      {
+        "id": "bldg-west-n-02",
+        "west": 106.6969307,
+        "south": 10.7726437,
+        "east": 106.6971313,
+        "north": 10.7729042
+      },
+      {
+        "id": "bldg-east-arcade",
+        "west": 106.6988687,
+        "south": 10.7716915,
+        "east": 106.6990693,
+        "north": 10.7718856
+      },
+      {
+        "id": "bldg-east-01",
+        "west": 106.6991113,
+        "south": 10.7716915,
+        "east": 106.6993119,
+        "north": 10.7718856
+      },
+      {
+        "id": "bldg-east-02",
+        "west": 106.699354,
+        "south": 10.7716915,
+        "east": 106.6995545,
+        "north": 10.7718856
+      },
+      {
+        "id": "bldg-east-10",
+        "west": 106.6988687,
+        "south": 10.7719269,
+        "east": 106.6990693,
+        "north": 10.7721209
+      },
+      {
+        "id": "bldg-east-11",
+        "west": 106.6991113,
+        "south": 10.7719269,
+        "east": 106.6993119,
+        "north": 10.7721209
+      },
+      {
+        "id": "bldg-east-12",
+        "west": 106.699354,
+        "south": 10.7719269,
+        "east": 106.6995545,
+        "north": 10.7721209
+      },
+      {
+        "id": "bldg-east-20",
+        "west": 106.6988687,
+        "south": 10.7721622,
+        "east": 106.6990693,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-east-21",
+        "west": 106.6991113,
+        "south": 10.7721622,
+        "east": 106.6993119,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-east-22",
+        "west": 106.699354,
+        "south": 10.7721622,
+        "east": 106.6995545,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-east-n-00",
+        "west": 106.6988687,
+        "south": 10.7726437,
+        "east": 106.6990693,
+        "north": 10.7727246
+      },
+      {
+        "id": "bldg-east-n-01",
+        "west": 106.6991113,
+        "south": 10.7726437,
+        "east": 106.6993119,
+        "north": 10.7727246
+      },
+      {
+        "id": "bldg-east-n-02",
+        "west": 106.699354,
+        "south": 10.7726437,
+        "east": 106.6995545,
+        "north": 10.7727246
+      },
+      {
+        "id": "bldg-north-stall",
+        "west": 106.6982012,
+        "south": 10.7731468,
+        "east": 106.6983926,
+        "north": 10.7733468
+      },
+      {
+        "id": "bldg-north-01",
+        "west": 106.6984347,
+        "south": 10.7731468,
+        "east": 106.6986261,
+        "north": 10.7733468
+      },
+      {
+        "id": "bldg-north-02",
+        "west": 106.6986681,
+        "south": 10.7731468,
+        "east": 106.6988596,
+        "north": 10.7733468
+      },
+      {
+        "id": "bldg-north-10",
+        "west": 106.6982012,
+        "south": 10.7733881,
+        "east": 106.6983926,
+        "north": 10.7735882
+      },
+      {
+        "id": "bldg-north-11",
+        "west": 106.6984347,
+        "south": 10.7733881,
+        "east": 106.6986261,
+        "north": 10.7735882
+      },
+      {
+        "id": "bldg-north-12",
+        "west": 106.6986681,
+        "south": 10.7733881,
+        "east": 106.6988596,
+        "north": 10.7735882
+      },
+      {
+        "id": "bldg-north-20",
+        "west": 106.6982012,
+        "south": 10.7736295,
+        "east": 106.6983926,
+        "north": 10.7738295
+      },
+      {
+        "id": "bldg-north-21",
+        "west": 106.6984347,
+        "south": 10.7736295,
+        "east": 106.6986261,
+        "north": 10.7738295
+      },
+      {
+        "id": "bldg-north-22",
+        "west": 106.6986681,
+        "south": 10.7736295,
+        "east": 106.6988596,
+        "north": 10.7738295
+      },
+      {
+        "id": "bldg-south-shed",
+        "west": 106.69768,
+        "south": 10.770928,
+        "east": 106.697872,
+        "north": 10.771101
+      },
+      {
+        "id": "bldg-south-10",
+        "west": 106.69768,
+        "south": 10.7711424,
+        "east": 106.697872,
+        "north": 10.7713154
+      },
+      {
+        "id": "bldg-south-20",
+        "west": 106.69768,
+        "south": 10.7713567,
+        "east": 106.697872,
+        "north": 10.7715298
+      },
+      {
+        "id": "bldg-south-e-00",
+        "west": 106.6981463,
+        "south": 10.770928,
+        "east": 106.6983658,
+        "north": 10.771101
+      },
+      {
+        "id": "bldg-south-e-10",
+        "west": 106.6981463,
+        "south": 10.7711424,
+        "east": 106.6983658,
+        "north": 10.7713154
+      },
+      {
+        "id": "bldg-south-e-20",
+        "west": 106.6981463,
+        "south": 10.7713567,
+        "east": 106.6983658,
+        "north": 10.7715298
+      },
+      {
+        "id": "bldg-steps-w-00",
+        "west": 106.6975611,
+        "south": 10.7716017,
+        "east": 106.6976955,
+        "north": 10.7717837
+      },
+      {
+        "id": "bldg-steps-w-01",
+        "west": 106.6977376,
+        "south": 10.7716017,
+        "east": 106.697872,
+        "north": 10.7717837
+      },
+      {
+        "id": "bldg-steps-w-10",
+        "west": 106.6975611,
+        "south": 10.7718251,
+        "east": 106.6976955,
+        "north": 10.7720071
+      },
+      {
+        "id": "bldg-steps-w-11",
+        "west": 106.6977376,
+        "south": 10.7718251,
+        "east": 106.697872,
+        "north": 10.7720071
+      },
+      {
+        "id": "bldg-steps-w-20",
+        "west": 106.6975611,
+        "south": 10.7720484,
+        "east": 106.6976955,
+        "north": 10.7722305
+      },
+      {
+        "id": "bldg-steps-w-21",
+        "west": 106.6977376,
+        "south": 10.7720484,
+        "east": 106.697872,
+        "north": 10.7722305
+      },
+      {
+        "id": "bldg-steps-e-00",
+        "west": 106.6981463,
+        "south": 10.7716017,
+        "east": 106.6982899,
+        "north": 10.7717837
+      },
+      {
+        "id": "bldg-steps-e-01",
+        "west": 106.6983319,
+        "south": 10.7716017,
+        "east": 106.6984755,
+        "north": 10.7717837
+      },
+      {
+        "id": "bldg-steps-e-10",
+        "west": 106.6981463,
+        "south": 10.7718251,
+        "east": 106.6982899,
+        "north": 10.7720071
+      },
+      {
+        "id": "bldg-steps-e-11",
+        "west": 106.6983319,
+        "south": 10.7718251,
+        "east": 106.6984755,
+        "north": 10.7720071
+      },
+      {
+        "id": "bldg-steps-e-20",
+        "west": 106.6981463,
+        "south": 10.7720484,
+        "east": 106.6982899,
+        "north": 10.7722305
+      },
+      {
+        "id": "bldg-steps-e-21",
+        "west": 106.6983319,
+        "south": 10.7720484,
+        "east": 106.6984755,
+        "north": 10.7722305
+      }
+    ],
+    "honesty": "Authored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:1 city. NOT_PLAN_PASS.\n\nFriend bodies are a this-machine local demo (tabs or browser profiles on 4175). Not a city presence server. Position is in-app, not GPS. NOT_PLAN_PASS.",
+    "mode": "Offline — Stroll alone; shops still open.",
+    "shopMarker": true,
+    "gtaClaim": false
+  },
+  "turned": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/?seat=a",
+    "playReady": "yes",
+    "playEngine": "r3f",
+    "playCanvas": true,
+    "avatar": {
+      "lon": 106.69804,
+      "lat": 10.771735,
+      "heading": 90,
+      "pose": "idle",
+      "groundY": "0",
+      "insideAabb": "0",
+      "blocked": "0",
+      "collision": "aabb-radius"
+    },
+    "proof": {
+      "camera": "behind",
+      "follow": "heading",
+      "heading": 89.8,
+      "camYaw": 89.8,
+      "buildings": 60,
+      "extruded": "footprint",
+      "collision": "aabb-radius",
+      "groundY": "0",
+      "insideAabb": "0",
+      "blocked": "0",
+      "hitBuilding": ""
+    },
+    "boxes": [
+      {
+        "id": "bldg-market-hall",
+        "west": 106.6981646,
+        "south": 10.7726437,
+        "east": 106.6982899,
+        "north": 10.7727848
+      },
+      {
+        "id": "bldg-hall-01",
+        "west": 106.6983319,
+        "south": 10.7726437,
+        "east": 106.6984572,
+        "north": 10.7727848
+      },
+      {
+        "id": "bldg-hall-10",
+        "west": 106.6981646,
+        "south": 10.7728261,
+        "east": 106.6982899,
+        "north": 10.7729671
+      },
+      {
+        "id": "bldg-hall-11",
+        "west": 106.6983319,
+        "south": 10.7728261,
+        "east": 106.6984572,
+        "north": 10.7729671
+      },
+      {
+        "id": "bldg-hall-w-00",
+        "west": 106.6975885,
+        "south": 10.7726437,
+        "east": 106.6977092,
+        "north": 10.7727848
+      },
+      {
+        "id": "bldg-hall-w-01",
+        "west": 106.6977513,
+        "south": 10.7726437,
+        "east": 106.697872,
+        "north": 10.7727848
+      },
+      {
+        "id": "bldg-hall-w-10",
+        "west": 106.6975885,
+        "south": 10.7728261,
+        "east": 106.6977092,
+        "north": 10.7729671
+      },
+      {
+        "id": "bldg-hall-w-11",
+        "west": 106.6977513,
+        "south": 10.7728261,
+        "east": 106.697872,
+        "north": 10.7729671
+      },
+      {
+        "id": "bldg-hall-se-00",
+        "west": 106.6981646,
+        "south": 10.7722754,
+        "east": 106.6982899,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-hall-se-01",
+        "west": 106.6983319,
+        "south": 10.7722754,
+        "east": 106.6984572,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-hall-sw-00",
+        "west": 106.6975885,
+        "south": 10.7722754,
+        "east": 106.6977092,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-hall-sw-01",
+        "west": 106.6977513,
+        "south": 10.7722754,
+        "east": 106.697872,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-west-block",
+        "west": 106.6964455,
+        "south": 10.7720508,
+        "east": 106.696646,
+        "north": 10.7721829
+      },
+      {
+        "id": "bldg-west-01",
+        "west": 106.6966881,
+        "south": 10.7720508,
+        "east": 106.6968887,
+        "north": 10.7721829
+      },
+      {
+        "id": "bldg-west-02",
+        "west": 106.6969307,
+        "south": 10.7720508,
+        "east": 106.6971313,
+        "north": 10.7721829
+      },
+      {
+        "id": "bldg-west-10",
+        "west": 106.6964455,
+        "south": 10.7722242,
+        "east": 106.696646,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-west-11",
+        "west": 106.6966881,
+        "south": 10.7722242,
+        "east": 106.6968887,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-west-12",
+        "west": 106.6969307,
+        "south": 10.7722242,
+        "east": 106.6971313,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-west-n-00",
+        "west": 106.6964455,
+        "south": 10.7726437,
+        "east": 106.696646,
+        "north": 10.7729042
+      },
+      {
+        "id": "bldg-west-n-01",
+        "west": 106.6966881,
+        "south": 10.7726437,
+        "east": 106.6968887,
+        "north": 10.7729042
+      },
+      {
+        "id": "bldg-west-n-02",
+        "west": 106.6969307,
+        "south": 10.7726437,
+        "east": 106.6971313,
+        "north": 10.7729042
+      },
+      {
+        "id": "bldg-east-arcade",
+        "west": 106.6988687,
+        "south": 10.7716915,
+        "east": 106.6990693,
+        "north": 10.7718856
+      },
+      {
+        "id": "bldg-east-01",
+        "west": 106.6991113,
+        "south": 10.7716915,
+        "east": 106.6993119,
+        "north": 10.7718856
+      },
+      {
+        "id": "bldg-east-02",
+        "west": 106.699354,
+        "south": 10.7716915,
+        "east": 106.6995545,
+        "north": 10.7718856
+      },
+      {
+        "id": "bldg-east-10",
+        "west": 106.6988687,
+        "south": 10.7719269,
+        "east": 106.6990693,
+        "north": 10.7721209
+      },
+      {
+        "id": "bldg-east-11",
+        "west": 106.6991113,
+        "south": 10.7719269,
+        "east": 106.6993119,
+        "north": 10.7721209
+      },
+      {
+        "id": "bldg-east-12",
+        "west": 106.699354,
+        "south": 10.7719269,
+        "east": 106.6995545,
+        "north": 10.7721209
+      },
+      {
+        "id": "bldg-east-20",
+        "west": 106.6988687,
+        "south": 10.7721622,
+        "east": 106.6990693,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-east-21",
+        "west": 106.6991113,
+        "south": 10.7721622,
+        "east": 106.6993119,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-east-22",
+        "west": 106.699354,
+        "south": 10.7721622,
+        "east": 106.6995545,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-east-n-00",
+        "west": 106.6988687,
+        "south": 10.7726437,
+        "east": 106.6990693,
+        "north": 10.7727246
+      },
+      {
+        "id": "bldg-east-n-01",
+        "west": 106.6991113,
+        "south": 10.7726437,
+        "east": 106.6993119,
+        "north": 10.7727246
+      },
+      {
+        "id": "bldg-east-n-02",
+        "west": 106.699354,
+        "south": 10.7726437,
+        "east": 106.6995545,
+        "north": 10.7727246
+      },
+      {
+        "id": "bldg-north-stall",
+        "west": 106.6982012,
+        "south": 10.7731468,
+        "east": 106.6983926,
+        "north": 10.7733468
+      },
+      {
+        "id": "bldg-north-01",
+        "west": 106.6984347,
+        "south": 10.7731468,
+        "east": 106.6986261,
+        "north": 10.7733468
+      },
+      {
+        "id": "bldg-north-02",
+        "west": 106.6986681,
+        "south": 10.7731468,
+        "east": 106.6988596,
+        "north": 10.7733468
+      },
+      {
+        "id": "bldg-north-10",
+        "west": 106.6982012,
+        "south": 10.7733881,
+        "east": 106.6983926,
+        "north": 10.7735882
+      },
+      {
+        "id": "bldg-north-11",
+        "west": 106.6984347,
+        "south": 10.7733881,
+        "east": 106.6986261,
+        "north": 10.7735882
+      },
+      {
+        "id": "bldg-north-12",
+        "west": 106.6986681,
+        "south": 10.7733881,
+        "east": 106.6988596,
+        "north": 10.7735882
+      },
+      {
+        "id": "bldg-north-20",
+        "west": 106.6982012,
+        "south": 10.7736295,
+        "east": 106.6983926,
+        "north": 10.7738295
+      },
+      {
+        "id": "bldg-north-21",
+        "west": 106.6984347,
+        "south": 10.7736295,
+        "east": 106.6986261,
+        "north": 10.7738295
+      },
+      {
+        "id": "bldg-north-22",
+        "west": 106.6986681,
+        "south": 10.7736295,
+        "east": 106.6988596,
+        "north": 10.7738295
+      },
+      {
+        "id": "bldg-south-shed",
+        "west": 106.69768,
+        "south": 10.770928,
+        "east": 106.697872,
+        "north": 10.771101
+      },
+      {
+        "id": "bldg-south-10",
+        "west": 106.69768,
+        "south": 10.7711424,
+        "east": 106.697872,
+        "north": 10.7713154
+      },
+      {
+        "id": "bldg-south-20",
+        "west": 106.69768,
+        "south": 10.7713567,
+        "east": 106.697872,
+        "north": 10.7715298
+      },
+      {
+        "id": "bldg-south-e-00",
+        "west": 106.6981463,
+        "south": 10.770928,
+        "east": 106.6983658,
+        "north": 10.771101
+      },
+      {
+        "id": "bldg-south-e-10",
+        "west": 106.6981463,
+        "south": 10.7711424,
+        "east": 106.6983658,
+        "north": 10.7713154
+      },
+      {
+        "id": "bldg-south-e-20",
+        "west": 106.6981463,
+        "south": 10.7713567,
+        "east": 106.6983658,
+        "north": 10.7715298
+      },
+      {
+        "id": "bldg-steps-w-00",
+        "west": 106.6975611,
+        "south": 10.7716017,
+        "east": 106.6976955,
+        "north": 10.7717837
+      },
+      {
+        "id": "bldg-steps-w-01",
+        "west": 106.6977376,
+        "south": 10.7716017,
+        "east": 106.697872,
+        "north": 10.7717837
+      },
+      {
+        "id": "bldg-steps-w-10",
+        "west": 106.6975611,
+        "south": 10.7718251,
+        "east": 106.6976955,
+        "north": 10.7720071
+      },
+      {
+        "id": "bldg-steps-w-11",
+        "west": 106.6977376,
+        "south": 10.7718251,
+        "east": 106.697872,
+        "north": 10.7720071
+      },
+      {
+        "id": "bldg-steps-w-20",
+        "west": 106.6975611,
+        "south": 10.7720484,
+        "east": 106.6976955,
+        "north": 10.7722305
+      },
+      {
+        "id": "bldg-steps-w-21",
+        "west": 106.6977376,
+        "south": 10.7720484,
+        "east": 106.697872,
+        "north": 10.7722305
+      },
+      {
+        "id": "bldg-steps-e-00",
+        "west": 106.6981463,
+        "south": 10.7716017,
+        "east": 106.6982899,
+        "north": 10.7717837
+      },
+      {
+        "id": "bldg-steps-e-01",
+        "west": 106.6983319,
+        "south": 10.7716017,
+        "east": 106.6984755,
+        "north": 10.7717837
+      },
+      {
+        "id": "bldg-steps-e-10",
+        "west": 106.6981463,
+        "south": 10.7718251,
+        "east": 106.6982899,
+        "north": 10.7720071
+      },
+      {
+        "id": "bldg-steps-e-11",
+        "west": 106.6983319,
+        "south": 10.7718251,
+        "east": 106.6984755,
+        "north": 10.7720071
+      },
+      {
+        "id": "bldg-steps-e-20",
+        "west": 106.6981463,
+        "south": 10.7720484,
+        "east": 106.6982899,
+        "north": 10.7722305
+      },
+      {
+        "id": "bldg-steps-e-21",
+        "west": 106.6983319,
+        "south": 10.7720484,
+        "east": 106.6984755,
+        "north": 10.7722305
+      }
+    ],
+    "honesty": "Authored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:1 city. NOT_PLAN_PASS.\n\nFriend bodies are a this-machine local demo (tabs or browser profiles on 4175). Not a city presence server. Position is in-app, not GPS. NOT_PLAN_PASS.",
+    "mode": "Offline — Stroll alone; shops still open.",
+    "shopMarker": true,
+    "gtaClaim": false
+  },
+  "atWall": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/?seat=a",
+    "playReady": "yes",
+    "playEngine": "r3f",
+    "playCanvas": true,
+    "avatar": {
+      "lon": 106.6981412,
+      "lat": 10.7717354,
+      "heading": 90,
+      "pose": "idle",
+      "groundY": "0",
+      "insideAabb": "0",
+      "blocked": "0",
+      "collision": "aabb-radius"
+    },
+    "proof": {
+      "camera": "behind",
+      "follow": "heading",
+      "heading": 89.8,
+      "camYaw": 89.8,
+      "buildings": 60,
+      "extruded": "footprint",
+      "collision": "aabb-radius",
+      "groundY": "0",
+      "insideAabb": "0",
+      "blocked": "0",
+      "hitBuilding": ""
+    },
+    "boxes": [
+      {
+        "id": "bldg-market-hall",
+        "west": 106.6981646,
+        "south": 10.7726437,
+        "east": 106.6982899,
+        "north": 10.7727848
+      },
+      {
+        "id": "bldg-hall-01",
+        "west": 106.6983319,
+        "south": 10.7726437,
+        "east": 106.6984572,
+        "north": 10.7727848
+      },
+      {
+        "id": "bldg-hall-10",
+        "west": 106.6981646,
+        "south": 10.7728261,
+        "east": 106.6982899,
+        "north": 10.7729671
+      },
+      {
+        "id": "bldg-hall-11",
+        "west": 106.6983319,
+        "south": 10.7728261,
+        "east": 106.6984572,
+        "north": 10.7729671
+      },
+      {
+        "id": "bldg-hall-w-00",
+        "west": 106.6975885,
+        "south": 10.7726437,
+        "east": 106.6977092,
+        "north": 10.7727848
+      },
+      {
+        "id": "bldg-hall-w-01",
+        "west": 106.6977513,
+        "south": 10.7726437,
+        "east": 106.697872,
+        "north": 10.7727848
+      },
+      {
+        "id": "bldg-hall-w-10",
+        "west": 106.6975885,
+        "south": 10.7728261,
+        "east": 106.6977092,
+        "north": 10.7729671
+      },
+      {
+        "id": "bldg-hall-w-11",
+        "west": 106.6977513,
+        "south": 10.7728261,
+        "east": 106.697872,
+        "north": 10.7729671
+      },
+      {
+        "id": "bldg-hall-se-00",
+        "west": 106.6981646,
+        "south": 10.7722754,
+        "east": 106.6982899,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-hall-se-01",
+        "west": 106.6983319,
+        "south": 10.7722754,
+        "east": 106.6984572,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-hall-sw-00",
+        "west": 106.6975885,
+        "south": 10.7722754,
+        "east": 106.6977092,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-hall-sw-01",
+        "west": 106.6977513,
+        "south": 10.7722754,
+        "east": 106.697872,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-west-block",
+        "west": 106.6964455,
+        "south": 10.7720508,
+        "east": 106.696646,
+        "north": 10.7721829
+      },
+      {
+        "id": "bldg-west-01",
+        "west": 106.6966881,
+        "south": 10.7720508,
+        "east": 106.6968887,
+        "north": 10.7721829
+      },
+      {
+        "id": "bldg-west-02",
+        "west": 106.6969307,
+        "south": 10.7720508,
+        "east": 106.6971313,
+        "north": 10.7721829
+      },
+      {
+        "id": "bldg-west-10",
+        "west": 106.6964455,
+        "south": 10.7722242,
+        "east": 106.696646,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-west-11",
+        "west": 106.6966881,
+        "south": 10.7722242,
+        "east": 106.6968887,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-west-12",
+        "west": 106.6969307,
+        "south": 10.7722242,
+        "east": 106.6971313,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-west-n-00",
+        "west": 106.6964455,
+        "south": 10.7726437,
+        "east": 106.696646,
+        "north": 10.7729042
+      },
+      {
+        "id": "bldg-west-n-01",
+        "west": 106.6966881,
+        "south": 10.7726437,
+        "east": 106.6968887,
+        "north": 10.7729042
+      },
+      {
+        "id": "bldg-west-n-02",
+        "west": 106.6969307,
+        "south": 10.7726437,
+        "east": 106.6971313,
+        "north": 10.7729042
+      },
+      {
+        "id": "bldg-east-arcade",
+        "west": 106.6988687,
+        "south": 10.7716915,
+        "east": 106.6990693,
+        "north": 10.7718856
+      },
+      {
+        "id": "bldg-east-01",
+        "west": 106.6991113,
+        "south": 10.7716915,
+        "east": 106.6993119,
+        "north": 10.7718856
+      },
+      {
+        "id": "bldg-east-02",
+        "west": 106.699354,
+        "south": 10.7716915,
+        "east": 106.6995545,
+        "north": 10.7718856
+      },
+      {
+        "id": "bldg-east-10",
+        "west": 106.6988687,
+        "south": 10.7719269,
+        "east": 106.6990693,
+        "north": 10.7721209
+      },
+      {
+        "id": "bldg-east-11",
+        "west": 106.6991113,
+        "south": 10.7719269,
+        "east": 106.6993119,
+        "north": 10.7721209
+      },
+      {
+        "id": "bldg-east-12",
+        "west": 106.699354,
+        "south": 10.7719269,
+        "east": 106.6995545,
+        "north": 10.7721209
+      },
+      {
+        "id": "bldg-east-20",
+        "west": 106.6988687,
+        "south": 10.7721622,
+        "east": 106.6990693,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-east-21",
+        "west": 106.6991113,
+        "south": 10.7721622,
+        "east": 106.6993119,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-east-22",
+        "west": 106.699354,
+        "south": 10.7721622,
+        "east": 106.6995545,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-east-n-00",
+        "west": 106.6988687,
+        "south": 10.7726437,
+        "east": 106.6990693,
+        "north": 10.7727246
+      },
+      {
+        "id": "bldg-east-n-01",
+        "west": 106.6991113,
+        "south": 10.7726437,
+        "east": 106.6993119,
+        "north": 10.7727246
+      },
+      {
+        "id": "bldg-east-n-02",
+        "west": 106.699354,
+        "south": 10.7726437,
+        "east": 106.6995545,
+        "north": 10.7727246
+      },
+      {
+        "id": "bldg-north-stall",
+        "west": 106.6982012,
+        "south": 10.7731468,
+        "east": 106.6983926,
+        "north": 10.7733468
+      },
+      {
+        "id": "bldg-north-01",
+        "west": 106.6984347,
+        "south": 10.7731468,
+        "east": 106.6986261,
+        "north": 10.7733468
+      },
+      {
+        "id": "bldg-north-02",
+        "west": 106.6986681,
+        "south": 10.7731468,
+        "east": 106.6988596,
+        "north": 10.7733468
+      },
+      {
+        "id": "bldg-north-10",
+        "west": 106.6982012,
+        "south": 10.7733881,
+        "east": 106.6983926,
+        "north": 10.7735882
+      },
+      {
+        "id": "bldg-north-11",
+        "west": 106.6984347,
+        "south": 10.7733881,
+        "east": 106.6986261,
+        "north": 10.7735882
+      },
+      {
+        "id": "bldg-north-12",
+        "west": 106.6986681,
+        "south": 10.7733881,
+        "east": 106.6988596,
+        "north": 10.7735882
+      },
+      {
+        "id": "bldg-north-20",
+        "west": 106.6982012,
+        "south": 10.7736295,
+        "east": 106.6983926,
+        "north": 10.7738295
+      },
+      {
+        "id": "bldg-north-21",
+        "west": 106.6984347,
+        "south": 10.7736295,
+        "east": 106.6986261,
+        "north": 10.7738295
+      },
+      {
+        "id": "bldg-north-22",
+        "west": 106.6986681,
+        "south": 10.7736295,
+        "east": 106.6988596,
+        "north": 10.7738295
+      },
+      {
+        "id": "bldg-south-shed",
+        "west": 106.69768,
+        "south": 10.770928,
+        "east": 106.697872,
+        "north": 10.771101
+      },
+      {
+        "id": "bldg-south-10",
+        "west": 106.69768,
+        "south": 10.7711424,
+        "east": 106.697872,
+        "north": 10.7713154
+      },
+      {
+        "id": "bldg-south-20",
+        "west": 106.69768,
+        "south": 10.7713567,
+        "east": 106.697872,
+        "north": 10.7715298
+      },
+      {
+        "id": "bldg-south-e-00",
+        "west": 106.6981463,
+        "south": 10.770928,
+        "east": 106.6983658,
+        "north": 10.771101
+      },
+      {
+        "id": "bldg-south-e-10",
+        "west": 106.6981463,
+        "south": 10.7711424,
+        "east": 106.6983658,
+        "north": 10.7713154
+      },
+      {
+        "id": "bldg-south-e-20",
+        "west": 106.6981463,
+        "south": 10.7713567,
+        "east": 106.6983658,
+        "north": 10.7715298
+      },
+      {
+        "id": "bldg-steps-w-00",
+        "west": 106.6975611,
+        "south": 10.7716017,
+        "east": 106.6976955,
+        "north": 10.7717837
+      },
+      {
+        "id": "bldg-steps-w-01",
+        "west": 106.6977376,
+        "south": 10.7716017,
+        "east": 106.697872,
+        "north": 10.7717837
+      },
+      {
+        "id": "bldg-steps-w-10",
+        "west": 106.6975611,
+        "south": 10.7718251,
+        "east": 106.6976955,
+        "north": 10.7720071
+      },
+      {
+        "id": "bldg-steps-w-11",
+        "west": 106.6977376,
+        "south": 10.7718251,
+        "east": 106.697872,
+        "north": 10.7720071
+      },
+      {
+        "id": "bldg-steps-w-20",
+        "west": 106.6975611,
+        "south": 10.7720484,
+        "east": 106.6976955,
+        "north": 10.7722305
+      },
+      {
+        "id": "bldg-steps-w-21",
+        "west": 106.6977376,
+        "south": 10.7720484,
+        "east": 106.697872,
+        "north": 10.7722305
+      },
+      {
+        "id": "bldg-steps-e-00",
+        "west": 106.6981463,
+        "south": 10.7716017,
+        "east": 106.6982899,
+        "north": 10.7717837
+      },
+      {
+        "id": "bldg-steps-e-01",
+        "west": 106.6983319,
+        "south": 10.7716017,
+        "east": 106.6984755,
+        "north": 10.7717837
+      },
+      {
+        "id": "bldg-steps-e-10",
+        "west": 106.6981463,
+        "south": 10.7718251,
+        "east": 106.6982899,
+        "north": 10.7720071
+      },
+      {
+        "id": "bldg-steps-e-11",
+        "west": 106.6983319,
+        "south": 10.7718251,
+        "east": 106.6984755,
+        "north": 10.7720071
+      },
+      {
+        "id": "bldg-steps-e-20",
+        "west": 106.6981463,
+        "south": 10.7720484,
+        "east": 106.6982899,
+        "north": 10.7722305
+      },
+      {
+        "id": "bldg-steps-e-21",
+        "west": 106.6983319,
+        "south": 10.7720484,
+        "east": 106.6984755,
+        "north": 10.7722305
+      }
+    ],
+    "honesty": "Authored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:1 city. NOT_PLAN_PASS.\n\nFriend bodies are a this-machine local demo (tabs or browser profiles on 4175). Not a city presence server. Position is in-app, not GPS. NOT_PLAN_PASS.",
+    "mode": "Offline — Stroll alone; shops still open.",
+    "shopMarker": true,
+    "gtaClaim": false
+  },
+  "still": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/?seat=a",
+    "playReady": "yes",
+    "playEngine": "r3f",
+    "playCanvas": true,
+    "avatar": {
+      "lon": 106.6981412,
+      "lat": 10.7717355,
+      "heading": 90,
+      "pose": "idle",
+      "groundY": "0",
+      "insideAabb": "0",
+      "blocked": "0",
+      "collision": "aabb-radius"
+    },
+    "proof": {
+      "camera": "behind",
+      "follow": "heading",
+      "heading": 89.8,
+      "camYaw": 89.8,
+      "buildings": 60,
+      "extruded": "footprint",
+      "collision": "aabb-radius",
+      "groundY": "0",
+      "insideAabb": "0",
+      "blocked": "0",
+      "hitBuilding": ""
+    },
+    "boxes": [
+      {
+        "id": "bldg-market-hall",
+        "west": 106.6981646,
+        "south": 10.7726437,
+        "east": 106.6982899,
+        "north": 10.7727848
+      },
+      {
+        "id": "bldg-hall-01",
+        "west": 106.6983319,
+        "south": 10.7726437,
+        "east": 106.6984572,
+        "north": 10.7727848
+      },
+      {
+        "id": "bldg-hall-10",
+        "west": 106.6981646,
+        "south": 10.7728261,
+        "east": 106.6982899,
+        "north": 10.7729671
+      },
+      {
+        "id": "bldg-hall-11",
+        "west": 106.6983319,
+        "south": 10.7728261,
+        "east": 106.6984572,
+        "north": 10.7729671
+      },
+      {
+        "id": "bldg-hall-w-00",
+        "west": 106.6975885,
+        "south": 10.7726437,
+        "east": 106.6977092,
+        "north": 10.7727848
+      },
+      {
+        "id": "bldg-hall-w-01",
+        "west": 106.6977513,
+        "south": 10.7726437,
+        "east": 106.697872,
+        "north": 10.7727848
+      },
+      {
+        "id": "bldg-hall-w-10",
+        "west": 106.6975885,
+        "south": 10.7728261,
+        "east": 106.6977092,
+        "north": 10.7729671
+      },
+      {
+        "id": "bldg-hall-w-11",
+        "west": 106.6977513,
+        "south": 10.7728261,
+        "east": 106.697872,
+        "north": 10.7729671
+      },
+      {
+        "id": "bldg-hall-se-00",
+        "west": 106.6981646,
+        "south": 10.7722754,
+        "east": 106.6982899,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-hall-se-01",
+        "west": 106.6983319,
+        "south": 10.7722754,
+        "east": 106.6984572,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-hall-sw-00",
+        "west": 106.6975885,
+        "south": 10.7722754,
+        "east": 106.6977092,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-hall-sw-01",
+        "west": 106.6977513,
+        "south": 10.7722754,
+        "east": 106.697872,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-west-block",
+        "west": 106.6964455,
+        "south": 10.7720508,
+        "east": 106.696646,
+        "north": 10.7721829
+      },
+      {
+        "id": "bldg-west-01",
+        "west": 106.6966881,
+        "south": 10.7720508,
+        "east": 106.6968887,
+        "north": 10.7721829
+      },
+      {
+        "id": "bldg-west-02",
+        "west": 106.6969307,
+        "south": 10.7720508,
+        "east": 106.6971313,
+        "north": 10.7721829
+      },
+      {
+        "id": "bldg-west-10",
+        "west": 106.6964455,
+        "south": 10.7722242,
+        "east": 106.696646,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-west-11",
+        "west": 106.6966881,
+        "south": 10.7722242,
+        "east": 106.6968887,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-west-12",
+        "west": 106.6969307,
+        "south": 10.7722242,
+        "east": 106.6971313,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-west-n-00",
+        "west": 106.6964455,
+        "south": 10.7726437,
+        "east": 106.696646,
+        "north": 10.7729042
+      },
+      {
+        "id": "bldg-west-n-01",
+        "west": 106.6966881,
+        "south": 10.7726437,
+        "east": 106.6968887,
+        "north": 10.7729042
+      },
+      {
+        "id": "bldg-west-n-02",
+        "west": 106.6969307,
+        "south": 10.7726437,
+        "east": 106.6971313,
+        "north": 10.7729042
+      },
+      {
+        "id": "bldg-east-arcade",
+        "west": 106.6988687,
+        "south": 10.7716915,
+        "east": 106.6990693,
+        "north": 10.7718856
+      },
+      {
+        "id": "bldg-east-01",
+        "west": 106.6991113,
+        "south": 10.7716915,
+        "east": 106.6993119,
+        "north": 10.7718856
+      },
+      {
+        "id": "bldg-east-02",
+        "west": 106.699354,
+        "south": 10.7716915,
+        "east": 106.6995545,
+        "north": 10.7718856
+      },
+      {
+        "id": "bldg-east-10",
+        "west": 106.6988687,
+        "south": 10.7719269,
+        "east": 106.6990693,
+        "north": 10.7721209
+      },
+      {
+        "id": "bldg-east-11",
+        "west": 106.6991113,
+        "south": 10.7719269,
+        "east": 106.6993119,
+        "north": 10.7721209
+      },
+      {
+        "id": "bldg-east-12",
+        "west": 106.699354,
+        "south": 10.7719269,
+        "east": 106.6995545,
+        "north": 10.7721209
+      },
+      {
+        "id": "bldg-east-20",
+        "west": 106.6988687,
+        "south": 10.7721622,
+        "east": 106.6990693,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-east-21",
+        "west": 106.6991113,
+        "south": 10.7721622,
+        "east": 106.6993119,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-east-22",
+        "west": 106.699354,
+        "south": 10.7721622,
+        "east": 106.6995545,
+        "north": 10.7723563
+      },
+      {
+        "id": "bldg-east-n-00",
+        "west": 106.6988687,
+        "south": 10.7726437,
+        "east": 106.6990693,
+        "north": 10.7727246
+      },
+      {
+        "id": "bldg-east-n-01",
+        "west": 106.6991113,
+        "south": 10.7726437,
+        "east": 106.6993119,
+        "north": 10.7727246
+      },
+      {
+        "id": "bldg-east-n-02",
+        "west": 106.699354,
+        "south": 10.7726437,
+        "east": 106.6995545,
+        "north": 10.7727246
+      },
+      {
+        "id": "bldg-north-stall",
+        "west": 106.6982012,
+        "south": 10.7731468,
+        "east": 106.6983926,
+        "north": 10.7733468
+      },
+      {
+        "id": "bldg-north-01",
+        "west": 106.6984347,
+        "south": 10.7731468,
+        "east": 106.6986261,
+        "north": 10.7733468
+      },
+      {
+        "id": "bldg-north-02",
+        "west": 106.6986681,
+        "south": 10.7731468,
+        "east": 106.6988596,
+        "north": 10.7733468
+      },
+      {
+        "id": "bldg-north-10",
+        "west": 106.6982012,
+        "south": 10.7733881,
+        "east": 106.6983926,
+        "north": 10.7735882
+      },
+      {
+        "id": "bldg-north-11",
+        "west": 106.6984347,
+        "south": 10.7733881,
+        "east": 106.6986261,
+        "north": 10.7735882
+      },
+      {
+        "id": "bldg-north-12",
+        "west": 106.6986681,
+        "south": 10.7733881,
+        "east": 106.6988596,
+        "north": 10.7735882
+      },
+      {
+        "id": "bldg-north-20",
+        "west": 106.6982012,
+        "south": 10.7736295,
+        "east": 106.6983926,
+        "north": 10.7738295
+      },
+      {
+        "id": "bldg-north-21",
+        "west": 106.6984347,
+        "south": 10.7736295,
+        "east": 106.6986261,
+        "north": 10.7738295
+      },
+      {
+        "id": "bldg-north-22",
+        "west": 106.6986681,
+        "south": 10.7736295,
+        "east": 106.6988596,
+        "north": 10.7738295
+      },
+      {
+        "id": "bldg-south-shed",
+        "west": 106.69768,
+        "south": 10.770928,
+        "east": 106.697872,
+        "north": 10.771101
+      },
+      {
+        "id": "bldg-south-10",
+        "west": 106.69768,
+        "south": 10.7711424,
+        "east": 106.697872,
+        "north": 10.7713154
+      },
+      {
+        "id": "bldg-south-20",
+        "west": 106.69768,
+        "south": 10.7713567,
+        "east": 106.697872,
+        "north": 10.7715298
+      },
+      {
+        "id": "bldg-south-e-00",
+        "west": 106.6981463,
+        "south": 10.770928,
+        "east": 106.6983658,
+        "north": 10.771101
+      },
+      {
+        "id": "bldg-south-e-10",
+        "west": 106.6981463,
+        "south": 10.7711424,
+        "east": 106.6983658,
+        "north": 10.7713154
+      },
+      {
+        "id": "bldg-south-e-20",
+        "west": 106.6981463,
+        "south": 10.7713567,
+        "east": 106.6983658,
+        "north": 10.7715298
+      },
+      {
+        "id": "bldg-steps-w-00",
+        "west": 106.6975611,
+        "south": 10.7716017,
+        "east": 106.6976955,
+        "north": 10.7717837
+      },
+      {
+        "id": "bldg-steps-w-01",
+        "west": 106.6977376,
+        "south": 10.7716017,
+        "east": 106.697872,
+        "north": 10.7717837
+      },
+      {
+        "id": "bldg-steps-w-10",
+        "west": 106.6975611,
+        "south": 10.7718251,
+        "east": 106.6976955,
+        "north": 10.7720071
+      },
+      {
+        "id": "bldg-steps-w-11",
+        "west": 106.6977376,
+        "south": 10.7718251,
+        "east": 106.697872,
+        "north": 10.7720071
+      },
+      {
+        "id": "bldg-steps-w-20",
+        "west": 106.6975611,
+        "south": 10.7720484,
+        "east": 106.6976955,
+        "north": 10.7722305
+      },
+      {
+        "id": "bldg-steps-w-21",
+        "west": 106.6977376,
+        "south": 10.7720484,
+        "east": 106.697872,
+        "north": 10.7722305
+      },
+      {
+        "id": "bldg-steps-e-00",
+        "west": 106.6981463,
+        "south": 10.7716017,
+        "east": 106.6982899,
+        "north": 10.7717837
+      },
+      {
+        "id": "bldg-steps-e-01",
+        "west": 106.6983319,
+        "south": 10.7716017,
+        "east": 106.6984755,
+        "north": 10.7717837
+      },
+      {
+        "id": "bldg-steps-e-10",
+        "west": 106.6981463,
+        "south": 10.7718251,
+        "east": 106.6982899,
+        "north": 10.7720071
+      },
+      {
+        "id": "bldg-steps-e-11",
+        "west": 106.6983319,
+        "south": 10.7718251,
+        "east": 106.6984755,
+        "north": 10.7720071
+      },
+      {
+        "id": "bldg-steps-e-20",
+        "west": 106.6981463,
+        "south": 10.7720484,
+        "east": 106.6982899,
+        "north": 10.7722305
+      },
+      {
+        "id": "bldg-steps-e-21",
+        "west": 106.6983319,
+        "south": 10.7720484,
+        "east": 106.6984755,
+        "north": 10.7722305
+      }
+    ],
+    "honesty": "Authored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:1 city. NOT_PLAN_PASS.\n\nFriend bodies are a this-machine local demo (tabs or browser profiles on 4175). Not a city presence server. Position is in-app, not GPS. NOT_PLAN_PASS.",
+    "mode": "Offline — Stroll alone; shops still open.",
+    "shopMarker": true,
+    "gtaClaim": false
+  },
+  "shot": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-wall.png"
+}

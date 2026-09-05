@@ -1,0 +1,142 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=12:37 +07
+ROLE=IMPLEMENTER
+TICK=n/a (do not treat this file as TICK=yes)
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M1=1
+NOT_M0_WP1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+PLAYER_URL=http://127.0.0.1:4175/
+RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-25
+COMMAND=node hh-3d/app/data-qa/j5-nonet-draft-probe.mjs
+VERDICT_IMPLEMENTER_CDP=J5_NONET_DRAFT_OK
+LIVE_JS=/assets/index-D4Sc2h68.js
+LIVE_JS_LEN=2162025
+LIVE_JS_SHA256=76f9843d6e8cff47bc683e55bea928ac36797054d601a1e6f4ceec9ace4c64b2
+DID_NOT_REMINT=1
+DID_NOT_RECYCLE=1
+DID_NOT_REBUILD=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NO_COMMIT=1
+NO_HIP_SPHERES=1
+DID_NOT_RIP_LANTERN_BOARD=1
+DID_NOT_RIP_HARBOR_STEPS_CROSSING=1
+DID_NOT_RIP_DEFERRED_MINIMAP=1
+DID_NOT_RIP_WARMUP=1
+DID_NOT_RIP_FRIEND_STEPS=1
+DID_NOT_RIP_90M_LOD=1
+DID_NOT_RIP_HUD=1
+DID_NOT_RIP_PLAQUES=1
+DID_NOT_RIP_LANES=1
+DID_NOT_RIP_FOG_EDGE=1
+DID_NOT_RIP_STREET_PLAY_SHOPS=1
+DID_NOT_RIP_SKY=1
+DID_NOT_RIP_CAM_HIT=1
+DID_NOT_CLICK_NETWORK_CUT_CHECKBOX=1
+DID_NOT_CLICK_RETRY=1
+DELETED_TEST_DRAFT=1
+NO_NEW_SHOP_SERVER=1
+NO_INTERIOR=1
+NO_MAP_FETCH=1
+ACCEPTED_PRIOR=CRITIC-3D-OWNER-OFF-BOARD-REAUDIT-2026-09-04.txt TICK=yes on /assets/index-D4Sc2h68.js
+
+================================================================================
+SLICE
+================================================================================
+
+Lost network is not social Offline. Isolated seat stayed Offline
+stroll. CDP Network.emulateNetworkConditions set
+navigator.onLine=false (not the ModeBar / shop checkbox).
+A new listing on Quầy Phở Nhà must stay Chưa đăng / off the
+chalkboard. UI must not say đã đăng. The already-loaded public
+Phở cache must stay (Bản lưu lúc / Listing updated).
+
+Already true. Did not remint. networkAllowsPublish(false, *)
+writes status=draft queued=true. publicListings /
+stallBoardTitles keep drafts off the shelf and board.
+publishedShopCatalog drops drafts before /demo-bus. Catalog
+load is not cleared when the browser goes offline after a
+successful shops.json fetch.
+
+Did not rip lantern Cá/Túi, Harbor×Steps crossing, deferred
+minimap, friend steps, LOD, HUD chip, plaques, lanes, fog/edge,
+streetPlayShops, sky, or cam-hit.
+
+================================================================================
+CDP (headless Chrome isolated seat A, 1280×720, already-up 4175 pid 68116)
+================================================================================
+
+Isolated temp profile. about:blank then ?seat=a.
+Did not click Online. Did not click Simulate no-network.
+Did not catalog_clear. Did not publish the test draft.
+
+Load first (cache):
+  playReady=yes  buildings>=20
+  public shop list still has shop-local-mtmh45qxehxhvb
+  goods-loaded-at = Bản lưu lúc 2026-09-04T05:37:01
+  Listing updated present on the Phở panel
+
+Become Chủ quầy (máy này). Stay Offline.
+Board titles before = Phở bò (mẫu)
+
+CDP Network.emulateNetworkConditions offline=true
+  navigator.onLine=false
+  list-product-form data-network=off
+  Connection: browser offline. Showing the local copy if it
+  already loaded; otherwise Chưa tải.
+  network-cut-sim unchecked
+  shop-network-cut unchecked
+  presence still Offline — Stroll alone; shops still open.
+
+List "Bun Nonet Probe 0904" on shop-local-mtmh45qxehxhvb:
+  result status=draft id=listing-local-mtmiussnmg9gwz
+  text=Chưa đăng — nháp chờ mạng. Not posted.
+  owner-drafts queued=yes  Chưa đăng
+  daDang=false
+  board after = Phở bò (mẫu)   (no Bun Nonet)
+  shelf published rows did not gain the draft name
+  /demo-bus listings did not gain the draft
+
+Restore online (CDP offline=false + online event):
+  form data-network=on
+  Retry publish (this machine) enabled
+  draft still Chưa đăng until explicit retry
+  board still Phở bò (mẫu)
+  Did not click retry (would publish onto this-PC persist).
+  Deleted the isolated localStorage draft. Left demo owner.
+
+leftover persist (unchanged, draw keep-out as before):
+  shop-local-sharedpc          Quầy Shared PC
+  shop-local-mtl8ulddihjpre    Quay Critic J6 Jump
+  shop-local-mtmh45qxehxhvb    Quầy Phở Nhà  published  Phở bò
+
+Live JS still /assets/index-D4Sc2h68.js 2162025
+sha256=76f9843d6e8cff47bc683e55bea928ac36797054d601a1e6f4ceec9ace4c64b2
+Did not recycle / rebuild / typecheck / test. Hash unchanged.
+Did not start 4173 / 4174 / 5175. Did not bind 0.0.0.0.
+
+================================================================================
+HONESTY
+================================================================================
+
+This is the this-PC 4175 /demo-bus catalog, not a city shop
+server, not WAN, not OIDC. Lost-network is navigator.onLine,
+not social Offline. A queued draft is local-only until an
+explicit retry after the browser is online again. Cached
+published Phở stays. Leftover Shared PC / J6 stay persist-only.
+NOT GATE-U1. NOT_PLAN_PASS. Not an M1 tick.
+
+================================================================================
+END
+================================================================================

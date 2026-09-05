@@ -1,0 +1,86 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=19:20 +07
+ROLE=IMPLEMENTER
+TICK=n/a (do not treat this file as TICK=yes)
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M0_WP1=1
+NOT_M1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+PLAYER_URL=http://127.0.0.1:4175/
+RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-42
+COMMAND=node hh-3d/app/data-qa/j5-shelf-minimap-probe.mjs
+VERDICT_IMPLEMENTER_CDP=J5_SHELF_MINIMAP_OK
+LIVE_JS=/assets/index-DEBo1VKU.js
+LIVE_JS_LEN=2171029
+LIVE_JS_SHA256=17695ddc17e581e5892a0c2d35f843f2eb791c17da3120062a58b18933d99872
+LISTEN=127.0.0.1:4175
+LIVE_PID=44892
+REMINTED=yes
+ONE_RECYCLE_AFTER_BUILD=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NO_COMMIT=1
+NO_FIFTH_STREET=1
+PRIOR_TICK_NO=CRITIC-3D-SHELF-MINIMAP-REAUDIT-2026-09-04.txt on CIj9td8A
+
+================================================================================
+SLICE
+================================================================================
+
+Independent critic TICK=no on CIj9td8A hunt 4: lantern shelf no
+longer covered the 184×134 widget (overlap 0), but after recenter
+the in-widget MapLibre attribution card hid lantern / Phở / Kem.
+Only the Chè blue mark stayed player-visible (purple count 0).
+
+This remint does not add AttributionControl on the corner map.
+Caption is “2D · not OSM”. CSS hides leftover attrib chrome.
+HUD honesty banner still denies GTA / 1:1 / digital twin.
+
+Shelf vs wrap overlap stays 0. Four street-play marks still
+listed. Leftover Shared PC / J6 stay off the 2D marks.
+Did not catalog_clear. Did not rip defer, Nearby/E, leftover
+banners, or shop-dot layer.
+
+================================================================================
+CDP (headless Chrome, 1280×720, isolated guest B, recycled 4175)
+================================================================================
+
+Live JS after one recycle (old pid 43236 → listen 127.0.0.1:4175
+pid 44892):
+  /assets/index-DEBo1VKU.js
+  LEN=2171029
+  SHA256=17695ddc17e581e5892a0c2d35f843f2eb791c17da3120062a58b18933d99872
+
+Lantern E: nearby=shop-lantern-fish leftover banner absent
+  wrap vs panel overlap=0
+  attribVisible=0  wrapAttrib=caption
+  marks: lantern, Phở, Chè, Kem
+Leftover Shared PC: banner present, overlap=0
+
+Shot=hh-3d/app/data-qa/j5-3d-shelf-minimap.png
+Probe=hh-3d/app/data-qa/j5-shelf-minimap-probe.mjs
+JSON=hh-3d/app/data-qa/J5-SHELF-MINIMAP-2026-09-04.txt
+
+Implementer CDP only. Not an independent critic TICK. Not a plan tick.
+
+================================================================================
+OWNER LEFTOVERS (unchanged)
+================================================================================
+
+1. GATE-U1 three-human review (first acceptance leftover; not faked).
+2. R2-WP1 headed/mobile/memory/min-FPS thresholds still UNFILLED.
+3. WAN / other-PC join still not built. 4175 loopback only.
+4. R4-WP0B real account/OIDC still not built.
+5. Open data (OSM/Overture) still needs license ledger + grant.
+6. Leftover this-PC shops stay in the catalog; they do not own street E.
+7. M0/M1/M2 plan WPs still NOT_STARTED. NOT_PLAN_PASS. Not M1.

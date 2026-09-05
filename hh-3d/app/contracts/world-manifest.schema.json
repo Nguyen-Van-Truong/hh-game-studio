@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "hh-world-manifest/v0",
+  "title": "HH World WorldManifest",
+  "type": "object",
+  "required": [
+    "schema",
+    "display_name",
+    "aoi_label",
+    "center",
+    "extent_m",
+    "acquired_at",
+    "generated_at",
+    "published_at",
+    "accuracy_class",
+    "authored_or_source",
+    "source_hash",
+    "artifact_hash",
+    "honesty"
+  ],
+  "properties": {
+    "schema": { "const": "hh-world-manifest/v0" },
+    "display_name": { "const": "HH World" },
+    "authored_or_source": { "enum": ["authored", "source"] },
+    "accuracy_class": { "enum": ["authored", "surveyed", "unknown"] },
+    "acquired_at": { "type": "string" },
+    "accessed_at": { "description": "forbidden as a twin of acquired_at" }
+  },
+  "not": { "required": ["accessed_at"] }
+}

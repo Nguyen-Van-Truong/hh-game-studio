@@ -1,0 +1,13 @@
+# Disposable sandbox. Never commit engine, cache, secrets, or downloads.
+unreal/
+Saved/
+Intermediate/
+DerivedDataCache/
+Binaries/
+*.uproject
+*.token
+*.env
+secrets/
+data/snapshots/
+data/raw/
+*.log

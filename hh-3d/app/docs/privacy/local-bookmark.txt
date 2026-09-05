@@ -1,0 +1,9 @@
+HH World privacy — local bookmark (no account)
+
+- Bookmarks stay in this browser's localStorage only.
+- No login. No cookie tracking. No cloud sync.
+- Allowed fields: schema version, place id, savedAt.
+- Reset clears that key. Export downloads the allowlisted JSON.
+- Precise personal location is not collected.
+- Share links only carry a public place id, not a GPS trace.
+- Legal owner / privacy owner names are still UNFILLED.

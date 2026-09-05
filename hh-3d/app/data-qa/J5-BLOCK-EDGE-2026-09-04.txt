@@ -1,0 +1,198 @@
+{
+  "run_id": "HH3D-J5-20260904-ASIA-SAIGON-05",
+  "player": "http://127.0.0.1:4175/",
+  "verdict": "J5_BLOCK_EDGE_OK",
+  "not_plan_pass": true,
+  "not_gate_u1": true,
+  "not_osm": true,
+  "not_wan": true,
+  "walkOn": true,
+  "lanternOk": true,
+  "shopClosedOk": true,
+  "leftoverOk": true,
+  "edgeDomOk": true,
+  "atBoundOk": true,
+  "noVoid": true,
+  "edgeVisible": true,
+  "honestyOk": true,
+  "keptOk": true,
+  "extraSouthM": 0.134,
+  "insideAoi": true,
+  "toward": {
+    "lat": 10.7707227,
+    "atBound": "1"
+  },
+  "atEdge": {
+    "title": "HH World",
+    "playReady": "yes",
+    "pose": "walk",
+    "sprint": "1",
+    "lon": 106.6980321,
+    "lat": 10.7707227,
+    "alt": 0,
+    "heading": 180,
+    "atBound": "1",
+    "blocked": "0",
+    "buildings": 60,
+    "sky": "gradient-hemisphere",
+    "fog": "distance-haze",
+    "fogNear": "58",
+    "fogFar": "155",
+    "blockEdge": "curb-wall-lot",
+    "blockBound": "fixture-edge",
+    "walls": "4",
+    "lots": "4",
+    "walkCycle": "opposite-stride",
+    "collision": "footprint-radius",
+    "scooters": "15",
+    "canvas": {
+      "w": 1280,
+      "h": 720
+    },
+    "play": {
+      "footsteps": "1",
+      "kind": "procedural-thump",
+      "ticks": "247"
+    },
+    "proof": {
+      "footsteps": "1",
+      "kind": "procedural-thump",
+      "ticks": "247"
+    },
+    "steps": {
+      "footsteps": "1",
+      "kind": "procedural-thump",
+      "ticks": "247"
+    },
+    "live": {
+      "kind": "procedural-thump",
+      "live": true,
+      "muted": false,
+      "reason": "",
+      "ticks": 247,
+      "foot": "left",
+      "sprint": true,
+      "lastGain": 0.22
+    },
+    "nearbyShop": "",
+    "stallHint": "E opens a stall when you are next to it.",
+    "shopRange": "Quầy Cá Đèn Lồng: 128 m away",
+    "shopPanel": false,
+    "shopPanelId": "",
+    "honesty": "Authored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:1 city. This 400 m frame ends at an authored wall — fixture edge, not a city. NOT_PLAN_PASS.\n\nFriend bodies use this PC's 4175 loopback store (two browsers here). Not a city shop server. Not a city presence server. Not another city's cloud. Not WAN. Not GPS. NOT_PLAN_PASS.",
+    "gtaClaim": false
+  },
+  "extra": {
+    "title": "HH World",
+    "playReady": "yes",
+    "pose": "walk",
+    "sprint": "1",
+    "lon": 106.6980317,
+    "lat": 10.7707215,
+    "alt": 0,
+    "heading": 180,
+    "atBound": "1",
+    "blocked": "0",
+    "buildings": 60,
+    "sky": "gradient-hemisphere",
+    "fog": "distance-haze",
+    "fogNear": "58",
+    "fogFar": "155",
+    "blockEdge": "curb-wall-lot",
+    "blockBound": "fixture-edge",
+    "walls": "4",
+    "lots": "4",
+    "walkCycle": "opposite-stride",
+    "collision": "footprint-radius",
+    "scooters": "15",
+    "canvas": {
+      "w": 1280,
+      "h": 720
+    },
+    "play": {
+      "footsteps": "1",
+      "kind": "procedural-thump",
+      "ticks": "256"
+    },
+    "proof": {
+      "footsteps": "1",
+      "kind": "procedural-thump",
+      "ticks": "256"
+    },
+    "steps": {
+      "footsteps": "1",
+      "kind": "procedural-thump",
+      "ticks": "256"
+    },
+    "live": {
+      "kind": "procedural-thump",
+      "live": true,
+      "muted": false,
+      "reason": "",
+      "ticks": 256,
+      "foot": "right",
+      "sprint": true,
+      "lastGain": 0.22
+    },
+    "nearbyShop": "",
+    "stallHint": "E opens a stall when you are next to it.",
+    "shopRange": "Quầy Cá Đèn Lồng: 128 m away",
+    "shopPanel": false,
+    "shopPanelId": "",
+    "honesty": "Authored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:1 city. This 400 m frame ends at an authored wall — fixture edge, not a city. NOT_PLAN_PASS.\n\nFriend bodies use this PC's 4175 loopback store (two browsers here). Not a city shop server. Not a city presence server. Not another city's cloud. Not WAN. Not GPS. NOT_PLAN_PASS.",
+    "gtaClaim": false
+  },
+  "lantern": {
+    "nearby": "shop-lantern-fish",
+    "panel": "shop-lantern-fish"
+  },
+  "seatB": {
+    "nearbyShop": "",
+    "stallHint": "E opens a stall when you are next to it.",
+    "shopRange": "Quầy Cá Đèn Lồng: 29 m away",
+    "afterE": "",
+    "panel": false
+  },
+  "mid": {
+    "samples": 26460,
+    "meanR": 73.4,
+    "meanG": 97.1,
+    "meanB": 111.5,
+    "beigeRatio": 0.046,
+    "blueRatio": 0.328,
+    "wallRatio": 0.123,
+    "lotRatio": 0.022,
+    "fogRatio": 0.021,
+    "blackRatio": 0,
+    "bluerThanRed": true
+  },
+  "far": {
+    "samples": 16758,
+    "meanR": 44,
+    "meanG": 131,
+    "meanB": 204,
+    "beigeRatio": 0,
+    "blueRatio": 1,
+    "wallRatio": 0,
+    "lotRatio": 0,
+    "fogRatio": 0,
+    "blackRatio": 0,
+    "bluerThanRed": true
+  },
+  "sky": {
+    "samples": 17640,
+    "meanR": 56.8,
+    "meanG": 137,
+    "meanB": 203.4,
+    "beigeRatio": 0,
+    "blueRatio": 0.922,
+    "wallRatio": 0.001,
+    "lotRatio": 0,
+    "fogRatio": 0,
+    "blackRatio": 0,
+    "bluerThanRed": true
+  },
+  "honesty": "Authored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:1 city. This 400 m frame ends at an authored wall — fixture edge, not a city. NOT_PLAN_PASS.\n\nFrien",
+  "shot": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-block-edge.png",
+  "hash": "69fb116036c093f0"
+}

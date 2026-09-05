@@ -1,0 +1,161 @@
+{
+  "run_id": "HH3D-J5-20260903-ASIA-SAIGON-36",
+  "player": "http://127.0.0.1:4175/",
+  "verdict": "J5_WALK_CYCLE_OK",
+  "not_plan_pass": true,
+  "not_gate_u1": true,
+  "cycleOk": true,
+  "pixOk": true,
+  "moveOk": true,
+  "streetOk": true,
+  "keptOk": true,
+  "shopOk": true,
+  "honestyOk": true,
+  "friendMeshOk": true,
+  "standSpread": 0.05,
+  "walkSpread": 2.4388476517060993,
+  "sprintSpread": 2.8875429735438614,
+  "walkOpposite": true,
+  "sprintOpposite": true,
+  "walkMoved": {
+    "east": 0,
+    "north": 2.103947999868936,
+    "moved": 2.103947999868936
+  },
+  "sprintMoved": {
+    "east": 0,
+    "north": 4.174499999940835,
+    "moved": 4.174499999940835
+  },
+  "clearDelta": {
+    "east": 0,
+    "north": 6.8573120000488785,
+    "moved": 6.8573120000488785
+  },
+  "lanternDelta": {
+    "east": 0,
+    "north": 27.24000399996143,
+    "moved": 27.24000399996143
+  },
+  "standBody": {
+    "samples": 27874,
+    "skinRatio": 0.005,
+    "tealRatio": 0.114,
+    "pantsRatio": 0.729,
+    "leftRatio": 0.84,
+    "rightRatio": 0.855,
+    "imbalance": 0.016
+  },
+  "walkBody": {
+    "samples": 27874,
+    "skinRatio": 0.008,
+    "tealRatio": 0.101,
+    "pantsRatio": 0.732,
+    "leftRatio": 0.814,
+    "rightRatio": 0.868,
+    "imbalance": 0.054
+  },
+  "sprintBody": {
+    "samples": 27874,
+    "skinRatio": 0.006,
+    "tealRatio": 0.1,
+    "pantsRatio": 0.706,
+    "leftRatio": 0.79,
+    "rightRatio": 0.836,
+    "imbalance": 0.046
+  },
+  "walkDiff": 0.182,
+  "sprintDiff": 0.28,
+  "skyBand": {
+    "meanR": 137.2,
+    "meanG": 144,
+    "meanB": 147.1,
+    "beigeRatio": 0.047,
+    "blueRatio": 0.412,
+    "bluerThanRed": true
+  },
+  "standPeak": {
+    "pose": "idle",
+    "sprint": "0",
+    "spread": 0.05,
+    "armSpread": 0,
+    "leftLeg": 0.03,
+    "rightLeg": -0.02,
+    "leftArm": 0.08,
+    "rightArm": 0.08,
+    "opposite": true,
+    "moving": false,
+    "running": false
+  },
+  "walkPeak": {
+    "pose": "walk",
+    "sprint": "0",
+    "spread": 2.4388476517060993,
+    "armSpread": 2.6987248604944547,
+    "leftLeg": 1.2194238258530496,
+    "rightLeg": -1.2194238258530496,
+    "leftArm": -1.3493624302472274,
+    "rightArm": 1.3493624302472274,
+    "opposite": true,
+    "moving": true,
+    "running": false
+  },
+  "sprintPeak": {
+    "pose": "walk",
+    "sprint": "1",
+    "spread": 2.8875429735438614,
+    "armSpread": 3.1606889305007133,
+    "leftLeg": 1.4437714867719307,
+    "rightLeg": -1.4437714867719307,
+    "leftArm": -1.5803444652503567,
+    "rightArm": 1.5803444652503567,
+    "opposite": true,
+    "moving": true,
+    "running": true
+  },
+  "walkSamples": 13,
+  "sprintSamples": 13,
+  "shopPanelId": "shop-lantern-fish",
+  "scooters": "15",
+  "spill": "13",
+  "hashes": {
+    "stand": "41c3dbce20ff4875",
+    "walk": "538d23a0e4dd5c06",
+    "sprint": "b049f9621a3d9c6e"
+  },
+  "shots": {
+    "stand": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-walk-stand.png",
+    "walk": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-walk-walk.png",
+    "sprint": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-walk-sprint.png"
+  },
+  "home": {
+    "buildings": 60,
+    "body": "tunic-humanoid",
+    "walkCycle": "opposite-stride",
+    "camera": "behind",
+    "canvas": {
+      "x": 0,
+      "y": 0,
+      "w": 1280,
+      "h": 720
+    },
+    "scooters": "15",
+    "spill": "13"
+  },
+  "afterWalk": {
+    "lon": 106.69804,
+    "lat": 10.7717005,
+    "pose": "walk",
+    "sprint": "0"
+  },
+  "afterSprint": {
+    "lon": 106.69804,
+    "lat": 10.771738,
+    "pose": "idle",
+    "sprint": "0"
+  },
+  "shopOpen": {
+    "id": "shop-lantern-fish",
+    "open": true
+  }
+}

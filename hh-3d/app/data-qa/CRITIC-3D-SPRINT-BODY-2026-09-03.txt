@@ -1,0 +1,434 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+WALK_MPS=1.610
+SPRINT_MPS=2.735
+WALK_M_3S=4.831
+SPRINT_M_3S=8.204
+RATIO=1.70
+BIGGEST_MISS=Sprint and the tunic body are real on this 400 m authored AABB block, but it is still hashed muted boxes, not a city / interiors / GATE-U1. Live R3F scene was not enumerable (no canvas.__r3f). Headless pointer-lock still empty. NOT_PLAN_PASS.
+
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-03
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=15:45 +07
+MODEL=grok-4.6
+SCOPE=HH World Shift/pad sprint vs walk + Hòn Gió tunic body (no bowling-ball hips) on already-up 4175 (NOT GTA / NOT 1:1 / NOT a city)
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=04cb6ca92c482017c02d78e7885727f73b62103d
+PROGRESS_CLAIMS_HEAD=04cb6ca92c482017c02d78e7885727f73b62103d
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-SPRINT-BODY-2026-09-03.txt
+PRIOR_CRITIC=hh-3d/app/data-qa/CRITIC-3D-LOOK-SLIDE-2026-09-03.txt
+LEAD_PACK=hh-3d/app/data-qa/J5-SPRINT-2026-09-03.txt
+LEAD_PROBE=hh-3d/app/data-qa/j5-sprint-probe.mjs
+LEAD_SHOTS=hh-3d/app/data-qa/j5-3d-body-stand.png ; j5-3d-body-walk.png ; j5-3d-body-sprint.png
+LEAD_RUN_ID_CLAIM=HH3D-J5-20260903-ASIA-SAIGON-10
+LEAD_VERDICT_CLAIM=J5_SPRINT_OK
+PROGRESS_TRUSTED_ALONE=NO
+J5_SPRINT_OK_TRUSTED_ALONE=NO
+LEAD_PACK_TRUSTED_ALONE=NO
+LEAD_SHOT_TRUSTED_ALONE=NO
+LEAD_PROBE_TRUSTED_ALONE=NO
+DATA_SPRINT_TRUSTED_ALONE=NO
+DATA_BODY_TRUSTED_ALONE=NO
+DATA_CAM_YAW_TRUSTED_ALONE=NO
+DATA_INSIDE_AABB_TRUSTED_ALONE=NO
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_VF_TOUCH=1
+NO_UNREAL=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_RUN_LEAD_PROBE_WRITER=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M0_WP1=1
+NOT_GTA=1
+NOT_1TO1=1
+NOT_A_CITY=1
+NOT_OSM=1
+CRITIC_CDP_PORT=9588
+CRITIC_SCENE_PORT=9599
+CRITIC_FIBER_PORT=9611
+LIVE_JS=/assets/index-_AFebqgm.js
+LIVE_JS_LEN=2079036
+LIVE_PID=47844
+LIVE_CMD=node .../hh-3d/app/web/node_modules/vite/bin/vite.js preview
+VITE_PREVIEW_PORT_PIN=4175
+KNOWN_BUILDING=bldg-steps-e-00
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/
+
+4175 was already up (vite preview pid 47844). This critic used that preview
+and did not start 4173, 4174, 5175, or a second HH World preview. Independent
+Chrome CDP (debug 9588, about:blank then navigate, temp profile only,
+headless=new 1280x720) waited until canvas.play-canvas was ready, then:
+
+  Hold W 3.0 s                 walk north from spawn
+  Reload
+  Hold Shift+W 3.0 s           sprint north from spawn
+  Reload
+  Right-drag 180 px / -36 px   look yaw/pitch (CDP mouse; lock denied)
+  Hold W 1.5 s                 walk along that look
+  Reload
+  Hold W 8 s                   street north
+  Hold D 0.86 s                turn in place to heading 95
+  Hold W 10 s                  walk into Steps East
+  Hold W 3.0 s                 extra push, 10 samples @ 300 ms
+
+Sprint is real. Native CDP KeyW 3.0 s moved 4.831 m north (east=0) =
+1.610 m/s. Fresh spawn, ShiftLeft+KeyW 3.0 s moved 8.204 m north (east=0)
+= 2.735 m/s. Ratio 1.70. Sprint distance is 3.373 m / 70% larger than
+walk on the same clock. Mid-hold lat samples stay on those two plateaus
+(~1.56–1.68 walk, ~2.59–2.84 sprint). That is not equal speed.
+
+Hips are not bowling balls. Independent guest frames (stand / walk /
+sprint / look / wall) show a long teal tunic column from the behind
+camera: one hem, slim pelvis, black hair helmet + nape, no two hip
+spheres. Live JS served by this 4175 (index-_AFebqgm.js, 2079036 B)
+builds that body: RoundedBox tunic args [.4,.98,.34], pelvis slab
+[.22,.11,.13] at [0,.5,0], capsule thighs, scale Rb=1.36 on
+self-walker. sphereGeometry in that bundle sits on the named head
+group and on hands, not as a left/right hip pair.
+
+Look still works. Right-drag turned camYaw 0 → 25.2 and orbit
+camX/camZ 4.79,-103.56 → 2.38,-103.19 while lon/lat stayed at spawn.
+Then W 1.5 s moved 2.422 m on bearing 25.115° (east +1.028, north
++2.193). Error vs kept yaw 25.2° is 0.085°.
+
+Collision still works. After D then W into live GeoJSON
+bldg-steps-e-00, extra W froze lon at 106.6981412 across 10 samples
+(lonSpan=0). Lat fell 10.7717219 → 10.7717177 (south). Independent
+point-in-AABB on the same GeoJSON the page fetched is empty at the
+wall, every extra sample, and after release. Extra east = 0.000 m.
+Center stays 0.558 m outside the west face.
+
+Honesty still denies GTA / 1:1 / OSM and prints NOT_PLAN_PASS.
+GATE-U1 STATE: NOT_STARTED. This critic did not invent humans.
+
+J5_SPRINT_OK / SAIGON-10 is claim only and was not used as proof.
+This critic did not run j5-sprint-probe.mjs (it writes that pack).
+
+Biggest miss: sprint + tunic are real, but the world is still a muted
+authored 400 m AABB street — not a city, not interiors, not GATE-U1.
+Live WebGL scene graph was not enumerable (canvas.__r3f absent; React
+fiber walk found no Three scene). Body proof is guest pixels + the JS
+this preview actually served, not a live mesh dump. Headless click
+did not take pointer-lock.
+
+================================================================================
+METHOD
+================================================================================
+
+Read on disk (not PROGRESS / J5 alone):
+  hh-3d/app/web/src/avatar/walk.ts
+    WALK_SPEED_MPS=1.6  SPRINT_SPEED_MPS=2.72  moveSpeedMps(sprint)
+  hh-3d/app/web/src/avatar/useAvatar.ts
+    sprintHeld = keys has "shift" OR pad.sprint
+  hh-3d/app/web/src/play/world.ts
+    PERSON_SCALE=1.36
+  hh-3d/app/web/src/play/Person.tsx
+    Long tunic RoundedBox [0.4, 0.98, 0.34]; slim pelvis slab
+    [0.22, 0.11, 0.13] at y=0.5; capsule legs. Comment denies
+    bowling-ball hip spheres. sphereGeometry = head/hair/hands.
+  hh-3d/app/web/src/play/PlayView.tsx
+    scale={PERSON_SCALE} name=self-walker
+    data-body="tunic-humanoid"  data-sprint  REJECTED as sole proof
+  hh-3d/app/web/src/avatar/WalkPad.tsx
+    data-testid=walk-sprint  label ≫
+  hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+    CURRENT_FIRST_LEFTOVER=GATE-U1; GATE-U1 STATE: NOT_STARTED (line 862)
+  hh-3d/app/docs/review/README.txt
+    "GATE-U1 is NOT done."
+  Lead pack J5-SPRINT / SAIGON-10 / J5_SPRINT_OK
+    read only as claim (walk 5.07 m / 1.69; sprint 8.71 m / 2.90).
+    Did not run j5-sprint-probe.mjs (it writes that pack + shots).
+
+Live (existing 4175 only; did not start another HH World preview):
+  TCP 127.0.0.1:4175 LISTEN pid 47844 node vite preview
+  4173 DOWN  4174 DOWN  5175 DOWN  (still down after CDP)
+  GET /                         200  title=HH World
+                                script /assets/index-_AFebqgm.js
+  GET /data/ben-thanh-400m.authored.geojson  200  92096 B
+    kind.building=60  (independent node count)
+    bldg-steps-e-00 AABB from the same GeoJSON the page fetched:
+      west=106.6981463  south=10.7716017
+      east=106.6982899  north=10.7717837
+  Live JS Content-Length=2079036
+    w=1.6,T=2.72 = PRESENT
+    Rb=1.36 on self-walker scale = PRESENT
+    tunic args:[.4,.98,.34] = PRESENT
+    pelvis Sb args:[.22,.11,.13] at [0,.5,0] = PRESENT
+    capsuleGeometry thighs = PRESENT
+    sphereGeometry = 12 (head/hair/hands in the Person chunk)
+    NOT_PLAN_PASS / No GTA = PRESENT
+    openstreetmap / cesium / googleapis / maptiler = ABSENT
+  Independent Chrome CDP vs 4175 (debug 9588)
+    shots TEMP only (not written under data-qa):
+      C:\Users\truon\AppData\Local\Temp\hh-critic-3d-sprint-body\critic-stand.png   84380 B  sha16=b421f111abe44c39
+      C:\Users\truon\AppData\Local\Temp\hh-critic-3d-sprint-body\critic-walk.png    88689 B  sha16=ffa5b7d89200428b
+      C:\Users\truon\AppData\Local\Temp\hh-critic-3d-sprint-body\critic-sprint.png  80500 B  sha16=69d5dbd065b86ced
+      C:\Users\truon\AppData\Local\Temp\hh-critic-3d-sprint-body\critic-look.png    89200 B  sha16=b1f3a11f0690162f
+      C:\Users\truon\AppData\Local\Temp\hh-critic-3d-sprint-body\critic-toward.png  61394 B  sha16=27322439fe97b367
+      C:\Users\truon\AppData\Local\Temp\hh-critic-3d-sprint-body\critic-wall.png    50087 B  sha16=bec1d9446fa6a8df
+  Scene dump attempts (9599 / 9611): canvas.__r3f undefined;
+    React fiber walk hops=301, no Three scene. Not treated as a hip fail.
+  Did not run npm build. Did not recycle the preview. Did not fetch OSM.
+
+================================================================================
+PROCESS / GIT
+================================================================================
+
+RESULT=PASS_ON_STATED_FAIL_RULE
+
+Stated fail: VF / AGENTS.md staged with this if they committed.
+Observed:
+  git rev-parse HEAD = 04cb6ca92c482017c02d78e7885727f73b62103d
+  git diff --cached --name-only = empty
+  hh-3d/app remains untracked in this tree
+  Critic did not commit, did not tick plan, did not touch VF.
+
+================================================================================
+ATTACK 1 — 3s W vs 3s Shift+W MUST SHOW A CLEARLY LARGER SPRINT
+================================================================================
+
+RESULT=PASS  SPRINT_REAL  WALK=1.610  SPRINT=2.735  RATIO=1.70
+
+Rejected as sole proof:
+  lead J5-SPRINT-2026-09-03.txt / SAIGON-10 / J5_SPRINT_OK
+  lead j5-3d-body-*.png
+  data-sprint / status "sprinting" / data-body
+
+Independent proof from live lon/lat (M_PER_DEG_LAT=111320):
+
+  Walk (spawn 106.6980400, 10.7716200, heading=0):
+    after 3000 ms KeyW: lon=106.6980400  lat=10.7716634
+    east=0.000  north=+4.831 m  moved=4.831 m
+    4.831 / 3.0 = 1.610 m/s
+    mid @ ~900 ms: pose=walk sprint=0 status="You: walking"
+    HUD shop copy 0.0 m → 1.5 m on the walk shot
+    camZ  -103.56 → -98.73  (camera followed north)
+
+  Sprint (fresh reload, same spawn):
+    ShiftLeft + KeyW, modifiers=8, 3000 ms
+    after: lon=106.6980400  lat=10.7716937  sprint released=0
+    east=0.000  north=+8.204 m  moved=8.204 m
+    8.204 / 3.0 = 2.735 m/s
+    mid @ ~900 ms: sprint=1 status="You: sprinting"
+    HUD shop copy 2.6 m on the sprint shot
+    camZ  -103.56 → -95.36
+
+  Mid-hold lat samples (same street, no wall):
+    walk  t=1297..3009  lat 10.7716387 → 10.7716634
+      interval m/s ≈ 1.56, 1.56, 1.63, 1.57, 1.68, 1.58, 1.63
+    sprint t=1307..3009  lat 10.7716522 → 10.7716937
+      interval m/s ≈ 2.73, 2.59, 2.84, 2.68, 2.73, 2.66, 2.80
+    No overlapping band. Sprint samples never drop to walk speed.
+
+Coded constants in the live bundle: w=1.6 T=2.72 (ratio 1.70).
+This hold landed on those numbers (lead pack 1.69 / 2.90 is a
+slightly hotter clock on the same code; not used as proof).
+
+Pad ≫ is in the live DOM (data-testid=walk-sprint, text="≫").
+This critic did not pointer-hold the pad; Shift was the proof.
+
+FAIL-if-sprint-equals-walk does not trigger.
+
+================================================================================
+ATTACK 2 — BODY MUST NOT BE TWO HIP SPHERES
+================================================================================
+
+RESULT=PASS  TUNIC  SCALE=1.36_IN_LIVE_JS  HIP_SPHERES=0_IN_SOURCE_AND_PIXELS
+
+Rejected as sole proof:
+  data-body="tunic-humanoid"
+  Person.tsx comments
+  lead stand/walk/sprint shots
+
+Independent proof:
+
+  Guest pixels, this CDP (hashes differ stand≠walk≠sprint):
+    Long teal hem past the hip; one column, not two balls.
+    Slim dark pelvis under the tunic; capsule legs / box shoes
+    visible at the wall (feet on the slab).
+    Black hair helmet + nape/sides. Behind camera. Not a CSS doll.
+
+  Live JS this preview actually served:
+    scale:Rb and Rb=1.36 on name:`self-walker`
+    tunic Sb args:[.4,.98,.34] radius .12 (shirt)
+    pelvis Sb position:[0,.5,0] args:[.22,.11,.13] (pants)
+    legs: capsuleGeometry [.062,.2] + [.05,.16], not SphereGeometry
+    sphereGeometry cluster is inside name:`head` (skin .136, hair
+    .138/.108/.09) plus hand spheres .056 — not a hip pair at y=0.5
+
+  Live WebGL traverse: FAILED (no canvas.__r3f; fiber found no
+  scene). That is a method miss, not a restored bowling-ball mesh.
+  Pixels + the served Person chunk are enough to reject "two hip
+  spheres."
+
+FAIL-if-hips-restored does not trigger.
+
+================================================================================
+ATTACK 3 — LOOK MUST STILL WORK AFTER THE SPRINT SLICE
+================================================================================
+
+RESULT=PASS  BEARING_ERR=0.085°
+
+Fresh navigate, CDP right-press at canvas center, move +180 x / -36 y:
+
+  look=drag  heading=25  camYaw=25.2  camPitch=5
+  camX=2.38  camZ=-103.19
+  lon/lat UNCHANGED
+  Expected from LOOK_SENS_DEG=0.14: yaw=180*0.14=25.2  pitch=36*0.14=5.04
+  Pixel hash stand b421f111abe44c39 ≠ look b1f3a11f0690162f
+
+After pointerup: look=off, yaw kept 25.2.
+Hold W 1500 ms (look released, heading still 25):
+  lon 106.6980400 → 106.6980494
+  lat 10.7716200 → 10.7716397
+  east=+1.028 m  north=+2.193 m  moved=2.422 m  bearing=25.115°
+  walkBearingErr vs yaw 25.2 = 0.085°
+  Speed 2.422 / 1.5 = 1.61 m/s (walk, not sprint — Shift was up)
+
+World-north W would keep lon. Observed: lon rose, bearing matches
+the new look. Pointer-lock element stayed empty (headless). Right-drag
+is the path this CDP proved.
+
+================================================================================
+ATTACK 4 — COLLISION MUST STILL STOP AT THE KNOWN AABB
+================================================================================
+
+RESULT=PASS  STOPPED  SLIDE_SOUTH  INSIDE_AABB=0  EXTRA_EAST=0
+
+Rejected as sole proof: data-inside-aabb / data-slide / data-blocked
+
+Independent proof from live GeoJSON AABB + live lon/lat:
+
+  W 8.0 s north: east=0  north=+12.824 m  (open lane still walkable)
+  D 860 ms: heading=95  camYaw=86.2→ then 95.3 after the east walk
+  W 10 s toward the west face:
+    atWall lon=106.6981412  lat=10.7717219  heading=95
+    live point-in-AABB hitWall=false
+
+  Extra W 3.0 s, 10 samples @ 300 ms:
+    EVERY sample lon=106.6981412          (east freeze; lonSpan=0)
+    lat 10.7717215 → 10.7717177           (south, monotonic)
+    inBox=false on every sample
+    after release: lon still 106.6981412  lat=10.7717177
+    extra.east=0  extra.north=-0.468 m
+
+  Nearest live box after extra W:
+    id=bldg-steps-e-00
+    (106.6981463-106.6981412) * mPerLon = 0.558 m
+    Center is outside. Guest wall frame: teal tunic in front of a
+    brown volume; stall copy 21 m (south of the north shop).
+
+FAIL-if-collision-dead / clip-through does not trigger.
+
+================================================================================
+ATTACK 5 — NO PUBLIC OSM / OTHER-PC / GATE-U1 FAKE
+================================================================================
+
+RESULT=PASS  (none of the cheats)
+
+CDP Network unique URLs on the 4175 session:
+  /  /?seat=a
+  /assets/index-_AFebqgm.js  /assets/index-4Fs4UukL.css
+  /styles/local-style.json  /demo-bus
+  /data/ben-thanh-400m.authored.geojson
+  /data/world-manifest.json  /data/shops.json
+  /favicon.ico  data:  blob:http://127.0.0.1:4175/...
+
+tileHits=[]
+No openstreetmap / cesium / googleapis / maps.google / maptiler /
+mapbox:// / cartocdn / overture / demotiles.
+
+Honesty (live innerText):
+  "Authored approximation. Not a live map, not OSM/Overture, not
+  photogrammetry, and not a digital twin. No GTA claim, no 1:1 city.
+  NOT_PLAN_PASS."
+  Friend-body line: this-PC 4175 loopback store; not a city presence
+  server; not WAN; not GPS; NOT_PLAN_PASS.
+gtaClaim=false. Denial present.
+
+Plan: CURRENT_FIRST_LEFTOVER=GATE-U1
+GATE-U1 STATE: NOT_STARTED (line 862)
+docs/review/README.txt: "GATE-U1 is NOT done."
+No invented human reviewers. No other-PC join. No OSM fetch.
+
+================================================================================
+LEAD CLAIMS vs INDEPENDENT LIVE
+================================================================================
+
+Claim                                         Verdict
+Shift or pad ≫ sprint ~2.9 vs ~1.7 walk       CONFIRMED direction;
+                                              this CDP: 2.735 vs 1.610
+                                              (lead 2.90 / 1.69 is the
+                                              same code, hotter clock)
+Hòn Gió tunic language, no bowling-ball hips  CONFIRMED (pixels + live
+                                              JS tunic/pelvis/capsules)
+scale 1.36                                    CONFIRMED in live JS
+                                              (Rb=1.36 on self-walker)
+J5_SPRINT_OK SAIGON-10                        CLAIM ONLY; not used
+NOT_PLAN_PASS                                 CONFIRMED
+GATE-U1 not faked                             CONFIRMED
+Look still works                              CONFIRMED (bearing 25.115°)
+Collision still works                         CONFIRMED (extra east=0;
+                                              gap 0.558 m; AABB empty)
+Pad ≫ hold                                    CODED + DOM present;
+                                              not independently held
+4175 existing preview                         CONFIRMED pid 47844
+4173/4174 / second preview                    NOT STARTED by this critic
+
+================================================================================
+HARD FAIL CHECK (TICK=no triggers)
+================================================================================
+
+Sprint equals walk                              NO  (8.204 vs 4.831 m
+                                                in 3.0 s; ratio 1.70)
+Hips restored as two bowling-ball spheres       NO  (tunic column in
+                                                6 guest frames; live JS
+                                                pelvis slab + capsules)
+Look dead after sprint slice                    NO  (yaw 25.2; W bearing
+                                                25.115°)
+Collision dead / clip into AABB                 NO  (10 extra samples
+                                                inBox=false; extra.east=0)
+Street walk dead                                NO  (12.82 m north)
+Public OSM/Cesium/Google tile URL               NO
+GTA / 1:1 / city claimed in chrome              NO
+Lead pack / data-sprint used as sole proof      NO
+GATE-U1 humans invented                         NO
+4173/4174 / second preview started              NO
+
+Therefore TICK=yes: sprint is real and hips are not bowling balls
+on 4175 as labeled. NOT a plan PASS. NOT GATE-U1.
+
+================================================================================
+NOT GRANTED
+================================================================================
+
+- GATE-U1 / M0-WP1 / M1-WP0 / M2 / R2-WP0 / R2-WP1
+- A city, interiors, mesh collision, or 1:1 streets
+- A live Three.js scene dump (R3F 9 did not expose canvas.__r3f)
+- Proof that headed Chrome pointer-lock works
+- Proof that the on-screen ≫ pad hold equals Shift
+- Permission to treat data-sprint / data-body as sole proof
+- Other-PC presence / OSM-Overture fetch
+- Permission to start 4173/4174, fetch maps, Unreal, VF, or tick [x]
+
+================================================================================
+END
+================================================================================

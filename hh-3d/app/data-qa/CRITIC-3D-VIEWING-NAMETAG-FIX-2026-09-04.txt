@@ -1,0 +1,69 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=20:48 +07
+ROLE=IMPLEMENTER
+TICK=n/a (do not treat this file as TICK=yes)
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M2=1
+NOT_M1=1
+NOT_OSM=1
+NOT_WAN=1
+PLAYER_URL=http://127.0.0.1:4175/
+RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-49
+COMMAND=one remint after TICK=no; no implementer two-seat claim
+VERDICT_IMPLEMENTER_CDP=not_run (critic owns the hunt)
+LIVE_JS=/assets/index-DScoMgU1.js
+LIVE_JS_LEN=2173037
+LIVE_JS_SHA256=c5528b94d747c5ca5a6a58ef3e2fce00291bdc4dbcf71274eb108d28315644f8
+LIVE_CSS=/assets/index-Dza0__iA.css
+LISTEN=127.0.0.1:4175
+LIVE_PID=48420
+LIVE_PID_STARTTIME=2026-09-04 20:47:50 +07
+REMINTED=yes
+ONE_RECYCLE_AFTER_BUILD=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+NO_COMMIT=1
+PRIOR_TICK_NO=CRITIC-3D-VIEWING-NAMETAG-REAUDIT-2026-09-04.txt
+PRIOR_TICK_NO_JS=/assets/index-Bpqr6UP3.js
+ACCEPTED_PRIOR=CRITIC-3D-FRIEND-E-VIEWING-REAUDIT-2026-09-04.txt TICK=yes on /assets/index-B_vhyY5s.js
+
+================================================================================
+SLICE
+================================================================================
+
+Independent critic TICK=no on Bpqr6UP3: after KeyE at Quầy Phở Nhà,
+remote-body-a was gone and “Đang xem cửa hàng” was up, but the first
+viewing-published sample still had DIV.play-remote-label
+[data-testid=remote-avatar-a] “Bạn A (máy này)”. Gone only ~700 ms
+later. That delay is the named miss.
+
+Walker cleanup used useEffect (after paint). Drei Html portals outlive
+the unmounted mesh for that first sample.
+
+This remint:
+- dropStreetNametag / dropLeftoverStreetNametags remove .play-remote-label
+  nodes only (not a minimap mark)
+- Walker unmount cleanup is useLayoutEffect (before paint)
+- PlayView useLayoutEffect also purges leftover nametags when a seat
+  leaves streetRemotes
+
+Keep the TICK=no file. Do not catalog_clear. Hitch3 play-idle and
+E viewing copy are not ripped. NOT_PLAN_PASS.
+
+Critic must sample B on the FIRST viewing-published frame (body gone +
+Đang xem cửa hàng) and fail if remote-avatar-a is still in the document.
+
+================================================================================
+OWNER LEFTOVERS (unchanged)
+================================================================================
+
+1. GATE-U1 three-human review (first acceptance leftover; not faked).
+2. R2-WP1 headed/mobile/memory/min-FPS thresholds still UNFILLED.
+3. WAN / other-PC join still not built. 4175 loopback only.
+4. R4-WP0B real account/OIDC still not built.
+5. Open data (OSM/Overture) still needs license ledger + grant.
+6. Leftover this-PC shops stay in the catalog; they do not own street E.
+7. M0/M1/M2 plan WPs still NOT_STARTED. NOT_PLAN_PASS. Not M1. Not M2.

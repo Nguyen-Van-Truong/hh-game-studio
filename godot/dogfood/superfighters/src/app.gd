@@ -17,6 +17,7 @@ var map_id: String = "rooftops"
 var vs_map_id: String = "rooftops"
 var stage_index: int = 0
 var next_round_id: int = 1
+var vs1_bot_count: int = 2
 var flow_phase: String = "title"
 var result_token: int = 0
 var runtime: RuntimeApi = RuntimeApi.new()
@@ -119,6 +120,7 @@ func start_fight(p_mode: String, p_map: String, p_stage: int) -> void:
 		tree.paused = false
 	session = GameSession.new()
 	session.test_driven = test_driven
+	session.vs1_bot_count = vs1_bot_count
 	session.match_rules.round_id = next_round_id
 	next_round_id += 1
 	session.won.connect(_on_won)

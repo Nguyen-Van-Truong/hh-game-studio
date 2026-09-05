@@ -1,0 +1,2152 @@
+{
+  "run_id": "HH3D-J5-20260903-ASIA-SAIGON-29",
+  "player": "http://127.0.0.1:4175/",
+  "verdict": "J5_ROOF_OK",
+  "not_plan_pass": true,
+  "not_gate_u1": true,
+  "lookPath": "cdp-mouse",
+  "roofDomOk": true,
+  "lookOk": true,
+  "skyOk": true,
+  "roofPixOk": true,
+  "wallOk": true,
+  "shopOk": true,
+  "keptOk": true,
+  "honestyOk": true,
+  "camPitch": 28,
+  "roof": {
+    "kind": "parapet-ac-tank",
+    "buildings": 60,
+    "parapets": 276,
+    "acs": 61,
+    "tanks": 8
+  },
+  "skyBand": {
+    "samples": 3090,
+    "meanR": 137.6,
+    "meanG": 146.2,
+    "meanB": 149.9,
+    "beigeRatio": 0.042,
+    "grayRatio": 0.001,
+    "blueRatio": 0.416,
+    "darkRatio": 0.15,
+    "acRatio": 0.001,
+    "lidRatio": 0.111,
+    "bluerThanRed": true
+  },
+  "roofBand": {
+    "samples": 20002,
+    "meanR": 84.7,
+    "meanG": 84.9,
+    "meanB": 78.4,
+    "beigeRatio": 0.015,
+    "grayRatio": 0.007,
+    "blueRatio": 0.126,
+    "darkRatio": 0.53,
+    "acRatio": 0.076,
+    "lidRatio": 0.045,
+    "bluerThanRed": false
+  },
+  "sideLid": {
+    "samples": 7931,
+    "meanR": 73,
+    "meanG": 77.7,
+    "meanB": 79.7,
+    "beigeRatio": 0,
+    "grayRatio": 0,
+    "blueRatio": 0.429,
+    "darkRatio": 0.386,
+    "acRatio": 0.215,
+    "lidRatio": 0.1,
+    "bluerThanRed": true
+  },
+  "wallToward": {
+    "east": 11.067082160424873,
+    "north": 0.03339599999478082,
+    "moved": 11.06713254815402
+  },
+  "wallExtra": {
+    "east": 0,
+    "north": 0.022263999864691186,
+    "moved": 0.022263999864691186
+  },
+  "nearestWall": {
+    "id": "bldg-steps-e-00",
+    "dist": 0.5577284492873995
+  },
+  "liveRing": [],
+  "shopPanelId": "shop-lantern-fish",
+  "hash": "a5d35094b015dc80",
+  "bytes": 136713,
+  "shotRoof": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-roof.png",
+  "home": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/?seat=a",
+    "playReady": "yes",
+    "playEngine": "r3f",
+    "playCanvas": true,
+    "canvasBox": {
+      "x": 0,
+      "y": 0,
+      "w": 1280,
+      "h": 720
+    },
+    "avatar": {
+      "lon": 106.69804,
+      "lat": 10.77162,
+      "heading": 0,
+      "groundY": "0",
+      "insideAabb": "0",
+      "insideRing": "0",
+      "collision": "footprint-radius"
+    },
+    "proof": {
+      "camera": "behind",
+      "follow": "heading",
+      "heading": 0,
+      "camYaw": 0,
+      "camPitch": 0,
+      "buildings": 60,
+      "extruded": "footprint",
+      "collision": "footprint-radius",
+      "groundY": "0",
+      "insideAabb": "0",
+      "insideRing": "0",
+      "hitBuilding": "",
+      "sky": "gradient-hemisphere",
+      "sun": "disc",
+      "lamps": "38",
+      "planters": "4",
+      "groundFloor": "door-glass-awning",
+      "roof": "parapet-ac-tank",
+      "roofBuildings": 60,
+      "roofParapets": 276,
+      "roofAcs": 61,
+      "roofTanks": 8
+    },
+    "roofs": [
+      {
+        "building": "bldg-market-hall",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-hall-01",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-10",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-11",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-w-00",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-hall-w-01",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-w-10",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-hall-w-11",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-se-00",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-se-01",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-sw-00",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-sw-01",
+        "parapets": 4,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-west-block",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-west-01",
+        "parapets": 4,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-west-02",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-west-10",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-west-11",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-west-12",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-west-n-00",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-west-n-01",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-west-n-02",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-arcade",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-01",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-east-02",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-10",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-11",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-12",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-20",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-21",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-22",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-n-00",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-n-01",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-n-02",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-stall",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-01",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-02",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-10",
+        "parapets": 4,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-11",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-12",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-20",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-21",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-22",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-south-shed",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-south-10",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-south-20",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-south-e-00",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-south-e-10",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-south-e-20",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-w-00",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-w-01",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-steps-w-10",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-w-11",
+        "parapets": 4,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-w-20",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-steps-w-21",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-e-00",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-e-01",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-e-10",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-e-11",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-e-20",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-e-21",
+        "parapets": 4,
+        "acs": 0,
+        "tanks": 0
+      }
+    ],
+    "shopMarker": false,
+    "shopPanel": false,
+    "shopPanelId": "",
+    "honesty": "Authored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:1 city. NOT_PLAN_PASS.\n\nFriend bodies use this PC's 4175 loopback store (two browsers here). Not a city shop server. Not a city presence server. Not another city's cloud. Not WAN. Not GPS. NOT_PLAN_PASS.",
+    "mode": "Offline — Stroll alone; shops still open.",
+    "gtaClaim": false
+  },
+  "midWalk": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/?seat=a",
+    "playReady": "yes",
+    "playEngine": "r3f",
+    "playCanvas": true,
+    "canvasBox": {
+      "x": 0,
+      "y": 0,
+      "w": 1280,
+      "h": 720
+    },
+    "avatar": {
+      "lon": 106.69804,
+      "lat": 10.7716724,
+      "heading": 0,
+      "groundY": "0",
+      "insideAabb": "0",
+      "insideRing": "0",
+      "collision": "footprint-radius"
+    },
+    "proof": {
+      "camera": "behind",
+      "follow": "heading",
+      "heading": 0,
+      "camYaw": 0,
+      "camPitch": 0,
+      "buildings": 60,
+      "extruded": "footprint",
+      "collision": "footprint-radius",
+      "groundY": "0",
+      "insideAabb": "0",
+      "insideRing": "0",
+      "hitBuilding": "",
+      "sky": "gradient-hemisphere",
+      "sun": "disc",
+      "lamps": "38",
+      "planters": "4",
+      "groundFloor": "door-glass-awning",
+      "roof": "parapet-ac-tank",
+      "roofBuildings": 60,
+      "roofParapets": 276,
+      "roofAcs": 61,
+      "roofTanks": 8
+    },
+    "roofs": [
+      {
+        "building": "bldg-market-hall",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-hall-01",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-10",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-11",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-w-00",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-hall-w-01",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-w-10",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-hall-w-11",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-se-00",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-se-01",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-sw-00",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-sw-01",
+        "parapets": 4,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-west-block",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-west-01",
+        "parapets": 4,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-west-02",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-west-10",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-west-11",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-west-12",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-west-n-00",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-west-n-01",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-west-n-02",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-arcade",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-01",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-east-02",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-10",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-11",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-12",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-20",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-21",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-22",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-n-00",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-n-01",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-n-02",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-stall",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-01",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-02",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-10",
+        "parapets": 4,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-11",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-12",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-20",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-21",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-22",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-south-shed",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-south-10",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-south-20",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-south-e-00",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-south-e-10",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-south-e-20",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-w-00",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-w-01",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-steps-w-10",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-w-11",
+        "parapets": 4,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-w-20",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-steps-w-21",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-e-00",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-e-01",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-e-10",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-e-11",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-e-20",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-e-21",
+        "parapets": 4,
+        "acs": 0,
+        "tanks": 0
+      }
+    ],
+    "shopMarker": true,
+    "shopPanel": false,
+    "shopPanelId": "",
+    "honesty": "Authored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:1 city. NOT_PLAN_PASS.\n\nFriend bodies use this PC's 4175 loopback store (two browsers here). Not a city shop server. Not a city presence server. Not another city's cloud. Not WAN. Not GPS. NOT_PLAN_PASS.",
+    "mode": "Offline — Stroll alone; shops still open.",
+    "gtaClaim": false
+  },
+  "pitched": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/?seat=a",
+    "playReady": "yes",
+    "playEngine": "r3f",
+    "playCanvas": true,
+    "canvasBox": {
+      "x": 0,
+      "y": 0,
+      "w": 1280,
+      "h": 720
+    },
+    "avatar": {
+      "lon": 106.69804,
+      "lat": 10.7716724,
+      "heading": 24,
+      "groundY": "0",
+      "insideAabb": "0",
+      "insideRing": "0",
+      "collision": "footprint-radius"
+    },
+    "proof": {
+      "camera": "behind",
+      "follow": "look",
+      "heading": 23.8,
+      "camYaw": 23.8,
+      "camPitch": 28,
+      "buildings": 60,
+      "extruded": "footprint",
+      "collision": "footprint-radius",
+      "groundY": "0",
+      "insideAabb": "0",
+      "insideRing": "0",
+      "hitBuilding": "",
+      "sky": "gradient-hemisphere",
+      "sun": "disc",
+      "lamps": "38",
+      "planters": "4",
+      "groundFloor": "door-glass-awning",
+      "roof": "parapet-ac-tank",
+      "roofBuildings": 60,
+      "roofParapets": 276,
+      "roofAcs": 61,
+      "roofTanks": 8
+    },
+    "roofs": [
+      {
+        "building": "bldg-market-hall",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-hall-01",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-10",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-11",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-w-00",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-hall-w-01",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-w-10",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-hall-w-11",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-se-00",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-se-01",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-sw-00",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-sw-01",
+        "parapets": 4,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-west-block",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-west-01",
+        "parapets": 4,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-west-02",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-west-10",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-west-11",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-west-12",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-west-n-00",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-west-n-01",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-west-n-02",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-arcade",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-01",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-east-02",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-10",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-11",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-12",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-20",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-21",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-22",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-n-00",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-n-01",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-n-02",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-stall",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-01",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-02",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-10",
+        "parapets": 4,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-11",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-12",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-20",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-21",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-22",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-south-shed",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-south-10",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-south-20",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-south-e-00",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-south-e-10",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-south-e-20",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-w-00",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-w-01",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-steps-w-10",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-w-11",
+        "parapets": 4,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-w-20",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-steps-w-21",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-e-00",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-e-01",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-e-10",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-e-11",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-e-20",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-e-21",
+        "parapets": 4,
+        "acs": 0,
+        "tanks": 0
+      }
+    ],
+    "shopMarker": true,
+    "shopPanel": false,
+    "shopPanelId": "",
+    "honesty": "Authored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:1 city. NOT_PLAN_PASS.\n\nFriend bodies use this PC's 4175 loopback store (two browsers here). Not a city shop server. Not a city presence server. Not another city's cloud. Not WAN. Not GPS. NOT_PLAN_PASS.",
+    "mode": "Offline — Stroll alone; shops still open.",
+    "gtaClaim": false
+  },
+  "wallStill": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/?seat=a",
+    "playReady": "yes",
+    "playEngine": "r3f",
+    "playCanvas": true,
+    "canvasBox": {
+      "x": 0,
+      "y": 0,
+      "w": 1280,
+      "h": 720
+    },
+    "avatar": {
+      "lon": 106.6981412,
+      "lat": 10.7716646,
+      "heading": 90,
+      "groundY": "0",
+      "insideAabb": "0",
+      "insideRing": "0",
+      "collision": "footprint-radius"
+    },
+    "proof": {
+      "camera": "behind",
+      "follow": "heading",
+      "heading": 89.8,
+      "camYaw": 0,
+      "camPitch": 0,
+      "buildings": 60,
+      "extruded": "footprint",
+      "collision": "footprint-radius",
+      "groundY": "0",
+      "insideAabb": "0",
+      "insideRing": "0",
+      "hitBuilding": "",
+      "sky": "gradient-hemisphere",
+      "sun": "disc",
+      "lamps": "38",
+      "planters": "4",
+      "groundFloor": "door-glass-awning",
+      "roof": "parapet-ac-tank",
+      "roofBuildings": 60,
+      "roofParapets": 276,
+      "roofAcs": 61,
+      "roofTanks": 8
+    },
+    "roofs": [
+      {
+        "building": "bldg-market-hall",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-hall-01",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-10",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-11",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-w-00",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-hall-w-01",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-w-10",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-hall-w-11",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-se-00",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-se-01",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-sw-00",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-sw-01",
+        "parapets": 4,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-west-block",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-west-01",
+        "parapets": 4,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-west-02",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-west-10",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-west-11",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-west-12",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-west-n-00",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-west-n-01",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-west-n-02",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-arcade",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-01",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-east-02",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-10",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-11",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-12",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-20",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-21",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-22",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-n-00",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-n-01",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-n-02",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-stall",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-01",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-02",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-10",
+        "parapets": 4,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-11",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-12",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-20",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-21",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-22",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-south-shed",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-south-10",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-south-20",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-south-e-00",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-south-e-10",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-south-e-20",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-w-00",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-w-01",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-steps-w-10",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-w-11",
+        "parapets": 4,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-w-20",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-steps-w-21",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-e-00",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-e-01",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-e-10",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-e-11",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-e-20",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-e-21",
+        "parapets": 4,
+        "acs": 0,
+        "tanks": 0
+      }
+    ],
+    "shopMarker": true,
+    "shopPanel": false,
+    "shopPanelId": "",
+    "honesty": "Authored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:1 city. NOT_PLAN_PASS.\n\nFriend bodies use this PC's 4175 loopback store (two browsers here). Not a city shop server. Not a city presence server. Not another city's cloud. Not WAN. Not GPS. NOT_PLAN_PASS.",
+    "mode": "Offline — Stroll alone; shops still open.",
+    "gtaClaim": false
+  },
+  "shopOpen": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/?seat=a&place=place-market-steps&shop=shop-lantern-fish",
+    "playReady": "yes",
+    "playEngine": "r3f",
+    "playCanvas": true,
+    "canvasBox": {
+      "x": 0,
+      "y": 0,
+      "w": 1280,
+      "h": 720
+    },
+    "avatar": {
+      "lon": 106.69804,
+      "lat": 10.7718451,
+      "heading": 0,
+      "groundY": "0",
+      "insideAabb": "0",
+      "insideRing": "0",
+      "collision": "footprint-radius"
+    },
+    "proof": {
+      "camera": "behind",
+      "follow": "heading",
+      "heading": 0,
+      "camYaw": 0,
+      "camPitch": 0,
+      "buildings": 60,
+      "extruded": "footprint",
+      "collision": "footprint-radius",
+      "groundY": "0",
+      "insideAabb": "0",
+      "insideRing": "0",
+      "hitBuilding": "",
+      "sky": "gradient-hemisphere",
+      "sun": "disc",
+      "lamps": "38",
+      "planters": "4",
+      "groundFloor": "door-glass-awning",
+      "roof": "parapet-ac-tank",
+      "roofBuildings": 60,
+      "roofParapets": 276,
+      "roofAcs": 61,
+      "roofTanks": 8
+    },
+    "roofs": [
+      {
+        "building": "bldg-market-hall",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-hall-01",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-10",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-11",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-w-00",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-hall-w-01",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-w-10",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-hall-w-11",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-se-00",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-se-01",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-sw-00",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-hall-sw-01",
+        "parapets": 4,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-west-block",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-west-01",
+        "parapets": 4,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-west-02",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-west-10",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-west-11",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-west-12",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-west-n-00",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-west-n-01",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-west-n-02",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-arcade",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-01",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-east-02",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-10",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-11",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-12",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-20",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-21",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-22",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-n-00",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-n-01",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-east-n-02",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-stall",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-01",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-02",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-10",
+        "parapets": 4,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-11",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-12",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-20",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-21",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-north-22",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-south-shed",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-south-10",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-south-20",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-south-e-00",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-south-e-10",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-south-e-20",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-w-00",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-w-01",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-steps-w-10",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-w-11",
+        "parapets": 4,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-w-20",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 1
+      },
+      {
+        "building": "bldg-steps-w-21",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-e-00",
+        "parapets": 5,
+        "acs": 0,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-e-01",
+        "parapets": 4,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-e-10",
+        "parapets": 5,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-e-11",
+        "parapets": 4,
+        "acs": 2,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-e-20",
+        "parapets": 5,
+        "acs": 1,
+        "tanks": 0
+      },
+      {
+        "building": "bldg-steps-e-21",
+        "parapets": 4,
+        "acs": 0,
+        "tanks": 0
+      }
+    ],
+    "shopMarker": true,
+    "shopPanel": true,
+    "shopPanelId": "shop-lantern-fish",
+    "honesty": "Authored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:1 city. NOT_PLAN_PASS.\n\nFriend bodies use this PC's 4175 loopback store (two browsers here). Not a city shop server. Not a city presence server. Not another city's cloud. Not WAN. Not GPS. NOT_PLAN_PASS.",
+    "mode": "Offline — Stroll alone; shops still open.",
+    "gtaClaim": false
+  }
+}

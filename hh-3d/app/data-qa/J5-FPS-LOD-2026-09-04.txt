@@ -1,0 +1,160 @@
+{
+  "run_id": "HH3D-J5-20260904-ASIA-SAIGON-11",
+  "player": "http://127.0.0.1:4175/",
+  "viewport": "1280x720",
+  "method": "headless-new CDP rAF wall-clock 3000ms",
+  "liveJs": "/assets/index-DRczAori.js",
+  "verdict": "J5_FPS_LOD_OBSERVED",
+  "remintNeeded": false,
+  "reminted": true,
+  "idleOk": false,
+  "walkOk": true,
+  "harborOk": true,
+  "walked": true,
+  "not_plan_pass": true,
+  "not_gate_u1": true,
+  "not_osm": true,
+  "not_wan": true,
+  "idle": {
+    "wallMs": 3000.1,
+    "n": 115,
+    "frameMs": {
+      "n": 115,
+      "min": 16.5,
+      "median": 33.1,
+      "p1": 16.5,
+      "max": 66.8,
+      "mean": 26.38
+    },
+    "fps": {
+      "n": 115,
+      "min": 14.97,
+      "median": 30.21,
+      "p1": 15.69,
+      "max": 60.61,
+      "mean": 44
+    }
+  },
+  "walk": {
+    "wallMs": 3000.1,
+    "n": 132,
+    "frameMs": {
+      "n": 132,
+      "min": 16.4,
+      "median": 16.7,
+      "p1": 16.5,
+      "max": 66.7,
+      "mean": 22.85
+    },
+    "fps": {
+      "n": 132,
+      "min": 14.99,
+      "median": 59.88,
+      "p1": 19.92,
+      "max": 60.98,
+      "mean": 49.98
+    }
+  },
+  "idleAfterWalk": {
+    "wallMs": 3000,
+    "n": 126,
+    "frameMs": {
+      "n": 126,
+      "min": 16.4,
+      "median": 16.7,
+      "p1": 16.52,
+      "max": 66.7,
+      "mean": 23.94
+    },
+    "fps": {
+      "n": 126,
+      "min": 14.99,
+      "median": 59.88,
+      "p1": 19.91,
+      "max": 60.98,
+      "mean": 48.36
+    }
+  },
+  "spawn": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/?seat=a",
+    "playReady": "yes",
+    "engine": "r3f",
+    "pose": "idle",
+    "lon": 106.69804,
+    "lat": 10.77162,
+    "heading": 0,
+    "buildings": 60,
+    "fog": "distance-haze",
+    "groundFloor": "door-glass-awning",
+    "streetHud": "named-chip",
+    "streetName": "Harbor Walk",
+    "chipText": "Harbor Walk",
+    "menuHidden": true,
+    "canvas": {
+      "w": 1280,
+      "h": 720
+    },
+    "honesty": "Authored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:1 city. Authored 400 m: two official named streets plus inner parcel lanes, not a city grid. This frame ends at an authored wall — fixture edge, not a city. NOT_PLAN_PASS.\n\nFriend bodies use this PC's 4175 loopback store (two browsers here). Not a city shop server. Not a city presence server. Not another city's cloud. Not WAN. Not GPS. NOT_PLAN_PASS.",
+    "farLod": "inner-door-glass",
+    "farLodM": 90,
+    "farDrawnInner": 48,
+    "farDrawnScooters": 6,
+    "plaques": 4,
+    "nearbyShop": "",
+    "shopPanel": false,
+    "shopPanelId": "",
+    "minimapActive": "Harbor Walk"
+  },
+  "beforeIdle": {
+    "pose": "idle",
+    "chip": "Harbor Walk",
+    "street": "Harbor Walk",
+    "lon": 106.69804,
+    "lat": 10.77162
+  },
+  "afterIdle": {
+    "pose": "idle",
+    "chip": "Harbor Walk",
+    "lon": 106.69804,
+    "lat": 10.77162
+  },
+  "midWalk": {
+    "pose": "walk",
+    "chip": "Harbor Walk",
+    "lon": 106.69804,
+    "lat": 10.7716641
+  },
+  "afterWalk": {
+    "pose": "idle",
+    "chip": "Harbor Walk",
+    "lon": 106.69804,
+    "lat": 10.7716674
+  },
+  "afterSecondIdle": {
+    "pose": "idle",
+    "chip": "Harbor Walk",
+    "lon": 106.69804,
+    "lat": 10.7716674
+  },
+  "onSteps": {
+    "pose": "idle",
+    "chip": "Steps East",
+    "mini": "Steps East",
+    "lon": 106.6981034,
+    "lat": 10.7718195
+  },
+  "lantern": {
+    "nearby": "shop-lantern-fish",
+    "panel": "shop-lantern-fish"
+  },
+  "stepsChip": true,
+  "lanternOk": true,
+  "lodOk": true,
+  "plaquesOk": true,
+  "farLod": "inner-door-glass",
+  "farLodM": 90,
+  "farDrawnInner": 48,
+  "farDrawnScooters": 6,
+  "honesty": "Authored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:1 city. Authored 400 m: two official named streets plus inner parcel lanes, not a city grid. This frame ends at an auth"
+}

@@ -1,0 +1,2415 @@
+PROGRESS — HH World (hh-3d/app)
+DATE=2026-09-05
+TIMEZONE=Asia/Saigon
+GIT_HEAD_AT_WRITE=04cb6ca92c482017c02d78e7885727f73b62103d
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+PLAN_CHECKBOXES=UNCHANGED_DO_NOT_TICK
+TARGET_PLAN=real-application
+READ_THIS_FIRST=this file
+OWNER_MODES_CONTRACT=hh-3d/zdoc/03-9-hh-world-owner-modes.txt (rev3 LOCAL_DEMO_EXISTS_NOT_PLAN_PASS)
+WP_ORDER_AND_DOD=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+PLAN_ROUTING_RECONCILED=2026-09-03_DOCUMENTATION_ONLY
+DECISION_RECORD=hh-3d/app/decision-records/2026-09-03-r0-wp0-hh-world-web.txt
+
+OWNER_CHAT_GRANT=làm HH World web
+ACCEPT_RECOMMENDATIONS=YES
+AUTHORIZE_HH3D_APP_SCAFFOLD=YES
+AUTHORIZE_MAP_FETCH=NO
+AUTHORIZE_CESIUM=NO
+AUTHORIZE_GOOGLE_PHOTOREALISTIC=NO
+AUTHORIZE_UNREAL_INSTALL=NO
+AUTHORIZE_PAID_API=NO
+AUTHORIZE_GODOT2_CITY=NO
+NO_HUMAN_OWNER_SIGN_NAME_INVENTED=1
+
+================================================================================
+PLAYER URL
+================================================================================
+
+  http://127.0.0.1:4175/
+
+  ONE preview. Do not use 4173 (Hòn Gió demo) or 4174.
+  Dev if needed: http://127.0.0.1:5175/  (npm run dev) — do not start a second
+  HH World preview if 4175 is already up.
+
+================================================================================
+CURRENT / NEXT
+================================================================================
+
+CURRENT leftover for plan acceptance = GATE-U1 (three human reviewers).
+  Do not invent humans. Do not tick original WP STATE/PASS.
+  Local map critic TICK=yes is still NOT_PLAN_PASS.
+  J4 ASCII "ban sung" fold remint is code-only; not M1-WP1; not GATE-U1.
+  Do not start R3/R5/R6/R7. Do not fetch maps. Do not open Unreal/Godot/VF.
+
+PLAYER_SLICE_THIS_SESSION=HTML_LOD
+  LOOK_PITCH_FPS_LIVE_REAUDIT=independent critic TICK=yes on live KZQAQdH6.
+    A heading 0→0 lon +east / cam-right west = screen-left; pitch-up
+    tunic in frame; FPS chip NOT_60 / NOT_R2_WP1. NOT_PLAN_PASS.
+    Notes=hh-3d/app/data-qa/CRITIC-3D-LOOK-PITCH-FPS-LIVE-REAUDIT-2026-09-05.txt
+    HTML-LOD TICK and BrVc4bRj TICK were not treated as this proof.
+  Status=independent critic TICK=yes on live KZQAQdH6. NOT_PLAN_PASS.
+  Notes=hh-3d/app/data-qa/CRITIC-3D-HTML-LOD-REAUDIT-2026-09-05.txt
+  LIVE_JS=/assets/index-KZQAQdH6.js LEN=2176239
+  SHA256=878eb28eea10fa2cb114421b8157f398e6977ca0cf3c8a404a95d39867bc56e7
+  LIVE_PID=388
+  LIVE_PID_STARTTIME=2026-09-05 06:42:59 +07
+  Implementer=hh-3d/app/data-qa/CRITIC-3D-HTML-LOD-2026-09-05.txt
+  Critic file (must be written by independent critic only)=
+    hh-3d/app/data-qa/CRITIC-3D-HTML-LOD-REAUDIT-2026-09-05.txt
+  Html shop/place/plaque labels skip past 90 m (meshes stay).
+  Accepted prior LOOK_PITCH_FPS reaudit TICK=yes on BrVc4bRj still
+  stands for A=east/screen-left, yaw −1, pitch-up tunic, FPS chip.
+  NOT_R2_WP1. NOT_PLAN_PASS.
+  Prior LOOK_PITCH_FPS live (superseded as current JS only):
+  LIVE_JS=/assets/index-BrVc4bRj.js LEN=2175994
+  SHA256=c73e28b6ae16f3009d9af4908a1a05acd2acbbd0f2b350c47884fbe80c8c9df4
+  LIVE_PID=30572
+  LIVE_PID_STARTTIME=2026-09-05 06:29:31 +07
+  Implementer=hh-3d/app/data-qa/CRITIC-3D-LOOK-PITCH-FPS-2026-09-05.txt
+  Notes=hh-3d/app/data-qa/CRITIC-3D-LOOK-PITCH-FPS-REAUDIT-2026-09-05.txt
+  Status=independent critic TICK=yes on BrVc4bRj. NOT_PLAN_PASS.
+  LOOK_YAW_SIGN=-1 stays. A/D use demo flipped screen-right so A from
+  north walks east (screen-left). Pitch-up drops the lens / keeps tunic.
+  On-street FPS chip is honest rAF · NOT_60 / NOT_R2_WP1.
+  Walk 2.55 / sprint 4.35. Connected copy “Máy này · 4175”.
+  Prior LOOK_STRAFE critic TICK=yes on CoTKbFff is superseded for A
+  screen direction (that hunt used lon-west = screen-left; owner visual
+  and Three lookAt camera-right = west). Keep yaw-sign result.
+  NOT_R2_WP1. NOT_PLAN_PASS.
+  Void-as-acceptance: DGX50qvn +1 remint (owner: still inverted).
+  Late critic CRITIC-3D-LOOK-YAW-FIX-REAUDIT-2026-09-05.txt TICK=yes
+    is on superseded DGX50qvn — not live acceptance.
+  Late critic CRITIC-3D-LOOK-YAW-FIX-REAUDIT2-2026-09-05.txt TICK=no
+    HASH_MISMATCH=1 is correct: claimed DGX50qvn, live already CoTKbFff.
+  Prior TAB_HIDE_GHOST reaudit TICK=yes still stands on oRuAyVDb (replaced live).
+  Do not treat implementer CDP as acceptance.
+  LIVE_JS=/assets/index-oRuAyVDb.js LEN=2174914
+  SHA256=f7f8b3612152d6a3b229b1f3a33020db1dcc9e342acf64b43a28cbde7e463f82
+  LIVE_CSS=/assets/index-DsRW_q10.css LEN=83046
+  LIVE_PID=18936
+  LIVE_PID_STARTTIME=2026-09-05 05:27:39 +07
+  Notes=hh-3d/app/data-qa/CRITIC-3D-TAB-HIDE-GHOST-FIX-REAUDIT-2026-09-05.txt
+  Prior TICK=no kept (miss that forced the remint):
+    hh-3d/app/data-qa/CRITIC-3D-TAB-HIDE-GHOST-REAUDIT2-2026-09-05.txt
+    hh-3d/app/data-qa/CRITIC-3D-TAB-HIDE-GHOST-REAUDIT-2026-09-05.txt
+  Prior implementer note kept:
+    hh-3d/app/data-qa/CRITIC-3D-TAB-HIDE-GHOST-FIX-2026-09-05.txt
+    hh-3d/app/data-qa/CRITIC-3D-TAB-HIDE-GHOST-2026-09-04.txt
+  Visible Online+opted-in keeps publishing (no leave-on-every-tick /
+  cleanup race / unsigned leftover leave). Hidden stops publish
+  (leave once) without flipping Offline. Unhide republishes.
+  Other seat loses body/nametag after leave or ≤ PRESENCE_TTL_MS=10000.
+  This-PC /demo-bus only. NOT_M2.
+  Accepted prior: CRITIC-3D-VIEWING-OPEN-SHELF-2026-09-04.txt TICK=yes
+  on /assets/index-DHD8uCJ5.js LEN=2173910
+  SHA256=c1be8323e371ad18311f30e11ee23dcd1e334a97a46992ab9b9153af64a42ddf
+  Street chip play-viewing-open (“Mở kệ”) with Menu closed.
+  Accepted prior: CRITIC-3D-VIEWING-STREET-HUD-REAUDIT-2026-09-04.txt
+  TICK=yes on /assets/index-Ba8fGY2G.js LEN=2173678
+  SHA256=f33eb1499012641f958c055498f9ead07f4e4bb32a095931c908e249834d2bc5
+  Menu-closed visible play-viewing-chip with Đang xem cửa hàng + shop.
+  Prior nametag FIX reaudit TICK=yes still stands (DScoMgU1).
+  Prior TICK=no nametag first-sample leftover kept (Bpqr6UP3).
+  Prior FRIEND-E-VIEWING reaudit TICK=yes still stands.
+  Prior HITCH3 reaudit TICK=yes still stands.
+  Prior LEFTOVER-KIND reaudit TICK=yes still stands.
+  Prior LEFTOVER-GAP reaudit TICK=yes still stands.
+  Prior FRIEND-VIEWING reaudit TICK=yes still stands.
+  Prior SHELF-ATTRIB reaudit TICK=yes still stands.
+  Prior MINIMAP_STREET_SHOPS reaudit TICK=yes still stands.
+  Prior HARBOR-SOUTH reaudit TICK=yes still stands.
+  Prior TRAM-WEST reaudit TICK=yes still stands.
+  Prior TRAM-NORTH reaudit TICK=yes still stands.
+  Prior CHE-BOARD reaudit TICK=yes still stands.
+  Prior CREATE_SIDEWALK reaudit TICK=yes still stands.
+  Prior leftover-panel reaudit TICK=yes still stands.
+  TRAM-XING reaudit TICK=yes still stands.
+
+NEXT
+  1. GATE-U1 human 5-minute journey (not faked). Still first acceptance leftover.
+  2. Later open data (OSM/Overture) only after license ledger + AUTHORIZE_MAP_FETCH=YES.
+     Today's 60 buildings are still the small authored 400 m block with insets.
+  3. WAN / other-PC join still not built. Today's store is this PC's 4175
+     loopback only. Do not bind 0.0.0.0. Do not claim a city cloud.
+  4. R4-WP0B real account/OIDC still not built. J2/J4 used a labeled local
+     demo identity only. Do not fake Google/OIDC or invent a human owner name.
+  5. J3/J6 local demo friends OBSERVED on this PC. Independent critic
+     CRITIC-3D-FRIEND-GAIT-REAUDIT-2026-09-04.txt TICK=yes on BaoJbjxu
+     (same-body walk diffs; leftover E not stolen). Friend footsteps
+     remint is implementer CDP only (SAIGON-13) after reaudit
+     TICK=no on DptTgaTX. Real M2 presence server / city friends
+     still not built. Do not tick M2-WP0/M2-WP1.
+  6. R2-WP1 remaining: mobile/headed/context-loss/memory/interaction-FPS/
+     cold-process first-map/owner-signed thresholds. Old MapLibre idle
+     was 56.82, not 60. Harbor Play after far LOD: idle mean 44.00 /
+     walk mean 49.98 (post-idle). First Harbor W after minimap defer:
+     min 9.99 / mean 23.73 (headless 1280x720 rAF 3 s). Min ≥ 20 /
+     min ≥ 25 and idle ≥50 still UNFILLED. Not 60.
+  7. Street now has hemi+sun, dark-road / light-walk / yellow-edge, cheap
+     lamps, four zebras (lantern stall + Harbor/Steps East mouth +
+     Harbor/Steps West mouth + Harbor/Tram Approach mouth),
+     stop-lines and curb returns at those three corners, a few planters,
+     15 parked box scooters on the
+     sidewalk edge, authored awning kiosks at published shops with
+     a chalkboard of public fiction listing names (lantern: Cá + Túi;
+     drawn player shops reuse the same painter: Phở bò (mẫu),
+     Chè đậu (mẫu) on Quầy Chè Vỉa, Kem dua (mẫu) on Quay Kem
+     Reaudit when that stall is drawn),
+     a street-facing ground-floor door+glass+awning on Harbor Walk /
+     Tram Approach and on inner parcel lanes that already face a
+     carved road, those inner centerlines painted as dark asphalt
+     + lighter walk edge, four pole-board plaques naming Harbor Walk /
+     Tram Approach / Steps East / Steps West, a slim HUD chip for the
+     current of those four names, the corner minimap drawing those
+     same four in-memory lines (darker official, thinner inner,
+     chip highlight) plus cheap street-play shop dots at the
+     sidewalk plant (lantern / drawn Phở / Chè / Kem if drawn;
+     leftover Shared PC / J6 stay off the 2D marks), far inner door/glass/awning and distant
+     scooters skipped past 90 m (Harbor near-field kept), a cheap parapet + hashed
+     AC/tank on the 60 lids, authored crate/basket spill beside
+     published kiosks plus 3 sidewalk stacks, distance haze, and a
+     courtyard wall + curb + water/lot on the 400 m fixture bounds.
+     Other walls stay ID-tinted boxes with insets. Still not a
+     downtown or a city. Open data still needs a grant.
+  8. Walk collision is now the extruded ring, not a looser AABB. Chamfer
+     cuts are walkable to the visible wall. Still 2D circle-vs-ring,
+     not interiors / mesh collision / a city.
+  9. Follow camera now pulls in along the look ray vs those rings
+     (plus stall boxes). Still not mesh collision / a city.
+  10. Sibling critic may review this tree; implementer does not tick [x].
+
+================================================================================
+DONE THIS SESSION (code exists; plan still [ ] )
+================================================================================
+
+R0-WP0  Official decision record written. review-log factual append only.
+        Human OWNER_SIGN name still UNFILLED. DEMO_GAP_ACCEPTED=YES.
+R0-WP1  Vite + React 19.2.8 + TS 5.9.3 + Vite 8.2.2 (demo pins).
+        maplibre-gl 5.6.2. Lockfile present. typecheck/test/build PASS.
+R1-WP0  Authored 400 m GeoJSON around 10.7725, 106.6980. NO fetch.
+        WorldManifest + app-local license/research ledgers.
+        Did NOT rewrite hh-3d/zdoc/license-ledger.txt or research-ledger.txt.
+R1-WP1  MapLibre local style + local GeoJSON + fill-extrusion + 2D list fallback.
+R2-WP0  Search, place card (name / approx / Map data as of), deep link, share.
+        GATE-U1 dependency is NOT done, so this is not a plan PASS.
+R4-WP0A Local bookmark (localStorage allowlist, export/reset, no login).
+
+LOCAL_STREET_SLICE_2026-09-03 (NOT_PLAN_PASS; not an M-WP tick)
+  Self stylized CSS/HTML avatar on the 400 m authored map.
+  Keyboard WASD/arrows: walk / stand / turn. Touch pad present.
+  Position is in-app lng/lat, not GPS / camera center.
+  Default Offline; Online control disabled ("unavailable"); 0 remote people.
+  One public authored shop shop-lantern-fish at Market Steps.
+  Published listings: fish + bag fiction. Draft listing-draft-hidden hidden.
+  Owner-offline checkbox default ON; shelf stays public. No friends required.
+  J1 Chrome CDP OBSERVED: hh-3d/app/data-qa/J1-WALK-SHOP-2026-09-03.txt
+  RUN_ID=HH3D-J1-20260903-ASIA-SAIGON-03  verdict=J1_OBSERVED
+  Critic-E remint: NEARBY_SHOP_M=10 (at the stall, not the old 20 m street bubble).
+  Spawn 28 m; spawn E no-op; street E at 20.2 m still closed; hold W 13.4 s / 21.4 m.
+  Nearby at 9.9 m; E opened Quầy Cá Đèn Lồng (via=e). Hint says "at the stall".
+  Fish+bag shown; draft absent; owner-Offline label does not hide shelf.
+  Camera follow stays on while the shelf is open; Close keeps follow + doll on-screen.
+  Workspace locks map height so the sheet cannot push the avatar below the fold.
+  Seat remint after CRITIC-J1-RANGE-CAM: open shop is a sidebar-column overlay
+  (goods first). Probe RUN_ID=HH3D-J1-20260903-ASIA-SAIGON-04 shopSeatOk=true
+  (fish top 381.8 / bag top 488.1, both < 720, visible). Not a plan tick.
+  Touch pad / building collision / camera-pan independence: coded, not CDP.
+
+J2_LOCAL_DEMO_LIST_2026-09-03 (NOT_PLAN_PASS; not R4-WP0B / M1-WP0)
+  Local demo identity "Chủ quầy (máy này)" on this machine.
+  Labeled NOT a real account / NOT Google/OIDC / NOT_PLAN_PASS.
+  Published local listings persist in localStorage and stay on the public
+  shelf after Offline label, leave-demo-owner, close, and guest reopen.
+  Simulate no-network (not Offline stroll): new item stays draft / Chưa đăng;
+  UI does not say "đã đăng". Explicit retry after network returns publishes.
+  Browse shop still does not require friends. No fake OIDC.
+  Chrome CDP OBSERVED: hh-3d/app/data-qa/J2-LIST-PRODUCT-2026-09-03.txt
+  RUN_ID=HH3D-J2-20260903-ASIA-SAIGON-01  verdict=J2_OBSERVED
+  Probe: node hh-3d/app/data-qa/j2-list-product-probe.mjs  EXIT=0
+
+J3_LOCAL_DEMO_FRIENDS_2026-09-03 (NOT_PLAN_PASS; not M2-WP0 / M2-WP1)
+  Seats ?seat=a|b|c on the same 4175 app (tab or second browser profile).
+  Bạn A / Bạn B can Add friend + Accept. Người lạ C cannot be friended.
+  Online is a local demo control (not a city server). Opt-in required.
+  Position is in-app walk from WASD/pad, not GPS.
+  Transport: BroadcastChannel + per-seat localStorage + this 4175 preview
+  process bus (/demo-bus). Honesty: this machine, NOT_PLAN_PASS.
+  Critic CRITIC-J3-2026-09-03.txt TICK=no was against the pre-seat tree
+  (one local body / Online unavailable). Remint after seats exist.
+  Chrome CDP OBSERVED: hh-3d/app/data-qa/J3-FRIENDS-WALK-2026-09-03.txt
+  RUN_ID=HH3D-J3-20260903-ASIA-SAIGON-01  verdict=J3_OBSERVED
+  Probe: node hh-3d/app/data-qa/j3-friends-walk-probe.mjs  EXIT=0
+  Three isolated headless profiles (A=9248 B=9249 C=9250) vs recycled 4175.
+  Pending invite: remoteCount=0. After accept: A sees remote-avatar-b,
+  B sees remote-avatar-a. A walk lat 10.7716200 → 10.7716517 on B.
+  B walk lon 106.6981040 → 106.6981355 on A. A Offline → B remotes 0.
+  Unfriend → both remotes 0. C Online: never drawn on A/B; C sees none.
+
+J4_LOCAL_CREATE_SHOP_2026-09-03 (NOT_PLAN_PASS; not M1-WP0)
+  Player creates a shop: name + what it sells (free-text: phở, sách, cá, túi).
+  Demo identity "Chủ quầy (máy này)" labeled NOT real account / NOT OIDC /
+  NOT_PLAN_PASS. New shop gets an in-app map marker at the character.
+  Guest walks near (~10 m) + E to browse THAT shop's public shelf.
+  Public shelf stays after Offline label / leave-demo-owner. Isolated second
+  Chrome profile on this 4175 also sees lantern + player shop via /demo-bus.
+  Drafts stay Chưa đăng (never "đã đăng"). Lantern stall remains one example.
+  Chrome CDP OBSERVED: hh-3d/app/data-qa/J4-CREATE-SHOP-2026-09-03.txt
+  RUN_ID=HH3D-J4-20260903-ASIA-SAIGON-01  verdict=J4_OBSERVED
+  Probe: node hh-3d/app/data-qa/j4-create-shop-probe.mjs  EXIT=0
+  A created Quầy Phở Nhà / Phở bò → shop-local-mtl0pvfk7hwglz. Leave identity:
+  2 markers remain. A E at spawn opened that shelf. Isolated B saw 2 markers
+  and E opened the same Phở shelf. A walk north then E opened lantern.
+  CRITIC-J4 TICK=yes (2026-09-03 11:34 +07) miss remint: prohibited match
+  now folds lowercase + strip VN diacritics + collapse spaces/punctuation.
+  Rejects bán súng / ban sung / bán-súng / BÁN SÚNG / ban.sung. Allows
+  phở / sách / cá. Not M1-WP1 / not complete policy. Did not scrub
+  this-machine localStorage leftover. Recycled existing 4175 after rebuild
+  (in-process /demo-bus reset with the process; no catalog_clear; no 4174).
+
+PLAY_3D_WALK_2026-09-03 (NOT_PLAN_PASS; not M0-WP1 / not GATE-U1)
+  Default 4175 Play is R3F third-person on the authored 400 m fixture.
+  Pins: three 0.182.0, @react-three/fiber 9.7.0, @react-three/drei 10.7.8
+  (same as hh-3d/demo). Did not copy Hòn Gió island into the city.
+  Camera follows body heading (not world-north). A/D turn in place;
+  W/S walk along facing. Pad ◀/▶ turn. No mouse-look (would fight pad).
+  Seats / Offline-Online / search / create-shop / lists open via Menu or Tab.
+  Honesty one line stays on the street. Shop E overlay still works when near.
+  Collision still uses authored building rings. Honesty denies 1:1 / GTA.
+  Chrome CDP OBSERVED: hh-3d/app/data-qa/J5-3D-WALK-2026-09-03.txt
+  Shots: j5-3d-walk-behind.png ; j5-3d-walk-turn.png
+  RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-04  verdict=J5_OBSERVED
+  play 1280x720; worldMap=false; minimap 182x132; buildings=5
+  camera=behind follow=heading; camYaw 0 → 228 (A 1.2 s) → 1.8 (D 1.2 s)
+  Hold W 9 s moved 14.4 m north (lat 10.7716200 → 10.7717496).
+  Default menu hidden; overlayRatio=0.099 (not half the canvas).
+  This is stylized boxes, NOT a city digital twin, NOT Unreal, NOT GTA.
+  Critic CRITIC-3D-WALK-2-2026-09-03.txt TICK=yes; this remint is the miss fix.
+
+PLAY_3D_BLOCK_2026-09-03 (NOT_PLAN_PASS; not M0-WP1 / not GATE-U1)
+  Same 400 m authored fixture, no OSM/Overture fetch. The five mega-boxes
+  were carved along the existing streets and split into 60 parcels; Play
+  extrudes each ring (footprint mesh, not AABB). Ground is light walk;
+  Harbor Walk + Tram Approach are dark road over a lighter sidewalk.
+  CDP: hh-3d/app/data-qa/J5-3D-WALK-2026-09-03.txt
+  Shots: j5-3d-block.png ; j5-3d-walk-behind.png ; j5-3d-walk-turn.png
+  RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-05  verdict=J5_OBSERVED
+  play 1280x720; buildings=60 list=60 extruded=footprint
+  W 9 s moved 14.4 m north; camYaw 0 → 226.2 (A) → 0 (D)
+  overlayRatio=0.099; shop marker still at Market Steps.
+  Critic CRITIC-3D-CAM-HUD-2026-09-03.txt TICK=yes; this remint is the miss fix.
+
+PLAY_3D_COLLISION_2026-09-03 (NOT_PLAN_PASS; not M0-WP1 / not GATE-U1)
+  Same 400 m authored fixture, no OSM/Overture fetch. Walk collision is now
+  the building AABB plus a 0.55 m body radius (not center-point-in-ring).
+  Chamfered footprints no longer let the body walk into the box. Feet stay
+  on the slab (ground Y=0). Ground is a darker 400 m slab over a darker
+  surround; Harbor Walk is darker asphalt on a lighter walk.
+  CDP: hh-3d/app/data-qa/J5-COLLISION-2026-09-03.txt
+  Shot: j5-3d-wall.png
+  Probe: node hh-3d/app/data-qa/j5-collision-probe.mjs  EXIT=0
+  RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-07  verdict=J5_COLLISION_OK
+  W 8 s north 12.8 m (street still open); D to heading 90; W 10 s east
+  11.07 m then stop at bldg-steps-e-00, 0.56 m outside AABB; extra 3 s W
+  east=0.00 m; inside-aabb=0 live+DOM. collision=aabb-radius ground-y=0.
+  Third-person heading-follow + slim HUD + shop E + Offline honesty hold.
+  Critic CRITIC-3D-COLLISION-2026-09-03.txt TICK=yes (independent CDP 9393;
+  extra east=0; center 0.558 m outside bldg-steps-e-00). Biggest miss:
+  still a beige 400 m AABB block, not a city; 95° hold slides along the
+  face (~0.91 m / 6 s), not clip-through. NOT_PLAN_PASS.
+
+THIS_PC_SHARED_STORE_2026-09-03 (NOT_PLAN_PASS; not R3 / M1 / M2)
+  4175 /demo-bus is the source of truth for published shops, friend graph,
+  and live presence on THIS PC. Bind 127.0.0.1 only (403 if Host is not
+  loopback). Catalog+graph persist under web/.data/this-pc-shared.json
+  (gitignored). Presence is ephemeral + TTL. Drafts stay on the creating
+  tab and never enter the public catalog. Graph mutations are ops
+  (request/accept/unfriend), not last-write localStorage.
+  CDP: hh-3d/app/data-qa/J6-SHARED-SERVER-2026-09-03.txt
+  Probe: node hh-3d/app/data-qa/j6-shared-server-probe.mjs  EXIT=0
+  RUN_ID=HH3D-J6-20260903-ASIA-SAIGON-02  verdict=J6_SHARED_OK
+  Isolated A/B, localStorage cleared: both saw lantern + shop-local-sharedpc
+  after a Node POST (no tab wrote that shop first). Draft inject rejected.
+  A↔B Online walk: B lat 10.7716200 → 10.7716509. A Offline → B remotes 0;
+  shop stayed on GET. A no-network create = Chưa đăng; draftOnBus=false.
+  Honesty: this PC / loopback / not WAN / NOT_PLAN_PASS.
+
+PLAY_3D_JUMP_2026-09-03 (NOT_PLAN_PASS; not M0-WP1 / not GATE-U1)
+  Space / pad ⌃ hop like hh-3d/demo (JUMP 6.1, GRAVITY 17). Peak ~0.95 m;
+  lands on the slab (alt=0). Does not clear a building. Heading-follow,
+  60 buildings, slim HUD, shop E still work. Long tunic, no bowling-ball hips.
+  CDP: hh-3d/app/data-qa/J5-JUMP-2026-09-03.txt
+  Probe: node hh-3d/app/data-qa/j5-jump-probe.mjs  EXIT=0
+  RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-08  verdict=J5_JUMP_OK
+  airborne=1 alt=0.95; land alt=0; A 1.2 s heading 0→228 camYaw 228;
+  buildings=60; menu closed; status "jumping · Space jump".
+
+PLAY_3D_FEEL_2026-09-03 (NOT_PLAN_PASS; not M0-WP1 / not GATE-U1)
+  Optional pointer-lock look on canvas click; Esc releases. Right-drag look
+  always works (pad ◀/▶ still turns). WASD along look. Cheap AABB face slide
+  is now an intentional tangent project (not jitter). Building colors vary
+  from existing IDs (20 muted walls). Same 400 m authored fixture. No OSM.
+  CDP: hh-3d/app/data-qa/J5-FEEL-2026-09-03.txt
+  Shots: j5-3d-look.png ; j5-3d-slide.png
+  Probe: node hh-3d/app/data-qa/j5-feel-probe.mjs  EXIT=0
+  RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-09  verdict=J5_FEEL_OK
+  look=canvas-pointer; camYaw 0→25.2 pitch 5; follow=look while dragging;
+  W along look east=1.51 north=3.21; pad A still turned heading.
+  Street W 12.86 m; 95° hold extra east=0 north=-0.92; lonSpanM=0;
+  12 samples data-slide=1 pose=walk inside=0 lon=106.6981412.
+
+PLAY_3D_SPRINT_2026-09-03 (NOT_PLAN_PASS; not M0-WP1 / not GATE-U1)
+  Hold Shift (or pad ≫) sprints at 2.72 m/s; release returns 1.6 walk.
+  Same look / WASD / AABB collision. Body reuses Hòn Gió tunic proportions
+  (not the island): long teal tunic, slim pelvis, nape/side hair, scale 1.36.
+  Walk/stand/turn/jump/sprint poses stay readable from the behind camera.
+  Same 400 m authored fixture. No OSM.
+  CDP: hh-3d/app/data-qa/J5-SPRINT-2026-09-03.txt
+  Shots: j5-3d-body-stand.png ; j5-3d-body-walk.png ; j5-3d-body-sprint.png
+  Probe: node hh-3d/app/data-qa/j5-sprint-probe.mjs  EXIT=0
+  RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-10  verdict=J5_SPRINT_OK
+  W 3 s north 5.07 m (1.69 m/s); Shift+W 3 s north 8.71 m (2.90 m/s);
+  data-sprint=1 mid-hold; release sprint=0; buildings=60; inside AABB=0.
+  Critic CRITIC-3D-SPRINT-BODY-2026-09-03.txt TICK=yes (walk 1.55 vs
+  sprint 2.73 m/s; no bowling hips). Independent CDP; not a plan tick.
+
+PLAY_3D_SKY_SIGNS_2026-09-03 (NOT_PLAN_PASS; not M0-WP1 / not GATE-U1)
+  Gradient sky hemisphere + sun disc on the authored 400 m Play.
+  3D pole + painted board at each published shop (not HUD-only).
+  CDP: hh-3d/app/data-qa/J5-SKY-SIGN-2026-09-03.txt
+  Shots: j5-3d-sky.png ; j5-3d-sky-sign.png
+  Probe: node hh-3d/app/data-qa/j5-sky-sign-probe.mjs  EXIT=0
+  First critic RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-14  J5_SKY_SIGN_OK
+  data-sky=gradient-hemisphere data-sun=disc data-shop-signs=3
+  Spawn canyon RGB 113.3/155.5/179.8 blueRatio=0.784 beige=0
+  Critic CRITIC-3D-SKY-SIGNS-2026-09-03.txt TICK=yes. NOT_PLAN_PASS.
+
+PLAY_3D_SIGN_READ_2026-09-03 (NOT_PLAN_PASS; not M0-WP1 / not GATE-U1)
+  Same sky. Boards enlarged 3.55x1.22, two street faces, #9a2f0e + 52px.
+  Recycled 4175 after rebuild. Probe remint SAIGON-16 EXIT=0.
+  Walk sky RGB 122.3/142.2/154.8 blueRatio=0.614
+  Walk orange=0.135 (was 0 on SAIGON-14). Spawn orange=0.246.
+  data-shop-sign-faces=2. Still not a city. NOT_PLAN_PASS.
+
+PLAY_3D_STREET_LIGHT_2026-09-03 (NOT_PLAN_PASS; not M0-WP1 / not GATE-U1)
+  Follow-player hemi + sun key + camera fill on the authored 400 m Play.
+  Harbor Walk / Tram Approach stay dark asphalt; sidewalk/plaza lighter;
+  cheap stone curb + yellow painted road-edge. Walls stay boxes with
+  plaster/paint roughness (not photogrammetry). No bowling-ball hips.
+  CDP: hh-3d/app/data-qa/J5-STREET-LIGHT-2026-09-03.txt
+  Shots: j5-3d-street.png ; j5-3d-street-walk.png
+  Probe: node hh-3d/app/data-qa/j5-street-light-probe.mjs  EXIT=0
+  RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-19  verdict=J5_STREET_LIGHT_OK
+  data-light=hemi-sun data-ground=road-walk-curb
+  Walk sky RGB 130.4/154.8/168.5 blueRatio=0.653 beige=0.034
+  walk lum 169.7 vs road 23.8 (delta 145.9). Tunic teal=0.32.
+  Critic CRITIC-3D-STREET-LIGHT-2026-09-03.txt TICK=yes. NOT_PLAN_PASS.
+
+PLAY_3D_STREET_PROPS_2026-09-03 (NOT_PLAN_PASS; not M0-WP1 / not GATE-U1)
+  Cheap authored furniture on Harbor Walk / Tram Approach: pole+fixture
+  lamps (a few warm point glows), one zebra at the lantern stall, and
+  4 planter/canopy masses. Positions from the existing street lines.
+  Lamp/planter AABBs join walk collision; street center stays open.
+  Same hemi+sun / asphalt / yellow-edge / shop boards. No bowling hips.
+  CDP: hh-3d/app/data-qa/J5-STREET-PROPS-2026-09-03.txt
+  Shots: j5-3d-street-props.png ; j5-3d-street-crosswalk.png
+  Probe: node hh-3d/app/data-qa/j5-street-props-probe.mjs  EXIT=0
+  RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-22  verdict=J5_STREET_PROPS_OK
+  data-street-props=lamps-crosswalk-planters lamps=38 glows=6
+  crosswalks=1 planters=4
+  Mid-walk sky RGB 125.1/149.9/164.2 blueRatio=0.639 beige=0.029
+  zebra whiteRatio=0.144. E opened shop-lantern-fish. inside-aabb=0.
+  Critic CRITIC-3D-STREET-PROPS-2026-09-03.txt TICK=yes. NOT_PLAN_PASS.
+
+PLAY_3D_SHOP_STALL_2026-09-03 (NOT_PLAN_PASS; not M0-WP1 / not GATE-U1)
+  Cheap authored storefront at each published shop marker: awning box
+  colored from shop id/name, counter + two posts + shallow kiosk under
+  the existing pole-board. Counter/kiosk AABB joins walk collision
+  unless the leftover sits on spawn (Shared PC collide=0 so W is free).
+  Not an interior. Same 400 m authored fixture. No OSM.
+  CDP: hh-3d/app/data-qa/J5-SHOP-STALL-2026-09-03.txt
+  Shots: j5-3d-shop-stall-spawn.png ; j5-3d-shop-stall.png
+  Probe: node hh-3d/app/data-qa/j5-shop-stall-probe.mjs  EXIT=0
+  RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-23  verdict=J5_SHOP_STALL_OK
+  data-shop-stall-kind=awning-kiosk stalls=3 lantern=#6e3d9a
+  Mid-walk sky RGB 123.8/148.1/162.2 blueRatio=0.638 beige=0.024
+  awningRatio=0.132 zebra whiteRatio=0.117. E opened shop-lantern-fish
+  at 5.6 m. lamps=38 crosswalks=1 planters=4 inside-aabb=0.
+  Critic CRITIC-3D-SHOP-STALL-2026-09-03.txt TICK=yes. NOT_PLAN_PASS.
+
+PLAY_3D_GROUND_FLOOR_2026-09-03 (NOT_PLAN_PASS; not M0-WP1 / not GATE-U1)
+  Street-facing ground floor on Harbor Walk / Tram Approach only:
+  darker door slab + wider display-glass strip + thin building awning.
+  Geometric sidewalk setback; alley backs stay plain insets. Visual
+  only. Door slab stays inside the existing AABB+radius (no path trap).
+  Not interiors. Not stranger NPCs. Not fake shop listings.
+  Same 400 m authored fixture. No OSM.
+  CDP: hh-3d/app/data-qa/J5-GROUND-FLOOR-2026-09-03.txt
+  Shots: j5-3d-ground-floor.png ; j5-3d-ground-floor-stall.png
+  Probe: node hh-3d/app/data-qa/j5-ground-floor-probe.mjs  EXIT=0
+  RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-24  verdict=J5_GROUND_FLOOR_OK
+  data-ground-floor=door-glass-awning buildings=34 faces=38
+  displays=62 storefronts=38 awnings=38
+  facade windows=2141 doors=60 bands=472 (honest; unchanged)
+  Mid-walk sky RGB 124.8/149.0/163.2 blueRatio=0.64 beige=0.029
+  sideGlass=0.205 sideDoor=0.076. E opened shop-lantern-fish.
+  lamps=38 crosswalks=1 planters=4 lantern=#6e3d9a inside-aabb=0.
+  Critic CRITIC-3D-GROUND-FLOOR-2026-09-03.txt TICK=yes. NOT_PLAN_PASS.
+
+PLAY_3D_FOOTPRINT_HIT_2026-09-03 (NOT_PLAN_PASS; not M0-WP1 / not GATE-U1)
+  Walk collision is the authored footprint ring + existing stall/lamp/
+  planter blockers, not a looser AABB when that box mismatches the
+  extruded mesh. Circle radius 0.55 m. Wall-slide kept. Jump land
+  still ground y=0. Harbor Walk / spawn / zebra / lantern E stay open.
+  Same 400 m authored fixture. No OSM. No interiors.
+  CDP: hh-3d/app/data-qa/J5-FOOTPRINT-HIT-2026-09-03.txt
+  Shots: j5-3d-footprint-wall.png ; j5-3d-footprint-inset.png
+  Probe: node hh-3d/app/data-qa/j5-footprint-hit-probe.mjs  EXIT=0
+  RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-28  verdict=J5_FOOTPRINT_HIT_OK
+  data-collision=footprint-radius
+  Street-facing west face: extra east=0.00; nearest bldg-steps-e-00
+  @ 0.57 m; inside-ring=0 live+DOM.
+  SW chamfer: east 11.90 m (AABB would stop ~11.07); inside-aabb=1
+  inside-ring=0 live GeoJSON. 95° slide extra east=0 north=-2.10 m.
+  Spawn W +1.89 m. E opened shop-lantern-fish. lamps=38 planters=4.
+  Critic CRITIC-3D-FOOTPRINT-HIT-2026-09-03.txt TICK=yes. NOT_PLAN_PASS.
+
+PLAY_3D_ROOF_2026-09-03 (NOT_PLAN_PASS; not M0-WP1 / not GATE-U1)
+  Cheap authored roof language on the 60 extruded boxes: darker lid
+  than the wall, thin parapet around the ring, and 1–2 AC/tank boxes
+  on a subset hashed from building id. Visual only. Not walkable.
+  Not interiors. Positive look pitch now lifts lookY so Harbor Walk
+  look-up can see the cap. Same 400 m authored fixture. No OSM.
+  CDP: hh-3d/app/data-qa/J5-ROOF-2026-09-03.txt
+  Shot: j5-3d-roof.png
+  Probe: node hh-3d/app/data-qa/j5-roof-probe.mjs  EXIT=0
+  RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-29  verdict=J5_ROOF_OK
+  data-roof=parapet-ac-tank buildings=60 parapets=276 acs=61 tanks=8
+  Look-up camYaw 23.8 pitch 28. Mid-look sky RGB 137.3/145.2/148.4
+  blueRatio=0.416. Roof-band lid=0.045 ac=0.076.
+  Street-facing extra east=0; nearest bldg-steps-e-00 @ 0.57 m;
+  inside-ring=0. E opened shop-lantern-fish. lamps=38 planters=4.
+  Critic CRITIC-3D-ROOF-2026-09-03.txt TICK=yes. NOT_PLAN_PASS.
+
+PLAY_3D_SCOOTERS_2026-09-03 (NOT_PLAN_PASS; not M0-WP1 / not GATE-U1)
+  Cheap authored parked box scooters on Harbor Walk / Tram Approach
+  sidewalk edge: body + wheels + handlebar boxes, hashed stable
+  positions plus two near-walk and two past-lantern bikes. AABB
+  collision like planters. Stay off the driving lane / zebra / lantern
+  10 m E path. Color from id hash. STATIC only — no riders, no NPC
+  people, no traffic AI. Friends unchanged (friends are people;
+  scooters are props). Same 400 m authored fixture. No OSM.
+  CDP: hh-3d/app/data-qa/J5-SCOOTERS-2026-09-03.txt
+  Shot: j5-3d-scooters.png
+  Probe: node hh-3d/app/data-qa/j5-scooters-probe.mjs  EXIT=0
+  RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-33  verdict=J5_SCOOTERS_OK
+  data-scooter-kind=parked-box-scooter scooters=15 harbor=8 tram=7
+  colors=8. Look camYaw 340.4. Mid-look sky RGB 137.3/146.4/150.2
+  blueRatio=0.431. Left sidewalk scooterRatio=0.068.
+  Walk north +5.52 m; inside-aabb=0. E opened shop-lantern-fish.
+  lamps=38 planters=4 roof=parapet-ac-tank.
+  Critic CRITIC-3D-SCOOTERS-2026-09-03.txt TICK=yes. NOT_PLAN_PASS.
+
+PLAY_3D_MARKET_SPILL_2026-09-03 (NOT_PLAN_PASS; not M0-WP1 / not GATE-U1)
+  Cheap authored market spill beside each published shop kiosk:
+  crates, basket bowls, stacked boxes. Fish stall (lantern) uses
+  cooler/teal + crate wood; other shops hash from id/name.
+  3 extra crate stacks on Harbor Walk sidewalk near lamps, off
+  the driving lane / zebra / lantern 10 m E path / scooter slots.
+  Low crates join walk collision like planters unless they sit on
+  spawn (leftover collide=0 so W is free). Not a real inventory.
+  No new catalog listings. No interiors. No NPCs.
+  Same 400 m authored fixture. No OSM.
+  CDP: hh-3d/app/data-qa/J5-MARKET-SPILL-2026-09-03.txt
+  Shot: j5-3d-market-spill.png
+  Probe: node hh-3d/app/data-qa/j5-market-spill-probe.mjs  EXIT=0
+  RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-35  verdict=J5_MARKET_SPILL_OK
+  data-market-spill=crate-basket-stack spill=13 shop=10 street=3
+  lantern cooler=#2a7a78 crate=#8a5a32 basket=#c4a06a.
+  Look camYaw 350.2. Mid-walk sky RGB 137.8/145.6/148.7
+  blueRatio=0.411. Left stall spillRatio=0.156.
+  Walk north +24.64 m; inside-aabb=0. E opened shop-lantern-fish.
+  scooters=15 lamps=38 planters=4 roof=parapet-ac-tank.
+  Critic CRITIC-3D-MARKET-SPILL-2026-09-03.txt TICK=yes. NOT_PLAN_PASS.
+
+PLAY_3D_WALK_CYCLE_2026-09-03 (NOT_PLAN_PASS; not M0-WP1 / not GATE-U1)
+  Stronger opposite-arm / opposite-leg walk on the existing Person.
+  Walk stride 1.22 / arm 1.35; sprint stride 1.48 / arm 1.62 at
+  9.4 vs 12.8 rad/s. Idle tiny breath + weight shift, not a dance.
+  Reduced-motion damps the step instead of freezing a slide.
+  Friends Online reuse the same Person; sprint is optional on the
+  local presence packet. No new hip spheres. Same 400 m fixture.
+  CDP: hh-3d/app/data-qa/J5-WALK-CYCLE-2026-09-03.txt
+  Shots: j5-3d-walk-stand.png ; j5-3d-walk-walk.png ; j5-3d-walk-sprint.png
+  Probe: node hh-3d/app/data-qa/j5-walk-cycle-probe.mjs  EXIT=0
+  RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-36  verdict=J5_WALK_CYCLE_OK
+  data-walk-cycle=opposite-stride
+  Stand spread 0.05; walk 2.44 opposite; sprint 2.89 running.
+  Walk north +2.10 m; sprint +4.17 m; lantern +27.24 m.
+  Walk pixel-diff 0.182; sprint 0.28. Sky blueRatio=0.412.
+  E opened shop-lantern-fish. scooters=15 spill=13 lamps=38.
+  Critic CRITIC-3D-WALK-CYCLE-2026-09-03.txt TICK=yes. NOT_PLAN_PASS.
+
+PLAY_3D_BLOCK_EDGE_2026-09-04 (NOT_PLAN_PASS; not M0-WP1 / not GATE-U1)
+  Cheap distance haze + visible authored edge on the 400 m fixture.
+  Fog near 58 / far 155 so far boxes fade (not photogrammetry, not HDRI).
+  Courtyard wall + curb + water/lot + light cope on the GeoJSON bounds.
+  2D keep-in clamp/slide at the fixture edge; spawn / Harbor Walk /
+  lantern E stay open. Did not fetch OSM. Did not invent downtown.
+  Footsteps / friend limbs / streetPlayShops / sky mesh / cam-hit kept.
+  CDP: hh-3d/app/data-qa/J5-BLOCK-EDGE-2026-09-04.txt
+  Shot: j5-3d-block-edge.png
+  Probe: node hh-3d/app/data-qa/j5-block-edge-probe.mjs  EXIT=0
+  RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-05  verdict=J5_BLOCK_EDGE_OK
+  LIVE_JS=/assets/index-Dge8907V.js LEN=2133407
+  SHA256=2bb2bee66cf437e024c0a6e61bb9ab3c0ce9d7f1efe1f49dcff67d97bf8331c3
+  data-fog=distance-haze; data-block-edge=curb-wall-lot walls=4 lots=4
+  South bound data-at-bound=1 extra south=0.13 m alt=0. Wall/cope
+  visible in shot (wallRatio=0.123). data-footsteps=1 while W.
+  Lantern E shop-lantern-fish. Seat B leftover E not stolen.
+  Implementer CDP only. Not an independent critic TICK. Not a plan tick.
+
+PLAY_3D_SIDE_STREET_2026-09-04 (NOT_PLAN_PASS; not M0-WP1 / not GATE-U1)
+  Cheap door+glass (+ thin awning) on inner parcel lanes already
+  carved in the 400 m fixture. Centerlines from facing AABBs
+  (3.6–22 m gaps). Not new downtown. Not OSM. Harbor Walk /
+  Tram Approach stay 38 faces. Alley backs / far lots stay plain.
+  10 lamps + 8 parked box scooters off the inner walk center.
+  Fog / edge keep-in / footsteps / friend limbs / streetPlayShops /
+  sky / cam-hit not ripped. No NPCs. No interiors.
+  CDP: hh-3d/app/data-qa/J5-SIDE-STREET-2026-09-04.txt
+  Shot: j5-3d-side-street.png
+  Probe: node hh-3d/app/data-qa/j5-side-street-probe.mjs  EXIT=0
+  RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-06  verdict=J5_SIDE_STREET_OK
+  LIVE_JS=/assets/index-DMtr6Df6.js LEN=2138099
+  SHA256=cecfeffc8dbcd3f0da2212be8816ce1c84751ff9409dee8f2c0624d028c9b365
+  data-side-street=door-glass-lamp streets=31
+  faces=168 main=38 inner=130 extra=+130 vs Harbor-only
+  lamps=48 (inner 10) scooters=23 (inner 8)
+  Walk off Harbor +11.07 m east / +18.12 m north; inside-ring=0.
+  Shot doorRatio=0.114 glass=0.036. Lantern E shop-lantern-fish.
+  South bound data-at-bound=1. Seat B leftover E not stolen.
+  Implementer CDP only. Not an independent critic TICK. Not a plan tick.
+
+PLAY_3D_INNER_LANE_2026-09-04 (NOT_PLAN_PASS; not M0-WP1 / not GATE-U1)
+  Dark asphalt strip + lighter walk edge on the same derived
+  inner centerlines (Steps East/West + inner connectors). Same
+  cheap Harbor language, not photogrammetry. No new GeoJSON
+  streets. Harbor Walk / Tram Approach unchanged. Door/glass,
+  fog / edge keep-in / footsteps / friend limbs / streetPlayShops /
+  sky / cam-hit not ripped. No NPCs. No interiors.
+  CDP: hh-3d/app/data-qa/J5-INNER-LANE-2026-09-04.txt
+  Shot: j5-3d-inner-lane.png
+  Probe: node hh-3d/app/data-qa/j5-inner-lane-probe.mjs  EXIT=0
+  RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-07  verdict=J5_INNER_LANE_OK
+  LIVE_JS=/assets/index-Y4m4boSF.js LEN=2139698
+  SHA256=8cfbcabf0181ab95b8b76d1a88984acae67c8af93d0ac311dcfec361d621eef0
+  data-inner-lane=asphalt-walk-edge roads=31 walks=31 edges=62
+  Walk Harbor then east into Steps +12.58 m / +20.82 m; inside-ring=0.
+  Shot doorRatio=0.091 glass=0.044. Floor lum road=2.7 walk=94.3
+  delta=91.6 (darker center). Lantern E shop-lantern-fish.
+  South bound data-at-bound=1. Seat B leftover E not stolen.
+  Implementer CDP only. Not an independent critic TICK. Not a plan tick.
+
+PLAY_3D_STREET_NAME_2026-09-04 (NOT_PLAN_PASS; not M0-WP1 / not GATE-U1)
+  Cheap authored street plaques (canvas pole-board, like shop
+  signs) at walk-visible corners: Harbor Walk, Tram Approach,
+  Steps East, Steps West. Fixture names only. No new GeoJSON
+  streets. Thin planter collision. Off lantern E / spawn.
+  Inner lanes / side-street / fog / edge / footsteps / friend
+  gait / streetPlayShops / sky / cam-hit not ripped. No NPCs.
+  CDP: hh-3d/app/data-qa/J5-STREET-NAME-2026-09-04.txt
+  Shots: j5-3d-street-name-harbor.png ; j5-3d-street-name-steps.png
+  Probe: node hh-3d/app/data-qa/j5-street-name-probe.mjs  EXIT=0
+  RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-08  verdict=J5_STREET_NAME_OK
+  LIVE_JS=/assets/index-BzqNNsdo.js LEN=2144352
+  SHA256=b612e489b889fa001b84145c77b353dad9d2260e4e54c436c22fc8c9e269191b
+  data-street-plaques=4 kind=pole-board official=2 inner=2
+  names=Harbor Walk, Tram Approach, Steps East, Steps West
+  Harbor label on-screen; Steps East after +7.24 m east / +19.1 m
+  north; inside-ring=0. Inner lum road=2 walk=138.3 delta=136.3.
+  Lantern E shop-lantern-fish. Seat B leftover E not stolen.
+  Implementer CDP only. Not an independent critic TICK. Not a plan tick.
+
+PLAY_3D_STREET_HUD_2026-09-04 (NOT_PLAN_PASS; not M0-WP1 / not GATE-U1)
+  Slim HUD chip for the current authored street / inner lane.
+  Same four names as the plaques: Harbor Walk, Tram Approach,
+  Steps East, Steps West. One 22 px line, not a panel. "—" when
+  not near those four. Did not restore the old fat dashboard.
+  Menu/Tab lists stay behind Tab. Not GPS. Not OSM. Not a city.
+  Plaques / inner lanes / dressing / fog / edge / footsteps /
+  friend gait / streetPlayShops / sky / cam-hit not ripped.
+  CDP: hh-3d/app/data-qa/J5-STREET-HUD-2026-09-04.txt
+  Shots: j5-3d-street-hud-harbor.png ; j5-3d-street-hud-steps.png
+  Probe: node hh-3d/app/data-qa/j5-street-hud-probe.mjs  EXIT=0
+  RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-09  verdict=J5_STREET_HUD_OK
+  LIVE_JS=/assets/index-DF4TvR_E.js LEN=2146024
+  SHA256=9eb88fce4b24620d8d91d78a3377e58ccc3c91346ae97dea8dc609f1388700be
+  data-street-hud=named-chip
+  Harbor chip=Harbor Walk; after +7.2 m east / +19.83 m north
+  chip=Steps East; plaques still 4. Lantern E shop-lantern-fish.
+  Seat B leftover E not stolen. Menu hidden. Chip 92x22 then 76x22.
+  Independent critic CRITIC-3D-STREET-HUD-REAUDIT-2026-09-04.txt
+  TICK=yes on DF4TvR_E. Not a plan tick.
+
+PLAY_3D_MINIMAP_LANE_2026-09-04 (NOT_PLAN_PASS; not M0-WP1 / not GATE-U1)
+  Corner MapLibre minimap draws the same four authored HUD
+  lanes in-memory: Harbor Walk, Tram Approach, Steps East,
+  Steps West. Official darker; inner thinner; current chip
+  line highlighted. Did not add GeoJSON streets. Did not
+  restore the old full-page map dashboard. Play stays R3F.
+  HUD chip / plaques / inner asphalt / dressing / fog / edge /
+  footsteps / friend gait / streetPlayShops / sky / cam-hit
+  not ripped. Not OSM. Not a city grid.
+  CDP: hh-3d/app/data-qa/J5-MINIMAP-LANE-2026-09-04.txt
+  Shots: j5-3d-minimap-lane-harbor.png ; j5-3d-minimap-lane-steps.png
+  Probe: node hh-3d/app/data-qa/j5-minimap-lane-probe.mjs  EXIT=0
+  RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-10  verdict=J5_MINIMAP_LANE_OK
+  LIVE_JS=/assets/index-DOyi5rEr.js LEN=2148383
+  SHA256=f6a98569d4e5be3c2d7c5b2db610895647280df5a243289ca0e5687c7ff564be
+  data-minimap-lanes=authored-hud-lanes official=2 inner=2 extra=2
+  Harbor chip+active=Harbor Walk; after +7.09 m east / +19.45 m
+  north chip=Steps East AND minimap active=Steps East
+  highlight=1 role=inner. Plaques still 4. Lantern E
+  shop-lantern-fish. Seat B leftover E not stolen.
+  Implementer CDP only. Not an independent critic TICK. Not a plan tick.
+
+PLAY_3D_HITCH_2026-09-04 (NOT_PLAN_PASS; not M0-WP1 / not GATE-U1 / not R2-WP1)
+  Cheap Play-mount hitch warmup after friend-steps fix reaudit
+  TICK=yes on nJ1HVwcJ. Resume AudioContext + one silent plant
+  + one gl.compile of the painted street/tunic. No HDRI. No
+  spinner over a beige void. Did not rip friend Offline
+  teardown / 90 m LOD / chip / minimap / plaques / lanes /
+  fog/edge / streetPlayShops / sky / cam-hit.
+  CDP: hh-3d/app/data-qa/J5-HITCH-2026-09-04.txt
+  Notes: hh-3d/app/data-qa/CRITIC-3D-HITCH-2026-09-04.txt
+  Probe: node hh-3d/app/data-qa/j5-hitch-probe.mjs  EXIT=0
+  RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-15  verdict=J5_HITCH_OBSERVED
+  LIVE_JS=/assets/index-Zv5epUAg.js LEN=2153814
+  SHA256=458d723bf1584e1c60ed8f77220227dfe3d8db89a3441ba2c0908e38db265743
+  First Harbor W: before min=8.57 mean=20.40 on nJ1HVwcJ;
+  after min=8.58 mean=27.53. Mean better; min ≥ 25 not
+  reached (one ~117 ms frame). lantern E shop-lantern-fish;
+  Offline friend ticks stay 0 with remotes=0. NOT 60.
+  Implementer CDP only. Not an independent critic TICK. Not a plan tick.
+
+PLAY_3D_HITCH2_2026-09-04 (NOT_PLAN_PASS; not M0-WP1 / not GATE-U1 / not R2-WP1)
+  Defer corner MapLibre until Play idle-pose rAF ~800 ms or the
+  first W ends. Play stays the default; not a restored dashboard.
+  After defer, chip+minimap still Harbor Walk → Steps East.
+  Corner skips fill-extrusion (unused compile). Did not rip
+  hitch warmup / friend Offline teardown / 90 m LOD / HUD chip /
+  plaques / lanes / fog/edge / streetPlayShops / sky / cam-hit.
+  CDP: hh-3d/app/data-qa/J5-HITCH2-2026-09-04.txt
+  Notes: hh-3d/app/data-qa/CRITIC-3D-HITCH2-2026-09-04.txt
+  Probe: node hh-3d/app/data-qa/j5-hitch2-probe.mjs  EXIT=0
+  RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-19  verdict=J5_HITCH2_OBSERVED
+  LIVE_JS=/assets/index-BgKOOgwd.js LEN=2154825
+  SHA256=263b3d2274f957b422e5456a47e14a12b34cdea0722566d7cf31219a2b463a5d
+  First Harbor W: before min=7.50 mean=19.00 on Zv5epUAg;
+  after min=9.99 mean=23.73. Mean better; min still ~10
+  (one ~100 ms frame). Prefer ≥20 not reached. Keep defer.
+  First W: minimap pending / absent. After: Harbor then
+  Steps East chip+minimap agree (hl=1 inner). lantern E
+  shop-lantern-fish; Offline friend ticks stay 0. NOT 60.
+  Implementer CDP only. Not an independent critic TICK. Not a plan tick.
+
+PLAY_3D_LIST_LEFTOVER_2026-09-04 (NOT_PLAN_PASS; not M0-WP1 / not M1 / not GATE-U1)
+  Menu/Tab public shop list no longer treats spawn-keep-out
+  leftovers as normal street stalls. Shared PC + J6 Jump stay
+  persist-only (draw=0). Guest list labels them leftover and
+  sorts them last. Lantern + drawn Phở stay street rows.
+  Nearby E still uses streetPlayShops. Did not catalog_clear.
+  Did not remint west/east crossings, net labels, boards,
+  streetPlayShops, minimap, friend steps, LOD, HUD, plaques,
+  lanes, fog/edge, sky, cam-hit.
+  CDP: hh-3d/app/data-qa/J5-LIST-LEFTOVER-2026-09-04.txt
+  Notes: hh-3d/app/data-qa/CRITIC-3D-LIST-LEFTOVER-2026-09-04.txt
+  Probe: node hh-3d/app/data-qa/j5-list-leftover-probe.mjs  EXIT=0
+  RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-29  verdict=J5_LIST_LEFTOVER_OK
+  LIVE_JS=/assets/index-CCDPahU8.js LEN=2165874
+  SHA256=6fc3906121746831cba72d53274737f6dea224f081afaffc20d4efdf329d86d1
+  Isolated guest B Menu: lantern + Quầy Phở Nhà street;
+  Shared PC + J6 labeled leftover last. Spawn E none.
+  Independent reaudit TICK=yes:
+    hh-3d/app/data-qa/CRITIC-3D-LIST-LEFTOVER-REAUDIT-2026-09-04.txt
+  Jam hunt PASS (right-column leftover mark, 8px gap).
+  Implementer notes stay TICK=n/a. Not a plan tick.
+
+PLAY_3D_TRAM_XING_2026-09-04 (NOT_PLAN_PASS; not M0-WP1 / not M1 / not GATE-U1)
+  Cheap authored crossing at Harbor Walk / Tram Approach, same
+  zebra + stop-line + curb language as the Steps mouths. Zebra
+  sits on Tram Approach just east of Harbor so it does not
+  stack on the lantern zebra or the two Steps mouths. Two
+  official streets + inner lanes. Not OSM. Not a fifth street.
+  East / west / lantern zebras kept. Did not remint Menu
+  leftover labels, west/east Steps crossings, net labels,
+  boards, streetPlayShops, minimap, friend steps, LOD, HUD,
+  plaques, lanes, fog/edge, sky, cam-hit.
+  CDP: hh-3d/app/data-qa/J5-TRAM-XING-2026-09-04.txt
+  Shot: j5-3d-tram-xing-tram.png
+  Notes: hh-3d/app/data-qa/CRITIC-3D-TRAM-XING-2026-09-04.txt
+  Probe: node hh-3d/app/data-qa/j5-tram-xing-probe.mjs  EXIT=0
+  RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-30  verdict=J5_TRAM_XING_OK
+  LIVE_JS=/assets/index-D6skGmYL.js LEN=2167318
+  SHA256=29f5735069f1b6e0d16680cb03da1b8d72180b2824c90b41f6caf51c2a0aa05a
+  data-corner-crossing=zebra-stopline-curb
+  crosswalks=4 stopLines=3 curbReturns=12
+  Tram shot whiteRatio=0.273 curbRatio=0.095
+  Walk Harbor then east +0.73 m / +95.58 m; chip+minimap
+  Harbor Walk → Tram Approach (hl=1 official). East/west
+  zebras kept. lantern E shop-lantern-fish. Seat B leftover
+  Menu last; spawn E not stolen.
+  Independent reaudit TICK=yes:
+    hh-3d/app/data-qa/CRITIC-3D-TRAM-XING-REAUDIT-2026-09-04.txt
+  On-asphalt remount (not the discarded south sidewalk crop).
+  Implementer notes stay TICK=n/a. Not a plan tick.
+
+PLAY_3D_LEFTOVER_PANEL_2026-09-04 (NOT_PLAN_PASS; not M0-WP1 / not M1 / not GATE-U1)
+  Open shop panel no longer treats spawn-keep-out leftovers as
+  a normal street stall. Shared PC + J6 Jump show
+  MENU_LEFTOVER_LABEL on the panel. Lantern + drawn Phở keep
+  authored/local street copy. Nearby E still uses
+  streetPlayShops. Menu leftover list still labeled last.
+  Did not catalog_clear.
+  Did not remint Harbor×Tram / west/east Steps crossings,
+  lantern zebra, Menu leftover list labels/sort, net labels,
+  boards, streetPlayShops, minimap, friend steps, LOD, HUD,
+  plaques, lanes, fog/edge, sky, cam-hit.
+  CDP: hh-3d/app/data-qa/J5-LEFTOVER-PANEL-2026-09-04.txt
+  Notes: hh-3d/app/data-qa/CRITIC-3D-LEFTOVER-PANEL-2026-09-04.txt
+  Probe: node hh-3d/app/data-qa/j5-leftover-panel-probe.mjs  EXIT=0
+  RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-31  verdict=J5_LEFTOVER_PANEL_OK
+  LIVE_JS=/assets/index-BjeBwyj9.js LEN=2167676
+  SHA256=4f5ceeebbbf48009ca74757bf04d32b857d38b481f7f0ab7d389928d4c00d252
+  Isolated guest B Offline: leftover panels labeled; lantern /
+  Phở street copy; spawn E none; lantern E shop-lantern-fish.
+  Independent reaudit TICK=yes:
+    hh-3d/app/data-qa/CRITIC-3D-LEFTOVER-PANEL-REAUDIT-2026-09-04.txt
+  Banner distinct; leftover kind chip still street-gold (nit).
+  Implementer notes stay TICK=n/a. Not a plan tick.
+
+PLAY_3D_WEST_XING_2026-09-04 (NOT_PLAN_PASS; not M0-WP1 / not GATE-U1)
+  Cheap authored crossing at Harbor Walk / Steps West, same
+  zebra + stop-line + curb language as the east mouth. Zebra
+  sits on the west inner ribbon so it does not stack on the
+  east Harbor zebra. Two official streets + inner lanes. Not
+  OSM. Not a fifth street. East mouth / lantern zebra kept.
+  Did not remint net labels / reconnect / boards /
+  streetPlayShops / east crossing / minimap / friend steps /
+  LOD / HUD / plaques / lanes / fog/edge / sky / cam-hit.
+  CDP: hh-3d/app/data-qa/J5-WEST-XING-2026-09-04.txt
+  Shot: j5-3d-west-xing-west.png
+  Notes: hh-3d/app/data-qa/CRITIC-3D-WEST-XING-2026-09-04.txt
+  Probe: node hh-3d/app/data-qa/j5-west-xing-probe.mjs  EXIT=0
+  RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-28  verdict=J5_WEST_XING_OK
+  LIVE_JS=/assets/index-BkgSKGSy.js LEN=2164988
+  SHA256=2c2385ccd07a97fdca755f1279cdb0f07cf78dbcf7162ebda0597e1ecec285e6
+  data-corner-crossing=zebra-stopline-curb
+  crosswalks=3 stopLines=2 curbReturns=8
+  West shot whiteRatio=0.172 curbRatio=0.307
+  Walk Harbor then west −17.44 m / +21.22 m; chip+minimap
+  Harbor Walk → Steps West (hl=1 inner). East zebra kept.
+  lantern E shop-lantern-fish. Seat B leftover E not stolen.
+  Implementer CDP only. Not an independent critic TICK. Not a plan tick.
+
+PLAY_3D_INTERSECTION_2026-09-04 (NOT_PLAN_PASS; not M0-WP1 / not GATE-U1)
+  Cheap authored crossing at Harbor Walk / Steps East only:
+  Harbor zebra language on the asphalt, a thin stop-line, and
+  four stone curb-return boxes on the east curb. Same 400 m
+  fixture. Two official streets + inner lanes. Not OSM. Not a
+  fifth street. Did not grind hitch. Deferred minimap / warmup /
+  friend steps / LOD / HUD / plaques / lanes / fog/edge /
+  streetPlayShops / sky / cam-hit not ripped.
+  CDP: hh-3d/app/data-qa/J5-INTERSECTION-2026-09-04.txt
+  Shot: j5-3d-intersection-corner.png
+  Notes: hh-3d/app/data-qa/CRITIC-3D-INTERSECTION-2026-09-04.txt
+  Probe: node hh-3d/app/data-qa/j5-intersection-probe.mjs  EXIT=0
+  RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-20  verdict=J5_INTERSECTION_OK
+  LIVE_JS=/assets/index-DEOxFuyb.js LEN=2158383
+  SHA256=0fe8a6d204a9ad3578fbca9ab55cf707aa3410e7d7fe071a6b9e54d481195736
+  data-corner-crossing=zebra-stopline-curb
+  crosswalks=2 stopLines=1 curbReturns=4
+  Corner shot whiteRatio=0.139 curbRatio=0.083
+  Walk Harbor then east +6.79 m / +20.07 m; chip+minimap
+  Harbor Walk → Steps East (hl=1 inner). lantern E
+  shop-lantern-fish. Seat B leftover E not stolen.
+  Implementer CDP only. Not an independent critic TICK. Not a plan tick.
+
+PLAY_3D_FRIEND_STEPS_2026-09-04 (NOT_PLAN_PASS; not M0-WP1 / not M2 / not GATE-U1)
+  Quieter remote footsteps on accepted Online friends. Same
+  WebAudio triangle thump + short noise as self; gain 0.05 walk
+  / 0.08 sprint before linear falloff (0.035 at 7.5 m vs self
+  0.14). Skip past ~25 m. Mute when tab hidden or Play overlay
+  covers. Strangers and Offline stay silent. Offline teardown
+  remint: remotes.length===0 cuts plants in the same render;
+  live=0; ticks do not rise; no leftover oscillator. No voices /
+  music / GTA radio / samples. Chip / minimap / 90 m LOD /
+  plaques / lanes / fog/edge / self footsteps / friend gait /
+  streetPlayShops / sky / cam-hit not ripped.
+  CDP: hh-3d/app/data-qa/J5-FRIEND-STEPS-2026-09-04.txt
+  Notes: hh-3d/app/data-qa/CRITIC-3D-FRIEND-STEPS-FIX-2026-09-04.txt
+  Probe: node hh-3d/app/data-qa/j5-friend-steps-probe.mjs  EXIT=0
+  RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-13  verdict=J5_FRIEND_STEPS_OK
+  LIVE_JS=/assets/index-nJ1HVwcJ.js LEN=2152818
+  SHA256=aa2c143cc1edf1aac67ab8ffc7facd3029b875bfd8dee0acbbfbceb6a887d701
+  Isolated A/B: add/accept/Online; A holds W; B plants +4;
+  B stand=0; hidden 15→15; Offline A → B live=0 ticks=0
+  osc=25 flat while A walks Offline; lantern E shop-lantern-fish;
+  leftover E not stolen. Implementer CDP only. Not an
+  independent critic TICK. Not a plan tick.
+
+PLAY_3D_FPS_LOD_2026-09-04 (NOT_PLAN_PASS; not M0-WP1 / not GATE-U1 / not R2-WP1)
+  Harbor Play FPS on the dressed 400 m block. Pre-LOD walk mean
+  43.95 < 45 on DOyi5rEr, so one cheap far LOD remint: skip inner
+  door/glass/awning and distant scooters beyond 90 m. Harbor /
+  Tram faces and lantern stalls stay. HUD chip / plaques / inner
+  asphalt / dressing / fog / edge / footsteps / friend gait /
+  streetPlayShops / sky / cam-hit not ripped.
+  CDP: hh-3d/app/data-qa/J5-FPS-LOD-2026-09-04.txt
+  Probe: node hh-3d/app/data-qa/j5-fps-lod-probe.mjs  EXIT=0
+  RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-11  verdict=J5_FPS_LOD_OBSERVED
+  LIVE_JS=/assets/index-DRczAori.js LEN=2149085
+  SHA256=5fe4118fc604ba3d8c5baf5ca6125d6e47d6229dde8067ef256711bbc30ce42b
+  data-far-lod=inner-door-glass m=90 drawn-inner=48 drawn-scooters=6
+  After remint: idle mean=44.00 median=30.21; walk mean=49.98
+  median=59.88. Chip Harbor Walk → Steps East; minimap agrees.
+  Lantern E shop-lantern-fish. Plaques still 4. NOT 60.
+  Implementer CDP only. Not an independent critic TICK. Not a plan tick.
+
+PLAY_3D_FOOTSTEPS_2026-09-04 (NOT_PLAN_PASS; not M0-WP1 / not GATE-U1)
+  Cheap procedural self footsteps on the existing opposite-stride clock.
+  WebAudio triangle thump + short noise. No downloaded samples. No
+  speech / looped bed. Sprint uses SPRINT_RATE (faster plants) and
+  gain 0.22 vs walk 0.14. Mute when the tab is hidden, Tab menu covers
+  Play, shop sheet is open, standing, or airborne. Friends silent.
+  Same 400 m authored fixture. No OSM. Camera / friend limbs /
+  streetPlayShops / sky not ripped.
+  CDP: hh-3d/app/data-qa/J5-FOOTSTEPS-2026-09-04.txt
+  Shot: j5-3d-footsteps.png
+  Probe: node hh-3d/app/data-qa/j5-footsteps-probe.mjs  EXIT=0
+  RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-04  verdict=J5_FOOTSTEPS_OK
+  LIVE_JS=/assets/index-2Oh0rjA2.js LEN=2129826
+  SHA256=90255e199dae322fa6818097ba690770ffe36c6b9b952a1eff10974c973f8e18
+  data-footsteps=1 while W; 0 stand; 0 hidden; 0 menu overlay.
+  Walk +4 plants / 1.1 s; sprint +5 / 1.1 s. Lantern E
+  shop-lantern-fish. Seat B leftover E not stolen.
+  Implementer CDP only. Not an independent critic TICK. Not a plan tick.
+
+PLAY_3D_FRIEND_GAIT_2026-09-04 (NOT_PLAN_PASS; not M0-WP1 / not M2 / not GATE-U1)
+  Claim 4 remint after CRITIC-3D-CROSS-REAUDIT TICK=no. Did not rip
+  leftover-E / modes-header / north-sky. Follow camera no longer forces
+  t=0.36 into a box; street floor + push-out keep look-down off black.
+  Seat B street-side -1.6 and look pitch -8 so default B sees A's tunic
+  (~7 m west), not Steps East / sky. Remote screen projection for tunic
+  crops. Isolated CDP: pixelDiff 0.9736; lookDownBlack=false; lantern E
+  still shop-lantern-fish; leftover shops still do not own B's E.
+  CDP: hh-3d/app/data-qa/J5-FRIEND-GAIT-2026-09-04.txt
+  Shots: j5-3d-friend-gait-b.png ; j5-3d-friend-gait-stand.png ;
+         j5-3d-friend-gait-walk1.png ; j5-3d-friend-gait-walk2.png ;
+         j5-3d-friend-gait-lookdown.png
+  Probe: node hh-3d/app/data-qa/j5-friend-gait-probe.mjs  EXIT=0
+  RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-03  verdict=J5_FRIEND_GAIT_OK
+  LIVE_JS=/assets/index-BaoJbjxu.js LEN=2126062
+  SHA256=4d222643a8ebe93268a7a33ac6db1a2f6844dc35e63c8073edbe7947e2dd5e51
+  Implementer CDP only. Not an independent critic TICK. Not a plan tick.
+
+PLAY_3D_CROSS_FIX_2026-09-04 (NOT_PLAN_PASS; not M0-WP1 / not M2 / not GATE-U1)
+  Implementer remint after CRITIC-3D-CROSS-AUDIT-2026-09-04.txt TICK=no.
+  Did not treat spawn-mesh-hide as the primary fix. Leftover catalog
+  rows stay on this-PC /demo-bus. Street Nearby E uses streetPlayShops
+  (keep-out 14 m) so Shared PC / J6 Jump do not own the prompt.
+  Authored shop-lantern-fish remains the stall fallback. Modes header
+  honesty: LOCAL_DEMO_EXISTS_NOT_PLAN_PASS. Default follow pitch +
+  stronger blue haze so spawn/north look-up is not beige. Remote
+  Walker writes limb proof onto remote-avatar-* and remote-walk-cycle-*.
+  CDP: hh-3d/app/data-qa/J5-CROSS-FIX-2026-09-04.txt
+  Shots: j5-3d-cross-fix-spawn.png ; j5-3d-cross-fix-seat-b.png ;
+         j5-3d-cross-fix-friend-walk.png
+  Probe: node hh-3d/app/data-qa/j5-cross-fix-probe.mjs  EXIT=0
+  RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-02  verdict=J5_CROSS_FIX_OK
+  LIVE_JS=/assets/index-C5aM6kYn.js LEN=2124549
+  SHA256=bcfe3c0525b5468d23cd435e0436359c37bd01792c1b134e1a4ecf8791b96c6e
+  Seat B: nearby none; stall hint idle; "Quầy Cá Đèn Lồng: 29 m away".
+  Spawn sky RGB 105/172.4/216 blueRatio=0.888 beige=0.
+  B remote-avatar-a limbSpread=1.139 opposite=1 moving=1.
+  Implementer CDP only. Not an independent critic TICK. Not a plan tick.
+
+PLAY_3D_CAM_HIT_2026-09-03 (NOT_PLAN_PASS; not M0-WP1 / not GATE-U1)
+  Follow camera pull-in along the look ray vs footprint rings and
+  stall boxes. Head/shoulder origin; pad in front of the hit;
+  short rig lifts over the nape. Does not turn the body. Does
+  not make roofs walkable. Same 400 m authored fixture. No OSM.
+  CDP: hh-3d/app/data-qa/J5-CAM-HIT-2026-09-03.txt
+  Shots: j5-3d-cam-open.png ; j5-3d-cam-hit.png
+  Probe: node hh-3d/app/data-qa/j5-cam-hit-probe.mjs  EXIT=0
+  RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-37  verdict=J5_CAM_HIT_OK
+  data-cam-kind=look-ray-ring
+  Spawn camHit=0 dist=5.62. Steps East west face: extra east=0;
+  nearest bldg-steps-e-00 @ 0.56 m; inside-ring=0.
+  Face west: camHit=1 id=bldg-steps-e-00 dist=0.38 desired=5.62
+  yaw=271. Mid-frame blueRatio=0.878 darkGray=0.121.
+  Walk spread 2.44 opposite. E opened shop-lantern-fish.
+  scooters=15 spill=13 lamps=38.
+  Critic CRITIC-3D-CAM-HIT-2026-09-03.txt TICK=yes. NOT_PLAN_PASS.
+
+PLAY_3D_FRIEND_TUNIC_FACADE_2026-09-03 (NOT_PLAN_PASS; not M2 / not GATE-U1)
+  Online friend remotes use the same Person tunic as the local walker.
+  Seat colors: A teal #2a7d78, B gold #c4a046, C mauve #7a6a7a.
+  Offline / unfriend still hide the other body. 60 authored extrusions
+  get cheaper window/door/band boxes on AABB faces (still boxes).
+  CDP: hh-3d/app/data-qa/J5-FRIENDS-TUNIC-2026-09-03.txt
+  Shot: j5-3d-friend-tunic.png
+  Probe: node hh-3d/app/data-qa/j5-friends-tunic-probe.mjs  EXIT=0
+  RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-11  verdict=J5_FRIENDS_TUNIC_OK
+  Isolated A/B; accept + Online; B remote-avatar-a body=tunic-humanoid
+  tunic=#2a7d78 (B self #c4a046); A walk lat 10.7716200 → 10.7716308 pose=walk;
+  A Offline → B remotes 0. Facade inset windows=2141 doors=60 bands=472
+  buildings=60 insetBuildings=60. Shot: B gold from behind, A teal labeled
+  Bạn A, brown box with dark window patches. Not a city. Not WAN.
+
+CRITIC_LOCAL_PLAYER_PROOF=TICK=yes
+  File=hh-3d/app/data-qa/CRITIC-HH-WORLD-2026-09-03.txt
+  Scope=local player proof on 4175 only. NOT a plan PASS.
+
+R2-WP1_EVIDENCE=OBSERVED_DESKTOP_HEADLESS_NOT_PLAN_PASS
+  File=hh-3d/app/data-qa/R2-WP1-PERF-2026-09-03.txt
+  RUN_ID=HH3D-R2WP1-20260903-ASIA-SAIGON-01
+  Browser=Chrome Headless 152 / 1280x720 / NVIDIA GTX 1660 Ti
+  Idle rAF N=240: median 56.82 FPS, min/p1 53.76 FPS (NOT 60)
+  First map (same process): 412 ms then 213 ms cache-disabled
+  Fallback WebGL-off + reduced-motion camera jump: OBSERVED
+  Mobile / headed / Play: UNFILLED
+
+PREVIEW_PORT=4175
+DISPLAY_NAME=HH World
+DATA_KIND=authored approximation (NOT live OSM/Overture)
+ARTIFACT_HASH=83463aadae62b5db93a1c30fee003aaf73a729a45c8f42d0bb718c419ff1acbe
+SOURCE_HASH=5daca107ae79bd4c248584a6e761e65cbd9b3665c548f359924920fba33b4b83
+
+================================================================================
+CONCURRENCY (honest; not a capacity SLA)
+================================================================================
+
+TODAY: localhost 4175, one machine. Published shops + friend graph live in
+this preview's /demo-bus (loopback 127.0.0.1) and persist on this PC.
+Presence is in-process + TTL. BroadcastChannel is same-profile low-latency
+only; two isolated browsers use the store, not one tab's localStorage.
+Another PC cannot join. Do not expose 0.0.0.0 WAN.
+
+IF later hosted as static files + a catalog/search API: many independent
+browsers can BROWSE (thousands-class is plausible). Each GPU draws the map.
+The server is list/search, not a GTA-style sim of every body in the city.
+
+PRESENCE (product intent, not built today): friends-only, about 20 on screen,
+1–5 Hz while moving. Not "see everyone in the city". Do not invent a number
+like "10 000 simultaneous GTA players".
+
+Offline walk + a shop cache does not require a game server.
+
+Short note: hh-3d/app/data-qa/CONCURRENCY-2026-09-03.txt
+
+================================================================================
+NOT DONE
+================================================================================
+
+- Original plan STATE/PASS/checkboxes still unticked (correct).
+- GATE-U1 three-human review (FIRST leftover; not faked)
+- R2-WP1 plan PASS still blocked: GATE-U1 open; mobile/headed/context-loss/
+  memory/interaction-FPS/cold-process first-map/owner thresholds UNFILLED
+- Idle desktop FPS OBSERVED. Old MapLibre median 56.82, not 60.
+  Harbor Play after far LOD: idle mean 44.00 / walk mean 49.98
+  (headless 1280x720 rAF 3 s). First Harbor W after minimap
+  defer: min 9.99 / mean 23.73. Idle ≥50 and first-W min ≥20
+  still UNFILLED. Not 60. Not a plan tick.
+- No named Low/list-only quality tier in UI. Far LOD is automatic
+  (inner door/glass + distant scooters past 90 m), not a new control.
+- R3+ server/PostGIS / R4-WP0B real identity (OIDC/account still absent)
+- J2 local demo list OBSERVED on 4175. Real owner account still not built.
+- J3 local demo friends OBSERVED on 4175. J6 remint: this-PC 4175 store is
+  SoT for two browsers here. Remotes share the tunic mesh. Implementer
+  SAIGON-03 CDP + independent critic TICK=yes on BaoJbjxu: B default
+  sees teal A; same-body walk diffs; look-down not black. Distinct seat
+  colors. Not a city presence server, not M2, not WAN. Another machine
+  will not.
+- Leftover this-PC shops (shop-local-sharedpc, shop-local-mtl8ulddihjpre)
+  stay in the catalog. They no longer own Nearby E / street play inside
+  the 14 m spawn keep-out. Menu/Tab list labels them leftover and sorts
+  them last. Do not catalog_clear. shop-lantern-fish kept.
+- J4 local create-shop OBSERVED on 4175. J6: published shops persist on
+  this PC's store; drafts do not. Not M1-WP0. Another machine will not.
+  ASCII "ban sung" fold remint is local-demo only; not M1-WP1 moderation.
+- M0/M1/M2 plan WPs still NOT_STARTED in the canonical plan (correct).
+  Local avatar+shop+demo-friends+create-shop code exists as a player slice only.
+- No-network "Chưa tải" path: UI exists if shops.json fails; not E2E cut-cable.
+- Nearby E is CDP-observed on 4175 (SAIGON-04, 10 m stall + shop seat).
+  Building collision is now footprint-radius (SAIGON-28): street-facing
+  extra east=0; chamfer past the old AABB; inside-ring=0. 95° face
+  slide still CDP-observed (SAIGON-09 and SAIGON-28).
+  Pointer-lock look is coded; CDP proved right-drag (headless lock often
+  denied). Follow camera now pulls in vs footprint rings when the
+  behind-point would enter a box (SAIGON-37). Touch-pad hold
+  independence: still coded, not a dedicated CDP.
+  10 m E is still a radius. Stall/counter now has a collide AABB
+  (except a leftover on spawn). Not a walk-in interior.
+- Any real map fetch / Cesium / Google / Unreal
+- Legal/privacy owner names (UNFILLED)
+- Human OWNER_SIGN name
+- MapLibre text glyphs: none used (labels are HTML markers). Offline claim
+  for tiles/geojson/style: OBSERVED local. System UI fonts only.
+  OFFLINE_COMPLETE=NOT_CLAIMED
+- Chunk size warning CONFIRMED: built JS 2158383 bytes (~2.16 MB) after Three.js.
+- Default Play is no longer the MapLibre schematic dashboard. MapLibre remains
+  as a corner 2D map + WebGL-off fallback. Buildings are 60 authored extrusions
+  with cheap window/door/band insets in the 400 m frame, not photogrammetry /
+  not OSM. Sky is a cheap gradient hemisphere + sun, not a captured sky.
+  Shop E-targets have 3D pole-boards plus an authored awning kiosk
+  and cheap crate/basket spill beside the counter. Street uses
+  hemi+sun, dark-road / light-walk / yellow-edge, cheap lamps,
+  four zebras (lantern stall + Harbor/Steps East mouth +
+  Harbor/Steps West mouth + Harbor/Tram Approach mouth),
+  stop-lines and curb returns at those three corners, a few planters,
+  15 Harbor/Tram parked box scooters plus
+  8 on inner lanes, 3 extra sidewalk crate stacks, and street-facing
+  ground-floor door+glass on Harbor Walk / Tram Approach and on
+  inner parcel lanes that already face a carved road. Those inner
+  centerlines now carry a dark asphalt strip + lighter walk edge.
+  Four pole-board plaques name Harbor Walk, Tram Approach,
+  Steps East, and Steps West (authored fixture names, not OSM).
+  A slim HUD chip repeats the current of those four names
+  (or "—") so you do not have to face a plaque. Not GPS.
+  The corner minimap draws those same four in-memory lines
+  (darker official, thinner inner, chip highlight). Far inner
+  door/glass/awning and distant scooters skip past 90 m;
+  Harbor near-field stays. Still two GeoJSON streets plus
+  inner parcel lanes, not a city grid. Not OSM.
+  Lids get a darker tint,
+  a thin parapet, and hashed AC/tank boxes on a subset. Walk
+  collision follows extruded footprint rings plus lamp/planter/
+  scooter/spill AABBs, not a looser building box. The follow
+  camera pulls in along the look ray vs those rings so the
+  lens stays in street space. Far boxes fade in distance haze.
+  The 400 m GeoJSON bounds have a courtyard wall + curb +
+  water/lot; walk keep-in is that fixture edge, not a city.
+  Default HUD is slim.
+  Roofs are not walkable. Scooters and crates are props.
+- No commit.
+
+================================================================================
+COMMANDS (exact)
+================================================================================
+
+Generate / validate fixture:
+  python hh-3d/app/data-pipeline/build_authored_fixture.py
+  python hh-3d/app/data-pipeline/validate_fixture.py
+  EXIT=0  artifact_hash=83463aadae62b5db93a1c30fee003aaf73a729a45c8f42d0bb718c419ff1acbe
+  features=68 buildings=60 places=4  (no fetch)
+
+Web:
+  cd hh-3d/app/web
+  npm ci
+  npm run typecheck     EXIT=0
+  npm test              EXIT=0
+  npm run build         EXIT=0
+  npm run preview       http://127.0.0.1:4175/
+
+Verify this session:
+  Invoke-WebRequest http://127.0.0.1:4175/                         200 HH World
+  /data/ben-thanh-400m.authored.geojson                            200
+  /data/world-manifest.json                                        200
+  /styles/local-style.json                                         200 no public tile URL
+  Chrome headless --dump-dom http://127.0.0.1:4175/
+    map canvas + 4 markers + honesty banner + place list OBSERVED
+  Chrome headless --dump-dom http://127.0.0.1:4175/?place=place-market-hall
+    place-card + approx + Map data as of + Bookmark locally OBSERVED
+  CDP click bookmark -> localStorage hh-world.bookmarks.v1 PASS
+  R2-WP1 2026-09-03 (existing 4175 only; Chrome headless 152; 1280x720)
+    idle rAF N=240 extrusion ON:  min 53.76 / median 56.82 / p1 53.76 FPS
+    idle rAF N=240 extrusion OFF: min 53.76 / median 56.82 / p1 54.40 FPS
+    first-map same process: 412 ms; cache-disabled remount: 213 ms
+    compositor shots: extrusion on/off hashes differ
+    prefers-reduced-motion reduce: camera frames identical (MapLibre duration 0)
+    --disable-webgl client: fallback copy + list + card OBSERVED
+    live JS Content-Length=1120207 (older bundle; this session build ~1.14 MB)
+    network: no public tile URL
+    NOT_PLAN_PASS; GATE-U1 still first leftover
+  This session (existing 4175; did not start a second preview):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (10 tests)
+    npm run build      EXIT=0  dist/assets/index-CpzRBuNC.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200
+    /data/shops.json                                         200
+    live JS /assets/index-CpzRBuNC.js                        200 Content-Length=1137372
+    node hh-3d/app/data-qa/j1-walk-shop-probe.mjs            EXIT=0
+      J1_OBSERVED walkOk farEOk nearbyOk shopOk shopSeatOk modeOk honestyOk
+      followOk via=e  RUN_ID=HH3D-J1-20260903-ASIA-SAIGON-04
+      streetE@20.2 m closed; nearby@9.9 m; follow on during shelf + after Close
+      shop goods bbox in 1280×720 after E (listings top 382, bag bottom 588)
+    NOT_PLAN_PASS; GATE-U1 still first leftover; J2 next leftover; J3 not done
+  This session J2 (recycled existing 4175; no 4174; no second product):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (15 tests)
+    npm run build      EXIT=0  dist/assets/index-C-PC_7Jj.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200
+    live JS /assets/index-C-PC_7Jj.js                        200 Content-Length=1145519
+    node hh-3d/app/data-qa/j2-list-product-probe.mjs         EXIT=0
+      J2_OBSERVED publishOk persistOk queueOk retryOk honestyOk seatOk
+      RUN_ID=HH3D-J2-20260903-ASIA-SAIGON-01
+      guest → Chủ quầy (máy này) → extra fish public → leave → guest still sees it
+      no-network bag stays Chưa đăng; retry then public; no "đã đăng" on queue
+    NOT_PLAN_PASS; GATE-U1 still first leftover; J3 not done; R4-WP0B not built
+  This session J3 (recycled 4175 after rebuild so /demo-bus is live; no 4174):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (19 tests)
+    npm run build      EXIT=0  dist/assets/index-BKMI6e2P.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200
+    /demo-bus                                            200 local-demo-bus
+    live JS /assets/index-BKMI6e2P.js                    200 Content-Length=1161331
+    node hh-3d/app/data-qa/j3-friends-walk-probe.mjs     EXIT=0
+      J3_OBSERVED walkOk friendOk hideOk strangerOk honestyOk
+      RUN_ID=HH3D-J3-20260903-ASIA-SAIGON-01
+      isolated profiles A/B/C; pending no body; accept then A↔B walk
+      A Offline / unfriend hide other; C never drawn
+    NOT_PLAN_PASS; GATE-U1 still first leftover; M2 not ticked; no city server
+  This session J4 (recycled 4175 after rebuild so /demo-bus catalog is live):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (22 tests)
+    npm run build      EXIT=0  dist/assets/index-jeQ9lFe4.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200
+    /demo-bus                                            200 catalog field present
+    live JS /assets/index-jeQ9lFe4.js                    200 Content-Length=1171161
+    node hh-3d/app/data-qa/j4-create-shop-probe.mjs      EXIT=0
+      J4_OBSERVED createOk persistOk aWalkOk secondCtxOk twoShopsOk queueOk honestyOk
+      RUN_ID=HH3D-J4-20260903-ASIA-SAIGON-01
+      isolated A created Quầy Phở Nhà / Phở bò; leave-identity kept 2 markers
+      isolated B saw lantern + player shop; E opened Phở shelf
+      A walk then E opened Quầy Cá Đèn Lồng; draft create = Chưa đăng
+    NOT_PLAN_PASS; GATE-U1 still first leftover; M1 not ticked; no shop server
+  This session J4 critic miss remint (recycled existing 4175; no 4174):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (22 tests)
+    npm run build      EXIT=0  dist/assets/index-Css3q5a_.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200
+    live JS /assets/index-Css3q5a_.js                        200 Content-Length=1171300
+    Prohibited fold in bundle (NFD + ban sung). Did not POST catalog_clear.
+    Did not edit this-machine localStorage. In-process /demo-bus emptied
+    because the preview process was recycled to serve the new bundle.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; M1-WP1 not granted
+  This session 3D Play remint (recycled 4175 only; no 4173/4174/5175):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (26 tests)
+    npm run build      EXIT=0  dist/assets/index-BkvBebH4.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200
+    live JS /assets/index-BkvBebH4.js                        200 Content-Length=2064060
+    node hh-3d/app/data-qa/j5-3d-walk-probe.mjs              EXIT=0
+      J5_OBSERVED playOk bodyOk walkOk honestyOk shopOk
+      RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-03
+      play-view 1280x720 r3f; no hh-world-map; minimap 182x132
+      self-avatar engine=r3f doll=false; proof camera=behind buildings=5
+      W 9 s moved 14.4 m north; shot j5-3d-walk-behind.png
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim
+  This session critic-miss remint (heading-follow + slim HUD; recycle 4175 only):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (28 tests)
+    npm run build      EXIT=0  dist/assets/index-CfCQsQ-2.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200
+    live JS /assets/index-CfCQsQ-2.js                        200 Content-Length=2065470
+    node hh-3d/app/data-qa/j5-3d-walk-probe.mjs              EXIT=0
+      J5_OBSERVED playOk bodyOk walkOk honestyOk shopOk turnLeftOk turnRightOk hudOk
+      RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-04
+      camYaw 0 → 228 (A) → 1.8 (D); overlayRatio=0.099; menu default hidden
+      W 9 s moved 14.4 m north; shots behind + turn
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim
+  This session extruded block remint (recycle 4175 only; no 4173/4174/5175):
+    python data-pipeline/build_authored_fixture.py + validate_fixture.py EXIT=0
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (29 tests)
+    npm run build      EXIT=0  dist/assets/index-4f3W9n9d.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200
+    live JS /assets/index-4f3W9n9d.js                        200 Content-Length=2066338
+    /data/ben-thanh-400m.authored.geojson                    200
+    node hh-3d/app/data-qa/j5-3d-walk-probe.mjs              EXIT=0
+      J5_OBSERVED playOk bodyOk walkOk honestyOk shopOk turnLeftOk turnRightOk hudOk
+      RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-05
+      buildings=60 list=60 extruded=footprint
+      camYaw 0→226.2 (A) → 0 (D); overlayRatio=0.099; W 14.4 m north
+      shots j5-3d-block.png + behind + turn
+    Preview pid 65540 vite preview on 4175. 4173/4174/5175 down.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim
+  This session first-paint remint (recycle 4175 only; no 4173/4174/5175):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (30 tests)
+    npm run build      EXIT=0  dist/assets/index-VQf98DhM.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200 play-boot
+    live JS /assets/index-VQf98DhM.js                        200 Content-Length=2067820
+    node hh-3d/app/data-qa/j5-first-paint-probe.mjs          EXIT=0
+      J5_FIRST_PAINT_OK emptyGrayFirst=false labeled=true
+      RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-06
+      first shot = labeled loading (not blank gray); ready canvas 1280x720
+    Preview pid 66700 vite preview on 4175. 4173/4174/5175 down.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim
+  This session solid-collision remint (recycle 4175 only; no 4173/4174/5175):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (34 tests)
+    npm run build      EXIT=0  dist/assets/index-CoeOUyJ8.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200
+    live JS /assets/index-CoeOUyJ8.js                        200 Content-Length=2069274
+    /data/ben-thanh-400m.authored.geojson                    200
+    node hh-3d/app/data-qa/j5-collision-probe.mjs            EXIT=0
+      J5_COLLISION_OK playOk streetOk walkTowardOk blockedOk stayOnSlabOk
+      RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-07
+      W north 12.8 m; heading 90; W east 11.07 m; extra W east=0
+      nearest bldg-steps-e-00 @ 0.56 m; inside AABB live=0 DOM=0
+      ground-y=0; collision=aabb-radius; shot j5-3d-wall.png
+    Preview pid 59284 vite preview on 4175. 4173/4174/5175 down.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim
+  This session this-PC shared store + jump (recycle 4175 only; no 4173/4174/5175):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (38 tests)
+    npm run build      EXIT=0  dist/assets/index-Ce3LEdTD.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200 HH World
+    live JS /assets/index-Ce3LEdTD.js                        200 Content-Length=2070820
+    /demo-bus                                            200 this_pc bind=127.0.0.1 not_wan
+    node hh-3d/app/data-qa/j6-shared-server-probe.mjs        EXIT=0
+      J6_SHARED_OK busOk twoBrowsersOk friendOk offlineOk draftOk honestyOk
+      RUN_ID=HH3D-J6-20260903-ASIA-SAIGON-02
+      Node POST shop-local-sharedpc; isolated A/B (empty localStorage) both
+      saw lantern + that shop; draft inject rejected; A walk lat on B
+      10.7716200→10.7716509; A Offline → B remotes 0; shop stayed; draft
+      create = Chưa đăng and not on GET
+    node hh-3d/app/data-qa/j5-jump-probe.mjs                 EXIT=0
+      J5_JUMP_OK jumpOk landOk turnOk walkOk hudOk honestyOk
+      RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-08
+      Space peak alt=0.95 airborne=1; land alt=0; heading/camYaw 0→228;
+      buildings=60; menu closed
+    Preview pid 70428 vite preview on 4175. 4173/4174/5175 down.
+    Collision critic TICK=yes accepted; collision not redone.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO
+  This session look + wall-slide + ID wall tints (recycle 4175 only):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (42 tests)
+    npm run build      EXIT=0  dist/assets/index-BYiLnYEq.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200 HH World
+    live JS /assets/index-BYiLnYEq.js                        200 Content-Length=2076294
+    /demo-bus                                            200 this_pc bind=127.0.0.1
+    node hh-3d/app/data-qa/j5-feel-probe.mjs                 EXIT=0
+      J5_FEEL_OK lookOk walkAlongLookOk streetOk slideOk honestyOk padOk
+      RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-09
+      right-drag camYaw 0→25.2 pitch 5; W along look east=1.51 m
+      95° slide extra east=0 north=-0.92 lonSpanM=0 data-slide=1
+    Preview pid 35288 vite preview on 4175. 4173/4174/5175 down.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO
+  This session sprint + Hòn Gió tunic body (recycle 4175 only):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (44 tests)
+    npm run build      EXIT=0  dist/assets/index-_AFebqgm.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200 HH World
+    live JS /assets/index-_AFebqgm.js                        200 Content-Length=2079036
+    /demo-bus                                            200 this_pc bind=127.0.0.1
+    node hh-3d/app/data-qa/j5-sprint-probe.mjs               EXIT=0
+      J5_SPRINT_OK walk=1.69 sprint=2.90 faster=true
+      RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-10
+      W 3 s 5.07 m north; Shift+W 3 s 8.71 m north; release sprint=0
+      shots stand + walk + sprint from behind
+    Preview pid 47844 vite preview on 4175. 4173/4174/5175 down.
+    Look-slide critic TICK=yes accepted; look/slide not redone.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO
+  This session friend tunic + facade insets (recycle 4175 only):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (46 tests)
+    npm run build      EXIT=0  dist/assets/index-BWlKQePu.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200
+    live JS /assets/index-BWlKQePu.js                        200 Content-Length=2082737
+    /demo-bus                                            200 this_pc bind=127.0.0.1
+    node hh-3d/app/data-qa/j5-friends-tunic-probe.mjs        EXIT=0
+      J5_FRIENDS_TUNIC_OK tunicOk moveOk hideOk facadeOk
+      RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-11
+      B sees A teal tunic-humanoid move; A Offline → B remotes 0
+      facade windows=2141 doors=60 bands=472 insetBuildings=60
+      shot j5-3d-friend-tunic.png
+    Preview pid 48256 vite preview on 4175. 4173/4174/5175 down.
+    Sprint-body critic TICK=yes accepted; sprint/self-tunic not redone.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO
+  This session sky + shop pole-board (recycle 4175 only):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (48 tests)
+    npm run build      EXIT=0  dist/assets/index-9wO2B8tz.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200
+    live JS /assets/index-9wO2B8tz.js                        200 Content-Length=2086426
+    /demo-bus                                            200 this_pc bind=127.0.0.1
+    node hh-3d/app/data-qa/j5-sky-sign-probe.mjs             EXIT=0
+      J5_SKY_SIGN_OK sky=gradient-hemisphere signs=3 blue=0.784
+      RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-14
+      spawn sky band not beige/gray void; lantern pole-board + E
+      shots j5-3d-sky.png + j5-3d-sky-sign.png
+    Preview pid 58060 vite preview on 4175. 4173/4174/5175 down.
+    Friends-windows critic TICK=yes accepted; tunic/facade not redone.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO
+  This session readable shop boards (recycle existing 4175 only):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (48 tests)
+    npm run build      EXIT=0  dist/assets/index-Cu2bMqMD.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200
+    live JS /assets/index-Cu2bMqMD.js                        200 Content-Length=2086773
+    node hh-3d/app/data-qa/j5-sky-sign-probe.mjs             EXIT=0
+      J5_SKY_SIGN_OK sky=gradient-hemisphere signs=3
+      blue=0.614 orange=0.135
+      RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-16
+      walk sky still blue; walk orange 0.135 (was 0); spawn orange 0.246
+      faces=2  shots j5-3d-sky.png + j5-3d-sky-sign.png
+    Preview pid 70112 vite preview on 4175. 4173/4174/5175 down.
+    Sky-signs critic TICK=yes accepted; sky mesh not redone.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO
+  This session street light + road/walk/curb (recycle existing 4175 only):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (49 tests)
+    npm run build      EXIT=0  dist/assets/index-CNJLLsBh.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200
+    live JS /assets/index-CNJLLsBh.js                        200 Content-Length=2089620
+    node hh-3d/app/data-qa/j5-street-light-probe.mjs         EXIT=0
+      J5_STREET_LIGHT_OK light=hemi-sun ground=road-walk-curb
+      blue=0.653 walk-road=145.9 teal=0.32
+      RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-19
+      walk sky still blue; road darker than sidewalk; tunic not washed
+      shots j5-3d-street.png + j5-3d-street-walk.png
+    Preview pid 72156 vite preview on 4175. 4173/4174/5175 down.
+    Sky-signs critic TICK=yes accepted; sky mesh / boards not redone.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO
+  This session street props (recycle existing 4175 only):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (50 tests)
+    npm run build      EXIT=0  dist/assets/index-CYlr8YM3.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200
+    live JS /assets/index-CYlr8YM3.js                        200 Content-Length=2096834
+    node hh-3d/app/data-qa/j5-street-props-probe.mjs         EXIT=0
+      J5_STREET_PROPS_OK lamps=38 crosswalks=1 planters=4
+      blue=0.639 zebraWhite=0.144 shop=true
+      RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-22
+      mid-walk sky still blue; zebra + lamps at lantern stall; E works
+      shots j5-3d-street-props.png + j5-3d-street-crosswalk.png
+    Preview pid 9892 vite preview on 4175. 4173/4174/5175 down.
+    Street-light critic TICK=yes accepted; lighting / boards not redone.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO
+  This session shop stall storefront (recycle existing 4175 only):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (51 tests)
+    npm run build      EXIT=0  dist/assets/index-C9tzyECj.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200
+    live JS /assets/index-C9tzyECj.js                        200 Content-Length=2100300
+    node hh-3d/app/data-qa/j5-shop-stall-probe.mjs           EXIT=0
+      J5_SHOP_STALL_OK stalls=3 awning=#6e3d9a awningRatio=0.132
+      blue=0.638 zebraWhite=0.117 shop=shop-lantern-fish
+      RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-23
+      lantern awning + counter visible; pole-board kept; E at 5.6 m
+      shots j5-3d-shop-stall-spawn.png + j5-3d-shop-stall.png
+    Preview listen pid 54704 vite preview on 4175. 4173/4174/5175 down.
+    Street-props critic TICK=yes accepted; lamps / zebra / sky not ripped.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO
+  This session street-facing ground floor (recycle existing 4175 only):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (52 tests)
+    npm run build      EXIT=0  dist/assets/index-yPYpXRb_.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200
+    live JS /assets/index-yPYpXRb_.js                        200 Content-Length=2104072
+    node hh-3d/app/data-qa/j5-ground-floor-probe.mjs         EXIT=0
+      J5_GROUND_FLOOR_OK faces=38 displays=62 storefronts=38
+      windows=2141 doors=60 bands=472 blue=0.64 glass=0.205
+      RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-24
+      Harbor Walk door+glass; sky still blue; lamps/zebra/lantern kept
+      E opened shop-lantern-fish
+      shots j5-3d-ground-floor.png + j5-3d-ground-floor-stall.png
+    Preview listen pid 12816 vite preview on 4175. 4173/4174/5175 down.
+    Shop-stall critic TICK=yes accepted; stalls / lamps / sky not ripped.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO
+  This session footprint-ring walk hit (recycle existing 4175 only):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (55 tests)
+    npm run build      EXIT=0  dist/assets/index-BNjPJr_A.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200
+    live JS /assets/index-BNjPJr_A.js                        200 Content-Length=2105567
+    node hh-3d/app/data-qa/j5-footprint-hit-probe.mjs        EXIT=0
+      J5_FOOTPRINT_HIT_OK collision=footprint-radius
+      insetEast=11.90 wallExtra=0.000 slideN=-2.10
+      insideRing=0 shop=shop-lantern-fish
+      RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-28
+      street-facing extra east=0; chamfer inside AABB not ring
+      shots j5-3d-footprint-wall.png + j5-3d-footprint-inset.png
+    Preview listen pid 72268 vite preview on 4175. 4173/4174/5175 down.
+    Ground-floor critic TICK=yes accepted; door/glass/lamps/sky not ripped.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO
+  This session authored roof language (recycle existing 4175 only):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (56 tests)
+    npm run build      EXIT=0  dist/assets/index-CRXFDUYf.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200
+    live JS /assets/index-CRXFDUYf.js                        200 Content-Length=2108718
+    node hh-3d/app/data-qa/j5-roof-probe.mjs                 EXIT=0
+      J5_ROOF_OK roof=parapet-ac-tank parapets=276 acs=61 tanks=8
+      pitch=28 blue=0.416 lid=0.045 ac=0.076 wallExtra=0.000
+      shop=shop-lantern-fish
+      RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-29
+      Harbor Walk look-up shot j5-3d-roof.png; sky still blue
+      footprint extra east=0; E opened lantern
+    Preview listen pid 44172 vite preview on 4175. 4173/4174/5175 down.
+    Footprint-hit critic TICK=yes accepted; rings / lamps / sky not ripped.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO
+  This session authored parked scooters (recycle existing 4175 only):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (57 tests)
+    npm run build      EXIT=0  dist/assets/index-D0ZqDeKs.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200
+    live JS /assets/index-D0ZqDeKs.js                        200 Content-Length=2112880
+    node hh-3d/app/data-qa/j5-scooters-probe.mjs             EXIT=0
+      J5_SCOOTERS_OK scooters=15 harbor=8 tram=7 colors=8
+      blue=0.431 pix=0.068 walkN=5.52 shop=shop-lantern-fish
+      RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-33
+      Harbor Walk look shot j5-3d-scooters.png; sky still blue
+      near-e + near-w on sidewalk; E opened lantern
+    Preview listen pid 18008 vite preview on 4175. 4173/4174/5175 down.
+    Roof critic TICK=yes accepted; roofs / lamps / sky / stalls not ripped.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO
+  This session authored market spill (recycle existing 4175 only):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (58 tests)
+    npm run build      EXIT=0  dist/assets/index-DBYbCSBM.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200
+    live JS /assets/index-DBYbCSBM.js                        200 Content-Length=2119693
+    node hh-3d/app/data-qa/j5-market-spill-probe.mjs         EXIT=0
+      J5_MARKET_SPILL_OK spill=13 shop=10 street=3 scooters=15
+      blue=0.411 pix=0.156 shop=shop-lantern-fish
+      RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-35
+      Harbor Walk look shot j5-3d-market-spill.png; sky still blue
+      lantern cooler+crate+basket; E opened lantern
+    Preview listen pid 66732 vite preview on 4175. 4173/4174/5175 down.
+    Scooters critic TICK=yes accepted; scooters / roofs / lamps / sky
+    / stalls not ripped.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO
+  This session opposite-stride walk cycle (recycle existing 4175 only):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (59 tests)
+    npm run build      EXIT=0  dist/assets/index-YZ_sGtJ6.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200
+    live JS /assets/index-YZ_sGtJ6.js                        200 Content-Length=2121260
+    node hh-3d/app/data-qa/j5-walk-cycle-probe.mjs           EXIT=0
+      J5_WALK_CYCLE_OK walkSpread=2.44 sprintSpread=2.89
+      walkDiff=0.182 shop=shop-lantern-fish
+      RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-36
+      behind shots stand + walk + sprint; scooters=15 spill=13
+    Preview listen pid 43668 vite preview on 4175. 4173/4174/5175 down.
+    Market-spill critic TICK=yes accepted; scooters / spill / roofs
+    / lamps / sky / stalls not ripped.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO
+  This session follow-camera pull-in (recycle existing 4175 only):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (60 tests)
+    npm run build      EXIT=0  dist/assets/index-D4DzxvQX.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200
+    live JS /assets/index-D4DzxvQX.js                        200 Content-Length=2123194
+    node hh-3d/app/data-qa/j5-cam-hit-probe.mjs              EXIT=0
+      J5_CAM_HIT_OK open=5.62 pulled=0.38 hit=bldg-steps-e-00
+      shop=shop-lantern-fish
+      RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-37
+      facing west at Steps East; shot street/sky not box interior
+      walk cycle still opposite-stride
+    Preview listen pid 72356 vite preview on 4175. 4173/4174/5175 down.
+    Walk-cycle critic TICK=yes accepted; walk / scooters / spill /
+    roofs / lamps / sky / stalls not ripped.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO
+  This session cross-audit remint (recycle existing 4175 once after real
+  fixes; no 4173/4174/5175; no catalog_clear):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (61 tests)
+    npm run build      EXIT=0  dist/assets/index-C5aM6kYn.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200
+    live JS /assets/index-C5aM6kYn.js                        200 Content-Length=2124549
+    SHA256=bcfe3c0525b5468d23cd435e0436359c37bd01792c1b134e1a4ecf8791b96c6e
+    node hh-3d/app/data-qa/j5-cross-fix-probe.mjs            EXIT=0
+      J5_CROSS_FIX_OK eOk nearbyB=none skyBlue=0.888
+      remoteSpread=1.139 lantern=shop-lantern-fish
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-02
+      Seat B leftover J6 did not own E; spawn sky not beige;
+      B observed A's opposite-stride limb attrs
+    Independent critic CRITIC-3D-CROSS-AUDIT TICK=no still stands
+    on the old D4DzxvQX audit. Implementer is not the critic.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO; plan checkboxes [ ]
+  This session Claim 4 friend-gait remint (recycle existing 4175 after
+  build; no 4173/4174/5175; no catalog_clear):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (62 tests)
+    npm run build      EXIT=0  dist/assets/index-BaoJbjxu.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200
+    live JS /assets/index-BaoJbjxu.js                        200 Content-Length=2126062
+    SHA256=4d222643a8ebe93268a7a33ac6db1a2f6844dc35e63c8073edbe7947e2dd5e51
+    node hh-3d/app/data-qa/j5-friend-gait-probe.mjs          EXIT=0
+      J5_FRIEND_GAIT_OK pixelDiff=0.9736 lookDownBlack=false
+      remoteSpread=1.278 lantern=shop-lantern-fish
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-03
+      B default sees teal A; leftover E not owned; look-down not black
+    Independent critic CROSS-REAUDIT TICK=no stands on C5aM6kYn.
+    Implementer is not the critic. NOT_PLAN_PASS; GATE-U1 still first
+    leftover; no GTA/1:1 claim; OSM fetch still NO; WAN still NO;
+    plan checkboxes [ ]
+  This session procedural footsteps (recycle existing 4175 once after
+  build; no 4173/4174/5175; no catalog_clear):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (63 tests)
+    npm run build      EXIT=0  dist/assets/index-2Oh0rjA2.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200 HH World
+    live JS /assets/index-2Oh0rjA2.js                        200 Content-Length=2129826
+    SHA256=90255e199dae322fa6818097ba690770ffe36c6b9b952a1eff10974c973f8e18
+    node hh-3d/app/data-qa/j5-footsteps-probe.mjs            EXIT=0
+      J5_FOOTSTEPS_OK walk=1 stand=0 hidden=0 menu=0
+      ticksW=4 ticksS=5 lantern=shop-lantern-fish leftoverB=none
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-04
+      data-footsteps=1 while W; 0 standing; 0 tab hidden; 0 Tab menu
+      Seat B leftover E not stolen; honesty 1280x720 unchanged
+    Preview listen pid 44212 vite preview on 4175. 4173/4174/5175 down.
+    Friend-gait reaudit TICK=yes accepted; camera / friend limbs /
+    streetPlayShops / sky not ripped.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO; plan checkboxes [ ]
+  This session authored 400 m fixture edge (recycle 4175 after remint
+  build; no 4173/4174/5175; no catalog_clear):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (65 tests)
+    npm run build      EXIT=0  dist/assets/index-Dge8907V.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200 HH World
+    live JS /assets/index-Dge8907V.js                        200 Content-Length=2133407
+    SHA256=2bb2bee66cf437e024c0a6e61bb9ab3c0ce9d7f1efe1f49dcff67d97bf8331c3
+    node hh-3d/app/data-qa/j5-block-edge-probe.mjs           EXIT=0
+      J5_BLOCK_EDGE_OK walk=1 bound=1 void=0 edge=1
+      lantern=shop-lantern-fish leftoverB=none
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-05
+      data-fog=distance-haze 58/155; data-block-edge=curb-wall-lot
+      walls=4 lots=4; data-at-bound=1; extra south=0.13 m; alt=0
+      data-footsteps=1 while W; Seat B leftover E not stolen
+      Shot j5-3d-block-edge.png: wall/cope + horizon haze
+    Preview vite preview on 4175 (127.0.0.1). 4173/4174/5175 down.
+    Footsteps reaudit TICK=yes accepted; footsteps / friend limbs /
+    streetPlayShops / sky mesh / cam-hit not ripped.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO; plan checkboxes [ ]
+  This session inner side-street dress (recycle 4175 once after
+  build; no 4173/4174/5175; no catalog_clear):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (66 tests)
+    npm run build      EXIT=0  dist/assets/index-DMtr6Df6.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200 HH World
+    live JS /assets/index-DMtr6Df6.js                        200 Content-Length=2138099
+    SHA256=cecfeffc8dbcd3f0da2212be8816ce1c84751ff9409dee8f2c0624d028c9b365
+    node hh-3d/app/data-qa/j5-side-street-probe.mjs          EXIT=0
+      J5_SIDE_STREET_OK inner=130 extra=130 lamps=10 scooters=8
+      east=11.07 lantern=shop-lantern-fish leftoverB=none
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-06
+      Harbor/Tram faces stay 38; data-at-bound=1; shot door/glass
+    Preview vite preview on 4175 (127.0.0.1). 4173/4174/5175 down.
+    Block-edge reaudit TICK=yes accepted; fog / edge / footsteps /
+    friend limbs / streetPlayShops / sky / cam-hit not ripped.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO; plan checkboxes [ ]
+  This session inner-lane asphalt + walk edge (recycle 4175 once after
+  build; no 4173/4174/5175; no catalog_clear):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (67 tests)
+    npm run build      EXIT=0  dist/assets/index-Y4m4boSF.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200 HH World
+    live JS /assets/index-Y4m4boSF.js                        200 Content-Length=2139698
+    SHA256=8cfbcabf0181ab95b8b76d1a88984acae67c8af93d0ac311dcfec361d621eef0
+    node hh-3d/app/data-qa/j5-inner-lane-probe.mjs           EXIT=0
+      J5_INNER_LANE_OK roads=31 walks=31 lumDelta=91.6
+      door=0.091 east=12.58 lantern=shop-lantern-fish leftoverB=none
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-07
+      Harbor/Tram unchanged; data-at-bound=1; darker center
+    Preview vite preview on 4175 (127.0.0.1). 4173/4174/5175 down.
+    Side-street reaudit TICK=yes accepted; door/glass / fog / edge /
+    footsteps / friend limbs / streetPlayShops / sky / cam-hit not ripped.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO; plan checkboxes [ ]
+  This session authored street-name plaques (recycle 4175 once after
+  build; no 4173/4174/5175; no catalog_clear):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (68 tests)
+    npm run build      EXIT=0  dist/assets/index-BzqNNsdo.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200 HH World
+    live JS /assets/index-BzqNNsdo.js                        200 Content-Length=2144352
+    SHA256=b612e489b889fa001b84145c77b353dad9d2260e4e54c436c22fc8c9e269191b
+    node hh-3d/app/data-qa/j5-street-name-probe.mjs          EXIT=0
+      J5_STREET_NAME_OK plaques=4 names=Harbor Walk,Tram Approach,Steps East,Steps West
+      harborVis=true stepsVis=true east=7.24 lumDelta=136.3
+      lantern=shop-lantern-fish leftoverB=none
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-08
+    Preview vite preview on 4175 (127.0.0.1). 4173/4174/5175 down.
+    Inner-lane reaudit TICK=yes accepted; inner lanes / side-street /
+    fog / edge / footsteps / friend gait / streetPlayShops / sky /
+    cam-hit not ripped.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO; plan checkboxes [ ]
+  This session slim street HUD chip (recycle 4175 once after
+  remint build; no 4173/4174/5175; no catalog_clear):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (69 tests)
+    npm run build      EXIT=0  dist/assets/index-DF4TvR_E.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200 HH World
+    live JS /assets/index-DF4TvR_E.js                        200 Content-Length=2146024
+    SHA256=9eb88fce4b24620d8d91d78a3377e58ccc3c91346ae97dea8dc609f1388700be
+    node hh-3d/app/data-qa/j5-street-hud-probe.mjs           EXIT=0
+      J5_STREET_HUD_OK chipHarbor=Harbor Walk chipSteps=Steps East
+      plaques=4 east=7.2 lantern=shop-lantern-fish leftoverB=none
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-09
+    Preview vite preview on 4175 (127.0.0.1). 4173/4174/5175 down.
+    Street-name reaudit TICK=yes accepted; plaques / inner lanes /
+    dressing / fog / edge / footsteps / friend gait /
+    streetPlayShops / sky / cam-hit not ripped.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO; plan checkboxes [ ]
+  This session corner minimap HUD lanes (recycle 4175 once after
+  build; no 4173/4174/5175; no catalog_clear):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (70 tests)
+    npm run build      EXIT=0  dist/assets/index-DOyi5rEr.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200 HH World
+    live JS /assets/index-DOyi5rEr.js                        200 Content-Length=2148383
+    SHA256=f6a98569d4e5be3c2d7c5b2db610895647280df5a243289ca0e5687c7ff564be
+    node hh-3d/app/data-qa/j5-minimap-lane-probe.mjs         EXIT=0
+      J5_MINIMAP_LANE_OK chipHarbor=Harbor Walk chipSteps=Steps East
+      miniSteps=Steps East hl=1 inner=2 extra=2 east=7.09
+      lantern=shop-lantern-fish leftoverB=none
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-10
+    Preview vite preview on 4175 (127.0.0.1). 4173/4174/5175 down.
+    Street-HUD reaudit TICK=yes accepted; HUD chip / plaques /
+    inner lanes / dressing / fog / edge / footsteps / friend
+    gait / streetPlayShops / sky / cam-hit not ripped.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO; plan checkboxes [ ]
+  This session Harbor FPS + far LOD (recycle 4175 once after
+  build; no 4173/4174/5175; no catalog_clear):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (71 tests)
+    npm run build      EXIT=0  dist/assets/index-DRczAori.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200 HH World
+    live JS /assets/index-DRczAori.js                        200 Content-Length=2149085
+    SHA256=5fe4118fc604ba3d8c5baf5ca6125d6e47d6229dde8067ef256711bbc30ce42b
+    node hh-3d/app/data-qa/j5-fps-lod-probe.mjs              EXIT=0
+      J5_FPS_LOD_OBSERVED idle=44.00 walk=49.98
+      steps=Steps East lantern=shop-lantern-fish
+      far-lod=inner-door-glass m=90
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-11
+    Pre-LOD walk mean 43.95 on DOyi5rEr triggered the remint.
+    Preview vite preview on 4175 (127.0.0.1 pid 32756).
+    4173/4174/5175 down.
+    Minimap-lane reaudit TICK=yes accepted on DOyi5rEr; HUD
+    chip / plaques / inner lanes / dressing / fog / edge /
+    footsteps / friend gait / streetPlayShops / sky / cam-hit
+    not ripped.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO; plan checkboxes [ ]
+  This session quieter friend footsteps (recycle existing 4175 once
+  after build; no 4173/4174/5175; no catalog_clear):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (72 tests)
+    npm run build      EXIT=0  dist/assets/index-DptTgaTX.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200 HH World
+    live JS /assets/index-DptTgaTX.js                        200 Content-Length=2152085
+    SHA256=0a13284eacdcffeadc20bf1a633ce19fd4c62f79dc8390f67714c744b6c7dc58
+    node hh-3d/app/data-qa/j5-friend-steps-probe.mjs         EXIT=0
+      J5_FRIEND_STEPS_OK walk=+3 stand=0 hidden=0
+      gain=0.035 dist=7.47 lantern=shop-lantern-fish leftoverB=none
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-12
+      Isolated A/B add/accept/Online; A holds W; B plant count
+      rises; B stand ticks=0; hidden ticks frozen; leftover E
+      not stolen. Chip / minimap / 90 m LOD kept.
+    Preview vite preview on 4175 (127.0.0.1 pid 6280).
+    4173/4174/5175 down.
+    FPS-LOD reaudit TICK=yes accepted on DRczAori; 90 m LOD /
+    HUD chip / minimap / plaques / lanes / fog/edge / self
+    footsteps / friend gait / streetPlayShops / sky / cam-hit
+    not ripped.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO; plan checkboxes [ ]
+  This session Offline friend-step teardown remint (recycle existing
+  4175 once after build; no 4173/4174/5175; no catalog_clear):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (72 tests)
+    npm run build      EXIT=0  dist/assets/index-nJ1HVwcJ.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200 HH World
+    live JS /assets/index-nJ1HVwcJ.js                        200 Content-Length=2152818
+    SHA256=aa2c143cc1edf1aac67ab8ffc7facd3029b875bfd8dee0acbbfbceb6a887d701
+    node hh-3d/app/data-qa/j5-friend-steps-probe.mjs         EXIT=0
+      J5_FRIEND_STEPS_OK walk=+4 stand=0 hidden=0 offline=flat
+      gain=0.035 dist=7.52 lantern=shop-lantern-fish leftoverB=none
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-13
+      Isolated A/B add/accept/Online; A holds W; B plants +4;
+      hidden ticks frozen; A Offline → B live=0 ticks=0 osc=25
+      flat while A keeps walking Offline. Leftover E not stolen.
+      Chip / minimap / 90 m LOD kept.
+    Preview vite preview on 4175 (127.0.0.1 pid 5156).
+    4173/4174/5175 down.
+    Independent friend-steps reaudit TICK=no stands on DptTgaTX.
+    Implementer is not the critic. FPS-LOD reaudit TICK=yes
+    accepted on DRczAori; 90 m LOD / HUD chip / minimap /
+    plaques / lanes / fog/edge / self footsteps / friend gait /
+    streetPlayShops / sky / cam-hit not ripped.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO; plan checkboxes [ ]
+  This session first-walk hitch warmup (recycle 4175 once after
+  build; no 4173/4174/5175; no catalog_clear):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (73 tests)
+    npm run build      EXIT=0  dist/assets/index-Zv5epUAg.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200 HH World
+    live JS /assets/index-Zv5epUAg.js                        200 Content-Length=2153814
+    SHA256=458d723bf1584e1c60ed8f77220227dfe3d8db89a3441ba2c0908e38db265743
+    node hh-3d/app/data-qa/j5-hitch-probe.mjs                EXIT=0
+      J5_HITCH_OBSERVED first-W before min=8.57 mean=20.40
+      after min=8.58 mean=27.53 lantern=shop-lantern-fish
+      hitch-warmup=audio-compile
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-15
+    Preview vite preview on 4175 (127.0.0.1 pid 32236).
+    4173/4174/5175 down.
+    Friend-steps fix reaudit TICK=yes accepted on nJ1HVwcJ;
+    Offline teardown / 90 m LOD / HUD chip / minimap /
+    plaques / lanes / fog/edge / streetPlayShops / sky /
+    cam-hit not ripped.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO; plan checkboxes [ ]
+  This session first-walk hitch2 MapLibre defer (recycle 4175 after
+  remint build; no 4173/4174/5175; no catalog_clear):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (74 tests)
+    npm run build      EXIT=0  dist/assets/index-BgKOOgwd.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200 HH World
+    live JS /assets/index-BgKOOgwd.js                        200 Content-Length=2154825
+    SHA256=263b3d2274f957b422e5456a47e14a12b34cdea0722566d7cf31219a2b463a5d
+    node hh-3d/app/data-qa/j5-hitch2-probe.mjs               EXIT=0
+      J5_HITCH2_OBSERVED first-W before min=7.50 mean=19.00
+      after min=9.99 mean=23.73 lantern=shop-lantern-fish
+      miniSteps=Steps East hitch-defer=play-idle-or-first-w
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-19
+    Preview vite preview on 4175 (127.0.0.1 pid 55656).
+    4173/4174/5175 down.
+    Hitch reaudit TICK=yes accepted on Zv5epUAg; warmup /
+    Offline teardown / 90 m LOD / HUD chip / plaques / lanes /
+    fog/edge / streetPlayShops / sky / cam-hit not ripped.
+    Corner MapLibre waits for idle Play frames or first W end.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO; plan checkboxes [ ]
+  This session Harbor / Steps East corner crossing (recycle 4175
+  once after remint build; no 4173/4174/5175; no catalog_clear):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (75 tests)
+    npm run build      EXIT=0  dist/assets/index-DEOxFuyb.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200 HH World
+    live JS /assets/index-DEOxFuyb.js                        200 Content-Length=2158383
+    SHA256=0fe8a6d204a9ad3578fbca9ab55cf707aa3410e7d7fe071a6b9e54d481195736
+    node hh-3d/app/data-qa/j5-intersection-probe.mjs         EXIT=0
+      J5_INTERSECTION_OK corner=zebra-stopline-curb
+      white=0.139 curb=0.083 chipHarbor=Harbor Walk
+      chipSteps=Steps East mini=Steps East
+      lantern=shop-lantern-fish leftoverB=none
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-20
+    Preview vite preview on 4175 (127.0.0.1 pid 64132).
+    4173/4174/5175 down.
+    Hitch2 reaudit TICK=yes accepted on BgKOOgwd; did not grind
+    hitch. Deferred minimap / warmup / friend steps / 90 m LOD /
+    HUD chip / plaques / lanes / fog/edge / streetPlayShops /
+    sky / cam-hit not ripped.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO; plan checkboxes [ ]
+  This session lantern stall chalkboard (recycle 4175 once after
+  remint build; no 4173/4174/5175; no catalog_clear):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (77 tests)
+    npm run build      EXIT=0  dist/assets/index-4xUMLnYL.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200 HH World
+    live JS /assets/index-4xUMLnYL.js                        200 Content-Length=2161516
+    SHA256=4f8cd7033ea399ad7322937c94cf0a5f0fdd48c063cdfdf60086c47f0670f5dd
+    node hh-3d/app/data-qa/j5-stall-board-probe.mjs          EXIT=0
+      J5_STALL_BOARD_OK board=Cá nục sương (mẫu) | Túi cói chợ (mẫu)
+      crop slate=0.629 chalk=0.07
+      lantern=shop-lantern-fish leftoverB=none stripes=7
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-21
+    Preview vite preview on 4175 (127.0.0.1 pid 44140).
+    4173/4174/5175 down.
+    Intersection reaudit TICK=yes accepted on DEOxFuyb; did not rip
+    Harbor×Steps crossing / deferred minimap / warmup / friend
+    steps / 90 m LOD / HUD chip / plaques / lanes / fog/edge /
+    streetPlayShops / sky / cam-hit.
+    Authored fiction listings, not a live market. Leftover Shared
+    PC / mtl8ulddihjpre stay in persist inside keep-out and do
+    not own E.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO; plan checkboxes [ ]
+  This session player-shop chalkboard (recycle 4175 once after
+  remint build; no 4173/4174/5175; no catalog_clear):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (78 tests)
+    npm run build      EXIT=0  dist/assets/index-D4Sc2h68.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200 HH World
+    live JS /assets/index-D4Sc2h68.js                        200 Content-Length=2162025
+    SHA256=76f9843d6e8cff47bc683e55bea928ac36797054d601a1e6f4ceec9ace4c64b2
+    node hh-3d/app/data-qa/j5-player-board-probe.mjs         EXIT=0
+      J5_PLAYER_BOARD_OK shop=shop-local-mtmh45qxehxhvb
+      board=Phở bò (mẫu)  crop slate=0.533 chalk=0.038
+      lantern=Cá nục sương (mẫu) | Túi cói chợ (mẫu)
+      lantern crop slate=0.516 chalk=0.084
+      north=19.8 leftoverB=none
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-22
+    Preview vite preview on 4175 (127.0.0.1 pid 68116).
+    4173/4174/5175 down.
+    Stall-board reaudit TICK=yes accepted on 4xUMLnYL; did not rip
+    lantern Cá/Túi / Harbor×Steps / deferred minimap / warmup /
+    friend steps / 90 m LOD / HUD chip / plaques / lanes /
+    fog/edge / streetPlayShops / sky / cam-hit.
+    Local demo identity only; not OIDC; not a city shop server.
+    Leftover Shared PC / mtl8ulddihjpre stay in persist inside
+    keep-out and do not own E.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO; plan checkboxes [ ]
+  This session guest public-shop browse (no remint; already-up
+  4175 pid 68116; no 4173/4174/5175; no catalog_clear):
+    Invoke-WebRequest http://127.0.0.1:4175/                 200 HH World
+    live JS /assets/index-D4Sc2h68.js                        200 Content-Length=2162025
+    SHA256=76f9843d6e8cff47bc683e55bea928ac36797054d601a1e6f4ceec9ace4c64b2
+    node hh-3d/app/data-qa/j5-guest-board-probe.mjs          EXIT=0
+      J5_GUEST_BOARD_OK shop=shop-local-mtmh45qxehxhvb
+      crop=Phở bò (mẫu) / mẫu · not a live market
+      crop slate=0.639 chalk=0.056  north=14.1
+      E=shop-local-mtmh45qxehxhvb  friendA=none
+      guest Offline; no add-friend; no Online required
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-23
+    Preview vite preview on 4175 (127.0.0.1 pid 68116) unchanged.
+    4173/4174/5175 down.
+    Player-board reaudit TICK=yes accepted on D4Sc2h68; did not
+    remint. Isolated B empty profile pulled the drawn published
+    shop from /demo-bus. Leftover Shared PC / mtl8ulddihjpre stay
+    in persist inside keep-out and do not own E.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO; plan checkboxes [ ]
+  This session owner-Offline published shop stays (no remint;
+  already-up 4175 pid 68116; no 4173/4174/5175; no catalog_clear):
+    Invoke-WebRequest http://127.0.0.1:4175/                 200 HH World
+    live JS /assets/index-D4Sc2h68.js                        200 Content-Length=2162025
+    SHA256=76f9843d6e8cff47bc683e55bea928ac36797054d601a1e6f4ceec9ace4c64b2
+    node hh-3d/app/data-qa/j5-owner-off-board-probe.mjs      EXIT=0
+      J5_OWNER_OFF_BOARD_OK shop=shop-local-mtmh45qxehxhvb
+      A=Chủ quầy then leave-identity; Offline both states
+      B crop=Phở bò (mẫu) / mẫu · not a live market
+      crop slate=0.626 chalk=0.047  north=13.7 east=2.1
+      E=shop-local-mtmh45qxehxhvb  friendA=none remotes=0
+      guest B Offline; A Offline / not present; no Online
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-24
+    Preview vite preview on 4175 (127.0.0.1 pid 68116) unchanged.
+    4173/4174/5175 down.
+    Guest-board reaudit TICK=yes accepted on D4Sc2h68; did not
+    remint. Isolated A+B: published Phở shop stays when owner
+    is Offline and after leave-demo-owner. Leftover Shared PC /
+    mtl8ulddihjpre stay in persist inside keep-out and do not
+    own E.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO; plan checkboxes [ ]
+  This session lost-network draft ≠ posted (no remint;
+  already-up 4175 pid 68116; no 4173/4174/5175; no catalog_clear):
+    Invoke-WebRequest http://127.0.0.1:4175/                 200 HH World
+    live JS /assets/index-D4Sc2h68.js                        200 Content-Length=2162025
+    SHA256=76f9843d6e8cff47bc683e55bea928ac36797054d601a1e6f4ceec9ace4c64b2
+    node hh-3d/app/data-qa/j5-nonet-draft-probe.mjs          EXIT=0
+      J5_NONET_DRAFT_OK shop=shop-local-mtmh45qxehxhvb
+      CDP navigator.onLine=false (checkbox unused)
+      list Bun Nonet Probe 0904 = draft / Chưa đăng
+      board stayed Phở bò (mẫu); daDang=false
+      cache stayed Bản lưu lúc 2026-09-04T05:37:01
+      restore online → Retry publish enabled; not clicked
+      test draft deleted; busDraft=false
+      presence stayed Offline stroll
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-25
+    Preview vite preview on 4175 (127.0.0.1 pid 68116) unchanged.
+    4173/4174/5175 down.
+    Owner-off reaudit TICK=yes accepted on D4Sc2h68; did not
+    remint. Lost network is not social Offline. Leftover Shared
+    PC / mtl8ulddihjpre stay in persist inside keep-out.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO; plan checkboxes [ ]
+  This session social Offline ≠ internet labels (recycle 4175
+  once after remint build; no 4173/4174/5175; no catalog_clear):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (80 tests)
+    npm run build      EXIT=0  dist/assets/index-Ds6AgobF.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200 HH World
+    live JS /assets/index-Ds6AgobF.js                        200 Content-Length=2162901
+    SHA256=22a0109914938d43fe18c47096360cbde3caa59471d6eebac88de2af3420a1c1
+    node hh-3d/app/data-qa/j5-net-label-probe.mjs            EXIT=0
+      J5_NET_LABEL_OK
+      HUD Offline + Đang kết nối (menu hidden)
+      CDP onLine=false → Offline + Mất kết nối (social stays)
+      Menu Mất kết nối; restore → Đang kết nối; Offline stays
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-26
+    Preview vite preview on 4175 (127.0.0.1 pid 40880).
+    4173/4174/5175 down.
+    Nonet-draft reaudit TICK=yes accepted on D4Sc2h68; this
+    remint only split the two labels. Leftover Shared PC /
+    mtl8ulddihjpre stay in persist inside keep-out.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO; plan checkboxes [ ]
+  This session reconnect pill flash (recycle 4175 once after
+  remint build; no 4173/4174/5175; no catalog_clear):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (81 tests)
+    npm run build      EXIT=0  dist/assets/index-BJSm6u26.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200 HH World
+    live JS /assets/index-BJSm6u26.js                        200 Content-Length=2163608
+    SHA256=4bab466a90d3ad6a404286e41a0bc68df8df89e58feb0cd755ef98a9dc8c35ca
+    node hh-3d/app/data-qa/j5-net-reconnect-probe.mjs        EXIT=0
+      J5_NET_RECONNECT_OK
+      HUD Offline + Đang kết nối (menu hidden)
+      CDP onLine=false → Offline + Mất kết nối (social stays)
+      CDP onLine=true → Offline + Đang kết nối lại (~599 ms)
+      then Offline + Đang kết nối
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-27
+    Preview vite preview on 4175 (127.0.0.1 pid 52864).
+    4173/4174/5175 down.
+    NET-LABEL reaudit TICK=yes accepted on Ds6AgobF; this remint
+    only adds the reconnect flash. Leftover Shared PC /
+    mtl8ulddihjpre stay in persist inside keep-out.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO; plan checkboxes [ ]
+  This session Harbor / Steps West mouth crossing (recycle 4175
+  once after remint build; no 4173/4174/5175; no catalog_clear):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (82 tests)
+    npm run build      EXIT=0  dist/assets/index-BkgSKGSy.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200 HH World
+    live JS /assets/index-BkgSKGSy.js                        200 Content-Length=2164988
+    SHA256=2c2385ccd07a97fdca755f1279cdb0f07cf78dbcf7162ebda0597e1ecec285e6
+    node hh-3d/app/data-qa/j5-west-xing-probe.mjs            EXIT=0
+      J5_WEST_XING_OK corner=zebra-stopline-curb
+      white=0.172 curb=0.307 chipHarbor=Harbor Walk
+      chipWest=Steps West mini=Steps West
+      lantern=shop-lantern-fish leftoverB=none
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-28
+    Preview vite preview on 4175 (127.0.0.1 pid 60500).
+    4173/4174/5175 down.
+    NET-RECONNECT reaudit TICK=yes accepted; did not remint
+    net labels / reconnect / boards / streetPlayShops /
+    Harbor×Steps East / deferred minimap / friend steps /
+    90 m LOD / HUD chip / plaques / lanes / fog/edge / sky /
+    cam-hit.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO; plan checkboxes [ ]
+  This session Menu leftover list (recycle 4175 once after remint
+  build; no 4173/4174/5175; no catalog_clear):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (83 tests)
+    npm run build      EXIT=0  dist/assets/index-CCDPahU8.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200 HH World
+    live JS /assets/index-CCDPahU8.js                        200 Content-Length=2165874
+    SHA256=6fc3906121746831cba72d53274737f6dea224f081afaffc20d4efdf329d86d1
+    node hh-3d/app/data-qa/j5-list-leftover-probe.mjs        EXIT=0
+      J5_LIST_LEFTOVER_OK
+      street=shop-lantern-fish,shop-local-mtmh45qxehxhvb
+      leftover=shop-local-sharedpc,shop-local-mtl8ulddihjpre
+      labeled leftover last; spawn E none
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-29
+    Preview vite preview on 4175 (127.0.0.1 pid 72840).
+    4173/4174/5175 down.
+    WEST-XING reaudit TICK=yes accepted on BkgSKGSy; this remint
+    only labels Menu leftovers. Did not remint west/east
+    crossings / net labels / reconnect / boards /
+    streetPlayShops / deferred minimap / friend steps /
+    90 m LOD / HUD chip / plaques / lanes / fog/edge / sky /
+    cam-hit.
+    Leftover Shared PC / mtl8ulddihjpre stay in persist inside
+    keep-out and do not own E.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO; plan checkboxes [ ]
+  This session Harbor / Tram Approach mouth crossing (recycle 4175
+  once after remint build; no 4173/4174/5175; no catalog_clear):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (84 tests)
+    npm run build      EXIT=0  dist/assets/index-D6skGmYL.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200 HH World
+    live JS /assets/index-D6skGmYL.js                        200 Content-Length=2167318
+    SHA256=29f5735069f1b6e0d16680cb03da1b8d72180b2824c90b41f6caf51c2a0aa05a
+    node hh-3d/app/data-qa/j5-tram-xing-probe.mjs            EXIT=0
+      J5_TRAM_XING_OK corner=zebra-stopline-curb
+      white=0.273 curb=0.095 chipHarbor=Harbor Walk
+      chipTram=Tram Approach mini=Tram Approach
+      lantern=shop-lantern-fish leftoverB=none leftoverLast
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-30
+    Preview vite preview on 4175 (127.0.0.1 pid 34604).
+    4173/4174/5175 down.
+    LIST-LEFTOVER reaudit TICK=yes accepted on CCDPahU8; this
+    remint only paints the Harbor×Tram mouth. Did not remint
+    Menu leftover labels / west/east Steps crossings / net
+    labels / boards / streetPlayShops / deferred minimap /
+    friend steps / 90 m LOD / HUD chip / plaques / lanes /
+    fog/edge / sky / cam-hit.
+    Leftover Shared PC / mtl8ulddihjpre stay in persist inside
+    keep-out and do not own E.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO; plan checkboxes [ ]
+  This session leftover shop panel (recycle 4175 once after remint
+  build; no 4173/4174/5175; no catalog_clear):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (85 tests)
+    npm run build      EXIT=0  dist/assets/index-BjeBwyj9.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200 HH World
+    live JS /assets/index-BjeBwyj9.js                        200 Content-Length=2167676
+    SHA256=4f5ceeebbbf48009ca74757bf04d32b857d38b481f7f0ab7d389928d4c00d252
+    node hh-3d/app/data-qa/j5-leftover-panel-probe.mjs       EXIT=0
+      J5_LEFTOVER_PANEL_OK
+      leftover Shared PC / J6 = không trên phố / leftover máy này
+      lantern = public shop · authored example among many
+      Phở = public shop · opened on this machine
+      spawn E none; lantern E shop-lantern-fish; leftover last
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-31
+    Preview vite preview on 4175 (127.0.0.1 pid 26552).
+    4173/4174/5175 down.
+    TRAM-XING reaudit TICK=yes accepted on D6skGmYL; this remint
+    only labels leftover shop panels. Did not remint Harbor×Tram
+    / west/east Steps crossings / lantern zebra / Menu leftover
+    list labels/sort / net labels / boards / streetPlayShops /
+    deferred minimap / friend steps / 90 m LOD / HUD chip /
+    plaques / lanes / fog/edge / sky / cam-hit.
+    Leftover Shared PC / mtl8ulddihjpre stay in persist inside
+    keep-out and do not own E.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO; plan checkboxes [ ]
+  This session sidewalk stall pose (recycle 4175 once after remint
+  build; no 4173/4174/5175; no catalog_clear):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (86 tests)
+    npm run build      EXIT=0  dist/assets/index-DMHs6gaq.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200 HH World
+    live JS /assets/index-DMHs6gaq.js                        200 Content-Length=2168506
+    SHA256=4a69b7361fff2bad9de1e09cf0e1225c6c96367848ff31af5cdb19a7a96e2e0a
+    node hh-3d/app/data-qa/j5-stall-sidewalk-probe.mjs       EXIT=0
+      J5_STALL_SIDEWALK_OK
+      Phở persistLane=0.13 plantLane=7.2 draw=1
+      lantern plantLane=7.2 draw=1
+      walk past Phở blocked=0 chip=Harbor Walk
+      lantern E=shop-lantern-fish leftover banners hold
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-32
+    Preview vite preview on 4175 (127.0.0.1 pid 33124).
+    4173/4174/5175 down.
+    LEFTOVER-PANEL reaudit TICK=yes accepted on BjeBwyj9; this
+    remint only moves drawn stall mesh/collide to the Harbor/
+    Tram sidewalk. Did not remint leftover panel banners /
+    Menu leftover labels/sort / Harbor×Tram / west/east Steps
+    crossings / lantern zebra / net labels / boards /
+    streetPlayShops keep-out / deferred minimap / friend steps /
+    90 m LOD / HUD chip / plaques / lanes / fog/edge / sky /
+    cam-hit. Did not remint leftover kind-chip gold.
+    Leftover Shared PC / mtl8ulddihjpre stay in persist inside
+    keep-out and do not own E.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO; plan checkboxes [ ]
+  This session stall E + pole-board plant (recycle 4175 once after
+  remint build; no 4173/4174/5175; no catalog_clear):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (86 tests)
+    npm run build      EXIT=0  dist/assets/index-Cp7g20_q.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200 HH World
+    live JS /assets/index-Cp7g20_q.js                        200 Content-Length=2168740
+    SHA256=85bb8e1fdf641e979a0c7576ba591c4026e76eb4fce51ea597fb5f02a3028aec
+    node hh-3d/app/data-qa/j5-stall-e-sign-probe.mjs         EXIT=0
+      J5_STALL_E_SIGN_OK
+      Phở persistLane=0.14 plantLane=7.2 signLane=7.2
+      lantern persistLane=0.40 plantLane=7.2 signLane=7.2
+      E-at-persist none / E-at-stall Phở + lantern
+      Harbor walk blocked=0 chip=Harbor Walk
+      leftover banners hold
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-33
+    Preview vite preview on 4175 (127.0.0.1 pid 44812).
+    4173/4174/5175 down.
+    SIDEWALK reaudit TICK=no on DMHs6gaq; this remint only
+    points Nearby/E and the pole-board at the drawn stall
+    plant. Did not remint leftover panel banners / Menu
+    leftover labels/sort / Harbor×Tram / west/east Steps
+    crossings / lantern zebra / net labels / boards /
+    streetPlayShops keep-out / deferred minimap / friend steps /
+    90 m LOD / HUD chip / plaques / lanes / fog/edge / sky /
+    cam-hit. Persist lon/lat stay. Did not catalog_clear.
+    Leftover Shared PC / mtl8ulddihjpre stay in persist inside
+    keep-out and do not own E.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO; plan checkboxes [ ]
+  This session stall E range tighten (recycle 4175 once after
+  remint build; no 4173/4174/5175; no catalog_clear):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (86 tests)
+    npm run build      EXIT=0  dist/assets/index-DsJoiruI.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200 HH World
+    live JS /assets/index-DsJoiruI.js                        200 Content-Length=2168810
+    SHA256=3e7650d7899e379dd1faceec8aecf9e3db51ef17be791c63b0c334b8b5ca486f
+    node hh-3d/app/data-qa/j5-stall-e-range-probe.mjs        EXIT=0
+      J5_STALL_E_RANGE_OK
+      asphalt west-of-lantern-persist laneM=2.12 Nearby empty E=none
+      Phở persist E=none / sidewalk E=shop-local-mtmh45qxehxhvb
+      lantern persist E=none / sidewalk E=shop-lantern-fish
+      leftover banners hold
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-34
+    Preview vite preview on 4175 (127.0.0.1 pid 44120).
+    4173/4174/5175 down.
+    STALL-E-SIGN reaudit TICK=yes on Cp7g20_q; this remint only
+    tightens Nearby/E (NEARBY_SHOP_M=4 + asphalt laneM ≲ 3).
+    Did not remint leftover panel banners / Menu leftover
+    labels/sort / Harbor×Tram / west/east Steps crossings /
+    lantern zebra / net labels / boards / streetPlayShops
+    keep-out / deferred minimap / friend steps / 90 m LOD /
+    HUD chip / plaques / lanes / fog/edge / sky / cam-hit /
+    sidewalk plant / pole-board plant. Persist lon/lat stay.
+    Did not catalog_clear.
+    Leftover Shared PC / mtl8ulddihjpre stay in persist inside
+    keep-out and do not own E.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO; plan checkboxes [ ]
+  This session stall range HUD (recycle 4175 once after remint
+  build; no 4173/4174/5175; no catalog_clear):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (86 tests)
+    npm run build      EXIT=0  dist/assets/index-Bsz3aP8u.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200 HH World
+    live JS /assets/index-Bsz3aP8u.js                        200 Content-Length=2168818
+    SHA256=cb72726f4811bda2407f8731a7fcf59c4878a69ec7187ff96fa2290e43ba575b
+    node hh-3d/app/data-qa/j5-stall-range-hud-probe.mjs       EXIT=0
+      J5_STALL_RANGE_HUD_OK
+      asphalt west-of-lantern-persist laneM=2.24 Nearby empty
+      shop-range="Walk to a stall." E=none
+      Phở persist range empty copy / E=none
+      sidewalk Phở range="Quầy Phở Nhà: 1.7 m away"
+        E=shop-local-mtmh45qxehxhvb
+      lantern persist range empty copy / E=none
+      sidewalk lantern range="Quầy Cá Đèn Lồng: 2.3 m away"
+        E=shop-lantern-fish
+      leftover banners hold
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-35
+    Preview vite preview on 4175 (127.0.0.1 pid 35576).
+    4173/4174/5175 down.
+    STALL-E-RANGE reaudit TICK=yes on DsJoiruI; this remint
+    only hides named shop-range when Nearby is empty.
+    Did not remint Nearby/E range / leftover panel banners /
+    Menu leftover labels/sort / Harbor×Tram / west/east Steps
+    crossings / lantern zebra / net labels / boards /
+    streetPlayShops keep-out / deferred minimap / friend steps /
+    90 m LOD / HUD chip / plaques / lanes / fog/edge / sky /
+    cam-hit / sidewalk plant / pole-board plant. Persist lon/lat
+    stay. Did not catalog_clear.
+    Leftover Shared PC / mtl8ulddihjpre stay in persist inside
+    keep-out and do not own E.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO; plan checkboxes [ ]
+  This session create persist on sidewalk (recycle 4175 once after
+  remint build; no 4173/4174/5175; no catalog_clear):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (87 tests)
+    npm run build      EXIT=0  dist/assets/index-C3JOtA3q.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200 HH World
+    live JS /assets/index-C3JOtA3q.js                        200 Content-Length=2169322
+    SHA256=c000db65138fc3c3f48583ba17d1032aa82c5fca0ef4047cdf2d5db1bc2bcdc7
+    node hh-3d/app/data-qa/j5-create-sidewalk-probe.mjs       EXIT=0
+      J5_CREATE_SIDEWALK_OK
+      Quầy Chè Vỉa shop-local-mtmrbdjffjdkg8
+      persistLane=7.2 plantLane=7.21 signLane=7.21
+      asphalt old-style laneM=0.60 Nearby empty
+        shop-range="Walk to a stall." E=none
+      sidewalk range="Quầy Chè Vỉa: 2.0 m away"
+        E=shop-local-mtmrbdjffjdkg8
+      lantern E=shop-lantern-fish leftover banners hold
+      Phở persist kept; Shared PC / J6 draw=0
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-36
+    Preview vite preview on 4175 (127.0.0.1 pid 51752).
+    4173/4174/5175 down.
+    STALL-RANGE-HUD reaudit TICK=yes on Bsz3aP8u; this remint
+    only writes new create persist through the sidewalk plant.
+    Did not remint Nearby/E range / leftover panel banners /
+    Menu leftover labels/sort / Harbor×Tram / west/east Steps
+    crossings / lantern zebra / net labels / boards /
+    streetPlayShops keep-out / deferred minimap / friend steps /
+    90 m LOD / HUD chip / plaques / lanes / fog/edge / sky /
+    cam-hit / drawn sidewalk plant / pole-board plant.
+    Existing Phở persist stays. Did not catalog_clear.
+    Leftover Shared PC / mtl8ulddihjpre stay in persist inside
+    keep-out and do not own E.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO; plan checkboxes [ ]
+  This session Chè sidewalk chalkboard (no remint; already-up 4175
+  pid 51752; no 4173/4174/5175; no catalog_clear):
+    Live JS still /assets/index-C3JOtA3q.js LEN=2169322
+    SHA256=c000db65138fc3c3f48583ba17d1032aa82c5fca0ef4047cdf2d5db1bc2bcdc7
+    node hh-3d/app/data-qa/j5-che-board-probe.mjs            EXIT=0
+      J5_CHE_BOARD_OK
+      isolated guest B Offline, friendA=none
+      Chè crop=Chè đậu (mẫu) / mẫu · not a live market
+        slate=0.462 chalk=0.054
+      E=shop-local-mtmrbdjffjdkg8  listing Chè đậu
+      Kem drawn; crop=Kem dua (mẫu)
+      lantern=Cá nục sương (mẫu) | Túi cói chợ (mẫu)
+      Phở=Phở bò (mẫu)
+      leftover Shared PC / J6 draw=0; spawn E not stolen
+      asphalt old-style laneM=0.49 Nearby empty
+        shop-range="Walk to a stall." E=none
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-37
+    CREATE_SIDEWALK reaudit TICK=yes on C3JOtA3q still stands.
+    Did not remint persist / shop-range HUD / Nearby/E /
+    leftover banners / Menu leftover / crossings / zebra /
+    net labels / streetPlayShops / minimap / friend steps /
+    LOD / HUD chip / plaques / lanes / fog/edge / sky / cam-hit.
+    Did not catalog_clear. Did not recycle 4175.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO; plan checkboxes [ ]
+  This session Tram Approach north-of-mouth street language
+  (no remint; already-up 4175 pid 51752; no 4173/4174/5175;
+  no catalog_clear):
+    Live JS still /assets/index-C3JOtA3q.js LEN=2169322
+    SHA256=c000db65138fc3c3f48583ba17d1032aa82c5fca0ef4047cdf2d5db1bc2bcdc7
+    node hh-3d/app/data-qa/j5-tram-north-probe.mjs           EXIT=0
+      J5_TRAM_NORTH_OK
+      isolated guest B Offline, friendA=none
+      chip=Tram Approach mini=Tram Approach
+      zebraDist=40.43 tramLaneM=1.53
+      north sidewalk lamp + planter-tram-east-s
+      dark asphalt + lighter walk + yellow edge
+      Chè E=shop-local-mtmrbdjffjdkg8
+      leftover Shared PC / J6 draw=0; spawn E none
+      GeoJSON streets=2 (Harbor Walk, Tram Approach)
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-38
+    CHE-BOARD reaudit TICK=yes on C3JOtA3q still stands.
+    Did not remint persist / boards / shop-range / Nearby/E /
+    leftover banners / Menu leftover / crossings / zebra /
+    net labels / streetPlayShops / minimap / friend steps /
+    LOD / HUD chip / plaques / lanes / fog/edge / sky / cam-hit.
+    Did not catalog_clear. Did not recycle 4175.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO; plan checkboxes [ ]
+  This session Tram Approach west-of-mouth street language
+  (no remint; already-up 4175 pid 51752; no 4173/4174/5175;
+  no catalog_clear):
+    Live JS still /assets/index-C3JOtA3q.js LEN=2169322
+    SHA256=c000db65138fc3c3f48583ba17d1032aa82c5fca0ef4047cdf2d5db1bc2bcdc7
+    node hh-3d/app/data-qa/j5-tram-west-probe.mjs            EXIT=0
+      J5_TRAM_WEST_OK
+      isolated guest B Offline, friendA=none
+      chip=Tram Approach mini=Tram Approach
+      lon=106.6977162 lat=10.7725147 heading=253 west
+      zebraDist=38.67 tramLaneM=1.64 harborLaneM=32.91
+      west sidewalk lamps 3-e/w + 4-e/w
+      dark asphalt + lighter walk + yellow edge
+      east planter-tram-east-s stays; zebra not stacked
+      Chè E=shop-local-mtmrbdjffjdkg8
+      leftover Shared PC / J6 draw=0; spawn E none
+      GeoJSON streets=2 (Harbor Walk, Tram Approach)
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-39
+    Preview vite preview on 4175 (127.0.0.1 pid 51752).
+    4173/4174/5175 down.
+    TRAM-NORTH reaudit TICK=yes on C3JOtA3q still stands.
+    Did not remint persist / boards / shop-range / Nearby/E /
+    leftover banners / Menu leftover / crossings / zebra /
+    east Tram furniture / net labels / streetPlayShops /
+    minimap / friend steps / LOD / HUD chip / plaques /
+    lanes / fog/edge / sky / cam-hit.
+    Did not catalog_clear. Did not recycle 4175.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO; plan checkboxes [ ]
+  This session Harbor Walk south-of-spawn street language
+  (no remint; already-up 4175 pid 51752; no 4173/4174/5175;
+  no catalog_clear):
+    Live JS still /assets/index-C3JOtA3q.js LEN=2169322
+    SHA256=c000db65138fc3c3f48583ba17d1032aa82c5fca0ef4047cdf2d5db1bc2bcdc7
+    node hh-3d/app/data-qa/j5-harbor-south-probe.mjs         EXIT=0
+      J5_HARBOR_SOUTH_OK
+      isolated guest B Offline, friendA=none
+      chip=Harbor Walk mini=Harbor Walk
+      lon=106.6980543 lat=10.771145 heading=197 south
+      spawnDist=53.16 harborLaneM=0.46
+      tramZebraDist=150.85 lanternZebraDist=80.86
+      south sidewalk lamps 0-e/w + 1-e/w
+      dark asphalt + lighter walk + yellow edge
+      no south planter added; zebras not stacked
+      lantern E=shop-lantern-fish
+      leftover Shared PC / J6 draw=0; spawn E none
+      GeoJSON streets=2 (Harbor Walk, Tram Approach)
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-40
+    Preview vite preview on 4175 (127.0.0.1 pid 51752).
+    4173/4174/5175 down.
+    TRAM-WEST reaudit TICK=yes on C3JOtA3q still stands.
+    Did not remint persist / boards / shop-range / Nearby/E /
+    leftover banners / Menu leftover / crossings / zebra /
+    east/west Tram furniture / net labels / streetPlayShops /
+    minimap / friend steps / LOD / HUD chip / plaques /
+    lanes / fog/edge / sky / cam-hit.
+    Did not catalog_clear. Did not recycle 4175.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO; plan checkboxes [ ]
+  This session corner-minimap street-play shop marks (recycle
+  existing 4175 once after remint build; no 4173/4174/5175;
+  no catalog_clear):
+    npm run typecheck  EXIT=0
+    npm test           EXIT=0 (88 tests)
+    npm run build      EXIT=0  dist/assets/index-CMuviBit.js
+    Invoke-WebRequest http://127.0.0.1:4175/                 200
+    live JS /assets/index-CMuviBit.js                        LEN=2170837
+    SHA256=c56379e9e7210f33d9ed14756d3b4d09ca8194155e7812c6e020065a477e272d
+    node hh-3d/app/data-qa/j5-minimap-shops-probe.mjs        EXIT=0
+      J5_MINIMAP_SHOPS_OK
+      isolated guest B Offline, friendA not accepted
+      first W: defer=pending  hh-world-minimap ABSENT
+      after first W: defer=live  kind=play-idle-or-first-w
+      shop marks=lantern, Phở, Chè, Kem (drawn)
+      leftover Shared PC / J6 absent
+      chip === minimap.active
+      lantern E=shop-lantern-fish  range 3.4 m
+      leftover Menu + Shared PC banner hold
+      spawn E none
+      RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-41
+    Preview listen pid 26796 vite preview on 4175 (127.0.0.1).
+    4173/4174/5175 down.
+    HARBOR-SOUTH reaudit TICK=yes on C3JOtA3q still stands.
+    Did not remint Harbor south / Tram furniture / zebras /
+    chalkboards / shop-range / Nearby/E / leftover banners /
+    net labels / friend steps / LOD / HUD chip / plaques /
+    fog/edge / sky / cam-hit. Did not rip minimap defer or
+    lane ribbons. No fifth street.
+    NOT_PLAN_PASS; GATE-U1 still first leftover; no GTA/1:1 claim;
+    OSM fetch still NO; WAN other-PC still NO; plan checkboxes [ ]
+
+================================================================================
+HONESTY
+================================================================================
+
+- Geometry and place names facing the player are authored/fictionalized.
+- AOI label may name the real Bến Thành vicinity; 60 footprints are NOT a survey.
+- Forbidden claims stay forbidden: 1:1, realtime, digital twin, GTA-like, Y8.
+- Networking OFF. No OSM/Overture/Cesium/Google fetch this session.
+- Sandbox papers in hh-3d/hh3d-real-world-open-world/ are historical.
+  Live product files are hh-3d/app/.
+
+================================================================================
+PLAN REVIEW 2026-09-03 (DOCS ONLY; NOT NEW RUNTIME EVIDENCE)
+================================================================================
+
+Owner requested clearer modes and a better complete user experience.
+The canonical plan and modes rev2 now separate social mode from connectivity,
+require real avatar movement, persist published shops independently of owner
+presence, specify cache/draft/auth/reconnect behavior and owner journeys.
+GATE-U1 is a gate before R2 acceptance; existing candidate R2 UI is its input,
+so the plan does not require R2 to PASS before its own human review.
+Original WP STATE/PASS/checkboxes unchanged. Runtime/evidence hashes above
+remain historical observations; this edit does not rerun or certify them.
+No map fetch, runtime mutation, engine install, new preview, deploy or tick.

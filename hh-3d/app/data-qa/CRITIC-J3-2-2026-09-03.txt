@@ -1,0 +1,372 @@
+TICK=yes
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-03
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=2026-09-03 10:25 +07
+MODEL=grok-4.6-extra-high
+SCOPE=HH World J3-2 remint: friends-only walking bodies on existing 4175
+PLAYER_URL=http://127.0.0.1:4175/
+PRIOR_CRITIC_J3=hh-3d/app/data-qa/CRITIC-J3-2026-09-03.txt
+PRIOR_TICK_TREATED_AS_CURRENT=NO
+PRIOR_WAS_RACE_BEFORE_IMPLEMENTATION=YES
+GIT_HEAD_OBSERVED=657634f8f82281bd670c9a375ad49c6180db3583
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_VF_TOUCH=1
+NO_UNREAL=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_RUN_THEIR_PROBE_WRITER=1
+INDEPENDENT_CDP=1
+CDP_PORTS=9271/9272/9273
+CDP_PROFILES=isolated_temp_user-data-dir
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/
+
+Biggest miss: still a this-machine local demo (/demo-bus + BroadcastChannel
++ localStorage). Not a city presence server. GATE-U1 and M2-WP0/M2-WP1
+remain open. That is honesty, not a J3 fail.
+
+Independent two-context CDP on the already-up 4175 preview (isolated
+Chrome A ?seat=a / B ?seat=b / C ?seat=c, debug 9271/9272/9273, temp
+profiles, stdout only; did not run their probe writer) saw:
+
+  1. After Add friend + Accept + both Online, each tab drew the other's
+     friend marker (remote-avatar + people-row). Pending showed 0 bodies.
+  2. A hold W ~2.4 s moved B's friend marker NUMBERS and pose:
+       remote-avatar-a  lon 106.6980400→106.6980301
+                        lat 10.7716200→10.7716501
+                        pose idle→walk  heading 0→342
+       MapLibre transform y 222px→220px; people-row lat matched.
+  3. B hold D ~2.4 s moved A's friend marker NUMBERS and pose:
+       remote-avatar-b  lon 106.6981040→106.6981291
+                        lat 10.7716200→10.7716280
+                        pose idle→walk  heading 270→72
+  4. A Offline → B remoteCount=0, remotes=[], people=[].
+     A Online again → B remote-avatar-a returns.
+     Unfriend → both remoteCount=0.
+  5. C Online never drawn on A/B/C (no remote-avatar-c / people-row-c;
+     C has no Add-friend controls).
+
+This is NOT a plan PASS. NOT M2-WP0. NOT M2-WP1. NOT GATE-U1.
+GATE-U1 was not faked. Plan STATE/PASS not flipped. Copy does not claim
+GPS, GTA, see-everyone, or a city server.
+
+Prior CRITIC-J3 TICK=no is stale (pre-seat tree: Online unavailable, no
+friends modules). Not used as current.
+
+================================================================================
+METHOD
+================================================================================
+
+Disk (not PROGRESS alone):
+  hh-3d/app/PROGRESS.txt
+  hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+    (CURRENT_FIRST_LEFTOVER, WP_STATE_PASS_POLICY, GATE-U1 / M0 / M1 /
+    M2-WP0 / M2-WP1 STATE)
+  hh-3d/app/docs/review/README.txt
+  hh-3d/app/web/src/friends/{bus,graph,presence,seats,usePresence,
+    useFriendGraph,FriendsBar,seatMode}.ts(x)
+  hh-3d/app/web/src/modes/{modes.ts,ModeBar.tsx}
+  hh-3d/app/web/src/map/MapView.tsx  (setLngLat on remotes)
+  hh-3d/app/web/src/ui/HonestyBanner.tsx
+  hh-3d/app/web/vite.demo-bus.ts
+  hh-3d/app/data-qa/j3-friends-walk-probe.mjs
+  hh-3d/app/data-qa/J3-FRIENDS-WALK-2026-09-03.txt  (read; not re-run)
+  hh-3d/app/data-qa/CRITIC-J3-2026-09-03.txt  (history only)
+  git log -1; git diff --cached --name-only
+
+Live (existing 4175 only; did not start another HH World preview):
+  TCP 127.0.0.1:4175 LISTEN pid 52536  vite preview
+  4173 DOWN  4174 DOWN  5175 DOWN
+  GET /                                              200  title HH World
+    script /assets/index-BKMI6e2P.js
+  GET /assets/index-BKMI6e2P.js                      200  len=1161331
+    remote-avatar=2  BroadcastChannel=10  demo-bus=4
+    NOT_PLAN_PASS=3  not GPS=3  city presence server=2
+    Sign in with Google=0  GeolocateControl=7 (MapLibre vendor)
+  GET /demo-bus                                      200  kind=local-demo-bus
+    not_presence_server=true  not_plan_pass=true
+  Independent two-context Chrome CDP vs 4175
+    A 9271  B 9272  C 9273  about:blank then ?seat=
+    Isolated user-data-dir (BroadcastChannel cannot cross profiles;
+    /demo-bus is the cross-profile path)
+  Did not run node j3-friends-walk-probe.mjs (writer).
+  Did not run npm build. Did not start 4173/4174/5175.
+
+================================================================================
+PROCESS / GIT
+================================================================================
+
+RESULT=PASS_ON_STATED_FAIL_RULE
+
+Stated fail: VF / AGENTS.md staged with this if they committed.
+Observed:
+  git diff --cached --name-only  = empty
+  last commit = 657634f VF6-WP3: tick after critic and official PASS
+  No J3 / hh-3d/app commit in HEAD
+  Critic did not commit, did not tick plan, did not touch VF.
+
+Working tree dirt (not this critic's write):
+  hh-3d/app/ still wholly untracked
+  VF evidence dirty elsewhere
+Process landmine for a later mixed commit. Not the stated FAIL.
+
+================================================================================
+ATTACK 1 — TWO LOCAL DEMO SEATS A/B ON 4175?
+================================================================================
+
+RESULT=PASS
+
+Live DOM (isolated profiles, cleared localStorage, then ?seat=):
+  seat-switcher data-seat=a|b|c
+  current-seat: Bạn A / Bạn B / Người lạ C (máy này)
+  Online enabled (disabled=false)
+  opt-in checkbox present
+  Add friend / Accept / Unfriend present for A↔B only
+  Honesty: this-machine local demo; not a city presence server;
+    in-app, not GPS; NOT_PLAN_PASS
+
+Disk:
+  modes.ts ONLINE_AVAILABLE=true
+  seats.ts DEMO_SEATS a/b friendable, c stranger=true
+  graph.ts orderedPair allows only a↔b
+  bus.ts BroadcastChannel + localStorage + /demo-bus
+  vite.demo-bus.ts in-process preview middleware, not a city server
+
+Lead claim of local demo (not a city server) matches disk and live.
+
+================================================================================
+ATTACK 2 — DOES THE OTHER AVATAR MOVE WHEN THE OTHER SEAT WALKS?
+================================================================================
+
+RESULT=PASS  (two contexts; numbers moved; not a static pin)
+
+Required: other avatar MOVES. Fail if one body, static pin, or
+bus/flags only.
+
+Context A (9271) hold W ~2.4 s. Context B (9272) at the same moment:
+  before  remote-avatar-a  lon=106.6980400 lat=10.7716200 pose=idle
+  after   remote-avatar-a  lon=106.6980301 lat=10.7716501 pose=walk
+  people-row-a lat 10.7716200→10.7716501  text standing→walking
+  marker transform translate(457px,222px)→(457px,220px)
+  screen x/y also changed
+  B remoteCount=1  hasRemoteC=false
+
+Context B (9272) hold D ~2.4 s. Context A (9271):
+  before  remote-avatar-b  lon=106.6981040 lat=10.7716200 pose=idle
+  after   remote-avatar-b  lon=106.6981291 lat=10.7716280 pose=walk
+  heading 270→72
+  A remoteCount=1
+
+This is not list-only and not /demo-bus JSON alone: the map marker
+element data-lon/data-lat and MapLibre transform changed in the other
+tab. Pose flipped to walk. Two isolated profiles, so the path that
+carried the walk is /demo-bus (same 4175 process), which is the labeled
+local demo.
+
+Their probe file (unread-as-proof) claimed lat 10.7716200→10.7716517
+and lon 106.6981040→106.6981355. Independent numbers differ slightly
+(fresh walk) but the same direction and magnitude. Not copied.
+
+================================================================================
+ATTACK 3 — OFFLINE VIEWER: ZERO OTHER BODIES?
+================================================================================
+
+RESULT=PASS
+
+After mutual Online bodies existed:
+  A click Offline
+  B: remoteCount=0 remotes=[] people=[]
+  A: mode Offline, remoteCount=0 remotes=[]
+  C (never a friend): remotes=[] throughout
+
+A click Online again: B remote-avatar-a returns (count=1).
+B Unfriend A: both remoteCount=0.
+
+Hide is a real revoke of a previously visible body, not a vacuous
+empty layer.
+
+================================================================================
+ATTACK 4 — STRANGER C MUST NOT APPEAR?
+================================================================================
+
+RESULT=PASS
+
+C tab: seat=c, addA=false, addB=false, relation none.
+C clicked Online (same as A/B). Still:
+  friendsC remotes=[] remoteCount=0  no remote-avatar-a/b/c
+  A/B never had remote-avatar-c or people-row-c
+  finalC remotes=[]
+
+Friend-row-c exists as a labeled stranger roster row ("cannot friend
+in this demo"). That is not a body on the street. See-everyone fail
+rule does not hit.
+
+================================================================================
+ATTACK 5 — COPY CLAIM CITY SERVER / GTA / GPS?
+================================================================================
+
+RESULT=PASS  (honest denial)
+
+Live presence-honesty:
+  Friend bodies are a this-machine local demo (tabs or browser profiles
+  on 4175). Not a city presence server. Position is in-app, not GPS.
+  NOT_PLAN_PASS.
+
+Friends-honesty: Local demo seats on this machine. Not a city presence
+server. Not GPS. NOT_PLAN_PASS.
+
+Honesty banner: No GTA claim, no 1:1 city, no stranger crowd.
+Street copy: in-app, not GPS.
+gpsClaim=false  gtaClaim=false  googleOidc=false  cityServerClaim=false
+GeolocateControl button: absent from player path.
+Vendor getCurrentPosition / GeolocateControl strings remain in the
+MapLibre bundle (same residual as J1/J2). MapView does not add that
+control. GPS is not the player path.
+
+================================================================================
+ATTACK 6 — DID THEY TICK A WP PASS?
+================================================================================
+
+RESULT=PASS  (not ticked)
+
+Canonical plan still:
+  CURRENT_FIRST_LEFTOVER=GATE-U1
+  WP_STATE_PASS_POLICY=ORIGINAL_VALUES_UNCHANGED_NOT_LIVE_PROGRESS
+  GATE-U1 STATE: NOT_STARTED
+  M0 / M1 / M2-WP0 / M2-WP1 STATE: NOT_STARTED
+  No STATE: DONE/PASS/COMPLETE on those WPs
+
+PROGRESS labels J3_OBSERVED and NOT_PLAN_PASS; leftover #1 remains
+GATE-U1. Critic does not treat PROGRESS prose as a plan tick.
+
+================================================================================
+ATTACK 7 — DID THEY FAKE GATE-U1 HUMANS?
+================================================================================
+
+RESULT=PASS  (not faked)
+
+hh-3d/app/docs/review/README.txt still:
+  GATE-U1 is NOT done.
+  Need three independent human reviewers…
+  placeholder so later agents do not invent a pass.
+
+No invented reviewer names, no forged 5-minute notes, no OWNER_SIGN
+name. Leftover #1 remains GATE-U1. Correct.
+
+================================================================================
+ATTACK 8 — THEIR PROBE EXIT=0?
+================================================================================
+
+RESULT=CONSISTENT_BUT_NOT_USED_AS_SOLE_PROOF
+
+On disk:
+  j3-friends-walk-probe.mjs exists
+  J3-FRIENDS-WALK-2026-09-03.txt verdict=J3_OBSERVED
+    walkOk friendOk hideOk strangerOk honestyOk
+    beforeALat=10.7716200 afterALat=10.7716517
+    beforeBLon=106.6981040 afterBLon=106.6981355
+
+This critic did not re-run that writer (it would overwrite a data-qa
+file). Independent CDP on the same 4175 reproduced the same beats
+with its own numbers. Lead "probe EXIT=0 J3_OBSERVED" is consistent
+with the file on disk and with this live remint.
+
+================================================================================
+ATTACK 9 — PLAYER SEAT: CAN A HUMAN SEE A FRIEND WALK WITHOUT READING CODE?
+================================================================================
+
+RESULT=PASS
+
+On 4175 a human can:
+  open ?seat=a and ?seat=b
+  Add friend / Accept
+  click Online (opt-in auto-on)
+  walk WASD and see the other tab's friend body move
+  Offline / Unfriend to hide it
+  open ?seat=c and not appear as a street body
+
+Two isolated browser profiles on the same 4175 process. That is the
+labeled local demo, not a city.
+
+================================================================================
+LEAD CLAIMS vs DISK+LIVE
+================================================================================
+
+Claim                                         Verdict
+4175 is the player                            CONFIRMED (only listener)
+?seat=a and ?seat=b                           CONFIRMED
+Add friend / Accept, both Online              CONFIRMED
+Walk: other tab shows friend body MOVE        CONFIRMED (marker numbers)
+Offline / Unfriend hides                      CONFIRMED
+?seat=c never appears as a body               CONFIRMED
+Probe file J3_OBSERVED                        CONFIRMED on disk
+  (not re-run; independent CDP agrees)
+Local demo (BC + localStorage + /demo-bus)    CONFIRMED
+  Isolated profiles used /demo-bus, not BC
+GATE-U1 not faked                             CONFIRMED
+NOT_PLAN_PASS                                 CONFIRMED
+No GPS / GTA / see-everyone / WP PASS         CONFIRMED
+
+================================================================================
+HARD FAIL CHECK (TICK=no triggers)
+================================================================================
+
+Other avatar actually moves when other walks  YES
+Two contexts see each other walk              YES
+Still one body                                NO
+Static pin                                    NO  (lon/lat + pose + transform)
+Bus/flags only                                NO  (map marker numbers moved)
+GPS used as presence                          NO
+See-everyone crowd                            NO
+Page broken / 4175 down / wrong product       NO
+Plan STATE/PASS ticked                        NO
+GATE-U1 humans invented                       NO
+J3 claimed as plan PASS                       NO (labeled NOT_PLAN_PASS)
+
+Therefore TICK=yes for friends-only walking on 4175 as a local demo.
+
+================================================================================
+NOT GRANTED
+================================================================================
+
+- M2-WP0 friends graph (server / real accounts)
+- M2-WP1 remote walk as a city presence product
+- M0-WP0 Online as a live city mode
+- R4-WP0B real identity / OIDC
+- GATE-U1 / any plan PASS
+- Permission to start 4173/4174, fetch maps, Unreal, VF, or tick [x]
+- Claim that BroadcastChannel alone crosses isolated profiles
+  (it does not; /demo-bus did)
+
+================================================================================
+INDEPENDENT CDP NUMBERS (4175, 2026-09-03)
+================================================================================
+
+A walk seen on B:
+  remote-avatar-a  106.6980400,10.7716200 idle
+                →  106.6980301,10.7716501 walk heading 342
+
+B walk seen on A:
+  remote-avatar-b  106.6981040,10.7716200 idle heading 270
+                →  106.6981291,10.7716280 walk heading 72
+
+Offline B remotes=0. Unfriend a=0 b=0. C remotes=0 always.
+
+================================================================================
+END
+================================================================================

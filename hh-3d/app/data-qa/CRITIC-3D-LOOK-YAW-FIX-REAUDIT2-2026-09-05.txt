@@ -1,0 +1,260 @@
+TICK=no
+URL=http://127.0.0.1:4175/
+HASH_MISMATCH=1
+DID_NOT_RECYCLE=1
+NOT_PLAN_PASS=1
+CRITIC=SECOND_INDEPENDENT
+NOT_GATE_U1=1
+NOT_M2=1
+LIVE_JS_CLAIMED=/assets/index-DGX50qvn.js
+LIVE_JS_CLAIMED_LEN=2174941
+LIVE_JS_CLAIMED_SHA256=7a2cf1c558a4a5fe0f37474a80f9da2edcb6e5eb31b0b4dca4f4a81c1b50c8d9
+LIVE_JS_NOW=/assets/index-CoTKbFff.js
+LIVE_JS_NOW_LEN=2174312
+LIVE_JS_NOW_SHA256=2971c5c4577664cd319c9dbdd2f451f141ea6cf201fd52ba8db496dd15bf273c
+CLAIMED_JS_PATH_NOW_BYTES=2052
+CLAIMED_JS_PATH_NOW_SHA256=e796d01652cb4237eb93c2bda353e250fa8d465a05cb133d88c8dc3986201cbc
+CLAIMED_JS_PATH_NOW_IS_HTML=1
+DID_NOT_REBUILD=1
+DID_NOT_RESTORE_DIST=1
+DID_NOT_CATALOG_CLEAR=1
+NOT_M0_WP1=1
+NOT_M1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+DATE=2026-09-05
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=06:16 +07
+MODEL=grok-4.6-extra-high
+SCOPE=Second independent adversarial re-audit of the claimed LOOK yaw-fix remint DGX50qvn / pid 15520. Do not treat implementer notes or any other critic TICK as acceptance. Own CDP on 10030 (A) and 10032 (B).
+PLAYER_URL=http://127.0.0.1:4175/
+LISTEN=127.0.0.1:4175
+CLAIMED_PID=15520
+CLAIMED_PID_STARTTIME=2026-09-05 06:07:09 +07
+CLAIMED_PID_AT_T0=alive
+CLAIMED_PID_AT_CDP_CLOSE=dead
+LIVE_PID_NOW=28288
+LIVE_PID_NOW_STARTTIME=2026-09-05 06:11:49 +07
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-LOOK-YAW-FIX-REAUDIT2-2026-09-05.txt
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-LOOK-YAW-FIX-2026-09-05.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+DID_NOT_TREAT_IMPLEMENTER_AS_TICK_YES=1
+DID_NOT_TREAT_OTHER_CRITIC_TICK_AS_ACCEPTANCE=1
+DID_NOT_COPY_OTHER_CRITIC_NUMBERS=1
+DID_NOT_RUN_IMPLEMENTER_PROBES=1
+DID_NOT_RUN_PARENT_PROBE=1
+DID_NOT_OVERWRITE_IMPLEMENTER_NOTE=1
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+AUTHORIZE_MAP_FETCH=NO
+VITE_PREVIEW_PORT_PIN=4175
+CRITIC_CDP_PORTS=10030 / 10032
+DID_NOT_REUSE_10014=1
+DID_NOT_REUSE_10016=1
+DID_NOT_REUSE_10018=1
+DID_NOT_REUSE_10020=1
+DID_NOT_REUSE_10022=1
+DID_NOT_REUSE_10024=1
+DID_NOT_REUSE_10026=1
+DID_NOT_REUSE_10028=1
+VIEWPORT=1280x720
+ISOLATED_PROFILES=1
+HEADLESS_NEW=1
+SEATS=a+b
+SLICE=LOOK_YAW_FIX_REAUDIT2
+POINTER_LOCK=0
+MOUSE_HUNT=right-drag-left
+SKIPPED_MOUSE=0
+
+================================================================================
+ONE-SENTENCE MISS
+================================================================================
+
+Live GET of /assets/index-DGX50qvn.js is HTML 2052 B (sha e796d016…) not the claimed 2174941 / 7a2cf1c558…, and the right-drag-left I measured increased heading 0.0→22.4 / 292.0→314.4.
+
+================================================================================
+HUNT 1 — HASH / PID (own GET, not implementer)
+================================================================================
+
+T0 ~06:09 +07 (before CDP finished):
+  GET http://127.0.0.1:4175/ → script /assets/index-DGX50qvn.js
+  GET raw /assets/index-DGX50qvn.js
+    LEN=2174941
+    SHA256=7a2cf1c558a4a5fe0f37474a80f9da2edcb6e5eb31b0b4dca4f4a81c1b50c8d9
+    MATCHED claimed remint at that instant
+  PID 15520 ALIVE=1 NAME=node
+    START=2026-09-05 06:07:09 +07
+    CMD=vite preview --host 127.0.0.1 --port 4175 --strictPort
+
+T1 ~06:14 +07 (own CDP close / re-GET):
+  GET http://127.0.0.1:4175/ → script /assets/index-CoTKbFff.js
+  GET claimed path /assets/index-DGX50qvn.js
+    LEN=2052
+    SHA256=e796d01652cb4237eb93c2bda353e250fa8d465a05cb133d88c8dc3986201cbc
+    HEAD=<!doctype html>  (SPA HTML, not the JS remint)
+    HASH_MISMATCH=1
+  GET live /assets/index-CoTKbFff.js
+    LEN=2174312
+    SHA256=2971c5c4577664cd319c9dbdd2f451f141ea6cf201fd52ba8db496dd15bf273c
+  PID 15520 ALIVE=0
+  LISTEN 127.0.0.1:4175 pid 28288 (node, same vite preview argv)
+    START=2026-09-05 06:11:49 +07
+
+This critic did not recycle / rebuild / kill / restore-dist / catalog_clear
+4175. The claimed remint process is gone. Live URL is not DGX50qvn.
+HASH_MISMATCH=1 is a hard TICK=no. A T0-only hash that is not re-GETed
+after CDP is how a first critic rubber-stamps a remint that did not stay
+live.
+
+HUNT1=FAIL
+
+================================================================================
+HUNT 2 — OWNER INVERT (KeyA + mouse-left must DECREASE heading)
+================================================================================
+
+Own headless Chrome CDP. Seat A port 10030. Seat B port 10032.
+Did not use 10014/10016/10018/10020/10022/10024/10026/10028.
+Input: KeyA hold ~550 ms; mouse = right-button drag left ~160 CSS px
+on the WebGL canvas. Heading from play-view/play-proof data-heading.
+Did not skip mouse.
+
+SEAT A (10030, ?seat=a)
+  spawn    heading=0.0   camYaw=0.0   look=off   ready=yes
+           lon=106.6980400 lat=10.7716200  facing=north
+  after KeyA
+           heading=0.0   camYaw=0.0   look=off
+           dHeading=+0.0
+           NOT 330–359. Required decrease from ~0 failed.
+  fresh navigate then right-drag left
+           before mouse heading=0.0
+           after  mouse heading=22.4  camYaw=22.4  look=off
+           dHeading=+22.4  INCREASE (toward east)
+           Same invert class as the named BRKtMVXq miss (mouse-left
+           raised heading). Required decrease failed.
+
+SEAT B (10032, ?seat=b)
+  spawn    heading=292.0  camYaw=292.0  look=off
+           lon=106.6981040 lat=10.7716200  facing=west
+           Spawn ~292 (not 270) observed.
+  after KeyA
+           heading=292.0  camYaw=292.0
+           lon=106.6981031 lat=10.7716179
+           dHeading=+0.0  (no decrease; body slid, did not turn)
+  fresh navigate then right-drag left
+           before mouse heading=292.0
+           after  mouse heading=314.4  camYaw=314.4
+           dHeading=+22.4  INCREASE
+
+TICK=yes requires this critic personally seeing heading decrease on
+BOTH KeyA and mouse-left AND hash match. Saw neither decrease. Hash
+does not match live.
+
+HUNT2_KEYA=FAIL
+HUNT2_MOUSE=FAIL
+HUNT2_SEAT_B_SPAWN=PASS
+HUNT2=FAIL
+
+================================================================================
+HUNT 3 — LEFTOVER INVERT / COPY / HUD / 20 USERS
+================================================================================
+
+Pad ◀ vs KeyA:
+  .walk-w aria-label="Move left" text=◀  (not a turn-left control)
+  pad pointerdown ~550 ms on seat A: heading stayed 0.0
+  KeyA on seat A: heading stayed 0.0
+  KeyA on seat B: heading stayed 292.0 while lon/lat moved
+  Leftover vs the yaw-fix hunt that KeyA must turn left: live A is a
+  strafe, pad is labeled move, not turn. A first critic who only
+  scored KeyA-as-turn on an earlier snapshot can ignore this.
+
+Look-mode A strafe vs turn:
+  Seat A right-button held: look=drag, help "A/D strafe"
+  KeyA while drag: heading 0.0 → 0.0 (no turn)
+  After release: look=off, lon 106.6980400 → 106.6980365 (west while
+  facing north = strafe left), heading still 0.0
+  After mouse hunt, look=off but help still "A/D strafe"
+  That is look-mode / unlocked-turn confusion vs the claimed remint
+  hunt (KeyA from 0 → 330–359).
+
+HUD "Đang kết nối" as connected:
+  hud-connection text="Máy này · 4175"  data-connection=on
+  hasDangKetNoi=0  hasDangKetNoiLai=0
+  Not this leftover.
+
+20 online users:
+  body hasTwentyOnline=0
+  presence=Offline
+  Not this leftover.
+
+HUNT3_PAD_VS_KEYA=FAIL (strafe/move leftover; no KeyA turn)
+HUNT3_LOOK_A_CONFUSION=FAIL
+HUNT3_HUD_DANG_KET_NOI=PASS
+HUNT3_TWENTY_ONLINE=PASS
+
+================================================================================
+NUMBERS THIS CRITIC MEASURED (do not substitute another critic)
+================================================================================
+
+SEAT_A_HEADING_SPAWN=0.0
+SEAT_A_HEADING_AFTER_A=0.0
+SEAT_A_DELTA_A=+0.0
+SEAT_A_HEADING_BEFORE_MOUSE=0.0
+SEAT_A_HEADING_AFTER_MOUSE=22.4
+SEAT_A_DELTA_MOUSE=+22.4
+SEAT_B_HEADING_SPAWN=292.0
+SEAT_B_HEADING_AFTER_A=292.0
+SEAT_B_DELTA_A=+0.0
+SEAT_B_HEADING_BEFORE_MOUSE=292.0
+SEAT_B_HEADING_AFTER_MOUSE=314.4
+SEAT_B_DELTA_MOUSE=+22.4
+FACING_A_SPAWN=north
+FACING_B_SPAWN=west
+HUD_CONNECTION=Máy này · 4175
+HUD_CONNECTION_ATTR=on
+HUD_WAS_NOT_DANG_KET_NOI=1
+PAD_WEST_LABEL=Move left
+LOOK_MODE_DURING_HELD_RIGHT=drag
+HASH_MISMATCH=1
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=no
+
+URL=http://127.0.0.1:4175/ was up. This critic did not recycle,
+rebuild, restore-dist, kill, or restart 4175, did not start
+4173/4174/5175, did not bind 0.0.0.0, did not catalog_clear, did
+not commit, did not edit product source, did not tick a plan, did
+not claim GATE-U1.
+
+Claimed remint DGX50qvn / pid 15520 / 06:07:09 +07 was present on
+a T0 GET, then gone. Live listener is pid 28288 / 06:11:49 +07
+serving /assets/index-CoTKbFff.js. Claimed JS URL is HTML.
+HASH_MISMATCH=1.
+
+Own CDP (10030/10032) did not see owner-required decrease:
+KeyA left heading at 0.0 and 292.0; mouse-left raised heading
+0.0→22.4 and 292.0→314.4. Seat B spawn 292.0 is the only hunt-2
+sub-check that held.
+
+Implementer TICK=n/a is not acceptance. Another critic’s TICK on
+a T0 hash of DGX50qvn is not acceptance: they can miss the live
+swap and they can miss mouse-left still increasing if they only
+score KeyA. This critic did not skip mouse and did not copy their
+headings.
+
+NOT_PLAN_PASS=1. NOT_GATE_U1=1.
+
+TICK=no

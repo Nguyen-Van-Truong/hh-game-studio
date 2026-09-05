@@ -1,0 +1,94 @@
+{
+  "run_id": "HH3D-J3-20260903-ASIA-SAIGON-01",
+  "player": "http://127.0.0.1:4175/",
+  "verdict": "J3_OBSERVED",
+  "not_plan_pass": true,
+  "not_m2_wp1": true,
+  "walkOk": true,
+  "friendOk": true,
+  "hideOk": true,
+  "strangerOk": true,
+  "honestyOk": true,
+  "twoContexts": true,
+  "isolatedProfiles": true,
+  "beforeALat": "10.7716200",
+  "afterALat": "10.7716517",
+  "beforeBLon": "106.6981040",
+  "afterBLon": "106.6981355",
+  "homeA": {
+    "seat": "a",
+    "mode": "Offline — Stroll alone; shops still open.",
+    "remoteCount": 0,
+    "onlineDisabled": false
+  },
+  "homeB": {
+    "seat": "b",
+    "mode": "Offline — Stroll alone; shops still open.",
+    "remoteCount": 0
+  },
+  "pending": {
+    "remoteCount": 0,
+    "relationA": "incoming"
+  },
+  "friendsA": {
+    "remoteCount": 1,
+    "people": [
+      {
+        "id": "people-row-b",
+        "seat": "b",
+        "pose": "idle",
+        "lon": "106.6981040",
+        "lat": "10.7716200",
+        "text": "Bạn B (máy này) · standing · in-app, not GPS"
+      }
+    ],
+    "remotes": [
+      {
+        "id": "remote-avatar-b",
+        "seat": "b",
+        "pose": "idle",
+        "heading": "270",
+        "lon": "106.6981040",
+        "lat": "10.7716200"
+      }
+    ]
+  },
+  "friendsB": {
+    "remoteCount": 1,
+    "people": [
+      {
+        "id": "people-row-a",
+        "seat": "a",
+        "pose": "idle",
+        "lon": "106.6980400",
+        "lat": "10.7716200",
+        "text": "Bạn A (máy này) · standing · in-app, not GPS"
+      }
+    ],
+    "remotes": [
+      {
+        "id": "remote-avatar-a",
+        "seat": "a",
+        "pose": "idle",
+        "heading": "0",
+        "lon": "106.6980400",
+        "lat": "10.7716200"
+      }
+    ]
+  },
+  "friendsC": {
+    "remoteCount": 0,
+    "remotes": []
+  },
+  "offlineB": {
+    "remoteCount": 0
+  },
+  "backB": {
+    "remoteCount": 1
+  },
+  "unfriend": {
+    "a": 0,
+    "b": 0
+  },
+  "honesty": "Friend bodies are a this-machine local demo (tabs or browser profiles on 4175). Not a city presence server. Position is in-app, not GPS. NOT_PLAN_PASS."
+}

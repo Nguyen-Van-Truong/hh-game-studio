@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "hh-world-place-card/v0",
+  "title": "HH World place card",
+  "type": "object",
+  "required": ["id", "name", "approx", "acquired_at", "honesty"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": "string" },
+    "approx": { "const": true },
+    "acquired_at": { "type": "string" },
+    "honesty": { "type": "string" }
+  }
+}

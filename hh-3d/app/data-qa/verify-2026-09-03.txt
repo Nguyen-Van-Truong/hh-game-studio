@@ -1,0 +1,17 @@
+HH World local verify — 2026-09-03 Asia/Saigon
+PREVIEW=http://127.0.0.1:4175/
+typecheck=0
+test=0
+build=0
+validate_fixture=0
+curl_html=200
+curl_geojson=200
+curl_manifest=200
+curl_style=200
+headless_home=map canvas + 4 markers + honesty OBSERVED
+headless_place=place-card Market Hall approx Map-data-as-of OBSERVED
+cdp_bookmark=PASS localStorage hh-world.bookmarks.v1
+fps=UNMEASURED
+gate_u1=NOT_DONE
+plan_tick=NOT_DONE
+network_tiles=none observed in style/bundle host scan

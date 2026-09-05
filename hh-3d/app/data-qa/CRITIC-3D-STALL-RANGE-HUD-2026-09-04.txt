@@ -1,0 +1,144 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=16:15 +07
+ROLE=IMPLEMENTER
+TICK=n/a (do not treat this file as TICK=yes)
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M0_WP1=1
+NOT_M1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+PLAYER_URL=http://127.0.0.1:4175/
+RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-35
+COMMAND=node hh-3d/app/data-qa/j5-stall-range-hud-probe.mjs
+VERDICT_IMPLEMENTER_CDP=J5_STALL_RANGE_HUD_OK
+LIVE_JS=/assets/index-Bsz3aP8u.js
+LIVE_JS_LEN=2168818
+LIVE_JS_SHA256=cb72726f4811bda2407f8731a7fcf59c4878a69ec7187ff96fa2290e43ba575b
+REMINTED=yes
+ONE_RECYCLE_AFTER_BUILD=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NO_COMMIT=1
+NO_HIP_SPHERES=1
+DID_NOT_RIP_NEARBY_E_RANGE=1
+DID_NOT_RIP_SIDEWALK_PLANT=1
+DID_NOT_RIP_POLE_BOARD_PLANT=1
+DID_NOT_RIP_LEFTOVER_PANEL=1
+DID_NOT_RIP_MENU_LEFTOVER_LIST=1
+DID_NOT_RIP_TRAM_XING=1
+DID_NOT_RIP_WEST_XING=1
+DID_NOT_RIP_EAST_XING=1
+DID_NOT_RIP_LANTERN_ZEBRA=1
+DID_NOT_RIP_NET_LABELS=1
+DID_NOT_RIP_BOARDS=1
+DID_NOT_RIP_STREET_PLAY_SHOPS=1
+DID_NOT_RIP_DEFERRED_MINIMAP=1
+DID_NOT_RIP_FRIEND_STEPS=1
+DID_NOT_RIP_90M_LOD=1
+DID_NOT_RIP_HUD_STREET_CHIP=1
+DID_NOT_RIP_PLAQUES=1
+DID_NOT_RIP_LANES=1
+DID_NOT_RIP_FOG_EDGE=1
+DID_NOT_RIP_SKY=1
+DID_NOT_RIP_CAM_HIT=1
+NO_FIFTH_STREET=1
+NO_NPC=1
+NO_INTERIOR=1
+NO_MAP_FETCH=1
+ACCEPTED_PRIOR=CRITIC-3D-STALL-E-RANGE-REAUDIT-2026-09-04.txt TICK=yes on DsJoiruI (named hunts; residual recorded)
+
+================================================================================
+SLICE
+================================================================================
+
+Independent reaudit TICK=yes on DsJoiruI kept asphalt residual E
+none, sidewalk stall E, persist E none, leftover banners. Residual
+(did not void TICK): Harbor asphalt west of lantern persist,
+Nearby empty and E none, but shop-range still named lantern at
+~5 m because StreetHelp fell back to authoredStall / stallName
+when nearbyName was null.
+
+This remint only hides the named range when Nearby is empty:
+  shop-range = "Walk to a stall." (no lantern/Phở name, no meters)
+  shop-range names the stall + meters only when Nearby is real
+Nearby/E range tighten (4 m + asphalt laneM ≲ 3) is unchanged.
+Persist lon/lat stay. Kiosks stay drawn. Leftover Shared PC / J6
+stay draw=0 / keep-out. Did not catalog_clear. Did not remint
+Nearby/E range, sidewalk plant, pole-board plant, leftover panel
+banners, Menu leftover labels/sort, Harbor×Tram / west / east
+Steps crossings, lantern zebra, net labels, boards chalkboard,
+streetPlayShops keep-out, minimap, friend steps, LOD, HUD street
+chip, plaques, lanes, fog/edge, sky, or cam-hit.
+
+================================================================================
+CDP (headless Chrome, 1280×720, isolated guest B, recycled 4175)
+================================================================================
+
+Seat B empty profile, Offline · Đang kết nối. Guest. No catalog_clear.
+
+Live JS after one recycle:
+  /assets/index-Bsz3aP8u.js
+  LEN=2168818
+  SHA256=cb72726f4811bda2407f8731a7fcf59c4878a69ec7187ff96fa2290e43ba575b
+
+Harbor asphalt west-of-lantern-persist (critic residual stand):
+  lon=106.6980199 lat=10.7718649
+  chip=Harbor Walk  laneM=2.24  blocked=0
+  dPhoPlant=8.40 m  dLanternPlant=5.16 m
+  nearby empty
+  range="Walk to a stall."  (no lantern/Phở name, no meters)
+  hint="E opens a stall when you are next to it."
+  asphalt E = none  (did not open Phở or lantern)
+
+Harbor persist (Phở):
+  laneM=0.41  dPersist=0.92  dPlant=7.75
+  nearby empty  range="Walk to a stall."  E-at-persist = none
+
+Harbor persist (lantern):
+  laneM=0.92  dPersist=1.02  dPlant=6.49
+  nearby empty  range="Walk to a stall."  E-at-persist = none
+
+Sidewalk Phở awning:
+  laneM=6.48  dPlant=1.69
+  nearby=shop-local-mtmh45qxehxhvb
+  range="Quầy Phở Nhà: 1.7 m away"
+  E-at-stall opened shop-local-mtmh45qxehxhvb
+  leftover banner absent; street kind holds
+
+Sidewalk lantern stall:
+  laneM=5.42  dPlant=2.29
+  nearby=shop-lantern-fish
+  range="Quầy Cá Đèn Lồng: 2.3 m away"
+  E-at-stall opened shop-lantern-fish
+  leftover=0  kind = public shop · authored example among many
+
+Leftover Shared PC / J6: draw=0, persist still on /demo-bus.
+Spawn E not stolen. Menu leftover rows last, labeled
+  “không trên phố / leftover máy này”.
+Menu-opened leftover panels:
+  Shared PC / J6 banner present leftover=1 street=0.
+
+Implementer CDP only. Not an independent critic TICK. Not a plan tick.
+
+================================================================================
+OWNER LEFTOVERS (unchanged)
+================================================================================
+
+1. GATE-U1 three-human review (first acceptance leftover; not faked).
+2. R2-WP1 headed/mobile/memory/min-FPS thresholds still UNFILLED.
+   Hitch2 remint kept; first-W min still ~10. Not 60.
+3. WAN / other-PC join still not built. 4175 loopback only.
+4. R4-WP0B real account/OIDC still not built.
+5. Open data (OSM/Overture) still needs license ledger + grant.
+6. Leftover this-PC shops stay in the catalog; they do not own street E.
+   Menu list + open panel still label them leftover. Do not catalog_clear.
+7. M0/M1/M2 plan WPs still NOT_STARTED. NOT_PLAN_PASS. Not M1.

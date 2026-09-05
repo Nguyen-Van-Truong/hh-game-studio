@@ -1,0 +1,151 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=10:06 +07
+ROLE=IMPLEMENTER
+TICK=n/a (do not treat this file as TICK=yes)
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M0_WP1=1
+NOT_M2=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_OIDC=1
+PLAYER_URL=http://127.0.0.1:4175/
+RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-13
+COMMAND=node hh-3d/app/data-qa/j5-friend-steps-probe.mjs
+VERDICT_IMPLEMENTER_CDP=J5_FRIEND_STEPS_OK
+LIVE_JS=/assets/index-nJ1HVwcJ.js
+LIVE_JS_LEN=2152818
+LIVE_JS_SHA256=aa2c143cc1edf1aac67ab8ffc7facd3029b875bfd8dee0acbbfbceb6a887d701
+ONE_RECYCLE_AFTER_BUILD=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NO_COMMIT=1
+NO_HIP_SPHERES=1
+DID_NOT_RIP_90M_LOD=1
+DID_NOT_RIP_MINIMAP=1
+DID_NOT_RIP_HUD_CHIP=1
+DID_NOT_RIP_PLAQUES=1
+DID_NOT_RIP_LANES=1
+DID_NOT_RIP_FOG_EDGE=1
+DID_NOT_RIP_SELF_FOOTSTEPS=1
+DID_NOT_RIP_FRIEND_GAIT=1
+DID_NOT_RIP_STREET_PLAY_SHOPS=1
+DID_NOT_RIP_SKY=1
+DID_NOT_RIP_CAM_HIT=1
+NO_VOICES=1
+NO_MUSIC=1
+NO_GTA_RADIO=1
+NO_SAMPLES=1
+PRIOR_REAUDIT=CRITIC-3D-FRIEND-STEPS-REAUDIT-2026-09-04.txt TICK=no on DptTgaTX
+DID_NOT_TREAT_REAUDIT_AS_TICK_YES=1
+ACCEPTED_PRIOR=CRITIC-3D-FPS-LOD-REAUDIT-2026-09-04.txt TICK=yes on DRczAori
+
+================================================================================
+SLICE
+================================================================================
+
+Independent reaudit TICK=no on /assets/index-DptTgaTX.js: Offline A
+teardown was dirty. After people-layer remotes=0, B planted one more
+oscillator (10→11) and left data-friend-footsteps=1 / ticks=1 with
+reason="". Online walk rise, hidden freeze, unfriend, stranger C,
+gain, lantern E, leftover E, LOD/chip/minimap held. This remint
+fixes only that Offline leftover. Did not rip those passing hunts.
+
+Friend plants now cut in the same Play render when remotes.length===0
+or that seat is not on the allowlist (Offline / not opted-in / gone).
+A stale Walker useFrame cannot re-arm or plant. Live attr is forced
+to 0; ticks do not rise; no new oscillator.
+
+No voices, no music, no GTA radio. Same 400 m authored fixture.
+HUD chip / minimap / 90 m LOD / plaques / lanes / fog/edge /
+self footsteps / friend gait / streetPlayShops / sky / cam-hit
+not ripped.
+
+Honesty is still the authored 400 m block. Not a city. Not M2.
+
+================================================================================
+PROOF (implementer CDP vs recycled 4175)
+================================================================================
+
+typecheck EXIT=0
+npm test EXIT=0 (72 tests)
+npm run build EXIT=0  dist/assets/index-nJ1HVwcJ.js
+Recycled existing 4175 once (old pid 6280 → listen 127.0.0.1:4175
+pid 5156). Did not start 4173 / 4174 / 5175. Did not bind 0.0.0.0.
+
+GET / → 200  script /assets/index-nJ1HVwcJ.js
+GET that JS → 200  Content-Length=2152818
+sha256=aa2c143cc1edf1aac67ab8ffc7facd3029b875bfd8dee0acbbfbceb6a887d701
+Matches the built file.
+
+Probe node hh-3d/app/data-qa/j5-friend-steps-probe.mjs EXIT=0
+  Isolated headless Chrome 1280x720, seats A + B, ports 9541 / 9542.
+  OscillatorNode / AudioBufferSourceNode.start hooked on B.
+  Add friend / accept / Online on this-PC 4175 loopback.
+
+  B stand (before and after friends Online, A idle):
+    data-friend-footsteps=0  ticks=0
+  A holds W: B data-friend-footsteps=1  remote pose=walk
+    plants 2 → 6  (+4 in ~1.1 s)
+    lastGain=0.035  dist=7.52 m  seat=a
+    B's own data-footsteps stays 0 while B stands
+  Fake document.hidden on B while A still walks:
+    data-friend-footsteps=0 reason=hidden  ticks 15 → 15
+  Unhide, A still W: live=1  ticks 16 → 21
+
+  Offline A (A clicks Offline — Stroll alone). B people-layer
+  remotes hits 0 at teardown sample 1. From that sample on:
+
+    remotes=0  live=0  ticks=0  osc=25  src=25  reason=idle
+    remotes=0  live=0  ticks=0  osc=25  src=25
+    remotes=0  live=0  ticks=0  osc=25  src=25
+    remotes=0  live=0  ticks=0  osc=25  src=25
+    remotes=0  live=0  ticks=0  osc=25  src=25
+    remotes=0  live=0  ticks=0  osc=25  src=25
+
+  A then holds W Offline ~1.2 s. B six walk samples:
+
+    remotes=0  live=0  ticks=0  osc=25  src=25
+    (flat through all six)
+
+  No leftover plant after remotes=0. Live attr does not stay 1.
+  Remote DOM may linger one or two samples; plants do not.
+
+  Seat A lantern E opened shop-lantern-fish.
+  Isolated seat B spawn: nearby none; "Quầy Cá Đèn Lồng: 29 m away";
+  leftover Shared PC / J6 did not own E; press E opened nothing
+  after A walked. A walking did not steal leftover E.
+
+  Kept on the same bundle:
+    play-street-chip Harbor Walk
+    hh-world-minimap authored-hud-lanes
+    data-far-lod=inner-door-glass m=90
+    plaques=4  street-hud=named-chip
+    sky=gradient-hemisphere  walk-cycle=opposite-stride
+
+Independent critic CRITIC-3D-FRIEND-STEPS-REAUDIT-2026-09-04.txt
+TICK=no stands on DptTgaTX. This file is implementer notes for the
+Offline remint. Not a critic TICK. Not a plan tick.
+
+Independent FPS-LOD reaudit TICK=yes on DRczAori is still accepted.
+This slice did not redo 90 m LOD.
+
+================================================================================
+OWNER LEFTOVERS (unchanged)
+================================================================================
+
+- GATE-U1 three human reviewers (not faked)
+- AUTHORIZE_MAP_FETCH=YES + license ledger before any OSM/Overture
+- Other-PC / WAN join (store is this PC 4175 loopback)
+- Real account / OIDC
+- Real M2 presence server / city friends still not built
+
+================================================================================
+END
+================================================================================

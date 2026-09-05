@@ -1,0 +1,145 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-05
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=05:28 +07
+ROLE=IMPLEMENTER
+TICK=n/a (do not treat this file as TICK=yes)
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M2=1
+NOT_M1=1
+NOT_OSM=1
+NOT_WAN=1
+PLAYER_URL=http://127.0.0.1:4175/
+RUN_ID=HH3D-J5-20260905-ASIA-SAIGON-02
+COMMAND=one remint after REAUDIT2 TICK=no; no implementer two-seat claim
+VERDICT_IMPLEMENTER_CDP=not_run (critic owns the hunt)
+LIVE_JS=/assets/index-oRuAyVDb.js
+LIVE_JS_LEN=2174914
+LIVE_JS_SHA256=f7f8b3612152d6a3b229b1f3a33020db1dcc9e342acf64b43a28cbde7e463f82
+LIVE_CSS=/assets/index-DsRW_q10.css
+LIVE_CSS_LEN=83046
+LIVE_CSS_SHA256=77ec860c389e0edc35641e8b1ae385804335dc8e127f841dccfaa101ffa4a545
+LISTEN=127.0.0.1:4175
+LIVE_PID=18936
+LIVE_PID_STARTTIME=2026-09-05 05:27:39 +07
+REMINTED=yes
+ONE_BUILD=1
+ONE_RECYCLE_AFTER_BUILD=1
+KILLED_ONLY_4175_LISTEN_PID=7848
+DID_NOT_KILL_POWERSHELL_PID=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+NO_COMMIT=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+DID_NOT_OVERWRITE_REAUDIT=1
+DID_NOT_OVERWRITE_REAUDIT2=1
+DID_NOT_LAUNCH_CRITIC=1
+DID_NOT_TREAT_CDP_AS_ACCEPTANCE=1
+PRIOR_REAUDIT=CRITIC-3D-TAB-HIDE-GHOST-REAUDIT-2026-09-05.txt TICK=no on CQffXcMA
+PRIOR_REAUDIT2=CRITIC-3D-TAB-HIDE-GHOST-REAUDIT2-2026-09-05.txt TICK=no on CQffXcMA
+PRIOR_IMPLEMENTER_NOTE=CRITIC-3D-TAB-HIDE-GHOST-2026-09-04.txt TICK=n/a
+ACCEPTED_PRIOR=CRITIC-3D-VIEWING-OPEN-SHELF-2026-09-04.txt TICK=yes on /assets/index-DHD8uCJ5.js
+
+================================================================================
+NAMED MISS
+================================================================================
+
+TAB_HIDE_GHOST remint after two independent TICK=no files. Keep both.
+
+REAUDIT2 on live CQffXcMA (pid 7848 StartTime 2026-09-05 04:54:18 +07)
+forced BOTH seats visible (Page.setWebLifecycleState state=active,
+document.hidden=false, visibilityState=visible). A stayed Online,
+opted-in, connected, saw B. Graph a-b accepted. B NEVER held
+standing remote-body-a for two samples ~1s apart. A's /demo-bus
+presence was leave-wiped in under 1s (four bus hits, two body
+flickers, zero 1s holds). Hide/unhide were not scored.
+
+A's own page kept POSTing presence about every 2s with no leave
+while hidden=false. Those packets still vanished from GET /demo-bus
+in <1s. First reaudit had the same wipe (maybe headless-hidden).
+REAUDIT2 ruled that out.
+
+================================================================================
+ROOT CAUSE
+================================================================================
+
+usePresence called publishLocalLeave + /demo-bus leave on every
+!live 200ms tick and on every effect cleanup (mode / opt-in /
+connected / viewingShopId remount), so a visible Online opted-in
+publish could be raced off the bus; leftover hidden same-seat
+tabs could keep unsigned-leaving after a newer visible publisher.
+
+================================================================================
+WHAT CHANGED
+================================================================================
+
+hh-3d/app/web/src/friends/presence.ts
+  streetPresenceIntent: visible+online+opted-in+connected => publish;
+  hidden falling edge => leave once; already-hidden => hold;
+  visibilitychange to visible => publish, never leave. Mode not flipped.
+
+hh-3d/app/web/src/friends/usePresence.ts
+  Interval uses that intent (no leave-on-every-tick). pagehide leaves
+  only when the document is actually hidden. Publish effect depends
+  on seat only so viewing/mode churn does not cleanup-leave. Matching
+  presence_session / leave_session on the bus. No setPresenceMode.
+
+hh-3d/app/web/vite.this-pc-store.ts
+  shouldApplyStreetLeave: unsigned or mismatched leave cannot wipe a
+  standing presence_session (old hidden tab must not overwrite a
+  newer visible seat). Matching hide leave still deletes.
+
+hh-3d/app/web/src/friends/bus.ts
+  pushDemoBus accepts leave_session.
+
+hh-3d/app/web/tests/presence.test.mjs
+  visible + online + opted-in => publish; hidden => not publish;
+  visibilitychange to visible does not leave; hide leaves once.
+
+hh-3d/app/web/tests/play.test.mjs
+  Source assert: streetPresenceIntent + leave_session + hold +
+  shouldApplyStreetLeave. Hook still does not set Offline.
+
+hh-3d/app/web/tests/shared-store.test.mjs
+  Stale/unsigned leave does not wipe a newer session.
+
+Kept: play-viewing-chip + play-viewing-open, nametag useLayoutEffect
+purge, hitch3 play-idle. Leftover Shared PC / J6 stay on /demo-bus.
+Hide still stops publish (T07). Hide is not Offline.
+
+================================================================================
+VERIFY (implementer only)
+================================================================================
+
+node --test tests/presence.test.mjs tests/play.test.mjs tests/shared-store.test.mjs
+  EXIT=0 (55 pass)
+npm run build EXIT=0  dist/assets/index-oRuAyVDb.js
+Recycled 4175 once: killed LISTEN pid 7848 only (node), not PowerShell
+$PID. Started:
+  npm run preview -- --host 127.0.0.1 --port 4175 --strictPort
+LISTEN pid 18936 (node, StartTime 2026-09-05 05:27:39 +07).
+Did not start 4173 / 4174 / 5175. Did not bind 0.0.0.0.
+Did not catalog_clear. GET raw JS bytes hashed above. CSS unchanged.
+Live bundle still has play-idle, play-viewing-chip, play-viewing-open.
+catalog_clear needle = 0. openstreetmap needle = 0.
+
+TICK=n/a. Do not treat this remint as acceptance. Critic hunts separately.
+Did not write a reaudit. Did not launch a critic. Did not overwrite
+REAUDIT or REAUDIT2.
+
+================================================================================
+OWNER LEFTOVERS (unchanged)
+================================================================================
+
+1. GATE-U1 three-human review (first acceptance leftover; not faked).
+2. R2-WP1 headed/mobile/memory/min-FPS thresholds still UNFILLED.
+3. WAN / other-PC join still not built. 4175 loopback only.
+4. R4-WP0B real account/OIDC still not built.
+5. Open data (OSM/Overture) still needs license ledger + grant.
+6. Leftover this-PC shops stay in the catalog; they do not own street E.
+7. M0/M1/M2 plan WPs still NOT_STARTED. NOT_PLAN_PASS. Not M1. Not M2.
+8. Independent critic must still hunt TAB_HIDE_GHOST on oRuAyVDb.

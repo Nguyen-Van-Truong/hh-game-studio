@@ -1,0 +1,27 @@
+HH WORLD APP-LOCAL LICENSE LEDGER
+DATE=2026-09-03
+NETWORKING=OFF
+FETCH_PERFORMED=NO
+NOTE=Original hh-3d/zdoc/license-ledger.txt was not rewritten (forbidden).
+     This file is the app-local ledger for the local proof only.
+
+ROW 1
+  artifact=authored GeoJSON fixture ben-thanh-400m.authored.geojson
+  source=HH World implementer, 2026-09-03
+  license=original authored content in this repo
+  acquire=NO
+  provider=none
+  notes=Invented geometry near a named real vicinity. Not OSM. Not Overture.
+
+ROW 2
+  artifact=maplibre-gl npm package
+  license=BSD-3-Clause
+  purpose=local browser renderer
+  tiles=none
+  ion=no
+  paid=no
+
+ROW 3
+  artifact=React / Vite / TypeScript (demo-matched pins)
+  license=MIT
+  purpose=web shell

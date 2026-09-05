@@ -1,0 +1,269 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+BOOTED_4175=1
+DID_NOT_RECYCLE=1
+DID_NOT_REBUILD=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+CRITIC=INDEPENDENT_ADVERSARIAL_FOOTSTEPS_REAUDIT
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=07:01 +07
+MODEL=grok-4.6-extra-high
+SCOPE=Re-audit of implementer footsteps remint. Do not treat CRITIC-3D-FOOTSTEPS-2026-09-04.txt as TICK=yes.
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=04cb6ca92c482017c02d78e7885727f73b62103d
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-FOOTSTEPS-REAUDIT-2026-09-04.txt
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-FOOTSTEPS-2026-09-04.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+DID_NOT_TREAT_IMPLEMENTER_AS_TICK_YES=1
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NOT_OSM=1
+NOT_WAN=1
+VITE_PREVIEW_PORT_PIN=4175
+LIVE_PID=44212
+LISTEN=127.0.0.1:4175
+CRITIC_CDP_PORTS=9911 / 9912
+VIEWPORT=1280x720
+ISOLATED_PROFILES=1
+HEADLESS_NEW=1
+
+LIVE_JS=/assets/index-2Oh0rjA2.js
+LIVE_JS_LEN=2129826
+LIVE_JS_SHA256=90255e199dae322fa6818097ba690770ffe36c6b9b952a1eff10974c973f8e18
+LIVE_JS_MATCHES_CLAIM=1
+HASH_MISMATCH=0
+
+CLAIM_1_STAND_WALK_RELEASE=PASS
+CLAIM_2_HIDDEN_MENU_MUTE=PASS
+CLAIM_3_SPRINT_LOUDER_FASTER=PASS
+CLAIM_4_LEFTOVER_LANTERN_SKY=PASS
+CLAIM_5_NO_SAMPLES_NO_GTA=PASS
+FRIENDS_SILENT=PASS
+
+BIGGEST_MISS=None on the named hunts. Implementer +4 walk plants / 1.1 s was +3 here; still rose. Three.js unused Audio helpers are not downloaded samples. NOT_PLAN_PASS.
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/ was already up. Bind 127.0.0.1 pid 44212
+(node vite preview). Did not recycle, rebuild, kill, or start
+4173 / 4174 / 5175. Did not bind 0.0.0.0.
+
+Did not treat CRITIC-3D-FOOTSTEPS-2026-09-04.txt as TICK=yes
+(ROLE=IMPLEMENTER, TICK=n/a). Did not run j5-footsteps-probe.mjs.
+
+Independent Chrome CDP, isolated temp profiles, ?seat=a / ?seat=b.
+AudioContext.createOscillator / createBufferSource.start hooked so
+mute is not a DOM-only flag. Plant counts held flat while hidden
+and while the Play menu / lantern shop covered Play.
+
+Live hash matches the claimed remint. Hunts 1–4 held. No sample
+files, no GTA music. This is NOT_PLAN_PASS. GATE-U1 humans were
+not invented.
+
+================================================================================
+LIVE JS
+================================================================================
+
+HTML script = /assets/index-2Oh0rjA2.js
+http length = 2129826
+sha256 = 90255e199dae322fa6818097ba690770ffe36c6b9b952a1eff10974c973f8e18
+Matches the claimed remint name + length + hash.
+After CDP the same name is still served from pid 44212.
+
+Bundle scan:
+  .mp3 / .wav / .ogg / .m4a = 0
+  new Audio( = 0
+  gta 6 / rockstar = 0
+  procedural-thump = 1
+  createOscillator = 1  (triangle thump; left/right 92/84 walk, 118/108 sprint)
+  createBufferSource = 2
+    1) Three.js Audio helper (unused library path)
+    2) footstep noise + bandpass 880 walk / 1400 sprint
+  decodeAudioData / createMediaElementSource = Three.js Audio
+    loader/mediaNode, not a fetched sample. Not a miss.
+
+================================================================================
+CLAIM 1 — STAND / HOLD W / RELEASE — PASS
+================================================================================
+
+Tried to fail: stand already 1; W never live; plants do not rise;
+release stays 1; idle plants keep climbing.
+
+Seat A spawn, isolated profile:
+  stand: pose=idle data-footsteps=0 ticks=0 reason=idle
+  osc starts = 0
+  Hold W: pose=walk data-footsteps=1
+  ~1.1 s hold: ticks 0 → 3  (plants rose; osc=3 src=3)
+  lastGain=0.14 kind=procedural-thump
+  Release W: pose=idle data-footsteps=0
+  idle ~0.9 s: ticks stay 5  (no extra plants)
+
+Implementer wrote +4 walk plants in ~1.1 s. This critic measured
++3 in the same window. The named bar is “increases”, not “exactly 4”.
+PASS.
+
+================================================================================
+CLAIM 2 — HIDDEN / MENU MUTE WHILE W — PASS
+================================================================================
+
+Tried to fail as a fake DOM flag: keep W down, keep frames running,
+watch reason + plant count + real oscillator starts.
+
+Fake document.hidden=true while W still held (rAF still ticks):
+  data-footsteps=0
+  reason=hidden
+  ticks 4 → 4 over ~1.1 s
+  osc 4 → 4   src 4 → 4
+  AudioContext.state stayed "running" but no new start()
+Unhide, still W: data-footsteps=1
+
+Play menu overlay (data-open=yes) while W still held:
+  data-footsteps=0
+  reason=overlay
+  ticks 4 → 4 over ~1.1 s
+  osc 4 → 4   src 4 → 4
+Close menu, still W: data-footsteps=1
+
+Shop sheet shop-lantern-fish also mutes (same overlay gate):
+  reason=overlay data-footsteps=0
+  ticks 44 → 44 while W held after E
+
+Page.setWebLifecycleState("hidden") returned CDP
+"Unidentified lifecycle state" on this Chrome. The defineProperty
+hidden hunt is the stricter one: frames still run, so a lie that
+only painted data-footsteps=0 would have shown rising ticks / osc.
+It did not.
+
+PASS. Not a fake flag.
+
+================================================================================
+CLAIM 3 — SPRINT LOUDER / FASTER — PASS
+================================================================================
+
+Tried to fail: same gain, same plant rate, sprint attr missing.
+
+Walk ~1.1 s:  lastGain=0.14  plants +3  data-footstep-sprint != 1
+Sprint Shift+W ~1.1 s: lastGain=0.22  plants +5  sprint=1
+  0.22 > 0.14
+  +5 > +3
+
+Could not hear headless. Used gain + plant-rate attrs, plus hooked
+oscillator starts during the walk window. PASS.
+
+Implementer probe treats louder as true if either gain is 0.
+This critic does not use that loophole. Both gains were nonzero
+and different.
+
+================================================================================
+CLAIM 4 — LEFTOVER E / LANTERN / FRIEND+SKY SPOT — PASS
+================================================================================
+
+GET /demo-bus catalog still holds leftover this-PC shops:
+
+  shop-local-sharedpc  "Quầy Shared PC"
+    lon=106.69804 lat=10.77162   exact spawn
+  shop-local-mtl8ulddihjpre  "Quay Critic J6 Jump"
+    lon=106.6981497 lat=10.77162  ~12 m east of spawn
+
+Seat B at spawn (isolated profile):
+  nearbyShop=""
+  stallHint="E opens a stall when you are next to it."
+  shopRange="Quầy Cá Đèn Lồng: 29 m away"
+  leftover names / ids are NOT the E target
+  Press E: shopPanelId=""  (did not open J6 / Shared PC)
+
+Authored lantern: A held W then E. Panel opened shop-lantern-fish.
+  Nearby became shop-lantern-fish. Not a leftover shop.
+
+DOM spot-check (not a gait remint):
+  sky=gradient-hemisphere
+  walk-cycle=opposite-stride
+  collision=footprint-radius
+  scooters=15
+  honesty: Authored approximation / not a digital twin / NOT_PLAN_PASS
+    / No GTA claim
+  After graph_clear + add-friend-b / accept-friend-a / Online:
+    remote-avatar-b on A: pose=walk walk-cycle=opposite-stride
+    tunic=#c4a046 (gold). Not ripped sky. Not a sample bed.
+
+Friends silent on A's page while B walked:
+  A idle data-footsteps=0 ticks 44 → 44  osc 44 → 44
+  B's own page: data-footsteps=1 ticks=3 (self only)
+
+PASS. Leftovers still in store (intended). Seat B E not stolen.
+
+================================================================================
+HUNTS (not named fails)
+================================================================================
+
+Walk plants +3 vs implementer +4: window jitter. Still rose.
+
+AudioContext stays "running" while muted: they do not suspend()
+the context. Mute is “do not plant”. Hooked start() counts stayed
+flat. Not a miss.
+
+React JSX still ships data-footsteps="0". writeProof overwrites
+each frame. Observed live=1 while walking; 0 when muted.
+
+Three.js decodeAudioData / createMediaElementSource: unused
+library Audio path. No .mp3/.wav/.ogg/.m4a. Not GTA music.
+
+Page.setWebLifecycleState unavailable here. Fake hidden already
+proved the gate under live frames.
+
+Implementer louder loophole (gain===0 passes): not used. Observed
+0.14 vs 0.22.
+
+remote-walk-cycle-b nodes did not carry pose/spread on this snap.
+Proof used remote-avatar-b + A's silent ticks. Enough for the
+named “not obviously ripped” spot-check. Not a gait remint.
+
+================================================================================
+METHOD
+================================================================================
+
+1. 4175 already up. Did not recycle / rebuild / start other ports.
+2. GET /  /demo-bus  /assets/index-2Oh0rjA2.js. Recorded name+sha+len.
+3. Read implementer note (TICK=n/a). Did not copy its probe writer.
+4. Independent Chrome CDP 1280x720 isolated profiles, ports 9911/9912.
+   Hooked OscillatorNode/BufferSource.start. Stand / W / hidden /
+   menu / release / sprint / lantern E / seat B leftover E.
+   Then graph_clear only (catalog kept), add/accept/Online, B walks,
+   A must stay silent.
+5. Did not write lead packs. Did not tick plan. Did not fake GATE-U1.
+
+Temp only (not under data-qa):
+  %TEMP%\hh-footsteps-reaudit.json
+  %TEMP%\hh-footsteps-hash.json
+  %TEMP%\hh-footsteps-scan.json
+
+================================================================================
+STILL IMPOSSIBLE WITHOUT OWNER
+================================================================================
+
+- GATE-U1 three human reviewers (not faked)
+- AUTHORIZE_MAP_FETCH=YES + license ledger before any OSM/Overture
+- Other-PC / WAN join (store is this PC 4175 loopback)
+- Real account / OIDC
+
+================================================================================
+END
+================================================================================

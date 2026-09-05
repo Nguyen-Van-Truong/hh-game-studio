@@ -1,0 +1,138 @@
+{
+  "run_id": "HH3D-J5-20260904-ASIA-SAIGON-16",
+  "player": "http://127.0.0.1:4175/",
+  "viewport": "1280x720",
+  "method": "headless-new CDP first-W rAF wall-clock 3000ms settle=400ms skip=2",
+  "liveJs": "/assets/index-Zv5epUAg.js",
+  "liveJsLen": 2153814,
+  "liveJsSha256": "458d723bf1584e1c60ed8f77220227dfe3d8db89a3441ba2c0908e38db265743",
+  "verdict": "J5_HITCH2_OBSERVED",
+  "not_plan_pass": true,
+  "not_gate_u1": true,
+  "not_r2_wp1": true,
+  "not_60_fps": true,
+  "not_osm": true,
+  "not_wan": true,
+  "harborOk": true,
+  "walked": true,
+  "lanternOk": true,
+  "friendOfflineClosed": true,
+  "miniHarbor": true,
+  "miniSteps": true,
+  "walk": {
+    "wallMs": 3050,
+    "n": 52,
+    "frameMs": {
+      "n": 52,
+      "min": 33.2,
+      "median": 50.05,
+      "p1": 33.25,
+      "max": 133.4,
+      "mean": 59.3
+    },
+    "fps": {
+      "n": 52,
+      "min": 7.5,
+      "median": 19.98,
+      "p1": 8.05,
+      "max": 30.12,
+      "mean": 19
+    }
+  },
+  "spawn": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/?seat=a",
+    "playReady": "yes",
+    "hitchWarmup": "audio-compile",
+    "pose": "idle",
+    "lon": 106.69804,
+    "lat": 10.77162,
+    "heading": 0,
+    "buildings": 60,
+    "streetName": "Harbor Walk",
+    "chipText": "Harbor Walk",
+    "canvas": {
+      "w": 1280,
+      "h": 720
+    },
+    "worldMapPresent": false,
+    "farLod": "inner-door-glass",
+    "farLodM": 90,
+    "plaques": 4,
+    "nearbyShop": "",
+    "shopPanel": false,
+    "shopPanelId": "",
+    "friendLive": "0",
+    "friendTicks": 0,
+    "remotes": 0,
+    "minimapDefer": "",
+    "minimapDeferKind": "",
+    "minimap": {
+      "present": true,
+      "kind": "authored-hud-lanes",
+      "official": 2,
+      "inner": 2,
+      "extra": 2,
+      "names": "Tram Approach,Harbor Walk,Steps East,Steps West",
+      "active": "Harbor Walk",
+      "highlight": "1",
+      "activeRole": "official"
+    },
+    "miniActiveItem": {
+      "name": "Harbor Walk",
+      "role": "official",
+      "active": "1"
+    }
+  },
+  "beforeWalk": {
+    "pose": "idle",
+    "chip": "Harbor Walk",
+    "street": "Harbor Walk",
+    "lon": 106.69804,
+    "lat": 10.77162,
+    "hitchWarmup": "audio-compile",
+    "minimapPresent": true,
+    "minimapDefer": ""
+  },
+  "midWalk": {
+    "pose": "walk",
+    "chip": "Harbor Walk",
+    "lon": 106.69804,
+    "lat": 10.7716564,
+    "minimapPresent": true,
+    "minimapDefer": ""
+  },
+  "afterWalk": {
+    "pose": "walk",
+    "chip": "Harbor Walk",
+    "lon": 106.69804,
+    "lat": 10.7716564,
+    "friendLive": "0",
+    "friendTicks": 0,
+    "remotes": 0,
+    "minimapPresent": true,
+    "minimapDefer": ""
+  },
+  "harborMini": {
+    "chip": "Harbor Walk",
+    "active": "Harbor Walk",
+    "defer": "",
+    "present": true
+  },
+  "steps": {
+    "chip": "Steps East",
+    "active": "Steps East",
+    "highlight": "1",
+    "role": "inner",
+    "eastM": 7.2,
+    "northM": 20.32
+  },
+  "lantern": {
+    "nearby": "shop-lantern-fish",
+    "panel": "shop-lantern-fish"
+  },
+  "walkMin": 7.5,
+  "walkMean": 19,
+  "hitchWarmup": "audio-compile",
+  "minimapDeferKind": ""
+}

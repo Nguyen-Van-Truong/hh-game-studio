@@ -1,0 +1,427 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+BIGGEST_MISS=Look and slide are real on this 400 m authored AABB block, but it is still hashed muted boxes, not a city / interiors / GATE-U1. Headless click did not engage pointer-lock (right-drag carried look). HUD still prints "A/D turn" while looking actually strafes. NOT_PLAN_PASS.
+
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-03
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=15:29 +07
+MODEL=grok-4.6
+SCOPE=HH World look (right-drag yaw/pitch) + WASD along look + 95° wall slide on already-up 4175 (NOT GTA / NOT 1:1 / NOT a city)
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=1567956b35dbe78e938280f930ad711a5fb68de4
+PROGRESS_CLAIMS_HEAD=1567956b35dbe78e938280f930ad711a5fb68de4
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-LOOK-SLIDE-2026-09-03.txt
+PRIOR_CRITIC=hh-3d/app/data-qa/CRITIC-3D-COLLISION-2026-09-03.txt
+LEAD_PACK=hh-3d/app/data-qa/J5-FEEL-2026-09-03.txt
+LEAD_PROBE=hh-3d/app/data-qa/j5-feel-probe.mjs
+LEAD_SHOTS=hh-3d/app/data-qa/j5-3d-look.png ; hh-3d/app/data-qa/j5-3d-slide.png
+LEAD_RUN_ID_CLAIM=HH3D-J5-20260903-ASIA-SAIGON-09
+LEAD_VERDICT_CLAIM=J5_FEEL_OK
+PROGRESS_TRUSTED_ALONE=NO
+J5_FEEL_OK_TRUSTED_ALONE=NO
+LEAD_PACK_TRUSTED_ALONE=NO
+LEAD_SHOT_TRUSTED_ALONE=NO
+LEAD_PROBE_TRUSTED_ALONE=NO
+DATA_CAM_YAW_TRUSTED_ALONE=NO
+DATA_SLIDE_TRUSTED_ALONE=NO
+DATA_INSIDE_AABB_TRUSTED_ALONE=NO
+DATA_LOOK_ATTR_TRUSTED_ALONE=NO
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_VF_TOUCH=1
+NO_UNREAL=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_RUN_LEAD_PROBE_WRITER=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M0_WP1=1
+NOT_GTA=1
+NOT_1TO1=1
+NOT_A_CITY=1
+NOT_OSM=1
+CRITIC_CDP_PORT=9488
+LIVE_JS=/assets/index-BYiLnYEq.js
+LIVE_JS_LEN=2075772
+LIVE_PID=35288
+LIVE_CMD=node .../hh-3d/app/web/node_modules/vite/bin/vite.js preview
+VITE_PREVIEW_PORT_PIN=4175
+KNOWN_BUILDING=bldg-steps-e-00
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/
+
+4175 was already up (vite preview pid 35288). This critic used that preview
+and did not start 4173, 4174, 5175, or a second HH World preview. Independent
+Chrome CDP (debug 9488, about:blank then navigate, temp profile only,
+headless=new 1280x720) waited until canvas.play-canvas was ready, then:
+
+  Right-drag 180 px / -36 px   look yaw/pitch (CDP mouse; lock denied)
+  Hold W 2.2 s                 walk along that look
+  Re-enter right-drag, A 0.9 s then D 0.9 s   strafe while looking
+  Unlock, A 0.4 s              in-place turn (look off)
+  Fresh navigate
+  Hold W 8 s                   street north
+  Hold D 0.86 s                turn in place to ~95°
+  Hold W 10 s                  walk into Steps East
+  Hold W 6.0 s                 extra push, 20 samples @ 300 ms
+
+Look is real. Native CDP right-drag (not the lead probe, not data-cam-yaw
+alone) turned camYaw 0 → 25.2 and orbit camX/camZ 4.79,-103.56 → 2.38,-103.19
+while lon/lat stayed frozen at spawn. Guest pixels changed
+(home sha16=2706f424cf03d853 ≠ look a8b3df4b01bf48d0). Then W 2.2 s moved
+3.543 m on bearing 25.207° (east +1.509, north +3.206). Error vs kept yaw
+25.2° is 0.007°. That is walk-along-look, not world-north.
+
+A/D while look=drag strafed. Heading stayed 25.2. A went 1.46 m at bearing
+295°; D returned 1.46 m at 115°. After look released, A 0.4 s turned heading
+25.2 → 339.4 with lon/lat frozen. Unlocked A/D still turn.
+
+Slide is real and did not clip. After D then W into live GeoJSON
+bldg-steps-e-00, extra W froze lon at 106.6981412 across 20 samples.
+Lat fell monotonically 10.7717212 → 10.7717134 (south). Independent
+point-in-AABB on the same GeoJSON the page fetched is empty at the wall,
+every extra sample, and after release. Extra east = 0.000 m. Center stays
+0.558 m outside the west face (circle radius on disk is 0.55 m). No lat
+jitter-up. Guest wall/slide frames: third-person teal body in front of a
+brown volume; stall copy 20 m → 21 m (slid south, away from the north shop).
+
+Street walk still works (12.80 m north, east=0). Live fixture still has
+60 kind=building features. Live JS ships all 20 WALLS hexes; this fixture
+hashes onto 19 of them. Honesty still denies GTA / 1:1 / OSM and prints
+NOT_PLAN_PASS. GATE-U1 STATE: NOT_STARTED.
+
+This is NOT_PLAN_PASS. GATE-U1 was not faked. J5_FEEL_OK / SAIGON-09 is
+claim only and was not used as proof. This critic did not run
+j5-feel-probe.mjs (it writes that pack).
+
+Biggest miss: look + slide work, but the world is still a muted authored
+400 m AABB street — not a city, not interiors, not GATE-U1. Headless click
+did not take pointer-lock (empty pointerLockElement). Right-drag is the
+path this CDP proved. HUD still says "A/D turn" while looking strafes.
+
+================================================================================
+METHOD
+================================================================================
+
+Read on disk (not PROGRESS / J5 alone):
+  hh-3d/app/web/src/avatar/look.ts
+    LOOK_SENS_DEG=0.14  pitch clamp [-42, 28]
+    applyLookDelta: yaw += dx*0.14 ; pitch -= dy*0.14
+  hh-3d/app/web/src/avatar/walk.ts
+    applyLookMove: WASD via cameraRelativeAxes(heading); no in-place turn
+    projectSlide + separateFromBuildings: cheap AABB slide, not mesh
+    AVATAR_RADIUS_M=0.55  WALK_SPEED_MPS=1.6  TURN_DEG_PER_SEC=110
+  hh-3d/app/web/src/avatar/useAvatar.ts
+    look delta writes heading = look.yaw
+    look.mode !== "off" → applyLookMove (A/D = strafe)
+    look.mode === "off" → applyFacingMove (A/D = turn)
+    data-slide is "wanted forward blocked but still moved" — NOT stop proof
+  hh-3d/app/web/src/play/PlayView.tsx
+    PlayLook: left-click requestPointerLock; button-2 drag fallback
+    Esc exits lock / ends drag
+    data-cam-yaw = followCameraPose(..., look.yaw).yawDeg
+    REJECTED as sole camera proof (same function writes the attr)
+  hh-3d/app/web/src/play/world.ts
+    WALLS = 20 muted hexes; wallColorForId hashes building id
+  hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+    CURRENT_FIRST_LEFTOVER=GATE-U1; GATE-U1 STATE: NOT_STARTED (line 862)
+  hh-3d/app/docs/review/README.txt
+    "GATE-U1 is NOT done."
+  Lead pack J5-FEEL / SAIGON-09 / J5_FEEL_OK
+    read only as claim. Did not run j5-feel-probe.mjs (it writes that pack).
+
+Live (existing 4175 only; did not start another HH World preview):
+  TCP 127.0.0.1:4175 LISTEN pid 35288 node vite preview
+  4173 DOWN  4174 DOWN  5175 DOWN  (still down after CDP)
+  GET /                         200  title=HH World
+                                script /assets/index-BYiLnYEq.js
+  GET /data/ben-thanh-400m.authored.geojson  200  92096 B
+    kind.building=60  (independent node count)
+    bldg-steps-e-00 AABB from the same GeoJSON the page fetched:
+      west=106.6981463  south=10.7716017
+      east=106.6982899  north=10.7717837
+  Live JS Content-Length=2075772
+    requestPointerLock / exitPointerLock / click-or-right-drag = PRESENT
+    all 20 WALLS hexes = PRESENT
+    NOT_PLAN_PASS / No GTA = PRESENT
+    openstreetmap / cesium / googleapis / maptiler = ABSENT
+  Independent Chrome CDP vs 4175 (debug 9488)
+    shots TEMP only (not written under data-qa):
+      C:\Users\truon\AppData\Local\Temp\hh-critic-3d-look-slide\critic-home.png       82444 B  sha16=2706f424cf03d853
+      C:\Users\truon\AppData\Local\Temp\hh-critic-3d-look-slide\critic-look.png       87563 B  sha16=a8b3df4b01bf48d0
+      C:\Users\truon\AppData\Local\Temp\hh-critic-3d-look-slide\critic-walk-look.png  79596 B  sha16=80f340ebc84808a2
+      C:\Users\truon\AppData\Local\Temp\hh-critic-3d-look-slide\critic-reset.png      82444 B  sha16=2706f424cf03d853
+      C:\Users\truon\AppData\Local\Temp\hh-critic-3d-look-slide\critic-turn.png       66167 B  sha16=c26af8b55eb35df2
+      C:\Users\truon\AppData\Local\Temp\hh-critic-3d-look-slide\critic-wall.png       47806 B  sha16=00d3cd3e2aab3817
+      C:\Users\truon\AppData\Local\Temp\hh-critic-3d-look-slide\critic-slide.png      47678 B  sha16=963e219ebf5184e7
+  Did not run npm build. Did not recycle the preview. Did not fetch OSM.
+
+================================================================================
+PROCESS / GIT
+================================================================================
+
+RESULT=PASS_ON_STATED_FAIL_RULE
+
+Stated fail: VF / AGENTS.md staged with this if they committed.
+Observed:
+  git rev-parse HEAD = 1567956b35dbe78e938280f930ad711a5fb68de4
+  git diff --cached --name-only = empty
+  hh-3d/app remains untracked in this tree
+  Critic did not commit, did not tick plan, did not touch VF.
+
+================================================================================
+ATTACK 1 — RIGHT-DRAG OR LOOK MUST CHANGE camYaw (AND THE RIG)
+================================================================================
+
+RESULT=PASS  LOOK_REAL  PATH=cdp-mouse
+
+Rejected as sole proof:
+  lead J5-FEEL-2026-09-03.txt / SAIGON-09 / J5_FEEL_OK
+  lead j5-3d-look.png
+  data-cam-yaw / data-follow="look" / data-look="drag"
+  (PlayView copies yawDeg from followCameraPose(look.yaw))
+
+Independent proof:
+
+  Home (seat a spawn):
+    lon=106.6980400  lat=10.7716200  heading=0  camYaw=0
+    camX=4.79  camZ=-103.56  look=off
+    status="You: standing · facing north · click canvas to look · Esc · A/D turn · Space"
+    Shot: body from behind, dark street north, shop labels ahead.
+
+  Left-click canvas (pointer-lock attempt):
+    pointerLockElement=""  look still "off"
+    Headless Chrome denied lock. Not used as look proof.
+
+  CDP Input right-press at canvas center, move +180 x / -36 y:
+    look=drag  heading=25.2  camYaw=25.2  camPitch=5
+    camX=2.38  camZ=-103.19
+    lon/lat UNCHANGED (lookPosFrozen)
+    Expected from LOOK_SENS_DEG=0.14: yaw=180*0.14=25.2  pitch=36*0.14=5.04
+    Pixel hash changed. A north-locked rig would keep camX/camZ.
+
+  After pointerup: look=off  camYaw still 25.2 (yaw kept, mode released)
+  Esc after that: still unlocked; yaw kept. Esc-unlock-of-an-active-lock
+  was not observed because lock never engaged.
+
+  Canvas PointerEvent fallback was NOT needed. Native CDP mouse was enough.
+
+FAIL-if-look-fake does not trigger.
+
+================================================================================
+ATTACK 2 — W MUST MOVE ALONG THAT LOOK, NOT WORLD-NORTH
+================================================================================
+
+RESULT=PASS  BEARING_ERR=0.007°
+
+After look (heading/yaw 25.2, mode off), hold W 2200 ms. Did not reset.
+
+  afterLook  lon=106.6980400  lat=10.7716200
+  afterW     lon=106.6980538  lat=10.7716488  heading=25.2  camYaw=25.2
+  east=+1.509 m  north=+3.206 m  moved=3.543 m  bearing=25.207°
+  walkBearingErr vs yaw 25.2 = 0.007°
+  Speed 3.543 / 2.2 = 1.61 m/s matches WALK_SPEED_MPS.
+
+World-north W would keep lon and raise only lat. Observed: lon rose,
+bearing matches the new look, stall "Quầy Shared PC" 0.0 m → 3.5 m on the
+walk shot. Camera stayed behind the body (self-hit centered; third-person).
+
+That is WASD-along-look. Not a heading-lock leftover from an old north rig.
+
+================================================================================
+ATTACK 3 — A/D STRAFE WHILE LOOKING; UNLOCKED A/D STILL TURN
+================================================================================
+
+RESULT=PASS
+
+Re-entered right-drag (look=drag, heading still 25.2). Did not move the
+pointer. Then:
+
+  Hold A 900 ms: heading STAYED 25.2  look=drag
+    east=-1.323 m  north=+0.623 m  moved=1.463 m  bearing=295.2°
+    (left of a 25° look: west + a little north)
+
+  Hold D 900 ms: heading STAYED 25.2  look=drag
+    east=+1.323 m  north=-0.623 m  moved=1.463 m  bearing=115.2°
+    (right of that look; returned to the post-W point)
+
+If A/D still turned while looking, heading would move and lon/lat would
+stay put. Observed: heading frozen, body translated. That is strafe.
+
+Released look, then A 400 ms:
+  heading 25.2 → 339.4  lon/lat UNCHANGED
+  Unlocked A/D still turn. Pad/keyboard turn path is not dead.
+
+HUD copy still says "A/D turn" in every shot, including while look=drag.
+That is leftover chrome, not the locomotion. Behavior matches the claim.
+
+================================================================================
+ATTACK 4 — 95° WALL HOLD MUST SLIDE; MUST NOT JITTER-CLIP THROUGH
+================================================================================
+
+RESULT=PASS  STOPPED  SLIDE_SOUTH  INSIDE_AABB=0  EXTRA_EAST=0  JITTER=0
+
+Rejected as sole proof:
+  data-slide / data-inside-aabb / data-hit-building / data-blocked
+  lead slideSamples / extra.east=0
+
+Independent proof from live GeoJSON AABB + live lon/lat:
+
+  Fresh navigate, W 8.0 s north:
+    east=0  north=+12.802 m  (open lane still walkable)
+
+  D 860 ms in place: heading=95.3  camYaw=95.3  lon/lat unchanged
+  Shot: camera swung to the east brown volume / Steps East.
+
+  W 10 s toward the west face:
+    atWall lon=106.6981412  lat=10.7717216  heading=95.3
+    toward east=+11.067 m  north=-1.492 m  bearing=97.68°
+    live point-in-AABB hitWall=[]
+
+  Extra W 6.0 s, 20 samples @ 300 ms (keydown held the whole time):
+    EVERY sample lon=106.6981412          (east freeze; lonSpanM=0)
+    lat 10.7717212 → 10.7717134           (south, step ~0.0000004 / sample)
+    latMono=true  latJitterUp=false
+    hit[] empty on every sample
+    pose=walk the whole hold (axis slide, not a plant)
+    after release: lon still 106.6981412  lat=10.7717133
+    extra.east=0  extra.north=-0.924 m
+    still point-in-AABB hitStill=[]
+
+  Nearest live box after extra W:
+    id=bldg-steps-e-00
+    (106.6981463-106.6981412) * mPerLon(10.77171) = 0.558 m
+    Center is outside. Next ~0.08 m east tick would enter the 0.55 m
+    circle. That is a stop + face slide, not a clip.
+
+  Guest pixels (wall 00d3cd3e2aab3817 ≠ slide 963e219ebf5184e7):
+    Third-person body in front of a brown vertical volume. Feet on the
+    light walk. Minimap dot adjacent to the parcel, not inside it.
+    Stall copy 20 m → 21 m (south, away from the north lantern shop).
+
+FAIL-if-jitter-clip does not trigger. data-slide="1" during the hold is
+consistent but was not the proof.
+
+================================================================================
+ATTACK 5 — 20 MUTED COLORS; STILL 60 AUTHORED PARCELS
+================================================================================
+
+RESULT=PASS_PALETTE  COUNT=60  UNIQUE_USED=19_OF_20
+
+Live GeoJSON kind=building = 60. proof.buildings=60. Same fixture as
+prior block/collision critics. No extra downtown fetch.
+
+Live JS contains all 20 WALLS hexes from world.ts. Hashing the 60 live
+ids through the same colorIndex used on disk yields 19 distinct wall
+tints (one palette slot unused on this id set). Home/look frames show
+more than one beige: tan / brown / grey-brown volumes, not a single
+CAD color. This is ID-tinted AABB boxes, not textured streets.
+
+================================================================================
+ATTACK 6 — NO PUBLIC OSM / OTHER-PC / GATE-U1 FAKE
+================================================================================
+
+RESULT=PASS  (none of the cheats)
+
+CDP Network unique URLs on the 4175 session:
+  /  /assets/index-BYiLnYEq.js  /assets/index-Dlz3xGB2.css
+  /styles/local-style.json  /demo-bus
+  /data/ben-thanh-400m.authored.geojson
+  /data/world-manifest.json  /data/shops.json
+  /favicon.ico  /?seat=a  data:  blob:http://127.0.0.1:4175/...
+
+tileHits=[]
+No openstreetmap / cesium / googleapis / maps.google / maptiler /
+mapbox:// / cartocdn / overture / demotiles.
+
+Honesty (live innerText):
+  "Authored approximation. Not a live map, not OSM/Overture, not
+  photogrammetry, and not a digital twin. No GTA claim, no 1:1 city.
+  NOT_PLAN_PASS."
+  Friend-body line: this-PC 4175 loopback store; not a city presence
+  server; not WAN; not GPS; NOT_PLAN_PASS.
+Mode: "Offline — Stroll alone; shops still open."
+gtaClaim=false. Denial present.
+
+Plan: CURRENT_FIRST_LEFTOVER=GATE-U1
+GATE-U1 STATE: NOT_STARTED (line 862)
+docs/review/README.txt: "GATE-U1 is NOT done."
+No invented human reviewers. No other-PC join. No OSM fetch.
+
+================================================================================
+LEAD CLAIMS vs INDEPENDENT LIVE
+================================================================================
+
+Claim                                         Verdict
+Click canvas pointer-lock yaw/pitch           UNPROVEN in this headless
+                                              CDP (lock element empty)
+Esc unlock                                    UNPROVEN (lock never on);
+                                              Esc after drag: already off
+Right-drag fallback changes camYaw            CONFIRMED (CDP mouse;
+                                              0→25.2; orbit + pixels)
+WASD walks along look                         CONFIRMED (bearing 25.207°
+                                              vs yaw 25.2; err 0.007°)
+A/D strafe while looking                      CONFIRMED (heading held;
+                                              A 295° / D 115°)
+Unlocked A/D still turn                       CONFIRMED (25.2→339.4)
+95° wall hold slides (east freeze, south)     CONFIRMED (lonSpanM=0;
+                                              extra.north=-0.924)
+No jitter-clip through                        CONFIRMED (20 samples +
+                                              still/wall AABB empty)
+20 muted colors / 60 parcels                  CONFIRMED palette=20 in JS;
+                                              19 used; 60 buildings
+J5_FEEL_OK SAIGON-09                          CLAIM ONLY; not used
+NOT_PLAN_PASS                                 CONFIRMED
+GATE-U1 / other PC / OSM not done             CONFIRMED
+4175 existing preview                         CONFIRMED pid 35288
+4173/4174 / second preview                    NOT STARTED by this critic
+
+================================================================================
+HARD FAIL CHECK (TICK=no triggers)
+================================================================================
+
+Look is fake (yaw attr only / W still north)    NO  (orbit + pixels +
+                                                W bearing 25.207°)
+Slide still clips / jitter-enters AABB          NO  (20 extra samples
+                                                hit=[]; extra.east=0)
+Street walk dead                                NO  (12.80 m north)
+Public OSM/Cesium/Google tile URL               NO
+GTA / 1:1 / city claimed in chrome              NO
+Lead pack / data-cam-yaw used as sole proof     NO
+GATE-U1 humans invented                         NO
+4173/4174 / second preview started              NO
+
+Therefore TICK=yes: look + slide are real on 4175 as labeled.
+NOT a plan PASS. NOT GATE-U1.
+
+================================================================================
+NOT GRANTED
+================================================================================
+
+- GATE-U1 / M0-WP1 / M1-WP0 / M2 / R2-WP0 / R2-WP1
+- A city, interiors, mesh collision, or 1:1 streets
+- Proof that headed Chrome pointer-lock + Esc unlock work
+  (this pass is right-drag only)
+- A planted (no-slide) wall
+- Permission to treat data-cam-yaw / data-slide as sole proof
+- Other-PC presence / OSM-Overture fetch
+- Permission to start 4173/4174, fetch maps, Unreal, VF, or tick [x]
+
+================================================================================
+END
+================================================================================

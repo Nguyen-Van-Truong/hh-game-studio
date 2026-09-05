@@ -1,0 +1,409 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+BOOTED_4175=1
+DID_NOT_RECYCLE=1
+DID_NOT_REBUILD=1
+DID_NOT_REMINT=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M1=1
+NOT_M0_WP1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+CRITIC=INDEPENDENT_ADVERSARIAL_NONET_DRAFT_REAUDIT
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=12:43 +07
+MODEL=grok-4.6-extra-high
+SCOPE=Re-audit of claimed isolated seat + navigator.onLine=false: new listing stays Chưa đăng / off chalkboard; cached Phở bò stays; no «đã đăng». Do not treat CRITIC-3D-NONET-DRAFT-2026-09-04.txt as TICK=yes.
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=04cb6ca92c482017c02d78e7885727f73b62103d
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-NONET-DRAFT-REAUDIT-2026-09-04.txt
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-NONET-DRAFT-2026-09-04.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+DID_NOT_TREAT_IMPLEMENTER_AS_TICK_YES=1
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+DID_NOT_CLICK_NETWORK_CUT=1
+DID_NOT_CLICK_RETRY=1
+DID_NOT_CATALOG_CLEAR=1
+VITE_PREVIEW_PORT_PIN=4175
+LIVE_PID=68116
+LISTEN=127.0.0.1:4175
+CRITIC_CDP_PORT=9997
+VIEWPORT=1280x720
+ISOLATED_PROFILE=1
+HEADLESS_NEW=1
+ABOUT_BLANK_THEN_NAVIGATE=1
+SEAT=a
+
+CLAIM_JS=/assets/index-D4Sc2h68.js
+CLAIM_JS_LEN=2162025
+CLAIM_JS_SHA256=76f9843d6e8cff47bc683e55bea928ac36797054d601a1e6f4ceec9ace4c64b2
+LIVE_JS=/assets/index-D4Sc2h68.js
+LIVE_JS_LEN=2162025
+LIVE_JS_SHA256=76f9843d6e8cff47bc683e55bea928ac36797054d601a1e6f4ceec9ace4c64b2
+LIVE_JS_MATCHES_CLAIM=1
+HASH_MISMATCH=0
+
+DRAFT_NAME=Critic Nonet Reaudit Qx7p 0904
+DRAFT_ID=listing-local-mtmj1r5iplja2u
+DRAFT_STATUS=draft
+DRAFT_QUEUED=yes
+RESULT_TEXT=Chưa đăng — nháp chờ mạng. Not posted.
+DA_DANG=0
+DRAFT_ON_BOARD=no
+SHELF_HAS_DRAFT=0
+BUS_HAS_DRAFT=0
+BOARD_TITLES_BEFORE=Phở bò (mẫu)
+BOARD_TITLES_AFTER_OFFLINE=Phở bò (mẫu)
+BOARD_TITLES_WALK=Phở bò (mẫu)
+BOARD_TITLES_AFTER_ONLINE=Phở bò (mẫu)
+CACHE_PHO_STAYED=1
+NAV_ONLINE_WHILE_LIST=false
+FORM_NETWORK_WHILE_LIST=off
+NETWORK_CUT_BAR=0
+NETWORK_CUT_SHOP=0
+SOCIAL_MODE=Offline — Stroll alone; shops still open.
+SOCIAL_OFFLINE_OK=1
+ONLINE_BTN_ACTIVE=no
+DELETED_TEST_DRAFT=1
+
+PLAYER_SHOP=shop-local-mtmh45qxehxhvb
+PLAYER_SHOP_NAME=Quầy Phở Nhà
+WALK_NORTH_M=9.09
+WALK_EAST_M=0
+WALK_HEADING=0
+WALK_CROP_TEXT=Phở bò (mẫu) / mẫu · not a live market
+WALK_CROP_HAS_PHO=1
+WALK_CROP_HAS_DRAFT=0
+WALK_CROP_BOX=550,581 122x39 (live overlay + pad 16 → 154x71)
+WALK_CROP_SLATE=0.512
+WALK_CROP_CHALK=0.034
+
+CLAIM_1_LIVE_HASH=PASS
+CLAIM_2_OFFLINE_DRAFT_OFF_BOARD_NO_DA_DANG=PASS
+CLAIM_3_CACHED_PHO_STAYS=PASS
+CLAIM_4_SOCIAL_OFFLINE_NOT_CONFUSED=PASS
+
+BIGGEST_MISS=None on the named hunts. Live hash matches D4Sc2h68 / 2162025 / 76f9843d… before CDP, after CDP, and after this write. Isolated A went CDP-offline (navigator.onLine=false, form data-network=off) without ticking Simulate no-network. Unique title Critic Nonet Reaudit Qx7p 0904 saved as draft / Chưa đăng / queued. Board titles stayed Phở bò (mẫu). Public shelf stayed Phở bò only. Overlay crop reads Phở bò, not the draft name. No «đã đăng». /demo-bus never gained the draft. Social mode stayed Offline stroll. Deleted the isolated localStorage draft. NOT_PLAN_PASS.
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/ was already up. Bind 127.0.0.1 pid 68116
+(node vite preview --host 127.0.0.1 --port 4175 --strictPort).
+Did not recycle, rebuild, remint, kill, or start 4173 / 4174 / 5175.
+Did not bind 0.0.0.0.
+
+Did not treat CRITIC-3D-NONET-DRAFT-2026-09-04.txt as TICK=yes
+(ROLE=IMPLEMENTER, TICK=n/a). Did not run
+j5-nonet-draft-probe.mjs as proof. Did not write J5 packs.
+Did not tick any plan. Did not catalog_clear. Did not click
+Simulate no-network. Did not click Retry publish.
+
+Independent Chrome CDP, isolated temp profile, 1280×720,
+about:blank then ?seat=a. Tried to fail: hash drift; listing
+publishes while onLine=false; chalkboard / public shelf / bus
+gains the unique name; UI says đã đăng; cached Phở bò drops;
+social Offline confused with browser offline.
+
+Hash matches. New name stayed off the board without đã đăng.
+Cached Phở bò stayed. This is NOT_PLAN_PASS. GATE-U1 humans
+were not invented. Not M1.
+
+Return:
+  TICK=yes
+  LIVE_JS=/assets/index-D4Sc2h68.js
+  DRAFT_NAME=Critic Nonet Reaudit Qx7p 0904
+  ON_BOARD=no
+
+================================================================================
+LIVE JS
+================================================================================
+
+HTML script = /assets/index-D4Sc2h68.js
+http length = 2162025
+sha256 = 76f9843d6e8cff47bc683e55bea928ac36797054d601a1e6f4ceec9ace4c64b2
+Matches the claimed live name + length + hash.
+
+GET before CDP (12:38 +07), GET after listing/walk/restore
+(same bytes), and GET after this write (12:43 +07) are the
+same from pid 68116. HASH_MISMATCH=0. Did not stop.
+
+Bundle scan (live bytes, not source):
+  đã đăng = 0
+  da dang = 0
+  Chưa đăng = 4
+  openstreetmap = 0
+  overture = 2   (honesty copy "not OSM/Overture", not a fetch)
+  0.0.0.0 = 0
+  shop-lantern-fish = 1
+  mtmh45qxehxhvb = 0   (this-PC shop id is persist, not bundled)
+  not a live market = 3
+  chalkboard-menu = 1
+  Simulate no-network = 2
+  navigator.onLine = 1
+  Bun Nonet = 0
+  Critic Nonet = 0
+
+/demo-bus this_pc=true bind=127.0.0.1 not_wan=true.
+presence={} pairs=[].
+Catalog leftover persist (not reminted, not cleared):
+  shop-local-sharedpc          Quầy Shared PC     owner_presence=offline status=published
+  shop-local-mtl8ulddihjpre    Quay Critic J6 Jump owner_presence=offline status=published
+  shop-local-mtmh45qxehxhvb    Quầy Phở Nhà       owner_presence=offline status=published
+Listings unchanged: Shared PC Phở bò; J6 Sach phe binh J6;
+player listing-local-mtmh45qxhyu29f Phở bò.
+No Critic Nonet / Qx7p row on the bus.
+
+================================================================================
+CLAIM 1 — LIVE HASH IS THE CLAIMED BUNDLE — PASS
+================================================================================
+
+Tried to fail as a later/earlier bundle or SPA-shell fallback
+on the claimed name.
+
+  live = /assets/index-D4Sc2h68.js
+  len  = 2162025
+  sha  = 76f9843d6e8cff47bc683e55bea928ac36797054d601a1e6f4ceec9ace4c64b2
+
+Same name + length + hash before CDP, after CDP, and after
+this write from pid 68116. HASH_MISMATCH=0.
+
+PASS.
+
+================================================================================
+CLAIM 2 — OFFLINE DRAFT STAYS OFF THE BOARD / NO ĐÃ ĐĂNG — PASS
+================================================================================
+
+Tried to fail: unique name paints onto the chalkboard, public
+shelf, or /demo-bus; status=published; UI says đã đăng.
+
+Isolated seat A (CDP 9997, temp user-data-dir, about:blank then
+?seat=a). Load first so shops.json is cached. Become Chủ quầy.
+Did not click Online. Did not click Simulate no-network.
+
+CDP Network.emulateNetworkConditions offline=true, then offline
+event because navigator.onLine was already false:
+  navOnline = false
+  form data-network = off
+  connection = browser offline. Showing the local copy if it
+    already loaded; otherwise Chưa tải.
+  network-cut-sim unchecked
+  shop-network-cut unchecked
+  presence still Offline — Stroll alone; shops still open.
+  online-btn data-active = no
+
+Listed unique title "Critic Nonet Reaudit Qx7p 0904" on
+shop-local-mtmh45qxehxhvb (kind other; not their Bun Nonet
+Probe 0904):
+  result status=draft id=listing-local-mtmj1r5iplja2u
+  text=Chưa đăng — nháp chờ mạng. Not posted.
+  owner-drafts queued=yes  Chưa đăng  Queued until network
+  daDang=false
+  shelf published rows = listing-local-mtmh45qxhyu29f Phở bò only
+  board after = Phở bò (mẫu)
+  live overlay titles = Phở bò (mẫu)
+  /demo-bus listings did not gain the draft (node GET while
+    Chrome was still offline)
+
+Prefer TICK=no if the draft appears as published. It did not.
+status stayed draft. queued stayed yes. Retry stayed disabled
+while offline ("Queued until network").
+
+After restore (CDP offline=false + online event), still draft
+until explicit retry. Retry became enabled. Did not click it.
+Board still Phở bò (mẫu). Shelf still Phở bò only.
+
+Deleted the isolated localStorage row
+(before=4 after=3 removed=1). Left demo owner → Guest.
+Isolated profile then died. Persist bus never held Qx7p.
+
+PASS.
+
+================================================================================
+CLAIM 3 — CACHED PUBLIC PHỞ BÒ STAYS ON THE BOARD — PASS
+================================================================================
+
+Tried to fail: going onLine=false hides the already-loaded
+Phở chalkboard or public shelf.
+
+Load-first (navigator still online):
+  playReady=yes  buildings>=20
+  public shop list has shop-local-mtmh45qxehxhvb
+  goods-loaded-at = Bản lưu lúc 2026-09-04T05:42:26
+    (this isolated session's shops.json fetch, then cached)
+  board titles = Phở bò (mẫu)
+  player listing-local-mtmh45qxhyu29f Phở bò
+
+After CDP-offline + list + walk + restore:
+  board titles still Phở bò (mẫu)
+  public shelf still Phở bò
+  Listing updated still present on the Phở panel
+  Bản lưu lúc still present
+  phoPublic stayed true
+
+Independent walk after close-shelf (chunks 1100 / 1750 / 1250 /
+850 / 650, not the implementer path — they did not walk).
+Stopped at +9.09 m north / 0 m east, heading 0. Nearby hint
+was still lantern range (19 m); that is not a hide of Phở.
+Player overlay shop-local-mtmh45qxehxhvb was onScreen.
+
+Shot AFTER list, BEFORE restore-online.
+Live player overlay box 550,581 122×39.
+Critic crop 154×71 (pad 16).
+slateRatio=0.512 chalkRatio=0.034.
+
+Visual read of critic-overlay-crop.png (pixels, not
+data-titles):
+  dark-green chalkboard, thin brown frame
+  chalk line: Phở bò (mẫu)
+  footer: mẫu · not a live market
+
+Phở / bò are readable. This is not a blank green slab.
+This is not gone. This is not Critic / Nonet / Qx7p.
+DOM count alone was not used.
+
+Same walk frame also shows a second, higher lantern overlay
+(Cá nục / Túi cói). That distant board is a second overlay,
+not the player crop. Accept crop is shop-local-mtmh45qxehxhvb.
+
+CACHE_PHO_STAYED=1
+WALK_CROP_HAS_DRAFT=0
+
+PASS.
+
+================================================================================
+CLAIM 4 — SOCIAL OFFLINE STROLL IS FINE / NOT CONFUSED — PASS
+================================================================================
+
+Tried to fail: proof uses ModeBar Offline as if it were
+navigator.onLine=false, or flips Online while listing.
+
+Seat stayed Offline stroll the whole time:
+  spawn / owner / offline / listed / walk / restored / left
+  presence = Offline — Stroll alone; shops still open.
+  offline-btn data-active = yes
+  online-btn data-active = no
+Did not click Online.
+
+Browser offline is the other channel:
+  connection-label switches to "browser offline…"
+  list-product-form data-network=off
+  that is navigator.onLine, not ModeBar.
+
+Social Offline stroll + shops still open is allowed by the
+claim. Lost-network is what blocked publish.
+
+PASS.
+
+================================================================================
+HUNTS (not named fails)
+================================================================================
+
+Shop panel ships a default-checked owner-offline-sim checkbox
+("Simulate owner Offline / logged out / app closed."). That is
+a local UI label on the shelf. It is not navigator.onLine and
+was not used as the lost-network proof. Lost-network is
+navOnline=false / form data-network=off / CDP emulate.
+
+Shop and ModeBar both ship an unchecked "Simulate no-network
+(not Offline stroll)" checkbox. Copy on that control includes
+"Chưa đăng", so body /chuaDang/ is true even before submit.
+Named fail is a published new name / đã đăng, not the helper
+label. Checkbox stayed unchecked. DID_NOT_CLICK_NETWORK_CUT=1.
+
+Walk stopped short of E-range for Quầy Phở Nhà (nearby empty,
+lantern still 19 m). Named fail is draft-on-board / Phở gone,
+not a close E-open. Overlay + crop still read Phở bò (mẫu).
+
+bodyHasDraft=true after submit because owner-drafts shows the
+queued name. That is the draft list, not the chalkboard.
+boardTextHasDraft=0. shelfHasDraft=0.
+
+Online button is not disabled. "Inactive" here means
+data-active=no. Did not click Online. Did not click Retry.
+
+Leftover persist (draw keep-out as before):
+  shop-local-sharedpc          titles=Phở bò (mẫu)
+  shop-local-mtl8ulddihjpre    titles=Sach phe binh J6 (mẫu)
+Shared PC also sells Phở bò — that persist title is not the
+drawn walk-up board. Player crop is shop-local-mtmh45qxehxhvb.
+
+Honesty banner on spawn / list / walk / restore:
+  Authored approximation. Not a live map, not OSM/Overture,
+  not photogrammetry, and not a digital twin. Menu boards
+  list authored fiction goods, not a live market.
+  NOT_PLAN_PASS.
+
+LIVE_INVENTORY_CLAIM=0. Local demo identity only. No OIDC.
+This is this-PC 4175 /demo-bus catalog, not a city shop
+server, not WAN. A queued draft is local-only until an
+explicit retry after the browser is online again.
+
+4175 vite preview argv has no --host 0.0.0.0. Listen is
+127.0.0.1:4175. netstat foreign 0.0.0.0:0 on a LISTENING
+row is not a bind.
+
+================================================================================
+METHOD
+================================================================================
+
+1. 4175 already up (pid 68116). Did not recycle / rebuild /
+   start other ports.
+2. GET /  /demo-bus  /data/shops.json  /assets/index-D4Sc2h68.js.
+   Recorded name+sha+len before CDP, after CDP, and after
+   this write.
+3. Read implementer note (TICK=n/a). Did not copy its probe
+   writer into product files. Did not run
+   j5-nonet-draft-probe.mjs as proof.
+4. Independent Chrome CDP 1280×720 isolated profile.
+   Port 9997: about:blank → ?seat=a, cache load, Become Chủ
+   quầy, stay Offline stroll, CDP Network.emulateNetworkConditions
+   offline=true (not the checkbox), list unique Qx7p title,
+   crop walk BEFORE restore, restore online, do not retry,
+   delete isolated draft, leave-demo-owner.
+5. Did not write lead packs. Did not tick plan. Did not fake
+   GATE-U1.
+
+Temp only (not under data-qa):
+  %TEMP%\hh-nonet-reaudit\hash-bus.mjs
+  %TEMP%\hh-nonet-reaudit\hash-bus.json
+  %TEMP%\hh-nonet-reaudit\scan-js.mjs
+  %TEMP%\hh-nonet-reaudit\scan-js.json
+  %TEMP%\hh-nonet-reaudit\critic-nonet-reaudit.mjs
+  %TEMP%\hh-nonet-reaudit\critic-walk.json
+  %TEMP%\hh-nonet-reaudit\critic-panel-after-list.png
+  %TEMP%\hh-nonet-reaudit\critic-walk-board.png
+  %TEMP%\hh-nonet-reaudit\critic-overlay-crop.png
+
+================================================================================
+STILL IMPOSSIBLE WITHOUT OWNER
+================================================================================
+
+- GATE-U1 three human reviewers (not faked)
+- AUTHORIZE_MAP_FETCH=YES + license ledger before any OSM/Overture
+- Other-PC / WAN join (store is this PC 4175 loopback)
+- Real account / OIDC
+
+================================================================================
+END
+================================================================================

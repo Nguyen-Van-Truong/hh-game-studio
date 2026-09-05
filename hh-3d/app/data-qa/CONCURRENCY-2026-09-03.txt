@@ -1,0 +1,33 @@
+CONCURRENCY — HH World honest note
+DATE=2026-09-03
+TIMEZONE=Asia/Saigon
+URL=http://127.0.0.1:4175/
+NOT_PLAN_PASS=1
+NOT_A_CITY_SERVER=1
+NOT_GTA=1
+
+TODAY
+  One machine, localhost 4175. Shop create/list and friends presence use
+  this browser's localStorage plus the preview process /demo-bus (and
+  BroadcastChannel inside one profile). Another PC cannot join. Isolated
+  Chrome profiles on THIS machine can see a published shop because they
+  share that 4175 process bus — that is still one host, not a product
+  server.
+
+IF HOSTED LATER as static files + a shop catalog API
+  Many independent browsers can BROWSE (thousands-class is plausible).
+  Each visitor's GPU draws the map. The server is list/search/catalog,
+  not a GTA-style simulation of every body in the city.
+
+PRESENCE (when a real M2 server exists; not built today)
+  Friends-only. Cap about 20 on screen. Send 1–5 Hz while moving.
+  Not "see everyone in the city". Do not invent a number like
+  "10 000 simultaneous GTA players".
+
+OFFLINE WALK + shop cache
+  Does not require a game server. Today's authored map + published
+  shop cache already walk and browse without one.
+
+LEFTOVER
+  GATE-U1 three humans still unfilled. Real shop/presence server still
+  unbuilt. This note is not a capacity SLA.

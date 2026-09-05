@@ -1,0 +1,125 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=15:07 +07
+ROLE=IMPLEMENTER
+TICK=n/a (do not treat this file as TICK=yes)
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M0_WP1=1
+NOT_M1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+PLAYER_URL=http://127.0.0.1:4175/
+RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-32
+COMMAND=node hh-3d/app/data-qa/j5-stall-sidewalk-probe.mjs
+VERDICT_IMPLEMENTER_CDP=J5_STALL_SIDEWALK_OK
+LIVE_JS=/assets/index-DMHs6gaq.js
+LIVE_JS_LEN=2168506
+LIVE_JS_SHA256=4a69b7361fff2bad9de1e09cf0e1225c6c96367848ff31af5cdb19a7a96e2e0a
+REMINTED=yes
+ONE_RECYCLE_AFTER_BUILD=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NO_COMMIT=1
+NO_HIP_SPHERES=1
+DID_NOT_RIP_LEFTOVER_PANEL=1
+DID_NOT_RIP_MENU_LEFTOVER_LIST=1
+DID_NOT_RIP_TRAM_XING=1
+DID_NOT_RIP_WEST_XING=1
+DID_NOT_RIP_EAST_XING=1
+DID_NOT_RIP_LANTERN_ZEBRA=1
+DID_NOT_RIP_NET_LABELS=1
+DID_NOT_RIP_BOARDS=1
+DID_NOT_RIP_STREET_PLAY_SHOPS=1
+DID_NOT_RIP_DEFERRED_MINIMAP=1
+DID_NOT_RIP_FRIEND_STEPS=1
+DID_NOT_RIP_90M_LOD=1
+DID_NOT_RIP_HUD=1
+DID_NOT_RIP_PLAQUES=1
+DID_NOT_RIP_LANES=1
+DID_NOT_RIP_FOG_EDGE=1
+DID_NOT_RIP_SKY=1
+DID_NOT_RIP_CAM_HIT=1
+NO_FIFTH_STREET=1
+NO_NPC=1
+NO_INTERIOR=1
+NO_MAP_FETCH=1
+ACCEPTED_PRIOR=CRITIC-3D-LEFTOVER-PANEL-REAUDIT-2026-09-04.txt TICK=yes on BjeBwyj9
+
+================================================================================
+SLICE
+================================================================================
+
+Drawn Phở (shop-local-mtmh45qxehxhvb) persist lon/lat sat on the
+Harbor Walk centerline (0.13 m). Harbor×Tram walks had to peel
+around the awning. shopStallSpec planted mesh + collide at persist.
+
+This remint only moves the drawn stall pose (mesh + collide +
+shop spill that follows the kiosk) onto the nearest Harbor/Tram
+sidewalk, ~7.2 m across like planters / plaques. Persist lon/lat
+stay. Pole-board stays at persist. Already-off-lane plants would
+stay; lantern persist was also on the lane so it moved with Phở.
+Leftover Shared PC / J6 stay draw=0 / keep-out. Did not
+catalog_clear. Did not remint leftover panel banners, Menu
+leftover labels/sort, Harbor×Tram / west / east Steps crossings,
+lantern zebra, net labels, boards, streetPlayShops keep-out,
+minimap, friend steps, LOD, HUD, plaques, lanes, fog/edge, sky,
+or cam-hit. Did not remint leftover kind-chip gold.
+
+================================================================================
+CDP (headless Chrome, 1280×720, isolated guest B, recycled 4175)
+================================================================================
+
+Seat B empty profile, Offline · Đang kết nối. Guest. No catalog_clear.
+
+Drawn Phở stall:
+  persist 106.69804, 10.7717978  persistLane=0.13 m (on asphalt)
+  plant xz=-2.70, -77.54  plantLane=7.2 m  street=street-harbor-walk
+  draw=1 collide=1
+
+Drawn lantern stall:
+  persist 106.6980366, 10.7718712
+  plant xz=-2.81, -69.37  plantLane=7.2 m  draw=1
+  not hidden
+
+Leftover Shared PC / J6: draw=0, persist still on /demo-bus.
+
+Walk Harbor Walk north past Phở:
+  B starts east of spawn (Steps East chip for two chunks), then
+  Harbor Walk. Lat 10.771656 → 10.771841 past Phở 10.771798.
+  Each chunk gained 3.7–4.4 m. blocked=0. End laneM=0.71
+  (on the driving lane) without hitting the sidewalk kiosk.
+  Chip on that stretch = Harbor Walk.
+
+Shot j5-3d-stall-sidewalk.png: purple Phở awning on tan sidewalk
+west of the asphalt; lane clear; chip Harbor Walk.
+
+E at lantern still shop-lantern-fish
+  leftover=0  kind = public shop · authored example among many
+  leftover banner absent
+
+Menu leftover Shared PC / J6 still leftover banner
+  "không trên phố / leftover máy này"  leftover=1 last.
+
+Implementer CDP only. Not an independent critic TICK. Not a plan tick.
+
+================================================================================
+OWNER LEFTOVERS (unchanged)
+================================================================================
+
+1. GATE-U1 three-human review (first acceptance leftover; not faked).
+2. R2-WP1 headed/mobile/memory/min-FPS thresholds still UNFILLED.
+   Hitch2 remint kept; first-W min still ~10. Not 60.
+3. WAN / other-PC join still not built. 4175 loopback only.
+4. R4-WP0B real account/OIDC still not built.
+5. Open data (OSM/Overture) still needs license ledger + grant.
+6. Leftover this-PC shops stay in the catalog; they do not own street E.
+   Menu list + open panel still label them leftover. Do not catalog_clear.
+7. M0/M1/M2 plan WPs still NOT_STARTED. NOT_PLAN_PASS. Not M1.

@@ -1100,10 +1100,10 @@ Bots stay smoke.
 
 ## VF6-WP5 Bot planner (not a play observation)
 
-Dated 2026-09-03 Asia/Saigon. No in-game Y8 play. No HTML5/Flash
+Dated 2026-09-04 Asia/Saigon. No in-game Y8 play. No HTML5/Flash
 package. Sidecar: `docs/bots.md`. Official `run_id` is
-`VF6WP5-20260903-ASIA-SAIGON-03` (`cmd.vf6-wp5.bots.3`).
-Packs `-01` and `-02` are void.
+`VF6WP5-20260904-ASIA-SAIGON-08` (`cmd.vf6-wp5.bots.8`).
+Packs `-01`…`-07` and the 20260903 `-04` id are void.
 
 Planner stays `ledger:RL-BOT-PLAN` (`assumption`, **not observed**).
 Navigation stays `ledger:RL-BOT-NAV` (`assumption`). Aim error stays
@@ -1120,7 +1120,7 @@ stays `ledger:RL-CTRL-HOLD-AIM` (`assumption`). 60 Hz stays
 |---|---|---|---|---|---|---|---|---|
 | RL-BOT-NAV | Platform/ladder graph | `assumption` | none | VF6-WP5; cites RL-MAP-GRAPH | 2026-09-03 | bots walk/jump/climb catalog cells; no teleport | jump envelope | Public map topology, not hidden state. |
 | RL-BOT-PLAN | Seeded intent planner | `assumption` | none | VF6-WP5 product contract | 2026-09-03 | pickup/cover/attack/retreat/hold; same seed same intents | budget | Official proof is think()+apply_frames. |
-| RL-BOT-AIM | Aim error + reaction delay | `assumption` | none | VF6-WP5; cites RL-CTRL-HOLD-AIM | 2026-09-03 | first shot waits reaction ticks; shot dir is rotated by aim_error_deg vs geometric center | degrees, delay | No perfect aim. Analog override, not HUD-only. |
+| RL-BOT-AIM | Aim error + reaction delay | `assumption` | none | VF6-WP5; cites RL-CTRL-HOLD-AIM | 2026-09-03 | first shot waits reaction ticks; shot dir is rotated by aim_error_deg vs geometric center | degrees, delay | Analog override on the bullet. `perfect_aim=0` is not proof. |
 | RL-BOT-PIT | Pit/hazard/fire avoid | `assumption` | none | VF6-WP5; cites RL-ENV-ARENA | 2026-09-03 | bots route around known pit columns; greedy may fall | — | Route-around, not hold-still. |
 | RL-BOT-RECOVER | Knockdown recovery wait | `assumption` | none | VF6-WP5; cites RL-HIT-DOWN | 2026-09-03 | locked during knockdown; extra recovery ticks before acting | wait ticks | Not a teleport get-up. |
 | RL-BOT-DIFF | recruit/regular/veteran | `assumption` | none | VF6-WP5 product tuning; **not** observed Y8 | 2026-09-03 | HUD shows delay/aim/budget; Stage tier and Survival wave map onto profiles | four knobs | Visible/tunable, not Y8 ranks. |

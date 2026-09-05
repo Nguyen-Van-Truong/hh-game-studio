@@ -1,0 +1,337 @@
+TICK=no
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-03
+TIMEZONE=Asia/Saigon
+MODEL=grok-4.6-extra-high
+SCOPE=HH World J3 friends-only walking bodies on existing 4175
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=657634f8f82281bd670c9a375ad49c6180db3583
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS_TRUSTED_ALONE=NO
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_VF_TOUCH=1
+NO_UNREAL=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_RUN_THEIR_PROBE_WRITER=1
+NO_J3_PROBE_FILE_FOUND=1
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=no
+
+URL=http://127.0.0.1:4175/
+
+Biggest miss: still one local body per tab. There are no demo seats A/B,
+no opt-in, no mutual-friend graph, and no second walking avatar. Seat A
+walked on 4175; seat B never saw that motion.
+
+Lead J3 claim is not on the already-up 4175 preview. Independent Chrome
+CDP used two fresh headless contexts (debug 9277 / 9278, temp profiles,
+stdout only). Each tab is Offline, Online disabled ("unavailable"),
+people layer "none (friends layer off)", one self-avatar, zero remotes.
+After holding W on A, A's lon/lat/heading changed; B stayed at spawn
+with remoteCount=0. No Seat A/B UI. No unfriend control. No J3 probe
+file exists, so "probe EXIT=0" is unverified and not reproduced.
+
+This is NOT a plan PASS. NOT M2-WP0. NOT M2-WP1. NOT GATE-U1.
+GATE-U1 was not faked. Plan STATE/PASS not flipped. Copy does not claim
+a city server, GTA, or GPS as a live feature.
+
+================================================================================
+METHOD
+================================================================================
+
+Disk (not PROGRESS alone):
+  hh-3d/app/PROGRESS.txt
+  hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+  hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+    (CURRENT_FIRST_LEFTOVER, WP_STATE_PASS_POLICY, GATE-U1 / M0 / M1 /
+    M2-WP0 / M2-WP1 STATE)
+  hh-3d/app/web/src/modes/ModeBar.tsx  modes.ts
+  hh-3d/app/web/src/app/App.tsx
+  hh-3d/app/web/src/map/MapView.tsx
+  hh-3d/app/web/src/avatar/StreetHelp.tsx
+  hh-3d/app/web/src/account/demoIdentity.ts
+  hh-3d/app/web/src/ui/HonestyBanner.tsx
+  hh-3d/app/docs/review/README.txt
+  hh-3d/app/server/README.txt
+  glob: no web/src/friends, presence, or seats modules
+  glob: no hh-3d/app/data-qa/*J3* probe or evidence
+  git log -1; git diff --cached --name-only; git status --short hh-3d/app
+  git diff on the canonical plan (STATE/PASS search)
+
+Live (existing 4175 only; did not start another HH World preview):
+  TCP 127.0.0.1:4175 LISTEN pid 40336 node
+  4173 DOWN  4174 DOWN  5175 DOWN
+  GET /                                              200  title HH World
+    script /assets/index-C-PC_7Jj.js
+  GET /assets/index-C-PC_7Jj.js                      200  len=1145519
+    data-remote-avatar=0  Seat A=0  Seat B=0  demo-seat=0
+    BroadcastChannel=0  hh-world.presence=0  hh-world.seat=0
+    become-demo-owner=1  leave-demo-owner=1  NOT_PLAN_PASS=1
+    friends layer=1  Other people on the street=1
+    Sign in with Google=0  oidc login=0
+    getCurrentPosition=1  GeolocateControl=7  (MapLibre vendor)
+  GET /assets/index-C5BLfW0u.css                    200  len=75171
+    self-avatar=5  remote-avatar=0  friend-avatar=0  seat-a=0
+  GET /data/shops.json                               200
+  Independent two-context Chrome CDP vs 4175
+    A debug 9277  B debug 9278  about:blank then navigate
+    Did not reuse or run a J3 probe writer (none on disk)
+  Did not run npm build. Did not start 4173/4174/5175.
+
+================================================================================
+PROCESS / GIT
+================================================================================
+
+RESULT=PASS_ON_STATED_FAIL_RULE
+
+Stated fail: VF / AGENTS.md staged with this if they committed.
+Observed:
+  git diff --cached --name-only  = empty
+  last commit = 657634f VF6-WP3: tick after critic and official PASS
+  No J3 / hh-3d/app commit in HEAD
+  Critic did not commit, did not tick plan, did not touch VF.
+
+Working tree dirt (not this critic's write):
+  hh-3d/app/ still wholly untracked
+  hh-3d/zdoc/31-8-hh3d-real-application-plan.txt modified
+  VF evidence dirty elsewhere
+Process landmine for a later mixed commit. Not the stated FAIL.
+
+================================================================================
+ATTACK 1 — TWO LOCAL DEMO SEATS A/B ON 4175?
+================================================================================
+
+RESULT=FAIL
+
+Lead: two local demo seats (A/B), labeled NOT_PLAN_PASS / not a presence
+server.
+
+Live DOM (both CDP contexts, fresh profiles, empty localStorage):
+  no button/text "Seat A" / "Seat B" / demo-seat
+  no opt-in / unfriend control
+  identity is the J2 guest line: "Guest · shops public; friends not required"
+  lsKeys=[]
+  ModeBar Online button exists but disabled:
+    "Online — Meet friends on the street (unavailable)"
+
+Disk:
+  modes.ts ONLINE_AVAILABLE=false OTHER_PEOPLE_VISIBLE=false
+    DEFAULT_PRESENCE=offline
+  ModeBar hardcodes friends layer off + unavailable Online
+  demoIdentity.ts is the J2 shop owner flag only (Chủ quầy), not seat A/B
+  App.tsx passes one local avatar into MapView; no friends/presence props
+  MapView creates exactly one self-avatar marker
+  No src/friends, src/presence, src/seats
+  server/README.txt: HH World server — NOT STARTED
+
+NOT_PLAN_PASS exists in the J2 shop-owner copy inside the live JS bundle,
+not as a J3 seat label. "not a presence server" is not on the street UI.
+
+This is still the J2 guest/shop slice, not two demo presence seats.
+
+================================================================================
+ATTACK 2 — DOES THE OTHER AVATAR MOVE WHEN THE OTHER SEAT WALKS?
+================================================================================
+
+RESULT=FAIL  (one body; walk is local-only)
+
+CDP required proof: other avatar MOVES, not a static pin.
+
+Context A (9277) hold W ~2.2 s:
+  before  lon=106.6980400 lat=10.7716200 heading=0  pose=idle
+  after   lon=106.6980300 lat=10.7716503 heading=342 pose=idle
+  selfCount=1  remoteCount=0
+  people still "none (friends layer off)"
+
+Context B (9278) at the same moment:
+  lon=106.6980400 lat=10.7716200 heading=0  (spawn, unchanged)
+  selfCount=1  remoteCount=0
+  remotes=[]
+  people still "none (friends layer off)"
+
+A's walk is real local motion. B never received a second body, pin, or
+interpolated walker. There is nothing to call a moving friend avatar.
+Fail rule "still one body" hits.
+
+================================================================================
+ATTACK 3 — OFFLINE VIEWER: ZERO OTHER BODIES?
+================================================================================
+
+RESULT=VACUOUS_PASS_NOT_J3
+
+Default mode is Offline. Both contexts show zero remotes. That matches
+"Offline → other body gone" only because other bodies never exist.
+
+There is no Online path to turn friends on, then Offline to remove them.
+No unfriend control. Cannot prove revoke. A disabled friends layer is
+not friends-only presence.
+
+================================================================================
+ATTACK 4 — STRANGER C MUST NOT APPEAR?
+================================================================================
+
+RESULT=VACUOUS_PASS_NOT_J3
+
+No third body is drawn. Also no Seat C UI. Honesty banner says
+"no stranger crowd" (a denial, not a C fixture).
+
+A regex on "stranger crowd" is not a stranger-C test. Friends-only
+filter is unproven: the app draws nobody else, including friends.
+
+Fail rule "see-everyone" does not apply. Fail rule "one body" does.
+
+================================================================================
+ATTACK 5 — COPY CLAIM CITY SERVER / GTA / GPS?
+================================================================================
+
+RESULT=PASS  (honest denial)
+
+Live honesty:
+  authored approximation; not live map / OSM / photogrammetry /
+  digital twin; shops authored fiction; No GTA claim, no 1:1 city,
+  no stranger crowd.
+
+StreetHelp: "in-app position, not GPS"
+GeolocateControl button: absent
+No "city server" / "presence server" on the page
+Online labeled unavailable, not live
+
+GTA and GPS strings appear only as denials. Live JS still contains
+vendor getCurrentPosition / GeolocateControl (MapLibre). MapView does
+not add that control. Same residual as J1/J2. GPS is not the player
+path.
+
+================================================================================
+ATTACK 6 — DID THEY TICK A WP PASS?
+================================================================================
+
+RESULT=PASS  (not ticked)
+
+Canonical plan still:
+  CURRENT_FIRST_LEFTOVER=GATE-U1
+  WP_STATE_PASS_POLICY=ORIGINAL_VALUES_UNCHANGED_NOT_LIVE_PROGRESS
+  GATE-U1 STATE: NOT_STARTED
+  M0-WP0 / M0-WP1 / M1-WP0 STATE: NOT_STARTED
+  M2-WP0 / M2-WP1 STATE: NOT_STARTED
+  R4-WP0B STATE: OPTIONAL_NOT_OPEN
+  No STATE: DONE/PASS/COMPLETE, no [x] on those WPs
+
+Plan working-tree diff exists (documentation routing). Critic does not
+treat that as a tick. PROGRESS: PLAN_CHECKBOXES=UNCHANGED_DO_NOT_TICK
+and still names J3 "not implemented".
+
+================================================================================
+ATTACK 7 — DID THEY FAKE GATE-U1 HUMANS?
+================================================================================
+
+RESULT=PASS  (not faked)
+
+hh-3d/app/docs/review/README.txt still:
+  GATE-U1 is NOT done.
+  Need three independent human reviewers…
+  placeholder so later agents do not invent a pass.
+
+No invented reviewer names, no forged 5-minute notes, no OWNER_SIGN
+name. Leftover #1 remains GATE-U1. Correct.
+
+================================================================================
+ATTACK 8 — THEIR PROBE EXIT=0?
+================================================================================
+
+RESULT=FAIL_UNVERIFIED
+
+Lead: probe EXIT=0.
+
+Observed:
+  no hh-3d/app/data-qa/*J3* file
+  no j3-*-probe.mjs
+  no J3-*-2026-09-03.txt evidence pack
+  this critic did not write or run a J3 probe (would be a writer)
+
+J2 probe (j2-list-product-probe.mjs) still says it does not start J3.
+Cannot treat a missing process table as EXIT=0. Independent CDP is
+the proof, and it fails the walking-friend claim.
+
+================================================================================
+ATTACK 9 — PLAYER SEAT: CAN A HUMAN SEE A FRIEND WALK WITHOUT READING CODE?
+================================================================================
+
+RESULT=FAIL
+
+On 4175 a human can walk their own doll (WASD). A human cannot:
+  pick seat A or B
+  opt into presence
+  accept a friend
+  enable Online (button disabled)
+  see another person walk
+  unfriend / go Offline to hide a previously visible body
+
+Two browser windows on 4175 are two isolated local dolls. That is
+stroll-alone, not J3.
+
+================================================================================
+LEAD CLAIMS vs DISK+LIVE
+================================================================================
+
+Claim                                         Verdict
+4175 is the player                            CONFIRMED (only listener)
+Two local demo seats A/B                      REJECTED (no UI, no keys)
+Labeled NOT_PLAN_PASS / not presence server   REJECTED as J3 seats
+                                              (J2 shop copy only)
+Mutual friend + Online + opt-in → walk        REJECTED
+Other avatar MOVES when other walks           REJECTED (B remoteCount=0)
+Offline / unfriend removes other body         UNPROVEN (never present)
+Stranger C not drawn                          VACUOUS (nobody else drawn)
+Copy claims city server / GTA / GPS           REJECTED (denials only)
+Probe EXIT=0                                  REJECTED (no J3 probe file)
+GATE-U1 not faked                             CONFIRMED
+WP PASS / [x] ticked                          REJECTED (not ticked)
+Friends-only walking real on 4175             REJECTED
+
+================================================================================
+HARD FAIL CHECK (TICK=no triggers)
+================================================================================
+
+Other avatar actually moves when other walks  NO
+Two demo seats A/B exist                      NO
+Online + opt-in + mutual friend path          NO
+Still one body                                YES  ← TICK=no
+List-only / disabled friends flags            YES  ← TICK=no
+GPS used as presence                          NO
+See-everyone crowd                            NO
+Page broken / 4175 down / wrong product       NO
+Plan STATE/PASS ticked                        NO
+GATE-U1 humans invented                       NO
+J3 claimed as plan PASS                       NO (claim was player-slice;
+                                              still not granted)
+
+Therefore TICK=no for friends-only walking on 4175.
+
+================================================================================
+NOT GRANTED
+================================================================================
+
+- J3 friends-only walking presence
+- M2-WP0 friends graph
+- M2-WP1 remote walk/idle/heading
+- M0-WP0 Online availability
+- R4-WP0B real identity
+- GATE-U1 / any plan PASS
+- Probe EXIT=0 as evidence
+- Permission to start 4173/4174, fetch maps, Unreal, VF, or tick [x]
+
+================================================================================
+END
+================================================================================

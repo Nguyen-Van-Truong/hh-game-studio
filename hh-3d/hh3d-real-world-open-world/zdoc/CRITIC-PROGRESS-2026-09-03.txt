@@ -1,0 +1,372 @@
+CRITIC-PROGRESS — INDEPENDENT ADVERSARIAL REVIEW
+Date: 2026-09-03
+Timezone: Asia/Saigon
+Critic role: read-only except this file
+Did not: implement product, commit, run Godot, install Unreal, start preview,
+         rewrite hh-3d/zdoc/ originals, or tick any VF / HH-3D plan checkbox
+
+Trust: DISK this session, not implementer report, not CRITIC-A/B/C/D text as
+current truth. D is historical closeout of SANDBOX-G0-DOCS paper. This review
+is the progress update + intended web R0-WP0 paper.
+
+Taxonomy: OBSERVED = read from disk/git this session. INFERRED = source-logical,
+no runtime. UNPROVEN = would need browser/Godot/owner sign.
+
+HEAD this session: ff702a7112cb00ef97160025d3006ecb75f415ee
+  (G0-DECISION-RECORD GIT_HEAD_AT_WRITE still c1a7b117… — stale)
+
+================================================================================
+0. VERDICT
+================================================================================
+
+RACE + FAIL
+
+TICK=no
+
+Named deliverables of this lượt are NOT on disk:
+  - no PROGRESS / SANDBOX-PROGRESS file
+  - no R0-WP0 paper / decision record (new file)
+  - no hh-3d/app/decision-records/*
+
+Cannot TICK=yes a missing paper. Critique below is the intended route plus
+what the implementer already did to routing files and the git index.
+
+Not BLOCKED on secrets / Unreal install / .uproject / original-plan rewrite.
+Those absences are not a pass. They are the floor.
+
+THE MISS:
+  1. RACE — the web R0-WP0 paper this critic was told to attack does not
+     exist yet. Progress “update” is START/STATUS/WORKING-PLAN hygiene after
+     CRITIC-D, not a new WP.
+  2. PROCESS (already on disk) — index now stages VF6-WP3 + AGENTS.md + the
+     entire sandbox together. HEAD ff702a7 already committed hygiene + Hòn Gió
+     demo in one commit. START and CRITIC-D forbade that mix.
+  3. ROUTE (if they write R0-WP0 next) — sandbox OWNER_RESUME=1 is
+     THIS_FOLDER_ONLY / SANDBOX-G0-DOCS. It is not TARGET_PLAN=real-application.
+     Putting R0-WP0 in this sandbox, or treating CRITIC-D TICK=yes as owner
+     accept / product resume, contradicts START / STATUS / CRITIC-D / the
+     REFERENCE_NOT_EXECUTE marker.
+
+================================================================================
+1. TRUST DISK — WHAT EXISTS, WHAT DOES NOT
+================================================================================
+
+Sandbox zdoc on disk this session (19 files before THIS file):
+  START, READ_ORDER, 00-SANDBOX-STATUS, COPY-MANIFEST, ERRATA,
+  SANDBOX-WORKING-PLAN, G0-DECISION-RECORD, G0-LICENSE-LEDGER.TEMPLATE,
+  OWNER-DECISION-2026-09-03-GODOT-NOT-UNREAL,
+  31-8-hh3d-real-application-plan.REFERENCE_NOT_EXECUTE,
+  five hashed copies, CRITIC-A/B/C/D.
+
+MISSING (searched hh-3d/** for *PROGRESS* *R0* *WP0* *decision-record*):
+  zdoc/PROGRESS.txt                         ABSENT
+  zdoc/SANDBOX-PROGRESS.txt                 ABSENT
+  any *R0-WP0* file                         ABSENT
+  hh-3d/app/                                ABSENT
+  hh-3d/app/decision-records/               ABSENT
+  hh-3d/unreal/                             ABSENT
+  sandbox app/ or unreal/                   ABSENT
+  godot/dogfood/hh-world-3d/                ABSENT
+  *.uproject / UnrealEditor.exe under hh-3d NONE
+
+Live routing still says:
+  START FIRST_WP=SANDBOX-G0-DOCS
+  START G0_ENGINE=FORBIDDEN_UNTIL_WRITTEN_NATIVE_GRANT
+  STATUS CURRENT_WP=SANDBOX-G0-DOCS
+  STATUS G0_ENGINE=FORBIDDEN
+  WORKING-PLAN CURRENT_VALID_WP=SANDBOX-G0-DOCS
+  WORKING-PLAN NEXT_WP_IF_OWNER_ACCEPTS=NONE_UNTIL_G0_DOCS_OWNER_ACCEPT
+  G0-DECISION-RECORD OWNER_ACCEPT=UNFILLED
+  G0-DECISION-RECORD VERDICT=DOCS_WRITTEN_NOT_PASS
+  G0-DECISION-RECORD AUTHORIZE_UNREAL_INSTALL=NO
+
+mtime of “progress update” (after CRITIC-D 06:22):
+  06:47:20  G0-DECISION-RECORD.txt
+  06:47:30  OWNER-DECISION-2026-09-03-GODOT-NOT-UNREAL.txt
+  06:47:35  00-SANDBOX-STATUS.txt
+  06:47:36  START.txt
+These are residual/wipe/CRITIC-D bookkeeping. They are not an R0-WP0 paper.
+
+================================================================================
+2. ATTACK 1 — DID THEY REOPEN UNREAL / G0-ENGINE / §9 HELLO-WORLD?
+================================================================================
+
+OBSERVED: NO install, no .uproject, no hh-3d/unreal/, no packaged hello-world
+claim. START / STATUS / WORKING-PLAN / G0-DECISION-RECORD §6 still forbid it.
+OWNER-DECISION-2026-09-03 locks Unreal OFF for this track.
+
+INTENDED-ROUTE RISK: if the missing R0-WP0 paper “proves” native by copying
+open-world §9 (empty UE project + packaged hello-world) or treats G0-ENGINE
+as the web gate, that is a reopen. Honest R0-WP0 is the opposite:
+  web-first, MapLibre-local, Unreal deferred, no engine download.
+
+COPY-MANIFEST application-plan WHY still says “so G0 can keep Unreal as a
+candidate”. ROLE=REFERENCE_NOT_EXECUTE. DO_NOT_RUN_R0_PLUS_HERE=1.
+Candidate language is not an install grant. Residual dialect, same as D.
+
+Verdict on this attack: not reopened on disk. Do not “fix” the race by
+installing Unreal.
+
+================================================================================
+3. ATTACK 2 — DID THEY TICK OR REWRITE ORIGINAL hh-3d/zdoc PLANS?
+================================================================================
+
+OBSERVED: no.
+  git status --short hh-3d/zdoc = empty
+  Five copies still hash-match originals (SHA-256, this session):
+    31-8-hh3d-real-world-open-world-plan.txt
+      8CDAAD43B46D459843F6FCA76116301EAD69455DBAFE5F2DF46D5B0F0B36A6C6 MATCH
+    31-8-hh3d-real-application-plan.txt
+      3B3204C0FD0CEAEEC82BDCDBBD245090BB944074FC84897D467CD1EA586C7AC6 MATCH
+    01-9-hh3d-plan-audit-summary.txt
+      2B7D278AEC12633F9D46806D3E880CB092F0676F99C4844D3FA238E2077CC0B5 MATCH
+    01-9-hh3d-cheap-agent-handoff-prompt.txt
+      DB2B17AC1322691815227DC3AAACE053DF3B0BFA594F8408BAAA8820F6E88B23 MATCH
+    review-log.txt
+      62BA41FF2FD3A27D47135ADD019C6FB39EC470D59827A292037F6FFE3E644DF3 MATCH
+  Real-app header still CURRENT_WP=NONE_PAUSED, STATUS=PAUSED_NOT_STARTED…
+  R0-WP0 STATE still PAUSED_READY_AFTER_OWNER_RESUME
+  No [x] / STATE=DONE / IN_PROGRESS on the original application plan
+
+INTENDED-ROUTE TRAP (this is the miss if they “follow the plan literally”):
+  Real-app R0-WP0 ALLOWED_PATHS =
+    hh-3d/zdoc/review-log.txt,
+    hh-3d/app/decision-records/*
+  Writing the paper into review-log.txt = REWRITE ORIGINAL. Forbidden by
+  START, this critic’s brief, ERRATA DO_NOT_REWRITE_ORIGINALS, and by the
+  owner rule that copies stay byte-identical.
+  Creating hh-3d/app/decision-records/* = creates hh-3d/app/, which START
+  L31, STATUS L24, README, and G0-DECISION-RECORD L36 / L310 say must not
+  be scaffolded from this track. Audit §8: R0 is decision record; chưa
+  scaffold. review-log L485–486: FORBIDDEN scaffold runtime.
+
+Honest paper path INFERRED (not implemented):
+  NEW file that is not an original, not this sandbox’s CURRENT_WP, labeled
+  PAPER_ONLY / NOT_APP_IMPLEMENTATION. If they must use the plan path, only
+  decision-records/*.txt and no package.json / web/ / server/. Creating
+  hh-3d/app/web/* is R0-WP1. FAIL.
+
+================================================================================
+4. ATTACK 3 — DID THEY SCAFFOLD hh-3d/app/ OR A GODOT-2 CITY UNDER VF?
+================================================================================
+
+OBSERVED: no app tree. no godot/dogfood/hh-world-3d/. no city under
+godot/dogfood/superfighters/.
+
+OWNER-DECISION L16–21 / L23–27: Godot-2 city is “Not now”; if later, new
+folder + same 4.7.1-stable pin + never edit superfighters/.
+
+Staged superfighters files this session (NOT a city scaffold; they are
+VF6-WP3 dirty):
+  docs/stage.md, src/app.gd, src/game_session.gd, src/sim/stage.gd,
+  src/ui/title_screen.gd, tests/check_stage.py, tests/pack_stage_evidence.py,
+  tests/stage_cases.gd (MM)
+
+That is concurrent VF work in the same index as the sandbox. See attack 6.
+It is not proof they built a 3D city inside Vault Fighters. Do not treat
+those diffs as HH World progress.
+
+================================================================================
+5. ATTACK 4 — IS “NEXT” HONEST FOR A USER?
+================================================================================
+
+User-facing truth OBSERVED:
+
+  Vault Fighters (official AGENTS.md): VF6-WP3, 31/50, not finished.
+  HH World web app: 0%. hh-3d/app/ does not exist.
+    Audit L24–28 / real-app L17 / L49: APP_IMPLEMENTATION_PROGRESS=0.
+  Hòn Gió: WebGL seed in hh-3d/demo/. Not the map product. Not GTA.
+  Native / Unreal city: FORBIDDEN, not installed, owner STOP.
+  Godot-2 3D walk: owner “Not now”.
+  This sandbox: paper G0-DOCS awaiting OWNER_ACCEPT. Not a game.
+
+Honest “next” if the owner wants HH World product:
+  R0-WP0 = web paper (AOI / provider / license / cost / privacy / hardware).
+  Not a playable native game. Not Unreal hello-world. Not MapLibre running.
+  Not hh-3d/app/ MVP. Implementation stays 0% after an honest R0-WP0.
+
+Honest “next” for THIS sandbox if the owner has not signed G0 §2:
+  Stay SANDBOX-G0-DOCS. Do not start G0-ENGINE or G1.
+  WORKING-PLAN: NEXT_WP_IF_OWNER_ACCEPTS=NONE_UNTIL_G0_DOCS_OWNER_ACCEPT
+
+LIE classes (INTENDED; file not yet written — fail the paper if it says any):
+  - “next is a 3D city / GTA-like / real-map 1:1”
+  - “Unreal / Godot-2 is the next WP”
+  - “HH World is started / scaffolded / playable”
+  - “CRITIC-D TICK=yes = G0 PASS / owner accept / license to G1”
+  - “sandbox OWNER_RESUME=1 = real-application resume”
+
+START L30–32 already states the honest product-next:
+  R0-WP0 decision record only. Still no hh-3d/app/ scaffold.
+  Not this sandbox. Not demo D0-*. Not open-world §18.
+
+================================================================================
+6. ATTACK 5 — DO PROGRESS FILES CONTRADICT START / CRITIC-D?
+================================================================================
+
+Live START vs live STATUS / WORKING-PLAN / G0-DECISION-RECORD:
+  No CURRENT_WP flip to R0-WP0. No G0-ENGINE=OPEN. Owner fields UNFILLED.
+  START residual after D now names COPY-MANIFEST in the wipe set and tells
+  the agent to follow README / G0-DECISION-RECORD §7, not that paragraph
+  alone. That closes D residual 1. Not a contradiction.
+
+STATUS L23–24 vs START L30–32:
+  STATUS: “Do not run R0+ here. Do not create hh-3d/app/.”
+  START: product-next is R0-WP0, “Not this sandbox.”
+  WORKING-PLAN: NEXT = NONE until G0-DOCS owner accept.
+  REFERENCE_NOT_EXECUTE.txt L7–8: do not execute R0-WP0 inside this folder.
+  These agree: R0-WP0 is the other track.
+
+CONTRADICTION IF the implementer now writes R0-WP0 inside
+  hh-3d/hh3d-real-world-open-world/zdoc/
+  or sets CURRENT_WP=R0-WP0 on STATUS / WORKING-PLAN
+  or treats MODE=EXECUTE_ONE_WP + OWNER_RESUME=1 as the real-app grant.
+
+CRITIC-D L472–474:
+  Next agent: wait for owner accept on G0-DECISION-RECORD §2, or wipe/redo.
+  Do not start G0-ENGINE or G1.
+R0-WP0 is neither G0-ENGINE nor G1. It is still not authorized by D’s tick.
+D’s tick is SANDBOX-G0-DOCS paper closeout ONLY (D L22, START L64–66).
+
+G0-DECISION-RECORD GIT_HEAD_AT_WRITE=c1a7b117… is stale vs HEAD ff702a7.
+Residual honesty hole, not an Unreal reopen.
+
+STATUS L38–39 still talks about stale-20260831 / official recapture names.
+After ff702a7 those official-path PNGs/RUN files are gone from HEAD (deleted
+in the hygiene+demo commit). Names remain commitable (gitignore only ignores
+the stale folder). Do not claim recapture exists at the official path.
+
+COPY-MANIFEST SANDBOX-ONLY lists CRITIC-A..D and not OWNER-DECISION or this
+file. Inventory drift. LOW. Same class D already declined to fail on.
+
+================================================================================
+7. ATTACK 6 — VF DIRT / “GAME FINISHED” CLAIM
+================================================================================
+
+VF plan tick? OBSERVED no.
+  zdocs/29-8-vault-fighters-y8-parity-plan.txt not in the index diff.
+  CURRENT_VALID_WP=VF6-WP3 still. Checkbox VF6-WP3 remains [ ].
+
+Game finished claim in sandbox routing? OBSERVED no.
+  VERDICT=DOCS_WRITTEN_NOT_PASS. No PASS. No GTA-like.
+
+VF dirty files MIXED with this folder? OBSERVED YES. MATERIAL.
+
+git diff --cached --name-status this session (one `git commit` of the index):
+  M  AGENTS.md                          (VF resume header; no HH-3D mention)
+  M  godot/dogfood/superfighters/*      (eight VF6-WP3 files)
+  A  hh-3d/hh3d-real-world-open-world/** (entire sandbox, 21 files)
+
+START L66: “Not a one-commit license.”
+START residual: split hygiene / demo / sandbox before any commit.
+CRITIC-D L332–337 / L451–454 / L468: do not treat the mixed index as a
+legal commit; this TICK does not authorize Commit All.
+
+They went further than D’s leftover:
+  ALREADY COMMITTED ff702a7 (06:49:45 +0700), author Nguyen Van Truong:
+    message claims Snake/.gitignore cleanup
+    body also mutates hh-3d/demo (App.tsx, play.ts, HelpPanel, TouchPad,
+    authored-experience-seed) and DELETES official-path 20260831 evidence
+  Sandbox was kept out of that commit (still staged). Hygiene + demo were
+  not split. That is the commit D said was not legal.
+
+AGENTS.md staged hunk only moves freeze → VF6-WP3 resume. It does not tick
+VF6-WP3 and does not add an HH-3D exception. CRITIC-A B7 still holds:
+an agent who follows AGENTS.md ignores this folder; an agent who follows
+the folder name starts Unreal. Coordinator still has not written the
+exception into AGENTS.md.
+
+Do not Commit All. Unstage VF from any sandbox commit. Unstage sandbox
+from any VF6-WP3 commit.
+
+================================================================================
+8. INTENDED R0-WP0 ROUTE — WHAT WOULD BE LEGAL vs WHAT WILL FAIL
+================================================================================
+
+RACE: paper not written. This section is the attack on the route the
+parent said they are writing.
+
+REQUIRED before a legal R0-WP0 paper (from audit §8 + real-app L669–695
++ review-log L475–488 + START L30–32):
+
+  1. Explicit owner resume for TARGET_PLAN=real-application,
+     CURRENT_WP=R0-WP0. Sandbox OWNER_RESUME=1 does not count.
+  2. DEMO_GAP_ACCEPTED in writing on the canonical review-log
+     (or owner written accept of demo gap). review-log L479–481.
+     Not present. Owner-decision file is Godot-not-Unreal only.
+     Demo plan still CURRENT_WP=NONE_PAUSED / REWORK.
+  3. Paper only. NETWORKING=OFF. No fetch. No paid API. No Unreal.
+  4. Do not execute it inside hh-3d/hh3d-real-world-open-world/.
+  5. Do not rewrite hh-3d/zdoc/ originals (including review-log copy
+     or canon).
+  6. Do not scaffold runtime hh-3d/app/web|server|data-pipeline.
+  7. Do not tick real-app CURRENT_WP or STATE.
+  8. Do not touch Godot / VF / Snake / Kho Bí Ẩn.
+  9. Tell the user this is a web decision paper, implementation 0%.
+
+FAIL the paper if it:
+  - lives in this sandbox and STATUS still says “Do not run R0+ here”
+    without an explicit “this file is a pointer, CURRENT_WP unchanged”
+  - fills OWNER_* on G0-DECISION-RECORD as a substitute for R0
+  - copies §9 hello-world / Cesium sample as R0 verify
+  - creates package.json / Vite app / MapLibre canvas
+  - claims chợ ảo / Bến Thành is playable
+  - treats Hòn Gió Play as HH World evidence
+  - uses VF dirty hash as the R0 source freeze
+
+review-log L518–520: agents do not pick R0-WP0 vs demo. Owner picks.
+START “IF OWNER MEANT PRODUCT NEXT INSTEAD” is a pointer, not a signature.
+
+================================================================================
+9. TICK CHECKLIST (progress + R0-WP0 paper bar)
+================================================================================
+
+R0-WP0 paper exists on disk and is paper-only
+  OBSERVED NO  → RACE
+
+PROGRESS file exists and matches START / CRITIC-D
+  OBSERVED NO  → RACE (routing files updated; no PROGRESS)
+
+Unreal / G0-ENGINE / §9 hello-world not reopened
+  OBSERVED YES (not reopened)
+
+Originals not rewritten / not ticked
+  OBSERVED YES
+
+hh-3d/app/ and Godot-2 city under superfighters/ not scaffolded
+  OBSERVED YES
+
+“Next” honest (web paper, not fake native game) in live routing
+  OBSERVED YES for current START/STATUS; UNPROVEN for the missing paper
+
+Progress files contradict START / CRITIC-D
+  OBSERVED NO on CURRENT_WP / G0-ENGINE
+  OBSERVED YES on git process (mixed index + ff702a7) vs START/D split rule
+
+VF dirty files mixed into this work / game claimed finished
+  MIX = YES (staged). Finished claim = NO. VF tick = NO.
+
+TICK=yes only if zero material process/product-route errors.
+Material errors present: missing deliverable (RACE) + mixed VF/sandbox
+index + hygiene+demo already committed against the split rule + no
+real-application resume for the intended R0-WP0.
+
+TICK=no
+
+================================================================================
+10. WHAT THIS FILE DOES NOT AUTHORIZE
+================================================================================
+
+- Do not treat this TICK=no as a ticket to install Unreal or “finish G0”.
+- Do not rewrite hh-3d/zdoc/ originals to “make ALLOWED_PATHS work”.
+- Do not scaffold hh-3d/app/ to make the paper look real.
+- Do not start G0-ENGINE, G1, R0-WP1, or demo D0-*.
+- Do not tick VF6-WP3 or any HH-3D checkbox.
+- Do not commit the current index.
+- Do not fill OWNER_* until the owner signs.
+- Packaged hello-world / Cesium sample / MapLibre MVP stay UNPROVEN
+  and are not required to write a paper.
+
+If a later agent actually writes the R0-WP0 paper, this file is void.
+A new critic must read that file. Do not inherit this TICK=no as a
+product fact, and do not inherit a later TICK=yes from this race.

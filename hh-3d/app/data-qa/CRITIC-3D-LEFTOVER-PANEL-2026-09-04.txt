@@ -1,0 +1,119 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=14:45 +07
+ROLE=IMPLEMENTER
+TICK=n/a (do not treat this file as TICK=yes)
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M0_WP1=1
+NOT_M1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+PLAYER_URL=http://127.0.0.1:4175/
+RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-31
+COMMAND=node hh-3d/app/data-qa/j5-leftover-panel-probe.mjs
+VERDICT_IMPLEMENTER_CDP=J5_LEFTOVER_PANEL_OK
+LIVE_JS=/assets/index-BjeBwyj9.js
+LIVE_JS_LEN=2167676
+LIVE_JS_SHA256=4f5ceeebbbf48009ca74757bf04d32b857d38b481f7f0ab7d389928d4c00d252
+REMINTED=yes
+ONE_RECYCLE_AFTER_BUILD=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NO_COMMIT=1
+NO_HIP_SPHERES=1
+DID_NOT_RIP_TRAM_XING=1
+DID_NOT_RIP_WEST_XING=1
+DID_NOT_RIP_EAST_XING=1
+DID_NOT_RIP_LANTERN_ZEBRA=1
+DID_NOT_RIP_MENU_LEFTOVER_LIST=1
+DID_NOT_RIP_NET_LABELS=1
+DID_NOT_RIP_BOARDS=1
+DID_NOT_RIP_STREET_PLAY_SHOPS=1
+DID_NOT_RIP_DEFERRED_MINIMAP=1
+DID_NOT_RIP_FRIEND_STEPS=1
+DID_NOT_RIP_90M_LOD=1
+DID_NOT_RIP_HUD=1
+DID_NOT_RIP_PLAQUES=1
+DID_NOT_RIP_LANES=1
+DID_NOT_RIP_FOG_EDGE=1
+DID_NOT_RIP_SKY=1
+DID_NOT_RIP_CAM_HIT=1
+NO_FIFTH_STREET=1
+NO_NPC=1
+NO_INTERIOR=1
+NO_MAP_FETCH=1
+ACCEPTED_PRIOR=CRITIC-3D-TRAM-XING-REAUDIT-2026-09-04.txt TICK=yes
+
+================================================================================
+SLICE
+================================================================================
+
+Menu leftover rows were already labeled, but opening Shared PC /
+J6 from Menu still read as a normal street shop. ShopPanel said
+"public shop · opened on this machine" for every local shop,
+including spawn-keep-out leftovers.
+
+This remint only changes the open shop panel: leftover shops
+show MENU_LEFTOVER_LABEL ("không trên phố / leftover máy này")
+on a leftover banner + kind line. Lantern + drawn Phở keep
+normal street/public copy. streetPlayShops / Nearby E unchanged.
+Menu leftover list still labeled last. Did not catalog_clear.
+
+Did not remint Harbor×Tram / west / east Steps crossings,
+lantern zebra, Menu leftover list labels/sort, net labels,
+boards, streetPlayShops, minimap, friend steps, LOD, HUD,
+plaques, lanes, fog/edge, sky, or cam-hit.
+
+================================================================================
+CDP (headless Chrome, 1280×720, isolated guest B, recycled 4175)
+================================================================================
+
+Seat B empty profile, Offline · Đang kết nối. Guest. No catalog_clear.
+
+Menu leftover Shared PC (shop-local-sharedpc):
+  data-leftover=1 data-street=0
+  banner+kind = không trên phố / leftover máy này
+  no "public shop · opened on this machine"
+
+Menu leftover J6 (shop-local-mtl8ulddihjpre):
+  data-leftover=1 data-street=0
+  banner+kind = không trên phố / leftover máy này
+  no street/public shop copy
+
+Menu lantern (shop-lantern-fish):
+  data-leftover=0 data-street=1  no leftover banner
+  kind = public shop · authored example among many
+
+Menu drawn Phở (shop-local-mtmh45qxehxhvb):
+  data-leftover=0 data-street=1  no leftover banner
+  kind = public shop · opened on this machine
+
+Menu leftover list still last + labeled.
+Spawn nearby="" leftoverDrawn=[]  E at spawn opened none
+Street E at lantern opened shop-lantern-fish
+  leftover=0 kind = public shop · authored example among many
+leftover persist still on /demo-bus (draw keep-out as before)
+
+Implementer CDP only. Not an independent critic TICK. Not a plan tick.
+
+================================================================================
+OWNER LEFTOVERS (unchanged)
+================================================================================
+
+1. GATE-U1 three-human review (first acceptance leftover; not faked).
+2. R2-WP1 headed/mobile/memory/min-FPS thresholds still UNFILLED.
+   Hitch2 remint kept; first-W min still ~10. Not 60.
+3. WAN / other-PC join still not built. 4175 loopback only.
+4. R4-WP0B real account/OIDC still not built.
+5. Open data (OSM/Overture) still needs license ledger + grant.
+6. Leftover this-PC shops stay in the catalog; they do not own street E.
+   Menu list + open panel now label them leftover. Do not catalog_clear.
+7. M0/M1/M2 plan WPs still NOT_STARTED. NOT_PLAN_PASS. Not M1.

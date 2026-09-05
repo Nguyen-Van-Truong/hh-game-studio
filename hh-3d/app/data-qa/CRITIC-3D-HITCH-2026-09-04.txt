@@ -1,0 +1,147 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=10:26 +07
+ROLE=IMPLEMENTER
+TICK=n/a (do not treat this file as TICK=yes)
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M0_WP1=1
+NOT_R2_WP1_PASS=1
+NOT_60_FPS=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+PLAYER_URL=http://127.0.0.1:4175/
+RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-15
+COMMAND=node hh-3d/app/data-qa/j5-hitch-probe.mjs
+VERDICT_IMPLEMENTER_CDP=J5_HITCH_OBSERVED
+LIVE_JS=/assets/index-Zv5epUAg.js
+LIVE_JS_LEN=2153814
+LIVE_JS_SHA256=458d723bf1584e1c60ed8f77220227dfe3d8db89a3441ba2c0908e38db265743
+ONE_RECYCLE_AFTER_BUILD=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NO_COMMIT=1
+NO_HIP_SPHERES=1
+DID_NOT_RIP_FRIEND_STEPS=1
+DID_NOT_RIP_90M_LOD=1
+DID_NOT_RIP_MINIMAP=1
+DID_NOT_RIP_HUD=1
+DID_NOT_RIP_PLAQUES=1
+DID_NOT_RIP_LANES=1
+DID_NOT_RIP_FOG_EDGE=1
+DID_NOT_RIP_STREET_PLAY_SHOPS=1
+DID_NOT_RIP_SKY=1
+DID_NOT_RIP_CAM_HIT=1
+NO_NPC=1
+NO_INTERIOR=1
+NO_MAP_FETCH=1
+NO_DOWNLOADED_HDRI=1
+NO_LOADING_SPINNER_OVER_VOID=1
+ACCEPTED_PRIOR=CRITIC-3D-FRIEND-STEPS-FIX-REAUDIT-2026-09-04.txt TICK=yes on nJ1HVwcJ
+
+================================================================================
+SLICE
+================================================================================
+
+FPS-LOD reaudit walk mean was ≥45 but min ~18.6 after idle.
+This slice measured FIRST Harbor W (colder than that post-idle
+window), then added a cheap Play-mount warmup:
+
+  - resume AudioContext
+  - plant one silent / zero-gain thump graph (not a proof tick)
+  - one gl.compile(scene, camera) of the already-painted street
+    + tunic (no downloaded HDRI)
+
+Did not add a loading spinner over a beige void. Street still
+paints first. Friend Offline teardown, 90 m LOD, minimap, HUD,
+plaques, lanes, fog/edge, streetPlayShops, sky, cam-hit not ripped.
+
+Honesty: still authored boxes, not a city. Do not claim 60 FPS.
+Do not claim R2-WP1 PASS.
+
+================================================================================
+FIRST HARBOR W (headless Chrome CDP, 1280×720, rAF wall-clock 3000 ms)
+================================================================================
+
+Method: play-ready, click canvas, settle 400 ms, hold W, sample
+rAF (skip 2). This is FIRST W, not the FPS-LOD idle-then-walk
+window. Critic walk min ~18.59 was after 1.2 s + 3 s idle.
+
+BEFORE  live JS=/assets/index-nJ1HVwcJ.js
+        RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-14
+        walk min=8.57  mean=20.40  median=20.00  n=57
+        frame max=116.7 ms
+        chip=Harbor Walk  pose=walk
+        lantern E=shop-lantern-fish
+        friend remotes=0 live=0 ticks=0
+
+AFTER   live JS=/assets/index-Zv5epUAg.js
+        RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-15
+        walk min=8.58  mean=27.53  median=29.94  n=72
+        p1=9.58  max=60.24
+        frame max=116.6 ms
+        hitch-warmup=audio-compile
+        chip=Harbor Walk  pose=walk
+        lantern E=shop-lantern-fish
+        friend remotes=0 live=0 ticks=0
+
+Supplemental same bundle, settle 1200 ms (no second recycle):
+        RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-15B
+        walk min=8.58  mean=27.82  n=71
+
+GOAL min ≥ 25: NOT reached.
+Mean 20.40 → 27.53 is clearly better (more frames in the same
+3 s; median 20 → 29.94). The leftover is one ~117 ms frame
+(~8.6 FPS) that still lands in the first-W window even after
+1.2 s settle. 25 min is unreachable on this first-W sample
+without a larger remint. Not better than 18 on the min —
+say so. Not 60. Not R2-WP1.
+
+================================================================================
+KEEP
+================================================================================
+
+Lantern E still shop-lantern-fish.
+Solo Offline friend plants stay closed (remotes=0, live=0,
+ticks=0 while self walks). Did not rerun the full isolated
+A/B leak hunt; that teardown was not touched.
+far-lod=inner-door-glass m=90. Plaques=4. Harbor chip held.
+
+================================================================================
+CDP (implementer; not an independent critic)
+================================================================================
+
+URL=http://127.0.0.1:4175/ recycled once after warmup build.
+Bind 127.0.0.1 pid 32236. Did not start 4173 / 4174 / 5175.
+Did not catalog_clear.
+
+  typecheck EXIT=0
+  test      EXIT=0 (73)
+  build     EXIT=0  index-Zv5epUAg.js
+
+NOT_PLAN_PASS. GATE-U1 still first leftover.
+
+================================================================================
+OWNER LEFTOVERS
+================================================================================
+
+- GATE-U1 three human reviewers (not faked) — first acceptance leftover
+- R2-WP1 still not PASS: first-W min 8.58 (not ≥25); idle ≥50 /
+  mobile / headed / context-loss / memory / cold-process first-map
+  / owner thresholds UNFILLED. Mean 27.53 is one Harbor headless
+  first-W sample only. Not 60.
+- AUTHORIZE_MAP_FETCH=YES + license ledger before any OSM/Overture
+- Other-PC / WAN join (store is this PC 4175 loopback)
+- Real account / OIDC
+- Plan checkboxes stay [ ]
+
+================================================================================
+END
+================================================================================

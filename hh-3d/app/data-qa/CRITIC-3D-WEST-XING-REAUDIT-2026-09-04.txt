@@ -1,0 +1,382 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+BOOTED_4175=1
+DID_NOT_RECYCLE=1
+DID_NOT_REBUILD=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_FIFTH_OFFICIAL_STREET=1
+HASH_MISMATCH=0
+CRITIC=INDEPENDENT_ADVERSARIAL_WEST_XING_REAUDIT
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=13:38 +07
+MODEL=grok-4.6-extra-high
+SCOPE=Re-audit of claimed Harbor Walk × Steps West mouth remint. Do not treat CRITIC-3D-WEST-XING-2026-09-04.txt as TICK=yes.
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=04cb6ca92c482017c02d78e7885727f73b62103d
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-WEST-XING-REAUDIT-2026-09-04.txt
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-WEST-XING-2026-09-04.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+DID_NOT_TREAT_IMPLEMENTER_AS_TICK_YES=1
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+VITE_PREVIEW_PORT_PIN=4175
+LIVE_PID=60500
+LISTEN=127.0.0.1:4175
+CRITIC_CDP_PORTS=9971 (seat A walk) / 9972 (seat B leftover E)
+VIEWPORT=1280x720
+ISOLATED_PROFILES=1
+HEADLESS_NEW=1
+
+CLAIM_JS=/assets/index-BkgSKGSy.js
+CLAIM_JS_LEN=2164988
+CLAIM_JS_SHA256=2c2385ccd07a97fdca755f1279cdb0f07cf78dbcf7162ebda0597e1ecec285e6
+LIVE_JS=/assets/index-BkgSKGSy.js
+LIVE_JS_LEN=2164988
+LIVE_JS_SHA256=2c2385ccd07a97fdca755f1279cdb0f07cf78dbcf7162ebda0597e1ecec285e6
+LIVE_JS_MATCHES_CLAIM=1
+
+CHIP_SPAWN=Harbor Walk
+CHIP_HARBOR=Harbor Walk
+CHIP_WEST=Steps West
+MINIMAP_WEST=Steps West
+MINIMAP_HIGHLIGHT=1
+MINIMAP_ROLE=inner
+MINIMAP_OFFICIAL=2
+CHIP_MINIMAP_AGREE_STEPS_WEST=1
+CHIP_WAS_NOT_STEPS_EAST=1
+WEST_M_EAST=-12.35
+WEST_M_NORTH=23.66
+WEST_HEADING=8
+WEST_CAM_PITCH=10.0
+LOOKDOWN_CAM_PITCH=-28.0
+HARBOR_M_NORTH=18.36
+EAST_M_EAST=6.46
+EAST_M_NORTH=22.10
+EAST_CHIP=Steps East
+EAST_MINIMAP=Steps East
+
+STRIPE_VISIBLE_ON_WEST_ASPHALT=1
+BARE_RIBBONS=0
+WEST_FLOOR_CREAM=0.306
+WEST_FLOOR_DARK=0.281
+WEST_FLOOR_CURB=0.149
+WEST_FLOOR_HORIZ_CREAM_BANDS=2
+WEST_FORE_CREAM=0.393
+WEST_FORE_DARK=0.341
+WEST_FORE_HORIZ_CREAM_BANDS=2
+LOOKDOWN_CREAM=0.906
+LOOKDOWN_DARK=0.010
+LOOKDOWN_HORIZ_CREAM_BANDS=1
+SHOT_WEST_HASH16=b9b211c70b68a548
+SHOT_LOOK_HASH16=4eadd4783896226c
+SHOT_EAST_HASH16=9d2103c1e94fc54d
+WEST_ZEBRA_DOM=1
+EAST_ZEBRA_DOM=1
+EAST_STRIPES_VISIBLE=1
+
+GEOJSON_STREETS=2
+GEOJSON_NAMES=Tram Approach, Harbor Walk
+PLAQUES=4
+FIFTH_OFFICIAL_CLAIM=0
+OSM_GRID_CLAIM=0
+LANTERN_E=shop-lantern-fish
+SEAT_B_PANEL_AFTER_E=0
+LEFTOVER_E_STOLEN=0
+PLAY_ENGINE=r3f
+WORLD_MAP_PRESENT=0
+NET_OSM_HITS=0
+
+CLAIM_1_LIVE_HASH=PASS
+CLAIM_2_WEST_CROP_STRIPES=PASS
+CLAIM_3_WEST_CHIP_AND_MINIMAP_STEPS_WEST=PASS
+CLAIM_4_EAST_STRIPES_GEOJSON_NO_FIFTH_NO_OSM=PASS
+CLAIM_5_LANTERN_E_AND_LEFTOVER_B=PASS
+
+BIGGEST_MISS=None on the named hunts. Live hash matches BkgSKGSy / 2164988 / 2c2385cc… before and after CDP. Independent west mouth crop facing north (−12.35 m east / +23.66 m north, heading 8, pitch 10) shows cream zebra on dark asphalt at the WEST mouth, not two bare ribbons and not only the east crossing. Chip and mounted minimap both Steps West (hl=1 inner). East mouth still striped. GeoJSON streets still 2. Lantern E opened shop-lantern-fish. Seat B leftover E did not steal. NOT_PLAN_PASS.
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/ was already up. Bind 127.0.0.1 pid 60500
+(node vite preview --host 127.0.0.1 --port 4175 --strictPort).
+Did not recycle, rebuild, kill, or start 4173 / 4174 / 5175.
+Did not bind 0.0.0.0. Did not catalog_clear.
+
+Did not treat CRITIC-3D-WEST-XING-2026-09-04.txt as TICK=yes
+(ROLE=IMPLEMENTER, TICK=n/a). Did not run j5-west-xing-probe.mjs
+as proof. Did not write J5 packs. Did not tick any plan.
+
+Independent Chrome CDP, isolated temp profiles, 1280×720,
+?seat=a / ?seat=b. Tried to fail: hash drift; west mouth still
+two bare asphalt ribbons with only DOM zebra counts; west crop
+showing only the east crossing; chip-only Steps West while
+minimap stays Harbor or flips to Steps East; live UI claiming
+a fifth official street or OSM grid; GeoJSON street count ≠ 2;
+lantern E stolen by leftover; seat B E opens a leftover shop.
+
+Hash matches. The west mouth asphalt crop has visible cream
+stripes. Walk west flips chip and minimap together to Steps
+West, not Steps East. Honesty held. Named keep hunts held.
+This is NOT_PLAN_PASS. GATE-U1 humans were not invented.
+
+================================================================================
+LIVE JS
+================================================================================
+
+HTML script = /assets/index-BkgSKGSy.js
+http length = 2164988
+sha256 = 2c2385ccd07a97fdca755f1279cdb0f07cf78dbcf7162ebda0597e1ecec285e6
+Matches the claimed remint name + length + hash.
+Second GET after CDP is the same bytes from pid 60500.
+HASH_MISMATCH=0. Did not stop.
+
+Bundle scan (live bytes, not source):
+  openstreetmap = 0
+  overpass = 0
+  overture = 2   (honesty copy “not OSM/Overture”, not a fetch host)
+  0.0.0.0 = 0
+  shop-lantern-fish = 1
+  crosswalk-harbor-steps-west = 4
+  Steps West = 2
+
+GET /data/ben-thanh-400m.authored.geojson kind=street count = 2
+  Tram Approach, Harbor Walk
+
+CDP Network.requestWillBeSent on seat A: osm/overpass/overture
+/mapbox/maptiler hits = 0.
+
+/demo-bus still this_pc bind=127.0.0.1 not_wan. Leftover
+shop-local-sharedpc and shop-local-mtl8ulddihjpre remain on
+the catalog. Did not catalog_clear.
+
+================================================================================
+CLAIM 1 — LIVE HASH IS THE CLAIMED REMINT — PASS
+================================================================================
+
+Tried to fail as a later/earlier bundle or SPA-shell fallback
+on the claimed name.
+
+  live = /assets/index-BkgSKGSy.js
+  len  = 2164988
+  sha  = 2c2385ccd07a97fdca755f1279cdb0f07cf78dbcf7162ebda0597e1ecec285e6
+
+GET before CDP and GET after CDP are the same name + length
++ hash from pid 60500. HASH_MISMATCH=0.
+
+PASS.
+
+================================================================================
+CLAIM 2 — WEST MOUTH ASPHALT CROP HAS VISIBLE CREAM STRIPES — PASS
+================================================================================
+
+Tried to fail: the Harbor / Steps West mouth is still two bare
+ribbons, or the only visible zebra is the east crossing, with
+only DOM crosswalk/stop/curb counts dressing the page.
+Prefer TICK=no if the west asphalt shot is bare.
+
+Independent walk (chunked, not their 2400+11800+850+11000):
+Harbor north to +18.36 m, A then W onto the west inner lane,
+then D + short W to face north on Steps West
+(−12.35 m east / +23.66 m north, heading 8, cam pitch 10.0).
+
+Default-pitch west crop (asphalt ROI y 52–94%):
+  creamRatio=0.306  darkRatio=0.281  curbRatio=0.149
+  horizCreamBands=2  vertCreamRibbons=1
+
+Foreground-heavier ROI (y 62–96%):
+  creamRatio=0.393  darkRatio=0.341  horizCreamBands=2
+
+A peak-counter that demanded ≥3 horizontal cream bands would
+have called this bare. That classifier is wrong on this frame.
+Visual read of critic-west-mouth.png: cream zebra bars on dark
+asphalt at the WEST mouth (left of the north view), with a
+stop-line / curb lip. The east mouth zebra is also in the same
+north frame (right), so this is not “only the east crossing.”
+The west bars sit on the west inner ribbon.
+
+Look-down (right-drag, pitch −28.0) is cream-heavy
+(creamRatio=0.906 darkRatio=0.010 bands=1) because the lens
+ate sidewalk / cream wash more than the road. Visual read of
+critic-west-lookdown.png still shows thick cream zebra bars
+in the bottom-right asphalt, not two longitudinal centerline
+ribbons alone.
+
+BARE_RIBBONS=0. STRIPE_VISIBLE_ON_WEST_ASPHALT=1.
+DOM west zebra (7 stripes, id=crosswalk-harbor-steps-west)
+is supporting, not the sole proof.
+
+PASS.
+
+================================================================================
+CLAIM 3 — WALK WEST: CHIP AND MINIMAP BOTH STEPS WEST — PASS
+================================================================================
+
+Tried to fail: chip flips while minimap stays Harbor, or
+minimap never mounts, or both flip to Steps East.
+
+After first W 1800 ms: defer=live  chip=Harbor Walk
+minimap present  active=Harbor Walk  official=2
+
+At Harbor +18.36 m north: chip=Harbor Walk  mini=Harbor Walk
+
+Independent A then W west (not their 850+11000), then D to
+face north:
+
+  chip=Steps West
+  streetName=Steps West
+  mini=Steps West  highlight=1  role=inner  official=2
+  miniActiveItem name=Steps West role=inner
+  east=−12.35  north=+23.66
+  heading=8  facing north
+  chipOnScreen=1
+  Steps West plaque still in the four-name set
+
+CHIP_ONLY_DOM_FLIP=0. Minimap was mounted before the west
+leg. It did not stay Harbor. It did not become Steps East.
+
+PASS.
+
+================================================================================
+CLAIM 4 — EAST STILL STRIPED; GEOJSON=2; NO FIFTH / NO OSM — PASS
+================================================================================
+
+Tried to fail: east mouth lost its stripes; live UI claims a
+fifth official street or an OSM grid; GeoJSON streets ≠ 2.
+
+After west, independent D + W to +6.46 m east / +22.10 m north:
+  chip=Steps East  mini=Steps East  hl=1 role=inner
+  eastZebraDom=1  westZebraDom=1
+  Visual read of critic-east-mouth.png: cream zebra still on
+  the asphalt to the left while facing east. Center-ROI
+  creamRatio=0.002 is the sidewalk/building crop, not a
+  missing crossing — the bars are in-frame left of the body.
+
+Honesty on spawn / west / east:
+  "two official named streets plus inner parcel lanes,
+   not a city grid"
+  "Not a live map, not OSM/Overture"
+  NOT_PLAN_PASS
+  fifthOfficialClaim=0  osmGridClaim=0
+
+Minimap names after mount:
+  Tram Approach, Harbor Walk, Steps East, Steps West
+  official=2  inner=2  extra=2
+  extra/inner are parcel lanes, not a fifth official street.
+  UI never says "5 official" or "OSM grid".
+
+GET authored GeoJSON kind=street = 2
+  (Tram Approach, Harbor Walk)
+
+Plaques still 4. world MapView absent. Play engine=r3f.
+NET_OSM_HITS=0.
+
+PASS.
+
+================================================================================
+CLAIM 5 — LANTERN E STILL shop-lantern-fish; SEAT B NOT STOLEN — PASS
+================================================================================
+
+Tried to fail: leftover this-PC shop owns Nearby / E; seat B
+E opens leftover.
+
+Seat A after west/east, back toward lantern:
+  nearby=shop-lantern-fish  (1.0 m)
+  E opened shop-lantern-fish
+  leftoverStolen not observed on seat A
+
+Seat B isolated profile, leftover E at spawn:
+  nearbyShop=""
+  stallHint="E opens a stall when you are next to it."
+  shopRange="Quầy Cá Đèn Lồng: 29 m away"
+  after E: panel=false  shopPanelId=""
+  LEFTOVER_E_STOLEN=0
+
+Leftover catalog rows still exist on /demo-bus. They still
+do not own street E on this path.
+
+PASS.
+
+================================================================================
+HUNTS (not named fails)
+================================================================================
+
+Peak-counter horizCreamBands=2 on the default west ROI is
+the low end of a zebra, not a fail: the west bars sit left
+of frame-center, so a mid-frame band counter under-counts.
+Visual west mouth + look-down still show cream on dark.
+Did not copy their probe writer or their PNG as proof.
+
+Look-down creamRatio=0.906 is a cream-wash ROI, not the
+verdict crop. Verdict uses the default-pitch west mouth
+asphalt plus the visual read.
+
+minimap extra=2 is Steps East / Steps West listed as inner
+lanes. Honesty still says two official streets. Not a fifth
+official street.
+
+overture=2 in the live bundle is honesty copy, not a map
+fetch. No OSM host on the named GET surfaces.
+
+Default Play stayed R3F 1280×720. Did not grind hitch / min
+FPS. Did not claim GATE-U1.
+
+================================================================================
+METHOD
+================================================================================
+
+1. 4175 already up (pid 60500). Did not recycle / rebuild /
+   start other ports.
+2. GET /  /demo-bus  /data/ben-thanh-400m.authored.geojson
+   /assets/index-BkgSKGSy.js. Recorded name+sha+len twice.
+3. Read implementer note (TICK=n/a). Did not copy its probe
+   writer into product files. Did not run
+   j5-west-xing-probe.mjs as proof.
+4. Independent Chrome CDP 1280×720 isolated profiles.
+   Ports 9971/9972: about:blank → navigate, first Harbor W,
+   wait for deferred minimap, chunked north to the Harbor
+   mouth, A then W onto Steps West, asphalt shot + look-down,
+   then east mouth check, lantern E, seat B leftover E.
+5. Did not write lead packs. Did not tick plan. Did not fake
+   GATE-U1.
+
+Temp only (not under data-qa):
+  %TEMP%\hh-west-xing-reaudit\critic-west-xing-reaudit.mjs
+  %TEMP%\hh-west-xing-reaudit\critic-walk.json
+  %TEMP%\hh-west-xing-reaudit\critic-west-mouth.png
+  %TEMP%\hh-west-xing-reaudit\critic-west-lookdown.png
+  %TEMP%\hh-west-xing-reaudit\critic-east-mouth.png
+  %TEMP%\hh-west-xing-reaudit\critic-west-steps.png
+
+================================================================================
+STILL IMPOSSIBLE WITHOUT OWNER
+================================================================================
+
+- GATE-U1 three human reviewers (not faked)
+- R2-WP1 still not PASS (idle ≥50 / first-W min ≥20 / mobile /
+  headed / context-loss / memory / owner thresholds UNFILLED)
+- AUTHORIZE_MAP_FETCH=YES + license ledger before any OSM/Overture
+- Other-PC / WAN join (store is this PC 4175 loopback)
+- Real account / OIDC
+
+================================================================================
+END
+================================================================================

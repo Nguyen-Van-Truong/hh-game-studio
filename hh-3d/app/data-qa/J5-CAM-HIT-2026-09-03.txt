@@ -1,0 +1,117 @@
+{
+  "run_id": "HH3D-J5-20260903-ASIA-SAIGON-37",
+  "player": "http://127.0.0.1:4175/",
+  "verdict": "J5_CAM_HIT_OK",
+  "not_plan_pass": true,
+  "not_gate_u1": true,
+  "playOk": true,
+  "openOk": true,
+  "wallOk": true,
+  "pulledOk": true,
+  "streetShotOk": true,
+  "cycleOk": true,
+  "shopOk": true,
+  "keptOk": true,
+  "honestyOk": true,
+  "openDist": 5.62,
+  "pulledDist": 0.38,
+  "desiredDist": 5.62,
+  "camHitId": "bldg-steps-e-00",
+  "headingAtPull": 271,
+  "camYawAtPull": 271.4,
+  "street": {
+    "east": 0,
+    "north": 5.332228000023562,
+    "moved": 5.332228000023562
+  },
+  "toward": {
+    "east": 11.067081605534527,
+    "north": -0.9684840000463879,
+    "moved": 11.109376963714325
+  },
+  "extra": {
+    "east": 0,
+    "north": -0.256036000025901,
+    "moved": 0.256036000025901
+  },
+  "lanternDelta": {
+    "east": 0,
+    "north": 25.03586799991041,
+    "moved": 25.03586799991041
+  },
+  "nearest": {
+    "id": "bldg-steps-e-00",
+    "dist": 0.5577284342869325
+  },
+  "insideRing": [],
+  "insideAabb": [],
+  "skyOpen": {
+    "meanR": 186.4,
+    "meanG": 93.5,
+    "meanB": 72.4,
+    "lum": 0.438,
+    "beigeRatio": 0.14,
+    "blueRatio": 0.007,
+    "darkGrayRatio": 0.022,
+    "bluerThanRed": false
+  },
+  "skyHit": {
+    "meanR": 20.5,
+    "meanG": 22,
+    "meanB": 22.8,
+    "lum": 0.085,
+    "beigeRatio": 0,
+    "blueRatio": 0,
+    "darkGrayRatio": 0.958,
+    "bluerThanRed": false
+  },
+  "midHit": {
+    "meanR": 98.8,
+    "meanG": 111.1,
+    "meanB": 118.6,
+    "lum": 0.428,
+    "beigeRatio": 0,
+    "blueRatio": 0.878,
+    "darkGrayRatio": 0.121,
+    "bluerThanRed": true
+  },
+  "walkPeak": {
+    "pose": "walk",
+    "spread": 2.439913120540368,
+    "leftLeg": 1.219956560270184,
+    "rightLeg": -1.219956560270184,
+    "leftArm": -1.3499519314465152,
+    "rightArm": 1.3499519314465152,
+    "opposite": true,
+    "moving": true
+  },
+  "shopPanelId": "shop-lantern-fish",
+  "hashes": {
+    "open": "c25cd3e5c7a35015",
+    "hit": "e676b53b6e577b53"
+  },
+  "shots": {
+    "open": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-cam-open.png",
+    "hit": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-cam-hit.png"
+  },
+  "home": {
+    "camKind": "look-ray-ring",
+    "camHit": "0",
+    "camDist": 5.62,
+    "buildings": 60,
+    "collision": "footprint-radius",
+    "walkCycle": "opposite-stride"
+  },
+  "pulled": {
+    "camHit": "1",
+    "camHitId": "bldg-steps-e-00",
+    "camDist": 0.38,
+    "camDesired": 5.62,
+    "heading": 271,
+    "insideRing": "0"
+  },
+  "shopOpen": {
+    "id": "shop-lantern-fish",
+    "open": true
+  }
+}

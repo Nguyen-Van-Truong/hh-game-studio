@@ -1,0 +1,324 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+BOOTED_4175=1
+DID_NOT_RECYCLE=1
+DID_NOT_REBUILD=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_R2_WP1_PASS=1
+NOT_60_FPS=1
+NOT_OSM=1
+NOT_WAN=1
+CRITIC=INDEPENDENT_ADVERSARIAL_HITCH_REAUDIT
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=10:37 +07
+MODEL=grok-4.6-extra-high
+SCOPE=Re-audit of implementer first-Harbor-W hitch warmup remint. Do not treat CRITIC-3D-HITCH-2026-09-04.txt as TICK=yes.
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=04cb6ca92c482017c02d78e7885727f73b62103d
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-HITCH-REAUDIT-2026-09-04.txt
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-HITCH-2026-09-04.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+DID_NOT_TREAT_IMPLEMENTER_AS_TICK_YES=1
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+VITE_PREVIEW_PORT_PIN=4175
+LIVE_PID=32236
+LISTEN=127.0.0.1:4175
+CRITIC_CDP_PORTS=9931 (first-W + lantern) / 9932 (leftover B)
+VIEWPORT=1280x720
+ISOLATED_PROFILES=1
+HEADLESS_NEW=1
+
+CLAIM_JS=/assets/index-Zv5epUAg.js
+CLAIM_JS_LEN=2153814
+CLAIM_JS_SHA256=458d723bf1584e1c60ed8f77220227dfe3d8db89a3441ba2c0908e38db265743
+LIVE_JS=/assets/index-Zv5epUAg.js
+LIVE_JS_LEN=2153814
+LIVE_JS_SHA256=458d723bf1584e1c60ed8f77220227dfe3d8db89a3441ba2c0908e38db265743
+LIVE_JS_MATCHES_CLAIM=1
+HASH_MISMATCH=0
+
+WALK_MIN_FPS=9.99
+WALK_MEAN_FPS=29.31
+WALK_MEDIAN_FPS=30.03
+WALK_P1_FPS=10.00
+WALK_MAX_FPS=60.24
+WALK_N=78
+WALK_WALL_MS=3000
+WALK_FRAME_MS_MAX=100.1
+WALK_MEAN_GT_21=1
+WALK_MEAN_LE_21=0
+IMPLEMENTER_BEFORE_MEAN=20.40
+IMPLEMENTER_AFTER_MEAN=27.53
+IMPLEMENTER_AFTER_MIN=8.58
+CRITIC_DID_NOT_REPRODUCE_27_53=1
+CRITIC_MEAN_CLEARLY_ABOVE_BASELINE=1
+MIN_GE_25=0
+NOT_A_FAIL_ON_MIN=1
+NOT_A_60_CLAIM=1
+
+CHIP_HARBOR=Harbor Walk
+POSE_MID=walk
+HITCH_WARMUP=audio-compile
+LANTERN_E=shop-lantern-fish
+FRIEND_REMOTES=0
+FRIEND_LIVE=0
+FRIEND_TICKS=0
+SEAT_B_LEFTOVER_E_STOLEN=0
+BEIGE_VOID_SPINNER=0
+PLAQUES=4
+FAR_LOD=inner-door-glass
+FAR_LOD_M=90
+GEOJSON_STREETS=2
+
+CLAIM_1_LIVE_HASH=PASS
+CLAIM_2_WALK_MEAN_ABOVE_21=PASS
+CLAIM_3_HONESTY_NO_MIN25_NO_60_NO_R2=PASS
+CLAIM_4_LANTERN_FRIEND_NO_VOID_SPINNER=PASS
+
+BIGGEST_MISS=None on the named hunts. Live hash matches Zv5epUAg / 2153814 / 458d723b…. Independent first Harbor W rAF mean 29.31 is clearly above the 20.40 baseline and above ~21 (not their 27.53; not 60). Min 9.99 is still one ~100 ms hitch — they already admitted min ~8.58 / not ≥25; that is not a fail on this remint. Notes and PROGRESS do not claim min≥25, 60 FPS, or R2-WP1 PASS. Lantern E opened shop-lantern-fish. Offline remotes=0 stayed live=0 ticks=0. First paint is the existing labeled PlayLoading, not a spinner over a beige void. NOT_PLAN_PASS.
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/ was already up. Bind 127.0.0.1 pid 32236
+(node vite preview). Did not recycle, rebuild, kill, or start
+4173 / 4174 / 5175. Did not bind 0.0.0.0.
+
+Did not treat CRITIC-3D-HITCH-2026-09-04.txt as TICK=yes
+(ROLE=IMPLEMENTER, TICK=n/a). Did not run j5-hitch-probe.mjs
+as proof. Did not write J5 packs. Did not tick any plan.
+
+Independent Chrome CDP, isolated temp profiles, 1280×720,
+?seat=a / ?seat=b. Tried to fail: hash drift; first-W mean
+still ≤21 vs their 20.40 baseline; notes/PROGRESS smuggling
+min≥25 or 60 or R2-WP1 PASS; lantern swap; Offline friend
+plants with remotes=0; beige-void spinner.
+
+Hash matches before and after CDP. Walk mean 29.31 holds a
+clear improve vs 20.40. Honesty held. Named keep hunts held.
+This is NOT_PLAN_PASS. GATE-U1 humans were not invented.
+R2-WP1 is still not PASS.
+
+================================================================================
+LIVE JS
+================================================================================
+
+HTML script = /assets/index-Zv5epUAg.js
+http length = 2153814
+sha256 = 458d723bf1584e1c60ed8f77220227dfe3d8db89a3441ba2c0908e38db265743
+Matches the claimed remint name + length + hash.
+Second GET after all CDP sessions is the same bytes.
+HASH_MISMATCH=0. Did not stop.
+
+Bundle scan (live bytes, not source):
+  openstreetmap = 0
+  overpass = 0
+  overture = 2   (honesty copy “not OSM/Overture”, not a fetch host)
+  0.0.0.0 = 0
+  spinner = 0
+  audio-compile / hitch-warmup = 3
+  shop-lantern-fish = 1
+
+GET /data/ben-thanh-400m.authored.geojson kind=street count = 2
+  Tram Approach, Harbor Walk
+
+/demo-bus still this_pc bind=127.0.0.1 not_wan. Leftover
+shop-local-sharedpc and shop-local-mtl8ulddihjpre remain on
+the catalog. Did not catalog_clear.
+
+================================================================================
+CLAIM 1 — LIVE HASH IS THE CLAIMED REMINT — PASS
+================================================================================
+
+Tried to fail as a later/earlier bundle or SPA-shell fallback
+on the claimed name.
+
+  live = /assets/index-Zv5epUAg.js
+  len  = 2153814
+  sha  = 458d723bf1584e1c60ed8f77220227dfe3d8db89a3441ba2c0908e38db265743
+
+Second GET after CDP is the same name + length + hash from
+pid 32236. HASH_MISMATCH=0.
+
+PASS.
+
+================================================================================
+CLAIM 2 — INDEPENDENT FIRST HARBOR W MEAN CLEARLY > 21 — PASS
+================================================================================
+
+Tried to fail: this critic’s own first-W mean still ≤21
+(no clear improve vs their 20.40 baseline). Prefer TICK=no
+if the mean is still ~20. Min ~8 is not a fail — they
+admitted it.
+
+Method (independent; not their probe writer): play-ready,
+click canvas, settle 400 ms, hold W, rAF wall-clock 3000 ms
+(skip 2). FIRST W, not the FPS-LOD idle-then-walk window.
+Headless Chrome CDP, 1280×720, seat A Harbor spawn.
+
+  Harbor chip=Harbor Walk  pose=walk  hitch-warmup=audio-compile
+  far-lod=inner-door-glass  m=90  plaques=4  buildings=60
+  mid-walk north +4.72 m  (lat 10.7716200 → 10.7716624)
+  chip still Harbor Walk
+
+  walk  wall=3000 ms  n=78
+        mean=29.31  median=30.03  min=9.99  p1=10.00  max=60.24
+        frame max=100.1 ms
+
+Mean 29.31 is clearly above ~21 and above their 20.40
+baseline. Did not reproduce implementer 27.53 (this sample
+is a bit higher). Did not see a stable 60. One ~100 ms
+frame still lands in the first-W window (min 9.99), same
+leftover class as their 8.58 / 116.6 ms. That min is not
+a fail on this remint.
+
+PASS the remint mean claim. NOT_R2_WP1_PASS. NOT_60_FPS.
+
+================================================================================
+CLAIM 3 — HONESTY: NO min≥25 / 60 / R2-WP1 PASS — PASS
+================================================================================
+
+Tried to fail notes or PROGRESS claiming min≥25, 60 FPS,
+or R2-WP1 PASS.
+
+CRITIC-3D-HITCH-2026-09-04.txt (implementer, TICK=n/a):
+  GOAL min ≥ 25: NOT reached.
+  Do not claim 60 FPS.
+  Do not claim R2-WP1 PASS.
+  AFTER min=8.58 mean=27.53. NOT_R2_WP1_PASS=1 NOT_60_FPS=1
+
+PROGRESS PLAYER_SLICE_THIS_SESSION / PLAY_3D_HITCH /
+NOT DONE / NEXT item 6:
+  min ≥ 25 not reached (one ~117 ms frame remains).
+  Not 60. Not R2-WP1.
+  Idle ≥50 and first-W min ≥25 still UNFILLED.
+
+No smuggle found on this remint. Old MapLibre
+R2-WP1_EVIDENCE row stays OBSERVED_DESKTOP_HEADLESS_NOT_PLAN_PASS
+and is not this hitch slice.
+
+PASS honesty.
+
+================================================================================
+CLAIM 4 — LANTERN E / OFFLINE FRIEND / NO VOID SPINNER — PASS
+================================================================================
+
+Tried to fail: leftover owns E; Offline remotes=0 still
+plants; hitch remint added a spinner over a beige void.
+
+Dedicated Harbor-north then E (same seat A, port 9931):
+  nearby=shop-lantern-fish  range=0.8 m  chip=Harbor Walk
+  E opened shop-lantern-fish
+  shelf title Quầy Cá Đèn Lồng
+  leftoverStolen=false
+
+Offline friend-steps spot-check (solo seat A, remotes=0):
+  before / mid / after first-W and at lantern:
+    remotes=0  data-friend-footsteps=0  ticks=0
+  Self walked. Plants stayed closed. Did not rerun the
+  isolated A/B leak hunt; that teardown was not this
+  remint’s named bar. remotes=0 → live=0 held.
+
+Seat B isolated spawn (port 9932):
+  nearbyShop=""
+  stallHint="E opens a stall when you are next to it."
+  shopRange="Quầy Cá Đèn Lồng: 29 m away"
+  Press E: shopPanelId=""  panel=false
+  Leftover catalog rows stay. They still do not own E.
+
+First paint (Page.loadEventFired, no wait for play-ready):
+  play-loading visible 1280×720
+  text=HH World / Loading the authored 400 m block /
+       Authored approximation — not a city, not OSM, not 1:1
+  bg=rgb(216, 211, 200)  (existing labeled PlayLoading)
+  spinnerEl=false  spinnerCss=false  play-boot=null
+  shot mean RGB 215.4/210.6/200.0  std=22.78  uniqueQ16=110
+  beigeRatio=0.006  (labeled overlay, not empty void)
+
+After play-ready: loading gone. Street canvas 1280×720.
+  ready shot mean RGB 108.5/132.5/145.3  blueRatio=0.444
+  beigeRatio=0.035  darkRatio=0.266
+  Harbor Walk chip on. Not a beige void. Not a spinner.
+
+PASS.
+
+================================================================================
+HUNTS (not named fails)
+================================================================================
+
+Implementer walk 27.53 was not this critic’s number. 29.31
+is enough for a clear improve vs 20.40 and is not 60.
+
+Min 9.99 here vs their 8.58 is the same leftover class
+(one long first-W frame). Do not mint R2-WP1 from either
+sample. Do not treat min ~10 as a remint fail — they
+already said 25 min is unreachable on this first-W window.
+
+overture=2 in the live bundle is honesty copy, not a map
+fetch. No OSM host on the named GET surfaces.
+
+First-paint overlay is still the prior labeled beige
+PlayLoading (dark road bar, not a CSS spinner). The remint
+did not add a spinner-over-void. Street still paints after
+ready.
+
+Leftover this-PC shops stay. They still do not own Nearby E.
+
+================================================================================
+METHOD
+================================================================================
+
+1. 4175 already up (pid 32236). Did not recycle / rebuild /
+   start other ports.
+2. GET /  /demo-bus  /data/ben-thanh-400m.authored.geojson
+   /assets/index-Zv5epUAg.js. Recorded name+sha+len twice.
+3. Read implementer note (TICK=n/a). Did not copy its probe
+   writer into product files. Did not run j5-hitch-probe.mjs.
+4. Independent Chrome CDP 1280×720 isolated profiles.
+   Port 9931: about:blank → navigate, first-paint shot,
+   first Harbor W 3 s rAF, then north to lantern + E.
+   Port 9932: leftover B E.
+5. Did not write lead packs. Did not tick plan. Did not fake
+   GATE-U1. Did not claim R2-WP1 or 60 FPS.
+
+Temp only (not under data-qa):
+  %TEMP%\hh-hitch-reaudit\critic-hitch-reaudit.mjs
+  %TEMP%\hh-hitch-reaudit\critic-walk.json
+  %TEMP%\hh-hitch-reaudit\critic-first.png
+  %TEMP%\hh-hitch-reaudit\critic-ready.png
+  %TEMP%\hh-hitch-reaudit\post-check.mjs
+
+================================================================================
+STILL IMPOSSIBLE WITHOUT OWNER
+================================================================================
+
+- GATE-U1 three human reviewers (not faked)
+- R2-WP1 still not PASS: first-W min 9.99 (not ≥25); idle ≥50 /
+  mobile / headed / context-loss / memory / cold-process
+  first-map / owner thresholds UNFILLED. Mean 29.31 is one
+  Harbor headless first-W sample only. Not 60.
+- AUTHORIZE_MAP_FETCH=YES + license ledger before any OSM/Overture
+- Other-PC / WAN join (store is this PC 4175 loopback)
+- Real account / OIDC
+
+================================================================================
+END
+================================================================================

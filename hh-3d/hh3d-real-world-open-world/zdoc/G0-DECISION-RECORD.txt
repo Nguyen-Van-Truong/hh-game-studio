@@ -1,0 +1,346 @@
+G0 DECISION RECORD / TEMPLATE
+WP=SANDBOX-G0-DOCS
+TITLE=Paper G0 decision record only (not engine install)
+DATE=2026-09-03
+TIMEZONE=Asia/Saigon
+RUN_ID=HH3D-G0-20260903-ASIA-SAIGON-01
+COMMAND_ID=cmd.hh3d-g0.decision-record.1
+FOLDER=hh-3d/hh3d-real-world-open-world/
+FORM=DOCS_ONLY
+OWNER_ACCEPT=UNFILLED
+VERDICT=DOCS_WRITTEN_NOT_PASS
+GIT_HEAD_AT_WRITE=c1a7b11769fbf4fd57c1e9da2e9748e2ece6c0ff
+NOTE=HEAD is repo context only. Staged leftover work was not committed.
+
+================================================================================
+0. HOW TO USE THIS FILE
+================================================================================
+
+This is the first native gate. It is a decision record the owner can fill
+or accept. It is NOT a ticket to install Unreal Engine now.
+
+Unreal Engine is a CANDIDATE for a later native client/game. It is NOT the
+default runtime for HH World web. The product path stays
+31-8-hh3d-real-application-plan.txt (web-first, MapLibre-local MVP) unless
+the owner explicitly chooses native AFTER accepting this G0.
+
+If web MVP is enough, native DEFERRED forever is a valid outcome.
+
+================================================================================
+1. ROUTE SPLIT (LOCKED)
+================================================================================
+
+WEB PRODUCT (do not execute from this folder)
+  Plan: 31-8-hh3d-real-application-plan.txt
+  First WP there: R0-WP0
+  App folder: hh-3d/app/  — must not be created here
+  Unreal role there: OPTIONAL after web MVP benchmark
+
+NATIVE / OPEN-WORLD (this folder only)
+  Plan copy: 31-8-hh3d-real-world-open-world-plan.txt
+  First WP: SANDBOX-G0-DOCS (this file). G0-ENGINE is forbidden.
+  Default AOI if later opened: ~400 m x 400 m near 10.7725, 106.6980
+  Display name: Vault Fighters names are forbidden; working name HH World
+
+HON GIO DEMO (not this sandbox)
+  hh-3d/demo/ is a WebGL seed. Preview contract: http://127.0.0.1:4173/
+  Do not copy its execution plan as the next WP.
+
+FROZEN ELSEWHERE
+  godot/, Vault Fighters, zdocs/20-8-*, zdocs/29-8-*
+
+================================================================================
+2. OWNER DECISIONS — FILL OR ACCEPT DEFAULTS
+================================================================================
+
+Plan section 16 defaults if the owner does not write a new choice.
+OWNER_ACCEPT remains UNFILLED until the owner signs below.
+
+Q1  AOI / city
+    DEFAULT=Ben Thanh vicinity, Ho Chi Minh City
+    CENTER_DEFAULT=10.7725, 106.6980
+    OWNER_CHOICE=UNFILLED
+
+Q2  First product target
+    DEFAULT=Windows desktop is the native IF opened; HH World web remains
+            the product unless native is chosen
+    OWNER_CHOICE=UNFILLED
+    ALLOWED=web_mvp_only | native_after_web_benchmark | native_now_blocked
+
+Q3  Online tiles
+    DEFAULT=offline gameplay map; online visualization optional later
+    OWNER_CHOICE=UNFILLED
+    ALLOWED=offline_only | offline_plus_optional_online_viz | stop
+
+Q4  API / Cesium / cloud budget
+    DEFAULT=0 now. PAID_SERVICE_AUTHORIZATION=NONE
+    MONTHLY_CAP_USD=UNFILLED
+    KILL_SWITCH_OWNER=UNFILLED
+
+Q5  Visual target
+    DEFAULT=stylized-realistic; no Google photogrammetry bake
+    OWNER_CHOICE=UNFILLED
+
+Q6  Fictionalize names / logos / interiors
+    DEFAULT=yes, fictionalize gameplay-facing brands
+    OWNER_CHOICE=UNFILLED
+
+Q7  Hardware baseline + FPS
+    DEFAULT=do not invent 60 FPS as a proven target
+    TARGET_FPS=UNMEASURED
+    MINIMUM_FPS=UNMEASURED
+    See section 4. Do not treat the host snapshot as a packaged-game pass.
+
+LEGAL_PROFILE_RECOMMENDATION=offline-open-data-first
+LEGAL_PROFILE_OWNER=UNFILLED
+  ALLOWED=offline-open-data-first | online-visualization-only | stop_terms_unclear
+
+NATIVE_ROUTE_RECOMMENDATION=DEFERRED_UNTIL_OWNER_CHOOSES_AFTER_G0
+NATIVE_ROUTE_OWNER=UNFILLED
+  ALLOWED=DEFERRED | OPEN_G1_AFTER_ACCEPT | STOP
+
+OWNER_SIGN=
+  NAME=UNFILLED
+  DATE=UNFILLED
+  ACCEPT_THIS_RECORD=UNFILLED
+  AUTHORIZE_UNREAL_INSTALL=NO
+  AUTHORIZE_PAID_API=NO
+  AUTHORIZE_G1=NO
+
+OWNER_CHAT_2026-09-03 (explicit, this track):
+  UNREAL_FOR_THIS_TRACK=STOP
+  STAY_ON_GODOT=YES
+  VF_KEEPS_CURRENT_GODOT_AND_HH_AGENT=YES
+  SECOND_ENGINE_FORK=NO
+  SECOND_GODOT_VERSION=NO
+  IF_NATIVE_CITY_GAME=new project folder + same pin 4.7.1-stable + never
+    same path as godot/dogfood/superfighters/
+
+================================================================================
+3. ENGINE / PLUGIN / COMPILER PIN — TEMPLATE, NOT INSTALLED
+================================================================================
+
+UNREAL_STATUS=CANDIDATE_NOT_DEFAULT_NOT_INSTALLED
+UNREAL_VERSION_PIN=UNFILLED
+  PLAN_HINT=one stable UE5.x after owner accept; do not pick "latest"
+CESIUM_FOR_UNREAL_VERSION_PIN=UNFILLED
+  STATUS=NOT_PRESENT
+  PROFILE_IF_EVER=ONLINE_VISUALIZATION only; never collision/nav/bake
+COMPILER_CANDIDATE_OBSERVED=
+  vswhere -all -format json => []
+  cl.exe FOUND at
+    C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.44.35207\bin\Hostx64\x64\cl.exe
+  PIN=UNPROVEN (BuildTools present; no registered VS instance; no UE compile)
+IDE_PIN=UNFILLED
+BLENDER=missing
+GDAL/OGR=missing
+DUCKDB=missing
+PYTHON_OBSERVED=Python 3.11.9
+NODE_OBSERVED=v24.10.0 (web tools; not a native pin)
+NPM_OBSERVED=11.6.1
+GIT_OBSERVED=git version 2.51.1.windows.1
+
+EPIC / UE ON THIS HOST (existence only; nothing launched)
+  C:\Users\truon\AppData\Local\EpicGamesLauncher = missing
+  C:\Program Files\Epic Games = missing
+  C:\Program Files (x86)\Epic Games = empty directory
+  C:\ProgramData\Epic = exists (leftover metadata UNPROVEN)
+  %LOCALAPPDATA%\UnrealEngine\4.27\Saved = leftover, ~0 MB, not an engine
+  %LOCALAPPDATA%\UnrealEngine\5.3\Saved = leftover, ~0 MB, not an engine
+  %LOCALAPPDATA%\UnrealEngine\5.5\Saved = leftover, ~25 MB, not an engine
+  UnrealEditor.exe search (shallow) = none
+  hh-3d/unreal/ = not created
+
+GODOT_PIN_EXISTS=1
+  PATH=%LOCALAPPDATA%\HHGodotAgent\tooling\godot-4.7.1-stable\bin
+  USE_FOR_THIS_SANDBOX=FORBIDDEN
+
+================================================================================
+4. HARDWARE SNAPSHOT — OBSERVED 2026-09-03
+================================================================================
+
+Command group exit: 0 (PowerShell inventory + nvidia-smi + vswhere + copy)
+
+OS
+  OBSERVED=Microsoft Windows 11 Pro
+  VERSION=10.0.26200
+  BUILD=26200
+  ARCH=64-bit
+
+CPU
+  OBSERVED=Intel Core i5-10400F @ 2.90 GHz
+  CORES=6
+  THREADS=12
+  MAX_CLOCK_MHZ=2904
+  BOARD=Micro-Star MS-7E05
+
+RAM
+  OBSERVED_TOTAL_GB=31.92
+  OBSERVED_FREE_GB=8.79   (one snapshot; not a soak)
+
+GPU
+  nvidia-smi EXIT=0
+  OBSERVED=NVIDIA GeForce GTX 1660 Ti
+  VRAM_MIB=6144
+  DRIVER=591.74
+  WMI_ADAPTERRAM_BYTES=4293918720  (UNTRUSTED; 32-bit WMI field)
+  WMI_DRIVERVERSION=32.0.15.9174
+  MODE=1920x1080
+
+DISK
+  C: NTFS 292.18 GB total / 68.19 GB free
+  D: NTFS 416.92 GB total / 293.91 GB free  (label SSDDataColorful; workspace)
+  E: NTFS 183.23 GB total / 25.56 GB free   (label SSDNVME2)
+
+PERFORMANCE TIER
+  OBSERVED_PACKAGED_UE=none
+  INFERRED=this GPU/VRAM is a weak-to-mid desktop for UE5 Nanite/Lumen/city
+  TIER_LABEL=UNPROVEN
+  DO_NOT_CLAIM=60 FPS, AAA, GTA-like, 1 km2 playable
+
+SSD / DDC RISKS
+  - UE install + DDC + Intermediate/Saved can consume tens to 100+ GB.
+  - C: has only ~68 GB free. Installing Epic/UE on C: can fill the OS disk.
+  - D: has ~294 GB free and is the workspace disk; still not a blank check.
+  - E: ~26 GB free is too small for engine + DDC.
+  - Leftover %LOCALAPPDATA%\UnrealEngine\Saved folders are not a DDC plan.
+  - One writer per artifact; never commit DDC, Intermediate, Saved, tokens.
+
+NETWORK
+  This G0 used local inventory only. No provider fetch. NETWORKING=OFF.
+
+================================================================================
+5. LEGAL / COST / DATA RISKS (FROM PLAN + AUDIT)
+================================================================================
+
+Not legal advice. Re-check live terms before any acquire/release.
+
+R3  Google/Cesium terms may forbid extract/bake/offline cache/collision.
+    Mitigation: LEGAL_PROFILE_RECOMMENDATION=offline-open-data-first
+    Google Photorealistic = OFF. Cesium ion = not authorized.
+
+R5  Unreal project too heavy for this host.
+    6 GB VRAM, 32 GB RAM, 6-core 2019-era CPU, C: tight.
+    Mitigation: stay docs-only until owner accepts; if native opens, 400 m
+    proof first, Lumen/Nanite/crowd off until measured.
+
+R7  Real names, logos, house interiors, people photos.
+    Mitigation: fictionalize gameplay-facing brands; no personal data.
+
+R8  Paid API / quota surprise.
+    Mitigation: PAID_SERVICE_AUTHORIZATION=NONE. Cost ceiling UNFILLED.
+
+R9  "GTA-like" scope blow-up.
+    Mitigation: no GTA-like / 1:1 / realtime claims. G0 is a gate, not a game.
+
+LICENSE LEDGER
+  No data downloaded. Template only: G0-LICENSE-LEDGER.TEMPLATE.txt
+  Required before any acquire: source, URL, release, acquired_at (canonical;
+  see ERRATA if a file still says accessed_at), license, attribution, hash,
+  permitted use.
+
+STOP IF
+  - rip / trace / bundle GTA, Y8, Superfighters, or other game assets
+  - OSM planet dump or public raster tile scrape
+  - Google/Cesium used as collision/nav/gameplay source
+  - secret/token in repo, log, screenshot
+  - Godot / VF / hh-3d/app / demo used as this WP
+
+================================================================================
+6. ORIGINAL G0 PASS CRITERIA vs THIS LUOT
+================================================================================
+
+Plan G0 pass (section 9) asked for more than this owner lượt allows.
+
+  hardware baseline + performance tier
+    PARTIAL: host snapshot OBSERVED; packaged tier UNPROVEN
+
+  empty project + packaged hello-world
+    NOT DONE. Forbidden: no .uproject, no engine download.
+
+  Cesium sample / georeference if online profile
+    NOT DONE. Online profile not chosen. Plugin not present.
+
+  no credentials in repo
+    OBSERVED for this sandbox: no keys written.
+
+  legal decision offline-open-data-first | online-visualization-only | stop
+    TEMPLATE only. Owner field UNFILLED. Recommendation recorded.
+
+Therefore: G0 is not PASS. Next agent does not start G1.
+
+================================================================================
+7. RESTART RECIPE
+================================================================================
+
+Soft wipe (keep hashed copies, redo paper notes):
+  Delete everything under hh-3d/hh3d-real-world-open-world/ except the
+  five hashed copies listed in COPY-MANIFEST.txt:
+    31-8-hh3d-real-world-open-world-plan.txt
+    31-8-hh3d-real-application-plan.txt
+    01-9-hh3d-plan-audit-summary.txt
+    01-9-hh3d-cheap-agent-handoff-prompt.txt
+    review-log.txt
+  Recreate START.txt, READ_ORDER.txt, COPY-MANIFEST.txt (five hashes),
+  ERRATA-FROM-AUDIT.txt, 00-SANDBOX-STATUS.txt, PROGRESS.txt, and this
+  record. After 2026-09-03 closeout, CURRENT_WP stays SANDBOX-G0-DOCS
+  (DOCS_CLOSED_PAPER). The web file is a POINTER, not CURRENT_WP.
+  NEXT_NATIVE_WP=NONE. Do not restart as if §9 were live.
+  NATIVE_EXECUTION_AUTHORIZATION=NONE.
+
+Hard wipe:
+  Delete hh-3d/hh3d-real-world-open-world/ entirely.
+  Recopy from hh-3d/zdoc/ the same five files (not the demo WebGL plan).
+  Recreate START.txt, COPY-MANIFEST.txt, READ_ORDER.txt, ERRATA,
+  STATUS, and PROGRESS before any WP.
+
+Then read START.txt first, then PROGRESS.txt, then 00-SANDBOX-STATUS.txt.
+G0 paper is closed. Current paper is R0-WP0-WEB-DECISION-RECORD.txt.
+Do not start G0-ENGINE. Next native WP = NONE.
+
+================================================================================
+8. NEXT AGENT
+================================================================================
+
+SANDBOX-G0-DOCS paper is DOCS_CLOSED_PAPER (CRITIC-D TICK=yes).
+UNREAL_TRACK=STOP. NEXT_NATIVE_WP=NONE.
+CURRENT_WP stays SANDBOX-G0-DOCS. R0-WP0-WEB-DECISION-RECORD.txt is a
+POINTER only (NOT_A_REAL_APPLICATION_RESUME=1). See PROGRESS.txt.
+Section 2 OWNER_ACCEPT / OWNER_SIGN stay UNFILLED.
+
+ALLOWED NOW
+  - Owner fills section 2 of THIS file (optional; does not reopen Unreal).
+  - Owner fills R0-WP0-WEB-DECISION-RECORD.txt section 3.
+  - Critic read-only on this folder.
+  - Another agent may redo this folder from zdoc copies.
+
+FORBIDDEN NOW
+  - Install Unreal / Epic / Cesium / marketplace
+  - Create HHWorld.uproject
+  - Fetch Overture/OSM/Google/Cesium
+  - Scaffold hh-3d/app/
+  - Run Godot or tick VF plans
+  - Claim PASS / GTA-like / real-map 1:1
+  - Treat this closeout as a G0-ENGINE or G1 grant
+
+IF A LATER OWNER REVERSES UNREAL STOP AND OPENS G1
+  Still: one approved release, license ledger first, 400 m AOI, no Google
+  bake, no G2 before G1.5 human usability. Needs a new written grant.
+
+================================================================================
+9. ADDENDUM 2026-09-03 AFTER CRITIC-D + OWNER CHAT
+================================================================================
+
+Paper G0 = DOCS_CLOSED_PAPER. Not product PASS. Not G0-ENGINE.
+Owner chat (OWNER-DECISION-2026-09-03-GODOT-NOT-UNREAL.txt):
+  UNREAL_FOR_THIS_TRACK=STOP
+  VF_KEEPS_CURRENT_GODOT_AND_HH_AGENT=YES
+  SECOND_ENGINE=NO
+  GODOT2_CITY=NOT_NOW
+
+Section 1 still says Unreal is a CANDIDATE for a later native client.
+That sentence is historical template language. This addendum + owner
+chat override it for THIS track: STOP, next native WP = NONE.
+
+Do not fill OWNER_* fields from this addendum. Leave them UNFILLED
+until the owner signs.

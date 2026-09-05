@@ -1,0 +1,407 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+BIGGEST_MISS=Shared store + Space hop are real on this PC's 4175 loopback only. Another PC / WAN still cannot join. After the bus pull, B caches the shop in its own localStorage. Still a beige 60-building authored slab, not OSM, not GATE-U1.
+
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-03
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=2026-09-03 15:10 +07
+MODEL=grok-4.6
+SCOPE=HH World this-PC /demo-bus shared store + Space jump on already-up 4175
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=1567956b35dbe78e938280f930ad711a5fb68de4
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+CONCURRENCY=hh-3d/app/data-qa/CONCURRENCY-2026-09-03.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-J6-JUMP-2026-09-03.txt
+LEAD_J6_PACK=hh-3d/app/data-qa/J6-SHARED-SERVER-2026-09-03.txt
+LEAD_J6_PROBE=hh-3d/app/data-qa/j6-shared-server-probe.mjs
+LEAD_J6_RUN_ID=HH3D-J6-20260903-ASIA-SAIGON-02
+LEAD_J6_VERDICT=J6_SHARED_OK
+LEAD_J5_PACK=hh-3d/app/data-qa/J5-JUMP-2026-09-03.txt
+LEAD_J5_PROBE=hh-3d/app/data-qa/j5-jump-probe.mjs
+LEAD_J5_RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-08
+LEAD_J5_VERDICT=J5_JUMP_OK
+PROGRESS_TRUSTED_ALONE=NO
+LEAD_PACK_TRUSTED_ALONE=NO
+LEAD_PROBE_TRUSTED_ALONE=NO
+J6_SHARED_OK_TRUSTED_ALONE=NO
+J5_JUMP_OK_TRUSTED_ALONE=NO
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_VF_TOUCH=1
+NO_UNREAL=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_RUN_LEAD_PROBE_WRITER=1
+INDEPENDENT_CDP=1
+CDP_PORTS=9488/9489
+CDP_PROFILES=isolated_temp_user-data-dir
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_WAN=1
+NOT_OTHER_PC=1
+NOT_OSM=1
+LIVE_JS=/assets/index-Ce3LEdTD.js
+LIVE_PID=70428
+LIVE_CMD=node .../hh-3d/app/web/node_modules/vite/bin/vite.js preview
+VITE_PREVIEW_PORT_PIN=4175
+CRITIC_SHOP=shop-local-mtl8ulddihjpre
+CRITIC_DRAFT=shop-local-mtl8urfo7t0uuk
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/
+
+4175 was already up (vite preview pid 70428, bind 127.0.0.1). This critic
+used that preview and did not start 4173, 4174, 5175, or a second HH World
+preview. Independent two-context Chrome CDP (debug 9488/9489, about:blank
+then ?seat=a|b, fresh temp profiles, headless=new 1280x720, stdout only)
+did not run j6-shared-server-probe.mjs or j5-jump-probe.mjs (those writers
+overwrite the lead packs).
+
+  1. Shared store is real, not one-tab localStorage.
+     Isolated guest B started with empty origin storage, then pulled leftover
+     shop-local-sharedpc from /demo-bus (not from A's tab). This critic then
+     posted a NEW shop from A's UI (typed "Quay Critic J6 Jump" / "Sach phe
+     binh J6", not their Node-injected Quầy Shared PC). New id
+     shop-local-mtl8ulddihjpre published. GET /demo-bus gained that id.
+     Fresh B then grew markers lantern + leftover + the new id. B did not
+     have that id before A's submit.
+  2. Space jump is real. Feet left y=0 (alt 0 → 0.48 → peak 0.95,
+     airborne=1, groundY=0, status "jumping") then landed (alt=0,
+     airborne=0, groundY=0, status "standing"). play-proof data-alt matched.
+  3. Draft ≠ posted. No-network create = status=draft, "Chưa đăng — nháp
+     chờ mạng. Not posted." Draft id shop-local-mtl8urfo7t0uuk absent from
+     /demo-bus and from B's markers.
+  4. Offline B: remoteCount=0, shops stayed (3 public markers). Honesty
+     denies WAN / other-PC / OSM / city server. Host spoof on /demo-bus
+     is 403 loopback-only. LAN IPv4:4175 does not connect.
+
+This is NOT a plan PASS. NOT GATE-U1. GATE-U1 was not faked. Plan
+STATE/PASS not flipped. Copy does not claim another PC can join, OSM
+fetch, or a city cloud.
+
+Biggest miss: still this-machine 4175 loopback. Another PC cannot join.
+After the bus pull, B writes the published shop into its own
+localStorage (cache, not the cross-profile SoT). Leftover
+shop-local-sharedpc and an accepted A↔B graph pair remain from their
+earlier inject. Still a beige 60-building authored slab.
+
+================================================================================
+METHOD
+================================================================================
+
+Disk (not PROGRESS alone):
+  hh-3d/app/PROGRESS.txt
+  hh-3d/app/data-qa/CONCURRENCY-2026-09-03.txt
+  hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+    (CURRENT_FIRST_LEFTOVER=GATE-U1, WP_STATE_PASS_POLICY,
+     GATE-U1 STATE: NOT_STARTED)
+  hh-3d/app/docs/review/README.txt
+  hh-3d/app/web/vite.config.ts          host 127.0.0.1:4175
+  hh-3d/app/web/vite.demo-bus.ts
+  hh-3d/app/web/vite.this-pc-store.ts   published-only persist; drafts dropped
+  hh-3d/app/web/.data/this-pc-shared.json
+  hh-3d/app/web/src/friends/bus.ts      pull/push /demo-bus + BroadcastChannel
+  hh-3d/app/web/src/app/App.tsx         createShop → publishCatalog → pushDemoBus
+  hh-3d/app/web/src/avatar/walk.ts      JUMP_SPEED=6.1 GRAVITY=17 GROUND_Y=0
+  hh-3d/app/web/src/avatar/useAvatar.ts Space → applyJump + integrateVertical
+  hh-3d/app/web/src/play/PlayView.tsx   data-alt / data-airborne / data-ground-y
+  hh-3d/app/web/src/ui/HonestyBanner.tsx
+  hh-3d/app/web/src/friends/FriendsBar.tsx
+  hh-3d/app/data-qa/j6-shared-server-probe.mjs  (read; not run)
+  hh-3d/app/data-qa/J6-SHARED-SERVER-2026-09-03.txt  (read; not re-run)
+  hh-3d/app/data-qa/j5-jump-probe.mjs  (read; not run)
+  hh-3d/app/data-qa/J5-JUMP-2026-09-03.txt  (read; not re-run)
+  git log -1; git diff --cached --name-only
+
+Live (existing 4175 only; did not start another HH World preview):
+  TCP 127.0.0.1:4175 LISTEN pid 70428 node vite preview
+  4173 DOWN  4174 DOWN  5175 DOWN
+  GET /                                              200  title HH World
+    script /assets/index-Ce3LEdTD.js  len=2070820
+  GET /data/shops.json                               200  shop-lantern-fish only
+  GET /demo-bus                                      200  kind=local-demo-bus
+    bind=127.0.0.1  this_pc=true  not_wan=true  persist=catalog+graph
+    leftover shop-local-sharedpc from their Node inject
+  Host: 203.0.113.8:4175 on /demo-bus                 403
+    {"error":"loopback-only","bind":"127.0.0.1","not_wan":true}
+  LAN IPv4:4175 (172.24.48.1 / 172.27.80.1 /
+    192.168.100.128)                                  NO CONNECT
+  Independent two-context Chrome CDP vs 4175
+    A 9488  B 9489  about:blank then ?seat=a|b
+    Isolated user-data-dir (BroadcastChannel cannot cross profiles;
+    /demo-bus is the cross-profile path)
+    Storage.clearDataForOrigin local_storage then reload
+  Did not run node j6-shared-server-probe.mjs (writer).
+  Did not run node j5-jump-probe.mjs (writer).
+  Did not run npm build. Did not start 4173/4174/5175.
+  Did not POST catalog_clear. Creating a shop through the player UI
+  did publish onto the shared bus; that is the feature under test.
+
+================================================================================
+PROCESS / GIT
+================================================================================
+
+RESULT=PASS_ON_STATED_FAIL_RULE
+
+Stated fail: VF / AGENTS.md staged with this if they committed.
+Observed:
+  git diff --cached --name-only  = empty
+  last commit = 1567956 VF6-WP4: tick after critic and official PASS
+  No J6 / J5-jump / hh-3d/app commit in HEAD
+  Critic did not commit, did not tick plan, did not touch VF.
+
+Working tree dirt (not this critic's write):
+  hh-3d/app/ still wholly untracked
+  VF evidence dirty elsewhere
+Process landmine for a later mixed commit. Not the stated FAIL.
+
+================================================================================
+ATTACK 1 — TWO ISOLATED BROWSERS SHARE A SHOP VIA /demo-bus, NOT ONE-TAB LS?
+================================================================================
+
+RESULT=PASS
+
+Lead J6 probe injects shop-local-sharedpc by Node POST, then both browsers
+see it after localStorage clear. That leftover is still on the live bus.
+This critic did not treat their inject as the proof.
+
+Independent path (stronger than their pack):
+  B after clear+reload, BEFORE this critic's submit:
+    lsShops = [shop-local-sharedpc]   ← bus leftover, not A's new shop
+    markers = lantern + shop-local-sharedpc
+    homeBHadCreated = false
+  A opened Menu, Become Chủ quầy (máy này), native-set
+    name=Quay Critic J6 Jump  good=Sach phe binh J6
+    submit result status=published shop=shop-local-mtl8ulddihjpre
+  GET /demo-bus then listed
+    shop-local-sharedpc + shop-local-mtl8ulddihjpre
+    bind=127.0.0.1 this_pc=true not_wan=true persist=catalog+graph
+  Isolated B then:
+    markers = lantern + leftover + shop-local-mtl8ulddihjpre
+    publicCount=3
+    bHasCreated=true
+
+BroadcastChannel cannot cross these user-data-dirs. shops.json on 4175
+is still lantern-only. Therefore B saw A's UI-posted shop through the
+4175 process store, not through one tab's localStorage as SoT.
+
+Residual: after pull, App.tsx applyIncoming writes published rows into
+B's localStorage (bLsHasCreated=true). That is a local cache of the
+bus, not the cross-profile source of truth. Fail rule "still one-tab
+localStorage only" does not hit.
+
+================================================================================
+ATTACK 2 — SPACE: FEET LEAVE y=0 THEN LAND ON THE SLAB?
+================================================================================
+
+RESULT=PASS
+
+A closed the menu, blurred, Space keyDown/keyUp (vk=32). Samples every
+40 ms (not their j5-jump-probe.mjs):
+
+  preJump   alt=0     airborne=0  groundY=0  standing
+  t~40-80   alt=0.48  airborne=1  groundY=0  jumping
+  peak      alt=0.95  airborne=1  groundY=0  jumping  proofAlt=0.95
+  next      alt=0.34  airborne=1  groundY=0  jumping
+  land      alt=0     airborne=0  groundY=0  standing
+
+leftY0=true. Peak 0.35–1.4. Landed alt<=0.05 and groundY===0.
+Status text flipped standing → jumping → standing. play-proof data-alt
+tracked the same numbers. Disk: Person/PlayView place the body at
+GROUND_Y + alt; JUMP_SPEED 6.1 / GRAVITY 17 matches the ~0.95 m hop
+and does not clear a building.
+
+This is not a pose-only fake and not a hardcoded data-alt=0.95 with
+no leave/land. Fail rule "jump is fake" does not hit.
+
+================================================================================
+ATTACK 3 — OFFLINE: NO OTHER BODIES, SHOPS STAY? DRAFT ≠ POSTED?
+================================================================================
+
+RESULT=PASS  (shops + draft proven; Offline bodies vacuous-but-honest)
+
+Default B: mode "Offline — Stroll alone; shops still open."
+  remoteCount=0  remotes=[]
+  shops still lantern + leftover + (after post) critic shop
+
+That matches "Offline: no other bodies, shops stay" on this seat
+without needing Online first. Presence on the bus snapshot after the
+run was {}. This critic did not remint their A↔B Online walk; leftover
+graph still has an accepted a/b pair from their earlier probe. Vacuous
+for "hide a previously visible friend body." Not a shop-store fail.
+
+Draft: A ticked Simulate no-network, typed "Quay Nhap Critic J6" /
+"Sach nhap J6", submit:
+  status=draft
+  shop=shop-local-mtl8urfo7t0uuk
+  text="Chưa đăng — nháp chờ mạng. Not posted."
+  draftOnBus=false
+  B markers did not gain that id
+Store mergePublished drops non-published rows. Draft ≠ posted.
+
+================================================================================
+ATTACK 4 — 127.0.0.1 ONLY, NOT 0.0.0.0 WAN / OTHER-PC / OSM?
+================================================================================
+
+RESULT=PASS  (honest denial; bind is loopback)
+
+Listen table: 127.0.0.1:4175 only. vite.config preview.host=127.0.0.1.
+isLoopbackHost rejects non-loopback Host. Live Host spoof 403
+loopback-only. This PC's LAN IPv4 addresses do not accept 4175.
+
+Honesty (live A):
+  "Authored approximation. Not a live map, not OSM/Overture…"
+  "Friend bodies use this PC's 4175 loopback store (two browsers here).
+   … Not WAN. Not GPS. NOT_PLAN_PASS."
+Friends honesty:
+  "This-PC shared store on 4175 loopback (127.0.0.1). Two browsers on
+   THIS machine… Not WAN… NOT_PLAN_PASS."
+wanClaim=false  osmClaim=false
+CONCURRENCY / PROGRESS: another PC cannot join; do not bind 0.0.0.0.
+
+Live JS still contains the denial string "OSM" (4) and no "0.0.0.0".
+No claim that another PC can join or that the map is fetched OSM.
+
+================================================================================
+ATTACK 5 — GATE-U1 FAKED? PLAN PASS? NOT_PLAN_PASS MISSING?
+================================================================================
+
+RESULT=PASS  (not faked; not a plan PASS)
+
+Canonical plan still:
+  CURRENT_FIRST_LEFTOVER=GATE-U1
+  WP_STATE_PASS_POLICY=ORIGINAL_VALUES_UNCHANGED_NOT_LIVE_PROGRESS
+  GATE-U1 STATE: NOT_STARTED
+  R2-WP0 / M0 / M1 / M2 STATE: NOT_STARTED
+  No STATE: DONE/PASS/COMPLETE on those WPs
+
+hh-3d/app/docs/review/README.txt still:
+  GATE-U1 is NOT done.
+  Need three independent human reviewers…
+  placeholder so later agents do not invent a pass.
+
+Live NOT_PLAN_PASS on honesty + friends line. Lead packs set
+not_plan_pass / not_gate_u1. No invented reviewer names, no forged
+5-minute notes, no OWNER_SIGN name. Leftover #1 remains GATE-U1.
+
+================================================================================
+ATTACK 6 — THEIR PROBES J6_SHARED_OK / J5_JUMP_OK?
+================================================================================
+
+RESULT=CONSISTENT_BUT_NOT_USED_AS_SOLE_PROOF
+
+On disk:
+  J6-SHARED-SERVER-2026-09-03.txt  verdict=J6_SHARED_OK
+    busOk twoBrowsersOk friendOk offlineOk draftOk honestyOk
+    shopIds=[shop-local-sharedpc]  (Node inject, not UI create)
+    sawA/sawB include lantern + sharedpc
+    drafted Chưa đăng; draftOnBus=false
+  J5-JUMP-2026-09-03.txt  verdict=J5_JUMP_OK
+    peakAlt=0.95  peakAirborne=1  landedAlt=0
+
+This critic did not re-run those writers. Independent CDP on the same
+4175 reproduced (1) UI-posted shop crossing isolated profiles via the
+bus and (2) Space leave-y=0 / land with the same 0.95 peak. Their
+J6_SHARED_OK is weaker on create (Node POST) and stronger on the
+Online friend-walk they reminted; this seat is stronger on UI create
+and did not remint friend walk. Jump numbers match.
+
+================================================================================
+ATTACK 7 — PLAYER SEAT: CAN A HUMAN POST + JUMP WITHOUT READING CODE?
+================================================================================
+
+RESULT=PASS
+
+On 4175 a human can:
+  Become Chủ quầy (máy này)
+  Type a non-default shop name and Open shop
+  Open a second browser profile on this machine and see that shop
+  Press Space, leave the slab, land
+  Tick Simulate no-network and read Chưa đăng (not đã đăng)
+
+No Google login. No GPS prompt. Another machine will not see the shop.
+That is the labeled local demo.
+
+================================================================================
+LEAD CLAIMS vs DISK+LIVE
+================================================================================
+
+Claim                                         Verdict
+4175 is the player                            CONFIRMED (only listener)
+Two isolated browsers share shops via bus     CONFIRMED (UI create + B)
+Not one-tab localStorage as SoT               CONFIRMED (isolated profiles)
+Space jump ~0.95 m                            CONFIRMED (peak 0.95)
+Lands on slab y=0                             CONFIRMED
+Offline: no other bodies, shops stay          CONFIRMED on default Offline
+Draft ≠ posted                                CONFIRMED
+127.0.0.1 only, not 0.0.0.0 WAN               CONFIRMED (listen + 403 + LAN)
+Probes J6_SHARED_OK / J5_JUMP_OK on disk      CONSISTENT; not re-run
+NOT_PLAN_PASS                                 CONFIRMED
+GATE-U1 not faked                             CONFIRMED
+Another PC / WAN / OSM as live feature        REJECTED (they deny it)
+Shared store is fake / one-tab only           REJECTED
+Jump is fake                                  REJECTED
+
+================================================================================
+HARD FAIL CHECK (TICK=no triggers)
+================================================================================
+
+Shared store real on 4175                     YES
+B (fresh storage) saw A's posted shop         YES
+Still one-tab localStorage only               NO
+Space: feet leave y=0 then land               YES
+Jump fake                                     NO
+Another-PC / WAN / OSM claimed                NO
+Page broken / 4175 down / wrong product       NO
+Plan STATE/PASS ticked                        NO
+GATE-U1 humans invented                       NO
+J6/J5 claimed as plan PASS                    NO (labeled NOT_PLAN_PASS)
+
+Therefore TICK=yes for this-PC shared store + Space jump on 4175.
+
+================================================================================
+NOT GRANTED
+================================================================================
+
+- GATE-U1 / any plan PASS
+- M1-WP0 shop-server independence / catalog cache
+- M2-WP0 / M2-WP1 real presence server
+- Claim that another PC can join today
+- OSM / Overture fetch
+- 0.0.0.0 WAN bind
+- This critic's remint of their Online A↔B walk
+- Permission to start 4173/4174, fetch maps, Unreal, VF, or tick [x]
+
+================================================================================
+INDEPENDENT CDP NUMBERS (4175, 2026-09-03 15:10 +07)
+================================================================================
+
+A created: shop-local-mtl8ulddihjpre
+  name=Quay Critic J6 Jump  sells=Sach phe binh J6  status=published
+  lon=106.6981497 lat=10.77162
+B before: markers lantern + shop-local-sharedpc; no critic id
+B after:  markers lantern + leftover + shop-local-mtl8ulddihjpre
+Draft: shop-local-mtl8urfo7t0uuk Chưa đăng / not on bus / not on B
+Jump: pre 0/0 → peak 0.95 airborne=1 → land 0/0 groundY=0
+buildings=60  playReady A/B=yes
+Host spoof /demo-bus 403 loopback-only
+LAN :4175 no connect
+
+This critic did not POST catalog_clear afterward. The live bus now also
+holds this critic's published shop until someone else clears it.
+
+================================================================================
+END
+================================================================================

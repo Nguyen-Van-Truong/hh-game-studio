@@ -1,0 +1,91 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=19:37 +07
+ROLE=IMPLEMENTER
+TICK=n/a (do not treat this file as TICK=yes)
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M2=1
+NOT_M0_WP1=1
+NOT_M1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+PLAYER_URL=http://127.0.0.1:4175/
+RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-43
+COMMAND=node hh-3d/app/data-qa/j5-friend-viewing-probe.mjs
+VERDICT_IMPLEMENTER_CDP=J5_FRIEND_VIEWING_OK
+LIVE_JS=/assets/index-C6w1CTve.js
+LIVE_JS_LEN=2172514
+LIVE_JS_SHA256=d37b3492bbc939aedc75bee64d01c8b47a66bb931a24bea495831b908231a153
+LISTEN=127.0.0.1:4175
+LIVE_PID=30200
+REMINTED=yes
+ONE_RECYCLE_AFTER_BUILD=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NO_COMMIT=1
+ACCEPTED_PRIOR=CRITIC-3D-SHELF-ATTRIB-REAUDIT-2026-09-04.txt TICK=yes on /assets/index-DEBo1VKU.js
+
+================================================================================
+SLICE
+================================================================================
+
+Modes contract: if a friend enters a shop, street presence leaves
+the street; the other friend may see “Đang xem cửa hàng” and a
+public-shop link. No shared interior.
+
+This remint publishes optional viewing_shop_id on the local
+demo-bus presence packet while a shelf is open. The viewer still
+hears the friend as coarse presence, but the street body / 3D
+label / 2D remote marker / friend footsteps are gone. Menu
+people-row + people-layer show “Đang xem cửa hàng” and Mở kệ.
+Close shelf: street body returns.
+
+Not M2. Not a city presence server. Two browsers on this PC
+4175 loopback only. Did not catalog_clear. Did not rip
+minimap dots, attrib-off-minimap, leftover banners, Nearby/E,
+or defer.
+
+================================================================================
+CDP (headless Chrome, 1280×720, seats A+B, recycled 4175)
+================================================================================
+
+Friend graph was reset (graph_clear + leave) then re-friended.
+Shops were not cleared.
+
+  before A opens lantern: B streetCount=1 bodyA=1 viewing=0
+  A Menu-opens shop-lantern-fish (leftover=0)
+  during: B bodyA=0 labelA=0 streetCount=0 viewingCount=1
+          remote-viewing-a shop=shop-lantern-fish “Đang xem cửa hàng”
+          people-row-a street=0 · Đang xem cửa hàng · Mở kệ
+  after Close shelf: B bodyA=1 viewing gone streetCount=1
+
+Live JS after recycle (old pid 44892 → 31800 → 30200):
+  /assets/index-C6w1CTve.js
+  LEN=2172514
+  SHA256=d37b3492bbc939aedc75bee64d01c8b47a66bb931a24bea495831b908231a153
+
+Shot=hh-3d/app/data-qa/j5-3d-friend-viewing.png
+Probe=hh-3d/app/data-qa/j5-friend-viewing-probe.mjs
+JSON=hh-3d/app/data-qa/J5-FRIEND-VIEWING-2026-09-04.txt
+
+Implementer CDP only. Not an independent critic TICK. Not a plan tick.
+
+================================================================================
+OWNER LEFTOVERS (unchanged)
+================================================================================
+
+1. GATE-U1 three-human review (first acceptance leftover; not faked).
+2. R2-WP1 headed/mobile/memory/min-FPS thresholds still UNFILLED.
+3. WAN / other-PC join still not built. 4175 loopback only.
+4. R4-WP0B real account/OIDC still not built.
+5. Open data (OSM/Overture) still needs license ledger + grant.
+6. Leftover this-PC shops stay in the catalog; they do not own street E.
+7. M0/M1/M2 plan WPs still NOT_STARTED. NOT_PLAN_PASS. Not M1.

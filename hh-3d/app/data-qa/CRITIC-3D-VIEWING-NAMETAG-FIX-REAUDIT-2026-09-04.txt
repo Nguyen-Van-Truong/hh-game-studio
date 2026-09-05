@@ -1,0 +1,333 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+HASH_MISMATCH=0
+DID_NOT_RECYCLE=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M2=1
+LIVE_JS=/assets/index-DScoMgU1.js
+LIVE_JS_LEN=2173037
+LIVE_JS_SHA256=c5528b94d747c5ca5a6a58ef3e2fce00291bdc4dbcf71274eb108d28315644f8
+DID_NOT_REBUILD=1
+DID_NOT_RESTORE_DIST=1
+DID_NOT_CATALOG_CLEAR=1
+NOT_M0_WP1=1
+NOT_M1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=20:54 +07
+MODEL=grok-4.6-extra-high
+SCOPE=Independent re-audit of VIEWING_NAMETAG fix remint on live DScoMgU1. Do not treat implementer CRITIC-3D-VIEWING-NAMETAG-FIX-2026-09-04.txt (TICK=n/a) as acceptance. Named miss is leftover street nametag on the FIRST viewing-published sample.
+PLAYER_URL=http://127.0.0.1:4175/
+LISTEN=127.0.0.1:4175
+LIVE_PID=48420
+LIVE_PID_AFTER_CDP=48420
+LIVE_PID_STARTTIME=2026-09-04 20:47:50 +07
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-VIEWING-NAMETAG-FIX-REAUDIT-2026-09-04.txt
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-VIEWING-NAMETAG-FIX-2026-09-04.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+DID_NOT_TREAT_IMPLEMENTER_AS_TICK_YES=1
+DID_NOT_COPY_IMPLEMENTER_JSON=1
+DID_NOT_RUN_J5_VIEWING_NAMETAG_PROBE=1
+DID_NOT_RUN_J5_FRIEND_E_VIEWING_PROBE=1
+PRIOR_TICK_NO_UNTOUCHED=CRITIC-3D-VIEWING-NAMETAG-REAUDIT-2026-09-04.txt TICK=no on /assets/index-Bpqr6UP3.js
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+AUTHORIZE_MAP_FETCH=NO
+VITE_PREVIEW_PORT_PIN=4175
+CRITIC_CDP_PORTS=9992 / 9994
+IMPLEMENTER_CDP_PORT_NOT_REUSED=1
+DID_NOT_REUSE_9788=1
+DID_NOT_REUSE_9789=1
+DID_NOT_REUSE_9785=1
+DID_NOT_REUSE_9787=1
+DID_NOT_REUSE_9985=1
+DID_NOT_REUSE_9987=1
+DID_NOT_REUSE_9988=1
+DID_NOT_REUSE_9990=1
+VIEWPORT=1280x720
+ISOLATED_PROFILES=1
+HEADLESS_NEW=1
+SEATS=a+b
+SLICE=VIEWING_NAMETAG
+GRAPH_CLEAR_THEN_RE_FRIEND=1
+SHOPS_KEPT=1
+CLICKED_OPEN_SHOP=0
+OPENED_VIA=e
+
+LIVE_JS_BEFORE=/assets/index-DScoMgU1.js
+LIVE_JS_LEN_BEFORE=2173037
+LIVE_JS_SHA256_BEFORE=c5528b94d747c5ca5a6a58ef3e2fce00291bdc4dbcf71274eb108d28315644f8
+LIVE_JS_AFTER=/assets/index-DScoMgU1.js
+LIVE_JS_LEN_AFTER=2173037
+LIVE_JS_SHA256_AFTER=c5528b94d747c5ca5a6a58ef3e2fce00291bdc4dbcf71274eb108d28315644f8
+LIVE_JS_MATCHES_CLAIM=1
+HASH_MISMATCH=0
+LIVE_CSS=/assets/index-Dza0__iA.css
+
+HUNT1_HASH=PASS
+HUNT2_LEFTOVER_NAMETAG=PASS
+HUNT3_LEFTOVER_HONESTY=PASS
+BODY_VANISHED=1
+NAMETAG_GONE_AT_FIRST_VIEWING_SAMPLE=1
+NAMETAG_GONE_AFTER_700MS=1
+VIEWING_COPY_VISIBLE=1
+VIEWING_COPY=Đang xem cửa hàng
+VIEWING_SHOP=shop-local-mtmh45qxehxhvb
+VIEWING_SHOP_NAME=Quầy Phở Nhà
+LEFTOVER_STOLE_VIEWING=0
+SPAWN_E_EMPTY=1
+SPAWN_E_STOLEN=0
+HONESTY_DENIES_GTA_11_TWIN=1
+BUNDLE_PLAY_IDLE=1
+OIDC_CLAIM=0
+WAN_CLAIM=0
+CITY_PRESENCE_SERVER_CLAIM=0
+BIGGEST_MISS=None on the named hunts. First viewing-published sample on this CDP had remote-body-a gone and querySelector [data-testid=remote-avatar-a] null, with no visible DIV.play-remote-label for seat a.
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/ was already up. Bind 127.0.0.1 pid 48420
+(node, StartTime 2026-09-04 20:47:50 +07). Did not recycle, rebuild,
+restore-dist, kill, or restart 4175. Did not start 4173 / 4174 /
+5175. Did not bind 0.0.0.0. Did not catalog_clear. Same LISTEN
+pid 48420 after CDP.
+
+Did not treat CRITIC-3D-VIEWING-NAMETAG-FIX-2026-09-04.txt as
+TICK=yes (ROLE=IMPLEMENTER, TICK=n/a, no implementer two-seat
+claim). Did not run j5-viewing-nametag-probe.mjs or
+j5-friend-e-viewing-probe.mjs as proof. Did not copy that
+implementer note as this verdict. Did not overwrite
+CRITIC-3D-VIEWING-NAMETAG-REAUDIT-2026-09-04.txt (that TICK=no
+on Bpqr6UP3 stays). Did not tick any plan. GATE-U1 humans were
+not invented. Not M1. Not M2. NOT_PLAN_PASS.
+
+Independent Chrome CDP, isolated temp profiles, headless=new,
+1280×720, ?seat=a on 9992 and ?seat=b on 9994. Did not reuse
+9788 / 9789 / 9785 / 9787 / 9985 / 9987 / 9988 / 9990.
+graph_clear then re-friend only; leftover Shared PC / J6 and
+the other this-PC shops stayed on /demo-bus.
+
+GET / then GET the script, recorded before CDP and after CDP.
+Name + length + sha256 match the claimed remint both times.
+Third GET after chromes were gone: same. HASH_MISMATCH=0.
+
+Hunt 2 holds on THIS CDP: KeyE at Harbor sidewalk Phở published
+viewing and hid remote-body-a. On the first viewing-published
+sample (MutationObserver, body gone AND “Đang xem cửa hàng”
+for Quầy Phở Nhà), querySelector [data-testid=remote-avatar-a]
+was null and no visible DIV.play-remote-label for seat a was
+in the document. A later +700 ms sample was also null. That
+later null is not what passed hunt 2; the first published
+sample already held.
+
+================================================================================
+LIVE JS
+================================================================================
+
+GET / then GET /assets/index-DScoMgU1.js
+
+BEFORE CDP:
+  HTML script = /assets/index-DScoMgU1.js
+  http file length = 2173037
+  sha256 = c5528b94d747c5ca5a6a58ef3e2fce00291bdc4dbcf71274eb108d28315644f8
+  CSS = /assets/index-Dza0__iA.css
+
+AFTER CDP:
+  HTML script = /assets/index-DScoMgU1.js
+  http file length = 2173037
+  sha256 = c5528b94d747c5ca5a6a58ef3e2fce00291bdc4dbcf71274eb108d28315644f8
+  CSS = /assets/index-Dza0__iA.css
+
+Third GET after chromes were gone: same name, same length,
+same sha256. Pid still 48420 StartTime 2026-09-04 20:47:50 +07.
+Claimed remint name + length + hash match. HASH_MISMATCH=0.
+
+Bundle scan (live bytes, not source):
+  play-idle = 1
+  play-idle-or-first-w = 0
+  openstreetmap = 0
+  overture = 2 (honesty denial: “not OSM/Overture”)
+  viewing copy “Đang xem cửa hàng” = 1
+  viewing_shop_id = 18
+  gta = 3 (honesty “No GTA claim”; plus unrelated gTag)
+  digital twin = 3 (honesty denial)
+  oidc = 8 (not_oidc / “OIDC is not built”, not a sign-in claim)
+
+================================================================================
+HUNT 1 — HASH_MISMATCH — PASS
+================================================================================
+
+Tried to fail a swapped or stale bundle vs DScoMgU1 / 2173037 /
+c5528b94d747c5ca5a6a58ef3e2fce00291bdc4dbcf71274eb108d28315644f8.
+
+Independent GET of raw file bytes before any Chrome, again after
+both seats exited, and a third GET after chromes were gone.
+Same name, same length, same sha256. Pid still 48420 StartTime
+2026-09-04 20:47:50 +07. PASS.
+
+================================================================================
+HUNT 2 — NAMED MISS: LEFTOVER STREET NAMETAG DURING VIEWING — PASS
+================================================================================
+
+Tried to fail: E does not publish viewing / street body stays;
+or on the FIRST viewing-published sample
+[data-testid=remote-avatar-a] is still in the document (even if
+called a minimap mark); or a visible DIV.play-remote-label for
+seat a is still in the document. A later +700 ms null does not
+erase a leftover already observed on that first sample.
+
+graph_clear then Menu add-friend-b / accept-friend-a,
+Online on both seats. B Menu stayed open; A Menu was closed
+before the walk. CLICKED_OPEN_SHOP=0. KeyE only.
+
+B before any shelf:
+  playReady=yes  canvas=1280×720
+  remote-body-a=1
+  remote-avatar-a=0  (allowed: “may exist”; body was enough)
+  streetCount=1  viewingCount=0  viewingA=null
+  people-layer = “Other people on the street: Bạn A (máy này).”
+  people-row-a street=1 shop="" “Bạn A (máy này) · standing · in-app, not GPS”
+
+A closed Menu. look=off. Spawn stall-hint Nearby empty
+(“E opens a stall when you are next to it.”). Did not click
+any open-shop-*.
+
+A walked Harbor sidewalk: face west, walk off asphalt, face
+north, hold lon≈106.69799. Attempts 1–3 never got Nearby
+(critic-walk miss, not Menu). Attempt 4 held the sidewalk.
+
+At E (Menu closed, focused play-canvas):
+  chip=Harbor Walk  lon=106.6979912  lat=10.7717735  heading=11
+  nearby=shop-local-mtmh45qxehxhvb
+  hint=“Press E or tap Open to enter Quầy Phở Nhà.”
+  range=“Quầy Phở Nhà: 3.8 m away”
+  KeyE only. CLICKED_OPEN_SHOP=0.
+
+A shop-panel after E:
+  data-shop=shop-local-mtmh45qxehxhvb
+  data-leftover=0
+  shop-leftover-banner ABSENT
+  menuOpen=false
+
+B last street sample before viewing (rAF, still not published):
+  remote-body-a=1
+  remote-avatar-a=1
+  DIV.play-remote-label “Bạn A (máy này)” display=block
+  streetCount=1  viewingCount=0  viewingShop=""
+  people-layer = “Other people on the street: Bạn A (máy này).”
+  That leftover is allowed: viewing was not published yet.
+
+B FIRST viewing-published sample (MutationObserver, 10 ms later;
+wait condition = remote-body-a gone AND “Đang xem cửa hàng”
+for that shop — not “wait until nametag gone”):
+  remote-body-a=0
+  remote-avatar-a=0
+  labelACount=0
+  classLabelCount=0
+  querySelector('[data-testid=remote-avatar-a]') = null
+  visible DIV.play-remote-label for seat a = none
+  streetCount=0  viewingCount=1  bodyCount=0
+  play-remote-viewing count=1 text=“Đang xem cửa hàng”
+  remote-viewing-a shop=shop-local-mtmh45qxehxhvb street=0
+  people-layer = “Other people on the street: none (no accepted
+    friend Online on this street). Đang xem cửa hàng: Bạn A (máy này).”
+  people-row-a street=0 shop=shop-local-mtmh45qxehxhvb
+  text = “Bạn A (máy này) · Đang xem cửa hàng · Mở kệ”
+
+People-row “Bạn A” is the viewing list, not a street Html
+nametag. The named miss was DIV.play-remote-label
+[data-testid=remote-avatar-a]. That node is gone on this first
+published sample. Trail after that sample stayed labelA=0.
+
+B +700 ms later (same shelf still open):
+  remote-body-a=0
+  remote-avatar-a=0
+  labelACount=0
+  viewing copy still up for the same Phở.
+
+Leftover Shared PC / J6 were still listed as Menu open-shop-*
+buttons, but viewingA.shop was shop-local-mtmh45qxehxhvb,
+not shop-local-sharedpc / shop-local-mtl8ulddihjpre.
+LEFTOVER_STOLE_VIEWING=0.
+
+A clicked close-shop. B wait until bodyA=1 and viewingA gone.
+
+  remote-body-a=1
+  remote-avatar-a=0
+  viewingA=null
+  streetCount=1  viewingCount=0  viewingListCount=0
+  people-layer = “Other people on the street: Bạn A (máy này).”
+
+Street body returned. Nametag was not required to return.
+NAMETAG_GONE_AT_FIRST_VIEWING_SAMPLE=1. PASS hunt 2.
+
+================================================================================
+HUNT 3 — LEFTOVER / PLAY-IDLE / SAME PID — PASS
+================================================================================
+
+Tried to fail: catalog_clear wiped Shared PC / J6; hitch3
+play-idle ripped from the bundle; honesty claiming GTA /
+1:1 / digital twin / OIDC / WAN / a city presence server;
+pid recycled.
+
+/demo-bus before and after still has
+  shop-local-sharedpc          Quầy Shared PC
+  shop-local-mtl8ulddihjpre    Quay Critic J6 Jump
+plus the kept street-play this-PC shops (Phở / Chè / Kem).
+A’s Menu still listed open-shop-shop-local-sharedpc and
+open-shop-shop-local-mtl8ulddihjpre. Did not catalog_clear.
+Did not click those buttons.
+
+Spawn Nearby empty. SPAWN_E_STOLEN=0.
+
+Live bundle still contains play-idle (count=1) and not
+play-idle-or-first-w.
+
+Honesty (compact, live CDP):
+  “Not a live map, not OSM/Overture, not photogrammetry, and
+  not a digital twin. No GTA claim, no 1:1 city.”
+presence-honesty:
+  “Not a city shop server. Not a city presence server. …
+  Not WAN. Not GPS. NOT_PLAN_PASS.”
+Live bundle OIDC hits are denials (“OIDC is not built”,
+not_oidc), not a sign-in claim. Not M2.
+
+LISTEN 127.0.0.1:4175 pid 48420 before CDP and after CDP.
+Process StartTime still 2026-09-04 20:47:50 +07. Did not
+recycle, rebuild, restore-dist, kill, or restart 4175.
+PASS.
+
+================================================================================
+OWNER LEFTOVERS (unchanged; not invented)
+================================================================================
+
+1. GATE-U1 three-human review still unproven. Not faked.
+2. R2-WP1 headed/mobile/memory/min-FPS thresholds still UNFILLED.
+3. WAN / other-PC join still not built. 4175 loopback only.
+4. Real account / OIDC still not built.
+5. Open data (OSM/Overture) still needs license ledger + grant.
+6. Leftover this-PC shops stay in the catalog; they do not own
+   street E or this viewing packet.
+7. M0/M1/M2 plan WPs still NOT_STARTED. NOT_PLAN_PASS. Not M1.
+   Not M2.
+
+END

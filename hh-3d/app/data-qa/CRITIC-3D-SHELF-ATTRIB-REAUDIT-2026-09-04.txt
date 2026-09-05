@@ -1,0 +1,383 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+HASH_MISMATCH=0
+DID_NOT_RECYCLE=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+LIVE_JS=/assets/index-DEBo1VKU.js
+LIVE_JS_LEN=2171029
+LIVE_JS_SHA256=17695ddc17e581e5892a0c2d35f843f2eb791c17da3120062a58b18933d99872
+DID_NOT_REBUILD=1
+NOT_M0_WP1=1
+NOT_M1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=19:28 +07
+MODEL=grok-4.6-extra-high
+SCOPE=Re-audit of implementer SHELF_MINIMAP_CLEAR remint after TICK=no on CIj9td8A. Named miss was attrib card covering lantern/Phở/Kem on the lantern-open 184×134 crop.
+PLAYER_URL=http://127.0.0.1:4175/
+LISTEN=127.0.0.1:4175
+LIVE_PID=44892
+LIVE_PID_AFTER_CDP=44892
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-SHELF-ATTRIB-REAUDIT-2026-09-04.txt
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-SHELF-ATTRIB-2026-09-04.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+DID_NOT_TREAT_IMPLEMENTER_AS_TICK_YES=1
+PRIOR_TICK_NO_KEPT=hh-3d/app/data-qa/CRITIC-3D-SHELF-MINIMAP-REAUDIT-2026-09-04.txt
+DID_NOT_OVERWRITE_PRIOR_TICK_NO=1
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_RUN_IMPLEMENTER_PROBE=1
+VITE_PREVIEW_PORT_PIN=4175
+CRITIC_CDP_PORTS=9971 (walk stopped on Phở; unused as hunt-4) then 9973 / 9975 (did not open lantern; unused as hunt-4) then 9977 (verdict)
+IMPLEMENTER_CDP_PORT_NOT_REUSED=1
+VIEWPORT=1280x720
+ISOLATED_PROFILES=1
+HEADLESS_NEW=1
+SEAT=b
+GUEST=1
+
+LIVE_JS_BEFORE=/assets/index-DEBo1VKU.js
+LIVE_JS_LEN_BEFORE=2171029
+LIVE_JS_SHA256_BEFORE=17695ddc17e581e5892a0c2d35f843f2eb791c17da3120062a58b18933d99872
+LIVE_JS_AFTER=/assets/index-DEBo1VKU.js
+LIVE_JS_LEN_AFTER=2171029
+LIVE_JS_SHA256_AFTER=17695ddc17e581e5892a0c2d35f843f2eb791c17da3120062a58b18933d99872
+LIVE_JS_MATCHES_CLAIM=1
+HASH_MISMATCH=0
+
+DEFER_FIRST_WRAP=pending
+DEFER_MAP_ABSENT_FIRST=1
+DEFER_FIRST_PLAY=pending
+DEFER_MAPLIBRE_FIRST_PLAY=0
+DEFER_AFTER_FIRST_W=live
+DEFER_KIND=play-idle-or-first-w
+LANTERN_PANEL_OVERLAP=0
+LEFTOVER_PANEL_OVERLAP=0
+LANTERN_WRAP_VISIBLE=1
+LANTERN_WRAP_OP=1
+LEFTOVER_BANNER_ON_SHAREDPC=1
+LANTERN_LEFTOVER_BANNER=0
+LANTERN_NEARBY=shop-lantern-fish
+LANTERN_RANGE=Quầy Cá Đèn Lồng: 3.8 m away
+SPAWN_E_EMPTY=1
+SPAWN_E_STOLEN=0
+CHIP_MINIMAP_AGREE=1
+HONESTY_DENIES_GTA_11_TWIN=1
+OIDC_CLAIM=0
+LEFTOVER_ON_MAP=0
+ATTRIB_IN_WRAP=0
+ATTRIB_VISIBLE=0
+ATTRIB_DISPLAY=none
+WRAP_ATTRIB=caption
+CAPTION=2D · not OSM
+HTML_MARKS_WHILE_LANTERN_OPEN=shop-lantern-fish,shop-local-mtmh45qxehxhvb,shop-local-mtmrbdjffjdkg8,shop-local-mtmrq33hoq4phb
+PLAYER_VISIBLE_DOTS_ON_LANTERN_CROP=lantern-purple,pho-purple,che-blue,kem-red
+LANTERN_CROP_PURPLE=72
+LANTERN_CROP_BLUE=32
+LANTERN_CROP_RED=57
+LEFTOVER_CROP_PURPLE=72
+LEFTOVER_CROP_BLUE=32
+LEFTOVER_CROP_RED=58
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/ was already up. Bind 127.0.0.1 pid 44892
+(node vite preview --host 127.0.0.1 --port 4175 --strictPort).
+Did not recycle, rebuild, restore-dist, kill, or start 4173 / 4174 / 5175.
+Did not bind 0.0.0.0. Did not catalog_clear. Same pid 44892 after CDP.
+
+Did not treat CRITIC-3D-SHELF-ATTRIB-2026-09-04.txt as TICK=yes
+(ROLE=IMPLEMENTER, TICK=n/a). Did not run j5-shelf-minimap-probe.mjs
+as proof. Did not copy J5-SHELF-MINIMAP JSON as the verdict.
+Did not overwrite CRITIC-3D-SHELF-MINIMAP-REAUDIT-2026-09-04.txt
+(that TICK=no on CIj9td8A stays). Did not tick any plan.
+GATE-U1 humans were not invented.
+
+Independent Chrome CDP, isolated temp profiles, ?seat=b guest,
+headless=new, 1280x720. Ports 9971 / 9973 / 9975 unused as hunt-4
+(lantern Nearby not held). Verdict stills/rects/pixels are 9977 only.
+
+Live hash matches the claimed remint before CDP and after 9977
+(/assets/index-DEBo1VKU.js 2171029
+17695ddc17e581e5892a0c2d35f843f2eb791c17da3120062a58b18933d99872).
+HASH_MISMATCH=0.
+
+Hunt 4 crop (lantern shelf open, map recentered on the lantern
+sidewalk): independent 184×134 clip shows four player-visible
+street-play dots. Mark-offset samples are 6E3D9A / 6E3D9A /
+2F5FBE / B82E4A, not FFFFFF. Purple count 72 (was 0 on CIj9td8A).
+.maplibregl-ctrl-attrib is absent in the wrap. Caption is
+“2D · not OSM”. Shop-panel overlap is 0. This is NOT_PLAN_PASS.
+Not M1.
+
+================================================================================
+LIVE JS
+================================================================================
+
+GET / then GET the script, recorded before CDP and after CDP 9977.
+
+HTML script = /assets/index-DEBo1VKU.js
+http file length = 2171029
+sha256 = 17695ddc17e581e5892a0c2d35f843f2eb791c17da3120062a58b18933d99872
+Matches the claimed remint name + length + hash.
+After CDP the same name + length + hash is still served from
+pid 44892.
+
+Bundle scan (live bytes, not source):
+  openstreetmap = 0
+  overpass = 0
+  street-play-plant = 1
+  minimap-shop-mark = 2
+  shop-local-sharedpc / shop-local-mtl8ulddihjpre hardcoded = 0
+  oidc = 8, denial language present
+  digital twin = 3 (honesty denial)
+  2D · not OSM = 1
+  No OIDC claim.
+
+CDP Network.requestWillBeSent (9977): 127.0.0.1:4175, data:, blob:.
+No osm / overpass / mapbox / maptiler hosts. /demo-bus was hit
+(leftover catalog still served). Did not catalog_clear.
+
+================================================================================
+HUNT 1 — HASH vs CLAIMED REMINT — PASS
+================================================================================
+
+Tried to fail as HASH_MISMATCH.
+
+Claimed: /assets/index-DEBo1VKU.js / 2171029 /
+17695ddc17e581e5892a0c2d35f843f2eb791c17da3120062a58b18933d99872
+
+Before CDP and after CDP 9977: same name, length, sha256.
+LISTEN stayed 127.0.0.1:4175 pid 44892.
+
+HASH_MISMATCH=0. PASS.
+
+================================================================================
+HUNT 2 — FIRST FRAMES STILL DEFER; THEN LIVE — PASS
+================================================================================
+
+Tried to fail as MapLibre already mounted on first Play paint,
+or defer ripped.
+
+Isolated guest B, about:blank then Page.navigate, poll ~40 ms
+(9977):
+
+  boot          wrap=absent  defer=""      mini=absent  maplibre=0
+  first wrap    467 ms       defer=pending mini=absent  maplibre=0
+                              playReady="" chip=—
+  playReady=yes 1930 ms      defer=pending mini=absent  maplibre=0
+                              chip=Steps East buildings=60
+  before first W defer=pending mini=absent  maplibre=0
+  after first W  defer=live    mini=present maplibre=1
+                 kind=play-idle-or-first-w
+                 chip=Harbor Walk mini=Harbor Walk
+                 shops=street-play-plant
+
+Identity = "Guest · shops public; friends not required"
+signed-in=no. friend-row-a not accepted.
+
+PASS.
+
+================================================================================
+HUNT 3 — LANTERN SHELF MUST NOT COVER THE 184×134 WIDGET — PASS
+================================================================================
+
+Tried to fail as shop-panel getBoundingClientRect overlap > 0,
+hidden wrap, opacity 0, leftover banner on a street shelf,
+or a corner crop with no map.
+
+Real Nearby/E at the lantern sidewalk (not leftover E):
+  nearby=shop-lantern-fish
+  range="Quầy Cá Đèn Lồng: 3.8 m away"
+  lon=106.6980012 lat=10.7718549 heading=331
+  E opened shop-lantern-fish
+  leftover=0  leftover banner ABSENT
+  kind="public shop · authored example among many"
+  chip+mini still Harbor Walk
+
+Independent rects (not implementer JSON):
+  wrap 184 × 134.390625 @ 1087.203125, 576.8125
+       vis=visible op=1 display=block z=3
+  panel 320 × 502.40625 @ 951.203125, 49.59375
+        bottom=552  vis=visible
+  overlapPanel = 0
+
+Full 1280×720 still: shelf ends above the corner; a gap of 3D
+street sits between panel bottom 552 and wrap top 576.8.
+Wrap still 184×134 visible.
+
+PASS.
+
+================================================================================
+HUNT 4 — FOUR STREET-PLAY DOTS PLAYER-VISIBLE WHILE LANTERN SHELF OPEN — PASS
+================================================================================
+
+Tried to fail as the named miss: attrib / “Authored approximation”
+card covering lantern / Phở / Kem after recenter; purple count 0;
+Chè-only crop; or HTML-only proof.
+
+HTML while lantern shelf is open (not used as enough):
+  four .minimap-shop-mark 8×8 op=1 vis=visible inWrap
+    shop-lantern-fish           Quầy Cá Đèn Lồng   rel 86,60  bg rgb(110,61,154)
+    shop-local-mtmh45qxehxhvb   Quầy Phở Nhà       rel 83,69  bg rgb(110,61,154)
+    shop-local-mtmrbdjffjdkg8   Quầy Chè Vỉa       rel 105,52 bg rgb(47,95,190)
+    shop-local-mtmrq33hoq4phb   Quay Kem Reaudit   rel 104,74 bg rgb(184,46,74)
+  leftover Shared PC / J6 ABSENT from proof and marks
+
+Independent lantern-open corner clip (184×134) pixel sample
+at those mark offsets, plus full-clip scan (PIL, this critic):
+
+  lantern rel 86,60  center 6E3D9A ring AA8BBD — purple visible
+  Phở     rel 83,69  center 6E3D9A ring AA8BBD — purple visible
+  Chè     rel 105,52 center 2F5FBE ring 859FD2 — blue visible
+  Kem     rel 104,74 center B82E4A ring D6828E — red visible
+  crop purple=72  blue=32  red=57
+  no FFFFFF attrib fill at those offsets
+
+The leftover-open clip on the same widget, before the lantern
+recenter, also shows four colored dots (centers 6E3D9A / 6E3D9A /
+2F5FBE / B82E4A; purple=72).
+
+PASS. Four player-visible street-play dots on this critic's crop.
+Hidden list + in-wrap HTML circles were not the proof.
+
+================================================================================
+HUNT 5 — ATTRIB GONE; CAPTION; HUD HONESTY — PASS
+================================================================================
+
+Tried to fail as .maplibregl-ctrl-attrib still covering the wrap,
+or honesty claiming GTA / 1:1 / digital twin.
+
+Lantern-open wrap:
+  attribPresent=0  attribList=[]  attribVisible=0
+  attribDisplay=none (no in-wrap attrib node)
+  wrapAttrib=caption
+  caption="2D · not OSM"
+
+Honesty banner still denies GTA / 1:1 / digital twin / OSM /
+live map / photogrammetry / city grid.
+
+PASS.
+
+================================================================================
+HUNT 6 — LEFTOVER MENU + SHARED PC; SPAWN E; CHIP; NO OIDC — PASS
+================================================================================
+
+Tried to fail as leftover banners ripped, leftover E stole spawn,
+leftover Shared PC / J6 on the 2D marks, chip/minimap disagree,
+or an OIDC claim.
+
+Menu Tab, leftoverCount=2, last rows labeled
+“không trên phố / leftover máy này”:
+  shop-local-sharedpc
+  shop-local-mtl8ulddihjpre   (Quay Critic J6 Jump)
+
+Menu-opened Shared PC:
+  leftover=1  banner present  leftoverCopy=1
+  kind="không trên phố / leftover máy này"
+  wrap still 184×134.39 @ 1087.2, 576.8 vis=visible op=1
+  panel bottom=552
+  overlapPanel = 0
+  leftover-open corner clip shows the map and four colored dots
+
+Spawn B E before first W:
+  nearby=""  panel=false  leftover E stolen=0
+
+Chip vs minimap (same frames):
+  first Play     chip=Steps East   mini absent (still deferred)
+  after first W  chip=Harbor Walk  mini=Harbor Walk
+  lantern stand  chip=Harbor Walk  mini=Harbor Walk / active=Harbor Walk
+
+No OIDC claim on the page. Identity guest, signed-in=no.
+Leftover catalog rows stay. Did not catalog_clear.
+
+PASS.
+
+================================================================================
+HUNT 7 — DID NOT RECYCLE 4175 — PASS
+================================================================================
+
+Before CDP: LISTENING 127.0.0.1:4175 pid 44892
+After CDP 9977: same listen, same pid, same vite preview argv.
+Did not recycle, rebuild, restore-dist, kill, or restart 4175.
+
+PASS.
+
+================================================================================
+HUNTS (not named fails)
+================================================================================
+
+9971 reached Phở Nearby (3.2 m) and never opened lantern; that
+walk is not a product miss and is not this verdict.
+9973 / 9975 also failed to hold lantern Nearby. Hunt 4 uses
+9977 only: Nearby/E shop-lantern-fish, leftover banner absent.
+
+Implementer probe / J5-SHELF-MINIMAP JSON / j5-3d-shelf-minimap.png
+unused as this critic's pass.
+
+Leftover Shared PC / J6 stay in /demo-bus and the Menu list.
+
+Pale-map cream pixels on the 184×134 clip are authored tiles /
+caption, not an attrib card. Mark-offset samples are saturated
+awning colors, unlike the prior CIj9td8A FFFFFF miss.
+
+================================================================================
+METHOD
+================================================================================
+
+1. 4175 already up (pid 44892). Did not recycle / rebuild /
+   start other ports. AUTHORIZE_MAP_FETCH=NO.
+2. GET / and /assets/index-DEBo1VKU.js. Recorded name+sha+len
+   before CDP and after.
+3. Read implementer note (TICK=n/a). Did not run its probe as
+   acceptance. Did not copy its overlap/marks JSON as verdict.
+4. Independent Chrome CDP 1280x720 isolated profiles.
+   9971 / 9973 / 9975: lantern Nearby not held; unused as hunt-4.
+   9977: guest B first-frame defer, spawn E, leftover Menu /
+   Shared PC, lantern sidewalk E, Network watch, full + corner
+   stills.
+5. Corner clips measured with PIL pixel samples at this
+   critic's own mark rects. Temp only, not data-qa.
+6. Did not write lead packs. Did not tick plan. Did not fake
+   GATE-U1. Did not overwrite the prior TICK=no file.
+
+Temp only (not under data-qa):
+  %TEMP%\hh-shelf-attrib-reaudit\critic-lantern-full.png
+  %TEMP%\hh-shelf-attrib-reaudit\critic-lantern-minimap.png
+  %TEMP%\hh-shelf-attrib-reaudit\critic-leftover-full.png
+  %TEMP%\hh-shelf-attrib-reaudit\critic-leftover-minimap.png
+  %TEMP%\hh-shelf-attrib-reaudit\critic.json
+  %TEMP%\hh-shelf-attrib-reaudit\pixels.json
+
+================================================================================
+STILL IMPOSSIBLE WITHOUT OWNER
+================================================================================
+
+- GATE-U1 three human reviewers (not faked)
+- AUTHORIZE_MAP_FETCH=YES + license ledger before any OSM/Overture
+- Other-PC / WAN join (store is this PC 4175 loopback)
+- Real account / OIDC
+
+================================================================================
+END
+================================================================================

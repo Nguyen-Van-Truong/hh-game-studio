@@ -1,0 +1,141 @@
+{
+  "run_id": "HH3D-J5-20260904-ASIA-SAIGON-24",
+  "player": "http://127.0.0.1:4175/",
+  "verdict": "J5_OWNER_OFF_BOARD_OK",
+  "reminted": false,
+  "didNotRecycle": true,
+  "didNotRebuild": true,
+  "liveJs": "/assets/index-D4Sc2h68.js",
+  "liveLen": 2162025,
+  "liveSha": "76f9843d6e8cff47bc683e55bea928ac36797054d601a1e6f4ceec9ace4c64b2",
+  "playerShopId": "shop-local-mtmh45qxehxhvb",
+  "ownerA": {
+    "spawnIdentity": "Guest · shops public; friends not required",
+    "spawnSigned": "no",
+    "spawnMode": "Offline — Stroll alone; shops still open.",
+    "asOwner": "Chủ quầy (máy này) · local demo, not a real account",
+    "asOwnerSigned": "yes",
+    "asOwnerMode": "Offline — Stroll alone; shops still open.",
+    "leftIdentity": "Guest · shops public; friends not required",
+    "leftSigned": "no",
+    "leftMode": "Offline — Stroll alone; shops still open.",
+    "duringB": {
+      "identity": "Guest · shops public; friends not required",
+      "signed": "no",
+      "mode": "Offline — Stroll alone; shops still open.",
+      "onlineActive": "no",
+      "remotes": 0
+    },
+    "shopStayedAfterLeave": true
+  },
+  "cropText": "Phở bò (mẫu)mẫu · not a live market Phở bò (mẫu) Phở bò (mẫu)",
+  "cropHasPho": true,
+  "cropHasBo": true,
+  "cropStats": {
+    "samples": 4257,
+    "slateRatio": 0.626,
+    "chalkRatio": 0.047
+  },
+  "cropBox": {
+    "x": 814,
+    "y": 234,
+    "w": 166,
+    "h": 53
+  },
+  "cropSize": {
+    "w": 198,
+    "h": 85
+  },
+  "northM": 13.73,
+  "eastM": 2.1,
+  "heading": 6,
+  "nearby": "shop-local-mtmh45qxehxhvb",
+  "shopOpen": "shop-local-mtmh45qxehxhvb",
+  "goods": [
+    {
+      "id": "listing-local-mtmh45qxhyu29f",
+      "kind": "other",
+      "status": "published",
+      "text": "Phở bòKhác / otherpublicLocal demo listing. Free-text sample. Not a real product.Liên hệ"
+    }
+  ],
+  "identityB": "Guest · shops public; friends not required",
+  "identitySignedB": "no",
+  "presenceModeB": "Offline — Stroll alone; shops still open.",
+  "friendASpawn": "none",
+  "friendAWalk": "none",
+  "friendAAfterE": "none",
+  "remotesWalk": 0,
+  "remotesAfterE": 0,
+  "leftoverInherited": false,
+  "didUnfriendLeftover": false,
+  "didAddFriend": false,
+  "didClickOnline": false,
+  "leftovers": [
+    {
+      "shop": "shop-local-sharedpc",
+      "source": "local-demo",
+      "draw": "0",
+      "keepOut": "1",
+      "titles": "Phở bò (mẫu)",
+      "count": 1
+    },
+    {
+      "shop": "shop-local-mtl8ulddihjpre",
+      "source": "local-demo",
+      "draw": "0",
+      "keepOut": "1",
+      "titles": "Sach phe binh J6 (mẫu)",
+      "count": 1
+    }
+  ],
+  "leftoverDrawn": [],
+  "leftoverPersist": [
+    {
+      "shop": "shop-local-sharedpc",
+      "name": "Quầy Shared PC",
+      "lat": 10.77162,
+      "lon": 106.69804,
+      "northM": 0,
+      "owner_presence": "offline",
+      "status": "published"
+    },
+    {
+      "shop": "shop-local-mtl8ulddihjpre",
+      "name": "Quay Critic J6 Jump",
+      "lat": 10.77162,
+      "lon": 106.69814973080383,
+      "northM": 0,
+      "owner_presence": "offline",
+      "status": "published"
+    },
+    {
+      "shop": "shop-local-mtmh45qxehxhvb",
+      "name": "Quầy Phở Nhà",
+      "lat": 10.771797831117475,
+      "lon": 106.69804,
+      "northM": 19.8,
+      "owner_presence": "offline",
+      "status": "published"
+    }
+  ],
+  "leftoverKeep": true,
+  "phoPersist": {
+    "shop": "shop-local-mtmh45qxehxhvb",
+    "name": "Quầy Phở Nhà",
+    "lat": 10.771797831117475,
+    "lon": 106.69804,
+    "northM": 19.8,
+    "owner_presence": "offline",
+    "status": "published"
+  },
+  "ownerOffOk": true,
+  "aShopStayed": true,
+  "guestOk": true,
+  "notFriendsOk": true,
+  "boardOk": true,
+  "eOk": true,
+  "leftoverOk": true,
+  "didNotCatalogClear": true,
+  "didNotRemint": true
+}

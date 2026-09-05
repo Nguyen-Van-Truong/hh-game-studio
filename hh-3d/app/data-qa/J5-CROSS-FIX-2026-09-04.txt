@@ -1,0 +1,76 @@
+{
+  "run_id": "HH3D-J5-20260904-ASIA-SAIGON-02",
+  "player": "http://127.0.0.1:4175/",
+  "verdict": "J5_CROSS_FIX_OK",
+  "not_plan_pass": true,
+  "not_gate_u1": true,
+  "not_osm": true,
+  "not_wan": true,
+  "eOk": true,
+  "skyOk": true,
+  "walkOk": true,
+  "lanternOk": true,
+  "honestyOk": true,
+  "skyBand": {
+    "samples": 2781,
+    "meanR": 105,
+    "meanG": 172.4,
+    "meanB": 216,
+    "beigeRatio": 0,
+    "blueRatio": 0.888,
+    "bluerThanRed": true
+  },
+  "seatB": {
+    "nearbyShop": "",
+    "stallHint": "E opens a stall when you are next to it.",
+    "shopRange": "Quầy Cá Đèn Lồng: 29 m away"
+  },
+  "remoteA": {
+    "testid": "remote-avatar-a",
+    "seat": "a",
+    "body": "tunic-humanoid",
+    "tunic": "#2a7d78",
+    "pose": "walk",
+    "heading": "0",
+    "lon": "106.6980400",
+    "lat": "10.7716825",
+    "limbSpread": "1.139",
+    "limbOpposite": "1",
+    "limbMoving": "1"
+  },
+  "remoteProof": {
+    "seat": "a",
+    "spread": "1.139",
+    "opposite": "1",
+    "moving": "1"
+  },
+  "walkedRemotes": [
+    {
+      "testid": "remote-avatar-a",
+      "seat": "a",
+      "body": "tunic-humanoid",
+      "tunic": "#2a7d78",
+      "pose": "walk",
+      "heading": "0",
+      "lon": "106.6980400",
+      "lat": "10.7716825",
+      "limbSpread": "1.139",
+      "limbOpposite": "1",
+      "limbMoving": "1"
+    }
+  ],
+  "walkedRemoteWalk": [
+    {
+      "seat": "a",
+      "spread": "1.139",
+      "opposite": "1",
+      "moving": "1"
+    }
+  ],
+  "lanternPanel": "shop-lantern-fish",
+  "hash": "57518a1352deba43",
+  "shotSpawn": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-cross-fix-spawn.png",
+  "shotB": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-cross-fix-seat-b.png",
+  "shotWalk": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-cross-fix-friend-walk.png",
+  "friendsB": 0
+}

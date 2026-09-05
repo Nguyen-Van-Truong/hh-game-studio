@@ -1,17 +1,26 @@
 PROMPT BÀN GIAO HH-3D CHO AGENT RẺ
-Phiên bản: 2026-09-02 hardening
+Phiên bản: 2026-09-03 rev2 — live routing + owner modes contract
 Mục tiêu: làm đúng, nhỏ, có bằng chứng; không làm nhiều nhưng không chứng minh được
 Model khuyến nghị: gpt-5.6-sol, reasoning medium
 
-CURRENT_OWNER_FREEZE=1
-CURRENT_MODE=AUDIT_ONLY
-CURRENT_OWNER_RESUME=0
-CURRENT_EXECUTION_AUTHORIZATION=NONE
+OWNER_MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+Nếu nhiệm vụ đụng Online/Offline, bạn bè, người trên phố, shop, hàng:
+đọc file đó trước. Online = chỉ bạn bè đi trên phố. Offline = không thấy
+NGƯỜI KHÁC; self avatar vẫn đi, hàng/shop vẫn có dù chủ thoát app.
+Social Offline khác mất Internet; có mạng vẫn cập nhật/đăng hàng.
+Vị trí avatar là trong app, không GPS/tâm camera; marker không thay avatar.
+Không nhảy M2-WP1 nếu CURRENT_WP chưa phải M-WP.
 
-QUAN TRỌNG: mọi section `EXECUTE_ONE_WP`, R0..R8, demo runtime checklist hoặc
-command nằm phía dưới chỉ là FUTURE TEMPLATE. Chúng không trở thành lệnh chạy
-chỉ vì agent đọc được file này. Khi `CURRENT_OWNER_RESUME=0`, agent không được
-copy một template rồi tự điền `OWNER_RESUME=1`.
+LIVE_PROGRESS=hh-3d/app/PROGRESS.txt
+CURRENT_OWNER_GRANT=2026-09-03_LOCAL_HH_WORLD_WEB
+CURRENT_FIRST_LEFTOVER=GATE-U1_SEE_LIVE_PROGRESS
+CURRENT_MODE=FOLLOW_USER_TASK_AND_LIVE_PROGRESS
+CURRENT_EXECUTION_AUTHORIZATION=RECORDED_LOCAL_WEB_ONLY_NO_MAP_FETCH
+THIS_REVISION=DOCUMENTATION_ONLY_NO_M_WP_STARTED
+
+QUAN TRỌNG: các template dưới không tự thành lệnh chạy. Đọc live PROGRESS,
+owner modes rev2 và canonical plan trước. Freeze 01-09 đã được thay bằng
+grant local web trong decision record 03-09; không tự mở mọi WP.
 
 Nếu dùng subagent, phân công tối thiểu:
   - Implementer: gpt-5.6-sol / medium, chỉ một WP.
@@ -32,16 +41,11 @@ Phạm vi duy nhất của nhiệm vụ là:
 
 D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/hh-game-studio/hh-3d
 
-Đây là prompt bàn giao cho các lượt sau. Tại thời điểm phát hành prompt này,
-owner đang freeze toàn bộ HH-3D. Nếu header ở cuối prompt chưa được owner điền
-đúng `OWNER_RESUME=1`, bạn chỉ được AUDIT_ONLY: đọc, kiểm kê, báo cáo; không
-được sửa code, không fetch data, không cài package, không chạy demo/runtime,
-không chạy Godot, không pack evidence, không commit và không tick plan.
-
-Không coi các câu trong chat cũ, README cũ, screenshot, PASS banner hoặc output
-của agent trước là quyền triển khai. Đọc `AGENTS.md` hiện hành trước tiên.
-AGENTS.md mới nhất có quyền cao hơn prompt này. Nếu AGENTS.md nói freeze thì
-freeze thắng mọi câu “hãy làm tiếp” trong lịch sử.
+Đây là prompt bàn giao. Runtime HH World hiện có ở hh-3d/app/; sandbox và
+demo là lịch sử/nhánh riêng. Read live PROGRESS first cho phần HH World.
+Không coi screenshot/PASS banner là bằng chứng quyền hoặc nghiệm thu.
+Chỉ dẫn owner hiện hành có ưu tiên; dùng grant đã ghi với đúng giới hạn,
+không bắt owner nhập lại OWNER_RESUME=1. Không tự giả chữ ký human.
 
 Hai chế độ:
 
@@ -50,11 +54,11 @@ MODE=AUDIT_ONLY
   handoff nếu owner cho phép. Không chạm product source.
 
 MODE=EXECUTE_ONE_WP
-  Chỉ được dùng khi owner gửi lệnh mới có `OWNER_RESUME=1`, chỉ rõ plan, WP,
-  allowed paths, network và paid-service authorization. Chỉ làm một WP trong
-  lượt đó. Không tự mở WP kế tiếp.
+  Dùng khi task và grant đã có cho phép exact WP trong live PROGRESS. Agent
+  lập scope/allowed paths/network từ canonical plan; không đòi cấp lại quyền.
+  Chỉ làm một WP trong lượt đó; không tự mở gate hoặc WP kế tiếp.
 
-Trong AUDIT_ONLY, tuyệt đối không được dùng câu “cập nhật handoff” làm cớ để:
+Trong AUDIT_ONLY không có yêu cầu sửa plan, không được dùng “handoff” làm cớ để:
 
 - rewrite `CURRENT_WP`, `STATUS`, `STATE`, `ALLOWED_PATHS` hoặc WP graph trong
   execution plan;
@@ -62,6 +66,9 @@ Trong AUDIT_ONLY, tuyệt đối không được dùng câu “cập nhật hand
 - xuất một chuỗi “WP1 -> WP2 -> WP3” như thể đã được owner mở;
 - chạy build/typecheck/preview/browser chỉ để kiểm chứng tài liệu;
 - sửa source candidate vì thấy một known gap.
+
+Nếu owner yêu cầu sửa plan như lượt 03-09 rev2, được chỉnh contract/order/
+handoff trong scope đó; không thay STATE/PASS, không gọi đó là code đã chạy.
 
 Các giá trị implementation lịch sử như camera sign, scale, mesh dimensions,
 palette, primitive choice hoặc port cũ chỉ là `LAST_OBSERVED_IMPLEMENTATION`.
@@ -85,10 +92,10 @@ Không dựa vào memory/chat summary làm source of truth. Mỗi turn mới ho�
 compaction phải phục hồi state theo đúng thứ tự:
 
 1. đọc `AGENTS.md` hiện hành;
-2. đọc header/status của exact target plan;
-3. đọc `hh-3d/demo/docs/handoff-2026-09-01.txt`;
-4. đọc `hh-3d/zdoc/01-9-hh3d-plan-audit-summary.txt`;
-5. đọc phần cuối `hh-3d/zdoc/review-log.txt`;
+2. đọc `hh-3d/app/PROGRESS.txt` và decision record live được trỏ tới;
+3. đọc header `hh-3d/zdoc/31-8-hh3d-real-application-plan.txt`;
+4. đọc owner modes rev2 rồi exact WP/DoD/references trong canonical plan;
+5. đọc cuối review-log; demo/audit-summary cũ chỉ khi cần lịch sử;
 6. nếu cần biết tree thì chỉ chạy read-only `git status --short`;
 7. trước action phải tự ghi lại:
 
@@ -104,7 +111,8 @@ compaction phải phục hồi state theo đúng thứ tự:
    KNOWN_GAPS
    NEXT_SAFE_ACTION
 
-Thiếu hoặc mâu thuẫn một trường => AUDIT_ONLY/BLOCKED. Không tự điền từ chat cũ.
+Đối chiếu mâu thuẫn bằng ưu tiên owner mới + PROGRESS + contract + exact WP.
+Chỉ báo BLOCKED phần thật sự thiếu; không dùng freeze cũ chặn grant hiện hành.
 
 ================================================================================
 1. MỤC TIÊU SẢN PHẨM VÀ SỰ THẬT PHẢI GIỮ
@@ -213,11 +221,12 @@ primitive stylized prototype, không được gọi production art.
 
 Plan real application:
   hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
-  STATUS=PAUSED_NOT_STARTED_DECISIONS_REQUIRED
-  CURRENT_WP=NONE_PAUSED
-  APP_IMPLEMENTATION_PROGRESS=0_PERCENT_NO_APP_FOLDER
+  STATUS=LOCAL_PROOF_EXISTS_ACCEPTANCE_INCOMPLETE
+  CURRENT_WP=SEE_hh-3d/app/PROGRESS.txt
+  ORIGINAL_WP_STATE_PASS=UNCHANGED_NOT_LIVE_PROGRESS
 
-`hh-3d/app/` chưa có. Không nói HH World đã scaffold hoặc đã có backend.
+`hh-3d/app/` có local map proof trên 4175 theo PROGRESS. GATE-U1 còn thiếu,
+FPS mới có một phần desktop evidence; chưa có backend/shops/friends/avatar.
 
 Plan open-world:
   hh-3d/zdoc/31-8-hh3d-real-world-open-world-plan.txt
@@ -240,7 +249,8 @@ File này chỉ là background audit. Không lấy brief cũ cuối file làm l�
 5. CesiumJS chỉ là route/spike riêng cho globe/terrain/3D Tiles sau provider,
    terms, token, quota, cost và benchmark gate.
 6. Backend/PostGIS chỉ mở sau local map/search/card/share/data contract pass.
-7. Local bookmark trước, không login để browse; OIDC/cloud sync optional.
+7. Local bookmark/browse không login; identity bắt buộc cho M-WPs,
+   chỉ cloud bookmark sync optional.
 8. Unreal chỉ optional native client sau web MVP benchmark; gameplay native có
    plan riêng.
 
@@ -325,17 +335,18 @@ Lease/ownership:
 - source thay đổi sau critic làm mọi verdict/evidence cũ hết hiệu lực.
 
 ================================================================================
-6. LỘ TRÌNH THỰC THI CHÍNH XÁC SAU KHI OWNER RESUME
+6. THAM CHIẾU WP — THỨ TỰ CHỈ LẤY TỪ CANONICAL PLAN
 ================================================================================
 
-Không coi danh sách này là quyền chạy hiện tại. Đây là thứ tự được phép sau khi
-owner mở từng gate.
+Không coi vị trí đoạn văn dưới là dependency order hay quyền chạy. Chuỗi
+canonical: local proof/candidate R2 -> GATE-U1 -> R2 quality -> R4 bookmark
+-> R5 stable IDs -> R3 -> R4 identity -> M0-WP0 -> M0-WP1 avatar -> M1 shop/
+moderation -> M2 friends/presence -> R6/R8 owner-journey beta.
+City stories/native là nhánh riêng. Live next vẫn đọc PROGRESS; không làm lại R0.
 
-PLAN ERRATA GUARD: execution plan hiện còn vài contradiction đã ghi trong
-handoff/audit-summary (`Play/WASD` demo scope, D0-WP4/D0-WP6 split, P3
-R4-WP1/R4-WP0A order, `acquired_at`/`accessed_at`, networking header). Nếu
-exact active WP đụng một contradiction này, dừng BLOCKED để owner/coordinator
-reconcile plan; không tự sửa graph/STATE/ALLOWED_PATHS.
+PLAN ERRATA: HH World routing, order, acquired_at và mode/network đã được
+sửa rev2. Demo errata thuộc nhánh demo. Nếu phát hiện xung đột mới, báo đúng
+phần; không lấy audit cũ làm quyền đổi acceptance hoặc giả nghiệm thu.
 
 R0-WP0 — Product/hardware/AOI/provider decision record
 
@@ -420,6 +431,8 @@ backend lớn, search lớn hoặc native.
 
 GATE-U1 — Human-player/application usability proof
 
+Gate chặn NGHIỆM THU R2/mở phase sau. Candidate search/card/share local đã có
+được dùng làm đầu vào journey, không đòi R2 PASS trước gate.
 Đây là gate bắt buộc, không tự bỏ qua vì build pass. Ba reviewer độc lập, ít
 nhất một người chưa đọc code, hoàn thành journey 5 phút:
 
@@ -453,7 +466,9 @@ source ID tạm.
 
 R3-WP0/R3-WP1 — API/PostGIS/catalog
 
-Chỉ mở nếu metric chứng minh local static artifact không đủ. API tối thiểu:
+Sau quality/stable-ID gates. Shop/friends đã có nhu cầu shared state nên
+không cần ép chứng minh map tĩnh thất bại. Foundation API tham khảo (routes
+auth/shops/friends thêm theo exact WP; không mở tất cả ở R3):
 
 GET /health
 GET /ready
@@ -464,7 +479,7 @@ GET /worlds/:id/features?bbox=&layers=&limit=
 GET /places/search?q=&world_id=
 GET /places/:id
 GET /experiences/:id
-POST/PATCH/DELETE /bookmarks
+POST/PATCH/DELETE /bookmarks (chỉ khi cloud sync được mở sau auth)
 POST /map-issue-report
 
 Validate bbox/zoom/page/query cost; max bytes/features; cursor/limit; timeout/
@@ -482,11 +497,21 @@ Gắn Hòn Gió/city story vào stable internal ID, asset ledger, camera/card/sh
 loading/error/fallback/reduced motion. UI phải phân biệt source-derived với
 authored fiction. Source refresh không âm thầm làm mất authored anchor.
 
-R4-WP0B — Optional OIDC/cloud sync
+R4-WP0B — Identity bắt buộc cho M-WPs; cloud bookmark sync optional
 
-Chỉ mở sau R4-WP0A và owner/provider/legal decision. Có permission matrix,
-session/cookie/CSRF/CSP, consent/retention/delete/export/revoke, auth E2E. Nếu
-không cần, giữ OPTIONAL_NOT_OPEN.
+Sau R4-WP0A/R3-WP1 + provider/privacy/cost decision. Nhu cầu identity đã có
+từ owner modes, không bỏ qua auth. Guest browse/walk không login. Permission
+matrix, session/CSRF/CSP, consent/retention/delete/export/revoke, account
+isolation và auth E2E theo canonical WP. STATE lịch sử giữ nguyên, chưa PASS.
+
+M0–M2 — Owner modes (bắt buộc trước social/shop release)
+
+Đọc exact blocks trong canonical plan và modes rev2 T01–T12.
+M0-WP0 mode/connectivity/consent; M0-WP1 self avatar đi thật;
+M1-WP0 shop/listing/cache, M1-WP1 moderation; M2-WP0 friends;
+M2-WP1 input-driven remote walk + server privacy + lifecycle/reconnect.
+Không nhận marker-only, shop biến khi chủ thoát, STALE cho chưa có cache,
+hoặc Offline có mạng mà không đăng được hàng. Không tự làm checkout.
 
 R6-WP0/R6-WP1 — Security/observability/deploy/cost
 
@@ -739,20 +764,20 @@ Không được ghi “hoàn tất/final/production-ready” nếu chưa có DoD
 evidence + hai critic + coordinator decision trên cùng source hash.
 
 ================================================================================
-13. HEADER OWNER ĐIỀN TRƯỚC MỘT LƯỢT THỰC THI
+13. TASK CARD DO AGENT LẬP TỪ QUYỀN ĐÃ CÓ
 ================================================================================
 
-Nếu owner chưa muốn chạy, giữ nguyên:
+Mẫu này không phải bước bắt owner xin/cấp lại quyền. Lượt sửa plan:
 
 MODE=AUDIT_ONLY
-OWNER_RESUME=0
+TASK_SCOPE=OWNER_REQUESTED_PLAN_CORRECTION
 
-Nếu owner muốn cho agent thực hiện đúng một WP, owner phải thay bằng mẫu sau:
+Lượt thực thi: agent đối chiếu task/grant hiện hành rồi lập mẫu:
 
 MODE=EXECUTE_ONE_WP
-OWNER_RESUME=1
+OWNER_GRANT=<reference to recorded grant; không chữ ký tự bịa>
 PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
-CURRENT_WP=R0-WP0
+CURRENT_WP=<exact live WP từ hh-3d/app/PROGRESS.txt>
 GOAL=<một mục tiêu duy nhất>
 ALLOWED_PATHS=<exact paths của WP>
 FORBIDDEN_PATHS=godot/**; Vault Fighters; Kho Bí Ẩn; Snake; mọi path khác
@@ -762,8 +787,8 @@ DO_NOT_ADD_DEPENDENCY=true
 DONE_WHEN=<copy nguyên postconditions của WP>
 VERIFY=<copy exact verify của WP>
 
-Lượt đầu được khuyến nghị là R0-WP0 documentation/decision audit. Không phải
-R1-WP0 fetch data, không phải scaffold app, không phải Unreal.
+Không mặc định quay lại R0-WP0: record và scaffold đã có. Việc đầu còn thiếu
+ở lần viết này là GATE-U1; các gap FPS theo PROGRESS. Không fetch/Unreal/M-WP.
 
 ================================================================================
 14. KẾT LUẬN CHO AGENT

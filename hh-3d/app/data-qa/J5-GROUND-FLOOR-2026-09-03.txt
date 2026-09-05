@@ -1,0 +1,2331 @@
+{
+  "run_id": "HH3D-J5-20260903-ASIA-SAIGON-24",
+  "player": "http://127.0.0.1:4175/",
+  "verdict": "J5_GROUND_FLOOR_OK",
+  "not_plan_pass": true,
+  "not_gate_u1": true,
+  "not_osm": true,
+  "not_wan": true,
+  "facadeOk": true,
+  "groundOk": true,
+  "skyOk": true,
+  "propsOk": true,
+  "stallOk": true,
+  "shopOk": true,
+  "honestyOk": true,
+  "awningHex": "#6e3d9a",
+  "skyBand": {
+    "samples": 1462,
+    "meanR": 124.8,
+    "meanG": 149,
+    "meanB": 163.2,
+    "lum": 144.9,
+    "beigeRatio": 0.029,
+    "grayRatio": 0,
+    "blueRatio": 0.64,
+    "tealRatio": 0.646,
+    "darkRatio": 0.078,
+    "lightRatio": 0.821,
+    "whiteRatio": 0.027,
+    "warmRatio": 0.026,
+    "awningRatio": 0,
+    "glassRatio": 0.028,
+    "doorRatio": 0.007,
+    "uniqueQ16": 65,
+    "bluerThanRed": true
+  },
+  "leftFloor": {
+    "samples": 8648,
+    "meanR": 96.8,
+    "meanG": 102.8,
+    "meanB": 103.3,
+    "lum": 101.6,
+    "beigeRatio": 0,
+    "grayRatio": 0.005,
+    "blueRatio": 0.468,
+    "tealRatio": 0.497,
+    "darkRatio": 0.324,
+    "lightRatio": 0.46,
+    "whiteRatio": 0.153,
+    "warmRatio": 0,
+    "awningRatio": 0.286,
+    "glassRatio": 0.129,
+    "doorRatio": 0.051,
+    "uniqueQ16": 64,
+    "bluerThanRed": true
+  },
+  "rightFloor": {
+    "samples": 8648,
+    "meanR": 164.4,
+    "meanG": 160.5,
+    "meanB": 145.1,
+    "lum": 160.2,
+    "beigeRatio": 0.024,
+    "grayRatio": 0.001,
+    "blueRatio": 0.017,
+    "tealRatio": 0.017,
+    "darkRatio": 0.1,
+    "lightRatio": 0.885,
+    "whiteRatio": 0.729,
+    "warmRatio": 0.023,
+    "awningRatio": 0.017,
+    "glassRatio": 0.076,
+    "doorRatio": 0.025,
+    "uniqueQ16": 45,
+    "bluerThanRed": false
+  },
+  "sideGlass": 0.20500000000000002,
+  "sideDoor": 0.076,
+  "stallAwning": {
+    "samples": 13724,
+    "meanR": 86,
+    "meanG": 85.8,
+    "meanB": 85.3,
+    "lum": 85.8,
+    "beigeRatio": 0.01,
+    "grayRatio": 0.028,
+    "blueRatio": 0.273,
+    "tealRatio": 0.193,
+    "darkRatio": 0.51,
+    "lightRatio": 0.372,
+    "whiteRatio": 0.167,
+    "warmRatio": 0.01,
+    "awningRatio": 0.13,
+    "glassRatio": 0.252,
+    "doorRatio": 0.195,
+    "uniqueQ16": 173,
+    "bluerThanRed": false
+  },
+  "zebraBand": {
+    "samples": 10472,
+    "meanR": 51,
+    "meanG": 61.8,
+    "meanB": 61,
+    "lum": 59.4,
+    "beigeRatio": 0,
+    "grayRatio": 0.12,
+    "blueRatio": 0.12,
+    "tealRatio": 0.232,
+    "darkRatio": 0.739,
+    "lightRatio": 0.23,
+    "whiteRatio": 0.121,
+    "warmRatio": 0,
+    "awningRatio": 0,
+    "glassRatio": 0.568,
+    "doorRatio": 0.293,
+    "uniqueQ16": 78,
+    "bluerThanRed": true
+  },
+  "hash": "ba9dca6e74559bde",
+  "bytes": 148829,
+  "shotWalk": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-ground-floor.png",
+  "shotStall": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-ground-floor-stall.png",
+  "spawnDom": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/?seat=a",
+    "playReady": "yes",
+    "canvas": {
+      "w": 1280,
+      "h": 720,
+      "cw": 1280,
+      "ch": 720,
+      "box": {
+        "w": 1280,
+        "h": 720,
+        "top": 0,
+        "left": 0
+      }
+    },
+    "sky": "gradient-hemisphere",
+    "sun": "disc",
+    "light": "hemi-sun",
+    "ground": "road-walk-curb",
+    "streetProps": "lamps-crosswalk-planters",
+    "lamps": "38",
+    "crosswalks": "1",
+    "planters": "4",
+    "buildings": "60",
+    "facade": "inset",
+    "windows": "2141",
+    "doors": "60",
+    "bands": "472",
+    "facadeTotal": "2673",
+    "groundFloor": "door-glass-awning",
+    "gfBuildings": "34",
+    "gfFaces": "38",
+    "gfDisplays": "62",
+    "gfStorefronts": "38",
+    "gfAwnings": "38",
+    "shops": "3",
+    "shopStalls": "3",
+    "shopStallKind": "awning-kiosk",
+    "shopSignKind": "pole-board",
+    "heading": "0.0",
+    "lon": "106.6980400",
+    "lat": "10.7716200",
+    "insideAabb": "0",
+    "shopMarker": false,
+    "shopPanel": false,
+    "shopPanelId": "",
+    "lanternAwning": "",
+    "floors": [
+      {
+        "testid": "ground-floor-bldg-market-hall-0",
+        "building": "bldg-market-hall",
+        "street": "street-tram-approach",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-market-hall-1",
+        "building": "bldg-market-hall",
+        "street": "street-harbor-walk",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-01-2",
+        "building": "bldg-hall-01",
+        "street": "street-tram-approach",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-10-3",
+        "building": "bldg-hall-10",
+        "street": "street-harbor-walk",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-w-00-4",
+        "building": "bldg-hall-w-00",
+        "street": "street-tram-approach",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-w-01-5",
+        "building": "bldg-hall-w-01",
+        "street": "street-tram-approach",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-w-01-6",
+        "building": "bldg-hall-w-01",
+        "street": "street-harbor-walk",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-w-11-7",
+        "building": "bldg-hall-w-11",
+        "street": "street-harbor-walk",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-se-00-8",
+        "building": "bldg-hall-se-00",
+        "street": "street-tram-approach",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-se-00-9",
+        "building": "bldg-hall-se-00",
+        "street": "street-harbor-walk",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-se-01-10",
+        "building": "bldg-hall-se-01",
+        "street": "street-tram-approach",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-sw-00-11",
+        "building": "bldg-hall-sw-00",
+        "street": "street-tram-approach",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-sw-01-12",
+        "building": "bldg-hall-sw-01",
+        "street": "street-tram-approach",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-sw-01-13",
+        "building": "bldg-hall-sw-01",
+        "street": "street-harbor-walk",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-west-10-14",
+        "building": "bldg-west-10",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-west-11-15",
+        "building": "bldg-west-11",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-west-12-16",
+        "building": "bldg-west-12",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-west-n-00-17",
+        "building": "bldg-west-n-00",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-west-n-01-18",
+        "building": "bldg-west-n-01",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-west-n-02-19",
+        "building": "bldg-west-n-02",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-east-20-20",
+        "building": "bldg-east-20",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-east-21-21",
+        "building": "bldg-east-21",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-east-22-22",
+        "building": "bldg-east-22",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-east-n-00-23",
+        "building": "bldg-east-n-00",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-east-n-01-24",
+        "building": "bldg-east-n-01",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-east-n-02-25",
+        "building": "bldg-east-n-02",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-south-shed-26",
+        "building": "bldg-south-shed",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-south-10-27",
+        "building": "bldg-south-10",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-south-20-28",
+        "building": "bldg-south-20",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-south-e-00-29",
+        "building": "bldg-south-e-00",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-south-e-10-30",
+        "building": "bldg-south-e-10",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-south-e-20-31",
+        "building": "bldg-south-e-20",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-steps-w-01-32",
+        "building": "bldg-steps-w-01",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-steps-w-11-33",
+        "building": "bldg-steps-w-11",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-steps-w-21-34",
+        "building": "bldg-steps-w-21",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-steps-e-00-35",
+        "building": "bldg-steps-e-00",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-steps-e-10-36",
+        "building": "bldg-steps-e-10",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-steps-e-20-37",
+        "building": "bldg-steps-e-20",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      }
+    ],
+    "stalls": [
+      {
+        "testid": "shop-stall-shop-lantern-fish",
+        "shop": "shop-lantern-fish",
+        "kind": "awning-kiosk",
+        "awning": "#6e3d9a"
+      },
+      {
+        "testid": "shop-stall-shop-local-sharedpc",
+        "shop": "shop-local-sharedpc",
+        "kind": "awning-kiosk",
+        "awning": "#2f5fbe"
+      },
+      {
+        "testid": "shop-stall-shop-local-mtl8ulddihjpre",
+        "shop": "shop-local-mtl8ulddihjpre",
+        "kind": "awning-kiosk",
+        "awning": "#4a8c2e"
+      }
+    ],
+    "props": [
+      {
+        "testid": "lamp-street-tram-approach-0-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-0-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-1-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-1-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-2-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-2-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-3-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-3-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-4-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-4-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-5-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-5-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-6-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-6-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-7-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-7-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-8-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-8-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-0-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-0-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-1-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-1-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-3-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-3-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-4-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-4-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-5-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-5-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-6-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-6-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-7-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-7-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-8-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-8-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-harbor-shop-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-harbor-shop-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-harbor-near-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-harbor-near-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "crosswalk-harbor-lantern",
+        "kind": "crosswalk"
+      },
+      {
+        "testid": "planter-harbor-shop-e",
+        "kind": "planter"
+      },
+      {
+        "testid": "planter-harbor-shop-w",
+        "kind": "planter"
+      },
+      {
+        "testid": "planter-harbor-north-e",
+        "kind": "planter"
+      },
+      {
+        "testid": "planter-tram-east-s",
+        "kind": "planter"
+      }
+    ],
+    "honesty": true,
+    "deniesGta": true,
+    "deniesTwin": true
+  },
+  "walkDom": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/?seat=a",
+    "playReady": "yes",
+    "canvas": {
+      "w": 1280,
+      "h": 720,
+      "cw": 1280,
+      "ch": 720,
+      "box": {
+        "w": 1280,
+        "h": 720,
+        "top": 0,
+        "left": 0
+      }
+    },
+    "sky": "gradient-hemisphere",
+    "sun": "disc",
+    "light": "hemi-sun",
+    "ground": "road-walk-curb",
+    "streetProps": "lamps-crosswalk-planters",
+    "lamps": "38",
+    "crosswalks": "1",
+    "planters": "4",
+    "buildings": "60",
+    "facade": "inset",
+    "windows": "2141",
+    "doors": "60",
+    "bands": "472",
+    "facadeTotal": "2673",
+    "groundFloor": "door-glass-awning",
+    "gfBuildings": "34",
+    "gfFaces": "38",
+    "gfDisplays": "62",
+    "gfStorefronts": "38",
+    "gfAwnings": "38",
+    "shops": "3",
+    "shopStalls": "3",
+    "shopStallKind": "awning-kiosk",
+    "shopSignKind": "pole-board",
+    "heading": "0.0",
+    "lon": "106.6980400",
+    "lat": "10.7716855",
+    "insideAabb": "0",
+    "shopMarker": true,
+    "shopPanel": false,
+    "shopPanelId": "",
+    "lanternAwning": "#6e3d9a",
+    "floors": [
+      {
+        "testid": "ground-floor-bldg-market-hall-0",
+        "building": "bldg-market-hall",
+        "street": "street-tram-approach",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-market-hall-1",
+        "building": "bldg-market-hall",
+        "street": "street-harbor-walk",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-01-2",
+        "building": "bldg-hall-01",
+        "street": "street-tram-approach",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-10-3",
+        "building": "bldg-hall-10",
+        "street": "street-harbor-walk",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-w-00-4",
+        "building": "bldg-hall-w-00",
+        "street": "street-tram-approach",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-w-01-5",
+        "building": "bldg-hall-w-01",
+        "street": "street-tram-approach",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-w-01-6",
+        "building": "bldg-hall-w-01",
+        "street": "street-harbor-walk",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-w-11-7",
+        "building": "bldg-hall-w-11",
+        "street": "street-harbor-walk",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-se-00-8",
+        "building": "bldg-hall-se-00",
+        "street": "street-tram-approach",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-se-00-9",
+        "building": "bldg-hall-se-00",
+        "street": "street-harbor-walk",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-se-01-10",
+        "building": "bldg-hall-se-01",
+        "street": "street-tram-approach",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-sw-00-11",
+        "building": "bldg-hall-sw-00",
+        "street": "street-tram-approach",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-sw-01-12",
+        "building": "bldg-hall-sw-01",
+        "street": "street-tram-approach",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-sw-01-13",
+        "building": "bldg-hall-sw-01",
+        "street": "street-harbor-walk",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-west-10-14",
+        "building": "bldg-west-10",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-west-11-15",
+        "building": "bldg-west-11",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-west-12-16",
+        "building": "bldg-west-12",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-west-n-00-17",
+        "building": "bldg-west-n-00",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-west-n-01-18",
+        "building": "bldg-west-n-01",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-west-n-02-19",
+        "building": "bldg-west-n-02",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-east-20-20",
+        "building": "bldg-east-20",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-east-21-21",
+        "building": "bldg-east-21",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-east-22-22",
+        "building": "bldg-east-22",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-east-n-00-23",
+        "building": "bldg-east-n-00",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-east-n-01-24",
+        "building": "bldg-east-n-01",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-east-n-02-25",
+        "building": "bldg-east-n-02",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-south-shed-26",
+        "building": "bldg-south-shed",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-south-10-27",
+        "building": "bldg-south-10",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-south-20-28",
+        "building": "bldg-south-20",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-south-e-00-29",
+        "building": "bldg-south-e-00",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-south-e-10-30",
+        "building": "bldg-south-e-10",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-south-e-20-31",
+        "building": "bldg-south-e-20",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-steps-w-01-32",
+        "building": "bldg-steps-w-01",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-steps-w-11-33",
+        "building": "bldg-steps-w-11",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-steps-w-21-34",
+        "building": "bldg-steps-w-21",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-steps-e-00-35",
+        "building": "bldg-steps-e-00",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-steps-e-10-36",
+        "building": "bldg-steps-e-10",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-steps-e-20-37",
+        "building": "bldg-steps-e-20",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      }
+    ],
+    "stalls": [
+      {
+        "testid": "shop-stall-shop-lantern-fish",
+        "shop": "shop-lantern-fish",
+        "kind": "awning-kiosk",
+        "awning": "#6e3d9a"
+      },
+      {
+        "testid": "shop-stall-shop-local-sharedpc",
+        "shop": "shop-local-sharedpc",
+        "kind": "awning-kiosk",
+        "awning": "#2f5fbe"
+      },
+      {
+        "testid": "shop-stall-shop-local-mtl8ulddihjpre",
+        "shop": "shop-local-mtl8ulddihjpre",
+        "kind": "awning-kiosk",
+        "awning": "#4a8c2e"
+      }
+    ],
+    "props": [
+      {
+        "testid": "lamp-street-tram-approach-0-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-0-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-1-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-1-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-2-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-2-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-3-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-3-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-4-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-4-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-5-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-5-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-6-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-6-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-7-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-7-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-8-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-8-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-0-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-0-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-1-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-1-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-3-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-3-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-4-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-4-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-5-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-5-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-6-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-6-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-7-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-7-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-8-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-8-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-harbor-shop-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-harbor-shop-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-harbor-near-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-harbor-near-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "crosswalk-harbor-lantern",
+        "kind": "crosswalk"
+      },
+      {
+        "testid": "planter-harbor-shop-e",
+        "kind": "planter"
+      },
+      {
+        "testid": "planter-harbor-shop-w",
+        "kind": "planter"
+      },
+      {
+        "testid": "planter-harbor-north-e",
+        "kind": "planter"
+      },
+      {
+        "testid": "planter-tram-east-s",
+        "kind": "planter"
+      }
+    ],
+    "honesty": true,
+    "deniesGta": true,
+    "deniesTwin": true
+  },
+  "stallDom": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/?seat=a",
+    "playReady": "yes",
+    "canvas": {
+      "w": 1280,
+      "h": 720,
+      "cw": 1280,
+      "ch": 720,
+      "box": {
+        "w": 1280,
+        "h": 720,
+        "top": 0,
+        "left": 0
+      }
+    },
+    "sky": "gradient-hemisphere",
+    "sun": "disc",
+    "light": "hemi-sun",
+    "ground": "road-walk-curb",
+    "streetProps": "lamps-crosswalk-planters",
+    "lamps": "38",
+    "crosswalks": "1",
+    "planters": "4",
+    "buildings": "60",
+    "facade": "inset",
+    "windows": "2141",
+    "doors": "60",
+    "bands": "472",
+    "facadeTotal": "2673",
+    "groundFloor": "door-glass-awning",
+    "gfBuildings": "34",
+    "gfFaces": "38",
+    "gfDisplays": "62",
+    "gfStorefronts": "38",
+    "gfAwnings": "38",
+    "shops": "3",
+    "shopStalls": "3",
+    "shopStallKind": "awning-kiosk",
+    "shopSignKind": "pole-board",
+    "heading": "0.0",
+    "lon": "106.6980400",
+    "lat": "10.7718222",
+    "insideAabb": "0",
+    "shopMarker": true,
+    "shopPanel": false,
+    "shopPanelId": "",
+    "lanternAwning": "#6e3d9a",
+    "floors": [
+      {
+        "testid": "ground-floor-bldg-market-hall-0",
+        "building": "bldg-market-hall",
+        "street": "street-tram-approach",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-market-hall-1",
+        "building": "bldg-market-hall",
+        "street": "street-harbor-walk",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-01-2",
+        "building": "bldg-hall-01",
+        "street": "street-tram-approach",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-10-3",
+        "building": "bldg-hall-10",
+        "street": "street-harbor-walk",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-w-00-4",
+        "building": "bldg-hall-w-00",
+        "street": "street-tram-approach",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-w-01-5",
+        "building": "bldg-hall-w-01",
+        "street": "street-tram-approach",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-w-01-6",
+        "building": "bldg-hall-w-01",
+        "street": "street-harbor-walk",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-w-11-7",
+        "building": "bldg-hall-w-11",
+        "street": "street-harbor-walk",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-se-00-8",
+        "building": "bldg-hall-se-00",
+        "street": "street-tram-approach",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-se-00-9",
+        "building": "bldg-hall-se-00",
+        "street": "street-harbor-walk",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-se-01-10",
+        "building": "bldg-hall-se-01",
+        "street": "street-tram-approach",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-sw-00-11",
+        "building": "bldg-hall-sw-00",
+        "street": "street-tram-approach",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-sw-01-12",
+        "building": "bldg-hall-sw-01",
+        "street": "street-tram-approach",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-sw-01-13",
+        "building": "bldg-hall-sw-01",
+        "street": "street-harbor-walk",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-west-10-14",
+        "building": "bldg-west-10",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-west-11-15",
+        "building": "bldg-west-11",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-west-12-16",
+        "building": "bldg-west-12",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-west-n-00-17",
+        "building": "bldg-west-n-00",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-west-n-01-18",
+        "building": "bldg-west-n-01",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-west-n-02-19",
+        "building": "bldg-west-n-02",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-east-20-20",
+        "building": "bldg-east-20",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-east-21-21",
+        "building": "bldg-east-21",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-east-22-22",
+        "building": "bldg-east-22",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-east-n-00-23",
+        "building": "bldg-east-n-00",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-east-n-01-24",
+        "building": "bldg-east-n-01",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-east-n-02-25",
+        "building": "bldg-east-n-02",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-south-shed-26",
+        "building": "bldg-south-shed",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-south-10-27",
+        "building": "bldg-south-10",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-south-20-28",
+        "building": "bldg-south-20",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-south-e-00-29",
+        "building": "bldg-south-e-00",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-south-e-10-30",
+        "building": "bldg-south-e-10",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-south-e-20-31",
+        "building": "bldg-south-e-20",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-steps-w-01-32",
+        "building": "bldg-steps-w-01",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-steps-w-11-33",
+        "building": "bldg-steps-w-11",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-steps-w-21-34",
+        "building": "bldg-steps-w-21",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-steps-e-00-35",
+        "building": "bldg-steps-e-00",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-steps-e-10-36",
+        "building": "bldg-steps-e-10",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-steps-e-20-37",
+        "building": "bldg-steps-e-20",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      }
+    ],
+    "stalls": [
+      {
+        "testid": "shop-stall-shop-lantern-fish",
+        "shop": "shop-lantern-fish",
+        "kind": "awning-kiosk",
+        "awning": "#6e3d9a"
+      },
+      {
+        "testid": "shop-stall-shop-local-sharedpc",
+        "shop": "shop-local-sharedpc",
+        "kind": "awning-kiosk",
+        "awning": "#2f5fbe"
+      },
+      {
+        "testid": "shop-stall-shop-local-mtl8ulddihjpre",
+        "shop": "shop-local-mtl8ulddihjpre",
+        "kind": "awning-kiosk",
+        "awning": "#4a8c2e"
+      }
+    ],
+    "props": [
+      {
+        "testid": "lamp-street-tram-approach-0-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-0-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-1-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-1-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-2-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-2-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-3-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-3-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-4-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-4-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-5-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-5-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-6-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-6-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-7-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-7-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-8-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-8-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-0-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-0-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-1-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-1-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-3-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-3-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-4-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-4-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-5-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-5-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-6-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-6-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-7-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-7-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-8-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-8-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-harbor-shop-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-harbor-shop-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-harbor-near-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-harbor-near-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "crosswalk-harbor-lantern",
+        "kind": "crosswalk"
+      },
+      {
+        "testid": "planter-harbor-shop-e",
+        "kind": "planter"
+      },
+      {
+        "testid": "planter-harbor-shop-w",
+        "kind": "planter"
+      },
+      {
+        "testid": "planter-harbor-north-e",
+        "kind": "planter"
+      },
+      {
+        "testid": "planter-tram-east-s",
+        "kind": "planter"
+      }
+    ],
+    "honesty": true,
+    "deniesGta": true,
+    "deniesTwin": true
+  },
+  "shopDom": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/?seat=a&place=place-market-steps&shop=shop-lantern-fish",
+    "playReady": "yes",
+    "canvas": {
+      "w": 1280,
+      "h": 720,
+      "cw": 1280,
+      "ch": 720,
+      "box": {
+        "w": 1280,
+        "h": 720,
+        "top": 0,
+        "left": 0
+      }
+    },
+    "sky": "gradient-hemisphere",
+    "sun": "disc",
+    "light": "hemi-sun",
+    "ground": "road-walk-curb",
+    "streetProps": "lamps-crosswalk-planters",
+    "lamps": "38",
+    "crosswalks": "1",
+    "planters": "4",
+    "buildings": "60",
+    "facade": "inset",
+    "windows": "2141",
+    "doors": "60",
+    "bands": "472",
+    "facadeTotal": "2673",
+    "groundFloor": "door-glass-awning",
+    "gfBuildings": "34",
+    "gfFaces": "38",
+    "gfDisplays": "62",
+    "gfStorefronts": "38",
+    "gfAwnings": "38",
+    "shops": "3",
+    "shopStalls": "3",
+    "shopStallKind": "awning-kiosk",
+    "shopSignKind": "pole-board",
+    "heading": "0.0",
+    "lon": "106.6980400",
+    "lat": "10.7718222",
+    "insideAabb": "0",
+    "shopMarker": true,
+    "shopPanel": true,
+    "shopPanelId": "shop-lantern-fish",
+    "lanternAwning": "#6e3d9a",
+    "floors": [
+      {
+        "testid": "ground-floor-bldg-market-hall-0",
+        "building": "bldg-market-hall",
+        "street": "street-tram-approach",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-market-hall-1",
+        "building": "bldg-market-hall",
+        "street": "street-harbor-walk",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-01-2",
+        "building": "bldg-hall-01",
+        "street": "street-tram-approach",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-10-3",
+        "building": "bldg-hall-10",
+        "street": "street-harbor-walk",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-w-00-4",
+        "building": "bldg-hall-w-00",
+        "street": "street-tram-approach",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-w-01-5",
+        "building": "bldg-hall-w-01",
+        "street": "street-tram-approach",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-w-01-6",
+        "building": "bldg-hall-w-01",
+        "street": "street-harbor-walk",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-w-11-7",
+        "building": "bldg-hall-w-11",
+        "street": "street-harbor-walk",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-se-00-8",
+        "building": "bldg-hall-se-00",
+        "street": "street-tram-approach",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-se-00-9",
+        "building": "bldg-hall-se-00",
+        "street": "street-harbor-walk",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-se-01-10",
+        "building": "bldg-hall-se-01",
+        "street": "street-tram-approach",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-sw-00-11",
+        "building": "bldg-hall-sw-00",
+        "street": "street-tram-approach",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-sw-01-12",
+        "building": "bldg-hall-sw-01",
+        "street": "street-tram-approach",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-hall-sw-01-13",
+        "building": "bldg-hall-sw-01",
+        "street": "street-harbor-walk",
+        "displays": 1,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-west-10-14",
+        "building": "bldg-west-10",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-west-11-15",
+        "building": "bldg-west-11",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-west-12-16",
+        "building": "bldg-west-12",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-west-n-00-17",
+        "building": "bldg-west-n-00",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-west-n-01-18",
+        "building": "bldg-west-n-01",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-west-n-02-19",
+        "building": "bldg-west-n-02",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-east-20-20",
+        "building": "bldg-east-20",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-east-21-21",
+        "building": "bldg-east-21",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-east-22-22",
+        "building": "bldg-east-22",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-east-n-00-23",
+        "building": "bldg-east-n-00",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-east-n-01-24",
+        "building": "bldg-east-n-01",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-east-n-02-25",
+        "building": "bldg-east-n-02",
+        "street": "street-tram-approach",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-south-shed-26",
+        "building": "bldg-south-shed",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-south-10-27",
+        "building": "bldg-south-10",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-south-20-28",
+        "building": "bldg-south-20",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-south-e-00-29",
+        "building": "bldg-south-e-00",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-south-e-10-30",
+        "building": "bldg-south-e-10",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-south-e-20-31",
+        "building": "bldg-south-e-20",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-steps-w-01-32",
+        "building": "bldg-steps-w-01",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-steps-w-11-33",
+        "building": "bldg-steps-w-11",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-steps-w-21-34",
+        "building": "bldg-steps-w-21",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-steps-e-00-35",
+        "building": "bldg-steps-e-00",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-steps-e-10-36",
+        "building": "bldg-steps-e-10",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      },
+      {
+        "testid": "ground-floor-bldg-steps-e-20-37",
+        "building": "bldg-steps-e-20",
+        "street": "street-harbor-walk",
+        "displays": 2,
+        "storefronts": 1,
+        "awnings": 1
+      }
+    ],
+    "stalls": [
+      {
+        "testid": "shop-stall-shop-lantern-fish",
+        "shop": "shop-lantern-fish",
+        "kind": "awning-kiosk",
+        "awning": "#6e3d9a"
+      },
+      {
+        "testid": "shop-stall-shop-local-sharedpc",
+        "shop": "shop-local-sharedpc",
+        "kind": "awning-kiosk",
+        "awning": "#2f5fbe"
+      },
+      {
+        "testid": "shop-stall-shop-local-mtl8ulddihjpre",
+        "shop": "shop-local-mtl8ulddihjpre",
+        "kind": "awning-kiosk",
+        "awning": "#4a8c2e"
+      }
+    ],
+    "props": [
+      {
+        "testid": "lamp-street-tram-approach-0-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-0-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-1-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-1-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-2-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-2-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-3-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-3-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-4-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-4-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-5-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-5-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-6-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-6-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-7-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-7-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-8-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-8-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-0-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-0-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-1-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-1-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-3-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-3-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-4-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-4-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-5-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-5-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-6-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-6-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-7-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-7-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-8-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-8-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-harbor-shop-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-harbor-shop-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-harbor-near-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-harbor-near-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "crosswalk-harbor-lantern",
+        "kind": "crosswalk"
+      },
+      {
+        "testid": "planter-harbor-shop-e",
+        "kind": "planter"
+      },
+      {
+        "testid": "planter-harbor-shop-w",
+        "kind": "planter"
+      },
+      {
+        "testid": "planter-harbor-north-e",
+        "kind": "planter"
+      },
+      {
+        "testid": "planter-tram-east-s",
+        "kind": "planter"
+      }
+    ],
+    "honesty": true,
+    "deniesGta": true,
+    "deniesTwin": true
+  }
+}

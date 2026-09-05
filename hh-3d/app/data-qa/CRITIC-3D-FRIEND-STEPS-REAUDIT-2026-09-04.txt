@@ -1,0 +1,289 @@
+TICK=no
+URL=http://127.0.0.1:4175/
+BOOTED_4175=1
+DID_NOT_RECYCLE=1
+DID_NOT_REBUILD=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M2=1
+CRITIC=INDEPENDENT_ADVERSARIAL_FRIEND_STEPS_REAUDIT
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=09:55 +07
+MODEL=grok-4.6-extra-high
+SCOPE=Re-audit of implementer friend-steps remint. Do not treat CRITIC-3D-FRIEND-STEPS-2026-09-04.txt as TICK=yes.
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=04cb6ca92c482017c02d78e7885727f73b62103d
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-FRIEND-STEPS-REAUDIT-2026-09-04.txt
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-FRIEND-STEPS-2026-09-04.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+DID_NOT_TREAT_IMPLEMENTER_AS_TICK_YES=1
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NOT_OSM=1
+NOT_WAN=1
+VITE_PREVIEW_PORT_PIN=4175
+LIVE_PID=6280
+LISTEN=127.0.0.1:4175
+CRITIC_CDP_PORTS=9941 / 9942 / 9943 then 9951 / 9952
+VIEWPORT=1280x720
+ISOLATED_PROFILES=1
+HEADLESS_NEW=1
+
+LIVE_JS=/assets/index-DptTgaTX.js
+LIVE_JS_LEN=2152085
+LIVE_JS_SHA256=0a13284eacdcffeadc20bf1a633ce19fd4c62f79dc8390f67714c744b6c7dc58
+LIVE_JS_MATCHES_CLAIM=1
+HASH_MISMATCH=0
+
+B_PLANT_STAND=0
+B_PLANT_WALK_START=1
+B_PLANT_WALK_HELD=4
+B_PLANT_WALK_DELTA=+3
+B_PLANT_HIDDEN=14
+B_PLANT_HIDDEN_DELTA=0
+
+CLAIM_1_WALK_RISE=PASS
+CLAIM_2_HIDDEN_MUTE=PASS
+CLAIM_3_OFFLINE_UNFRIEND_STRANGER=FAIL
+CLAIM_3_OFFLINE=FAIL
+CLAIM_3_UNFRIEND=PASS
+CLAIM_3_STRANGER_C=PASS
+CLAIM_4_GAIN_LANTERN_LEFTOVER_CHIP=PASS
+
+BIGGEST_MISS=Offline A: after people-layer dropped to 0, B still planted one real oscillator (osc 10→11) and left data-friend-footsteps=1 / ticks=1 with no remotes. Unfriend and stranger C stayed silent. Walk rise and hidden freeze held. NOT_PLAN_PASS.
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=no
+
+URL=http://127.0.0.1:4175/ was already up. Bind 127.0.0.1 pid 6280
+(node vite preview). Did not recycle, rebuild, kill, or start
+4173 / 4174 / 5175. Did not bind 0.0.0.0.
+
+Did not treat CRITIC-3D-FRIEND-STEPS-2026-09-04.txt as TICK=yes
+(ROLE=IMPLEMENTER, TICK=n/a). Did not run j5-friend-steps-probe.mjs.
+
+Live name + length + sha256 match the claimed remint. Independent
+Chrome CDP, isolated temp profiles, ?seat=a / ?seat=b / ?seat=c.
+OscillatorNode / AudioBufferSourceNode.start hooked so a live flag
+alone is not proof.
+
+Hunt 1 held: B stand plants 0; A holds W → B ticks 1→4 (+3) and
+osc/src +3; B's own data-footsteps stayed 0. Hunt 2 held: fake
+document.hidden froze ticks 14→14 and osc 14→14. Hunt 3 failed
+on Offline A (one extra plant + stale live=1). Unfriend and
+stranger C did not plant. Gain 0.035 < self 0.14. Lantern E
+opened shop-lantern-fish. Seat B leftover E not stolen. Chip /
+minimap still present.
+
+This is NOT_PLAN_PASS. GATE-U1 humans were not invented.
+
+================================================================================
+LIVE JS
+================================================================================
+
+HTML script = /assets/index-DptTgaTX.js
+http length = 2152085
+sha256 = 0a13284eacdcffeadc20bf1a633ce19fd4c62f79dc8390f67714c744b6c7dc58
+Matches the claimed remint name + length + hash.
+After CDP (09:55 +07) the same name and sha256 are still served
+from pid 6280.
+
+Bundle scan:
+  .mp3 / .wav / .ogg / .m4a = 0
+  new Audio( = 0
+  gta 6 / rockstar = 0
+  procedural-thump = 1
+  createOscillator = 1
+  createBufferSource = 2
+    (same unused Three.js Audio helper + procedural noise as
+    the self-footstep remint; not a downloaded sample)
+
+================================================================================
+CLAIM 1 — A/B ONLINE WALK PLANTS — PASS
+================================================================================
+
+Tried to fail: stand already live; W only flips a flag; ticks
+rise with no oscillator; B's own data-footsteps also go live
+while B stands.
+
+Isolated A/B, graph_clear only, add-friend-b / accept-friend-a /
+Online on both. B stand + A idle (before and after friends):
+  data-friend-footsteps=0
+  ticks=0
+  osc=0 src=0
+  B pose=idle
+
+A holds W ~1.1 s, B stands:
+  remote A pose=walk
+  data-friend-footsteps=1
+  ticks 1 → 4  (+3)
+  osc 1 → 4    src 1 → 4
+  lastGain=0.03555  dist=7.22 m  seat=a
+  B data-footsteps=0  B pose=idle  B selfTicks not used as proof
+
+A release W: friend live=0 after ~2.3 s.
+
+Implementer wrote 1→4 (+3) / gain 0.035 / dist 7.47 m. This
+critic measured +3 plants, gain 0.03555, dist 7.22 m, and the
+same +3 on hooked start(). Not a DOM-only flag. PASS.
+
+================================================================================
+CLAIM 2 — HIDDEN WHILE A WALKS — PASS
+================================================================================
+
+Tried to fail as a fake DOM flag: keep A on W, fake
+document.hidden on B, watch ticks + real oscillator starts.
+
+Fake hidden on B while A still walks:
+  data-friend-footsteps=0
+  reason=hidden
+  ticks 14 → 14 over ~1.1 s
+  osc 14 → 14   src 14 → 14
+Unhide, A still W: live=1  ticks 14 → 17
+
+Frames still run under the defineProperty hunt. A lie that only
+painted live=0 would have shown rising ticks / osc. It did not.
+PASS.
+
+================================================================================
+CLAIM 3 — OFFLINE / UNFRIEND / STRANGER C — FAIL
+================================================================================
+
+Tried to fail: Offline A or unfriend still plants; stranger C
+plants.
+
+Stranger seat C (Online, cannot friend; no add-friend-c):
+  C holds W ~1.1 s while A idle / B stand
+  B ticks stay 0  osc delta 0
+  no remote-avatar-c on A or B
+  PASS
+
+Unfriend from B after A is back Online:
+  remote A gone
+  A holds W ~1.2 s
+  B ticks 0 → 0  osc delta 0  live=0
+  PASS
+
+Offline A (A clicks Offline — Stroll alone):
+  people-layer remoteCount hits 0
+  A then holds W ~1.2 s: B ticks stay 1 → 1, osc delta 0
+  But the teardown is dirty. Recheck samples after Offline click:
+
+    remotes=1  ticks=9   osc=9   live=1   (A still in layer)
+    remotes=0  ticks=10  osc=10  live=1   remote DOM still 1
+    remotes=0  ticks=0   osc=10  live=1   prune, flag not cleared
+    remotes=0  ticks=1   osc=11  live=1   remote DOM 0 — one more plant
+    then ticks=1 live=1 osc=11 through Offline walk
+
+  One real oscillator start after people-layer already 0.
+  data-friend-footsteps stays 1 with no remotes and reason="".
+  First run saw the same leftover: live=1 ticks=1 after Offline,
+  remoteA=false.
+
+Named bar: "Offline A … B must not plant." B planted once after
+A went Offline, and the live attr lied. FAIL. Prefer TICK=no.
+
+================================================================================
+CLAIM 4 — GAIN / LANTERN / LEFTOVER E / CHIP — PASS
+================================================================================
+
+Friend lastGain=0.03555 on B while A's self lastGain=0.14.
+0.03555 < 0.14. Attrs exist. Quieter than self. PASS.
+
+GET /demo-bus catalog still holds leftover this-PC shops:
+  shop-local-sharedpc  "Quầy Shared PC"
+    lon=106.69804 lat=10.77162
+  shop-local-mtl8ulddihjpre  "Quay Critic J6 Jump"
+    lon=106.6981497 lat=10.77162
+
+Seat B spawn (isolated profile):
+  nearbyShop=""
+  stallHint="E opens a stall when you are next to it."
+  shopRange="Quầy Cá Đèn Lồng: 29 m away"
+  Press E: shopPanelId=""  (did not open J6 / Shared PC)
+  After A walked, leftover E still did not open.
+
+Authored lantern: A held W then E. Panel opened shop-lantern-fish.
+  Nearby became shop-lantern-fish. Not a leftover shop.
+
+Spot-check kept on the same bundle:
+  play-street-chip Harbor Walk
+  hh-world-minimap authored-hud-lanes
+  data-far-lod=inner-door-glass m=90
+  plaques=4  street-hud=named-chip
+  sky=gradient-hemisphere  walk-cycle=opposite-stride
+  honesty: Authored approximation / not a digital twin /
+    NOT_PLAN_PASS / No GTA claim
+
+PASS on the named leftovers. Does not rescue hunt 3.
+
+================================================================================
+HUNTS (not named fails)
+================================================================================
+
+Walk +3 matches implementer +3 this time. Dist 7.22 vs 7.47 is
+window jitter. Still rose with real start().
+
+Unfriend and stranger C were clean. The miss is Offline teardown
+plus a stuck live=1, not "every non-friend plants."
+
+AudioContext is not suspended on mute. Mute is “do not plant”.
+Hidden start() counts stayed flat. Not a miss.
+
+React JSX still ships data-friend-footsteps="0". writeProof
+overwrites each frame. Observed live=1 while A walked.
+
+Three.js createBufferSource: unused library Audio path. No
+sample files. Not a miss.
+
+================================================================================
+METHOD
+================================================================================
+
+1. 4175 already up. Did not recycle / rebuild / start other ports.
+2. GET /  /demo-bus  /assets/index-DptTgaTX.js. Recorded name+sha+len.
+3. Read implementer note (TICK=n/a). Did not copy its probe writer.
+4. Independent Chrome CDP 1280x720 isolated profiles.
+   Ports 9941/9942/9943 (A/B/C) then 9951/9952 (Offline recheck).
+   Hooked OscillatorNode / BufferSource.start.
+   graph_clear only. Catalog kept.
+   Stand / A walk / hidden / Offline A / unfriend / stranger C /
+   lantern E / seat B leftover E / chip+minimap.
+5. Did not write lead packs. Did not tick plan. Did not fake GATE-U1.
+
+Temp only (not under data-qa):
+  %TEMP%\hh-friend-steps-reaudit.mjs
+  %TEMP%\hh-friend-steps-reaudit.json
+  %TEMP%\hh-friend-steps-offline-recheck.mjs
+  %TEMP%\hh-friend-steps-offline-recheck.json
+  %TEMP%\hh-friend-steps-live.js
+
+================================================================================
+STILL IMPOSSIBLE WITHOUT OWNER
+================================================================================
+
+- GATE-U1 three human reviewers (not faked)
+- AUTHORIZE_MAP_FETCH=YES + license ledger before any OSM/Overture
+- Other-PC / WAN join (store is this PC 4175 loopback)
+- Real account / OIDC
+- Real M2 presence server / city friends still not built
+
+================================================================================
+END
+================================================================================

@@ -1,0 +1,442 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+BOOTED_4175=1
+DID_NOT_RECYCLE=1
+DID_NOT_REBUILD=1
+DID_NOT_REMINT=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M1=1
+NOT_M0_WP1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+NOT_FIFTH_OFFICIAL_STREET=1
+HASH_MISMATCH=0
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=14:34 +07
+MODEL=grok-4.6-extra-high
+SCOPE=Re-audit of claimed Harbor Walk × Tram Approach mouth remint. Do not treat CRITIC-3D-TRAM-XING-2026-09-04.txt as TICK=yes.
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=04cb6ca92c482017c02d78e7885727f73b62103d
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-TRAM-XING-REAUDIT-2026-09-04.txt
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-TRAM-XING-2026-09-04.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+DID_NOT_TREAT_IMPLEMENTER_AS_TICK_YES=1
+IMPLEMENTER_CDP_NOT_PROOF=1
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+DID_NOT_CATALOG_CLEAR=1
+VITE_PREVIEW_PORT_PIN=4175
+LIVE_PID=34604
+LISTEN=127.0.0.1:4175
+CRITIC_CDP_PORTS=9988 (seat A walk) / 9989 (seat B leftover E) / 9991 (on-asphalt remount + lantern)
+VIEWPORT=1280x720
+ISOLATED_PROFILES=1
+HEADLESS_NEW=1
+ABOUT_BLANK_THEN_NAVIGATE=1
+IMPLEMENTER_CDP_PORT_NOT_REUSED=1
+IMPLEMENTER_PROBE_NOT_RUN=1
+
+CLAIM_JS=/assets/index-D6skGmYL.js
+CLAIM_JS_LEN=2167318
+CLAIM_JS_SHA256=29f5735069f1b6e0d16680cb03da1b8d72180b2824c90b41f6caf51c2a0aa05a
+LIVE_JS=/assets/index-D6skGmYL.js
+LIVE_JS_LEN=2167318
+LIVE_JS_SHA256=29f5735069f1b6e0d16680cb03da1b8d72180b2824c90b41f6caf51c2a0aa05a
+LIVE_JS_MATCHES_CLAIM=1
+HASH_MISMATCH=0
+LIVE_JS_AFTER_CDP=/assets/index-D6skGmYL.js
+LIVE_JS_LEN_AFTER_CDP=2167318
+LIVE_JS_SHA256_AFTER_CDP=29f5735069f1b6e0d16680cb03da1b8d72180b2824c90b41f6caf51c2a0aa05a
+
+TRAM_MOUTH_WORLD_X=6.15
+TRAM_MOUTH_WORLD_Z=1.77
+TRAM_ZEBRA_DOM_XZ=7.60,0.00
+TRAM_STOP_DOM_XZ=5.45,0.00
+TRAM_DIST_TO_ZEBRA_M=2.29
+TRAM_HEADING=84
+CHIP_TRAM=Tram Approach
+MINIMAP_TRAM=Tram Approach
+MINIMAP_HIGHLIGHT=1
+MINIMAP_ROLE=official
+MINIMAP_OFFICIAL=2
+CHIP_MINIMAP_AGREE_TRAM=1
+STRIPE_VISIBLE_ON_TRAM_ASPHALT=1
+STOP_LINE_VISIBLE_ON_TRAM_ASPHALT=1
+CURB_VISIBLE_ON_TRAM_ASPHALT=1
+BARE_ASPHALT=0
+LOOK_ASPHALT_CREAM=0.470
+LOOK_ASPHALT_DARK=0.373
+LOOK_ASPHALT_CURB=0.108
+LOOK_ASPHALT_HORIZ_CREAM_BANDS=4
+SHOT_ONMOUTH_HASH16=25aa675b5e11cdfe
+SHOT_LOOK_HASH16=7871e8e6b1d688a4
+
+EAST_ZEBRA_DOM=1
+WEST_ZEBRA_DOM=1
+LANTERN_ZEBRA_DOM=1
+TRAM_ZEBRA_DOM=1
+STACKED_ON_TRAM=0
+DIST_TRAM_TO_EAST_M=80.58
+DIST_TRAM_TO_WEST_M=78.37
+DIST_TRAM_TO_LANTERN_M=70.06
+GEOJSON_STREETS=2
+GEOJSON_NAMES=Tram Approach, Harbor Walk
+PLAQUES=4
+FIFTH_OFFICIAL_CLAIM=0
+OSM_GRID_CLAIM=0
+LANTERN_E=shop-lantern-fish
+LEFTOVER_E_STOLEN=0
+MENU_LEFTOVER_LAST=1
+MENU_LEFTOVER_LABELED=1
+PLAY_ENGINE=r3f
+WORLD_MAP_PRESENT=0
+NET_OSM_HITS=0
+
+CLAIM_1_LIVE_HASH=PASS
+CLAIM_2_TRAM_MOUTH_PAINT=PASS
+CLAIM_3_CHIP_AND_MINIMAP_AGREE=PASS
+CLAIM_4_PRIOR_ZEBRAS_GEOJSON_NO_FIFTH=PASS
+CLAIM_5_LANTERN_E_AND_LEFTOVER_B=PASS
+
+BIGGEST_MISS=None on the named hunts. First isolated walk stopped on the south sidewalk (z≈−9, chip still Harbor Walk) and that crop is not the verdict. Remount at world x=6.15 / z=1.77 (2.29 m from crosswalk-harbor-tram) shows cream zebra + stop-line + curb on that mouth's asphalt. Chip and mounted minimap both Tram Approach. East / west / lantern zebras stay 70–80 m away. GeoJSON streets still 2. Seat B leftover E not stolen; Menu leftovers last. Lantern E opened shop-lantern-fish. NOT_PLAN_PASS.
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/ was already up. Bind 127.0.0.1 pid 34604
+(node vite preview, config pin host 127.0.0.1 port 4175 strictPort).
+Did not recycle, rebuild, kill, or start 4173 / 4174 / 5175.
+Did not bind 0.0.0.0. Did not catalog_clear.
+
+Did not treat CRITIC-3D-TRAM-XING-2026-09-04.txt as TICK=yes
+(ROLE=IMPLEMENTER, TICK=n/a). Did not run j5-tram-xing-probe.mjs
+as proof. Did not write J5 packs. Did not tick any plan.
+
+Independent Chrome CDP, isolated temp profiles, 1280×720,
+about:blank then ?seat=a / ?seat=b. Ports 9988 / 9989 / 9991,
+not the implementer 9693 / 9694. Tried to fail: hash drift;
+south-sidewalk cream wash sold as the Tram zebra; chip Tram
+Approach while minimap stays Harbor Walk; paint only at Steps
+or the lantern stall; GeoJSON ≠ 2 or a fifth official street;
+leftover Menu / spawn E stolen; lantern E not shop-lantern-fish.
+
+Hash matches before and after CDP. On-asphalt remount is the
+Harbor×Tram mouth (not Steps, not lantern). Look-down crop has
+alternating cream / dark bands plus a thick cream stop-line
+and stone curb. Chip and minimap agree on Tram Approach.
+Honesty still denies GTA / 1:1 / digital twin. No OIDC claim.
+This is NOT_PLAN_PASS. GATE-U1 humans were not invented.
+
+================================================================================
+LIVE JS
+================================================================================
+
+HTML script = /assets/index-D6skGmYL.js
+http length = 2167318
+sha256 = 29f5735069f1b6e0d16680cb03da1b8d72180b2824c90b41f6caf51c2a0aa05a
+Matches the claimed remint name + length + hash.
+GET after both CDP sessions is the same bytes from pid 34604.
+HASH_MISMATCH=0. Did not stop.
+
+Bundle scan (live bytes, not source):
+  openstreetmap = 0
+  overpass = 0
+  overture = 2   (honesty copy “not OSM/Overture”, not a fetch host)
+  0.0.0.0 = 0
+  shop-lantern-fish = 1
+  crosswalk-harbor-tram = 3
+  stopline-harbor-tram = 1
+  crosswalk-harbor-steps-east = 3
+  crosswalk-harbor-steps-west = 4
+  crosswalk-harbor-lantern = 1
+  OIDC = 3       (denial copy “NOT Google/OIDC”, not a live login)
+  digital twin = 3  (honesty denial)
+  Tram Approach = 2
+  Steps East = 2
+  Steps West = 2
+
+GET /data/ben-thanh-400m.authored.geojson kind=street count = 2
+  Tram Approach, Harbor Walk
+
+CDP Network.requestWillBeSent on seat A: osm/overpass/overture
+/mapbox/maptiler hits = 0.
+
+================================================================================
+CLAIM 1 — LIVE HASH IS THE CLAIMED REMINT — PASS
+================================================================================
+
+Tried to fail as a later/earlier bundle or SPA-shell fallback
+on the claimed name.
+
+  live = /assets/index-D6skGmYL.js
+  len  = 2167318
+  sha  = 29f5735069f1b6e0d16680cb03da1b8d72180b2824c90b41f6caf51c2a0aa05a
+
+GET before CDP, after the first isolated walk, and after the
+on-asphalt remount are the same name + length + hash from
+pid 34604. HASH_MISMATCH=0.
+
+PASS.
+
+================================================================================
+CLAIM 2 — TRAM MOUTH ASPHALT HAS ZEBRA + STOP-LINE + CURB — PASS
+================================================================================
+
+Tried to fail: cream only on the lantern stall or a Steps
+mouth; south-sidewalk wash sold as zebra; Tram zebra in DOM
+but the floor is bare asphalt; zebra without a stop-line or
+without a curb at the same mouth.
+
+World origin is lon 106.698 / lat 10.7725. DOM tram zebra is
+at x=7.60 z=0.00; stop-line stopline-harbor-tram at x=5.45
+z=0.00; south curb returns at z≈−3.6. East Steps zebra is at
+z=−80.52; west at z=−75.99; lantern zebra at z=−69.99.
+
+First isolated walk (9988) stopped at +5.97 m east / +88.70 m
+north of spawn, world z≈−9.3 — south sidewalk of the join,
+not on Tram asphalt. Chip still Harbor Walk. That crop is
+cream-wash sidewalk, not the verdict. Did not accept it.
+
+Independent remount (9991), different timings than the
+implementer 2400/7000/850/4200 path: sprint north in 3200 ms
+chunks with stall peels, then onto the join. Landed at
+
+  world x=6.15  z=1.77
+  lon=106.6980562  lat=10.7725159
+  dist to crosswalk-harbor-tram = 2.29 m
+  heading 84 (facing east)
+  chip=Tram Approach  mini=Tram Approach
+
+That is on the 8.6 m Tram asphalt (half-width 4.3 m), between
+the stop-line and the zebra, not at Steps (z≈−80) and not at
+the lantern stall (z≈−70). Shop-range still 72 m to the
+lantern.
+
+Default-pitch on-mouth shot: cream zebra bars + a solid
+stop-line + raised curb on dark asphalt in the foreground.
+Center-asphalt ROI creamRatio=0.037 is the distant road past
+the paint, not a bare mouth.
+
+Look-down crop (right-drag) standing on that mouth:
+  lookAsphalt cream=0.470  dark=0.373  curb=0.108
+  horizCreamBands=4
+Row profile on asphalt x=360–920 alternates cream / dark
+(y≈348 / 384 / 408 cream peaks, dark gaps) then a thick
+cream band (stop-line) and curb-heavy rows (y≈420–432
+curbRatio 0.60–0.84). Visual read of
+critic-tram-onmouth-look.png and the floor crop: avatar
+standing on cream zebra, stop-line on the same asphalt,
+stone/cream curb lip. Not a lantern crop. Not a Steps crop.
+
+DOM supporting only: cornerKind=zebra-stopline-curb,
+crosswalks=4, stopLines=3, curbReturns=12, tram zebra 7
+stripes mouth=tram, stopline-harbor-tram present, four tram
+curb-return ids (harbor-tram + tram-approach, n/s).
+
+BARE_ASPHALT=0.
+STRIPE_VISIBLE_ON_TRAM_ASPHALT=1.
+STOP_LINE_VISIBLE_ON_TRAM_ASPHALT=1.
+CURB_VISIBLE_ON_TRAM_ASPHALT=1.
+
+PASS.
+
+================================================================================
+CLAIM 3 — CHIP AND MINIMAP AGREE AT THAT MOUTH — PASS
+================================================================================
+
+Tried to fail: chip flips to Tram Approach while minimap
+stays Harbor Walk, or the reverse; minimap never mounts.
+
+Minimap mounted after the first Harbor W (defer=live,
+active=Harbor Walk) before the north walk. It was live at
+the mouth, not a chip-only DOM flip.
+
+On the remount mouth (x=6.15 z=1.77):
+  chip=Tram Approach  streetName=Tram Approach
+  chipOnScreen=1  (first session; remount chip visible)
+  mini=Tram Approach  highlight=1  role=official
+  official=2  names=Tram Approach,Harbor Walk,Steps East,Steps West
+  world plaque also Tram Approach
+
+CHIP_MINIMAP_AGREE_TRAM=1. Not Harbor Walk vs Tram Approach.
+Not Steps East / Steps West.
+
+South-sidewalk first stop had both Harbor Walk — agreement,
+but that was not the mouth. Verdict uses the on-asphalt
+remount.
+
+PASS.
+
+================================================================================
+CLAIM 4 — EAST / WEST / LANTERN ZEBRAS KEPT; GEOJSON=2; NO FIFTH — PASS
+================================================================================
+
+Tried to fail: tram paint stacked on lantern or a Steps
+mouth; east/west/lantern zebras ripped; live UI claims a
+fifth official street; GeoJSON streets ≠ 2.
+
+DOM at spawn / tram:
+  crosswalk-harbor-tram        7 stripes  mouth=tram     x=7.60  z=0.00
+  crosswalk-harbor-steps-east  7 stripes  mouth=east     x=4.54  z=−80.52
+  crosswalk-harbor-steps-west  7 stripes  mouth=west     x=−11.55 z=−75.99
+  crosswalk-harbor-lantern     7 stripes                 x=4.40  z=−69.99
+  stackedEast=0  dist=80.58 m
+  stackedWest=0  dist=78.37 m
+  stackedLantern=0  dist=70.06 m
+
+Lantern-follow still (heading 178, z=−65.6, 6.4 m from the
+lantern stall) still shows a cream zebra + stop-line at that
+south intersection, with a Steps East plaque in-frame — the
+kept south paint, 65 m from the tram zebra.
+
+Honesty on spawn / mouth / lantern:
+  "two official named streets plus inner parcel lanes,
+   not a city grid"
+  "Not a live map, not OSM/Overture"
+  "No GTA claim, no 1:1 city"
+  "not a digital twin"
+  NOT_PLAN_PASS
+  fifthOfficialClaim=0  osmGridClaim=0
+
+Minimap names: Tram Approach, Harbor Walk, Steps East,
+Steps West. official=2. Inner/extra are parcel lanes, not a
+fifth official street. UI never says "5 official" or
+"OSM grid".
+
+GET authored GeoJSON kind=street = 2
+  (Tram Approach, Harbor Walk)
+
+Plaques still 4. world MapView absent. Play engine=r3f.
+NET_OSM_HITS=0.
+
+PASS.
+
+================================================================================
+CLAIM 5 — LANTERN E STILL shop-lantern-fish; SEAT B NOT STOLEN — PASS
+================================================================================
+
+Tried to fail: leftover this-PC shop owns Nearby / E; seat B
+E opens leftover; Menu leftovers not last / unlabeled.
+
+Isolated seat B (9989), leftover E at spawn:
+  nearbyShop=""
+  stallHint="E opens a stall when you are next to it."
+  shopRange="Quầy Cá Đèn Lồng: 29 m away"
+  after E: panel=false  shopPanelId=""
+  LEFTOVER_E_STOLEN=0
+
+Menu Tab on seat B:
+  1. shop-lantern-fish          leftover=0 unlabeled
+  2. shop-local-mtmh45qxehxhvb  leftover=0 unlabeled
+  3. shop-local-sharedpc        leftover=1 labeled last-but-one
+  4. shop-local-mtl8ulddihjpre  leftover=1 labeled last
+  leftoverLast=1  leftoverLabeled=1
+
+Seat A remount then south to the lantern (not the failed
+first west-bound sprint):
+  nearby=shop-lantern-fish  (6.4 m)
+  prompt: Press E … Quầy Cá Đèn Lồng
+  E opened shop-lantern-fish
+
+Leftover catalog rows still exist. They still do not own
+street E on this path.
+
+PASS.
+
+================================================================================
+HUNTS (not named fails)
+================================================================================
+
+First 9988 walk at z≈−9 is south sidewalk cream wash
+(creamRatio rising toward the bottom, no alternating bands).
+That would have been a FAIL if used as the mouth proof.
+It was discarded. Verdict uses the 9991 remount on asphalt.
+
+Default-pitch mouthAsphalt creamRatio=0.037 under-counts
+because that ROI is the distant Tram ribbon past the paint.
+Look-down asphalt bands=4 is the zebra counter. Visual
+on-mouth + look-down still show cream on dark plus stop-line
+and curb.
+
+camPitch attribute was empty on the remount SNAP; the
+look-down frame is still a down-pitch asphalt crop (avatar
+feet on the zebra). Did not treat the missing attribute as
+a paint miss.
+
+OIDC=3 in the live bundle is “NOT Google/OIDC” shop-panel
+copy. Live body did not claim a real account. No OIDC
+login surface on the walked path.
+
+overture=2 in the live bundle is honesty copy, not a map
+fetch. No OSM host on the named GET surfaces.
+
+Default Play stayed R3F 1280×720. Did not grind hitch / min
+FPS. Did not claim GATE-U1.
+
+================================================================================
+METHOD
+================================================================================
+
+1. 4175 already up (pid 34604). Did not recycle / rebuild /
+   start other ports.
+2. GET /  /data/ben-thanh-400m.authored.geojson
+   /assets/index-D6skGmYL.js. Recorded name+sha+len three
+   times (before CDP, after first walk, after remount).
+3. Read implementer note (TICK=n/a). Did not copy its probe
+   writer into product files. Did not run
+   j5-tram-xing-probe.mjs as proof.
+4. Independent Chrome CDP 1280×720 isolated profiles.
+   Ports 9988/9989: about:blank → navigate, seat B leftover
+   Menu + spawn E, seat A Harbor north then east. First
+   stop was south sidewalk — rejected as mouth proof.
+   Port 9991 remount: walk to world x=6.15 z=1.77, asphalt
+   shot + look-down, then south to lantern E.
+5. Did not write lead packs. Did not tick plan. Did not fake
+   GATE-U1.
+
+Temp only (not under data-qa):
+  %TEMP%\hh-tram-xing-reaudit\critic-tram-xing-reaudit.mjs
+  %TEMP%\hh-tram-xing-reaudit\critic-tram-followup.mjs
+  %TEMP%\hh-tram-xing-reaudit\critic-walk.json
+  %TEMP%\hh-tram-xing-reaudit\critic-followup.json
+  %TEMP%\hh-tram-xing-reaudit\critic-tram-mouth.png
+  %TEMP%\hh-tram-xing-reaudit\critic-tram-lookdown.png
+  %TEMP%\hh-tram-xing-reaudit\critic-tram-onmouth.png
+  %TEMP%\hh-tram-xing-reaudit\critic-tram-onmouth-look.png
+  %TEMP%\hh-tram-xing-reaudit\critic-tram-onmouth-look-crop.png
+  %TEMP%\hh-tram-xing-reaudit\critic-lantern-follow.png
+
+================================================================================
+STILL IMPOSSIBLE WITHOUT OWNER
+================================================================================
+
+- GATE-U1 three human reviewers (not faked)
+- R2-WP1 still not PASS (idle / first-W min / mobile /
+  headed / context-loss / memory / owner thresholds UNFILLED)
+- AUTHORIZE_MAP_FETCH=YES + license ledger before any OSM/Overture
+- Other-PC / WAN join (store is this PC 4175 loopback)
+- Real account / OIDC
+
+================================================================================
+END
+================================================================================

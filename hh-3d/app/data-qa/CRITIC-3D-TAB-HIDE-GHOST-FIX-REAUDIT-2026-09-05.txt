@@ -1,0 +1,337 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+HASH_MISMATCH=0
+DID_NOT_RECYCLE=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M2=1
+LIVE_JS=/assets/index-oRuAyVDb.js
+LIVE_JS_LEN=2174914
+LIVE_JS_SHA256=f7f8b3612152d6a3b229b1f3a33020db1dcc9e342acf64b43a28cbde7e463f82
+DID_NOT_REBUILD=1
+DID_NOT_RESTORE_DIST=1
+DID_NOT_CATALOG_CLEAR=1
+NOT_M0_WP1=1
+NOT_M1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-05
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=05:33 +07
+MODEL=grok-4.6-extra-high
+SCOPE=Independent remint re-audit of TAB_HIDE_GHOST on live oRuAyVDb after REAUDIT + REAUDIT2 TICK=no. Force both seats visible before hide. Do not treat implementer CRITIC-3D-TAB-HIDE-GHOST-FIX-2026-09-05.txt (TICK=n/a) as acceptance.
+PLAYER_URL=http://127.0.0.1:4175/
+LISTEN=127.0.0.1:4175
+LIVE_PID=18936
+LIVE_PID_AFTER_CDP=18936
+LIVE_PID_STARTTIME=2026-09-05 05:27:39 +07
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-TAB-HIDE-GHOST-FIX-REAUDIT-2026-09-05.txt
+PRIOR_REAUDIT=hh-3d/app/data-qa/CRITIC-3D-TAB-HIDE-GHOST-REAUDIT-2026-09-05.txt
+PRIOR_REAUDIT2=hh-3d/app/data-qa/CRITIC-3D-TAB-HIDE-GHOST-REAUDIT2-2026-09-05.txt
+PRIOR_REAUDIT_KEPT=1
+PRIOR_REAUDIT2_KEPT=1
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-TAB-HIDE-GHOST-FIX-2026-09-05.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+DID_NOT_TREAT_IMPLEMENTER_AS_TICK_YES=1
+DID_NOT_COPY_IMPLEMENTER_JSON=1
+DID_NOT_RUN_IMPLEMENTER_PROBES=1
+DID_NOT_OVERWRITE_PRIOR_REAUDIT=1
+DID_NOT_OVERWRITE_PRIOR_REAUDIT2=1
+DID_NOT_OVERWRITE_IMPLEMENTER_NOTE=1
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+AUTHORIZE_MAP_FETCH=NO
+VITE_PREVIEW_PORT_PIN=4175
+CRITIC_CDP_PORTS=10014 / 10016
+IMPLEMENTER_CDP_PORT_NOT_REUSED=1
+DID_NOT_REUSE_10010=1
+DID_NOT_REUSE_10012=1
+DID_NOT_REUSE_10006=1
+DID_NOT_REUSE_10008=1
+VIEWPORT=1280x720
+ISOLATED_PROFILES=1
+HEADLESS_NEW=1
+SEATS=a+b
+SLICE=TAB_HIDE_GHOST
+GRAPH_CLEAR_THEN_RE_FRIEND=1
+SHOPS_KEPT=1
+CLICKED_OFFLINE=0
+RELOADED_A=0
+HIDE_IS_NOT_OFFLINE=1
+FORCED_VISIBLE_BEFORE_HIDE=1
+A_HIDDEN_BEFORE_HOLD=false
+A_VISIBILITYSTATE_BEFORE_HOLD=visible
+B_HIDDEN_BEFORE_HOLD=false
+B_VISIBILITYSTATE_BEFORE_HOLD=visible
+
+LIVE_JS_BEFORE=/assets/index-oRuAyVDb.js
+LIVE_JS_LEN_BEFORE=2174914
+LIVE_JS_SHA256_BEFORE=f7f8b3612152d6a3b229b1f3a33020db1dcc9e342acf64b43a28cbde7e463f82
+LIVE_JS_AFTER=/assets/index-oRuAyVDb.js
+LIVE_JS_LEN_AFTER=2174914
+LIVE_JS_SHA256_AFTER=f7f8b3612152d6a3b229b1f3a33020db1dcc9e342acf64b43a28cbde7e463f82
+LIVE_JS_MATCHES_CLAIM=1
+HASH_MISMATCH=0
+LIVE_CSS=/assets/index-DsRW_q10.css
+LIVE_CSS_LEN=83046
+LIVE_CSS_SHA256=77ec860c389e0edc35641e8b1ae385804335dc8e127f841dccfaa101ffa4a545
+
+HUNT1_HASH=PASS
+HUNT2_TAB_HIDE_GHOST=PASS
+HUNT3_LEFTOVER_HONESTY=PASS
+SAW_STABLE_BODY_BEFORE_HIDE=1
+BODY_HELD=1
+BODY_A_AFTER_HIDE=0
+NAMETAG_AFTER_HIDE=0
+A_MODE_AFTER_HIDE=Online — Meet friends on this machine.
+BODY_AFTER_UNHIDE=1
+CLICKED_OFFLINE=0
+BUNDLE_PLAY_IDLE=1
+BUNDLE_PLAY_VIEWING_CHIP=1
+BUNDLE_PLAY_VIEWING_OPEN=1
+LEFTOVER_SHARED_PC=1
+LEFTOVER_J6=1
+HONESTY_DENIES_GTA_11_TWIN=1
+OIDC_CLAIM=0
+WAN_CLAIM=0
+CITY_PRESENCE_SERVER_CLAIM=0
+BIGGEST_MISS=None on the named hunts. After both seats were forced visible, B held remote-body-a across four samples spanning 1411 ms with A's /demo-bus presence standing (no leave-wipe). Hide then cleared body + nametag by 1 s and still at 11 s while A stayed Online; unhide returned remote-body-a without reload.
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/ was already up. Bind 127.0.0.1 pid 18936
+(node, StartTime 2026-09-05 05:27:39 +07). Did not recycle, rebuild,
+restore-dist, kill, or restart 4175. Did not start 4173 / 4174 /
+5175. Did not bind 0.0.0.0. Did not catalog_clear. Same LISTEN
+pid 18936 after CDP.
+
+Did not treat CRITIC-3D-TAB-HIDE-GHOST-FIX-2026-09-05.txt as
+TICK=yes (ROLE=IMPLEMENTER, TICK=n/a). Did not treat
+CRITIC-3D-TAB-HIDE-GHOST-REAUDIT-2026-09-05.txt or
+CRITIC-3D-TAB-HIDE-GHOST-REAUDIT2-2026-09-05.txt as acceptance
+(those files stay TICK=no; this hunt did not overwrite them).
+Did not run implementer probes as proof. Did not copy
+implementer JSON. Did not tick any plan. GATE-U1 humans were
+not invented. Not M1. Not M2. NOT_PLAN_PASS.
+
+Independent Chrome CDP, isolated temp profiles, headless=new,
+1280×720, ?seat=a on 10014 and ?seat=b on 10016. Did not reuse
+10010 / 10012 / 10006 / 10008. graph_clear then Menu
+add-friend-b / accept-friend-a / Online + opt-in on both. Did
+not click Offline. Did not reload A after Online.
+
+GET / then GET the script as raw bytes before CDP and after CDP
+and again after the leftover check. Name + length + sha256 match
+the claimed remint all three times. HASH_MISMATCH=0.
+
+Hunt A held on THIS CDP. Hunt B held. Unhide returned the body.
+A presence-mode stayed Online.
+
+================================================================================
+LIVE JS
+================================================================================
+
+GET / then GET /assets/index-oRuAyVDb.js as raw bytes.
+
+BEFORE CDP:
+  HTML script = /assets/index-oRuAyVDb.js
+  http file length = 2174914
+  sha256 = f7f8b3612152d6a3b229b1f3a33020db1dcc9e342acf64b43a28cbde7e463f82
+
+AFTER CDP:
+  HTML script = /assets/index-oRuAyVDb.js
+  http file length = 2174914
+  sha256 = f7f8b3612152d6a3b229b1f3a33020db1dcc9e342acf64b43a28cbde7e463f82
+
+Claimed remint name + length + hash match. HASH_MISMATCH=0.
+
+LIVE_CSS=/assets/index-DsRW_q10.css LEN=83046
+sha256 = 77ec860c389e0edc35641e8b1ae385804335dc8e127f841dccfaa101ffa4a545
+
+Bundle scan (live bytes, not source):
+  visibilitychange = 4
+  visibilityState = 2
+  document.hidden = 3
+  pagehide = 2
+  play-viewing-chip = 1
+  play-viewing-open = 1
+  play-idle = 1
+  leave_session = 1
+  hitch3 string = 0
+  openstreetmap = 0
+  catalog_clear = 0
+
+================================================================================
+HUNT 1 — HASH_MISMATCH — PASS
+================================================================================
+
+Tried to fail a swapped or stale bundle vs oRuAyVDb / 2174914 /
+f7f8b3612152d6a3b229b1f3a33020db1dcc9e342acf64b43a28cbde7e463f82.
+
+Independent GET before any Chrome and again after the last CDP
+seats exited. Same name, same length, same sha256. Pid still
+18936 StartTime 2026-09-05 05:27:39 +07. 4173 / 4174 / 5175
+still not listening. PASS.
+
+================================================================================
+HUNT A — BODY HELD WHILE VISIBLE — PASS
+================================================================================
+
+Tried to fail the prior product miss: after both seats are
+forced visible, A's /demo-bus presence still leave-wipes in <1s
+and B never holds remote-body-a for two samples ≥1s apart.
+
+Visible-force on both seats (before any hide):
+  Page.setWebLifecycleState {status:"active"} = CDP -32602
+    (this Chrome wants params.state, not status)
+  Page.setWebLifecycleState {state:"active"} = ok
+  Page.bringToFront = ok
+  Emulation.setFocusEmulationEnabled = ok
+  document.hidden getter / visibilityState getter forced
+  visible plus visibilitychange (headless=new cannot keep the
+  page hidden for this hold)
+
+A before hold:
+  document.hidden = false
+  visibilityState = "visible"
+  presence-mode = "Online — Meet friends on this machine."
+  online-btn data-active = yes
+  offline-btn data-active = no
+  presence-opt-in = true
+  connection-label data-connection = on
+B before hold:
+  document.hidden = false
+  visibilityState = "visible"
+  graph pair a-b = accepted
+  remote-body-a already 1 (streetCount=1)
+
+Official hold (menus left open after Online; require
+remote-body-a=1 on two samples ≥1000 ms apart, and require
+that interval not drop to 0):
+
+  four samples, dt 41 / 505 / 978 / 1411 ms
+  A stayed hidden=false / visibilityState=visible on every
+  sample. B stayed visible. Graph stayed a-b:accepted.
+  remote-body-a = 1 on all four. Hold span = 1370 ms.
+  A's /demo-bus presence stood the whole hold:
+    same presence_session a-mtnj3lh0-bsk478
+    age 319 ms → 1690 ms (idle publish; TTL 10 s)
+    presenceA never null
+  A's Network POST /demo-bus during the hold: presence only,
+  leave posts = 0.
+  leaveWipedWhileVisible = 0
+  SAW_STABLE_BODY_BEFORE_HIDE=1
+  BODY_HELD=1
+
+This is the miss REAUDIT2 scored. It did not reproduce on
+oRuAyVDb. PASS.
+
+================================================================================
+HUNT B — HIDE CLEARS GHOST; UNHIDE RETURNS BODY — PASS
+================================================================================
+
+Tried to fail: after A is hidden ≥ PRESENCE_TTL_MS=10000, B
+still sees a standing remote-body-a / leftover
+[data-testid=remote-avatar-a] / visible .play-remote-label for
+seat a; or A flips Offline; or the body never returns after
+unhide without reload.
+
+Hide A only (no Offline, no reload):
+  Page.setWebLifecycleState {state:"hidden"} = CDP -32000
+    "Unidentified lifecycle state" on this Chrome
+  visibility hidden + visibilitychange applied
+    document.hidden=true visibilityState=hidden
+  A presence-mode immediately after hide still
+    "Online — Meet friends on this machine."
+    online-btn data-active=yes  offline-btn=no
+
+A Network POST /demo-bus 19 ms after hide: leave=a with
+matching leave_session a-mtnj3lh0-bsk478. Independent GET
+/demo-bus then had presenceA=null.
+
+B timeline after hide (A stayed hidden / Online / opted-in):
+  dt≈133 ms   remote-body-a=1  remote-avatar-a visible
+              "Bạn A (máy này)"  (B poll lag after leave)
+  dt≈1047 ms  remote-body-a=0  remote-avatar-a=null
+              visible .play-remote-label for a = 0
+              streetCount=0
+  dt≈2043 ms  still 0 / null / no label
+  dt≈5034 ms  still 0 / null / no label
+  dt≈11055 ms still 0 / null / no label
+              A mode still Online, online-btn yes, offline no
+
+Wait ≥11 s scored: BODY_A_AFTER_HIDE=0 NAMETAG_AFTER_HIDE=0
+A_MODE_AFTER_HIDE=Online — Meet friends on this machine.
+Did not click Offline. Hide is not Offline.
+
+Unhide A (Page.setWebLifecycleState {state:"active"} = ok,
+visibility visible + visibilitychange). No reload.
+  dt≈108 ms  presenceA back on /demo-bus (same session),
+             remote-body-a still 0
+  dt≈680 ms  still 0
+  dt≈1303 ms remote-body-a=1  A hidden=false / visible
+             mode still Online
+BODY_AFTER_UNHIDE=1
+
+PASS.
+
+================================================================================
+HUNT 3 — LEFTOVER / PLAY-IDLE / SAME PID — PASS
+================================================================================
+
+Tried to fail: catalog_clear wiped Shared PC / J6; hitch3
+play-idle ripped from the bundle; play-viewing-chip /
+play-viewing-open gone; honesty claiming GTA / 1:1 / digital
+twin / OIDC / WAN / a city presence server; pid recycled.
+
+Independent GET /demo-bus after CDP still has
+  shop-local-sharedpc          Quầy Shared PC
+  shop-local-mtl8ulddihjpre    Quay Critic J6 Jump
+catalog_clear needle in live JS = 0. Did not POST
+catalog_clear. graph_clear + re-friend only.
+
+Live JS still has play-idle, play-viewing-chip, play-viewing-open.
+Honesty banner: “Not a live map, not OSM/Overture … not a
+digital twin. No GTA claim, no 1:1 city. … Friend bodies use
+this PC's 4175 loopback store …”
+
+Same pid 18936 before and after CDP. PASS for this honesty
+hunt. Does not invent M2 or GATE-U1.
+
+================================================================================
+SCORE CARD (requested)
+================================================================================
+
+TICK=yes
+BODY_HELD_WHILE_VISIBLE=1
+BODY_AFTER_HIDE=0
+NAMETAG_AFTER_HIDE=0
+A_MODE=Online — Meet friends on this machine.
+BODY_AFTER_UNHIDE=1
+HASH_MISMATCH=0
+LIVE_PID=18936
+
+================================================================================
+NOT CLAIMED
+================================================================================
+
+NOT_PLAN_PASS. Not M1. Not M2. GATE-U1 three-human review was
+not invented. OWNER_SIGN was not invented. No OSM/Overture
+fetch. No 4173 / 4174 / 5175. No 0.0.0.0 bind. No recycle of
+4175.

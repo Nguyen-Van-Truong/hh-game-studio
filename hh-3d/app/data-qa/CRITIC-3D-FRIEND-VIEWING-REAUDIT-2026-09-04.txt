@@ -1,0 +1,283 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+HASH_MISMATCH=0
+DID_NOT_RECYCLE=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M2=1
+LIVE_JS=/assets/index-C6w1CTve.js
+LIVE_JS_LEN=2172514
+LIVE_JS_SHA256=d37b3492bbc939aedc75bee64d01c8b47a66bb931a24bea495831b908231a153
+DID_NOT_REBUILD=1
+DID_NOT_RESTORE_DIST=1
+DID_NOT_CATALOG_CLEAR=1
+NOT_M0_WP1=1
+NOT_M1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=19:39 +07
+MODEL=grok-4.6-extra-high
+SCOPE=Independent re-audit of FRIEND_VIEWING_SHOP on live C6w1CTve. Do not treat implementer CRITIC-3D-FRIEND-VIEWING-2026-09-04.txt (TICK=n/a) or J5-FRIEND-VIEWING JSON as acceptance.
+PLAYER_URL=http://127.0.0.1:4175/
+LISTEN=127.0.0.1:4175
+LIVE_PID=30200
+LIVE_PID_AFTER_CDP=30200
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-FRIEND-VIEWING-REAUDIT-2026-09-04.txt
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-FRIEND-VIEWING-2026-09-04.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+DID_NOT_TREAT_IMPLEMENTER_AS_TICK_YES=1
+DID_NOT_COPY_IMPLEMENTER_JSON=1
+DID_NOT_RUN_J5_FRIEND_VIEWING_PROBE=1
+PRIOR_ACCEPTED_UNTOUCHED=CRITIC-3D-SHELF-ATTRIB-REAUDIT-2026-09-04.txt TICK=yes on DEBo1VKU
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+AUTHORIZE_MAP_FETCH=NO
+VITE_PREVIEW_PORT_PIN=4175
+CRITIC_CDP_PORTS=9981 / 9983
+IMPLEMENTER_CDP_PORT_NOT_REUSED=1
+VIEWPORT=1280x720
+ISOLATED_PROFILES=1
+HEADLESS_NEW=1
+SEATS=a+b
+GRAPH_CLEAR_ONLY=1
+SHOPS_KEPT=1
+
+LIVE_JS_BEFORE=/assets/index-C6w1CTve.js
+LIVE_JS_LEN_BEFORE=2172514
+LIVE_JS_SHA256_BEFORE=d37b3492bbc939aedc75bee64d01c8b47a66bb931a24bea495831b908231a153
+LIVE_JS_AFTER=/assets/index-C6w1CTve.js
+LIVE_JS_LEN_AFTER=2172514
+LIVE_JS_SHA256_AFTER=d37b3492bbc939aedc75bee64d01c8b47a66bb931a24bea495831b908231a153
+LIVE_JS_MATCHES_CLAIM=1
+HASH_MISMATCH=0
+
+HUNT1_HASH=PASS
+HUNT2_FRIEND_BODY_BEFORE=PASS
+HUNT3_VIEWING_NAMED=PASS
+HUNT4_BODY_BACK=PASS
+HUNT5_LEFTOVER_HONESTY=PASS
+HUNT6_SAME_PID=PASS
+BODY_VANISHED=1
+VIEWING_COPY_VISIBLE=1
+VIEWING_COPY=Đang xem cửa hàng
+VIEWING_SHOP=shop-lantern-fish
+ROW_GAP_BEFORE_MO_KE=1
+LEFTOVER_STOLE_VIEWING=0
+SPAWN_E_EMPTY=1
+SPAWN_E_STOLEN=0
+HONESTY_DENIES_GTA_11_TWIN=1
+OIDC_CLAIM=0
+WAN_CLAIM=0
+CITY_PRESENCE_SERVER_CLAIM=0
+BIGGEST_MISS=none on this remint. Named hunt 3 held on independent 9981/9983 CDP: A Menu-opened shop-lantern-fish (leftover banner absent); B lost remote-body-a; people-row-a / people-layer / play-remote-viewing showed “Đang xem cửa hàng” with a · gap before Mở kệ; leftover Shared PC did not own the viewing.
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/ was already up. Bind 127.0.0.1 pid 30200
+(node, StartTime 2026-09-04 19:36:15 +07). Did not recycle, rebuild,
+restore-dist, kill, or restart 4175. Did not start 4173 / 4174 / 5175.
+Did not bind 0.0.0.0. Did not catalog_clear. Same LISTEN pid 30200
+after CDP.
+
+Did not treat CRITIC-3D-FRIEND-VIEWING-2026-09-04.txt as TICK=yes
+(ROLE=IMPLEMENTER, TICK=n/a). Did not run j5-friend-viewing-probe.mjs
+as proof. Did not copy J5-FRIEND-VIEWING JSON as this verdict.
+Did not remint or overwrite CRITIC-3D-SHELF-ATTRIB-REAUDIT-2026-09-04.txt
+(TICK=yes on DEBo1VKU stays). Did not tick any plan. GATE-U1 humans
+were not invented. Not M1. Not M2. NOT_PLAN_PASS.
+
+Independent Chrome CDP, isolated temp profiles, headless=new,
+1280×720, ?seat=a on 9981 and ?seat=b on 9983. Did not reuse
+9781 / 9783. graph_clear + leave only; leftover Shared PC / J6
+and the other this-PC shops stayed on /demo-bus.
+
+GET / then GET the script, recorded before CDP and after CDP.
+Name + length + sha256 match the claimed remint both times.
+HASH_MISMATCH=0.
+
+Hunt 3 held on THIS CDP, not on implementer notes: body gone and
+“Đang xem cửa hàng” visible for A on B’s Menu / people-layer /
+play-remote-viewing, shop=shop-lantern-fish, leftover banner
+absent.
+
+================================================================================
+LIVE JS
+================================================================================
+
+GET / then GET /assets/index-C6w1CTve.js
+
+BEFORE CDP:
+  HTML script = /assets/index-C6w1CTve.js
+  http file length = 2172514
+  sha256 = d37b3492bbc939aedc75bee64d01c8b47a66bb931a24bea495831b908231a153
+
+AFTER CDP:
+  HTML script = /assets/index-C6w1CTve.js
+  http file length = 2172514
+  sha256 = d37b3492bbc939aedc75bee64d01c8b47a66bb931a24bea495831b908231a153
+
+Claimed remint name + length + hash match. HASH_MISMATCH=0.
+
+Bundle scan (live bytes, not source):
+  openstreetmap = 0
+  overture = 2 (honesty denial: “not OSM/Overture”)
+  viewing copy “Đang xem cửa hàng” = 1
+  viewing_shop_id = 18
+  gta = 3 (honesty “No GTA claim”; plus unrelated gTag)
+  digital twin = 3 (honesty denial)
+  oidc = 8 (not_oidc / “OIDC is not built”, not a sign-in claim)
+
+================================================================================
+HUNT 1 — HASH_MISMATCH — PASS
+================================================================================
+
+Tried to fail a swapped or stale bundle vs C6w1CTve / 2172514 /
+d37b3492bbc939aedc75bee64d01c8b47a66bb931a24bea495831b908231a153.
+
+Independent GET before any Chrome, and again after both seats
+exited. Same name, same length, same sha256. Pid still 30200.
+PASS.
+
+================================================================================
+HUNT 2 — B SEES A BEFORE ANY SHELF — PASS
+================================================================================
+
+Tried to fail: friends never appear.
+
+graph_clear only, then Menu add-friend-b / accept-friend-a,
+presence-opt-in + Online on both seats.
+
+B before any shop:
+  playReady=yes  canvas=1280×720
+  remote-body-a=1
+  streetCount=1  viewingCount=0  viewingA=null
+  people-layer = “Other people on the street: Bạn A (máy này).”
+  people-row-a street=1 shop="" “Bạn A (máy này) · standing · in-app, not GPS”
+
+remote-avatar-a was not in B’s DOM at any sample (before /
+during / after). Hunt 2 allows remote-body-a or remote-avatar-a.
+Street body was present. Friends appeared. PASS.
+
+================================================================================
+HUNT 3 — NAMED MISS: VIEWING HIDES STREET BODY — PASS
+================================================================================
+
+Tried to fail: A still stands on B’s street; “Đang xem cửa hàng”
+missing; copy jammed into one blob with no gap before “Mở kệ”;
+or leftover Shared PC / J6 stole the viewing.
+
+A Menu-opened open-shop-shop-lantern-fish (via=menu, not Nearby/E).
+A shop-panel:
+  data-shop=shop-lantern-fish
+  data-leftover=0
+  shop-leftover-banner ABSENT
+
+B during (wait until bodyA=0 and viewing named the lantern; did
+not time out):
+  remote-body-a=0
+  remote-avatar-a=0
+  streetCount=0  viewingCount=1  bodyCount=0
+  play-remote-viewing count=1 text=“Đang xem cửa hàng”
+  remote-viewing-a shop=shop-lantern-fish street=0
+  people-layer = “Other people on the street: none (no accepted
+    friend Online on this street). Đang xem cửa hàng: Bạn A (máy này).”
+  people-row-a street=0 shop=shop-lantern-fish
+  text = “Bạn A (máy này) · Đang xem cửa hàng · Mở kệ”
+  html has a separate people-open-shop-a button after “ · ”
+  jammedBlob=0
+
+Leftover Shared PC / J6 were still listed leftover=1 in the same
+Menu, but viewingA.shop was shop-lantern-fish, not
+shop-local-sharedpc / shop-local-mtl8ulddihjpre. PASS.
+
+================================================================================
+HUNT 4 — CLOSE SHELF RETURNS STREET BODY — PASS
+================================================================================
+
+A clicked close-shop. B wait until bodyA=1 and viewingA gone;
+did not time out.
+
+  remote-body-a=1
+  viewingA=null
+  streetCount=1  viewingCount=0  viewingListCount=0
+  people-layer = “Other people on the street: Bạn A (máy này).”
+  people-row-a street=1 shop="" “Bạn A (máy này) · standing · in-app, not GPS”
+  people-open-shop-a gone
+
+Street body returned. Viewing list empty. PASS.
+
+================================================================================
+HUNT 5 — LEFTOVER / SPAWN E / HONESTY — PASS
+================================================================================
+
+Tried to fail: catalog_clear wiped Shared PC / J6; spawn E stolen
+by leftover; honesty claiming GTA / 1:1 / digital twin / OIDC /
+WAN / a city presence server; M2.
+
+/demo-bus before and after still has
+  shop-local-sharedpc          Quầy Shared PC
+  shop-local-mtl8ulddihjpre    Quay Critic J6 Jump
+plus the kept street-play this-PC shops (Phở / Chè / Kem).
+Menu public-shop-names leftoverCount=2 leftover=1 on Shared PC
+and J6 only. Did not catalog_clear.
+
+Spawn / play stall-hint nearby-shop="" on A and B.
+“E opens a stall when you are next to it.” Nearby is not
+Shared PC or J6. SPAWN_E_STOLEN=0.
+
+Honesty (compact, live CDP):
+  “Not a live map, not OSM/Overture, not photogrammetry, and
+  not a digital twin. No GTA claim, no 1:1 city.”
+presence-honesty:
+  “Not a city shop server. Not a city presence server. …
+  Not WAN. Not GPS. NOT_PLAN_PASS.”
+Live bundle OIDC hits are denials (“OIDC is not built”,
+not_oidc:!0), not a sign-in claim. Not M2. PASS.
+
+Note (not the named miss): leftover Menu name+label concatenate
+in textContent as “Quầy Shared PCkhông trên phố / leftover máy
+này”. That is leftover-list chrome, not the viewing row. The
+viewing row itself had a · gap before Mở kệ.
+
+================================================================================
+HUNT 6 — SAME PID / DID NOT RECYCLE — PASS
+================================================================================
+
+LISTEN 127.0.0.1:4175 pid 30200 before CDP and after CDP.
+Process StartTime still 2026-09-04 19:36:15 +07. Did not
+recycle, rebuild, restore-dist, kill, or restart 4175.
+Did not catalog_clear. PASS.
+
+================================================================================
+OWNER LEFTOVERS (unchanged; not invented)
+================================================================================
+
+1. GATE-U1 three-human review still unproven. Not faked.
+2. R2-WP1 headed/mobile/memory/min-FPS thresholds still UNFILLED.
+3. WAN / other-PC join still not built. 4175 loopback only.
+4. Real account / OIDC still not built.
+5. Open data (OSM/Overture) still needs license ledger + grant.
+6. Leftover this-PC shops stay in the catalog; they do not own
+   street E or this viewing packet.
+7. M0/M1/M2 plan WPs still NOT_STARTED. NOT_PLAN_PASS. Not M1.
+   Not M2.
+
+END

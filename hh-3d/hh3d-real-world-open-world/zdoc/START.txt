@@ -1,0 +1,115 @@
+START — hh-3d/hh3d-real-world-open-world
+DATE=2026-09-03
+TIMEZONE=Asia/Saigon
+
+ORIGINALS_CANONICAL=hh-3d/zdoc/
+THIS_FOLDER=DISPOSABLE_SANDBOX
+NETWORKING=OFF
+
+G0_PAPER=DOCS_CLOSED_PAPER
+G0_PAPER_CRITIC=CRITIC-D-2026-09-03 TICK=yes paper only
+NATIVE_WP=NONE
+NATIVE_EXECUTION_AUTHORIZATION=NONE
+G0_ENGINE=FORBIDDEN
+UNREAL_TRACK=STOP
+
+CURRENT_WP=SANDBOX-G0-DOCS
+CURRENT_WP_FORM=DOCS_ONLY
+CURRENT_WP_STATE=DOCS_CLOSED_PAPER
+POINTER_WEB_PAPER=zdoc/R0-WP0-WEB-DECISION-RECORD.txt
+REAL_APP_MOVED_TO=hh-3d/app/
+OWNER_CHAT_GRANT=làm HH World web
+OWNER_GRANT_DATE=2026-09-03
+AUTHORIZE_HH3D_APP_SCAFFOLD=YES
+NOT_A_REAL_APPLICATION_RESUME=0
+NOTE=Sandbox papers stay historical. Official HH World work is hh-3d/app/.
+NEXT=Read hh-3d/app/PROGRESS.txt first for the live product.
+     Owner modes (friends on street / shops offline):
+       hh-3d/zdoc/03-9-hh-world-owner-modes.txt — do not implement from sandbox.
+     This sandbox stays disposable. Do not fetch maps. Do not start G0-ENGINE.
+     Do not start a Godot-2 city. Do not tick hh-3d/zdoc/ originals.
+     Next native WP = NONE. Preview: http://127.0.0.1:4175/
+RESTART_FILE=../../app/PROGRESS.txt
+SANDBOX_RESTART_FILE=zdoc/PROGRESS.txt
+
+READ_ORDER
+  0. hh-3d/app/PROGRESS.txt  (LIVE HH World product)
+  1. This file
+  2. PROGRESS.txt
+  3. READ_ORDER.txt
+  4. 00-SANDBOX-STATUS.txt
+  5. COPY-MANIFEST.txt (hashes must match)
+  6. ERRATA-FROM-AUDIT.txt
+  7. 31-8-hh3d-real-world-open-world-plan.txt (copy; do not execute §9 engine)
+  8. 01-9-hh3d-plan-audit-summary.txt
+  9. review-log.txt
+ 10. 31-8-hh3d-real-application-plan.txt as REFERENCE_NOT_EXECUTE
+ 11. OWNER-DECISION-2026-09-03-GODOT-NOT-UNREAL.txt
+ 12. G0-DECISION-RECORD.txt (paper closed; not an install grant)
+ 13. R0-WP0-WEB-DECISION-RECORD.txt (POINTER paper; not CURRENT_WP)
+
+FIRST LEGAL WP (historical, closed)
+  SANDBOX-G0-DOCS = copy plans + paper decision record + host/legal/cost
+  questions. Not Unreal install. Not packaged hello-world. Not Cesium sample.
+  Plan §9 G0 pass criteria that require an empty Unreal project + packaged
+  hello-world are G0-ENGINE and remain FORBIDDEN.
+  STATE=DOCS_CLOSED_PAPER after CRITIC-D TICK=yes. Do not redo unless wipe.
+
+POINTER (historical)
+  R0-WP0-WEB-DECISION-RECORD.txt was a paper twin. Official record is now
+  hh-3d/app/decision-records/2026-09-03-r0-wp0-hh-world-web.txt after the
+  2026-09-03 owner grant "làm HH World web". STATE of this pointer remains
+  paper. Do not recreate a third decision folder in this sandbox.
+
+OWNER_CHAT_2026-09-03
+  Unreal STOP. Stay Godot 4.7.1-stable. VF keeps current Godot + hh_agent
+  at godot/dogfood/superfighters/. No second engine. No Godot 4.7.2.
+  No Godot-2 city now. HH World = web. Hòn Gió = demo seed.
+  See OWNER-DECISION-2026-09-03-GODOT-NOT-UNREAL.txt
+
+FORBIDDEN
+  Unreal download/install
+  hh-3d/unreal/**
+  Demo mutation from this track
+  Creating a second HH World app outside hh-3d/app/
+  Godot / Vault Fighters / Snake / Kho Bí Ẩn
+  G1+ fetch / large maps / paid APIs
+  Rewriting originals in hh-3d/zdoc/
+  Ticking plan checkboxes
+  Treating CURRENT_EXECUTION_PLAN=demo-webgl as live
+  Treating open-world §9 as next
+
+ERRATA
+  See ERRATA-FROM-AUDIT.txt. Do not “fix” P3 / acquired_at / networking
+  in the original plans from here.
+
+COPIED SHA256 (must match COPY-MANIFEST.txt)
+  31-8-hh3d-real-world-open-world-plan.txt
+    8CDAAD43B46D459843F6FCA76116301EAD69455DBAFE5F2DF46D5B0F0B36A6C6
+  31-8-hh3d-real-application-plan.txt
+    3B3204C0FD0CEAEEC82BDCDBBD245090BB944074FC84897D467CD1EA586C7AC6
+  01-9-hh3d-plan-audit-summary.txt
+    2B7D278AEC12633F9D46806D3E880CB092F0676F99C4844D3FA238E2077CC0B5
+  01-9-hh3d-cheap-agent-handoff-prompt.txt
+    DB2B17AC1322691815227DC3AAACE053DF3B0BFA594F8408BAAA8820F6E88B23
+  review-log.txt
+    62BA41FF2FD3A27D47135ADD019C6FB39EC470D59827A292037F6FFE3E644DF3
+    NOTE=original hh-3d/zdoc/review-log.txt received an allowed R0-WP0
+         append on 2026-09-03; this sandbox copy is now behind.
+
+CRITIC-D 2026-09-03
+  TICK=yes for SANDBOX-G0-DOCS paper closeout ONLY.
+  Not G0-ENGINE. Not owner accept. Not a one-commit license.
+
+RESIDUAL
+  Official wipe: recopy five hashed files; recreate START +
+  COPY-MANIFEST + READ_ORDER + ERRATA + STATUS + PROGRESS.
+  Follow README / G0-DECISION-RECORD §7, not a leftover sentence.
+  This folder's G0/R0 papers, OWNER-DECISION, working-plan, and critic
+  files are sandbox-native; hard wipe drops them unless restored from git.
+  Hòn Gió chat/HUD went into commit ff702a7 with hygiene (split rule
+  broken once; do not repeat). Unstage VF from any sandbox commit.
+  Unstage sandbox from any VF commit. Do not Commit All.
+  PUNCH_COMBO_AFTER is unused (pose-only punch). HUD says pose.
+  G0-ENGINE still unauthorized. Owner fields stay UNFILLED.
+  Do not expand the Hòn Gió demo from this track.

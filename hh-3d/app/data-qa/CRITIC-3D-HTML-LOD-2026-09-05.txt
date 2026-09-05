@@ -1,0 +1,44 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-05
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=06:43 +07
+ROLE=IMPLEMENTER
+TICK=n/a
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_R2_WP1=1
+NOT_60=1
+PLAYER_URL=http://127.0.0.1:4175/
+LIVE_JS=/assets/index-KZQAQdH6.js
+LIVE_JS_LEN=2176239
+LIVE_JS_SHA256=878eb28eea10fa2cb114421b8157f398e6977ca0cf3c8a404a95d39867bc56e7
+LIVE_PID=388
+LIVE_PID_STARTTIME=2026-09-05 06:42:59 +07
+SUPERSEDES=/assets/index-BrVc4bRj.js
+ACCEPTED_PRIOR=CRITIC-3D-LOOK-PITCH-FPS-REAUDIT-2026-09-05.txt TICK=yes on BrVc4bRj
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+NO_COMMIT=1
+
+LOOK_PITCH_FPS critic TICK=yes on BrVc4bRj. Next leftover street-play
+hole (not GATE-U1): first keys felt dead / janky because every
+shop/place/plaque Drei Html portal mounted on first Harbor paint.
+Shared PC / J6 Jump stay persist leftovers (draw=0, keep-out).
+Hitch3 idle-minimap still stands; this is Html LOD only.
+
+This remint:
+  PLAY_HTML_LOD_KIND=far-html
+  shouldDrawPlayHtml uses FAR_DETAIL_M=90
+  Shop / plaque / place Html skip past 90 m. Meshes stay.
+  LOOK_YAW_SIGN=-1, demo flipped A=east/screen-left, pitch-up
+  chest look-at, FPS chip NOT_60 / NOT_R2_WP1 unchanged.
+  Walk 2.55 / 4.35. Máy này · 4175.
+
+Recycled LISTEN pid 30572 only. New preview 127.0.0.1:4175.
+Independent critic writes ONLY
+CRITIC-3D-HTML-LOD-REAUDIT-2026-09-05.txt
+Hunts: hash; spawn shop-marker Html still present; data-html-lod;
+A still east / heading frozen; mouse-left heading up; pitch-up
+onCanvas + camLookY~2; FPS chip NOT_60; Shared PC / J6 persist;
+DID_NOT_RECYCLE. Ports not 10014–10036.
+Implementer is never TICK=yes. NOT_PLAN_PASS.

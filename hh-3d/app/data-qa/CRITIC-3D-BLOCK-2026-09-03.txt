@@ -1,0 +1,344 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+MESH_COUNT=60
+BIGGEST_MISS=Guest sees a walkable authored 400 m block of many beige extrusions, not five AABB boxes — still not a city / not 1:1 / not textured streets. First WebGL frames can be blank gray. NOT_PLAN_PASS.
+
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-03
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=14:02 +07
+MODEL=grok-4.6
+SCOPE=HH World extruded authored-400 m building block on already-up 4175 (NOT GTA / NOT 1:1 / NOT a city)
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=1567956b35dbe78e938280f930ad711a5fb68de4
+PROGRESS_CLAIMS_HEAD=1567956b35dbe78e938280f930ad711a5fb68de4
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-BLOCK-2026-09-03.txt
+PRIOR_CRITIC=hh-3d/app/data-qa/CRITIC-3D-CAM-HUD-2026-09-03.txt
+LEAD_PACK=hh-3d/app/data-qa/J5-3D-WALK-2026-09-03.txt
+LEAD_SHOT=hh-3d/app/data-qa/j5-3d-block.png
+LEAD_RUN_ID_CLAIM=HH3D-J5-20260903-ASIA-SAIGON-05
+PROGRESS_TRUSTED_ALONE=NO
+J5_OBSERVED_TRUSTED_ALONE=NO
+LEAD_PACK_TRUSTED_ALONE=NO
+LEAD_SHOT_TRUSTED_ALONE=NO
+DATA_BUILDINGS_ATTR_TRUSTED_ALONE=NO
+PLAY_BUILDING_LIST_TRUSTED_ALONE=NO
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_VF_TOUCH=1
+NO_UNREAL=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_RUN_LEAD_PROBE_WRITER=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M0_WP1=1
+NOT_GTA=1
+NOT_1TO1=1
+NOT_A_CITY=1
+CRITIC_CDP_PORT=9337
+CRITIC_CDP_PORTS_TRIED=9333,9335,9337
+LIVE_JS=/assets/index-4f3W9n9d.js
+LIVE_PID=65540
+LIVE_CMD=node .../hh-3d/app/web/node_modules/vite/bin/vite.js preview
+VITE_PREVIEW_PORT_PIN=4175
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/
+MESH_COUNT=60
+
+4175 was already up (vite preview pid 65540). This critic used that preview
+and did not start 4173, 4174, 5175, or a second HH World preview. Independent
+Chrome CDP (debug 9337, about:blank then navigate, temp profile only) waited
+until canvas.play-canvas resized to 1264x705, then held A, then W.
+
+A guest who waits through the first blank-gray WebGL frames sees a
+third-person street of many distinct beige extruded volumes on a dark road
+with lighter walks — not the five AABB boxes CRITIC-3D-CAM-HUD named as the
+miss. Live authored GeoJSON the page fetched has 60 kind=building features.
+Hidden play-building-list also 60. Visual street + corner 2D map show a
+parcel block, not five mega-boxes.
+
+Heading-follow still works. Hold A 1.5 s turned heading 0° → 193° (south),
+in place. Camera orbit jumped camX/camZ 4.79,-103.56 → 5.24,-92.41. Then W
+4 s moved 6.43 m on bearing 193.18° (east -1.47 m, north -6.26 m). Stall
+range 28 m → 34 m. That is south-southwest along the new heading, not
+world-north.
+
+No public OSM / Cesium / Google tile URL on the 3D path. Network to 4175
+only (local style, authored GeoJSON, shops, demo-bus, blobs). Honesty denies
+GTA / 1:1 / city / OSM. Plan leftover is still GATE-U1 STATE: NOT_STARTED.
+This is NOT_PLAN_PASS. GATE-U1 humans were not invented.
+
+Biggest miss: still a small authored 400 m beige extrusion block, not a
+city. First WebGL frames can be a blank gray play surface before the
+play-canvas class attaches. Shop E was not re-proven on the successful
+remint. Heading-follow and the 60-building block themselves are not the miss.
+
+================================================================================
+METHOD
+================================================================================
+
+Read on disk (not PROGRESS / J5 alone):
+  hh-3d/app/web/src/play/PlayView.tsx
+    BuildingMesh = ExtrudeGeometry from footprint ring (wall + roof).
+    Streets: dark #3a3d42 boxes; walks: lighter #d8d3c8 boxes.
+    data-buildings / play-building-list exist — NOT treated as mesh proof.
+  hh-3d/app/web/src/play/world.ts
+    buildingsToWorld maps each authored polygon; STREET_WIDTH_M=8.6,
+    WALK_WIDTH_M=16.4.
+  hh-3d/app/web/src/map/aoi.ts
+    buildingsFromCollection: kind===building Polygon only.
+  hh-3d/app/web/src/avatar/useAvatar.ts
+    A/left = turn; W = forward along heading; window keydown Set.
+  hh-3d/app/web/src/map/MapView.tsx
+    style: /styles/local-style.json (no remote tiles).
+  hh-3d/app/web/public/styles/local-style.json
+    sources: {}  layers: background only. No glyphs/sprites/tiles.
+  hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+    CURRENT_FIRST_LEFTOVER=GATE-U1; GATE-U1 STATE: NOT_STARTED (line 862).
+  hh-3d/app/docs/review/README.txt
+    "GATE-U1 is NOT done."
+  Prior critic CRITIC-3D-CAM-HUD TICK=yes asked for a walkable block
+    instead of five AABB boxes.
+  Lead pack J5-3D-WALK / j5-3d-block.png / SAIGON-05 read only as claim.
+
+Live (existing 4175 only; did not start another HH World preview):
+  TCP 127.0.0.1:4175 LISTEN pid 65540 node vite preview
+  4173 DOWN  4174 DOWN  5175 DOWN
+  GET /                         200  title=HH World
+                                script /assets/index-4f3W9n9d.js
+  GET /data/ben-thanh-400m.authored.geojson  200  92096 B
+    features=68  kind.building=60  park=1  street=2  place=4  aoi=1
+  Live JS Content-Length=2066338
+    HAS_EXTRUDEGEOMETRY=1  HAS_BOXGEOMETRY=1 (streets/person, not buildings)
+    openstreetmap/cesium/googleapis/maptiler/mapbox:// / demotiles = ABSENT
+    "mapbox" substring = MapLibre terrain encoding enum only, not a tile URL
+    HAS_NO_GTA=1  HAS_NOT_PLAN_PASS=1
+  Independent Chrome CDP vs 4175
+    first passes 9333/9335: captured too early (blank gray) / OS key hold
+      throttled — not used as walk proof
+    remint 9337: wait until play-canvas 1264x705, then A then W
+    shots TEMP only (not written under data-qa):
+      C:\Users\truon\AppData\Local\Temp\hh-critic-3d-block\critic3-home.png     72319 B  sha 89b211b9b4d70ca9
+      C:\Users\truon\AppData\Local\Temp\hh-critic-3d-block\critic3-hold-a.png   56609 B  sha 9aeed114f8d622b2
+      C:\Users\truon\AppData\Local\Temp\hh-critic-3d-block\critic3-after-w.png  58360 B  sha 2ffe855aa1746c31
+  Did not run j5-3d-walk-probe.mjs. Did not write J5-3D-WALK-2026-09-03.txt.
+  Did not run npm build. Did not recycle the preview.
+
+================================================================================
+PROCESS / GIT
+================================================================================
+
+RESULT=PASS_ON_STATED_FAIL_RULE
+
+Stated fail: VF / AGENTS.md staged with this if they committed.
+Observed:
+  git diff --cached --name-only  = empty
+  last commit = 1567956 VF6-WP4: tick after critic and official PASS
+  No hh-3d/app commit in HEAD
+  Critic did not commit, did not tick plan, did not touch VF.
+
+================================================================================
+ATTACK 1 — COUNT 3D BUILDING MESHES. FAIL IF STILL ~5
+================================================================================
+
+RESULT=PASS  MESH_COUNT=60  (not five boxes)
+
+Rejected as sole proof:
+  data-buildings="60" on play-proof (hardcoded from buildings.length)
+  hidden <ol data-testid="play-building-list"> (can be faked without meshes)
+  lead j5-3d-block.png / SAIGON-05 pack
+
+Independent count used instead:
+
+  1. Live GET the same GeoJSON the page requested
+     http://127.0.0.1:4175/data/ben-thanh-400m.authored.geojson
+     kind=building = 60  (disk public fixture also 60)
+     IDs include bldg-market-hall, bldg-hall-01…, bldg-west-*, bldg-east-*,
+     bldg-north-*, bldg-south-*, bldg-steps-* — parcel splits, not five
+     mega-footprints.
+
+  2. CDP Network: page fetched that local GeoJSON. No other building source.
+
+  3. Guest pixels after WebGL ready (critic3-home / hold-a / after-w):
+     Third-person street lined with many distinct tan extruded volumes on
+     both sides of a dark road + lighter walks. Corner 2D map shows a
+     multi-block parcel grid (dozens of footprints), not five boxes.
+     Home shot hash ≠ A ≠ W.
+
+  4. Three.js scene.traverse UNAVAILABLE
+     window.THREE=false  canvas.__r3f=false  React fiber walk found 0 Mesh.
+     That is a probe miss (R3F 9 does not leak the scene). It is not a
+     5-box world. Visual + live GeoJSON carry the count.
+
+On disk, each building is one ExtrudeGeometry wall + one roof slab
+(2 Three meshes / building). Guest-visible building volumes = 60.
+FAIL-if-~5 does not trigger.
+
+================================================================================
+ATTACK 2 — WASD STILL MOVES; CAMERA STILL HEADING-FOLLOW (A THEN W)
+================================================================================
+
+RESULT=PASS
+
+Sequence required: wait for play-canvas resize, then Hold A first, then W.
+Did not walk first. Did not trust data-cam-yaw alone.
+
+Home (spawn seat a):
+  heading=0  status="You: standing · facing north · A/D turn"
+  lon=106.6980400  lat=10.7716200
+  proof.camYaw=0  camX=4.79  camZ=-103.56
+  stall=28 m  pose=idle
+  Shot: body from behind, dark road + lighter walks, many tan extrusions,
+  Shop · Quầy Cá Đèn Lồng / Market Steps / Roundabout Green / Clock Garden
+  ahead.
+
+Hold A 1500 ms (TURN_DEG_PER_SEC=110 → wrap(0-165)≈195; observed 193):
+
+  heading=193  status="You: standing · facing south · A/D turn"
+  lon/lat UNCHANGED (in-place turn; moveA east=0 north=0)
+  proof.camYaw=193.2  camX=5.24  camZ=-92.41
+  stall still 28 m
+  Shot hash 9aeed114f8d622b2 ≠ home. North shop/place labels gone. Camera
+  looks down the south street of beige volumes. Character still from behind.
+
+Then W 4000 ms (did not reset heading):
+
+  afterW lon=106.6980266  lat=10.7715638  heading=193
+  east=-1.465 m  north=-6.256 m  moved=6.426 m  bearing=193.18°
+  alongHeading=true  northLockedWalk=false
+  stall 28 m → 34 m  (walked away from the north shop)
+  camX/camZ 5.24,-92.41 → 3.78,-98.67  (camera translated with the body)
+  Shot hash 2ffe855aa1746c31 ≠ hold-A. Still third-person from behind,
+  still facing south.
+
+Speed 6.43 m / 4.0 s = 1.61 m/s matches WALK_SPEED_MPS.
+
+Note: CDP Input.dispatchKeyEvent while the canvas was still the default
+300x150 buffer / first blank-gray frames did not accumulate a full turn.
+That is critic timing, not a north-lock. After play-canvas 1264x705, the
+same window keydown listeners (key "a" then "w") produced the numbers
+above. OS-level key hold is not required to prove the handlers; a guest
+keyboard uses those listeners.
+
+================================================================================
+ATTACK 3 — NO PUBLIC OSM / CESIUM / GOOGLE TILE URL IN THE 3D PATH
+================================================================================
+
+RESULT=PASS  (no public tiles)
+
+CDP Network unique URLs on the 4175 session:
+  /  /assets/index-4f3W9n9d.js  /assets/index-C0XR5PnN.css
+  /styles/local-style.json  /demo-bus
+  /data/ben-thanh-400m.authored.geojson
+  /data/world-manifest.json  /data/shops.json
+  /favicon.ico  data:  blob:http://127.0.0.1:4175/...
+
+tileHits=[]
+No openstreetmap / cesium / googleapis / maps.google / maptiler /
+mapbox:// / cartocdn / overture / demotiles.
+
+Live JS: those host strings absent. The only "mapbox" hit is MapLibre's
+terrain encoding enum default (`terrarium|mapbox|custom`), not a request.
+Minimap style is local-style.json with empty sources.
+
+Did not fetch OSM/Overture. Did not start a map service.
+
+================================================================================
+ATTACK 4 — HONESTY: NOT GTA / NOT 1:1 / NOT A CITY
+================================================================================
+
+RESULT=PASS  (none of the cheats)
+
+Live honesty (CDP + home/A/W shots):
+  "Authored approximation. Not a live map, not OSM/Overture, not
+  photogrammetry, and not a digital twin. No GTA claim, no 1:1 city.
+  NOT_PLAN_PASS."
+  Friend-body line: this-machine local demo; not a city presence server;
+  in-app position, not GPS; NOT_PLAN_PASS.
+Minimap footer: "Authored approximation · not OSM · not a live survey ·
+HH World"
+gtaRaw=false  oneToOneClaim=false  denial=true  notPlanPass=true
+
+Visual is a small low-poly block, not a city. Honesty matches the pixels.
+
+Plan: CURRENT_FIRST_LEFTOVER=GATE-U1
+GATE-U1 STATE: NOT_STARTED (line 862)
+docs/review/README.txt: "GATE-U1 is NOT done."
+No invented human reviewers. No WP STATE flipped by this critic.
+
+================================================================================
+LEAD CLAIMS vs INDEPENDENT LIVE
+================================================================================
+
+Claim                                         Verdict
+60 extruded building meshes (was 5 boxes)     CONFIRMED (live GeoJSON 60 +
+                                              guest street/minimap of many
+                                              parcels; not five AABB boxes)
+Dark road + lighter walk                      CONFIRMED (shots)
+WASD / heading-follow                         CONFIRMED (A 0→193 in place;
+                                              W 6.43 m @ 193.18°)
+Shop E still works                            NOT RE-PROVEN this remint
+                                              (early pass never reached the
+                                              stall; successful pass stopped
+                                              after A then W as specified)
+Slim HUD                                      CONFIRMED on default shots
+                                              (brand + Menu + honesty +
+                                              street-help + pad + minimap)
+No OSM fetch                                  CONFIRMED
+J5_OBSERVED SAIGON-05                         CLAIM ONLY; not used as proof
+NOT_PLAN_PASS                                 CONFIRMED
+GATE-U1 not faked                             CONFIRMED
+4175 existing preview                         CONFIRMED pid 65540
+4173/4174 / second preview                    NOT STARTED by this critic
+
+================================================================================
+HARD FAIL CHECK (TICK=no triggers)
+================================================================================
+
+Still ~5 building boxes                         NO  (60 authored extrusions;
+                                                guest sees a parcel block)
+Play broken (no 3D / WASD dead / camera dead)   NO  (after WebGL ready:
+                                                third-person body, A turns,
+                                                W walks along heading)
+Public OSM/Cesium/Google tile URL in 3D path    NO
+GTA / 1:1 / city claimed in chrome              NO
+Probe-only / lead pack used as proof            NO
+data-buildings used as sole mesh proof          NO
+GPS used as player position                     NO
+Plan STATE/PASS ticked                          NO
+GATE-U1 humans invented                         NO
+4173/4174 / second preview started              NO
+
+Therefore TICK=yes: a guest sees a block of many buildings, not five boxes,
+and Play is not broken. NOT a plan PASS. NOT GATE-U1.
+
+================================================================================
+NOT GRANTED
+================================================================================
+
+- GATE-U1 / M0-WP1 / M1-WP0 / M2 / R2-WP0 / R2-WP1
+- A city, a canyon, photogrammetry, or 1:1 streets
+- Permission to treat data-buildings / play-building-list as Three.js proof
+- Shop E on this remint (not re-run after the working A-then-W)
+- WebGL-off fallback as a 3D walk (still the 2D map)
+- Real shop/catalog/presence server
+- Permission to start 4173/4174, fetch maps, Unreal, VF, or tick [x]
+
+================================================================================
+END
+================================================================================

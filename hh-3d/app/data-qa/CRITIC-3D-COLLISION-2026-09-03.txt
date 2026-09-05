@@ -1,0 +1,356 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+BIGGEST_MISS=Walls stop the body (center stays 0.56 m outside Steps East) but this is still a beige authored 400 m AABB block — not a city, not interiors, not GATE-U1. A 95° hold slides south along the face. NOT_PLAN_PASS.
+
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-03
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=14:49 +07
+MODEL=grok-4.6
+SCOPE=HH World solid building collision on already-up 4175 (walk into a known AABB and STOP; NOT GTA / NOT 1:1 / NOT a city)
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=1567956b35dbe78e938280f930ad711a5fb68de4
+PROGRESS_CLAIMS_HEAD=1567956b35dbe78e938280f930ad711a5fb68de4
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-COLLISION-2026-09-03.txt
+PRIOR_CRITIC=hh-3d/app/data-qa/CRITIC-3D-FIRST-PAINT-2026-09-03.txt
+LEAD_PACK=hh-3d/app/data-qa/J5-COLLISION-2026-09-03.txt
+LEAD_PROBE=hh-3d/app/data-qa/j5-collision-probe.mjs
+LEAD_SHOT=hh-3d/app/data-qa/j5-3d-wall.png
+LEAD_RUN_ID_CLAIM=HH3D-J5-20260903-ASIA-SAIGON-07
+LEAD_VERDICT_CLAIM=J5_COLLISION_OK
+PROGRESS_TRUSTED_ALONE=NO
+J5_COLLISION_OK_TRUSTED_ALONE=NO
+LEAD_PACK_TRUSTED_ALONE=NO
+LEAD_SHOT_TRUSTED_ALONE=NO
+LEAD_PROBE_TRUSTED_ALONE=NO
+DATA_INSIDE_AABB_TRUSTED_ALONE=NO
+DATA_BLOCKED_TRUSTED_ALONE=NO
+DATA_CAMERA_FOLLOW_ATTR_TRUSTED_ALONE=NO
+DATA_GROUND_Y_TRUSTED_ALONE=NO
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_VF_TOUCH=1
+NO_UNREAL=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_RUN_LEAD_PROBE_WRITER=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M0_WP1=1
+NOT_GTA=1
+NOT_1TO1=1
+NOT_A_CITY=1
+NOT_OTHER_PC=1
+NOT_OSM=1
+CRITIC_CDP_PORT=9393
+LIVE_JS=/assets/index-CoeOUyJ8.js
+LIVE_PID=59284
+LIVE_CMD=node .../hh-3d/app/web/node_modules/vite/bin/vite.js preview
+VITE_PREVIEW_PORT_PIN=4175
+KNOWN_BUILDING=bldg-steps-e-00
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/
+
+4175 was already up (vite preview pid 59284). This critic used that preview
+and did not start 4173, 4174, 5175, or a second HH World preview. Independent
+Chrome CDP (debug 9393, about:blank then navigate, temp profile only,
+headless=new 1280x720) waited until canvas.play-canvas was 1280x720, then:
+
+  Hold W 8 s   street north
+  Hold D 0.85 s  turn in place
+  Hold W 10 s  walk into Steps East
+  Hold W 6 s   extra push, sampled every 0.5 s
+
+The body STOPPED at the west face of live GeoJSON building
+bldg-steps-e-00. Independent point-in-AABB on the live fixture (not
+data-inside-aabb, not the lead pack) is empty at the wall, during the
+extra push, and after release. Extra east = 0.000 m across 12 samples.
+Center stays 0.558 m outside the box (circle radius on disk is 0.55 m).
+Guest pixels: third-person teal body in front of a brown wall, not inside
+it. Minimap dot sits on the walk, adjacent to the parcel, not in the
+footprint.
+
+Street walk still works (12.80 m north, east=0). Third-person +
+heading-follow still work (D turns heading 0→95 in place; camYaw 0→95.3;
+camera looks east at the wall; body stays centered from behind).
+
+This is NOT_PLAN_PASS. GATE-U1 is still STATE: NOT_STARTED. Other-PC
+presence and OSM/Overture were not granted and were not fetched.
+
+Biggest miss: walls stop the body on this authored block, but it is still
+a beige 400 m AABB street — not a city, not interiors, not GATE-U1.
+A 95° hold slides south along the face (~0.91 m / 6 s) because collision
+is 2D circle-vs-AABB with axis separation, not a planted wall. That slide
+is not clip-through.
+
+================================================================================
+METHOD
+================================================================================
+
+Read on disk (not PROGRESS / J5 alone):
+  hh-3d/app/web/src/avatar/walk.ts
+    AVATAR_RADIUS_M=0.55  GROUND_Y=0
+    hitsSolidBuilding = circle vs buildingAabb (ring AABB, not point-in-ring)
+    tryStep: blocked step → only-east → only-north (slide, not clip)
+  hh-3d/app/web/src/avatar/useAvatar.ts
+    W = forward along heading; A/D = in-place turn; window keydown Set
+    blocked flag is "wanted forward but lon/lat unchanged" — drops on keyup
+    and is 0 while sliding along a face. NOT used as stop proof.
+  hh-3d/app/web/src/play/PlayView.tsx
+    data-camera="behind" and data-follow="heading" are HARDCODED strings.
+    data-ground-y is String(GROUND_Y). NOT used as camera/feet proof.
+    data-inside-aabb IS computed from isInsideBuildingAabb — still not the
+    sole proof; this critic recomputed from live GeoJSON + live lon/lat.
+    Streets #2a2c31; walks #e8e0d2; slab #8a8578.
+  hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+    CURRENT_FIRST_LEFTOVER=GATE-U1; GATE-U1 STATE: NOT_STARTED (line 862).
+  hh-3d/app/docs/review/README.txt
+    "GATE-U1 is NOT done."
+  Lead pack J5-COLLISION / j5-3d-wall.png / SAIGON-07 / J5_COLLISION_OK
+    read only as claim. Did not run j5-collision-probe.mjs (it writes that
+    pack).
+
+Live (existing 4175 only; did not start another HH World preview):
+  TCP 127.0.0.1:4175 LISTEN pid 59284 node vite preview
+  4173 DOWN  4174 DOWN  5175 DOWN  (still down after CDP)
+  GET /                         200  title=HH World
+                                script /assets/index-CoeOUyJ8.js
+  GET /data/ben-thanh-400m.authored.geojson  200  92096 B
+    kind.building=60  (independent count)
+    bldg-steps-e-00 AABB from the same GeoJSON the page fetched:
+      west=106.6981463  south=10.7716017
+      east=106.6982899  north=10.7717837
+  Live JS Content-Length=2069274
+    aabb-radius=PRESENT  NOT_PLAN_PASS=PRESENT  No GTA=PRESENT
+    openstreetmap/cesium/googleapis/maptiler = ABSENT
+  Independent Chrome CDP vs 4175 (debug 9393)
+    shots TEMP only (not written under data-qa):
+      C:\Users\truon\AppData\Local\Temp\hh-critic-3d-collision\critic-home.png    74162 B  sha16=c9fad2deaa8d9170
+      C:\Users\truon\AppData\Local\Temp\hh-critic-3d-collision\critic-street.png  74275 B  sha16=ecb2083daeb500ee
+      C:\Users\truon\AppData\Local\Temp\hh-critic-3d-collision\critic-turn.png    58831 B  sha16=f8915937979be575
+      C:\Users\truon\AppData\Local\Temp\hh-critic-3d-collision\critic-wall.png    43733 B  sha16=3d114345e0d39f78
+      C:\Users\truon\AppData\Local\Temp\hh-critic-3d-collision\critic-still.png   43723 B  sha16=5bcfd9bb71a23b31
+  Did not run npm build. Did not recycle the preview. Did not fetch OSM.
+
+================================================================================
+PROCESS / GIT
+================================================================================
+
+RESULT=PASS_ON_STATED_FAIL_RULE
+
+Stated fail: VF / AGENTS.md staged with this if they committed.
+Observed:
+  git rev-parse HEAD = 1567956b35dbe78e938280f930ad711a5fb68de4
+  git diff --cached --name-only = empty
+  hh-3d/app remains untracked in this tree
+  Critic did not commit, did not tick plan, did not touch VF.
+
+================================================================================
+ATTACK 1 — WALK INTO A KNOWN BUILDING; CENTER MUST NOT ENTER THE AABB
+================================================================================
+
+RESULT=PASS  STOPPED  INSIDE_AABB=0  EXTRA_EAST=0
+
+Rejected as sole proof:
+  lead J5-COLLISION-2026-09-03.txt / SAIGON-07 / J5_COLLISION_OK
+  lead j5-3d-wall.png
+  data-inside-aabb / data-blocked / data-hit-building
+  data-collision="aabb-radius" (hardcoded string)
+
+Independent proof:
+
+  Live GeoJSON AABB for bldg-steps-e-00 as above (same URL the page
+  requested; no other building source on the network log).
+
+  After D then W 10 s (heading 95, camYaw 95.3):
+    atWall lon=106.6981412  lat=10.7717216
+    live point-in-AABB hitAfter=[]
+    east from turn = +11.067 m  (walked toward the west face)
+    north from turn = -1.492 m  (95° heading, not a north-lock)
+
+  Extra W 6.0 s, 12 samples @ 500 ms (keydown held the whole time):
+    EVERY sample lon=106.6981412  (east freeze)
+    lat 10.7717209 → 10.7717134   (south slide 0.83 m during hold)
+    hitSamples=[]
+    after release: lon still 106.6981412  lat=10.7717134
+    extra.east=0  extra.north=-0.913 m
+    still point-in-AABB hitStill=[]
+
+  Nearest live box after extra W:
+    id=bldg-steps-e-00  dist=0.5577 m
+    (106.6981463-106.6981412) * mPerLon(10.77171) = 0.558 m
+    Center is outside. Next 0.08 m east tick would enter the 0.55 m
+    circle. That is a stop, not a clip.
+
+  Guest pixels (wall vs still, hashes 3d114345e0d39f78 ≠ 5bcfd9bb71a23b31):
+    Third-person body in front of a brown vertical volume. Feet on the
+    light walk. Minimap blue/white dot adjacent to the tan parcel, not
+    inside it. Stall copy 20 m → 21 m (slid south, away from the north
+    shop) — consistent with a face slide, not a punch-through.
+
+FAIL-if-clip-through does not trigger.
+
+Note: data-blocked stayed "0" during the extra hold because tryStep still
+accepted the south component (pose=walk). That flag is not "hit a wall".
+Lon freeze + live AABB is the stop proof.
+
+================================================================================
+ATTACK 2 — STREET WALK STILL WORKS
+================================================================================
+
+RESULT=PASS
+
+Home spawn (seat a): lon=106.6980400  lat=10.7716200  heading=0
+Hold W 8000 ms, no turn:
+  upStreet lon=106.6980400  lat=10.7717350  heading=0
+  east=0  north=+12.802 m  moved=12.802 m
+  Speed 12.80 / 8.0 = 1.60 m/s matches WALK_SPEED_MPS.
+  Stall copy 28 m → 15 m (Quầy Cá Đèn Lồng). Shot hash changed.
+  Status stayed "facing north". Body still on the dark road from behind.
+
+Street is walkable. Collision did not freeze the open lane.
+
+================================================================================
+ATTACK 3 — THIRD-PERSON + HEADING-FOLLOW STILL WORK
+================================================================================
+
+RESULT=PASS
+
+Did not accept data-camera="behind" or data-follow="heading" (hardcoded
+in PlayView.tsx). Used camYaw vs heading + pixels.
+
+Home: heading=0  camYaw=0  status="facing north"
+  Shot: body from behind, looking down the dark street.
+
+Hold D 850 ms in place (TURN_DEG_PER_SEC=110 → ~93.5; observed 95):
+  heading=95  camYaw=95.3  lon/lat UNCHANGED
+  status="facing east"
+  Shot: camera swung to look at the brown east volume / Steps East.
+  Character still from behind. North shop labels no longer dominate.
+
+Then W along that heading (Attack 1). Camera stayed behind the body
+while the wall filled the frame. camYaw remained 95.3 through extra W.
+
+That is heading-follow, not world-north lock.
+
+================================================================================
+ATTACK 4 — FEET ON SLAB / DARKER STREET (PIXELS, NOT HARDCODED Y)
+================================================================================
+
+RESULT=PASS_VISUAL  (Y attr is hardcoded; pixels carry it)
+
+data-ground-y="0" is String(GROUND_Y). Rejected as sole proof.
+
+Home + street shots: dark nearly-black asphalt strip, lighter walks,
+beige slab beside. Character drop-shadow on the road, not floating or
+sunk. After the east walk the feet stand on the light walk in front of
+the brown wall. No negative-Y / fall-through observed.
+
+Street color on disk is #2a2c31 (darker than the older #3a3d42 CAD
+plane). Guest home/street frames read as a dark road, not a beige slab
+alone.
+
+================================================================================
+ATTACK 5 — NO PUBLIC OSM / OTHER-PC / GATE-U1 FAKE
+================================================================================
+
+RESULT=PASS  (none of the cheats)
+
+CDP Network unique URLs on the 4175 session:
+  /  /assets/index-CoeOUyJ8.js  /assets/index-Ba7m2pDq.css
+  /styles/local-style.json  /demo-bus
+  /data/ben-thanh-400m.authored.geojson
+  /data/world-manifest.json  /data/shops.json
+  /favicon.ico  data:  blob:http://127.0.0.1:4175/...
+
+tileHits=[]
+No openstreetmap / cesium / googleapis / maps.google / maptiler /
+mapbox:// / cartocdn / overture / demotiles.
+
+Honesty (live innerText):
+  "Authored approximation. Not a live map, not OSM/Overture, not
+  photogrammetry, and not a digital twin. No GTA claim, no 1:1 city.
+  NOT_PLAN_PASS."
+  Friend-body line: this-machine local demo; not a city presence server;
+  in-app position, not GPS; NOT_PLAN_PASS.
+Mode: "Offline — Stroll alone; shops still open."
+gtaRaw=true only because the denial contains the word GTA; denial=true.
+No 1:1 / city claim in chrome.
+
+Plan: CURRENT_FIRST_LEFTOVER=GATE-U1
+GATE-U1 STATE: NOT_STARTED (line 862)
+docs/review/README.txt: "GATE-U1 is NOT done."
+No invented human reviewers. No other-PC join. No OSM fetch.
+
+================================================================================
+LEAD CLAIMS vs INDEPENDENT LIVE
+================================================================================
+
+Claim                                         Verdict
+Walk into building AABB and STOP              CONFIRMED (Steps East;
+                                              extra east=0; inside=0)
+extra W east=0 after Steps East               CONFIRMED (12 extra samples
+                                              lon frozen at 106.6981412)
+center 0.56 m outside                         CONFIRMED 0.5577 m to
+                                              bldg-steps-e-00 west face
+Feet on slab                                  CONFIRMED visually
+                                              (Y attr hardcoded, unused)
+Darker street                                 CONFIRMED (home/street shots)
+Street walk still works                       CONFIRMED 12.80 m north
+Third-person + heading-follow                 CONFIRMED (A/D unused here;
+                                              D 0→95, camYaw 95.3, body
+                                              from behind)
+J5_COLLISION_OK SAIGON-07                     CLAIM ONLY; not used as proof
+NOT_PLAN_PASS                                 CONFIRMED
+GATE-U1 / other PC / OSM not done             CONFIRMED
+4175 existing preview                         CONFIRMED pid 59284
+4173/4174 / second preview                    NOT STARTED by this critic
+
+================================================================================
+HARD FAIL CHECK (TICK=no triggers)
+================================================================================
+
+Center entered a live building AABB             NO  (hitAfter/hitStill/
+                                                hitSamples all empty)
+Extra W punched east through the wall           NO  (extra.east=0)
+Street walk dead                                NO  (12.80 m north)
+Third-person or heading-follow dead             NO  (D turns camera;
+                                                body stays behind)
+Public OSM/Cesium/Google tile URL               NO
+GTA / 1:1 / city claimed in chrome              NO
+Lead pack / data-inside-aabb used as proof      NO
+GATE-U1 humans invented                         NO
+4173/4174 / second preview started              NO
+
+Therefore TICK=yes: walls actually stop the body. Clip-through is not
+observed on this path. NOT a plan PASS. NOT GATE-U1.
+
+================================================================================
+NOT GRANTED
+================================================================================
+
+- GATE-U1 / M0-WP1 / M1-WP0 / M2 / R2-WP0 / R2-WP1
+- A city, interiors, mesh collision, or 1:1 streets
+- A planted (no-slide) wall when heading is off-axis
+- Permission to treat data-inside-aabb / data-blocked as sole proof
+- Other-PC presence / OSM-Overture fetch
+- Shop E on this remint (not the collision bar)
+- Permission to start 4173/4174, fetch maps, Unreal, VF, or tick [x]
+
+================================================================================
+END
+================================================================================

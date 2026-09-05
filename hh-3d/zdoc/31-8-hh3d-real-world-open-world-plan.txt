@@ -1,15 +1,17 @@
 PLAN_ROLE=NON_AUTHORITATIVE_PROPOSAL
 PLAN_SCOPE=hh-3d
 PLAN_DATE=2026-08-31
-LAST_AUDIT_DATE=2026-09-01
+LAST_AUDIT_DATE=2026-09-03
 TIMEZONE=Asia/Saigon
 STATUS=BACKGROUND_AUDIT_PAUSED
 PRODUCT_WORKSPACE=hh-3d
 PARENT_PRODUCT_BOUNDARY=godot/dogfood/superfighters (do not modify)
-ROUTING_UPDATE=2026-08-31
+ROUTING_UPDATE=2026-09-03
 ROUTING_ROLE=BACKGROUND_AUDIT_ONLY
-CURRENT_EXECUTION_PLAN=hh-3d/zdoc/31-8-hh3d-demo-webgl-plan.txt (PAUSED)
-LATER_EXECUTION_PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+CURRENT_EXECUTION_PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+LIVE_PROGRESS=hh-3d/app/PROGRESS.txt
+OWNER_MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+HISTORICAL_DEMO_PLAN=hh-3d/zdoc/31-8-hh3d-demo-webgl-plan.txt
 DO_NOT_START_THIS_FILE_DIRECTLY=1
 NATIVE_EXECUTION_AUTHORIZATION=NONE
 NATIVE_DEPENDENCY=web MVP benchmark + separate owner decision
@@ -23,9 +25,11 @@ HH-3D REAL-WORLD OPEN-WORLD GAME PLAN
 Tên làm việc: HH World (tên thương hiệu cuối sẽ chốt sau legal gate)
 Vai trò của file này sau routing update: background audit về map thật, legal,
 provenance và lựa chọn engine. Nó không còn là execution plan hiện tại.
-Execution hiện tại không có: demo web trong `31-8-hh3d-demo-webgl-plan.txt`
-đang PAUSED; sản phẩm đầy đủ về sau nằm trong
-`31-8-hh3d-real-application-plan.txt` và cũng chưa được mở.
+Live HH World nằm ở hh-3d/app/ sau grant web 03-09. Đọc PROGRESS trước:
+local map proof đã có, GATE-U1 còn thiếu. Plan ứng dụng giữ WP order/DoD;
+owner modes rev2 định nghĩa Online/Offline, avatar và shop. Không triển khai
+từ file background này, không quay lại demo/sandbox, không mở G0-ENGINE.
+STATE/PASS gốc bên dưới giữ nguyên; không dùng chúng làm live progress.
 
 Tài liệu này là proposal riêng cho hh-3d. Nó không phải WP của Vault Fighters,
 không thêm checkbox vào roadmap Godot, không thay đổi AGENTS.md và không được
@@ -35,7 +39,8 @@ dùng để suy ra tiến độ của bất kỳ product nào khác.
 AUDIT OVERRIDE 2026-09-01 — KHÔNG PHẢI EXECUTION BACKLOG
 --------------------------------------------------------------------------------
 
-Owner đã yêu cầu dừng cả demo và phần triển khai tương lai. File này chỉ được
+Lịch sử audit 01-09: owner đã yêu cầu dừng demo/phần triển khai lúc đó. Grant
+web 03-09 không mở nhánh native. File này chỉ được
 dùng để phản biện lựa chọn native/open-world, không được dùng làm lệnh cho
 agent coding. Hiện `hh-3d/unreal/` chưa tồn tại trong workspace; không có
 Unreal project, packaged build, hardware pass, provider approval hay legal pass

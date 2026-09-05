@@ -1,0 +1,142 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=13:06 +07
+ROLE=IMPLEMENTER
+TICK=n/a (do not treat this file as TICK=yes)
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M0=1
+NOT_M0_WP0=1
+NOT_M0_WP1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+PLAYER_URL=http://127.0.0.1:4175/
+RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-27
+COMMAND=node hh-3d/app/data-qa/j5-net-reconnect-probe.mjs
+VERDICT_IMPLEMENTER_CDP=J5_NET_RECONNECT_OK
+LIVE_JS=/assets/index-BJSm6u26.js
+LIVE_JS_LEN=2163608
+LIVE_JS_SHA256=4bab466a90d3ad6a404286e41a0bc68df8df89e58feb0cd755ef98a9dc8c35ca
+ONE_RECYCLE_AFTER_BUILD=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NO_COMMIT=1
+NO_HIP_SPHERES=1
+DID_NOT_RIP_LANTERN_BOARD=1
+DID_NOT_RIP_HARBOR_STEPS_CROSSING=1
+DID_NOT_RIP_DEFERRED_MINIMAP=1
+DID_NOT_RIP_FRIEND_STEPS=1
+DID_NOT_RIP_90M_LOD=1
+DID_NOT_RIP_HUD_STREET_CHIP=1
+DID_NOT_RIP_PLAQUES=1
+DID_NOT_RIP_LANES=1
+DID_NOT_RIP_FOG_EDGE=1
+DID_NOT_RIP_STREET_PLAY_SHOPS=1
+DID_NOT_RIP_SKY=1
+DID_NOT_RIP_CAM_HIT=1
+DID_NOT_RIP_NET_LABEL_SPLIT=1
+DID_NOT_CLICK_ONLINE=1
+DID_NOT_CLICK_NETWORK_CUT_CHECKBOX=1
+NO_NEW_PRESENCE_SERVER=1
+NO_INTERIOR=1
+NO_MAP_FETCH=1
+ACCEPTED_PRIOR=CRITIC-3D-NET-LABEL-REAUDIT-2026-09-04.txt TICK=yes on /assets/index-Ds6AgobF.js
+
+================================================================================
+SLICE
+================================================================================
+
+NET-LABEL leftover: no live Đang kết nối lại. This remint is the
+slim connectivity pill only.
+
+When this-PC 4175 browser network goes Mất kết nối → online, the
+HUD connectivity span flashes Đang kết nối lại for 800 ms (coded;
+inside 400–1200), then Đang kết nối. Social Offline/Online does
+not flip. First paint stays Đang kết nối (no flash).
+
+Not a reconnecting presence server. Friends / session / shop
+publish still use the raw online bit. Simulate no-network
+checkbox unused. Honesty stays this PC 4175 loopback, not a city.
+
+Did not remint boards, streetPlayShops, intersection, minimap,
+friend steps, LOD, HUD street chip, plaques, lanes, fog/edge,
+sky, cam-hit, or the Offline vs Đang kết nối / Mất kết nối split.
+
+================================================================================
+LABELS OBSERVED
+================================================================================
+
+HUD (menu hidden, Harbor Walk chip still Harbor Walk):
+  hud-presence   = Offline
+  hud-connection = Đang kết nối
+  box 140×21 @ 821,32   (slim pill, not a dashboard)
+
+After CDP onLine=false (checkbox unchecked, menu still hidden):
+  hud-presence   = Offline          UNCHANGED
+  hud-connection = Mất kết nối      ONLY this line changed
+
+After CDP onLine=true (same closed menu, fast poll):
+  hud-presence   = Offline          still
+  hud-connection = Đang kết nối lại  first at 658 ms, last at 1217 ms
+  attr           = retry
+  consecutive CDP samples ~599 ms (coded flash 800 ms)
+
+Then:
+  hud-connection = Đang kết nối     settled 1279 ms
+  hud-presence   = Offline          still
+
+Social Offline never became Online. Same word does not do both jobs.
+
+================================================================================
+PROOF (implementer CDP vs recycled 4175)
+================================================================================
+
+typecheck EXIT=0
+npm test EXIT=0 (81 tests)
+npm run build EXIT=0  dist/assets/index-BJSm6u26.js
+Recycled 4175 once after that remint build (127.0.0.1 only).
+Did not start 4173 / 4174 / 5175. Did not bind 0.0.0.0.
+
+Probe node hh-3d/app/data-qa/j5-net-reconnect-probe.mjs EXIT=0
+  Isolated headless Chrome 1280x720, seat A, port 9670.
+  about:blank then ?seat=a. Did not click Online.
+  Did not click Simulate no-network. Did not catalog_clear.
+
+LIVE_JS=/assets/index-BJSm6u26.js LEN=2163608
+SHA256=4bab466a90d3ad6a404286e41a0bc68df8df89e58feb0cd755ef98a9dc8c35ca
+Preview vite preview --host 127.0.0.1 --port 4175 --strictPort
+pid 52864.
+
+================================================================================
+NOT FIXED / STILL TRUE
+================================================================================
+
+- This is implementer CDP only. TICK=n/a. Not GATE-U1 humans.
+- Not M0-WP0 / M0-WP1. Plan checkboxes still [ ].
+- WAN / other-PC join still not built. Store is this PC 4175
+  loopback. Not a city presence server.
+- Leftover Shared PC + mtl8ulddihjpre stay persist-only.
+- Pill flash is not session re-auth or a reconnecting presence
+  server. Modes-contract reconnect of friends after verify is
+  still not this slice.
+- Owner-Offline shop checkbox is still a local shelf label,
+  not navigator.onLine.
+
+================================================================================
+4175
+================================================================================
+
+Preview: npm run preview -- --host 127.0.0.1 --port 4175 --strictPort
+from hh-3d/app/web. One recycle after the remint build.
+No second preview. No 4173 / 4174 / 5175.
+
+LIVE_JS=/assets/index-BJSm6u26.js
+LEN=2163608
+SHA256=4bab466a90d3ad6a404286e41a0bc68df8df89e58feb0cd755ef98a9dc8c35ca

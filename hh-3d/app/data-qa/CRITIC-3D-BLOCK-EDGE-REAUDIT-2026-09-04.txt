@@ -1,0 +1,272 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+BOOTED_4175=1
+DID_NOT_RECYCLE=1
+DID_NOT_REBUILD=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+CRITIC=INDEPENDENT_ADVERSARIAL_BLOCK_EDGE_REAUDIT
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=07:29 +07
+MODEL=grok-4.6-extra-high
+SCOPE=Re-audit of implementer block-edge remint. Do not treat CRITIC-3D-BLOCK-EDGE-2026-09-04.txt as TICK=yes.
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=04cb6ca92c482017c02d78e7885727f73b62103d
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-BLOCK-EDGE-REAUDIT-2026-09-04.txt
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-BLOCK-EDGE-2026-09-04.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+DID_NOT_TREAT_IMPLEMENTER_AS_TICK_YES=1
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NOT_OSM=1
+NOT_WAN=1
+VITE_PREVIEW_PORT_PIN=4175
+LIVE_PID=31508
+LISTEN=127.0.0.1:4175
+CRITIC_CDP_PORTS=9921 / 9922
+VIEWPORT=1280x720
+ISOLATED_PROFILES=1
+HEADLESS_NEW=1
+
+LIVE_JS=/assets/index-Dge8907V.js
+LIVE_JS_LEN=2133407
+LIVE_JS_SHA256=2bb2bee66cf437e024c0a6e61bb9ab3c0ce9d7f1efe1f49dcff67d97bf8331c3
+LIVE_JS_MATCHES_CLAIM=1
+HASH_MISMATCH=0
+
+CLAIM_1_BOUND_KEEP_IN=PASS
+CLAIM_2_VISIBLE_EDGE_NOT_FOG_ONLY=PASS
+CLAIM_3_SPAWN_HARBOR_LANTERN=PASS
+CLAIM_4_FOOTSTEPS_LEFTOVER_E=PASS
+CLAIM_5_SKY_HONESTY=PASS
+
+BIGGEST_MISS=None on the named hunts. Past the south face measured -0.015 m (still inside). Extra 5 s Shift+W leaked 0 m. Shot has wall/curb/lot, not fog-only. A 720 m surround still reads as a dark band past the short wall; that is not the named fail while the authored edge is in frame. NOT_PLAN_PASS.
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/ was already up. Bind 127.0.0.1 pid 31508
+(node vite preview). Did not recycle, rebuild, kill, or start
+4173 / 4174 / 5175. Did not bind 0.0.0.0.
+
+Did not treat CRITIC-3D-BLOCK-EDGE-2026-09-04.txt as TICK=yes
+(ROLE=IMPLEMENTER, TICK=n/a). Did not run j5-block-edge-probe.mjs.
+
+Independent Chrome CDP, isolated temp profiles, ?seat=a / ?seat=b.
+Tried to fail keep-in, fog-only, lantern trap, leftover E, beige sky.
+
+Live hash matches the claimed remint. Hunts 1–5 held. This is
+NOT_PLAN_PASS. GATE-U1 humans were not invented.
+
+================================================================================
+LIVE JS
+================================================================================
+
+HTML script = /assets/index-Dge8907V.js
+http length = 2133407
+sha256 = 2bb2bee66cf437e024c0a6e61bb9ab3c0ce9d7f1efe1f49dcff67d97bf8331c3
+Matches the claimed remint name + length + hash.
+After CDP the same name is still served from pid 31508.
+
+Bundle scan (live bytes, not source):
+  openstreetmap = 0
+  0.0.0.0 = 0
+  gta 6 / rockstar = 0
+  distance-haze = 1
+  curb-wall-lot = 1
+  fixture-edge = 1
+  shop-lantern-fish = 1
+  procedural-thump = 1
+  overture / photogrammetry / digital twin = honesty denials, not a fetch
+
+/demo-bus still this_pc bind=127.0.0.1 not_wan. Leftover
+shop-local-sharedpc and shop-local-mtl8ulddihjpre remain on the
+catalog. Did not catalog_clear.
+
+================================================================================
+CLAIM 1 — WALK / SPRINT TO A BOUND — PASS
+================================================================================
+
+Tried to fail: never reach data-at-bound=1; 2+ m past the face;
+alt leaves 0; extra hold keeps leaking; jump voids.
+
+Seat A spawn 106.69804, 10.77162 alt=0. Harbor Walk north then
+lantern, turn, Shift+W south.
+
+  first at-bound=1  lat=10.7707240  alt=0
+  +2.2 s W          lat=10.7707215  at-bound=1  alt=0  pose=walk sprint=1
+  +5.0 s more W     lat=10.7707215  at-bound=1  alt=0
+  afterBoundM=0.278   (toward the face after the pad flipped)
+  pastFaceM=-0.015    (still 1.5 cm inside AOI south+2 m)
+  leakWhileHoldM=0
+  insideAoi=true
+
+2+ m past the face would FAIL. 0.13 m leftover is allowed.
+Observed leftover past the face is none; the 0.278 m is approach
+after at-bound, then pin. Space at the face: peak alt=0.84,
+land alt=0, still at-bound=1. No void.
+
+After look-down, A/D was strafe. 3 s W along the face:
+  south leftover=-0.323 m (inward, not out)
+  along=-4.517 m
+  at-bound stayed 1
+
+PASS.
+
+================================================================================
+CLAIM 2 — SHOT SHOWS A VISIBLE EDGE — PASS
+================================================================================
+
+Tried to fail as fog-only / infinite slab. Did not use the
+implementer loophole (far.blueRatio or sky.blue alone).
+
+Required wall or curb or lot in the lower band. Fog alone = FAIL.
+
+Default south-bound shot (still sprinting, facing south):
+  sky  beige=0 blue=0.922
+  mid  wall=0.120 lot=0.063 curb=0.067 edge=0.250 fog=0.019
+  bottom wall=0.170 lot=0.052 curb=0.097 edge=0.319
+  fogOnly=false  infiniteSlab=false
+
+Look-down (right-drag) puts a courtyard wall in the frame:
+  mid edge=0.886  bottom edge=0.922  black=0.002
+  Body flush on the face. Sky still blue.
+
+The 720 m surround is still a dark band past the short wall
+(bottom surroundRatio=0.646). Named bar is “visible edge, not
+just fog.” The wall / curb / teal lot strip are in the lower
+frame. Not a miss.
+
+PASS.
+
+================================================================================
+CLAIM 3 — SPAWN / HARBOR / LANTERN E — PASS
+================================================================================
+
+Tried to fail: spawn W stuck; Harbor Walk blocked; E dead or
+opens a leftover.
+
+Spawn W ~1.1 s: +2.182 m north, pose=walk, footsteps=1.
+Not trapped.
+
+Hold W on Harbor Walk to the lantern:
+  nearby=shop-lantern-fish
+  range=Quầy Cá Đèn Lồng: 9.4 m away
+  E opened shop-lantern-fish
+  Close restored Play (panel false)
+
+PASS.
+
+================================================================================
+CLAIM 4 — FOOTSTEPS + SEAT B LEFTOVER E — PASS
+================================================================================
+
+Tried to fail: footsteps drop while W; leftover Shared PC / J6
+owns B's E.
+
+Seat A: data-footsteps=1 on the first W and still 1 at the bound
+while Shift+W (ticks live). kind=procedural-thump.
+
+Seat B isolated spawn:
+  nearbyShop=""
+  stallHint="E opens a stall when you are next to it."
+  shopRange="Quầy Cá Đèn Lồng: 29 m away"
+  leftover names / ids are NOT the E target
+  Press E: shopPanelId=""  panel=false
+
+PASS. Leftovers still in /demo-bus (intended). Seat B E not stolen.
+
+================================================================================
+CLAIM 5 — SKY + HONESTY — PASS
+================================================================================
+
+Tried to fail: beige spawn/north sky; honesty claims a city / 1:1.
+
+Spawn standing, facing north, default look:
+  sky beige=0 blue=0.915 bluerThanRed
+  data-sky=gradient-hemisphere
+South-bound sky beige=0 blue=0.922.
+
+Honesty on the 1280x720 banner:
+  Authored approximation. Not a live map, not OSM/Overture,
+  not photogrammetry, and not a digital twin. No GTA claim,
+  no 1:1 city. This 400 m frame ends at an authored wall —
+  fixture edge, not a city. NOT_PLAN_PASS.
+
+PASS.
+
+================================================================================
+HUNTS (not named fails)
+================================================================================
+
+Implementer extraSouthM=0.13. This critic measured past-face
+-0.015 m and a 0.278 m approach after at-bound. Same pin.
+Named bar is “~0 past the face; 2+ m FAIL.”
+
+Implementer edgeVisible could pass on fog/blue alone. Unused.
+Lower-band wall+curb+lot held without that loophole.
+
+720 m surround still sits under the haze past the 2.28 m wall.
+Visible as a dark horizon, not as a walkable void. Walker stays
+on the slab (alt=0). Honesty already says fixture edge, not a
+city. Not a named miss.
+
+Slide after look-down used strafe, not turn. Still did not leak
+south. North / east / west faces were not walked to the pad;
+the named hunt is one bound. DOM still walls=4 lots=4.
+
+clampInsideAoi / projectBoundSlide are minified away in the
+bundle. Live keep-in is the proof, not the export name.
+
+Page look-down mid wallRatio overlaps plaza beige in the
+histogram. The look-down still shows a dark courtyard wall
+behind the teal tunic. Not a miss.
+
+================================================================================
+METHOD
+================================================================================
+
+1. 4175 already up. Did not recycle / rebuild / start other ports.
+2. GET /  /demo-bus  /assets/index-Dge8907V.js. Recorded name+sha+len.
+3. Read implementer note (TICK=n/a). Did not copy its probe writer.
+4. Independent Chrome CDP 1280x720 isolated profiles, ports 9921/9922.
+   Spawn sky shot. W prove Harbor open. Lantern E. Shift+W south
+   until at-bound=1. Extra 2.2 s then 5 s. Bound shot + look-down
+   shot. Space land. Strafe along the face. Seat B leftover E.
+5. Did not write lead packs. Did not tick plan. Did not fake GATE-U1.
+
+Temp only (not under data-qa):
+  %TEMP%\hh-block-edge-reaudit\hunt.json
+  %TEMP%\hh-block-edge-reaudit\spawn.png
+  %TEMP%\hh-block-edge-reaudit\edge-south.png
+  %TEMP%\hh-block-edge-reaudit\edge-lookdown.png
+  %TEMP%\hh-block-edge-reaudit\index.js
+
+================================================================================
+STILL IMPOSSIBLE WITHOUT OWNER
+================================================================================
+
+- GATE-U1 three human reviewers (not faked)
+- AUTHORIZE_MAP_FETCH=YES + license ledger before any OSM/Overture
+- Other-PC / WAN join (store is this PC 4175 loopback)
+- Real account / OIDC
+
+================================================================================
+END
+================================================================================

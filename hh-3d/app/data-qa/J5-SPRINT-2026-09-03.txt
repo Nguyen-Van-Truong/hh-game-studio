@@ -1,0 +1,62 @@
+{
+  "run_id": "HH3D-J5-20260903-ASIA-SAIGON-10",
+  "player": "http://127.0.0.1:4175/",
+  "verdict": "J5_SPRINT_OK",
+  "not_plan_pass": true,
+  "not_gate_u1": true,
+  "holdMs": 3000,
+  "walk": {
+    "east": 0,
+    "north": 5.065059999867572,
+    "moved": 5.065059999867572
+  },
+  "sprint": {
+    "east": 0,
+    "north": 8.705223999891913,
+    "moved": 8.705223999891913
+  },
+  "walkMps": 1.6883533332891905,
+  "sprintMps": 2.9017413332973043,
+  "faster": true,
+  "walkOk": true,
+  "sprintOk": true,
+  "released": true,
+  "bodyOk": true,
+  "honestyOk": true,
+  "padOk": true,
+  "streetOk": true,
+  "midWalk": {
+    "pose": "walk",
+    "sprint": "0",
+    "status": "You: walking · facing north · click canvas to look · Esc · Shift sprint · A/D turn · Space"
+  },
+  "midSprint": {
+    "pose": "walk",
+    "sprint": "1",
+    "status": "You: sprinting · facing north · click canvas to look · Esc · Shift sprint · A/D turn · Space"
+  },
+  "afterWalk": {
+    "lon": 106.69804,
+    "lat": 10.7716655,
+    "sprint": "0"
+  },
+  "afterSprint": {
+    "lon": 106.69804,
+    "lat": 10.7716982,
+    "sprint": "0"
+  },
+  "home": {
+    "buildings": 60,
+    "body": "tunic-humanoid",
+    "camera": "behind",
+    "canvas": {
+      "w": 1280,
+      "h": 720
+    }
+  },
+  "shots": {
+    "stand": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-body-stand.png",
+    "walk": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-body-walk.png",
+    "sprint": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-body-sprint.png"
+  }
+}

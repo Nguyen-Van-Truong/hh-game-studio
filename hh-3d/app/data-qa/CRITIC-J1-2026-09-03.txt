@@ -1,0 +1,386 @@
+TICK=yes
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-03
+TIMEZONE=Asia/Saigon
+MODEL=grok-4.6-extra-high
+SCOPE=HH World J1 local walk + one public shop on existing 4175
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=657634f8f82281bd670c9a375ad49c6180db3583
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS_TRUSTED_ALONE=NO
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_VF_TOUCH=1
+NO_UNREAL=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/
+
+J1 is a real walk+shop on the already-up 4175 preview, and honesty holds.
+Independent Chrome CDP (this critic, port 9255, did not reuse their probe
+writer) held W and watched a CSS figure move, turn, take pose=walk, then
+return to idle. Sidebar goods opened Quầy Cá Đèn Lồng; fish + bag listings
+rendered; draft "Nháp chưa đăng" stayed off the shelf; owner Offline copy
+stayed on; no other player bodies; no geolocate control in the live DOM;
+plan STATE/PASS not flipped; GATE-U1 humans not invented.
+
+This is NOT a plan PASS. NOT M0-WP1. NOT M1-WP0. NOT GATE-U1. NOT J2/J3.
+
+Biggest miss: stroll→stall is incomplete. Spawn sits ~28 m from the shop
+(nearby radius 20 m). Official and critic CDP both opened the shelf from
+the goods list, not by walking into range and pressing E. Owner-Offline is
+a label checkbox that cannot hide listings. Touch pad, building collision,
+and camera-pan independence remain coded, not CDP-proven.
+
+================================================================================
+METHOD
+================================================================================
+
+Disk (not PROGRESS alone):
+  hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+  hh-3d/app/PROGRESS.txt
+  hh-3d/app/web/src/avatar/*  modes/*  shops/*
+  hh-3d/app/web/src/map/MapView.tsx  app/App.tsx  app/app.css
+  hh-3d/app/web/src/ui/HonestyBanner.tsx  Header.tsx
+  hh-3d/app/web/public/data/shops.json
+  hh-3d/app/web/dist/assets/index-BOapeFa0.js (string/context scan)
+  hh-3d/app/data-qa/j1-walk-shop-probe.mjs
+  hh-3d/app/data-qa/J1-WALK-SHOP-2026-09-03.txt
+  hh-3d/app/docs/review/README.txt
+  hh-3d/zdoc/31-8-hh3d-real-application-plan.txt (STATE lines + M0/M1/GATE-U1)
+  git status --short; git diff --cached --name-only; git log -1
+  git diff on the canonical plan (STATE/PASS search)
+
+Live (existing 4175 only; did not start another HH World preview):
+  TCP 127.0.0.1:4175 LISTEN pid 58476
+  4173 DOWN  4174 DOWN  5175 not a preview listener
+  GET /                                              200  title HH World
+  GET /data/shops.json                               200  shop-lantern-fish
+  HEAD /assets/index-BOapeFa0.js                     200  Content-Length=1136440
+  Independent headless Chrome CDP vs 4175 (debug 9255, temp profile, stdout only)
+  npm run typecheck  EXIT=0
+  npm test           EXIT=0  (9 tests)
+  Did not run npm build (would mutate dist). Did not run their probe script
+  (it writes J1-WALK-SHOP-2026-09-03.txt).
+
+================================================================================
+PROCESS / GIT
+================================================================================
+
+RESULT=PASS_ON_STATED_FAIL_RULE
+
+Stated fail: VF / AGENTS.md staged with this if they committed.
+Observed:
+  git diff --cached --name-only  = empty
+  last commit = 657634f VF6-WP3: tick after critic and official PASS
+  PROGRESS GIT_HEAD_AT_WRITE matches that hash
+  No J1 / hh-3d/app commit in HEAD
+  PROGRESS says "No commit." Matches.
+
+Working tree dirt (not staged, not a J1 commit):
+  Many godot/dogfood/superfighters/* modified + untracked VF6 evidence
+  hh-3d/AGENTS.md untracked
+  hh-3d/app/ untracked (whole product tree still untracked)
+This is a process landmine for a later mixed commit. It is not the stated
+FAIL (nothing VF/AGENTS.md is staged; they did not commit this slice).
+
+Critic did not touch VF, did not commit, did not tick plan.
+
+================================================================================
+ATTACK 1 — DOES 4175 SHOW AN AVATAR THAT MOVES FROM KEYS?
+================================================================================
+
+RESULT=PASS  (not a static pin)
+
+Disk:
+  useAvatar.ts rAF loop reads WASD/arrows + walk pad, calls tryStep.
+  MapView mounts a MapLibre marker whose element is head/torso/two legs,
+  data-testid=self-avatar, dataset lon/lat/heading/pose, rotation=heading,
+  class is-walk while pose=walk. CSS stride animation on legs.
+  AVATAR_SPAWN = lon 106.69804 / lat 10.77162. WALK_SPEED_MPS=1.6.
+
+Independent live CDP (2026-09-03, 4175, 1.1 s KeyW):
+  home    pose=idle heading=0   lon=106.6980400 lat=10.7716200
+          class=self-avatar … (no is-walk)
+          innerHTML has avatar-head / avatar-torso / avatar-leg-l/r
+  walking pose=walk heading=342 lon=106.6980350 lat=10.7716350
+          class=… is-walk
+          status "You: walking · facing north · in-app position, not GPS"
+  stood   pose=idle heading=342 lon=106.6980350 lat=10.7716350
+  moved   dLon=-0.0000050  dLat=+0.0000150
+  walkOk=true
+
+Their packed J1-WALK-SHOP-2026-09-03.txt matches this shape
+(dLat +0.0000153 / dLon -0.0000050; heading 342). Not a fabricated flag:
+the DOM pose, class, and coordinates changed under a real keyDown.
+
+Residual: it is still a 28×44 CSS doll on a MapLibre HTML marker, not a
+sprite sheet. Modes §2 asks for a recognizable standing/walking character.
+Head+torso+striding legs + heading change meets J1; it is not pin-only.
+A screenshot-only claim would have failed. This one has motion + state.
+
+================================================================================
+ATTACK 2 — IS POSITION IN-APP (NO GEOLOCATION API)?
+================================================================================
+
+RESULT=PASS  with vendor-dead-code note
+
+App source: zero geolocation / getCurrentPosition / watchPosition /
+GeolocateControl under hh-3d/app/web/src.
+Avatar state is authored lng/lat advanced by tryStep. Camera follow reads
+avatar; dragstart/rotatestart frees follow and does not write avatar.
+StreetHelp and honesty copy say in-app / not GPS.
+
+Live DOM: no .maplibregl-ctrl-geolocate button. geolocateBtn=false.
+
+Bundle attack: dist/assets/index-BOapeFa0.js CONTAINS
+  window.navigator.geolocation, getCurrentPosition, watchPosition.
+Context is MapLibre GeolocateControl vendor code (geolocateButton,
+_geolocationWatchID, permissions.query name=geolocation). MapView only
+adds AttributionControl + NavigationControl. Dead library surface, not
+wired as the player body.
+
+GPS is not the avatar position source. Do not call this "GPS used."
+
+================================================================================
+ATTACK 3 — OFFLINE: ZERO OTHER PLAYER BODIES?
+================================================================================
+
+RESULT=PASS
+
+modes.ts: DEFAULT_PRESENCE=offline, ONLINE_AVAILABLE=false,
+OTHER_PEOPLE_VISIBLE=false. No remote avatar component. MapView renders
+self marker + place markers + one shop marker. No data-remote-avatar
+anywhere in src.
+
+Live:
+  mode "Offline — Stroll alone; shops still open."
+  people "Other people on the street: none (friends layer off)."
+  online button disabled, text "(unavailable)"
+  remoteCount=0  remoteAny=0
+  connection "browser online; catalog is the local authored fixture
+  (no shop server)."
+
+J3 friends presence is correctly absent. Online is not faked live.
+
+================================================================================
+ATTACK 4 — SHOP PUBLIC WITHOUT FRIENDS? SHELF SURVIVES OWNER-OFFLINE?
+================================================================================
+
+RESULT=PASS_FOR_J1_FIXTURE  (weak on "owner left", honest)
+
+Live shops.json = disk public/data/shops.json:
+  shop-lantern-fish published, owner_presence=offline
+  listings: morning-mackerel published fish, woven-tote published bag,
+            listing-draft-hidden draft
+
+UI: GoodsList + shop marker + ShopPanel. No login. No friends gate.
+openShop only requires a published shop_id in the parsed catalog.
+
+Independent live:
+  shop marker text "Shop · Quầy Cá Đèn Lồng"
+  goods buttons show both samples + shop name + "public"
+  opened via="goods"
+  shop panel true; owner "Shop owner: Offline. Public listings stay open."
+  listings fish + bag; href ?place=place-market-steps&shop=shop-lantern-fish
+  after Close shelf: panel gone; avatar stayed at the same in-app point
+
+Attack on "owner Offline":
+  owner_presence is parsed and stored, then NEVER used to filter
+  publicShops / publicListings (those filter status===published only).
+  ownerOfflineSim is a React checkbox that swaps two sentences.
+  Unchecking it still leaves the shelf (copy becomes "local Online label
+  only… Shop still public."). There is no second session, no logout, no
+  server. Lead disclosed this as a sim. It is not a fake disappearing
+  shop, and it is not M1-WP0 "owner closed the app, guest still reads
+  from server."
+
+Shop is not "only JSON." JSON is the fixture; a human sees a named stall,
+goods list, and shelf panel.
+
+================================================================================
+ATTACK 5 — DRAFTS SHOWN AS POSTED?
+================================================================================
+
+RESULT=PASS
+
+publicListings drops status!==published.
+Live draftShown=false. listing-draft-hidden absent from panel and goods.
+Disk fixture still contains the draft row (correct: hidden, not deleted).
+
+================================================================================
+ATTACK 6 — GPS / GTA / 1:1 / STRANGER CROWD COPY?
+================================================================================
+
+RESULT=PASS
+
+Honesty banner live:
+  Authored approximation. not a live map, not OSM/Overture, not
+  photogrammetry, not a digital twin.
+  Map data as of 2026-09-03 (authored fixture).
+  Shops and goods … authored fiction. No GTA claim, no 1:1 city, no
+  digital twin, no stranger crowd.
+
+shops.json honesty array matches. Header: "Local map proof · walk the
+street · Bến Thành vicinity" — vicinity naming is allowed; footprints
+are not a survey. No stranger crowd bodies. No GTA claim in UI.
+
+================================================================================
+ATTACK 7 — DID THEY TICK OLD WP PASS?
+================================================================================
+
+RESULT=PASS  (not ticked)
+
+Canonical plan still:
+  CURRENT_FIRST_LEFTOVER=GATE-U1
+  WP_STATE_PASS_POLICY=ORIGINAL_VALUES_UNCHANGED_NOT_LIVE_PROGRESS
+  GATE-U1 STATE: NOT_STARTED
+  R2-WP0 / R2-WP1 / R0–R4 blocks: STATE: NOT_STARTED (or historical
+  non-PASS values; no STATE: DONE/PASS/COMPLETE)
+  M0-WP0 / M0-WP1 / M1-WP0 / M1-WP1 / M2-*: STATE: NOT_STARTED
+
+PROGRESS: PLAN_CHECKBOXES=UNCHANGED_DO_NOT_TICK
+  PLAYER_SLICE=LOCAL_AVATAR_PLUS_ONE_PUBLIC_SHOP
+  Status=J1_OBSERVED  NOT_PLAN_PASS
+  J2/J3 named not done
+
+Plan diff adds M0/M1 blocks as NOT_STARTED documentation, does not flip
+historical PASS. Critic does not treat that edit as a tick.
+
+================================================================================
+ATTACK 8 — DID THEY FAKE GATE-U1 HUMANS?
+================================================================================
+
+RESULT=PASS  (not faked)
+
+hh-3d/app/docs/review/README.txt still:
+  GATE-U1 is NOT done.
+  Need three independent human reviewers…
+  placeholder so later agents do not invent a pass.
+
+No invented reviewer names, no forged 5-minute notes, no OWNER_SIGN name.
+PROGRESS leftover #1 remains GATE-U1. Correct.
+
+================================================================================
+ATTACK 9 — PROBE SCRIPT: REAL UI OR JUST FLAGS?
+================================================================================
+
+RESULT=PASS  (real UI; shop path is sidebar, not proximity)
+
+j1-walk-shop-probe.mjs:
+  launches its own Chrome CDP against existing PLAYER 4175
+  does not start a second preview
+  Input.dispatchKeyEvent KeyW
+  Runtime.evaluate reads live DOM (self-avatar datasets, goods buttons,
+  shop panel, listings, honesty, mode, remote nodes)
+  walkOk requires measured dLat/dLon, not a hardcoded true
+  shopOk requires panel + fish + bag + no draft + Offline owner copy
+  writes J1-WALK-SHOP-2026-09-03.txt  verdict J1_OBSERVED
+
+Their packed file is consistent with an actual DOM snapshot (Vietnamese
+goods strings, honesty paragraphs, heading 342).
+
+Gaps they already labeled, and this critic reproduced:
+  opened.via=goods  (not marker, not E, not nearby button)
+  nearby=null after 1.1 s hold
+  ownerWasOn=true — checkbox already on; they did not demonstrate a
+  hide-then-restore of listings (impossible anyway; see Attack 4)
+
+Independent critic CDP (stdout only) reproduced walkOk/shopOk/modeOk/
+honestyOk without writing their evidence file.
+
+Unit tests (9, EXIT=0) are disk fixtures + reimplemented math, not
+imports of walk.ts/catalog.ts. They support honesty of the JSON, not
+the live marker. Live CDP is the motion proof.
+
+================================================================================
+ATTACK 10 — PLAYER SEAT: CAN A HUMAN STROLL→GOODS WITHOUT READING CODE?
+================================================================================
+
+RESULT=PASS_FOR_BROWSE  PARTIAL_FOR_STALL_ENTRY
+
+On first paint a guest sees:
+  Offline explanation
+  "WASD or arrows walk. Camera pan does not move you."
+  "in-app position, not GPS"
+  on-screen walk pad
+  map canvas + shop marker "Shop · Quầy Cá Đèn Lồng"
+  sidebar "Public goods" with two sample titles
+  Online button visibly unavailable
+
+A human can: open 4175 → hold W and see the doll walk → click a goods
+row or the shop marker → read fish/bag → Close shelf → stay put.
+No login. No docs. No code.
+
+What a human cannot yet treat as proven:
+  Walk until "Open Quầy Cá Đèn Lồng" appears, press E, enter from the
+  street. Spawn-to-shop distance is tested as >20 m and <40 m
+  (avatar.test.mjs). 1.1 s at 1.6 m/s is ~1.8 m, far short.
+  Touch pad, building collision, and pan-does-not-move-you are visible
+  copy / coded, not CDP-walked.
+  "Chưa tải cửa hàng này" only if shops.json fetch fails — UI-only,
+  not a cut-cable E2E. Lead already said this.
+
+Modes §2 allows click/tap OR nearby interact, same shop_id. Goods/marker
+click is a legal entry. The missing beat is proximity, not the shelf.
+
+================================================================================
+LEAD CLAIMS vs DISK+LIVE
+================================================================================
+
+Claim                                         Verdict
+Walk avatar WASD on 4175                      CONFIRMED (critic CDP)
+Browse Quầy Cá Đèn Lồng                       CONFIRMED (panel + goods)
+Shelf stays if owner Offline                  CONFIRMED as fixture+label
+                                              (not a real owner logout)
+In-app position, not GPS                      CONFIRMED (unused vendor
+                                              GeolocateControl in bundle)
+Offline = no other people, still walk         CONFIRMED
+J2/J3 not done                                CONFIRMED
+GATE-U1 not faked                             CONFIRMED
+NOT_PLAN_PASS                                 CONFIRMED
+typecheck/test 0                              CONFIRMED this critic
+build 0 / 1.14 MB bundle                      NOT re-run (would mutate);
+                                              live JS 1136440 matches
+                                              PROGRESS claim
+Nearby E not CDP-walked                       CONFIRMED gap
+Touch/collision/camera-pan not CDP            CONFIRMED gap
+"Chưa tải" UI-only                            CONFIRMED gap
+
+================================================================================
+HARD FAIL CHECK (TICK=no triggers)
+================================================================================
+
+Avatar fake / static pin                      NO
+Shop only JSON, no UI                         NO
+GPS used as player position                   NO
+Plan STATE/PASS ticked                        NO
+Page broken / 4175 down / wrong product       NO
+GATE-U1 humans invented                       NO
+J1 claimed as plan PASS                       NO
+
+Therefore TICK=yes for the J1 player-slice claim as labeled.
+
+================================================================================
+NOT GRANTED
+================================================================================
+
+- M0-WP1 / M1-WP0 / M2 / R2-WP0 / R2-WP1 / GATE-U1
+- J2 owner list-product (identity still required; correctly stopped)
+- J3 friend bodies
+- Real catalog server, cache STALE/UNAVAILABLE E2E, draft retry
+- Collision, touch, camera-pan, proximity-E as observed
+- Permission to start 4173/4174, fetch maps, Unreal, VF, or tick [x]

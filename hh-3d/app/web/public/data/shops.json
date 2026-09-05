@@ -1,0 +1,65 @@
+{
+  "schema": "hh-world-shop-catalog/v0",
+  "world_id": "hh-world-ben-thanh-400m",
+  "authored_or_source": "authored",
+  "accuracy_class": "authored",
+  "published_at": "2026-09-03T08:40:00+07:00",
+  "updated_at": "2026-09-03T08:40:00+07:00",
+  "honesty": [
+    "Fictional player-shop fixture for local J1. Not a real stall or brand.",
+    "Public listings stay visible while the fixture owner is Offline.",
+    "Draft rows must not appear on the public shelf.",
+    "Not GPS. Not a digital twin. Not a stranger crowd."
+  ],
+  "shops": [
+    {
+      "shop_id": "shop-lantern-fish",
+      "owner_id": "owner-fixture-local",
+      "name": "Quầy Cá Đèn Lồng",
+      "description": "Authored public stall at Market Steps. Fish and bag samples. Not a real business.",
+      "place_id": "place-market-steps",
+      "lon": 106.6980366,
+      "lat": 10.7718712,
+      "status": "published",
+      "owner_presence": "offline",
+      "updated_at": "2026-09-03T08:40:00+07:00",
+      "version": 1,
+      "world_id": "hh-world-ben-thanh-400m"
+    }
+  ],
+  "listings": [
+    {
+      "listing_id": "listing-morning-mackerel",
+      "shop_id": "shop-lantern-fish",
+      "title": "Cá nục sương (mẫu)",
+      "description": "Fictional fish-class sample. Price is not a live quote.",
+      "kind": "fish",
+      "price_label": "Liên hệ",
+      "status": "published",
+      "updated_at": "2026-09-03T08:40:00+07:00",
+      "version": 1
+    },
+    {
+      "listing_id": "listing-woven-tote",
+      "shop_id": "shop-lantern-fish",
+      "title": "Túi cói chợ (mẫu)",
+      "description": "Fictional bag-class sample. Not a real product for sale.",
+      "kind": "bag",
+      "price_label": "Liên hệ",
+      "status": "published",
+      "updated_at": "2026-09-03T08:40:00+07:00",
+      "version": 1
+    },
+    {
+      "listing_id": "listing-draft-hidden",
+      "shop_id": "shop-lantern-fish",
+      "title": "Nháp chưa đăng",
+      "description": "Local draft. Must not appear on the public shelf.",
+      "kind": "other",
+      "price_label": "—",
+      "status": "draft",
+      "updated_at": "2026-09-03T08:40:00+07:00",
+      "version": 1
+    }
+  ]
+}

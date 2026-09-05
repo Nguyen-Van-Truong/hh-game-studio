@@ -59,6 +59,7 @@ var last_hit_weapon: String = ""
 var last_fire_weapon: String = ""
 var last_fire_raw_spawn: float = 0.0
 var survival: SurvivalRules = null
+var vs1_bot_count: int = 2
 
 
 func setup(p_mode: String, p_map: String, p_stage: int) -> void:
@@ -802,6 +803,8 @@ func _spawn_fighters() -> void:
 		bots = StageRules.bot_count(stage_index)
 	elif mode == "survival":
 		bots = SurvivalRules.initial_bots()
+	elif mode == "vs1":
+		bots = clampi(vs1_bot_count, 1, 2)
 	var b: int = 0
 	while b < bots:
 		var bot: Fighter = Fighter.new()

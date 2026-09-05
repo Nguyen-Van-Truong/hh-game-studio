@@ -1,0 +1,125 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=09:11 +07
+ROLE=IMPLEMENTER
+TICK=n/a (do not treat this file as TICK=yes)
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M0_WP1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+PLAYER_URL=http://127.0.0.1:4175/
+RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-10
+COMMAND=node hh-3d/app/data-qa/j5-minimap-lane-probe.mjs
+VERDICT_IMPLEMENTER_CDP=J5_MINIMAP_LANE_OK
+LIVE_JS=/assets/index-DOyi5rEr.js
+LIVE_JS_LEN=2148383
+LIVE_JS_SHA256=f6a98569d4e5be3c2d7c5b2db610895647280df5a243289ca0e5687c7ff564be
+ONE_RECYCLE_AFTER_BUILD=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NO_COMMIT=1
+NO_HIP_SPHERES=1
+DID_NOT_RIP_HUD_CHIP=1
+DID_NOT_RIP_PLAQUES=1
+DID_NOT_RIP_INNER_LANES=1
+DID_NOT_RIP_SIDE_STREET=1
+DID_NOT_RIP_FOG_EDGE=1
+DID_NOT_RIP_FOOTSTEPS=1
+DID_NOT_RIP_FRIEND_GAIT=1
+DID_NOT_RIP_STREET_PLAY_SHOPS=1
+DID_NOT_RIP_SKY=1
+DID_NOT_RIP_CAM_HIT=1
+NO_NPC=1
+NO_INTERIOR=1
+NO_MAP_FETCH=1
+ACCEPTED_PRIOR=CRITIC-3D-STREET-HUD-REAUDIT-2026-09-04.txt TICK=yes on DF4TvR_E
+
+================================================================================
+SLICE
+================================================================================
+
+Wayfinding is HUD + 3D plaques. The corner MapLibre minimap
+used to show only the two GeoJSON streets. This slice draws
+the same four authored HUD lanes in-memory so chip and map
+agree:
+
+  Harbor Walk · Tram Approach · Steps East · Steps West
+
+Official lines darker. Inner lanes thinner. The line that
+matches the current HUD chip is highlighted (green). Local
+memory / in-app GeoJSON source only — no fetch, no new
+fixture streets. Play stays R3F full viewport. MapLibre stays
+the 182×132 corner minimap + WebGL-off fallback. Did not
+restore the old full-page map dashboard.
+
+Honesty: authored 400 m, not OSM, not a city grid, still two
+official named streets + inner parcel lanes.
+
+Did not rip HUD chip, plaques, inner asphalt, side-street
+dressing, fog/edge, footsteps, friend gait, streetPlayShops,
+sky, or cam-hit. No NPCs. No interiors. No map fetch.
+
+================================================================================
+MINIMAP
+================================================================================
+
+  data-testid=hh-world-minimap  kind=authored-hud-lanes
+  box 182 × 132 @ 1088, 578  (corner, not full page)
+  official=2  inner=2  extra=2
+  names=Tram Approach,Harbor Walk,Steps East,Steps West
+
+  Harbor  chip=Harbor Walk   minimap-active=Harbor Walk
+          highlight=1  role=official
+  Steps   chip=Steps East    minimap-active=Steps East
+          highlight=1  role=inner
+          hidden li#minimap-lane-steps-east data-active=1
+
+GeoJSON kind=street count stays 2 (Harbor Walk, Tram Approach).
+worldMapPresent=false on Play (no restored dashboard).
+
+================================================================================
+CDP (implementer; not an independent critic)
+================================================================================
+
+URL=http://127.0.0.1:4175/ recycled once after build.
+Bind 127.0.0.1 pid 64684. Did not start 4173 / 4174 / 5175.
+Did not catalog_clear. Leftover shop-local-sharedpc and
+shop-local-mtl8ulddihjpre remain on /demo-bus.
+
+  typecheck EXIT=0
+  test      EXIT=0 (70)
+  build     EXIT=0  index-DOyi5rEr.js
+
+Harbor W then east into Steps:
+  east=+7.09 m  north=+19.45 m  inside-ring=0
+  chip Harbor Walk → Steps East
+  minimap active Harbor Walk → Steps East  highlight=1 extra=2
+
+Lantern E = shop-lantern-fish (not Shared PC / J6).
+Seat B leftover E not stolen (nearby none; E no panel).
+Plaques still 4. Menu hidden. Sky / fog / edge / inner asphalt
+kept. NOT_PLAN_PASS.
+
+Shots: j5-3d-minimap-lane-harbor.png ; j5-3d-minimap-lane-steps.png
+
+================================================================================
+OWNER LEFTOVERS (unchanged)
+================================================================================
+
+- GATE-U1 three human reviewers (not faked) — first acceptance leftover
+- AUTHORIZE_MAP_FETCH=YES + license ledger before any OSM/Overture
+- Other-PC / WAN join (store is this PC 4175 loopback)
+- Real account / OIDC
+- Plan checkboxes stay [ ]
+
+================================================================================
+END
+================================================================================

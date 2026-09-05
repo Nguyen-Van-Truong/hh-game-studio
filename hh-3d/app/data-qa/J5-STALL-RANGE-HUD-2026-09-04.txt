@@ -1,0 +1,201 @@
+{
+  "run_id": "HH3D-J5-20260904-ASIA-SAIGON-35",
+  "player": "http://127.0.0.1:4175/",
+  "verdict": "J5_STALL_RANGE_HUD_OK",
+  "leakRangeOk": true,
+  "phoPersistRangeOk": true,
+  "lanternPersistRangeOk": true,
+  "phoStallRangeOk": true,
+  "lanternStallRangeOk": true,
+  "not_plan_pass": true,
+  "not_gate_u1": true,
+  "not_m1": true,
+  "liveJs": "/assets/index-Bsz3aP8u.js",
+  "liveLen": 2168818,
+  "liveSha": "cb72726f4811bda2407f8731a7fcf59c4878a69ec7187ff96fa2290e43ba575b",
+  "guestOk": true,
+  "leftoverOk": true,
+  "leftoverLast": true,
+  "leftoverKeep": true,
+  "leftoverEStolen": "",
+  "leftoversHidden": true,
+  "listOk": true,
+  "ePhoPersist": "none",
+  "eLeak": "none",
+  "ePhoStall": "shop-local-mtmh45qxehxhvb",
+  "eLanternPersist": "none",
+  "eLanternStall": "shop-lantern-fish",
+  "leakAsphalt": true,
+  "leakNearbyEmpty": true,
+  "leakStand": {
+    "lon": 106.6980199,
+    "lat": 10.7718649,
+    "chip": "Harbor Walk",
+    "nearby": "",
+    "range": "Walk to a stall.",
+    "hint": "E opens a stall when you are next to it.",
+    "laneM": 2.24,
+    "dPhoPlant": 8.4,
+    "dLanternPlant": 5.16,
+    "dPhoPersist": 7.79,
+    "dLanternPersist": 1.96
+  },
+  "phoPersistStand": {
+    "lon": 106.6980451,
+    "lat": 10.7717912,
+    "chip": "Harbor Walk",
+    "nearby": "",
+    "range": "Walk to a stall.",
+    "hint": "E opens a stall when you are next to it.",
+    "laneM": 0.41,
+    "dPhoPlant": 7.75,
+    "dLanternPlant": 12.28,
+    "dPhoPersist": 0.92,
+    "dLanternPersist": 8.95
+  },
+  "phoStallStand": {
+    "lon": 106.6979817,
+    "lat": 10.7718173,
+    "chip": "Harbor Walk",
+    "nearby": "shop-local-mtmh45qxehxhvb",
+    "range": "Quầy Phở Nhà: 1.7 m away",
+    "hint": "Press E or tap Open to enter Quầy Phở Nhà.",
+    "laneM": 6.48,
+    "dPhoPlant": 1.69,
+    "dLanternPlant": 6.68,
+    "dPhoPersist": 6.74,
+    "dLanternPersist": 8.49
+  },
+  "lanternPersistStand": {
+    "lon": 106.698032,
+    "lat": 10.7718632,
+    "chip": "Harbor Walk",
+    "nearby": "",
+    "range": "Walk to a stall.",
+    "hint": "E opens a stall when you are next to it.",
+    "laneM": 0.92,
+    "dPhoPlant": 9.09,
+    "dLanternPlant": 6.49,
+    "dPhoPersist": 7.33,
+    "dLanternPersist": 1.02
+  },
+  "lanternStallStand": {
+    "lon": 106.6979908,
+    "lat": 10.7718641,
+    "chip": "Harbor Walk",
+    "nearby": "shop-lantern-fish",
+    "range": "Quầy Cá Đèn Lồng: 2.3 m away",
+    "hint": "Press E or tap Open to enter Quầy Cá Đèn Lồng.",
+    "laneM": 5.42,
+    "dPhoPlant": 6.96,
+    "dLanternPlant": 2.29,
+    "dPhoPersist": 9.13,
+    "dLanternPersist": 5.07
+  },
+  "leftoverDrawn": [],
+  "leftoverPersist": [
+    {
+      "shop": "shop-local-sharedpc",
+      "name": "Quầy Shared PC",
+      "lon": 106.69804,
+      "lat": 10.77162,
+      "status": "published"
+    },
+    {
+      "shop": "shop-local-mtl8ulddihjpre",
+      "name": "Quay Critic J6 Jump",
+      "lon": 106.69814973080383,
+      "lat": 10.77162,
+      "status": "published"
+    }
+  ],
+  "leftoverMenuRows": [
+    {
+      "shop": "shop-local-sharedpc",
+      "name": "Quầy Shared PC",
+      "leftover": "1",
+      "street": "0",
+      "labeled": true
+    },
+    {
+      "shop": "shop-local-mtl8ulddihjpre",
+      "name": "Quay Critic J6 Jump",
+      "leftover": "1",
+      "street": "0",
+      "labeled": true
+    }
+  ],
+  "leakWalk": [
+    {
+      "i": 0,
+      "lon": 106.6980422,
+      "lat": 10.7718113,
+      "d": 7.62,
+      "nearby": "",
+      "chip": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 1,
+      "lon": 106.6980402,
+      "lat": 10.7718249,
+      "d": 6.15,
+      "nearby": "",
+      "chip": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 2,
+      "lon": 106.6980382,
+      "lat": 10.7718388,
+      "d": 4.69,
+      "nearby": "",
+      "chip": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 3,
+      "lon": 106.6980296,
+      "lat": 10.7718496,
+      "d": 3.18,
+      "nearby": "",
+      "chip": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 4,
+      "lon": 106.6980228,
+      "lat": 10.7718572,
+      "d": 2.09,
+      "nearby": "",
+      "chip": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 5,
+      "lon": 106.6980199,
+      "lat": 10.7718649,
+      "d": 1.18,
+      "nearby": "",
+      "chip": "Harbor Walk",
+      "blocked": "0"
+    }
+  ],
+  "shot": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-stall-range-hud.png",
+  "identity": "Guest · shops public; friends not required",
+  "mode": "Offline·Đang kết nối",
+  "shared": {
+    "id": "shop-local-sharedpc",
+    "leftover": "1",
+    "banner": "không trên phố / leftover máy này",
+    "kind": "không trên phố / leftover máy này"
+  },
+  "j6": {
+    "id": "shop-local-mtl8ulddihjpre",
+    "leftover": "1",
+    "banner": "không trên phố / leftover máy này",
+    "kind": "không trên phố / leftover máy này"
+  },
+  "honesty": "Authored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:1 city. Authored 400 m: two official named streets plus inner parcel lanes, not a city grid. This f",
+  "didNotCatalogClear": true
+}

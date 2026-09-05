@@ -1,0 +1,151 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=10:54 +07
+ROLE=IMPLEMENTER
+TICK=n/a (do not treat this file as TICK=yes)
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M0_WP1=1
+NOT_R2_WP1_PASS=1
+NOT_60_FPS=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+PLAYER_URL=http://127.0.0.1:4175/
+RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-19
+COMMAND=node hh-3d/app/data-qa/j5-hitch2-probe.mjs
+VERDICT_IMPLEMENTER_CDP=J5_HITCH2_OBSERVED
+LIVE_JS=/assets/index-BgKOOgwd.js
+LIVE_JS_LEN=2154825
+LIVE_JS_SHA256=263b3d2274f957b422e5456a47e14a12b34cdea0722566d7cf31219a2b463a5d
+ONE_RECYCLE_AFTER_BUILD=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NO_COMMIT=1
+NO_HIP_SPHERES=1
+DID_NOT_RIP_WARMUP=1
+DID_NOT_RIP_FRIEND_STEPS=1
+DID_NOT_RIP_90M_LOD=1
+DID_NOT_RIP_MINIMAP=1
+DID_NOT_RIP_HUD=1
+DID_NOT_RIP_PLAQUES=1
+DID_NOT_RIP_LANES=1
+DID_NOT_RIP_FOG_EDGE=1
+DID_NOT_RIP_STREET_PLAY_SHOPS=1
+DID_NOT_RIP_SKY=1
+DID_NOT_RIP_CAM_HIT=1
+NO_NPC=1
+NO_INTERIOR=1
+NO_MAP_FETCH=1
+NO_LOADING_SPINNER_OVER_VOID=1
+ACCEPTED_PRIOR=CRITIC-3D-HITCH-REAUDIT-2026-09-04.txt TICK=yes on Zv5epUAg
+
+================================================================================
+SLICE
+================================================================================
+
+Hitch reaudit TICK=yes left min ~10 / one ~100–117 ms first-W frame.
+This remint defers corner MapLibre construction until after Play idle
+rAF (~800 ms of idle-pose time) or the first W ends (move-held W/S
+or pose=walk). Play canvas stays the default. Did not restore a map
+dashboard. After defer, chip + minimap still agree Harbor Walk →
+Steps East. Corner also skips fill-extrusion (unused 3D compile on
+the 182×132 map). HUD lanes stay.
+
+Did not rip hitch warmup, friend Offline teardown, 90 m LOD, HUD
+chip, plaques, lanes, fog/edge, streetPlayShops, sky, cam-hit.
+
+Honesty: still authored boxes, not a city. Do not claim 60 FPS.
+Do not claim R2-WP1 PASS. Min ≥ 20 not reached.
+
+================================================================================
+FIRST HARBOR W (headless Chrome CDP, 1280×720, rAF wall-clock 3000 ms)
+================================================================================
+
+Method: play-ready, click canvas, settle 400 ms, hold W, sample
+rAF (skip 2). FIRST W, not the FPS-LOD idle-then-walk window.
+Same probe writer before vs after (j5-hitch2-probe.mjs).
+
+BEFORE  live JS=/assets/index-Zv5epUAg.js
+        RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-16
+        walk min=7.50  mean=19.00  median=19.98  n=52
+        frame max=133.4 ms
+        chip=Harbor Walk  pose=walk
+        minimap already present during first W (no defer)
+        lantern E=shop-lantern-fish
+        friend remotes=0 live=0 ticks=0
+        Harbor→Steps East chip+minimap agreed
+
+AFTER   live JS=/assets/index-BgKOOgwd.js
+        RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-19
+        walk min=9.99  mean=23.73  median=20.04  n=65
+        p1=10.00  max=59.52
+        frame max=100.1 ms
+        hitch-warmup=audio-compile
+        minimap-defer=play-idle-or-first-w
+        first W: defer=pending  hh-world-minimap ABSENT
+        after first W: defer=live  chip+minimap Harbor Walk
+        east walk: chip=Steps East AND minimap active=Steps East
+                   highlight=1 role=inner  east=6.1 m north=21.41 m
+        lantern E=shop-lantern-fish
+        friend remotes=0 live=0 ticks=0
+        Play default; world MapView absent
+
+GOAL min clearly above 10 (prefer ≥ 20): NOT reached.
+Min 7.50 → 9.99 is still the leftover ~10 / one ~100 ms frame
+class (critic hitch reaudit min 9.99 / 100.1 ms). Say so.
+Mean 19.00 → 23.73 is better; min did not get worse. Keep the
+defer. Not 60. Not R2-WP1.
+
+Two discarded timing remints (CFHQgl-j, D9Yxzv1a) mounted
+MapLibre during first W and made min worse; not this live hash.
+
+================================================================================
+KEEP
+================================================================================
+
+Lantern E still shop-lantern-fish.
+Solo Offline friend plants stay closed (remotes=0, live=0,
+ticks=0 while self walks). Did not rerun the full isolated
+A/B leak hunt; that teardown was not touched.
+far-lod=inner-door-glass m=90. Plaques=4. Harbor chip held.
+Corner minimap still highlights Steps East after defer.
+Play stays R3F full viewport. Not a restored dashboard.
+
+================================================================================
+CDP (implementer; not an independent critic)
+================================================================================
+
+URL=http://127.0.0.1:4175/ recycled after the walk-held remint build.
+Bind 127.0.0.1 pid 55656. Did not start 4173 / 4174 / 5175.
+Did not catalog_clear.
+
+  typecheck EXIT=0
+  test      EXIT=0 (74)
+  build     EXIT=0  index-BgKOOgwd.js
+
+NOT_PLAN_PASS. GATE-U1 still first leftover.
+
+================================================================================
+OWNER LEFTOVERS
+================================================================================
+
+- GATE-U1 three human reviewers (not faked) — first acceptance leftover
+- R2-WP1 still not PASS: first-W min 9.99 (not ≥20 / not ≥25); idle ≥50 /
+  mobile / headed / context-loss / memory / cold-process first-map
+  / owner thresholds UNFILLED. Mean 23.73 is one Harbor headless
+  first-W sample only. Not 60.
+- AUTHORIZE_MAP_FETCH=YES + license ledger before any OSM/Overture
+- Other-PC / WAN join (store is this PC 4175 loopback)
+- Real account / OIDC
+- Plan checkboxes stay [ ]
+
+================================================================================
+END
+================================================================================

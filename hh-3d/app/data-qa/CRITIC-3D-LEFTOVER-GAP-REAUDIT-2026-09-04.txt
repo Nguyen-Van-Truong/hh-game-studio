@@ -1,0 +1,285 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+HASH_MISMATCH=0
+DID_NOT_RECYCLE=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+LIVE_JS=/assets/index-cmeHN__e.js
+LIVE_JS_LEN=2172629
+LIVE_JS_SHA256=bfec78e081bf002f8335dbc767747349bf891f3b17616d2b13acafb17b5536d3
+DID_NOT_REBUILD=1
+DID_NOT_RESTORE_DIST=1
+DID_NOT_CATALOG_CLEAR=1
+NOT_M0_WP1=1
+NOT_M1=1
+NOT_M2=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=19:47 +07
+MODEL=grok-4.6-extra-high
+SCOPE=Independent re-audit of LEFTOVER_MENU_GAP on live cmeHN__e. Do not treat implementer CRITIC-3D-LEFTOVER-GAP-2026-09-04.txt (TICK=n/a) or J5-LEFTOVER-GAP JSON as acceptance.
+PLAYER_URL=http://127.0.0.1:4175/
+LISTEN=127.0.0.1:4175
+LIVE_PID=50264
+LIVE_PID_AFTER_CDP=50264
+LIVE_PID_STARTTIME=2026-09-04 19:43:57 +07
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-LEFTOVER-GAP-REAUDIT-2026-09-04.txt
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-LEFTOVER-GAP-2026-09-04.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+DID_NOT_TREAT_IMPLEMENTER_AS_TICK_YES=1
+DID_NOT_COPY_IMPLEMENTER_JSON=1
+DID_NOT_RUN_J5_LEFTOVER_GAP_PROBE=1
+PRIOR_ACCEPTED_UNTOUCHED=CRITIC-3D-FRIEND-VIEWING-REAUDIT-2026-09-04.txt TICK=yes on C6w1CTve
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+AUTHORIZE_MAP_FETCH=NO
+VITE_PREVIEW_PORT_PIN=4175
+CRITIC_CDP_PORT=9991
+IMPLEMENTER_CDP_PORT_NOT_REUSED=1
+VIEWPORT=1280x720
+ISOLATED_PROFILE=1
+HEADLESS_NEW=1
+SEAT=b
+GUEST=1
+
+LIVE_JS_BEFORE=/assets/index-cmeHN__e.js
+LIVE_JS_LEN_BEFORE=2172629
+LIVE_JS_SHA256_BEFORE=bfec78e081bf002f8335dbc767747349bf891f3b17616d2b13acafb17b5536d3
+LIVE_JS_AFTER=/assets/index-cmeHN__e.js
+LIVE_JS_LEN_AFTER=2172629
+LIVE_JS_SHA256_AFTER=bfec78e081bf002f8335dbc767747349bf891f3b17616d2b13acafb17b5536d3
+LIVE_JS_MATCHES_CLAIM=1
+HASH_MISMATCH=0
+
+HUNT1_HASH=PASS
+HUNT2_MENU_GAP=PASS
+HUNT3_LEFTOVER_DESC=PASS
+HUNT4_SPAWN_E_HONESTY=PASS
+HUNT5_SAME_PID=PASS
+SHARED_PC_ROW=Quầy Shared PC · không trên phố / leftover máy này
+J6_ROW=Quay Critic J6 Jump · không trên phố / leftover máy này
+ROW_JAMMED=0
+ROW_LABELS_RIPPED=0
+SHARED_PC_GAP_BEFORE_KHONG=1
+LEFTOVER_BANNER_PRESENT=1
+LEFTOVER_DESC=không trên phố / leftover máy này. Not a street stall. Nearby E does not open this shelf.
+STREET_PLAYER_OPENED_DESC_BACK=0
+SPAWN_E_EMPTY=1
+SPAWN_E_STOLEN=0
+HONESTY_DENIES_GTA_11_TWIN=1
+OIDC_CLAIM=0
+WAN_CLAIM=0
+FRIEND_VIEWING_COPY_IN_BUNDLE=1
+LEFTOVER_SHOPS_STILL_ON_DEMO_BUS=1
+BIGGEST_MISS=none on this remint. Named hunts 2+3 held on independent 9991 CDP: leftover Shared PC / J6 Menu textContent is “Quầy Shared PC · không trên phố / leftover máy này” and “Quay Critic J6 Jump · không trên phố / leftover máy này” (not PCkhông); leftover-label small still present; Shared PC shop-panel-desc is leftover honesty, not “Player-opened shop on this machine”.
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/ was already up. Bind 127.0.0.1 pid 50264
+(node, StartTime 2026-09-04 19:43:57 +07, vite preview --host
+127.0.0.1 --port 4175 --strictPort). Did not recycle, rebuild,
+restore-dist, kill, or restart 4175. Did not start 4173 / 4174 /
+5175. Did not bind 0.0.0.0. Did not catalog_clear. Same LISTEN
+pid 50264 after CDP.
+
+Did not treat CRITIC-3D-LEFTOVER-GAP-2026-09-04.txt as TICK=yes
+(ROLE=IMPLEMENTER, TICK=n/a). Did not run j5-leftover-gap-probe.mjs
+as proof. Did not copy J5-LEFTOVER-GAP JSON as this verdict.
+Did not remint or overwrite CRITIC-3D-FRIEND-VIEWING-REAUDIT-2026-09-04.txt
+(TICK=yes on C6w1CTve stays). Did not tick any plan. GATE-U1
+humans were not invented. Not M1. Not M2. NOT_PLAN_PASS.
+
+Independent Chrome CDP, isolated temp profile, headless=new,
+1280×720, ?seat=b guest on 9991. Did not reuse 9791. No
+catalog_clear. Leftover Shared PC / J6 stayed on /demo-bus.
+
+GET / then GET the script, recorded before CDP and after CDP.
+Name + length + sha256 match the claimed remint both times.
+HASH_MISMATCH=0.
+
+Hunt 2 and hunt 3 held on THIS CDP, not on implementer notes.
+
+================================================================================
+LIVE JS
+================================================================================
+
+GET http://127.0.0.1:4175/  STATUS=200
+HTML script = /assets/index-cmeHN__e.js
+link stylesheet = /assets/index-BVObHPH0.css
+
+BEFORE CDP:
+  HTML script = /assets/index-cmeHN__e.js
+  http file length = 2172629
+  sha256 = bfec78e081bf002f8335dbc767747349bf891f3b17616d2b13acafb17b5536d3
+
+AFTER CDP:
+  HTML script = /assets/index-cmeHN__e.js
+  http file length = 2172629
+  sha256 = bfec78e081bf002f8335dbc767747349bf891f3b17616d2b13acafb17b5536d3
+
+Claimed remint name + length + hash match. HASH_MISMATCH=0.
+
+Bundle scan (live bytes, not source):
+  openstreetmap = 0
+  overture = 0 (honesty banner still says “not OSM/Overture”)
+  viewing copy “Đang xem cửa hàng” = 1
+  viewing_shop_id = 18
+  Player-opened shop on this machine = 1 (street copy still in
+    bundle; leftover shop-panel-desc did not use it)
+  PCkhông trên phố = 0
+  Shared PCkhông = 0
+  không trên phố / leftover máy này = 1
+  Not a street stall = 1
+  Nearby E does not open this shelf = 1
+  GTA = 2 (honesty “No GTA claim”)
+  digital twin = 3 (honesty denial)
+  oidc = 5 / OIDC = 3 (not_oidc / “OIDC is not built”, not a
+    sign-in claim)
+  1:1 city = 2 (honesty denial)
+  catalog_clear = 0
+
+================================================================================
+HUNT 1 — HASH_MISMATCH — PASS
+================================================================================
+
+Tried to fail a swapped or stale bundle vs cmeHN__e / 2172629 /
+bfec78e081bf002f8335dbc767747349bf891f3b17616d2b13acafb17b5536d3.
+
+Independent GET before any Chrome, and again after the 9991
+seat exited. Same name, same length, same sha256. Pid still
+50264. HASH_MISMATCH=0. PASS.
+
+================================================================================
+HUNT 2 — NAMED MISS: MENU LEFTOVER ROW GAP — PASS
+================================================================================
+
+Tried to fail: leftover Shared PC / J6 Menu textContent still
+jammed as “Quầy Shared PCkhông trên phố”, or leftover labels
+ripped so the honesty words are gone.
+
+Isolated guest B, empty profile. playReady=yes canvas=1280×720.
+Opened Menu via play-menu-toggle (data-open=yes).
+public-shop-names data-count=6 leftover-count=2 street-count=4.
+
+Leftover rows (live DOM textContent / innerHTML, not implementer
+JSON):
+
+  shop-local-sharedpc leftover=1 street=0 keep-out=1
+  name span = Quầy Shared PC
+  leftover-label present data-testid=leftover-label-shop-local-sharedpc
+  label raw = “ · không trên phố / leftover máy này”
+  li textContent = “Quầy Shared PC · không trên phố / leftover máy này”
+  jammedBlob=0  (not “Quầy Shared PCkhông trên phố”)
+  char before “không trên phố” = U+0020 space after U+00B7 middle dot
+
+  shop-local-mtl8ulddihjpre leftover=1 street=0 keep-out=1
+  name span = Quay Critic J6 Jump
+  leftover-label present data-testid=leftover-label-shop-local-mtl8ulddihjpre
+  label raw = “ · không trên phố / leftover máy này”
+  li textContent = “Quay Critic J6 Jump · không trên phố / leftover máy này”
+  jammedBlob=0
+
+Street rows (lantern / Phở / Chè / Kem) have no leftover-label
+and do not carry leftover copy. Labels were not ripped.
+PASS.
+
+================================================================================
+HUNT 3 — NAMED MISS: LEFTOVER SHARED PC DESC — PASS
+================================================================================
+
+Tried to fail: leftover banner gone; shop-panel-desc back to
+street “Player-opened shop on this machine”.
+
+Opened leftover Shared PC from Menu (open-shop-shop-local-sharedpc).
+Did not trust data-leftover alone.
+
+  data-shop=shop-local-sharedpc
+  data-leftover=1 data-street=0 data-keep-out=1
+  class=card shop-panel shop-sheet shop-panel-leftover
+  leftover banner present, display=block, visibility=visible,
+    opacity=1
+  banner text = “không trên phố / leftover máy này”
+  kind = “không trên phố / leftover máy này”
+  shop-panel-desc = “không trên phố / leftover máy này. Not a
+    street stall. Nearby E does not open this shelf.”
+  desc does NOT contain “Player-opened shop on this machine”
+
+Street Player-opened body copy is not back on this leftover
+shelf. Leftover honesty holds. PASS.
+
+================================================================================
+HUNT 4 — SPAWN E / HONESTY / FRIEND-VIEWING COPY / DEMO-BUS — PASS
+================================================================================
+
+Tried to fail: leftover steals street E at spawn; honesty
+claiming GTA / 1:1 / digital twin / OIDC / WAN; leftover shops
+wiped; friend-viewing copy ripped from the bundle.
+
+Spawn B, nearby-shop="" stall-hint=“E opens a stall when you
+are next to it.” Hold E:
+  shopPanel=0
+  shopPanelId=
+  leftoverEStolen=0
+SPAWN_E_EMPTY=1. Leftover did not steal street E.
+
+Honesty (live CDP, compact):
+  “Not a live map, not OSM/Overture, not photogrammetry, and
+  not a digital twin. No GTA claim, no 1:1 city. … NOT_PLAN_PASS.”
+presence-honesty:
+  “Not a city shop server. Not a city presence server. …
+  Not WAN. Not GPS. NOT_PLAN_PASS.”
+Live bundle OIDC hits are denials (“OIDC is not built”,
+not_oidc), not a sign-in claim. Not M2.
+
+Friend-viewing copy still exists in the live bundle
+(“Đang xem cửa hàng” = 1, viewing_shop_id = 18). Did not
+require two seats.
+
+/demo-bus before and after still has
+  shop-local-sharedpc          Quầy Shared PC
+  shop-local-mtl8ulddihjpre    Quay Critic J6 Jump
+plus the kept this-PC street shops (Phở / Chè / Kem).
+Did not catalog_clear. PASS.
+
+================================================================================
+HUNT 5 — SAME PID / DID NOT RECYCLE — PASS
+================================================================================
+
+LISTEN 127.0.0.1:4175 pid 50264 before CDP and after CDP.
+Process StartTime still 2026-09-04 19:43:57 +07. Did not
+recycle, rebuild, restore-dist, kill, or restart 4175.
+Did not catalog_clear. PASS.
+
+================================================================================
+OWNER LEFTOVERS (unchanged; not invented)
+================================================================================
+
+1. GATE-U1 three-human review still unproven. Not faked.
+2. R2-WP1 headed/mobile/memory/min-FPS thresholds still UNFILLED.
+3. WAN / other-PC join still not built. 4175 loopback only.
+4. Real account / OIDC still not built.
+5. Open data (OSM/Overture) still needs license ledger + grant.
+6. Leftover this-PC shops stay in the catalog; they do not own
+   street E. Menu rows now carry a · gap before leftover copy.
+7. M0/M1/M2 plan WPs still NOT_STARTED. NOT_PLAN_PASS. Not M1.
+   Not M2.
+
+END

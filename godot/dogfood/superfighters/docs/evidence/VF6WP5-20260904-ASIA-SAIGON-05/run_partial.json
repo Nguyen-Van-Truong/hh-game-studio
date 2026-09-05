@@ -1,0 +1,54 @@
+{
+	"command_id": "cmd.vf6-wp5.bots.5",
+	"display": "Windows",
+	"ended_at": "2026-09-04T15:38:17+07:00",
+	"ended_unix": 1788511097.309,
+	"epsilon": 0.001,
+	"fail_count": 0,
+	"godot": {
+		"build": "official",
+		"hash": "a13da4feb8d8aefc283c3763d33a2f170a18d541",
+		"hex": 263937,
+		"major": 4,
+		"minor": 7,
+		"patch": 1,
+		"status": "stable",
+		"string": "4.7.1-stable (official)",
+		"timestamp": 0
+	},
+	"map_id": "rooftops",
+	"mode": "vs1",
+	"os_name": "Windows",
+	"outcomes": {
+		"BOT_COVERAGE": "planner",
+		"BOUND": "pass",
+		"DIFF": "pass",
+		"FINISH": "pass",
+		"GREEDY": "pass",
+		"LIVE": "pass",
+		"MAPS": "pass",
+		"NOT_AI": 0,
+		"NOT_Y8_PARITY": 1,
+		"RECOVER": "pass",
+		"SCHEMA": "pass",
+		"USED_FORCE_KILL": 0,
+		"WEAPONS": "pass"
+	},
+	"run_id": "VF6WP5-20260904-ASIA-SAIGON-05",
+	"schema": "vault-fighters.vf6-wp5.run.v1",
+	"screens": {
+		"fight": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\godot\\dogfood\\superfighters\\.evidence\\VF6WP5-20260904-ASIA-SAIGON-05-window/screens/bots_fight_1280x720.png",
+		"pause": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\godot\\dogfood\\superfighters\\.evidence\\VF6WP5-20260904-ASIA-SAIGON-05-window/screens/bots_pause_1280x720.png",
+		"title": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\godot\\dogfood\\superfighters\\.evidence\\VF6WP5-20260904-ASIA-SAIGON-05-window/screens/bots_title_1280x720.png"
+	},
+	"seed": 7,
+	"started_at": "2026-09-04T15:05:23+07:00",
+	"started_unix": 1788509123.573,
+	"tick_hz": 60,
+	"timezone": "Asia/Saigon",
+	"viewport": {
+		"h": 720.0,
+		"w": 1280.0
+	},
+	"wp": "VF6-WP5"
+}

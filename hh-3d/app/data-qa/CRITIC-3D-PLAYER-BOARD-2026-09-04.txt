@@ -1,0 +1,110 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=11:52 +07
+ROLE=IMPLEMENTER
+TICK=n/a (do not treat this file as TICK=yes)
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M0_WP1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+PLAYER_URL=http://127.0.0.1:4175/
+RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-22
+COMMAND=node hh-3d/app/data-qa/j5-player-board-probe.mjs
+VERDICT_IMPLEMENTER_CDP=J5_PLAYER_BOARD_OK
+LIVE_JS=/assets/index-D4Sc2h68.js
+LIVE_JS_LEN=2162025
+LIVE_JS_SHA256=76f9843d6e8cff47bc683e55bea928ac36797054d601a1e6f4ceec9ace4c64b2
+ONE_RECYCLE_AFTER_BUILD=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NO_COMMIT=1
+NO_HIP_SPHERES=1
+DID_NOT_RIP_LANTERN_BOARD=1
+DID_NOT_RIP_HARBOR_STEPS_CROSSING=1
+DID_NOT_RIP_DEFERRED_MINIMAP=1
+DID_NOT_RIP_WARMUP=1
+DID_NOT_RIP_FRIEND_STEPS=1
+DID_NOT_RIP_90M_LOD=1
+DID_NOT_RIP_HUD=1
+DID_NOT_RIP_PLAQUES=1
+DID_NOT_RIP_LANES=1
+DID_NOT_RIP_FOG_EDGE=1
+DID_NOT_RIP_STREET_PLAY_SHOPS=1
+DID_NOT_RIP_SKY=1
+DID_NOT_RIP_CAM_HIT=1
+NO_NEW_SHOP_SERVER=1
+NO_INTERIOR=1
+NO_MAP_FETCH=1
+ACCEPTED_PRIOR=CRITIC-3D-STALL-BOARD-REAUDIT-2026-09-04.txt TICK=yes on /assets/index-4xUMLnYL.js
+
+================================================================================
+SLICE
+================================================================================
+
+Lantern chalkboard remint already painted authored stall names.
+This slice reuses that same painter for any drawn streetPlay shop
+(not spawn-hidden leftovers): public listing names, (mẫu) mark if
+the title lacks it, drafts stay off, footer "mẫu · not a live market".
+
+Only leftover player shops on this-PC persist were inside keep-out
+(Shared PC / mtl8ulddihjpre). A new published shop was opened via
+the labeled local demo identity at ~19.8 m north of spawn
+(shop-local-mtmh45qxehxhvb, Quầy Phở Nhà / Phở bò). Not on spawn.
+Not OIDC. Not a city shop server.
+
+E at that stall opens THAT shop. Leftover B Nearby stays empty;
+E does not open Shared PC / J6. Leftovers stay persist-only
+(draw=0 keep-out=1). Did not catalog_clear.
+
+Did not rip lantern Cá/Túi, Harbor×Steps crossing, deferred
+minimap, friend steps, LOD, HUD chip, plaques, lanes, fog/edge,
+streetPlayShops, sky, or cam-hit.
+
+================================================================================
+CDP (headless Chrome, 1280×720, recycled 4175)
+================================================================================
+
+Seat A walks north to the drawn player stall. Shot + crop BEFORE E.
+Then walk to lantern. Seat B leftover E check at spawn.
+
+board kind=chalkboard-menu
+player shop=shop-local-mtmh45qxehxhvb  (~19.79 m north)
+player titles=Phở bò (mẫu)
+player overlay box 530,642 182×58
+player crop slateRatio=0.533 chalkRatio=0.038  (Phở bò readable)
+E opened shop-local-mtmh45qxehxhvb; shelf Phở bò; draft hidden
+lantern titles=Cá nục sương (mẫu) | Túi cói chợ (mẫu)
+lantern overlay box 565,578 137×79
+lantern crop slateRatio=0.516 chalkRatio=0.084
+leftover B nearby="" E not stolen
+leftover persist (draw=0 keep-out=1):
+  shop-local-sharedpc titles=Phở bò (mẫu)
+  shop-local-mtl8ulddihjpre titles=Sach phe binh J6 (mẫu)
+
+npm run typecheck  EXIT=0
+npm test           EXIT=0 (78 tests)
+npm run build      EXIT=0  dist/assets/index-D4Sc2h68.js
+Recycled existing 4175 once (old pid 44140 → listen 127.0.0.1:4175
+pid 68116). Did not start 4173 / 4174 / 5175. Did not bind 0.0.0.0.
+
+================================================================================
+HONESTY
+================================================================================
+
+Board footer and compact honesty: "mẫu · not a live market" /
+"Menu boards list authored fiction goods, not a live market."
+Create used the labeled local demo identity
+("Chủ quầy (máy này)"), not Google/OIDC, not a city server.
+NOT a real stall inventory. NOT GATE-U1. NOT_PLAN_PASS.
+
+================================================================================
+END
+================================================================================

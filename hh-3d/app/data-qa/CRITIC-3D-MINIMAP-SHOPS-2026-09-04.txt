@@ -1,0 +1,138 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=18:44 +07
+ROLE=IMPLEMENTER
+TICK=n/a (do not treat this file as TICK=yes)
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M0_WP1=1
+NOT_M1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+PLAYER_URL=http://127.0.0.1:4175/
+RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-41
+COMMAND=node hh-3d/app/data-qa/j5-minimap-shops-probe.mjs
+VERDICT_IMPLEMENTER_CDP=J5_MINIMAP_SHOPS_OK
+LIVE_JS=/assets/index-CMuviBit.js
+LIVE_JS_LEN=2170837
+LIVE_JS_SHA256=c56379e9e7210f33d9ed14756d3b4d09ca8194155e7812c6e020065a477e272d
+REMINTED=yes
+ONE_RECYCLE_AFTER_BUILD=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NO_COMMIT=1
+NO_HIP_SPHERES=1
+DID_NOT_RIP_HARBOR_SOUTH=1
+DID_NOT_RIP_TRAM_FURNITURE=1
+DID_NOT_RIP_ZEBRAS=1
+DID_NOT_RIP_CHALKBOARDS=1
+DID_NOT_RIP_SHOP_RANGE_HUD=1
+DID_NOT_RIP_NEARBY_E=1
+DID_NOT_RIP_LEFTOVER_BANNERS=1
+DID_NOT_RIP_NET_LABELS=1
+DID_NOT_RIP_FRIEND_STEPS=1
+DID_NOT_RIP_90M_LOD=1
+DID_NOT_RIP_HUD_STREET_CHIP=1
+DID_NOT_RIP_PLAQUES=1
+DID_NOT_RIP_FOG_EDGE=1
+DID_NOT_RIP_SKY=1
+DID_NOT_RIP_CAM_HIT=1
+DID_NOT_RIP_MINIMAP_DEFER=1
+DID_NOT_RIP_LANE_RIBBONS=1
+NO_FIFTH_STREET=1
+NO_NPC=1
+NO_INTERIOR=1
+NO_MAP_FETCH=1
+ACCEPTED_PRIOR=CRITIC-3D-HARBOR-SOUTH-REAUDIT-2026-09-04.txt TICK=yes on /assets/index-C3JOtA3q.js
+
+================================================================================
+SLICE
+================================================================================
+
+Corner minimap already drew four authored HUD lanes. A guest
+could not find Chè / lantern / Phở on that 2D map.
+
+This remint, after the existing defer still mounts MapLibre,
+draws cheap street-play published shop dots at the sidewalk
+plant (not on-lane persist). Hidden proof list
+hh-world-minimap-shops names the same ids.
+
+Leftover Shared PC / J6 stay draw=0 / keep-out and do not
+appear as street marks. Catalog persist was not cleared.
+
+Did not remint Harbor south / Tram east-west furniture,
+zebras, chalkboards, shop-range HUD, Nearby/E, leftover
+banners, net labels, friend steps, LOD, HUD street chip,
+plaques, fog/edge, sky, cam-hit. Did not rip minimap defer
+(HITCH2) or lane ribbons. No fifth official street.
+
+================================================================================
+CDP (headless Chrome, 1280×720, isolated guest B, recycled 4175)
+================================================================================
+
+Seat B empty profile. Identity = "Guest · shops public; friends
+not required". signed-in=no. Offline. friend-row-a not accepted.
+
+Live JS after one recycle (old pid 51752 → listen 127.0.0.1:4175
+pid 26796, vite preview --host 127.0.0.1 --port 4175 --strictPort):
+  /assets/index-CMuviBit.js
+  LEN=2170837
+  SHA256=c56379e9e7210f33d9ed14756d3b4d09ca8194155e7812c6e020065a477e272d
+
+Deferred mount still happens:
+  first W: defer=pending  hh-world-minimap ABSENT
+  after first W: defer=live  kind=play-idle-or-first-w
+  chip + minimap active agree (Steps East at B's first stand,
+  then Harbor Walk at the lantern sidewalk)
+
+After mount, minimap DOM/proof (kind=street-play-plant, count=4):
+  shop-lantern-fish              Quầy Cá Đèn Lồng
+  shop-local-mtmh45qxehxhvb      Quầy Phở Nhà
+  shop-local-mtmrbdjffjdkg8      Quầy Chè Vỉa
+  shop-local-mtmrq33hoq4phb      Quay Kem Reaudit   (drawn)
+  leftover Shared PC / J6 ABSENT from proof + marks
+
+Kem is drawn (draw=1) so it is a street mark. Shared PC /
+J6 stay draw=0 on play-shop-stalls / boards.
+
+Nearby/E still hold: lantern sidewalk plant laneM=7.2
+  nearby=shop-lantern-fish
+  range="Quầy Cá Đèn Lồng: 3.4 m away"
+  E opened shop-lantern-fish  leftover banner absent
+
+Chalkboards still hold:
+  lantern  Cá nục sương (mẫu) | Túi cói chợ (mẫu)
+  Phở      Phở bò (mẫu)
+  Chè      Chè đậu (mẫu)
+  Kem      Kem dua (mẫu)
+
+Leftover Menu + panel banners still hold:
+  Menu leftover rows last, labeled “không trên phố / leftover máy này”
+  Menu-opened Shared PC: leftover=1 banner present
+Spawn E not stolen (nearby empty at B spawn).
+
+Shot=hh-3d/app/data-qa/j5-3d-minimap-shops.png
+Probe=hh-3d/app/data-qa/j5-minimap-shops-probe.mjs
+JSON=hh-3d/app/data-qa/J5-MINIMAP-SHOPS-2026-09-04.txt
+
+Implementer CDP only. Not an independent critic TICK. Not a plan tick.
+
+================================================================================
+OWNER LEFTOVERS (unchanged)
+================================================================================
+
+1. GATE-U1 three-human review (first acceptance leftover; not faked).
+2. R2-WP1 headed/mobile/memory/min-FPS thresholds still UNFILLED.
+3. WAN / other-PC join still not built. 4175 loopback only.
+4. R4-WP0B real account/OIDC still not built.
+5. Open data (OSM/Overture) still needs license ledger + grant.
+6. Leftover this-PC shops stay in the catalog; they do not own street E.
+   Menu list + open panel still label them leftover. Do not catalog_clear.
+7. M0/M1/M2 plan WPs still NOT_STARTED. NOT_PLAN_PASS. Not M1.

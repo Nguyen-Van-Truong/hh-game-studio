@@ -1,0 +1,140 @@
+{
+  "run_id": "HH3D-J5-20260904-ASIA-SAIGON-36",
+  "player": "http://127.0.0.1:4175/",
+  "verdict": "J5_CREATE_SIDEWALK_OK",
+  "not_plan_pass": true,
+  "not_gate_u1": true,
+  "not_m1": true,
+  "liveJs": "/assets/index-C3JOtA3q.js",
+  "liveLen": 2169322,
+  "liveSha": "c000db65138fc3c3f48583ba17d1032aa82c5fca0ef4047cdf2d5db1bc2bcdc7",
+  "guestOk": true,
+  "leftoverOk": true,
+  "leftoverLast": true,
+  "leftoverKeep": true,
+  "leftoverEStolen": "",
+  "leftoversHidden": true,
+  "listOk": true,
+  "phoKept": true,
+  "newShop": "shop-local-mtmrbdjffjdkg8",
+  "newName": "Quầy Chè Vỉa",
+  "persistLane": 7.2,
+  "plantLane": 7.21,
+  "signLane": 7.21,
+  "persist": {
+    "lon": 106.6981047,
+    "lat": 10.7719753
+  },
+  "plant": {
+    "lon": 106.69810470178126,
+    "lat": 10.771981764283149
+  },
+  "oldStyle": {
+    "lon": 106.6980462,
+    "lat": 10.7719652
+  },
+  "spawnOldStyle": {
+    "lon": 106.69814973086929,
+    "lat": 10.771799662234999
+  },
+  "onLane": {
+    "lon": 106.6980462,
+    "lat": 10.7719652,
+    "laneM": 0.79,
+    "reached": true
+  },
+  "eAsphalt": "none",
+  "eFresh": "shop-local-mtmrbdjffjdkg8",
+  "eLantern": "shop-lantern-fish",
+  "persistOnWalk": true,
+  "plantOnWalk": true,
+  "signOnWalk": true,
+  "eAsphaltNone": true,
+  "eAsphaltEmpty": true,
+  "eFreshOk": true,
+  "freshRangeOk": true,
+  "eLanternOk": true,
+  "asphaltStand": {
+    "lon": 106.6980444,
+    "lat": 10.7719681,
+    "chip": "Harbor Walk",
+    "nearby": "",
+    "range": "Walk to a stall.",
+    "hint": "E opens a stall when you are next to it.",
+    "laneM": 0.6,
+    "dNewPlant": 6.77,
+    "dNewPersist": 6.64,
+    "dLanternPlant": 12.73,
+    "dOldStyle": 0.38
+  },
+  "freshStand": {
+    "lon": 106.6980874,
+    "lat": 10.7719774,
+    "chip": "Steps East",
+    "nearby": "shop-local-mtmrbdjffjdkg8",
+    "range": "Quầy Chè Vỉa: 2.0 m away",
+    "hint": "Press E or tap Open to enter Quầy Chè Vỉa.",
+    "laneM": 5.31,
+    "dNewPlant": 1.95,
+    "dNewPersist": 1.91,
+    "dLanternPlant": 16.68,
+    "dOldStyle": 4.71
+  },
+  "lanternStand": {
+    "lon": 106.6979863,
+    "lat": 10.7718911,
+    "chip": "Harbor Walk",
+    "nearby": "shop-lantern-fish",
+    "range": "Quầy Cá Đèn Lồng: 2.1 m away",
+    "hint": "Press E or tap Open to enter Quầy Cá Đèn Lồng.",
+    "laneM": 5.87,
+    "dNewPlant": 16.42,
+    "dNewPersist": 15.98,
+    "dLanternPlant": 2.06,
+    "dOldStyle": 10.53
+  },
+  "leftoverDrawn": [],
+  "leftoverPersist": [
+    {
+      "shop": "shop-local-sharedpc",
+      "name": "Quầy Shared PC",
+      "lon": 106.69804,
+      "lat": 10.77162,
+      "status": "published"
+    },
+    {
+      "shop": "shop-local-mtl8ulddihjpre",
+      "name": "Quay Critic J6 Jump",
+      "lon": 106.69814973080383,
+      "lat": 10.77162,
+      "status": "published"
+    }
+  ],
+  "leftoverMenuRows": [
+    {
+      "shop": "shop-local-sharedpc",
+      "name": "Quầy Shared PC",
+      "leftover": "1",
+      "street": "0",
+      "labeled": true
+    },
+    {
+      "shop": "shop-local-mtl8ulddihjpre",
+      "name": "Quay Critic J6 Jump",
+      "leftover": "1",
+      "street": "0",
+      "labeled": true
+    }
+  ],
+  "asphaltWalk": [],
+  "shot": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-create-sidewalk.png",
+  "identity": "Guest · shops public; friends not required",
+  "createResult": {
+    "status": "published",
+    "shop": "shop-local-mtmrbdjffjdkg8",
+    "listing": "listing-local-mtmrbdjfe1fzp3",
+    "text": "Shop is on the map. Walk up to the stall (~4 m) and press E. Not a server ACK. Not a real account."
+  },
+  "honesty": "Authored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:1 city. Authored 400 m: two official named streets plus inner parcel lanes, not a city grid. This f",
+  "didNotCatalogClear": true
+}

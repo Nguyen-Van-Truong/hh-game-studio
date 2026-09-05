@@ -1,0 +1,340 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+BOOTED_4175=1
+DID_NOT_RECYCLE=1
+DID_NOT_REBUILD=1
+DID_NOT_REMINT=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M0=1
+NOT_M0_WP0=1
+NOT_M0_WP1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+CRITIC=INDEPENDENT_ADVERSARIAL_NET_LABEL_REAUDIT
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=12:58 +07
+MODEL=grok-4.6-extra-high
+SCOPE=Re-audit of claimed HUD pair: social Offline/Online vs Đang kết nối / Mất kết nối. Fake navigator.onLine=false must change ONLY connectivity. Do not treat CRITIC-3D-NET-LABEL-2026-09-04.txt as TICK=yes.
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=04cb6ca92c482017c02d78e7885727f73b62103d
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-NET-LABEL-REAUDIT-2026-09-04.txt
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-NET-LABEL-2026-09-04.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+DID_NOT_TREAT_IMPLEMENTER_AS_TICK_YES=1
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+DID_NOT_CLICK_ONLINE=1
+DID_NOT_CLICK_NETWORK_CUT=1
+DID_NOT_CATALOG_CLEAR=1
+VITE_PREVIEW_PORT_PIN=4175
+LIVE_PID=40880
+LISTEN=127.0.0.1:4175
+CRITIC_CDP_PORTS=9998 (first seat, raced DOM) / 9999 (wait-for-HUD-text, menu stayed closed)
+VIEWPORT=1280x720
+ISOLATED_PROFILE=1
+HEADLESS_NEW=1
+ABOUT_BLANK_THEN_NAVIGATE=1
+SEAT=a
+
+CLAIM_JS=/assets/index-Ds6AgobF.js
+CLAIM_JS_LEN=2162901
+CLAIM_JS_SHA256=22a0109914938d43fe18c47096360cbde3caa59471d6eebac88de2af3420a1c1
+LIVE_JS=/assets/index-Ds6AgobF.js
+LIVE_JS_LEN=2162901
+LIVE_JS_SHA256=22a0109914938d43fe18c47096360cbde3caa59471d6eebac88de2af3420a1c1
+LIVE_JS_MATCHES_CLAIM=1
+HASH_MISMATCH=0
+
+BEFORE_ONLINE_FALSE_SOCIAL=Offline
+BEFORE_ONLINE_FALSE_CONN=Đang kết nối
+AFTER_ONLINE_FALSE_SOCIAL=Offline
+AFTER_ONLINE_FALSE_CONN=Mất kết nối
+AFTER_RESTORE_SOCIAL=Offline
+AFTER_RESTORE_CONN=Đang kết nối
+SOCIAL_FLIPPED=0
+ONE_WORD_DOES_BOTH=0
+MENU_CLOSED_BOTH_ON_HUD=1
+HUD_CONN_ONLY_INSIDE_TAB=0
+STREET_CHIP=Harbor Walk
+HUD_PILL=139.6x20.5 @ 821.4,32.4
+HUD_PRESENCE_BOX=38.2x16.7 @ 829.4,34.3
+HUD_CONNECTION_BOX=71.0x16.7 @ 882.0,34.3
+SAME_WORD=0
+NETWORK_CUT_BAR=0
+ONLINE_BTN_ACTIVE=no
+CITY_WAN_CLAIM=0
+
+CLAIM_1_HUD_BOTH_LABELS_MENU_CLOSED=PASS
+CLAIM_2_FAKE_OFFLINE_CHANGES_ONLY_CONN=PASS
+CLAIM_3_RESTORE_CONN_SOCIAL_STAYS=PASS
+CLAIM_4_SLIM_CHIP_NO_CITY=PASS
+
+BIGGEST_MISS=None on the named hunts. Live hash matches Ds6AgobF / 2162901 / 22a01099… before CDP, after CDP, and after this write. Menu closed: HUD shows Offline and Đang kết nối as two on-screen spans, not only inside Tab. Fake navigator.onLine=false (CDP Network.emulateNetworkConditions + offline event; checkbox unused) changes the connectivity span to Mất kết nối; social stays Offline. Restore returns Đang kết nối; social still Offline. Slim pill 140×21. Harbor Walk chip still on screen. Honesty still not a city / not WAN. NOT_PLAN_PASS.
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/ was already up. Bind 127.0.0.1 pid 40880
+(node vite preview --host 127.0.0.1 --port 4175 --strictPort).
+Did not recycle, rebuild, remint, kill, or start 4173 / 4174 / 5175.
+Did not bind 0.0.0.0.
+
+Did not treat CRITIC-3D-NET-LABEL-2026-09-04.txt as TICK=yes
+(ROLE=IMPLEMENTER, TICK=n/a). Did not run
+j5-net-label-probe.mjs as proof. Did not write J5 packs.
+Did not tick any plan. Did not catalog_clear. Did not click
+Online. Did not click Simulate no-network.
+
+Independent Chrome CDP, isolated temp profiles, 1280×720,
+about:blank then ?seat=a. Tried to fail: hash drift; connectivity
+only inside Tab; one English Offline word still doing both jobs;
+social flipping or renaming to the same word; fat dashboard;
+street chip gone; city/WAN claim.
+
+Hash matches. Two HUD words stay distinct under fake offline.
+This is NOT_PLAN_PASS. GATE-U1 humans were not invented. Not M0.
+
+Return:
+  TICK=yes
+  LIVE_JS=/assets/index-Ds6AgobF.js
+  BEFORE=Offline | Đang kết nối
+  AFTER_ONLINE_FALSE=Offline | Mất kết nối
+
+================================================================================
+LIVE JS
+================================================================================
+
+HTML script = /assets/index-Ds6AgobF.js
+http length = 2162901
+sha256 = 22a0109914938d43fe18c47096360cbde3caa59471d6eebac88de2af3420a1c1
+Matches the claimed live name + length + hash.
+
+GET before CDP (12:53 +07), GET after the wait-for-text seat
+(same bytes), and GET after this write (12:57 +07) are the
+same from pid 40880. HASH_MISMATCH=0. Did not stop.
+
+Bundle scan (live bytes, not source):
+  browser offline = 0
+  Đang kết nối = 2
+  Mất kết nối = 2
+  Đang kết nối lại = 0
+  hud-presence = 1
+  hud-connection = 1
+  menu-connection = 1
+  mode-status = 3
+  Offline = 15   (social stroll copy, not the connectivity word)
+  openstreetmap = 0
+  overture = 0
+  0.0.0.0 = 0
+  not a city = 4
+  not WAN = 1
+  Simulate no-network = 2
+  navigator.onLine = 1
+  this-PC 4175 = 2
+
+================================================================================
+CLAIM 1 — MENU CLOSED, BOTH LABELS ON HUD — PASS
+================================================================================
+
+Tried to fail: connectivity exists only inside Tab / play-menu,
+so the walk chrome is still one social Offline word.
+
+Seat A, menu data-open=no, play-menu hidden=true.
+hud-presence and hud-connection are NOT inside play-menu.
+Both onScreen, opacity 1, not [hidden].
+
+  hud-presence   = Offline          38×17 @ 829,34
+  hud-connection = Đang kết nối     71×17 @ 882,34
+  mode-status    = Offline·Đang kết nối   140×21 @ 821,32
+  street chip    = Harbor Walk      92×22 @ 724,32
+  menu-connection exists but 0×0 / hidden (Tab only)
+
+Full frame (critic-online.png): Menu Tab closed. Slim dark
+pill reads Offline · Đang kết nối. Harbor Walk chip still
+left of it. Honesty still “not a city / not OSM”.
+
+presence-mode long copy lives in the hidden menu. That is
+fine: the HUD claim is the two short spans, and they are
+visible with the menu closed.
+
+HUD_CONN_ONLY_INSIDE_TAB=0
+PASS.
+
+================================================================================
+CLAIM 2 — onLine=false CHANGES ONLY CONNECTIVITY — PASS
+================================================================================
+
+Tried to fail: social flips to Online, or both spans become
+the same word, or connectivity stays Đang kết nối, or the
+checkbox is what actually cuts the network.
+
+Did not click Simulate no-network. Did not click Online.
+CDP Network.emulateNetworkConditions offline=true, then
+window offline event because navigator.onLine was already
+false after emulate.
+
+First seat (CDP 9998) snapped as soon as navOnline===false
+and caught a React-event race: DOM still Đang kết nối for
+that one poll. The crop taken immediately after already
+read Offline · Mất kết nối. That is not a product miss;
+the listener is the online/offline event, not a poll of
+navigator.onLine.
+
+Second seat (CDP 9999) waited for HUD text with the menu
+still closed (3 tries / ~400–600 ms):
+
+  navOnline        = false
+  hud-presence     = Offline          UNCHANGED
+  hud-presence attr= offline
+  hud-connection   = Mất kết nối      ONLY this span
+  hud-connection attr= off
+  sameWord         = false
+  menuOpen         = no
+  networkCutBar    = false
+  online-btn       = no
+
+Full frame critic2-lost-full.png: menu still closed.
+Pill reads Offline · Mất kết nối (connectivity amber).
+Harbor Walk chip still Harbor Walk.
+
+Social did not flip. Social was not renamed to Mất kết nối.
+One word does not do both jobs.
+
+PASS.
+
+================================================================================
+CLAIM 3 — RESTORE onLine=true — PASS
+================================================================================
+
+Tried to fail: connectivity stuck on Mất kết nối, or social
+changes on restore.
+
+Same closed-menu seat. CDP offline=false + online event.
+Waited for HUD text (4 tries / ~600–800 ms):
+
+  navOnline        = true
+  hud-presence     = Offline          still
+  hud-connection   = Đang kết nối
+  menuOpen         = no
+  sameWord         = false
+
+First-seat restore snap was also a race (menu close then
+immediate poll while still Mất kết nối). Second seat with
+an explicit wait is the accepted observation.
+
+PASS.
+
+================================================================================
+CLAIM 4 — SLIM / STREET CHIP / NO CITY — PASS
+================================================================================
+
+Tried to fail: fat dashboard; Harbor Walk chip gone; copy
+claims a city or WAN.
+
+  mode-status pill 139.6×20.5  (under 28 px)
+  hud-top 72.5 px tall includes brand + honesty + chip + pill
+  That strip is not a network dashboard.
+
+Street chip stayed Harbor Walk on spawn, after fake offline,
+and after restore. On-screen 92×22. A D-key hold did not
+change the name because A/D is turn, not east walk; that is
+not a ripped chip. Spawn Harbor Walk is the same chip the
+prior street-HUD work already accepted. This remint did not
+remove it.
+
+Honesty on every snap:
+  Authored approximation. Not a live map, not OSM/Overture,
+  not photogrammetry, and not a digital twin. No GTA claim,
+  no 1:1 city. Authored 400 m … NOT_PLAN_PASS.
+Menu connection copy (when opened on the first seat):
+  this-PC 4175 loopback … not WAN. Not a city.
+bodyCity hunt /live map fetch|city cloud|WAN join/ = 0.
+
+PASS.
+
+================================================================================
+HUNTS (not named fails)
+================================================================================
+
+First CDP seat raced the offline/online events if the critic
+only waits for navigator.onLine. Product updates on the
+window event. Prefer waiting for the HUD text. Named fail
+is a stuck or flipped label after that wait, not a 200 ms
+stale poll.
+
+Opening Tab is not required to see Mất kết nối. First seat
+opened the menu after the lost crop only to read
+menu-connection; it also said Mất kết nối, social still
+Offline — Stroll alone. Checkbox stayed unchecked.
+
+Owner-offline shop checkbox was not used. Leftover Shared PC
++ mtl8ulddihjpre persist rows were not cleared.
+
+"Đang kết nối lại" is still not a third live state (0 in
+bundle). Not this hunt.
+
+4175 vite preview argv has no --host 0.0.0.0. Listen is
+127.0.0.1:4175. netstat foreign 0.0.0.0:0 on a LISTENING
+row is not a bind.
+
+================================================================================
+METHOD
+================================================================================
+
+1. 4175 already up (pid 40880). Did not recycle / rebuild /
+   start other ports.
+2. GET / and /assets/index-Ds6AgobF.js. Recorded name+sha+len
+   before CDP, after CDP, and after this write.
+3. Read implementer note (TICK=n/a). Did not copy its probe
+   writer into product files. Did not run
+   j5-net-label-probe.mjs as proof.
+4. Independent Chrome CDP 1280×720 isolated profiles.
+   Port 9998: about:blank → ?seat=a, menu closed, emulate
+   offline, open Tab once, restore (raced polls recorded).
+   Port 9999: same spawn, menu stayed closed, wait for HUD
+   text on lost and restore.
+5. Did not write lead packs. Did not tick plan. Did not fake
+   GATE-U1.
+
+Temp only (not under data-qa):
+  %TEMP%\hh-net-label-reaudit\index-Ds6AgobF.js
+  %TEMP%\hh-net-label-reaudit\scan-js.json
+  %TEMP%\hh-net-label-reaudit\critic-walk.json
+  %TEMP%\hh-net-label-reaudit\critic-walk2.json
+  %TEMP%\hh-net-label-reaudit\critic-online.png
+  %TEMP%\hh-net-label-reaudit\critic-hud-online.png
+  %TEMP%\hh-net-label-reaudit\critic-hud-lost.png
+  %TEMP%\hh-net-label-reaudit\critic2-lost-full.png
+  %TEMP%\hh-net-label-reaudit\critic2-restored-full.png
+
+================================================================================
+STILL IMPOSSIBLE WITHOUT OWNER
+================================================================================
+
+- GATE-U1 three human reviewers (not faked)
+- AUTHORIZE_MAP_FETCH=YES + license ledger before any OSM/Overture
+- Other-PC / WAN join (store is this PC 4175 loopback)
+- Real account / OIDC
+
+================================================================================
+END
+================================================================================

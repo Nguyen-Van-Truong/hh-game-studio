@@ -1,0 +1,150 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=17:25 +07
+ROLE=IMPLEMENTER
+TICK=n/a (do not treat this file as TICK=yes)
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M0_WP1=1
+NOT_M1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+PLAYER_URL=http://127.0.0.1:4175/
+RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-38
+COMMAND=node hh-3d/app/data-qa/j5-tram-north-probe.mjs
+VERDICT_IMPLEMENTER_CDP=J5_TRAM_NORTH_OK
+LIVE_JS=/assets/index-C3JOtA3q.js
+LIVE_JS_LEN=2169322
+LIVE_JS_SHA256=c000db65138fc3c3f48583ba17d1032aa82c5fca0ef4047cdf2d5db1bc2bcdc7
+REMINTED=no
+DID_NOT_RECYCLE=1
+DID_NOT_REBUILD=1
+DID_NOT_TYPECHECK=1
+DID_NOT_TEST=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NO_COMMIT=1
+NO_HIP_SPHERES=1
+DID_NOT_RIP_CREATE_SIDEWALK_PERSIST=1
+DID_NOT_RIP_CHE_BOARD=1
+DID_NOT_RIP_SHOP_RANGE_HUD=1
+DID_NOT_RIP_NEARBY_E_RANGE=1
+DID_NOT_RIP_LEFTOVER_PANEL=1
+DID_NOT_RIP_MENU_LEFTOVER_LIST=1
+DID_NOT_RIP_TRAM_XING=1
+DID_NOT_RIP_WEST_XING=1
+DID_NOT_RIP_EAST_XING=1
+DID_NOT_RIP_LANTERN_ZEBRA=1
+DID_NOT_RIP_NET_LABELS=1
+DID_NOT_RIP_STREET_PLAY_SHOPS=1
+DID_NOT_RIP_DEFERRED_MINIMAP=1
+DID_NOT_RIP_FRIEND_STEPS=1
+DID_NOT_RIP_90M_LOD=1
+DID_NOT_RIP_HUD_STREET_CHIP=1
+DID_NOT_RIP_PLAQUES=1
+DID_NOT_RIP_LANES=1
+DID_NOT_RIP_FOG_EDGE=1
+DID_NOT_RIP_SKY=1
+DID_NOT_RIP_CAM_HIT=1
+NO_FIFTH_STREET=1
+NO_NPC=1
+NO_INTERIOR=1
+NO_MAP_FETCH=1
+ACCEPTED_PRIOR=CRITIC-3D-CHE-BOARD-REAUDIT-2026-09-04.txt TICK=yes on /assets/index-C3JOtA3q.js
+
+================================================================================
+SLICE
+================================================================================
+
+Shop/E/chalkboard work is accepted. This slice switches back to
+street language on Tram Approach north of the Harbor×Tram mouth.
+
+Live 4175 already had the cheap official-street language on that
+stretch: dark asphalt + lighter walk edge + yellow curb line, plus
+authored lamp posts and planter-tram-east-s on the north sidewalk
+~40–60 m along Tram from the zebra. Did not remint.
+
+Tram Approach is the E–W official street. Walking due north from
+the zebra leaves Tram and becomes Harbor Walk. Isolated guest B
+walked Harbor to the mouth, then east along Tram ~40 m so chip +
+minimap stay Tram Approach.
+
+Did not remint create-shop sidewalk persist, chalkboards,
+shop-range HUD, Nearby/E range, leftover panel banners, Menu
+leftover labels/sort, Harbor×Tram / west / east Steps crossings,
+lantern zebra, net labels, streetPlayShops keep-out, minimap,
+friend steps, LOD, HUD street chip, plaques, fog/edge, sky, or
+cam-hit.
+
+Did not add a fifth official street. GeoJSON streets stay 2.
+Did not catalog_clear. Did not recycle 4175.
+
+================================================================================
+CDP (headless Chrome, 1280×720, isolated guest B, already-up 4175)
+================================================================================
+
+Seat B empty profile. Identity = Guest. signed-in=no.
+Offline. friendA=none. No Add friend.
+
+Live JS unchanged (pid 51752 still serving C3JOtA3q):
+  /assets/index-C3JOtA3q.js
+  LEN=2169322
+  SHA256=c000db65138fc3c3f48583ba17d1032aa82c5fca0ef4047cdf2d5db1bc2bcdc7
+
+Harbor×Tram zebra (authored):
+  world x=7.60 z=0  lon=106.6980695 lat=10.7725
+  First Harbor approach chip=Harbor Walk (south of mouth).
+
+North Tram stand (~40 m along Tram from the zebra):
+  lon=106.6984391 lat=10.7724901
+  zebraDist=40.43 m  tramLaneM=1.53
+  chip=Tram Approach  streetName=Tram Approach
+  minimap active=Tram Approach  highlight=1  role=official
+  official=2  names=Tram Approach, Harbor Walk, Steps East, Steps West
+  GeoJSON kind=street count=2 (Tram Approach, Harbor Walk)
+
+DOM furniture on that 20–90 m north-sidewalk band:
+  lamps=lamp-street-tram-approach-3-w … 6-w
+  planter=planter-tram-east-s
+  Not stacked on crosswalk-harbor-tram.
+
+Pixels (north + look-down):
+  dark asphalt darkRatio 0.64–0.88
+  lighter walk walkRatio 0.04–0.21
+  yellow edge / curb present
+  Shot shows lamp post + cube planter on the walk
+  Shot=hh-3d/app/data-qa/j5-3d-tram-north.png
+  Look=hh-3d/app/data-qa/j5-3d-tram-north-lookdown.png
+
+Stalls still drawn:
+  Chè đậu (mẫu) / Kem dua (mẫu) / Phở bò (mẫu)
+  lantern Cá nục sương (mẫu) | Túi cói chợ (mẫu)
+  Chè sidewalk E=shop-local-mtmrbdjffjdkg8
+
+Leftover Shared PC / J6:
+  Menu leftover last + labeled
+  panel banners = không trên phố / leftover máy này
+  draw=0  stallDraw=0
+  spawn E=none  leftover E not stolen
+
+Implementer CDP only. Not an independent critic TICK. Not a plan tick.
+
+================================================================================
+OWNER LEFTOVERS (unchanged)
+================================================================================
+
+1. GATE-U1 three-human review (first acceptance leftover; not faked).
+2. R2-WP1 headed/mobile/memory/min-FPS thresholds still UNFILLED.
+3. WAN / other-PC join still not built. 4175 loopback only.
+4. R4-WP0B real account/OIDC still not built.
+5. Open data (OSM/Overture) still needs license ledger + grant.
+6. Leftover this-PC shops stay in the catalog; they do not own street E.
+   Menu list + open panel still label them leftover. Do not catalog_clear.
+7. M0/M1/M2 plan WPs still NOT_STARTED. NOT_PLAN_PASS. Not M1.

@@ -1,0 +1,411 @@
+TICK=yes
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-03
+TIMEZONE=Asia/Saigon
+MODEL=grok-4.6-extra-high
+SCOPE=HH World J2 local demo list+leave on existing 4175
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=657634f8f82281bd670c9a375ad49c6180db3583
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS_TRUSTED_ALONE=NO
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_VF_TOUCH=1
+NO_UNREAL=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_RUN_THEIR_PROBE_WRITER=1
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/
+
+J2 is a real list+leave+still-visible path on the already-up 4175 preview.
+Independent Chrome CDP (this critic, port 9266, fresh temp profile, stdout
+only; did not reuse or re-run their probe writer) opened Quầy Cá Đèn Lồng
+as Guest, saw only the two authored public goods, became "Chủ quầy (máy
+này)" with NOT a real account / NOT Google/OIDC / NOT_PLAN_PASS, put
+"Cá thu thêm (máy này)" on the public shelf as a new listing-local-* row,
+left the demo identity, and still saw that row as Guest. Offline-label
+toggle did not hide it. No-network checkbox kept a new bag as Chưa đăng
+and off the public shelf; body never said "đã đăng". Reload kept the
+published extra fish and kept the draft off the shelf.
+
+This is NOT a plan PASS. NOT R4-WP0B. NOT M1-WP0. NOT GATE-U1. NOT J3.
+
+Biggest miss: shop independence is this-browser localStorage plus a
+checkbox, not a second guest session or a catalog server. No-network is
+the same: a labeled sim, not a cut cable. Identity is a local signed_in
+flag, honestly labeled, not OIDC.
+
+================================================================================
+METHOD
+================================================================================
+
+Disk (not PROGRESS alone):
+  hh-3d/app/PROGRESS.txt
+  hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+  hh-3d/zdoc/31-8-hh3d-real-application-plan.txt (STATE lines + GATE-U1 /
+    R4-WP0B / M1-WP0)
+  hh-3d/app/web/src/account/demoIdentity.ts
+  hh-3d/app/web/src/shops/localListings.ts  catalog.ts  ShopPanel.tsx
+    ListProductForm.tsx
+  hh-3d/app/web/src/modes/ModeBar.tsx  modes.ts
+  hh-3d/app/web/src/app/App.tsx  ui/HonestyBanner.tsx
+  hh-3d/app/web/public/data/shops.json
+  hh-3d/app/web/tests/demo-listing.test.mjs
+  hh-3d/app/data-qa/j2-list-product-probe.mjs
+  hh-3d/app/data-qa/J2-LIST-PRODUCT-2026-09-03.txt
+  hh-3d/app/docs/review/README.txt
+  git status --short hh-3d; git diff --cached --name-only; git log -1
+  git diff on the canonical plan (STATE/PASS search)
+
+Live (existing 4175 only; did not start another HH World preview):
+  TCP 127.0.0.1:4175 LISTEN pid 40336
+  4173 DOWN  4174 DOWN  5175 DOWN
+  GET /                                              200  title HH World
+  GET /data/shops.json                               200  shop-lantern-fish
+    listings = morning-mackerel + woven-tote + listing-draft-hidden
+    (no listing-local-* / no "Cá thu thêm")
+  GET /assets/index-C-PC_7Jj.js                      200  len=1145519
+    become-demo-owner=1  leave-demo-owner=1  network-cut-sim=1
+    Sign in with Google=0  oidc login=0  data-remote-avatar=0
+  Independent headless Chrome CDP vs 4175 (debug 9266, temp profile)
+  Did not run npm build (would mutate dist). Did not run
+  j2-list-product-probe.mjs (it writes J2-LIST-PRODUCT-2026-09-03.txt).
+
+================================================================================
+PROCESS / GIT
+================================================================================
+
+RESULT=PASS_ON_STATED_FAIL_RULE
+
+Stated fail: VF / AGENTS.md staged with this if they committed.
+Observed:
+  git diff --cached --name-only  = empty
+  last commit = 657634f VF6-WP3: tick after critic and official PASS
+  PROGRESS GIT_HEAD_AT_WRITE matches that hash
+  No J2 / hh-3d/app commit in HEAD
+  PROGRESS says "No commit." Matches.
+
+Working tree dirt (not staged, not a J2 commit):
+  hh-3d/zdoc/* modified including the canonical plan (documentation
+  routing; STATE/PASS not flipped — see Attack 7)
+  hh-3d/AGENTS.md untracked
+  hh-3d/app/ untracked (whole product tree still untracked)
+  VF6 evidence still dirty elsewhere in the workspace
+This is a process landmine for a later mixed commit. It is not the stated
+FAIL (nothing VF/AGENTS.md is staged; they did not commit this slice).
+
+Critic did not touch VF, did not commit, did not tick plan.
+
+================================================================================
+ATTACK 1 — GUEST CAN OPEN SHOP AND SEE GOODS WITHOUT BECOMING OWNER?
+================================================================================
+
+RESULT=PASS
+
+Live 4175 first paint (fresh profile, empty localStorage):
+  title HH World
+  identity "Guest · shops public; friends not required"  signed-in=no
+  become=false form=false (shop closed)
+  goods already show two authored public rows:
+    Cá nục sương (mẫu) · Quầy Cá Đèn Lồng · public
+    Túi cói chợ (mẫu) · Quầy Cá Đèn Lồng · public
+  authored draft "Nháp chưa đăng" absent
+
+Opened via goods click (not E, not marker):
+  href ?place=place-market-steps&shop=shop-lantern-fish
+  shopPanel=true  become=true  leave=false  form=false
+  ownerLabel "Guest on this machine. Browse does not need friends or an
+    account."
+  listings = listing-morning-mackerel (authored fish) +
+             listing-woven-tote (authored bag)
+  no listing-local-* yet
+  guestBrowseOk=true
+
+A guest sees the stall and the two samples without signing in. The list
+form is gated on signed_in. This is not "must become owner to browse."
+
+================================================================================
+ATTACK 2 — IS THE EXTRA LISTING HARDCODED ONLY?
+================================================================================
+
+RESULT=PASS  (created at click, not fixture)
+
+shops.json on disk and on 4175:
+  published: morning-mackerel, woven-tote
+  draft hidden: listing-draft-hidden
+  no Cá thu thêm, no listing-local-*
+
+Guest open had exactly those two published rows.
+
+After Become + default fish submit:
+  new id listing-local-mtkxtqr43r8ws1
+  source=local-demo  status=published  kind=fish
+  text "Cá thu thêm (máy này)" + public
+  goods list gained the same third row
+  localStorage hh-world.local-listings.v1 wrote that one object
+  result "On the public shelf (this machine). Not a server ACK. Not a
+    real account."
+
+Their packed J2-LIST-PRODUCT file used a different id
+(listing-local-mtkxoc3698jeiu). Different run, same shape. Hardcoded-only
+would have shown the extra fish on first guest open or in shops.json.
+It did not.
+
+Residual: the title is a preset ("Cá thu thêm (máy này)"), not a unique
+string this critic typed. Still a real create: new id, merge into
+publicListings, persist. Not a static third fixture.
+
+================================================================================
+ATTACK 3 — DEMO IDENTITY: LABELED LOCAL, OR FAKE OIDC?
+================================================================================
+
+RESULT=PASS  (local demo; not fake Google/OIDC)
+
+Disk:
+  demoIdentity.ts kind=local-demo, owner_id=owner-local-demo-machine,
+  display_name="Chủ quầy (máy này)", not_real_account / not_oidc /
+  not_google / not_plan_pass all required true. sanitize drops oidc
+  kind and invented owner ids. become/leave only flip signed_in in
+  localStorage. No OIDC module, no Google button in src.
+
+Live after Become:
+  identity "Chủ quầy (máy này) · local demo, not a real account"
+  signed-in=yes
+  ownerLabel "Chủ quầy (máy này) — local demo identity. NOT a real
+    account. NOT Google/OIDC. NOT_PLAN_PASS."
+  form=true
+  googleOidc=false at home / open / owner / listed / queued
+  live JS: "Sign in with Google"=0  "oidc login"=0
+
+Copy does not claim a real account. This is a machine-local flag, and
+they say so. Fail would be a Google button, an invented human owner
+name, or copy that calls this OIDC. None observed.
+
+================================================================================
+ATTACK 4 — LEAVE IDENTITY: LISTING STILL VISIBLE? SHOP INDEPENDENT?
+================================================================================
+
+RESULT=PASS_FOR_J2_LOCAL  (same browser; not a shop server)
+
+After Leave demo owner:
+  become=true  form=false  identitySigned=no
+  identity back to Guest
+  listings still include listing-local-mtkxtqr43r8ws1
+
+Owner-Offline checkbox off then on: extra id stayed in the panel both
+times. That control still only swaps two sentences (same J1 residual).
+
+Close shelf: panel gone; goods still list the extra fish.
+Guest reopen: signed-in=no, extra id still in the panel.
+
+Reload (still signed in from the later owner step): extra fish still
+published; queued bag still draft / off the public list. So persist is
+localStorage, not only React state.
+
+What this is not:
+  a second clean browser profile reading a server catalog
+  M1-WP0 "shop exists independently" with cache/server
+  owner closed the app on another device
+leaveDemoOwner only writes guestIdentity(); it does not delete
+localRows. Correct for "leave identity, shelf stays" on this machine.
+Do not grant shop-server independence.
+
+================================================================================
+ATTACK 5 — NO-NETWORK: DRAFT LABELED POSTED?
+================================================================================
+
+RESULT=PASS
+
+Control exists (ModeBar network-cut-sim + ShopPanel shop-network-cut,
+same React state). Labeled "Simulate no-network (not Offline stroll)."
+
+After cut + Túi / bag submit:
+  formNetwork=off
+  result status=draft id=listing-local-mtkxtsnu5ke2lm
+  text "Chưa đăng — nháp chờ mạng. Not posted."
+  drafts: Túi bố thêm (máy này) + Chưa đăng + Queued until network
+  public listings do NOT include that id
+  goods still only the three published rows
+  daDang=false  (no "đã đăng" on the page)
+
+After reload, draft still Chưa đăng with Retry publish; still not on
+the public shelf. Authored "Nháp chưa đăng" never appeared.
+
+This is a checkbox, not navigator.offline / cut cable. Honest label.
+Draft is not shown as posted.
+
+================================================================================
+ATTACK 6 — GPS / GOOGLE LOGIN / REAL ACCOUNT / J3 STARTED?
+================================================================================
+
+RESULT=PASS
+
+Live:
+  geolocateBtn=false
+  remoteCount=0
+  Online button disabled, text unavailable
+  people "Other people on the street: none (friends layer off)."
+  mode "Offline — Stroll alone; shops still open."
+  honesty banner: authored approximation; not live map / OSM /
+    photogrammetry / digital twin; shops authored fiction; no GTA /
+    1:1 / stranger crowd
+  StreetHelp on disk: "in-app position, not GPS"
+
+Live JS still contains vendor getCurrentPosition (MapLibre
+GeolocateControl). MapView does not add that control. Same J1 residual.
+GPS is not the player or listing path.
+
+J3 friend bodies are correctly absent. No fake Online.
+
+================================================================================
+ATTACK 7 — DID THEY TICK OLD WP PASS?
+================================================================================
+
+RESULT=PASS  (not ticked)
+
+Canonical plan still:
+  CURRENT_FIRST_LEFTOVER=GATE-U1
+  WP_STATE_PASS_POLICY=ORIGINAL_VALUES_UNCHANGED_NOT_LIVE_PROGRESS
+  GATE-U1 STATE: NOT_STARTED
+  R4-WP0B STATE: OPTIONAL_NOT_OPEN
+  M1-WP0 STATE: NOT_STARTED
+  R2-WP0 / R0–R4 blocks: STATE: NOT_STARTED (or historical non-PASS
+  values; no STATE: DONE/PASS/COMPLETE, no [x])
+
+Plan working-tree diff adds M0/M1 documentation and routing text. It
+does not flip historical PASS. Critic does not treat that edit as a
+tick.
+
+PROGRESS: PLAN_CHECKBOXES=UNCHANGED_DO_NOT_TICK
+  Status=J2_OBSERVED  NOT_PLAN_PASS
+  J3 named not done
+  R4-WP0B named not built
+
+================================================================================
+ATTACK 8 — DID THEY FAKE GATE-U1 HUMANS?
+================================================================================
+
+RESULT=PASS  (not faked)
+
+hh-3d/app/docs/review/README.txt still:
+  GATE-U1 is NOT done.
+  Need three independent human reviewers…
+  placeholder so later agents do not invent a pass.
+
+No invented reviewer names, no forged 5-minute notes, no OWNER_SIGN
+name. PROGRESS leftover #1 remains GATE-U1. Correct. J3 not started.
+
+================================================================================
+ATTACK 9 — THEIR PROBE: REAL UI OR JUST FLAGS? EXIT=0?
+================================================================================
+
+RESULT=PASS  (real UI; this critic did not re-run their writer)
+
+j2-list-product-probe.mjs:
+  launches its own Chrome CDP against existing PLAYER 4175
+  does not start a second preview
+  clicks goods → become → list-submit → leave → close → guest reopen
+    → network-cut → bag submit → retry
+  walk/flags require live DOM ids, Chưa đăng, no "đã đăng"
+  writes J2-LIST-PRODUCT-2026-09-03.txt  verdict J2_OBSERVED
+  process.exitCode=1 unless J2_OBSERVED
+
+Their packed file is consistent with an actual DOM snapshot (Vietnamese
+goods, honesty strings, extraFishId listing-local-mtkxoc3698jeiu,
+queued Chưa đăng). This critic independently reproduced the same path
+with different generated ids (mtkxtqr43r8ws1 / mtkxtsnu5ke2lm) and
+reloadOk=true. That is stronger than trusting their EXIT=0 integer.
+
+Did not re-execute their script: it would overwrite their evidence
+file. Independent CDP guestBrowseOk / publishOk / persistOk / queueOk /
+honestyOk all true. Lead claim "probe EXIT=0" is consistent with a
+script that exits 0 only on J2_OBSERVED; this seat treats the live
+path, not their process table, as proof.
+
+================================================================================
+ATTACK 10 — PLAYER SEAT: CAN A HUMAN DO LIST+LEAVE WITHOUT READING CODE?
+================================================================================
+
+RESULT=PASS_FOR_J2_LOCAL
+
+On 4175 a human can:
+  open the URL → click a public goods row → see fish+bag as Guest
+  click Become Chủ quầy (máy này) → read the NOT real account copy
+  click Put on the public shelf → see Cá thu thêm as public
+  click Leave demo owner → still see that extra row
+  tick Simulate no-network → Save as draft → read Chưa đăng
+No Google login. No docs. No code. No GPS prompt.
+
+What a human cannot treat as a real shop-server:
+  another browser / incognito without the same localStorage
+  a second person on another machine
+  owner app-closed on a phone while a guest reads a server
+  real OIDC
+Those are R4-WP0B / M1-WP0 leftovers, correctly unlabeled as PASS.
+
+================================================================================
+LEAD CLAIMS vs DISK+LIVE
+================================================================================
+
+Claim                                         Verdict
+4175 is the player                            CONFIRMED (only listener)
+Become Chủ quầy (máy này) local demo          CONFIRMED (critic CDP)
+NOT OIDC / NOT_PLAN_PASS                      CONFIRMED (copy + no Google)
+Put Cá or Túi on public shelf                 CONFIRMED (Cá thu thêm)
+Stays after leave identity                    CONFIRMED (guest + goods)
+Stays after Offline label                     CONFIRMED (checkbox; stays)
+No-network: Chưa đăng, not đã đăng            CONFIRMED (checkbox sim)
+Probe HH3D-J2-…-01 EXIT=0                     CONSISTENT; not re-run;
+                                              independent path PASS
+GATE-U1 not faked                             CONFIRMED
+J3 not started                                CONFIRMED
+Listings hardcoded only                       REJECTED (guest had 2;
+                                              third id generated)
+Identity fake-OIDC                            REJECTED
+Drafts shown as posted                        REJECTED
+Page broken                                   REJECTED
+
+================================================================================
+HARD FAIL CHECK (TICK=no triggers)
+================================================================================
+
+Listings hardcoded only                       NO
+Identity fake-OIDC / claims real account      NO
+Drafts shown as posted / "đã đăng"            NO
+Page broken / 4175 down / wrong product       NO
+Plan STATE/PASS ticked                        NO
+GATE-U1 humans invented                       NO
+J2 claimed as plan PASS                       NO
+J3 started / fake friend bodies               NO
+
+Therefore TICK=yes for the J2 local list+leave claim as labeled.
+
+================================================================================
+NOT GRANTED
+================================================================================
+
+- R4-WP0B OIDC / real owner account
+- M1-WP0 shop-server independence / catalog cache
+- GATE-U1 / R2-WP0 plan PASS
+- J3 friend bodies
+- Second-browser or other-machine persist
+- Real cut-cable offline (checkbox only)
+- Nearby-E as the J2 entry (goods click used)
+- Permission to start 4173/4174, fetch maps, Unreal, VF, or tick [x]
+
+================================================================================
+END
+================================================================================

@@ -1,0 +1,31 @@
+READ ORDER — sandbox restart
+1. START.txt
+2. PROGRESS.txt
+3. 00-SANDBOX-STATUS.txt
+4. COPY-MANIFEST.txt
+5. ERRATA-FROM-AUDIT.txt
+6. Copied 31-8-hh3d-real-world-open-world-plan.txt
+7. Copied 01-9-hh3d-plan-audit-summary.txt
+8. Copied review-log.txt
+9. Copied 31-8-hh3d-real-application-plan.txt (REFERENCE_NOT_EXECUTE)
+10. OWNER-DECISION-2026-09-03-GODOT-NOT-UNREAL.txt
+11. G0-DECISION-RECORD.txt (DOCS_CLOSED_PAPER; not an install grant)
+12. R0-WP0-WEB-DECISION-RECORD.txt (POINTER paper; not CURRENT_WP)
+13. CRITIC-A/B/C (historical TICK=no) then CRITIC-D-2026-09-03.txt
+    (TICK=yes for SANDBOX-G0-DOCS paper only; not G0-ENGINE)
+14. CRITIC-PROGRESS-2026-09-03.txt (TICK=no; race — paper was missing
+    at review time. Historical. Do not inherit as product fact.)
+
+CURRENT_WP=SANDBOX-G0-DOCS
+CURRENT_WP_STATE=DOCS_CLOSED_PAPER
+POINTER_WEB_PAPER=R0-WP0-WEB-DECISION-RECORD.txt
+OWNER_CHAT_GRANT=làm HH World web
+AUTHORIZE_HH3D_APP_SCAFFOLD=YES
+REAL_APP_MOVED_TO=hh-3d/app/
+LIVE_PROGRESS=../../app/PROGRESS.txt
+G0_PAPER=DOCS_CLOSED_PAPER
+NEXT_NATIVE_WP=NONE
+UNREAL_TRACK=STOP
+NATIVE_EXECUTION_AUTHORIZATION=NONE
+DO_NOT_INSTALL_UNREAL=1
+DO_NOT_SCAFFOLD_SECOND_APP=1

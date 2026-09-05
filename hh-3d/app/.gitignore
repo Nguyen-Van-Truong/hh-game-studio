@@ -1,0 +1,16 @@
+**/node_modules/
+**/dist/
+.env
+.env.*
+!.env.example
+*.local
+.vite/
+.cache/
+.turbo/
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+data-qa/chrome-profile*/
+data-qa/chrome-*.err
+data-qa/chrome-*.out

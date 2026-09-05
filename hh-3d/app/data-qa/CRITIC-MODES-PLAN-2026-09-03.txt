@@ -1,0 +1,308 @@
+TICK=yes
+CRITIC=ADVERSARIAL_READ_ONLY
+DATE=2026-09-03
+TIMEZONE=Asia/Saigon
+MODEL=grok-4.6-extra-high
+SCOPE=HH World modes/plan routing docs (not runtime, not product code)
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_PRODUCT_CODE=1
+NO_HUMAN_SIGNATURE_INVENTED=1
+HANDOFF_PREFERRED_MODEL=gpt-5.6-sol / medium
+MODEL_MISMATCH=1
+  This note is not a cheap-agent critic pair and does not unlock a WP tick.
+
+READ (this critic):
+  hh-3d/AGENTS.md
+  hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+  hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+    (header, owner-modes block, P3/M-WPs, leftover order, 01-09 freeze lines)
+  hh-3d/zdoc/01-9-hh3d-cheap-agent-handoff-prompt.txt
+  hh-3d/app/PROGRESS.txt
+  hh-3d/zdoc/review-log.txt tail
+  PLUS leftover hunt in:
+    hh-3d/zdoc/01-9-hh3d-plan-audit-summary.txt
+    hh-3d/hh3d-real-world-open-world/zdoc/START.txt
+    review-log head (historical)
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+The live routing path (AGENTS.md -> PROGRESS -> owner-modes rev2 ->
+canonical plan header/P3/M-WPs -> handoff rev2 -> review-log tail) is
+consistent enough that a sibling implementing the next slice will not
+build GPS-crowd, Offline=no-internet, shops-need-friends, or
+Unreal-before-avatar. Current leftover is GATE-U1 humans, not M0 walk
+and not M2 presence.
+
+This is NOT a plan PASS, NOT GATE-U1 done, NOT permission to start M-WPs
+or tick old STATE/PASS. It is only a yes that the modes/plan docs no
+longer contain a live routing lie that would produce the wrong product.
+
+Biggest remaining doc miss:
+  hh-3d/zdoc/01-9-hh3d-plan-audit-summary.txt is still written as current
+  freeze truth (no app, 0%, FROZEN, old P3 with no M0–M2, R4-WP0B
+  “optional”, “after GATE-U1 then open search”). The canonical plan
+  header still names this file AUDIT_SUMMARY=. A skimmer who trusts that
+  pointer over PROGRESS can freeze, redo R0, or ship map-only as HH World.
+
+================================================================================
+ATTACK 1 — “APP DOES NOT EXIST” / “FULL FREEZE” AS LIVE TRUTH
+================================================================================
+
+RESULT=PASS on the required live files. Residual poison elsewhere.
+
+AGENTS.md: live product is hh-3d/app/. Explicitly forbids reviving
+  “no app / freeze all / restart R0”. GATE-U1 still unproven.
+PROGRESS: player URL 4175, code exists, PLAN_ROUTING_RECONCILED,
+  GATE-U1 first leftover. No “app missing” claim.
+Handoff rev2: freeze 01-09 replaced by recorded 03-09 local-web grant.
+  STATUS=LOCAL_PROOF_EXISTS_ACCEPTANCE_INCOMPLETE.
+  CURRENT_FIRST_LEFTOVER=GATE-U1_SEE_LIVE_PROGRESS.
+  “hh-3d/app/ có local map proof trên 4175”.
+Canonical plan header: LOCAL_PROOF_EXISTS_ACCEPTANCE_INCOMPLETE;
+  CURRENT_WP=SEE_PROGRESS; CURRENT_FIRST_LEFTOVER=GATE-U1.
+  01-09 freeze block is labeled history (“đã thay đổi; xem PROGRESS”).
+  STATE/PASS “không phải bằng chứng app chưa tồn tại”.
+Owner modes: Live WP from PROGRESS; GATE-U1 still missing; no freeze-all.
+Sandbox START: REAL_APP_MOVED_TO=hh-3d/app/; NEXT=read PROGRESS first.
+Review-log TAIL (OWNER MODES REV2): freeze/no-app/demo pointers are
+  historical; GATE-U1 still first leftover.
+
+NOT live truth, but still on disk as if current:
+  review-log HEAD (2026-09-01): real_application_progress=
+    0_PERCENT_NO_APP_FOLDER; KEEP FREEZE; “hh-3d/app/ still absent”.
+    Later lines mark these historical; a reader who stops at the top
+    gets a lie. Handoff recovery says read the tail. Residual, not the
+    live route.
+  01-9-hh3d-plan-audit-summary.txt: Execution status FROZEN BY OWNER;
+    “hiện chưa có hh-3d/app/, tiến độ = 0%”;
+    STATUS=PAUSED_NOT_STARTED_DECISIONS_REQUIRED;
+    CURRENT_WP=NONE_PAUSED;
+    resume protocol still demands OWNER_RESUME=1 magic.
+    This file was not restated SUPERSEDED. Biggest leftover.
+
+================================================================================
+ATTACK 2 — STREET AVATAR / SHOPS AFTER UNREAL
+================================================================================
+
+RESULT=PASS in live leftover order.
+
+Canonical leftover (plan header + § override + owner-modes §6 + handoff §6):
+  local map + GATE-U1 + R2 quality + R4-WP0A
+  -> R5 -> R3
+  -> R4-WP0B identity
+  -> M0-WP0/M0-WP1 avatar
+  -> M1 shops/moderation
+  -> M2 friends/presence
+  -> R6/R8 owner-journey beta
+  R4-WP1 city story and R7 Unreal are separate branches.
+  Explicit: “P6 là tên sắp xếp cũ đã bỏ; không có dependency Unreal
+  trước modes.” R7 OPTIONAL_NOT_OPEN; AUTHORIZE_UNREAL_INSTALL=NO.
+
+No live leftover line puts walking avatar or shops after Unreal.
+
+Residual: audit-summary leftover order is still old P3 “authored
+application” (R4-WP0A / R4-WP1 / R4-WP0B optional OIDC) then P4 beta
+then P5 Unreal. M0–M2 are absent. That order can ship map+story and
+treat Unreal as the next “real” step. Same file as Attack 1 miss.
+Sandbox open-world plan remains background; AGENTS.md forbids executing
+its copies.
+
+================================================================================
+ATTACK 3 — OFFLINE STILL WRITTEN AS “NO INTERNET”
+================================================================================
+
+RESULT=PASS as product-mode definition. Naming collision remains.
+
+Live contract (modes rev2 §1, plan owner-intent, AGENTS, PROGRESS,
+handoff header): social Offline ≠ lost Internet. Matrix is
+mode × connectivity. Offline + connected still reads/publishes catalog.
+Default Offline. “Không dùng chữ Offline để đồng thời chỉ hai trạng thái.”
+
+Exact “no internet” / “không có internet” as the meaning of the Offline
+control: not found in the required live files.
+
+Residual collisions (not a mode lie if the matrix is read):
+  Plan phase name “P1 OFFLINE MAP PROOF” = local fixture, no fetch.
+  PROGRESS “Offline claim for tiles/geojson/style” / OFFLINE_COMPLETE=
+    NOT_CLAIMED = map-asset honesty, not social mode.
+  Handoff degraded-mode “network unavailable”.
+  Audit-summary leftover NETWORKING_STATUS=OUT_OF_SCOPE… is stale;
+    live plan header is NETWORKING_STATUS=DUAL_MODE_AFTER_LOCAL_PROOF.
+
+================================================================================
+ATTACK 4 — PRESENCE STILL GPS OR “SEE EVERYONE”
+================================================================================
+
+RESULT=PASS.
+
+Modes rev2: no GPS / home address / IP / camera-center as avatar
+position; do not ask GPS to meet friends. Online = mutually accepted
+friends only; strangers/followers/pending never. Server filter, not
+client hide. “Thấy mọi người lạ trên phố” remains out of scope (plan
+audit #7). AGENTS.md: presence is virtual avatar position, not GPS or
+map camera; a marker is not the walking avatar.
+
+Residual: plan §12 still has generic “precise location opt-in”. That is
+privacy template, not a presence design. A skimmer could add a GPS
+prompt. Modes win on conflict (WINS_ON_CONFLICT_FOR=mode meaning,
+avatar experience). Not enough to flip TICK.
+
+================================================================================
+ATTACK 5 — SHOP VISIBILITY STILL REQUIRES OWNER ONLINE / FRIENDSHIP
+================================================================================
+
+RESULT=PASS.
+
+Modes: public shop ≠ owner tab open / owner Online. Published shops
+and listings remain when owner goes Offline, drops network, closes
+browser, or logs out. Viewing public shops does not require friendship.
+Guest + Offline + connected can browse S (T01). Owner logout leaves
+S visible (T04). Plan owner-intent and M1-WP0 repeat this.
+
+Residual parse trap: plan header ACCOUNT_REQUIRED_FOR=
+  open_shop, list_product, friends, online_presence.
+  “list_product” can be misread as “must log in to see listings”.
+  Surrounding text says account is for open/publish; public browse
+  stays no-login. Modes win. Do not implement shops from this critic.
+
+================================================================================
+ATTACK 6 — CAN A CHEAP AGENT MISTAKE CURRENT LEFTOVER?
+================================================================================
+
+RESULT=PASS if they obey PROGRESS. Temptation remains.
+
+Live CURRENT leftover, repeated:
+  PROGRESS CURRENT_WP=GATE-U1 first (three human reviewers).
+  Plan CURRENT_FIRST_LEFTOVER=GATE-U1.
+  Handoff CURRENT_FIRST_LEFTOVER=GATE-U1_SEE_LIVE_PROGRESS;
+    “Không nhảy M2-WP1 nếu CURRENT_WP chưa phải M-WP”;
+    “Không fetch/Unreal/M-WP”.
+  Owner modes §6: live WP from PROGRESS; GATE-U1 missing; do not fake
+    humans; do not open M-WP in the documentation revision.
+  PROGRESS NEXT item 4: “Owner modes (NOT now)”.
+  Owner modes: IMPLEMENTATION_STATUS=NOT_IMPLEMENTED;
+    THIS_REVISION=DOCUMENTATION_ONLY_NOT_A_START_TICKET.
+
+Wrong leftovers a cheap agent might pick anyway:
+  1. M0-WP1 avatar walk — because modes rev2 is long, AUTHORITY=1,
+     and looks like a start ticket. Docs forbid this now.
+  2. M2-WP1 live friends — because that is the owner sentence people
+     remember. Handoff forbids the jump.
+  3. R2-WP1 polish / invent GATE-U1 notes — GATE-U1 is not codeable
+     by an agent; R2-WP1 is NEXT#2 and NOT_PLAN_PASS.
+  4. Redo R0-WP0 / “no app” scaffold — only if they trust
+     audit-summary or review-log head.
+
+Sibling implementer instruction that stays true: do humans for GATE-U1
+or wait. Do not start avatar/shops/presence because the contract got
+clearer. Do not tick [x].
+
+================================================================================
+ATTACK 7 — THREE JOURNEYS TESTABLE OR SCREENSHOT-ONLY?
+================================================================================
+
+RESULT=SPECIFIED_TESTABLE / NOT_YET_RUNNABLE. Not screenshot-only.
+
+Modes §5 journeys:
+  stroll guest: map -> Offline -> walk -> find shop by goods ->
+    product -> close shelf -> bookmark/share.
+  shop owner: login -> place shop -> publish -> other session sees
+    goods -> owner quits -> guest still sees.
+  friends walk: mutual accept -> both Online -> input-driven remote
+    walk/stop/turn -> Offline and keep browsing.
+
+T01–T11 are multi-client / API / cache / revoke assertions, not pins.
+T02 requires video/trace + server/client assertions.
+T12 is human on target devices; prior map GATE-U1 does not substitute.
+R8/M2 DONE_WHEN: “screenshot/map-only proof không đủ”;
+  “Fixture/socket mock không là E2E duy nhất”.
+
+They are not screenshot-only in the contract. They are also not
+executable today: IMPLEMENTATION_STATUS=NOT_IMPLEMENTED; no M-WP
+runtime. A sibling must not treat T01–T12 as this slice’s verify.
+
+GATE-U1 journey (search/card/share/fallback) is the live testable
+human leftover. Candidate R2 UI exists; three humans do not.
+
+================================================================================
+ATTACK 8 — SKIP GATE-U1 HUMANS OR TICK OLD WP PASS?
+================================================================================
+
+RESULT=PASS (instructions forbid both). Residual bait exists.
+
+Forbids skip/fake humans:
+  AGENTS.md, PROGRESS (“Do not invent GATE-U1 humans”), owner-modes §6,
+  GATE-U1 block (“không được bỏ”), handoff GATE-U1 paragraph,
+  review-log tail.
+
+Forbids ticking old WP PASS:
+  PLAN_CHECKBOXES=UNCHANGED_DO_NOT_TICK;
+  WP_STATE_PASS_POLICY=ORIGINAL_VALUES_UNCHANGED_NOT_LIVE_PROGRESS;
+  “Candidate local đã có; không làm lại vì STATE còn NOT_STARTED”;
+  R2-WP0 “not a plan PASS” while GATE-U1 open;
+  R2-WP1_EVIDENCE=NOT_PLAN_PASS;
+  CRITIC_LOCAL_PLAYER_PROOF is local-proof only.
+
+Bait that could still make a sibling skip or tick:
+  Every R0–R2 / R4-WP0A block still STATE: NOT_STARTED while code
+    exists — looks like unfinished work to “complete” by ticking.
+  Circular GATE-U1 was fixed (candidate R2 is input). Inverse error:
+    “search already exists, so GATE-U1 is optional.” Docs deny this.
+  Audit-summary “Sau GATE-U1 mới mở search/card” contradicts disk
+    (search exists; gate uses it). Could hide search or declare the
+    gate moot.
+  Handoff EXECUTE_ONE_WP template still prints OWNER_RESUME: 1.
+    AGENTS.md says do not demand a symbolic resume. Process leftover,
+    not a product lie.
+  Owner-modes AUTHORITY=1 + T01–T12 can feel like the next WP.
+
+No instruction in the required live files tells the sibling to skip
+GATE-U1 humans or to tick historical STATE/PASS.
+
+================================================================================
+PER-CLAIM TABLE
+================================================================================
+
+CLAIM                                              VERDICT
+Live START/handoff/PROGRESS say no-app / full
+  freeze as current truth                          PASS (they do not)
+Review-log head / audit-summary still say it       REWORK leftover
+Street avatar / shops after Unreal (live order)    PASS (they do not)
+Audit-summary leftover order omits M0–M2           REWORK leftover
+Offline control = no internet (live files)         PASS (they do not)
+P1 “OFFLINE MAP PROOF” name collision              residual
+Presence = GPS or see-everyone (live files)        PASS (they do not)
+§12 “precise location opt-in” leftover             residual
+Shop needs owner Online / friendship               PASS (they do not)
+ACCOUNT_REQUIRED_FOR=list_product parse trap       residual
+CURRENT leftover = GATE-U1 not M0/M2               PASS if PROGRESS obeyed
+Modes file looks like a start ticket               residual temptation
+Three journeys screenshot-only                     PASS (specified testable)
+Three journeys runnable now                        NO (docs-only)
+Docs tell sibling to skip GATE-U1 or tick PASS     PASS (they do not)
+Audit-summary unmarked SUPERSEDED                  REWORK — biggest miss
+Plan STATE/PASS unchanged / no tick from this      PASS
+M-WPs implemented by the doc revision              PASS (not claimed)
+
+================================================================================
+ONE BIGGEST REMAINING DOC MISS
+================================================================================
+
+hh-3d/zdoc/01-9-hh3d-plan-audit-summary.txt is still live-voiced
+(FROZEN, no hh-3d/app/, 0%, old P3 without shops/friends/avatar,
+optional identity, search only after GATE-U1, OWNER_RESUME=1) while
+31-8-hh3d-real-application-plan.txt still points AUDIT_SUMMARY= at it.
+
+Mark that file historical/superseded, or a cheap agent who follows the
+plan header instead of PROGRESS will freeze, redo R0, or ship map-only
+and call it HH World.
+
+Do not start M-WPs. Do not invent GATE-U1 humans. Do not tick plans.
+)

@@ -1,0 +1,41 @@
+OWNER DECISION — 2026-09-03
+Timezone: Asia/Saigon
+Source: owner chat (stay Godot; no Unreal for this track; ask about Godot-2)
+
+LOCKED
+  Unreal is OFF for the HH real-world / open-world track.
+  Do not install Unreal. Do not create .uproject. Do not open G0-ENGINE.
+
+GODOT
+  Vault Fighters keeps the current stock Godot 4.7.1-stable + hh_agent
+  at godot/dogfood/superfighters/. Other VF agents keep that tree.
+
+  Do NOT fork Godot C++ (GX). Do NOT bump to 4.7.2. Do NOT share one
+  Godot process / one project path with two products.
+
+  If a Godot city / 3D walk game is opened later:
+    new folder (example godot/dogfood/hh-world-3d/)
+    same official 4.7.1-stable pin
+    own plan, own evidence, own Godot process
+    hh_agent may be reused as the bridge, after 3D commands are added
+    never edit superfighters/ from that plan
+
+PRODUCT SPLIT (best)
+  1. Vault Fighters = Godot 2D, current agent, current folder.
+  2. HH World map / place cards = web (hh-3d), not Godot, not Unreal.
+  3. Hòn Gió = WebGL seed in hh-3d/demo/.
+  4. Godot-2 = only if we later want a native 3D walk slice. Not now.
+
+HH_AGENT HONESTY
+  Good enough for VF 2D text scenes. Not “press every button”.
+  Still Gap: editor Play ACK, inject input, remote runtime tree,
+  agent screenshot. Matrix is Node2D / TileMap / Camera2D heavy.
+  A 3D city game needs new semantic commands (Node3D, Camera3D) —
+  plugin improvement, not a second engine.
+
+THIS LUOT POINTER (2026-09-03, after CRITIC-D)
+  CURRENT_WP = SANDBOX-G0-DOCS (DOCS_CLOSED_PAPER)
+  NEXT_NATIVE_WP = NONE
+  POINTER_WEB_PAPER = R0-WP0-WEB-DECISION-RECORD.txt
+  NOT_A_REAL_APPLICATION_RESUME = 1
+  See PROGRESS.txt. Do not install Unreal. Do not scaffold hh-3d/app/.

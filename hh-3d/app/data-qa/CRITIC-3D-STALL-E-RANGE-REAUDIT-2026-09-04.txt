@@ -1,0 +1,361 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+BOOTED_4175=1
+DID_NOT_RECYCLE=1
+DID_NOT_REBUILD=1
+DID_NOT_REMINT=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M1=1
+NOT_M0_WP1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+HASH_MISMATCH=0
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=16:08 +07
+MODEL=grok-4.6-extra-high
+SCOPE=Re-audit of claimed NEARBY_SHOP_M=4 + driving-lane (laneM ≲ 3) remint. Do not treat CRITIC-3D-STALL-E-RANGE-2026-09-04.txt as TICK=yes.
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=04cb6ca92c482017c02d78e7885727f73b62103d
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-STALL-E-RANGE-REAUDIT-2026-09-04.txt
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-STALL-E-RANGE-2026-09-04.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+DID_NOT_TREAT_IMPLEMENTER_AS_TICK_YES=1
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+DID_NOT_CATALOG_CLEAR=1
+VITE_PREVIEW_PORT_PIN=4175
+LIVE_PID=44120
+LISTEN=127.0.0.1:4175
+CRITIC_CDP_PORTS=9841 (guest B leftovers + residual asphalt + Phở persist/stall) / 9842 (guest B residual asphalt + lantern persist/stall)
+VIEWPORT=1280x720
+ISOLATED_PROFILES=1
+HEADLESS_NEW=1
+ABOUT_BLANK_THEN_NAVIGATE=1
+SEAT=b
+IMPLEMENTER_CDP_PORT_NOT_REUSED=1
+IMPLEMENTER_PROBE_NOT_RUN=1
+IMPLEMENTER_JSON_NOT_PROOF=1
+
+CLAIM_JS=/assets/index-DsJoiruI.js
+CLAIM_JS_LEN=2168810
+CLAIM_JS_SHA256=3e7650d7899e379dd1faceec8aecf9e3db51ef17be791c63b0c334b8b5ca486f
+LIVE_JS=/assets/index-DsJoiruI.js
+LIVE_JS_LEN=2168810
+LIVE_JS_SHA256=3e7650d7899e379dd1faceec8aecf9e3db51ef17be791c63b0c334b8b5ca486f
+LIVE_JS_MATCHES_CLAIM=1
+HASH_MISMATCH=0
+LIVE_JS_AFTER_CDP=/assets/index-DsJoiruI.js
+LIVE_JS_LEN_AFTER_CDP=2168810
+LIVE_JS_SHA256_AFTER_CDP=3e7650d7899e379dd1faceec8aecf9e3db51ef17be791c63b0c334b8b5ca486f
+
+GUEST_IDENTITY=Guest · shops public; friends not required
+GUEST_SIGNED_IN=no
+HUD_PRESENCE=Offline · Đang kết nối
+THIS_TAB=Bạn B (máy này)
+
+ASPHALT_E=none
+ASPHALT_NEARBY=
+ASPHALT_LANE_M=2.35
+E_AT_PERSIST=none
+E_AT_STALL=shop-local-mtmh45qxehxhvb
+LANTERN_E_AT_PERSIST=none
+LANTERN_E_AT_STALL=shop-lantern-fish
+SIDEWALK_E=shop-local-mtmh45qxehxhvb+shop-lantern-fish
+PERSIST_E=none
+POLE_BOARD_IN_LANE=0
+PHO_SIGN_LANE_M=7.2
+LANTERN_SIGN_LANE_M=7.2
+PHO_PLANT_LANE_M=7.2
+LANTERN_PLANT_LANE_M=7.2
+PHO_SIGN_TO_PLANT_M=0
+LANTERN_SIGN_TO_PLANT_M=0
+SIGN_LANE=7.2
+LEFTOVER_E_STOLEN=0
+LEFTOVER_DRAWN=0
+CHIP_HARBOR_WALK=1
+HONESTY_DENIES_GTA=1
+HONESTY_DENIES_1TO1=1
+HONESTY_DENIES_DIGITAL_TWIN=1
+OIDC_CLAIM=0
+
+CLAIM_1_LIVE_HASH=PASS
+CLAIM_2_ASPHALT_RESIDUAL_E_NONE=PASS
+CLAIM_3_SIDEWALK_STALL_E=PASS
+CLAIM_4_PERSIST_E_NONE=PASS
+CLAIM_5_POLE_BOARD_WITH_PLANT=PASS
+CLAIM_6_LEFTOVER_BANNERS_SPAWN_E=PASS
+CLAIM_7_HONESTY_NO_OIDC=PASS
+
+BIGGEST_MISS=None on the named hunts. Residual Harbor asphalt west of lantern persist (laneM 2.35 / 2.37) Nearby empty, Press E none. Sidewalk Phở and lantern E still open the matching shops. Persist E stays none. Leftover banners hold.
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/ was already up. Bind 127.0.0.1 pid 44120
+(node vite preview --host 127.0.0.1 --port 4175 --strictPort).
+Did not recycle, rebuild, kill, or start 4173 / 4174 / 5175.
+Did not bind 0.0.0.0. Did not catalog_clear. DID_NOT_RECYCLE=1.
+Same pid 44120 before CDP, after seat 9841, and after seat 9842.
+
+Did not treat CRITIC-3D-STALL-E-RANGE-2026-09-04.txt as TICK=yes
+(ROLE=IMPLEMENTER, TICK=n/a). Implementer CDP / J5-STALL-E-RANGE
+JSON is not acceptance. Did not run j5-stall-e-range-probe.mjs
+(it would overwrite their J5 pack and reuse port 9706). Did not
+write J5 packs. Did not tick any plan.
+
+Independent Chrome CDP, isolated temp profiles, 1280×720,
+?seat=b empty guest, Offline. Own debug ports 9841 then 9842,
+not implementer 9706. Tried to fail: hash drift; Press E still
+opening a sidewalk shop from the driving-lane residual; Nearby
+offering Phở or lantern on laneM ~2–3 asphalt; sidewalk E
+broken by the 4 m tighten; persist E returning; leftover
+Shared PC / J6 drawn or stealing spawn E; leftover Menu /
+panel banners ripped; pole-board back in the driving lane;
+honesty dropping GTA / 1:1 / digital-twin denials; OIDC claim.
+
+Hash matches. Asphalt residual E is none. Sidewalk stall E
+still opens the right shop. Persist E stays none. Leftover
+banners hold. TICK=yes. NOT_PLAN_PASS.
+GATE-U1 humans were not invented. Not M1.
+
+================================================================================
+LIVE JS
+================================================================================
+
+GET http://127.0.0.1:4175/  STATUS=200
+HTML script = /assets/index-DsJoiruI.js
+link stylesheet = /assets/index-DMifatKR.css
+
+GET /assets/index-DsJoiruI.js
+  Content-Length = (absent; Transfer-Encoding: chunked)
+  bytes          = 2168810
+  sha256         = 3e7650d7899e379dd1faceec8aecf9e3db51ef17be791c63b0c334b8b5ca486f
+
+Matches the claimed remint name + length + hash exactly.
+GET before CDP 9841, GET after CDP 9841, GET after CDP 9842
+(same pid 44120) are the same bytes. HASH_MISMATCH=0.
+Did not stop. Did not audit an old bundle.
+
+================================================================================
+CLAIM 1 — LIVE HASH IS THE CLAIMED REMINT — PASS
+================================================================================
+
+Tried to fail as a later/earlier bundle or SPA-shell fallback
+on the claimed name.
+
+  live = /assets/index-DsJoiruI.js
+  len  = 2168810
+  sha  = 3e7650d7899e379dd1faceec8aecf9e3db51ef17be791c63b0c334b8b5ca486f
+
+GET before CDP and GET after both CDP seats are the same name
++ length + hash from pid 44120.
+
+================================================================================
+CLAIM 2 — HARBOR ASPHALT WEST OF LANTERN PERSIST: NEARBY/E NONE — PASS
+================================================================================
+
+Tried to fail the prior STALL-E-SIGN residual: west of lantern
+persist on still-asphalt Harbor (laneM ~2–3) Nearby/E offered
+Phở at ~9 m.
+
+HARD hunt, CDP 9841, isolated guest B, walked spawn → Harbor
+north to the prior residual stand (106.6980156, 10.7718746)
+first — not after a persist/menu setup:
+
+  lon=106.6980189 lat=10.7718648  heading=359
+  chip=Harbor Walk  laneM=2.35  blocked=0
+  dLanternPersist=2.06 m  dLanternPlant=5.06 m
+  dPhoPlant=8.33 m        dPhoPersist=7.81 m
+  nearby empty   nearby button absent
+  range="Quầy Cá Đèn Lồng: 5.1 m away" (fallback range, not Nearby)
+  hint="E opens a stall when you are next to it."
+  Press E = none
+
+Same seat, implementer residual coords (106.6980209, 10.7718681):
+
+  lon=106.6980189 lat=10.7718662
+  chip=Harbor Walk  laneM=2.34  blocked=0
+  nearby empty  Press E = none
+
+HARD hunt, CDP 9842, fresh isolated guest B, same residual:
+
+  lon=106.6980186 lat=10.7718678  heading=355
+  chip=Harbor Walk  laneM=2.37  blocked=0
+  dLanternPersist=2.00 m  dLanternPlant=4.95 m
+  dPhoPlant=8.59 m
+  nearby empty
+  range="Quầy Cá Đèn Lồng: 4.9 m away" (fallback, not Nearby)
+  Press E = none
+
+Whole Harbor approach on both seats (laneM in the driving
+band) had nearby empty — no Phở offer at ~9 m. Press E did
+not open a sidewalk shop from the driving lane.
+ASPHALT_E=none.
+
+Fallback range still names lantern at ~5 m while Nearby is
+empty and E does not open. Same pattern as accepted persist
+stands. Not a Nearby/E offer. Not a hard miss.
+
+================================================================================
+CLAIM 3 — SIDEWALK STALL E STILL OPENS THE RIGHT SHOP — PASS
+================================================================================
+
+Tried to fail if the 4 m tighten broke sidewalk E, opened
+leftover, or opened the wrong shop.
+
+CDP 9841, walked west to the drawn Phở awning:
+
+  lon=106.6979934 lat=10.7718000
+  chip=Harbor Walk  laneM=5.23  blocked=0
+  dPersist=5.10 m   dPlant=2.02 m  closerToPersist=no
+  nearby=shop-local-mtmh45qxehxhvb
+  range="Quầy Phở Nhà: 2.0 m away"
+  hint="Press E or tap Open to enter Quầy Phở Nhà."
+  E-at-stall opened shop-local-mtmh45qxehxhvb
+  leftover=0 street=1  kind = public shop · opened on this machine
+  leftover banner absent
+
+CDP 9842, walked west from lantern persist toward the drawn
+lantern plant:
+
+  lon=106.6980045 lat=10.7718774
+  chip=Harbor Walk  laneM=3.90  blocked=0
+  dPersist=3.58 m   dPlant=3.30 m  closerToPersist=no
+  nearby=shop-lantern-fish
+  range="Quầy Cá Đèn Lồng: 3.3 m away"
+  hint="Press E or tap Open to enter Quầy Cá Đèn Lồng."
+  E-at-stall opened shop-lantern-fish
+  leftover=0 street=1
+  kind = public shop · authored example among many
+  leftover banner absent
+
+Lantern stand was 3.3 m from the plant (inside the claimed
+4 m), laneM 3.90 (above the ≲ 3 driving-lane cutoff). E
+opened the matching shop. 4 m tighten did not break sidewalk E.
+
+================================================================================
+CLAIM 4 — E AT HARBOR PERSIST IS STILL NONE — PASS
+================================================================================
+
+Tried to fail if persist lon/lat still owned Nearby/E.
+
+CDP 9841, Harbor asphalt at Phở persist
+(closer to persist than to the sidewalk kiosk):
+
+  lon=106.6980365 lat=10.7718055  heading=176
+  chip=Harbor Walk  laneM=0.51  blocked=0
+  dPersist=0.94 m   dPlant=6.70 m  closerToPersist=yes
+  nearby empty
+  range="Quầy Cá Đèn Lồng: 10 m away" (fallback, not Nearby)
+  E-at-persist = none
+
+CDP 9842, Harbor asphalt at lantern persist:
+
+  lon=106.6980245 lat=10.7718684  heading=94
+  chip=Harbor Walk  laneM=1.73  blocked=0
+  dPersist=1.36 m   dPlant=5.57 m  closerToPersist=yes
+  nearby empty
+  range="Quầy Cá Đèn Lồng: 5.6 m away" (fallback, not Nearby)
+  E-at-persist = none
+
+PERSIST_E=none. Empty persist does not own E.
+
+================================================================================
+CLAIM 5 — POLE-BOARD STILL WITH THE PLANT — PASS
+================================================================================
+
+Tried to fail if a shop sign returned to the asphalt
+(signLane < ~5 m) while the awning is on the sidewalk.
+
+play-shop-signs (data-kind=pole-board), independent DOM:
+
+  Phở sign     xz=-2.70,-77.54  draw=1  signLane=7.20 m  sign-to-plant=0.00
+  lantern sign xz=-2.81,-69.37  draw=1  signLane=7.20 m  sign-to-plant=0.00
+  Phở plant    plantLane=7.20
+  lantern plant plantLane=7.20
+
+signLane = plantLane = 7.2 m. Sign xz equals plant xz.
+SIGN_LANE ≥ ~5 m. POLE_BOARD_IN_LANE=0.
+
+================================================================================
+CLAIM 6 — LEFTOVER BANNERS HOLD; SPAWN E NOT STOLEN — PASS
+================================================================================
+
+Tried to fail leftover draw=1, leftover E stolen at spawn, Menu
+leftover rows unlabeled / not last, leftover panel banners
+ripped.
+
+  Leftover Shared PC / J6 play-shop-stalls draw=0.
+  /demo-bus persist still published at spawn cone
+    shop-local-sharedpc        106.69804, 10.77162
+    shop-local-mtl8ulddihjpre  106.6981497, 10.77162
+  Spawn E: panel=false, nearby empty. leftoverEStolen=0.
+  Menu leftover rows last (idx last 2 of the list), leftover=1,
+  labeled “không trên phố / leftover máy này”.
+  Menu-opened leftover panels (CDP 9841):
+    Shared PC banner present “không trên phố / leftover máy này”
+      leftover=1 street=0
+    J6       banner present “không trên phố / leftover máy này”
+      leftover=1 street=0
+  Street Phở / lantern panels from E have no leftover banner.
+
+Leftover banners still hold. Spawn E not stolen. Did not
+catalog_clear.
+
+================================================================================
+CLAIM 7 — HONESTY DENIES GTA / 1:1 / DIGITAL TWIN; NO OIDC — PASS
+================================================================================
+
+Honesty banner (live HUD, both seats):
+
+  “Authored approximation. Not a live map, not OSM/Overture,
+  not photogrammetry, and not a digital twin. No GTA claim,
+  no 1:1 city. … NOT_PLAN_PASS.”
+
+Identity = “Guest · shops public; friends not required”
+data-signed-in=no. No OIDC claim on the honesty banner or
+guest identity. Offline · Đang kết nối.
+
+================================================================================
+WHAT THE IMPLEMENTER CDP DID NOT REPLACE
+================================================================================
+
+Their J5-STALL-E-RANGE JSON is implementer CDP on port 9706.
+This reaudit did not reuse that verdict. Live play on 9841/9842
+matched the named residual / persist / stall / leftover rows
+and independently pressed E on the prior residual asphalt.
+
+================================================================================
+OWNER LEFTOVERS (unchanged; not this tick)
+================================================================================
+
+1. GATE-U1 three-human review (first acceptance leftover; not faked).
+2. R2-WP1 headed/mobile/memory/min-FPS thresholds still UNFILLED.
+3. WAN / other-PC join still not built. 4175 loopback only.
+4. R4-WP0B real account/OIDC still not built.
+5. Open data (OSM/Overture) still needs license ledger + grant.
+6. Leftover this-PC shops stay in the catalog; they do not own street E.
+   Menu list + open panel still label them leftover. Do not catalog_clear.
+7. M0/M1/M2 plan WPs still NOT_STARTED. NOT_PLAN_PASS. Not M1.
+
+TICK=yes. NOT_PLAN_PASS. Not M1. Not GATE-U1.

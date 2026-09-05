@@ -1,0 +1,372 @@
+TICK=no
+URL=http://127.0.0.1:4175/
+HASH_MISMATCH=0
+DID_NOT_RECYCLE=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+LIVE_JS=/assets/index-CIj9td8A.js
+LIVE_JS_LEN=2170932
+LIVE_JS_SHA256=57484ad9f75eedf96d8e6e14b4ea183ae1037d22ee62420b895bc35e29d3736e
+DID_NOT_REBUILD=1
+NOT_M0_WP1=1
+NOT_M1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=19:15 +07
+MODEL=grok-4.6-extra-high
+SCOPE=Re-audit of implementer shelf-vs-corner-minimap remint. Do not treat CRITIC-3D-SHELF-MINIMAP-2026-09-04.txt as TICK=yes.
+PLAYER_URL=http://127.0.0.1:4175/
+LISTEN=127.0.0.1:4175
+LIVE_PID=43236
+LIVE_PID_AFTER_CDP=43236
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-SHELF-MINIMAP-REAUDIT-2026-09-04.txt
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-SHELF-MINIMAP-2026-09-04.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+DID_NOT_TREAT_IMPLEMENTER_AS_TICK_YES=1
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_RUN_IMPLEMENTER_PROBE=1
+VITE_PREVIEW_PORT_PIN=4175
+CRITIC_CDP_PORTS=9961 (aborted mid leftover clip on this critic's PNG decoder; unused as verdict) then 9963
+IMPLEMENTER_CDP_PORT_NOT_REUSED=1
+VIEWPORT=1280x720
+ISOLATED_PROFILES=1
+HEADLESS_NEW=1
+SEAT=b
+GUEST=1
+
+LIVE_JS_BEFORE=/assets/index-CIj9td8A.js
+LIVE_JS_LEN_BEFORE=2170932
+LIVE_JS_SHA256_BEFORE=57484ad9f75eedf96d8e6e14b4ea183ae1037d22ee62420b895bc35e29d3736e
+LIVE_JS_AFTER=/assets/index-CIj9td8A.js
+LIVE_JS_LEN_AFTER=2170932
+LIVE_JS_SHA256_AFTER=57484ad9f75eedf96d8e6e14b4ea183ae1037d22ee62420b895bc35e29d3736e
+LIVE_JS_MATCHES_CLAIM=1
+HASH_MISMATCH=0
+
+DEFER_FIRST_WRAP=pending
+DEFER_MAP_ABSENT_FIRST=1
+DEFER_FIRST_PLAY=pending
+DEFER_MAPLIBRE_FIRST_PLAY=0
+DEFER_AFTER_FIRST_W=live
+DEFER_KIND=play-idle-or-first-w
+LANTERN_PANEL_OVERLAP=0
+LEFTOVER_PANEL_OVERLAP=0
+LANTERN_WRAP_VISIBLE=1
+LANTERN_WRAP_OP=1
+LEFTOVER_BANNER_ON_SHAREDPC=1
+LANTERN_LEFTOVER_BANNER=0
+LANTERN_NEARBY=shop-lantern-fish
+LANTERN_RANGE=Quầy Cá Đèn Lồng: 3.4 m away
+SPAWN_E_EMPTY=1
+SPAWN_E_STOLEN=0
+CHIP_MINIMAP_AGREE=1
+HONESTY_DENIES_GTA_11_TWIN=1
+OIDC_CLAIM=0
+LEFTOVER_ON_MAP=0
+HTML_MARKS_WHILE_LANTERN_OPEN=shop-lantern-fish,shop-local-mtmh45qxehxhvb,shop-local-mtmrbdjffjdkg8,shop-local-mtmrq33hoq4phb
+PLAYER_VISIBLE_DOTS_ON_LANTERN_CROP=che-only
+LANTERN_CROP_PURPLE=0
+LANTERN_CROP_BLUE=538
+LANTERN_CROP_RED=409
+LEFTOVER_CROP_PURPLE=64
+LEFTOVER_CROP_BLUE=538
+LEFTOVER_CROP_RED=441
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=no
+
+URL=http://127.0.0.1:4175/ was already up. Bind 127.0.0.1 pid 43236
+(node vite preview --host 127.0.0.1 --port 4175 --strictPort).
+Did not recycle, rebuild, restore-dist, kill, or start 4173 / 4174 / 5175.
+Did not bind 0.0.0.0. Did not catalog_clear. Same pid 43236 after CDP.
+
+Did not treat CRITIC-3D-SHELF-MINIMAP-2026-09-04.txt as TICK=yes
+(ROLE=IMPLEMENTER, TICK=n/a). Did not run j5-shelf-minimap-probe.mjs
+as proof. Did not copy J5-SHELF-MINIMAP JSON as the verdict.
+Did not tick any plan. GATE-U1 humans were not invented.
+
+Independent Chrome CDP, isolated temp profiles, ?seat=b guest,
+headless=new, 1280x720, critic ports 9961 then 9963 (not 9773).
+
+Live hash matches the claimed remint before and after CDP
+(/assets/index-CIj9td8A.js 2170932
+57484ad9f75eedf96d8e6e14b4ea183ae1037d22ee62420b895bc35e29d3736e).
+HASH_MISMATCH=0.
+
+Named miss (hunt 4): with the lantern street shelf open, the
+independent 184×134 corner crop shows the map and the Chè blue
+mark only; lantern / Phở / Kem sit under the in-widget MapLibre
+attribution card after recenter (sampled white / clipped outline).
+HTML .minimap-shop-mark circles stay in-wrap at opacity 1, but
+that plus the hidden <ol> is not player-visible four-dot proof.
+Shop-panel overlap is 0; leftover banners and spawn E still hold.
+This is NOT_PLAN_PASS. Not M1.
+
+================================================================================
+LIVE JS
+================================================================================
+
+GET / then GET the script, recorded before CDP and after CDP 9963.
+
+HTML script = /assets/index-CIj9td8A.js
+http file length = 2170932
+sha256 = 57484ad9f75eedf96d8e6e14b4ea183ae1037d22ee62420b895bc35e29d3736e
+Matches the claimed remint name + length + hash.
+After CDP the same name + length + hash is still served from
+pid 43236.
+
+Bundle scan (live bytes, not source):
+  openstreetmap = 0
+  overpass = 0
+  street-play-plant = 1
+  minimap-shop-mark = 2
+  shop-local-sharedpc / shop-local-mtl8ulddihjpre hardcoded = 0
+  oidc = 8, denial (NOT Google/OIDC = 2, R4-WP0B = 2)
+  digital twin = 3 (honesty denial)
+  No OIDC claim.
+
+CDP Network.requestWillBeSent: only 127.0.0.1:4175, data:, blob:.
+No osm / overpass / mapbox / maptiler hosts. /demo-bus was hit
+(leftover catalog still served). Did not catalog_clear.
+
+================================================================================
+HUNT 1 — HASH vs CLAIMED REMINT — PASS
+================================================================================
+
+Tried to fail as HASH_MISMATCH.
+
+Claimed: /assets/index-CIj9td8A.js / 2170932 /
+57484ad9f75eedf96d8e6e14b4ea183ae1037d22ee62420b895bc35e29d3736e
+
+Before CDP and after CDP 9963: same name, length, sha256.
+LISTEN stayed 127.0.0.1:4175 pid 43236.
+
+HASH_MISMATCH=0. PASS.
+
+================================================================================
+HUNT 2 — FIRST FRAMES STILL DEFER; THEN LIVE — PASS
+================================================================================
+
+Tried to fail as MapLibre already mounted on first Play paint,
+or defer ripped.
+
+Isolated guest B, about:blank then Page.navigate, poll ~40 ms:
+
+  boot          wrap=absent  defer=""      mini=absent  maplibre=0
+  first wrap    517 ms       defer=pending mini=absent  maplibre=0
+                              playReady="" chip=—
+  playReady=yes 1770 ms      defer=pending mini=absent  maplibre=0
+                              chip=Steps East buildings=60
+  before first W defer=pending mini=absent  maplibre=0
+  after first W  defer=live    mini=present maplibre=1
+                 kind=play-idle-or-first-w
+                 chip=Harbor Walk mini=Harbor Walk
+                 shops=street-play-plant
+
+Identity = "Guest · shops public; friends not required"
+signed-in=no. friend-row-a not accepted.
+
+PASS.
+
+================================================================================
+HUNT 3 — LANTERN SHELF MUST NOT COVER THE 184×134 WIDGET — PASS
+================================================================================
+
+Tried to fail as shop-panel getBoundingClientRect overlap > 0,
+hidden wrap, opacity 0, or a corner crop with no map.
+
+Real Nearby/E at the sidewalk plant (not leftover E):
+  nearby=shop-lantern-fish
+  range="Quầy Cá Đèn Lồng: 3.4 m away"
+  lon=106.6979873 lat=10.7718489 heading=318
+  E opened shop-lantern-fish
+  leftover=0  leftover banner ABSENT
+  kind="public shop · authored example among many"
+  chip+mini still Harbor Walk
+
+Independent rects (not implementer JSON):
+  wrap 184 × 134.390625 @ 1087.203125, 576.8125
+       vis=visible op=1 display=block z=3
+  panel 320 × 502.40625 @ 951.203125, 49.59375
+        bottom=552  vis=visible
+  overlapPanel = 0
+
+Full 1280×720 still: shelf ends above the corner; a gap of 3D
+street sits between panel bottom 552 and wrap top 576.8.
+
+Corner clip 184×135: map is present (tan blocks, green Harbor
+band, "2D map" caption, authored-approximation card).
+Not hidden. Not opacity 0. Not a shop-panel cover.
+
+PASS on the named cover / hide / empty-map tests.
+(Dot count while this shelf is open is hunt 4.)
+
+================================================================================
+HUNT 4 — FOUR STREET-PLAY DOTS PLAYER-VISIBLE WHILE LANTERN SHELF OPEN — FAIL
+================================================================================
+
+Tried to fail as hidden <ol> proof, leftover Shared PC / J6 on
+the 2D marks, or a crop that does not show the four named dots.
+
+HTML while lantern shelf is open (not used as enough):
+  four .minimap-shop-mark 8×8 op=1 vis=visible inWrap
+    shop-lantern-fish           Quầy Cá Đèn Lồng   @ 1175, 636
+    shop-local-mtmh45qxehxhvb   Quầy Phở Nhà       @ 1172, 645
+    shop-local-mtmrbdjffjdkg8   Quầy Chè Vỉa       @ 1194, 629
+    shop-local-mtmrq33hoq4phb   Quay Kem Reaudit   @ 1193, 650
+  four .maplibregl-marker panes
+  leftover Shared PC / J6 ABSENT from proof and marks
+
+Independent lantern-open corner clip (184×135) pixel sample
+at those mark offsets, plus blob scan:
+
+  Chè   rel 107,52  blue 2F5FBE / 3A66C0 with white ring — visible
+  lantern rel 88,59  dark outline then FFFFFF — clipped by the
+          in-widget attribution card
+  Phở   rel 85,68   FFFFFF (attribution) — not a purple dot
+  Kem   rel 106,73  attribution dither then FFFFFF — not a red dot
+  purple pixel count on that clip = 0
+  only one shop-dot-sized saturated blob (6×6 blue @ 108,54)
+
+The leftover-open clip on the same widget, before the lantern
+recenter, still shows four colored dots (sampled AA8BBD /
+AA8BBD / 859FD2 / D6828E; purple=64). So the marks exist.
+They are not player-visible as four street-play dots on the
+lantern-open crop this remint asked a critic to take.
+
+FAIL. Hidden list + in-wrap HTML circles are not enough.
+
+================================================================================
+HUNT 5 — LEFTOVER MENU + SHARED PC SHEET; BANNERS; NO COVER — PASS
+================================================================================
+
+Tried to fail as leftover banners ripped, leftover E stole spawn,
+or leftover sheet covering the corner map.
+
+Menu Tab, leftoverCount=2, last rows labeled
+“không trên phố / leftover máy này”:
+  shop-local-sharedpc
+  shop-local-mtl8ulddihjpre   (Quay Critic J6 Jump)
+
+Menu-opened Shared PC:
+  leftover=1  banner present  leftoverCopy=1
+  kind="không trên phố / leftover máy này"
+  wrap still 184×134.39 @ 1087.2, 576.8 vis=visible op=1
+  panel bottom=552
+  overlapPanel = 0
+  leftover-open corner clip shows the map and four colored dots
+
+Leftover catalog rows stay. Did not catalog_clear.
+
+PASS.
+
+================================================================================
+HUNT 6 — SPAWN E; CHIP/MINIMAP; HONESTY; NO OIDC — PASS
+================================================================================
+
+Tried to fail: leftover owns spawn E; chip-only name; GTA / 1:1 /
+digital-twin claim; OIDC claim.
+
+Spawn B E before first W:
+  nearby=""  panel=false  leftover E stolen=0
+
+Chip vs minimap (same frames):
+  first Play     chip=Steps East   mini absent (still deferred)
+  after first W  chip=Harbor Walk  mini=Harbor Walk
+  lantern stand  chip=Harbor Walk  mini=Harbor Walk
+
+Honesty banner still denies GTA / 1:1 / digital twin / OSM /
+live map / photogrammetry / city grid. Minimap card:
+“Authored approximation · not OSM · not a live survey · HH World”.
+No OIDC claim on the page. Identity guest, signed-in=no.
+
+PASS.
+
+================================================================================
+HUNT 7 — DID NOT RECYCLE 4175 — PASS
+================================================================================
+
+Before CDP: LISTENING 127.0.0.1:4175 pid 43236
+After CDP 9963: same listen, same pid, same vite preview argv.
+Did not recycle, rebuild, restore-dist, kill, or restart 4175.
+
+PASS.
+
+================================================================================
+HUNTS (not named fails)
+================================================================================
+
+Shop-panel vs wrap overlap is 0 for both the lantern street
+shelf and the leftover Shared PC sheet. That is the remint
+the implementer claimed. It is not enough for hunt 4.
+
+MapLibre attribution on the 184×134 widget covers the lower
+marks after the map recenters on the lantern sidewalk. That
+is this critic's still, not implementer JSON.
+
+9961 died while decoding a leftover clip (this critic's PNG
+filter bug). Verdict uses 9963 stills/rects only.
+
+Implementer probe / J5-SHELF-MINIMAP JSON / j5-3d-shelf-minimap.png
+unused as this critic's pass.
+
+Leftover Shared PC / J6 stay in /demo-bus and the Menu list.
+
+================================================================================
+METHOD
+================================================================================
+
+1. 4175 already up (pid 43236). Did not recycle / rebuild /
+   start other ports. AUTHORIZE_MAP_FETCH=NO.
+2. GET / and /assets/index-CIj9td8A.js. Recorded name+sha+len
+   before CDP and after.
+3. Read implementer note (TICK=n/a). Did not run its probe as
+   acceptance. Did not copy its overlap/marks JSON as verdict.
+4. Independent Chrome CDP 1280x720 isolated profiles.
+   Port 9961: aborted on leftover clip decode; not used.
+   Port 9963: guest B first-frame defer, spawn E, leftover
+   Menu / Shared PC, lantern sidewalk E, Network watch,
+   full + corner stills.
+5. Corner clips measured with System.Drawing pixel samples
+   at this critic's own mark rects. Temp only, not data-qa.
+6. Did not write lead packs. Did not tick plan. Did not fake
+   GATE-U1.
+
+Temp only (not under data-qa):
+  %TEMP%\hh-shelf-minimap-reaudit\critic-lantern-full.png
+  %TEMP%\hh-shelf-minimap-reaudit\critic-lantern-minimap.png
+  %TEMP%\hh-shelf-minimap-reaudit\critic-leftover-full.png
+  %TEMP%\hh-shelf-minimap-reaudit\critic-leftover-minimap.png
+  %TEMP%\hh-shelf-minimap-reaudit\critic.json
+
+================================================================================
+STILL IMPOSSIBLE WITHOUT OWNER
+================================================================================
+
+- GATE-U1 three human reviewers (not faked)
+- AUTHORIZE_MAP_FETCH=YES + license ledger before any OSM/Overture
+- Other-PC / WAN join (store is this PC 4175 loopback)
+- Real account / OIDC
+
+================================================================================
+END
+================================================================================

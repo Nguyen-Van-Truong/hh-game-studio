@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "hh-world-bookmark/v0",
+  "title": "HH World local bookmark",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["v", "id", "savedAt"],
+  "properties": {
+    "v": { "const": 1 },
+    "id": { "type": "string", "pattern": "^place-[a-z0-9-]+$" },
+    "savedAt": { "type": "string" }
+  }
+}

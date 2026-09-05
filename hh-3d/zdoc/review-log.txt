@@ -561,3 +561,134 @@ not a product verdict and not authorization to start preview.
 
 Handoff/check/audit-summary/cheap-agent prompt were updated to reflect these
 static facts. Execution plans themselves remain unchanged.
+
+--------------------------------------------------------------------------------
+R0-WP0 OWNER CHAT GRANT — 2026-09-03 / FACTUAL APPEND ONLY
+--------------------------------------------------------------------------------
+OWNER_CHAT_GRANT=làm HH World web
+DATE=2026-09-03
+ACCEPT_RECOMMENDATIONS=YES
+AUTHORIZE_HH3D_APP_SCAFFOLD=YES
+AUTHORIZE_MAP_FETCH=NO
+AUTHORIZE_CESIUM=NO
+AUTHORIZE_GOOGLE_PHOTOREALISTIC=NO
+AUTHORIZE_UNREAL_INSTALL=NO
+AUTHORIZE_PAID_API=NO
+AUTHORIZE_GODOT2_CITY=NO
+DEMO_GAP_ACCEPTED=YES (Hòn Gió seed gaps remain; they do not block HH World local proof)
+OFFICIAL_RECORD=hh-3d/app/decision-records/2026-09-03-r0-wp0-hh-world-web.txt
+RUN_ID=HH3D-R0-20260903-ASIA-SAIGON-02
+PLAN_STATE_PASS_UNCHANGED=1
+NO_HUMAN_OWNER_SIGN_NAME_INVENTED=1
+This line does not tick 31-8-hh3d-real-application-plan.txt.
+
+--------------------------------------------------------------------------------
+OWNER MODES 2026-09-03 — FACTUAL APPEND
+--------------------------------------------------------------------------------
+OWNER_FILE=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PLAN_AMEND=31-8-hh3d-real-application-plan.txt header + audit #7 + P6 M0-M2
+ONLINE=friends-only stylized characters on the street
+OFFLINE=no other people on the street; shops/listings still visible
+NOT_GTA=1
+NOT_STRANGER_CROWD=1
+NO_PLAN_CHECKBOX_TICK=1
+No M-WP was started. GATE-U1 remains first local leftover.
+
+--------------------------------------------------------------------------------
+OWNER MODES REV2 / PLAN CONSISTENCY REVIEW — 2026-09-03
+--------------------------------------------------------------------------------
+REQUEST=Owner asked to correct contradictions and make the intended experience
+  complete and understandable to subsequent agents.
+SCOPE=HH World documentation only; no runtime/feature implementation.
+BASELINE_HEAD_AT_START=70661298975271a0d51cc0d80fa8953a8e0ee94b
+CONTRACT=hh-3d/zdoc/03-9-hh-world-owner-modes.txt revision 2
+CANONICAL_ORDER=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+LIVE_PROGRESS=hh-3d/app/PROGRESS.txt
+
+Resolved:
+  - Social Offline is distinct from Internet disconnection. Both modes use
+    the same catalog and can publish when connected; no-cache is unavailable.
+  - Self avatar walks in both modes; remote friends reproduce real input
+    movement. Avatar position is in the app world, not GPS or camera center.
+  - Published shops/listings persist independently of owner presence.
+    Cache/draft/version/retry/tombstone and account isolation are specified.
+  - Server enforces friends/consent/mode/block for coordinates AND coarse
+    activity status. Disconnect/revoke/tab lease have measurable behavior.
+  - M0-WP1 local avatar/walking added as unstarted work. M features precede
+    owner-experience beta; native/story branches are separate.
+  - Identity is required for modes; cloud bookmark sync remains optional.
+  - GATE-U1 gates R2 acceptance; candidate R2 UI is input to human review,
+    removing the circular interpretation without fabricating a human result.
+  - Active routing points to app/PROGRESS; freeze/no-app/demo pointers are
+    historical. Scoped hh-3d/AGENTS.md gives the next agent the correct route.
+  - R8 acceptance now requires the three owner journeys and combined T01–T12.
+    Early M1 tests explicitly exclude later remote/moderation subcases.
+
+READ_ONLY_DOC_REVIEWS=ux_modes_review and plan_routes_review
+  Both identified concrete gaps; this revision incorporates their corrections.
+  These were documentation reviews, not formal runtime critics or TICK records.
+STATIC_VERIFY=25 original application WP STATE values preserved; only new
+  M0-WP1 added as NOT_STARTED. Original plan checkbox/PASS lines unchanged.
+  Dependency graph acyclic; current routing links exist; git diff --check
+  for hh-3d reported no whitespace errors (normal LF/CRLF warnings only).
+
+RUNTIME_STARTED=0
+MAP_FETCH=0
+PLAN_TICK=0
+HUMAN_SIGNATURE_CREATED=0
+COMMIT_BY_THIS_REVIEW=0
+COMMIT_REASON=Documentation correction over an existing dirty/untracked tree;
+  other product work is concurrent. No WP runtime acceptance was performed.
+NEXT=Read live PROGRESS; GATE-U1 and remaining R2 quality evidence are still
+  outstanding. Do not start M-WPs just because their plan is now clearer.
+
+--------------------------------------------------------------------------------
+LOCAL STREET SLICE — 2026-09-03 implementer (NOT_PLAN_PASS)
+--------------------------------------------------------------------------------
+DATE=2026-09-03 Asia/Saigon
+URL=http://127.0.0.1:4175/
+PLAN_TICK=0
+COMMIT=0
+MAP_FETCH=0
+NEW_PREVIEW=0
+HUMAN_SIGNATURE_CREATED=0
+HEAD_AT_WRITE=657634f8f82281bd670c9a375ad49c6180db3583
+
+Owner session asked for the first player-visible leftover after reading the
+updated modes/plan. GATE-U1 still cannot be completed by an agent. This lượt
+added a local Offline street slice on the existing 400 m authored map: a
+stylized self avatar that walks/stands/turns from WASD (touch pad in UI),
+other-people layer off, and one public authored shop (Quầy Cá Đèn Lồng) with
+published fish + bag samples. Draft listing-draft-hidden is not shown. Shop
+stays visible with the owner-offline simulation checked. Chrome CDP
+HH3D-J1-20260903-ASIA-SAIGON-01 recorded J1_OBSERVED (walk, open goods, owner
+Offline, close shelf, avatar stays). J2 (account/list product) and J3
+(friends presence) were not implemented. Online control stays disabled /
+unavailable. typecheck/test/build EXIT=0 against the existing 4175 preview
+after rebuild. This is not an M0/M1/M2 tick and not GATE-U1. NOT_PLAN_PASS.
+
+2026-09-03 Asia/Saigon: 01-9-hh3d-plan-audit-summary.txt marked HISTORICAL=1 / NOT_LIVE_ROUTING=1; AUDIT_SUMMARY in 31-8-hh3d-real-application-plan.txt is historical routing, not live. No WP tick.
+
+2026-09-03 Asia/Saigon: J1 critic miss remint on existing 4175. Walk ~8.6 m / 5.4 s into 20 m, far E no-op, then E opened Quầy Cá Đèn Lồng (via=e, not goods list). Owner-Offline checkbox copy says it does not take the shelf down; listings stayed. Probe EXIT=0 RUN_ID=HH3D-J1-20260903-ASIA-SAIGON-02. NOT_PLAN_PASS. GATE-U1 and J2 account leftovers unchanged. No J3.
+
+2026-09-03 Asia/Saigon: J1 walk-E critic misses remint on existing 4175. Interact radius 10 m (at the stall); street E at 20.2 m still closed; nearby at 9.9 m then E opened Quầy Cá Đèn Lồng. Camera follow stays on while the shelf is open; Close keeps follow and the doll on-screen. Probe EXIT=0 RUN_ID=HH3D-J1-20260903-ASIA-SAIGON-03. NOT_PLAN_PASS. GATE-U1 and J2 leftovers unchanged. No J3.
+
+2026-09-03 Asia/Saigon: J1 seat remint after CRITIC-J1-RANGE-CAM on existing 4175. Open shop is a workspace overlay on the sidebar column (name + fish/bag first). After E, listings bbox top 382 / bag 488, both <720 and visible with no sidebar scroll. Probe EXIT=0 RUN_ID=HH3D-J1-20260903-ASIA-SAIGON-04. NOT_PLAN_PASS. Leftover GATE-U1 then J2. No J3.
+
+2026-09-03 Asia/Saigon: J2 local demo list on recycled 4175. Guest becomes "Chủ quầy (máy này)" (NOT real account / NOT OIDC / NOT_PLAN_PASS), lists extra fish onto the public shelf, leaves the demo identity, and still sees it as guest. No-network sim keeps a new bag as Chưa đăng (not "đã đăng"); retry after network returns publishes. Probe EXIT=0 RUN_ID=HH3D-J2-20260903-ASIA-SAIGON-01. typecheck/test/build EXIT=0. No GATE-U1 humans invented. No J3. Plan checkboxes unticked.
+
+2026-09-03 Asia/Saigon: J3 local demo friends after CRITIC-J3 TICK=no (pre-seat tree: one body / Online unavailable). Recycled 4175 with seats ?seat=a|b|c. Mutual A↔B + Online + opt-in: isolated Chrome A walk moved B's friend body (lat 10.7716200→10.7716517); B walk moved A's (lon 106.6981040→106.6981355). Offline / unfriend hide the other. Stranger C never drawn. Honesty: this-machine / not a city presence server / not GPS / NOT_PLAN_PASS. Probe EXIT=0 RUN_ID=HH3D-J3-20260903-ASIA-SAIGON-01. typecheck/test/build EXIT=0 (19 tests). GATE-U1 not faked. Plan STATE/PASS unticked. No commit.
+
+2026-09-03 Asia/Saigon: J4 player-created shop on recycled 4175. Demo identity "Chủ quầy (máy này)" (NOT real account / NOT_PLAN_PASS) opens a shop by name + free-text goods (Phở bò), not only lantern fish/bag. New shop gets a map marker. Leave-identity keeps it public. Isolated second context B on the same 4175 bus also sees lantern + player shop; walk/E opens that shelf. Walk to Quầy Cá Đèn Lồng still opens the authored example. No-network create stays Chưa đăng (not "đã đăng"). Probe EXIT=0 RUN_ID=HH3D-J4-20260903-ASIA-SAIGON-01. typecheck/test/build EXIT=0 (22 tests). GATE-U1 not faked. Plan STATE/PASS unticked. No commit. Honest concurrency: this machine only today; later static+catalog can be thousands-class browse, not GTA 10k.
+
+2026-09-03 Asia/Saigon: J4 critic miss remint on recycled 4175. Prohibited check now folds lowercase + VN diacritics + punctuation so ASCII "ban sung" / "bán-súng" / "BÁN SÚNG" reject with "bán súng". phở / sách / cá still allowed. Did not scrub this-machine localStorage leftover. Not M1-WP1. typecheck/test/build EXIT=0 (22 tests). GATE-U1 not faked. Plan STATE/PASS unticked. No commit. Another PC cannot join.
+
+2026-09-03 Asia/Saigon: 3D Play critic-miss remint after CRITIC-3D-WALK-2 TICK=yes. Camera now follows body heading (A/D turn; W/S walk facing). Default HUD is brand + Menu + one honesty line; seats/lists behind Tab/Menu. Shop E overlay unchanged. Recycled 4175 only (no 4173/4174). CDP RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-04 camYaw 0→228→1.8, overlayRatio=0.099, W 14.4 m north. typecheck/test/build EXIT=0 (28 tests). NOT_PLAN_PASS. GATE-U1 still first leftover; not faked. No GTA/1:1 claim. No commit.
+
+2026-09-03 Asia/Saigon: extruded authored block remint after CRITIC-3D-CAM-HUD TICK=yes (miss: five AABB boxes on a beige slab). Same 400 m GeoJSON pipeline, no OSM/Overture fetch. Five mega-footprints carved along Harbor Walk / Tram Approach and split into 60 parcels; Play extrudes each ring. Dark road + lighter walk from the existing street lines. Recycled 4175 only (pid 65540; no 4173/4174/5175). CDP RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-05 buildings=60 list=60 extruded=footprint, W 14.4 m north, camYaw 0→226.2→0, overlayRatio=0.099. Shots j5-3d-block.png + behind + turn. typecheck/test/build EXIT=0 (29 tests). artifact_hash=83463aadae62b5db93a1c30fee003aaf73a729a45c8f42d0bb718c419ff1acbe. NOT_PLAN_PASS. GATE-U1 still first leftover; not faked. Still a small authored block, later open data. No GTA/1:1 claim. No commit.
+
+2026-09-03 Asia/Saigon: sibling critic CRITIC-3D-COLLISION TICK=yes on existing 4175 (center 0.558 m outside Steps East; extra east=0). Lead did not redo collision. Optional 95° face slide left as-is. Recycled 4175 only (pid 70428; no 4173/4174/5175). This-PC shared store: /demo-bus is SoT for published shops + friend graph + presence on 127.0.0.1; drafts never post; two isolated browsers saw a Node-injected shop after localStorage clear; A Offline hid bodies and kept the shop. Space jump peak alt=0.95 then land 0; heading-follow 0→228. Probes EXIT=0 RUN_ID=HH3D-J6-20260903-ASIA-SAIGON-02 J6_SHARED_OK and HH3D-J5-20260903-ASIA-SAIGON-08 J5_JUMP_OK. typecheck/test/build EXIT=0 (38 tests). NOT_PLAN_PASS. GATE-U1 not faked. OSM fetch still NO. WAN / other-PC still NO. No commit.
+
+2026-09-03 Asia/Saigon: player-feel remint on recycled 4175 after CRITIC-J6-JUMP TICK=yes. Click canvas = optional pointer-lock look (Esc releases). Right-drag also looks so headless CDP can prove it; pad ◀/▶ still turns. WASD walks along look. Cheap wall-slide is a stable AABB tangent (95° hold extra east=0, south 0.92 m, lonSpanM=0, data-slide=1). Building colors vary from existing IDs (20 muted walls); still the authored 400 m block, not a city. Probe EXIT=0 RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-09 J5_FEEL_OK (camYaw 0→25.2, W along look east=1.51 m). typecheck/test/build EXIT=0 (42 tests). live JS index-BYiLnYEq.js. NOT_PLAN_PASS. GATE-U1 not faked. OSM fetch still NO. WAN / other-PC still NO. No commit.
+
+2026-09-03 Asia/Saigon: sprint + Hòn Gió tunic body on recycled 4175 after CRITIC-3D-LOOK-SLIDE TICK=yes. Hold Shift or pad ≫ = 2.72 m/s; release = 1.6 walk. Look/WASD/collision kept. Body: long teal tunic 0.4×0.98×0.34, slim pelvis, nape/side hair, scale 1.36; no bowling-ball hips. Probe EXIT=0 RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-10 J5_SPRINT_OK (walk 1.69 m/s vs sprint 2.90 m/s). typecheck/test/build EXIT=0 (44 tests). live JS index-_AFebqgm.js. Still authored 400 m block. NOT_PLAN_PASS. GATE-U1 / OSM grant / other-PC leftovers unchanged. No commit.

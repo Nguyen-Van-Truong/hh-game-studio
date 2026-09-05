@@ -1,0 +1,28 @@
+PARENT REBUTTAL — not an independent critic TICK
+DATE=2026-09-05
+TIMEZONE=Asia/Saigon
+ROLE=PARENT_IMPLEMENTER
+TICK=no
+REBUTS=hh-3d/app/data-qa/CRITIC-3D-LOOK-YAW-REAUDIT-2026-09-05.txt
+REBUTS_TICK=yes
+LIVE_AT_REBUTTAL=/assets/index-BRKtMVXq.js
+LIVE_JS_SHA256=efbc92a0bb4388f7fbc28bd42005809851e6f02f696e92321ac3428d63499c54
+NOT_PLAN_PASS=1
+DID_NOT_TREAT_CRITIC_YES_AS_ACCEPTANCE=1
+
+The independent reaudit TICK=yes is kept on disk. It is NOT product acceptance.
+
+Named miss the reaudit did not hunt:
+  Owner: mouse-left or A still swings the view right (inverted).
+  Reaudit hunt required A to INCREASE heading (270→303). That is a
+  right turn (west toward north). Parent CDP 10022/10024 on the same
+  live JS: seat A mouse-left drag heading 0.0 → 63.6 (facing east).
+  That reproduces the owner complaint. Hunt 2 was written to match
+  the implementer sign flip, not the owner visual.
+
+Demo lookYawSign=-1 is mouse-on-radians with a different stack.
+Copying -1 onto HH World degree heading made A/mouse-left look right.
+
+Remint after this file: LOOK_YAW_SIGN=1 and TURN_YAW_SIGN=1 so
+negative dx / KeyA decrease heading (look left). Seat B heading
+synced to look yaw 292. followRigYaw uses heading when look is off.

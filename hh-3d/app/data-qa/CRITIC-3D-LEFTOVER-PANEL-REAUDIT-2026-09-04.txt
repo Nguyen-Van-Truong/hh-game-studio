@@ -1,0 +1,366 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+BOOTED_4175=1
+DID_NOT_RECYCLE=1
+DID_NOT_REBUILD=1
+DID_NOT_REMINT=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M1=1
+NOT_M0_WP1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+HASH_MISMATCH=0
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=14:52 +07
+MODEL=grok-4.6-extra-high
+SCOPE=Re-audit of claimed isolated guest-B leftover shop-panel remint. Do not treat CRITIC-3D-LEFTOVER-PANEL-2026-09-04.txt as TICK=yes.
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=04cb6ca92c482017c02d78e7885727f73b62103d
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-LEFTOVER-PANEL-REAUDIT-2026-09-04.txt
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-LEFTOVER-PANEL-2026-09-04.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+DID_NOT_TREAT_IMPLEMENTER_AS_TICK_YES=1
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+DID_NOT_CATALOG_CLEAR=1
+VITE_PREVIEW_PORT_PIN=4175
+LIVE_PID=26552
+LISTEN=127.0.0.1:4175
+CRITIC_CDP_PORT=9921
+VIEWPORT=1280x720
+ISOLATED_PROFILE=1
+HEADLESS_NEW=1
+ABOUT_BLANK_THEN_NAVIGATE=1
+SEAT=b
+IMPLEMENTER_CDP_PORT_NOT_REUSED=1
+IMPLEMENTER_PROBE_NOT_RUN=1
+IMPLEMENTER_JSON_NOT_PROOF=1
+
+CLAIM_JS=/assets/index-BjeBwyj9.js
+CLAIM_JS_LEN=2167676
+CLAIM_JS_SHA256=4f5ceeebbbf48009ca74757bf04d32b857d38b481f7f0ab7d389928d4c00d252
+LIVE_JS=/assets/index-BjeBwyj9.js
+LIVE_JS_LEN=2167676
+LIVE_JS_SHA256=4f5ceeebbbf48009ca74757bf04d32b857d38b481f7f0ab7d389928d4c00d252
+LIVE_JS_MATCHES_CLAIM=1
+HASH_MISMATCH=0
+LIVE_JS_AFTER_CDP=/assets/index-BjeBwyj9.js
+LIVE_JS_LEN_AFTER_CDP=2167676
+LIVE_JS_SHA256_AFTER_CDP=4f5ceeebbbf48009ca74757bf04d32b857d38b481f7f0ab7d389928d4c00d252
+
+GUEST_IDENTITY=Guest · shops public; friends not required
+GUEST_SIGNED_IN=no
+PRESENCE=Offline — Stroll alone; shops still open.
+HUD_PRESENCE=Offline · Đang kết nối
+THIS_TAB=Bạn B (máy này)
+
+LEFTOVER_PANEL_COPY_SHARED=banner "không trên phố / leftover máy này" (13.6px dashed) + kind "KHÔNG TRÊN PHỐ / LEFTOVER MÁY NÀY"
+LEFTOVER_PANEL_COPY_J6=banner "không trên phố / leftover máy này" (13.6px dashed) + kind "KHÔNG TRÊN PHỐ / LEFTOVER MÁY NÀY"
+STREET_PANEL_COPY_LANTERN=kind "PUBLIC SHOP · AUTHORED EXAMPLE AMONG MANY"; no leftover banner
+STREET_PANEL_COPY_PHO=kind "PUBLIC SHOP · OPENED ON THIS MACHINE"; no leftover banner
+STREET_PANEL_COPY_LANTERN_E=kind "PUBLIC SHOP · AUTHORED EXAMPLE AMONG MANY"; no leftover banner
+LEFTOVER_BANNER_DISTINCT=1
+LEFTOVER_BANNER_HIDDEN=0
+LEFTOVER_BANNER_ZERO=0
+LEFTOVER_BANNER_SAME_COLOR_AS_BG=0
+LEFTOVER_BANNER_JAMMED_IN_TITLE=0
+LEFTOVER_STILL_SAYS_PUBLIC_SHOP_KIND=0
+STREET_SHOWS_LEFTOVER_BANNER=0
+LEFTOVER_E_STOLEN=0
+NEARBY_SPAWN=
+SHOP_AFTER_E=
+LANTERN_E=shop-lantern-fish
+LANTERN_E_LEFTOVER=0
+MENU_LEFTOVER_LIST_LAST=1
+MENU_LEFTOVER_LABELED=1
+OIDC_CLAIM=0
+HONESTY_DENIES_GTA=1
+HONESTY_DENIES_1TO1=1
+HONESTY_DENIES_DIGITAL_TWIN=1
+
+CLAIM_1_LIVE_HASH=PASS
+CLAIM_2_LEFTOVER_PANEL_BANNER=PASS
+CLAIM_3_STREET_PANELS_NO_LEFTOVER=PASS
+CLAIM_4_SPAWN_E_NOT_STOLEN=PASS
+CLAIM_5_LANTERN_E_STILL_STREET=PASS
+CLAIM_6_MENU_LIST_STILL_LABELED_LAST=PASS
+CLAIM_7_HONESTY_NO_OIDC=PASS
+
+BIGGEST_MISS=None on the named hunts. Leftover Shared PC / J6 shop panels show a separate dashed leftover banner a player can read, not only data-leftover=1. Kind line is leftover uppercase, not “public shop · opened on this machine”. Lantern + drawn Phở + street E keep street/public kind and have no leftover banner. Spawn E opened none. NOT_PLAN_PASS.
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/ was already up. Bind 127.0.0.1 pid 26552
+(node vite preview --host 127.0.0.1 --port 4175 --strictPort).
+Did not recycle, rebuild, kill, or start 4173 / 4174 / 5175.
+Did not bind 0.0.0.0. Did not catalog_clear.
+
+Did not treat CRITIC-3D-LEFTOVER-PANEL-2026-09-04.txt as TICK=yes
+(ROLE=IMPLEMENTER, TICK=n/a). Implementer CDP / J5-LEFTOVER-PANEL
+JSON is not acceptance. Did not run j5-leftover-panel-probe.mjs
+(it would overwrite their J5 pack and reuse port 9696). Did not
+write J5 packs. Did not tick any plan.
+
+Independent Chrome CDP, isolated temp profile, 1280×720,
+?seat=b empty guest, Offline. Own debug port 9921, not implementer
+9696. Tried to fail: hash drift; leftover panel still reading as a
+street/public shop; leftover banner hidden / 0×0 / same color as
+sheet / jammed into the title; leftover E stolen at spawn;
+lantern E stolen or leftover-marked; Menu leftover list unlabeled
+or not last; OIDC; honesty dropping GTA / 1:1 / digital-twin
+denials.
+
+Hash matches. Leftover panels show a distinct leftover banner.
+Street shops do not. Leftover E is not stolen. This is
+NOT_PLAN_PASS. GATE-U1 humans were not invented. Not M1.
+
+================================================================================
+LIVE JS
+================================================================================
+
+GET http://127.0.0.1:4175/  STATUS=200
+HTML script = /assets/index-BjeBwyj9.js
+link stylesheet = /assets/index-DMifatKR.css
+
+GET /assets/index-BjeBwyj9.js
+  Content-Length = 2167676
+  bytes          = 2167676
+  sha256         = 4f5ceeebbbf48009ca74757bf04d32b857d38b481f7f0ab7d389928d4c00d252
+
+Matches the claimed remint name + length + hash exactly.
+Second GET after CDP (same pid 26552) is the same bytes.
+HASH_MISMATCH=0. Did not stop. Did not audit an old bundle.
+
+Live CSS leftover rules (served index-DMifatKR.css):
+  .shop-panel-leftover { border:1px dashed #c4b8a4 }
+  .shop-panel-leftover-banner { color:#6a5f54; background:#f4efe6;
+    border:1px dashed #c4b8a4; margin:0 0 .45rem;
+    padding:.35rem .5rem; font-size:.85rem }
+  .shop-panel-leftover-copy { color:#6a5f54; background:#e8dfd0 }
+
+Nit, not a named-hunt miss: .approx comes later at the same
+specificity, so leftover kind still paints gold #ead8a8 like a
+street kind chip. The leftover banner itself is the dashed box,
+not that chip. Player-visible leftover copy still holds.
+
+/demo-bus leftover persist (unchanged; no catalog_clear):
+  shop-local-sharedpc          Quầy Shared PC        106.69804,10.77162
+  shop-local-mtl8ulddihjpre    Quay Critic J6 Jump   106.698149…,10.77162
+Drawn street Phở also persist. Did not catalog_clear.
+
+================================================================================
+CLAIM 1 — LIVE HASH IS THE CLAIMED REMINT — PASS
+================================================================================
+
+Tried to fail as a later/earlier bundle or SPA-shell fallback
+on the claimed name.
+
+  live = /assets/index-BjeBwyj9.js
+  len  = 2167676
+  sha  = 4f5ceeebbbf48009ca74757bf04d32b857d38b481f7f0ab7d389928d4c00d252
+
+GET before CDP and GET after CDP are the same name + length
++ hash from pid 26552. HASH_MISMATCH=0.
+
+PASS.
+
+================================================================================
+CLAIM 2 — LEFTOVER SHARED PC / J6 PANELS SHOW LEFTOVER BANNER — PASS
+================================================================================
+
+Isolated guest B, empty profile, Offline. Tab opens Menu.
+Opened shop-local-sharedpc and shop-local-mtl8ulddihjpre from
+the list. Did not trust data-leftover alone.
+
+Shared PC (shop-local-sharedpc):
+  data-leftover=1 data-street=0 data-keep-out=1
+  class=card shop-panel shop-sheet shop-panel-leftover
+  title h2 = Quầy Shared PC   (no leftover words in the title)
+  leftover banner present, display=block, visibility=visible,
+    opacity=1, in view
+  banner box 279×32.9 at (964.2, 68.6)
+  banner innerText = không trên phố / leftover máy này
+  banner color rgb(106,95,84) on rgb(244,239,230)
+  banner vs panel bg distance = 9.9 (not the same color)
+  text contrast on banner ≈ 5.43:1
+  dashed 1px border rgb(196,184,164)
+  title bottom 66.2 / banner top 68.6 — ~2.4 px gap, no overlap
+  banner is not a child of h2
+  kind = KHÔNG TRÊN PHỐ / LEFTOVER MÁY NÀY
+  panel does NOT contain “public shop · opened on this machine”
+  panel does NOT contain “public shop · authored example among many”
+
+J6 (shop-local-mtl8ulddihjpre):
+  same leftover banner geometry and copy
+  title h2 = Quay Critic J6 Jump
+  kind = KHÔNG TRÊN PHỐ / LEFTOVER MÁY NÀY
+  no street/public-shop kind line
+
+Hard hunt results:
+  hidden / 0×0 / same-color-as-bg / jammed-into-title = no
+  leftover readable as its own dashed banner under the title,
+  then again as the gold uppercase kind chip. A player sees
+  leftover / không trên phố. This is not attribute-only.
+
+Nit: leftover shop body still says “Player-opened shop on this
+machine” in the authored description. That is not the kind line
+the remint claimed to change. Not a named-hunt miss.
+
+Player crops (temp, not committed):
+  panel-sharedpc.png sha256=efd5301a2bef855fe6a022fd9681d94592f0d82f8f26835e40841f08b822beed
+  panel-j6.png       sha256=cb24db440f68262e2b393227006fa67fc8b7f06b87303d607002e754dca6a2ca
+  full-sharedpc.png  sha256=a8e6e2895a093a9f1a0cf0950eadb4458a7e27082521e012002cb051dc23242e
+
+PASS.
+
+================================================================================
+CLAIM 3 — LANTERN + DRAWN PHỞ MUST NOT SHOW LEFTOVER BANNER — PASS
+================================================================================
+
+Menu-open lantern (shop-lantern-fish):
+  data-leftover=0 data-street=1 data-keep-out=0
+  class=… shop-panel-street
+  leftover banner absent
+  kind = PUBLIC SHOP · AUTHORED EXAMPLE AMONG MANY
+  leftoverCopy=0
+
+Menu-open drawn Phở (shop-local-mtmh45qxehxhvb):
+  data-leftover=0 data-street=1 data-keep-out=0
+  leftover banner absent
+  kind = PUBLIC SHOP · OPENED ON THIS MACHINE
+  leftoverCopy=0
+
+Tried to fail as leftover banner leaking onto street shops.
+It does not.
+
+PASS.
+
+================================================================================
+CLAIM 4 — SPAWN E DOES NOT STEAL LEFTOVER SHOPS — PASS
+================================================================================
+
+Seat B at spawn (lon=106.698104 lat=10.77162 heading=270).
+Nearby shop empty. leftoverDrawn=[].
+Range chip: “Quầy Cá Đèn Lồng: 29 m away” — not Shared PC,
+not J6.
+
+Esc / blur canvas then hold E at spawn:
+  shopPanel=0
+  shopPanelId=
+  nearbyAfterE=
+  leftoverEStolen=0
+
+Leftovers remain on /demo-bus persist (published). Persist-only
+as claimed. Guest cannot open them as street E.
+
+PASS.
+
+================================================================================
+CLAIM 5 — STREET E AT LANTERN STILL SHOP-LANTERN-FISH — PASS
+================================================================================
+
+Walked from spawn (west then north, then bearing-correct) to
+lantern. At lantern:
+  nearbyShop=shop-lantern-fish
+  lon=106.6980156 lat=10.7718397 heading=37
+
+Hold E:
+  shopPanelId=shop-lantern-fish
+  leftover=0 street=1
+  leftover banner absent
+  kind = PUBLIC SHOP · AUTHORED EXAMPLE AMONG MANY
+  leftoverCopy=0
+
+lanternE=shop-lantern-fish. Not leftover. Not Shared PC / J6.
+
+PASS.
+
+================================================================================
+CLAIM 6 — MENU LEFTOVER LIST STILL LABELED LAST — PASS
+================================================================================
+
+public-shop-names data-count=4 leftover-count=2 street-count=2.
+
+Observed order (live DOM, not implementer JSON):
+
+  1. shop-lantern-fish
+     Quầy Cá Đèn Lồng
+     leftover=0 street=1 unlabeled
+
+  2. shop-local-mtmh45qxehxhvb
+     Quầy Phở Nhà
+     leftover=0 street=1 unlabeled
+
+  3. shop-local-sharedpc
+     Quầy Shared PC
+     leftover=1 street=0 labeled
+     “không trên phố / leftover máy này”
+
+  4. shop-local-mtl8ulddihjpre
+     Quay Critic J6 Jump
+     leftover=1 street=0 labeled last
+     “không trên phố / leftover máy này”
+
+Street rows first. Leftovers labeled AND last.
+unlabeledLeftover empty. This remint did not rip the list.
+
+PASS.
+
+================================================================================
+CLAIM 7 — HONESTY / NO OIDC — PASS
+================================================================================
+
+Honesty banner still:
+  not a live map, not OSM/Overture, not photogrammetry,
+  not a digital twin. No GTA claim, no 1:1 city.
+  NOT_PLAN_PASS.
+
+Identity signed-in=no. Guest copy. Shop panel says
+“R4-WP0B account/OIDC is not built.” No OIDC claim.
+
+PASS.
+
+================================================================================
+OWNER LEFTOVERS (unchanged; not this slice)
+================================================================================
+
+1. GATE-U1 three-human review still not faked.
+2. R2-WP1 headed/mobile/memory/min-FPS still UNFILLED.
+3. WAN / other-PC join still not built. 4175 loopback only.
+4. R4-WP0B real account/OIDC still not built.
+5. Open data (OSM/Overture) still needs license ledger + grant.
+6. Leftover this-PC shops stay in the catalog; they do not own
+   street E. Menu list + open panel now label them leftover.
+   Do not catalog_clear.
+7. M0/M1/M2 plan WPs still NOT_STARTED. NOT_PLAN_PASS. Not M1.
+
+================================================================================
+STOP CONDITIONS
+================================================================================
+
+Did not recycle 4175. Did not rebuild. Did not remint.
+Did not start 4173/4174/5175. Did not bind 0.0.0.0.
+Did not catalog_clear. Did not implement. Did not commit.
+Did not tick a plan checkbox. Did not invent GATE-U1.
+Did not treat implementer notes or implementer CDP as TICK=yes.

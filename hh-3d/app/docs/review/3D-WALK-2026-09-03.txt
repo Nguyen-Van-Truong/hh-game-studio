@@ -1,0 +1,39 @@
+HH WORLD — REVIEW LOG
+DATE=2026-09-03
+TIMEZONE=Asia/Saigon
+SLICE=extruded authored 400 m block on recycled 4175 (NOT_PLAN_PASS)
+PLAYER=http://127.0.0.1:4175/
+RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-05
+LIVE_JS=/assets/index-4f3W9n9d.js
+LIVE_PID=65540
+SHOT=hh-3d/app/data-qa/j5-3d-block.png
+SHOT_WALK=hh-3d/app/data-qa/j5-3d-walk-behind.png
+SHOT_TURN=hh-3d/app/data-qa/j5-3d-walk-turn.png
+CDP=hh-3d/app/data-qa/J5-3D-WALK-2026-09-03.txt
+CRITIC=hh-3d/app/data-qa/CRITIC-3D-CAM-HUD-2026-09-03.txt TICK=yes
+  (miss: five AABB boxes on a beige slab)
+
+HOW THE BLOCK IS BUILT
+  Same authored 400 m GeoJSON. No OSM/Overture fetch.
+  The original five footprints were carved away from Harbor Walk / Tram
+  Approach and split into 60 parcels. Play extrudes each ring (not AABB).
+  Streets from the fixture: darker road over a lighter walk band.
+  Ground is a light plaza, not the old beige slab.
+
+STILL KEPT
+  Third-person, camera behind heading, WASD, shop E, Menu/Tab,
+  Offline/friends local demo, honesty (not GTA / not 1:1 / not twin).
+
+PROOF
+  CDP buildings=60 list=60 data-extruded=footprint
+  W 9 s moved 14.4 m north; camYaw 0 → 226.2 (A) → 0 (D)
+  overlayRatio=0.099; shop marker still at Market Steps
+  typecheck/test/build EXIT=0 (29 tests)
+
+HONEST
+  This is still a small authored block, not a city, not live OSM, not
+  Unreal, not GTA. Later leftover is open data after license + fetch grant.
+  GATE-U1 three-human review is still the first plan leftover.
+  Do not tick. Do not invent humans.
+
+NO COMMIT. NO PLAN PASS. NO 4173/4174.

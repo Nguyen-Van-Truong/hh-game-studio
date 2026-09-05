@@ -1,0 +1,45 @@
+{
+  "run_id": "HH3D-J5-20260904-ASIA-SAIGON-43",
+  "player": "http://127.0.0.1:4175/",
+  "verdict": "J5_FRIEND_VIEWING_OK",
+  "not_plan_pass": true,
+  "not_gate_u1": true,
+  "not_m2": true,
+  "reminted": true,
+  "liveJs": "/assets/index-C6w1CTve.js",
+  "liveJsLen": 2172514,
+  "liveJsSha256": "d37b3492bbc939aedc75bee64d01c8b47a66bb931a24bea495831b908231a153",
+  "streetBefore": true,
+  "viewingOk": true,
+  "backOk": true,
+  "honestyOk": true,
+  "before": {
+    "bodyA": true,
+    "streetCount": 1,
+    "viewingCount": 0
+  },
+  "during": {
+    "bodyA": false,
+    "labelA": false,
+    "streetCount": 0,
+    "viewingCount": 1,
+    "viewingA": {
+      "shop": "shop-lantern-fish",
+      "street": "0",
+      "text": "Đang xem cửa hàng"
+    },
+    "rowA": {
+      "street": "0",
+      "shop": "shop-lantern-fish",
+      "text": "Bạn A (máy này) · Đang xem cửa hàng · Mở kệ"
+    },
+    "peopleText": "Other people on the street: none (no accepted friend Online on this street). Đang xem cửa hàng: Bạn A (máy này).",
+    "aPanel": "shop-lantern-fish"
+  },
+  "after": {
+    "bodyA": true,
+    "viewingA": null,
+    "streetCount": 1
+  },
+  "shot": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-friend-viewing.png"
+}

@@ -1,0 +1,33 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-05
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=06:12 +07
+ROLE=IMPLEMENTER
+TICK=n/a
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+PLAYER_URL=http://127.0.0.1:4175/
+LIVE_JS=/assets/index-CoTKbFff.js
+LIVE_JS_LEN=2174312
+LIVE_JS_SHA256=2971c5c4577664cd319c9dbdd2f451f141ea6cf201fd52ba8db496dd15bf273c
+LIVE_PID=28288
+LIVE_PID_STARTTIME=2026-09-05 06:11:49 +07
+SUPERSEDES=/assets/index-DGX50qvn.js
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+NO_COMMIT=1
+
+Owner still inverted on DGX50qvn (+1, A/D still turned in place).
+Research: owner only ever play-tested LOOK_YAW_SIGN=+1. Hòn Gió demo
+that felt OK uses lookYawSign=-1 and A/D always strafe (Help: “đi /
+strafe theo hướng nhìn”), not in-place turn. Demo warns: do not flip
+strafe when changing look sign.
+
+This remint:
+1. LOOK_YAW_SIGN=-1 (demo). +1 rejected by owner twice.
+2. A/D and pad ◀/▶ always strafe via applyLookMove. No applyFacingMove
+   on the play tick. Left moves west when facing north (screen left).
+3. Mouse only turns the view. HUD says A/D strafe.
+
+Hard-refresh 4175. Chip still “Máy này · 4175”. HUD must say strafe.
+NOT_PLAN_PASS.

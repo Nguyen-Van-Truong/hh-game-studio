@@ -1,0 +1,86 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=19:52 +07
+ROLE=IMPLEMENTER
+TICK=n/a (do not treat this file as TICK=yes)
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M2=1
+NOT_M1=1
+NOT_OSM=1
+NOT_WAN=1
+PLAYER_URL=http://127.0.0.1:4175/
+RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-45
+COMMAND=node hh-3d/app/data-qa/j5-leftover-kind-probe.mjs
+VERDICT_IMPLEMENTER_CDP=J5_LEFTOVER_KIND_OK
+LIVE_JS=/assets/index-BaH71wNA.js
+LIVE_JS_LEN=2172629
+LIVE_JS_SHA256=bfec78e081bf002f8335dbc767747349bf891f3b17616d2b13acafb17b5536d3
+LIVE_CSS=/assets/index-Dza0__iA.css
+LIVE_CSS_LEN=82661
+LIVE_CSS_SHA256=a87447efdeb34967d524b950412d86f5b5aacfa09f5e66bf1f671061b1f397ba
+LISTEN=127.0.0.1:4175
+LIVE_PID=28080
+LIVE_PID_STARTTIME=2026-09-04 19:51:52 +07
+REMINTED=yes
+CSS_ONLY_REMINTED=1
+ONE_RECYCLE_AFTER_BUILD=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NO_COMMIT=1
+ACCEPTED_PRIOR=CRITIC-3D-LEFTOVER-GAP-REAUDIT-2026-09-04.txt TICK=yes on /assets/index-cmeHN__e.js
+
+================================================================================
+SLICE
+================================================================================
+
+Leftover-gap reaudit TICK=yes. Leftover-panel reaudit had a CSS
+nit: .approx comes later at the same specificity, so leftover
+kind still painted street gold #ead8a8 / uppercase.
+
+This remint adds .approx.shop-panel-leftover-copy after .approx
+so leftover kind is muted #e8dfd0 / #6a5f54, text-transform none.
+JS bytes are unchanged (same sha256 as leftover-gap); Vite
+renamed the script because CSS import fingerprint changed.
+Persist catalog was not cleared.
+
+Did not rip leftover Menu · gap, leftover desc honesty, friend
+viewing, minimap dots, attrib-off-minimap, Nearby/E, or defer.
+
+================================================================================
+CDP (headless Chrome, 1280×720, isolated guest B, recycled 4175)
+================================================================================
+
+Live after recycle (old pid 50264 → 28080):
+  /assets/index-BaH71wNA.js
+  LEN=2172629
+  SHA256=bfec78e081bf002f8335dbc767747349bf891f3b17616d2b13acafb17b5536d3
+  CSS=/assets/index-Dza0__iA.css LEN=82661
+  SHA256=a87447efdeb34967d524b950412d86f5b5aacfa09f5e66bf1f671061b1f397ba
+
+Leftover Shared PC kindBg=rgb(232, 223, 208) kindColor=rgb(106, 95, 84)
+kindTransform=none. Not gold rgb(234, 216, 168). Menu gap still
+holds. Spawn E not stolen.
+
+Shot=hh-3d/app/data-qa/j5-3d-leftover-kind.png
+Probe=hh-3d/app/data-qa/j5-leftover-kind-probe.mjs
+JSON=hh-3d/app/data-qa/J5-LEFTOVER-KIND-2026-09-04.txt
+
+Implementer CDP only. Not an independent critic TICK. Not a plan tick.
+
+================================================================================
+OWNER LEFTOVERS (unchanged)
+================================================================================
+
+1. GATE-U1 three-human review (first acceptance leftover; not faked).
+2. R2-WP1 headed/mobile/memory/min-FPS thresholds still UNFILLED.
+3. WAN / other-PC join still not built. 4175 loopback only.
+4. R4-WP0B real account/OIDC still not built.
+5. Open data (OSM/Overture) still needs license ledger + grant.
+6. Leftover this-PC shops stay in the catalog; they do not own street E.
+7. M0/M1/M2 plan WPs still NOT_STARTED. NOT_PLAN_PASS. Not M1. Not M2.

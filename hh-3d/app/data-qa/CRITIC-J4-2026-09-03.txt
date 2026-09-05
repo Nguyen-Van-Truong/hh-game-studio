@@ -1,0 +1,428 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+BIGGEST_MISS=Still this-machine localStorage + 4175 /demo-bus (another PC cannot join). ASCII "ban sung" published past the accented "bán súng" filter.
+
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-03
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=2026-09-03 11:34 +07
+MODEL=grok-4.6
+SCOPE=HH World J4 local create-any-shop + walk+E on existing 4175
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=657634f8f82281bd670c9a375ad49c6180db3583
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+CONCURRENCY=hh-3d/app/data-qa/CONCURRENCY-2026-09-03.txt
+LEAD_RUN_ID=HH3D-J4-20260903-ASIA-SAIGON-01
+LEAD_PROBE=hh-3d/app/data-qa/j4-create-shop-probe.mjs
+LEAD_PACK=hh-3d/app/data-qa/J4-CREATE-SHOP-2026-09-03.txt
+PROGRESS_TRUSTED_ALONE=NO
+LEAD_PROBE_TRUSTED_ALONE=NO
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_VF_TOUCH=1
+NO_UNREAL=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_RUN_THEIR_PROBE_WRITER=1
+INDEPENDENT_CDP=1
+CDP_PORTS=9284/9285
+CDP_PROFILES=isolated_temp_user-data-dir
+NOT_PLAN_PASS=1
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/
+
+Create-any-shop + walk+E is real on the already-up 4175 preview. This
+critic did not re-run j4-create-shop-probe.mjs (that writer overwrites
+J4-CREATE-SHOP-2026-09-03.txt). Independent two-context Chrome CDP
+(debug 9284/9285, fresh temp profiles, stdout only) typed a unique
+non-fish name, not their default Phở.
+
+  1. Guest A walked south, became "Chủ quầy (máy này)", replaced the
+     default "Quầy Phở Nhà / Phở bò" with "Quay Sach Phe Binh J4" /
+     "Sach giao khoa", submitted. New id shop-local-mtl14k19867xtg
+     published. Marker appeared at the character
+     (106.6980762, 10.7715569). Public count 2 → 3. Lantern marker
+     stayed. Goods row: Sach giao khoa · Khác/other · that shop.
+  2. Leave demo owner: signed-in=no, become back, 3 markers remain
+     including the sách shop.
+  3. E at the character opened THAT shop (panel id
+     shop-local-mtl14k19867xtg, title Quay Sach Phe Binh J4, listing
+     Sach giao khoa). Not lantern. Owner label: "Browse does not need
+     friends or an account."
+  4. Isolated guest B (no friends, signed-in=no) saw all three markers
+     via this 4175 /demo-bus. B walked south; E at 8.1 m opened the
+     same sách shelf (same listing id listing-local-mtl14k19j5f0ba).
+  5. Simulate no-network + new shop: result status=draft, text
+     "Chưa đăng — nháp chờ mạng. Not posted." daDang=false. Draft
+     shop not added to public markers (count stayed 3).
+
+This is NOT a plan PASS. NOT M1-WP0. NOT GATE-U1. GATE-U1 was not
+faked. Plan STATE/PASS not flipped. Copy does not claim another PC
+can join today, city-scale GTA, or GPS.
+
+Biggest miss: still a this-machine local demo (localStorage + this
+4175 /demo-bus). Another PC cannot join. Also: prohibited check exists
+but ASCII "ban sung" published (disk regex is "bán súng"). That is a
+moderation hole, not a fake create. Not M1-WP1.
+
+================================================================================
+METHOD
+================================================================================
+
+Disk (not PROGRESS alone):
+  hh-3d/app/PROGRESS.txt
+  hh-3d/app/data-qa/CONCURRENCY-2026-09-03.txt
+  hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+    (CURRENT_FIRST_LEFTOVER, WP_STATE_PASS_POLICY, GATE-U1 / M1-WP0)
+  hh-3d/app/docs/review/README.txt
+  hh-3d/app/web/src/shops/{CreateShopForm,localShops,localListings,
+    moderation,catalog,ShopPanel,GoodsList}.ts(x)
+  hh-3d/app/web/src/app/App.tsx  (createShop at avatar lon/lat)
+  hh-3d/app/web/src/avatar/{walk.ts,StreetHelp.tsx,useAvatar.ts}
+  hh-3d/app/web/src/ui/HonestyBanner.tsx
+  hh-3d/app/web/src/friends/bus.ts  vite.demo-bus.ts
+  hh-3d/app/web/public/data/shops.json
+  hh-3d/app/web/tests/local-shop.test.mjs
+  hh-3d/app/data-qa/j4-create-shop-probe.mjs  (read; not run)
+  hh-3d/app/data-qa/J4-CREATE-SHOP-2026-09-03.txt  (read; not re-run)
+  git log -1; git diff --cached --name-only
+
+Live (existing 4175 only; did not start another HH World preview):
+  TCP 127.0.0.1:4175 LISTEN pid 39236
+  4173 DOWN  4174 DOWN  5175 DOWN
+  GET /                                              200  title HH World
+    script /assets/index-jeQ9lFe4.js
+  GET /assets/index-jeQ9lFe4.js                      200  len=1171161
+  GET /data/shops.json                               200  shop-lantern-fish only
+  GET /demo-bus                                      200  kind=local-demo-bus
+    leftover published Quầy Phở Nhà (their prior probe)
+    not_plan_pass=true  not_presence_server=true
+  Independent two-context Chrome CDP vs 4175
+    A 9284  B 9285  about:blank then ?seat=a|b
+    Isolated user-data-dir (BroadcastChannel cannot cross profiles;
+    /demo-bus is the cross-profile path)
+  Did not run node j4-create-shop-probe.mjs (writer).
+  Did not run npm build. Did not start 4173/4174/5175.
+  Did not POST catalog_clear (would mutate their leftover). Creating
+  a shop through the player UI did publish onto the shared bus; that
+  is the feature under test.
+
+================================================================================
+PROCESS / GIT
+================================================================================
+
+RESULT=PASS_ON_STATED_FAIL_RULE
+
+Stated fail: VF / AGENTS.md staged with this if they committed.
+Observed:
+  git diff --cached --name-only  = empty
+  last commit = 657634f VF6-WP3: tick after critic and official PASS
+  No J4 / hh-3d/app commit in HEAD
+  Critic did not commit, did not tick plan, did not touch VF.
+
+Working tree dirt (not this critic's write):
+  hh-3d/app/ still wholly untracked
+  VF evidence dirty elsewhere
+Process landmine for a later mixed commit. Not the stated FAIL.
+
+================================================================================
+ATTACK 1 — CREATE ANY ALLOWED SHOP, NOT ONLY LANTERN / DEFAULT PHỞ?
+================================================================================
+
+RESULT=PASS
+
+shops.json on 4175: only shop-lantern-fish (Cá nục + Túi cói + hidden
+draft). No sách shop in the fixture.
+
+Home A (fresh profile, empty localStorage, then /demo-bus pull):
+  2 public markers already: lantern + leftover Quầy Phở Nhà
+    (shop-local-mtl0pvfk7hwglz at spawn from their earlier probe)
+  That leftover is their prior create, not this critic's.
+
+This critic walked south (~8 s) so the new shop would not sit on the
+leftover Phở pin, then typed a unique ASCII name (not the form
+default):
+
+  default fields were Quầy Phở Nhà / Phở bò
+  native setter: nameOk=true goodOk=true
+    name=Quay Sach Phe Binh J4
+    good=Sach giao khoa
+  submit result status=published
+    shop=shop-local-mtl14k19867xtg
+    listing=listing-local-mtl14k19j5f0ba
+  publicCount 2 → 3
+  new marker at avatar 106.6980762, 10.7715569
+  lantern marker still present
+  goods include "Sach giao khoaKhác / other · Quay Sach Phe Binh J4"
+
+Hardcoded-only would have shown the sách shop on first paint or in
+shops.json. It did not. Different id from their packed
+shop-local-mtl0pvfk7hwglz. Create is real and not lantern-only.
+
+Their probe only clicked submit on the Phở default. This seat typed
+a non-fish name. Stronger than their pack.
+
+================================================================================
+ATTACK 2 — WALK + E OPENS THAT SHOP'S GOODS, NOT ONLY LANTERN?
+================================================================================
+
+RESULT=PASS
+
+After leave-identity, A E at the character (0.0 m):
+  shopPanel=true
+  shopPanelId=shop-local-mtl14k19867xtg
+  title=Quay Sach Phe Binh J4
+  listings[0]=Sach giao khoa / other / published / local-demo
+  stallHint=Press E or tap Open to enter Quay Sach Phe Binh J4.
+  NOT shop-lantern-fish. NOT leftover Phở.
+
+Isolated guest B started near leftover Phở, walked S, E at 8.1 m:
+  shopPanel=true
+  shopPanelId=shop-local-mtl14k19867xtg
+  same listing-local-mtl14k19j5f0ba Sach giao khoa
+  identitySigned=no
+
+That is walk-into-range + E on the player shop, not a goods-list
+click and not lantern.
+
+Residual: after create, a further S hold only slid east ~4.5 m
+(still inside 10 m; building/AOI slide). Far-E therefore still
+opened sách. That does not undo the at-character E or B's 8.1 m E.
+10 m is still a radius, not stall-counter geometry.
+
+================================================================================
+ATTACK 3 — LEAVE DEMO OWNER / OFFLINE: SHELF STAYS?
+================================================================================
+
+RESULT=PASS
+
+After Leave demo owner:
+  identitySigned=no  become=true  leave=false
+  publicCount=3
+  markers still include lantern + leftover Phở + sách shop
+
+E after leave opened the sách shelf as Guest.
+
+Isolated B never became owner and still saw / opened that shop.
+Owner process from their prior Phở probe is already gone; leftover
+Phở remained on /demo-bus and on both fresh profiles.
+
+Owner-Offline checkbox was not re-toggled this seat (J1/J2 already
+showed it only swaps copy). Leave-identity + second profile is the
+stronger J4 proof. Offline stroll is not a catalog revoke.
+
+================================================================================
+ATTACK 4 — GUEST PATH REQUIRES FRIENDS?
+================================================================================
+
+RESULT=PASS  (friends not required)
+
+Home A identity: "Guest · shops public; friends not required"
+friendsRequired body scan: false
+Shop panel ownerLabel after E:
+  "Guest on this machine. Browse does not need friends or an account."
+B opened the sách shelf with no Add-friend / Accept and signed-in=no.
+
+Browse does not go through the friends graph.
+
+================================================================================
+ATTACK 5 — CONCURRENCY COPY: CITY-SCALE GTA OR ANOTHER PC TODAY?
+================================================================================
+
+RESULT=PASS  (honest denial)
+
+PROGRESS CONCURRENCY block:
+  TODAY: localhost 4175, one machine. Another PC cannot join.
+  Isolated profiles on THIS host share the 4175 process bus.
+  Later hosted browse: thousands-class plausible; not GTA-style sim.
+  Presence intent: friends-only ~20. Do not invent 10 000 GTA players.
+
+CONCURRENCY-2026-09-03.txt repeats the same: NOT_A_CITY_SERVER,
+NOT_GTA, another PC cannot join, GATE-U1 leftover.
+
+Live honesty banner: "Not a city shop server. No GTA claim, no 1:1
+city." Presence: in-app, not GPS. NOT_PLAN_PASS.
+
+No claim that another PC can join today. No 10000-GTA capacity claim.
+
+================================================================================
+ATTACK 6 — GPS / WP PASS / FAKE GATE-U1?
+================================================================================
+
+RESULT=PASS  (not faked; no GPS player path; no WP PASS)
+
+Live A:
+  geolocateBtn=false
+  googleOidc=false
+  gtaClaim=false
+  honestyNotGps=true  (presence + avatar-status "not GPS")
+  notPlanPass=true
+  identity after Become: local demo, NOT a real account, NOT
+    Google/OIDC, NOT_PLAN_PASS
+
+Canonical plan still:
+  CURRENT_FIRST_LEFTOVER=GATE-U1
+  WP_STATE_PASS_POLICY=ORIGINAL_VALUES_UNCHANGED_NOT_LIVE_PROGRESS
+  GATE-U1 STATE: NOT_STARTED
+  M1-WP0 STATE: NOT_STARTED
+  No STATE: DONE/PASS/COMPLETE on those WPs
+
+hh-3d/app/docs/review/README.txt still:
+  GATE-U1 is NOT done.
+  Need three independent human reviewers…
+  placeholder so later agents do not invent a pass.
+
+No invented reviewer names, no forged 5-minute notes, no OWNER_SIGN
+name. Leftover #1 remains GATE-U1. Correct.
+
+MapLibre vendor GeolocateControl strings remain in the bundle
+(same residual as J1–J3). MapView does not add that control.
+
+================================================================================
+ATTACK 7 — PROHIBITED CHECK HOLE?
+================================================================================
+
+RESULT=HOLE_OBSERVED  (does not flip TICK; not M1-WP1)
+
+They have a prohibited check (moderation.ts + form error
+"No prohibited items."). Comment: not a legal review, not M1-WP1,
+does not claim complete policy.
+
+Disk BLOCKED includes /bán\s*súng/i and /unlicensed\s*firearm/i.
+No ASCII fold. No bare "sung".
+
+Live spot-check after restoring network: name "Quay thuong",
+goods "ban sung" (ASCII, no diacritics):
+  nameOk/goodOk true
+  result status=published shop=shop-local-mtl15eevhtvjdp
+  formError=""
+  new public marker "Shop · Quay thuong"
+  /demo-bus now lists sells="ban sung" published
+
+So the check is real for the accented token they wrote, and hollow
+for the obvious ASCII synonym. Unit test local-shop.test.mjs does
+not cover "bán súng" / "ban sung".
+
+This is a residual hole, not "create is fake" and not an
+another-PC claim. Stated TICK=no triggers do not fire. Do not
+grant M1-WP1 moderation.
+
+This critic did not POST catalog_clear afterward. The live bus
+now also holds this critic's sách shop, a draft, and the
+"ban sung" row until someone else clears it.
+
+================================================================================
+ATTACK 8 — THEIR PROBE EXIT=0 J4_OBSERVED?
+================================================================================
+
+RESULT=CONSISTENT_BUT_NOT_USED_AS_SOLE_PROOF
+
+On disk:
+  j4-create-shop-probe.mjs exists
+  J4-CREATE-SHOP-2026-09-03.txt verdict=J4_OBSERVED
+    createOk persistOk aWalkOk secondCtxOk twoShopsOk queueOk honestyOk
+    playerShopId=shop-local-mtl0pvfk7hwglz  (default Phở submit)
+
+This critic did not re-run that writer. Independent CDP on the same
+4175 reproduced create + leave + E + second isolated profile +
+Chưa đăng with a different shop id (mtl14k19867xtg) and a typed
+sách name. Lead "probe EXIT=0 J4_OBSERVED" is consistent with the
+file on disk and with this live remint. Their probe never typed
+off-default text; this seat did.
+
+================================================================================
+ATTACK 9 — PLAYER SEAT: CAN A HUMAN CREATE + WALK+E WITHOUT CODE?
+================================================================================
+
+RESULT=PASS
+
+On 4175 a human can:
+  Become Chủ quầy (máy này)
+  Change name/goods off the Phở default
+  Open shop at the character
+  Leave demo owner
+  Walk near (~10 m) and press E to browse THAT shelf
+  Open a second browser profile on this machine and still see it
+  Tick Simulate no-network and read Chưa đăng (not đã đăng)
+
+No Google login. No GPS prompt. No friends required to browse.
+Another machine will not see it. That is the labeled local demo.
+
+================================================================================
+LEAD CLAIMS vs DISK+LIVE
+================================================================================
+
+Claim                                         Verdict
+4175 is the player                            CONFIRMED (only listener)
+Become Chủ quầy (máy này)                     CONFIRMED
+Open shop at character, any allowed name      CONFIRMED (typed sách)
+Lantern remains one example among many        CONFIRMED (3 public)
+Walk ~10 m + E opens THAT shop                CONFIRMED (B @ 8.1 m)
+Leave identity; shop still browseable         CONFIRMED
+Second browser SAME machine sees shop         CONFIRMED (isolated B)
+Offline/leave does not take shelf down        CONFIRMED (leave + leftover)
+Draft no-network = Chưa đăng, not đã đăng     CONFIRMED
+Guest path does not require friends           CONFIRMED
+Probe file J4_OBSERVED / EXIT=0               CONSISTENT; not re-run
+Concurrency: localhost today; not 10000 GTA   CONFIRMED (honest)
+Another PC can join today                     REJECTED (they deny it)
+GATE-U1 not faked / NOT_PLAN_PASS             CONFIRMED
+No GPS player path / no WP PASS               CONFIRMED
+Create is fake / only lantern                 REJECTED
+Prohibited check complete                     REJECTED (ASCII hole)
+
+================================================================================
+HARD FAIL CHECK (TICK=no triggers)
+================================================================================
+
+Create-any-shop + walk+E real on 4175         YES
+Still only lantern                            NO
+Create is fake                                NO  (new id, typed sách)
+Another-PC claimed                            NO  (explicitly denied)
+Page broken / 4175 down / wrong product       NO
+Plan STATE/PASS ticked                        NO
+GATE-U1 humans invented                       NO
+J4 claimed as plan PASS                       NO (labeled NOT_PLAN_PASS)
+
+Therefore TICK=yes for local create-any-shop + walk+E on 4175.
+
+================================================================================
+NOT GRANTED
+================================================================================
+
+- M1-WP0 shop-server independence / catalog cache
+- M1-WP1 moderation (ASCII "ban sung" published)
+- R4-WP0B real identity / OIDC
+- GATE-U1 / any plan PASS
+- Claim that another PC can join today
+- Real cut-cable offline (checkbox only)
+- Far-walk leave-10 m on this seat (S slid east 4.5 m)
+- Permission to start 4173/4174, fetch maps, Unreal, VF, or tick [x]
+
+================================================================================
+INDEPENDENT CDP NUMBERS (4175, 2026-09-03 11:34 +07)
+================================================================================
+
+Created: shop-local-mtl14k19867xtg
+  name=Quay Sach Phe Binh J4  sells=Sach giao khoa
+  lon=106.6980762 lat=10.7715569  status=published
+A leave: 3 markers remain. A E @ 0.0 m opened that shop.
+B E @ 8.1 m opened the same listing-local-mtl14k19j5f0ba.
+Draft: shop-local-mtl15dzfi4lg34 Chưa đăng / not posted / not public.
+ASCII ban-sung hole: shop-local-mtl15eevhtvjdp published.
+
+================================================================================
+END
+================================================================================

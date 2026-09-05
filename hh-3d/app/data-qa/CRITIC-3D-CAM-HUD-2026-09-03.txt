@@ -1,0 +1,347 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+BIGGEST_MISS=Heading-follow is real, but the world is still five AABB boxes on a beige slab. Menu/Tab reopens the old 320x661 list dashboard. NOT_PLAN_PASS.
+
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-03
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=13:40 +07
+MODEL=grok-4.6
+SCOPE=HH World heading-follow camera + slim HUD on already-up 4175 (authored 400 m, NOT GTA / NOT 1:1)
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=1567956b35dbe78e938280f930ad711a5fb68de4
+PROGRESS_CLAIMS_HEAD=1567956b35dbe78e938280f930ad711a5fb68de4
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-CAM-HUD-2026-09-03.txt
+PRIOR_CRITIC=hh-3d/app/data-qa/CRITIC-3D-WALK-2-2026-09-03.txt
+LEAD_PROBE=hh-3d/app/data-qa/j5-3d-walk-probe.mjs
+LEAD_PACK=hh-3d/app/data-qa/J5-3D-WALK-2026-09-03.txt
+PROGRESS_TRUSTED_ALONE=NO
+LEAD_PROBE_TRUSTED_ALONE=NO
+LEAD_PACK_TRUSTED_ALONE=NO
+DATA_CAM_YAW_TRUSTED_ALONE=NO
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_VF_TOUCH=1
+NO_UNREAL=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_RUN_LEAD_PROBE_WRITER=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M0_WP1=1
+NOT_GTA=1
+NOT_1TO1=1
+CRITIC_CDP_PORT=9311
+LIVE_JS=/assets/index-CfCQsQ-2.js
+LIVE_PID=33136
+LIVE_CMD=node .../hh-3d/app/web/node_modules/vite/bin/vite.js preview
+VITE_PREVIEW_PORT_PIN=4175
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/
+
+4175 was already up (vite preview pid 33136). This critic used that preview
+and did not start 4173, 4174, 5175, or a second HH World preview. Independent
+Chrome CDP (debug 9311, about:blank then navigate, temp profile only) held A
+first, then W, then Tab, then a fresh navigate + W + E.
+
+Heading-follow is real. Hold A 1.5 s turned the body from 0° north to 195°
+south. The camera view rotated with it (north street / shop labels gone;
+south brown slabs ahead; character still seen from behind). Then W 4 s moved
+the body 6.40 m on bearing 195.06° (east -1.66 m, north -6.18 m). That is
+south-southwest along the new heading, not world-north. Stall range rose
+28 m → 34 m because the lantern shop sits north of spawn.
+
+Default HUD is slim. Overlay chrome at home is 9.93% of 1280x720. Seats and
+lists are display:none (0x0). Menu/Tab reveals the old 320x661 side dashboard.
+Default is still third-person R3F (play canvas 1280x720). MapLibre is only the
+182x132 corner "2D map". Shop E still opens Quầy Cá Đèn Lồng at ~5.5 m.
+
+Honesty denies GTA / 1:1. Plan leftover is still GATE-U1 STATE: NOT_STARTED.
+This is NOT_PLAN_PASS. GATE-U1 humans were not invented.
+
+Biggest miss: still five AABB boxes on a beige slab, not a city. Menu/Tab
+reopens the old list dashboard. Heading-follow itself is not the miss.
+
+================================================================================
+METHOD
+================================================================================
+
+Read on disk (not PROGRESS / J5 alone):
+  hh-3d/app/web/src/avatar/walk.ts
+    TURN_DEG_PER_SEC=110; applyFacingMove: A/D turn in place; W/S along heading
+  hh-3d/app/web/src/avatar/useAvatar.ts
+    A/left = turn -1; W = forward +1
+  hh-3d/app/web/src/play/world.ts
+    followCameraPose(pos, headingDeg) — yaw from heading, not PLAY_BEARING_DEG
+    PLAY_BEARING_DEG=0 still exists as a leftover constant; unused by the rig
+  hh-3d/app/web/src/play/PlayView.tsx
+    FollowCamera uses followCameraPose(..., avatar.heading)
+    data-cam-yaw is yawDeg copied from that same function (= heading).
+    NOT treated as camera proof.
+  hh-3d/app/web/src/app/App.tsx
+    listsOpen = !webglOk || menuOpen; aside hidden unless Menu/Tab
+  hh-3d/app/web/src/app/app.css
+    .app-play .side[hidden]{display:none}; slim honesty / overlay side
+  hh-3d/app/web/src/ui/Header.tsx          Menu + Tab
+  hh-3d/app/web/src/ui/HonestyBanner.tsx   compact: No GTA / no 1:1 / NOT_PLAN_PASS
+  hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+    CURRENT_FIRST_LEFTOVER=GATE-U1; GATE-U1 STATE: NOT_STARTED
+  hh-3d/app/docs/review/README.txt         GATE-U1 is NOT done
+  Prior critic CRITIC-3D-WALK-2 (TICK=yes) asked for heading-follow + slim HUD
+  Lead pack J5-3D-WALK-2026-09-03.txt read only as claim, not proof
+    (that probe walked W first, then A — not this critic's sequence)
+
+Live (existing 4175 only; did not start another HH World preview):
+  TCP 127.0.0.1:4175 LISTEN pid 33136 node vite preview
+  4173 DOWN  4174 DOWN  5175 DOWN  9311 critic-only then killed
+  GET /                         200  title=HH World
+                                script /assets/index-CfCQsQ-2.js
+  Live JS Content-Length=2065470
+    HAS_THREE=1  HAS_R3F=1  HAS_MAPLIBRE=1  HAS_PLAY_VIEW=1
+    HAS_GTA=0  HAS_NO_GTA=1  PLAY_BEARING_HARDCODE=0
+  Independent Chrome CDP vs 4175 (debug 9311, about:blank then navigate)
+    shots TEMP only (not written under data-qa):
+      C:\Users\truon\AppData\Local\Temp\hh-critic-3d-cam-hud\critic-home.png     53467 B
+      C:\Users\truon\AppData\Local\Temp\hh-critic-3d-cam-hud\critic-hold-a.png   46130 B
+      C:\Users\truon\AppData\Local\Temp\hh-critic-3d-cam-hud\critic-after-w.png  48830 B
+      C:\Users\truon\AppData\Local\Temp\hh-critic-3d-cam-hud\critic-tab-menu.png 88535 B
+      C:\Users\truon\AppData\Local\Temp\hh-critic-3d-cam-hud\critic-shop-e.png   89218 B
+  Did not run j5-3d-walk-probe.mjs. Did not write J5-3D-WALK-2026-09-03.txt.
+  Did not run npm build. Did not recycle the preview.
+
+================================================================================
+PROCESS / GIT
+================================================================================
+
+RESULT=PASS_ON_STATED_FAIL_RULE
+
+Stated fail: VF / AGENTS.md staged with this if they committed.
+Observed:
+  git diff --cached --name-only  = empty
+  last commit = 1567956 VF6-WP4: tick after critic and official PASS
+  No hh-3d/app commit in HEAD
+  Critic did not commit, did not tick plan, did not touch VF.
+
+Working tree dirt (not this critic's write):
+  Many godot/dogfood/superfighters/* + hh-3d/app untracked + plan modified.
+  Process landmine for a later mixed commit. Not the stated FAIL.
+
+================================================================================
+ATTACK 1 — HOLD A: CAMERA YAW AND BODY HEADING MUST CHANGE TOGETHER
+================================================================================
+
+RESULT=PASS  (visual + pose; not data-cam-yaw alone)
+
+Sequence required: Hold A first. Did not walk first.
+
+Home (spawn seat a):
+  heading=0  status="You: standing · facing north · A/D turn"
+  lon=106.6980400  lat=10.7716200
+  proof.camYaw=0  proof.camX=4.79  proof.camZ=-103.56
+  stall=28 m  pose=idle
+  Shot: body from behind, street ahead, Shop · Quầy Cá Đèn Lồng + Market
+  Steps / Roundabout Green / Clock Garden labels in front.
+
+Hold A 1500 ms (TURN_DEG_PER_SEC=110 → expected wrap(0-165)=195):
+
+  heading=195  status="You: standing · facing south · A/D turn"
+  lon/lat UNCHANGED (in-place turn; moveHomeA east=0 north=0)
+  proof.camYaw=195  proof.camX=5.42  proof.camZ=-92.44
+  stall still 28 m
+  self-hit box still 36x48 at 622,470 (camera stayed behind the mesh)
+
+  data-cam-yaw === heading is NOT independent proof. PlayView sets
+  yawDeg = heading inside followCameraPose. Rejected as sole evidence.
+
+  Camera-orbit proof at the same lng/lat: camX/camZ jumped
+  4.79,-103.56 → 5.42,-92.44. A north-locked rig would keep the same
+  behind-north seat.
+
+  Visual proof (hashes differ home 16e7a409e47ef81a vs A 26f10b63f2a433ad):
+  After A the north shop / place labels are gone. The frame looks at two
+  dark brown horizontal slabs on beige. Character still seen from behind,
+  not in profile. HUD says facing south.
+
+  window.THREE / canvas.__r3f were absent (R3F does not leak the camera).
+  Not used.
+
+================================================================================
+ATTACK 2 — THEN W: BODY MOVES ALONG THE NEW HEADING, NOT WORLD-NORTH
+================================================================================
+
+RESULT=PASS
+
+After the A turn, hold W 4000 ms. Did not reset heading.
+
+  afterA  lon=106.6980400  lat=10.7716200  heading=195
+  afterW  lon=106.6980248  lat=10.7715645  heading=195
+  east=-1.662 m  north=-6.178 m  moved=6.398 m  bearing=195.06°
+  alongHeading=true  northLockedWalk=false
+  stall 27.97 m → 34.17 m  (walked away from the north shop)
+
+World-north W from spawn would raise lat and keep lon, and stall would
+fall. Observed: lat fell, lon fell west a little, stall rose. Speed
+6.40 m / 4.0 s = 1.60 m/s matches WALK_SPEED_MPS.
+
+Visual after W: still third-person from behind, still facing the south
+slabs. Shot hash 6a59a96e0dac6a72 ≠ hold-A. Camera translated with the
+body (camX 5.42→3.76, camZ -92.44→-98.63) while heading stayed 195.
+play-self-hit stayed 36x48 @ 622,470 — follow, not a stuck pin.
+
+================================================================================
+ATTACK 3 — DEFAULT HUD SLIM; MENU/TAB REVEALS OLD LISTS
+================================================================================
+
+RESULT=PASS_DEFAULT_SLIM
+
+Home 1280x720, menu hidden:
+  aside[data-testid=play-menu]  hidden=true  display=none  box 0x0
+  app data-menu=closed  menuToggle="MenuTab"
+  friends / places / goods / createShop / modeBar all 0x0
+  No seats covering the 3D canvas.
+
+  Visible chrome only:
+    .topbar        162x30   top 6, left 7
+    .honesty-slim  544x39   top 6, left 175
+    .street-help   248x131  top 499, left 12
+    .walk-pad      112x74   top 629, left 12
+    .minimap-wrap  184x134  top 577, left 1087
+  overlayArea=91519  overlayRatio=0.0993  (~10%)
+
+Tab key:
+  menuOpen=true  hidden=false  app data-menu=open  toggle="CloseTab"
+  play-menu box 320x661 at 951,50
+  Shot: Offline / Online, "Show my character…", Seat B / Seat C.
+  places top=1353 and goods top=1570 sit below vh=720 (scroll the side).
+  overlayRatio 0.73 is a SUM of overlapping boxes (menu + friends +
+  mode-bar counted three times). Visual cover is one 320-wide panel, not
+  a full-canvas dashboard. Default (pre-Tab) is the bar that matters.
+
+Lead "lists behind Menu/Tab" CONFIRMED. Default is not dashboard-first.
+
+================================================================================
+ATTACK 4 — STILL THIRD-PERSON 3D DEFAULT (NOT MAPLIBRE-FIRST)
+================================================================================
+
+RESULT=PASS
+
+Home:
+  play-view data-engine=r3f  canvas.play-canvas 1280x720 inset 0
+  worldMap=false  maplibreMain=false  webgl-fallback=false
+  maplibreAny=true only as minimap 182x132 at 578,1088
+  avatar.engine=r3f  doll HTML pin=false
+  Shot: stylized teal tunic from behind, boxes with height, not a
+  full-page MapLibre + CSS doll.
+
+Live bundle index-CfCQsQ-2.js (newer than CRITIC-3D-WALK-2's
+index-BkvBebH4.js). PLAY_BEARING hardcoded string absent.
+
+================================================================================
+ATTACK 5 — SHOP E STILL WORKS
+================================================================================
+
+RESULT=PASS
+
+Fresh navigate after the A/W/Tab pass (spawn heading 0 again). Hold W
+14 s north to the stall. Did not click goods list / Open nearby.
+
+  near: shopRangeM=5.55  nearbyBtn=true
+        hint="Press E or tap Open to enter Quầy Cá Đèn Lồng."
+  KeyE: shopPanel=true  title=Quầy Cá Đèn Lồng
+        shop-sheet 320x661 at 951,50  overlayRatio=0.335 (sheet open)
+  Shot: Cá nục sương (mẫu) + Túi cói chợ (mẫu), Close shelf, owner-Offline
+  checkbox. Menu stayed closed. 3D body still on screen behind the pole.
+
+Selector data-listing-id was empty (markup uses other attrs). Listings
+were read from the screenshot, not from that empty array.
+
+================================================================================
+ATTACK 6 — GTA / 1:1 / GATE-U1 / PLAN PASS
+================================================================================
+
+RESULT=PASS  (none of the cheats)
+
+Live honesty compact:
+  "Authored approximation. Not a live map, not OSM/Overture, not
+  photogrammetry, and not a digital twin. No GTA claim, no 1:1 city.
+  NOT_PLAN_PASS."
+gtaRaw=false  oneToOne=false
+Presence: Offline — Stroll alone; shops still open.
+
+Plan: CURRENT_FIRST_LEFTOVER=GATE-U1
+GATE-U1 STATE: NOT_STARTED (line 862)
+docs/review/README.txt: "GATE-U1 is NOT done."
+No invented human reviewers. No WP STATE flipped by this critic.
+
+================================================================================
+LEAD CLAIMS vs INDEPENDENT LIVE
+================================================================================
+
+Claim                                         Verdict
+Camera stays behind facing                    CONFIRMED (A then W shots;
+                                              body from behind both times)
+A/D turn                                      CONFIRMED (A: heading 0→195,
+                                              in-place, lon/lat frozen)
+W/S along heading                             CONFIRMED (bearing 195.06°;
+                                              not world-north)
+Not locked north                              CONFIRMED
+Menu/Tab opens old lists                      CONFIRMED (320x661; seats)
+Default HUD slim (~10% overlay)               CONFIRMED (0.0993)
+Shop E still works                            CONFIRMED (5.5 m, lantern,
+                                              fish+bag on shot)
+NOT GTA / NOT 1:1                             CONFIRMED
+NOT_PLAN_PASS                                 CONFIRMED
+GATE-U1 not faked                             CONFIRMED
+4175 existing preview                         CONFIRMED pid 33136
+4173/4174 / second preview                    NOT STARTED by this critic
+
+Lead J5 pack (SAIGON-04, W then A, overlay 0.0993, yaw 0→228) is
+consistent on overlay and turn math. Not used as proof. This critic
+ran A then W as specified.
+
+================================================================================
+HARD FAIL CHECK (TICK=no triggers)
+================================================================================
+
+Camera still north-locked                     NO  (A rotates view; W walks
+                                              195°, stall 28→34)
+HUD still dashboard-first                     NO  (lists 0x0 until Tab)
+Page broken / 4175 down / wrong product       NO
+Probe-only (no independent CDP)               NO
+data-cam-yaw used as sole camera proof        NO
+GPS used as player position                   NO
+Plan STATE/PASS ticked                        NO
+GATE-U1 humans invented                       NO
+GTA / 1:1 claimed in chrome                   NO
+
+Therefore TICK=yes for heading-follow + slim default HUD on 4175
+as labeled.
+
+================================================================================
+NOT GRANTED
+================================================================================
+
+- GATE-U1 / M0-WP1 / M1-WP0 / M2 / R2-WP0 / R2-WP1
+- A city, a canyon, or 1:1 streets (five AABB boxes + beige slab)
+- Permission to treat play-proof data-follow="heading" as runtime camera
+- WebGL-off fallback as a 3D walk (still the 2D map)
+- Real shop/catalog/presence server
+- Permission to start 4173/4174, fetch maps, Unreal, VF, or tick [x]
+
+================================================================================
+END
+================================================================================

@@ -1,0 +1,183 @@
+{
+  "run_id": "HH3D-J5-20260903-ASIA-SAIGON-09",
+  "player": "http://127.0.0.1:4175/",
+  "verdict": "J5_FEEL_OK",
+  "not_plan_pass": true,
+  "not_gate_u1": true,
+  "lookPath": "canvas-pointer",
+  "lookOk": true,
+  "walkAlongLookOk": true,
+  "padStillTurns": true,
+  "streetOk": true,
+  "slideOk": true,
+  "honestyOk": true,
+  "padOk": true,
+  "yawDelta": 25.2,
+  "yawKept": 25.2,
+  "pitchDelta": 5,
+  "camMoved": true,
+  "lookWalk": {
+    "east": 1.5091477160625402,
+    "north": 3.206015999894447,
+    "moved": 3.543453882933426
+  },
+  "street": {
+    "east": 0,
+    "north": 12.857459999968057,
+    "moved": 12.857459999968057
+  },
+  "toward": {
+    "east": 11.067079788355132,
+    "north": -1.4916880000305355,
+    "moved": 11.167156671742982
+  },
+  "extra": {
+    "east": 0,
+    "north": -0.9239559999215174,
+    "moved": 0.9239559999215174
+  },
+  "lonSpanM": 0,
+  "latMono": true,
+  "slideSamples": [
+    {
+      "lon": 106.6981412,
+      "lat": 10.7717214,
+      "pose": "walk",
+      "slide": "1",
+      "inside": "0",
+      "heading": 95.3
+    },
+    {
+      "lon": 106.6981412,
+      "lat": 10.7717207,
+      "pose": "walk",
+      "slide": "1",
+      "inside": "0",
+      "heading": 95.3
+    },
+    {
+      "lon": 106.6981412,
+      "lat": 10.77172,
+      "pose": "walk",
+      "slide": "1",
+      "inside": "0",
+      "heading": 95.3
+    },
+    {
+      "lon": 106.6981412,
+      "lat": 10.7717193,
+      "pose": "walk",
+      "slide": "1",
+      "inside": "0",
+      "heading": 95.3
+    },
+    {
+      "lon": 106.6981412,
+      "lat": 10.7717186,
+      "pose": "walk",
+      "slide": "1",
+      "inside": "0",
+      "heading": 95.3
+    },
+    {
+      "lon": 106.6981412,
+      "lat": 10.771718,
+      "pose": "walk",
+      "slide": "1",
+      "inside": "0",
+      "heading": 95.3
+    },
+    {
+      "lon": 106.6981412,
+      "lat": 10.7717173,
+      "pose": "walk",
+      "slide": "1",
+      "inside": "0",
+      "heading": 95.3
+    },
+    {
+      "lon": 106.6981412,
+      "lat": 10.7717166,
+      "pose": "walk",
+      "slide": "1",
+      "inside": "0",
+      "heading": 95.3
+    },
+    {
+      "lon": 106.6981412,
+      "lat": 10.7717159,
+      "pose": "walk",
+      "slide": "1",
+      "inside": "0",
+      "heading": 95.3
+    },
+    {
+      "lon": 106.6981412,
+      "lat": 10.7717152,
+      "pose": "walk",
+      "slide": "1",
+      "inside": "0",
+      "heading": 95.3
+    },
+    {
+      "lon": 106.6981412,
+      "lat": 10.7717145,
+      "pose": "walk",
+      "slide": "1",
+      "inside": "0",
+      "heading": 95.3
+    },
+    {
+      "lon": 106.6981412,
+      "lat": 10.7717138,
+      "pose": "walk",
+      "slide": "1",
+      "inside": "0",
+      "heading": 95.3
+    }
+  ],
+  "duringLook": {
+    "camera": "behind",
+    "follow": "look",
+    "look": "drag",
+    "heading": 25.2,
+    "camYaw": 25.2,
+    "camPitch": 5,
+    "camX": 2.38,
+    "camY": 3.87,
+    "camZ": -103.19,
+    "buildings": 60,
+    "slide": "0",
+    "insideAabb": "0",
+    "hitBuilding": ""
+  },
+  "afterLook": {
+    "camera": "behind",
+    "follow": "look",
+    "look": "off",
+    "heading": 25.2,
+    "camYaw": 25.2,
+    "camPitch": 5,
+    "camX": 2.38,
+    "camY": 3.87,
+    "camZ": -103.19,
+    "buildings": 60,
+    "slide": "0",
+    "insideAabb": "0",
+    "hitBuilding": ""
+  },
+  "atWall": {
+    "lon": 106.6981412,
+    "lat": 10.7717221,
+    "heading": 95.3
+  },
+  "still": {
+    "lon": 106.6981412,
+    "lat": 10.7717138,
+    "inside": "0"
+  },
+  "shots": {
+    "look": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-look.png",
+    "slide": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-slide.png"
+  }
+}

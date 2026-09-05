@@ -1,0 +1,59 @@
+PROGRESS — hh-3d/hh3d-real-world-open-world
+DATE=2026-09-03
+TIMEZONE=Asia/Saigon
+GIT_HEAD_AT_WRITE=ff702a7112cb00ef97160025d3006ecb75f415ee
+READ_THIS_AFTER=START.txt
+LIVE_PRODUCT_PROGRESS=hh-3d/app/PROGRESS.txt
+
+A later agent working on HH World should restart from hh-3d/app/PROGRESS.txt.
+This sandbox file is a routing note only.
+
+OWNER GRANT 2026-09-03
+  OWNER_CHAT_GRANT=làm HH World web
+  TARGET_PLAN=real-application
+  CURRENT_WP=R0-WP0 then continued local proof
+  ACCEPT_RECOMMENDATIONS=YES
+  AUTHORIZE_HH3D_APP_SCAFFOLD=YES
+  AUTHORIZE_MAP_FETCH=NO
+  AUTHORIZE_CESIUM=NO
+  AUTHORIZE_GOOGLE_PHOTOREALISTIC=NO
+  AUTHORIZE_UNREAL_INSTALL=NO
+  AUTHORIZE_PAID_API=NO
+  AUTHORIZE_GODOT2_CITY=NO
+  Real work moved to hh-3d/app/.
+  Official decision record:
+    hh-3d/app/decision-records/2026-09-03-r0-wp0-hh-world-web.txt
+  Player URL: http://127.0.0.1:4175/
+
+DONE (sandbox history, still true)
+  - Sandbox papers / CRITIC-D paper G0 closeout.
+  - POINTER paper R0-WP0-WEB-DECISION-RECORD.txt (historical).
+  - Unreal STOP. No G0-ENGINE.
+
+CHANGED THIS SESSION
+  - Owner grant opened hh-3d/app/ (sandbox "do not create app" is stale).
+  - Original review-log.txt received an allowed R0-WP0 factual append.
+    Sandbox hashed copy of review-log.txt is now behind the original.
+    Do not recopy unless doing an official wipe.
+
+NOT DONE
+  - Do not tick original plan checkboxes.
+  - No map fetch. No Unreal. No Cesium. No Google.
+  - GATE-U1 / FPS still UNPROVEN (see hh-3d/app/PROGRESS.txt).
+  - Owner modes not implemented: hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+
+NEXT
+  CURRENT_SANDBOX_WP=SANDBOX-G0-DOCS (paper closed; do not redo)
+  LIVE_WP=see hh-3d/app/PROGRESS.txt
+  NEXT_NATIVE_WP=NONE
+  1. Continue HH World in hh-3d/app/, not here.
+  2. Do not treat open-world §9 as next.
+
+FORBIDDEN
+  - Unreal / Epic / .uproject / G0-ENGINE / G1+
+  - Cesium ion / Google Photorealistic / paid API / map dump
+  - Godot VF / zdocs/20-8-* / zdocs/29-8-* / Godot-2 city
+  - Rewrite or tick hh-3d/zdoc/ originals (review-log append already done)
+  - Preview 4174; second HH World preview
+  - Claim PASS on the original plan
+)

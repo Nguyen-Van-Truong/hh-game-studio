@@ -1,0 +1,287 @@
+TICK=no
+URL=http://127.0.0.1:4175/
+BOOTED_4175=1
+DID_NOT_RECYCLE=1
+DID_NOT_REBUILD=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+CRITIC=INDEPENDENT_ADVERSARIAL_SIDE_STREET_REAUDIT
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=09:05 +07
+MODEL=grok-4.6-extra-high
+SCOPE=Re-audit of claimed side-street remint DMtr6Df6. Do not treat CRITIC-3D-SIDE-STREET-2026-09-04.txt as TICK=yes.
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=04cb6ca92c482017c02d78e7885727f73b62103d
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-SIDE-STREET-REAUDIT-2026-09-04.txt
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-SIDE-STREET-2026-09-04.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+DID_NOT_TREAT_IMPLEMENTER_AS_TICK_YES=1
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NOT_OSM=1
+NOT_WAN=1
+VITE_PREVIEW_PORT_PIN=4175
+LIVE_PID=69896
+LISTEN=127.0.0.1:4175
+CRITIC_CDP_PORTS=9961 / 9962 (walk) ; 9965 (lantern+bound retry)
+VIEWPORT=1280x720
+ISOLATED_PROFILES=1
+HEADLESS_NEW=1
+
+CLAIM_JS=/assets/index-DMtr6Df6.js
+CLAIM_JS_LEN=2138099
+CLAIM_JS_SHA256=cecfeffc8dbcd3f0da2212be8816ce1c84751ff9409dee8f2c0624d028c9b365
+
+LIVE_JS=/assets/index-DF4TvR_E.js
+LIVE_JS_LEN=2146024
+LIVE_JS_SHA256=9eb88fce4b24620d8d91d78a3377e58ccc3c91346ae97dea8dc609f1388700be
+LIVE_JS_MATCHES_CLAIM=0
+HASH_MISMATCH=1
+CLAIMED_ASSET_HTTP=200
+CLAIMED_ASSET_BYTES=2052
+CLAIMED_ASSET_IS_SPA_HTML=1
+
+CLAIM_1_INNER_STREET_VISIBLE=PASS_ON_LATER_LIVE_NOT_CLAIMED_BYTES
+CLAIM_2_PATH_LANTERN_LEFTOVER_BOUND=PASS_ON_LATER_LIVE
+CLAIM_3_BACKS_NOT_WALLPAPERED=PASS_ON_LATER_LIVE
+CLAIM_4_SKY_FOOTSTEPS_NO_OSM=PASS_ON_LATER_LIVE
+
+BIGGEST_MISS=Live hash is not the claimed remint. HTML serves /assets/index-DF4TvR_E.js (2146024, 9eb88fce…). GET /assets/index-DMtr6Df6.js returns the 2052-byte SPA shell, not 2138099 bytes of JS. TICK=yes requires the claimed live hash AND a visible inner street. Hash fails. Inner door+glass is visible on the later bundle, but that does not certify DMtr6Df6. NOT_PLAN_PASS.
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=no
+
+URL=http://127.0.0.1:4175/ was already up. Bind 127.0.0.1 pid 69896
+(node vite preview). Did not recycle, rebuild, kill, or start
+4173 / 4174 / 5175. Did not bind 0.0.0.0.
+
+Did not treat CRITIC-3D-SIDE-STREET-2026-09-04.txt as TICK=yes
+(ROLE=IMPLEMENTER, TICK=n/a). Did not run j5-side-street-probe.mjs.
+
+Independent Chrome CDP, isolated temp profiles, ?seat=a / ?seat=b.
+Tried to fail hidden-counter dressing, path trap, leftover E,
+wallpapered backs, beige sky, and an OSM fetch.
+
+The claimed remint is not what 4175 serves. That is a hard miss.
+Feature hunts on the later live bundle are recorded below so this
+file does not invent a plain-box miss that the current pixels
+do not show. They do not unlock TICK=yes.
+
+This is NOT_PLAN_PASS. GATE-U1 humans were not invented.
+
+================================================================================
+LIVE JS
+================================================================================
+
+HTML script = /assets/index-DF4TvR_E.js
+http length = 2146024
+sha256 = 9eb88fce4b24620d8d91d78a3377e58ccc3c91346ae97dea8dc609f1388700be
+
+Claimed remint name + length + hash do not match.
+GET http://127.0.0.1:4175/assets/index-DMtr6Df6.js → 200 / 2052 B
+(the index.html fallback, sha256
+f6ec92566d152c5b8a2f038b4d128a5e02497e81f1a025a69c845d9c0fe472b8).
+The DMtr6Df6 bytes are gone from the preview.
+
+After CDP the same DF4TvR_E name is still served from pid 69896.
+
+Bundle scan (live DF4TvR_E bytes, not source):
+  openstreetmap = 0
+  0.0.0.0 = 0
+  gta 6 / rockstar = 0
+  street-inner = 1
+  door-glass-lamp = 1
+  door-glass-awning = 1
+  distance-haze = 1
+  curb-wall-lot = 1
+  fixture-edge = 1
+  shop-lantern-fish = 1
+  procedural-thump = 1
+  overture / photogrammetry / digital twin = honesty denials, not a fetch
+
+Live GeoJSON /data/ben-thanh-400m.authored.geojson:
+  kind=street count = 2 (Harbor Walk, Tram Approach)
+  street-inner = 0
+  Still authored 400 m. Not new downtown.
+
+/demo-bus still this-PC loopback. Leftover shop-local-sharedpc and
+shop-local-mtl8ulddihjpre remain on the catalog. Did not catalog_clear.
+
+================================================================================
+CLAIM 1 — WALK OFF HARBOR ONTO AN INNER GAP — PASS ON LATER LIVE
+================================================================================
+
+Tried to fail: extra faces only as hidden counters; street still a
+plain ID-tinted box; same Harbor-only 38.
+
+Seat A spawn 106.69804, 10.77162 heading 0, streetChip=Harbor Walk.
+W then D then W (independent timings, not the implementer writer):
+
+  onInner lon=106.6981578 lat=10.7717887 heading=99
+  eastM=+12.88  northM=+18.78
+  inside-ring=0 inside-aabb=0 alt=0
+  streetChip=Steps East
+  gfFaces=168 gfMain=38 gfInner=130 sideStreets=31
+  extraFaces=+130 vs Harbor-only 38
+  sideLamps=10 sideScooters=8 lamps=48 scooters=23
+
+Shot inner-east.png (facing east, chip Steps East):
+  mid   door=0.101 glass=0.032 dark=0.185 plain=0.188
+  left  door=0.083 glass=0.001
+  right door=0.138 glass=0.072
+  Frame is a carved lane: dark asphalt + yellow edge, dark door
+  slabs / glass patches on the facing walls, not a bare box.
+
+Turn onto a wall (inner-face.png, heading 187):
+  wallMid door=0.424 glass=0.010
+  wallLow door=0.673 glass=0.016
+  One large tan face stays mostly plain (honesty). Door/glass is
+  on the lane-facing side, not every wall in the turn.
+
+onlyCounters=false. DOM 130 inner faces are not the only proof.
+This is the later DF4TvR_E bundle, not DMtr6Df6. Feature visible
+here does not make the claimed hash live.
+
+================================================================================
+CLAIM 2 — PATH / LANTERN E / LEFTOVER B / SOUTH BOUND — PASS ON LATER LIVE
+================================================================================
+
+Tried to fail: trapped in the gap; E dead or leftover; bound dead.
+
+First combined walk after the inner shot wandered (12 m short of
+the lantern, then SW into a lot). That was this critic's path,
+not a product trap: alt stayed 0, inside AOI, no inside-aabb.
+
+Dedicated Harbor retry (CDP 9965), spawn W along Harbor Walk:
+
+  nearby=shop-lantern-fish  range=9.1 m  footsteps=1
+  E opened shop-lantern-fish
+  Close restored Play (panel false)
+
+Then A ~180° and Shift+W south:
+
+  first at-bound=1  lon=106.6981701 lat=10.7707293 alt=0
+  +0.6 s hold      lon=106.6981721 lat=10.7707216 at-bound=1 alt=0
+  noTrap=true
+
+Seat B isolated spawn:
+  nearbyShop=""
+  stallHint="E opens a stall when you are next to it."
+  shopRange="Quầy Cá Đèn Lồng: 29 m away"
+  leftover names / ids are NOT the E target
+  Press E: shopPanelId=""  panel=false
+
+PASS on the later live. Leftovers still in /demo-bus (intended).
+
+================================================================================
+CLAIM 3 — ALLEY BACKS / LOT ENDS STAY PLAIN — PASS ON LATER LIVE
+================================================================================
+
+Tried to fail: every wall wallpapered with door+glass.
+
+  gfFaces=168 = 38 main + 130 inner. Not >=220.
+  inner-face tan wall is mostly a plain inset (two small dark
+  patches, not a storefront row).
+  lot-back.png (after the wandered SW lot): far building is a
+  plain gray box, no door/glass row. Ground is empty tan lot.
+  wallpapered=false
+
+Harbor/Tram main-face count stayed 38. GeoJSON street count stayed 2.
+
+PASS on the later live. Still authored boxes, still 400 m.
+
+================================================================================
+CLAIM 4 — SKY / FOOTSTEPS / NO OSM — PASS ON LATER LIVE
+================================================================================
+
+Tried to fail: beige sky; W silent; OSM/Overture fetch.
+
+Spawn facing north:
+  sky beige=0 blue=0.799  data-sky=gradient-hemisphere
+South-bound retry:
+  sky beige=0.003 blue=0.826  authored wall in the lower frame
+Inner-east top band beige=0.114 is canyon wall in the sky crop,
+not the hemisphere (mean ~115/114/112). Dome shots stay blue.
+
+First W from spawn: +1.848 m north, pose=walk, data-footsteps=1,
+kind=procedural-thump. Still 1 on the lantern approach and at
+the south face while Shift+W.
+
+Network.requestWillBeSent: 1464 URLs, osmHits=0, wanHits=0.
+No openstreetmap / overture / nominatim / mapbox tile host.
+
+PASS on the later live.
+
+================================================================================
+HUNTS (not named fails)
+================================================================================
+
+Implementer inner shot used door+glass>0.012 OR dark>0.04.
+Unused. This critic required glass or door on the inner frame
+and a walked-off pose. innerMid glass=0.032 and right-wall
+glass=0.072 held without that OR.
+
+First lantern/bound attempt failed because this critic left
+Steps East 12 m from the kiosk, then sprinted into a west lot
+(lat 10.771125, heading 221, chip "—"). Dedicated Harbor path
+opened shop-lantern-fish and pinned the south face. Not a
+product miss.
+
+PROGRESS.txt and the live name already describe a later
+STREET_HUD remint on DF4TvR_E. That recycle happened before
+this critic's clean hash. This critic did not recycle.
+
+================================================================================
+METHOD
+================================================================================
+
+1. 4175 already up. Did not recycle / rebuild / start other ports.
+2. GET /  /demo-bus  /assets/index-DF4TvR_E.js and the claimed
+   DMtr6Df6 URL. Recorded name+sha+len. Claimed URL is SPA HTML.
+3. Read implementer note (TICK=n/a). Did not copy its probe writer.
+4. Independent Chrome CDP 1280x720 isolated profiles, ports
+   9961/9962. Spawn sky shot. W prove Harbor open. East onto
+   Steps. Inner + face shots. Seat B leftover E. Network watch.
+5. Dedicated lantern+bound retry on port 9965 after the first
+   walk missed the kiosk.
+6. Did not write lead packs. Did not tick plan. Did not fake GATE-U1.
+
+Temp only (not under data-qa):
+  %TEMP%\hh-side-street-reaudit\hunt.json
+  %TEMP%\hh-side-street-reaudit\lantern-bound.json
+  %TEMP%\hh-side-street-reaudit\spawn.png
+  %TEMP%\hh-side-street-reaudit\inner-east.png
+  %TEMP%\hh-side-street-reaudit\inner-face.png
+  %TEMP%\hh-side-street-reaudit\south-bound.png
+  %TEMP%\hh-side-street-reaudit\lot-back.png
+  %TEMP%\hh-side-street-reaudit\bound-retry.png
+  %TEMP%\hh-side-street-reaudit\index.js
+
+================================================================================
+STILL IMPOSSIBLE WITHOUT OWNER
+================================================================================
+
+- GATE-U1 three human reviewers (not faked)
+- AUTHORIZE_MAP_FETCH=YES + license ledger before any OSM/Overture
+- Other-PC / WAN join (store is this PC 4175 loopback)
+- Real account / OIDC
+
+================================================================================
+END
+================================================================================

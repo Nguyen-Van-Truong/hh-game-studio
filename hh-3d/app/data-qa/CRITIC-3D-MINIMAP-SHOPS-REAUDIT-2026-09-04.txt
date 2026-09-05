@@ -1,0 +1,304 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+BOOTED_4175=1
+DID_NOT_RECYCLE=1
+DID_NOT_REBUILD=1
+HASH_MISMATCH=0
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M0_WP1=1
+NOT_M1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=19:01 +07
+MODEL=grok-4.6-extra-high
+SCOPE=Re-audit of implementer corner-minimap street-play shop-dot remint. Do not treat CRITIC-3D-MINIMAP-SHOPS-2026-09-04.txt as TICK=yes.
+PLAYER_URL=http://127.0.0.1:4175/
+LISTEN=127.0.0.1:4175
+LIVE_PID=26796
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-MINIMAP-SHOPS-REAUDIT-2026-09-04.txt
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-MINIMAP-SHOPS-2026-09-04.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+DID_NOT_TREAT_IMPLEMENTER_AS_TICK_YES=1
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+DID_NOT_CATALOG_CLEAR=1
+VITE_PREVIEW_PORT_PIN=4175
+CRITIC_CDP_PORTS=9943 then 9945/9947/9949/9951/9953
+VIEWPORT=1280x720
+ISOLATED_PROFILES=1
+HEADLESS_NEW=1
+
+LIVE_JS=/assets/index-CMuviBit.js
+LIVE_JS_LEN=2170837
+LIVE_JS_SHA256=c56379e9e7210f33d9ed14756d3b4d09ca8194155e7812c6e020065a477e272d
+LIVE_JS_MATCHES_CLAIM=1
+HASH_MISMATCH=0
+
+DEFER_FIRST_FRAMES=pending
+DEFER_MAP_ABSENT_FIRST=1
+DEFER_AFTER_FIRST_W=live
+DEFER_KIND=play-idle-or-first-w
+VISIBLE_MARKS=1
+VISIBLE_MARK_IDS=shop-lantern-fish,shop-local-mtmh45qxehxhvb,shop-local-mtmrbdjffjdkg8,shop-local-mtmrq33hoq4phb
+VISIBLE_MARK_NAMES=Quầy Cá Đèn Lồng,Quầy Phở Nhà,Quầy Chè Vỉa,Quay Kem Reaudit
+PROOF_LIST_ONLY=0
+LEFTOVER_MARKS=0
+LEFTOVER_ON_MAP=0
+LEFTOVER_E_STOLEN=0
+SPAWN_E_STOLEN=0
+CHIP_MINIMAP_AGREE=1
+LANTERN_E=shop-lantern-fish
+LANTERN_LEFTOVER_BANNER=0
+LEFTOVER_MENU_HOLD=1
+LEFTOVER_PANEL_BANNER_HOLD=1
+HONESTY_DENIES_GTA_11_TWIN=1
+OIDC_CLAIM=0
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/ was already up. Bind 127.0.0.1 pid 26796
+(node vite preview --host 127.0.0.1 --port 4175 --strictPort).
+Did not recycle, rebuild, restore-dist, kill, or start 4173 / 4174 / 5175.
+Did not bind 0.0.0.0. Did not catalog_clear.
+
+Did not treat CRITIC-3D-MINIMAP-SHOPS-2026-09-04.txt as TICK=yes
+(ROLE=IMPLEMENTER, TICK=n/a). Did not run j5-minimap-shops-probe.mjs
+as proof. Did not copy J5-MINIMAP-SHOPS JSON. Did not tick any plan.
+
+Independent Chrome CDP, isolated temp profiles, ?seat=b guest.
+Tried to fail: hash drift; defer ripped; hidden <ol> proof without
+player-visible corner dots; leftover Shared PC / J6 on the 2D map;
+on-lane persist marks; chip vs minimap disagree; leftover owns spawn
+or lantern E; leftover Menu / panel banners ripped; honesty / OIDC.
+
+Live hash matches the claimed remint before and after CDP
+(/assets/index-CMuviBit.js 2170837
+c56379e9e7210f33d9ed14756d3b4d09ca8194155e7812c6e020065a477e272d).
+HASH_MISMATCH=0.
+
+Named hunts held. This is NOT_PLAN_PASS. Not M1. GATE-U1 humans
+were not invented.
+
+================================================================================
+LIVE JS
+================================================================================
+
+HTML script = /assets/index-CMuviBit.js
+http file length = 2170837
+sha256 = c56379e9e7210f33d9ed14756d3b4d09ca8194155e7812c6e020065a477e272d
+Matches the claimed remint name + length + hash.
+After CDP the same name + length + hash is still served from
+pid 26796.
+
+Bundle scan (live bytes, not source):
+  openstreetmap = 0
+  overpass = 0
+  street-play-plant = 1
+  minimap-shop-mark = 2
+  shop-local-sharedpc / shop-local-mtl8ulddihjpre hardcoded = 0
+  oidc / openid = 8, all denial
+    not_oidc:!0 on demo identity / seats
+    "NOT Google/OIDC"
+    "R4-WP0B account/OIDC is not built"
+  No OIDC claim.
+
+CDP Network.requestWillBeSent: osm / overpass / mapbox / maptiler
+external tile hosts = 0. Non-4175 WAN URLs = 0.
+GeoJSON kind=street count = 2.
+
+/demo-bus leftover catalog still has Quầy Shared PC and
+Quay Critic J6 Jump. Did not catalog_clear.
+
+================================================================================
+HUNT 1 — FIRST FRAMES STILL DEFER; THEN LIVE — PASS
+================================================================================
+
+Tried to fail as MapLibre already mounted on first Play paint.
+
+Isolated guest B, Page.navigate after about:blank, poll ~40 ms:
+
+  boot          defer=""     mini=absent
+  first wrap    defer=pending  mini=absent  playReady=""
+  playReady=yes defer=pending  mini=absent  chip=Steps East
+  before first W defer=pending mini=absent
+  after first W  defer=live    mini=present  kind=play-idle-or-first-w
+                 shops=street-play-plant
+
+Identity = "Guest · shops public; friends not required"
+signed-in=no. friend-row-a not accepted.
+
+PASS.
+
+================================================================================
+HUNT 2 — STREET-PLAY MARKS PLAYER-VISIBLE ON THE CORNER MAP — PASS
+================================================================================
+
+Tried to fail as hidden <ol data-testid=hh-world-minimap-shops> only,
+or a 2D map that still shows only street lines.
+
+After mount, corner wrap 184×134 @ 1088, 578. Not a restored
+full-page map dashboard. worldMapPresent=false.
+
+Hidden proof list names four street-play plants. That list alone
+is not enough. Independent checks that the dots are on the widget:
+
+  four .minimap-shop-mark MapLibre HTML circles, 8×8, radius 50%,
+  opacity 1, visibility visible, inside wrap and mini canvas box
+  four .maplibregl-marker panes in .minimap-wrap
+  clip of the corner widget shows four colored dots on sidewalk
+  bands, not on the dark centerline: two purple (lantern + Phở),
+  one blue (Chè), one red (Kem). White rings visible.
+  Pixel count on the 184×134 crop: purple=48 blue=196 red=24
+  saturated=1491. Not a street-line-only map.
+
+No MapLibre circle layer (marks are HTML circles on the map
+overlay). Player-visible on the corner map. PROOF_LIST_ONLY=0.
+
+PASS.
+
+================================================================================
+HUNT 3 — LANTERN + DRAWN LOCAL SHOPS; LEFTOVER ABSENT; SIDEWALK PLANT — PASS
+================================================================================
+
+Tried to fail: missing lantern / Phở / Chè / Kem; leftover Shared
+PC / J6 drawn; marks parked on persist lane.
+
+Marks / proof / painted ids (Kem draw=1 so it must appear):
+  shop-lantern-fish           Quầy Cá Đèn Lồng   plant 106.6979743,10.7718769
+                              persist 106.6980366,10.7718712
+                              plantVsPersist=6.84 m  stallLaneM=7.2
+  shop-local-mtmh45qxehxhvb   Quầy Phở Nhà       plantVsPersist=7.10 m  laneM=7.2
+  shop-local-mtmrbdjffjdkg8   Quầy Chè Vỉa       plantVsPersist=0.72 m  laneM=7.21
+  shop-local-mtmrq33hoq4phb   Quay Kem Reaudit   plantVsPersist=0.72 m  laneM=11.88
+
+Leftover Shared PC / J6 ABSENT from proof, marks, and painted
+circles. leftoverDrawn mesh/boards stay draw=0 / keep-out=1.
+
+Lantern + Phở persist sat on-lane and the 2D mark uses the
+sidewalk plant (~7.2 m across), not persist. Chè / Kem persist
+were already off-lane; mark is persist + 0.72 m body-back, not
+an on-lane persist. Kem laneM=11.88 is still off the driving
+lane, not a leftover.
+
+PASS.
+
+================================================================================
+HUNT 4 — CHIP / MINIMAP AGREE; LANTERN E; LEFTOVER BANNERS; SPAWN E — PASS
+================================================================================
+
+Tried to fail: chip-only flip; leftover owns E; leftover Menu /
+panel copy ripped; spawn E stolen.
+
+  first stand   chip=Steps East  mini=Steps East
+  after first W chip=Steps East  mini=Steps East  highlight=1
+  lantern walk  chip=Harbor Walk mini=Harbor Walk  (same frame)
+
+Spawn B E: nearby=""  panel=""  leftoverEStolen=0.
+
+Leftover Menu still holds: leftoverCount=2, rows last, labeled
+“không trên phố / leftover máy này” for Shared PC and J6.
+Menu-opened Shared PC: leftover=1 banner present.
+
+Lantern sidewalk (dedicated Harbor-north walk, port 9953; earlier
+ports 9943–9951 were this critic’s short/asphalt/Phở-stop paths,
+not a stall swap):
+  nearby=shop-lantern-fish
+  range="Quầy Cá Đèn Lồng: 3.3 m away"
+  E opened shop-lantern-fish
+  leftover=0  leftover banner ABSENT
+  kind="public shop · authored example among many"
+  chip+mini still Harbor Walk
+  leftoverStolen=false
+
+A west-sidewalk stand also opened Phở (street shop, leftover=0)
+when this critic stopped early. That is not leftover E.
+
+Chalkboards still hold:
+  lantern  Cá nục sương (mẫu) | Túi cói chợ (mẫu)
+  Phở      Phở bò (mẫu)
+  Chè      Chè đậu (mẫu)
+  Kem      Kem dua (mẫu)
+
+Honesty banner still denies GTA / 1:1 / digital twin / OSM /
+city grid. Minimap attribution: “Authored approximation · not
+OSM · not a live survey · HH World”. No OIDC claim.
+
+PASS.
+
+================================================================================
+HUNTS (not named fails)
+================================================================================
+
+Shop shelf covers the corner minimap while the lantern panel is
+open. Default Play and the post-walk corner clip still show the
+184×134 widget with four dots.
+
+First lantern tries ended on Harbor asphalt (nearby suppressed
+when laneM ≲ 3) or at Phở (NEARBY_SHOP_M=4, south of lantern).
+Those were this critic’s path, not leftover owning E. The
+dedicated sidewalk walk opened shop-lantern-fish.
+
+MapLibre getStyle was not hanging on the host. Circle-layer
+count is 0 by design; visibility proof is the HTML circles plus
+the cropped still, not a GeoJSON circle source.
+
+Implementer probe wrote product shots / J5-MINIMAP-SHOPS JSON.
+Unused as this critic’s pass.
+
+Leftover catalog rows stay. They still do not own Nearby E.
+
+================================================================================
+METHOD
+================================================================================
+
+1. 4175 already up (pid 26796). Did not recycle / rebuild /
+   start other ports.
+2. GET / and /assets/index-CMuviBit.js. Recorded name+sha+len
+   before CDP and after.
+3. Read implementer note (TICK=n/a). Did not run its probe as
+   acceptance.
+4. Independent Chrome CDP 1280x720 isolated profiles.
+   Port 9943: guest B defer, visible-mark hunt, leftover Menu /
+   Shared PC banner, spawn E, Network watch.
+   Ports 9945–9951: lantern path misses (asphalt / Phở / short).
+   Port 9953: Harbor sidewalk north past Phở; lantern E.
+5. Did not write lead packs. Did not tick plan. Did not fake
+   GATE-U1.
+
+Temp only (not under data-qa):
+  %TEMP%\hh-minimap-shops-reaudit\critic-full.png
+  %TEMP%\hh-minimap-shops-reaudit\critic-minimap.png
+  %TEMP%\hh-minimap-shops-reaudit\critic-lantern6.png
+  %TEMP%\hh-minimap-shops-reaudit\critic.json
+
+================================================================================
+STILL IMPOSSIBLE WITHOUT OWNER
+================================================================================
+
+- GATE-U1 three human reviewers (not faked)
+- AUTHORIZE_MAP_FETCH=YES + license ledger before any OSM/Overture
+- Other-PC / WAN join (store is this PC 4175 loopback)
+- Real account / OIDC
+
+================================================================================
+END
+================================================================================

@@ -1,0 +1,272 @@
+TICK=no
+URL=http://127.0.0.1:4175/
+HASH_MISMATCH=0
+DID_NOT_RECYCLE=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M2=1
+LIVE_JS=/assets/index-CQffXcMA.js
+LIVE_JS_LEN=2174239
+LIVE_JS_SHA256=d30a7845e6cf8a13b3d129fbdfda4d82c06a02b29deee502c16672ed698b4250
+DID_NOT_REBUILD=1
+DID_NOT_RESTORE_DIST=1
+DID_NOT_CATALOG_CLEAR=1
+NOT_M0_WP1=1
+NOT_M1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-05
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=05:05 +07
+MODEL=grok-4.6-extra-high
+SCOPE=Independent re-audit of TAB_HIDE_GHOST on live CQffXcMA. Do not treat implementer CRITIC-3D-TAB-HIDE-GHOST-2026-09-04.txt (TICK=n/a) as acceptance.
+PLAYER_URL=http://127.0.0.1:4175/
+LISTEN=127.0.0.1:4175
+LIVE_PID=7848
+LIVE_PID_AFTER_CDP=7848
+LIVE_PID_STARTTIME=2026-09-05 04:54:18 +07
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-TAB-HIDE-GHOST-REAUDIT-2026-09-05.txt
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-TAB-HIDE-GHOST-2026-09-04.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+DID_NOT_TREAT_IMPLEMENTER_AS_TICK_YES=1
+DID_NOT_COPY_IMPLEMENTER_JSON=1
+DID_NOT_RUN_IMPLEMENTER_PROBES=1
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+AUTHORIZE_MAP_FETCH=NO
+VITE_PREVIEW_PORT_PIN=4175
+CRITIC_CDP_PORTS=10006 / 10008
+IMPLEMENTER_CDP_PORT_NOT_REUSED=1
+DID_NOT_REUSE_9788=1
+DID_NOT_REUSE_9789=1
+DID_NOT_REUSE_9785=1
+DID_NOT_REUSE_9787=1
+DID_NOT_REUSE_9985=1
+DID_NOT_REUSE_9987=1
+DID_NOT_REUSE_9988=1
+DID_NOT_REUSE_9990=1
+DID_NOT_REUSE_9992=1
+DID_NOT_REUSE_9994=1
+DID_NOT_REUSE_9996=1
+DID_NOT_REUSE_9998=1
+DID_NOT_REUSE_10002=1
+DID_NOT_REUSE_10004=1
+VIEWPORT=1280x720
+ISOLATED_PROFILES=1
+HEADLESS_NEW=1
+SEATS=a+b
+SLICE=TAB_HIDE_GHOST
+GRAPH_CLEAR_THEN_RE_FRIEND=1
+SHOPS_KEPT=1
+CLICKED_OFFLINE=0
+RELOADED_A=0
+HIDE_IS_NOT_OFFLINE=1
+
+LIVE_JS_BEFORE=/assets/index-CQffXcMA.js
+LIVE_JS_LEN_BEFORE=2174239
+LIVE_JS_SHA256_BEFORE=d30a7845e6cf8a13b3d129fbdfda4d82c06a02b29deee502c16672ed698b4250
+LIVE_JS_AFTER=/assets/index-CQffXcMA.js
+LIVE_JS_LEN_AFTER=2174239
+LIVE_JS_SHA256_AFTER=d30a7845e6cf8a13b3d129fbdfda4d82c06a02b29deee502c16672ed698b4250
+LIVE_JS_MATCHES_CLAIM=1
+HASH_MISMATCH=0
+LIVE_CSS=/assets/index-DsRW_q10.css
+LIVE_CSS_LEN=83046
+LIVE_CSS_SHA256=77ec860c389e0edc35641e8b1ae385804335dc8e127f841dccfaa101ffa4a545
+
+HUNT1_HASH=PASS
+HUNT2_TAB_HIDE_GHOST=FAIL
+HUNT3_LEFTOVER_HONESTY=PASS
+SAW_STABLE_BODY_BEFORE_HIDE=0
+BODY_A_AFTER_HIDE=unproven
+NAMETAG_AFTER_HIDE=unproven
+A_MODE_AFTER_HIDE=unproven
+BODY_AFTER_UNHIDE=unproven
+CLICKED_OFFLINE=0
+BUNDLE_PLAY_IDLE=1
+BUNDLE_PLAY_VIEWING_CHIP=1
+BUNDLE_PLAY_VIEWING_OPEN=1
+LEFTOVER_SHARED_PC=1
+LEFTOVER_J6=1
+HONESTY_DENIES_GTA_11_TWIN=1
+OIDC_CLAIM=0
+WAN_CLAIM=0
+CITY_PRESENCE_SERVER_CLAIM=0
+BIGGEST_MISS=B never held a standing remote-body-a (A's /demo-bus presence was leave-wiped within 1s whenever it appeared), so hide-clears-ghost and unhide-return were not proven.
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=no
+
+URL=http://127.0.0.1:4175/ was already up. Bind 127.0.0.1 pid 7848
+(node, StartTime 2026-09-05 04:54:18 +07). Did not recycle, rebuild,
+restore-dist, kill, or restart 4175. Did not start 4173 / 4174 /
+5175. Did not bind 0.0.0.0. Did not catalog_clear. Same LISTEN
+pid 7848 after CDP.
+
+Did not treat CRITIC-3D-TAB-HIDE-GHOST-2026-09-04.txt as TICK=yes
+(ROLE=IMPLEMENTER, TICK=n/a, no implementer two-seat claim). Did
+not run implementer probes as proof. Did not copy that note as
+this verdict. Did not overwrite nametag / street-HUD / open-shelf
+/ implementer TAB-HIDE notes. Did not tick any plan. GATE-U1
+humans were not invented. Not M1. Not M2. NOT_PLAN_PASS.
+
+Independent Chrome CDP, isolated temp profiles, headless=new,
+1280×720, ?seat=a on 10006 and ?seat=b on 10008. Did not reuse
+9788 / 9789 / 9785 / 9787 / 9985 / 9987 / 9988 / 9990 / 9992 /
+9994 / 9996 / 9998 / 10002 / 10004. graph_clear then re-friend
+only; leftover Shared PC / J6 stayed on /demo-bus.
+
+GET / then GET the script as raw bytes before CDP and after CDP.
+Name + length + sha256 match the claimed remint both times.
+HASH_MISMATCH=0.
+
+Hunt 2 failed on THIS CDP: B never held remote-body-a as a
+standing street friend long enough to hide. Hide was not scored.
+
+================================================================================
+LIVE JS
+================================================================================
+
+GET / then GET /assets/index-CQffXcMA.js as raw bytes.
+
+BEFORE CDP:
+  HTML script = /assets/index-CQffXcMA.js
+  http file length = 2174239
+  sha256 = d30a7845e6cf8a13b3d129fbdfda4d82c06a02b29deee502c16672ed698b4250
+
+AFTER CDP:
+  HTML script = /assets/index-CQffXcMA.js
+  http file length = 2174239
+  sha256 = d30a7845e6cf8a13b3d129fbdfda4d82c06a02b29deee502c16672ed698b4250
+
+Claimed remint name + length + hash match. HASH_MISMATCH=0.
+
+LIVE_CSS=/assets/index-DsRW_q10.css LEN=83046
+sha256 = 77ec860c389e0edc35641e8b1ae385804335dc8e127f841dccfaa101ffa4a545
+
+Bundle scan (live bytes, not source):
+  visibilitychange = 4
+  visibilityState = 2
+  document.hidden = 3
+  pagehide = 2
+  shouldPublishStreetPresence = 0 (minified away; not a hash fail)
+  play-viewing-chip = 1
+  play-viewing-open = 1
+  play-idle = 1
+  hitch3 string = 0
+  openstreetmap = 0
+  catalog_clear = 0
+
+================================================================================
+HUNT 1 — HASH_MISMATCH — PASS
+================================================================================
+
+Tried to fail a swapped or stale bundle vs CQffXcMA / 2174239 /
+d30a7845e6cf8a13b3d129fbdfda4d82c06a02b29deee502c16672ed698b4250.
+
+Independent GET before any Chrome and again after the last CDP
+seats exited. Same name, same length, same sha256. Pid still
+7848 StartTime 2026-09-05 04:54:18 +07. 4173 / 4174 / 5175
+still not listening. PASS.
+
+================================================================================
+HUNT 2 — NAMED MISS: GHOST BODY AFTER HIDE — FAIL
+================================================================================
+
+Tried to fail: after A is hidden ≥ PRESENCE_TTL_MS=10000, B
+still sees a standing remote-body-a / leftover
+[data-testid=remote-avatar-a].play-remote-label / play-viewing-chip
+for A; or A flips Offline; or the body never returns after
+unhide without reload.
+
+Independent seats, graph_clear then Menu add-friend-b /
+accept-friend-a, Online + opt-in on both (Online button; did
+not click Offline; did not reload A). Hide method reserved:
+Runtime.evaluate defineProperty document.hidden=true +
+visibilityState=hidden + visibilitychange in A's main world.
+No Page.setWebLifecycleState freeze (that would stop timers and
+false-pass a tab that only stops publishing when frozen).
+
+B must first see remote-body-a as a street friend, then hide.
+That precondition did not hold.
+
+Official uncontaminated wait (menus left open after Online;
+require remote-body-a AND streetCount≥1, then hold 1s):
+
+  35s poll. Graph pair a-b accepted. A sees B the whole time
+  (aSeesB=1). B publishes steadily on /demo-bus.
+
+  A's /demo-bus presence is not steady. Sample:
+    t≈0.9s  presenceSeats=b,a  presenceA.age=2ms
+    t≈1.4s  B remote-body-a=1  presenceA already null
+    t≈2.4s  1s hold check      remote-body-a=0
+    t≈17.8s B remote-body-a=1  presenceA null
+    t≈18.9s hold               remote-body-a=0
+    t≈24.6s B remote-body-a=1  presenceA null
+    t≈25.6s hold               remote-body-a=0
+    t≈26.5s B remote-body-a=1  presenceA null
+    next hold                  remote-body-a=0
+
+  Five hold attempts. Zero lasted 1s. Hide skipped. Unhide
+  not scored. SAW_STABLE_BODY_BEFORE_HIDE=0.
+
+Earlier discarded attempts (not scored as PASS):
+  - Short wait never saw bodyA; unhide then still 0.
+  - One flicker with Menu open (bodyA=1, nametag already null,
+    /demo-bus presenceA null). Closing Menu dropped the body
+    before hide. Hiding an already-absent body is not ghost
+    proof. Do not treat that run as hunt 2.
+
+So: no standing friend to hide, no scored post-hide ghost
+check, no scored unhide return. A mode after a valid hide is
+unproven. FAIL.
+
+Did not click Offline. Hide is not Offline. Did not reload A.
+
+================================================================================
+HUNT 3 — LEFTOVER / PLAY-IDLE / SAME PID — PASS
+================================================================================
+
+Tried to fail: catalog_clear wiped Shared PC / J6; hitch3
+play-idle ripped from the bundle; play-viewing-chip /
+play-viewing-open gone; honesty claiming GTA / 1:1 / digital
+twin / OIDC / WAN / a city presence server; pid recycled.
+
+/demo-bus before and after still has
+  shop-local-sharedpc          Quầy Shared PC
+  shop-local-mtl8ulddihjpre    Quay Critic J6 Jump
+plus the kept street-play this-PC shops.
+Menu leftover rows still present on both seats when Menu was
+open. catalog_clear needle in live JS = 0.
+
+Live JS still has play-idle, play-viewing-chip, play-viewing-open.
+Honesty banner: “Not a live map, not OSM/Overture … not a
+digital twin. No GTA claim, no 1:1 city. … Not a city presence
+server. Not WAN. Not GPS. NOT_PLAN_PASS.”
+
+Same pid 7848 before and after CDP. PASS for this honesty
+hunt only. Does not rescue hunt 2.
+
+================================================================================
+NOT CLAIMED
+================================================================================
+
+NOT_PLAN_PASS. Not M1. Not M2. GATE-U1 three-human review was
+not invented. OWNER_SIGN was not invented. No OSM/Overture
+fetch. No 4173 / 4174 / 5175. No 0.0.0.0 bind. No recycle of
+4175.

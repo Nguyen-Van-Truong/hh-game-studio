@@ -1,0 +1,106 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=07:20 +07
+ROLE=IMPLEMENTER
+TICK=n/a (do not treat this file as TICK=yes)
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M0_WP1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_OIDC=1
+PLAYER_URL=http://127.0.0.1:4175/
+RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-05
+COMMAND=node hh-3d/app/data-qa/j5-block-edge-probe.mjs
+VERDICT_IMPLEMENTER_CDP=J5_BLOCK_EDGE_OK
+LIVE_JS=/assets/index-Dge8907V.js
+LIVE_JS_LEN=2133407
+LIVE_JS_SHA256=2bb2bee66cf437e024c0a6e61bb9ab3c0ce9d7f1efe1f49dcff67d97bf8331c3
+ONE_RECYCLE_AFTER_BUILD=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NO_COMMIT=1
+NO_HIP_SPHERES=1
+DID_NOT_RIP_FOOTSTEPS=1
+DID_NOT_RIP_FRIEND_LIMBS=1
+DID_NOT_RIP_STREET_PLAY_SHOPS=1
+DID_NOT_RIP_SKY=1
+DID_NOT_RIP_CAM_HIT=1
+
+================================================================================
+SLICE
+================================================================================
+
+Walking far still hit an empty slab / sky hole. This slice marks the
+authored 400 m fixture as a finite block:
+
+1. Cheap distance haze (Three.js fog, SKY_FOG, near 58 m / far 155 m)
+   so far boxes fade. Not photogrammetry. Not a downloaded HDRI.
+   Sky hemisphere stays fog=false (accepted sky not ripped).
+
+2. Visible authored edge on the GeoJSON bounds: courtyard wall
+   (2.28 m) + inner curb + outer water/lot strip + light cope.
+   Spawn and Harbor Walk / lantern E sit well inside. Not a city
+   beyond the 400 m file.
+
+3. 2D keep-in at the authored AOI (2 m inset): clampInsideAoi +
+   projectBoundSlide. Extra south at the face = 0.13 m. alt=0.
+   Honesty: fixture edge, not a city.
+
+Did not fetch OSM. Did not invent downtown. Did not rip footsteps,
+friend limbs, streetPlayShops, sky mesh, or cam-hit.
+
+================================================================================
+PROOF (implementer CDP vs recycled 4175)
+================================================================================
+
+typecheck EXIT=0
+npm test EXIT=0 (65 tests)
+npm run build EXIT=0  dist/assets/index-Dge8907V.js
+Recycled 4175 after the remint build (127.0.0.1 only).
+Did not start 4173 / 4174 / 5175. Did not bind 0.0.0.0.
+
+Probe node hh-3d/app/data-qa/j5-block-edge-probe.mjs EXIT=0
+  Isolated headless Chrome 1280x720, seats A + B, ports 9531 / 9532.
+
+  Hold W: data-footsteps=1 pose=walk.
+  Walk to lantern: E opened shop-lantern-fish. Close restored Play.
+  Turn south, Shift+W to the south GeoJSON face: data-at-bound=1
+  lat=10.7707215 (AOI south+2 m). Extra 2.2 s W extraSouthM=0.13.
+  alt=0. insideAoi=true. No void fall.
+  Shot j5-3d-block-edge.png: wall/cope in the lower band
+  (wallRatio=0.123 lotRatio=0.022); horizon haze; sky still blue
+  (sky blueRatio=0.922). data-fog=distance-haze 58/155.
+  data-block-edge=curb-wall-lot walls=4 lots=4.
+  data-footsteps=1 while W at the bound (ticks 247→256).
+
+  Isolated seat B spawn: leftover Shared PC / J6 did not own E;
+  press E opened nothing. nearby none; lantern 29 m away.
+
+Honesty 1280x720: authored 400 m frame ends at an authored wall —
+fixture edge, not a city. NOT_PLAN_PASS.
+
+Independent critic CRITIC-3D-FOOTSTEPS-REAUDIT-2026-09-04.txt
+TICK=yes on 2Oh0rjA2 stands. Friend gait reaudit TICK=yes stands.
+Implementer is not the critic. TICK=n/a on this file.
+
+================================================================================
+OWNER LEFTOVERS
+================================================================================
+
+1. GATE-U1 three human reviewers (FIRST leftover; not faked).
+2. WAN / other-PC join still not built. 4175 loopback only.
+3. R4-WP0B real account/OIDC still not built.
+4. Real M2 presence server / city friends still not built.
+5. Open data (OSM/Overture) only after license ledger + grant.
+   Today's 60 buildings are still the small authored 400 m block.
+6. R2-WP1 remaining: mobile/headed/context-loss/memory/interaction-FPS/
+   cold-process first-map/owner-signed thresholds.
+7. Leftover this-PC shops stay in the catalog; they do not own
+   Nearby E / street play inside the 14 m spawn keep-out.
+8. Sibling critic may review this tree; implementer does not tick [x].

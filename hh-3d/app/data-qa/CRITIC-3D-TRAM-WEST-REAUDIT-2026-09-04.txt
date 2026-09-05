@@ -1,0 +1,553 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+BOOTED_4175=1
+DID_NOT_RECYCLE=1
+DID_NOT_REBUILD=1
+DID_NOT_REMINT=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M1=1
+NOT_M0_WP1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+NOT_FIFTH_OFFICIAL_STREET=1
+HASH_MISMATCH=0
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=18:06 +07
+MODEL=grok-4.6-extra-high
+SCOPE=Re-audit of claimed isolated guest-B Tram Approach WEST-stretch (~40 m west of Harbor×Tram zebra) on already-up C3JOtA3q. Do not treat CRITIC-3D-TRAM-WEST-2026-09-04.txt as TICK=yes.
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=04cb6ca92c482017c02d78e7885727f73b62103d
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-TRAM-WEST-REAUDIT-2026-09-04.txt
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-TRAM-WEST-2026-09-04.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+DID_NOT_TREAT_IMPLEMENTER_AS_TICK_YES=1
+IMPLEMENTER_CDP_NOT_PROOF=1
+IMPLEMENTER_JSON_NOT_PROOF=1
+IMPLEMENTER_SHOTS_NOT_PROOF=1
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_UNFRIEND=1
+DID_NOT_ADD_FRIEND=1
+DID_NOT_CLICK_ONLINE=1
+VITE_PREVIEW_PORT_PIN=4175
+LIVE_PID=51752
+LISTEN=127.0.0.1:4175
+CRITIC_CDP_PORT=9933
+CRITIC_CHE_CDP_PORT=9935
+IMPLEMENTER_CDP_PORT_NOT_REUSED=1
+IMPLEMENTER_PROBE_PORT=9744
+IMPLEMENTER_PROBE_NOT_RUN=1
+VIEWPORT=1280x720
+ISOLATED_PROFILES=1
+HEADLESS_NEW=1
+ABOUT_BLANK_THEN_NAVIGATE=1
+SEAT=b
+
+CLAIM_JS=/assets/index-C3JOtA3q.js
+CLAIM_JS_LEN=2169322
+CLAIM_JS_SHA256=c000db65138fc3c3f48583ba17d1032aa82c5fca0ef4047cdf2d5db1bc2bcdc7
+LIVE_JS=/assets/index-C3JOtA3q.js
+LIVE_JS_LEN=2169322
+LIVE_JS_SHA256=c000db65138fc3c3f48583ba17d1032aa82c5fca0ef4047cdf2d5db1bc2bcdc7
+LIVE_JS_MATCHES_CLAIM=1
+HASH_MISMATCH=0
+LIVE_JS_AFTER_CDP=/assets/index-C3JOtA3q.js
+LIVE_JS_LEN_AFTER_CDP=2169322
+LIVE_JS_SHA256_AFTER_CDP=c000db65138fc3c3f48583ba17d1032aa82c5fca0ef4047cdf2d5db1bc2bcdc7
+CONTENT_LENGTH_HEADER=2169322
+
+GUEST_IDENTITY=Guest · shops public; friends not required
+GUEST_SIGNED_IN=no
+PRESENCE=Offline — Stroll alone; shops still open.
+ONLINE_ACTIVE=no
+OFFLINE_ACTIVE=yes
+FRIEND_A_RELATION=none
+DID_CLICK_ADD_FRIEND=0
+STAYED_OFFLINE=1
+
+chip=Tram Approach
+streetName=Tram Approach
+CHIP_TRAM=1
+CHIP_NOT_HARBOR_WALK=1
+CHIP_ON_SCREEN=1
+MINIMAP_ACTIVE=Tram Approach
+MINIMAP_HIGHLIGHT=1
+MINIMAP_ROLE=official
+MINIMAP_OFFICIAL=2
+CHIP_MINIMAP_AGREE=1
+GEOJSON_STREET_COUNT=2
+GEOJSON_STREET_NAMES=Harbor Walk,Tram Approach
+NO_FIFTH_OFFICIAL_STREET=1
+
+TRAM_STAND_LON=106.6977461
+TRAM_STAND_LAT=10.7725156
+TRAM_STAND_HEADING=259.1
+TRAM_STAND_FACING=west
+ZEBRA_DIST_M=35.01
+TRAM_LANE_M=1.74
+HARBOR_LANE_M=29.64
+STAND_ON_TRAM_APPROACH=1
+STAND_NOT_HARBOR_WALK=1
+STAND_NOT_ZEBRA=1
+STAND_WEST_OF_ZEBRA=1
+STAND_NOT_EAST_REMOUNT=1
+STAND_ABOUT_40M=1
+LON_BELOW_ZEBRA=1
+
+ZEBRA_LON=106.6980616
+ZEBRA_LAT=10.7724833
+ZEBRA_CHIP=Tram Approach
+ZEBRA_DOM=crosswalk-harbor-tram
+ZEBRA_DOM_XZ=7.60,0.00
+ZEBRA_PRESENT=1
+ZEBRA_STACKED_OVER=0
+ZEBRA_USED_AS_WEST_PROOF=0
+EAST_STAND_CLAIM_LON=106.69839
+EAST_KEEP_LON=106.6982458
+EAST_KEEP_LAT=10.7724857
+EAST_KEEP_CHIP=Tram Approach
+EAST_KEEP_ZEBRA_DIST_M=19.74
+EAST_STRETCH_PRESENT=1
+
+furniture=lamp posts visible on west look-along (both walks); no west planter
+FURNITURE_LAMP_VISIBLE=1
+FURNITURE_PLANTER_VISIBLE=0
+FURNITURE_DOM_WEST_LAMPS=lamp-street-tram-approach-3-e,3-w,4-e,4-w
+FURNITURE_DOM_EAST_LAMPS=lamp-street-tram-approach-5-e,5-w,6-e,6-w
+FURNITURE_DOM_PLANTER_TRAM_EAST_S=1
+FURNITURE_DOM_WEST_TRAM_PLANTER=0
+ASPHALT_VISIBLE=1
+WALK_EDGE_VISIBLE=1
+YELLOW_CURB_VISIBLE=1
+BARE_ID_TINTED_CANYON=0
+WEST_CROP_IS_EAST_PLANTER=0
+WEST_CROP_IS_ZEBRA=0
+
+CHE_SHOP=shop-local-mtmrbdjffjdkg8
+CHE_E_OBSERVED=shop-local-mtmrbdjffjdkg8
+CHE_NEARBY=shop-local-mtmrbdjffjdkg8
+CHE_LEFTOVER=0
+LEFTOVER_E_STOLEN=0
+leftoverEStolen=0
+LEFTOVER_DRAWN=0
+LEFTOVER_SHAREDPC_DRAW=0
+LEFTOVER_J6_DRAW=0
+SPAWN_NEARBY=
+SPAWN_E_PANEL=0
+SPAWN_E_OPENED=
+
+HONESTY_DENIES_GTA=1
+HONESTY_DENIES_1TO1=1
+HONESTY_DENIES_DIGITAL_TWIN=1
+OIDC_CLAIM=0
+
+CLAIM_1_LIVE_HASH=PASS
+CLAIM_2_WEST_STAND_ON_TRAM=PASS
+CLAIM_3_ASPHALT_WALK_LAMP_OR_PLANTER=PASS
+CLAIM_4_CHIP_MINIMAP_GEO_2=PASS
+CLAIM_5_CHE_E_LEFTOVER_EAST_ZEBRA=PASS
+CLAIM_6_HONESTY_NO_OIDC=PASS
+
+BIGGEST_MISS=none on the named hunts. Live hash matches C3JOtA3q / 2169322 / c000db65… before CDP, after the west walk, and after this write. Isolated empty-profile seat B stayed Guest / Offline / friendA=none. Independent Harbor-north → zebra → WEST along Tram (not implementer harborNorth 10.77242 / 40.00 m / 2.05 m offset). Chip at the stand = Tram Approach (tramLaneM=1.74, harborLaneM=29.64, lon=106.6977461 < zebra ~106.69806). Look-along facing west shows dark asphalt + lighter walk + yellow curb + black lamps. Not the east planter stand and not the zebra crop. Harbor×Tram zebra still striped. East keep at 106.6982458 still Tram Approach. Chè E still shop-local-mtmrbdjffjdkg8 (first pass overshot; isolated retry opened that id, leftover=0). Shared PC / J6 draw=0. Spawn E none. NOT_PLAN_PASS.
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/ was already up. Bind 127.0.0.1 pid 51752
+(node vite preview --host 127.0.0.1 --port 4175 --strictPort).
+Did not recycle, rebuild, remint, kill, or start 4173 / 4174 / 5175.
+Did not bind 0.0.0.0. DID_NOT_RECYCLE=1.
+
+Did not treat CRITIC-3D-TRAM-WEST-2026-09-04.txt as TICK=yes
+(ROLE=IMPLEMENTER, TICK=n/a, REMINTED=no). Implementer CDP /
+J5_TRAM_WEST_OK JSON and j5-3d-tram-west*.png are not
+acceptance. Did not run j5-tram-west-probe.mjs (it would
+overwrite their J5 pack and reuse port 9744). Did not write
+J5 packs. Did not tick any plan. Did not catalog_clear.
+Did not POST graph_op. Did not click Online.
+
+Independent Chrome CDP, isolated temp profiles, 1280×720,
+about:blank then ?seat=b. Own debug ports 9933 (west walk)
+and 9935 (Chè retry), not implementer 9744 and not prior
+reaudit 9917/9881/9988/9989/9991/9971/9972. Tried to fail:
+hash drift; stand still Harbor Walk; west proof is the zebra
+or the accepted EAST stand (~106.69839); lon never drops
+below zebra ~106.69807; bare ID-tinted canyon with no
+walk-edge lamp/planter; chip/minimap disagree; fifth official
+street; Chè E ripped; Shared PC / J6 draw=1 or steal spawn E;
+zebra missing or stacked-over; east Tram stretch gone;
+honesty drops GTA / 1:1 / digital-twin denials; OIDC claim.
+
+Hash matches. Isolated guest B is on Tram Approach ~35 m
+WEST of the Harbor×Tram zebra. Look-along shows asphalt +
+walk + lamp. Chip and minimap agree. Chè E and leftover
+draw hold. TICK=yes. NOT_PLAN_PASS. GATE-U1 humans were
+not invented. Not M1.
+
+================================================================================
+LIVE JS
+================================================================================
+
+GET http://127.0.0.1:4175/  STATUS=200
+HTML script = /assets/index-C3JOtA3q.js
+
+GET /assets/index-C3JOtA3q.js
+  Content-Length = 2169322   (curl.exe -sI)
+  bytes          = 2169322
+  sha256         = c000db65138fc3c3f48583ba17d1032aa82c5fca0ef4047cdf2d5db1bc2bcdc7
+
+Matches the claimed live name + length + hash exactly.
+GET before CDP 9933, GET after the west walk, GET during
+the Chè retry window, and GET after this write (same pid
+51752) are the same bytes.
+HASH_MISMATCH=0. Did not stop. Did not audit an old bundle.
+
+Bundle scan (live bytes, not source):
+  openstreetmap = 0
+  overture = 2   (honesty copy "not OSM/Overture", not a fetch)
+  0.0.0.0 = 0
+  oidc login / sign in with google = 0
+
+CDP Network.requestWillBeSent on seat B: osm/overpass/
+overture/mapbox/maptiler hits = 0.
+
+/demo-bus this_pc=true bind=127.0.0.1 not_wan=true.
+graph.pairs=[] (empty). presence={}.
+Official GeoJSON kind=street count=2 (Tram Approach, Harbor Walk).
+No fifth official street.
+
+Catalog leftover persist (not reminted, not cleared):
+  shop-local-sharedpc          Quầy Shared PC      106.69804, 10.77162
+  shop-local-mtl8ulddihjpre    Quay Critic J6 Jump 106.6981497, 10.77162
+Drawn this-PC street shops:
+  shop-local-mtmh45qxehxhvb    Quầy Phở Nhà        listing Phở bò
+  shop-local-mtmrbdjffjdkg8    Quầy Chè Vỉa        listing Chè đậu
+  shop-local-mtmrq33hoq4phb    Quay Kem Reaudit    listing Kem dua
+
+================================================================================
+CLAIM 1 — LIVE HASH IS THE CLAIMED BUNDLE — PASS
+================================================================================
+
+Tried to fail as a later/earlier bundle or SPA-shell fallback
+on the claimed name.
+
+  live = /assets/index-C3JOtA3q.js
+  len  = 2169322
+  sha  = c000db65138fc3c3f48583ba17d1032aa82c5fca0ef4047cdf2d5db1bc2bcdc7
+
+Same name + length + hash from pid 51752 before CDP, after
+the west walk, and after this write. HASH_MISMATCH=0.
+
+PASS.
+
+================================================================================
+CLAIM 2 — STAND IS WEST OF THE ZEBRA ON TRAM APPROACH — PASS
+================================================================================
+
+Tried to fail: isolated guest B walks west from the zebra
+and the chip stays / becomes Harbor Walk, or the “west”
+stand is still the mouth / zebra, or the body remounts the
+accepted EAST stand (~106.69839).
+
+Tram Approach is E–W. Lon must drop below the zebra
+~106.69807. Seat B spawn was Steps East (106.698104,
+10.77162), Guest, Offline, friendA=none. Independent Harbor
+waypoints (106.698033, 10.77200) then (106.698030, 10.77238),
+then the authored Harbor×Tram zebra, then WEST along Tram.
+Not the implementer harborNorth 106.69802/10.77242 or their
+40.00 m / 2.05 m offset stand.
+
+At zebra (not the accept stand):
+  lon=106.6980616  lat=10.7724833  heading~24 (facing north)
+  chip=Tram Approach  mini=Tram Approach
+  White zebra stripes visible underfoot. This crop is mouth
+  proof only. ZEBRA_USED_AS_WEST_PROOF=0.
+
+West walk kept chip=Tram Approach after leaving the mouth,
+except one Harbor Walk tick at lon=106.6980149 while still
+crossing the Harbor ribbon (expected at the join). That is
+not the west stand.
+
+Independent stand (target ~36 m along Tram, −1.9 m off-axis):
+
+  lon=106.6977461  lat=10.7725156  heading=259.1 (facing west)
+  chip=Tram Approach  streetName=Tram Approach
+  zebraDist=35.01 m   tramLaneM=1.74   harborLaneM=29.64
+  chipOnScreen=1
+  westOfZebraLon=1
+  remountedEastStand=0
+
+35.01 m is ~40 m along Tram, west of zebra lon 106.69806,
+not on Harbor (29.64 m from the Harbor centerline) and not
+the east stand (106.69839). Chip at that stand never fell
+back to Harbor Walk. Remount was not needed.
+
+PASS.
+
+================================================================================
+CLAIM 3 — ASPHALT + WALK + LAMP OR PLANTER VISIBLE THERE — PASS
+================================================================================
+
+Tried to fail: the west stand is a bare canyon of ID-tinted
+boxes with no walk-edge furniture, or the only furniture
+crop is the zebra / the accepted east planter. DOM ids and
+implementer j5-3d-tram-west*.png are not the accept path.
+
+Look-along (facing west, own critic-tram-west-along.png):
+  dark asphalt down the E–W lane
+  lighter sidewalk both sides
+  yellow curb
+  black L-lamps on both walks, repeating down the stretch
+  You: standing · facing west
+  chip=Tram Approach
+
+Look-down (right-drag pitch −31.8°, critic-tram-west-lookdown.png):
+  same asphalt / walk / yellow curb
+  lamps still on both walks
+
+Pixel bands on those frames (supporting, not the accept path):
+  alongFloor dark=0.820 walk=0.064 curb=0.029 yellow=0.019
+  alongMid   dark=0.593 walk=0.203 curb=0.068
+  lookFloor  dark=0.882 walk=0.047 curb=0.018
+  lookMid    dark=0.633 walk=0.098 curb=0.090
+  greenRatio = 0.000 (no west planter; not used to reject)
+  A vertical-dark-column counter reported 85 “posts” —
+  that classifier ate building walls. Deaf. Discarded.
+
+Player-visible lamps in the full west look-along frame are
+the accept path. A left-side walk crop (80–520) showed the
+walk + a red/black sidewalk cart but not the lamps — wrong
+sidewalk crop. The right-side crop shows walk + yellow curb
++ a lamp pole. Full look-along still shows the lamps.
+
+DOM on that west 16–95 m band (supporting):
+  lamps lamp-street-tram-approach-3-e, 3-w, 4-e, 4-w
+  west tram planter = none
+  east planter-tram-east-s still present at x=52.89 (east)
+  stackedOnZebra=[]
+
+BARE_ID_TINTED_CANYON=0. Not a Harbor Walk crop. Not the
+zebra. Not the east planter stand.
+
+PASS.
+
+================================================================================
+CLAIM 4 — CHIP + MINIMAP AGREE; GEOJSON STREETS = 2 — PASS
+================================================================================
+
+Tried to fail: chip says Tram Approach and minimap says Harbor
+Walk (or the reverse), or official streets become 3+.
+
+At the 35.01 m west stand:
+  chip=Tram Approach  chipOnScreen=1
+  minimap present  kind=authored-hud-lanes
+  official=2  inner=2  extra=2
+  names=Tram Approach,Harbor Walk,Steps East,Steps West
+  active=Tram Approach  highlight=1  role=official
+  chip === minimap.active
+
+Live GeoJSON kind=street count=2, names Harbor Walk +
+Tram Approach. Steps East / Steps West stay extra/inner, not
+a fifth official street. Honesty still says “two official
+named streets”.
+
+PASS.
+
+================================================================================
+CLAIM 5 — CHÈ E / LEFTOVERS / EAST STRETCH / ZEBRA HOLD — PASS
+================================================================================
+
+Tried to fail: Chè sidewalk E opens leftover / another shop;
+Shared PC or J6 draw=1; spawn E stolen; Harbor×Tram zebra
+gone or stacked-over; east Tram stretch ripped.
+
+Spawn leftover E (seat B, empty profile) before any walk:
+  nearby empty
+  range="Walk to a stall."
+  hint="E opens a stall when you are next to it."
+  held E: panel=false  opened=""
+  leftoverEStolen=0
+
+First Chè walk after the west/east legs overshot
+(nearby was shop-local-mtmrbdjffjdkg8 at 10.771998 then
+lost). That is this critic’s path, not a leftover steal.
+Isolated retry on port 9935 (independent empty profile,
+Harbor north to 106.6980795 / 10.7719863):
+  nearby=shop-local-mtmrbdjffjdkg8
+  range="Quầy Chè Vỉa: 2.8 m away"
+  held E: panel=true
+  shopPanelId=shop-local-mtmrbdjffjdkg8
+  leftover=0
+  board titles still “Chè đậu (mẫu)”
+  panel copy is the Chè listing, not leftover máy này
+
+Leftover play-stall-boards / play-shop-stalls at the west
+stand and at the Chè retry:
+  leftoverDrawn=[]
+  leftoverStallDrawn=[]
+  Shared PC / J6 stay persist-only on /demo-bus (draw=0).
+
+Harbor×Tram zebra:
+  DOM crosswalk-harbor-tram at x=7.60 z=0 still listed
+  critic-zebra.png shows the white stripes at the mouth
+  no lamp/planter stacked on that xz (stackedOnZebra=[])
+
+East Tram stretch still present (independent hop after
+the west shots, not their east planter 0.64*len stand):
+  lon=106.6982458  lat=10.7724857  facing east
+  chip=Tram Approach  mini=Tram Approach
+  zebraDist=19.74 m  (east of zebra, not 106.69839)
+  critic-tram-east-keep.png still shows asphalt + walk +
+  yellow curb + lamps on that east look
+  DOM east lamps 5-e/w 6-e/w and planter-tram-east-s stay
+
+PASS.
+
+================================================================================
+CLAIM 6 — HONESTY DENIES GTA / 1:1 / DIGITAL TWIN; NO OIDC — PASS
+================================================================================
+
+Honesty banner (live HUD, guest B spawn / zebra / west stand
+/ east keep / Chè):
+
+  “Authored approximation. Not a live map, not OSM/Overture,
+  not photogrammetry, and not a digital twin. No GTA claim,
+  no 1:1 city. Authored 400 m: two official named streets
+  plus inner parcel lanes, not a city grid. … Menu boards
+  list authored fiction goods, not a live market.
+  NOT_PLAN_PASS.”
+
+OIDC appears nowhere as a login claim. signed-in=no.
+No “sign in with Google / OIDC login”. gpsClaim=false.
+
+PASS.
+
+================================================================================
+WHAT THE IMPLEMENTER CDP DID NOT PROVE
+================================================================================
+
+Their J5 pack stood at lon=106.6977162 lat=10.7725147
+(zebraDist=38.67) after Harbor 10.77242 → 40 m / 2.05 m
+offset, then reused j5-3d-tram-west.png /
+j5-3d-tram-west-lookdown.png as the furniture proof.
+This reaudit used different CDP ports, a different walk
+(mid-Harbor 10.77200 → mouth 10.77238 → zebra → west to
+~35 m facing west, then an east-keep hop), and read
+different frames (critic-tram-west-along.png /
+critic-tram-west-lookdown.png / critic-tram-east-keep.png).
+Their J5_TRAM_WEST_OK JSON was not used as proof.
+
+Their westFloor greenRatio / lampRatio gates are not
+player proof. This critic accepted only a visible lamp
+in an independent west look-along frame on Tram.
+
+================================================================================
+HUNTS (not named fails)
+================================================================================
+
+A left-side walk crop missed the lamps because those sit
+further along / on both walks; the crop framed a red/black
+sidewalk cart. Full look-along still shows the lamps.
+Not a miss.
+
+greenRatio band gate stayed 0.000 — there is no west
+tram planter. Claim was lamp or planter. Lamps are enough.
+
+Vertical-dark-column counter = 85 on along/look frames.
+That heuristic counts building walls. Deaf. Discarded.
+
+One Harbor Walk tick at lon=106.6980149 while leaving the
+mouth is the Harbor ribbon at the join, not the west stand.
+Stand chip stayed Tram Approach.
+
+35.01 m is short of their 38.67 m because the independent
+target was 36 m and the walk stopped at 1.33 m. Still ~40 m
+and still west of zebra lon. Chip never flipped to Harbor
+Walk on that stand.
+
+First Chè E after the long west/east loop overshot. Isolated
+retry opened shop-local-mtmrbdjffjdkg8 with leftover=0.
+Not a leftover steal.
+
+Leftover Shared PC / J6 still persist in the loopback
+catalog. That is allowed. The fail was ownership of street
+E or draw=1. They own neither.
+
+Default Play stayed R3F 1280×720. Did not grind hitch /
+min FPS. Did not claim GATE-U1.
+
+================================================================================
+METHOD
+================================================================================
+
+1. 4175 already up (pid 51752). Did not recycle / rebuild /
+   start other ports.
+2. GET /  /demo-bus  /data/ben-thanh-400m.authored.geojson
+   /assets/index-C3JOtA3q.js. Recorded name+sha+len before CDP,
+   after the walk, and after this write. curl.exe -sI for
+   Content-Length.
+3. Read implementer note (TICK=n/a). Did not copy its probe
+   writer into product files. Did not run
+   j5-tram-west-probe.mjs as proof. Did not POST unfriend.
+4. Independent Chrome CDP 1280×720 isolated profile.
+   Port 9933: about:blank → ?seat=b, leftover E at spawn,
+   Harbor north, zebra shot, west along Tram ~35 m,
+   look-along + look-down, east-keep hop.
+   Port 9935: isolated Chè E retry after the first overshoot.
+5. Did not write lead packs. Did not tick plan. Did not fake
+   GATE-U1.
+
+Temp only (not under data-qa):
+  %TEMP%\hh-tram-west-reaudit\hash-before.json
+  %TEMP%\hh-tram-west-reaudit\critic-tram-west-reaudit.mjs
+  %TEMP%\hh-tram-west-reaudit\critic-che-retry.mjs
+  %TEMP%\hh-tram-west-reaudit\critic-walk.json
+  %TEMP%\hh-tram-west-reaudit\critic-che.json
+  %TEMP%\hh-tram-west-reaudit\critic-zebra.png
+  %TEMP%\hh-tram-west-reaudit\critic-tram-west-along.png
+  %TEMP%\hh-tram-west-reaudit\critic-tram-west-lookdown.png
+  %TEMP%\hh-tram-west-reaudit\critic-tram-west-walk-crop.png
+  %TEMP%\hh-tram-west-reaudit\critic-tram-west-right-crop.png
+  %TEMP%\hh-tram-west-reaudit\critic-tram-west-look-crop.png
+  %TEMP%\hh-tram-west-reaudit\critic-tram-east-keep.png
+  %TEMP%\hh-tram-west-reaudit\critic-che-e.png
+
+================================================================================
+OWNER LEFTOVERS (unchanged; not this tick)
+================================================================================
+
+1. GATE-U1 three-human review (first acceptance leftover; not faked).
+2. R2-WP1 headed/mobile/memory/min-FPS thresholds still UNFILLED.
+3. WAN / other-PC join still not built. 4175 loopback only.
+4. R4-WP0B real account/OIDC still not built.
+5. Open data (OSM/Overture) still needs license ledger + grant.
+6. Leftover this-PC shops stay in the catalog; they do not own street E.
+   Menu list + open panel still label them leftover. Do not catalog_clear.
+7. M0/M1/M2 plan WPs still NOT_STARTED. NOT_PLAN_PASS. Not M1.
+
+TICK=yes. NOT_PLAN_PASS. Not M1. Not GATE-U1.
+
+================================================================================
+END
+================================================================================

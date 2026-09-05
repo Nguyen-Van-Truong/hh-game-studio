@@ -1,0 +1,17 @@
+LAUNCH_START Fri 09/04/2026 21:55:25.99 
+PASS: VF6-WP5 bot planner structure
+RUN_ID=VF6WP5-20260904-ASIA-SAIGON-07
+COMMAND_ID=cmd.vf6-wp5.bots.7
+CHECK_EXIT=0 leftover=0 elapsed=0.1
+FREEZE 99dc5f41f8624184275b0c65551e35e348318c2508f88be55823256b499a9ceb
+HEADLESS_EXIT=1 leftover=0 elapsed=1479.1
+headless failed leftover=0
+At D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\godot\dogfood\superfighters\tests\run_bots_o
+fficial.ps1:112 char:46
++ ... e 0 -or $afterHl -ne 0) { throw "headless failed leftover=$afterHl" }
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (headless failed leftover=0:String) [], RuntimeException
+    + FullyQualifiedErrorId : headless failed leftover=0
+ 
+HOST_EXIT=1 
+LAUNCH_END Fri 09/04/2026 22:20:08.61 

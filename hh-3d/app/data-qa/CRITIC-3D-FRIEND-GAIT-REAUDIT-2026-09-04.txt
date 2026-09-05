@@ -1,0 +1,298 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+BOOTED_4175=1
+DID_NOT_RECYCLE=1
+DID_NOT_REBUILD=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+CRITIC=INDEPENDENT_ADVERSARIAL_FRIEND_GAIT_REAUDIT
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=06:47 +07
+MODEL=grok-4.6-extra-high
+SCOPE=Re-audit of implementer remint after CRITIC-3D-CROSS-REAUDIT-2026-09-04 TICK=no
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=04cb6ca92c482017c02d78e7885727f73b62103d
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-FRIEND-GAIT-REAUDIT-2026-09-04.txt
+PRIOR_CRITIC=hh-3d/app/data-qa/CRITIC-3D-CROSS-REAUDIT-2026-09-04.txt
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-FRIEND-GAIT-FIX-2026-09-04.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+DID_NOT_TREAT_IMPLEMENTER_AS_TICK_YES=1
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NOT_M2=1
+NOT_OSM=1
+NOT_WAN=1
+VITE_PREVIEW_PORT_PIN=4175
+LIVE_PID=52660
+LISTEN=127.0.0.1:4175
+CRITIC_CDP_PORTS=9881 / 9882
+VIEWPORT=1280x720
+ISOLATED_PROFILES=1
+HEADLESS_NEW=1
+
+LIVE_JS=/assets/index-BaoJbjxu.js
+LIVE_JS_LEN=2126062
+LIVE_JS_SHA256=4d222643a8ebe93268a7a33ac6db1a2f6844dc35e63c8073edbe7947e2dd5e51
+LIVE_JS_MATCHES_REMINTED_NAME=1
+HASH_MISMATCH=0
+
+CLAIM_1_NEARBY_E=PASS
+CLAIM_2_MODES_HEADER=PASS
+CLAIM_3_SPAWN_NORTH_SKY=PASS
+CLAIM_4_FRIEND_WALK=PASS
+
+CLAIM_4_PIXELDIFF_SAMEBODY_FIXED=0.5908
+CLAIM_4_PIXELDIFF_SAMEBODY_FOLLOW_TUNIC=0.1608
+CLAIM_4_PIXELDIFF_WALK_PHASE_FOLLOW_TUNIC=0.2578
+CLAIM_4_LOOKDOWN_BLACK=0
+CLAIM_4_LOOKDOWN_LUM=107.5
+CLAIM_4_LOOKDOWN_BLACKRATIO=0.0703
+
+BIGGEST_MISS=None on the four named claims. Implementer stand-vs-walk 0.9736 is a sliding window, not the same-body number; this critic does not use it. Honest same-body diffs are still well above 0.02. NOT_PLAN_PASS.
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/ was already up. Bind 127.0.0.1 pid 52660.
+Did not recycle, rebuild, kill, or start 4173 / 4174 / 5175.
+Did not treat CRITIC-3D-FRIEND-GAIT-FIX-2026-09-04.txt as TICK=yes
+(ROLE=IMPLEMENTER, TICK=n/a). Did not run the implementer probe writer.
+
+Independent Chrome CDP, isolated temp profiles, about:blank then
+?seat=a / ?seat=b. graph_clear only. Catalog kept.
+
+Tried to fail claim 4 on the live hash: sky/wall default, attrs-only,
+noise-level pixelDiff, identical walk-phase hashes, solid-black
+look-down, leftover E, beige north sky. Those named bars did not
+break on BaoJbjxu. Claims 1–3 were not ripped.
+
+This is NOT_PLAN_PASS. GATE-U1 humans were not invented.
+
+================================================================================
+LIVE JS
+================================================================================
+
+HTML script = /assets/index-BaoJbjxu.js
+disk/http length = 2126062
+sha256 = 4d222643a8ebe93268a7a33ac6db1a2f6844dc35e63c8073edbe7947e2dd5e51
+Matches the reminted name + hash the implementer recorded.
+After this CDP (06:47 +07) the same name and Content-Length are
+still served. Prior critic audited index-C5aM6kYn.js.
+
+================================================================================
+CLAIM 1 — NEARBY E / LEFTOVER SHOPS — PASS
+================================================================================
+
+GET /demo-bus catalog still holds leftover this-PC shops (not wiped):
+
+  shop-local-sharedpc  "Quầy Shared PC"
+    lon=106.69804 lat=10.77162   exact spawn
+  shop-local-mtl8ulddihjpre  "Quay Critic J6 Jump"
+    lon=106.6981497 lat=10.77162  ~12 m east of spawn
+
+Seat B at spawn (isolated profile):
+  nearbyShop=""
+  stallHint="E opens a stall when you are next to it."
+  shopRange="Quầy Cá Đèn Lồng: 29 m away"
+  leftover names / ids are NOT the E target
+  Press E at B spawn: shopPanelId=""  (did not open J6 / Shared PC)
+
+Authored lantern: A held W then E. Panel opened shop-lantern-fish.
+  Shelf text: Cá nục sương / Túi cói chợ.
+  Nearby became shop-lantern-fish.
+  Not a leftover shop.
+
+Tried to fail: leftovers still in store (intended). Seat B spawn E
+no longer offers J6 / Shared PC. PASS. Not ripped.
+
+================================================================================
+CLAIM 2 — MODES HEADER — PASS
+================================================================================
+
+hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+  IMPLEMENTATION_STATUS=LOCAL_DEMO_EXISTS_NOT_PLAN_PASS
+  THIS_REVISION=HEADER_HONESTY_2026-09-04
+  NOT_M2=1
+  NOT_GATE_U1=1
+  Plan checkbox still [ ]. Live 4175 named as this-PC loopback demo.
+
+Does not still say IMPLEMENTATION_STATUS=NOT_IMPLEMENTED.
+Does not claim plan PASS / M2 / GATE-U1.
+
+Tried to fail: grep for NOT_IMPLEMENTED header and PASS/M2/GATE-U1
+claims. Residual mentions of GATE-U1 / M2-WP1 are "not this / still
+missing", not a pass claim. PASS. Not ripped.
+
+================================================================================
+CLAIM 3 — SPAWN / NORTH SKY — PASS
+================================================================================
+
+Seat A spawn, heading north, look=off. Crop is the TOP of the play
+canvas (y 2..87, x 192..1088), not a canyon mid-frame.
+
+  RGB 122.2 / 176.9 / 210.2
+  beigeRatio=0
+  blueRatio=0.726
+  bluerThanRed=true
+
+Tried to fail: beige / not-bluer-than-red on the top band. Did not
+fail. PASS. Not ripped.
+
+================================================================================
+CLAIM 4 — FRIEND WALK / OPPOSITE-STRIDE — PASS
+================================================================================
+
+Isolated seats, graph_clear only (catalog kept), Menu add/accept,
+both Online. A walks. B stays put.
+
+Default B view (pitch=-8.0, yaw=270, side=-1.60, camHit=0,
+inside=0, dist=5.77): street, not zenith, not Steps East.
+  remote-walk-cycle-a onCanvas=1 screenX=717.1 screenY=271.6
+  Tight body crop around that point: tunic/tealRatio=0.3533
+  A is a teal tunic on the road. Not sky. Not bldg-steps-e-00.
+  B local idle __hhWalkCycle spread=0.05 moving=0
+
+When A holds W, remote-avatar-a on B:
+  walk1: spread=1.155 opposite=1 moving=1 pose=walk
+    screenX=701.0 screenY=271.0 onCanvas=1
+  walk2: spread=1.220 opposite=1 moving=1
+    screenX=593.5 screenY=267.4 onCanvas=1
+  Not B idle 0.05.
+
+Tried to fail as attrs-only / off-canvas / sky crop:
+
+  Body crop stand (same pixels, A still in box on walk1):
+    stand tight teal=0.3533
+    walk1 at that same box teal=0.3299
+    stand-vs-walk FIXED pixelDiff=0.5908  (>> 0.02)
+    This is same-body, not A walking into an empty box.
+
+  Follow-tunic crop (centroid of #2a7d78-class pixels, ~17 px shift
+  stand→walk1):
+    stand-vs-walk pixelDiff=0.1608  (>> 0.02)
+    walk1-vs-walk2 pixelDiff=0.2578
+    hashes
+      stand  f08c94d8616bf547
+      walk1  96bbe3c1b2ed82aa
+      walk2  d5762b61c532fa50
+    Three different hashes. Cycle claim is not one frozen pose.
+
+  Visual on the same-body crops (not attrs):
+    stand: teal tunic, idle, one arm down
+    walk1: teal tunic, opposite stride (arm forward, trailing leg)
+    walk2: teal tunic, opposite arm phase from walk1
+    Background is street / curb / wall, not sky.
+
+Look-down from B, 220 px right-drag (the named hunt that went
+black on C5aM6kYn):
+  pitch=-38.8  camHit=0  inside=0  camY=1.27
+  play-inner lum=107.5  blackRatio=0.0703
+  lookDownBlack=false
+  Street / B's gold tunic still drawn. Not a solid black interior.
+
+Tried to fail with the implementer's 0.9736 stand-vs-walk:
+  That number is a sliding 180×260 window. On this remint the
+  remote-walk-cycle screen coords and A's translation (~107 px
+  walk1→walk2) make a loose follow-box compare different
+  backgrounds. 0.97 is not accepted as same-body proof.
+  The claim still holds on the fixed box (0.5908) and the
+  tunic-follow crop (0.1608), plus the visible stride.
+
+people-layer data-remote-count is still untrustworthy at first
+snap. Proof used remote-avatar-a / walk-cycle nodes + pixels.
+
+PASS.
+
+================================================================================
+HUNTS (not named fails)
+================================================================================
+
+Implementer 0.9736 / 0.9716: inflated by crop translation. Called
+out above. Not enough to sink claim 4 once same-body crops are
+used.
+
+Dark slab under B at default pitch -8: asphalt + shadow, ~17%
+near-black samples on the full 1280×720 grab. inside-aabb=0.
+Not the named solid-black look-down.
+
+Look-down loses A (no tunic blob in the down frame). The named
+bar is "must not be solid black", not "must keep A in lens".
+
+Leftover shops still exist on this PC store. Intended.
+
+Honesty: NOT_PLAN_PASS banner present on spawn, seat B, lantern,
+and friend frames.
+
+"Not a city" / 400 m authored boxes: honesty. Not a miss.
+
+================================================================================
+WHAT CHANGED VS THE PRIOR CRITIC
+================================================================================
+
+Prior TICK=no on C5aM6kYn:
+  default B = sky / camHit bldg-steps-e-00
+  220 px look-down = solid black
+  stand-vs-walk remoteBody ~0.0057 noise
+  second walk frame hashed identical to stand
+  attrs existed and were not enough
+
+This remint (BaoJbjxu):
+  default B sees A's teal tunic on the street
+  220 px look-down stays street (lum 107.5)
+  same-body pixelDiff 0.5908 / 0.1608
+  two walk-phase hashes differ
+  opposite limbs visible on the second seat
+
+Claims 1–3 still hold on the same leftover catalog, modes
+header, and north-sky top band.
+
+================================================================================
+METHOD
+================================================================================
+
+1. 4175 already up. Did not recycle / rebuild / start other ports.
+2. GET /  /demo-bus  /assets/index-BaoJbjxu.js. Recorded name+sha+len.
+3. Read modes header, implementer note (TICK=n/a), prior critic.
+4. Independent Chrome CDP 1280x720 isolated profiles, ports 9881/9882.
+   Did not run j5-friend-gait-probe.mjs.
+5. graph_clear only. Add/accept/Online. A walks. B crops A's body.
+   Fixed-box + tunic-follow pixelDiff. 220 px look-down. Leftover E.
+   Lantern E. Seat A north sky band.
+6. Did not write lead packs. Did not tick plan. Did not fake GATE-U1.
+
+TEMP shots (not under data-qa):
+  critic-sky-north.png     north sky blue
+  critic-b-default.png     A teal on street from B
+  critic-stand.png         same as default (A idle)
+  critic-walk1.png         A opposite-stride
+  critic-walk2.png         A other walk phase
+  critic-lookdown.png      street, not solid black
+
+================================================================================
+STILL IMPOSSIBLE WITHOUT OWNER
+================================================================================
+
+- GATE-U1 three human reviewers (not faked)
+- AUTHORIZE_MAP_FETCH=YES + license ledger before any OSM/Overture
+- Other-PC / WAN join (store is this PC 4175 loopback)
+- Real account / OIDC
+
+================================================================================
+END
+================================================================================

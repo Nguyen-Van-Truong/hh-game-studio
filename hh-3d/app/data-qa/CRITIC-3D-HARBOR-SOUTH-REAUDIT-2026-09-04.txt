@@ -1,0 +1,530 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+BOOTED_4175=1
+DID_NOT_RECYCLE=1
+DID_NOT_REBUILD=1
+DID_NOT_REMINT=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M1=1
+NOT_M0_WP1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+NOT_FIFTH_OFFICIAL_STREET=1
+HASH_MISMATCH=0
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=18:29 +07
+MODEL=grok-4.6-extra-high
+SCOPE=Re-audit of claimed isolated guest-B Harbor Walk SOUTH stand (~40–80 m south of spawn, away from lantern / Tram) on already-up C3JOtA3q. Do not treat CRITIC-3D-HARBOR-SOUTH-2026-09-04.txt as TICK=yes.
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=04cb6ca92c482017c02d78e7885727f73b62103d
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-HARBOR-SOUTH-REAUDIT-2026-09-04.txt
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-HARBOR-SOUTH-2026-09-04.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+DID_NOT_TREAT_IMPLEMENTER_AS_TICK_YES=1
+IMPLEMENTER_CDP_NOT_PROOF=1
+IMPLEMENTER_JSON_NOT_PROOF=1
+IMPLEMENTER_SHOTS_NOT_PROOF=1
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_UNFRIEND=1
+DID_NOT_ADD_FRIEND=1
+DID_NOT_CLICK_ONLINE=1
+VITE_PREVIEW_PORT_PIN=4175
+LIVE_PID=51752
+LISTEN=127.0.0.1:4175
+CRITIC_CDP_PORT=9964
+IMPLEMENTER_CDP_PORT_NOT_REUSED=1
+IMPLEMENTER_PROBE_PORT=9755
+IMPLEMENTER_PROBE_NOT_RUN=1
+VIEWPORT=1280x720
+ISOLATED_PROFILES=1
+HEADLESS_NEW=1
+ABOUT_BLANK_THEN_NAVIGATE=1
+SEAT=b
+
+CLAIM_JS=/assets/index-C3JOtA3q.js
+CLAIM_JS_LEN=2169322
+CLAIM_JS_SHA256=c000db65138fc3c3f48583ba17d1032aa82c5fca0ef4047cdf2d5db1bc2bcdc7
+LIVE_JS=/assets/index-C3JOtA3q.js
+LIVE_JS_LEN=2169322
+LIVE_JS_SHA256=c000db65138fc3c3f48583ba17d1032aa82c5fca0ef4047cdf2d5db1bc2bcdc7
+LIVE_JS_MATCHES_CLAIM=1
+HASH_MISMATCH=0
+LIVE_JS_AFTER_CDP=/assets/index-C3JOtA3q.js
+LIVE_JS_LEN_AFTER_CDP=2169322
+LIVE_JS_SHA256_AFTER_CDP=c000db65138fc3c3f48583ba17d1032aa82c5fca0ef4047cdf2d5db1bc2bcdc7
+CONTENT_LENGTH_HEADER=2169322
+
+GUEST_IDENTITY=Guest · shops public; friends not required
+GUEST_SIGNED_IN=no
+PRESENCE=Offline — Stroll alone; shops still open.
+ONLINE_ACTIVE=no
+OFFLINE_ACTIVE=yes
+FRIEND_A_RELATION=none
+DID_CLICK_ADD_FRIEND=0
+STAYED_OFFLINE=1
+
+chip=Harbor Walk
+streetName=Harbor Walk
+CHIP_HARBOR=1
+CHIP_NOT_TRAM=1
+CHIP_NOT_STEPS=1
+CHIP_ON_SCREEN=1
+MINIMAP_ACTIVE=Harbor Walk
+MINIMAP_HIGHLIGHT=1
+MINIMAP_ROLE=official
+MINIMAP_OFFICIAL=2
+CHIP_MINIMAP_AGREE=1
+GEOJSON_STREET_COUNT=2
+GEOJSON_STREET_NAMES=Harbor Walk,Tram Approach
+NO_FIFTH_OFFICIAL_STREET=1
+
+SOUTH_STAND_LON=106.6980388
+SOUTH_STAND_LAT=10.7712108
+SOUTH_STAND_HEADING=169.2
+SOUTH_STAND_FACING=south
+SPAWN_LON=106.698104
+SPAWN_LAT=10.77162
+spawnDist=46.11
+HARBOR_LANE_M=1.14
+TRAM_LANE_M=143.51
+TRAM_ZEBRA_DIST_M=143.55
+LANTERN_ZEBRA_DIST_M=73.52
+LAT_BELOW_SPAWN=1
+STAND_ON_HARBOR_WALK=1
+STAND_NOT_TRAM=1
+STAND_NOT_LANTERN_ZEBRA=1
+STAND_NOT_HARBOR_TRAM_MOUTH=1
+STAND_ABOUT_40_TO_80M=1
+FIXTURE_M=143.58
+INSIDE_400M=1
+IMPLEMENTER_STAND_DIST_M=7.52
+
+furniture=lamp posts visible on south look-along (both walks) and look-down (right walk); no south planter
+FURNITURE_LAMP_VISIBLE=1
+FURNITURE_PLANTER_VISIBLE=0
+FURNITURE_DOM_SOUTH_LAMPS=lamp-street-harbor-walk-0-e,0-w,1-e,1-w
+FURNITURE_DOM_SOUTH_PLANTERS=none
+FURNITURE_DOM_NORTH_PLANTERS_STAY=planter-harbor-shop-e/w,planter-harbor-north-e,planter-tram-east-s
+ASPHALT_VISIBLE=1
+WALK_EDGE_VISIBLE=1
+YELLOW_CURB_VISIBLE=1
+BARE_ID_TINTED_CANYON=0
+SOUTH_CROP_IS_LANTERN=0
+SOUTH_CROP_IS_HARBOR_TRAM=0
+
+LANTERN_SHOP=shop-lantern-fish
+LANTERN_E_OBSERVED=shop-lantern-fish
+LANTERN_NEARBY=shop-lantern-fish
+LANTERN_LEFTOVER=0
+LANTERN_RANGE=Quầy Cá Đèn Lồng: 2.8 m away
+LEFTOVER_E_STOLEN=0
+leftoverEStolen=0
+LEFTOVER_DRAWN=0
+LEFTOVER_SHAREDPC_DRAW=0
+LEFTOVER_J6_DRAW=0
+SPAWN_NEARBY=
+SPAWN_E_PANEL=0
+SPAWN_E_OPENED=
+
+TRAM_EAST_LAMPS_DOM=lamp-street-tram-approach-5-e/w,6-e/w,7-e/w,8-e/w
+TRAM_WEST_LAMPS_DOM=lamp-street-tram-approach-0-e/w … 4-e/w
+HARBOR_TRAM_ZEBRA_DOM=crosswalk-harbor-tram
+HARBOR_TRAM_ZEBRA_XZ=7.60,0.00
+ZEBRA_PRESENT=1
+ZEBRA_STACKED_OVER=0
+DID_NOT_REWALK_TRAM=1
+
+HONESTY_DENIES_GTA=1
+HONESTY_DENIES_1TO1=1
+HONESTY_DENIES_DIGITAL_TWIN=1
+OIDC_CLAIM=0
+
+CLAIM_1_LIVE_HASH=PASS
+CLAIM_2_SOUTH_STAND_ON_HARBOR=PASS
+CLAIM_3_ASPHALT_WALK_LAMP_OR_PLANTER=PASS
+CLAIM_4_CHIP_MINIMAP_GEO_2=PASS
+CLAIM_5_LANTERN_E_LEFTOVER_TRAM_KEEP=PASS
+CLAIM_6_HONESTY_NO_OIDC=PASS
+
+BIGGEST_MISS=none on the named hunts. Live hash matches C3JOtA3q / 2169322 / c000db65… before CDP, after the south walk, and after this write. Isolated empty-profile seat B stayed Guest / Offline / friendA=none. Independent Steps-East → Harbor step (~8 m south of spawn along) → mid-south (~22 m) → ~47 m west-offset stand (not implementer centerline 53.16 m / 106.6980543, 10.771145). Chip at the stand = Harbor Walk (harborLaneM=1.14, tramLaneM=143.51, lat=10.7712108 < spawn 10.77162). Look-along facing south shows dark asphalt + lighter walk + yellow curb + black lamps on both walks. Not a lantern zebra crop and not a Harbor×Tram mouth crop. Lantern sidewalk E still shop-lantern-fish (leftover=0). Shared PC / J6 draw=0. Spawn E none. Tram east/west lamps and Harbor×Tram zebra still in DOM. NOT_PLAN_PASS.
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/ was already up. Bind 127.0.0.1 pid 51752
+(node vite preview --host 127.0.0.1 --port 4175 --strictPort).
+Did not recycle, rebuild, remint, kill, or start 4173 / 4174 / 5175.
+Did not bind 0.0.0.0. DID_NOT_RECYCLE=1.
+
+Did not treat CRITIC-3D-HARBOR-SOUTH-2026-09-04.txt as TICK=yes
+(ROLE=IMPLEMENTER, TICK=n/a, REMINTED=no). Implementer CDP /
+J5_HARBOR_SOUTH_OK JSON and j5-3d-harbor-south*.png are not
+acceptance. Did not run j5-harbor-south-probe.mjs (it would
+overwrite their J5 pack and reuse port 9755). Did not write
+J5 packs. Did not tick any plan. Did not catalog_clear.
+Did not POST graph_op. Did not click Online.
+
+Independent Chrome CDP, isolated temp profile, 1280×720,
+about:blank then ?seat=b. Own debug port 9964, not implementer
+9755 and not prior reaudit 9933/9935/9917/9881/9988/9989/9991.
+Tried to fail: hash drift; stand still north of spawn / on
+lantern zebra / at Harbor×Tram; south proof is a Tram crop;
+bare ID-tinted canyon with no walk-edge lamp/planter;
+chip/minimap disagree; fifth official street; lantern E ripped
+to leftover; Shared PC / J6 draw=1 or steal spawn E; tram
+east/west or Harbor×Tram zebra gone; honesty drops GTA / 1:1 /
+digital-twin denials; OIDC claim.
+
+Hash matches. Isolated guest B is on Harbor Walk ~46 m SOUTH
+of spawn. Look-along shows asphalt + walk + lamp. Chip and
+minimap agree. Lantern E and leftover draw hold. TICK=yes.
+NOT_PLAN_PASS. GATE-U1 humans were not invented. Not M1.
+
+================================================================================
+LIVE JS
+================================================================================
+
+GET http://127.0.0.1:4175/  STATUS=200
+HTML script = /assets/index-C3JOtA3q.js
+
+GET /assets/index-C3JOtA3q.js
+  Content-Length = 2169322   (curl.exe -sI)
+  bytes          = 2169322
+  sha256         = c000db65138fc3c3f48583ba17d1032aa82c5fca0ef4047cdf2d5db1bc2bcdc7
+
+Matches the claimed live name + length + hash exactly.
+GET before CDP 9964, GET after the south walk / lantern E,
+and GET after this write (same pid 51752) are the same bytes.
+HASH_MISMATCH=0. Did not stop. Did not audit an old bundle.
+
+Bundle scan (live bytes, not source):
+  openstreetmap = 0
+  overture = 2   (honesty copy "not OSM/Overture", not a fetch)
+  0.0.0.0 = 0
+  oidc login / sign in with google = 0
+
+CDP Network.requestWillBeSent on seat B: osm/overpass/
+overture/mapbox/maptiler hits = 0.
+
+/demo-bus this_pc=true bind=127.0.0.1 not_wan=true.
+graph.pairs=[] (empty). presence={}.
+Official GeoJSON kind=street count=2 (Tram Approach, Harbor Walk).
+No fifth official street.
+
+Catalog leftover persist (not reminted, not cleared):
+  shop-local-sharedpc          Quầy Shared PC      106.69804, 10.77162
+  shop-local-mtl8ulddihjpre    Quay Critic J6 Jump 106.6981497, 10.77162
+Drawn this-PC street shops:
+  shop-local-mtmh45qxehxhvb    Quầy Phở Nhà        listing Phở bò
+  shop-local-mtmrbdjffjdkg8    Quầy Chè Vỉa        listing Chè đậu
+  shop-local-mtmrq33hoq4phb    Quay Kem Reaudit    listing Kem dua
+
+================================================================================
+CLAIM 1 — LIVE HASH IS THE CLAIMED BUNDLE — PASS
+================================================================================
+
+Tried to fail as a later/earlier bundle or SPA-shell fallback
+on the claimed name.
+
+  live = /assets/index-C3JOtA3q.js
+  len  = 2169322
+  sha  = c000db65138fc3c3f48583ba17d1032aa82c5fca0ef4047cdf2d5db1bc2bcdc7
+
+Same name + length + hash from pid 51752 before CDP, after
+the south walk, and after this write. HASH_MISMATCH=0.
+
+PASS.
+
+================================================================================
+CLAIM 2 — STAND IS SOUTH OF SPAWN ON HARBOR WALK — PASS
+================================================================================
+
+Tried to fail: isolated guest B walks south from spawn and
+the chip stays / becomes Tram Approach or Steps, or the
+“south” stand is still the lantern zebra / Harbor×Tram mouth,
+or the body walked north toward lantern / Tram.
+
+Harbor Walk is N–S. Lat must drop below spawn ~10.77162.
+Seat B spawn was Steps East (106.698104, 10.77162), Guest,
+Offline, friendA=none. Independent Harbor step (~8 m south
+of spawn along, 0.35 m west), mid-south (~22 m, 0.9 m west),
+then a ~47 m west-offset stand (1.4 m off the centerline).
+Not the implementer centerline southAlongM=spawnAlong−58
+stand at 106.6980543 / 10.771145.
+
+South walk chips after leaving Steps East stayed Harbor Walk
+on every mid and stand chunk. Lat fell 10.77162 → 10.7712108.
+No north tick toward lantern / Tram on the south claim path.
+
+Independent stand:
+
+  lon=106.6980388  lat=10.7712108  heading=169.2 (facing south)
+  chip=Harbor Walk  streetName=Harbor Walk
+  spawnDist=46.11 m   harborLaneM=1.14   tramLaneM=143.51
+  tramZebraDist=143.55 m   lanternZebraDist=73.52 m
+  chipOnScreen=1
+  latBelowSpawn=1
+  implementerStandDist=7.52 m
+
+46.11 m is inside 40–80 m, south of spawn lat, 1.14 m off the
+Harbor centerline, 143 m from Harbor×Tram, 74 m from the
+lantern zebra. Chip at that stand never fell back to Tram
+Approach or Steps. Remount was not needed.
+
+PASS.
+
+================================================================================
+CLAIM 3 — ASPHALT + WALK + LAMP OR PLANTER VISIBLE THERE — PASS
+================================================================================
+
+Tried to fail: the south stand is a bare canyon of ID-tinted
+boxes with no walk-edge furniture, or the only furniture crop
+is the lantern zebra / Harbor×Tram mouth. DOM ids and
+implementer j5-3d-harbor-south*.png are not the accept path.
+
+Look-along (facing south, own critic-harbor-south-along.png):
+  dark asphalt down the N–S lane
+  lighter sidewalk both sides
+  yellow curb
+  black L-lamps on both walks, repeating down the stretch
+  You: standing · facing south
+  chip=Harbor Walk
+
+Look-down (right-drag pitch −32.5°, critic-harbor-south-lookdown.png):
+  same asphalt / walk / yellow curb
+  at least one black L-lamp on the right walk
+
+Pixel bands on those frames (supporting, not the accept path):
+  alongFloor dark=0.834 walk=0.076 curb=0.033 yellow=0.011
+  alongMid   dark=0.608 walk=0.186 curb=0.064
+  lookFloor  dark=0.901 walk=0.047 curb=0.018
+  lookMid    dark=0.626 walk=0.096 curb=0.054
+  greenRatio = 0.000 (no south planter; not used to reject)
+
+A look-down floor crop missed the lamps because those sit
+further along / on the walks. Full look-along still shows
+lamps on both sides. Right-side along crop shows walk +
+yellow curb + a lamp pole.
+
+DOM on that south 24–95 m band (supporting):
+  lamps lamp-street-harbor-walk-0-e, 0-w, 1-e, 1-w
+  south planters = none
+  north planters stay: planter-harbor-shop-e/w,
+    planter-harbor-north-e, planter-tram-east-s
+  stackedOnZebra=[]
+
+BARE_ID_TINTED_CANYON=0. Not a lantern crop. Not a
+Harbor×Tram crop.
+
+PASS.
+
+================================================================================
+CLAIM 4 — CHIP + MINIMAP AGREE; GEOJSON STREETS = 2 — PASS
+================================================================================
+
+Tried to fail: chip says Harbor Walk and minimap says Tram
+Approach (or the reverse), or official streets become 3+.
+
+At the 46.11 m south stand:
+  chip=Harbor Walk  chipOnScreen=1
+  minimap present  kind=authored-hud-lanes
+  official=2  inner=2  extra=2
+  names=Tram Approach,Harbor Walk,Steps East,Steps West
+  active=Harbor Walk  highlight=1  role=official
+  chip === minimap.active
+
+Live GeoJSON kind=street count=2, names Harbor Walk +
+Tram Approach. Steps East / Steps West stay extra/inner, not
+a fifth official street. Honesty still says “two official
+named streets”. Fixture radius at the stand = 143.58 m
+(inside the authored 400 m block).
+
+PASS.
+
+================================================================================
+CLAIM 5 — LANTERN E / LEFTOVERS / TRAM KEEP — PASS
+================================================================================
+
+Tried to fail: lantern sidewalk E opens leftover / another
+shop; Shared PC or J6 draw=1; spawn E stolen; Tram east/west
+or Harbor×Tram zebra ripped.
+
+Spawn leftover E (seat B, empty profile) before any walk:
+  nearby empty
+  range="Walk to a stall."
+  hint="E opens a stall when you are next to it."
+  held E: panel=false  opened=""
+  leftoverEStolen=0
+
+Lantern walk-back after the south shots (independent
+sidewalk −2.05 m lon / −0.35 m lat from the lantern stall,
+not implementer −1.15 m lon):
+  nearby=shop-lantern-fish
+  range="Quầy Cá Đèn Lồng: 2.8 m away"
+  held E: panel=true
+  shopPanelId=shop-lantern-fish
+  leftover=0
+  board titles still “Cá nục sương (mẫu) | Túi cói chợ (mẫu)”
+  critic-lantern-e.png shows the Cá Đèn Lồng shelf, not
+  leftover máy này
+
+Leftover play-stall-boards / play-shop-stalls at the south
+stand:
+  leftoverDrawn=[]
+  leftoverStallDrawn=[]
+  leftoverCount=2 (persist-only on /demo-bus)
+  Shared PC / J6 stay persist-only (draw=0).
+
+Tram east/west + Harbor×Tram zebra (DOM keep; did not
+re-walk those stretches):
+  east lamps 5-e/w … 8-e/w still listed
+  west lamps 0-e/w … 4-e/w still listed
+  planter-tram-east-s still at x=52.89
+  crosswalk-harbor-tram still at x=7.60 z=0
+  stackedOnZebra=[]
+
+PASS.
+
+================================================================================
+CLAIM 6 — HONESTY DENIES GTA / 1:1 / DIGITAL TWIN; NO OIDC — PASS
+================================================================================
+
+Honesty banner (live HUD, guest B spawn / south stand /
+look-down / lantern E):
+
+  “Authored approximation. Not a live map, not OSM/Overture,
+  not photogrammetry, and not a digital twin. No GTA claim,
+  no 1:1 city. Authored 400 m: two official named streets
+  plus inner parcel lanes, not a city grid. … Menu boards
+  list authored fiction goods, not a live market.
+  NOT_PLAN_PASS.”
+
+OIDC appears nowhere as a login claim. signed-in=no.
+No “sign in with Google / OIDC login”. gpsClaim=false.
+
+PASS.
+
+================================================================================
+WHAT THE IMPLEMENTER CDP DID NOT PROVE
+================================================================================
+
+Their J5 pack stood at lon=106.6980543 lat=10.771145
+(spawnDist=53.16) after a Harbor-center step then
+southAlongM=spawnAlong−58 on the centerline, then reused
+j5-3d-harbor-south.png / j5-3d-harbor-south-lookdown.png
+as the furniture proof. This reaudit used a different CDP
+port, a different walk (Harbor step −8 m / mid −22 m /
+west-offset −47 m), and read different frames
+(critic-harbor-south-along.png /
+critic-harbor-south-lookdown.png). Their
+J5_HARBOR_SOUTH_OK JSON was not used as proof.
+
+Their southFloor greenRatio / lampRatio gates are not
+player proof. This critic accepted only a visible lamp
+in an independent south look-along frame on Harbor Walk.
+
+================================================================================
+HUNTS (not named fails)
+================================================================================
+
+A look-down floor crop missed the lamps because those sit
+further along / on the walks; the crop framed asphalt +
+yellow curb + lighter walk. Full look-along still shows
+the lamps. Not a miss.
+
+greenRatio band gate stayed 0.000 — there is no south
+Harbor planter. Claim was lamp or planter. Lamps are enough.
+
+46.11 m is short of their 53.16 m because the independent
+target was spawnAlong−47 with a 1.4 m west offset and the
+walk stopped at 1.48 m. Still inside 40–80 m and still
+south of spawn lat. Chip never flipped to Tram Approach
+on that stand.
+
+Lantern walk-back briefly left the Harbor chip to “—”
+while cutting toward the lantern sidewalk (Pho nearby, then
+blocked=1, then lantern). That is this critic’s lantern-E
+path after the south shots, not the south stand and not a
+leftover steal.
+
+Leftover Shared PC / J6 still persist in the loopback
+catalog. That is allowed. The fail was ownership of street
+E or draw=1. They own neither.
+
+HUD Offline chip also showed “Đang kết nối” while presence
+copy stayed Offline. Not a named hunt for this slice.
+
+Default Play stayed R3F 1280×720. Did not grind hitch /
+min FPS. Did not claim GATE-U1.
+
+================================================================================
+METHOD
+================================================================================
+
+1. 4175 already up (pid 51752). Did not recycle / rebuild /
+   start other ports.
+2. GET /  /demo-bus  /data/ben-thanh-400m.authored.geojson
+   /assets/index-C3JOtA3q.js. Recorded name+sha+len before CDP,
+   after the walk, and after this write. curl.exe -sI for
+   Content-Length.
+3. Read implementer note (TICK=n/a). Did not copy its probe
+   writer into product files. Did not run
+   j5-harbor-south-probe.mjs as proof. Did not POST unfriend.
+4. Independent Chrome CDP 1280×720 isolated profile.
+   Port 9964: about:blank → ?seat=b, leftover E at spawn,
+   Harbor step south, mid-south, ~47 m west-offset stand,
+   look-along + look-down, lantern sidewalk E.
+5. Did not write lead packs. Did not tick plan. Did not fake
+   GATE-U1.
+
+Temp only (not under data-qa):
+  %TEMP%\hh-harbor-south-reaudit\hash-before.json
+  %TEMP%\hh-harbor-south-reaudit\critic-harbor-south-reaudit.mjs
+  %TEMP%\hh-harbor-south-reaudit\critic-walk.json
+  %TEMP%\hh-harbor-south-reaudit\critic-harbor-south-along.png
+  %TEMP%\hh-harbor-south-reaudit\critic-harbor-south-lookdown.png
+  %TEMP%\hh-harbor-south-reaudit\critic-harbor-south-walk-crop.png
+  %TEMP%\hh-harbor-south-reaudit\critic-harbor-south-right-crop.png
+  %TEMP%\hh-harbor-south-reaudit\critic-harbor-south-look-crop.png
+  %TEMP%\hh-harbor-south-reaudit\critic-lantern-e.png
+
+================================================================================
+OWNER LEFTOVERS (unchanged; not this tick)
+================================================================================
+
+1. GATE-U1 three-human review (first acceptance leftover; not faked).
+2. R2-WP1 headed/mobile/memory/min-FPS thresholds still UNFILLED.
+3. WAN / other-PC join still not built. 4175 loopback only.
+4. R4-WP0B real account/OIDC still not built.
+5. Open data (OSM/Overture) still needs license ledger + grant.
+6. Leftover this-PC shops stay in the catalog; they do not own street E.
+   Menu list + open panel still label them leftover. Do not catalog_clear.
+7. M0/M1/M2 plan WPs still NOT_STARTED. NOT_PLAN_PASS. Not M1.
+
+TICK=yes. NOT_PLAN_PASS. Not M1. Not GATE-U1.
+
+================================================================================
+END
+================================================================================

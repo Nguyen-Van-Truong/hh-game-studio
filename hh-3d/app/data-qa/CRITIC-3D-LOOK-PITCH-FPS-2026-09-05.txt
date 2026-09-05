@@ -1,0 +1,65 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-05
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=06:31 +07
+ROLE=IMPLEMENTER
+TICK=n/a
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_R2_WP1=1
+NOT_60=1
+PLAYER_URL=http://127.0.0.1:4175/
+LIVE_JS=/assets/index-BrVc4bRj.js
+LIVE_JS_LEN=2175994
+LIVE_JS_SHA256=c73e28b6ae16f3009d9af4908a1a05acd2acbbd0f2b350c47884fbe80c8c9df4
+LIVE_PID=30572
+LIVE_PID_STARTTIME=2026-09-05 06:29:31 +07
+SUPERSEDES=/assets/index-CoTKbFff.js
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+NO_COMMIT=1
+DID_NOT_RECYCLE_AFTER_THIS_NOTE=1
+
+Owner still saw Key A go screen-RIGHT on CoTKbFff. Prior critic treated
+lon-west + heading 0 as screen-left. That is the geographic story, not
+the Three.js picture.
+
+Pre-edit CDP on live CoTKbFff (port 10048, DID_NOT_RECYCLE):
+  hash CoTKbFff / 2174312 / 2971c5c457… matched.
+  Three lookAt from behind heading 0: camera-right X ≈ −1 (west).
+  KeyA heading 0→0, lon 106.6980400 → 106.6980233 (west) = along
+  camera-right = screen-RIGHT. Follow-cam keeps the body centered so
+  screenX barely moves; the world slides the wrong way.
+  Default pitch 10 already aimed lookY via +pitch*0.36 (~+3.6 m).
+  Pitch-up screenshot was sky-only; tunic gone. FPS chip absent.
+
+Hòn Gió demo (do not ship demo assets):
+  rightX = −cos(yaw), rightZ = sin(yaw). A is ix = right−left.
+  playLookCamera: stay behind; y = chest+camLift − sin(pitch)*range;
+  look-at stays on chest + aimAhead. lookYawSign=−1. Do not flip
+  strafe when changing yaw sign. WALK 2.55 / RUN 4.35.
+
+This remint:
+1. cameraRelativeAxes uses the demo flipped right
+   (east: fwd*sin − right*cos, north: fwd*cos + right*sin).
+   A from north walks east = opposite camera-right = screen-left.
+   Heading still frozen. LOOK_YAW_SIGN stays −1.
+2. followCameraPose copies demo pitch: drop the lens on pitch-up,
+   raise on pitch-down, lookY = chest + ahead*sin(pitch). Removed
+   the +pitchDeg*0.36 sky yeet.
+3. Visible rAF chip [data-testid=play-fps] “N FPS · NOT_60”,
+   claim NOT_R2_WP1. Hidden tab skips samples + Canvas frameloop
+   never. BasicShadowMap + dpr 1.25 stay. Not a 60 / R2-WP1 claim.
+4. Walk 2.55 / 4.35. Connected copy “Máy này · 4175”.
+
+Post-remint implementer CDP (ports 10050 A / 10052 B; not 10014–10036):
+  Seat A: heading 0→0, lon +0.0000124 east, onCanvas 1 before and
+  after pitch 28 (camLookY 1.98, not sky). Mouse-left heading 0→20.
+  Seat B: heading 292→292 on A, body onCanvas, mouse-left 292→312.
+  Chip visible; values are honest headless rAF (not 60).
+  Shots: hh-3d/app/data-qa/look-pitch-post-shots/
+
+node --test 94/94. Recycled LISTEN pid 28288 only. New preview
+127.0.0.1:4175 --strictPort. Independent critic must write ONLY
+CRITIC-3D-LOOK-PITCH-FPS-REAUDIT-2026-09-05.txt. Implementer is
+never TICK=yes. NOT_PLAN_PASS.

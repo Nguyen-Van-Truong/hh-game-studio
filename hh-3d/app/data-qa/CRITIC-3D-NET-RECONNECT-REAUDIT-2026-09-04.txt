@@ -1,0 +1,355 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+BOOTED_4175=1
+DID_NOT_RECYCLE=1
+DID_NOT_REBUILD=1
+DID_NOT_REMINT=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M0=1
+NOT_M0_WP0=1
+NOT_M0_WP1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+CRITIC=INDEPENDENT_ADVERSARIAL_NET_RECONNECT_REAUDIT
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=13:10 +07
+MODEL=grok-4.6-extra-high
+SCOPE=Re-audit of claimed remint: lost → online must flash Đang kết nối lại then Đang kết nối; social stays Offline. Do not treat CRITIC-3D-NET-RECONNECT-2026-09-04.txt as TICK=yes.
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=04cb6ca92c482017c02d78e7885727f73b62103d
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-NET-RECONNECT-REAUDIT-2026-09-04.txt
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-NET-RECONNECT-2026-09-04.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+DID_NOT_TREAT_IMPLEMENTER_AS_TICK_YES=1
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+DID_NOT_CLICK_ONLINE=1
+DID_NOT_CLICK_NETWORK_CUT=1
+DID_NOT_CATALOG_CLEAR=1
+VITE_PREVIEW_PORT_PIN=4175
+LIVE_PID=52864
+LISTEN=127.0.0.1:4175
+CRITIC_CDP_PORTS=9996 (seat 1, shots) / 9995 (seat 2, faster poll, no mid-flash shot)
+VIEWPORT=1280x720
+ISOLATED_PROFILE=1
+HEADLESS_NEW=1
+ABOUT_BLANK_THEN_NAVIGATE=1
+SEAT=a
+
+CLAIM_JS=/assets/index-BJSm6u26.js
+CLAIM_JS_LEN=2163608
+CLAIM_JS_SHA256=4bab466a90d3ad6a404286e41a0bc68df8df89e58feb0cd755ef98a9dc8c35ca
+LIVE_JS=/assets/index-BJSm6u26.js
+LIVE_JS_LEN=2163608
+LIVE_JS_SHA256=4bab466a90d3ad6a404286e41a0bc68df8df89e58feb0cd755ef98a9dc8c35ca
+LIVE_JS_MATCHES_CLAIM=1
+HASH_MISMATCH=0
+
+LABEL_SEQUENCE=Offline|Đang kết nối  →  Offline|Mất kết nối  →  Offline|Đang kết nối lại  →  Offline|Đang kết nối
+CAUGHT_DANG_KET_NOI_LAI=1
+JUMPED_STRAIGHT_TO_DANG_KET_NOI=0
+SOCIAL_FLIPPED=0
+SOCIAL_STAYED=Offline
+MENU_CLOSED=1
+NETWORK_CUT_BAR=0
+ONLINE_BTN_ACTIVE=no
+STREET_CHIP=Harbor Walk
+HUD_PILL_SPAWN=139.6x20.5 @ 821.4,32.4
+HUD_PILL_RETRY=156.0x20.5 @ 821.4,32.4
+HUD_PILL_SETTLED=139.6x20.5 @ 821.4,32.4
+PRESENCE_SERVER_CLAIM=0
+CITY_WAN_CLAIM=0
+
+SEAT1_RETRY_FIRST_MS=877
+SEAT1_RETRY_LAST_MS=1568
+SEAT1_RETRY_VISIBLE_MS=707
+SEAT2_RETRY_FIRST_MS=962
+SEAT2_SETTLED_MS=1285
+SEAT2_RETRY_VISIBLE_MS=323
+
+CLAIM_1_LIVE_HASH=PASS
+CLAIM_2_LOST_ONLY_CONN=PASS
+CLAIM_3_CAUGHT_RETRY_FLASH=PASS
+CLAIM_4_SETTLE_SOCIAL_STILL_OFFLINE=PASS
+CLAIM_5_SLIM_CHIP_NO_SERVER=PASS
+
+BIGGEST_MISS=None on the named hunts. Live hash matches BJSm6u26 / 2163608 / 4bab466a… before CDP, after CDP, and after this write. Two isolated seats with the menu closed: onLine=false → Offline · Mất kết nối; fast restore poll caught Đang kết nối lại (attr=retry) then Đang kết nối. Social stayed Offline. Harbor Walk chip stayed. Slim pill stayed under 28 px tall. Not a presence-server claim. NOT_PLAN_PASS.
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/ was already up. Bind 127.0.0.1 pid 52864
+(node vite preview --host 127.0.0.1 --port 4175 --strictPort).
+Did not recycle, rebuild, remint, kill, or start 4173 / 4174 / 5175.
+Did not bind 0.0.0.0.
+
+Did not treat CRITIC-3D-NET-RECONNECT-2026-09-04.txt as TICK=yes
+(ROLE=IMPLEMENTER, TICK=n/a). Did not run
+j5-net-reconnect-probe.mjs as proof. Did not write J5 packs.
+Did not tick any plan. Did not catalog_clear. Did not click
+Online. Did not click Simulate no-network.
+
+Independent Chrome CDP, isolated temp profiles, 1280×720,
+about:blank then ?seat=a. Tried to fail: hash drift; flash
+missing (jump straight to Đang kết nối); social flipping to
+Online; fat dashboard; street chip gone; presence-server /
+city / WAN claim.
+
+Hash matches. Fast poll caught Đang kết nối lại on both seats.
+This is NOT_PLAN_PASS. GATE-U1 humans were not invented. Not M0.
+
+Return:
+  TICK=yes
+  LIVE_JS=/assets/index-BJSm6u26.js
+  SEQUENCE=Offline|Đang kết nối → Offline|Mất kết nối → Offline|Đang kết nối lại → Offline|Đang kết nối
+
+================================================================================
+LIVE JS
+================================================================================
+
+HTML script = /assets/index-BJSm6u26.js
+http length = 2163608
+sha256 = 4bab466a90d3ad6a404286e41a0bc68df8df89e58feb0cd755ef98a9dc8c35ca
+Matches the claimed live name + length + hash.
+
+GET before CDP (13:07 +07), GET after seat 1 + seat 2
+(same bytes), and GET after this write (13:10 +07) are the
+same from pid 52864. HASH_MISMATCH=0. Did not stop.
+
+Bundle scan (live bytes, not source):
+  Đang kết nối lại = 2
+  Đang kết nối = 4
+  Mất kết nối = 2
+  hud-presence = 1
+  hud-connection = 1
+  play-street-chip = 1
+  openstreetmap = 0
+  overture = 0
+  0.0.0.0 = 0
+  presence server = 3   (all denial: "Not a … presence server")
+  not a city = 4
+  not WAN = 2
+  Simulate no-network = 2
+  navigator.onLine = 1
+  this-PC 4175 = present in honesty / menu copy
+
+================================================================================
+CLAIM 1 — LIVE HASH IS THE CLAIMED BUNDLE — PASS
+================================================================================
+
+Tried to fail as a later/earlier bundle or SPA-shell fallback
+on the claimed name.
+
+  live = /assets/index-BJSm6u26.js
+  len  = 2163608
+  sha  = 4bab466a90d3ad6a404286e41a0bc68df8df89e58feb0cd755ef98a9dc8c35ca
+
+Same name + length + hash before CDP, after two seats, and
+after this write from pid 52864. HASH_MISMATCH=0.
+
+PASS.
+
+================================================================================
+CLAIM 2 — MENU CLOSED, onLine=false CHANGES ONLY CONNECTIVITY — PASS
+================================================================================
+
+Tried to fail: social flips; both spans become the same word;
+connectivity stays Đang kết nối; checkbox is what cuts the
+network; labels only inside Tab.
+
+Seat 1 (CDP 9996) and seat 2 (CDP 9995). Menu data-open=no
+the whole time. Did not click Simulate no-network. Did not
+click Online.
+
+Spawn (menu closed, 60 buildings, play-ready=yes):
+  hud-presence   = Offline
+  hud-connection = Đang kết nối
+  first paint was NOT Đang kết nối lại
+  Harbor Walk chip on screen 92×22 @ 724,32
+  slim pill 140×21 @ 821,32
+  Full frame critic-spawn.png: Offline · Đang kết nối
+
+CDP Network.emulateNetworkConditions offline=true, then
+window offline event (navigator.onLine already false):
+  navOnline        = false
+  hud-presence     = Offline          UNCHANGED
+  hud-connection   = Mất kết nối      ONLY this span
+  hud-connection attr = off
+  menuOpen         = no
+  networkCutBar    = false
+  Full frame critic-lost.png: Offline · Mất kết nối (amber)
+
+Social did not flip. Social was not renamed to Mất kết nối.
+
+PASS.
+
+================================================================================
+CLAIM 3 — onLine=true FLASHES Đang kết nối lại — PASS
+================================================================================
+
+Tried to fail: restore jumps straight to Đang kết nối and
+the ~800 ms flash is never painted. Prefer TICK=no if the
+flash is missing. Polled fast on purpose.
+
+Same closed-menu seats. CDP offline=false + online event.
+Did not wait for a slow HUD settle first.
+
+Seat 1 (16 ms sleep, shots). Label sequence after restore:
+  73 ms    Mất kết nối          (stale until React applies)
+  877 ms   Đang kết nối lại     FIRST CATCH  attr=retry
+  1568 ms  Đang kết nối lại     last consecutive sample
+  1607 ms  Đang kết nối         settled
+  visible ≈ 707 ms (inside 400–1200; coded 800)
+  critic-retry.png: Offline · Đang kết nối lại
+  social Offline the whole poll. menuOpen=no.
+
+Seat 2 (8 ms sleep, no mid-flash shot — second try to miss):
+  29 ms    Mất kết nối
+  962 ms   Đang kết nối lại     CAUGHT AGAIN  social Offline
+  1285 ms  Đang kết nối
+  JUMPED_STRAIGHT_TO_DANG_KET_NOI=0
+
+Did not jump straight to Đang kết nối. The flash is live,
+not only a source string. First paint on spawn stayed
+Đang kết nối (no flash on boot).
+
+PASS.
+
+================================================================================
+CLAIM 4 — AFTER FLASH: Đang kết nối, SOCIAL STILL OFFLINE — PASS
+================================================================================
+
+Tried to fail: social becomes Online on restore, or
+connectivity sticks on Đang kết nối lại / Mất kết nối.
+
+Seat 1 settled snap:
+  hud-presence   = Offline
+  hud-connection = Đang kết nối     attr=on
+  navOnline      = true
+  menuOpen       = no
+  online-btn     = no
+  critic-settled.png: Offline · Đang kết nối
+
+Seat 2 settled the same pair. Social Offline never became
+Online. Same word does not do both jobs.
+
+PASS.
+
+================================================================================
+CLAIM 5 — SLIM PILL / STREET CHIP / NO PRESENCE SERVER — PASS
+================================================================================
+
+Tried to fail: fat dashboard; Harbor Walk chip gone; copy
+claims a city presence server or WAN.
+
+  spawn pill   139.6×20.5
+  retry pill   156.0×20.5   (longer Vietnamese flash; still < 28 px tall)
+  settled pill 139.6×20.5
+  Not a network dashboard.
+
+Street chip stayed Harbor Walk on spawn, lost, retry, and
+settle. On-screen 92×22.
+
+Honesty on every snap:
+  Authored approximation. Not a live map, not OSM/Overture,
+  not photogrammetry, and not a digital twin. … NOT_PLAN_PASS.
+
+body /presence server/ is true only as denial copy:
+  "Not a city presence server."
+  "Not a city. Not a presence server."
+HUD pill never claims a reconnecting presence server.
+Friends / session / shop publish are still the raw online
+bit. This flash is the slim connectivity pill only.
+
+LISTEN remains 127.0.0.1:4175. vite argv has no
+--host 0.0.0.0. netstat foreign 0.0.0.0:0 on a LISTENING
+row is not a bind.
+
+PASS.
+
+================================================================================
+HUNTS (not named fails)
+================================================================================
+
+After onLine=true, the first ~0.8–1.0 s of fast samples
+still read Mất kết nối while navigator.onLine is already
+true. Product applies on the window online event / React
+commit, not a poll of navigator.onLine. Named fail is a
+missing Đang kết nối lại after that apply, or a straight
+jump to Đang kết nối. Both seats then painted the flash.
+
+Seat 2 consecutive flash samples were shorter (~323 ms)
+than seat 1 (~707 ms). Still a live Đang kết nối lại with
+attr=retry, not a skip. Coded window is 800 ms; critic
+samples are not a frame clock.
+
+Opening Tab is not required. Checkbox stayed unchecked.
+Owner-offline shop checkbox was not used. Leftover Shared
+PC + mtl8ulddihjpre persist rows were not cleared.
+
+Did not invent GATE-U1 humans. Did not tick a plan box.
+This is not M0.
+
+================================================================================
+METHOD
+================================================================================
+
+1. 4175 already up (pid 52864). Did not recycle / rebuild /
+   start other ports.
+2. GET / and /assets/index-BJSm6u26.js. Recorded name+sha+len
+   before CDP, after two seats, and after this write.
+3. Read implementer note (TICK=n/a). Did not copy its probe
+   writer into product files. Did not run
+   j5-net-reconnect-probe.mjs as proof.
+4. Independent Chrome CDP 1280×720 isolated profiles.
+   Port 9996: about:blank → ?seat=a, menu stayed closed,
+   emulate offline, fast restore poll + four full frames.
+   Port 9995: same path, faster poll, no mid-flash shot
+   (second try to miss the flash).
+5. Did not write lead packs. Did not tick plan. Did not fake
+   GATE-U1.
+
+Temp only (not under data-qa):
+  %TEMP%\hh-net-reconnect-reaudit\index-live.js
+  %TEMP%\hh-net-reconnect-reaudit\index-after-cdp.js
+  %TEMP%\hh-net-reconnect-reaudit\critic-net-reconnect-reaudit.mjs
+  %TEMP%\hh-net-reconnect-reaudit\critic-seat2.mjs
+  %TEMP%\hh-net-reconnect-reaudit\critic-walk.json
+  %TEMP%\hh-net-reconnect-reaudit\critic-seat2.json
+  %TEMP%\hh-net-reconnect-reaudit\critic-spawn.png
+  %TEMP%\hh-net-reconnect-reaudit\critic-lost.png
+  %TEMP%\hh-net-reconnect-reaudit\critic-retry.png
+  %TEMP%\hh-net-reconnect-reaudit\critic-settled.png
+
+================================================================================
+STILL IMPOSSIBLE WITHOUT OWNER
+================================================================================
+
+- GATE-U1 three human reviewers (not faked)
+- AUTHORIZE_MAP_FETCH=YES + license ledger before any OSM/Overture
+- Other-PC / WAN join (store is this PC 4175 loopback)
+- Real account / OIDC
+- A reconnecting presence server (this slice is a HUD flash)
+
+================================================================================
+END
+================================================================================

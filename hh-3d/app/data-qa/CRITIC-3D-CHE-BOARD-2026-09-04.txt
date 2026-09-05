@@ -1,0 +1,153 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=16:59 +07
+ROLE=IMPLEMENTER
+TICK=n/a (do not treat this file as TICK=yes)
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M0_WP1=1
+NOT_M1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+PLAYER_URL=http://127.0.0.1:4175/
+RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-37
+COMMAND=node hh-3d/app/data-qa/j5-che-board-probe.mjs
+VERDICT_IMPLEMENTER_CDP=J5_CHE_BOARD_OK
+LIVE_JS=/assets/index-C3JOtA3q.js
+LIVE_JS_LEN=2169322
+LIVE_JS_SHA256=c000db65138fc3c3f48583ba17d1032aa82c5fca0ef4047cdf2d5db1bc2bcdc7
+REMINTED=no
+DID_NOT_RECYCLE=1
+DID_NOT_REBUILD=1
+DID_NOT_TYPECHECK=1
+DID_NOT_TEST=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NO_COMMIT=1
+NO_HIP_SPHERES=1
+DID_NOT_RIP_CREATE_SIDEWALK_PERSIST=1
+DID_NOT_RIP_SHOP_RANGE_HUD=1
+DID_NOT_RIP_NEARBY_E_RANGE=1
+DID_NOT_RIP_LEFTOVER_PANEL=1
+DID_NOT_RIP_MENU_LEFTOVER_LIST=1
+DID_NOT_RIP_TRAM_XING=1
+DID_NOT_RIP_WEST_XING=1
+DID_NOT_RIP_EAST_XING=1
+DID_NOT_RIP_LANTERN_ZEBRA=1
+DID_NOT_RIP_NET_LABELS=1
+DID_NOT_RIP_STREET_PLAY_SHOPS=1
+DID_NOT_RIP_DEFERRED_MINIMAP=1
+DID_NOT_RIP_FRIEND_STEPS=1
+DID_NOT_RIP_90M_LOD=1
+DID_NOT_RIP_HUD_STREET_CHIP=1
+DID_NOT_RIP_PLAQUES=1
+DID_NOT_RIP_LANES=1
+DID_NOT_RIP_FOG_EDGE=1
+DID_NOT_RIP_SKY=1
+DID_NOT_RIP_CAM_HIT=1
+NO_FIFTH_STREET=1
+NO_NPC=1
+NO_INTERIOR=1
+NO_MAP_FETCH=1
+ACCEPTED_PRIOR=CRITIC-3D-CREATE-SIDEWALK-REAUDIT-2026-09-04.txt TICK=yes on /assets/index-C3JOtA3q.js
+
+================================================================================
+SLICE
+================================================================================
+
+J1: goods readable on the stall chalkboard before E.
+Lantern (Cá + Túi) and drawn Phở already used that painter.
+Live 4175 already painted Quầy Chè Vỉa / Quay Kem Reaudit
+listings on the same cheap chalkboard. Did not remint.
+
+Isolated guest B, empty Chrome profile, Offline, no friends.
+Pulled /demo-bus. Did not catalog_clear. Did not recycle 4175.
+
+Did not remint create-shop sidewalk persist, shop-range HUD,
+Nearby/E range, leftover panel banners, Menu leftover
+labels/sort, Harbor×Tram / west / east Steps crossings,
+lantern zebra, net labels, streetPlayShops keep-out, minimap,
+friend steps, LOD, HUD street chip, plaques, lanes, fog/edge,
+sky, or cam-hit.
+
+================================================================================
+CDP (headless Chrome, 1280×720, isolated guest B, already-up 4175)
+================================================================================
+
+Seat B empty profile. Identity = "Guest · shops public; friends
+not required". signed-in=no. Offline — Stroll alone.
+friend-row-a=none at spawn / walk / after E. No Add friend.
+
+Live JS unchanged (pid 51752 still serving the sidewalk remint):
+  /assets/index-C3JOtA3q.js
+  LEN=2169322
+  SHA256=c000db65138fc3c3f48583ba17d1032aa82c5fca0ef4047cdf2d5db1bc2bcdc7
+
+/demo-bus listings (unchanged):
+  shop-local-mtmrbdjffjdkg8  Quầy Chè Vỉa     Chè đậu
+  shop-local-mtmrq33hoq4phb  Quay Kem Reaudit Kem dua
+
+Walked isolated B to the Chè sidewalk stand (Harbor-side of
+the kiosk; plant-hug sits on Steps East laneM ≲ 3 and Nearby
+goes empty by the accepted stall-range rule).
+
+Chè chalkboard BEFORE E:
+  kind=chalkboard-menu
+  draw=1 keep-out=0
+  titles=Chè đậu (mẫu)
+  overlay crop 625,259 231×73
+  crop slateRatio=0.462 chalkRatio=0.054
+  Crop pixels: dark-green chalkboard, thin brown frame,
+  chalk "Chè đậu (mẫu)", footer "mẫu · not a live market"
+  Shot=hh-3d/app/data-qa/j5-3d-che-board.png
+  Crop=hh-3d/app/data-qa/j5-3d-che-board-crop.png
+
+Stand at crop/E:
+  lon=106.6980863 lat=10.7719624
+  chip=Steps East  dPlant=2.95
+  nearby=shop-local-mtmrbdjffjdkg8
+  range="Quầy Chè Vỉa: 3.0 m away"
+  hint="Press E or tap Open to enter Quầy Chè Vỉa."
+  E opened shop-local-mtmrbdjffjdkg8
+  shelf listing-local-mtmrbdjfe1fzp3  Chè đậu  published
+  leftover banner absent
+
+Kem is drawn as a street shop (draw=1, not leftover/hidden).
+  titles=Kem dua (mẫu)
+  overlay crop slateRatio=0.765 chalkRatio=0.150
+  Crop=hh-3d/app/data-qa/j5-3d-kem-board-crop.png
+  chalk "Kem dua (mẫu)", footer "mẫu · not a live market"
+
+Lantern board still Cá nục sương (mẫu) | Túi cói chợ (mẫu).
+Phở board still Phở bò (mẫu).
+Leftover Shared PC / J6: draw=0, no leftover board in keep-out.
+Spawn E not stolen.
+
+Harbor asphalt at Chè's old-style centerline:
+  lon=106.6980435 lat=10.7719638
+  laneM=0.49
+  nearby empty
+  range="Walk to a stall."
+  E=none
+
+Implementer CDP only. Not an independent critic TICK. Not a plan tick.
+
+================================================================================
+OWNER LEFTOVERS (unchanged)
+================================================================================
+
+1. GATE-U1 three-human review (first acceptance leftover; not faked).
+2. R2-WP1 headed/mobile/memory/min-FPS thresholds still UNFILLED.
+3. WAN / other-PC join still not built. 4175 loopback only.
+4. R4-WP0B real account/OIDC still not built.
+5. Open data (OSM/Overture) still needs license ledger + grant.
+6. Leftover this-PC shops stay in the catalog; they do not own street E.
+   Menu list + open panel still label them leftover. Do not catalog_clear.
+7. M0/M1/M2 plan WPs still NOT_STARTED. NOT_PLAN_PASS. Not M1.

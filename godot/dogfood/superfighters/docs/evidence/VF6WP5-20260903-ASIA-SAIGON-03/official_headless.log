@@ -1,0 +1,44 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+HH_VF_BOTS STEP=boot DISPLAY=headless
+HH_VF_BOTS STEP=schema ok=true
+HH_VF_BOTS STEP=map_sync id=rooftops
+HH_VF_BOTS STEP=map_sync id=storage
+HH_VF_BOTS STEP=map_sync id=police
+HH_VF_BOTS STEP=map_sync id=hazardous
+HH_VF_BOTS STEP=map_sync id=lantern
+HH_VF_BOTS STEP=map_sync id=gauge
+HH_VF_BOTS STEP=maps six
+HH_VF_BOTS STEP=weapons_start nades=3 gun=pistol ammo=12
+HH_VF_BOTS STEP=weapons classes=3
+HH_VF_BOTS STEP=finish_chunk left=1020 outcome=play
+HH_VF_BOTS STEP=finish_chunk left=840 outcome=win
+HH_VF_BOTS STEP=finish_fighter slot=0 team=0 dead=false cause= hp=7 shots=2 x=317 y=164 bot=true
+HH_VF_BOTS STEP=finish_fighter slot=1 team=1 dead=true cause=damage hp=0 shots=2 x=324 y=164 bot=true
+HH_VF_BOTS STEP=finish_fighter slot=2 team=0 dead=false cause= hp=100 shots=0 x=712 y=116 bot=true
+HH_VF_BOTS STEP=finish outcome=win
+HH_VF_BOTS STEP=greedy
+HH_VF_BOTS STEP=recover
+HH_VF_BOTS STEP=diff
+HH_VF_BOTS STEP=bound
+HH_VF_BOTS STEP=live
+HH_VF_BOTS run_id=VF6WP5-20260903-ASIA-SAIGON-03
+HH_VF_BOTS command_id=cmd.vf6-wp5.bots.3
+HH_VF_BOTS DISPLAY=headless
+HH_VF_BOTS SEED=7 MAP=rooftops MODE=vs1 NAME=Skyline Relay
+HH_VF_BOTS STARTED_AT=2026-09-03T18:12:55+07:00 ENDED_AT=2026-09-03T18:27:11+07:00
+HH_VF_BOTS USED_STEP_FIXED=0 USED_APPLY_FRAMES=3666 USED_APPLY_ATTEMPTED=3666 USED_APPLY_SUCCEEDED=3666 USED_PARSE_INPUT_EVENT=0 USED_ACTION_PRESS=0 USED_FORCE_KILL=0 USED_TELEPORT=0 USED_APPLY_EVAL=0
+HH_VF_BOTS SCHEMA=pass SCHEMA_SOURCE=outcome_schema
+HH_VF_BOTS MAPS=pass WEAPONS=pass FINISH=pass GREEDY=pass RECOVER=pass DIFF=pass BOUND=pass LIVE=pass
+HH_VF_BOTS MAP_ROW id=rooftops name=Skyline Relay reach=true pit=true aim=true combat=true moved=101.6 toward=101.6 goal_dist=282.4 waypoint_dist=69.0 engage=282.5 pit_blocks=705 pit_reroutes=207 gun=4 melee=0 aim_err=-3.3 shot_off=5.1 cause=
+HH_VF_BOTS MAP_ROW id=storage name=Pallet Annex reach=true pit=true aim=true combat=true moved=215.1 toward=172.0 goal_dist=36.0 waypoint_dist=116.7 engage=1.7 pit_blocks=0 pit_reroutes=0 gun=5 melee=5 aim_err=6.2 shot_off=4.1 cause=
+HH_VF_BOTS MAP_ROW id=police name=Signal Court reach=true pit=true aim=true combat=true moved=27.1 toward=25.3 goal_dist=137.9 waypoint_dist=136.0 engage=136.9 pit_blocks=14 pit_reroutes=7 gun=9 melee=0 aim_err=-3.0 shot_off=3.0 cause=
+HH_VF_BOTS MAP_ROW id=hazardous name=Vitriol Sump reach=true pit=true aim=true combat=true moved=223.8 toward=220.2 goal_dist=3.8 waypoint_dist=63.9 engage=2.1 pit_blocks=0 pit_reroutes=0 gun=5 melee=7 aim_err=-4.0 shot_off=4.1 cause=
+HH_VF_BOTS MAP_ROW id=lantern name=Lantern Cut reach=true pit=true aim=true combat=true moved=220.3 toward=214.6 goal_dist=91.1 waypoint_dist=60.4 engage=89.6 pit_blocks=4 pit_reroutes=2 gun=9 melee=0 aim_err=3.0 shot_off=5.2 cause=
+HH_VF_BOTS MAP_ROW id=gauge name=Gauge Deck reach=true pit=true aim=true combat=true moved=84.5 toward=-2.3 goal_dist=274.3 waypoint_dist=139.6 engage=273.1 pit_blocks=56 pit_reroutes=16 gun=9 melee=0 aim_err=-3.0 shot_off=5.2 cause=
+HH_VF_BOTS HONESTY BOT_COVERAGE=planner NOT_AI=0 NOT_Y8_PARITY=1 PLANNER_CLASS=assumption DIFF=tuning NO_TELEPORT=1 NO_PERFECT_AIM=1 NO_HIDDEN_STATE=1
+HH_VF_BOTS FORCE_KILL_OFFICIAL=0 TELEPORT_OFFICIAL=0
+HH_VF_BOTS EVIDENCE_DIR=D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\godot\dogfood\superfighters\.evidence\VF6WP5-20260903-ASIA-SAIGON-03-headless
+PASS: Vault Fighters bot planner
+HH_VF_BOTS FINISHED=1
+HH_VF_BOTS PROCESS_EXIT=0

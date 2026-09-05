@@ -1,0 +1,290 @@
+TICK=yes
+RACE=0
+PRIOR_CRITIC_3D_WALK_TICK=no_STALE
+URL=http://127.0.0.1:4175/
+BIGGEST_MISS=First impression is third-person street walk, but leftover HUD/aside (320x343 seats + scrollable lists) still sits on five AABB boxes on a beige slab, and the camera is locked world-north rather than heading-follow. Not a city. NOT_PLAN_PASS.
+
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-03
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=13:22 +07
+MODEL=grok-4.6
+SCOPE=HH World default Play = third-person 3D walk on already-up 4175 (authored 400 m, NOT GTA / NOT 1:1)
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=1567956b35dbe78e938280f930ad711a5fb68de4
+PROGRESS_CLAIMS_HEAD=657634f8f82281bd670c9a375ad49c6180db3583
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-WALK-2-2026-09-03.txt
+PRIOR_RACE_FILE=hh-3d/app/data-qa/CRITIC-3D-WALK-2026-09-03.txt
+PROGRESS_TRUSTED_ALONE=NO
+J5_OBSERVED_TRUSTED_ALONE=NO
+LEAD_SHOT_TRUSTED_ALONE=NO
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_VF_TOUCH=1
+NO_UNREAL=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_WAIT=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M0_WP1=1
+NOT_GTA=1
+NOT_1TO1=1
+CRITIC_CDP_PORT=9295
+LIVE_JS=/assets/index-BkvBebH4.js
+LIVE_PID=42388
+LIVE_CMD=node .../hh-3d/app/web/node_modules/vite/bin/vite.js preview
+VITE_PREVIEW_PORT_PIN=4175
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+RACE=0
+
+URL=http://127.0.0.1:4175/
+
+4175 was already up. This critic used that preview and did not start 4173,
+4174, 5175, or a second HH World preview. Independent Chrome CDP (port 9295,
+about:blank then navigate) saw a guest first impression of a full-viewport
+R3F third-person street walk: stylized tunic body from behind, authored
+buildings as boxes with height, MapLibre only as a 182x132 corner "2D map".
+Hold W 9 s moved the in-app body 14.4 m north (lat 10.7716200 → 10.7717494)
+and the live stall range fell 28 m → 14 m. No GTA / 1:1 claim in chrome;
+honesty denies both. NOT_PLAN_PASS.
+
+CRITIC-3D-WALK-2026-09-03.txt TICK=no RACE is stale. That pass hit the old
+bundle /assets/index-Css3q5a_.js (MapLibre schematic + CSS doll pin). Live
+4175 now serves /assets/index-BkvBebH4.js. This file does not inherit that
+no. It also does not inherit J5_OBSERVED or PROGRESS.
+
+Biggest miss: leftover HUD/aside (seats + scrollable lists) still sits on
+five AABB boxes on a beige slab, and FollowCamera is locked to world-north
+rather than body heading. Third-person street walk, not a city.
+
+================================================================================
+METHOD
+================================================================================
+
+Read on disk (not PROGRESS / J5 alone):
+  hh-3d/app/web/package.json
+    three 0.182.0, @react-three/fiber 9.7.0, @react-three/drei 10.7.8,
+    maplibre-gl 5.6.2 still present
+  hh-3d/app/web/src/app/App.tsx
+    webglOk → PlayView full host; MapView variant=minimap; world MapView
+    only in WebGL-off fallback
+  hh-3d/app/web/src/play/PlayView.tsx + Person.tsx + world.ts
+    R3F Canvas, BuildingMesh boxes with height, FollowCamera, stylized
+    tunic Person. data-camera="behind" is hardcoded — not used as proof
+  hh-3d/app/web/src/app/app.css  .app-play .play-host inset 0; minimap
+    11.5rem x 8.4rem; .side overlay still mounted
+  hh-3d/app/web/src/map/MapView.tsx
+    CSS doll still exists for world/fallback; skipped on minimap variant
+  hh-3d/app/web/src/ui/HonestyBanner.tsx  "No GTA claim, no 1:1 city"
+  Lead claim shot inspected (not proof): j5-3d-walk-behind.png
+  Prior critic read only to refuse treating TICK=no as current
+
+Live (existing 4175 only; did not start another HH World preview):
+  TCP 127.0.0.1:4175 LISTEN pid 42388 node vite preview
+  4173 DOWN  4174 DOWN  5175 DOWN
+  Invoke-WebRequest http://127.0.0.1:4175/  200  title=HH World
+    script /assets/index-BkvBebH4.js
+  Live JS Content-Length=2064068
+    HAS_THREE=1  HAS_R3F=1  HAS_MAPLIBRE=1  HAS_PLAY_VIEW=1
+    HAS_GTA=0  HAS_NO_GTA=1  HAS_DOLL=1 (fallback/minimap code, not Play)
+  Independent Chrome CDP vs 4175 (debug 9295, about:blank then navigate)
+    shots TEMP only (not written under data-qa):
+      C:\Users\truon\AppData\Local\Temp\hh-critic-3dwalk2\critic-home.png  110346 B  13:21:37 +07
+      C:\Users\truon\AppData\Local\Temp\hh-critic-3dwalk2\critic-walk.png  106278 B  13:21:46 +07
+  Did not run npm build. Did not recycle the preview. Did not start 4173/4174.
+  Did not reuse j5-3d-walk-probe.mjs. Did not trust play-proof / play-self-hit.
+
+================================================================================
+ATTACK 1 — IS 4175 THE PLAYER, AND IS THE OLD DASHBOARD GONE?
+================================================================================
+
+RESULT=YES / NEW_BUNDLE / 3D_PLAY_DEFAULT
+
+4175 is up and is HH World, not Hòn Gió 4173. Correct URL.
+Served HTML is the remint bundle, not the RACE dashboard:
+
+  Independent GET 2026-09-03 13:19 +07:
+    STATUS=200  title=HH World
+    script=/assets/index-BkvBebH4.js
+    (prior critic live script was /assets/index-Css3q5a_.js)
+
+  Independent CDP 2026-09-03 13:21 +07, critic port 9295:
+    href=http://127.0.0.1:4175/?seat=a
+    title=HH World
+    appClass=app app-play
+    play-view data-engine=r3f  box=1280x720 at 0,0
+    play-canvas class=play-canvas data-engine=three  1280x720 at 0,0
+    hh-world-map=ABSENT  maplibreMain=false  fallback=false
+    maplibregl-canvas COUNT=1  182x132 at 578,1088  (corner 2D map)
+    doll CSS (.avatar-head / .avatar-torso)=false
+    self-avatar=1  class=play-self-hit  empty HTML  (probe hitbox, not the mesh)
+    worldMap=false
+
+A guest opening 4175 sees a 3D canvas filling the play surface, not a
+full-page MapLibre schematic with a CSS pin. Sidebar lists remain mounted
+as a 320x343 overlay (see Attack 6) but do not replace Play.
+
+================================================================================
+ATTACK 2 — VISIBLE 3D BODY, CAMERA BEHIND? (PIXELS, NOT TESTIDS)
+================================================================================
+
+RESULT=YES
+
+Did not accept data-testid="play-proof" data-camera="behind" (hardcoded in
+PlayView.tsx). Did not accept the empty 36x48 play-self-hit as a body.
+
+Independent screenshots (home + after W):
+
+  Home: stylized low-poly figure, teal/forest tunic, dark bun, seen from
+  behind and slightly above, shadow on the ground, facing a street slab
+  toward peach/tan boxes. HUD says "You: standing · facing north".
+  Shop label "Shop · Quầy Cá Đèn Lồng" ahead. Stall range 28 m.
+
+  Walk: same figure still from behind; Market Steps label and a tall brown
+  box now dominate the forward view; stall range 14 m; shop pole in front
+  of the box. Camera stayed behind the body (not top-down, not first-person).
+
+FollowCamera on disk is locked to PLAY_BEARING_DEG=0 (world north) and
+lookAt(z+6), not avatar.heading. Seat A spawn heading=0, W walks north, so
+the guest default IS camera-behind. A/D would not swing the camera behind
+a turned body. That is the heading-lock miss, not a top-down dashboard.
+
+window.THREE is not global (R3F bundles three). Irrelevant.
+
+================================================================================
+ATTACK 3 — BUILDINGS HAVE HEIGHT?
+================================================================================
+
+RESULT=YES / STYLIZED_BOXES_ONLY
+
+Home shot: multiple peach/tan rectangular volumes with vertical faces,
+not flat footprints. Walk shot: a large dark brown slab with clear height
+ahead of the body (Market Steps / hall AABB). proof@buildings=5 matches
+authored fixture count. BuildingMesh on disk uses boxGeometry(width, h,
+depth) plus a roof slab — AABB of the ring, not a true extruded footprint.
+
+This satisfies "buildings have height". It does not satisfy a city or 1:1
+street canyon. Honesty already says authored / estimated heights.
+
+================================================================================
+ATTACK 4 — DOES WASD MOVE THE 3D BODY?
+================================================================================
+
+RESULT=YES
+
+Independent CDP (not their probe) dispatched KeyW keyDown, slept 9000 ms,
+keyUp:
+
+  home lat/lon  10.7716200 / 106.6980400   (matches AVATAR_SPAWN)
+  walk lat/lon  10.7717494 / 106.6980400
+  movedM=14.4048  northM=14.4048  eastM=0
+  pose returned to idle after release (heading stayed 0)
+
+Visual, not only dataset.lat:
+  Home stall copy "Quầy Cá Đèn Lồng: 28 m away"
+  Walk stall copy "Quầy Cá Đèn Lồng: 14 m away"
+  Forward building/labels much closer after W
+
+play-self-hit screen box stayed 36x48 at top 539 / left 622 — expected:
+camera follows the body, so the mesh stays centered while world lat
+changes. That is third-person follow, not "the pin didn't move".
+
+WebGL readPixels on the play canvas returned RGBA 0 (preserveDrawingBuffer
+off). Not used. Screenshots are the pixel proof.
+
+E / shop overlay was not this critic's bar. Not claimed.
+
+================================================================================
+ATTACK 5 — GTA 6 / 1:1 CLAIM IN CHROME?
+================================================================================
+
+RESULT=NO_OVERCLAIM
+
+Live honesty (CDP innerText):
+  "Authored approximation. This is not a live map, not OSM/Overture, not
+  photogrammetry, and not a digital twin."
+  "No GTA claim, no 1:1 city, no digital twin, no stranger crowd."
+  "NOT_PLAN_PASS."
+gtaRaw=false  oneToOneClaim=false  denial=true
+Brand-sub: "Walk the authored 400 m street · open a shop · friends demo ·
+Bến Thành vicinity" — no Superfighters / GTA / 1:1 title.
+Live JS HAS_GTA=0 HAS_NO_GTA=1.
+
+Honesty does not convert this into a plan PASS. It does clear the
+overclaim bar.
+
+================================================================================
+ATTACK 6 — STILL DASHBOARD-FIRST?
+================================================================================
+
+RESULT=NO / WALK_IS_FIRST_IMPRESSION
+
+What a guest sees first (both critic shots): 3D street, body from behind,
+boxes with height, small 2D map in the corner. That is the Play default.
+
+What is still leftover (does not flip TICK):
+  aside.side still display:block  320x343 at top 364 / left 951
+  overflow:auto — FriendsBar seats are visible; Search / CreateShop /
+  PlaceList / GoodsList / PlaceCard / BookmarkPanel remain in the tree
+  and are one scroll away. HUD-top (header + honesty + Offline/Online)
+  still covers the upper band.
+  CSS doll code still ships for WebGL-off world MapView.
+
+This is dashboard chrome on a 3D walk, not a dashboard that is Play.
+A guest who never opens the aside still gets the third-person street.
+TICK=no would be illegal on "still dashboard-first".
+
+================================================================================
+GUEST BAR (TICK=yes REQUIRES ALL)
+================================================================================
+
+3D canvas filling play (not full-page MapLibre + CSS pin)   YES
+Character body visible; camera behind (not top-down only)   YES
+Buildings have height (not flat footprints only)            YES
+WASD moves the 3D body (position changes)                   YES
+No GTA / 1:1 claim in chrome                                YES
+Guest first impression = third-person street walk           YES
+
+Therefore TICK=yes. NOT a plan PASS. NOT GATE-U1. NOT M0-WP1.
+
+================================================================================
+PORTS / NON-ACTIONS
+================================================================================
+
+4175 LISTEN pid 42388 vite preview                        CONFIRMED
+4173 / 4174 / 5175                                        DOWN; not started
+Second HH World preview                                   NOT STARTED
+npm build / preview recycle                               NOT RUN
+Implement / commit / plan checkbox                        NOT DONE
+VF / Unreal / map fetch                                   NOT TOUCHED
+Did not write screenshots under hh-3d/app/data-qa         CONFIRMED
+Did not treat prior TICK=no as current                    CONFIRMED
+
+================================================================================
+WHAT THIS TICK DOES NOT GRANT
+================================================================================
+
+- Not GATE-U1. Do not invent three human reviewers.
+- Not M0-WP1 / not any plan [x].
+- Not a Hòn Gió island port. Not Unreal. Not GTA. Not 1:1 / digital twin.
+- Not proof that A/D keeps the camera behind a turned body.
+- Not proof that WebGL-off fallback is a 3D walk (it is the 2D map).
+- Not proof E-at-stall; shop distance after W was still 14 m.
+
+================================================================================
+END
+================================================================================

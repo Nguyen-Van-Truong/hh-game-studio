@@ -1,25 +1,33 @@
-PLAN_ROLE=HARDENED_FUTURE_EXECUTION_PLAN
-PLAN_SCOPE=hh-3d/real-application
+PLAN_ROLE=CANONICAL_WP_ORDER_AND_ACCEPTANCE
+PLAN_SCOPE=hh-3d/app
 PLAN_DATE=2026-08-31
-LAST_AUDIT_DATE=2026-09-01
+LAST_AUDIT_DATE=2026-09-03
+OWNER_MODES_DATE=2026-09-03
 TIMEZONE=Asia/Saigon
-STATUS=PAUSED_NOT_STARTED_DECISIONS_REQUIRED
-CURRENT_WP=NONE_PAUSED
-CURRENT_EXECUTION=DOCUMENTATION_ONLY
-EXECUTION_AUTHORIZATION=REVOKED_UNTIL_OWNER_RESUMES
-FIRST_WP_AFTER_RESUME=R0-WP0
+STATUS=LOCAL_PROOF_EXISTS_ACCEPTANCE_INCOMPLETE
+CURRENT_WP=SEE_hh-3d/app/PROGRESS.txt
+CURRENT_EXECUTION=FOLLOW_LIVE_PROGRESS_AND_RECORDED_OWNER_GRANT
+EXECUTION_AUTHORIZATION=LOCAL_WEB_ONLY_AS_RECORDED_2026_09_03
+LIVE_PROGRESS=hh-3d/app/PROGRESS.txt
+CURRENT_FIRST_LEFTOVER=GATE-U1
+PLAN_REVISION_SCOPE=DOCUMENTATION_ONLY_NO_NEW_RUNTIME_AUTHORIZATION
+WP_STATE_PASS_POLICY=ORIGINAL_VALUES_UNCHANGED_NOT_LIVE_PROGRESS
 DO_NOT_START_DIRECTLY=1
 PRODUCT_TYPE=WEB_FIRST_REAL_APPLICATION
-NATIVE_ENGINE_ROLE=OPTIONAL_UNREAL_CLIENT
-NETWORKING_STATUS=OUT_OF_SCOPE_FOR_FIRST_RELEASE
+NATIVE_ENGINE_ROLE=SEPARATE_UNOPENED_BRANCH_NOT_A_MODES_DEPENDENCY
+NETWORKING_STATUS=DUAL_MODE_AFTER_LOCAL_PROOF
+NETWORKING_FIRST_LOCAL_PROOF=OFF
 GOOGLE_PHOTOREALISTIC_STATUS=OFF_HIGH_RISK_OPTIONAL
-ACCOUNT_STATUS=DEFERRED_LOCAL_BOOKMARK_FIRST
-APP_IMPLEMENTATION_PROGRESS=0_PERCENT_NO_APP_FOLDER
-SOURCE_OF_TRUTH=THIS_FILE_FOR_FULL_APPLICATION
+ACCOUNT_STATUS=REQUIRED_LATER_FOR_OWNER_MODES_CLOUD_BOOKMARK_SYNC_OPTIONAL
+ACCOUNT_REQUIRED_FOR=open_shop, list_product, friends, online_presence
+APP_IMPLEMENTATION_PROGRESS=SEE_LIVE_PROGRESS_NO_PERCENT_FROM_UNCHANGED_CHECKBOXES
+CODE_EXISTS_OUTSIDE_TICKS=see hh-3d/app/PROGRESS.txt (local authored map only)
+SOURCE_OF_TRUTH=THIS_FILE_FOR_WP_ORDER
+OWNER_MODES_TRUTH=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
 DEMO_PLAN=hh-3d/zdoc/31-8-hh3d-demo-webgl-plan.txt
 BACKGROUND_AUDIT=hh-3d/zdoc/31-8-hh3d-real-world-open-world-plan.txt
 PARENT_PRODUCT_BOUNDARY=godot/dogfood/superfighters (do not modify)
-AUDIT_SUMMARY=hh-3d/zdoc/01-9-hh3d-plan-audit-summary.txt
+AUDIT_SUMMARY=hh-3d/zdoc/01-9-hh3d-plan-audit-summary.txt (HISTORICAL routing, not live)
 CHEAP_AGENT_PROMPT=hh-3d/zdoc/01-9-hh3d-cheap-agent-handoff-prompt.txt
 
 ================================================================================
@@ -32,21 +40,31 @@ bằng trình duyệt, khám phá địa điểm thật, xem bản đồ 2D/3D, 
 thông tin địa điểm, lưu/chia sẻ vị trí, xem experience nguyên bản và nhận
 thông báo rõ về độ mới, nguồn, độ chính xác và giới hạn dữ liệu.
 
-File này là kế hoạch tương lai. Hiện không plan HH-3D nào được triển khai:
-demo và full application đều bị owner freeze; chỉ được audit/cập nhật tài liệu
-bàn giao cho đến khi có lệnh resume mới, tường minh.
+Owner đã mở HH World web ngày 03-09-2026; app local nằm ở hh-3d/app/.
+Đọc PROGRESS.txt trước để biết code/evidence và việc còn thiếu. GATE-U1 vẫn
+chưa đạt; không suy ra plan PASS từ local proof. Lần sửa này chỉ sửa plan theo
+yêu cầu owner, không mở M-WP, fetch map, deploy hay mua dịch vụ.
+
+STATE/PASS/checkbox cũ trong các block WP được giữ để không giả nghiệm thu.
+Chúng là sổ acceptance chưa cập nhật, không phải bằng chứng app chưa tồn tại.
+Tiến độ live lấy từ PROGRESS; thứ tự/DoD lấy từ đây; nghĩa mode lấy từ
+03-9-hh-world-owner-modes.txt rev2. Chỉ dẫn owner mới có ưu tiên, không cần
+bắt owner lặp một header magic. Freeze 01-09 bên dưới là lịch sử đã được
+resume có giới hạn bởi decision record 03-09, không mở toàn bộ backlog.
 
 Không mở plan full cùng lúc với demo. Không sửa Godot, Vault Fighters, Kho Bí
 Ẩn hoặc Snake để phục vụ hh-3d. File background cũ chỉ là audit; file này là
-nguồn sự thật cho full application sau khi demo được review.
+nguồn thứ tự cho app. Owner đã chấp nhận gap demo trong decision record 03-09;
+không quay lại bắt sửa demo làm dependency của HH World.
 
 --------------------------------------------------------------------------------
 AUDIT/HARDENING OVERRIDE 2026-09-01 — THAY CÁC GIẢ ĐỊNH CŨ KHI XUNG ĐỘT
 --------------------------------------------------------------------------------
 
-Owner đã yêu cầu dừng triển khai và chỉ hoàn thiện kế hoạch. Vì vậy:
+Lịch sử ngày 01-09: owner đã yêu cầu dừng triển khai. Các ghi nhận tại ngày
+đó bên dưới không phải trạng thái live sau resume 03-09:
 
-- `hh-3d/app/` chưa tồn tại; không có phần nào của HH World được triển khai;
+- tại ngày audit đó `hh-3d/app/` chưa tồn tại (đã thay đổi; xem PROGRESS);
 - mọi WP R0..R8 là backlog, không phải tiến độ đã làm;
 - không agent nào được scaffold app, tải map, cài provider SDK, tạo account,
   dùng API key, cài Unreal hoặc gọi dịch vụ trả phí khi trạng thái còn PAUSED;
@@ -66,12 +84,18 @@ sẵn sàng giao toàn bộ cho agent rẻ. Các sửa đổi bắt buộc của
    screenshot nếu terms chưa được duyệt.
 4. Snapshot refresh/diff/stable IDs phải được chứng minh **trước** khi anchor
    authored experience; không xây authored mapping trên source ID tạm.
-5. Local bookmark/share không cần account. OIDC/cloud sync là optional phase;
-   public browse/search/card/fallback không phụ thuộc đăng nhập.
-6. Backend/PostGIS chỉ mở sau khi offline read flow, local search/card/share
-   và data contract đã pass. Không xây cloud để thay thế proof dữ liệu.
-7. Multiplayer/social presence/voice/chat/server-authoritative state hoàn toàn
-   out of scope cho first release.
+5. Local bookmark/share không cần account; cloud bookmark sync optional.
+   Identity bắt buộc cho M-WPs. Public browse/search/card/fallback không login.
+6. Backend/PostGIS mở sau local read flow, search/card/share, quality và
+   stable snapshot contract. Shop/friends cần shared application state là
+   lý do hợp lệ cho R3; không cần chứng minh map tĩnh thiếu trước khi làm R3.
+7. Voice/chat/server-authoritative GTA state hoàn toàn out of scope.
+   “Thấy mọi người lạ trên phố” out of scope mãi.
+   Friends-only walking characters + player shops là OWNER INTENT 2026-09-03
+   (file 03-9-hh-world-owner-modes.txt). Chúng KHÔNG thuộc first local 400 m
+   proof. Chúng là phase M0–M2 sau map local + server + account. Audit cũ
+   “multiplayer entirely out of scope” bị file modes thắng cho đúng hai ý:
+   người trên phố = bạn bè; hàng trong shop = mọi người được phép xem.
 8. Mọi `ALLOWED_PATHS` wildcard trong section cũ là trần phạm vi, không phải
    quyền sửa toàn bộ. Handoff thật phải liệt kê file cụ thể.
 9. Network mặc định OFF cho agent. WP cần internet phải ghi domain/source,
@@ -79,7 +103,7 @@ sẵn sàng giao toàn bộ cho agent rẻ. Các sửa đổi bắt buộc của
 10. Không một agent nào tự cập nhật STATE/PASS. Coordinator chỉ cập nhật sau
     runtime evidence và critic read-only trên cùng source hash.
 
-Thứ tự release đã harden:
+Thứ tự canonical đã đối chiếu lại 03-09 (dependency WP phải khớp chuỗi này):
 
   P0 DECISION RECORD
     R0-WP0 product/AOI/provider/license/cost/privacy/hardware
@@ -88,25 +112,35 @@ Thứ tự release đã harden:
   P1 OFFLINE MAP PROOF
     R1-WP0 approved 400 m fixture + WorldManifest/provenance
     -> R1-WP1 MapLibre local 2D + owned 3D extrusion + attribution/fallback
-    -> GATE-U1 human usability review
-    -> R2-WP0 local search/card/deep-link/share
+    -> R2-WP0 candidate search/card/deep-link/share để human có journey
+    -> GATE-U1 human usability review -> nghiệm thu R2-WP0
     -> R2-WP1 performance/accessibility/offline quality
+    -> R4-WP0A local bookmark/privacy (no login)
 
   P2 REFRESHABLE SNAPSHOT
     R5-WP0 deterministic refresh/diff/stable IDs/rollback
-    -> R3-WP0 read-only API/PostGIS only if local proof needs server
+    -> R3-WP0 API/PostGIS foundation cho shared shops/friends
     -> R3-WP1 catalog/search/authored boundary
 
-  P3 AUTHORED APPLICATION
-    R4-WP1 Hòn Gió/city-story route anchored by stable internal ID
-    -> R4-WP0A local bookmark/privacy (no login)
-    -> R4-WP0B optional OIDC/cloud sync only by new owner decision
+  P3 OWNER EXPERIENCE (bắt buộc cho bản HH World shops/friends)
+    R4-WP0B identity/auth; cloud bookmark sync vẫn optional
+    -> M0-WP0 mode/connectivity/consent
+    -> M0-WP1 local avatar/walking/camera/shop-entry hooks
+    -> M1-WP0 shops/listings/cache -> M1-WP1 moderation
+    -> M2-WP0 friends -> M2-WP1 friends-only moving avatars
 
-  P4 PRIVATE ALPHA/BETA
-    R6 security/observability/deploy/cost -> R8 accessibility/beta/release
+  P4 OWNER JOURNEY BETA/RELEASE
+    R6 security/observability/deploy/cost -> R8 accessibility/journeys/release
+    Map-only/shop-only internal evidence ghi đúng scope, không gọi owner
+    experience complete. Không public UGC trước moderation/security gate.
 
-  P5 OPTIONAL NATIVE
-    R7 Unreal spike only after web MVP benchmark proves native value
+  NHÁNH RIÊNG, KHÔNG CHẶN M0–M2
+    R4-WP1 city-story/authored experience sau stable IDs và R3-WP1.
+    R7 native chỉ khi có owner decision riêng; hiện chưa mở.
+
+GATE-U1 chặn nghiệm thu R2 và mở phase sau. Candidate R2 dùng cho chính
+journey của gate là đầu vào kiểm tra, không phải PASS phụ thuộc ngược.
+Candidate local đã có trong PROGRESS; không làm lại vì STATE còn NOT_STARTED.
 
 Required currentness fields are now:
 
@@ -115,8 +149,38 @@ Required currentness fields are now:
   height_confidence, authored_or_source, source_hash, artifact_hash.
 
 UI phải hiện `Map data as of`, provider/release, vùng source-derived,
-approximation và authored fiction. Không marketing là digital twin, realtime,
-1:1, current absolute hoặc GTA-like.
+approximation và authored fiction. Không marketing là digital twin, realtime
+city, 1:1, current absolute hoặc GTA-like.
+
+--------------------------------------------------------------------------------
+OWNER INTENT 2026-09-03 — HAI MODE + BẠN BÈ + SHOP (THẮNG KHI XUNG ĐỘT)
+--------------------------------------------------------------------------------
+
+Chi tiết bắt buộc cho agent: hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+
+Hai mode trên cùng một map:
+
+  ONLINE
+    Thấy avatar đi/đứng/đổi hướng của NGƯỜI ĐÃ KẾT BẠN đang Online, opt-in,
+    không bị chặn, còn trong AOI/viewport. Không thấy người lạ.
+    Vào shop vẫn thấy hàng.
+
+  OFFLINE
+    Phố không có nhân vật người khác. Self avatar vẫn đi được, không phát vị trí.
+    Vào cửa hàng người khác đã mở vẫn thấy sản phẩm họ đăng
+    Có mạng thì đọc/đăng hàng bình thường. Mất mạng: bản đã tải có timestamp;
+    chưa tải là UNAVAILABLE, chỉ cache cũ mới STALE. Không gắn freshness với mode.
+
+Hàng (cá, túi, bất kỳ thứ hợp pháp) ≠ người trên phố.
+Bạn bè cổng PEOPLE. Shop public không cần là bạn mới xem kệ.
+Cần account để mở shop / đăng hàng / kết bạn / hiện thân.
+Cần moderation/report. Cấm GTA/1:1/digital twin/crowd người lạ.
+
+Shop published tồn tại dù chủ shop Offline/đăng xuất/tắt app. Vị trí avatar
+là vị trí trong app, không GPS/tâm camera. Xem hợp đồng modes rev2 cho vòng
+đời, consent, cache, server filtering và test T01–T12.
+M0–M2 là P3 trong chuỗi ở trên, trước nghiệm thu beta owner experience.
+P6 là tên sắp xếp cũ đã bỏ; không có dependency Unreal trước modes.
 
 --------------------------------------------------------------------------------
 0. TRẢ LỜI TRỰC TIẾP VỀ UNREAL
@@ -215,7 +279,7 @@ MVP là ứng dụng, không phải game:
 - có loading, retry, stale, offline và 2D fallback;
 - có about/license/privacy/report map issue.
 
-Phase sau, không chặn web MVP:
+Nhánh mở rộng, không chặn proof map hay owner modes:
 
 - city stories, curated walks và profile island;
 - bookmark sync, follows và notifications;
@@ -224,7 +288,16 @@ Phase sau, không chặn web MVP:
 - live weather, traffic hoặc event overlays;
 - native Unreal client;
 - minigame hoặc vehicle experience;
-- multiplayer realtime.
+- voice/chat;
+
+Owner modes (P3, bắt buộc cho social/shop release sau local map proof):
+- Offline/Online toggle as defined in 03-9-hh-world-owner-modes.txt;
+- player-opened shops and listings visible in both modes;
+- Online: friends-only walking characters, never strangers.
+- Local avatar ở cả hai mode, có input đi thật; pin không thay thế nhân vật.
+- Shop và hàng public sống độc lập với session/mode của chủ shop.
+
+Stranger crowd không thuộc route này; không liệt kê như phase kế tiếp.
 
 Không claim trong MVP:
 
@@ -277,7 +350,7 @@ WorldManifest bắt buộc có:
 
 - schema_version, world_id, display_name;
 - AOI polygon/bbox, coordinate reference, local origin và units;
-- provider, theme, release/version, source URL, accessed_at;
+- provider, theme, release/version, source URL, acquired_at;
 - source_hash, generated_at, generator version/commit, artifact hash;
 - license refs, attribution text/links, permitted-use decision;
 - fidelity policy, confidence, missing fields, known gaps;
@@ -540,7 +613,7 @@ tiêu và một vùng file.
 Header bắt buộc:
 
 PLAN: 31-8-hh3d-real-application-plan.txt
-CURRENT_WP: R<n>-WP<n>
+CURRENT_WP: <exact live R/M WP hoặc GATE từ app/PROGRESS.txt>
 GOAL: một câu có thể kiểm tra
 DEPENDENCIES: versions/source fixtures đã pin
 ALLOWED_PATHS: danh sách path
@@ -661,10 +734,17 @@ temporary screenshots. Binary lớn dùng storage/LFS policy được duyệt.
 10. WORK PACKAGES VÀ GATES
 --------------------------------------------------------------------------------
 
-Các mục dưới đây là backlog và hiện đang PAUSED vì owner chưa mở quyền triển
-khai. `CURRENT_WP=NONE_PAUSED`; không agent nào được tự chuyển trạng thái.
-Một WP chỉ pass khi DONE_WHEN, VERIFY, evidence và critic đều đạt; coordinator
-mới được cập nhật state sau khi owner resume.
+Các block dưới giữ STATE/PASS lịch sử chưa tick. Chúng mô tả scope và
+nghiệm thu; không dùng để phủ nhận code đã có trong app/PROGRESS.txt.
+Chỉ làm live CURRENT_WP trong quyền đã ghi. Một WP chỉ pass khi DONE_WHEN,
+VERIFY, evidence và critic đạt; bản sửa tài liệu này không cập nhật state.
+
+Integration cho R4-WP0B và M-WPs: được đăng ký component/route/feature flag
+trong hh-3d/app/web/src/app/*, hh-3d/app/web/src/App.* và server bootstrap
+hh-3d/app/server/src/app.*, hh-3d/app/server/src/index.*,
+hh-3d/app/server/src/routes/*.
+Đây chỉ là trần wiring cần cho exact WP; handoff phải liệt kê file thật sau
+khi đọc topology. Không refactor unrelated source hoặc sửa acceptance.
 
 R0-WP0 — Product, hardware, AOI và provider decision gate
 STATE: PAUSED_READY_AFTER_OWNER_RESUME
@@ -781,10 +861,13 @@ VERIFY:
 GATE-U1 — Human-player usability proof
 STATE: NOT_STARTED
 DEPENDENCIES: R1-WP1
+REVIEW_INPUT: candidate R2-WP0 local UI (không yêu cầu R2 đã PASS)
 ALLOWED_PATHS: hh-3d/app/docs/review/*, hh-3d/app/perf/*,
   hh-3d/app/web/tests/*
 
-Đây là gate bắt buộc trước R2-WP0, không phải feature để agent tự bỏ qua.
+Đây là gate bắt buộc trước NGHIỆM THU R2-WP0 và mở phase sau, không được bỏ.
+Journey dùng candidate local R2 search/card/share đã có trong PROGRESS.
+Không đòi R2 đã PASS để chạy gate; cũng không cho candidate code tự thành PASS.
 Ba người review độc lập (ít nhất một người chưa đọc code) phải hoàn thành
 journey 5 phút trong AOI proof khoảng 400 m x 400 m: mở app, tìm một landmark,
 chọn feature, đọc card, đổi 2D/3D, copy/reload share link và tìm fallback khi
@@ -799,7 +882,8 @@ VERIFY:
 
 R2-WP0 — Map UX, search shell và place cards
 STATE: NOT_STARTED
-DEPENDENCIES: R1-WP1,GATE-U1
+DEPENDENCIES: R1-WP1
+ACCEPTANCE_GATE: GATE-U1 (candidate UI là đầu vào cho human journey)
 ALLOWED_PATHS: hh-3d/app/web/src/search/*,
   hh-3d/app/web/src/ui/*, hh-3d/app/web/src/map/*,
   hh-3d/app/web/tests/*
@@ -854,7 +938,7 @@ VERIFY:
 
 R3-WP0 — API contracts và PostGIS foundation
 STATE: NOT_STARTED
-DEPENDENCIES: R1-WP0,R2-WP0
+DEPENDENCIES: R2-WP1,R5-WP0
 ALLOWED_PATHS: hh-3d/app/server/*, hh-3d/app/contracts/*,
   hh-3d/app/infra/dev/*
 
@@ -930,16 +1014,23 @@ VERIFY:
 - delete/export/reset;
 - log/browser storage redaction review.
 
-R4-WP0B — Optional OIDC/cloud sync
+R4-WP0B — Identity cho shops/friends; cloud bookmark sync optional
 STATE: OPTIONAL_NOT_OPEN
-DEPENDENCIES: R4-WP0A + explicit owner/provider/legal decision
+DEPENDENCIES: R4-WP0A,R3-WP1 + provider/privacy/cost decision
 ALLOWED_PATHS: hh-3d/app/server/src/auth/*, hh-3d/app/server/src/bookmarks/*,
   hh-3d/app/web/src/account/*, hh-3d/app/contracts/*,
-  hh-3d/app/docs/privacy/*
+  hh-3d/app/docs/privacy/*, hh-3d/app/server/migrations/*,
+  hh-3d/app/server/tests/*, hh-3d/app/web/tests/*
 
-Chỉ mở nếu local bookmark đã ổn định và owner chấp nhận chi phí/privacy.
-Phải có permission matrix, session/cookie/CSRF/CSP, delete/export/revoke,
-retention/consent và auth E2E. Nếu không mở, giữ `OPTIONAL_NOT_OPEN`.
+Identity là dependency BẮT BUỘC của M0–M2; ý owner shops/friends đã xác lập
+nhu cầu này. Chỉ cloud bookmark sync là optional, không được lấy trạng thái
+OPTIONAL_NOT_OPEN lịch sử để bỏ qua auth rồi làm shop/presence không danh tính.
+Provider/privacy/cost quyết định trước khi dùng dịch vụ; không tự mua/deploy.
+Guest vẫn browse/walk riêng không login. Auth UI chỉ xuất hiện đúng lúc cần.
+DONE_WHEN: permission matrix guest/owner/friend/moderator, session/cookie/
+CSRF/CSP, delete/export/revoke, retention/consent, account isolation đầy đủ.
+VERIFY: auth E2E đăng nhập/đăng xuất/session hết hạn/đổi account; API không
+tin owner_id từ client; local draft/consent không rò sang account khác.
 
 R4-WP0 — LEGACY ALIAS / SUPERSEDED
 Không thực thi block cũ mang tên R4-WP0; nó đã được tách thành R4-WP0A và
@@ -947,7 +1038,7 @@ R4-WP0B để không bắt người dùng đăng nhập chỉ để duyệt bả
 
 R4-WP1 — Authored experience layer
 STATE: NOT_STARTED
-DEPENDENCIES: R2-WP0,GATE-U1,R3-WP1
+DEPENDENCIES: R2-WP0,GATE-U1,R5-WP0,R3-WP1
 ALLOWED_PATHS: hh-3d/app/web/src/experiences/*,
   hh-3d/app/content/experiences/*, hh-3d/app/contracts/*,
   hh-3d/app/manifests/*
@@ -974,12 +1065,13 @@ VERIFY:
 
 R5-WP0 — Snapshot refresh, diff và atomic rollback
 STATE: NOT_STARTED
-DEPENDENCIES: R1-WP0,R2-WP0
+DEPENDENCIES: R1-WP0,R2-WP1,R4-WP0A
 ALLOWED_PATHS: hh-3d/app/data-pipeline/*, hh-3d/app/manifests/*,
   hh-3d/app/server/src/refresh/*, hh-3d/app/docs/operations/*
 
 Làm:
 - manual/scheduled refresh theo provider release;
+- local fixture v1/v2 đủ để chứng minh diff/stable IDs khi chưa được fetch;
 - add/change/delete diff;
 - review queue cho high-impact changes;
 - immutable release + atomic current pointer;
@@ -1010,7 +1102,7 @@ khi offline. Đây là WP mới với adapter và evidence riêng.
 
 R6-WP0 — Production security và observability
 STATE: NOT_STARTED
-DEPENDENCIES: R3-WP0,R4-WP0A,R5-WP0
+DEPENDENCIES: R3-WP0,R4-WP0A,R5-WP0,M1-WP1,M2-WP1
 ALLOWED_PATHS: hh-3d/app/server/*, hh-3d/app/web/*,
   hh-3d/app/infra/*, hh-3d/app/docs/operations/*
 
@@ -1103,7 +1195,7 @@ hệ thống đó vào web API/map MVP.
 
 R8-WP0 — Accessibility, mobile và public beta
 STATE: NOT_STARTED
-DEPENDENCIES: R2-WP1,R4-WP0A,R6-WP1
+DEPENDENCIES: R2-WP1,R4-WP0A,R6-WP1,M1-WP1,M2-WP1
 ALLOWED_PATHS: hh-3d/app/web/*, hh-3d/app/docs/accessibility/*,
   hh-3d/app/docs/release/*
 
@@ -1114,6 +1206,9 @@ Làm:
 - slow network/offline/stale;
 - terms/privacy/about/license/report issue;
 - public beta feedback/abuse path.
+- ba journey ở owner modes §5 + T01–T12; human ghi task success/confusion/
+  điểm thích/khó chịu trên device mục tiêu; sửa blockers trước nghiệm thu.
+  Map-only GATE-U1 không thay thế review đi phố/gặp bạn/xem hàng.
 
 DONE_WHEN:
 - explore/search/card/share works trên target mobile;
@@ -1121,6 +1216,10 @@ DONE_WHEN:
 - accessibility blocker không còn;
 - bandwidth/memory đo được;
 - copy không nói quá fidelity/currentness.
+- ba owner journey ở modes §5 hoàn thành trên device mục tiêu; không còn
+  blocker hiểu nhầm mode/GPS/shop, điều khiển avatar hoặc duyệt hàng;
+- T01–T11 kết quả cùng candidate source và human T12 có feedback/issue
+  disposition; screenshot/map-only proof không đủ.
 
 VERIFY:
 - device/browser matrix;
@@ -1128,10 +1227,13 @@ VERIFY:
 - keyboard/touch trace;
 - Lighthouse/equivalent;
 - clean-browser beta run.
+- multi-client owner-journey run + T01–T12; human review độc lập có notes,
+  không agent ký thay; có thể dùng evidence còn đúng hash/scope, không cần
+  chạy lại chỉ để lặp nếu không có thay đổi liên quan.
 
 R8-WP1 — Release package
 STATE: NOT_STARTED
-DEPENDENCIES: required MVP WPs + legal/security review
+DEPENDENCIES: R8-WP0 + required owner-mode WPs M0–M2 + legal/security review
 ALLOWED_PATHS: hh-3d/app/docs/release/*, hh-3d/app/infra/*,
   hh-3d/app/web/*, hh-3d/app/server/*, hh-3d/app/manifests/*
 
@@ -1149,6 +1251,9 @@ DONE_WHEN:
 - manifests complete;
 - monitoring/rollback/contact rõ;
 - legal/product owner ký trước public.
+- shop vẫn xem sau owner thoát; hai bạn thấy input-driven avatar motion,
+  Offline giữ shop nhưng gỡ remote, C không nhận presence; all M-WP/three
+  journeys/human T12 có evidence được critic đối chiếu, không chỉ map flow.
 
 VERIFY:
 - production rehearsal;
@@ -1156,6 +1261,140 @@ VERIFY:
 - release audit;
 - source/hash/license/secret scan;
 - post-release smoke.
+
+M0-WP0 — Online / Offline mode, connectivity và consent
+STATE: NOT_STARTED
+DEPENDENCIES: R2-WP1,R3-WP1,R4-WP0B
+ALLOWED_PATHS: hh-3d/app/web/src/modes/*, hh-3d/app/web/src/ui/*,
+  hh-3d/app/web/src/account/*, hh-3d/app/contracts/*,
+  hh-3d/app/docs/modes/*, hh-3d/app/web/tests/*
+
+Đọc modes rev2 §§0–1. presenceMode khác connectivity. Default Offline.
+Online chưa khả dụng trước M2-WP1 phải có nhãn đúng, không giả live.
+DONE_WHEN:
+- ma trận hai mode x hai trạng thái mạng và consent/account isolation rõ;
+- Offline chặn people publish/subscribe, không chặn catalog/auth;
+- logout/account switch/reconnect không tự kế thừa consent hay fake connected;
+- UI giải thích mode, kết nối, unavailable; không claim feature chưa có.
+VERIFY: contract/unit/E2E default, persistence, network events, session switch;
+  không socket presence ở Offline. Feature-flag tests không thay proof M2.
+
+M0-WP1 — Avatar local, đi phố và tương tác cửa hàng
+STATE: NOT_STARTED
+DEPENDENCIES: M0-WP0
+ALLOWED_PATHS: hh-3d/app/web/src/avatar/*, hh-3d/app/web/src/map/*,
+  hh-3d/app/web/src/ui/*, hh-3d/app/web/src/app/*,
+  hh-3d/app/web/public/avatars/*, hh-3d/app/contracts/*,
+  hh-3d/app/web/tests/*, hh-3d/app/perf/*, hh-3d/app/docs/modes/*
+
+Làm modes rev2 §2. Avatar self ở cả hai mode, guest đi local. Vị trí ảo,
+không GPS/tâm camera. Art nguyên bản, có ledger; không cần engine mới.
+Shop hook ở WP này dùng fixture được ghi rõ; catalog thật thuộc M1.
+DONE_WHEN:
+- input keyboard/touch làm avatar đi/dừng/quay hướng, camera follow/free/recenter;
+- vùng đi hợp lệ, không xuyên chướng ngại hoặc ra ngoài AOI;
+- mở/đóng shop hook giữ vị trí/focus; camera pan không đổi vị trí avatar;
+- idle/walk hiển thị rõ, reduced motion/list fallback giữ core browse.
+VERIFY: input E2E T01/T11 phần local; capture chuyển động liên tục + state
+  assertions, mobile/desktop/weak-WebGL performance. Ảnh/pin không đủ.
+
+M1-WP0 — Shop tồn tại độc lập, listings và catalog cả hai mode
+STATE: NOT_STARTED
+DEPENDENCIES: M0-WP1,R3-WP1,R4-WP0B,R5-WP0
+ALLOWED_PATHS: hh-3d/app/web/src/shops/*, hh-3d/app/server/src/shops/*,
+  hh-3d/app/web/src/map/*, hh-3d/app/web/src/avatar/*,
+  hh-3d/app/web/src/ui/*, hh-3d/app/web/src/bookmarks/*,
+  hh-3d/app/server/src/catalog/*, hh-3d/app/server/migrations/*,
+  hh-3d/app/contracts/*, hh-3d/app/web/tests/*, hh-3d/app/server/tests/*,
+  hh-3d/app/docs/modes/*
+
+Thực hiện modes rev2 §§4–5: shop/listing stable IDs, owner authz, publish/
+hidden/sold_out/delete, ảnh/schema/quota; search/filter, shop deep link/share/
+local bookmark, marker directory cùng địa điểm, kệ và product detail.
+Shop public không cần là bạn/login. Owner tắt app không đóng shop.
+Không thêm checkout/payment. Chỉ private fixtures đến khi moderation đạt.
+DONE_WHEN:
+- publish đọc lại được từ phiên khác; shop/hàng vẫn còn sau owner logout;
+- Offline có mạng đăng và đọc bình thường; catalog freshness độc lập mode;
+- cache phân biệt EMPTY/STALE/UNAVAILABLE; map_as_of khác listing_updated_at;
+- nháp/retry opt-in, idempotency, version conflict, đổi account/logout/cancel
+  không gửi nhầm; upload lỗi không tạo thành công giả;
+- hidden/delete/tombstone không sống lại từ cache/retry; refresh map giữ shop;
+- vào/ra kệ qua normal UI giữ avatar/camera/focus.
+VERIFY: T01,T03–T06,T09–T10 chỉ các phần catalog/cache/persistence/owner
+  hide-delete và shop journey ở §5; remote assertion T03 để M2-WP1,
+  suspension workflow T10 để M1-WP1. API authz + E2E hai phiên,
+  network outage/reconnect/eviction/clear; contract source hash, no presence
+  side-effect. Pending draft không được dùng làm evidence hàng public.
+
+M1-WP1 — Report, ẩn, takedown và shop moderation
+STATE: NOT_STARTED
+DEPENDENCIES: M1-WP0
+ALLOWED_PATHS: hh-3d/app/server/src/moderation/*,
+  hh-3d/app/server/src/shops/*, hh-3d/app/server/src/catalog/*,
+  hh-3d/app/web/src/shops/*, hh-3d/app/docs/legal/*,
+  hh-3d/app/contracts/*, hh-3d/app/server/tests/*, hh-3d/app/web/tests/*
+
+Danh mục đa dạng không có nghĩa không có chính sách. Phân biệt hide cá nhân
+và takedown/suspend của moderator. Public beta cần policy + report + người
+xử lý, không chỉ nút bấm; legal owner ký theo release gate.
+DONE_WHEN:
+- report tạo ticket có trạng thái và không lộ thông tin người báo;
+- unauthorized takedown bị chặn; nội dung bị gỡ không lọt search/kệ/cache
+  sau sync; máy mất mạng hiện timestamp chứ không hứa cập nhật ngay;
+- cấm/duyệt/upload validation theo policy đã ghi, rate limits chống abuse;
+- private fixtures không được công bố như kiểm duyệt pháp lý đã hoàn tất.
+VERIFY: T10 + abuse fixtures an toàn; role matrix, report workflow, cache/
+  retry resurrection; evidence redaction. Không public UGC trước gate này.
+
+M2-WP0 — Friends graph và quyền xem hiện diện
+STATE: NOT_STARTED
+DEPENDENCIES: M1-WP1,R4-WP0B,M0-WP0
+ALLOWED_PATHS: hh-3d/app/server/src/friends/*,
+  hh-3d/app/web/src/friends/*, hh-3d/app/web/src/ui/*,
+  hh-3d/app/contracts/*, hh-3d/app/server/tests/*, hh-3d/app/web/tests/*,
+  hh-3d/app/server/migrations/*
+
+Tìm người bằng định danh app/link tường minh; gửi/hủy/chấp nhận/từ chối lời
+mời, unfriend/block. Không tự import contacts, tự kết bạn, tự gửi lời mời.
+DONE_WHEN:
+- chỉ mutual accepted là bạn; request/pending/follower không có quyền presence;
+- server permission predicate dùng lại cho API/socket; block ở một phía
+  chặn hai chiều; quyền list/coarse status không lộ cho người lạ;
+- hủy bạn không xóa shop public; block không hứa xóa shop khỏi public web;
+- empty state hướng người dùng xem shop/mời bạn, không giả người trên phố.
+VERIFY: T08 phần graph; authz, duplicate/concurrent accept, deny/unfriend/block;
+  A/B/C fixtures; không có leak quan hệ/vị trí qua endpoint phụ.
+
+M2-WP1 — Avatar bạn bè đi thật trên phố
+STATE: NOT_STARTED
+DEPENDENCIES: M0-WP1,M1-WP1,M2-WP0,R4-WP0B,R3-WP1
+ALLOWED_PATHS: hh-3d/app/web/src/presence/*,
+  hh-3d/app/server/src/presence/*, hh-3d/app/web/src/map/*,
+  hh-3d/app/web/src/avatar/*, hh-3d/app/web/src/modes/*,
+  hh-3d/app/web/src/friends/*, hh-3d/app/web/src/shops/*,
+  hh-3d/app/web/src/ui/*, hh-3d/app/contracts/*,
+  hh-3d/app/web/tests/*, hh-3d/app/server/tests/*,
+  hh-3d/app/perf/*, hh-3d/app/docs/modes/*
+
+Làm modes rev2 §§2–3. Local avatar motion từ input ở M0-WP1 được đồng bộ
+thành remote walk/idle/heading, có nội suy. Không chấm ghim thay nhân vật.
+Server chỉ phân phối bạn đủ quyền; protocol có session/sequence/TTL/lease,
+reject dữ liệu ngoài world/bounds/rate; offline/revoke không hồi sinh packet.
+DONE_WHEN:
+- hai phiên A/B là bạn thấy chuyển động tương ứng từ input thật;
+- C cùng phố không thấy/nhận dữ liệu presence; Offline zero OTHER bodies;
+- mode/network/consent/session/tab lifecycle gỡ đúng hạn, no duplicate avatar;
+- vào shop khỏi street presence, coarse state không lộ vị trí ngoài quyền;
+- avatar cap/network/latency/FPS/memory khi đi + mở shop được đo; chốt TTL/
+  revoke budget/network profile theo modes §3 trước nghiệm thu;
+- Online enabled chỉ khi backend và permission checks thật đã đủ;
+- all T01–T12 thực hiện đúng phạm vi, giữ shop khi owner thoát;
+- không tuyên bố 60 FPS hoặc human enjoyment nếu chưa có evidence.
+VERIFY: multi-client runtime + traces/video/server assertions cùng source
+  hash; outage/reconnect/background/tab lease/packet reorder/revoke;
+  cap/viewport + mobile/desktop/reduced motion/fallback; independent critics
+  đọc cả network privacy và người chơi. Fixture/socket mock không là E2E duy nhất.
 
 --------------------------------------------------------------------------------
 11. DATA PIPELINE CHI TIẾT
@@ -1421,7 +1660,7 @@ Production:
 - release notes/terms/privacy/about.
 
 Release checklist:
-- source release/accessed_at;
+- source release/acquired_at;
 - license/attribution;
 - source/artifact/build hashes;
 - dependency/security scan;
@@ -1475,38 +1714,41 @@ Dừng và tạo GAP_REPORT khi:
 - native workstream bắt đầu chưa có separate decision.
 
 --------------------------------------------------------------------------------
-18. OWNER DECISIONS TRƯỚC R0-WP0
+18. DECISION RECORD VÀ QUYẾT ĐỊNH CÒN THIẾU TRƯỚC DATA SCALE
 --------------------------------------------------------------------------------
 
-Defaults:
+Decision record local R0 đã có, xem PROGRESS; không làm lại hoặc bắt owner
+xác nhận lại modes đã nói. Các default dưới là bối cảnh, không thay grant:
 
 - application: HH World web-first;
 - AOI proof: 400 m x 400 m quanh Chợ Bến Thành;
 - MVP extent: khoảng 1 km2 sau proof;
 - renderer: MapLibre-local MVP, Cesium optional route, R3F authored;
-- data: approved Overture/OSM snapshot;
+- data hiện tại: authored local fixture; approved Overture/OSM là hướng sau,
+  AUTHORIZE_MAP_FETCH vẫn NO;
 - Google photorealistic layer: OFF trong MVP;
-- account: local bookmark trước, auth phase sau;
+- account: local bookmark trước; auth bắt buộc trước shop/friends/presence;
 - style: authored language riêng;
 - Unreal: deferred;
 - release: private/staging trước public;
-- no vehicle/combat gameplay trong application MVP.
+- no vehicle/combat gameplay trong application MVP;
+- Online/Offline + friends-only street + player shops: 03-9-hh-world-owner-modes.txt.
 
 Owner phải chốt trước data scale:
 
 1. AOI/city cuối;
 2. web-only hay native desktop target;
-3. offline bắt buộc hay online accepted;
+3. phạm vi tải trước/cache mất Internet (mode xã hội đã chốt ở modes rev2);
 4. provider/cloud/API budget;
 5. real names/logos/signage policy;
-6. account/social/UGC trong MVP;
+6. provider/privacy/operations cho identity và UGC đã yêu cầu trong M-WPs;
 7. target devices/FPS/bandwidth;
 8. legal/privacy/provider-account owner;
 9. refresh cadence;
 10. support/incident contact.
 
-Nếu chưa chốt, chỉ làm G0/R1 small proof; không tải dữ liệu lớn, bật
-commercial provider hoặc public launch.
+Nếu chưa chốt phần nào, giữ gate phần đó và làm đúng live PROGRESS. Không
+dùng G0 native hay làm lại R0/R1; không tải map, bật provider/public launch.
 
 --------------------------------------------------------------------------------
 19. HANDOFF PROMPT MẪU
@@ -1514,7 +1756,8 @@ commercial provider hoặc public launch.
 
 Prompt triển khai:
 
-Bạn chỉ làm CURRENT_WP=R<n>-WP<n> trong
+Đọc hh-3d/app/PROGRESS.txt đầu tiên, rồi owner modes rev2 và exact WP.
+Bạn chỉ làm CURRENT_WP hiện hành (R-WP, M-WP hoặc gate được trỏ tới) trong
 D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/hh-game-studio/hh-3d.
 Đọc đúng Section 10 của 31-8-hh3d-real-application-plan.txt. GOAL là một
 câu có thể kiểm tra. Chỉ sửa ALLOWED_PATHS. Không sửa Godot, Vault Fighters,
@@ -1566,9 +1809,11 @@ Web MVP complete:
 - no unlicensed asset/secret;
 - legal/product owner duyệt trước public beta.
 
-Full application release-ready:
+Full application / owner-experience release-ready:
 
 - web MVP + account/bookmark/content boundary theo scope;
+- M0-WP0/M0-WP1/M1-WP0/M1-WP1/M2-WP0/M2-WP1 đạt, với ba journey
+  đi dạo/xem hàng, chủ shop publish rồi thoát, gặp bạn đi thật (modes §5);
 - CI/deploy/observability/backup/rollback;
 - currentness refresh và diff review;
 - cost/quota/privacy/security/accessibility;

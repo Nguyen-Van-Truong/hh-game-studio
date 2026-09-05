@@ -1,0 +1,749 @@
+{
+  "run_id": "HH3D-J5-20260903-ASIA-SAIGON-33",
+  "player": "http://127.0.0.1:4175/",
+  "verdict": "J5_SCOOTERS_OK",
+  "not_plan_pass": true,
+  "not_gate_u1": true,
+  "lookPath": "cdp-mouse",
+  "lookDx": -140,
+  "nearestScooter": {
+    "id": "scooter-harbor-near-w",
+    "kind": "scooter",
+    "street": "street-harbor-walk",
+    "color": "#c45a2a",
+    "x": -0.89,
+    "z": -91.43
+  },
+  "scooterDomOk": true,
+  "walkOk": true,
+  "skyOk": true,
+  "pixOk": true,
+  "shopOk": true,
+  "keptOk": true,
+  "honestyOk": true,
+  "scooterN": 15,
+  "harborN": 8,
+  "tramN": 7,
+  "colors": [
+    "#6e3d5a",
+    "#c45a2a",
+    "#2f4f6e",
+    "#2a6b8a",
+    "#8a3a32",
+    "#4a7a3a",
+    "#3d3f44",
+    "#b8783a"
+  ],
+  "walkDelta": {
+    "east": 0,
+    "north": 5.5214719998621575,
+    "moved": 5.5214719998621575
+  },
+  "lanternDelta": {
+    "east": 0,
+    "north": 24.9579439999885,
+    "moved": 24.9579439999885
+  },
+  "skyBand": {
+    "samples": 3090,
+    "meanR": 137.3,
+    "meanG": 146.4,
+    "meanB": 150.2,
+    "beigeRatio": 0.04,
+    "blueRatio": 0.431,
+    "scooterRatio": 0.114,
+    "bluerThanRed": true
+  },
+  "leftWalk": {
+    "samples": 9476,
+    "meanR": 103.5,
+    "meanG": 114.5,
+    "meanB": 134.8,
+    "beigeRatio": 0.001,
+    "blueRatio": 0.427,
+    "scooterRatio": 0.068,
+    "bluerThanRed": true
+  },
+  "rightWalk": {
+    "samples": 9476,
+    "meanR": 83.2,
+    "meanG": 115.1,
+    "meanB": 162.5,
+    "beigeRatio": 0.003,
+    "blueRatio": 0.614,
+    "scooterRatio": 0.005,
+    "bluerThanRed": true
+  },
+  "shopPanelId": "shop-lantern-fish",
+  "hash": "166774da60080ba0",
+  "bytes": 137137,
+  "shot": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-scooters.png",
+  "home": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/?seat=a",
+    "playReady": "yes",
+    "playEngine": "r3f",
+    "playCanvas": true,
+    "canvasBox": {
+      "x": 0,
+      "y": 0,
+      "w": 1280,
+      "h": 720
+    },
+    "avatar": {
+      "lon": 106.69804,
+      "lat": 10.77162,
+      "heading": 0,
+      "groundY": "0",
+      "insideAabb": "0",
+      "insideRing": "0"
+    },
+    "proof": {
+      "camera": "behind",
+      "collision": "footprint-radius",
+      "sky": "gradient-hemisphere",
+      "sun": "disc",
+      "lamps": "38",
+      "planters": "4",
+      "scooters": "15",
+      "scooterKind": "parked-box-scooter",
+      "groundFloor": "door-glass-awning",
+      "roof": "parapet-ac-tank",
+      "streetProps": "lamps-crosswalk-planters",
+      "camYaw": 0,
+      "camPitch": 0,
+      "insideAabb": "0",
+      "insideRing": "0",
+      "buildings": 60
+    },
+    "scooters": [
+      {
+        "id": "scooter-harbor-near-e",
+        "kind": "scooter",
+        "street": "street-harbor-walk",
+        "color": "#6e3d5a",
+        "x": 10.23,
+        "z": -88.68
+      },
+      {
+        "id": "scooter-harbor-near-w",
+        "kind": "scooter",
+        "street": "street-harbor-walk",
+        "color": "#c45a2a",
+        "x": -0.89,
+        "z": -91.43
+      },
+      {
+        "id": "scooter-street-tram-approach-0-w",
+        "kind": "scooter",
+        "street": "street-tram-approach",
+        "color": "#c45a2a",
+        "x": -166.55,
+        "z": 1.37
+      },
+      {
+        "id": "scooter-street-tram-approach-2-e",
+        "kind": "scooter",
+        "street": "street-tram-approach",
+        "color": "#2f4f6e",
+        "x": -110.21,
+        "z": -7.92
+      },
+      {
+        "id": "scooter-street-tram-approach-4-e",
+        "kind": "scooter",
+        "street": "street-tram-approach",
+        "color": "#2a6b8a",
+        "x": -53.69,
+        "z": -6.04
+      },
+      {
+        "id": "scooter-street-tram-approach-5-w",
+        "kind": "scooter",
+        "street": "street-tram-approach",
+        "color": "#8a3a32",
+        "x": -30.28,
+        "z": 5.58
+      },
+      {
+        "id": "scooter-street-tram-approach-8-w",
+        "kind": "scooter",
+        "street": "street-tram-approach",
+        "color": "#4a7a3a",
+        "x": 57.79,
+        "z": 6.54
+      },
+      {
+        "id": "scooter-street-tram-approach-10-e",
+        "kind": "scooter",
+        "street": "street-tram-approach",
+        "color": "#8a3a32",
+        "x": 111.01,
+        "z": -1.8
+      },
+      {
+        "id": "scooter-street-tram-approach-10-w",
+        "kind": "scooter",
+        "street": "street-tram-approach",
+        "color": "#2f4f6e",
+        "x": 113.17,
+        "z": 9.49
+      },
+      {
+        "id": "scooter-street-harbor-walk-0-e",
+        "kind": "scooter",
+        "street": "street-harbor-walk",
+        "color": "#2a6b8a",
+        "x": 11.31,
+        "z": -169.58
+      },
+      {
+        "id": "scooter-street-harbor-walk-0-w",
+        "kind": "scooter",
+        "street": "street-harbor-walk",
+        "color": "#3d3f44",
+        "x": 0.15,
+        "z": -169.18
+      },
+      {
+        "id": "scooter-street-harbor-walk-9-e",
+        "kind": "scooter",
+        "street": "street-harbor-walk",
+        "color": "#2f4f6e",
+        "x": 3.2,
+        "z": 84.67
+      },
+      {
+        "id": "scooter-street-harbor-walk-9-w",
+        "kind": "scooter",
+        "street": "street-harbor-walk",
+        "color": "#2a6b8a",
+        "x": -8.03,
+        "z": 85.72
+      },
+      {
+        "id": "scooter-street-harbor-walk-10-w",
+        "kind": "scooter",
+        "street": "street-harbor-walk",
+        "color": "#b8783a",
+        "x": -9.32,
+        "z": 109.84
+      },
+      {
+        "id": "scooter-street-harbor-walk-12-e",
+        "kind": "scooter",
+        "street": "street-harbor-walk",
+        "color": "#b8783a",
+        "x": -1.3,
+        "z": 169.1
+      }
+    ],
+    "shopMarker": false,
+    "shopPanel": false,
+    "shopPanelId": "",
+    "honesty": "Authored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:1 city. NOT_PLAN_PASS.\n\nFriend bodies use this PC's 4175 loopback store (two browsers here). Not a city shop server. Not a city presence server. Not another city's cloud. Not WAN. Not GPS. NOT_PLAN_PASS.",
+    "mode": "Offline — Stroll alone; shops still open.",
+    "gtaClaim": false
+  },
+  "midWalk": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/?seat=a",
+    "playReady": "yes",
+    "playEngine": "r3f",
+    "playCanvas": true,
+    "canvasBox": {
+      "x": 0,
+      "y": 0,
+      "w": 1280,
+      "h": 720
+    },
+    "avatar": {
+      "lon": 106.69804,
+      "lat": 10.7716696,
+      "heading": 0,
+      "groundY": "0",
+      "insideAabb": "0",
+      "insideRing": "0"
+    },
+    "proof": {
+      "camera": "behind",
+      "collision": "footprint-radius",
+      "sky": "gradient-hemisphere",
+      "sun": "disc",
+      "lamps": "38",
+      "planters": "4",
+      "scooters": "15",
+      "scooterKind": "parked-box-scooter",
+      "groundFloor": "door-glass-awning",
+      "roof": "parapet-ac-tank",
+      "streetProps": "lamps-crosswalk-planters",
+      "camYaw": 0,
+      "camPitch": 0,
+      "insideAabb": "0",
+      "insideRing": "0",
+      "buildings": 60
+    },
+    "scooters": [
+      {
+        "id": "scooter-harbor-near-e",
+        "kind": "scooter",
+        "street": "street-harbor-walk",
+        "color": "#6e3d5a",
+        "x": 10.23,
+        "z": -88.68
+      },
+      {
+        "id": "scooter-harbor-near-w",
+        "kind": "scooter",
+        "street": "street-harbor-walk",
+        "color": "#c45a2a",
+        "x": -0.89,
+        "z": -91.43
+      },
+      {
+        "id": "scooter-street-tram-approach-0-w",
+        "kind": "scooter",
+        "street": "street-tram-approach",
+        "color": "#c45a2a",
+        "x": -166.55,
+        "z": 1.37
+      },
+      {
+        "id": "scooter-street-tram-approach-2-e",
+        "kind": "scooter",
+        "street": "street-tram-approach",
+        "color": "#2f4f6e",
+        "x": -110.21,
+        "z": -7.92
+      },
+      {
+        "id": "scooter-street-tram-approach-4-e",
+        "kind": "scooter",
+        "street": "street-tram-approach",
+        "color": "#2a6b8a",
+        "x": -53.69,
+        "z": -6.04
+      },
+      {
+        "id": "scooter-street-tram-approach-5-w",
+        "kind": "scooter",
+        "street": "street-tram-approach",
+        "color": "#8a3a32",
+        "x": -30.28,
+        "z": 5.58
+      },
+      {
+        "id": "scooter-street-tram-approach-8-w",
+        "kind": "scooter",
+        "street": "street-tram-approach",
+        "color": "#4a7a3a",
+        "x": 57.79,
+        "z": 6.54
+      },
+      {
+        "id": "scooter-street-tram-approach-10-e",
+        "kind": "scooter",
+        "street": "street-tram-approach",
+        "color": "#8a3a32",
+        "x": 111.01,
+        "z": -1.8
+      },
+      {
+        "id": "scooter-street-tram-approach-10-w",
+        "kind": "scooter",
+        "street": "street-tram-approach",
+        "color": "#2f4f6e",
+        "x": 113.17,
+        "z": 9.49
+      },
+      {
+        "id": "scooter-street-harbor-walk-0-e",
+        "kind": "scooter",
+        "street": "street-harbor-walk",
+        "color": "#2a6b8a",
+        "x": 11.31,
+        "z": -169.58
+      },
+      {
+        "id": "scooter-street-harbor-walk-0-w",
+        "kind": "scooter",
+        "street": "street-harbor-walk",
+        "color": "#3d3f44",
+        "x": 0.15,
+        "z": -169.18
+      },
+      {
+        "id": "scooter-street-harbor-walk-9-e",
+        "kind": "scooter",
+        "street": "street-harbor-walk",
+        "color": "#2f4f6e",
+        "x": 3.2,
+        "z": 84.67
+      },
+      {
+        "id": "scooter-street-harbor-walk-9-w",
+        "kind": "scooter",
+        "street": "street-harbor-walk",
+        "color": "#2a6b8a",
+        "x": -8.03,
+        "z": 85.72
+      },
+      {
+        "id": "scooter-street-harbor-walk-10-w",
+        "kind": "scooter",
+        "street": "street-harbor-walk",
+        "color": "#b8783a",
+        "x": -9.32,
+        "z": 109.84
+      },
+      {
+        "id": "scooter-street-harbor-walk-12-e",
+        "kind": "scooter",
+        "street": "street-harbor-walk",
+        "color": "#b8783a",
+        "x": -1.3,
+        "z": 169.1
+      }
+    ],
+    "shopMarker": true,
+    "shopPanel": false,
+    "shopPanelId": "",
+    "honesty": "Authored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:1 city. NOT_PLAN_PASS.\n\nFriend bodies use this PC's 4175 loopback store (two browsers here). Not a city shop server. Not a city presence server. Not another city's cloud. Not WAN. Not GPS. NOT_PLAN_PASS.",
+    "mode": "Offline — Stroll alone; shops still open.",
+    "gtaClaim": false
+  },
+  "looked": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/?seat=a",
+    "playReady": "yes",
+    "playEngine": "r3f",
+    "playCanvas": true,
+    "canvasBox": {
+      "x": 0,
+      "y": 0,
+      "w": 1280,
+      "h": 720
+    },
+    "avatar": {
+      "lon": 106.69804,
+      "lat": 10.7716696,
+      "heading": 340,
+      "groundY": "0",
+      "insideAabb": "0",
+      "insideRing": "0"
+    },
+    "proof": {
+      "camera": "behind",
+      "collision": "footprint-radius",
+      "sky": "gradient-hemisphere",
+      "sun": "disc",
+      "lamps": "38",
+      "planters": "4",
+      "scooters": "15",
+      "scooterKind": "parked-box-scooter",
+      "groundFloor": "door-glass-awning",
+      "roof": "parapet-ac-tank",
+      "streetProps": "lamps-crosswalk-planters",
+      "camYaw": 340.4,
+      "camPitch": -0.8,
+      "insideAabb": "0",
+      "insideRing": "0",
+      "buildings": 60
+    },
+    "scooters": [
+      {
+        "id": "scooter-harbor-near-e",
+        "kind": "scooter",
+        "street": "street-harbor-walk",
+        "color": "#6e3d5a",
+        "x": 10.23,
+        "z": -88.68
+      },
+      {
+        "id": "scooter-harbor-near-w",
+        "kind": "scooter",
+        "street": "street-harbor-walk",
+        "color": "#c45a2a",
+        "x": -0.89,
+        "z": -91.43
+      },
+      {
+        "id": "scooter-street-tram-approach-0-w",
+        "kind": "scooter",
+        "street": "street-tram-approach",
+        "color": "#c45a2a",
+        "x": -166.55,
+        "z": 1.37
+      },
+      {
+        "id": "scooter-street-tram-approach-2-e",
+        "kind": "scooter",
+        "street": "street-tram-approach",
+        "color": "#2f4f6e",
+        "x": -110.21,
+        "z": -7.92
+      },
+      {
+        "id": "scooter-street-tram-approach-4-e",
+        "kind": "scooter",
+        "street": "street-tram-approach",
+        "color": "#2a6b8a",
+        "x": -53.69,
+        "z": -6.04
+      },
+      {
+        "id": "scooter-street-tram-approach-5-w",
+        "kind": "scooter",
+        "street": "street-tram-approach",
+        "color": "#8a3a32",
+        "x": -30.28,
+        "z": 5.58
+      },
+      {
+        "id": "scooter-street-tram-approach-8-w",
+        "kind": "scooter",
+        "street": "street-tram-approach",
+        "color": "#4a7a3a",
+        "x": 57.79,
+        "z": 6.54
+      },
+      {
+        "id": "scooter-street-tram-approach-10-e",
+        "kind": "scooter",
+        "street": "street-tram-approach",
+        "color": "#8a3a32",
+        "x": 111.01,
+        "z": -1.8
+      },
+      {
+        "id": "scooter-street-tram-approach-10-w",
+        "kind": "scooter",
+        "street": "street-tram-approach",
+        "color": "#2f4f6e",
+        "x": 113.17,
+        "z": 9.49
+      },
+      {
+        "id": "scooter-street-harbor-walk-0-e",
+        "kind": "scooter",
+        "street": "street-harbor-walk",
+        "color": "#2a6b8a",
+        "x": 11.31,
+        "z": -169.58
+      },
+      {
+        "id": "scooter-street-harbor-walk-0-w",
+        "kind": "scooter",
+        "street": "street-harbor-walk",
+        "color": "#3d3f44",
+        "x": 0.15,
+        "z": -169.18
+      },
+      {
+        "id": "scooter-street-harbor-walk-9-e",
+        "kind": "scooter",
+        "street": "street-harbor-walk",
+        "color": "#2f4f6e",
+        "x": 3.2,
+        "z": 84.67
+      },
+      {
+        "id": "scooter-street-harbor-walk-9-w",
+        "kind": "scooter",
+        "street": "street-harbor-walk",
+        "color": "#2a6b8a",
+        "x": -8.03,
+        "z": 85.72
+      },
+      {
+        "id": "scooter-street-harbor-walk-10-w",
+        "kind": "scooter",
+        "street": "street-harbor-walk",
+        "color": "#b8783a",
+        "x": -9.32,
+        "z": 109.84
+      },
+      {
+        "id": "scooter-street-harbor-walk-12-e",
+        "kind": "scooter",
+        "street": "street-harbor-walk",
+        "color": "#b8783a",
+        "x": -1.3,
+        "z": 169.1
+      }
+    ],
+    "shopMarker": true,
+    "shopPanel": false,
+    "shopPanelId": "",
+    "honesty": "Authored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:1 city. NOT_PLAN_PASS.\n\nFriend bodies use this PC's 4175 loopback store (two browsers here). Not a city shop server. Not a city presence server. Not another city's cloud. Not WAN. Not GPS. NOT_PLAN_PASS.",
+    "mode": "Offline — Stroll alone; shops still open.",
+    "gtaClaim": false
+  },
+  "shopOpen": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/?seat=a&place=place-market-steps&shop=shop-lantern-fish",
+    "playReady": "yes",
+    "playEngine": "r3f",
+    "playCanvas": true,
+    "canvasBox": {
+      "x": 0,
+      "y": 0,
+      "w": 1280,
+      "h": 720
+    },
+    "avatar": {
+      "lon": 106.69804,
+      "lat": 10.7718449,
+      "heading": 0,
+      "groundY": "0",
+      "insideAabb": "0",
+      "insideRing": "0"
+    },
+    "proof": {
+      "camera": "behind",
+      "collision": "footprint-radius",
+      "sky": "gradient-hemisphere",
+      "sun": "disc",
+      "lamps": "38",
+      "planters": "4",
+      "scooters": "15",
+      "scooterKind": "parked-box-scooter",
+      "groundFloor": "door-glass-awning",
+      "roof": "parapet-ac-tank",
+      "streetProps": "lamps-crosswalk-planters",
+      "camYaw": 0,
+      "camPitch": 0,
+      "insideAabb": "0",
+      "insideRing": "0",
+      "buildings": 60
+    },
+    "scooters": [
+      {
+        "id": "scooter-harbor-near-e",
+        "kind": "scooter",
+        "street": "street-harbor-walk",
+        "color": "#6e3d5a",
+        "x": 10.23,
+        "z": -88.68
+      },
+      {
+        "id": "scooter-harbor-near-w",
+        "kind": "scooter",
+        "street": "street-harbor-walk",
+        "color": "#c45a2a",
+        "x": -0.89,
+        "z": -91.43
+      },
+      {
+        "id": "scooter-street-tram-approach-0-w",
+        "kind": "scooter",
+        "street": "street-tram-approach",
+        "color": "#c45a2a",
+        "x": -166.55,
+        "z": 1.37
+      },
+      {
+        "id": "scooter-street-tram-approach-2-e",
+        "kind": "scooter",
+        "street": "street-tram-approach",
+        "color": "#2f4f6e",
+        "x": -110.21,
+        "z": -7.92
+      },
+      {
+        "id": "scooter-street-tram-approach-4-e",
+        "kind": "scooter",
+        "street": "street-tram-approach",
+        "color": "#2a6b8a",
+        "x": -53.69,
+        "z": -6.04
+      },
+      {
+        "id": "scooter-street-tram-approach-5-w",
+        "kind": "scooter",
+        "street": "street-tram-approach",
+        "color": "#8a3a32",
+        "x": -30.28,
+        "z": 5.58
+      },
+      {
+        "id": "scooter-street-tram-approach-8-w",
+        "kind": "scooter",
+        "street": "street-tram-approach",
+        "color": "#4a7a3a",
+        "x": 57.79,
+        "z": 6.54
+      },
+      {
+        "id": "scooter-street-tram-approach-10-e",
+        "kind": "scooter",
+        "street": "street-tram-approach",
+        "color": "#8a3a32",
+        "x": 111.01,
+        "z": -1.8
+      },
+      {
+        "id": "scooter-street-tram-approach-10-w",
+        "kind": "scooter",
+        "street": "street-tram-approach",
+        "color": "#2f4f6e",
+        "x": 113.17,
+        "z": 9.49
+      },
+      {
+        "id": "scooter-street-harbor-walk-0-e",
+        "kind": "scooter",
+        "street": "street-harbor-walk",
+        "color": "#2a6b8a",
+        "x": 11.31,
+        "z": -169.58
+      },
+      {
+        "id": "scooter-street-harbor-walk-0-w",
+        "kind": "scooter",
+        "street": "street-harbor-walk",
+        "color": "#3d3f44",
+        "x": 0.15,
+        "z": -169.18
+      },
+      {
+        "id": "scooter-street-harbor-walk-9-e",
+        "kind": "scooter",
+        "street": "street-harbor-walk",
+        "color": "#2f4f6e",
+        "x": 3.2,
+        "z": 84.67
+      },
+      {
+        "id": "scooter-street-harbor-walk-9-w",
+        "kind": "scooter",
+        "street": "street-harbor-walk",
+        "color": "#2a6b8a",
+        "x": -8.03,
+        "z": 85.72
+      },
+      {
+        "id": "scooter-street-harbor-walk-10-w",
+        "kind": "scooter",
+        "street": "street-harbor-walk",
+        "color": "#b8783a",
+        "x": -9.32,
+        "z": 109.84
+      },
+      {
+        "id": "scooter-street-harbor-walk-12-e",
+        "kind": "scooter",
+        "street": "street-harbor-walk",
+        "color": "#b8783a",
+        "x": -1.3,
+        "z": 169.1
+      }
+    ],
+    "shopMarker": true,
+    "shopPanel": true,
+    "shopPanelId": "shop-lantern-fish",
+    "honesty": "Authored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:1 city. NOT_PLAN_PASS.\n\nFriend bodies use this PC's 4175 loopback store (two browsers here). Not a city shop server. Not a city presence server. Not another city's cloud. Not WAN. Not GPS. NOT_PLAN_PASS.",
+    "mode": "Offline — Stroll alone; shops still open.",
+    "gtaClaim": false
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "run_id": "HH3D-J5-20260904-ASIA-SAIGON-04",
+  "player": "http://127.0.0.1:4175/",
+  "verdict": "J5_FOOTSTEPS_OK",
+  "not_plan_pass": true,
+  "not_gate_u1": true,
+  "not_osm": true,
+  "not_wan": true,
+  "walkOn": true,
+  "standOff": true,
+  "hiddenOff": true,
+  "unhiddenOn": true,
+  "menuMute": true,
+  "menuResume": true,
+  "tickWalk": true,
+  "tickSprint": true,
+  "sprintFaster": true,
+  "louder": true,
+  "lanternOk": true,
+  "leftoverOk": true,
+  "honestyOk": true,
+  "kindOk": true,
+  "keptOk": true,
+  "ticks": {
+    "walkStart": 0,
+    "walkHeld": 4,
+    "walkDelta": 4,
+    "sprintStart": 6,
+    "sprintHeld": 11,
+    "sprintDelta": 5,
+    "walkGain": 0.14,
+    "sprintGain": 0.22
+  },
+  "stand0": {
+    "pose": "idle",
+    "footsteps": "0",
+    "ticks": 0
+  },
+  "walking": {
+    "pose": "walk",
+    "footsteps": "1",
+    "live": {
+      "kind": "procedural-thump",
+      "live": true,
+      "muted": false,
+      "reason": "",
+      "ticks": 0,
+      "foot": "",
+      "sprint": false,
+      "lastGain": 0
+    }
+  },
+  "hidden": {
+    "footsteps": "0",
+    "hidden": true,
+    "reason": "hidden"
+  },
+  "unhidden": {
+    "footsteps": "1",
+    "hidden": false
+  },
+  "menuOn": {
+    "footsteps": "0",
+    "menuOpen": "yes",
+    "reason": "overlay"
+  },
+  "standing": {
+    "pose": "idle",
+    "footsteps": "0"
+  },
+  "sprinting": {
+    "pose": "walk",
+    "sprint": "1",
+    "footsteps": "1"
+  },
+  "seatB": {
+    "nearbyShop": "",
+    "stallHint": "E opens a stall when you are next to it.",
+    "shopRange": "Quầy Cá Đèn Lồng: 29 m away",
+    "afterE": "",
+    "panel": false
+  },
+  "lantern": {
+    "nearby": "shop-lantern-fish",
+    "panel": "shop-lantern-fish"
+  },
+  "honesty": "Authored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:1 city. NOT_PLAN_PASS.\n\nFriend bodies use this PC's 4175 lo",
+  "shot": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-footsteps.png",
+  "hash": "72360c12fe606a70"
+}

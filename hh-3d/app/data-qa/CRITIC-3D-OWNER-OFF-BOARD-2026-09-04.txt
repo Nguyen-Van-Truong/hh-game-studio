@@ -1,0 +1,128 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=12:25 +07
+ROLE=IMPLEMENTER
+TICK=n/a (do not treat this file as TICK=yes)
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M1=1
+NOT_M0_WP1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+PLAYER_URL=http://127.0.0.1:4175/
+RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-24
+COMMAND=node hh-3d/app/data-qa/j5-owner-off-board-probe.mjs
+VERDICT_IMPLEMENTER_CDP=J5_OWNER_OFF_BOARD_OK
+LIVE_JS=/assets/index-D4Sc2h68.js
+LIVE_JS_LEN=2162025
+LIVE_JS_SHA256=76f9843d6e8cff47bc683e55bea928ac36797054d601a1e6f4ceec9ace4c64b2
+DID_NOT_REMINT=1
+DID_NOT_RECYCLE=1
+DID_NOT_REBUILD=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NO_COMMIT=1
+NO_HIP_SPHERES=1
+DID_NOT_RIP_LANTERN_BOARD=1
+DID_NOT_RIP_HARBOR_STEPS_CROSSING=1
+DID_NOT_RIP_DEFERRED_MINIMAP=1
+DID_NOT_RIP_WARMUP=1
+DID_NOT_RIP_FRIEND_STEPS=1
+DID_NOT_RIP_90M_LOD=1
+DID_NOT_RIP_HUD=1
+DID_NOT_RIP_PLAQUES=1
+DID_NOT_RIP_LANES=1
+DID_NOT_RIP_FOG_EDGE=1
+DID_NOT_RIP_STREET_PLAY_SHOPS=1
+DID_NOT_RIP_SKY=1
+DID_NOT_RIP_CAM_HIT=1
+NO_NEW_SHOP_SERVER=1
+NO_INTERIOR=1
+NO_MAP_FETCH=1
+ACCEPTED_PRIOR=CRITIC-3D-GUEST-BOARD-REAUDIT-2026-09-04.txt TICK=yes on /assets/index-D4Sc2h68.js
+
+================================================================================
+SLICE
+================================================================================
+
+Owner modes: published shop stays when the owner is Offline /
+not present. Isolated A (demo owner of Quầy Phở Nhà) stays
+Offline and then uses the labeled leave-identity control.
+Isolated guest B must still see the Phở chalkboard and E-open
+shop-local-mtmh45qxehxhvb. Friends are not required.
+
+Already true. Did not remint. publicShops / publishedShopCatalog
+/ street draw filter status === published only. owner_presence
+is stored, not a hide switch. leaveDemoOwner clears signed-in
+only; it does not unpublish. Offline presence sends leave, not
+a catalog takedown.
+
+Did not rip lantern Cá/Túi, Harbor×Steps crossing, deferred
+minimap, friend steps, LOD, HUD chip, plaques, lanes, fog/edge,
+streetPlayShops, sky, or cam-hit.
+
+================================================================================
+CDP (headless Chrome A+B, 1280×720, already-up 4175 pid 68116)
+================================================================================
+
+Isolated temp profiles. about:blank then ?seat=a / ?seat=b.
+Did not click Online. Did not click Add friend. Did not
+catalog_clear. Graph pairs were already [].
+
+Seat A:
+  spawn Guest / Offline
+  Become Chủ quầy (máy này) — still Offline, online-btn inactive
+  Leave demo owner (labeled not-present control) → Guest again
+  During B walk: Guest / Offline / remotes=0
+  Player shop still in A boards after leave
+
+Seat B:
+  Guest · shops public; friends not required
+  Presence=Offline — Stroll alone; shops still open.
+  friend-row-a=none at spawn / walk / after E
+  remotes=0 walk + after E
+  West on spawn heading, then north. Nearby at +13.73 m /
+  +2.10 m east, heading 6. Shot + crop BEFORE E.
+
+board kind=chalkboard-menu
+player shop=shop-local-mtmh45qxehxhvb  (~19.8 m north, persist)
+owner_presence=offline  status=published
+B crop text=Phở bò (mẫu) / mẫu · not a live market
+B overlay box 814,234 166×53
+B crop slateRatio=0.626 chalkRatio=0.047
+Crop pixels: dark-green chalkboard, thin brown frame,
+chalk "Phở bò (mẫu)", footer "mẫu · not a live market"
+(far lantern Túi overlay shares the frame; accept crop is Phở)
+E opened shop-local-mtmh45qxehxhvb; shelf listing-local-mtmh45qxhyu29f
+Phở bò; draft hidden
+friendA after E=none
+
+leftover persist (draw=0 keep-out=1):
+  shop-local-sharedpc titles=Phở bò (mẫu)
+  shop-local-mtl8ulddihjpre titles=Sach phe binh J6 (mẫu)
+
+Live JS still /assets/index-D4Sc2h68.js 2162025
+sha256=76f9843d6e8cff47bc683e55bea928ac36797054d601a1e6f4ceec9ace4c64b2
+Did not recycle / rebuild / typecheck / test. Hash unchanged.
+Did not start 4173 / 4174 / 5175. Did not bind 0.0.0.0.
+
+================================================================================
+HONESTY
+================================================================================
+
+This is the this-PC 4175 /demo-bus catalog, not a city shop
+server, not WAN, not OIDC. Owner Offline / leave-identity does
+not take a published shop down. Guest B browse does not need
+friends or Online. Leftover Shared PC / J6 stay persist-only.
+NOT GATE-U1. NOT_PLAN_PASS. Not an M1 tick.
+
+================================================================================
+END
+================================================================================

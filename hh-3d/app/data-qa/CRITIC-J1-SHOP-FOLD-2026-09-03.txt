@@ -1,0 +1,312 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+BIGGEST_MISS=Shop-sheet still overflow:auto (603>398) so owner copy / description sit under the sheet fold; 10 m is still a radius, not stall-counter geometry. Owner-Offline remains a local label checkbox.
+
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-03
+TIMEZONE=Asia/Saigon
+MODEL=grok-4.6
+SCOPE=HH World J1 shop-fold after E on existing 4175 (1280×720)
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=657634f8f82281bd670c9a375ad49c6180db3583
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+LEAD_RUN_ID=HH3D-J1-20260903-ASIA-SAIGON-04
+LEAD_PROBE=hh-3d/app/data-qa/j1-walk-shop-probe.mjs
+LEAD_PACK=hh-3d/app/data-qa/J1-WALK-SHOP-2026-09-03.txt
+PRIOR_CRITIC=hh-3d/app/data-qa/CRITIC-J1-RANGE-CAM-2026-09-03.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-J1-SHOP-FOLD-2026-09-03.txt
+PROGRESS_TRUSTED_ALONE=NO
+LEAD_PROBE_TRUSTED_ALONE=NO
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_VF_TOUCH=1
+NO_UNREAL=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_RUN_LEAD_PROBE_WRITER=1
+NOT_PLAN_PASS=1
+CRITIC_CDP_PORT=9288
+LIVE_JS=/assets/index-CpzRBuNC.js
+LIVE_CSS=/assets/index-nKXGPhOD.css
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/
+
+A guest on 1280×720 sees shop name + fish + bag immediately after E.
+This critic did not trust the lead pack and did not run
+j1-walk-shop-probe.mjs (that writer overwrites
+J1-WALK-SHOP-2026-09-03.txt). Independent headless Chrome CDP on debug
+port 9288, temp profile, stdout + %TEMP% JSON only. No goods-list click.
+No open-nearby click. Only KeyW / KeyE / Close shelf.
+
+Spawn 28 m. Spawn E and street E at 20.3 m: no panel, no nearby, href
+stays /. Nearby first at 9.86 m. Near E opens Quầy Cá Đèn Lồng. After E,
+independent getBoundingClientRect (vh=720, no sidebar scroll):
+
+  name   top 317.5  bottom 341.8  left 941  fully in vh; elementFromPoint=H2
+  fish   top 381.8  bottom 481.7  left 941  fully in vh; hitSelf
+  bag    top 488.1  bottom 587.9  left 941  fully in vh; hitSelf
+  list   top 381.8  bottom 587.9
+
+None of the needed listings have top>=720. .side scrollTop=0 / scrollLeft=0.
+.shop-sheet scrollTop=0. Draft "Nháp chưa đăng" absent. Close: follow still
+on, doll bbox 450,493 28×31 inside vh. Offline: zero remote bodies. No
+geolocate control. Plan STATE/PASS not flipped. GATE-U1 humans not invented.
+
+This is NOT a plan PASS. NOT M0-WP1. NOT M1-WP0. NOT GATE-U1. NOT J2/J3.
+
+Biggest miss: the overlay remint puts goods on-screen, but .shop-sheet is
+still overflow:auto (scrollHeight 603 > clientHeight 398). Owner copy,
+shop description, and the Offline checkbox sit under the sheet's own fold.
+10 m is still a circle around shop lon/lat, not stall-counter geometry.
+Owner-Offline is still a local label. Collision, touch pad, and
+pan-does-not-move-you stay coded, not CDP-walked.
+
+================================================================================
+METHOD
+================================================================================
+
+Disk (not PROGRESS alone):
+  hh-3d/app/web/src/shops/ShopPanel.tsx     name + listings first; draft
+                                            filtered by publicListings
+  hh-3d/app/web/src/app/App.tsx             ShopPanel sibling of .side
+                                            (same workspace grid cell)
+  hh-3d/app/web/src/app/app.css             .shop-sheet grid-column 2 /
+                                            grid-row 1 / z-index 6 /
+                                            overflow:auto; .side overflow:auto
+  hh-3d/app/web/src/avatar/walk.ts          NEARBY_SHOP_M=10
+  hh-3d/app/data-qa/j1-walk-shop-probe.mjs
+  hh-3d/app/data-qa/J1-WALK-SHOP-2026-09-03.txt
+  hh-3d/app/data-qa/CRITIC-J1-RANGE-CAM-2026-09-03.txt
+  hh-3d/app/PROGRESS.txt
+  hh-3d/app/docs/review/README.txt
+  hh-3d/zdoc/31-8-hh3d-real-application-plan.txt (CURRENT_FIRST_LEFTOVER + STATE)
+  hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+  git log -1; git diff --cached --name-only
+
+Live (existing 4175 only; did not start another HH World preview):
+  TCP 127.0.0.1:4175 LISTEN pid 58476 (same listener; not started by critic)
+  4173 DOWN  4174 DOWN  5175 not a preview listener
+  GET /                         200  title HH World
+                                script /assets/index-CpzRBuNC.js
+                                css    /assets/index-nKXGPhOD.css
+  GET /assets/index-CpzRBuNC.js 200  Content-Length=1137372
+  GET /assets/index-nKXGPhOD.css 200
+    .shop-sheet{z-index:6;grid-area:1/2;overflow:auto;max-height:100%}
+    .side{grid-area:1/2;overflow:auto}
+  GET /data/shops.json          200  shop-lantern-fish + listing-draft-hidden
+                                    + listing-morning-mackerel + listing-woven-tote
+  Live JS: function M(e,t,n=10)  (nearestPublishedShop default = 10)
+  Independent Chrome CDP vs 4175 (debug 9288, about:blank then navigate)
+  Emulation.setDeviceMetricsOverride 1280×720  dsf=1
+  Did not run their probe script. Did not write J1-WALK-SHOP-2026-09-03.txt.
+  Did not run npm build. Did not start 4173/4174/5175.
+
+================================================================================
+PROCESS / GIT
+================================================================================
+
+RESULT=PASS_ON_STATED_FAIL_RULE
+
+Stated fail: VF / AGENTS.md staged with this if they committed.
+Observed:
+  git diff --cached --name-only  = empty
+  last commit = 657634f VF6-WP3: tick after critic and official PASS
+  No hh-3d/app commit in HEAD
+  Critic did not commit, did not tick plan, did not touch VF.
+
+Working tree dirt (not this critic's write):
+  Many godot/dogfood/superfighters/* + hh-3d/app untracked + plan modified.
+  Process landmine for a later mixed commit. Not the stated FAIL.
+
+================================================================================
+ATTACK 1 — AFTER E, ARE NAME + FISH + BAG IN 1280×720 WITHOUT SIDEBAR SCROLL?
+================================================================================
+
+RESULT=PASS  (guest sees goods immediately; not the RANGE-CAM y=879 miss)
+
+Prior critic CRITIC-J1-RANGE-CAM-2026-09-03.txt measured shop card at
+y=879 inside scrolling .side (vh=720). That was the fail to remint.
+
+Independent CDP this session (2026-09-03, 4175, critic port 9288,
+1280×720, via=e, no goods click):
+
+  After KeyE at 9.86 m:
+    href=http://127.0.0.1:4175/?place=place-market-steps&shop=shop-lantern-fish
+    shopPanel=true  name="Quầy Cá Đèn Lồng"
+    listings: listing-morning-mackerel kind=fish top=381.8
+              listing-woven-tote      kind=bag  top=488.1
+    listing-draft-hidden absent  draftShown=false
+
+  getBoundingClientRect + computed style + elementFromPoint:
+    name  941,317.5  145×24   visible display=block  fullyInVh
+          hit = H2 "Quầy Cá Đèn Lồng"
+    fish  941,381.8  312×100  visible list-item      fullyInVh
+          hitSelf; text "Fictional fish-class sample…"
+    bag   941,488.1  312×100  visible list-item      fullyInVh
+          hitSelf; text "Fictional bag-class sample…"
+    list  941,381.8  312×206  fullyInVh
+    panel overlay on right column (z-index 6, grid-area 1/2)
+
+  Scroll (adversarial, not their inViewport helper):
+    .side        scrollTop=0  scrollHeight=1121  clientHeight=414  needsScroll=true
+    .shop-sheet  scrollTop=0  scrollHeight=603   clientHeight=398  needsScroll=true
+    .workspace   scrollTop=0  overflow=hidden
+    None of name/fish/bag required a scroll to become readable. Their tops
+    are 318 / 382 / 488, all < 720. Bottoms 342 / 482 / 588, all < 720.
+    elementFromPoint at each listing center hits that listing, not a cover.
+
+Lead pack SAIGON-04 (listings 381.8 / bag 488.1 / panel left 928) matches
+this independent run to 0.1 px. Corroboration, not the proof. Proof is
+this critic's CDP. Their inViewport helper only checks top<720; this
+critic also checked bottoms, hit-test, and actual scrollTop.
+
+Residual (does not flip TICK): .side is still a 1121 px scroller under the
+overlay. If the overlay were removed, the old below-fold bug returns.
+.shop-sheet itself still scrolls for content below the bag.
+
+================================================================================
+ATTACK 2 — FAR E STILL CLOSED; NEAR E OPENS; DRAFT HIDDEN
+================================================================================
+
+RESULT=PASS  (via=e, not goods list)
+
+Spawn:
+  href=http://127.0.0.1:4175/
+  shopRangeM=27.966  nearby=null  shopPanel=false
+  After KeyE: same href, shopPanel still false, nearby still null.
+
+Street (~20 m):
+  shopRangeM=20.293
+  After KeyE: shopPanel=false  nearby=null  href still /
+
+At stall:
+  shopRangeM=9.865  nearby="Open Quầy Cá Đèn Lồng"
+  hint="Press E or tap Open to enter Quầy Cá Đèn Lồng."
+  interactDisabled=false  shopPanel still false until E
+
+Walk proof (not a teleport):
+  home    pose=idle heading=0   lon=106.6980400 lat=10.7716200
+  atStall pose=idle heading=342 lon=106.6979796 lat=10.7718025
+  moved   21.363 m in 13340 ms = 1.60 m/s  (matches WALK_SPEED_MPS)
+
+Draft: live shops.json still contains listing-draft-hidden. After E,
+listing ids are only fish + bag. Body text has no "Nháp chưa đăng".
+
+================================================================================
+ATTACK 3 — AVATAR STILL VISIBLE AFTER CLOSE
+================================================================================
+
+RESULT=PASS  (bbox + follow; doll not off-frame)
+
+shopOpen followOn=true  label="Following you"
+avatarBox 450,492.7 28×31  display=block visibility=visible opacity=1
+fullyInVh=true  (bottom 523.8 < 720)
+
+afterClose shopPanel=false  followOn=true  label="Following you"
+avatarBox unchanged 450,492.7 28×31  same pixel seat
+href after Close = /?place=place-market-steps  (place card may remain;
+follow stayed on so easeTo did not steal the camera)
+
+Honest residual: elementFromPoint at the doll center hits the shop-marker
+button ("Shop · Quầy Cá Đèn Lồng"), not the figure. The doll is under the
+stall pin, not off-canvas and not display:none. Not a camera-lost-the-doll
+fail.
+
+================================================================================
+ATTACK 4 — GPS / OTHER BODIES / WP PASS / FAKE GATE-U1
+================================================================================
+
+RESULT=PASS  (none of the four cheats)
+
+No GPS as player position:
+  App src: zero geolocation / getCurrentPosition / watchPosition /
+  GeolocateControl. Avatar is authored lng/lat + tryStep.
+  Live DOM: geolocateBtn=false.
+  Status "You: standing · facing north · in-app position, not GPS".
+  (A naive /GPS/ regex matches that sentence. The words are a denial,
+  not a geolocate control.)
+
+No other bodies Offline:
+  Live: mode "Offline — Stroll alone; shops still open."
+        people "…none (friends layer off)."
+        online button disabled  remoteCount=0
+
+No WP PASS tick:
+  Canonical plan CURRENT_FIRST_LEFTOVER=GATE-U1
+  GATE-U1 STATE: NOT_STARTED  (line 862)
+  M0-WP1 / M1-WP0 STATE: NOT_STARTED
+  No STATE: PASS/DONE/COMPLETE in the plan.
+  PROGRESS: PLAN_CHECKBOXES=UNCHANGED_DO_NOT_TICK  NOT_PLAN_PASS
+
+No fake GATE-U1:
+  hh-3d/app/docs/review/README.txt still:
+    GATE-U1 is NOT done.
+    Need three independent human reviewers…
+  No invented reviewer names. Leftover #1 remains GATE-U1. J2/J3 named not done.
+
+================================================================================
+LEAD CLAIMS vs INDEPENDENT LIVE
+================================================================================
+
+Claim                                         Verdict
+Shop overlay on right sidebar after E         CONFIRMED (grid-area 1/2,
+                                              z-index 6, sibling of .side)
+Fish+bag visible 1280×720, no sidebar scroll  CONFIRMED (fish 381.8 /
+                                              bag 488.1; side scrollTop=0;
+                                              both fully in vh; hit-test)
+listings y=382 / bag y=488                    CONFIRMED (381.8 / 488.1)
+Probe EXIT=0 SAIGON-04                        CONSISTENT with critic;
+                                              not used as sole proof
+4175 existing preview                         CONFIRMED pid 58476
+                                              live bundle index-CpzRBuNC.js
+Far E still closed                            CONFIRMED (spawn + 20.3 m)
+Avatar visible after Close                    CONFIRMED (bbox + follow)
+Draft hidden                                  CONFIRMED
+No GPS / no other Offline bodies              CONFIRMED
+NOT_PLAN_PASS / GATE-U1 / J2 leftover         CONFIRMED
+4173/4174 / second preview                    NOT STARTED by this critic
+
+================================================================================
+HARD FAIL CHECK (TICK=no triggers)
+================================================================================
+
+Needed listing top>=720                       NO  (fish 381.8 / bag 488.1)
+Sidebar scroll required to read goods         NO  (side scrollTop=0;
+                                              overlay hit-test = listings)
+Page broken / 4175 down / wrong product       NO
+Far E opens shop                              NO
+Draft shown as posted                         NO
+Camera loses the doll after Close             NO
+Probe-only (no independent walk)              NO
+GPS used as player position                   NO
+Plan STATE/PASS ticked                        NO
+GATE-U1 humans invented                       NO
+J1 claimed as plan PASS                       NO
+Other player bodies in Offline                NO
+
+Therefore TICK=yes: a guest sees goods immediately after E on 1280×720.
+
+================================================================================
+NOT GRANTED
+================================================================================
+
+- M0-WP1 / M1-WP0 / M2 / R2-WP0 / R2-WP1 / GATE-U1
+- J2 owner list-product (identity still required; correctly stopped)
+- J3 friend bodies
+- Real catalog server / owner logout / cache STALE E2E
+- Standing at the stall counter (entry is a 10 m bubble)
+- Whole shop card above-the-fold (sheet still scrolls past the bag)
+- Collision, touch-pad hold, camera-pan independence as observed
+- Permission to start 4173/4174, fetch maps, Unreal, VF, or tick [x]

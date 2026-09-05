@@ -1,0 +1,146 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=16:35 +07
+ROLE=IMPLEMENTER
+TICK=n/a (do not treat this file as TICK=yes)
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M0_WP1=1
+NOT_M1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+PLAYER_URL=http://127.0.0.1:4175/
+RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-36
+COMMAND=node hh-3d/app/data-qa/j5-create-sidewalk-probe.mjs
+VERDICT_IMPLEMENTER_CDP=J5_CREATE_SIDEWALK_OK
+LIVE_JS=/assets/index-C3JOtA3q.js
+LIVE_JS_LEN=2169322
+LIVE_JS_SHA256=c000db65138fc3c3f48583ba17d1032aa82c5fca0ef4047cdf2d5db1bc2bcdc7
+REMINTED=yes
+ONE_RECYCLE_AFTER_BUILD=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NO_COMMIT=1
+NO_HIP_SPHERES=1
+DID_NOT_RIP_NEARBY_E_RANGE=1
+DID_NOT_RIP_SIDEWALK_PLANT=1
+DID_NOT_RIP_POLE_BOARD_PLANT=1
+DID_NOT_RIP_LEFTOVER_PANEL=1
+DID_NOT_RIP_MENU_LEFTOVER_LIST=1
+DID_NOT_RIP_TRAM_XING=1
+DID_NOT_RIP_WEST_XING=1
+DID_NOT_RIP_EAST_XING=1
+DID_NOT_RIP_LANTERN_ZEBRA=1
+DID_NOT_RIP_NET_LABELS=1
+DID_NOT_RIP_BOARDS=1
+DID_NOT_RIP_STREET_PLAY_SHOPS=1
+DID_NOT_RIP_DEFERRED_MINIMAP=1
+DID_NOT_RIP_FRIEND_STEPS=1
+DID_NOT_RIP_90M_LOD=1
+DID_NOT_RIP_HUD_STREET_CHIP=1
+DID_NOT_RIP_PLAQUES=1
+DID_NOT_RIP_LANES=1
+DID_NOT_RIP_FOG_EDGE=1
+DID_NOT_RIP_SKY=1
+DID_NOT_RIP_CAM_HIT=1
+NO_FIFTH_STREET=1
+NO_NPC=1
+NO_INTERIOR=1
+NO_MAP_FETCH=1
+ACCEPTED_PRIOR=CRITIC-3D-STALL-RANGE-HUD-REAUDIT-2026-09-04.txt TICK=yes on Bsz3aP8u
+
+================================================================================
+SLICE
+================================================================================
+
+Stall-E saga started because createLocalShop / create-at-spawn
+(PLAYER_SHOP_NORTH_M=20) persisted Phở on the Harbor driving lane.
+Mesh / E later offset to the sidewalk; persist lon/lat stayed on
+asphalt.
+
+This remint only writes NEW published player-shop persist through
+the same sidewalk plant helper as the drawn stall
+(persistSidewalkLngLat → stallSidewalkPlant / shopPlayLngLat).
+Create-at-spawn still walks 20 m north first, then plants the walk.
+Create-while-standing-on-the-lane plants the walk from that stand.
+Existing Phở persist is not rewritten. Leftover Shared PC / J6
+stay persist-only draw=0. Did not catalog_clear.
+
+Did not remint Nearby/E range, leftover panel banners, Menu leftover
+labels/sort, Harbor×Tram / west / east Steps crossings, lantern
+zebra, net labels, boards chalkboard, streetPlayShops keep-out,
+minimap, friend steps, LOD, HUD street chip, plaques, lanes,
+fog/edge, sky, or cam-hit.
+
+Live 4175 before this remint still wrote persist on the lane
+(createLocalShop used placeAwayFromOthers only). Remint required.
+
+================================================================================
+CDP (headless Chrome, 1280×720, isolated guest B, recycled 4175)
+================================================================================
+
+Seat B empty profile, Offline · Đang kết nối. Guest. No catalog_clear.
+Walked onto Harbor asphalt (~40 m north of spawn, laneM 0.79),
+became labeled demo owner, published Quầy Chè Vỉa / Chè đậu,
+left owner (back to guest).
+
+Live JS after one recycle:
+  /assets/index-C3JOtA3q.js
+  LEN=2169322
+  SHA256=c000db65138fc3c3f48583ba17d1032aa82c5fca0ef4047cdf2d5db1bc2bcdc7
+
+New shop shop-local-mtmrbdjffjdkg8
+  persist lon/lat = 106.6981047, 10.7719753
+  persistLane = 7.2   (Harbor sidewalk, not the asphalt centerline)
+  plantLane   = 7.21
+  signLane    = 7.21
+  mesh / pole-board sit with that persist (plant ≈ persist)
+
+Harbor asphalt at that shop's old-style centerline
+  (create stand 106.6980462, 10.7719652; hunt 106.6980444, 10.7719681)
+  chip=Harbor Walk  laneM=0.60
+  dPersist=6.64 m  dPlant=6.77 m
+  nearby empty
+  range="Walk to a stall."
+  E-at-asphalt = none
+
+Sidewalk at the new kiosk:
+  laneM=5.31  dPlant=1.95
+  nearby=shop-local-mtmrbdjffjdkg8
+  range="Quầy Chè Vỉa: 2.0 m away"
+  E-at-sidewalk opened shop-local-mtmrbdjffjdkg8
+  leftover banner absent; street kind = public shop · opened on this machine
+
+Lantern sidewalk E still shop-lantern-fish
+  range="Quầy Cá Đèn Lồng: 2.1 m away"
+
+Existing Phở persist kept (not rewritten).
+Leftover Shared PC / J6: draw=0, persist still on /demo-bus
+  Shared PC 106.69804, 10.77162
+  J6        106.6981497, 10.77162
+Spawn E not stolen. Menu leftover rows last, labeled
+  “không trên phố / leftover máy này”.
+Menu-opened leftover panels:
+  Shared PC / J6 banner present leftover=1 street=0.
+
+Implementer CDP only. Not an independent critic TICK. Not a plan tick.
+
+================================================================================
+OWNER LEFTOVERS (unchanged)
+================================================================================
+
+1. GATE-U1 three-human review (first acceptance leftover; not faked).
+2. R2-WP1 headed/mobile/memory/min-FPS thresholds still UNFILLED.
+3. WAN / other-PC join still not built. 4175 loopback only.
+4. R4-WP0B real account/OIDC still not built.
+5. Open data (OSM/Overture) still needs license ledger + grant.
+6. Leftover this-PC shops stay in the catalog; they do not own street E.
+   Menu list + open panel still label them leftover. Do not catalog_clear.
+7. M0/M1/M2 plan WPs still NOT_STARTED. NOT_PLAN_PASS. Not M1.

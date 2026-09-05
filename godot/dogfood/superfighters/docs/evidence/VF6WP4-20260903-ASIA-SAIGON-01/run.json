@@ -1,0 +1,89 @@
+{
+  "schema": "vault-fighters.vf6-wp4.pack.v1",
+  "run_id": "VF6WP4-20260903-ASIA-SAIGON-01",
+  "command_id": "cmd.vf6-wp4.survival.1",
+  "wp": "VF6-WP4",
+  "packed_at": "2026-09-03T09:50:02+07:00",
+  "base_head": "657634f",
+  "source_tree_sha256": "4fb78a4c6875649e16797115d711d3739f371348d437c665180755e99b6890ec",
+  "godot_sha256": "35dab11e04ece16a2b93035e65204f4a944a3e00b020d43e54409193379d5eef",
+  "verdicts": {
+    "schema": "pass",
+    "load": "pass",
+    "distinct": "pass",
+    "score": "pass",
+    "spawn": "pass",
+    "pause": "pass",
+    "restart": "pass",
+    "live": "pass"
+  },
+  "score": {
+    "first": 1,
+    "last": 7,
+    "samples": 360,
+    "source": "time/kill score never decreases during a run",
+    "verdict": "pass"
+  },
+  "spawn": {
+    "cap_living_bots": 6,
+    "cap_pickups": 12,
+    "max_living_bots": 1,
+    "max_pickups": 4,
+    "refused": 3,
+    "source": "director budget never exceeds entity caps",
+    "verdict": "pass",
+    "weapon_respawns": 0
+  },
+  "distinct": {
+    "source": "Survival play leaves Stage checkpoint untouched",
+    "stage_hash_after": "a94ea313475a85dff94945f19d6acc0cd4d3abc6ecd6c69ae0476e18b67b98e7",
+    "stage_hash_before": "a94ea313475a85dff94945f19d6acc0cd4d3abc6ecd6c69ae0476e18b67b98e7",
+    "stage_index": 0,
+    "survival_mode": "survival",
+    "verdict": "pass"
+  },
+  "restart": {
+    "cleared": true,
+    "death_cause": "damage",
+    "end_reason": "p1_down",
+    "lost": true,
+    "score_shown": 104,
+    "source": "P1 death ends the run and shows score; rematch is a new run",
+    "verdict": "pass"
+  },
+  "leftover": {
+    "window_elapsed_sec": 350.2,
+    "run_all_host_exit": 0,
+    "headless_host_exit": 0,
+    "headless_elapsed_sec": 653.5,
+    "window_exe": "C:\\Users\\truon\\AppData\\Local\\HHGodotAgent\\tooling\\godot-4.7.1-stable\\bin\\Godot_v4.7.1-stable_win64_console.exe",
+    "leftover": 0,
+    "after_headless": 0,
+    "host": "System.Diagnostics.Process WaitForExit",
+    "window_host_exit": 0,
+    "after_check": 0,
+    "run_all_elapsed_sec": 1823.4,
+    "path": "godot/dogfood/superfighters",
+    "note": "leftover-0 after each official console-twin process",
+    "after_window": 0,
+    "after_run_all": 0
+  },
+  "exits": {
+    "window": 0,
+    "host": "System.Diagnostics.Process.ExitCode",
+    "headless": 0,
+    "run_all": 0,
+    "check": 0
+  },
+  "live_logs_ok": true,
+  "run_all_ok": true,
+  "soak_ok": true,
+  "stills": [
+    "survival_fight_1280x720.png",
+    "survival_lose_1280x720.png",
+    "survival_pause_1280x720.png",
+    "survival_restart_1280x720.png",
+    "survival_title_1280x720.png",
+    "survival_title_after_1280x720.png"
+  ]
+}

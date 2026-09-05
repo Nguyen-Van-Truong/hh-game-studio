@@ -1,0 +1,89 @@
+SANDBOX WORKING PLAN / WP LOG
+DATE=2026-09-03
+SCOPE=hh-3d/hh3d-real-world-open-world ONLY
+REPLACES_ORIGINALS=0
+TICKS_ORIGINALS=0
+
+This file logs work inside the disposable sandbox. It does not replace
+hh-3d/zdoc/31-8-hh3d-real-world-open-world-plan.txt or
+hh-3d/zdoc/31-8-hh3d-real-application-plan.txt and must not be used
+to tick STATE/PASS on those files.
+
+CURRENT_VALID_WP=SANDBOX-G0-DOCS
+SANDBOX-G0-DOCS=DOCS_CLOSED_PAPER
+OWNER_CHAT_GRANT=làm HH World web
+AUTHORIZE_HH3D_APP_SCAFFOLD=YES
+REAL_APP_MOVED_TO=hh-3d/app/
+LIVE_PROGRESS=hh-3d/app/PROGRESS.txt
+NEXT_WP_IF_OWNER_ACCEPTS=see hh-3d/app/PROGRESS.txt
+POINTER_WEB_PAPER=R0-WP0-WEB-DECISION-RECORD.txt
+NOT_A_REAL_APPLICATION_RESUME=0
+POINTER_DOES_NOT_CHANGE_CURRENT_VALID_WP=1
+CRITIC_D=TICK_YES_PAPER_G0_DOCS_ONLY
+UNREAL_TRACK=STOP
+NEXT_NATIVE_WP=NONE
+G0_ENGINE=FORBIDDEN
+DO_NOT_JUMP_TO=G0-ENGINE,G1,hh-3d/app,Godot-2,open-world-§9
+
+OWNER_CHAT_2026-09-03
+  Unreal STOP. VF keeps current Godot 4.7.1-stable + hh_agent.
+  No second engine. HH World = web. See
+  OWNER-DECISION-2026-09-03-GODOT-NOT-UNREAL.txt
+
+G0
+  SOURCE_ID=G0
+  TITLE=Feasibility, hardware, legal and engine pin
+  FORM_THIS_LUOT=DOCS_ONLY
+  OWNER_OVERRIDE_2026-09-03=decision record / template; no Unreal install
+  STATUS_SANDBOX=DOCS_CLOSED_PAPER
+  CRITIC_D=TICK_YES_PAPER_G0_DOCS_ONLY
+  STATUS_ORIGINAL_COPY=NOT_STARTED (unchanged; do not edit)
+  DELIVERABLE=G0-DECISION-RECORD.txt
+  DONE_WHEN_DOCS=
+    - owner can fill or accept the record
+    - Unreal recorded as CANDIDATE, not default for HH World web
+    - later owner chat STOP overrides candidate for THIS track
+    - legal / cost / hardware / SSD / DDC risks recorded
+    - web MVP remains product path
+    - restart recipe recorded
+    - no engine install, no .uproject, no paid API, no map dump
+  LEFTOVER_VS_ORIGINAL_PASS_CRITERIA=
+    - packaged empty-project hello-world = NOT DONE / FORBIDDEN this track
+    - Cesium sample / georeference = NOT DONE / FORBIDDEN this track
+    - exact UE/plugin pin = UNFILLED (template only)
+    - owner legal choice = UNFILLED
+    - performance tier from a real packaged run = UNPROVEN
+    - OWNER_ACCEPT / OWNER_SIGN stay UNFILLED
+
+SANDBOX-R0-WP0-WEB
+  TITLE=HH World web-first decision template
+  FORM_THIS_LUOT=DOCS_ONLY
+  STATE=DOCS_WRITTEN_NOT_PASS
+  NOT_ORIGINAL_R0_WP0=1
+  DELIVERABLE=R0-WP0-WEB-DECISION-RECORD.txt
+  RESTART=PROGRESS.txt
+  DONE_WHEN_DOCS=
+    - owner can fill or accept the web record
+    - MapLibre-local 400 m recorded as LATER, not now
+    - Cesium / Google / Unreal recorded OFF/STOP
+    - no hh-3d/app/ created
+    - no fetch
+  LEFTOVER_VS_ORIGINAL_R0_WP0=
+    - OWNER_SIGN = UNFILLED
+    - free/current/exact still ambiguous
+    - no hh-3d/app/decision-records/ write
+    - original plan STATE unchanged (PAUSED)
+    - no browser matrix, no MapLibre runtime
+
+G1 and later (native)
+  STATE=DO_NOT_START
+  NEXT_NATIVE_WP=NONE
+  NOTE=Unreal track STOP. G1 needs a reversed owner decision, an accepted
+       G0, license ledger before fetch, and a new OWNER_RESUME.
+       Still no Google bake / OSM scrape.
+
+Original real-app R0-WP1+
+  STATE=DO_NOT_START_FROM_THIS_FOLDER
+  NOTE=Needs a new OWNER_RESUME naming TARGET_PLAN=real-application
+       and exact WP. First implementation remains R0-WP1 then R1 400 m.
+       Not authorized by this working-plan.

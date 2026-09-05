@@ -1,0 +1,304 @@
+HH WORLD — OWNER MODES / PRODUCT CONTRACT
+DATE=2026-09-04
+REVISION=3_LOCAL_DEMO_HEADER_HONESTY
+TIMEZONE=Asia/Saigon
+SOURCE=owner chat 2026-09-03 + 2026-09-04 critic header honesty
+AUTHORITY=1_FOR_MODES_AND_SOCIAL_SHOP
+WINS_ON_CONFLICT_FOR=mode meaning, friends visibility, avatar experience, shops/products
+DOES_NOT_WIN_FOR=other products, map-fetch/license/cost permissions, human acceptance evidence
+CANONICAL_PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+LIVE_PROGRESS=hh-3d/app/PROGRESS.txt
+READ_ORDER=live progress -> this contract -> current WP in canonical plan
+DO_NOT_TICK_PLAN_CHECKBOXES_FROM_THIS_FILE=1
+IMPLEMENTATION_STATUS=LOCAL_DEMO_EXISTS_NOT_PLAN_PASS
+THIS_REVISION=HEADER_HONESTY_2026-09-04
+NOT_M2=1
+NOT_GATE_U1=1
+NOT_A_CITY_PRESENCE_SERVER=1
+
+================================================================================
+0. Ý OWNER VÀ CÁCH HIỂU DÙNG CHUNG
+================================================================================
+
+HH World cho người dùng đi dạo trên bản đồ, khám phá cửa hàng do người dùng
+mở và xem hàng họ đăng; khi chọn Online thì gặp nhân vật bạn bè đang dùng app.
+
+Ý owner bắt buộc:
+- Online: trên phố chỉ thấy nhân vật NGƯỜI ĐÃ KẾT BẠN đang Online trên map.
+  Không hiện người lạ, follower hay lời mời kết bạn chưa được chấp nhận.
+- Offline: không thấy nhân vật NGƯỜI KHÁC; vẫn xem được cửa hàng public và
+  sản phẩm người khác đã đăng, kể cả khi chủ cửa hàng không online.
+- Quan hệ bạn bè chỉ giới hạn người hiện trên phố. Xem shop public không cần
+  kết bạn với chủ shop. Hàng có thể thuộc nhiều loại: cá, túi xách, đồ tự làm…
+- Đây là mục tiêu sản phẩm. Local 4175 demo trên máy này đã có đi phố +
+  shop public + Online bạn bè demo (loopback, NOT_PLAN_PASS). Đó không phải
+  M2-WP1 / GATE-U1 / máy khác / OSM. Plan checkbox vẫn [ ].
+
+Quyết định thiết kế trong bản sửa này (để agent triển khai thống nhất):
+- "Đi trên phố" là điều khiển avatar trong thế giới của app. Không dùng GPS
+  thật, địa chỉ nhà, IP hay tâm camera làm vị trí nhân vật. Không hỏi GPS để
+  gặp bạn. Đổi cách hiểu sang theo dõi vị trí thật cần quyết định riêng.
+- Người dùng có avatar của chính mình ở CẢ HAI mode; khách chưa đăng nhập
+  vẫn có avatar local. "Không có ai" phải viết là "không có người khác".
+- Public shop là cửa hàng ảo gắn với địa điểm trong app; không tự nhận là
+  cửa hàng thật ngoài đời, quyền sở hữu tòa nhà hay đại diện thương hiệu.
+- Bản đầu làm mở shop/đăng/xem hàng. Đặt hàng, thanh toán, vận chuyển, chat
+  riêng chưa được đặc tả/triển khai; không tự báo đã mua hay đã thanh toán.
+  Chúng là backlog riêng nếu bổ sung, không phải lời hứa của M0–M2.
+
+================================================================================
+1. MODE XÃ HỘI VÀ KẾT NỐI MẠNG LÀ HAI TRẠNG THÁI ĐỘC LẬP
+================================================================================
+
+Control giữ tên Online / Offline, kèm lời giải thích:
+  Online — Đi phố cùng bạn bè.
+  Offline — Đi dạo riêng; vẫn xem cửa hàng.
+Trạng thái Internet hiện riêng: Đang kết nối / Mất kết nối / Đang kết nối lại.
+Không dùng chữ Offline để đồng thời chỉ hai trạng thái khác nhau.
+
+MODE       INTERNET     NHÂN VẬT KHÁC          SHOP / SẢN PHẨM
+Online     Có           Bạn đủ điều kiện      Đọc/cập nhật từ server
+Offline    Có           Không                 Đọc/cập nhật từ server như Online
+Online     Mất          Dừng presence, gỡ      Chỉ bản đã tải, ghi thời điểm;
+                        avatar remote         chưa tải thì báo chưa khả dụng
+Offline    Mất          Không                 Cùng chính sách cache ở dòng trên
+
+Mất mạng không âm thầm đổi lựa chọn mode đã lưu. Online lúc mất mạng phải
+hiện "Đã mất kết nối; tạm thời không hiện bạn bè", không giả vờ đang live.
+Kết nối lại chỉ mở presence sau xác thực session, mode, consent và quyền
+bạn bè hiện tại. Không phát lại vị trí/nhân vật cũ từ cache.
+
+Mặc định lần đầu: Offline. Khi đã đăng nhập và chủ động chọn Online, giải
+thích một lần "Bạn và bạn bè đang Online sẽ thấy nhân vật của nhau trong app".
+Lựa chọn gắn theo account; guest hoặc tài khoản khác không kế thừa consent.
+Đăng xuất, tắt hiện diện hoặc chuyển Offline: gỡ people layer ngay ở máy
+mình, dừng gửi/nhận presence, gửi kết thúc session nếu còn kết nối.
+Offline vẫn có network catalog/auth; không được tắt toàn bộ mạng của app.
+
+Local demo trên 4175 (máy này, loopback): control Online đã mở được bạn A/B
+cùng preview. Đó là demo identity + /demo-bus, không phải M2-WP1, không phải
+máy khác, không phải GATE-U1. Không ghi "Chưa khả dụng" khi nút Online đã
+chạy trên máy này. Không tick checkbox plan từ file này.
+Đăng nhập chỉ cần cho mở shop/đăng hàng/kết bạn/hiện diện; không chặn xem map,
+đi dạo riêng hay duyệt shop public.
+
+================================================================================
+2. NHÂN VẬT VÀ ĐI PHỐ — KHÔNG NGHIỆM THU BẰNG PIN
+================================================================================
+
+M0-WP1 cung cấp avatar local trước khi M2 nối bạn bè:
+- Avatar stylized nguyên bản, nhìn ra nhân vật; có đứng/đi/hướng quay.
+- Desktop dùng phím di chuyển; mobile có điều khiển cảm ứng rõ. Hướng dẫn
+  ngắn ngay lần đầu. Không bắt người dùng mở tài liệu kỹ thuật.
+- Camera theo avatar được, cũng khám phá map tự do được; có nút về nhân vật.
+  Pan/zoom camera không làm avatar hoặc vị trí gửi cho bạn tự di chuyển.
+- Đi trong vùng đường đi được do app định nghĩa. Không xuyên building/water
+  chưa cho phép, không rơi ngoài AOI. Proxy đi lại là authored, không khẳng
+  định đường/khả năng tiếp cận chính xác ngoài đời.
+- Chọn cửa hàng bằng click/tap hoặc nút tương tác khi ở gần; cả hai mở cùng
+  shop_id. Xem kệ dạng panel/không gian stylized đơn giản, không bắt làm full
+  interior 3D. Đóng kệ trở lại phố đúng vị trí và focus; không teleport lén.
+- Online dùng avatar thế giới này để đồng bộ. Marker bản đồ/danh sách 2D là
+  fallback bổ sung, không thay thế bằng chứng nhân vật đi trên phố.
+
+Avatar bạn không va chạm/chặn đường người xem. Không có combat/traffic/NPC.
+Nếu bạn vào cửa hàng: street presence chuyển khỏi phố; bạn bè được phép có
+thể thấy "Đang xem cửa hàng" và link shop public, không cần shared interior.
+Không dựng nhân vật người lạ bên trong shop hoặc NPC giả là người online.
+
+Thiết kế giảm chuyển động, text lớn, keyboard/touch/focus và list fallback
+phải giữ thao tác duyệt hàng. Avatar remote nội suy chuyển động mượt từ mẫu
+presence, không chỉ nhảy chấm; tốc độ gửi network tách khỏi FPS render.
+
+================================================================================
+3. AI ĐƯỢC THẤY AI
+================================================================================
+
+Server chỉ gửi street presence A cho B khi đồng thời:
+- A và B đăng nhập, có session còn hiệu lực, chọn Online và đã opt-in;
+- là bạn bè được hai bên chấp nhận, không block ở bất kỳ phía nào;
+- A đang trong world/phiên tương thích và trên phố trong vùng B đang xem;
+- presence còn hạn và nằm trong giới hạn hiển thị.
+
+Không gửi dữ liệu người lạ rồi chỉ ẩn ở client. Không cho API/socket khác
+vượt lọc friends/block/mode; link chia sẻ map không chứa live friend position.
+Pending/follower/khách cùng shop không phải bạn. Block/hủy bạn/thu hồi
+consent/session phải thu hồi stream lẫn quyền API và xóa avatar đang hiện.
+Cả coarse presence ("Online", "đang xem cửa hàng", "ngoài vùng") cũng cần
+session + mutual friend + hai bên Online/opt-in + không block; chỉ bỏ điều
+kiện trong viewport vì đây là trạng thái thô, không tọa độ. Offline/consent
+off phải giấu cả hoạt động xem shop, không chỉ avatar. UI có thể ghi "Không
+hiện trên phố", không tiết lộ người đó chủ động ẩn hay đã tắt app. Catalog
+public và timestamp nội dung vẫn theo vòng đời shop, không là presence.
+
+Trạng thái "đang dùng":
+- Đang trên phố trong tab hoạt động: phát heartbeat + vị trí avatar ảo.
+- Tab nền/sleep/đóng app/mất kết nối: ngừng publish; server hết lease thì gỡ.
+- Nhiều tab cùng account: chỉ một publisher có lease; đổi tab không tạo
+  hai người; tab cũ không được ghi đè session mới.
+- Mất mạng ở viewer: gỡ remote ngay khi phát hiện; không giữ bóng ma vô hạn.
+- Offline/hủy bạn/block khi có mạng phải cập nhật bên kia mà không reload map.
+
+Thông số khởi đầu để đo ở M2-WP1, không phải số owner đã chứng minh:
+  PRESENCE_SEND_HZ=5 khi di chuyển; heartbeat=2 giây khi đứng.
+  PRESENCE_TTL_SECONDS=10; explicit revoke target <=2 giây khi mạng hoạt động.
+  VISIBLE_FRIEND_CAP=20; visibility query theo vùng, ưu tiên bạn gần nhất.
+  Chốt/ghi thông số cuối + network profile vào evidence trước nghiệm thu.
+  Khi quá cap nói "Đang hiện 20 bạn gần nhất"; không báo các bạn còn lại offline.
+  Không gửi tọa độ bạn ngoài vùng chỉ để làm counter. Danh sách bạn chỉ trả
+  trạng thái coarse được phép: online/offline/đang xem shop/ngoài vùng.
+  Sequence/session id loại packet trễ; reconnect không hồi sinh avatar bị chặn.
+
+Phố ít bạn là đúng; thông báo "Chưa có bạn nào trên phố" kèm tìm cửa hàng /
+mời kết bạn tùy chọn. Không tự gửi lời mời, thêm bạn hay tạo crowd để lấp phố.
+
+================================================================================
+4. SHOP TỒN TẠI ĐỘC LẬP VỚI CHỦ SHOP
+================================================================================
+
+"Đã mở cửa hàng" = shop đã được publish hợp lệ trên server, không phải tab
+shop đang mở hoặc chủ shop đang online. Shop và hàng public vẫn truy cập
+được khi chủ chuyển Offline, mất mạng, đóng trình duyệt hoặc đăng xuất.
+
+Vòng đời tối thiểu:
+  Shop: draft -> published -> hidden/closed; suspended do moderation.
+  Listing: draft -> published -> sold_out/hidden -> deleted (tombstone).
+Chỉ hàng được phép public trong shop đang published mới ra catalog. Sold out
+có nhãn "Hết hàng"; không suy ra tồn kho hoặc cam kết bán từ bản cache.
+Giới hạn shop/ảnh/dung lượng/pagination là cấu hình ghi trong WP; không hard
+code vài loại hàng khiến owner không đăng được danh mục hợp lệ mới.
+
+Dữ liệu shop: stable shop_id, owner_id, tên, mô tả, ảnh đại diện, world_id,
+anchor ảo, trạng thái, updated_at, version. Nhiều shop cùng địa điểm dùng
+directory/list; không chiếm tòa nhà thật. Thay map snapshot không mất shop.
+Listing: stable listing_id, shop_id, tiêu đề, mô tả, ảnh có quyền sử dụng,
+loại/tag, giá + đơn vị tiền hoặc "Liên hệ", tình trạng, updated_at, version.
+User nhập nội dung theo schema; không HTML tùy ý. Chỉ owner/role được phép
+tạo/sửa/publish/ẩn; server kiểm tra quyền, không tin owner_id từ client.
+
+Duyệt hàng ở cả hai mode:
+- Có mạng: cùng catalog, query/filter/search theo shop/tên/loại hàng; hiển
+  thị cache nhanh rồi revalidate. Mode không quyết định độ mới của kệ.
+- Nhãn map "Map data as of" khác thời gian cập nhật sản phẩm; ghi rõ ảnh và
+  mô tả do người bán đăng. Không lấy độ mới bản đồ làm độ mới giá/tồn kho.
+- Không mạng, đã cache: xem bản đã tải, báo "Bản lưu lúc …; chưa cập nhật".
+  Cache hết fresh_until là STALE, vẫn có timestamp.
+- Không mạng, chưa cache/đã evict: UNAVAILABLE / "Chưa tải cửa hàng này";
+  nút thử lại khi có mạng. Không gọi shop trống, hàng hết hay STALE.
+- Có mạng và server xác nhận shop chưa đăng hàng: EMPTY / "Chưa có sản phẩm".
+- Hidden/deleted/suspended sau sync phải bị gỡ khỏi search/marker/kệ/cache.
+  Offline không biết thay đổi mới: không hứa takedown tức thì trên máy mất
+  mạng. Nhận tombstone khi reconnect, xử lý trước khi đưa cache ra bản live.
+- Cache có quota/eviction, version/schema và clear/reset. Không claim toàn
+  thành phố offline nếu chỉ một số shop và AOI đã được tải.
+
+Tạo/đăng hàng:
+- Social Offline nhưng CÓ mạng: xác thực và đăng server bình thường.
+- Mất mạng: lưu NHÁP local, nhãn "Chưa đăng"; có thể chọn hàng đợi gửi lại
+  tường minh. Không tự đưa nháp lên kệ public hay báo thành công.
+- Retry dùng idempotency key; server ACK rồi đọc lại mới "Đã đăng".
+- Sau reconnect xác thực lại đúng account + quyền shop + version/moderation;
+  conflict phải cho xử lý, không ghi đè bản mới. Logout/đổi account/hủy nháp
+  vô hiệu auto-send; không gửi nháp của A bằng session B.
+- Hai khách cùng xem được một bản published; lỗi upload không tạo listing
+  public có ảnh hỏng. Upload có validate/quota/quarantine và quyền truy cập.
+
+Report/ẩn cá nhân/takedown/suspend bắt buộc trước public beta. "Bán bất kỳ gì"
+là đa dạng hàng được phép theo chính sách; không hứa mọi loại hàng đều hợp
+pháp. Chính sách cụ thể và người chịu trách nhiệm vận hành phải chốt trước
+public; agent không tự ký legal approval. Fixtures kiểm duyệt là giả lập an
+toàn. Tính năng hidden/block không hứa xóa nội dung public khỏi mọi người.
+
+================================================================================
+5. TRẢI NGHIỆM PHẢI HOÀN THÀNH, KHÔNG CHỈ DANH SÁCH FEATURE
+================================================================================
+
+Journey tự khám phá (không tài khoản):
+  mở map -> hiểu Offline -> di chuyển avatar -> tìm shop theo loại hàng ->
+  xem một sản phẩm -> đóng kệ về đúng phố -> lưu/chia sẻ shop public.
+
+Journey chủ shop:
+  đăng nhập khi chọn mở shop -> đặt shop ảo -> nhập hàng -> preview ->
+  publish và thấy hàng từ phiên khách khác -> tắt app -> khách vẫn xem được.
+
+Journey gặp bạn:
+  chủ động kết bạn/chấp nhận -> cả hai chọn Online -> thấy avatar bạn đi,
+  dừng, đổi hướng theo điều khiển thật -> chọn xem tên/hồ sơ tối thiểu hoặc
+  shop public của bạn -> chuyển Offline và tiếp tục duyệt hàng riêng.
+
+Danh sách shop/search/card phải dễ hiểu trên mobile. Đừng ép đăng nhập lúc
+vừa mở app; nhãn trạng thái ngắn, empty state có hành động tiếp. Khi mạng yếu
+hoặc máy yếu, giảm hiệu ứng/chi tiết trước, giữ nút điều khiển và hàng dễ đọc.
+Cần đo khả năng hoàn thành journey + lỗi hiểu nhầm + lời chê cụ thể, không
+suy ra "thú vị/tốt nhất" từ FPS hoặc screenshot. Không cần thêm nhiệm vụ,
+điểm thưởng, chat hay hiệu ứng đông người để đạt scope này.
+
+================================================================================
+6. THỨ TỰ VÀ PHẠM VI NGHIỆM THU
+================================================================================
+
+Live WP chỉ lấy từ app/PROGRESS.txt. GATE-U1 còn thiếu; không giả human review,
+không tải map, không khởi động engine, không mở M-WP trong lần sửa tài liệu.
+
+Chuỗi canonical plan:
+  local map + GATE-U1 + R2 quality + local bookmark
+  -> R5 stable snapshot IDs/diff (fixture local cũng được)
+  -> R3 API/catalog
+  -> R4-WP0B identity (cloud bookmark sync vẫn optional)
+  -> M0-WP0 mode/connectivity/consent contract
+  -> M0-WP1 avatar local + walking/camera/shop entry hooks
+  -> M1-WP0 shop/listing/catalog/cache
+  -> M1-WP1 report/hide/moderation
+  -> M2-WP0 friends
+  -> M2-WP1 live friend avatars
+  -> R6 security/operations/deploy + R8 owner-journey beta/release.
+
+R4-WP1 city story và R7 native là nhánh riêng, không dependency của M0–M2.
+Danh tính bắt buộc cho owner modes là yêu cầu đã có; provider/chi phí/quyền
+deploy phải chốt theo gate, không tự dùng dịch vụ trả phí.
+Map local là technical proof; có thể review nội bộ riêng. Shop-only private
+slice được ghi phạm vi; chỉ gọi hoàn thành owner modes khi đi phố bạn bè và
+shop cùng đạt. Không ship đầy đủ HH World sau map proof rồi bỏ M0–M2.
+
+================================================================================
+7. MA TRẬN VERIFY BẮT BUỘC CHO M-WPs
+================================================================================
+
+Dùng A/B là bạn đã chấp nhận, C là người lạ, shop S của B có hàng published.
+Fixtures và multi-client runtime phải phân biệt; không lấy seeded UI làm live.
+Ghi build/source/contract hash, thời gian, trace/repro, môi trường/network.
+
+T01 Guest Offline + có mạng: avatar self đi được; không remote; xem S không login.
+T02 A/B Online cùng world: A đi/dừng/đổi hướng bằng input; B thấy đúng chuyển
+    động tương ứng, và ngược lại. C cùng phố không xuất hiện, không nhận
+    tọa độ A/B qua API/socket. Video/trace + server/client assertions.
+T03 A chuyển Offline: self vẫn đi, remote hết, B gỡ A; shop S không đổi.
+T04 B logout/đóng app/Offline: S và hàng vẫn xem được bởi A và guest.
+T05 Offline + có mạng: owner đăng hàng thật, guest đọc thấy một listing.
+T06 Cả hai mode mất mạng: cache có timestamp; chưa cache = chưa tải; shop
+    trống chỉ khi server từng xác nhận empty, không bịa hàng.
+T07 Ngắt mạng viewer/publisher, sleep, session expiry, reconnect: không ghost
+    quá TTL, không packet cũ hồi sinh, không coi chọn Online là đã connected.
+T08 Hủy bạn/block/revoke consent: UI và server chặn stream ngay theo budget;
+    không reload; pending không được body; shop public không tự xóa.
+T09 Nháp retry/logout/đổi account/conflict: không double-post/sai owner/auto
+    publish ngoài ý; lỗi upload không báo đã đăng.
+T10 Hàng/shop hidden/deleted/suspended: search/kệ/cache hội tụ sau reconnect,
+    không resurrection từ retry/cache. API cấm sửa shop người khác.
+T11 Avatar camera/walk/collision/entry/exit + nhiều tab + trên 20 bạn + ngoài
+    vùng; reduced motion/keyboard/touch/2D fallback không mất thao tác cốt lõi.
+T12 Human journey ở mục 5 trên device mục tiêu: ghi hiểu mode, hoàn thành tác
+    vụ, khó chịu/điểm thích, nhầm GPS/nhầm shop thật, feedback và sửa lại.
+    Review map GATE-U1 trước đây không thay cho review trải nghiệm social/shop.
+
+================================================================================
+8. BÀN GIAO NGẮN
+================================================================================
+
+Live product: hh-3d/app/; preview local theo PROGRESS (hiện 4175).
+Sandbox hh-3d/hh3d-real-world-open-world/ là lịch sử; không triển khai ở đó.
+Không dùng native/background plan làm WP tiếp. Không sửa sản phẩm khác.
+Online = gặp avatar bạn bè trong app; Offline = đi riêng, shop vẫn hoạt động.
+Mất mạng là trạng thái riêng. Shop không phụ thuộc chủ online. Không marker-only.
+Ý owner mới trong chat có ưu tiên; cập nhật hợp đồng nếu owner đổi ý, không
+bắt owner nhập lại một câu magic hoặc một header mới để công nhận chỉ dẫn.

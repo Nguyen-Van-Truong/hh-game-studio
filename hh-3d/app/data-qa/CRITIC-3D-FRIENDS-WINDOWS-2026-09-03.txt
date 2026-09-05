@@ -1,0 +1,357 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+MOVE_LAT_A_ON_B=10.7716200→10.7716351
+MOVE_NORTH_M=1.681
+INSET_TOTAL=2673
+INSET_WINDOWS=2141
+INSET_DOORS=60
+INSET_BANDS=472
+INSET_BUILDINGS=60
+OFFLINE_B_REMOTES=0
+BIGGEST_MISS=Friend tunics and facade insets are real on this 400 m authored AABB block, but it is still cheap box patches on muted extrudes — not a city / interiors / WAN friends / GATE-U1. Live R3F scene was not enumerable (no canvas.__r3f). Headless readPixels stayed empty. NOT_PLAN_PASS.
+
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-03
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=17:22 +07
+MODEL=grok-4.6
+SCOPE=HH World two-seat friend tunics (not pins) + authored facade insets on already-up 4175 (NOT GTA / NOT 1:1 / NOT a city / NOT WAN)
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=04cb6ca92c482017c02d78e7885727f73b62103d
+PROGRESS_CLAIMS_HEAD=04cb6ca92c482017c02d78e7885727f73b62103d
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-FRIENDS-WINDOWS-2026-09-03.txt
+PRIOR_CRITIC=hh-3d/app/data-qa/CRITIC-3D-SPRINT-BODY-2026-09-03.txt
+LEAD_PACK=hh-3d/app/data-qa/J5-FRIENDS-TUNIC-2026-09-03.txt
+LEAD_PROBE=hh-3d/app/data-qa/j5-friends-tunic-probe.mjs
+LEAD_SHOT=hh-3d/app/data-qa/j5-3d-friend-tunic.png
+LEAD_RUN_ID_CLAIM=HH3D-J5-20260903-ASIA-SAIGON-11
+LEAD_VERDICT_CLAIM=J5_FRIENDS_TUNIC_OK
+PROGRESS_TRUSTED_ALONE=NO
+J5_FRIENDS_TUNIC_OK_TRUSTED_ALONE=NO
+LEAD_PACK_TRUSTED_ALONE=NO
+LEAD_SHOT_TRUSTED_ALONE=NO
+LEAD_PROBE_TRUSTED_ALONE=NO
+DATA_BODY_ATTR_TRUSTED_ALONE=NO
+DATA_FACADE_ATTR_TRUSTED_ALONE=NO
+DATA_REMOTE_OL_TRUSTED_ALONE=NO
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_VF_TOUCH=1
+NO_UNREAL=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_RUN_LEAD_PROBE_WRITER=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M2_WP0=1
+NOT_M2_WP1=1
+NOT_GTA=1
+NOT_1TO1=1
+NOT_A_CITY=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_OTHER_PC=1
+CRITIC_CDP_PORTS_1=9721/9722
+CRITIC_CDP_PORTS_2=9731/9732
+LIVE_JS_FIRST=/assets/index-BWlKQePu.js
+LIVE_JS_FIRST_LEN=2082737
+LIVE_JS_NOW=/assets/index-Ds8u-Kel.js
+LIVE_JS_NOW_LEN=2086212
+LIVE_PID_FIRST=48256
+LIVE_PID_NOW=18608
+LIVE_CMD=node .../hh-3d/app/web/node_modules/vite/bin/vite.js preview
+VITE_PREVIEW_PORT_PIN=4175
+PREVIEW_RECYCLED_MID_CRITIC=1
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/
+
+4175 was already up. This critic used that preview and did not start 4173,
+4174, 5175, or a second HH World preview. Independent two-context Chrome
+CDP (debug 9721/9722 then remint 9731/9732 after the preview recycled;
+temp profiles only; headless=new 1280x720; about:blank then navigate
+?seat=a / ?seat=b) waited until canvas.play-canvas was ready, then:
+
+  Both seats: Menu Tab → A Add friend B → B Accept A → both Online
+  B facing west (heading 270) at spawn 7 m east of A
+  A hold W 3.5 s                 remote on B walks north
+  A Offline                      B remotes go to zero
+
+Friend tunics are real. B's guest frames show a gold self-walker
+(behind camera) and a teal remote body of the same long-tunic Person
+mesh — head, hem, feet — not a CSS doll pin and not a map marker.
+After W, the teal body is still that mesh, now labeled
+"Bạn A (máy này)", pose walk, lat 10.7716200 → 10.7716351
+(+1.681 m north, lon unchanged). First CDP on the earlier bundle
+saw the same tunic pair and +1.035 m. Lead SAIGON-11 numbers were
+not used as proof.
+
+Facade insets are real. Independent replay of facadePiecesForBuilding
+on the GeoJSON this 4175 actually served counts 2141 windows / 60
+doors / 472 bands = 2673 pieces on all 60 authored buildings — not
+60 flat boxes. Guest frames show recessed dark window/door rectangles
+and horizontal bands on tan extrudes, with shadow in the recesses.
+Live JS this preview serves maps those pieces to boxGeometry meshes
+(kind window/door/band) on groups with facade:"inset".
+
+Offline hides the other body. After A Offline, B remoteCount=0,
+remotes=[], people=[], hidden play-remote-bodies count=0. Guest
+pixels lose the teal tunic. B stays Online; only the other seat
+vanishes. That is the stated contract.
+
+Honesty still denies GTA / 1:1 / OSM / WAN and prints NOT_PLAN_PASS.
+GATE-U1 STATE: NOT_STARTED. M2-WP0 / M2-WP1 STATE: NOT_STARTED.
+This critic did not invent humans.
+
+J5_FRIENDS_TUNIC_OK / SAIGON-11 is claim only and was not used as proof.
+This critic did not run j5-friends-tunic-probe.mjs (it writes that pack).
+
+Biggest miss: tunics + insets are real, but the world is still a muted
+authored 400 m AABB street with cheap box patches — not a city, not
+interiors, not WAN / other-PC friends, not GATE-U1. Live WebGL scene
+graph was not enumerable (canvas.__r3f absent). Headless readPixels
+returned empty (preserveDrawingBuffer). Body/inset proof is guest
+pixels + the JS this preview actually served, not a live mesh dump.
+
+================================================================================
+METHOD
+================================================================================
+
+Read on disk (not PROGRESS / J5 alone):
+  hh-3d/app/PROGRESS.txt
+    PLAYER_SLICE=FRIEND_TUNIC_FACADE; J5_FRIENDS_TUNIC_OK claim;
+    CURRENT leftover GATE-U1
+  hh-3d/app/web/src/play/Person.tsx
+    DEFAULT shirt #2a7d78; seat b shirt #c4a046
+    tunic RoundedBox [0.4, 0.98, 0.34]; slim pelvis; capsule legs
+  hh-3d/app/web/src/play/PlayView.tsx
+    Walker name=self-walker | remote-${seat}; remotes map to Walker
+    BuildingMesh facades.map → boxGeometry + userData kind=facade
+  hh-3d/app/web/src/play/world.ts
+    facadePiecesForBuilding window/door/band; countFacadePieces
+  hh-3d/app/web/src/friends/usePresence.ts + presence.ts
+    visibleFriends empty unless viewer Online+opted-in+connected
+    publisher Offline pushes leave
+  hh-3d/app/web/src/friends/seats.ts
+    B spawn +7 m east, heading 270 (looks at A)
+  hh-3d/app/web/src/map/MapView.tsx
+    CSS doll factory still exists for map fallback — REJECTED as
+    Play proof. Play DOM had zero .avatar-figure / maplibregl-marker
+  hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+    GATE-U1 STATE: NOT_STARTED (line 862)
+    M2-WP0 / M2-WP1 STATE: NOT_STARTED (lines 1351, 1370)
+  hh-3d/app/docs/review/README.txt
+    "GATE-U1 is NOT done."
+  Lead pack J5-FRIENDS-TUNIC / SAIGON-11 / J5_FRIENDS_TUNIC_OK
+    read only as claim (lat 10.7716200→10.7716308; 2141/60/472).
+    Did not run j5-friends-tunic-probe.mjs (it writes that pack + shot).
+
+Live (existing 4175 only; did not start another HH World preview):
+  First GET /                   200  title=HH World
+                                script /assets/index-BWlKQePu.js  2082737 B
+                                vite preview pid 48256
+  Later GET /                   200
+                                script /assets/index-Ds8u-Kel.js  2086212 B
+                                vite preview pid 18608
+    Preview recycled under the same port while this critic ran.
+    Remint CDP is the current-bundle proof. First-run pixels still
+    counted as the same product path, not a second preview.
+  4173 DOWN  4174 DOWN  5175 DOWN
+  GET /data/ben-thanh-400m.authored.geojson  200  92096 B
+    kind.building=60  (independent node count)
+    Independent facadePiecesForBuilding on that GeoJSON:
+      windows=2141  doors=60  bands=472  total=2673  inset=60/60
+  Live JS now (index-Ds8u-Kel.js):
+    name:`self-walker`:`remote-${t}` + Person child = PRESENT
+    tunic args:[.4,.98,.34] = PRESENT
+    shirt `#2a7d78` / `#c4a046` = PRESENT
+    kind:`window` / kind:`door` / kind:`band` = PRESENT
+    userData facade:`inset` + mesh:`extrude` = PRESENT
+    play-remote-label / remote-avatar-${t} = PRESENT
+    NOT_PLAN_PASS / demo-bus / online-btn / offline-btn = PRESENT
+    openstreetmap / cesium = ABSENT
+    MapView CSS remote-avatar doll factory still in the same bundle
+    (map fallback). Play seats used the R3F Walker path.
+  Independent Chrome CDP vs 4175
+    shots TEMP only (not written under data-qa):
+      first (BWlKQePu, 9721/9722):
+        critic-b-online.png   76987 B  sha16=a8c423e5e5c94a5e
+        critic-b-walk.png     79105 B  sha16=ab3d4e890b52390a
+        critic-b-offline.png 113663 B  sha16=5b144a98d9a97600
+      remint (Ds8u-Kel, 9731/9732) — current live:
+        critic-b-online.png  144692 B  sha16=79777522e5527af7
+        critic-b-walk.png    145664 B  sha16=1dace8681ed37549
+        critic-b-offline.png 155760 B  sha16=8eee0be708a2e1dc
+  Scene dump: canvas.__r3f undefined; fiber hops=13, no Three scene.
+    Same method miss as CRITIC-3D-SPRINT-BODY. Not treated as a pin
+    restore. Guest pixels + served Person/facade chunks are enough.
+  WebGL readPixels: all-zero (headless, no preserveDrawingBuffer).
+    Not treated as a blank-world fail. PNG frames are the pixels.
+  Did not run npm build. Did not start a second preview. Did not
+  fetch OSM. Did not write the lead pack.
+
+================================================================================
+PROCESS / GIT
+================================================================================
+
+RESULT=PASS_ON_STATED_FAIL_RULE
+
+Stated fail: VF / AGENTS.md staged with this if they committed.
+Observed:
+  git rev-parse HEAD = 04cb6ca92c482017c02d78e7885727f73b62103d
+  git diff --cached --name-only = empty
+  hh-3d/app remains untracked in this tree
+  Critic did not commit, did not tick plan, did not touch VF.
+
+================================================================================
+ATTACK 1 — B MUST SEE A MOVING TUNIC-HUMANOID, NOT A PIN
+================================================================================
+
+RESULT=PASS  TUNIC_REMOTE  TEAL_A  GOLD_B  MOVE_NORTH_M=1.681
+
+Rejected as sole proof:
+  lead J5-FRIENDS-TUNIC-2026-09-03.txt / SAIGON-11 / J5_FRIENDS_TUNIC_OK
+  lead j5-3d-friend-tunic.png
+  data-body="tunic-humanoid"
+  hidden ol[data-testid=play-remote-bodies]
+  people-row / play-proof attributes
+
+Independent proof:
+
+  Two isolated Chromes on this 4175 (?seat=a / ?seat=b). After Add /
+  Accept / both Online, B (heading 270, lon 106.6981040) looks west
+  at A (lon 106.6980400, same lat). That is ~7 m in front of B.
+
+  Guest pixels, remint (current index-Ds8u-Kel.js):
+    Gold long tunic column, black hair, behind camera = B self.
+    Teal long tunic of the same Person language in the street,
+    facing B, labeled "Bạn A (máy này)". Not a map pin, not a
+    CSS head/torso/legs DIV. Play DOM cssDolls=[].
+  First-run pixels on the prior bundle showed the same pair.
+
+  After A KeyW 3500 ms, B's remote row (Html label, not trusted
+  alone) went pose idle→walk, lat 10.7716200 → 10.7716351,
+  lon unchanged. 0.0000151 * 111320 = 1.681 m north.
+  First CDP: 10.7716200 → 10.7716293 = 1.035 m (crossed the
+  0.000008 wait threshold early). Lead claimed 10.7716308;
+  not used. Walk-frame hash ≠ online-frame hash
+  (1dace8681ed37549 ≠ 79777522e5527af7). Teal body still
+  visible further along the street.
+
+  Live JS this preview serves:
+    Walker name = self-walker | `remote-${seat}`
+    child = Person (_b) with colors.shirt
+    args:[.4,.98,.34] radius .12  (same tunic as self)
+    seat a shirt `#2a7d78`  seat b shirt `#c4a046`
+
+FAIL-if-remote-is-pin does not trigger.
+
+================================================================================
+ATTACK 2 — BUILDINGS MUST SHOW INSET MESHES, NOT 60 BLANK BOXES
+================================================================================
+
+RESULT=PASS  INSETS_REAL  TOTAL=2673  BUILDINGS=60  >>_60_FLAT
+
+Rejected as sole proof:
+  data-facade / data-facade-windows / data-insets
+  play-proof data-facade="inset"
+  lead facade.windows=2141
+
+Independent proof:
+
+  Same GeoJSON the page fetched, this critic's own port of
+  facadePiecesForBuilding (faces, doorIdx, floors, window grid):
+    buildings=60  inset=60
+    windows=2141  doors=60  bands=472  total=2673
+  Matches the live play-proof numbers. That is a count of
+  generated pieces, not a texture stamp.
+
+  Guest pixels (online + walk): tan/brown extrudes with recessed
+  dark rectangles and a mid-face band. Shadows sit inside the
+  recesses. That is more than 60 hashed blank boxes.
+
+  Live JS BuildingMesh:
+    group userData {kind:`building`, mesh:`extrude`, facade:`inset`}
+    then per-piece boxGeometry with kind:`window` / `door` / `band`
+
+  Still boxes. Still authored. Still not interiors or photogrammetry.
+  Fail rule was "walls still blank boxes" — they are not.
+
+FAIL-if-blank-boxes does not trigger.
+
+================================================================================
+ATTACK 3 — OFFLINE MUST HIDE THE OTHER BODY
+================================================================================
+
+RESULT=PASS  HIDE_OK  REMOTE_COUNT=0  TEAL_GONE
+
+A Offline (publisher leave). B stays Online + opted-in.
+
+  B snap: remoteCount=0  remotes=[]  people=[]  hidden ol count=0
+  Guest remint offline frame: gold self only; no teal remote;
+  HUD "Other people on the street: none (no accepted friend
+  Online on this machine)." Menu is open on that shot (this
+  critic opened it to click Offline on A; B's menu was also
+  opened). The street in front of B has no second tunic.
+  Offline-frame hash 8eee0be708a2e1dc ≠ walk 1dace8681ed37549.
+
+Contract: Offline hides OTHER avatars; own walker remains.
+Observed.
+
+================================================================================
+ATTACK 4 — HONESTY / SCOPE MUST NOT CLAIM A CITY OR PLAN PASS
+================================================================================
+
+RESULT=PASS  NOT_PLAN_PASS  NOT_GATE_U1  NOT_M2  NOT_WAN
+
+Banner on every guest frame:
+  "Authored approximation. Not a live map, not OSM/Overture,
+   not photogrammetry, and not a digital twin. No GTA claim,
+   no 1:1 city. NOT_PLAN_PASS."
+
+Friends honesty (disk + live): this-PC 4175 loopback, not WAN,
+not a city presence server.
+
+Plan leftover GATE-U1 still NOT_STARTED. M2-WP0 / M2-WP1 still
+NOT_STARTED. This critic did not tick them. Local two-Chrome
+demo on 4175 is not M2.
+
+mapPresent=true in the snap is the 2D minimap overlay + MapLibre
+module still in the bundle, not the Play default. Play engine
+attribute is r3f; canvas.play-canvas is the street. Default Play
+is not the old MapLibre dashboard.
+
+================================================================================
+WHAT THIS IS NOT
+================================================================================
+
+NOT a plan PASS.
+NOT GATE-U1.
+NOT M2-WP0 / M2-WP1.
+NOT WAN / other-PC / city friends.
+NOT OSM / Overture / photogrammetry / a downtown.
+NOT GTA / 1:1.
+NOT a live Three scene dump (method miss).
+NOT permission to tick any [x].
+
+================================================================================
+STOP
+================================================================================
+
+TICK=yes on the stated rule: friend tunics + insets are real on
+http://127.0.0.1:4175/. Remotes are not pins. Walls are not blank
+boxes. Write this file only. No implement. No remint request. No
+second preview. No plan tick.

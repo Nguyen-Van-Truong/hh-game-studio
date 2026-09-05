@@ -1,0 +1,102 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=19:08 +07
+ROLE=IMPLEMENTER
+TICK=n/a (do not treat this file as TICK=yes)
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M0_WP1=1
+NOT_M1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+PLAYER_URL=http://127.0.0.1:4175/
+RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-42
+COMMAND=node hh-3d/app/data-qa/j5-shelf-minimap-probe.mjs
+VERDICT_IMPLEMENTER_CDP=J5_SHELF_MINIMAP_OK
+LIVE_JS=/assets/index-CIj9td8A.js
+LIVE_JS_LEN=2170932
+LIVE_JS_SHA256=57484ad9f75eedf96d8e6e14b4ea183ae1037d22ee62420b895bc35e29d3736e
+LISTEN=127.0.0.1:4175
+LIVE_PID=43236
+REMINTED=yes
+ONE_RECYCLE_AFTER_BUILD=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NO_COMMIT=1
+NO_FIFTH_STREET=1
+NO_NPC=1
+NO_INTERIOR=1
+NO_MAP_FETCH=1
+ACCEPTED_PRIOR=CRITIC-3D-MINIMAP-SHOPS-REAUDIT-2026-09-04.txt TICK=yes on /assets/index-CMuviBit.js
+
+================================================================================
+SLICE
+================================================================================
+
+Independent critic of the street-shop-dot remint (CMuviBit) left a
+named leftover: the lantern shop sheet covered the 184×134 corner
+map while the shelf was open.
+
+This remint stops the Play shop sheet and Menu at bottom:9.5rem so
+the corner widget stays player-visible. Rect overlap of wrap vs
+lantern panel = 0. Same for leftover Shared PC opened from Menu.
+Four street-play dots (lantern / Phở / Chè / Kem) stay on the
+widget while the lantern shelf is open. Leftover Shared PC / J6
+stay off the 2D marks.
+
+Did not remint Harbor south / Tram furniture, zebras, chalkboards,
+shop-range HUD, Nearby/E, leftover banners, net labels, friend
+steps, LOD, HUD street chip, plaques, fog/edge, sky, cam-hit.
+Did not rip minimap defer or shop-dot layer. No fifth official
+street. Did not catalog_clear.
+
+================================================================================
+CDP (headless Chrome, 1280×720, isolated guest B, recycled 4175)
+================================================================================
+
+Seat B empty profile. Guest. Offline. friend-row-a not accepted.
+
+Live JS after one recycle (old pid 26796 → listen 127.0.0.1:4175
+pid 43236, vite preview --host 127.0.0.1 --port 4175 --strictPort):
+  /assets/index-CIj9td8A.js
+  LEN=2170932
+  SHA256=57484ad9f75eedf96d8e6e14b4ea183ae1037d22ee62420b895bc35e29d3736e
+
+Lantern E (street shop):
+  nearby=shop-lantern-fish
+  range="Quầy Cá Đèn Lồng: 3.8 m away"
+  panel leftover=0  leftover banner absent
+  wrap 184×134 @ 1088,577  panel bottom=552  overlap=0
+  marks visible: lantern, Phở, Chè, Kem
+
+Leftover Menu-opened Shared PC:
+  leftover=1 banner present
+  wrap still visible  overlap=0
+
+Defer, leftover-off-map, spawn E, leftover Menu labels still hold.
+
+Shot=hh-3d/app/data-qa/j5-3d-shelf-minimap.png
+Probe=hh-3d/app/data-qa/j5-shelf-minimap-probe.mjs
+JSON=hh-3d/app/data-qa/J5-SHELF-MINIMAP-2026-09-04.txt
+
+Implementer CDP only. Not an independent critic TICK. Not a plan tick.
+
+================================================================================
+OWNER LEFTOVERS (unchanged)
+================================================================================
+
+1. GATE-U1 three-human review (first acceptance leftover; not faked).
+2. R2-WP1 headed/mobile/memory/min-FPS thresholds still UNFILLED.
+3. WAN / other-PC join still not built. 4175 loopback only.
+4. R4-WP0B real account/OIDC still not built.
+5. Open data (OSM/Overture) still needs license ledger + grant.
+6. Leftover this-PC shops stay in the catalog; they do not own street E.
+   Menu list + open panel still label them leftover. Do not catalog_clear.
+7. M0/M1/M2 plan WPs still NOT_STARTED. NOT_PLAN_PASS. Not M1.

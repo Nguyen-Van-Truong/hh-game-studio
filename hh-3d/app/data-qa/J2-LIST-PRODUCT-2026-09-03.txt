@@ -1,0 +1,269 @@
+{
+  "run_id": "HH3D-J2-20260903-ASIA-SAIGON-01",
+  "player": "http://127.0.0.1:4175/",
+  "verdict": "J2_OBSERVED",
+  "not_plan_pass": true,
+  "not_r4_wp0b": true,
+  "publishOk": true,
+  "persistOk": true,
+  "queueOk": true,
+  "retryOk": true,
+  "honestyOk": true,
+  "seatOk": true,
+  "extraFishId": "listing-local-mtkxoc3698jeiu",
+  "queuedId": "listing-local-mtkxods3hyqtbn",
+  "home": {
+    "mode": "Offline — Stroll alone; shops still open.",
+    "identity": "Guest · shops public; friends not required",
+    "people": "Other people on the street: none (friends layer off)."
+  },
+  "opened": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/?place=place-market-steps&shop=shop-lantern-fish",
+    "mode": "Offline — Stroll alone; shops still open.",
+    "people": "Other people on the street: none (friends layer off).",
+    "identity": "Guest · shops public; friends not required",
+    "identitySigned": "no",
+    "onlineDisabled": true,
+    "shopPanel": true,
+    "become": true,
+    "leave": false,
+    "form": false,
+    "formNetwork": null,
+    "ownerLabel": "Guest on this machine. Browse does not need friends or an account.",
+    "owner": "Shop owner: Offline. Public listings stay open.",
+    "listings": [
+      {
+        "id": "listing-morning-mackerel",
+        "kind": "fish",
+        "status": "published",
+        "source": "authored",
+        "text": "Cá nục sương (mẫu)Cá / fishpublicFictional fish-class sample. Price is not a live quote.Liên hệ"
+      },
+      {
+        "id": "listing-woven-tote",
+        "kind": "bag",
+        "status": "published",
+        "source": "authored",
+        "text": "Túi cói chợ (mẫu)Túi / bagpublicFictional bag-class sample. Not a real product for sale.Liên hệ"
+      }
+    ],
+    "drafts": [],
+    "result": null,
+    "goods": [
+      "Cá nục sương (mẫu)Cá / fish · Quầy Cá Đèn Lồngpublic",
+      "Túi cói chợ (mẫu)Túi / bag · Quầy Cá Đèn Lồngpublic"
+    ],
+    "authoredDraftShown": false,
+    "daDang": false,
+    "googleOidc": false,
+    "seat": {
+      "fish": {
+        "top": 405.3,
+        "bottom": 505.1,
+        "visible": true
+      },
+      "bag": {
+        "top": 511.5,
+        "bottom": 611.4,
+        "visible": true
+      }
+    }
+  },
+  "asOwner": {
+    "identitySigned": "yes",
+    "ownerLabel": "Chủ quầy (máy này) — local demo identity. NOT a real account. NOT Google/OIDC. NOT_PLAN_PASS.",
+    "form": true
+  },
+  "listed": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/?place=place-market-steps&shop=shop-lantern-fish",
+    "mode": "Offline — Stroll alone; shops still open.",
+    "people": "Other people on the street: none (friends layer off).",
+    "identity": "Chủ quầy (máy này) · local demo, not a real account",
+    "identitySigned": "yes",
+    "onlineDisabled": true,
+    "shopPanel": true,
+    "become": false,
+    "leave": true,
+    "form": true,
+    "formNetwork": "on",
+    "ownerLabel": "Chủ quầy (máy này) — local demo identity. NOT a real account. NOT Google/OIDC. NOT_PLAN_PASS.",
+    "owner": "Shop owner: Offline. Public listings stay open.",
+    "listings": [
+      {
+        "id": "listing-morning-mackerel",
+        "kind": "fish",
+        "status": "published",
+        "source": "authored",
+        "text": "Cá nục sương (mẫu)Cá / fishpublicFictional fish-class sample. Price is not a live quote.Liên hệ"
+      },
+      {
+        "id": "listing-woven-tote",
+        "kind": "bag",
+        "status": "published",
+        "source": "authored",
+        "text": "Túi cói chợ (mẫu)Túi / bagpublicFictional bag-class sample. Not a real product for sale.Liên hệ"
+      },
+      {
+        "id": "listing-local-mtkxoc3698jeiu",
+        "kind": "fish",
+        "status": "published",
+        "source": "local-demo",
+        "text": "Cá thu thêm (máy này)Cá / fishpublicLocal demo listing. Extra fish sample. Not a real product.Liên hệ"
+      }
+    ],
+    "drafts": [],
+    "result": {
+      "status": "published",
+      "id": "listing-local-mtkxoc3698jeiu",
+      "text": "On the public shelf (this machine). Not a server ACK. Not a real account."
+    },
+    "goods": [
+      "Cá nục sương (mẫu)Cá / fish · Quầy Cá Đèn Lồngpublic",
+      "Túi cói chợ (mẫu)Túi / bag · Quầy Cá Đèn Lồngpublic",
+      "Cá thu thêm (máy này)Cá / fish · Quầy Cá Đèn Lồngpublic"
+    ],
+    "authoredDraftShown": false,
+    "daDang": false,
+    "googleOidc": false,
+    "seat": {
+      "fish": {
+        "top": 405.3,
+        "bottom": 505.1,
+        "visible": true
+      },
+      "bag": {
+        "top": 511.5,
+        "bottom": 611.4,
+        "visible": true
+      }
+    }
+  },
+  "leftOwner": {
+    "become": true,
+    "listings": [
+      "listing-morning-mackerel",
+      "listing-woven-tote",
+      "listing-local-mtkxoc3698jeiu"
+    ]
+  },
+  "afterClose": {
+    "shopPanel": false,
+    "goods": [
+      "Cá nục sương (mẫu)Cá / fish · Quầy Cá Đèn Lồngpublic",
+      "Túi cói chợ (mẫu)Túi / bag · Quầy Cá Đèn Lồngpublic",
+      "Cá thu thêm (máy này)Cá / fish · Quầy Cá Đèn Lồngpublic"
+    ]
+  },
+  "guestReopen": {
+    "identitySigned": "no",
+    "listings": [
+      "listing-morning-mackerel",
+      "listing-woven-tote",
+      "listing-local-mtkxoc3698jeiu"
+    ]
+  },
+  "queued": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/?place=place-market-steps&shop=shop-lantern-fish",
+    "mode": "Offline — Stroll alone; shops still open.",
+    "people": "Other people on the street: none (friends layer off).",
+    "identity": "Chủ quầy (máy này) · local demo, not a real account",
+    "identitySigned": "yes",
+    "onlineDisabled": true,
+    "shopPanel": true,
+    "become": false,
+    "leave": true,
+    "form": true,
+    "formNetwork": "off",
+    "ownerLabel": "Chủ quầy (máy này) — local demo identity. NOT a real account. NOT Google/OIDC. NOT_PLAN_PASS.",
+    "owner": "Shop owner: Offline. Public listings stay open.",
+    "listings": [
+      {
+        "id": "listing-morning-mackerel",
+        "kind": "fish",
+        "status": "published",
+        "source": "authored",
+        "text": "Cá nục sương (mẫu)Cá / fishpublicFictional fish-class sample. Price is not a live quote.Liên hệ"
+      },
+      {
+        "id": "listing-woven-tote",
+        "kind": "bag",
+        "status": "published",
+        "source": "authored",
+        "text": "Túi cói chợ (mẫu)Túi / bagpublicFictional bag-class sample. Not a real product for sale.Liên hệ"
+      },
+      {
+        "id": "listing-local-mtkxoc3698jeiu",
+        "kind": "fish",
+        "status": "published",
+        "source": "local-demo",
+        "text": "Cá thu thêm (máy này)Cá / fishpublicLocal demo listing. Extra fish sample. Not a real product.Liên hệ"
+      }
+    ],
+    "drafts": [
+      {
+        "id": "listing-local-mtkxods3hyqtbn",
+        "status": "draft",
+        "queued": "yes",
+        "text": "Túi bố thêm (máy này)Chưa đăngQueued until network"
+      }
+    ],
+    "result": {
+      "status": "draft",
+      "id": "listing-local-mtkxods3hyqtbn",
+      "text": "Chưa đăng — nháp chờ mạng. Not posted."
+    },
+    "goods": [
+      "Cá nục sương (mẫu)Cá / fish · Quầy Cá Đèn Lồngpublic",
+      "Túi cói chợ (mẫu)Túi / bag · Quầy Cá Đèn Lồngpublic",
+      "Cá thu thêm (máy này)Cá / fish · Quầy Cá Đèn Lồngpublic"
+    ],
+    "authoredDraftShown": false,
+    "daDang": false,
+    "googleOidc": false,
+    "seat": {
+      "fish": {
+        "top": 405.3,
+        "bottom": 505.1,
+        "visible": true
+      },
+      "bag": {
+        "top": 511.5,
+        "bottom": 611.4,
+        "visible": true
+      }
+    }
+  },
+  "retried": {
+    "listings": [
+      "listing-morning-mackerel",
+      "listing-woven-tote",
+      "listing-local-mtkxoc3698jeiu",
+      "listing-local-mtkxods3hyqtbn"
+    ],
+    "drafts": []
+  },
+  "finalGuest": {
+    "listings": [
+      {
+        "id": "listing-morning-mackerel",
+        "kind": "fish"
+      },
+      {
+        "id": "listing-woven-tote",
+        "kind": "bag"
+      },
+      {
+        "id": "listing-local-mtkxoc3698jeiu",
+        "kind": "fish"
+      },
+      {
+        "id": "listing-local-mtkxods3hyqtbn",
+        "kind": "bag"
+      }
+    ],
+    "become": true
+  }
+}

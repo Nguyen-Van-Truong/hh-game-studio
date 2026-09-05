@@ -1,0 +1,85 @@
+{
+  "run_id": "HH3D-J5-20260904-ASIA-SAIGON-21",
+  "player": "http://127.0.0.1:4175/",
+  "verdict": "J5_STALL_BOARD_OK",
+  "liveJs": "/assets/index-4xUMLnYL.js",
+  "liveLen": 2161516,
+  "liveSha": "4f8cd7033ea399ad7322937c94cf0a5f0fdd48c063cdfdf60086c47f0670f5dd",
+  "stallBoardKind": "chalkboard-menu",
+  "boardText": "Cá nục sương (mẫu)Túi cói chợ (mẫu)mẫu · not a live market Cá nục sương (mẫu) | Túi cói chợ (mẫu) Cá nục sương (mẫu) | Túi cói chợ (mẫu)",
+  "lanternTitles": "Cá nục sương (mẫu) | Túi cói chợ (mẫu)",
+  "liveBoardOnScreen": true,
+  "liveBoardBox": {
+    "x": 560,
+    "y": 602,
+    "w": 164,
+    "h": 94
+  },
+  "crop": {
+    "samples": 6500,
+    "slateRatio": 0.629,
+    "chalkRatio": 0.07,
+    "creamRatio": 0.07,
+    "whiteRatio": 0.042
+  },
+  "mid": {
+    "samples": 230400,
+    "slateRatio": 0.146,
+    "chalkRatio": 0.18,
+    "creamRatio": 0.18,
+    "whiteRatio": 0.171
+  },
+  "shopOpen": "shop-lantern-fish",
+  "goods": [
+    {
+      "id": "listing-morning-mackerel",
+      "kind": "fish",
+      "status": "published",
+      "text": "Cá nục sương (mẫu)Cá / fishpublicFictional fish-class sample. Price is not a live quote.Liên hệ"
+    },
+    {
+      "id": "listing-woven-tote",
+      "kind": "bag",
+      "status": "published",
+      "text": "Túi cói chợ (mẫu)Túi / bagpublicFictional bag-class sample. Not a real product for sale.Liên hệ"
+    }
+  ],
+  "leftovers": [
+    {
+      "shop": "shop-local-sharedpc",
+      "draw": "0",
+      "keepOut": "1",
+      "titles": "Phở bò",
+      "count": 1
+    },
+    {
+      "shop": "shop-local-mtl8ulddihjpre",
+      "draw": "0",
+      "keepOut": "1",
+      "titles": "Sach phe binh J6",
+      "count": 1
+    }
+  ],
+  "leftoverDrawn": [],
+  "leftoverB": true,
+  "leftoverEStolen": false,
+  "leftoverBNearby": "",
+  "stripes": {
+    "crosswalks": 2,
+    "cornerKind": "zebra-stopline-curb",
+    "lanternZebra": true,
+    "cornerZebra": true,
+    "cornerStripes": 7,
+    "stopLines": 1,
+    "curbReturns": 4
+  },
+  "nearbyShop": "shop-lantern-fish",
+  "insideAabb": "0",
+  "shopClosed": true,
+  "honestyOk": true,
+  "boardVisible": true,
+  "shelfShowsGoods": true,
+  "shelfHidesDraft": true,
+  "leftoverKeepOut": true,
+  "stripesOk": true
+}

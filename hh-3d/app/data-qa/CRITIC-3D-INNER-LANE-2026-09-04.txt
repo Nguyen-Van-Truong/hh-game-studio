@@ -1,0 +1,123 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=08:12 +07
+ROLE=IMPLEMENTER
+TICK=n/a (do not treat this file as TICK=yes)
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M0_WP1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_OIDC=1
+PLAYER_URL=http://127.0.0.1:4175/
+RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-07
+COMMAND=node hh-3d/app/data-qa/j5-inner-lane-probe.mjs
+VERDICT_IMPLEMENTER_CDP=J5_INNER_LANE_OK
+LIVE_JS=/assets/index-Y4m4boSF.js
+LIVE_JS_LEN=2139698
+LIVE_JS_SHA256=8cfbcabf0181ab95b8b76d1a88984acae67c8af93d0ac311dcfec361d621eef0
+ONE_RECYCLE_AFTER_BUILD=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NO_COMMIT=1
+NO_HIP_SPHERES=1
+DID_NOT_RIP_DOOR_GLASS=1
+DID_NOT_RIP_FOG_EDGE=1
+DID_NOT_RIP_FOOTSTEPS=1
+DID_NOT_RIP_FRIEND_LIMBS=1
+DID_NOT_RIP_STREET_PLAY_SHOPS=1
+DID_NOT_RIP_SKY=1
+DID_NOT_RIP_CAM_HIT=1
+NO_NPC=1
+NO_INTERIOR=1
+
+================================================================================
+SLICE
+================================================================================
+
+Inner gaps already had door/glass wall language (accepted
+CRITIC-3D-SIDE-STREET-REAUDIT TICK=yes on DMtr6Df6). The floor
+still read as one light plaza. This slice paints the existing
+derived inner centerlines as lanes:
+
+1. Dark asphalt ribbon along the same AABB-derived inner
+   centerlines already used for dressing (Steps East/West and
+   the inner connectors). Not new GeoJSON streets. GeoJSON
+   kind=street count stays 2.
+
+2. Lighter walk edge + thin yellow paint, same cheap Harbor
+   Walk language. Walk width is clamped inside the parcel gap
+   so alley backs / far lots are not wallpapered.
+
+3. Harbor Walk / Tram Approach curb+walk+asphalt left as they
+   were. Raised inner curbs not added (no path trap).
+
+Harbor / lantern / spawn / bound keep-in kept. Honesty: authored
+400 m, two official named streets + inner parcel lanes, not a
+city grid.
+
+Did not rip door/glass, fog/edge keep-in, footsteps, friend
+limbs, streetPlayShops, sky, or cam-hit.
+
+================================================================================
+LANES PAINTED (existing derived centerlines)
+================================================================================
+
+Harbor Walk / Tram Approach: unchanged (38 street-facing faces,
+named-street walk/curb/edge).
+
+Inner lanes: 31 centerlines, 31 walk ribbons, 62 yellow edge
+strips. Among Steps East / Steps West and the same inner
+connectors already dressed. Not a city grid.
+
+================================================================================
+PROOF (implementer CDP vs recycled 4175)
+================================================================================
+
+typecheck EXIT=0
+npm test EXIT=0 (67 tests)
+npm run build EXIT=0  dist/assets/index-Y4m4boSF.js
+Recycled 4175 once after that build (127.0.0.1 only, pid 30084).
+Did not start 4173 / 4174 / 5175. Did not bind 0.0.0.0.
+
+Probe node hh-3d/app/data-qa/j5-inner-lane-probe.mjs EXIT=0
+  Isolated headless Chrome 1280x720, seats A + B, ports 9551 / 9552.
+
+  DOM: data-inner-lane=asphalt-walk-edge roads=31 walks=31 edges=62
+  faces=168 main=38 inner=130 extra=+130 vs Harbor-only 38
+  lamps=48 (inner 10) scooters=23 (inner 8)
+  Walk Harbor then east into Steps: +12.58 m east / +20.82 m north
+  heading 84; inside-ring=0 inside-aabb=0 alt=0.
+  Shot j5-3d-inner-lane.png: doorRatio=0.091 glassRatio=0.044
+  (door+glass still visible). Floor lum road=2.7 walk=94.3
+  delta=91.6 (darker center).
+  Then lantern: E opened shop-lantern-fish.
+  South bound: data-at-bound=1 lat=10.7707217 alt=0.
+  Seat B leftover nearby none; E did not open sharedpc / J6.
+  Fog / edge / sky / collision / walk-cycle / door-glass held.
+
+================================================================================
+OWNER LEFTOVERS (unchanged)
+================================================================================
+
+GATE-U1 three human reviewers — first plan leftover. Not faked.
+Leftover this-PC shops shop-local-sharedpc and
+shop-local-mtl8ulddihjpre stay in the catalog. They still do not
+own Nearby E / street play. Do not catalog_clear.
+OSM / Overture still NO. WAN / other-PC still NO.
+Plan checkboxes still [ ]. Not a city.
+
+================================================================================
+HONESTY
+================================================================================
+
+Still the authored 400 m box set. Two official named streets
+(Harbor Walk, Tram Approach) plus inner parcel lanes painted
+with the same cheap asphalt + walk edge. Not a downtown. Not
+OSM. NOT_PLAN_PASS. Independent critic may review; implementer
+TICK=n/a.

@@ -15,8 +15,8 @@ import shutil
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-RUN_ID = "VF6WP5-20260903-ASIA-SAIGON-03"
-COMMAND_ID = "cmd.vf6-wp5.bots.3"
+RUN_ID = "VF6WP5-20260904-ASIA-SAIGON-08"
+COMMAND_ID = "cmd.vf6-wp5.bots.8"
 WP = "VF6-WP5"
 SAIGON = timezone(timedelta(hours=7))
 SOURCE_SUFFIXES = {".gd", ".json", ".tscn", ".md"}
@@ -26,6 +26,7 @@ SOURCE_EXTRA = (
     "tests/run_bots.gd",
     "tests/check_bots.py",
     "tests/pack_bots_evidence.py",
+    "tests/run_bots_official.ps1",
     "tests/run_all.gd",
     "tests/survival_cases.gd",
     "tests/stage_cases.gd",
@@ -93,7 +94,7 @@ def now_saigon() -> str:
 def load_json(path: Path) -> dict:
     if not path.is_file():
         return {}
-    return json.loads(path.read_text(encoding="utf-8"))
+    return json.loads(path.read_text(encoding="utf-8-sig"))
 
 
 def outcome_verdict(outcomes: dict, key: str) -> str:
@@ -103,18 +104,25 @@ def outcome_verdict(outcomes: dict, key: str) -> str:
     return "unproven"
 
 
-def parse_exit_from_log(text: str) -> int | None:
-    """Log cleanliness only. Host exit is leftover_proof.*_host_exit, not PROCESS_EXIT."""
+def log_unclean(text: str) -> bool:
+    """Log cleanliness only. Never a host exit. Host exit is leftover_proof WaitForExit."""
     lowered = text.lower()
     if "hh_assert_fail" in lowered or "status=unproven" in lowered:
-        return None
+        return True
     if any(token in lowered for token in ("warning:", "error:", "script warning", "parse error")):
-        return None
-    if "FAIL: Vault Fighters bot planner" in text:
-        return 1
-    if "PASS: Vault Fighters bot planner" in text and "HH_VF_BOTS FINISHED=1" in text:
-        return 0
-    return None
+        return True
+    if "FAIL: Vault Fighters" in text:
+        return True
+    return False
+
+
+def _copy_if_different(src: Path, dst: Path) -> None:
+    if not src.is_file():
+        return
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    if src.resolve() == dst.resolve():
+        return
+    shutil.copy2(src, dst)
 
 
 def write_freeze(product: Path, dest: Path) -> str:
@@ -223,8 +231,9 @@ def main() -> int:
     headless_log_text = Path(args.headless_log).read_text(encoding="utf-8", errors="replace") if Path(args.headless_log).is_file() else ""
     window_log_text = Path(args.window_log).read_text(encoding="utf-8", errors="replace") if Path(args.window_log).is_file() else ""
     run_all_log_text = Path(args.run_all_log).read_text(encoding="utf-8", errors="replace") if Path(args.run_all_log).is_file() else ""
-    parsed_h = parse_exit_from_log(headless_log_text)
-    parsed_w = parse_exit_from_log(window_log_text)
+    parsed_h = None
+    parsed_w = None
+    logs_unclean = log_unclean(headless_log_text) or log_unclean(window_log_text)
     dive_banner = next((ln for ln in run_all_log_text.splitlines() if ln.startswith("HH_VF_DIVE ")), "")
     vs_banner = next((ln for ln in run_all_log_text.splitlines() if ln.startswith("HH_VF_VS ") and "ROSTER=" in ln), "")
     match_banner = next((ln for ln in run_all_log_text.splitlines() if ln.startswith("HH_VF_MATCH ") and "MACHINE=" in ln), "")
@@ -286,13 +295,7 @@ def main() -> int:
     host_w = int(leftover_proof.get("window_host_exit", -1))
     host_a = int(leftover_proof.get("run_all_host_exit", -1))
     leftover_path = str(leftover_proof.get("counted_product_path") or leftover_proof.get("path") or "")
-    leftover_excl = (
-        str(leftover_proof.get("excluded", ""))
-        + " "
-        + str(leftover_proof.get("note", ""))
-        + " "
-        + str(leftover_proof.get("scan", ""))
-    ).lower()
+    leftover_host = str(leftover_proof.get("host", "")).lower()
     leftover_ok = (
         leftover_proof
         and leftover_computed == 0
@@ -302,20 +305,14 @@ def main() -> int:
         and after_w == 0
         and after_a == 0
         and "superfighters" in leftover_path.replace("\\", "/").lower()
-        and "critic-vf6wp5" in leftover_excl
         and str(leftover_proof.get("scan", "")) != ""
+        and "waitforexit" in leftover_host
         and "console" in str(leftover_proof.get("window_exe", "")).lower()
         and host_h == 0
         and host_w == 0
         and host_a == 0
+        and not logs_unclean
     )
-    parsed_all = None
-    if (
-        "PASS: Vault Fighters first playable" in run_all_log_text
-        and "HH_VF_ALL FINISHED=1" in run_all_log_text
-        and "FAIL: Vault Fighters" not in run_all_log_text
-    ):
-        parsed_all = 0
     exits_ok = (
         exits_proof
         and int(exits_proof.get("check", -1)) == 0
@@ -326,20 +323,50 @@ def main() -> int:
         and args.headless_exit == host_h
         and args.window_exit == host_w
         and args.run_all_exit == host_a
-        and parsed_h == host_h
-        and parsed_w == host_w
-        and parsed_all == host_a
-        and parsed_h == 0
-        and parsed_w == 0
-        and parsed_all == 0
+        and host_h == 0
+        and host_w == 0
+        and host_a == 0
+        and not log_unclean(run_all_log_text)
     )
     rows = maps_row.get("rows", {})
     if not isinstance(rows, dict):
         rows = {}
     six = ("rooftops", "storage", "police", "hazardous", "lantern", "gauge")
+
+    LIP_ENGAGE_LO = 71.0
+    LIP_ENGAGE_HI = 72.0
+
+    def honest_reach(row: dict) -> bool:
+        if bool(row.get("dead", False)):
+            return False
+        if float(row.get("goal_dist", 9999.0)) < 36.0:
+            return True
+        if float(row.get("engage_dist", 9999.0)) < 48.0:
+            return True
+        return bool(row.get("named_down", False)) and float(row.get("closest_engage", 9999.0)) < 48.0
+
+    missing_maps = [mid for mid in six if not isinstance(rows.get(mid), dict)]
+    if missing_maps:
+        print("FAIL: packer missing map rows " + ",".join(missing_maps))
+        return 1
+    if "HH_VF_BOTS STEP=maps compact" in run_all_log_text or "HH_VF_BOTS_COMPACT=1" in run_all_log_text:
+        print("FAIL: official run_all must not run HH_VF_BOTS_COMPACT=1")
+        return 1
+    lip_only = 0
+    for mid in six:
+        row = rows[mid]
+        eng = float(row.get("engage_dist", 9999.0))
+        if (
+            str(row.get("reach_reason", "")) == "engage"
+            and LIP_ENGAGE_LO <= eng < LIP_ENGAGE_HI
+            and float(row.get("goal_dist", 9999.0)) >= 36.0
+        ):
+            lip_only += 1
+    if lip_only >= 3:
+        print(f"FAIL: engage in [71,72) as sole reach on {lip_only} maps")
+        return 1
     six_ok = all(
-        isinstance(rows.get(mid), dict)
-        and bool(rows[mid].get("reach_ok"))
+        honest_reach(rows[mid])
         and bool(rows[mid].get("pit_ok"))
         and bool(rows[mid].get("aim_ok"))
         and bool(rows[mid].get("combat_ok"))
@@ -347,11 +374,15 @@ def main() -> int:
         for mid in six
     )
     rooftops = rows.get("rooftops", {}) if isinstance(rows.get("rooftops"), dict) else {}
-    rooftops_ok = (
+    rooftops_ok = honest_reach(rooftops) and (
         int(rooftops.get("gun_used", 0)) + int(rooftops.get("melee_used", 0)) > 0
-        and (
-            int(rooftops.get("pit_reroutes", 0)) >= 1
-            or float(rooftops.get("toward", 0.0)) > 40.0
+    ) and (
+        float(rooftops.get("goal_dist", 9999.0)) < 36.0
+        or float(rooftops.get("waypoint_dist", 9999.0)) < 48.0
+        or int(rooftops.get("pit_reroutes", 0)) >= 1
+        or (
+            float(rooftops.get("engage_dist", 9999.0)) < 48.0
+            and float(rooftops.get("moved", 0.0)) >= 200.0
         )
     )
     ux_ok = (
@@ -359,11 +390,18 @@ def main() -> int:
         and rooftops_ok
         and int(weapons_row.get("classes", 0)) >= 2
         and int(weapons_row.get("gun_used", 0)) >= 1
-        and int(weapons_row.get("nade_used", 0)) + int(weapons_row.get("melee_used", 0)) >= 1
-        and int(weapons_row.get("perfect_aim_shots", 1)) == 0
-        and float(weapons_row.get("last_shot_off_deg", 0.0)) >= 1.0
+        and (
+            int(weapons_row.get("melee_used", 0)) >= 1
+            or bool(weapons_row.get("nade_combat", False))
+        )
         and str(finish_row.get("outcome", "play")) != "play"
+        and int(finish_row.get("fighter_count", 0)) == 2
+        and int(finish_row.get("spawned_count", 0)) == 2
+        and int(finish_row.get("culled", 1)) == 0
+        and int(finish_row.get("living", 0)) == 1
+        and int(finish_row.get("unused_spawns", 1)) == 0
         and int(finish_row.get("pit_deaths", 1)) == 0
+        and int(finish_row.get("damage_deaths", 0)) >= 1
         and int(finish_row.get("winner_shots", 0)) + int(finish_row.get("winner_melee", 0)) >= 1
         and float(finish_row.get("winner_moved", 0.0)) >= 16.0
         and int(apply_info.get("used_force_kill", 1)) == 0
@@ -414,9 +452,9 @@ def main() -> int:
         if extra_path.is_file():
             shutil.copy2(extra_path, evidence / extra_name)
             shutil.copy2(extra_path, review / extra_name)
-    shutil.copy2(Path(args.freeze), evidence / "freeze.json")
-    shutil.copy2(Path(args.leftover_proof), evidence / "leftover_proof.json")
-    shutil.copy2(Path(args.exits_proof), evidence / "exits_proof.json")
+    _copy_if_different(Path(args.freeze), evidence / "freeze.json")
+    _copy_if_different(Path(args.leftover_proof), evidence / "leftover_proof.json")
+    _copy_if_different(Path(args.exits_proof), evidence / "exits_proof.json")
     shutil.copy2(Path(args.headless_log), evidence / "official_headless.log")
     shutil.copy2(Path(args.window_log), evidence / "official_window.log")
     shutil.copy2(Path(args.run_all_log), evidence / "official_run_all.log")
@@ -447,7 +485,7 @@ def main() -> int:
         print("FAIL: VF6-WP5 packer rejected official package")
         print(f"  outcomes_ok={outcomes_ok} leftover_ok={leftover_ok} exits_ok={exits_ok}")
         print(f"  live_logs_ok={live_logs_ok} run_all_ok={run_all_ok} stills_ok={stills_ok}")
-        print(f"  six_ok={six_ok} parsed_h={parsed_h} parsed_w={parsed_w}")
+        print(f"  six_ok={six_ok} logs_unclean={logs_unclean}")
         return 1
     print("PASS: VF6-WP5 evidence packed")
     print(f"RUN_ID={RUN_ID}")

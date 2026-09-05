@@ -1,0 +1,498 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+BOOTED_4175=1
+DID_NOT_RECYCLE=1
+DID_NOT_REBUILD=1
+DID_NOT_REMINT=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M1=1
+NOT_M0_WP1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+HASH_MISMATCH=0
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=17:09 +07
+MODEL=grok-4.6-extra-high
+SCOPE=Re-audit of claimed isolated guest-B Chè chalkboard + E-open on already-up C3JOtA3q. Do not treat CRITIC-3D-CHE-BOARD-2026-09-04.txt as TICK=yes.
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=04cb6ca92c482017c02d78e7885727f73b62103d
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-CHE-BOARD-REAUDIT-2026-09-04.txt
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-CHE-BOARD-2026-09-04.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+DID_NOT_TREAT_IMPLEMENTER_AS_TICK_YES=1
+IMPLEMENTER_CDP_NOT_PROOF=1
+IMPLEMENTER_JSON_NOT_PROOF=1
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_UNFRIEND=1
+DID_NOT_ADD_FRIEND=1
+DID_NOT_CLICK_ONLINE=1
+VITE_PREVIEW_PORT_PIN=4175
+LIVE_PID=51752
+LISTEN=127.0.0.1:4175
+CRITIC_CDP_PORT=9881
+IMPLEMENTER_CDP_PORT_NOT_REUSED=1
+IMPLEMENTER_PROBE_NOT_RUN=1
+VIEWPORT=1280x720
+ISOLATED_PROFILES=1
+HEADLESS_NEW=1
+ABOUT_BLANK_THEN_NAVIGATE=1
+SEAT=b
+
+CLAIM_JS=/assets/index-C3JOtA3q.js
+CLAIM_JS_LEN=2169322
+CLAIM_JS_SHA256=c000db65138fc3c3f48583ba17d1032aa82c5fca0ef4047cdf2d5db1bc2bcdc7
+LIVE_JS=/assets/index-C3JOtA3q.js
+LIVE_JS_LEN=2169322
+LIVE_JS_SHA256=c000db65138fc3c3f48583ba17d1032aa82c5fca0ef4047cdf2d5db1bc2bcdc7
+LIVE_JS_MATCHES_CLAIM=1
+HASH_MISMATCH=0
+LIVE_JS_AFTER_CDP=/assets/index-C3JOtA3q.js
+LIVE_JS_LEN_AFTER_CDP=2169322
+LIVE_JS_SHA256_AFTER_CDP=c000db65138fc3c3f48583ba17d1032aa82c5fca0ef4047cdf2d5db1bc2bcdc7
+CONTENT_LENGTH_HEADER=2169322
+
+GUEST_IDENTITY=Guest · shops public; friends not required
+GUEST_SIGNED_IN=no
+PRESENCE=Offline — Stroll alone; shops still open.
+ONLINE_ACTIVE=no
+OFFLINE_ACTIVE=yes
+FRIEND_A_RELATION=none
+FRIEND_ROW_A_ACCEPTED=0
+DID_CLICK_ADD_FRIEND=0
+STAYED_OFFLINE=1
+
+CHE_SHOP=shop-local-mtmrbdjffjdkg8
+CHE_SHOP_NAME=Quầy Chè Vỉa
+CHE_BOARD_TEXT_OBSERVED=Chè đậu (mẫu) / mẫu · not a live market
+CHE_CROP_BLANK=0
+CHE_CROP_GENERIC=0
+CHE_CROP_DATA_ATTR_ONLY=0
+CHE_CROP_HAS_CHE=1
+CHE_CROP_HAS_DAU=1
+CHE_CROP_BOX=805,280 256x81 (live overlay; critic crop 288x113 with pad)
+CHE_CROP_SLATE=0.520
+CHE_CROP_CHALK=0.053
+CHE_STAND_LON=106.6980773
+CHE_STAND_LAT=10.7719688
+CHE_STAND_CHIP=Harbor Walk
+CHE_STAND_DPLANT=3.33
+CHE_NEARBY=shop-local-mtmrbdjffjdkg8
+CHE_RANGE=Quầy Chè Vỉa: 3.3 m away
+CHE_HINT=Press E or tap Open to enter Quầy Chè Vỉa.
+E_OBSERVED=shop-local-mtmrbdjffjdkg8
+CHE_E_OPENED=shop-local-mtmrbdjffjdkg8
+CHE_SHELF=Chè đậu (listing-local-mtmrbdjfe1fzp3, published)
+CHE_LEFTOVER_BANNER=0
+CHE_PANEL_KIND=public shop · opened on this machine
+
+KEM_SHOP=shop-local-mtmrq33hoq4phb
+KEM_DRAWN=1
+KEM_SKIPPED_HIDDEN=0
+KEM_BOARD_TEXT_OBSERVED=Kem dua (mẫu) / mẫu · not a live market
+KEM_CROP_BLANK=0
+KEM_CROP_SLATE=0.488
+KEM_CROP_CHALK=0.098
+
+PHO_SHOP=shop-local-mtmh45qxehxhvb
+PHO_BOARD_TEXT_OBSERVED=Phở bò (mẫu) / mẫu · not a live market
+PHO_CROP_HAS_PHO=1
+
+LANTERN_SHOP=shop-lantern-fish
+LANTERN_BOARD_TEXT_OBSERVED=Cá nục sương / (mẫu) / Túi cói chợ (mẫu) / mẫu · not a live market
+LANTERN_CROP_HAS_CA=1
+LANTERN_CROP_HAS_TUI=1
+LANTERN_CROP_HAS_CHE=0
+
+LEFTOVER_E_STOLEN=0
+leftoverEStolen=0
+LEFTOVER_DRAWN=0
+LEFTOVER_SHAREDPC_DRAW=0
+LEFTOVER_J6_DRAW=0
+SPAWN_NEARBY=
+SPAWN_E_PANEL=0
+SPAWN_E_OPENED=
+
+ASPHALT_LON=106.6980389
+ASPHALT_LAT=10.7719667
+ASPHALT_CHIP=Harbor Walk
+ASPHALT_LANE_M=0.01
+ASPHALT_NEARBY=
+ASPHALT_RANGE=Walk to a stall.
+ASPHALT_RANGE_NAMES_CHE=0
+ASPHALT_E=none
+
+HONESTY_DENIES_GTA=1
+HONESTY_DENIES_1TO1=1
+HONESTY_DENIES_DIGITAL_TWIN=1
+OIDC_CLAIM=0
+
+CLAIM_1_LIVE_HASH=PASS
+CLAIM_2_CHE_BOARD_READABLE_BEFORE_E=PASS
+CLAIM_3_E_OPENS_CHE=PASS
+CLAIM_4_KEM_BOARD_IF_DRAWN=PASS
+CLAIM_5_LANTERN_PHO_LEFTOVER=PASS
+CLAIM_6_ASPHALT_E_NONE=PASS
+CLAIM_7_HONESTY_NO_OIDC=PASS
+
+BIGGEST_MISS=none on the named hunts. Live hash matches C3JOtA3q / 2169322 / c000db65… before CDP, after CDP, and after this write. Isolated empty-profile seat B stayed Guest / Offline / friendA=none. Independent Harbor-side walk-up crop (not implementer 625,259) reads Chè đậu (mẫu) — not blank, not generic, not a data attribute. E opened shop-local-mtmrbdjffjdkg8; shelf Chè đậu published. Kem is drawn and its crop reads Kem dua (mẫu). Lantern crop still Cá/Túi. Phở crop still Phở bò. Shared PC / J6 stay draw=0. Spawn E none. Harbor asphalt at the old-style centerline (laneM=0.01) has Nearby empty, range “Walk to a stall.” (does not name Chè), E=none. NOT_PLAN_PASS.
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/ was already up. Bind 127.0.0.1 pid 51752
+(node vite preview --host 127.0.0.1 --port 4175 --strictPort).
+Did not recycle, rebuild, remint, kill, or start 4173 / 4174 / 5175.
+Did not bind 0.0.0.0. DID_NOT_RECYCLE=1.
+
+Did not treat CRITIC-3D-CHE-BOARD-2026-09-04.txt as TICK=yes
+(ROLE=IMPLEMENTER, TICK=n/a, REMINTED=no). Implementer CDP /
+J5_CHE_BOARD_OK JSON is not acceptance. Did not run
+j5-che-board-probe.mjs (it would overwrite their J5 pack and
+reuse port 9733). Did not write J5 packs. Did not tick any plan.
+Did not catalog_clear. Did not POST graph_op. Did not click Online.
+
+Independent Chrome CDP, isolated temp profile, 1280×720,
+about:blank then ?seat=b. Own debug port 9881, not implementer
+9733 and not the prior sidewalk-reaudit 9867/9868. Tried to fail:
+hash drift; Chè board blank / generic / unreadable / data-attr
+only; E opens the wrong shop or a leftover; Kem drawn but board
+blank; lantern ripped to Chè; Phở ripped off Phở; Shared PC / J6
+draw=1 or steal spawn E; Harbor asphalt at the old-style
+centerline names Chè or opens E; honesty drops GTA / 1:1 /
+digital-twin denials; OIDC claim.
+
+Hash matches. Isolated guest B reads Chè đậu on the walk-up
+board before E. E opens that shop. Kem / lantern / Phở / leftover
+/ asphalt hunts hold. TICK=yes. NOT_PLAN_PASS. GATE-U1 humans
+were not invented. Not M1.
+
+================================================================================
+LIVE JS
+================================================================================
+
+GET http://127.0.0.1:4175/  STATUS=200
+HTML script = /assets/index-C3JOtA3q.js
+
+GET /assets/index-C3JOtA3q.js
+  Content-Length = 2169322   (curl -sI; fetch() header was empty)
+  bytes          = 2169322
+  sha256         = c000db65138fc3c3f48583ba17d1032aa82c5fca0ef4047cdf2d5db1bc2bcdc7
+
+Matches the claimed live name + length + hash exactly.
+GET before CDP 9881, GET after the walk, and GET after this
+write (same pid 51752) are the same bytes.
+HASH_MISMATCH=0. Did not stop. Did not audit an old bundle.
+
+Bundle scan (live bytes, not source):
+  openstreetmap = 0
+  overture = 2   (honesty copy "not OSM/Overture", not a fetch)
+  0.0.0.0 = 0
+  chalkboard-menu = 1
+  not a live market = 3
+  shop-lantern-fish = 1
+  mtmrbdjffjdkg8 = 0   (this-PC shop id is persist, not bundled)
+  mtmrq33hoq4phb = 0
+
+/demo-bus this_pc=true bind=127.0.0.1 not_wan=true.
+graph.pairs=[] (empty). presence={}.
+Catalog leftover persist (not reminted, not cleared):
+  shop-local-sharedpc          Quầy Shared PC      106.69804, 10.77162
+  shop-local-mtl8ulddihjpre    Quay Critic J6 Jump 106.6981497, 10.77162
+Drawn this-PC street shops:
+  shop-local-mtmh45qxehxhvb    Quầy Phở Nhà        listing Phở bò
+  shop-local-mtmrbdjffjdkg8    Quầy Chè Vỉa        listing Chè đậu
+  shop-local-mtmrq33hoq4phb    Quay Kem Reaudit    listing Kem dua
+
+================================================================================
+CLAIM 1 — LIVE HASH IS THE CLAIMED BUNDLE — PASS
+================================================================================
+
+Tried to fail as a later/earlier bundle or SPA-shell fallback
+on the claimed name.
+
+  live = /assets/index-C3JOtA3q.js
+  len  = 2169322
+  sha  = c000db65138fc3c3f48583ba17d1032aa82c5fca0ef4047cdf2d5db1bc2bcdc7
+
+Same name + length + hash from pid 51752 before CDP, after CDP,
+and after this write. HASH_MISMATCH=0.
+
+PASS.
+
+================================================================================
+CLAIM 2 — CHÈ BOARD IS PLAYER-READABLE BEFORE E — PASS
+================================================================================
+
+Tried to fail: isolated guest B walks to Quầy Chè Vỉa and the
+chalkboard is blank, generic, unreadable, or only a hidden
+data-titles attribute. Prefer TICK=no if the crop is a green
+slab or lantern Cá/Túi.
+
+Isolated empty Chrome profile, ?seat=b, Offline, friendA=none.
+Did not unfriend. Did not add friend. Did not catalog_clear.
+
+Independent walk (not implementer walkToward 1600/900/420 and
+not their -2.05/-1.35 plant offset). Seat B already faces west.
+North along Steps East jammed around lat 10.7716913, then slipped
+west onto Harbor Walk and continued north (chunk holds 1300/750/
+480/280). Harbor-side stand, then hops to
+offsetLngLat(plant, -2.35, -0.85) and 106.6980863 / 10.7719624
+if Nearby missed. Shot BEFORE E.
+
+Stand:
+  lon=106.6980773  lat=10.7719688  heading=45.7
+  chip=Harbor Walk  dPlant=3.33
+  nearby=shop-local-mtmrbdjffjdkg8
+  range="Quầy Chè Vỉa: 3.3 m away"
+  hint="Press E or tap Open to enter Quầy Chè Vỉa."
+  live overlay 805,280 256×81
+  critic crop 288×113  slateRatio=0.520  chalkRatio=0.053
+
+Visual read of critic-che-overlay-crop.png and critic-che-wide.png
+(pixels, not data-titles):
+  dark-green chalkboard, thin brown frame
+  chalk line: Chè đậu (mẫu)
+  footer: mẫu · not a live market
+
+This is not a blank green slab. It is not generic stall copy.
+It is not lantern Cá/Túi. Hidden [data-testid=play-stall-boards]
+titles were recorded but were not the accept path.
+
+CROP_BLANK=0. CROP_GENERIC=0. CROP_DATA_ATTR_ONLY=0.
+
+PASS.
+
+================================================================================
+CLAIM 3 — E OPENS shop-local-mtmrbdjffjdkg8 — PASS
+================================================================================
+
+Tried to fail: E no-ops, opens lantern / Phở / Shared PC / J6,
+or the shelf lacks the published listing.
+
+After the crop, held E (own 200 ms hold, not their 180):
+  panel=true
+  shopPanelId=shop-local-mtmrbdjffjdkg8
+  leftover=0  leftover banner absent
+  kind="public shop · opened on this machine"
+  shelf listing-local-mtmrbdjfe1fzp3  Chè đậu  published
+  “Local demo listing. Free-text sample. Not a real product.”
+
+After-E still shows the same chalkboard (Chè đậu (mẫu)) above
+the orange “Quầy Chè Vỉa” plaque. Guest signed-in=no.
+
+PASS.
+
+================================================================================
+CLAIM 4 — KEM IS DRAWN; BOARD READS Kem dua — PASS
+================================================================================
+
+Tried to fail: Kem draw=1 but the walk-up board is blank or
+still Chè/Phở/lantern text. Hidden leftover is not a fail;
+Kem is not leftover.
+
+play-shop-stalls: shop-local-mtmrq33hoq4phb draw=1.
+Walked an independent offset (-1.6 east, -1.2 north of plant).
+Nearby at that stand was empty (range="Walk to a stall.") —
+that is a stall-range miss at that pose, not a hidden shop.
+Live overlay was on screen. Crop 396,272 259×82.
+
+Visual read of critic-kem-overlay-crop.png:
+  dark-green chalkboard, thin brown frame
+  chalk: Kem dua (mẫu)
+  footer: mẫu · not a live market
+  slateRatio=0.488  chalkRatio=0.098
+
+Player-readable. Not skipped as leftover. PASS.
+
+================================================================================
+CLAIM 5 — LANTERN CÁ/TÚI; PHỞ STILL PHỞ; LEFTOVER draw=0 — PASS
+================================================================================
+
+Tried to fail: lantern board rewritten to Chè; Phở board
+blank or Chè; Shared PC / J6 draw=1; spawn E stolen.
+
+Lantern overlay crop (pixels):
+  Cá nục sương
+  (mẫu)
+  Túi cói chợ (mẫu)
+  footer mẫu · not a live market
+  nearby=shop-lantern-fish
+  No Chè on that face.
+
+Phở overlay crop (pixels):
+  Phở bò (mẫu)
+  footer mẫu · not a live market
+  nearby=shop-local-mtmh45qxehxhvb
+
+Leftover play-stall-boards / play-shop-stalls:
+  leftoverDrawn=[]
+  leftoverStallDrawn=[]
+  Shared PC / J6 stay persist-only on /demo-bus (draw=0).
+
+Spawn (seat B, empty profile) before any walk:
+  nearby empty
+  range="Walk to a stall."
+  hint="E opens a stall when you are next to it."
+  held E: panel=false  opened=""
+  leftoverEStolen=0
+
+PASS.
+
+================================================================================
+CLAIM 6 — HARBOR ASPHALT AT CHÈ OLD-STYLE CENTERLINE — PASS
+================================================================================
+
+Tried to fail if Nearby named Chè, if shop-range printed Chè +
+meters, or if E opened shop-local-mtmrbdjffjdkg8 on empty
+asphalt.
+
+Independent Harbor nearest-point of Chè persist
+(106.6981047, 10.7719753), not the implementer JSON stand.
+Asphalt target 106.6980389, 10.7719744. Stand:
+
+  lon=106.6980389  lat=10.7719667
+  chip=Harbor Walk  laneM=0.01
+  nearby empty
+  range="Walk to a stall."
+  hint="E opens a stall when you are next to it."
+  rangeNamesChe=0
+  E-at-asphalt = none
+
+The Chè kiosk is visible off to the sidewalk from that
+centerline (asphalt shot still shows the distant board). That
+is not shop-range naming Chè and is not Nearby/E. PASS.
+
+================================================================================
+CLAIM 7 — HONESTY DENIES GTA / 1:1 / DIGITAL TWIN; NO OIDC — PASS
+================================================================================
+
+Honesty banner (live HUD, guest B spawn / Chè / asphalt):
+
+  “Authored approximation. Not a live map, not OSM/Overture,
+  not photogrammetry, and not a digital twin. No GTA claim,
+  no 1:1 city. … Menu boards list authored fiction goods,
+  not a live market. NOT_PLAN_PASS.”
+
+Board footer on every crop: “mẫu · not a live market”.
+OIDC appears only as a denial on the create-shop identity
+line if opened; this guest never became owner. No “sign in
+with Google / OIDC login”. signed-in=no.
+
+PASS.
+
+================================================================================
+WHAT THE IMPLEMENTER CDP DID NOT PROVE
+================================================================================
+
+Their J5 pack cropped 625,259 231×73 at a Harbor-side plant
+hug they already knew, then reused those pixels as the
+board proof. This reaudit used a different CDP port, a
+different walk (Steps-East jam → Harbor north → independent
+offsets), and read a different overlay box (805,280). Their
+J5_CHE_BOARD_OK JSON and j5-3d-che-board-crop.png were not
+used as proof.
+
+Kem Nearby was empty at the independent Kem offset even
+though the board was on-screen. That does not fail this
+slice (the hunt is the painted listing, and Kem is drawn).
+It is a stall-range pose miss, not a leftover hide.
+
+================================================================================
+HUNTS (not named fails)
+================================================================================
+
+Straight north on Steps East from B spawn jammed near
+lat 10.7716913 for several chunks, then west onto Harbor.
+That is the same class of sidewalk-plant block seen on
+earlier guest walks. Harbor north still reached Chè.
+
+atChe chip stayed Harbor Walk at dPlant=3.33 (Nearby still
+Chè). Implementer plant-hug sat on Steps East. Both poses
+can see the board; this critic accepted the Harbor-side
+readable crop + E, not their exact Steps East numbers.
+
+Live JS does not embed “Chè đậu”; the title comes from
+this-PC /demo-bus persist. That is not a hash miss.
+
+Leftover Shared PC / J6 still persist in the loopback
+catalog. That is allowed. The fail was ownership of street
+E or draw=1. They own neither.
+
+Default Play stayed R3F 1280×720. Did not grind hitch /
+min FPS. Did not claim GATE-U1.
+
+================================================================================
+METHOD
+================================================================================
+
+1. 4175 already up (pid 51752). Did not recycle / rebuild /
+   start other ports.
+2. GET /  /demo-bus  /data/shops.json  /data/ben-thanh-400m.authored.geojson
+   /assets/index-C3JOtA3q.js. Recorded name+sha+len before CDP,
+   after the walk, and after this write. curl -sI for
+   Content-Length.
+3. Read implementer note (TICK=n/a). Did not copy its probe
+   writer into product files. Did not run
+   j5-che-board-probe.mjs as proof. Did not POST unfriend.
+4. Independent Chrome CDP 1280×720 isolated profile.
+   Port 9881: about:blank → ?seat=b, leftover E at spawn,
+   Harbor-side Chè crop BEFORE E, E, Kem crop, Phở crop,
+   lantern crop, asphalt E.
+5. Did not write lead packs. Did not tick plan. Did not fake
+   GATE-U1.
+
+Temp only (not under data-qa):
+  %TEMP%\hh-che-board-reaudit\hash-bus.mjs
+  %TEMP%\hh-che-board-reaudit\hash-bus.json
+  %TEMP%\hh-che-board-reaudit\hash-after.mjs
+  %TEMP%\hh-che-board-reaudit\critic-che-board-reaudit.mjs
+  %TEMP%\hh-che-board-reaudit\critic-walk.json
+  %TEMP%\hh-che-board-reaudit\critic-che-before-e.png
+  %TEMP%\hh-che-board-reaudit\critic-che-overlay-crop.png
+  %TEMP%\hh-che-board-reaudit\critic-che-wide.png
+  %TEMP%\hh-che-board-reaudit\critic-che-after-e.png
+  %TEMP%\hh-che-board-reaudit\critic-kem-overlay-crop.png
+  %TEMP%\hh-che-board-reaudit\critic-pho-overlay-crop.png
+  %TEMP%\hh-che-board-reaudit\critic-lantern-overlay-crop.png
+  %TEMP%\hh-che-board-reaudit\critic-asphalt.png
+
+================================================================================
+OWNER LEFTOVERS (unchanged; not this tick)
+================================================================================
+
+1. GATE-U1 three-human review (first acceptance leftover; not faked).
+2. R2-WP1 headed/mobile/memory/min-FPS thresholds still UNFILLED.
+3. WAN / other-PC join still not built. 4175 loopback only.
+4. R4-WP0B real account/OIDC still not built.
+5. Open data (OSM/Overture) still needs license ledger + grant.
+6. Leftover this-PC shops stay in the catalog; they do not own street E.
+   Menu list + open panel still label them leftover. Do not catalog_clear.
+7. M0/M1/M2 plan WPs still NOT_STARTED. NOT_PLAN_PASS. Not M1.
+
+TICK=yes. NOT_PLAN_PASS. Not M1. Not GATE-U1.
+
+================================================================================
+END
+================================================================================

@@ -1,0 +1,605 @@
+{
+  "run_id": "HH3D-J5-20260904-ASIA-SAIGON-40",
+  "player": "http://127.0.0.1:4175/",
+  "verdict": "J5_HARBOR_SOUTH_OK",
+  "reminted": false,
+  "liveJs": "/assets/index-C3JOtA3q.js",
+  "liveLen": 2169322,
+  "liveSha": "c000db65138fc3c3f48583ba17d1032aa82c5fca0ef4047cdf2d5db1bc2bcdc7",
+  "chip": "Harbor Walk",
+  "streetName": "Harbor Walk",
+  "mini": {
+    "present": true,
+    "kind": "authored-hud-lanes",
+    "official": 2,
+    "inner": 2,
+    "extra": 2,
+    "names": "Tram Approach,Harbor Walk,Steps East,Steps West",
+    "active": "Harbor Walk",
+    "highlight": "1",
+    "activeRole": "official"
+  },
+  "spawnDist": 53.16,
+  "harborLaneM": 0.46,
+  "tramLaneM": 150.84,
+  "tramZebraDist": 150.85,
+  "lanternZebraDist": 80.86,
+  "heading": 197,
+  "camPitch": -24.8,
+  "southLamps": [
+    "lamp-street-harbor-walk-0-e",
+    "lamp-street-harbor-walk-0-w",
+    "lamp-street-harbor-walk-1-e",
+    "lamp-street-harbor-walk-1-w"
+  ],
+  "southPlanters": [],
+  "northPlantersStay": [
+    "planter-harbor-shop-e",
+    "planter-harbor-shop-w",
+    "planter-harbor-north-e",
+    "planter-tram-east-s"
+  ],
+  "stackedOnZebra": [
+    "lamp-harbor-shop-e",
+    "lamp-harbor-shop-w"
+  ],
+  "zebraTram": {
+    "id": "crosswalk-harbor-tram",
+    "x": 7.6,
+    "z": 0
+  },
+  "zebraLantern": {
+    "id": "crosswalk-harbor-lantern",
+    "x": 4.4,
+    "z": -69.99
+  },
+  "furnitureDom": true,
+  "streetPix": true,
+  "furniturePix": true,
+  "southFloor": {
+    "samples": 33600,
+    "whiteRatio": 0.043,
+    "curbRatio": 0.023,
+    "darkRatio": 0.883,
+    "walkRatio": 0.043,
+    "greenRatio": 0,
+    "lampRatio": 0.884,
+    "yellowRatio": 0.011
+  },
+  "southMid": {
+    "samples": 25878,
+    "whiteRatio": 0.174,
+    "curbRatio": 0.044,
+    "darkRatio": 0.701,
+    "walkRatio": 0.174,
+    "greenRatio": 0,
+    "lampRatio": 0.705,
+    "yellowRatio": 0.017
+  },
+  "lookFloor": {
+    "samples": 33600,
+    "whiteRatio": 0.03,
+    "curbRatio": 0.017,
+    "darkRatio": 0.912,
+    "walkRatio": 0.03,
+    "greenRatio": 0,
+    "lampRatio": 0.912,
+    "yellowRatio": 0.005
+  },
+  "lookMid": {
+    "samples": 27240,
+    "whiteRatio": 0.117,
+    "curbRatio": 0.04,
+    "darkRatio": 0.724,
+    "walkRatio": 0.115,
+    "greenRatio": 0,
+    "lampRatio": 0.755,
+    "yellowRatio": 0.014
+  },
+  "geoStreets": [
+    "Tram Approach",
+    "Harbor Walk"
+  ],
+  "lanternE": "shop-lantern-fish",
+  "leftoverBanners": {
+    "shared": true,
+    "j6": true,
+    "leftoverLast": true,
+    "draw": [],
+    "stallDraw": []
+  },
+  "spawnE": "none",
+  "spawnEStolen": false,
+  "stalls": {
+    "che": {
+      "shop": "shop-local-mtmrbdjffjdkg8",
+      "draw": "1",
+      "keepOut": "0",
+      "titles": "Chè đậu (mẫu)"
+    },
+    "kem": {
+      "shop": "shop-local-mtmrq33hoq4phb",
+      "draw": "1",
+      "keepOut": "0",
+      "titles": "Kem dua (mẫu)"
+    },
+    "pho": {
+      "shop": "shop-local-mtmh45qxehxhvb",
+      "draw": "1",
+      "keepOut": "0",
+      "titles": "Phở bò (mẫu)"
+    },
+    "lantern": {
+      "shop": "shop-lantern-fish",
+      "draw": "1",
+      "keepOut": "0",
+      "titles": "Cá nục sương (mẫu) | Túi cói chợ (mẫu)"
+    }
+  },
+  "stand": {
+    "lon": 106.69805074601555,
+    "lat": 10.771099073991833
+  },
+  "atSouth": {
+    "lon": 106.6980543,
+    "lat": 10.771145,
+    "chip": "Harbor Walk",
+    "heading": 197
+  },
+  "southAlongM": 34.05292294434041,
+  "harborLen": 380.3288150545663,
+  "standWalk": [
+    {
+      "i": 0,
+      "lon": 106.698059,
+      "lat": 10.7715944,
+      "d": 55.15,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 1,
+      "lon": 106.6980631,
+      "lat": 10.7715686,
+      "d": 52.29,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 2,
+      "lon": 106.6980672,
+      "lat": 10.771543,
+      "d": 49.45,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 3,
+      "lon": 106.6980712,
+      "lat": 10.7715176,
+      "d": 46.64,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 4,
+      "lon": 106.6980753,
+      "lat": 10.7714918,
+      "d": 43.8,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 5,
+      "lon": 106.6980794,
+      "lat": 10.7714662,
+      "d": 40.99,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 6,
+      "lon": 106.6980835,
+      "lat": 10.7714404,
+      "d": 38.16,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 7,
+      "lon": 106.6980876,
+      "lat": 10.7714149,
+      "d": 35.39,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 8,
+      "lon": 106.6980916,
+      "lat": 10.7713893,
+      "d": 32.62,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 9,
+      "lon": 106.6980957,
+      "lat": 10.7713635,
+      "d": 29.84,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 10,
+      "lon": 106.6980874,
+      "lat": 10.7713389,
+      "d": 27,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 11,
+      "lon": 106.6980793,
+      "lat": 10.7713149,
+      "d": 24.23,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 12,
+      "lon": 106.6980709,
+      "lat": 10.7712901,
+      "d": 21.38,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 13,
+      "lon": 106.6980626,
+      "lat": 10.7712656,
+      "d": 18.58,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 14,
+      "lon": 106.6980543,
+      "lat": 10.771241,
+      "d": 15.8,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 15,
+      "lon": 106.6980461,
+      "lat": 10.7712167,
+      "d": 13.1,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 16,
+      "lon": 106.6980519,
+      "lat": 10.7711915,
+      "d": 10.29,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 17,
+      "lon": 106.6980555,
+      "lat": 10.7711761,
+      "d": 8.59,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 18,
+      "lon": 106.698059,
+      "lat": 10.7711606,
+      "d": 6.91,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 19,
+      "lon": 106.6980543,
+      "lat": 10.771145,
+      "d": 5.13,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    }
+  ],
+  "lanternWalk": [
+    {
+      "i": 0,
+      "lon": 106.6980535,
+      "lat": 10.7711661,
+      "d": 79.73,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 1,
+      "lon": 106.6980524,
+      "lat": 10.7711965,
+      "d": 76.35,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 2,
+      "lon": 106.6980514,
+      "lat": 10.7712223,
+      "d": 73.49,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 3,
+      "lon": 106.6980506,
+      "lat": 10.7712434,
+      "d": 71.15,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 4,
+      "lon": 106.6980495,
+      "lat": 10.7712714,
+      "d": 68.05,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 5,
+      "lon": 106.6980485,
+      "lat": 10.7712975,
+      "d": 65.15,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 6,
+      "lon": 106.6980476,
+      "lat": 10.7713214,
+      "d": 62.51,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 7,
+      "lon": 106.6980464,
+      "lat": 10.7713533,
+      "d": 58.98,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 8,
+      "lon": 106.6980455,
+      "lat": 10.7713765,
+      "d": 56.41,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 9,
+      "lon": 106.6980444,
+      "lat": 10.7714033,
+      "d": 53.45,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 10,
+      "lon": 106.6980434,
+      "lat": 10.7714313,
+      "d": 50.36,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 11,
+      "lon": 106.6980424,
+      "lat": 10.7714572,
+      "d": 47.5,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 12,
+      "lon": 106.6980415,
+      "lat": 10.7714789,
+      "d": 45.11,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 13,
+      "lon": 106.6980406,
+      "lat": 10.7715031,
+      "d": 42.44,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 14,
+      "lon": 106.6980395,
+      "lat": 10.7715328,
+      "d": 39.18,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 15,
+      "lon": 106.6980385,
+      "lat": 10.7715577,
+      "d": 36.45,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 16,
+      "lon": 106.6980374,
+      "lat": 10.7715859,
+      "d": 33.37,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 17,
+      "lon": 106.6980365,
+      "lat": 10.7716106,
+      "d": 30.69,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 18,
+      "lon": 106.6980358,
+      "lat": 10.7716295,
+      "d": 28.64,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 19,
+      "lon": 106.6980347,
+      "lat": 10.7716587,
+      "d": 25.49,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 20,
+      "lon": 106.6980335,
+      "lat": 10.7716886,
+      "d": 22.3,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 21,
+      "lon": 106.6980327,
+      "lat": 10.7717092,
+      "d": 20.13,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 22,
+      "lon": 106.6980187,
+      "lat": 10.7717336,
+      "d": 17.04,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 23,
+      "lon": 106.6980045,
+      "lat": 10.7717548,
+      "d": 14.3,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 24,
+      "lon": 106.6979897,
+      "lat": 10.7717768,
+      "d": 11.49,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 25,
+      "lon": 106.6979879,
+      "lat": 10.7717895,
+      "d": 10.07,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 26,
+      "lon": 106.6979867,
+      "lat": 10.7717905,
+      "d": 9.93,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 27,
+      "lon": 106.6979768,
+      "lat": 10.7717905,
+      "d": 9.72,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    }
+  ],
+  "lanternNearby": "shop-lantern-fish",
+  "guestOk": true,
+  "chipOk": true,
+  "miniOk": true,
+  "walkChipsStayHarbor": true,
+  "alongOk": true,
+  "fixtureOk": true,
+  "leftoverOk": true,
+  "lanternOk": true,
+  "stallsOk": true,
+  "geoOk": true,
+  "honestyOk": true,
+  "didNotCatalogClear": true,
+  "didNotRemint": true,
+  "shots": {
+    "south": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-harbor-south.png",
+    "look": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-harbor-south-lookdown.png"
+  }
+}

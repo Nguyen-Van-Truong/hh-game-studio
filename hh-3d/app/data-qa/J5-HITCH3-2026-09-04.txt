@@ -1,0 +1,132 @@
+{
+  "run_id": "HH3D-J5-20260904-ASIA-SAIGON-46",
+  "player": "http://127.0.0.1:4175/",
+  "verdict": "J5_HITCH3_OK",
+  "not_plan_pass": true,
+  "not_r2_wp1": true,
+  "not_60_fps": true,
+  "reminted": true,
+  "liveJs": "/assets/index-B_vhyY5s.js",
+  "liveJsLen": 2172590,
+  "liveJsSha256": "30145754ae259b733719ccf613efba53621c20103b6dccf2e7c89d4921a8bbf3",
+  "harborOk": true,
+  "walked": true,
+  "pendingThroughWalk": true,
+  "keyupStillPending": true,
+  "idleMounted": true,
+  "kindOk": true,
+  "spawnEStolen": false,
+  "walk": {
+    "wallMs": 3000.1,
+    "n": 112,
+    "frameMs": {
+      "n": 112,
+      "min": 16.4,
+      "median": 33.15,
+      "p1": 16.5,
+      "max": 83.4,
+      "mean": 27.08
+    },
+    "fps": {
+      "n": 112,
+      "min": 11.99,
+      "median": 30.17,
+      "p1": 19.93,
+      "max": 60.98,
+      "mean": 43.47
+    }
+  },
+  "walkMin": 11.99,
+  "walkMean": 43.47,
+  "beforeWalk": {
+    "playReady": "yes",
+    "hitchWarmup": "audio-compile",
+    "pose": "idle",
+    "lon": 106.69804,
+    "lat": 10.77162,
+    "buildings": 60,
+    "chipText": "Harbor Walk",
+    "streetName": "Harbor Walk",
+    "canvas": {
+      "w": 1280,
+      "h": 720
+    },
+    "nearbyShop": "",
+    "shopPanel": false,
+    "shopPanelId": "",
+    "worldMapPresent": false,
+    "minimapDefer": "pending",
+    "minimapDeferKind": "play-idle",
+    "minimapPresent": false,
+    "minimapActive": ""
+  },
+  "midWalk": {
+    "playReady": "yes",
+    "hitchWarmup": "audio-compile",
+    "pose": "walk",
+    "lon": 106.69804,
+    "lat": 10.7716595,
+    "buildings": 60,
+    "chipText": "Harbor Walk",
+    "streetName": "Harbor Walk",
+    "canvas": {
+      "w": 1280,
+      "h": 720
+    },
+    "nearbyShop": "",
+    "shopPanel": false,
+    "shopPanelId": "",
+    "worldMapPresent": false,
+    "minimapDefer": "pending",
+    "minimapDeferKind": "play-idle",
+    "minimapPresent": false,
+    "minimapActive": ""
+  },
+  "afterKeyup": {
+    "playReady": "yes",
+    "hitchWarmup": "audio-compile",
+    "pose": "idle",
+    "lon": 106.69804,
+    "lat": 10.7716648,
+    "buildings": 60,
+    "chipText": "Harbor Walk",
+    "streetName": "Harbor Walk",
+    "canvas": {
+      "w": 1280,
+      "h": 720
+    },
+    "nearbyShop": "",
+    "shopPanel": false,
+    "shopPanelId": "",
+    "worldMapPresent": false,
+    "minimapDefer": "pending",
+    "minimapDeferKind": "play-idle",
+    "minimapPresent": false,
+    "minimapActive": ""
+  },
+  "afterIdle": {
+    "playReady": "yes",
+    "hitchWarmup": "audio-compile",
+    "pose": "idle",
+    "lon": 106.69804,
+    "lat": 10.7716648,
+    "buildings": 60,
+    "chipText": "Harbor Walk",
+    "streetName": "Harbor Walk",
+    "canvas": {
+      "w": 1280,
+      "h": 720
+    },
+    "nearbyShop": "",
+    "shopPanel": false,
+    "shopPanelId": "",
+    "worldMapPresent": false,
+    "minimapDefer": "live",
+    "minimapDeferKind": "play-idle",
+    "minimapPresent": true,
+    "minimapActive": "Harbor Walk"
+  },
+  "hitchWarmup": "audio-compile",
+  "minimapDeferKind": "play-idle",
+  "shot": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-hitch3.png"
+}

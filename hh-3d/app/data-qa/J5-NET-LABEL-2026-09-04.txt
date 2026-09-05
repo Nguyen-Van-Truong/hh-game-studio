@@ -1,0 +1,46 @@
+{
+  "runId": "HH3D-J5-20260904-ASIA-SAIGON-26",
+  "player": "http://127.0.0.1:4175/",
+  "verdict": "J5_NET_LABEL_OK",
+  "live": {
+    "liveJs": "/assets/index-Ds6AgobF.js",
+    "liveLen": 2162901,
+    "liveSha": "22a0109914938d43fe18c47096360cbde3caa59471d6eebac88de2af3420a1c1"
+  },
+  "online": {
+    "hudPresence": "Offline",
+    "hudConnection": "Đang kết nối",
+    "presenceMode": "Offline — Stroll alone; shops still open.",
+    "menuOpen": "no",
+    "streetName": "Harbor Walk",
+    "hudBox": {
+      "x": 821.4,
+      "y": 32.4,
+      "w": 139.6,
+      "h": 20.5
+    },
+    "navOnline": true
+  },
+  "lost": {
+    "hudPresence": "Offline",
+    "hudConnection": "Mất kết nối",
+    "presenceMode": "Offline — Stroll alone; shops still open.",
+    "menuOpen": "no",
+    "navOnline": false,
+    "networkCutBar": false
+  },
+  "menu": {
+    "hudPresence": "Offline",
+    "menuConnection": "Mất kết nối",
+    "presenceMode": "Offline — Stroll alone; shops still open.",
+    "connectionLabel": "Mất kết nối · showing the local copy if it already loaded; otherwise Chưa tải.Simulate no-network (not Offline stroll)"
+  },
+  "restored": {
+    "hudPresence": "Offline",
+    "hudConnection": "Đang kết nối",
+    "menuConnection": "Đang kết nối",
+    "presenceMode": "Offline — Stroll alone; shops still open.",
+    "navOnline": true
+  },
+  "honesty": "Authored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:1 city. Authored 400 m: two official named streets plus inner parcel lanes, not a city grid. This f"
+}

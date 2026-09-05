@@ -1,0 +1,319 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+HASH_MISMATCH=0
+DID_NOT_RECYCLE=1
+NOT_PLAN_PASS=1
+LIVE_JS=/assets/index-CoTKbFff.js
+LIVE_JS_LEN=2174312
+LIVE_JS_SHA256=2971c5c4577664cd319c9dbdd2f451f141ea6cf201fd52ba8db496dd15bf273c
+NOT_GATE_U1=1
+NOT_M2=1
+DID_NOT_REBUILD=1
+DID_NOT_RESTORE_DIST=1
+DID_NOT_CATALOG_CLEAR=1
+NOT_M0_WP1=1
+NOT_M1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-05
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=06:16 +07
+MODEL=grok-4.6-extra-high
+SCOPE=Independent remint re-audit of LOOK/STRAFE on live CoTKbFff. Tried to FAIL. Do not treat implementer CRITIC-3D-LOOK-STRAFE-2026-09-05.txt (ROLE=IMPLEMENTER, TICK=n/a) or the superseded DGX50qvn LOOK-YAW-FIX reaudit TICK=yes as acceptance. Different hunts: A must strafe (heading frozen, lon west), mouse-left must INCREASE heading.
+PLAYER_URL=http://127.0.0.1:4175/
+LISTEN=127.0.0.1:4175
+LIVE_PID=28288
+LIVE_PID_AFTER_CDP=28288
+LIVE_PID_STARTTIME=2026-09-05 06:11:49 +07
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-LOOK-STRAFE-REAUDIT-2026-09-05.txt
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-LOOK-STRAFE-2026-09-05.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+SUPERSEDED_REAUDIT=hh-3d/app/data-qa/CRITIC-3D-LOOK-YAW-FIX-REAUDIT-2026-09-05.txt
+SUPERSEDED_LIVE_JS=/assets/index-DGX50qvn.js
+DID_NOT_TREAT_DGX50qvn_TICK_YES_AS_ACCEPTANCE=1
+DID_NOT_TREAT_IMPLEMENTER_AS_TICK_YES=1
+DID_NOT_COPY_IMPLEMENTER_JSON=1
+DID_NOT_RUN_IMPLEMENTER_PROBES=1
+DID_NOT_OVERWRITE_IMPLEMENTER_NOTE=1
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+AUTHORIZE_MAP_FETCH=NO
+VITE_PREVIEW_PORT_PIN=4175
+CRITIC_CDP_PORTS=10034
+IMPLEMENTER_CDP_PORT_NOT_REUSED=1
+DID_NOT_REUSE_10014=1
+DID_NOT_REUSE_10016=1
+DID_NOT_REUSE_10018=1
+DID_NOT_REUSE_10020=1
+DID_NOT_REUSE_10022=1
+DID_NOT_REUSE_10024=1
+DID_NOT_REUSE_10026=1
+DID_NOT_REUSE_10028=1
+DID_NOT_REUSE_10030=1
+DID_NOT_REUSE_10032=1
+SEAT_B_NOT_NEEDED=1
+VIEWPORT=1280x720
+ISOLATED_PROFILES=1
+HEADLESS_NEW=1
+SEATS=a
+SLICE=LOOK_STRAFE_REAUDIT
+GRAPH_CLEAR=0
+SHOPS_KEPT=1
+POINTER_LOCK=0
+LOOK_MODE=off
+MOUSE_HUNT=right-drag-left
+
+LIVE_JS_BEFORE=/assets/index-CoTKbFff.js
+LIVE_JS_LEN_BEFORE=2174312
+LIVE_JS_SHA256_BEFORE=2971c5c4577664cd319c9dbdd2f451f141ea6cf201fd52ba8db496dd15bf273c
+LIVE_JS_AFTER=/assets/index-CoTKbFff.js
+LIVE_JS_LEN_AFTER=2174312
+LIVE_JS_SHA256_AFTER=2971c5c4577664cd319c9dbdd2f451f141ea6cf201fd52ba8db496dd15bf273c
+LIVE_JS_MATCHES_CLAIM=1
+HASH_MISMATCH=0
+LIVE_CSS=/assets/index-DsRW_q10.css
+
+HUNT1_HASH=PASS
+HUNT2_KEYA_STRAFE=PASS
+HUNT3_MOUSE_LEFT=PASS
+HUNT4_HUD_BUNDLE=PASS
+SEAT_A_HEADING_BEFORE_A=0.0
+SEAT_A_HEADING_AFTER_A=0.0
+SEAT_A_DELTA_A=0.0
+SEAT_A_LON_BEFORE_A=106.6980400
+SEAT_A_LON_AFTER_A=106.6980287
+SEAT_A_LON_DELTA=-0.0000113
+SEAT_A_LAT_BEFORE_A=10.7716200
+SEAT_A_LAT_AFTER_A=10.7716200
+SEAT_A_HEADING_BEFORE_MOUSE=0.0
+SEAT_A_HEADING_AFTER_MOUSE=19.7
+SEAT_A_DELTA_MOUSE=+19.7
+FACING_A_BEFORE=north
+FACING_A_AFTER_A=north
+LOOK_MODE_DURING_A=off
+HUD_HELP=You: standing · facing north · click canvas to look · Esc · Shift sprint · A/D strafe · Space
+HUD_HELP_HAS_STRAFE=1
+HUD_HELP_HAS_TURN=0
+HUD_CONNECTION=Máy này · 4175
+HUD_CONNECTION_ATTR=on
+BUNDLE_WALK_255=1
+BUNDLE_SPRINT_435=1
+BUNDLE_AD_STRAFE=2
+BUNDLE_AD_TURN=0
+BUNDLE_CATALOG_CLEAR=0
+LEFTOVER_CATALOG_COUNT=5
+BIGGEST_MISS=None on the named hunts. Live hash matches CoTKbFff / 2174312 / 2971c5c457… before and after CDP on the same pid 28288. Isolated seat A CDP (10034) KeyA look-off: heading 0.0 → 0.0, lon 106.6980400 → 106.6980287 (west). Required mouse right-drag left: heading 0.0 → 19.7 (+19.7). Compact HUD says A/D strafe. Connected chip is Máy này · 4175.
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/ was already up. Bind 127.0.0.1 pid 28288
+(node, vite preview --host 127.0.0.1 --port 4175 --strictPort,
+StartTime 2026-09-05 06:11:49 +07). Did not recycle, rebuild,
+restore-dist, kill, or restart 4175. Did not start 4173 / 4174 /
+5175. Did not bind 0.0.0.0. Did not catalog_clear. Same LISTEN
+pid 28288 after CDP. 10034 / 10036 were not listening after
+Chrome exited. 10014–10032 were not used. 10030 was already
+Listen on another pid and was left alone.
+
+Did not treat CRITIC-3D-LOOK-STRAFE-2026-09-05.txt as TICK=yes
+(ROLE=IMPLEMENTER, TICK=n/a). Did not treat the DGX50qvn
+LOOK-YAW-FIX reaudit TICK=yes as acceptance (superseded live JS;
+that hunt required KeyA to turn heading down). Did not run
+implementer probes as proof. Did not copy implementer JSON.
+Did not tick any plan. GATE-U1 humans were not invented.
+Not M1. Not M2. NOT_PLAN_PASS.
+
+Independent Chrome CDP, one isolated temp profile, headless=new,
+1280×720. Seat A ?seat=a on 10034. Menu closed. Look unlocked
+(data-look=off) for KeyA. Did not pointer-lock. Required mouse
+was a canvas right-drag left (negative dx, buttons=2). Seat B
+on 10036 was not needed after seat A held all hunts.
+
+GET / then GET the script as raw bytes before CDP and after CDP.
+Name + length + sha256 match the claimed remint both times.
+HASH_MISMATCH=0.
+
+Hunt 2 KeyA strafe and hunt 3 mouse-left both held on THIS CDP.
+Hunt 4 HUD / bundle held.
+
+================================================================================
+LIVE JS
+================================================================================
+
+GET / then GET /assets/index-CoTKbFff.js as raw bytes.
+
+BEFORE CDP:
+  HTML script = /assets/index-CoTKbFff.js
+  http file length = 2174312
+  sha256 = 2971c5c4577664cd319c9dbdd2f451f141ea6cf201fd52ba8db496dd15bf273c
+
+AFTER CDP:
+  HTML script = /assets/index-CoTKbFff.js
+  http file length = 2174312
+  sha256 = 2971c5c4577664cd319c9dbdd2f451f141ea6cf201fd52ba8db496dd15bf273c
+
+Claimed remint name + length + hash match. HASH_MISMATCH=0.
+
+LIVE_CSS=/assets/index-DsRW_q10.css
+
+Bundle scan (live bytes, not source):
+  2.55 = 3
+  first 2.55 context = var w=2.55,T=4.35  (WALK / SPRINT pair)
+  4.35 = 2
+  A/D strafe = 2
+  A/D turn = 0
+  catalog_clear = 0
+  Máy này · 4175 = 2
+  play-idle present
+  20 live city friends = 0
+
+================================================================================
+HUNT 1 — HASH / PID — PASS
+================================================================================
+
+Tried to fail a swapped or stale bundle vs CoTKbFff / 2174312 /
+2971c5c4577664cd319c9dbdd2f451f141ea6cf201fd52ba8db496dd15bf273c,
+or a recycled preview pid.
+
+Independent GET before any Chrome and again after the CDP seat
+exited. Same name, same length, same sha256. Pid still 28288
+StartTime 2026-09-05 06:11:49 +07. Command still
+vite preview --host 127.0.0.1 --port 4175 --strictPort.
+4173 / 4174 / 5175 still not listening. PASS.
+
+================================================================================
+HUNT 2 — MOVE LEFT (KeyA, look off) — PASS
+================================================================================
+
+Tried to fail two old bugs: A still turns heading (applyFacingMove)
+or A walks east / lon increases (strafe invert).
+
+Independent Chrome CDP 10034, isolated empty profile, ?seat=a,
+menu closed (data-open=no), look unlocked (play-proof data-look=off).
+Heading at spawn ≈ 0 (north). KeyA held ~600 ms (CDP keyDown +
+rawKeyDown, then keyUp). Did not pointer-lock.
+
+  StreetHelp before A:
+    You: standing · facing north · click canvas to look · Esc ·
+    Shift sprint · A/D strafe · Space
+  play-proof data-heading before A = 0.0
+  self-avatar data-heading = 0
+  cam-yaw = 0.0
+  lon = 106.6980400
+  lat = 10.7716200
+  look = off
+  turning = 0
+
+  StreetHelp after A:
+    You: standing · facing north · click canvas to look · Esc ·
+    Shift sprint · A/D strafe · Space
+  play-proof data-heading after A = 0.0
+  self-avatar data-heading = 0
+  cam-yaw = 0.0
+  lon = 106.6980287
+  lat = 10.7716200
+  look = off
+  turning = 0
+
+Signed heading delta KeyA = 0.0 (limit ~1°). Lon decreased
+−0.0000113 (west / screen-left while facing north). Lat frozen.
+Old applyFacingMove would have swung heading (DGX50qvn KeyA was
+0.0 → 343.5). Strafe invert would have raised lon. Neither
+reproduced. PASS.
+
+================================================================================
+HUNT 3 — MOUSE LOOK (right-drag left) — PASS
+================================================================================
+
+Tried to fail the +1 remint owner rejected: negative dx decreases
+heading. Demo lookYawSign=-1 must INCREASE heading/look yaw.
+
+Same seat A, still look-off before the drag. Canvas right-drag
+left: x 691.2 → 550.4 (dx = −140.8), y 345.6, button=right,
+buttons=2. Did not pointer-lock.
+
+  play-proof data-heading before mouse = 0.0
+  play-proof data-heading after mouse = 19.7
+  self-avatar data-heading after mouse = 20
+  cam-yaw after mouse = 19.7
+  lon/lat unchanged at 106.6980287 / 10.7716200
+
+Signed heading delta mouse = +19.7. Heading INCREASED. The
+rejected +1 path (heading decrease, e.g. 0.0 → 343-ish or
+343.5 → 323.9 on DGX50qvn) did not reproduce. PASS.
+
+================================================================================
+HUNT 4 — HUD / BUNDLE / CATALOG — PASS
+================================================================================
+
+Tried to fail: compact help still says “A/D turn”; connected chip
+is only “Đang kết nối”; live bytes lack 2.55 walk language;
+catalog_clear after touching the bus.
+
+Compact StreetHelp on this CDP:
+  You: standing · facing north · click canvas to look · Esc ·
+  Shift sprint · A/D strafe · Space
+  contains “A/D strafe” = yes
+  contains “A/D turn” = no
+
+HUD while connected (data-connection=on), menu closed:
+  hud-connection = Máy này · 4175
+
+Live bytes:
+  var w=2.55,T=4.35
+  A/D strafe = 2
+  A/D turn = 0
+  catalog_clear = 0
+
+GET /demo-bus after CDP (read only; no catalog_clear; no
+graph_clear):
+  kind=local-demo-bus this_pc=true bind=127.0.0.1 not_wan=true
+  persist=catalog+graph
+  leftover catalog count = 5
+  catalog still holds Shared PC, J6 Jump, Phở Nhà, Chè Vỉa,
+  Kem Reaudit.
+
+PASS for this honesty hunt. Does not invent M2 or GATE-U1.
+
+================================================================================
+SCORE CARD (requested)
+================================================================================
+
+TICK=yes
+SEAT_A_HEADING_BEFORE_A=0.0
+SEAT_A_HEADING_AFTER_A=0.0
+SEAT_A_LON_BEFORE_A=106.6980400
+SEAT_A_LON_AFTER_A=106.6980287
+SEAT_A_HEADING_BEFORE_MOUSE=0.0
+SEAT_A_HEADING_AFTER_MOUSE=19.7
+HUD_HELP=You: standing · facing north · click canvas to look · Esc · Shift sprint · A/D strafe · Space
+HASH_MISMATCH=0
+LIVE_PID=28288
+HUD_CONNECTION=Máy này · 4175
+
+================================================================================
+NOT CLAIMED
+================================================================================
+
+NOT_PLAN_PASS. Not M1. Not M2. GATE-U1 three-human review was
+not invented. OWNER_SIGN was not invented. No OSM/Overture
+fetch. No 4173 / 4174 / 5175. No 0.0.0.0 bind. No recycle of
+4175. Pointer-lock / movementX-negative was not used (right-drag
+left satisfied the required mouse hunt). Not 60 FPS. Not R2-WP1.
+Not WAN. Not a city.

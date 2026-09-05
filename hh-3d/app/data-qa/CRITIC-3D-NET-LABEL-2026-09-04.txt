@@ -1,0 +1,145 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=12:50 +07
+ROLE=IMPLEMENTER
+TICK=n/a (do not treat this file as TICK=yes)
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M0=1
+NOT_M0_WP0=1
+NOT_M0_WP1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+PLAYER_URL=http://127.0.0.1:4175/
+RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-26
+COMMAND=node hh-3d/app/data-qa/j5-net-label-probe.mjs
+VERDICT_IMPLEMENTER_CDP=J5_NET_LABEL_OK
+LIVE_JS=/assets/index-Ds6AgobF.js
+LIVE_JS_LEN=2162901
+LIVE_JS_SHA256=22a0109914938d43fe18c47096360cbde3caa59471d6eebac88de2af3420a1c1
+ONE_RECYCLE_AFTER_BUILD=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NO_COMMIT=1
+NO_HIP_SPHERES=1
+DID_NOT_RIP_LANTERN_BOARD=1
+DID_NOT_RIP_HARBOR_STEPS_CROSSING=1
+DID_NOT_RIP_DEFERRED_MINIMAP=1
+DID_NOT_RIP_FRIEND_STEPS=1
+DID_NOT_RIP_90M_LOD=1
+DID_NOT_RIP_HUD_STREET_CHIP=1
+DID_NOT_RIP_PLAQUES=1
+DID_NOT_RIP_LANES=1
+DID_NOT_RIP_FOG_EDGE=1
+DID_NOT_RIP_STREET_PLAY_SHOPS=1
+DID_NOT_RIP_SKY=1
+DID_NOT_RIP_CAM_HIT=1
+DID_NOT_CLICK_ONLINE=1
+DID_NOT_CLICK_NETWORK_CUT_CHECKBOX=1
+NO_NEW_SHOP_SERVER=1
+NO_INTERIOR=1
+NO_MAP_FETCH=1
+ACCEPTED_PRIOR=CRITIC-3D-NONET-DRAFT-REAUDIT-2026-09-04.txt TICK=yes on /assets/index-D4Sc2h68.js
+
+================================================================================
+SLICE
+================================================================================
+
+Social Online/Offline (stroll with friends vs alone) is not
+internet. The old chrome used "Offline" for stroll and
+"browser offline" for navigator.onLine=false — one English
+word for two jobs. HUD (menu closed) also hid both labels
+inside Tab.
+
+Reminted a slim HUD pair plus a menu connectivity line:
+
+  Offline / Online          stroll; shops still open
+  Đang kết nối / Mất kết nối   this-PC 4175 browser network
+
+CDP Network.emulateNetworkConditions (navigator.onLine=false)
+changes ONLY the connectivity line. Social Offline stays.
+Simulate no-network checkbox unused. Honesty stays this PC
+4175 loopback, not a city.
+
+Did not remint boards, streetPlayShops, intersection, minimap,
+friend steps, LOD, HUD street chip, plaques, lanes, fog/edge,
+sky, or cam-hit. Lost-network drafts stay off the board
+(accepted reaudit; not redone).
+
+================================================================================
+LABELS OBSERVED
+================================================================================
+
+HUD (menu hidden, Harbor Walk chip still Harbor Walk):
+  hud-presence   = Offline
+  hud-connection = Đang kết nối
+  box 140×21 @ 821,32   (slim pill, not a dashboard)
+
+After CDP onLine=false (checkbox unchecked, menu still hidden):
+  hud-presence   = Offline          UNCHANGED
+  hud-connection = Mất kết nối      ONLY this line changed
+  presence-mode  = Offline — Stroll alone; shops still open.
+  online-btn data-active = no
+
+After opening Menu:
+  menu-connection = Mất kết nối
+  presence-mode   = Offline — Stroll alone; shops still open.
+
+Restore online:
+  hud-connection  = Đang kết nối
+  menu-connection = Đang kết nối
+  hud-presence    = Offline         still
+
+No "browser offline" phrase on the page.
+
+================================================================================
+PROOF (implementer CDP vs recycled 4175)
+================================================================================
+
+typecheck EXIT=0
+npm test EXIT=0 (80 tests)
+npm run build EXIT=0  dist/assets/index-Ds6AgobF.js
+Recycled 4175 once after that remint build (127.0.0.1 only).
+Did not start 4173 / 4174 / 5175. Did not bind 0.0.0.0.
+
+Probe node hh-3d/app/data-qa/j5-net-label-probe.mjs EXIT=0
+  Isolated headless Chrome 1280x720, seat A, port 9661.
+  about:blank then ?seat=a. Did not click Online.
+  Did not click Simulate no-network. Did not catalog_clear.
+
+LIVE_JS=/assets/index-Ds6AgobF.js LEN=2162901
+SHA256=22a0109914938d43fe18c47096360cbde3caa59471d6eebac88de2af3420a1c1
+Preview vite preview --host 127.0.0.1 --port 4175 --strictPort
+pid 40880.
+
+================================================================================
+NOT FIXED / STILL TRUE
+================================================================================
+
+- This is implementer CDP only. TICK=n/a. Not GATE-U1 humans.
+- Not M0-WP0 / M0-WP1. Plan checkboxes still [ ].
+- WAN / other-PC join still not built. Store is this PC 4175
+  loopback. Not a city presence server.
+- Leftover Shared PC + mtl8ulddihjpre stay persist-only.
+- "Đang kết nối lại" is not a third live state yet.
+- Owner-Offline shop checkbox is still a local shelf label,
+  not navigator.onLine.
+
+================================================================================
+4175
+================================================================================
+
+Preview: npm run preview -- --host 127.0.0.1 --port 4175 --strictPort
+from hh-3d/app/web. One recycle after the remint build.
+No second preview. No 4173 / 4174 / 5175.
+
+LIVE_JS=/assets/index-Ds6AgobF.js
+LEN=2162901
+SHA256=22a0109914938d43fe18c47096360cbde3caa59471d6eebac88de2af3420a1c1

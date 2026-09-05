@@ -1,0 +1,371 @@
+SUPERSEDED_AS_OFFICIAL_RECORD=1
+OFFICIAL_RECORD=hh-3d/app/decision-records/2026-09-03-r0-wp0-hh-world-web.txt
+OWNER_CHAT_GRANT=làm HH World web
+AUTHORIZE_HH3D_APP_SCAFFOLD=YES
+NOTE=This sandbox file is historical POINTER paper. Do not treat AUTHORIZE=NO
+     below as current. The owner grant of 2026-09-03 opened hh-3d/app/.
+
+R0-WP0 WEB DECISION RECORD / TEMPLATE
+WP=SANDBOX-R0-WP0-WEB
+TITLE=HH World web-first decision template (paper only)
+DATE=2026-09-03
+TIMEZONE=Asia/Saigon
+RUN_ID=HH3D-R0-20260903-ASIA-SAIGON-01
+COMMAND_ID=cmd.hh3d-r0.web-decision-record.1
+FOLDER=hh-3d/hh3d-real-world-open-world/
+FORM=DOCS_ONLY
+STATE=DOCS_ONLY
+POINTER_ONLY=1
+SANDBOX_CURRENT_WP_UNCHANGED=SANDBOX-G0-DOCS
+VERDICT=DOCS_WRITTEN_NOT_PASS
+OWNER_ACCEPT=UNFILLED
+NOT_ORIGINAL_R0_WP0=1
+THIS_FOLDER_OWNER_RESUME_DOES_NOT_GRANT_ORIGINAL_R0=1
+NOT_A_REAL_APPLICATION_RESUME=1
+DEMO_GAP_ACCEPTED=UNFILLED
+ORIGINAL_PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+ORIGINAL_R0_WP0_STATE_UNCHANGED=PAUSED_READY_AFTER_OWNER_RESUME
+APP_FOLDER_CREATED=NO
+FETCH_PERFORMED=NO
+GIT_HEAD_AT_WRITE=ff702a7112cb00ef97160025d3006ecb75f415ee
+NOTE=HEAD is repo context only. Do not treat this file as original-plan PASS.
+     Do not create hh-3d/app/. Do not fetch maps. Do not install Unreal.
+
+================================================================================
+0. HOW TO USE THIS FILE
+================================================================================
+
+This is a POINTER paper in the disposable sandbox. It is the honest
+product-next *document* for a user who wants a real-place app.
+It does NOT change sandbox CURRENT_WP (stays SANDBOX-G0-DOCS,
+DOCS_CLOSED_PAPER). Sandbox OWNER_RESUME=1 is THIS_FOLDER_ONLY and
+is not TARGET_PLAN=real-application.
+
+CRITIC-PROGRESS-2026-09-03 TICK=no was a race (this file was missing).
+That tick does not authorize Unreal, app scaffold, or original R0-WP0.
+
+It is NOT:
+  - original R0-WP0 (ALLOWED_PATHS there include hh-3d/app/decision-records/*)
+  - a scaffold grant for hh-3d/app/
+  - a fetch / MapLibre / Cesium / Google / Unreal ticket
+  - a tick of 31-8-hh3d-real-application-plan.txt
+  - G0-ENGINE or open-world §9
+
+It IS:
+  - a fill-or-accept template the owner can sign
+  - a routing lock: web-first HH World, MapLibre-local 400 m LATER
+  - a stop sign for Unreal / Cesium ion / Google Photorealistic on this track
+  - a POINTER: CURRENT_WP unchanged; original R0-WP0 still PAUSED
+    until a NEW resume names TARGET_PLAN=real-application
+  - DEMO_GAP_ACCEPTED stays UNFILLED (do not rewrite canonical review-log)
+
+If the owner later opens the real-app folder, copy accepted answers into
+hh-3d/app/decision-records/ under a new resume. Do not invent that folder now.
+
+================================================================================
+1. PLAYER-SEAT VERDICT (KEEP, WITH ROUTING ADJUST)
+================================================================================
+
+Question: are the HH-3D / open-world plans still the best path from a
+player's seat?
+
+KEEP the 01-9 audit priority. Do not merge the three tracks.
+
+  1. Real application (HH World web) — BEST remaining product.
+     A player who wants a real place needs a URL, a map of a real AOI,
+     a place card, share/bookmark, and honest "Map data as of".
+     That is this file's product. Implementation progress of hh-3d/app/
+     is still 0%. This paper does not change that number.
+
+  2. Hòn Gió demo (hh-3d/demo/) — KEEP as WebGL seed only.
+     From a player's seat it is a small authored island, not a city app.
+     Pose-only punch labels are already on Help/HUD. Do not expand combat,
+     do not run a second preview, do not treat demo polish as HH World.
+
+  3. Open-world / Unreal (copied 31-8 open-world plan) — ADJUST to STOP.
+     §9 packaged hello-world / G0-ENGINE does not give a player anything
+     they can open. Owner chat 2026-09-03: Unreal STOP for this track.
+     Native next WP = NONE. Do not treat archived §18 as an execute ticket.
+
+Godot / Vault Fighters stays the 2D arena on stock 4.7.1-stable. It is
+not a second engine for HH World. A later Godot-2 city walk, if ever
+opened, needs a new folder and a new plan — not now.
+
+Therefore the best remaining work after paper G0 is THIS web decision
+record, then (later, after owner accept + a new resume) MapLibre local
+400 m. Not Cesium. Not Google. Not Unreal. Not VF.
+
+================================================================================
+2. ROUTE SPLIT (LOCKED THIS LUOT)
+================================================================================
+
+HH WORLD WEB (product)
+  Plan (canonical, still PAUSED): 31-8-hh3d-real-application-plan.txt
+  This sandbox twin: THIS FILE (DOCS_ONLY)
+  Future app folder: hh-3d/app/  — MUST NOT be created this lượt
+  First later implementation (NOT NOW): R0-WP1 topology, then R1-WP0
+    approved 400 m fixture. NETWORKING stays OFF until a written exception.
+
+HON GIO DEMO (not this WP)
+  hh-3d/demo/ WebGL seed. Preview contract if ever needed:
+    http://127.0.0.1:4173/ only. No 4174.
+
+NATIVE / UNREAL (this track)
+  UNREAL_TRACK=STOP
+  NEXT_NATIVE_WP=NONE
+  G0-ENGINE=FORBIDDEN
+  No .uproject. No hh-3d/unreal/. No Epic install.
+
+GODOT
+  VF keeps current Godot 4.7.1-stable + hh_agent at
+    godot/dogfood/superfighters/
+  This track does not run, edit, or tick VF / zdocs/20-8-* / zdocs/29-8-*.
+  No Godot fork. No 4.7.2. No Godot-2 city project now.
+
+DISPLAY NAME
+  Working name: HH World
+  Forbidden in product chrome: Superfighters / Super Fighter / Vault Fighters
+    map names / Y8 title cards
+
+================================================================================
+3. OWNER DECISIONS — RECOMMENDATION vs UNFILLED
+================================================================================
+
+Plan section 18 defaults plus owner chat 2026-09-03.
+OWNER_ACCEPT remains UNFILLED until the owner signs below.
+Do not treat RECOMMENDATION as a signed choice.
+
+Q1  Product type
+    RECOMMENDATION=web_first_real_application
+    OWNER_CHAT_LOCK=HH World map / place cards = web (hh-3d), not Godot,
+                    not Unreal
+    OWNER_CHOICE=UNFILLED
+    ALLOWED=web_first_real_application | stop
+
+Q2  AOI / city (proof later, not now)
+    RECOMMENDATION=Ben Thanh vicinity, Ho Chi Minh City
+    CENTER_DEFAULT=10.7725, 106.6980
+    PROOF_EXTENT_DEFAULT=400 m x 400 m
+    LATER_EXTENT_HINT=about 1 km2 only after 400 m proof + GATE-U1
+    FETCH_NOW=NO
+    OWNER_CHOICE=UNFILLED
+
+Q3  First renderer
+    RECOMMENDATION=MapLibre GL JS + local approved snapshot
+    3D_MVP=owned fill-extrusion from that snapshot (later)
+    CESIUM=OFF_THIS_TRACK_UNTIL_NEW_OWNER_DECISION
+    GOOGLE_PHOTOREALISTIC=OFF
+    R3F=authored route later (Hòn Gió seed); not the map MVP
+    OWNER_CHOICE=UNFILLED
+    ALLOWED=maplibre_local | stop
+
+Q4  Online vs offline
+    RECOMMENDATION=offline_local_proof_first
+    NETWORKING_NOW=OFF
+    PAID_SERVICE_AUTHORIZATION=NONE
+    OWNER_CHOICE=UNFILLED
+    ALLOWED=offline_only | offline_plus_optional_online_viz_later | stop
+
+Q5  Provider / license (no acquire)
+    RECOMMENDATION=offline-open-data-first
+    CANDIDATES_LATER=approved Overture and/or OSM snapshot, one release,
+                     license ledger BEFORE fetch
+    CANONICAL_CURRENTNESS_FIELD=acquired_at
+    ACCESSED_AT_IN_PLAN=errata; do not emit both as the same fact
+    LEDGER_NOW=empty (see G0-LICENSE-LEDGER.TEMPLATE.txt)
+    OWNER_CHOICE=UNFILLED
+    LEGAL_PROFILE_OWNER=UNFILLED
+    ALLOWED=offline-open-data-first | stop_terms_unclear
+
+Q6  Cost / quota
+    DEFAULT=0 now
+    MONTHLY_CAP_USD=UNFILLED
+    KILL_SWITCH_OWNER=UNFILLED
+    CESIUM_ION=NOT_AUTHORIZED
+    GOOGLE_TILES=NOT_AUTHORIZED
+    CLOUD_HOSTING=NOT_NOW
+
+Q7  Account / social
+    RECOMMENDATION=local_bookmark_first_no_login
+    MULTIPLAYER_CHAT_VOICE=OUT_OF_SCOPE_FIRST_RELEASE
+    UGC=OUT_OF_SCOPE_FIRST_RELEASE
+    OWNER_CHOICE=UNFILLED
+
+Q8  Names / logos / interiors
+    RECOMMENDATION=fictionalize gameplay-facing brands; no personal data;
+                   no house interiors as fact
+    OWNER_CHOICE=UNFILLED
+
+Q9  Visual / claims
+    RECOMMENDATION=stylized-readable map, not photogrammetry
+    FORBIDDEN_CLAIMS=1:1, realtime, digital twin, GTA-like, current absolute
+    UI_MUST_SAY_LATER=Map data as of + provider + approximation + authored
+    OWNER_CHOICE=UNFILLED
+
+Q10 Hardware / FPS (web, not packaged UE)
+    HOST_SNAPSHOT=see G0-DECISION-RECORD.txt section 4 (2026-09-03)
+    OBSERVED_HOST=Windows 11 / i5-10400F / 32 GB / GTX 1660 Ti 6 GB
+    NODE_OBSERVED=v24.10.0
+    NPM_OBSERVED=11.6.1
+    PYTHON_OBSERVED=Python 3.11.9
+    BROWSER_MATRIX=UNFILLED
+    TARGET_FPS=UNMEASURED
+    MINIMUM_FPS=UNMEASURED
+    POSTGIS=NOT_PRESENT_NOT_NEEDED_YET
+    GDAL/OGR=missing
+    DUCKDB=missing
+    DO_NOT_CLAIM=MapLibre 60 FPS, mobile Play proof, chunk budget
+
+Q11 Native / Unreal / Godot-2
+    OWNER_CHAT_LOCK=Unreal STOP for this track
+    NEXT_NATIVE_WP=NONE
+    GODOT2_CITY=NOT_NOW
+    VF_KEEPS_CURRENT_GODOT=YES
+    SECOND_ENGINE=NO
+    OWNER_CHOICE_NATIVE=STOP_THIS_TRACK
+    NATIVE_ROUTE_OWNER=UNFILLED  (chat lock is not a signed §2 of G0)
+
+Q12 Refresh cadence
+    RECOMMENDATION=no refresh until a local fixture exists
+    OWNER_CHOICE=UNFILLED
+
+Q13 Support / legal owner
+    LEGAL_OWNER=UNFILLED
+    PRIVACY_OWNER=UNFILLED
+    INCIDENT_CONTACT=UNFILLED
+
+OWNER_SIGN=
+  NAME=UNFILLED
+  DATE=UNFILLED
+  ACCEPT_THIS_RECORD=UNFILLED
+  AUTHORIZE_HH3D_APP_SCAFFOLD=NO
+  AUTHORIZE_MAP_FETCH=NO
+  AUTHORIZE_CESIUM=NO
+  AUTHORIZE_GOOGLE_PHOTOREALISTIC=NO
+  AUTHORIZE_UNREAL_INSTALL=NO
+  AUTHORIZE_PAID_API=NO
+  AUTHORIZE_GODOT2_CITY=NO
+
+OWNER_CHAT_2026-09-03 (explicit):
+  UNREAL_FOR_THIS_TRACK=STOP
+  STAY_ON_GODOT=YES
+  VF_KEEPS_CURRENT_GODOT_AND_HH_AGENT=YES
+  SECOND_ENGINE_FORK=NO
+  SECOND_GODOT_VERSION=NO
+  HH_WORLD=web
+  HON_GIO=demo seed
+  IF_NATIVE_CITY_LATER=new folder + pin 4.7.1-stable + never
+    godot/dogfood/superfighters/
+
+================================================================================
+4. WHAT A LATER MAPLIBRE 400 m SLICE LOOKS LIKE (NOT THIS LUOT)
+================================================================================
+
+Only after: owner signs this record AND a new OWNER_RESUME names the next
+WP AND NETWORKING exception + license ledger exist if any acquire is needed.
+
+Then, in order (canonical plan; do not invent WPs):
+  R0-WP1  repo topology + pins          still may be refused until resume
+  R1-WP0  approved 400 m fixture        no OSM planet, no tile scrape
+  R1-WP1  MapLibre local 2D + extrusion + attribution + 2D fallback
+  GATE-U1 three humans, 5-minute journey
+  R2-WP0  local search / place card / deep-link / share
+
+Default proof AOI if still unset: ~400 m x 400 m near 10.7725, 106.6980.
+One writer per artifact. Schema + hash in the manifest. acquired_at
+canonical. No Google bake. No Cesium ion. No Unreal georeference.
+
+This section is a map, not a ticket. STATE of those WPs in the original
+plan remains PAUSED / NOT_STARTED.
+
+================================================================================
+5. ORIGINAL R0-WP0 PASS CRITERIA vs THIS LUOT
+================================================================================
+
+Original R0-WP0 DONE_WHEN asked for more than this lượt allows.
+
+  owner reads the decision record
+    PARTIAL: template written; OWNER_SIGN=UNFILLED
+
+  no ambiguity about free / current / exact
+    NOT DONE. Q2–Q9 still UNFILLED. Recommendation is not a close.
+
+  hardware / toolchain matrix
+    PARTIAL: host + Node/npm/Python OBSERVED in G0; browser matrix
+    UNFILLED; MapLibre/runtime UNPROVEN
+
+  provider / license profile chosen or BLOCKED
+    TEMPLATE only. LEGAL_PROFILE_OWNER=UNFILLED. No acquire.
+
+  full plan still split from demo
+    OBSERVED: this file keeps that split.
+
+  ALLOWED_PATHS write to hh-3d/app/decision-records/*
+    NOT DONE. Forbidden this lượt. Sandbox twin only.
+
+Therefore: this is not PASS. Next agent does not scaffold hh-3d/app/,
+does not fetch, does not start R1, does not tick the original plan.
+
+================================================================================
+6. LEGAL / COST / DATA (NO ACQUIRE)
+================================================================================
+
+Not legal advice. Re-check live terms before any acquire/release.
+
+  Offline-open-data-first is the recommendation.
+  Google Photorealistic = OFF. Cesium ion = not authorized.
+  No secret / token in this folder.
+  License ledger rows = none.
+  STOP if anyone rips game assets, scrapes public raster tiles, or uses
+  Google/Cesium as collision/nav/gameplay source.
+
+P3 order errata (do not "fix" originals from here):
+  Header lists R4-WP1 then R4-WP0A; dependency blocks do not force that.
+  Reconcile before any P3 WP. Not this lượt.
+
+================================================================================
+7. RESTART / WHERE A LATER AGENT RESUMES
+================================================================================
+
+Read first: START.txt, then PROGRESS.txt, then this file.
+Native G0 paper is DOCS_CLOSED_PAPER (CRITIC-D). Do not install Unreal
+to "finish G0".
+
+If the owner has not signed section 3:
+  Stay on SANDBOX-G0-DOCS (paper closed). Critic may attack this
+  POINTER. Do not open hh-3d/app/. Do not flip CURRENT_WP.
+
+If the owner signs and wants implementation:
+  New OWNER_RESUME must name TARGET_PLAN=real-application, exact WP,
+  ALLOWED_PATHS, NETWORKING, PAID_SERVICE_AUTHORIZATION.
+  First implementation WP is still R0-WP1 in the canonical plan —
+  not invented here — and still must not start from this sandbox
+  unless that resume says so.
+
+Hard wipe of this folder drops THIS file (it is not one of the five
+hashed copies). Restore from git if committed, or rewrite.
+
+================================================================================
+8. NEXT AGENT
+================================================================================
+
+ALLOWED NOW
+  - Owner fills section 3.
+  - Critic read-only on this paper + routing files.
+  - Routing/PROGRESS edits inside this sandbox if a critic residual is real.
+
+FORBIDDEN NOW
+  - Create hh-3d/app/ or hh-3d/unreal/ or any .uproject
+  - Fetch Overture/OSM/Google/Cesium or pin a paid API
+  - Install Unreal / Epic / Cesium for Unreal
+  - Start G0-ENGINE, G1, Godot-2, or VF work from this track
+  - Tick or rewrite hh-3d/zdoc/ originals
+  - Expand Hòn Gió demo / run a second preview
+  - Claim PASS / 1:1 / GTA-like / MapLibre already running
+  - Flip sandbox CURRENT_WP to R0-WP0 or SANDBOX-R0-WP0-WEB
+
+DO_NOT_CLAIM
+  HH World exists as an app
+  400 m fixture exists
+  original R0-WP0 is complete
+)

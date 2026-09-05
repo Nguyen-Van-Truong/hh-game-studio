@@ -1,0 +1,1087 @@
+{
+  "run_id": "HH3D-J5-20260903-ASIA-SAIGON-23",
+  "player": "http://127.0.0.1:4175/",
+  "verdict": "J5_SHOP_STALL_OK",
+  "not_plan_pass": true,
+  "not_gate_u1": true,
+  "not_osm": true,
+  "not_wan": true,
+  "skyOk": true,
+  "propsOk": true,
+  "stallOk": true,
+  "shopOk": true,
+  "honestyOk": true,
+  "awningHex": "#6e3d9a",
+  "skyBand": {
+    "samples": 1462,
+    "meanR": 123.8,
+    "meanG": 148.1,
+    "meanB": 162.2,
+    "lum": 144,
+    "beigeRatio": 0.024,
+    "grayRatio": 0,
+    "blueRatio": 0.638,
+    "tealRatio": 0.642,
+    "darkRatio": 0.08,
+    "lightRatio": 0.823,
+    "whiteRatio": 0.021,
+    "warmRatio": 0.036,
+    "awningRatio": 0,
+    "uniqueQ16": 54,
+    "bluerThanRed": true
+  },
+  "spawnSky": {
+    "samples": 1462,
+    "meanR": 170.7,
+    "meanG": 52.1,
+    "meanB": 31.4,
+    "lum": 75.8,
+    "beigeRatio": 0.018,
+    "grayRatio": 0.049,
+    "blueRatio": 0,
+    "tealRatio": 0,
+    "darkRatio": 0.785,
+    "lightRatio": 0.119,
+    "whiteRatio": 0.083,
+    "warmRatio": 0.012,
+    "awningRatio": 0,
+    "uniqueQ16": 41,
+    "bluerThanRed": false
+  },
+  "awningBand": {
+    "samples": 13724,
+    "meanR": 87.8,
+    "meanG": 87.6,
+    "meanB": 87,
+    "lum": 87.6,
+    "beigeRatio": 0.011,
+    "grayRatio": 0.031,
+    "blueRatio": 0.277,
+    "tealRatio": 0.2,
+    "darkRatio": 0.496,
+    "lightRatio": 0.382,
+    "whiteRatio": 0.168,
+    "warmRatio": 0.01,
+    "awningRatio": 0.132,
+    "uniqueQ16": 182,
+    "bluerThanRed": false
+  },
+  "zebraBand": {
+    "samples": 10472,
+    "meanR": 49.3,
+    "meanG": 60.1,
+    "meanB": 59.3,
+    "lum": 57.7,
+    "beigeRatio": 0,
+    "grayRatio": 0.117,
+    "blueRatio": 0.111,
+    "tealRatio": 0.224,
+    "darkRatio": 0.75,
+    "lightRatio": 0.219,
+    "whiteRatio": 0.117,
+    "warmRatio": 0,
+    "awningRatio": 0.001,
+    "uniqueQ16": 73,
+    "bluerThanRed": true
+  },
+  "hash": "cefbc0f2034fa249",
+  "bytes": 150552,
+  "shotSpawn": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-shop-stall-spawn.png",
+  "shot": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-shop-stall.png",
+  "spawnDom": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/?seat=a",
+    "playReady": "yes",
+    "canvas": {
+      "w": 1280,
+      "h": 720,
+      "cw": 1280,
+      "ch": 720,
+      "box": {
+        "w": 1280,
+        "h": 720,
+        "top": 0,
+        "left": 0
+      }
+    },
+    "sky": "gradient-hemisphere",
+    "sun": "disc",
+    "light": "hemi-sun",
+    "ground": "road-walk-curb",
+    "streetProps": "lamps-crosswalk-planters",
+    "lamps": "38",
+    "lampGlows": "6",
+    "crosswalks": "1",
+    "planters": "4",
+    "buildings": "60",
+    "shops": "3",
+    "shopSigns": "3",
+    "shopStalls": "3",
+    "shopStallKind": "awning-kiosk",
+    "shopSignKind": "pole-board",
+    "body": "tunic-humanoid",
+    "heading": "0.0",
+    "lon": "106.6980400",
+    "lat": "10.7716200",
+    "insideAabb": "0",
+    "blocked": "0",
+    "shopMarker": true,
+    "shopPanel": false,
+    "shopPanelId": "",
+    "lanternAwning": "#6e3d9a",
+    "lanternStall": "awning-kiosk",
+    "stalls": [
+      {
+        "testid": "shop-stall-shop-lantern-fish",
+        "shop": "shop-lantern-fish",
+        "kind": "awning-kiosk",
+        "awning": "#6e3d9a",
+        "collide": "1",
+        "x": "4.00",
+        "z": "-69.28"
+      },
+      {
+        "testid": "shop-stall-shop-local-sharedpc",
+        "shop": "shop-local-sharedpc",
+        "kind": "awning-kiosk",
+        "awning": "#2f5fbe",
+        "collide": "0",
+        "x": "4.37",
+        "z": "-97.24"
+      },
+      {
+        "testid": "shop-stall-shop-local-mtl8ulddihjpre",
+        "shop": "shop-local-mtl8ulddihjpre",
+        "kind": "awning-kiosk",
+        "awning": "#4a8c2e",
+        "collide": "1",
+        "x": "16.37",
+        "z": "-97.24"
+      }
+    ],
+    "props": [
+      {
+        "testid": "lamp-street-tram-approach-0-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-0-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-1-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-1-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-2-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-2-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-3-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-3-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-4-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-4-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-5-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-5-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-6-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-6-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-7-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-7-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-8-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-8-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-0-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-0-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-1-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-1-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-3-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-3-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-4-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-4-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-5-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-5-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-6-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-6-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-7-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-7-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-8-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-8-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-harbor-shop-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-harbor-shop-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-harbor-near-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-harbor-near-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "crosswalk-harbor-lantern",
+        "kind": "crosswalk"
+      },
+      {
+        "testid": "planter-harbor-shop-e",
+        "kind": "planter"
+      },
+      {
+        "testid": "planter-harbor-shop-w",
+        "kind": "planter"
+      },
+      {
+        "testid": "planter-harbor-north-e",
+        "kind": "planter"
+      },
+      {
+        "testid": "planter-tram-east-s",
+        "kind": "planter"
+      }
+    ],
+    "honesty": true,
+    "deniesGta": true,
+    "deniesTwin": true
+  },
+  "midDom": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/?seat=a",
+    "playReady": "yes",
+    "canvas": {
+      "w": 1280,
+      "h": 720,
+      "cw": 1280,
+      "ch": 720,
+      "box": {
+        "w": 1280,
+        "h": 720,
+        "top": 0,
+        "left": 0
+      }
+    },
+    "sky": "gradient-hemisphere",
+    "sun": "disc",
+    "light": "hemi-sun",
+    "ground": "road-walk-curb",
+    "streetProps": "lamps-crosswalk-planters",
+    "lamps": "38",
+    "lampGlows": "6",
+    "crosswalks": "1",
+    "planters": "4",
+    "buildings": "60",
+    "shops": "3",
+    "shopSigns": "3",
+    "shopStalls": "3",
+    "shopStallKind": "awning-kiosk",
+    "shopSignKind": "pole-board",
+    "body": "tunic-humanoid",
+    "heading": "0.0",
+    "lon": "106.6980400",
+    "lat": "10.7716844",
+    "insideAabb": "0",
+    "blocked": "0",
+    "shopMarker": true,
+    "shopPanel": false,
+    "shopPanelId": "",
+    "lanternAwning": "#6e3d9a",
+    "lanternStall": "awning-kiosk",
+    "stalls": [
+      {
+        "testid": "shop-stall-shop-lantern-fish",
+        "shop": "shop-lantern-fish",
+        "kind": "awning-kiosk",
+        "awning": "#6e3d9a",
+        "collide": "1",
+        "x": "4.00",
+        "z": "-69.28"
+      },
+      {
+        "testid": "shop-stall-shop-local-sharedpc",
+        "shop": "shop-local-sharedpc",
+        "kind": "awning-kiosk",
+        "awning": "#2f5fbe",
+        "collide": "0",
+        "x": "4.37",
+        "z": "-97.24"
+      },
+      {
+        "testid": "shop-stall-shop-local-mtl8ulddihjpre",
+        "shop": "shop-local-mtl8ulddihjpre",
+        "kind": "awning-kiosk",
+        "awning": "#4a8c2e",
+        "collide": "1",
+        "x": "16.37",
+        "z": "-97.24"
+      }
+    ],
+    "props": [
+      {
+        "testid": "lamp-street-tram-approach-0-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-0-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-1-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-1-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-2-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-2-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-3-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-3-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-4-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-4-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-5-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-5-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-6-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-6-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-7-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-7-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-8-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-8-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-0-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-0-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-1-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-1-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-3-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-3-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-4-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-4-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-5-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-5-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-6-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-6-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-7-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-7-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-8-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-8-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-harbor-shop-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-harbor-shop-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-harbor-near-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-harbor-near-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "crosswalk-harbor-lantern",
+        "kind": "crosswalk"
+      },
+      {
+        "testid": "planter-harbor-shop-e",
+        "kind": "planter"
+      },
+      {
+        "testid": "planter-harbor-shop-w",
+        "kind": "planter"
+      },
+      {
+        "testid": "planter-harbor-north-e",
+        "kind": "planter"
+      },
+      {
+        "testid": "planter-tram-east-s",
+        "kind": "planter"
+      }
+    ],
+    "honesty": true,
+    "deniesGta": true,
+    "deniesTwin": true
+  },
+  "walkDom": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/?seat=a",
+    "playReady": "yes",
+    "canvas": {
+      "w": 1280,
+      "h": 720,
+      "cw": 1280,
+      "ch": 720,
+      "box": {
+        "w": 1280,
+        "h": 720,
+        "top": 0,
+        "left": 0
+      }
+    },
+    "sky": "gradient-hemisphere",
+    "sun": "disc",
+    "light": "hemi-sun",
+    "ground": "road-walk-curb",
+    "streetProps": "lamps-crosswalk-planters",
+    "lamps": "38",
+    "lampGlows": "6",
+    "crosswalks": "1",
+    "planters": "4",
+    "buildings": "60",
+    "shops": "3",
+    "shopSigns": "3",
+    "shopStalls": "3",
+    "shopStallKind": "awning-kiosk",
+    "shopSignKind": "pole-board",
+    "body": "tunic-humanoid",
+    "heading": "0.0",
+    "lon": "106.6980400",
+    "lat": "10.7718215",
+    "insideAabb": "0",
+    "blocked": "0",
+    "shopMarker": true,
+    "shopPanel": false,
+    "shopPanelId": "",
+    "lanternAwning": "#6e3d9a",
+    "lanternStall": "awning-kiosk",
+    "stalls": [
+      {
+        "testid": "shop-stall-shop-lantern-fish",
+        "shop": "shop-lantern-fish",
+        "kind": "awning-kiosk",
+        "awning": "#6e3d9a",
+        "collide": "1",
+        "x": "4.00",
+        "z": "-69.28"
+      },
+      {
+        "testid": "shop-stall-shop-local-sharedpc",
+        "shop": "shop-local-sharedpc",
+        "kind": "awning-kiosk",
+        "awning": "#2f5fbe",
+        "collide": "0",
+        "x": "4.37",
+        "z": "-97.24"
+      },
+      {
+        "testid": "shop-stall-shop-local-mtl8ulddihjpre",
+        "shop": "shop-local-mtl8ulddihjpre",
+        "kind": "awning-kiosk",
+        "awning": "#4a8c2e",
+        "collide": "1",
+        "x": "16.37",
+        "z": "-97.24"
+      }
+    ],
+    "props": [
+      {
+        "testid": "lamp-street-tram-approach-0-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-0-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-1-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-1-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-2-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-2-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-3-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-3-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-4-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-4-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-5-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-5-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-6-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-6-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-7-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-7-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-8-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-8-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-0-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-0-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-1-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-1-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-3-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-3-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-4-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-4-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-5-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-5-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-6-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-6-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-7-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-7-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-8-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-8-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-harbor-shop-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-harbor-shop-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-harbor-near-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-harbor-near-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "crosswalk-harbor-lantern",
+        "kind": "crosswalk"
+      },
+      {
+        "testid": "planter-harbor-shop-e",
+        "kind": "planter"
+      },
+      {
+        "testid": "planter-harbor-shop-w",
+        "kind": "planter"
+      },
+      {
+        "testid": "planter-harbor-north-e",
+        "kind": "planter"
+      },
+      {
+        "testid": "planter-tram-east-s",
+        "kind": "planter"
+      }
+    ],
+    "honesty": true,
+    "deniesGta": true,
+    "deniesTwin": true
+  },
+  "shopDom": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/?seat=a&place=place-market-steps&shop=shop-lantern-fish",
+    "playReady": "yes",
+    "canvas": {
+      "w": 1280,
+      "h": 720,
+      "cw": 1280,
+      "ch": 720,
+      "box": {
+        "w": 1280,
+        "h": 720,
+        "top": 0,
+        "left": 0
+      }
+    },
+    "sky": "gradient-hemisphere",
+    "sun": "disc",
+    "light": "hemi-sun",
+    "ground": "road-walk-curb",
+    "streetProps": "lamps-crosswalk-planters",
+    "lamps": "38",
+    "lampGlows": "6",
+    "crosswalks": "1",
+    "planters": "4",
+    "buildings": "60",
+    "shops": "3",
+    "shopSigns": "3",
+    "shopStalls": "3",
+    "shopStallKind": "awning-kiosk",
+    "shopSignKind": "pole-board",
+    "body": "tunic-humanoid",
+    "heading": "0.0",
+    "lon": "106.6980400",
+    "lat": "10.7718215",
+    "insideAabb": "0",
+    "blocked": "0",
+    "shopMarker": true,
+    "shopPanel": true,
+    "shopPanelId": "shop-lantern-fish",
+    "lanternAwning": "#6e3d9a",
+    "lanternStall": "awning-kiosk",
+    "stalls": [
+      {
+        "testid": "shop-stall-shop-lantern-fish",
+        "shop": "shop-lantern-fish",
+        "kind": "awning-kiosk",
+        "awning": "#6e3d9a",
+        "collide": "1",
+        "x": "4.00",
+        "z": "-69.28"
+      },
+      {
+        "testid": "shop-stall-shop-local-sharedpc",
+        "shop": "shop-local-sharedpc",
+        "kind": "awning-kiosk",
+        "awning": "#2f5fbe",
+        "collide": "0",
+        "x": "4.37",
+        "z": "-97.24"
+      },
+      {
+        "testid": "shop-stall-shop-local-mtl8ulddihjpre",
+        "shop": "shop-local-mtl8ulddihjpre",
+        "kind": "awning-kiosk",
+        "awning": "#4a8c2e",
+        "collide": "1",
+        "x": "16.37",
+        "z": "-97.24"
+      }
+    ],
+    "props": [
+      {
+        "testid": "lamp-street-tram-approach-0-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-0-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-1-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-1-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-2-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-2-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-3-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-3-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-4-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-4-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-5-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-5-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-6-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-6-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-7-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-7-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-8-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-tram-approach-8-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-0-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-0-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-1-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-1-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-3-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-3-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-4-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-4-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-5-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-5-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-6-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-6-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-7-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-7-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-8-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-street-harbor-walk-8-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-harbor-shop-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-harbor-shop-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-harbor-near-e",
+        "kind": "lamp"
+      },
+      {
+        "testid": "lamp-harbor-near-w",
+        "kind": "lamp"
+      },
+      {
+        "testid": "crosswalk-harbor-lantern",
+        "kind": "crosswalk"
+      },
+      {
+        "testid": "planter-harbor-shop-e",
+        "kind": "planter"
+      },
+      {
+        "testid": "planter-harbor-shop-w",
+        "kind": "planter"
+      },
+      {
+        "testid": "planter-harbor-north-e",
+        "kind": "planter"
+      },
+      {
+        "testid": "planter-tram-east-s",
+        "kind": "planter"
+      }
+    ],
+    "honesty": true,
+    "deniesGta": true,
+    "deniesTwin": true
+  }
+}

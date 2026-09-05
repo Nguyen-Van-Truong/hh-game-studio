@@ -1,0 +1,110 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=06:35 +07
+ROLE=IMPLEMENTER
+TICK=n/a (do not treat this file as TICK=yes)
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M2=1
+NOT_OSM=1
+NOT_WAN=1
+PLAYER_URL=http://127.0.0.1:4175/
+RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-03
+COMMAND=node hh-3d/app/data-qa/j5-friend-gait-probe.mjs
+VERDICT_IMPLEMENTER_CDP=J5_FRIEND_GAIT_OK
+CRITIC_FILE=hh-3d/app/data-qa/CRITIC-3D-CROSS-REAUDIT-2026-09-04.txt
+CRITIC_TICK=no
+LIVE_JS=/assets/index-BaoJbjxu.js
+LIVE_JS_LEN=2126062
+LIVE_JS_SHA256=4d222643a8ebe93268a7a33ac6db1a2f6844dc35e63c8073edbe7947e2dd5e51
+ONE_RECYCLE_AFTER_REAL_FIXES=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_BIND_0_0_0_0=1
+NO_COMMIT=1
+NO_HIP_SPHERES=1
+CLAIMS_1_2_3_NOT_RIPPED=1
+
+================================================================================
+WHAT THE RE-AUDIT SAID (accepted as the spec)
+================================================================================
+
+Independent critic TICK=no on live /assets/index-C5aM6kYn.js.
+Claims 1–3 PASSED (leftover Nearby E, modes header, spawn/north sky).
+Did not rip those.
+
+Claim 4 FAIL — only job this remint:
+- Default B view could not see A (sky / camHit bldg-steps-e-00 pull-in 1.70 m).
+- Deep look-down from B west went solid black (camera interior).
+- stand-vs-walk remoteBody pixelDiff 0.0057 (noise). Second walk frame
+  hashed identical to stand.
+- Attrs on A were real (spread 0.76–1.11, opposite=1) vs B idle 0.05.
+  That is NOT enough.
+
+================================================================================
+FIXED (code + implementer CDP)
+================================================================================
+
+Camera / B first friend view
+  The 0.36 "destination inside" overwrite in cameraRayHit was the 1.70 m
+  crush: desired behind-west sits in Steps East, so the lens was forced
+  36% along the ray instead of stopping at the west face.
+  Removed that overwrite. pushCameraOutOfSolid + CAM_STREET_FLOOR_Y=0.82
+  so a look-down cannot park the lens in a box / under the slab.
+  Extra pad when pitch < -18.
+  Seat B: PLAY_CAM_SIDE_B=-1.6 (south of the east wall) and default look
+  pitch -8 so the first view is the street / A's teal tunic, not zenith
+  or the Steps East face. Body heading stays 270 (A is ~7 m west).
+  Isolated B default: camHit=0 inside=0 dist=5.77 pitch=-8 side=-1.60.
+  Teal A on canvas (crop tealRatio=0.0465, onCanvas=1).
+
+Look-down
+  220 px right-drag from B. Canvas lum=107.5 blackRatio=0.070.
+  lookDownBlack=false. cam-inside=0. Not a solid black interior.
+
+Remote opposite-stride (pixels, not attrs-only)
+  Isolated add/accept/Online. A holds W. B crops A's tunic via projected
+  screenX/Y (not sky).
+  stand-vs-walk remoteBody pixelDiff=0.9736 (well above 0.02).
+  Two walk-phase crops: sha16 d231bbd1090ff3d0 / c2e35b3d59e30260 /
+  5df173e198cd1f48 — not identical.
+  walk-phase pixelDiff=0.9716.
+  Remote node: limbSpread=1.278 opposite=1 moving=1 onCanvas=1
+  (second phase spread 1.217 opposite=1). Not B idle 0.05.
+
+Leftover E / lantern (must still hold)
+  Seat B spawn: nearbyShop="" ; hint idle ; "Quầy Cá Đèn Lồng: 29 m away".
+  Leftover Shared PC / J6 did not own E.
+  A held W then E: shop-lantern-fish.
+
+================================================================================
+4175
+================================================================================
+
+Preview: npm run preview (vite.config host 127.0.0.1 port 4175 strictPort)
+from hh-3d/app/web. Recycled the existing 4175 after the remint build.
+No 4173 / 4174 / 5175. No 0.0.0.0. Listen pid 52660.
+
+LIVE_JS=/assets/index-BaoJbjxu.js
+LEN=2126062
+SHA256=4d222643a8ebe93268a7a33ac6db1a2f6844dc35e63c8073edbe7947e2dd5e51
+
+================================================================================
+NOT FIXED / STILL TRUE
+================================================================================
+
+- This writer is the implementer. TICK=n/a. Independent critic has not
+  re-audited index-BaoJbjxu.js. Prior TICK=no stands until they do.
+- GATE-U1 three humans not invented. Plan checkboxes still [ ].
+- M2 / city presence / other-PC / WAN / OSM not built.
+- Leftover this-PC shops still exist. Intended. They do not own Nearby E
+  inside the 14 m keep-out.
+- Not a city. Not 1:1. Bind remains 127.0.0.1:4175.
+- Default follow yaw still tracks body heading (270 west) after the first
+  tick; the street-side offset + look-down pitch is what frames A.
+
+================================================================================
+END

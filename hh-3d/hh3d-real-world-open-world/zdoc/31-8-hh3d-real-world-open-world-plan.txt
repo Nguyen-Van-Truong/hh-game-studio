@@ -1,0 +1,1020 @@
+PLAN_ROLE=NON_AUTHORITATIVE_PROPOSAL
+PLAN_SCOPE=hh-3d
+PLAN_DATE=2026-08-31
+LAST_AUDIT_DATE=2026-09-01
+TIMEZONE=Asia/Saigon
+STATUS=BACKGROUND_AUDIT_PAUSED
+PRODUCT_WORKSPACE=hh-3d
+PARENT_PRODUCT_BOUNDARY=godot/dogfood/superfighters (do not modify)
+ROUTING_UPDATE=2026-08-31
+ROUTING_ROLE=BACKGROUND_AUDIT_ONLY
+CURRENT_EXECUTION_PLAN=hh-3d/zdoc/31-8-hh3d-demo-webgl-plan.txt (PAUSED)
+LATER_EXECUTION_PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+DO_NOT_START_THIS_FILE_DIRECTLY=1
+NATIVE_EXECUTION_AUTHORIZATION=NONE
+NATIVE_DEPENDENCY=web MVP benchmark + separate owner decision
+AUDIT_SUMMARY=hh-3d/zdoc/01-9-hh3d-plan-audit-summary.txt
+CHEAP_AGENT_PROMPT=hh-3d/zdoc/01-9-hh3d-cheap-agent-handoff-prompt.txt
+
+================================================================================
+HH-3D REAL-WORLD OPEN-WORLD GAME PLAN
+================================================================================
+
+Tên làm việc: HH World (tên thương hiệu cuối sẽ chốt sau legal gate)
+Vai trò của file này sau routing update: background audit về map thật, legal,
+provenance và lựa chọn engine. Nó không còn là execution plan hiện tại.
+Execution hiện tại không có: demo web trong `31-8-hh3d-demo-webgl-plan.txt`
+đang PAUSED; sản phẩm đầy đủ về sau nằm trong
+`31-8-hh3d-real-application-plan.txt` và cũng chưa được mở.
+
+Tài liệu này là proposal riêng cho hh-3d. Nó không phải WP của Vault Fighters,
+không thêm checkbox vào roadmap Godot, không thay đổi AGENTS.md và không được
+dùng để suy ra tiến độ của bất kỳ product nào khác.
+
+--------------------------------------------------------------------------------
+AUDIT OVERRIDE 2026-09-01 — KHÔNG PHẢI EXECUTION BACKLOG
+--------------------------------------------------------------------------------
+
+Owner đã yêu cầu dừng cả demo và phần triển khai tương lai. File này chỉ được
+dùng để phản biện lựa chọn native/open-world, không được dùng làm lệnh cho
+agent coding. Hiện `hh-3d/unreal/` chưa tồn tại trong workspace; không có
+Unreal project, packaged build, hardware pass, provider approval hay legal pass
+được ghi nhận cho route này.
+
+- Không tạo project Unreal, tải map lớn, cài plugin, tạo account, dùng key,
+  gọi dịch vụ trả phí hoặc mở G2 trở đi khi chưa có owner resume và native
+  decision record riêng.
+- Unreal chỉ hợp lý cho native game có vehicle/physics/crowd/cinematic/VR;
+  không cần cho web application. Web MVP phải được benchmark trước khi tiêu
+  tiền cho native.
+- Google Photorealistic 3D Tiles/Cesium online chỉ là visualization profile
+  có điều khoản riêng; không extract, trace, bake, cache trái phép hoặc dùng
+  làm collision/nav/gameplay source.
+- OSM/Overture phải có release, acquired/source/generated/published time,
+  source/artifact hash, accuracy/geometry/height confidence, license và
+  attribution; không gọi snapshot là realtime.
+- Networking, traffic live, multiplayer, voice/chat và server-authoritative
+  gameplay không thuộc first release.
+
+Quality gate bắt buộc trước khi mở native playable slice:
+
+- `G1.5-HUMAN-USABILITY`: ba reviewer độc lập, trong đó có ít nhất một người
+  chưa đọc code, hoàn thành route 5 phút trên AOI 400 m x 400 m: spawn -> một
+  landmark -> quay lại, không vehicle/NPC/mission. Ghi task success, confusion,
+  device, build/source hash và lời chê. Không đạt thì REWORK, dù scene đẹp.
+- Native G0 phải ghi exact UE/plugin/compiler versions, hardware tiers, disk/
+  VRAM/RAM budget, cost ceiling, license profile, offline behavior và rollback.
+- Chỉ sau G1.5 mới cân nhắc G2 1 km2; không nhảy thẳng tới city/AAA scope.
+
+Release ladder của file này là tham chiếu, không phải lệnh chạy:
+
+P0 offline data/coordinate proof -> P1 small authored/map proof -> P2 optional
+native 400 m slice -> P3 1 km2 playable -> P4 vehicle/street life -> P5 mission
+and scale. Mỗi bước cần owner mở gate, source hash, runtime evidence và critic
+độc lập. Nếu web MVP đáp ứng nhu cầu, native giữ `DEFERRED` vĩnh viễn là kết quả
+hợp lệ; không phải thất bại.
+
+--------------------------------------------------------------------------------
+0. KẾT LUẬN NGẮN GỌN VỀ LỜI AGENT CŨ
+--------------------------------------------------------------------------------
+
+Kết luận: agent cũ hợp lý cho một web diorama đẹp như ảnh Pelago, nhưng không
+hợp lý nếu mục tiêu mới là game giống GTA V/GTA VI nhất có thể, có nhân vật,
+xe, NPC, va chạm, nhiệm vụ và bản đồ thật.
+
+Những điểm đúng:
+
+1. Ảnh có vẻ là một trải nghiệm 3D tương tác chạy bằng renderer của trình
+   duyệt, với UI HTML phủ lên canvas; Three.js/React Three Fiber là lựa chọn
+   hợp lý cho loại showcase này.
+2. AI coding thường viết mã và tạo asset/config; trình duyệt và GPU mới là
+   nơi render từng frame. Một ảnh tĩnh không chứng minh được toàn bộ nguồn
+   gốc, số vòng chỉnh sửa hay model AI đã dùng.
+3. Instancing, LOD, camera preset, UI overlay và quy trình viết-chạy-quan sát-
+   sửa là các kỹ thuật phù hợp cho prototype web.
+4. Saltwind là một sản phẩm/demo riêng, không phải bằng chứng rằng ảnh Pelago
+   và Saltwind là cùng một codebase hay cùng một sản phẩm.
+
+Những điểm cần sửa:
+
+1. “Giống video trong 1–2 ngày” chỉ có thể đúng với một mockup nhỏ. Nó không
+   đúng cho open world có streaming, AI giao thông, pedestrian, vehicle
+   physics, interiors, mission state, save/load, optimization và packaging.
+2. Spline, Kenney, Quaternius và R3F có thể giúp tạo diorama hoặc browser
+   viewer; chúng không phải nền móng tốt nhất cho game desktop third-person
+   quy mô lớn. Rapier/GSAP cũng không tự giải quyết world streaming, crowd,
+   navigation hay production content.
+3. OSM/Overture footprint chỉ cho biết một phần vị trí và hình dạng. Chúng
+   không tự cung cấp cửa, mặt tiền chính xác, nội thất, biển hiệu, hàng hóa,
+   người dân hoặc trạng thái giao thông theo thời gian thực.
+4. “Bản đồ đúng thế giới hiện tại” không phải một thuộc tính nhị phân. Cần
+   ghi rõ source, release, thời điểm chụp, bbox, độ chính xác, dữ liệu thiếu
+   và lịch refresh. Không được gọi snapshot cũ là realtime.
+5. Google Photorealistic 3D Tiles có thể làm lớp hiển thị online trong một
+   prototype có key/billing/attribution; không được mặc định dùng nó làm dữ
+   liệu collision, navigation, source để trace/bake map, hay asset offline.
+6. Tuyên bố về Grok 4.7 chỉ là claim chưa được xác minh trong các nguồn xAI
+   chính thức đã kiểm tra tại ngày lập plan. Không chọn model dựa trên nhãn
+   trong một clip; model chỉ là một công cụ, không thay thế pipeline game.
+7. `hh-3d` hiện đã tồn tại trong working tree với `README.md` và `IDEAS.md`,
+   nhưng chưa phải một Vite app hoàn chỉnh. “Folder trống” chỉ đúng theo nghĩa
+   chưa có ứng dụng, không đúng nếu hiểu là không có thư mục nào.
+
+Quyết định kiến trúc từ kết luận trên:
+
+- Nếu mục tiêu là browser application/map viewer: MapLibre local là proof đầu
+  tiên; R3F chỉ giữ cho authored diorama ở route riêng, CesiumJS chỉ mở sau
+  provider/terms/cost benchmark.
+- Nếu mục tiêu là game có cảm giác GTA-like: dùng Unreal Engine làm runtime
+  chính; Cesium for Unreal chỉ là lớp địa lý/streaming tùy chọn; gameplay map
+  phải có dữ liệu và collision do project sở hữu.
+
+--------------------------------------------------------------------------------
+1. ĐỊNH NGHĨA “GIỐNG GTA” ĐỂ KHÔNG HỨA ẢO
+--------------------------------------------------------------------------------
+
+Không dùng “giống GTA” như một lời hứa về số lượng nội dung hoặc chất lượng
+AAA. Trong plan này, GTA-like được phân rã thành các functional beats có thể
+đo được:
+
+- góc nhìn third-person và điều khiển nhân vật mượt;
+- đi bộ, chạy, nhảy, leo/vượt chướng ngại ở mức phù hợp với map;
+- lái ít nhất một loại xe với vào/ra xe và camera riêng;
+- đường phố có traffic và người đi bộ với LOD/schedule;
+- va chạm, navigation, streaming theo khu vực;
+- tương tác với cửa, phương tiện, vật thể và một số interior có chủ đích;
+- mission state machine, objective, fail/retry/complete và save checkpoint;
+- thế giới phản hồi theo thời gian trong game: thời gian ngày, thời tiết,
+  wanted/response hoặc một cơ chế truy đuổi nguyên bản tương đương;
+- HUD, pause, settings, accessibility và telemetry debug;
+- map/minimap có tên khu vực, tọa độ hoặc marker nguồn dữ liệu rõ ràng.
+
+Không được claim:
+
+- “bằng GTA V/GTA VI”;
+- “toàn bộ thành phố thật 1:1”;
+- “realtime/current tuyệt đối”;
+- “có toàn bộ nội thất”;
+- “AI tự làm game AAA hoàn chỉnh trong một prompt”.
+
+Mục tiêu phát hành đầu tiên là vertical slice chơi được 10–15 phút trong một
+khu vực thật nhỏ, có một mission hoàn chỉnh. Mở rộng diện tích chỉ sau khi
+slice đó đạt kiểm thử và hiệu năng.
+
+--------------------------------------------------------------------------------
+2. BA LỚP ĐỘ TRUNG THỰC CẦN TÁCH RIÊNG
+--------------------------------------------------------------------------------
+
+Một hệ thống không thể vừa có toàn cầu, vừa photorealistic, vừa có gameplay
+chi tiết ở mọi nơi với ngân sách nhỏ. Dùng ba lớp sau:
+
+Lớp A — Geo reference / globe:
+
+- mục đích: đặt thế giới ở đúng kinh-vĩ độ, xem xa, chuyển địa điểm;
+- dữ liệu: Cesium terrain/3D Tiles hoặc lớp bản đồ online được cấp phép;
+- trạng thái: có thể online, có thể thay đổi theo nhà cung cấp;
+- không dùng làm collision, navmesh hay nguồn để trích xuất hình học gameplay.
+
+Lớp B — Playable city fabric:
+
+- mục đích: đường, block, building mass, vỉa hè, giao lộ, bãi xe, terrain;
+- dữ liệu: snapshot Overture/OSM và dữ liệu mở được phép, qua pipeline riêng;
+- trạng thái: offline/package được sau khi kiểm tra license;
+- hình học có collision đơn giản, nav và streaming cell ổn định;
+- độ chính xác phải ghi bằng metric, không chỉ nhìn bằng mắt.
+
+Lớp C — Hero district / authored gameplay:
+
+- mục đích: vài block mà người chơi thật sự đi bộ, lái xe và làm nhiệm vụ;
+- dữ liệu: mesh/material/prop/interior nguyên bản, do team tạo hoặc license
+  rõ ràng; có thể dùng ảnh khảo sát được phép làm reference, không trace/rip;
+- trạng thái: gameplay-authoritative và được test kỹ;
+- mỗi khu có design pass, art pass, collision pass, nav pass và legal pass.
+
+Mô hình quyết định:
+
+  GLOBAL VIEW  --->  CITY FABRIC  --->  HERO BLOCKS  --->  MISSION SPACES
+  online/LOD       offline snapshot     authored assets      authored logic
+
+Khi người chơi đi xa khỏi hero district, chất lượng giảm theo thiết kế chứ
+không giả vờ rằng mọi tòa nhà đều có mặt tiền/interior thật.
+
+--------------------------------------------------------------------------------
+3. SCOPE MẶC ĐỊNH CHO VERTICAL SLICE
+--------------------------------------------------------------------------------
+
+Để plan có điểm bắt đầu cụ thể, dùng các giả định mặc định sau. Chúng có thể
+đổi ở Gate G0 mà không phải đổi kiến trúc:
+
+- địa điểm: khu vực quanh Chợ Bến Thành, Thành phố Hồ Chí Minh;
+- tâm tham chiếu: khoảng 10.7725, 106.6980;
+- AOI proof: khoảng 400 m x 400 m;
+- AOI playable đầu tiên: khoảng 1 km2, điều chỉnh theo mật độ dữ liệu và
+  phần cứng thật;
+- nền tảng: Windows desktop, single-player;
+- camera: third-person over-the-shoulder;
+- nội dung: một nhân vật nguyên bản, một xe nguyên bản, một hero building hoặc
+  interior, một mission 10–15 phút, traffic/pedestrian tối giản;
+- dữ liệu map: snapshot có version/hash; không gọi là live map;
+- visual target: stylized-realistic có vật liệu/ánh sáng riêng, không cố tái
+  tạo photogrammetry Google trong bản offline đầu tiên.
+
+Nếu owner muốn thành phố khác, chỉ thay `AOI_CENTER`, polygon AOI, tên
+display và source manifest; không lấy tên/landmark thật làm lý do để sao chép
+art hay layout expressive của một game thương mại.
+
+--------------------------------------------------------------------------------
+4. STACK ĐỀ XUẤT
+--------------------------------------------------------------------------------
+
+4.1 Runtime game — lựa chọn chính
+
+- Unreal Engine 5.x, pin đúng một phiên bản stable sau Gate G0.
+- C++ cho systems/core contracts; Blueprint cho composition, tuning và
+  designer-facing content khi phù hợp.
+- World Partition cho runtime streaming theo cell.
+- Data Layers cho gameplay/art/event variants.
+- PCG cho foliage, street dressing và variation có seed.
+- Nanite cho static geometry phù hợp sau profiling; không coi Nanite là phép
+  thuật miễn phí.
+- Lumen chỉ bật sau khi đo trên hardware baseline; có fallback lighting.
+- Chaos Vehicles cho vehicle physics.
+- Navigation/StateTree/AI framework của Unreal cho NPC và mission orchestration.
+- Mass Entity/Mass Gameplay chỉ dùng khi crowd scale thật sự cần; hero NPC
+  vẫn có thể là Actor đầy đủ.
+
+4.2 Geospatial layer
+
+- Cesium for Unreal cho georeference, globe context, terrain/3D Tiles streaming
+  và chuyển giữa các vị trí địa lý.
+- CesiumGeoreference là nguồn quy đổi lat/lon/height sang local Unreal space.
+- Vector GeoJSON/Parquet không được giả định là Cesium tự đọc trực tiếp trong
+  runtime; phải convert thành asset/mesh/PCG input mà pipeline kiểm soát.
+- Google Photorealistic 3D Tiles, nếu được dùng, chỉ nằm trong profile
+  `ONLINE_VISUALIZATION`, tách khỏi profile `PACKAGED_GAMEPLAY`.
+
+4.3 Offline geodata pipeline
+
+- Overture Maps: buildings, transportation, places/base khi license từng
+  theme phù hợp.
+- OpenStreetMap extracts/diffs hoặc nguồn OSM-derived có điều khoản phù hợp;
+  không dùng public raster tile server làm kho offline.
+- GeoParquet/Parquet làm artifact trung gian; DuckDB + spatial extension cho
+  lọc bbox/join/QA.
+- GDAL/OGR, pyogrio, Shapely hoặc công cụ tương đương cho reprojection,
+  simplify, polygon repair và kiểm tra topology.
+- Blender + Python cho hero mesh/prop; Houdini là optional khi PCG cần vượt
+  quá khả năng pipeline đơn giản.
+- QGIS hoặc viewer tương đương cho human QA đối chiếu 2D.
+- Git LFS hoặc artifact store có version cho binary; không commit cache,
+  credentials, raw planet extract hay build output vào lịch sử thường.
+
+4.4 Web viewer tùy chọn
+
+- Vite + React + TypeScript + Three.js/R3F có thể giữ trong
+  `hh-3d/web-viewer/` cho bản đồ giới thiệu, minimap, link launcher hoặc
+  diorama.
+- Đây không phải runtime gameplay chính và không được hứa có vehicle/crowd/
+  open-world parity chỉ vì cảnh demo render đẹp.
+- Spline chỉ dùng cho mockup/art direction nếu cần; không khóa dữ liệu gameplay
+  hay mission vào Spline.
+
+--------------------------------------------------------------------------------
+5. NGUYÊN TẮC “MAP THẬT HIỆN TẠI”
+--------------------------------------------------------------------------------
+
+Mỗi bản build phải định nghĩa currentness bằng manifest, ví dụ:
+
+  map_snapshot_id = hcmc-ben-thanh-<provider-release>
+  source_accessed_at = YYYY-MM-DDTHH:MM:SS+07:00
+  source_release = exact provider release/tag
+  bbox = west,south,east,north
+  coordinate_system = WGS84 -> local ENU around origin
+  generated_by = tool version + git commit
+  source_hash = SHA-256
+  refresh_policy = monthly / on-demand / live-overlay
+  known_gaps = explicit list
+
+Định nghĩa currentness:
+
+- C0 — live visual overlay: nhà cung cấp trả dữ liệu lúc người dùng xem;
+  không có nghĩa game content đã được cập nhật và không được bake lại tự động.
+- C1 — latest published snapshot: release mới nhất đã được pin tại thời điểm
+  build; đây là mức mặc định cho playable city fabric.
+- C2 — validated local update: snapshot cộng với kiểm tra/hiệu chỉnh từ
+  nguồn địa phương có license; dùng cho hero district.
+- C3 — live world state: traffic/weather/events riêng, có endpoint và SLA;
+  không nhầm với footprint/building data.
+
+UI/debug build phải hiển thị `as_of` hoặc cho người review xem manifest. Nếu
+source không có dữ liệu height/facade/interior, phải để trạng thái `unknown`/
+`approximated`, không tự điền rồi gọi là sự thật.
+
+--------------------------------------------------------------------------------
+6. DATA SOURCES VÀ LEGAL/PROVENANCE GATE
+--------------------------------------------------------------------------------
+
+Bảng dưới đây là định hướng kỹ thuật, không phải ý kiến pháp lý. Trước public
+release phải đọc điều khoản hiện hành và xin legal review khi có phần chưa rõ.
+
+Nguồn                  Dùng cho                         Cách dùng trong plan
+---------------------  --------------------------------  ----------------------
+OSM/OSMF              roads/POI/footprints              extract/self-host,
+                                                         attribution + ODbL
+Overture Buildings    building footprints/height        pin release, generate
+                                                         authored derived mesh,
+                                                         retain ODbL notices
+Overture Transport    routable road segments/connectors pin release, build road
+                                                         graph/splines/nav input
+Overture Places       place metadata                    inspect per-source
+                                                         license; do not assume
+                                                         one license for all rows
+Cesium for Unreal     globe/georeference/3D Tiles       plugin + service terms
+Google 3D Tiles       optional online visual backdrop   visualization profile;
+                                                         no extraction/offline
+Own/licensed assets    hero facade/interior/props       ledger, license, hash,
+                                                         source file retained
+
+Các cổng bắt buộc:
+
+G-L1 — License ledger:
+
+- mỗi file/data artifact có source, author/provider, license, URL, access date,
+  attribution text, hash và permitted use;
+- OSM-derived output phải xử lý nghĩa vụ ODbL/share-alike theo tư vấn pháp lý;
+- Overture theme có thể khác license; ghi license theo theme/source, không
+  gộp thành “Overture miễn phí”;
+- tên doanh nghiệp, logo, biển hiệu, nhân dạng và ảnh người thật phải được
+  thay thế hoặc có permission phù hợp.
+
+G-L2 — Google/Cesium service:
+
+- API key/token chỉ ở secret store hoặc local environment, không trong repo,
+  log, screenshot hay packaged public artifact;
+- hiển thị attribution động theo yêu cầu provider;
+- không prefetch/scrape/bake/cache riêng dữ liệu Google để tạo map offline;
+- không dùng Photorealistic 3D Tiles làm collision/navmesh hay trace geometry;
+- nếu product phụ thuộc stream online, phải ghi rõ chi phí, quota, outage,
+  account ownership và behavior khi mất mạng;
+- nếu cần đóng gói/distribute ra ngoài nội bộ, legal/commercial terms phải
+  được chấp thuận trước.
+
+G-L3 — Release/IP:
+
+- không tải, rip, trace, reverse-engineer, bundle hay ship code/art/audio,
+  map layout expressive, UI, title card hoặc trademark của GTA/Rockstar hay
+  sản phẩm tham chiếu khác;
+- “lấy cảm hứng từ thể loại” chỉ áp dụng cho mechanics/affordances ở mức
+  khái quát, không phải biểu đạt cụ thể;
+- không dùng AI-generated asset nếu không biết nguồn/license hoặc không thể
+  chứng minh quyền sử dụng thương mại;
+- Unreal Engine royalty/seat terms và plugin terms phải được ghi trong release
+  checklist, không suy đoán từ một tutorial.
+
+--------------------------------------------------------------------------------
+7. KIẾN TRÚC HỆ THỐNG
+--------------------------------------------------------------------------------
+
+Luồng build/runtime:
+
+  brief
+    -> AOI + source manifest
+    -> download/extract đã được phép
+    -> validate/reproject/normalize
+    -> generate road/building/terrain artifacts
+    -> import Unreal assets/PCG inputs
+    -> World Partition + Data Layers
+    -> gameplay/nav/traffic/interior authoring
+    -> packaged run + capture + metrics
+    -> review + checkpoint + release manifest
+
+Các boundary cần giữ:
+
+1. `SourceData` không phải `GameplayData`. Raw geodata có thể thiếu, đổi hoặc
+   bị thu hồi; gameplay map phải có version và fallback.
+2. `VisualTiles` không phải `CollisionWorld`. Mesh stream để nhìn không được
+   tự động trở thành mặt đất có thể đi/lái.
+3. `GeoFeatureId` không phải `MissionId`. ID nhà/đường từ provider không được
+   dùng làm identity bất biến của nhiệm vụ nếu provider có thể thay đổi.
+4. `LiveOverlay` không được mutate save/gameplay state không qua validation.
+5. Mọi generated asset phải ghi generator version, source hash, transform,
+   units và license metadata.
+
+Data model tối thiểu:
+
+- `WorldManifest`: world_id, engine_version, plugin_versions, AOI, origin,
+  source releases, hashes, license bundle, generator commit.
+- `RoadFeature`: stable internal id, source ids, centerline, width class,
+  lane/one-way/access metadata, confidence, generated spline id.
+- `BuildingFeature`: stable internal id, footprint, height source, height
+  confidence, parts flag, facade class, collision class, authored override.
+- `PlaceFeature`: source id, display policy, category, attribution, privacy/
+  brand clearance status.
+- `HeroOverride`: feature id, authored asset id, reason, reviewer, timestamp,
+  source/reference boundary.
+- `GameplayZone`: polygon/cell, load policy, nav policy, traffic density,
+  mission tags, fallback asset set.
+
+Coordinate policy:
+
+- lưu nguồn ở WGS84/EPSG:4326 hoặc định dạng source chính thức;
+- convert sang local ENU quanh origin của AOI trước khi tạo mesh/gameplay;
+- dùng double precision ở geospatial pipeline; tránh đặt toàn thành phố bằng
+  float quanh global origin;
+- ghi rõ đơn vị Unreal (cm) và sai số transform;
+- test round-trip lat/lon -> local -> lat/lon trên các điểm kiểm tra.
+
+--------------------------------------------------------------------------------
+8. CẤU TRÚC THƯ MỤC DỰ KIẾN
+--------------------------------------------------------------------------------
+
+Đây là target topology cho các WP sau; lượt hiện tại chỉ tạo `zdoc` và plan,
+không scaffold các folder runtime.
+
+hh-3d/
+  README.md
+  IDEAS.md
+  zdoc/
+    31-8-hh3d-real-world-open-world-plan.txt
+    research-ledger.txt                 (tạo ở G1)
+    license-ledger.txt                  (tạo ở G0/G1)
+    review-log.txt                      (tạo sau mỗi gate)
+  unreal/
+    HHWorld.uproject
+    Config/
+    Source/HHWorld/
+    Content/
+      Maps/
+      WorldPartition/
+      Geo/
+      Gameplay/
+      Characters/
+      Vehicles/
+      Interiors/
+      UI/
+      Audio/
+      Art/
+  tools/
+    geodata/
+      fetch_manifest.py
+      extract_aoi.py
+      validate_geo.py
+      generate_roads.py
+      generate_building_masses.py
+      emit_unreal_inputs.py
+  data/
+    manifests/
+    snapshots/          (artifact pointer or small approved extracts only)
+    derived/
+    qa/
+  web-viewer/           (optional R3F viewer, separate runtime)
+
+Không đưa `node_modules`, `.godot`, Unreal `Saved/`, `Intermediate/`, DDC,
+secret, raw provider cache, packaged builds hoặc token vào source commit.
+
+--------------------------------------------------------------------------------
+9. WORK PACKAGES VÀ GATES
+--------------------------------------------------------------------------------
+
+Các mục dưới đây dùng trạng thái chữ để tránh nhầm với checkbox của roadmap
+khác. Đây là backlog background đang PAUSED; không agent nào được tự mở gate,
+đổi STATE hoặc coi `NOT_STARTED` là quyền triển khai.
+
+G0 — Feasibility, hardware, legal and engine pin
+STATE: NOT_STARTED
+
+Mục tiêu:
+
+- kiểm tra máy thật: GPU/VRAM, RAM, SSD, driver, Windows version, network;
+- xác nhận Unreal Engine stable version, compiler/IDE, Cesium for Unreal,
+  Blender, Python, GDAL/DuckDB và dung lượng artifact;
+- chốt Windows-first, single-player và budget API/storage;
+- lập IP/source/license ledger trước khi tải dữ liệu;
+- xác nhận owner hiểu rằng exact facade/interior/realtime traffic là các lớp
+  riêng và có thể cần dịch vụ trả phí/legal review.
+
+Pass criteria:
+
+- có hardware baseline và performance tier;
+- tạo được project rỗng và chạy packaged hello-world;
+- Cesium sample/georeference mở được nếu chọn online profile;
+- không có credential trong repo;
+- legal decision: `offline-open-data-first`, `online-visualization-only`, hoặc
+  dừng vì điều khoản chưa rõ.
+
+Stop nếu: máy không đáp ứng, engine/plugin không pin được, hoặc owner yêu cầu
+bake dữ liệu provider bị cấm vào bản phát hành.
+
+G1 — Geospatial proof, 400 m x 400 m
+STATE: NOT_STARTED
+
+Mục tiêu:
+
+- lấy đúng một release Overture/OSM đã được phép cho AOI mặc định;
+- dựng road centerline, block, building footprint và height approximation;
+- xuất bản đồ 2D QA cạnh nguồn và scene 3D tối giản;
+- test coordinate round-trip, units, rotation, origin, height fallback;
+- viết `research-ledger.txt`, `license-ledger.txt`, manifest và known gaps.
+
+Pass criteria:
+
+- ít nhất 20 điểm kiểm tra có sai số tọa độ trong ngưỡng đã ghi;
+- road graph không có dangling connector bất ngờ ở ranh giới AOI;
+- building polygons hợp lệ, không tự xuyên đất hoặc đảo winding;
+- mỗi generated artifact truy ngược được về source/hash/generator;
+- map hiển thị rõ `as_of` và attribution.
+
+G1.5-HUMAN-USABILITY — Human-player gate
+STATE: NOT_STARTED
+DEPENDENCIES: G1, owner mở native/web route tương ứng
+
+Trước khi mở G2, ba reviewer độc lập (ít nhất một người chưa đọc code) phải
+hoàn thành route 5 phút trong AOI 400 m x 400 m: spawn -> landmark -> quay
+về. Không dùng vehicle, NPC hoặc mission để che lấp lỗi nền tảng. Ghi task
+success, thời gian, điểm bị lạc/khó hiểu, device, build/source hash và lời chê.
+Reviewer phải hiểu đâu là dữ liệu thật, đâu là approximation và đâu là authored.
+
+PASS chỉ khi route không làm mất control, landmark dễ tìm, loading/fallback
+không gây dead-end và không có claim fidelity vượt manifest. Nếu không đạt,
+REWORK trước khi mở rộng lên 1 km2.
+
+VERIFY:
+- input trace/browser hoặc packaged trace trên target device;
+- ba review notes độc lập;
+- source/artifact/license hash và currentness fields đầy đủ.
+
+G2 — Playable block, 1 km2
+STATE: NOT_STARTED
+DEPENDENCIES: G1,G1.5-HUMAN-USABILITY
+
+Mục tiêu:
+
+- third-person controller, camera, collision, ground/sidewalk và basic nav;
+- streaming cell đầu tiên với World Partition;
+- một hero block nguyên bản, một cửa, một interior nhỏ;
+- minimap/debug coordinates và respawn/fallback khi stream chưa sẵn sàng.
+
+Pass criteria:
+
+- người chơi đi bộ từ spawn đến landmark và quay lại bằng input thật;
+- không xuyên building/ground trong test route;
+- loading/unloading cell không mất player hoặc mission state;
+- interior transition có postcondition rõ và không tạo duplicate actor;
+- packaged build chạy không cần editor.
+
+G3 — Vehicle and street life
+STATE: NOT_STARTED
+
+Mục tiêu:
+
+- một vehicle nguyên bản với vào/ra, camera, braking/steering và collision;
+- traffic graph trên các road segment đã validate;
+- pedestrian spawn/schedule/LOD tối giản;
+- traffic/pedestrian không chặn hero mission hoặc làm nghẽn nav.
+
+Pass criteria:
+
+- lái một vòng có route và quay về garage/spawn;
+- xe không xuất hiện trong building hoặc dưới terrain trong soak test;
+- NPC xa camera giảm representation/logic theo tier;
+- số actor, frame time, memory và stream hitch được ghi trên baseline.
+
+G4 — Vertical slice mission
+STATE: NOT_STARTED
+
+Mục tiêu:
+
+- mission 10–15 phút với intro, 3–5 objectives, fail/retry/complete;
+- ít nhất một tương tác world, một pursuit/response mechanic nguyên bản và
+  một lựa chọn route;
+- save/checkpoint, pause, quit/restart và failure recovery;
+- toàn bộ mission asset nằm trong hero district, không phụ thuộc Google tile.
+
+Pass criteria:
+
+- clean start -> complete bằng input thật, không teleport/force-complete;
+- reload checkpoint cho kết quả đúng và không duplicate mission event;
+- có log timeline, seed nếu có procedural spawn, build hash và screenshot;
+- một critic độc lập có thể chạy lại theo repro command.
+
+G5 — Authored city quality
+STATE: NOT_STARTED
+
+Mục tiêu:
+
+- tăng hero district có chủ đích thay vì chỉ extrude toàn bộ footprint;
+- facade language, signage, props, lighting, audio và weather riêng;
+- thêm 2–3 interior/landmark có lý do gameplay;
+- map update không phá authored overrides.
+
+Pass criteria:
+
+- visual review tách rõ `source-derived mass` và `authored asset`;
+- update snapshot tạo diff report, không âm thầm ghi đè hero override;
+- no missing references, no unlicensed files, no secret leak;
+- profile quality tiers trên hardware baseline.
+
+G6 — Scale and resilience
+STATE: NOT_STARTED
+
+Mục tiêu:
+
+- mở rộng từ slice lên nhiều km2 chỉ sau khi G4/G5 ổn định;
+- HLOD/PCG/World Partition/Data Layers và asset budget;
+- streaming fallback, offline mode, network outage handling nếu có online
+  visual layer;
+- soak test nhiều giờ và save/load ở các cell khác nhau.
+
+Pass criteria:
+
+- target/minimum FPS và 1% low được đo, không chỉ nhìn viewport;
+- memory/VRAM/disk/CPU budgets có số cụ thể;
+- không có pop-in phá gameplay ở các route kiểm thử;
+- lỗi provider/API không làm game mất playable collision world.
+
+G7 — Currentness refresh and release package
+STATE: NOT_STARTED
+
+Mục tiêu:
+
+- refresh pipeline theo release mới, có diff, review và rollback;
+- build manifest + attribution + license notices + third-party terms;
+- automated source/hash/license completeness checks;
+- packaged Windows build, install/run/recovery instructions.
+
+Pass criteria:
+
+- cùng source manifest tạo ra artifact hash ổn định trong môi trường pin;
+- update thất bại giữ nguyên snapshot đang chạy;
+- UI/release notes nói rõ `as_of`, coverage và limitations;
+- legal owner sign-off cho provider data, names/logos, assets và engine terms.
+
+--------------------------------------------------------------------------------
+10. DATA PIPELINE CHI TIẾT
+--------------------------------------------------------------------------------
+
+Bước 1 — Freeze AOI
+
+- nhận center/polygon từ config, không hard-code trong script rải rác;
+- tạo bbox có margin cho đường/route ở ranh giới;
+- lưu altitude datum, local origin và intended gameplay extent.
+
+Bước 2 — Acquire đúng cách
+
+- dùng Overture release/extract hoặc OSM data provider có phép;
+- không quét/rải request lên public OSM raster tiles để tạo archive;
+- không tải Google Photorealistic mesh để xử lý machine/tracing;
+- lưu URL, release, timestamp, license và checksum trước transform.
+
+Bước 3 — Normalize
+
+- validate geometry, repair có log, loại feature ngoài AOI sau khi có margin;
+- giữ source IDs và provenance field;
+- map height: explicit height -> levels conversion -> documented fallback;
+- phân loại building/road/footway/parking/rail/water/park;
+- không biến giá trị thiếu thành số có vẻ chính xác mà không đánh dấu.
+
+Bước 4 — Generate
+
+- road centerline -> spline/road mesh/graph input;
+- footprint + height -> mass mesh collision nhẹ;
+- sidewalk/crosswalk/curb -> secondary geometry theo confidence;
+- prop/foliage -> PCG seed cố định, không spawn random không replay được;
+- POI -> internal IDs + display policy + legal/brand status.
+
+Bước 5 — Import và stream
+
+- tạo Unreal assets theo cell, không một mesh khổng lồ cho cả thành phố;
+- đặt actor vào World Partition/Data Layer đúng cell;
+- HLOD cho xa, collision proxy cho gần, không dùng render-only tile làm nav;
+- ghi generated asset manifest liên kết source feature IDs.
+
+Bước 6 — QA
+
+- bản đồ 2D: compare roads/building outlines/landmarks;
+- bản đồ 3D: inspect height, z-fighting, seam, origin, normals;
+- gameplay: walk/drive/nav route, cell boundary, stream outage;
+- provenance: source hash, generator commit, license, artifact hash;
+- refresh: diff add/change/delete, authored override conflicts và rollback.
+
+--------------------------------------------------------------------------------
+11. GAMEPLAY SYSTEMS — CHỈ THÊM SAU KHI G2 ỔN
+--------------------------------------------------------------------------------
+
+Character:
+
+- movement modes rõ ràng: walk/run/sprint/crouch/jump/interaction;
+- camera obstruction handling, aim/target assist tùy accessibility;
+- animation state machine nguyên bản; không lấy animation/rig từ game khác;
+- death/respawn hoặc fail state không phá streaming/mission state.
+
+Vehicle:
+
+- vehicle class data-driven: mass, wheelbase, acceleration, brake, turning,
+  damage state, entry points;
+- dùng Chaos Vehicle cho physics; tuning bằng test track riêng;
+- giao thông dùng simplified simulation khi xa, full physics khi gần;
+- parking/spawn/despawn có ownership và cleanup rõ.
+
+NPC/crowd:
+
+- phân tier: hero Actor, near simplified Actor, far Mass/instance/off;
+- navigation graph lấy từ playable road/sidewalk data, không từ Google tile;
+- schedule/behavior state có seed/version nếu cần replay;
+- tránh mô phỏng người thật, biển số, địa chỉ nhà riêng hoặc dữ liệu cá nhân.
+
+Mission:
+
+- state machine canonical: locked -> active -> objective -> failed/retry ->
+  complete/abandoned;
+- event IDs idempotent; save snapshot sau transition quan trọng;
+- mission không phụ thuộc provider online để hoàn thành;
+- authored content tách khỏi source-derived geometry bằng `HeroOverride`.
+
+World simulation:
+
+- time-of-day, weather, lighting và traffic density có profile;
+- live traffic/weather nếu dùng chỉ là overlay không authoritative cho map;
+- có deterministic test profile và low-cost offline profile;
+- pause/quit ưu tiên, không để async stream/AI callback ghi state sau shutdown.
+
+--------------------------------------------------------------------------------
+12. PERFORMANCE TARGET VÀ ĐO LƯỜNG
+--------------------------------------------------------------------------------
+
+Không chọn con số đẹp trước khi biết hardware. G0 phải tạo baseline, sau đó
+ghi các target chính thức. Dùng ba tier:
+
+- Minimum: build vẫn chơi được, streaming không làm mất control;
+- Target: trải nghiệm mặc định trên baseline PC;
+- High: máy mạnh/visual preset cao, không phải acceptance bắt buộc đầu tiên.
+
+Metrics bắt buộc:
+
+- average FPS, 1% low và frame-time percentile;
+- game thread, render thread, GPU time;
+- peak RAM/VRAM, loaded cell count, HLOD/PCG cost;
+- first-load time, cell transition hitch, shader/asset stall;
+- actor/entity count theo khoảng cách;
+- nav generation time và mission event latency;
+- packaged size, patch/diff size và offline startup.
+
+Budget rule:
+
+- mọi asset/system mới phải có before/after profile;
+- Nanite/Lumen/virtual shadow/crowd không được bật chỉ vì “đẹp”; phải có
+  hardware result và fallback;
+- nếu target giảm, ghi lý do và cập nhật scope, không che metric.
+
+--------------------------------------------------------------------------------
+13. AGENT WORKFLOW VÀ AN TOÀN THAY ĐỔI
+--------------------------------------------------------------------------------
+
+Agent được giao brief ngắn, nhưng phải tự tạo artifacts có thể kiểm chứng:
+
+  inspect -> plan -> semantic change -> validate -> build -> run -> observe
+  -> measure -> repair -> checkpoint -> review package
+
+Quy tắc:
+
+- một writer cho mỗi manifest/source file tại một thời điểm;
+- không raw-edit binary Unreal package khi không hiểu transaction/ownership;
+- generator phải deterministic theo release + seed + config hash;
+- mỗi command/mutation có command id hoặc build/run id duy nhất;
+- ACK chỉ sau đọc lại postcondition từ file/runtime;
+- trước thay đổi destructive phải checkpoint source/manifest và thử rollback;
+- không để API key/token trong prompt transcript, log, screenshot, bundle;
+- không gọi network trong packaged gameplay nếu profile là offline;
+- không tự đổi legal/acceptance để hợp với asset hoặc code đã lỡ tạo;
+- không claim map/feature chỉ từ code chưa chạy và screenshot chưa đối chiếu;
+- lỗi provider, missing data, stale release và approximate height phải xuất
+  hiện trong report, không bị nuốt bởi fallback im lặng.
+
+Review artifact tối thiểu mỗi gate:
+
+- run_id, source_snapshot_id, command/build id, engine/plugin versions;
+- source tree/artifact hashes và repro command;
+- map/mode/AOI, seed nếu có, timestamp + timezone;
+- metrics, known gaps, screenshot/video nếu cần;
+- attribution/license links và reviewer verdict;
+- process/resource cleanup proof cho automated runs.
+
+--------------------------------------------------------------------------------
+14. TEST PLAN
+--------------------------------------------------------------------------------
+
+Unit/data tests:
+
+- WGS84/local ENU round-trip;
+- bbox clipping and polygon validity;
+- height fallback and confidence propagation;
+- road graph connectivity/one-way/turn restrictions where available;
+- stable internal IDs and source diff reconciliation;
+- PCG seed reproducibility;
+- license manifest completeness and secret scan.
+
+Runtime tests:
+
+- clean boot offline;
+- spawn -> walk -> enter/exit -> drive -> mission -> save -> reload;
+- cell boundary crossing in both directions;
+- stream delay/outage while player is moving;
+- vehicle collision/unstuck/recovery;
+- NPC LOD transitions and cleanup;
+- pause/quit during async load, mission transition and vehicle exit.
+
+Human review:
+
+- compare 2D source map and 3D playable route;
+- inspect 10–20 sampled buildings and roads, record error not just pass/fail;
+- verify scene does not imply unsupported interior/facade accuracy;
+- check that original art direction is distinguishable from source-derived mass;
+- review attribution visibility and UI privacy language.
+
+Không dùng teleport, force-kill, fake completion hoặc screenshot setup làm bằng
+chứng duy nhất cho walk/drive/mission. Các fixture chỉ hỗ trợ unit/smoke test;
+official acceptance phải có trace input thật từ clean start.
+
+--------------------------------------------------------------------------------
+15. RỦI RO VÀ CÁCH XỬ LÝ
+--------------------------------------------------------------------------------
+
+R1 — Map footprint thưa/sai ở khu vực cần làm
+Mitigation: chọn source release khác, bổ sung nguồn mở có license, hero-author
+những block cần gameplay, ghi confidence; không tự tuyên bố 1:1.
+
+R2 — “Đúng hiện tại” thay đổi liên tục
+Mitigation: snapshot + `as_of` + monthly/on-demand refresh + diff/rollback;
+live overlay là feature riêng.
+
+R3 — Google/Cesium terms không phù hợp cho packaged game
+Mitigation: offline-open-data-first; Google chỉ visualization profile; legal
+gate trước mọi distribution.
+
+R4 — Tòa nhà extrude nhìn giống hộp, không giống phố thật
+Mitigation: art pass theo density/importance, facade kit nguyên bản, hero
+override, không scale toàn thành phố bằng tay.
+
+R5 — Unreal project quá nặng cho máy hiện tại
+Mitigation: G0 hardware test; prototype 400 m; lower tier; disable Lumen/
+Nanite/crowd where needed; không mở rộng diện tích trước profile.
+
+R6 — AI tạo code nhanh nhưng state/asset provenance rối
+Mitigation: contracts, manifests, deterministic generators, one-writer,
+checkpoint, review gate và small vertical increments.
+
+R7 — Tên/logo/biển hiệu thật gây vấn đề IP hoặc privacy
+Mitigation: fictionalize gameplay-facing brands/characters; dùng landmark
+chỉ ở mức địa lý/educational khi legal cho phép; không thu thập dữ liệu cá nhân.
+
+R8 — Provider/API outage hoặc chi phí tăng
+Mitigation: packaged collision world độc lập; quota/billing alert; offline
+fallback; không để service key ở client nếu policy yêu cầu proxy/server.
+
+R9 — “GTA-like” phình thành AAA vô hạn
+Mitigation: gate theo 1 mission/1 vehicle/1 hero district; chỉ mở rộng sau
+metrics + review; mỗi feature mới phải có acceptance và budget.
+
+--------------------------------------------------------------------------------
+16. OWNER DECISIONS CẦN CHỐT Ở G0
+--------------------------------------------------------------------------------
+
+Các mặc định đã nêu đủ để bắt đầu feasibility audit. Trước khi tải dữ liệu
+lớn hoặc tạo Unreal project chính thức, owner cần chốt:
+
+1. Thành phố/AOI cuối: giữ Bến Thành hay đổi địa điểm?
+2. Mục tiêu đầu tiên: Windows desktop game hay browser map viewer?
+3. Cho phép online tiles hay bắt buộc offline hoàn toàn?
+4. Ngân sách API/Cesium/cloud và mức chấp nhận chi phí vận hành?
+5. Visual target: stylized-realistic hay photorealistic licensed data?
+6. Có chấp nhận fictionalized tên/logo/interior để giảm legal risk không?
+7. Hardware baseline tối thiểu và target FPS?
+
+Nếu chưa có câu trả lời, dùng defaults: Bến Thành, Windows, single-player,
+offline gameplay map + optional online visualization, stylized-realistic,
+original/fictionalized hero content, target 60 FPS và minimum 30 FPS sau khi
+đo hardware.
+
+--------------------------------------------------------------------------------
+17. ĐIỀU KIỆN DỪNG NGAY
+--------------------------------------------------------------------------------
+
+Dừng và tạo gap report, không “lách” plan, khi:
+
+- phải rip/trace/bundle asset, screenshot, mesh, audio, code hoặc map biểu đạt
+  của game khác;
+- phải dùng Google/Cesium output làm offline collision/nav/gameplay source mà
+  chưa có quyền rõ ràng;
+- source/license/attribution không truy nguyên được;
+- API key/secret xuất hiện trong repo, log, evidence hoặc build;
+- generated map thay đổi mà không có source hash/diff/rollback;
+- runtime vẫn playable chỉ nhờ provider online nhưng plan lại gọi là offline;
+- không đạt minimum hardware/performance mà vẫn muốn mở rộng AOI;
+- agent định sửa Godot/Vault Fighters/Snake/Kho Bí Ẩn để phục vụ hh-3d;
+- owner đổi mục tiêu từ prototype thành public/commercial release nhưng chưa
+  mở legal, budget, privacy và release gates tương ứng.
+
+--------------------------------------------------------------------------------
+18. ARCHIVED EXECUTION BRIEF — SUPERSEDED, KHÔNG ĐƯỢC CHẠY
+--------------------------------------------------------------------------------
+
+Đoạn brief cũ dưới đây chỉ giữ làm lịch sử. Nó bị supersede bởi owner freeze,
+real-application plan và `01-9-hh3d-cheap-agent-handoff-prompt.txt`. Không gửi
+nguyên văn cho agent, không thực hiện G0/G1 từ file background này.
+
+Archived brief:
+
+“Trong `hh-3d`, chỉ thực hiện G0/G1 của plan này. Không sửa
+`godot/`, Vault Fighters, Snake hoặc Kho Bí Ẩn. Trước hết kiểm tra hardware,
+Unreal/plugin/tool versions và license path. Dùng một AOI nhỏ quanh Bến Thành
+(hoặc AOI owner đã chốt), pin một release Overture/OSM được phép, tạo manifest
+và license ledger trước khi download. Convert dữ liệu sang local ENU; dựng
+road/building proof tối giản trong Unreal hoặc một offline 2D/3D inspection
+artifact. Không dùng Google Photorealistic Tiles để tạo collision/navmesh,
+không bake online tiles, không đặt secret trong source. Chạy coordinate,
+geometry, provenance và packaged smoke checks; báo rõ source date, gaps,
+metrics, hashes và verdict. Chưa được mở G2 hay gọi đây là GTA-like game.”
+
+--------------------------------------------------------------------------------
+19. NGUỒN ĐÃ KIỂM TRA TẠI 2026-08-31
+--------------------------------------------------------------------------------
+
+Epic Unreal Engine:
+- World Partition:
+  https://dev.epicgames.com/documentation/unreal-engine/world-partition-in-unreal-engine
+- Large World Coordinates:
+  https://dev.epicgames.com/documentation/en-us/unreal-engine/large-world-coordinates-in-unreal-engine-5
+- PCG:
+  https://dev.epicgames.com/documentation/unreal-engine/procedural-content-generation-framework-in-unreal-engine
+- Mass Entity:
+  https://dev.epicgames.com/documentation/en-us/unreal-engine/overview-of-mass-entity-in-unreal-engine
+- Chaos Vehicles:
+  https://dev.epicgames.com/documentation/en-us/unreal-engine/chaos-vehicles
+- Unreal licensing:
+  https://www.unrealengine.com/license
+
+Cesium:
+- Cesium for Unreal:
+  https://cesium.com/learn/unreal/
+- Cesium for Unreal FAQ/data formats:
+  https://cesium.com/learn/unreal/unreal-faq/
+- Georeferenced objects:
+  https://cesium.com/learn/unreal/unreal-placing-objects-v1-x/
+- Google Photorealistic 3D Tiles in Cesium for Unreal:
+  https://cesium.com/learn/unreal/unreal-photorealistic-3d-tiles/
+- Cesium ion terms:
+  https://cesium.com/legal/terms-of-service/
+
+Open geodata:
+- Overture Buildings:
+  https://docs.overturemaps.org/guides/buildings/
+- Overture Transportation:
+  https://docs.overturemaps.org/guides/transportation/
+- Overture attribution/licensing:
+  https://docs.overturemaps.org/attribution/
+- OpenStreetMap copyright/license:
+  https://www.openstreetmap.org/copyright
+- OSM tile usage policy:
+  https://operations.osmfoundation.org/policies/tiles/
+
+Google Maps Platform:
+- Photorealistic 3D Tiles:
+  https://developers.google.com/maps/documentation/tile/3d-tiles
+- Map Tiles API policies:
+  https://developers.google.com/maps/documentation/tile/policies
+- Renderer integration:
+  https://developers.google.com/maps/documentation/tile/use-renderer
+
+xAI claim check:
+- xAI models:
+  https://docs.x.ai/developers/models
+- Grok 4.6 model page:
+  https://docs.x.ai/developers/models/grok-4.6
+- xAI release notes:
+  https://docs.x.ai/developers/release-notes
+
+Ghi chú nguồn: các URL/điều khoản có thể thay đổi. Trước mỗi release phải
+re-check trang chính thức, chụp version/access date trong license ledger và
+không coi đoạn plan này là thay thế legal advice.
+
+--------------------------------------------------------------------------------
+20. DEFINITION OF READY FOR IMPLEMENTATION
+--------------------------------------------------------------------------------
+
+Plan chỉ được chuyển từ `PROPOSED` sang implementation khi tất cả điều kiện
+sau được xác nhận trong review log:
+
+- owner chọn target platform/AOI hoặc chấp thuận defaults;
+- G0 hardware/toolchain pass;
+- runtime path (Unreal game, web viewer, hoặc cả hai) được phân biệt;
+- source/license/currentness policy được chốt;
+- online Google/Cesium có hoặc không có đã được tách profile;
+- first slice còn trong 400 m proof -> 1 km2 playable -> 1 mission;
+- performance minimum/target được đo trên máy thật;
+- không có xung đột với Vault Fighters và các scope bị đóng băng;
+- first execution brief được giao với manifest/hash/repro requirements.
+
+Kết quả mong muốn của plan này không phải là hứa “làm GTA VI”. Kết quả là một
+pipeline có thể chứng minh: tọa độ thật ở mức snapshot, gameplay nguyên bản,
+độ trung thực được ghi đúng, và mỗi lần mở rộng đều có dữ liệu, license,
+performance và review evidence tương ứng.

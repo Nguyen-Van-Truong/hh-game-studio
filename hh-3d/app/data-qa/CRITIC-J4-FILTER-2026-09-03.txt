@@ -1,0 +1,257 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+BIGGEST_MISS=Still this-machine local-demo fold on 4175 /demo-bus (not M1-WP1, not a shop server). Not a fail under the stated rule.
+
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-03
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=2026-09-03 11:40 +07
+MODEL=grok-4.6
+SCOPE=HH World J4 accent-fold remint on existing 4175 (ban sung == bán súng; phở/sách/cá stay allowed)
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=657634f8f82281bd670c9a375ad49c6180db3583
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+CONCURRENCY=hh-3d/app/data-qa/CONCURRENCY-2026-09-03.txt
+PRIOR_J4_CRITIC=hh-3d/app/data-qa/CRITIC-J4-2026-09-03.txt
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_VF_TOUCH=1
+NO_UNREAL=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_RUN_THEIR_PROBE_WRITER=1
+INDEPENDENT_CDP=1
+CDP_PORT=9296
+CDP_PROFILE=isolated_temp_user-data-dir
+NOT_PLAN_PASS=1
+NOT_M1_WP1=1
+CITY_SERVER_REQUIRED=NO
+THIS_MACHINE_IS_NOT_A_FAIL=1
+NO_EVASION_HOWTO_BEYOND_NAMED_EXAMPLES=1
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/
+
+The named accent hole is closed on the already-up 4175 player after a
+same-port remint (new bundle index-Css3q5a_.js). Independent Chrome CDP
+(debug 9296, fresh temp profile, stdout only; did not run
+j4-create-shop-probe.mjs) typed the two named titles and the three
+allowed goods through the real create-shop and list-product forms.
+
+  1. Shop sells `ban sung` (name Quay J4F BanAscii): rejected.
+     formError="Name or goods rejected. Plain text, 2–80 characters.
+     No prohibited items." result=null. publicCount stayed 1 (lantern
+     only). No new public name / marker / goods row.
+  2. Shop sells `bán-súng` (name Quay J4F BanHyphen): rejected the
+     same way. publicCount still 1.
+  3. Shop name `ban sung` (sells sách): rejected. publicCount still 1.
+  4. Shop name `bán-súng` (sells cá): rejected. publicCount still 1.
+  5. Allowed create still works:
+       Quay J4F Sach / sách → shop-local-mtl1cmvccud452 published
+       Quay J4F Pho / phở  → shop-local-mtl1cnaze5req2 published
+       Quay J4F Ca / cá    → shop-local-mtl1cnqtg7l6fl published
+     publicCount 1 → 2 → 3 → 4. Goods list showed those titles.
+  6. Listing path on the sách shelf (open-shop-shop-local-mtl1cmvccud452):
+       title `ban sung`  → listError, listResult=null, not on shelf
+       title `bán-súng`  → listError, listResult=null, not on shelf
+       title `sách`      → listing-local-mtl1cpdwu4sszo published
+
+Post-attack GET /demo-bus: three published shops (sách / phở / cá) and
+four published listings with those allowed titles. No published shop
+or listing titled `ban sung` or `bán-súng`.
+
+This is NOT a plan PASS. NOT M1-WP1. NOT GATE-U1. City server was not
+required. This-machine localStorage + 4175 /demo-bus is residual
+honesty, not a TICK=no.
+
+Biggest miss: the check is still a local-demo string fold inside this
+4175 process. It is not a shop server and not a legal review.
+
+================================================================================
+METHOD
+================================================================================
+
+Disk (not PROGRESS alone):
+  hh-3d/app/web/src/shops/moderation.ts
+    foldForMatch: NFD + strip marks + lowercase + punctuation→space
+    BLOCKED includes /ban\s*sung/ after fold
+    comment names the two examples; not M1-WP1
+  hh-3d/app/web/src/shops/{CreateShopForm,ListProductForm,localShops,
+    localListings}.ts(x)
+  hh-3d/app/web/src/app/App.tsx  (createShop / onListProduct)
+  hh-3d/app/web/tests/local-shop.test.mjs
+    asserts the two named titles reject; phở/sách/cá still sanitize
+  hh-3d/app/PROGRESS.txt  (ASCII fold remint; not M1-WP1)
+  hh-3d/app/data-qa/CONCURRENCY-2026-09-03.txt
+  hh-3d/app/data-qa/CRITIC-J4-2026-09-03.txt  (prior hole on old bundle)
+  git log -1; git diff --cached --name-only
+
+Live (existing 4175 only; did not start another HH World preview):
+  First listen this seat: 4175 pid 39236  bundle /assets/index-jeQ9lFe4.js
+    GET /demo-bus then still held leftover shop-local-mtl15eevhtvjdp
+    sells="ban sung" published (pre-remint leftover from prior J4 critic)
+  After lead remint, same port recycled: 4175 pid 57152
+  4173 DOWN  4174 DOWN  5175 DOWN
+  GET /                                              200  title HH World
+    script /assets/index-Css3q5a_.js  len=1171300
+    live rule: /ban\s*sung/ + normalize(`NFD`)  (no bare accent-only rule)
+  GET /demo-bus after CDP
+    only this critic's sách/phở/cá rows; no named banned title
+  Independent Chrome CDP vs 4175
+    port 9296  about:blank then ?seat=a
+    Isolated user-data-dir
+  Did not run node j4-create-shop-probe.mjs (writer).
+  Did not POST catalog_clear.
+  Did not start 4173/4174/5175.
+  Did not write a how-to beyond the two named examples.
+
+================================================================================
+PROCESS / GIT
+================================================================================
+
+RESULT=PASS_ON_STATED_FAIL_RULE
+
+Stated fail: VF / AGENTS.md staged with this if they committed.
+Observed:
+  git diff --cached --name-only  = empty
+  last commit = 657634f VF6-WP3: tick after critic and official PASS
+  No J4 / hh-3d/app commit in HEAD
+  Critic did not commit, did not tick plan, did not touch VF.
+
+Working tree dirt (not this critic's write):
+  hh-3d/app/ still wholly untracked
+  VF evidence dirty elsewhere
+Process landmine for a later mixed commit. Not the stated FAIL.
+
+4175 pid changed 39236 → 57152 on the same port during the remint
+window. This critic did not spawn that process and did not open a
+second product preview.
+
+================================================================================
+ATTACK 1 — NAMED TITLES MUST FAIL AND STAY OFF THE PUBLIC SHELF
+================================================================================
+
+RESULT=PASS
+
+Player UI, not a unit-test import.
+
+Create-shop (Become Chủ quầy (máy này) first):
+  sells `ban sung`      rejected  published=false  publicCount=1
+  sells `bán-súng`      rejected  published=false  publicCount=1
+  name  `ban sung`      rejected  published=false  publicCount=1
+  name  `bán-súng`      rejected  published=false  publicCount=1
+
+List-product on the later sách shop:
+  title `ban sung`      rejected  listResult=null
+  title `bán-súng`      rejected  listResult=null
+  shelf listings stayed the allowed sách row only until the allowed
+  re-list below.
+
+/demo-bus after the seat: publishedBanSung=[] publishedHyphen=[]
+publishedListBan=[].
+
+Prior leftover `ban sung` on the old jeQ9lFe4 bundle is gone from the
+recycled 4175 bus. That leftover is history of the hole, not current
+publish. Fresh creates of the two named titles failed.
+
+================================================================================
+ATTACK 2 — sách / phở / cá STILL CREATE
+================================================================================
+
+RESULT=PASS
+
+  sách  shop-local-mtl1cmvccud452 / listing-local-mtl1cmvdatjtc6
+        plus listing-local-mtl1cpdwu4sszo on that shelf
+  phở   shop-local-mtl1cnaze5req2 / listing-local-mtl1cnazropd2y
+  cá    shop-local-mtl1cnqtg7l6fl / listing-local-mtl1cnqt34qguv
+        kind inferred Cá / fish on the goods row
+
+Fold did not swallow ordinary Vietnamese goods. Lantern (Cá nục) stayed
+as the authored example.
+
+================================================================================
+ATTACK 3 — CITY SERVER / THIS-MACHINE MUST NOT BE A FAIL
+================================================================================
+
+RESULT=PASS  (not required; not treated as fail)
+
+Live A:
+  notPlanPass=true
+  cityServerClaim=false
+  googleOidc=false
+  identity after Become: Chủ quầy (máy này) · local demo, not a real
+    account
+
+PROGRESS / CONCURRENCY still: localhost 4175, one machine, another PC
+cannot join. NOT_A_CITY_SERVER. ASCII fold remint labeled local-demo
+only; not M1-WP1.
+
+Stated rule: do not require a city server; do not treat this-machine
+as a fail. Followed.
+
+================================================================================
+LEAD CLAIMS vs DISK+LIVE
+================================================================================
+
+Claim                                         Verdict
+4175 is the player                            CONFIRMED (only listener)
+Reminted bundle has fold + ban sung rule      CONFIRMED (index-Css3q5a_.js)
+`ban sung` still publishes                    REJECTED (create + list fail)
+`bán-súng` still publishes                    REJECTED (create + list fail)
+sách / phở / cá still create                  CONFIRMED
+Named titles appear on public shelf           REJECTED
+City server required                          REJECTED (they deny it)
+This-machine is a fail                        REJECTED (stated not-a-fail)
+M1-WP1 / plan PASS                            REJECTED (labeled not)
+GATE-U1 faked                                 NO
+
+================================================================================
+HARD FAIL CHECK (TICK=no triggers)
+================================================================================
+
+`ban sung` still publishes on 4175            NO
+Named titles on public shelf                  NO
+sách / phở / cá blocked by the fold           NO
+City server demanded                          NO
+This-machine treated as fail                  NO
+Page broken / 4175 down / wrong product       NO
+Plan STATE/PASS ticked                        NO
+
+Therefore TICK=yes for the accent-hole remint on 4175.
+
+================================================================================
+NOT GRANTED
+================================================================================
+
+- M1-WP1 moderation / legal review / complete policy
+- M1-WP0 shop-server independence
+- GATE-U1 / any plan PASS
+- Claim that another PC can join today
+- Permission to start 4173/4174, fetch maps, Unreal, VF, or tick [x]
+- A how-to for evading the filter beyond the two named examples
+
+================================================================================
+INDEPENDENT CDP NUMBERS (4175, 2026-09-03 11:40 +07)
+================================================================================
+
+Bundle: /assets/index-Css3q5a_.js  pid=57152
+Reject: shop/list `ban sung` and `bán-súng` → no result, no public row
+Allow:  shop-local-mtl1cmvccud452 sách
+        shop-local-mtl1cnaze5req2 phở
+        shop-local-mtl1cnqtg7l6fl cá
+Bus after: no published named banned title
+
+================================================================================
+END
+================================================================================

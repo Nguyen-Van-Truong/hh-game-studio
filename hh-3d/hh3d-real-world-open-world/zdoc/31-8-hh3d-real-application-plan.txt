@@ -1,0 +1,1622 @@
+PLAN_ROLE=HARDENED_FUTURE_EXECUTION_PLAN
+PLAN_SCOPE=hh-3d/real-application
+PLAN_DATE=2026-08-31
+LAST_AUDIT_DATE=2026-09-01
+TIMEZONE=Asia/Saigon
+STATUS=PAUSED_NOT_STARTED_DECISIONS_REQUIRED
+CURRENT_WP=NONE_PAUSED
+CURRENT_EXECUTION=DOCUMENTATION_ONLY
+EXECUTION_AUTHORIZATION=REVOKED_UNTIL_OWNER_RESUMES
+FIRST_WP_AFTER_RESUME=R0-WP0
+DO_NOT_START_DIRECTLY=1
+PRODUCT_TYPE=WEB_FIRST_REAL_APPLICATION
+NATIVE_ENGINE_ROLE=OPTIONAL_UNREAL_CLIENT
+NETWORKING_STATUS=OUT_OF_SCOPE_FOR_FIRST_RELEASE
+GOOGLE_PHOTOREALISTIC_STATUS=OFF_HIGH_RISK_OPTIONAL
+ACCOUNT_STATUS=DEFERRED_LOCAL_BOOKMARK_FIRST
+APP_IMPLEMENTATION_PROGRESS=0_PERCENT_NO_APP_FOLDER
+SOURCE_OF_TRUTH=THIS_FILE_FOR_FULL_APPLICATION
+DEMO_PLAN=hh-3d/zdoc/31-8-hh3d-demo-webgl-plan.txt
+BACKGROUND_AUDIT=hh-3d/zdoc/31-8-hh3d-real-world-open-world-plan.txt
+PARENT_PRODUCT_BOUNDARY=godot/dogfood/superfighters (do not modify)
+AUDIT_SUMMARY=hh-3d/zdoc/01-9-hh3d-plan-audit-summary.txt
+CHEAP_AGENT_PROMPT=hh-3d/zdoc/01-9-hh3d-cheap-agent-handoff-prompt.txt
+
+================================================================================
+HH-3D REAL APPLICATION PLAN — HH WORLD
+================================================================================
+
+Mục tiêu: xây một ứng dụng 3D địa lý thực sự cho người dùng thật, không chỉ
+là game demo và không chỉ là video hoặc screenshot. Người dùng có thể mở
+bằng trình duyệt, khám phá địa điểm thật, xem bản đồ 2D/3D, tìm kiếm, mở
+thông tin địa điểm, lưu/chia sẻ vị trí, xem experience nguyên bản và nhận
+thông báo rõ về độ mới, nguồn, độ chính xác và giới hạn dữ liệu.
+
+File này là kế hoạch tương lai. Hiện không plan HH-3D nào được triển khai:
+demo và full application đều bị owner freeze; chỉ được audit/cập nhật tài liệu
+bàn giao cho đến khi có lệnh resume mới, tường minh.
+
+Không mở plan full cùng lúc với demo. Không sửa Godot, Vault Fighters, Kho Bí
+Ẩn hoặc Snake để phục vụ hh-3d. File background cũ chỉ là audit; file này là
+nguồn sự thật cho full application sau khi demo được review.
+
+--------------------------------------------------------------------------------
+AUDIT/HARDENING OVERRIDE 2026-09-01 — THAY CÁC GIẢ ĐỊNH CŨ KHI XUNG ĐỘT
+--------------------------------------------------------------------------------
+
+Owner đã yêu cầu dừng triển khai và chỉ hoàn thiện kế hoạch. Vì vậy:
+
+- `hh-3d/app/` chưa tồn tại; không có phần nào của HH World được triển khai;
+- mọi WP R0..R8 là backlog, không phải tiến độ đã làm;
+- không agent nào được scaffold app, tải map, cài provider SDK, tạo account,
+  dùng API key, cài Unreal hoặc gọi dịch vụ trả phí khi trạng thái còn PAUSED;
+- demo Hòn Gió là read-only reference, không phải dependency để sửa chung;
+- Godot/Vault Fighters/Kho Bí Ẩn/Snake luôn forbidden.
+
+Ba critic độc lập đánh giá plan đúng hướng về web-first/provenance nhưng chưa
+sẵn sàng giao toàn bộ cho agent rẻ. Các sửa đổi bắt buộc của audit này:
+
+1. MVP proof làm **offline/private, 400 m x 400 m**, không 1 km2 ngay.
+2. Renderer đầu tiên là **MapLibre + local approved GeoJSON/owned style**;
+   3D đầu tiên có thể là fill-extrusion từ snapshot đã duyệt. CesiumJS chạy ở
+   route/spike riêng sau khi provider/terms/cost được chốt; không ghép Cesium
+   + R3F trong một canvas ở MVP proof.
+3. Google Photorealistic 3D Tiles OFF. Chỉ xem xét sau legal/provider/billing
+   decision riêng; không cache/extract/trace/bake/collision/nav/marketing
+   screenshot nếu terms chưa được duyệt.
+4. Snapshot refresh/diff/stable IDs phải được chứng minh **trước** khi anchor
+   authored experience; không xây authored mapping trên source ID tạm.
+5. Local bookmark/share không cần account. OIDC/cloud sync là optional phase;
+   public browse/search/card/fallback không phụ thuộc đăng nhập.
+6. Backend/PostGIS chỉ mở sau khi offline read flow, local search/card/share
+   và data contract đã pass. Không xây cloud để thay thế proof dữ liệu.
+7. Multiplayer/social presence/voice/chat/server-authoritative state hoàn toàn
+   out of scope cho first release.
+8. Mọi `ALLOWED_PATHS` wildcard trong section cũ là trần phạm vi, không phải
+   quyền sửa toàn bộ. Handoff thật phải liệt kê file cụ thể.
+9. Network mặc định OFF cho agent. WP cần internet phải ghi domain/source,
+   mục đích, size limit, license và checksum trước khi fetch.
+10. Không một agent nào tự cập nhật STATE/PASS. Coordinator chỉ cập nhật sau
+    runtime evidence và critic read-only trên cùng source hash.
+
+Thứ tự release đã harden:
+
+  P0 DECISION RECORD
+    R0-WP0 product/AOI/provider/license/cost/privacy/hardware
+    -> R0-WP1 topology + pinned toolchain
+
+  P1 OFFLINE MAP PROOF
+    R1-WP0 approved 400 m fixture + WorldManifest/provenance
+    -> R1-WP1 MapLibre local 2D + owned 3D extrusion + attribution/fallback
+    -> GATE-U1 human usability review
+    -> R2-WP0 local search/card/deep-link/share
+    -> R2-WP1 performance/accessibility/offline quality
+
+  P2 REFRESHABLE SNAPSHOT
+    R5-WP0 deterministic refresh/diff/stable IDs/rollback
+    -> R3-WP0 read-only API/PostGIS only if local proof needs server
+    -> R3-WP1 catalog/search/authored boundary
+
+  P3 AUTHORED APPLICATION
+    R4-WP1 Hòn Gió/city-story route anchored by stable internal ID
+    -> R4-WP0A local bookmark/privacy (no login)
+    -> R4-WP0B optional OIDC/cloud sync only by new owner decision
+
+  P4 PRIVATE ALPHA/BETA
+    R6 security/observability/deploy/cost -> R8 accessibility/beta/release
+
+  P5 OPTIONAL NATIVE
+    R7 Unreal spike only after web MVP benchmark proves native value
+
+Required currentness fields are now:
+
+  source_released_at, acquired_at, generated_at, published_at,
+  fresh_until, stale_after, accuracy_class, geometry_confidence,
+  height_confidence, authored_or_source, source_hash, artifact_hash.
+
+UI phải hiện `Map data as of`, provider/release, vùng source-derived,
+approximation và authored fiction. Không marketing là digital twin, realtime,
+1:1, current absolute hoặc GTA-like.
+
+--------------------------------------------------------------------------------
+0. TRẢ LỜI TRỰC TIẾP VỀ UNREAL
+--------------------------------------------------------------------------------
+
+Câu trả lời: ứng dụng thật không bắt buộc dùng Unreal.
+
+Nếu ứng dụng thật nghĩa là một web application có URL, map 3D, search, place
+card, bookmark, share link, cập nhật dữ liệu, account và backend, kiến trúc
+mặc định là web-first:
+
+- React + TypeScript cho shell và UI;
+- MapLibre GL JS cho MVP 2D map, minimap, labels và 3D fill-extrusion từ
+  snapshot local đã duyệt; đây là renderer mặc định, không phải fallback;
+- CesiumJS chỉ là route/spike riêng cho globe, terrain, 3D Tiles sau
+  provider/terms/cost; không phải renderer primary/mặc định của MVP;
+- Three.js hoặc React Three Fiber cho authored diorama/story scene;
+- API server + PostgreSQL/PostGIS chỉ sau local map/search/card/share/data
+  contract pass;
+- Python/DuckDB/GDAL cho ingest, validate, diff và phát hành snapshot;
+- object storage/CDN cho approved tile và asset artifacts.
+
+Unreal chỉ mở như native client tùy chọn khi nhu cầu đã được chứng minh:
+
+- desktop experience cần vehicle physics, crowd, collision hoặc cinematic;
+- native offline high-fidelity city fabric;
+- VR/console hoặc simulation browser không đáp ứng;
+- authored gameplay riêng có ngân sách, team và legal gate.
+
+Unreal không phải nơi chứa canonical account, permission, moderation, billing,
+search index, bookmark, CMS, provider refresh, source/license manifest hoặc
+user content. Web app vẫn phải hoạt động khi native client không cài.
+
+Bảng quyết định:
+
+Nhu cầu                               Lựa chọn mặc định
+------------------------------------  -----------------------------------------
+MVP 2D/3D map nhỏ local               React + MapLibre GL JS
+Globe/terrain/3D Tiles tùy chọn       React + CesiumJS, route riêng
+Diorama voxel như Hòn Gió             React + R3F + Three.js
+Search/account/content                API + PostgreSQL/PostGIS
+Refresh map/provenance                Python + DuckDB/GDAL + artifact store
+Native game/vehicle/physics/crowd    Unreal, workstream riêng
+VR/cinematic desktop                 Unreal, workstream riêng
+
+Quyết định mặc định:
+web-first real application; Unreal deferred optional. Không cần cài Unreal để
+đạt web application MVP.
+
+--------------------------------------------------------------------------------
+1. AUDIT PLAN CŨ VÀ CÁC ĐIỂM ĐÃ SỬA
+--------------------------------------------------------------------------------
+
+Plan background trước đây có phần đúng về provenance, geodata, Unreal,
+World Partition và legal. Tuy nhiên nó chưa phải execution plan tốt nhất vì:
+
+1. Trộn web diorama, game open-world và application bản đồ vào một scope.
+2. Xem Unreal như lựa chọn mặc định dù chưa định nghĩa application target.
+3. Đặt quá nhiều hệ thống lớn cạnh nhau trước MVP: renderer, native engine,
+   traffic, crowd, mission, backend, live data và interiors.
+4. Chưa khóa file ownership, dependency policy và hành vi khi agent bị block.
+5. Dùng cụm 'đúng map hiện tại' mà chưa tách snapshot, live overlay,
+   confidence, as_of và authored content.
+6. Chưa có handoff đủ nhỏ cho agent giá rẻ; agent dễ tự viết hết hoặc đổi stack.
+7. Chưa tách evidence browser application khỏi evidence native game.
+
+File này sửa như sau:
+
+- Demo và full application có hai plan, hai root runtime và acceptance riêng.
+- Full application là web-first, có backend/data pipeline thật.
+- MapLibre local là đường proof đầu tiên; CesiumJS là route địa lý tùy chọn sau
+  provider/terms/cost gate; R3F là route authored scene riêng.
+- Unreal là optional native client, không phải dependency web MVP.
+- Mỗi WP có allowed paths, forbidden paths, DONE_WHEN và VERIFY.
+- Không claim GTA-like nếu chưa có test và module riêng.
+- Snapshot/currentness/license/attribution là contract bắt buộc từ đầu.
+- Native vehicle/combat/crowd nếu cần sẽ có plan native riêng.
+
+--------------------------------------------------------------------------------
+2. ĐỊNH NGHĨA SẢN PHẨM VÀ RANH GIỚI
+--------------------------------------------------------------------------------
+
+Tên làm việc: HH World. Brand, logo và tên phát hành chốt ở legal gate.
+
+MVP là ứng dụng, không phải game:
+
+- mở URL trên desktop và mobile;
+- xem một AOI thật ở chế độ 2D và 3D;
+- orbit, pan, zoom, đổi layer và camera;
+- tìm đường, khu vực, building hoặc POI;
+- click feature để xem place/building card;
+- xem source, as_of, confidence, attribution và known limitations;
+- copy/share deep link gồm world, feature, camera và layer state;
+- lưu bookmark local; account sync là phase sau;
+- mở authored experience/diorama như Hòn Gió từ marker;
+- có loading, retry, stale, offline và 2D fallback;
+- có about/license/privacy/report map issue.
+
+Phase sau, không chặn web MVP:
+
+- city stories, curated walks và profile island;
+- bookmark sync, follows và notifications;
+- creator content có moderation;
+- event/venue/catalog integration;
+- live weather, traffic hoặc event overlays;
+- native Unreal client;
+- minigame hoặc vehicle experience;
+- multiplayer realtime.
+
+Không claim trong MVP:
+
+- toàn thành phố có facade hoặc interior chính xác;
+- toàn thế giới photorealistic và offline;
+- dữ liệu luôn realtime;
+- traffic/NPC/gameplay như GTA;
+- một screenshot chứng minh feature đã hoạt động;
+- tên, thương hiệu, UI, mission hoặc asset của GTA/Rockstar.
+
+Nguyên tắc:
+địa lý thật là context/data layer; authored content là experience layer;
+native gameplay nếu có là client/workstream khác.
+
+--------------------------------------------------------------------------------
+3. FIDELITY VÀ CURRENTNESS CONTRACT
+--------------------------------------------------------------------------------
+
+Mỗi feature hiển thị phải có fidelity class:
+
+F0 — Globe context:
+- vị trí WGS84, globe, terrain hoặc visual tiles;
+- có thể do provider stream;
+- không phải collision, navigation hoặc app source of truth.
+
+F1 — City fabric:
+- roads, blocks, building footprints, height approximation, parks và water;
+- tạo từ snapshot provider đã pin;
+- có source hash, release, confidence và license.
+
+F2 — Authored place:
+- facade, landmark, interior, signage, prop, story và interaction do team
+  sở hữu hoặc license rõ;
+- có asset ledger, reviewer và override relation;
+- có thể khác thực tế vì style, privacy hoặc gameplay.
+
+F3 — Live overlay:
+- weather, traffic, event, business status hoặc telemetry;
+- có provider, timestamp, TTL, stale behavior và cost;
+- không âm thầm sửa F1/F2.
+
+Currentness values:
+
+- SNAPSHOT: release cụ thể, immutable trong build;
+- REFRESHED: release mới đã qua diff review;
+- LIVE_OVERLAY: lấy lúc runtime, có TTL;
+- UNKNOWN: không đủ bằng chứng, không hiển thị như fact.
+
+WorldManifest bắt buộc có:
+
+- schema_version, world_id, display_name;
+- AOI polygon/bbox, coordinate reference, local origin và units;
+- provider, theme, release/version, source URL, accessed_at;
+- source_hash, generated_at, generator version/commit, artifact hash;
+- license refs, attribution text/links, permitted-use decision;
+- fidelity policy, confidence, missing fields, known gaps;
+- refresh policy, current release pointer, rollback pointer;
+- available layers, fallback world, client compatibility;
+- online requirements, estimated cost/quota nếu có.
+
+UI phải nói rõ snapshot date, live state, estimated height và authored content.
+Không dùng chữ 'đúng hiện tại', '1:1' hoặc 'photorealistic' nếu manifest không
+chứng minh được.
+
+--------------------------------------------------------------------------------
+4. STACK VÀ KIẾN TRÚC MỤC TIÊU
+--------------------------------------------------------------------------------
+
+4.1 Web client
+
+- React + TypeScript strict;
+- Vite cho SPA build nhanh và deterministic;
+- router có deep links cho world/place/experience;
+- MapLibre GL JS là renderer MVP cho 2D, minimap và 3D fill-extrusion từ
+  snapshot local đã duyệt;
+- CesiumJS là route/spike riêng cho globe, terrain hoặc 3D Tiles sau khi R0
+  chốt provider, terms, token, quota và cost; không phải dependency của MVP;
+- R3F/Three.js chỉ cho authored scene hoặc custom layer đã proof;
+- DOM React cho cards, search, controls và accessibility;
+- data fetching/cache ở service layer;
+- feature flags cho online tiles, live overlays và native handoff;
+- Error Boundary, diagnostics và static fallback.
+
+4.2 Backend
+
+- TypeScript + Fastify hoặc framework tương đương được pin ở R0;
+- OpenAPI và schema validation;
+- PostgreSQL + PostGIS cho authored/application data;
+- Postgres trigram/search trước; OpenSearch chỉ khi metric chứng minh cần;
+- background jobs cho refresh, diff và indexing;
+- object storage + CDN cho approved artifacts;
+- OIDC/provider-managed auth;
+- rate limit, CORS, CSP, audit log và correlation id;
+- API không proxy URL tùy ý từ user input.
+
+4.3 Data pipeline
+
+- Python pinned;
+- DuckDB spatial + GeoParquet làm intermediate;
+- GDAL/OGR, Shapely/pyogrio hoặc tool tương đương;
+- adapter riêng theo provider/theme;
+- validate -> normalize -> diff -> generate -> QA -> publish;
+- deterministic config/seed;
+- source và artifact manifest sinh cùng pipeline;
+- raw data nằm ngoài git hoặc artifact store được kiểm soát.
+
+4.4 Storage/delivery
+
+- local immutable artifact là mặc định cho proof; object storage + CDN chỉ mở
+  sau khi release/cost/security gate đã pass;
+- versioned URL và cache headers;
+- immutable release directory + atomic current pointer;
+- metadata API chỉ trả feature đã qua license/quality filter;
+- không expose database credential hoặc provider token cho client.
+
+Network profile:
+
+- agent/dev mặc định `NETWORKING=OFF`;
+- first proof phải chạy bằng fixture/artifact local, không phụ thuộc tile
+  provider lúc boot;
+- mỗi ngoại lệ online phải ghi domain allowlist, mục đích, giới hạn bytes,
+  release/license, checksum, quota, TTL, timeout, retry và offline behavior;
+- không prefetch/cache công khai vượt điều khoản và không gọi arbitrary URL.
+
+4.5 Optional native client
+
+- Unreal Engine 5.x pin sau native spike;
+- World Partition/Data Layers cho authored native world;
+- Cesium for Unreal chỉ cho georeference/visual layer khi terms cho phép;
+- native đọc WorldManifest/API contracts;
+- collision/navigation do project sở hữu;
+- native không làm web app phụ thuộc;
+- vehicle/crowd/combat/mission có plan native riêng.
+
+4.6 Version policy
+
+Không ghi latest vào source. R0 phải pin Node/npm/React/Vite/TypeScript,
+MapLibre/Three/R3F; pin CesiumJS chỉ nếu decision record mở route đó.
+Pin server/Postgres, Python/GDAL/DuckDB và browser matrix khi phase đó mở.
+Mọi major upgrade cần change record, lockfile và regression; agent rẻ
+không tự nâng version.
+
+--------------------------------------------------------------------------------
+5. RENDERER VÀ COORDINATE POLICY
+--------------------------------------------------------------------------------
+
+MapLibre GL JS:
+- 2D vector map, minimap, labels, search overview và 3D fill-extrusion từ
+  local approved snapshot;
+- provider style/source phải có license;
+- không phải physics, navmesh hoặc gameplay engine.
+
+CesiumJS:
+- globe, terrain, 3D Tiles, camera, feature picking và precision trong một
+  route/spike riêng;
+- quản lý tile availability, credits, token, fallback và cleanup;
+- chỉ trở thành renderer production sau decision record và benchmark chứng minh
+  nó cần thiết hơn MapLibre cho target user journey.
+
+Three.js/R3F:
+- Hòn Gió, city story, authored islands và custom objects;
+- InstancedMesh, LOD, disposal và DPR cap;
+- không tự giải quyết globe precision, backend, auth, currentness hay search.
+
+CesiumJS + R3F trong cùng view:
+- không tích hợp chỉ vì cả hai là WebGL;
+- trước hết làm spike về coordinate transform, picking, render order,
+  resize, context loss, memory và frame budget;
+- nếu spike fail, dùng route/view tách biệt; MVP không được phụ thuộc vào việc
+  ghép hai WebGL context/renderer.
+
+Unreal:
+- không nằm trong browser MVP;
+- chỉ mở native spike khi user need và benchmark pass;
+- World Partition/PCG/Mass/Chaos không kéo vào web app tùy ý.
+
+Coordinate policy:
+- giữ nguồn ở WGS84/EPSG:4326 hoặc CRS chính thức;
+- pipeline dùng double precision;
+- quy đổi sang local ENU quanh origin AOI;
+- ghi datum, axis order, units và transform error;
+- test WGS84 -> local -> WGS84 trên fixed control points;
+- source feature ID không phải identity bất biến của user content.
+
+--------------------------------------------------------------------------------
+6. SOURCE, LICENSE, PROVENANCE VÀ PRIVACY GATE
+--------------------------------------------------------------------------------
+
+OSM/Overture:
+
+- OSM data là ODbL; phải attribution và xem xét share-alike/derivative DB;
+- Overture Buildings/Transportation có source/theme licensing riêng; pin
+  release và ghi theme/source;
+- Overture Places có thể gồm nhiều provider/license; không gộp một license;
+- public OSM raster tile server không dùng làm bulk/offline archive;
+- artifact có source URL, release, date, license, attribution và hash.
+
+Google/Cesium online content:
+
+- Google Photorealistic 3D Tiles chỉ trong profile ONLINE_VISUALIZATION;
+- không scrape, extract, trace, index, bake, redistribute hoặc dùng làm
+  collision/nav/gameplay source nếu terms không cho phép;
+- credits động phải hiển thị theo response;
+- key/token ở secret manager hoặc server policy phù hợp;
+- quota, billing, account owner, rotation, outage và cost alert có owner;
+- commercial/public distribution phải qua legal review terms hiện hành.
+
+Authored assets/real places:
+
+- asset ledger gồm asset id, creator/provider, URL, license, date, checksum,
+  modification, platform, attribution và reviewer;
+- không dùng asset 'free download', 'AI generated' hoặc 'CC0' nếu không có
+  nguồn kiểm tra được;
+- logo, biển hiệu, thương hiệu, ảnh người thật, biển số và nội thất phải
+  fictionalize hoặc có permission;
+- không hiển thị private residence hoặc precise user location không cần thiết;
+- user location mặc định coarse/local-only, retention/deletion rõ.
+
+Provenance chain:
+
+source release -> source hash -> generator config/commit -> artifact hash
+-> client build -> runtime evidence
+
+Nếu chain đứt, output là UNPROVEN và không public.
+
+--------------------------------------------------------------------------------
+7. DATA MODEL VÀ API CONTRACT
+--------------------------------------------------------------------------------
+
+Mọi schema có version; provider schema không đi thẳng vào UI.
+
+WorldManifest:
+- schema version, world id, display name;
+- AOI, origin, CRS, local transform, units;
+- source release/provider, source hash, generator commit;
+- source_released_at, acquired_at, generated_at, published_at;
+- fresh_until, stale_after;
+- accuracy_class, geometry_confidence, height_confidence;
+- authored_or_source;
+- artifact hashes, license refs, attribution;
+- fidelity policy, known gaps, refresh policy;
+- online requirements, fallback world, client compatibility.
+
+GeoFeature:
+- internal feature id ổn định;
+- source refs, kind, geometry ref, fidelity class, confidence, as_of;
+- display name và display name source;
+- visibility policy, authored override ref;
+- không dùng source id làm primary key cho bookmark/mission.
+
+PlaceCard:
+- place id, title, category, description;
+- viewport/coordinates theo privacy policy;
+- source, as_of, confidence, attribution;
+- brand clearance, privacy class, allowlisted actions;
+- report issue status/url.
+
+Experience:
+- experience id/version/title, authored asset refs;
+- anchor world/feature, camera entry, availability;
+- license refs, accessibility metadata;
+- draft/review/published/withdrawn status.
+
+UserBookmark:
+- owner id, world/feature/experience reference;
+- validated camera state, private/public visibility;
+- timestamps, deletion state, idempotency/audit relation;
+- không lưu precise GPS history ngoài consent.
+
+API minimum:
+
+- GET /health
+- GET /version
+- GET /worlds/:id/manifest
+- GET /worlds/:id/layers
+- GET /worlds/:id/features?bbox=&layers=&limit=
+- GET /places/search?q=&world_id=
+- GET /places/:id
+- GET /experiences/:id
+- POST/PATCH/DELETE /bookmarks
+- GET /refresh-runs/:id admin-only
+- POST /map-issue-report
+
+API rules:
+
+- validate bbox, zoom, layer, page size và query cost;
+- response kèm source/as_of/attribution;
+- không arbitrary URL proxy, SQL, HTML hoặc file path;
+- unsupported schema trả lỗi có hướng dẫn;
+- mutation có idempotency/request key;
+- authorization server-side;
+- log correlation id nhưng redact token, cookie và precise location.
+
+API operational minimum:
+
+- `/health` chỉ báo process; `/ready` báo dependency readiness riêng, không
+  giả provider là healthy;
+- error envelope có `code`, `message`, `request_id`, `retryable`, không lộ
+  stack/secret/SQL/path;
+- mọi list endpoint có cursor hoặc giới hạn page rõ, max bbox/feature/bytes,
+  timeout, cancellation và rate-limit response;
+- dùng ETag/If-None-Match hoặc version header cho manifest/artifact; ghi rõ
+  cache invalidation khi current pointer đổi;
+- CORS/CSP/origin, audit log và redaction phải có test trước public.
+
+--------------------------------------------------------------------------------
+8. QUY TẮC CHO AGENT RẺ
+--------------------------------------------------------------------------------
+
+Rủi ro chính là agent tự mở rộng scope. Mọi handoff chỉ giao một WP, một mục
+tiêu và một vùng file.
+
+Header bắt buộc:
+
+PLAN: 31-8-hh3d-real-application-plan.txt
+CURRENT_WP: R<n>-WP<n>
+GOAL: một câu có thể kiểm tra
+DEPENDENCIES: versions/source fixtures đã pin
+ALLOWED_PATHS: danh sách path
+FORBIDDEN_PATHS: danh sách path
+DO_NOT_ADD_DEPENDENCY: true nếu WP không cho phép
+DONE_WHEN: postconditions
+VERIFY: exact commands and trace
+REPORT: diff, commands, exit codes, hashes, gaps, blocker
+
+Agent phải:
+
+1. Đọc đúng WP và không tự mở WP kế tiếp.
+2. Chỉ sửa ALLOWED_PATHS.
+3. Không đổi renderer, provider, schema, AOI hoặc license policy.
+4. Không cài package mới nếu chưa có approval, version, license và lý do.
+5. Không tải dữ liệu/asset ngoài nếu chưa có ledger entry.
+6. Không ghi secret/token/cookie/browser profile vào source/log/evidence.
+7. Không sửa expected để biến FAIL thành PASS.
+8. Không claim feature từ code chưa chạy hoặc screenshot chưa đối chiếu.
+9. Nếu thiếu quyền/key/hardware/dữ liệu/terms: ghi BLOCKED_REASON và dừng.
+10. Không sửa Godot/Vault Fighters/Kho Bí Ẩn/Snake hoặc plan khác.
+11. Không tự tick status; coordinator cập nhật sau critic.
+
+Phân công:
+
+- Agent rẻ: CSS, typed component nhỏ, schema, unit test, deterministic
+  utility, docs và bug có reproduction rõ.
+- Agent mạnh: renderer integration, geospatial transform, streaming, security,
+  performance diagnosis, migration và architecture review.
+- Critic read-only: chạy verify độc lập, kiểm diff/evidence, không sửa source.
+- Human/legal owner: provider terms, brand, privacy, commercial release.
+- Coordinator: WP order, lease, source hash, verdict và handoff.
+
+Nếu agent trả lời dài nhưng không có files changed, commands, exit code và
+postcondition, coi là chưa có evidence.
+
+--------------------------------------------------------------------------------
+9. CẤU TRÚC THƯ MỤC MỤC TIÊU
+--------------------------------------------------------------------------------
+
+hh-3d/
+  README.md
+  IDEAS.md
+  zdoc/
+    31-8-hh3d-demo-webgl-plan.txt
+    31-8-hh3d-real-application-plan.txt
+    31-8-hh3d-real-world-open-world-plan.txt
+    research-ledger.txt
+    license-ledger.txt
+    review-log.txt
+  demo/
+    ...
+  app/
+    README.md
+    decision-records/
+    docs/
+      review
+    web/
+      package.json
+      package-lock.json
+      src/app
+      src/map
+      src/ui
+      src/search
+      src/experiences
+      src/contracts
+      src/services
+      src/account
+      src/bookmarks
+      tests
+    server/
+      package.json
+      src/routes
+      src/auth
+      src/catalog
+      src/bookmarks
+      src/refresh
+      src/security
+      migrations
+      tests
+    data-pipeline/
+      pyproject.toml
+      src/adapters
+      src/normalize
+      src/validate
+      src/diff
+      src/generate
+      src/publish
+      tests
+    contracts/
+      world-manifest.schema.json
+      geo-feature.schema.json
+      place-card.schema.json
+    manifests/
+    artifacts/
+    data-qa/
+    content/
+      experiences/
+    infra/
+      dev
+      staging
+      production
+    native-unreal/
+      optional, only after R7-WP0
+    docs/
+      privacy
+      accessibility
+      operations
+      release
+      native
+    perf/
+
+Không commit node_modules, dist, env có secret, provider cache, raw planet
+extract, browser profile, Unreal Saved/Intermediate/DDC, packaged build hoặc
+temporary screenshots. Binary lớn dùng storage/LFS policy được duyệt.
+
+--------------------------------------------------------------------------------
+10. WORK PACKAGES VÀ GATES
+--------------------------------------------------------------------------------
+
+Các mục dưới đây là backlog và hiện đang PAUSED vì owner chưa mở quyền triển
+khai. `CURRENT_WP=NONE_PAUSED`; không agent nào được tự chuyển trạng thái.
+Một WP chỉ pass khi DONE_WHEN, VERIFY, evidence và critic đều đạt; coordinator
+mới được cập nhật state sau khi owner resume.
+
+R0-WP0 — Product, hardware, AOI và provider decision gate
+STATE: PAUSED_READY_AFTER_OWNER_RESUME
+DEPENDENCIES: explicit owner resume + demo review decision (pass hoặc owner
+chấp nhận gap có ghi trong review-log)
+ALLOWED_PATHS: hh-3d/zdoc/review-log.txt, hh-3d/app/decision-records/*
+
+Làm:
+- xác nhận application-first/web-first;
+- chốt AOI, mặc định proof 400 m x 400 m quanh Chợ Bến Thành;
+- chốt desktop/mobile, offline/online, budget, privacy và legal owner;
+- kiểm tra Node/browser/GPU/RAM/SSD/network/hosting/PostGIS;
+- xác nhận MapLibre-local MVP, Cesium route tùy chọn, R3F authored route và
+  deferred Unreal;
+- ghi cost/quota/outage/currentness policy.
+
+DONE_WHEN:
+- owner đọc decision record;
+- không còn ambiguity về free/current/exact;
+- có hardware/toolchain matrix;
+- provider/license profile được chọn hoặc ghi BLOCKED;
+- full plan vẫn tách khỏi demo.
+
+VERIFY:
+- tool/version dump;
+- hardware baseline;
+- license/secret preflight;
+- decision review log.
+
+R0-WP1 — Repository topology và pinned toolchain
+STATE: NOT_STARTED
+DEPENDENCIES: R0-WP0
+ALLOWED_PATHS: hh-3d/app/web/*, hh-3d/app/server/*,
+  hh-3d/app/data-pipeline/*, hh-3d/app/contracts/*, hh-3d/app/README.md
+
+Làm:
+- tạo topology tối thiểu, chưa tạo native Unreal;
+- pin Node/npm/Python/dependencies và lockfiles;
+- scripts typecheck/build/test/lint;
+- env example không có secret;
+- README setup và boundary.
+
+DONE_WHEN:
+- clean install reproducible;
+- starter typecheck/build/test pass;
+- không có dependency ngoài decision record;
+- gitignore chặn secret/cache/build;
+- diff chỉ nằm trong allowed paths.
+
+VERIFY:
+- clean staging install;
+- version dump;
+- typecheck/build/test;
+- secret/license scan.
+
+R1-WP0 — AOI source proof và provenance
+STATE: NOT_STARTED
+DEPENDENCIES: R0-WP1
+ALLOWED_PATHS: hh-3d/app/data-pipeline/*, hh-3d/app/manifests/*,
+  hh-3d/zdoc/research-ledger.txt, hh-3d/zdoc/license-ledger.txt,
+  hh-3d/app/data-qa/*
+
+Làm:
+- acquire source release/theme đã approved;
+- extract AOI nhỏ với margin;
+- giữ source IDs/license metadata;
+- validate CRS/geometry/height/confidence/road connectivity;
+- emit GeoParquet/GeoJSON QA và WorldManifest.
+
+DONE_WHEN:
+- source URL/release/access date/hash đủ;
+- coordinate round-trip pass control points;
+- geometry valid hoặc exception có log;
+- missing height/name ghi UNKNOWN/ESTIMATED;
+- artifact truy ngược source/generator/license.
+
+VERIFY:
+- pipeline test;
+- geometry QA;
+- checksums;
+- attribution/license completeness;
+- no raster bulk scrape.
+
+R1-WP1 — Browser geospatial renderer proof
+STATE: NOT_STARTED
+DEPENDENCIES: R1-WP0
+ALLOWED_PATHS: hh-3d/app/web/src/map/*, hh-3d/app/web/src/app/*,
+  hh-3d/app/web/public/*, hh-3d/app/web/tests/*,
+  hh-3d/app/docs/review/*
+
+Làm:
+- render AOI bằng profile đã ghi trong R0 decision record; mặc định MVP là
+  MapLibre local + 3D fill-extrusion từ approved snapshot. Nếu decision record
+  chưa tồn tại thì dừng với `BLOCKED_REASON`, không tự chọn provider;
+- add a useful 2D list/fallback even when 3D is available;
+- camera, picking, layer toggle, loading/error/attribution;
+- click feature trả internal id/source/as_of;
+- không làm account/search ở WP này.
+
+DONE_WHEN:
+- browser mở scene/map thật của AOI;
+- failure/retry/2D fallback hoạt động;
+- credits đúng profile;
+- không duplicate listener/resource;
+- build/typecheck pass.
+
+VERIFY:
+- clean browser trace;
+- desktop/mobile resize;
+- network throttle/offline;
+- WebGL error path;
+- console scan.
+
+GATE-U1 — Human-player usability proof
+STATE: NOT_STARTED
+DEPENDENCIES: R1-WP1
+ALLOWED_PATHS: hh-3d/app/docs/review/*, hh-3d/app/perf/*,
+  hh-3d/app/web/tests/*
+
+Đây là gate bắt buộc trước R2-WP0, không phải feature để agent tự bỏ qua.
+Ba người review độc lập (ít nhất một người chưa đọc code) phải hoàn thành
+journey 5 phút trong AOI proof khoảng 400 m x 400 m: mở app, tìm một landmark,
+chọn feature, đọc card, đổi 2D/3D, copy/reload share link và tìm fallback khi
+WebGL/mạng lỗi. Ghi task success, thời gian, lỗi hiểu nhầm, viewport/device,
+source/build hash và lời chê cụ thể. Nếu người mới không hiểu app đang hiển thị
+gì hoặc data nào là thật/approximate, verdict là REWORK dù code/build pass.
+
+VERIFY:
+- scripted browser trace trên desktop và 390x844/320x568;
+- read-only human review notes của 3 reviewer;
+- evidence không chứa precise personal location hoặc secret.
+
+R2-WP0 — Map UX, search shell và place cards
+STATE: NOT_STARTED
+DEPENDENCIES: R1-WP1,GATE-U1
+ALLOWED_PATHS: hh-3d/app/web/src/search/*,
+  hh-3d/app/web/src/ui/*, hh-3d/app/web/src/map/*,
+  hh-3d/app/web/tests/*
+
+Làm:
+- search/filter/layer controls;
+- feature/building/POI card;
+- close/Escape/focus return/deep link;
+- source/as_of/confidence/attribution;
+- 2D list fallback;
+- không render arbitrary HTML từ source.
+
+DONE_WHEN:
+- landing -> search -> select -> card -> share -> reload pass;
+- keyboard/touch path pass;
+- invalid link có safe error;
+- essential info đọc được khi WebGL off;
+- target viewport không overflow.
+
+VERIFY:
+- schema/unit tests;
+- browser E2E;
+- accessibility keyboard audit;
+- source/as_of/attribution assertion.
+
+R2-WP1 — Web performance, quality tiers và fallback
+STATE: NOT_STARTED
+DEPENDENCIES: R1-WP1,GATE-U1,R2-WP0
+ALLOWED_PATHS: hh-3d/app/web/*, hh-3d/app/perf/*
+
+Làm:
+- baseline desktop/mobile/weak WebGL;
+- request cancellation và cache policy;
+- DPR/quality/reduced motion;
+- đo first meaningful map, interactive time, FPS/frame time, memory;
+- context-loss recovery;
+- không load whole city/planet lúc boot.
+
+DONE_WHEN:
+- metrics có device/browser/build/source hash;
+- low tier giảm work thật;
+- no runaway request/rerender/listener/resource;
+- thresholds được decision record;
+- 2D mode hữu ích khi 3D unavailable.
+
+VERIFY:
+- repeatable performance run;
+- browser profiler;
+- network budget;
+- context-loss/recovery;
+- memory cleanup.
+
+R3-WP0 — API contracts và PostGIS foundation
+STATE: NOT_STARTED
+DEPENDENCIES: R1-WP0,R2-WP0
+ALLOWED_PATHS: hh-3d/app/server/*, hh-3d/app/contracts/*,
+  hh-3d/app/infra/dev/*
+
+Làm:
+- OpenAPI cho manifest/features/places/experiences;
+- PostGIS cho authored/application data, không raw planet;
+- migrations, bbox/query limits, pagination, health/version;
+- fixtures không có real personal data;
+- contract tests web/server.
+
+DONE_WHEN:
+- local/test server reproducible;
+- invalid query và unauth mutation bị chặn;
+- response kèm source/as_of/attribution;
+- migration strategy ghi rõ;
+- credentials không repo.
+
+VERIFY:
+- unit/integration/contract tests;
+- migration rehearsal;
+- query cost/rate-limit test;
+- secret/dependency/license scan.
+
+R3-WP1 — Search, catalog và authored-content boundary
+STATE: NOT_STARTED
+DEPENDENCIES: R3-WP0
+ALLOWED_PATHS: hh-3d/app/server/src/catalog/*,
+  hh-3d/app/server/src/search/*, hh-3d/app/web/src/search/*,
+  hh-3d/app/contracts/*
+
+Làm:
+- source-aware search/ranking;
+- authored experience catalog tách source-derived features;
+- visibility/status draft/review/published/withdrawn;
+- cache invalidation và source reference;
+- moderation boundary.
+
+DONE_WHEN:
+- result truy ngược source/as_of/license;
+- source update không xóa authored content âm thầm;
+- oversized query/abuse bị chặn;
+- stale/unavailable result nói rõ;
+- contracts pass.
+
+VERIFY:
+- API/search tests;
+- diff fixture;
+- authorization/visibility;
+- load smoke query budget.
+
+R4-WP0A — Local bookmarks và privacy (không cần account)
+STATE: NOT_STARTED
+DEPENDENCIES: R2-WP0
+ALLOWED_PATHS: hh-3d/app/web/src/bookmarks/*,
+  hh-3d/app/web/src/ui/*, hh-3d/app/contracts/*,
+  hh-3d/app/docs/privacy/*
+
+Làm:
+- private bookmark mặc định bằng local storage/URL state đã validate;
+- public share chỉ khi owner đã chốt dữ liệu nào được công khai;
+- delete/export/reset, precise-location policy và privacy copy rõ;
+- không tạo account, cookie tracking hoặc cloud sync ở WP này.
+
+DONE_WHEN:
+- public browse/search/card/share không cần login;
+- bookmark chỉ giữ schema/state được allowlist và reset được;
+- invalid/tampered link bị từ chối an toàn;
+- privacy copy dễ hiểu và legal status rõ.
+
+VERIFY:
+- browser E2E clean profile;
+- schema/property tests;
+- delete/export/reset;
+- log/browser storage redaction review.
+
+R4-WP0B — Optional OIDC/cloud sync
+STATE: OPTIONAL_NOT_OPEN
+DEPENDENCIES: R4-WP0A + explicit owner/provider/legal decision
+ALLOWED_PATHS: hh-3d/app/server/src/auth/*, hh-3d/app/server/src/bookmarks/*,
+  hh-3d/app/web/src/account/*, hh-3d/app/contracts/*,
+  hh-3d/app/docs/privacy/*
+
+Chỉ mở nếu local bookmark đã ổn định và owner chấp nhận chi phí/privacy.
+Phải có permission matrix, session/cookie/CSRF/CSP, delete/export/revoke,
+retention/consent và auth E2E. Nếu không mở, giữ `OPTIONAL_NOT_OPEN`.
+
+R4-WP0 — LEGACY ALIAS / SUPERSEDED
+Không thực thi block cũ mang tên R4-WP0; nó đã được tách thành R4-WP0A và
+R4-WP0B để không bắt người dùng đăng nhập chỉ để duyệt bản đồ.
+
+R4-WP1 — Authored experience layer
+STATE: NOT_STARTED
+DEPENDENCIES: R2-WP0,GATE-U1,R3-WP1
+ALLOWED_PATHS: hh-3d/app/web/src/experiences/*,
+  hh-3d/app/content/experiences/*, hh-3d/app/contracts/*,
+  hh-3d/app/manifests/*
+
+Làm:
+- Hòn Gió hoặc city story;
+- anchor authored object vào GeoFeature nhưng override riêng;
+- camera entry/card/share;
+- asset ledger/quality/reduced motion;
+- phân biệt source-derived và authored.
+
+DONE_WHEN:
+- source refresh không mất authored anchor;
+- loading/error/keyboard/fallback;
+- asset provenance/license đủ;
+- user hiểu boundary;
+- không phụ thuộc Unreal.
+
+VERIFY:
+- browser E2E;
+- refresh diff;
+- asset/attribution audit;
+- accessibility/reduced motion.
+
+R5-WP0 — Snapshot refresh, diff và atomic rollback
+STATE: NOT_STARTED
+DEPENDENCIES: R1-WP0,R2-WP0
+ALLOWED_PATHS: hh-3d/app/data-pipeline/*, hh-3d/app/manifests/*,
+  hh-3d/app/server/src/refresh/*, hh-3d/app/docs/operations/*
+
+Làm:
+- manual/scheduled refresh theo provider release;
+- add/change/delete diff;
+- review queue cho high-impact changes;
+- immutable release + atomic current pointer;
+- stable internal mapping cho authored overrides;
+- rollback và stale marker.
+
+DONE_WHEN:
+- failed import không phá current release;
+- cùng input/config tạo hash ổn định;
+- diff có reviewer/status;
+- UI/API as_of đúng sau update;
+- old release restore được.
+
+VERIFY:
+- fixture refresh;
+- injected failure;
+- rollback rehearsal;
+- hash/manifest;
+- override conflict.
+
+R5-WP1 — Live overlay adapter
+STATE: DEFERRED
+DEPENDENCIES: R5-WP0 + provider/legal/budget decision
+
+Không mở nếu chưa có provider, SLA, TTL, budget, privacy và fallback. Live
+traffic/weather/event không sửa canonical geometry và không làm app unusable
+khi offline. Đây là WP mới với adapter và evidence riêng.
+
+R6-WP0 — Production security và observability
+STATE: NOT_STARTED
+DEPENDENCIES: R3-WP0,R4-WP0A,R5-WP0
+ALLOWED_PATHS: hh-3d/app/server/*, hh-3d/app/web/*,
+  hh-3d/app/infra/*, hh-3d/app/docs/operations/*
+
+Làm:
+- structured logs có redaction/correlation/retention;
+- metrics latency/error/cache/query/tile cost;
+- frontend error không gửi sensitive data;
+- CSP/CORS/rate limit/dependency audit;
+- backup/restore/key rotation/incident runbook;
+- provider outage/stale/owned fallback.
+
+DONE_WHEN:
+- lỗi trace browser -> API -> job;
+- secret/license/dependency scan pass;
+- restore test thực hiện;
+- outage vẫn browse approved snapshot/2D;
+- redaction test pass.
+
+VERIFY:
+- security checklist;
+- offline/outage smoke;
+- restore rehearsal;
+- alert test;
+- log assertions.
+
+R6-WP1 — Deployment, cost và release environments
+STATE: NOT_STARTED
+DEPENDENCIES: R0-WP0,R3-WP0,R6-WP0
+ALLOWED_PATHS: hh-3d/app/infra/*, hh-3d/app/docs/operations/*,
+  hh-3d/app/docs/release/*, hh-3d/app/web/*, hh-3d/app/server/*
+
+Làm:
+- dev/staging/prod separation;
+- CI clean build/test/security/license;
+- object storage/CDN/cache;
+- quota, cost dashboard, alert, kill switch;
+- migration/deploy/rollback runbook;
+- no production secret trong client bundle.
+
+DONE_WHEN:
+- staging-to-prod rehearsal pass;
+- cost/request limits active;
+- rollback owner/contact rõ;
+- deploy artifact manifest/hash;
+- quota/outage behavior có test.
+
+VERIFY:
+- CI run;
+- staging deploy;
+- clean-browser smoke;
+- quota/cost alert;
+- rollback rehearsal.
+
+R7-WP0 — Optional Unreal native integration spike
+STATE: OPTIONAL_NOT_OPEN
+DEPENDENCIES: web MVP stable, owner requests native value
+ALLOWED_PATHS: hh-3d/app/native-unreal/*,
+  hh-3d/app/contracts/*, hh-3d/app/docs/native/*
+
+Làm:
+- pin Unreal/Cesium plugin;
+- open cùng AOI bằng World Partition/georeference;
+- đọc WorldManifest/API contract;
+- test owned collision/nav proxy độc lập visual tiles;
+- packaged desktop run, online/offline/outage;
+- so sánh cost/value với web-only.
+
+DONE_WHEN:
+- web app không phụ thuộc native;
+- coordinate tolerance pass;
+- native packaged run có benchmark;
+- no forbidden tile extraction/bake;
+- decision record mở hoặc đóng workstream.
+
+VERIFY:
+- packaged run;
+- coordinate control points;
+- offline/outage;
+- performance/cost;
+- license/attribution review.
+
+R7-WP1 — Native gameplay module
+STATE: DEFERRED_SEPARATE_PLAN
+DEPENDENCIES: R7-WP0 decision
+
+Không triển khai trong application plan này. Nếu owner muốn vehicle, combat,
+NPC, mission, traffic simulation hoặc gameplay kiểu open-world, tạo plan
+native/game riêng có scope, asset, legal, performance và test. Không nhồi các
+hệ thống đó vào web API/map MVP.
+
+R8-WP0 — Accessibility, mobile và public beta
+STATE: NOT_STARTED
+DEPENDENCIES: R2-WP1,R4-WP0A,R6-WP1
+ALLOWED_PATHS: hh-3d/app/web/*, hh-3d/app/docs/accessibility/*,
+  hh-3d/app/docs/release/*
+
+Làm:
+- responsive/touch/low-memory;
+- 2D fallback first-class;
+- keyboard/screen-reader/reduced motion/contrast;
+- slow network/offline/stale;
+- terms/privacy/about/license/report issue;
+- public beta feedback/abuse path.
+
+DONE_WHEN:
+- explore/search/card/share works trên target mobile;
+- WebGL off không làm core app unusable;
+- accessibility blocker không còn;
+- bandwidth/memory đo được;
+- copy không nói quá fidelity/currentness.
+
+VERIFY:
+- device/browser matrix;
+- accessibility audit;
+- keyboard/touch trace;
+- Lighthouse/equivalent;
+- clean-browser beta run.
+
+R8-WP1 — Release package
+STATE: NOT_STARTED
+DEPENDENCIES: required MVP WPs + legal/security review
+ALLOWED_PATHS: hh-3d/app/docs/release/*, hh-3d/app/infra/*,
+  hh-3d/app/web/*, hh-3d/app/server/*, hh-3d/app/manifests/*
+
+Làm:
+- versioned release manifest;
+- source/artifact/license/attribution bundle;
+- migration/rollback/support runbook;
+- changelog coverage/as_of/known gaps;
+- synthetic smoke và backup restore;
+- owner sign-off.
+
+DONE_WHEN:
+- fresh user browse/search/card/share/fallback;
+- no secret bundle/log/evidence;
+- manifests complete;
+- monitoring/rollback/contact rõ;
+- legal/product owner ký trước public.
+
+VERIFY:
+- production rehearsal;
+- external clean-browser test;
+- release audit;
+- source/hash/license/secret scan;
+- post-release smoke.
+
+--------------------------------------------------------------------------------
+11. DATA PIPELINE CHI TIẾT
+--------------------------------------------------------------------------------
+
+A. Freeze AOI/config:
+- AOI polygon, margin, layers, origin, output profile;
+- reject bbox quá lớn ở MVP;
+- ghi schema/generator/provider release.
+
+B. Acquire:
+- approved Overture/OSM extract/provider export;
+- không bulk scrape public raster tiles;
+- không dùng Google Photorealistic mesh để machine-extract geometry;
+- verify response/license/checksum;
+- lưu source manifest trước transform.
+
+C. Normalize:
+- validate CRS, geometry, winding, self-intersection;
+- normalize road class, one-way, access, width;
+- normalize footprint, height, levels, parts, confidence;
+- giữ source refs và unknown;
+- missing height là estimated, không fabricated fact.
+
+D. Generate:
+- vector tiles cho 2D;
+- approved 3D tiles hoặc mesh chunks cho visual;
+- authored glTF/Three scene cho F2;
+- searchable index chỉ giữ approved fields;
+- interaction/collision proxy do application sở hữu.
+
+E. QA:
+- source vs generated 2D overlay;
+- coordinate/height/road samples;
+- bounds, LOD, seams, normals, z-fighting;
+- query cost, attribution, privacy filter;
+- source diff và authored override conflict.
+
+F. Publish:
+- immutable versioned artifact path;
+- validate manifest/artifact hashes;
+- atomic current pointer;
+- invalidate affected cache only;
+- retain previous release;
+- API/UI trả as_of/stale status.
+
+Không tự sửa source map để làm đẹp một khu vực. Authored override cần lý do,
+internal id, reviewer, timestamp và relation tới source.
+
+--------------------------------------------------------------------------------
+12. UX VÀ ACCESSIBILITY CONTRACT
+--------------------------------------------------------------------------------
+
+MVP screens:
+
+1. Landing/explore:
+- giải thích app;
+- phân biệt real-world source và HH-authored content;
+- data date/coverage.
+
+2. World view:
+- 3D canvas, 2D toggle, layer controls, search, attribution;
+- loading/retry/offline/stale;
+- camera reset/share.
+
+3. Place card:
+- title/category/source/as_of/confidence;
+- allowlisted action;
+- report issue;
+- authored experience link.
+
+4. Share view:
+- validate URL state;
+- restore camera/layers;
+- safe fallback cho unknown world/feature.
+
+5. Settings/about:
+- quality, reduced motion, language, privacy, data usage;
+- license/attribution/terms dễ tìm.
+
+Interaction:
+- mouse, keyboard, touch;
+- Escape đóng panel; focus return;
+- no focus trap trong canvas;
+- color không là tín hiệu duy nhất;
+- essential list/card đọc được khi WebGL off;
+- no autoplay audio;
+- precise location opt-in và retention rõ.
+
+App phải usable khi WebGL unavailable, mạng chậm, provider timeout, attribution
+dài, viewport nhỏ, snapshot stale hoặc feature bị withdrawn.
+
+--------------------------------------------------------------------------------
+13. SECURITY, PRIVACY VÀ OPERATIONS
+--------------------------------------------------------------------------------
+
+Security:
+- secrets ở secret manager/ignored env;
+- API key scope/quota;
+- rotate/revoke provider token;
+- không arbitrary URL proxy/SQL/HTML/file path;
+- lockfile + dependency/license audit;
+- HTTPS, CSP, CORS, secure cookies, CSRF;
+- admin authz + audit;
+- upload quarantine/scan nếu UGC mở.
+
+Privacy:
+- không lưu precise location mặc định;
+- redact coordinates trong logs;
+- không hiển thị private residence/user history không cần;
+- purpose/retention/delete/export rõ;
+- analytics aggregate hoặc consent;
+- public place metadata tách user data.
+
+Operations:
+- health không giả provider healthy;
+- outage dùng stale/owned fallback;
+- refresh job lease ngăn hai writer;
+- atomic release pointer;
+- incident record có release/source hash/impact/remediation;
+- backup chỉ pass sau restore rehearsal.
+
+--------------------------------------------------------------------------------
+14. PERFORMANCE, COST VÀ SLO
+--------------------------------------------------------------------------------
+
+Không chốt số trước G0. G0 đo hardware rồi owner ký threshold.
+
+Web:
+- first meaningful map;
+- time to interactive;
+- average FPS/frame time/1 percent low;
+- memory/VRAM khi đo được;
+- tile/asset requests, bytes, cache hit;
+- context loss/recovery;
+- loaded feature count và React render frequency.
+
+API:
+- p50/p95 manifest/search/feature latency;
+- 4xx/5xx, timeout, retry;
+- query cost, bbox/limit violations;
+- cache hit, provider latency;
+- cost per session/request.
+
+Data:
+- generation time, artifact/diff size;
+- invalid geometry/missing height;
+- coverage/confidence;
+- rollback duration/success;
+- stale age/live TTL.
+
+Native nếu mở:
+- frame/game/render/GPU time;
+- RAM/VRAM, loaded cells, hitch;
+- package size, SSD requirement;
+- offline startup;
+- value comparison against web-only.
+
+Cost controls:
+- AOI/zoom/request limits;
+- no unbounded prefetch;
+- provider cache policy;
+- quota alerts;
+- expensive layer feature flag/kill switch;
+- artifact retention;
+- no production scale trước budget owner.
+
+Cost envelope bắt buộc ở R0:
+
+- `LOCAL_PROOF`: provider spend = 0; chỉ dùng fixture/approved artifact local,
+  ghi chi phí máy/lưu trữ nếu có;
+- `STAGING`: owner ghi trần chi phí tháng, request/byte quota, alert threshold,
+  người nhận cảnh báo và kill switch trước khi bật online;
+- `PUBLIC_BETA`: không mặc định bật Google/Cesium ion/live overlay; mỗi provider
+  phải có cost per session/request, cache/TTL, outage fallback và stop rule;
+- chưa có con số owner ký thì không được gọi provider trả phí, tải dữ liệu lớn
+  hoặc mở public traffic.
+
+Mọi metric có device/browser/build/source hash/timestamp. Mượt, đẹp và
+giống GTA không phải metric.
+
+--------------------------------------------------------------------------------
+15. TEST VÀ EVIDENCE
+--------------------------------------------------------------------------------
+
+Data tests:
+- CRS/round-trip/units;
+- geometry validity/bbox clipping;
+- road graph/direction;
+- height fallback/confidence;
+- stable IDs/refresh diff;
+- deterministic generator;
+- manifest/license/artifact completeness;
+- rollback.
+
+Web tests:
+- clean boot/loading/error/2D fallback;
+- camera/pick/layer/search/card/share;
+- keyboard/touch/reduced motion;
+- slow/offline/stale;
+- cache/cancel/memory cleanup;
+- auth/bookmark permission nếu bật.
+
+API tests:
+- schema/version;
+- invalid bbox/query cost/rate limit;
+- auth/ownership/visibility;
+- idempotent mutation;
+- migration/backup/restore;
+- provider timeout/retry/fallback.
+
+Native tests nếu mở:
+- packaged boot;
+- georeference control points;
+- visual/collision separation;
+- offline/outage;
+- cell boundary;
+- performance.
+
+Human review:
+- compare source 2D map và rendered route;
+- sample building/road và record error/confidence;
+- verify authored/source boundary;
+- verify attribution/license/privacy;
+- judge usefulness as application, not only screenshot.
+
+Evidence:
+- run_id, build_id, source_snapshot_id, command/request id;
+- engine/browser/dependency versions;
+- source/artifact/lockfile hashes;
+- AOI/layers/as_of/seed;
+- exact repro commands/exit codes;
+- runtime screenshots, not mockups;
+- gaps và critic verdict;
+- no keys/tokens/cookies/private user data.
+
+Không dùng screenshot loading/setup, fake JSON, teleport, force-complete hoặc
+hard-coded FPS làm bằng chứng duy nhất.
+
+--------------------------------------------------------------------------------
+16. DEPLOYMENT VÀ RELEASE TOPOLOGY
+--------------------------------------------------------------------------------
+
+Local:
+- web dev server, API dev server, PostGIS dev container;
+- local approved small artifact;
+- no production keys.
+
+Staging:
+- separate project/account/keys;
+- immutable artifact release;
+- migration rehearsal;
+- synthetic browse/search/bookmark;
+- quotas và observability.
+
+Production:
+- CDN/web host;
+- API HTTPS/rate limit;
+- controlled PostGIS;
+- versioned object storage;
+- current pointer + rollback;
+- provider outage fallback;
+- release notes/terms/privacy/about.
+
+Release checklist:
+- source release/accessed_at;
+- license/attribution;
+- source/artifact/build hashes;
+- dependency/security scan;
+- cost/quota budget;
+- privacy/legal status;
+- accessibility/performance;
+- rollback test;
+- owner/contact/on-call.
+
+--------------------------------------------------------------------------------
+17. RỦI RO VÀ ĐIỀU KIỆN DỪNG
+--------------------------------------------------------------------------------
+
+R1 — Agent rẻ tự đổi stack hoặc làm cả product:
+one-WP handoff, allowed paths, exact verify, critic read-only.
+
+R2 — Map source thiếu/sai:
+show confidence/unknown/as_of, authored override có provenance, không claim 1:1.
+
+R3 — Provider terms/billing thay đổi:
+adapter + license re-check + feature flag + owned fallback.
+
+R4 — Hai renderer gây lỗi:
+MapLibre-local MVP; Cesium route/spike chỉ sau provider/terms/cost gate;
+R3F authored route trước khi compose.
+
+R5 — Dữ liệu Google/Cesium bị dùng sai:
+visualization-only; không extract/trace/bake/offline; legal gate.
+
+R6 — Web không đủ vehicle/crowd/physics:
+mở native Unreal spike; gameplay là plan riêng.
+
+R7 — Privacy/brand complaint:
+privacy class, fictionalized authored content, permission ledger, log redaction.
+
+R8 — Tile/API cost tăng:
+quota, cache, AOI/zoom limits, kill switch, budget owner.
+
+R9 — Full product phình thành GTA/AAA:
+lock MVP journeys; module mới cần WP, acceptance, performance và cost.
+
+Dừng và tạo GAP_REPORT khi:
+- thiếu license/attribution/source hash;
+- secret xuất hiện repo/log/evidence/bundle;
+- agent sửa ngoài allowed paths;
+- visual tiles thành collision/nav không có quyền;
+- refresh không atomic/rollback được;
+- app chỉ chạy online nhưng không nói rõ;
+- metrics fake hoặc expected bị đổi để pass;
+- owner muốn public/commercial trước legal/privacy/security;
+- native workstream bắt đầu chưa có separate decision.
+
+--------------------------------------------------------------------------------
+18. OWNER DECISIONS TRƯỚC R0-WP0
+--------------------------------------------------------------------------------
+
+Defaults:
+
+- application: HH World web-first;
+- AOI proof: 400 m x 400 m quanh Chợ Bến Thành;
+- MVP extent: khoảng 1 km2 sau proof;
+- renderer: MapLibre-local MVP, Cesium optional route, R3F authored;
+- data: approved Overture/OSM snapshot;
+- Google photorealistic layer: OFF trong MVP;
+- account: local bookmark trước, auth phase sau;
+- style: authored language riêng;
+- Unreal: deferred;
+- release: private/staging trước public;
+- no vehicle/combat gameplay trong application MVP.
+
+Owner phải chốt trước data scale:
+
+1. AOI/city cuối;
+2. web-only hay native desktop target;
+3. offline bắt buộc hay online accepted;
+4. provider/cloud/API budget;
+5. real names/logos/signage policy;
+6. account/social/UGC trong MVP;
+7. target devices/FPS/bandwidth;
+8. legal/privacy/provider-account owner;
+9. refresh cadence;
+10. support/incident contact.
+
+Nếu chưa chốt, chỉ làm G0/R1 small proof; không tải dữ liệu lớn, bật
+commercial provider hoặc public launch.
+
+--------------------------------------------------------------------------------
+19. HANDOFF PROMPT MẪU
+--------------------------------------------------------------------------------
+
+Prompt triển khai:
+
+Bạn chỉ làm CURRENT_WP=R<n>-WP<n> trong
+D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/hh-game-studio/hh-3d.
+Đọc đúng Section 10 của 31-8-hh3d-real-application-plan.txt. GOAL là một
+câu có thể kiểm tra. Chỉ sửa ALLOWED_PATHS. Không sửa Godot, Vault Fighters,
+Kho Bí Ẩn, Snake hoặc plan khác. Không đổi AOI/provider/renderer/schema, không
+thêm dependency, không tải asset/dữ liệu ngoài nếu chưa có license ledger.
+Hoàn thành DONE_WHEN, chạy VERIFY, rồi báo files changed, commands, exit
+codes, source/build/artifact hashes, evidence và known gaps. Nếu thiếu
+key/quyền/dữ liệu/hardware hoặc phải đổi acceptance, dừng với BLOCKED_REASON;
+không tự bịa fallback.
+
+Prompt bug cụ thể:
+
+Chỉ sửa reproduction đã nêu trong file đã cho. Không refactor ngoài lỗi. Giữ
+API/schema/behavior khác. Thêm regression test nếu phù hợp. Chạy exact verify.
+Báo before/after result và diff.
+
+Prompt critic read-only:
+
+Đọc diff của CURRENT_WP ở chế độ read-only. Không sửa file. Chạy VERIFY độc
+lập, kiểm allowed paths, dependency drift, schema/license/secret, runtime
+postcondition, source/artifact hash, attribution và scope. Trả PASS, REWORK
+hoặc BLOCKED kèm bằng chứng; không tin exit integer hoặc JSON caller cung cấp
+nếu chưa đọc lại artifact/runtime.
+
+--------------------------------------------------------------------------------
+20. READY VÀ COMPLETE
+--------------------------------------------------------------------------------
+
+Ready for implementation:
+
+- demo web đã review pass hoặc gap list được owner chấp nhận;
+- R0 decisions về platform/AOI/provider/budget/privacy có record;
+- toolchain/version/hardware pin;
+- source/license/currentness policy rõ;
+- web/native boundary rõ;
+- first slice giữ trong proof 400 m -> MVP khoảng 1 km2;
+- no unresolved secret/legal blocker;
+- first handoff có one-WP brief.
+
+Web MVP complete:
+
+- clean user xem 2D/3D, search, pick, card, share và fallback;
+- source/as_of/confidence/attribution trung thực;
+- approved snapshot có manifest/hash/license;
+- API/PostGIS boundary pass nếu backend bật;
+- refresh/diff/rollback chạy được;
+- accessibility/performance/security minimum pass;
+- outage/stale behavior rõ;
+- no unlicensed asset/secret;
+- legal/product owner duyệt trước public beta.
+
+Full application release-ready:
+
+- web MVP + account/bookmark/content boundary theo scope;
+- CI/deploy/observability/backup/rollback;
+- currentness refresh và diff review;
+- cost/quota/privacy/security/accessibility;
+- source/artifact/license evidence;
+- public copy không claim quá dữ liệu;
+- native spike chỉ tính nếu decision record pass;
+- mọi claim real/current/high-fidelity trỏ manifest/evidence.
+
+Không cần Unreal để đạt web application release. Unreal chỉ thành bắt buộc cho
+một sản phẩm native riêng nếu owner chọn vehicle/physics/crowd/cinematic/VR
+và chấp nhận chi phí, build target, legal và maintenance của hai client.
+
+--------------------------------------------------------------------------------
+21. NGUỒN KỸ THUẬT VÀ ĐIỀU KHOẢN CẦN RE-CHECK
+--------------------------------------------------------------------------------
+
+Web geospatial:
+- CesiumJS: https://cesium.com/platform/cesiumjs
+- CesiumJS fundamentals: https://cesium.com/learn/cesiumjs-fundamentals/
+- Cesium 3D Tiles styling:
+  https://cesium.com/learn/cesiumjs-learn/cesiumjs-3d-tiles-styling/
+- MapLibre GL JS: https://maplibre.org/maplibre-gl-js/docs/
+- React app guidance: https://react.dev/learn/creating-a-react-app
+- Three.js InstancedMesh: https://threejs.org/docs/pages/InstancedMesh.html
+
+Open geodata:
+- Overture Buildings: https://docs.overturemaps.org/guides/buildings/
+- Overture Transportation: https://docs.overturemaps.org/guides/transportation/
+- Overture attribution: https://docs.overturemaps.org/attribution/
+- OpenStreetMap license: https://www.openstreetmap.org/copyright
+- OSM tile policy: https://operations.osmfoundation.org/policies/tiles/
+
+Google/Cesium service:
+- Google Photorealistic 3D Tiles:
+  https://developers.google.com/maps/documentation/tile/3d-tiles
+- Google Map Tiles policies:
+  https://developers.google.com/maps/documentation/tile/policies
+- Google renderer integration:
+  https://developers.google.com/maps/documentation/tile/use-renderer
+- Cesium for Unreal: https://cesium.com/learn/unreal/
+- Cesium ion terms: https://cesium.com/legal/terms-of-service/
+
+Native optional:
+- Unreal World Partition:
+  https://dev.epicgames.com/documentation/unreal-engine/world-partition-in-unreal-engine
+- Unreal PCG:
+  https://dev.epicgames.com/documentation/unreal-engine/procedural-content-generation-framework-in-unreal-engine
+- Unreal licensing: https://www.unrealengine.com/license
+
+Các nguồn/điều khoản có thể thay đổi. Mỗi release phải re-check URL, access
+date, version và terms; plan không thay thế legal advice.

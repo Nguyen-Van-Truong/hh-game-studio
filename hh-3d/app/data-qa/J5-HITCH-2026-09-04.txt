@@ -1,0 +1,49 @@
+{
+  "run_id": "HH3D-J5-20260904-ASIA-SAIGON-15",
+  "player": "http://127.0.0.1:4175/",
+  "viewport": "1280x720",
+  "method": "headless-new CDP first-W rAF wall-clock 3000ms settle=400ms skip=2",
+  "before": {
+    "liveJs": "/assets/index-nJ1HVwcJ.js",
+    "liveJsLen": 2152818,
+    "liveJsSha256": "aa2c143cc1edf1aac67ab8ffc7facd3029b875bfd8dee0acbbfbceb6a887d701",
+    "run_id": "HH3D-J5-20260904-ASIA-SAIGON-14",
+    "walkMin": 8.57,
+    "walkMean": 20.4,
+    "n": 57,
+    "median": 20,
+    "frameMsMax": 116.7,
+    "lantern": "shop-lantern-fish",
+    "friendOfflineClosed": true
+  },
+  "after": {
+    "liveJs": "/assets/index-Zv5epUAg.js",
+    "liveJsLen": 2153814,
+    "liveJsSha256": "458d723bf1584e1c60ed8f77220227dfe3d8db89a3441ba2c0908e38db265743",
+    "run_id": "HH3D-J5-20260904-ASIA-SAIGON-15",
+    "walkMin": 8.58,
+    "walkMean": 27.53,
+    "n": 72,
+    "median": 29.94,
+    "p1": 9.58,
+    "max": 60.24,
+    "frameMsMax": 116.6,
+    "hitchWarmup": "audio-compile",
+    "lantern": "shop-lantern-fish",
+    "friendOfflineClosed": true
+  },
+  "afterSettle1200": {
+    "run_id": "HH3D-J5-20260904-ASIA-SAIGON-15B",
+    "walkMin": 8.58,
+    "walkMean": 27.82,
+    "n": 71,
+    "note": "same bundle; 1.2s settle; no second recycle"
+  },
+  "verdict": "J5_HITCH_OBSERVED",
+  "minGe25": false,
+  "meanImproved": true,
+  "not_plan_pass": true,
+  "not_gate_u1": true,
+  "not_r2_wp1": true,
+  "not_60_fps": true
+}

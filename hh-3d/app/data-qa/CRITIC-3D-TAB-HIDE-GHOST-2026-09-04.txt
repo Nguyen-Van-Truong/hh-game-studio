@@ -1,0 +1,104 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-05
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=04:54 +07
+ROLE=IMPLEMENTER
+TICK=n/a (do not treat this file as TICK=yes)
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M2=1
+NOT_M1=1
+NOT_OSM=1
+NOT_WAN=1
+PLAYER_URL=http://127.0.0.1:4175/
+RUN_ID=HH3D-J5-20260905-ASIA-SAIGON-01
+COMMAND=one remint; no implementer two-seat claim
+VERDICT_IMPLEMENTER_CDP=not_run (critic owns the hunt)
+LIVE_JS=/assets/index-CQffXcMA.js
+LIVE_JS_LEN=2174239
+LIVE_JS_SHA256=d30a7845e6cf8a13b3d129fbdfda4d82c06a02b29deee502c16672ed698b4250
+LIVE_CSS=/assets/index-DsRW_q10.css
+LIVE_CSS_LEN=83046
+LIVE_CSS_SHA256=77ec860c389e0edc35641e8b1ae385804335dc8e127f841dccfaa101ffa4a545
+LISTEN=127.0.0.1:4175
+LIVE_PID=7848
+LIVE_PID_STARTTIME=2026-09-05 04:54:18 +07
+REMINTED=yes
+ONE_RECYCLE_AFTER_BUILD=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+NO_COMMIT=1
+PATH=B (source already had hide-stops-publish; 4175 was down / not serving this slice)
+ACCEPTED_PRIOR=CRITIC-3D-VIEWING-OPEN-SHELF-2026-09-04.txt TICK=yes on /assets/index-DHD8uCJ5.js
+PRIOR_LIVE_JS=/assets/index-DHD8uCJ5.js LEN=2173910
+PRIOR_SHA256=c1be8323e371ad18311f30e11ee23dcd1e334a97a46992ab9b9153af64a42ddf
+
+================================================================================
+NAMED MISS
+================================================================================
+
+TAB_HIDE_GHOST / owner T07: a background / hidden tab must stop publishing
+this-PC street presence. The other seat must lose remote-body-* and the
+street nametag (remote-avatar-* / .play-remote-label) after at most
+PRESENCE_TTL_MS=10000 without the hidden seat clicking Offline.
+
+Prior live DHD8uCJ5 only left on pagehide. document.hidden muted footsteps
+but the hidden seat could keep publishing, so B stared at a standing ghost.
+
+This is hide, not Offline. A’s own UI stays Online. Visible again republishes.
+This-PC /demo-bus TTL only. NOT_M2. No city presence server.
+
+================================================================================
+WHAT CHANGED
+================================================================================
+
+hh-3d/app/web/src/friends/presence.ts
+  isDocumentStreetVisible(document.visibilityState === "hidden" /
+  document.hidden). shouldPublishStreetPresence requires Online + opted-in
+  + connected + documentVisible. Mode is not flipped.
+
+hh-3d/app/web/src/friends/usePresence.ts
+  Publish uses that gate. Hidden takes the same leave path as not opted-in
+  (publishLocalLeave + /demo-bus leave). visibilitychange forces leave or
+  republish immediately. pagehide leave stays. usePresence does not call
+  setPresenceMode.
+
+hh-3d/app/web/tests/presence.test.mjs
+  Hidden / visibilitychange stops publish; mode stays "online"; stale
+  packet past TTL is not street-visible.
+
+hh-3d/app/web/tests/play.test.mjs
+  Source assert: gate + visibilitychange; hook does not set Offline.
+
+Kept: play-viewing-chip + play-viewing-open, nametag useLayoutEffect purge,
+hitch3 play-idle. Leftover Shared PC / J6 stay on /demo-bus. No Menu chrome.
+
+If leave does not leave the frozen tab, /demo-bus sweepPresence + isFresh
+drop the last packet after PRESENCE_TTL_MS=10000.
+
+================================================================================
+VERIFY (implementer only)
+================================================================================
+
+node --test tests/presence.test.mjs tests/play.test.mjs  EXIT=0 (51 pass)
+npm run build EXIT=0  dist/assets/index-CQffXcMA.js
+4175 was down overnight; started one preview after this build
+  npm run preview -- --host 127.0.0.1 --port 4175 --strictPort
+LISTEN pid 7848 (not PowerShell $PID). Did not start 4173 / 4174 / 5175.
+Did not bind 0.0.0.0. Did not catalog_clear. GET raw JS bytes hashed above.
+Live bundle contains visibilitychange + pagehide + visibilityState.
+
+TICK=n/a. Do not treat this remint as acceptance. Critic hunts separately.
+
+================================================================================
+OWNER LEFTOVERS (unchanged)
+================================================================================
+
+1. GATE-U1 three-human review (first acceptance leftover; not faked).
+2. R2-WP1 headed/mobile/memory/min-FPS thresholds still UNFILLED.
+3. WAN / other-PC join still not built. 4175 loopback only.
+4. R4-WP0B real account/OIDC still not built.
+5. Open data (OSM/Overture) still needs license ledger + grant.
+6. Leftover this-PC shops stay in the catalog; they do not own street E.
+7. M0/M1/M2 plan WPs still NOT_STARTED. NOT_PLAN_PASS. Not M1. Not M2.
+8. Independent critic must still hunt TAB_HIDE_GHOST on CQffXcMA.

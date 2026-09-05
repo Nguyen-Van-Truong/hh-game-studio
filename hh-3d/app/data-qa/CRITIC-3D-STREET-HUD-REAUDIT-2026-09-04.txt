@@ -1,0 +1,305 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+BOOTED_4175=1
+DID_NOT_RECYCLE=1
+DID_NOT_REBUILD=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+CRITIC=INDEPENDENT_ADVERSARIAL_STREET_HUD_REAUDIT
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=09:03 +07
+MODEL=grok-4.6-extra-high
+SCOPE=Re-audit of implementer slim street HUD remint. Do not treat CRITIC-3D-STREET-HUD-2026-09-04.txt as TICK=yes.
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=04cb6ca92c482017c02d78e7885727f73b62103d
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-STREET-HUD-REAUDIT-2026-09-04.txt
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-STREET-HUD-2026-09-04.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+DID_NOT_TREAT_IMPLEMENTER_AS_TICK_YES=1
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+VITE_PREVIEW_PORT_PIN=4175
+LIVE_PID=69896
+LISTEN=127.0.0.1:4175
+CRITIC_CDP_PORTS=9943 / 9944 then 9945 / 9946
+VIEWPORT=1280x720
+ISOLATED_PROFILES=1
+HEADLESS_NEW=1
+
+LIVE_JS=/assets/index-DF4TvR_E.js
+LIVE_JS_LEN=2146024
+LIVE_JS_SHA256=9eb88fce4b24620d8d91d78a3377e58ccc3c91346ae97dea8dc609f1388700be
+LIVE_JS_MATCHES_CLAIM=1
+HASH_MISMATCH=0
+
+CHIP_BEFORE=Harbor Walk
+CHIP_AFTER=Steps East
+CHIP_CHANGED=1
+CHIP_STUCK_DASH=0
+HARBOR_M_EAST_FIRST=5.88
+HARBOR_M_EAST_CONFIRM=7.24
+CHIP_H_PX=21.9
+CHIP_W_HARBOR=91.7
+CHIP_W_STEPS=75.9
+OVERLAY_RATIO_HUD_PLUS_PAD=0.0902
+HUD_TOP_H=55.8
+MENU_HIDDEN_DEFAULT=1
+PLAQUES=4
+LANTERN_E=shop-lantern-fish
+SEAT_B_LEFTOVER_E_STOLEN=0
+
+CLAIM_1_HARBOR_CHIP_HARBOR_WALK=PASS
+CLAIM_2_WALK_EAST_CHIP_CHANGES_STEPS_EAST=PASS
+CLAIM_3_SLIM_CHIP_MENU_HIDDEN=PASS
+CLAIM_4_NO_GPS_OSM_LANTERN_PLAQUES_LEFTOVER=PASS
+
+BIGGEST_MISS=None on the named hunts. Live hash matches DF4TvR_E / 2146024 / 9eb88fce…. Chip on Harbor is Harbor Walk (not Steps East, not —). Independent east walk changed the on-screen chip to Steps East. Slim 22 px pill; Menu hidden. Lantern E still shop-lantern-fish. Plaques still 4. Seat B leftover E not stolen. NOT_PLAN_PASS.
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/ was already up. Bind 127.0.0.1 pid 69896
+(node vite preview). Did not recycle, rebuild, kill, or start
+4173 / 4174 / 5175. Did not bind 0.0.0.0.
+
+Did not treat CRITIC-3D-STREET-HUD-2026-09-04.txt as TICK=yes
+(ROLE=IMPLEMENTER, TICK=n/a). Did not run j5-street-hud-probe.mjs
+as proof. Did not write lead packs. Did not tick any plan.
+
+Independent Chrome CDP, isolated temp profiles, ?seat=a / ?seat=b.
+Tried to fail: chip stuck on Harbor Walk or — after east walk;
+fat dashboard / Menu open; hash drift; GPS/OSM claim; leftover
+E steal; lantern stall swap; plaque count change.
+
+Live hash matches the claimed remint before and after CDP.
+Chip text actually changed on the walk. Named hunts 1–4 held.
+This is NOT_PLAN_PASS. GATE-U1 humans were not invented.
+
+================================================================================
+LIVE JS
+================================================================================
+
+HTML script = /assets/index-DF4TvR_E.js
+http length = 2146024
+sha256 = 9eb88fce4b24620d8d91d78a3377e58ccc3c91346ae97dea8dc609f1388700be
+Matches the claimed remint name + length + hash.
+After CDP the same name + length + hash is still served from
+pid 69896. Same bytes on a second GET.
+
+Bundle scan (live bytes, not source):
+  openstreetmap = 0
+  0.0.0.0 = 0
+  Harbor Walk / Tram Approach / Steps East / Steps West = 2 each
+  play-street-chip = 1
+  named-chip = 1
+  shop-lantern-fish = 1
+  GPS / gps = denial path only (Not GPS; not GPS; not_gps:!0;
+    chip title "Fixture only — not GPS, not OSM.")
+  city grid = honesty denial ("not a city grid")
+  Overture = honesty denial only
+  NOT_PLAN_PASS = 7
+
+GET /data/ben-thanh-400m.authored.geojson kind=street count = 2
+  Tram Approach, Harbor Walk
+  kinds: aoi=1 park=1 building=60 street=2 place=4
+
+/demo-bus still this_pc bind=127.0.0.1 not_wan. Leftover
+shop-local-sharedpc ("Quầy Shared PC") and
+shop-local-mtl8ulddihjpre remain on the catalog. Did not
+catalog_clear.
+
+================================================================================
+CLAIM 1 — HARBOR CHIP IS HARBOR WALK, NOT STEPS EAST, NOT — — PASS
+================================================================================
+
+Tried to fail as stuck em-dash, Steps East at spawn, or
+DOM-only text the frame does not paint.
+
+Seat A spawn 106.69804, 10.77162 alt=0 heading=0.
+Click canvas, hold W ~2.4 s on Harbor.
+
+  spawn chipText=Harbor Walk  role=official  streetHud=named-chip
+  harbor chipText=Harbor Walk  lon=106.69804 lat=10.7716494
+  eastM=0  northM=+3.27
+  chipBox 91.7 × 21.9 @ 724.1, 23.3  onScreen=true
+  chip title: Authored street name. Fixture only — not GPS, not OSM.
+
+Independent Harbor frame (temp critic-harbor.png):
+  Slim green pill at top-right reads Harbor Walk. Not — .
+  Not Steps East. Honesty banner still denies OSM / city grid.
+  Pole-boards in the same frame: Steps East (left), Harbor Walk
+  (right), Steps West further on. Menu lists not open.
+
+PASS.
+
+================================================================================
+CLAIM 2 — WALK EAST; CHIP CHANGES TO STEPS EAST — PASS
+================================================================================
+
+Tried to fail: no east gain; chip stays Harbor Walk; chip
+flips without harborM rise; change is data-attr only.
+
+First independent walk, chunked east after a north push + D turn:
+
+  after-north   chip=Harbor Walk  east=0     north=+16.29
+  after-turn    chip=Harbor Walk  heading=79
+  east-chunk-1  chip=Harbor Walk  east=+0.98
+  east-chunk-2  chip=Harbor Walk  east=+2.89
+  east-chunk-3  chip=Harbor Walk  east=+4.54
+  east-chunk-4  chip=Steps East   east=+5.88  north=+16.86
+                role=inner  heading=84  alt=0
+                inside-aabb=0  inside-ring=0
+                chipBox 75.9 × 21.9 @ 724.1, 23.3
+
+Chip text changed when harborM (east) rose into the Steps
+band. Not stuck on Harbor Walk.
+
+Confirm walk (fuller east, ports 9945/9946):
+  steps chip=Steps East  east=+7.24  north=+19.75  heading=93
+  lon=106.6981062 lat=10.7717974
+
+Independent Steps frame (temp critic-steps.png):
+  Slim green pill reads Steps East. 3D pole-board in the
+  same frame also reads Steps East / inner lane. Not Harbor
+  Walk on the chip.
+
+PASS.
+
+================================================================================
+CLAIM 3 — SLIM CHIP, NOT A RESTORED FAT DASHBOARD — PASS
+================================================================================
+
+Tried to fail as a restored side dashboard / open Menu /
+tall HUD strip replacing Play.
+
+  chip height 21.9 px on Harbor and on Steps (claimed 22 px)
+  chip width 91.7 → 75.9 (label shrink, not a new panel)
+  hud-top height 55.8 (existing brand + honesty + chip row)
+  overlay ratio hud-top + walk-pad = 0.0902
+  play-menu data-open=no  hidden=true  box 0×0  display=none
+  fatDashClass=false  (.dashboard / .fat-hud / .play-dashboard absent)
+
+Harbor and Steps frames: Menu Tab control only. Lists stay
+behind Tab. Chip is one slim pill in hud-top, not a restored
+fat shop/friends dashboard. 2D map + status chrome are the
+prior Play overlays, not a new dashboard.
+
+PASS.
+
+================================================================================
+CLAIM 4 — NO GPS/OSM CLAIM; LANTERN E; PLAQUES 4; LEFTOVER B — PASS
+================================================================================
+
+Tried to fail: chip/GPS claim; OSM/city-grid claim; E opens
+Shared PC / J6; leftover owns B; plaques added or dropped.
+
+Honesty on Harbor / Steps / lantern frames:
+  Authored approximation. Not a live map, not OSM/Overture,
+  not photogrammetry, and not a digital twin. No GTA claim,
+  no 1:1 city. Authored 400 m: two official named streets
+  plus inner parcel lanes, not a city grid. … NOT_PLAN_PASS.
+  Friend bodies … Not WAN. Not GPS. NOT_PLAN_PASS.
+
+2D map footer: Authored approximation · not OSM · not a live
+survey · HH World.
+chip title denies GPS/OSM. osmClaim=false gtaClaim=false
+bodyHasGps=false on Harbor / Steps.
+
+Plaques still 4 pole-board (official=2, inner=2):
+  Harbor Walk, Tram Approach, Steps East, Steps West
+GeoJSON official streets still 2.
+
+Lantern (confirm walk from Steps, turn west):
+  nearby=shop-lantern-fish
+  range=Quầy Cá Đèn Lồng: 9.0 m away
+  E opened shop-lantern-fish
+  leftoverStolen=false
+  Frame: shelf title Quầy Cá Đèn Lồng, not Shared PC / J6.
+  Chip at lantern is Harbor Walk again (back on Harbor).
+
+Seat B isolated spawn:
+  nearbyShop=""
+  stallHint="E opens a stall when you are next to it."
+  shopRange="Quầy Cá Đèn Lồng: 29 m away"
+  leftover names / ids are NOT the E target
+  Press E: shopPanelId=""  panel=false
+
+A first lantern approach from the shorter Steps stop
+(+5.88 east / +16.86 north) did not reach nearby. That was
+this critic's short path, not a stall swap. The fuller walk
+(+7.24 / +19.75) opened shop-lantern-fish.
+
+PASS.
+
+================================================================================
+HUNTS (not named fails)
+================================================================================
+
+hud-top is 55.8 px because honesty + brand sit in the same
+row as the 22 px chip. That is the existing slim hud-top,
+not a restored fat dashboard. Overlay 0.0902 counts the
+walk-pad square; chip area alone is ~0.002.
+
+Harbor Walk half-band is wider than Steps East. Chip stays
+Harbor Walk through +4.54 m east and flips at +5.88 m. That
+is nearest-in-band, not a stuck label.
+
+Implementer probe wrote product shots / J5-STREET-HUD JSON.
+Unused as this critic's pass. Live letters on independent
+frames were required.
+
+Leftover catalog rows stay. They still do not own Nearby E.
+
+================================================================================
+METHOD
+================================================================================
+
+1. 4175 already up. Did not recycle / rebuild / start other ports.
+2. GET /  /demo-bus  /data/ben-thanh-400m.authored.geojson
+   /assets/index-DF4TvR_E.js. Recorded name+sha+len twice.
+3. Read implementer note (TICK=n/a). Did not copy its probe writer.
+4. Independent Chrome CDP 1280x720 isolated profiles.
+   Ports 9943/9944: Harbor W shot, chunked east until chip
+   change, leftover B E.
+   Ports 9945/9946: fuller east + lantern E + leftover B E.
+5. Did not write lead packs. Did not tick plan. Did not fake GATE-U1.
+
+Temp only (not under data-qa):
+  %TEMP%\hh-hud-critic\critic-harbor.png
+  %TEMP%\hh-hud-critic\critic-steps.png
+  %TEMP%\hh-hud-critic\critic-lantern.png
+  %TEMP%\hh-hud-critic\critic-walk.json
+  %TEMP%\hh-hud-critic\critic-lantern.json
+  %TEMP%\hh-hud-critic\live-scan.json
+
+================================================================================
+STILL IMPOSSIBLE WITHOUT OWNER
+================================================================================
+
+- GATE-U1 three human reviewers (not faked)
+- AUTHORIZE_MAP_FETCH=YES + license ledger before any OSM/Overture
+- Other-PC / WAN join (store is this PC 4175 loopback)
+- Real account / OIDC
+
+================================================================================
+END
+================================================================================

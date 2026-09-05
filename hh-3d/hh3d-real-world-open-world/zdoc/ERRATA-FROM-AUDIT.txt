@@ -1,0 +1,76 @@
+ERRATA FROM 01-9-hh3d-plan-audit-summary.txt
+DATE=2026-09-03
+SOURCE=hh-3d/zdoc/01-9-hh3d-plan-audit-summary.txt
+SANDBOX_COPY_SHA256=2B7D278AEC12633F9D46806D3E880CB092F0676F99C4844D3FA238E2077CC0B5
+ROLE=WARNINGS_ONLY
+DO_NOT_REWRITE_ORIGINALS=1
+DO_NOT_INVENT_WPS=1
+
+These are confirmed plan contradictions. If a later WP hits one, STOP and
+ask the owner/coordinator to reconcile. Do not "fix" the original plans
+from this sandbox.
+
+1) P3 order: header says R4-WP1 -> R4-WP0A
+   OBSERVED in 31-8-hh3d-real-application-plan.txt (sandbox copy):
+     P3 summary lists R4-WP1 then R4-WP0A.
+     R4-WP0A DEPENDENCIES = R2-WP0 only.
+     R4-WP1 DEPENDENCIES = R2-WP0, GATE-U1, R3-WP1.
+   WARNING: dependency blocks do not force R4-WP1 before R4-WP0A.
+   This sandbox must not execute either WP.
+
+2) Currentness field names: acquired_at vs accessed_at
+   OBSERVED: required currentness set uses acquired_at (with
+   source_released_at, generated_at, published_at, fresh_until, stale_after).
+   WorldManifest / release checklist still mention accessed_at.
+   WARNING: pick one canonical field or an explicit mapping before any
+   manifest is written. Do not emit both as if they were the same fact.
+
+3) Networking header vs later online phases
+   OBSERVED: NETWORKING_STATUS=OUT_OF_SCOPE_FOR_FIRST_RELEASE
+   later text still allows staging/public-beta online exceptions.
+   WARNING: treat as default OFF for local proof, not a ban on every later
+   phase. This sandbox G0 stays NETWORKING=OFF.
+
+4) Open-world CURRENT_EXECUTION_PLAN is history, not a start ticket
+   OBSERVED in 31-8-hh3d-real-world-open-world-plan.txt header:
+     CURRENT_EXECUTION_PLAN=hh-3d/zdoc/31-8-hh3d-demo-webgl-plan.txt (PAUSED)
+     DO_NOT_START_THIS_FILE_DIRECTLY=1
+     NATIVE_EXECUTION_AUTHORIZATION=NONE
+     STATUS=BACKGROUND_AUDIT_PAUSED
+   WARNING: that header pointed at the Hòn Gió demo plan as routing history.
+   It is NOT authority to resume the demo, and NOT a ticket to install Unreal
+   in the main tree. Owner 2026-09-03 opened ONLY this isolated folder for
+   docs-only G0.
+
+5) Archived G0/G1 brief at section 18 of the open-world plan
+   WARNING: SUPERSEDED. Do not send it to an agent as an execute ticket.
+   This sandbox G0 follows the owner 2026-09-03 isolate: decision record
+   only, no engine install, no empty packaged project.
+
+6) Demo Play/WASD vs demo-plan pass language
+   WARNING: belongs to hh-3d/demo/, not this sandbox. Do not import demo
+   rework as a native WP.
+
+7) Unreal / open-world §9 after owner chat 2026-09-03
+   WARNING: Unreal track = STOP. Next native WP = NONE.
+   G0-DECISION-RECORD section 1 still says Unreal is a CANDIDATE
+   (historical template). Section 9 addendum + OWNER-DECISION override
+   that for THIS track. Do not "finish G0" by installing Unreal.
+
+8) SANDBOX-R0-WP0-WEB is a sandbox POINTER id, not original R0-WP0
+   WARNING: do not write this id into hh-3d/zdoc/ originals.
+   do not create hh-3d/app/decision-records/ from this folder.
+   do not set CURRENT_WP=R0-WP0 or CURRENT_WP=SANDBOX-R0-WP0-WEB.
+   STATE=DOCS_ONLY. Not PASS. CURRENT_WP stays SANDBOX-G0-DOCS.
+
+9) CRITIC-PROGRESS-2026-09-03 TICK=no
+   WARNING: race — PROGRESS + R0 paper were missing at that review.
+   Those files now exist as POINTER / DOCS_ONLY. The TICK=no is
+   historical. Do not inherit it as "G0 failed" or as a ticket to
+   install Unreal. Mixed VF+sandbox index is still forbidden.
+
+10) Owner grant 2026-09-03 "làm HH World web"
+    SUPERSEDES sandbox sentences that say do not create hh-3d/app/.
+    Official work is hh-3d/app/. Do not create a second app in this
+    sandbox. Do not fetch maps. Do not tick originals. Restart:
+    hh-3d/app/PROGRESS.txt

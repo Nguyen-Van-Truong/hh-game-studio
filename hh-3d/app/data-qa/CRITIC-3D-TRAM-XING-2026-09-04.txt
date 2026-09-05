@@ -1,0 +1,121 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=14:17 +07
+ROLE=IMPLEMENTER
+TICK=n/a (do not treat this file as TICK=yes)
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M0_WP1=1
+NOT_M1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+PLAYER_URL=http://127.0.0.1:4175/
+RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-30
+COMMAND=node hh-3d/app/data-qa/j5-tram-xing-probe.mjs
+VERDICT_IMPLEMENTER_CDP=J5_TRAM_XING_OK
+LIVE_JS=/assets/index-D6skGmYL.js
+LIVE_JS_LEN=2167318
+LIVE_JS_SHA256=29f5735069f1b6e0d16680cb03da1b8d72180b2824c90b41f6caf51c2a0aa05a
+REMINTED=yes
+ONE_RECYCLE_AFTER_BUILD=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NO_COMMIT=1
+NO_HIP_SPHERES=1
+DID_NOT_RIP_WEST_XING=1
+DID_NOT_RIP_EAST_XING=1
+DID_NOT_RIP_LANTERN_ZEBRA=1
+DID_NOT_RIP_MENU_LEFTOVER=1
+DID_NOT_RIP_NET_LABELS=1
+DID_NOT_RIP_RECONNECT=1
+DID_NOT_RIP_BOARDS=1
+DID_NOT_RIP_STREET_PLAY_SHOPS=1
+DID_NOT_RIP_DEFERRED_MINIMAP=1
+DID_NOT_RIP_FRIEND_STEPS=1
+DID_NOT_RIP_90M_LOD=1
+DID_NOT_RIP_HUD=1
+DID_NOT_RIP_PLAQUES=1
+DID_NOT_RIP_LANES=1
+DID_NOT_RIP_FOG_EDGE=1
+DID_NOT_RIP_SKY=1
+DID_NOT_RIP_CAM_HIT=1
+NO_FIFTH_STREET=1
+NO_NPC=1
+NO_INTERIOR=1
+NO_MAP_FETCH=1
+ACCEPTED_PRIOR=CRITIC-3D-LIST-LEFTOVER-REAUDIT-2026-09-04.txt TICK=yes
+
+================================================================================
+SLICE
+================================================================================
+
+Harbor Walk × Steps East and Harbor Walk × Steps West already had
+cheap zebra + stop-line + curb. The official-official mouth was
+still bare. This remint adds the same Harbor stripe language at
+Harbor Walk × Tram Approach only:
+
+7 cream stripes on Tram Approach just east of Harbor so the
+zebra does not stack on the lantern stall or the two Steps
+mouths, a thin stop-line, and four stone curb-return boxes
+hooking Harbor's east curb (two L-hooks). Same 400 m fixture.
+Two official GeoJSON streets + inner lanes. Not OSM. Not a
+downtown grid. Did not add a fifth named street.
+
+Did not remint Menu leftover labels/sort, west/east Steps
+crossings, net labels, boards, streetPlayShops, minimap,
+friend steps, LOD, HUD, plaques, lanes, fog/edge, sky, or
+cam-hit.
+
+Lantern stall zebra kept. East and west Steps zebras kept.
+Spawn / bound / lantern 10 m E path stay open. Curb returns
+are visual only (not walk solids).
+
+================================================================================
+CDP (headless Chrome, 1280×720, recycled 4175)
+================================================================================
+
+WALK: Harbor north (peel around the drawn Phở stall on the
+centerline), D onto Tram Approach, then south to lantern E.
+Seat B leftover Menu + spawn E.
+
+cornerDom=true  kind=zebra-stopline-curb
+crosswalks=4 (lantern + east + west + tram)  stopLines=3
+curbReturns=12
+Shot j5-3d-tram-xing-tram.png facing east on Tram Approach:
+  floor whiteRatio=0.273  curbRatio=0.095
+  (cream stripes + stop-line + stone lip, not bare asphalt)
+chip Harbor Walk → Tram Approach after +0.73 m east / +95.58 m
+north
+minimap after mount: active=Tram Approach highlight=1
+role=official
+east + west + lantern zebras still in DOM (7 stripes each)
+inside-ring=0  at-bound=0
+lantern E shop-lantern-fish
+Seat B leftover E not stolen
+Menu leftover labels last (Shared PC + J6 after lantern + Phở)
+GeoJSON streets=2 (Harbor Walk, Tram Approach)
+plaques still 4
+honesty authored 400 m / two official streets / inner lanes /
+not OSM / NOT_PLAN_PASS
+
+Implementer CDP only. Not an independent critic TICK. Not a plan tick.
+
+================================================================================
+OWNER LEFTOVERS (unchanged)
+================================================================================
+
+1. GATE-U1 three-human review (first acceptance leftover; not faked).
+2. R2-WP1 headed/mobile/memory/min-FPS thresholds still UNFILLED.
+   Hitch2 remint kept; first-W min still ~10. Not 60.
+3. WAN / other-PC join still not built. 4175 loopback only.
+4. R4-WP0B real account/OIDC still not built.
+5. Open data (OSM/Overture) still needs license ledger + grant.
+6. Leftover this-PC shops stay in the catalog; they do not own street E.
+7. M0/M1/M2 plan WPs still NOT_STARTED. NOT_PLAN_PASS.

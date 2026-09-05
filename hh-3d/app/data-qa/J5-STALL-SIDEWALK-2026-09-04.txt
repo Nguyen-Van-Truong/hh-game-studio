@@ -1,0 +1,189 @@
+{
+  "run_id": "HH3D-J5-20260904-ASIA-SAIGON-32",
+  "player": "http://127.0.0.1:4175/",
+  "verdict": "J5_STALL_SIDEWALK_OK",
+  "not_plan_pass": true,
+  "not_gate_u1": true,
+  "not_m1": true,
+  "liveJs": "/assets/index-DMHs6gaq.js",
+  "liveLen": 2168506,
+  "liveSha": "4a69b7361fff2bad9de1e09cf0e1225c6c96367848ff31af5cdb19a7a96e2e0a",
+  "guestOk": true,
+  "leftoverOk": true,
+  "streetEOk": true,
+  "nearbyOk": true,
+  "listOk": true,
+  "leftoverLast": true,
+  "leftoverKeep": true,
+  "poseOk": true,
+  "walkOk": true,
+  "phoOffLane": true,
+  "lanternOffLane": true,
+  "phoDrawn": true,
+  "lanternDrawn": true,
+  "leftoversHidden": true,
+  "walkedPastPho": true,
+  "chipOnStretch": true,
+  "chipAtPho": "Harbor Walk",
+  "walkHarborDist": 0.71,
+  "pho": {
+    "shop": "shop-local-mtmh45qxehxhvb",
+    "name": "Quầy Phở Nhà",
+    "draw": "1",
+    "collide": "1",
+    "lon": 106.69804,
+    "lat": 10.7717978,
+    "x": -2.7,
+    "z": -77.54,
+    "laneM": 7.2,
+    "street": "street-harbor-walk",
+    "persistLane": 0.13,
+    "plantLane": 7.2
+  },
+  "lantern": {
+    "shop": "shop-lantern-fish",
+    "name": "Quầy Cá Đèn Lồng",
+    "draw": "1",
+    "collide": "1",
+    "lon": 106.6980366,
+    "lat": 10.7718712,
+    "x": -2.81,
+    "z": -69.37,
+    "laneM": 7.2,
+    "street": "street-harbor-walk",
+    "plantLane": 7.2
+  },
+  "leftoverDrawn": [],
+  "leftoverPersist": [
+    {
+      "shop": "shop-local-sharedpc",
+      "name": "Quầy Shared PC",
+      "lon": 106.69804,
+      "lat": 10.77162,
+      "status": "published"
+    },
+    {
+      "shop": "shop-local-mtl8ulddihjpre",
+      "name": "Quay Critic J6 Jump",
+      "lon": 106.69814973080383,
+      "lat": 10.77162,
+      "status": "published"
+    }
+  ],
+  "leftoverMenuRows": [
+    {
+      "shop": "shop-local-sharedpc",
+      "name": "Quầy Shared PC",
+      "leftover": "1",
+      "street": "0",
+      "labeled": true
+    },
+    {
+      "shop": "shop-local-mtl8ulddihjpre",
+      "name": "Quay Critic J6 Jump",
+      "leftover": "1",
+      "street": "0",
+      "labeled": true
+    }
+  ],
+  "walkLog": [
+    {
+      "chunk": 0,
+      "lat": 10.7716562,
+      "lon": 106.6980955,
+      "chip": "Steps East",
+      "heading": 347,
+      "blocked": "0",
+      "gained": 4.03,
+      "laneM": 5.72
+    },
+    {
+      "chunk": 1,
+      "lat": 10.7716912,
+      "lon": 106.698086,
+      "chip": "Steps East",
+      "heading": 347,
+      "blocked": "0",
+      "gained": 3.9,
+      "laneM": 4.73
+    },
+    {
+      "chunk": 2,
+      "lat": 10.771725,
+      "lon": 106.6980745,
+      "chip": "Harbor Walk",
+      "heading": 347,
+      "blocked": "0",
+      "gained": 3.76,
+      "laneM": 3.53
+    },
+    {
+      "chunk": 3,
+      "lat": 10.7717636,
+      "lon": 106.6980654,
+      "chip": "Harbor Walk",
+      "heading": 347,
+      "blocked": "0",
+      "gained": 4.3,
+      "laneM": 2.59
+    },
+    {
+      "chunk": 4,
+      "lat": 10.7718018,
+      "lon": 106.6980564,
+      "chip": "Harbor Walk",
+      "heading": 347,
+      "blocked": "0",
+      "gained": 4.25,
+      "laneM": 1.66
+    },
+    {
+      "chunk": 5,
+      "lat": 10.771841,
+      "lon": 106.6980472,
+      "chip": "Harbor Walk",
+      "heading": 347,
+      "blocked": "0",
+      "gained": 4.36,
+      "laneM": 0.71
+    }
+  ],
+  "walkEnd": {
+    "lon": 106.6980472,
+    "lat": 10.771841,
+    "chip": "Harbor Walk",
+    "heading": 347
+  },
+  "lookStall": {
+    "lon": 106.6980466,
+    "lat": 10.7718436,
+    "heading": 259,
+    "chip": "Harbor Walk"
+  },
+  "shot": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-stall-sidewalk.png",
+  "identity": "Guest · shops public; friends not required",
+  "mode": "Offline·Đang kết nối",
+  "shared": {
+    "id": "shop-local-sharedpc",
+    "leftover": "1",
+    "banner": "không trên phố / leftover máy này",
+    "kind": "không trên phố / leftover máy này"
+  },
+  "j6": {
+    "id": "shop-local-mtl8ulddihjpre",
+    "leftover": "1",
+    "banner": "không trên phố / leftover máy này",
+    "kind": "không trên phố / leftover máy này"
+  },
+  "streetE": {
+    "id": "shop-lantern-fish",
+    "leftover": "0",
+    "kind": "public shop · authored example among many",
+    "leftoverCopy": false,
+    "nearby": "shop-lantern-fish",
+    "lon": 106.6980466,
+    "lat": 10.7718436
+  },
+  "honesty": "Authored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:1 city. Authored 400 m: two official named streets plus inner parcel lanes, not a city grid. This f",
+  "didNotCatalogClear": true
+}

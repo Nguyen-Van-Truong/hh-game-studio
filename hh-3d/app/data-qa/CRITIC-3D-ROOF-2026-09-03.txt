@@ -1,0 +1,155 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-29
+VERDICT=J5_ROOF_OK
+ROOF=parapet-ac-tank
+ROOF_BUILDINGS=60
+PARAPETS=276
+ACS=61
+TANKS=8
+CAM_YAW=23.8
+CAM_PITCH=28
+SKY_BAND_RGB=137.3/145.2/148.4
+SKY_BLUE_RATIO=0.416
+ROOF_LID_RATIO=0.045
+ROOF_AC_RATIO=0.076
+WALL_EXTRA_EAST_M=0.000
+WALL_NEAR=bldg-steps-e-00@0.57m
+SHOP_E=shop-lantern-fish
+LAMPS=38
+PLANTERS=4
+LIVE_JS=/assets/index-CRXFDUYf.js
+LIVE_JS_LEN=2108718
+LIVE_JS_SHA256=ba0ca348dba753e96ca66dc214980e91cdd4e6ec778ef43cf8868a369b4ba524
+BIGGEST_MISS=Look-up from Harbor Walk now hits a darker lid + thin parapet cap, and a hashed subset of roofs carry cheap AC/tank boxes. Still the 60 authored boxes, not a city skyline, not photogrammetry, not walkable roofs, not GATE-U1. NOT_PLAN_PASS.
+
+CRITIC=LOCAL_LEAD
+DATE=2026-09-03
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=19:32 +07
+MODEL=grok-4.6
+SCOPE=HH World authored roof language (parapet + hashed AC/tank + darker lid) on recycled 4175 (NOT GTA / NOT 1:1 / NOT a city / NOT walkable roofs)
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=04cb6ca92c482017c02d78e7885727f73b62103d
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-ROOF-2026-09-03.txt
+LEAD_PROBE=hh-3d/app/data-qa/j5-roof-probe.mjs
+LEAD_PACK=hh-3d/app/data-qa/J5-ROOF-2026-09-03.txt
+LEAD_SHOTS=hh-3d/app/data-qa/j5-3d-roof.png
+LEAD_RUN_ID=HH3D-J5-20260903-ASIA-SAIGON-29
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M0_WP1=1
+NOT_GTA=1
+NOT_1TO1=1
+NOT_A_CITY=1
+NOT_OSM=1
+NOT_WAN=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+VITE_PREVIEW_PORT_PIN=4175
+LIVE_PID=44172
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/
+
+4175 was recycled after the roof remint (vite preview listen pid 44172)
+serving /assets/index-CRXFDUYf.js (2108718 B,
+sha256=ba0ca348dba753e96ca66dc214980e91cdd4e6ec778ef43cf8868a369b4ba524).
+This critic used that preview and did not start 4173, 4174, 5175, or a
+second HH World preview. Did not claim yes from source alone.
+
+Chrome CDP probe j5-roof-probe.mjs (headless=new 1280x720, temp
+profile, debug 9418) vs this 4175:
+
+  Walk north on Harbor Walk
+  Right-drag look: camYaw 0→23.8, camPitch 0→28 (look-up toward
+  the east lids)
+  Fresh ?seat=a for street-facing wall + lantern E
+
+Live DOM: data-roof=parapet-ac-tank buildings=60 parapets=276
+acs=61 tanks=8. Collision stayed footprint-radius. Ground floor
+door-glass-awning, lamps=38, planters=4, sky=gradient-hemisphere
+kept. Honesty still prints NOT_PLAN_PASS / no GTA / no 1:1.
+
+1280x720 look-up shot j5-3d-roof.png:
+  Sky band RGB 137.3/145.2/148.4 blueRatio=0.416 beige=0.039
+  Roof band lid=0.045 ac=0.076 dark=0.533 beige=0.015
+  Camera follow=look while pitched. Sky still blue.
+
+Street-facing west face of live GeoJSON bldg-steps-e-00:
+  After D then W: east +11.06 m
+  Extra W 3 s: east=0.000 m  north=-0.145 m
+  Independent point-in-ring hit=[]  data-inside-ring=0
+  Center 0.57 m outside the AABB west face.
+
+E at lantern opened shop-lantern-fish.
+
+GATE-U1 STATE: not faked. AUTHORIZE_MAP_FETCH still NO.
+
+================================================================================
+OBSERVED
+================================================================================
+
+- All 60 authored extrusions get a darker lid than the wall and a
+  thin parapet around the footprint ring. A hashed subset carries
+  1–2 AC/tank boxes (61 AC + 8 tanks). Visual only.
+- Positive look pitch lifts lookY so Harbor Walk look-up can see
+  the cap instead of only the wall face.
+- Footprint-radius walk hit still holds (extra east=0). Roofs were
+  not added to walk solids. Jump land was not re-tested; ground-y
+  stayed 0 on every snap.
+- Sky / lamps / zebra / kiosks / ground-floor door+glass were not
+  ripped. Friends / sprint / look stay.
+- One 1280x720 shot: Harbor Walk look-up.
+- Preview JS /assets/index-CRXFDUYf.js
+  sha256=ba0ca348dba753e96ca66dc214980e91cdd4e6ec778ef43cf8868a369b4ba524
+- 4173 / 4174 / 5175 not listening.
+
+================================================================================
+MISSES
+================================================================================
+
+- Still the authored 400 m block. Not a city skyline. Not OSM.
+  Parapet / AC / tank are cheap boxes, not photogrammetry or
+  downloaded models.
+- Roofs are not walkable and have no interiors. AC/tank sit on
+  the lid; from the street they read as a cap + a few peeking
+  boxes, not a mechanical penthouse.
+- This-PC leftover shop name can still appear on the street HUD.
+  Lantern E still opened the authored shop-lantern-fish.
+- GATE-U1 three humans still unfilled. NOT_PLAN_PASS.
+
+================================================================================
+HARD FAIL CHECK (TICK=no triggers)
+================================================================================
+
+Look-up still a featureless flat lid with no cap/AC          NO
+  (live roof=parapet-ac-tank; pitch 28; lid+ac pixels)
+Sky washed beige / void                                      NO  (blueRatio=0.416)
+Footprint collision broken / extra east punched the wall     NO  (extra.east=0)
+Lantern E broken                                             NO
+Roofs made walkable / interiors added                        NO
+Honesty missing / GTA / 1:1 claimed                          NO
+Claim from code/PROGRESS alone                               NO
+OSM/Cesium/Google fetch                                      NO
+GATE-U1 humans invented                                      NO
+4173/4174 / second preview started                           NO
+
+Therefore TICK=yes: Harbor Walk look-up shows a darker lid,
+thin parapet, and hashed AC/tank boxes on 4175 as labeled.
+NOT a plan PASS. NOT GATE-U1.
+
+================================================================================
+END
+================================================================================

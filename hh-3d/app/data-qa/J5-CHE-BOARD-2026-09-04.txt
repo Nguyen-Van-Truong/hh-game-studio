@@ -1,0 +1,307 @@
+{
+  "run_id": "HH3D-J5-20260904-ASIA-SAIGON-37",
+  "player": "http://127.0.0.1:4175/",
+  "verdict": "J5_CHE_BOARD_OK",
+  "reminted": false,
+  "liveJs": "/assets/index-C3JOtA3q.js",
+  "liveLen": 2169322,
+  "liveSha": "c000db65138fc3c3f48583ba17d1032aa82c5fca0ef4047cdf2d5db1bc2bcdc7",
+  "cheShop": "shop-local-mtmrbdjffjdkg8",
+  "kemShop": "shop-local-mtmrq33hoq4phb",
+  "cheListing": "Chè đậu",
+  "kemListing": "Kem dua",
+  "cropText": "Chè đậu (mẫu)mẫu · not a live market Chè đậu (mẫu) Chè đậu (mẫu)",
+  "cropStats": {
+    "samples": 6996,
+    "slateRatio": 0.462,
+    "chalkRatio": 0.054
+  },
+  "cropBox": {
+    "x": 625,
+    "y": 259,
+    "w": 231,
+    "h": 73
+  },
+  "cropSize": {
+    "w": 263,
+    "h": 105
+  },
+  "kemDrawn": true,
+  "kemSkipped": false,
+  "kemCropText": "Kem dua (mẫu)mẫu · not a live market Kem dua (mẫu) Kem dua (mẫu)",
+  "kemStats": {
+    "samples": 10332,
+    "slateRatio": 0.765,
+    "chalkRatio": 0.15
+  },
+  "kemBox": {
+    "x": 528,
+    "y": 287,
+    "w": 295,
+    "h": 94
+  },
+  "nearby": "shop-local-mtmrbdjffjdkg8",
+  "shopOpen": "shop-local-mtmrbdjffjdkg8",
+  "goods": [
+    {
+      "id": "listing-local-mtmrbdjfe1fzp3",
+      "kind": "other",
+      "status": "published",
+      "text": "Chè đậuKhác / otherpublicLocal demo listing. Free-text sample. Not a real product.Liên hệ"
+    }
+  ],
+  "identity": "Guest · shops public; friends not required",
+  "identitySigned": "no",
+  "presenceMode": "Offline — Stroll alone; shops still open.",
+  "friendASpawn": "none",
+  "friendAWalk": "none",
+  "friendAAfterE": "none",
+  "leftoverInherited": false,
+  "didUnfriendLeftover": false,
+  "leftoverDrawn": [],
+  "leftoverStallDrawn": [],
+  "leftoverEStolen": false,
+  "cheBoard": {
+    "shop": "shop-local-mtmrbdjffjdkg8",
+    "source": "local-demo",
+    "draw": "1",
+    "keepOut": "0",
+    "titles": "Chè đậu (mẫu)",
+    "count": 1
+  },
+  "kemBoard": {
+    "shop": "shop-local-mtmrq33hoq4phb",
+    "source": "local-demo",
+    "draw": "1",
+    "keepOut": "0",
+    "titles": "Kem dua (mẫu)",
+    "count": 1
+  },
+  "phoBoard": {
+    "shop": "shop-local-mtmh45qxehxhvb",
+    "source": "local-demo",
+    "draw": "1",
+    "keepOut": "0",
+    "titles": "Phở bò (mẫu)",
+    "count": 1
+  },
+  "lanternBoard": {
+    "shop": "shop-lantern-fish",
+    "source": "authored",
+    "draw": "1",
+    "keepOut": "0",
+    "titles": "Cá nục sương (mẫu) | Túi cói chợ (mẫu)",
+    "count": 2
+  },
+  "cheStand": {
+    "lon": 106.6980863,
+    "lat": 10.7719624,
+    "nearby": "shop-local-mtmrbdjffjdkg8",
+    "range": "Quầy Chè Vỉa: 3.0 m away",
+    "hint": "Press E or tap Open to enter Quầy Chè Vỉa.",
+    "chip": "Steps East",
+    "dPlant": 2.95
+  },
+  "asphaltStand": {
+    "lon": 106.6980435,
+    "lat": 10.7719638,
+    "nearby": "",
+    "range": "Walk to a stall.",
+    "hint": "E opens a stall when you are next to it.",
+    "laneM": 0.49,
+    "e": "none"
+  },
+  "cheWalk": [
+    {
+      "i": 0,
+      "lon": 106.6980983,
+      "lat": 10.7716407,
+      "d": 36.64,
+      "nearby": "",
+      "range": "Walk to a stall.",
+      "chip": "Steps East",
+      "blocked": "0"
+    },
+    {
+      "i": 1,
+      "lon": 106.6980916,
+      "lat": 10.7716646,
+      "d": 33.96,
+      "nearby": "",
+      "range": "Walk to a stall.",
+      "chip": "Steps East",
+      "blocked": "0"
+    },
+    {
+      "i": 2,
+      "lon": 106.6980864,
+      "lat": 10.7716836,
+      "d": 31.84,
+      "nearby": "",
+      "range": "Walk to a stall.",
+      "chip": "Steps East",
+      "blocked": "0"
+    },
+    {
+      "i": 3,
+      "lon": 106.6980783,
+      "lat": 10.7717067,
+      "d": 29.28,
+      "nearby": "",
+      "range": "Walk to a stall.",
+      "chip": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 4,
+      "lon": 106.6980725,
+      "lat": 10.7717277,
+      "d": 26.97,
+      "nearby": "",
+      "range": "Walk to a stall.",
+      "chip": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 5,
+      "lon": 106.6980755,
+      "lat": 10.7717494,
+      "d": 24.54,
+      "nearby": "",
+      "range": "Walk to a stall.",
+      "chip": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 6,
+      "lon": 106.6980815,
+      "lat": 10.771777,
+      "d": 21.45,
+      "nearby": "",
+      "range": "Walk to a stall.",
+      "chip": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 7,
+      "lon": 106.6980857,
+      "lat": 10.7717962,
+      "d": 19.31,
+      "nearby": "",
+      "range": "Walk to a stall.",
+      "chip": "Steps East",
+      "blocked": "0"
+    },
+    {
+      "i": 8,
+      "lon": 106.6980906,
+      "lat": 10.7718189,
+      "d": 16.79,
+      "nearby": "",
+      "range": "Walk to a stall.",
+      "chip": "Steps East",
+      "blocked": "0"
+    },
+    {
+      "i": 9,
+      "lon": 106.6980958,
+      "lat": 10.771843,
+      "d": 14.14,
+      "nearby": "",
+      "range": "Walk to a stall.",
+      "chip": "Steps East",
+      "blocked": "0"
+    },
+    {
+      "i": 10,
+      "lon": 106.6981013,
+      "lat": 10.7718684,
+      "d": 11.39,
+      "nearby": "",
+      "range": "Walk to a stall.",
+      "chip": "Steps East",
+      "blocked": "0"
+    },
+    {
+      "i": 11,
+      "lon": 106.6980945,
+      "lat": 10.7718875,
+      "d": 9.19,
+      "nearby": "",
+      "range": "Walk to a stall.",
+      "chip": "Steps East",
+      "blocked": "0"
+    },
+    {
+      "i": 12,
+      "lon": 106.6980862,
+      "lat": 10.7719108,
+      "d": 6.55,
+      "nearby": "",
+      "range": "Walk to a stall.",
+      "chip": "Steps East",
+      "blocked": "0"
+    },
+    {
+      "i": 13,
+      "lon": 106.698088,
+      "lat": 10.7719256,
+      "d": 4.91,
+      "nearby": "",
+      "range": "Walk to a stall.",
+      "chip": "Steps East",
+      "blocked": "0"
+    },
+    {
+      "i": 14,
+      "lon": 106.6980901,
+      "lat": 10.7719373,
+      "d": 3.63,
+      "nearby": "",
+      "range": "Walk to a stall.",
+      "chip": "Steps East",
+      "blocked": "0"
+    },
+    {
+      "i": 15,
+      "lon": 106.6980927,
+      "lat": 10.7719518,
+      "d": 2.12,
+      "nearby": "shop-local-mtmrbdjffjdkg8",
+      "range": "Quầy Chè Vỉa: 3.6 m away",
+      "chip": "Steps East",
+      "blocked": "0"
+    },
+    {
+      "i": 16,
+      "lon": 106.6980905,
+      "lat": 10.7719554,
+      "d": 1.66,
+      "nearby": "shop-local-mtmrbdjffjdkg8",
+      "range": "Quầy Chè Vỉa: 3.3 m away",
+      "chip": "Steps East",
+      "blocked": "0"
+    },
+    {
+      "i": 17,
+      "lon": 106.6980863,
+      "lat": 10.7719624,
+      "d": 0.81,
+      "nearby": "shop-local-mtmrbdjffjdkg8",
+      "range": "Quầy Chè Vỉa: 3.0 m away",
+      "chip": "Steps East",
+      "blocked": "0"
+    }
+  ],
+  "guestOk": true,
+  "notFriendsOk": true,
+  "boardOk": true,
+  "eOk": true,
+  "leftoverOk": true,
+  "lanternOk": true,
+  "phoOk": true,
+  "kemOk": true,
+  "asphaltOk": true,
+  "didNotCatalogClear": true,
+  "didNotRemint": true
+}

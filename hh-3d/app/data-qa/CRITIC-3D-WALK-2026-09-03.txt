@@ -1,0 +1,191 @@
+TICK=no
+RACE=1
+URL=http://127.0.0.1:4175/
+BIGGEST_MISS=Default Play on already-up 4175 is still the MapLibre schematic dashboard: CSS doll pin (head/torso/legs DIV) on a maplibregl-canvas plus sidebar lists. Guest does not see a 3D character, camera-behind, or WASD through streets. Sibling 3D-walk conversion has not landed on this preview.
+
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-03
+TIMEZONE=Asia/Saigon
+MODEL=grok-4.6
+SCOPE=HH World third-person 3D walk on existing 4175 (Hòn Gió Play feel, authored 400 m, NOT GTA 6)
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=1567956b35dbe78e938280f930ad711a5fb68de4
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-WALK-2026-09-03.txt
+PROGRESS_TRUSTED_ALONE=NO
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_VF_TOUCH=1
+NO_UNREAL=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_WAIT=1
+STOPPED_AFTER_RACE=1
+NOT_PLAN_PASS=1
+CRITIC_CDP_PORT=9288
+LIVE_JS=/assets/index-Css3q5a_.js
+LIVE_PID=57152
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=no
+RACE=1
+
+URL=http://127.0.0.1:4175/
+
+4175 was already up. This critic used that preview and did not start 4173,
+4174, 5175, or a second HH World preview. The guest Play view is still the
+old schematic dashboard from the J4 remint bundle, not a third-person 3D
+walk.
+
+Wait is wrong: files on disk and the live player have not changed into a
+3D character / camera-behind / street-walk Play default. Writing RACE and
+stopping. No implement. No remint. No second preview.
+
+This is NOT a plan PASS. NOT GATE-U1. NOT a Hòn Gió port. NOT GTA 6.
+Honesty on the live page says "No GTA claim, no 1:1 city" — they did not
+claim GTA 6 / 1:1. That honesty does not convert the dashboard into a 3D
+walk.
+
+Biggest miss: default Play on 4175 is still MapLibre + CSS doll pin +
+sidebar lists. A guest does not see a 3D character, camera behind, or WASD
+movement through streets.
+
+================================================================================
+METHOD
+================================================================================
+
+Read on disk (not PROGRESS alone):
+  hh-3d/app/PROGRESS.txt (CURRENT leftover GATE-U1; J4 remint; no 3D-walk WP)
+  hh-3d/app/web/package.json (maplibre-gl 5.6.2 only; no three / R3F / gltf)
+  hh-3d/app/web/src/map/MapView.tsx (maplibregl.Map + HTML marker doll)
+  hh-3d/app/web/src/app/App.tsx (Header + ModeBar + MapView + aside lists)
+  hh-3d/app/web/src/ui/Header.tsx ("Local map · walk · open a shop")
+  hh-3d/app/web/src/avatar/* (CSS/HTML avatar + WalkPad, not a 3D mesh)
+  hh-3d/app/web/src tree: 38 ts/tsx files; none is a 3D walk scene
+
+Live (existing 4175 only; did not start another HH World preview):
+  TCP 127.0.0.1:4175 LISTEN pid 57152 node
+  4173 DOWN  4174 DOWN  5175 DOWN
+  Invoke-WebRequest http://127.0.0.1:4175/  200  title=HH World
+    script /assets/index-Css3q5a_.js
+  Live JS Content-Length=1171300
+    HAS_MAPLIBRE=1  HAS_FILL_EXTRUSION=1  HAS_SELF_AVATAR=1
+    HAS_THREE=0  HAS_GLTF=0  HAS_GTA=0
+  Independent Chrome CDP vs 4175 (debug 9288, about:blank then navigate)
+  Did not run npm build. Did not recycle the preview. Did not start 4173/4174.
+
+================================================================================
+ATTACK 1 — IS 4175 THE PLAYER, AND IS IT THE OLD DASHBOARD?
+================================================================================
+
+RESULT=RACE / OLD_DASHBOARD
+
+4175 is up and is HH World, not Hòn Gió 4173. That is the correct URL.
+The served app is the pre-3D-walk schematic product:
+
+  Independent CDP 2026-09-03 Asia/Saigon, critic port 9288:
+    href=http://127.0.0.1:4175/?seat=a
+    title=HH World
+    brand-sub=Local map · walk · open a shop · friends demo · Bến Thành vicinity
+    canvas=1  class=maplibregl-canvas  749x352
+    self-avatar=DIV.maplibregl-marker  innerHTML=avatar-shadow + avatar-head
+      + avatar-torso + avatar-leg-l + avatar-leg-r
+    pose=idle
+    window.THREE=false
+    scripts=["/assets/index-Css3q5a_.js"]
+    workspace=1  aside/side=1
+    testids include place-list, goods-list, place-search, create-shop,
+      walk-pad, honesty-banner, mode-bar, friends-bar, bookmark-panel
+    extrusion toggle text="3D building extrusion (authored heights)"
+      = MapLibre fill-extrusion checkbox, not a third-person camera
+
+A white/CSS pin on a MapLibre pane with a sidebar is the old Play view.
+Fill-extrusion buildings (if the checkbox is on) are schematic map blocks,
+not a guest walking a 3D body through streets with the camera behind.
+
+================================================================================
+ATTACK 2 — DID SOURCE ALREADY CHANGE INTO 3D WALK WHILE 4175 LAGGED?
+================================================================================
+
+RESULT=NO / STILL_DASHBOARD_ON_DISK
+
+If the sibling had finished on disk and only the preview was stale, this
+would still be TICK=no (live Play is what a guest sees), but it would not
+be a "files already changed" finish. Disk matches the live dashboard:
+
+  package.json dependencies: maplibre-gl, react, react-dom only
+  MapView.tsx: new maplibregl.Map({ style, zoom 16.4, pitch 45 })
+  makeAvatarEl: HTML doll, not a mesh
+  App.tsx default tree: Header, HonestyBanner, ModeBar, FriendsBar,
+    map-pane MapView, StreetHelp, WalkPad, extrusion checkbox, aside
+    SearchBox / CreateShopForm / PlaceList / GoodsList / PlaceCard /
+    BookmarkPanel
+  No three / @react-three / gltf / PerspectiveCamera / WalkScene file
+
+RACE: the conversion job has not finished. Critic does not wait and does
+not start a second preview to "help" them.
+
+================================================================================
+ATTACK 3 — GTA 6 / 1:1 CLAIM?
+================================================================================
+
+RESULT=NO_OVERCLAIM_ON_PAGE
+
+Live body text includes:
+  "No GTA claim, no 1:1 city, no digital twin, no stranger crowd."
+CDP gta=false. The substring "1:1" appears only inside that denial.
+PROGRESS honesty forbids 1:1 / GTA-like. This is not a TICK=no for
+overclaim. TICK=no is for the missing 3D Play view (RACE).
+
+================================================================================
+GUEST BAR (TICK=yes REQUIRES ALL)
+================================================================================
+
+3D character (not CSS/HTML doll / white pin)     NO  (DIV marker doll)
+Camera behind the body                            NO  (MapLibre pitch 45 overview)
+Buildings with height as walkable 3D streets      NO  (optional fill-extrusion on a map)
+WASD moves through streets in that 3D view        NO  (WASD moves a map pin; Play is dashboard)
+Not still schematic dashboard as default Play     NO  (dashboard IS the default)
+No GTA 6 / 1:1 claim                              YES (honesty denies it)
+
+Therefore TICK=yes is illegal. TICK=no RACE.
+
+================================================================================
+PORTS / NON-ACTIONS
+================================================================================
+
+4175 LISTEN pid 57152                             CONFIRMED (only listener)
+4173 / 4174 / 5175                                DOWN; not started
+Second HH World preview                           NOT STARTED
+npm build / preview recycle                       NOT RUN
+Implement / commit / plan checkbox                NOT DONE
+VF / Unreal / map fetch                           NOT TOUCHED
+
+================================================================================
+WHAT WOULD UNLOCK A LATER TICK
+================================================================================
+
+A later critic may TICK=yes only after the same 4175 (or a recycled
+single preview on 4175, no 4173/4174) shows a guest:
+
+  1. a 3D character body (mesh / extruded figure in world space),
+  2. camera behind that body,
+  3. authored-400 m buildings with height,
+  4. WASD moving that body through streets,
+
+and the default Play view is that walk, not this schematic dashboard.
+Do not claim GTA 6 or 1:1. This file does not grant that tick in advance.
+
+================================================================================
+END
+================================================================================

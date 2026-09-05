@@ -1,0 +1,351 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+BOOTED_4175=1
+DID_NOT_RECYCLE=1
+DID_NOT_REBUILD=1
+DID_NOT_REMINT=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M1=1
+NOT_M0_WP1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+HASH_MISMATCH=0
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=16:46 +07
+MODEL=grok-4.6-extra-high
+SCOPE=Re-audit of claimed new-publish persist-on-sidewalk remint. Do not treat CRITIC-3D-CREATE-SIDEWALK-2026-09-04.txt as TICK=yes.
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=04cb6ca92c482017c02d78e7885727f73b62103d
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-CREATE-SIDEWALK-REAUDIT-2026-09-04.txt
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-CREATE-SIDEWALK-2026-09-04.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+DID_NOT_TREAT_IMPLEMENTER_AS_TICK_YES=1
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+DID_NOT_CATALOG_CLEAR=1
+VITE_PREVIEW_PORT_PIN=4175
+LIVE_PID=51752
+LISTEN=127.0.0.1:4175
+CRITIC_CDP_PORTS=9867 (isolated guest B leftovers + Harbor asphalt old-style + Chè sidewalk E + lantern sidewalk E) / 9868 (fresh isolated guest B create-at-spawn + leave owner)
+VIEWPORT=1280x720
+ISOLATED_PROFILES=1
+HEADLESS_NEW=1
+ABOUT_BLANK_THEN_NAVIGATE=1
+SEAT=b
+IMPLEMENTER_CDP_PORT_NOT_REUSED=1
+IMPLEMENTER_PROBE_NOT_RUN=1
+IMPLEMENTER_JSON_NOT_PROOF=1
+
+CLAIM_JS=/assets/index-C3JOtA3q.js
+CLAIM_JS_LEN=2169322
+CLAIM_JS_SHA256=c000db65138fc3c3f48583ba17d1032aa82c5fca0ef4047cdf2d5db1bc2bcdc7
+LIVE_JS=/assets/index-C3JOtA3q.js
+LIVE_JS_LEN=2169322
+LIVE_JS_SHA256=c000db65138fc3c3f48583ba17d1032aa82c5fca0ef4047cdf2d5db1bc2bcdc7
+LIVE_JS_MATCHES_CLAIM=1
+HASH_MISMATCH=0
+LIVE_JS_AFTER_CDP=/assets/index-C3JOtA3q.js
+LIVE_JS_LEN_AFTER_CDP=2169322
+LIVE_JS_SHA256_AFTER_CDP=c000db65138fc3c3f48583ba17d1032aa82c5fca0ef4047cdf2d5db1bc2bcdc7
+
+GUEST_IDENTITY=Guest · shops public; friends not required
+GUEST_SIGNED_IN=no
+HUD_PRESENCE=Offline · Đang kết nối
+THIS_TAB=Bạn B (máy này)
+
+CHE_SHOP=shop-local-mtmrbdjffjdkg8
+CHE_PERSIST_LON=106.6981047
+CHE_PERSIST_LAT=10.7719753
+CHE_PERSIST_LANE=7.2
+CHE_PLANT_LANE=7.21
+CHE_SIGN_LANE=7.21
+CREATE_AT_SPAWN_SHOP=shop-local-mtmrq33hoq4phb
+CREATE_AT_SPAWN_NAME=Quay Kem Reaudit
+CREATE_AT_SPAWN_PERSIST_LANE=11.87
+CREATE_AT_SPAWN_PLANT_LANE=11.88
+ASPHALT_E=none
+SIDEWALK_E=shop-local-mtmrbdjffjdkg8
+LANTERN_E=shop-lantern-fish
+LEFTOVER_E_STOLEN=0
+LEFTOVER_DRAWN=0
+PHO_PERSIST_REWRITTEN=0
+HONESTY_DENIES_GTA=1
+HONESTY_DENIES_1TO1=1
+HONESTY_DENIES_DIGITAL_TWIN=1
+OIDC_CLAIM=0
+
+CLAIM_1_LIVE_HASH=PASS
+CLAIM_2_CHE_PERSIST_SIDEWALK=PASS
+CLAIM_3_ASPHALT_E_NONE=PASS
+CLAIM_4_SIDEWALK_E_OPENS_CHE=PASS
+CLAIM_5_CREATE_AT_SPAWN_SIDEWALK=PASS
+CLAIM_6_PHO_LEFTOVER_LANTERN=PASS
+CLAIM_7_HONESTY_NO_OIDC=PASS
+
+BIGGEST_MISS=none on the hard bars. Create-at-spawn persistLane is 11.87 (east nudge off Phở, already-off-lane keep), not the 7.2 west Harbor plant of Chè, but it is not Harbor centerline (≲ 3).
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/ was already up. Bind 127.0.0.1 pid 51752
+(start 16:32 +07). Did not recycle, rebuild, kill, or start 4173 / 4174 /
+5175. Did not bind 0.0.0.0. Did not catalog_clear. DID_NOT_RECYCLE=1.
+
+Did not treat CRITIC-3D-CREATE-SIDEWALK-2026-09-04.txt as TICK=yes
+(ROLE=IMPLEMENTER, TICK=n/a). Implementer CDP / J5-CREATE-SIDEWALK
+JSON is not acceptance. Did not run j5-create-sidewalk-probe.mjs
+(it would overwrite their J5 pack and reuse port 9708). Did not
+write J5 packs. Did not tick any plan.
+
+Independent Chrome CDP, isolated temp profiles, 1280×720,
+?seat=b empty guest, Offline. Own debug ports 9867 then 9868,
+not implementer 9708. Tried to fail: hash drift; Chè persist still
+on the Harbor lane (persistLane ≲ 3); mesh/sign split from persist;
+Nearby/E on empty asphalt at the old-style centerline; sidewalk E
+missing or opening the wrong shop; create-at-spawn still writing
+Harbor centerline persist; Phở persist rewritten; leftover Shared
+PC / J6 drawn or stealing spawn E; leftover Menu / panel banners
+ripped; lantern sidewalk E stolen; honesty dropping GTA / 1:1 /
+digital-twin denials; OIDC claim.
+
+Hash matches. Chè persist is sidewalk. Asphalt E is none.
+Sidewalk E opens Chè. Create-at-spawn also persists off the
+asphalt. Leftovers / lantern / Phở persist hold.
+TICK=yes. NOT_PLAN_PASS. GATE-U1 humans were not invented. Not M1.
+
+================================================================================
+LIVE JS
+================================================================================
+
+GET http://127.0.0.1:4175/  STATUS=200
+HTML script = /assets/index-C3JOtA3q.js
+
+GET /assets/index-C3JOtA3q.js
+  Content-Length = 2169322
+  bytes          = 2169322
+  sha256         = c000db65138fc3c3f48583ba17d1032aa82c5fca0ef4047cdf2d5db1bc2bcdc7
+
+Matches the claimed remint name + length + hash exactly.
+GET before CDP 9867, GET after CDP 9868, and a third GET after
+both seats (same pid 51752) are the same bytes.
+HASH_MISMATCH=0. Did not stop. Did not audit an old bundle.
+
+================================================================================
+CLAIM 1 — LIVE HASH IS THE CLAIMED REMINT — PASS
+================================================================================
+
+Tried to fail as a later/earlier bundle or SPA-shell fallback
+on the claimed name.
+
+  live = /assets/index-C3JOtA3q.js
+  len  = 2169322
+  sha  = c000db65138fc3c3f48583ba17d1032aa82c5fca0ef4047cdf2d5db1bc2bcdc7
+
+GET before CDP and GET after both CDP seats are the same name
++ length + hash from pid 51752.
+
+================================================================================
+CLAIM 2 — CHÈ PERSIST IS SIDEWALK; MESH + SIGN SIT WITH IT — PASS
+================================================================================
+
+Tried to fail if /demo-bus lacked Quầy Chè Vỉa, if persistLane
+was still on the Harbor driving lane (≲ 3), or if mesh / pole-board
+sat on a different plant than persist.
+
+Isolated guest B (CDP 9867), empty profile, Offline · Đang kết nối.
+Guest. No catalog_clear.
+
+/demo-bus shop-local-mtmrbdjffjdkg8
+  name = Quầy Chè Vỉa
+  persist lon/lat = 106.6981046903636, 10.771975330838092
+  matches claimed 106.6981047, 10.7719753
+
+Independent Harbor polyline distance of that persist
+(not implementer JSON, not data-lane-m alone):
+
+  persistLane = 7.2   (≳ 5, sidewalk; not ≲ 3 asphalt)
+
+Drawn stall + pole-board (play-shop-stalls / play-shop-signs):
+
+  Quầy Chè Vỉa  draw=1 collide=1  street=street-harbor-walk
+    persist 106.6981047, 10.7719753
+    plant   xz=11.45,-57.69  → 106.6981047, 10.7719818
+    plantLane = 7.21
+    sign    xz=11.45,-57.69  signLane = 7.21
+    plant-to-persist = 0.72 m (body-back, not a split stall)
+
+Mesh and pole-board sit with the sidewalk persist. PASS.
+
+================================================================================
+CLAIM 3 — HARBOR ASPHALT AT OLD-STYLE CENTERLINE DOES NOT OPEN CHÈ — PASS
+================================================================================
+
+Tried to fail if Nearby named Chè, if shop-range printed Chè +
+meters, or if E opened shop-local-mtmrbdjffjdkg8 on empty asphalt.
+
+Walked onto Harbor Walk toward the claimed old-style centerline
+near 106.698044, 10.771968. Independent old-style lane vs Harbor
+= 0.55 m (asphalt). Stand:
+
+  lon=106.698047  lat=10.7719565
+  chip=Harbor Walk  laneM=0.86  blocked=0
+  dOldStyle=1.32 m  dChePersist=6.65 m  dChePlant=6.91 m
+  nearby empty
+  range="Walk to a stall."
+  hint="E opens a stall when you are next to it."
+  E-at-asphalt = none
+
+Range does not name Chè and has no meters. PASS.
+
+================================================================================
+CLAIM 4 — SIDEWALK E OPENS CHÈ — PASS
+================================================================================
+
+Tried to fail if sidewalk Nearby/E missed Chè or opened another
+shop / leftover.
+
+Walked west from that asphalt stand to the Chè plant
+(dChePlant ≤ 2.0):
+
+  lon=106.6980928  lat=10.7719689
+  chip=Steps East  laneM=5.89
+  dChePersist=1.48 m  dChePlant=1.94 m
+  nearby=shop-local-mtmrbdjffjdkg8
+  range="Quầy Chè Vỉa: 1.9 m away"
+  hint="Press E or tap Open to enter Quầy Chè Vỉa."
+  E opened shop-local-mtmrbdjffjdkg8
+  leftover banner absent
+  kind="public shop · opened on this machine"
+  leftover=0 street=1
+
+Shop-range MAY name Quầy Chè Vỉa + meters; it did. PASS.
+
+================================================================================
+CLAIM 5 — CREATE-AT-SPAWN ALSO PERSISTS OFF THE ASPHALT — PASS
+================================================================================
+
+Tried to fail the path the implementer CDP did not hunt: become
+labeled demo owner at spawn (PLAYER_SHOP_NORTH_M), publish a
+distinct shop, leave owner. Fail if that persist is still Harbor
+centerline (persistLane ≲ 3).
+
+Fresh isolated guest B (CDP 9868), empty profile. Did not walk
+off the nape. Avatar at boot / at Become:
+
+  lon=106.698104  lat=10.77162
+  nearby empty
+  identity → "Chủ quầy (máy này) · local demo, not a real account"
+  create line denies Google/OIDC
+
+Published "Quay Kem Reaudit" / "Kem dua" from that spawn pose.
+Left owner (back to Guest). Did not catalog_clear.
+
+New shop shop-local-mtmrq33hoq4phb
+  persist lon/lat = 106.6981497, 10.7718061
+  persistLane = 11.87   (≳ 5; not ≲ 3)
+  plantLane   = 11.88
+  signLane    = 11.88
+  plant ≈ persist (0.72 m body-back)
+  /demo-bus row matches that persist
+  lat ≈ spawn + 20 m (PLAYER_SHOP_NORTH_M), lon ≈ +12 m east
+  (clash with existing Phở on the 20 m-north marker)
+
+This is the north-then-plant path, not the implementer's
+stand-on-the-lane create. Persist is off the Harbor driving
+lane. It is further east than Chè's 7.2 m west sidewalk plant
+because placeAwayFromOthers nudged east of Phở and the already-
+off-lane plant kept that pose. Still sidewalk/off-asphalt, not
+centerline. PASS.
+
+================================================================================
+CLAIM 6 — PHỞ PERSIST + LEFTOVERS + SPAWN E + LANTERN E — PASS
+================================================================================
+
+Tried to fail Phở persist rewrite, leftover draw=1, leftover E
+stolen at spawn, Menu leftover rows unlabeled / not last,
+leftover panel banners ripped, or lantern sidewalk E stolen.
+
+  Phở persist still 106.69804, 10.771797831117475
+    (old on-lane marker; persistLane independent = 0.14)
+    updated_at still 2026-09-04T04:48:21.273Z
+    not rewritten by the Chè remint or this create-at-spawn
+  Leftover Shared PC / J6 play-shop-stalls draw=0 collide=0
+  /demo-bus persist still published at spawn cone
+    shop-local-sharedpc        106.69804, 10.77162
+    shop-local-mtl8ulddihjpre  106.6981497, 10.77162
+  Spawn E: nearby empty, range="Walk to a stall." leftoverEStolen=0
+  Menu leftover rows last, leftover=1, labeled
+    “không trên phố / leftover máy này”
+  Menu-opened leftover panels (CDP 9867):
+    Shared PC banner present leftover=1 street=0 leftoverCopy=1
+    J6       banner present leftover=1 street=0 leftoverCopy=1
+  Lantern sidewalk stand (laneM=5.77, dPlant=2.39):
+    nearby=shop-lantern-fish
+    range="Quầy Cá Đèn Lồng: 2.4 m away"
+    E opened shop-lantern-fish
+    kind="public shop · authored example among many"
+    leftover banner absent
+
+Leftover banners still hold. Spawn E not stolen. Lantern
+sidewalk E still shop-lantern-fish. Did not catalog_clear.
+
+================================================================================
+CLAIM 7 — HONESTY DENIES GTA / 1:1 / DIGITAL TWIN; NO OIDC — PASS
+================================================================================
+
+Honesty banner (live HUD, guest B):
+
+  “Authored approximation. Not a live map, not OSM/Overture,
+  not photogrammetry, and not a digital twin. No GTA claim,
+  no 1:1 city. … NOT_PLAN_PASS.”
+
+OIDC appears only as a denial on the create-shop identity line
+(“NOT a real account. NOT Google/OIDC.”). No OIDC claim.
+Guest signed-in=no after leave. Offline · Đang kết nối.
+
+================================================================================
+WHAT THE IMPLEMENTER CDP DID NOT PROVE
+================================================================================
+
+Their J5 walk created Chè while standing ~40 m north on the
+Harbor lane, then hunted E at that shop's old-style centerline.
+That is create-while-on-the-lane, not create-at-spawn. This
+reaudit replayed the Chè persist/E hunts on an isolated guest
+and separately published from spawn. Create-at-spawn also
+left the asphalt. Their J5_CREATE_SIDEWALK_OK JSON was not
+used as proof.
+
+================================================================================
+OWNER LEFTOVERS (unchanged; not this tick)
+================================================================================
+
+1. GATE-U1 three-human review (first acceptance leftover; not faked).
+2. R2-WP1 headed/mobile/memory/min-FPS thresholds still UNFILLED.
+3. WAN / other-PC join still not built. 4175 loopback only.
+4. R4-WP0B real account/OIDC still not built.
+5. Open data (OSM/Overture) still needs license ledger + grant.
+6. Leftover this-PC shops stay in the catalog; they do not own street E.
+   Menu list + open panel still label them leftover. Do not catalog_clear.
+7. M0/M1/M2 plan WPs still NOT_STARTED. NOT_PLAN_PASS. Not M1.
+
+TICK=yes. NOT_PLAN_PASS. Not M1. Not GATE-U1.

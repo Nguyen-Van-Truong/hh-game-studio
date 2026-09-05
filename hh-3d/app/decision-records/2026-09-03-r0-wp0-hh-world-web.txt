@@ -1,0 +1,221 @@
+R0-WP0 DECISION RECORD — HH WORLD WEB
+WP=R0-WP0
+TITLE=HH World product / AOI / renderer / license / privacy lock
+DATE=2026-09-03
+TIMEZONE=Asia/Saigon
+RUN_ID=HH3D-R0-20260903-ASIA-SAIGON-02
+COMMAND_ID=cmd.hh3d-r0.web-decision-record.2
+FOLDER=hh-3d/app/decision-records/
+FORM=OFFICIAL_APP_RECORD
+POINTER_SOURCE=hh-3d/hh3d-real-world-open-world/zdoc/R0-WP0-WEB-DECISION-RECORD.txt
+ORIGINAL_PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+TARGET_PLAN=real-application
+CURRENT_WP_AT_WRITE=R0-WP0
+NOT_A_HUMAN_SIGNATURE=1
+GIT_HEAD_AT_WRITE=ff702a7112cb00ef97160025d3006ecb75f415ee
+NOTE=This is the official app-folder record. The sandbox file remains a pointer.
+     Do not invent a human OWNER_SIGN name. Owner chat grant is recorded below.
+     Do not tick 31-8-hh3d-real-application-plan.txt STATE/PASS.
+
+================================================================================
+0. OWNER GRANT (this resume; not a forged human name)
+================================================================================
+
+OWNER_CHAT_GRANT=làm HH World web
+DATE=2026-09-03
+ACCEPT_RECOMMENDATIONS=YES
+AUTHORIZE_HH3D_APP_SCAFFOLD=YES
+AUTHORIZE_MAP_FETCH=NO
+AUTHORIZE_CESIUM=NO
+AUTHORIZE_GOOGLE_PHOTOREALISTIC=NO
+AUTHORIZE_UNREAL_INSTALL=NO
+AUTHORIZE_PAID_API=NO
+AUTHORIZE_GODOT2_CITY=NO
+
+OWNER_SIGN=
+  NAME=UNFILLED
+  DATE=UNFILLED
+  ACCEPT_THIS_RECORD=UNFILLED_AS_HUMAN_SIGNATURE
+  NOTE=Agent recorded the chat grant. Agent is not the human owner.
+
+DEMO_GAP_ACCEPTED=YES
+  Hòn Gió (hh-3d/demo/) remains a WebGL seed. Demo rework/evidence gaps stay
+  residual and do not block this HH World local proof. Do not expand the demo
+  from this track. Do not treat demo PASS as true.
+
+================================================================================
+1. LOCKED CHOICES (Q defaults accepted)
+================================================================================
+
+Q1  Product type
+    OWNER_CHOICE=web_first_real_application
+    DISPLAY_NAME=HH World
+    FORBIDDEN_CHROME=Superfighters, Super Fighter, Vault Fighters, Y8
+
+Q2  AOI / city (proof)
+    OWNER_CHOICE=Ben Thanh vicinity, Ho Chi Minh City
+    CENTER=10.7725, 106.6980
+    PROOF_EXTENT=400 m x 400 m
+    LATER_EXTENT_HINT=about 1 km2 only after 400 m proof + GATE-U1
+    FETCH_NOW=NO
+    DATA_KIND_THIS_SESSION=authored_approximation_fixture
+    NOT=live OSM, Overture dump, photogrammetry, digital twin
+
+Q3  First renderer
+    OWNER_CHOICE=maplibre_local
+    PACKAGE=maplibre-gl (pin in hh-3d/app/web/package.json)
+    3D_MVP=owned fill-extrusion from the authored local fixture
+    CESIUM=OFF
+    GOOGLE_PHOTOREALISTIC=OFF
+    R3F=not the map MVP (Hòn Gió seed stays in hh-3d/demo/)
+
+Q4  Online vs offline
+    OWNER_CHOICE=offline_local_proof_first
+    NETWORKING=OFF
+    PAID_SERVICE_AUTHORIZATION=NONE
+    TILE_URL_TO_PUBLIC_INTERNET=FORBIDDEN
+    PREFER=local style JSON + local GeoJSON + system UI fonts
+    IF_CDN_USED=document as UNPROVEN/gap; do not claim offline-complete
+
+Q5  Provider / license
+    OWNER_CHOICE=offline-open-data-first
+    LEDGER_NOW=authored fixture only; no real fetch
+    CANONICAL_CURRENTNESS_FIELD=acquired_at
+    ACCESSED_AT=errata leftover in original plan; do not emit as the same fact
+    LEGAL_PROFILE_OWNER=UNFILLED
+    FETCH_CANDIDATES_LATER=approved Overture and/or OSM snapshot, one release,
+                           license ledger BEFORE fetch. Still NO this session.
+
+Q6  Cost / quota
+    MONTHLY_CAP_USD=0 now
+    KILL_SWITCH_OWNER=UNFILLED
+    CESIUM_ION=NOT_AUTHORIZED
+    GOOGLE_TILES=NOT_AUTHORIZED
+    CLOUD_HOSTING=NOT_NOW
+
+Q7  Account / social
+    OWNER_CHOICE=local_bookmark_first_no_login
+    MULTIPLAYER_CHAT_VOICE=OUT_OF_SCOPE_FIRST_RELEASE
+    UGC=OUT_OF_SCOPE_FIRST_RELEASE
+    SCOPE_NOTE_2026_09_03_REV2=The lines above record the first LOCAL MAP proof.
+      Later owner intent requires public user shops/listings and friends-only
+      avatars before the HH World owner-experience release. See
+      hh-3d/zdoc/03-9-hh-world-owner-modes.txt (rev2) and canonical P3/M WPs.
+      Chat/voice/payment remain outside those WPs. This annotation does not
+      implement/open them, authorize a service, or change a human signature.
+
+Q8  Names / logos / interiors
+    OWNER_CHOICE=fictionalize gameplay-facing brands; no personal data;
+                 no house interiors as fact
+    AOI_LABEL_MAY_NAME_THE_REAL_VICINITY=yes (Bến Thành vicinity)
+    GEOMETRY_MAY_NOT_CLAIM_TO_BE_THE_REAL_MARKET=yes
+
+Q9  Visual / claims
+    OWNER_CHOICE=stylized-readable map, not photogrammetry
+    FORBIDDEN_CLAIMS=1:1, realtime, digital twin, GTA-like, current absolute,
+                     Y8 parity
+    UI_MUST_SAY=authored / approximation / Map data as of
+
+Q10 Hardware / toolchain (host snapshot 2026-09-03)
+    OS=Microsoft Windows 11 Pro 10.0.26200
+    CPU=Intel Core i5-10400F @ 2.90 GHz (6C/12T)
+    RAM_GB=31.92
+    GPU=NVIDIA GeForce GTX 1660 Ti 6 GB, driver 591.74
+    NODE_OBSERVED=v24.10.0
+    NPM_OBSERVED=11.6.1
+    PYTHON_OBSERVED=Python 3.11.9
+    POSTGIS=NOT_PRESENT_NOT_NEEDED_YET
+    GDAL/OGR=missing
+    DUCKDB=missing
+    BROWSER_MATRIX=UNFILLED
+    TARGET_FPS=UNMEASURED
+    MINIMUM_FPS=UNMEASURED
+    DO_NOT_CLAIM=MapLibre 60 FPS, mobile Play proof, chunk budget
+
+Q11 Native / Unreal / Godot-2
+    OWNER_CHOICE_NATIVE=STOP_THIS_TRACK
+    UNREAL=STOP
+    GODOT2_CITY=NOT_NOW
+    VF_KEEPS_GODOT_4.7.1_STABLE=YES
+    SECOND_ENGINE=NO
+    GODOT_4.7.2=NO
+
+Q12 Refresh cadence
+    OWNER_CHOICE=no provider refresh until a later approved acquire
+    THIS_SESSION=authored fixture; no snapshot refresh pipeline
+
+Q13 Support / legal owner
+    LEGAL_OWNER=UNFILLED
+    PRIVACY_OWNER=UNFILLED
+    INCIDENT_CONTACT=UNFILLED
+
+================================================================================
+2. APPROVED DEPENDENCIES FOR SCAFFOLD
+================================================================================
+
+Match hh-3d/demo stack versions where easy. Do not import the demo island.
+
+  react=19.2.8
+  react-dom=19.2.8
+  @types/react=19.2.18
+  @types/react-dom=19.2.5
+  typescript=5.9.3
+  vite=8.2.2
+  @vitejs/plugin-react=6.1.1
+  @types/node=24.10.13
+  maplibre-gl=5.6.2   (BSD-3-Clause; local renderer only)
+  No Cesium. No Google Maps. No Mapbox paid tiles. No react-three-fiber here.
+
+Preview port: 4175 (4173 = Hòn Gió demo; 4174 reserved / do not use)
+Dev port: 5175
+
+================================================================================
+3. HONESTY / PROVENANCE
+================================================================================
+
+Required UI fields when data exists:
+  source_released_at, acquired_at, generated_at, published_at,
+  fresh_until, stale_after, accuracy_class, geometry_confidence,
+  height_confidence, authored_or_source, source_hash, artifact_hash.
+
+This session's fixture:
+  authored_or_source=authored
+  accuracy_class=authored
+  geometry_confidence=low
+  height_confidence=estimated
+  acquired_at=2026-09-03 (fixture authored; NOT a survey access date)
+
+Do not write hh-3d/zdoc/license-ledger.txt or research-ledger.txt
+(originals; rewrite forbidden). App-local ledgers live under
+hh-3d/app/manifests/.
+
+================================================================================
+4. WHAT THIS RECORD DOES AND DOES NOT CLOSE
+================================================================================
+
+Closes enough ambiguity to scaffold a local player-facing proof:
+  product, AOI center/extent, renderer, offline, no login, no fetch,
+  no Unreal/Cesium/Google, display name, honesty language.
+
+Does not close:
+  human OWNER_SIGN name
+  GATE-U1 (three human reviewers)
+  legal/privacy owner names
+  browser FPS matrix
+  original-plan checkbox tick (coordinator + critics only)
+  any real map provider acquire
+
+Original plan STATE/PASS remain unchanged.
+
+================================================================================
+5. OWNER MODES ADDENDUM 2026-09-03
+================================================================================
+
+AUTHORITATIVE=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+ONLINE=see only accepted friends walking on the street (stylized; not GTA)
+OFFLINE=see no other people; still see products in player-opened shops
+STRANGER_CROWD=FORBIDDEN
+VOICE_CHAT_GTA_PHYSICS=FORBIDDEN
+IMPLEMENT_NOW=NO (after R3 + account + M0-M2 current WP)
+This addendum does not authorize presence sockets or shop CRUD today.
+)

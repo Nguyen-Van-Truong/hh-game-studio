@@ -1,0 +1,407 @@
+{
+  "run_id": "HH3D-J5-20260904-ASIA-SAIGON-10",
+  "player": "http://127.0.0.1:4175/",
+  "verdict": "J5_MINIMAP_LANE_OK",
+  "not_plan_pass": true,
+  "not_gate_u1": true,
+  "not_osm": true,
+  "not_wan": true,
+  "not_gps": true,
+  "miniPresent": true,
+  "miniHarbor": true,
+  "miniSteps": true,
+  "harborChip": true,
+  "stepsChip": true,
+  "walkedOff": true,
+  "lanternOk": true,
+  "leftoverOk": true,
+  "honestyOk": true,
+  "geoOk": true,
+  "keptOk": true,
+  "chipHarbor": "Harbor Walk",
+  "chipSteps": "Steps East",
+  "miniHarborActive": "Harbor Walk",
+  "miniStepsActive": "Steps East",
+  "miniStepsHighlight": "1",
+  "miniInner": 2,
+  "geoStreets": [
+    "Tram Approach",
+    "Harbor Walk"
+  ],
+  "eastM": 7.09,
+  "northM": 19.45,
+  "spawn": {
+    "title": "HH World",
+    "playReady": "yes",
+    "engine": "r3f",
+    "pose": "idle",
+    "lon": 106.69804,
+    "lat": 10.77162,
+    "alt": 0,
+    "heading": 0,
+    "insideAabb": "0",
+    "insideRing": "0",
+    "buildings": 60,
+    "sky": "gradient-hemisphere",
+    "fog": "distance-haze",
+    "blockEdge": "curb-wall-lot",
+    "groundFloor": "door-glass-awning",
+    "innerLane": "asphalt-walk-edge",
+    "streetPlaques": 4,
+    "plaqueKind": "pole-board",
+    "streetHud": "named-chip",
+    "streetName": "Harbor Walk",
+    "streetRole": "official",
+    "chipText": "Harbor Walk",
+    "chipOnScreen": true,
+    "menuHidden": true,
+    "worldMapPresent": false,
+    "canvas": {
+      "w": 1280,
+      "h": 720
+    },
+    "nearbyShop": "",
+    "stallHint": "E opens a stall when you are next to it.",
+    "shopRange": "Quầy Cá Đèn Lồng: 28 m away",
+    "shopPanel": false,
+    "shopPanelId": "",
+    "honesty": "Authored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:1 city. Authored 400 m: two official named streets plus inner parcel lanes, not a city grid. This frame ends at an authored wall — fixture edge, not a city. NOT_PLAN_PASS.\n\nFriend bodies use this PC's 4175 loopback store (two browsers here). Not a city shop server. Not a city presence server. Not another city's cloud. Not WAN. Not GPS. NOT_PLAN_PASS.",
+    "minimap": {
+      "present": true,
+      "onScreen": true,
+      "box": {
+        "x": 1088.2,
+        "y": 577.8,
+        "w": 182,
+        "h": 132.4
+      },
+      "kind": "authored-hud-lanes",
+      "official": 2,
+      "inner": 2,
+      "extra": 2,
+      "names": "Tram Approach,Harbor Walk,Steps East,Steps West",
+      "active": "Harbor Walk",
+      "highlight": "1",
+      "activeRole": "official"
+    },
+    "miniItems": [
+      {
+        "id": "minimap-lane-street-tram-approach",
+        "name": "Tram Approach",
+        "role": "official",
+        "active": "0"
+      },
+      {
+        "id": "minimap-lane-street-harbor-walk",
+        "name": "Harbor Walk",
+        "role": "official",
+        "active": "1"
+      },
+      {
+        "id": "minimap-lane-steps-east",
+        "name": "Steps East",
+        "role": "inner",
+        "active": "0"
+      },
+      {
+        "id": "minimap-lane-steps-west",
+        "name": "Steps West",
+        "role": "inner",
+        "active": "0"
+      }
+    ],
+    "miniActiveItem": {
+      "id": "minimap-lane-street-harbor-walk",
+      "name": "Harbor Walk",
+      "role": "official",
+      "active": "1"
+    },
+    "gtaClaim": false,
+    "gpsClaim": false
+  },
+  "onHarbor": {
+    "title": "HH World",
+    "playReady": "yes",
+    "engine": "r3f",
+    "pose": "walk",
+    "lon": 106.69804,
+    "lat": 10.7716466,
+    "alt": 0,
+    "heading": 0,
+    "insideAabb": "0",
+    "insideRing": "0",
+    "buildings": 60,
+    "sky": "gradient-hemisphere",
+    "fog": "distance-haze",
+    "blockEdge": "curb-wall-lot",
+    "groundFloor": "door-glass-awning",
+    "innerLane": "asphalt-walk-edge",
+    "streetPlaques": 4,
+    "plaqueKind": "pole-board",
+    "streetHud": "named-chip",
+    "streetName": "Harbor Walk",
+    "streetRole": "official",
+    "chipText": "Harbor Walk",
+    "chipOnScreen": true,
+    "menuHidden": true,
+    "worldMapPresent": false,
+    "canvas": {
+      "w": 1280,
+      "h": 720
+    },
+    "nearbyShop": "",
+    "stallHint": "E opens a stall when you are next to it.",
+    "shopRange": "Quầy Cá Đèn Lồng: 25 m away",
+    "shopPanel": false,
+    "shopPanelId": "",
+    "honesty": "Authored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:1 city. Authored 400 m: two official named streets plus inner parcel lanes, not a city grid. This frame ends at an authored wall — fixture edge, not a city. NOT_PLAN_PASS.\n\nFriend bodies use this PC's 4175 loopback store (two browsers here). Not a city shop server. Not a city presence server. Not another city's cloud. Not WAN. Not GPS. NOT_PLAN_PASS.",
+    "minimap": {
+      "present": true,
+      "onScreen": true,
+      "box": {
+        "x": 1088.2,
+        "y": 577.8,
+        "w": 182,
+        "h": 132.4
+      },
+      "kind": "authored-hud-lanes",
+      "official": 2,
+      "inner": 2,
+      "extra": 2,
+      "names": "Tram Approach,Harbor Walk,Steps East,Steps West",
+      "active": "Harbor Walk",
+      "highlight": "1",
+      "activeRole": "official"
+    },
+    "miniItems": [
+      {
+        "id": "minimap-lane-street-tram-approach",
+        "name": "Tram Approach",
+        "role": "official",
+        "active": "0"
+      },
+      {
+        "id": "minimap-lane-street-harbor-walk",
+        "name": "Harbor Walk",
+        "role": "official",
+        "active": "1"
+      },
+      {
+        "id": "minimap-lane-steps-east",
+        "name": "Steps East",
+        "role": "inner",
+        "active": "0"
+      },
+      {
+        "id": "minimap-lane-steps-west",
+        "name": "Steps West",
+        "role": "inner",
+        "active": "0"
+      }
+    ],
+    "miniActiveItem": {
+      "id": "minimap-lane-street-harbor-walk",
+      "name": "Harbor Walk",
+      "role": "official",
+      "active": "1"
+    },
+    "gtaClaim": false,
+    "gpsClaim": false
+  },
+  "onSteps": {
+    "title": "HH World",
+    "playReady": "yes",
+    "engine": "r3f",
+    "pose": "idle",
+    "lon": 106.6981048,
+    "lat": 10.7717947,
+    "alt": 0,
+    "heading": 92,
+    "insideAabb": "0",
+    "insideRing": "0",
+    "buildings": 60,
+    "sky": "gradient-hemisphere",
+    "fog": "distance-haze",
+    "blockEdge": "curb-wall-lot",
+    "groundFloor": "door-glass-awning",
+    "innerLane": "asphalt-walk-edge",
+    "streetPlaques": 4,
+    "plaqueKind": "pole-board",
+    "streetHud": "named-chip",
+    "streetName": "Steps East",
+    "streetRole": "inner",
+    "chipText": "Steps East",
+    "chipOnScreen": true,
+    "menuHidden": true,
+    "worldMapPresent": false,
+    "canvas": {
+      "w": 1280,
+      "h": 720
+    },
+    "nearbyShop": "",
+    "stallHint": "E opens a stall when you are next to it.",
+    "shopRange": "Quầy Cá Đèn Lồng: 11 m away",
+    "shopPanel": false,
+    "shopPanelId": "",
+    "honesty": "Authored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:1 city. Authored 400 m: two official named streets plus inner parcel lanes, not a city grid. This frame ends at an authored wall — fixture edge, not a city. NOT_PLAN_PASS.\n\nFriend bodies use this PC's 4175 loopback store (two browsers here). Not a city shop server. Not a city presence server. Not another city's cloud. Not WAN. Not GPS. NOT_PLAN_PASS.",
+    "minimap": {
+      "present": true,
+      "onScreen": true,
+      "box": {
+        "x": 1088.2,
+        "y": 577.8,
+        "w": 182,
+        "h": 132.4
+      },
+      "kind": "authored-hud-lanes",
+      "official": 2,
+      "inner": 2,
+      "extra": 2,
+      "names": "Tram Approach,Harbor Walk,Steps East,Steps West",
+      "active": "Steps East",
+      "highlight": "1",
+      "activeRole": "inner"
+    },
+    "miniItems": [
+      {
+        "id": "minimap-lane-street-tram-approach",
+        "name": "Tram Approach",
+        "role": "official",
+        "active": "0"
+      },
+      {
+        "id": "minimap-lane-street-harbor-walk",
+        "name": "Harbor Walk",
+        "role": "official",
+        "active": "0"
+      },
+      {
+        "id": "minimap-lane-steps-east",
+        "name": "Steps East",
+        "role": "inner",
+        "active": "1"
+      },
+      {
+        "id": "minimap-lane-steps-west",
+        "name": "Steps West",
+        "role": "inner",
+        "active": "0"
+      }
+    ],
+    "miniActiveItem": {
+      "id": "minimap-lane-steps-east",
+      "name": "Steps East",
+      "role": "inner",
+      "active": "1"
+    },
+    "gtaClaim": false,
+    "gpsClaim": false
+  },
+  "atLantern": {
+    "title": "HH World",
+    "playReady": "yes",
+    "engine": "r3f",
+    "pose": "walk",
+    "lon": 106.6980322,
+    "lat": 10.771788,
+    "alt": 0,
+    "heading": 265,
+    "insideAabb": "0",
+    "insideRing": "0",
+    "buildings": 60,
+    "sky": "gradient-hemisphere",
+    "fog": "distance-haze",
+    "blockEdge": "curb-wall-lot",
+    "groundFloor": "door-glass-awning",
+    "innerLane": "asphalt-walk-edge",
+    "streetPlaques": 4,
+    "plaqueKind": "pole-board",
+    "streetHud": "named-chip",
+    "streetName": "Harbor Walk",
+    "streetRole": "official",
+    "chipText": "Harbor Walk",
+    "chipOnScreen": true,
+    "menuHidden": true,
+    "worldMapPresent": false,
+    "canvas": {
+      "w": 1280,
+      "h": 720
+    },
+    "nearbyShop": "shop-lantern-fish",
+    "stallHint": "Press E or tap Open to enter Quầy Cá Đèn Lồng.",
+    "shopRange": "Quầy Cá Đèn Lồng: 9.3 m away",
+    "shopPanel": false,
+    "shopPanelId": "",
+    "honesty": "Authored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:1 city. Authored 400 m: two official named streets plus inner parcel lanes, not a city grid. This frame ends at an authored wall — fixture edge, not a city. NOT_PLAN_PASS.\n\nFriend bodies use this PC's 4175 loopback store (two browsers here). Not a city shop server. Not a city presence server. Not another city's cloud. Not WAN. Not GPS. NOT_PLAN_PASS.",
+    "minimap": {
+      "present": true,
+      "onScreen": true,
+      "box": {
+        "x": 1088.2,
+        "y": 577.8,
+        "w": 182,
+        "h": 132.4
+      },
+      "kind": "authored-hud-lanes",
+      "official": 2,
+      "inner": 2,
+      "extra": 2,
+      "names": "Tram Approach,Harbor Walk,Steps East,Steps West",
+      "active": "Harbor Walk",
+      "highlight": "1",
+      "activeRole": "official"
+    },
+    "miniItems": [
+      {
+        "id": "minimap-lane-street-tram-approach",
+        "name": "Tram Approach",
+        "role": "official",
+        "active": "0"
+      },
+      {
+        "id": "minimap-lane-street-harbor-walk",
+        "name": "Harbor Walk",
+        "role": "official",
+        "active": "1"
+      },
+      {
+        "id": "minimap-lane-steps-east",
+        "name": "Steps East",
+        "role": "inner",
+        "active": "0"
+      },
+      {
+        "id": "minimap-lane-steps-west",
+        "name": "Steps West",
+        "role": "inner",
+        "active": "0"
+      }
+    ],
+    "miniActiveItem": {
+      "id": "minimap-lane-street-harbor-walk",
+      "name": "Harbor Walk",
+      "role": "official",
+      "active": "1"
+    },
+    "gtaClaim": false,
+    "gpsClaim": false
+  },
+  "lantern": {
+    "nearby": "shop-lantern-fish",
+    "panel": "shop-lantern-fish"
+  },
+  "seatB": {
+    "nearbyShop": "",
+    "stallHint": "E opens a stall when you are next to it.",
+    "shopRange": "Quầy Cá Đèn Lồng: 29 m away",
+    "afterE": "",
+    "panel": false
+  },
+  "honesty": "Authored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:1 city. Authored 400 m: two official named streets plus inner parcel lanes, not a city grid. This frame ends at an authored wall — fixture edge, not a city. NO",
+  "shots": {
+    "harbor": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-minimap-lane-harbor.png",
+    "steps": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-minimap-lane-steps.png"
+  },
+  "hashHarbor": "2fd7ab373aecb40a",
+  "hashSteps": "bd85fd775819a01b"
+}

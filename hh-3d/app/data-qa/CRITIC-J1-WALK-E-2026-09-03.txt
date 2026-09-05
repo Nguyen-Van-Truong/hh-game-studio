@@ -1,0 +1,318 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+BIGGEST_MISS=E unlocks at the 20 m bubble (still ~20 m from the stall), and opening the shop drops camera follow so Close leaves the doll off-frame.
+
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-03
+TIMEZONE=Asia/Saigon
+MODEL=grok-4.6
+SCOPE=HH World J1 stroll→E shop entry on existing 4175 (not goods-list)
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=657634f8f82281bd670c9a375ad49c6180db3583
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+LEAD_RUN_ID=HH3D-J1-20260903-ASIA-SAIGON-02
+LEAD_PROBE=hh-3d/app/data-qa/j1-walk-shop-probe.mjs
+LEAD_PACK=hh-3d/app/data-qa/J1-WALK-SHOP-2026-09-03.txt
+PRIOR_CRITIC=hh-3d/app/data-qa/CRITIC-J1-2026-09-03.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-J1-WALK-E-2026-09-03.txt
+PROGRESS_TRUSTED_ALONE=NO
+LEAD_PROBE_TRUSTED_ALONE=NO
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_VF_TOUCH=1
+NO_UNREAL=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_RUN_LEAD_PROBE_WRITER=1
+NOT_PLAN_PASS=1
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/
+
+Walk+E is real on the already-up 4175 preview. This critic did not trust
+the lead pack or re-run j1-walk-shop-probe.mjs (that writer overwrites
+J1-WALK-SHOP-2026-09-03.txt). Independent headless Chrome CDP on debug
+port 9266, temp profile, stdout only, never clicked a goods-list button.
+
+Spawn ~28 m. Far E: no panel, no nearby, href stays /, interact disabled.
+Hold W 5.35 s: 13 samples of pose=walk + class is-walk, lon/lat advancing,
+shopRangeM 27.97 → 19.95. Then nearby "Open Quầy Cá Đèn Lồng". Near E
+opens the shelf (href ?place=place-market-steps&shop=shop-lantern-fish)
+with fish + bag; draft "Nháp chưa đăng" absent. Owner-Offline checkbox
+does not hide listings. Offline: zero remote bodies. No geolocate control.
+Plan STATE/PASS not flipped. GATE-U1 humans not invented.
+
+This is NOT a plan PASS. NOT M0-WP1. NOT M1-WP0. NOT GATE-U1. NOT J2/J3.
+
+Biggest miss: E unlocks at the 20 m radius, not at the stall. After E the
+camera drops follow; Close shelf leaves the doll off-frame. Owner-Offline
+is still a local label checkbox. Goods list remains a skip path. Collision,
+touch pad, and pan-does-not-move-you stay coded, not CDP-walked.
+
+================================================================================
+METHOD
+================================================================================
+
+Disk (not PROGRESS alone):
+  hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+  hh-3d/app/PROGRESS.txt
+  hh-3d/app/web/src/avatar/walk.ts useAvatar.ts StreetHelp.tsx WalkPad.tsx
+  hh-3d/app/web/src/app/App.tsx
+  hh-3d/app/web/src/map/MapView.tsx
+  hh-3d/app/web/src/shops/catalog.ts ShopPanel.tsx GoodsList.tsx
+  hh-3d/app/web/src/modes/modes.ts ModeBar.tsx
+  hh-3d/app/web/src/ui/HonestyBanner.tsx
+  hh-3d/app/web/public/data/shops.json
+  hh-3d/app/data-qa/j1-walk-shop-probe.mjs
+  hh-3d/app/data-qa/J1-WALK-SHOP-2026-09-03.txt
+  hh-3d/app/data-qa/CRITIC-J1-2026-09-03.txt
+  hh-3d/app/docs/review/README.txt
+  hh-3d/zdoc/31-8-hh3d-real-application-plan.txt (CURRENT_FIRST_LEFTOVER + STATE)
+  git log -1; git diff --cached --name-only; git diff on plan STATE/PASS
+
+Live (existing 4175 only; did not start another HH World preview):
+  TCP 127.0.0.1:4175 LISTEN pid 58476
+  4173 DOWN  4174 DOWN  9242 DOWN
+  GET /                         200  title HH World
+                                script /assets/index-D4YEx4xU.js
+  GET /assets/index-D4YEx4xU.js 200  Content-Length=1137322
+  GET /data/shops.json          200  shop-lantern-fish + listing-draft-hidden
+  Independent Chrome CDP vs 4175 (debug 9266, about:blank then navigate)
+  Did not run their probe script. Did not write J1-WALK-SHOP-2026-09-03.txt.
+  Did not run npm build (would mutate dist). Did not start 4173/4174.
+
+Live JS string scan (4175 bundle, not disk-only):
+  open-nearby-shop=1  walk-interact=2  self-avatar=2
+  owner-offline-sim=1  "Press E"=1  "not GPS"=1
+  data-remote-avatar=0
+  geolocate=85  getCurrentPosition=1  (MapLibre vendor; see Attack 2)
+
+================================================================================
+PROCESS / GIT
+================================================================================
+
+RESULT=PASS_ON_STATED_FAIL_RULE
+
+Stated fail: VF / AGENTS.md staged with this if they committed.
+Observed:
+  git diff --cached --name-only  = empty
+  last commit = 657634f VF6-WP3: tick after critic and official PASS
+  No hh-3d/app commit in HEAD
+  Critic did not commit, did not tick plan, did not touch VF.
+
+Working tree dirt (not this critic's write):
+  Many godot/dogfood/superfighters/* + hh-3d/app untracked + plan modified.
+  Process landmine for a later mixed commit. Not the stated FAIL.
+
+================================================================================
+ATTACK 1 — FAR E MUST FAIL; NEAR E MUST OPEN (INDEPENDENT CDP)
+================================================================================
+
+RESULT=PASS  (via=e, not goods list)
+
+Independent CDP (2026-09-03, 4175, critic port 9266). No goods button click.
+No open-nearby click. Only Input.dispatchKeyEvent KeyE / KeyW.
+
+Far (spawn):
+  href=http://127.0.0.1:4175/
+  shopRangeM=27.966  hint="Walk toward Quầy Cá Đèn Lồng. E does nothing…"
+  nearby=null  interactDisabled=true  shopPanel=false
+  After KeyE: same href, shopPanel still false, nearby still null.
+
+Walk (hold W, camera bearing -18, 13 samples / 5350 ms):
+  t=418    pose=walk is-walk lon=106.6980382 lat=10.7716255 range=27.33 nearby=null
+  t=2057   pose=walk          lon=106.6980307 lat=10.7716480 range=24.85 nearby=null
+  t=4937   pose=walk          lon=106.6980177 lat=10.7716874 range=20.56 nearby=null
+  t=5350   pose=walk          lon=106.6980159 lat=10.7716929 range=19.95
+           nearby="Open Quầy Cá Đèn Lồng"  shopPanel=false
+  shopPanel stayed false for the entire stroll. Walking does not auto-open.
+
+Near (after keyUp W, before E):
+  href still /
+  shopPanel=false
+  nearby present  hint="Press E or tap Open to enter Quầy Cá Đèn Lồng."
+  shopRangeM=19.953  interactDisabled=false
+
+Near E:
+  href=http://127.0.0.1:4175/?place=place-market-steps&shop=shop-lantern-fish
+  shopPanel=true
+  listings: listing-morning-mackerel kind=fish
+            listing-woven-tote kind=bag
+  listing-draft-hidden absent  draftShown=false
+  owner="Shop owner: Offline. Public listings stay open."
+
+Lead pack (SAIGON-02, via=e, walkMs=5362, moved=8.59 m, range 19.93) is
+consistent with this independent run (walkMs=5350, moved=8.56 m, range 19.95).
+It is corroboration, not the proof. Proof is this critic's CDP.
+
+================================================================================
+ATTACK 2 — DOES THE AVATAR ACTUALLY TRANSLATE?
+================================================================================
+
+RESULT=PASS  (world-space translation; screen-space is follow-locked)
+
+Not a static pin and not a prompt-only spoof.
+
+Disk: useAvatar rAF reads WASD, tryStep at WALK_SPEED_MPS=1.6, MapView
+setLngLat + setRotation + class is-walk. AVATAR_SPAWN 106.69804 / 10.77162.
+W is camera-relative (bearing -18) so heading becomes 342, not 0.
+
+Independent live:
+  home    pose=idle heading=0   lon=106.6980400 lat=10.7716200
+          class=self-avatar … (no is-walk)
+          innerHTML head/torso/leg-l/leg-r
+          status "You: standing · facing north · in-app position, not GPS"
+  midWalk pose=walk heading=342 lon=106.6980382 lat=10.7716255
+          class=… is-walk
+          status "You: walking · facing north · in-app position, not GPS"
+  atStall pose=idle heading=342 lon=106.6980158 lat=10.7716931
+  moved   dLon=-0.0000242  dLat=+0.0000731  meters=8.557
+  speed   8.557 / 5.350 s = 1.60 m/s  (matches WALK_SPEED_MPS)
+  range   27.966 → 19.953  (drop ≈ walk distance toward shop at
+          106.6980366, 10.7718712)
+
+13 monotonic samples: lat rises, lon falls slightly, range falls every
+tick. That is not a one-shot dataset rewrite.
+
+Screen-space residual (honest): camera follow keeps the doll near center
+(home rect 437,370 40×36 → atStall 443,373 28×31). shopRect dy=+7 only.
+World translation is real; a screenshot of the doll sitting still would
+be misleading. Heading/class/range/lon/lat all changed under KeyW.
+
+================================================================================
+ATTACK 3 — GPS / OTHER BODIES / DRAFT-AS-POSTED / WP TICK / FAKE GATE-U1
+================================================================================
+
+RESULT=PASS  (none of the five cheats)
+
+No GPS as player position:
+  App src: zero geolocation / getCurrentPosition / watchPosition /
+  GeolocateControl. Avatar is authored lng/lat + tryStep.
+  Live DOM: geolocateBtn=false. Status says "not GPS".
+  Bundle contains MapLibre GeolocateControl vendor strings
+  (geolocate×85, getCurrentPosition×1). Not wired. Dead library surface.
+
+No other bodies Offline:
+  modes.ts DEFAULT_PRESENCE=offline, ONLINE_AVAILABLE=false,
+  OTHER_PEOPLE_VISIBLE=false. No data-remote-avatar in src or live JS.
+  Live: mode "Offline — Stroll alone; shops still open."
+        people "…none (friends layer off)."
+        online button disabled  remoteCount=0
+
+No draft-as-posted:
+  publicListings drops status!==published.
+  Live shops.json still contains listing-draft-hidden (hidden, not deleted).
+  After E: draftShown=false; only fish + bag ids.
+
+No WP PASS tick:
+  Canonical plan CURRENT_FIRST_LEFTOVER=GATE-U1
+  GATE-U1 / M0-WP1 / M1-WP0 / R2-WP0 / R2-WP1 STATE: NOT_STARTED
+  No STATE: PASS/DONE/COMPLETE in the plan.
+  Plan diff adds M0/M1 blocks as NOT_STARTED documentation. Not a tick.
+  PROGRESS: PLAN_CHECKBOXES=UNCHANGED_DO_NOT_TICK  NOT_PLAN_PASS
+
+No fake GATE-U1:
+  hh-3d/app/docs/review/README.txt still:
+    GATE-U1 is NOT done.
+    Need three independent human reviewers…
+  No invented reviewer names. Leftover #1 remains GATE-U1. J2/J3 named not done.
+
+================================================================================
+ATTACK 4 — CAN A PLAYER STROLL→E→GOODS WITHOUT THE GOODS LIST?
+================================================================================
+
+RESULT=PASS  (path exists; list is still a skip)
+
+Street chrome a guest can use without docs:
+  stall hint at spawn: walk toward Quầy Cá Đèn Lồng; E does nothing until close
+  range meter 28 m
+  WASD / pad copy
+  nearby "Open …" + "Press E" after walking into 20 m
+  WalkPad interact button enables (interactDisabled false)
+  KeyE opens the same shop_id as the list would
+
+This critic opened the shelf with KeyE only. Goods list was visible
+(2 public buttons) and was not used. Modes §2 allows click/tap OR nearby
+interact. List-as-fallback is honest copy in GoodsList.
+
+Prior critic CRITIC-J1-2026-09-03.txt was correct that SAIGON-01 / the
+old 1.1 s W hold was list-only. That miss is repaired on 4175 now.
+SAIGON-02 + this independent CDP are the remint.
+
+================================================================================
+ATTACK 5 — OWNER-OFFLINE CHECKBOX HIDES THE SHELF?
+================================================================================
+
+RESULT=PASS_AS_LABELED  (checkbox cannot hide; not a real logout)
+
+Lead claim: checkbox does not hide shelf. Confirmed.
+
+owner_presence is parsed then unused by publicShops / publicListings.
+ownerOfflineSim swaps two sentences. Uncheck → "local Online label only…
+Shop still public." Listings stay. Recheck → Offline copy. Shelf stays.
+Copy: "This label does not take the public shelf down."
+
+This is not M1-WP0 "owner closed the app, guest still reads from server."
+No second session. No logout. Lead disclosed the sim. Do not grant M1.
+
+================================================================================
+LEAD CLAIMS vs INDEPENDENT LIVE
+================================================================================
+
+Claim                                         Verdict
+4175 walk W toward Quầy Cá Đèn Lồng           CONFIRMED (critic CDP)
+E does nothing until ~20 m                    CONFIRMED (far E no-op;
+                                              nearby at 19.95 m)
+Then E/Open shows fish+bag, draft hidden      CONFIRMED via KeyE
+Probe EXIT=0 via=e SAIGON-02                  CONSISTENT with critic;
+                                              not used as sole proof
+Far E stays closed                            CONFIRMED
+Owner-Offline checkbox does not hide shelf    CONFIRMED (label only)
+GATE-U1/J2/J3 leftover                        CONFIRMED
+NOT_PLAN_PASS                                 CONFIRMED
+Avatar translates (not prompt spoof)          CONFIRMED in world space
+No GPS / no other Offline bodies              CONFIRMED
+No draft-as-posted / no WP tick / no U1 fake  CONFIRMED
+Player can stroll→E without goods list        CONFIRMED
+4173/4174 / second preview                    NOT STARTED by this critic
+
+================================================================================
+HARD FAIL CHECK (TICK=no triggers)
+================================================================================
+
+Still list-only                               NO
+Probe-only (no independent walk)              NO
+Broken page / 4175 down / wrong product       NO
+Avatar fake / static pin                      NO
+GPS used as player position                   NO
+Plan STATE/PASS ticked                        NO
+GATE-U1 humans invented                       NO
+J1 claimed as plan PASS                       NO
+Draft shown as posted                         NO
+Other player bodies in Offline                NO
+
+Therefore TICK=yes for walk+E on 4175 as labeled.
+
+================================================================================
+NOT GRANTED
+================================================================================
+
+- M0-WP1 / M1-WP0 / M2 / R2-WP0 / R2-WP1 / GATE-U1
+- J2 owner list-product (identity still required; correctly stopped)
+- J3 friend bodies
+- Real catalog server / owner logout / cache STALE E2E
+- Standing at the stall geometry (entry is a 20 m bubble)
+- Close-shelf camera/focus return (follow dropped; doll left frame)
+- Collision, touch-pad hold, camera-pan independence as observed
+- Permission to start 4173/4174, fetch maps, Unreal, VF, or tick [x]

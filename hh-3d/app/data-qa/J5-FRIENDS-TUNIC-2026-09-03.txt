@@ -1,0 +1,43 @@
+{
+  "run_id": "HH3D-J5-20260903-ASIA-SAIGON-11",
+  "player": "http://127.0.0.1:4175/",
+  "verdict": "J5_FRIENDS_TUNIC_OK",
+  "not_plan_pass": true,
+  "not_gate_u1": true,
+  "not_wan": true,
+  "not_other_pc": true,
+  "tunicOk": true,
+  "moveOk": true,
+  "hideOk": true,
+  "facadeOk": true,
+  "honestyOk": true,
+  "tunics": {
+    "a": "#2a7d78",
+    "b": "#c4a046"
+  },
+  "remoteOnB": {
+    "testid": "remote-avatar-a",
+    "seat": "a",
+    "body": "tunic-humanoid",
+    "tunic": "#2a7d78",
+    "pose": "walk",
+    "heading": "0",
+    "lon": "106.6980400",
+    "lat": "10.7716286"
+  },
+  "startLat": "10.7716200",
+  "walkedLat": "10.7716286",
+  "facade": {
+    "body": "tunic-humanoid",
+    "tunic": "#c4a046",
+    "facade": "inset",
+    "windows": 2141,
+    "doors": 60,
+    "bands": 472,
+    "total": 2673,
+    "buildings": 60
+  },
+  "insetBuildings": 60,
+  "offlineB": 0,
+  "shot": "d:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-friend-tunic.png"
+}

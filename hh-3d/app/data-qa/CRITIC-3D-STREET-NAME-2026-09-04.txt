@@ -1,0 +1,129 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=08:40 +07
+ROLE=IMPLEMENTER
+TICK=n/a (do not treat this file as TICK=yes)
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M0_WP1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_OIDC=1
+PLAYER_URL=http://127.0.0.1:4175/
+RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-08
+COMMAND=node hh-3d/app/data-qa/j5-street-name-probe.mjs
+VERDICT_IMPLEMENTER_CDP=J5_STREET_NAME_OK
+LIVE_JS=/assets/index-BzqNNsdo.js
+LIVE_JS_LEN=2144352
+LIVE_JS_SHA256=b612e489b889fa001b84145c77b353dad9d2260e4e54c436c22fc8c9e269191b
+ONE_RECYCLE_AFTER_BUILD=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NO_COMMIT=1
+NO_HIP_SPHERES=1
+DID_NOT_RIP_INNER_LANES=1
+DID_NOT_RIP_SIDE_STREET=1
+DID_NOT_RIP_FOG_EDGE=1
+DID_NOT_RIP_FOOTSTEPS=1
+DID_NOT_RIP_FRIEND_GAIT=1
+DID_NOT_RIP_STREET_PLAY_SHOPS=1
+DID_NOT_RIP_SKY=1
+DID_NOT_RIP_CAM_HIT=1
+NO_NPC=1
+NO_INTERIOR=1
+NO_MAP_FETCH=1
+
+================================================================================
+SLICE
+================================================================================
+
+The player could walk Harbor Walk and the Steps East gap, but
+nothing named those lanes in-world. This slice adds cheap
+authored street plaques (canvas texture on a pole-board, same
+language as shop signs):
+
+1. Harbor Walk + Tram Approach (the two official GeoJSON streets)
+   plus Steps East / Steps West (inner-lane names already in the
+   fixture building titles). Short English fixture names +
+   honesty line2 ("official street" / "inner lane"). Did not
+   invent a downtown grid.
+
+2. Walk-visible corners. Harbor plaque on the west sidewalk
+   north of spawn keep-out and off the lantern 10 m E path.
+   Steps plaques at the Harbor-facing mouths of the Steps
+   blocks. Tram plaque on the south sidewalk east of the
+   crossing. Thin planter-like collision on the pole.
+
+3. Live honesty still says authored 400 m, two official named
+   streets + inner parcel lanes, not OSM, not a city. GeoJSON
+   kind=street count stays 2.
+
+Did not rip inner lanes, side-street door/glass, fog/edge,
+footsteps, friend gait, streetPlayShops, sky, or cam-hit.
+No NPCs. No interiors. No map fetch.
+
+================================================================================
+PLAQUES (fixture names only)
+================================================================================
+
+  plaque-harbor-walk     Harbor Walk     official street   x=-2.89  z=-81.72
+  plaque-tram-approach   Tram Approach   official street   x=22.88  z=-7.45
+  plaque-steps-east      Steps East      inner lane        x=13.55  z=-76.20
+  plaque-steps-west      Steps West      inner lane        x=-11.55 z=-76.20
+
+data-street-plaques=4 kind=pole-board official=2 inner=2
+
+================================================================================
+PROOF (implementer CDP vs recycled 4175)
+================================================================================
+
+typecheck EXIT=0
+npm test EXIT=0 (68 tests)
+npm run build EXIT=0  dist/assets/index-BzqNNsdo.js
+Recycled 4175 once after that build (127.0.0.1 only).
+Did not start 4173 / 4174 / 5175. Did not bind 0.0.0.0.
+
+Probe node hh-3d/app/data-qa/j5-street-name-probe.mjs EXIT=0
+  Isolated headless Chrome 1280x720, seats A + B, ports 9561 / 9562.
+
+  DOM: data-street-plaques=4 kind=pole-board official=2 inner=2
+  names=Harbor Walk, Tram Approach, Steps East, Steps West
+  GeoJSON streets still 2 (Harbor Walk, Tram Approach).
+  Harbor walk shot: Harbor Walk label on-screen (x=859 y=512);
+  plaqueRatio=0.117. Shot j5-3d-street-name-harbor.png.
+  Walk Harbor then east into Steps: +7.24 m east / +19.1 m north
+  heading 94; inside-ring=0 inside-aabb=0 alt=0.
+  Steps shot: Steps East label on-screen (x=831 y=580);
+  plaqueRatio=0.024. Shot j5-3d-street-name-steps.png.
+  Inner floor lum road=2 walk=138.3 delta=136.3 (darker center).
+  Then lantern: E opened shop-lantern-fish (8.8 m).
+  Seat B leftover nearby none; E did not open sharedpc / J6.
+  Honesty: authored 400 m, two official named streets + inner
+  parcel lanes, not a city grid. Fog / edge / sky / collision /
+  walk-cycle / door-glass / inner-lane held.
+
+================================================================================
+OWNER LEFTOVERS (unchanged)
+================================================================================
+
+GATE-U1 three human reviewers — first plan leftover. Not faked.
+Leftover this-PC shops shop-local-sharedpc and
+shop-local-mtl8ulddihjpre stay in the catalog. They still do not
+own Nearby E / street play. Do not catalog_clear.
+OSM / Overture still NO. WAN / other-PC still NO.
+Plan checkboxes still [ ]. Not a city.
+
+================================================================================
+HONESTY
+================================================================================
+
+Still the authored 400 m box set. Two official named streets
+(Harbor Walk, Tram Approach) plus inner parcel lanes, now with
+cheap pole-board plaques at walk-visible corners. Not a downtown.
+Not OSM. NOT_PLAN_PASS. Independent critic may review; implementer
+TICK=n/a.

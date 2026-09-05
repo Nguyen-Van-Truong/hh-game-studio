@@ -1,0 +1,116 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+ROLE=IMPLEMENTER
+TICK=n/a (do not treat this file as TICK=yes)
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M2=1
+NOT_OSM=1
+NOT_WAN=1
+PLAYER_URL=http://127.0.0.1:4175/
+RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-02
+COMMAND=node hh-3d/app/data-qa/j5-cross-fix-probe.mjs
+VERDICT_IMPLEMENTER_CDP=J5_CROSS_FIX_OK
+CRITIC_FILE=hh-3d/app/data-qa/CRITIC-3D-CROSS-AUDIT-2026-09-04.txt
+CRITIC_TICK=no
+LIVE_JS=/assets/index-C5aM6kYn.js
+LIVE_JS_LEN=2124549
+LIVE_JS_SHA256=bcfe3c0525b5468d23cd435e0436359c37bd01792c1b134e1a4ecf8791b96c6e
+ONE_RECYCLE_AFTER_REAL_FIXES=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+
+================================================================================
+WHAT THE CRITIC SAID (accepted as the spec)
+================================================================================
+
+Independent critic TICK=no on restored 4175 (audited index-D4DzxvQX.js).
+
+1. Shared PC kiosk did NOT fill spawn behind-camera (camHit=0, dist 5.62,
+   drawn stalls=1). Hiding spawn mesh is the WRONG main job.
+2. Hard play miss: leftover this-PC shops still drove Nearby E. Seat B HUD
+   "Press E … Quay Critic J6 Jump" at 5.0 m. Catalog had shop-local-sharedpc
+   at exact spawn + shop-local-mtl8ulddihjpre ~12 m east. Keep authored
+   shop-lantern-fish. Do not wipe the catalog.
+3. Modes header IMPLEMENTATION_STATUS=NOT_IMPLEMENTED was a routing lie vs
+   live demo friends+shops+Online. Fix to local-demo-exists / NOT_PLAN_PASS.
+   Do not tick plan. Do not claim M2 / GATE-U1.
+4. Spawn/north sky beige (RGB ~128/132/125, beigeRatio 0.143). LOCAL_LEAD
+   SKY TICK=yes used a canyon crop.
+5. Friend opposite-stride on a second seat UNPROVEN (remote limb attrs null,
+   pixelDiff 0.0076). Expose remote limb proof and remint isolated A/B so B
+   observes A's opposite-stride, or do not claim it.
+
+Concurrent mid-audit dist replace to index-CxzK2kmo.js was rude to that
+critic. This remint waited for real fixes, then recycled 4175 once.
+
+================================================================================
+FIXED (code + implementer CDP)
+================================================================================
+
+E / leftover street play (primary)
+  streetPlayShops / isStreetPlayShop in walk.ts. SPAWN_KEEP_OUT_M=14 so the
+  ~12 m east J6 leftover is inside keep-out (12 m sat on the rim at 12).
+  nearestPublishedShop and StreetHelp shopCount use playShops only.
+  Stall fallback is shop-lantern-fish, not shops[0].
+  New create-shop still nudges out of keep-out; persist stays.
+  Catalog rows were not deleted.
+
+  Seat B CDP:
+    nearbyShop=""
+    stallHint="E opens a stall when you are next to it."
+    shopRange="Quầy Cá Đèn Lồng: 29 m away"
+    leftover J6 / Shared PC did not own E.
+
+Modes header
+  hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+  IMPLEMENTATION_STATUS=LOCAL_DEMO_EXISTS_NOT_PLAN_PASS
+  THIS_REVISION=HEADER_HONESTY_2026-09-04
+  Live 4175 demo exists; still NOT_PLAN_PASS; not M2; not GATE-U1.
+  Plan checkboxes unchanged.
+
+Spawn / north sky
+  Stronger blue haze/horizon/fog. PLAY_DEFAULT_PITCH_DEG=10 so default
+  follow look-up is sky, not a canyon wall crop.
+  Spawn sky band CDP: RGB 105 / 172.4 / 216, blueRatio=0.888, beige=0.
+
+Remote opposite-stride proof
+  writeRemoteWalkCycleProof writes limbSpread / limbOpposite / limbMoving
+  onto [data-testid=remote-avatar-{seat}] and [data-testid=remote-walk-cycle-{seat}]
+  plus globalThis.__hhRemoteWalkCycle.
+  Isolated A/B remint: B observed remote-avatar-a
+    limbSpread=1.139  limbOpposite=1  limbMoving=1  pose=walk
+    lat 10.7716825 while A held W.
+  That is implementer CDP, not a second independent critic.
+
+Spawn-mesh-hide (secondary / not the job)
+  Keep-out stalls already skipped draw. Critic already showed that was not
+  the spawn-camera miss. Left as hygiene. Not expanded.
+
+================================================================================
+NOT FIXED / STILL TRUE
+================================================================================
+
+- Independent critic has not re-audited index-C5aM6kYn.js. TICK=no stands
+  on the D4DzxvQX session. This writer is the implementer.
+- Leftover shops still exist on this PC store. That is intended. They just
+  do not own Nearby E / street play inside 14 m of spawn.
+- GATE-U1 three humans not invented. Plan checkboxes still [ ].
+- M2 / city presence / other-PC / WAN / OSM not built.
+- Not a city. Not 1:1. Bind remains 127.0.0.1:4175.
+- people-layer remoteCount on the last B snap was 0 while remote-avatar-a
+  limb attrs were present. Proof used the avatar / walk-cycle nodes, not
+  the layer count.
+
+================================================================================
+4175
+================================================================================
+
+Preview: npm run preview -- --host 127.0.0.1 --port 4175 --strictPort
+from hh-3d/app/web. One recycle after the real fixes. No second preview.
+No 4173 / 4174 / 5175.
+
+LIVE_JS=/assets/index-C5aM6kYn.js
+LEN=2124549
+SHA256=bcfe3c0525b5468d23cd435e0436359c37bd01792c1b134e1a4ecf8791b96c6e

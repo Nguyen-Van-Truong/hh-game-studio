@@ -1,0 +1,77 @@
+COPY MANIFEST
+DATE=2026-09-03
+ACTION=COPY_NOT_MOVE
+ORIGINALS_LEFT_IN=hh-3d/zdoc/
+COPIES_IN=hh-3d/hh3d-real-world-open-world/zdoc/
+HASH_ALG=SHA256
+COPY_COMMAND_EXIT=0
+
+FILE=31-8-hh3d-real-world-open-world-plan.txt
+WHY=BACKGROUND copy of the native feasibility plan. First WP here is
+    SANDBOX-G0-DOCS (paper only). Plan §9 packaged hello-world is
+    G0-ENGINE and FORBIDDEN. Do not start this file directly.
+ROLE=BACKGROUND_PLAN_COPY
+DO_NOT_EXECUTE_SECTION_9=1
+SHA256=8CDAAD43B46D459843F6FCA76116301EAD69455DBAFE5F2DF46D5B0F0B36A6C6
+BYTE_IDENTICAL_TO_ORIGINAL=1
+
+FILE=31-8-hh3d-real-application-plan.txt
+WHY=Related web-first product plan. Unreal for this track = STOP
+    (owner 2026-09-03). Web MVP remains the product path. Do not run
+    original R0+ (app scaffold) here. Sandbox paper twin:
+    R0-WP0-WEB-DECISION-RECORD.txt (DOCS_ONLY).
+ROLE=REFERENCE_NOT_EXECUTE
+DO_NOT_RUN_R0_PLUS_HERE=1
+SHA256=3B3204C0FD0CEAEEC82BDCDBBD245090BB944074FC84897D467CD1EA586C7AC6
+BYTE_IDENTICAL_TO_ORIGINAL=1
+
+FILE=01-9-hh3d-plan-audit-summary.txt
+WHY=Errata / contradictions. First WP must not invent WPs or ignore P3,
+    currentness, networking, or CURRENT_EXECUTION_PLAN history warnings.
+ROLE=ERRATA
+SHA256=2B7D278AEC12633F9D46806D3E880CB092F0676F99C4844D3FA238E2077CC0B5
+BYTE_IDENTICAL_TO_ORIGINAL=1
+
+FILE=01-9-hh3d-cheap-agent-handoff-prompt.txt
+WHY=Open-world plan header points here. Clarifies AUDIT vs EXECUTE and
+    stop conditions. Header inside this copy is historical (OWNER_RESUME=0
+    for the main tree). Sandbox routing is 00-SANDBOX-STATUS.txt.
+ROLE=PROTOCOL_REFERENCE
+SHA256=DB2B17AC1322691815227DC3AAACE053DF3B0BFA594F8408BAAA8820F6E88B23
+BYTE_IDENTICAL_TO_ORIGINAL=1
+
+FILE=review-log.txt
+WHY=CRITIC-A B5. History of WASD/P3/accessed_at so the next agent does
+    not re-lose errata.
+ROLE=ERRATA_HISTORY
+SHA256=62BA41FF2FD3A27D47135ADD019C6FB39EC470D59827A292037F6FFE3E644DF3
+BYTE_IDENTICAL_TO_ORIGINAL=1
+
+NOT COPIED
+  31-8-hh3d-demo-webgl-plan.txt
+    WHY=Hòn Gió execution plan is not the next WP of this sandbox.
+    POINTER=Hòn Gió is a WebGL seed at hh-3d/demo/; preview 127.0.0.1:4173.
+
+SANDBOX-ONLY FILES (not copies)
+  README.txt
+  .gitignore
+  zdoc/00-SANDBOX-STATUS.txt
+  zdoc/ERRATA-FROM-AUDIT.txt
+  zdoc/COPY-MANIFEST.txt
+  zdoc/SANDBOX-WORKING-PLAN.txt
+  zdoc/G0-DECISION-RECORD.txt
+  zdoc/G0-LICENSE-LEDGER.TEMPLATE.txt
+  zdoc/31-8-hh3d-real-application-plan.REFERENCE_NOT_EXECUTE.txt
+  zdoc/START.txt
+  zdoc/READ_ORDER.txt
+  zdoc/OWNER-DECISION-2026-09-03-GODOT-NOT-UNREAL.txt
+  zdoc/R0-WP0-WEB-DECISION-RECORD.txt
+  zdoc/PROGRESS.txt
+  zdoc/CRITIC-A-2026-09-03.txt
+  zdoc/CRITIC-B-2026-09-03.txt
+  zdoc/CRITIC-C-2026-09-03.txt
+  zdoc/CRITIC-D-2026-09-03.txt
+  zdoc/CRITIC-PROGRESS-2026-09-03.txt
+    NOTE=Independent reviews. Not implementer signatures.
+         CRITIC-D TICK=yes for SANDBOX-G0-DOCS paper only.
+         CRITIC-PROGRESS TICK=no (race: paper missing at review time).

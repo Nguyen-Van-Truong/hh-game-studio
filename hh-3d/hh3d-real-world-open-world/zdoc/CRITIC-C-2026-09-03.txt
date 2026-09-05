@@ -1,0 +1,476 @@
+CRITIC-C — INDEPENDENT ADVERSARIAL REVIEW
+Date: 2026-09-03
+Timezone: Asia/Saigon
+Critic role: read-only except this file
+Did not: implement product, commit, run Godot, install Unreal, start preview,
+         rewrite hh-3d/zdoc/ originals, or tick any plan checkbox
+
+Trust: DISK this session, not implementer report, not CRITIC-A/B text as
+current truth. CRITIC-A and CRITIC-B are historical. Parent claimed the
+CRITIC-B punch list was patched. This critic hashed, grepped, check-ignore’d,
+and read git index vs worktree.
+
+Taxonomy: OBSERVED = read from disk/git this session. INFERRED = source-logical,
+no runtime. UNPROVEN = would need browser/Godot/owner sign.
+
+================================================================================
+0. VERDICT
+================================================================================
+
+REWORK
+
+TICK=no
+
+Not BLOCKED: no secret, no Unreal install, no .uproject, no hh-3d/app/,
+no rewritten originals, no owner/legal gate that stops a paper-docs patch.
+Packaged hello-world / Unreal install remain NOT required for this tick.
+Do not treat missing G0-ENGINE as a fail.
+
+Not PASS: parent closed the CRITIC-B headlines (restart keeps START +
+review-log; WP=SANDBOX-G0-DOCS; no “four source files”; official recapture
+names commitable; HUD/Help pose-only on disk and index). Then left the
+routing files START tells you to read next still naming undifferentiated
+G0 as the first native gate / “G0 content”, and left the official wipe
+deleting COPY-MANIFEST (the hash ledger START says you must match) without
+recreating it.
+
+That is the miss. Front door patched. COPY-MANIFEST + STATUS AUTHORITY
+still feed plan §9. Restart still drops the hash ledger.
+
+================================================================================
+1. TRUST DISK — WHAT THE PARENT ACTUALLY PATCHED
+================================================================================
+
+CRITIC-B punch list vs disk now:
+
+1. Restart cannot drop START or review-log
+   OBSERVED FIXED in G0-DECISION-RECORD.txt §7 and README.txt wipe.
+   Soft wipe lists five hashed files including review-log; recreates
+   START / READ_ORDER / ERRATA / STATUS / this record with
+   FIRST_WP=SANDBOX-G0-DOCS and NATIVE_EXECUTION_AUTHORIZATION=NONE.
+   Hard wipe recopies the same five; recreates START first.
+   README wipe copies the five, then recreates START.
+   STATUS RESTART now: “Recreate START.txt before anything else. Next
+   agent reads START.txt first.”
+
+2. Naming: WP=SANDBOX-G0-DOCS not WP=G0. No “four source files”
+   OBSERVED FIXED on the fields B named:
+     G0-DECISION-RECORD L2 WP=SANDBOX-G0-DOCS
+     G0-DECISION-RECORD L41 First WP: SANDBOX-G0-DOCS
+     START / READ_ORDER / STATUS / WORKING-PLAN / README current WP
+       = SANDBOX-G0-DOCS
+   Grep “four source” / “stay on G0” / “WP=G0” / “CURRENT_WP=G0” /
+   “First WP: G0” under the sandbox excluding CRITIC-*.txt = no matches.
+   Those strings survive only in historical CRITIC-B (and this file
+   quoting it).
+
+3. Index not one hygiene+demo+sandbox commit
+   OBSERVED: START L63–64 admits split-before-commit. Sandbox is still
+   entirely untracked (`git ls-files` count = 0; 18 untracked files).
+   The index is still one hygiene+demo blob. See §9. Call-out, not the
+   primary miss, because START admits the split.
+
+4. Ignore cannot swallow official recapture names
+   OBSERVED FIXED. Worktree == index for .gitignore. Rule is now only
+     hh-3d/demo/evidence/stale-20260831/
+   git check-ignore this session:
+     overview-1280x720.png     COMMITABLE
+     play-walk.png             COMMITABLE
+     play-boat.png             COMMITABLE
+     play-chat.png             COMMITABLE
+     RUN-HONGIO-DEMO-20260903-01.md COMMITABLE
+     RUN-20260903-01.md        COMMITABLE
+     capture-running-app.mjs   COMMITABLE
+   Stale 20260831 dumps are on disk under evidence/stale-20260831/
+   (Test-Path each old official path = False). Folder is ignored.
+   Official names at the official path are no longer ignored.
+
+5. Unreal / packaged hello-world still NOT required
+   OBSERVED. START / STATUS / G0-DECISION-RECORD §6 still forbid it.
+   No .uproject. No hh-3d/app/. No hh-3d/unreal/.
+
+Parent did the named punch-list edits. The leftover is what they did
+not touch in the files START ranks as authority after itself.
+
+================================================================================
+2. ATTACK 1 — HASH EVERY COPIED FILE vs hh-3d/zdoc/
+================================================================================
+
+Algorithm: SHA-256 via Get-FileHash. Also fc /b on each pair.
+HEAD this session: c1a7b11769fbf4fd57c1e9da2e9748e2ece6c0ff
+(matches G0-DECISION-RECORD GIT_HEAD_AT_WRITE).
+
+FILE=31-8-hh3d-real-world-open-world-plan.txt
+  ORIG=8CDAAD43B46D459843F6FCA76116301EAD69455DBAFE5F2DF46D5B0F0B36A6C6
+  COPY=8CDAAD43B46D459843F6FCA76116301EAD69455DBAFE5F2DF46D5B0F0B36A6C6
+  RESULT=MATCH  fc=no differences
+
+FILE=31-8-hh3d-real-application-plan.txt
+  ORIG=3B3204C0FD0CEAEEC82BDCDBBD245090BB944074FC84897D467CD1EA586C7AC6
+  COPY=3B3204C0FD0CEAEEC82BDCDBBD245090BB944074FC84897D467CD1EA586C7AC6
+  RESULT=MATCH  fc=no differences
+
+FILE=01-9-hh3d-plan-audit-summary.txt
+  ORIG=2B7D278AEC12633F9D46806D3E880CB092F0676F99C4844D3FA238E2077CC0B5
+  COPY=2B7D278AEC12633F9D46806D3E880CB092F0676F99C4844D3FA238E2077CC0B5
+  RESULT=MATCH  fc=no differences
+
+FILE=01-9-hh3d-cheap-agent-handoff-prompt.txt
+  ORIG=DB2B17AC1322691815227DC3AAACE053DF3B0BFA594F8408BAAA8820F6E88B23
+  COPY=DB2B17AC1322691815227DC3AAACE053DF3B0BFA594F8408BAAA8820F6E88B23
+  RESULT=MATCH  fc=no differences
+
+FILE=review-log.txt
+  ORIG=62BA41FF2FD3A27D47135ADD019C6FB39EC470D59827A292037F6FFE3E644DF3
+  COPY=62BA41FF2FD3A27D47135ADD019C6FB39EC470D59827A292037F6FFE3E644DF3
+  RESULT=MATCH  fc=no differences
+
+FILE=31-8-hh3d-demo-webgl-plan.txt
+  ORIG=C08CA66367939CBC310C2B194049E55F7C0B0B81EE1EE54D532A2B1309220651
+  COPY=MISSING
+  RESULT=NOT_COPIED (correct; COPY-MANIFEST L45–48)
+
+COPY-MANIFEST SHA256 fields match the live hashes for all five copied
+files. START “COPIED SHA256” now lists all five, including cheap-agent
+DB2B17AC1322691815227DC3AAACE053DF3B0BFA594F8408BAAA8820F6E88B23.
+CRITIC-B’s incomplete START list is gone.
+
+Hash attack does not fail. Completeness on disk does not fail.
+
+================================================================================
+3. ATTACK 2 — LEFTOVER “four source” / “stay on G0”
+================================================================================
+
+Required: leftover “four source” / stay on G0 anywhere except historical
+critic files.
+
+OBSERVED: those exact phrases are gone from live sandbox files.
+Grep under hh-3d/hh3d-real-world-open-world excluding CRITIC-*.txt:
+  four source / stay on G0 / WP=G0 / CURRENT_WP=G0 / First WP: G0
+  = no matches.
+  “four” = no matches.
+
+The leftover is not those strings. It is the same collapse under a
+new wording. See §4.
+
+================================================================================
+4. THE MISS — COPY-MANIFEST + STATUS STILL NAME UNDIFFERENTIATED G0
+================================================================================
+
+START READ_ORDER item 4 is COPY-MANIFEST.txt (“hashes must match”).
+STATUS AUTHORITY item 2 is the copied open-world plan “for G0 content”.
+
+COPY-MANIFEST.txt L9–12 (live, not historical):
+
+  FILE=31-8-hh3d-real-world-open-world-plan.txt
+  WHY=Primary execution source for THIS sandbox. First native gate is G0.
+  ROLE=PRIMARY_PLAN_COPY
+
+That file’s own header (verbatim copy, must not rewrite):
+  DO_NOT_START_THIS_FILE_DIRECTLY=1
+  NATIVE_EXECUTION_AUTHORIZATION=NONE
+  STATUS=BACKGROUND_AUDIT_PAUSED
+  CURRENT_EXECUTION_PLAN=...demo-webgl-plan.txt (PAUSED)
+And §9 L497–500 still requires empty project + packaged hello-world.
+
+STATUS L16–18 (live):
+
+  AUTHORITY (this folder)
+    1. This STATUS file for sandbox routing only.
+    2. Copied 31-8-hh3d-real-world-open-world-plan.txt for G0 content.
+
+No “skip §9” / “G0-ENGINE forbidden” on that bullet. CRITIC-B Attack 3a
+named this exact seam as why TICK stayed no. Parent patched the
+restart pointer and the WP= header. They left this bullet and the
+manifest WHY line.
+
+NAIVE-AGENT PATH (INFERRED, same class as B’s skim path)
+  Follow START → COPY-MANIFEST → “Primary execution source” /
+  “First native gate is G0” → open the copied plan at G0 → §9
+  hello-world. START L26–28 already says §9 is G0-ENGINE and forbidden
+  IF the agent finishes START. COPY-MANIFEST is the next file START
+  names. It contradicts START. STATUS AUTHORITY item 1 elevates STATUS
+  for routing; item 2 then hands the agent “G0 content” without the
+  split.
+
+This is leftover G0-as-WP naming in the two live files that are not
+historical critics. “First native gate is G0” is WP=G0 by another
+name. “for G0 content” is the same collapse.
+
+WORKING-PLAN SOURCE_ID=G0 is a source-id map to the original plan
+section, with FORM_THIS_LUOT=DOCS_ONLY. Borderline. Not the miss.
+COPY-MANIFEST ROLE=PRIMARY_PLAN_COPY is the miss.
+
+================================================================================
+5. SAME-CLASS BACK DOOR — RESTART STILL DROPS COPY-MANIFEST
+================================================================================
+
+G0-DECISION-RECORD §7 soft wipe (OBSERVED):
+  Delete everything under the sandbox except the five hashed copies.
+  Recreate START, READ_ORDER, ERRATA, STATUS, and this record.
+
+COPY-MANIFEST.txt is sandbox-only. It is not one of the five hashed
+copies. Soft wipe deletes it. Recreate list does not include it.
+
+README wipe (OBSERVED):
+  Delete the whole folder. Recopy five files. Recreate START /
+  READ_ORDER / ERRATA / STATUS. No COPY-MANIFEST. No README recreate
+  of the hash ledger.
+
+Hard wipe (OBSERVED):
+  Same five + START / READ_ORDER / ERRATA / STATUS. No COPY-MANIFEST.
+
+START L16 and L49: hashes “must match COPY-MANIFEST.txt”.
+After the official restart, that file is gone. START’s own read-order
+item 4 is a missing file. The hash ledger that proves B5 is not
+self-describing under the recipe the folder publishes.
+
+CRITIC-B required restart cannot drop START or review-log. Parent
+added those two and stopped. The next file START depends on is now
+the drop. Same class of bug, one file later.
+
+Also deleted and not recreated: SANDBOX-WORKING-PLAN,
+G0-LICENSE-LEDGER.TEMPLATE, REFERENCE_NOT_EXECUTE marker, sandbox
+.gitignore, critic files. Those are leftover process holes. The
+material one is COPY-MANIFEST, because START names it as required.
+
+================================================================================
+6. ATTACK 3 — DOES START / STATUS STILL ALLOW UNREAL / .uproject?
+================================================================================
+
+If the next agent OBEYS START.txt in full:
+  FIRST_WP=SANDBOX-G0-DOCS
+  NATIVE_EXECUTION_AUTHORIZATION=NONE
+  G0_ENGINE=FORBIDDEN_UNTIL_WRITTEN_NATIVE_GRANT
+  FORBIDDEN includes Unreal, hh-3d/unreal/**, hh-3d/app/**
+  L26–28: packaged hello-world is G0-ENGINE, forbidden.
+  Answer: NO. START does not grant install.
+
+If the next agent OBEYS STATUS FORBIDDEN / NATIVE_* = NONE:
+  CURRENT_WP=SANDBOX-G0-DOCS
+  G0_ENGINE=FORBIDDEN
+  WHAT WAS NOT DONE: no .uproject / no engine.
+  Answer: NO.
+
+SEAM THAT STILL FEEDS §9 (OBSERVED) — why TICK stays no:
+  COPY-MANIFEST L10 + STATUS L18, see §4.
+  Sandbox .gitignore still ignores unreal/ and *.uproject
+  (hide-the-crime residual). This session: Test-Path hh-3d/unreal,
+  sandbox/unreal, sandbox/app = False. Get-ChildItem hh-3d for
+  *.uproject / UnrealEditor.exe = none.
+
+Cheap-agent copy header still CURRENT_OWNER_RESUME=0 / AUDIT_ONLY.
+STATUS L23–26 disclaims it. Safer freeze than an install. Residual
+dialect, not the miss.
+
+================================================================================
+7. ATTACK 4 — G0-DECISION-RECORD.txt
+================================================================================
+
+Fake PASS? NO.
+  L11 VERDICT=DOCS_WRITTEN_NOT_PASS
+  L10 OWNER_ACCEPT=UNFILLED
+  §6: hello-world NOT DONE / Forbidden; Cesium NOT DONE; legal TEMPLATE.
+  L261: “G0 is not PASS. Next agent does not start G1.”
+  STATUS L47: “No PASS claim.”
+
+Filled owner fields? NO. OWNER_CHOICE / OWNER_SIGN / LEGAL_PROFILE_OWNER
+/ NATIVE_ROUTE_OWNER / MONTHLY_CAP_USD / KILL_SWITCH_OWNER = UNFILLED.
+AUTHORIZE_UNREAL_INSTALL=NO AUTHORIZE_PAID_API=NO AUTHORIZE_G1=NO.
+
+Engine pin claimed without evidence? NO pin.
+  UNREAL_VERSION_PIN=UNFILLED
+  CESIUM_FOR_UNREAL_VERSION_PIN=UNFILLED
+  UNREAL_STATUS=CANDIDATE_NOT_DEFAULT_NOT_INSTALLED
+
+Secrets? NONE observed in this file or the sandbox-only docs.
+  No API key, token, cookie, or .env.
+  Host paths include C:\Users\truon\ — machine username, not a credential.
+  RUN_ID=HH3D-G0-20260903-ASIA-SAIGON-01 and
+  COMMAND_ID=cmd.hh3d-g0.decision-record.1 are minted paper identifiers.
+  Over-formal, not a PASS claim.
+
+§7 restart text is the patched B recipe. Header WP= is patched.
+Body still useful. The miss is not this file’s header anymore.
+
+================================================================================
+8. ATTACK 5 — REPO ROOT .gitignore + STALE MOVE
+================================================================================
+
+Staged hunk vs HEAD: +snake ignore, +testnewcodex/, +stale-20260831/
+folder only. Comment names overview-1280x720.png, play-walk.png,
+RUN-*.md as commitable. check-ignore agrees. See §1 item 4.
+
+STATUS L36–37 is now FALSE (OBSERVED):
+  “Narrowed staged repo .gitignore evidence rules to exact 2026-08-31
+   dumps so future official RUN-*.md / PNGs are not swallowed.”
+
+Disk ignore is a folder, not exact 2026-08-31 filename dumps.
+Exact-name ignores were the CRITIC-B leftover that swallowed
+recapture. STATUS still documents that rejected strategy as WHAT
+WAS DONE. A later agent who “restores STATUS as truth” will
+re-ignore overview-1280x720.png / play-walk.png.
+
+For a paper G0-DOCS closeout, STATUS is a deliverable. It lies
+about the ignore patch. Secondary to §4, still a docs defect.
+
+Official-path RUN-HONGIO-DEMO-20260831-01.md is now COMMITABLE
+(not ignored). Stale copies live only under the ignored folder.
+CRITIC-B said keep those RUN names ignored; parent override for
+this critic was move-to-folder + do not swallow official names.
+Folder approach matches the override. Not a swallow fail.
+
+================================================================================
+9. ATTACK 6 — INDEX / COMMIT ALL
+================================================================================
+
+OBSERVED `git status --short` / `git diff --cached --name-status`:
+
+  STAGED together (one `git commit` of the index):
+    Hygiene: .gitignore, snake deletes, drive_snake*.py deletes,
+             testnewcodex deletes, 20260831 evidence deletes
+    Owner-authorized demo: seed, App.tsx, play.ts, PlayerChatBubble,
+             app.css, HelpPanel, TouchPad
+
+  UNTRACKED:
+    hh-3d/hh3d-real-world-open-world/**  (entire WP, 18 files)
+
+  UNSTAGED (other track):
+    AGENTS.md
+    godot/dogfood/superfighters/* (docs/stage.md, app.gd, stage.gd,
+      title_screen.gd, stage_cases.gd)
+
+START L63–64: do not commit hygiene + demo + sandbox as one commit.
+Admission exists. Parent said that is enough to avoid TICK=no on
+this item. Call-out remains: IDE Commit All would scoop staged
+hygiene+demo PLUS untracked sandbox PLUS unstaged AGENTS.md and
+VF6-WP3 files. Do not treat the current index as a legal commit.
+
+COPY-MANIFEST SANDBOX-ONLY list still omits CRITIC-B. Inventory
+drift. LOW.
+
+================================================================================
+10. ATTACK 7 — HUD / HELP / PUNCH_COMBO_AFTER / ORIGINALS
+================================================================================
+
+PUNCH_COMBO_AFTER
+  Disk and INDEX play.ts L14–15:
+    /** UNUSED. Pose-only punch uses PUNCH_DURATION. No combo window. */
+    export const PUNCH_COMBO_AFTER = 0.3;
+  Call-sites in hh-3d/demo/src: definition only. Still unused.
+  CRITIC-B’s index-vs-disk gap on this comment is CLOSED
+  (`M ` staged; worktree clean).
+
+Help pose-only
+  Disk and INDEX HelpPanel.tsx L33:
+    “click trái hoặc F — đấm (chỉ pose, chưa trúng)”
+  Gap closed.
+
+HUD pose-only
+  Disk and INDEX App.tsx L404–410:
+    “click/F đấm (pose)” on both the pre-lock hint and the play HUD.
+  Gap closed.
+
+Residuals (not the punch-list fail):
+  authored-experience-seed.md L41: “F / locked LMB punch” — no pose /
+    unused caveat. Index matches disk.
+  TouchPad.tsx L148–154: button label “Đấm” / aria-label “Đấm” —
+    no pose-only. Parent required HUD/Help, not pad/seed.
+
+hh-3d/zdoc/ git status --short = empty. Originals not rewritten.
+Hashes match. fc /b clean.
+
+hh-3d/app/ does not exist.
+hh-3d/unreal/ does not exist.
+sandbox app/ and unreal/ do not exist.
+No .uproject in hh-3d.
+
+Do not demand revert of owner-asked chat/HUD. Punch-label check
+on the named surfaces PASSES.
+
+================================================================================
+11. ATTACK 8 — godot / VF DIRT
+================================================================================
+
+Sandbox tree does not contain VF edits.
+Concurrent unstaged VF + AGENTS.md is commit-poison if Commit All,
+not a G0-DOCS product mutation. Do not blend into an HH-3D commit.
+
+================================================================================
+12. TICK
+================================================================================
+
+TICK=no
+
+Material issues for SANDBOX-G0-DOCS closeout:
+  - COPY-MANIFEST L10 still “Primary execution source” /
+    “First native gate is G0” / ROLE=PRIMARY_PLAN_COPY
+  - STATUS AUTHORITY L18 still “for G0 content” with no skip-§9
+  - Official restart still deletes COPY-MANIFEST and does not
+    recreate it (START’s hash ledger)
+  - STATUS L36–37 still describes the rejected exact-name ignore
+
+Punch-list headlines 1–2 (restart START/review-log; WP= field;
+no “four source”) and 4–5 (ignore names; Unreal not required)
+are patched. Zero-issue bar not met.
+
+Do not tick any HH-3D original-plan checkbox.
+Do not require Unreal / packaged hello-world / Cesium sample.
+Do not treat CRITIC-A, CRITIC-B, or this file as implementer PASS.
+
+================================================================================
+13. WHAT THE PARENT COORDINATOR MUST FORCE NEXT
+================================================================================
+
+1. Patch sandbox-only routing text. Do NOT rewrite hh-3d/zdoc/
+   originals.
+   In COPY-MANIFEST.txt for the open-world file:
+     WHY must not say “Primary execution source” or
+     “First native gate is G0”.
+     ROLE must not be PRIMARY_PLAN_COPY.
+     State: BACKGROUND copy; first WP is SANDBOX-G0-DOCS;
+     plan §9 is G0-ENGINE and forbidden.
+   In 00-SANDBOX-STATUS.txt AUTHORITY item 2:
+     “Copied … for G0-DOCS context. Skip §9 engine / packaged
+     hello-world. G0-ENGINE remains FORBIDDEN.”
+   Fix STATUS L36–37 to the folder ignore that is actually on disk
+   (stale-20260831/; official names commitable). Mention CRITIC-B
+   in the COPY-MANIFEST sandbox-only list if that list is kept.
+
+2. Restart recipes (G0-DECISION-RECORD §7 and README wipe) must
+   recreate COPY-MANIFEST.txt with the five hashes, not only START.
+   Soft wipe must not delete the hash ledger without putting it
+   back. Keep the five-file recopy + START recreate. Do not
+   reintroduce “four source files” or WP=G0.
+
+3. Do not commit the current index as one commit. Split before
+   any commit:
+     A) hygiene only (.gitignore + snake/testnewcodex/20260831
+        untrack; stale folder stays ignored)
+     B) owner-authorized demo (already has UNUSED comment +
+        Help/HUD pose-only in the index)
+     C) sandbox folder as its own commit, after the routing-text
+        patch in item 1
+   Do not add AGENTS.md or godot/dogfood/superfighters/* to any
+   of those. IDE Commit All is still a trap.
+
+4. Do not install Unreal. Do not create .uproject. Do not
+   scaffold hh-3d/app/. Do not run Godot for this folder. Do not
+   execute plan §9 or archived §18. Do not tick G0 on the copied
+   original.
+
+5. Leave owner fields UNFILLED until the owner signs. Do not
+   mint a PASS on hardware inventory.
+
+6. Re-critic after 1–2. This TICK=no dies only if:
+     - COPY-MANIFEST / STATUS AUTHORITY cannot be read as
+       “first gate is G0 / do plan §9”
+     - restart recipes cannot drop START, review-log, OR
+       COPY-MANIFEST
+     - naming stays SANDBOX-G0-DOCS (no WP=G0, no “four source”)
+     - ignore still cannot swallow overview-1280x720.png,
+       play-walk.png, future RUN-20260903
+     - index is not one hygiene+demo+sandbox commit (START
+       admission still acceptable if they still have not committed)
+   Packaged hello-world stays NOT required.
+   TouchPad/seed unlabeled punch copy is residual, not this bar.

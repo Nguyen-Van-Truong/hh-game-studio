@@ -1,0 +1,422 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+BOOTED_4175=1
+DID_NOT_RECYCLE=1
+DID_NOT_REBUILD=1
+DID_NOT_REMINT=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M1=1
+NOT_M0_WP1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+CRITIC=INDEPENDENT_ADVERSARIAL_GUEST_BOARD_REAUDIT
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=12:20 +07
+MODEL=grok-4.6-extra-high
+SCOPE=Re-audit of claimed isolated guest-B chalkboard + E-open. Do not treat CRITIC-3D-GUEST-BOARD-2026-09-04.txt as TICK=yes.
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=04cb6ca92c482017c02d78e7885727f73b62103d
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-GUEST-BOARD-REAUDIT-2026-09-04.txt
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-GUEST-BOARD-2026-09-04.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+DID_NOT_TREAT_IMPLEMENTER_AS_TICK_YES=1
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+DID_NOT_UNFRIEND=1
+DID_NOT_ADD_FRIEND=1
+DID_NOT_ACCEPT_FRIEND=1
+DID_NOT_CLICK_ONLINE=1
+DID_NOT_CATALOG_CLEAR=1
+VITE_PREVIEW_PORT_PIN=4175
+LIVE_PID=68116
+LISTEN=127.0.0.1:4175
+CRITIC_CDP_PORTS=9981 (straight-north jam) / 9982 (west then north + crop + E)
+VIEWPORT=1280x720
+ISOLATED_PROFILES=1
+HEADLESS_NEW=1
+ABOUT_BLANK_THEN_NAVIGATE=1
+SEAT=b
+
+CLAIM_JS=/assets/index-D4Sc2h68.js
+CLAIM_JS_LEN=2162025
+CLAIM_JS_SHA256=76f9843d6e8cff47bc683e55bea928ac36797054d601a1e6f4ceec9ace4c64b2
+LIVE_JS=/assets/index-D4Sc2h68.js
+LIVE_JS_LEN=2162025
+LIVE_JS_SHA256=76f9843d6e8cff47bc683e55bea928ac36797054d601a1e6f4ceec9ace4c64b2
+LIVE_JS_MATCHES_CLAIM=1
+HASH_MISMATCH=0
+
+GUEST_IDENTITY=Guest · shops public; friends not required
+GUEST_SIGNED_IN=no
+PRESENCE=Offline — Stroll alone; shops still open.
+ONLINE_ACTIVE=no
+OFFLINE_ACTIVE=yes
+FRIEND_A_RELATION=none
+FRIEND_A_TEXT=Bạn A (máy này) — not friends / Add friend
+FRIEND_ROW_A_DOM=1
+FRIEND_ROW_A_ACCEPTED=0
+ACCEPT_FRIEND_A=0
+UNFRIEND_A=0
+ADD_FRIEND_A_VISIBLE=1
+DID_CLICK_ADD_FRIEND=0
+REMOTES_PEOPLE_LAYER=0
+REMOTES_PEOPLE_ROWS=0
+REMOTES_BODIES=0
+REMOTES_VISIBLE=0
+GRAPH_PAIRS_BUS=[]
+GRAPH_PAIRS_STORAGE=[]
+SECRET_FRIENDS=0
+STAYED_OFFLINE=1
+
+PLAYER_SHOP=shop-local-mtmh45qxehxhvb
+PLAYER_SHOP_NAME=Quầy Phở Nhà
+GUEST_WALK_NORTH_M=13.50
+GUEST_WALK_EAST_M=4.74
+GUEST_HEADING=15
+GUEST_NEARBY=shop-local-mtmh45qxehxhvb
+GUEST_RANGE=Quầy Phở Nhà: 7.9 m away
+GUEST_HINT=Press E or tap Open to enter Quầy Phở Nhà.
+GUEST_CROP_TEXT=Phở bò (mẫu) / mẫu · not a live market
+GUEST_CROP_BLANK=0
+GUEST_CROP_LANTERN_TEXT=0
+GUEST_CROP_HAS_PHO=1
+GUEST_CROP_HAS_BO=1
+GUEST_CROP_BOX=1093,237 200x85 (live overlay 1109,253 168x53 + pad)
+GUEST_CROP_SLATE=0.676
+GUEST_CROP_CHALK=0.050
+GUEST_E_OPENED=shop-local-mtmh45qxehxhvb
+GUEST_SHELF=Phở bò (listing-local-mtmh45qxhyu29f)
+GUEST_DRAFT_ON_SHELF=0
+
+SEAT_B_SPAWN_NORTH_M=0
+SEAT_B_SPAWN_EAST_M=7
+SEAT_B_SPAWN_HEADING=270
+SEAT_B_SPAWN_NEARBY=
+SEAT_B_SPAWN_E_PANEL=0
+SEAT_B_SPAWN_E_SHOP=
+LEFTOVER_E_STOLEN=0
+LEFTOVER_DRAWN=0
+LEFTOVER_SHAREDPC_KEEP_OUT=1
+LEFTOVER_J6_KEEP_OUT=1
+
+CLAIM_1_LIVE_HASH=PASS
+CLAIM_2_ISOLATED_GUEST_OFFLINE_NO_FRIENDS=PASS
+CLAIM_3_CROP_PHO_BO_NOT_LANTERN=PASS
+CLAIM_4_E_OPENS_PLAYER_SHOP=PASS
+CLAIM_5_LEFTOVER_E_NOT_STOLEN=PASS
+
+BIGGEST_MISS=None on the named hunts. Live hash matches D4Sc2h68 / 2162025 / 76f9843d… before and after CDP. Isolated empty-profile seat B stayed Guest / Offline / friendA=none / remotes=0. Player overlay crop at +13.50 m / +4.74 m east (7.9 m from Quầy Phở Nhà) reads Phở bò (mẫu) — not blank, not Cá/Túi. E opened shop-local-mtmh45qxehxhvb. Spawn Nearby empty; spawn E no-op; Shared PC / J6 stay persist-only. NOT_PLAN_PASS.
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/ was already up. Bind 127.0.0.1 pid 68116
+(node vite preview --host 127.0.0.1 --port 4175 --strictPort).
+Did not recycle, rebuild, remint, kill, or start 4173 / 4174 / 5175.
+Did not bind 0.0.0.0.
+
+Did not treat CRITIC-3D-GUEST-BOARD-2026-09-04.txt as TICK=yes
+(ROLE=IMPLEMENTER, TICK=n/a). Did not run
+j5-guest-board-probe.mjs as proof. Did not write J5 packs.
+Did not tick any plan. Did not catalog_clear. Did not POST
+graph_op unfriend / add / accept. Did not click Online.
+
+Independent Chrome CDP, isolated temp profiles, 1280×720,
+about:blank then ?seat=b. Tried to fail: hash drift; leftover
+this-PC A–B pair secretly friends (friend-row accepted /
+remotes>0); Offline flipped; crop is lantern Cá/Túi or a
+blank green slab; E opens shop-lantern-fish or Shared PC /
+J6; leftover shops own Nearby E at B spawn.
+
+Hash matches. A true isolated guest reads Phở bò and E-opens
+that shop without friends and without Online. Leftover spawn
+E is not stolen. This is NOT_PLAN_PASS. GATE-U1 humans were
+not invented. Not M1.
+
+================================================================================
+LIVE JS
+================================================================================
+
+HTML script = /assets/index-D4Sc2h68.js
+http length = 2162025
+sha256 = 76f9843d6e8cff47bc683e55bea928ac36797054d601a1e6f4ceec9ace4c64b2
+Matches the claimed live name + length + hash.
+GET before CDP (12:17 +07), GET after walk-2 CDP, and GET
+after this write (12:20 +07) are the same bytes from
+pid 68116. HASH_MISMATCH=0. Did not stop.
+
+Bundle scan (live bytes, not source):
+  openstreetmap = 0
+  overture = 2   (honesty copy "not OSM/Overture", not a fetch)
+  0.0.0.0 = 0
+  shop-lantern-fish = 1
+  mtmh45qxehxhvb = 0   (this-PC shop id is persist, not bundled)
+  not a live market = 3
+  chalkboard-menu = 1
+
+/demo-bus this_pc=true bind=127.0.0.1 not_wan=true.
+graph.pairs=[] (empty). presence={}.
+Catalog leftover persist (not reminted, not cleared):
+  shop-local-sharedpc          Quầy Shared PC     0.0 m N / 0 m E
+  shop-local-mtl8ulddihjpre    Quay Critic J6 Jump 0.0 m N / 12 m E
+  shop-local-mtmh45qxehxhvb    Quầy Phở Nhà       19.8 m N / 0 m E
+Listings: Shared PC Phở bò; J6 Sach phe binh J6;
+player listing-local-mtmh45qxhyu29f Phở bò.
+
+================================================================================
+CLAIM 1 — LIVE HASH IS THE CLAIMED BUNDLE — PASS
+================================================================================
+
+Tried to fail as a later/earlier bundle or SPA-shell fallback
+on the claimed name.
+
+  live = /assets/index-D4Sc2h68.js
+  len  = 2162025
+  sha  = 76f9843d6e8cff47bc683e55bea928ac36797054d601a1e6f4ceec9ace4c64b2
+
+Same name + length + hash before CDP and after both CDP
+sessions from pid 68116. HASH_MISMATCH=0.
+
+PASS.
+
+================================================================================
+CLAIM 2 — ISOLATED GUEST B STAYS OFFLINE / NOT FRIENDS — PASS
+================================================================================
+
+Tried to fail: empty-profile seat B is secretly friends
+(friend-row accepted / remotes>0), or Online, or signed-in.
+
+Isolated Chrome user-data-dir. about:blank (origin storage
+denied on blank). Then navigate http://127.0.0.1:4175/?seat=b.
+Did not launch seat A. Did not click Add friend / Accept /
+Unfriend / Online. Did not POST graph_op.
+
+Spawn / walk / after E (both CDP sessions):
+  identity = Guest · shops public; friends not required
+  data-signed-in = no
+  presence = Offline — Stroll alone; shops still open.
+  online-btn data-active = no
+  friend-row-a data-relation = none
+  friend-row-a text = "Bạn A (máy này) — not friends" + Add friend
+  accept-friend-a = absent
+  unfriend-a = absent
+  people-layer data-remote-count = 0
+  people-rows data-count = 0
+  play-remote-bodies data-count = 0
+  remote-avatar-* = none
+  localStorage hh-world.demo-friends.v1 pairs = []
+  /demo-bus graph.pairs = []
+
+friend-row-a exists in the FriendsBar seat list. That is not
+an accepted pair. Add friend remaining visible is the opposite
+of a leaked accept. remotes stayed 0. SECRET_FRIENDS=0.
+
+Implementer note says a prior CDP POSTed graph_op unfriend
+for leftover A–B. This reaudit did not repeat that mutation.
+The live bus was already empty. Guest B did not inherit a
+friend.
+
+PASS.
+
+================================================================================
+CLAIM 3 — WALK-UP CROP READS PHỞ BÒ, NOT LANTERN / BLANK — PASS
+================================================================================
+
+Tried to fail: chalkboard is a blank green slab, or the
+painted face is lantern Cá/Túi, and the only “proof” is a
+hidden DOM title. Prefer TICK=no if blank or lantern text.
+
+First independent walk (port 9981): turn north from B spawn
+(+7 m east, heading 270) then chunked W. North jammed at
++7.94 m / +5.66 m east (east sidewalk vs building). Nearby
+stayed empty. That path is a jam, not a crop accept.
+
+Second walk (port 9982): hold W west on B’s spawn heading
+to +1.01 m east, turn north, chunked W (not their 1300/1500/
+1700/1400/1600/1200/1100/700). Stopped at +13.50 m north /
++4.74 m east, heading 15. Nearby=shop-local-mtmh45qxehxhvb.
+Range=Quầy Phở Nhà: 7.9 m away. Shot BEFORE E.
+
+Live player overlay box 1109,253 168×53.
+Critic crop 1093,237 200×85 (pad 16).
+slateRatio=0.676 chalkRatio=0.050.
+
+Visual read of critic-guest2-overlay-crop.png (pixels, not
+data-titles):
+  dark-green chalkboard, thin brown frame, wooden post
+  chalk line: Phở bò (mẫu)
+  footer: mẫu · not a live market
+
+Phở / bò are readable. Diacritics visible. This is not a
+blank green slab. This is not Cá / Túi / nục / cói on the
+player overlay. DOM count alone was not used.
+
+Same frame also shows a second, higher lantern overlay
+(box 1113,199 102×59, titles Cá nục sương | Túi cói chợ).
+That distant board is a second overlay, not the player crop.
+Accept crop is shop-local-mtmh45qxehxhvb.
+
+GUEST_CROP_BLANK=0
+GUEST_CROP_LANTERN_TEXT=0
+
+PASS.
+
+================================================================================
+CLAIM 4 — E OPENS shop-local-mtmh45qxehxhvb — PASS
+================================================================================
+
+Tried to fail: E opens shop-lantern-fish, Shared PC, or J6,
+or opens nothing because Nearby is a distant overlay only.
+
+After the player crop, held E:
+  panel=true
+  shopPanelId=shop-local-mtmh45qxehxhvb
+  shelf = listing-local-mtmh45qxhyu29f  Phở bò
+  draft on shelf = 0
+  not shop-lantern-fish
+  not shop-local-sharedpc / mtl8ulddihjpre
+  identity still Guest / signed-in=no
+  presence still Offline
+  friendA still none
+  remotes still 0
+  after-E panel copy: "Guest on this machine. Browse does
+  not need friends or an account."
+
+Hint before E: "Press E or tap Open to enter Quầy Phở Nhà."
+
+PASS.
+
+================================================================================
+CLAIM 5 — SHARED PC / J6 DO NOT OWN NEARBY E AT B SPAWN — PASS
+================================================================================
+
+Tried to fail: leftover this-PC shop owns Nearby / E at
+isolated B spawn (B is 7 m east of Harbor; J6 is ~12 m east;
+NEARBY=10 m).
+
+Seat B spawn:
+  nearbyShop=""
+  stallHint="E opens a stall when you are next to it."
+  shopRange="Quầy Cá Đèn Lồng: 29 m away"
+  after E: panel=false  shopPanelId=""
+  LEFTOVER_E_STOLEN=0
+
+Persist-only leftover rows (draw=0 keep-out=1):
+  shop-local-sharedpc          titles=Phở bò (mẫu)
+  shop-local-mtl8ulddihjpre    titles=Sach phe binh J6 (mẫu)
+leftoverDrawn=[]
+
+They still exist on /demo-bus. They still do not own street E
+on this path. Shared PC also sells Phở bò — that persist
+title is not the drawn walk-up board and is not spawn E.
+
+West walk from spawn toward Harbor (east 7 → 1.01) also kept
+nearby="". Keep-out held while crossing the leftover cone.
+
+PASS.
+
+================================================================================
+HUNTS (not named fails)
+================================================================================
+
+Straight north from B’s +7 m east sidewalk jams at +7.94 m.
+West onto Harbor, then north, is required to reach the
+player kiosk. This does not void the guest-board claim. It
+is why walk-1 Nearby stayed empty and E no-op’d. Walk-2 is
+the accept path.
+
+At the east-side approach two chalkboard overlays share the
+frame: near Phở bò, far Cá/Túi. The accept crop is the
+player overlay (shop-local-mtmh45qxehxhvb), not the far
+lantern plaque. Hidden [data-testid=play-stall-boards]
+titles were recorded but were not the accept path.
+
+Range at accept was 7.9 m (NEARBY=10). Face-on 3 m south
+walk-up is the seat-A player-board pose, not required here.
+Pixels still read Phở bò.
+
+friend-row-a is always in the FriendsBar seat list. The
+named fail is secretly friends (accepted / remotes>0), not
+the existence of the row. Relation stayed none.
+
+Honesty banner on spawn / walk / after E:
+  Authored approximation. Not a live map, not OSM/Overture,
+  not photogrammetry, and not a digital twin. Menu boards
+  list authored fiction goods, not a live market.
+  NOT_PLAN_PASS.
+
+Board footer (read from crop):
+  "mẫu · not a live market"
+
+LIVE_INVENTORY_CLAIM=0. Local demo identity only. No OIDC.
+This is this-PC 4175 /demo-bus catalog, not a city shop
+server, not WAN.
+
+4175 vite preview argv has no --host 0.0.0.0. Listen is
+127.0.0.1:4175. netstat foreign 0.0.0.0:0 on a LISTENING
+row is not a bind.
+
+================================================================================
+METHOD
+================================================================================
+
+1. 4175 already up (pid 68116). Did not recycle / rebuild /
+   start other ports.
+2. GET /  /demo-bus  /data/shops.json  /assets/index-D4Sc2h68.js.
+   Recorded name+sha+len before CDP, after walk-2, and after
+   this write.
+3. Read implementer note (TICK=n/a). Did not copy its probe
+   writer into product files. Did not run
+   j5-guest-board-probe.mjs as proof. Did not POST unfriend.
+4. Independent Chrome CDP 1280×720 isolated profiles.
+   Port 9981: about:blank → ?seat=b, leftover E at spawn,
+   straight-north jam. Port 9982: leftover E at spawn, west
+   then north (not their chunks), player overlay crop BEFORE
+   E, E.
+5. Did not write lead packs. Did not tick plan. Did not fake
+   GATE-U1.
+
+Temp only (not under data-qa):
+  %TEMP%\hh-guest-board-reaudit\hash-bus.mjs
+  %TEMP%\hh-guest-board-reaudit\hash-bus.json
+  %TEMP%\hh-guest-board-reaudit\critic-guest-board.mjs
+  %TEMP%\hh-guest-board-reaudit\critic-guest-board-2.mjs
+  %TEMP%\hh-guest-board-reaudit\critic-walk.json
+  %TEMP%\hh-guest-board-reaudit\critic-walk2.json
+  %TEMP%\hh-guest-board-reaudit\critic-guest-before-e.png
+  %TEMP%\hh-guest-board-reaudit\critic-guest-overlay-crop.png
+  %TEMP%\hh-guest-board-reaudit\critic-guest2-before-e.png
+  %TEMP%\hh-guest-board-reaudit\critic-guest2-overlay-crop.png
+  %TEMP%\hh-guest-board-reaudit\critic-guest2-after-e.png
+
+================================================================================
+STILL IMPOSSIBLE WITHOUT OWNER
+================================================================================
+
+- GATE-U1 three human reviewers (not faked)
+- AUTHORIZE_MAP_FETCH=YES + license ledger before any OSM/Overture
+- Other-PC / WAN join (store is this PC 4175 loopback)
+- Real account / OIDC
+
+================================================================================
+END
+================================================================================

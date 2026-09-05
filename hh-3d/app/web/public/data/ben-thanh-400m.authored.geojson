@@ -1,0 +1,3414 @@
+{
+  "type": "FeatureCollection",
+  "name": "hh-world-ben-thanh-400m-authored",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "EPSG:4326"
+    }
+  },
+  "bbox": [
+    106.6961711,
+    10.7707034,
+    106.6998289,
+    10.7742966
+  ],
+  "hh_world": {
+    "display_name": "HH World",
+    "aoi_label": "Bến Thành vicinity, Ho Chi Minh City",
+    "center": [
+      106.698,
+      10.7725
+    ],
+    "extent_m": [
+      400,
+      400
+    ],
+    "authored_or_source": "authored",
+    "honesty": "Authored approximation. Not OSM. Not a live map. Not 1:1."
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "aoi-boundary",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6961711,
+              10.7707034
+            ],
+            [
+              106.6998289,
+              10.7707034
+            ],
+            [
+              106.6998289,
+              10.7742966
+            ],
+            [
+              106.6961711,
+              10.7742966
+            ],
+            [
+              106.6961711,
+              10.7707034
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "aoi-boundary",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "aoi",
+        "name": "Bến Thành vicinity (authored frame)",
+        "display_name": "Authored 400 m frame"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "park-clock-garden",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.697177,
+              10.7728593
+            ],
+            [
+              106.6979086,
+              10.7728593
+            ],
+            [
+              106.6979086,
+              10.7740271
+            ],
+            [
+              106.697177,
+              10.7740271
+            ],
+            [
+              106.697177,
+              10.7728593
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "park-clock-garden",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "park",
+        "name": "Clock Garden",
+        "display_name": "Clock Garden",
+        "height_m": null,
+        "height_confidence": "unknown"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-market-hall",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6981897,
+              10.7726437
+            ],
+            [
+              106.6982899,
+              10.7726437
+            ],
+            [
+              106.6982899,
+              10.7727848
+            ],
+            [
+              106.6981646,
+              10.7727848
+            ],
+            [
+              106.6981646,
+              10.7726683
+            ],
+            [
+              106.6981897,
+              10.7726437
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-market-hall",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "Market Hall",
+        "display_name": "Market Hall",
+        "height_m": 16,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-hall-01",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6983457,
+              10.7726437
+            ],
+            [
+              106.6984572,
+              10.7726437
+            ],
+            [
+              106.6984434,
+              10.7727848
+            ],
+            [
+              106.6983319,
+              10.7727848
+            ],
+            [
+              106.6983457,
+              10.7726437
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-hall-01",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "Market Hall 2",
+        "display_name": "Market Hall 2",
+        "height_m": 12,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-hall-10",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6981897,
+              10.7728261
+            ],
+            [
+              106.6982899,
+              10.7728261
+            ],
+            [
+              106.6982899,
+              10.7729671
+            ],
+            [
+              106.6981646,
+              10.7729671
+            ],
+            [
+              106.6981646,
+              10.7728507
+            ],
+            [
+              106.6981897,
+              10.7728261
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-hall-10",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "Market Hall 3",
+        "display_name": "Market Hall 3",
+        "height_m": 15,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-hall-11",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6983457,
+              10.7728261
+            ],
+            [
+              106.6984572,
+              10.7728261
+            ],
+            [
+              106.6984434,
+              10.7729671
+            ],
+            [
+              106.6983319,
+              10.7729671
+            ],
+            [
+              106.6983457,
+              10.7728261
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-hall-11",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "Market Hall 4",
+        "display_name": "Market Hall 4",
+        "height_m": 12,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-hall-w-00",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6976126,
+              10.7726437
+            ],
+            [
+              106.6977092,
+              10.7726437
+            ],
+            [
+              106.6977092,
+              10.7727848
+            ],
+            [
+              106.6975885,
+              10.7727848
+            ],
+            [
+              106.6975885,
+              10.7726674
+            ],
+            [
+              106.6976126,
+              10.7726437
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-hall-w-00",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "Hall West 1",
+        "display_name": "Hall West 1",
+        "height_m": 13,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-hall-w-01",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6977646,
+              10.7726437
+            ],
+            [
+              106.697872,
+              10.7726437
+            ],
+            [
+              106.6978587,
+              10.7727848
+            ],
+            [
+              106.6977513,
+              10.7727848
+            ],
+            [
+              106.6977646,
+              10.7726437
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-hall-w-01",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "Hall West 2",
+        "display_name": "Hall West 2",
+        "height_m": 10,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-hall-w-10",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6976126,
+              10.7728261
+            ],
+            [
+              106.6977092,
+              10.7728261
+            ],
+            [
+              106.6977092,
+              10.7729671
+            ],
+            [
+              106.6975885,
+              10.7729671
+            ],
+            [
+              106.6975885,
+              10.7728498
+            ],
+            [
+              106.6976126,
+              10.7728261
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-hall-w-10",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "Hall West 3",
+        "display_name": "Hall West 3",
+        "height_m": 13,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-hall-w-11",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6977646,
+              10.7728261
+            ],
+            [
+              106.697872,
+              10.7728261
+            ],
+            [
+              106.6978587,
+              10.7729671
+            ],
+            [
+              106.6977513,
+              10.7729671
+            ],
+            [
+              106.6977646,
+              10.7728261
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-hall-w-11",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "Hall West 4",
+        "display_name": "Hall West 4",
+        "height_m": 10,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-hall-se-00",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6981811,
+              10.7722754
+            ],
+            [
+              106.6982899,
+              10.7722754
+            ],
+            [
+              106.6982899,
+              10.7723563
+            ],
+            [
+              106.6981646,
+              10.7723563
+            ],
+            [
+              106.6981646,
+              10.7722916
+            ],
+            [
+              106.6981811,
+              10.7722754
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-hall-se-00",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "Hall South 1",
+        "display_name": "Hall South 1",
+        "height_m": 11,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-hall-se-01",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.698341,
+              10.7722754
+            ],
+            [
+              106.6984572,
+              10.7722754
+            ],
+            [
+              106.6984482,
+              10.7723563
+            ],
+            [
+              106.6983319,
+              10.7723563
+            ],
+            [
+              106.698341,
+              10.7722754
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-hall-se-01",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "Hall South 2",
+        "display_name": "Hall South 2",
+        "height_m": 10,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-hall-sw-00",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.697605,
+              10.7722754
+            ],
+            [
+              106.6977092,
+              10.7722754
+            ],
+            [
+              106.6977092,
+              10.7723563
+            ],
+            [
+              106.6975885,
+              10.7723563
+            ],
+            [
+              106.6975885,
+              10.7722916
+            ],
+            [
+              106.697605,
+              10.7722754
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-hall-sw-00",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "Hall Court 1",
+        "display_name": "Hall Court 1",
+        "height_m": 11,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-hall-sw-01",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6977603,
+              10.7722754
+            ],
+            [
+              106.697872,
+              10.7722754
+            ],
+            [
+              106.6978629,
+              10.7723563
+            ],
+            [
+              106.6977513,
+              10.7723563
+            ],
+            [
+              106.6977603,
+              10.7722754
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-hall-sw-01",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "Hall Court 2",
+        "display_name": "Hall Court 2",
+        "height_m": 11,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-west-block",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6964724,
+              10.7720508
+            ],
+            [
+              106.696646,
+              10.7720508
+            ],
+            [
+              106.696646,
+              10.7721829
+            ],
+            [
+              106.6964455,
+              10.7721829
+            ],
+            [
+              106.6964455,
+              10.7720773
+            ],
+            [
+              106.6964724,
+              10.7720508
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-west-block",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "West Block",
+        "display_name": "West Block",
+        "height_m": 14,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-west-01",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6967029,
+              10.7720508
+            ],
+            [
+              106.6968887,
+              10.7720508
+            ],
+            [
+              106.6968739,
+              10.7721829
+            ],
+            [
+              106.6966881,
+              10.7721829
+            ],
+            [
+              106.6967029,
+              10.7720508
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-west-01",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "West Block 2",
+        "display_name": "West Block 2",
+        "height_m": 13,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-west-02",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6969307,
+              10.7720508
+            ],
+            [
+              106.6971313,
+              10.7720508
+            ],
+            [
+              106.6971313,
+              10.7721565
+            ],
+            [
+              106.6971044,
+              10.7721829
+            ],
+            [
+              106.6969307,
+              10.7721829
+            ],
+            [
+              106.6969307,
+              10.7720508
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-west-02",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "West Block 3",
+        "display_name": "West Block 3",
+        "height_m": 12,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-west-10",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6964603,
+              10.7722242
+            ],
+            [
+              106.696646,
+              10.7722242
+            ],
+            [
+              106.6966313,
+              10.7723563
+            ],
+            [
+              106.6964455,
+              10.7723563
+            ],
+            [
+              106.6964603,
+              10.7722242
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-west-10",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "West Block 4",
+        "display_name": "West Block 4",
+        "height_m": 14,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-west-11",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6966881,
+              10.7722242
+            ],
+            [
+              106.6968887,
+              10.7722242
+            ],
+            [
+              106.6968887,
+              10.7723299
+            ],
+            [
+              106.6968618,
+              10.7723563
+            ],
+            [
+              106.6966881,
+              10.7723563
+            ],
+            [
+              106.6966881,
+              10.7722242
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-west-11",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "West Block 5",
+        "display_name": "West Block 5",
+        "height_m": 13,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-west-12",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6969576,
+              10.7722242
+            ],
+            [
+              106.6971313,
+              10.7722242
+            ],
+            [
+              106.6971313,
+              10.7723563
+            ],
+            [
+              106.6969307,
+              10.7723563
+            ],
+            [
+              106.6969307,
+              10.7722506
+            ],
+            [
+              106.6969576,
+              10.7722242
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-west-12",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "West Block 6",
+        "display_name": "West Block 6",
+        "height_m": 12,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-west-n-00",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6964839,
+              10.7726437
+            ],
+            [
+              106.696646,
+              10.7726437
+            ],
+            [
+              106.696646,
+              10.7729042
+            ],
+            [
+              106.6964455,
+              10.7729042
+            ],
+            [
+              106.6964455,
+              10.7726815
+            ],
+            [
+              106.6964839,
+              10.7726437
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-west-n-00",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "West Loft 1",
+        "display_name": "West Loft 1",
+        "height_m": 15,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-west-n-01",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6967092,
+              10.7726437
+            ],
+            [
+              106.6968887,
+              10.7726437
+            ],
+            [
+              106.6968675,
+              10.7729042
+            ],
+            [
+              106.6966881,
+              10.7729042
+            ],
+            [
+              106.6967092,
+              10.7726437
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-west-n-01",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "West Loft 2",
+        "display_name": "West Loft 2",
+        "height_m": 15,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-west-n-02",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6969307,
+              10.7726437
+            ],
+            [
+              106.6971313,
+              10.7726437
+            ],
+            [
+              106.6971313,
+              10.7728665
+            ],
+            [
+              106.6970929,
+              10.7729042
+            ],
+            [
+              106.6969307,
+              10.7729042
+            ],
+            [
+              106.6969307,
+              10.7726437
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-west-n-02",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "West Loft 3",
+        "display_name": "West Loft 3",
+        "height_m": 15,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-east-arcade",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6989071,
+              10.7716915
+            ],
+            [
+              106.6990693,
+              10.7716915
+            ],
+            [
+              106.6990693,
+              10.7718856
+            ],
+            [
+              106.6988687,
+              10.7718856
+            ],
+            [
+              106.6988687,
+              10.7717292
+            ],
+            [
+              106.6989071,
+              10.7716915
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-east-arcade",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "East Arcade",
+        "display_name": "East Arcade",
+        "height_m": 12,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-east-01",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6991325,
+              10.7716915
+            ],
+            [
+              106.6993119,
+              10.7716915
+            ],
+            [
+              106.6992908,
+              10.7718856
+            ],
+            [
+              106.6991113,
+              10.7718856
+            ],
+            [
+              106.6991325,
+              10.7716915
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-east-01",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "East Arcade 2",
+        "display_name": "East Arcade 2",
+        "height_m": 10,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-east-02",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.699354,
+              10.7716915
+            ],
+            [
+              106.6995545,
+              10.7716915
+            ],
+            [
+              106.6995545,
+              10.7718478
+            ],
+            [
+              106.6995161,
+              10.7718856
+            ],
+            [
+              106.699354,
+              10.7718856
+            ],
+            [
+              106.699354,
+              10.7716915
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-east-02",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "East Arcade 3",
+        "display_name": "East Arcade 3",
+        "height_m": 14,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-east-10",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6988898,
+              10.7719269
+            ],
+            [
+              106.6990693,
+              10.7719269
+            ],
+            [
+              106.6990481,
+              10.7721209
+            ],
+            [
+              106.6988687,
+              10.7721209
+            ],
+            [
+              106.6988898,
+              10.7719269
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-east-10",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "East Arcade 4",
+        "display_name": "East Arcade 4",
+        "height_m": 10,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-east-11",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6991113,
+              10.7719269
+            ],
+            [
+              106.6993119,
+              10.7719269
+            ],
+            [
+              106.6993119,
+              10.7720832
+            ],
+            [
+              106.6992735,
+              10.7721209
+            ],
+            [
+              106.6991113,
+              10.7721209
+            ],
+            [
+              106.6991113,
+              10.7719269
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-east-11",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "East Arcade 5",
+        "display_name": "East Arcade 5",
+        "height_m": 14,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-east-12",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6993924,
+              10.7719269
+            ],
+            [
+              106.6995545,
+              10.7719269
+            ],
+            [
+              106.6995545,
+              10.7721209
+            ],
+            [
+              106.699354,
+              10.7721209
+            ],
+            [
+              106.699354,
+              10.7719646
+            ],
+            [
+              106.6993924,
+              10.7719269
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-east-12",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "East Arcade 6",
+        "display_name": "East Arcade 6",
+        "height_m": 12,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-east-20",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6988687,
+              10.7721622
+            ],
+            [
+              106.6990693,
+              10.7721622
+            ],
+            [
+              106.6990693,
+              10.7723185
+            ],
+            [
+              106.6990309,
+              10.7723563
+            ],
+            [
+              106.6988687,
+              10.7723563
+            ],
+            [
+              106.6988687,
+              10.7721622
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-east-20",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "East Arcade 7",
+        "display_name": "East Arcade 7",
+        "height_m": 14,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-east-21",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6991497,
+              10.7721622
+            ],
+            [
+              106.6993119,
+              10.7721622
+            ],
+            [
+              106.6993119,
+              10.7723563
+            ],
+            [
+              106.6991113,
+              10.7723563
+            ],
+            [
+              106.6991113,
+              10.7722
+            ],
+            [
+              106.6991497,
+              10.7721622
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-east-21",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "East Arcade 8",
+        "display_name": "East Arcade 8",
+        "height_m": 12,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-east-22",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6993751,
+              10.7721622
+            ],
+            [
+              106.6995545,
+              10.7721622
+            ],
+            [
+              106.6995334,
+              10.7723563
+            ],
+            [
+              106.699354,
+              10.7723563
+            ],
+            [
+              106.6993751,
+              10.7721622
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-east-22",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "East Arcade 9",
+        "display_name": "East Arcade 9",
+        "height_m": 10,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-east-n-00",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6988852,
+              10.7726437
+            ],
+            [
+              106.6990693,
+              10.7726437
+            ],
+            [
+              106.6990693,
+              10.7727246
+            ],
+            [
+              106.6988687,
+              10.7727246
+            ],
+            [
+              106.6988687,
+              10.7726599
+            ],
+            [
+              106.6988852,
+              10.7726437
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-east-n-00",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "Arcade North 1",
+        "display_name": "Arcade North 1",
+        "height_m": 11,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-east-n-01",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6991204,
+              10.7726437
+            ],
+            [
+              106.6993119,
+              10.7726437
+            ],
+            [
+              106.6993028,
+              10.7727246
+            ],
+            [
+              106.6991113,
+              10.7727246
+            ],
+            [
+              106.6991204,
+              10.7726437
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-east-n-01",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "Arcade North 2",
+        "display_name": "Arcade North 2",
+        "height_m": 11,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-east-n-02",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.699354,
+              10.7726437
+            ],
+            [
+              106.6995545,
+              10.7726437
+            ],
+            [
+              106.6995545,
+              10.7727084
+            ],
+            [
+              106.6995381,
+              10.7727246
+            ],
+            [
+              106.699354,
+              10.7727246
+            ],
+            [
+              106.699354,
+              10.7726437
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-east-n-02",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "Arcade North 3",
+        "display_name": "Arcade North 3",
+        "height_m": 11,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-north-stall",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6982395,
+              10.7731468
+            ],
+            [
+              106.6983926,
+              10.7731468
+            ],
+            [
+              106.6983926,
+              10.7733468
+            ],
+            [
+              106.6982012,
+              10.7733468
+            ],
+            [
+              106.6982012,
+              10.7731844
+            ],
+            [
+              106.6982395,
+              10.7731468
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-north-stall",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "North Stall Row",
+        "display_name": "North Stall Row",
+        "height_m": 10,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-north-01",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6984557,
+              10.7731468
+            ],
+            [
+              106.6986261,
+              10.7731468
+            ],
+            [
+              106.698605,
+              10.7733468
+            ],
+            [
+              106.6984347,
+              10.7733468
+            ],
+            [
+              106.6984557,
+              10.7731468
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-north-01",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "North Stall Row 2",
+        "display_name": "North Stall Row 2",
+        "height_m": 10,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-north-02",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6986681,
+              10.7731468
+            ],
+            [
+              106.6988596,
+              10.7731468
+            ],
+            [
+              106.6988596,
+              10.7733092
+            ],
+            [
+              106.6988213,
+              10.7733468
+            ],
+            [
+              106.6986681,
+              10.7733468
+            ],
+            [
+              106.6986681,
+              10.7731468
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-north-02",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "North Stall Row 3",
+        "display_name": "North Stall Row 3",
+        "height_m": 10,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-north-10",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6982222,
+              10.7733881
+            ],
+            [
+              106.6983926,
+              10.7733881
+            ],
+            [
+              106.6983715,
+              10.7735882
+            ],
+            [
+              106.6982012,
+              10.7735882
+            ],
+            [
+              106.6982222,
+              10.7733881
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-north-10",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "North Stall Row 4",
+        "display_name": "North Stall Row 4",
+        "height_m": 8,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-north-11",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6984347,
+              10.7733881
+            ],
+            [
+              106.6986261,
+              10.7733881
+            ],
+            [
+              106.6986261,
+              10.7735505
+            ],
+            [
+              106.6985878,
+              10.7735882
+            ],
+            [
+              106.6984347,
+              10.7735882
+            ],
+            [
+              106.6984347,
+              10.7733881
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-north-11",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "North Stall Row 5",
+        "display_name": "North Stall Row 5",
+        "height_m": 8,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-north-12",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6987064,
+              10.7733881
+            ],
+            [
+              106.6988596,
+              10.7733881
+            ],
+            [
+              106.6988596,
+              10.7735882
+            ],
+            [
+              106.6986681,
+              10.7735882
+            ],
+            [
+              106.6986681,
+              10.7734257
+            ],
+            [
+              106.6987064,
+              10.7733881
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-north-12",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "North Stall Row 6",
+        "display_name": "North Stall Row 6",
+        "height_m": 8,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-north-20",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6982012,
+              10.7736295
+            ],
+            [
+              106.6983926,
+              10.7736295
+            ],
+            [
+              106.6983926,
+              10.7737919
+            ],
+            [
+              106.6983543,
+              10.7738295
+            ],
+            [
+              106.6982012,
+              10.7738295
+            ],
+            [
+              106.6982012,
+              10.7736295
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-north-20",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "North Stall Row 7",
+        "display_name": "North Stall Row 7",
+        "height_m": 10,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-north-21",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6984729,
+              10.7736295
+            ],
+            [
+              106.6986261,
+              10.7736295
+            ],
+            [
+              106.6986261,
+              10.7738295
+            ],
+            [
+              106.6984347,
+              10.7738295
+            ],
+            [
+              106.6984347,
+              10.7736671
+            ],
+            [
+              106.6984729,
+              10.7736295
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-north-21",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "North Stall Row 8",
+        "display_name": "North Stall Row 8",
+        "height_m": 10,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-north-22",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6986892,
+              10.7736295
+            ],
+            [
+              106.6988596,
+              10.7736295
+            ],
+            [
+              106.6988385,
+              10.7738295
+            ],
+            [
+              106.6986681,
+              10.7738295
+            ],
+            [
+              106.6986892,
+              10.7736295
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-north-22",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "North Stall Row 9",
+        "display_name": "North Stall Row 9",
+        "height_m": 10,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-south-shed",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6977152,
+              10.770928
+            ],
+            [
+              106.697872,
+              10.770928
+            ],
+            [
+              106.697872,
+              10.771101
+            ],
+            [
+              106.69768,
+              10.771101
+            ],
+            [
+              106.69768,
+              10.7709626
+            ],
+            [
+              106.6977152,
+              10.770928
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-south-shed",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "South Shed",
+        "display_name": "South Shed",
+        "height_m": 6,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-south-10",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.69768,
+              10.7711424
+            ],
+            [
+              106.697872,
+              10.7711424
+            ],
+            [
+              106.697872,
+              10.7712808
+            ],
+            [
+              106.6978367,
+              10.7713154
+            ],
+            [
+              106.69768,
+              10.7713154
+            ],
+            [
+              106.69768,
+              10.7711424
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-south-10",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "South Shed 2",
+        "display_name": "South Shed 2",
+        "height_m": 7,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-south-20",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6976993,
+              10.7713567
+            ],
+            [
+              106.697872,
+              10.7713567
+            ],
+            [
+              106.6978526,
+              10.7715298
+            ],
+            [
+              106.69768,
+              10.7715298
+            ],
+            [
+              106.6976993,
+              10.7713567
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-south-20",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "South Shed 3",
+        "display_name": "South Shed 3",
+        "height_m": 8,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-south-e-00",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6981815,
+              10.770928
+            ],
+            [
+              106.6983658,
+              10.770928
+            ],
+            [
+              106.6983658,
+              10.771101
+            ],
+            [
+              106.6981463,
+              10.771101
+            ],
+            [
+              106.6981463,
+              10.7709626
+            ],
+            [
+              106.6981815,
+              10.770928
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-south-e-00",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "South Annex 1",
+        "display_name": "South Annex 1",
+        "height_m": 6,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-south-e-10",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6981463,
+              10.7711424
+            ],
+            [
+              106.6983658,
+              10.7711424
+            ],
+            [
+              106.6983658,
+              10.7712808
+            ],
+            [
+              106.6983305,
+              10.7713154
+            ],
+            [
+              106.6981463,
+              10.7713154
+            ],
+            [
+              106.6981463,
+              10.7711424
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-south-e-10",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "South Annex 2",
+        "display_name": "South Annex 2",
+        "height_m": 7,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-south-e-20",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6981657,
+              10.7713567
+            ],
+            [
+              106.6983658,
+              10.7713567
+            ],
+            [
+              106.6983464,
+              10.7715298
+            ],
+            [
+              106.6981463,
+              10.7715298
+            ],
+            [
+              106.6981657,
+              10.7713567
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-south-e-20",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "South Annex 3",
+        "display_name": "South Annex 3",
+        "height_m": 8,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-steps-w-00",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.697588,
+              10.7716017
+            ],
+            [
+              106.6976955,
+              10.7716017
+            ],
+            [
+              106.6976955,
+              10.7717837
+            ],
+            [
+              106.6975611,
+              10.7717837
+            ],
+            [
+              106.6975611,
+              10.7716281
+            ],
+            [
+              106.697588,
+              10.7716017
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-steps-w-00",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "Steps West 1",
+        "display_name": "Steps West 1",
+        "height_m": 11,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-steps-w-01",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6977523,
+              10.7716017
+            ],
+            [
+              106.697872,
+              10.7716017
+            ],
+            [
+              106.6978572,
+              10.7717837
+            ],
+            [
+              106.6977376,
+              10.7717837
+            ],
+            [
+              106.6977523,
+              10.7716017
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-steps-w-01",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "Steps West 2",
+        "display_name": "Steps West 2",
+        "height_m": 9,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-steps-w-10",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.697588,
+              10.7718251
+            ],
+            [
+              106.6976955,
+              10.7718251
+            ],
+            [
+              106.6976955,
+              10.7720071
+            ],
+            [
+              106.6975611,
+              10.7720071
+            ],
+            [
+              106.6975611,
+              10.7718515
+            ],
+            [
+              106.697588,
+              10.7718251
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-steps-w-10",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "Steps West 3",
+        "display_name": "Steps West 3",
+        "height_m": 12,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-steps-w-11",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6977523,
+              10.7718251
+            ],
+            [
+              106.697872,
+              10.7718251
+            ],
+            [
+              106.6978572,
+              10.7720071
+            ],
+            [
+              106.6977376,
+              10.7720071
+            ],
+            [
+              106.6977523,
+              10.7718251
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-steps-w-11",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "Steps West 4",
+        "display_name": "Steps West 4",
+        "height_m": 10,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-steps-w-20",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.697588,
+              10.7720484
+            ],
+            [
+              106.6976955,
+              10.7720484
+            ],
+            [
+              106.6976955,
+              10.7722305
+            ],
+            [
+              106.6975611,
+              10.7722305
+            ],
+            [
+              106.6975611,
+              10.7720749
+            ],
+            [
+              106.697588,
+              10.7720484
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-steps-w-20",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "Steps West 5",
+        "display_name": "Steps West 5",
+        "height_m": 13,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-steps-w-21",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6977523,
+              10.7720484
+            ],
+            [
+              106.697872,
+              10.7720484
+            ],
+            [
+              106.6978572,
+              10.7722305
+            ],
+            [
+              106.6977376,
+              10.7722305
+            ],
+            [
+              106.6977523,
+              10.7720484
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-steps-w-21",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "Steps West 6",
+        "display_name": "Steps West 6",
+        "height_m": 11,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-steps-e-00",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.698175,
+              10.7716017
+            ],
+            [
+              106.6982899,
+              10.7716017
+            ],
+            [
+              106.6982899,
+              10.7717837
+            ],
+            [
+              106.6981463,
+              10.7717837
+            ],
+            [
+              106.6981463,
+              10.7716299
+            ],
+            [
+              106.698175,
+              10.7716017
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-steps-e-00",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "Steps East 1",
+        "display_name": "Steps East 1",
+        "height_m": 11,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-steps-e-01",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6983477,
+              10.7716017
+            ],
+            [
+              106.6984755,
+              10.7716017
+            ],
+            [
+              106.6984597,
+              10.7717837
+            ],
+            [
+              106.6983319,
+              10.7717837
+            ],
+            [
+              106.6983477,
+              10.7716017
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-steps-e-01",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "Steps East 2",
+        "display_name": "Steps East 2",
+        "height_m": 9,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-steps-e-10",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.698175,
+              10.7718251
+            ],
+            [
+              106.6982899,
+              10.7718251
+            ],
+            [
+              106.6982899,
+              10.7720071
+            ],
+            [
+              106.6981463,
+              10.7720071
+            ],
+            [
+              106.6981463,
+              10.7718533
+            ],
+            [
+              106.698175,
+              10.7718251
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-steps-e-10",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "Steps East 3",
+        "display_name": "Steps East 3",
+        "height_m": 12,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-steps-e-11",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6983477,
+              10.7718251
+            ],
+            [
+              106.6984755,
+              10.7718251
+            ],
+            [
+              106.6984597,
+              10.7720071
+            ],
+            [
+              106.6983319,
+              10.7720071
+            ],
+            [
+              106.6983477,
+              10.7718251
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-steps-e-11",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "Steps East 4",
+        "display_name": "Steps East 4",
+        "height_m": 10,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-steps-e-20",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.698175,
+              10.7720484
+            ],
+            [
+              106.6982899,
+              10.7720484
+            ],
+            [
+              106.6982899,
+              10.7722305
+            ],
+            [
+              106.6981463,
+              10.7722305
+            ],
+            [
+              106.6981463,
+              10.7720767
+            ],
+            [
+              106.698175,
+              10.7720484
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-steps-e-20",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "Steps East 5",
+        "display_name": "Steps East 5",
+        "height_m": 13,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bldg-steps-e-21",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              106.6983477,
+              10.7720484
+            ],
+            [
+              106.6984755,
+              10.7720484
+            ],
+            [
+              106.6984597,
+              10.7722305
+            ],
+            [
+              106.6983319,
+              10.7722305
+            ],
+            [
+              106.6983477,
+              10.7720484
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "bldg-steps-e-21",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "building",
+        "name": "Steps East 6",
+        "display_name": "Steps East 6",
+        "height_m": 11,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "street-tram-approach",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            106.6962626,
+            10.7724551
+          ],
+          [
+            106.6976342,
+            10.7725
+          ],
+          [
+            106.6983658,
+            10.7725
+          ],
+          [
+            106.6997374,
+            10.7725719
+          ]
+        ]
+      },
+      "properties": {
+        "id": "street-tram-approach",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "street",
+        "name": "Tram Approach",
+        "display_name": "Tram Approach"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "street-harbor-walk",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            106.6980549,
+            10.7707932
+          ],
+          [
+            106.6980366,
+            10.7721407
+          ],
+          [
+            106.698,
+            10.7728593
+          ],
+          [
+            106.6979268,
+            10.7742068
+          ]
+        ]
+      },
+      "properties": {
+        "id": "street-harbor-walk",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "street",
+        "name": "Harbor Walk",
+        "display_name": "Harbor Walk"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "place-market-hall",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.6980183,
+          10.7726258
+        ]
+      },
+      "properties": {
+        "id": "place-market-hall",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "place",
+        "name": "Market Hall",
+        "display_name": "Market Hall",
+        "summary": "Authored stand-in near the Bến Thành vicinity center. Not the real market footprint.",
+        "height_m": 16,
+        "height_confidence": "estimated"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "place-clock-garden",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.6975428,
+          10.7734432
+        ]
+      },
+      "properties": {
+        "id": "place-clock-garden",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "place",
+        "name": "Clock Garden",
+        "display_name": "Clock Garden",
+        "summary": "Authored park block north of the hall. Shape is invented for the local proof.",
+        "height_m": null,
+        "height_confidence": "unknown"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "place-market-steps",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.6980366,
+          10.7718712
+        ]
+      },
+      "properties": {
+        "id": "place-market-steps",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "place",
+        "name": "Market Steps",
+        "display_name": "Market Steps",
+        "summary": "Authored gathering point south of the hall. Not a surveyed entrance.",
+        "height_m": null,
+        "height_confidence": "unknown"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "place-roundabout-green",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.6980183,
+          10.772518
+        ]
+      },
+      "properties": {
+        "id": "place-roundabout-green",
+        "source_released_at": "2026-09-03T00:00:00+07:00",
+        "acquired_at": "2026-09-03T00:00:00+07:00",
+        "generated_at": "2026-09-03T13:50:00+07:00",
+        "published_at": "2026-09-03T13:50:00+07:00",
+        "fresh_until": "2026-12-03T00:00:00+07:00",
+        "stale_after": "2027-03-03T00:00:00+07:00",
+        "accuracy_class": "authored",
+        "geometry_confidence": "low",
+        "authored_or_source": "authored",
+        "honesty": "authored approximation; not a live survey; not 1:1",
+        "kind": "place",
+        "name": "Roundabout Green",
+        "display_name": "Roundabout Green",
+        "summary": "Authored crossing of Tram Approach and Harbor Walk.",
+        "height_m": null,
+        "height_confidence": "unknown"
+      }
+    }
+  ]
+}

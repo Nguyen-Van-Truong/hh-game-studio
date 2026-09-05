@@ -1,0 +1,301 @@
+TICK=yes
+BIGGEST_MISS=None on the named hunts. Live BrVc4bRj / 2175994 / c73e28b6ae16f3009d9af4908a1a05acd2acbbd0f2b350c47884fbe80c8c9df4 matched before and after CDP on the same LISTEN pid 30572. Seat A heading 0 KeyA/ArrowLeft/pad ◀ all INCREASE lon (east) with heading frozen — opposite Three.js camera-right (west) = screen-left. Seat B heading 292 KeyA: heading 292→292, lon +0.0000057 east / lat +0.0000138 north = opposite that behind-cam right (west+south) = screen-left. Mouse-left heading 0.0→19.6 and 292→311.6. Pitch-up onCanvas=1, camLookY 1.98 / 1.92, tunic visible not sky. FPS chip “N FPS · NOT_60” data-claim=NOT_R2_WP1.
+HASH_MATCH=1
+DID_NOT_RECYCLE=1
+LIVE_JS=/assets/index-BrVc4bRj.js
+LIVE_JS_LEN=2175994
+LIVE_JS_SHA256=c73e28b6ae16f3009d9af4908a1a05acd2acbbd0f2b350c47884fbe80c8c9df4
+LIVE_PID=30572
+CDP_PORTS=10054 / 10056 (primary A/B); retries 10058 / 10060 / 10062 / 10064
+
+HUNT1_HASH=PASS
+HUNT2_KEYA_SCREEN_LEFT=PASS
+HUNT3_MOUSE_LEFT=PASS
+HUNT4_PITCH_UP=PASS
+HUNT5_FPS_CHIP=PASS
+HUNT6_HONESTY=PASS
+
+SEAT_A_HEADING_BEFORE_A=0.0
+SEAT_A_HEADING_AFTER_A=0.0
+SEAT_A_DLON_A=+0.0000070
+SEAT_A_LON_BEFORE_A=106.6980400
+SEAT_A_LON_AFTER_A=106.6980470
+SEAT_A_ARROW_HEADING_BEFORE=0.0
+SEAT_A_ARROW_HEADING_AFTER=0.0
+SEAT_A_ARROW_DLON=+0.0000082
+SEAT_A_PAD_DLON=+0.0000093
+SEAT_B_HEADING_BEFORE_A=292
+SEAT_B_HEADING_AFTER_A=292
+SEAT_B_DLON_A=+0.0000057
+SEAT_B_DLAT_A=+0.0000138
+SEAT_B_LON_BEFORE_A=106.6981040
+SEAT_B_LON_AFTER_A=106.6981097
+SEAT_A_HEADING_BEFORE_MOUSE=0.0
+SEAT_A_HEADING_AFTER_MOUSE=19.6
+SEAT_A_DHEADING_MOUSE=+19.6
+SEAT_B_HEADING_BEFORE_MOUSE=292
+SEAT_B_HEADING_AFTER_MOUSE=311.6
+SEAT_B_DHEADING_MOUSE=+19.6
+SEAT_A_ONCANVAS_PITCH=1
+SEAT_A_CAMLOOKY_PITCH=1.98
+SEAT_B_ONCANVAS_PITCH=1
+SEAT_B_CAMLOOKY_PITCH=1.92
+FPS_TEXT_A=5 FPS · NOT_60
+FPS_CLAIM_A=NOT_R2_WP1
+FPS_TEXT_B=6 FPS · NOT_60
+FPS_CLAIM_B=NOT_R2_WP1
+HUD_CONNECTION=Máy này · 4175
+
+ROLE=CRITIC
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-05
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=06:39 +07
+PLAYER_URL=http://127.0.0.1:4175/
+LISTEN=127.0.0.1:4175
+LIVE_PID_STARTTIME=2026-09-05 06:29:31 +07
+LIVE_PID_AFTER_CDP=30572
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-LOOK-PITCH-FPS-REAUDIT-2026-09-05.txt
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-LOOK-PITCH-FPS-2026-09-05.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+DID_NOT_TREAT_IMPLEMENTER_AS_ACCEPTANCE=1
+SUPERSEDED_LOOK_STRAFE_ON=CoTKbFff
+DID_NOT_TREAT_COTKBFFF_STRAFE_TICK_AS_A_SCREEN=1
+DID_NOT_RUN_IMPLEMENTER_PROBES_AS_PROOF=1
+DID_NOT_COPY_IMPLEMENTER_JSON=1
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_SECOND_PREVIEW=1
+DID_NOT_RECYCLE_4175=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+DID_NOT_USE_RESERVED_CDP_10014_10036=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_R2_WP1=1
+NOT_60=1
+NOT_WAN=1
+VIEWPORT=1280x720
+HEADLESS_NEW=1
+ISOLATED_PROFILES=1
+MOUSE_HUNT=right-drag-left
+POINTER_LOCK=0
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+Tried to FAIL every hunt on the live claimed remint. Did not trust
+implementer CRITIC-3D-LOOK-PITCH-FPS-2026-09-05.txt (ROLE=IMPLEMENTER,
+TICK=n/a). Did not treat the superseded CoTKbFff LOOK_STRAFE critic
+as the A-screen rule (that pack used lon-west = screen-left; owner
+visual + Three.js camera-right at heading 0 is WEST, so A must go
+EAST). Own CDP only.
+
+URL=http://127.0.0.1:4175/ already up. Bind 127.0.0.1 pid 30572
+(node, vite preview --host 127.0.0.1 --port 4175 --strictPort,
+StartTime 2026-09-05 06:29:31 +07). Same pid after every seat.
+Did not recycle, kill, rebuild, or start 4173 / 4174 / 5175.
+Did not catalog_clear. Did not tick any plan. GATE-U1 humans
+were not invented.
+
+Primary seats: Chrome headless=new 1280×720, isolated temp
+profiles, CDP 10054 (?seat=a) and 10056 (?seat=b). Retries on
+10058 / 10060 / 10062 / 10064 after first ArrowLeft and first
+short Seat-B KeyA looked dead (focus / 5 FPS rAF). Those ports
+were free before and after. 10014–10036 were not used. 10030
+was already Listen on another pid and was left alone.
+
+================================================================================
+HUNT 1 — HASH / PID — PASS
+================================================================================
+
+Tried to fail a swapped bundle vs BrVc4bRj / 2175994 /
+c73e28b6ae16f3009d9af4908a1a05acd2acbbd0f2b350c47884fbe80c8c9df4,
+or a recycled preview pid.
+
+GET / then GET /assets/index-BrVc4bRj.js as raw bytes before CDP
+and after the last retry Chrome exited.
+
+BEFORE:
+  HTML script = /assets/index-BrVc4bRj.js
+  http file length = 2175994
+  sha256 = c73e28b6ae16f3009d9af4908a1a05acd2acbbd0f2b350c47884fbe80c8c9df4
+
+AFTER:
+  HTML script = /assets/index-BrVc4bRj.js
+  http file length = 2175994
+  sha256 = c73e28b6ae16f3009d9af4908a1a05acd2acbbd0f2b350c47884fbe80c8c9df4
+
+LIVE_CSS=/assets/index-DkV8APlZ.css
+
+Pid still 30572 StartTime 2026-09-05 06:29:31 +07. Command still
+vite preview --host 127.0.0.1 --port 4175 --strictPort.
+4173 / 4174 / 5175 still not listening. HASH_MATCH=1.
+DID_NOT_RECYCLE=1. PASS.
+
+================================================================================
+HUNT 2 — KEY A / PAD ◀ / ARROWLEFT = SCREEN-LEFT — PASS
+================================================================================
+
+Tried to fail the CoTKbFff owner miss: A decreases lon (west) at
+heading 0 = along camera-right = screen-RIGHT. Also tried to fail
+heading turn, and Seat B A-as-turn / wrong-side.
+
+Three.js lookAt from behind heading 0: camera at south+side,
+_z = pos−target, right = up×_z ≈ (−1, 0, 0) = WEST. Opposite
+camera-right = EAST = +lon. Owner visual over lon-west story.
+
+Seat A ?seat=a CDP 10054, menu closed, look=off, no pointer-lock.
+KeyA held ~900 ms (keyDown + rawKeyDown, then keyUp).
+
+  self-avatar / play-proof before A:
+    headingSelf=0 headingProof=0.0 lon=106.6980400 lat=10.7716200
+    onCanvas=1 turning=0 look=off camYaw=0.0
+  after KeyA:
+    headingSelf=0 headingProof=0.0 lon=106.6980470 lat=10.7716200
+    onCanvas=1 turning=0 look=off camYaw=0.0
+
+  dHeading A = 0.0 (frozen). dLon = +0.0000070 (east).
+  If A had decreased lon, TICK=no. It increased. PASS for KeyA.
+
+ArrowLeft first pass on the same seat after KeyA recorded dLon=0
+(canvas not focused; Chrome ate the arrow). Independent retry
+CDP 10058, canvas focused, fresh spawn:
+
+  heading 0.0 → 0.0
+  lon 106.6980400 → 106.6980482
+  dLon = +0.0000082 east. Same screen-left as KeyA.
+
+key:"Left" (wrong DOM name) on 10062 did not move — product
+listens for event.key toLowerCase "arrowleft", not a fail.
+
+Pad ◀ (aria-label="Move left", text ◀) on seat A after KeyA:
+  heading 0.0 → 0.0
+  lon 106.6980470 → 106.6980563
+  dLon = +0.0000093 east. PASS.
+
+Seat B heading 292, first 900 ms KeyA on 10056: dLon=0 dLat=0
+heading 292→292. Tried to call that a miss. Headless rAF was
+5 FPS; mid-hold on a later 1800 ms KeyA (port 10064) still
+showed idle, then after the full hold:
+
+  headingSelf 292 → 292  headingProof 292 → 292  (frozen, not turn)
+  lon 106.6981040 → 106.6981097  dLon = +0.0000057
+  lat 10.7716200 → 10.7716338  dLat = +0.0000138
+  pose after = walk  blocked=0  turning=0  onCanvas=1
+
+Behind-cam at heading 292 (first B snap): cam (15.92, −101.52)
+look (10.09, −97.44). Camera-right ≈ west+south. A moved
+east+north = opposite that right = screen-left. PASS.
+
+HUD during A (seat A): A/D strafe, not A/D turn.
+LOOK_MODE_DURING_A=off.
+
+================================================================================
+HUNT 3 — MOUSE LOOK LEFT — PASS
+================================================================================
+
+Tried to fail heading decrease (LOOK_YAW_SIGN=+1). Required
+right-drag left: movementX negative / dx negative. No
+pointer-lock. Did not flip yaw back to +1.
+
+Seat A (after pad, still heading 0.0): canvas right-drag
+x 632 → 492 (dx = −140), y 312.5, button=right, buttons=2.
+
+  play-proof heading 0.0 → 19.6
+  self-avatar heading 0 → 20
+  cam-yaw 0.0 → 19.6
+  dHeading = +19.6
+
+Seat B: heading 292 → 311.6  self 292 → 312  dHeading = +19.6
+
+Heading INCREASED on both seats. The rejected +1 path
+(0 → 343-ish) did not reproduce. PASS.
+
+================================================================================
+HUNT 4 — PITCH UP, TUNIC STAYS — PASS
+================================================================================
+
+Tried to fail sky yeet: camLookY > 6 or onCanvas≠1 or
+screenshot sky-only / no tunic.
+
+Same seats, large mouse-up look (dy = −240, right-drag).
+
+Seat A after pitch:
+  onCanvas=1  camPitch=28  camY=0.92  camLookY=1.98
+  lookYSky=(1.98>6)=0
+  screenshot a-pitch-up.png: teal tunic + black head on
+  asphalt, street ahead, not sky-only.
+
+Seat B after pitch:
+  onCanvas=1  camPitch=25.6  camY=1.13  camLookY=1.92
+  screenshot b-pitch-up.png: yellow tunic visible, not sky.
+
+Chest band ~1–3 held. Pitch-down not required. PASS.
+
+================================================================================
+HUNT 5 — FPS CHIP — PASS
+================================================================================
+
+Tried to fail missing/empty chip or a 60 / R2-WP1 PASS claim.
+
+[data-testid=play-fps] present on-street both seats.
+  Seat A: text="5 FPS · NOT_60"  data-claim=NOT_R2_WP1  data-fps=5
+  Seat B: text="6 FPS · NOT_60"  data-claim=NOT_R2_WP1  data-fps=6
+  Later A frames also 4 / 3 FPS · NOT_60.
+  play-proof data-fps-claim=NOT_R2_WP1
+  Visible in screenshots (top-right chip).
+
+Headless rAF is low. That is honest. Does not claim 60 FPS.
+Does not claim R2-WP1 PASS. Empty/missing chip did not
+reproduce. PASS.
+
+================================================================================
+HUNT 6 — NO CATALOG_CLEAR / HONESTY — PASS
+================================================================================
+
+Tried to fail catalog_clear, vanished leftovers, walk-pace
+rewrite, 20-friend / WAN copy.
+
+Did not POST catalog_clear. GET /demo-bus after CDP (read only):
+  kind=local-demo-bus this_pc=true bind=127.0.0.1 not_wan=true
+  persist=catalog+graph
+  leftover catalog count = 5
+  Shared PC, J6 Jump, Phở Nhà, Chè Vỉa, Kem Reaudit still present.
+  graph pairs = one accepted a↔b. Not 20. Not WAN.
+
+HUD connection textContent = Máy này · 4175
+data-connection=on
+Friends chrome copy: two browsers on THIS machine, not a city
+presence server, not WAN.
+
+Source grep (walk.ts): WALK_SPEED_MPS = 2.55
+SPRINT_SPEED_MPS = 4.35
+
+Live bytes:
+  2.55 = 3  (pair var w=2.55,T=4.35)
+  4.35 = 2
+  catalog_clear = 0
+  Máy này · 4175 = 2
+  20 live city friends = 0
+
+PASS. Does not invent GATE-U1 or plan PASS.
+
+================================================================================
+NOT CLAIMED
+================================================================================
+
+NOT_PLAN_PASS. NOT_R2_WP1. NOT_60. GATE-U1 three-human review
+was not invented. No OSM fetch. No 4173 / 4174 / 5175. No
+0.0.0.0 bind. No recycle of 4175. Implementer notes are not
+acceptance. CoTKbFff LOOK_STRAFE TICK is superseded for A
+screen direction.

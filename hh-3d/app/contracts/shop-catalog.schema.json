@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "hh-world-shop-catalog/v0",
+  "title": "HH World authored shop catalog",
+  "type": "object",
+  "required": ["schema", "shops", "listings", "honesty"],
+  "properties": {
+    "schema": { "const": "hh-world-shop-catalog/v0" },
+    "world_id": { "type": "string" },
+    "authored_or_source": { "const": "authored" },
+    "shops": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "shop_id",
+          "owner_id",
+          "name",
+          "place_id",
+          "lon",
+          "lat",
+          "status",
+          "owner_presence"
+        ],
+        "properties": {
+          "shop_id": { "type": "string", "pattern": "^shop-[a-z0-9-]+$" },
+          "status": { "enum": ["draft", "published", "hidden", "closed"] },
+          "owner_presence": { "enum": ["offline", "online"] }
+        }
+      }
+    },
+    "listings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["listing_id", "shop_id", "title", "kind", "status"],
+        "properties": {
+          "listing_id": { "type": "string", "pattern": "^listing-[a-z0-9-]+$" },
+          "kind": { "enum": ["fish", "bag", "other"] },
+          "status": {
+            "enum": ["draft", "published", "sold_out", "hidden", "deleted"]
+          }
+        }
+      }
+    }
+  }
+}

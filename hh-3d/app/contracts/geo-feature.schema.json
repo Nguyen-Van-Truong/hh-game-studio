@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "hh-world-geo-feature/v0",
+  "title": "HH World GeoFeature",
+  "type": "object",
+  "required": ["type", "id", "geometry", "properties"],
+  "properties": {
+    "type": { "const": "Feature" },
+    "properties": {
+      "type": "object",
+      "required": [
+        "id",
+        "kind",
+        "name",
+        "authored_or_source",
+        "accuracy_class",
+        "acquired_at"
+      ]
+    }
+  }
+}

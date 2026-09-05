@@ -1,0 +1,509 @@
+CRITIC-A — INDEPENDENT ADVERSARIAL REVIEW
+Date: 2026-09-03
+Timezone: Asia/Saigon
+Critic role: read-only except this file
+Did not: implement product, commit, run Godot, install Unreal, start preview, rewrite execution plans
+
+Review A = previous agent (Hòn Gió + git hygiene), staged/uncommitted
+Review B = “what is actually next” across HH-3D plans + owner isolated-folder ask
+Review C = sandbox hh-3d/hh3d-real-world-open-world/ as of this audit instant
+
+Taxonomy: OBSERVED = read from disk/git this session. INFERRED = source-logical, no runtime. UNPROVEN = would need browser/Godot/owner intent.
+
+================================================================================
+1. VERDICT — PREVIOUS AGENT
+================================================================================
+
+REWORK
+
+Untrack-from-index-only is the one thing they got right. Everything else is
+either unauthorized demo mutation on a REVOKED plan, a gitignore that will
+eat official evidence, leftover fake combat, or a staged blob that must not
+be one commit.
+
+Not BLOCKED: they did not wipe the files from disk, did not commit, did not
+install Unreal, did not touch Godot in the staged set.
+
+Not PASS: a “hygiene” agent shipped Play combat/chat polish the demo plan
+explicitly excludes, left PUNCH_COMBO_AFTER unused, and wrote ignore rules
+that hide the next official RUN package.
+
+================================================================================
+2. VERDICT — “NEXT PLAN” / FIRST LEGAL WP
+================================================================================
+
+FIRST LEGAL WP (honor plan ladder AND the new owner message):
+
+  SANDBOX-G0-DOCS — documentation isolation only.
+
+  Exact meaning:
+  - Create/keep hh-3d/hh3d-real-world-open-world/ as a working set.
+  - Copy related zdocs into .../zdoc/ (verbatim, with source hash).
+  - Write START/READ_ORDER that says NATIVE_EXECUTION_AUTHORIZATION=NONE
+    still, and CURRENT_WP is a paper G0 decision record (§16 questions),
+    NOT Unreal install, NOT hh-3d/unreal/, NOT G1 fetch, NOT hh-3d/app/.
+  - Do not rewrite hh-3d/zdoc/ originals.
+  - Do not execute archived §18 brief (“chỉ thực hiện G0/G1”).
+
+If the owner actually wanted product execution of “the next HH-3D plan”
+rather than an isolated open-world sandbox, the first execution WP is
+real-application R0-WP0 (decision record only; FIRST_WP_AFTER_RESUME),
+NOT open-world G0-as-written, NOT demo D0-*, NOT Unreal.
+
+AGENTS.md (2026-09-03) does not mention HH-3D at all. Official product
+route in that file is still Vault Fighters VF6-WP3. Isolated HH-3D folder
+is a parallel owner ask. It is not a license to start G1 or to pause VF.
+
+COUNTER-ARGUMENT (R0-WP0 is the real “next”):
+  1. 01-9-hh3d-plan-audit-summary.txt §2 priority: real-application > demo
+     > open-world. Open-world “chỉ để quyết định có cần native sau web MVP”.
+  2. Open-world header: DO_NOT_START_THIS_FILE_DIRECTLY=1,
+     NATIVE_EXECUTION_AUTHORIZATION=NONE,
+     NATIVE_DEPENDENCY=web MVP benchmark + separate owner decision.
+  3. Open-world §18: archived G0/G1 brief is SUPERSEDED; “không thực hiện
+     G0/G1 từ file background này”.
+  4. Real-app header: FIRST_WP_AFTER_RESUME=R0-WP0,
+     PRODUCT_TYPE=WEB_FIRST_REAL_APPLICATION,
+     NATIVE_ENGINE_ROLE=OPTIONAL_UNREAL_CLIENT.
+  5. Audit §8 recommended resume: R0-WP0, MapLibre-local 400 m, Unreal only
+     after web MVP benchmark.
+  6. Folder name matching the open-world filename is a naming trap, not a
+     gate. Owner said “các plan tiếp theo” (plural) + copy zdocs. That is
+     isolation/docs, not “download UE”.
+
+G0-as-written is internally hostile to the header. §9 G0 pass criteria
+require “tạo được project rỗng và chạy packaged hello-world” and optional
+Cesium sample. Header + §8 + §16 + §18 forbid creating the Unreal project
+and downloading engine until owner pins versions/budget/legal. An agent
+who “does G0 properly” from §9 will FAIL the header. Coordinator must
+split G0 into G0-DOCS (allowed) vs G0-ENGINE (forbidden until a written
+NATIVE_EXECUTION_AUTHORIZATION).
+
+Starting Unreal / downloading the engine is a FAIL even inside the
+sandbox. Isolation does not grant native authorization. Sandbox is still
+this repo.
+
+THREE WAYS THE IMPLEMENTER WILL SCREW THIS UP
+  1. Read §9 G0 pass criteria, install/download Unreal, scaffold
+     hh-3d/unreal/HHWorld.uproject or the same tree under the sandbox.
+     Header L14–15, L44–46, §8 L431–432, §18 L921–923 all forbid it.
+  2. Copy only 31-8-hh3d-real-world-open-world-plan.txt, treat
+     CURRENT_EXECUTION_PLAN=...demo-webgl-plan.txt (PAUSED) as “next”,
+     or treat P3 `R4-WP1 → R4-WP0A` as the next WP. Wrong file, wrong
+     era, known errata.
+  3. Scaffold hh-3d/app/ (real-app R0-WP1), polish hh-3d/demo/ further,
+     or rewrite originals in hh-3d/zdoc/. Empty sandbox + critic file
+     is already useless for restart; a rewritten original is worse.
+
+================================================================================
+3. FINDINGS
+================================================================================
+
+----- REVIEW A — GIT HYGIENE -----
+
+A1. SEVERITY: LOW / CREDIT
+    LABEL: OBSERVED
+    Untrack was --cached, not disk delete.
+    git status shows D in the index for snake, testnewcodex zips, evidence
+    PNG/RUN/probe. Test-Path on every staged-delete path this session =
+    present on disk (zero MISSING ON DISK).
+    Paths still on disk include:
+      godot/plugin-project/snake/snake.tscn
+      godot/plugin-project/snake/snake_game.gd
+      tools/godot/drive_snake.py (+ polish/reload/show)
+      testnewcodex/codex-wm-tool.zip
+      testnewcodex/sub2api-v0.1.168-gpt-5.6-sol-wm-source.zip
+      hh-3d/demo/evidence/fallback.png
+      hh-3d/demo/evidence/RUN-HONGIO-DEMO-20260831-01.md
+    They did not rm the working tree. This part is correct.
+
+A2. SEVERITY: HIGH
+    LABEL: OBSERVED
+    .gitignore will hide official evidence we still need in git later.
+    Staged .gitignore L91–96:
+      hh-3d/demo/evidence/*.png
+      hh-3d/demo/evidence/*.jpg/*.jpeg/*.webp
+      hh-3d/demo/evidence/RUN-*.md
+      hh-3d/demo/evidence/capture-probe.json
+    git check-ignore -v this session:
+      future hh-3d/demo/evidence/RUN-HONGIO-DEMO-20260903-01.md
+        -> .gitignore:95
+      future hh-3d/demo/evidence/play-chat.png
+        -> .gitignore:91
+    Demo plan audit override (31-8-hh3d-demo-webgl-plan.txt L65–67) and
+    audit summary §3 still require a new official package: screenshots +
+    RUN log + source/lock hash. After this ignore lands, `git add` of that
+    package is a no-op unless someone -f or edits ignore. Comment on
+    .gitignore L90 (“local screenshot dumps”) is a lie about the path:
+    that directory IS the official evidence location.
+
+A3. SEVERITY: LOW / CREDIT
+    LABEL: OBSERVED
+    Keeping capture-running-app.mjs tracked is correct.
+    git ls-files: hh-3d/demo/evidence/capture-running-app.mjs
+    git check-ignore does not match it.
+    Script BASE default is http://127.0.0.1:4173 (capture-running-app.mjs L12).
+    No secrets in the first 80 lines. Chrome path is a local default, not a
+    token.
+
+A4. SEVERITY: MEDIUM
+    LABEL: OBSERVED
+    Staged set is not one WP. It mixes:
+      - platform hygiene (.gitignore, snake untrack, testnewcodex untrack)
+      - demo product mutation (App/Help/TouchPad/CSS/seed/bubble)
+    AGENTS.md execution rule: one WP one commit; Snake is out of VF/HH
+    product scope. A coordinator who `git commit` the index as-is ships
+    revoked-demo polish under a hygiene story.
+    Unstaged and NOT in this staged set (do not blend):
+      AGENTS.md (VF6-WP3 resume)
+      godot/dogfood/superfighters/* (concurrent VF work)
+    Those are a different agent. Previous agent still left a dirty tree
+    that a lazy commit will poison.
+
+A5. SEVERITY: LOW
+    LABEL: OBSERVED
+    Historical RUN-20260831-01/02 + PNGs remain on disk but will vanish
+    from the next clone after this commit. Audit already called them
+    STALE_RECAPTURE_REQUIRED. Untracking stale binaries is defensible.
+    Combining that with ignore-of-future-RUN-*.md is not.
+
+----- REVIEW A — DEMO / CHAT / PUNCH / PORT -----
+
+A6. SEVERITY: HIGH
+    LABEL: OBSERVED
+    Unauthorized mutation of a REVOKED demo.
+    31-8-hh3d-demo-webgl-plan.txt L8–9, L35–38:
+      EXECUTION_AUTHORIZATION=REVOKED_UNTIL_OWNER_RESUMES
+      CURRENT_EXECUTION=NO_DEMO_MUTATION
+      “không agent nào được sửa hh-3d/demo/**”
+    Resume allowlist if owner reopens (L59–62):
+      hh-3d/demo/src/scene/Boat.tsx
+      hh-3d/demo/src/scene/World.tsx
+      hh-3d/demo/src/ui/TouchPad.tsx
+    Staged demo files they actually touched:
+      hh-3d/demo/src/App.tsx
+      hh-3d/demo/src/scene/PlayerChatBubble.tsx
+      hh-3d/demo/src/styles/app.css
+      hh-3d/demo/src/ui/HelpPanel.tsx
+      hh-3d/demo/src/ui/TouchPad.tsx
+      hh-3d/demo/docs/authored-experience-seed.md
+    git status on Boat.tsx / World.tsx: clean. They did not do the only
+    authorized functional rework (IdleThung reduced-motion + TouchPad
+    keyboard semantics). They polished chat/punch instead.
+
+A7. SEVERITY: HIGH
+    LABEL: OBSERVED
+    Scope creep vs demo lock. Chat and combat are outside demo pass.
+    31-8-hh3d-demo-webgl-plan.txt L140: character “không có combat”
+    L165–167: “Không thuộc demo pass”:
+      WASD / súng / combat
+      login / database / chat / UGC
+    They added:
+      HelpPanel.tsx L33: “click trái hoặc F — đấm”
+      App.tsx L404–410: HUD “click/F đấm” + still “Enter chat”
+      TouchPad.tsx L145–155: “Đấm” button
+      authored-experience-seed.md L14–15, L37, L41, L64–74: chat + punch
+        as seed contracts
+    They documented punch/chat harder while the plan still says both are
+    out of pass. Audit errata already flagged this split-brain
+    (01-9-hh3d-plan-audit-summary.txt L253–255). They widened it.
+
+A8. SEVERITY: HIGH
+    LABEL: OBSERVED
+    PUNCH_COMBO_AFTER is still a fake feature. They documented “đấm”
+    as if it were a complete action.
+    hh-3d/demo/src/lib/play.ts L14: export const PUNCH_COMBO_AFTER = 0.3
+    Call-sites in src/: ONLY the definition.
+    SimClock.tsx imports PUNCH_DURATION (L15, L247), never
+    PUNCH_COMBO_AFTER.
+    Prior audits already said this (handoff-2026-09-02 L116
+    “PUNCH_COMBO_AFTER 0.3 ← KHÔNG DÙNG”; audit summary L130;
+    review-log L540). This agent added Help/HUD/Touch copy and did not
+    delete, comment, or implement the constant.
+    Punch that exists is pose-only (SimClock punchLeft + Person pose).
+    No hit, no damage, no combo window. Help text does not say that.
+
+A9. SEVERITY: MEDIUM
+    LABEL: OBSERVED (empty bubble fix) + INFERRED (lock / Enter)
+    Chat empty-bubble: they did fix the “…” placeholder.
+      PlayerChatBubble.tsx L9–12: trim + return null
+      App.tsx L181: chatOpen && chatDraft.trim()
+      seed L71: “An empty draft does not show a placeholder bubble.”
+    Punch while composer is open: gated at sim, not only at the pad.
+      App.tsx L189: inputBlocked = chatOpen || helpOpen || showFallback
+      SimClock.tsx L168: gameplayActive = playing && !inputBlocked
+      SimClock.tsx L193–200 and L243–245: punchEdge cleared when
+      !gameplayActive.
+      App.tsx L453–455: TouchPad unmounted while chatOpen.
+    Residual holes (INFERRED, no browser this session):
+      a) input.ts L124–136: F/E/Space/WASD still write the shared input
+         object unless the event target is INPUT/TEXTAREA/SELECT. They
+         do not check lookEnabled/inputBlocked. SimClock discards the
+         edges the same frame, so this is waste + a future footgun, not
+         a proven punch-while-chat.
+      b) App.tsx L196–205: submitChat always requestAnimationFrame ->
+         requestPlayLookLock(). Pointer lock after a keydown+rAF is
+         often denied. They admitted this in seed L74. If lock
+         unexpectedly succeeds, the next canvas click is melee
+         (input.ts L183–185: “After lock, click is melee”).
+      c) App.tsx L112–122: isTextEntryTarget includes BUTTON.
+         New TouchPad “Đấm” is type="button" with onPointerDown only
+         (TouchPad.tsx L145–155), no onClick, no onKeyDown.
+         Focus that button + Enter: chat does not open (isTextEntryTarget),
+         punch does not fire (no click handler). New dead control.
+    Enter stealing gameplay while composer focused: composer
+    ChatComposer.tsx L38–42 stopPropagation + input.ts isEditableTarget
+    should hold. UNPROVEN in a real page.
+
+A10. SEVERITY: MEDIUM
+     LABEL: OBSERVED
+     TouchPad keyboard semantics still missing. They added a combat
+     button and a CSS wrap instead.
+     Audit: TouchPad “thiếu keyboard semantics đầy đủ”
+     (01-9-hh3d-plan-audit-summary.txt L126–127).
+     TouchPad.tsx: zero onKeyDown, zero tabIndex logic, zero key
+     mirroring. grep onKeyDown/tabIndex/keyboard = no matches.
+     Staged CSS: .touch-row { flex-wrap; justify-content: center }
+     (app.css). That is layout for a fourth wide button, not a11y.
+
+A11. SEVERITY: MEDIUM
+     LABEL: OBSERVED (contract) / UNPROVEN (they hit 4174 this session)
+     4173 vs 4174 trap is still live. They did not touch it.
+     vite.config.ts: server 5173, preview 4173.
+     package.json L9: "preview": "vite preview"  (no --strictPort)
+     tests/smoke.md L10–13:
+       npm run preview -- --host 127.0.0.1
+       Open http://127.0.0.1:4173/
+     No --port 4173 --strictPort. If 4173 is taken, Vite increments to
+     4174 and every handoff/capture script (capture-running-app.mjs L12)
+     points at a dead 4173. Previous handoff required strictPort
+     (handoff-2026-09-02 L79–82). They left the loose command.
+
+A12. SEVERITY: LOW
+     LABEL: INFERRED
+     No typecheck/build/browser evidence on the staged demo diff.
+     V-A19 / demo plan L94–95: do not claim done from unrun code.
+     I also did not run the demo (critic constraint). Treat A9 residual
+     lock/Enter items as unproven at runtime.
+
+----- REVIEW B — PLAN LADDER / ERRATA / COPY SET -----
+
+B1. SEVERITY: HIGH
+    LABEL: OBSERVED
+    Open-world file is BACKGROUND. Using it as the next execution plan
+    is the mistake the audit already named.
+    31-8-hh3d-real-world-open-world-plan.txt L1–16:
+      PLAN_ROLE=NON_AUTHORITATIVE_PROPOSAL
+      STATUS=BACKGROUND_AUDIT_PAUSED
+      DO_NOT_START_THIS_FILE_DIRECTLY=1
+      NATIVE_EXECUTION_AUTHORIZATION=NONE
+      CURRENT_EXECUTION_PLAN=...demo-webgl-plan.txt (PAUSED)
+      LATER_EXECUTION_PLAN=...real-application-plan.txt
+    01-9-hh3d-plan-audit-summary.txt L257–258: that CURRENT_EXECUTION_PLAN
+    line is routing history, not authority while HH-3D is frozen.
+    Copying the header blindly = “next WP is the paused demo”. Wrong.
+
+B2. SEVERITY: HIGH
+    LABEL: OBSERVED
+    G0 §9 pass criteria vs header/§8/§16/§18 contradiction.
+    §9 L497–500: empty project + packaged hello-world + Cesium sample.
+    §8 L431–432: this pass “chỉ tạo zdoc và plan, không scaffold runtime”.
+    §16 L882–883: owner must decide BEFORE “tải dữ liệu lớn hoặc tạo
+    Unreal project chính thức”.
+    §18 L918–923: do not run G0/G1 from this background file.
+    Header L44–46: do not create Unreal project / install plugins /
+    open G2.
+    If the lead copies “G0” as next WP without a DOCS vs ENGINE split,
+    the next agent installs the engine. That is the predictable miss.
+
+B3. SEVERITY: HIGH
+    LABEL: OBSERVED
+    Unreal download/install is a FAIL in the sandbox too.
+    Same cites as B2. Audit summary L375: “không cài Unreal/plugin hoặc
+    tải map lớn trong audit mode”. Real-app L51–52: no Unreal while
+    PAUSED. Isolation folder is still PLAN_SCOPE=hh-3d, still this git
+    repo, still no NATIVE_EXECUTION_AUTHORIZATION.
+
+B4. SEVERITY: HIGH
+    LABEL: OBSERVED
+    Known errata the lead will copy as “next WP” if they skim headers:
+    a) P3 order: real-app L100–102 writes
+         R4-WP1 -> R4-WP0A -> R4-WP0B
+       Audit summary L246–247 and L217–221 write the opposite readiness
+       (R4-WP0A bookmarks first; R4-WP1 after stable IDs).
+       Dependency blocks: R4-WP0A depends on R2-WP0 only (real-app L911).
+       R4-WP1 depends on R2-WP0, GATE-U1, R3-WP1 (L950).
+       Neither is “next”. Next execution WP if HH World is the product
+       is R0-WP0 (L669–695). Copying P3 is a skip of the entire ladder.
+    b) acquired_at vs accessed_at:
+       Harden list L111–115 / audit L248–249: acquired_at is canonical.
+       WorldManifest block still has accessed_at (real-app L280).
+       Open-world currentness example uses source_accessed_at (L289).
+       A copied “next WP” that authors a manifest from the wrong
+       section will fail the other section.
+    c) NETWORKING_STATUS=OUT_OF_SCOPE_FOR_FIRST_RELEASE (real-app L14)
+       vs STAGING/PUBLIC_BETA online exceptions (L1330–1332).
+       Audit L250–252: default OFF for local proof, not a forever ban.
+       Naive copy of the header = refuse all network forever, or the
+       opposite (enable Cesium because staging text exists).
+    d) Demo WASD/combat vs Play tests: demo L165–167 vs audit override
+       Play/390x844 and source Play mode. Unresolved. Owner must chốt
+       before any demo resume. Previous agent “fixed” punch UX instead
+       of waiting for that chốt.
+    e) D0-WP4/D0-WP6 merged override (demo L56–62) vs still-split WP
+       blocks (D0-WP4 L377–381, D0-WP6 L421–426). Audit L255–256:
+       do not invent a merged WP id. Resume_FROM header
+       D0-WP4_D0-WP6_D0-WP7_D0-WP8_REVIEW is a review pointer, not a
+       legal CURRENT_WP.
+
+B5. SEVERITY: HIGH
+    LABEL: OBSERVED
+    What MUST be copied into
+    hh-3d/hh3d-real-world-open-world/zdoc/  (verbatim + hash):
+      31-8-hh3d-real-world-open-world-plan.txt     (this track)
+      01-9-hh3d-plan-audit-summary.txt             (priority, errata, resume)
+      01-9-hh3d-cheap-agent-handoff-prompt.txt     (AUDIT_ONLY lock)
+      31-8-hh3d-real-application-plan.txt          (dependency: web-first,
+                                                    R0-WP0, native-after-MVP)
+      review-log.txt                               (so they do not re-lose
+                                                    WASD/P3/accessed_at)
+    What MUST stay reference-only, never “CURRENT_WP”:
+      31-8-hh3d-demo-webgl-plan.txt                (PAUSED demo; not next)
+      zdocs/29-8-vault-fighters-y8-parity-plan.txt (other product)
+      AGENTS.md VF6-WP3 block                      (other product)
+    Also required in the sandbox (not a copy of an original):
+      START.txt / READ_ORDER.txt stating:
+        - originals in hh-3d/zdoc/ remain canonical
+        - SHA-256 of each copied file at copy time
+        - FIRST_WP=SANDBOX-G0-DOCS
+        - NATIVE_EXECUTION_AUTHORIZATION=NONE
+        - FORBIDDEN: Unreal install, hh-3d/unreal/, hh-3d/app/ scaffold,
+          demo mutation, Godot/VF/Snake, G1+ fetch
+        - errata list from audit §4 (do not “fix” originals here)
+    Originals SHA-256 this session (do not trust a copy without matching):
+      31-8-hh3d-real-world-open-world-plan.txt
+        8CDAAD43B46D459843F6FCA76116301EAD69455DBAFE5F2DF46D5B0F0B36A6C6
+      31-8-hh3d-real-application-plan.txt
+        3B3204C0FD0CEAEEC82BDCDBBD245090BB944074FC84897D467CD1EA586C7AC6
+      31-8-hh3d-demo-webgl-plan.txt
+        C08CA66367939CBC310C2B194049E55F7C0B0B81EE1EE54D532A2B1309220651
+      01-9-hh3d-plan-audit-summary.txt
+        2B7D278AEC12633F9D46806D3E880CB092F0676F99C4844D3FA238E2077CC0B5
+
+B6. SEVERITY: HIGH
+    LABEL: OBSERVED / INFERRED
+    What makes the isolated folder useless for “another agent restart
+    from the plan”:
+      - empty zdoc (CURRENT STATE — see C1)
+      - copy of open-world only, without audit/errata/real-app
+      - rewritten header that grants NATIVE_EXECUTION_AUTHORIZATION
+        or STATUS=IN_PROGRESS without owner fields
+      - no START/READ_ORDER / no file hashes
+      - treating CURRENT_EXECUTION_PLAN=demo as live
+      - treating archived §18 brief as the handoff
+      - originals rewritten in hh-3d/zdoc/ so the copy and the canon drift
+      - Unreal/DDC/binaries dumped into the sandbox
+      - no statement that G0-ENGINE is still forbidden
+
+B7. SEVERITY: MEDIUM
+    LABEL: OBSERVED
+    AGENTS.md vs owner chat is unresolved governance.
+    AGENTS.md L3–13: OWNER RESUME 2026-09-03 = VF6-WP3, 31/50.
+    Grep HH-3D / Hòn Gió / open-world / real-application in AGENTS.md:
+    no matches.
+    An implementer who “follows AGENTS.md” will ignore this folder.
+    An implementer who “follows the open file + folder name” will start
+    Unreal. Coordinator must write the exception, not hope.
+
+----- REVIEW C — SANDBOX AS OF THIS INSTANT -----
+
+C1. SEVERITY: HIGH
+    LABEL: OBSERVED
+    hh-3d/hh3d-real-world-open-world/ EXISTS and is USELESS for restart.
+    Tree: only subdirectory zdoc/. File count under the tree = 0 before
+    this critic file. No plan copies, no START, no hashes, no ledger.
+    Another agent cannot restart from this folder. They will fall back
+    to hh-3d/zdoc/ and repeat the “which plan is next” error.
+
+C2. SEVERITY: LOW / CREDIT
+    LABEL: OBSERVED
+    Originals in hh-3d/zdoc/ were not rewritten this session.
+    git status --short hh-3d/zdoc/ = empty.
+    hh-3d/app/ does not exist. hh-3d/unreal/ does not exist.
+    No engine install observed. No Godot touch in the sandbox.
+    They have not jumped past G0 because they have not done G0.
+
+C3. SEVERITY: LOW
+    LABEL: OBSERVED
+    No secrets, huge binaries, or ripped assets in the sandbox (there
+    is nothing to hide yet). Keep it that way.
+
+C4. SEVERITY: MEDIUM
+    LABEL: INFERRED
+    Empty folder + owner “copy related zdocs” means the implementer
+    either raced, stalled, or created a path and stopped. This critic
+    file is not a substitute for the copy set in B5. If they later
+    copy plans and “fix” headers to look executable, re-audit; this
+    verdict dies the moment those files change.
+
+================================================================================
+4. TICK
+================================================================================
+
+TICK=no
+
+Material issues: A2, A4, A6, A7, A8, B1, B2, B3, B4, B5, B6, C1.
+Zero-issue bar not met. Do not tick any HH-3D plan checkbox. Do not
+treat previous-agent demo polish as D0-WP4/D0-WP6 closeout.
+
+================================================================================
+5. WHAT THE PARENT COORDINATOR MUST FORCE
+================================================================================
+
+1. Do not commit the current index as one commit. Split or unstage the
+   demo mutations. Hygiene (snake/testnewcodex/stale PNG untrack) may
+   proceed only after A2 is fixed.
+
+2. Narrow .gitignore before any commit:
+   - keep capture-running-app.mjs tracked (already correct)
+   - do NOT ignore hh-3d/demo/evidence/RUN-*.md as a class
+   - if ignoring ad-hoc PNGs, exception the official recapture names
+     or stop ignoring the evidence directory entirely
+   - snake/ + testnewcodex/ ignores are fine
+
+3. Quarantine staged demo edits (App.tsx, PlayerChatBubble.tsx,
+   HelpPanel.tsx, TouchPad.tsx, app.css, authored-experience-seed.md)
+   until an OWNER_RESUME names an exact demo WP and ALLOWED_PATHS.
+   They are not the IdleThung/TouchPad-keyboard rework.
+
+4. Do not let anyone claim punch is done. Either delete
+   PUNCH_COMBO_AFTER or mark it UNUSED in play.ts AND strip Help/HUD
+   language that implies a real melee/combo system. Pose-only must be
+   labeled pose-only if punch stays in the prototype.
+
+5. Isolated folder: force the B5 copy set + START/READ_ORDER + hashes.
+   Empty zdoc is a fail. This critic file alone is not the working set.
+
+6. Force FIRST_WP=SANDBOX-G0-DOCS. Write in START.txt:
+   NATIVE_EXECUTION_AUTHORIZATION=NONE
+   FORBIDDEN=Unreal download/install, hh-3d/unreal/**, hh-3d/app/**
+   G0-ENGINE is a separate owner decision after web MVP / R0.
+   If they wanted product “next” instead: R0-WP0 in real-application,
+   ALLOWED_PATHS already listed (review-log + decision-records), still
+   no scaffold.
+
+7. Do not rewrite hh-3d/zdoc/ originals to “fix” P3 / acquired_at /
+   networking / D0 merge. Errata stay in audit + START. Execution-plan
+   rewrite is a coordinator job after owner resume, not an implementer
+   drive-by.
+
+8. Do not touch Godot, Vault Fighters, Snake, or Kho Bí Ẩn for this
+   folder. Do not blend VF6-WP3 unstaged files into any HH-3D commit.
+
+9. Do not treat 31-8-hh3d-demo-webgl-plan.txt as next. It is PAUSED
+   and the previous agent already violated it.
+
+10. Re-critic after the copy set exists. This TICK=no dies only if a
+    later critic sees: complete hashed copies, START that forbids
+    Unreal, demo mutations unstaged or owner-authorized, ignore rules
+    that cannot swallow official RUN evidence.

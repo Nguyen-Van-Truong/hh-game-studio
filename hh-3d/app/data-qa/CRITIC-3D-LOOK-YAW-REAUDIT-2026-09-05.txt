@@ -1,0 +1,282 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+HASH_MISMATCH=0
+DID_NOT_RECYCLE=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M2=1
+LIVE_JS=/assets/index-BRKtMVXq.js
+LIVE_JS_LEN=2174982
+LIVE_JS_SHA256=efbc92a0bb4388f7fbc28bd42005809851e6f02f696e92321ac3428d63499c54
+DID_NOT_REBUILD=1
+DID_NOT_RESTORE_DIST=1
+DID_NOT_CATALOG_CLEAR=1
+NOT_M0_WP1=1
+NOT_M1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-05
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=06:01 +07
+MODEL=grok-4.6-extra-high
+SCOPE=Independent remint re-audit of LOOK invert / pace copy / HUD honesty on live BRKtMVXq. Do not treat implementer CRITIC-3D-LOOK-YAW-2026-09-05.txt (ROLE=IMPLEMENTER, TICK=n/a) as acceptance.
+PLAYER_URL=http://127.0.0.1:4175/
+LISTEN=127.0.0.1:4175
+LIVE_PID=27952
+LIVE_PID_AFTER_CDP=27952
+LIVE_PID_STARTTIME=2026-09-05 05:57:36 +07
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-LOOK-YAW-REAUDIT-2026-09-05.txt
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-LOOK-YAW-2026-09-05.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+DID_NOT_TREAT_IMPLEMENTER_AS_TICK_YES=1
+DID_NOT_COPY_IMPLEMENTER_JSON=1
+DID_NOT_RUN_IMPLEMENTER_PROBES=1
+DID_NOT_OVERWRITE_IMPLEMENTER_NOTE=1
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+AUTHORIZE_MAP_FETCH=NO
+VITE_PREVIEW_PORT_PIN=4175
+CRITIC_CDP_PORTS=10018
+IMPLEMENTER_CDP_PORT_NOT_REUSED=1
+DID_NOT_REUSE_10014=1
+DID_NOT_REUSE_10016=1
+VIEWPORT=1280x720
+ISOLATED_PROFILES=1
+HEADLESS_NEW=1
+SEAT=b
+SEATS=b
+SLICE=LOOK_YAW_REAUDIT
+GRAPH_CLEAR=0
+SHOPS_KEPT=1
+POINTER_LOCK=0
+LOOK_MODE=off
+
+LIVE_JS_BEFORE=/assets/index-BRKtMVXq.js
+LIVE_JS_LEN_BEFORE=2174982
+LIVE_JS_SHA256_BEFORE=efbc92a0bb4388f7fbc28bd42005809851e6f02f696e92321ac3428d63499c54
+LIVE_JS_AFTER=/assets/index-BRKtMVXq.js
+LIVE_JS_LEN_AFTER=2174982
+LIVE_JS_SHA256_AFTER=efbc92a0bb4388f7fbc28bd42005809851e6f02f696e92321ac3428d63499c54
+LIVE_JS_MATCHES_CLAIM=1
+HASH_MISMATCH=0
+LIVE_CSS=/assets/index-DsRW_q10.css
+
+HUNT1_HASH=PASS
+HUNT2_LOOK_INVERT=PASS
+HUNT3_PACE_COPY_HONESTY=PASS
+HEADING_BEFORE_A=270
+HEADING_AFTER_A=303
+HEADING_DELTA=+33
+FACING_BEFORE=west
+FACING_AFTER_A=west
+LOOK_MODE_DURING_A=off
+HUD_CONNECTION=Máy này · 4175
+HUD_CONNECTION_ATTR=on
+HUD_WAS_NOT_DANG_KET_NOI=1
+ONLINE_HINT=Bạn B (máy này): this-PC demo has 2 friend seats (A/B). Seat C is a stranger and cannot friend. Not 20 people. Not WAN. Not a city presence server. Not GPS.
+BUNDLE_WALK_255=1
+BUNDLE_LOOK_YAW_SIGN_IDENT=0
+BUNDLE_PLAY_IDLE=1
+BUNDLE_20_LIVE_CITY_FRIENDS=0
+BUNDLE_2_FRIEND_SEATS=1
+BUNDLE_NOT_20_PEOPLE=1
+LEFTOVER_COUNT_UI=2
+LEFTOVER_SHARED_PC=1
+LEFTOVER_J6=1
+BIGGEST_MISS=None on the named hunts. Live hash matches BRKtMVXq / 2174982 / efbc92a0… before and after CDP on the same pid 27952. Isolated seat B CDP (10018) held KeyA look-off: heading 270 → 303 (+33 toward 280+), not the old invert toward 260. Connected HUD chip is Máy này · 4175, not Đang kết nối. ModeBar denies 20 live city friends.
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/ was already up. Bind 127.0.0.1 pid 27952
+(node, vite preview --host 127.0.0.1 --port 4175 --strictPort,
+StartTime 2026-09-05 05:57:36 +07). Did not recycle, rebuild,
+restore-dist, kill, or restart 4175. Did not start 4173 / 4174 /
+5175. Did not bind 0.0.0.0. Did not catalog_clear. Same LISTEN
+pid 27952 after CDP. 10018 / 10020 / 10014 / 10016 were not
+listening after the isolated Chrome exited.
+
+Did not treat CRITIC-3D-LOOK-YAW-2026-09-05.txt as TICK=yes
+(ROLE=IMPLEMENTER, TICK=n/a). Did not run implementer probes as
+proof. Did not copy implementer JSON. Did not tick any plan.
+GATE-U1 humans were not invented. Not M1. Not M2. NOT_PLAN_PASS.
+
+Independent Chrome CDP, one isolated temp profile, headless=new,
+1280×720, ?seat=b on 10018. Did not reuse 10014 / 10016. Menu
+closed for the KeyA hunt. Look unlocked (data-look=off). Did
+not pointer-lock (optional mouse hunt not required once KeyA
+held).
+
+GET / then GET the script as raw bytes before CDP and after CDP.
+Name + length + sha256 match the claimed remint both times.
+HASH_MISMATCH=0.
+
+Hunt 2 held on THIS CDP. Hunt 3 copy/honesty held.
+
+================================================================================
+LIVE JS
+================================================================================
+
+GET / then GET /assets/index-BRKtMVXq.js as raw bytes.
+
+BEFORE CDP:
+  HTML script = /assets/index-BRKtMVXq.js
+  http file length = 2174982
+  sha256 = efbc92a0bb4388f7fbc28bd42005809851e6f02f696e92321ac3428d63499c54
+
+AFTER CDP:
+  HTML script = /assets/index-BRKtMVXq.js
+  http file length = 2174982
+  sha256 = efbc92a0bb4388f7fbc28bd42005809851e6f02f696e92321ac3428d63499c54
+
+Claimed remint name + length + hash match. HASH_MISMATCH=0.
+
+LIVE_CSS=/assets/index-DsRW_q10.css
+
+Bundle scan (live bytes, not source):
+  2.55 = 3
+  first 2.55 context = var w=2.55,T=4.35  (WALK / SPRINT pair)
+  LOOK_YAW_SIGN identifier = 0 (minified away)
+  TURN_YAW_SIGN identifier = 0 (minified away)
+  play-idle = 1
+  Máy này · 4175 = 2
+  Đang kết nối lại = 2
+  Đang kết nối (not lại) = 0
+  2 friend seats = 1
+  Not 20 people = 1
+  20 live city friends = 0
+  VISIBLE_FRIEND_CAP = 0
+  catalog_clear = 0
+  openstreetmap = 0
+
+================================================================================
+HUNT 1 — HASH_MISMATCH — PASS
+================================================================================
+
+Tried to fail a swapped or stale bundle vs BRKtMVXq / 2174982 /
+efbc92a0bb4388f7fbc28bd42005809851e6f02f696e92321ac3428d63499c54.
+
+Independent GET before any Chrome and again after the CDP seat
+exited. Same name, same length, same sha256. Pid still 27952
+StartTime 2026-09-05 05:57:36 +07. 4173 / 4174 / 5175 still
+not listening. PASS.
+
+================================================================================
+HUNT 2 — LOOK INVERT (KeyA, look off) — PASS
+================================================================================
+
+Tried to fail the old +1 invert: KeyA still decreases heading
+(seat B spawn 270 toward 260, or heading≈0 toward 350).
+
+Independent Chrome CDP 10018, isolated empty profile,
+?seat=b, menu closed, look unlocked (play-proof data-look=off).
+Did not pointer-lock.
+
+  StreetHelp before A:
+    You: standing · facing west · click canvas to look · Esc ·
+    Shift sprint · A/D turn · Space
+  play-proof data-heading before A = 270
+  self-avatar data-heading = 270
+  cam-yaw = 270
+
+  KeyA held ~400 ms (CDP keyDown + rawKeyDown, then keyUp).
+
+  StreetHelp after A:
+    You: turning · facing west · click canvas to look · Esc ·
+    Shift sprint · A/D turn · Space
+  play-proof data-heading after A = 303
+  self-avatar data-heading = 303
+  cam-yaw = 303
+  look still off
+
+Signed heading delta = +33. From seat-B spawn 270, A moved
+heading toward 280+ (303), not toward 260. That is the opposite
+of the old +1 convention. Facing label stayed west because 303
+is still in the west bucket (225–315); the numeric heading is
+the proof.
+
+Optional pointer-lock / movementX-negative mouse was not run.
+KeyA is the required hunt and it held on this CDP. PASS.
+
+================================================================================
+HUNT 3 — PACE / COPY / HONESTY — PASS
+================================================================================
+
+Tried to fail: no WALK 2.55 language in the live bytes; connected
+HUD still only “Đang kết nối”; ModeBar / bundle claiming 20 live
+city friends; play-idle ripped; leftover this-PC shops wiped
+after touching /demo-bus.
+
+Live bytes contain `var w=2.55,T=4.35` (WALK / SPRINT pair).
+LOOK_YAW_SIGN identifier is minified out; the hunt allows
+“WALK 2.55 language or 2.55 and LOOK_YAW_SIGN”. 2.55 walk
+language is present. play-idle = 1.
+
+HUD while connected (data-connection=on), menu closed:
+  hud-connection = Máy này · 4175
+  mode-status = Offline·Máy này · 4175
+  not the word pair that only said “Đang kết nối” as the
+  connected state.
+
+After opening Menu and clicking Online (honesty read only;
+no catalog_clear):
+  hud-presence = Online
+  hud-connection still Máy này · 4175
+  online-hint = Bạn B (máy này): this-PC demo has 2 friend
+    seats (A/B). Seat C is a stranger and cannot friend.
+    Not 20 people. Not WAN. Not a city presence server.
+    Not GPS.
+  people-layer = Other people on the street: none (no
+    accepted friend Online on this street).
+  claims20Live = false
+
+GET /demo-bus after CDP (read only; no catalog_clear; no
+graph_clear):
+  kind=local-demo-bus this_pc=true bind=127.0.0.1 not_wan=true
+  persist=catalog+graph
+  leftover UI count = 2
+  catalog still holds:
+    shop-local-sharedpc          Quầy Shared PC
+    shop-local-mtl8ulddihjpre    Quay Critic J6 Jump
+    shop-local-mtmh45qxehxhvb    Quầy Phở Nhà
+    shop-local-mtmrbdjffjdkg8    Quầy Chè Vỉa
+    shop-local-mtmrq33hoq4phb    Quay Kem Reaudit
+
+PASS for this honesty hunt. Does not invent M2 or GATE-U1.
+
+================================================================================
+SCORE CARD (requested)
+================================================================================
+
+TICK=yes
+SEAT=b
+HEADING_BEFORE_A=270
+HEADING_AFTER_A=303
+HASH_MISMATCH=0
+LIVE_PID=27952
+HUD_CONNECTION=Máy này · 4175
+
+================================================================================
+NOT CLAIMED
+================================================================================
+
+NOT_PLAN_PASS. Not M1. Not M2. GATE-U1 three-human review was
+not invented. OWNER_SIGN was not invented. No OSM/Overture
+fetch. No 4173 / 4174 / 5175. No 0.0.0.0 bind. No recycle of
+4175. Optional pointer-lock mouse-left was not exercised.
+Not 60 FPS. Not R2-WP1. Not WAN. Not a city.

@@ -1,0 +1,101 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=11:31 +07
+ROLE=IMPLEMENTER
+TICK=n/a (do not treat this file as TICK=yes)
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M0_WP1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+PLAYER_URL=http://127.0.0.1:4175/
+RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-21
+COMMAND=node hh-3d/app/data-qa/j5-stall-board-probe.mjs
+VERDICT_IMPLEMENTER_CDP=J5_STALL_BOARD_OK
+LIVE_JS=/assets/index-4xUMLnYL.js
+LIVE_JS_LEN=2161516
+LIVE_JS_SHA256=4f8cd7033ea399ad7322937c94cf0a5f0fdd48c063cdfdf60086c47f0670f5dd
+ONE_RECYCLE_AFTER_BUILD=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NO_COMMIT=1
+NO_HIP_SPHERES=1
+DID_NOT_RIP_HARBOR_STEPS_CROSSING=1
+DID_NOT_RIP_DEFERRED_MINIMAP=1
+DID_NOT_RIP_WARMUP=1
+DID_NOT_RIP_FRIEND_STEPS=1
+DID_NOT_RIP_90M_LOD=1
+DID_NOT_RIP_HUD=1
+DID_NOT_RIP_PLAQUES=1
+DID_NOT_RIP_LANES=1
+DID_NOT_RIP_FOG_EDGE=1
+DID_NOT_RIP_STREET_PLAY_SHOPS=1
+DID_NOT_RIP_SKY=1
+DID_NOT_RIP_CAM_HIT=1
+NO_NEW_SHOP_SERVER=1
+NO_INTERIOR=1
+NO_MAP_FETCH=1
+ACCEPTED_PRIOR=CRITIC-3D-INTERSECTION-REAUDIT-2026-09-04.txt TICK=yes on /assets/index-DEOxFuyb.js
+
+================================================================================
+SLICE
+================================================================================
+
+J1 still needed E to see goods. This remint paints a cheap chalkboard /
+menu board on the authored lantern stall (and other drawn streetPlay
+kiosks that already have published listings). Canvas texture on the
+kiosk south face + east side. 1–3 public catalog titles. Drafts stay
+off the board. Authored fiction names, not a live market inventory.
+Not a new shop server. Not interiors.
+
+Leftover this-PC shops inside spawn keep-out still do not draw a
+board and still do not own street E (streetPlayShops unchanged).
+
+Did not rip Harbor×Steps crossing, deferred minimap, friend steps,
+LOD, HUD chip, plaques, lanes, fog/edge, streetPlayShops, sky, or
+cam-hit.
+
+================================================================================
+CDP (headless Chrome, 1280×720, recycled 4175)
+================================================================================
+
+Seat A walks W to the lantern. Shot + crop BEFORE E.
+Seat B leftover E check at spawn.
+
+board kind=chalkboard-menu
+lantern titles=Cá nục sương (mẫu) | Túi cói chợ (mẫu)
+live overlay on-screen (box 560,602 164×94)
+crop slateRatio=0.629 chalkRatio=0.07  (Cá / Túi readable)
+E opened shop-lantern-fish; shelf fish+bag; draft hidden
+leftover B nearby="" E not stolen
+leftover persist (draw=0 keep-out=1):
+  shop-local-sharedpc titles=Phở bò
+  shop-local-mtl8ulddihjpre titles=Sach phe binh J6
+Harbor×Steps still present: crosswalks=2 corner=zebra-stopline-curb
+  lantern zebra + corner zebra 7 stripes, stop-line=1, curb-returns=4
+inside-aabb=0
+
+npm run typecheck  EXIT=0
+npm test           EXIT=0 (77 tests)
+npm run build      EXIT=0  dist/assets/index-4xUMLnYL.js
+Recycled existing 4175 once (old pid 64132 → listen 127.0.0.1:4175
+pid 44140). Did not start 4173 / 4174 / 5175. Did not bind 0.0.0.0.
+
+================================================================================
+HONESTY
+================================================================================
+
+Board footer and compact honesty: "mẫu · not a live market" /
+"Menu boards list authored fiction goods, not a live market."
+NOT a real stall inventory. NOT GATE-U1. NOT_PLAN_PASS.
+
+================================================================================
+END
+================================================================================

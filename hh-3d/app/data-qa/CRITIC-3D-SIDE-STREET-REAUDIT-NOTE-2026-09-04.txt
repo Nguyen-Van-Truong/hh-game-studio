@@ -1,0 +1,29 @@
+COORDINATOR NOTE — do not treat as TICK=yes
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=09:07 +07
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+
+Two independent re-audits used the same filename
+`CRITIC-3D-SIDE-STREET-REAUDIT-2026-09-04.txt`. The later write won.
+
+1. ~08:00 [Audit inner side streets] walked live `/assets/index-DMtr6Df6.js`
+   and recorded TICK=yes (inner Steps East walkable, doorRatio 0.103).
+   That verdict applied to THAT remint only.
+
+2. Later remints on the same 4175: inner-lane Y4m4boSF, plaques BzqNNsdo,
+   HUD chip DF4TvR_E. DMtr6Df6 is no longer the preview JS (URL now
+   falls back to the SPA HTML shell).
+
+3. ~09:05 a second critic was still pointed at DMtr6Df6. They correctly
+   fail-closed: TICK=no HASH_MISMATCH. Live was DF4TvR_E. They also
+   observed inner door+glass STILL on that later bundle (+130 faces,
+   Steps East walk). That is not a play regression.
+
+Read:
+- `CRITIC-3D-SIDE-STREET-REAUDIT-2026-09-04.txt` = the 09:05 stale-hash no
+- `CRITIC-3D-STREET-HUD-REAUDIT-2026-09-04.txt` = current live TICK=yes
+- This file = process note only
+
+Do not remint side streets for this no. Do not tick the plan.

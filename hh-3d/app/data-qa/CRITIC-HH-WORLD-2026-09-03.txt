@@ -1,0 +1,385 @@
+TICK=yes
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-03
+TIMEZONE=Asia/Saigon
+SCOPE=HH World web (hh-3d/app) local player proof
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=ff702a7112cb00ef97160025d3006ecb75f415ee
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+PROGRESS_TRUSTED_ALONE=NO
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_VF_TOUCH=1
+NO_UNREAL=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+Local player proof exists on the claimed URL. Honesty language is on the
+live page. Style and served fixture are authored-local. Original plan
+STATE/PASS remain unticked. GATE-U1 and R2-WP1 FPS are named leftovers,
+not hidden. Human OWNER_SIGN name was not invented.
+
+This is NOT a plan PASS for R0/R1/R2/R4. It is only a critic yes for the
+local player-proof claim as labeled: code exists, preview works, plan
+stays [ ] / STATE unchanged.
+
+Biggest miss: GATE-U1 (three human reviewers) is still undone, so R2-WP0
+and R4-WP0A cannot be plan-accepted. Same workspace also has Vault
+Fighters + AGENTS.md already staged (app itself is untracked — not one
+index mix today, but a process landmine).
+
+================================================================================
+METHOD
+================================================================================
+
+Read on disk (not PROGRESS alone):
+  hh-3d/app/PROGRESS.txt
+  hh-3d/app/decision-records/2026-09-03-r0-wp0-hh-world-web.txt
+  hh-3d/zdoc/31-8-hh3d-real-application-plan.txt (R0/R1/R2/R4/GATE-U1 DoD)
+  hh-3d/zdoc/review-log.txt (tail + git diff)
+  hh-3d/app/web src (App, MapView, HonestyBanner, Header, PlaceCard,
+    PlaceList, SearchBox, bookmarks/storage, aoi, CSP in index.html)
+  fixture + world-manifest + local-style.json (public + pipeline + dist)
+  hh-3d/app/.gitignore, repo .gitignore
+  git status --short / staged names / HEAD
+
+Live (existing preview only; did not start another):
+  Get-NetTCPConnection: 127.0.0.1:4175 LISTEN; 4173/4174/5175 not listening
+  Invoke-WebRequest http://127.0.0.1:4175/                         200
+  /data/ben-thanh-400m.authored.geojson                            200
+  /data/world-manifest.json                                        200
+  /styles/local-style.json                                         200
+  /assets/index-Bgjc3g-y.js                                        200
+  http://127.0.0.1:4173/                                           FAIL (down)
+  Chrome headless --dump-dom against the already-up 4175
+    (temporary dump files created then deleted; this critic file is the
+     only intended write)
+
+================================================================================
+ATTACK 1 — DOES 4175 SERVE HH WORLD?
+================================================================================
+
+RESULT=PASS
+
+4175 is up and is HH World, not a blank root and not Hòn Gió 4173.
+
+Live HTML:
+  <title>HH World</title>
+  CSP connect-src 'self' (and default-src 'self')
+  script /assets/index-Bgjc3g-y.js
+  css  /assets/index-DuqmC8iB.css
+
+Independent dump-dom of http://127.0.0.1:4175/ OBSERVED:
+  brand HH World
+  honesty-banner
+  maplibre canvas (aria-label=Map, ~749x352)
+  4 markers: Market Hall, Clock Garden, Market Steps, Roundabout Green
+  place list with "approx" on each row
+  empty place-card prompt
+  local bookmarks panel ("No login")
+  attribution: "Authored approximation · not OSM · not a live survey · HH World"
+  3D extrusion toggle checked
+
+Independent dump-dom of /?place=place-market-hall OBSERVED:
+  Market Hall marker active
+  place-card with approx, Map data as of 2026-09-03, Source=authored,
+  Bookmark locally, Copy local link
+
+4173 was down this seat. Lead claim "do not use 4173" matches live state.
+
+================================================================================
+ATTACK 2 — AUTHORED-ONLY / NO PUBLIC TILES
+================================================================================
+
+RESULT=PASS (residual hardening note below)
+
+Live /styles/local-style.json:
+  name=hh-world-local-authored
+  sources={}
+  layers=background only
+  no glyphs, no sprites, no tile URL
+
+hh-3d/app/web/public/ : no http(s) URLs.
+MapView loads style "/styles/local-style.json" and GeoJSON via same-origin
+addSource (in-memory collection). transformRequest throws on non-local.
+
+Served JS URL scan (unique http/https in dist bundle):
+  http://www.w3.org/1998/Math/MathML
+  http://www.w3.org/1999/xlink
+  http://www.w3.org/2000/svg
+  http://www.w3.org/XML/1998/namespace
+  https://github.com/mapbox/mapbox-gl-js/issues/2907
+  https://maplibre.org/
+  https://react.dev/errors/
+None of these are tile/OSM/Cesium/Google/MapTiler/Carto endpoints.
+@mapbox/* names in package-lock.json are npm registry packages, not tile hosts.
+
+App.tsx fetch() is only /data/ben-thanh-400m.authored.geojson and
+/data/world-manifest.json (same origin). That is not a map-provider fetch.
+
+No Cesium / Google / Unreal / Mapbox paid tiles in app source.
+
+RESIDUAL (not TICK=no): isLocalUrl() treats any string starting with "/"
+as local, so a protocol-relative "//evil.example/tiles" would pass the
+helper. Live style has no such URL. CSP connect-src 'self' is the backstop.
+Hardening gap, not a live network-tile lie.
+
+================================================================================
+ATTACK 3 — HONESTY / FORBIDDEN CLAIMS
+================================================================================
+
+RESULT=PASS
+
+Live UI says:
+  "Authored approximation."
+  "not a live map, not OSM/Overture, not photogrammetry, and not a digital twin"
+  "Map data as of 2026-09-03 (authored fixture)"
+  place rows: "approx"
+  place card: "approx" + "Map data as of" + honesty "not 1:1"
+  map attribution: authored / not OSM / not a live survey
+
+No player-facing claim of 1:1, realtime, digital twin, GTA-like, or Y8
+parity. Those strings appear only as denials / forbidden_claims lists.
+
+AOI label names the real Bến Thành vicinity; footprints/names facing the
+player are fictionalized (Market Hall, Clock Garden, …). Matches the
+decision record.
+
+================================================================================
+ATTACK 4 — INVENTED HUMAN OWNER_SIGN?
+================================================================================
+
+RESULT=PASS (name not invented)
+
+decision-records/2026-09-03-r0-wp0-hh-world-web.txt:
+  OWNER_SIGN NAME=UNFILLED
+  DATE=UNFILLED
+  ACCEPT_THIS_RECORD=UNFILLED_AS_HUMAN_SIGNATURE
+  NOT_A_HUMAN_SIGNATURE=1
+  NO invented personal name in this record, PROGRESS, review-log append,
+  or privacy note. LEGAL_OWNER / PRIVACY_OWNER remain UNFILLED.
+
+Owner chat grant is recorded as text ("làm HH World web"), not forged as
+a human signature.
+
+================================================================================
+ATTACK 5 — ORIGINAL PLAN CHECKBOXES / STATE
+================================================================================
+
+RESULT=PASS (unticked)
+
+31-8-hh3d-real-application-plan.txt is NOT in git status (unchanged).
+Header still:
+  STATUS=PAUSED_NOT_STARTED_DECISIONS_REQUIRED
+  CURRENT_WP=NONE_PAUSED
+  APP_IMPLEMENTATION_PROGRESS=0_PERCENT_NO_APP_FOLDER  (stale vs disk;
+  they did not rewrite it — correct under no-plan-mutation)
+
+WP STATE still:
+  R0-WP0  PAUSED_READY_AFTER_OWNER_RESUME
+  R0-WP1  NOT_STARTED
+  R1-WP0  NOT_STARTED
+  R1-WP1  NOT_STARTED
+  GATE-U1 NOT_STARTED
+  R2-WP0  NOT_STARTED
+  R2-WP1  NOT_STARTED
+  R4-WP0A NOT_STARTED
+
+No [x] checkboxes. No STATE: PASS. Lead claim "plan still unticked" matches
+disk.
+
+================================================================================
+ATTACK 6 — GATE-U1 SKIP vs R2-WP0 PLAN PASS
+================================================================================
+
+RESULT=PASS (coded without claiming plan PASS)
+
+Plan: GATE-U1 is a hard dependency before R2-WP0.
+Disk: search/card/deeplink/share exist; GATE-U1 evidence (3 human 5-minute
+reviews) does NOT exist.
+
+PROGRESS and the decision record say R2-WP0 is "not a plan PASS" because
+GATE-U1 is undone. Critic agrees. Code-without-PASS is allowed if labeled.
+Do not treat this TICK=yes as coordinator permission to tick R2-WP0.
+
+R2-WP1 FPS / first-map / mobile matrix: UNMEASURED / UNFILLED on disk.
+Named leftover. Correct.
+
+================================================================================
+ATTACK 7 — BOOKMARK
+================================================================================
+
+RESULT=PASS with residual
+
+Code:
+  localStorage key hh-world.bookmarks.v1
+  allowlist sanitize: v===1, id /^place-[a-z0-9-]+$/, savedAt length bound
+  extra keys dropped; bad ids rejected (unit test present)
+  no login, no account module, no cookie tracker in src
+  export/reset present
+  privacy copy: "Stored in this browser only. No login."
+  legal/privacy owner names UNFILLED (honest)
+
+Live: bookmark panel + "Bookmark locally" button OBSERVED on the place card.
+This critic did not re-run the CDP click this seat. Lead file
+data-qa/verify-2026-09-03.txt claims cdp_bookmark=PASS; that file is not
+trusted alone. Player seat still holds: a user can see the control; storage
+path is local-only allowlist.
+
+================================================================================
+ATTACK 8 — DISPLAY NAME / FOREIGN CHROME
+================================================================================
+
+RESULT=PASS
+
+<title>, header brand, manifest.display_name = HH World.
+Live chrome has no Superfighters / Super Fighter / Vault Fighters / Y8.
+Place names are fictionalized. "Y8" appears only in forbidden_claims /
+honesty denials.
+
+================================================================================
+ATTACK 9 — CHROME QA PROFILES / SECRETS
+================================================================================
+
+RESULT=PASS (profiles exist on disk; gitignored)
+
+On disk under hh-3d/app/data-qa/:
+  chrome-profile/
+  chrome-profile-cdp/
+  chrome-profile-cdp2/
+  chrome-profile-place/
+  chrome-*.err / chrome-cdp.out
+
+hh-3d/app/.gitignore:
+  data-qa/chrome-profile*/
+  data-qa/chrome-*.err
+  data-qa/chrome-*.out
+  **/dist/
+  .env / .env.* / !.env.example
+
+git check-ignore CONFIRMED:
+  chrome-profile-cdp2/Default/Preferences  ignored
+  web/dist/index.html                      ignored
+
+.env.example has no keys. No commitable .env with tokens found.
+headless-*.html and verify-2026-09-03.txt are commitable dumps of the
+public page (no secret observed). Profiles must stay untracked; do not
+`git add -f` them.
+
+================================================================================
+ATTACK 10 — ZDOC ORIGINALS REWRITTEN?
+================================================================================
+
+RESULT=PASS (review-log append only)
+
+git diff --stat hh-3d/zdoc/:
+  review-log.txt | 20 ++++++++++++++++++++
+  1 file changed, 20 insertions(+)
+
+Append is the R0-WP0 OWNER CHAT GRANT block. No rewrite of
+31-8-hh3d-real-application-plan.txt, license-ledger.txt, or
+research-ledger.txt. App-local ledgers live under hh-3d/app/manifests/.
+
+================================================================================
+ATTACK 11 — GIT MIX VF + THIS APP
+================================================================================
+
+RESULT=PROCESS_WARN (not TICK=no)
+
+Staged NOW (index):
+  AGENTS.md
+  godot/dogfood/superfighters/docs/stage.md
+  godot/dogfood/superfighters/src/app.gd
+  godot/dogfood/superfighters/src/game_session.gd
+  godot/dogfood/superfighters/src/sim/stage.gd
+  godot/dogfood/superfighters/src/ui/title_screen.gd
+  godot/dogfood/superfighters/tests/check_stage.py
+  godot/dogfood/superfighters/tests/pack_stage_evidence.py
+  godot/dogfood/superfighters/tests/stage_cases.gd
+
+hh-3d/app/ is UNTRACKED (not in the index).
+hh-3d/zdoc/review-log.txt is unstaged modified.
+
+They did NOT stage VF/AGENTS.md together with this app. Fail-closed
+"mixed index" does not trigger. The working tree is still contaminated:
+a sloppy `git add` / commit would mix VF6 with HH World. Residual, not a
+product lie. This critic did not touch VF.
+
+Unreal: no install/start observed this seat. AUTHORIZE_UNREAL_INSTALL=NO
+on the record.
+
+================================================================================
+ATTACK 12 — PLAYER SEAT
+================================================================================
+
+RESULT=PASS
+
+A user can open 4175, see a MapLibre map with four place markers, open
+Market Hall via deep link, read honesty + approx + Map data as of, and
+see Bookmark locally. 4175 was up; no second preview started.
+
+Bookmark persist was not re-clicked by this critic. UI + storage code
+are on disk and on the live DOM.
+
+================================================================================
+PLAN DoD vs CLAIM (not a tick)
+================================================================================
+
+R0-WP0: official app decision record exists; human OWNER_SIGN / legal /
+  privacy names UNFILLED. Hardware matrix is a host snapshot, not
+  re-measured here. Plan STATE still PAUSED_READY_AFTER_OWNER_RESUME.
+  Correctly not claimed as plan PASS.
+
+R0-WP1: Vite/React/TS/maplibre pins match the record; lockfile present.
+  This critic did not re-run npm ci/typecheck/test/build (read-only).
+  Live preview implies a prior build exists.
+
+R1-WP0: authored 400 m GeoJSON + WorldManifest; FETCH_PERFORMED=false.
+  Plan DoD text still talks about approved acquire — they substituted an
+  authored fixture under AUTHORIZE_MAP_FETCH=NO. Labeled. Not plan PASS.
+
+R1-WP1: live map + 2D list + extrusion toggle + attribution OBSERVED.
+  GATE-U1 / official browser-matrix evidence absent.
+
+R2-WP0: search/card/share/deeplink coded; GATE-U1 missing → not plan PASS.
+
+R2-WP1: UNMEASURED. Leftover named.
+
+R4-WP0A: local bookmark coded; depends on R2-WP0 plan closeout → not
+  plan PASS.
+
+================================================================================
+LEFTOVERS (must stay named)
+================================================================================
+
+- GATE-U1 three-human 5-minute journey (NOT_DONE)
+- R2-WP1 FPS / first meaningful map / mobile matrix (UNMEASURED)
+- Human OWNER_SIGN name (UNFILLED)
+- Legal / privacy owner names (UNFILLED)
+- Original plan STATE/PASS still unticked (correct)
+- No real map fetch / Cesium / Google / Unreal this track
+- Workspace dirty: VF + AGENTS.md staged; do not commit with hh-3d/app
+- isLocalUrl protocol-relative "/" hole (defense-in-depth)
+- Bookmark click not independently re-proven this critic seat
+- MapLibre vendor chunk ~1.1 MB (lead-noted; not re-weighed as FPS)
+
+================================================================================
+WHAT WOULD HAVE FORCED TICK=no
+================================================================================
+
+Live 4175 blank / wrong product / 4173-only; public tile URL in style or
+live requests; invented OWNER_SIGN name; plan STATE/PASS flipped;
+Cesium/Google/Unreal/fetch; VF files in the same index as this app;
+or no working map. None of those were observed.
+
+================================================================================
+END
+================================================================================

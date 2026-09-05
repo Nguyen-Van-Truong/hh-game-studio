@@ -1,0 +1,371 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+HASH_MISMATCH=0
+DID_NOT_RECYCLE=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_R2_WP1_PASS=1
+NOT_60_FPS=1
+LIVE_JS=/assets/index-B_vhyY5s.js
+LIVE_JS_LEN=2172590
+LIVE_JS_SHA256=30145754ae259b733719ccf613efba53621c20103b6dccf2e7c89d4921a8bbf3
+LIVE_CSS=/assets/index-Dza0__iA.css
+LIVE_CSS_LEN=82661
+LIVE_CSS_SHA256=a87447efdeb34967d524b950412d86f5b5aacfa09f5e66bf1f671061b1f397ba
+DID_NOT_REBUILD=1
+DID_NOT_RESTORE_DIST=1
+DID_NOT_CATALOG_CLEAR=1
+NOT_M0_WP1=1
+NOT_M1=1
+NOT_M2=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+CRITIC=INDEPENDENT_ADVERSARIAL
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=20:06 +07
+MODEL=grok-4.6-extra-high
+SCOPE=Independent re-audit of HITCH3_IDLE_AFTER_WALK on live B_vhyY5s / Dza0__iA. Do not treat implementer CRITIC-3D-HITCH3-2026-09-04.txt (TICK=n/a) or J5-HITCH3 JSON as acceptance. Hitch2 reaudit TICK=yes still stands for its remint (keyup-mount). This remint’s named miss is that hitch2 keyup-mount.
+PLAYER_URL=http://127.0.0.1:4175/
+LISTEN=127.0.0.1:4175
+LIVE_PID=48264
+LIVE_PID_AFTER_CDP=48264
+LIVE_PID_STARTTIME=2026-09-04 20:00:40 +07
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-HITCH3-REAUDIT-2026-09-04.txt
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-HITCH3-2026-09-04.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+DID_NOT_TREAT_IMPLEMENTER_AS_TICK_YES=1
+DID_NOT_COPY_IMPLEMENTER_JSON=1
+DID_NOT_RUN_J5_HITCH3_PROBE=1
+DID_NOT_RUN_J5_HITCH2_PROBE=1
+PRIOR_ACCEPTED_UNTOUCHED=CRITIC-3D-LEFTOVER-KIND-REAUDIT-2026-09-04.txt TICK=yes on /assets/index-BaH71wNA.js
+HITCH2_REAUDIT_STILL_STANDS=CRITIC-3D-HITCH2-REAUDIT-2026-09-04.txt TICK=yes on its remint (MapLibre mounted on first-W keyup)
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+AUTHORIZE_MAP_FETCH=NO
+VITE_PREVIEW_PORT_PIN=4175
+CRITIC_CDP_PORT=9995
+CRITIC_CDP_PORT_IDLE_FOLLOW=9997
+IMPLEMENTER_CDP_PORT_NOT_REUSED=1
+DID_NOT_REUSE_9663=1
+DID_NOT_REUSE_9661=1
+DID_NOT_REUSE_9795=1
+DID_NOT_REUSE_9991=1
+DID_NOT_REUSE_9993=1
+VIEWPORT=1280x720
+ISOLATED_PROFILE=1
+HEADLESS_NEW=1
+SEAT=a
+SLICE=HITCH3_IDLE_AFTER_WALK
+
+LIVE_JS_BEFORE=/assets/index-B_vhyY5s.js
+LIVE_JS_LEN_BEFORE=2172590
+LIVE_JS_SHA256_BEFORE=30145754ae259b733719ccf613efba53621c20103b6dccf2e7c89d4921a8bbf3
+LIVE_CSS_BEFORE=/assets/index-Dza0__iA.css
+LIVE_CSS_LEN_BEFORE=82661
+LIVE_CSS_SHA256_BEFORE=a87447efdeb34967d524b950412d86f5b5aacfa09f5e66bf1f671061b1f397ba
+LIVE_JS_AFTER=/assets/index-B_vhyY5s.js
+LIVE_JS_LEN_AFTER=2172590
+LIVE_JS_SHA256_AFTER=30145754ae259b733719ccf613efba53621c20103b6dccf2e7c89d4921a8bbf3
+LIVE_CSS_AFTER=/assets/index-Dza0__iA.css
+LIVE_CSS_LEN_AFTER=82661
+LIVE_CSS_SHA256_AFTER=a87447efdeb34967d524b950412d86f5b5aacfa09f5e66bf1f671061b1f397ba
+LIVE_JS_MATCHES_CLAIM=1
+LIVE_CSS_MATCHES_CLAIM=1
+HASH_MISMATCH=0
+
+HUNT1_HASH=PASS
+HUNT2_FIRST_W_KEYUP_STILL_PENDING=PASS
+HUNT3_HONESTY=PASS
+HUNT4_SAME_PID=PASS
+
+MID_W_DEFER=pending
+MID_W_KIND=play-idle
+MID_W_MINIMAP=0
+KEYUP_180_DEFER=pending
+KEYUP_180_KIND=play-idle
+KEYUP_180_MINIMAP=0
+KEYUP_180_LIVE=0
+IDLE_920_DEFER=pending
+IDLE_920_MINIMAP=0
+IDLE_FOLLOW_800_DEFER=pending
+IDLE_FOLLOW_1000_DEFER=pending
+IDLE_FOLLOW_1200_DEFER=pending
+IDLE_FOLLOW_1600_DEFER=live
+IDLE_FOLLOW_1600_KIND=play-idle
+IDLE_FOLLOW_1600_MINIMAP=1
+KIND_STILL_PLAY_IDLE_OR_FIRST_W=0
+WORLD_MAP_PRESENT=0
+CHIP_HARBOR=Harbor Walk
+SPAWN_E_EMPTY=1
+SPAWN_E_STOLEN=0
+LEFTOVER_SHOPS_STILL_ON_DEMO_BUS=1
+
+WALK_MIN_FPS=11.99
+WALK_MEAN_FPS=45.09
+WALK_MEDIAN_FPS=59.52
+WALK_P1_FPS=20.00
+WALK_MAX_FPS=60.61
+WALK_N=110
+WALK_WALL_MS=2800.0
+WALK_FRAME_MS_MAX=83.4
+NOT_A_FAIL_ON_MIN_10_12=1
+NOT_A_60_CLAIM=1
+
+PLAY_ENGINE=r3f
+PLAY_CANVAS=1280x720
+HITCH_WARMUP=audio-compile
+MINIMAP_DEFER_KIND=play-idle
+BUNDLE_PLAY_IDLE_OR_FIRST_W=0
+BUNDLE_PLAY_IDLE=1
+
+BIGGEST_MISS=none on this remint. Named hunt 2 held on independent 9995 CDP: first Harbor W mid-walk and keyup+180 stayed data-minimap-defer=pending with hh-world-minimap absent (hitch2 would already be live). Kind is play-idle, not play-idle-or-first-w. World MapView absent. Idle later went live as play-idle (9997: still pending at +1200 ms, live at +1600 ms).
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/ was already up. Bind 127.0.0.1 pid 48264
+(node vite preview --host 127.0.0.1 --port 4175 --strictPort,
+StartTime 2026-09-04 20:00:40 +07). Did not recycle, rebuild,
+restore-dist, kill, or restart 4175. Did not start 4173 / 4174 /
+5175. Did not bind 0.0.0.0. Did not catalog_clear. Same LISTEN
+pid 48264 after CDP.
+
+Did not treat CRITIC-3D-HITCH3-2026-09-04.txt as TICK=yes
+(ROLE=IMPLEMENTER, TICK=n/a). Did not run j5-hitch3-probe.mjs
+or j5-hitch2-probe.mjs as proof. Did not copy J5-HITCH3 JSON
+as this verdict. Did not remint or overwrite
+CRITIC-3D-LEFTOVER-KIND-REAUDIT-2026-09-04.txt (TICK=yes on
+BaH71wNA stays). Hitch2 reaudit TICK=yes still stands for its
+own remint. Did not tick any plan. GATE-U1 humans were not
+invented. Not M1. Not M2. NOT_PLAN_PASS. Not R2-WP1 PASS.
+Not 60 FPS.
+
+Independent Chrome CDP, isolated temp profiles, headless=new,
+1280×720, ?seat=a. Primary hunt on 9995. Idle-follow on 9997.
+Did not reuse 9663 / 9661 / 9795 / 9991 / 9993. Started W as
+soon as playReady (canvas focus then KeyW; no 800 ms idle
+stand first). No catalog_clear. Leftover Shared PC / J6 stayed
+on /demo-bus.
+
+GET / then GET the JS file AND the CSS file, recorded before
+CDP and after CDP. HTML script name + JS sha256 + CSS
+name/sha256 match the claimed remint both times.
+HASH_MISMATCH=0.
+
+Hunt 2 held on THIS CDP, not on implementer notes.
+
+================================================================================
+LIVE JS + CSS
+================================================================================
+
+GET http://127.0.0.1:4175/  STATUS=200
+HTML script = /assets/index-B_vhyY5s.js
+link stylesheet = /assets/index-Dza0__iA.css
+
+BEFORE CDP:
+  HTML script = /assets/index-B_vhyY5s.js
+  http JS length = 2172590
+  JS sha256 = 30145754ae259b733719ccf613efba53621c20103b6dccf2e7c89d4921a8bbf3
+  HTML css = /assets/index-Dza0__iA.css
+  http CSS length = 82661
+  CSS sha256 = a87447efdeb34967d524b950412d86f5b5aacfa09f5e66bf1f671061b1f397ba
+
+AFTER CDP:
+  HTML script = /assets/index-B_vhyY5s.js
+  http JS length = 2172590
+  JS sha256 = 30145754ae259b733719ccf613efba53621c20103b6dccf2e7c89d4921a8bbf3
+  HTML css = /assets/index-Dza0__iA.css
+  http CSS length = 82661
+  CSS sha256 = a87447efdeb34967d524b950412d86f5b5aacfa09f5e66bf1f671061b1f397ba
+
+Claimed remint name + length + hash match for JS and CSS.
+HASH_MISMATCH=0.
+
+Bundle scan (live JS bytes, not source):
+  play-idle-or-first-w = 0
+  play-idle = 1
+  openstreetmap = 0
+  overture = 0
+  catalog_clear = 0
+  60 FPS = 0
+  không trên phố = 1
+  leftover máy này = 1
+  Not a street stall = 1
+  Nearby E does not open this shelf = 1
+  Đang xem cửa hàng = 1
+  viewing_shop_id = 18
+  GATE-U1 = 0
+  R2-WP1 = 0
+  leftover kind/gap copy still in the bundle
+
+/demo-bus before and after still has
+  shop-local-sharedpc          Quầy Shared PC
+  shop-local-mtl8ulddihjpre    Quay Critic J6 Jump
+plus kept this-PC street shops. Did not catalog_clear.
+
+================================================================================
+HUNT 1 — HASH_MISMATCH — PASS
+================================================================================
+
+Tried to fail a swapped or stale bundle vs claimed
+B_vhyY5s / 2172590 /
+30145754ae259b733719ccf613efba53621c20103b6dccf2e7c89d4921a8bbf3
+AND CSS Dza0__iA / 82661 /
+a87447efdeb34967d524b950412d86f5b5aacfa09f5e66bf1f671061b1f397ba.
+
+Independent GET / + GET JS + GET CSS before any Chrome, and
+again after both 9995 and 9997 seats exited. Same HTML script
+name, same JS length/sha256, same CSS name/length/sha256.
+Pid still 48264. HASH_MISMATCH=0. PASS.
+
+================================================================================
+HUNT 2 — NAMED MISS: HITCH2 KEYUP-MOUNT ON FIRST HARBOR W — PASS
+================================================================================
+
+Tried to fail: corner MapLibre already live during first W, or
+live 180 ms after first-W keyup (hitch2 construct-on-keyup),
+or data-minimap-defer-kind still play-idle-or-first-w, or a
+world MapView dashboard restored.
+
+Independent 9995, isolated seat A, 1280×720, headless=new.
+playReady=yes canvas=1280×720 engine=r3f hitch-warmup=audio-compile.
+Chip Harbor Walk. Focused canvas and started W immediately
+(no 800 ms idle stand that would idle-mount and skip the miss).
+
+9995 snapshots (this critic’s DOM, not implementer JSON):
+
+  spawn / before W:
+    defer=pending  kind=play-idle  hh-world-minimap ABSENT
+    world MapView ABSENT  chip=Harbor Walk  pose=idle
+    shopPanel=0  nearby=""
+
+  mid W (held KeyW, rAF ~2800 ms, pose=walk, lat moved):
+    defer=pending  kind=play-idle  hh-world-minimap ABSENT
+    world MapView ABSENT  chip=Harbor Walk
+
+  keyup + 180 ms:
+    defer=pending  kind=play-idle  hh-world-minimap ABSENT
+    world MapView ABSENT  chip=Harbor Walk
+    KEYUP_180_LIVE=0
+
+  ~920 ms more idle after that (+~1100 ms after keyup):
+    defer=pending  kind=play-idle  minimap ABSENT
+    pose had returned idle  chip=Harbor Walk
+
+9997 idle-follow (separate isolated profile, same first-W start):
+
+  mid W:     defer=pending  mini=0  kind=play-idle
+  keyup+180: defer=pending  mini=0  kind=play-idle
+  +800 ms:   defer=pending  mini=0  pose=idle  world=0
+  +1000 ms:  defer=pending  mini=0
+  +1200 ms:  defer=pending  mini=0
+  +1600 ms:  defer=live     mini=1  kind=play-idle  chip=Harbor Walk  world=0
+  +2200 ms:  defer=live     mini=1  kind=play-idle  world=0
+
+Named miss held: hitch2 would already be live at keyup+180.
+This remint was still pending then. Kind is play-idle, not
+play-idle-or-first-w (bundle count of that old kind string
+is 0). World MapView never appeared. Default Play stayed
+R3F 1280×720; map-pane-play overlay only.
+
+Idle mount was later than the implementer ~950 ms note
+(still pending at +1200 ms here; live by +1600 ms). That is
+honesty, not a named fail. The instruction allows idle to go
+live after ~800–1000 ms; it does not fail a later play-idle
+mount. PASS.
+
+================================================================================
+HUNT 3 — HONESTY: FPS / CHIP / SPAWN E / LEFTOVERS — PASS
+================================================================================
+
+Tried to fail a 60 FPS or R2-WP1 smuggle, Harbor chip lie,
+leftover stealing spawn E, leftover shops wiped, or leftover
+kind/gap copy ripped from the bundle. Do not fail on first-W
+min ~10–12.
+
+This critic’s own first-W rAF (9995, hold W ~2800 ms, skip 2):
+  n=110  wall=2800.0 ms
+  fps min=11.99  mean=45.09  median=59.52  p1=20.00  max=60.61
+  frame max=83.4 ms
+Min 11.99 is the admitted leftover class (~10–12). Not a fail
+on this remint. Mean 45.09 is not a stable 60. One 16.5 ms
+frame is not a 60 FPS claim. NOT_60_FPS. NOT_R2_WP1_PASS.
+Min ≥20 / idle ≥50 still UNFILLED. Did not mint those.
+
+Chip stayed Harbor Walk at spawn, mid-W, keyup+180, and idle
+live. Spawn E empty: shopPanel=0 nearby="" at spawn; after
+Harbor E hold shopPanel=0 nearby="". Leftover did not steal
+street E.
+
+/demo-bus still holds leftover Shared PC and J6 after CDP.
+Live bundle still has leftover kind/gap copy
+(“không trên phố”, “leftover máy này”, “Not a street stall”,
+“Nearby E does not open this shelf”). Friend-viewing copy
+still exists (“Đang xem cửa hàng” = 1). PASS.
+
+================================================================================
+HUNT 4 — SAME PID / DID NOT RECYCLE — PASS
+================================================================================
+
+LISTEN 127.0.0.1:4175 pid 48264 before CDP and after CDP.
+Process StartTime still 2026-09-04 20:00:40 +07. Did not
+recycle, rebuild, restore-dist, kill, or restart 4175.
+Did not catalog_clear. PASS.
+
+================================================================================
+METHOD
+================================================================================
+
+1. 4175 already up (pid 48264, StartTime 20:00:40 +07).
+   Did not recycle / rebuild / start other ports / bind WAN.
+2. GET /  /demo-bus  /assets/index-B_vhyY5s.js
+   /assets/index-Dza0__iA.css. Recorded name+sha+len twice.
+3. Read implementer note (TICK=n/a). Did not copy its probe
+   writer or J5-HITCH3 JSON. Did not run j5-hitch3-probe.mjs
+   or j5-hitch2-probe.mjs.
+4. Independent Chrome CDP 1280×720 isolated profiles.
+   Port 9995: about:blank → ?seat=a, first Harbor W immediately
+   after playReady, rAF during W, snap mid-W / keyup+180 /
+   ~920 ms idle, then E at Harbor.
+   Port 9997: same first-W start, idle marks 800/1000/1200/
+   1600/2200 ms after keyup.
+5. Did not write lead packs. Did not tick plan. Did not fake
+   GATE-U1. Did not claim R2-WP1 or 60 FPS.
+
+Temp only (not under data-qa):
+  %TEMP%\hh-hitch3-reaudit\critic-hitch3-cdp.mjs
+  %TEMP%\hh-hitch3-reaudit\critic-hitch3-idle-follow.mjs
+  %TEMP%\hh-hitch3-reaudit\critic-walk.json
+  %TEMP%\hh-hitch3-reaudit\critic-idle-follow.json
+
+================================================================================
+OWNER LEFTOVERS (unchanged; not invented)
+================================================================================
+
+1. GATE-U1 three-human review still unproven. Not faked.
+2. R2-WP1 headed/mobile/memory/min-FPS thresholds still UNFILLED.
+   This first-W min 11.99 is not ≥20. Not 60.
+3. WAN / other-PC join still not built. 4175 loopback only.
+4. Real account / OIDC still not built.
+5. Open data (OSM/Overture) still needs license ledger + grant.
+6. Leftover this-PC shops stay in the catalog; they do not own
+   street E.
+7. M0/M1/M2 plan WPs still NOT_STARTED. NOT_PLAN_PASS. Not M1.
+   Not M2.
+
+END

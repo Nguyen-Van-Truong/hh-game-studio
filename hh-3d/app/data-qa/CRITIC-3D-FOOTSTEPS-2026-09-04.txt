@@ -1,0 +1,96 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=06:55 +07
+ROLE=IMPLEMENTER
+TICK=n/a (do not treat this file as TICK=yes)
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M0_WP1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_OIDC=1
+PLAYER_URL=http://127.0.0.1:4175/
+RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-04
+COMMAND=node hh-3d/app/data-qa/j5-footsteps-probe.mjs
+VERDICT_IMPLEMENTER_CDP=J5_FOOTSTEPS_OK
+LIVE_JS=/assets/index-2Oh0rjA2.js
+LIVE_JS_LEN=2129826
+LIVE_JS_SHA256=90255e199dae322fa6818097ba690770ffe36c6b9b952a1eff10974c973f8e18
+ONE_RECYCLE_AFTER_BUILD=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NO_COMMIT=1
+NO_HIP_SPHERES=1
+DID_NOT_RIP_CAMERA=1
+DID_NOT_RIP_FRIEND_LIMBS=1
+DID_NOT_RIP_STREET_PLAY_SHOPS=1
+DID_NOT_RIP_SKY=1
+CLAIMS_1_4_NOT_REDONE=1
+
+================================================================================
+SLICE
+================================================================================
+
+Walk already looked like a step and was silent. This slice adds cheap
+procedural self footsteps (WebAudio triangle thump + short noise; no
+downloaded samples). Each opposite-stride sine zero-crossing plants one
+foot. Sprint uses the existing faster stride clock and a higher gain
+(0.22 vs 0.14). Friends stay silent. No speech, no looped bed.
+
+Mute when document.hidden, Tab menu covering Play, or the shop sheet is
+open. Airborne / standing also mute. Offline-only self is enough.
+
+Honesty is still the authored 400 m block. Not a city.
+
+================================================================================
+PROOF (implementer CDP vs recycled 4175)
+================================================================================
+
+typecheck EXIT=0
+npm test EXIT=0 (63 tests)
+npm run build EXIT=0  dist/assets/index-2Oh0rjA2.js
+Recycled existing 4175 once (old pid 52660 → listen 127.0.0.1:4175 pid 44212).
+Did not start 4173 / 4174 / 5175. Did not bind 0.0.0.0.
+
+Probe node hh-3d/app/data-qa/j5-footsteps-probe.mjs EXIT=0
+  Isolated headless Chrome 1280x720, seats A + B, ports 9521 / 9522.
+
+  Stand spawn: data-footsteps=0 ticks=0
+  Hold W: data-footsteps=1 pose=walk; +4 plants in ~1.1 s (gain 0.14)
+  Fake document.hidden while W held: data-footsteps=0 reason=hidden
+  Unhide, still W: data-footsteps=1
+  Tab menu open while W: data-footsteps=0 reason=overlay
+  Close menu, still W: data-footsteps=1
+  Release W: pose=idle data-footsteps=0
+  Shift+W: data-footsteps=1 sprint=1; +5 plants in ~1.1 s (gain 0.22)
+
+  Seat A lantern E opened shop-lantern-fish.
+  Isolated seat B spawn: nearby none; "Quầy Cá Đèn Lồng: 29 m away";
+  leftover Shared PC / J6 did not own E; press E opened nothing.
+
+  Shot j5-3d-footsteps.png 1280x720: walking north on Harbor Walk,
+  honesty banner still "Authored approximation … NOT_PLAN_PASS".
+  Sky still gradient-hemisphere. scooters=15. collision=footprint-radius.
+
+Independent critic CRITIC-3D-FRIEND-GAIT-REAUDIT-2026-09-04.txt TICK=yes
+on BaoJbjxu is accepted. This slice did not redo claims 1–4.
+
+This file is implementer notes. Not a critic TICK. Not a plan tick.
+
+================================================================================
+OWNER LEFTOVERS (unchanged)
+================================================================================
+
+- GATE-U1 three human reviewers (not faked)
+- AUTHORIZE_MAP_FETCH=YES + license ledger before any OSM/Overture
+- Other-PC / WAN join (store is this PC 4175 loopback)
+- Real account / OIDC
+
+================================================================================
+END
+================================================================================

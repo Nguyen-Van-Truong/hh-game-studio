@@ -1,0 +1,76 @@
+{
+  "run_id": "HH3D-J5-20260903-ASIA-SAIGON-06",
+  "player": "http://127.0.0.1:4175/",
+  "verdict": "J5_FIRST_PAINT_OK",
+  "not_plan_pass": true,
+  "not_gate_u1": true,
+  "firstOk": true,
+  "readyOk": true,
+  "emptyGrayFirst": false,
+  "labeled": true,
+  "street": false,
+  "firstBytes": 34371,
+  "firstHash": "365e8b0fbc0a83ee",
+  "firstPx": {
+    "width": 1280,
+    "height": 720,
+    "samples": 11440,
+    "meanR": 215.8,
+    "meanG": 210.9,
+    "meanB": 200.3,
+    "std": 20.4,
+    "channelSpread": 15.49,
+    "uniqueQ16": 89,
+    "beigeRatio": 0.004,
+    "darkRatio": 0.007,
+    "grayRatio": 0.001,
+    "emptyGray": false
+  },
+  "firstDom": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/",
+    "boot": null,
+    "loading": {
+      "w": 1280,
+      "h": 720,
+      "text": "HH World\n\nLoading the authored 400 m block\n\nGround, buildings, and your character. Authored approximation — not a city, not OSM, not 1:1."
+    },
+    "playReady": "",
+    "canvas": null,
+    "labeled": true,
+    "bodySample": "HH World\n\nLoading the authored 400 m block\n\nGround, buildings, and your character. Authored approximation — not a city, not OSM, not 1:1.\n\nHH World\n\nMenu\nTab\n\nAuthored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:"
+  },
+  "readyHash": "87bc37df03e48899",
+  "readyPx": {
+    "width": 1280,
+    "height": 720,
+    "samples": 11440,
+    "meanR": 123.6,
+    "meanG": 120.2,
+    "meanB": 112.6,
+    "std": 69.16,
+    "channelSpread": 10.97,
+    "uniqueQ16": 129,
+    "beigeRatio": 0.074,
+    "darkRatio": 0.41,
+    "grayRatio": 0.252,
+    "emptyGray": false
+  },
+  "readyDom": {
+    "title": "HH World",
+    "href": "http://127.0.0.1:4175/?seat=a",
+    "boot": null,
+    "loading": null,
+    "playReady": "yes",
+    "canvas": {
+      "w": 1280,
+      "h": 720,
+      "cw": 1280,
+      "ch": 720
+    },
+    "labeled": false,
+    "bodySample": "HH World\n\nMenu\nTab\n\nAuthored approximation. Not a live map, not OSM/Overture, not photogrammetry, and not a digital twin. No GTA claim, no 1:1 city. NOT_PLAN_PASS.\n\nFriend bodies are a this-machine local demo (tabs or browser profiles on 4175). Not a city presence server. Positio"
+  },
+  "shot": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-first-paint.png",
+  "shotReady": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-first-paint-ready.png"
+}

@@ -1,0 +1,108 @@
+IMPLEMENTER NOTES — not an independent critic
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=13:28 +07
+ROLE=IMPLEMENTER
+TICK=n/a (do not treat this file as TICK=yes)
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M0_WP1=1
+NOT_OSM=1
+NOT_WAN=1
+NOT_GPS=1
+NOT_OIDC=1
+PLAYER_URL=http://127.0.0.1:4175/
+RUN_ID=HH3D-J5-20260904-ASIA-SAIGON-28
+COMMAND=node hh-3d/app/data-qa/j5-west-xing-probe.mjs
+VERDICT_IMPLEMENTER_CDP=J5_WEST_XING_OK
+LIVE_JS=/assets/index-BkgSKGSy.js
+LIVE_JS_LEN=2164988
+LIVE_JS_SHA256=2c2385ccd07a97fdca755f1279cdb0f07cf78dbcf7162ebda0597e1ecec285e6
+ONE_RECYCLE_AFTER_BUILD=1
+DID_NOT_CATALOG_CLEAR=1
+DID_NOT_TICK_PLAN=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NO_COMMIT=1
+NO_HIP_SPHERES=1
+DID_NOT_RIP_NET_LABELS=1
+DID_NOT_RIP_RECONNECT=1
+DID_NOT_RIP_BOARDS=1
+DID_NOT_RIP_STREET_PLAY_SHOPS=1
+DID_NOT_RIP_HARBOR_STEPS_EAST=1
+DID_NOT_RIP_DEFERRED_MINIMAP=1
+DID_NOT_RIP_FRIEND_STEPS=1
+DID_NOT_RIP_90M_LOD=1
+DID_NOT_RIP_HUD=1
+DID_NOT_RIP_PLAQUES=1
+DID_NOT_RIP_LANES=1
+DID_NOT_RIP_FOG_EDGE=1
+DID_NOT_RIP_SKY=1
+DID_NOT_RIP_CAM_HIT=1
+NO_FIFTH_STREET=1
+NO_NPC=1
+NO_INTERIOR=1
+NO_MAP_FETCH=1
+ACCEPTED_PRIOR=CRITIC-3D-NET-RECONNECT-REAUDIT-2026-09-04.txt TICK=yes
+
+================================================================================
+SLICE
+================================================================================
+
+Harbor Walk × Steps East already had zebra + stop-line + curb.
+The west mouth was still two bare ribbons. This remint mirrors
+that cheap crossing at Harbor Walk × Steps West only:
+
+Harbor zebra language (7 cream stripes) on the west inner
+ribbon so it does not stack on the east Harbor zebra, a thin
+stop-line, and four stone curb-return boxes on the Harbor west
+curb (two L-hooks). Same 400 m fixture. Two official GeoJSON
+streets + inner lanes. Not OSM. Not a downtown grid. Did not
+add a fifth named street. Steps West plaque stays.
+
+Did not remint net labels / reconnect, boards, streetPlayShops,
+Harbor×Steps East crossing, deferred minimap, friend steps,
+LOD, HUD chip, plaques, lanes, fog/edge, sky, or cam-hit.
+
+Lantern stall zebra kept. East mouth zebra kept. Spawn / bound
+/ lantern 10 m E path stay open. Curb returns are visual only
+(not walk solids).
+
+================================================================================
+CDP (headless Chrome, 1280×720, recycled 4175)
+================================================================================
+
+WALK: Harbor north, A to face west, W onto Steps West, then
+east mouth check and lantern E. Seat B leftover E check.
+
+cornerDom=true  kind=zebra-stopline-curb
+crosswalks=3 (lantern + east + west)  stopLines=2  curbReturns=8
+Shot j5-3d-west-xing-west.png facing north on Steps West:
+  floor whiteRatio=0.172  curbRatio=0.307  (cream stripes + stone lip)
+chip Harbor Walk → Steps West after −17.44 m west / +21.22 m north
+minimap after mount: active=Steps West highlight=1 role=inner
+east zebra still in DOM (7 stripes); east shot kept
+inside-ring=0  at-bound=0
+lantern E shop-lantern-fish
+Seat B leftover E not stolen
+GeoJSON streets=2 (Harbor Walk, Tram Approach)
+plaques still 4
+honesty authored 400 m / two official streets / inner lanes /
+not OSM / NOT_PLAN_PASS
+
+Implementer CDP only. Not an independent critic TICK. Not a plan tick.
+
+================================================================================
+OWNER LEFTOVERS (unchanged)
+================================================================================
+
+1. GATE-U1 three-human review (first acceptance leftover; not faked).
+2. R2-WP1 headed/mobile/memory/min-FPS thresholds still UNFILLED.
+   Hitch2 remint kept; first-W min still ~10. Not 60.
+3. WAN / other-PC join still not built. 4175 loopback only.
+4. R4-WP0B real account/OIDC still not built.
+5. Open data (OSM/Overture) still needs license ledger + grant.
+6. Leftover this-PC shops stay in the catalog; they do not own street E.
+7. M0/M1/M2 plan WPs still NOT_STARTED. NOT_PLAN_PASS.

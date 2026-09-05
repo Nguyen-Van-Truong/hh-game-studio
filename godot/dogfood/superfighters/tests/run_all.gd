@@ -1816,6 +1816,9 @@ func _test_survival(app: App) -> void:
 
 
 func _test_bots(app: App) -> void:
+	if OS.get_environment("HH_VF_BOTS_COMPACT") == "1":
+		_fail("BOTS official run_all must not set HH_VF_BOTS_COMPACT=1")
+		return
 	var errors: PackedStringArray = await BotCasesScript.run_all(app)
 	var i: int = 0
 	while i < errors.size():

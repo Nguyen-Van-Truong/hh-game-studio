@@ -1,0 +1,291 @@
+TICK=no
+URL=http://127.0.0.1:4175/
+BOOTED_4175=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+CRITIC=INDEPENDENT_ADVERSARIAL_CROSS
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=05:44 +07
+MODEL=grok-4.6-extra-high
+SCOPE=HH World cross-audit on restored 4175 (spawn camera, leftover this-PC shops, friend walk-cycle, modes header, E/sky/hips/W)
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=04cb6ca92c482017c02d78e7885727f73b62103d
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-CROSS-AUDIT-2026-09-04.txt
+PRIOR_LOCAL_LEAD=hh-3d/app/data-qa/CRITIC-3D-CAM-HIT-2026-09-03.txt
+PRIOR_LOCAL_LEAD_WALK=hh-3d/app/data-qa/CRITIC-3D-WALK-CYCLE-2026-09-03.txt
+PRIOR_LOCAL_LEAD_SKY=hh-3d/app/data-qa/CRITIC-3D-SKY-SIGNS-2026-09-03.txt
+PRIOR_LOCAL_LEAD_STALL=hh-3d/app/data-qa/CRITIC-3D-SHOP-STALL-2026-09-03.txt
+LEAD_CAM_HIT_CLAIM=HH3D-J5-20260903-ASIA-SAIGON-37 / J5_CAM_HIT_OK / TICK=yes
+LEAD_WALK_CLAIM=HH3D-J5-20260903-ASIA-SAIGON-36 / J5_WALK_CYCLE_OK / TICK=yes
+PROGRESS_TRUSTED_ALONE=NO
+LOCAL_LEAD_TICK_TRUSTED_ALONE=NO
+LEAD_PACK_TRUSTED_ALONE=NO
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_REBUILD=1
+DID_NOT_RUN_LEAD_PROBE_WRITER=1
+DID_NOT_BIND_0_0_0_0=1
+NOT_M0_WP1=1
+NOT_M2=1
+NOT_GTA=1
+NOT_1TO1=1
+NOT_A_CITY=1
+NOT_OSM=1
+NOT_WAN=1
+VITE_PREVIEW_PORT_PIN=4175
+LIVE_PID=34936
+LISTEN=127.0.0.1:4175
+CRITIC_CDP_PORTS=9841 / 9851 / 9852
+VIEWPORT=1280x720
+
+LIVE_JS_AUDITED=/assets/index-D4DzxvQX.js
+LIVE_JS_AUDITED_LEN=2123194
+LIVE_JS_AUDITED_SHA256=801af5ca1271198378249d4d284146199341f456c34fd344ebf8ff248258dab2
+LIVE_JS_NOW_HTML=/assets/index-CxzK2kmo.js
+LIVE_JS_NOW_LEN=2123716
+LIVE_JS_NOW_SHA256=c9e3e8c32e5dc8b436406d5776972eb13e9ebc84c0fdecb4e2ca9bd15cc36c24
+CONCURRENT_DIST_REPLACE_AFTER_CDP=1
+
+BIGGEST_MISS=LOCAL_LEAD TICK=yes on CAM-HIT / WALK-CYCLE / SKY is incomplete. Friend opposite-stride on a second seat is still unproven after this critic tried. Modes header still says NOT_IMPLEMENTED while 4175 already runs demo friends+shops. Leftover this-PC shops still sit in the catalog and steal the E prompt on seat B. Spawn/north sky is beige. NOT_PLAN_PASS.
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=no
+
+URL=http://127.0.0.1:4175/
+
+4175 was DOWN. This critic restored the existing dist only
+(`npm run preview -- --host 127.0.0.1 --port 4175 --strictPort`
+from hh-3d/app/web). Did not rebuild. Did not start 4173 / 4174 /
+5175. Bind was 127.0.0.1. Vite listen pid 34936.
+
+Independent Chrome CDP (headless=new, 1280x720, temp profiles,
+about:blank then ?seat=a / ?seat=b). Did not run lead probe writers.
+Did not trust PROGRESS or LOCAL_LEAD TICK=yes alone.
+
+This is NOT_PLAN_PASS. GATE-U1 humans were not invented.
+"Not a city" is honesty, not a miss.
+
+================================================================================
+LIVE JS
+================================================================================
+
+At restore / this CDP:
+  HTML script = /assets/index-D4DzxvQX.js
+  disk length = 2123194
+  disk sha256 = 801af5ca1271198378249d4d284146199341f456c34fd344ebf8ff248258dab2
+  Matches LOCAL_LEAD CAM-HIT SAIGON-37 recorded bundle.
+
+After this CDP (05:42 +07), a concurrent remint replaced dist:
+  HTML now = /assets/index-CxzK2kmo.js
+  length = 2123716
+  sha256 = c9e3e8c32e5dc8b436406d5776972eb13e9ebc84c0fdecb4e2ca9bd15cc36c24
+  Old JS URL now falls back to index.html (2052 B, text/html).
+  This critic did not rebuild. Live play numbers below are the
+  D4DzxvQX restore session, not the later CxzK2kmo file.
+
+================================================================================
+MISS 1 — FRIEND WALK-CYCLE ON A SECOND SEAT STILL UNPROVEN
+================================================================================
+
+LOCAL_LEAD CRITIC-3D-WALK-CYCLE-2026-09-03.txt TICK=yes while writing
+"This critic did not remint an isolated A/B friend seat."
+PROGRESS then treats opposite-stride as kept for remotes.
+
+This critic reminted two isolated seats on the restored 4175
+(CDP 9851/9852, localStorage cleared, Menu → add/accept → Online):
+
+  B sees remote-avatar-a  body=tunic-humanoid  tunic=#2a7d78
+  data-walk-cycle="opposite-stride" is a STATIC label string
+  remote limbSpread / limbOpposite = null
+  writeWalkCycleProof runs only when Walker self=true
+    (PlayView.tsx: if (self && limbsRef.current) writeWalkCycleProof)
+  B's own canvas limb while A walked: spread=0.05 moving=0
+    (B idle breath, not A's stride)
+  canvas.__r3f = false  — no live remote limb dump
+  A hold W: remote pose flipped to walk
+  lat 10.7716200 → 10.7716222  (+0.24 m only)
+  stand-vs-walk mid-frame pixelDiff = 0.0076  (noise)
+
+That is a pose flag + a tunic label, not an observed opposite-arm /
+opposite-leg cycle on the second seat. LOCAL_LEAD over-claimed by
+ticking WALK-CYCLE yes without this remint. This critic tried and
+still cannot prove it.
+
+================================================================================
+MISS 2 — MODES HEADER IS STALE AGAINST THE LIVE DEMO
+================================================================================
+
+hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+  IMPLEMENTATION_STATUS=NOT_IMPLEMENTED
+  THIS_REVISION=DOCUMENTATION_ONLY_NOT_A_START_TICKET
+  "Bản map local hiện tại chưa đáp ứng các ý này."
+  "Trong giai đoạn chỉ có M0/M1, chưa M2-WP1: không quảng cáo
+   Online đã hoạt động. Control Online ghi Chưa khả dụng"
+
+Live 4175 on this restore:
+  GET /demo-bus already has graph pair a↔b status=accepted
+  Isolated seats opened Online and drew remote-avatar-a
+  E at lantern opened shop-lantern-fish (public shelf)
+  Catalog also holds leftover player shops (below)
+  Honesty banner still says NOT_PLAN_PASS / this PC loopback
+
+The modes file is the owner contract (AUTHORITY=1 for modes).
+A header that still says NOT_IMPLEMENTED while the live demo
+already runs friends + shops + Online remotes is a stale doc.
+That is not a plan tick and not GATE-U1. It is a routing lie
+for the next reader.
+
+================================================================================
+MISS 3 — LEFTOVER THIS-PC SHOPS STILL OWN THE STREET
+================================================================================
+
+GET /demo-bus catalog (this restore, no catalog_clear):
+
+  shop-local-sharedpc  "Quầy Shared PC"
+    lon=106.69804 lat=10.77162   EXACT spawn
+    collide=0  awning=#2f5fbe
+  shop-local-mtl8ulddihjpre  "Quay Critic J6 Jump"
+    lon=106.6981497 lat=10.77162  ~12 m east of spawn
+    collide=0  awning=#4a8c2e
+  plus authored shop-lantern-fish
+
+Hidden play-shop-stalls listed all three. Proof
+data-shop-stalls=1 (only lantern drawn).
+
+Spawn behind-camera (seat A, heading north, camKind=look-ray-ring):
+  camHit=0  camHitId=""  camDist=5.62  camDesired=5.62  camY=3.55
+  Shot sha16=68aef84d6eeb95b9
+  Over-shoulder street: teal tunic, dark road, tan boxes, scooters.
+  Shared PC / this-PC kiosk did NOT fill the lens.
+  Suspected "leftover mesh eats behind-camera" is NOT observed
+  on this restore. Camera solids skip non-collide leftovers
+  (world.ts shopStallSolid returns null when collide=false),
+  and the drawn stall count was 1.
+
+That is not a free pass. LOCAL_LEAD CAM-HIT TICK=yes still
+called leftover "biggest miss" and ticked yes anyway. The
+CAM-HIT official path walked off spawn, then proved pull-in
+only vs bldg-steps-e-00. Spawn camHit=0 was treated as
+"open street" success while leftover shops remained in the
+this-PC store.
+
+Seat B live HUD (friend-stand / friend-walk shots):
+  "Press E or tap Open to enter Quay Critic J6 Jump."
+  "Quay Critic J6 Jump: 5.0 m away"
+  Seat B spawn is +7 m east; J6 leftover is +12 m east.
+  The E prompt is a leftover this-PC shop, not the lantern.
+  That is a hard play miss: ghost catalog still drives nearby E
+  on the second seat.
+
+================================================================================
+MISS 4 — SPAWN / NORTH SKY IS BEIGE
+================================================================================
+
+LOCAL_LEAD CRITIC-3D-SKY-SIGNS-2026-09-03.txt TICK=yes
+  "Spawn canyon RGB 113.3/155.5/179.8 blueRatio=0.784 beige=0"
+
+This critic spawn sky band (top of the 1280x720 play canvas):
+  RGB 128.2 / 132.1 / 125.1
+  blueRatio=0.226  beigeRatio=0.143
+  bluerThanRed=false
+Spawn and lantern-E guest frames read as a flat pale beige /
+off-white void, not the claimed blue hemisphere. Seat B facing
+west showed more blue — so the "sky is fine" claim is
+viewpoint-cherrypicked. Spawn is the default shot.
+
+================================================================================
+TRIED TO FAIL — DID NOT FAIL
+================================================================================
+
+E lantern: after W 16 s, north +25.41 m, E opened
+  shop-lantern-fish. Shelf text: Cá nục sương / Túi cói chợ.
+  NOT a miss.
+
+Spawn W trapped: hold W 2.2 s, lat 10.7716200 → 10.7716511
+  north +3.46 m. Not trapped. collide=0 leftover does what
+  the comment says for walk. NOT a miss.
+
+Hip sphereGeometry: Person.tsx still uses slim pelvis
+  RoundedBox [0.22, 0.11, 0.13] + capsule thighs. No hip
+  sphere restored. Behind-camera is a long teal tunic with a
+  rounded hem. Not treated as a hard miss.
+
+Leftover kiosk filling the spawn behind-camera: NOT observed
+  (see Miss 3). Honesty: the hypothesis failed on this restore.
+
+"Not a city" / 400 m authored boxes: honesty. Not a miss.
+
+================================================================================
+WHAT LOCAL_LEAD OVER-CLAIMED
+================================================================================
+
+CRITIC-3D-CAM-HIT-2026-09-03.txt TICK=yes
+  Spawn camHit=0 dist=5.62 sold as open-street proof.
+  Leftover Shared PC called out, then ignored for the tick.
+  Official pull-in is only Steps East vs a building ring.
+  Incomplete for "camera no longer eats geometry at spawn."
+
+CRITIC-3D-WALK-CYCLE-2026-09-03.txt TICK=yes
+  Self behind-camera only. Friend seat explicitly skipped.
+  PROGRESS still says remotes reuse the same cycle.
+
+CRITIC-3D-SKY-SIGNS-2026-09-03.txt TICK=yes
+  Spawn beige=0 / blue 0.784. Live spawn/north is beige.
+
+CRITIC-3D-SHOP-STALL-2026-09-03.txt TICK=yes
+  "Spawn is owned by a leftover Shared PC stall."
+  Mesh may be hidden now; leftover still owns catalog + seat B E.
+
+PROGRESS.txt still CURRENT = CAM_HIT / SAIGON-37 / J5_CAM_HIT_OK
+  remint. Overnight pair did not leave a new player slice.
+  Local TICK=yes remains NOT_PLAN_PASS.
+
+================================================================================
+METHOD
+================================================================================
+
+1. 4175 was down. Restored existing dist only. Host 127.0.0.1
+   --strictPort 4175. Did not rebuild. Did not start 4173/4174/5175.
+2. Read PROGRESS, LOCAL_LEAD CRITIC-3D-*, world.ts leftover /
+   cameraHitSolids, owner-modes header.
+3. GET /  /demo-bus  /data/shops.json. Recorded leftover catalog.
+4. Chrome CDP 1280x720 seat A: spawn shot, spawn E, spawn W,
+   walk to lantern, E. Pixel bands on spawn PNG.
+5. Chrome CDP two isolated seats A/B: friend + Online + A walk.
+   Remote limb attrs / __r3f / pixelDiff. TEMP shots only.
+6. Did not write lead packs. Did not tick plan. Did not fake
+   GATE-U1. Did not fetch maps.
+
+TEMP shots (not under data-qa):
+  spawn.png        sha16=68aef84d6eeb95b9
+  spawn-e.png      sha16=531e8050bb2d6d86
+  lantern-e.png    opened shop-lantern-fish
+  friend-stand.png B gold, remote A teal, E=J6 leftover 5.0 m
+  friend-walk.png  pixelDiff 0.0076 vs stand
+
+================================================================================
+STILL IMPOSSIBLE WITHOUT OWNER
+================================================================================
+
+- GATE-U1 three human reviewers (not faked)
+- AUTHORIZE_MAP_FETCH=YES + license ledger before any OSM/Overture
+- Other-PC / WAN join (store is this PC 4175 loopback)
+- R4-WP0B real account / OIDC
+
+================================================================================
+END
+================================================================================

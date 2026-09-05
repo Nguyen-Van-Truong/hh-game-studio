@@ -1,0 +1,32 @@
+G0 LICENSE LEDGER TEMPLATE
+DATE=2026-09-03
+STATUS=EMPTY_NO_ACQUIRE
+PAID_SERVICE_AUTHORIZATION=NONE
+NETWORKING=OFF
+
+Do not download, account, or pin a provider release until the owner fills
+LEGAL_PROFILE on the web record (R0-WP0-WEB-DECISION-RECORD.txt) or a later
+signed grant. Unreal/G0 accept is not a fetch ticket. Canonical currentness
+field is acquired_at.
+If a plan still says accessed_at, treat it as the same event only after an
+explicit mapping; do not invent a second timestamp.
+
+ROW FIELDS (one row per artifact, later)
+  asset_or_source_id=
+  provider=
+  exact_url=
+  source_released_at=
+  acquired_at=
+  license=
+  attribution_text=
+  sha256=
+  permitted_use=
+  reviewer=
+  decision=
+
+ROWS
+  (none)
+
+FORBIDDEN UNTIL OWNER ACCEPT
+  Overture/OSM extract, Cesium ion, Google 3D Tiles, marketplace packs,
+  planet dumps, raster tile scrapes, Unreal sample maps.

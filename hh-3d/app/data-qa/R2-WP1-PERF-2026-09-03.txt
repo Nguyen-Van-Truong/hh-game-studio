@@ -1,0 +1,316 @@
+R2-WP1 PERFORMANCE / QUALITY / FALLBACK EVIDENCE
+DATE=2026-09-03
+TIMEZONE=Asia/Saigon
+RUN_ID=HH3D-R2WP1-20260903-ASIA-SAIGON-01
+COMMAND_ID=cmd.hh3d-r2-wp1.perf-evidence.1
+LEAD=agent measurement on existing preview
+NOT_PLAN_PASS=1
+GATE_U1=NOT_DONE
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+PLAN_CHECKBOXES=UNCHANGED
+PLAYER_URL=http://127.0.0.1:4175/
+PREVIEW=EXISTING_VITE_PREVIEW PID=58476 (did not start 4173/4174/5175; did not start a second HH World preview)
+GIT_HEAD=ff702a7112cb00ef97160025d3006ecb75f415ee
+ARTIFACT_HASH=124042f8dfb7cc572d8d13ef173a1fbed51f3e76e2d8dab44963c4c9481fe47b
+SOURCE_HASH=5daca107ae79bd4c248584a6e761e65cbd9b3665c548f359924920fba33b4b83
+CRITIC_LOCAL_PLAYER_PROOF=hh-3d/app/data-qa/CRITIC-HH-WORLD-2026-09-03.txt TICK=yes
+NO_HUMAN_OWNER_SIGN_INVENTED=1
+NO_GATE_U1_SIGNATURE_INVENTED=1
+
+================================================================================
+VERDICT (evidence only)
+================================================================================
+
+NOT_PLAN_PASS
+
+R2-WP1 numbers now exist for one Chrome headless desktop seat against the
+already-up 4175 preview. That is measurement, not a plan tick.
+
+GATE-U1 (three human reviewers, 5-minute journey) is still open. Original
+plan STATE/PASS stay [ ]. Do not treat this file as coordinator permission
+to tick R2-WP1.
+
+================================================================================
+WHAT WAS OPENED (browser matrix)
+================================================================================
+
+OBSERVED
+  Product: Chrome Headless 152.0.7977.65
+  UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+      (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36
+  OS: Microsoft Windows 11 10.0.26200
+  Viewport: 1280 x 720, deviceScaleFactor=1, mobile=false
+  GPU used by page: ANGLE (NVIDIA, NVIDIA GeForce GTX 1660 Ti Direct3D11
+      vs_5_0 ps_5_0, D3D11) — WebGL 2.0
+  Host CPU: Intel Core i5-10400F 6C/12T
+  Host RAM: 31.92 GB class (34277961728 bytes)
+  Host GPU adapter: NVIDIA GeForce GTX 1660 Ti, driver 32.0.15.9174
+  Method: Chrome CDP on 127.0.0.1:9235 (map/FPS) and :9236 (WebGL off)
+  Player: http://127.0.0.1:4175/ already listening (vite preview)
+
+UNFILLED
+  Chrome headed / interactive human window
+  Firefox
+  Safari
+  Edge
+  Mobile 390x844
+  Mobile 320x568
+  Android / iOS Play
+  Touch path
+  Weak / software WebGL (this seat used NVIDIA hardware in headless)
+  DPR 2 / 3
+  Context-loss / restore
+  JS heap / VRAM
+  Interaction / pan / orbit FPS (samples below are IDLE rAF)
+
+MOBILE_PLAY=NOT_CLAIMED
+DO_NOT_CLAIM=60 FPS, offline-complete, plan PASS, GATE-U1 done
+
+================================================================================
+1. FIRST MEANINGFUL MAP
+================================================================================
+
+METHOD
+  Chrome CDP Page.navigate about:blank -> http://127.0.0.1:4175/
+  Poll requestAnimationFrame until ALL of:
+    .maplibregl-canvas width > 0
+    4 .map-marker nodes
+    [data-testid="honesty-banner"]
+    4 [data-testid="place-list"] buttons
+  Clock: performance.now() from navigation start, plus host Date.now()
+
+RUN A (same Chrome process, first navigate this session)
+  firstMapMsFromNav = 412
+  hostFirstMapMs    = 416
+  canvas            = 928 x 562
+  markers           = 4 (Market Hall, Clock Garden, Market Steps, Roundabout Green)
+
+RUN B (same Chrome process, Network.setCacheDisabled=true, second navigate)
+  firstMapMsFromNav = 213
+  hostFirstMapMs    = 217
+  canvas            = 928 x 562
+  markers           = 4
+
+HONESTY
+  Both runs are the same HeadlessChrome process. This is NOT a cold
+  OS + Chrome + disk-cache-empty first paint. Cold-process first-map
+  = UNMEASURED.
+  HTML navigation transferSize ~932 B (document 632 B). The 1.12 MB
+  vendor JS is a separate same-origin request (see chunk section).
+  Navigation performance duration (document only) ~103 ms; first map
+  is later, after MapLibre + GeoJSON + 4 markers.
+
+DO_NOT_CLAIM
+  "sub-200 ms first map for a new player machine"
+  "TTI budget signed"
+  Decision-record TARGET_FPS / MINIMUM_FPS remain UNFILLED as owner
+  thresholds. These numbers are observations only.
+
+================================================================================
+2. FPS / FRAME TIME (IDLE rAF)
+================================================================================
+
+METHOD
+  Injected requestAnimationFrame sampler
+  N = 240 samples after skipping 12 warmup frames
+  Two series: extrusion checkbox ON, then OFF
+  Viewport 1280x720 desktop
+  Map idle (no pan/orbit/drag during the 240 frames)
+  p1 = 1st percentile of that sample set (low tail)
+  median = 50th percentile
+  min = worst FPS / smallest frame-ms in the set
+
+EXTRUSION ON  (N=240)
+  frame_ms  min=17.00  median=17.60  p1=17.10  max=18.60  mean=17.71
+  fps       min=53.76  median=56.82  p1=53.76  max=58.82  mean=56.50
+
+EXTRUSION OFF (N=240)
+  frame_ms  min=17.00  median=17.60  p1=17.10  max=18.60  mean=17.63
+  fps       min=53.76  median=56.82  p1=54.40  max=58.82  mean=56.73
+
+NOT 60 FPS
+  Median ~56.8. Min / p1 ~53.8. Frame time sits near 17.6 ms, not
+  16.67 ms. Do not advertise 60 FPS. Headless compositor may cap
+  below a 60 Hz display; this seat did not measure a headed 60 Hz
+  monitor.
+
+HOST CPU (overlapping 10 x 1 s Get-Counter, not locked to rAF window)
+  n=10  min=8.94%  median=11.06%  max=21.70%  (\Processor(_Total)\% Processor Time)
+
+HOST GPU ENGINE COUNTER
+  UNFILLED (Get-Counter GPU Engine returned no usable >0 samples this seat)
+
+PAGE GPU
+  OBSERVED via WEBGL_debug_renderer_info: NVIDIA GeForce GTX 1660 Ti / ANGLE D3D11
+
+PERF.getMetrics
+  Empty array this CDP session. JS heap / DOM nodes UNFILLED.
+
+INTERACTION FPS
+  UNMEASURED. Idle rAF is not pan/orbit proof.
+
+QUALITY TIER DECISION
+  Idle FPS on this 400 m authored fixture is not poor. No new product
+  quality-tier control was added. The existing extrusion checkbox is
+  the only player quality switch (see section 3). List-only is the
+  WebGL-off path, not a named Low tier in the UI.
+
+================================================================================
+3. EXTRUSION / 2D FALLBACK / REDUCED MOTION (not just a flag)
+================================================================================
+
+3A. 3D extrusion checkbox — WORKS (visual, not only checked=true)
+  CDP Page.captureScreenshot:
+    r2-wp1-map-extrusion-on.png   69149 B  sha16=750cd671
+      checkbox CHECKED; buildings are 3D blocks; pitch ~45
+    r2-wp1-map-extrusion-off.png  85301 B  sha16=c0cdaa4c
+      checkbox UNCHECKED; footprints flat; pitch 0
+  Hashes differ. Player-visible geometry changes. FPS benefit of
+  turning extrusion off was NOT observed in idle rAF (same ~56.8).
+  Work reduction is visual (no fill-extrusion / no pitch), not a
+  measured frame-time win on this tiny AOI.
+
+3B. 2D place list — always present with WebGL on
+  Four approx rows OBSERVED on the live desktop screenshots.
+  List is not hidden behind the canvas.
+
+3C. WebGL-off fallback — WORKS (real path, Chrome --disable-webgl --disable-webgl2)
+  Second Chrome client only (port 9236). Same 4175 preview.
+  OBSERVED:
+    [data-testid="webgl-fallback"] =
+      "WebGL is off. Use the place list. This 2D list is the fallback."
+    no .maplibregl-canvas
+    canvasWebgl probe false
+    4 place-list rows still there
+    honesty banner still there
+  Deep link http://127.0.0.1:4175/?place=place-market-hall
+    place-card Market Hall + approx + Map data as of 2026-09-03 +
+    Bookmark locally + Copy local link  OBSERVED
+  Close then click Clock Garden:
+    URL -> ?place=place-clock-garden
+    card Clock Garden + active row  OBSERVED
+  Screenshot: r2-wp1-webgl-off-fallback.png
+  First sync-read after click returned card=null; that was a React
+  flush race in the probe, not a player bug. After 300 ms wait, card
+  is present.
+
+3D. prefers-reduced-motion — WORKS for camera ease (MapLibre, not app CSS)
+  App source has no matchMedia / @media prefers-reduced-motion.
+  maplibre-gl 5.6.2 camera.easeTo sets duration=0 when
+    !options.essential && browser.prefersReducedMotion
+  App easeTo({ duration: 400 }) does not set essential:true.
+  CDP Emulation.setEmulatedMedia:
+    no-preference: Clock Garden click, 3 compositor shots at ~0/180/460 ms
+      hashes differ (e15ce3ee / 2c96ffc9 / bb3aa5b6) — camera interpolated
+    reduce: Market Steps click, 3 compositor shots
+      hashes identical (10cdd811 x3) — no in-between frames; card already
+      Market Steps. Jump, not a 400 ms ease.
+  App CSS has no transform/opacity animations to reduce.
+  Residual: no player-facing "reduced motion" toggle in Settings.
+  Residual: headless Chrome defaulted matchMedia reduce=true until we
+    emulated no-preference. Do not assume OS setting from headless.
+
+================================================================================
+4. CHUNK / NETWORK BUDGET
+================================================================================
+
+LIVE 4175 assets (Content-Length)
+  /assets/index-Bgjc3g-y.js     1120207 bytes  (= 1.120 MB SI / 1.068 MiB)
+  /assets/index-DuqmC8iB.css      71491 bytes
+  /data/ben-thanh-400m.authored.geojson  16257
+  /data/world-manifest.json               1634
+  /styles/local-style.json                 357
+  /                         HTML           632
+
+CHUNK leftover CONFIRMED: vendor JS ~1.12 MB minified. Same class as
+the earlier note. Not a new surprise.
+
+CDP Network on the map session (unique URLs):
+  http://127.0.0.1:4175/
+  http://127.0.0.1:4175/assets/index-Bgjc3g-y.js
+  http://127.0.0.1:4175/assets/index-DuqmC8iB.css
+  http://127.0.0.1:4175/styles/local-style.json
+  http://127.0.0.1:4175/data/ben-thanh-400m.authored.geojson
+  http://127.0.0.1:4175/data/world-manifest.json
+  http://127.0.0.1:4175/favicon.ico
+  blob:http://127.0.0.1:4175/...
+  data:image/webp;base64,...
+  data:image/svg+xml;charset=utf-8,... (MapLibre control icons)
+  nonLocal tile/OSM/Cesium/Google/MapTiler = none
+
+LIVE style:
+  name=hh-world-local-authored
+  sources={}
+  layers=background only
+  no glyphs, no sprites, no public tile URL
+
+OFFLINE-COMPLETE=NOT_CLAIMED
+  System UI fonts only (CSS font-family: "Segoe UI", system-ui, sans-serif).
+  No app-bundled webfont. 1.12 MB JS leftover remains.
+  Local tiles/geojson/style: OBSERVED same-origin this session.
+
+================================================================================
+5. PLAYER BUGS THIS SEAT
+================================================================================
+
+Map blank?           NO — compositor shots show authored 3D/2D map + 4 markers
+Honesty missing?     NO — banner + attribution + approx on list/card
+Network tile leak?   NO — style empty sources; CDP URLs same-origin/data/blob
+Bookmark broken?     UI present ("Bookmark locally" / local-only copy).
+                     This lead did not re-click storage. Prior critic +
+                     verify-2026-09-03.txt claim CDP bookmark PASS; not
+                     re-proven here.
+WebGL-off list?      WORKS (section 3C)
+Reduced-motion ease? WORKS via MapLibre (section 3D)
+
+No product source change. No quality-tier UI added (idle FPS not poor).
+No rebuild. Preview 4175 left running.
+
+================================================================================
+6. STILL OPEN (named leftovers)
+================================================================================
+
+1. GATE-U1 three human 5-minute reviews — FIRST leftover. Not faked.
+2. R2-WP1 still NOT_PLAN_PASS because GATE-U1 is a hard dependency and
+   because mobile / headed / context-loss / memory / interaction FPS /
+   owner-signed thresholds remain UNFILLED.
+3. No named Low / list-only quality tier in the UI (only extrusion
+   checkbox + WebGL-off automatic fallback).
+4. Cold-process first-map UNMEASURED.
+5. Human OWNER_SIGN / legal / privacy names UNFILLED.
+6. Chunk ~1.12 MB leftover remains.
+7. System fonts: do not claim offline-complete.
+8. Original plan checkboxes stay unticked (correct).
+
+================================================================================
+REPRO (do not start a second preview if 4175 is up)
+================================================================================
+
+  Confirm: Get-NetTCPConnection -LocalPort 4175
+  Chrome:
+    "C:\Program Files\Google\Chrome\Application\chrome.exe"
+    --headless=new --remote-debugging-port=9235 --enable-gpu
+    --ignore-gpu-blocklist --use-angle=d3d11 --window-size=1280,720
+    --user-data-dir=hh-3d/app/data-qa/chrome-profile-r2wp1
+  node hh-3d/app/data-qa/r2-wp1-perf-probe.mjs main
+  node hh-3d/app/data-qa/r2-wp1-screenshot-probe.mjs
+  WebGL off client:
+    chrome --disable-webgl --disable-webgl2 --remote-debugging-port=9236
+    --user-data-dir=hh-3d/app/data-qa/chrome-profile-r2wp1-nowebgl
+  node hh-3d/app/data-qa/r2-wp1-perf-probe.mjs fallback
+  node hh-3d/app/data-qa/r2-wp1-fallback-click.mjs
+
+SCREENSHOTS (compositor, this run)
+  hh-3d/app/data-qa/r2-wp1-map-extrusion-on.png
+  hh-3d/app/data-qa/r2-wp1-map-extrusion-off.png
+  hh-3d/app/data-qa/r2-wp1-motion-nopref-t0.png
+  hh-3d/app/data-qa/r2-wp1-motion-nopref-t180.png
+  hh-3d/app/data-qa/r2-wp1-motion-nopref-t460.png
+  hh-3d/app/data-qa/r2-wp1-motion-reduce-t0.png
+  hh-3d/app/data-qa/r2-wp1-motion-reduce-t180.png
+  hh-3d/app/data-qa/r2-wp1-motion-reduce-t460.png
+  hh-3d/app/data-qa/r2-wp1-webgl-off-fallback.png
+
+================================================================================
+END
+================================================================================

@@ -1,0 +1,50 @@
+{
+  "schema": "hh-world-manifest/v0",
+  "display_name": "HH World",
+  "aoi_label": "Bến Thành vicinity, Ho Chi Minh City",
+  "center": {
+    "lon": 106.698,
+    "lat": 10.7725
+  },
+  "extent_m": {
+    "east_west": 400,
+    "north_south": 400
+  },
+  "bbox": {
+    "west": 106.6961711,
+    "south": 10.7707034,
+    "east": 106.6998289,
+    "north": 10.7742966
+  },
+  "renderer": "maplibre-gl local style + local GeoJSON",
+  "networking": "OFF",
+  "fetch_performed": false,
+  "authored_or_source": "authored",
+  "accuracy_class": "authored",
+  "geometry_confidence": "low",
+  "height_confidence": "estimated",
+  "source_released_at": "2026-09-03T00:00:00+07:00",
+  "acquired_at": "2026-09-03T00:00:00+07:00",
+  "generated_at": "2026-09-03T13:50:00+07:00",
+  "published_at": "2026-09-03T13:50:00+07:00",
+  "fresh_until": "2026-12-03T00:00:00+07:00",
+  "stale_after": "2027-03-03T00:00:00+07:00",
+  "source_hash": "5daca107ae79bd4c248584a6e761e65cbd9b3665c548f359924920fba33b4b83",
+  "artifact_hash": "83463aadae62b5db93a1c30fee003aaf73a729a45c8f42d0bb718c419ff1acbe",
+  "artifact_path": "data-pipeline/fixtures/ben-thanh-400m.authored.geojson",
+  "published_path": "web/public/data/ben-thanh-400m.authored.geojson",
+  "honesty": [
+    "Authored approximation of a 400 m frame around 10.7725, 106.6980.",
+    "Building rings are authored parcels inside that frame, not OSM/Overture.",
+    "Not photogrammetry, not a digital twin, not realtime, not 1:1.",
+    "Gameplay-facing place names are fictionalized.",
+    "Map data as of 2026-09-03 (authored fixture)."
+  ],
+  "forbidden_claims": [
+    "1:1",
+    "realtime",
+    "digital twin",
+    "GTA-like",
+    "Y8 parity"
+  ]
+}

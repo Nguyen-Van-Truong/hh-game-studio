@@ -1,0 +1,608 @@
+{
+  "run_id": "HH3D-J5-20260904-ASIA-SAIGON-38",
+  "player": "http://127.0.0.1:4175/",
+  "verdict": "J5_TRAM_NORTH_OK",
+  "reminted": false,
+  "liveJs": "/assets/index-C3JOtA3q.js",
+  "liveLen": 2169322,
+  "liveSha": "c000db65138fc3c3f48583ba17d1032aa82c5fca0ef4047cdf2d5db1bc2bcdc7",
+  "chip": "Tram Approach",
+  "streetName": "Tram Approach",
+  "mini": {
+    "present": true,
+    "kind": "authored-hud-lanes",
+    "official": 2,
+    "inner": 2,
+    "extra": 2,
+    "names": "Tram Approach,Harbor Walk,Steps East,Steps West",
+    "active": "Tram Approach",
+    "highlight": "1",
+    "activeRole": "official"
+  },
+  "zebraDist": 40.43,
+  "tramLaneM": 1.53,
+  "northLamps": [
+    "lamp-street-tram-approach-3-w",
+    "lamp-street-tram-approach-4-w",
+    "lamp-street-tram-approach-5-w",
+    "lamp-street-tram-approach-6-w"
+  ],
+  "northPlanters": [
+    "planter-tram-east-s"
+  ],
+  "furnitureDom": true,
+  "streetPix": true,
+  "furniturePix": true,
+  "northFloor": {
+    "samples": 33600,
+    "whiteRatio": 0.037,
+    "curbRatio": 0.019,
+    "darkRatio": 0.879,
+    "walkRatio": 0.036,
+    "greenRatio": 0,
+    "lampRatio": 0.887,
+    "yellowRatio": 0.006
+  },
+  "northMid": {
+    "samples": 25878,
+    "whiteRatio": 0.216,
+    "curbRatio": 0.037,
+    "darkRatio": 0.637,
+    "walkRatio": 0.212,
+    "greenRatio": 0.002,
+    "lampRatio": 0.653,
+    "yellowRatio": 0.007
+  },
+  "lookFloor": {
+    "samples": 33600,
+    "whiteRatio": 0.064,
+    "curbRatio": 0.116,
+    "darkRatio": 0.739,
+    "walkRatio": 0.063,
+    "greenRatio": 0,
+    "lampRatio": 0.758,
+    "yellowRatio": 0.013
+  },
+  "lookMid": {
+    "samples": 27240,
+    "whiteRatio": 0.173,
+    "curbRatio": 0.052,
+    "darkRatio": 0.677,
+    "walkRatio": 0.169,
+    "greenRatio": 0.002,
+    "lampRatio": 0.69,
+    "yellowRatio": 0.007
+  },
+  "geoStreets": [
+    "Tram Approach",
+    "Harbor Walk"
+  ],
+  "cheE": "shop-local-mtmrbdjffjdkg8",
+  "leftoverBanners": {
+    "shared": true,
+    "j6": true,
+    "leftoverLast": true,
+    "draw": [],
+    "stallDraw": []
+  },
+  "spawnE": "none",
+  "spawnEStolen": false,
+  "stalls": {
+    "che": {
+      "shop": "shop-local-mtmrbdjffjdkg8",
+      "draw": "1",
+      "keepOut": "0",
+      "titles": "Chè đậu (mẫu)"
+    },
+    "kem": {
+      "shop": "shop-local-mtmrq33hoq4phb",
+      "draw": "1",
+      "keepOut": "0",
+      "titles": "Kem dua (mẫu)"
+    },
+    "pho": {
+      "shop": "shop-local-mtmh45qxehxhvb",
+      "draw": "1",
+      "keepOut": "0",
+      "titles": "Phở bò (mẫu)"
+    },
+    "lantern": {
+      "shop": "shop-lantern-fish",
+      "draw": "1",
+      "keepOut": "0",
+      "titles": "Cá nục sương (mẫu) | Túi cói chợ (mẫu)"
+    }
+  },
+  "zebra": {
+    "x": 7.604443847415086,
+    "z": 0,
+    "lon": 106.69806953701452,
+    "lat": 10.7725
+  },
+  "stand": {
+    "lon": 106.69848366830456,
+    "lat": 10.772520740709064
+  },
+  "atZebra": {
+    "lon": 106.6980679,
+    "lat": 10.7723589,
+    "chip": "Harbor Walk"
+  },
+  "atNorth": {
+    "lon": 106.6984391,
+    "lat": 10.7724901,
+    "chip": "Tram Approach",
+    "heading": 20
+  },
+  "harborWalk": [
+    {
+      "i": 0,
+      "lon": 106.6981186,
+      "lat": 10.7716421,
+      "d": 87.26,
+      "chip": "Steps East",
+      "mini": "Steps East",
+      "blocked": "0"
+    },
+    {
+      "i": 1,
+      "lon": 106.6981102,
+      "lat": 10.7716667,
+      "d": 84.44,
+      "chip": "Steps East",
+      "mini": "Steps East",
+      "blocked": "0"
+    },
+    {
+      "i": 2,
+      "lon": 106.698103,
+      "lat": 10.7716878,
+      "d": 82.01,
+      "chip": "Steps East",
+      "mini": "Steps East",
+      "blocked": "0"
+    },
+    {
+      "i": 3,
+      "lon": 106.6980941,
+      "lat": 10.7716913,
+      "d": 81.52,
+      "chip": "Steps East",
+      "mini": "Steps East",
+      "blocked": "0"
+    },
+    {
+      "i": 4,
+      "lon": 106.6980868,
+      "lat": 10.7716913,
+      "d": 81.45,
+      "chip": "Steps East",
+      "mini": "Steps East",
+      "blocked": "0"
+    },
+    {
+      "i": 5,
+      "lon": 106.6980746,
+      "lat": 10.7717138,
+      "d": 78.84,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 6,
+      "lon": 106.698077,
+      "lat": 10.7717386,
+      "d": 76.11,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 7,
+      "lon": 106.6980794,
+      "lat": 10.7717635,
+      "d": 73.37,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 8,
+      "lon": 106.6980822,
+      "lat": 10.7717935,
+      "d": 70.07,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 9,
+      "lon": 106.6980845,
+      "lat": 10.7718173,
+      "d": 67.46,
+      "chip": "Steps East",
+      "mini": "Steps East",
+      "blocked": "0"
+    },
+    {
+      "i": 10,
+      "lon": 106.6980872,
+      "lat": 10.7718455,
+      "d": 64.37,
+      "chip": "Steps East",
+      "mini": "Steps East",
+      "blocked": "0"
+    },
+    {
+      "i": 11,
+      "lon": 106.6980919,
+      "lat": 10.7718689,
+      "d": 61.85,
+      "chip": "Steps East",
+      "mini": "Steps East",
+      "blocked": "0"
+    },
+    {
+      "i": 12,
+      "lon": 106.6980941,
+      "lat": 10.7718916,
+      "d": 59.38,
+      "chip": "Steps East",
+      "mini": "Steps East",
+      "blocked": "0"
+    },
+    {
+      "i": 13,
+      "lon": 106.6980968,
+      "lat": 10.7719204,
+      "d": 56.25,
+      "chip": "Steps East",
+      "mini": "Steps East",
+      "blocked": "0"
+    },
+    {
+      "i": 14,
+      "lon": 106.6980992,
+      "lat": 10.7719448,
+      "d": 53.6,
+      "chip": "Steps East",
+      "mini": "Steps East",
+      "blocked": "0"
+    },
+    {
+      "i": 15,
+      "lon": 106.6981017,
+      "lat": 10.7719688,
+      "d": 51.02,
+      "chip": "Steps East",
+      "mini": "Steps East",
+      "blocked": "0"
+    },
+    {
+      "i": 16,
+      "lon": 106.6981041,
+      "lat": 10.7719688,
+      "d": 51.06,
+      "chip": "Steps East",
+      "mini": "Steps East",
+      "blocked": "0"
+    },
+    {
+      "i": 17,
+      "lon": 106.6980876,
+      "lat": 10.7719773,
+      "d": 49.83,
+      "chip": "Steps East",
+      "mini": "Steps East",
+      "blocked": "1"
+    },
+    {
+      "i": 18,
+      "lon": 106.6980876,
+      "lat": 10.7719773,
+      "d": 49.83,
+      "chip": "Steps East",
+      "mini": "Steps East",
+      "blocked": "1"
+    },
+    {
+      "i": 19,
+      "lon": 106.6980679,
+      "lat": 10.772002,
+      "d": 46.83,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 20,
+      "lon": 106.6980604,
+      "lat": 10.7720268,
+      "d": 43.99,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 21,
+      "lon": 106.698053,
+      "lat": 10.7720512,
+      "d": 41.21,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    }
+  ],
+  "zebraWalk": [
+    {
+      "i": 0,
+      "lon": 106.6980572,
+      "lat": 10.7720789,
+      "d": 46.9,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 1,
+      "lon": 106.6980628,
+      "lat": 10.772103,
+      "d": 44.2,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 2,
+      "lon": 106.6980691,
+      "lat": 10.7721305,
+      "d": 41.13,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 3,
+      "lon": 106.6980751,
+      "lat": 10.7721567,
+      "d": 38.22,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 4,
+      "lon": 106.6980809,
+      "lat": 10.7721822,
+      "d": 35.4,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 5,
+      "lon": 106.6980868,
+      "lat": 10.7722077,
+      "d": 32.59,
+      "chip": "Steps East",
+      "mini": "Steps East",
+      "blocked": "0"
+    },
+    {
+      "i": 6,
+      "lon": 106.6980926,
+      "lat": 10.7722329,
+      "d": 29.84,
+      "chip": "Steps East",
+      "mini": "Steps East",
+      "blocked": "0"
+    },
+    {
+      "i": 7,
+      "lon": 106.6980985,
+      "lat": 10.7722586,
+      "d": 27.06,
+      "chip": "Steps East",
+      "mini": "Steps East",
+      "blocked": "0"
+    },
+    {
+      "i": 8,
+      "lon": 106.6980908,
+      "lat": 10.7722836,
+      "d": 24.2,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 9,
+      "lon": 106.6980835,
+      "lat": 10.7723077,
+      "d": 21.46,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 10,
+      "lon": 106.6980755,
+      "lat": 10.7723339,
+      "d": 18.5,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 11,
+      "lon": 106.6980679,
+      "lat": 10.7723589,
+      "d": 15.71,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    }
+  ],
+  "standWalk": [
+    {
+      "i": 0,
+      "lon": 106.6980939,
+      "lat": 10.7723645,
+      "d": 46.04,
+      "chip": "Harbor Walk",
+      "mini": "Harbor Walk",
+      "blocked": "0"
+    },
+    {
+      "i": 1,
+      "lon": 106.6981197,
+      "lat": 10.7723696,
+      "d": 43.21,
+      "chip": "—",
+      "mini": "—",
+      "blocked": "0"
+    },
+    {
+      "i": 2,
+      "lon": 106.698146,
+      "lat": 10.7723747,
+      "d": 40.35,
+      "chip": "—",
+      "mini": "—",
+      "blocked": "0"
+    },
+    {
+      "i": 3,
+      "lon": 106.6981713,
+      "lat": 10.7723797,
+      "d": 37.6,
+      "chip": "—",
+      "mini": "—",
+      "blocked": "0"
+    },
+    {
+      "i": 4,
+      "lon": 106.6981979,
+      "lat": 10.7723849,
+      "d": 34.72,
+      "chip": "—",
+      "mini": "—",
+      "blocked": "0"
+    },
+    {
+      "i": 5,
+      "lon": 106.6982239,
+      "lat": 10.7723901,
+      "d": 31.91,
+      "chip": "—",
+      "mini": "—",
+      "blocked": "0"
+    },
+    {
+      "i": 6,
+      "lon": 106.6982502,
+      "lat": 10.7723952,
+      "d": 29.11,
+      "chip": "—",
+      "mini": "—",
+      "blocked": "0"
+    },
+    {
+      "i": 7,
+      "lon": 106.6982763,
+      "lat": 10.7724004,
+      "d": 26.34,
+      "chip": "—",
+      "mini": "—",
+      "blocked": "0"
+    },
+    {
+      "i": 8,
+      "lon": 106.6982964,
+      "lat": 10.7724174,
+      "d": 23.49,
+      "chip": "—",
+      "mini": "—",
+      "blocked": "0"
+    },
+    {
+      "i": 9,
+      "lon": 106.6983168,
+      "lat": 10.7724346,
+      "d": 20.61,
+      "chip": "Tram Approach",
+      "mini": "Tram Approach",
+      "blocked": "0"
+    },
+    {
+      "i": 10,
+      "lon": 106.6983371,
+      "lat": 10.7724517,
+      "d": 17.78,
+      "chip": "Tram Approach",
+      "mini": "Tram Approach",
+      "blocked": "0"
+    },
+    {
+      "i": 11,
+      "lon": 106.6983569,
+      "lat": 10.7724684,
+      "d": 15.04,
+      "chip": "Tram Approach",
+      "mini": "Tram Approach",
+      "blocked": "0"
+    },
+    {
+      "i": 12,
+      "lon": 106.6983823,
+      "lat": 10.7724752,
+      "d": 12.19,
+      "chip": "Tram Approach",
+      "mini": "Tram Approach",
+      "blocked": "0"
+    },
+    {
+      "i": 13,
+      "lon": 106.698408,
+      "lat": 10.7724819,
+      "d": 9.34,
+      "chip": "Tram Approach",
+      "mini": "Tram Approach",
+      "blocked": "0"
+    },
+    {
+      "i": 14,
+      "lon": 106.6984236,
+      "lat": 10.772486,
+      "d": 7.62,
+      "chip": "Tram Approach",
+      "mini": "Tram Approach",
+      "blocked": "0"
+    },
+    {
+      "i": 15,
+      "lon": 106.6984391,
+      "lat": 10.7724901,
+      "d": 5.95,
+      "chip": "Tram Approach",
+      "mini": "Tram Approach",
+      "blocked": "0"
+    }
+  ],
+  "guestOk": true,
+  "chipOk": true,
+  "miniOk": true,
+  "alongOk": true,
+  "leftoverOk": true,
+  "cheOk": true,
+  "stallsOk": true,
+  "geoOk": true,
+  "honestyOk": true,
+  "didNotCatalogClear": true,
+  "didNotRemint": true,
+  "shots": {
+    "north": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-tram-north.png",
+    "look": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\hh-3d\\app\\data-qa\\j5-3d-tram-north-lookdown.png"
+  }
+}

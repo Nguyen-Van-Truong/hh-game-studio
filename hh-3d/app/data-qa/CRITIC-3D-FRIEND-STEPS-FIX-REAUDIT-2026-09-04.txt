@@ -1,0 +1,301 @@
+TICK=yes
+URL=http://127.0.0.1:4175/
+BOOTED_4175=1
+DID_NOT_RECYCLE=1
+DID_NOT_REBUILD=1
+NOT_PLAN_PASS=1
+NOT_GATE_U1=1
+NOT_M2=1
+CRITIC=INDEPENDENT_ADVERSARIAL_FRIEND_STEPS_FIX_REAUDIT
+DATE=2026-09-04
+TIMEZONE=Asia/Saigon
+TIME_LOCAL=10:14 +07
+MODEL=grok-4.6-extra-high
+SCOPE=Re-audit of implementer Offline leftover remint. Do not treat CRITIC-3D-FRIEND-STEPS-FIX-2026-09-04.txt as TICK=yes. Do not overwrite CRITIC-3D-FRIEND-STEPS-REAUDIT-2026-09-04.txt (TICK=no on DptTgaTX stays).
+PLAYER_URL=http://127.0.0.1:4175/
+GIT_HEAD_OBSERVED=04cb6ca92c482017c02d78e7885727f73b62103d
+PLAN=hh-3d/zdoc/31-8-hh3d-real-application-plan.txt
+MODES=hh-3d/zdoc/03-9-hh-world-owner-modes.txt
+PROGRESS=hh-3d/app/PROGRESS.txt
+THIS_FILE=hh-3d/app/data-qa/CRITIC-3D-FRIEND-STEPS-FIX-REAUDIT-2026-09-04.txt
+IMPLEMENTER_NOTE=hh-3d/app/data-qa/CRITIC-3D-FRIEND-STEPS-FIX-2026-09-04.txt
+IMPLEMENTER_ROLE=IMPLEMENTER
+IMPLEMENTER_TICK=n/a
+DID_NOT_TREAT_IMPLEMENTER_AS_TICK_YES=1
+DID_NOT_OVERWRITE_FRIEND_STEPS_REAUDIT=1
+PRIOR_REAUDIT_STANDS=CRITIC-3D-FRIEND-STEPS-REAUDIT-2026-09-04.txt TICK=no on DptTgaTX
+THIS_FILE_ONLY_WRITE=1
+NO_IMPLEMENT=1
+NO_COMMIT=1
+NO_PLAN_TICK=1
+NO_MAP_FETCH=1
+NO_SECOND_PREVIEW=1
+DID_NOT_START_4173=1
+DID_NOT_START_4174=1
+DID_NOT_START_5175=1
+DID_NOT_BIND_0_0_0_0=1
+NOT_OSM=1
+NOT_WAN=1
+VITE_PREVIEW_PORT_PIN=4175
+LIVE_PID=5156
+LISTEN=127.0.0.1:4175
+CRITIC_CDP_PORTS=9961 / 9962 / 9963 then 9964 / 9965
+VIEWPORT=1280x720
+ISOLATED_PROFILES=1
+HEADLESS_NEW=1
+
+CLAIM_JS=/assets/index-nJ1HVwcJ.js
+CLAIM_JS_LEN=2152818
+CLAIM_JS_SHA256=aa2c143cc1edf1aac67ab8ffc7facd3029b875bfd8dee0acbbfbceb6a887d701
+LIVE_JS=/assets/index-nJ1HVwcJ.js
+LIVE_JS_LEN=2152818
+LIVE_JS_SHA256=aa2c143cc1edf1aac67ab8ffc7facd3029b875bfd8dee0acbbfbceb6a887d701
+LIVE_JS_MATCHES_CLAIM=1
+HASH_MISMATCH=0
+
+B_PLANT_STAND=0
+B_PLANT_WALK_START=1
+B_PLANT_WALK_HELD=5
+B_PLANT_WALK_DELTA=+4
+B_PLANT_OSC_DELTA=+4
+B_PLANT_HIDDEN_RECHECK=3
+B_PLANT_HIDDEN_RECHECK_DELTA=0
+
+CLAIM_1_WALK_RISE=PASS
+CLAIM_2_OFFLINE_TEARDOWN=PASS
+CLAIM_3_HIDDEN=PASS
+CLAIM_3_UNFRIEND=PASS
+CLAIM_3_STRANGER_C=PASS
+CLAIM_4_LANTERN_LEFTOVER_E=PASS
+
+BIGGEST_MISS=none on this remint. Prior leftover (DptTgaTX remotes=0 then osc+1 / live=1) did not reproduce on nJ1HVwcJ. After people-layer 0, B live=0 ticks=0 osc flat while A kept walking Offline, including while remote DOM lingered. NOT_PLAN_PASS.
+
+================================================================================
+VERDICT
+================================================================================
+
+TICK=yes
+
+URL=http://127.0.0.1:4175/ was already up. Bind 127.0.0.1 pid 5156
+(node vite preview). Did not recycle, rebuild, kill, or start
+4173 / 4174 / 5175. Did not bind 0.0.0.0.
+
+Did not treat CRITIC-3D-FRIEND-STEPS-FIX-2026-09-04.txt as TICK=yes
+(ROLE=IMPLEMENTER, TICK=n/a). Did not run j5-friend-steps-probe.mjs.
+Did not overwrite CRITIC-3D-FRIEND-STEPS-REAUDIT-2026-09-04.txt;
+that TICK=no on DptTgaTX stays.
+
+Live name + length + sha256 match the claimed remint. Independent
+Chrome CDP, isolated temp profiles, ?seat=a / ?seat=b / ?seat=c.
+OscillatorNode / AudioBufferSourceNode.start hooked so a live flag
+alone is not proof.
+
+Hunt 1 held: B stand plants 0; A holds W → B ticks 1→5 (+4) and
+osc/src +4; B's own data-footsteps stayed 0. Hunt 2 held: Offline
+A while walking, then again after stop. From the first remotes=0
+sample, B live=0 ticks=0 osc flat (10 then 15 on the long run;
+6 on the 30 ms recheck). A walking Offline did not plant. Hunt 3
+held: hidden froze ticks 3→3 and osc 3→3. Unfriend and stranger C
+silent. Hunt 4 held: lantern E opened shop-lantern-fish; seat B
+leftover E not stolen. Chip / minimap / 90 m LOD still present.
+
+This is NOT_PLAN_PASS. GATE-U1 humans were not invented.
+
+================================================================================
+LIVE JS
+================================================================================
+
+HTML script = /assets/index-nJ1HVwcJ.js
+http length = 2152818
+sha256 = aa2c143cc1edf1aac67ab8ffc7facd3029b875bfd8dee0acbbfbceb6a887d701
+Matches the claimed remint name + length + hash.
+After CDP (10:14 +07) the same name and sha256 are still served
+from pid 5156.
+
+Bundle scan:
+  .mp3 / .wav / .ogg / .m4a = 0
+  new Audio( = 0
+  gta 6 / rockstar = 0
+  openstreetmap / overture = 0
+  procedural-thump = 1
+  createOscillator = 1
+  createBufferSource = 2
+    (same unused Three.js Audio helper + procedural noise as
+    the self-footstep remint; not a downloaded sample)
+
+================================================================================
+CLAIM 1 — A/B ONLINE WALK PLANTS — PASS
+================================================================================
+
+Tried to fail: stand already live; W only flips a flag; ticks
+rise with no oscillator; B's own data-footsteps also go live
+while B stands.
+
+Isolated A/B, graph_clear only, add-friend-b / accept-friend-a /
+Online on both. B stand + A idle (before and after friends):
+  data-friend-footsteps=0
+  ticks=0
+  osc=0 src=0
+
+A holds W ~1.1 s, B stands:
+  remote A pose=walk
+  data-friend-footsteps=1
+  ticks 1 → 5  (+4)
+  osc 1 → 5    src 1 → 5
+  lastGain=0.03517  dist=7.42 m  seat=a
+  B data-footsteps=0
+
+Implementer wrote 2→6 (+4) / gain 0.035 / dist 7.52 m. This
+critic measured +4 plants, gain 0.03517, dist 7.42 m, and the
+same +4 on hooked start(). Not a DOM-only flag. PASS.
+
+================================================================================
+CLAIM 2 — OFFLINE A ZERO EXTRA B PLANTS — PASS
+================================================================================
+
+Tried to fail the same miss as DptTgaTX: after people-layer
+drops to 0, one leftover oscillator and stuck live=1 while A
+keeps walking Offline. Prefer TICK=no on leftover live=1 or
+osc+1.
+
+Path A — Offline while A still holds W (harder race):
+  first remotes=0 sample already live=0 ticks=0 osc=10
+  remote DOM lingered one sample (remoteA=true, pose=walk)
+  then remotes=0 live=0 ticks=0 osc=10 through 16 teardown
+  samples and 12 Offline-walk samples. osc stayed 10.
+
+Path B — stop, then Offline, then A walks Offline:
+  remotes hit 0 at teardown sample 1
+  remote DOM lingered ~5 samples (remoteA=true, pose=walk)
+  live=0 ticks=0 osc=15 flat through linger + Offline walk
+
+30 ms recheck (9964/9965), Offline clicked with no post-click
+sleep while A still on W. Captured the remotes=1 → 0 cut:
+
+  remotes=1  live=1  ticks=6  osc=6   (last Online plant)
+  remotes=0  live=0  ticks=0  osc=6   remoteA still true
+  remotes=0  live=0  ticks=0  osc=6   … then remote DOM gone
+  A keeps W Offline: remotes=0 live=0 ticks=0 osc=6 flat
+
+No leftover plant after remotes=0. Live attr does not stay 1.
+Ticks do not rise. osc does not rise. Remote DOM linger is
+not a plant. PASS. This is the named bar that failed on
+DptTgaTX.
+
+================================================================================
+CLAIM 3 — HIDDEN / UNFRIEND / STRANGER C — PASS
+================================================================================
+
+Tried to fail as a fake DOM flag, or as leftover plants after
+unfriend / stranger walk.
+
+Hidden (recheck, from a non-zero count, A still on W):
+  data-friend-footsteps=0
+  reason=hidden
+  ticks 3 → 3 over ~0.9 s
+  osc 3 → 3   src 3 → 3
+Unhide, A still W: live=1  ticks 3 → 4
+
+First long run hid before a footfall (ticks 0→0, osc 10→10,
+unhidden live=1). That freeze is real but weaker. Recheck
+proved a non-zero counter stays put. PASS.
+
+Unfriend from B after A is back Online:
+  remote A gone
+  A holds W ~1.2 s
+  B ticks 0 → 0  osc 15 → 15  live=0
+  PASS
+
+Stranger seat C (Online, cannot friend; no add-friend-c):
+  C holds W ~1.2 s while B stands
+  B ticks stay 0  osc 15 → 15
+  no remote-avatar-c on B
+  PASS
+
+================================================================================
+CLAIM 4 — LANTERN E / LEFTOVER E / CHIP — PASS
+================================================================================
+
+GET /demo-bus catalog still holds leftover this-PC shops.
+Seat B spawn (isolated profile):
+  nearbyShop=""
+  stallHint="E opens a stall when you are next to it."
+  shopRange="Quầy Cá Đèn Lồng: 29 m away"
+  Press E: shopPanelId=""  (did not open J6 / Shared PC)
+  After A walked, leftover E still did not open.
+
+Authored lantern: A held W then E. Panel opened shop-lantern-fish.
+  Nearby became shop-lantern-fish. Not a leftover shop.
+
+Spot-check kept on the same bundle:
+  play-street-chip Harbor Walk
+  hh-world-minimap authored-hud-lanes
+  data-far-lod=inner-door-glass m=90
+  plaques=4  street-hud=named-chip
+  sky=gradient-hemisphere  walk-cycle=opposite-stride
+  honesty: Authored approximation / not a digital twin /
+    NOT_PLAN_PASS / No GTA claim
+
+PASS on the named leftovers.
+
+================================================================================
+HUNTS (not named fails)
+================================================================================
+
+Walk +4 matches implementer +4 this time. Dist 7.42 vs 7.52 is
+window jitter. Still rose with real start().
+
+Remote DOM can linger one to five samples after people-layer
+0 (Walker still mounted, pose=walk). Plants do not. Same note
+as the implementer. Not the DptTgaTX leftover.
+
+AudioContext is not suspended on mute. Mute is “do not plant”.
+Hidden start() counts stayed flat. Not a miss.
+
+React JSX still ships data-friend-footsteps="0". writeProof
+overwrites each frame. Observed live=1 while A walked Online
+and live=0 from the first remotes=0 sample.
+
+Three.js createBufferSource: unused library Audio path. No
+sample files. Not a miss.
+
+================================================================================
+METHOD
+================================================================================
+
+1. 4175 already up (pid 5156). Did not recycle / rebuild /
+   start other ports.
+2. GET /  and /assets/index-nJ1HVwcJ.js. Recorded name+sha+len
+   before CDP. Same after CDP.
+3. Read implementer note (TICK=n/a). Did not copy its probe
+   writer. Did not treat it as TICK=yes.
+4. Independent Chrome CDP 1280x720 isolated profiles.
+   Ports 9961/9962/9963 (A/B/C) then 9964/9965 (Offline+hidden
+   recheck). Hooked OscillatorNode / BufferSource.start.
+   graph_clear only. Catalog kept.
+   Stand / A walk / Offline while W / Offline after stop /
+   hidden / unfriend / stranger C / lantern E / seat B
+   leftover E / chip+minimap.
+5. Did not write lead packs. Did not tick plan. Did not fake
+   GATE-U1. Did not overwrite the DptTgaTX reaudit.
+
+Temp only (not under data-qa):
+  %TEMP%\hh-friend-steps-fix-reaudit.mjs
+  %TEMP%\hh-friend-steps-fix-reaudit.json
+  %TEMP%\hh-friend-steps-fix-offline-recheck.mjs
+  %TEMP%\hh-friend-steps-fix-offline-recheck.json
+  %TEMP%\hh-friend-steps-fix-live.js
+
+================================================================================
+STILL IMPOSSIBLE WITHOUT OWNER
+================================================================================
+
+- GATE-U1 three human reviewers (not faked)
+- AUTHORIZE_MAP_FETCH=YES + license ledger before any OSM/Overture
+- Other-PC / WAN join (store is this PC 4175 loopback)
+- Real account / OIDC
+- Real M2 presence server / city friends still not built
+
+================================================================================
+END
+================================================================================
