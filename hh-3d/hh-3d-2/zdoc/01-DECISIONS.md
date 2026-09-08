@@ -1,3 +1,6 @@
+> HISTORY_ONLY — 08-09-2026: nội dung dưới là lịch sử, không chỉ đạo/tiến độ hiện hành.
+> Plan đang dùng: [công cụ Godot–Blender](../../../../hoan-hao/zdoc/8-9-godot-blender-agent-studio-plan.txt) trước, rồi [game HH World](../../../../hoan-hao/zdoc/8-9-hh-world-gameplay-viet-nam-plan.txt).
+> Không cập nhật/tick các marker/DoD dưới. Chỉ đọc khi truy vết quyết định cũ.
 # Quyết định và giới hạn
 
 Ngày: 2026-09-05. Đây là quyết định thiết kế của coordinator từ yêu cầu mới;

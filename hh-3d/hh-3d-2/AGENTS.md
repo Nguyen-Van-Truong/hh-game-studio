@@ -1,29 +1,27 @@
-# HH World 2 — phạm vi mới, chỉ lập kế hoạch ở lần khởi tạo
+# HH Studio / HH World — routing hai plan hiện hành
 
-Owner ngày 2026-09-05 yêu cầu làm lại sản phẩm trong `hh-3d/hh-3d-2`,
-trước mắt **chỉ tạo plan A–Z**. Không suy ra quyền clone/cài engine, tạo game,
-chạy server, tải bản đồ, dùng dịch vụ trả phí hoặc phát hành từ bộ tài liệu này.
-Một yêu cầu tiếp theo như “bắt đầu làm theo plan” mở các WP local theo phạm vi
-đã ghi; không cần bắt owner đọc lại một câu xác nhận đặc biệt.
+Owner 08-09-2026 yêu cầu tách đúng hai TXT theo hai việc:
+1. [Godot + Blender + agent tools](../../../hoan-hao/zdoc/8-9-godot-blender-agent-studio-plan.txt).
+2. [Game HH World / Việt Nam](../../../hoan-hao/zdoc/8-9-hh-world-gameplay-viet-nam-plan.txt).
 
-Owner ngày 2026-09-08 yêu cầu một cửa đọc tổng thể ở repo bên cạnh:
-[`8-9-hh-world-2-ke-hoach-tong-the-va-chat-luong.txt`](../../../hoan-hao/zdoc/8-9-hh-world-2-ke-hoach-tong-the-va-chat-luong.txt).
-Đây là ngoại lệ đường dẫn chỉ cho tài liệu do owner yêu cầu; không mở scope
-code/services Hoàn Hảo. Bản 5-9 master là lịch sử. Master mới là supplement
-bắt buộc EX01–EX36/DB-D1–D4 và sizing; không có bảng tiến độ thứ hai.
+Làm tools trước. Plan1 giữ GT; plan2 giữ H2. Đọc bảng/CURRENT_VALID_WP trong
+đúng TXT rồi specs/contracts/gates/exception liên quan. GT-10 tạo package trên
+fixture độc lập, không dependency H2; H2-P0-01 nhận package. Không mở plan thứ
+ba, không tick hai nơi. zdoc01–09, master cũ, bản gộp U2 chỉ lịch sử.
 
-Đọc master, `zdoc/00-START-HERE.md`, `zdoc/PROGRESS.md`, rồi WP hiện hành trong
-`zdoc/06-ROADMAP.md` và đúng các contract WP đó viện dẫn.
-Đây là routing riêng cho subtree này. Không bắt đầu WP Vault Fighters hay
-tiếp tục backlog Web cũ khi làm HH World 2. Mọi file bên ngoài subtree giữ
-nguyên; `hh-3d/app/` và các plan cũ chỉ là tài liệu tham khảo.
+Scope tools studio/**; game game/assets-src/backend/contracts/tools/tests/geo
+trong HH2. Generated addon consumer không sửa tay; package đổi bằng tool
+change request/version. Không sửa cùng file worker lease; một writer/file.
+Hai TXT ở sibling hoan-hao là ngoại lệ tài liệu owner chỉ định, không quyền
+sửa services xã hội. Không đổi Vault Fighters/pin/process/platform/Rust/Web cũ.
 
-Coordinator chia việc, viết/sửa plan, kiểm tra bằng chứng và quyết định.
-Worker, researcher và critic chỉ được gọi qua Cursor CLI với
-`--model cursor-grok-4.6-xhigh-fast`; cấm Composer/Auto/model fallback,
-Task/Explore/subagent có model không kiểm soát. Không có đúng model thì báo
-gap; không âm thầm đổi. Không sửa cùng file với worker.
+Hiện PLAN_ONLY: chỉ tài liệu/research/review; không clone/fork/install hoặc chạy
+implementation từ việc tạo plan. Khi owner mở thực thi, theo dependency và
+quyền thực tế, không yêu cầu magic phrase. Core fork không là bước đầu.
 
-Không dùng một marker authority toàn repo mới. Thẩm quyền roadmap chỉ thuộc
-scope `hh-3d/hh-3d-2`; không thay đổi acceptance/engine pin của sản phẩm khác.
-Chi tiết giao việc, lease, evidence và giới hạn quyền: `zdoc/08-AGENT-WORKFLOW.md`.
+Coordinator viết/sửa plan, chia việc, xem báo cáo và quyết định. Worker/search/
+research/critic chỉ Cursor CLI cursor-grok-4.6-xhigh-fast; không Composer/Auto/
+fallback/hidden subagent khác model. Quota hết ghi pending, không giả review.
+Không claim runtime/human/tool/capacity PASS từ document/static validation.
+Không thêm marker authority toàn repo. Review hiện hành:
+zdoc/reviews/split-20260908/REVIEW-RESULT.md, chỉ đúng hash mới có giá trị.
