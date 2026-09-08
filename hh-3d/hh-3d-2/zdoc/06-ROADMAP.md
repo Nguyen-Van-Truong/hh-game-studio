@@ -3,11 +3,18 @@
 PLAN_SCOPE=hh-3d/hh-3d-2
 PLAN_ROLE=CANONICAL_WP_ORDER_AND_ACCEPTANCE
 PLAN_DATE=2026-09-05
+PLAN_UPDATED=2026-09-08
 EXECUTION_STATUS=PLAN_ONLY_NOT_STARTED
 CURRENT_VALID_WP=H2-P0-01
 
 Mọi hàng còn PLANNED. Duyệt bộ plan không đồng nghĩa ACCEPTED một WP triển
 khai. Không dùng số checkbox của Web/Vault Fighters làm tiến độ ở đây.
+
+Supplement bắt buộc: [master ngày 8-9](../../../../hoan-hao/zdoc/8-9-hh-world-2-ke-hoach-tong-the-va-chat-luong.txt),
+mục 3 (dispatch song song), 5 (EX01–EX36 gắn WP), 6 (DB-D1–D4), 7 (sizing).
+Mỗi handoff phải lấy EX/test liên quan, không chỉ đọc BUILD happy-path dưới.
+Master không đổi thứ tự/dependencies/trạng thái bảng này. Review cũ 5-9
+không nghiệm thu revision mới; đọc `reviews/master-20260908/REVIEW-RESULT.md`.
 
 ## Quy tắc thực thi
 
@@ -182,7 +189,10 @@ Postgres migrations, command journal/outbox, dev config không secrets Git.
 VERIFY: clean DB boot, repeat migrate, version conflict, rollback/restore trên
 DB copy; restore sau deletion replay tombstones, API schema invalid input fail.
 Chưa gọi service Hoàn Hảo thật.
-DoD: reproducible local backend + backup rehearsal, 2 critics.
+DoD: reproducible local backend + backup rehearsal, 2 critics. Khóa DB-D1/D2
+configuration contract và test remote-WAL-flush/fail-closed trên fixture;
+local hai process không chứng minh hai failure domains. Hạ tầng thực D2
+và single-host-loss drill bắt buộc ở P6-02 trước persistent alpha.
 
 ### H2-P3-02 — Identity và admission
 ALLOWED: auth provider adapter, room registry/tickets, net auth client/server.
@@ -298,6 +308,11 @@ DoD: operational private environment documented, real operator designated;
 issuer/tickets thực + secure channel, không fixture DEV_ONLY; thiếu credentials
 thực thì GAP, không mở WAN bằng local auth.
 not a claim human fun gate has passed. 2 critics.
+Persistent alpha phải đạt DB-D2: primary + synchronous standby khác host,
+RPO=0 cho giao dịch đã ACK khi mất một DB host với standby còn sống;
+RTO≤4h phải đo. Khi mất synchronous protection, chặn protected writes,
+không tự giảm thành async. DB-D3/D4: archive/restore/deletion rehearsal và
+fault-domain report; single-node disposable test không thay gate này.
 
 ### H2-P6-03 — Human acceptance v0.1
 ALLOWED: feedback/evidence, focused issue fixes via new source hashes/reviews.
@@ -357,6 +372,9 @@ VERIFY: Q04-L/Q04-N/Q04-C/Q04-W1/Q05/Q06 on pilot, bounded CCU test with config,
 overflow, network egress and storage cost, backup restore/drain/update rollback.
 DoD: release cap based on measured headroom and operator capacity, no arithmetic
 CCU extrapolation; 2 critics. Seamless cell sharding still outside this WP.
+DB-D3/D4: đo archive lag, PITR/region-loss RPO và RTO theo failure model,
+reconcile transaction/deletion trước traffic; không hứa RPO=0 cho mọi disaster.
+Mất một room node cần capacity dự phòng và reconnect thật; không phải seamless.
 
 ### H2-P8-03 — Release candidate
 ALLOWED: build/export/QA manifests, release docs/credits/policy drafts.

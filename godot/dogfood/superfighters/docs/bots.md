@@ -4,8 +4,8 @@ Sidecar for VF6-WP5. Display title remains **Vault Fighters**.
 Planner rows are `ledger:RL-BOT-*` (`assumption`). Not observed Y8.
 Not a Superfighters trademark use.
 
-Official `run_id` is `VF6WP5-20260904-ASIA-SAIGON-08`
-(`cmd.vf6-wp5.bots.8`). Packs `-01`…`-07` and the 20260903 `-04`
+Official `run_id` is `VF6WP5-20260905-ASIA-SAIGON-10`
+(`cmd.vf6-wp5.bots.10`). Packs `-01`…`-09` and the 20260903 `-04`
 id are void.
 
 ## What shipped
@@ -16,23 +16,30 @@ loop:
 - platform / ladder graph from `MapGraph` + bounded A*
 - threat / cover / pickup / attack / retreat / patrol intents
 - two live weapon classes proven in combat: ledger `fire_spawn` plus
-  a melee `hit` on a living foe, or a nade explosion that hits after
-  a fight close. A starter-kit nade dump is not a second class.
+  a melee `hit` on a living foe, or a nade `hit` whose payload shows
+  blast damage on a living foe. A starter-kit nade dump, or any death
+  after any explosion, is not a second class.
 - aim error rotates the actual shot direction (`aim_x`/`aim_y` on
   `Bullet.setup`). Bots do not have perfect aim. A measured `shot_off`
-  is telemetry. `perfect_aim=0` is not advertised as proof — a real
-  near-zero roll may occur.
+  is telemetry. `perfect_aim` is not advertised as DoD.
 - pit avoid is a route-around (backtrack / other platform / jump),
-  not a freeze at the lip. Same-Y pit lips are not A* walk edges.
-  Rooftops must show a lower goal/waypoint or a successful detour,
-  not 44 freezes then a park.
+  not a hop-freeze at the lip. Same-Y pit lips are not A* walk edges.
+  Rooftops must close (`goal < 36` or melee pocket) and must not pass
+  on 12+ lip freezes with 0 successful reroutes. After a close they
+  stay on that deck; a chase hop off the foe is not arrival.
+- Ladder exit: walk off when the rung has a deck under it (lantern).
+  A shaft column (no floor on that x) uses one hop_off onto the
+  neighbor one-way, then walk. `jump_pressed` after a floor detach is
+  a full jump and stays inside the ladder AABB (lantern x≈69–72).
+  Hold-jump with no side walk is climb.
 - airborne spawn/fall paths from the landing floor, not an air cell
   treated as a high deck. A held hop keeps air-x so a closed door
   can be cleared; falling before a hop does not air-walk into crates.
 - knockdown recovery wait
 - recruit / regular / veteran profiles in `data/sim/bots.json`
-- vs1 can spawn a 2-body roster (`vs1_bot_count=1`). Official finish
-  uses that spawn. It does not cull extras after `sync_physics`.
+- vs1 can spawn a 2-body roster (`vs1_bot_count=1`). Official six-map,
+  weapons, finish, greedy compare, and fight stills use that spawn.
+  There is no post-sync cull function.
 
 Difficulty knobs are reaction delay, aim error degrees, tactical
 budget, and recovery ticks. They are HUD-visible on the VS stage line
@@ -40,22 +47,22 @@ budget, and recovery ticks. They are HUD-visible on the VS stage line
 
 Greedy baseline walks straight at the foe with no pit graph. Planner
 compare may use a greedy pit-death delta as supporting evidence, but
-the planner must also arrive (`goal < 36` or `engage < 48`) on that
-rooftops seed. Fire deaths are not pit deaths.
+the planner must also arrive (`goal < 36` or melee pocket `< 28`) on
+that rooftops seed. Fire deaths are not pit deaths.
 
 Finish proof starts with exactly two fighters (bot vs bot). The
 champion must have moved and fought; the loser must die by damage.
 An idle full-HP teammate is not last-standing.
 
-Reach proof is the named opponent start (`goal_dist < 36`), melee /
-inside fire range (`engage_dist < 48`), or the named foe down after
-a proven close (`closest_engage < 48`). Parking at engage in
-`[71, 72)` is not reach. A long-range shot, a 27px shuffle, walking
-away, or a reroute counter is not reach.
+Reach proof is the named opponent start (`goal_dist < 36`) or a
+landed melee in the pocket (`engage < 28` and `melee_used ≥ 1`).
+Parking at engage 38 / 48, or a long-range shot, is not reach.
 
-Bots keep walking toward the foe or a named platform after they
-start firing. Walk-stop is the melee pocket only. It is not the
-harness reach constant.
+Bots keep walking toward the foe after they start firing. Walk-stop
+is the melee pocket only (~hitbox). It is not a harness 48 gate.
+
+The named waypoint is the last A* cell toward the foe, not the first
+cell ≥72 from start.
 
 ## Honesty
 
@@ -73,11 +80,14 @@ harness reach constant.
   override on that command so the bullet leaves on the erred vector.
 - Official leftover is host `WaitForExit` on product `--path` only.
   A PASS banner is not remapped to exit 0. Critic iso exclude is not
-  required.
+  required. Packer does not self-copy logs and does not write READY
+  after a pack fail.
 - Official `run_all` does not default `HH_VF_BOTS_COMPACT`.
 - Survival / Stage official banners stay `NOT_AI=1` because those
   packages did not remint planner postconditions. Live Survival/Stage
   bots still use this brain.
+- Window fight still is a 2-body vs1. Pause overlay must change
+  pixels versus the fight still.
 - Not Y8 parity.
 
 ## Residual

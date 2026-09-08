@@ -16,12 +16,12 @@ func _ready() -> void:
 	name = "Pause"
 	layer = 80
 	follow_viewport_enabled = false
-	process_mode = Node.PROCESS_MODE_WHEN_PAUSED
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	visible = false
 	var bg: ColorRect = ColorRect.new()
 	bg.name = "Backdrop"
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
-	bg.color = Color(0.07, 0.11, 0.19, 0.88)
+	bg.color = Color(0.04, 0.06, 0.14, 0.92)
 	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(bg)
 	var label: Label = Label.new()

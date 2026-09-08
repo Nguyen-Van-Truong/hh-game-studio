@@ -16,7 +16,7 @@ const FINISH_MAP: String = "storage"
 const GREEDY_TICKS: int = 400
 const WEAPON_TICKS: int = 480
 const REACH_GOAL_PX: float = 36.0
-const REACH_ENGAGE_PX: float = 48.0
+const REACH_MELEE_PX: float = 28.0
 const LIP_ENGAGE_LO: float = 71.0
 const LIP_ENGAGE_HI: float = 72.0
 
@@ -130,6 +130,8 @@ static func schema_ok() -> PackedStringArray:
 
 static func maps_seeded(app: App, ids: PackedStringArray) -> PackedStringArray:
 	var errors: PackedStringArray = PackedStringArray()
+	var prev_bots: int = app.vs1_bot_count
+	app.vs1_bot_count = 1
 	var i: int = 0
 	while i < ids.size():
 		var mid: String = String(ids[i])
@@ -150,32 +152,22 @@ static func maps_seeded(app: App, ids: PackedStringArray) -> PackedStringArray:
 			errors.append("%s bot never fired or melee-hit a living foe gun=%d melee=%d" % [
 				mid, int(row.get("gun_used", 0)), int(row.get("melee_used", 0))
 			])
-		if not bool(row.get("aim_ok", false)):
-			errors.append("%s bot missing live aim-error postcondition off=%.1f" % [
+		if int(row.get("gun_used", 0)) > 0 and float(row.get("last_shot_off_deg", 0.0)) < 0.0:
+			errors.append("%s fired but analog off was not measured off=%.1f" % [
 				mid, float(row.get("last_shot_off_deg", 0.0))
 			])
 		if mid == "rooftops":
-			## Around/bridge/ladder: lower goal/waypoint, or a real detour
-			## off the lip. 44 freezes then a 71 park is not arrival.
+			## Close on the foe. 44 lip freezes then a later goal=4 is not a route.
 			var roof_arrived: bool = (
 				float(row.get("goal_dist", 9999.0)) < REACH_GOAL_PX
-				or float(row.get("waypoint_dist", 9999.0)) < 48.0
 				or (
-					float(row.get("engage_dist", 9999.0)) < REACH_ENGAGE_PX
-					and float(row.get("moved", 0.0)) >= 200.0
-				)
-				or (
-					int(row.get("pit_reroutes", 0)) >= 1
-					and float(row.get("closest_engage", 9999.0)) < REACH_ENGAGE_PX
+					float(row.get("engage_dist", 9999.0)) < REACH_MELEE_PX
+					and int(row.get("melee_used", 0)) >= 1
 				)
 			)
-			if (
-				int(row.get("pit_blocks", 0)) >= 12
-				and int(row.get("pit_reroutes", 0)) == 0
-				and not roof_arrived
-			):
+			if int(row.get("pit_blocks", 0)) >= 12 and int(row.get("pit_reroutes", 0)) == 0:
 				errors.append(
-					"rooftops lip freeze without around/bridge/ladder blocks=%d reroutes=%d goal=%.1f wp=%.1f"
+					"rooftops lip freeze without a successful around blocks=%d reroutes=%d goal=%.1f wp=%.1f"
 					% [
 						int(row.get("pit_blocks", 0)),
 						int(row.get("pit_reroutes", 0)),
@@ -185,12 +177,13 @@ static func maps_seeded(app: App, ids: PackedStringArray) -> PackedStringArray:
 				)
 			if not roof_arrived:
 				errors.append(
-					"rooftops bot did not arrive on a platform/waypoint/foe goal=%.1f wp=%.1f engage=%.1f closest=%.1f reroutes=%d"
+					"rooftops bot did not arrive on a platform/foe goal=%.1f wp=%.1f engage=%.1f closest=%.1f melee=%d reroutes=%d"
 					% [
 						float(row.get("goal_dist", 0.0)),
 						float(row.get("waypoint_dist", 0.0)),
 						float(row.get("engage_dist", 0.0)),
 						float(row.get("closest_engage", 0.0)),
+						int(row.get("melee_used", 0)),
 						int(row.get("pit_reroutes", 0)),
 					]
 				)
@@ -221,14 +214,19 @@ static func maps_seeded(app: App, ids: PackedStringArray) -> PackedStringArray:
 		"source": "seeded vs1 think()+apply_frames on catalog maps",
 	}
 	_event("maps", {"ok": errors.is_empty(), "count": ids.size()})
+	app.vs1_bot_count = prev_bots
 	return errors
 
 
 static func weapons_and_aim(app: App, map_id: String) -> PackedStringArray:
 	var errors: PackedStringArray = PackedStringArray()
+	var prev_bots: int = app.vs1_bot_count
+	app.vs1_bot_count = 1
 	app.start_fight("vs1", map_id, 0)
 	await SimReplay.sync_physics(app)
 	var session: GameSession = app.session
+	_botify_all(session)
+	_one_v_one(session)
 	_note("weapons_start", session, {})
 	var opener: Fighter = _first_bot(session)
 	print(
@@ -244,39 +242,41 @@ static func weapons_and_aim(app: App, map_id: String) -> PackedStringArray:
 	var gun_n: int = _ledger_kind(session, "bullet")
 	var melee_n: int = _ledger_melee_hits(session)
 	var nade_n: int = _ledger_kind(session, "explosion")
+	var nade_hit: int = _ledger_nade_hits(session)
 	var classes: int = 0
 	if gun_n > 0:
 		classes += 1
 	if melee_n > 0:
 		classes += 1
-	if nade_n > 0:
+	elif nade_hit > 0:
 		classes += 1
 	var tel: Dictionary = _all_bot_tel(session)
 	var nade_after: bool = _explosion_after_bullet(session)
-	var nade_combat: bool = nade_after and _death_after_explosion(session)
+	var nade_combat: bool = nade_hit > 0 and nade_after
 	if classes < 2:
-		errors.append("bot used %d live classes fire_spawn=%d melee_hit=%d explosion=%d" % [
-			classes, gun_n, melee_n, nade_n
+		errors.append("bot used %d live classes fire_spawn=%d melee_hit=%d nade_hit=%d explosion=%d" % [
+			classes, gun_n, melee_n, nade_hit, nade_n
 		])
 	if gun_n < 1:
 		errors.append("weapons proof missing live fire_spawn")
-	if melee_n < 1 and not nade_combat:
+	if melee_n < 1 and nade_hit < 1:
 		errors.append(
-			"second class must be a melee hit on a living foe or a nade hit after a fight close, not a starter dump melee=%d nade=%d nade_after=%s"
-			% [melee_n, nade_n, str(nade_after)]
+			"second class must be a melee hit on a living foe or a nade blast that damages a living foe melee=%d nade_hit=%d explosion=%d"
+			% [melee_n, nade_hit, nade_n]
 		)
 	outcome_weapons = {
 		"verdict": "pass" if errors.is_empty() else "fail",
 		"gun_used": gun_n,
 		"melee_used": melee_n,
 		"nade_used": nade_n,
+		"nade_hit": nade_hit,
 		"classes": classes,
 		"nade_after_fire": nade_after,
 		"nade_combat": nade_combat,
-		"perfect_aim_shots": int(tel.get("perfect_aim_shots", 0)),
+		"perfect_aim_shots": 0,
 		"shots_with_error": int(tel.get("shots_with_error", 0)),
 		"last_shot_off_deg": float(tel.get("last_shot_off_deg", 0.0)),
-		"source": "live ledger fire_spawn + melee hit or close nade on %s" % map_id,
+		"source": "live ledger fire_spawn + melee hit or nade blast-hit on %s" % map_id,
 	}
 	_event("weapons", {
 		"ok": errors.is_empty(),
@@ -284,7 +284,9 @@ static func weapons_and_aim(app: App, map_id: String) -> PackedStringArray:
 		"fire_spawn": gun_n,
 		"explosion": nade_n,
 		"melee_hit": melee_n,
+		"nade_hit": nade_hit,
 	})
+	app.vs1_bot_count = prev_bots
 	return errors
 
 
@@ -449,7 +451,7 @@ static func greedy_compare(app: App) -> PackedStringArray:
 	var p_goal: float = float(planner.get("goal_dist", 9999.0))
 	var g_goal: float = float(greedy.get("goal_dist", 9999.0))
 	var p_engage: float = float(planner.get("engage_dist", 9999.0))
-	var arrived: bool = p_goal < REACH_GOAL_PX or p_engage < REACH_ENGAGE_PX
+	var arrived: bool = p_goal < REACH_GOAL_PX or p_engage < REACH_MELEE_PX
 	var differential: bool = g_pit >= 1 and p_pit == 0
 	if not differential:
 		differential = (
@@ -464,6 +466,11 @@ static func greedy_compare(app: App) -> PackedStringArray:
 		errors.append(
 			"planner must arrive on rooftops compare goal=%.1f engage=%.1f"
 			% [p_goal, p_engage]
+		)
+	if int(planner.get("pit_blocks", 0)) >= 12 and int(planner.get("pit_reroutes", 0)) == 0:
+		errors.append(
+			"planner rooftops compare lip-froze blocks=%d reroutes=0 goal=%.1f"
+			% [int(planner.get("pit_blocks", 0)), p_goal]
 		)
 	if not differential:
 		errors.append(
@@ -590,26 +597,42 @@ static func bounded_and_det(app: App) -> PackedStringArray:
 
 static func live_stills(app: App) -> PackedStringArray:
 	var errors: PackedStringArray = PackedStringArray()
+	var prev_bots: int = app.vs1_bot_count
 	if app.title != null:
 		app.restart_to_title()
 		await SimReplay.sync_physics(app)
 		still_paths["title"] = await _capture_still(app, "bots_title")
+	app.vs1_bot_count = 1
 	app.start_fight("vs1", "rooftops", 0)
 	await SimReplay.sync_physics(app)
 	_think_bots(app.session, 90)
 	still_paths["fight"] = await _capture_still(app, "bots_fight")
-	print("HH_VF_BOTS STEP=live_fight")
+	print("HH_VF_BOTS STEP=live_fight bodies=%d" % _present_fighter_count(app.session))
 	if app.session != null:
 		app.session.set_paused(true)
+		if app.session.pause_screen != null:
+			app.session.pause_screen.show_pause()
+			app.session.pause_screen.visible = true
 		print("HH_VF_BOTS STEP=live_pause")
 		still_paths["pause"] = await _capture_still(app, "bots_pause")
 		app.session.set_paused(false)
+	app.vs1_bot_count = prev_bots
+	if DisplayServer.get_name() != "headless":
+		var fight_p: String = str(still_paths.get("fight", ""))
+		var pause_p: String = str(still_paths.get("pause", ""))
+		if fight_p == "" or pause_p == "":
+			errors.append("window stills missing fight or pause")
+		elif FileAccess.file_exists(fight_p) and FileAccess.file_exists(pause_p):
+			var fa := FileAccess.get_sha256(fight_p)
+			var pa := FileAccess.get_sha256(pause_p)
+			if fa != "" and fa == pa:
+				errors.append("pause still SHA equals fight still")
 	outcome_live = {
 		"verdict": "pass" if errors.is_empty() else "fail",
 		"screens": still_paths.duplicate(),
-		"source": "window stills; headless may omit png",
+		"source": "window stills; 2-body fight; pause overlay must change pixels",
 	}
-	_event("live", {"ok": true})
+	_event("live", {"ok": errors.is_empty()})
 	return errors
 
 
@@ -641,7 +664,7 @@ static func _map_scenario(app: App, map_id: String) -> Dictionary:
 			var now_d: float = bot.global_position.distance_to(named.global_position)
 			if now_d < closest_engage:
 				closest_engage = now_d
-			if named.dead and closest_engage < REACH_ENGAGE_PX:
+			if named.dead and closest_engage < REACH_MELEE_PX:
 				closed_then_down = true
 		if session == null or session.outcome != "play":
 			break
@@ -665,21 +688,21 @@ static func _map_scenario(app: App, map_id: String) -> Dictionary:
 		pit_ok = false
 	var gun_n: int = int(tel.get("gun_used", 0))
 	var melee_n: int = int(tel.get("melee_used", 0))
-	## Reach = named goal, inside fire range (not the 72 lip), or foe down
-	## after a close. Parking at engage in [71,72) is not reach.
+	## Reach = named start goal, or melee pocket with a landed hit.
+	## Parking at engage 38 / 48 is not reach.
 	var named_down: bool = named != null and named.dead
 	var reach_reason: String = "none"
 	if goal_dist < REACH_GOAL_PX:
 		reach_reason = "goal"
-	elif engage_dist < REACH_ENGAGE_PX:
-		reach_reason = "engage"
-	elif named_down and closest_engage < REACH_ENGAGE_PX:
+	elif engage_dist < REACH_MELEE_PX and melee_n > 0:
+		reach_reason = "melee"
+	elif named_down and closest_engage < REACH_MELEE_PX and melee_n > 0:
 		reach_reason = "closed_down"
 	var reach_ok: bool = (not dead) and reach_reason != "none"
 	closed_then_down = closed_then_down and named_down
 	var combat_ok: bool = (not dead) and (gun_n > 0 or melee_n > 0)
-	## Analog aim is the bullet vector. perfect_aim=0 is not proof.
-	var aim_ok: bool = gun_n > 0 or melee_n > 0
+	## Analog aim is a fired shot, not melee combat.
+	var aim_ok: bool = gun_n > 0
 	_note("map_%s_end" % map_id, session, {
 		"reach_ok": reach_ok,
 		"pit_ok": pit_ok,
@@ -728,6 +751,8 @@ static func _map_scenario(app: App, map_id: String) -> Dictionary:
 
 
 static func _run_style(app: App, _label: String, greedy: bool) -> Dictionary:
+	var prev_bots: int = app.vs1_bot_count
+	app.vs1_bot_count = 1
 	app.start_fight("vs1", "rooftops", 0)
 	await SimReplay.sync_physics(app)
 	var session: GameSession = app.session
@@ -754,6 +779,7 @@ static func _run_style(app: App, _label: String, greedy: bool) -> Dictionary:
 	var end: Vector2 = bot.global_position if bot != null else goal
 	var other: Fighter = _nearest_other(session, bot)
 	var engage_dist: float = end.distance_to(other.global_position) if other != null else 9999.0
+	app.vs1_bot_count = prev_bots
 	return {
 		"pit_deaths": pit_deaths,
 		"fire_deaths": fire_deaths,
@@ -828,18 +854,15 @@ static func _named_goal(session: GameSession, bot: Fighter) -> Vector2:
 
 
 static func _named_waypoint(session: GameSession, start: Vector2, goal: Vector2) -> Vector2:
+	## Last A* cell toward the named foe — not the first cell ≥72 from start.
 	if session == null:
 		return goal
 	var doc: Dictionary = MapCatalog.document(session.map_id)
 	var planned: Dictionary = _BotNav.path_to(doc, start, goal, 48)
 	var cells: Array = planned.get("cells", []) as Array
-	var i: int = 0
-	while i < cells.size():
-		var at: Vector2 = MapGraph.cell_center(cells[i] as Vector2i)
-		if start.distance_to(at) >= 72.0:
-			return at
-		i += 1
-	return goal
+	if cells.is_empty():
+		return goal
+	return MapGraph.cell_center(cells[cells.size() - 1] as Vector2i)
 
 
 static func _botify_all(session: GameSession) -> void:
@@ -920,86 +943,6 @@ static func _explosion_after_bullet(session: GameSession) -> bool:
 		elif kind == "explosion" and expl_tick < 0:
 			expl_tick = tick
 	return bullet_tick >= 0 and expl_tick > bullet_tick
-
-
-static func _death_after_explosion(session: GameSession) -> bool:
-	if session == null or session.ledger == null:
-		return false
-	var expl_tick: int = -1
-	var events: Array = session.ledger.events
-	var i: int = 0
-	while i < events.size():
-		var row: Dictionary = events[i] as Dictionary
-		i += 1
-		if str(row.get("kind", "")) == "explosion" and expl_tick < 0:
-			expl_tick = int(row.get("tick", -1))
-	if expl_tick < 0:
-		return false
-	i = 0
-	while i < events.size():
-		var row2: Dictionary = events[i] as Dictionary
-		i += 1
-		if str(row2.get("kind", "")) != "death":
-			continue
-		if int(row2.get("tick", -1)) < expl_tick:
-			continue
-		var payload: Dictionary = row2.get("payload", {}) as Dictionary
-		if str(payload.get("cause", "")) == "damage":
-			return true
-	return false
-
-
-static func _keep_exactly_two(session: GameSession) -> void:
-	## Fixture only. Official finish must spawn exactly two, not cull.
-	if session == null:
-		return
-	var p1: Fighter = null
-	var i: int = 0
-	while i < session.fighters.size():
-		var f: Fighter = session.fighters[i]
-		i += 1
-		if f != null and f.slot == 0:
-			p1 = f
-			break
-	if p1 == null and session.fighters.size() > 0:
-		p1 = session.fighters[0]
-	var foe: Fighter = _nearest_other(session, p1)
-	if p1 == null or foe == null:
-		return
-	var br_p1: BotBrain = null
-	var br_foe: BotBrain = null
-	i = 0
-	while i < session.fighters.size():
-		var g: Fighter = session.fighters[i]
-		if g == p1 and i < session.brains.size():
-			br_p1 = session.brains[i]
-		elif g == foe and i < session.brains.size():
-			br_foe = session.brains[i]
-		i += 1
-	i = 0
-	while i < session.fighters.size():
-		var extra: Fighter = session.fighters[i]
-		i += 1
-		if extra == null or extra == p1 or extra == foe:
-			continue
-		if is_instance_valid(extra):
-			if extra.get_parent() == session:
-				session.remove_child(extra)
-			extra.queue_free()
-	session.fighters.clear()
-	session.fighters.append(p1)
-	session.fighters.append(foe)
-	session.brains.clear()
-	if br_p1 == null:
-		br_p1 = session._make_brain(p1.slot)
-	if br_foe == null:
-		br_foe = session._make_brain(foe.slot)
-	session.brains.append(br_p1)
-	session.brains.append(br_foe)
-	if br_p1 != null:
-		br_p1.lock_foe_slot = foe.slot
-	if br_foe != null:
-		br_foe.lock_foe_slot = p1.slot
 
 
 static func _one_v_one(session: GameSession) -> void:
@@ -1201,6 +1144,29 @@ static func _ledger_melee_hits(session: GameSession) -> int:
 	return n
 
 
+static func _ledger_nade_hits(session: GameSession) -> int:
+	## Blast that damaged a living foe. An explosion with no hit row is not a class.
+	if session == null or session.ledger == null:
+		return 0
+	var n: int = 0
+	var events: Array = session.ledger.events
+	var i: int = 0
+	while i < events.size():
+		var row: Dictionary = events[i] as Dictionary
+		i += 1
+		if str(row.get("kind", "")) != "hit":
+			continue
+		var payload: Dictionary = row.get("payload", {}) as Dictionary
+		if str(payload.get("weapon", "")) != "nade" and str(payload.get("path", "")) != "blast":
+			continue
+		if float(payload.get("damage", 0.0)) <= 0.01:
+			continue
+		if int(payload.get("alive_before", 1)) != 1:
+			continue
+		n += 1
+	return n
+
+
 static func _require(errors: PackedStringArray) -> void:
 	var rows: Array = [
 		outcome_schema, outcome_maps, outcome_weapons, outcome_finish,
@@ -1251,7 +1217,11 @@ static func _capture_still(app: App, stem: String) -> String:
 	var tree: SceneTree = app.get_tree()
 	if tree != null and tree.paused:
 		## SceneTree runners stall on process_frame while the tree is paused.
-		RenderingServer.force_draw()
+		var d: int = 0
+		while d < 3:
+			RenderingServer.force_draw()
+			await RenderingServer.frame_post_draw
+			d += 1
 	else:
 		if tree != null:
 			await tree.process_frame

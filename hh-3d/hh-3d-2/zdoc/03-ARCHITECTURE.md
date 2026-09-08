@@ -3,6 +3,11 @@
 Thiết kế mặc định cho v0.1; API wire/schema cụ thể phải được khóa ở WP trước
 khi triển khai dependent feature. Không gọi một sơ đồ là capacity đã chứng minh.
 
+Supplement bắt buộc ngày 08-09: [master](../../../../hoan-hao/zdoc/8-9-hh-world-2-ke-hoach-tong-the-va-chat-luong.txt)
+mục 4–7, EX01–EX36 và DB-D1–D4. Các bổ sung làm rõ fencing, pending receipt,
+failure domains và sizing; roadmap vẫn giữ thứ tự/tiến độ. Review v2 cũ
+không chứng nhận revision mới, xem `reviews/master-20260908/REVIEW-RESULT.md`.
+
 ## A01 — Các thành phần
 
 ```text
@@ -89,6 +94,10 @@ có sandbox economy riêng theo PRODUCT, không nhập thành tiền Online.
 
 Reward room→API: room gửi durable award command với attempt_id/command_id và
 proof authority; có pending journal/retry được phục hồi, API dedup và commit.
+Online attempt phải được API đăng ký durable trước khi room cho bắt đầu.
+Local room journal chỉ chịu process crash khi disk còn; không phải chứng cứ
+chịu mất host/disk. Kết quả chưa vào API và chưa ACK khi room host mất là
+unconfirmed/retryable theo EX07; không suy outcome từ client hay mint bù mù.
 Client có thể thấy animation “bắt được”, nhưng inventory/notification “đã nhận”
 chỉ sau API committed receipt/readback. Room crash sau API commit: reconnect
 query receipt/inventory, không mint lại. Crash trước commit: recover pending
@@ -149,8 +158,13 @@ là các kết quả khác nhau; reconnect không kick người khác để lấ
 Khi mất kết nối đột ngột, giữ một reservation reconnect **30 s**, actor pose
 cleanup vẫn trong **10 s**; reservation vẫn tính vào cap. Sau expiry release
 idempotent; reconnect hết hạn đi qua admission như lần mới, không kick peer.
-Logout/leave chủ động release ngay. Session mới thắng session cũ theo epoch,
-không tạo hai reservation. Party reserve đủ số slot trong một transaction
+Logout/leave chủ động release ngay. Máy mới được xác thực trước; takeover cùng
+room dùng một registry transaction kiểm admission + CAS epoch + rebind hold
+hiện có + fence session cũ. Không cần slot thứ hai ngay cả occupied=cap32;
+release/re-admit nếu dùng phải cùng TX, không có khoảng hở tranh chỗ. Test
+hai takeover đồng thời và stale input. Chuyển room khác cần reserve đủ target
+trước handoff, fail admission giữ phiên cũ. Không tạo hai reservation.
+Party reserve đủ số slot trong một transaction
 hoặc cả nhóm fail; deadline 15 s để join, hủy phần chưa vào và UI rõ người
 đã join; không claim atomic network join khi chỉ reservation là atomic.
 
@@ -170,6 +184,14 @@ PostgreSQL là authority durable. Tables logical: accounts/profile, friendships/
 blocks, inventory, wallets/ledger, houses/placements, shops/listings, commands,
 outbox, reports/moderation_actions, world_releases/anchor_mappings. Pose runtime
 ephemeral; không lưu position history từng frame vào DB.
+
+Mức bảo vệ dữ liệu theo master DB-D1–D4: dev disposable khác persistent alpha.
+Persistent alpha dùng fsync + synchronous standby remote WAL flush khác host;
+không ACK protected transaction khi chưa đủ durability. Single DB host loss
+RPO=0 chỉ khi synchronous survivor còn sống, failover được fencing; mất
+protection thì chặn protected writes đến khi khôi phục redundancy. Backup/
+PITR xử lý failure model khác và có archive-lag/RPO riêng; RPO24h chỉ dành
+telemetry tái dựng được. Không gọi async WAL archive là RPO0 mọi thảm họa.
 
 Mua item game: khóa hoặc optimistic version stock/wallet → validate funds,
 ownership, visibility → debit/credit/item transfer + journal + outbox trong

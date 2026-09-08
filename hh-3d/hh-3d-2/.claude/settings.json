@@ -1,0 +1,20 @@
+{
+  "model": "claude-fable-5.1",
+  "effortLevel": "xhigh",
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://api.experientiallabs.ai",
+    "ANTHROPIC_MODEL": "claude-fable-5.1",
+    "ANTHROPIC_DEFAULT_FABLE_MODEL": "claude-fable-5.1"
+  },
+  "modelOverrides": {
+    "claude-fable-5": "claude-fable-5.1"
+  },
+  "permissions": {
+    "deny": [
+      "Read(D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/hoan-hao/**)",
+      "Read(D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hoan-hao/**)",
+      "Edit(D:/dataDiskD/intellji/hoanhaosocial/hoanhaonew-20-6-2025/hoan-hao/**)",
+      "Edit(D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hoan-hao/**)"
+    ]
+  }
+}

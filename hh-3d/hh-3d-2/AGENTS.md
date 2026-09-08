@@ -6,7 +6,13 @@ chạy server, tải bản đồ, dùng dịch vụ trả phí hoặc phát hàn
 Một yêu cầu tiếp theo như “bắt đầu làm theo plan” mở các WP local theo phạm vi
 đã ghi; không cần bắt owner đọc lại một câu xác nhận đặc biệt.
 
-Đọc `zdoc/00-START-HERE.md`, `zdoc/PROGRESS.md`, rồi WP hiện hành trong
+Owner ngày 2026-09-08 yêu cầu một cửa đọc tổng thể ở repo bên cạnh:
+[`8-9-hh-world-2-ke-hoach-tong-the-va-chat-luong.txt`](../../../hoan-hao/zdoc/8-9-hh-world-2-ke-hoach-tong-the-va-chat-luong.txt).
+Đây là ngoại lệ đường dẫn chỉ cho tài liệu do owner yêu cầu; không mở scope
+code/services Hoàn Hảo. Bản 5-9 master là lịch sử. Master mới là supplement
+bắt buộc EX01–EX36/DB-D1–D4 và sizing; không có bảng tiến độ thứ hai.
+
+Đọc master, `zdoc/00-START-HERE.md`, `zdoc/PROGRESS.md`, rồi WP hiện hành trong
 `zdoc/06-ROADMAP.md` và đúng các contract WP đó viện dẫn.
 Đây là routing riêng cho subtree này. Không bắt đầu WP Vault Fighters hay
 tiếp tục backlog Web cũ khi làm HH World 2. Mọi file bên ngoài subtree giữ

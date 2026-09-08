@@ -7,6 +7,7 @@ is `godot/plugin-project/r5w7/` (same `project.godot`). There is no second
 
 | File | What it is |
 |------|------------|
+| [AGENT_GODOT_RUNBOOK.md](AGENT_GODOT_RUNBOOK.md) | How agents must launch the pinned 4.7.1 binaries, `--path`, leftover-0, and `WaitForExit` for Vault Fighters. |
 | [CAPABILITY_MATRIX.md](CAPABILITY_MATRIX.md) | Measurable 2D workflows. Supported = named action + official E2E ACK, or stock Godot CLI. Not every P0 is Supported. |
 | [COVERAGE_2D.md](COVERAGE_2D.md) | R5-WP7 TRACE REPORT: every P0/P1 2D row → action + official test **or** Alternative/Gap + owner. |
 | [MCP_BAKEOFF.md](MCP_BAKEOFF.md) | R1-WP2 audit + R1-WP3 E2E scorecard on disposable copies ([tests/e2e/bakeoff/](../../tests/e2e/bakeoff/)). Shortlist A+C Lite. Do not enable in `plugin-project`. |

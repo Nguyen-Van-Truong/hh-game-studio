@@ -1,5 +1,9 @@
 # Kết quả review bộ plan HH World 2
 
+**HISTORICAL — chỉ áp dụng freeze-v2 ngày 05-09-2026.** Canonical đã sửa
+ngày 08-09; verdict ACCEPTED dưới không áp dụng source hiện hành. Trạng thái
+mới: [`master-20260908/REVIEW-RESULT.md`](master-20260908/REVIEW-RESULT.md).
+
 Ngày: 2026-09-05 · Coordinator: task hiện tại · Phạm vi: tài liệu thiết kế.
 
 **PLAN_DESIGN_REVIEW=ACCEPTED**

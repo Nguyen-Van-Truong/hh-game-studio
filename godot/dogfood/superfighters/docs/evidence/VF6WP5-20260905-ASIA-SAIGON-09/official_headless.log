@@ -1,0 +1,59 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+HH_VF_BOTS STEP=boot DISPLAY=headless
+HH_VF_BOTS STEP=schema ok=true
+HH_VF_BOTS STEP=map_sync id=rooftops
+HH_VF_BOTS STEP=map_sync id=storage
+HH_VF_BOTS STEP=map_sync id=police
+HH_VF_BOTS STEP=map_sync id=hazardous
+HH_VF_BOTS STEP=map_sync id=lantern
+HH_VF_BOTS STEP=map_sync id=gauge
+HH_VF_BOTS STEP=maps six
+HH_VF_BOTS STEP=weapons_start nades=3 gun=pistol ammo=12
+HH_VF_BOTS STEP=weapons classes=2
+HH_VF_BOTS STEP=finish_chunk left=1020 outcome=play
+HH_VF_BOTS STEP=finish_chunk left=840 outcome=win
+HH_VF_BOTS STEP=finish_fighter slot=0 team=0 dead=false cause= hp=82 shots=2 x=309 y=164 bot=true
+HH_VF_BOTS STEP=finish_fighter slot=1 team=1 dead=true cause=damage hp=0 shots=2 x=314 y=164 bot=true
+HH_VF_BOTS STEP=finish outcome=win
+HH_VF_BOTS STEP=greedy
+HH_VF_BOTS STEP=recover
+HH_VF_BOTS STEP=diff
+HH_VF_BOTS STEP=bound
+HH_VF_BOTS STEP=live_fight bodies=2
+HH_VF_BOTS STEP=live_pause
+HH_VF_BOTS STEP=live
+HH_ASSERT_FAIL police bot did not reach named foe/waypoint goal=107.2 wp=65.8 engage=109.5 closest=102.2 reason=none
+HH_ASSERT_FAIL gauge bot did not reach named foe/waypoint goal=284.6 wp=282.3 engage=283.4 closest=220.1 reason=none
+HH_ASSERT_FAIL gauge bot never fired or melee-hit a living foe gun=0 melee=0
+HH_ASSERT_FAIL planner pit deaths 1 on rooftops compare
+HH_ASSERT_FAIL compare needs greedy pit death or planner-only goal p_pit=1 g_pit=2 p_goal=9.7 g_goal=262.4
+HH_ASSERT_FAIL MAPS structured outcome is fail
+HH_ASSERT_FAIL GREEDY structured outcome is fail
+HH_VF_BOTS run_id=VF6WP5-20260905-ASIA-SAIGON-09
+HH_VF_BOTS command_id=cmd.vf6-wp5.bots.9
+HH_VF_BOTS DISPLAY=headless
+HH_VF_BOTS SEED=7 MAP=rooftops MODE=vs1 NAME=Skyline Relay
+HH_VF_BOTS STARTED_AT=2026-09-05T13:38:05+07:00 ENDED_AT=2026-09-05T14:36:44+07:00
+HH_VF_BOTS USED_STEP_FIXED=0 USED_APPLY_FRAMES=3813 USED_APPLY_ATTEMPTED=3813 USED_APPLY_SUCCEEDED=3813 USED_PARSE_INPUT_EVENT=0 USED_ACTION_PRESS=0 USED_FORCE_KILL=0 USED_TELEPORT=0 USED_APPLY_EVAL=0
+HH_VF_BOTS SCHEMA=pass SCHEMA_SOURCE=outcome_schema
+HH_VF_BOTS MAPS=fail WEAPONS=pass FINISH=pass GREEDY=fail RECOVER=pass DIFF=pass BOUND=pass LIVE=pass
+HH_VF_BOTS MAP_ROW id=rooftops name=Skyline Relay reach=true reason=goal pit=true aim=true combat=true moved=375.9 toward=375.1 goal_dist=8.9 waypoint_dist=9.1 engage=17.6 closest=10.7 pit_blocks=0 pit_reroutes=0 gun=2 melee=8 aim_err=6.7 shot_off=3.4 cause=
+HH_VF_BOTS MAP_ROW id=storage name=Pallet Annex reach=true reason=melee pit=true aim=true combat=true moved=198.9 toward=169.9 goal_dist=38.1 waypoint_dist=13.0 engage=13.0 closest=13.0 pit_blocks=0 pit_reroutes=0 gun=3 melee=1 aim_err=6.4 shot_off=7.2 cause=
+HH_VF_BOTS MAP_ROW id=police name=Signal Court reach=false reason=none pit=true aim=true combat=true moved=58.4 toward=56.0 goal_dist=107.2 waypoint_dist=65.8 engage=109.5 closest=102.2 pit_blocks=59 pit_reroutes=49 gun=10 melee=0 aim_err=-7.1 shot_off=2.3 cause=
+HH_VF_BOTS MAP_ROW id=hazardous name=Vitriol Sump reach=true reason=goal pit=true aim=true combat=true moved=216.8 toward=215.9 goal_dist=8.1 waypoint_dist=8.3 engage=13.7 closest=10.5 pit_blocks=0 pit_reroutes=0 gun=4 melee=4 aim_err=7.8 shot_off=6.4 cause=
+HH_VF_BOTS MAP_ROW id=lantern name=Lantern Cut reach=true reason=goal pit=true aim=true combat=true moved=297.7 toward=297.1 goal_dist=8.6 waypoint_dist=8.7 engage=17.0 closest=14.2 pit_blocks=0 pit_reroutes=0 gun=3 melee=8 aim_err=8.8 shot_off=2.0 cause=
+HH_VF_BOTS MAP_ROW id=gauge name=Gauge Deck reach=false reason=none pit=true aim=false combat=false moved=83.8 toward=-12.6 goal_dist=284.6 waypoint_dist=282.3 engage=283.4 closest=220.1 pit_blocks=0 pit_reroutes=0 gun=0 melee=0 aim_err=0.0 shot_off=0.0 cause=damage
+HH_VF_BOTS HONESTY BOT_COVERAGE=planner NOT_AI=0 NOT_Y8_PARITY=1 PLANNER_CLASS=assumption DIFF=tuning NO_TELEPORT=1 NO_PERFECT_AIM=1 NO_HIDDEN_STATE=1
+HH_VF_BOTS FORCE_KILL_OFFICIAL=0 TELEPORT_OFFICIAL=0
+HH_VF_BOTS EVIDENCE_DIR=D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\godot\dogfood\superfighters\.evidence\VF6WP5-20260905-ASIA-SAIGON-09-headless
+FAIL: Vault Fighters bot planner
+  - police bot did not reach named foe/waypoint goal=107.2 wp=65.8 engage=109.5 closest=102.2 reason=none
+  - gauge bot did not reach named foe/waypoint goal=284.6 wp=282.3 engage=283.4 closest=220.1 reason=none
+  - gauge bot never fired or melee-hit a living foe gun=0 melee=0
+  - planner pit deaths 1 on rooftops compare
+  - compare needs greedy pit death or planner-only goal p_pit=1 g_pit=2 p_goal=9.7 g_goal=262.4
+  - MAPS structured outcome is fail
+  - GREEDY structured outcome is fail
+HH_VF_BOTS FINISHED=1
+HH_VF_BOTS PROCESS_EXIT=1

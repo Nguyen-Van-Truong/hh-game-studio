@@ -1,0 +1,35 @@
+{
+  "kind": "COORDINATOR_STATIC_DOCUMENT_CHECK_ONLY",
+  "checked_at": "2026-09-08T17:14:04.2206587+07:00",
+  "manifest_sha256": "747cef231b1c5bab8b89e742f3c7c957e1626286329c112c4c1c948f8af3aebe",
+  "source_files": 13,
+  "master_wp_count": 32,
+  "roadmap_heading_count": 32,
+  "dependency_edges": 33,
+  "ex_count": 36,
+  "db_profiles": 4,
+  "relative_references": 13,
+  "markdown_links_checked": 7,
+  "arithmetic": {
+    "cpu_rooms": 13.0,
+    "ram_rooms": 16.0,
+    "down_rooms": 91.0,
+    "up_rooms": 273.0,
+    "nodes_full": 5.0,
+    "nodes_60percent": 8.0,
+    "peak_down_TB": 77.76,
+    "average_down_TB": 15.552
+  },
+  "canonical_changed_since_v2": [
+    "AGENTS.md",
+    "zdoc/00-START-HERE.md",
+    "zdoc/03-ARCHITECTURE.md",
+    "zdoc/05-QUALITY-GATES.md",
+    "zdoc/06-ROADMAP.md",
+    "zdoc/PROGRESS.md"
+  ],
+  "errors": [],
+  "result": "PASS_STATIC_ONLY",
+  "runtime_acceptance": "NONE",
+  "independent_critic": "SEPARATE_PENDING"
+}

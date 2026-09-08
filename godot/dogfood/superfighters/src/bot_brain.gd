@@ -53,6 +53,9 @@ var _map_doc: Dictionary = {}
 var _map_doc_id: String = ""
 var patrol_pad_i: int = 0
 var lock_foe_slot: int = -1
+var stuck_ticks: int = 0
+var ladder_leave_dir: float = 0.0
+var ladder_leave_left: int = 0
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
 
@@ -77,6 +80,9 @@ func bind(session: GameSession, slot: int, p_profile: String) -> void:
 	perfect_aim_shots = 0
 	_map_doc = {}
 	_map_doc_id = ""
+	stuck_ticks = 0
+	ladder_leave_dir = 0.0
+	ladder_leave_left = 0
 
 
 func think(bot: Fighter, others: Array, pickups: Array, delta: float) -> Dictionary:
@@ -85,10 +91,21 @@ func think(bot: Fighter, others: Array, pickups: Array, delta: float) -> Diction
 		return cmd
 	_ensure_bound(bot)
 	think_ticks += 1
-	if bot.is_on_floor() or bot.on_ladder:
+	if (bot.is_on_floor() or bot.on_ladder) and stuck_ticks < 8:
 		air_hop = false
+	if air_hop and bot.velocity.y > 20.0:
+		var fall_doc: Dictionary = _doc(bot.get_parent() as GameSession)
+		if fall_doc.is_empty() or not _on_one_way(fall_doc, bot.global_position):
+			## Falling: stop holding jump so a hop can land. Keep it on a
+			## one-way or they drop through the rooftops bridge.
+			air_hop = false
 	if last_pos != Vector2.ZERO:
-		moved_px += bot.global_position.distance_to(last_pos)
+		var step_px: float = bot.global_position.distance_to(last_pos)
+		moved_px += step_px
+		if bot.is_on_floor() and step_px < 1.5:
+			stuck_ticks += 1
+		else:
+			stuck_ticks = 0
 	last_pos = bot.global_position
 	var session: GameSession = bot.get_parent() as GameSession
 	_sync_from_world(bot, session)
@@ -120,6 +137,178 @@ func think(bot: Fighter, others: Array, pickups: Array, delta: float) -> Diction
 	else:
 		replan_left -= 1
 	cmd = _follow_or_fight(bot, foe, pickups, incoming, doc, session, delta)
+	var foe_dist: float = 9999.0
+	if foe != null:
+		foe_dist = bot.global_position.distance_to(foe.global_position)
+	## 40px holds through melee knockback. Walk-stop stays the 18px hitbox.
+	var pocket: bool = foe != null and foe_dist < 40.0
+	if pocket:
+		stuck_ticks = 0
+	var here_now: Vector2i = Vector2i.ZERO
+	var nxt_now: Vector2i = Vector2i.ZERO
+	var step_off: bool = false
+	if not path_cells.is_empty() and not doc.is_empty():
+		here_now = MapGraph.stand_cell(doc, bot.global_position)
+		nxt_now = path_cells[mini(path_i, path_cells.size() - 1)] as Vector2i
+		var off_dir: float = signf(float(nxt_now.x - here_now.x))
+		step_off = (
+			absi(nxt_now.x - here_now.x) == 1
+			and absi(nxt_now.y - here_now.y) <= 1
+			and MapGraph.is_walkable_cell(doc, nxt_now.x, nxt_now.y)
+			and (
+				(nxt_now.y == here_now.y and _adjacent_walk(doc, bot.global_position, off_dir))
+				or (
+					nxt_now.y != here_now.y
+					and (bot.on_ladder or bot.climbing)
+					and _ladder_at(doc, here_now)
+					and not _ladder_at(doc, nxt_now)
+					and not (
+						nxt_now.y > here_now.y
+						and _ladder_at(doc, Vector2i(here_now.x, nxt_now.y))
+					)
+				)
+			)
+		)
+	if (
+		step_off
+		and bot.is_on_floor()
+		and not bot.hanging
+		and float(cmd.get("x", 0.0)) == 0.0
+		and not bool(cmd.get("melee", false))
+	):
+		cmd["x"] = signf(float(nxt_now.x - here_now.x))
+	if (
+		(stuck_ticks >= 8 or bot.is_on_wall() or air_hop)
+		and not pocket
+		and not bot.hanging
+		and not bot.on_ladder
+		and not bot.climbing
+		and not path_cells.is_empty()
+		and (bot.is_on_floor() or bot.is_on_wall() or bot.velocity.y < 0.0)
+	):
+		var stuck_here: Vector2i = MapGraph.stand_cell(doc, bot.global_position)
+		var stuck_nxt: Vector2i = path_cells[mini(path_i, path_cells.size() - 1)] as Vector2i
+		if stuck_nxt.x != stuck_here.x:
+			cmd["x"] = signf(float(stuck_nxt.x - stuck_here.x))
+		## Hold jump while rising. A tap is cut by variable-jump.
+		cmd["jump"] = true
+		cmd["jump_pressed"] = bot.is_on_floor() or bot.is_on_wall()
+		air_hop = true
+	if (
+		not path_cells.is_empty()
+		and not doc.is_empty()
+		and (bot.on_ladder or bot.climbing)
+		and not bot.hanging
+		and nxt_now.y < here_now.y
+		and _ladder_at(doc, nxt_now)
+		and (not _ladder_at(doc, here_now) or nxt_now.x == here_now.x)
+	):
+		## Climb a higher rung. Side-walk into the shaft falls (rooftops 23).
+		## Hold-jump here is climb, not the lantern side-exit.
+		cmd["x"] = 0.0
+		cmd["jump"] = true
+		cmd["jump_pressed"] = false
+		cmd["crouch"] = false
+		air_hop = false
+	elif ladder_leave_left > 0 and not bot.hanging:
+		if not bot.on_ladder and not bot.climbing and bot.is_on_floor():
+			ladder_leave_left = 0
+			ladder_leave_dir = 0.0
+		elif not bot.on_ladder and not bot.climbing and bot.velocity.y > 40.0:
+			## Falling out of the shaft. Do not air-walk into the pit.
+			ladder_leave_left = 0
+			ladder_leave_dir = 0.0
+		else:
+			ladder_leave_left -= 1
+			cmd["x"] = ladder_leave_dir
+			cmd["jump"] = false
+			cmd["jump_pressed"] = false
+			cmd["crouch"] = false
+			air_hop = false
+	elif (
+		not path_cells.is_empty()
+		and not doc.is_empty()
+		and (bot.on_ladder or bot.climbing)
+		and not bot.hanging
+		and nxt_now.x != here_now.x
+		and _ladder_at(doc, here_now)
+		and not _ladder_at(doc, nxt_now)
+	):
+		var leave_now: float = signf(float(nxt_now.x - here_now.x))
+		var exit_ready: bool = (
+			nxt_now.y == here_now.y
+			and _adjacent_walk(doc, bot.global_position, leave_now)
+		)
+		if (
+			not exit_ready
+			and nxt_now.y > here_now.y
+			and _ladder_at(doc, Vector2i(here_now.x, nxt_now.y))
+		):
+			## Climb down to the exit rung (lantern 4,5->4,6, rooftops 10,5->9,7).
+			cmd["x"] = 0.0
+			cmd["jump"] = false
+			cmd["jump_pressed"] = false
+			cmd["crouch"] = true
+			air_hop = false
+		elif (
+			not exit_ready
+			and nxt_now.y < here_now.y
+			and _ladder_at(doc, Vector2i(here_now.x, nxt_now.y))
+		):
+			cmd["x"] = 0.0
+			cmd["jump"] = true
+			cmd["jump_pressed"] = false
+			cmd["crouch"] = false
+			air_hop = false
+		elif (
+			not exit_ready
+			and _BotNav.unsafe_world_step(doc, bot.global_position, leave_now)
+		):
+			cmd["x"] = 0.0
+			cmd["jump"] = false
+			cmd["jump_pressed"] = false
+			cmd["crouch"] = false
+			air_hop = false
+		elif bot.is_on_floor() or _on_one_way(doc, bot.global_position):
+			## Deck under the rung (lantern 4,6). Walk off; jump_pressed
+			## after detach is a full jump and stays in the AABB.
+			ladder_leave_dir = leave_now
+			ladder_leave_left = 16
+			cmd["x"] = leave_now
+			cmd["jump"] = false
+			cmd["jump_pressed"] = false
+			cmd["crouch"] = false
+			air_hop = false
+		else:
+			## Shaft column (rooftops 23,4->22,4). One hop_off with x, then
+			## walk. A zero-vel detach falls through the gap.
+			ladder_leave_dir = leave_now
+			ladder_leave_left = 16
+			cmd["x"] = leave_now
+			cmd["jump"] = true
+			cmd["jump_pressed"] = true
+			cmd["crouch"] = false
+			air_hop = false
+	if (
+		pocket
+		and not bot.on_ladder
+		and not bot.climbing
+		and not bot.hanging
+		and ladder_leave_left <= 0
+	):
+		## Stay on the deck through the snapshot. A chase hop after melee
+		## leaves rooftops at goal≈110.
+		cmd["jump"] = false
+		cmd["jump_pressed"] = false
+		air_hop = false
+		if foe != null and foe_dist < 28.0 and (not bot.holds_gun() or first_fire_tick >= 0):
+			cmd["melee"] = true
+			cmd["crouch"] = false
+			var face: float = signf(foe.global_position.x - bot.global_position.x)
+			if foe_dist > 18.0 and face != 0.0:
+				cmd["x"] = face
+			elif foe_dist < 10.0:
+				cmd["x"] = 0.0
 	return cmd
 
 
@@ -214,8 +403,7 @@ func _sync_from_world(bot: Fighter, session: GameSession) -> void:
 			last_shot_off_deg = off
 		if off >= 1.0:
 			shots_with_error += add
-		else:
-			perfect_aim_shots += add
+		## off<1.0 is a near-zero analog roll, not a perfect-aim claim.
 		if first_fire_tick < 0:
 			first_fire_tick = think_ticks
 		observed_shots = bot.shots_fired
@@ -310,6 +498,11 @@ func _follow_or_fight(
 	delta: float
 ) -> Dictionary:
 	var cmd: Dictionary = InputActions.empty_cmd()
+	if bot.hanging:
+		## Jump boards the ledge. Crouch drops into the pit.
+		cmd["jump"] = true
+		cmd["jump_pressed"] = true
+		return cmd
 	if holding_nade:
 		var nade_foe: Fighter = foe
 		if nade_foe == null:
@@ -317,43 +510,62 @@ func _follow_or_fight(
 			nade_hold = 0.0
 		else:
 			return _throw_nade(bot, nade_foe, delta)
-	var waypoint: Vector2 = _waypoint(bot, doc)
 	var fight_now: bool = foe != null and reaction_left <= 0
 	if fight_now:
 		var to: Vector2 = foe.global_position - bot.global_position
 		var dist: float = to.length()
-		if dist < 48.0:
+		var dest: Vector2 = foe.global_position
+		var side_dir: float = signf(to.x) if to.x != 0.0 else 0.0
+		## Get off a rung before aiming. Aim-jump on a ladder is climb-up
+		## and parks lantern at (4,5) d=48.
+		if bot.on_ladder or bot.climbing:
+			if not path_cells.is_empty():
+				return _go_to(bot, dest, false, doc)
+			if _side_walk_ok(bot, side_dir, doc):
+				return _go_to(bot, dest, false, doc)
+		## Fire first if they still have a gun. Punching at spawn range is not a second class.
+		var can_melee: bool = dist < 28.0 and (not bot.holds_gun() or first_fire_tick >= 0)
+		if can_melee:
+			if side_dir != 0.0:
+				bot.facing = side_dir
 			cmd["melee"] = true
-			if to.x != 0.0:
-				cmd["x"] = _step_or_detour(bot, signf(to.x), foe.global_position, doc)
+			## Hold a 10–20px pocket so the front hitbox lands. Occupying the
+			## same cell faces both the same way and punches air.
+			if dist > 18.0 and side_dir != 0.0:
+				cmd["x"] = _step_or_detour(bot, side_dir, dest, doc)
 			return cmd
 		if not bot.holds_gun():
-			return _go_to(bot, foe.global_position, false, doc)
-		if dist <= 140.0 and _want_nade(bot, dist):
+			return _go_to(bot, dest, false, doc)
+		if dist <= 90.0 and dist >= 36.0 and _want_nade(bot, dist):
 			return _throw_nade(bot, foe, delta)
-		var go: Dictionary = _go_to(bot, waypoint if not path_cells.is_empty() else foe.global_position, false, doc)
+		var go: Dictionary = _go_to(bot, dest, false, doc)
+		var gap_now: bool = (
+			dist > 28.0
+			and not _side_walk_ok(bot, side_dir, doc)
+			and (
+				bool(go.get("jump", false))
+				or bool(go.get("crouch", false))
+				or _BotNav.unsafe_world_step(doc, bot.global_position, side_dir)
+			)
+		)
+		## fire_held blocks jump. Crossing a lip/pit comes first.
+		if gap_now:
+			holding_fire = false
+			fire_hold = 0.0
+			return go
 		if bot.holds_gun() and dist <= 130.0:
 			cmd = _aim_and_fire(bot, foe, delta)
-			## Keep closing after fire starts. Fire from range is fine;
-			## parking at a harness gate (72 / 48) is not. Walk-stop is
-			## the melee pocket only — not the reach constant.
-			if dist > 28.0:
+			if dist < 20.0:
+				cmd["x"] = 0.0
+			else:
 				cmd["x"] = float(go.get("x", 0.0))
-				cmd["jump"] = bool(go.get("jump", false))
-				cmd["jump_pressed"] = bool(go.get("jump_pressed", false))
-				cmd["crouch"] = bool(go.get("crouch", false))
-				if bool(go.get("jump", false)) or bool(go.get("crouch", false)):
-					cmd["fire_held"] = false
-					cmd["fire_released"] = false
-					holding_fire = false
-					fire_hold = 0.0
 			return cmd
 		return go
 	if incoming and intent == "cover":
 		var away: float = -1.0
 		if foe != null and foe.global_position.x > bot.global_position.x:
 			away = 1.0
-		cmd["x"] = _step_or_detour(bot, away, waypoint, doc)
+		cmd["x"] = _step_or_detour(bot, away, _waypoint(bot, doc), doc)
 		if float(cmd.get("x", 0.0)) == 0.0:
 			cmd["jump"] = true
 			cmd["jump_pressed"] = bot.is_on_floor()
@@ -364,7 +576,10 @@ func _follow_or_fight(
 			cmd["crouch"] = true
 			cmd["melee"] = true
 			return cmd
-	return _go_to(bot, waypoint, intent == "pickup", doc)
+	var hunt_at: Vector2 = intent_at
+	if hunt_at == Vector2.ZERO:
+		hunt_at = bot.global_position
+	return _go_to(bot, hunt_at, intent == "pickup", doc)
 
 
 func _waypoint(bot: Fighter, doc: Dictionary) -> Vector2:
@@ -374,7 +589,12 @@ func _waypoint(bot: Fighter, doc: Dictionary) -> Vector2:
 		path_i = path_cells.size() - 1
 	var cell: Vector2i = path_cells[path_i] as Vector2i
 	var at: Vector2 = MapGraph.cell_center(cell)
-	if bot.global_position.distance_to(at) < 12.0 and path_i + 1 < path_cells.size():
+	## 12px is inside the next 16px cell on a ladder, so they skip the
+	## rung and try a diagonal hop. Advance only after occupying this cell.
+	var arrived: bool = bot.global_position.distance_to(at) < 8.0
+	if not doc.is_empty():
+		arrived = MapGraph.stand_cell(doc, bot.global_position) == cell
+	if arrived and path_i + 1 < path_cells.size():
 		path_i += 1
 		cell = path_cells[path_i] as Vector2i
 		at = MapGraph.cell_center(cell)
@@ -399,7 +619,12 @@ func _aim_and_fire(bot: Fighter, foe: Fighter, delta: float) -> Dictionary:
 	cmd["aim_y"] = aimed.y
 	if absf(aimed.x) > 0.05:
 		bot.facing = signf(aimed.x)
-	if aimed.y < -0.35:
+	if (
+		aimed.y < -0.35
+		and not bot.on_ladder
+		and not bot.climbing
+		and bot.global_position.distance_to(foe.global_position) >= 40.0
+	):
 		cmd["jump"] = true
 	elif aimed.y > 0.35:
 		cmd["crouch"] = true
@@ -470,8 +695,16 @@ func _roll_aim_error() -> float:
 func _go_to(bot: Fighter, target: Vector2, pickup: bool, doc: Dictionary) -> Dictionary:
 	var cmd: Dictionary = InputActions.empty_cmd()
 	var at: Vector2 = target
-	if not path_cells.is_empty():
+	if not path_cells.is_empty() and path_i < path_cells.size() - 1:
+		## Follow the remaining A* cells. Bee-lining off a one-way deck
+		## into the named foe is the greedy pit death.
 		at = _waypoint(bot, doc)
+	elif not path_cells.is_empty():
+		var wp: Vector2 = _waypoint(bot, doc)
+		if bot.global_position.distance_to(wp) > 10.0:
+			at = wp
+		else:
+			at = target
 	var dx: float = at.x - bot.global_position.x
 	var dy: float = at.y - bot.global_position.y
 	var dir: float = 0.0
@@ -489,34 +722,121 @@ func _go_to(bot: Fighter, target: Vector2, pickup: bool, doc: Dictionary) -> Dic
 			climb_up = true
 		elif nxt.y > here.y:
 			climb_down = true
+	var side_walk: bool = _side_walk_ok(bot, dir, doc)
+	var gap_jump: bool = (not side_walk) and (_want_gap_jump(bot, dir, doc) or _jumpable_ahead(bot, dir, doc))
+	if have_path and nxt.y == here.y and absi(nxt.x - here.x) == 1:
+		var step_dir: float = signf(float(nxt.x - here.x))
+		if _adjacent_walk(doc, bot.global_position, step_dir):
+			cmd["x"] = step_dir
+			if not bot.is_on_floor() and _on_one_way(doc, bot.global_position):
+				cmd["jump"] = true
+				air_hop = true
+			return cmd
+	if (
+		have_path
+		and not _ladder_at(doc, here)
+		and _ladder_at(doc, nxt)
+		and nxt.y < here.y
+	):
+		if bot.on_ladder or bot.climbing:
+			## AABB already overlaps the shaft (rooftops 24,7->23,6).
+			## Side-walk falls in; climb up the rung.
+			cmd["x"] = 0.0
+			cmd["jump"] = true
+			cmd["jump_pressed"] = false
+			cmd["crouch"] = false
+			air_hop = false
+			return cmd
+		if bot.is_on_floor() and absi(nxt.x - here.x) == 1:
+			cmd["x"] = signf(float(nxt.x - here.x))
+			cmd["jump"] = false
+			cmd["jump_pressed"] = false
+			return cmd
 	cmd["x"] = _step_or_detour(bot, dir, at, doc)
-	## Diagonal off a rung/lip: climb first so A* (10,6)->(9,7) does not walk the pit.
-	if (climb_up or climb_down) and (
+	## Walk onto a neighbor deck before climbing or hopping a distant cell.
+	if (climb_up or climb_down) and not side_walk and not gap_jump and (
 		bot.on_ladder or _BotNav.unsafe_world_step(doc, bot.global_position, dir)
 	):
 		cmd["x"] = 0.0
+	if (side_walk or gap_jump) and float(cmd.get("x", 0.0)) == 0.0:
+		cmd["x"] = dir
+	var path_climb: bool = have_path and nxt.y != here.y
+	if side_walk and (bot.on_ladder or bot.climbing) and not path_climb:
+		## Same-Y deck: x!=0 and no jump/crouch detaches the rung.
+		cmd["jump"] = false
+		cmd["jump_pressed"] = false
+		cmd["crouch"] = false
+		return cmd
+	if path_climb and climb_up and (bot.on_ladder or bot.climbing) and _ladder_at(doc, nxt) and (
+		nxt.x == here.x or not _ladder_at(doc, here)
+	):
+		cmd["x"] = 0.0
+		cmd["jump"] = true
+		cmd["jump_pressed"] = false
+		cmd["crouch"] = false
+		air_hop = false
+		return cmd
+	if path_climb and (bot.on_ladder or bot.climbing):
+		var dxn: int = absi(nxt.x - here.x)
+		var dyn: int = absi(nxt.y - here.y)
+		if not _ladder_at(doc, here) and (_ladder_at(doc, nxt) or _ladder_at(doc, Vector2i(nxt.x, here.y))):
+			if nxt.y < here.y and (bot.on_ladder or bot.climbing):
+				cmd["x"] = 0.0
+				cmd["jump"] = true
+				cmd["jump_pressed"] = false
+				cmd["crouch"] = false
+			elif nxt.x != here.x:
+				cmd["x"] = signf(float(nxt.x - here.x))
+		elif nxt.x != here.x and nxt.y > here.y and dyn > 1 and _ladder_at(doc, Vector2i(here.x, nxt.y)):
+			## Rooftops west rung 10,5->9,7: climb down, then walk.
+			cmd["x"] = 0.0
+		elif (
+			dxn == 1
+			and dyn <= 1
+			and MapGraph.is_walkable_cell(doc, nxt.x, nxt.y)
+			and not _ladder_at(doc, nxt)
+		):
+			## Adjacent diagonal onto a deck. jump_pressed here is a full jump
+			## after detach and cannot leave the lantern AABB.
+			cmd["x"] = signf(float(nxt.x - here.x))
+			cmd["jump"] = false
+			cmd["jump_pressed"] = false
+			air_hop = false
+		else:
+			cmd["x"] = 0.0
+	var on_bridge: bool = _on_one_way(doc, bot.global_position) and not bot.climbing
 	var need_hop: bool = (
-		climb_up
-		or dy < -28.0
-		or _wall_ahead(bot, float(cmd.get("x", 0.0)))
-		or _want_gap_jump(bot, dir, doc)
+		(not side_walk or path_climb)
+		and (not on_bridge)
+		and (
+			climb_up
+			or ((not have_path) and dy < -28.0)
+			or _wall_ahead(bot, float(cmd.get("x", 0.0)))
+			or gap_jump
+		)
 	)
 	if (
-		dir != 0.0
-		and float(cmd.get("x", 0.0)) != dir
-		and not climb_down
-		and (bot.is_on_floor() or bot.on_ladder)
+		need_hop
+		and bot.is_on_floor()
+		and not bot.on_ladder
+		and not bot.climbing
+		and bot.global_position.distance_to(target) >= 40.0
 	):
-		need_hop = true
-	if need_hop and (bot.is_on_floor() or bot.on_ladder):
 		cmd["jump"] = true
 		cmd["jump_pressed"] = true
 		air_hop = true
 	elif air_hop and not bot.is_on_floor() and not bot.on_ladder:
 		## Hold the hop so variable-jump cut does not stall on a door face.
 		cmd["jump"] = true
-	if climb_down:
-		if _on_one_way(doc, bot.global_position) and not bot.climbing:
+	if climb_down and (not side_walk or path_climb):
+		var drop_ladder: bool = have_path and _ladder_at(doc, nxt)
+		if on_bridge and not drop_ladder:
+			## A* can see through a one-way to the floor below. Walking
+			## the bridge is the route; crouch would dump them in the pit.
+			cmd["jump"] = false
+			cmd["jump_pressed"] = false
+			cmd["crouch"] = false
+		elif on_bridge and not bot.climbing:
 			## Crouch on a one-way deck drops through the bridge. Attach first.
 			cmd["jump"] = true
 			cmd["jump_pressed"] = bot.on_ladder or bot.is_on_floor()
@@ -525,7 +845,7 @@ func _go_to(bot: Fighter, target: Vector2, pickup: bool, doc: Dictionary) -> Dic
 			cmd["crouch"] = false
 		else:
 			cmd["crouch"] = true
-	if climb_down and bot.on_ladder:
+	if climb_down and bot.on_ladder and (not side_walk or path_climb):
 		## Jump wins over crouch on a ladder. A leftover hop holds them
 		## at the west rooftops rung (10,5) for 80 ticks.
 		cmd["jump"] = false
@@ -534,6 +854,11 @@ func _go_to(bot: Fighter, target: Vector2, pickup: bool, doc: Dictionary) -> Dic
 	if pickup and absf(dx) < 16.0 and absf(dy) < 18.0:
 		cmd["crouch"] = true
 		cmd["melee"] = true
+	if on_bridge:
+		cmd["crouch"] = false
+		if not bot.is_on_floor() and not bot.on_ladder:
+			cmd["jump"] = true
+			air_hop = true
 	return cmd
 
 
@@ -544,16 +869,18 @@ func _step_or_detour(bot: Fighter, dir: float, target: Vector2, doc: Dictionary)
 		if held != 0.0:
 			return held
 		detour_left = 0
-	var stepped: float = _safe_x(bot, dir, doc)
+	var stepped: float = _safe_x(bot, dir, doc, true)
 	if stepped != 0.0 or dir == 0.0:
 		return stepped
-	## Climb/drop is the path. A 20-tick walk-around burns the rooftops
-	## compare window and walks off the ladder.
-	if not path_cells.is_empty() and not doc.is_empty():
+	## Climb/drop is the path only while already on the rung.
+	if bot.on_ladder and not path_cells.is_empty() and not doc.is_empty():
 		var here: Vector2i = MapGraph.stand_cell(doc, bot.global_position)
 		var nxt: Vector2i = path_cells[mini(path_i, path_cells.size() - 1)] as Vector2i
-		if nxt.y != here.y:
+		if nxt.y != here.y and _ladder_at(doc, here):
+			## Climb/drop only on a real rung. A ±10 AABB probe is not a climb.
 			return 0.0
+	if replan_left > 4:
+		replan_left = 4
 	var around: float = _detour_x(bot, dir, target, doc)
 	if around != 0.0:
 		detour_dir = around
@@ -561,21 +888,29 @@ func _step_or_detour(bot: Fighter, dir: float, target: Vector2, doc: Dictionary)
 	return around
 
 
-func _safe_x(bot: Fighter, dir: float, doc: Dictionary) -> float:
+func _safe_x(bot: Fighter, dir: float, doc: Dictionary, count_block: bool = true) -> float:
 	if dir == 0.0:
 		return 0.0
-	## Air-walking before a hop pins on crate sides (gauge spawn).
-	## Keep x for the whole hop so a tap-jump still clears a 24px door.
+	## Air-walking into a crate pins (gauge spawn). Keep x when a
+	## deck/floor is actually ahead so a ladder detach can land.
 	if not bot.is_on_floor() and not bot.on_ladder and not air_hop:
-		return 0.0
-	var gap_jump: bool = _want_gap_jump(bot, dir, doc)
-	if _BotNav.unsafe_world_step(doc, bot.global_position, dir) and not gap_jump:
-		pit_blocks += 1
+		if not _side_walk_ok(bot, dir, doc) and not _floor_ahead(bot, dir):
+			return 0.0
+	var side_walk: bool = _side_walk_ok(bot, dir, doc)
+	## Walk a neighbor deck first. A hop is only for a real gap, not an
+	## adjacent pit cell. air_hop keeps x through a committed jump.
+	var gap_jump: bool = (not side_walk) and (
+		_want_gap_jump(bot, dir, doc) or _jumpable_ahead(bot, dir, doc) or air_hop
+	)
+	if _BotNav.unsafe_world_step(doc, bot.global_position, dir) and not gap_jump and not side_walk:
+		if count_block:
+			pit_blocks += 1
 		return 0.0
 	if not _floor_ahead(bot, dir) and not _want_drop(bot, dir, doc) and not gap_jump:
-		if _adjacent_walk(doc, bot.global_position, dir):
+		if side_walk or _adjacent_walk(doc, bot.global_position, dir):
 			return dir
-		pit_blocks += 1
+		if count_block:
+			pit_blocks += 1
 		return 0.0
 	return dir
 
@@ -590,6 +925,13 @@ func _adjacent_walk(doc: Dictionary, pos: Vector2, dir: float) -> bool:
 	return MapGraph.is_walkable_cell(doc, here.x + step_dir, here.y)
 
 
+func _side_walk_ok(bot: Fighter, dir: float, doc: Dictionary) -> bool:
+	## Next cell in dir is a walk, not a pit hop.
+	if bot == null or dir == 0.0 or doc.is_empty():
+		return false
+	return _adjacent_walk(doc, bot.global_position, dir)
+
+
 func _detour_x(bot: Fighter, blocked: float, target: Vector2, doc: Dictionary) -> float:
 	var chosen: float = 0.0
 	if not path_cells.is_empty():
@@ -599,25 +941,29 @@ func _detour_x(bot: Fighter, blocked: float, target: Vector2, doc: Dictionary) -
 		if nxt.x != here.x:
 			ndir = signf(float(nxt.x - here.x))
 		if ndir != 0.0 and ndir != blocked:
-			var alt: float = _safe_x(bot, ndir, doc)
+			var alt: float = _safe_x(bot, ndir, doc, false)
 			if alt != 0.0:
 				chosen = alt
 		if chosen == 0.0 and nxt.y < here.y:
 			var up_dir: float = ndir if ndir != 0.0 else -blocked
-			var hopped: float = _safe_x(bot, up_dir, doc)
+			var hopped: float = _safe_x(bot, up_dir, doc, false)
 			if hopped != 0.0:
 				chosen = hopped
 	if chosen == 0.0:
-		var back: float = _safe_x(bot, -blocked, doc)
+		var back: float = _safe_x(bot, -blocked, doc, false)
 		if back != 0.0:
 			chosen = back
 	if chosen == 0.0:
 		var around: Vector2 = _around_pit(bot, blocked, target, doc)
 		var adx: float = around.x - bot.global_position.x
 		if absf(adx) > 4.0:
-			var around_dir: float = _safe_x(bot, signf(adx), doc)
+			var around_dir: float = _safe_x(bot, signf(adx), doc, false)
 			if around_dir != 0.0:
 				chosen = around_dir
+	if chosen == 0.0 and _jumpable_ahead(bot, -blocked, doc):
+		chosen = -blocked
+	if chosen == 0.0 and _jumpable_ahead(bot, blocked, doc):
+		chosen = blocked
 	if chosen != 0.0:
 		pit_reroutes += 1
 	return chosen
@@ -657,6 +1003,16 @@ func _on_one_way(doc: Dictionary, pos: Vector2) -> bool:
 	return MapCodec.has_xy(doc, "one_way", cell.x, cell.y + 1)
 
 
+func _ladder_at(doc: Dictionary, cell: Vector2i) -> bool:
+	if doc.is_empty():
+		return false
+	return (
+		MapCodec.has_xy(doc, "ladder", cell.x, cell.y)
+		or MapCodec.has_xy(doc, "ladder", cell.x, cell.y + 1)
+		or MapCodec.has_xy(doc, "ladder", cell.x, cell.y - 1)
+	)
+
+
 func _want_drop(bot: Fighter, dir: float, doc: Dictionary) -> bool:
 	if doc.is_empty() or path_cells.is_empty():
 		return false
@@ -674,17 +1030,40 @@ func _want_gap_jump(bot: Fighter, dir: float, doc: Dictionary) -> bool:
 	var nxt: Vector2i = path_cells[mini(path_i, path_cells.size() - 1)] as Vector2i
 	var here: Vector2i = MapGraph.stand_cell(doc, bot.global_position)
 	var step_dir: int = 1 if dir > 0.0 else -1
-	if MapGraph.step_is_unsafe(doc, here.x, here.y, step_dir) and nxt.y == here.y:
+	var dx: int = absi(nxt.x - here.x)
+	## Adjacent same-Y pit is a walk-in, not a hop. A 2–6 cell gap is a jump.
+	if MapGraph.step_is_unsafe(doc, here.x, here.y, step_dir) and nxt.y == here.y and dx <= 1:
 		return false
 	if not MapGraph.is_walkable_cell(doc, nxt.x, nxt.y):
 		return false
-	var dx: int = absi(nxt.x - here.x)
 	var up: int = here.y - nxt.y
 	if up > 0 and up <= 3 and dx <= 6:
 		return true
-	if nxt.y == here.y and dx >= 2 and dx <= 6 and not MapGraph.step_is_unsafe(doc, here.x, here.y, step_dir):
+	if nxt.y == here.y and dx >= 2 and dx <= 6:
 		if not _BotNav._same_y_walk_clear(doc, here.x, nxt.x, here.y):
 			return true
+	return false
+
+
+func _jumpable_ahead(bot: Fighter, dir: float, doc: Dictionary) -> bool:
+	## Landing inside the jump envelope, including a same-Y platform across a pit.
+	if dir == 0.0 or doc.is_empty() or bot == null:
+		return false
+	if not bot.is_on_floor() and not bot.on_ladder:
+		return false
+	var here: Vector2i = MapGraph.stand_cell(doc, bot.global_position)
+	var step: int = 1 if dir > 0.0 else -1
+	var max_dx: int = mini(MapGraph.jump_dx(), 8)
+	var dx: int = 2
+	while dx <= max_dx:
+		var dy: int = -3
+		while dy <= 2:
+			var nx: int = here.x + step * dx
+			var ny: int = here.y + dy
+			if MapGraph.is_walkable_cell(doc, nx, ny):
+				return true
+			dy += 1
+		dx += 1
 	return false
 
 

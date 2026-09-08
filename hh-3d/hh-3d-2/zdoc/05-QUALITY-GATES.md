@@ -168,8 +168,16 @@ Không có coordinates hợp lệ ngoài VN scope đã định; check dataset po
 và policy biển đảo, không chỉ bbox camera. Nguồn/license/attribution/version
 có trong release manifest và credits; bỏ watermark không làm dữ liệu original.
 
-Ops: restore backup trên instance sạch; alpha target RPO ≤24 h/RTO ≤4 h,
-đo thực tế. Crash/restart/drain/update/rollback không dupe ledger. Alert test,
+Ops theo [master ngày 8-9](../../../../hoan-hao/zdoc/8-9-hh-world-2-ke-hoach-tong-the-va-chat-luong.txt)
+DB-D1–D4/EX29–EX32: restore trên instance sạch; persistent alpha cần RPO=0
+cho protected transaction đã ACK khi mất một DB host và synchronous standby
+còn sống, RTO≤4h đo bằng drill. Mất synchronous protection phải fail-closed
+protected writes; promotion phải fence primary cũ. Đây không là RPO0 cho
+region loss, PITR lùi trước transaction hoặc cả hai host mất. Các failure model
+đó phải có archive lag/RPO/RTO đo riêng, transaction/deletion reconciliation
+trước traffic. RPO≤24h chỉ dùng telemetry tái dựng được; không dùng cho
+wallet/item/house/shop đã ACK. Dev disposable không thay persistent alpha gate.
+Crash/restart/drain/update/rollback không dupe ledger. Alert test,
 rate/abuse quotas, cost cap và kill switch có operator. Public release cần
 review audience/privacy/moderation/brand, quyền dữ liệu và ký-publish thực.
 Chưa có approval thì package release-ready local, không tự deploy.

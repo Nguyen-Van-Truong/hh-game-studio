@@ -9,6 +9,9 @@ Does not modify Kho Bí Ẩn. Does not fork Godot.
 
 ## How to run
 
+Agent spawn / leftover-0 / official host:
+[`docs/godot-agent/AGENT_GODOT_RUNBOOK.md`](../../../docs/godot-agent/AGENT_GODOT_RUNBOOK.md).
+
 Kill leftover Godot first. Sequential `--path` only.
 
 ```

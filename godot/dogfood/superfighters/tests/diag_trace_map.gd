@@ -17,6 +17,7 @@ func _boot() -> void:
 	var packed: PackedScene = load("res://scenes/main.tscn") as PackedScene
 	var app: App = packed.instantiate() as App
 	app.test_driven = true
+	app.vs1_bot_count = 1
 	root.add_child(app)
 	app.start_fight("vs1", map_id, 0)
 	await SimReplay.sync_physics(app)
@@ -60,7 +61,7 @@ func _boot() -> void:
 			var c: Vector2i = br.path_cells[mini(br.path_i, br.path_cells.size() - 1)] as Vector2i
 			nxt = "%d,%d" % [c.x, c.y]
 		print(
-			"HH_TRACE t=%d pos=%.0f,%.0f cell=%d,%d foe=%.0f,%.0f d=%.0f ladder=%s climb=%s floor=%s hang=%s vx=%.0f vy=%.0f intent=%s nxt=%s gun=%d"
+			"HH_TRACE t=%d pos=%.0f,%.0f cell=%d,%d foe=%.0f,%.0f d=%.0f ladder=%s climb=%s floor=%s hang=%s lock=%s wall=%s vx=%.0f vy=%.0f intent=%s nxt=%s path_i=%d path_n=%d pit=%d gun=%d"
 			% [
 				tick,
 				bot.global_position.x,
@@ -74,10 +75,15 @@ func _boot() -> void:
 				str(bot.climbing),
 				str(bot.is_on_floor()),
 				str(bot.hanging),
+				str(bot.reaction_locked()),
+				str(bot.is_on_wall()),
 				bot.velocity.x,
 				bot.velocity.y,
 				br.intent if br != null else "",
 				nxt,
+				br.path_i if br != null else -1,
+				br.path_cells.size() if br != null else 0,
+				br.pit_blocks if br != null else 0,
 				bot.shots_fired,
 			]
 		)

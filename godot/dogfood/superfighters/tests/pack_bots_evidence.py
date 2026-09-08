@@ -15,8 +15,8 @@ import shutil
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-RUN_ID = "VF6WP5-20260904-ASIA-SAIGON-08"
-COMMAND_ID = "cmd.vf6-wp5.bots.8"
+RUN_ID = "VF6WP5-20260905-ASIA-SAIGON-10"
+COMMAND_ID = "cmd.vf6-wp5.bots.10"
 WP = "VF6-WP5"
 SAIGON = timezone(timedelta(hours=7))
 SOURCE_SUFFIXES = {".gd", ".json", ".tscn", ".md"}
@@ -120,9 +120,15 @@ def _copy_if_different(src: Path, dst: Path) -> None:
     if not src.is_file():
         return
     dst.parent.mkdir(parents=True, exist_ok=True)
-    if src.resolve() == dst.resolve():
+    try:
+        if src.resolve() == dst.resolve():
+            return
+    except OSError:
+        pass
+    try:
+        shutil.copy2(src, dst)
+    except shutil.SameFileError:
         return
-    shutil.copy2(src, dst)
 
 
 def write_freeze(product: Path, dest: Path) -> str:
@@ -341,9 +347,13 @@ def main() -> int:
             return False
         if float(row.get("goal_dist", 9999.0)) < 36.0:
             return True
-        if float(row.get("engage_dist", 9999.0)) < 48.0:
+        if float(row.get("engage_dist", 9999.0)) < 28.0 and int(row.get("melee_used", 0)) >= 1:
             return True
-        return bool(row.get("named_down", False)) and float(row.get("closest_engage", 9999.0)) < 48.0
+        return (
+            bool(row.get("named_down", False))
+            and float(row.get("closest_engage", 9999.0)) < 28.0
+            and int(row.get("melee_used", 0)) >= 1
+        )
 
     missing_maps = [mid for mid in six if not isinstance(rows.get(mid), dict)]
     if missing_maps:
@@ -368,7 +378,6 @@ def main() -> int:
     six_ok = all(
         honest_reach(rows[mid])
         and bool(rows[mid].get("pit_ok"))
-        and bool(rows[mid].get("aim_ok"))
         and bool(rows[mid].get("combat_ok"))
         and int(rows[mid].get("gun_used", 0)) + int(rows[mid].get("melee_used", 0)) > 0
         for mid in six
@@ -376,14 +385,9 @@ def main() -> int:
     rooftops = rows.get("rooftops", {}) if isinstance(rows.get("rooftops"), dict) else {}
     rooftops_ok = honest_reach(rooftops) and (
         int(rooftops.get("gun_used", 0)) + int(rooftops.get("melee_used", 0)) > 0
-    ) and (
-        float(rooftops.get("goal_dist", 9999.0)) < 36.0
-        or float(rooftops.get("waypoint_dist", 9999.0)) < 48.0
-        or int(rooftops.get("pit_reroutes", 0)) >= 1
-        or (
-            float(rooftops.get("engage_dist", 9999.0)) < 48.0
-            and float(rooftops.get("moved", 0.0)) >= 200.0
-        )
+    ) and not (
+        int(rooftops.get("pit_blocks", 0)) >= 12
+        and int(rooftops.get("pit_reroutes", 0)) == 0
     )
     ux_ok = (
         six_ok
@@ -392,7 +396,7 @@ def main() -> int:
         and int(weapons_row.get("gun_used", 0)) >= 1
         and (
             int(weapons_row.get("melee_used", 0)) >= 1
-            or bool(weapons_row.get("nade_combat", False))
+            or int(weapons_row.get("nade_hit", 0)) >= 1
         )
         and str(finish_row.get("outcome", "play")) != "play"
         and int(finish_row.get("fighter_count", 0)) == 2
@@ -410,19 +414,25 @@ def main() -> int:
     )
     outcomes_ok = all(verdicts[key] == "pass" for key in keys) and ux_ok
     window_screens = list((window_ev / "screens").glob("*.png")) if (window_ev / "screens").is_dir() else []
-    required_stems = ("bots_title_", "bots_fight_")
+    required_stems = ("bots_title_", "bots_fight_", "bots_pause_")
     still_names = [png.name for png in window_screens]
-    stills_ok = len(window_screens) >= 2 and all(
+    stills_ok = len(window_screens) >= 3 and all(
         any(name.startswith(stem) for name in still_names) for stem in required_stems
     )
+    fight_pngs = [p for p in window_screens if p.name.startswith("bots_fight_")]
+    pause_pngs = [p for p in window_screens if p.name.startswith("bots_pause_")]
+    if fight_pngs and pause_pngs:
+        if sha256_file(fight_pngs[0]) == sha256_file(pause_pngs[0]):
+            stills_ok = False
+            print("FAIL: pause still SHA equals fight still")
     review.mkdir(parents=True, exist_ok=True)
     (review / "screens").mkdir(parents=True, exist_ok=True)
     for png in window_screens:
         if png.stat().st_size <= 0:
             stills_ok = False
             continue
-        shutil.copy2(png, evidence / "screens" / png.name)
-        shutil.copy2(png, review / "screens" / png.name)
+        _copy_if_different(png, evidence / "screens" / png.name)
+        _copy_if_different(png, review / "screens" / png.name)
 
     packed = {
         "schema": "vault-fighters.vf6-wp5.pack.v1",
@@ -444,20 +454,20 @@ def main() -> int:
         "stills": [p.name for p in window_screens],
     }
     (evidence / "run.json").write_text(json.dumps(packed, indent=2) + "\n", encoding="utf-8")
-    shutil.copy2(window_outcomes_path, evidence / "outcomes.json")
+    _copy_if_different(window_outcomes_path, evidence / "outcomes.json")
     if (window_ev / "run_partial.json").is_file():
-        shutil.copy2(window_ev / "run_partial.json", evidence / "run_partial.json")
+        _copy_if_different(window_ev / "run_partial.json", evidence / "run_partial.json")
     for extra_name in ("events.jsonl", "snapshot_start.json", "snapshot_end.json"):
         extra_path = window_ev / extra_name
         if extra_path.is_file():
-            shutil.copy2(extra_path, evidence / extra_name)
-            shutil.copy2(extra_path, review / extra_name)
+            _copy_if_different(extra_path, evidence / extra_name)
+            _copy_if_different(extra_path, review / extra_name)
     _copy_if_different(Path(args.freeze), evidence / "freeze.json")
     _copy_if_different(Path(args.leftover_proof), evidence / "leftover_proof.json")
     _copy_if_different(Path(args.exits_proof), evidence / "exits_proof.json")
-    shutil.copy2(Path(args.headless_log), evidence / "official_headless.log")
-    shutil.copy2(Path(args.window_log), evidence / "official_window.log")
-    shutil.copy2(Path(args.run_all_log), evidence / "official_run_all.log")
+    _copy_if_different(Path(args.headless_log), evidence / "official_headless.log")
+    _copy_if_different(Path(args.window_log), evidence / "official_window.log")
+    _copy_if_different(Path(args.run_all_log), evidence / "official_run_all.log")
     for name in (
         "run.json",
         "outcomes.json",
@@ -466,7 +476,7 @@ def main() -> int:
         "exits_proof.json",
     ):
         if (evidence / name).is_file():
-            shutil.copy2(evidence / name, review / name)
+            _copy_if_different(evidence / name, review / name)
     leftover_computed = leftover_computed
     verdict_ok = outcomes_ok and leftover_ok and exits_ok and live_logs_ok and run_all_ok and stills_ok
     verdict = (
@@ -474,18 +484,19 @@ def main() -> int:
         f"RUN_ID={RUN_ID}\nCOMMAND_ID={COMMAND_ID}\n"
         f"SOURCE={source_tree}\n"
         f"PLANNER live; NOT_AI=0 on official bot harness only\n"
-        f"WEAPONS classes={weapons_row.get('classes')} perfect_aim={weapons_row.get('perfect_aim_shots')}\n"
+        f"WEAPONS classes={weapons_row.get('classes')} melee={weapons_row.get('melee_used')} "
+        f"nade_hit={weapons_row.get('nade_hit', 0)} analog_off={weapons_row.get('last_shot_off_deg')}\n"
         f"FINISH outcome={finish_row.get('outcome')} pit_deaths={finish_row.get('pit_deaths')}\n"
         f"READY_FOR_CRITICS={'yes' if verdict_ok else 'no'}\n"
         f"29-8 still [ ]. Parent 59/60.\n"
     )
     (evidence / "verdict.md").write_text(verdict, encoding="utf-8")
-    shutil.copy2(evidence / "verdict.md", review / "verdict.md")
+    _copy_if_different(evidence / "verdict.md", review / "verdict.md")
     if not verdict_ok:
         print("FAIL: VF6-WP5 packer rejected official package")
         print(f"  outcomes_ok={outcomes_ok} leftover_ok={leftover_ok} exits_ok={exits_ok}")
         print(f"  live_logs_ok={live_logs_ok} run_all_ok={run_all_ok} stills_ok={stills_ok}")
-        print(f"  six_ok={six_ok} logs_unclean={logs_unclean}")
+        print(f"  six_ok={six_ok} rooftops_ok={rooftops_ok} logs_unclean={logs_unclean}")
         return 1
     print("PASS: VF6-WP5 evidence packed")
     print(f"RUN_ID={RUN_ID}")
@@ -494,4 +505,8 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    try:
+        raise SystemExit(main())
+    except Exception as exc:
+        print(f"FAIL: VF6-WP5 packer exception {type(exc).__name__}: {exc}")
+        raise SystemExit(1)

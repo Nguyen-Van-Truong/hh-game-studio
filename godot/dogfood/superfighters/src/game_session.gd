@@ -1533,6 +1533,8 @@ func _explode(nade: ThrownGrenade) -> void:
 	while i < fighters.size():
 		var f: Fighter = fighters[i]
 		i += 1
+		if f.dead:
+			continue
 		if not _Expl.allows_damage(mode, nade.owner_slot, nade.owner_team, f):
 			continue
 		if f.invuln_ticks > 0 or f.invuln > 0.0:
@@ -1548,6 +1550,16 @@ func _explode(nade: ThrownGrenade) -> void:
 		var hp0: float = f.health
 		f.take_damage(raw, rolled.get("knock", knock) as Vector2)
 		_record_hit_cap(f, raw, hp0, "blast", nade.payload_id)
+		var applied: float = hp0 - f.health
+		if hp0 > 0.01 and applied > 0.01:
+			ledger.push(clock.tick, "explosives", "hit", {
+				"attacker": nade.owner_slot,
+				"target": f.slot,
+				"weapon": "nade",
+				"damage": SimConstants.quantize(applied),
+				"path": "blast",
+				"alive_before": 1,
+			})
 		if f.last_crit:
 			ledger.push(clock.tick, "combat", "crit", {
 				"attacker": nade.owner_slot,

@@ -25,8 +25,8 @@ BRAIN = ROOT / "src" / "bot_brain.gd"
 SESSION = ROOT / "src" / "game_session.gd"
 APP = ROOT / "src" / "app.gd"
 INPUT = ROOT / "src" / "input_actions.gd"
-GATE_RUN_ID = "VF6WP5-20260904-ASIA-SAIGON-08"
-COMMAND_ID = "cmd.vf6-wp5.bots.8"
+GATE_RUN_ID = "VF6WP5-20260905-ASIA-SAIGON-10"
+COMMAND_ID = "cmd.vf6-wp5.bots.10"
 FORBIDDEN_RUN_IDS = (
     "VF6WP5-20260903-ASIA-SAIGON-01",
     "VF6WP5-20260903-ASIA-SAIGON-02",
@@ -39,6 +39,8 @@ FORBIDDEN_RUN_IDS = (
     "VF6WP5-20260904-ASIA-SAIGON-05",
     "VF6WP5-20260904-ASIA-SAIGON-06",
     "VF6WP5-20260904-ASIA-SAIGON-07",
+    "VF6WP5-20260904-ASIA-SAIGON-08",
+    "VF6WP5-20260905-ASIA-SAIGON-09",
     "VF6WP4-20260903-ASIA-SAIGON-02",
     "VF6WP4-20260903-ASIA-SAIGON-01",
     "VF6WP3-20260901-ASIA-SAIGON-03",
@@ -146,7 +148,7 @@ def main() -> int:
         "explosion",
         "waypoint_dist",
         "REACH_GOAL_PX",
-        "REACH_ENGAGE_PX",
+        "REACH_MELEE_PX",
         "last_shot_off_deg",
         "greedy_pit_deaths",
         "vs1_bot_count",
@@ -156,11 +158,22 @@ def main() -> int:
         "reach_reason",
         "fighter_count",
         "_explosion_after_bullet",
+        "_ledger_nade_hits",
         "LIP_ENGAGE_LO",
         "force_draw",
     ):
         if needle not in cases:
             errors.append(f"bot_cases missing {needle}")
+    if "_keep_exactly_two" in cases:
+        errors.append("_keep_exactly_two must be deleted from source")
+    if "_death_after_explosion" in cases:
+        errors.append("class 2 must not be any death after explosion")
+    if "start.distance_to(at) >= 72.0" in cases:
+        errors.append("_named_waypoint must not pick the first cell ≥72")
+    if "REACH_ENGAGE_PX" in cases:
+        errors.append("bot_cases must not keep the 48 engage reach constant")
+    if "engage_dist < 48.0" in cases:
+        errors.append("bot_cases must not PASS on engage < 48")
     fin_idx = cases.find("static func finish_match")
     fin_end = cases.find("static func greedy_compare")
     fin_body = cases[fin_idx:fin_end] if fin_idx >= 0 and fin_end > fin_idx else ""
@@ -262,6 +275,16 @@ def main() -> int:
         errors.append("packer must reject engage in [71,72) as sole reach")
     if "engage_dist" in packer and "< 72.0" in packer:
         errors.append("packer reach must not be engage < 72")
+    if "engage_dist" in packer and "< 48.0" in packer:
+        errors.append("packer reach must not be engage < 48")
+    if "bots_pause_" not in packer:
+        errors.append("packer must require a pause still stem")
+    if "sha256_file(fight_pngs[0])" not in packer and "pause still SHA" not in packer:
+        errors.append("packer must require distinct pause vs fight SHA")
+    if "perfect_aim=" in packer:
+        errors.append("packer must not advertise perfect_aim as DoD")
+    if 'shutil.copy2(Path(args.headless_log)' in packer:
+        errors.append("packer must not self-copy official logs")
     official = OFFICIAL.read_text(encoding="utf-8") if OFFICIAL.is_file() else ""
     if not official:
         errors.append("missing tests/run_bots_official.ps1")

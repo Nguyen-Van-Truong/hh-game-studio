@@ -66,6 +66,7 @@ platform files; plan 29-8 thắng cho product files.
    không tạo checkbox, không đổi thứ tự WP và không được tự tick.
 5. `PROJECT_BRIEF.md`, `KNOWN_ISSUES.md` và `NOTICE.md` trong product folder
    khi WP yêu cầu.
+6. Khi spawn Godot / leftover-0 / official: `docs/godot-agent/AGENT_GODOT_RUNBOOK.md`.
 
 Không lấy hai file `zdocs/16-8-*` làm nguồn WP. Không lấy các checkbox trong
 README, chat, evidence folder hoặc plan cũ làm tiến độ product.

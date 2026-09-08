@@ -2,6 +2,12 @@
 
 Ngày lập: 2026-09-05 · Múi giờ: Asia/Saigon · Scope: `hh-3d/hh-3d-2`.
 
+Cập nhật 08-09: owner mở **[file tổng hợp có bảng 32 WP ở đầu](../../../../hoan-hao/zdoc/8-9-hh-world-2-ke-hoach-tong-the-va-chat-luong.txt)**
+trước; các file dưới là phụ lục theo WP. EX01–EX36, DB-D1–D4 và công thức
+capacity trong master là supplement bắt buộc. Bảng master chỉ là snapshot;
+roadmap giữ trạng thái duy nhất. Review revision này xem
+`reviews/master-20260908/REVIEW-RESULT.md`; review v2 ngày 5-9 là lịch sử.
+
 **Mục tiêu:** game xã hội 3D nguyên bản, cảm hứng trải nghiệm Play Together,
 không khí Việt Nam; làm gameplay trước, tích hợp địa lý Hoàn Hảo sau.
 Chọn hướng **Godot native nguyên bản + công cụ mở rộng ở cấp project**.
