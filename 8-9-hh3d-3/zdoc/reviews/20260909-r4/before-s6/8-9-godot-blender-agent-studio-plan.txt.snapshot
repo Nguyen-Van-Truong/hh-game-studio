@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 08-09-2026, Asia/Saigon | Revision S2 | CHỈ LẬP KẾ HOẠCH
+Ngày 09-09-2026, Asia/Saigon | Revision S5 | CHỈ LẬP KẾ HOẠCH
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -21,8 +21,9 @@ RUNTIME_ACCEPTANCE=NONE
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S3
-BASELINE_STUDIO=3cc7a85f730c99963a5a64079a0e02dc20edbd40
+PLAN_REVISION=S5
+REVIEW_BASE_COMMIT=5d19ba66d4476928e564f165b6396743dccde620
+HISTORICAL_STUDIO_COMMIT=3cc7a85f730c99963a5a64079a0e02dc20edbd40
 
 0. MỤC TIÊU, PHẠM VI VÀ THỨ TỰ
 
@@ -46,7 +47,7 @@ source gameplay bắt đầu sau handoff công cụ. Không xây editor tổng q
 Root tương lai: hh-game-studio/8-9-hh3d-3. Công cụ chỉ sở hữu studio/**,
 bao gồm lock/build/fixture/package của mình. Không đổi Godot/Vault Fighters,
 không sửa root platform/Rust, Web cũ hay dịch vụ Hoàn Hảo. Vị trí hai TXT ở
-repo mới `hh-game-studio/8-9-hh3d-3/zdoc/`; chỉ mở quyền tài liệu, không quyền dịch vụ.
+thư mục `hh-game-studio/8-9-hh3d-3/zdoc/` trong repo hiện tại; chỉ mở quyền tài liệu, không quyền dịch vụ.
 GT-01 đọc capability công cụ có sẵn trong phạm vi được cho phép; muốn reuse
 ngoài scope cần chỉ rõ artifact/source được phép, kiểm license/compatibility.
 Không suy platform đã tick là tools mới đạt; không cần fork engine để agent dùng.
@@ -78,13 +79,14 @@ Engine khác | Fallback khi benchmark cùng workload thất bại | Migration/ar
 
 Ảnh demo Web 16FPS không chứng minh Godot sẽ60FPS. Báo cáo Vault Fighters chưa
 chứng minh Godot4.7.1 gây các lỗi gameplay/evidence; không sửa pin của dự án đó.
-GT-01 kiểm official artifacts và capability reuse. Nguồn Cursor đọc08-09 báo
-Godot và Blender theo candidate lock được kiểm chứng tại GT-01
-fallback Blender4.5.13LTS chỉ nếu addon bắt buộc có incompatibility đã tái hiện.
-Đây là ứng viên nghiên cứu, không installation proof. Verify release chính thức,
-full commit/SHA256/license/--version trước cài; báo khác biệt thực tế, không
-suy version từ folder hoặc auto latest. Khóa một bộ trong studio/toolchain.lock.json.
-Game P0-01 tiêu thụ đúng bộ đã khóa, không chốt độc lập pin khác.
+GT-01 kiểm official artifacts và capability reuse. Trang archive Godot và LTS
+Blender đã được đối chiếu trong lượt 08-09: ứng viên Godot 4.7.2-stable standard, matching export templates, Blender 5.2.1 LTS; fallback Blender 4.5.13 LTS chỉ
+khi addon không tương thích đã tái hiện. Đây là ứng viên, chưa là installed pin.
+GT-01 phải lấy artifact từ nguồn official, xác minh full commit/SHA256/license/
+--version, nền tảng và exporter; sai thì GAP, không tự tải latest hoặc tin tên
+folder. Một bộ duy nhất trong studio/toolchain.lock.json; game nhận đúng bộ đó.
+Godot không được gắn nhãn LTS của Blender. Pin bảo mật được nâng bằng release
+đã review/regression; không đóng băng dependency lỗi vô hạn để giữ checksum.
 
 GT-01/08 chứng minh editor/import/export cơ bản; H2-P1-03 và H2-P5-03 trong
 plan game mới quyết định workload3D/thiết bị đạt. Khi fail: profile/repro → tối đa
@@ -96,7 +98,7 @@ issue nếu có và cost templates/security/merge dài hạn. Không nằm trong
 
 2.1 Cấu trúc source và trách nhiệm
 
-Trong root HH2 dự kiến, mọi source do plan công cụ sở hữu nằm ở studio/:
+Trong root HH3D-3 dự kiến, mọi source do plan công cụ sở hữu nằm ở studio/:
   studio/toolchain.lock.json    pin engine/templates/Blender/exporter/addons
   studio/protocol/              schema/capability envelope
   studio/godot-addon/           source Godot adapter duy nhất
@@ -152,6 +154,28 @@ Trusted adapter scripts có source hash/review và operation allowlist. Worker
 viết source theo lease rồi import/validate; không biến generic exec thành
 editor mutation đã “an toàn” chỉ vì có token.
 
+Canonical wire contract GT-02: JSON UTF-8, duplicate keys/invalid Unicode/NaN/
+Infinity reject; integer ngoài safe range truyền decimal string. Dùng JCS
+(RFC 8785) hoặc một profile tương đương đã khóa với golden vectors Python/
+Node/Godot; không tự normalize Unicode trong payload_hash. Name NFC là bước
+domain validation riêng trước tạo command. Scope dedupe=(project_id,command_id),
+digest phủ operation+target+payload+schema; đổi lease không làm ID cũ thành lệnh
+mới. Persistent results/tombstones không giữ toàn bộ trong RAM. Hết retry horizon
+chỉ reject command đã hết hạn và tra cứu archive, không thực thi lại ID cũ.
+
+Path protection phải chống race ở thời điểm dùng file: private staged root,
+OS handle/descriptor không follow link, kiểm final resolved path/file identity,
+deny reparse/junction/hardlink/ADS/device paths và case alias theo platform.
+realpath rồi kiểm lại vẫn chưa loại TOCTOU; nếu pin/OS không cung cấp safe open
+thì operation trên root có thể bị writer ngoài lease đổi link phải UNSUPPORTED.
+Fuzz đổi link giữa validate/open/replace trên disposable root; không ghi ra ngoài.
+Loopback HTTP/WebSocket cần Host/Origin allowlist, session auth trên read lẫn
+write, chống DNS rebinding/CSRF và caps trước auth; không wildcard CORS. IPC
+stdio có session binding/OS access, không ép HTTP Origin lên stdio. Credential
+chỉ kênh riêng, redaction test bao gồm lỗi parser, argv, environment dump/capture.
+External URL fetch chỉ host allowlist, validate từng redirect/DNS/IP, chặn local/
+metadata/private endpoints không được cấp; source text/tool output không trao quyền.
+
 Safety baseline phải có ngay GT-02 và lần mutation đầu GT-03/GT-04:
 lease/revision/dedupe/validation/readback/checkpoint/path/token. GT-07 nâng
 khả năng recovery/multi-agent, không cho phép bỏ safety trong spike đầu.
@@ -165,10 +189,20 @@ chỉ main thread; jobs ngoài process gửi queue. ObjectID không tồn tại 
 scene reload: resolve lại theo stable ID/revision. EditorUndoRedoManager tạo
 do/undo đầy đủ; multi-file save không tự atomic nhờ commit_action. Save staged
 outputs + journal + verified publish/recovery theo2.5. Không raw-write scene
-đang mở. Script/code text edits tách scene writer, parse/import trước preview.
+đang mở. Script/code text edits dùng typed operation riêng, không raw shell/eval.
+GT-03 sở hữu script_text.replace: allowlist .gd, expected revision, bounded
+UTF-8 patch/full text, preview diff, lease/checkpoint và staged parse/import
+trong disposable editor sandbox (kể cả @tool/import hook), không live editor.
+Reject syntax/type/import error trước activation; reload/readback đúng script
+hash rồi mới ACK. Chạy script mới chỉ trong disposable Play sandbox đã cấp
+capability; validator không cấp thêm quyền. Script và scene cùng đổi dùng
+cùng project revision/publish journal, crash không để active nửa cũ nửa mới.
 
 Blender UI: bpy mutation trên main thread qua timer/operator/queue được kiểm;
-không network thread gọi bpy. Background job là process riêng --background
+không network thread gọi bpy. Host network chạy process ngoài Blender; UI
+chỉ poll IPC không blocking với bounded work trên main-thread timer. Không để
+Python background threads sống dai bên trong Blender dù thread không gọi bpy;
+đây cũng là rủi ro theo tài liệu threading, phải test đúng pin. Background job là process riêng --background
 với trusted script/hash, input copy và output staged. Threading Python của
 Blender không được coi như thread-safe DCC API. Không cố chạy render/export
 nặng trên UI loop rồi mất Stop. UI state/mode/selection/context được snapshot
@@ -177,6 +211,12 @@ Không mở auto-run scripts từ .blend không tin cậy; disable auto-executio
 không làm parser mọi file an toàn, dùng asset trusted/catalog và sandboxed
 disposable job/resource caps. Linked libraries/external textures phải nằm
 allowlist, được hash; missing hoặc ngoài root fail trước publish.
+Preflight GLB/texture trong job riêng có CPU/RAM/disk/time cap; giới hạn cả
+decoded bytes, dimensions, accessor/buffer bounds, mesh/bones/clip/material count,
+URI, extension allowlist và recursion. Khronos validator chỉ là một lớp kiểm;
+import sandbox Godot và visual/readback vẫn bắt buộc. Không nhận shader/script
+do người lạ gửi; generated code từ agent phải qua source review/parse/lease trước
+chạy sandbox. Disable autoexec không được coi là isolation cho parser.
 Bundled Python/Blender/addons/exporter versions ghi lock; không pip vào Python
 hệ thống hoặc cài addon bên ngoài scope từ remote command.
 
@@ -245,6 +285,39 @@ network share hoặc file antivirus đang lock phải retry bounded/fail giữ b
 Disk full/quota/partial write tests trước dùng; không ack chỉ vì process exit0.
 
 
+2.6 Trust package, UX và support contract
+
+Package manifest schema HH-STUDIO-0.1 phải bind package_id/version/target,
+artifact hashes, source closure, protocol/schema, expiration/security floor,
+trust-key ID và rollback compatibility. Local GT-08/GT-10 dùng test signer/
+pinned trust key riêng; không cần production signing credential để đạt fixture.
+Consumer verify manifest signature qua key đã pin ngoài artifact trước giải nén;
+SHA tải cùng file không tự xác thực publisher. Public signing là gate riêng.
+Test key rotation/revocation, expired metadata, hash/target mismatch, download
+gián đoạn và replay version cũ. Không downgrade xuống dưới security floor;
+last-good bị revoke thì giữ source/saves, chặn tool mutation và báo recovery
+package cần thiết. Last-good còn trusted/compatible mới được rollback activation.
+Offline không cho cài metadata đã hết hạn; bản đã cài hợp lệ vẫn dùng offline
+trong policy được công bố, không network kill-switch phá source của người dùng.
+TUF là reference thiết kế, không yêu cầu tự viết hệ thống signing mới từ đầu.
+
+Mutating operations công bố dry-run/diff/affected files và undo hoặc recovery
+policy; inspect/input/Stop không giả có undo hay bắt preview gây trễ. Owner đã
+authorize scope thì agent tự thực thi và show replay, không popup mỗi command.
+Destructive edit có checkpoint. Undo nhiều bước kiểm revision, không ghi đè
+manual edit mới hơn. UI dùng queued/running/draining/unknown/committed/rejected,
+có next action, progress hoặc trạng thái chưa biết, keyboard focus/shortcuts,
+reconnect không tự resume job đã Stop. Pagination/filter/result byte cap cho
+inspector; dropped telemetry có counter, không drop command receipts.
+
+Mỗi lần update: old/new compatibility fixture, migration/rollback, SBOM/license/
+dependency scan và affected capability regression. Lần phát hành đầu GT-10 kiểm
+consumer fixture độc lập; consumer HH World smoke chỉ áp sau khi game đã tồn tại.
+Critical exploitable dependency không phát hành; waiver rủi ro thấp cần reviewer,
+owner xử lý, expiry và test, không blanket ignore. Security fixes giữ last-good
+hợp lệ trong upgrade window. Dùng source/runtime hashes trong support package,
+scrub secrets/PII, có reproduction nhỏ; không upload toàn project mặc định.
+
 3. ĐẶC TẢ CÔNG VIỆC GT — MỖI WP CỘNG TQ00 VÀ TX LIÊN QUAN
 
 ### GT-01 — Khóa môi trường và bootstrap fixture
@@ -263,6 +336,7 @@ DoD: lock tái tạo được, fixture đứng độc lập không cần H2; TQ0
 2 critics, chưa claim Blender bridge hay game FPS.
 
 ### GT-02 — Protocol/capability/safety baseline
+CONTRACT/VERIFY: mục2.2 canonical/path/loopback, TX15/TX17; limits profile có số trước adapter consumer, cross-language golden vectors và no-effect reject.
 ALLOWED: studio/protocol/, studio/host/core, studio/tests/protocol.
 BUILD: mục2.2 request/status/schema/discovery, lease/fencing/revision,
 bounded journal/dedupe/limits/token/path resolver. Minimal typed client và
@@ -273,17 +347,21 @@ DoD: mutation reject trước apply khi invalid, pending khác committed, lookup
 không duplicate, no remote eval/secrets; TQ02/TX01/03/11/14,2 critics.
 
 ### GT-03 — Godot adapter cơ bản
+CONTRACT/VERIFY: safe file open/revision mục2.2; Godot transaction và mutation UX mục2.6, TX15.
 ALLOWED: studio/godot-addon/, operation catalog Godot, studio/tests/godot,
 fixture scene trên snapshot. Envelope studio/protocol/ chỉ đọc từ GT-02.
 BUILD: EditorPlugin/main-thread typed inspect/create/change/delete approved
 nodes/resources, stable IDs/revision, UndoRedo/checkpoint, Godot-only staged
-save/journal/recovery/readback. Editor và Play process riêng.
+save/journal/recovery/readback; script_text.replace theo mục2.3 (catalog/schema,
+parse/import, cùng revision và journal với scene). Editor và Play process riêng.
 VERIFY: actual editor before/after/undo/redo/reopen; stale ID/lease, owner edit,
-invalid type/range/NaN/path; crash save/response lost; partial output không ACK.
+invalid type/range/NaN/path; invalid .gd/oversized patch/stale script/parse failure;
+scene+script crash save/response lost; partial output không ACK hoặc chạy preview.
 DoD: TQ03 + TX02/03/06/09/13, 2 critics. Real-input/pause/capture thuộc GT-06,
 cross-app activation GT-07; không tính cùng deliverable hai lần.
 
 ### GT-04 — Blender adapter
+CONTRACT/VERIFY: mục2.3 external IPC host, không persistent Python threads trong Blender; resource-bounded hostile-input fixtures.
 ALLOWED: studio/blender-addon/, studio/host/blender, studio/tests/blender,
 fixture .blend leased, không dùng file artist đang mở ngoài lease.
 BUILD: inspect/create mesh/change typed transform/save/checkpoint/export;
@@ -296,6 +374,7 @@ DoD: TQ04/TX02/03/04/05/06,2 critics; declare supported operations chính xác.
 Không coi disable autoexec là sandbox parser hoàn chỉnh hoặc mở mọi file lạ.
 
 ### GT-05 — Blender→GLB→Godot pipeline
+CONTRACT/VERIFY: mục2.3/2.4 preflight/allowlisted glTF extensions, decoded texture/accessor caps; Khronos validation + actual Godot import.
 ALLOWED: studio/fixtures/assets-src/, studio/pipeline/, import presets/tests,
 fixture generated asset snapshots. Không sửa gameplay product.
 BUILD: 1m axis, prop/PBR, 1 rigged avatar+1outfit+idle/walk clips, in-place
@@ -308,6 +387,7 @@ DoD: TQ05/TX04/07/08/09,2 critics, art fixture dùng được trên Godot; chỉ
 snapshot publish. Active editor cross-app activation chờ GT-07.
 
 ### GT-06 — Quan sát và chơi bằng công cụ
+CONTRACT/VERIFY: mục2.6 reviewer UX và TX18; human Stop/reconnect không resume ngầm, keyboard/error/UNKNOWN có next action.
 ALLOWED: studio/godot-addon/observe, studio/host/replay, reviewer UI/tests,
 fixture input/controller/interaction scripts (không HH World source).
 BUILD: inspect scene/property/runtime, start/play/input/pause/stop/capture,
@@ -320,6 +400,7 @@ DoD: TQ06/TX02/05/13,2 critics; fixture là actual tool E2E trên app thật nh�
 KHÔNG chứng minh chất lượng gameplay/network của HH World.
 
 ### GT-07 — Scheduling/transaction/recovery đa agent
+CONTRACT/VERIFY: mục2.5/2.6 crash consistency, TX18 fair quotas; publish/cancel race cùng journal không ACK sớm.
 ALLOWED: studio/host/leases/jobs/activation và adapter transaction tests.
 BUILD: FIFO/expiry/fencing/dependency/bounded concurrency, active manifest
 mục2.5, safe manual-edit reconciliation. Safety ban đầu GT-02 vẫn bắt buộc.
@@ -330,6 +411,7 @@ DoD: TQ07/TX05/06/09/11/13/14,2 critics; queue không starvation, Stop ưu tiên
 rollback không đè manual edit mới; logs state rõ không lộ token.
 
 ### GT-08 — CI/import/export matrix
+CONTRACT/VERIFY: mục2.6 và TX16-C; test signer/local trusted fixture; Android ABI/native libs 4 KB/16 KB compatibility. Emulator chỉ dùng page-size/ABI proof, không GPU acceptance.
 ALLOWED: studio/build/, studio/tests/ci/, studio/toolchain.lock.json phiên
 bản đã review, fixture build profiles. Không game/tools hoặc contracts game.
 BUILD: fresh checkout + blobs, trusted source closure, hash-keyed cache,
@@ -337,35 +419,49 @@ fixture export Windows/Android/Linux headless với templates đúng pin.
 VERIFY: missing LFS/blob/texture/wrong template/cache poison/unsupported addon
 fail. Launch Windows+Linux headless; Android install/launch fixture trên ít
 nhất một máy thật hỗ trợ đã ghi SKU/OS. Không emulator thay GPU proof.
-DoD: TQ08/TX08/10/12,2 critics; build recipe/artifact hashes/exits/limits.
-Thiếu máy Android giữ target GAP, làm task local độc lập; không ACCEPT GT-08
-và không bàn giao đầy đủ GT-10 cho game Android cho đến target proof đủ.
+DoD: TQ08-B/TX16-C/TX08/10 và TX12 pin/ABI,2 critics; build recipe/artifact hashes/exits/limits.
+Android máy thật là hard gate của GT-08 cho toàn gói v0.1 (Windows/Android/
+Linux headless). Thiếu máy ghi GAP, có thể chuẩn bị/test phần độc lập nhưng
+không ACCEPT GT-08, GT-09, GT-10 hoặc dispatch source H2-P0-01. Không có
+desktop-only ACCEPT hay partial package unlock ngầm; cần bố trí thiết bị.
+TQ08-B/TX16-C là closure GT-08; install/upgrade consumer closure ở GT-10.
 
 ### GT-09 — Agent conformance toàn tuyến
+CONTRACT/VERIFY: TX01–TX18 trong scope GT-01…GT-09 đã có; riêng TX16-C/TQ08-B
+chỉ producer verifier/fixture build, TX16-I/TQ08-I install-upgrade thuộc GT-10.
+Prompt-injection/capability/UX trên đúng Cursor client; độc lập fixture, không chờ game.
 ALLOWED: studio/tests/conformance/, isolated fixture clones, evidence.
 BUILD: brief → Blender sửa asset → GLB → Godot scene → actual play/input →
-observe lỗi seeded → agent sửa → replay → checkpoint; không cần game H2.
+observe lỗi scene/resource/script seeded → agent sửa bằng catalog GT-03 →
+replay → checkpoint; không cần game H2 và không shell edit ngoài typed operation.
 VERIFY: Cursor đúng model bằng adapter được cấp, operations có command IDs,
 pre/postcondition; reconnect/retry/context reset không mutation trùng; owner
 edit giữa lease và hai job source khác chạy song song. Protocol client riêng
 kiểm unsupported client version; không giả model khác đã chạy conformance.
-DoD: TQ02–TQ08/TX01–TX14,2 critics, trace/source before-after+video/readback;
+DoD: TQ02–TQ07 + TQ08-B/TX01–TX18 theo scope CONTRACT trên,2 critics,
+trace/source before-after+video/readback;
 không người sửa ẩn, không chỉ banner hoặc direct state injection. Capability
 matrix chỉ đánh SUPPORTED đúng client/model/host/version đã kiểm thực tế.
 
 ### GT-10 — Package và handoff
+CONTRACT/VERIFY: mục2.6/TX16-I install/upgrade/revocation/security-floor/local signer, compatibility và support runbook.
 ALLOWED: studio/package/, local install/update scripts, compatibility lock,
 studio/evidence/. Không ghi consumer project chưa được cấp scope.
 BUILD: package v0.1 contract HH-STUDIO-0.1 (mục6), known limits/runbook/help
 đi cùng package, no global env dependencies; ABI/schema migration/deprecation.
 VERIFY: install vào clean fixture copy, source/save cũ giữ nguyên, upgrade/
 rollback old/new state compatibility, uninstall addon không xóa art/game;
-one roundtrip+play sau update. No public upload/sign/install scope khác.
-DoD: TQ08/TX10/12/14,2 critics; hash/package/model/matrix/handoff đầy đủ.
+one roundtrip+play sau update. Chỉ ký bằng test trust key local; không public upload/production sign/install scope khác.
+DoD: TQ08-I/TX16-I + TX10/12/14,2 critics; hash/package/model/matrix/handoff đầy đủ.
+Dependency GT-08/09 ACCEPTED gồm physical Android fixture; manifest ghi đúng
+supported_targets Windows/Android/Linux-headless, không partial ACCEPT ngầm.
 Không cần closed alpha của game và không claim tool sửa được mọi thể loại.
 4. TQ — GATE CHẤT LƯỢNG CÔNG CỤ (MỤC TIÊU, CHƯA CÓ KẾT QUẢ)
 
-TQ00: mỗi GT có source closure/hash, actual pre/postcondition, true host exit,
+TQ00: bảng dependency đầu file + spec GT + mục2 + TQ/TX được spec trỏ tới
+là acceptance closure. Limits/fixtures/test IDs phải khóa trước code consumer;
+coverage map liên kết requirement→test→artifact/hash, orphan requirement là GAP.
+Mỗi GT có source closure/hash, actual pre/postcondition, true host exit,
 clean owned-process leftovers, dependency accepted, đúng lease, critic đúng
 hash; không secret, warning/error/leak chưa giải thích. Headless không thay
 editor/window/GPU, screenshot không thay mutation readback. Worker chỉ candidate.
@@ -415,11 +511,15 @@ active do exit0. Có owner edit mới thì conflict cần reconcile, không roll
 đè edit. Host/fsync/diskfull fail không trả committed khi không đủ proof.
 2writers/lease expiry/FIFO/cancel/jobID PIDreuse/queue flood phải tái hiện.
 
-TQ08: clean Win+Android export, Linux headless fixture launch, old/new addon
-install/rollback/uninstall trên copy; không global env/token/cache trong artifact.
-Windows editor/Blender và Android runtime được kiểm riêng; Android không cần
-Blender. Pin docs/recipe/limits, không tự tải latest khi thiếu artifact.
-Package version/manifest/schema/tool hashes phải khớp runtime báo đọc lại.
+TQ08: có hai slice nghiệm thu theo thứ tự producer rồi consumer:
+TQ08-B (GT-08, regression GT-09): clean Win+Android export, Linux headless
+fixture launch, hash/build verifier với local test signer. Windows editor/
+Blender và Android runtime kiểm riêng; Android install/launch trên máy thật
+là bắt buộc. Không global env/token/cache trong artifact; pin recipe/limits,
+không tự tải latest. Producer fixture không đòi updater chưa xây ở GT-10.
+TQ08-I (GT-10): package cài old/new addon trên clean copy, upgrade/rollback/
+uninstall và play readback; version/manifest/schema/tool hashes khớp runtime.
+GT-10 tiêu thụ TQ08-B đã ACCEPTED và thực thi TQ08-I; không vòng dependency.
 
 Hiệu năng UX công cụ dự kiến trên workstation ghi tạiGT-01:
 - Editor UI không bị blocking network/job; command validation/queue admission
@@ -475,6 +575,8 @@ TX11 — Journal full/lost response/retry after crash; GT-02/GT-07/GT-09.
 Persist failed không ACK; bounded queue/log/deadletter, retry-after; tombstone
 bao phủ retry horizon và cùng ID không thực thi lần nữa. Stop priority riêng.
 TX12 — Upgrade/downgrade/uninstall/ABI; GT-01/GT-08/GT-10.
+GT-01 khóa candidate/cache isolation; GT-08 ABI/template/build fixture;
+GT-10 mới nghiệm thu installer/migration/rollback/uninstall toàn gói dưới đây.
 Copy project/cache isolated, oldsave/source giữ nguyên; incompatible schema
 reject hoặc migrate reviewed; uninstall không xóa asset. Không mở editor cũ
 vào cache mới rồi xóa lỗi. Engine core changes ngoài scope phải ADR/owner.
@@ -488,6 +590,25 @@ session an toàn; command đang chạy còn kết quả thì journal lookup. Use
 không tự resume sau reconnect; expose pending/gap/last-good bằng ngôn ngữ rõ.
 Quota không là căn cứ nói source sai hoặc tool unavailable vĩnh viễn.
 
+TX15 — Canonicalization/TOCTOU/loopback attack; GT-02/GT-03/GT-09.
+Golden vectors qua các client; swap link/alias giữa validate/open/replace,
+HTTP bad Host/Origin, malformed token và redirect private endpoint bị reject,
+không mutation ngoài scope hoặc lộ secret. Safe-open unavailable là GAP.
+TX16 — Supply chain/expired key/downgrade; GT-08/GT-10.
+TX16-C (GT-08/09): local fixture signer + verifier library; tamper/truncate/
+revoke/mix version/target/expiry/security floor reject trước unpack vào staging.
+TX16-I (GT-10): installer/update dùng verifier đã kiểm; rollback chỉ về bản còn
+trusted/compatible; key mất hoặc expired metadata có recovery UX, không bypass
+security floor/xóa source. Producer verifier không đòi installer consumer trước GT-10.
+TX17 — Prompt injection/tool output/source code privilege; GT-02/GT-09.
+Seed instructions độc hại trong asset metadata/README/log/URL; agent không đổi
+root/model/quyền, không exfiltrate hay chạy eval theo dữ liệu. Capability token
+enforced tại host, không chỉ trong prompt. Test generated script sandbox import.
+TX18 — Quota/UI starvation/worker amplification; GT-06/GT-07/GT-09.
+Flood inspect/export/capture và disconnect mid-job; queue/result/memory caps,
+fairness theo project+session, Stop priority, no retry multiplication, bounded
+diagnostic retention. Mất quota ghi GAP, không replay task tốn tiền vô hạn.
+
 Case mới có TX ID, WP owner, expected outcome/regression trước mở lại đúng
 feature. Không hứa danh sách bao trùm mọi ngoại lệ tưởng tượng; ưu tiên lỗi
 có thể gây mất source, command sai scope, ACK giả và UX mất điều khiển.
@@ -495,6 +616,7 @@ có thể gây mất source, command sai scope, ACK giả và UX mất điều k
 
 TOOL_PACKAGE_CONTRACT=HH-STUDIO-0.1
 GT-10 xuất package manifest kỹ thuật có:
+- signed manifest/trust-key ID/security floor/expiry/target và policy mục2.6;
 - package_id/semver, protocol_version/schema_digest, supported operations và
   command status/error contracts, target roots/project IDs/limits/auth mode;
 - toolchain lock Godot binary/templates/fullcommit/SHA, Blender/Python/exporter/
@@ -516,7 +638,7 @@ package/version/hash, phân loại bug/capability/perf/unknown; coordinator ghi
 change request ở ĐÚNG đoạn GT/mục2/TQ/TX, tăng revision và package version.
 Không xóa evidence bản accepted cũ hoặc tạo GT ID trùng để “tick lại”. Release
 mới chạy regression affected capabilities+install/rollback+consumer contract,
-2critics cho mutation/security, giữ last-good package đến khi đủ evidence.
+2critics cho mọi release package thay đổi, giữ last-good package đến khi đủ evidence.
 Consumer upgrade explicit lock diff; project khác chỉ nhận sau owner grant.
 Không phá compatible client đang dùng hoặc silently auto-upgrade global Godot.
 
@@ -662,8 +784,8 @@ Không tạo automation/watchdog/heartbeat chạy về sau trong lượt plan n�
 
 9.1 Nguồn công khai và mức tin cậy
 
-Research/critic dùng Cursor đúng model, ngày08-09-2026. Các trang dưới là
-nguồn kỹ thuật/reference đã được các lượt Cursor đọc (trừ ghi rõ thất bại);
+Research notes/critic dùng Cursor đúng model; coordinator đối chiếu nguồn
+official ngày08–09/09/2026. Danh mục dưới ghi nguồn kỹ thuật/reference;
 nguồn hỗ trợ thiết kế, không benchmark dự án. /stable, /latest, /current là
 URL động; khi implementation dùng docs đúng version đã khóa. Giá/cấu hình
 nhà cung cấp/rights dataset cụ thể chưa được xác minh nên không có báo giá.
@@ -696,86 +818,42 @@ S13 https://docs.godotengine.org/en/stable/tutorials/scripting/cpp/about_godot_c
   Extension path nghiên cứu; API/ABI/version cần test trước dùng, không fork now.
 
 
-Nguồn trên được các Cursor researcher lượt08-09 đọc trước khi tách; lượt tách
-không tự thực hiện research bằng model khác. Chưa cài/chạy mới từ plan.
-Mọi pin/API phải kiểm lại đúng version ở GT-01/04/08; URL stable/current động
-không là lock. Blender threading/context và glTF constraints thành test TQ,
-không lấy documentation thay actual app evidence. Không khẳng định Godot
-stock là tốt nhất mọi game hoặc fork chắc chắn gây chậm.
+S14 https://www.rfc-editor.org/rfc/rfc8785.html
+  JCS hỗ trợ canonical JSON; project phải test numeric/Unicode contract riêng.
+S15 https://theupdateframework.github.io/specification/latest/
+  Trust/update threats; test key local không phải production release signature.
+S16 https://www.khronos.org/gltf/
+  Asset interchange và validation; hợp lệ glTF không bảo đảm look/perf Godot.
+S17 https://developer.android.com/guide/practices/page-sizes
+  Android native libs/page-size test; store requirements kiểm lại trước publish.
+
+Nguồn official đã được coordinator đối chiếu 08–09/09; các URL động không là
+lock. Researcher cũ research.host.json timeout/exit1: research.md chỉ là gợi ý
+chưa hoàn tất, không critic hay runtime acceptance. Nguồn/API chưa đọc lại đúng
+pin ghi UNVERIFIED trước implementation. Không cài binary trong lượt review.
 
 9.2 Trạng thái thiết kế và bàn giao
 PLAN_DESIGN_REVIEW=SEE_EXACT_HASH_REPORT
 Review hiện hành:
 ./reviews/20260908-r3/REVIEW-RESULT.md
-Nguồn nghiên cứu/review lịch sử:
-File gộp lịch sử: `./8-9-hh-studio-godot-blender-hh-world-plan.txt` (chỉ đọc, không có hiệu lực và không phải dependency).
-Đây là evidence/lịch sử, không plan thứ ba. U1 hai critics REVISE, coordinator
-đã sửa U2. U2 chưa được chấp thuận độc lập vì Cursor báo hết usage. Bản tách
-S2 là bản tách công cụ có dependencies/ownership riêng; verdict trước không chứng nhận S2;
-report phải khớp hash bộ công cụ S2. Static checks không critic/runtime acceptance.
+File gộp cũ chỉ lịch sử, không dependency hay bảng tiến độ thứ ba. S4 tích hợp
+contract S3 vào đúng mục2/GT/TQ/TX, bỏ mâu thuẫn routing, pin, package trust và
+consumer vòng. S5 sửa closure theo owner WP, Android hard gate và script operation.
+Verdict các revision trước không chứng nhận S5. Report phải có đúng hash
+của hai plan; static PASS không thay hai critic/runtime/human.
 
-Thay đổi S2: theo owner chỉ2TXT, bỏ việc bắt tool chờ gameplay; dependency một chiều GT-10→H2-P0-01 vẫn giữ, tool v0.1 nghiệm thu
-trên actual fixture; game chỉ consume/test consumer. Không dựng engine custom
-lõi hay platform general-purpose trước game. Old active masters thành lịch sử.
-TQ/TX/GT nằm trọn file này; game/server economics nằm plan2. Không sửa VF.
-
-Bàn giao doc: bảng10GT trước nội dung,10spec có ALLOWED/BUILD/VERIFY/DoD,
-DAG10GT không edge đếnH2; crosslink tới game tồn tại; TQ00–08/TX01–14 đủ,
-END/hash/revision đầy đủ, không tick tiến độ từ việc viết tài liệu.
-Bàn giao implementation tương lai: package fixture ACCEPTED chưa là game
-ACCEPTED; maintainer chỉ claim capability đã test trên client/version thực.
-Không bảo đảm hết lỗi hiếm hay mọi agent dùng được chỉ nhờ plan dài.
+Bàn giao: 10GT/10spec, DAG một chiều GT-10→game, TQ00–08/TX01–18, source scope
+và verify đầy đủ. PLAN_ONLY và tất cả PLANNED vẫn giữ; chưa triển khai từ review.
+Snapshot/diff/freeze/validator/report là evidence dưới reviews, không nguồn WP.
+Base commit chỉ provenance: cả root HH3D-3 đang untracked nên source hash từng
+file mới xác định nội dung; không coi Git HEAD là bản freeze của các plan.
 
 Từ vựng: WP=công việc; DoD=điều kiện xong; fixture=dự án mẫu để kiểm công cụ;
 lease=quyền ghi tạm; fencing=chặn writer cũ; hash=dấu nhận dạng nội dung;
 readback=đọc lại state thật; GLB=artifact3D; bake=chuyển hiệu ứng DCC sang asset;
 CCU=người online cùng lúc trong game, không số agent phát triển game.
 
-10. RÀ SOÁT BỔ SUNG S3 — ĐIỀU KIỆN ĐỂ CÓ THỂ PUBLIC
 
-S3 khóa thêm các điểm thường bị bỏ sót khi từ fixture chuyển sang sản phẩm:
-- Command envelope phải canonicalize JSON (UTF-8, key order, integer/string và
-  duplicate-key reject) trước payload_hash; giới hạn tổng bytes sau giải nén,
-  số phần tử, độ sâu, thời gian CPU và kết quả đọc. Parser không được khác nhau
-  giữa Python/Node/Godot. Target path được kiểm lại ngay trước open/write để
-  tránh TOCTOU; cấm hard-link/reparse ngoài root và cấm symlink trong release.
-- Loopback token chỉ bảo vệ một phần: mọi endpoint phải có origin/host policy,
-  chống DNS rebinding/SSRF, rate limit theo session+IP, timeout và body limit;
-  log redaction phải có test bằng token, cookie, Authorization, đường dẫn và
-  payload lỗi. Cùng máy không phải ranh giới tin cậy giữa các user.
-- Package cài đặt phải có chữ ký hoặc trust root được pin, key rotation/revocation,
-  minimum-version chống rollback và staged activation. Hash một mình không chứng
-  minh nguồn nếu manifest không được xác thực. Ghi rõ trường hợp dev offline;
-  không biến dev bypass thành release capability.
-- GLB/texture/shader/animation được parse trong process giới hạn tài nguyên,
-  không dereference URI ngoài allowlist; archive ratio, file count, dimensions,
-  bones, clips, material/shader complexity và decompression time đều có cap.
-  Import cache là disposable; release chỉ nhận artifact đã hash và readback.
-- Mỗi operation có dry-run/diff preview, affected-consumer list và undo/recovery
-  path. UI phải hiển thị queued/running/draining/unknown, progress có nhịp hoặc
-  “đang không xác định”, nút Stop không giả hủy. Pagination/field allowlist
-  ngăn inspector làm treo UI khi scene lớn; keyboard focus và lỗi có next action.
-  Đây là yêu cầu UX/conformance, không suy ra từ API tồn tại.
-- Package update phải test downgrade bị chặn đúng policy, migration backup,
-  revocation, mất mạng giữa download/activation và recovery về last-good. Patch
-  bảo mật có expiry/upgrade window; không silent auto-upgrade engine/addon.
-
-Các điều kiện này được phân công: GT-02/TQ02/TX03 (canonical parser, SSRF,
-redaction), GT-05/TQ05/TX04/TX08 (asset bombs), GT-07/TQ07/TX09/TX11 (atomic
-activation), GT-08/TQ08/TX10 (signed package/rollback), GT-06/TQ06/TX13 (UX
-states), GT-09 (cross-client conformance), GT-10 (migration/support artifact).
-Mỗi test ghi input size, limit, elapsed, exit và expected reject/commit; không
-chấp nhận một “security review” chung thay cho case thực.
-
-10.1 Cổng bảo trì dài hạn
-
-Trước mỗi toolchain update phải chạy compatibility matrix cũ/mới trên fixture,
-reproduce import/export hashes hoặc semantic diff, migration/rollback, then
-consumer smoke. Giữ một last-good package và changelog không xóa evidence.
-Dependency/CVE scan, SBOM, license/attribution và expiry của certificate/key
-được kiểm trong CI; artifact hết hạn bị chặn trước publish. Metrics có baseline
-và phân vị; không dùng median để che p99/rare crash. Bản update chỉ là CANDIDATE
-cho đến khi hai critic đọc cùng source/package hash.
 
 END_OF_TOOLS_PLAN
-DATE=2026-09-08 Asia/Saigon
+DATE=2026-09-09 Asia/Saigon
