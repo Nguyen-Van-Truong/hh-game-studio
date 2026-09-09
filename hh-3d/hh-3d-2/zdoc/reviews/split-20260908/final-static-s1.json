@@ -1,0 +1,42 @@
+{
+  "kind": "STATIC_DOCUMENT_VALIDATION_NOT_RUNTIME",
+  "checked_at": "2026-09-08T21:58:56.3989163+07:00",
+  "manifest_sha256": "458124251764e1cabc6dcf540579fdd74c66ce01065788c4afd06c3c36b99336",
+  "source_files": 18,
+  "plans": [
+    {
+      "path": "../../../hoan-hao/zdoc/8-9-godot-blender-agent-studio-plan.txt",
+      "wp_count": 10,
+      "spec_count": 10,
+      "exception_count": 14,
+      "bytes": 50802,
+      "sha256": "ce38ae51c466a009be49dcc34c81d334ae11088fd8af9240c16e5492ee6afab7"
+    },
+    {
+      "path": "../../../hoan-hao/zdoc/8-9-hh-world-gameplay-viet-nam-plan.txt",
+      "wp_count": 32,
+      "spec_count": 32,
+      "exception_count": 36,
+      "bytes": 123086,
+      "sha256": "83082e78a51d8748575b2a11678c9d42aec37a4942d73e593b2a1600470b2f31"
+    }
+  ],
+  "total_wp": 42,
+  "dependencies": 45,
+  "cross_plan_dependency": [
+    "GT-10 -> H2-P0-01"
+  ],
+  "checked_local_links": 51,
+  "arithmetic": [
+    13.0,
+    16.0,
+    91.0,
+    273.0,
+    5.0,
+    8.0,
+    77.76,
+    15.552
+  ],
+  "errors": [],
+  "result": "PASS_STATIC_ONLY"
+}

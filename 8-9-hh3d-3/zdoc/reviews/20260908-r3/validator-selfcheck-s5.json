@@ -1,0 +1,48 @@
+{
+  "kind": "VALIDATOR_NEGATIVE_SELF_CHECK_IN_MEMORY",
+  "source_modified": false,
+  "cases": [
+    {
+      "case": "cycle",
+      "expected_rejection": [
+        "DAG cycle at GT-01"
+      ],
+      "result": "PASS"
+    },
+    {
+      "case": "future_network_gate",
+      "expected_rejection": [
+        "H2-P1-02: explicit network slice"
+      ],
+      "result": "PASS"
+    },
+    {
+      "case": "solo_online_closure",
+      "expected_rejection": [
+        "Solo EX44 closure cannot silently include online lifecycle"
+      ],
+      "result": "PASS"
+    },
+    {
+      "case": "missing_spec",
+      "expected_rejection": [
+        "8-9-godot-blender-agent-studio-plan.txt: row/spec bijection and order"
+      ],
+      "result": "PASS"
+    },
+    {
+      "case": "bad_sizing",
+      "expected_rejection": [
+        "sizing example peak_TB"
+      ],
+      "result": "PASS"
+    },
+    {
+      "case": "missing_link",
+      "expected_rejection": [
+        "8-9-godot-blender-agent-studio-plan.txt: broken local link reviews/20260908-r3/not-existing-report.md"
+      ],
+      "result": "PASS"
+    }
+  ]
+}

@@ -1,0 +1,174 @@
+--- S4/8-9-godot-blender-agent-studio-plan.txt
++++ S5/8-9-godot-blender-agent-studio-plan.txt
+@@ -1,5 +1,5 @@
+ HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
+-Ngày 09-09-2026, Asia/Saigon | Revision S4 | CHỈ LẬP KẾ HOẠCH
++Ngày 09-09-2026, Asia/Saigon | Revision S5 | CHỈ LẬP KẾ HOẠCH
+ 
+ BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
+ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
+@@ -21,7 +21,7 @@
+ HUMAN_ACCEPTANCE=NONE
+ PLAN_SCOPE=8-9-hh3d-3/studio
+ PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
+-PLAN_REVISION=S4
++PLAN_REVISION=S5
+ REVIEW_BASE_COMMIT=5d19ba66d4476928e564f165b6396743dccde620
+ HISTORICAL_STUDIO_COMMIT=3cc7a85f730c99963a5a64079a0e02dc20edbd40
+ 
+@@ -189,7 +189,14 @@
+ scene reload: resolve lại theo stable ID/revision. EditorUndoRedoManager tạo
+ do/undo đầy đủ; multi-file save không tự atomic nhờ commit_action. Save staged
+ outputs + journal + verified publish/recovery theo2.5. Không raw-write scene
+-đang mở. Script/code text edits tách scene writer, parse/import trước preview.
++đang mở. Script/code text edits dùng typed operation riêng, không raw shell/eval.
++GT-03 sở hữu script_text.replace: allowlist .gd, expected revision, bounded
++UTF-8 patch/full text, preview diff, lease/checkpoint và staged parse/import
++trong disposable editor sandbox (kể cả @tool/import hook), không live editor.
++Reject syntax/type/import error trước activation; reload/readback đúng script
++hash rồi mới ACK. Chạy script mới chỉ trong disposable Play sandbox đã cấp
++capability; validator không cấp thêm quyền. Script và scene cùng đổi dùng
++cùng project revision/publish journal, crash không để active nửa cũ nửa mới.
+ 
+ Blender UI: bpy mutation trên main thread qua timer/operator/queue được kiểm;
+ không network thread gọi bpy. Host network chạy process ngoài Blender; UI
+@@ -345,9 +352,11 @@
+ fixture scene trên snapshot. Envelope studio/protocol/ chỉ đọc từ GT-02.
+ BUILD: EditorPlugin/main-thread typed inspect/create/change/delete approved
+ nodes/resources, stable IDs/revision, UndoRedo/checkpoint, Godot-only staged
+-save/journal/recovery/readback. Editor và Play process riêng.
++save/journal/recovery/readback; script_text.replace theo mục2.3 (catalog/schema,
++parse/import, cùng revision và journal với scene). Editor và Play process riêng.
+ VERIFY: actual editor before/after/undo/redo/reopen; stale ID/lease, owner edit,
+-invalid type/range/NaN/path; crash save/response lost; partial output không ACK.
++invalid type/range/NaN/path; invalid .gd/oversized patch/stale script/parse failure;
++scene+script crash save/response lost; partial output không ACK hoặc chạy preview.
+ DoD: TQ03 + TX02/03/06/09/13, 2 critics. Real-input/pause/capture thuộc GT-06,
+ cross-app activation GT-07; không tính cùng deliverable hai lần.
+ 
+@@ -402,7 +411,7 @@
+ rollback không đè manual edit mới; logs state rõ không lộ token.
+ 
+ ### GT-08 — CI/import/export matrix
+-CONTRACT/VERIFY: mục2.6 và TX16; test signer/local trusted package; Android ABI/native libs 4 KB/16 KB compatibility. Emulator chỉ dùng page-size/ABI proof, không GPU acceptance.
++CONTRACT/VERIFY: mục2.6 và TX16-C; test signer/local trusted fixture; Android ABI/native libs 4 KB/16 KB compatibility. Emulator chỉ dùng page-size/ABI proof, không GPU acceptance.
+ ALLOWED: studio/build/, studio/tests/ci/, studio/toolchain.lock.json phiên
+ bản đã review, fixture build profiles. Không game/tools hoặc contracts game.
+ BUILD: fresh checkout + blobs, trusted source closure, hash-keyed cache,
+@@ -410,25 +419,32 @@
+ VERIFY: missing LFS/blob/texture/wrong template/cache poison/unsupported addon
+ fail. Launch Windows+Linux headless; Android install/launch fixture trên ít
+ nhất một máy thật hỗ trợ đã ghi SKU/OS. Không emulator thay GPU proof.
+-DoD: TQ08/TX08/10/12,2 critics; build recipe/artifact hashes/exits/limits.
+-Thiếu máy Android giữ target GAP, làm task local độc lập; không ACCEPT GT-08
+-và không bàn giao đầy đủ GT-10 cho game Android cho đến target proof đủ.
++DoD: TQ08-B/TX16-C/TX08/10 và TX12 pin/ABI,2 critics; build recipe/artifact hashes/exits/limits.
++Android máy thật là hard gate của GT-08 cho toàn gói v0.1 (Windows/Android/
++Linux headless). Thiếu máy ghi GAP, có thể chuẩn bị/test phần độc lập nhưng
++không ACCEPT GT-08, GT-09, GT-10 hoặc dispatch source H2-P0-01. Không có
++desktop-only ACCEPT hay partial package unlock ngầm; cần bố trí thiết bị.
++TQ08-B/TX16-C là closure GT-08; install/upgrade consumer closure ở GT-10.
+ 
+ ### GT-09 — Agent conformance toàn tuyến
+-CONTRACT/VERIFY: mọi TX01–TX18, prompt-injection/capability/UX trên đúng Cursor client; độc lập fixture, không chờ game.
++CONTRACT/VERIFY: TX01–TX18 trong scope GT-01…GT-09 đã có; riêng TX16-C/TQ08-B
++chỉ producer verifier/fixture build, TX16-I/TQ08-I install-upgrade thuộc GT-10.
++Prompt-injection/capability/UX trên đúng Cursor client; độc lập fixture, không chờ game.
+ ALLOWED: studio/tests/conformance/, isolated fixture clones, evidence.
+ BUILD: brief → Blender sửa asset → GLB → Godot scene → actual play/input →
+-observe lỗi seeded → agent sửa → replay → checkpoint; không cần game H2.
++observe lỗi scene/resource/script seeded → agent sửa bằng catalog GT-03 →
++replay → checkpoint; không cần game H2 và không shell edit ngoài typed operation.
+ VERIFY: Cursor đúng model bằng adapter được cấp, operations có command IDs,
+ pre/postcondition; reconnect/retry/context reset không mutation trùng; owner
+ edit giữa lease và hai job source khác chạy song song. Protocol client riêng
+ kiểm unsupported client version; không giả model khác đã chạy conformance.
+-DoD: TQ02–TQ08/TX01–TX18,2 critics, trace/source before-after+video/readback;
++DoD: TQ02–TQ07 + TQ08-B/TX01–TX18 theo scope CONTRACT trên,2 critics,
++trace/source before-after+video/readback;
+ không người sửa ẩn, không chỉ banner hoặc direct state injection. Capability
+ matrix chỉ đánh SUPPORTED đúng client/model/host/version đã kiểm thực tế.
+ 
+ ### GT-10 — Package và handoff
+-CONTRACT/VERIFY: mục2.6/TX16 install/upgrade/revocation/security-floor/local signer, compatibility và support runbook.
++CONTRACT/VERIFY: mục2.6/TX16-I install/upgrade/revocation/security-floor/local signer, compatibility và support runbook.
+ ALLOWED: studio/package/, local install/update scripts, compatibility lock,
+ studio/evidence/. Không ghi consumer project chưa được cấp scope.
+ BUILD: package v0.1 contract HH-STUDIO-0.1 (mục6), known limits/runbook/help
+@@ -436,7 +452,9 @@
+ VERIFY: install vào clean fixture copy, source/save cũ giữ nguyên, upgrade/
+ rollback old/new state compatibility, uninstall addon không xóa art/game;
+ one roundtrip+play sau update. Chỉ ký bằng test trust key local; không public upload/production sign/install scope khác.
+-DoD: TQ08/TX10/12/14,2 critics; hash/package/model/matrix/handoff đầy đủ.
++DoD: TQ08-I/TX16-I + TX10/12/14,2 critics; hash/package/model/matrix/handoff đầy đủ.
++Dependency GT-08/09 ACCEPTED gồm physical Android fixture; manifest ghi đúng
++supported_targets Windows/Android/Linux-headless, không partial ACCEPT ngầm.
+ Không cần closed alpha của game và không claim tool sửa được mọi thể loại.
+ 4. TQ — GATE CHẤT LƯỢNG CÔNG CỤ (MỤC TIÊU, CHƯA CÓ KẾT QUẢ)
+ 
+@@ -493,11 +511,15 @@
+ đè edit. Host/fsync/diskfull fail không trả committed khi không đủ proof.
+ 2writers/lease expiry/FIFO/cancel/jobID PIDreuse/queue flood phải tái hiện.
+ 
+-TQ08: clean Win+Android export, Linux headless fixture launch, old/new addon
+-install/rollback/uninstall trên copy; không global env/token/cache trong artifact.
+-Windows editor/Blender và Android runtime được kiểm riêng; Android không cần
+-Blender. Pin docs/recipe/limits, không tự tải latest khi thiếu artifact.
+-Package version/manifest/schema/tool hashes phải khớp runtime báo đọc lại.
++TQ08: có hai slice nghiệm thu theo thứ tự producer rồi consumer:
++TQ08-B (GT-08, regression GT-09): clean Win+Android export, Linux headless
++fixture launch, hash/build verifier với local test signer. Windows editor/
++Blender và Android runtime kiểm riêng; Android install/launch trên máy thật
++là bắt buộc. Không global env/token/cache trong artifact; pin recipe/limits,
++không tự tải latest. Producer fixture không đòi updater chưa xây ở GT-10.
++TQ08-I (GT-10): package cài old/new addon trên clean copy, upgrade/rollback/
++uninstall và play readback; version/manifest/schema/tool hashes khớp runtime.
++GT-10 tiêu thụ TQ08-B đã ACCEPTED và thực thi TQ08-I; không vòng dependency.
+ 
+ Hiệu năng UX công cụ dự kiến trên workstation ghi tạiGT-01:
+ - Editor UI không bị blocking network/job; command validation/queue admission
+@@ -553,6 +575,8 @@
+ Persist failed không ACK; bounded queue/log/deadletter, retry-after; tombstone
+ bao phủ retry horizon và cùng ID không thực thi lần nữa. Stop priority riêng.
+ TX12 — Upgrade/downgrade/uninstall/ABI; GT-01/GT-08/GT-10.
++GT-01 khóa candidate/cache isolation; GT-08 ABI/template/build fixture;
++GT-10 mới nghiệm thu installer/migration/rollback/uninstall toàn gói dưới đây.
+ Copy project/cache isolated, oldsave/source giữ nguyên; incompatible schema
+ reject hoặc migrate reviewed; uninstall không xóa asset. Không mở editor cũ
+ vào cache mới rồi xóa lỗi. Engine core changes ngoài scope phải ADR/owner.
+@@ -571,9 +595,11 @@
+ HTTP bad Host/Origin, malformed token và redirect private endpoint bị reject,
+ không mutation ngoài scope hoặc lộ secret. Safe-open unavailable là GAP.
+ TX16 — Supply chain/expired key/downgrade; GT-08/GT-10.
+-Ký local fixture, tamper/truncate/revoke/mix version/target; verify trước unpack.
+-Rollback chỉ về bản còn trusted/compatible; key mất hoặc expired metadata có
+-recovery UX, không tự bypass security floor hay xóa source người dùng.
++TX16-C (GT-08/09): local fixture signer + verifier library; tamper/truncate/
++revoke/mix version/target/expiry/security floor reject trước unpack vào staging.
++TX16-I (GT-10): installer/update dùng verifier đã kiểm; rollback chỉ về bản còn
++trusted/compatible; key mất hoặc expired metadata có recovery UX, không bypass
++security floor/xóa source. Producer verifier không đòi installer consumer trước GT-10.
+ TX17 — Prompt injection/tool output/source code privilege; GT-02/GT-09.
+ Seed instructions độc hại trong asset metadata/README/log/URL; agent không đổi
+ root/model/quyền, không exfiltrate hay chạy eval theo dữ liệu. Capability token
+@@ -758,8 +784,8 @@
+ 
+ 9.1 Nguồn công khai và mức tin cậy
+ 
+-Research/critic dùng Cursor đúng model, ngày08-09-2026. Các trang dưới là
+-nguồn kỹ thuật/reference đã được các lượt Cursor đọc (trừ ghi rõ thất bại);
++Research notes/critic dùng Cursor đúng model; coordinator đối chiếu nguồn
++official ngày08–09/09/2026. Danh mục dưới ghi nguồn kỹ thuật/reference;
+ nguồn hỗ trợ thiết kế, không benchmark dự án. /stable, /latest, /current là
+ URL động; khi implementation dùng docs đúng version đã khóa. Giá/cấu hình
+ nhà cung cấp/rights dataset cụ thể chưa được xác minh nên không có báo giá.
+@@ -812,7 +838,8 @@
+ ./reviews/20260908-r3/REVIEW-RESULT.md
+ File gộp cũ chỉ lịch sử, không dependency hay bảng tiến độ thứ ba. S4 tích hợp
+ contract S3 vào đúng mục2/GT/TQ/TX, bỏ mâu thuẫn routing, pin, package trust và
+-consumer vòng. Verdict S1/S2/S3 không chứng nhận S4. Report phải có đúng hash
++consumer vòng. S5 sửa closure theo owner WP, Android hard gate và script operation.
++Verdict các revision trước không chứng nhận S5. Report phải có đúng hash
+ của hai plan; static PASS không thay hai critic/runtime/human.
+ 
+ Bàn giao: 10GT/10spec, DAG một chiều GT-10→game, TQ00–08/TX01–18, source scope

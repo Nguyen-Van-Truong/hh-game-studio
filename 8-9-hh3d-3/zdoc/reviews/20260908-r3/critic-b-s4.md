@@ -1,0 +1,55 @@
+I'll independently audit S4 as critic B: read the two live plans and freeze file, verify the stated hashes, then check design coverage without consulting other critics.The tools plan is in; I'll read the game plan in sections and locate economy, fencing, admission, network, scale, UX, geo, and handoff contracts.Next I'll read economy, durability, scale, WP specs, and exception sections to check ownership and contradictions.I'll verify the freeze hashes and one PostgreSQL durability detail the plans rely on, without treating other reviews as evidence.**PLAN_DESIGN critic B** · MODEL=`cursor-grok-4.6-xhigh-fast` · REVISION=S4 · PROOF_CLASS=PLAN_DESIGN only. No human/runtime/scale PASS.
+
+**Hashes** (from `zdoc/reviews/20260908-r3/freeze-s4.json`; both TXT `PLAN_REVISION=S4`; on-disk SHA256 not recomputed):
+- Tools=`f055d2773b01bf6f89cb8a453ebc159af227d7b2158bcc51ad8945d32b39c715` (58852 B)
+- Game=`48998bde70c53e8e685113f447a3b5b6a6f9bf38a62e1eedb4e218820c5476a4` (141756 B)
+- Aggregate=`f9d8a58775db749bd7cfa554f2073d86c099738502a929f42ce5ba50d28bdfae`
+
+**Read coverage:** freeze-s4.json entire; tools `zdoc/8-9-godot-blender-agent-studio-plan.txt` L1–833 (`END_OF_TOOLS_PLAN`); game `zdoc/8-9-hh-world-gameplay-viet-nam-plan.txt` L1–1967 (`END_OF_GAME_PLAN`). No other critic verdict; no historical plan as scope. PG primary-doc fetch rejected; no extra web used.
+
+**Checked and coherent enough (not grounds to fail):** one `economic_realm_id` + one PG writer (game L432–436); command uniqueness `(realm,account,command_id)` and no date-in-UNIQUE replay (L440–449); award `COMMITTED` = one TX for ledger/mailbox/outbox (L522–526); purchase same-TX (L386–389); UNKNOWN + DB-D2 lookup barrier (L411–415, L591–604); delete-vs-trade serialize + tombstone-before-read (L764–768, L633–637, EX32/EX37); PITR cannot rebuild from key-only (L626–631, EX31); admission CAS/takeover/rebind-at-cap32 (L312–367, EX01); AOI AND + no wallet in avatar state (L369–378, EX43); OIDC PKCE / fail-closed UDP (L329–337, L291–301); `cpu_ms_tick`≠wall, `mem_room`, kB=1000 vs GiB=2^30 (L1604–1663); cardinality ladder vs CCU with owner WPs P3-01/P6-01/P8-02 (L467–477); a11y/OS/ABI owners P0-02/P5-02/EX27/EX39; geo rights P7-01/G06/EX34; release N-only + security-floor (L784–793, P8-03/P9); GT-10→H2-P0-01 one-way, HH-STUDIO-0.1 aligned (tools L591–608, game L97–114). Future 100M/CCU profiles have owner WPs + pre-consumer locks (P0-02/P3-01/P3-02). PLAN_ONLY: no runtime proof required.
+
+---
+
+### BLOCKING
+
+**B1. EX44 is in H2-P2-03 acceptance closure but is Online-only.**  
+Game L1096 points P2-03 CONTRACT/VERIFY at **EX44**; L1096 also says Solo needs no Online DB. EX44 L1551–1554 owns house-sleep, starter-kit (Online grant, L210), and activity balancing, listing **P2-03**/P3-04/P4-01/P4-03/P5-01. Q00 L811–813 makes “Q/EX the spec points to” the closure.  
+**Failure:** P2-03 critic demands house process-sleep + starter grant (needs P3/P4); or implementer ignores EX44 and later WPs assume it already passed. Opposite of EX09 L1404–1407, which splits Solo vs Online.  
+**Minimal fix:** Split EX44: Solo activity/quota/balancing → P2-03/P5-01 only; starter-kit → P3-04; house sleep/owner-leave/wake → P4-03 (P4-01 caps only). Remove EX44 from P2-03 CONTRACT (keep P08 + 3.5 + EX09 Solo).
+
+**B2. GT-08 ACCEPT vs GT-10 DAG vs “partial Android handoff”.**  
+Tools table L8–10: GT-09←GT-08, GT-10←GT-09. L414–415: missing Android ⇒ do not ACCEPT GT-08 **and** do not fully hand off GT-10 for Android; L414 also “local độc lập”. Game L6/L55/L1729: H2-P0-01 only after GT-10 ACCEPTED; L1028–1030 still allows game local bootstrap if Android is missing.  
+**Failure:** Worker A never ACCEPTs GT-08 ⇒ GT-10/H2 never start (even Win Solo). Worker B ACCEPTs GT-08/GT-10 desktop-only using “local độc lập” / “không bàn giao đầy đủ … Android”. Game `CURRENT_VALID_WP=H2-P0-01` (L39) looks dispatchable while tools `CURRENT_VALID_WP=GT-01` (tools L17).  
+**Minimal fix:** In GT-08/GT-10/H2-P0-01: Win+Linux-headless VERIFY may ACCEPT with `android_runtime=GAP` recorded on the package; GT-10 manifest `supported_targets`; H2-P0-01 may consume that subset; H2-P1-03/P5-03 stay blocked on Android. Or state explicitly that one physical Android is a hard gate for **all** GT-08…H2-P0-01, and mark game CURRENT as `NOT_DISPATCHABLE until GT-10 ACCEPTED`.
+
+---
+
+### NONBLOCKING
+
+**N1. House sleep has shutdown, not a named single-flight wake.** Game L203–207, L1182–1188, EX44 L1552–1553: owner-leave → lobby TTL → idle-stop process; shops stay as rows. Visit/admission/lease exist (L342–367, L1184–1188, “10 enter/leave” L1188) but two visitors to a sleeping house are not told “one fenced spawn, second joins same lease, spawn fail stays UNKNOWN, no second dedicated process.”  
+**Fix:** One EX44/P4-03 VERIFY sentence: wake = existing room-start+lease; dual-start uses EX02 fencing.
+
+**N2. Award wording can be read as outbox-before-ledger.** L390–391 “pending/outbox … rồi commit reward” vs L522–526 one COMMITTED TX.  
+**Fix:** Persist RESULT_RECORDED; write outbox+ledger only inside the COMMITTED TX.
+
+**N3. Network units.** Q04-C L938 `KB/s` vs L1662–1663 `kB=1000B` and the 0.96 MB/s example.  
+**Fix:** Use `kB/s` (1000) in Q04-C.
+
+**N4. EX41 lists P1-02 for “memory 0/8/32 và packed node” (L1539–1542) but P1-02 is a 2-client spike (L1053–1062).**  
+**Fix:** Per-WP outcomes: P1-02 empty+2-client; P6-01 0/8/32; P8-02 packed.
+
+**N5. Game handoff template omits `OTHER_PLAN` (tools L674 vs game L1765)** so H2-P0-01 may not open the tools TXT.  
+**Fix:** Copy `OTHER_PLAN` for intake/handoff WPs.
+
+**N6. Two “sleep” words:** AOI actor sleep (L425) vs house process idle-stop (L206, EX44).  
+**Fix:** Distinct terms (`actor_lod_sleep` vs `house_process_idle_stop`).
+
+**N7. P3-02 claims to lock MTU before consumers (L1556) after P1-02 already used MTU fixtures (L1054).**  
+**Fix:** P1-02 limits disposable/non-authoritative; P3-02 is the lock.
+
+---
+
+**VERDICT=REVISE**
+
+S4 economy/protection/admission/AOI/auth/units/cardinality/UX/geo/release are specified with owners and do not need invented infinite requirements. Two closure bugs remain: EX44 makes Solo P2-03 accept Online sleep/starter, and GT-08/GT-10/H2-P0-01 disagree on whether Android GAP blocks the whole handoff. Coordinator must apply B1+B2 (and may take N1–N2 in the same edit). This is not human review, not runtime PASS, not scale proof.

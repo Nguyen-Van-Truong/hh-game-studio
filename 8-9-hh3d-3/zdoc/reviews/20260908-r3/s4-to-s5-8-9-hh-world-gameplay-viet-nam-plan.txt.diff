@@ -1,0 +1,373 @@
+--- S4/8-9-hh-world-gameplay-viet-nam-plan.txt
++++ S5/8-9-hh-world-gameplay-viet-nam-plan.txt
+@@ -1,5 +1,5 @@
+ HH WORLD — PLAN 2/2: GAMEPLAY, SOCIAL MULTIPLAYER, VIỆT NAM
+-Ngày 09-09-2026, Asia/Saigon | Revision S4 | CHỈ LẬP KẾ HOẠCH
++Ngày 09-09-2026, Asia/Saigon | Revision S5 | CHỈ LẬP KẾ HOẠCH
+ 
+ BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO GAME
+ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
+@@ -37,13 +37,14 @@
+ 32 | H2-P9-02 | Quan sát vận hành và quyết định mở rộng | H2-P9-01 | PLANNED
+ 
+ CURRENT_VALID_WP=H2-P0-01
++DISPATCHABLE=NO_UNTIL_GT10_ACCEPTED_AND_OWNER_IMPLEMENTATION_AUTHORIZATION
+ EXECUTION_AUTHORIZATION=PLAN_ONLY
+ IMPLEMENTATION=NOT_STARTED
+ RUNTIME_ACCEPTANCE=NONE
+ HUMAN_ACCEPTANCE=NONE
+ PLAN_SCOPE=8-9-hh3d-3/game-and-services
+ PLAN_ROLE=GAME_SOURCE_OF_PROGRESS
+-PLAN_REVISION=S4
++PLAN_REVISION=S5
+ REVIEW_BASE_COMMIT=5d19ba66d4476928e564f165b6396743dccde620
+ HISTORICAL_STUDIO_COMMIT=3cc7a85f730c99963a5a64079a0e02dc20edbd40
+ HISTORICAL_SOCIAL_COMMIT=71629923641178171ec4339143b3cf1472618adc
+@@ -52,7 +53,9 @@
+ 
+ Đây là plan GAME, một trong đúng hai TXT có hiệu lực. Plan công cụ:
+ ./8-9-godot-blender-agent-studio-plan.txt
+-GT-10 ở plan đó phải bàn giao gói v0.1 đã kiểm trước H2-P0-01. Công cụ chỉ
++GT-10 phải ACCEPTED và bàn giao gói v0.1 đã kiểm trước H2-P0-01. GT-08 physical
++Android là hard gate toàn gói; không desktop-only/partial ACCEPT. CURRENT_VALID_WP
++chỉ hàng đầu chưa nghiệm thu, không tự cấp quyền dispatch. Công cụ chỉ
+ kiểm trên fixture độc lập; game kiểm lại trên workload/sản phẩm thật, không
+ lấy tool conformance làm bằng chứng fun/FPS/multiplayer/kinh tế. Công cụ không
+ chờ game, game không yêu cầu fork engine trước gameplay. Hợp đồng nhận gói ở
+@@ -202,8 +205,15 @@
+ pending/reconnect hold; không phải 8 khách cộng chủ. Party cap=4, có thể mời
+ thêm party khác nếu đủ chỗ và quyền. Chủ rời nhà/logout: v0.1 đóng visit mới,
+ thông báo khách và đưa về lobby qua handoff có deadline profile; layout/items
+-đã commit vẫn giữ. Khi không còn active/hold/pending result, flush/readback
+-layout rồi idle timeout kết thúc process. Hàng triệu nhà/quầy offline chỉ là
++đã commit vẫn giữ. Đóng visit hủy pending join/reconnect holds của khách ngay;
++khách còn active chỉ giữ slot đến handoff/TTL. Owner logout/leave chủ động
++release cả hold; owner mất mạng đột ngột mới giữ reconnect hold tối đa30s theo
++router. Hold cũ không mở lại visit đã đóng. Khi không còn active/hold/pending
++result, flush/readback layout rồi house_process_idle_stop sau idle timeout.
++Owner quay lại: wake qua room-start lease/fencing sẵn có, CAS single-flight;
++hai request chỉ tạo một authority, timeout lookup lease/job cùng ID rồi retry,
++không spawn process thứ hai mù. Visit chỉ mở khi owner đã activate trong nhà.
++Hàng triệu nhà/quầy offline chỉ là
+ DB rows/catalog/CDN, không mỗi account giữ một Godot process trong RAM.
+ 
+ Solo first-run không cần mạng; account provider outage vẫn chơi Solo. Chuyển
+@@ -251,7 +261,7 @@
+ dễ dùng ở mức 4/5 trở lên. Đây là gate usability nhỏ, không chứng minh retention.
+ Nếu chưa có đủ người: HUMAN_UNVERIFIED, không đổi thành bot hoặc ký thay.
+ 
+-P08 — Quy tắc gameplay cần khóa trước bulk content (H2-P2-03/P3-03/P5-01)
++## P08 — Quy tắc gameplay cần khóa trước bulk content (H2-P2-03/P3-03/P5-01)
+ 
+ Activity descriptor versioned: input/cue/success/fail/cancel, time window, seed
+ policy, reward distribution/rarity công khai, quota/cooldown, max bundle và
+@@ -388,7 +398,8 @@
+   listing đã khóa item. Purchase rechecks version/price/stock/visibility và
+   ownership trong cùng DB transaction debit/credit/transfer/journal/outbox.
+ - Attempt online đăng ký API durable trước activity bắt đầu. Room result được
+-  ghi API pending/outbox với attempt+room epoch, rồi commit reward transaction.
++  ghi API RESULT_RECORDED với attempt+room epoch; ledger/mailbox và outbox cùng
++  ghi trong transaction chuyển COMMITTED, không phát award event trước TX.
+   Room mất disk trước gửi result: attempt có trạng thái chưa xác nhận, cho chơi
+   lại theo policy không tự mint outcome không tồn tại. Recovery query cùng
+   attempt_id/reservation trước; chưa có result và reservation còn hạn mới được
+@@ -422,7 +433,7 @@
+ process Godot hay một máy giữ tất cả avatar trong RAM.
+ 
+ Room bounded theo cap/AOI. Client chỉ nhận actor gần, bạn bè/party và object
+-đang tương tác; dùng interest tiers, snapshot delta, LOD, actor sleep và pooling.
++đang tương tác; dùng interest tiers, snapshot delta, LOD, actor_lod_sleep và pooling.
+ Router/registry phân room theo region+room_id; admission cap, queue TTL, drain,
+ N+1, reconnect checkpoint/epoch. Không seamless migrate khi chưa proof. Mỗi
+ room worker có memory limit, watchdog và backpressure; không nhồi nhiều room
+@@ -837,15 +848,19 @@
+ closed alpha nếu release scope chưa gồm iOS. Thiếu máy không ngăn test logic,
+ nhưng không được tick gate mobile/release.
+ 
+-Benchmark fixture v1: cùng plaza, GLB/rig/material/animation/hash, camera route,
+-0/8/32 avatar; 64 avatar stress render riêng. Avatar có đi/emote/trang phục,
+-không chỉ cube đứng. Cảnh gồm khu đông, chỗ bị che khuất, UI inventory/shop,
+-chạy/nhảy/quay nhanh, lần đầu activity và vào nhà. Ghi nguồn tạo actor.
++Fixture Q01-B v1 (P1-03): plaza representative + rig/material/animation có
++nguồn từ GT-10/look-dev, clone0/8/32,64 stress render riêng; walk/turn/emote
++loop cơ bản và camera route khu đông/occlusion. Không cube-only. Không cần
++controller sản phẩm, inventory/shop UI, activity hoặc house của P2/P4.
++Fixture Q01-F v1 (P5-03/P8-03): content final, cùng load0/8/32 và64 stress,
++thêm controller chạy/nhảy/quay nhanh, inventory/shop, first activity/vào nhà
++qua route hoàn chỉnh P2/P4. P2-04 chuẩn bị route chức năng, chưa nghiệm thu
++F. Khóa hash/actor source/camera từng fixture; không đánh tráo B thành F.
+ 
+ Release build, đúng renderer, vsync/FPS cap, độ phân giải render và display,
+ quality/DPR, CPU/GPU/driver/RAM, power mode, network, nhiệt và app nền.
+ Mỗi cấu hình 3 run riêng: cold launch có first-use; 60 s warmup + route 180 s;
+-soak 20 phút Android để thấy thermal. Không chỉ đo đứng nhìn trời. Capture
++thermal Android10phút cho B, soak20phút cho F. Không chỉ đo đứng nhìn trời. Capture
+ profiler để chẩn đoán riêng; capture nghiệm thu không bật overlay nặng.
+ Raw frame times theo ms + p50/p95/p99, slowest windows và hitch count.
+ 1% low = 1000 / mean của 1% frame-times lớn nhất; ghi cách tính, không lẫn
+@@ -916,10 +931,21 @@
+ 
+ ### Q04-L — Hai client local thật và authority/cleanup
+ 
+-2 client process thật + 1 server, tách user dirs: A đi/nhảy/emote, B thấy đúng
+-hướng; B tương tác; disconnect A → B hết ghost trong 10 s; logout/block có
+-kết nối → revoke visibility/chat ≤2 s. Duplicate/out-of-order/session cũ
+-không resurrect avatar/item. No source editor writes trong official run.
++Mọi slice dùng2 client process thật +1 server, user dirs riêng; không source
++editor writes trong official run. Q04-L là nhóm, owner nghiệm thu slice sau:
++- Q04-L0 (P1-02): move/turn/emote prototype, B thấy A; disconnect ghost≤10s;
++  stale/duplicate/out-of-order input không resurrect avatar. Không login provider,
++  reward, house, block/chat hoặc controller hoàn chỉnh P2.
++- Q04-L1 (P3-03): activity server authority, spoof/seq/retry/reconcile và
++  RESULT_RECORDED/UNKNOWN với API persistence nền P3-01; consumer receipt
++  contract kiểm bằng test double có nhãn, chưa claim economic commit. Award
++  received thật ở P3-04. Logout session cleanup≤2s; chưa đòi block/chat.
++- Q04-L2 (P4-01): block/permission revoke visibility/direct interaction≤2s,
++  late join/snapshot/cache cùng policy; chưa đòi chat trước P4-04.
++- Q04-L3 (P4-04): block/logout revoke queued/live/history chat≤2s khi kết nối;
++  không replay nội dung bị ẩn khi unblock. P6 WAN chạy tích hợp L0–L3.
++P3-04 hoàn thiện reward receipt thật và regression L1; không lấy stub làm proof
++durable economy. Các slice giữ invariant chung, không kéo future deliverable.
+ 
+ ### Q04-N — Network impairment/reconciliation
+ 
+@@ -935,7 +961,7 @@
+ Target room 32 connected clients có message/input/interaction thực, không chỉ
+ idle socket: server tick 30 Hz, p95 tick ≤16 ms, p99 ≤25 ms; không backlog tăng
+ qua soak 60 phút. Measure host specs, process/room count và CPU headroom.
+-Per client average gameplay traffic mục tiêu ≤30 KB/s xuống / ≤10 KB/s lên,
++Per client average gameplay traffic mục tiêu ≤30 kB/s xuống / ≤10 kB/s lên (kB=1000B),
+ chưa gồm tải content; record bursts/p95 separately. DoD mặc định bắt buộc 32
+ đạt trên cấu hình ghi rõ. Nếu chỉ đạt ít hơn, FAIL/GAP; proposal đổi cap v0.1
+ phải được owner quyết định vì đổi trải nghiệm, cập nhật scope/mode mục3.1 và Q04-C rồi chạy
+@@ -977,6 +1003,12 @@
+ Secrets scan cho source/evidence/export; TLS/DTLS/certificate fail-closed
+ tested; không `verify=false` cho production. Catalog images/UGC không mở rộng
+ ngoài scope. Threat review là checklist kỹ thuật, không tự chứng nhận compliance.
++Q05 theo owner, không kéo mọi ca tương lai vào P3-02: auth/transport/ticket →
++P3-02; authority/spoof → P3-03; ledger/grant/spend/commit/outbox → P3-04;
++block/draft/last-item → P4-01/P4-02; chat/operator → P4-04; data deletion/export
++schema nền ở P3-01, end-to-end trên social/shop ở P4/P8-01; production restore/
++migration/failure models → P6-02/P8-01. Mỗi WP regression invariant đã có và
++nghiệm thu ca thuộc deliverable của mình; frozen coverage map ghi test IDs rõ.
+ 
+ ## Q06 — Geo và vận hành/release
+ 
+@@ -1010,6 +1042,8 @@
+ INPUT: tool package contract và game baseline, git/process/cache inventory, release ledger.
+ BUILD: nhận nguyên gói GT-10 theo mục2; verify local trust/signature, manifest,
+ capability/target và digest; tạo consumer lock từ toolchain lock đã nghiệm thu.
++Intake chỉ khi GT-10 toàn gói ACCEPTED, bao gồm Android proof GT-08; không
++coi target GAP của package là đủ để mở source game.
+ Pin Linux x86_64/headless, không engine candidate khác, không sửa VF/cache cũ.
+ Missing artifact chỉ launcher dev fetch đúng URL/digest locked, chưa có thì GAP.
+ VERIFY: --version/readback package bằng launcher, tamper/wrong target/template/
+@@ -1025,8 +1059,10 @@
+ theo mỗi WP; ghi server OS/transport matrix dự kiến và engine bake-off recipe.
+ VERIFY: schema và matrix coverage; phân biệt target/observed/missing.
+ DoD: không có “60 FPS” chưa đo; người thiếu thiết bị không bị giả thành emulator.
+-Thiếu Android ghi gap thiết bị; local bootstrap vẫn có thể được coordinator
+-dispatch độc lập. P1-03 cần Windows + ít nhất một Android (Q01-B); P5-03 cần
++Sau intake gói GT-10 đầy đủ, nếu thiết bị benchmark GAME chưa đến ghi gap;
++local bootstrap có thể dispatch theo dependency. Quy tắc này không miễn
++physical Android fixture GT-08 hoặc cho vượt GT-10 chưa ACCEPTED.
++P1-03 cần Windows + ít nhất một Android (Q01-B); P5-03 cần
+ đủ matrix Q01-F. Không thiếu máy nào cũng bị diễn thành cấm mọi việc local.
+ 
+ ### H2-P0-03 — Bootstrap
+@@ -1051,13 +1087,15 @@
+ DoD: report có state before/after/undo hash; no partial write; 2 critics.
+ 
+ ### H2-P1-02 — Network risk spike
+-CONTRACT/VERIFY: dedicated template+PCK và async room boundary mục3.2; empty process/world RAM, preauth/MTU risk fixtures (DEV_ONLY loopback).
++CONTRACT/VERIFY: dedicated template+PCK và async room boundary mục3.2; empty
++process/world RAM, preauth/MTU risk fixtures (DEV_ONLY loopback). Limits spike
++tạm thời disposable, không là locked WAN profile; P3-02 khóa trước secure consumer.
+ ALLOWED: `game/scripts/net/`, throwaway test scenes, `contracts/net/`, tests.
+ BUILD: 1 dedicated + 2 client thật; move/emote interaction prototype, input
+ seq/server authority/snapshot và gộp edge input 60→30 Hz theo A03; transport
+ feasibility matrix Windows/Android/Linux (thiếu target ghi chưa verify; Windows
+ local proof là DoD spike, không khóa transport WAN). DEV_ONLY chỉ loopback.
+-VERIFY: Q04-L, invalid actor authority/session/input; stop/reconnect;
++VERIFY: Q04-L0, invalid actor authority/session/input; stop/reconnect;
+ host captures separate process exits. Không triển khai MMO/backend toàn quốc.
+ DoD: stock pipeline đáp ứng basic contract; gaps security/export ghi rõ; 2 critics.
+ 
+@@ -1093,7 +1131,9 @@
+ DoD: 1 hero đạt style guide, catalog pipeline tái lập; bulk content đến P5-01.
+ 
+ ### H2-P2-03 — Activity loop
+-CONTRACT/VERIFY: P08 activity/quest descriptor và mục3.5 Solo save/UX, EX44; không cần DB Online để nghiệm thu phần Solo.
++CONTRACT/VERIFY: P08 activity/quest descriptor, mục3.5 Solo save/UX và EX09
++phần Solo; không cần DB Online. EX44-A chỉ consistency descriptor/quota local,
++không starter grant hoặc house process Online.
+ ALLOWED: activity/quest/collection UI+data/scripts, Solo save/tests.
+ BUILD: câu cá nguyên bản, tutorial+3 quest có skip/xem lại, 6 item, readable success/fail/retry,
+ authority interface local riêng Online; seed/attempt id có giới hạn.
+@@ -1117,7 +1157,9 @@
+ CONTRACT/VERIFY: mục3.2.1/A09/3.5, EX37/EX40/EX41; schema locks/unique/realm, data lifecycle, 100k dataset và query/index report.
+ ALLOWED: `backend/`, HTTP/save schemas, migration/transaction tests.
+ BUILD: khóa Node LTS/framework/DB/schema tool exact versions; modular API,
+-Postgres migrations, command journal/outbox, dev config không secrets Git.
++Postgres migrations, command journal/outbox, durable attempt/result API (đến
++RESULT_RECORDED, schema/lookup/idempotency) để P3-03 tiêu thụ; grant/ledger
++completion ở P3-04. Dev config không secrets Git.
+ VERIFY: clean DB boot, repeat migrate, version conflict, rollback/restore trên
+ DB copy; restore sau deletion replay tombstones, API schema invalid input fail.
+ Chưa gọi service Hoàn Hảo thật.
+@@ -1143,28 +1185,34 @@
+ ALLOWED: room gameplay/movement/activity code, protocol schemas, tests.
+ BUILD: input validation, prediction/reconciliation/interpolation, authority
+ activity outcomes; disconnect/timer handling; no Solo economy injection.
+-VERIFY: Q04-L/Q04-N at 100/200 ms profiles, reward spoof, speedhack/cooldown/
+-dup seq, 60→30 edge aggregation, room/API crash trước/sau award commit,
+-actual two-client activity route; reward chỉ ACK received sau API committed receipt.
++VERIFY: Q04-L1/Q04-N at 100/200 ms profiles, reward spoof, speedhack/cooldown/
++dup seq,60→30 edge aggregation, room/API crash trước/sau RESULT_RECORDED thật;
++actual two-client activity route dừng ở pending. Receipt consumer test double
++có nhãn kiểm reject/stale/UNKNOWN, không mint item hoặc claim award đã commit.
++Room result→ledger/outbox→received thật và crash quanh commit thuộc P3-04.
+ DoD: authority independently readback, tolerance documented, 2 critics.
+ 
+ ### H2-P3-04 — Economy correctness
+-CONTRACT/VERIFY: realm/unique/retention/outbox/starter kit mục3.2, EX40/EX41/EX44; same-ID replay, poison events, deadlock và delete-vs-trade races.
++CONTRACT/VERIFY: realm/unique/retention/outbox/starter kit mục3.2, EX40/EX41/EX44-B;
++same-ID replay, poison events, deadlock; delete-vs-trade regression khi P4-02 có shop.
+ ALLOWED: inventory/wallet/journal services and activity award integration.
+ BUILD: idempotent durable grants, optimistic concurrency, unique item IDs,
+ API post-commit receipts, transactional outbox.
+ VERIFY: Q05 concurrent grant/spend/crash/timeout/retry/outbox duplicates;
++Q04-L1 integrated2-client activity→real ledger/outbox→received, crash room/API
++trước/sau commit; consumer không ACK received trước protected committed receipt.
+ 100 repeated commands không nhân item; Solo save manipulation rejected Online.
+ DoD: reconciliation query/test chứng minh balances/items invariant; 2 critics.
+ 
+ ## P4 — Social, nhà và shop thật
+ 
+ ### H2-P4-01 — Friends/party/AOI
+-CONTRACT/VERIFY: P04/3.2 AOI/house cap/reservations, EX43/EX44; auth filter mọi channel, unhide không replay lịch sử.
++CONTRACT/VERIFY: P04/3.2 AOI/house cap/reservations, EX43-A/EX44-C cap/reservations;
++auth filter channel đã có, unhide không replay lịch sử.
+ ALLOWED: social APIs/UI, room router/AOI schemas/tests.
+ BUILD: accept/request/block, mode privacy, party 4/house 8/plaza 32 caps,
+ join reservation và visibility hysteresis; direct interact mutual awareness.
+-VERIFY: Q04-L/Q04-N + join room full/blocked/private; reconnect reservation
++VERIFY: Q04-L2/Q04-N + join room full/blocked/private; reconnect reservation
+ 30 s/actor TTL 10 s/party all-or-none reservation; race invite/logout; hidden peer
+ không lộ transform qua API; priority không phá cap/block.
+ DoD: 2 client + observer adversarial route, no ghost >TTL; 2 critics.
+@@ -1179,17 +1227,21 @@
+ DoD: receipt + DB readback + player video + Q05; 2 critics.
+ 
+ ### H2-P4-03 — House online
+-CONTRACT/VERIFY: P04 cap8 gồm owner+holds, sleep/owner-leave/close policy, EX44; layout persistence không giữ process cho account offline.
++CONTRACT/VERIFY: P04 cap8 gồm owner+holds, house_process_idle_stop/owner-leave/
++close policy, EX44-C; layout persistence không giữ process cho account offline.
+ ALLOWED: placement durable/visit/permissions APIs and scenes.
+ BUILD: validate catalog/ownership/bounds/quotas; save layout version; party
+ invite/private visit, crash-safe load. Không visit nhà Solo/import local placement.
+ No visitors edit owner's house.
+ VERIFY: undo/save/rejoin/readback; 2 writer conflicts; blocked invite; stale
+-catalog asset; malicious transform; 10 enter/leave memory loops.
++catalog asset; malicious transform;10 enter/leave memory loops; EX02 dual wake
++fencing/CAS chỉ một process authority, spawn timeout không tạo duplicate; owner
++leave hủy guest holds ngay, logout không giữ owner hold và guest handoff có TTL.
+ DoD: durable layout same semantic hash; safe conflict; 2 critics.
+ 
+ ### H2-P4-04 — Communication/moderation
+-CONTRACT/VERIFY: mục3.5/EX37/EX43; privacy evidence store riêng, RBAC/audit/appeal, revoke live và cached output.
++CONTRACT/VERIFY: mục3.5/EX37/EX43-B/Q04-L3; privacy evidence store riêng,
++RBAC/audit/appeal, revoke live và cached output.
+ ALLOWED: chat/report/block/rate limit services/UI/admin tools scoped new project.
+ BUILD: text length/normalize, room chat, mute/block/report queue, operator
+ hide/suspend audit, limits. Chat off before control path works; preset emotes remain.
+@@ -1537,23 +1589,35 @@
+   restore và placement-version cutover. Một owner economic realm, v0.1 cross-
+   realm transfer reject; owner migration không dual-write independent ledgers.
+ EX41 — Bounded room/API/outbox resources; P1-02/P3-01/P3-04/P6-01/P8-02.
+-  Hot tick không HTTP blocking, dedicated export giữ sim, memory0/8/32 và packed
+-  node. Poison event→DLQ không đổi COMMITTED receipt; retry budget/jitter/order/
+-  dedupe/replay, pool exhausted/backlog recovery không double grant.
++  P1-02: dedicated export giữ sim/hot tick không blocking, empty+2-client RAM
++  và preauth/MTU spike. P3-01/P3-04: pool/payload/queue/outbox bounded, poison
++  event→DLQ không đổi COMMITTED receipt; retry budget/jitter/order/dedupe/replay.
++  P6-01: memory0/8/32+tick; P8-02: packed nodes/backlog recovery/overload,
++  không double grant. Không đòi packed-node proof ở P1-02.
+ EX42 — Auth/transport/workload identity/clock; P1-02/P3-02/P3-03/P6-02.
+-  PKCE/nonce/redirect/JWKS/refresh reuse, giả room→API, preauth flood, MTU/IPv6/
+-  NAT rebinding/Wi-Fi→mobile, process restart clock. Secure fallback chỉ được
+-  mở sau same profile tests; role/epoch/attempt kiểm tại authority commit.
++  P1-02 chỉ disposable preauth/MTU/clock feasibility trên loopback. P3-02:
++  PKCE/nonce/redirect/JWKS/refresh reuse, giả room→API, preauth flood/MTU/IPv6,
++  secure channel và deadline profile; P3-03 role/epoch/attempt authority commit.
++  P6-02 cross-device NAT rebinding/Wi-Fi→mobile/clock recovery. Secure fallback
++  chỉ mở sau cùng secure profile tests, không lấy spike làm auth nghiệm thu.
+ EX43 — AOI all channels/revoke/resubscribe; P3-03/P4-01/P4-04.
+-  Snapshot/spawn/RPC/late-join/cache đều theo AND permission; public_visibility
+-  default không leak actor/seed/wallet. Block purge queued data, revoke epoch;
+-  unblock không replay hidden history. Party priority không vượt permission/cap.
+-EX44 — House sleep/starter kit/activity balancing; P2-03/P3-04/P4-01/P4-03/P5-01.
+-  House cap8 gồm chủ+holds, party4, owner leave→lobby đúng TTL; empty house
+-  process ends, offline shop vẫn persistent. Starter grant chỉ một/account,
+-  quest/catalog update giữa attempt không reroll hoặc đổi reward đã phát.
+-
+-P3-02 khóa numeric timeout/rate/size/MTU/retention profile trước consumer.
++  P3-03: snapshot/spawn/RPC/late-join không leak seed/wallet/authority;
++  public_visibility explicit trước attach peer. EX43-A (P4-01): mọi channel
++  actor/cache theo AND permission; block purge/revoke, party priority không vượt
++  permission/cap; unblock không replay hidden history. EX43-B (P4-04): cùng policy
++  chat/history/queued messages. P3-03 không đòi social block/chat trước owner P4.
++EX44 — Activity/starter kit/house lifecycle; P2-03/P3-04/P4-01/P4-03/P5-01.
++  EX44-A (P2-03 Solo, P5-01 balance final): descriptor/quota/save, quest/catalog
++  update giữa attempt không reroll/đổi reward. P2 không cần Online DB.
++  EX44-B (P3-04): starter grant duy nhất/account, retry/login/takeover không mint
++  lần hai; descriptor Online và ledger theo P08, không nhập item Solo.
++  EX44-C: P4-01 chỉ cap8 gồm owner+holds, party4 và cancellation reservation.
++  P4-03 nghiệm thu owner leave→đóng visit/hủy guest holds→lobby TTL, empty
++  house_process_idle_stop; owner wake single-flight room lease/CAS/EX02,
++  spawn timeout lookup không duplicate process; offline shop vẫn là DB rows.
++
++P3-02 khóa numeric timeout/rate/size/MTU/retention profile trước secure consumer;
++P1-02 disposable spike ghi limits tạm có số, không dùng làm release lock.
+ Mục3.5/P0-02/P3-01 khóa data/UX profile trước collection. Mỗi test ID có WP owner,
+ fixture/fault injection, expected invariant + player-facing result, raw metrics
+ và recovery. Incident mới thêm regression vào đúng owner, không giả đã phủ mọi lỗi.
+@@ -1763,7 +1827,7 @@
+ ROLE=implementer/researcher/critic
+ MODEL=cursor-grok-4.6-xhigh-fast; NO_FALLBACK/NO_COMPOSER/NO_HIDDEN_SUBAGENTS
+ ROOT=<absolute 8-9-hh3d-3>; WORKSPACE=<studio repo>
+-PLAN=<absolute one TXT>; PLAN_REVISION/HASH=<frozen content>
++PLAN=<absolute one TXT>; OTHER_PLAN=<tools TXT at intake/handoff, otherwise relevant only>; PLAN_REVISION/HASH=<frozen content>
+ WP=<one bounded WP/subdeliverable>; DEPENDENCIES=<actual ACCEPTED evidence>
+ AUTHORIZATION=<owner request, current plan-only/implementation scope>
+ GOAL=<concrete tool or player behavior>
+@@ -1849,8 +1913,8 @@
+ 
+ 9.1 Nguồn công khai và mức tin cậy
+ 
+-Research/critic dùng Cursor đúng model, ngày08-09-2026. Các trang dưới là
+-nguồn kỹ thuật/reference đã được các lượt Cursor đọc (trừ ghi rõ thất bại);
++Research notes/critic dùng Cursor đúng model; coordinator đối chiếu nguồn
++official ngày08–09/09/2026. Danh mục dưới ghi nguồn kỹ thuật/reference;
+ nguồn hỗ trợ thiết kế, không benchmark dự án. /stable, /latest, /current là
+ URL động; khi implementation dùng docs đúng version đã khóa. Giá/cấu hình
+ nhà cung cấp/rights dataset cụ thể chưa được xác minh nên không có báo giá.
+@@ -1935,9 +1999,11 @@
+ PLAN_DESIGN_REVIEW=SEE_EXACT_HASH_REPORT
+ Review hiện hành:
+ ./reviews/20260908-r3/REVIEW-RESULT.md
+-Lịch sử trước S4 không chứng nhận hash hiện tại. S4 sửa routing/workflow S2,
++Lịch sử trước S5 không chứng nhận hash hiện tại. S4 sửa routing/workflow S2,
+ gộp appendix S3 vào contract gốc, bổ sung realm/dedupe/admission/AOI/RAM/outbox/
+-identity/UX/release và EX01–EX44. Không có plan thứ ba hay tiến độ từ report.
++identity/UX/release và EX01–EX44. S5 sửa closure Q01/Q04/Q05/EX theo owner,
++Android handoff, house wake/hold và award ordering. Không có plan thứ ba hay
++tiến độ từ report.
+ Base commit chỉ provenance vì hai TXT còn untracked; freeze dựa full bytes.
+ Tất cả 32 H2 vẫn PLANNED, implementation/runtime/human đều chưa nghiệm thu.
+ 
+@@ -1964,4 +2030,4 @@
+ 
+ 
+ END_OF_GAME_PLAN
+-DATE=2026-09-09 Asia/Saigon+DATE=2026-09-09 Asia/Saigon

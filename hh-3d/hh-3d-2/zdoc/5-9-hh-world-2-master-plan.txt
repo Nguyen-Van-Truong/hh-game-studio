@@ -1,0 +1,567 @@
+HISTORY_ONLY — nội dung lịch sử, không còn chỉ đạo/tiến độ hiện hành.
+Plan công cụ: ./8-9-godot-blender-agent-studio-plan.txt
+Plan game: ./8-9-hh-world-gameplay-viet-nam-plan.txt
+Không cập nhật/tick marker dưới; đọc file mới có đủ specs và bảng đầu.
+
+HH WORLD 2 — MASTER PLAN, UX/EDGE-CASE/SERVER ADDENDUM
+Ngày lập: 05-09-2026 (Asia/Saigon) | Revision: 1 | PLAN_ONLY
+
+BẢNG TÓM TẮT ĐIỀU PHỐI (đọc bảng này trước)
+
+| Thứ tự | Giai đoạn / việc | Trạng thái hôm nay | Kết quả phải có trước bước sau |
+|---:|---|---|---|
+| 0 | Quyết định scope, Godot stock 4.7.2, device/server pin | ĐÃ LẬP KẾ HOẠCH | lock + checksum + rollback; không fork |
+| 1 | Bootstrap project, test harness, editor semantic tools | PLANNED — H2-P0/H2-P1 | project chạy, UndoRedo/lease/readback đúng |
+| 2 | Spike network authority + benchmark Godot | PLANNED — H2-P1 | 2 client thật; Windows + Android; đo, không đoán |
+| 3 | Controller, camera, avatar, UI, art direction | PLANNED — H2-P2 | vòng chơi Solo 10–15 phút, input touch/keyboard |
+| 4 | Activity, nhà, sưu tầm, shop catalog offline | PLANNED — H2-P2 | chơi lại được; Solo namespace tách Online |
+| 5 | API, account/session, database, room authority | PLANNED — H2-P3 | durable command, receipt/readback, reconnect |
+| 6 | Friends, party, AOI, public/private room, moderation | PLANNED — H2-P4 | cap/consent/block/TTL; không lộ tọa độ |
+| 7 | Final content, streaming, accessibility, device perf | PLANNED — H2-P5 | Q01-F/Q02/Q03; desktop + Android thật |
+| 8 | Load/chaos, private WAN, human closed alpha | PLANNED — H2-P6 | technical cap đo được; 8 người thật; không giả ký |
+| 9 | Adapter Hoàn Hảo, OSM/PostGIS, converter, một khu VN | PLANNED — H2-P7/H2-P8 | license/CRS/ID/rollback; geo chỉ sau gameplay |
+| 10 | Pilot, restore/cost, release candidate, ký/phát hành | PLANNED — H2-P8/H2-P9 | package + operator + approval thật |
+
+**Cách đọc và nguồn:** Đây là file tổng hợp để người điều phối đọc nhanh, không
+phải bảng tick thứ hai. Thứ tự và trạng thái WP lấy từ [roadmap canonical](../../hh-game-studio/hh-3d/hh-3d-2/zdoc/06-ROADMAP.md) và [PROGRESS](../../hh-game-studio/hh-3d/hh-3d-2/zdoc/PROGRESS.md). Quyết định/UX ở [01-DECISIONS](../../hh-game-studio/hh-3d/hh-3d-2/zdoc/01-DECISIONS.md), gameplay ở [02-PRODUCT](../../hh-game-studio/hh-3d/hh-3d-2/zdoc/02-PRODUCT.md), kiến trúc ở [03-ARCHITECTURE](../../hh-game-studio/hh-3d/hh-3d-2/zdoc/03-ARCHITECTURE.md), Godot tools ở [04-GODOT-TOOLS](../../hh-game-studio/hh-3d/hh-3d-2/zdoc/04-GODOT-TOOLS.md), gate ở [05-QUALITY-GATES](../../hh-game-studio/hh-3d/hh-3d-2/zdoc/05-QUALITY-GATES.md), địa lý ở [07-GEOGRAPHY](../../hh-game-studio/hh-3d/hh-3d-2/zdoc/07-GEOGRAPHY.md), workflow agent ở [08-AGENT-WORKFLOW](../../hh-game-studio/hh-3d/hh-3d-2/zdoc/08-AGENT-WORKFLOW.md), nguồn ở [09-RESEARCH](../../hh-game-studio/hh-3d/hh-3d-2/zdoc/09-RESEARCH.md). Hash review mới nhất ở [REVIEW-RESULT](../../hh-game-studio/hh-3d/hh-3d-2/zdoc/reviews/REVIEW-RESULT.md).
+
+Master này bổ sung checklist rủi ro, UX, waves, sizing và quyết định vận hành.
+Nếu có mâu thuẫn, `hh-3d/hh-3d-2/AGENTS.md` thắng về routing game mới và roadmap canonical thắng về WP/thứ tự; `hoan-hao/AGENTS.md` chỉ thắng khi sửa code/dịch vụ Hoàn Hảo;
+master thắng về các kiểm tra an toàn bổ sung cho HH World 2. Không sửa plan cũ,
+Web cũ, Vault Fighters hoặc dữ liệu Hoàn Hảo trong khi lập tài liệu này.
+
+TRẠNG THÁI HIỆN TẠI
+- Chỉ có plan; game/backend/engine mới chưa tạo, chưa clone, chưa benchmark.
+- Engine đề xuất: Godot official stock 4.7.2-stable, pin riêng; không fork lõi.
+- Chưa tuyên bố FPS, CCU, multiplayer Internet, dữ liệu OSM hay bản đồ thật.
+- WP đầu tiên sau khi owner yêu cầu bắt đầu: H2-P0-01.
+
+1. QUYẾT ĐỊNH SẢN PHẨM VÀ MỨC GIỐNG PLAY TOGETHER
+
+Lấy beat người chơi được tài liệu công khai mô tả (đi dạo, avatar/trang phục,
+nhà/trang trí, hoạt động như câu cá, sưu tầm, bạn bè Follow/Summon, chuyển khu,
+party/minigame) làm cảm hứng chức năng. Không copy model, rig, tên, map,
+landmark, UI, âm thanh, economy, xác suất, mã mạng, screenshot hay trademark.
+HH World 2 có silhouette/avatar, màu, nhạc, landmark, quest, activity và UI gốc.
+Mục tiêu “giống trải nghiệm xã hội” chứ không phải giống từng chi tiết.
+
+Bản cũ Web có bài học giữ lại: shop public tồn tại khi chủ offline; presence là
+avatar ảo, không GPS; visibility phải lọc ở authority; demo loopback/2 tab không
+phải WAN; FPS phải đo headed trên thiết bị thật. Không copy friends-only cũ một
+cách máy móc: game mới có Solo, Private Friends và Public Plaza opt-in. Public
+chỉ nhìn actor trong room/AOI; bạn bè được ưu tiên trong ngân sách; người lạ
+không có nghĩa mọi người toàn thị trấn cùng render. Có thể xem shop catalog
+public khi chủ offline nhưng avatar chủ không hiện.
+
+MVP phải vui trước bản đồ: một khu hư cấu có cảm giác Việt Nam, 1 loop câu cá
+nguyên bản, 3 quest, avatar preset/wardrobe/emote, một nhà, quầy catalog,
+party nhỏ. Hoàn thành 10–15 phút không cần GPS/login bắt buộc. Sau đó mới thêm
+room online, persistence, moderation và cuối cùng adapter bản đồ Hoàn Hảo.
+Địa lý thật là nguồn/ngữ cảnh; không biến OSM thành collision/nav/3D hoàn chỉnh
+mà chưa converter và art review.
+
+2. WAVE THỰC HIỆN — LÀM NHIỀU VIỆC NHƯNG KHÔNG DẪM FILE
+
+Mỗi wave chỉ bắt đầu khi dependency của roadmap đã ACCEPTED. Các worker được
+chạy song song khi có file lease riêng; một writer một file, một runtime/user
+folder một run. Coordinator gửi prompt đầy đủ: WP, model exact
+`cursor-grok-4.6-xhigh-fast`, base/source hash, file lease, command schema,
+verify command, evidence và điều kiện dừng. Worker không tick plan; critic chỉ
+đọc đúng source hash. Không chạy hai official run ghi cùng thư mục.
+
+| Wave | Có thể chạy song song | Điều kiện / không được làm |
+|---|---|---|
+| W0 | engine lock, thiết bị profile, license inventory | Không clone/fork; chốt 4.7.2 + templates/checksum |
+| W1 | bootstrap; network risk spike; editor tool spike ở paths riêng | Không để editor tool chặn network benchmark; không public server |
+| W2 | controller/camera; avatar look-dev; UI shell; activity design | Cùng contracts, không cùng scene; gameplay route phải chạy thật |
+| W3 | house/catalog; API/migration; server authority | Solo/Online namespace; chưa cho client mint item |
+| W4 | friends/AOI/party; shop; moderation tools | block/privacy/TTL/room cap phải có before public |
+| W5 | final art/audio; streaming/accessibility; perf profile | final content + Android thật; không đo primitive thay avatar |
+| W6 | chaos/load; private WAN; human test preparation | secure issuer/ticket thật; fixture chỉ loopback |
+| W7 | geo contract/license; converter spike sau W6 | không fetch OSM nếu chưa quyền/size/hash/attribution |
+| W8 | pilot geo art; cost/restore/ops; release package | rollback/readback/approval; không suy CCU từ một run |
+
+Nếu thiếu máy Android, người thật, issuer, legal owner hoặc chi phí hosting,
+chỉ tiếp tục phần độc lập và ghi GAP/UNVERIFIED. Không đổi floor, giả reviewer,
+hoặc nhảy geo để che gameplay/perf chưa đạt. Coordinator commit tối đa một
+checkpoint cho WP sau evidence + critic; master không tự tick trạng thái.
+
+3. MÔ HÌNH HỆ THỐNG VÀ LUỒNG DỮ LIỆU
+
+Client Godot native chỉ xử lý input, dự đoán chuyển động, render, UI và cache.
+Room server authoritative xử lý tick, va chạm gameplay, visibility và activity.
+API xử lý account/session, room ticket, friends, shop, inventory và commands.
+PostgreSQL giữ dữ liệu bền; outbox/worker xử lý side effects. Geo adapter và
+MapLibre/Hoàn Hảo ở lớp directory/minimap/chunk package, không query DB mỗi
+frame hoặc dùng longitude/latitude làm Vector3 physics.
+
+Mọi command mutation gồm schema_version, command_id, account/session, expected
+version, issued_at, nonce, payload_hash. Validate kích thước, kiểu, range,
+quyền, target, path và duplicate trước apply. Durable ACK chỉ sau transaction
+commit + readback; timeout tra command_id, không retry mù. Player input có
+sequence/session/tick, server clock; 60 Hz client prediction không làm tốc độ
+phụ thuộc FPS. Snapshot remote có sequence/epoch, loại gói cũ; reliable item,
+shop, party và account không bị chặn bởi kênh pose unreliable.
+
+Presence chỉ gồm actor/instance/mode/permission/last-seen cần thiết; không GPS
+hoặc lịch sử vị trí. AOI + hysteresis + party/friend priority nhưng giữ block,
+consent, cap. Spawn chỉ interactive khi peer cùng room đã ACK actor_epoch;
+chủ shop offline không cần avatar trong room để người khác xem listing public.
+
+Reward từ room ghi pending journal rồi gửi API award với attempt_id/command_id.
+Client chỉ hiện “đã nhận” sau receipt committed. Crash trước/sau commit phải
+reconcile không mất/nhân đồ. Inventory/wallet/shop sử dụng optimistic version
+hoặc khóa transaction, unique IDs, audit ledger và outbox dedupe. Draft không
+lộ; published listing tồn tại khi owner logout; visitor không sửa nhà.
+
+Account delete: xác thực lại, revoke session/ticket, tombstone, ẩn profile/shop,
+đóng friend edges/linking; ledger/audit pseudonymize theo retention. Tombstone
+phải sống ngoài snapshot rollback và được replay trước mở traffic; restore không
+làm tài khoản/nhà/shop bị xóa sống lại. Solo save có namespace/schema riêng;
+không import item/tiền/placement vào Online.
+
+4. CHECKLIST NGOẠI LỆ VÀ XỬ LÝ UX
+
+Nguyên tắc: mỗi lỗi có trạng thái rõ (đang xử lý / thành công / thất bại / kết
+quả chưa biết), hành động tiếp theo, mã support/correlation không chứa secret,
+retry có backoff/jitter và giới hạn. Không dùng “đã xong” trước postcondition.
+
+| Trường hợp | Validate/phòng ngừa | UX bắt buộc |
+|---|---|---|
+| Mạng chập chờn, timeout không biết kết quả | command_id lookup, idempotency, pending receipt | “Đang kiểm tra kết quả”, không cho bấm nhân đôi; retry/thoát an toàn |
+| Mất mạng giữa activity/reward | journal/outbox, attempt dedupe, server clock | animation có thể dừng; item hiển thị Pending/Retryable, không tự báo mất |
+| Duplicate/out-of-order packet, sequence wrap | session epoch + 64-bit seq, reject cũ/đổi session; test near wrap | reconnect nhẹ, không rollback avatar/item bất ngờ |
+| Client clock sai/timezone/DST | server time; ISO timestamp; không dùng local clock cho economy | hiển thị giờ theo thiết bị, trạng thái expiry theo server |
+| Crash/restart room/API/DB | drain, WAL/PITR/backup, replay journal/tombstone, health gate | “Đang khôi phục phòng”; không kick im lặng; retry join rõ |
+| Room đầy, party vào dở | reserve toàn party atomically, TTL 15 s; reconnect hold 30 s; actor cleanup 10 s | hiển thị chỗ còn/queue/room khác; không đẩy người đang chơi |
+| Invite hết hạn/bị block/đổi privacy | validate quyền tại receive và action; invalidate ticket/epoch | lý do chung không lộ dữ liệu nhạy cảm; nút mời lại |
+| Public → hidden/offline/private | state transition server-side; rời public trước ẩn; no location API | banner mode hiện tại; xác nhận nếu bạn bè mất avatar |
+| AOI spawn/despawn ở ranh | hysteresis, actor_epoch, spawn ACK/grace ≤2 s | avatar không nhấp nháy; “đang đồng bộ” thay tương tác sai |
+| Block/report/mute giữa tương tác | revoke permission/priority, recheck in-flight, no hidden collision | người dùng không thấy chat/avatar bị chặn; report receipt |
+| Bạn rời room khi party/activity | ownership/session epoch; reward theo attempt, không host client | thông báo ai rời; hoạt động solo/leave có lựa chọn |
+| Hai người mua item cuối | atomic stock/version + ledger | một thành công, một “hết hàng”; không trừ tiền thất bại |
+| Giá/listing đổi khi mở panel | version/readback/quote expiry | refresh card; hiển thị giá mới trước confirm |
+| Draft/shop chủ logout/delete | visibility state; tombstone; cache age | public listing vẫn xem nếu published; draft biến mất đúng |
+| Save đầy/hỏng/phiên bản mới | quota/atomic temp-rename/checksum/schema migration; future reject | backup/repair/export; không overwrite save tốt |
+| Bị kill khi save/đặt nhà | journal + temp file + fsync/rename/readback | lần mở sau khôi phục hoặc báo rõ phần chưa lưu |
+| Asset/chunk tải lỗi/hash sai | manifest/hash/signature/size/codec validation; quarantine | placeholder an toàn + retry; không spawn dưới sàn |
+| Shader compile/first walk hitch | preload/warmup, Q01-C/W đo riêng | loading có tiến độ; không treo UI hoặc đổ lỗi người dùng |
+| Camera xuyên/tường, spawn nguy hiểm | safe spawn volumes, nav/collision test, stuck detector | respawn gần nhất có confirm; giữ inventory |
+| Touch mất focus/incoming call/background | pause input, rebind focus, lifecycle save; Online không pause server | Solo resume; Online “vẫn Online/Leave”; không gửi input cũ |
+| DPI/notch/text tiếng Việt | safe area, font glyph/IME, 48dp target, scale/contrast/reduced-motion | không cắt nút/chữ; keyboard và gamepad đều dùng được |
+| Low RAM/thermal/context loss | memory budget, release unused, thermal route, renderer fallback preset | hạ chất lượng có giải thích; retry scene; không mất durable state |
+| Flood/chat payload/Unicode bypass | byte+grapheme limits, normalize, rate limit, report/mute | cooldown đếm server; lỗi không làm văng game |
+| Cert hết hạn/UDP bị chặn | health check trước admission; fail-closed; renewal alert | lỗi kết nối rõ, không fallback plaintext; retry sau |
+| Region/latency cao | room region selection, RTT probe, cap; no cross-region simulation | chọn region gần; cảnh báo delay, không giả “mượt” |
+
+Các hàng này là trường hợp cần test trong WP tương ứng, không phải tuyên bố đã
+xử lý. Mọi fallback phải giữ quyền sở hữu, không biến placeholder thành final
+art, không cho client tự quyết định quyền hoặc reward.
+
+5. NHÂN VẬT, CẢNH, UI/UX — MỨC CẦN GIỐNG VÀ CÁCH VALIDATE
+
+Không cần giống hình dáng Play Together. Cần đạt các phẩm chất trải nghiệm:
+nhận diện avatar từ xa, chuyển động phản hồi, emote dễ gọi, bạn bè dễ nhập
+phòng, activity có tín hiệu rõ, nhà/shop là nơi muốn quay lại, cảnh có landmark
+và lối đi dễ hiểu. Phong cách Việt Nam phải là thiết kế nguyên bản: màu, mái,
+hiên, hàng cây, biển hiệu, chợ/hồ/ngõ; không dựng lại map hoặc UI game tham khảo.
+
+Nhân vật: một skeleton gốc, 3 preset, 6 outfit phối được, idle/walk/run/jump/
+land và 6 emote trước khi làm hàng loạt. Validate bone/scale/axis, skin weight,
+feet sliding, root motion, xuyên quần áo, LOD pop, silhouette ở 720p, animation
+khi mạng trễ. Avatar gần có đầy đủ; xa giảm mesh, animation, nameplate, shadow.
+Nameplate pool theo khoảng cách/AOI, không tạo HTML/widget cập nhật mỗi frame.
+Không render toàn bộ người trong town; bạn bè/party ưu tiên trong cap nhưng
+vẫn chịu privacy và budget.
+
+Cảnh: một khu 256–400 m authored, chunk nhỏ, spawn/respawn volume, đường đi
+không cụt, landmark nhìn được, chỗ câu cá và nhà có mục đích. Mỗi vật có
+collision proxy/nav riêng; không để mesh trang trí chặn lối. Dùng atlas/instance/
+LOD/culling; bóng rẻ ở mobile. Test 6 camera route: spawn, chạy, nhảy, quay
+nhanh, sát tường, vào nhà; kiểm z-fighting, ánh sáng, vật thể lọt sàn, safe
+spawn, stuck detector và context loss. Địa lý thật về sau chỉ cung cấp topology/
+địa điểm có nguồn; art/gameplay overlay sửa cho chơi được.
+
+UI/UX: HUD tối giản; joystick/touch pad và nút hành động vùng an toàn ≥48 dp;
+keyboard/gamepad remap; camera sensitivity/invert; text đủ dấu/IME; contrast,
+text scale, reduced motion, mute từng nhóm. Luồng phải thể hiện mode Offline /
+Solo / Friends / Public và Online connectivity là hai thứ khác nhau. Nhà Solo,
+nhà Online và item/tiền không nhập lẫn. Mỗi panel có loading, empty, stale,
+unavailable, error, retry; thao tác quan trọng có confirm/undo nhưng không popup
+liên tục. Purchase/publish dùng pending→committed/failed/unknown; nút disabled
+khi pending nhưng có cancel nơi an toàn.
+
+UX acceptance tối thiểu: 5 người thật trưởng thành, 4/5 hoàn thành onboarding
+đi → emote → activity → reward → nhà/quầy trong 10 phút; 4/5 chấm điều khiển
+≥4/5. Test riêng desktop keyboard, Android touch, gamepad nếu claim hỗ trợ.
+Test offline đầu tiên không login; mất mạng khi Online hiển thị giữ/leave;
+room đầy, invite expired, block, purchase timeout và restore đều phải có người
+thử quan sát trạng thái đúng. Human feedback không được thay bằng bot/screenshot.
+
+6. VALIDATION VÀ EVIDENCE CHO AGENT
+
+Trước mọi mutation: schema + command_id duy nhất + expected_revision + path
+allowlist + lease + payload hash; chặn traversal/symlink/reparse, null/NaN/
+Infinity, số ngoài range, UTF-8 invalid, array/object quá sâu, file/texture/
+packet giải nén quá lớn, compressed-bomb và shader/script lạ. Parse giới hạn
+trước allocate. Validate owner/permission/epoch/room/visibility ở server; client
+chỉ hiển thị. Không dùng LocalStorage/demo-bus làm authority.
+
+Editor command: main thread, UndoRedo toàn bộ operation, save temp+flush+atomic
+rename, readback node/resource/hash; lỗi giữa nhiều file phải rollback/journal.
+Runtime: editor/Play process tách, immutable content snapshot, role-specific
+user dir/log/PID. Stop/Pause drain/cancel không mất ACK. Một writer/file, lease
+owner/expiry/FIFO; stale hash conflict phải reconcile, không overwrite.
+
+Mỗi run ghi run_id, command_id, seed, world/mode, engine/protocol/content/source
+manifest hash, artifact hash, device/config, input trace, timestamp, expected/
+actual postcondition, warning/error explanation, host-captured exit/leftovers.
+Packer fail closed nếu thiếu/mismatched/stale manifest, exit caller tự khai,
+warning chưa giải thích, process bị kill/hang hoặc evidence bị ghi đè. `TICK=yes`
+chỉ critic/coordinator sau source hash + DoD; không tự ký human/legal/brand.
+Không claim feature từ code chưa chạy, ảnh chưa quan sát, bot chưa tương tác.
+
+Validation phải cover giá trị bình thường, biên, rỗng, duplicate, retry, timeout,
+concurrent race, reconnect, crash trước/sau commit, version cũ/mới, disk đầy,
+RAM thấp, thermal, background/foreground, cert expiry, UDP block, provider
+unavailable, permission revoked, delete/restore. Fault injection có seed và
+expected recovery; test fail không xóa evidence để chạy lại cho đẹp.
+
+7. SERVER VÀ HẠ TẦNG — ĐỊNH CỠ CÓ CÔNG THỨC, KHÔNG HỨA CCU
+
+Không cần GPU cho room server headless; GPU nằm ở máy người chơi. Server vẫn
+cần CPU đơn luồng tick ổn định, RAM cho room/API/cache, SSD NVMe cho DB/WAL,
+network egress/ingress và backup. Định cỡ cuối chỉ sau Q04-C load test trên
+Linux x86_64 room target + transport đã khóa. Không lấy số Web cũ, bot render,
+headless FPS hoặc phép nhân “32 người × số server” làm capacity.
+
+### 7.1 Môi trường đề xuất theo giai đoạn
+
+| Giai đoạn | Cấu hình khởi đầu để test/triển khai | Dùng để làm gì | Không được kết luận |
+|---|---|---|---|
+| Dev local | 6+ physical cores / 16 GB RAM / NVMe ≥100 GB, GPU tùy client; Docker/WSL nếu sẵn | 1 client + API + DB + room nhỏ | Không mô phỏng production WAN |
+| LAN 2–4 client | 8 cores / 16–32 GB / NVMe, 1 Gbps LAN | authority/reconnect/profile | Không phải alpha capacity |
+| Closed alpha nhỏ (8–32/room, 2–4 rooms) | 8 physical cores hoặc dedicated vCPU có CPU guarantee, 32 GB RAM; room process tách API/DB; NVMe 500 GB; 1 Gbps; backup riêng | private WAN + Q04-W | Không bảo đảm 32 nếu chưa đạt Q04-C |
+| Pilot 100–300 CCU phân tán | 2–3 app/room nodes mỗi node 8–16 vCPU/32–64 GB; managed HA DB 4–8 vCPU/32 GB; Valkey/cache tùy đo 2–4 vCPU/8–16 GB; CDN/object storage; 1 Gbps+ egress | nhiều room, rolling/drain, one-node loss test | Số chỉ là starting topology, chưa capacity/pricing |
+| 1.000 CCU peak phân tán | ≥3 room/API nodes 16 vCPU/64 GB, DB primary+standby 8–16 vCPU/64 GB NVMe/WAL, cache 4–8 vCPU/16–32 GB, CDN, metrics/log node; multi-AZ nếu có | benchmark theo measured room cap, failover | Không phải 1.000 cùng plaza |
+| 10.000 town-wide | Không mua theo bảng; cần load/traffic/cost model và architecture review | chỉ mở sau pilot | Không hứa một room 10.000; hotspot cần instance/AOI/crowd proxy |
+
+Các cỡ trên là **starting hypothesis**, phải thay bằng SKU/CPU generation,
+region, virtualization guarantee, observed metrics và giá đã kiểm tra. Một
+máy lớn duy nhất dễ bắt đầu nhưng là single point of failure; alpha có thể
+chấp nhận maintenance rõ, public không nên.
+
+### 7.2 Công thức đo và ví dụ có giả định
+
+Ghi `C_room_cpu_ms` = tổng CPU milliseconds của room process trong một tick
+30 Hz ở p95 (không phải wall time của tick; nếu có nhiều thread ghi tổng CPU),
+`M_room`, `B_down/up` p95 bytes/s/client, `R_join` admission/reconnect rate,
+`N_room` actor thật và `N_aoi` actor mỗi client. Với usable physical CPU budget
+`U_ms = cores × 1000 × target_util` mỗi giây, công suất CPU ước lượng:
+
+`rooms_cpu = floor(U_ms / (C_room_cpu_ms × 30))`.
+
+Nếu C=8,000 ms CPU/tick (ví dụ giả định, không đo), 8 cores, target_util=.60:
+`floor(8×1000×.60/(8000×30)) = 0`; nghĩa profile này không hợp 8 cores, không
+được làm tròn thành một room. Nếu C=80 ms CPU/tick giả định: floor(4800/2400)=2
+rooms, nhưng phải trừ API/OS/GC và kiểm p95/p99. `rooms_ram = floor((RAM_usable - RAM_base) / M_room)` và `rooms_net = floor(network_budget_bytes_per_s / (N_clients_per_room × (B_down_p95 + B_up_p95)))`; `rooms = min(rooms_cpu, rooms_ram, rooms_net, rooms_tick, fd/DB/queue limits)`; cùng đơn vị, giữ headroom tối thiểu 30% CPU/RAM/network và thử mất một node.
+
+`C_room_cpu_ms` không được lấy `tick_wall_ms × cores` nếu profiler không chứng
+minh thread usage. Tick p95 wall ≤16 ms và tổng CPU ms/tick là hai guard khác.
+Cần ghi CPU steal/throttle, GC pauses, disk wait, clock drift và background jobs.
+Admission phải từ chối trước khi room vượt cap; không chờ tick lag rồi mới kick.
+
+Ví dụ traffic **giả định**: 1.000 user × 30 KB/s downstream = 30 MB/s decimal,
+~240 Mbps payload; thêm 30% overhead/burst ≈312 Mbps. 30-day full-peak egress
+là ~77.76 TB; nếu average chỉ 20% peak thì ~15.55 TB. Đây là traffic client,
+không tính CDN tải content, replication, TLS, metrics hay retransmit. Phải lấy
+p95 actual bytes, compression/delta và region billing để mua link; không dùng
+30 KB/s làm promise.
+
+DB sizing không nhân CCU trực tiếp. Đo writes/s từ command/ledger/friend/shop,
+read QPS, WAL bytes/s, backup size/growth, restore duration, cache hit và index
+bloat. Durable economy cần WAL/PITR/backup/replication policy; RPO 24 h chỉ là
+mức mất dữ liệu có thể chấp nhận lớn, không phù hợp với item/currency đã ACK.
+Alpha phải định nghĩa RPO/RTO thật, test restore + tombstone trước mở; công bố
+RPO=24h chỉ cho dữ liệu không durable hoặc chấp thuận owner, không cho ledger.
+
+### 7.3 Network/ops UX và failure drills
+
+API HTTPS và movement transport là hai kênh. LB/API gateway không tự chuyển
+UDP room; nếu dùng WebSocket/TCP fallback phải test latency/ordering/backpressure,
+không coi giống ENet. Room registry reserve TTL, health/readiness, graceful
+admission/drain, region/RTT probe, rate limit và reconnect backoff jitter.
+CDN/object storage phục vụ content package; không đặt GLB/texture lớn vào packet
+movement hay DB hot path.
+
+Drill bắt buộc: room host kill; DB failover; WAL/full disk; backup restore; cache
+mất; node CPU steal/thermal host; clock skew; cert sắp/hết hạn; UDP blocked;
+region RTT cao; join/reconnect storm; malformed/oversized payload; provider
+geo unavailable; asset hash mismatch. Mỗi drill phải có metric, timeout,
+operator action, client message, no item loss/dup, evidence exit/cleanup.
+
+Lộ trình hạ tầng: dev one-node → alpha tách room/API/DB backup → pilot 2–3 node
+và managed/replicated DB → public chỉ khi cost/monitor/moderation/legal/restore
+đạt. Không triển khai cloud/public trong lượt lập plan này; cần owner mở gate
+secret/tiền/publish ở WP tương ứng.
+
+8. CÁC GATE BẮT BUỘC BỔ SUNG TRƯỚC ALPHA
+
+Các mục dưới đây là điều kiện bắt buộc triển khai, không phải lời hứa đã làm.
+Chúng bổ sung cho Q00–Q06 trong tài liệu canonical; mỗi mục được gắn vào WP
+trước khi worker nhận lease. Nếu phát hiện mismatch, fail closed và sửa contract.
+
+A. Session fencing: cùng account đăng nhập máy thứ hai làm epoch cũ bị từ chối
+ở API + room + ticket; input/mua/đặt nhà cũ trả STALE_SESSION trong ≤2 giây.
+Có idle/absolute expiry server-side, regenerate sau login, logout revoke.
+Máy cũ nhận thông báo phiên mới, không mất giao dịch đã commit.
+
+B. Dữ liệu bất thường: reject NaN/Infinity, số âm/overflow, JSON quá sâu,
+Unicode không hợp lệ, timestamp client lệch ngoài cửa sổ, sequence/tick gần
+wrap; test MAX-2…0 và session epoch. Không crash, teleport hoặc đổi số dư.
+
+C. Room fencing: mỗi instance có lease owner/epoch/fencing token; host cũ
+không được input/reward sau thay host. Hai process cùng instance phải để một
+authority thắng; mọi award kiểm tra epoch hiện tại.
+
+D. Award journal: room mất đĩa/host ngay trước commit phải để API outbox/attempt
+id quyết định; reconnect query receipt/pending; không ACK “đã nhận” sớm và
+không mint lại khi replay. Test kill sau animation, trước/sau commit.
+
+E. Economy: listing/wallet/stock/item instance thay đổi trong một transaction;
+checked arithmetic; hide/giá đổi giữa mua trả lỗi sạch; item cuối chỉ một người
+thành công. `command_id` khác payload phải conflict. Outbox, refund, restore
+và concurrent requests có invariant kiểm tra.
+
+F. Database: alpha có WAL fsync và archive off-box, base backup, PITR restore
+trên máy sạch, kiểm tra LSN/backup chain. RPO 24 giờ chỉ áp log/telemetry không
+được dùng để biện minh mất item/currency đã ACK; RPO/RTO ledger phải đo và ghi.
+Tombstone xóa tài khoản nằm ngoài snapshot rollback, replay trước traffic,
+không resurrect profile/shop; ledger/audit retention theo chính sách.
+
+G. Version/content: handshake protocol + catalog/world/content hash + engine
+build; mismatch fail-closed, asset thiếu vào quarantine/fallback an toàn; import
+settings, collision/nav và strip server pin rõ. Alpha N-only drain; N/N-1 chỉ
+sau gate riêng. Save có schema_version và future-version reject.
+
+H. Admission/abuse: reconnect storm có jitter/quota/circuit breaker, reservation
+party all-or-none, hold 30 giây và actor cleanup 10 giây; join timeout 15 giây.
+Rate-limit account/IP hợp lý để không khóa cả NAT; giới hạn decompressed size,
+packet, chat, upload và query. Không hứa chống DDoS volumetric ở app layer.
+
+I. AOI/social: block/revoke invalidate permission/epoch và in-flight action;
+“đã biết avatar” chỉ sau spawn + actor_epoch + peer ACK. Avatar không có collider
+quyền lực khi đã despawn. Public hidden rời Public; private chỉ người mời;
+shop public không cần chủ shop online. Player↔player interaction khác mua
+listing public. Party leader rời, block giữa ticket và AOI biên đều có state UX.
+
+J. Transport/cert: DEV_ONLY chỉ loopback. Khóa transport thật trên đúng Linux
+room + Windows/Android client; UDP bị chặn thì fail closed hoặc fallback đã
+đo, không plaintext. Cert hostname/expiry/key rotation, private key scan,
+không `client_unsafe` ngoài dev. LB L7 API không tự chuyển UDP room.
+
+K. Lifecycle/file safety: asset package, save, replay và logs có size/file-count
+limit, magic/allowlist, decompression cap trước allocate, traversal/symlink
+block. Disk đầy, cache missing, shader compile fail và context loss không làm
+mất durable state; temp+flush+atomic rename/readback.
+
+L. Fault/restore: host kill, DB failover/PITR, archive gap, full disk, cache mất,
+CPU steal, clock skew, cert hết hạn, UDP block, latency 200 ms, 64 reconnect,
+malformed payload, provider geo unavailable đều có fault injection + UX + metric.
+Không xóa evidence thất bại; process exit/hang/leftover được host ghi.
+
+M. User data: account deletion xác thực lại, revoke, tombstone, unlink mapping,
+friend/shop/chat/report retention; restore không hồi sinh. Xuất/xóa local Solo
+được mô tả đúng giới hạn offline. Telemetry tối thiểu, purpose/retention rõ,
+không log token/email/private chat. Public release cần owner/legal/privacy/
+moderation thực ký, không agent ký thay.
+
+9. BẢNG KIỂM THỬ TRƯỚC KHI GỌI “HOẠT ĐỘNG TỐT”
+
+| Lớp | Phải quan sát | Không được dùng thay thế |
+|---|---|---|
+| Static/schema | typecheck, lint, schema/migration, path/secret/license scan, dependency lock | một ảnh PASS |
+| Editor | command validate→UndoRedo→save→readback; duplicate/stale/crash rollback | sửa `.tscn` bằng tay rồi đọc file |
+| Gameplay | input route thật ở 30/60/120, collision/camera/activity/house/reward | teleport/force-kill là bằng chứng duy nhất |
+| Render | headed release build, raw frame times, cold/warm/thermal, 0/8/32 + 64 stress | Godot headless/Chrome headless FPS |
+| Local network | server + 2 client process, packet order/loss/reconnect/authority | hai tab BroadcastChannel |
+| Capacity | 32 network clients có input/interaction + p95 tick/CPU/RAM/B/s/60-min soak | số room nhân với máy |
+| WAN | ≥2 mạng thật, secure account/ticket, region RTT, full room/drain | localhost/LAN claim |
+| Human UX | 5 người onboarding; 8 người WAN alpha nếu mở gate; feedback lỗi/ý định | bot, tên người giả, owner ký giả |
+| Persistence | duplicate/retry/race/crash/PITR/delete/restore/migration | `pg_dump` một lần không restore |
+| Geo | source hash/license/CRS/ID/seam/anchor/update/offline fallback | bbox/ảnh bản đồ chứng minh walkable |
+| Release | install/update/uninstall, old save, package hash, cert/rollback, support/runbook | upload chưa ký |
+
+Mỗi lớp ghi PASS/FAIL/GAP/UNVERIFIED; PASS một lớp không nâng lớp khác.
+Không gọi game “giống Play Together” chỉ vì avatar/nhà có mặt; claim đúng là
+“social game nguyên bản lấy beat công khai làm cảm hứng” sau human/art review.
+
+10. QUẢN LÝ RỦI RO VÀ QUYẾT ĐỊNH ĐẢO HƯỚNG
+
+Nếu Godot stock đạt Q01-B/Q04-L nhưng final Android Q01-F trượt sau hai vòng
+profile: cắt shadow/LOD/scene density hoặc làm bake-off Unity/Web bằng cùng
+asset; owner duyệt đổi. Nếu network authority fail: dừng shop/public, giữ
+Solo. Nếu DB restore fail: dừng economy ACK, chỉ cho catalog read-only. Nếu
+moderation/operator chưa có: chat/public tắt, private emote-only. Nếu geo
+license/provider/CRS fail: giữ authored plaza, không phá gameplay. Nếu 32
+room không đạt: giảm content/cap chỉ bằng decision + sửa UI/contract + đo lại;
+không đổi âm thầm. Nếu iOS thiếu máy/toolchain: không claim iOS.
+
+Không clone Godot để chữa những lỗi do scene, art, network hoặc server. Chỉ mở
+fork khi có bug/API đã tái lập trên stock + extension, benchmark chứng minh
+lợi ích, owner duyệt maintenance/CI/security/rollback. Không đặt server GPU để
+cứu FPS client; tối ưu client và giảm AOI/render trước.
+
+11. LIÊN KẾT VÀ QUY TẮC CẬP NHẬT
+
+- Bắt đầu triển khai từ `../../hh-game-studio/hh-3d/hh-3d-2/zdoc/00-START-HERE.md` và `../../hh-game-studio/hh-3d/hh-3d-2/AGENTS.md`, WP đầu `H2-P0-01`.
+- Chỉ [06-ROADMAP.md](../../hh-game-studio/hh-3d/hh-3d-2/zdoc/06-ROADMAP.md)
+  có thứ tự/trạng thái; master này không thêm checkbox.
+- Khi sửa master hoặc canonical, ghi revision/date/reason; canonical đổi làm
+  freeze hash review stale. Worker đọc cả master và WP docs trước dispatch.
+- Reports nghiên cứu có Model/URL/thời gian/trạng thái; URL không mở được ghi
+  UNVERIFIED, không dùng claim mạnh. Worker không tải asset/reference game.
+- File này nằm ở `hoan-hao/zdoc` để dễ đọc; không biến nó thành authority của
+  các service Hoàn Hảo. Tài liệu service/AGENTS của Hoàn Hảo vẫn thắng cho code
+  Hoàn Hảo. Adapter game chỉ dùng interface được P7 phê duyệt.
+- Một lần owner yêu cầu “bắt đầu làm”, coordinator tạo lease/WP cụ thể; không
+  tự động chạy cả A–Z trong một lượt, không mở public deploy, không sửa file
+  ngoài scope.
+
+KẾT LUẬN ĐIỀU PHỐI
+
+Lựa chọn hợp lý nhất cho mục tiêu hiện tại là Godot native stock 4.7.2 + server
+authoritative/room-first. Web cũ giữ cho bản đồ/shop/tham chiếu; không ép Web
+làm client gameplay nếu FPS và vòng chơi không đạt. Không clone/fork Godot lúc
+này. Làm gameplay vui, mượt và kiểm chứng trước; sau đó nối dữ liệu Hoàn Hảo
+qua adapter có nguồn, license, CRS, ID, hash và rollback. “Nhiều người cùng
+thấy nhau” đạt bằng room + AOI + cap + friend/party priority, không phải gửi
+mọi avatar cho mọi client. Cấu hình server ở mục 7 chỉ là điểm khởi đo; cấu
+hình thật phải lấy từ Q04-C/P6-01 và thử mất một node.
+
+PLAN_DESIGN=MASTER_ADDENDUM_COMPLETE
+IMPLEMENTATION=NONE
+RUNTIME_PROOF=NONE
+OWNER_APPROVAL_SIGNED=NONE
+LAST_UPDATED=05-09-2026 10:49 +07 (file metadata checked after final append)
+
+12. NGUỒN, REVIEW VÀ GIỚI HẠN BẰNG CHỨNG
+
+Nguồn chính đã được mở trong phiên lập kế hoạch 05-09-2026; các URL này chỉ
+hỗ trợ claim tương ứng, không phải benchmark game HH World 2:
+
+- Play Together HAEGIN guide: https://hub.playtogether.haegin.kr/vi/homegame-guide/whats-the-play-together
+  Xác nhận các beat hướng người chơi như social town, activity, nhà, avatar,
+  friends, Follow/Summon và chuyển khu ở mức UI. Không công bố backend, AOI,
+  shard, FPS hoặc CCU. Không reverse engineer.
+- Godot Windows/archive: https://godotengine.org/download/windows/ và
+  https://godotengine.org/download/archive/ — report worker đọc bản stable
+  4.7.2 ngày 18-08-2026; full artifact commit/checksum vẫn phải acquire ở P0.
+- Godot dedicated server: https://docs.godotengine.org/en/stable/tutorials/export/exporting_for_dedicated_servers.html
+  — headless/server export và Dummy audio; không GPU server hoặc MMO capacity.
+- Godot multiplayer: https://docs.godotengine.org/en/stable/tutorials/networking/high_level_multiplayer.html
+  — transport/RPC/auth hook; account security và authority gameplay do app.
+- Godot ENet: https://docs.godotengine.org/en/stable/classes/class_enetconnection.html
+  — ENet/DTLS API; DTLS không phải account login; capability cần test đúng build.
+- Godot editor undo: https://docs.godotengine.org/en/stable/classes/class_editorundoredo_manager.html
+  — EditorPlugin/UndoRedo contract; không tự làm transaction nhiều file atomic.
+- PostgreSQL WAL/PITR: https://www.postgresql.org/docs/current/continuous-archiving.html
+  và reliability: https://www.postgresql.org/docs/current/wal-reliability.html —
+  backup/WAL/restore cần diễn tập; pg_dump đơn lẻ không thay PITR.
+- PostgreSQL standby: https://www.postgresql.org/docs/current/hot-standby.html —
+  replica đọc/trễ không thay backup hoặc ledger authority.
+- OSM rights: https://www.openstreetmap.org/copyright — attribution/ODbL và
+  policy tile/API phải xét đúng dataset/service; OSM không phải asset 3D.
+- Photon AOI: https://doc.photonengine.com/fusion/current/manual/advanced/interest-management
+  — replication culling, không phải sharding hoặc con số CCU HH2.
+- OWASP session/file/DoS: https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html
+  https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html
+  https://cheatsheetseries.owasp.org/cheatsheets/Denial_of_Service_Cheat_Sheet.html
+  — nguyên tắc expiry/revoke, giới hạn gói/giải nén và quota; không là chứng
+  nhận bảo mật sản phẩm.
+
+Review nội bộ: hai critic v2 đã ACCEPT plan canonical `4762d1cc...` của
+hh-3d-2; worker lần này là advisory cho master. Xem reports tại
+[review folder](../../hh-game-studio/hh-3d/hh-3d-2/zdoc/reviews/master-20260905/).
+Một worker report có thể có lỗi gõ hash/URL hoặc claim version-bound; chỉ dùng
+nội dung đã được coordinator reconcile vào master/canonical, không coi mọi câu
+trong report là authority.
+
+Các điều chưa biết: thiết bị Android/iOS thực, FPS/thermal, CPU-ms room,
+bytes/actor, room cap WAN, ISP UDP/NAT, issuer/OIDC, operator moderation,
+provider Hoàn Hảo/API/rights/cost, tên phát hành và owner/legal approval. Mọi
+điều này có WP/gate; chưa có runtime proof trong file này.
+
+13. CHECK TRƯỚC KHI OWNER CHO “BẮT ĐẦU”
+
+- Mở file này và `00-START-HERE`; hiểu đây là plan, không phải game đã có.
+- `PROGRESS` vẫn `PLAN_ONLY`, `CURRENT_VALID_WP=H2-P0-01`; canonical roadmap
+    có 32 WP PLANNED, không có trạng thái do master tự ghi.
+- Quyết định engine, social public opt-in, Solo≠Online, room/AOI cap,
+    no-IAP/no-UGC-mesh, gameplay-first/geo-later được chấp nhận hoặc owner
+    ghi decision thay đổi.
+- Có máy Windows và ít nhất một Android cho early gate; biết Q01-F cần đủ
+    Windows + Android trung bình + Android thấp. Human alpha chưa được giả.
+- Có cách lưu artifact/hash/evidence ngoài dirty files sản phẩm khác; không
+    stage Vault Fighters/Web evidence vào HH2.
+- Chưa cần mua server: bắt đầu dev/local; server alpha chỉ sau đo C/Q04.
+- Owner khi cần ký các quyết định lớn: secret/hosting cost, public deploy,
+    legal/brand, đổi engine/scope. Coordinator chuẩn bị package trước khi hỏi.
+
+Khi owner nói bắt đầu, coordinator chỉ giao P0-01 bằng prompt Cursor đầy đủ;
+không giao một prompt “làm hết plan”, không clone engine tự động, không fetch
+bản đồ sớm. Sau mỗi gate, cập nhật canonical `PROGRESS` và review hash; cập
+nhật master chỉ để phản ánh liên kết/revision, không tạo progress thứ hai.
+
+VALIDATION=links_exist_checked; master_append_parts=3; canonical_runtime_tests=0
+MASTER_STATUS=PLAN_ADDENDUM_FOR_REVIEW_ONLY
+LAST_UPDATED=2026-09-05 10:49 +07 (file metadata checked after final append)
+
+
+
+
+14. ERRATA REVISION 1 — ƯU TIÊN ĐỌC SAU CÙNG
+
+Phần này được append sau review cuối để loại mơ hồ, không tạo progress/WP thứ
+hai. Nó sửa cách diễn đạt tương ứng trong phần trước:
+
+1) Routing: khi làm game, đọc `hh-3d/hh-3d-2/AGENTS.md` rồi `zdoc/00-START-HERE.md`;
+roadmap `06-ROADMAP.md` là authority trạng thái. `hoan-hao/AGENTS.md` chỉ áp
+khi sửa service Hoàn Hảo. Không đọc file master này như authority cho các service
+khác. Link khởi động đầy đủ: `../../hh-game-studio/hh-3d/hh-3d-2/AGENTS.md`.
+
+2) Wave: W0 chỉ chuẩn bị kế hoạch/đợi owner; P0-03 phải ACCEPTED trước P1-01
+hoặc P1-02. P1-01 và P1-02 có thể song song sau P0-03, P1-03 cần P1-02 và
+Q01-B, không cần chờ toàn bộ editor tools. P3-01 có thể chuẩn bị sớm nhưng
+schema feature cuối vẫn chờ P2-03. Bảng đầu là snapshot dễ đọc, không phải
+checkbox hay thẩm quyền mới.
+
+3) Session slot: khi session mới fence session cũ, registry atomically release
+hoặc chuyển **duy nhất** reservation cũ sang epoch mới; không giữ hai slot.
+Disconnect bất ngờ giữ reconnect reservation 30 s, actor cleanup 10 s; logout
+chủ động release. Party 4 reserve all-or-none trong 15 s. Nếu retry/hết chỗ,
+UI báo rõ và admission lại, không kick peer.
+
+4) Công thức network: `B_down_p95`/`B_up_p95` là bytes/giây/**mỗi client**;
+`rooms_net = floor(network_budget_bytes_per_s / (N_clients_per_room ×
+(B_down_p95 + B_up_p95)))`. Ví dụ giả định (không mua theo ví dụ): room 32,
+40 KB/s tổng/client, budget 1 Gbit/s × 0.70 = 87.5 MB/s usable →
+`floor(87.5/1.28)=68 rooms` trước overhead khác; CPU/RAM/tick thường làm
+con số thấp hơn. Nếu chỉ tính downstream, phải ghi riêng và cộng upstream/DTLS/
+burst. Công thức cuối luôn lấy `min(rooms_cpu, rooms_ram, rooms_net,
+rooms_tick, fd/DB/queue)` và kiểm tra mất một node.
+
+5) Thiết bị: P0 không chờ điện thoại; P1-03 cần Windows + ≥1 Android thật
+(Q01-B). P5-03/P8-03 mới cần đủ Windows + Android tầm trung + Android thấp
+(Q01-F). Thiếu device là GAP đúng gate, không là lý do giả cấm bootstrap.
+Q01-C cold gồm loading/shader warmup; Q01-W warm gồm route sau warmup; thermal
+20 phút áp stall threshold cuối. Không hạ threshold để hợp kết quả.
+
+6) Server: mọi cỡ ở mục 7 là starting hypothesis; sau Q04-C thay bằng số đo
+CPU-ms/tick, wall p95/p99, M_room, B/s, DB writes/WAL, CPU steal và giá/region
+đã kiểm tra. Không GPU room headless. 1000/10000 CCU chỉ là nghiên cứu có điều
+kiện, không phải capacity hiện tại hay một plaza duy nhất.
+
+7) Review: sửa canonical file hoặc master làm hash cũ stale. Hash master sau
+errata phải được tính lại; các verdict trước errata chỉ chứng minh bản cũ.
+

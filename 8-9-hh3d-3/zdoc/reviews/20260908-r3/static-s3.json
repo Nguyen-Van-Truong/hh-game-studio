@@ -1,0 +1,22 @@
+{
+  "kind": "STATIC_PLAN_CHECK_NOT_RUNTIME",
+  "revision": "S3",
+  "result": "PASS_STATIC_ONLY",
+  "plans": [
+    {
+      "path": "8-9-godot-blender-agent-studio-plan.txt",
+      "sha256": "1d409988dd778477326e8da1bbe42430106552eaa227707a55d46605e34986a3",
+      "bytes": 54322,
+      "wp": 10,
+      "exceptions": 14
+    },
+    {
+      "path": "8-9-hh-world-gameplay-viet-nam-plan.txt",
+      "sha256": "8c46741a30514ad0bae1571266db527ec246ebf3ad2b98a0a839a01a5ccae024",
+      "bytes": 124371,
+      "wp": 32,
+      "exceptions": 39
+    }
+  ],
+  "errors": []
+}
