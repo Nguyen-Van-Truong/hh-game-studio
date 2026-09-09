@@ -1,0 +1,246 @@
+{
+  "kind": "STATIC_PLAN_CHECK_NOT_RUNTIME",
+  "revision": "S6",
+  "result": "FAIL",
+  "timestamp": "2026-09-09T15:25:57.841113+07:00",
+  "manifest_sha256": "1f530bdd52d303b60ce33a9d13f51acd8bd05716ffd47e141e5913421e1a81ec",
+  "plans": [
+    {
+      "path": "8-9-godot-blender-agent-studio-plan.txt",
+      "sha256": "6a82935e94bee3dbcfdba38b1a01549f55734f668dda465dca8e673c7d544561",
+      "bytes": 61060,
+      "lines": 859,
+      "wp_rows": 10,
+      "specs": 10,
+      "exceptions": 18
+    },
+    {
+      "path": "8-9-hh-world-gameplay-viet-nam-plan.txt",
+      "sha256": "e0861b1c2e1406de3f0aacb0c7ed611dbdcd4d2cb6fe77f807d7c3276dcc5f83",
+      "bytes": 146697,
+      "lines": 2033,
+      "wp_rows": 32,
+      "specs": 32,
+      "exceptions": 44
+    }
+  ],
+  "dependencies": {
+    "GT-01": [
+      "OWNER_START"
+    ],
+    "GT-02": [
+      "GT-01"
+    ],
+    "GT-03": [
+      "GT-02"
+    ],
+    "GT-04": [
+      "GT-02"
+    ],
+    "GT-05": [
+      "GT-03",
+      "GT-04"
+    ],
+    "GT-06": [
+      "GT-05"
+    ],
+    "GT-07": [
+      "GT-05",
+      "GT-06"
+    ],
+    "GT-08": [
+      "GT-07"
+    ],
+    "GT-09": [
+      "GT-08"
+    ],
+    "GT-10": [
+      "GT-09"
+    ],
+    "H2-P0-01": [
+      "GT-10"
+    ],
+    "H2-P0-02": [
+      "H2-P0-01"
+    ],
+    "H2-P0-03": [
+      "H2-P0-02"
+    ],
+    "H2-P1-01": [
+      "H2-P0-03"
+    ],
+    "H2-P1-02": [
+      "H2-P0-03"
+    ],
+    "H2-P1-03": [
+      "H2-P1-01",
+      "H2-P1-02"
+    ],
+    "H2-P2-01": [
+      "H2-P1-03"
+    ],
+    "H2-P2-02": [
+      "H2-P2-01"
+    ],
+    "H2-P2-03": [
+      "H2-P2-02"
+    ],
+    "H2-P2-04": [
+      "H2-P2-03"
+    ],
+    "H2-P3-01": [
+      "H2-P1-03",
+      "H2-P2-03"
+    ],
+    "H2-P3-02": [
+      "H2-P3-01"
+    ],
+    "H2-P3-03": [
+      "H2-P3-02"
+    ],
+    "H2-P3-04": [
+      "H2-P3-03"
+    ],
+    "H2-P4-01": [
+      "H2-P3-04"
+    ],
+    "H2-P4-02": [
+      "H2-P4-01"
+    ],
+    "H2-P4-03": [
+      "H2-P4-02"
+    ],
+    "H2-P4-04": [
+      "H2-P4-03"
+    ],
+    "H2-P5-01": [
+      "H2-P4-04"
+    ],
+    "H2-P5-02": [
+      "H2-P5-01"
+    ],
+    "H2-P5-03": [
+      "H2-P5-02"
+    ],
+    "H2-P6-01": [
+      "H2-P5-03"
+    ],
+    "H2-P6-02": [
+      "H2-P6-01"
+    ],
+    "H2-P6-03": [
+      "H2-P6-02"
+    ],
+    "H2-P7-01": [
+      "H2-P6-03"
+    ],
+    "H2-P7-02": [
+      "H2-P7-01"
+    ],
+    "H2-P7-03": [
+      "H2-P7-02"
+    ],
+    "H2-P8-01": [
+      "H2-P7-03"
+    ],
+    "H2-P8-02": [
+      "H2-P8-01"
+    ],
+    "H2-P8-03": [
+      "H2-P8-02"
+    ],
+    "H2-P9-01": [
+      "H2-P8-03"
+    ],
+    "H2-P9-02": [
+      "H2-P9-01"
+    ]
+  },
+  "topological_order": [
+    "GT-01",
+    "GT-02",
+    "GT-03",
+    "GT-04",
+    "GT-05",
+    "GT-06",
+    "GT-07",
+    "GT-08",
+    "GT-09",
+    "GT-10",
+    "H2-P0-01",
+    "H2-P0-02",
+    "H2-P0-03",
+    "H2-P1-01",
+    "H2-P1-02",
+    "H2-P1-03",
+    "H2-P2-01",
+    "H2-P2-02",
+    "H2-P2-03",
+    "H2-P2-04",
+    "H2-P3-01",
+    "H2-P3-02",
+    "H2-P3-03",
+    "H2-P3-04",
+    "H2-P4-01",
+    "H2-P4-02",
+    "H2-P4-03",
+    "H2-P4-04",
+    "H2-P5-01",
+    "H2-P5-02",
+    "H2-P5-03",
+    "H2-P6-01",
+    "H2-P6-02",
+    "H2-P6-03",
+    "H2-P7-01",
+    "H2-P7-02",
+    "H2-P7-03",
+    "H2-P8-01",
+    "H2-P8-02",
+    "H2-P8-03",
+    "H2-P9-01",
+    "H2-P9-02"
+  ],
+  "sizing_illustration": {
+    "rooms_cpu": 13,
+    "rooms_ram": 16,
+    "rooms_down": 91,
+    "rooms_up": 273,
+    "full_nodes": 5,
+    "sparse_nodes": 8,
+    "peak_TB": 77.76,
+    "average_TB": 15.552
+  },
+  "errors": [
+    "8-9-godot-blender-agent-studio-plan.txt: source hash",
+    "8-9-godot-blender-agent-studio-plan.txt: byte count",
+    "8-9-godot-blender-agent-studio-plan.txt: PLAN_REVISION",
+    "8-9-godot-blender-agent-studio-plan.txt: title revision",
+    "8-9-hh-world-gameplay-viet-nam-plan.txt: source hash",
+    "8-9-hh-world-gameplay-viet-nam-plan.txt: byte count",
+    "8-9-hh-world-gameplay-viet-nam-plan.txt: PLAN_REVISION",
+    "8-9-hh-world-gameplay-viet-nam-plan.txt: title revision",
+    "8-9-hh-world-gameplay-viet-nam-plan.txt: exception sequence",
+    "LEGAL-VN L1-L8 block present in 3.5",
+    "SCALE-LOCKS SL1-SL12 present in 3.2.1",
+    "Q01-T trend gate defined and locked at P0-02",
+    "Q00 requires Q01-T record for client WPs",
+    "H2-P0-03: missing S6 closure reference i18n",
+    "H2-P3-01: missing S6 closure reference SCALE-LOCKS",
+    "H2-P3-02: missing S6 closure reference EX47",
+    "H2-P4-01: missing S6 closure reference EX45",
+    "H2-P4-02: missing S6 closure reference P2P_TRADE",
+    "H2-P4-04: missing S6 closure reference EX48",
+    "H2-P5-02: missing S6 closure reference EX50",
+    "H2-P6-01: missing S6 closure reference EX46",
+    "H2-P6-02: missing S6 closure reference LEGAL-VN",
+    "H2-P8-03: missing S6 closure reference LEGAL-VN",
+    "H2-P9-01: missing S6 closure reference LEGAL-VN",
+    "H2-P4-01: placement/AFK owner reference",
+    "P03 shop row states P2P_TRADE default off",
+    "EX08 no longer assumes P2P escrow by default",
+    "GT-05: naming convention deliverable",
+    "GT-06: perf collector schema shared with game Q01"
+  ],
+  "warnings": [],
+  "limits": "Checks structure, declared graph and examples; semantic completeness requires independent review; runtime/human/scale/legal not tested."
+}

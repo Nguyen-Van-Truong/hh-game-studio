@@ -1,5 +1,5 @@
 HH WORLD — PLAN 2/2: GAMEPLAY, SOCIAL MULTIPLAYER, VIỆT NAM
-Ngày 09-09-2026, Asia/Saigon | Revision S5 | CHỈ LẬP KẾ HOẠCH
+Ngày 09-09-2026, Asia/Saigon | Revision S6 | CHỈ LẬP KẾ HOẠCH
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO GAME
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -44,7 +44,7 @@ RUNTIME_ACCEPTANCE=NONE
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/game-and-services
 PLAN_ROLE=GAME_SOURCE_OF_PROGRESS
-PLAN_REVISION=S5
+PLAN_REVISION=S6
 REVIEW_BASE_COMMIT=5d19ba66d4476928e564f165b6396743dccde620
 HISTORICAL_STUDIO_COMMIT=3cc7a85f730c99963a5a64079a0e02dc20edbd40
 HISTORICAL_SOCIAL_COMMIT=71629923641178171ec4339143b3cf1472618adc
@@ -80,8 +80,8 @@ Mâu thuẫn schema/plan phải reconcile đúng scope, không đổi acceptance
 code đã lỡ làm. Lượt này chỉ tạo plan: chưa làm game/server, cài engine, lấy
 map, thuê máy hay phát hành.
 
-Mục lục: 1 Lựa chọn; 2 Consumer contract; 3 Game/online/durability/geo;
-4 Q00–Q06; 5 Specs 32 H2; 6 EX01–EX44; 7 Server/cost; 8 Workflow;
+Mục lục: 1 Lựa chọn; 2 Consumer contract; 3 Game/online/durability/geo/
+LEGAL-VN; 4 Q00–Q06; 5 Specs 32 H2; 6 EX01–EX50; 7 Server/cost; 8 Workflow;
 9 Nguồn, review và giới hạn.
 
 1. LỰA CHỌN VÀ QUYẾT ĐỊNH KIẾN TRÚC
@@ -160,9 +160,9 @@ Không dùng nhiệm vụ chờ vô nghĩa, paywall hay chuỗi menu để thay 
 | Hoạt động | 1 trò câu cá nguyên bản với dấu hiệu bằng hình/âm/thời điểm; 3 nhiệm vụ onboarding; chơi cạnh bạn | 10 minigame nửa chừng |
 | Sưu tầm | 6 loại vật phẩm/cá, thông tin, rarity công khai, trang sổ bộ nhỏ | Lootbox trả tiền, market đầu cơ |
 | Nhà | 1 phòng/account, 12 món catalog, đặt/xoay/undo/lưu; cap 8 người tổng gồm chủ nhà và holds, party tối đa 4 người | Upload mesh/script; phá nhà người khác |
-| Shop game | 1 quầy/account, 6 slot listing, draft/publish/unpublish; giá bằng soft currency hoặc trưng bày | Thanh toán/cash-out/đơn hàng thật |
-| Social | Kết bạn hai chiều, party tối đa 4, invite/join, block, emote, text chat có giới hạn | Voice; bạn bè không giới hạn cùng render |
-| UI | HUD gọn, túi đồ, emote wheel, bạn bè, house/shop, settings, reconnect | Debug/status nội bộ phủ màn chơi |
+| Shop game | 1 quầy/account, 6 slot, draft/publish/unpublish; quầy người chơi là trưng bày/giới thiệu; mua bằng soft currency chỉ từ catalog hệ thống (item mint bởi nhà phát hành) | Thanh toán/cash-out/đơn hàng thật; chuyển item/currency giữa hai người chơi (LEGAL-VN L5, flag P2P_TRADE mặc định off) |
+| Social | Kết bạn hai chiều (cap bạn bè và pending khóa P0-02), party tối đa 4, invite/join có TTL, block, emote, text chat có giới hạn; thẻ thông tin avatar khi chạm/click người khác | Voice; bạn bè không giới hạn cùng render |
+| UI | HUD gọn, túi đồ, emote wheel, bạn bè, thẻ avatar, house/shop, settings, reconnect; thông báo sức khỏe định kỳ và nhãn độ tuổi theo LEGAL-VN | Debug/status nội bộ phủ màn chơi |
 | Âm thanh | Nhạc/ambience nguyên bản hoặc license hợp lệ; bước chân, tương tác, activity, UI; mute riêng | Audio ripped, âm thanh quá dày theo từng avatar |
 
 Đây là mức scope mục tiêu, có thể chia nhỏ trong WP. Nếu chất lượng/fun fail,
@@ -184,6 +184,23 @@ riêng; v0.1 không có chuyển tự động. UI gọi rõ “chơi thử Solo�
 Friends service cung cấp online/room có quyền xem, không stream transform bạn
 ở xa. Join kiểm tra consent, block, room policy và sức chứa. Room đầy: chờ,
 hoặc mời cả party qua room khác bằng đồng ý rõ; không đẩy người đang chơi đi.
+Hai beat xã hội cốt lõi phải có tên: "Đến chỗ bạn" (join room của bạn còn chỗ,
+có quyền) và "Gọi bạn đến" (invite vào room/nhà mình). Invite/party request có
+TTL (đề xuất 60s, P0-02 khóa), rate limit và trạng thái riêng: đã rời/đầy/từ
+chối/hết hạn; leader party rời hoặc mất mạng quá TTL thì chuyển leader cho
+thành viên lâu nhất còn kết nối, không tan party ngầm. Thẻ thông tin avatar
+(chạm/click người trong AOI): tên hiển thị, trang phục, hành động kết bạn/mời
+party/thăm nhà/xem quầy/report/block/mute; mọi hành động qua authority, thẻ
+không lộ account_id nội bộ, vị trí nhà thật hay quan hệ chặn.
+
+Room placement (P4-01 contract, P6-01/P8-02 đo): khi vào Public, router chọn
+instance theo thứ tự bạn bè/party đang ở → cùng vùng/độ trễ → lấp đến mức
+target occupancy (đề xuất 24/32 để bạn còn vào được) → mở instance mới; không
+lấp 32/32 rồi mới mở. Placement chỉ là gợi ý, admission vẫn là registry TX.
+Instance vắng quá ngưỡng gộp bằng cách ngừng nhận mới rồi để drain, không kick.
+AFK: không input N phút (đề xuất 10, P3-02 khóa) → cảnh báo 60s → rời room về
+Solo/lobby có save, giải phóng slot; AFK vẫn tính cap đến khi rời. Chủ nhà AFK
+không đóng nhà sớm hơn policy P04; đang chơi activity không bị AFK giữa attempt.
 Offline/ẩn presence không tiết lộ tọa độ qua search/friends API. Chọn ẩn hoàn
 toàn sẽ rời Public và chuyển Solo/private theo lựa chọn đã giải thích; không
 cho vừa báo “ẩn hoàn toàn” vừa hiện model trong Public. Private vẫn hiện với
@@ -199,7 +216,12 @@ Chỗ câu là điểm tương tác không độc quyền giữa player để ac
 giữ một slot vô hình; visitor placement edit luôn bị chặn bởi ownership.
 Mua ở shop là tương tác với shop/ledger authority, không đòi avatar chủ shop
 cùng room hoặc đang Online. Rule hai avatar biết nhau không áp lên listing
-public; quyền listing/stock/transaction vẫn được server kiểm tra.
+public; quyền listing/stock/transaction vẫn được server kiểm tra. Theo LEGAL-VN
+L5 (mục3.5), v0.1/v0.2 không chuyển item_instance hay currency giữa hai
+account: quầy người chơi trưng bày item mình sở hữu và giới thiệu item catalog
+hệ thống; người mua nhận item mint từ catalog, chủ quầy có thể nhận điểm thưởng
+do hệ thống cấp nếu hồ sơ phát hành ghi. Đường P2P giữ schema/escrow nhưng
+sau flag server P2P_TRADE=off, chỉ mở khi tư vấn pháp lý xác nhận bằng văn bản.
 
 House/session policy: cap house=8 bao gồm chủ nếu đang có mặt và mọi active/
 pending/reconnect hold; không phải 8 khách cộng chủ. Party cap=4, có thể mời
@@ -220,6 +242,11 @@ Solo first-run không cần mạng; account provider outage vẫn chơi Solo. Ch
 Online lần đầu giải thích sandbox, cấp starter kit Online qua một grant key
 duy nhất/account, không bắt làm lại tutorial. Achievement cosmetic/tình trạng
 đã đọc hướng dẫn có thể lưu preference; không import tiền/item/nhà Solo.
+Online tại Việt Nam là dịch vụ G1: bước chuyển Online gồm đăng nhập, xác thực
+số điện thoại VN và họ tên/ngày sinh theo LEGAL-VN (mục3.5); dưới 16 tuổi đi
+luồng cha mẹ/người giám hộ đăng ký; chưa xác thực thì chỉ Solo. UI nói rõ vì
+sao cần, dữ liệu dùng để làm gì và cách xóa. Closed alpha người lớn vẫn chạy
+đúng luồng này với provider test có nhãn, không bỏ bước để "đỡ phiền".
 
 ## P05 — UI và art direction
 
@@ -320,6 +347,13 @@ Reliable command không chặn movement unreliable; bounded queues, reconnect
 backoff+jitter. Pause Solo đóng băng sim; menu Online chỉ khóa input local.
 
 Account/session:
+- ID contract (P3-01 khóa trước bảng đầu tiên): mọi ID bền (account, item_
+  instance, house, shop, attempt, command, room, anchor) là 128-bit có thứ tự
+  thời gian (UUIDv7 hoặc ULID-tương đương) do authority sinh, không auto-
+  increment lộ số lượng, không nhúng PII/realm-host; client chỉ sinh command_id/
+  idempotency key. public_handle tách account_id nội bộ; API ngoài chỉ trả
+  public_handle/opaque ID. Realm/placement resolve qua directory, không mã hóa
+  trong ID. Test: enumeration/scrape, collision, index locality trên 100k/1M.
 - Epoch gameplay một active session/account; xác thực máy mới trước, rồi một
   registry TX kiểm admission và CAS epoch, rebind room_hold hiện có sang epoch
   mới và fence epoch cũ cùng lúc. Đổi máy giữ cùng room không cần slot trống
@@ -394,9 +428,12 @@ Economy/catalog:
   Idempotency retention bao trùm retry horizon; receipt financial immutable,
   không xóa dedupe rồi replay một award cũ tạo item mới.
 - Wallet/stock checked integer, soft currency không float. Unique item_instance
-  có một owner, một active listing escrow; seller không vừa equip vừa sell nếu
-  listing đã khóa item. Purchase rechecks version/price/stock/visibility và
-  ownership trong cùng DB transaction debit/credit/transfer/journal/outbox.
+  có một owner. Purchase v0.1 = debit buyer + mint item_instance mới từ catalog
+  hệ thống (stock/version/price/visibility/entitlement recheck) trong cùng DB
+  transaction debit/journal/outbox; không transfer ownership giữa account.
+  Escrow/listing khóa item (seller không vừa equip vừa sell) là schema dự phòng
+  cho P2P_TRADE, chỉ kích hoạt sau LEGAL-VN L5; test escrow chạy với flag on
+  trên fixture, không là closure P4-02 khi flag off.
 - Attempt online đăng ký API durable trước activity bắt đầu. Room result được
   ghi API RESULT_RECORDED với attempt+room epoch; ledger/mailbox và outbox cùng
   ghi trong transaction chuyển COMMITTED, không phát award event trước TX.
@@ -488,6 +525,23 @@ restore elapsed dưới cùng query SLO mục7.3 và p99 profile khóa trước 
 công bố extrapolation + uncertainty; không chứng nhận bằng 10M hay 32 clients.
 Nếu owner muốn hàng trăm triệu CCU thực thì cần chương trình đa vùng và capacity
 review khác; hai plan hiện chưa cam kết năng lực đó. Không tự gắn SCALE_PASS.
+
+SCALE-LOCKS — quyết định rẻ hôm nay, đắt nếu đổi sau 100M bản ghi; khóa trước
+consumer đầu tiên và kiểm bằng test ID riêng:
+  SL1 ID contract 128-bit thời gian, public_handle tách account_id (P3-01).
+  SL2 economic_realm_id + placement directory qua API, client không biết DB host (P3-01).
+  SL3 API stateless, mọi state phiên ở registry/DB/ticket; không sticky RAM (P3-01/P3-02).
+  SL4 Friend graph có cap và fan-out budget, presence pull-on-open (EX45, P4-01).
+  SL5 Room placement/affinity/target occupancy tách admission (P04, P4-01).
+  SL6 Content/catalog immutable theo hash qua CDN; client không tin URL động (P5-02/P8-03).
+  SL7 Protocol/world/catalog version handshake N-only, schema_version mọi save (A08).
+  SL8 i18n string table + font fallback từ P0-03, không hardcode chữ trong scene (3.5).
+  SL9 Remote config/flag ký số, cohort, default an toàn trong client (3.5, EX49).
+  SL10 Trường pháp lý VN (xác thực, tuổi, giờ chơi/ngày) trong account model (LEGAL-VN).
+  SL11 Dedupe/tombstone/hold epochs di chuyển cùng owner data khi shard (A09, EX40).
+  SL12 Telemetry cardinality bounded, không log/event theo mỗi frame hay mỗi pose.
+Không nằm trong khóa: seamless world, đa vùng, 64+/room, tiền thật, voice, UGC.
+Chúng là gate sau có đo, không phải nợ kỹ thuật của v0.1.
 
 Kiểm EX16/20/29/30/35 cho hot key, reconnect herd, pool cạn, hot shard, index
 bloat, queue/WAL/disk đầy, CDN chết, autoscale loop, split-brain, noisy neighbour
@@ -780,6 +834,74 @@ trước read traffic; export request async/reauth/TTL download, không public l
 Không thêm audience trẻ em/public monetization khi chưa review/policy staffing;
 đây là gate quyết định thực, không tự chứng nhận pháp lý.
 
+LEGAL-VN — yêu cầu pháp lý Việt Nam cho game G1 (nguồn S34–S36 tại thời điểm
+viết; tư vấn pháp lý xác nhận điều khoản/hiệu lực trước P6-02 và P8-03; agent
+chuẩn bị checklist/artifact, không tự kết luận pháp lý). Đưa vào thiết kế ngay
+vì đổi sau là đổi account model, UI và hosting:
+  L1 Tài khoản Online xác thực bằng số điện thoại di động VN; lưu họ tên, ngày
+     sinh, số điện thoại theo quy định; dưới 16 tuổi cha mẹ/người giám hộ đăng
+     ký bằng thông tin của họ. Solo offline không là dịch vụ Online (P02/P04).
+     Schema P3-01: verified_phone_ref, dob, age_band, guardian_link mã hóa,
+     retention/xóa theo thời hạn; P3-02 nối provider xác thực; không lưu OTP.
+  L2 Giới hạn giờ chơi người dưới 18: ≤60 phút/ngày cho game này, ≤180 phút/ngày
+     mọi game của doanh nghiệp (00:00–24:00 Asia/Ho_Chi_Minh). Bộ đếm cấp
+     account phía server, xuyên thiết bị/room, không tin client; hết giờ thì
+     kết thúc attempt an toàn, save, về menu có thông báo, không mất phần
+     thưởng đã COMMITTED. Nếu doanh nghiệp có nhiều game, bộ đếm chung là
+     service riêng (P3-02 interface, P6-02 vận hành). Test đổi giờ máy/đổi
+     máy/đúng nửa đêm/attempt đang chạy (EX47).
+  L3 Hiển thị liên tục kết quả phân loại độ tuổi khi giới thiệu/quảng cáo/phát
+     hành; khuyến cáo "Chơi quá 180 phút một ngày sẽ ảnh hưởng xấu đến sức
+     khỏe" trên màn hình người chơi 30 phút/lần trong khi chơi (mọi người
+     chơi). Thông báo là UI không chặn điều khiển quá 1 giây, có timer server-
+     side + fallback client, có test (P5-02).
+  L4 Có ít nhất một hệ thống máy chủ đặt tại Việt Nam để lưu trữ/cung cấp thông
+     tin theo yêu cầu cơ quan quản lý; dữ liệu cá nhân và nhật ký người chơi
+     mặc định lưu tại vùng VN; vùng ngoài VN cho room realtime chỉ khi tư vấn
+     pháp lý xác nhận và có đo RTT (mục7). Chuyển dữ liệu ra nước ngoài theo
+     thủ tục Luật BVDLCN 91/2025 và NĐ hướng dẫn (S35).
+  L5 Vật phẩm ảo/đơn vị ảo/điểm thưởng chỉ mint theo hồ sơ phát hành đã báo
+     cáo; không quy đổi thành tiền/thẻ cào/voucher; không mua bán vật phẩm ảo
+     giữa người chơi với nhau; không gắn khuyến mãi thưởng tiền/hiện vật ngoài
+     game vào giao diện. Vì vậy shop v0.1/v0.2 là catalog hệ thống + quầy trưng
+     bày; P2P_TRADE flag off; Hoàn Hảo marketplace chỉ read-only directory (G05).
+  L6 Hồ sơ Quyết định phát hành G1: tên/nguồn game, kịch bản/nhân vật/nhiệm vụ/
+     bản đồ/hệ vật phẩm/điểm thưởng/âm thanh/hình ảnh/tương tác, phân loại độ
+     tuổi, chứng minh sở hữu IP, domain/IP/kho ứng dụng, phương thức thanh toán;
+     hiệu lực ≤5 năm; mã cấp phép gắn vào mô tả trên store và website. Agent
+     sinh bản nháp từ catalog/asset manifest ở P6-02, cập nhật P8-03; nộp hồ sơ
+     và thời gian thẩm định là lead time của owner trước P9-01, không tự ký.
+  L7 Website/kênh công bố: phân loại tuổi, luật chơi, quy chế quản lý nội dung,
+     nguyên tắc giải quyết khiếu nại/tranh chấp, thông tin doanh nghiệp/giấy
+     phép; bộ phận tiếp nhận khiếu nại có người thật (operator P6-02/P8-03);
+     người chơi có quyền cho/không cho dùng thông tin để quảng cáo/chia sẻ.
+     Nội dung game không vi phạm điều cấm (cờ bạc/bài, chất kích thích, chủ
+     quyền lãnh thổ, thuần phong mỹ tục); policy biển đảo G06 áp cho map.
+  L8 Dữ liệu cá nhân: đánh giá tác động (DPIA), hồ sơ đồng ý, nhân sự bảo vệ dữ
+     liệu, quyền xóa/xuất/rút đồng ý, thông báo vi phạm; hồ sơ nháp P6-02 trước
+     tester, hoàn chỉnh P8-03. Ngừng dịch vụ phải báo trước 90 ngày và bảo đảm
+     quyền lợi người chơi; ghi vào runbook shutdown.
+Chưa có giấy phép/xác nhận thì package chỉ release-ready; P9-01 không phát hành.
+
+i18n từ P0-03: mọi chữ người chơi thấy nằm trong bảng dịch (Godot translation
+CSV/PO) có key ổn định, vi-VN mặc định, en scaffold; thiếu key hiện fallback vi
+và log, không hiện rỗng/key thô; không ghép chuỗi theo ngữ pháp, dùng format
+có tên tham số và quy tắc số nhiều; font fallback chain có dấu đủ; text
+overflow/ellipsis/200% scale test trong P5-02; P8-03 audit không hardcode chữ.
+
+Remote config/flag: manifest ký số, versioned, cohort/percentage, giá trị
+mặc định an toàn nằm trong client; chỉ đổi tham số đã khai báo schema, không
+tải code, không đổi luật attempt đang chạy hay giá đã hiển thị chưa confirm;
+flag authority (P2P_TRADE, chat_enabled, public_plaza, rewarded_activity,
+admission_shed) đánh giá phía server và audit ai/khi nào/vì sao; stale config
+quá TTL dùng mặc định; kill switch có operator. Schema P3-01, vận hành P6-02.
+
+Cỡ gói cài/patch (P0-02 khóa số, P8-03 kiểm): đề xuất Android cài lần đầu ≤400
+MB gồm nội dung để chơi Solo 10 phút, nội dung thêm tải theo asset pack có
+resume/hash; patch nội dung thường ≤100 MB; hỏi trước khi tải qua mạng di
+động, hiển thị dung lượng; disk peak old+new+staging (EX50). Windows tương tự
+có số riêng. Số vượt phải có quyết định, không âm thầm.
+
 UX trạng thái: optimistic preview khác receipt đã nhận. Pending sau 10s chuyển
 copy chờ/tra cứu+support ID, cho đóng dialog và theo dõi trong lịch sử; server
 status vẫn UNKNOWN đến khi có proof, không tự đổi FAILED sau UI timeout.
@@ -829,7 +951,9 @@ báo candidate, critic độc lập đúng hash, coordinator mới ACCEPTED.
 Ghi run_id/command_id/seed/config/source manifest/artifact/trace hash, timestamp,
 repro command, expected/actual, process exit và leftovers từ host. Parser phải
 fail closed khi evidence thiếu/stale; banner PASS hoặc caller supplied exit
-không đủ. Xem mục8 cho mức reviewer mỗi WP.
+không đủ. Xem mục8 cho mức reviewer mỗi WP. Mọi WP H2-P2-01→H2-P5-02 có
+deliverable client kèm một bản ghi Q01-T (trend) trước CANDIDATE; thiếu là GAP
+của WP đó, không chờ P5-03 mới biết nợ hiệu năng.
 
 ## Q01 — Benchmark tái lập và thiết bị
 
@@ -841,6 +965,12 @@ final content, cold/warm + thermal 20 phút và tất cả ngưỡng dưới. Ga
 thay gate F. P0-02 profile phải ghi required test IDs theo WP, không dẫn Q01 chung.
 **Q01-C (cold)** và **Q01-W (warm)** là hai phép đo cấu thành cả B/F, quy định
 ngay dưới bảng. Không đánh tráo cold run đã cache bằng warm run.
+**Q01-T (trend, P2-01→P5-02):** mỗi WP client ghi một lần đo fixture Q01-B v1
+cộng content hiện có, cùng SKU Windows đã khóa (Android khi có), cùng công thức
+raw ms/p50/p95/p99 và Q02 budget counters (triangles/draw calls/texture/RSS);
+không là acceptance, nhưng median xấu hơn >15% hoặc p99 >25% so bản ghi trước,
+hoặc vượt budget Q02, phải có giải thích và quyết định trong report WP. Import
+hook game cảnh báo asset vượt budget Q02 lúc import (P2-02), review trước merge.
 
 Matrix Q01-F bắt buộc: 1 Windows laptop iGPU hoặc cấu hình thấp được chọn, 1 Android
 tầm trung thật, 1 Android thấp thật để quyết định support floor. iOS chỉ được
@@ -1055,8 +1185,11 @@ khác; hai critics. Chưa được dùng package manifest làm proof gameplay/CC
 CONTRACT/VERIFY: mục3.5/P08; profile baseline dữ liệu, UX/accessibility và support OS/ABI, targets có số/test IDs trước build; unknown không là kết quả.
 ALLOWED: `contracts/quality-profile.json`, fixture specification, evidence.
 BUILD: ghi SKU/OS/GPU/RAM, desktop/touch preset, render resolution, support
-floor, lịch lấy thiết bị thực; khóa Q01-B/Q01-F/Q01-C/Q01-W/Q02 và test IDs
+floor, lịch lấy thiết bị thực; khóa Q01-B/Q01-F/Q01-C/Q01-W/Q01-T/Q02 và test IDs
 theo mỗi WP; ghi server OS/transport matrix dự kiến và engine bake-off recipe.
+Khóa thêm: cỡ gói cài/patch (3.5), cap bạn bè/pending/invite TTL (EX45),
+AFK/target occupancy đề xuất (P04), inventory dữ liệu LEGAL-VN L1/L2/L8 và
+vùng lưu trữ VN (L4), SCALE-LOCKS checklist có test ID owner.
 VERIFY: schema và matrix coverage; phân biệt target/observed/missing.
 DoD: không có “60 FPS” chưa đo; người thiếu thiết bị không bị giả thành emulator.
 Sau intake gói GT-10 đầy đủ, nếu thiết bị benchmark GAME chưa đến ghi gap;
@@ -1069,7 +1202,8 @@ P1-03 cần Windows + ít nhất một Android (Q01-B); P5-03 cần
 ALLOWED: `game/project.godot`, entry scene/scripts, `tools/`, `tests/`, CI local.
 BUILD: minimal launch/menu/quit, first-run tên/preset/skip tutorial skeleton
 không login wall, dev build label trong diagnostics, input
-actions, test runner, snapshot/run/user_dir isolation, headless server entry.
+actions, test runner, snapshot/run/user_dir isolation, headless server entry;
+i18n scaffold theo 3.5 (bảng dịch vi-VN, key ổn định, lint không hardcode chữ).
 VERIFY: import, parse typed scripts, launcher error paths, real exit codes;
 window launch and clean close. Tool bootstrapping theo consumer contract gói GT-10, không tạo full game.
 DoD: một lệnh logic check và một lệnh headed smoke documented, artifacts versioned.
@@ -1118,6 +1252,9 @@ ALLOWED: player/camera/input scenes/scripts, collision fixture/tests.
 BUILD: movement/camera/touch đầy đủ P03; movement interface dùng lại server.
 VERIFY: Q03-A 30/60/120 cap, slopes/steps/walls/landing, menu focus, camera near
 wall; real-input route desktop+Android. Fixture bổ trợ, không teleport sole proof.
+Interaction prompt khi nhiều đối tượng chồng (chỗ câu/cửa/người): chọn theo
+hướng nhìn rồi khoảng cách, có hysteresis, không nhấp nháy; xoay màn hình/đổi
+cỡ cửa sổ không mất state hay input. Gamepad ghi UNSUPPORTED v0.1, không im lặng.
 DoD: control video + snapshots, no inversion/slide/camera clipping tuyến chuẩn.
 
 ### H2-P2-02 — Avatar pipeline
@@ -1125,6 +1262,8 @@ ALLOWED: avatar source trong assets-src/, game assets/import/animation/data và 
 BUILD: style guide v1, font/stack đủ dấu tiếng Việt + license, hero rig,
 wardrobe slots, 6 emote, LOD pipeline và catalog IDs; trước
 bulk content có look-dev original đã review. Bắt đầu đủ biến thể để test mixing.
+Import hook cảnh báo asset vượt budget Q02 (triangles/bones/materials/texture)
+theo asset class, kèm naming convention từ gói GT-10; vượt cần review, không chặn ngầm.
 VERIFY: Q03-R look-dev/font runtime, GLB import, animation blending,
 costume intersections, LOD pop/skin,
 reset/equip/relaunch, reference/license manifest.
@@ -1154,12 +1293,14 @@ DoD: playable slice video và package; no geometry/placeholders claim final art.
 ## P3 — Authority và dữ liệu bền vững
 
 ### H2-P3-01 — API/persistence foundation
-CONTRACT/VERIFY: mục3.2.1/A09/3.5, EX37/EX40/EX41; schema locks/unique/realm, data lifecycle, 100k dataset và query/index report.
+CONTRACT/VERIFY: mục3.2.1/A09/3.5, EX37/EX40/EX41; schema locks/unique/realm, data lifecycle, 100k dataset và query/index report; SCALE-LOCKS SL1–SL3/SL9/SL10 có test ID; EX49 flag schema.
 ALLOWED: `backend/`, HTTP/save schemas, migration/transaction tests.
 BUILD: khóa Node LTS/framework/DB/schema tool exact versions; modular API,
 Postgres migrations, command journal/outbox, durable attempt/result API (đến
 RESULT_RECORDED, schema/lookup/idempotency) để P3-03 tiêu thụ; grant/ledger
-completion ở P3-04. Dev config không secrets Git.
+completion ở P3-04. Dev config không secrets Git. ID contract 3.2 (UUIDv7/ULID,
+public_handle), bảng playtime_daily/age_band/verified_phone_ref/guardian_link
+mã hóa theo LEGAL-VN L1/L2, remote config/flag schema có audit (3.5).
 VERIFY: clean DB boot, repeat migrate, version conflict, rollback/restore trên
 DB copy; restore sau deletion replay tombstones, API schema invalid input fail.
 Chưa gọi service Hoàn Hảo thật.
@@ -1173,9 +1314,13 @@ CONTRACT/VERIFY: auth/admission/clock/service identity mục3.2, EX42; reserve+t
 ALLOWED: auth provider adapter, room registry/tickets, net auth client/server.
 BUILD: OIDC/provider adapter có issuer/audience/expiry validation; dev identity
 không thể bật trong release; secure transport/cert và nonce/replay handling.
+Xác thực số điện thoại VN/ngày sinh/luồng người giám hộ qua provider hoặc bước
+riêng có nhãn (LEGAL-VN L1); playtime accounting server-side và hook kết thúc
+phiên an toàn cho dưới 18 (L2, EX47); khóa profile AFK/idle/invite TTL (P04).
 VERIFY: Q05 auth attacks, expired ticket, full-room reservations, stale epoch,
 TLS/DTLS failure, UDP-block fail-closed, secret scan; đăng nhập/logout/refresh/
-reconnect thật; Solo cold-start không bắt login.
+reconnect thật; Solo cold-start không bắt login; chưa xác thực thì Online bị
+chặn đúng thông điệp; giờ chơi qua nửa đêm/đổi máy/đổi giờ máy không cộng dồn sai.
 DoD: local provider integration có contract tests; production issuer/secret
 chưa có ghi gap và chặn P6-02; cấm DEV_ONLY trên LAN/WAN. Khóa transport matrix
 cho Windows/Android/Linux + ticket/channel binding trước capacity test; 2 critics.
@@ -1211,19 +1356,29 @@ CONTRACT/VERIFY: P04/3.2 AOI/house cap/reservations, EX43-A/EX44-C cap/reservati
 auth filter channel đã có, unhide không replay lịch sử.
 ALLOWED: social APIs/UI, room router/AOI schemas/tests.
 BUILD: accept/request/block, mode privacy, party 4/house 8/plaza 32 caps,
-join reservation và visibility hysteresis; direct interact mutual awareness.
+join reservation và visibility hysteresis; direct interact mutual awareness;
+cap bạn bè/pending, presence pull-on-open + push bounded (EX45); placement
+affinity/target occupancy/AFK theo P04 (EX46); thẻ thông tin avatar; invite
+TTL/trạng thái đã rời/hết hạn; chuyển leader party.
 VERIFY: Q04-L2/Q04-N + join room full/blocked/private; reconnect reservation
 30 s/actor TTL 10 s/party all-or-none reservation; race invite/logout; hidden peer
-không lộ transform qua API; priority không phá cap/block.
+không lộ transform qua API; priority không phá cap/block; account đạt cap bạn
+bè đăng nhập không tạo O(bạn) ghi DB; "Đến chỗ bạn" khi bạn vừa rời/đầy/ẩn có
+đúng trạng thái; AFK cảnh báo rồi rời đúng slot; thẻ avatar không lộ ID nội bộ.
 DoD: 2 client + observer adversarial route, no ghost >TTL; 2 critics.
 
 ### H2-P4-02 — Shops
 CONTRACT/VERIFY: một realm transaction mục3.2.1, slot/escrow/item/price/block race; owner delete/retire item và offline shop thuộc EX37/EX40.
 ALLOWED: shop API/UI/data, catalog transaction tests.
-BUILD: 1 quầy/6 slots, draft/publish/hide/stock/version, display-only hoặc
-soft-currency buy, owner offline vẫn tồn tại. Không real marketplace orders.
-VERIFY: actor UI publish→logout→B view/buy; duplicate click/retry, race last item,
-forged price/owner, hidden draft, failed payment rollback.
+BUILD: 1 quầy/6 slots, draft/publish/hide/stock/version; quầy trưng bày item sở
+hữu và giới thiệu item catalog hệ thống; mua = debit + mint từ catalog trong một
+TX, không chuyển ownership giữa account; P2P_TRADE flag server mặc định off,
+schema escrow giữ nhưng không ship bật (LEGAL-VN L5); owner offline vẫn tồn tại.
+Không real marketplace orders.
+VERIFY: actor UI publish→logout→B view/buy; duplicate click/retry, race last item
+stock hệ thống, forged price/owner, hidden draft, failed payment rollback; API
+transfer ownership trả REJECTED khi flag off; escrow tests chạy trên fixture
+flag on, có nhãn, không là closure.
 DoD: receipt + DB readback + player video + Q05; 2 critics.
 
 ### H2-P4-03 — House online
@@ -1245,8 +1400,13 @@ RBAC/audit/appeal, revoke live và cached output.
 ALLOWED: chat/report/block/rate limit services/UI/admin tools scoped new project.
 BUILD: text length/normalize, room chat, mute/block/report queue, operator
 hide/suspend audit, limits. Chat off before control path works; preset emotes remain.
+Công cụ hỗ trợ (CS): tra receipt/command theo support ID, cấp bù có audit và
+idempotency key, ban/unban/appeal trail, không sửa DB tay. Tên hiển thị: chống
+giả mạo bằng skeleton confusable (Unicode + dấu Việt), tên dành riêng
+(Admin/HH/hệ thống), đổi tên có cooldown và lịch sử cho moderation (EX48).
 VERIFY: spam/bypass Unicode/oversized payload, blocked chat/history/lookup,
-report to operator action to affected client; operator privileges least privilege.
+report to operator action to affected client; operator privileges least privilege;
+tên giả mạo staff/bạn bè bị từ chối, bạn bè thấy tên mới kèm tên cũ trong TTL.
 DoD: technical flow tested; policies/real staffing remain P6-02; 2 critics.
 
 ## P5 — Chất lượng hình ảnh và mượt
@@ -1264,9 +1424,14 @@ DoD: runtime art package 6 angles+video, signed critic notes (agent, not human o
 CONTRACT/VERIFY: mục3.5 UX/assistive tech/resource-bounded streaming, EX39; UNKNOWN→history/support, no raw internal details.
 ALLOWED: chunk loading/pools/UI/settings/onboarding diagnostics.
 BUILD: async resource loading/loading UI, shader first-use strategy, pooling,
-safe area/text scale/touch focus/contrast, reconnect/error/empty states.
+safe area/text scale/touch focus/contrast, reconnect/error/empty states;
+LEGAL-VN L3 UI (nhãn độ tuổi, khuyến cáo 30 phút/lần không chặn điều khiển),
+i18n overflow/fallback, asset pack tải theo nhu cầu có resume/hash và hỏi trước
+khi dùng mạng di động (3.5, EX50).
 VERIFY: Q03-A/Q03-R + Q01-C first movement/menu/equip/house; interrupt load,
-context/background/foreground; no unbounded growth.
+context/background/foreground; no unbounded growth; khuyến cáo hiện đúng chu kỳ
+qua đổi room/background; thiếu key dịch không hiện rỗng; ngắt tải asset pack
+giữa chừng rồi resume đúng hash.
 DoD: playable package no technical banners in primary flows; repro each fixed hitch.
 
 ### H2-P5-03 — Device/performance acceptance
@@ -1286,7 +1451,9 @@ BUILD: real network synthetic clients distinct from render dummies, metric
 capture, reconnect/failure/rollback scenarios; room caps enforced.
 VERIFY: Q04-L/Q04-N/Q04-C 32 connected/60-minute soak trên đúng Linux server
 và transport khóa ở P3-02, impaired network, capacity bytes/cost,
-Q05 transaction/adversarial regression, cold process exits/leftovers.
+Q05 transaction/adversarial regression, cold process exits/leftovers; EX45 fan-out
+với account cap bạn bè và đồ thị lệch; EX46 placement/fragmentation/AFK dưới
+tải; EX47 giới hạn giờ chơi dưới tải; EX49 flag đổi giữa soak không phá attempt.
 DoD: 32 đạt Q04-C và công bố config. Cap thấp hơn phải qua decision thay scope
 của owner + sửa contract + đo lại, không tick 32 bằng kết quả 16. 2 critics.
 
@@ -1296,6 +1463,11 @@ ALLOWED: deployment templates/runbooks/config schema under new backend/tools;
 runtime external actions only to approved environment with actual credentials.
 BUILD: private allowlist environment, TLS/key rotation/backup/alert/drain,
 invite adult testers, operator moderation/privacy/retention plan; no public URL listing.
+LEGAL-VN nháp: hồ sơ G1 (L6) sinh từ catalog/asset manifest, DPIA/hồ sơ đồng ý/
+nhân sự bảo vệ dữ liệu (L8), vùng lưu trữ VN và sơ đồ luồng dữ liệu (L4), kênh
+khiếu nại có người (L7); ghi rõ mục nào chờ tư vấn pháp lý, không tự kết luận.
+Alert bổ sung: chứng chỉ/khóa/secret sắp hết hạn, CVE critical dependency, flag
+đổi bất thường; mỗi alert có runbook và người trực (EX49).
 VERIFY: Q04-W1 devices/different real networks, secure login/join, restore sau
 account deletion không resurrect và alert
 drill; secret/scope/cost approvals only where needed after review package ready.
@@ -1380,9 +1552,13 @@ protocol compatibility N-only/drain by default (N/N-1 chỉ nếu tested), Solo
 save migration, changelog/support/known issues, dataset attribution.
 VERIFY: Q00/Q01-F/Q02/Q03-A/Q03-R/Q03-H/Q04-L/Q04-N/Q04-C/Q04-W1/Q04-W2/
 Q05/Q06, regression only once per unchanged candidate; human pilot feedback
-on actual geographic package; secrets/license/brand checks.
+on actual geographic package; secrets/license/brand checks; LEGAL-VN checklist
+L1–L8 có trạng thái từng mục (đạt/chờ pháp lý/GAP), cỡ gói cài/patch theo số
+khóa P0-02 (EX50), audit i18n không hardcode, flag mặc định release đúng (EX49).
 DoD: no open release blocker; ready-for-approval package, 2 critics. iOS excluded
 unless its own real build/device/store gate completed; do not fake parity.
+Thiếu quyết định phát hành G1/xác nhận pháp lý là release blocker có tên, không
+phải ghi chú.
 
 ## P9 — Release và sau release
 
@@ -1390,7 +1566,8 @@ unless its own real build/device/store gate completed; do not fake parity.
 CONTRACT/VERIFY: mục3.5 trusted artifact/clean install, N-only drain hoặc compatible canary đã test, signed/public chỉ quyền thực; EX38.
 ALLOWED: approved distribution environment/metadata, local release evidence.
 BUILD: all artifacts staged and reviewed first; obtain actual owner signing/
-publish/brand/required policy decisions; use official tools with secrets protected.
+publish/brand/required policy decisions; use official tools with secrets protected;
+mã cấp phép G1 gắn vào mô tả store/website, trang công bố L7 đã lên (LEGAL-VN).
 VERIFY: install từ distribution thật, API/server version compatibility, smoke,
 operator rollback switch; record artifact hash/channel/time.
 DoD: actual authorized release and observed smoke; no claimed release from
@@ -1450,7 +1627,8 @@ EX07 — Room mất ổ đĩa khi award chưa commit; P3-03/P3-04/P6-01.
   result cũ: chỉ một kết quả hợp lệ, quota không bị giữ mãi hoặc cấp hai lần.
   UI retry/pending theo server; đã ACK received phải còn theo DB-D2.
 EX08 — Item cuối/hide/đổi giá/cùng item hai listing; P3-04/P4-02.
-  Race buyer A/B + owner unpublish; unique escrow/version/stock/wallet TX.
+  Race buyer A/B + owner unpublish trên listing catalog hệ thống có stock giới
+  hạn; version/stock/wallet cùng TX (escrow chỉ khi P2P_TRADE on, LEGAL-VN L5).
   Một valid sale hoặc fail sạch, không negative/double ownership; card refresh
   price cần confirm lại. Refund là transaction riêng có reason/id, không sửa số trực tiếp.
 EX09 — Inventory/mailbox đầy; P2-03/P3-04/P4-02.
@@ -1615,6 +1793,50 @@ EX44 — Activity/starter kit/house lifecycle; P2-03/P3-04/P4-01/P4-03/P5-01.
   P4-03 nghiệm thu owner leave→đóng visit/hủy guest holds→lobby TTL, empty
   house_process_idle_stop; owner wake single-flight room lease/CAS/EX02,
   spawn timeout lookup không duplicate process; offline shop vẫn là DB rows.
+EX45 — Friend graph fan-out/cap/pending spam; P0-02/P4-01/P6-01/P8-02.
+  P0-02 khóa cap bạn bè (đề xuất 200), pending nhận/gửi (đề xuất 50) và hạn
+  request (đề xuất 30 ngày). Presence: mở danh sách bạn thì pull trang có
+  keyset; push chỉ tới bạn đang online trong budget/giây, gộp burst; login/
+  logout không ghi O(bạn) hàng DB hay gửi O(bạn) message đồng thời. Test tài
+  khoản đạt cap, đồ thị lệch (một người có nhiều bạn), 1M records P6-01 và 10M
+  P8-02: không hot row, không stampede khi node restart. Request spam bị quota
+  và block ưu tiên; xóa bạn/unfriend hủy invite/party consent liên quan.
+EX46 — Placement/fragmentation/AFK giữ chỗ; P3-02/P4-01/P6-01/P8-02.
+  Router lấp instance theo bạn bè/party → vùng → target occupancy, không 32/32
+  rồi mới mở; instance vắng ngừng nhận mới rồi drain. AFK không input quá N
+  phút (P3-02 khóa) cảnh báo rồi rời có save; đang attempt không bị AFK; AFK
+  vẫn tính cap đến khi rời; không kick người đang tương tác để nhét bạn. Test
+  đồ thị bạn bè tách vùng, 1000 join cùng lúc, instance mồ côi, AFK giữa
+  reconnect hold; đo fragmentation (rooms_house/rooms_plaza mục7.1) dưới tải.
+EX47 — Giới hạn giờ chơi/tuổi/xác thực theo LEGAL-VN; P3-01/P3-02/P5-02/P6-02/P8-03.
+  Bộ đếm playtime/ngày cấp account phía server (00:00–24:00 Asia/Ho_Chi_Minh),
+  xuyên thiết bị/room/reconnect; đổi giờ máy, NTP nhảy, đổi máy, phiên vắt qua
+  nửa đêm, attempt đang chạy khi hết giờ: kết thúc an toàn, save, không mất
+  reward COMMITTED, không cho login lại để reset. Chưa xác thực số điện thoại/
+  ngày sinh thì Online từ chối đúng thông điệp và Solo vẫn chơi; dưới 16 đi
+  luồng người giám hộ; khuyến cáo 30 phút/lần hiện đúng chu kỳ qua đổi room/
+  background, không chặn điều khiển. Dữ liệu L1 mã hóa, retention/xóa theo
+  hạn; thiếu xác nhận pháp lý là GAP có tên, không tự bỏ bước.
+EX48 — Tên giả mạo/confusable/đổi tên/tên dành riêng; P0-03/P3-02/P4-04.
+  Tên hiển thị NFC + skeleton confusable (Latin/Cyrillic/Greek, dấu tiếng Việt
+  tổ hợp, zero-width, khoảng trắng lạ) để chống giả staff/bạn; tên dành riêng
+  (Admin, GM, HH World, hệ thống); độ dài byte+grapheme; đổi tên có cooldown,
+  lịch sử tên cho moderation và bạn bè thấy tên cũ trong TTL. Solo (P0-03) chỉ
+  validate local; uniqueness/impersonation Online tại P3-02/P4-04. Không lộ
+  account_id qua tên; không từ chối tên tiếng Việt hợp lệ vì false-positive.
+EX49 — Remote config/flag/kill switch sai hoặc stale; P3-01/P6-02/P8-03/P9-02.
+  Manifest flag ký số/versioned/cohort; client dùng default an toàn khi thiếu/
+  stale/sai chữ ký; flag authority đánh giá server và audit; đổi flag giữa
+  attempt không đổi luật/giá đã hiển thị; kill switch (chat/public/rewarded/
+  admission) có operator và runbook; flag không tải code/asset ngoài release.
+  Test: flag đảo liên tục dưới tải, cohort lệch giữa client/server, rollback
+  flag, secret/cert sắp hết hạn có alert trước ≥14 ngày.
+EX50 — Cỡ gói cài/patch, mạng di động, disk peak; P0-02/P5-02/P8-03.
+  Cài lần đầu Android ≤ số P0-02 (đề xuất 400 MB) đủ chơi Solo 10 phút; asset
+  pack còn lại tải theo nhu cầu có resume/hash/hỏi trước khi dùng mạng di động;
+  patch nội dung thường ≤ số P0-02 (đề xuất 100 MB); ngắt tải/hết pin/hết disk
+  giữa chừng giữ last-good; disk peak old+new+staging; không chặn vào Solo vì
+  chưa tải pack Online. Vượt số phải có quyết định ghi lý do, không âm thầm.
 
 P3-02 khóa numeric timeout/rate/size/MTU/retention profile trước secure consumer;
 P1-02 disposable spike ghi limits tạm có số, không dùng làm release lock.
@@ -1662,7 +1884,10 @@ Nếu mua node dedicated, vẫn kiểm benchmark trên node đó.
 Network: room ENet/UDP endpoint hoặc LB L4; API HTTPS L7; nội dung version/hash
 qua CDN/object storage, không trong pose channel. Chọn region có RTT tốt đo
 bằng ít nhất hai mạng Việt Nam; cả cloud Singapore lẫn VN đều cần probe, không
-đoán hãng/vùng nào luôn nhanh. UDP có thể bị ISP/firewall chặn, phải có UX fail
+đoán hãng/vùng nào luôn nhanh. Ràng buộc LEGAL-VN L4: dữ liệu cá nhân, ledger
+và nhật ký người chơi mặc định ở vùng VN, có ít nhất một hệ thống máy chủ tại
+VN; room realtime ngoài VN chỉ khi tư vấn pháp lý xác nhận, và phải tính chi
+phí/độ trễ liên vùng cho API↔room. UDP có thể bị ISP/firewall chặn, phải có UX fail
 và nếu cần fallback secure thì test lại SLO/cost. Không cài fleet lúc này.
 
 7.1 Công thức CPU/RAM/network đúng đơn vị
@@ -1985,6 +2210,18 @@ S32 https://operations.osmfoundation.org/policies/nominatim/
   OSM data khác public service policies; không chọn các endpoint này để scale.
 S33 https://theupdateframework.github.io/specification/latest/
   Reference cho authenticated update/rollback/freeze threats, không runtime proof.
+S34 https://game.gov.vn/tin-tuc/current-regulations-on-online-video-games-government-decree-1472024nd-cp-on-the-management-provision-and-use-of-internet-services-and-cyber-information-decree-147-38n3
+  Cổng game.gov.vn tóm tắt Nghị định 147/2024/NĐ-CP (hiệu lực 25/12/2024):
+  phân loại G1–G4, xác thực số điện thoại VN, dưới 16 người giám hộ đăng ký,
+  giờ chơi dưới 18 (60/180 phút), khuyến cáo 30 phút/lần, máy chủ tại VN, vật
+  phẩm ảo không quy đổi/không mua bán giữa người chơi, hồ sơ G1 ≤5 năm. Đọc
+  09/09/2026; văn bản gốc và sửa đổi phải được tư vấn pháp lý đối chiếu.
+S35 https://congbao.chinhphu.vn/van-ban/luat-so-91-2025-qh15-45578.htm
+  Luật Bảo vệ dữ liệu cá nhân 91/2025/QH15 hiệu lực 01/01/2026 (NĐ hướng dẫn
+  356/2025/NĐ-CP thay NĐ 13/2023): DPIA, chuyển dữ liệu ra nước ngoài, nhân sự
+  bảo vệ dữ liệu, hồ sơ đồng ý. Chỉ là dữ kiện thiết kế, không tư vấn pháp lý.
+S36 https://thuvienphapluat.vn/chinh-sach-phap-luat-moi/vn/ho-tro-phap-luat/chinh-sach-moi/75111/dieu-kien-cap-giay-phep-cung-cap-dich-tro-choi-dien-tu-g1-tren-mang-tu-25-12-2024
+  Điều kiện giấy phép G1 theo Điều 39 NĐ 147 (trích dẫn thứ cấp, đối chiếu S34).
 
 Coordinator đã đối chiếu nguồn official 08–09/09; research.host.json cũ timeout/
 exit1 nên research.md chỉ provisional notes, không verdict. Docs động cần khóa
@@ -1998,18 +2235,22 @@ UndoRedo constraints được đưa thành test yêu cầu thay vì claim no bug
 9.2 Trạng thái thiết kế và lịch sử
 PLAN_DESIGN_REVIEW=SEE_EXACT_HASH_REPORT
 Review hiện hành:
-./reviews/20260908-r3/REVIEW-RESULT.md
-Lịch sử trước S5 không chứng nhận hash hiện tại. S4 sửa routing/workflow S2,
+./reviews/20260909-r4/REVIEW-RESULT.md
+Lịch sử trước S6 không chứng nhận hash hiện tại. S4 sửa routing/workflow S2,
 gộp appendix S3 vào contract gốc, bổ sung realm/dedupe/admission/AOI/RAM/outbox/
 identity/UX/release và EX01–EX44. S5 sửa closure Q01/Q04/Q05/EX theo owner,
-Android handoff, house wake/hold và award ordering. Không có plan thứ ba hay
-tiến độ từ report.
-Base commit chỉ provenance vì hai TXT còn untracked; freeze dựa full bytes.
+Android handoff, house wake/hold và award ordering. S6 (09/09) bổ sung LEGAL-VN
+L1–L8 và shop catalog-hệ-thống/P2P_TRADE off, ID contract và SCALE-LOCKS, friend
+fan-out/placement/AFK/thẻ avatar, i18n, remote config, cỡ gói, Q01-T trend và
+EX45–EX50; S5 chưa có critic verdict vì hết quota nên S6 review lại toàn bộ.
+Không có plan thứ ba hay tiến độ từ report.
+Base commit chỉ provenance: S5 đã commit ở aa5ae15, S6 đang sửa trong working
+tree; freeze dựa full bytes, không dựa Git HEAD.
 Tất cả 32 H2 vẫn PLANNED, implementation/runtime/human đều chưa nghiệm thu.
 
 9.3 Kiểm bàn giao và giới hạn
 Bảng32H2/32spec, dependency một chiều GT-10→H2-P0-01, không vòng; Q00–06,
-EX01–EX44, P01–P08/A/DB/G và sizing tự chứa. H2-P2-04 kiểm workflow asset-to-
+EX01–EX50, P01–P08/A/DB/G/LEGAL-VN/SCALE-LOCKS và sizing tự chứa. H2-P2-04 kiểm workflow asset-to-
 Solo thật; fixture GT không thay gameplay/FPS/CCU/fun. Static validator phải
 kiểm ID/count/dependency/links/UTF8/sentinel/hash/arithmetic.
 
