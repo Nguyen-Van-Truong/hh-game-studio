@@ -1,5 +1,5 @@
 HH WORLD — PLAN 2/2: GAMEPLAY, SOCIAL MULTIPLAYER, VIỆT NAM
-Ngày 10-09-2026, Asia/Saigon | Revision S14 | TRIỂN KHAI THEO GATE
+Ngày 09-09-2026, Asia/Saigon | Revision S13 | CHỈ LẬP KẾ HOẠCH
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO GAME
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -37,14 +37,14 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 32 | H2-P9-02 | Quan sát vận hành và quyết định mở rộng | H2-P9-01 | PLANNED
 
 CURRENT_VALID_WP=H2-P0-01
-DISPATCHABLE=NO_UNTIL_GT10_ACCEPTED
-EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
+DISPATCHABLE=NO_UNTIL_GT10_ACCEPTED_AND_OWNER_IMPLEMENTATION_AUTHORIZATION
+EXECUTION_AUTHORIZATION=PLAN_ONLY
 IMPLEMENTATION=NOT_STARTED
 RUNTIME_ACCEPTANCE=NONE
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/game-and-services
 PLAN_ROLE=GAME_SOURCE_OF_PROGRESS
-PLAN_REVISION=S14
+PLAN_REVISION=S13
 REVIEW_BASE_COMMIT=b4195ca
 HISTORICAL_REJECTED_COMMIT=54d0c7c
 HISTORICAL_STUDIO_COMMIT=3cc7a85f730c99963a5a64079a0e02dc20edbd40
@@ -2419,21 +2419,18 @@ cạnh nhiều Blender UI khi máy thiếu RAM. Queue/backpressure tốt hơn OO
 8.2 Giao việc đủ chi tiết, model đúng yêu cầu hiện hành
 
 Coordinator viết/sửa plan, chia việc, kiểm result và quyết định. Worker,
-researcher/search và critic dùng Grok CLI chính thức, model grok-4.6,
-reasoning-effort xhigh và --no-subagents theo lệnh owner 10-09-2026.
-Không dùng Codex worker, Cursor, Auto/fallback hoặc hidden subagents. Không tự đổi model khi quota; ghi lỗi thực và giữ
+researcher/search và critic chỉ gọi Codex subagent model `gpt-6-astra` với
+thinking `medium`; không Composer/Auto/fallback hoặc Task/Explore/
+subagent model không kiểm soát. Không tự đổi model khi quota; ghi lỗi thực và giữ
 phần phụ thuộc pending, tiếp tục việc coordinator được phép.
 Auth đã agent login; chỉ chẩn đoán auth khi có lỗi, không in tokens.
-CLI flags/model kiểm bằng grok --help và grok models, cache cùng phiên.
-Không suy diễn cờ fast; chỉ ghi fast nếu CLI/provider có bằng chứng hỗ trợ.
-Prompt read-only không là sandbox: critic đọc snapshot riêng, kiểm lại hashes
-và diff sau run. Worker chỉ ghi trong lease; phiên mới có UUID/attempt mới.
-Mỗi batch tối đa hai lần poll; supervisor ghi exit/PID/start và báo watcher.
-Thông báo terminal chỉ là NEEDS_REVIEW/WORKER_INCOMPLETE, không là ACCEPT.
+CLI flags/model verify --help/--list-models theo version, cache cùng phiên.
+--mode ask không là sandbox an toàn tuyệt đối; check source hashes/diff sau
+read-only critic. Workers được mutation chỉ các files user-authorized lease.
 
 Handoff template (điền hết, không gửi 'đọc plan rồi làm tiếp'):
 ROLE=implementer/researcher/critic
-MODEL=grok-4.6; REASONING_EFFORT=xhigh; CLI=official_grok; FAST_FLAG=ONLY_IF_VERIFIED; NO_CODEX_WORKER/NO_CURSOR/NO_FALLBACK/NO_HIDDEN_SUBAGENTS
+MODEL=gpt-6-astra; THINKING=medium; NO_CURSOR/NO_GROK/NO_FALLBACK/NO_COMPOSER/NO_HIDDEN_SUBAGENTS
 ROOT=<absolute 8-9-hh3d-3>; WORKSPACE=<studio repo>
 PLAN=<absolute one TXT>; OTHER_PLAN=<tools TXT at intake/handoff, otherwise relevant only>; PLAN_REVISION/HASH=<frozen content>
 WP=<one bounded WP/subdeliverable>; DEPENDENCIES=<actual ACCEPTED evidence>
@@ -2486,7 +2483,7 @@ cleanup cần kết thúc đúng process, không xóa evidence lỗi để đẹ
 
 Worker báo CANDIDATE, không tick. Routine game WP một critic độc lập; tool/
 authority/transaction/security/geo/release, P1-03/P5-03/P6/P8 cần2
-Grok CLI critics sessions riêng, không đọc verdict nhau. Report dùng ACCEPT/
+Codex critics sessions riêng, không đọc verdict nhau. Report dùng ACCEPT/
 REVISE/INSUFFICIENT_EVIDENCE đúng hash. Coordinator đóng findings rồi đổi trạng
 thái một hàng đầu file. Source thay sau critic phải review source mới.
 Plan consolidation lần này cũng cần2critics trên cùng hash; review thiết kế
@@ -2521,7 +2518,7 @@ Không tạo automation/watchdog/heartbeat chạy về sau trong lượt plan n�
 
 9.1 Nguồn công khai và mức tin cậy
 
-Worker/search/critic hiện dùng Grok CLI grok-4.6 xhigh; nguồn đã đối chiếu
+Research notes/critic dùng Codex Astra medium; coordinator đối chiếu nguồn
 official ngày08–09/09/2026. Danh mục dưới ghi nguồn kỹ thuật/reference;
 nguồn hỗ trợ thiết kế, không benchmark dự án. /stable, /latest, /current là
 URL động; khi implementation dùng docs đúng version đã khóa. Giá/cấu hình
@@ -2630,7 +2627,7 @@ UndoRedo constraints được đưa thành test yêu cầu thay vì claim no bug
 9.2 Trạng thái thiết kế và lịch sử
 PLAN_DESIGN_REVIEW=SEE_EXACT_HASH_REPORT
 Review hiện hành:
-./reviews/20260910-r5/REVIEW-RESULT.md
+./reviews/20260909-r4/REVIEW-RESULT.md
 Lịch sử S4–S8 không chứng nhận hash hiện tại. S5 đã có scale ladder/A09 và
 Q01-B; S6–S8 làm rõ owners, LEGAL-VN, catalog shop, Q01-T, SL1–SL12, EX45–53.
 Hai critic S6 cùng REVISE. S7 sửa nhiều finding nhưng A còn PARTIAL Q01-T,
@@ -2641,15 +2638,14 @@ S9 (09/09) sửa applicability Solo, family/contact/player, SIM/recovery/CAS,
 retention sáu tháng tách anti-farm, legal amendment/pilot gate, SL1/SL6 trước
 consumer, ownership số bảo mật và thời điểm kế vị leader. S9 không mặc nhiên
 ACCEPT; report ghi đúng frozen hashes và evidence từng attempt, launcher
-fail closed và không ghi đè lịch sử. Đây là lịch sử quyền tại thời điểm S9. Owner hiện đã cho phép triển khai;
-S14 giữ dependency GT-10 và các gate evidence/critic/legal/human còn thiếu.
+fail closed và không ghi đè lịch sử. Hai critic ACCEPT vẫn cần quyền owner
+triển khai riêng; EXECUTION_AUTHORIZATION=PLAN_ONLY tiếp tục có hiệu lực.
 S10/S11 làm rõ candidate pin, safe-open/linked closure, benchmark cardinality và
 shared manifest. S12 thêm release-profile-v1 typed, legal/enterprise fail-closed,
 production-vs-fixture mode, dependency hash gates và DB durability evidence.
 S13 khóa closed-schema/signature provenance, load-profile-v1 acceptance defaults,
 deployment-profile-v1 closure, candidate-vs-observed tool pin và loại bỏ commit
-large-file bị remote từ chối. S14 đổi worker sang Grok CLI và ghi quyền owner
-đã cấp; game vẫn đợi GT-10 ACCEPTED. 32 H2 PLANNED; chưa có runtime/human/legal/scale
+large-file bị remote từ chối. 32 H2 PLANNED; chưa có runtime/human/legal/scale
 acceptance. Snapshot/freeze mới dựa full bytes, Git HEAD chỉ provenance; không
 có plan thứ ba.
 
@@ -2676,4 +2672,4 @@ rollback=quay về bản tốt đã kiểm, không đè thay đổi mới chưa 
 
 
 END_OF_GAME_PLAN
-DATE=2026-09-10 Asia/Saigon
+DATE=2026-09-09 Asia/Saigon

@@ -1,0 +1,13 @@
+# Frozen HH3D source manifests hash the same bytes on Windows and CI.
+*.txt text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.jsonl text eol=lf
+*.py text eol=lf
+*.ps1 text eol=lf
+*.gd text eol=lf
+*.godot text eol=lf
+*.tscn text eol=lf
+*.blend binary
+*.snapshot -text
+studio/evidence/** -text

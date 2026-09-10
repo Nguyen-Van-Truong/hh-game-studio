@@ -1,0 +1,46 @@
+"""Prepare isolated HH3D worker inputs and launch official Grok supervisors.
+
+Logs/workspaces stay in TEMP. Prepare only; Launch-Batch.ps1 starts supervisors.
+This is dispatch, never an acceptance mechanism.
+"""
+from pathlib import Path
+import datetime, hashlib, json, shutil, tempfile, uuid
+
+HERE = Path(__file__).resolve().parent
+REPO = HERE.parents[3]
+SCOPE = REPO / '8-9-hh3d-3'
+STAMP = datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%SZ')
+BATCH = Path(tempfile.gettempdir()) / ('hh3d-gt01-' + STAMP)
+BATCH.mkdir(exist_ok=False)
+NAMES = ['8-9-godot-blender-agent-studio-plan.txt', '8-9-hh-world-gameplay-viet-nam-plan.txt']
+COMMON = '''You are one bounded HH3D worker. Use official Grok yourself; no additional agents, no Cursor/Codex, no model fallback. Work only in the supplied workspace. No git commits/pushes, no ticks or invented ACCEPT signatures. Input plans are S13 snapshots, not proof of implementation. Owner has authorized implementation now and changed worker policy to Grok CLI grok-4.6 xhigh; PLAN_ONLY and Codex-only statements in these snapshots are being corrected by coordinator. Do not implement HH World before GT-10 acceptance. Do not touch any other product. Do actual assigned work, not a plan for future work. Final artifacts REQUIRED: REPORT.md and evidence.json in workspace root. Include outcome COMPLETE/PARTIAL/BLOCKED, exact commands with actual exits, changed file paths/hashes, findings/gaps/limitations. Distinguish absence of implementation from a defect in the plan. No production secrets, external messages, payment, publishing or downloads of untrusted artifacts. Use primary official web sources when researching. You have at most 20 minutes; produce a partial truthful report before budget ends. Stop after the deliverables, no endless extra audits. Input hashes are in input-manifest.json. Only own output files may change; plans under inputs/ must remain byte-identical. CLI --always-approve grants tool access; these path/scope constraints still apply.
+'''
+JOBS = {
+ 'tools-audit': (True, '''Audit inputs/tools plan closely, and cross-plan handoff. Find concrete unresolved contradictions, impossible acceptance dependencies, missing trust/identity/atomicity/lifecycle/UX contracts that would cause rework. Focus GT01 feasibility and signature/source-manifest cycles, process identity on Windows, safe path handling. Do not re-review all historical reviews. Read current input plan directly. Produce a maximum of 8 actionable prioritized findings with exact quote, location, rationale, proposed replacement text, and verification. No code changes. If no substantive findings say so without claiming runtime acceptance.'''),
+ 'game-audit': (True, '''Audit inputs/game plan plus tools handoff for release profiles, legal requirements Vietnam, Solo eligibility, minimization/age/phone uniqueness/retention/deletion, capacity/resource budgets and deployment. Search current authoritative primary legal sources for any asserted law you challenge. Do not provide a legal signoff. Identify maximum 8 actionable design findings with exact quote/location, sources, concrete replacement text and validation. Check signature/hash self-reference and conditional Solo UX contradictions. Do not confuse unfinished implementation with a plan gap. No source changes.'''),
+ 'toolchain': (True, '''Complete GT01 official toolchain inventory/reuse/license/target-matrix research. Read input plans and studio/toolchain.lock.json. Verify current official availability/build/checksum sources for Godot candidate4.7.2 vs installed4.7.1 and Blender5.2.1 LTS; distinguish web evidence from observed local binary. You MAY read local artifact paths explicitly listed in lock and adjacent Godot GUI companion/version files, and compute hashes; no installation/global changes, no whole disk search. Choose a justified single candidate with unresolved gates explicit; do not call observed4.7.1 the release pin by default. Write outputs/toolchain-proposal.json with official URLs, compatibility/support status, exact hashes observed, full commit if verifiable, license/SPDX, target Win editor+Linux headless+Android runtime matrix and missing proofs; write outputs/REUSE-MATRIX.md. No writes outside workspace. Capture local commands bounded to60seconds. Do not claim Blender installed if only ZIP exists.'''),
+ 'host-runner': (False, '''Implement GT01 portable, bounded Windows host verification tooling in studio/build/bootstrap/ and its meaningful tests in studio/tests/bootstrap/. ONLY those paths writable (plus final reports/logs). Fixture files and lock are read-only to you; another worker owns fixture. Design CLI --studio-root --godot-exe --expected-version --timeout --run-id/command-id --output, with explicit paths. Verify console AND adjacent GUI companion hashes before spawn, safe immutable copy of fixture to unique workspace including spaces/Unicode; no run on canonical/user project. Record full source closure including runner, fixture, lock, and both executable hashes, host actual exit/stdout/stderr/PID/start/argv/timeout/leftover, accurate empty inventory [] not empty file. Bounded subprocess with file redirects to avoid pipe deadlock; cleanup only own exact launched process identity/tree, never kill by name. Reject existing evidence output/run IDs, invalid/traversal/symlink roots, altered expected digest/version before any project launch. Do not write generated .godot caches into source. Use stdlib Python and/or PowerShell. Separate result COMPLETE/DIAGNOSTIC/GAP, never acceptance on --quit-after/banner alone. Persist raw evidence with no recursive hash self-reference. Tests must inject stale hashes, timeout, console/GUI mismatch, duplicate run IDs, spaces/Unicode, fake executable launch failure. Use fake process tests for failure branches; you may perform one real Godot headless import on your private copied fixture using installed locked binary. No global env mutation or official acceptance claims. New code must remain portable across copied workspace paths; local absolute binaries passed by caller. Do not implement GT02+ protocol.'''),
+ 'fixture': (False, '''Implement a small original GT01 fixture under studio/fixtures/sample-game/ and a separate Blender fixture recipe under studio/fixtures/sample-blender/. ONLY those paths writable plus reports/logs. This is GT01 bootstrap, not GT06 full avatar/gameplay or any HH World code. Godot4.7 typed GDScript, clear menu with Start and Quit, focus+keyboard navigation, small original scene with movement, pause/resume, quit via actual input and printed typed transition state for later evidence. Avoid assets outside root; generate simple geometry in code/scenes. Include bounded headless input trace script (Input.parse_input_event where appropriate) that goes menu-start/pause/resume/quit and logs post-transition readback; direct calls or quit-after cannot be sole interaction evidence. A host runner worker owns build/bootstrap, tests/bootstrap and lock: DO NOT change those paths. Blender fixture recipe should create an original unit cube with clean scale/origin, save .blend and validate reopen through background Python, disable autoexec; recipe may be unexecuted if Blender not installed but label honestly. Never overwrite existing .blend or output by default. You may run installed Godot at explicit lock path only on your own workspace fixture; bound subprocess timeout<=60secs, no second process on same project concurrently, capture actual exit and relevant errors/warnings. No Blender installation. No ship fake tests. Finish REPORT.md and evidence.json with exact files/commands/results/gaps.'''),
+}
+records=[]
+for job,(web,task) in JOBS.items():
+    attempt=BATCH/job
+    work=attempt/'workspace'
+    (work/'inputs').mkdir(parents=True)
+    rows=[]
+    for n in NAMES:
+        raw=(SCOPE/'zdoc'/n).read_bytes()
+        (work/'inputs'/n).write_bytes(raw)
+        rows.append({'path':'inputs/'+n,'sha256':hashlib.sha256(raw).hexdigest(),'bytes':len(raw)})
+    shutil.copytree(SCOPE/'studio',work/'studio',ignore=shutil.ignore_patterns('.local','.godot','__pycache__','evidence','*.pyc'))
+    (work/'input-manifest.json').write_text(json.dumps(rows,indent=2)+'\n',encoding='utf-8')
+    (work/'AGENTS.md').write_text(COMMON+'\nAssigned work:\n'+task+'\n',encoding='utf-8')
+    config={'id':'hh3d-'+job,'attempt':STAMP,'session':str(uuid.uuid4()),'workspace':str(work),'notification_repo':str(REPO.parent/'hoan-hao'),'turn_limit':65,'max_seconds':1200,'notify':True,'web_search':web}
+    (attempt/'config.json').write_text(json.dumps(config,indent=2)+'\n',encoding='utf-8')
+    (attempt/'TASK.txt').write_text(COMMON+'\nAssigned work:\n'+task+'\n',encoding='utf-8')
+    shutil.copy2(HERE/'Run-Worker.ps1',attempt/'Run-Worker.ps1')
+    records.append({'role':job,'attempt_dir':str(attempt),'workspace':str(work),'supervisor_pid':None,'session':config['session']})
+record={'schema':'HH3D-WORKER-BATCH-1','created_utc':STAMP,'batch_root':str(BATCH),'model':'grok-4.6','reasoning_effort':'xhigh','fast_flag':'NOT_EXPOSED_BY_CLI','poll_budget':2,'polls_used':0,'jobs':records}
+(BATCH/'batch.json').write_text(json.dumps(record,indent=2)+'\n',encoding='utf-8')
+(HERE/'active-batch.local.json').write_text(json.dumps(record,indent=2)+'\n',encoding='utf-8')
+print(json.dumps(record,indent=2))

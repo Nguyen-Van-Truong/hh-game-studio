@@ -1,9 +1,9 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 10-09-2026, Asia/Saigon | Revision S14 | TRIỂN KHAI THEO GATE
+Ngày 09-09-2026, Asia/Saigon | Revision S13 | CHỈ LẬP KẾ HOẠCH
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
-01 | GT-01 | Chốt pin/phạm vi/reuse; bootstrap dự án mẫu độc lập | OWNER_START | IN_PROGRESS
+01 | GT-01 | Chốt pin/phạm vi/reuse; bootstrap dự án mẫu độc lập | OWNER_START | PLANNED
 02 | GT-02 | Protocol, capability, journal và an toàn lệnh tối thiểu | GT-01 | PLANNED
 03 | GT-03 | Godot EditorPlugin: sửa scene, UndoRedo, save/readback | GT-02 | PLANNED
 04 | GT-04 | Blender adapter UI và background jobs an toàn | GT-02 | PLANNED
@@ -15,13 +15,13 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 10 | GT-10 | Gói công cụ v0.1, cài/upgrade/rollback, bàn giao game | GT-09 | PLANNED
 
 CURRENT_VALID_WP=GT-01
-EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=GT01_IN_PROGRESS
+EXECUTION_AUTHORIZATION=PLAN_ONLY
+IMPLEMENTATION=NOT_STARTED
 RUNTIME_ACCEPTANCE=NONE
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S14
+PLAN_REVISION=S13
 REVIEW_BASE_COMMIT=b4195ca
 HISTORICAL_REJECTED_COMMIT=54d0c7c
 HISTORICAL_STUDIO_COMMIT=3cc7a85f730c99963a5a64079a0e02dc20edbd40
@@ -48,7 +48,7 @@ source gameplay bắt đầu sau handoff công cụ. Không xây editor tổng q
 Root tương lai: hh-game-studio/8-9-hh3d-3. Công cụ chỉ sở hữu studio/**,
 bao gồm lock/build/fixture/package của mình. Không đổi Godot/Vault Fighters,
 không sửa root platform/Rust, Web cũ hay dịch vụ Hoàn Hảo. Vị trí hai TXT ở
-thư mục `hh-game-studio/8-9-hh3d-3/zdoc/` trong repo hiện tại; owner đã mở triển khai studio theo dependency; không mở quyền dịch vụ khác.
+thư mục `hh-game-studio/8-9-hh3d-3/zdoc/` trong repo hiện tại; chỉ mở quyền tài liệu, không quyền dịch vụ.
 GT-01 đọc capability công cụ có sẵn trong phạm vi được cho phép; muốn reuse
 ngoài scope cần chỉ rõ artifact/source được phép, kiểm license/compatibility.
 Không suy platform đã tick là tools mới đạt; không cần fork engine để agent dùng.
@@ -59,8 +59,7 @@ GT state: PLANNED → IN_PROGRESS → CANDIDATE → ACCEPTED hoặc GAP. Chỉ c
 Mỗi WP có owner/lease/basehash/allowed files/verify; không worker tự tick.
 Cập nhật đoạn tại chỗ kèm revision/change reason; không append errata trái
 nội dung. Lần tạo file append từng phần nhỏ và kiểm sentinel cuối/hash.
-Owner đã cho phép implementation; GT-01 được triển khai và phải qua đủ DoD.
-Quyền thực hiện không thay bằng chứng nghiệm thu và không là public release.
+Đây là PLAN_ONLY: chưa cài, clone, fork, triển khai hoặc publish từ việc tạo plan.
 
 Mục lục: 1 Lựa chọn/pin; 2 Contract công cụ và asset; 3 Specs GT;
 4 TQ nghiệm thu; 5 TX ngoại lệ; 6 Handoff sang game; 7 Máy/hiệu năng;
@@ -462,12 +461,12 @@ TQ08-B/TX16-C là closure GT-08; install/upgrade consumer closure ở GT-10.
 ### GT-09 — Agent conformance toàn tuyến
 CONTRACT/VERIFY: TX01–TX18 trong scope GT-01…GT-09 đã có; riêng TX16-C/TQ08-B
 chỉ producer verifier/fixture build, TX16-I/TQ08-I install-upgrade thuộc GT-10.
-Prompt-injection/capability/UX trên đúng Grok CLI client; độc lập fixture, không chờ game.
+Prompt-injection/capability/UX trên đúng Codex client; độc lập fixture, không chờ game.
 ALLOWED: studio/tests/conformance/, isolated fixture clones, evidence.
 BUILD: brief → Blender sửa asset → GLB → Godot scene → actual play/input →
 observe lỗi scene/resource/script seeded → agent sửa bằng catalog GT-03 →
 replay → checkpoint; không cần game H2 và không shell edit ngoài typed operation.
-VERIFY: Grok CLI đúng model bằng adapter được cấp, operations có command IDs,
+VERIFY: Codex đúng model bằng adapter được cấp, operations có command IDs,
 pre/postcondition; reconnect/retry/context reset không mutation trùng; owner
 edit giữa lease và hai job source khác chạy song song. Protocol client riêng
 kiểm unsupported client version; không giả model khác đã chạy conformance.
@@ -731,21 +730,18 @@ protocol/debug details ngoài diagnostics cần thiết.
 8.2 Giao việc đủ chi tiết, model đúng yêu cầu hiện hành
 
 Coordinator viết/sửa plan, chia việc, kiểm result và quyết định. Worker,
-researcher/search và critic dùng Grok CLI chính thức, model grok-4.6,
-reasoning-effort xhigh và --no-subagents theo lệnh owner 10-09-2026.
-Không dùng Codex worker, Cursor, Auto/fallback hoặc hidden subagents. Không tự đổi model khi quota; ghi lỗi thực và giữ
+researcher/search và critic chỉ gọi Codex subagent model `gpt-6-astra` với
+thinking `medium`; không Composer/Auto/fallback hoặc Task/Explore/
+subagent model không kiểm soát. Không tự đổi model khi quota; ghi lỗi thực và giữ
 phần phụ thuộc pending, tiếp tục việc coordinator được phép.
 Auth đã agent login; chỉ chẩn đoán auth khi có lỗi, không in tokens.
-CLI flags/model kiểm bằng grok --help và grok models, cache cùng phiên.
-Không suy diễn cờ fast; chỉ ghi fast nếu CLI/provider có bằng chứng hỗ trợ.
-Prompt read-only không là sandbox: critic đọc snapshot riêng, kiểm lại hashes
-và diff sau run. Worker chỉ ghi trong lease; phiên mới có UUID/attempt mới.
-Mỗi batch tối đa hai lần poll; supervisor ghi exit/PID/start và báo watcher.
-Thông báo terminal chỉ là NEEDS_REVIEW/WORKER_INCOMPLETE, không là ACCEPT.
+CLI flags/model verify --help/--list-models theo version, cache cùng phiên.
+--mode ask không là sandbox an toàn tuyệt đối; check source hashes/diff sau
+read-only critic. Workers được mutation chỉ các files user-authorized lease.
 
 Handoff template (điền hết, không gửi 'đọc plan rồi làm tiếp'):
 ROLE=implementer/researcher/critic
-MODEL=grok-4.6; REASONING_EFFORT=xhigh; CLI=official_grok; FAST_FLAG=ONLY_IF_VERIFIED; NO_CODEX_WORKER/NO_CURSOR/NO_FALLBACK/NO_HIDDEN_SUBAGENTS
+MODEL=gpt-6-astra; THINKING=medium; NO_CURSOR/NO_GROK/NO_FALLBACK/NO_COMPOSER/NO_HIDDEN_SUBAGENTS
 ROOT=<absolute path repo 8-9-hh3d-3>; WORKSPACE=<studio repo>
 PLAN=<absolute TXT đúng scope tools hoặc game>; OTHER_PLAN=<chỉ nếu cần handoff>; PLAN_REVISION/HASH=<frozen content>
 WP=<one bounded WP/subdeliverable>; DEPENDENCIES=<actual ACCEPTED evidence>
@@ -796,7 +792,7 @@ Packer parse real host exits, run ownership, missing/stale/hash/schema/limits;
 caller-supplied exit0 hay field 'PASS' không đủ. Timeout/abort là incomplete;
 cleanup cần kết thúc đúng process, không xóa evidence lỗi để đẹp package.
 
-Worker báo CANDIDATE, không tick. Mọi GT cần2 Grok CLI critics trong sessions
+Worker báo CANDIDATE, không tick. Mọi GT cần2 Codex critics trong sessions
 độc lập, không đọc verdict nhau. Quy tắc nghiệm thu consumer thuộc plan2.
 Report dùng ACCEPT/
 REVISE/INSUFFICIENT_EVIDENCE đúng hash. Coordinator đóng findings rồi đổi trạng
@@ -834,7 +830,7 @@ Không tạo automation/watchdog/heartbeat chạy về sau trong lượt plan n�
 
 9.1 Nguồn công khai và mức tin cậy
 
-Worker/search/critic hiện dùng Grok CLI grok-4.6 xhigh; nguồn đã đối chiếu
+Research notes/critic dùng Codex Astra medium; coordinator đối chiếu nguồn
 official ngày08–09/09/2026. Danh mục dưới ghi nguồn kỹ thuật/reference;
 nguồn hỗ trợ thiết kế, không benchmark dự án. /stable, /latest, /current là
 URL động; khi implementation dùng docs đúng version đã khóa. Giá/cấu hình
@@ -885,7 +881,7 @@ pin ghi UNVERIFIED trước implementation. Không cài binary trong lượt rev
 9.2 Trạng thái thiết kế và bàn giao
 PLAN_DESIGN_REVIEW=SEE_EXACT_HASH_REPORT
 Review hiện hành:
-./reviews/20260910-r5/REVIEW-RESULT.md
+./reviews/20260909-r4/REVIEW-RESULT.md
 S4/S5 sửa routing/closure; S6/S7 bổ sung naming và perf schema. Hai critic S7
 vẫn REVISE trên cặp plan, không chứng nhận S8. S8 critic bị quota, chưa có
 verdict. S9 sửa ALLOWED của GT-05/GT-06, writer/version compatibility và GT-10
@@ -894,10 +890,8 @@ S10/S11 bổ sung safe-open Windows, linked-library closure, benchmark cardinali
 và package pin state. S12 chuyển worker/critic policy sang Codex Astra medium;
 S13 khóa candidate-vs-observed pin, closed package closure và loại bỏ commit
 large-file bị remote từ chối; static PASS không thay hai critic/runtime/human,
-không là runtime acceptance.
-S14 ghi quyền implementation owner đã cấp, GT-01 IN_PROGRESS; đổi worker
-sang official Grok CLI grok-4.6 xhigh, sửa routing và bộ kiểm chứng đang dùng.
-9 GT còn PLANNED; GT-02 chỉ mở khi GT-01 đủ dependency/DoD/critic. Tất cả
+không tự mở GT-01.
+10 GT PLANNED, PLAN_ONLY; owner phải cho phép implementation riêng. Tất cả
 review/snapshot chỉ evidence, không nguồn WP; hash full bytes mới là freeze.
 
 Từ vựng: WP=công việc; DoD=điều kiện xong; fixture=dự án mẫu để kiểm công cụ;
@@ -908,4 +902,4 @@ CCU=người online cùng lúc trong game, không số agent phát triển game.
 
 
 END_OF_TOOLS_PLAN
-DATE=2026-09-10 Asia/Saigon
+DATE=2026-09-09 Asia/Saigon

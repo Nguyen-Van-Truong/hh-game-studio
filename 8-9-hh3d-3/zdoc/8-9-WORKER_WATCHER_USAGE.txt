@@ -1,0 +1,51 @@
+WORKER WATCHER USAGE (verified 2026-09-09)
+
+Purpose: watch explicit worker attempts without model polling. The watcher never starts/resumes workers, never edits code, and never treats exit code alone as success. Durable inbox files are authoritative; Windows toast/sound is best effort.
+
+Before each batch:
+1. Give every worker a unique attempt directory with report path, exit.txt, stderr.txt, and a completion marker contract.
+2. Start the watcher in a hidden single-instance PowerShell process:
+   powershell.exe -NoProfile -ExecutionPolicy Bypass -File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hoan-hao\scripts\worker-mailbox\Start-Watcher.ps1"
+3. Do not read worker events continuously. Wait for a toast or inspect `deployvps2/.out-env/worker-mailbox/inbox` after the worker terminates.
+4. A NEEDS_REVIEW notice means the worker produced terminal evidence that still requires coordinator review. WORKER_INCOMPLETE/UNKNOWN means no valid final evidence; do not promote a milestone.
+5. Coordinator must independently read report and evidence, recompute hashes, verify exit code and tests, and then update the canonical plan. A process disappearing, a report claim, or a toast alone is never release proof.
+
+Watcher scope: it only observes rows registered in the active attempt manifest. Grok CLI sessions must be registered explicitly with actual model/effort/session and bounded paths; otherwise no notification is expected. The current implementation accepts exact normalized model identity and explicit paths under the repo or user TEMP root. It does not observe in-process Codex subagents automatically.
+
+Tests (isolated; no real sound):
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hoan-hao\scripts\worker-mailbox\tests\Invoke-WorkerMailboxTests.ps1"
+
+Stop only the scoped watcher marker:
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hoan-hao\scripts\worker-mailbox\Stop-Watcher.ps1"
+
+Notification semantics: visual/audible delivery is convenience; inbox/ledger plus matching report hash is the durable record. If Focus Assist or session isolation hides a toast, the batch state is still recoverable from the inbox.
+VERIFIED GROK CLI CHILD-SUPERVISOR ROUTE (2026-09-10 local)
+The Windows screenshots supplied by the user came from the per-attempt Grok child supervisor, NOT from Start-Watcher.ps1's legacy registry polling. Do not claim that running Start-Watcher.ps1 automatically observes official Grok CLI jobs.
+Reference supervisor: C:/Users/truon/AppData/Local/Temp/hh-mainline-impl-20260909T230623Z/Run-Worker.ps1 (inspect before reuse). Each new attempt needs its own config.json and TASK.txt, with workspace separate from attempt logs. Config fields: id, attempt, session (fresh UUID for new job), workspace, repo, turn_limit, notify=true. Resume requires --resume with the exact existing UUID and a new attempt/log dir; do not reuse old exit/notification.claim files.
+Launch supervisor via Start-Process powershell.exe -WindowStyle Hidden with -NoProfile -File <supervisor> -AttemptDir <attempt>; quote paths. It launches grok.exe --model grok-4.6 --reasoning-effort xhigh --prompt-file <TASK> --no-subagents --no-plan, records native PID/start, uses WaitForExit(), and writes runner-meta.json/exit.txt. It invokes existing WorkerMailbox.Notify.ps1 once using exclusive notification.claim. No model tokens are spent while this ordinary process waits.
+This route stores notice-evidence.json/notice-result.json in the attempt, not the legacy inbox. It checks report/evidence presence only to choose NEEDS_REVIEW vs WORKER_INCOMPLETE; coordinator MUST still verify hashes, raw tests and semantics. A CLI can exit0 with no work, so exit0 never means task success. A crashed supervisor may leave no exit metadata: mark UNKNOWN after matching PID/start, never guess a successful exit. Reuse exact explicit attempts; do not resurrect completed attempts or delete their logs.
+
+HH3D GT-01 bounded route (2026-09-10)
+Repository-owned supervisor and launch tools: zdoc/reviews/20260910-r5/.
+1. dispatch_batch.py PREPARES new isolated workspaces and fresh UUIDs in TEMP.
+2. Launch-Batch.ps1 starts those supervisors with Start-Process -WindowStyle Hidden.
+   Verify native.json exists for each child. A supervisor PID alone does not prove
+   Grok started. Detached Python child launch did not survive on this host and
+   is not the supported launch route.
+3. poll_batch.py records at most TWO polls per batch in active-batch.local.json.
+   Do useful independent coordinator work between polls; do not read event streams
+   repeatedly. After the budget, rely on the per-attempt notice/terminal metadata
+   and the owner's next message to resume review. There is no automatic model
+   continuation merely because a Windows toast appears.
+4. Supervisor waits up to 20 minutes, records timeout/exit/error and preserves
+   all attempt files. Timeout and absent metadata are never successful completion.
+   CLI may itself have started tool subprocesses: verify worker output/process
+   ownership before promotion, including after a timeout.
+5. Official Grok CLI 1.0.25 supports --model grok-4.6 --reasoning-effort xhigh
+   --no-subagents. No separate fast flag appeared in the installed --help.
+   Research jobs keep web search enabled; local implementation jobs disable it.
+
+Quota: an ordinary PowerShell wait/notification does not call an AI model.
+Coordinator turns, repeated log reads and reasoning consume context/usage; a
+watcher-led handoff avoids those calls while jobs run. Worker Grok usage remains
+separate, and no fixed percentage saving is claimed.

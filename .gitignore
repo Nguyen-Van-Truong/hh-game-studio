@@ -34,6 +34,15 @@ node_modules/
 /Godot_v*.tpz
 /Godot_v*.exe
 
+# HH3D local tool archives stay outside Git; toolchain.lock.json records source
+# URL, version and digest so CI/download tooling can verify them reproducibly.
+8-9-hh3d-3/studio/.local/tooling/*.zip
+8-9-hh3d-3/studio/.local/tooling/*.tpz
+8-9-hh3d-3/studio/.local/tooling/*.exe
+8-9-hh3d-3/studio/.local/
+8-9-hh3d-3/zdoc/reviews/*/active-batch.local.json
+8-9-hh3d-3/zdoc/reviews/*/dispatch.local.log
+
 # MCP candidate clone bodies (R1-WP2). Commit LICENSE + PIN.json only.
 third_party/mcp-staging/**
 !third_party/mcp-staging/README.md
