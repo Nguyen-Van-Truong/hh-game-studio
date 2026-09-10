@@ -1,5 +1,5 @@
 HH WORLD — PLAN 2/2: GAMEPLAY, SOCIAL MULTIPLAYER, VIỆT NAM
-Ngày 10-09-2026, Asia/Saigon | Revision S18 | TRIỂN KHAI THEO GATE
+Ngày 10-09-2026, Asia/Saigon | Revision S19 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO GAME
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -45,7 +45,7 @@ RUNTIME_ACCEPTANCE=NONE
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/game-and-services
 PLAN_ROLE=GAME_SOURCE_OF_PROGRESS
-PLAN_REVISION=S18
+PLAN_REVISION=S19
 REVIEW_BASE_COMMIT=b4195ca
 HISTORICAL_REJECTED_COMMIT=54d0c7c
 HISTORICAL_STUDIO_COMMIT=3cc7a85f730c99963a5a64079a0e02dc20edbd40
@@ -883,6 +883,8 @@ không tự ký legal. License/cost/provider không đạt thì giữ game autho
 
 3.5 DATA/UX/RELEASE CONTRACTS DÙNG NGAY TỪ ĐẦU
 
+Before any external payment is introduced, the release profile MUST carry `monetization=OFF` and a negative artifact scan for payment SDKs, payment endpoints, voucher/refund/chargeback flows and monetization UI. P4-02 virtual catalog currency is not real-money payment. Enabling payment requires a separate owner/WP with provider outage, refund, chargeback, tax, parental approval, entitlement revocation and reconciliation evidence.
+
 P0-02 ghi inventory dữ liệu/SDK dự kiến, purpose/retention/delete/export/audience/
 residency draft. P3-01 triển khai trước thu dữ liệu, P6-02 chốt policy/người chịu
 trách nhiệm trước tester, P8-03 kiểm lại release market. Analytics tùy chọn tách
@@ -1025,6 +1027,8 @@ không bất ngờ quá lớn. Touch/IME/keyboard remap/game focus + 200% text/n
 reduced motion/cue không phụ thuộc màu/âm, accessibility labels và focus order
 test bằng assistive technology thực trên target; missing capability là GAP.
 
+H2-P8-03 also drills signed content recovery when the primary CDN/object store is unavailable or corrupt, the KMS/signing key is rotated or unavailable, and the client cache is evicted. The verifier must admit only the last trusted package, preserve saves, and show bounded offline/maintenance UX; unsigned or unverifiable content is never served. Evidence includes restore source, key version, cache state, rollback result and real host exits.
+
 H2-P8-03 public-ready: artifact signature/trusted update manifest, SBOM/licenses/
 dependency risk triage, native ABI/4KB+16KB Android compatibility, target SDK và
 store policy đọc lại lúc release. Emulator chỉ page/ABI, GPU phải máy thật.
@@ -1035,6 +1039,8 @@ thêm GDScript/native plugin. Secrets/update key không ở client hay logs.
 N-only drain giữ nguyên: canary là environment/cohort có version/DB compatibility
 đã test, không tự mở N/N-1 shared realm vì ghi “phased rollout”. Security-floor
 chặn rollback vulnerable build; phục hồi bằng bản sửa hợp lệ và giữ saves.
+
+Every alert/runbook in P6/P8/P9 must name an on-call role, escalation SLA, notification channel, cost owner and last drill timestamp; missing ownership is a release GAP.
 
 H2-P9-02 vận hành 7 ngày đề xuất phải có stop/rollback/admission triggers khóa
 P8-03 trước traffic: critical dupe/data leak/durability mất protection→disable
@@ -1466,6 +1472,8 @@ DoD: playable slice video và package; no geometry/placeholders claim final art.
 ## P3 — Authority và dữ liệu bền vững
 
 ### H2-P3-01 — API/persistence foundation
+P3-01 owns a field-level telemetry/privacy manifest covering crash reports, input traces, screenshots/video, IP/device data, moderation evidence and support exports. For every copy and region it records purpose, retention, access role, deletion/hold behavior and redaction test; raw tokens, chat, precise location and child data must be rejected before emission.
+
 CONTRACT/VERIFY: mục3.2.1/A09/3.5, EX37/EX40/EX41; schema locks/unique/realm, data lifecycle, 100k dataset và query/index report (1M/10M thuộc P6-01/P8-02); SCALE-LOCKS consume SL1/SL6 đã khóa P0-02; khóa SL2/SL3/SL7/SL9/SL10/SL11/SL12 có test ID; EX49 flag schema; EX51 unique active contact claim, L8 retention matrix; release-profile-v1 và legal decision phải được readback trước production.
 ALLOWED: `backend/`, HTTP/save schemas, migration/transaction tests.
 BUILD: khóa Node LTS/framework/DB/schema tool exact versions; modular API,
@@ -1649,6 +1657,8 @@ no copyrighted reference assets; no placeholder counted final; bản ghi Q01-T-P
 DoD: runtime art package 6 angles+video, signed critic notes (agent, not human owner).
 
 ### H2-P5-02 — Polish/streaming/accessibility
+P5-02 accessibility acceptance enumerates supported Windows/Android assistive technology, minimum contrast and touch-target sizes, keyboard/touch remapping, screen-reader announcements for PENDING/UNKNOWN/REJECTED, 200% text and reduced-motion behavior. Each target has a human test matrix; unavailable platform capability is recorded as a visible fallback or GAP, never silently ignored.
+
 CONTRACT/VERIFY: mục3.5 UX/assistive tech/resource-bounded streaming, EX39; consume accepted release-profile-v1; UNKNOWN/expired/mismatched profile blocks public-profile UI and package outputs, UNKNOWN→history/support, no raw internal details.
 ALLOWED: chunk loading/pools/UI/settings/onboarding diagnostics.
 BUILD: async resource loading/loading UI, shader first-use strategy, pooling,
@@ -2645,7 +2655,7 @@ UndoRedo constraints được đưa thành test yêu cầu thay vì claim no bug
 9.2 Trạng thái thiết kế và lịch sử
 PLAN_DESIGN_REVIEW=SEE_EXACT_HASH_REPORT
 Review hiện hành:
-./reviews/20260910-r5/REVIEW-RESULT.md
+./reviews/20260911-r7/PLAN-AUDIT.md
 Lịch sử S4–S8 không chứng nhận hash hiện tại. S5 đã có scale ladder/A09 và
 Q01-B; S6–S8 làm rõ owners, LEGAL-VN, catalog shop, Q01-T, SL1–SL12, EX45–53.
 Hai critic S6 cùng REVISE. S7 sửa nhiều finding nhưng A còn PARTIAL Q01-T,
@@ -2671,6 +2681,7 @@ và ghi header PLAN_DESIGN_CRITICS: từ S6 đến S16 chưa có verdict critic 
 kế nào ACCEPT (S6/S7 REVISE; S8 quota; S9–S16 không có verdict). Static kiểm
 closure S6–S8 (LEGAL-VN, catalog shop, SCALE-LOCKS, EX45–EX53) vẫn PASS trên
 S17; không đổi nội dung WP/EX/Q của game.
+S19 (11-09, independent audit): bổ sung monetization=OFF và artifact scan, CDN/object-store/KMS recovery drill, field-level telemetry/privacy manifest, accessibility matrix đo được, ownership alert/runbook và release claim guard. Các gate này chưa có runtime/legal/human acceptance.
 S18 (10-09) đồng bộ tiến độ tools: GT-01 có bằng chứng headless 4.7.2
 chưa nghiệm thu. Game vẫn chưa triển khai và đợi GT-10; không thay LEGAL-VN,
 EX/Q, release profile hay capacity gates. Review hiện hành:

@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 10-09-2026, Asia/Saigon | Revision S18 | TRIỂN KHAI THEO GATE
+Ngày 10-09-2026, Asia/Saigon | Revision S19 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=NONE
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S18
+PLAN_REVISION=S19
 REVIEW_BASE_COMMIT=b4195ca
 HISTORICAL_REJECTED_COMMIT=54d0c7c
 HISTORICAL_STUDIO_COMMIT=3cc7a85f730c99963a5a64079a0e02dc20edbd40
@@ -85,6 +85,8 @@ Engine khác | Fallback khi benchmark cùng workload thất bại | Migration/ar
 
 Ảnh demo Web 16FPS không chứng minh Godot sẽ60FPS. Báo cáo Vault Fighters chưa
 chứng minh Godot4.7.1 gây các lỗi gameplay/evidence; không sửa pin của dự án đó.
+Godot source provenance is immutable: resolve the release tag to a commit, verify the official release asset plus checksum, and record the tag object/commit identity and retrieval time. A moved tag, unsigned/mismatched provenance, or source/API disagreement is a supply-chain GAP; never accept a filename or mutable latest URL alone.
+
 GT-01 kiểm official artifacts và capability reuse. Trang archive Godot và LTS
 Blender đã được đối chiếu trong lượt 08-09: ứng viên Godot 4.7.2-stable standard, matching export templates, Blender 5.2.1 LTS; fallback Blender 4.5.13 LTS chỉ
 khi addon không tương thích đã tái hiện.
@@ -510,6 +512,7 @@ VERIFY: install vào clean fixture copy, source/save cũ giữ nguyên, upgrade/
 rollback old/new state compatibility, uninstall addon không xóa art/game;
 one roundtrip+play sau update. Chỉ ký bằng test trust key local; không public upload/production sign/install scope khác.
 DoD: TQ08-I/TX16-I + TX10/12/14,2 critics; hash/package/model/matrix/handoff đầy đủ.
+GT-10 release manifest MUST include `capacity_claims` copied only from the last signed, measured profile; absent/stale profile means no capacity claim. It must also assert `monetization=OFF` for this package and fail closed if payment SDKs, payment endpoints, voucher/refund/chargeback handlers or monetization UI are present. Any later monetization requires a separately reviewed contract/WP and new signed package.
 Dependency GT-08/09 ACCEPTED gồm physical Android fixture; manifest ghi đúng
 supported_targets Windows/Android/Linux-headless, không partial ACCEPT ngầm.
 Không cần closed alpha của game và không claim tool sửa được mọi thể loại.
@@ -928,7 +931,7 @@ pin ghi UNVERIFIED trước implementation. Không cài binary trong lượt rev
 9.2 Trạng thái thiết kế và bàn giao
 PLAN_DESIGN_REVIEW=SEE_EXACT_HASH_REPORT
 Review hiện hành:
-./reviews/20260910-r5/REVIEW-RESULT.md
+./reviews/20260911-r7/PLAN-AUDIT.md
 S4/S5 sửa routing/closure; S6/S7 bổ sung naming và perf schema. Hai critic S7
 vẫn REVISE trên cặp plan, không chứng nhận S8. S8 critic bị quota, chưa có
 verdict. S9 sửa ALLOWED của GT-05/GT-06, writer/version compatibility và GT-10
@@ -949,6 +952,7 @@ Godot 4.7.2-stable official, 4.7.1 chỉ chẩn đoán; lock/evidence không ch�
 process tree có cơ chế cụ thể; kiểm máy output worker và luật leo thang sau
 hai batch REJECT; checkpoint commit cho source IN_PROGRESS. Static kiểm S6–S8
 closure vẫn PASS trên S17.
+S19 (11-09, plan hardening): bổ sung provenance tag/commit bất biến, gate monetization=OFF và chặn capacity claim stale trong GT-10. Đây là yêu cầu thiết kế mới, chưa có runtime/critic acceptance.
 S18 (10-09, tiếp tục GT-01): đã chạy Godot 4.7.2 stock trên snapshot riêng,
 import + parse trace + input headless + QUITTING có host exit và Job Object.
 ZIP editor và export templates đã khớp SHA256/SHA512-SUMS official. Đây là

@@ -1,7 +1,7 @@
 # HH3D review evidence
 
 Progress lives only in the two TXT plans one directory above.
-Current review: [S18 / r6](20260910-r6/REVIEW-RESULT.md).
+Current review: [S19 / r7](20260911-r7/PLAN-AUDIT.md).
 
 | Directory | Purpose |
 | --- | --- |
@@ -30,3 +30,4 @@ tool downloads, duplicate workspaces and machine paths local. Before removal,
 check references, active attempts, Git tracking and whether reproduction still
 works. Owner permission to tidy does not mean successful/failed evidence should
 be silently discarded.
+
