@@ -1,4 +1,12 @@
-"""Static S16 plan checks. These do not prove semantic/runtime/legal acceptance."""
+"""Static S17 plan checks. These do not prove semantic/runtime/legal acceptance.
+
+S17 (independent coordinator audit, 2026-09-10): both plans carry PLAN_DESIGN_CRITICS stating that
+no design critic verdict has been ACCEPT from S6 to S16; the tools plan pins Godot 4.7.2-stable
+official (4.7.1 diagnostic only), forbids absolute host paths in lock/evidence, requires the GT-01
+runner to parse the GT01_TRACE line and owned process tree instead of exit 0 alone, adds machine
+checks for worker output and an escalation rule after two rejected batches, and requires a WIP
+checkpoint commit or a recorded reason for IN_PROGRESS source. Every S6-S16 check is retained.
+"""
 from pathlib import Path
 from collections import Counter
 import argparse, datetime, hashlib, json, math, re, sys
@@ -49,7 +57,8 @@ def validate(manifest, inputs, root):
         ids=[m.group(2) for m in table]
         check(ids==EXPECTED[index], name+": ordered WP rows")
         check([int(m.group(1)) for m in table]==list(range(1,len(EXPECTED[index])+1)), name+": row ordinals")
-        check([m.group(5) for m in table] == (["IN_PROGRESS"]+["PLANNED"]*9 if index==0 else ["PLANNED"]*32), name+": table status for S16 freeze")
+        check([m.group(5) for m in table] == (["IN_PROGRESS"]+["PLANNED"]*9 if index==0 else ["PLANNED"]*32), name+": table status for S17 freeze")
+        check(re.findall(r"(?m)^PLAN_DESIGN_CRITICS=(.+)$",s)==["NO_ACCEPTED_VERDICT_S6_TO_S16"], name+": PLAN_DESIGN_CRITICS header states no accepted design verdict")
         check(re.findall(r"(?m)^CURRENT_VALID_WP=(.+)$",s)==[EXPECTED[index][0]], name+": current WP")
         for m in table:
             wp=m.group(2)
@@ -253,6 +262,23 @@ def validate(manifest, inputs, root):
           "S16 acyclic signed payload and independent signer trust")
     check("GT01_EVIDENCE_STATUS=DIAGNOSTIC_ONLY" in t and "GT01_PENDING=" in t,
           "S16 GT01 diagnostic status and missing evidence are explicit")
+    # S17 closure checks: pin decision, portable lock/evidence, runner acceptance, worker machine checks.
+    gt01=specs.get("GT-01",""); gt01_build=between(gt01,"BUILD:","VERIFY:"); gt01_verify=verify_of("GT-01")
+    pin=between(t,"Quyết định pin S17","GT-01/08 chứng minh")
+    check("GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL" in t and "4.7.2-stable standard" in pin and "SHA512-SUMS" in pin
+          and "không được đưa vào package candidate GT-01" in pin and "S18 https://github.com/godotengine/godot-builds/releases/tag/4.7.2-stable" in t,
+          "S17 pin decision: Godot 4.7.2-stable official with SUMS verification; 4.7.1 diagnostic only")
+    check("không chứa đường dẫn tuyệt đối" in gt01_build and "toolchain.local.json" in gt01_build
+          and "không chứa đường dẫn tuyệt đối/username" in n(between(t,"TQ01:","TQ02:")),
+          "S17 lock is portable: no absolute host paths or usernames; host locations live in ignored local file")
+    check(all(x in gt01_verify for x in ["GT01_TRACE", "Exit 0 đơn lẻ không là PASS", "UNVERIFIED_PROCESS_TREE không được xuất hiện", "--check-only"]),
+          "S17 GT-01 runner acceptance parses the trace line, process tree and parse check; exit 0 alone is not PASS")
+    check("KILL_ON_JOB_CLOSE" in n(between(t,"TX05 —","TX06 —")) and "GT-01" in re.search(r"(?m)^TX05 — .+$",t).group(0),
+          "S17 TX05 names the owned-process-tree mechanism and includes GT-01")
+    check("hai batch liên tiếp bị REJECT" in n(t) and "py_compile" in t and "coordinator tự viết deliverable" in n(t),
+          "S17 worker outputs get machine checks and a bounded escalation rule")
+    check("đường dẫn tuyệt đối host/username phải redact" in n(t) and "checkpoint commit" in n(t),
+          "S17 committed evidence is path-redacted and IN_PROGRESS source has a checkpoint or a recorded reason")
     # Recompute concrete illustrative arithmetic; no deployment capacity proof.
     calculated={"rooms_cpu":math.floor(2400/(6*30)), "rooms_ram":math.floor(10/.6),
                 "rooms_down":math.floor(87.5e6/(32*30e3)), "rooms_up":math.floor(87.5e6/(32*10e3)),
@@ -283,10 +309,10 @@ def freeze(revision):
 
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
-    p=argparse.ArgumentParser();p.add_argument("--manifest",default="freeze-s16.json")
-    p.add_argument("--output",default="static-s16.json");p.add_argument("--freeze",action="store_true")
+    p=argparse.ArgumentParser();p.add_argument("--manifest",default="freeze-s17.json")
+    p.add_argument("--output",default="static-s17.json");p.add_argument("--freeze",action="store_true")
     p.add_argument("--inputs-dir",default=None,help="alternate directory holding *.snapshot copies for negative checks")
-    p.add_argument("--revision",default="S16");a=p.parse_args()
+    p.add_argument("--revision",default="S17");a=p.parse_args()
     if a.freeze:
         (OUT/a.manifest).write_text(json.dumps(freeze(a.revision),ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     manifest=json.loads((OUT/a.manifest).read_text(encoding="utf-8"))

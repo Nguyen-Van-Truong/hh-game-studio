@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 10-09-2026, Asia/Saigon | Revision S17 | TRIỂN KHAI THEO GATE
+Ngày 10-09-2026, Asia/Saigon | Revision S16 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -19,13 +19,11 @@ EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
 IMPLEMENTATION=GT01_IN_PROGRESS
 GT01_EVIDENCE_STATUS=DIAGNOSTIC_ONLY
 GT01_PENDING=PIN_PROVENANCE,BOOTSTRAP_SAFETY,HEADED_UI,PROCESS_TREE,BLENDER_FIXTURE,ROLLBACK,TWO_CRITICS
-GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
-PLAN_DESIGN_CRITICS=NO_ACCEPTED_VERDICT_S6_TO_S16
 RUNTIME_ACCEPTANCE=NONE
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S17
+PLAN_REVISION=S16
 REVIEW_BASE_COMMIT=b4195ca
 HISTORICAL_REJECTED_COMMIT=54d0c7c
 HISTORICAL_STUDIO_COMMIT=3cc7a85f730c99963a5a64079a0e02dc20edbd40
@@ -87,21 +85,14 @@ Engine khác | Fallback khi benchmark cùng workload thất bại | Migration/ar
 chứng minh Godot4.7.1 gây các lỗi gameplay/evidence; không sửa pin của dự án đó.
 GT-01 kiểm official artifacts và capability reuse. Trang archive Godot và LTS
 Blender đã được đối chiếu trong lượt 08-09: ứng viên Godot 4.7.2-stable standard, matching export templates, Blender 5.2.1 LTS; fallback Blender 4.5.13 LTS chỉ
-khi addon không tương thích đã tái hiện.
-Quyết định pin S17 (theo lựa chọn owner "Godot stock 4.7.2"): pin của HH Studio
-là Godot 4.7.2-stable standard, trang archive official xác nhận tồn tại ngày
-10-09-2026 (phát hành 18-08-2026, S02). Godot 4.7.1-stable đang có trong tooling
-Vault Fighters chỉ là binary chẩn đoán/reuse read-only: mọi run trên 4.7.1 là
-DIAGNOSTIC, không được đưa vào package candidate GT-01 và không được ghi làm pin.
-Chỉ đổi pin khi fixture tái hiện blocker trên 4.7.2 với minimal repro và ADR.
-GT-01 tải Godot_v4.7.2-stable_win64.exe.zip (kèm bản console), export templates
-4.7.2 và file SHA512-SUMS.txt của cùng release từ kênh official (S18), xác minh
-SHA512 khớp SUMS trước giải nén vào studio/.local/tooling/godot-4.7.2-stable/;
-ghi version, full commit từ --version, SHA256/SHA512, license MIT, platform,
-exporter và compatibility result trong lock và manifest; mismatch giữa candidate,
-observed và lock là GAP. Không tự tải latest hoặc tin tên folder; user_dir/cache
-của fixture tách riêng, không chạm cache hay pin của Vault Fighters. Một bộ duy
-nhất trong studio/toolchain.lock.json; game nhận đúng bộ đó.
+khi addon không tương thích đã tái hiện. Đây là ứng viên, chưa là installed pin.
+Bootstrap hiện quan sát Godot 4.7.1-stable; điều này không tự chọn 4.7.1 hay
+4.7.2 cho release. GT-01 phải quyết định đúng một bộ rồi ghi cùng version,
+full commit/build, SHA256, license, platform, exporter và compatibility result
+trong lock và manifest; mismatch giữa candidate, observed và lock là GAP.
+GT-01 phải lấy artifact từ nguồn official, xác minh full commit/SHA256/license/
+--version, nền tảng và exporter; sai thì GAP, không tự tải latest hoặc tin tên
+folder. Một bộ duy nhất trong studio/toolchain.lock.json; game nhận đúng bộ đó.
 Godot không được gắn nhãn LTS của Blender. Pin bảo mật được nâng bằng release
 đã review/regression; không đóng băng dependency lỗi vô hạn để giữ checksum.
 
@@ -350,26 +341,15 @@ ALLOWED: studio/toolchain.lock.json, studio/build/bootstrap, studio/fixtures/,
 studio/tests/bootstrap, studio/evidence/. Không sửa root pin hoặc game.
 BUILD: git/process/tool inventory; reuse matrix proven/partial/unsupported,
 official source/hash/license/version/template lock, local launcher không đổi
-PATH hệ thống. Lock là dữ liệu tái tạo được: tên artifact, URL official, SHA,
-version, full commit, license, platform; không chứa đường dẫn tuyệt đối,
-username hay máy cụ thể. Vị trí cài trên máy hiện tại ghi ở
-studio/.local/toolchain.local.json (ignored) và test_gt01 phải từ chối lock
-có đường dẫn tuyệt đối. Fixture project mới tạo từ template/schema đã kiểm, có
-entry scene/menu/quit và input contract. Blender fixture source sạch, origin/
-axis rõ. Windows editor/build + Linux headless artifact + Android export targets
-ghi matrix dự kiến. Máy hỗ trợ/OS/GPU/RAM thật ghi inventory, missing là gap.
+PATH hệ thống. Fixture project mới tạo từ template/schema đã kiểm, có entry
+scene/menu/quit và input contract. Blender fixture source sạch, origin/axis rõ.
+Windows editor/build + Linux headless artifact + Android export targets ghi
+matrix dự kiến. Máy hỗ trợ/OS/GPU/RAM thật ghi inventory, missing là gap.
 VERIFY: --version/checksum mismatch fail; Unicode/space paths; typed scene
 import/headed launch/clean close thực. Không mở project/cache khác. Rollback
-binary/package path trên copy; process PID/start/root đúng. Runner chỉ báo PASS
-khi đủ cả: host exit đọc từ wait thật; stdout có đúng một dòng JSON GT01_TRACE
-result PASS ở đúng phase; stderr rỗng hoặc mọi WARNING/ERROR của Godot được
-giải thích trong report; --version của binary khớp pin; không process con còn
-sống sau exit (Windows: Job Object KILL_ON_JOB_CLOSE hoặc liệt kê descendants
-theo (pid, start_time); Linux: process group). Exit 0 đơn lẻ không là PASS;
-UNVERIFIED_PROCESS_TREE không được xuất hiện trong candidate. Script fixture/
-trace phải qua `--headless --check-only --script` (parse) trước lần chạy thật.
-DoD: lock tái tạo được trên đúng pin 4.7.2, fixture đứng độc lập không cần H2;
-TQ01/TX12/TX14, 2 critics, chưa claim Blender bridge hay game FPS.
+binary/package path trên copy; process PID/start/root đúng.
+DoD: lock tái tạo được, fixture đứng độc lập không cần H2; TQ01/TX12/TX14,
+2 critics, chưa claim Blender bridge hay game FPS.
 
 ### GT-02 — Protocol/capability/safety baseline
 CONTRACT/VERIFY: mục2.2 canonical/path/loopback, TX15/TX17; limits profile có số trước adapter consumer, cross-language golden vectors và no-effect reject.
@@ -525,8 +505,6 @@ TQ01: tái tạo lock và fixture trên root có dấu/space; checksum/version/O
 templates mismatch phải dừng trước mở project. Luôn preserve package cũ.
 Manifest ghi Godot binary/templates/full commit, Blender/Python/addon/exporter,
 trusted scripts và supported host/target. Clean env không ngầm dựa PATH khác.
-Lock và evidence commit không chứa đường dẫn tuyệt đối/username; máy khác
-tái tạo được cùng lock từ URL official + SHA mà không sửa file.
 
 TQ02: validate trước mutation; từng bad type/size/depth/enum/NaN/Infinity/range/
 root/junction/stale revision/unknown capability có expected reject, no changed
@@ -624,12 +602,9 @@ TX04 — .blend lạ/linked library/script/GN/material unsupported; GT-04/GT-05.
 Không autoexec; approved input mới được isolated inspect, không mở vào user UI.
 Missing texture/addon/giant unpacked data báo lỗi và giữ last-good; bake feature
 hỗ trợ có manifest, unsupported explicit. Không sửa external libraries nguồn.
-TX05 — Timeout/OOM/disk full/Stop/PID reuse; GT-01/GT-04/GT-06/GT-07.
+TX05 — Timeout/OOM/disk full/Stop/PID reuse; GT-04/GT-06/GT-07.
 Preserve staged diagnostic, lookup active state, terminate đúng PID+start/root
-job nếu cần; không kill user app hoặc ghi job terminated thành PASS. Owned
-process tree: Windows dùng Job Object KILL_ON_JOB_CLOSE hoặc descendants theo
-(pid, start_time); Linux dùng process group; runner ghi leftover thật, không
-ghi UNVERIFIED rồi coi như sạch.
+job nếu cần; không kill user app hoặc ghi job terminated thành PASS.
 TX06 — Hai writer/lease hết/owner sửa thủ công; GT-03/GT-04/GT-07.
 FIFO/fencing/expected revision reject late publish; preserve user revision+
 worker staging/diff, reconcile mới apply. Không merge text .blend.
@@ -769,12 +744,6 @@ Prompt read-only không là sandbox: critic đọc snapshot riêng, kiểm lại
 và diff sau run. Worker chỉ ghi trong lease; phiên mới có UUID/attempt mới.
 Mỗi batch tối đa hai lần poll; supervisor ghi exit/PID/start và báo watcher.
 Thông báo terminal chỉ là NEEDS_REVIEW/WORKER_INCOMPLETE, không là ACCEPT.
-Output worker phải qua kiểm máy trước khi integrate: JSON parse, mọi `old`
-khớp đúng một lần trên base hash, Python `py_compile` + unittest, GDScript
-`--headless --check-only --script`; lỗi kiểm máy là REJECT không cần đọc thêm.
-Leo thang: hai batch liên tiếp bị REJECT trên cùng deliverable nhỏ (≤3 file,
-≤300 dòng) thì coordinator tự viết deliverable đó, ghi lý do và hash trong
-report; hai critic vẫn độc lập. Không lặp batch vô hạn cho cùng lỗi.
 
 Handoff template (điền hết, không gửi 'đọc plan rồi làm tiếp'):
 ROLE=implementer/researcher/critic
@@ -824,10 +793,7 @@ test invocation, raw timings/logs, expected/observed postconditions, screenshots
 video có camera route đúng client. Journal không chứa secret/private chat/PII.
 Hash canonical sorted path + per-file SHA256; GitHEAD không thay source hash
 khi tree dirty. Freeze trước run, sửa source→fresh run/candidate/hash. Không
-bỏ source dependency khỏi manifest vì không được worker edit. Evidence commit
-dùng đường dẫn tương đối repo; đường dẫn tuyệt đối host/username phải redact
-hoặc để trong .local. Source WP đang IN_PROGRESS phải có checkpoint commit
-scope rõ (nhãn WIP) hoặc lý do chưa commit ghi trong report hiện hành.
+bỏ source dependency khỏi manifest vì không được worker edit.
 Packer parse real host exits, run ownership, missing/stale/hash/schema/limits;
 caller-supplied exit0 hay field 'PASS' không đủ. Timeout/abort là incomplete;
 cleanup cần kết thúc đúng process, không xóa evidence lỗi để đẹp package.
@@ -912,11 +878,6 @@ S16 https://www.khronos.org/gltf/
   Asset interchange và validation; hợp lệ glTF không bảo đảm look/perf Godot.
 S17 https://developer.android.com/guide/practices/page-sizes
   Android native libs/page-size test; store requirements kiểm lại trước publish.
-S18 https://github.com/godotengine/godot-builds/releases/tag/4.7.2-stable
-  Kênh phát hành binary official mà trang download godotengine.org trỏ tới;
-  chứa Godot_v4.7.2-stable_win64.exe.zip, export templates và SHA512-SUMS.txt.
-  Ngày 10-09 trang này chưa fetch được từ coordinator (timeout); GT-01 phải tự
-  tải và đối chiếu SHA512 khi pin, không lấy số hash từ plan này.
 
 Nguồn official đã được coordinator đối chiếu 08–09/09; các URL động không là
 lock. Researcher cũ research.host.json timeout/exit1: research.md chỉ là gợi ý
@@ -940,13 +901,6 @@ S14 ghi quyền implementation owner đã cấp, GT-01 IN_PROGRESS; đổi worke
 sang official Grok CLI grok-4.6 xhigh, sửa routing và bộ kiểm chứng đang dùng.
 S15 đồng bộ field list release profile; S16 khóa payload ký và input-manifest
 không tự tham chiếu, ghi rõ GT-01 còn là diagnostic và các bằng chứng thiếu.
-S17 (10-09, audit coordinator độc lập): ghi rõ chưa có verdict critic thiết kế
-nào ACCEPT từ S6 đến S16 (S6/S7 REVISE, S8–S16 không có verdict); chốt pin
-Godot 4.7.2-stable official, 4.7.1 chỉ chẩn đoán; lock/evidence không chứa
-đường dẫn tuyệt đối; runner GT-01 không PASS bằng exit 0 đơn lẻ; owned
-process tree có cơ chế cụ thể; kiểm máy output worker và luật leo thang sau
-hai batch REJECT; checkpoint commit cho source IN_PROGRESS. Static kiểm S6–S8
-closure vẫn PASS trên S17.
 9 GT còn PLANNED; GT-02 chỉ mở khi GT-01 đủ dependency/DoD/critic. Tất cả
 review/snapshot chỉ evidence, không nguồn WP; hash full bytes mới là freeze.
 

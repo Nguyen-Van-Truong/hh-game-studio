@@ -1,8 +1,72 @@
-# HH3D S16 — GT-01 in progress, acceptance pending
+# HH3D S17 — GT-01 in progress, acceptance pending
 
 The two canonical TXT plans are the only progress authority. GT-01 remains
 IN_PROGRESS; GT-02 and HH World implementation have not opened. Owner permission
 does not substitute for runtime evidence, critic decisions, legal or human review.
+
+## S17 (10-09-2026, 11:05 Asia/Saigon) — audit độc lập của coordinator thứ hai
+
+Freeze `freeze-s17.json`: tools `a29ef954…2043` (69431 B), game
+`cc17beb8…eba3e` (205771 B), aggregate `853d3578…5ab6`. `static-s17.json`
+PASS_STATIC_ONLY (0 lỗi, 0 warning); `selfcheck-s17.json` 31/31 mutation test;
+`negative-s16-snapshot-under-s17.json` cho thấy S16 fail đúng 9 check S17 mới.
+Validator r4 (S8) chạy trên S17 chỉ báo các khác biệt đã biết (owner
+authorization, IN_PROGRESS, check Codex S13 đã lỗi thời); mọi closure S6–S8
+(LEGAL-VN, catalog shop, SCALE-LOCKS, EX45–EX53, Q01-T, profile số) vẫn PASS.
+Snapshot trước sửa: `before-s17/`; diff: `s16-to-s17-*.diff`.
+
+Phát hiện và cách sửa trong S17 (plan chỉ, không đụng `studio/` đang leased):
+
+1. Chưa có verdict critic thiết kế nào ACCEPT từ S6 đến S16. S6/S7 hai critic
+   REVISE; S8 bị quota; S9 có request nhưng không có output; S10–S13 không có
+   critic; S14–S16 các worker audit Grok bị REJECT vì không nộp report. GT-01
+   mở bằng quyền owner, không phải bằng gate critic. S17 ghi header
+   `PLAN_DESIGN_CRITICS=NO_ACCEPTED_VERDICT_S6_TO_S16` ở cả hai plan để người
+   đọc bảng đầu file không hiểu nhầm; validator từ chối giá trị ACCEPTED.
+2. Pin Godot trôi: plan nói ứng viên 4.7.2 nhưng hai ngày evidence GT-01 chạy
+   trên 4.7.1 của tooling Vault Fighters, lock ghi `CANDIDATE_GAP`, còn
+   `test_gt01.py` lại ép `4.7.1-stable`. Owner đã chọn "Godot stock 4.7.2";
+   trang archive official xác nhận 4.7.2-stable tồn tại (18-08-2026). S17 chốt
+   `GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL`, tải + xác minh SHA512-SUMS
+   từ kênh official (S18), 4.7.1 chỉ DIAGNOSTIC và không vào package candidate.
+3. `toolchain.lock.json` và `evidence/gt01-20260909-06/bootstrap-run.json`
+   chứa đường dẫn tuyệt đối kèm username máy chủ, không tái tạo được trên máy
+   khác và lộ thông tin host. S17: lock chỉ giữ artifact/URL/SHA/version/commit/
+   license; vị trí cài ghi ở `studio/.local/toolchain.local.json` (ignored);
+   evidence commit dùng đường dẫn tương đối, redact phần tuyệt đối.
+4. `run_fixture.py` hiện trả PASS khi hai process exit 0, không đọc dòng
+   GT01_TRACE, không kiểm stderr, ghi `leftover=UNVERIFIED_PROCESS_TREE`, mở
+   log bằng `wb` (ghi đè). `trace.gd` hiện chỉ press Enter không release nên
+   sau khi bỏ Enter toàn cục ở `main.gd` sẽ FAIL (Button phát `pressed` khi
+   release). S17 ghi rõ tiêu chí PASS của runner (host exit + đúng một dòng
+   GT01_TRACE + stderr sạch/giải thích + --version khớp pin + không process con,
+   Job Object/descendants) và bắt parse `--check-only` trước chạy.
+5. Worker Grok: 6 batch liên tiếp bị REJECT hoặc chỉ nhận một phần; batch
+   focused `20260910T011833Z` đã kết thúc (exit 0) từ 08:21 nhưng chưa được
+   coordinator kia review. Đọc read-only: bản `process` khá hơn (bắt OSError,
+   timeout kill) nhưng vẫn `wb`, đánh dấu lỗi bằng `"ERROR" in stdout.upper()`
+   quá rộng; bản `fixture` có `old` không khớp source (thụt lề sai), dùng
+   `get_tree()` trong script `extends SceneTree`, truy cập `fixture.quit_button`
+   trên biến kiểu `Object` và kiểm focus sau Enter thay vì trước — không thể
+   integrate nguyên bản. S17 thêm kiểm máy bắt buộc cho output worker và luật
+   leo thang: hai batch REJECT liên tiếp trên deliverable ≤3 file thì
+   coordinator tự viết, critic vẫn độc lập.
+6. Toàn bộ `studio/` (lock, runner, fixture, test, evidence) chưa được commit
+   dù GT-01 IN_PROGRESS hai ngày; commit `d7962ad`…`4a289be` chỉ có zdoc. S17
+   yêu cầu checkpoint commit WIP hoặc ghi lý do trong report hiện hành.
+
+Không sửa: `studio/**` (đang leased cho worker), `AGENTS.md`, validator r4
+(bản sửa S13 của coordinator kia còn uncommitted và có check Codex lỗi thời;
+nên xóa check đó hoặc chỉ giữ r5 làm validator hiện hành). Không chạy Godot,
+không cài binary, không đổi model worker.
+
+Việc tiếp theo cho coordinator GT-01 (theo thứ tự): tải và xác minh 4.7.2 +
+templates + SUMS vào `.local`, viết lại lock không đường dẫn tuyệt đối, sửa
+`test_gt01.py` theo pin, tự viết `trace.gd`/`run_process` nếu batch tiếp theo
+lại REJECT, chạy `--check-only` rồi run thật trên 4.7.2, commit WIP `studio/`,
+sau đó mới mint candidate và gọi hai critic Grok trên cùng hash.
+
+## S16 record (kept verbatim below)
 
 S14 recorded owner authorization and official Grok CLI worker policy. S15 made
 the release-profile field list agree with its closed schema. S16 specifies the

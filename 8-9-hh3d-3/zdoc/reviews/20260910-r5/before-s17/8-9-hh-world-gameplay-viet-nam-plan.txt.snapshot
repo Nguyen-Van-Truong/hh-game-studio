@@ -1,5 +1,5 @@
 HH WORLD — PLAN 2/2: GAMEPLAY, SOCIAL MULTIPLAYER, VIỆT NAM
-Ngày 10-09-2026, Asia/Saigon | Revision S17 | TRIỂN KHAI THEO GATE
+Ngày 10-09-2026, Asia/Saigon | Revision S16 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO GAME
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -40,12 +40,11 @@ CURRENT_VALID_WP=H2-P0-01
 DISPATCHABLE=NO_UNTIL_GT10_ACCEPTED
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
 IMPLEMENTATION=NOT_STARTED
-PLAN_DESIGN_CRITICS=NO_ACCEPTED_VERDICT_S6_TO_S16
 RUNTIME_ACCEPTANCE=NONE
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/game-and-services
 PLAN_ROLE=GAME_SOURCE_OF_PROGRESS
-PLAN_REVISION=S17
+PLAN_REVISION=S16
 REVIEW_BASE_COMMIT=b4195ca
 HISTORICAL_REJECTED_COMMIT=54d0c7c
 HISTORICAL_STUDIO_COMMIT=3cc7a85f730c99963a5a64079a0e02dc20edbd40
@@ -2666,11 +2665,6 @@ deployment-profile-v1 closure, candidate-vs-observed tool pin và loại bỏ co
 large-file bị remote từ chối. S14 đổi worker sang Grok CLI và ghi quyền owner
 đã cấp; game vẫn đợi GT-10 ACCEPTED. S15 đồng bộ field list; S16 khóa JCS,
 payload exclusions/trust role và input→profile→build→release không vòng.
-S17 (10-09, audit coordinator độc lập) chỉ đồng bộ revision với plan công cụ
-và ghi header PLAN_DESIGN_CRITICS: từ S6 đến S16 chưa có verdict critic thiết
-kế nào ACCEPT (S6/S7 REVISE; S8 quota; S9–S16 không có verdict). Static kiểm
-closure S6–S8 (LEGAL-VN, catalog shop, SCALE-LOCKS, EX45–EX53) vẫn PASS trên
-S17; không đổi nội dung WP/EX/Q của game.
 32 H2 PLANNED; chưa có runtime/human/legal/scale
 acceptance. Snapshot/freeze mới dựa full bytes, Git HEAD chỉ provenance; không
 có plan thứ ba.
