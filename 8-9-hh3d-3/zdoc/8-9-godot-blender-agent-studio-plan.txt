@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 10-09-2026, Asia/Saigon | Revision S14 | TRIỂN KHAI THEO GATE
+Ngày 10-09-2026, Asia/Saigon | Revision S16 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -17,11 +17,13 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 CURRENT_VALID_WP=GT-01
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
 IMPLEMENTATION=GT01_IN_PROGRESS
+GT01_EVIDENCE_STATUS=DIAGNOSTIC_ONLY
+GT01_PENDING=PIN_PROVENANCE,BOOTSTRAP_SAFETY,HEADED_UI,PROCESS_TREE,BLENDER_FIXTURE,ROLLBACK,TWO_CRITICS
 RUNTIME_ACCEPTANCE=NONE
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S14
+PLAN_REVISION=S16
 REVIEW_BASE_COMMIT=b4195ca
 HISTORICAL_REJECTED_COMMIT=54d0c7c
 HISTORICAL_STUDIO_COMMIT=3cc7a85f730c99963a5a64079a0e02dc20edbd40
@@ -897,6 +899,8 @@ large-file bị remote từ chối; static PASS không thay hai critic/runtime/h
 không là runtime acceptance.
 S14 ghi quyền implementation owner đã cấp, GT-01 IN_PROGRESS; đổi worker
 sang official Grok CLI grok-4.6 xhigh, sửa routing và bộ kiểm chứng đang dùng.
+S15 đồng bộ field list release profile; S16 khóa payload ký và input-manifest
+không tự tham chiếu, ghi rõ GT-01 còn là diagnostic và các bằng chứng thiếu.
 9 GT còn PLANNED; GT-02 chỉ mở khi GT-01 đủ dependency/DoD/critic. Tất cả
 review/snapshot chỉ evidence, không nguồn WP; hash full bytes mới là freeze.
 

@@ -1,0 +1,143 @@
+{
+  "schema": "HH3D-WORKER-REVIEW-1",
+  "acceptance": "NONE",
+  "raw_location": "Per-attempt directories under Windows TEMP, not in Git",
+  "attempts": [
+    {
+      "batch": "hh3d-gt01-20260910T004529Z",
+      "role": "tools-audit",
+      "session": "a8126ff4-04d7-4caf-8d32-ccf564ed7f3c",
+      "requested_model": "grok-4.6",
+      "requested_effort": "xhigh",
+      "reported_model_usage": [
+        "grok-4.6"
+      ],
+      "exit_code": 0,
+      "timed_out": false,
+      "coordinator_decision": "REJECT: no report files; some findings confuse implementation permission with acceptance",
+      "events_sha256": "f5832d6f78edb625114dd96cb77a0a52d76b021f4bfab51a903cccb59fbd16fe",
+      "response_sha256": null,
+      "report_present": false,
+      "evidence_present": false
+    },
+    {
+      "batch": "hh3d-gt01-20260910T004529Z",
+      "role": "game-audit",
+      "session": "345a8935-191d-4aa2-ac05-cc5fe57b1539",
+      "requested_model": "grok-4.6",
+      "requested_effort": "xhigh",
+      "reported_model_usage": [
+        "grok-4.6"
+      ],
+      "exit_code": 0,
+      "timed_out": false,
+      "coordinator_decision": "REJECT: no report files; no authoritative legal source verification in tool trace",
+      "events_sha256": "74d14ca3c464d82b0a6761ab48a73df74633b893c60c76fdd58051164ac3c1aa",
+      "response_sha256": null,
+      "report_present": false,
+      "evidence_present": false
+    },
+    {
+      "batch": "hh3d-gt01-20260910T004529Z",
+      "role": "toolchain",
+      "session": "fe6db01c-a64b-4d36-9f7c-b2685838f265",
+      "requested_model": "grok-4.6",
+      "requested_effort": "xhigh",
+      "reported_model_usage": [
+        "grok-4.6"
+      ],
+      "exit_code": 0,
+      "timed_out": false,
+      "coordinator_decision": "REJECT: no report files; command parser failures do not verify tool provenance",
+      "events_sha256": "beaa6e71fbc0992a5d557e69adf083cdc5284b0f35ccd28c6caa49b7b5d6d308",
+      "response_sha256": null,
+      "report_present": false,
+      "evidence_present": false
+    },
+    {
+      "batch": "hh3d-gt01-20260910T004529Z",
+      "role": "host-runner",
+      "session": "5a08af53-d2ae-40fb-ae89-5d6b13ba5b04",
+      "requested_model": "grok-4.6",
+      "requested_effort": "xhigh",
+      "reported_model_usage": [
+        "grok-4.6"
+      ],
+      "exit_code": 0,
+      "timed_out": false,
+      "coordinator_decision": "REJECT: claims code/tests completed but output files missing",
+      "events_sha256": "3d8f28faf8b57c59cf5e3ca7647aba4183a07c4444359538d837a4e5012cabc7",
+      "response_sha256": null,
+      "report_present": false,
+      "evidence_present": false
+    },
+    {
+      "batch": "hh3d-gt01-20260910T004529Z",
+      "role": "fixture",
+      "session": "89392f81-38b9-436b-977d-111071d219af",
+      "requested_model": "grok-4.6",
+      "requested_effort": "xhigh",
+      "reported_model_usage": [
+        "grok-4.6"
+      ],
+      "exit_code": 0,
+      "timed_out": false,
+      "coordinator_decision": "REJECT: required implementation and evidence files absent",
+      "events_sha256": "88b8716641d1e789874cb14702a8ddf87127df601d382527ab7c67f6f3b6b193",
+      "response_sha256": null,
+      "report_present": false,
+      "evidence_present": false
+    },
+    {
+      "batch": "hh3d-bundles-20260910T005231Z",
+      "role": "runner",
+      "session": "df3e1633-0270-4c68-9731-43aea4103046",
+      "requested_model": "grok-4.6",
+      "requested_effort": "xhigh",
+      "reported_model_usage": [
+        "grok-4.6"
+      ],
+      "exit_code": 0,
+      "timed_out": false,
+      "coordinator_decision": "REJECT: malformed JSON, reversed copy ignore, missing test imports, fabricated placeholder hashes and timeout exit, unconditional exit0",
+      "events_sha256": "12320ad5c6bbe76413f304702e1c2beea31290e2e54b63297f4fa1741fe92169",
+      "response_sha256": "d50c977df3fc620da4e50f7a7626fc5ab1dbb632f15d050bb10d08506e470120",
+      "report_present": false,
+      "evidence_present": false
+    },
+    {
+      "batch": "hh3d-bundles-20260910T005231Z",
+      "role": "fixture",
+      "session": "c0818b1e-27d2-48ae-87c5-db863d6a703b",
+      "requested_model": "grok-4.6",
+      "requested_effort": "xhigh",
+      "reported_model_usage": [
+        "grok-4.6"
+      ],
+      "exit_code": 0,
+      "timed_out": false,
+      "coordinator_decision": "REJECT: one project file instead of four requested files; prose claims absent code",
+      "events_sha256": "5840c65c191af806a38d92d8a4c8afa36718a5cb3685d01605183db8a5db4437",
+      "response_sha256": "2f2c4e7ba3570ca27c89dc5cd71fea1f2219094d7fa70d47633b3156e0ece16b",
+      "report_present": false,
+      "evidence_present": false
+    },
+    {
+      "batch": "hh3d-bundles-20260910T005231Z",
+      "role": "profile-review",
+      "session": "fe419d0a-ffc3-423d-81aa-ec5f9f0a6055",
+      "requested_model": "grok-4.6",
+      "requested_effort": "xhigh",
+      "reported_model_usage": [
+        "grok-4.6"
+      ],
+      "exit_code": 0,
+      "timed_out": false,
+      "coordinator_decision": "S15 field-list clarification only; not full semantic or legal acceptance",
+      "events_sha256": "065f39107b9da067c42897df966f9c62781b1681a2ef1f49baecfc769799e4e0",
+      "response_sha256": "1a9775a01b55ce0875019baab023f144fbbec2e6a9d84801dbb26153784533a7",
+      "report_present": false,
+      "evidence_present": false
+    }
+  ]
+}

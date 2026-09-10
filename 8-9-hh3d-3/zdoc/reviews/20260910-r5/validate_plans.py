@@ -1,4 +1,4 @@
-"""Static S14 plan checks. These do not prove semantic/runtime/legal acceptance."""
+"""Static S16 plan checks. These do not prove semantic/runtime/legal acceptance."""
 from pathlib import Path
 from collections import Counter
 import argparse, datetime, hashlib, json, math, re, sys
@@ -49,7 +49,7 @@ def validate(manifest, inputs, root):
         ids=[m.group(2) for m in table]
         check(ids==EXPECTED[index], name+": ordered WP rows")
         check([int(m.group(1)) for m in table]==list(range(1,len(EXPECTED[index])+1)), name+": row ordinals")
-        check([m.group(5) for m in table] == (["IN_PROGRESS"]+["PLANNED"]*9 if index==0 else ["PLANNED"]*32), name+": table status for S14 freeze")
+        check([m.group(5) for m in table] == (["IN_PROGRESS"]+["PLANNED"]*9 if index==0 else ["PLANNED"]*32), name+": table status for S16 freeze")
         check(re.findall(r"(?m)^CURRENT_VALID_WP=(.+)$",s)==[EXPECTED[index][0]], name+": current WP")
         for m in table:
             wp=m.group(2)
@@ -225,30 +225,34 @@ def validate(manifest, inputs, root):
           "F08 succession timing in WP verification")
     check("mọi finding S6 đã đóng" not in g and "EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED" in g,
           "Owner authorization is recorded independently of historical critic verdicts")
-    # S12/S14 closure checks: typed release, load and deployment contracts are explicit.
+    # S12/S16 closure checks: typed release, load and deployment contracts are explicit.
     p002_raw=specs.get("H2-P0-02","")
     p601=specs.get("H2-P6-01","")
     p602=specs.get("H2-P6-02","")
     check(all(x in p002_raw for x in ["release-profile-v1", "solo_release_eligible", "decision_signature", "BLOCKED_RELEASE_PROFILE_SCHEMA", "source_manifest_sha256"]),
-          "S14 release profile is closed-schema and provenance-bound")
+          "S16 release profile is closed-schema and provenance-bound")
     check("H2-P3-04" in specs.get("H2-P4-02","") and "H2-P5-03 ACCEPTED" in p601,
-          "S14 economy and load dependencies are explicit")
+          "S16 economy and load dependencies are explicit")
     check(all(x in p601 for x in ["contracts/load-profile-v1.json", "1.000", "1.5x", "2.0x", "completed samples"]) and "coordinated omission" in g,
-          "S14 load profile freezes workload, overload and sample rules")
+          "S16 load profile freezes workload, overload and sample rules")
     check(all(x in p602 for x in ["contracts/deployment-profile-v1.json", "fault-domain", "RPO/RTO", "BLOCKED_DEPLOYMENT_PROFILE"]),
-          "S14 deployment profile binds environment, ownership and fail-closed rules")
+          "S16 deployment profile binds environment, ownership and fail-closed rules")
     check("materialize/copy dưới fixture staged root" in t and "UNSUPPORTED_SAFE_OPEN_WINDOWS" in t,
-          "S14 tool plan closes linked inputs and safe-open unsupported behavior")
+          "S16 tool plan closes linked inputs and safe-open unsupported behavior")
     check("1000 mock commands" in t and "30 mẫu" in t and "p95" in t,
-          "S14 tool benchmark fixes cardinality and measurements")
+          "S16 tool benchmark fixes cardinality and measurements")
     policy="MODEL=grok-4.6; REASONING_EFFORT=xhigh; CLI=official_grok; FAST_FLAG=ONLY_IF_VERIFIED; NO_CODEX_WORKER/NO_CURSOR/NO_FALLBACK/NO_HIDDEN_SUBAGENTS"
     check(all(x.count(policy)==1 and "--no-subagents" in x for x in (t,g)),
-          "S14 active plans require exact official Grok policy")
-    check("DISPATCHABLE=NO_UNTIL_GT10_ACCEPTED" in g, "S14 game waits GT10")
+          "S16 active plans require exact official Grok policy")
+    check("DISPATCHABLE=NO_UNTIL_GT10_ACCEPTED" in g, "S16 game waits GT10")
     check("H2-P3-04" in graph.get("H2-P4-02",[]) and "H2-P5-03" in graph.get("H2-P6-01",[]),
-          "S14 dependency table agrees with economy/load specs")
+          "S16 dependency table agrees with economy/load specs")
     check(all("EXECUTION_AUTHORIZATION=PLAN_ONLY" not in x for x in (t,g)),
-          "S14 no stale active authorization")
+          "S16 no stale active authorization")
+    check(all(x in p002_raw for x in ["decision_signature.signature", "decision_signature.signed_payload_sha256", "manifest INPUT", "Trust registry độc lập", "JCS/RFC8785"]),
+          "S16 acyclic signed payload and independent signer trust")
+    check("GT01_EVIDENCE_STATUS=DIAGNOSTIC_ONLY" in t and "GT01_PENDING=" in t,
+          "S16 GT01 diagnostic status and missing evidence are explicit")
     # Recompute concrete illustrative arithmetic; no deployment capacity proof.
     calculated={"rooms_cpu":math.floor(2400/(6*30)), "rooms_ram":math.floor(10/.6),
                 "rooms_down":math.floor(87.5e6/(32*30e3)), "rooms_up":math.floor(87.5e6/(32*10e3)),
@@ -279,10 +283,10 @@ def freeze(revision):
 
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
-    p=argparse.ArgumentParser();p.add_argument("--manifest",default="freeze-s14.json")
-    p.add_argument("--output",default="static-s14.json");p.add_argument("--freeze",action="store_true")
+    p=argparse.ArgumentParser();p.add_argument("--manifest",default="freeze-s16.json")
+    p.add_argument("--output",default="static-s16.json");p.add_argument("--freeze",action="store_true")
     p.add_argument("--inputs-dir",default=None,help="alternate directory holding *.snapshot copies for negative checks")
-    p.add_argument("--revision",default="S14");a=p.parse_args()
+    p.add_argument("--revision",default="S16");a=p.parse_args()
     if a.freeze:
         (OUT/a.manifest).write_text(json.dumps(freeze(a.revision),ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     manifest=json.loads((OUT/a.manifest).read_text(encoding="utf-8"))

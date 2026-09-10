@@ -1,0 +1,217 @@
+{
+  "kind": "STATIC_PLAN_CHECK_NOT_RUNTIME",
+  "revision": "S16",
+  "result": "PASS_STATIC_ONLY",
+  "timestamp": "2026-09-10T08:10:46.953905+07:00",
+  "manifest_sha256": "f4eeede0c65d76b0d53e337d1691c4676d5a478466ed40604f60b61b0bf802da",
+  "plans": [
+    {
+      "path": "8-9-godot-blender-agent-studio-plan.txt",
+      "sha256": "203a4b5231b79b48c6a49e359fdae4af61672601e3ec015687942e795d55b239",
+      "bytes": 65602,
+      "lines": 915,
+      "wp_rows": 10,
+      "specs": 10,
+      "exceptions": 18
+    },
+    {
+      "path": "8-9-hh-world-gameplay-viet-nam-plan.txt",
+      "sha256": "93217369d409145ca95e6c7e1b6c89f83a0b2c7271e1a426003e60b9a6215887",
+      "bytes": 205319,
+      "lines": 2695,
+      "wp_rows": 32,
+      "specs": 32,
+      "exceptions": 53
+    }
+  ],
+  "dependencies": {
+    "GT-01": [
+      "OWNER_START"
+    ],
+    "GT-02": [
+      "GT-01"
+    ],
+    "GT-03": [
+      "GT-02"
+    ],
+    "GT-04": [
+      "GT-02"
+    ],
+    "GT-05": [
+      "GT-03",
+      "GT-04"
+    ],
+    "GT-06": [
+      "GT-05"
+    ],
+    "GT-07": [
+      "GT-05",
+      "GT-06"
+    ],
+    "GT-08": [
+      "GT-07"
+    ],
+    "GT-09": [
+      "GT-08"
+    ],
+    "GT-10": [
+      "GT-09"
+    ],
+    "H2-P0-01": [
+      "GT-10"
+    ],
+    "H2-P0-02": [
+      "H2-P0-01"
+    ],
+    "H2-P0-03": [
+      "H2-P0-02"
+    ],
+    "H2-P1-01": [
+      "H2-P0-03"
+    ],
+    "H2-P1-02": [
+      "H2-P0-03"
+    ],
+    "H2-P1-03": [
+      "H2-P1-01",
+      "H2-P1-02"
+    ],
+    "H2-P2-01": [
+      "H2-P1-03"
+    ],
+    "H2-P2-02": [
+      "H2-P2-01"
+    ],
+    "H2-P2-03": [
+      "H2-P2-02"
+    ],
+    "H2-P2-04": [
+      "H2-P2-03"
+    ],
+    "H2-P3-01": [
+      "H2-P1-03",
+      "H2-P2-03"
+    ],
+    "H2-P3-02": [
+      "H2-P3-01"
+    ],
+    "H2-P3-03": [
+      "H2-P3-02"
+    ],
+    "H2-P3-04": [
+      "H2-P3-03"
+    ],
+    "H2-P4-01": [
+      "H2-P3-04"
+    ],
+    "H2-P4-02": [
+      "H2-P4-01",
+      "H2-P3-04"
+    ],
+    "H2-P4-03": [
+      "H2-P4-02"
+    ],
+    "H2-P4-04": [
+      "H2-P4-03"
+    ],
+    "H2-P5-01": [
+      "H2-P4-04"
+    ],
+    "H2-P5-02": [
+      "H2-P5-01"
+    ],
+    "H2-P5-03": [
+      "H2-P5-02"
+    ],
+    "H2-P6-01": [
+      "H2-P5-03"
+    ],
+    "H2-P6-02": [
+      "H2-P6-01"
+    ],
+    "H2-P6-03": [
+      "H2-P6-02"
+    ],
+    "H2-P7-01": [
+      "H2-P6-03"
+    ],
+    "H2-P7-02": [
+      "H2-P7-01"
+    ],
+    "H2-P7-03": [
+      "H2-P7-02"
+    ],
+    "H2-P8-01": [
+      "H2-P7-03"
+    ],
+    "H2-P8-02": [
+      "H2-P8-01"
+    ],
+    "H2-P8-03": [
+      "H2-P8-02"
+    ],
+    "H2-P9-01": [
+      "H2-P8-03"
+    ],
+    "H2-P9-02": [
+      "H2-P9-01"
+    ]
+  },
+  "topological_order": [
+    "GT-01",
+    "GT-02",
+    "GT-03",
+    "GT-04",
+    "GT-05",
+    "GT-06",
+    "GT-07",
+    "GT-08",
+    "GT-09",
+    "GT-10",
+    "H2-P0-01",
+    "H2-P0-02",
+    "H2-P0-03",
+    "H2-P1-01",
+    "H2-P1-02",
+    "H2-P1-03",
+    "H2-P2-01",
+    "H2-P2-02",
+    "H2-P2-03",
+    "H2-P2-04",
+    "H2-P3-01",
+    "H2-P3-02",
+    "H2-P3-03",
+    "H2-P3-04",
+    "H2-P4-01",
+    "H2-P4-02",
+    "H2-P4-03",
+    "H2-P4-04",
+    "H2-P5-01",
+    "H2-P5-02",
+    "H2-P5-03",
+    "H2-P6-01",
+    "H2-P6-02",
+    "H2-P6-03",
+    "H2-P7-01",
+    "H2-P7-02",
+    "H2-P7-03",
+    "H2-P8-01",
+    "H2-P8-02",
+    "H2-P8-03",
+    "H2-P9-01",
+    "H2-P9-02"
+  ],
+  "sizing_illustration": {
+    "rooms_cpu": 13,
+    "rooms_ram": 16,
+    "rooms_down": 91,
+    "rooms_up": 273,
+    "full_nodes": 5,
+    "sparse_nodes": 8,
+    "peak_TB": 77.76,
+    "average_TB": 15.552
+  },
+  "errors": [],
+  "warnings": [],
+  "limits": "Checks structure, declared graph and examples; semantic completeness requires independent review; runtime/human/scale/legal not tested."
+}

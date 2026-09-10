@@ -9,5 +9,6 @@ foreach ($job in $batch.jobs) {
     $job.supervisor_pid=$process.Id
     $batch | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $BatchFile -Encoding utf8
     Write-Output ($job.role+': supervisor PID '+$process.Id)
+    Start-Sleep -Seconds 5
 }
 $batch | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $batch.batch_root 'batch.json') -Encoding utf8

@@ -1,5 +1,5 @@
 HH WORLD — PLAN 2/2: GAMEPLAY, SOCIAL MULTIPLAYER, VIỆT NAM
-Ngày 10-09-2026, Asia/Saigon | Revision S14 | TRIỂN KHAI THEO GATE
+Ngày 10-09-2026, Asia/Saigon | Revision S16 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO GAME
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -44,7 +44,7 @@ RUNTIME_ACCEPTANCE=NONE
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/game-and-services
 PLAN_ROLE=GAME_SOURCE_OF_PROGRESS
-PLAN_REVISION=S14
+PLAN_REVISION=S16
 REVIEW_BASE_COMMIT=b4195ca
 HISTORICAL_REJECTED_COMMIT=54d0c7c
 HISTORICAL_STUDIO_COMMIT=3cc7a85f730c99963a5a64079a0e02dc20edbd40
@@ -1317,8 +1317,8 @@ cardinality (guardian + ít nhất hai trẻ hợp lệ), purpose/consent, relea
 Counsel/owner chốt applicability trước production consumer P3-01/P3-02;
 chưa chốt chỉ prototype INTERNAL_ONLY, dữ liệu giả, không giả chữ ký counsel.
 Release profile `contracts/release-profile-v1.json` là artifact bắt buộc của
-P0-02: gồm `solo_release_eligible` (boolean, thiếu/unknown mặc định false),
-`legal_decision_id`, `effective_at`, `expires_at`, `audience` và `channels`;
+P0-02: gồm `schema`, `profile_id`, `profile_version`, `solo_release_eligible` (boolean, thiếu/unknown mặc định false),
+`legal_decision_id`, `effective_at`, `expires_at`, `audience`, `channels`, `decision_signature` và `source_manifest_sha256`;
 mọi field là typed, có timezone, và `effective_at` phải trước `expires_at`.
 Đây là closed schema: top-level field phải đúng tập đã khóa gồm `schema`,
 `profile_id`, `profile_version`, `solo_release_eligible`, `legal_decision_id`,
@@ -1328,9 +1328,23 @@ timezone không hợp lệ hoặc canonicalization không hợp lệ đều là
 `BLOCKED_RELEASE_PROFILE_SCHEMA`. `decision_signature` phải có `key_id`,
 algorithm đã allowlist, `signed_at`, `signer_role`, `signature` và
 `signed_payload_sha256`; key phải thuộc trust registry đúng mục đích, còn hiệu
-lực và bị revoke check trước khi dùng. Canonical payload dùng JCS/RFC8785 hoặc
-profile tương đương đã khóa; hash, chữ ký và manifest phải cùng payload, không
-được coi chữ ký của agent là phê duyệt pháp lý.
+lực và bị revoke check trước khi dùng. Canonicalization khóa duy nhất JCS/RFC8785
+trong version này, UTF-8; không có fallback serializer. Payload ký bao gồm toàn
+bộ top-level profile và metadata decision_signature, nhưng loại đúng hai field
+decision_signature.signature và decision_signature.signed_payload_sha256.
+signed_payload_sha256=SHA256(JCS(payload)); chữ ký ký bytes JCS(payload) theo
+algorithm allowlist. key_id/algorithm/signed_at/signer_role đều nằm trong payload
+ký; không suy quyền signer chỉ từ chuỗi signer_role do người gọi cung cấp.
+Trust registry độc lập artifact quyết định role/purpose của key; metadata phải
+khớp registry. Không được coi chữ ký của agent là phê duyệt pháp lý.
+source_manifest_sha256 trỏ manifest INPUT đã đóng băng: code/assets/schema/lock
+liên quan, loại profile, chữ ký, manifest đó và output build/evidence khỏi tập
+hash. Đây không phải hash của manifest phát hành cuối. Thứ tự là input manifest
+→ profile ký → build → release manifest ký riêng, manifest cuối bind input hash,
+profile hash và artifact hashes. Không manifest nào chứa hash của chính mình;
+input đổi phải tạo profile/build/release manifest mới, không reuse verdict cũ.
+P0-02 kiểm golden canonical vectors, key metadata tamper, field exclusions,
+dependency graph không vòng và đổi một input phải invalidates chain đến release.
 Profile thiếu, sai schema, chữ ký/key provenance không hợp lệ, ngoài thời hạn,
 hoặc không khớp audience/channel đều fail-closed thành không đủ điều kiện phát
 hành. `legal_decision_id` phải trỏ tới decision/biên bản có owner và phạm vi,
@@ -2649,7 +2663,9 @@ production-vs-fixture mode, dependency hash gates và DB durability evidence.
 S13 khóa closed-schema/signature provenance, load-profile-v1 acceptance defaults,
 deployment-profile-v1 closure, candidate-vs-observed tool pin và loại bỏ commit
 large-file bị remote từ chối. S14 đổi worker sang Grok CLI và ghi quyền owner
-đã cấp; game vẫn đợi GT-10 ACCEPTED. 32 H2 PLANNED; chưa có runtime/human/legal/scale
+đã cấp; game vẫn đợi GT-10 ACCEPTED. S15 đồng bộ field list; S16 khóa JCS,
+payload exclusions/trust role và input→profile→build→release không vòng.
+32 H2 PLANNED; chưa có runtime/human/legal/scale
 acceptance. Snapshot/freeze mới dựa full bytes, Git HEAD chỉ provenance; không
 có plan thứ ba.
 

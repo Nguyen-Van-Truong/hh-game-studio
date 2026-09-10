@@ -7,6 +7,9 @@ try {
     $exe=Join-Path $env:USERPROFILE '.grok/bin/grok.exe'
     $argsG=@('--cwd',('"'+$c.workspace+'"'),'--model','grok-4.6','--reasoning-effort','xhigh','--session-id',$c.session,'--prompt-file',('"'+(Join-Path $AttemptDir 'TASK.txt')+'"'),'--output-format','streaming-json','--no-subagents','--no-plan','--max-turns',[string]$c.turn_limit,'--always-approve')
     if (!$c.web_search) { $argsG += '--disable-web-search' }
+    if ($c.delivery -eq 'JSON_BUNDLE') {
+        $argsG += @('--verbatim','--tools',$c.tools,'--system-prompt-override','"You produce a concrete source or review JSON bundle from the supplied task. Return the requested files as full source strings. The coordinator writes them and runs tests. Never claim to have written files or executed commands. Follow the task scope exactly. No subagents, no hidden delegation, no model fallback. Output JSON only without Markdown fences."')
+    }
     $native=Start-Process -FilePath $exe -ArgumentList $argsG -WorkingDirectory $c.workspace -WindowStyle Hidden -RedirectStandardOutput (Join-Path $AttemptDir 'events.jsonl') -RedirectStandardError (Join-Path $AttemptDir 'stderr.txt') -PassThru
     $null=$native.Handle
     @{job_id=$c.id;attempt=$c.attempt;session=$c.session;pid=$native.Id;started_utc=$native.StartTime.ToUniversalTime().ToString('o');executable=$exe;requested_model='grok-4.6';requested_effort='xhigh';fast_flag='NOT_EXPOSED_BY_CLI';max_seconds=$c.max_seconds} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $AttemptDir 'native.json') -Encoding utf8
@@ -21,12 +24,24 @@ try {
 finally {
     @{job_id=$c.id;attempt=$c.attempt;session=$c.session;exit_code=$code;timed_out=$timedOut;launcher_error=$failure;finished_utc=[datetime]::UtcNow.ToString('o')} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $AttemptDir 'runner-meta.json') -Encoding utf8
     if ($null -ne $code) { [IO.File]::WriteAllText((Join-Path $AttemptDir 'exit.txt'),[string]$code) }
+    if ($c.delivery -eq 'JSON_BUNDLE' -and $code -eq 0 -and !$timedOut) {
+        # Preserve model text for later strict parsing. This is delivery, not validation.
+        try {
+            $parts=New-Object System.Collections.Generic.List[string]
+            Get-Content -LiteralPath (Join-Path $AttemptDir 'events.jsonl') -Encoding UTF8 | ForEach-Object {
+                $event=$_ | ConvertFrom-Json
+                if ($event.type -eq 'text') { $parts.Add([string]$event.data) }
+            }
+            [IO.File]::WriteAllText((Join-Path $c.workspace 'response.txt'),[string]::Join('',$parts),(New-Object System.Text.UTF8Encoding($false)))
+        } catch { $_.Exception.Message | Set-Content -LiteralPath (Join-Path $AttemptDir 'delivery-error.txt') -Encoding utf8 }
+    }
     if ($c.notify) { try {
         $claim=[IO.File]::Open((Join-Path $AttemptDir 'notification.claim'),[IO.FileMode]::CreateNew,[IO.FileAccess]::Write,[IO.FileShare]::None); $claim.Dispose()
         . (Join-Path $c.notification_repo 'scripts/worker-mailbox/lib/WorkerMailbox.Core.ps1')
         . (Join-Path $c.notification_repo 'scripts/worker-mailbox/lib/WorkerMailbox.Notify.ps1')
         $kind='WORKER_INCOMPLETE'
         if (!$timedOut -and $null -eq $failure -and (Test-Path -LiteralPath (Join-Path $c.workspace 'REPORT.md')) -and (Test-Path -LiteralPath (Join-Path $c.workspace 'evidence.json'))) { $kind='NEEDS_REVIEW' }
+        if (!$timedOut -and $null -eq $failure -and $c.delivery -eq 'JSON_BUNDLE' -and (Test-Path -LiteralPath (Join-Path $c.workspace 'response.txt'))) { $kind='NEEDS_REVIEW' }
         Send-MailboxNotification -Title ($c.id+' - '+$kind) -Body ('CLI ended; exit='+$code+'. Coordinator must verify files/tests. Evidence: '+$AttemptDir) -Mode real -EventKind $kind -EvidencePath (Join-Path $AttemptDir 'notice-evidence.json') | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $AttemptDir 'notice-result.json') -Encoding utf8
     } catch { $_.Exception.Message | Set-Content -LiteralPath (Join-Path $AttemptDir 'notice-error.txt') -Encoding utf8 } }
 }
