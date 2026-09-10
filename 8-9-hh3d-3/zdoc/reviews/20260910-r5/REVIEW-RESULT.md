@@ -60,6 +60,14 @@ materializing them and runs the resulting tests. Adding workers is useful only
 when each produces reviewable work; prior simultaneous starts also encountered
 provider 429 request-rate errors. Launches are now staggered.
 
+Batch `20260910T010752Z` was also rejected after both bounded polls: the runner
+read the snapshot before creating it and replaced observed exits, the fixture
+retained the Enter interception despite claiming otherwise, and tests were not
+valid runnable output. `repair-batch-rejected.json` binds each response digest.
+No code from that batch was integrated. Batch `20260910T011409Z` narrows the task
+to exact patches for menu input and actual subprocess exit capture; both are
+still subject to coordinator review and tests. No acceptance is delegated.
+
 `dispatch_batch.py` and `prepare_bundles.py` prepare fresh isolated batches;
 `Launch-Batch.ps1` starts hidden supervisors. Never redispatch just to inspect
 status. Ignored `active-batch.local.json` stores per-machine paths and sessions.

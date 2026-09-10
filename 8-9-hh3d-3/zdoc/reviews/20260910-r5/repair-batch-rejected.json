@@ -1,0 +1,30 @@
+{
+  "batch": "20260910T010752Z",
+  "decision": "REJECT_ALL_NO_INTEGRATION",
+  "reasons": {
+    "runner": "Malformed JSON; snapshot read before copy; replaces actual exit; contradictory one-object trace types; scope validation not repaired",
+    "fixture": "Main code unchanged despite claimed fixes; trace adds early returns that hang; no required transition or menu-quit proof",
+    "tests": "Malformed JSON; source import uses wrong parents index; not runnable"
+  },
+  "sources_preserved": true,
+  "attempts": [
+    {
+      "role": "runner",
+      "session": "73b61091-7ff8-4bdc-b107-35e4f56bc932",
+      "response_sha256": "b41e81f937397f392ea62f98ffe777e5e143ee65732379410f9ab53b324db717",
+      "bytes": 11522
+    },
+    {
+      "role": "fixture",
+      "session": "22b82aed-51a1-44cf-b7a7-8947a59efcf7",
+      "response_sha256": "8210895b3f78915668f6168f1cd15ad3295a030b1f2f2ee2e390be98afb2957f",
+      "bytes": 6156
+    },
+    {
+      "role": "tests",
+      "session": "607be4ef-a212-4a94-beda-000aa2e8597e",
+      "response_sha256": "eec07140d3c5b12c9ee7daaea38a19aa979a617ca491ab995ce241ecf54efa39",
+      "bytes": 9035
+    }
+  ]
+}
