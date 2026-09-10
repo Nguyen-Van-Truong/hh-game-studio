@@ -1,0 +1,61 @@
+{
+  "schema": "HH-STUDIO-TOOLCHAIN-LOCK-2",
+  "revision": "GT01-20260910-01",
+  "status": "CANDIDATE",
+  "godot": {
+    "version": "4.7.2-stable",
+    "source_tag": "4.7.2-stable",
+    "source_commit": "ed1daf0bf001b61586d9930840f2f1394092c079",
+    "source": "https://github.com/godotengine/godot-builds/releases/tag/4.7.2-stable",
+    "console_executable": "Godot_v4.7.2-stable_win64_console.exe",
+    "gui_executable": "Godot_v4.7.2-stable_win64.exe",
+    "console_sha256": "c8f0a6bc45a19b33541501e57f6f7cd972ab18453743266339d495cbbe846643",
+    "gui_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+    "archive": {
+      "name": "Godot_v4.7.2-stable_win64.exe.zip",
+      "url": "https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_win64.exe.zip",
+      "sha256": "731980f9608d61333e5baf54a2ef17210acc7a538446c0cb9969f002aca1e953",
+      "sha512": "83decd58fdf67b9d657958a1ae6bf1929c20785315a81effe245874cdc57acb709bf868e00778a96984338c1b29dafdb453c6847747694621c6ecf5da2259993",
+      "size_bytes": 86013866
+    },
+    "sha512_sums": {
+      "url": "https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/SHA512-SUMS.txt",
+      "sha256": "b8bdff6704f833e7a021df16ec08e1478edd5a285c1f894929b91a7f74a5c7c0"
+    },
+    "license": "MIT",
+    "observed_version": "4.7.2.stable.official.ed1daf0bf",
+    "source_commit_url": "https://api.github.com/repos/godotengine/godot/git/ref/tags/4.7.2-stable"
+  },
+  "export_templates": {
+    "version": "4.7.2-stable",
+    "name": "Godot_v4.7.2-stable_export_templates.tpz",
+    "url": "https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_export_templates.tpz",
+    "sha256": "f298490b8d44d934be425a5a65a51bf15f422428b229a06a6e11d9ffea248011",
+    "size_bytes": 1281349702,
+    "state": "ARCHIVE_VERIFIED_NOT_INSTALLED",
+    "sha512": "ca4d71c4d7b81dfc15d1a98baa07534aa95b03fdda78a0075b06672e1648d2e5f40980c9adc28d23e1b92e732ee7bf3461997aa804af74ec2fcd7a93ccb84079"
+  },
+  "blender": {
+    "version": "5.2.1",
+    "archive": "studio/.local/tooling/blender-5.2.1-windows-x64.zip",
+    "sha256": "0e631dad7d0cad6d5d18abdd2e2550f6c0213215334eda00ddbd3d22b96ecb2c",
+    "source": "https://download.blender.org/release/Blender5.2/blender-5.2.1-windows-x64.zip",
+    "license": "GPL",
+    "state": "ARCHIVE_VERIFIED_NOT_INSTALLED",
+    "required_before": "GT-04/GT-05"
+  },
+  "python": {
+    "version": "3.11.9",
+    "state": "OBSERVED_ONLY"
+  },
+  "android": {
+    "state": "GAP_UNTIL_GT08"
+  },
+  "policy": {
+    "no_latest_autofetch": true,
+    "no_system_path_mutation": true,
+    "absolute_paths_forbidden": true,
+    "local_overrides": "studio/.local/toolchain.local.json",
+    "fixture_independent_of_game": true
+  }
+}

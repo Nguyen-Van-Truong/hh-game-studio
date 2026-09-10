@@ -1,0 +1,71 @@
+{
+  "model": "grok-4.6",
+  "effort": "xhigh",
+  "workers": [
+    {
+      "role": "runner-audit",
+      "session": "67d21ee2-0e29-44e6-ab9a-21435278c516",
+      "sha256": "88c941343c36d804b5670e4342b3bdd4bd33699680456d1dc6c275e0146eee8a",
+      "host": {
+        "exit_code": 0,
+        "attempt": "20260910T054739Z",
+        "finished_utc": "2026-09-10T05:53:59.2043370Z",
+        "timed_out": false,
+        "session": "67d21ee2-0e29-44e6-ab9a-21435278c516",
+        "job_id": "hh3d-gt01-runner-audit",
+        "launcher_error": null
+      },
+      "integration": "REJECTED_AS_DELIVERED",
+      "canonical_write": false
+    },
+    {
+      "role": "fixture-audit",
+      "session": "198ad1b9-835a-431e-aedd-7999dff5b974",
+      "sha256": "14e06f3119a2c280a40affb28eb8568150fbb8bcd59f94b65252fc1747ff7991",
+      "host": {
+        "exit_code": 0,
+        "attempt": "20260910T054739Z",
+        "finished_utc": "2026-09-10T05:51:37.9846855Z",
+        "timed_out": false,
+        "session": "198ad1b9-835a-431e-aedd-7999dff5b974",
+        "job_id": "hh3d-gt01-fixture-audit",
+        "launcher_error": null
+      },
+      "integration": "REJECTED_AS_DELIVERED",
+      "canonical_write": false
+    },
+    {
+      "role": "toolchain-bootstrap",
+      "session": "a3594249-0063-4924-a3f7-079dc63fe624",
+      "sha256": "0b7e95431949f322f256d566480812aab4c75962cac05c883a6eda07e7089cd5",
+      "host": {
+        "exit_code": 0,
+        "attempt": "20260910T054739Z",
+        "finished_utc": "2026-09-10T05:51:18.1965163Z",
+        "timed_out": false,
+        "session": "a3594249-0063-4924-a3f7-079dc63fe624",
+        "job_id": "hh3d-gt01-toolchain-bootstrap",
+        "launcher_error": null
+      },
+      "integration": "REJECTED_AS_DELIVERED",
+      "canonical_write": false
+    },
+    {
+      "role": "blender-fixture",
+      "session": "54d59a24-ce3f-4856-909d-4467b039887e",
+      "sha256": "27c0f32f271870962c30bac1018ff0bd1ea530f2dcb329b849d9b42863d0848a",
+      "host": {
+        "exit_code": 0,
+        "attempt": "20260910T054739Z",
+        "finished_utc": "2026-09-10T05:49:53.2910054Z",
+        "timed_out": false,
+        "session": "54d59a24-ce3f-4856-909d-4467b039887e",
+        "job_id": "hh3d-gt01-blender-fixture",
+        "launcher_error": null
+      },
+      "integration": "REJECTED_AS_DELIVERED",
+      "canonical_write": false
+    }
+  ],
+  "limits": "See REVIEW-RESULT.md for adjudication; exit0 does not imply accepted code."
+}

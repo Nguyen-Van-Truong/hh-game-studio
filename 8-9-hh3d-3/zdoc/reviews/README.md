@@ -1,27 +1,32 @@
 # HH3D review evidence
 
-This directory contains review evidence, not a third plan or a worker service.
-Progress belongs only to the two active TXT plans in the parent directory.
+Progress lives only in the two TXT plans one directory above.
+Current review: [S18 / r6](20260910-r6/REVIEW-RESULT.md).
 
-Current report: [20260910-r5](20260910-r5/REVIEW-RESULT.md).
+| Directory | Purpose |
+| --- | --- |
+| 20260908-r3 | Historical recovery and S3 review scripts |
+| 20260909-r4 | Historical S6–S13 plan snapshots, diffs and critic evidence |
+| 20260910-r5 | S14–S17 review and reusable Grok supervisor |
+| 20260910-r6 | Current S18 progress, worker adjudication and partial GT01 runtime |
 
-Keep in Git: concise decisions/findings, reproducible validators/tests,
-source freeze manifests, source snapshots required to reproduce a finding,
-and the final evidence supporting an accepted gate. Older revisions remain
-historical and do not certify a new source hash.
+These are evidence folders, not worker processes. Worker workspace/output/logs
+are separate attempts in local TEMP, referenced by ignored *.local.json files.
+A worker completion notice does not accept its deliverable.
 
-Keep outside Git: live worker workspaces, streaming transcripts, CLI caches,
-tokens, temporary downloads and per-machine attempt pointers. New worker
-attempts live under Windows TEMP; locally generated scratch inside this tree
-belongs under a `.local/` directory. Commit a small digest/result summary after
-coordinator verification if it explains an acceptance or rejection.
+Keep reports, source hashes, frozen snapshots, diffs, validators and critic
+verdicts referenced by plans or commits. They explain past decisions and support
+reproduction. Do not blanket-ignore reviews or delete historical evidence merely
+because its worker ended.
 
-Do not ignore or delete this entire directory. Before retiring evidence,
-check active plan/report references, preserve the final acceptance and repro
-closure, and verify its recovery location and hashes. Historical evidence
-being tracked in Git is not, by itself, a reason to erase its current files.
-No automatic recursive cleanup is configured.
+Python bytecode/cache and machine-specific *.local.json are ignored and may be
+regenerated. No historical report or snapshot was removed in the r6 inventory.
+At inventory, all review folders together occupied about 2.23 MB; the large
+Godot/Blender downloads reside under ignored studio/.local/, not here.
 
-Worker `exit 0`, Windows toast, and an AI sentence saying “done” are terminal
-signals only. Review actual files, native tool results, source hashes and
-tests. Reject unsupported claims even when a worker is fast.
+Retention for future batches: commit a compact reviewed report, input/output
+hashes, host exit, useful test logs and final diffs. Leave streaming logs,
+tool downloads, duplicate workspaces and machine paths local. Before removal,
+check references, active attempts, Git tracking and whether reproduction still
+works. Owner permission to tidy does not mean successful/failed evidence should
+be silently discarded.

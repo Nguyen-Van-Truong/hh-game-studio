@@ -1,5 +1,5 @@
 HH WORLD — PLAN 2/2: GAMEPLAY, SOCIAL MULTIPLAYER, VIỆT NAM
-Ngày 10-09-2026, Asia/Saigon | Revision S17 | TRIỂN KHAI THEO GATE
+Ngày 10-09-2026, Asia/Saigon | Revision S18 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO GAME
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -45,7 +45,7 @@ RUNTIME_ACCEPTANCE=NONE
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/game-and-services
 PLAN_ROLE=GAME_SOURCE_OF_PROGRESS
-PLAN_REVISION=S17
+PLAN_REVISION=S18
 REVIEW_BASE_COMMIT=b4195ca
 HISTORICAL_REJECTED_COMMIT=54d0c7c
 HISTORICAL_STUDIO_COMMIT=3cc7a85f730c99963a5a64079a0e02dc20edbd40
@@ -2671,6 +2671,10 @@ và ghi header PLAN_DESIGN_CRITICS: từ S6 đến S16 chưa có verdict critic 
 kế nào ACCEPT (S6/S7 REVISE; S8 quota; S9–S16 không có verdict). Static kiểm
 closure S6–S8 (LEGAL-VN, catalog shop, SCALE-LOCKS, EX45–EX53) vẫn PASS trên
 S17; không đổi nội dung WP/EX/Q của game.
+S18 (10-09) đồng bộ tiến độ tools: GT-01 có bằng chứng headless 4.7.2
+chưa nghiệm thu. Game vẫn chưa triển khai và đợi GT-10; không thay LEGAL-VN,
+EX/Q, release profile hay capacity gates. Review hiện hành:
+./reviews/20260910-r6/REVIEW-RESULT.md
 32 H2 PLANNED; chưa có runtime/human/legal/scale
 acceptance. Snapshot/freeze mới dựa full bytes, Git HEAD chỉ provenance; không
 có plan thứ ba.

@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 10-09-2026, Asia/Saigon | Revision S17 | TRIỂN KHAI THEO GATE
+Ngày 10-09-2026, Asia/Saigon | Revision S18 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -17,15 +17,15 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 CURRENT_VALID_WP=GT-01
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
 IMPLEMENTATION=GT01_IN_PROGRESS
-GT01_EVIDENCE_STATUS=DIAGNOSTIC_ONLY
-GT01_PENDING=PIN_PROVENANCE,BOOTSTRAP_SAFETY,HEADED_UI,PROCESS_TREE,BLENDER_FIXTURE,ROLLBACK,TWO_CRITICS
+GT01_EVIDENCE_STATUS=PARTIAL_RUNTIME_UNREVIEWED
+GT01_PENDING=BOOTSTRAP_HARDENING,TOOLCHAIN_REPRO,ROLLBACK,TWO_CRITICS
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
 PLAN_DESIGN_CRITICS=NO_ACCEPTED_VERDICT_S6_TO_S16
 RUNTIME_ACCEPTANCE=NONE
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S17
+PLAN_REVISION=S18
 REVIEW_BASE_COMMIT=b4195ca
 HISTORICAL_REJECTED_COMMIT=54d0c7c
 HISTORICAL_STUDIO_COMMIT=3cc7a85f730c99963a5a64079a0e02dc20edbd40
@@ -88,7 +88,7 @@ chứng minh Godot4.7.1 gây các lỗi gameplay/evidence; không sửa pin củ
 GT-01 kiểm official artifacts và capability reuse. Trang archive Godot và LTS
 Blender đã được đối chiếu trong lượt 08-09: ứng viên Godot 4.7.2-stable standard, matching export templates, Blender 5.2.1 LTS; fallback Blender 4.5.13 LTS chỉ
 khi addon không tương thích đã tái hiện.
-Quyết định pin S17 (theo lựa chọn owner "Godot stock 4.7.2"): pin của HH Studio
+Quyết định pin S17 (coordinator chọn trong quyền triển khai owner đã cấp): pin của HH Studio
 là Godot 4.7.2-stable standard, trang archive official xác nhận tồn tại ngày
 10-09-2026 (phát hành 18-08-2026, S02). Godot 4.7.1-stable đang có trong tooling
 Vault Fighters chỉ là binary chẩn đoán/reuse read-only: mọi run trên 4.7.1 là
@@ -97,7 +97,9 @@ Chỉ đổi pin khi fixture tái hiện blocker trên 4.7.2 với minimal repro
 GT-01 tải Godot_v4.7.2-stable_win64.exe.zip (kèm bản console), export templates
 4.7.2 và file SHA512-SUMS.txt của cùng release từ kênh official (S18), xác minh
 SHA512 khớp SUMS trước giải nén vào studio/.local/tooling/godot-4.7.2-stable/;
-ghi version, full commit từ --version, SHA256/SHA512, license MIT, platform,
+ghi version và abbreviated commit từ --version; đối chiếu full commit từ tag
+source official godotengine/godot (không lấy commit của repo godot-builds).
+Ghi SHA256/SHA512, license MIT, platform,
 exporter và compatibility result trong lock và manifest; mismatch giữa candidate,
 observed và lock là GAP. Không tự tải latest hoặc tin tên folder; user_dir/cache
 của fixture tách riêng, không chạm cache hay pin của Vault Fighters. Một bộ duy
@@ -947,6 +949,21 @@ Godot 4.7.2-stable official, 4.7.1 chỉ chẩn đoán; lock/evidence không ch�
 process tree có cơ chế cụ thể; kiểm máy output worker và luật leo thang sau
 hai batch REJECT; checkpoint commit cho source IN_PROGRESS. Static kiểm S6–S8
 closure vẫn PASS trên S17.
+S18 (10-09, tiếp tục GT-01): đã chạy Godot 4.7.2 stock trên snapshot riêng,
+import + parse trace + input headless + QUITTING có host exit và Job Object.
+ZIP editor và export templates đã khớp SHA256/SHA512-SUMS official. Đây là
+PARTIAL_RUNTIME_UNREVIEWED, không là nghiệm thu GT-01. Runner còn hardening
+path/version/source-copy/negative tests; toolchain cần launcher tái tạo,
+rollback cùng hai critic chưa đủ. Run 20260910T131143Z đã qua headless và
+có cửa sổ, menu Quit, pause body+tick, Blender save/reopen và từ chối ghi đè;
+host exit0, stdout/stderr sạch ở ca thành công, Job active=0. Package
+studio/evidence/gt01-partial-20260910T131143Z giữ log/hash/ảnh đã redact;
+không là GT-01 ACCEPTED. Các audit Grok r6
+có finding sai thực tế nên phải phân xử trước sửa; không đồng nhất exit0 với
+kết quả worker hợp lệ. Checkpoint WIP và review hiện hành:
+./reviews/20260910-r6/REVIEW-RESULT.md
+Godot làm trước trong plan công cụ; H2 tiếp tục đợi GT-10. Không đổi DoD hoặc
+tự nhận plan hoàn hảo từ static PASS.
 9 GT còn PLANNED; GT-02 chỉ mở khi GT-01 đủ dependency/DoD/critic. Tất cả
 review/snapshot chỉ evidence, không nguồn WP; hash full bytes mới là freeze.
 

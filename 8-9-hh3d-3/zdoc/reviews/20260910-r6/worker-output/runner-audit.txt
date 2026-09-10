@@ -1,0 +1,46 @@
+{
+  "verdict": "REVISE",
+  "findings": [
+    {
+      "severity": "P2",
+      "file": "build/bootstrap/run_fixture.py",
+      "evidence": "VERSION_RE = re.compile(r\"(?P<version>\\d+\\.\\d+\\.\\d+\\.stable\\.official(?:\\.[0-9a-f]+)?)\")\n\ndef _observed_version(godot: Path, timeout: int) -> tuple[str, str]:\n    result = subprocess.run([str(godot), \"--version\"], capture_output=True, text=True,\n                            timeout=min(timeout, 30), check=False)\n    combined = (result.stdout or \"\") + (result.stderr or \"\")\n    match = VERSION_RE.search(combined)\n    return (match.group(\"version\") if match else \"\", combined.strip())\n\ndef _version_matches(observed: str, expected: str) -> bool:\n    normalized = expected.replace(\"-\", \".\")\n    return observed == normalized or observed.startswith(normalized + \".\")",
+      "reason": "Regex requires '.stable.official' but Godot --version outputs format like '4.7.2-stable'; match function rejects '-stable' suffix, so version check always fails even for pinned 4.7.2-stable from toolchain.lock.json.",
+      "fix": "Update regex to r\"(?P<version>\\d+\\.\\d+\\.\\d+[-.]stable(?:\\.official)?(?:\\.[0-9a-f]+)?)\" and _version_matches to: normalized = expected.replace('-', '.'); o = observed.replace('.', '-'); return o == normalized or o.startswith(normalized + '-stable')",
+      "test": "Run main with --expected-version 4.7.2-stable (matches) vs 4.7.2 (fails) on real Godot binary; distinguish pass/fail before any runs."
+    },
+    {
+      "severity": "P2",
+      "file": "build/bootstrap/run_fixture.py",
+      "evidence": "in run_process:\n    process = subprocess.Popen([sys.executable, \"-c\", helper, str(host_path), *argv], ...)\n    job_state = None\n    ...\n    try:\n        if os.name == \"nt\":\n            job_state = _job_for_process(process)\n        process.stdin.write(b\"GO\\n\")\n        ...\n        p = subprocess.Popen(sys.argv[2:])  # inside helper\n        code = p.wait()\n        ...",
+      "reason": "Job created/assigned to wrapper/helper BEFORE 'GO' and before launching target p (only helper is job member); target's spawned children are not job descendants, so not killed on job close/terminate.",
+      "fix": "Move job creation/assignment AFTER target launch inside helper (after 'GO' and p = Popen), change _job_for_process to assign the target handle; update terminate/close logic to use target as member.",
+      "test": "Spawn target that forks grandchild process; timeout or normal exit; verify grandchild killed only if job assigned to target."
+    },
+    {
+      "severity": "P2",
+      "file": "build/bootstrap/run_fixture.py",
+      "evidence": "in run_process:\n    try:\n        if os.name == \"nt\":\n            job_state = _job_for_process(process)\n        process.stdin.write(b\"GO\\n\")\n        process.stdin.close()\n        try:\n            exit_code = process.wait(timeout=timeout)\n        except subprocess.TimeoutExpired:\n            timed_out = True\n            if os.name == \"nt\":\n                _terminate_job(job_state)\n            else:\n                os.killpg(process.pid, signal.SIGKILL)\n            exit_code = process.wait(timeout=10)\n        ...\n    finally:\n        if process.poll() is None:\n            process.kill()\n        if not tree_verified:\n            if job_state:\n                _terminate_job(job_state)\n        _close_job(job_state)\n\n    host_report = json.loads(host_path.read_text(encoding=\"utf-8\")) if host_path.exists() else {}\n    ...\n    return {\"wrapper_exit_code\": exit_code, \"exit_code\": host_report.get(\"exit_code\"), \"target_pid\": host_report.get(\"target_pid\"), ...}",
+      "reason": "In timeout case, _terminate_job kills helper before p.wait() completes and before host.json write, so target_pid/exit_code always None ({} dict); launch failure (e.g. inner Popen raises) also skips json write.",
+      "fix": "Wrap helper p/Popen+wait in try/except; on kill, poll inner target separately with timeout=0 before outer wait; always write partial host.json with whatever target code captured.",
+      "test": "Timeout case (sleep > timeout) vs normal exit; assert target exit_code present and correct in evidence.json only if not killed before write."
+    },
+    {
+      "severity": "P2",
+      "file": "build/bootstrap/run_fixture.py",
+      "evidence": "in run_process:\n    deadline = time.monotonic() + 3\n    while time.monotonic() < deadline:\n        if os.name == \"nt\":\n            tree_verified = _job_active_count(job_state) == 0\n        else:\n            try:\n                os.killpg(process.pid, 0)\n            except ProcessLookupError:\n                tree_verified = True\n        if tree_verified:\n            break\n        time.sleep(0.02)\n\n    if not tree_verified:\n        if job_state:\n            _terminate_job(job_state)\n        ...\n\n    _close_job(job_state)",
+      "reason": "For normal exit (nt), active_processes stays 1 (helper still job member) until _close_job AFTER loop; tree_verified never set True (always False); non-nt path works via killpg but nt broken.",
+      "fix": "Set tree_verified after _close_job in finally (or move close before check loop); for nt use job.QueryInformationJobObject with JOB_OBJECT_BASIC_INFORMATION to poll post-close.",
+      "test": "Normal exit run; assert tree_verified=True in result dict (and evidence); timeout case already asserts True but does not cover normal."
+    },
+    {
+      "severity": "P2",
+      "file": "tests/bootstrap/test_run_fixture.py",
+      "evidence": "def test_timeout_captures_owned_child(self):\n    ...\n    result = run_fixture.run_process(\n        [\"python\", \"-c\", \"import time; time.sleep(10)\"],\n        cwd=output, output=output, timeout=1, label=\"timeout\")\n    self.assertTrue(result[\"timed_out\"])\n    self.assertTrue(result[\"tree_verified\"])\n\n    def test_timeout_kills_descendant_and_keeps_real_exit(self):\n        ...\n        result = run_fixture.run_process([sys.executable, \"-c\", code], ...)\n        self.assertTrue(result[\"timed_out\"])\n        self.assertTrue(result[\"tree_verified\"])\n\n    def test_real_exit_and_separate_logs(self):\n        ...\n        result = run_fixture.run_process(\n            [\"python\", \"-c\", \"print('ok')\"],\n            ...)\n        self.assertEqual(result[\"exit_code\"], 0)\n        ...\n        self.assertTrue(result[\"tree_verified\"])\n\n    def test_reject_duplicate_output_before_spawn(self):\n        ...",
+      "reason": "Only 4 tests; all superficial (happy path + timeout); no tests exercise rejection paths (version mismatch, checksum fail, source closure change during copy, duplicate output files); tree_verified never True on nt normal exit but asserts pass; does not distinguish real rejection.",
+      "fix": "Add 4 targeted tests: (1) version fail with --expected-version 4.7.3, (2) checksum mismatch, (3) modify fixture before copy and check before/after !=, (4) pre-create stdout file and expect fail before spawn; make tree_verified test assert False on nt normal to expose bug.",
+      "test": "Run full main with each rejection arg; verify return 2 and evidence status=DIAGNOSTIC; distinguish from ACCEPT cases."
+    }
+  ],
+  "limits": ["unproved gates"]
+}

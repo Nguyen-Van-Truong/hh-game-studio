@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "<LOCAL_PATH>", line 93, in <module>
+    main()
+    ~~~~^^
+  File "<LOCAL_PATH>", line 56, in main
+    target = safe_output(args.output)
+  File "<LOCAL_PATH>", line 20, in safe_output
+    raise ValueError("output exists or parent missing")
+ValueError: output exists or parent missing
+
+Error: script failed, file: '<LOCAL_PATH>', exiting.

@@ -1,0 +1,30 @@
+{
+"verdict": "REVISE",
+"findings": [
+{
+"severity": "P1",
+"file": "fixtures/sample-game/scripts/main.gd",
+"evidence": "		var direction := Input.get_axis(\"ui_left\", \"ui_right\")\n		body_position.x = clampf(body_position.x + direction * 180.0 * delta, 80.0, 560.0)",
+"reason": "get_axis returns 0.0 (actions unbound; only quit_action in project.godot); trace _press(KEY_RIGHT) never moves body_position despite physics_process",
+"fix": "add ui_left and ui_right actions under [input] in fixtures/sample-game/project.godot mapping KEY_LEFT and KEY_RIGHT",
+"test": "trace.gd movement postcondition (x > start_position after press/release) passes only after action binding"
+},
+{
+"severity": "P2",
+"file": "fixtures/sample-game/scripts/trace.gd",
+"evidence": "		_send_key(KEY_Q)\n		await _frames(3)\n		if not quit_seen:",
+"reason": "quit() synchronous in _quit_fixture makes await unreachable; QUITTING phase never observed for duration, post-QUITTING timing assertion never executed",
+"fix": "delay quit() in _quit_fixture (Timer.new().start(30) after emit transitioned)",
+"test": "else: block in _initialize reaches quit_seen check and PASS print only with delayed quit"
+},
+{
+"severity": "P1",
+"file": "fixtures/sample-game/scripts/trace.gd",
+"evidence": "		_press(KEY_RIGHT)\n		await _frames(4)\n		_release(KEY_RIGHT)\n		await _physics_frames(1)",
+"reason": "await _frames(4) triggers only _process (no body_position update); _physics_process (the only movement path) skipped, check always fails",
+"fix": "replace await _frames(4) with await _physics_frames(5) before _release",
+"test": "if (moved_snapshot[\"body_position\"] as Vector2).x <= start_position.x would be false after physics await but true before fix"
+}
+],
+"limits": ["unproved gates"]
+}
