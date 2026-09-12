@@ -23,6 +23,8 @@ def portable(value):
 portable(lock)
 assert lock["export_templates"]["version"] == godot["version"]
 assert lock["export_templates"]["state"] in {"PINNED_NOT_DOWNLOADED", "ARCHIVE_VERIFIED_NOT_INSTALLED"}
+assert lock["blender"]["state"] == "ARCHIVE_AND_BINARY_VERIFIED_LOCAL"
+assert re.fullmatch(r"[0-9a-f]{64}", lock["blender"]["executable_sha256"])
 assert lock["android"]["state"] == "GAP_UNTIL_GT08"
 for rel in ["project.godot", "main.tscn", "scripts/main.gd", "scripts/trace.gd"]:
     p = FIXTURE / rel
