@@ -16,6 +16,7 @@ import stat
 import sys
 import uuid
 import zipfile
+import time
 
 _spec = importlib.util.spec_from_file_location('hh_archive_verifier', Path(__file__).with_name('verify_archive.py'))
 verifier = importlib.util.module_from_spec(_spec)
@@ -60,6 +61,18 @@ def sha(path):
     require(before == verifier._identity(path), 'file changed during hash')
     return h.hexdigest()
 
+def file_record(path):
+    """Hash and size under one identity window; still cooperative, not safe-open."""
+    path = safe_path(path)
+    before = verifier._identity(path)
+    digest = hashlib.sha256(); size = 0
+    with path.open('rb') as handle:
+        for chunk in iter(lambda: handle.read(1024**2), b''):
+            size += len(chunk); digest.update(chunk)
+    after = verifier._identity(path)
+    require(before == after and size == after[2], 'file changed while recording manifest')
+    return {'sha256': digest.hexdigest(), 'size_bytes': size}
+
 def read_json(path):
     path = safe_path(path)
     before = verifier._identity(path)
@@ -91,7 +104,7 @@ def closure(package):
         require(child.is_file(), 'unexpected directory in package')
         member_name(child.name)
         if child.name != 'manifest.json':
-            result[child.name] = {'sha256':sha(child),'size_bytes':child.stat().st_size}
+            result[child.name] = file_record(child)
     return result
 
 def read_package(root, receipt):
@@ -109,8 +122,9 @@ def lease(root):
     root = safe_path(root)
     root.mkdir(parents=True,exist_ok=True)
     path = safe_path(root/'.mutation.lock')
+    payload = {'pid': os.getpid(), 'created_ns': time.time_ns(), 'nonce': uuid.uuid4().hex}
     with path.open('xb') as handle:
-        handle.write(uuid.uuid4().hex.encode()); handle.flush(); os.fsync(handle.fileno())
+        handle.write(encode(payload)); handle.flush(); os.fsync(handle.fileno())
     identity = verifier._identity(path)
     try:
         yield root
@@ -166,6 +180,11 @@ def install(archive_path, sums_path, lock_path, root_path):
             handle.write(encode(manifest)); handle.flush(); os.fsync(handle.fileno())
         receipt = {'package':package_id,'manifest_sha256':sha(stage/'manifest.json')}
         os.rename(stage,destination)  # Same volume, exclusive cooperative lease.
+        try:
+            fd = os.open(root/'packages', os.O_RDONLY)
+            os.fsync(fd); os.close(fd)
+        except OSError:
+            pass
         read_package(root,receipt)
     return {'status':'INSTALLED_NOT_ACTIVATED','receipt':receipt,'version':pin['version']}
 
@@ -193,6 +212,10 @@ def publish(root, state, expected):
     require(state_token(root)==expected, 'active state edited before publish')
     # Previous receipt and journal share this JSON; no two-file crash window.
     os.replace(temporary,root/STATE)
+    try:
+        fd = os.open(root, os.O_RDONLY); os.fsync(fd); os.close(fd)
+    except OSError:
+        pass
     require((root/STATE).read_bytes()==encode(state), 'readback failed; inspect state before retry')
     return {'status':state['operation'],'state_token':state_token(root),'transition_id':state['transition_id'],
             'revision':state['revision'],'current':state['current']}
@@ -218,6 +241,30 @@ def rollback(root_path, expected_state, expected_transition):
                  'operation':'ROLLED_BACK','current':previous,'previous':None}
         return publish(root,state,expected_state)
 
+def recover_lock(root_path, *, max_age_seconds=300):
+    """Explicit operator action after confirming no owner is still running."""
+    root = safe_path(root_path); path = safe_path(root/'.mutation.lock')
+    require(path.exists(), 'no stale lock exists')
+    payload = read_json(path)
+    require(type(payload.get('pid')) is int and type(payload.get('created_ns')) is int,
+            'lock metadata invalid; manual inspection required')
+    require(time.time_ns() - payload['created_ns'] >= max_age_seconds * 1_000_000_000,
+            'lock is too recent to reclaim')
+    try:
+        os.kill(payload['pid'], 0)
+    except ProcessLookupError:
+        pass
+    except PermissionError:
+        raise InstallError('lock owner cannot be inspected')
+    except OSError as exc:
+        # Windows reports an invalid/nonexistent PID as ERROR_INVALID_PARAMETER.
+        if getattr(exc, 'winerror', None) != 87:
+            raise InstallError('lock owner cannot be inspected') from exc
+    else:
+        raise InstallError('lock owner is still running')
+    path.unlink()
+    return {'status':'STALE_LOCK_RECOVERED','pid':payload['pid'],'created_ns':payload['created_ns']}
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__)
     commands = ap.add_subparsers(dest='command',required=True)
@@ -230,14 +277,19 @@ def main(argv=None):
     p = commands.add_parser('rollback')
     p.add_argument('--root',type=Path,required=True); p.add_argument('--expected-state',required=True)
     p.add_argument('--expected-transition',required=True)
+    p = commands.add_parser('recover-lock')
+    p.add_argument('--root',type=Path,required=True)
+    p.add_argument('--max-age-seconds',type=int,default=300)
     args = ap.parse_args(argv)
     try:
         if args.command=='install':
             result = install(args.archive,args.sums,args.lock,args.root)
         elif args.command=='activate':
             result = activate(args.root,{'package':args.package,'manifest_sha256':args.manifest_sha256},args.expected_state)
-        else:
+        elif args.command=='rollback':
             result = rollback(args.root,args.expected_state,args.expected_transition)
+        else:
+            result = recover_lock(args.root,max_age_seconds=args.max_age_seconds)
     except (ValueError,OSError,zipfile.BadZipFile,KeyError,TypeError):
         print('BOOTSTRAP_REJECTED: verify inputs and inspect current activation before retry',file=sys.stderr)
         return 2

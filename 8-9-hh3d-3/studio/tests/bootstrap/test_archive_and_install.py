@@ -1,4 +1,4 @@
-import hashlib, importlib.util, json, tempfile, unittest, zipfile
+import hashlib, importlib.util, json, tempfile, time, unittest, zipfile
 from pathlib import Path
 BASE=Path(__file__).parents[2]/'build/bootstrap'
 def load(name):
@@ -21,5 +21,8 @@ class ArchiveAndInstallTests(unittest.TestCase):
   self.s.write_text(self.s.read_text()+'\n'+self.s.read_text(),encoding='utf8'); self.assertRaises(v.VerificationError,v.verify_archive,self.l,self.a,self.s)
  def test_traversal_lock_rejected(self):
   self.lock['godot']['archive']['name']='../x.zip'; self.l.write_text(json.dumps(self.lock),encoding='utf8'); self.assertRaises(v.VerificationError,v.verify_archive,self.l,self.a,self.s)
+ def test_stale_lock_recovery_requires_dead_owner_and_age(self):
+  root=self.r/'lock-root'; root.mkdir(); lock=root/'.mutation.lock'; lock.write_text(json.dumps({'pid':999999999,'created_ns':time.time_ns()-400_000_000_000,'nonce':'x'}),encoding='utf8')
+  self.assertEqual(i.recover_lock(root)['status'],'STALE_LOCK_RECOVERED'); self.assertFalse(lock.exists())
 if __name__=='__main__': unittest.main(verbosity=2)
 
