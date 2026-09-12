@@ -26,6 +26,12 @@ HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
 PLAN_REVISION=S21
+S21_CHANGE_NOTE=Worker evidence is candidate only; freeze source after every
+source edit. Trace validation must match authored fixture semantics (pause
+transition tick may advance once, then remain frozen). Never treat a passing
+subprocess lane or a generated report as acceptance; bind all evidence to one
+source hash and redact raw host paths before commit. TX12/TX14 references in
+GT-01 are scoped slices only; future GT-08/GT-10 gates stay in their own WP.
 REVIEW_BASE_COMMIT=b4195ca
 HISTORICAL_REJECTED_COMMIT=54d0c7c
 HISTORICAL_STUDIO_COMMIT=3cc7a85f730c99963a5a64079a0e02dc20edbd40
