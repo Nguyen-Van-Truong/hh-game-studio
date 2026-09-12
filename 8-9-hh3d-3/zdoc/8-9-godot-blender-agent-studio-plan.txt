@@ -1000,6 +1000,10 @@ SHA512-SUMS/size; install offline và activate→rollback trên root `.local`
 source hash S20 đã PASS, log được giữ ở `reviews/20260911-r8/remint-s20/`.
 Còn thiếu TQ01/TX12/TX14, manifest hoàn chỉnh mới và hai critic độc lập trên
 cùng frozen hash.
+Review installer đã phát hiện và sửa stale-lock DoS: lock ghi PID/thời điểm và
+có lệnh `recover-lock` chỉ thu hồi owner đã chết quá tuổi tối thiểu; manifest
+đọc digest/size trong cùng identity window. Đây vẫn là bootstrap hợp tác local,
+chưa phải safe-open chống tiến trình thù địch.
 Sau hai lần fail cùng phần nhỏ, coordinator sửa theo mục8.2 và giữ hash/evidence.
 AgentMemory0.9.29 được thử local keyless BM25/manual recall trong TEMP độc lập:
 6/6 top1 keyword, absent keyword/control project trả rỗng, restart giữ kết quả.
