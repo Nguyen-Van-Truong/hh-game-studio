@@ -3,7 +3,7 @@
 **GENERATED_STATUS_NOT_PLAN**
 
 - Generated: 2026-09-12 (Asia/Saigon)
-- Source revision: S20 plans; repository HEAD `c839630`
+- Source revision: S20 plans; repository HEAD `561463a`
 - Review base commit: `b4195ca`
 - Current tools WP: **GT-01** (`IN_PROGRESS`)
 - Current game WP: **H2-P0-01** (`PLANNED`); dispatch is blocked until GT-10 is accepted.
