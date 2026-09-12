@@ -144,10 +144,10 @@ class S20Tests(unittest.TestCase):
         self.check_mutation(0, 'không thay critic Grok bắt buộc', 'thay critic Grok bắt buộc', 'cannot replace acceptance critics')
 
     def test_pending_remint_is_required(self):
-        self.check_mutation(0, ',HEADED_BLENDER_REMINT,', ',', 'pending header')
+        self.check_mutation(0, 'GT01_PENDING=HEADED_BLENDER_REMINT,TQ01_TX12_TX14,TWO_CRITICS', 'GT01_PENDING=TQ01_TX12_TX14,TWO_CRITICS', 'pending header')
 
     def test_pending_evidence_is_required(self):
-        self.check_mutation(0, ',TQ01_TX12_TX14,', ',', 'pending header')
+        self.check_mutation(0, 'GT01_PENDING=HEADED_BLENDER_REMINT,TQ01_TX12_TX14,TWO_CRITICS', 'GT01_PENDING=HEADED_BLENDER_REMINT,TWO_CRITICS', 'pending header')
 
     def test_metadata_cannot_be_excluded(self):
         self.check_mutation(0, 'Các `.uid` do Godot sinh', 'Các `*.uid` do Godot sinh', 'UID metadata')

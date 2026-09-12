@@ -18,7 +18,7 @@ CURRENT_VALID_WP=GT-01
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
 IMPLEMENTATION=GT01_IN_PROGRESS
 GT01_EVIDENCE_STATUS=PARTIAL_RUNTIME_UNREVIEWED
-GT01_PENDING=BOOTSTRAP_HARDENING,TOOLCHAIN_REPRO,ROLLBACK,HEADED_BLENDER_REMINT,TQ01_TX12_TX14,TWO_CRITICS
+GT01_PENDING=HEADED_BLENDER_REMINT,TQ01_TX12_TX14,TWO_CRITICS
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
 PLAN_DESIGN_CRITICS=NO_ACCEPTED_VERDICT_S6_TO_S20
 RUNTIME_ACCEPTANCE=NONE
@@ -992,12 +992,12 @@ S20 corrective pass: runner hiện đối chiếu caller với toolchain.lock, k
 ancestor trước resolve, kiểm source/snapshot và binary hash sau runtime, và quét
 warning/error ở cả stdout/stderr; bootstrap suite hiện 17/17, static 31/31.
 Lượt mới `GT01-R8-20260912T065903Z` qua cùng các gate này và vẫn chỉ là partial.
-Codex-sol được dùng có giới hạn cho audit read-only và hai helper độc lập
-`verify_archive`/`install_toolchain`; chưa nhập code cho tới khi coordinator
-parse, test và kiểm lease. Grok archive-repair trước đó vẫn PENDING/UNKNOWN sau
-đủ hai poll, không được tính hoàn thành. Còn thiếu hậu kiểm lock sau toàn bộ
-runtime, bootstrap/rollback đầy đủ, headed+Blender remint, TQ01/TX12/TX14,
-manifest mới và hai critic độc lập trên cùng frozen hash.
+Codex-sol được dùng có giới hạn cho audit read-only; coordinator đã kiểm lease,
+test và nhập hai helper độc lập `verify_archive`/`install_toolchain` sau khi
+Grok archive-repair PENDING/UNKNOWN đủ hai poll. Archive thật khớp SHA256/
+SHA512-SUMS/size; install offline và activate→rollback trên root `.local`
+đã qua. Còn thiếu hậu kiểm lock sau toàn bộ runtime, headed+Blender remint,
+TQ01/TX12/TX14, manifest mới và hai critic độc lập trên cùng frozen hash.
 Sau hai lần fail cùng phần nhỏ, coordinator sửa theo mục8.2 và giữ hash/evidence.
 AgentMemory0.9.29 được thử local keyless BM25/manual recall trong TEMP độc lập:
 6/6 top1 keyword, absent keyword/control project trả rỗng, restart giữ kết quả.

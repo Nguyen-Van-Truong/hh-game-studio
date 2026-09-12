@@ -28,6 +28,12 @@ or noisy `--version` invocation from being mistaken for a valid probe.
   files in the snapshot. Those two deterministic fixture files are now tracked;
   `.godot/` remains generated cache and excluded from the manifest. The reminted
   run then passed snapshot stability.
+- Offline archive verifier accepted the pinned Godot ZIP against SHA256,
+  SHA512-SUMS and size. A synthetic archive suite covers verify, install,
+  activate, rollback, duplicate SUMS and traversal rejection; the pinned ZIP
+  was installed into an ignored `.local` root without changing PATH. Blender
+  5.2.1 local executable was independently observed and its hash recorded in
+  the lock; this does not replace the required headed/Blender remint evidence.
 - Window/Blender tests from S18 have not been reminted for the new source closure.
 
 Remaining GT-01 work: recheck source/binaries/lock after the complete runtime,
@@ -61,7 +67,8 @@ Critic B read both files but exited1 after provider rejection
 attempted. See [critic adjudication](critic-adjudication.json). The second critic
 is still missing; neither report accepts the complete GT-01 WP.
 
-Plan S20 passes the inherited31/31 mutation tests and static graph/hash checks.
+Plan S20 passes 41/41 mutation tests and static graph/hash checks; the bootstrap
+suite passes 29/29 (including runner admission, archive and install cases).
 They do not test the completeness of S19/S20 design additions. Current reproducible
 check: `python 8-9-hh3d-3/zdoc/reviews/20260911-r8/validate_s20.py`.
 The new archive-verification worker owns only two new helper/test paths; extraction

@@ -257,8 +257,7 @@ def validate(manifest, inputs, root):
     check("AUX_SCOPE=readonly-audit|isolated-helper<=3-files" in t and "không thay critic Grok bắt buộc" in n(t),
           "S20 auxiliary scope cannot replace acceptance critics")
     pending=re.findall(r"(?m)^GT01_PENDING=(.+)$", t)
-    check(len(pending)==1 and set(pending[0].split(","))=={
-        "BOOTSTRAP_HARDENING","TOOLCHAIN_REPRO","ROLLBACK","HEADED_BLENDER_REMINT","TQ01_TX12_TX14","TWO_CRITICS"},
+    check(len(pending)==1 and set(pending[0].split(","))=={"HEADED_BLENDER_REMINT","TQ01_TX12_TX14","TWO_CRITICS"},
         "S20 pending header includes current remint and evidence gaps")
     check(".uid" in specs["GT-01"] and "VCS" in specs["GT-01"] and "*.uid" not in specs["GT-01"],
           "S20 fixture UID metadata remains source")
