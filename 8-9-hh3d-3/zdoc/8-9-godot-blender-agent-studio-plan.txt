@@ -390,7 +390,12 @@ theo (pid, start_time); Linux: process group). Exit 0 đơn lẻ không là PASS
 UNVERIFIED_PROCESS_TREE không được xuất hiện trong candidate. Script fixture/
 trace phải qua `--headless --check-only --script` (parse) trước lần chạy thật.
 DoD: lock tái tạo được trên đúng pin 4.7.2, fixture đứng độc lập không cần H2;
-TQ01/TX12/TX14, 2 critics, chưa claim Blender bridge hay game FPS.
+TQ01 và chỉ phần TX12/TX14 được gán cho GT-01 (candidate/cache isolation,
+quota/network/auth/Stop journal semantics). ABI/template/build thuộc GT-08;
+full installer/migration/rollback/uninstall thuộc GT-10; protocol journal,
+multi-agent recovery thuộc GT-02/GT-07. Không dùng dependency tương lai làm
+điều kiện vòng cho GT-01. Cần 2 critics trên cùng frozen source hash; chưa
+claim Blender bridge hay game FPS.
 
 ### GT-02 — Protocol/capability/safety baseline
 CONTRACT/VERIFY: mục2.2 canonical/path/loopback, TX15/TX17; limits profile có số trước adapter consumer, cross-language golden vectors và no-effect reject.

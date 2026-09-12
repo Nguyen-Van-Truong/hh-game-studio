@@ -1,0 +1,66 @@
+{
+  "status": "CANDIDATE",
+  "output": "$RUNTIME_OUTPUT\\run-output",
+  "runs": [
+    {
+      "wrapper_pid": 26760,
+      "started_at": "2026-09-12T15:07:08.637547+00:00",
+      "argv": [
+        "Godot_v4.7.2-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "$SNAPSHOT$PATH",
+        "--import"
+      ],
+      "exit_code": 0,
+      "target_pid": 20944,
+      "wrapper_exit_code": 0,
+      "timed_out": false,
+      "tree_verified": true,
+      "ownership": "gated_job_kill_on_close",
+      "stdout": "run-1-stdout.txt",
+      "stderr": "run-1-stderr.txt"
+    },
+    {
+      "wrapper_pid": 33236,
+      "started_at": "2026-09-12T15:07:12.425462+00:00",
+      "argv": [
+        "Godot_v4.7.2-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "$SNAPSHOT$PATH",
+        "--check-only",
+        "--script",
+        "res:$PATH"
+      ],
+      "exit_code": 0,
+      "target_pid": 16072,
+      "wrapper_exit_code": 0,
+      "timed_out": false,
+      "tree_verified": true,
+      "ownership": "gated_job_kill_on_close",
+      "stdout": "run-2-stdout.txt",
+      "stderr": "run-2-stderr.txt"
+    },
+    {
+      "wrapper_pid": 19964,
+      "started_at": "2026-09-12T15:07:12.894216+00:00",
+      "argv": [
+        "Godot_v4.7.2-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "$SNAPSHOT$PATH",
+        "--script",
+        "res:$PATH"
+      ],
+      "exit_code": 0,
+      "target_pid": 15088,
+      "wrapper_exit_code": 0,
+      "timed_out": false,
+      "tree_verified": true,
+      "ownership": "gated_job_kill_on_close",
+      "stdout": "run-3-stdout.txt",
+      "stderr": "run-3-stderr.txt"
+    }
+  ]
+}

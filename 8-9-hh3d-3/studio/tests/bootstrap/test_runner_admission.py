@@ -26,7 +26,7 @@ runner = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(runner)
 
 OBSERVED_VERSION = "4.7.2.stable.official.ed1daf0bf"
-TRACE = 'GT01_TRACE {"result":"PASS","phase":"QUITTING","sim_tick":42,"observations":[{"label":"menu"},{"label":"start"},{"label":"moved"},{"label":"paused_frozen"},{"label":"resumed"},{"label":"quitting"}]}\n'
+TRACE = 'GT01_TRACE {"result":"PASS","phase":"QUITTING","sim_tick":42,"observations":[{"label":"menu","phase":"MENU","sim_tick":0,"body":[0,0],"focus":"StartButton"},{"label":"start","phase":"PLAY","sim_tick":5,"body":[1,2],"focus":"StartButton"},{"label":"moved","phase":"PLAY","sim_tick":12,"body":[8,2],"focus":"StartButton"},{"label":"paused_frozen","phase":"PAUSED","sim_tick":13,"body":[8,2],"focus":"StartButton"},{"label":"resumed","phase":"PLAY","sim_tick":20,"body":[8,2],"focus":"StartButton"},{"label":"quitting","phase":"QUITTING","sim_tick":42,"body":[8,2],"focus":"StartButton"}]}\n'
 
 
 def sha256(data: bytes) -> str:
@@ -230,6 +230,31 @@ class RunnerAdmissionTests(unittest.TestCase):
         self.assertEqual(calls, ["run-1", "run-2", "run-3"])
         self.assertEqual(self.evidence("wrapper-exit")["status"], "DIAGNOSTIC")
 
+    def test_trace_without_semantic_observation_rejects(self):
+        import json as _json
+        payload = _json.loads(TRACE.removeprefix("GT01_TRACE "))
+        payload["observations"][2]["body"][0] = 0
+        bad = "GT01_TRACE " + _json.dumps(payload) + "\n"
+        code, *_ = self.invoke("trace-no-move", process=self.process_double(trace=bad)[0])
+        self.assertEqual(code, 2)
+        self.assertFalse(self.evidence("trace-no-move")["checks"]["trace_exactly_one_pass"])
+
+    def test_trace_pause_tick_mismatch_rejects(self):
+        import json as _json
+        payload = _json.loads(TRACE.removeprefix("GT01_TRACE "))
+        payload["observations"][3]["sim_tick"] = 12
+        bad = "GT01_TRACE " + _json.dumps(payload) + "\n"
+        code, *_ = self.invoke("trace-pause-mismatch", process=self.process_double(trace=bad)[0])
+        self.assertEqual(code, 2)
+        self.assertFalse(self.evidence("trace-pause-mismatch")["checks"]["trace_exactly_one_pass"])
+
+    def test_trace_duplicate_key_rejects(self):
+        bad = TRACE.replace('"result":"PASS"', '"result":"PASS","result":"PASS"')
+        code, *_ = self.invoke("trace-duplicate-key", process=self.process_double(trace=bad)[0])
+        self.assertEqual(code, 2)
+        self.assertFalse(self.evidence("trace-duplicate-key")["checks"]["trace_exactly_one_pass"])
+
 
 if __name__ == "__main__":
     unittest.main()
+

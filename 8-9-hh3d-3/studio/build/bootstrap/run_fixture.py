@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import os
 import shutil
 import signal
@@ -23,6 +24,45 @@ from pathlib import Path
 EXCLUDED_DIRS = {".godot", "__pycache__", ".local", "evidence"}
 VERSION_RE = re.compile(r"(?P<version>\d+\.\d+\.\d+\.stable\.official(?:\.[0-9a-f]+)?)")
 WARNING_RE = re.compile(r"(?:^|[^a-z])(warning|warn|error|failed|fatal)(?:[^a-z]|$)", re.IGNORECASE)
+TRACE_LABELS = ["menu", "start", "moved", "paused_frozen", "resumed", "quitting"]
+
+
+def _validate_trace(trace_data: object) -> bool:
+    """Validate the semantic GT01 trace, including observed state transitions."""
+    if not isinstance(trace_data, dict) or trace_data.get("result") != "PASS" or trace_data.get("phase") != "QUITTING":
+        return False
+    if not isinstance(trace_data.get("sim_tick"), int) or isinstance(trace_data.get("sim_tick"), bool):
+        return False
+    observations = trace_data.get("observations")
+    if not isinstance(observations, list) or len(observations) != len(TRACE_LABELS):
+        return False
+    rows = []
+    for expected, item in zip(TRACE_LABELS, observations):
+        if not isinstance(item, dict) or item.get("label") != expected:
+            return False
+        if not isinstance(item.get("phase"), str) or not isinstance(item.get("sim_tick"), int) or isinstance(item.get("sim_tick"), bool):
+            return False
+        body, focus = item.get("body"), item.get("focus")
+        if (not isinstance(body, list) or len(body) != 2 or
+                any(isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v) for v in body) or
+                not isinstance(focus, str) or not focus):
+            return False
+        rows.append(item)
+    phases = [r["phase"] for r in rows]
+    if phases != ["MENU", "PLAY", "PLAY", "PAUSED", "PLAY", "QUITTING"]:
+        return False
+    ticks = [r["sim_tick"] for r in rows]
+    if any(b < a for a, b in zip(ticks, ticks[1:])) or trace_data["sim_tick"] != ticks[-1]:
+        return False
+    if rows[2]["body"][0] <= rows[1]["body"][0]:
+        return False
+    # Entering pause consumes one authored transition tick; while paused the
+    # body snapshot must remain unchanged until resume.
+    if rows[3]["sim_tick"] != rows[2]["sim_tick"] + 1 or rows[3]["body"] != rows[4]["body"]:
+        return False
+    if rows[4]["sim_tick"] <= rows[3]["sim_tick"]:
+        return False
+    return True
 
 
 def utc_now() -> str:
@@ -422,12 +462,15 @@ def main(argv: list[str] | None = None) -> int:
     trace_ok = False
     if len(trace_lines) == 1:
         try:
-            trace_data = json.loads(trace_lines[0].removeprefix("GT01_TRACE "))
-            observations = trace_data.get("observations")
-            labels = [item.get("label") for item in observations] if isinstance(observations, list) and all(isinstance(item, dict) for item in observations) else []
-            trace_ok = (isinstance(trace_data, dict) and trace_data.get("result") == "PASS"
-                        and trace_data.get("phase") == "QUITTING" and labels == ["menu", "start", "moved", "paused_frozen", "resumed", "quitting"]
-                        and isinstance(trace_data.get("sim_tick"), int))
+            def _pairs(items):
+                out = {}
+                for key, value in items:
+                    if key in out:
+                        raise ValueError("duplicate trace key")
+                    out[key] = value
+                return out
+            trace_data = json.loads(trace_lines[0].removeprefix("GT01_TRACE "), object_pairs_hook=_pairs)
+            trace_ok = _validate_trace(trace_data)
         except (ValueError, TypeError):
             pass
     all_ok = (len(runs) == 3 and all(r["exit_code"] == 0 and r["wrapper_exit_code"] == 0

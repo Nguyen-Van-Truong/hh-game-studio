@@ -320,8 +320,23 @@ def read_state(root, expected):
     if expected=='NONE':
         return None
     state = read_json(root/STATE)
+    require(set(state) == {'schema','revision','transition_id','operation','current','previous'},
+            'invalid active state')
     require(state.get('schema')=='HH3D-BOOTSTRAP-ACTIVE-1' and type(state.get('revision')) is int and state['revision']>0
-            and isinstance(state.get('transition_id'),str), 'invalid active state')
+            and isinstance(state.get('transition_id'),str)
+            and re.fullmatch(r'[0-9a-f]{32}', state['transition_id'])
+            and state.get('operation') in ('ACTIVATED','ROLLED_BACK'),
+            'invalid active state')
+    require((state['operation']=='ACTIVATED' and state['current'] is not None)
+            or (state['operation']=='ROLLED_BACK' and state['previous'] is None),
+            'invalid active transition')
+    for receipt in (state['current'], state['previous']):
+        if receipt is not None:
+            require(isinstance(receipt,dict) and set(receipt)=={'package','manifest_sha256'},
+                    'invalid active receipt')
+            require(isinstance(receipt['package'],str) and HEX.fullmatch(receipt['package'])
+                    and isinstance(receipt['manifest_sha256'],str) and HEX.fullmatch(receipt['manifest_sha256']),
+                    'invalid active receipt digest')
     require(state_token(root)==expected, 'active state changed while reading')
     if state.get('current') is not None:
         read_package(root,state['current'])
