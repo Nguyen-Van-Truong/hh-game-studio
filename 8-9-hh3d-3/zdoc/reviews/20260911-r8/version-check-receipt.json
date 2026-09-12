@@ -1,0 +1,48 @@
+{
+  "role": "version-check",
+  "session": "a9507365-5994-4ad9-b625-b9188c388b5c",
+  "model": "grok-4.6",
+  "effort": "xhigh",
+  "polls_used": 1,
+  "artifact_hashes": [
+    {
+      "path": "events.jsonl",
+      "sha256": "7e79129b444db5399a34b7683a94bd6c932d7560699fdb1033fd56bb82d3dff3",
+      "bytes": 241245
+    },
+    {
+      "path": "stderr.txt",
+      "sha256": "e9201dccb7f6cf30287ba1f90f442bd01217fba0bae053edd159b8d9bd7115b3",
+      "bytes": 572
+    },
+    {
+      "path": "config.json",
+      "sha256": "693b8dbacfe0b4575bf36360ed06869846d391e4360f071eff8af5ca2f3e0dd6",
+      "bytes": 503
+    },
+    {
+      "path": "TASK.txt",
+      "sha256": "0301824acfe23e1735c693eedf6689fff9ffc12e752e917343255316b2005802",
+      "bytes": 2670
+    },
+    {
+      "path": "workspace/response.txt",
+      "sha256": "d5eda6ca3e1984c508991abfc90c54fe583dae1e6758b8590e40d28df340b73e",
+      "bytes": 10685
+    },
+    {
+      "path": "coordinator-review.json",
+      "sha256": "5d8fbe500ea0c3b92a6679bd5392970583d3f28c5d99d17f4b5896f8eb29c946",
+      "bytes": 1032
+    }
+  ],
+  "terminal": {
+    "exit_code": 0,
+    "attempt": "20260910T231711Z",
+    "finished_utc": "2026-09-10T23:19:40.6162691Z",
+    "timed_out": false,
+    "session": "a9507365-5994-4ad9-b625-b9188c388b5c",
+    "job_id": "hh3d-r8-version-check",
+    "launcher_error": null
+  }
+}

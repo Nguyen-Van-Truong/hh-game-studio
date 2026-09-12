@@ -7,9 +7,9 @@ import sys
 import unittest
 
 HERE = Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE.parent/'20260911-r7'))
-validator = importlib.import_module('validate_plans')
-mutations = importlib.import_module('test_review_s19')
+sys.path.insert(0, str(HERE))
+validator = importlib.import_module('validate_plans_s20')
+mutations = importlib.import_module('test_review_s20')
 
 def main():
     manifest = validator.freeze('S20')
@@ -23,7 +23,7 @@ def main():
         value['revision'] = 'S20'
         return value
     mutations.manifest_for = manifest_s20
-    test = unittest.TextTestRunner(verbosity=1).run(unittest.defaultTestLoader.loadTestsFromTestCase(mutations.S19Tests))
+    test = unittest.TextTestRunner(verbosity=1).run(unittest.defaultTestLoader.loadTestsFromTestCase(mutations.S20Tests))
     summary = {'result':result['result'], 'errors':result['errors'], 'warnings':result['warnings'],
                'mutation_tests':test.testsRun, 'failures':len(test.failures), 'errors_in_tests':len(test.errors),
                'manifest_sha256':manifest['manifest_sha256'],

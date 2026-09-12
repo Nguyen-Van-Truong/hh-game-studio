@@ -1,0 +1,38 @@
+{
+  "role": "canary",
+  "session": "b2be96bb-6621-4824-80ba-eb1c52c0347f",
+  "model": "grok-4.6",
+  "effort": "xhigh",
+  "polls_used": 2,
+  "artifact_hashes": [
+    {
+      "path": "events.jsonl",
+      "sha256": "943c96d83c3e64985479fbea55cae3079fa775d850853785624ded63b03b545c",
+      "bytes": 506231
+    },
+    {
+      "path": "stderr.txt",
+      "sha256": "b9e6da53687ba91ab2430bdfbe634654bebcadf8514efefe30f89cd9a16e7e1d",
+      "bytes": 1124
+    },
+    {
+      "path": "config.json",
+      "sha256": "f164940a45ebb55c1d4a4935ae41b787c732e0823ede0e7d7deea5f0474ff49d",
+      "bytes": 413
+    },
+    {
+      "path": "TASK.txt",
+      "sha256": "be070f2ba441888630155436f48a3966ce8679c75c1bd7c2b682bc7d3be85029",
+      "bytes": 1592
+    }
+  ],
+  "terminal": {
+    "exit_code": 0,
+    "attempt": "20260910T230818Z",
+    "finished_utc": "2026-09-10T23:10:38.3275704Z",
+    "timed_out": false,
+    "session": "b2be96bb-6621-4824-80ba-eb1c52c0347f",
+    "job_id": "hh3d-r8-canary",
+    "launcher_error": null
+  }
+}

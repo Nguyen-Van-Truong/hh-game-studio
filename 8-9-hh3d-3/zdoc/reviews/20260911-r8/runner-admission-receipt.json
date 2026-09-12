@@ -1,0 +1,53 @@
+{
+  "role": "runner-admission",
+  "session": "dee953a4-6e6a-4d6b-8067-5ef7f7da0b32",
+  "model": "grok-4.6",
+  "effort": "xhigh",
+  "polls_used": 1,
+  "artifact_hashes": [
+    {
+      "path": "events.jsonl",
+      "sha256": "fb431692fc00c9e2e49fa896a56fa4c5fa903b596d19983992b18978e5eff422",
+      "bytes": 217584
+    },
+    {
+      "path": "stderr.txt",
+      "sha256": "75e5e6f348dd56be7355d8f53a5a14642f2c0db9cc541b37632a96d104e3e7f0",
+      "bytes": 753
+    },
+    {
+      "path": "config.json",
+      "sha256": "17f6c2ef75e792382d64eba8e0547441ce049481c49f0198e476f6b2f16f7cf3",
+      "bytes": 512
+    },
+    {
+      "path": "TASK.txt",
+      "sha256": "2111ff80c57277fbbafe40a9d9a1613a46698b8e2fe7d14b4bb52bb144eeee78",
+      "bytes": 3627
+    },
+    {
+      "path": "workspace/response.txt",
+      "sha256": "330e4b532b27813257b45ae8e88f2448f8b468bb3a1735645529a6a7824e3c56",
+      "bytes": 13356
+    },
+    {
+      "path": "coordinator-review.json",
+      "sha256": "fc25185422c514d0b93cad7c2dc7ebb88bd16bbbd1e6f3b914eeeecf27bbefe0",
+      "bytes": 508
+    },
+    {
+      "path": "coordinator-review-2.json",
+      "sha256": "1b7e1200bd0d151db5d12175112b098818b430e316e0ec0803c06f12786f9661",
+      "bytes": 600
+    }
+  ],
+  "terminal": {
+    "exit_code": 0,
+    "attempt": "20260910T231033Z",
+    "finished_utc": "2026-09-10T23:11:42.0560770Z",
+    "timed_out": false,
+    "session": "dee953a4-6e6a-4d6b-8067-5ef7f7da0b32",
+    "job_id": "hh3d-r8-runner-admission",
+    "launcher_error": null
+  }
+}

@@ -1,0 +1,8 @@
+ROLE=capability-canary; MODEL=grok-4.6; EFFORT=xhigh; NO_SUBAGENTS.
+Workspace: $WORKSPACE. Only this workspace may be written. No global changes.
+This is a TWO-MINUTE real file/command capability test. Do NOT read studio or plans.
+1. Use your write tool to create probe.py containing Python stdlib that reads inputs/8-9-godot-blender-agent-studio-plan.txt as bytes, calculates SHA256, and writes evidence.json with exactly keys {"actual_sha256":<digest>,"marker":"HH3D-R8-CANARY","python_version":<sys.version>}. It must print the marker and hash.
+2. Use run_terminal_command to execute the probe. The installed Windows interpreter is $PYTHON. The working directory is already the workspace. Run a single simple command; no cd /d, bash pipe, heredoc, head/cat, or multi-line shell. You can use: powershell.exe -NoProfile -Command "& '$PYTHON' 'probe.py'". If a tool returns empty output, read evidence.json to see whether it really ran. At most two terminal attempts.
+3. Read evidence.json through the read tool. Write REPORT.md with actual observed outcome and command/exit. Do not claim a write or test you did not perform.
+If execution failed, use the write tool to write REPORT.md saying BLOCKED with exact failure. Never fabricate evidence.json as a substitute for running Python.
+Stop immediately after these deliverables. No git, no Godot, no Blender, no external services, no extra work.

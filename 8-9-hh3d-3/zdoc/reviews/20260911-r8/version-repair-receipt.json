@@ -1,0 +1,43 @@
+{
+  "role": "version-repair",
+  "session": "733a4688-3696-4ccf-ad49-4ffaaeed827b",
+  "model": "grok-4.6",
+  "effort": "xhigh",
+  "polls_used": 0,
+  "artifact_hashes": [
+    {
+      "path": "events.jsonl",
+      "sha256": "a4ebd53349eddc6d9df87646b392d549486f7eb80c810f70514b9749045f505d",
+      "bytes": 151503
+    },
+    {
+      "path": "stderr.txt",
+      "sha256": "d618bcad7bf8e667e6acf74be289673042de8d0dc2791ba6053b2e8c37247b8d",
+      "bytes": 366
+    },
+    {
+      "path": "config.json",
+      "sha256": "c1952109361384efa9b99658e9f4380b76b5a60ab04deb3790659d52f1598b95",
+      "bytes": 506
+    },
+    {
+      "path": "TASK.txt",
+      "sha256": "3e2da0b078d204ccea76faec2f63cffbddf3bc239a044f12ea3ac097fb955a1e",
+      "bytes": 3008
+    },
+    {
+      "path": "workspace/response.txt",
+      "sha256": "4ace0100f75757103b01ff0ece969d68f3a43935114643233765458e587b2fef",
+      "bytes": 7325
+    }
+  ],
+  "terminal": {
+    "exit_code": 0,
+    "attempt": "20260910T232656Z",
+    "finished_utc": "2026-09-10T23:27:25.4977958Z",
+    "timed_out": false,
+    "session": "733a4688-3696-4ccf-ad49-4ffaaeed827b",
+    "job_id": "hh3d-r8-version-repair",
+    "launcher_error": null
+  }
+}

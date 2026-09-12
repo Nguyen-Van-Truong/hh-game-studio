@@ -1,0 +1,53 @@
+{
+  "role": "memory-trial",
+  "session": "2e0fe5ed-4954-4dee-9edc-46d2061e5e19",
+  "model": "grok-4.6",
+  "effort": "xhigh",
+  "polls_used": 1,
+  "artifact_hashes": [
+    {
+      "path": "events.jsonl",
+      "sha256": "203feb9def695b0d776ead89c7b3d0fa3f39519931cc5ff17a5dd11601ecc121",
+      "bytes": 705463
+    },
+    {
+      "path": "stderr.txt",
+      "sha256": "3384aed2d1e906662a2732aad3fc635f8d72ff301e8d2d3121a9fe9718cc3fd6",
+      "bytes": 366
+    },
+    {
+      "path": "config.json",
+      "sha256": "544c517940339d18c25831cc0f76ee9c3453db84186868b483b44d5e99164803",
+      "bytes": 500
+    },
+    {
+      "path": "TASK.txt",
+      "sha256": "762aef20aae6cca5a9287a3bd983da2816966c86c3a01d32419484d940bfc8bb",
+      "bytes": 4525
+    },
+    {
+      "path": "workspace/response.txt",
+      "sha256": "527e357994b6f2c37d563a02ba5536dfa692bf6bc9fed5ad3aa93219d1a22b19",
+      "bytes": 10171
+    },
+    {
+      "path": "coordinator-review.json",
+      "sha256": "efd801c8517ab680af3f389b13227dd4cb427431f7a7afd6bac6a038b9d4f397",
+      "bytes": 500
+    },
+    {
+      "path": "coordinator-review-2.json",
+      "sha256": "24233e5fda9d43e8918829ba19a7540f919004a059d58c7efd3e825544f2ae4e",
+      "bytes": 1418
+    }
+  ],
+  "terminal": {
+    "exit_code": 0,
+    "attempt": "20260910T231149Z",
+    "finished_utc": "2026-09-10T23:12:29.4401191Z",
+    "timed_out": false,
+    "session": "2e0fe5ed-4954-4dee-9edc-46d2061e5e19",
+    "job_id": "hh3d-r8-memory-trial",
+    "launcher_error": null
+  }
+}

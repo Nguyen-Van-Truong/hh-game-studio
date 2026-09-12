@@ -1,0 +1,53 @@
+{
+  "role": "bootstrap-offline",
+  "session": "a7717462-a10e-47fd-b3a6-ecfae7e0afa2",
+  "model": "grok-4.6",
+  "effort": "xhigh",
+  "polls_used": 1,
+  "artifact_hashes": [
+    {
+      "path": "events.jsonl",
+      "sha256": "0f930eac1a35faff7bf0f51ac8d2347d3ce444886d4692f2c5d32e91eafc2cd1",
+      "bytes": 514701
+    },
+    {
+      "path": "stderr.txt",
+      "sha256": "410003f1213fa293fa4b0a8936d7b4b97aef784a6694266204934dc1f4c51f51",
+      "bytes": 572
+    },
+    {
+      "path": "config.json",
+      "sha256": "7530b0d5bec372be755c70d7415d3c15c5ec22cd64f197aeebbef8ea26cf0b78",
+      "bytes": 515
+    },
+    {
+      "path": "TASK.txt",
+      "sha256": "93987f222a0bc91655c87540e7d69b2bc6936431a2f6389095e91dfc6bae914e",
+      "bytes": 3919
+    },
+    {
+      "path": "workspace/response.txt",
+      "sha256": "261487d694fdbb4623e1074f1cd027370ce5f39f56f97820de615c8dfd06a48c",
+      "bytes": 15920
+    },
+    {
+      "path": "coordinator-review.json",
+      "sha256": "fc3892b9270a80d8c45f6086e6a0c44dcddd46774fcf82436a0f5121b545dc5b",
+      "bytes": 510
+    },
+    {
+      "path": "coordinator-review-2.json",
+      "sha256": "1c527b67093a95dcbc3b9e21fb8c74c978253d78470b1b523b23dab668a6defa",
+      "bytes": 602
+    }
+  ],
+  "terminal": {
+    "exit_code": 0,
+    "attempt": "20260910T231039Z",
+    "finished_utc": "2026-09-10T23:11:52.5474005Z",
+    "timed_out": false,
+    "session": "a7717462-a10e-47fd-b3a6-ecfae7e0afa2",
+    "job_id": "hh3d-r8-bootstrap-offline",
+    "launcher_error": null
+  }
+}

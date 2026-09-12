@@ -85,7 +85,13 @@ Engine khác | Fallback khi benchmark cùng workload thất bại | Migration/ar
 
 Ảnh demo Web 16FPS không chứng minh Godot sẽ60FPS. Báo cáo Vault Fighters chưa
 chứng minh Godot4.7.1 gây các lỗi gameplay/evidence; không sửa pin của dự án đó.
-Godot source provenance is immutable: resolve the release tag to a commit, verify the official release asset plus checksum, and record the tag object/commit identity and retrieval time. A moved tag, unsigned/mismatched provenance, or source/API disagreement is a supply-chain GAP; never accept a filename or mutable latest URL alone.
+PROVENANCE_POLICY=TAG_COMMIT_ASSET_HASH_BOUND
+TAG_DRIFT=GAP
+Khóa nguồn Godot bằng tag phát hành, full commit và hash artifact official,
+kèm thời điểm truy xuất. Ghi tag object nếu là annotated tag; lightweight tag
+ghi rõ loại và commit đích, không giả chữ ký. Tag đổi commit hoặc metadata nguồn
+không khớp là GAP. Chỉ tên file/URL latest không đủ xác nhận provenance;
+checksum official không tự chứng minh chữ ký phát hành hay thiết bị an toàn.
 
 GT-01 kiểm official artifacts và capability reuse. Trang archive Godot và LTS
 Blender đã được đối chiếu trong lượt 08-09: ứng viên Godot 4.7.2-stable standard, matching export templates, Blender 5.2.1 LTS; fallback Blender 4.5.13 LTS chỉ
@@ -122,7 +128,7 @@ issue nếu có và cost templates/security/merge dài hạn. Không nằm trong
 Trong root HH3D-3 dự kiến, mọi source do plan công cụ sở hữu nằm ở studio/:
   studio/toolchain.lock.json    pin engine/templates/Blender/exporter/addons
   studio/protocol/              schema/capability envelope
-  studio/contracts/             versioned cross-tool schemas (created when GT-02…GT-06 open)
+  studio/contracts/             schema dùng chung có phiên bản, tạo theo GT-02…GT-06
   studio/godot-addon/           source Godot adapter duy nhất
   studio/blender-addon/         Blender UI/export adapter
   studio/host/                  scheduler/lease/journal/JSON CLI/MCP adapter
@@ -175,6 +181,14 @@ Cấm remote arbitrary Python/GDScript/shell eval trong product agent API.
 Trusted adapter scripts có source hash/review và operation allowlist. Worker
 viết source theo lease rồi import/validate; không biến generic exec thành
 editor mutation đã “an toàn” chỉ vì có token.
+OPEN_LANE_POLICY=DISABLED_BY_DEFAULT
+Một open lane thử nghiệm (chạy mã tùy ý trong Godot/Blender) chỉ được xem xét
+sau GT-07 bằng ADR riêng: worktree và user-data directory riêng, tài khoản OS
+không có secret, network deny mặc định, Job Object/timeout/giới hạn RAM,
+checkpoint trước chạy, diff toàn bộ sau chạy, readback và publish gate. Lane
+này không được nhận project live/shared, không thay safe-open/allowlist của API
+public, không là bằng chứng conformance và không mở quyền fork engine. Khi chưa
+có ADR, capability trả `UNSUPPORTED_OPEN_LANE`.
 
 Canonical wire contract GT-02: JSON UTF-8, duplicate keys/invalid Unicode/NaN/
 Infinity reject; integer ngoài safe range truyền decimal string. Dùng JCS
@@ -520,6 +534,8 @@ closed nếu có payment SDK, endpoint, voucher/refund/chargeback handler hoặc
 monetization. Năng lực CCU/capacity thuộc profile đo được của plan game P8-03,
 không đưa `capacity_claims` vào package công cụ. Bất kỳ monetization nào sau
 này cần contract/WP và package ký mới.
+MONETIZATION_POLICY=OFF_ARTIFACT_SCAN_REQUIRED
+CAPACITY_CLAIMS=NOT_APPLICABLE_TO_TOOLS
 Dependency GT-08/09 ACCEPTED gồm physical Android fixture; manifest ghi đúng
 supported_targets Windows/Android/Linux-headless, không partial ACCEPT ngầm.
 Không cần closed alpha của game và không claim tool sửa được mọi thể loại.

@@ -1,0 +1,100 @@
+{
+  "result": "PASS",
+  "tests_run": 25,
+  "negative_plan_cases": [
+    {
+      "mutation": "exact original S8 with matching S8 manifest",
+      "errors": [
+        "shared ID contract locked before P2; P3 only consumes and measures",
+        "EX51 dual-loss CS path stated in EX51 and P3-02",
+        "F01 Solo release scope must be enforceable; no runtime flag exemption",
+        "F01 applicability/amendments before production consumer and external pilot",
+        "F02 contact/player separation with guardian family and child authorization cases",
+        "F03 OTP/contact cannot take over old principal; recent SIM risk included",
+        "F03 recovery atomicity, revocation, CS proof and rate ownership",
+        "F04 legal retention separated from anti-farm with hold/purge/restore",
+        "F06 explicit producer ALLOWED: studio/contracts/naming-convention-v1.md",
+        "F06 explicit producer ALLOWED: studio/contracts/perf-collector.schema.json",
+        "F06 export manifest includes shared contract files",
+        "F07 early lock SL1",
+        "F07 early lock SL6",
+        "F08 shared schema early, single security numeric owner",
+        "F08 succession timing in WP verification"
+      ]
+    },
+    {
+      "mutation": "F01 Solo",
+      "errors": [
+        "F01 Solo release scope must be enforceable; no runtime flag exemption"
+      ]
+    },
+    {
+      "mutation": "F01 applicability",
+      "errors": [
+        "F01 applicability/amendments before production consumer and external pilot"
+      ]
+    },
+    {
+      "mutation": "F02",
+      "errors": [
+        "F02 contact/player separation with guardian family and child authorization cases"
+      ]
+    },
+    {
+      "mutation": "F03 OTP",
+      "errors": [
+        "F03 OTP/contact cannot take over old principal; recent SIM risk included"
+      ]
+    },
+    {
+      "mutation": "F03 recovery",
+      "errors": [
+        "F03 recovery atomicity, revocation, CS proof and rate ownership"
+      ]
+    },
+    {
+      "mutation": "F04",
+      "errors": [
+        "F04 legal retention separated from anti-farm with hold/purge/restore"
+      ]
+    },
+    {
+      "mutation": "F06 explicit",
+      "errors": [
+        "F06 explicit producer ALLOWED: studio/contracts/naming-convention-v1.md"
+      ]
+    },
+    {
+      "mutation": "F06 explicit",
+      "errors": [
+        "F06 explicit producer ALLOWED: studio/contracts/perf-collector.schema.json"
+      ]
+    },
+    {
+      "mutation": "F07 early lock SL1",
+      "errors": [
+        "F07 early lock SL1"
+      ]
+    },
+    {
+      "mutation": "F07 early lock SL6",
+      "errors": [
+        "F07 early lock SL6"
+      ]
+    },
+    {
+      "mutation": "F08 shared",
+      "errors": [
+        "F08 shared schema early, single security numeric owner"
+      ]
+    },
+    {
+      "mutation": "F08 succession",
+      "errors": [
+        "F08 succession timing in WP verification"
+      ]
+    }
+  ],
+  "details": "test_child_failure_rejected (__main__.HarnessTests.test_child_failure_rejected) ... ok\ntest_cli_failure_exit_nonzero (__main__.HarnessTests.test_cli_failure_exit_nonzero) ... ok\ntest_double_verdict_rejected (__main__.HarnessTests.test_double_verdict_rejected) ... ok\ntest_empty_quota_response_rejected (__main__.HarnessTests.test_empty_quota_response_rejected) ... ok\ntest_error_envelope_cannot_accept (__main__.HarnessTests.test_error_envelope_cannot_accept) ... ok\ntest_freeze_mutation_rejected (__main__.HarnessTests.test_freeze_mutation_rejected) ... ok\ntest_invalid_json_rejected (__main__.HarnessTests.test_invalid_json_rejected) ... ok\ntest_legacy_stale_md_is_not_reused_or_overwritten (__main__.HarnessTests.test_legacy_stale_md_is_not_reused_or_overwritten) ... ok\ntest_live_mutation_rejected (__main__.HarnessTests.test_live_mutation_rejected) ... ok\ntest_missing_error_flag_rejected (__main__.HarnessTests.test_missing_error_flag_rejected) ... ok\ntest_missing_session_rejected (__main__.HarnessTests.test_missing_session_rejected) ... ok\ntest_no_verdict_rejected (__main__.HarnessTests.test_no_verdict_rejected) ... ok\ntest_report_hash_mismatch_rejected (__main__.HarnessTests.test_report_hash_mismatch_rejected) ... ok\ntest_same_attempt_never_overwrites (__main__.HarnessTests.test_same_attempt_never_overwrites) ... ok\ntest_snapshot_mutation_rejected (__main__.HarnessTests.test_snapshot_mutation_rejected) ... ok\ntest_stale_live_input_prevents_launch (__main__.HarnessTests.test_stale_live_input_prevents_launch) ... ok\ntest_success_binds_hashes_and_exact_model (__main__.HarnessTests.test_success_binds_hashes_and_exact_model) ... ok\ntest_timeout_rejected_even_if_output_says_accept (__main__.HarnessTests.test_timeout_rejected_even_if_output_says_accept) ... ok\ntest_traversal_id_rejected (__main__.HarnessTests.test_traversal_id_rejected) ... ok\ntest_valid_revise_is_completed_not_accept (__main__.HarnessTests.test_valid_revise_is_completed_not_accept) ... ok\ntest_verdict_not_terminal_rejected (__main__.HarnessTests.test_verdict_not_terminal_rejected) ... ok\ntest_wrong_model_rejected (__main__.HarnessTests.test_wrong_model_rejected) ... ok\ntest_baseline (__main__.PlanRegressionTests.test_baseline) ... ok\ntest_frozen_s8_rejected_by_new_checks (__main__.PlanRegressionTests.test_frozen_s8_rejected_by_new_checks) ... ok\ntest_regressions (__main__.PlanRegressionTests.test_regressions) ... ok\n\n----------------------------------------------------------------------\nRan 25 tests in 1.397s\n\nOK\n",
+  "limits": "Mocks and static mutations only; no runtime/legal/scale proof."
+}

@@ -40,7 +40,7 @@ CURRENT_VALID_WP=H2-P0-01
 DISPATCHABLE=NO_UNTIL_GT10_ACCEPTED
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
 IMPLEMENTATION=NOT_STARTED
-PLAN_DESIGN_CRITICS=NO_ACCEPTED_VERDICT_S6_TO_S16
+PLAN_DESIGN_CRITICS=NO_ACCEPTED_VERDICT_S6_TO_S20
 RUNTIME_ACCEPTANCE=NONE
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/game-and-services
@@ -883,7 +883,12 @@ không tự ký legal. License/cost/provider không đạt thì giữ game autho
 
 3.5 DATA/UX/RELEASE CONTRACTS DÙNG NGAY TỪ ĐẦU
 
-Before any external payment is introduced, the release profile MUST carry `monetization=OFF` and a negative artifact scan for payment SDKs, payment endpoints, voucher/refund/chargeback flows and monetization UI. P4-02 virtual catalog currency is not real-money payment. Enabling payment requires a separate owner/WP with provider outage, refund, chargeback, tax, parental approval, entitlement revocation and reconciliation evidence.
+MONETIZATION_POLICY=OFF_ARTIFACT_SCAN_REQUIRED
+Profile phát hành phải ghi `monetization=OFF` và kiểm artifact không chứa payment
+SDK/endpoint, voucher/refund/chargeback hoặc UI thanh toán tiền thật. Currency
+ảo P4-02 không là thanh toán tiền thật. Muốn mở thanh toán cần owner/WP riêng,
+kiểm provider mất kết nối, hoàn tiền, chargeback, thuế, đồng ý của phụ huynh,
+thu hồi entitlement và đối soát trước phát hành.
 
 P0-02 ghi inventory dữ liệu/SDK dự kiến, purpose/retention/delete/export/audience/
 residency draft. P3-01 triển khai trước thu dữ liệu, P6-02 chốt policy/người chịu
@@ -1027,7 +1032,11 @@ không bất ngờ quá lớn. Touch/IME/keyboard remap/game focus + 200% text/n
 reduced motion/cue không phụ thuộc màu/âm, accessibility labels và focus order
 test bằng assistive technology thực trên target; missing capability là GAP.
 
-H2-P8-03 also drills signed content recovery when the primary CDN/object store is unavailable or corrupt, the KMS/signing key is rotated or unavailable, and the client cache is evicted. The verifier must admit only the last trusted package, preserve saves, and show bounded offline/maintenance UX; unsigned or unverifiable content is never served. Evidence includes restore source, key version, cache state, rollback result and real host exits.
+H2-P8-03 diễn tập khôi phục content có chữ ký khi CDN/object store chính hỏng,
+KMS/key ký đổi hoặc mất kết nối và cache client bị xóa. Chỉ nhận package còn
+trusted, giữ save và hiển thị offline/maintenance có giới hạn chờ; content
+không xác minh được bị từ chối. Evidence ghi nguồn restore, key version,
+cache state, rollback và host exit thực.
 
 H2-P8-03 public-ready: artifact signature/trusted update manifest, SBOM/licenses/
 dependency risk triage, native ABI/4KB+16KB Android compatibility, target SDK và
@@ -1841,6 +1850,10 @@ reconcile transaction/deletion trước traffic; không hứa RPO=0 cho mọi di
 Mất một room node cần capacity dự phòng và reconnect thật; không phải seamless.
 
 ### H2-P8-03 — Release candidate
+CAPACITY_CLAIMS=GAME_P8_03_MEASURED_SIGNED_CURRENT_ONLY
+Chỉ công bố CCU/capacity từ profile đo đã ký, còn hiệu lực và khớp artifact,
+workload, hạ tầng phát hành. Thiếu/stale profile thì không có capacity claim;
+package công cụ GT-10 không cung cấp bằng chứng năng lực server game.
 CONTRACT/VERIFY: mục3.5 release trust/OS/keys/N-only cohort/data/UX, EX37–EX39; operational thresholds+sample floor+rollback triggers khóa trước rollout.
 ALLOWED: build/export/QA manifests, release docs/credits/policy drafts.
 BUILD: candidate Windows/Android packages, install/update/uninstall, saves,

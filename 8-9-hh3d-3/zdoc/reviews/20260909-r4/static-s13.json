@@ -1,0 +1,222 @@
+{
+  "kind": "STATIC_PLAN_CHECK_NOT_RUNTIME",
+  "revision": "S13",
+  "result": "FAIL",
+  "timestamp": "2026-09-09T20:03:38.493727+07:00",
+  "manifest_sha256": "bf078667f3f6b2dead22e9e82064b98807047d43468c4828c42425f450d21942",
+  "plans": [
+    {
+      "path": "8-9-godot-blender-agent-studio-plan.txt",
+      "sha256": "6b3ab4627d7ec0cfb48a0e507601ca78572336201346bf3cb38c99727552da25",
+      "bytes": 64602,
+      "lines": 905,
+      "wp_rows": 10,
+      "specs": 10,
+      "exceptions": 18
+    },
+    {
+      "path": "8-9-hh-world-gameplay-viet-nam-plan.txt",
+      "sha256": "782ed98d29c3f5e53e6f5e6cd4967b13f58f152b8bcd1e08bc477d3344ade608",
+      "bytes": 203376,
+      "lines": 2675,
+      "wp_rows": 32,
+      "specs": 32,
+      "exceptions": 53
+    }
+  ],
+  "dependencies": {
+    "GT-01": [
+      "OWNER_START"
+    ],
+    "GT-02": [
+      "GT-01"
+    ],
+    "GT-03": [
+      "GT-02"
+    ],
+    "GT-04": [
+      "GT-02"
+    ],
+    "GT-05": [
+      "GT-03",
+      "GT-04"
+    ],
+    "GT-06": [
+      "GT-05"
+    ],
+    "GT-07": [
+      "GT-05",
+      "GT-06"
+    ],
+    "GT-08": [
+      "GT-07"
+    ],
+    "GT-09": [
+      "GT-08"
+    ],
+    "GT-10": [
+      "GT-09"
+    ],
+    "H2-P0-01": [
+      "GT-10"
+    ],
+    "H2-P0-02": [
+      "H2-P0-01"
+    ],
+    "H2-P0-03": [
+      "H2-P0-02"
+    ],
+    "H2-P1-01": [
+      "H2-P0-03"
+    ],
+    "H2-P1-02": [
+      "H2-P0-03"
+    ],
+    "H2-P1-03": [
+      "H2-P1-01",
+      "H2-P1-02"
+    ],
+    "H2-P2-01": [
+      "H2-P1-03"
+    ],
+    "H2-P2-02": [
+      "H2-P2-01"
+    ],
+    "H2-P2-03": [
+      "H2-P2-02"
+    ],
+    "H2-P2-04": [
+      "H2-P2-03"
+    ],
+    "H2-P3-01": [
+      "H2-P1-03",
+      "H2-P2-03"
+    ],
+    "H2-P3-02": [
+      "H2-P3-01"
+    ],
+    "H2-P3-03": [
+      "H2-P3-02"
+    ],
+    "H2-P3-04": [
+      "H2-P3-03"
+    ],
+    "H2-P4-01": [
+      "H2-P3-04"
+    ],
+    "H2-P4-02": [
+      "H2-P4-01",
+      "H2-P3-04"
+    ],
+    "H2-P4-03": [
+      "H2-P4-02"
+    ],
+    "H2-P4-04": [
+      "H2-P4-03"
+    ],
+    "H2-P5-01": [
+      "H2-P4-04"
+    ],
+    "H2-P5-02": [
+      "H2-P5-01"
+    ],
+    "H2-P5-03": [
+      "H2-P5-02"
+    ],
+    "H2-P6-01": [
+      "H2-P5-03"
+    ],
+    "H2-P6-02": [
+      "H2-P6-01"
+    ],
+    "H2-P6-03": [
+      "H2-P6-02"
+    ],
+    "H2-P7-01": [
+      "H2-P6-03"
+    ],
+    "H2-P7-02": [
+      "H2-P7-01"
+    ],
+    "H2-P7-03": [
+      "H2-P7-02"
+    ],
+    "H2-P8-01": [
+      "H2-P7-03"
+    ],
+    "H2-P8-02": [
+      "H2-P8-01"
+    ],
+    "H2-P8-03": [
+      "H2-P8-02"
+    ],
+    "H2-P9-01": [
+      "H2-P8-03"
+    ],
+    "H2-P9-02": [
+      "H2-P9-01"
+    ]
+  },
+  "topological_order": [
+    "GT-01",
+    "GT-02",
+    "GT-03",
+    "GT-04",
+    "GT-05",
+    "GT-06",
+    "GT-07",
+    "GT-08",
+    "GT-09",
+    "GT-10",
+    "H2-P0-01",
+    "H2-P0-02",
+    "H2-P0-03",
+    "H2-P1-01",
+    "H2-P1-02",
+    "H2-P1-03",
+    "H2-P2-01",
+    "H2-P2-02",
+    "H2-P2-03",
+    "H2-P2-04",
+    "H2-P3-01",
+    "H2-P3-02",
+    "H2-P3-03",
+    "H2-P3-04",
+    "H2-P4-01",
+    "H2-P4-02",
+    "H2-P4-03",
+    "H2-P4-04",
+    "H2-P5-01",
+    "H2-P5-02",
+    "H2-P5-03",
+    "H2-P6-01",
+    "H2-P6-02",
+    "H2-P6-03",
+    "H2-P7-01",
+    "H2-P7-02",
+    "H2-P7-03",
+    "H2-P8-01",
+    "H2-P8-02",
+    "H2-P8-03",
+    "H2-P9-01",
+    "H2-P9-02"
+  ],
+  "sizing_illustration": {
+    "rooms_cpu": 13,
+    "rooms_ram": 16,
+    "rooms_down": 91,
+    "rooms_up": 273,
+    "full_nodes": 5,
+    "sparse_nodes": 8,
+    "peak_TB": 77.76,
+    "average_TB": 15.552
+  },
+  "errors": [
+    "8-9-godot-blender-agent-studio-plan.txt: broken local link reviews/20260909-r4/REVIEW-RESULT.md",
+    "8-9-hh-world-gameplay-viet-nam-plan.txt: broken local link reviews/20260909-r4/REVIEW-RESULT.md",
+    "F01 Solo release scope must be enforceable; no runtime flag exemption",
+    "S13 load profile freezes workload, overload and sample rules"
+  ],
+  "warnings": [],
+  "limits": "Checks structure, declared graph and examples; semantic completeness requires independent review; runtime/human/scale/legal not tested."
+}

@@ -1,0 +1,83 @@
+--- S8/8-9-godot-blender-agent-studio-plan.txt
++++ S9/8-9-godot-blender-agent-studio-plan.txt
+@@ -1,5 +1,5 @@
+ HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
+-Ngày 09-09-2026, Asia/Saigon | Revision S8 | CHỈ LẬP KẾ HOẠCH
++Ngày 09-09-2026, Asia/Saigon | Revision S9 | CHỈ LẬP KẾ HOẠCH
+ 
+ BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
+ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
+@@ -21,7 +21,7 @@
+ HUMAN_ACCEPTANCE=NONE
+ PLAN_SCOPE=8-9-hh3d-3/studio
+ PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
+-PLAN_REVISION=S8
++PLAN_REVISION=S9
+ REVIEW_BASE_COMMIT=5d19ba66d4476928e564f165b6396743dccde620
+ HISTORICAL_STUDIO_COMMIT=3cc7a85f730c99963a5a64079a0e02dc20edbd40
+ 
+@@ -378,7 +378,9 @@
+ ### GT-05 — Blender→GLB→Godot pipeline
+ CONTRACT/VERIFY: mục2.3/2.4 preflight/allowlisted glTF extensions, decoded texture/accessor caps; Khronos validation + actual Godot import.
+ ALLOWED: studio/fixtures/assets-src/, studio/pipeline/, import presets/tests,
+-fixture generated asset snapshots. Không sửa gameplay product.
++fixture generated asset snapshots, studio/contracts/naming-convention-v1.md.
++GT-05 là writer convention; thay schema cần compatibility/migration test.
++Không sửa gameplay product.
+ BUILD: 1m axis, prop/PBR, 1 rigged avatar+1outfit+idle/walk clips, in-place
+ motor policy; manifest source/license/closure/semantic tolerance+artifact SHA.
+ Baked supported GLB explicit; collider/nav proxy/LOD validator có fixture.
+@@ -399,14 +401,16 @@
+ ### GT-06 — Quan sát và chơi bằng công cụ
+ CONTRACT/VERIFY: mục2.6 reviewer UX và TX18; human Stop/reconnect không resume ngầm, keyboard/error/UNKNOWN có next action.
+ ALLOWED: studio/godot-addon/observe, studio/host/replay, reviewer UI/tests,
+-fixture input/controller/interaction scripts (không HH World source).
++fixture input/controller/interaction scripts, studio/contracts/perf-collector.schema.json.
++GT-06 là writer schema; compatibility/version tests khi thay. Không HH World source.
+ BUILD: inspect scene/property/runtime, start/play/input/pause/stop/capture,
+ bookmarks/camera, errors/perf collector. Fixture có đi lại/đổi đồ/emote/prop,
+ menu/pause/quit; original minimal art đã GT-05, không mở backend/map.
+ Perf collector xuất raw frame-time ms series + p50/p95/p99 + 1% low (1000/mean
+ của 1% frame lớn nhất) + counters triangles/draw calls/texture/RSS theo một
+ schema versioned `studio/contracts/perf-collector.schema.json` (schema id +
+-version ghi trong mỗi artifact; trường tùy chọn cho % pin Android); plan game
++version ghi trong mỗi artifact; trường tùy chọn cho % pin Android); GT-10
++manifest closure phải chứa cả schema này và naming-convention-v1.md. Plan game
+ dùng lại schema này cho Q01-B/F/T, không hai format.
+ VERIFY: real-input từ menu tới đi/interaction/pause/resume/quit, simulation
+ clock đứng khi pause nhưng UI clock vẫn tiến; pressed/held/released/seed;
+@@ -857,27 +861,13 @@
+ PLAN_DESIGN_REVIEW=SEE_EXACT_HASH_REPORT
+ Review hiện hành:
+ ./reviews/20260909-r4/REVIEW-RESULT.md
+-File gộp cũ chỉ lịch sử, không dependency hay bảng tiến độ thứ ba. S4 tích hợp
+-contract S3 vào đúng mục2/GT/TQ/TX, bỏ mâu thuẫn routing, pin, package trust và
+-consumer vòng. S5 sửa closure theo owner WP, Android hard gate và script operation.
+-S6 (09/09) thêm naming/taxonomy convention ở GT-05 và schema perf collector ở
+-GT-06 để plan game dùng chung; hai critic S6 (cursor-grok-4.6-xhigh-fast) cùng
+-REVISE. S7 (09/09) sửa theo critic: đặt tên file
+-`studio/contracts/perf-collector.schema.json` và kiểm schema trong GT-06/TQ06;
+-naming convention v1 là asset_id pattern fixture (không SKU game), mục2.4 và
+-TQ05 trỏ về convention thay vì đặt tên riêng. Hai critic S7 xác nhận các
+-finding tools đã đóng; S8 (09/09) chỉ đồng bộ revision với plan game (game
+-trỏ đúng đường dẫn `studio/contracts/perf-collector.schema.json`), không đổi
+-nội dung GT/TQ/TX. Verdict các revision trước không
+-chứng nhận S8. Report
+-phải có đúng hash của hai plan; static PASS không thay hai critic/runtime/human.
+-
+-Bàn giao: 10GT/10spec, DAG một chiều GT-10→game, TQ00–08/TX01–18, source scope
+-và verify đầy đủ. PLAN_ONLY và tất cả PLANNED vẫn giữ; chưa triển khai từ review.
+-Snapshot/diff/freeze/validator/report là evidence dưới reviews, không nguồn WP.
+-Base commit chỉ provenance: hai TXT đã được commit ở aa5ae15 (S5) nhưng bản S6
+-đang sửa trong working tree, nên source hash từng file mới xác định nội dung;
+-không coi Git HEAD là bản freeze của các plan.
++S4/S5 sửa routing/closure; S6/S7 bổ sung naming và perf schema. Hai critic S7
++vẫn REVISE trên cặp plan, không chứng nhận S8. S8 critic bị quota, chưa có
++verdict. S9 sửa ALLOWED của GT-05/GT-06, writer/version compatibility và GT-10
++manifest closure cho hai deliverable. Report hiện hành ghi evidence đúng hash;
++static PASS không thay hai critic/runtime/human, không tự mở GT-01.
++10 GT PLANNED, PLAN_ONLY; owner phải cho phép implementation riêng. Tất cả
++review/snapshot chỉ evidence, không nguồn WP; hash full bytes mới là freeze.
+ 
+ Từ vựng: WP=công việc; DoD=điều kiện xong; fixture=dự án mẫu để kiểm công cụ;
+ lease=quyền ghi tạm; fencing=chặn writer cũ; hash=dấu nhận dạng nội dung;

@@ -14,7 +14,9 @@ Thứ tự: GT-01→GT-10 rồi H2-P0-01→H2-P9-02. Không fork lõi Godot lúc
 không chạy Blender trên server người chơi; không coi số tài khoản đăng ký là
 số avatar realtime. Theo lệnh owner 10-09-2026, worker/search/critic dùng
 Grok CLI chính thức: model grok-4.6, reasoning-effort xhigh, --no-subagents.
-Không Codex worker/Cursor/Auto/fallback/hidden subagent. Kiểm --help và grok
+Theo quyền owner 12-09-2026, coordinator được tự làm và dùng Codex
+gpt-5.6-sol high cho audit/helper độc lập có lease hẹp; không thay hai critic
+Grok nghiệm thu. Không Cursor/Auto/fallback/hidden subagent. Kiểm --help và grok
 models theo phiên; không bịa cờ fast nếu CLI không cung cấp. Mỗi worker có
 attempt/session riêng, phạm vi ghi riêng và host exit thực. Tối đa hai lần
 poll mỗi batch; supervisor/watcher báo terminal để coordinator review.
