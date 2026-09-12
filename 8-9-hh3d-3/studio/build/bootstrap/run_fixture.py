@@ -16,6 +16,7 @@ import subprocess
 import sys
 import re
 import time
+import stat
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -246,31 +247,69 @@ def _version_matches(observed: str, expected: str) -> bool:
 
 def _reject_reparse_ancestors(path: Path) -> None:
     """Check the lexical path before resolve(), including existing ancestors."""
-    absolute = Path(os.path.abspath(os.fspath(path)))
+    raw = os.fspath(path)
+    if any(part == ".." for part in Path(raw).parts) or raw.startswith(("\\\\", "//")):
+        raise ValueError("traversal or network path is not allowed")
+    raw_parts = Path(raw).parts
+    for index, part in enumerate(raw_parts):
+        if index == 0 and re.match(r"^[A-Za-z]:", part):
+            continue
+        if ":" in part or part.endswith((" ", ".")):
+            raise ValueError("alias or alternate stream path is not allowed")
+    absolute = Path(os.path.abspath(raw))
     current = absolute
     while True:
-        if current.exists() and _is_reparse(current):
+        try:
+            info = os.lstat(current)
+        except FileNotFoundError:
+            info = None
+        except OSError as exc:
+            raise ValueError("input path is unavailable") from exc
+        if info is not None and (stat.S_ISLNK(info.st_mode) or (getattr(info, "st_file_attributes", 0) & 0x400)):
             raise ValueError(f"symlink/reparse path component: {current}")
         parent = current.parent
         if parent == current:
             break
         current = parent
 
-
+def _regular_identity(path: Path) -> tuple[int, int, int, int, int]:
+    try:
+        info = os.stat(path, follow_symlinks=False)
+    except OSError as exc:
+        raise ValueError(f"file unavailable: {path}") from exc
+    if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1 or _is_reparse(path):
+        raise ValueError(f"file must be regular and single-link: {path}")
+    return (info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns)
 def _load_toolchain_lock(studio: Path) -> dict:
     lock_path = studio / "toolchain.lock.json"
-    if not lock_path.is_file() or _is_reparse(lock_path):
-        raise ValueError("toolchain lock missing or reparse")
+    _regular_identity(lock_path)
     try:
-        lock = json.loads(lock_path.read_text(encoding="utf-8"))
+        def pairs(items):
+            result = {}
+            for key, value in items:
+                if key in result:
+                    raise ValueError("toolchain lock contains duplicate keys")
+                result[key] = value
+            return result
+        lock = json.loads(lock_path.read_text(encoding="utf-8"), object_pairs_hook=pairs)
         godot = lock["godot"]
         required = ("version", "console_executable", "gui_executable",
                     "console_sha256", "gui_sha256", "observed_version")
-        if lock.get("status") != "CANDIDATE" or any(not isinstance(godot.get(k), str) for k in required):
+        if lock.get("schema") != "HH-STUDIO-TOOLCHAIN-LOCK-2" or lock.get("status") != "CANDIDATE" or any(not isinstance(godot.get(k), (str, dict)) for k in required):
             raise ValueError("toolchain lock is incomplete or not candidate")
+        if not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+-stable", godot["version"]):
+            raise ValueError("toolchain version invalid")
+        if godot["source_tag"] != godot["version"] or not re.fullmatch(r"[0-9a-f]{40}", godot["source_commit"]):
+            raise ValueError("toolchain provenance invalid")
+        if godot["source"] != f"https://github.com/godotengine/godot-builds/releases/tag/{godot['version']}" or godot["source_commit_url"] != f"https://api.github.com/repos/godotengine/godot/git/ref/tags/{godot['version']}":
+            raise ValueError("toolchain provenance URL invalid")
         for key in ("console_sha256", "gui_sha256"):
             if not re.fullmatch(r"[0-9a-f]{64}", godot[key].lower()):
                 raise ValueError("toolchain lock checksum is invalid")
+        if not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+\.stable\.official\.[0-9a-f]{7,40}", godot["observed_version"]):
+            raise ValueError("observed version provenance invalid")
+        if (".official." + godot["source_commit"][:7]) not in godot["observed_version"]:
+            raise ValueError("observed version commit mismatch")
         return lock
     except (OSError, UnicodeError, json.JSONDecodeError, KeyError, TypeError) as exc:
         raise ValueError(f"invalid toolchain lock: {exc}") from exc
@@ -330,11 +369,12 @@ def main(argv: list[str] | None = None) -> int:
         if args.console_sha256.lower() != pinned["console_sha256"].lower() or args.gui_sha256.lower() != pinned["gui_sha256"].lower():
             return fail("caller checksum differs from toolchain lock")
         before = checked_files(studio)
+        _regular_identity(godot)
         if hash_file(godot) != pinned["console_sha256"].lower():
             return fail("console checksum mismatch")
         gui = godot.with_name(godot.name.replace("_console", ""))
         _reject_reparse_ancestors(gui)
-        if gui.name != pinned["gui_executable"] or not gui.is_file() or hash_file(gui) != pinned["gui_sha256"].lower():
+        if gui.name != pinned["gui_executable"] or not gui.is_file() or _regular_identity(gui) is None or hash_file(gui) != pinned["gui_sha256"].lower():
             return fail("GUI companion missing or checksum mismatch")
         observed, raw_version = _observed_version(godot, args.timeout_seconds)
         if observed != pinned["observed_version"] or not _version_matches(observed, expected_version):
@@ -383,7 +423,11 @@ def main(argv: list[str] | None = None) -> int:
     if len(trace_lines) == 1:
         try:
             trace_data = json.loads(trace_lines[0].removeprefix("GT01_TRACE "))
-            trace_ok = isinstance(trace_data, dict) and trace_data.get("result") == "PASS" and trace_data.get("phase") == "QUITTING"
+            observations = trace_data.get("observations")
+            labels = [item.get("label") for item in observations] if isinstance(observations, list) and all(isinstance(item, dict) for item in observations) else []
+            trace_ok = (isinstance(trace_data, dict) and trace_data.get("result") == "PASS"
+                        and trace_data.get("phase") == "QUITTING" and labels == ["menu", "start", "moved", "paused_frozen", "resumed", "quitting"]
+                        and isinstance(trace_data.get("sim_tick"), int))
         except (ValueError, TypeError):
             pass
     all_ok = (len(runs) == 3 and all(r["exit_code"] == 0 and r["wrapper_exit_code"] == 0

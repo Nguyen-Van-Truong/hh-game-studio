@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "$RUN_ROOT\create_fixture.py", line 93, in <module>
+    main()
+    ~~~~^^
+  File "$RUN_ROOT\create_fixture.py", line 56, in main
+    target = safe_output(args.output)
+  File "$RUN_ROOT\create_fixture.py", line 20, in safe_output
+    raise ValueError("output exists or parent missing")
+ValueError: output exists or parent missing
+
+Error: script failed, file: '$RUN_ROOT\create_fixture.py', exiting.

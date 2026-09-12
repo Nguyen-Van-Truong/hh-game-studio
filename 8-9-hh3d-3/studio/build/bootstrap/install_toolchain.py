@@ -25,6 +25,8 @@ MAX_FILES, MAX_FILE, MAX_TOTAL = 32, 512 * 1024**2, 1024**3
 HEX = re.compile(r'[0-9a-f]{64}')
 DEVICES = {'CON', 'PRN', 'AUX', 'NUL', *(f'COM{i}' for i in range(1,10)), *(f'LPT{i}' for i in range(1,10))}
 STATE = 'toolchain.local.json'
+LOCK_SCHEMA = 'HH3D-BOOTSTRAP-LEASE-2'
+MAX_LOCK_AGE_SECONDS = 7 * 24 * 60 * 60
 
 class InstallError(ValueError):
     pass
@@ -117,21 +119,144 @@ def read_package(root, receipt):
     require(manifest.get('files')==closure(package), 'package closure changed')
     return manifest
 
+def process_start(pid):
+    """Read a live process's creation identity without ever sending a signal.
+
+    None means the process is gone. Access denial and unsupported platforms
+    fail closed. PID reuse is distinguished from the owner recorded in a lease.
+    """
+    require(type(pid) is int and 0 < pid < 0xFFFFFFFF, 'INVALID_PID')
+    if os.name == 'nt':
+        import ctypes
+        from ctypes import wintypes
+
+        kernel = ctypes.WinDLL('kernel32', use_last_error=True)
+        kernel.OpenProcess.argtypes = [wintypes.DWORD, wintypes.BOOL, wintypes.DWORD]
+        kernel.OpenProcess.restype = wintypes.HANDLE
+        kernel.WaitForSingleObject.argtypes = [wintypes.HANDLE, wintypes.DWORD]
+        kernel.WaitForSingleObject.restype = wintypes.DWORD
+        kernel.GetProcessTimes.argtypes = [wintypes.HANDLE, *([ctypes.POINTER(wintypes.FILETIME)] * 4)]
+        kernel.GetProcessTimes.restype = wintypes.BOOL
+        kernel.CloseHandle.argtypes = [wintypes.HANDLE]
+        kernel.CloseHandle.restype = wintypes.BOOL
+        handle = kernel.OpenProcess(0x1000 | 0x100000, False, pid)
+        if not handle:
+            if ctypes.get_last_error() == 87:  # ERROR_INVALID_PARAMETER: PID absent.
+                return None
+            raise InstallError('lock owner cannot be inspected')
+        try:
+            wait = kernel.WaitForSingleObject(handle, 0)
+            if wait == 0:
+                return None
+            require(wait == 258, 'lock owner wait failed')  # WAIT_TIMEOUT: alive.
+            times = [wintypes.FILETIME() for _ in range(4)]
+            require(kernel.GetProcessTimes(handle, *(ctypes.byref(t) for t in times)),
+                    'lock owner creation time unavailable')
+            created = (times[0].dwHighDateTime << 32) | times[0].dwLowDateTime
+            return 'windows:' + str(created)
+        finally:
+            kernel.CloseHandle(handle)
+    if sys.platform.startswith('linux'):
+        try:
+            raw = Path('/proc', str(pid), 'stat').read_text(encoding='ascii')
+        except FileNotFoundError:
+            return None
+        except OSError as exc:
+            raise InstallError('lock owner cannot be inspected') from exc
+        fields = raw[raw.rfind(')') + 2:].split()
+        require(len(fields) > 19, 'lock owner creation time unavailable')
+        if fields[0] in ('Z', 'X'):
+            return None
+        boot_id = Path('/proc/sys/kernel/random/boot_id').read_text(encoding='ascii').strip()
+        return 'linux:' + boot_id + ':' + fields[19]
+    raise InstallError('process identity unsupported on this platform')
+
+
+@contextmanager
+def mutation_guard(root):
+    """Serialize cooperating writers/recovery; the OS releases this on crash.
+
+    This persistent file must never be unlinked: replacing a guard would split
+    the lock domain. It contains no PID or token and is not an active lease.
+    """
+    path = safe_path(root / '.mutation.guard')
+    with path.open('a+b') as handle:
+        if handle.seek(0, os.SEEK_END) == 0:
+            handle.write(b'\0')
+            handle.flush()
+            os.fsync(handle.fileno())
+        if os.name == 'nt':
+            import msvcrt
+            handle.seek(0)
+            try:
+                msvcrt.locking(handle.fileno(), msvcrt.LK_NBLCK, 1)
+            except OSError as exc:
+                raise InstallError('mutation guard busy') from exc
+            try:
+                yield
+            finally:
+                handle.seek(0)
+                msvcrt.locking(handle.fileno(), msvcrt.LK_UNLCK, 1)
+        else:
+            import fcntl
+            try:
+                fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+            except OSError as exc:
+                raise InstallError('mutation guard busy') from exc
+            try:
+                yield
+            finally:
+                fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
+
+
+def lock_token(root):
+    """Read the exact metadata token needed for explicit stale-lock recovery."""
+    return sha(safe_path(Path(root) / '.mutation.lock'))
+
+
+def require_lock_unchanged(path, identity, token):
+    require(verifier._identity(path) == identity and sha(path) == token,
+            'lock changed; refusing to remove replacement')
+
+
 @contextmanager
 def lease(root):
     root = safe_path(root)
-    root.mkdir(parents=True,exist_ok=True)
-    path = safe_path(root/'.mutation.lock')
-    payload = {'pid': os.getpid(), 'created_ns': time.time_ns(), 'nonce': uuid.uuid4().hex}
-    with path.open('xb') as handle:
-        handle.write(encode(payload)); handle.flush(); os.fsync(handle.fileno())
-    identity = verifier._identity(path)
-    try:
-        yield root
-    finally:
-        # Crash leaves a stale lock; do not auto-reclaim an unproven owner.
-        if verifier._identity(path)==identity:
+    root.mkdir(parents=True, exist_ok=True)
+    with mutation_guard(root):
+        path = safe_path(root / '.mutation.lock')
+        payload = {'schema': LOCK_SCHEMA, 'pid': os.getpid(),
+                   'process_start': process_start(os.getpid()),
+                   'created_ns': time.time_ns(), 'nonce': uuid.uuid4().hex}
+        require(payload['process_start'] is not None, 'lease owner identity unavailable')
+        with path.open('xb') as handle:
+            handle.write(encode(payload))
+            handle.flush()
+            os.fsync(handle.fileno())
+        identity = verifier._identity(path)
+        token = hashlib.sha256(encode(payload)).hexdigest()
+        try:
+            yield root
+        finally:
+            # Refuse deletion if even a noncooperating edit replaced metadata.
+            require_lock_unchanged(path, identity, token)
             path.unlink()
+
+
+def sync_directory(path):
+    """Do not turn a failed fsync into success or leak its file descriptor.
+
+    Python's Windows CRT cannot open directories for fsync. Surface that
+    limitation in successful results; file contents are still fsynced.
+    """
+    if os.name == 'nt':
+        return 'FILE_FLUSHED_DIRECTORY_SYNC_UNAVAILABLE_WINDOWS'
+    fd = os.open(path, os.O_RDONLY)
+    try:
+        os.fsync(fd)
+    finally:
+        os.close(fd)
+    return 'FILE_AND_DIRECTORY_SYNCED'
 
 def install(archive_path, sums_path, lock_path, root_path):
     archive_path,sums_path,lock_path = map(Path,(archive_path,sums_path,lock_path))
@@ -180,13 +305,10 @@ def install(archive_path, sums_path, lock_path, root_path):
             handle.write(encode(manifest)); handle.flush(); os.fsync(handle.fileno())
         receipt = {'package':package_id,'manifest_sha256':sha(stage/'manifest.json')}
         os.rename(stage,destination)  # Same volume, exclusive cooperative lease.
-        try:
-            fd = os.open(root/'packages', os.O_RDONLY)
-            os.fsync(fd); os.close(fd)
-        except OSError:
-            pass
+        durability = sync_directory(root/'packages')
         read_package(root,receipt)
-    return {'status':'INSTALLED_NOT_ACTIVATED','receipt':receipt,'version':pin['version']}
+    return {'status':'INSTALLED_NOT_ACTIVATED','receipt':receipt,'version':pin['version'],
+            'durability':durability}
 
 def state_token(root):
     path = safe_path(Path(root)/STATE)
@@ -212,13 +334,10 @@ def publish(root, state, expected):
     require(state_token(root)==expected, 'active state edited before publish')
     # Previous receipt and journal share this JSON; no two-file crash window.
     os.replace(temporary,root/STATE)
-    try:
-        fd = os.open(root, os.O_RDONLY); os.fsync(fd); os.close(fd)
-    except OSError:
-        pass
+    durability = sync_directory(root)
     require((root/STATE).read_bytes()==encode(state), 'readback failed; inspect state before retry')
     return {'status':state['operation'],'state_token':state_token(root),'transition_id':state['transition_id'],
-            'revision':state['revision'],'current':state['current']}
+            'revision':state['revision'],'current':state['current'],'durability':durability}
 
 def activate(root_path, receipt, expected_state):
     with lease(root_path) as root:
@@ -241,29 +360,43 @@ def rollback(root_path, expected_state, expected_transition):
                  'operation':'ROLLED_BACK','current':previous,'previous':None}
         return publish(root,state,expected_state)
 
-def recover_lock(root_path, *, max_age_seconds=300):
-    """Explicit operator action after confirming no owner is still running."""
-    root = safe_path(root_path); path = safe_path(root/'.mutation.lock')
-    require(path.exists(), 'no stale lock exists')
-    payload = read_json(path)
-    require(type(payload.get('pid')) is int and type(payload.get('created_ns')) is int,
-            'lock metadata invalid; manual inspection required')
-    require(time.time_ns() - payload['created_ns'] >= max_age_seconds * 1_000_000_000,
-            'lock is too recent to reclaim')
-    try:
-        os.kill(payload['pid'], 0)
-    except ProcessLookupError:
-        pass
-    except PermissionError:
-        raise InstallError('lock owner cannot be inspected')
-    except OSError as exc:
-        # Windows reports an invalid/nonexistent PID as ERROR_INVALID_PARAMETER.
-        if getattr(exc, 'winerror', None) != 87:
-            raise InstallError('lock owner cannot be inspected') from exc
-    else:
-        raise InstallError('lock owner is still running')
-    path.unlink()
-    return {'status':'STALE_LOCK_RECOVERED','pid':payload['pid'],'created_ns':payload['created_ns']}
+def recover_lock(root_path, *, expected_lock=None, max_age_seconds=300):
+    """Reclaim one observed dead owner's metadata under the cooperative guard.
+
+    Old metadata without a creation identity is intentionally not upgraded or
+    deleted. Inspect it manually. TTL is a minimum age, never proof of death.
+    """
+    require(isinstance(expected_lock, str) and HEX.fullmatch(expected_lock),
+            'explicit lock CAS token required')
+    require(type(max_age_seconds) is int and 0 <= max_age_seconds <= MAX_LOCK_AGE_SECONDS,
+            'invalid lock age threshold')
+    root = safe_path(root_path)
+    require(root.is_dir(), 'lock root unavailable')
+    with mutation_guard(root):
+        path = safe_path(root / '.mutation.lock')
+        require(path.exists(), 'no stale lock exists')
+        identity = verifier._identity(path)
+        require(lock_token(root) == expected_lock, 'lock CAS mismatch')
+        payload = read_json(path)
+        require(type(payload.get('pid')) is int and 0 < payload['pid'] < 0xFFFFFFFF,
+                'INVALID_PID')
+        require(set(payload) == {'schema', 'pid', 'process_start', 'created_ns', 'nonce'}
+                and payload['schema'] == LOCK_SCHEMA
+                and isinstance(payload['nonce'], str)
+                and re.fullmatch(r'[0-9a-f]{32}', payload['nonce'])
+                and isinstance(payload['process_start'], str)
+                and re.fullmatch(r'(?:windows:[1-9][0-9]{0,19}|linux:[0-9a-f-]{36}:[1-9][0-9]{0,19})', payload['process_start'])
+                and type(payload['created_ns']) is int and payload['created_ns'] > 0,
+                'lock metadata invalid; manual inspection required')
+        age = time.time_ns() - payload['created_ns']
+        require(age >= max_age_seconds * 1_000_000_000,
+                'lock is too recent to reclaim')
+        start = process_start(payload['pid'])
+        require(start is None or start != payload['process_start'], 'lock owner is still running')
+        require_lock_unchanged(path, identity, expected_lock)
+        path.unlink()
+        return {'status': 'STALE_LOCK_RECOVERED', 'pid': payload['pid'],
+                'created_ns': payload['created_ns'], 'recovered_lock': expected_lock}
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__)
@@ -279,6 +412,7 @@ def main(argv=None):
     p.add_argument('--expected-transition',required=True)
     p = commands.add_parser('recover-lock')
     p.add_argument('--root',type=Path,required=True)
+    p.add_argument('--expected-lock',required=True)
     p.add_argument('--max-age-seconds',type=int,default=300)
     args = ap.parse_args(argv)
     try:
@@ -289,7 +423,7 @@ def main(argv=None):
         elif args.command=='rollback':
             result = rollback(args.root,args.expected_state,args.expected_transition)
         else:
-            result = recover_lock(args.root,max_age_seconds=args.max_age_seconds)
+            result = recover_lock(args.root,expected_lock=args.expected_lock,max_age_seconds=args.max_age_seconds)
     except (ValueError,OSError,zipfile.BadZipFile,KeyError,TypeError):
         print('BOOTSTRAP_REJECTED: verify inputs and inspect current activation before retry',file=sys.stderr)
         return 2

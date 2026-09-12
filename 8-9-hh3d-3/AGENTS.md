@@ -13,9 +13,14 @@ DoD. Review/static evidence nằm trong zdoc/reviews/, không phải nguồn ti�
 Thứ tự: GT-01→GT-10 rồi H2-P0-01→H2-P9-02. Không fork lõi Godot lúc đầu;
 không chạy Blender trên server người chơi; không coi số tài khoản đăng ký là
 số avatar realtime. Theo lệnh owner 10-09-2026, worker/search/critic dùng
-Grok CLI chính thức: model grok-4.6, reasoning-effort xhigh, --no-subagents.
+Grok CLI chính thức vẫn là lựa chọn cho các phiên research/critic đã được
+định danh trong hồ sơ lịch sử: model grok-4.6, reasoning-effort xhigh,
+--no-subagents.
 Theo quyền owner 12-09-2026, coordinator được tự làm và dùng Codex
-gpt-5.6-sol high cho audit/helper độc lập có lease hẹp; không thay hai critic
+Worker Codex hiện hành theo owner steering: gpt-6-astra reasoning high, lease
+hẹp và file scope độc lập; không tự thay hai critic acceptance. Có thể dùng
+gpt-5.6-sol high cho audit/helper khi Astra không phù hợp. Worker chỉ là
+candidate; coordinator chạy verify, cập nhật plan và quyết định acceptance.
 Grok nghiệm thu. Không Cursor/Auto/fallback/hidden subagent. Kiểm --help và grok
 models theo phiên; không bịa cờ fast nếu CLI không cung cấp. Mỗi worker có
 attempt/session riêng, phạm vi ghi riêng và host exit thực. Tối đa hai lần

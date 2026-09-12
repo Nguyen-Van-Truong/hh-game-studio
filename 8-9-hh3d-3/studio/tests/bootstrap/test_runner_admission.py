@@ -26,7 +26,7 @@ runner = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(runner)
 
 OBSERVED_VERSION = "4.7.2.stable.official.ed1daf0bf"
-TRACE = 'GT01_TRACE {"result":"PASS","phase":"QUITTING"}\n'
+TRACE = 'GT01_TRACE {"result":"PASS","phase":"QUITTING","sim_tick":42,"observations":[{"label":"menu"},{"label":"start"},{"label":"moved"},{"label":"paused_frozen"},{"label":"resumed"},{"label":"quitting"}]}\n'
 
 
 def sha256(data: bytes) -> str:

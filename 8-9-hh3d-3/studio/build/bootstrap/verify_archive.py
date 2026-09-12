@@ -106,6 +106,8 @@ def _lock_details(lock: dict) -> tuple[str, str, str, str, int, str, str]:
         sums_sha256 = godot["sha512_sums"]["sha256"]
     except (KeyError, TypeError):
         _fail("lock is missing archive fields")
+    if not isinstance(godot, dict) or not isinstance(archive, dict):
+        _fail("lock archive fields have invalid types")
     if not isinstance(version, str) or not _VERSION.fullmatch(version):
         _fail("lock version is invalid")
     if not isinstance(name, str) or not _NAME.fullmatch(name) or "/" in name or "\\" in name:
@@ -119,6 +121,20 @@ def _lock_details(lock: dict) -> tuple[str, str, str, str, int, str, str]:
         _fail("lock archive URL is invalid")
     if url != expected_url or parsed.query or parsed.fragment or parsed.username or parsed.password:
         _fail("lock archive URL is invalid")
+    # Bind provenance to the same immutable release tag.  A lock that merely
+    # contains plausible hashes but points at another source is not admissible.
+    if godot.get("source_tag") != version or godot.get("source") != (
+        f"https://github.com/godotengine/godot-builds/releases/tag/{version}"):
+        _fail("lock source provenance is invalid")
+    commit = godot.get("source_commit")
+    if not isinstance(commit, str) or not re.fullmatch(r"[0-9a-fA-F]{40}", commit):
+        _fail("lock source commit is invalid")
+    commit_url = godot.get("source_commit_url")
+    if commit_url != f"https://api.github.com/repos/godotengine/godot/git/ref/tags/{version}":
+        _fail("lock source commit URL is invalid")
+    sums_url = godot.get("sha512_sums", {}).get("url") if isinstance(godot.get("sha512_sums"), dict) else None
+    if sums_url != f"https://github.com/godotengine/godot-builds/releases/download/{version}/SHA512-SUMS.txt":
+        _fail("lock sums URL is invalid")
     if not isinstance(sha256, str) or not _HEX64.fullmatch(sha256):
         _fail("lock archive SHA256 is invalid")
     if not isinstance(sha512, str) or not _HEX128.fullmatch(sha512):
@@ -139,6 +155,7 @@ def _verify_sums(raw: bytes, name: str, expected: str, pinned_sha256: str) -> st
     except UnicodeDecodeError:
         _fail("sums file is not UTF-8")
     matches = 0
+    seen: set[str] = set()
     for line in text.splitlines():
         if not line.strip() or line.lstrip().startswith("#"):
             continue
@@ -146,6 +163,12 @@ def _verify_sums(raw: bytes, name: str, expected: str, pinned_sha256: str) -> st
         if not match:
             _fail("sums file contains a malformed row")
         digest, filename = match.groups()
+        if filename in seen:
+            _fail("sums file contains duplicate filenames")
+        seen.add(filename)
+        if (filename.startswith(("/", "\\")) or ".." in Path(filename).parts
+                or ":" in filename or "\\" in filename):
+            _fail("sums file contains an unsafe filename")
         if filename == name:
             matches += 1
             if digest.lower() != expected:
