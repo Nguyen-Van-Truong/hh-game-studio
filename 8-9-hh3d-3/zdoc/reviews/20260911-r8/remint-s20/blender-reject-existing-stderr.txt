@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "C:\Users\truon\AppData\Local\Temp\hh-gt01-20260912T131204Z có dấu cbibai58\create_fixture.py", line 93, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\truon\AppData\Local\Temp\hh-gt01-20260912T131204Z có dấu cbibai58\create_fixture.py", line 56, in main
+    target = safe_output(args.output)
+  File "C:\Users\truon\AppData\Local\Temp\hh-gt01-20260912T131204Z có dấu cbibai58\create_fixture.py", line 20, in safe_output
+    raise ValueError("output exists or parent missing")
+ValueError: output exists or parent missing
+
+Error: script failed, file: 'C:\Users\truon\AppData\Local\Temp\hh-gt01-20260912T131204Z có dấu cbibai58\create_fixture.py', exiting.

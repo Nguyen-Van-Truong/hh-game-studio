@@ -34,12 +34,15 @@ or noisy `--version` invocation from being mistaken for a valid probe.
   was installed into an ignored `.local` root without changing PATH. Blender
   5.2.1 local executable was independently observed and its hash recorded in
   the lock; this does not replace the required headed/Blender remint evidence.
-- Window/Blender tests from S18 have not been reminted for the new source closure.
+- Fresh S20 remint `20260912T131204Z` exercised nine lanes: version, import,
+  parse, headless trace, menu Quit, headed trace, headed menu Quit, Blender
+  save/reopen, and Blender overwrite refusal. Successful lanes had host exit 0,
+  clean streams and empty process trees; refusal had expected exit 2. Text
+  evidence is in [remint-s20](remint-s20/evidence.json).
 
-Remaining GT-01 work: recheck source/binaries/lock after the complete runtime,
-reproducible bootstrap and verified rollback, remint headed/Blender evidence on
-the current source hash, complete TQ01/TX12/TX14 evidence, and obtain two
-independent critics for the entire WP. GT-02 is not open.
+Remaining GT-01 work: complete TQ01/TX12/TX14 evidence, freeze the complete
+manifest/package, and obtain two independent critics for the entire WP. GT-02
+is not open.
 
 ## Worker adjudication
 
