@@ -1,0 +1,592 @@
+{
+  "status": "COMPLETED_AWAITING_REVIEW",
+  "package_version": "0.9.29",
+  "image": "iiidev/iii@sha256:15f8d4ed16c0bec350b98f4e18ed04498b1fc5ccc50585e087b736717300cf26",
+  "tokens_saved": null,
+  "proof_class": "MANUAL_LOCAL_RETRIEVAL_SMOKE_NOT_CODING_QUALITY",
+  "requests": [
+    {
+      "route": "config/flags",
+      "ms": 15.000000013969839,
+      "response_bytes": 1705,
+      "query": null
+    },
+    {
+      "route": "remember",
+      "ms": 15.999999974155799,
+      "response_bytes": 666,
+      "query": null
+    },
+    {
+      "route": "remember",
+      "ms": 15.000000013969839,
+      "response_bytes": 649,
+      "query": null
+    },
+    {
+      "route": "remember",
+      "ms": 62.999999994644895,
+      "response_bytes": 649,
+      "query": null
+    },
+    {
+      "route": "remember",
+      "ms": 0.0,
+      "response_bytes": 654,
+      "query": null
+    },
+    {
+      "route": "remember",
+      "ms": 16.00000000325963,
+      "response_bytes": 655,
+      "query": null
+    },
+    {
+      "route": "remember",
+      "ms": 62.000000005355105,
+      "response_bytes": 655,
+      "query": null
+    },
+    {
+      "route": "search",
+      "ms": 16.00000000325963,
+      "response_bytes": 330,
+      "query": "công cụ"
+    },
+    {
+      "route": "search",
+      "ms": 92.99999999348074,
+      "response_bytes": 793,
+      "query": "Godot"
+    },
+    {
+      "route": "search",
+      "ms": 109.99999998603016,
+      "response_bytes": 565,
+      "query": "GT-10"
+    },
+    {
+      "route": "search",
+      "ms": 94.00000001187436,
+      "response_bytes": 555,
+      "query": "Watcher"
+    },
+    {
+      "route": "search",
+      "ms": 46.000000002095476,
+      "response_bytes": 320,
+      "query": "poll budget"
+    },
+    {
+      "route": "search",
+      "ms": 62.999999994644895,
+      "response_bytes": 320,
+      "query": "Memory"
+    },
+    {
+      "route": "search",
+      "ms": 46.999999991385266,
+      "response_bytes": 87,
+      "query": "zzabsent482910"
+    },
+    {
+      "route": "search",
+      "ms": 15.000000013969839,
+      "response_bytes": 67,
+      "query": "Godot"
+    },
+    {
+      "route": "search",
+      "ms": 62.999999994644895,
+      "response_bytes": 773,
+      "query": "Godot"
+    },
+    {
+      "route": "search",
+      "ms": 94.00000001187436,
+      "response_bytes": 793,
+      "query": "Godot"
+    },
+    {
+      "route": "search",
+      "ms": 62.000000005355105,
+      "response_bytes": 793,
+      "query": "Godot"
+    },
+    {
+      "route": "search",
+      "ms": 46.999999991385266,
+      "response_bytes": 793,
+      "query": "Godot"
+    },
+    {
+      "route": "search",
+      "ms": 62.999999994644895,
+      "response_bytes": 793,
+      "query": "Godot"
+    },
+    {
+      "route": "search",
+      "ms": 62.000000005355105,
+      "response_bytes": 793,
+      "query": "Godot"
+    },
+    {
+      "route": "search",
+      "ms": 62.999999994644895,
+      "response_bytes": 793,
+      "query": "Godot"
+    },
+    {
+      "route": "search",
+      "ms": 46.000000002095476,
+      "response_bytes": 793,
+      "query": "Godot"
+    },
+    {
+      "route": "search",
+      "ms": 62.999999994644895,
+      "response_bytes": 793,
+      "query": "Godot"
+    },
+    {
+      "route": "search",
+      "ms": 62.000000005355105,
+      "response_bytes": 793,
+      "query": "Godot"
+    },
+    {
+      "route": "search",
+      "ms": 94.00000001187436,
+      "response_bytes": 793,
+      "query": "Godot"
+    },
+    {
+      "route": "config/flags",
+      "ms": 31.000000017229468,
+      "response_bytes": 1705,
+      "query": null
+    },
+    {
+      "route": "search",
+      "ms": 46.999999991385266,
+      "response_bytes": 773,
+      "query": "Godot"
+    }
+  ],
+  "provider": "noop",
+  "embedding_provider": "none",
+  "authority_sha256": "15a89fe223aa46f7bf6cbfb65ad3e1c9b3cec485ce1fe310d8aca342aef2c239",
+  "notes": [
+    {
+      "text": "GT01 tools first. Công cụ được làm trước game. CURRENT_VALID_WP=GT-01; IN_PROGRESS.",
+      "result": {
+        "memory": {
+          "concepts": [],
+          "content": "GT01 tools first. Công cụ được làm trước game. CURRENT_VALID_WP=GT-01; IN_PROGRESS.",
+          "createdAt": "2026-09-10T23:19:31.613Z",
+          "files": [
+            "zdoc/8-9-godot-blender-agent-studio-plan.txt"
+          ],
+          "forgetAfter": "2026-09-11T23:19:31.616Z",
+          "id": "mem_mtw5g8ww_13ac67045716",
+          "isLatest": true,
+          "origin": {
+            "capturedAt": "2026-09-10T23:19:31.613Z",
+            "channel": "agent"
+          },
+          "project": "hh3d-trial-a",
+          "sessionIds": [],
+          "sourceObservationIds": [],
+          "strength": 7,
+          "supersedes": [],
+          "title": "GT01 tools first. Công cụ được làm trước game. CURRENT_VALID_WP=GT-01; IN_PROGRE",
+          "type": "fact",
+          "updatedAt": "2026-09-10T23:19:31.613Z",
+          "version": 1
+        },
+        "success": true
+      }
+    },
+    {
+      "text": "Godot pin 4.7.2-stable official applies to HH3D Studio. Never change Vault Fighters pin.",
+      "result": {
+        "memory": {
+          "concepts": [],
+          "content": "Godot pin 4.7.2-stable official applies to HH3D Studio. Never change Vault Fighters pin.",
+          "createdAt": "2026-09-10T23:19:31.629Z",
+          "files": [
+            "zdoc/8-9-godot-blender-agent-studio-plan.txt"
+          ],
+          "forgetAfter": "2026-09-11T23:19:31.632Z",
+          "id": "mem_mtw5g8xc_88a6d50e784c",
+          "isLatest": true,
+          "origin": {
+            "capturedAt": "2026-09-10T23:19:31.629Z",
+            "channel": "agent"
+          },
+          "project": "hh3d-trial-a",
+          "sessionIds": [],
+          "sourceObservationIds": [],
+          "strength": 7,
+          "supersedes": [],
+          "title": "Godot pin 4.7.2-stable official applies to HH3D Studio. Never change Vault Fight",
+          "type": "fact",
+          "updatedAt": "2026-09-10T23:19:31.629Z",
+          "version": 1
+        },
+        "success": true
+      }
+    },
+    {
+      "text": "HH World gameplay implementation waits until GT-10 ACCEPTED. No premature game dispatch.",
+      "result": {
+        "memory": {
+          "concepts": [],
+          "content": "HH World gameplay implementation waits until GT-10 ACCEPTED. No premature game dispatch.",
+          "createdAt": "2026-09-10T23:19:31.642Z",
+          "files": [
+            "zdoc/8-9-godot-blender-agent-studio-plan.txt"
+          ],
+          "forgetAfter": "2026-09-11T23:19:31.687Z",
+          "id": "mem_mtw5g8yv_a94fdd356348",
+          "isLatest": true,
+          "origin": {
+            "capturedAt": "2026-09-10T23:19:31.642Z",
+            "channel": "agent"
+          },
+          "project": "hh3d-trial-a",
+          "sessionIds": [],
+          "sourceObservationIds": [],
+          "strength": 7,
+          "supersedes": [],
+          "title": "HH World gameplay implementation waits until GT-10 ACCEPTED. No premature game d",
+          "type": "fact",
+          "updatedAt": "2026-09-10T23:19:31.642Z",
+          "version": 1
+        },
+        "success": true
+      }
+    },
+    {
+      "text": "Watcher notification means process ended and needs review. Exit zero never proves acceptance.",
+      "result": {
+        "memory": {
+          "concepts": [],
+          "content": "Watcher notification means process ended and needs review. Exit zero never proves acceptance.",
+          "createdAt": "2026-09-10T23:19:31.698Z",
+          "files": [
+            "zdoc/8-9-godot-blender-agent-studio-plan.txt"
+          ],
+          "forgetAfter": "2026-09-11T23:19:31.700Z",
+          "id": "mem_mtw5g8z8_724a9ce9c71b",
+          "isLatest": true,
+          "origin": {
+            "capturedAt": "2026-09-10T23:19:31.698Z",
+            "channel": "agent"
+          },
+          "project": "hh3d-trial-a",
+          "sessionIds": [],
+          "sourceObservationIds": [],
+          "strength": 7,
+          "supersedes": [],
+          "title": "Watcher notification means process ended and needs review. Exit zero never prove",
+          "type": "fact",
+          "updatedAt": "2026-09-10T23:19:31.698Z",
+          "version": 1
+        },
+        "success": true
+      }
+    },
+    {
+      "text": "Grok worker poll budget maximum two per batch. Owner handles watcher handoff if still running.",
+      "result": {
+        "memory": {
+          "concepts": [],
+          "content": "Grok worker poll budget maximum two per batch. Owner handles watcher handoff if still running.",
+          "createdAt": "2026-09-10T23:19:31.711Z",
+          "files": [
+            "zdoc/8-9-godot-blender-agent-studio-plan.txt"
+          ],
+          "forgetAfter": "2026-09-11T23:19:31.713Z",
+          "id": "mem_mtw5g8zl_14cf2987dff9",
+          "isLatest": true,
+          "origin": {
+            "capturedAt": "2026-09-10T23:19:31.711Z",
+            "channel": "agent"
+          },
+          "project": "hh3d-trial-a",
+          "sessionIds": [],
+          "sourceObservationIds": [],
+          "strength": 7,
+          "supersedes": [],
+          "title": "Grok worker poll budget maximum two per batch. Owner handles watcher handoff if ",
+          "type": "fact",
+          "updatedAt": "2026-09-10T23:19:31.711Z",
+          "version": 1
+        },
+        "success": true
+      }
+    },
+    {
+      "text": "Memory advisory only. Recheck AGENTS, canonical plan, source hashes before applying decisions.",
+      "result": {
+        "memory": {
+          "concepts": [],
+          "content": "Memory advisory only. Recheck AGENTS, canonical plan, source hashes before applying decisions.",
+          "createdAt": "2026-09-10T23:19:31.724Z",
+          "files": [
+            "zdoc/8-9-godot-blender-agent-studio-plan.txt"
+          ],
+          "forgetAfter": "2026-09-11T23:19:31.767Z",
+          "id": "mem_mtw5g913_0b4ad9b79feb",
+          "isLatest": true,
+          "origin": {
+            "capturedAt": "2026-09-10T23:19:31.724Z",
+            "channel": "agent"
+          },
+          "project": "hh3d-trial-a",
+          "sessionIds": [],
+          "sourceObservationIds": [],
+          "strength": 7,
+          "supersedes": [],
+          "title": "Memory advisory only. Recheck AGENTS, canonical plan, source hashes before apply",
+          "type": "fact",
+          "updatedAt": "2026-09-10T23:19:31.724Z",
+          "version": 1
+        },
+        "success": true
+      }
+    }
+  ],
+  "queries": [
+    {
+      "query": "công cụ",
+      "result": {
+        "format": "compact",
+        "results": [
+          {
+            "obsId": "mem_mtw5g8ww_13ac67045716",
+            "score": 4.84139870011961,
+            "sessionId": "memory",
+            "timestamp": "2026-09-10T23:19:31.613Z",
+            "title": "GT01 tools first. Công cụ được làm trước game. CURRENT_VALID_WP=GT-01; IN_PROGRE",
+            "type": "decision"
+          }
+        ],
+        "tokens_budget": 500,
+        "tokens_used": 77,
+        "truncated": false
+      }
+    },
+    {
+      "query": "Godot",
+      "result": {
+        "format": "compact",
+        "results": [
+          {
+            "obsId": "mem_mtw5g8xc_88a6d50e784c",
+            "score": 0.12447679306152118,
+            "sessionId": "memory",
+            "timestamp": "2026-09-10T23:19:31.629Z",
+            "title": "Godot pin 4.7.2-stable official applies to HH3D Studio. Never change Vault Fight",
+            "type": "decision"
+          },
+          {
+            "obsId": "mem_mtw5g913_0b4ad9b79feb",
+            "score": 0.07684146292988371,
+            "sessionId": "memory",
+            "timestamp": "2026-09-10T23:19:31.724Z",
+            "title": "Memory advisory only. Recheck AGENTS, canonical plan, source hashes before apply",
+            "type": "decision"
+          },
+          {
+            "obsId": "mem_mtw5g8yv_a94fdd356348",
+            "score": 0.07477294897264855,
+            "sessionId": "memory",
+            "timestamp": "2026-09-10T23:19:31.642Z",
+            "title": "HH World gameplay implementation waits until GT-10 ACCEPTED. No premature game d",
+            "type": "decision"
+          }
+        ],
+        "tokens_budget": 500,
+        "tokens_used": 234,
+        "truncated": false
+      }
+    },
+    {
+      "query": "GT-10",
+      "result": {
+        "format": "compact",
+        "results": [
+          {
+            "obsId": "mem_mtw5g8yv_a94fdd356348",
+            "score": 4.057574464314893,
+            "sessionId": "memory",
+            "timestamp": "2026-09-10T23:19:31.642Z",
+            "title": "HH World gameplay implementation waits until GT-10 ACCEPTED. No premature game d",
+            "type": "decision"
+          },
+          {
+            "obsId": "mem_mtw5g8ww_13ac67045716",
+            "score": 2.828323044886008,
+            "sessionId": "memory",
+            "timestamp": "2026-09-10T23:19:31.613Z",
+            "title": "GT01 tools first. Công cụ được làm trước game. CURRENT_VALID_WP=GT-01; IN_PROGRE",
+            "type": "decision"
+          }
+        ],
+        "tokens_budget": 500,
+        "tokens_used": 156,
+        "truncated": false
+      }
+    },
+    {
+      "query": "Watcher",
+      "result": {
+        "format": "compact",
+        "results": [
+          {
+            "obsId": "mem_mtw5g8z8_724a9ce9c71b",
+            "score": 1.625545788123763,
+            "sessionId": "memory",
+            "timestamp": "2026-09-10T23:19:31.698Z",
+            "title": "Watcher notification means process ended and needs review. Exit zero never prove",
+            "type": "decision"
+          },
+          {
+            "obsId": "mem_mtw5g8zl_14cf2987dff9",
+            "score": 1.5883762960172745,
+            "sessionId": "memory",
+            "timestamp": "2026-09-10T23:19:31.711Z",
+            "title": "Grok worker poll budget maximum two per batch. Owner handles watcher handoff if ",
+            "type": "decision"
+          }
+        ],
+        "tokens_budget": 500,
+        "tokens_used": 156,
+        "truncated": false
+      }
+    },
+    {
+      "query": "poll budget",
+      "result": {
+        "format": "compact",
+        "results": [
+          {
+            "obsId": "mem_mtw5g8zl_14cf2987dff9",
+            "score": 4.752836528775959,
+            "sessionId": "memory",
+            "timestamp": "2026-09-10T23:19:31.711Z",
+            "title": "Grok worker poll budget maximum two per batch. Owner handles watcher handoff if ",
+            "type": "decision"
+          }
+        ],
+        "tokens_budget": 500,
+        "tokens_used": 78,
+        "truncated": false
+      }
+    },
+    {
+      "query": "Memory",
+      "result": {
+        "format": "compact",
+        "results": [
+          {
+            "obsId": "mem_mtw5g913_0b4ad9b79feb",
+            "score": 2.466661995947017,
+            "sessionId": "memory",
+            "timestamp": "2026-09-10T23:19:31.724Z",
+            "title": "Memory advisory only. Recheck AGENTS, canonical plan, source hashes before apply",
+            "type": "decision"
+          }
+        ],
+        "tokens_budget": 500,
+        "tokens_used": 78,
+        "truncated": false
+      }
+    },
+    {
+      "query": "zzabsent482910",
+      "result": {
+        "format": "compact",
+        "results": [],
+        "tokens_budget": 500,
+        "tokens_used": 0,
+        "truncated": false
+      }
+    }
+  ],
+  "scope_b": {
+    "format": "compact",
+    "results": [],
+    "tokens_used": 0,
+    "truncated": false
+  },
+  "resource_sample": "6.469MiB / 512MiB 0.55%",
+  "restart": {
+    "format": "compact",
+    "results": [
+      {
+        "obsId": "mem_mtw5g8xc_88a6d50e784c",
+        "score": 0.12447679306152118,
+        "sessionId": "memory",
+        "timestamp": "2026-09-10T23:19:31.629Z",
+        "title": "Godot pin 4.7.2-stable official applies to HH3D Studio. Never change Vault Fight",
+        "type": "decision"
+      },
+      {
+        "obsId": "mem_mtw5g913_0b4ad9b79feb",
+        "score": 0.07684146292988371,
+        "sessionId": "memory",
+        "timestamp": "2026-09-10T23:19:31.724Z",
+        "title": "Memory advisory only. Recheck AGENTS, canonical plan, source hashes before apply",
+        "type": "decision"
+      },
+      {
+        "obsId": "mem_mtw5g8yv_a94fdd356348",
+        "score": 0.07477294897264855,
+        "sessionId": "memory",
+        "timestamp": "2026-09-10T23:19:31.642Z",
+        "title": "HH World gameplay implementation waits until GT-10 ACCEPTED. No premature game d",
+        "type": "decision"
+      }
+    ],
+    "tokens_used": 234,
+    "truncated": false
+  },
+  "before_restart": {
+    "format": "compact",
+    "results": [
+      {
+        "obsId": "mem_mtw5g8xc_88a6d50e784c",
+        "score": 0.12447679306152118,
+        "sessionId": "memory",
+        "timestamp": "2026-09-10T23:19:31.629Z",
+        "title": "Godot pin 4.7.2-stable official applies to HH3D Studio. Never change Vault Fight",
+        "type": "decision"
+      },
+      {
+        "obsId": "mem_mtw5g913_0b4ad9b79feb",
+        "score": 0.07684146292988371,
+        "sessionId": "memory",
+        "timestamp": "2026-09-10T23:19:31.724Z",
+        "title": "Memory advisory only. Recheck AGENTS, canonical plan, source hashes before apply",
+        "type": "decision"
+      },
+      {
+        "obsId": "mem_mtw5g8yv_a94fdd356348",
+        "score": 0.07477294897264855,
+        "sessionId": "memory",
+        "timestamp": "2026-09-10T23:19:31.642Z",
+        "title": "HH World gameplay implementation waits until GT-10 ACCEPTED. No premature game d",
+        "type": "decision"
+      }
+    ],
+    "tokens_used": 234,
+    "truncated": false
+  },
+  "container_final": "false",
+  "elapsed_seconds": 11.328000000008615,
+  "data_bytes": 11516
+}

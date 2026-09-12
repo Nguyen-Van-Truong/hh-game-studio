@@ -1,14 +1,16 @@
 # HH3D review evidence
 
 Progress lives only in the two TXT plans one directory above.
-Current review: [S19 / r7](20260911-r7/PLAN-AUDIT.md).
+Current review: [S20 / r8](20260911-r8/REVIEW-RESULT.md).
 
 | Directory | Purpose |
 | --- | --- |
 | 20260908-r3 | Historical recovery and S3 review scripts |
 | 20260909-r4 | Historical S6–S13 plan snapshots, diffs and critic evidence |
 | 20260910-r5 | S14–S17 review and reusable Grok supervisor |
-| 20260910-r6 | Current S18 progress, worker adjudication and partial GT01 runtime |
+| 20260910-r6 | S18 progress, worker adjudication and partial GT01 runtime |
+| 20260911-r7 | S19 design hardening and static freeze |
+| 20260911-r8 | S20 worker failures, version-probe hardening, partial runtime and memory trial |
 
 These are evidence folders, not worker processes. Worker workspace/output/logs
 are separate attempts in local TEMP, referenced by ignored *.local.json files.

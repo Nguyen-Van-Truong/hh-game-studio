@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 10-09-2026, Asia/Saigon | Revision S19 | TRIỂN KHAI THEO GATE
+Ngày 12-09-2026, Asia/Saigon | Revision S20 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -18,14 +18,14 @@ CURRENT_VALID_WP=GT-01
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
 IMPLEMENTATION=GT01_IN_PROGRESS
 GT01_EVIDENCE_STATUS=PARTIAL_RUNTIME_UNREVIEWED
-GT01_PENDING=BOOTSTRAP_HARDENING,TOOLCHAIN_REPRO,ROLLBACK,TWO_CRITICS
+GT01_PENDING=BOOTSTRAP_HARDENING,TOOLCHAIN_REPRO,ROLLBACK,HEADED_BLENDER_REMINT,TQ01_TX12_TX14,TWO_CRITICS
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
-PLAN_DESIGN_CRITICS=NO_ACCEPTED_VERDICT_S6_TO_S16
+PLAN_DESIGN_CRITICS=NO_ACCEPTED_VERDICT_S6_TO_S20
 RUNTIME_ACCEPTANCE=NONE
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S19
+PLAN_REVISION=S20
 REVIEW_BASE_COMMIT=b4195ca
 HISTORICAL_REJECTED_COMMIT=54d0c7c
 HISTORICAL_STUDIO_COMMIT=3cc7a85f730c99963a5a64079a0e02dc20edbd40
@@ -122,6 +122,7 @@ issue nếu có và cost templates/security/merge dài hạn. Không nằm trong
 Trong root HH3D-3 dự kiến, mọi source do plan công cụ sở hữu nằm ở studio/:
   studio/toolchain.lock.json    pin engine/templates/Blender/exporter/addons
   studio/protocol/              schema/capability envelope
+  studio/contracts/             versioned cross-tool schemas (created when GT-02…GT-06 open)
   studio/godot-addon/           source Godot adapter duy nhất
   studio/blender-addon/         Blender UI/export adapter
   studio/host/                  scheduler/lease/journal/JSON CLI/MCP adapter
@@ -359,7 +360,9 @@ version, full commit, license, platform; không chứa đường dẫn tuyệt �
 username hay máy cụ thể. Vị trí cài trên máy hiện tại ghi ở
 studio/.local/toolchain.local.json (ignored) và test_gt01 phải từ chối lock
 có đường dẫn tuyệt đối. Fixture project mới tạo từ template/schema đã kiểm, có
-entry scene/menu/quit và input contract. Blender fixture source sạch, origin/
+entry scene/menu/quit và input contract. Các `.uid` do Godot sinh cạnh script
+thuộc fixture source và được giữ trong VCS; `.godot/` chỉ là cache loại khỏi
+manifest. Blender fixture source sạch, origin/
 axis rõ. Windows editor/build + Linux headless artifact + Android export targets
 ghi matrix dự kiến. Máy hỗ trợ/OS/GPU/RAM thật ghi inventory, missing là gap.
 VERIFY: --version/checksum mismatch fail; Unicode/space paths; typed scene
@@ -512,7 +515,11 @@ VERIFY: install vào clean fixture copy, source/save cũ giữ nguyên, upgrade/
 rollback old/new state compatibility, uninstall addon không xóa art/game;
 one roundtrip+play sau update. Chỉ ký bằng test trust key local; không public upload/production sign/install scope khác.
 DoD: TQ08-I/TX16-I + TX10/12/14,2 critics; hash/package/model/matrix/handoff đầy đủ.
-GT-10 release manifest MUST include `capacity_claims` copied only from the last signed, measured profile; absent/stale profile means no capacity claim. It must also assert `monetization=OFF` for this package and fail closed if payment SDKs, payment endpoints, voucher/refund/chargeback handlers or monetization UI are present. Any later monetization requires a separately reviewed contract/WP and new signed package.
+GT-10 release manifest chỉ được giữ trạng thái `monetization=OFF` và phải fail
+closed nếu có payment SDK, endpoint, voucher/refund/chargeback handler hoặc UI
+monetization. Năng lực CCU/capacity thuộc profile đo được của plan game P8-03,
+không đưa `capacity_claims` vào package công cụ. Bất kỳ monetization nào sau
+này cần contract/WP và package ký mới.
 Dependency GT-08/09 ACCEPTED gồm physical Android fixture; manifest ghi đúng
 supported_targets Windows/Android/Linux-headless, không partial ACCEPT ngầm.
 Không cần closed alpha của game và không claim tool sửa được mọi thể loại.
@@ -763,9 +770,12 @@ protocol/debug details ngoài diagnostics cần thiết.
 8.2 Giao việc đủ chi tiết, model đúng yêu cầu hiện hành
 
 Coordinator viết/sửa plan, chia việc, kiểm result và quyết định. Worker,
-researcher/search và critic dùng Grok CLI chính thức, model grok-4.6,
+researcher/search và critic ưu tiên Grok CLI chính thức, model grok-4.6,
 reasoning-effort xhigh và --no-subagents theo lệnh owner 10-09-2026.
-Không dùng Codex worker, Cursor, Auto/fallback hoặc hidden subagents. Không tự đổi model khi quota; ghi lỗi thực và giữ
+Với subdeliverable nhỏ, thuần đọc/kiểm thử hoặc helper độc lập, owner cho phép
+Codex gpt-5.6-sol high làm worker phụ; phải ghi rõ ngoại lệ, lease file hẹp,
+không thay critic Grok bắt buộc của acceptance. Không dùng Cursor, Auto/fallback
+hoặc hidden subagents. Không tự đổi model khi quota; ghi lỗi thực và giữ
 phần phụ thuộc pending, tiếp tục việc coordinator được phép.
 Auth đã agent login; chỉ chẩn đoán auth khi có lỗi, không in tokens.
 CLI flags/model kiểm bằng grok --help và grok models, cache cùng phiên.
@@ -783,7 +793,7 @@ report; hai critic vẫn độc lập. Không lặp batch vô hạn cho cùng l�
 
 Handoff template (điền hết, không gửi 'đọc plan rồi làm tiếp'):
 ROLE=implementer/researcher/critic
-MODEL=grok-4.6; REASONING_EFFORT=xhigh; CLI=official_grok; FAST_FLAG=ONLY_IF_VERIFIED; NO_CODEX_WORKER/NO_CURSOR/NO_FALLBACK/NO_HIDDEN_SUBAGENTS
+MODEL=grok-4.6; REASONING_EFFORT=xhigh; CLI=official_grok; FAST_FLAG=ONLY_IF_VERIFIED; AUX_WORKER=codex-gpt-5.6-sol-high; AUX_SCOPE=readonly-audit|isolated-helper<=3-files; NO_CURSOR/NO_FALLBACK/NO_HIDDEN_SUBAGENTS
 ROOT=<absolute path repo 8-9-hh3d-3>; WORKSPACE=<studio repo>
 PLAN=<absolute TXT đúng scope tools hoặc game>; OTHER_PLAN=<chỉ nếu cần handoff>; PLAN_REVISION/HASH=<frozen content>
 WP=<one bounded WP/subdeliverable>; DEPENDENCIES=<actual ACCEPTED evidence>
@@ -931,7 +941,7 @@ pin ghi UNVERIFIED trước implementation. Không cài binary trong lượt rev
 9.2 Trạng thái thiết kế và bàn giao
 PLAN_DESIGN_REVIEW=SEE_EXACT_HASH_REPORT
 Review hiện hành:
-./reviews/20260911-r7/PLAN-AUDIT.md
+./reviews/20260911-r8/REVIEW-RESULT.md
 S4/S5 sửa routing/closure; S6/S7 bổ sung naming và perf schema. Hai critic S7
 vẫn REVISE trên cặp plan, không chứng nhận S8. S8 critic bị quota, chưa có
 verdict. S9 sửa ALLOWED của GT-05/GT-06, writer/version compatibility và GT-10
@@ -953,6 +963,32 @@ process tree có cơ chế cụ thể; kiểm máy output worker và luật leo 
 hai batch REJECT; checkpoint commit cho source IN_PROGRESS. Static kiểm S6–S8
 closure vẫn PASS trên S17.
 S19 (11-09, plan hardening): bổ sung provenance tag/commit bất biến, gate monetization=OFF và chặn capacity claim stale trong GT-10. Đây là yêu cầu thiết kế mới, chưa có runtime/critic acceptance.
+S20 (12-09, tiếp tục GT-01): đã sửa riêng version probe để dùng owned Job/process
+group, reject nonzero/missing exit/tree proof, stderr, stdout thừa hoặc phiên bản
+không official. 10 test mới và 5 test process cũ qua; lượt Godot thật mới
+GT01-R8-20260910T233017Z qua import/parse/input trace, host exit0 và tree sạch.
+Đây là PARTIAL_RUNTIME_UNREVIEWED; không chuyển evidence headed/Blender S18 sang
+hash source mới. Runner còn lock binding/path/source-copy/stdout gates; bootstrap
+tái tạo và rollback chưa xong. Hai critic cho thay đổi nhỏ không thay hai critic
+nghiệm thu toàn GT-01. Batch Grok trả nhanh nhưng nhiều output sai/thiếu; đã
+reject bằng parse/test/lease check, không lấy exit0 hoặc toast làm kết quả tốt.
+S20 corrective pass: runner hiện đối chiếu caller với toolchain.lock, kiểm path
+ancestor trước resolve, kiểm source/snapshot và binary hash sau runtime, và quét
+warning/error ở cả stdout/stderr; bootstrap suite hiện 17/17, static 31/31.
+Lượt mới `GT01-R8-20260912T065903Z` qua cùng các gate này và vẫn chỉ là partial.
+Codex-sol được dùng có giới hạn cho audit read-only và hai helper độc lập
+`verify_archive`/`install_toolchain`; chưa nhập code cho tới khi coordinator
+parse, test và kiểm lease. Grok archive-repair trước đó vẫn PENDING/UNKNOWN sau
+đủ hai poll, không được tính hoàn thành. Còn thiếu hậu kiểm lock sau toàn bộ
+runtime, bootstrap/rollback đầy đủ, headed+Blender remint, TQ01/TX12/TX14,
+manifest mới và hai critic độc lập trên cùng frozen hash.
+Sau hai lần fail cùng phần nhỏ, coordinator sửa theo mục8.2 và giữ hash/evidence.
+AgentMemory0.9.29 được thử local keyless BM25/manual recall trong TEMP độc lập:
+6/6 top1 keyword, absent keyword/control project trả rỗng, restart giữ kết quả.
+Chưa đo quota hoặc chất lượng coding; không gọi là cách tiết kiệm nhất. Không
+bật hooks hoặc cấu hình global Codex/Grok, dừng server khi idle. Memory chỉ gợi
+ý; mọi recall cần kiểm source/hash/current WP và không được tick plan. Thử nghiệm
+không là WP sản phẩm, không đổi dependency. Report hiện hành ghi giới hạn phép đo.
 S18 (10-09, tiếp tục GT-01): đã chạy Godot 4.7.2 stock trên snapshot riêng,
 import + parse trace + input headless + QUITTING có host exit và Job Object.
 ZIP editor và export templates đã khớp SHA256/SHA512-SUMS official. Đây là
@@ -979,4 +1015,4 @@ CCU=người online cùng lúc trong game, không số agent phát triển game.
 
 
 END_OF_TOOLS_PLAN
-DATE=2026-09-10 Asia/Saigon
+DATE=2026-09-11 Asia/Saigon

@@ -1,5 +1,5 @@
 HH WORLD — PLAN 2/2: GAMEPLAY, SOCIAL MULTIPLAYER, VIỆT NAM
-Ngày 10-09-2026, Asia/Saigon | Revision S19 | TRIỂN KHAI THEO GATE
+Ngày 11-09-2026, Asia/Saigon | Revision S20 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO GAME
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -45,7 +45,7 @@ RUNTIME_ACCEPTANCE=NONE
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/game-and-services
 PLAN_ROLE=GAME_SOURCE_OF_PROGRESS
-PLAN_REVISION=S19
+PLAN_REVISION=S20
 REVIEW_BASE_COMMIT=b4195ca
 HISTORICAL_REJECTED_COMMIT=54d0c7c
 HISTORICAL_STUDIO_COMMIT=3cc7a85f730c99963a5a64079a0e02dc20edbd40
@@ -2682,6 +2682,12 @@ kế nào ACCEPT (S6/S7 REVISE; S8 quota; S9–S16 không có verdict). Static k
 closure S6–S8 (LEGAL-VN, catalog shop, SCALE-LOCKS, EX45–EX53) vẫn PASS trên
 S17; không đổi nội dung WP/EX/Q của game.
 S19 (11-09, independent audit): bổ sung monetization=OFF và artifact scan, CDN/object-store/KMS recovery drill, field-level telemetry/privacy manifest, accessibility matrix đo được, ownership alert/runbook và release claim guard. Các gate này chưa có runtime/legal/human acceptance.
+S20 (11-09): đồng bộ tiến độ tools; GT-01 có bản sửa version probe và partial
+headless runtime mới, chưa ACCEPTED. H2 vẫn DISPATCHABLE=NO_UNTIL_GT10_ACCEPTED.
+AgentMemory thử nghiệm chỉ là hỗ trợ recall local; không là nguồn tiến độ,
+runtime acceptance hoặc chứng cứ hiệu năng game/server. Xem report công cụ
+./reviews/20260911-r8/REVIEW-RESULT.md
+Không thay gate công cụ bằng kết quả memory.
 S18 (10-09) đồng bộ tiến độ tools: GT-01 có bằng chứng headless 4.7.2
 chưa nghiệm thu. Game vẫn chưa triển khai và đợi GT-10; không thay LEGAL-VN,
 EX/Q, release profile hay capacity gates. Review hiện hành:
@@ -2713,4 +2719,4 @@ rollback=quay về bản tốt đã kiểm, không đè thay đổi mới chưa 
 
 
 END_OF_GAME_PLAN
-DATE=2026-09-10 Asia/Saigon
+DATE=2026-09-11 Asia/Saigon

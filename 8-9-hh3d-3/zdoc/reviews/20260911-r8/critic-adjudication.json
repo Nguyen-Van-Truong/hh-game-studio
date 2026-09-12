@@ -1,0 +1,72 @@
+{
+  "scope": "_observed_version change only; not full GT01",
+  "critics": [
+    {
+      "role": "critic-a",
+      "session": "29b076a8-ce9c-41bd-aecb-70a8d6234dd1",
+      "model": "grok-4.6",
+      "effort": "xhigh",
+      "terminal": {
+        "exit_code": 0,
+        "attempt": "20260910T233109Z",
+        "finished_utc": "2026-09-10T23:31:27.4860661Z",
+        "timed_out": false,
+        "session": "29b076a8-ce9c-41bd-aecb-70a8d6234dd1",
+        "job_id": "hh3d-r8-critic-a",
+        "launcher_error": null
+      },
+      "status": "SMALL_CHANGE_PASS",
+      "GT01_ACCEPTED": false,
+      "events_sha256": "b7bfb90af67d1fc1cc412b442f07aae64efb46569a85fb15a9f160a76e0ee0e5",
+      "frozen_inputs_unchanged": true,
+      "files_read": [
+        "studio/build/bootstrap/run_fixture.py",
+        "studio/tests/bootstrap/test_version_probe.py"
+      ],
+      "verdict": {
+        "schema": "HH3D-CHANGE-CRITIC-1",
+        "change_verdict": "PASS",
+        "source_sha256": "8bc18b7374900e6652ff3fb95ab027630eb8e7e1920885c5558a6eb7b7ab77b8",
+        "test_sha256": "4017f7ff2bbbd87d81520222cb99cb05a84f17906629611dd8fc7521b7b7eb36",
+        "findings": [],
+        "remaining_gates": [
+          "caller version/digest not fully bound to lock",
+          "reparse resolved too early in main",
+          "source-copy/content stability after runtime",
+          "stdout warnings in general phases",
+          "reproducible bootstrap and rollback",
+          "full frozen evidence/2critics"
+        ],
+        "executed_tests": false,
+        "GT01_ACCEPTED": false
+      },
+      "response_sha256": "7c6c7e8c54346bd1c996bd3dfd842e43c4df5d8ff57e6cc75e005ec285370de8"
+    },
+    {
+      "role": "critic-b",
+      "session": "ff3d0a10-6c05-41c1-8b93-965e571f124d",
+      "model": "grok-4.6",
+      "effort": "xhigh",
+      "terminal": {
+        "exit_code": 1,
+        "attempt": "20260910T233115Z",
+        "finished_utc": "2026-09-10T23:31:31.1344332Z",
+        "timed_out": false,
+        "session": "ff3d0a10-6c05-41c1-8b93-965e571f124d",
+        "job_id": "hh3d-r8-critic-b",
+        "launcher_error": null
+      },
+      "status": "NO_VERDICT",
+      "GT01_ACCEPTED": false,
+      "events_sha256": "eed073d43cedf708f1b4e982f28059f2b87a30cf671f264159c6883d56a40eed",
+      "frozen_inputs_unchanged": true,
+      "files_read": [
+        "studio/build/bootstrap/run_fixture.py",
+        "studio/tests/bootstrap/test_version_probe.py"
+      ],
+      "provider_reason": "403 SAFETY_CHECK_TYPE_DATA_LEAKAGE"
+    }
+  ],
+  "two_change_passes": false,
+  "GT01_ACCEPTED": false
+}

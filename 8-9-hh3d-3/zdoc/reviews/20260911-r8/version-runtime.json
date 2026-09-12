@@ -1,0 +1,103 @@
+{
+  "proof_class": "PARTIAL_RUNTIME_NOT_GT01_ACCEPTANCE",
+  "run_id": "GT01-R8-20260912T071338Z",
+  "host_exit": 0,
+  "observed_version": "4.7.2.stable.official.ed1daf0bf",
+  "expected_version": "4.7.2.stable.official.ed1daf0bf",
+  "checks": {
+    "trace_exactly_one_pass": true,
+    "stderr_clean": true,
+    "streams_clean": true,
+    "source_stable": true,
+    "snapshot_stable": true,
+    "binaries_stable": true,
+    "lock_bound": true,
+    "process_tree_verified": true
+  },
+  "runs": [
+    {
+      "wrapper_pid": 13036,
+      "started_at": "2026-09-12T07:13:39.640907+00:00",
+      "argv": [
+        "Godot_v4.7.2-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "$SNAPSHOT/.",
+        "--import"
+      ],
+      "exit_code": 0,
+      "target_pid": 24480,
+      "wrapper_exit_code": 0,
+      "timed_out": false,
+      "tree_verified": true,
+      "ownership": "gated_job_kill_on_close",
+      "stdout": "run-1-stdout.txt",
+      "stderr": "run-1-stderr.txt"
+    },
+    {
+      "wrapper_pid": 15592,
+      "started_at": "2026-09-12T07:13:43.507680+00:00",
+      "argv": [
+        "Godot_v4.7.2-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "$SNAPSHOT/.",
+        "--check-only",
+        "--script",
+        "res://scripts/trace.gd"
+      ],
+      "exit_code": 0,
+      "target_pid": 6884,
+      "wrapper_exit_code": 0,
+      "timed_out": false,
+      "tree_verified": true,
+      "ownership": "gated_job_kill_on_close",
+      "stdout": "run-2-stdout.txt",
+      "stderr": "run-2-stderr.txt"
+    },
+    {
+      "wrapper_pid": 26780,
+      "started_at": "2026-09-12T07:13:43.965507+00:00",
+      "argv": [
+        "Godot_v4.7.2-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "$SNAPSHOT/.",
+        "--script",
+        "res://scripts/trace.gd"
+      ],
+      "exit_code": 0,
+      "target_pid": 7032,
+      "wrapper_exit_code": 0,
+      "timed_out": false,
+      "tree_verified": true,
+      "ownership": "gated_job_kill_on_close",
+      "stdout": "run-3-stdout.txt",
+      "stderr": "run-3-stderr.txt"
+    }
+  ],
+  "raw_evidence_sha256": "ee881d642a960df03921dd0b0e84725ecf7684b6dac6f39c2faad9d50a5bc693",
+  "source": [
+    {
+      "path": "build/bootstrap/run_fixture.py",
+      "sha256": "9e4a57b377f3ff4f075b119017bd39027119e78a2c65e541c842a7cd797f99be"
+    },
+    {
+      "path": "tests/bootstrap/test_version_probe.py",
+      "sha256": "1274388f8eef37acc35031c1fcf8c9400fbc502440907321d12671a08e3df2c1"
+    },
+    {
+      "path": "toolchain.lock.json",
+      "sha256": "f4a9c2d8278adc66b86fff83ba3e00af2f19c894d8907d31b039d0ca1dd41c16"
+    }
+  ],
+  "diagnostic_logs": {
+    "host.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "host.stdout": "0a47512058f8efebc7f1b4df587de1092548fbd1c8d632a378d2fb9ff6499a29"
+  },
+  "limitations": [
+    "Only current headless fixture rerun; prior window/Blender evidence belongs to older source freeze.",
+    "Remaining runner lock binding, source/copy validation, bootstrap/rollback and critics still pending."
+  ],
+  "pass": true
+}

@@ -21,6 +21,7 @@ from pathlib import Path
 
 EXCLUDED_DIRS = {".godot", "__pycache__", ".local", "evidence"}
 VERSION_RE = re.compile(r"(?P<version>\d+\.\d+\.\d+\.stable\.official(?:\.[0-9a-f]+)?)")
+WARNING_RE = re.compile(r"(?:^|[^a-z])(warning|warn|error|failed|fatal)(?:[^a-z]|$)", re.IGNORECASE)
 
 
 def utc_now() -> str:
@@ -220,16 +221,73 @@ def fail(message: str) -> int:
 
 
 def _observed_version(godot: Path, timeout: int) -> tuple[str, str]:
-    result = subprocess.run([str(godot), "--version"], capture_output=True, text=True,
-                            timeout=min(timeout, 30), check=False)
-    combined = (result.stdout or "") + (result.stderr or "")
-    match = VERSION_RE.search(combined)
-    return (match.group("version") if match else "", combined.strip())
+    import tempfile
+    with tempfile.TemporaryDirectory(prefix="hh3d-version-") as directory:
+        output = Path(directory)
+        result = run_process([str(godot), "--version"], cwd=godot.parent,
+                             output=output, timeout=min(timeout, 30), label="version")
+        if (result.get("exit_code") != 0 or result.get("wrapper_exit_code") != 0
+                or result.get("timed_out") is not False
+                or result.get("tree_verified") is not True):
+            raise ValueError("version probe lacks clean exit/process-tree proof")
+        stdout, stderr = output / result["stdout"], output / result["stderr"]
+        if stdout.stat().st_size > 512 or stderr.stat().st_size != 0:
+            raise ValueError("version probe logs exceed limit or stderr is nonempty")
+        observed = stdout.read_bytes().decode("utf-8", errors="strict").strip()
+        if not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+\.stable\.official\.[0-9a-f]{7,40}", observed):
+            raise ValueError("version probe must contain one official version only")
+        return observed, observed
 
 
 def _version_matches(observed: str, expected: str) -> bool:
     normalized = expected.replace("-", ".")
     return observed == normalized or observed.startswith(normalized + ".")
+
+
+def _reject_reparse_ancestors(path: Path) -> None:
+    """Check the lexical path before resolve(), including existing ancestors."""
+    absolute = Path(os.path.abspath(os.fspath(path)))
+    current = absolute
+    while True:
+        if current.exists() and _is_reparse(current):
+            raise ValueError(f"symlink/reparse path component: {current}")
+        parent = current.parent
+        if parent == current:
+            break
+        current = parent
+
+
+def _load_toolchain_lock(studio: Path) -> dict:
+    lock_path = studio / "toolchain.lock.json"
+    if not lock_path.is_file() or _is_reparse(lock_path):
+        raise ValueError("toolchain lock missing or reparse")
+    try:
+        lock = json.loads(lock_path.read_text(encoding="utf-8"))
+        godot = lock["godot"]
+        required = ("version", "console_executable", "gui_executable",
+                    "console_sha256", "gui_sha256", "observed_version")
+        if lock.get("status") != "CANDIDATE" or any(not isinstance(godot.get(k), str) for k in required):
+            raise ValueError("toolchain lock is incomplete or not candidate")
+        for key in ("console_sha256", "gui_sha256"):
+            if not re.fullmatch(r"[0-9a-f]{64}", godot[key].lower()):
+                raise ValueError("toolchain lock checksum is invalid")
+        return lock
+    except (OSError, UnicodeError, json.JSONDecodeError, KeyError, TypeError) as exc:
+        raise ValueError(f"invalid toolchain lock: {exc}") from exc
+
+
+def _streams_clean(output: Path, runs: list[dict]) -> bool:
+    """Reject warnings/errors in either stream while allowing normal engine logs."""
+    for run in runs:
+        for field in ("stdout", "stderr"):
+            path = output / run[field]
+            try:
+                text = path.read_text(encoding="utf-8", errors="strict")
+            except (OSError, UnicodeError):
+                return False
+            if WARNING_RE.search(text):
+                return False
+    return True
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -247,7 +305,13 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     if not 1 <= args.timeout_seconds <= 600:
         return fail("timeout outside 1..600 seconds")
-    studio, godot, output = args.studio_root.resolve(), args.godot_exe.resolve(), args.output.resolve()
+    try:
+        _reject_reparse_ancestors(args.studio_root)
+        _reject_reparse_ancestors(args.godot_exe)
+        _reject_reparse_ancestors(args.output.parent)
+        studio, godot, output = args.studio_root.resolve(), args.godot_exe.resolve(), args.output.resolve()
+    except (OSError, RuntimeError, ValueError) as error:
+        return fail(str(error))
     fixture = studio / "fixtures" / "sample-game"
     if not studio.is_dir() or not fixture.is_dir() or not godot.is_file():
         return fail("studio, fixture, or Godot executable is missing")
@@ -256,14 +320,24 @@ def main(argv: list[str] | None = None) -> int:
     if _is_reparse(studio) or _is_reparse(godot):
         return fail("reparse/symlink root or executable")
     try:
+        lock = _load_toolchain_lock(studio)
+        pinned = lock["godot"]
+        expected_version = pinned["version"].replace("-", ".")
+        if args.expected_version.replace("-", ".") not in (expected_version, pinned["observed_version"]):
+            return fail("caller expected version differs from toolchain lock")
+        if Path(godot).name != pinned["console_executable"]:
+            return fail("console executable differs from toolchain lock")
+        if args.console_sha256.lower() != pinned["console_sha256"].lower() or args.gui_sha256.lower() != pinned["gui_sha256"].lower():
+            return fail("caller checksum differs from toolchain lock")
         before = checked_files(studio)
-        if hash_file(godot) != args.console_sha256.lower():
+        if hash_file(godot) != pinned["console_sha256"].lower():
             return fail("console checksum mismatch")
         gui = godot.with_name(godot.name.replace("_console", ""))
-        if not gui.is_file() or hash_file(gui) != args.gui_sha256.lower():
+        _reject_reparse_ancestors(gui)
+        if gui.name != pinned["gui_executable"] or not gui.is_file() or hash_file(gui) != pinned["gui_sha256"].lower():
             return fail("GUI companion missing or checksum mismatch")
         observed, raw_version = _observed_version(godot, args.timeout_seconds)
-        if not _version_matches(observed, args.expected_version):
+        if observed != pinned["observed_version"] or not _version_matches(observed, expected_version):
             return fail(f"version mismatch: {raw_version}")
     except (OSError, ValueError, subprocess.SubprocessError) as error:
         return fail(str(error))
@@ -275,7 +349,11 @@ def main(argv: list[str] | None = None) -> int:
     snapshot = output / "snapshot-unicode-đ" / "sample-game"
     shutil.copytree(fixture, snapshot, ignore=shutil.ignore_patterns(".godot", "*.pyc", "__pycache__"))
     after = checked_files(studio)
-    if before != after:
+    fixture_prefix = "fixtures/sample-game/"
+    expected_snapshot = {key.removeprefix(fixture_prefix): value for key, value in before.items()
+                         if key.startswith(fixture_prefix)}
+    snapshot_matches = checked_files(snapshot) == expected_snapshot
+    if before != after or not snapshot_matches or hash_file(godot) != pinned["console_sha256"].lower() or hash_file(gui) != pinned["gui_sha256"].lower():
         return fail("source closure changed while snapshot was copied")
     runs = []
     for number, run_argv in enumerate((
@@ -291,6 +369,16 @@ def main(argv: list[str] | None = None) -> int:
     trace_text = trace_path.read_text(encoding="utf-8", errors="replace") if trace_path.exists() else ""
     trace_lines = [line for line in trace_text.splitlines() if line.startswith("GT01_TRACE ")]
     clean_stderr = all(not (output / run["stderr"]).read_text(encoding="utf-8", errors="replace").strip() for run in runs)
+    streams_clean = _streams_clean(output, runs)
+    try:
+        source_stable = checked_files(studio) == before
+        snapshot_stable = checked_files(snapshot) == expected_snapshot
+        binaries_stable = (hash_file(godot) == pinned["console_sha256"].lower()
+                           and hash_file(gui) == pinned["gui_sha256"].lower())
+        _reject_reparse_ancestors(godot)
+        _reject_reparse_ancestors(gui)
+    except (OSError, ValueError):
+        source_stable = snapshot_stable = binaries_stable = False
     trace_ok = False
     if len(trace_lines) == 1:
         try:
@@ -298,14 +386,19 @@ def main(argv: list[str] | None = None) -> int:
             trace_ok = isinstance(trace_data, dict) and trace_data.get("result") == "PASS" and trace_data.get("phase") == "QUITTING"
         except (ValueError, TypeError):
             pass
-    all_ok = all(r["exit_code"] == 0 and not r["timed_out"] and r["tree_verified"] for r in runs) and trace_ok and clean_stderr
+    all_ok = (len(runs) == 3 and all(r["exit_code"] == 0 and r["wrapper_exit_code"] == 0
+              and not r["timed_out"] and r["tree_verified"] for r in runs)
+              and trace_ok and clean_stderr and streams_clean and source_stable
+              and snapshot_stable and binaries_stable)
     evidence = {"schema": "hh-gt01-bootstrap-evidence-v2", "status": "CANDIDATE" if all_ok else "DIAGNOSTIC",
                 "run_id": args.run_id, "command_id": args.command_id, "recorded_at": utc_now(),
                 "expected_version": args.expected_version, "observed_version": observed,
                 "console_sha256": args.console_sha256.lower(), "gui_sha256": args.gui_sha256.lower(),
                 "source_manifest": before, "runs": runs, "trace_lines": trace_lines,
-                "checks": {"trace_exactly_one_pass": trace_ok, "stderr_clean": clean_stderr,
-                           "source_stable": before == after, "process_tree_verified": all(r["tree_verified"] for r in runs)},
+                "checks": {"trace_exactly_one_pass": trace_ok, "stderr_clean": clean_stderr, "streams_clean": streams_clean,
+                           "source_stable": source_stable, "snapshot_stable": snapshot_stable,
+                           "binaries_stable": binaries_stable, "lock_bound": True,
+                           "process_tree_verified": all(r["tree_verified"] for r in runs)},
                 "limits": ["candidate evidence still requires TQ01/TX12/TX14 and two independent critics"]}
     (output / "evidence.json").write_text(json.dumps(evidence, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(json.dumps({"status": evidence["status"], "output": str(output), "runs": runs}, indent=2))

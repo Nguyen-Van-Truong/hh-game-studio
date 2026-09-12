@@ -1,0 +1,81 @@
+{
+  "status": "RETRIEVAL_SMOKE_PASS",
+  "package": "@agentmemory/agentmemory@0.9.29",
+  "engine_image": "iiidev/iii@sha256:15f8d4ed16c0bec350b98f4e18ed04498b1fc5ccc50585e087b736717300cf26",
+  "authority_sha256_at_trial": "15a89fe223aa46f7bf6cbfb65ad3e1c9b3cec485ce1fe310d8aca342aef2c239",
+  "mode": "full server; noop LLM; no embedding provider; manual REST recall; no client hooks/MCP integration",
+  "queries_top1_passed": 6,
+  "queries_tested": 6,
+  "absent_keyword_empty": true,
+  "empty_control_project_returned_no_rows": true,
+  "restart_ids_stable": true,
+  "warm_recall_ms": {
+    "samples": 10,
+    "median": 62.5,
+    "max": 94.00000001187436
+  },
+  "engine_container_resource_sample": "6.469MiB / 512MiB 0.55%",
+  "resource_limitations": "Engine container only. Host Node, Docker Desktop/VM and model context excluded; not total RAM.",
+  "data_bytes": 11516,
+  "trial_duration_seconds": 11.328000000008615,
+  "container_stopped": true,
+  "raw_report_sha256": "322524b658cf5b017d20cc7b74932d517e5b8a9760214beb20c353df573df359",
+  "probe_sha256": "e379ce192c3135ff070026dcd08ce1e0b29d212227b717a239f4b1c462ca36af",
+  "token_savings": null,
+  "coding_quality": "NOT_MEASURED",
+  "baseline": [
+    {
+      "query": "công cụ",
+      "host_ms": 21.81079998263158,
+      "exit": 0,
+      "response_bytes": 101
+    },
+    {
+      "query": "Godot",
+      "host_ms": 22.598299983656034,
+      "exit": 0,
+      "response_bytes": 95
+    },
+    {
+      "query": "GT-10",
+      "host_ms": 21.276500017847866,
+      "exit": 0,
+      "response_bytes": 95
+    },
+    {
+      "query": "Watcher",
+      "host_ms": 21.469500003149733,
+      "exit": 0,
+      "response_bytes": 201
+    },
+    {
+      "query": "poll budget",
+      "host_ms": 21.380099991802126,
+      "exit": 0,
+      "response_bytes": 101
+    },
+    {
+      "query": "Memory",
+      "host_ms": 21.449600026244298,
+      "exit": 0,
+      "response_bytes": 100
+    },
+    {
+      "query": "zzabsent482910",
+      "host_ms": 21.800899994559586,
+      "exit": 1,
+      "response_bytes": 0
+    }
+  ],
+  "baseline_limitations": "Six curated notes; rg includes subprocess startup, REST measures a warm service. Not equivalent coding-task or total-cost benchmark.",
+  "decision": "Keep experimental and off when idle. Use curated source-linked notes by default; no evidence memory is cheapest. Broader rollout requires measured successful-task cost and stale/conflicting populated-project cases.",
+  "findings": [
+    "Native Windows installer does not auto-install iii; download attempt timed out before archive existed, not checksum mismatch.",
+    "Default Docker demo ignored requested relocated ports and failed Node exec watcher startup; replaced only in isolated coordinator diagnostic.",
+    "Default launcher wrote user .agentmemory/engine-state.json; exact trial marker moved to TEMP, default trial container stopped.",
+    "Standalone MCP fallback uses substring matching, not full BM25; not used as BM25 evidence.",
+    "All notes share source filename; Godot search returned irrelevant lower-ranked rows. Top1 was correct; top3 precision is not perfect.",
+    "No permanent hooks, Codex/Grok global config changes, transcript import or API keys used.",
+    "Short keyword smoke is not proof of cross-project authorization, stale-memory safety, multilingual semantic quality or quota saving."
+  ]
+}

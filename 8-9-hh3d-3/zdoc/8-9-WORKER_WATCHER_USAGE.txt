@@ -49,3 +49,20 @@ Quota: an ordinary PowerShell wait/notification does not call an AI model.
 Coordinator turns, repeated log reads and reasoning consume context/usage; a
 watcher-led handoff avoids those calls while jobs run. Worker Grok usage remains
 separate, and no fixed percentage saving is claimed.
+
+2026-09-11 corrective handoff (r8):
+- r5/dispatch_batch.py is historical: it prepares work even with --help, uses
+  stale S13 instructions, and overwrites its active manifest. Do not run it for
+  new batches. r8/dispatch.py has explicit role/task arguments and no side effects
+  on --help/import; it prepares only, then Launch-Batch.ps1 launches hidden jobs.
+- The 20260910T225929Z five-job batch and r8 canary exited0 without required
+  report/evidence. The canary repeated malformed shell/Python commands despite
+  a bounded brief. These are rejected worker outputs, not speed/productivity proof.
+- JSON source delivery is an alternative after native tool execution fails;
+  coordinator checks frozen inputs, exact edits, path lease, parse and actual tests
+  before integrating. A single Markdown fence may be removed with raw text retained;
+  malformed inner JSON, out-of-lease paths and invented tests still reject.
+- Critic output for a small source change is not full GT-01 acceptance. Two
+  independent sessions must bind the same source and test hashes, with scope stated.
+- Poll budget remains two per attempt/batch. Reading a terminal result for review
+  is not a new running-job poll; never reset the counter to keep polling a job.
