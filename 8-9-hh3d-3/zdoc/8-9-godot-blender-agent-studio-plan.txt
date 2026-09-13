@@ -99,6 +99,12 @@ Godot 4.7.2 remint `GT01-R16-df94c50173d2-OFFICIAL-01` passed all three runtime
 lanes with host exits, clean streams and tree proof, and evidence is bound to
 that closure. It remains CANDIDATE until coordinator officialization and two
 independent critics; the binder correctly rejects candidate status.
+R17_CRITIC_RESULT=Two independent read-only critics reviewed the identical R16
+closure/evidence hash and both returned TICK=no. Blocking gaps are real headed
+editor/window evidence, TQ01/TX12/TX14 and recovery artifacts bound into the
+same frozen package, and officialization after binder READY_FOR_CRITIC. The
+coordinator must remint with new IDs after any source change; never flip
+CANDIDATE to OFFICIAL in place. GT-02 remains PLANNED.
 REVIEW_BASE_COMMIT=b4195ca
 HISTORICAL_REJECTED_COMMIT=54d0c7c
 HISTORICAL_STUDIO_COMMIT=3cc7a85f730c99963a5a64079a0e02dc20edbd40
