@@ -1,9 +1,9 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 12-09-2026, Asia/Saigon | Revision S21 | TRIỂN KHAI THEO GATE
+Ngày 13-09-2026, Asia/Saigon | Revision S23 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
-01 | GT-01 | Chốt pin/phạm vi/reuse; bootstrap dự án mẫu độc lập | OWNER_START | IN_PROGRESS
+01 | GT-01 | Chốt pin/phạm vi/reuse; bootstrap dự án mẫu độc lập | OWNER_START | ACCEPTED
 02 | GT-02 | Protocol, capability, journal và an toàn lệnh tối thiểu | GT-01 | PLANNED
 03 | GT-03 | Godot EditorPlugin: sửa scene, UndoRedo, save/readback | GT-02 | PLANNED
 04 | GT-04 | Blender adapter UI và background jobs an toàn | GT-02 | PLANNED
@@ -14,18 +14,18 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 09 | GT-09 | Agent conformance và toàn tuyến trên dự án mẫu | GT-08 | PLANNED
 10 | GT-10 | Gói công cụ v0.1, cài/upgrade/rollback, bàn giao game | GT-09 | PLANNED
 
-CURRENT_VALID_WP=GT-01
+CURRENT_VALID_WP=GT-02
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=GT01_IN_PROGRESS
-GT01_EVIDENCE_STATUS=PARTIAL_RUNTIME_UNREVIEWED
-GT01_PENDING=SOURCE_FREEZE,ARCHIVE_VERIFIER,INSTALLER_RECOVERY,RUNNER_ADMISSION,OFFICIAL_RUNTIME_R9,TQ01_TX12_TX14,TWO_CRITICS
+IMPLEMENTATION=GT02_IN_PROGRESS
+GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
+GT01_PENDING=NONE
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
 PLAN_DESIGN_CRITICS=NO_ACCEPTED_VERDICT_S6_TO_S21
-RUNTIME_ACCEPTANCE=NONE
+RUNTIME_ACCEPTANCE=GT01_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S21
+PLAN_REVISION=S23
 S22_PROGRESS_20260913=Coordinator integrated the next GT-01 hardening pass:
 runner now has explicit import/parse/trace-headless lanes, optional real
 editor-headed and trace-headed lanes using the pinned GUI executable, host
@@ -43,7 +43,7 @@ sidecar event which the runner copies into the named evidence stream and
 records as a hash, rather than treating an empty GUI stdout as PASS.
 S22_PENDING=FINAL_SOURCE_FREEZE,REGENERATE_CLOSURE,HEADLESS_HEADED_RE-MINT,
 LIFECYCLE_REPORT_BIND,TQ01_TX12_TX14_SCOPED,TWO_INDEPENDENT_CRITICS
-S22_FINAL_CANDIDATE=Package reviews/20260918-r21-gt01-final contains a fresh
+S22_FINAL_CANDIDATE=Package reviews/20260913-r21-gt01-final contains a fresh
 five-lane run `GT01-FINAL-R21` (import, parse, trace-headless, editor-headed,
 trace-headed), real host exits/tree proofs, isolated Godot user directories,
 editor probe, headed capture and lifecycle candidate copied under `lifecycle/`.
@@ -54,6 +54,22 @@ still CANDIDATE: the binder is a readiness gate, not acceptance, and two
 independent critics plus coordinator review remain mandatory. The binder was
 corrected to allow the exact console/GUI companion pair because requiring one
 binary would contradict the headed editor requirement.
+S23_CLOSEOUT_20260913=Coordinator acceptance recorded after the final package
+was frozen at source closure 3ace23bcf84598cda64d54bbe3fc4736acde877f9f714fb71e2355d3e809eea4.
+The package contains official offline archive verification, real install/
+activate/rollback evidence, Blender save/reopen evidence, five clean Godot
+lanes, host exit/process-tree proofs, and lifecycle binding. Independent
+critic-a and critic-b both report PASS/TICK=yes on that exact closure. GT-01
+is therefore ACCEPTED; deferred network/auth/quota fairness, multi-writer
+recovery, Android/device, security/conformance and full migration gates remain
+owned by GT-02/GT-07/GT-08/GT-09/GT-10 and are not retroactively claimed here.
+S23_LESSON=Acceptance requires two explicit critic signatures plus coordinator
+review; a binder READY_FOR_CRITIC or a passing subprocess alone never promotes
+a WP. Keep the deferred-gate boundary machine-readable so later critics do not
+reopen production semantics inside a scoped bootstrap WP.
+S23_NEXT=GT-02 protocol/capability/safety baseline is now the only valid active
+WP. Work must stay under studio/protocol, studio/host/core and
+studio/tests/protocol, with two critics and the GT-02 DoD before promotion.
 S21_CHANGE_NOTE=Worker evidence is candidate only; freeze source after every
 source edit. Trace validation must match authored fixture semantics (pause
 transition tick may advance once, then remain frozen). Never treat a passing
