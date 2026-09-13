@@ -1,0 +1,28 @@
+{
+  "schema": "HH3D-GT01-BLENDER-CANDIDATE-1",
+  "status": "CANDIDATE",
+  "run_id": "GT01-BLENDER-R21",
+  "source_closure_sha256": "3ace23bcf84598cda64d54bbe3fc4736acde877f9f714fb71e2355d3e809eea4",
+  "artifact": {
+    "path": "blender-fixture.blend",
+    "sha256": "9a3c1bc7b13a0109043f7b233bc3875a413f3f77ce712d5209a0a4c002410bd3",
+    "size_bytes": 88438
+  },
+  "observed": {
+    "version": "5.2.1 LTS",
+    "vertices": 8,
+    "polygons": 6,
+    "axis": "Z_UP_RIGHT_HANDED",
+    "origin": [
+      0,
+      0,
+      0
+    ],
+    "unit_meters": 1
+  },
+  "command": "blender --background --factory-startup --disable-autoexec --python create_fixture.py -- --output <new>.blend",
+  "limits": [
+    "save/reopen verified in the factory fixture run",
+    "no UI Blender bridge or GLB pipeline; GT-04/GT-05 remain planned"
+  ]
+}
