@@ -75,6 +75,17 @@ serial host-captured run (`GT01-R13-OFFICIAL-20260913`) passed import, check-onl
 parse and runtime trace with clean streams, verified process trees and a stable
 source/snapshot. This is still CANDIDATE: lock status remains CANDIDATE and the
 closure freeze, TQ01/TX12/TX14 and two independent critic records are pending.
+R14_PROGRESS=Freeze verifier, TQ01/TX12/TX14 candidate checks, and GT-02
+preparation audit are now available under reviews/20260914-r14-*. The freeze
+verifier correctly fails closed on candidate status, source/log drift, duplicate
+JSON keys, warnings, and unverified process ownership. Current candidate checks
+are 6/6 freeze mutations and 5/5 TQ01/TX12/TX14 offline checks. These artifacts
+do not promote GT-01: the official evidence must be reminted after one final
+source freeze, and two independent critics must review the same closure hash.
+LESSONS_R14=Keep test helper names distinct from unittest.TestCase.run; resolve
+review paths from the nested plan root (not repository root); compare receipt
+objects by their package field; never record a probe as true unless it was
+actually exercised. Generated snapshots remain ignored and are not deleted.
 REVIEW_BASE_COMMIT=b4195ca
 HISTORICAL_REJECTED_COMMIT=54d0c7c
 HISTORICAL_STUDIO_COMMIT=3cc7a85f730c99963a5a64079a0e02dc20edbd40
