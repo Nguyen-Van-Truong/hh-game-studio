@@ -1,0 +1,47 @@
+{
+  "schema": "HH3D-CHANGE-CRITIC-1",
+  "change_verdict": "REVISE",
+  "source_sha256": "3ace23bcf84598cda64d54bbe3fc4736acde877f9f714fb71e2355d3e809eea4",
+  "test_sha256": "8e9301964d9ec1d593ca22558fa2bb2e3a32075397f4679728c565295c826d37",
+  "reviewed_commit": "b34ba9093032bf8413f1a807204f93fe6b9626f3",
+  "findings": [
+    {
+      "priority": "P1",
+      "file": "8-9-hh3d-3/zdoc/reviews/20260918-r21-gt01-final/evidence.json",
+      "line": 198,
+      "claim": "The final candidate still requires TQ01/TX12/TX14.",
+      "reason": "The package itself leaves these GT-01 scoped gates open. The headed/runtime traces prove menu, movement, pause and quit, but no bound artifact proves the required root recreation/cache isolation and quota/network/auth/Stop semantics for this frozen package.",
+      "verify": "Provide scoped TQ01/TX12/TX14 reports with run IDs, host exits, postconditions and the same closure hash, then rebind the package."
+    },
+    {
+      "priority": "P1",
+      "file": "8-9-hh3d-3/zdoc/reviews/20260918-r21-gt01-final/lifecycle/report.json",
+      "line": 1,
+      "claim": "Lifecycle recovery evidence is bound to the frozen source closure.",
+      "reason": "The lifecycle report records only four source file hashes and has no source_closure_sha256 matching 3ace23bcf84598cda64d54bbe3fc4736acde877f9f714fb71e2355d3e809eea4. Its own limits are synthetic offline packages, cooperative identity and candidate evidence, so the recovery result cannot be independently tied to the complete 25-file freeze.",
+      "verify": "Add a closure digest/reference to the lifecycle report and an independently hashed lifecycle artifact set, or have the package binder verify that relationship."
+    },
+    {
+      "priority": "P2",
+      "file": "8-9-hh3d-3/studio/toolchain.lock.json",
+      "line": 35,
+      "claim": "Archive/install recovery is represented by the final package.",
+      "reason": "The lock still says CANDIDATE and export templates ARCHIVE_VERIFIED_NOT_INSTALLED; lifecycle contains only synthetic 427-byte A/B archives. No official archive verifier output or reproducible install/rollback receipt is bound under the R21 package, while binder READY_FOR_CRITIC explicitly validates candidate facts only.",
+      "verify": "Include the official archive checksum/SHA512 and offline install/rollback receipts bound to this closure, retaining GT-10 full installer scope for its later gate."
+    }
+  ],
+  "remaining_gates": [
+    "GT-02 protocol/capability/safety baseline and independent critics",
+    "GT-03 Godot EditorPlugin semantic mutation, undo/redo and recovery",
+    "GT-04 Blender main-thread/UI-context and trusted input closure",
+    "GT-05 GLB asset validation and semantic fingerprint",
+    "GT-06 real vertical slice/input/performance evidence",
+    "GT-07 fault, lease and multi-writer recovery",
+    "GT-08 build/export/ABI and physical Android conformance",
+    "GT-09 conformance/security/privacy/accessibility gates",
+    "GT-10 installer/migration/rollback/uninstall acceptance"
+  ],
+  "executed_tests": false,
+  "GT01_ACCEPTED": false,
+  "TICK": "no"
+}
