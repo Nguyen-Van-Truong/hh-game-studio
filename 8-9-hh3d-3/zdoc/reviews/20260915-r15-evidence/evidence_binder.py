@@ -229,8 +229,16 @@ def _check_runs(evidence_path: Path, evidence: dict[str, Any]) -> None:
                     _artifact_records(evidence, evidence_path, _rel(capture))
             elif traces: raise BindError("unexpected trace in non-trace lane")
     executables = {row["argv"][0] for row in lane_rows.values()}
-    if len(executables) != 1:
-        raise BindError("runtime lanes do not share the pinned executable")
+    # Headless proof uses the pinned console binary while real editor/window
+    # proof necessarily uses its GUI companion.  Admit exactly that pair, and
+    # reject arbitrary mixed binaries or path-bearing substitutions.
+    if len(executables) > 2 or any("/" in value or "\\" in value for value in executables):
+        raise BindError("runtime lanes use unexpected executables")
+    if len(executables) == 2:
+        console = {value for value in executables if value.lower().endswith("_console.exe")}
+        companion = executables - console
+        if len(console) != 1 or len(companion) != 1 or next(iter(companion)).lower() != next(iter(console)).lower().replace("_console.exe", ".exe"):
+            raise BindError("runtime lanes are not pinned console/gui pair")
     if set(hashes) != expected_logs: raise BindError("log_hashes contains missing or unrelated files")
     required={"import","parse","trace-headless"}
     if not required.issubset(seen) or seen-required not in (set(),{"editor-headed","trace-headed"}): raise BindError("required/optional lane set invalid")

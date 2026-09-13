@@ -1,0 +1,12 @@
+{
+  "schema": "HH3D-GT01-EVIDENCE-BINDER-2",
+  "status": "READY_FOR_CRITIC",
+  "run_id": "GT01-FINAL-R21",
+  "command_id": "cmd.gt01.final.r21",
+  "source_closure_sha256": "3ace23bcf84598cda64d54bbe3fc4736acde877f9f714fb71e2355d3e809eea4",
+  "failures": [],
+  "limits": [
+    "READY_FOR_CRITIC validates candidate facts only; it never upgrades runner status or accepts GT-01",
+    "Packages without editor-headed/trace-headed lanes are explicitly partial headed scope"
+  ]
+}

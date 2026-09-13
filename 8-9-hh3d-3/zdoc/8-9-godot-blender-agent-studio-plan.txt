@@ -43,6 +43,17 @@ sidecar event which the runner copies into the named evidence stream and
 records as a hash, rather than treating an empty GUI stdout as PASS.
 S22_PENDING=FINAL_SOURCE_FREEZE,REGENERATE_CLOSURE,HEADLESS_HEADED_RE-MINT,
 LIFECYCLE_REPORT_BIND,TQ01_TX12_TX14_SCOPED,TWO_INDEPENDENT_CRITICS
+S22_FINAL_CANDIDATE=Package reviews/20260918-r21-gt01-final contains a fresh
+five-lane run `GT01-FINAL-R21` (import, parse, trace-headless, editor-headed,
+trace-headed), real host exits/tree proofs, isolated Godot user directories,
+editor probe, headed capture and lifecycle candidate copied under `lifecycle/`.
+Closure generator reports 25/25 files and hash
+3ace23bcf84598cda64d54bbe3fc4736acde877f9f714fb71e2355d3e809eea4; binder
+reports READY_FOR_CRITIC after accepting the pinned console/GUI pair. This is
+still CANDIDATE: the binder is a readiness gate, not acceptance, and two
+independent critics plus coordinator review remain mandatory. The binder was
+corrected to allow the exact console/GUI companion pair because requiring one
+binary would contradict the headed editor requirement.
 S21_CHANGE_NOTE=Worker evidence is candidate only; freeze source after every
 source edit. Trace validation must match authored fixture semantics (pause
 transition tick may advance once, then remain frozen). Never treat a passing

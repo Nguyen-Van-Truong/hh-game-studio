@@ -1,0 +1,201 @@
+{
+  "schema": "hh-gt01-bootstrap-evidence-v2",
+  "status": "CANDIDATE",
+  "run_id": "GT01-FINAL-R21",
+  "command_id": "cmd.gt01.final.r21",
+  "recorded_at": "2026-09-13T11:44:45.752124+00:00",
+  "expected_version": "4.7.2-stable",
+  "observed_version": "4.7.2.stable.official.ed1daf0bf",
+  "console_sha256": "c8f0a6bc45a19b33541501e57f6f7cd972ab18453743266339d495cbbe846643",
+  "gui_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+  "source_manifest": {
+    "toolchain.lock.json": "57378d25ac7f673f94d325f422a9324e626620e0132fa34d5d040695f83be0c2",
+    "build/bootstrap/README.md": "d919042f99bd86b1cc8c426b674e4724bda3905430fbd0c6df0dd218f5aca241",
+    "build/bootstrap/install_toolchain.py": "fb47d31908291c8429279f54844623368d77854f84c6589795fa47ae4c60d366",
+    "build/bootstrap/lifecycle_probe.py": "a4b4c0f11d5f4d486719e2cfd03eafcda6bbfddf97f970a34a4cc1e433e59b49",
+    "build/bootstrap/run_fixture.py": "ea522450acc46f90be5e2a7b9257e73ce8b619948105b2c9073aac1f881c7328",
+    "build/bootstrap/verify_archive.py": "754a5d9998055252de982e4f24b7bd581841755821c5f32f2776160152592f8b",
+    "fixtures/sample-blender/README.md": "bab712d9432337dab45ecf95555050bb4520de4888d3531d0d541d683bea58e7",
+    "fixtures/sample-blender/create_fixture.py": "01403514c6779b1ae8df995af3aae84437b7032e7a2aecc5aa2acfcbee62743a",
+    "fixtures/sample-game/main.tscn": "194adf560f792e15a0db062ec2d436db4f15569e709da9a976b913a6c1307b42",
+    "fixtures/sample-game/project.godot": "e4990da976a4aefb75650bae0830dc74fa732c0b39cb7409fdb7ba1da4a879b9",
+    "fixtures/sample-game/addons/gt01_probe/plugin.cfg": "4f6cb4697715835fce9b5a8c6cf4203ca6146a16413a40d7f899f03327ed3903",
+    "fixtures/sample-game/addons/gt01_probe/probe.gd": "03bdab66a7622a341a3ca1d8dea0e20ee6e2f6c56441aece801dcfdb34200d16",
+    "fixtures/sample-game/addons/gt01_probe/probe.gd.uid": "ac30861f6f2988c2e19a70dc00934ae05ce4a761e5260320d3d3da19d6a8c1c3",
+    "fixtures/sample-game/scripts/main.gd": "688827516b16e31162b191b6b23bbfe2a90801fd54499ae2c81766ce9b2b044e",
+    "fixtures/sample-game/scripts/main.gd.uid": "5fc2d82e403a8b31fe608c6a2bf971396d98f3f26341948cf248b563b143b568",
+    "fixtures/sample-game/scripts/trace.gd": "09584e2b6a06f9c339548e73422a0316342b4002240e799cb5d9e2ee2e79dd6c",
+    "fixtures/sample-game/scripts/trace.gd.uid": "87010b6fd149d35fc52dcf29bfaffde8a0cffb1d472f6ba3796ea5bcfc9f4d78",
+    "tests/bootstrap/test_archive_and_install.py": "511389263b47ade85a4ed59d542c6af54a8a1ef9335dd01f2f89092aa946269a",
+    "tests/bootstrap/test_gt01.py": "8e9301964d9ec1d593ca22558fa2bb2e3a32075397f4679728c565295c826d37",
+    "tests/bootstrap/test_lifecycle_process.py": "f3020bd8ddf0fba9869c445c95e8dfc2d8c9829036314c89dad277c4f5f297ba",
+    "tests/bootstrap/test_run_fixture.py": "a80ca91c0ce63a108241ca61b92931516ebb3f1450f0c38cfb441e9b7ba9cbca",
+    "tests/bootstrap/test_runner_admission.py": "a60375cf8230f88646d6bdcc6096a34663c99043726ec22ba49a862277d9e7cf",
+    "tests/bootstrap/test_tq01_portability.py": "d092bc98c2d93d00df79024e0072d002488b9c3763218abf4a6d215801a5f3e0",
+    "tests/bootstrap/test_verify_archive.py": "e6e7d68cd0e11e3a8ab5ded239ae3ea012dc33b0bfb87a30b24a5ac1908698cb",
+    "tests/bootstrap/test_version_probe.py": "1274388f8eef37acc35031c1fcf8c9400fbc502440907321d12671a08e3df2c1"
+  },
+  "source_closure_sha256": "3ace23bcf84598cda64d54bbe3fc4736acde877f9f714fb71e2355d3e809eea4",
+  "runs": [
+    {
+      "wrapper_pid": 35892,
+      "started_at": "2026-09-13T11:44:29.516932+00:00",
+      "argv": [
+        "Godot_v4.7.2-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "$SNAPSHOT/.",
+        "--import"
+      ],
+      "exit_code": 0,
+      "target_pid": 7120,
+      "wrapper_exit_code": 0,
+      "timed_out": false,
+      "tree_verified": true,
+      "ownership": "gated_job_kill_on_close",
+      "stdout": "run-1-stdout.txt",
+      "stderr": "run-1-stderr.txt",
+      "host": "run-1-host.json",
+      "lane": "import"
+    },
+    {
+      "wrapper_pid": 11384,
+      "started_at": "2026-09-13T11:44:33.641764+00:00",
+      "argv": [
+        "Godot_v4.7.2-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "$SNAPSHOT/.",
+        "--check-only",
+        "--script",
+        "res://scripts/trace.gd"
+      ],
+      "exit_code": 0,
+      "target_pid": 27712,
+      "wrapper_exit_code": 0,
+      "timed_out": false,
+      "tree_verified": true,
+      "ownership": "gated_job_kill_on_close",
+      "stdout": "run-2-stdout.txt",
+      "stderr": "run-2-stderr.txt",
+      "host": "run-2-host.json",
+      "lane": "parse"
+    },
+    {
+      "wrapper_pid": 10280,
+      "started_at": "2026-09-13T11:44:34.095871+00:00",
+      "argv": [
+        "Godot_v4.7.2-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "$SNAPSHOT/.",
+        "--script",
+        "res://scripts/trace.gd"
+      ],
+      "exit_code": 0,
+      "target_pid": 18244,
+      "wrapper_exit_code": 0,
+      "timed_out": false,
+      "tree_verified": true,
+      "ownership": "gated_job_kill_on_close",
+      "stdout": "run-3-stdout.txt",
+      "stderr": "run-3-stderr.txt",
+      "host": "run-3-host.json",
+      "lane": "trace-headless"
+    },
+    {
+      "wrapper_pid": 8864,
+      "started_at": "2026-09-13T11:44:34.832615+00:00",
+      "argv": [
+        "Godot_v4.7.2-stable_win64.exe",
+        "--editor",
+        "--path",
+        "$SNAPSHOT/.",
+        "res://main.tscn",
+        "--",
+        "--gt01-editor-probe"
+      ],
+      "exit_code": 0,
+      "target_pid": 1948,
+      "wrapper_exit_code": 0,
+      "timed_out": false,
+      "tree_verified": true,
+      "ownership": "gated_job_kill_on_close",
+      "stdout": "run-4-editor-stdout.txt",
+      "stderr": "run-4-editor-stderr.txt",
+      "host": "run-4-editor-host.json",
+      "lane": "editor-headed"
+    },
+    {
+      "wrapper_pid": 1808,
+      "started_at": "2026-09-13T11:44:42.299879+00:00",
+      "argv": [
+        "Godot_v4.7.2-stable_win64.exe",
+        "--path",
+        "$SNAPSHOT/.",
+        "--script",
+        "res://scripts/trace.gd",
+        "--",
+        "--capture",
+        "--capture-path",
+        "menu.png"
+      ],
+      "exit_code": 0,
+      "target_pid": 6124,
+      "wrapper_exit_code": 0,
+      "timed_out": false,
+      "tree_verified": true,
+      "ownership": "gated_job_kill_on_close",
+      "stdout": "run-5-headed-trace-stdout.txt",
+      "stderr": "run-5-headed-trace-stderr.txt",
+      "host": "run-5-headed-trace-host.json",
+      "lane": "trace-headed",
+      "capture_path": "menu.png"
+    }
+  ],
+  "trace_lines": [
+    "GT01_TRACE {\"observations\":[{\"body\":[320.0,220.0],\"focus\":\"StartButton\",\"label\":\"menu\",\"phase\":\"MENU\",\"sim_tick\":0},{\"body\":[320.0,220.0],\"focus\":\"StartButton\",\"label\":\"start\",\"phase\":\"PLAY\",\"sim_tick\":1},{\"body\":[338.0,220.0],\"focus\":\"StartButton\",\"label\":\"moved\",\"phase\":\"PLAY\",\"sim_tick\":7},{\"body\":[338.0,220.0],\"focus\":\"StartButton\",\"label\":\"paused_frozen\",\"phase\":\"PAUSED\",\"sim_tick\":8},{\"body\":[338.0,220.0],\"focus\":\"StartButton\",\"label\":\"resumed\",\"phase\":\"PLAY\",\"sim_tick\":9},{\"body\":[338.0,220.0],\"focus\":\"StartButton\",\"label\":\"quitting\",\"phase\":\"QUITTING\",\"sim_tick\":10}],\"phase\":\"QUITTING\",\"result\":\"PASS\",\"sim_tick\":10}"
+  ],
+  "editor_trace_lines": [
+    "GT01_EDITOR_TRACE {\"display_server\":\"Windows\",\"result\":\"PASS\",\"root\":\"Fixture\",\"scene\":\"res://main.tscn\",\"visible\":true}"
+  ],
+  "headed_trace_lines": [
+    "GT01_TRACE {\"capture\":{\"display_server\":\"Windows\",\"size\":[640,360]},\"observations\":[{\"body\":[320.0,220.0],\"focus\":\"StartButton\",\"label\":\"menu\",\"phase\":\"MENU\",\"sim_tick\":0},{\"body\":[320.0,220.0],\"focus\":\"StartButton\",\"label\":\"start\",\"phase\":\"PLAY\",\"sim_tick\":2},{\"body\":[338.0,220.0],\"focus\":\"StartButton\",\"label\":\"moved\",\"phase\":\"PLAY\",\"sim_tick\":8},{\"body\":[338.0,220.0],\"focus\":\"StartButton\",\"label\":\"paused_frozen\",\"phase\":\"PAUSED\",\"sim_tick\":9},{\"body\":[338.0,220.0],\"focus\":\"StartButton\",\"label\":\"resumed\",\"phase\":\"PLAY\",\"sim_tick\":10},{\"body\":[338.0,220.0],\"focus\":\"StartButton\",\"label\":\"quitting\",\"phase\":\"QUITTING\",\"sim_tick\":11}],\"phase\":\"QUITTING\",\"result\":\"PASS\",\"sim_tick\":11}"
+  ],
+  "log_hashes": {
+    "run-1-stdout.txt": "8e3b4238c3c56f070b9428bad90c614f0d7d36cb1567c1c77450305a8acb5300",
+    "run-1-stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "run-1-host.json": "e32f318a0585ad88cf7e3b1bfee730021a7ab9e386b8ad06ea24ca9ae3a56163",
+    "run-2-stdout.txt": "83cf0b082206af2aa236c83064fbcfa76be1e00a4aa3558574b2f65965d9481c",
+    "run-2-stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "run-2-host.json": "d8f6bdd83650f7011ad51a02e2ff501ec2ce394dca754d3965282eeb91142aa9",
+    "run-3-stdout.txt": "51d7e2af1e6910e3998450b9a7033122a10a67b37841c26b3eaaff46b72eb1b9",
+    "run-3-stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "run-3-host.json": "dc6f9aa841099f4c8673ca5a8930d4168d5cbe5ea75a68ff014e1edc7bfb1d31",
+    "run-4-editor-stdout.txt": "8c476e93508746a5376f9c85ac978aab23d1bfc77c12ab2361e0f7829bb41689",
+    "run-4-editor-stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "run-4-editor-host.json": "34a0e80e8a58b2cda01ca17d36b92eace5095bd6f429b36c04f585f14b3a72eb",
+    "run-5-headed-trace-stdout.txt": "40a908457fcc340eea71c97b79ace8379afd76e26535cbdda5cec68bcc020909",
+    "run-5-headed-trace-stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "run-5-headed-trace-host.json": "615d24db0a5c2f90f59c085e1d22612a2c328580ee2cda1952df88cff2b4767a"
+  },
+  "artifact_hashes": {
+    "menu.png": "5edcf614243e46805f255ad2513536679adbba587d0fead2a437ba6c25c1c34d"
+  },
+  "checks": {
+    "trace_exactly_one_pass": true,
+    "stderr_clean": true,
+    "streams_clean": true,
+    "source_stable": true,
+    "snapshot_stable": true,
+    "binaries_stable": true,
+    "lock_bound": true,
+    "process_tree_verified": true,
+    "headed_editor_trace": true,
+    "headed_capture": true
+  },
+  "limits": [
+    "candidate evidence still requires TQ01/TX12/TX14 and two independent critics",
+    "headed lanes require an interactive display; --headed is never silently downgraded"
+  ]
+}
