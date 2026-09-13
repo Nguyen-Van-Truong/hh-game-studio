@@ -70,6 +70,11 @@ activation, CAS rollback, stale/replacement lock, manual-edit, live-owner,
 crashed-owner and TTL probes in synthetic roots. It remains candidate only;
 official runtime remint, complete closure, source freeze and two critics remain
 required for GT-01.
+R13_RUNTIME_CANDIDATE=Godot 4.7.2 console/gui hashes match the lock and one
+serial host-captured run (`GT01-R13-OFFICIAL-20260913`) passed import, check-only
+parse and runtime trace with clean streams, verified process trees and a stable
+source/snapshot. This is still CANDIDATE: lock status remains CANDIDATE and the
+closure freeze, TQ01/TX12/TX14 and two independent critic records are pending.
 REVIEW_BASE_COMMIT=b4195ca
 HISTORICAL_REJECTED_COMMIT=54d0c7c
 HISTORICAL_STUDIO_COMMIT=3cc7a85f730c99963a5a64079a0e02dc20edbd40
