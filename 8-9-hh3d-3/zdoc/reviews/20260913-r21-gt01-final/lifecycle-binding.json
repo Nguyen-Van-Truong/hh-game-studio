@@ -1,0 +1,31 @@
+{
+  "schema": "HH3D-GT01-LIFECYCLE-BINDING-1",
+  "status": "CANDIDATE",
+  "source_closure_sha256": "3ace23bcf84598cda64d54bbe3fc4736acde877f9f714fb71e2355d3e809eea4",
+  "lifecycle_report_sha256": "b33d54312e00a4a24fdb87f5ea31d8b991e73ee98b76fb0b7b5c0b11b8d6810d",
+  "lifecycle_source_hashes": {
+    "studio/build/bootstrap/install_toolchain.py": {
+      "sha256": "fb47d31908291c8429279f54844623368d77854f84c6589795fa47ae4c60d366",
+      "size_bytes": 21763
+    },
+    "studio/build/bootstrap/lifecycle_probe.py": {
+      "sha256": "a4b4c0f11d5f4d486719e2cfd03eafcda6bbfddf97f970a34a4cc1e433e59b49",
+      "size_bytes": 23465
+    },
+    "studio/build/bootstrap/verify_archive.py": {
+      "sha256": "754a5d9998055252de982e4f24b7bd581841755821c5f32f2776160152592f8b",
+      "size_bytes": 9891
+    },
+    "studio/tests/bootstrap/test_lifecycle_process.py": {
+      "sha256": "f3020bd8ddf0fba9869c445c95e8dfc2d8c9829036314c89dad277c4f5f297ba",
+      "size_bytes": 4270
+    }
+  },
+  "artifact_files": {
+    "lifecycle/report.json": "b33d54312e00a4a24fdb87f5ea31d8b991e73ee98b76fb0b7b5c0b11b8d6810d",
+    "gt01-scoped-gates.json": "d78c0b00cff3a79db7ee9bbb0062dca599146ca0867369ffce66be3a908f915f"
+  },
+  "limits": [
+    "binding joins the lifecycle candidate to the complete closure; lifecycle remains synthetic/cooperative"
+  ]
+}

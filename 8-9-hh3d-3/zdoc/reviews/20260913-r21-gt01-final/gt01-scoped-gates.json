@@ -1,0 +1,37 @@
+{
+  "schema": "HH3D-GT01-SCOPED-GATES-1",
+  "status": "CANDIDATE",
+  "run_id": "GT01-SCOPED-R21",
+  "source_closure_sha256": "3ace23bcf84598cda64d54bbe3fc4736acde877f9f714fb71e2355d3e809eea4",
+  "checks": [
+    {
+      "id": "TQ01",
+      "command": "python -m unittest 8-9-hh3d-3/studio/tests/bootstrap/test_tq01_portability.py -q",
+      "observed": "3 tests passed",
+      "scope": "lock portability, Unicode/cache isolation"
+    },
+    {
+      "id": "TX12",
+      "command": "python -m unittest discover -s 8-9-hh3d-3/studio/tests/bootstrap -p test_*.py -q",
+      "observed": "56 tests passed",
+      "scope": "offline installer/CAS and process lifecycle checks"
+    },
+    {
+      "id": "TX14",
+      "command": "binder + evidence secret/UTF-8 scan",
+      "observed": "READY_FOR_CRITIC; no warning/error/secret marker",
+      "scope": "candidate evidence hygiene only"
+    }
+  ],
+  "evidence": {
+    "runner": "evidence.json",
+    "binder": "binder-result.json",
+    "lifecycle_report": "lifecycle/report.json",
+    "closure": "source-closure-manifest.json"
+  },
+  "limits": [
+    "does not prove production network denial, token rotation, quota fairness or hostile OS-user isolation",
+    "does not promote CANDIDATE or replace two independent critics",
+    "official archives remain lock-bound and full installer/migration/uninstall stays GT-10"
+  ]
+}
