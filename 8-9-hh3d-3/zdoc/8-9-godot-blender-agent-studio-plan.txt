@@ -70,6 +70,12 @@ reopen production semantics inside a scoped bootstrap WP.
 S23_NEXT=GT-02 protocol/capability/safety baseline is now the only valid active
 WP. Work must stay under studio/protocol, studio/host/core and
 studio/tests/protocol, with two critics and the GT-02 DoD before promotion.
+S23_DISPATCH_20260913=Three Astra xhigh workers are dispatched in parallel with
+non-overlapping scopes: protocol envelopes under studio/protocol; bounded
+safety/limits/path/journal tests under studio/host/core and dedicated protocol
+tests; and a read-only GT-02 audit under zdoc/reviews. Workers may not tick
+checkboxes or claim acceptance. Coordinator will merge only after tests,
+source-hash review, and two independent critics on one frozen closure.
 S21_CHANGE_NOTE=Worker evidence is candidate only; freeze source after every
 source edit. Trace validation must match authored fixture semantics (pause
 transition tick may advance once, then remain frozen). Never treat a passing
