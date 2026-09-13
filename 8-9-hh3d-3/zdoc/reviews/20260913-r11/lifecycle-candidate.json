@@ -1,0 +1,28 @@
+{
+  "status": "CANDIDATE",
+  "run_id": "GT01-R11-LIFECYCLE-20260913",
+  "package_a": {
+    "package": "a83e8063f8a745c4e5cb9d36169020951ae7185921c0ed9474b0469acc3776ad",
+    "manifest_sha256": "33031e90d3e393678b932cfbec0827531cc937ac15c614f6efb781ac56e6e74e"
+  },
+  "package_b": {
+    "package": "264476d515d6c4fb3a1854f229ec134dd49c59f2bf15adb465f85c3df7de6bc1",
+    "manifest_sha256": "d740f15c269c7323ea287679b7bd690e21064413a3a7531e996bbde0ba4a9d85"
+  },
+  "rollback_current": {
+    "manifest_sha256": "33031e90d3e393678b932cfbec0827531cc937ac15c614f6efb781ac56e6e74e",
+    "package": "a83e8063f8a745c4e5cb9d36169020951ae7185921c0ed9474b0469acc3776ad"
+  },
+  "stale_transition_rejected": true,
+  "replacement_lock_rejected": true,
+  "probes_not_executed": [
+    "manual edit reconciliation",
+    "live owner recovery",
+    "crashed owner recovery"
+  ],
+  "limits": [
+    "synthetic packages only",
+    "no real engine execution",
+    "cooperative lock/process identity"
+  ]
+}

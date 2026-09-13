@@ -32,6 +32,32 @@ transition tick may advance once, then remain frozen). Never treat a passing
 subprocess lane or a generated report as acceptance; bind all evidence to one
 source hash and redact raw host paths before commit. TX12/TX14 references in
 GT-01 are scoped slices only; future GT-08/GT-10 gates stay in their own WP.
+S21_ADDENDUM_20260913=External MCP review is a sequencing input only; the
+repositories are not safety or capability proof. Keep the typed host/CLI and
+semantic command gates as the product core, and run a time-boxed compatibility
+spike in GT-03/GT-04 against the fixture. Pin exact addon/bridge versions,
+localhost transport, read-only default, and deny arbitrary-code/node-call
+operations; accept an adapter only after the native path's postcondition,
+hash, lease and critic gates. Compare NPGameDev/godot-mcp-toolkit and
+hybridindie/godot-mcp by measured fixture results, not README tool/star counts;
+Blender export remains an explicit Blender-to-GLB job outside MCP. Product
+positioning remains INTERNAL_FIRST_OSS_READY and the OSS decision is deferred
+to the GT-06 review.
+GT-06_VERTICAL_SLICE=The first end-to-end demo is scheduled in GT-06:
+brief -> Blender source edit -> GLB validation -> Godot import/scene change ->
+real Play/input -> observe/capture -> seeded repair/replay. This adds no new
+dependency or acceptance shortcut and cannot bypass GT-01..GT-05 gates.
+ANDROID_POLICY=Android is a GT-08 target-conformance and physical-device gate;
+it is not a desktop-core implementation blocker, but remains required before
+GT-10 and the HH World handoff. Emulator evidence cannot replace supported
+device runtime/GPU proof.
+SIGNING_POLICY=Keep v0.1 at hash+manifest+local test trust-key verification;
+advanced signing/TUF or public release credentials are a later package gate,
+with extension points preserved and no production secret in fixtures.
+LICENSE_POLICY=Review each component separately; record Blender/addon and
+Godot/host license and notice files in the manifest before redistribution.
+OPEN_LANE_POLICY remains DISABLED_BY_DEFAULT; any opt-in arbitrary-code lane
+requires its own post-GT-07 ADR, isolation, and network/secret restrictions.
 REVIEW_BASE_COMMIT=b4195ca
 HISTORICAL_REJECTED_COMMIT=54d0c7c
 HISTORICAL_STUDIO_COMMIT=3cc7a85f730c99963a5a64079a0e02dc20edbd40
@@ -472,6 +498,9 @@ GT-06 là writer schema; compatibility/version tests khi thay. Không HH World s
 BUILD: inspect scene/property/runtime, start/play/input/pause/stop/capture,
 bookmarks/camera, errors/perf collector. Fixture có đi lại/đổi đồ/emote/prop,
 menu/pause/quit; original minimal art đã GT-05, không mở backend/map.
+GT-06 is the first end-to-end vertical-slice review: Blender source edit →
+validated GLB → Godot import/readback → real menu/play/input → observe/capture
+→ seeded repair/replay. GT-09 repeats this path for full client conformance.
 Perf collector xuất raw frame-time ms series + p50/p95/p99 + 1% low (1000/mean
 của 1% frame lớn nhất) + counters triangles/draw calls/texture/RSS theo một
 schema versioned `studio/contracts/perf-collector.schema.json` (schema id +
