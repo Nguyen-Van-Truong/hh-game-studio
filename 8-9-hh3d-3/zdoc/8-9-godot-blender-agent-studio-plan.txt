@@ -58,6 +58,18 @@ LICENSE_POLICY=Review each component separately; record Blender/addon and
 Godot/host license and notice files in the manifest before redistribution.
 OPEN_LANE_POLICY remains DISABLED_BY_DEFAULT; any opt-in arbitrary-code lane
 requires its own post-GT-07 ADR, isolation, and network/secret restrictions.
+PORTABILITY_POLICY=Before an official run, record OS/architecture/locale,
+filesystem, RAM/CPU/GPU or headless mode, tool hashes and Android accelerator
+state. Use one process tree per fixture (Windows Job Object or Linux process
+group), bounded Blender multiprocessing, short UTF-8-safe roots, and explicit
+Unicode/long-path/UNC/ADS/reparse tests. Headless and windowed evidence stay
+separate; missing VPS accelerator/SDK is SKIP_ENVIRONMENT with remediation,
+never an implicit PASS. Research evidence: reviews/20260913-r12-os/.
+R12_CANDIDATE_PROGRESS=Lifecycle candidate covers distinct A/B install,
+activation, CAS rollback, stale/replacement lock, manual-edit, live-owner,
+crashed-owner and TTL probes in synthetic roots. It remains candidate only;
+official runtime remint, complete closure, source freeze and two critics remain
+required for GT-01.
 REVIEW_BASE_COMMIT=b4195ca
 HISTORICAL_REJECTED_COMMIT=54d0c7c
 HISTORICAL_STUDIO_COMMIT=3cc7a85f730c99963a5a64079a0e02dc20edbd40
