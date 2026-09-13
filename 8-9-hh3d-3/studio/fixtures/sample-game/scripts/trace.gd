@@ -22,7 +22,12 @@ func _initialize() -> void:
 	_record("menu")
 	if "--capture" in OS.get_cmdline_user_args() and DisplayServer.get_name() != "headless":
 		await RenderingServer.frame_post_draw
-		if root.get_texture().get_image().save_png("res://menu.png") != OK:
+		var capture_path := ""
+		var user_args := OS.get_cmdline_user_args()
+		var capture_index := user_args.find("--capture-path")
+		if capture_index >= 0 and capture_index + 1 < user_args.size():
+			capture_path = str(user_args[capture_index + 1])
+		if capture_path.is_empty() or root.get_texture().get_image().save_png(capture_path) != OK:
 			failures.append("menu screenshot save failed")
 	_send_key(KEY_TAB)
 	await _frames(1)
@@ -121,7 +126,17 @@ func _on_transition(name: String) -> void:
 		quit_seen = true
 		_record("quitting")
 		if ready_to_quit and failures.is_empty() and str(fixture.call("phase_name")) == "QUITTING":
-			print("GT01_TRACE " + JSON.stringify({"result": "PASS", "phase": "QUITTING", "sim_tick": int((fixture.call("snapshot") as Dictionary)["sim_tick"]), "observations": observations}))
+			var trace := {"result": "PASS", "phase": "QUITTING", "sim_tick": int((fixture.call("snapshot") as Dictionary)["sim_tick"]), "observations": observations}
+			var args := OS.get_cmdline_user_args()
+			if "--capture" in args and DisplayServer.get_name() != "headless":
+				trace["capture"] = {"display_server": DisplayServer.get_name(), "size": [640, 360]}
+			var trace_output := OS.get_environment("GT01_TRACE_OUTPUT")
+			if not trace_output.is_empty():
+				var trace_file := FileAccess.open(trace_output, FileAccess.WRITE)
+				if trace_file != null:
+					trace_file.store_string(JSON.stringify(trace) + "\n")
+					trace_file.close()
+			print("GT01_TRACE " + JSON.stringify(trace))
 
 func _record(label: String) -> void:
 	var state: Dictionary = fixture.call("snapshot")

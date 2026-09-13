@@ -92,13 +92,16 @@ class RunnerAdmissionTests(unittest.TestCase):
                        wrapper_failure_label: str | None = None, mutation=None):
         calls: list[str] = []
 
-        def run_process(argv, *, cwd, output, timeout, label):
+        def run_process(argv, *, cwd, output, timeout, label, env=None):
             calls.append(label)
             stdout = trace if label == "run-3" else ""
             if label == warning_label:
                 stdout += "WARNING: synthetic admission warning\n"
             (output / f"{label}-stdout.txt").write_text(stdout, encoding="utf-8")
             (output / f"{label}-stderr.txt").write_bytes(b"")
+            (output / f"{label}-host.json").write_text(json.dumps({
+                "target_pid": 200 + len(calls), "exit_code": 0,
+                "started_at": "2026-09-12T00:00:00+00:00"}), encoding="utf-8")
             if mutation is not None:
                 mutation(label, cwd)
             portable_argv = [Path(argv[0]).name]
@@ -122,6 +125,7 @@ class RunnerAdmissionTests(unittest.TestCase):
                 "ownership": "test-double",
                 "stdout": f"{label}-stdout.txt",
                 "stderr": f"{label}-stderr.txt",
+                "host": f"{label}-host.json",
             }
 
         return run_process, calls

@@ -1,33 +1,31 @@
-# GT-01 evidence binder (r15)
+# GT-01 evidence binder (r16)
 
-`evidence_binder.py` is a read-only, fail-closed boundary between a frozen
-source manifest and one runner output. It recomputes the closure hash from
-`required_files`, hashes those files on disk, and does not trust a
-runner-supplied `source_closure_sha256`. It requires `OFFICIAL`/`ACCEPTED`
-status, complete source bindings, clean checks, host and wrapper exit `0`,
-`timed_out=false`, gated process-tree ownership, independently hashed UTF-8
-logs without warning/error lines, and exactly one ordered passing GT01 trace.
-Candidate/diagnostic reports therefore remain useful for debugging but can
-never be upgraded by copying a field.
+The binder validates a runner package while preserving the runner's
+`CANDIDATE` status. It rejects `DIAGNOSTIC`, unknown, and `ACCEPTED` claims;
+`READY_FOR_CRITIC` is eligibility only and never promotes a candidate.
 
-The current R13 runner output is `CANDIDATE` and has no
-`source_closure_sha256`; the binder deliberately returns `GAP` for it. A real
-remint must first freeze the complete closure, write a manifest with every
-required regular file and digest, then run one official Godot process lane at
-a time against that frozen snapshot. The runner must publish source bindings,
-host-captured exits/tree records, and log files in the same package. After the
-run, invoke:
+Manifest paths use the exact `8-9-hh3d-3/studio/` prefix. Runner bindings use
+exact studio-relative keys and are mapped to that prefix without stripping
+arbitrary leading components. The complete on-disk studio closure is hashed
+and compared for exact file-set equality, and a supplied closure hash must
+match the recomputed value.
 
-```text
-python evidence_binder.py --source-manifest <frozen-manifest.json> --runner-output <official-evidence.json> --repo-root <frozen-repo> --output <binder-result.json>
-```
+Every lane requires independently hashed stdout, stderr, and host JSON. Host
+PID, start time, and exit are parsed and compared with the run record;
+warnings, errors, invalid UTF-8, and non-empty stderr fail closed. Lane names
+are exact (`import`, `parse`, `trace-headless`, `editor-headed`,
+`trace-headed`), and all lanes must use the same pinned executable. The default
+lanes are import, parse, and trace-headless. Editor-headed and trace-headed are
+accepted only as a pair, with parsed editor postconditions, parsed headed trace,
+and an independently hashed 640x360 PNG capture (`artifact_hashes`). Trace
+lines are parsed from stdout and checked for ordered transitions, movement,
+pause freeze, resume advancement, and quit; canonical headless `trace_lines`
+must match its stream, while optional `headed_trace_lines` is checked when
+present because headed capture metadata changes that JSON line.
 
-Only `READY_FOR_CRITIC` permits the two independent read-only critics to
-review the package. It is not coordinator acceptance and must not tick GT-01
-by itself. If source bytes change, or any log/run/trace is reminted, create a
-new run/command identifier and recompute the closure; never patch an old
-report in place.
+Focused mutations are run with:
 
-Synthetic mutation coverage is in `test_evidence_binder.py` (valid binding,
-candidate status, source/log mutation, nonzero exit, unverified tree,
-duplicate trace, warning output, and ignored caller hash).
+    python -m unittest discover -s 8-9-hh3d-3/zdoc/reviews/20260915-r15-evidence -p test_evidence_binder.py
+
+The historical R16 package is intentionally not bindable after source edits:
+it has no top-level `log_hashes` and its frozen closure is stale.

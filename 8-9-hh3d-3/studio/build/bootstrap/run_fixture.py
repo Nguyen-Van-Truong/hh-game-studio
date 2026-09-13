@@ -209,7 +209,8 @@ def _close_job(job_state) -> None:
         job_state[0].CloseHandle(job_state[1])
 
 
-def run_process(argv: list[str], *, cwd: Path, output: Path, timeout: int, label: str) -> dict:
+def run_process(argv: list[str], *, cwd: Path, output: Path, timeout: int, label: str,
+                env: dict[str, str] | None = None) -> dict:
     if not re.fullmatch(r"[A-Za-z0-9_-]+", label) or not 1 <= timeout <= 600:
         raise ValueError("invalid process label or timeout")
     stdout_path, stderr_path = output / f"{label}-stdout.txt", output / f"{label}-stderr.txt"
@@ -225,7 +226,8 @@ def run_process(argv: list[str], *, cwd: Path, output: Path, timeout: int, label
     helper = "import subprocess,sys,json,datetime; token=sys.stdin.readline(); sys.exit(125) if token != 'GO\\n' else None; started=datetime.datetime.now(datetime.timezone.utc).isoformat(); p=subprocess.Popen(sys.argv[2:]); code=p.wait(); f=open(sys.argv[1],'x',encoding='utf-8'); json.dump({'target_pid':p.pid,'started_at':started,'exit_code':code},f); f.close()"
     with stdout_path.open("xb") as stdout, stderr_path.open("xb") as stderr:
         process = subprocess.Popen([sys.executable, "-c", helper, str(host_path), *argv], cwd=cwd, stdout=stdout, stderr=stderr,
-                                   stdin=subprocess.PIPE, creationflags=flags, start_new_session=os.name != "nt")
+                                   stdin=subprocess.PIPE, creationflags=flags, start_new_session=os.name != "nt",
+                                   env=env)
         job_state = None
         timed_out = False
         tree_verified = False
@@ -280,7 +282,33 @@ def run_process(argv: list[str], *, cwd: Path, output: Path, timeout: int, label
             "exit_code": host_report.get("exit_code"), "target_pid": host_report.get("target_pid"),
             "wrapper_exit_code": exit_code, "timed_out": timed_out,
             "tree_verified": tree_verified, "ownership": "gated_job_kill_on_close" if os.name == "nt" else "process_group", "stdout": stdout_path.name,
-            "stderr": stderr_path.name}
+            "stderr": stderr_path.name, "host": host_path.name}
+
+
+def _isolated_user_env(output: Path) -> dict[str, str]:
+    """Return a per-run Godot user-data environment without mutating the host."""
+    user_root = (output / "godot-user").resolve()
+    user_root.mkdir(parents=True, exist_ok=True)
+    env = os.environ.copy()
+    # Godot uses platform-specific variables; setting all of these is harmless
+    # and prevents editor imports/cache from leaking into a developer profile.
+    env.update({"APPDATA": str(user_root / "Roaming"),
+                "LOCALAPPDATA": str(user_root / "Local"),
+                "USERPROFILE": str(user_root / "Profile"),
+                "HOME": str(user_root / "Home"),
+                "XDG_CONFIG_HOME": str(user_root / "config"),
+                "XDG_DATA_HOME": str(user_root / "data"),
+                "XDG_CACHE_HOME": str(user_root / "cache")})
+    for key in ("APPDATA", "LOCALAPPDATA", "USERPROFILE", "HOME", "XDG_CONFIG_HOME", "XDG_DATA_HOME", "XDG_CACHE_HOME"):
+        Path(env[key]).mkdir(parents=True, exist_ok=True)
+    return env
+
+
+def _file_sha256_if_present(path: Path) -> str | None:
+    try:
+        return hash_file(path) if path.is_file() else None
+    except OSError:
+        return None
 
 
 def fail(message: str) -> int:
@@ -408,6 +436,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--timeout-seconds", default=60, type=int)
     parser.add_argument("--check-only", action="store_true")
+    parser.add_argument("--headed", action="store_true",
+                        help="also run the real editor and GUI trace lanes")
     args = parser.parse_args(argv)
     if not 1 <= args.timeout_seconds <= 600:
         return fail("timeout outside 1..600 seconds")
@@ -468,20 +498,103 @@ def main(argv: list[str] | None = None) -> int:
     if before != after or not snapshot_matches or hash_file(godot) != pinned["console_sha256"].lower() or hash_file(gui) != pinned["gui_sha256"].lower():
         return fail("source closure changed while snapshot was copied")
     runs = []
+    env = _isolated_user_env(output)
     for number, run_argv in enumerate((
         [str(godot), "--headless", "--path", str(snapshot), "--import"],
         [str(godot), "--headless", "--path", str(snapshot), "--check-only", "--script", "res://scripts/trace.gd"],
         [str(godot), "--headless", "--path", str(snapshot), "--script", "res://scripts/trace.gd"],
     ), 1):
         runs.append(run_process(run_argv, cwd=snapshot, output=output,
-                                timeout=args.timeout_seconds, label=f"run-{number}"))
+                                        timeout=args.timeout_seconds, label=f"run-{number}", env=env))
+        runs[-1]["lane"] = ("import" if number == 1 else
+                             "parse" if number == 2 else "trace-headless")
         if runs[-1]["exit_code"] != 0 or runs[-1]["timed_out"] or not runs[-1]["tree_verified"]:
             break
+    if args.headed and len(runs) == 3 and all(r["exit_code"] == 0 and r["wrapper_exit_code"] == 0 and not r["timed_out"] and r["tree_verified"] for r in runs):
+        env["GT01_EDITOR_PROBE_OUTPUT"] = str(output / "editor-probe.json")
+        headed_argv = [str(gui), "--editor", "--path", str(snapshot), "res://main.tscn", "--", "--gt01-editor-probe"]
+        editor_run = run_process(headed_argv, cwd=snapshot, output=output,
+                                         timeout=args.timeout_seconds, label="run-4-editor", env=env)
+        editor_run["lane"] = "editor-headed"
+        runs.append(editor_run)
+        if editor_run["exit_code"] == 0 and editor_run["wrapper_exit_code"] == 0 and not editor_run["timed_out"] and editor_run["tree_verified"]:
+            capture_path = output / "menu.png"
+            env["GT01_TRACE_OUTPUT"] = str(output / "headed-trace.json")
+            headed_trace_argv = [str(gui), "--path", str(snapshot), "--script", "res://scripts/trace.gd",
+                                 "--", "--capture", "--capture-path", str(capture_path)]
+            headed_trace = run_process(headed_trace_argv, cwd=snapshot, output=output,
+                                               timeout=args.timeout_seconds, label="run-5-headed-trace", env=env)
+            headed_trace["lane"] = "trace-headed"
+            runs.append(headed_trace)
+            headed_trace["capture_path"] = capture_path.name
+            # GUI binaries have no console subsystem on Windows.  The fixture
+            # writes its structured event to this sidecar; bind that exact
+            # event into the captured stream for independent review.
+            sidecar = output / "headed-trace.json"
+            if sidecar.exists() and (output / headed_trace["stdout"]).stat().st_size == 0:
+                (output / headed_trace["stdout"]).write_text(
+                    "GT01_TRACE " + sidecar.read_text(encoding="utf-8").strip() + "\n", encoding="utf-8")
+        sidecar = output / "editor-probe.json"
+        if sidecar.exists() and (output / editor_run["stdout"]).stat().st_size == 0:
+            (output / editor_run["stdout"]).write_text(
+                "GT01_EDITOR_TRACE " + sidecar.read_text(encoding="utf-8").strip() + "\n", encoding="utf-8")
     trace_path = output / "run-3-stdout.txt"
     trace_text = trace_path.read_text(encoding="utf-8", errors="replace") if trace_path.exists() else ""
     trace_lines = [line for line in trace_text.splitlines() if line.startswith("GT01_TRACE ")]
     clean_stderr = all(not (output / run["stderr"]).read_text(encoding="utf-8", errors="replace").strip() for run in runs)
     streams_clean = _streams_clean(output, runs)
+    log_hashes: dict[str, str] = {}
+    for run in runs:
+        for field in ("stdout", "stderr", "host"):
+            name = run.get(field)
+            if isinstance(name, str):
+                digest = _file_sha256_if_present(output / name)
+                if digest is not None:
+                    log_hashes[name] = digest
+    editor_trace_lines = []
+    editor_stdout = output / "run-4-editor-stdout.txt"
+    if editor_stdout.exists():
+        editor_trace_lines = [line for line in editor_stdout.read_text(encoding="utf-8", errors="replace").splitlines()
+                              if line.startswith("GT01_EDITOR_TRACE ")]
+    if not editor_trace_lines:
+        sidecar = output / "editor-probe.json"
+        if sidecar.exists():
+            try:
+                editor_trace_lines = ["GT01_EDITOR_TRACE " + sidecar.read_text(encoding="utf-8").strip()]
+            except (OSError, UnicodeError):
+                pass
+    capture_ok = False
+    capture_meta = None
+    headed_trace_path = output / "run-5-headed-trace-stdout.txt"
+    if headed_trace_path.exists():
+        headed_lines = [line for line in headed_trace_path.read_text(encoding="utf-8", errors="replace").splitlines()
+                        if line.startswith("GT01_TRACE ")]
+        if len(headed_lines) == 1:
+            try:
+                headed_data = json.loads(headed_lines[0].removeprefix("GT01_TRACE "))
+                capture_meta = headed_data.get("capture")
+            except (ValueError, TypeError):
+                capture_meta = None
+    if capture_meta is None:
+        sidecar = output / "headed-trace.json"
+        if sidecar.exists():
+            try:
+                capture_meta = json.loads(sidecar.read_text(encoding="utf-8")).get("capture")
+            except (OSError, UnicodeError, ValueError, TypeError):
+                pass
+    capture_file = output / "menu.png"
+    if capture_file.is_file():
+        try:
+            header = capture_file.read_bytes()[:24]
+            capture_ok = (header[:8] == b"\x89PNG\r\n\x1a\n" and int.from_bytes(header[16:20], "big") == 640
+                          and int.from_bytes(header[20:24], "big") == 360 and isinstance(capture_meta, dict)
+                          and capture_meta.get("size") == [640, 360]
+                          and capture_meta.get("display_server") not in (None, "headless"))
+        except (OSError, ValueError):
+            capture_ok = False
+    artifact_hashes = {}
+    if capture_ok:
+        artifact_hashes["menu.png"] = hash_file(capture_file)
     try:
         source_stable = checked_files(studio) == before
         snapshot_stable = checked_files(snapshot) == expected_snapshot
@@ -505,21 +618,33 @@ def main(argv: list[str] | None = None) -> int:
             trace_ok = _validate_trace(trace_data)
         except (ValueError, TypeError):
             pass
-    all_ok = (len(runs) == 3 and all(r["exit_code"] == 0 and r["wrapper_exit_code"] == 0
+    base_ok = (len(runs) >= 3 and all(r["exit_code"] == 0 and r["wrapper_exit_code"] == 0
               and not r["timed_out"] and r["tree_verified"] for r in runs)
               and trace_ok and clean_stderr and streams_clean and source_stable
               and snapshot_stable and binaries_stable)
+    headed_ok = True
+    if args.headed:
+        headed_ok = (len(runs) == 5 and runs[3].get("lane") == "editor-headed"
+                     and runs[4].get("lane") == "trace-headed"
+                     and len(editor_trace_lines) == 1 and capture_ok)
+    all_ok = base_ok and headed_ok
     evidence = {"schema": "hh-gt01-bootstrap-evidence-v2", "status": "CANDIDATE" if all_ok else "DIAGNOSTIC",
                 "run_id": args.run_id, "command_id": args.command_id, "recorded_at": utc_now(),
                 "expected_version": args.expected_version, "observed_version": observed,
                 "console_sha256": args.console_sha256.lower(), "gui_sha256": args.gui_sha256.lower(),
                 "source_manifest": before, "source_closure_sha256": source_closure_digest,
-                "runs": runs, "trace_lines": trace_lines,
+                "runs": runs, "trace_lines": trace_lines, "editor_trace_lines": editor_trace_lines,
+                "headed_trace_lines": ([line for line in (output / "run-5-headed-trace-stdout.txt").read_text(encoding="utf-8", errors="replace").splitlines() if line.startswith("GT01_TRACE ")] if (output / "run-5-headed-trace-stdout.txt").exists() else []),
+                "log_hashes": log_hashes,
+                "artifact_hashes": artifact_hashes,
                 "checks": {"trace_exactly_one_pass": trace_ok, "stderr_clean": clean_stderr, "streams_clean": streams_clean,
                            "source_stable": source_stable, "snapshot_stable": snapshot_stable,
                            "binaries_stable": binaries_stable, "lock_bound": True,
-                           "process_tree_verified": all(r["tree_verified"] for r in runs)},
-                "limits": ["candidate evidence still requires TQ01/TX12/TX14 and two independent critics"]}
+                           "process_tree_verified": all(r["tree_verified"] for r in runs),
+                           "headed_editor_trace": (not args.headed or len(editor_trace_lines) == 1),
+                           "headed_capture": (not args.headed or capture_ok)},
+                "limits": ["candidate evidence still requires TQ01/TX12/TX14 and two independent critics",
+                           "headed lanes require an interactive display; --headed is never silently downgraded"]}
     (output / "evidence.json").write_text(json.dumps(evidence, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(json.dumps({"status": evidence["status"], "output": str(output), "runs": runs}, indent=2))
     return 0 if all_ok else 2

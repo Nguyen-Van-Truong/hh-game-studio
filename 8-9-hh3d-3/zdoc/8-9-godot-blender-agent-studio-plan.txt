@@ -26,6 +26,23 @@ HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
 PLAN_REVISION=S21
+S22_PROGRESS_20260913=Coordinator integrated the next GT-01 hardening pass:
+runner now has explicit import/parse/trace-headless lanes, optional real
+editor-headed and trace-headed lanes using the pinned GUI executable, host
+exit/tree records, per-run user-data isolation, UTF-8 log hashes and a
+640x360 PNG artifact binding. The fixture's editor probe is opt-in and its
+plugin path is relative, avoiding the observed duplicated-res-path warning.
+The headed run reached CANDIDATE with five clean lanes after a prior run was
+correctly rejected for Godot rewriting project.godot and for a missing plugin
+path. Evidence must be reminted only after all source workers stop editing.
+S22_LESSON=Never freeze closure or bind evidence while a worker can still edit
+runtime sources: one lifecycle edit invalidated the source closure, and the
+first headed fixture exposed a real project normalization mutation. GUI
+Godot has no console stdout on Windows; the fixture writes an explicit
+sidecar event which the runner copies into the named evidence stream and
+records as a hash, rather than treating an empty GUI stdout as PASS.
+S22_PENDING=FINAL_SOURCE_FREEZE,REGENERATE_CLOSURE,HEADLESS_HEADED_RE-MINT,
+LIFECYCLE_REPORT_BIND,TQ01_TX12_TX14_SCOPED,TWO_INDEPENDENT_CRITICS
 S21_CHANGE_NOTE=Worker evidence is candidate only; freeze source after every
 source edit. Trace validation must match authored fixture semantics (pause
 transition tick may advance once, then remain frozen). Never treat a passing
