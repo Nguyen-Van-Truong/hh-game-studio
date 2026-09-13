@@ -1,0 +1,58 @@
+{
+  "activate": {
+    "current": {
+      "manifest_sha256": "fb20228d94e878c3f314f1ce2631c85aeab23ebfff9240559afa562278d9e2d3",
+      "package": "731980f9608d61333e5baf54a2ef17210acc7a538446c0cb9969f002aca1e953"
+    },
+    "durability": "FILE_FLUSHED_DIRECTORY_SYNC_UNAVAILABLE_WINDOWS",
+    "revision": 1,
+    "state_token": "57910db560c0402a768dff001d697f4d8942a89de36dd0c6e64d35e9c35e3356",
+    "status": "ACTIVATED",
+    "transition_id": "3babb02a395347d3abcb53bd0caab08d"
+  },
+  "install": {
+    "durability": "FILE_FLUSHED_DIRECTORY_SYNC_UNAVAILABLE_WINDOWS",
+    "receipt": {
+      "manifest_sha256": "fb20228d94e878c3f314f1ce2631c85aeab23ebfff9240559afa562278d9e2d3",
+      "package": "731980f9608d61333e5baf54a2ef17210acc7a538446c0cb9969f002aca1e953"
+    },
+    "status": "INSTALLED_NOT_ACTIVATED",
+    "version": "4.7.2-stable"
+  },
+  "limits": [
+    "installation uses verified official bytes without network",
+    "full migration/uninstall remains GT-10"
+  ],
+  "rollback": {
+    "current": null,
+    "durability": "FILE_FLUSHED_DIRECTORY_SYNC_UNAVAILABLE_WINDOWS",
+    "revision": 2,
+    "state_token": "f9c1bba0ff54e1a15225c3f1f479265a7c823dd4d92d9a06f5a6a0ddb493e357",
+    "status": "ROLLED_BACK",
+    "transition_id": "0967214a4f2a4dd3b7bdfe4c229a62f5"
+  },
+  "root_kind": "temporary-offline",
+  "schema": "HH3D-GT01-OFFICIAL-ARCHIVE-INSTALL-1",
+  "status": "CANDIDATE",
+  "verify": {
+    "artifact": "godot.archive",
+    "limits": [
+      "offline bytes only",
+      "not race-proof handle security",
+      "no extraction or bootstrap"
+    ],
+    "name": "Godot_v4.7.2-stable_win64.exe.zip",
+    "schema": "HH3D-ARCHIVE-VERIFIED-1",
+    "sha256": "731980f9608d61333e5baf54a2ef17210acc7a538446c0cb9969f002aca1e953",
+    "sha512": "83decd58fdf67b9d657958a1ae6bf1929c20785315a81effe245874cdc57acb709bf868e00778a96984338c1b29dafdb453c6847747694621c6ecf5da2259993",
+    "size_bytes": 86013866,
+    "status": "VERIFIED_BYTES_ONLY",
+    "sums_sha256": "b8bdff6704f833e7a021df16ec08e1478edd5a285c1f894929b91a7f74a5c7c0",
+    "version": "4.7.2-stable"
+  },
+  "source_closure_sha256": "3ace23bcf84598cda64d54bbe3fc4736acde877f9f714fb71e2355d3e809eea4",
+  "source_hashes": {
+    "toolchain_lock": "57378d25ac7f673f94d325f422a9324e626620e0132fa34d5d040695f83be0c2",
+    "runner": "ea522450acc46f90be5e2a7b9257e73ce8b619948105b2c9073aac1f881c7328"
+  }
+}

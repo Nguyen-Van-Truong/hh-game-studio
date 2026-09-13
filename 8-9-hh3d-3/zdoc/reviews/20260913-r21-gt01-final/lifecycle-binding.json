@@ -23,9 +23,11 @@
   },
   "artifact_files": {
     "lifecycle/report.json": "b33d54312e00a4a24fdb87f5ea31d8b991e73ee98b76fb0b7b5c0b11b8d6810d",
-    "gt01-scoped-gates.json": "d78c0b00cff3a79db7ee9bbb0062dca599146ca0867369ffce66be3a908f915f"
+    "gt01-scoped-gates.json": "d78c0b00cff3a79db7ee9bbb0062dca599146ca0867369ffce66be3a908f915f",
+    "official-archive-install.json": "b6cedf45b51189448acf843b160fc80d017922e5f7136223961597e3e76e7227"
   },
   "limits": [
     "binding joins the lifecycle candidate to the complete closure; lifecycle remains synthetic/cooperative"
-  ]
+  ],
+  "official_archive_install_source_closure_sha256": "3ace23bcf84598cda64d54bbe3fc4736acde877f9f714fb71e2355d3e809eea4"
 }

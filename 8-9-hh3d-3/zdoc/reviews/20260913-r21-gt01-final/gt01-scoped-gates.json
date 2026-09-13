@@ -21,17 +21,25 @@
       "command": "binder + evidence secret/UTF-8 scan",
       "observed": "READY_FOR_CRITIC; no warning/error/secret marker",
       "scope": "candidate evidence hygiene only"
+    },
+    {
+      "id": "ARCHIVE_INSTALL",
+      "command": "verify_archive.py + install_toolchain.install/activate/rollback on official local bytes",
+      "observed": "VERIFIED_BYTES_ONLY, INSTALLED_NOT_ACTIVATED, ACTIVATED, ROLLED_BACK",
+      "scope": "offline official archive bytes; package receipt and source hashes bound"
     }
   ],
   "evidence": {
     "runner": "evidence.json",
     "binder": "binder-result.json",
     "lifecycle_report": "lifecycle/report.json",
-    "closure": "source-closure-manifest.json"
+    "closure": "source-closure-manifest.json",
+    "official_archive_install": "official-archive-install.json"
   },
   "limits": [
     "does not prove production network denial, token rotation, quota fairness or hostile OS-user isolation",
     "does not promote CANDIDATE or replace two independent critics",
-    "official archives remain lock-bound and full installer/migration/uninstall stays GT-10"
+    "official archives remain lock-bound and full installer/migration/uninstall stays GT-10",
+    "Windows directory fsync reports FILE_FLUSHED_DIRECTORY_SYNC_UNAVAILABLE_WINDOWS; this is recorded durability, not silently upgraded"
   ]
 }
