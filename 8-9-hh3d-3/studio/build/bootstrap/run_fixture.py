@@ -77,6 +77,33 @@ def hash_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def source_closure_sha256(source_manifest: dict[str, str]) -> str:
+    """Return the canonical hash used by the frozen GT-01 closure.
+
+    ``checked_files`` reports paths relative to ``studio``.  The freeze
+    manifest canonicalises those same paths under the stable product prefix,
+    then sorts by path and joins ``path NUL sha256 NEWLINE`` records.  Keeping
+    the prefix stable makes this value independent of the checkout's absolute
+    location while remaining byte-for-byte compatible with the freeze
+    verifier's ``closure_hash`` algorithm.
+    """
+    if not isinstance(source_manifest, dict):
+        raise ValueError("source manifest must be an object")
+    canonical_rows: list[str] = []
+    for path, digest in source_manifest.items():
+        if not isinstance(path, str) or not path or "\\" in path or path.startswith("/"):
+            raise ValueError("source manifest contains an unsafe path")
+        parts = path.split("/")
+        if any(part in ("", ".", "..") for part in parts):
+            raise ValueError("source manifest contains traversal")
+        if not isinstance(digest, str) or not re.fullmatch(r"[0-9a-f]{64}", digest):
+            raise ValueError("source manifest contains an invalid digest")
+        canonical_rows.append(f"8-9-hh3d-3/studio/{path}\0{digest}\n")
+    if not canonical_rows:
+        raise ValueError("source manifest is empty")
+    return hashlib.sha256("".join(sorted(canonical_rows)).encode("utf-8")).hexdigest()
+
+
 def _is_reparse(path: Path) -> bool:
     if os.name != "nt":
         return path.is_symlink()
@@ -421,9 +448,14 @@ def main(argv: list[str] | None = None) -> int:
             return fail(f"version mismatch: {raw_version}")
     except (OSError, ValueError, subprocess.SubprocessError) as error:
         return fail(str(error))
+    try:
+        source_closure_digest = source_closure_sha256(before)
+    except ValueError as error:
+        return fail(str(error))
     if args.check_only:
         print(json.dumps({"status": "CHECK_ONLY_PASS", "expected_version": args.expected_version,
-                          "observed_version": observed, "source_files": len(before)}))
+                          "observed_version": observed, "source_files": len(before),
+                          "source_closure_sha256": source_closure_digest}))
         return 0
     output.mkdir(parents=True, exist_ok=False)
     snapshot = output / "snapshot-unicode-đ" / "sample-game"
@@ -481,7 +513,8 @@ def main(argv: list[str] | None = None) -> int:
                 "run_id": args.run_id, "command_id": args.command_id, "recorded_at": utc_now(),
                 "expected_version": args.expected_version, "observed_version": observed,
                 "console_sha256": args.console_sha256.lower(), "gui_sha256": args.gui_sha256.lower(),
-                "source_manifest": before, "runs": runs, "trace_lines": trace_lines,
+                "source_manifest": before, "source_closure_sha256": source_closure_digest,
+                "runs": runs, "trace_lines": trace_lines,
                 "checks": {"trace_exactly_one_pass": trace_ok, "stderr_clean": clean_stderr, "streams_clean": streams_clean,
                            "source_stable": source_stable, "snapshot_stable": snapshot_stable,
                            "binaries_stable": binaries_stable, "lock_bound": True,

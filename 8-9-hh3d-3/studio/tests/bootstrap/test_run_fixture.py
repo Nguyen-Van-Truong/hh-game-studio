@@ -23,6 +23,32 @@ class RunFixtureTests(unittest.TestCase):
             self.assertEqual(run_fixture.hash_file(file), hashlib.sha256(b"hello").hexdigest())
             self.assertIn("sample.txt", run_fixture.checked_files(root))
 
+    def test_source_closure_hash_is_canonical_and_order_independent(self):
+        records = {
+            "z.txt": "b" * 64,
+            "a.txt": "a" * 64,
+        }
+        expected_payload = "".join(
+            f"8-9-hh3d-3/studio/{path}\0{records[path]}\n"
+            for path in sorted(records)
+        ).encode("utf-8")
+        expected = hashlib.sha256(expected_payload).hexdigest()
+        self.assertEqual(run_fixture.source_closure_sha256(records), expected)
+        self.assertEqual(
+            run_fixture.source_closure_sha256(dict(reversed(list(records.items())))),
+            expected,
+        )
+
+    def test_source_closure_hash_changes_when_source_digest_changes(self):
+        records = {"fixture.txt": "a" * 64}
+        original = run_fixture.source_closure_sha256(records)
+        records["fixture.txt"] = "b" * 64
+        self.assertNotEqual(run_fixture.source_closure_sha256(records), original)
+
+    def test_source_closure_hash_rejects_unsafe_manifest(self):
+        with self.assertRaises(ValueError):
+            run_fixture.source_closure_sha256({"../escape.txt": "a" * 64})
+
     def test_timeout_captures_owned_child(self):
         with tempfile.TemporaryDirectory() as temporary:
             output = Path(temporary)

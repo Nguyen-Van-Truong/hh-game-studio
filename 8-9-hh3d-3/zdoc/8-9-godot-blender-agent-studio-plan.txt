@@ -91,6 +91,14 @@ runtime evidence because it lacks a matching computed source-closure binding
 (and remains CANDIDATE). This is the intended result, not a verifier failure:
 remint evidence must include the complete closure and source_closure_sha256
 after the final source freeze, then pass the verifier before critic dispatch.
+R16_PROGRESS=Runner now emits source_closure_sha256 using the stable canonical
+path/hash algorithm. Closure R15 was regenerated after the source edit: 20/20
+required source, fixture, test and documentation files verify with closure hash
+df94c50173d296f446438c3b1ba022982d9eacde67705c6d609ecfa6d0f0a6a0. The serial
+Godot 4.7.2 remint `GT01-R16-df94c50173d2-OFFICIAL-01` passed all three runtime
+lanes with host exits, clean streams and tree proof, and evidence is bound to
+that closure. It remains CANDIDATE until coordinator officialization and two
+independent critics; the binder correctly rejects candidate status.
 REVIEW_BASE_COMMIT=b4195ca
 HISTORICAL_REJECTED_COMMIT=54d0c7c
 HISTORICAL_STUDIO_COMMIT=3cc7a85f730c99963a5a64079a0e02dc20edbd40

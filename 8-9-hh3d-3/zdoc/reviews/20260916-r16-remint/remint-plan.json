@@ -1,0 +1,19 @@
+{
+  "command_id": "cmd.gt01.remint.r16.df94c50173d2",
+  "constraints": [
+    "Do not launch a second Godot/Blender process for this fixture path.",
+    "Create a new evidence directory; never overwrite a prior run.",
+    "Re-run this preflight after any source, lock, or binary change.",
+    "READY_FOR_SERIAL_RUNTIME is not acceptance; binder and two critics remain required."
+  ],
+  "launch_command_redacted": "python 8-9-hh3d-3/studio/build/bootstrap/run_fixture.py --studio-root <PRODUCT_ROOT>/studio --godot-exe <GODOT_CONSOLE> --expected-version 4.7.2-stable --console-sha256 c8f0a6bc45a19b33541501e57f6f7cd972ab18453743266339d495cbbe846643 --gui-sha256 ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424 --run-id GT01-R16-df94c50173d2-OFFICIAL-01 --command-id cmd.gt01.remint.r16.df94c50173d2 --output <NEW_EVIDENCE_DIR>",
+  "post_run_binder_command": "python 8-9-hh3d-3/zdoc/reviews/20260915-r15-evidence/evidence_binder.py --source-manifest 8-9-hh3d-3/zdoc/reviews/20260915-r15-closure/source-closure-manifest.json --runner-output <NEW_EVIDENCE_DIR>/official-evidence.json --repo-root <FROZEN_REPO_ROOT> --output <NEW_EVIDENCE_DIR>/binder-result.json",
+  "reservation": "one-process.reservation (atomic O_EXCL, released after preflight)",
+  "revision_hint": "472-stable",
+  "run_id": "GT01-R16-df94c50173d2-OFFICIAL-01",
+  "schema": "HH3D-GT01-REMINT-PLAN-1",
+  "source_closure_sha256": "df94c50173d296f446438c3b1ba022982d9eacde67705c6d609ecfa6d0f0a6a0",
+  "source_file_count": 20,
+  "status": "READY_FOR_SERIAL_RUNTIME",
+  "toolchain_version": "4.7.2-stable"
+}
