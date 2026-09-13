@@ -1,11 +1,13 @@
 # GT-01 closure remint (r15)
 
 `closure_manifest.py` is a read-only generator and verifier for the final GT-01
-source closure. It includes the pinned bootstrap runtime, both fixtures, every
-bootstrap test, and the fixture/bootstrap documentation. Paths are repository
-relative; caches, `.godot`, evidence, temporary files and runtime output are
-excluded. The aggregate `source_closure_sha256` is canonical and excludes the
-generation timestamp.
+source closure. It mirrors the bootstrap runner's complete `studio/` inventory,
+including every runtime/bootstrap script, fixture source, documentation, and
+bootstrap test (new helpers are discovered automatically). Paths are repository
+relative; `.local`, `.godot`, `__pycache__`, and `evidence` are excluded. The
+aggregate `source_closure_sha256` is canonical and excludes the
+generation timestamp. Reparse points, symlinks, hard links, duplicate paths,
+traversal, host-path markers, and non-empty `gaps` fail closed.
 
 Generate and verify from the repository root:
 
