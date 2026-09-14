@@ -1,4 +1,5 @@
 # Frozen HH3D source manifests hash the same bytes on Windows and CI.
+.gitattributes text eol=lf
 *.txt text eol=lf
 *.md text eol=lf
 *.json text eol=lf
@@ -14,3 +15,12 @@
 *.snapshot -text
 studio/evidence/** -text
 zdoc/reviews/20260910-r6/worker-output/** -text
+# Hash-bound GT-02 run packages and their historical records retain exact bytes.
+# Source files above still use LF; never normalize a captured proof on checkout.
+zdoc/reviews/*-gt02-s[0-9]*/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+zdoc/reviews/*-gt02-s[0-9]*.md -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+zdoc/reviews/20260914-plan-history-s27/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+# Preserve the reviewers' Markdown hard line breaks in these immutable reports.
+zdoc/reviews/20260914-gt02-s26-02-critic-[ab].md whitespace=-blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+# The completed historical research report retains its original final blank line.
+zdoc/reviews/20260914-gt02-s27-windows-write-research.md whitespace=blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol

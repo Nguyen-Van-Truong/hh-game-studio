@@ -1,0 +1,228 @@
+{
+  "schema": "hh-gt02-solo-verification-v1",
+  "status": "COORDINATOR_LOGIC_VERIFIED",
+  "source_closure_sha256": "204450d1cf02a315ced729f2cfc6ca4c615ddfaf3a30deb8c3bb758d610368e5",
+  "source_files": 61,
+  "artifacts_verified": 9,
+  "candidate_sha256": "47104446c201350fd92ff53c958e8144eab7d55aa3623766a34e366137f9204d",
+  "counts": {
+    "protocol": {
+      "run": 143,
+      "passed": 139,
+      "skipped": 4
+    },
+    "bootstrap": {
+      "run": 56,
+      "passed": 56,
+      "skipped": 0
+    }
+  },
+  "skips": [
+    {
+      "id": "test_core.ProtocolCoreTests.test_path_root_traversal_and_symlink",
+      "reason": "symlink creation unavailable"
+    },
+    {
+      "id": "test_limits.LimitsTests.test_symlink_is_rejected_when_present",
+      "reason": "symlink unavailable on this host"
+    },
+    {
+      "id": "test_safe_open.ResolverTests.test_dangling_link_rejects_when_host_allows_link_creation",
+      "reason": "symbolic-link creation unavailable; Windows junction is tested separately"
+    },
+    {
+      "id": "test_safe_open.ResolverTests.test_linux_does_not_fall_back_to_realpath",
+      "reason": "non-Windows negative capability"
+    }
+  ],
+  "golden_rows": 2396,
+  "godot_negative_cases": 9,
+  "coverage": [
+    {
+      "requirement": "P-01",
+      "test_ids": [
+        "test_rejection_matrix.RejectionMatrixTests.test_raw_wire_rejections_leave_every_observed_boundary_unchanged"
+      ],
+      "observed": "PASSED_TEST_SCOPE_ONLY"
+    },
+    {
+      "requirement": "P-02",
+      "test_ids": [
+        "test_golden_vectors.GoldenVectorTests.test_python_vectors",
+        "test_golden_vectors.GoldenVectorTests.test_node_consumer_when_available",
+        "test_golden_vectors.GoldenVectorTests.test_godot_consumer_when_available"
+      ],
+      "observed": "PASSED_TEST_SCOPE_ONLY"
+    },
+    {
+      "requirement": "P-03",
+      "test_ids": [
+        "test_core.ProtocolCoreTests.test_unicode_and_large_integer_reject",
+        "test_rejection_matrix.RejectionMatrixTests.test_raw_wire_rejections_leave_every_observed_boundary_unchanged"
+      ],
+      "observed": "PASSED_TEST_SCOPE_ONLY"
+    },
+    {
+      "requirement": "P-04",
+      "test_ids": [
+        "test_domain_contract.DomainContractTests.test_non_nfc_name_rejects_before_command_construction",
+        "test_domain_contract.DomainContractTests.test_wire_payload_hashes_preserve_composed_and_decomposed_text"
+      ],
+      "observed": "PASSED_TEST_SCOPE_ONLY"
+    },
+    {
+      "requirement": "P-05",
+      "test_ids": [
+        "test_rejection_matrix.RejectionMatrixTests.test_every_required_envelope_field_is_required_without_side_effects",
+        "test_rejection_matrix.RejectionMatrixTests.test_envelope_type_and_unknown_field_rejections_have_no_effect"
+      ],
+      "observed": "PASSED_TEST_SCOPE_ONLY"
+    },
+    {
+      "requirement": "P-06",
+      "test_ids": [
+        "test_core.ProtocolCoreTests.test_response_status",
+        "test_transport.TransportTests.test_authenticated_discovery_and_typed_fixture_roundtrip"
+      ],
+      "observed": "PASSED_TEST_SCOPE_ONLY"
+    },
+    {
+      "requirement": "P-07",
+      "test_ids": [
+        "test_transport.TransportTests.test_authenticated_discovery_and_typed_fixture_roundtrip",
+        "test_transport.TransportTests.test_read_only_default_session_cannot_mutate_or_stop"
+      ],
+      "observed": "PASSED_TEST_SCOPE_ONLY"
+    },
+    {
+      "requirement": "P-08",
+      "test_ids": [
+        "test_rejection_matrix.RejectionMatrixTests.test_semantic_scope_identity_hash_and_deadline_rejections_have_no_effect"
+      ],
+      "observed": "PASSED_TEST_SCOPE_ONLY"
+    },
+    {
+      "requirement": "P-09",
+      "test_ids": [
+        "test_transport_recovery.TransportRecoveryTests.test_fence_cannot_change_between_validation_and_effect",
+        "test_transport.TransportTests.test_queued_revision_and_lease_are_checked_again_before_apply"
+      ],
+      "observed": "PASSED_TEST_SCOPE_ONLY"
+    },
+    {
+      "requirement": "P-10",
+      "test_ids": [
+        "test_journal_cas.JournalCasTests.test_same_command_concurrent_retries_have_one_durable_result",
+        "test_journal.JournalTests.test_same_id_different_payload_rejects"
+      ],
+      "observed": "PASSED_TEST_SCOPE_ONLY"
+    },
+    {
+      "requirement": "P-11",
+      "test_ids": [
+        "test_transport.TransportTests.test_same_id_changed_payload_conflicts_and_cannot_apply_twice"
+      ],
+      "observed": "PASSED_TEST_SCOPE_ONLY"
+    },
+    {
+      "requirement": "P-12",
+      "test_ids": [
+        "test_journal_retention.JournalRetentionTests.test_archive_retains_original_receipt_across_repeated_compact_and_reopen",
+        "test_transport_recovery.TransportRecoveryTests.test_expired_archive_is_authenticated_read_only_and_retains_original_receipt"
+      ],
+      "observed": "PASSED_TEST_SCOPE_ONLY"
+    },
+    {
+      "requirement": "P-13",
+      "test_ids": [
+        "test_transport_recovery.TransportRecoveryTests.test_capacity_reserves_terminal_record_and_bytes_before_mutation",
+        "test_journal_platform.JournalPlatformTests.test_reopen_and_compaction_stream_receipts_with_bounded_memory"
+      ],
+      "observed": "PASSED_TEST_SCOPE_ONLY"
+    },
+    {
+      "requirement": "P-14",
+      "test_ids": [
+        "test_safe_open.WindowsSafeOpenTests.test_parent_handle_blocks_rename_before_final_file_is_open",
+        "test_safe_open.WindowsSafeOpenTests.test_ancestor_swap_between_resolve_and_open_is_rejected",
+        "test_safe_open.WindowsSafeOpenTests.test_final_file_swap_to_hardlink_between_resolve_and_open_rejects"
+      ],
+      "observed": "PASSED_TEST_SCOPE_ONLY"
+    },
+    {
+      "requirement": "P-15",
+      "test_ids": [
+        "test_safe_open.WindowsSafeOpenTests.test_every_mutation_rejects_before_io_even_during_junction_swaps",
+        "test_safe_open.WindowsSafeOpenTests.test_exclusive_handle_hardlink_counterexample_keeps_mutation_disabled"
+      ],
+      "observed": "PASSED_TEST_SCOPE_ONLY"
+    },
+    {
+      "requirement": "P-16",
+      "test_ids": [
+        "test_transport.TransportTests.test_auth_required_for_every_read_write_and_control_route",
+        "test_transport_recovery.TransportRecoveryTests.test_queued_read_authorization_is_rechecked_after_rotation_revoke_and_expiry"
+      ],
+      "observed": "PASSED_TEST_SCOPE_ONLY"
+    },
+    {
+      "requirement": "P-17",
+      "test_ids": [
+        "test_security_vectors.SecurityVectorTests.test_no_exec_primitives_in_validation_modules",
+        "test_rejection_matrix.RejectionMatrixTests.test_semantic_scope_identity_hash_and_deadline_rejections_have_no_effect"
+      ],
+      "observed": "PASSED_TEST_SCOPE_ONLY"
+    },
+    {
+      "requirement": "P-18",
+      "test_ids": [
+        "test_transport_recovery.TransportRecoveryTests.test_old_credentials_and_encoded_variants_never_enter_metadata_or_output",
+        "test_redaction.RedactionTests.test_real_log_receipt_output_file_contains_only_redacted_bytes"
+      ],
+      "observed": "PASSED_TEST_SCOPE_ONLY"
+    },
+    {
+      "requirement": "P-19",
+      "test_ids": [
+        "test_transport_recovery.TransportRecoveryTests.test_pending_ack_socket_cuts_preserve_lookup_and_one_effect",
+        "test_transport_recovery.TransportRecoveryTests.test_committed_lookup_ack_socket_cuts_return_original_receipt",
+        "test_transport_recovery.TransportRecoveryTests.test_cancel_ack_socket_cuts_do_not_duplicate_or_apply",
+        "test_transport_recovery.TransportRecoveryTests.test_stop_ack_socket_cuts_preserve_stopped_state_on_reconnect"
+      ],
+      "observed": "PASSED_TEST_SCOPE_ONLY"
+    },
+    {
+      "requirement": "P-20",
+      "test_ids": [
+        "test_security_vectors.SecurityVectorTests.test_prompt_injection_is_data_and_never_executed",
+        "test_rejection_matrix.RejectionMatrixTests.test_semantic_scope_identity_hash_and_deadline_rejections_have_no_effect"
+      ],
+      "observed": "PASSED_TEST_SCOPE_ONLY"
+    },
+    {
+      "requirement": "P-21",
+      "test_ids": [
+        "test_golden_vectors.GoldenVectorTests.test_python_vectors",
+        "test_golden_vectors.GoldenVectorTests.test_node_consumer_when_available",
+        "test_golden_vectors.GoldenVectorTests.test_godot_consumer_when_available"
+      ],
+      "observed": "PASSED_TEST_SCOPE_ONLY"
+    },
+    {
+      "requirement": "P-22",
+      "test_ids": [
+        "test_domain_contract.DomainContractTests.test_real_parser_rejections_resolve_to_fixed_actionable_guidance",
+        "test_domain_contract.DomainContractTests.test_unknown_codes_are_bounded_inert_and_never_echoed"
+      ],
+      "observed": "PASSED_TEST_SCOPE_ONLY"
+    }
+  ],
+  "formal_acceptance": false,
+  "independent_critic_signatures": 0,
+  "limits": [
+    "P-02/P-21 serializer conformance; Python host owns raw wire admission",
+    "P-14/P-15 read identity and safe rejection only; Windows/Linux file mutation unsupported",
+    "P-19 in-process fixture transport; engine tree recovery belongs to later gates",
+    "one coordinator verification is not two independent reviews"
+  ]
+}

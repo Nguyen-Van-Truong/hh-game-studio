@@ -1,15 +1,13 @@
 """GT-02 hostile-input vectors.
 
 These tests exercise the protocol/limits boundary only.  They deliberately do
-not launch a process or mutate a project.  A missing transport Stop API is
-reported as an explicit skip; inventing a passing cancellation result would
-make this suite unsafe as acceptance evidence.
+not launch a process or mutate a project. Real Stop/Cancel/UNKNOWN socket
+coverage is owned by test_transport.py, not inferred from protocol enums.
 """
 from __future__ import annotations
 
 import ast
 import hashlib
-import importlib
 import json
 from pathlib import Path
 import sys
@@ -157,17 +155,6 @@ class SecurityVectorTests(unittest.TestCase):
                         resolver.resolve(path)
             with self.assertRaisesRegex(SafetyViolation, "UNSUPPORTED_SAFE_OPEN"):
                 resolver.resolve("new.txt", for_write=True)
-
-    def test_stop_api_is_explicitly_unsupported_when_absent(self) -> None:
-        """Do not claim cancellation proof until a real transport API exists."""
-        candidates = []
-        for module_name in ("protocol.core", "host.core.limits", "host.core.journal"):
-            module = importlib.import_module(module_name)
-            candidates.extend(name for name in dir(module) if name.lower() in {"stop", "cancel", "abort"})
-        if not candidates:
-            self.skipTest("UNSUPPORTED: no transport Stop/Cancel API is implemented in GT-02")
-        self.fail(f"Stop API requires a dedicated integration vector: {candidates}")
-
 
 if __name__ == "__main__":
     unittest.main()

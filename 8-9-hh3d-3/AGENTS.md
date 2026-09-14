@@ -1,5 +1,10 @@
 # HH3D-3 — routing hiện hành
 
+Owner steering mới nhất 14-09-2026: SOLO, chỉ coordinator tiếp tục; không tạo
+worker/subagent, Grok CLI hay task thay thế. Các worker cũ đã kết thúc.
+Tự review không được ghi thành hai review độc lập; giữ nguyên bằng chứng,
+dependency/DoD và ghi rõ formal review còn thiếu. Plan S28 là routing hiện hành.
+
 Chỉ có đúng hai plan TXT đang hoạt động:
 
 1. [8-9-godot-blender-agent-studio-plan.txt](zdoc/8-9-godot-blender-agent-studio-plan.txt) — bộ công cụ Godot + Blender + agent, làm trước.
@@ -12,21 +17,13 @@ DoD. Review/static evidence nằm trong zdoc/reviews/, không phải nguồn ti�
 
 Thứ tự: GT-01→GT-10 rồi H2-P0-01→H2-P9-02. Không fork lõi Godot lúc đầu;
 không chạy Blender trên server người chơi; không coi số tài khoản đăng ký là
-số avatar realtime. Theo lệnh owner 10-09-2026, worker/search/critic dùng
-Grok CLI chính thức vẫn là lựa chọn cho các phiên research/critic đã được
-định danh trong hồ sơ lịch sử: model grok-4.6, reasoning-effort xhigh,
---no-subagents.
-Theo quyền owner 12-09-2026, coordinator được tự làm và dùng Codex
-Worker Codex hiện hành theo owner steering: gpt-6-astra reasoning high, lease
-hẹp và file scope độc lập; không tự thay hai critic acceptance. Có thể dùng
-gpt-5.6-sol high cho audit/helper khi Astra không phù hợp. Worker chỉ là
-candidate; coordinator chạy verify, cập nhật plan và quyết định acceptance.
-Grok nghiệm thu. Không Cursor/Auto/fallback/hidden subagent. Kiểm --help và grok
-models theo phiên; không bịa cờ fast nếu CLI không cung cấp. Mỗi worker có
-attempt/session riêng, phạm vi ghi riêng và host exit thực. Tối đa hai lần
-poll mỗi batch; supervisor/watcher báo terminal để coordinator review.
+số avatar realtime. Routing Grok/Codex workers của các phiên trước chỉ là lịch
+sử trong plan archive/reviews. Hiện tại một coordinator sở hữu source scope,
+chạy verify và cập nhật tiến độ; không dispatch thêm agent. Giữ checkpoint,
+actual process exit, source hash và evidence; không bịa cờ hay chữ ký critic.
 
-Owner đã cho phép triển khai theo dependency; GT-01 đang IN_PROGRESS.
+Owner đã cho phép triển khai theo dependency; đọc trạng thái hiện hành từ
+bảng đầu plan công cụ và CURRENT_VALID_WP, không giữ bản sao tiến độ ở đây.
 Quyền triển khai không thay evidence/critic/legal/human acceptance. Không có
 engine/game/server nào được nghiệm thu chỉ vì plan tồn tại. Một writer/lease/
 path allowlist; worker không tự tick. Không sửa scope Vault Fighters/platform.

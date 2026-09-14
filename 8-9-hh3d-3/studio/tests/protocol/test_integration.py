@@ -45,4 +45,30 @@ class ProtocolIntegrationTests(unittest.TestCase):
         payload = {"text":"ok"}
         self.assertEqual(payload_digest("fixture.inspect", {"path":"main.tscn"}, payload, "hh-studio-0.1"), "sha256:" + hashlib.sha256(canonical_bytes(payload)).hexdigest())
 
+    def test_real_epoch_deadline_and_emitted_request_interoperate(self):
+        now_ms = 1_789_400_000_000
+        request = Request.from_dict(envelope(deadline_ms=now_ms + 1000, target={"path": "cảnh/đồ vật.tscn"}))
+        self.assertEqual(validate_envelope(request.as_dict(), now_ms=now_ms)["digest"], request.digest)
+        with self.assertRaisesRegex(SafetyViolation, "DEADLINE_OUT_OF_RANGE"):
+            validate_envelope(request.as_dict(), now_ms=now_ms + 1000)
+
+    def test_host_cannot_accept_typed_invalid_fields(self):
+        for change in ({"deadline_ms": True}, {"payload_hash": "SHA256:" + "A" * 64},
+                       {"operation": "arbitrary code"}, {"fencing_epoch": 1 << 60}):
+            with self.subTest(change=change):
+                with self.assertRaises(ValidationError):
+                    Request.from_dict(envelope(**change))
+                with self.assertRaises(SafetyViolation):
+                    validate_envelope(envelope(**change), now_ms=0)
+
+    def test_parser_recursion_and_key_unicode_are_stable_rejections(self):
+        from studio.protocol import parse_json
+        raw = "[" * 2000 + "0" + "]" * 2000
+        with self.assertRaisesRegex(ValidationError, "DEPTH_LIMIT"):
+            parse_json(raw)
+        with self.assertRaisesRegex(SafetyViolation, "DEPTH_LIMIT"):
+            parse_json_utf8(raw)
+        with self.assertRaisesRegex(ValidationError, "INVALID_UNICODE"):
+            parse_json('{"\\ud800":1}')
+
 if __name__ == "__main__": unittest.main()

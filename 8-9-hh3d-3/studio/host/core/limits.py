@@ -20,11 +20,13 @@ from typing import Any, Mapping
 try:  # package import from repository root
     from studio.protocol.core import (
         SCHEMA_VERSION as CANONICAL_SCHEMA_VERSION,
+        Request, ValidationError,
         canonical_json as canonical_protocol_json,
     )
 except ImportError:  # direct studio-root test/CLI invocation
     from protocol.core import (  # type: ignore[no-redef]
         SCHEMA_VERSION as CANONICAL_SCHEMA_VERSION,
+        Request, ValidationError,
         canonical_json as canonical_protocol_json,
     )
 
@@ -142,7 +144,9 @@ def parse_json_utf8(raw: bytes | str, *, limits: LimitsProfile = DEFAULT_LIMITS)
         value = json.loads(text, object_pairs_hook=pairs, parse_constant=constant)
     except SafetyViolation:
         raise
-    except (json.JSONDecodeError, UnicodeDecodeError) as exc:
+    except RecursionError as exc:
+        raise SafetyViolation("DEPTH_LIMIT") from exc
+    except (json.JSONDecodeError, UnicodeDecodeError, ValueError) as exc:
         raise SafetyViolation("INVALID_JSON") from exc
     _reject_non_finite(value, limits=limits)
     return value
@@ -191,17 +195,23 @@ def validate_envelope(envelope: Mapping[str, Any], *, now_ms: int,
     """Validate an agent request before lease/apply.  No side effects occur."""
     if not isinstance(envelope, Mapping):
         raise SafetyViolation("INVALID_ENVELOPE")
+    try:
+        Request.from_dict(envelope)
+    except ValidationError as exc:
+        raise SafetyViolation(exc.code) from exc
     required = ("schema_version", "command_id", "project_id", "operation",
                 "lease_id", "fencing_epoch", "expected_revision", "target",
                 "payload", "payload_hash", "deadline_ms")
     if set(envelope) != set(required):
-        unknown = set(envelope) - set(required)
+        unknown = set(envelope) - (set(required) | {"digest"})
         if unknown:
             raise SafetyViolation("UNKNOWN_FIELD", sorted(unknown)[0])
     missing = [key for key in required if key not in envelope]
     if missing:
         raise SafetyViolation("MISSING_FIELD", ",".join(missing))
-    _reject_non_finite(dict(envelope))
+    _reject_non_finite(dict(envelope), limits=limits)
+    if len(canonical_protocol_json(dict(envelope)).encode("utf-8")) > limits.max_envelope_bytes:
+        raise SafetyViolation("ENVELOPE_TOO_LARGE")
     text_caps = (("schema_version", 64), ("command_id", limits.max_command_id_chars),
                  ("project_id", limits.max_project_id_chars),
                  ("operation", limits.max_operation_chars), ("lease_id", 128),
@@ -219,26 +229,50 @@ def validate_envelope(envelope: Mapping[str, Any], *, now_ms: int,
             raise SafetyViolation("INVALID_FIELD", "target")
     if not isinstance(envelope["deadline_ms"], int) or isinstance(envelope["deadline_ms"], bool):
         raise SafetyViolation("INVALID_DEADLINE")
-    if envelope["deadline_ms"] < now_ms or envelope["deadline_ms"] > now_ms + limits.max_deadline_horizon_ms:
+    if not isinstance(now_ms, int) or isinstance(now_ms, bool) or not 0 <= now_ms <= SAFE_INTEGER_MAX:
+        raise SafetyViolation("INVALID_CLOCK")
+    if envelope["deadline_ms"] <= now_ms or envelope["deadline_ms"] > now_ms + limits.max_deadline_horizon_ms:
         raise SafetyViolation("DEADLINE_OUT_OF_RANGE")
     digest = payload_digest(envelope["operation"], envelope["target"], envelope["payload"], envelope["schema_version"], limits=limits)
-    if not isinstance(envelope["payload_hash"], str) or envelope["payload_hash"].lower() != digest:
+    if not isinstance(envelope["payload_hash"], str) or envelope["payload_hash"] != digest:
         raise SafetyViolation("PAYLOAD_HASH_MISMATCH")
     return dict(envelope)
 
 
 class SafePathResolver:
-    """Lexical root guard; write opens require an OS no-reparse primitive."""
+    """Read-only path inspection, never authority to open a file for mutation.
+
+    A returned Path is a snapshot and can become stale immediately. In
+    particular, callers must not pass it to open()/replace() for a write.
+    ``safe_open_supported`` is retained only for compatibility; caller supplied
+    booleans cannot establish an OS primitive and never unlock a write.
+    """
 
     def __init__(self, root: str | os.PathLike[str], *, safe_open_supported: bool = False) -> None:
-        self.root = Path(root).resolve(strict=True)
-        self.safe_open_supported = safe_open_supported
+        absolute = Path(os.path.abspath(root))
+        for component in (*reversed(absolute.parents), absolute):
+            metadata = component.lstat()
+            if stat.S_ISLNK(metadata.st_mode) or getattr(metadata, "st_file_attributes", 0) & 0x400:
+                raise SafetyViolation("REPARSE_OR_SYMLINK")
+        if not absolute.is_dir():
+            raise SafetyViolation("INVALID_PROJECT_ROOT")
+        self.root = absolute.resolve(strict=True)
+        self.safe_open_supported = False
 
     def resolve(self, relative: str, *, for_write: bool = False, require_existing: bool = False) -> Path:
+        if for_write:
+            # Resolve-only can never prove handle/ancestor/replace identity.
+            # Keep this unconditional even if a consumer toggles the public
+            # legacy attribute after construction.
+            raise SafetyViolation("UNSUPPORTED_SAFE_OPEN_WINDOWS" if os.name == "nt" else "UNSUPPORTED_SAFE_OPEN_LINUX")
         if not isinstance(relative, str) or not relative or "\x00" in relative:
             raise SafetyViolation("INVALID_PATH")
         if len(relative) > DEFAULT_LIMITS.max_target_chars:
             raise SafetyViolation("PATH_TOO_LONG")
+        try:
+            relative.encode("utf-8", "strict")
+        except UnicodeError:
+            raise SafetyViolation("INVALID_PATH_UNICODE") from None
         # pathlib uses host semantics (on Linux it does not split '\\').
         # Inspect the wire spelling first so a Windows path cannot bypass a
         # Linux test runner, and vice versa.
@@ -248,25 +282,44 @@ class SafePathResolver:
         if (relative.startswith(("/", "\\")) or re.match(r"^[A-Za-z]:", relative)
                 or _WINDOWS_DEVICE.match(relative)):
             raise SafetyViolation("DEVICE_OR_ADS_PATH")
-        if ":" in wire_parts[-1]:
-            raise SafetyViolation("DEVICE_OR_ADS_PATH")
+        for part in wire_parts:
+            # Apply Windows spelling constraints on all hosts and components,
+            # including ancestors. Win32 strips trailing spaces/dots and treats
+            # reserved device names specially even when they have extensions.
+            if ":" in part or re.match(r"^(?:CON|PRN|AUX|NUL|CONIN\$|CONOUT\$|COM[1-9¹²³]|LPT[1-9¹²³])(?:\.|$)", part, re.I):
+                raise SafetyViolation("DEVICE_OR_ADS_PATH")
+            if part.endswith((" ", ".")) or any(ord(char) < 32 for char in part) or any(char in '<>"|?*' for char in part):
+                raise SafetyViolation("PATH_ALIAS_OR_INVALID")
         # Build from validated wire components so separator semantics are
         # identical when tests run on a different host OS.
         candidate = Path(*wire_parts)
         if candidate.is_absolute() or any(part in ("", ".", "..") for part in candidate.parts):
             raise SafetyViolation("PATH_TRAVERSAL")
-        if for_write and not self.safe_open_supported:
-            raise SafetyViolation("UNSUPPORTED_SAFE_OPEN_WINDOWS" if os.name == "nt" else "UNSUPPORTED_SAFE_OPEN_LINUX")
+        current = self.root
+        for part in wire_parts:
+            if current.is_dir():
+                # Reject case aliases rather than accepting a different wire
+                # spelling for the same file; this policy is portable.
+                with os.scandir(current) as entries:
+                    for count, entry in enumerate(entries):
+                        if count >= 4096:
+                            raise SafetyViolation("PATH_DIRECTORY_LIMIT")
+                        if entry.name.casefold() == part.casefold() and entry.name != part:
+                            raise SafetyViolation("PATH_CASE_ALIAS")
+            current = current / part
+            try:
+                metadata = current.lstat()
+            except FileNotFoundError:
+                continue
+            if stat.S_ISLNK(metadata.st_mode) or getattr(metadata, "st_file_attributes", 0) & 0x400:
+                raise SafetyViolation("REPARSE_OR_SYMLINK")
         resolved = (self.root / candidate).resolve(strict=False)
         try:
             resolved.relative_to(self.root)
         except ValueError as exc:
             raise SafetyViolation("PATH_ESCAPE") from exc
-        current = self.root
-        for part in wire_parts:
-            current = current / part
-            if current.exists() and (current.is_symlink() or getattr(current.stat(follow_symlinks=False), "st_file_attributes", 0) & 0x400):
-                raise SafetyViolation("REPARSE_OR_SYMLINK")
+        if os.name == "nt" and str(resolved) != str(self.root / candidate):
+            raise SafetyViolation("PATH_ALIAS_OR_INVALID")
         if require_existing and not resolved.exists():
             raise SafetyViolation("PATH_NOT_FOUND")
         if resolved.exists() and stat.S_ISREG(resolved.stat().st_mode) and resolved.stat().st_nlink != 1:

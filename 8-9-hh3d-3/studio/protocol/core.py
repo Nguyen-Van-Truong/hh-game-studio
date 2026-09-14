@@ -37,6 +37,8 @@ _DIGEST = re.compile(r"^sha256:[0-9a-f]{64}$")
 
 def _reject_unknown(value: Mapping[str, Any], allowed: set[str], field: str) -> None:
     """Reject typo/ambiguous fields; extension negotiation is explicit later."""
+    if any(not isinstance(key, str) for key in value):
+        raise ValidationError("INVALID_KEY", field)
     unknown = set(value) - allowed
     if unknown:
         raise ValidationError("UNKNOWN_FIELD", f"{field}.{sorted(unknown)[0]}")
@@ -106,6 +108,10 @@ def _walk(value: Any, depth: int = 0, *, key: str = "") -> None:
         for item_key, item_value in value.items():
             if not isinstance(item_key, str):
                 raise ValidationError("INVALID_KEY", "object keys must be strings")
+            if len(item_key) > MAX_STRING_CHARS:
+                raise ValidationError("STRING_LIMIT", "object key")
+            if any(0xD800 <= ord(char) <= 0xDFFF for char in item_key):
+                raise ValidationError("INVALID_UNICODE", "object key")
             _walk(item_value, depth + 1, key=item_key)
     elif isinstance(value, Sequence):
         if len(value) > MAX_ARRAY_ITEMS:
@@ -140,10 +146,15 @@ def canonical_bytes(value: Any) -> bytes:
 
 
 def parse_json(data: str | bytes) -> Any:
-    if isinstance(data, str):
-        raw = data.encode("utf-8", "strict")
-    else:
-        raw = bytes(data)
+    try:
+        if isinstance(data, str):
+            raw = data.encode("utf-8", "strict")
+        elif isinstance(data, bytes):
+            raw = data
+        else:
+            raise ValidationError("INVALID_JSON", "string or bytes required")
+    except UnicodeEncodeError as exc:
+        raise ValidationError("INVALID_UNICODE", "wire text") from exc
     if len(raw) > MAX_BYTES:
         raise ValidationError("MESSAGE_TOO_LARGE", str(MAX_BYTES))
     try:
@@ -151,8 +162,10 @@ def parse_json(data: str | bytes) -> Any:
                            parse_constant=_reject_constant)
     except ValidationError:
         raise
-    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
-        raise ValidationError("INVALID_JSON", str(exc)) from exc
+    except RecursionError as exc:
+        raise ValidationError("DEPTH_LIMIT", "JSON parser nesting") from exc
+    except (UnicodeDecodeError, json.JSONDecodeError, ValueError) as exc:
+        raise ValidationError("INVALID_JSON", "malformed wire") from exc
     _walk(value)
     return value
 
@@ -177,12 +190,12 @@ class Capability:
 
     def __post_init__(self) -> None:
         _text(self.operation, "capability.operation", pattern=_OP)
+        if (not isinstance(self.read_scopes, (tuple, list))
+                or not isinstance(self.write_scopes, (tuple, list))):
+            raise ValidationError("INVALID_CAPABILITY", "scope lists required")
         for scope in (*self.read_scopes, *self.write_scopes):
             _text(scope, "capability.scope")
-        for key, limit in self.limits.items():
-            _text(key, "capability.limit")
-            if not isinstance(limit, int) or limit < 0 or limit > SAFE_INTEGER:
-                raise ValidationError("INVALID_LIMIT", key)
+        _validate_limits(self.limits)
 
     def as_dict(self) -> dict[str, Any]:
         return {"operation": self.operation, "read_scopes": list(self.read_scopes),
@@ -193,6 +206,9 @@ class Capability:
         if not isinstance(value, Mapping):
             raise ValidationError("INVALID_CAPABILITY", "object required")
         _reject_unknown(value, {"operation", "read_scopes", "write_scopes", "limits"}, "capability")
+        for name in ("read_scopes", "write_scopes"):
+            if not isinstance(value.get(name, ()), (tuple, list)):
+                raise ValidationError("INVALID_CAPABILITY", "scope lists required")
         return cls(value.get("operation", ""), tuple(value.get("read_scopes", ())),
                    tuple(value.get("write_scopes", ())), value.get("limits", {}))
 
@@ -281,16 +297,25 @@ class Request:
         _text(self.operation, "operation", pattern=_OP)
         _text(self.lease_id, "lease_id")
         _text(self.expected_revision, "expected_revision")
-        if not isinstance(self.fencing_epoch, int) or isinstance(self.fencing_epoch, bool) or self.fencing_epoch < 0:
+        if (not isinstance(self.fencing_epoch, int) or isinstance(self.fencing_epoch, bool)
+                or not 0 <= self.fencing_epoch <= SAFE_INTEGER):
             raise ValidationError("INVALID_FIELD", "fencing_epoch")
-        if not isinstance(self.deadline_ms, int) or self.deadline_ms <= 0 or self.deadline_ms > 86_400_000:
+        # Absolute Unix epoch milliseconds. The host enforces expiry and its
+        # negotiated future horizon when receiving the request.
+        if (not isinstance(self.deadline_ms, int) or isinstance(self.deadline_ms, bool)
+                or not 0 < self.deadline_ms <= SAFE_INTEGER):
             raise ValidationError("INVALID_DEADLINE", "deadline_ms")
         if self.schema_version != SCHEMA_VERSION:
             raise ValidationError("UNSUPPORTED_SCHEMA", self.schema_version)
         if not isinstance(self.target, Mapping) or set(self.target) not in ({"stable_id"}, {"path"}):
             raise ValidationError("INVALID_TARGET", "exactly stable_id or path")
         for key, value in self.target.items():
-            _text(value, f"target.{key}")
+            if key == "path":
+                if not isinstance(value, str) or not value or len(value) > 2048 or "\x00" in value:
+                    raise ValidationError("INVALID_TARGET", "target.path")
+                _walk(value)
+            else:
+                _text(value, f"target.{key}")
         if not isinstance(self.payload, Mapping) or len(canonical_bytes(self.payload)) > MAX_PAYLOAD_BYTES:
             raise ValidationError("PAYLOAD_TOO_LARGE", str(MAX_PAYLOAD_BYTES))
         expected = _payload_hash(self.payload)
@@ -352,8 +377,15 @@ class Response:
                 raise ValidationError("INVALID_STATUS", str(self.status)) from exc
         _text(self.code, "code")
         _text(self.command_id, "command_id")
-        if self.retry_after_ms is not None and (not isinstance(self.retry_after_ms, int) or self.retry_after_ms < 0):
+        if self.result_revision is not None:
+            _text(self.result_revision, "result_revision")
+        if self.result_hash is not None and (not isinstance(self.result_hash, str) or not _DIGEST.fullmatch(self.result_hash)):
+            raise ValidationError("INVALID_DIGEST", "result_hash")
+        if self.retry_after_ms is not None and (not isinstance(self.retry_after_ms, int)
+                or isinstance(self.retry_after_ms, bool) or not 0 <= self.retry_after_ms <= SAFE_INTEGER):
             raise ValidationError("INVALID_FIELD", "retry_after_ms")
+        if not isinstance(self.postconditions, Mapping):
+            raise ValidationError("INVALID_RESPONSE", "postconditions object required")
         _walk(self.postconditions)
 
     def as_dict(self) -> dict[str, Any]:
@@ -389,25 +421,17 @@ def validate_for_dispatch(request: Request, discovery: Discovery) -> None:
 
 
 def resolve_project_path(root: str | os.PathLike[str], relative: str) -> Path:
-    """Resolve a project-relative path and reject traversal/reparse escapes."""
-    if not isinstance(relative, str) or not relative or "\x00" in relative:
-        raise ValidationError("INVALID_PATH", "path")
-    wire_parts = re.split(r"[\\/]", relative)
-    if (_FORBIDDEN_PATH.search(relative) or os.path.isabs(relative)
-            or relative.startswith(("/", "\\"))
-            or re.match(r"^[A-Za-z]:", relative)
-            or any(part in ("", ".", "..") for part in wire_parts)
-            or ":" in wire_parts[-1]):
-        raise ValidationError("PATH_OUTSIDE_ROOT", relative)
-    root_path = Path(root).resolve(strict=True)
-    candidate = (root_path / Path(relative)).resolve(strict=False)
+    """Compatibility inspection helper using the host's single path policy.
+
+    Returning a Path never grants write permission or an OS handle. Consumers
+    must use the supported safe-open capability for actual I/O.
+    """
+    if __package__ == "studio.protocol":
+        from ..host.core.limits import SafePathResolver, SafetyViolation
+    else:
+        from host.core.limits import SafePathResolver, SafetyViolation
     try:
-        candidate.relative_to(root_path)
-    except ValueError as exc:
-        raise ValidationError("PATH_OUTSIDE_ROOT", relative) from exc
-    current = root_path
-    for part in Path(relative).parts:
-        current = current / part
-        if current.exists() and current.is_symlink():
-            raise ValidationError("REPARSE_OR_SYMLINK", relative)
-    return candidate
+        return SafePathResolver(root).resolve(relative)
+    except SafetyViolation as exc:
+        code = "PATH_OUTSIDE_ROOT" if exc.code in {"PATH_TRAVERSAL", "PATH_ESCAPE"} else exc.code
+        raise ValidationError(code, "project path rejected") from exc

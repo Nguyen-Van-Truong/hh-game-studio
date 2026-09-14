@@ -1,0 +1,117 @@
+{
+  "schema": "hh-gt02-candidate-v1",
+  "run_id": "GT02-S26-20260914-02",
+  "command_id": "cmd.GT02-S26-20260914-02",
+  "seed": 8785,
+  "started_utc": "2026-09-14T13:50:55.643819+00:00",
+  "completed_utc": "2026-09-14T13:51:17.921192+00:00",
+  "source_closure_sha256": "7c3038103291be4cca3242f8f48cef30c5ec0e00cbc9903b5f2e4be76fc48972",
+  "source_unchanged": true,
+  "environment": {
+    "os": "Windows",
+    "release": "10",
+    "architecture": "AMD64",
+    "python": "3.11.9",
+    "python_sha256": "5f7b89a612c9b8af1d6456cdfcd1dbe5ca630849e79aebced9bee9a6694952ec"
+  },
+  "lanes": [
+    {
+      "suite": "protocol",
+      "host": {
+        "wrapper_pid": 28376,
+        "started_at": "2026-09-14T13:50:55.728480+00:00",
+        "argv": [
+          "python.exe",
+          "-c",
+          "import json,sys,unittest\nfrom pathlib import Path\nsuite=unittest.defaultTestLoader.discover(sys.argv[1], pattern='test_*.py')\nr=unittest.TextTestRunner(verbosity=2).run(suite)\nsummary={'tests_run':r.testsRun,'failures':len(r.failures),'errors':len(r.errors),'skips':len(r.skipped),'skipped':[{'id':t.id(),'reason':s} for t,s in r.skipped]}\nprint('HH_GT02_TEST_RESULT '+json.dumps(summary),flush=True)\nsys.exit(0 if r.wasSuccessful() else 1)",
+          "$SNAPSHOT/studio/tests/protocol"
+        ],
+        "exit_code": 0,
+        "target_pid": 29868,
+        "wrapper_exit_code": 0,
+        "timed_out": false,
+        "tree_verified": true,
+        "ownership": "gated_job_kill_on_close",
+        "stdout": "protocol-stdout.txt",
+        "stderr": "protocol-stderr.txt",
+        "host": "protocol-host.json"
+      },
+      "summary": {
+        "tests_run": 109,
+        "failures": 0,
+        "errors": 0,
+        "skips": 4,
+        "skipped": [
+          {
+            "id": "test_core.ProtocolCoreTests.test_path_root_traversal_and_symlink",
+            "reason": "symlink creation unavailable"
+          },
+          {
+            "id": "test_limits.LimitsTests.test_symlink_is_rejected_when_present",
+            "reason": "symlink unavailable on this host"
+          },
+          {
+            "id": "test_safe_open.ResolverTests.test_dangling_link_rejects_when_host_allows_link_creation",
+            "reason": "symbolic-link creation unavailable; Windows junction is tested separately"
+          },
+          {
+            "id": "test_safe_open.ResolverTests.test_linux_does_not_fall_back_to_realpath",
+            "reason": "non-Windows negative capability"
+          }
+        ]
+      },
+      "passed": true,
+      "missing_required_evidence": []
+    },
+    {
+      "suite": "bootstrap",
+      "host": {
+        "wrapper_pid": 18844,
+        "started_at": "2026-09-14T13:51:10.271291+00:00",
+        "argv": [
+          "python.exe",
+          "-c",
+          "import json,sys,unittest\nfrom pathlib import Path\nsuite=unittest.defaultTestLoader.discover(sys.argv[1], pattern='test_*.py')\nr=unittest.TextTestRunner(verbosity=2).run(suite)\nsummary={'tests_run':r.testsRun,'failures':len(r.failures),'errors':len(r.errors),'skips':len(r.skipped),'skipped':[{'id':t.id(),'reason':s} for t,s in r.skipped]}\nprint('HH_GT02_TEST_RESULT '+json.dumps(summary),flush=True)\nsys.exit(0 if r.wasSuccessful() else 1)",
+          "$SNAPSHOT/studio/tests/bootstrap"
+        ],
+        "exit_code": 0,
+        "target_pid": 21184,
+        "wrapper_exit_code": 0,
+        "timed_out": false,
+        "tree_verified": true,
+        "ownership": "gated_job_kill_on_close",
+        "stdout": "bootstrap-stdout.txt",
+        "stderr": "bootstrap-stderr.txt",
+        "host": "bootstrap-host.json"
+      },
+      "summary": {
+        "tests_run": 56,
+        "failures": 0,
+        "errors": 0,
+        "skips": 0,
+        "skipped": []
+      },
+      "passed": true,
+      "missing_required_evidence": []
+    }
+  ],
+  "acceptance": "NOT_REVIEWED",
+  "acceptance_ready": false,
+  "known_gaps": [
+    "Windows mutation is disabled; handle probe proves reads only",
+    "Godot JCS proves serialization; raw wire admission remains separate",
+    "two independent frozen-source critic verdicts required"
+  ],
+  "status": "CANDIDATE",
+  "repro": "python studio/tests/protocol/run_gt02_candidate.py --run-id NEW_UNIQUE_ID --output zdoc/reviews/NEW_UNIQUE_DIRECTORY",
+  "artifacts": {
+    "bootstrap-host.json": "79b2a560fbdb2e6aeaa7df20a343fc68ab756fc193e2e209b23957002f6a3fb2",
+    "bootstrap-stderr.txt": "3ef47fb95ef010cb24402dfdf605eb663e2b8038c135ef470c14b85006f5a2a9",
+    "bootstrap-stdout.txt": "7cec53e3e748c2d8110805144bcd0dfeae084e0c0ba33828c77f1f2c38541399",
+    "golden/hh-gt02-godot-r0q2hhdh.json": "e110ce8601123a4395daf36f4c0f39724124a24f85295f08c4d0a676309ada8e",
+    "protocol-host.json": "15f2fef373c37b92d883136451660b709bbee1fa962f519b074aba000a1a25c0",
+    "protocol-stderr.txt": "7b5bac283b81d0e2f14a9c185937ee1fea3f08299fe214d1c4be373a12a531eb",
+    "protocol-stdout.txt": "3b1bc29d22289129b234d155bd678a490bf0f870f73c2d512922f0d3ec91c4da",
+    "source-closure.json": "e9bda01a2159d4ca895b026c51f0aa1956df1a9fc7108c7d5a8e6028291f51de"
+  }
+}
