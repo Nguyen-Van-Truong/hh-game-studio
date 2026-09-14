@@ -1,0 +1,30 @@
+{
+  "schema": "hh-gt02-git-bytes-verification-v1",
+  "status": "GIT_BYTES_VERIFIED",
+  "verified_utc": "2026-09-14T16:40:17.945290+00:00",
+  "git_source": "HEAD",
+  "head_at_verification": "96c506be08f81f95c956b23000c6fb796f938c6f",
+  "source_closure_sha256": "8c6ed94846c4737c1ff6dace8c29a2c26b66f62520cecc17fea32831297906bb",
+  "source_files": 61,
+  "artifact_files": 9,
+  "candidate_sha256": "df52fd1d0cb73de43140260d3ab38723ab23b0873e8222070f3da4f371941ed0",
+  "historical_plan_sha256": "e66c5e2f9837623f2388c7a96e54b7c0623deed243a4981934b6990a26daa4f0",
+  "verifier_sha256": "024fbbdf123a70ce7dfb794330282615b86effc5917c5891266d5b14be09ba6d",
+  "reconstructed_verification_sha256": "a27ded4c40d872682671592eac3bf78159d94a362f08d5ada6ad5723c24b56a3",
+  "isolated_python_exit": 0,
+  "counts": {
+    "protocol": {
+      "run": 144,
+      "passed": 140,
+      "skipped": 4
+    },
+    "bootstrap": {
+      "run": 56,
+      "passed": 56,
+      "skipped": 0
+    }
+  },
+  "scope": "Git byte integrity and stored evidence verification; no engine or suite rerun",
+  "formal_acceptance": false,
+  "independent_critic_signatures": 0
+}
