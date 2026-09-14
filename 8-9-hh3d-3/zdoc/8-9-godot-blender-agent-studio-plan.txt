@@ -627,12 +627,13 @@ TQ08-B/TX16-C là closure GT-08; install/upgrade consumer closure ở GT-10.
 ### GT-09 — Agent conformance toàn tuyến
 CONTRACT/VERIFY: TX01–TX18 trong scope GT-01…GT-09 đã có; riêng TX16-C/TQ08-B
 chỉ producer verifier/fixture build, TX16-I/TQ08-I install-upgrade thuộc GT-10.
-Prompt-injection/capability/UX trên đúng Grok CLI client; độc lập fixture, không chờ game.
+Prompt-injection/capability/UX trên client được cấp; model/host/version phải
+được ghi trong capability matrix và chạy trên fixture độc lập, không chờ game.
 ALLOWED: studio/tests/conformance/, isolated fixture clones, evidence.
 BUILD: brief → Blender sửa asset → GLB → Godot scene → actual play/input →
 observe lỗi scene/resource/script seeded → agent sửa bằng catalog GT-03 →
 replay → checkpoint; không cần game H2 và không shell edit ngoài typed operation.
-VERIFY: Grok CLI đúng model bằng adapter được cấp, operations có command IDs,
+VERIFY: client/model/host đúng capability bằng adapter được cấp, operations có command IDs,
 pre/postcondition; reconnect/retry/context reset không mutation trùng; owner
 edit giữa lease và hai job source khác chạy song song. Protocol client riêng
 kiểm unsupported client version; không giả model khác đã chạy conformance.
