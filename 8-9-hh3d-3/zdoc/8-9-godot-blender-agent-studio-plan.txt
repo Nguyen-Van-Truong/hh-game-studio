@@ -4,7 +4,7 @@ Ngày 13-09-2026, Asia/Saigon | Revision S23 | TRIỂN KHAI THEO GATE
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
 01 | GT-01 | Chốt pin/phạm vi/reuse; bootstrap dự án mẫu độc lập | OWNER_START | ACCEPTED
-02 | GT-02 | Protocol, capability, journal và an toàn lệnh tối thiểu | GT-01 | PLANNED
+02 | GT-02 | Protocol, capability, journal và an toàn lệnh tối thiểu | GT-01 | IN_PROGRESS
 03 | GT-03 | Godot EditorPlugin: sửa scene, UndoRedo, save/readback | GT-02 | PLANNED
 04 | GT-04 | Blender adapter UI và background jobs an toàn | GT-02 | PLANNED
 05 | GT-05 | Pipeline .blend → GLB → Godot, asset manifest | GT-03, GT-04 | PLANNED
@@ -76,6 +76,45 @@ safety/limits/path/journal tests under studio/host/core and dedicated protocol
 tests; and a read-only GT-02 audit under zdoc/reviews. Workers may not tick
 checkboxes or claim acceptance. Coordinator will merge only after tests,
 source-hash review, and two independent critics on one frozen closure.
+S24_PROGRESS_20260914=Coordinator consolidated the GT-02 candidate tree after
+worker reports. `studio/protocol` now uses a vendored Apache-2.0 RFC 8785 JCS
+implementation for canonical numbers and UTF-16 property ordering, with strict
+UTF-8/duplicate-key/surrogate/finite-number/safe-integer/depth/member/string
+limits, typed Request/Response/Capability/Discovery, unknown-field rejection,
+secret-field rejection and deterministic evidence redaction. The host limits
+layer now consumes the same `hh-studio-0.1` mapping-target wire profile and
+prefixed payload hash; cross-module tests prove both layers reject schema,
+digest, unknown-field and depth drift. The journal candidate adds fsync'd
+checksummed records, response-loss dedupe, terminal-status validation, bounded
+pending/record/byte limits, expiry tombstones surviving compaction, local
+lease/fencing/expiry and revision checks with atomic replacement.
+S24_VERIFY=Protocol/host/journal/security/integration suites: 35 tests pass,
+3 expected environment skips (Windows symlink/transport Stop API); py_compile
+passes for all GT-02 modules and `git diff --check` is clean. Evidence and
+reports remain CANDIDATE until source freeze, closure-bound execution artifacts
+and two independent critics.
+S24_GOLDEN_20260914=Added locked RFC 8785 vectors for numbers, Unicode,
+UTF-16 key order, escapes and request/payload digests. Independent Python and
+Node 24.10.0 consumers pass 2/2 tests; Godot consumer remains a named gap and
+must not be inferred from Node success.
+S24_RESEARCH=RFC 8785 is used instead of a home-grown float/key serializer;
+SQLite/OS durability guidance confirms synchronous full transactions and
+single-host locking are required for future multi-process journal integration.
+The vendored implementation is Apache-2.0 and must stay in the component
+notice/manifest. Windows safe-write handle identity, authenticated loopback,
+cross-language Node/Godot vectors, production redaction pipeline, and a real
+Stop/Cancel transport remain explicit gaps; no test marks these as PASS.
+S24_LESSON=Do not keep two independently accepted wire profiles: the initial
+host helper used a legacy schema and string target, which made green tests hide
+an interoperability failure. A shared schema plus a compatibility test now
+fails closed. Keep payload_hash (payload only) distinct from request digest
+(operation+target+payload+schema), and retain terminal tombstones after
+compaction so an old command ID can never be executed again.
+S24_PENDING=GT02 source freeze and closure manifest, cross-language golden
+vectors, durable journal inter-process/CAS test, loopback session auth and
+redaction integration, then two independent critics. Do not promote GT-03 or
+tick GT-02 until all P0 checks in `reviews/20260913-gt02-audit/gt02-audit.md`
+have executable evidence on one frozen hash.
 S21_CHANGE_NOTE=Worker evidence is candidate only; freeze source after every
 source edit. Trace validation must match authored fixture semantics (pause
 transition tick may advance once, then remain frozen). Never treat a passing

@@ -1,0 +1,21 @@
+{
+  "report": "gt02-cross-module-integration",
+  "date": "2026-09-14",
+  "test_command": "python -m unittest discover -s 8-9-hh3d-3/studio/tests/protocol -p 'test_*.py'",
+  "tests_passed": 35,
+  "tests_skipped": 3,
+  "compatibility": {
+    "policy": "one negotiated schema; no implicit field or digest conversion",
+    "shape_and_digest": "PASS_SHARED_PROFILE",
+    "unknown_fields": "PASS_REJECT",
+    "schema_allowlist": "PASS_REJECT",
+    "depth_limit": "PASS_REJECT",
+    "member_limit": "PASS_REJECT"
+  },
+  "actionable": [
+    "Add cross-language Node/Godot golden-vector consumers before adapter release.",
+    "Add inter-process CAS/file-lock evidence for multi-process journal use.",
+    "Add authenticated loopback session and real Stop/Cancel transport before later WP acceptance."
+  ],
+  "status": "CANDIDATE_NOT_ACCEPTED"
+}
