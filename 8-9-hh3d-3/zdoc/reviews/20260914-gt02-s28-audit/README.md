@@ -63,6 +63,8 @@ byte matched the working files and recorded hashes. The evidence verifier ran
 in an isolated Python process against that temporary reconstruction and exited
 0. This is stored-evidence verification, not another engine/suite execution.
 Run with `HEAD` after committing to repeat against the concrete Git commit.
+The implementation/evidence checkpoint commits are `96c506b` and `e52b5c0`;
+the latter records the post-commit HEAD reconstruction result.
 
 Git whitespace checks initially interpreted the captured CRLF log endings as
 trailing whitespace. Scoped attributes now recognize CRLF only in preserved
