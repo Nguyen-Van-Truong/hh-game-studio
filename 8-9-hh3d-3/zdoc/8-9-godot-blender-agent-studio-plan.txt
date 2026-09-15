@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 15-09-2026, Asia/Saigon | Revision S31 | TRIỂN KHAI THEO GATE
+Ngày 15-09-2026, Asia/Saigon | Revision S32 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -16,7 +16,7 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 
 CURRENT_VALID_WP=GT-02
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=GT02_CANDIDATE_SAFE_WRITE_GAP
+IMPLEMENTATION=GT02_CANDIDATE_EXPERIMENTAL_STAGING_SAFE_WRITE_GAP
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
 GT01_PENDING=NONE
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
@@ -25,20 +25,20 @@ RUNTIME_ACCEPTANCE=GT01_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S31
-EXECUTION_MODE=CODEX_ASTRA_XHIGH_OWNER_20260915
-SUBAGENTS_ENABLED=3
-GT02_EVIDENCE_STATUS=FROZEN_CANDIDATE_S30_01
-GT02_REVIEW_STATUS=S30_A_FAIL_B_PASS_SAFE_WRITE_GAP
-GT02_LAST_TESTED_SOURCE_CLOSURE=60799065f406fbb3b13d2dc0df093477210927f86e84b54175dfd36351521a1a
-GT02_CHECKPOINT_COMMITS=96c506b,e52b5c0,faedb0d,642d6f5,74d1cc2
+PLAN_REVISION=S32
+EXECUTION_MODE=SOLO_OWNER_20260915
+SUBAGENTS_ENABLED=0
+GT02_EVIDENCE_STATUS=FROZEN_CANDIDATE_S32_01
+GT02_REVIEW_STATUS=NOT_REVIEWED_SOLO_S32
+GT02_LAST_TESTED_SOURCE_CLOSURE=983e205a2c815c6e530bf6ef4255d84cc17b4fae0e05a5e9a2848960515d82b1
+GT02_CHECKPOINT_COMMITS=96c506b,e52b5c0,faedb0d,642d6f5,74d1cc2,52ca04c,52def92
 GT02_SAFE_WRITE_STATUS=GAP_UNSUPPORTED_WINDOWS
 
-TIẾN ĐỘ HIỆN HÀNH — S31, 15-09-2026
-Owner mở lại ba Codex subagent Astra xhigh. Hai lane audit read-only độc lập
-(durability và contract/security), một lane Windows safe-write probe riêng.
-Coordinator là writer source/test/plan và tích hợp; không dùng Grok CLI.
-Các lane S29 và formal review S30 đã kết thúc; verdict giữ đúng hash.
+TIẾN ĐỘ HIỆN HÀNH — S32, 15-09-2026
+Owner chuyển sang solo: hai lane S32 đang chạy đã interrupt, lane activation
+contract đã hoàn tất; không tạo/đánh thức subagent. Coordinator tiếp quản source,
+test, report dở và plan. Formal review S30 giữ đúng hash; source mới không được
+tính là đã có hai critic. Không dùng Grok CLI hoặc tự tạo chữ ký độc lập.
 S31 AppContainer probe, broker contract và adapter prerequisites đã hoàn tất;
 đây là diagnostic/preparation, không nghiệm thu thêm gate. Source S30 checkpoint
 74d1cc2; audit metadata 52ca04c. Tái dựng Git xác nhận 62 source/9 artifacts khớp
@@ -48,11 +48,11 @@ GT-01 ACCEPTED tại a0fb247; closure
 3ace23bcf84598cda64d54bbe3fc4736acde877f9f714fb71e2355d3e809eea4,
 evidence reviews/20260913-r21-gt01-final; hai critic PASS/TICK=yes.
 
-GT-02 candidate hiện hành: reviews/20260915-gt02-s30-01. Protocol 154 tests:
-150 pass, 4 platform skips; bootstrap 56/56. Host exit/process tree và source/
-snapshot ổn định; 62 source files, 9 artifacts được rehash. Python/Node/Godot
+GT-02 candidate hiện hành: reviews/20260915-gt02-s32-01. Protocol 173 tests:
+169 pass, 4 platform skips; bootstrap 56/56. Host exit/process tree và source/
+snapshot ổn định; 65 source files, 9 artifacts được rehash. Python/Node/Godot
 khớp 2396 canonical rows/hash; Godot thêm 9 negative cases. Audit verifier và
-bảng requirement → test → evidence ở reviews/20260915-gt02-s30-audit/.
+bảng requirement → test → evidence ở reviews/20260915-gt02-s32-audit/.
 Đã có typed schema/JCS/limits, journal/CAS tám process, reservation cho terminal,
 archive/tombstone, authenticated loopback, Stop/Cancel/UNKNOWN, redaction cả
 credential cũ, NFC names, fixed error guidance và UNSUPPORTED_OPEN_LANE.
@@ -93,9 +93,27 @@ filesystem boundary; chưa chứng minh IPC/network, handle duplication, reparse
 race, publish/durability hoặc sandbox cho Godot/Blender. Các run lỗi01–03 giữ
 nguyên. Broker contract và GT03/04 prerequisites nằm trong hai report cùng ngày.
 
-Tiếp theo S32: coordinator triển khai CREATE_NEW/readback bằng retained handle
-trong namespace riêng của broker; ba lane kiểm OS boundary nâng cao, activation
-journal contract và native-store failure cases. Chưa mở consumer mutation.
+S32 candidate: private_store.py tạo staging CREATE_NEW với protected owner DACL,
+retained ancestor/root/guard/blob handles, NTFS check, quota64 objects/8MiB,
+1MiB/blob, write/flush/readback và UNKNOWN khi staging lỗi.19 tests đạt riêng;
+gồm process mới/readback, writer contention, ACL/junction/hardlink, impersonation,
+short-write và cleanup retry khi handle thật vẫn mở. Full snapshot regression đã đạt.
+Close failure có registry giữ ownership; lỗi init sau tạo root không giả no-effect.
+reopen chỉ xác nhận identity/guard, chưa là phục hồi command sau crash.
+
+S32 native boundary run05 đã hoàn thành cả4 mode: private rights/broker process
+opens bị chặn, sentinel không inherit, restriction chặn child với error367.
+Hai positive controls đạt; actual exit47, markers và Job/PID readback sạch.
+Run03 lỗi0xC0000142 trước marker, run04 gặp strict INVALID_HANDLE exception;
+solo sửa launch DETACHED_PROCESS và chỉ bắt đúng SEH của probe handle cố ý sai.
+Profile/mapping/TEMP run05 đã dọn; run01–04/source lỗi giữ nguyên. Verifier28
+artifacts + raw derivation đạt, tampered copy bị reject; report ...s32-boundary.md.
+Report native-store là review draft bị ngắt, không phải final critic source mới.
+Activation contract đề xuất append-only selector thay mutable pointer; vẫn phải
+giữ expected generation/hash, journal/lease, release closure và consumer readback.
+
+Tiếp theo solo: lưu Git checkpoint và kiểm exact bytes; tích hợp actual worker
+với private store qua bytes-only IPC, rồi activation/crash recovery. Chưa mở consumer mutation.
 Giữ GT-02 CANDIDATE khi còn requirement/review thiếu. Không
 dispatch GT-03/04 mutation qua dependency/gap. Không hỏi lại phần triển khai đã
 được owner cấp quyền; không hạ DoD để hợp code hoặc dùng test pass thay chức năng.
@@ -121,6 +139,10 @@ KINH NGHIỆM ĐANG ÁP DỤNG
   tối thiểu thiếu biến chuẩn có thể làm CreateProcessW lỗi203; không suy lỗi do
   một biến khi chỉ mới kiểm cả bundle. Job accounting cần bounded drain; profile
   API trả đường dẫn AC con, cleanup cần đọc lại package/mapping/TEMP.
+- CloseHandle lỗi phải giữ ownership để retry cleanup, kể cả ancestor và lỗi
+  constructor; mock đóng thật rồi báo lỗi chưa kiểm trường hợp handle còn mở.
+  Probe numeric handle không inherit có thể gặp strict SEH; chỉ bắt đúng lỗi
+  dự kiến và xác minh full FileId trước đọc, không suy handle number là identity.
 - Sửa có repro, chạy hồi quy ảnh hưởng rồi remint. Không lặp fullsuite cùng
   source đã đạt nếu không có thay đổi/failure/gap liên quan; giữ evidence lỗi.
 

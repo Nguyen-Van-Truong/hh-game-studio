@@ -1,0 +1,93 @@
+{
+  "run_id": "GT02-S32-BOUNDARY-01",
+  "timestamp_utc": "2026-09-15T16:31:09.569028+00:00",
+  "os": "Windows-10-10.0.26200-SP0",
+  "python": "3.11.9",
+  "probe_sha256": "7391ceb80a4cb90e552c802fc31c7d0cbd35e95775af032070501b13e8901b06",
+  "helper_sha256": "1afd34eb11fd5ab9a34c37de2a80aabcec04224826a092ff122d5212bd3a50c4",
+  "native_source_sha256": "d3d00392fa1ea2ac3a28b2d27417e65c707a7c90f2eaad01e4b961cecaadd22e",
+  "profile_name": "<OWNED_PROFILE_NAME>",
+  "scope": "Fixed native diagnostics on owned TEMP/profile only",
+  "safe_write": "UNSUPPORTED_SAFE_OPEN_WINDOWS",
+  "package_sid": "<APPCONTAINER_SID>",
+  "profile_path": "<OWNED_PROFILE_PATH>",
+  "profile_folder_absent_before": true,
+  "profile_mapping_absent_before": true,
+  "fixture_root": "<OWNED_TEMP>",
+  "compiler": {
+    "cl_sha256": "f4eba2208e132daf500b7d7bbdf051e930c59dbdc1d87c35e146479427ffeb8d",
+    "link_sha256": "1a9889872481270ca45febcdaf26e75c53cea505c9eb214daea1098d4cf706bd",
+    "msvc_version": "14.44.35207",
+    "sdk_version": "10.0.26100.0",
+    "source_sha256": "d3d00392fa1ea2ac3a28b2d27417e65c707a7c90f2eaad01e4b961cecaadd22e",
+    "compile": {
+      "host_exit": 0,
+      "stdout": "boundary_child.c\r\n",
+      "stderr": "",
+      "timeout_seconds": 25
+    },
+    "link": {
+      "host_exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout_seconds": 25
+    }
+  },
+  "native_executable_sha256": "17889e0d203da8528864de3f34b4b9927af93984afafa9c29ae424236c9e3b65",
+  "broker_sentinel_handle_inheritable": true,
+  "effective_sddl": {
+    "scratch": "O:<BROKER_SID>G:<HOST_ACCOUNT_SID>D:P(A;OICI;RC;;;OW)(A;OICI;FA;;;<BROKER_SID>)(A;OICI;0x1301bf;;;<APPCONTAINER_SID>)S:AI(ML;OICI;NW;;;LW)",
+    "native_executable": "O:<BROKER_SID>G:<HOST_ACCOUNT_SID>D:(A;;RC;;;OW)(A;;FA;;;<BROKER_SID>)(A;;0x1301bf;;;<APPCONTAINER_SID>)S:AI(ML;ID;NW;;;LW)",
+    "private": "O:<BROKER_SID>G:<HOST_ACCOUNT_SID>D:P(A;OICI;RC;;;OW)(A;OICI;FA;;;<BROKER_SID>)",
+    "sentinel": "O:<BROKER_SID>G:<HOST_ACCOUNT_SID>D:(A;ID;RC;;;OW)(A;ID;FA;;;<BROKER_SID>)"
+  },
+  "cases": {
+    "control": {
+      "mode": "control",
+      "inherit_handles": false,
+      "inherited_handle_allowlist_count": 0,
+      "creation_suspended": true,
+      "timeout_ms": 10000,
+      "active_process_limit": 3,
+      "memory_limit_bytes": 134217728,
+      "kill_on_job_close": true,
+      "child_process_policy_requested": false,
+      "pid": 36460,
+      "token_is_appcontainer": 0,
+      "integrity_sid": "S-1-16-4096",
+      "capability_count": 0,
+      "wait_result": 0,
+      "host_captured_exit": 96,
+      "job_drain_samples": [
+        1,
+        0
+      ],
+      "job_active_processes_after_wait": 0,
+      "job_total_processes": 2,
+      "job_process_ids_at_final": [],
+      "native": null,
+      "host_readback": {
+        "created_directory_exists": false,
+        "delete_canary_exists": true,
+        "source_canary_unchanged": true,
+        "child_marker_present": false,
+        "child_marker_matches": false
+      }
+    }
+  },
+  "last_phase": "control",
+  "error": {
+    "type": "AssertionError",
+    "message": "Native root did not complete: control",
+    "winerror": null
+  },
+  "profile_folder_absent_after": true,
+  "profile_mapping_absent_after": true,
+  "owned_temp_removed": true,
+  "owned_profile_created_this_run": false,
+  "diagnostic_complete": false,
+  "native_executable_private_relative": "studio/.local/review-raw/S32/GT02-S32-BOUNDARY-01-6d2cd6afc2d0492182715e401a6c6078.exe",
+  "private_raw_sha256": "821f7f69589e0fda41fb34834d77697cf117e636e65c135d5937af8250aa5f6f",
+  "private_raw_relative_path": "studio/.local/review-raw/S32/GT02-S32-BOUNDARY-01-6d2cd6afc2d0492182715e401a6c6078.json",
+  "redaction": "Public machine paths/SIDs replaced; exact raw bytes and native binary kept ignored"
+}

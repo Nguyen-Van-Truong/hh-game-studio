@@ -1,9 +1,10 @@
 # HH3D-3 — routing hiện hành
 
-Owner steering mới nhất 15-09-2026: mở lại ba Codex subagent Astra xhigh.
-Coordinator phân việc độc lập, một writer/file; không dùng Grok CLI.
-Worker chỉ tạo candidate/report. Nghiệm thu cần hai critic độc lập cùng frozen
-source; tự review không thay chữ ký. Plan đầu file giữ trạng thái hiện hành.
+Owner steering mới nhất 15-09-2026: tạm dừng subagent, coordinator làm solo.
+Không tạo/đánh thức worker hoặc critic, không dùng Grok CLI. Kết quả và phần
+dở S32 đã bàn giao lại coordinator; một writer/file. Nghiệm thu vẫn cần hai
+critic độc lập cùng frozen source; solo self-review không thay chữ ký.
+Plan đầu file giữ trạng thái hiện hành.
 
 Chỉ có đúng hai plan TXT đang hoạt động:
 

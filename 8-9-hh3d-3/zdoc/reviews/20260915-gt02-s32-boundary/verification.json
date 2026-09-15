@@ -1,0 +1,30 @@
+{
+  "local": {
+    "exit": 0,
+    "result": {
+      "verified": "S32_FIXED_NATIVE_BOUNDARY_ONLY",
+      "artifacts": 28,
+      "raw_derivation_verified": true,
+      "safe_write": "UNSUPPORTED_SAFE_OPEN_WINDOWS",
+      "writes": 0,
+      "manifest_sha256": "c763b4e596172844d8edf76192c38681cea916608e5a911bc9c6cee85496c1cb"
+    }
+  },
+  "public_copy": {
+    "exit": 0,
+    "result": {
+      "verified": "S32_FIXED_NATIVE_BOUNDARY_ONLY",
+      "artifacts": 28,
+      "raw_derivation_verified": false,
+      "safe_write": "UNSUPPORTED_SAFE_OPEN_WINDOWS",
+      "writes": 0,
+      "manifest_sha256": "c763b4e596172844d8edf76192c38681cea916608e5a911bc9c6cee85496c1cb"
+    }
+  },
+  "tampered_copy": {
+    "exit": 1,
+    "detected": "Pinned hash mismatch"
+  },
+  "manifest_unchanged": true,
+  "owned_verifier_temp_removed": true
+}

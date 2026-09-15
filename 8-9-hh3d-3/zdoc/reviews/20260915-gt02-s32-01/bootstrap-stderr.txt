@@ -1,0 +1,62 @@
+test_corrupt_or_duplicate_sums_rejected (test_archive_and_install.ArchiveAndInstallTests.test_corrupt_or_duplicate_sums_rejected) ... ok
+test_crashed_subprocess_lease_is_recoverable (test_archive_and_install.ArchiveAndInstallTests.test_crashed_subprocess_lease_is_recoverable) ... ok
+test_invalid_pid_and_ttl_refused_without_mutation (test_archive_and_install.ArchiveAndInstallTests.test_invalid_pid_and_ttl_refused_without_mutation) ... ok
+test_live_owner_survives_recovery_probe (test_archive_and_install.ArchiveAndInstallTests.test_live_owner_survives_recovery_probe) ... ok
+test_publish_replace_failure_leaves_active_unchanged (test_archive_and_install.ArchiveAndInstallTests.test_publish_replace_failure_leaves_active_unchanged) ... ok
+test_replaced_lock_is_never_deleted (test_archive_and_install.ArchiveAndInstallTests.test_replaced_lock_is_never_deleted) ... ok
+test_stale_lock_recovery_requires_dead_owner_and_age (test_archive_and_install.ArchiveAndInstallTests.test_stale_lock_recovery_requires_dead_owner_and_age) ... ok
+test_state_rejects_stale_expected_transition_and_manual_edit (test_archive_and_install.ArchiveAndInstallTests.test_state_rejects_stale_expected_transition_and_manual_edit) ... ok
+test_subprocess_live_owner_survives_recovery_probe (test_archive_and_install.ArchiveAndInstallTests.test_subprocess_live_owner_survives_recovery_probe) ... ok
+test_traversal_lock_rejected (test_archive_and_install.ArchiveAndInstallTests.test_traversal_lock_rejected) ... ok
+test_verify_and_install_activate_rollback (test_archive_and_install.ArchiveAndInstallTests.test_verify_and_install_activate_rollback) ... ok
+test_hostile_case_digest_or_status_fails_closed (test_lifecycle_process.LifecycleProcessTests.test_hostile_case_digest_or_status_fails_closed) ... ok
+test_live_owner_and_crash_observations_are_real (test_lifecycle_process.LifecycleProcessTests.test_live_owner_and_crash_observations_are_real) ... ok
+test_missing_case_evidence_fails_closed (test_lifecycle_process.LifecycleProcessTests.test_missing_case_evidence_fails_closed) ... ok
+test_real_probe_is_candidate_with_exact_cases (test_lifecycle_process.LifecycleProcessTests.test_real_probe_is_candidate_with_exact_cases) ... ok
+test_replacement_and_manual_edit_preserve_newer_bytes (test_lifecycle_process.LifecycleProcessTests.test_replacement_and_manual_edit_preserve_newer_bytes) ... ok
+test_hash_and_closure (test_run_fixture.RunFixtureTests.test_hash_and_closure) ... ok
+test_real_exit_and_separate_logs (test_run_fixture.RunFixtureTests.test_real_exit_and_separate_logs) ... ok
+test_reject_duplicate_output_before_spawn (test_run_fixture.RunFixtureTests.test_reject_duplicate_output_before_spawn) ... GT01_GAP: studio, fixture, or Godot executable is missing
+ok
+test_source_closure_hash_changes_when_source_digest_changes (test_run_fixture.RunFixtureTests.test_source_closure_hash_changes_when_source_digest_changes) ... ok
+test_source_closure_hash_is_canonical_and_order_independent (test_run_fixture.RunFixtureTests.test_source_closure_hash_is_canonical_and_order_independent) ... ok
+test_source_closure_hash_rejects_unsafe_manifest (test_run_fixture.RunFixtureTests.test_source_closure_hash_rejects_unsafe_manifest) ... ok
+test_timeout_captures_owned_child (test_run_fixture.RunFixtureTests.test_timeout_captures_owned_child) ... ok
+test_timeout_kills_descendant_and_keeps_real_exit (test_run_fixture.RunFixtureTests.test_timeout_kills_descendant_and_keeps_real_exit) ... ok
+test_binary_change_during_runtime_rejects (test_runner_admission.RunnerAdmissionTests.test_binary_change_during_runtime_rejects) ... ok
+test_caller_hash_and_version_mismatch_reject_before_spawn (test_runner_admission.RunnerAdmissionTests.test_caller_hash_and_version_mismatch_reject_before_spawn) ... ok
+test_duplicate_or_missing_trace_rejects (test_runner_admission.RunnerAdmissionTests.test_duplicate_or_missing_trace_rejects) ... ok
+test_existing_output_rejects_with_otherwise_valid_inputs (test_runner_admission.RunnerAdmissionTests.test_existing_output_rejects_with_otherwise_valid_inputs) ... ok
+test_snapshot_change_during_runtime_rejects (test_runner_admission.RunnerAdmissionTests.test_snapshot_change_during_runtime_rejects) ... ok
+test_source_change_during_runtime_rejects (test_runner_admission.RunnerAdmissionTests.test_source_change_during_runtime_rejects) ... ok
+test_stdout_warning_rejects (test_runner_admission.RunnerAdmissionTests.test_stdout_warning_rejects) ... ok
+test_trace_duplicate_key_rejects (test_runner_admission.RunnerAdmissionTests.test_trace_duplicate_key_rejects) ... ok
+test_trace_pause_tick_mismatch_rejects (test_runner_admission.RunnerAdmissionTests.test_trace_pause_tick_mismatch_rejects) ... ok
+test_trace_without_semantic_observation_rejects (test_runner_admission.RunnerAdmissionTests.test_trace_without_semantic_observation_rejects) ... ok
+test_valid_full_three_phase_baseline (test_runner_admission.RunnerAdmissionTests.test_valid_full_three_phase_baseline) ... ok
+test_wrong_wrapper_exit_rejects (test_runner_admission.RunnerAdmissionTests.test_wrong_wrapper_exit_rejects) ... ok
+test_actual_archive_and_sums_verify_under_unicode_space_path (test_tq01_portability.TQ01Portability.test_actual_archive_and_sums_verify_under_unicode_space_path) ... ok
+test_digest_mismatch_fails_before_install_side_effects (test_tq01_portability.TQ01Portability.test_digest_mismatch_fails_before_install_side_effects) ... ok
+test_lock_uses_portable_relative_names_and_bound_provenance (test_tq01_portability.TQ01Portability.test_lock_uses_portable_relative_names_and_bound_provenance) ... ok
+test_duplicate_sum_filename_rejected (test_verify_archive.VerifyArchiveTests.test_duplicate_sum_filename_rejected) ... ok
+test_hardlink_rejected (test_verify_archive.VerifyArchiveTests.test_hardlink_rejected) ... ok
+test_provenance_is_bound (test_verify_archive.VerifyArchiveTests.test_provenance_is_bound) ... ok
+test_unsafe_sum_filename_rejected (test_verify_archive.VerifyArchiveTests.test_unsafe_sum_filename_rejected) ... ok
+test_valid (test_verify_archive.VerifyArchiveTests.test_valid) ... ok
+test_extra_stdout_or_nonofficial_version (test_version_probe.VersionProbeTests.test_extra_stdout_or_nonofficial_version) ... ok
+test_invalid_utf8 (test_version_probe.VersionProbeTests.test_invalid_utf8) ... ok
+test_missing_proof_fields (test_version_probe.VersionProbeTests.test_missing_proof_fields) ... ok
+test_nonempty_stderr_including_whitespace (test_version_probe.VersionProbeTests.test_nonempty_stderr_including_whitespace) ... ok
+test_nonzero_target_with_version_text (test_version_probe.VersionProbeTests.test_nonzero_target_with_version_text) ... ok
+test_nonzero_wrapper (test_version_probe.VersionProbeTests.test_nonzero_wrapper) ... ok
+test_oversized_output_cannot_hide_in_trimmed_whitespace (test_version_probe.VersionProbeTests.test_oversized_output_cannot_hide_in_trimmed_whitespace) ... ok
+test_stream_normal_engine_log_is_allowed (test_version_probe.VersionProbeTests.test_stream_normal_engine_log_is_allowed) ... ok
+test_stream_warning_is_rejected_in_either_stream (test_version_probe.VersionProbeTests.test_stream_warning_is_rejected_in_either_stream) ... ok
+test_timeout (test_version_probe.VersionProbeTests.test_timeout) ... ok
+test_unverified_tree (test_version_probe.VersionProbeTests.test_unverified_tree) ... ok
+test_valid_official_version_and_bounded_invocation (test_version_probe.VersionProbeTests.test_valid_official_version_and_bounded_invocation) ... ok
+
+----------------------------------------------------------------------
+Ran 56 tests in 7.044s
+
+OK
