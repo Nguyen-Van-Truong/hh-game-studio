@@ -1,6 +1,9 @@
 # S37 complete fixture release graphs — CANDIDATE
 
 Frozen closure: `b4e007455f7fd0dce25f62433a8bb6a7717ef6ff765fe1b52bf6ddecd0275ab7`.
+Source/evidence checkpoint: `adb2e52edeb039cf836f744a1e184dd1ef10d7e8`.
+The index and exact commit reconstruction both passed; the HEAD proof is
+recorded in `git-byte-verification-head.json`.
 79 source files, 9 candidate artifacts. Protocol **236/240 passed + 4 explicit
 skips**; bootstrap **56/56**. Actual process exits and owned trees passed, with
 source/snapshot unchanged. Python/Node/Godot still agree on 2,396 canonical rows;
