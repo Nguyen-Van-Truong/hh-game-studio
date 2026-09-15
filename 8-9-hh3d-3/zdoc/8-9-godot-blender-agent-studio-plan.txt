@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 16-09-2026, Asia/Saigon | Revision S34 | TRIỂN KHAI THEO GATE
+Ngày 16-09-2026, Asia/Saigon | Revision S35 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,17 +25,18 @@ RUNTIME_ACCEPTANCE=GT01_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S34
+PLAN_REVISION=S35
 EXECUTION_MODE=SOLO_OWNER_20260915
 SUBAGENTS_ENABLED=0
-GT02_EVIDENCE_STATUS=FROZEN_CANDIDATE_S34_01
-GT02_REVIEW_STATUS=NOT_REVIEWED_SOLO_S34
-GT02_LAST_TESTED_SOURCE_CLOSURE=2d524684563bfff75e77a67a39ac00f1a63f46d5c2cbcd99725c79d2edb12fe7
-GT02_CHECKPOINT_COMMITS=96c506b,e52b5c0,faedb0d,642d6f5,74d1cc2,52ca04c,52def92,957ea88,572185e,9839be9,abc88b0
+GT02_EVIDENCE_STATUS=FROZEN_CANDIDATE_S35_01
+GT02_REVIEW_STATUS=NOT_REVIEWED_SOLO_S35
+GT02_LAST_TESTED_SOURCE_CLOSURE=264ed3e3f35ca76038ba20cc00f41f3345ba6e9352e111b3be5e7ed38fe6e111
+GT02_CHECKPOINT_COMMITS=96c506b,e52b5c0,faedb0d,642d6f5,74d1cc2,52ca04c,52def92,957ea88,572185e,9839be9,abc88b0,6bfbc3e
 GT02_SAFE_WRITE_STATUS=GAP_UNSUPPORTED_WINDOWS
-GT02_BOUNDARY_EVIDENCE=S33_FIXED_IPC_STAGING_ONLY
+GT02_BOUNDARY_EVIDENCE=S35_NATIVE_TYPED_COUNTER_AND_S33_SEPARATE_STAGING
+GT02_WORKING_SOURCE_STATUS=S35_FROZEN_TESTED
 
-TIẾN ĐỘ HIỆN HÀNH — S34, cập nhật 16-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S35, cập nhật 16-09-2026
 Coordinator làm solo; các subagent đã dừng. Không tạo/đánh thức worker hoặc
 critic, không dùng Grok CLI. Solo self-review không thay hai chữ ký độc lập.
 
@@ -43,14 +44,14 @@ GT-01 ACCEPTED tại a0fb247; closure
 3ace23bcf84598cda64d54bbe3fc4736acde877f9f714fb71e2355d3e809eea4,
 evidence reviews/20260913-r21-gt01-final; hai critic PASS/TICK=yes.
 
-GT-02 candidate hiện hành: reviews/20260916-gt02-s34-01. Protocol194 tests:
-190 pass,4 skips (3 thiếu quyền symlink,1 negative Linux-only); bootstrap56/56.
-Actual host exit/process tree sạch, source/snapshot không đổi;68 source files,
+GT-02 candidate hiện hành: reviews/20260916-gt02-s35-01. Protocol210 tests:
+206 pass,4 skips (3 thiếu quyền symlink,1 negative Linux-only); bootstrap56/56.
+Actual host exit/process tree sạch, source/snapshot không đổi;73 source files,
 9 artifacts được rehash. Python/Node/Godot khớp2396 canonical rows/hash; Godot
 thêm9 negative cases. Bảng requirement → test → evidence và audit tái dựng
-Git nằm ở reviews/20260916-gt02-s34-audit/. Chưa có review độc lập cho source này.
-Checkpoint source/evidence S34: abc88b0; index và HEAD đều tái dựng68 source/
-9 artifacts khớp byte. Source không đổi sau lượt test; metadata commit riêng.
+Git nằm ở reviews/20260916-gt02-s35-audit/. Chưa có review độc lập cho source này.
+Checkpoint trước S35: abc88b0 source/evidence S34,6bfbc3e metadata. Các bản
+Git proof ghi commit thực sự đã kiểm trong git-byte-verification-*.json.
 
 Đã có typed schema/JCS/limits, journal/CAS8 process, terminal reservation,
 archive/tombstone, authenticated loopback, Stop/Cancel/UNKNOWN, redaction cả
@@ -63,7 +64,7 @@ Stop độc lập, một I/O/pipe và tối đa32 pipe được giữ ownership.
 completion thì giữ nguyên buffer/OVERLAPPED/event/pipe trong registry; close
 lần sau tiếp tục dọn chính operation đó.19 tests dùng Windows pipe thật đạt,
 gồm cancellation không hoàn tất, lỗi wait/result/close, short write, disconnect,
-concurrent Stop/close và caller bỏ reference. Chưa là endpoint auth/dispatcher.
+concurrent Stop/close và caller bỏ reference. S35 tích hợp endpoint/dispatcher bên dưới.
 
 S34 cũng sửa lỗi phase ở transport: exception khi thoát guard hoặc sau mutation
 bắt đầu phải giữ UNKNOWN/pending, đóng admission và không tự apply lại. Hai
@@ -78,9 +79,20 @@ S33 vẫn fixed diagnostic, chưa dùng pipe_io mới hoặc journal/lease/Stop/
 Report: reviews/20260915-gt02-s33-ipc.md; checkpoint9839be9. Không suy unit test
 pipe thành proof sandbox/production IPC hoặc durable namespace activation.
 
+S35 endpoint kiểm protected DACL/Low label, retained process PID+creation/
+primary AppContainer SID/session/token và nối dispatcher fixture với envelope/
+auth/lease/journal/Stop. Native run03 dùng đúng snapshot73 source, xác minh13
+module thực sự loaded;6 cases submit/token sai/lease cũ/mất reply/Cancel/Stop
+đều có marker, exit57 và Job/PID0. Submit/retry chỉ1 effect; các case từ chối/
+hủy không có effect. Work/control dùng process và session binding thật.
+Negative client PID khác bị chặn trước dispatch; placeholder không chạy,
+được cleanup exit125, không tính là application PASS. Package14 artifacts và
+2 dependencies được hash tại reviews/20260916-gt02-s35-native/; kiểm portable,
+Python -O và artifact thiếu/sửa đều đúng. Đây là counter fixture; private
+staging/selector vẫn chưa tích hợp, safe_write/atomic_replace chưa được cấp.
+
 Tiếp theo solo, theo thứ tự để tránh làm lại:
-1. Endpoint work/control giữ identity worker + session, tích hợp envelope/journal/
-   lease/Stop với OwnedPipe; proof native AppContainer trên source tích hợp.
+1. Chốt Git byte proof/checkpoint S35; không lặp fullsuite chỉ vì sửa metadata.
 2. Expected-generation selector cho complete immutable release; durable intent,
    readback và explicit crash reconciliation; không dùng reopen làm quyền retry.
 3. Freeze lại closure, adversarial verification; giữ CANDIDATE khi review còn thiếu.
@@ -90,7 +102,7 @@ Các finding/lượt lỗi S30–S33 và lý do quyết định giữ nguyên tr
 reviews/20260916-plan-history-s33/tools-plan-s33.txt (AUTHORITY=0), SHA-256
 1eb33e360f2c6f712768e453e0bb751e6d539eefb922347614b5e4a613a192f0.
 Hai critic S30 chỉ áp dụng closure S30: A FAIL/TICK=no vì TX15 availability GAP;
-B PASS/TICK=yes cho baseline fixture. Không chuyển chữ ký đó sang S34. Một
+B PASS/TICK=yes cho baseline fixture. Không chuyển chữ ký đó sang S35. Một
 TEMP probe S30 cũ còn lại do automatic approval review chặn cleanup; giữ báo
 cáo ...s30-windows-probe.md, không thử lại bằng công cụ khác hoặc claim TEMP0.
 

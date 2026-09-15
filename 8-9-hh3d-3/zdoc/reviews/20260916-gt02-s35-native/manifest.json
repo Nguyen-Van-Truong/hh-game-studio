@@ -1,0 +1,26 @@
+{
+  "schema": "hh-gt02-s35-native-manifest-v1",
+  "run_id": "GT02-S35-NATIVE-03",
+  "source_closure_sha256": "264ed3e3f35ca76038ba20cc00f41f3345ba6e9352e111b3be5e7ed38fe6e111",
+  "files": {
+    "boundary_child.c": "2cb3604f2f77c5fab64db80c4ee3aa781a70c9d9146dbd21be2a0fd2e40daa64",
+    "capture_run.py": "e571bfc392b8bd2ca5d6f2dce523b4dc50b4848e3b2eb7188a9fd0ba77e9f49e",
+    "ipc_probe.py": "10152d34f35bde0ae530f2d6f5ded70e0b23679b75d14264574efea90beebe84",
+    "ipc_probe.run-01.py": "1705eee5e5308871ea4ca407006be2bda95a4cfa7329fa06e87776e3cb04579a",
+    "ipc_probe.run-02.py": "b5e0c8a8f5f026ede8006928a05c9229435a0955854dff060cde955bbaedb45f",
+    "run-01.host.json": "326705c418147123b1557ec7528a5d77a578e5342c3923ce358bc01be90a9554",
+    "run-01.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "run-01.stdout.json": "71dbdf4d39ee7a24f2b23343187403d9eef1fd61ebb354a075940a1c39e8dcd1",
+    "run-02.host.json": "ba01ef8bde2a2c2a2bf066398c70acca29b746ad1d3fd1bb71d015db41d72996",
+    "run-02.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "run-02.stdout.json": "8488f1fc04d074cbd932ce9939071ec6c80a7171375574a7c30978c8fd427bfe",
+    "run-03.host.json": "e9808b39b1c32634ce661c279ac8d2f3c7cb3d35173fe5668183f0a4884fe2e2",
+    "run-03.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "run-03.stdout.json": "be01e630010c9d3ed621cb1ca00c7b9d2c9896c77d9013ca0f5ab46269603d09"
+  },
+  "dependencies": {
+    "zdoc/reviews/20260915-gt02-s32-boundary/boundary_probe.py": "b3337e327cf10a585407d1fc074c23d6c5ecc7ba67334579c34858f3a6fdf6bd",
+    "zdoc/reviews/20260915-gt02-s32-boundary/windows_api.py": "1afd34eb11fd5ab9a34c37de2a80aabcec04224826a092ff122d5212bd3a50c4"
+  },
+  "acceptance": false
+}

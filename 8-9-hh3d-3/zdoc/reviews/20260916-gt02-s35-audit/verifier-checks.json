@@ -1,0 +1,66 @@
+{
+  "status": "PORTABLE_VERIFIER_CHECKS_PASSED",
+  "cases": [
+    {
+      "case": "portable_native",
+      "exit": 0,
+      "expected_rejection": null,
+      "passed": true
+    },
+    {
+      "case": "portable_native_optimized",
+      "exit": 0,
+      "expected_rejection": null,
+      "passed": true
+    },
+    {
+      "case": "portable_integrated",
+      "exit": 0,
+      "expected_rejection": null,
+      "passed": true
+    },
+    {
+      "case": "coordinator_optimized_refused",
+      "exit": 1,
+      "expected_rejection": "OPTIMIZED_VERIFICATION_FORBIDDEN",
+      "passed": true
+    },
+    {
+      "case": "native_artifact_changed",
+      "exit": 1,
+      "expected_rejection": "ARTIFACT_HASH_MISMATCH",
+      "passed": true
+    },
+    {
+      "case": "native_manifest_changed",
+      "exit": 1,
+      "expected_rejection": "MANIFEST_HASH_MISMATCH",
+      "passed": true
+    },
+    {
+      "case": "runtime_source_changed",
+      "exit": 1,
+      "expected_rejection": "RUNTIME_SOURCE_HASH",
+      "passed": true
+    },
+    {
+      "case": "native_artifact_missing",
+      "exit": 1,
+      "expected_rejection": "FileNotFoundError",
+      "passed": true
+    },
+    {
+      "case": "restored_portable_integrated",
+      "exit": 0,
+      "expected_rejection": null,
+      "passed": true
+    }
+  ],
+  "source_closure_sha256": "264ed3e3f35ca76038ba20cc00f41f3345ba6e9352e111b3be5e7ed38fe6e111",
+  "verifier_hashes": {
+    "zdoc/reviews/20260916-gt02-s35-native/verify_package.py": "78ae57f820c2e2e9242aeb0c2eed059c09e981bd4172c58ff228f2afc2adbd07",
+    "zdoc/reviews/20260916-gt02-s35-audit/verify_evidence.py": "c224c43b7d7efea310cb2ab6564cc689eefe9ed32c175e6635db90b3b6c77b14"
+  },
+  "formal_acceptance": false,
+  "scope": "Artifact integrity checks; no runtime suite rerun"
+}

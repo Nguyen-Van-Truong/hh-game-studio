@@ -505,17 +505,9 @@ class LoopbackFixtureHost:
             self._send(stream, result, redactor=session.redactor)
             self._disconnect_probe(path, "after_reply", result)
         except JournalError as exc:
-            self._diagnostic(exc.code)
             try:
-                uncertain = exc.outcome_unknown or exc.code in _UNCERTAIN_JOURNAL_CODES
-                if uncertain:
-                    self._stopped.set()
-                details = ({"accepting_work": False, "next_action": "lookup.reconcile"}
-                           if uncertain else {})
-                self._send(stream, _response(Status.UNKNOWN if uncertain else Status.REJECTED,
-                           exc.code, safe_command_id, **details),
-                           503 if uncertain else 400,
-                           session.redactor if session else None)
+                result, status = self._journal_failure(exc, safe_command_id)
+                self._send(stream, result, status, session.redactor if session else None)
             except OSError:
                 pass
         except (SafetyViolation, ValidationError) as exc:
@@ -533,6 +525,16 @@ class LoopbackFixtureHost:
                 self._send(stream, _response(Status.UNKNOWN, "TRANSPORT_FAILED"), 500)
             except OSError:
                 pass
+
+    def _journal_failure(self, exc: JournalError, command_id: str) -> tuple[Response, int]:
+        """Shared HTTP/pipe phase semantics; transport choice cannot erase UNKNOWN."""
+        self._diagnostic(exc.code)
+        uncertain = exc.outcome_unknown or exc.code in _UNCERTAIN_JOURNAL_CODES
+        if uncertain:
+            self._stopped.set()
+        details = {"accepting_work": False, "next_action": "lookup.reconcile"} if uncertain else {}
+        return (_response(Status.UNKNOWN if uncertain else Status.REJECTED, exc.code, command_id, **details),
+                503 if uncertain else 400)
 
     @staticmethod
     def _shape(body: Any, keys: set[str]) -> None:

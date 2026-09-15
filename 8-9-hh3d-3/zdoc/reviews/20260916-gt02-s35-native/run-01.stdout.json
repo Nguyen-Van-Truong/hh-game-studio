@@ -1,0 +1,457 @@
+{
+  "run_id": "GT02-S35-NATIVE-01",
+  "timestamp_utc": "2026-09-15T17:47:13.814596+00:00",
+  "source_sha256": "1705eee5e5308871ea4ca407006be2bda95a4cfa7329fa06e87776e3cb04579a",
+  "native_source_sha256": "2cb3604f2f77c5fab64db80c4ee3aa781a70c9d9146dbd21be2a0fd2e40daa64",
+  "cases": [
+    {
+      "mode": "submit",
+      "inherit_handles": false,
+      "primary_token_verified": true,
+      "pid": 29052,
+      "retained_process_binding": {
+        "work": [
+          29052,
+          134339680344878554
+        ],
+        "control": [
+          29052,
+          134339680344878554
+        ]
+      },
+      "work_dispatch": {
+        "status": "ACCEPTED_PENDING",
+        "code": "QUEUED",
+        "command_id": "s35.submit",
+        "result_revision": null,
+        "result_hash": null,
+        "postconditions": {
+          "request_digest": "sha256:7f24717e8bde2e39687359343d2f6a9d9427bb5f5211b70cf669b79bfd425cdb"
+        }
+      },
+      "terminal_before_lookup": {
+        "status": "COMMITTED",
+        "code": "READBACK_CONFIRMED",
+        "command_id": "s35.submit",
+        "result_revision": "rev-1",
+        "result_hash": "sha256:0b9ee5e24d99d951bbe02c90ed4aec37a891812e558af00406800c0200279ef8",
+        "postconditions": {
+          "request_digest": "sha256:7f24717e8bde2e39687359343d2f6a9d9427bb5f5211b70cf669b79bfd425cdb",
+          "snapshot": {
+            "effect_count": 1,
+            "revision": "rev-1",
+            "value": 101
+          }
+        }
+      },
+      "control_dispatch": {
+        "status": "COMMITTED",
+        "code": "READBACK_CONFIRMED",
+        "command_id": "s35.submit",
+        "result_revision": "rev-1",
+        "result_hash": "sha256:0b9ee5e24d99d951bbe02c90ed4aec37a891812e558af00406800c0200279ef8",
+        "postconditions": {
+          "request_digest": "sha256:7f24717e8bde2e39687359343d2f6a9d9427bb5f5211b70cf669b79bfd425cdb",
+          "snapshot": {
+            "effect_count": 1,
+            "revision": "rev-1",
+            "value": 101
+          }
+        }
+      },
+      "snapshot": {
+        "value": 101,
+        "revision": "rev-1",
+        "effect_count": 1
+      },
+      "same_id_replay_effect_count": 1,
+      "host_exit": 57,
+      "native": {
+        "started": "S35_NATIVE_STARTED",
+        "pipe_write_dac_error": 5,
+        "pipe_write_owner_error": 5,
+        "second_instance_error": 5,
+        "work_reply_received": true,
+        "work_reply_hex": "7b22636f6465223a22515545554544222c22636f6d6d616e645f6964223a227333352e7375626d6974222c22706f7374636f6e646974696f6e73223a7b22726571756573745f646967657374223a227368613235363a37663234373137653862646532653339363837333539333433643266366139643934323762623566353231316237306366363639623739626664343235636462227d2c22726573756c745f68617368223a6e756c6c2c22726573756c745f7265766973696f6e223a6e756c6c2c22737461747573223a2241434345505445445f50454e44494e47227d",
+        "control_reply_hex": "7b22636f6465223a22524541444241434b5f434f4e4649524d4544222c22636f6d6d616e645f6964223a227333352e7375626d6974222c22706f7374636f6e646974696f6e73223a7b22726571756573745f646967657374223a227368613235363a37663234373137653862646532653339363837333539333433643266366139643934323762623566353231316237306366363639623739626664343235636462222c22736e617073686f74223a7b226566666563745f636f756e74223a312c227265766973696f6e223a227265762d31222c2276616c7565223a3130317d7d2c22726573756c745f68617368223a227368613235363a30623965653565323464393964393531626265303263393065643461656333376138393138313265353538616630303430363830306330323030323739656638222c22726573756c745f7265766973696f6e223a227265762d31222c22737461747573223a22434f4d4d4954544544227d",
+        "complete": "S35_NATIVE_COMPLETE"
+      },
+      "final_host_exit": 57,
+      "final_job_active": 0,
+      "final_job_pids": []
+    },
+    {
+      "mode": "wrong_token",
+      "inherit_handles": false,
+      "primary_token_verified": true,
+      "pid": 35436,
+      "retained_process_binding": {
+        "work": [
+          35436,
+          134339680346836119
+        ],
+        "control": [
+          35436,
+          134339680346836119
+        ]
+      },
+      "work_dispatch": {
+        "status": "REJECTED",
+        "code": "SESSION_BINDING_MISMATCH",
+        "command_id": "transport.request",
+        "result_revision": null,
+        "result_hash": null,
+        "postconditions": {}
+      },
+      "control_dispatch": {
+        "status": "REJECTED",
+        "code": "COMMAND_NOT_FOUND",
+        "command_id": "s35.wrong_token",
+        "result_revision": null,
+        "result_hash": null,
+        "postconditions": {}
+      },
+      "snapshot": {
+        "value": 0,
+        "revision": "rev-0",
+        "effect_count": 0
+      },
+      "host_exit": 57,
+      "native": {
+        "started": "S35_NATIVE_STARTED",
+        "pipe_write_dac_error": 5,
+        "pipe_write_owner_error": 5,
+        "second_instance_error": 5,
+        "work_reply_received": true,
+        "work_reply_hex": "7b22636f6465223a2253455353494f4e5f42494e44494e475f4d49534d41544348222c22636f6d6d616e645f6964223a227472616e73706f72742e72657175657374222c22706f7374636f6e646974696f6e73223a7b7d2c22726573756c745f68617368223a6e756c6c2c22726573756c745f7265766973696f6e223a6e756c6c2c22737461747573223a2252454a4543544544227d",
+        "control_reply_hex": "7b22636f6465223a22434f4d4d414e445f4e4f545f464f554e44222c22636f6d6d616e645f6964223a227333352e77726f6e675f746f6b656e222c22706f7374636f6e646974696f6e73223a7b7d2c22726573756c745f68617368223a6e756c6c2c22726573756c745f7265766973696f6e223a6e756c6c2c22737461747573223a2252454a4543544544227d",
+        "complete": "S35_NATIVE_COMPLETE"
+      },
+      "final_host_exit": 57,
+      "final_job_active": 0,
+      "final_job_pids": []
+    },
+    {
+      "mode": "stale_lease",
+      "inherit_handles": false,
+      "primary_token_verified": true,
+      "pid": 18732,
+      "retained_process_binding": {
+        "work": [
+          18732,
+          134339680348681658
+        ],
+        "control": [
+          18732,
+          134339680348681658
+        ]
+      },
+      "work_dispatch": {
+        "status": "REJECTED",
+        "code": "STALE_LEASE",
+        "command_id": "s35.stale_lease",
+        "result_revision": null,
+        "result_hash": null,
+        "postconditions": {}
+      },
+      "control_dispatch": {
+        "status": "REJECTED",
+        "code": "COMMAND_NOT_FOUND",
+        "command_id": "s35.stale_lease",
+        "result_revision": null,
+        "result_hash": null,
+        "postconditions": {}
+      },
+      "snapshot": {
+        "value": 0,
+        "revision": "rev-0",
+        "effect_count": 0
+      },
+      "host_exit": 57,
+      "native": {
+        "started": "S35_NATIVE_STARTED",
+        "pipe_write_dac_error": 5,
+        "pipe_write_owner_error": 5,
+        "second_instance_error": 5,
+        "work_reply_received": true,
+        "work_reply_hex": "7b22636f6465223a225354414c455f4c45415345222c22636f6d6d616e645f6964223a227333352e7374616c655f6c65617365222c22706f7374636f6e646974696f6e73223a7b7d2c22726573756c745f68617368223a6e756c6c2c22726573756c745f7265766973696f6e223a6e756c6c2c22737461747573223a2252454a4543544544227d",
+        "control_reply_hex": "7b22636f6465223a22434f4d4d414e445f4e4f545f464f554e44222c22636f6d6d616e645f6964223a227333352e7374616c655f6c65617365222c22706f7374636f6e646974696f6e73223a7b7d2c22726573756c745f68617368223a6e756c6c2c22726573756c745f7265766973696f6e223a6e756c6c2c22737461747573223a2252454a4543544544227d",
+        "complete": "S35_NATIVE_COMPLETE"
+      },
+      "final_host_exit": 57,
+      "final_job_active": 0,
+      "final_job_pids": []
+    },
+    {
+      "mode": "drop_reply",
+      "inherit_handles": false,
+      "primary_token_verified": true,
+      "pid": 23800,
+      "retained_process_binding": {
+        "work": [
+          23800,
+          134339680350370010
+        ],
+        "control": [
+          23800,
+          134339680350370010
+        ]
+      },
+      "work_transport_error": "PIPE_IO_FAILED",
+      "terminal_before_lookup": {
+        "status": "COMMITTED",
+        "code": "READBACK_CONFIRMED",
+        "command_id": "s35.drop_reply",
+        "result_revision": "rev-1",
+        "result_hash": "sha256:0b9ee5e24d99d951bbe02c90ed4aec37a891812e558af00406800c0200279ef8",
+        "postconditions": {
+          "request_digest": "sha256:7f24717e8bde2e39687359343d2f6a9d9427bb5f5211b70cf669b79bfd425cdb",
+          "snapshot": {
+            "effect_count": 1,
+            "revision": "rev-1",
+            "value": 101
+          }
+        }
+      },
+      "control_dispatch": {
+        "status": "COMMITTED",
+        "code": "READBACK_CONFIRMED",
+        "command_id": "s35.drop_reply",
+        "result_revision": "rev-1",
+        "result_hash": "sha256:0b9ee5e24d99d951bbe02c90ed4aec37a891812e558af00406800c0200279ef8",
+        "postconditions": {
+          "request_digest": "sha256:7f24717e8bde2e39687359343d2f6a9d9427bb5f5211b70cf669b79bfd425cdb",
+          "snapshot": {
+            "effect_count": 1,
+            "revision": "rev-1",
+            "value": 101
+          }
+        }
+      },
+      "snapshot": {
+        "value": 101,
+        "revision": "rev-1",
+        "effect_count": 1
+      },
+      "same_id_replay_effect_count": 1,
+      "host_exit": 57,
+      "native": {
+        "started": "S35_NATIVE_STARTED",
+        "pipe_write_dac_error": 5,
+        "pipe_write_owner_error": 5,
+        "second_instance_error": 5,
+        "work_reply_received": false,
+        "control_reply_hex": "7b22636f6465223a22524541444241434b5f434f4e4649524d4544222c22636f6d6d616e645f6964223a227333352e64726f705f7265706c79222c22706f7374636f6e646974696f6e73223a7b22726571756573745f646967657374223a227368613235363a37663234373137653862646532653339363837333539333433643266366139643934323762623566353231316237306366363639623739626664343235636462222c22736e617073686f74223a7b226566666563745f636f756e74223a312c227265766973696f6e223a227265762d31222c2276616c7565223a3130317d7d2c22726573756c745f68617368223a227368613235363a30623965653565323464393964393531626265303263393065643461656333376138393138313265353538616630303430363830306330323030323739656638222c22726573756c745f7265766973696f6e223a227265762d31222c22737461747573223a22434f4d4d4954544544227d",
+        "complete": "S35_NATIVE_COMPLETE"
+      },
+      "final_host_exit": 57,
+      "final_job_active": 0,
+      "final_job_pids": []
+    },
+    {
+      "mode": "cancel",
+      "inherit_handles": false,
+      "primary_token_verified": true,
+      "pid": 37124,
+      "retained_process_binding": {
+        "work": [
+          37124,
+          134339680352425780
+        ],
+        "control": [
+          37124,
+          134339680352425780
+        ]
+      },
+      "work_dispatch": {
+        "status": "ACCEPTED_PENDING",
+        "code": "QUEUED",
+        "command_id": "s35.cancel",
+        "result_revision": null,
+        "result_hash": null,
+        "postconditions": {
+          "request_digest": "sha256:40cd87ebe8108ee9ece6dd9bab98abb498d52d94b67de4cc81554586dae82418"
+        }
+      },
+      "control_dispatch": {
+        "status": "CANCELED",
+        "code": "CANCELED_BEFORE_APPLY",
+        "command_id": "s35.cancel",
+        "result_revision": null,
+        "result_hash": null,
+        "postconditions": {
+          "request_digest": "sha256:40cd87ebe8108ee9ece6dd9bab98abb498d52d94b67de4cc81554586dae82418",
+          "no_effect": true
+        }
+      },
+      "final_control_terminal": {
+        "status": "CANCELED",
+        "code": "CANCELED_BEFORE_APPLY",
+        "command_id": "s35.cancel",
+        "result_revision": null,
+        "result_hash": null,
+        "postconditions": {
+          "no_effect": true,
+          "request_digest": "sha256:40cd87ebe8108ee9ece6dd9bab98abb498d52d94b67de4cc81554586dae82418"
+        }
+      },
+      "final_work_terminal": {
+        "status": "CANCELED",
+        "code": "CANCELED_BEFORE_APPLY",
+        "command_id": "s35.cancel",
+        "result_revision": null,
+        "result_hash": null,
+        "postconditions": {
+          "no_effect": true,
+          "request_digest": "sha256:40cd87ebe8108ee9ece6dd9bab98abb498d52d94b67de4cc81554586dae82418"
+        }
+      },
+      "snapshot": {
+        "value": 0,
+        "revision": "rev-0",
+        "effect_count": 0
+      },
+      "host_exit": 57,
+      "native": {
+        "started": "S35_NATIVE_STARTED",
+        "pipe_write_dac_error": 5,
+        "pipe_write_owner_error": 5,
+        "second_instance_error": 5,
+        "work_reply_received": true,
+        "work_reply_hex": "7b22636f6465223a22515545554544222c22636f6d6d616e645f6964223a227333352e63616e63656c222c22706f7374636f6e646974696f6e73223a7b22726571756573745f646967657374223a227368613235363a34306364383765626538313038656539656365366464396261623938616262343938643532643934623637646534636338313535343538366461653832343138227d2c22726573756c745f68617368223a6e756c6c2c22726573756c745f7265766973696f6e223a6e756c6c2c22737461747573223a2241434345505445445f50454e44494e47227d",
+        "control_reply_hex": "7b22636f6465223a2243414e43454c45445f4245464f52455f4150504c59222c22636f6d6d616e645f6964223a227333352e63616e63656c222c22706f7374636f6e646974696f6e73223a7b226e6f5f656666656374223a747275652c22726571756573745f646967657374223a227368613235363a34306364383765626538313038656539656365366464396261623938616262343938643532643934623637646534636338313535343538366461653832343138227d2c22726573756c745f68617368223a6e756c6c2c22726573756c745f7265766973696f6e223a6e756c6c2c22737461747573223a2243414e43454c4544227d",
+        "complete": "S35_NATIVE_COMPLETE"
+      },
+      "final_host_exit": 57,
+      "final_job_active": 0,
+      "final_job_pids": []
+    },
+    {
+      "mode": "stop",
+      "inherit_handles": false,
+      "primary_token_verified": true,
+      "pid": 18104,
+      "retained_process_binding": {
+        "work": [
+          18104,
+          134339680353968818
+        ],
+        "control": [
+          18104,
+          134339680353968818
+        ]
+      },
+      "work_dispatch": {
+        "status": "ACCEPTED_PENDING",
+        "code": "QUEUED",
+        "command_id": "s35.stop",
+        "result_revision": null,
+        "result_hash": null,
+        "postconditions": {
+          "request_digest": "sha256:40cd87ebe8108ee9ece6dd9bab98abb498d52d94b67de4cc81554586dae82418"
+        }
+      },
+      "control_dispatch": {
+        "status": "ACCEPTED_PENDING",
+        "code": "STOP_DRAINING",
+        "command_id": "s35.stop.control",
+        "result_revision": null,
+        "result_hash": null,
+        "postconditions": {
+          "request_digest": "sha256:39e94514e43ebdf672bbd53cf02def89d1a670087d4bfe29ddf9cfd16001bb85",
+          "accepting_work": false
+        }
+      },
+      "final_control_terminal": {
+        "status": "COMMITTED",
+        "code": "STOPPED",
+        "command_id": "s35.stop.control",
+        "result_revision": null,
+        "result_hash": null,
+        "postconditions": {
+          "accepting_work": false,
+          "active": 0,
+          "pending": 0,
+          "request_digest": "sha256:39e94514e43ebdf672bbd53cf02def89d1a670087d4bfe29ddf9cfd16001bb85"
+        }
+      },
+      "final_work_terminal": {
+        "status": "CANCELED",
+        "code": "CANCELED_BEFORE_APPLY",
+        "command_id": "s35.stop",
+        "result_revision": null,
+        "result_hash": null,
+        "postconditions": {
+          "no_effect": true,
+          "request_digest": "sha256:40cd87ebe8108ee9ece6dd9bab98abb498d52d94b67de4cc81554586dae82418"
+        }
+      },
+      "snapshot": {
+        "value": 0,
+        "revision": "rev-0",
+        "effect_count": 0
+      },
+      "host_exit": 57,
+      "native": {
+        "started": "S35_NATIVE_STARTED",
+        "pipe_write_dac_error": 5,
+        "pipe_write_owner_error": 5,
+        "second_instance_error": 5,
+        "work_reply_received": true,
+        "work_reply_hex": "7b22636f6465223a22515545554544222c22636f6d6d616e645f6964223a227333352e73746f70222c22706f7374636f6e646974696f6e73223a7b22726571756573745f646967657374223a227368613235363a34306364383765626538313038656539656365366464396261623938616262343938643532643934623637646534636338313535343538366461653832343138227d2c22726573756c745f68617368223a6e756c6c2c22726573756c745f7265766973696f6e223a6e756c6c2c22737461747573223a2241434345505445445f50454e44494e47227d",
+        "control_reply_hex": "7b22636f6465223a2253544f505f445241494e494e47222c22636f6d6d616e645f6964223a227333352e73746f702e636f6e74726f6c222c22706f7374636f6e646974696f6e73223a7b22616363657074696e675f776f726b223a66616c73652c22726571756573745f646967657374223a227368613235363a33396539343531346534336562646636373262626435336366303264656638396431613637303038376434626665323964646639636664313630303162623835227d2c22726573756c745f68617368223a6e756c6c2c22726573756c745f7265766973696f6e223a6e756c6c2c22737461747573223a2241434345505445445f50454e44494e47227d",
+        "complete": "S35_NATIVE_COMPLETE"
+      },
+      "final_host_exit": 57,
+      "final_job_active": 0,
+      "final_job_pids": []
+    }
+  ],
+  "safe_write": false,
+  "acceptance": false,
+  "runtime_source_sha256": {
+    "pipe_io.py": "647e420b7d72506b8b1611a54a2f9bcef2e590a34230dd4a5f54fb136fcd6946",
+    "pipe_endpoint.py": "07c9cea3c7102a4559e2f603af8e2cd5127e973508d21659ea42f296850a71cc",
+    "fixture_pipe.py": "a6bad4fc4bfa27d91573e0a5784f76f4411a8c29dfe1c5282f9190461ce48246",
+    "transport.py": "1ec03356b1cb8c8987e1604bcb164aea6a9934dbe259451c19e12de36398aba0",
+    "journal.py": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6",
+    "private_store.py": "8b92645edf34469efdab7e6e02ea70507f3db16154471685697e6e9bbad2cdc1"
+  },
+  "imported_source_sha256": {
+    "boundary_probe.py": "b3337e327cf10a585407d1fc074c23d6c5ecc7ba67334579c34858f3a6fdf6bd",
+    "windows_api.py": "1afd34eb11fd5ab9a34c37de2a80aabcec04224826a092ff122d5212bd3a50c4"
+  },
+  "profile_absent_before": true,
+  "compiler": {
+    "cl_sha256": "f4eba2208e132daf500b7d7bbdf051e930c59dbdc1d87c35e146479427ffeb8d",
+    "link_sha256": "1a9889872481270ca45febcdaf26e75c53cea505c9eb214daea1098d4cf706bd",
+    "msvc_version": "14.44.35207",
+    "sdk_version": "10.0.26100.0",
+    "source_sha256": "2cb3604f2f77c5fab64db80c4ee3aa781a70c9d9146dbd21be2a0fd2e40daa64",
+    "compile": {
+      "host_exit": 0,
+      "stdout": "boundary_child.c\r\n",
+      "stderr": "",
+      "timeout_seconds": 25
+    },
+    "link": {
+      "host_exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout_seconds": 25
+    }
+  },
+  "native_executable_sha256": "3fbf25e19321adf35c3a25809fcc7d048c07be3e799abd1e779f30b4ea6a4dfd",
+  "native_executable_relative": "studio/.local/review-raw/S35/GT02-S35-NATIVE-01-865965b0845146bc8afee289db4c9eb5.exe",
+  "create_profile_hresult": 0,
+  "profile_exists_after_create": true,
+  "remaining_endpoint_owners": 0,
+  "remaining_io_owners": 0,
+  "marker": "S35_TYPED_IPC_DIAGNOSTIC_COMPLETE",
+  "delete_profile_hresult": 0,
+  "profile_absent_after": true,
+  "owned_temp_removed": true,
+  "diagnostic_complete": true,
+  "raw_relative": "studio/.local/review-raw/S35/GT02-S35-NATIVE-01-865965b0845146bc8afee289db4c9eb5.json",
+  "raw_sha256": "0d3afb8190d9a31e8060efe78b6e5f4edd86bd34f10c89294c4a35c23566b8ca"
+}
