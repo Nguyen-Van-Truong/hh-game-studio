@@ -1,0 +1,34 @@
+{
+  "scope": "coordinator verifier integrity checks; no independent critic",
+  "checks": [
+    {
+      "case": "missing_cut",
+      "result": "REJECTED"
+    },
+    {
+      "case": "wrong_pid",
+      "result": "REJECTED"
+    },
+    {
+      "case": "wrong_exit",
+      "result": "REJECTED"
+    },
+    {
+      "case": "duplicate_cut",
+      "result": "REJECTED"
+    },
+    {
+      "case": "duplicate_generation",
+      "result": "REJECTED"
+    },
+    {
+      "case": "false_restore_commit",
+      "result": "REJECTED"
+    },
+    {
+      "case": "optimized_python",
+      "result": "REJECTED",
+      "exit_code": 1
+    }
+  ]
+}

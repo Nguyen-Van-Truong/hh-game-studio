@@ -1,0 +1,10 @@
+{
+  "code": "import unittest,json,sys; suite=unittest.defaultTestLoader.discover('tests/protocol',pattern='test_fixture_selector.py'); r=unittest.TextTestRunner(verbosity=2).run(suite); print('SELECTOR_TEST_COMPLETE '+json.dumps({'run':r.testsRun,'failures':len(r.failures),'errors':len(r.errors),'skips':len(r.skipped)}),flush=True); sys.exit(not r.wasSuccessful())",
+  "runner_sha256": "ea522450acc46f90be5e2a7b9257e73ce8b619948105b2c9073aac1f881c7328",
+  "source_hashes": {
+    "host/core/private_events.py": "85a62c0cc4fb6b67564efb7ed5322ee1bbf08023b67d865e42283f4e072399a3",
+    "host/core/fixture_release.py": "547a01252b7c5f31fba0655fec01e71039d094d6c328e3fa39428120bd464e47",
+    "host/core/fixture_selector.py": "9113e1578a143a3d2b128106dca1bf784b46f6cfde2a0561424a7c17cef93b65",
+    "tests/protocol/test_fixture_selector.py": "26a368af33fc68fea4659a59c5bfd458c26a08f72dbb6c37b899e8f32a68577e"
+  }
+}

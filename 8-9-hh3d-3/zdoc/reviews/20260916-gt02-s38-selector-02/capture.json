@@ -1,0 +1,22 @@
+{
+  "host": {
+    "wrapper_pid": 24912,
+    "started_at": "2026-09-15T19:09:59.468920+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "-c",
+      "import unittest,json,sys; suite=unittest.defaultTestLoader.discover('tests/protocol',pattern='test_fixture_selector.py'); r=unittest.TextTestRunner(verbosity=2).run(suite); print('SELECTOR_TEST_COMPLETE '+json.dumps({'run':r.testsRun,'failures':len(r.failures),'errors':len(r.errors),'skips':len(r.skipped)}),flush=True); sys.exit(not r.wasSuccessful())"
+    ],
+    "exit_code": 0,
+    "target_pid": 9928,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "selector-stdout.txt",
+    "stderr": "selector-stderr.txt",
+    "host": "selector-host.json"
+  },
+  "source_unchanged": true
+}

@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 16-09-2026, Asia/Saigon | Revision S37 | TRIỂN KHAI THEO GATE
+Ngày 16-09-2026, Asia/Saigon | Revision S38 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,18 +25,18 @@ RUNTIME_ACCEPTANCE=GT01_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S37
+PLAN_REVISION=S38
 EXECUTION_MODE=SOLO_OWNER_20260915
 SUBAGENTS_ENABLED=0
-GT02_EVIDENCE_STATUS=FROZEN_CANDIDATE_S37_01
-GT02_REVIEW_STATUS=NOT_REVIEWED_SOLO_S37
-GT02_LAST_TESTED_SOURCE_CLOSURE=b4e007455f7fd0dce25f62433a8bb6a7717ef6ff765fe1b52bf6ddecd0275ab7
+GT02_EVIDENCE_STATUS=FROZEN_CANDIDATE_S38_01
+GT02_REVIEW_STATUS=NOT_REVIEWED_SOLO_S38
+GT02_LAST_TESTED_SOURCE_CLOSURE=370e98395f8e75f7b48b4b290790a026ca5fdb27008da14cd584b4c51db32b59
 GT02_CHECKPOINT_COMMITS=96c506b,e52b5c0,faedb0d,642d6f5,74d1cc2,52ca04c,52def92,957ea88,572185e,9839be9,abc88b0,6bfbc3e,43192c0,15801ad,adb2e52
 GT02_SAFE_WRITE_STATUS=GAP_UNSUPPORTED_WINDOWS
 GT02_BOUNDARY_EVIDENCE=S35_NATIVE_TYPED_COUNTER_AND_S33_SEPARATE_STAGING
-GT02_WORKING_SOURCE_STATUS=S37_FROZEN_TESTED
+GT02_WORKING_SOURCE_STATUS=S38_FROZEN_TESTED
 
-TIẾN ĐỘ HIỆN HÀNH — S37, cập nhật 16-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S38, cập nhật 16-09-2026
 Coordinator làm solo; các subagent đã dừng. Không tạo/đánh thức worker hoặc
 critic, không dùng Grok CLI. Solo self-review không thay hai chữ ký độc lập.
 
@@ -44,14 +44,15 @@ GT-01 ACCEPTED tại a0fb247; closure
 3ace23bcf84598cda64d54bbe3fc4736acde877f9f714fb71e2355d3e809eea4,
 evidence reviews/20260913-r21-gt01-final; hai critic PASS/TICK=yes.
 
-GT-02 candidate hiện hành: reviews/20260916-gt02-s37-01. Protocol240 tests:
-236 pass,4 skips (3 thiếu quyền symlink,1 negative Linux-only); bootstrap56/56.
-Actual host exit/process tree sạch, source/snapshot không đổi;79 source files,
+GT-02 candidate hiện hành: reviews/20260916-gt02-s38-01. Protocol267 tests:
+263 pass,4 skips (3 thiếu quyền symlink,1 negative Linux-only); bootstrap56/56.
+Actual host exit/process tree sạch, source/snapshot không đổi;82 source files,
 9 artifacts được rehash. Python/Node/Godot khớp2396 canonical rows/hash; Godot
 thêm9 negative cases. Bảng requirement → test → evidence và audit tái dựng
-Git nằm ở reviews/20260916-gt02-s37-audit/. Chưa có review độc lập cho source này.
-Checkpoint S37:adb2e52 source/evidence; Git index/HEAD proof đã đạt79 source/
-9 candidate artifacts và26 diagnostic artifacts. Checkpoint trước:15801ad(S36).
+Git nằm ở reviews/20260916-gt02-s38-audit/. Chưa có review độc lập cho source này.
+Checkpoint S38 đang chờ Git proof/commit. S37:adb2e52 source/evidence; S36:15801ad.
+S38 rehash82 source/9 candidate/45 diagnostic artifacts;9 crash cut được parse
+riêng,7 kiểm tra âm của verifier từ chối đúng. Không chuyển chữ ký critic cũ.
 Closure S35:264ed3e3f35ca76038ba20cc00f41f3345ba6e9352e111b3be5e7ed38fe6e111. Các bản
 Git proof ghi commit thực sự đã kiểm trong git-byte-verification-*.json.
 
@@ -112,12 +113,20 @@ Completeness chỉ cho fixture grammar; chưa là dependency scan Godot/Blender.
 Staged release chưa active; revisions trong manifest vẫn là metadata producer,
 selector phải so với authoritative state/lease trước selection và adoption.
 
+S38 thêm fixture_selector.py: một stream giữ intent/lease/revisions/
+selection/receipt, quota toàn operation, generation CAS và consumer readback.
+27/27 test selector đạt trên snapshot cuối, gồm9 crash cut bằng process thật.
+Stop tới trong quota scan/pin bị chặn trước effect admission; log/store/consumer
+mỗi object chỉ có một selector.5 focused runs giữ đúng source riêng17/21/21/24/27 tests.
+Reopen chỉ quan sát; explicit reconcile có thể nhận lại manifest đã ghi trước
+crash, không staging lại. Restore tăng generation và giữ UNKNOWN/restored.
+Đây là internal fixture; chưa có confined client gọi selector hoặc engine adapter.
+
 Tiếp theo solo, theo thứ tự để tránh làm lại:
-1. Nối private event stream + fixture release bằng typed selector transaction:
-   intent và whole-operation reservation trước staging, source/game/fence CAS,
-   selection khác consumer adoption/readback, Stop và explicit crash reconcile.
-   Không dùng reopen làm quyền retry; proof confined client phải exercise lớp mới.
-2. Freeze lại closure, adversarial verification; giữ CANDIDATE khi review còn thiếu.
+1. Hoàn tất Git proof/checkpoint S38; source đã freeze, không rerun chỉ vì metadata.
+2. Nối authenticated confined client với selector/staging mới; kiểm Stop, mất
+   reply, identity/lease sai và lookup không duplicate trên đúng source closure.
+3. Adversarial verification; giữ CANDIDATE khi review còn thiếu.
    Không lặp fullsuite cùng source đã đạt chỉ vì sửa metadata.
 GT-03/04 consumer mutation chưa đủ dependency; không hạ DoD để hợp code.
 
@@ -125,7 +134,7 @@ Các finding/lượt lỗi S30–S33 và lý do quyết định giữ nguyên tr
 reviews/20260916-plan-history-s33/tools-plan-s33.txt (AUTHORITY=0), SHA-256
 1eb33e360f2c6f712768e453e0bb751e6d539eefb922347614b5e4a613a192f0.
 Hai critic S30 chỉ áp dụng closure S30: A FAIL/TICK=no vì TX15 availability GAP;
-B PASS/TICK=yes cho baseline fixture. Không chuyển chữ ký đó sang S37. Một
+B PASS/TICK=yes cho baseline fixture. Không chuyển chữ ký đó sang S38. Một
 TEMP probe S30 cũ còn lại do automatic approval review chặn cleanup; giữ báo
 cáo ...s30-windows-probe.md, không thử lại bằng công cụ khác hoặc claim TEMP0.
 
@@ -136,6 +145,10 @@ GT-10. Inventory S29: Docker local phản hồi, chưa thấy ADB/Android kết 
 đó không là proof Linux/Android đạt. Chưa có cơ sở hẹn ngày xong toàn plan.
 
 KINH NGHIỆM ĐANG ÁP DỤNG
+- S38: Stop có thể tới trong quota scan/pin dù mutex đang bị giữ; kiểm lại
+  signal trước effect admission. Một consumer cũng chỉ có một selector owner.
+  Mất record STAGED không có nghĩa file chưa ghi: tìm và pin đúng manifest
+  của intent; partial/ambiguous thì giữ nguyên và reconcile, không ghi lại.
 - S36: không giả định alias tạo được với mọi access/flag; live os.link ở stream
   này trả sharing violation32, còn alias sau close thực sự bị chặn khi reopen.
   Giữ counterexample cũ; không suy share=0 là sandbox. Kiểm EOF sau readback,

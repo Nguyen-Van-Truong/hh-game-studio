@@ -1,6 +1,6 @@
 # Retained private event stream
 
-`PrivateEventLog` is an internal storage primitive for the next selector layer.
+`PrivateEventLog` is the internal storage primitive used by the fixture selector.
 It owns a dedicated `PrivateBlobStore` root/ancestor chain and permanent writer
 guard, plus a single noninheritable share=0, no-follow, write-through `.events`
 handle. The root contains exactly `.writer` and `.events`; it is distinct from
@@ -20,7 +20,7 @@ entire previous chain, compares the exact expected head, and checks capacity.
 The same retained handle seeks, writes once with a checked byte count, flushes,
 revalidates chain/identity/EOF and reads back the frame before returning a head.
 Concurrent commands using the same parent get one append and one conflict.
-Optional reserve counts/bytes check remaining capacity only; the future typed
+Optional reserve counts/bytes check remaining capacity only; the typed
 selector must persist and reconstruct reservation ownership in its intents.
 
 Reopen always uses existing names and requires trusted root/file identity plus
@@ -57,10 +57,13 @@ local NTFS behavior; they do not certify physical power-loss behavior or the
 complete release-publication namespace. Hardware/OS persistence assumptions
 must stay explicit. Never turn a missing initial store into an empty selector.
 
-Next layer: typed intent/selection/outcome records in this one stream, lease/
-fence and source/game revision checks, complete immutable release binding,
-generation CAS, consumer pin/adoption/readback, Stop and explicit reconciliation.
-Storage heads are not selection generations or command receipts.
+`fold()` runs a trusted pure reducer over a single validated guarded snapshot,
+reading one event body at a time and checking final EOF before advancing its
+witness. A rejected semantic history preserves bytes and quarantines the log.
+The reducer cannot perform effects or call back into the log. The internal
+fixture selector now supplies typed intent/selection/outcome, revision/fence
+CAS, consumer readback and explicit reconciliation; see FIXTURE_SELECTOR.md.
+Storage heads alone are not selection generations or command receipts.
 
 Primary references: [CreateFileW caching and NTFS metadata](https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilew),
 [FlushFileBuffers](https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-flushfilebuffers),
