@@ -31,7 +31,7 @@ SUBAGENTS_ENABLED=0
 GT02_EVIDENCE_STATUS=FROZEN_CANDIDATE_S32_01
 GT02_REVIEW_STATUS=NOT_REVIEWED_SOLO_S32
 GT02_LAST_TESTED_SOURCE_CLOSURE=983e205a2c815c6e530bf6ef4255d84cc17b4fae0e05a5e9a2848960515d82b1
-GT02_CHECKPOINT_COMMITS=96c506b,e52b5c0,faedb0d,642d6f5,74d1cc2,52ca04c,52def92
+GT02_CHECKPOINT_COMMITS=96c506b,e52b5c0,faedb0d,642d6f5,74d1cc2,52ca04c,52def92,957ea88
 GT02_SAFE_WRITE_STATUS=GAP_UNSUPPORTED_WINDOWS
 
 TIẾN ĐỘ HIỆN HÀNH — S32, 15-09-2026
@@ -41,8 +41,8 @@ test, report dở và plan. Formal review S30 giữ đúng hash; source mới kh
 tính là đã có hai critic. Không dùng Grok CLI hoặc tự tạo chữ ký độc lập.
 S31 AppContainer probe, broker contract và adapter prerequisites đã hoàn tất;
 đây là diagnostic/preparation, không nghiệm thu thêm gate. Source S30 checkpoint
-74d1cc2; audit metadata 52ca04c. Tái dựng Git xác nhận 62 source/9 artifacts khớp
-hash (s30-audit/git-byte-verification-head.json).
+74d1cc2; audit metadata 52ca04c. Source S32 checkpoint957ea88: tái dựng Git xác
+nhận65 source/9 artifacts khớp hash (s32-audit/git-byte-verification-head.json).
 
 GT-01 ACCEPTED tại a0fb247; closure
 3ace23bcf84598cda64d54bbe3fc4736acde877f9f714fb71e2355d3e809eea4,
@@ -112,7 +112,7 @@ Report native-store là review draft bị ngắt, không phải final critic sou
 Activation contract đề xuất append-only selector thay mutable pointer; vẫn phải
 giữ expected generation/hash, journal/lease, release closure và consumer readback.
 
-Tiếp theo solo: lưu Git checkpoint và kiểm exact bytes; tích hợp actual worker
+Tiếp theo solo: tích hợp actual worker
 với private store qua bytes-only IPC, rồi activation/crash recovery. Chưa mở consumer mutation.
 Giữ GT-02 CANDIDATE khi còn requirement/review thiếu. Không
 dispatch GT-03/04 mutation qua dependency/gap. Không hỏi lại phần triển khai đã

@@ -3,6 +3,8 @@
 GT-02 remains CANDIDATE. This package adds experimental broker-local staging;
 public safe-write/atomic-replace and consumer mutation remain unavailable.
 The owner paused subagents. No independent final review is claimed for S32.
+Source/evidence checkpoint: `957ea889125eeb34a1df99771e965fad90552b61`.
+`git-byte-verification-head.json` proves reconstruction from that exact commit.
 
 Frozen run: `GT02-S32-20260915-01`, command `cmd.GT02-S32-20260915-01`.
 Source closure (65 files):
