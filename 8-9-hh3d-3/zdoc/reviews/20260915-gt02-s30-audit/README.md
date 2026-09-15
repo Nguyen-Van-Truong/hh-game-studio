@@ -65,3 +65,7 @@ fixture baseline with its explicit unsupported capability. Neither reproduced
 a remaining journal/transport defect. `coordinator-decision.json` binds both
 reports and keeps GT-02 CANDIDATE. The plan clarifies that valid safe rejection
 does not close the required capability GAP; no downstream mutation is opened.
+
+Implementation/evidence checkpoint: `74d1cc2`. The post-commit HEAD check rebuilt
+62 source files and nine artifacts from that commit, then verified the stored
+evidence in isolated Python with exit 0. See `git-byte-verification-head.json`.

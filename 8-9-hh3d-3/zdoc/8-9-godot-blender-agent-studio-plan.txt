@@ -31,14 +31,17 @@ SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=FROZEN_CANDIDATE_S30_01
 GT02_REVIEW_STATUS=S30_A_FAIL_B_PASS_SAFE_WRITE_GAP
 GT02_LAST_TESTED_SOURCE_CLOSURE=60799065f406fbb3b13d2dc0df093477210927f86e84b54175dfd36351521a1a
-GT02_CHECKPOINT_COMMITS=96c506b,e52b5c0,faedb0d,642d6f5
+GT02_CHECKPOINT_COMMITS=96c506b,e52b5c0,faedb0d,642d6f5,74d1cc2
 GT02_SAFE_WRITE_STATUS=GAP_UNSUPPORTED_WINDOWS
 
 TIẾN ĐỘ HIỆN HÀNH — S30, 15-09-2026
 Owner mở lại ba Codex subagent Astra xhigh. Hai lane audit read-only độc lập
 (durability và contract/security), một lane Windows safe-write probe riêng.
 Coordinator là writer source/test/plan và tích hợp; không dùng Grok CLI.
-Các lane S29 đã kết thúc; verdict cũ giữ nguyên theo hash được review.
+Các lane S29 và formal review S30 đã kết thúc; verdict giữ đúng hash.
+Các lane tiếp theo: AppContainer probe, broker contract và adapter prerequisites
+read-only. Source S30 checkpoint 74d1cc2; tái dựng từ Git HEAD xác nhận 62 source/
+9 artifacts khớp hash (s30-audit/git-byte-verification-head.json).
 
 GT-01 ACCEPTED tại a0fb247; closure
 3ace23bcf84598cda64d54bbe3fc4736acde877f9f714fb71e2355d3e809eea4,
