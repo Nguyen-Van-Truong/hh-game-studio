@@ -31,7 +31,7 @@ SUBAGENTS_ENABLED=0
 GT02_EVIDENCE_STATUS=FROZEN_CANDIDATE_S38_01
 GT02_REVIEW_STATUS=NOT_REVIEWED_SOLO_S38
 GT02_LAST_TESTED_SOURCE_CLOSURE=370e98395f8e75f7b48b4b290790a026ca5fdb27008da14cd584b4c51db32b59
-GT02_CHECKPOINT_COMMITS=96c506b,e52b5c0,faedb0d,642d6f5,74d1cc2,52ca04c,52def92,957ea88,572185e,9839be9,abc88b0,6bfbc3e,43192c0,15801ad,adb2e52
+GT02_CHECKPOINT_COMMITS=96c506b,e52b5c0,faedb0d,642d6f5,74d1cc2,52ca04c,52def92,957ea88,572185e,9839be9,abc88b0,6bfbc3e,43192c0,15801ad,adb2e52,2e24912
 GT02_SAFE_WRITE_STATUS=GAP_UNSUPPORTED_WINDOWS
 GT02_BOUNDARY_EVIDENCE=S35_NATIVE_TYPED_COUNTER_AND_S33_SEPARATE_STAGING
 GT02_WORKING_SOURCE_STATUS=S38_FROZEN_TESTED
@@ -50,7 +50,8 @@ Actual host exit/process tree sạch, source/snapshot không đổi;82 source fi
 9 artifacts được rehash. Python/Node/Godot khớp2396 canonical rows/hash; Godot
 thêm9 negative cases. Bảng requirement → test → evidence và audit tái dựng
 Git nằm ở reviews/20260916-gt02-s38-audit/. Chưa có review độc lập cho source này.
-Checkpoint S38 đang chờ Git proof/commit. S37:adb2e52 source/evidence; S36:15801ad.
+Checkpoint S38:2e24912 source/evidence; Git index/HEAD proof đạt.
+S37:adb2e52 source/evidence; S36:15801ad.
 S38 rehash82 source/9 candidate/45 diagnostic artifacts;9 crash cut được parse
 riêng,7 kiểm tra âm của verifier từ chối đúng. Không chuyển chữ ký critic cũ.
 Closure S35:264ed3e3f35ca76038ba20cc00f41f3345ba6e9352e111b3be5e7ed38fe6e111. Các bản
@@ -123,10 +124,9 @@ crash, không staging lại. Restore tăng generation và giữ UNKNOWN/restored
 Đây là internal fixture; chưa có confined client gọi selector hoặc engine adapter.
 
 Tiếp theo solo, theo thứ tự để tránh làm lại:
-1. Hoàn tất Git proof/checkpoint S38; source đã freeze, không rerun chỉ vì metadata.
-2. Nối authenticated confined client với selector/staging mới; kiểm Stop, mất
+1. Nối authenticated confined client với selector/staging mới; kiểm Stop, mất
    reply, identity/lease sai và lookup không duplicate trên đúng source closure.
-3. Adversarial verification; giữ CANDIDATE khi review còn thiếu.
+2. Freeze closure mới và adversarial verification; giữ CANDIDATE khi review còn thiếu.
    Không lặp fullsuite cùng source đã đạt chỉ vì sửa metadata.
 GT-03/04 consumer mutation chưa đủ dependency; không hạ DoD để hợp code.
 

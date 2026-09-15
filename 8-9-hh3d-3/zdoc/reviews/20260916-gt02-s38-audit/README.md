@@ -1,6 +1,8 @@
 # S38 fixture activation and explicit recovery — CANDIDATE
 
 Frozen closure: `370e98395f8e75f7b48b4b290790a026ca5fdb27008da14cd584b4c51db32b59`.
+Source/evidence checkpoint: `2e24912f704110cde4b1d09521e9e26072ffba62`;
+exact index and HEAD reconstruction both passed.
 82 source files, 9 candidate artifacts. Protocol **263/267 passed + 4 explicit
 skips**; bootstrap **56/56**. Actual owned host exits/tree checks passed and
 source/snapshot stayed unchanged. Python/Node/Godot agree on 2,396 canonical
