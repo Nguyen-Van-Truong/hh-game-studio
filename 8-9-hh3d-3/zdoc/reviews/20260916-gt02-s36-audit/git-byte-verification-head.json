@@ -1,0 +1,46 @@
+{
+  "schema": "hh-gt02-git-bytes-verification-v1",
+  "status": "GIT_BYTES_VERIFIED",
+  "verified_utc": "2026-09-15T18:33:23.856567+00:00",
+  "git_source": "HEAD",
+  "head_at_verification": "15801adb943807b12e6a0700aa3677211a363e53",
+  "source_closure_sha256": "c4db7728b0b606d6574d24a78fde5eaaec99bed7934d280d0e56cec0d8e280f1",
+  "source_files": 76,
+  "artifact_files": 9,
+  "candidate_sha256": "c2b124c0c091941aae5a47b451ed4b42fac186af28ea86b10adcc8a9b81eb7fc",
+  "historical_plan_sha256": "f299a73fe9f699a0a7943a6b9ef74bbd7bcc3821a66a32075588d39a482dc189",
+  "verifier_sha256": "e713cb58560f10671d46701e308cbc77fb99ba036faa897c2c4fda44e687352c",
+  "reconstructed_verification_sha256": "a29f79aa465c4921420e25d5b134c9876125b1c0505b19733b30ccbbcbd65322",
+  "isolated_python_exit": 0,
+  "counts": {
+    "protocol": {
+      "run": 228,
+      "passed": 224,
+      "skipped": 4
+    },
+    "bootstrap": {
+      "run": 56,
+      "passed": 56,
+      "skipped": 0
+    }
+  },
+  "prior_native_counter": {
+    "status": "DIAGNOSTIC_ARTIFACTS_VERIFIED",
+    "manifest_sha256": "3f5a5d5b26b199897161048a8c70bf4a98cef46595b00e3d08d5c33f8b903363",
+    "source_closure_sha256": "264ed3e3f35ca76038ba20cc00f41f3345ba6e9352e111b3be5e7ed38fe6e111",
+    "source_files": 73,
+    "artifacts": 14,
+    "runtime_modules": 13,
+    "native_cases": 6,
+    "wrong_client_pid_rejected": true,
+    "local_raw_checks": [],
+    "raw_available": false,
+    "formal_acceptance": false,
+    "scope": "S35 native counter source subset unchanged; S36 private event stream is not exercised by that native run",
+    "current_source_subset_unchanged": true
+  },
+  "native_verifier_sha256": "78ae57f820c2e2e9242aeb0c2eed059c09e981bd4172c58ff228f2afc2adbd07",
+  "scope": "Git byte integrity and stored evidence verification; no engine or suite rerun",
+  "formal_acceptance": false,
+  "independent_critic_signatures": 0
+}
