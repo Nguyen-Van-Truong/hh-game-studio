@@ -1,0 +1,8 @@
+{
+  "code": "import unittest, json,sys; suite=unittest.defaultTestLoader.discover('tests/protocol',pattern='test_private_events.py'); r=unittest.TextTestRunner(verbosity=2).run(suite); print('EVENT_TEST_COMPLETE '+json.dumps({'run':r.testsRun,'failures':len(r.failures),'errors':len(r.errors),'skips':len(r.skipped)}),flush=True); sys.exit(not r.wasSuccessful())",
+  "runner_sha256": "ea522450acc46f90be5e2a7b9257e73ce8b619948105b2c9073aac1f881c7328",
+  "source_hashes": {
+    "host/core/private_events.py": "80c8f1789607ede20dc12d05d99c059af701e4a74c4c34a9192f1d0a41f1cc85",
+    "tests/protocol/test_private_events.py": "e43cb682849d2383b556d8b9d1dfb81dbd24a334c04d2bdd2fe480826a599f9a"
+  }
+}

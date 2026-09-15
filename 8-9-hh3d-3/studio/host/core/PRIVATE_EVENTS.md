@@ -1,0 +1,76 @@
+# Retained private event stream
+
+`PrivateEventLog` is an internal storage primitive for the next selector layer.
+It owns a dedicated `PrivateBlobStore` root/ancestor chain and permanent writer
+guard, plus a single noninheritable share=0, no-follow, write-through `.events`
+handle. The root contains exactly `.writer` and `.events`; it is distinct from
+the immutable blob store. Existing blob quota/layout and generic command
+journal are unchanged. No client operation or safe-write capability is enabled.
+
+Each frame is a 4-byte little-endian length, canonical JSON and a 32-byte SHA256.
+The body includes a format, sequence, previous record hash and event object.
+Genesis binds the minted root and actual volume/root/file IDs. Individual
+bodies are at most 16 KiB, the stream at most 8 MiB and 512 records. Parsing
+streams one record at a time; the resident history index keeps offsets, lengths
+and hashes, not every persistent event body. Returned event bytes are immutable.
+
+An append validates/copies input, takes the instance mutex, checks live root/
+ancestor/guard/stream identities and protected DACL, flushes and validates the
+entire previous chain, compares the exact expected head, and checks capacity.
+The same retained handle seeks, writes once with a checked byte count, flushes,
+revalidates chain/identity/EOF and reads back the frame before returning a head.
+Concurrent commands using the same parent get one append and one conflict.
+Optional reserve counts/bytes check remaining capacity only; the future typed
+selector must persist and reconstruct reservation ownership in its intents.
+
+Reopen always uses existing names and requires trusted root/file identity plus
+an acknowledged head witness. It does not create missing files. History is
+exposed only after a fresh successful FlushFileBuffers and complete chain
+validation, including the witness prefix. Valid newer records may become
+visible after a process crash; they are observations requiring explicit command
+reconciliation, not permission to repeat effects or return COMMITTED.
+
+Short writes, flush/readback/identity failures quarantine the instance and
+report uncertainty. Torn/checksum-invalid/noncanonical/reordered history or a
+missing witnessed suffix requires recovery and preserves every byte. There is
+no automatic truncation, compaction, retry, tail repair, rollback or deletion.
+An old witness cannot detect loss of a newer complete suffix; durable witness/
+receipt custody remains required for any stronger rollback-detection claim.
+
+At most 16 log owners are strongly retained. Stream close happens before root/
+guard close. Failed close retains exact ownership for a later `close()`, even
+after a constructor write/cleanup failure or a caller drops its reference.
+The mutex has a two-second admission timeout. Native file I/O remains
+synchronous: byte/record caps are not a storage-device latency bound; the
+supervisor must own a bounded process/job when testing potentially hung I/O.
+
+The trust boundary is the broker versus OS-confined workers. Unrestricted
+same-account actors/admins are not excluded by this DACL. No worker receives
+the object, root/configuration authority, file/volume/mapping handles or an
+impersonating broker thread. S35 proved native counter IPC on its own frozen
+closure; it does not yet prove this event stream integrated with a worker.
+
+NTFS metadata/write-through and FlushFileBuffers are the persistence API
+assumptions. Creation flushes the guard and writes/flushes/readbacks a nonempty
+genesis. Actual fresh-process reopen and crash-cut tests prove the observed
+local NTFS behavior; they do not certify physical power-loss behavior or the
+complete release-publication namespace. Hardware/OS persistence assumptions
+must stay explicit. Never turn a missing initial store into an empty selector.
+
+Next layer: typed intent/selection/outcome records in this one stream, lease/
+fence and source/game revision checks, complete immutable release binding,
+generation CAS, consumer pin/adoption/readback, Stop and explicit reconciliation.
+Storage heads are not selection generations or command receipts.
+
+Primary references: [CreateFileW caching and NTFS metadata](https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilew),
+[FlushFileBuffers](https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-flushfilebuffers),
+[SetFilePointerEx and shared-pointer synchronization](https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-setfilepointerex).
+
+Verification: `python -B studio/tests/protocol/test_private_events.py`, run by
+the owned Job runner with actual exit/tree capture. Tests include two concurrent
+appenders, a second process denied by the guard, fresh-process read/append,
+actual exit at write/flush cuts, partial writes, corrupt/truncated/reordered
+history, witness rollback, denied live hardlink attempt and real alias after
+close, missing/replaced stream, and retained cleanup ownership. A live hardlink
+denial for this access/flag combination does not overturn S30's separate
+exclusive-handle counterexample or justify generic project mutation.

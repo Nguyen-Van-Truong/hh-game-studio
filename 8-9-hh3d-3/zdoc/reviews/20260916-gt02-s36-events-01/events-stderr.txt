@@ -1,0 +1,27 @@
+test_alias_and_extra_namespace_entry_are_refused_before_write (test_private_events.PrivateEventTests.test_alias_and_extra_namespace_entry_are_refused_before_write) ... ERROR
+test_failed_close_retains_stream_and_ancestors_for_exact_retry (test_private_events.PrivateEventTests.test_failed_close_retains_stream_and_ancestors_for_exact_retry) ... ok
+test_fresh_process_reopen_reads_then_appends_from_pinned_head (test_private_events.PrivateEventTests.test_fresh_process_reopen_reads_then_appends_from_pinned_head) ... ok
+test_genesis_append_immutable_records_and_disk_index (test_private_events.PrivateEventTests.test_genesis_append_immutable_records_and_disk_index) ... ok
+test_invalid_and_reserved_capacity_refuse_before_write (test_private_events.PrivateEventTests.test_invalid_and_reserved_capacity_refuse_before_write) ... ok
+test_missing_or_wrong_stream_identity_never_autocreates (test_private_events.PrivateEventTests.test_missing_or_wrong_stream_identity_never_autocreates) ... ok
+test_process_exit_at_write_and_flush_cuts_reconciles_complete_chain_only (test_private_events.PrivateEventTests.test_process_exit_at_write_and_flush_cuts_reconciles_complete_chain_only) ... ok
+test_record_order_and_noncanonical_checksums_do_not_authorize_history (test_private_events.PrivateEventTests.test_record_order_and_noncanonical_checksums_do_not_authorize_history) ... ok
+test_registry_retains_dropped_caller_and_enforces_owner_cap (test_private_events.PrivateEventTests.test_registry_retains_dropped_caller_and_enforces_owner_cap) ... ok
+test_reload_barrier_failure_never_exposes_page_cache (test_private_events.PrivateEventTests.test_reload_barrier_failure_never_exposes_page_cache) ... ok
+test_same_parent_concurrent_append_has_one_winner (test_private_events.PrivateEventTests.test_same_parent_concurrent_append_has_one_winner) ... ok
+test_second_process_cannot_acquire_guard (test_private_events.PrivateEventTests.test_second_process_cannot_acquire_guard) ... ok
+test_truncated_tampered_and_whole_suffix_loss_require_recovery (test_private_events.PrivateEventTests.test_truncated_tampered_and_whole_suffix_loss_require_recovery) ... ok
+test_write_and_flush_failures_preserve_history_and_uncertainty (test_private_events.PrivateEventTests.test_write_and_flush_failures_preserve_history_and_uncertainty) ... ok
+
+======================================================================
+ERROR: test_alias_and_extra_namespace_entry_are_refused_before_write (test_private_events.PrivateEventTests.test_alias_and_extra_namespace_entry_are_refused_before_write)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\protocol\test_private_events.py", line 273, in test_alias_and_extra_namespace_entry_are_refused_before_write
+    os.link(self.log.root / '.events', outside)
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\truon\\AppData\\Local\\Temp\\gt02-events-test-fa2_9271\\hh-private-429115a7f2f94e319c9084ade4f90f2b\\.events' -> 'C:\\Users\\truon\\AppData\\Local\\Temp\\gt02-events-test-fa2_9271\\outside-hardlink'
+
+----------------------------------------------------------------------
+Ran 14 tests in 2.236s
+
+FAILED (errors=1)

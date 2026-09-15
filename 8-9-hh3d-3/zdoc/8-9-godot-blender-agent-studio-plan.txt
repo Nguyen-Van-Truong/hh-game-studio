@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 16-09-2026, Asia/Saigon | Revision S35 | TRIỂN KHAI THEO GATE
+Ngày 16-09-2026, Asia/Saigon | Revision S36 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,18 +25,18 @@ RUNTIME_ACCEPTANCE=GT01_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S35
+PLAN_REVISION=S36
 EXECUTION_MODE=SOLO_OWNER_20260915
 SUBAGENTS_ENABLED=0
-GT02_EVIDENCE_STATUS=FROZEN_CANDIDATE_S35_01
-GT02_REVIEW_STATUS=NOT_REVIEWED_SOLO_S35
-GT02_LAST_TESTED_SOURCE_CLOSURE=264ed3e3f35ca76038ba20cc00f41f3345ba6e9352e111b3be5e7ed38fe6e111
-GT02_CHECKPOINT_COMMITS=96c506b,e52b5c0,faedb0d,642d6f5,74d1cc2,52ca04c,52def92,957ea88,572185e,9839be9,abc88b0,6bfbc3e
+GT02_EVIDENCE_STATUS=FROZEN_CANDIDATE_S36_01
+GT02_REVIEW_STATUS=NOT_REVIEWED_SOLO_S36
+GT02_LAST_TESTED_SOURCE_CLOSURE=c4db7728b0b606d6574d24a78fde5eaaec99bed7934d280d0e56cec0d8e280f1
+GT02_CHECKPOINT_COMMITS=96c506b,e52b5c0,faedb0d,642d6f5,74d1cc2,52ca04c,52def92,957ea88,572185e,9839be9,abc88b0,6bfbc3e,43192c0
 GT02_SAFE_WRITE_STATUS=GAP_UNSUPPORTED_WINDOWS
 GT02_BOUNDARY_EVIDENCE=S35_NATIVE_TYPED_COUNTER_AND_S33_SEPARATE_STAGING
-GT02_WORKING_SOURCE_STATUS=S35_FROZEN_TESTED
+GT02_WORKING_SOURCE_STATUS=S36_FROZEN_TESTED
 
-TIẾN ĐỘ HIỆN HÀNH — S35, cập nhật 16-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S36, cập nhật 16-09-2026
 Coordinator làm solo; các subagent đã dừng. Không tạo/đánh thức worker hoặc
 critic, không dùng Grok CLI. Solo self-review không thay hai chữ ký độc lập.
 
@@ -44,13 +44,14 @@ GT-01 ACCEPTED tại a0fb247; closure
 3ace23bcf84598cda64d54bbe3fc4736acde877f9f714fb71e2355d3e809eea4,
 evidence reviews/20260913-r21-gt01-final; hai critic PASS/TICK=yes.
 
-GT-02 candidate hiện hành: reviews/20260916-gt02-s35-01. Protocol210 tests:
-206 pass,4 skips (3 thiếu quyền symlink,1 negative Linux-only); bootstrap56/56.
-Actual host exit/process tree sạch, source/snapshot không đổi;73 source files,
+GT-02 candidate hiện hành: reviews/20260916-gt02-s36-01. Protocol228 tests:
+224 pass,4 skips (3 thiếu quyền symlink,1 negative Linux-only); bootstrap56/56.
+Actual host exit/process tree sạch, source/snapshot không đổi;76 source files,
 9 artifacts được rehash. Python/Node/Godot khớp2396 canonical rows/hash; Godot
 thêm9 negative cases. Bảng requirement → test → evidence và audit tái dựng
-Git nằm ở reviews/20260916-gt02-s35-audit/. Chưa có review độc lập cho source này.
-Checkpoint trước S35: abc88b0 source/evidence S34,6bfbc3e metadata. Các bản
+Git nằm ở reviews/20260916-gt02-s36-audit/. Chưa có review độc lập cho source này.
+Checkpoint trước S36:43192c0 source/evidence S35; Git index/HEAD proof đã đạt.
+Closure S35:264ed3e3f35ca76038ba20cc00f41f3345ba6e9352e111b3be5e7ed38fe6e111. Các bản
 Git proof ghi commit thực sự đã kiểm trong git-byte-verification-*.json.
 
 Đã có typed schema/JCS/limits, journal/CAS8 process, terminal reservation,
@@ -91,10 +92,21 @@ Negative client PID khác bị chặn trước dispatch; placeholder không ch�
 Python -O và artifact thiếu/sửa đều đúng. Đây là counter fixture; private
 staging/selector vẫn chưa tích hợp, safe_write/atomic_replace chưa được cấp.
 
+S36 thêm private_events.py: một root/guard/stream giữ handle, protected DACL,
+JCS framed/hash chain, expected-head append và fresh flush trước đọc lịch sử.
+Giới hạn512 records/8MiB, body16KiB, index chỉ giữ offset/hash; tối đa16 owner.
+18 tests Windows thật đạt: CAS2 thread, writer process thứ2 bị chặn, crash cut
+write/flush, torn/checksum/order/EOF, witness suffix, alias và close/init lỗi.
+Giữ bytes/ownership khi chưa rõ kết quả; không truncate hay tự retry. S35 native
+counter source vẫn khớp byte nhưng chưa exercise stream mới. Đây là lớp lưu
+trữ cho selector; chưa có typed selection/adoption/recovery hoặc namespace
+publication ACK. Diagnostic lỗi được giữ kèm đúng source hash trong ...s36-events-01/02.
+
 Tiếp theo solo, theo thứ tự để tránh làm lại:
-1. Chốt Git byte proof/checkpoint S35; không lặp fullsuite chỉ vì sửa metadata.
-2. Expected-generation selector cho complete immutable release; durable intent,
-   readback và explicit crash reconciliation; không dùng reopen làm quyền retry.
+1. Chốt Git byte proof/checkpoint S36; không lặp fullsuite chỉ vì sửa metadata.
+2. Dùng private event stream cho expected-generation selector và complete
+   immutable release; typed intent/reservation/outcome, consumer readback và
+   explicit crash reconciliation. Không dùng reopen làm quyền retry.
 3. Freeze lại closure, adversarial verification; giữ CANDIDATE khi review còn thiếu.
 GT-03/04 consumer mutation chưa đủ dependency; không hạ DoD để hợp code.
 
@@ -102,7 +114,7 @@ Các finding/lượt lỗi S30–S33 và lý do quyết định giữ nguyên tr
 reviews/20260916-plan-history-s33/tools-plan-s33.txt (AUTHORITY=0), SHA-256
 1eb33e360f2c6f712768e453e0bb751e6d539eefb922347614b5e4a613a192f0.
 Hai critic S30 chỉ áp dụng closure S30: A FAIL/TICK=no vì TX15 availability GAP;
-B PASS/TICK=yes cho baseline fixture. Không chuyển chữ ký đó sang S35. Một
+B PASS/TICK=yes cho baseline fixture. Không chuyển chữ ký đó sang S36. Một
 TEMP probe S30 cũ còn lại do automatic approval review chặn cleanup; giữ báo
 cáo ...s30-windows-probe.md, không thử lại bằng công cụ khác hoặc claim TEMP0.
 
@@ -113,6 +125,11 @@ GT-10. Inventory S29: Docker local phản hồi, chưa thấy ADB/Android kết 
 đó không là proof Linux/Android đạt. Chưa có cơ sở hẹn ngày xong toàn plan.
 
 KINH NGHIỆM ĐANG ÁP DỤNG
+- S36: không giả định alias tạo được với mọi access/flag; live os.link ở stream
+  này trả sharing violation32, còn alias sau close thực sự bị chặn khi reopen.
+  Giữ counterexample cũ; không suy share=0 là sandbox. Kiểm EOF sau readback,
+  không chỉ sau scan. Witness cũ không phát hiện suffix mới bị mất nguyên record;
+  cần custody/high-water bền vững trước claim chống rollback toàn bộ.
 - Không gọi lại checker legacy toàn repo chỉ vì đổi plan tools. Lượt S34 gọi
   tests/bootstrap/test_authoritative_plan.py quét cả binary/cache ngoài scope,
   chưa có marker sau207.57s nên bị dừng đúng PID+creation+parent+command; không
