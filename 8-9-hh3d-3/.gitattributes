@@ -20,7 +20,12 @@ zdoc/reviews/20260910-r6/worker-output/** -text
 zdoc/reviews/*-gt02-s[0-9]*/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 zdoc/reviews/*-gt02-s[0-9]*.md -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 zdoc/reviews/20260914-plan-history-s27/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+zdoc/reviews/20260915-plan-history-s28/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+zdoc/reviews/20260915-plan-history-s29/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 # Preserve the reviewers' Markdown hard line breaks in these immutable reports.
 zdoc/reviews/20260914-gt02-s26-02-critic-[ab].md whitespace=-blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 # The completed historical research report retains its original final blank line.
 zdoc/reviews/20260914-gt02-s27-windows-write-research.md whitespace=blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+# Preserve authored Markdown breaks and the failed diagnostic's doubled CR bytes.
+zdoc/reviews/20260915-gt02-s29-safe-write-design.md whitespace=-blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+zdoc/reviews/20260915-gt02-s30-appcontainer-probe/sid-only-01.stdout.txt whitespace=-blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

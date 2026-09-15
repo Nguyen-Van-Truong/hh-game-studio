@@ -10,6 +10,11 @@ formatting or retaining the input. The mapping and returned records are immutabl
 
 Status remains separate: ACCEPTED_PENDING is not COMMITTED, UNKNOWN requires
 lookup/reconciliation, and a success-shaped code alone proves no postcondition.
+For example, JOURNAL_FULL during history reload or JOURNAL_LOCKED before lookup
+requires UNKNOWN: the original command may already have an effect. JOURNAL_FULL
+from a verified pre-admission capacity refusal can accompany REJECTED. Consumers
+must inspect status and the original command ID rather than infer no effect from
+an error code. The host stops admission when history cannot be established.
 Guidance never performs an automatic retry. When command intent changes, reconcile
 the original ID before creating a distinct authorized command. New emitted codes
 require a reviewed registry entry; do not derive remediation from received prose.
@@ -68,6 +73,7 @@ payload = {"name": name}
 | `SAFE_OPEN_DENIED`, `SAFE_READ_FAILED` | A held-handle file operation was denied or failed. | Inspect permissions and conflicting handles on the private root; reprobe identity before retrying the supported read operation. |
 | `COMMAND_ID_PAYLOAD_CONFLICT` | A command ID already names a different canonical command. | Lookup the original ID and reconcile intent; assign a new ID only to a distinct authorized command, never to evade deduplication. |
 | `COMMAND_ALREADY_TERMINAL` | The durable command already has a final result. | Return or inspect the stored result; do not overwrite it or apply the command again. |
+| `UNSUPPORTED_OPEN_LANE` | Arbitrary-code execution is disabled by the host policy. | Use the declared semantic operations; a wire request cannot enable an open execution lane. |
 | `COMMAND_NOT_FOUND` | The journal has no retained entry for that project and command ID. | Check the project and exact ID, including the archive/recovery context; absence alone is not proof that an uncertain external effect never occurred. |
 | `RETRY_HORIZON_EXPIRED` | The retained command is beyond its active retry horizon. | Use authenticated archive lookup for the original result; never execute the expired ID again. |
 | `ARCHIVE_NOT_EXPIRED` | The command is still in the active lookup horizon. | Use normal command lookup for the same project and command ID. |
@@ -76,7 +82,7 @@ payload = {"name": name}
 | `JOURNAL_FULL`, `JOURNAL_RECORD_LIMIT`, `PENDING_LIMIT`, `QUEUE_FULL`, `CONNECTION_LIMIT`, `STOP_COMMAND_LIMIT` | A bounded persistence, queue or connection budget is exhausted. | Stop adding work, use the reserved control path to inspect/drain, and reclaim only safely retainable capacity; lookup admitted IDs before retrying. |
 | `JOURNAL_LOCKED`, `LEASE_BUSY` | Another live owner currently holds the required lock or lease. | Wait with a bounded backoff and inspect ownership; do not steal a live lock or bypass the current fencing epoch. |
 | `JOURNAL_LEGACY_LOCK_RECOVERY_REQUIRED` | Legacy lock ownership cannot be safely established. | Preserve lock metadata and verify the original owner through the local recovery procedure before allowing another writer. |
-| `JOURNAL_LOCK_FAILED`, `JOURNAL_UNREADABLE`, `JOURNAL_WRITE_FAILED`, `JOURNAL_COMPACT_FAILED` | An operating-system journal operation failed. | Preserve staging and diagnose disk/permissions/handles; lookup and reconcile potentially admitted work before restoring service. |
+| `JOURNAL_LOCK_FAILED`, `JOURNAL_UNREADABLE`, `JOURNAL_WRITE_FAILED`, `JOURNAL_DURABILITY_UNCONFIRMED`, `JOURNAL_COMPACT_FAILED` | An operating-system journal operation failed or a durable read barrier could not be confirmed. | Preserve staging and diagnose disk/permissions/handles; lookup and reconcile potentially admitted work before restoring service. Never treat a readable terminal line as durable until a later barrier succeeds. |
 | `INVALID_LEASE`, `LEASE_TTL_OUT_OF_RANGE`, `STALE_LEASE`, `REVISION_MISMATCH` | The lease, fencing epoch or expected revision is invalid or stale. | Read the current revision and obtain a valid lease from the local authority, then reconcile the intended change; lookup an old command ID before replanning. |
 | `REDACTION_REGISTRATION_LIMIT`, `INVALID_REDACTION_REGISTRATION` | Secret or host-path registration exceeds the bounded output policy. | Stop the output/admission boundary and correct local registrations; never drop registered secrets to make room silently. |
 | `REDACTION_TEXT_LIMIT`, `REDACTION_TOTAL_TEXT_LIMIT`, `REDACTION_NODE_LIMIT`, `REDACTION_DEPTH_LIMIT`, `REDACTION_ITEM_LIMIT`, `REDACTION_OUTPUT_LIMIT` | The output exceeds bounded redaction limits. | Emit a smaller supported diagnostic without the original payload; never bypass redaction to report this failure. |

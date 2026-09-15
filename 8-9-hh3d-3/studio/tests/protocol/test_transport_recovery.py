@@ -2,11 +2,12 @@
 from __future__ import annotations
 
 import base64
-from contextlib import contextmanager
+from contextlib import contextmanager, nullcontext
 from dataclasses import replace
 import hashlib
 import http.client
 import json
+import os
 from pathlib import Path
 import sys
 import tempfile
@@ -54,6 +55,124 @@ def observed_state(root, host):
 
 
 class TransportRecoveryTests(unittest.TestCase):
+    def test_reload_fsync_failure_preserves_pending_and_requires_reconciliation(self):
+        self.check_fsync_failure(terminal_bytes=False)
+
+    def test_terminal_fsync_failure_is_unknown_over_socket_until_recovery_barrier(self):
+        self.check_fsync_failure(terminal_bytes=True)
+
+    def check_fsync_failure(self, *, terminal_bytes):
+        """Distinguish failed pre-append reload from a cached terminal record."""
+        from studio.host.core import journal as journal_module
+
+        with fixture() as (_, host, client, _):
+            host.faults.readback_gate = threading.Event()
+            request = client.request('terminal-fsync.socket', value=43,
+                                     lease=client.lease())
+            self.assertIs(client.submit(request).status, Status.ACCEPTED_PENDING)
+            self.assertTrue(host.faults.applied.wait(1))
+            pending_size = host.journal.path.stat().st_size
+            real_fsync = journal_module.os.fsync
+            failed_sizes = []
+
+            def fail_at_barrier(fd):
+                size = host.journal.path.stat().st_size
+                if not terminal_bytes or size > pending_size:
+                    failed_sizes.append(size)
+                    raise OSError('injected-fsync')
+                return real_fsync(fd)
+
+            with mock.patch.object(journal_module.os, 'fsync', side_effect=fail_at_barrier):
+                host.faults.readback_gate.set()
+                deadline = time.monotonic() + 2
+                while not host._stopped.is_set() and time.monotonic() < deadline:
+                    time.sleep(.005)
+                self.assertTrue(host._stopped.is_set())
+                lookup = client.lookup(request.command_id)
+                retry = client.submit(request)
+                self.assertIs(lookup.status, Status.UNKNOWN)
+                self.assertEqual(lookup.code, 'JOURNAL_DURABILITY_UNCONFIRMED')
+                self.assertEqual(lookup.command_id, request.command_id)
+                self.assertIs(retry.status, Status.UNKNOWN)
+                self.assertEqual(retry.code, 'JOURNAL_DURABILITY_UNCONFIRMED')
+                archive = client.lookup_archive(request.command_id)
+                self.assertIs(archive.status, Status.UNKNOWN)
+                self.assertEqual(archive.code, 'JOURNAL_DURABILITY_UNCONFIRMED')
+                with self.assertRaisesRegex(JournalError, 'JOURNAL_DURABILITY_UNCONFIRMED'):
+                    Journal(host.journal.path)
+            self.assertTrue(failed_sizes)
+            self.assertEqual(all(size > pending_size for size in failed_sizes), terminal_bytes)
+            recovered = Journal(host.journal.path)
+            expected_status = 'COMMITTED' if terminal_bytes else 'ACCEPTED_PENDING'
+            self.assertEqual(recovered.lookup(project_id='project.fixture',
+                                               command_id=request.command_id,
+                                               now_ms=epoch_ms())['status'], expected_status)
+            lookup = client.lookup(request.command_id)
+            retry = client.submit(request)
+            if terminal_bytes:
+                self.assertIs(lookup.status, Status.COMMITTED)
+            else:
+                self.assertIs(lookup.status, Status.UNKNOWN)
+                self.assertEqual(lookup.code, 'RECOVERY_REQUIRED')
+            self.assertEqual(retry, lookup)
+            self.assertEqual(host.fixture.effect_count, 1)
+
+    def test_unreadable_history_never_rejects_an_already_applied_command(self):
+        for fault in ('lock', 'guard_directory', 'guard_hardlink', 'bytes', 'records', 'legacy_lock'):
+            with self.subTest(fault=fault), fixture() as (_, host, client, _):
+                request = client.request('history.unavailable', value=47, lease=client.lease())
+                self.assertIs(client.submit(request).status, Status.ACCEPTED_PENDING)
+                committed = self.terminal(client, request.command_id)
+                self.assertIs(committed.status, Status.COMMITTED)
+                limits = host.journal.limits
+                competitor = Journal(host.journal.path)
+                legacy = host.journal.path.with_name(host.journal.path.name + '.lock')
+                guard = host.journal.path.with_name(host.journal.path.name + '.guard')
+                saved_guard = guard.with_name('saved.guard')
+                guard_alias = guard.with_name('alias.guard')
+                if fault == 'lock':
+                    host.journal.limits = replace(limits, lock_timeout_ms=30)
+                    expected = 'JOURNAL_LOCKED'
+                elif fault == 'guard_directory':
+                    guard.rename(saved_guard)
+                    guard.mkdir()
+                    expected = 'JOURNAL_LOCK_FAILED'
+                elif fault == 'guard_hardlink':
+                    os.link(guard, guard_alias)
+                    expected = 'JOURNAL_LOCK_UNSAFE'
+                elif fault == 'bytes':
+                    host.journal.limits = replace(limits, max_bytes=1)
+                    expected = 'JOURNAL_FULL'
+                elif fault == 'records':
+                    host.journal.limits = replace(limits, max_records=1)
+                    expected = 'JOURNAL_RECORD_LIMIT'
+                else:
+                    legacy.write_text('{', encoding='utf-8')
+                    expected = 'JOURNAL_LEGACY_LOCK_RECOVERY_REQUIRED'
+                before = host.journal.path.read_bytes()
+                try:
+                    with competitor._writer_lock() if fault == 'lock' else nullcontext():
+                        for response in (client.lookup(request.command_id), client.submit(request),
+                                         client.cancel(request.command_id),
+                                         client.lookup_archive(request.command_id)):
+                            self.assertIs(response.status, Status.UNKNOWN)
+                            self.assertEqual(response.code, expected)
+                            self.assertEqual(response.command_id, request.command_id)
+                            self.assertNotIn('no_effect', response.postconditions)
+                finally:
+                    host.journal.limits = limits
+                    if fault == 'legacy_lock':
+                        legacy.unlink()
+                    elif fault == 'guard_directory':
+                        guard.rmdir()
+                        saved_guard.rename(guard)
+                    elif fault == 'guard_hardlink':
+                        guard_alias.unlink()
+                self.assertEqual(host.journal.path.read_bytes(), before)
+                self.assertEqual(client.lookup(request.command_id), committed)
+                self.assertEqual(client.submit(request), committed)
+                self.assertEqual(host.fixture.effect_count, 1)
+
     def test_fence_cannot_change_between_validation_and_effect(self):
         with fixture() as (_, host, client, _):
             lease = client.lease()

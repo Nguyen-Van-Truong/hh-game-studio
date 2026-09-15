@@ -1,0 +1,20 @@
+{
+  "run_id": "GT02-S30-APPCONTAINER-SID-ONLY-01",
+  "timestamp_utc": "2026-09-15T16:00:59.769543+00:00",
+  "os": "Windows-10-10.0.26200-SP0",
+  "probe_sha256": "2e163c258139a035221246c7646aa34744340d99b59f7b8f8ad2a00d71eaf3f3",
+  "scope": "TEMP synthetic cmd.exe diagnostic; SID-only, no profile lifecycle; not adapter acceptance",
+  "profile_name": "hh-gt02-s30-sidonly-1ca78c679fa04669a22bf055e7d7b29a",
+  "profile_folder_absent_before": true,
+  "profile_mapping_absent_before": true,
+  "profile_api_calls": 0,
+  "profile_folder_absent_after": true,
+  "profile_mapping_absent_after": true,
+  "owned_temp_removed": true,
+  "diagnostic_complete": false,
+  "error": {
+    "type": "FileNotFoundError",
+    "message": "[WinError 2] The system cannot find the file specified.",
+    "winerror": 2
+  }
+}

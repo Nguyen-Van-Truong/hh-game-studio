@@ -1,0 +1,249 @@
+{
+  "proof_class": "INDEPENDENT_FROZEN_REVIEW_REAL_LOOPBACK_AND_JOURNAL",
+  "snapshot_closure_sha256": "60799065f406fbb3b13d2dc0df093477210927f86e84b54175dfd36351521a1a",
+  "transport_sha256": "b05da60fa919764e8d22298c1a0394310b446367c420a3fc4dc64f20dace64a6",
+  "journal_sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6",
+  "rows": [
+    {
+      "failure": "JOURNAL_LOCKED",
+      "before": "COMMITTED",
+      "during": {
+        "lookup": {
+          "status": "UNKNOWN",
+          "code": "JOURNAL_LOCKED",
+          "postconditions": {
+            "accepting_work": false,
+            "next_action": "lookup.reconcile"
+          }
+        },
+        "same_id_retry": {
+          "status": "UNKNOWN",
+          "code": "JOURNAL_LOCKED",
+          "postconditions": {
+            "accepting_work": false,
+            "next_action": "lookup.reconcile"
+          }
+        },
+        "cancel": {
+          "status": "UNKNOWN",
+          "code": "JOURNAL_LOCKED",
+          "postconditions": {
+            "accepting_work": false,
+            "next_action": "lookup.reconcile"
+          }
+        },
+        "archive": {
+          "status": "UNKNOWN",
+          "code": "JOURNAL_LOCKED",
+          "postconditions": {
+            "accepting_work": false,
+            "next_action": "lookup.reconcile"
+          }
+        }
+      },
+      "after": "COMMITTED",
+      "effect_count": 1
+    },
+    {
+      "failure": "JOURNAL_LOCK_FAILED",
+      "before": "COMMITTED",
+      "during": {
+        "lookup": {
+          "status": "UNKNOWN",
+          "code": "JOURNAL_LOCK_FAILED",
+          "postconditions": {
+            "accepting_work": false,
+            "next_action": "lookup.reconcile"
+          }
+        },
+        "same_id_retry": {
+          "status": "UNKNOWN",
+          "code": "JOURNAL_LOCK_FAILED",
+          "postconditions": {
+            "accepting_work": false,
+            "next_action": "lookup.reconcile"
+          }
+        },
+        "cancel": {
+          "status": "UNKNOWN",
+          "code": "JOURNAL_LOCK_FAILED",
+          "postconditions": {
+            "accepting_work": false,
+            "next_action": "lookup.reconcile"
+          }
+        },
+        "archive": {
+          "status": "UNKNOWN",
+          "code": "JOURNAL_LOCK_FAILED",
+          "postconditions": {
+            "accepting_work": false,
+            "next_action": "lookup.reconcile"
+          }
+        }
+      },
+      "after": "COMMITTED",
+      "effect_count": 1
+    },
+    {
+      "failure": "JOURNAL_LOCK_UNSAFE",
+      "before": "COMMITTED",
+      "during": {
+        "lookup": {
+          "status": "UNKNOWN",
+          "code": "JOURNAL_LOCK_UNSAFE",
+          "postconditions": {
+            "accepting_work": false,
+            "next_action": "lookup.reconcile"
+          }
+        },
+        "same_id_retry": {
+          "status": "UNKNOWN",
+          "code": "JOURNAL_LOCK_UNSAFE",
+          "postconditions": {
+            "accepting_work": false,
+            "next_action": "lookup.reconcile"
+          }
+        },
+        "cancel": {
+          "status": "UNKNOWN",
+          "code": "JOURNAL_LOCK_UNSAFE",
+          "postconditions": {
+            "accepting_work": false,
+            "next_action": "lookup.reconcile"
+          }
+        },
+        "archive": {
+          "status": "UNKNOWN",
+          "code": "JOURNAL_LOCK_UNSAFE",
+          "postconditions": {
+            "accepting_work": false,
+            "next_action": "lookup.reconcile"
+          }
+        }
+      },
+      "after": "COMMITTED",
+      "effect_count": 1
+    },
+    {
+      "failure": "JOURNAL_LEGACY_LOCK_RECOVERY_REQUIRED",
+      "before": "COMMITTED",
+      "during": {
+        "lookup": {
+          "status": "UNKNOWN",
+          "code": "JOURNAL_LEGACY_LOCK_RECOVERY_REQUIRED",
+          "postconditions": {
+            "accepting_work": false,
+            "next_action": "lookup.reconcile"
+          }
+        },
+        "same_id_retry": {
+          "status": "UNKNOWN",
+          "code": "JOURNAL_LEGACY_LOCK_RECOVERY_REQUIRED",
+          "postconditions": {
+            "accepting_work": false,
+            "next_action": "lookup.reconcile"
+          }
+        },
+        "cancel": {
+          "status": "UNKNOWN",
+          "code": "JOURNAL_LEGACY_LOCK_RECOVERY_REQUIRED",
+          "postconditions": {
+            "accepting_work": false,
+            "next_action": "lookup.reconcile"
+          }
+        },
+        "archive": {
+          "status": "UNKNOWN",
+          "code": "JOURNAL_LEGACY_LOCK_RECOVERY_REQUIRED",
+          "postconditions": {
+            "accepting_work": false,
+            "next_action": "lookup.reconcile"
+          }
+        }
+      },
+      "after": "COMMITTED",
+      "effect_count": 1
+    },
+    {
+      "failure": "JOURNAL_FULL",
+      "before": "COMMITTED",
+      "during": {
+        "lookup": {
+          "status": "UNKNOWN",
+          "code": "JOURNAL_FULL",
+          "postconditions": {
+            "accepting_work": false,
+            "next_action": "lookup.reconcile"
+          }
+        },
+        "same_id_retry": {
+          "status": "UNKNOWN",
+          "code": "JOURNAL_FULL",
+          "postconditions": {
+            "accepting_work": false,
+            "next_action": "lookup.reconcile"
+          }
+        },
+        "cancel": {
+          "status": "UNKNOWN",
+          "code": "JOURNAL_FULL",
+          "postconditions": {
+            "accepting_work": false,
+            "next_action": "lookup.reconcile"
+          }
+        },
+        "archive": {
+          "status": "UNKNOWN",
+          "code": "JOURNAL_FULL",
+          "postconditions": {
+            "accepting_work": false,
+            "next_action": "lookup.reconcile"
+          }
+        }
+      },
+      "after": "COMMITTED",
+      "effect_count": 1
+    },
+    {
+      "failure": "JOURNAL_RECORD_LIMIT",
+      "before": "COMMITTED",
+      "during": {
+        "lookup": {
+          "status": "UNKNOWN",
+          "code": "JOURNAL_RECORD_LIMIT",
+          "postconditions": {
+            "accepting_work": false,
+            "next_action": "lookup.reconcile"
+          }
+        },
+        "same_id_retry": {
+          "status": "UNKNOWN",
+          "code": "JOURNAL_RECORD_LIMIT",
+          "postconditions": {
+            "accepting_work": false,
+            "next_action": "lookup.reconcile"
+          }
+        },
+        "cancel": {
+          "status": "UNKNOWN",
+          "code": "JOURNAL_RECORD_LIMIT",
+          "postconditions": {
+            "accepting_work": false,
+            "next_action": "lookup.reconcile"
+          }
+        },
+        "archive": {
+          "status": "UNKNOWN",
+          "code": "JOURNAL_RECORD_LIMIT",
+          "postconditions": {
+            "accepting_work": false,
+            "next_action": "lookup.reconcile"
+          }
+        }
+      },
+      "after": "COMMITTED",
+      "effect_count": 1
+    }
+  ],
+  "source_unchanged": true
+}

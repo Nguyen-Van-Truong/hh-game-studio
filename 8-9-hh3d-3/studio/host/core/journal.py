@@ -28,6 +28,9 @@ from .limits import DEFAULT_LIMITS, LimitsProfile, SafetyViolation, canonical_js
 class JournalError(RuntimeError):
     def __init__(self, code: str, detail: str = "") -> None:
         self.code = code
+        # Local provenance, never accepted from a request: a read/lock failure
+        # cannot establish that this command was not already applied.
+        self.outcome_unknown = False
         super().__init__(f"{code}: {detail}" if detail else code)
 
 
@@ -260,11 +263,23 @@ class Journal:
     def _mutating(method):
         @wraps(method)
         def guarded(self, *args, **kwargs):
-            with self._writer_lock():
-                # Refresh after taking the lock so a second process cannot
-                # make a decision from stale in-memory dedupe/lease state.
-                self._reload()
-                return method(self, *args, **kwargs)
+            entered = completed = False
+            try:
+                with self._writer_lock():
+                    # Refresh after taking the lock so a second process cannot
+                    # make a decision from stale in-memory dedupe/lease state.
+                    self._reload()
+                    entered = True
+                    result = method(self, *args, **kwargs)
+                    completed = True
+                    return result
+            except JournalError as exc:
+                # The same FULL/LOCKED code can mean unavailable history or a
+                # known pre-admission refusal. Preserve that phase distinction.
+                # A guard-exit failure after the method is uncertain as well.
+                if not entered or completed:
+                    exc.outcome_unknown = True
+                raise
         return guarded
 
     @staticmethod
@@ -275,7 +290,12 @@ class Journal:
         if not self.path.exists():
             return
         try:
-            with self.path.open("rb") as stream:
+            # A terminal line can be visible in the page cache even when the
+            # writer's fsync failed. Open with write access and synchronize the
+            # complete journal before exposing any receipt to a new reader.
+            # This is the recovery barrier for a fresh Journal instance too;
+            # an in-memory poison flag would not protect reopen/lookup.
+            with self.path.open("r+b") as stream:
                 info = os.fstat(stream.fileno())
                 if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1:
                     raise JournalError("JOURNAL_PATH_UNSAFE")
@@ -293,6 +313,11 @@ class Journal:
                     record = self._decode_record(line)
                     self._apply_loaded(record, len(self._records))
                     self._records.offsets.append((offset, len(line)))
+                try:
+                    stream.flush()
+                    os.fsync(stream.fileno())
+                except OSError as exc:
+                    raise JournalError("JOURNAL_DURABILITY_UNCONFIRMED") from exc
         except OSError as exc:
             raise JournalError("JOURNAL_UNREADABLE") from exc
 

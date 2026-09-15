@@ -1,0 +1,153 @@
+{
+  "run_id": "GT02-S30-RESTRICTED-ACL-05",
+  "timestamp_utc": "2026-09-15T15:59:10.152312+00:00",
+  "os": "Windows-10-10.0.26200-SP0",
+  "python": "3.11.9",
+  "probe_sha256": "f9e47ca27de4189d298d2822c1f4af0db9ed1aae809e5db366c7aa0398d3fb30",
+  "scope": "synthetic TEMP; restricted impersonation and primary process; not full sandbox acceptance",
+  "cases": [
+    {
+      "context": "unrestricted",
+      "source_opens_winerror": {
+        "zero": 0,
+        "attributes": 0,
+        "read": 0,
+        "write": 0,
+        "delete": 0,
+        "write_dac": 0,
+        "write_owner": 0
+      },
+      "source_links_before": 1,
+      "win32_hardlink_winerror": 0,
+      "native_zero_handle_link_ntstatus": "0x00000000",
+      "scratch_create_winerror": 0
+    },
+    {
+      "context": "full_restrict",
+      "source_opens_winerror": {
+        "zero": 5,
+        "attributes": 5,
+        "read": 5,
+        "write": 5,
+        "delete": 5,
+        "write_dac": 5,
+        "write_owner": 5
+      },
+      "source_links_before": null,
+      "win32_hardlink_winerror": 5,
+      "native_zero_handle_link_ntstatus": "NOT_RUN_NO_HANDLE",
+      "scratch_create_winerror": 0,
+      "private_create_winerror": 5,
+      "private_delete_winerror": 5,
+      "private_rename_winerror": 5,
+      "private_directory_rename_winerror": 5,
+      "broker_process_open_winerror": {
+        "duplicate_handle": 5,
+        "vm_write_operation": 5,
+        "create_thread": 5,
+        "query_limited": 5
+      }
+    },
+    {
+      "context": "write_restrict",
+      "source_opens_winerror": {
+        "zero": 0,
+        "attributes": 0,
+        "read": 0,
+        "write": 5,
+        "delete": 0,
+        "write_dac": 5,
+        "write_owner": 5
+      },
+      "source_links_before": null,
+      "win32_hardlink_winerror": 5,
+      "native_zero_handle_link_ntstatus": "0xC0000022",
+      "scratch_create_winerror": 0,
+      "private_create_winerror": 5,
+      "private_delete_winerror": 0,
+      "private_rename_winerror": 0,
+      "private_directory_rename_winerror": 32,
+      "broker_process_open_winerror": {
+        "duplicate_handle": 5,
+        "vm_write_operation": 5,
+        "create_thread": 5,
+        "query_limited": 0
+      }
+    }
+  ],
+  "effective_sddl": {
+    "private": "O:S-1-5-21-1944110474-2570460517-2860145444-1001G:S-1-5-21-1944110474-2570460517-2860145444-513D:P(A;OICI;RC;;;OW)(A;OICI;FA;;;S-1-5-21-1944110474-2570460517-2860145444-1001)",
+    "scratch": "O:S-1-5-21-1944110474-2570460517-2860145444-1001G:S-1-5-21-1944110474-2570460517-2860145444-513D:P(A;OICI;RC;;;OW)(A;OICI;FA;;;S-1-5-21-1944110474-2570460517-2860145444-1001)(A;OICI;FA;;;S-1-5-21-3961425617-1194167739-380186776-11929)",
+    "source": "O:S-1-5-21-1944110474-2570460517-2860145444-1001G:S-1-5-21-1944110474-2570460517-2860145444-513D:(A;ID;RC;;;OW)(A;ID;FA;;;S-1-5-21-1944110474-2570460517-2860145444-1001)"
+  },
+  "synthetic_restricting_sid": "S-1-5-21-3961425617-1194167739-380186776-11929",
+  "broker_token": {
+    "token_type": 1,
+    "restricted_sids": [],
+    "privilege_count": 5
+  },
+  "preexisting_handle_under_full_restriction": {
+    "success": true,
+    "bytes_written": 6,
+    "winerror": 0
+  },
+  "preexisting_handle_effect_readback": "AFTER!",
+  "primary_process": {
+    "inherit_handles": false,
+    "creation_suspended": true,
+    "kill_on_job_close": true,
+    "active_process_limit": 1,
+    "memory_limit_bytes": 134217728,
+    "timeout_ms": 10000,
+    "isolation_scope": "primary restricted token; default desktop; synthetic trusted probe only",
+    "pid": 20372,
+    "host_read_child_token": {
+      "token_type": 1,
+      "restricted_sids": [
+        "S-1-5-21-3961425617-1194167739-380186776-11929"
+      ],
+      "privilege_count": 1
+    },
+    "wait_result": 0,
+    "host_captured_exit": 3221225794,
+    "job_active_processes_after_wait": 0,
+    "job_total_processes": 2,
+    "child_result": "MISSING"
+  },
+  "directory_parent_delete_child_controls": [
+    {
+      "restriction": "full",
+      "held_list_directory": false,
+      "rename_winerror": 5,
+      "original_exists": true,
+      "destination_exists": false
+    },
+    {
+      "restriction": "full",
+      "held_list_directory": true,
+      "rename_winerror": 5,
+      "original_exists": true,
+      "destination_exists": false
+    },
+    {
+      "restriction": "write_only",
+      "held_list_directory": false,
+      "rename_winerror": 0,
+      "original_exists": false,
+      "destination_exists": true
+    },
+    {
+      "restriction": "write_only",
+      "held_list_directory": true,
+      "rename_winerror": 32,
+      "original_exists": true,
+      "destination_exists": false
+    }
+  ],
+  "private_payload_unchanged": true,
+  "final_source_link_count": 3,
+  "write_restricted_delete_effect_readback": true,
+  "write_restricted_rename_effect_readback": true,
+  "marker": "GT02_S30_RESTRICTED_ACL_OBSERVATIONS_COMPLETE",
+  "owned_temp_removed": true
+}

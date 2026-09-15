@@ -1,0 +1,82 @@
+{
+  "run_id": "GT02-S30-HANDLE-PUBLISH-02",
+  "timestamp_utc": "2026-09-15T15:56:31.206146+00:00",
+  "os": "Windows-10-10.0.26200-SP0",
+  "python": "3.11.9",
+  "probe_sha256": "bf157735f9ba9f85081a79bb31ec0b202532549ef4488bcc798deb914847d238",
+  "scope": "Owned TEMP only; API observations; no sandbox/durability/capability acceptance",
+  "seed": 30,
+  "filesystem": "NTFS",
+  "effective_sddl": {
+    "staging": "O:S-1-5-21-1944110474-2570460517-2860145444-1001G:S-1-5-21-1944110474-2570460517-2860145444-513D:P(A;OICI;RC;;;OW)(A;OICI;FA;;;S-1-5-21-1944110474-2570460517-2860145444-1001)",
+    "release": "O:S-1-5-21-1944110474-2570460517-2860145444-1001G:S-1-5-21-1944110474-2570460517-2860145444-513D:P(A;OICI;RC;;;OW)(A;OICI;FA;;;S-1-5-21-1944110474-2570460517-2860145444-1001)"
+  },
+  "create_identity": {
+    "volume": 5641548138504128675,
+    "file_id": "b15a0e00000056000000000000000000",
+    "size": 0,
+    "links": 1,
+    "delete_pending": false,
+    "directory": false,
+    "attributes": 32,
+    "reparse_tag": 0,
+    "final_path": "\\\\?\\[TEMP]\\gt02-s30-handle-publish-da7ov9rf\\staging\\fresh-stage.bin"
+  },
+  "write": {
+    "bytes_written": 27,
+    "flush_file_buffers_success": true,
+    "readback_sha256": "bb618baed5f264ed1a5d53b527b1234faa01583a1de34ec0f3069e9eaf2d7ce5"
+  },
+  "pre_publish_identity": {
+    "volume": 5641548138504128675,
+    "file_id": "b15a0e00000056000000000000000000",
+    "size": 27,
+    "links": 1,
+    "delete_pending": false,
+    "directory": false,
+    "attributes": 32,
+    "reparse_tag": 0,
+    "final_path": "\\\\?\\[TEMP]\\gt02-s30-handle-publish-da7ov9rf\\staging\\fresh-stage.bin"
+  },
+  "destination_directory_identity": {
+    "volume": 5641548138504128675,
+    "file_id": "a75a0e0000006f000000000000000000",
+    "size": 0,
+    "links": 1,
+    "delete_pending": false,
+    "directory": true,
+    "attributes": 16,
+    "reparse_tag": 0,
+    "final_path": "\\\\?\\[TEMP]\\gt02-s30-handle-publish-da7ov9rf\\release"
+  },
+  "create_only_publish": {
+    "success": false,
+    "winerror": 87,
+    "replace_if_exists": false,
+    "root_directory_handle": true,
+    "relative_basename": "published-\u0111\u00edch.bin",
+    "source_reopened_by_path": false,
+    "has_expected_destination_id_parameter": false
+  },
+  "post_publish_identity": {
+    "volume": 5641548138504128675,
+    "file_id": "b15a0e00000056000000000000000000",
+    "size": 27,
+    "links": 1,
+    "delete_pending": false,
+    "directory": false,
+    "attributes": 32,
+    "reparse_tag": 0,
+    "final_path": "\\\\?\\[TEMP]\\gt02-s30-handle-publish-da7ov9rf\\staging\\fresh-stage.bin"
+  },
+  "same_source_identity": true,
+  "same_volume": true,
+  "source_name_absent": false,
+  "post_publish_readback_sha256": "bb618baed5f264ed1a5d53b527b1234faa01583a1de34ec0f3069e9eaf2d7ce5",
+  "error": {
+    "type": "AssertionError",
+    "message": "",
+    "winerror": null
+  },
+  "owned_temp_removed": true
+}

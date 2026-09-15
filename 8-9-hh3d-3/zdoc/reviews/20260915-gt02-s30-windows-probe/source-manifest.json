@@ -1,0 +1,22 @@
+{
+  "timestamp_utc": "2026-09-15T16:01:04.668724+00:00",
+  "baseline_git_head_at_assignment": "642d6f51158054a40862497c92d771512e8729d0",
+  "scripts_sha256": {
+    "restricted_acl_probe.py": "f9e47ca27de4189d298d2822c1f4af0db9ed1aae809e5db366c7aa0398d3fb30",
+    "win_process.py": "a5196a6c4e7e017067913831206852838162258eff0e3e7505a4cb39b61a527e",
+    "handle_publish_probe.py": "9d86e838a48737e583689898d5149d8bfebf7024ea81902c55b752de5610c43e",
+    "verify_evidence.py": "85b271afbc2103f6dbbb072bbd85675db4b6789005e58070585d644b2c573845"
+  },
+  "evidence_sha256": {
+    "restricted-acl-05.host.json": "ba788d8f3b46769054b0ec9d15374553ef56189bfdf9957f8c2e8f877ee44d7d",
+    "restricted-acl-05.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "restricted-acl-05.stdout.json": "e52dcc2d8b9067059fc82b91dc0d505b069d2f280458a09cc2e963e67216c4bd",
+    "handle-publish-06.host.json": "ba788d8f3b46769054b0ec9d15374553ef56189bfdf9957f8c2e8f877ee44d7d",
+    "handle-publish-06.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "handle-publish-06.stdout.json": "51f99bce8385104e8479e20aaece336ce3cbd821a552e73e5bb1779b5d07cf34"
+  },
+  "python_executable_sha256": "5f7b89a612c9b8af1d6456cdfcd1dbe5ca630849e79aebced9bee9a6694952ec",
+  "production_safe_open_sha256_unchanged": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535",
+  "scripts_manifest_sha256": "1f20fc4d20c22bf7336dafe58ab0dda43b36a857abd435df8b480d52096b7ef7",
+  "public_redaction": "host paths removed; originals retained in ignored studio/.local/review-raw; verification pins this manifest"
+}

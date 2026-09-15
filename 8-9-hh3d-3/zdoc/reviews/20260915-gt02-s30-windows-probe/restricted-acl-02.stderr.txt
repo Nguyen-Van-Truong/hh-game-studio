@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "[PROJECT]\zdoc\reviews\20260915-gt02-s30-windows-probe\restricted_acl_probe.py", line 284, in <module>
+    main()
+  File "[PROJECT]\zdoc\reviews\20260915-gt02-s30-windows-probe\restricted_acl_probe.py", line 252, in main
+    preexisting.write_bytes(b"before")
+  File "[USERPROFILE]\AppData\Local\Programs\Python\Python311\Lib\pathlib.py", line 1067, in write_bytes
+    with self.open(mode='wb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+  File "[USERPROFILE]\AppData\Local\Programs\Python\Python311\Lib\pathlib.py", line 1044, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '[TEMP]\\gt02-s30-restricted-acl-7b2hb0ri\\private\\preexisting-handle-canary'

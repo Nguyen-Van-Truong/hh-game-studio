@@ -1,0 +1,23 @@
+{
+  "schema": "hh-gt02-coordinator-decision-v1",
+  "source_closure_sha256": "60799065f406fbb3b13d2dc0df093477210927f86e84b54175dfd36351521a1a",
+  "candidate_sha256": "153c3325d1f85a63af17385059dd476acfddede9332f6ddf8299581c01e272e7",
+  "reports": {
+    "a": {
+      "path": "../20260915-gt02-s30-critic-a.md",
+      "sha256": "eaf0a85e5906c96eac5fa1b6a5a0f7dfafa4fd00141ba610553ffe76bec9c4d2",
+      "verdict": "FAIL",
+      "tick": false
+    },
+    "b": {
+      "path": "../20260915-gt02-s30-critic-b.md",
+      "sha256": "eb85b2db0b4568d0d7c57b9cba9819e8373c0de34ea5145131d623389bd4bd57",
+      "verdict": "PASS",
+      "tick": true
+    }
+  },
+  "decision": "RETAIN_CANDIDATE",
+  "accepted": false,
+  "reason": "Two independent full-gate approvals are absent; TX15 safe-write availability remains GAP. Correct UNSUPPORTED rejection does not prove file mutation.",
+  "next": "Prove OS isolation and private-namespace safe write/publish, remint changed source and review the new closure."
+}

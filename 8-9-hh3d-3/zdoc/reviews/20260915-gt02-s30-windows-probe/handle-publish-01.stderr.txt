@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "[PROJECT]\zdoc\reviews\20260915-gt02-s30-windows-probe\handle_publish_probe.py", line 150, in <module>
+    main()
+  File "[PROJECT]\zdoc\reviews\20260915-gt02-s30-windows-probe\handle_publish_probe.py", line 120, in main
+    assert result["create_only_publish"]["success"]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+AssertionError

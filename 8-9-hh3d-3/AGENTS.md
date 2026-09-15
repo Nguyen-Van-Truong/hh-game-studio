@@ -1,9 +1,9 @@
 # HH3D-3 — routing hiện hành
 
-Owner steering mới nhất 14-09-2026: SOLO, chỉ coordinator tiếp tục; không tạo
-worker/subagent, Grok CLI hay task thay thế. Các worker cũ đã kết thúc.
-Tự review không được ghi thành hai review độc lập; giữ nguyên bằng chứng,
-dependency/DoD và ghi rõ formal review còn thiếu. Plan S28 là routing hiện hành.
+Owner steering mới nhất 15-09-2026: mở lại ba Codex subagent Astra xhigh.
+Coordinator phân việc độc lập, một writer/file; không dùng Grok CLI.
+Worker chỉ tạo candidate/report. Nghiệm thu cần hai critic độc lập cùng frozen
+source; tự review không thay chữ ký. Plan đầu file giữ trạng thái hiện hành.
 
 Chỉ có đúng hai plan TXT đang hoạt động:
 
@@ -18,8 +18,8 @@ DoD. Review/static evidence nằm trong zdoc/reviews/, không phải nguồn ti�
 Thứ tự: GT-01→GT-10 rồi H2-P0-01→H2-P9-02. Không fork lõi Godot lúc đầu;
 không chạy Blender trên server người chơi; không coi số tài khoản đăng ký là
 số avatar realtime. Routing Grok/Codex workers của các phiên trước chỉ là lịch
-sử trong plan archive/reviews. Hiện tại một coordinator sở hữu source scope,
-chạy verify và cập nhật tiến độ; không dispatch thêm agent. Giữ checkpoint,
+sử trong plan archive/reviews. Coordinator giữ một writer/file, kiểm dependency
+và chỉ dispatch lane đủ dependency, scope rõ. Giữ checkpoint,
 actual process exit, source hash và evidence; không bịa cờ hay chữ ký critic.
 
 Owner đã cho phép triển khai theo dependency; đọc trạng thái hiện hành từ

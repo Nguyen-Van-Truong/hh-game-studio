@@ -416,6 +416,8 @@ def validate_for_dispatch(request: Request, discovery: Discovery) -> None:
         raise ValidationError("UNSUPPORTED_SCHEMA", request.schema_version)
     if request.project_id != discovery.project_id:
         raise ValidationError("PROJECT_MISMATCH", request.project_id)
+    if request.operation == "open_lane" or request.operation.startswith("open_lane."):
+        raise ValidationError("UNSUPPORTED_OPEN_LANE", "open execution lane is disabled")
     if not discovery.supports(request.operation):
         raise ValidationError("UNSUPPORTED_OPERATION", request.operation)
 

@@ -1,0 +1,15 @@
+test_partial_terminal_record_never_authorizes_success_or_retry (studio.tests.protocol.test_journal_durability.JournalDurabilityTests.test_partial_terminal_record_never_authorizes_success_or_retry) ... ok
+test_reload_barrier_failure_across_fresh_process_and_archive (studio.tests.protocol.test_journal_durability.JournalDurabilityTests.test_reload_barrier_failure_across_fresh_process_and_archive) ... ok
+test_terminal_flush_failure_across_fresh_process_and_archive (studio.tests.protocol.test_journal_durability.JournalDurabilityTests.test_terminal_flush_failure_across_fresh_process_and_archive) ... ok
+test_terminal_fsync_failure_across_fresh_process_and_archive (studio.tests.protocol.test_journal_durability.JournalDurabilityTests.test_terminal_fsync_failure_across_fresh_process_and_archive) ... ok
+test_terminal_write_failure_across_fresh_process_and_archive (studio.tests.protocol.test_journal_durability.JournalDurabilityTests.test_terminal_write_failure_across_fresh_process_and_archive) ... ok
+test_unreadable_history_never_rejects_an_already_applied_command (studio.tests.protocol.test_transport_recovery.TransportRecoveryTests.test_unreadable_history_never_rejects_an_already_applied_command) ... ok
+test_pending_ack_socket_cuts_preserve_lookup_and_one_effect (studio.tests.protocol.test_transport_recovery.TransportRecoveryTests.test_pending_ack_socket_cuts_preserve_lookup_and_one_effect) ... ok
+test_committed_lookup_ack_socket_cuts_return_original_receipt (studio.tests.protocol.test_transport_recovery.TransportRecoveryTests.test_committed_lookup_ack_socket_cuts_return_original_receipt) ... ok
+test_cancel_ack_socket_cuts_do_not_duplicate_or_apply (studio.tests.protocol.test_transport_recovery.TransportRecoveryTests.test_cancel_ack_socket_cuts_do_not_duplicate_or_apply) ... ok
+test_stop_ack_socket_cuts_preserve_stopped_state_on_reconnect (studio.tests.protocol.test_transport_recovery.TransportRecoveryTests.test_stop_ack_socket_cuts_preserve_stopped_state_on_reconnect) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 11.042s
+
+OK

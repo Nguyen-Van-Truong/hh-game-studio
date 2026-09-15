@@ -27,6 +27,17 @@ already lost their bodies report `ARCHIVE_RESULT_UNAVAILABLE`.
 
 Archive bodies remain in the same checksummed, bounded disk journal and are
 loaded on demand through an offset index. No archive eviction makes an ID new.
+Every reload opens the existing journal with write access and performs a
+durability barrier before exposing records. This reconciles a terminal line
+left visible after a prior writer's fsync failure; if the barrier fails, the
+reader returns `JOURNAL_DURABILITY_UNCONFIRMED` and transport does not authorize
+COMMITTED. A readable cached line alone is never proof of durable success.
+Guard acquisition or reload failure leaves the original command outcome unknown,
+including a configured FULL/RECORD_LIMIT that prevents reading existing history.
+Transport returns UNKNOWN and stops admission until reconciliation. Capacity
+rejection inside append, after history was read successfully and before new
+admission, remains REJECTED without effects. Classify the failure by its phase,
+not solely by the error code; a lock-release failure cannot revoke an effect.
 When retained history fills the configured capacity, admission fails closed.
 Cross-host storage, automatic archive rotation and engine publish recovery are
 outside this fixture baseline; they require their own verified implementation.

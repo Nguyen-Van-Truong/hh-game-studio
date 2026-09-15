@@ -1,0 +1,17 @@
+{
+  "started_utc": "2026-09-15T16:03:25.397609+00:00",
+  "completed_utc": "2026-09-15T16:03:36.905058+00:00",
+  "process_exit": 0,
+  "engine_run": false,
+  "full_suite_run": false,
+  "tests": [
+    "studio.tests.protocol.test_journal_durability",
+    "studio.tests.protocol.test_transport_recovery.TransportRecoveryTests.test_unreadable_history_never_rejects_an_already_applied_command",
+    "studio.tests.protocol.test_transport_recovery.TransportRecoveryTests.test_pending_ack_socket_cuts_preserve_lookup_and_one_effect",
+    "studio.tests.protocol.test_transport_recovery.TransportRecoveryTests.test_committed_lookup_ack_socket_cuts_return_original_receipt",
+    "studio.tests.protocol.test_transport_recovery.TransportRecoveryTests.test_cancel_ack_socket_cuts_do_not_duplicate_or_apply",
+    "studio.tests.protocol.test_transport_recovery.TransportRecoveryTests.test_stop_ack_socket_cuts_preserve_stopped_state_on_reconnect"
+  ],
+  "stdout": "focused-stdout.txt",
+  "stderr": "focused-stderr.txt"
+}

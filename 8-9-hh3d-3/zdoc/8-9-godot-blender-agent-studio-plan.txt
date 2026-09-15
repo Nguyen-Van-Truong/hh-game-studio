@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 14-09-2026, Asia/Saigon | Revision S28 | TRIỂN KHAI THEO GATE
+Ngày 15-09-2026, Asia/Saigon | Revision S30 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -16,7 +16,7 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 
 CURRENT_VALID_WP=GT-02
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=GT02_SOLO_VERIFIED_CANDIDATE
+IMPLEMENTATION=GT02_CANDIDATE_SAFE_WRITE_GAP
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
 GT01_PENDING=NONE
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
@@ -25,89 +25,91 @@ RUNTIME_ACCEPTANCE=GT01_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S28
-EXECUTION_MODE=SOLO_OWNER_20260914
-SUBAGENTS_ENABLED=0
-GT02_EVIDENCE_STATUS=FROZEN_CANDIDATE_S28_03
-GT02_REVIEW_STATUS=PENDING_INDEPENDENT_REVIEW
-GT02_LAST_TESTED_SOURCE_CLOSURE=8c6ed94846c4737c1ff6dace8c29a2c26b66f62520cecc17fea32831297906bb
-GT02_CHECKPOINT_COMMITS=96c506b,e52b5c0
+PLAN_REVISION=S30
+EXECUTION_MODE=CODEX_ASTRA_XHIGH_OWNER_20260915
+SUBAGENTS_ENABLED=3
+GT02_EVIDENCE_STATUS=FROZEN_CANDIDATE_S30_01
+GT02_REVIEW_STATUS=S30_A_FAIL_B_PASS_SAFE_WRITE_GAP
+GT02_LAST_TESTED_SOURCE_CLOSURE=60799065f406fbb3b13d2dc0df093477210927f86e84b54175dfd36351521a1a
+GT02_CHECKPOINT_COMMITS=96c506b,e52b5c0,faedb0d,642d6f5
+GT02_SAFE_WRITE_STATUS=GAP_UNSUPPORTED_WINDOWS
 
-TIẾN ĐỘ HIỆN HÀNH — S28, 14-09-2026
-Owner yêu cầu dừng dùng worker/subagent; coordinator tự đọc, sửa, nghiên cứu
-và kiểm thử. Tất cả worker trước đó đã kết thúc, không còn lease ghi đang mở.
-Không tạo subagent/task hoặc Grok CLI để thay thế trong chế độ solo này.
+TIẾN ĐỘ HIỆN HÀNH — S30, 15-09-2026
+Owner mở lại ba Codex subagent Astra xhigh. Hai lane audit read-only độc lập
+(durability và contract/security), một lane Windows safe-write probe riêng.
+Coordinator là writer source/test/plan và tích hợp; không dùng Grok CLI.
+Các lane S29 đã kết thúc; verdict cũ giữ nguyên theo hash được review.
 
-Đã xong GT-01: ACCEPTED tại a0fb247, closure
+GT-01 ACCEPTED tại a0fb247; closure
 3ace23bcf84598cda64d54bbe3fc4736acde877f9f714fb71e2355d3e809eea4,
 evidence reviews/20260913-r21-gt01-final; hai critic PASS/TICK=yes.
 
-GT-02 candidate hiện tại: reviews/20260914-gt02-s28-03. Lượt frozen này chạy
-144 test protocol: 140 pass, 4 platform skips; bootstrap 56/56 pass. Host exit
-và cây tiến trình được kiểm thực; source/snapshot giữ nguyên. Python/Node/Godot
-khớp 2396 dòng canonical bytes/hash; Godot thêm 9 negative cases.
+GT-02 candidate hiện hành: reviews/20260915-gt02-s30-01. Protocol 154 tests:
+150 pass, 4 platform skips; bootstrap 56/56. Host exit/process tree và source/
+snapshot ổn định; 62 source files, 9 artifacts được rehash. Python/Node/Godot
+khớp 2396 canonical rows/hash; Godot thêm 9 negative cases. Audit verifier và
+bảng requirement → test → evidence ở reviews/20260915-gt02-s30-audit/.
 Đã có typed schema/JCS/limits, journal/CAS tám process, reservation cho terminal,
-archive receipt qua compact/reopen, authenticated loopback, Stop/Cancel/UNKNOWN,
-redaction giữ cả token đã rotate/revoke, NFC name validation và mã lỗi cố định.
-Có 63 bad-request cases kiểm no-effect và 16 socket ACK-cut cases.
+archive/tombstone, authenticated loopback, Stop/Cancel/UNKNOWN, redaction cả
+credential cũ, NFC names, fixed error guidance và UNSUPPORTED_OPEN_LANE.
+Godot vectors chứng minh serializer; Python host sở hữu raw-wire admission.
 
-Solo audit tiếp theo tái hiện hai lỗi bổ sung bằng test fail trước khi sửa:
-fencing có thể đổi sau check nhưng trước effect; directory handle chỉ đọc
-attributes cho phép rename trước khi mở file cuối. Đã sửa lease_guard giữ OS
-lock qua effect ngắn và thêm FILE_LIST_DIRECTORY vào handle parent; hai test
-hồi quy và full remint S28-02 đã pass. S28-01 là diagnostic vì hai test tấn công
-cũ chưa xử lý việc OS chặn swap sớm; giữ nguyên gói lỗi và dùng run ID mới.
-Coordinator verifier kiểm lại 61 source files, 9 artifacts, host markers/exits,
-2396 golden rows và map P-01..P-22 tới test IDs đã chạy. Report:
-reviews/20260914-gt02-s28-audit/verification.json; đây không phải critic signature.
-S28-03 remint thêm gate LF source và lưu evidence exact bytes trong Git. Bảy
-file bootstrap/lock chỉ được khôi phục đúng bytes HEAD (không đổi Git content);
-source mới thêm một test ngăn freeze CRLF mà Git sẽ normalize. Các package cũ
-giữ nguyên bytes; không sửa hash cũ thành hash mới.
-Git index reconstruction đã khớp toàn bộ source/artifact/candidate và archive
-S27; verifier chạy isolated trên bản dựng từ Git exit0. Đây là kiểm byte và
-evidence đã lưu, không phải thêm một lượt engine test hay review độc lập.
+S29 critics review closure S28-03: A FAIL/TICK=no, B PASS/TICK=yes; verdict cũ
+không nghiệm thu source mới. S30 đóng hai lỗi đã tái hiện: fsync terminal thất
+bại nhưng cache có thể đọc được; và lệnh đã apply lại nhận REJECTED khi journal
+không đọc được. Reload nay cần durability barrier; guard/reload lỗi mang phase
+UNKNOWN, còn refusal capacity thật trước admission vẫn REJECTED/no-effect.
+Regression S30 kiểm write-before/partial-write/flush/fsync, fresh-process reopen/
+archive và 6 lỗi journal × lookup/retry/cancel/archive; effect luôn đúng một lần.
+Hai critic S30-01 cùng hash đã xong: A FAIL/TICK=no (TX15 availability GAP),
+B PASS/TICK=yes cho baseline fixture với UNSUPPORTED được công khai. Cả hai
+không tái hiện lỗi journal/transport mới. Coordinator giữ CANDIDATE: không có
+hai TICK=yes cho đầy đủ gate, không dùng PASS fixture để đóng safe-write GAP.
+Preaudit A đã cung cấp matrix được đưa vào regression, nên final critic A là
+reviewer mới; không dùng tác giả regression làm chữ ký độc lập cho chính nó.
 
-Chưa nghiệm thu GT-02: hai critic S26 đều FAIL trên hash cũ do lỗi capacity,
-archive và token; những lỗi đó đã sửa/test, nhưng chữ ký không áp dụng hash mới.
-Tự review ở chế độ solo không được ghi thành hai review độc lập. Quyền làm
-solo không được dùng để giả bằng chứng hoặc tự nhận mọi gate đã đạt.
+Windows safe-write vẫn GAP theo TX15, không biến UNSUPPORTED thành chức năng
+đã đạt. S30 probe xác nhận WRITE_RESTRICTED chưa chặn DELETE/rename; full
+restricted token chặn access trong impersonation nhưng Python child chưa có
+completion marker. Create-only publish retained-handle trong trusted fixture
+đạt identity/hash; chưa có isolation hoặc destination CAS. SID-only AppContainer
+probe không tạo profile và lỗi WinError 2 ở CreateProcessW, chưa có child proof.
+Các report ...s30-windows-probe.md và ...s30-appcontainer-probe/ là diagnostic.
+Một TEMP riêng của probe run03 còn lại sau cleanup bị automatic approval review
+chặn; đường dẫn chi tiết và lý do ở report. Không claim mọi TEMP đã sạch.
 
-Việc tiếp theo: giữ checkpoint WIP của candidate đã xác minh; formal review
-còn thiếu theo mục8.3 được ghi PENDING. Không tự tạo thêm agent trong chế độ
-solo và không nhảy GT-03/04 qua dependency còn thiếu.
-Windows read/identity probe hoạt động; mọi file mutation vẫn trả UNSUPPORTED.
-Đó là kết quả fail-closed cho phép ở mục2.2, không phải safe-write PASS.
-Safe-write là prerequisite trước lần mutation đầu GT-03/04. Godot vectors chỉ
-chứng minh serializer; raw-wire admission hiện do Python host thực thi.
+Tiếp theo: kiểm exact Git bytes và checkpoint S30; lane S31 thử AppContainer
+profile riêng (tạo/cleanup đúng profile do probe sở hữu, không global policy),
+positive control trước negative checks, rồi broker/private-namespace với OS
+isolation và crash/recovery trước
+consumer mutation. Giữ GT-02 CANDIDATE khi còn requirement/review thiếu. Không
+dispatch GT-03/04 mutation qua dependency/gap. Không hỏi lại phần triển khai đã
+được owner cấp quyền; không hạ DoD để hợp code hoặc dùng test pass thay chức năng.
 
-Còn lại để xong toàn plan: GT-03 Godot adapter; GT-04 Blender adapter; GT-05
-asset pipeline; GT-06 Play/input/observe; GT-07 multi-agent recovery; GT-08
-CI/Windows/Linux/Android máy thật; GT-09 conformance; GT-10 package/handoff.
-Không suy phần trăm hay thời hạn hoàn thành từ số test. HH World đợi GT-10.
+Còn lại: GT-03 Godot adapter, GT-04 Blender adapter, GT-05 asset pipeline,
+GT-06 Play/input/observe, GT-07 recovery/multi-agent, GT-08 CI/Windows/Linux/
+Android máy thật, GT-09 conformance, GT-10 package/handoff. HH World đợi GT-10.
+Docker local đã phản hồi; chưa thấy ADB/Android kết nối ở lượt inventory S29.
+Đó không phải bằng chứng Linux/Android đạt. Chưa có cơ sở hẹn ngày xong toàn plan.
 
 KINH NGHIỆM ĐANG ÁP DỤNG
-- Windows không dùng os.kill(pid,0) để dò sống: dùng process handle; cleanup
-  chỉ process mình sở hữu. Exit0 phải đi kèm completion marker và readback.
-- Reserve terminal record/bytes trước PENDING; giữ receipt archive và tombstone;
-  không làm ID cũ sống lại do compact, đổi lease hoặc đồng hồ quay lùi.
-- Bảo vệ secret cả sau rotate/revoke/expiry; không quên token để tiết kiệm RAM:
-  giới hạn lifetime history và từ chối issuance khi đầy.
-- JSON record tách theo LF, không str.splitlines() làm vỡ Unicode trong string.
-- Freeze sau khi hết writer; source đổi thì run ID/hash/review phải đổi.
-- Hash source phải tái tạo từ Git blob, không chỉ working tree. Evidence CRLF
-  giữ exact bytes; cấu hình whitespace riêng, không normalize proof để hết lỗi.
-- Handle chỉ đọc attributes không tự khóa rename thư mục; exclusive file handle
-  không tự ngăn hardlink. Không biến read probe thành quyền ghi an toàn.
-- Test đúng scope, có deadline. Repo-wide authoritative scan đọc cả binary/cache
-  đã bị dừng ở diagnostic budget; không ghi ca đó PASS và không sửa checker cũ.
+- Byte đọc được từ page cache không chứng minh fsync đã thành công. Recovery
+  cần barrier thành công; lỗi guard/reload không suy REJECTED chỉ từ mã lỗi.
+  Phase trước admission khác phase chưa đọc được lịch sử của ID đã apply.
+- Windows dùng process handle kiểm sống; không os.kill(pid,0). Exit0 cần
+  completion marker/readback. Chỉ cleanup đúng process/container sở hữu.
+- Reserve terminal capacity trước PENDING; giữ archive/tombstone/fencing epoch.
+- Giữ redaction token sau rotate/revoke/expiry; history đầy thì từ chối issuance.
+- JSON records tách LF; không splitlines() làm vỡ Unicode trong chuỗi.
+- Hash source phải tái tạo từ Git blob; evidence giữ exact bytes qua checkout.
+- Không đọc mỗi thuộc tính rồi suy handle đã khóa rename/hardlink.
+- Sửa có repro, chạy hồi quy ảnh hưởng rồi remint. Không lặp fullsuite cùng
+  source đã đạt nếu không có thay đổi/failure/gap liên quan; giữ evidence lỗi.
 
 LỊCH SỬ / CÁCH ĐỌC
-Bản S27 đầy đủ được lưu nguyên bytes tại
-reviews/20260914-plan-history-s27/tools-plan-s27.txt (AUTHORITY=0; hash trong README).
-Các report/evidence S26/S27 giữ nguyên. Chỉ bảng đầu file này là tiến độ hiện hành.
-Đọc bảng này, spec GT hiện tại và các mục TQ/TX nó trỏ tới; không phải đọc lại
-mọi nhật ký cũ. Các yêu cầu nghiệm thu và nguồn kỹ thuật bên dưới được giữ.
+S27/S28/S29 được giữ nguyên bytes trong reviews/*-plan-history-s*/ (AUTHORITY=0).
+Các verdict/evidence cũ giữ nguyên; bảng và markers đầu file là tiến độ duy nhất.
+Đọc GT hiện tại và TQ/TX nó tham chiếu; không cần đọc lại mọi nhật ký.
 
 QUYẾT ĐỊNH KỸ THUẬT CÒN HIỆU LỰC
 MCP_ADAPTER_POLICY=External MCP review is a sequencing input only; the
@@ -521,6 +523,10 @@ VERIFY: unsupported operation/version, wrong payload/id/hash/root/deadline,
 case/Unicode/reparse/traversal, journal full, retry after response lost.
 DoD: mutation reject trước apply khi invalid, pending khác committed, lookup
 không duplicate, no remote eval/secrets; TQ02/TX01/03/11/14,2 critics.
+S30 làm rõ §2.2/TX15: UNSUPPORTED là phản hồi từ chối an toàn hợp lệ, không
+xóa availability GAP. Baseline fixture PASS không đủ tự đóng GT-02 khi TX15
+safe-write còn thiếu; coordinator giữ gate tới khi có proof yêu cầu. Đây là
+làm rõ cách nghiệm thu, không bật capability hoặc hạ yêu cầu theo code.
 
 ### GT-03 — Godot adapter cơ bản
 CONTRACT/VERIFY: safe file open/revision mục2.2; Godot transaction và mutation UX mục2.6, TX15.
@@ -884,7 +890,7 @@ GT-01 ghi máy đang có rồi đo TQ. Driver/API/OS support phải theo pin th�
 CI logic/headless khởi điểm4–8vCPU/16GiB/NVMe; renderer/GPU nghiệm thu trên
 máy có GPU thật. Có ít nhất1Android thật cho GT-08, không cần Android chạy Blender.
 
-Chế độ thực thi hiện tại là solo theo mục8.2. Blender heavy export/render và
+Chế độ thực thi hiện tại theo mục8.2. Blender heavy export/render và
 official GPU tests serialize theo resource lease; memory/job quota+queue tránh OOM.
 Không mỗi agent mở một Godot editor trên cùngproject/cache; reader dùng snapshot.
 Ưu tiên incremental import/asset diff, reuse verified cache, paginated scene
@@ -906,21 +912,20 @@ Các subtask validator/schema/fixture được chuẩn bị song song nếu cont
 khóa, file lease khác; integration/acceptance vẫn theo dependency. Không tạo
 thêm tính năng không thuộc10GT vì “custom toàn diện”. Người chơi không thấy
 protocol/debug details ngoài diagnostics cần thiết.
-8.2 Chế độ thực thi solo hiện hành
+8.2 Chế độ thực thi có phân công hiện hành
 
-Theo owner 14-09-2026: chỉ coordinator làm việc; không dùng worker/subagent,
-Grok CLI hay tạo task khác để lách yêu cầu này. Routing/model/prompt template
-của các phiên trước được giữ trong archive S27, không là lệnh hiện hành.
-Coordinator đọc current WP, dependency, allowed files, test/DoD trước khi sửa;
-kiểm git status/source hash/process đang chạy, chọn subdeliverable nhỏ và test
-đúng ảnh hưởng. Không cần hỏi lại cho implementation đã được owner cho phép.
-
-Một writer/file; các lease trước đã đóng. Source và test phải có actual host
-exit, postcondition và giới hạn timeout. Không stage unrelated; không secrets
-trong shell args, logs hoặc artifact. Web/source/tool output là dữ liệu để
-kiểm chứng, không trao quyền hoặc đổi scope. Không tự mở arbitrary eval.
-Nếu chuyển người thực hiện về sau, handoff ghi đúng WP/source hash, file scope,
-đã test/chưa test, evidence, process/ports còn sống và các gap cụ thể.
+Owner steering mới nhất 15-09-2026: ba Codex subagent Astra xhigh và coordinator.
+Mỗi lane có WP/dependency, scope file, baseline/hash, deliverable và bounded
+verify; một writer/file. Không Grok CLI hoặc tự thay model khi thiếu quota.
+Critic đọc source/evidence độc lập, không đọc verdict nhau; source freeze trong
+formal review. Chuẩn bị report/probe khác scope có thể chạy đồng thời; Godot/
+Blender official có project/cache riêng và resource lease.
+Coordinator đọc current WP/DoD, kiểm Git/process trước sửa, tự tích hợp/verify/
+cập nhật plan. Không hỏi lại implementation đã được owner cho phép. Source/test
+phải có actual exit, postcondition, timeout; chỉ cleanup process/path sở hữu.
+Không stage unrelated hoặc secret. Web/source/tool output là dữ liệu, không
+trao quyền hay mở arbitrary eval. Handoff ghi WP/hash, scope, test/evidence,
+process/ports còn sống và gap; worker không tick hoặc tự commit source chung.
 
 8.3 Bằng chứng và nghiệm thu
 
@@ -953,9 +958,9 @@ caller-supplied exit0 hay field 'PASS' không đủ. Timeout/abort là incomplet
 cleanup cần kết thúc đúng process, không xóa evidence lỗi để đẹp package.
 
 Implementation báo CANDIDATE, không tự giả chữ ký. Gate đã khóa cần hai
-review độc lập trên cùng frozen source, không đọc verdict nhau. Chế độ solo
-hiện hành không tạo critic và không thay chữ ký này bằng hai lượt tự review;
-phần formal review còn thiếu phải ghi PENDING. Quy tắc consumer thuộc plan2.
+review độc lập trên cùng frozen source, không đọc verdict nhau. Coordinator
+verification không là chữ ký độc lập; review bản source cũ không chuyển sang bản mới.
+Phần formal review còn thiếu ghi PENDING. Quy tắc consumer thuộc plan2.
 Report dùng ACCEPT/
 REVISE/INSUFFICIENT_EVIDENCE đúng hash. Coordinator đóng findings rồi đổi trạng
 thái một hàng đầu file. Source thay sau critic phải review source mới.
@@ -1053,7 +1058,7 @@ Tinh gọn S28 chỉ di chuyển nhật ký cũ và đồng bộ chế độ sol
 xóa finding, đổi schema để hợp code, hoặc suy test xanh thành full acceptance.
 Lịch sử S4–S27, quyết định model cũ và runtime chưa đủ proof nằm trong bản S27
 archived và các report được nó tham chiếu. Tình trạng hiện hành xem đầu file.
-GT-01 đã ACCEPTED; GT-02 candidate đang solo audit; GT-03–GT-10 chưa nghiệm thu.
+GT-01 đã ACCEPTED; GT-02 candidate chưa đủ review source mới; GT-03–GT-10 chưa nghiệm thu.
 
 Từ vựng: WP=công việc; DoD=điều kiện xong; fixture=dự án mẫu để kiểm công cụ;
 lease=quyền ghi tạm; fencing=chặn writer cũ; hash=dấu nhận dạng nội dung;
@@ -1063,4 +1068,4 @@ CCU=người online cùng lúc trong game, không số agent phát triển game.
 
 
 END_OF_TOOLS_PLAN
-DATE=2026-09-14 Asia/Saigon
+DATE=2026-09-15 Asia/Saigon

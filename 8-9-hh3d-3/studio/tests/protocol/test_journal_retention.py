@@ -3,6 +3,7 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from host.core.journal import Journal, JournalError, JournalLimits
@@ -95,6 +96,32 @@ class JournalRetentionTests(unittest.TestCase):
         finished = reopened.finish_command(project_id="p", command_id="c", status="COMMITTED",
                                           receipt={"large": "x" * 1000}, now_ms=2)
         self.assertEqual(finished["status"], "COMMITTED")
+
+    def test_terminal_fsync_failure_blocks_reopen_until_a_later_barrier(self):
+        """A readable terminal line is not an ACK until durability is reproved."""
+        import host.core.journal as journal_module
+
+        journal = Journal(self.path)
+        self.append(journal, pending=True)
+        pending_size = self.path.stat().st_size
+        real_fsync = journal_module.os.fsync
+
+        def fail_only_after_terminal_bytes(fd):
+            if self.path.stat().st_size > pending_size:
+                raise OSError("injected terminal fsync failure")
+            return real_fsync(fd)
+
+        with mock.patch.object(journal_module.os, "fsync", side_effect=fail_only_after_terminal_bytes):
+            with self.assertRaisesRegex(JournalError, "JOURNAL_WRITE_FAILED"):
+                journal.finish_command(project_id="p", command_id="c", status="COMMITTED",
+                                       receipt={"result": "readback"}, now_ms=1)
+            with self.assertRaisesRegex(JournalError, "JOURNAL_DURABILITY_UNCONFIRMED"):
+                Journal(self.path)
+
+        recovered = Journal(self.path)
+        result = recovered.lookup(project_id="p", command_id="c", now_ms=2)
+        self.assertEqual(result["status"], "COMMITTED")
+        self.assertEqual(result["receipt"], {"result": "readback"})
 
 
 if __name__ == "__main__":

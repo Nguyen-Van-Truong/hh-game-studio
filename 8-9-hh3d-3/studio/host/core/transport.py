@@ -48,6 +48,11 @@ _SCOPES = frozenset({"fixture.read", "fixture.write", "control.stop", "control.c
 _TOKEN = re.compile(r"Bearer ([A-Za-z0-9_-]{43})\Z")
 _IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9._:/-]{0,127}\Z")
 _TARGET = {"stable_id": "fixture.counter"}
+_UNCERTAIN_JOURNAL_CODES = frozenset({
+    "JOURNAL_DURABILITY_UNCONFIRMED", "JOURNAL_UNREADABLE", "JOURNAL_WRITE_FAILED",
+    "JOURNAL_COMPACT_FAILED", "JOURNAL_RECORD_INVALID", "JOURNAL_TRUNCATED",
+    "JOURNAL_CHECKSUM_MISMATCH", "JOURNAL_HISTORY_INVALID", "JOURNAL_PATH_UNSAFE",
+})
 _SCHEMA = {"schema_version": SCHEMA_VERSION, "operations": {
     "fixture.inspect": {"target": _TARGET, "payload": {}},
     "fixture.set": {"target": _TARGET, "payload": {"value": "int:-1000000..1000000",
@@ -471,10 +476,21 @@ class LoopbackFixtureHost:
 
     def _handle(self, stream: socket.socket, listener: _Listener) -> None:
         session: _Session | None = None
+        safe_command_id = "transport.request"
         try:
             path, headers, raw = self._read_request(stream)
             session = self.sessions.authenticate(headers.get("authorization", ""))
             body = parse_json_utf8(raw)
+            # Only echo an identifier after the same public-ID redaction check
+            # used by dispatch. A malformed or sensitive value stays generic.
+            candidate_id = body.get("command_id") if isinstance(body, dict) else None
+            if isinstance(candidate_id, str) and _IDENTIFIER.fullmatch(candidate_id):
+                try:
+                    self.sessions.validate_public_identifier(candidate_id)
+                except SafetyViolation:
+                    pass
+                else:
+                    safe_command_id = candidate_id
             if self._disconnect_probe(path, "before_dispatch"):
                 return
             result = self._dispatch(path, body, session, listener.control)
@@ -488,10 +504,24 @@ class LoopbackFixtureHost:
                 return
             self._send(stream, result, redactor=session.redactor)
             self._disconnect_probe(path, "after_reply", result)
-        except (SafetyViolation, ValidationError, JournalError) as exc:
+        except JournalError as exc:
             self._diagnostic(exc.code)
             try:
-                self._send(stream, _response(Status.REJECTED, exc.code), 400,
+                uncertain = exc.outcome_unknown or exc.code in _UNCERTAIN_JOURNAL_CODES
+                if uncertain:
+                    self._stopped.set()
+                details = ({"accepting_work": False, "next_action": "lookup.reconcile"}
+                           if uncertain else {})
+                self._send(stream, _response(Status.UNKNOWN if uncertain else Status.REJECTED,
+                           exc.code, safe_command_id, **details),
+                           503 if uncertain else 400,
+                           session.redactor if session else None)
+            except OSError:
+                pass
+        except (SafetyViolation, ValidationError) as exc:
+            self._diagnostic(exc.code)
+            try:
+                self._send(stream, _response(Status.REJECTED, exc.code, safe_command_id), 400,
                            session.redactor if session else None)
             except OSError:
                 pass

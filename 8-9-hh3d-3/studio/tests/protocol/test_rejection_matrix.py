@@ -154,7 +154,7 @@ class RejectionMatrixTests(unittest.TestCase):
         cases = [("command_id", "", "INVALID_FIELD"),
                  ("command_id", "bad id", "INVALID_FIELD"),
                  ("operation", "python.eval", "UNSUPPORTED_OPERATION"),
-                 ("operation", "open_lane", "UNSUPPORTED_OPERATION"),
+                 ("operation", "open_lane", "UNSUPPORTED_OPEN_LANE"),
                  ("schema_version", "future-999", "UNSUPPORTED_SCHEMA"),
                  ("project_id", "other.project", "PROJECT_MISMATCH"),
                  ("target", {"path": "../outside.txt"}, "TARGET_OUTSIDE_SCOPE"),
@@ -191,6 +191,13 @@ class RejectionMatrixTests(unittest.TestCase):
         self.reject(raw, "ORIGIN_REJECTED", headers={"Origin": "https://attacker.example"})
         self.reject(canonical_bytes({"project_id": "project.fixture", "protocol_version": "999"}),
                     "UNSUPPORTED_VERSION", path="/v1/discovery")
+
+    def test_open_lane_policy_rejects_valid_wire_without_execution_or_effect(self):
+        for operation in ('open_lane', 'open_lane.exec', 'open_lane.enable'):
+            wire = self.request()
+            wire['operation'] = operation
+            with self.subTest(operation=operation):
+                self.reject(canonical_bytes(wire), 'UNSUPPORTED_OPEN_LANE')
 
     def test_process_audit_observer_detects_a_synthetic_launch_event(self):
         # Exercise the observer without launching a process or retaining argv.

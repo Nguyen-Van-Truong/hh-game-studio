@@ -1,0 +1,81 @@
+Traceback (most recent call last):
+  File "[PROJECT]\zdoc\reviews\20260915-gt02-s30-windows-probe\restricted_acl_probe.py", line 274, in main
+    out["primary_process"]["child_result"] = json.loads((scratch / "child-result.json").read_text(encoding="utf-8"))
+                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "[USERPROFILE]\AppData\Local\Programs\Python\Python311\Lib\pathlib.py", line 1058, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "[USERPROFILE]\AppData\Local\Programs\Python\Python311\Lib\pathlib.py", line 1044, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '[TEMP]\\gt02-s30-restricted-acl-y920imcz\\scratch\\child-result.json'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "[USERPROFILE]\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 636, in _rmtree_unsafe
+    os.rmdir(path)
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: '[TEMP]\\gt02-s30-restricted-acl-y920imcz\\private'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "[USERPROFILE]\AppData\Local\Programs\Python\Python311\Lib\tempfile.py", line 893, in onerror
+    _os.unlink(path)
+PermissionError: [WinError 5] Access is denied: '[TEMP]\\gt02-s30-restricted-acl-y920imcz\\private'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "[USERPROFILE]\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 636, in _rmtree_unsafe
+    os.rmdir(path)
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: '[TEMP]\\gt02-s30-restricted-acl-y920imcz\\private'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "[USERPROFILE]\AppData\Local\Programs\Python\Python311\Lib\tempfile.py", line 893, in onerror
+    _os.unlink(path)
+PermissionError: [WinError 5] Access is denied: '[TEMP]\\gt02-s30-restricted-acl-y920imcz\\private'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "[PROJECT]\zdoc\reviews\20260915-gt02-s30-windows-probe\restricted_acl_probe.py", line 315, in <module>
+    main()
+  File "[PROJECT]\zdoc\reviews\20260915-gt02-s30-windows-probe\restricted_acl_probe.py", line 222, in main
+    with tempfile.TemporaryDirectory(prefix="gt02-s30-restricted-acl-") as tmp:
+  File "[USERPROFILE]\AppData\Local\Programs\Python\Python311\Lib\tempfile.py", line 943, in __exit__
+    self.cleanup()
+  File "[USERPROFILE]\AppData\Local\Programs\Python\Python311\Lib\tempfile.py", line 947, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+  File "[USERPROFILE]\AppData\Local\Programs\Python\Python311\Lib\tempfile.py", line 929, in _rmtree
+    _shutil.rmtree(name, onerror=onerror)
+  File "[USERPROFILE]\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 787, in rmtree
+    return _rmtree_unsafe(path, onerror)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "[USERPROFILE]\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 629, in _rmtree_unsafe
+    _rmtree_unsafe(fullname, onerror)
+  File "[USERPROFILE]\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 638, in _rmtree_unsafe
+    onerror(os.rmdir, path, sys.exc_info())
+  File "[USERPROFILE]\AppData\Local\Programs\Python\Python311\Lib\tempfile.py", line 919, in onerror
+    cls._rmtree(path, ignore_errors=ignore_errors,
+  File "[USERPROFILE]\AppData\Local\Programs\Python\Python311\Lib\tempfile.py", line 929, in _rmtree
+    _shutil.rmtree(name, onerror=onerror)
+  File "[USERPROFILE]\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 787, in rmtree
+    return _rmtree_unsafe(path, onerror)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "[USERPROFILE]\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 638, in _rmtree_unsafe
+    onerror(os.rmdir, path, sys.exc_info())
+  File "[USERPROFILE]\AppData\Local\Programs\Python\Python311\Lib\tempfile.py", line 919, in onerror
+    cls._rmtree(path, ignore_errors=ignore_errors,
+  File "[USERPROFILE]\AppData\Local\Programs\Python\Python311\Lib\tempfile.py", line 929, in _rmtree
+    _shutil.rmtree(name, onerror=onerror)
+  File "[USERPROFILE]\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 787, in rmtree
+    return _rmtree_unsafe(path, onerror)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "[USERPROFILE]\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 638, in _rmtree_unsafe
+    onerror(os.rmdir, path, sys.exc_info())
+  File "[USERPROFILE]\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 636, in _rmtree_unsafe
+    os.rmdir(path)
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: '[TEMP]\\gt02-s30-restricted-acl-y920imcz\\private'
