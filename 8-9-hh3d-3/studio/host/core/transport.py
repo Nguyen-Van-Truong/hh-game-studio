@@ -770,6 +770,7 @@ class LoopbackFixtureHost:
                                  request_digest=request.digest, no_effect=True))
                     return
             if job.lease is not None:
+                effect_started = False
                 try:
                     with self.journal.lease_guard(job.lease, now_ms=epoch_ms()):
                         self.journal.check_revision(expected_revision=request.expected_revision,
@@ -779,10 +780,16 @@ class LoopbackFixtureHost:
                                 raise SafetyViolation("DEADLINE_BEFORE_APPLY")
                             if epoch_ms() >= job.lease.expires_ms:
                                 raise SafetyViolation("STALE_LEASE")
+                            # A guard-exit or partially applied setter failure
+                            # cannot turn an effect into REJECTED/no_effect.
+                            effect_started = True
                             self.fixture.value = request.payload["value"]
                             self.fixture.revision += 1
                             self.fixture.effect_count += 1
                 except (JournalError, SafetyViolation) as exc:
+                    if (effect_started or isinstance(exc, JournalError)
+                            and (exc.outcome_unknown or exc.code in _UNCERTAIN_JOURNAL_CODES)):
+                        raise  # Worker closes admission; durable pending needs reconciliation.
                     self._finish(job, _response(Status.REJECTED, exc.code, request.command_id,
                                  request_digest=request.digest, no_effect=True))
                     return

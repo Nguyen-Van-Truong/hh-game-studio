@@ -1,0 +1,44 @@
+{
+  "schema": "hh-gt02-effect-phase-regression-v1",
+  "timestamp_utc": "2026-09-15T17:22:50.949544+00:00",
+  "baseline_commit": "9839be9a77b38199a5c03c86bab5315b9b908955",
+  "baseline_transport_sha256": "b05da60fa919764e8d22298c1a0394310b446367c420a3fc4dc64f20dace64a6",
+  "current_transport_sha256": "25b65f059c808a3ae6df4101611752e2c2fd588c87151dd87d40e6160338c8c6",
+  "test_source_sha256": "09e8e958fa437ad05d3169ffd60b12ffe5cf7d40802178e3e1e214a125194941",
+  "results": [
+    {
+      "version": "baseline",
+      "tests_run": 2,
+      "failure_count": 4,
+      "error_count": 0,
+      "skips": 0,
+      "failures": [
+        {
+          "test_id": "phase_regression.TransportRecoveryTests.test_guard_exit_failure_after_effect_never_persists_no_effect_rejection (code='JOURNAL_LOCK_FAILED')",
+          "assertion": "AssertionError: <Status.REJECTED: 'REJECTED'> is not <Status.UNKNOWN: 'UNKNOWN'>"
+        },
+        {
+          "test_id": "phase_regression.TransportRecoveryTests.test_guard_exit_failure_after_effect_never_persists_no_effect_rejection (code='REVISION_MISMATCH')",
+          "assertion": "AssertionError: <Status.REJECTED: 'REJECTED'> is not <Status.UNKNOWN: 'UNKNOWN'>"
+        },
+        {
+          "test_id": "phase_regression.TransportRecoveryTests.test_guard_exit_failure_after_effect_never_persists_no_effect_rejection (code='SESSION_REVOKED')",
+          "assertion": "AssertionError: <Status.REJECTED: 'REJECTED'> is not <Status.UNKNOWN: 'UNKNOWN'>"
+        },
+        {
+          "test_id": "phase_regression.TransportRecoveryTests.test_partial_effect_failure_preserves_unknown_and_blocks_reapply",
+          "assertion": "AssertionError: <Status.REJECTED: 'REJECTED'> is not <Status.UNKNOWN: 'UNKNOWN'>"
+        }
+      ]
+    },
+    {
+      "version": "current",
+      "tests_run": 2,
+      "failure_count": 0,
+      "error_count": 0,
+      "skips": 0,
+      "failures": []
+    }
+  ],
+  "acceptance": false
+}

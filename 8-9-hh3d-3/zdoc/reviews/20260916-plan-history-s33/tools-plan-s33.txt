@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 16-09-2026, Asia/Saigon | Revision S34 | TRIỂN KHAI THEO GATE
+Ngày 16-09-2026, Asia/Saigon | Revision S33 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,84 +25,116 @@ RUNTIME_ACCEPTANCE=GT01_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S34
+PLAN_REVISION=S33
 EXECUTION_MODE=SOLO_OWNER_20260915
 SUBAGENTS_ENABLED=0
-GT02_EVIDENCE_STATUS=FROZEN_CANDIDATE_S34_01
-GT02_REVIEW_STATUS=NOT_REVIEWED_SOLO_S34
-GT02_LAST_TESTED_SOURCE_CLOSURE=2d524684563bfff75e77a67a39ac00f1a63f46d5c2cbcd99725c79d2edb12fe7
-GT02_CHECKPOINT_COMMITS=96c506b,e52b5c0,faedb0d,642d6f5,74d1cc2,52ca04c,52def92,957ea88,572185e,9839be9
+GT02_EVIDENCE_STATUS=FROZEN_CANDIDATE_S32_01
+GT02_REVIEW_STATUS=NOT_REVIEWED_SOLO_S32
+GT02_LAST_TESTED_SOURCE_CLOSURE=983e205a2c815c6e530bf6ef4255d84cc17b4fae0e05a5e9a2848960515d82b1
+GT02_CHECKPOINT_COMMITS=96c506b,e52b5c0,faedb0d,642d6f5,74d1cc2,52ca04c,52def92,957ea88,572185e
 GT02_SAFE_WRITE_STATUS=GAP_UNSUPPORTED_WINDOWS
 GT02_BOUNDARY_EVIDENCE=S33_FIXED_IPC_STAGING_ONLY
 
-TIẾN ĐỘ HIỆN HÀNH — S34, cập nhật 16-09-2026
-Coordinator làm solo; các subagent đã dừng. Không tạo/đánh thức worker hoặc
-critic, không dùng Grok CLI. Solo self-review không thay hai chữ ký độc lập.
+TIẾN ĐỘ HIỆN HÀNH — S33, cập nhật 16-09-2026
+Owner chuyển sang solo: hai lane S32 đang chạy đã interrupt, lane activation
+contract đã hoàn tất; không tạo/đánh thức subagent. Coordinator tiếp quản source,
+test, report dở và plan. Formal review S30 giữ đúng hash; source mới không được
+tính là đã có hai critic. Không dùng Grok CLI hoặc tự tạo chữ ký độc lập.
+S31 AppContainer probe, broker contract và adapter prerequisites đã hoàn tất;
+đây là diagnostic/preparation, không nghiệm thu thêm gate. Source S30 checkpoint
+74d1cc2; audit metadata 52ca04c. Source S32 checkpoint957ea88: tái dựng Git xác
+nhận65 source/9 artifacts khớp hash (s32-audit/git-byte-verification-head.json).
 
 GT-01 ACCEPTED tại a0fb247; closure
 3ace23bcf84598cda64d54bbe3fc4736acde877f9f714fb71e2355d3e809eea4,
 evidence reviews/20260913-r21-gt01-final; hai critic PASS/TICK=yes.
 
-GT-02 candidate hiện hành: reviews/20260916-gt02-s34-01. Protocol194 tests:
-190 pass,4 skips (3 thiếu quyền symlink,1 negative Linux-only); bootstrap56/56.
-Actual host exit/process tree sạch, source/snapshot không đổi;68 source files,
-9 artifacts được rehash. Python/Node/Godot khớp2396 canonical rows/hash; Godot
-thêm9 negative cases. Bảng requirement → test → evidence và audit tái dựng
-Git nằm ở reviews/20260916-gt02-s34-audit/. Chưa có review độc lập cho source này.
-
-Đã có typed schema/JCS/limits, journal/CAS8 process, terminal reservation,
+GT-02 candidate hiện hành: reviews/20260915-gt02-s32-01. Protocol 173 tests:
+169 pass, 4 platform skips; bootstrap 56/56. Host exit/process tree và source/
+snapshot ổn định; 65 source files, 9 artifacts được rehash. Python/Node/Godot
+khớp 2396 canonical rows/hash; Godot thêm 9 negative cases. Audit verifier và
+bảng requirement → test → evidence ở reviews/20260915-gt02-s32-audit/.
+Đã có typed schema/JCS/limits, journal/CAS tám process, reservation cho terminal,
 archive/tombstone, authenticated loopback, Stop/Cancel/UNKNOWN, redaction cả
-credential cũ, NFC names và UNSUPPORTED_OPEN_LANE. Godot vectors chứng minh
-serializer; Python host sở hữu raw-wire admission. Private staging S32 giữ
-ancestor/root/guard/blob handles, protected DACL, quota và write/flush/readback.
+credential cũ, NFC names, fixed error guidance và UNSUPPORTED_OPEN_LANE.
+Godot vectors chứng minh serializer; Python host sở hữu raw-wire admission.
 
-S34 thêm pipe_io.py: framed bytes tối đa256KiB, deadline chung header/body,
-Stop độc lập, một I/O/pipe và tối đa32 pipe được giữ ownership. Cancel chưa có
-completion thì giữ nguyên buffer/OVERLAPPED/event/pipe trong registry; close
-lần sau tiếp tục dọn chính operation đó.19 tests dùng Windows pipe thật đạt,
-gồm cancellation không hoàn tất, lỗi wait/result/close, short write, disconnect,
-concurrent Stop/close và caller bỏ reference. Chưa là endpoint auth/dispatcher.
+S29 critics review closure S28-03: A FAIL/TICK=no, B PASS/TICK=yes; verdict cũ
+không nghiệm thu source mới. S30 đóng hai lỗi đã tái hiện: fsync terminal thất
+bại nhưng cache có thể đọc được; và lệnh đã apply lại nhận REJECTED khi journal
+không đọc được. Reload nay cần durability barrier; guard/reload lỗi mang phase
+UNKNOWN, còn refusal capacity thật trước admission vẫn REJECTED/no-effect.
+Regression S30 kiểm write-before/partial-write/flush/fsync, fresh-process reopen/
+archive và 6 lỗi journal × lookup/retry/cancel/archive; effect luôn đúng một lần.
+Hai critic S30-01 cùng hash đã xong: A FAIL/TICK=no (TX15 availability GAP),
+B PASS/TICK=yes cho baseline fixture với UNSUPPORTED được công khai. Cả hai
+không tái hiện lỗi journal/transport mới. Coordinator giữ CANDIDATE: không có
+hai TICK=yes cho đầy đủ gate, không dùng PASS fixture để đóng safe-write GAP.
+Preaudit A đã cung cấp matrix được đưa vào regression, nên final critic A là
+reviewer mới; không dùng tác giả regression làm chữ ký độc lập cho chính nó.
 
-S34 cũng sửa lỗi phase ở transport: exception khi thoát guard hoặc sau mutation
-bắt đầu phải giữ UNKNOWN/pending, đóng admission và không tự apply lại. Hai
-regression mới tái hiện4 failure trên method từ Git9839be9; source sửa đạt cả2.
-Bằng chứng phase-regression.json giữ hash của method/test và kết quả từng case.
+Windows safe-write vẫn GAP theo TX15, không biến UNSUPPORTED thành chức năng
+đã đạt. S30 probe xác nhận WRITE_RESTRICTED chưa chặn DELETE/rename; full
+restricted token chặn access trong impersonation nhưng Python child chưa có
+completion marker. Create-only publish retained-handle trong trusted fixture
+đạt identity/hash; chưa có isolation hoặc destination CAS. SID-only AppContainer
+probe không tạo profile và lỗi WinError 2 ở CreateProcessW, chưa có child proof.
+Các report ...s30-windows-probe.md và ...s30-appcontainer-probe/ là diagnostic.
+Một TEMP riêng của probe run03 còn lại sau cleanup bị automatic approval review
+chặn; đường dẫn chi tiết và lý do ở report. Không claim mọi TEMP đã sạch.
 
-Windows safe-write vẫn GAP theo TX15. Native S31/S32 đã chứng minh các thao tác
-filesystem/process/hardlink/inheritance bị chặn trong fixed AppContainer. S33
-thực thi AppContainer → authenticated pipe → staging: hợp lệ tạo1 blob/readback,
-sai PID tạo0 blob; denied direct read/write/second instance, exit53/Job/PID sạch.
-S33 vẫn fixed diagnostic, chưa dùng pipe_io mới hoặc journal/lease/Stop/selector.
-Report: reviews/20260915-gt02-s33-ipc.md; checkpoint9839be9. Không suy unit test
-pipe thành proof sandbox/production IPC hoặc durable namespace activation.
+S31 run04 có primary AppContainer thật: đúng SID, Low integrity, zero capability,
+scratch write thành công; read/write/delete/rename/hardlink private đều bị chặn.
+Control cùng command thực hiện được cả năm thao tác. Hai process exit37, đủ
+markers; Job drain về0/PID list rỗng. Profile/package/mapping/TEMP của S31 đã
+dọn và đọc lại xác nhận. Verifier read-only kiểm18 artifacts và raw redaction,
+manifest42a33a9206e5e855ee509aa32c0af1ea602b97da0c885a62074a7b9fef829784.
+Report: reviews/20260915-gt02-s31-appcontainer.md. Đây chỉ là fixed-command
+filesystem boundary; chưa chứng minh IPC/network, handle duplication, reparse
+race, publish/durability hoặc sandbox cho Godot/Blender. Các run lỗi01–03 giữ
+nguyên. Broker contract và GT03/04 prerequisites nằm trong hai report cùng ngày.
 
-Tiếp theo solo, theo thứ tự để tránh làm lại:
-1. Endpoint work/control giữ identity worker + session, tích hợp envelope/journal/
-   lease/Stop với OwnedPipe; proof native AppContainer trên source tích hợp.
-2. Expected-generation selector cho complete immutable release; durable intent,
-   readback và explicit crash reconciliation; không dùng reopen làm quyền retry.
-3. Freeze lại closure, adversarial verification; giữ CANDIDATE khi review còn thiếu.
-GT-03/04 consumer mutation chưa đủ dependency; không hạ DoD để hợp code.
+S32 candidate: private_store.py tạo staging CREATE_NEW với protected owner DACL,
+retained ancestor/root/guard/blob handles, NTFS check, quota64 objects/8MiB,
+1MiB/blob, write/flush/readback và UNKNOWN khi staging lỗi.19 tests đạt riêng;
+gồm process mới/readback, writer contention, ACL/junction/hardlink, impersonation,
+short-write và cleanup retry khi handle thật vẫn mở. Full snapshot regression đã đạt.
+Close failure có registry giữ ownership; lỗi init sau tạo root không giả no-effect.
+reopen chỉ xác nhận identity/guard, chưa là phục hồi command sau crash.
 
-Các finding/lượt lỗi S30–S33 và lý do quyết định giữ nguyên trong reports và
-reviews/20260916-plan-history-s33/tools-plan-s33.txt (AUTHORITY=0), SHA-256
-1eb33e360f2c6f712768e453e0bb751e6d539eefb922347614b5e4a613a192f0.
-Hai critic S30 chỉ áp dụng closure S30: A FAIL/TICK=no vì TX15 availability GAP;
-B PASS/TICK=yes cho baseline fixture. Không chuyển chữ ký đó sang S34. Một
-TEMP probe S30 cũ còn lại do automatic approval review chặn cleanup; giữ báo
-cáo ...s30-windows-probe.md, không thử lại bằng công cụ khác hoặc claim TEMP0.
+S32 native boundary run05 đã hoàn thành cả4 mode: private rights/broker process
+opens bị chặn, sentinel không inherit, restriction chặn child với error367.
+Hai positive controls đạt; actual exit47, markers và Job/PID readback sạch.
+Run03 lỗi0xC0000142 trước marker, run04 gặp strict INVALID_HANDLE exception;
+solo sửa launch DETACHED_PROCESS và chỉ bắt đúng SEH của probe handle cố ý sai.
+Profile/mapping/TEMP run05 đã dọn; run01–04/source lỗi giữ nguyên. Verifier28
+artifacts + raw derivation đạt, tampered copy bị reject; report ...s32-boundary.md.
+Report native-store là review draft bị ngắt, không phải final critic source mới.
+Activation contract đề xuất append-only selector thay mutable pointer; vẫn phải
+giữ expected generation/hash, journal/lease, release closure và consumer readback.
 
-Còn lại sau GT-02: GT-03 Godot adapter, GT-04 Blender adapter, GT-05 asset
-pipeline, GT-06 Play/input/observe, GT-07 recovery/multi-agent, GT-08 CI/Windows/
-Linux/Android máy thật, GT-09 conformance, GT-10 package/handoff. HH World đợi
-GT-10. Inventory S29: Docker local phản hồi, chưa thấy ADB/Android kết nối;
-đó không là proof Linux/Android đạt. Chưa có cơ sở hẹn ngày xong toàn plan.
+S33 solo: native AppContainer → pipe → private_store thật đã chạy qua2 case.
+PID/process handle + pipe token/SID được kiểm, revert impersonation trước ghi.
+Case hợp lệ tạo1 blob/readback; sai expected PID reject/tạo0 blob. Worker bị chặn
+đọc/ghi trực tiếp blob; second pipe instance bị chặn. Hai native exit53, markers,
+Job/PID sạch; profile/mapping/TEMP đã dọn. Manifest28 artifacts kiểm raw/native
+binary và source S32; report reviews/20260915-gt02-s33-ipc.md. Đây là fixed
+diagnostic protocol, chưa có journal/lease/Stop/activation trên đường IPC này.
+
+Tiếp theo solo: tích hợp production envelope/journal/lease/Stop với IPC đã thử;
+giữ ownership khi cancel overlapped I/O; triển khai expected-generation selector
+và crash/recovery. Chưa mở consumer mutation.
+Giữ GT-02 CANDIDATE khi còn requirement/review thiếu. Không
+dispatch GT-03/04 mutation qua dependency/gap. Không hỏi lại phần triển khai đã
+được owner cấp quyền; không hạ DoD để hợp code hoặc dùng test pass thay chức năng.
+
+Còn lại: GT-03 Godot adapter, GT-04 Blender adapter, GT-05 asset pipeline,
+GT-06 Play/input/observe, GT-07 recovery/multi-agent, GT-08 CI/Windows/Linux/
+Android máy thật, GT-09 conformance, GT-10 package/handoff. HH World đợi GT-10.
+Docker local đã phản hồi; chưa thấy ADB/Android kết nối ở lượt inventory S29.
+Đó không phải bằng chứng Linux/Android đạt. Chưa có cơ sở hẹn ngày xong toàn plan.
 
 KINH NGHIỆM ĐANG ÁP DỤNG
-- CancelIoEx chỉ yêu cầu hủy; chưa quan sát completion thì không giải phóng
-  buffer/OVERLAPPED/event. Giữ owner có giới hạn và tiếp tục cleanup đúng handle.
-- no_effect cần chứng minh chưa bắt đầu mutation; mã lỗi validation xuất hiện
-  ở guard-exit không chứng minh điều đó. Sau effect phải UNKNOWN/reconcile.
 - Byte đọc được từ page cache không chứng minh fsync đã thành công. Recovery
   cần barrier thành công; lỗi guard/reload không suy REJECTED chỉ từ mã lỗi.
   Phase trước admission khác phase chưa đọc được lịch sử của ID đã apply.
@@ -1090,4 +1122,4 @@ CCU=người online cùng lúc trong game, không số agent phát triển game.
 
 
 END_OF_TOOLS_PLAN
-DATE=2026-09-16 Asia/Saigon
+DATE=2026-09-15 Asia/Saigon

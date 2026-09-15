@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT.parent))
 from studio.host.core.journal import Journal, JournalError, JournalLimits
 from studio.host.core.limits import SafetyViolation
-from studio.host.core.transport import (ArchivedResult, FixtureClient, FixtureFaults,
+from studio.host.core.transport import (ArchivedResult, FixtureClient, FixtureFaults, FixtureState,
     LoopbackFixtureHost, SessionAuthority, TransportLimits, epoch_ms)
 from studio.protocol.core import Response, Status, canonical_bytes
 
@@ -55,6 +55,50 @@ def observed_state(root, host):
 
 
 class TransportRecoveryTests(unittest.TestCase):
+    def test_guard_exit_failure_after_effect_never_persists_no_effect_rejection(self):
+        for error_type, code in ((JournalError, 'JOURNAL_LOCK_FAILED'),
+                                 (JournalError, 'REVISION_MISMATCH'),
+                                 (SafetyViolation, 'SESSION_REVOKED')):
+            with self.subTest(code=code), fixture() as (_, host, client, _):
+                request = client.request('guard.exit', value=73, lease=client.lease())
+                original = host.journal.lease_guard
+
+                @contextmanager
+                def failing_exit(*args, **kwargs):
+                    with original(*args, **kwargs):
+                        yield
+                    raise error_type(code)
+
+                with mock.patch.object(host.journal, 'lease_guard', failing_exit):
+                    self.assertIs(client.submit(request).status, Status.ACCEPTED_PENDING)
+                    result = self.terminal(client, request.command_id)
+                self.assertIs(result.status, Status.UNKNOWN)
+                self.assertNotIn('no_effect', result.postconditions)
+                self.assertEqual(host.fixture.snapshot(), {'value': 73, 'revision': 'rev-1', 'effect_count': 1})
+                self.assertTrue(host._stopped.is_set())
+                self.assertEqual(client.submit(request), result)
+                recovered = Journal(host.journal.path)
+                record = recovered.lookup(project_id=host.project_id, command_id=request.command_id, now_ms=epoch_ms())
+                self.assertEqual(record['status'], 'ACCEPTED_PENDING')
+
+    def test_partial_effect_failure_preserves_unknown_and_blocks_reapply(self):
+        class FailingState(FixtureState):
+            def __setattr__(self, name, value):
+                object.__setattr__(self, name, value)
+                if name == 'value' and value == 79:
+                    raise SafetyViolation('FIXTURE_PARTIAL_WRITE')
+
+        with fixture() as (_, host, client, _):
+            host.fixture = FailingState()
+            request = client.request('effect.partial', value=79, lease=client.lease())
+            self.assertIs(client.submit(request).status, Status.ACCEPTED_PENDING)
+            result = self.terminal(client, request.command_id)
+            self.assertIs(result.status, Status.UNKNOWN)
+            self.assertNotIn('no_effect', result.postconditions)
+            self.assertEqual(host.fixture.snapshot(), {'value': 79, 'revision': 'rev-0', 'effect_count': 0})
+            self.assertTrue(host._stopped.is_set())
+            self.assertEqual(client.submit(request), result)
+
     def test_reload_fsync_failure_preserves_pending_and_requires_reconciliation(self):
         self.check_fsync_failure(terminal_bytes=False)
 
