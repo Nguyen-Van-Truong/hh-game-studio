@@ -1,0 +1,115 @@
+{
+  "run_id": "GT02-S33-IPC-04",
+  "timestamp_utc": "2026-09-15T16:54:01.604263+00:00",
+  "source_sha256": "ea79b502000c7ddf69fb488bce6a32db83f68e6e71afcfb5fff7a9e4fef8a02f",
+  "native_source_sha256": "246cea725644e363c5799a73cbdef53ad3a491e6a5a386d861320bc2e63a4ae3",
+  "private_store_sha256": "8b92645edf34469efdab7e6e02ea70507f3db16154471685697e6e9bbad2cdc1",
+  "safe_write": "UNSUPPORTED_SAFE_OPEN_WINDOWS",
+  "production_protocol": false,
+  "cases": [
+    {
+      "mode": "stage",
+      "pipe_remote_rejected": true,
+      "pipe_first_instance": true,
+      "handle_inheritance": false,
+      "pipe_namespace": "AppContainer SID",
+      "effective_pipe_sddl": "O:<BROKER_SID>G:<HOST_ACCOUNT_SID>D:P(A;;FA;;;<BROKER_SID>)(A;;0x12019b;;;<APPCONTAINER_SID>)S:AI(ML;;NW;;;LW)",
+      "pid": 19788,
+      "primary_token": {
+        "appcontainer": 1,
+        "sid_matches": true,
+        "integrity": "S-1-16-4096",
+        "capabilities": 0
+      },
+      "actual_pipe_pid": 19788,
+      "pipe_token": {
+        "appcontainer": 1,
+        "sid_matches": true
+      },
+      "identity_binding_accepted": true,
+      "staged_blob": {
+        "object_id": "blob-2a7f033e6fbc413dbed33eab0316ced8",
+        "file_id": "49d81800000024000000000000000000",
+        "sha256": "6e378ef19ff1692c2d0580c9bb92bdf9e6bec0648eeec9fb1da3160606276d66"
+      },
+      "new_blob_count": 1,
+      "host_exit": 53,
+      "job_active": 0,
+      "job_pids": [],
+      "native": {
+        "started": "S33_NATIVE_STARTED",
+        "pipe_open_error": 0,
+        "reply": "STAGED blob-2a7f033e6fbc413dbed33eab0316ced8 6e378ef19ff1692c2d0580c9bb92bdf9e6bec0648eeec9fb1da3160606276d66",
+        "direct_read_error": 5,
+        "direct_write_error": 5,
+        "complete": "S33_NATIVE_COMPLETE"
+      },
+      "final_host_exit": 53,
+      "final_job_active": 0,
+      "final_job_pids": []
+    },
+    {
+      "mode": "wrong_pid",
+      "pipe_remote_rejected": true,
+      "pipe_first_instance": true,
+      "handle_inheritance": false,
+      "pipe_namespace": "AppContainer SID",
+      "effective_pipe_sddl": "O:<BROKER_SID>G:<HOST_ACCOUNT_SID>D:P(A;;FA;;;<BROKER_SID>)(A;;0x12019b;;;<APPCONTAINER_SID>)S:AI(ML;;NW;;;LW)",
+      "pid": 35036,
+      "primary_token": {
+        "appcontainer": 1,
+        "sid_matches": true,
+        "integrity": "S-1-16-4096",
+        "capabilities": 0
+      },
+      "actual_pipe_pid": 35036,
+      "pipe_token": {
+        "appcontainer": 1,
+        "sid_matches": true
+      },
+      "identity_binding_accepted": false,
+      "new_blob_count": 0,
+      "host_exit": 53,
+      "job_active": 0,
+      "job_pids": [],
+      "native": {
+        "started": "S33_NATIVE_STARTED",
+        "pipe_open_error": 0,
+        "reply": "REJECTED_IDENTITY",
+        "complete": "S33_NATIVE_COMPLETE"
+      },
+      "final_host_exit": 53,
+      "final_job_active": 0,
+      "final_job_pids": []
+    }
+  ],
+  "profile_absent_before": true,
+  "compiler": {
+    "cl_sha256": "f4eba2208e132daf500b7d7bbdf051e930c59dbdc1d87c35e146479427ffeb8d",
+    "link_sha256": "1a9889872481270ca45febcdaf26e75c53cea505c9eb214daea1098d4cf706bd",
+    "msvc_version": "14.44.35207",
+    "sdk_version": "10.0.26100.0",
+    "source_sha256": "246cea725644e363c5799a73cbdef53ad3a491e6a5a386d861320bc2e63a4ae3",
+    "compile": {
+      "host_exit": 0,
+      "stdout": "boundary_child.c\r\n",
+      "stderr": "",
+      "timeout_seconds": 25
+    },
+    "link": {
+      "host_exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout_seconds": 25
+    }
+  },
+  "native_executable_sha256": "be1f84c6b5da0950180f595233a088427291444960f885b0398b5fa1e7439de0",
+  "create_profile_hresult": 0,
+  "marker": "S33_IPC_STAGING_DIAGNOSTIC_COMPLETE",
+  "delete_profile_hresult": 0,
+  "profile_absent_after": true,
+  "owned_temp_removed": true,
+  "diagnostic_complete": true,
+  "raw_relative": "studio/.local/review-raw/S33/GT02-S33-IPC-04-fd98e1a959ec4cf39ebbf6a400033799.json",
+  "raw_sha256": "81d1d6ad47eecfb2a042bc64e133504fbdb2677b3aa58b02ef7a6da717b9ae8c"
+}

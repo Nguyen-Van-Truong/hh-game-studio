@@ -1,0 +1,70 @@
+{
+  "run_id": "GT02-S33-IPC-02",
+  "timestamp_utc": "2026-09-15T16:51:31.582816+00:00",
+  "source_sha256": "406a0451d2dff90a5aa2739728f03d9f569b9000a12e494ef65c003f9f3d5202",
+  "native_source_sha256": "246cea725644e363c5799a73cbdef53ad3a491e6a5a386d861320bc2e63a4ae3",
+  "private_store_sha256": "8b92645edf34469efdab7e6e02ea70507f3db16154471685697e6e9bbad2cdc1",
+  "safe_write": "UNSUPPORTED_SAFE_OPEN_WINDOWS",
+  "production_protocol": false,
+  "cases": [
+    {
+      "mode": "stage",
+      "pipe_remote_rejected": true,
+      "pipe_first_instance": true,
+      "handle_inheritance": false,
+      "pid": 36748,
+      "primary_token": {
+        "appcontainer": 1,
+        "sid_matches": true,
+        "integrity": "S-1-16-4096",
+        "capabilities": 0
+      },
+      "error": {
+        "type": "TimeoutError",
+        "message": "Owned pipe operation timed out",
+        "winerror": null
+      },
+      "final_host_exit": 94,
+      "final_job_active": 0,
+      "final_job_pids": [],
+      "native": {
+        "started": "S33_NATIVE_STARTED",
+        "pipe_open_error": 2,
+        "complete": false
+      }
+    }
+  ],
+  "profile_absent_before": true,
+  "compiler": {
+    "cl_sha256": "f4eba2208e132daf500b7d7bbdf051e930c59dbdc1d87c35e146479427ffeb8d",
+    "link_sha256": "1a9889872481270ca45febcdaf26e75c53cea505c9eb214daea1098d4cf706bd",
+    "msvc_version": "14.44.35207",
+    "sdk_version": "10.0.26100.0",
+    "source_sha256": "246cea725644e363c5799a73cbdef53ad3a491e6a5a386d861320bc2e63a4ae3",
+    "compile": {
+      "host_exit": 0,
+      "stdout": "boundary_child.c\r\n",
+      "stderr": "",
+      "timeout_seconds": 25
+    },
+    "link": {
+      "host_exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout_seconds": 25
+    }
+  },
+  "native_executable_sha256": "be1f84c6b5da0950180f595233a088427291444960f885b0398b5fa1e7439de0",
+  "create_profile_hresult": 0,
+  "error": {
+    "type": "RuntimeError",
+    "message": "IPC case failed: stage",
+    "winerror": null
+  },
+  "delete_profile_hresult": 0,
+  "profile_absent_after": true,
+  "owned_temp_removed": true,
+  "diagnostic_complete": false,
+  "raw_relative": "studio/.local/review-raw/S33/GT02-S33-IPC-02-f70c34cdfb5f4e9496a2894664e16286.json",
+  "raw_sha256": "1619b4823cd2d28922379e8d7ded38fcc2d7b9ac9d6dbfe36fc3fcab1dc01ad5"
+}

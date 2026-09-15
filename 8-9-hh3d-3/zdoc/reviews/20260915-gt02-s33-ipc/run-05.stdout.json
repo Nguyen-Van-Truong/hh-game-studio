@@ -1,0 +1,123 @@
+{
+  "run_id": "GT02-S33-IPC-05",
+  "timestamp_utc": "2026-09-15T16:56:47.431236+00:00",
+  "source_sha256": "8450006dc57cd437b5164a96bf5ff2b9001e55ab2bee4c956cdeb10042522d54",
+  "native_source_sha256": "21a04277dca1285f1717afea8d5f0cfe4d6d82fcbeac03fd45b7f484471618bf",
+  "private_store_sha256": "8b92645edf34469efdab7e6e02ea70507f3db16154471685697e6e9bbad2cdc1",
+  "safe_write": "UNSUPPORTED_SAFE_OPEN_WINDOWS",
+  "production_protocol": false,
+  "cases": [
+    {
+      "mode": "stage",
+      "pipe_remote_rejected": true,
+      "pipe_first_instance": true,
+      "handle_inheritance": false,
+      "pipe_namespace": "AppContainer SID",
+      "effective_pipe_sddl": "O:<BROKER_SID>G:<HOST_ACCOUNT_SID>D:P(A;;FA;;;<BROKER_SID>)(A;;0x12019b;;;<APPCONTAINER_SID>)S:AI(ML;;NW;;;LW)",
+      "pid": 13196,
+      "primary_token": {
+        "appcontainer": 1,
+        "sid_matches": true,
+        "integrity": "S-1-16-4096",
+        "capabilities": 0
+      },
+      "actual_pipe_pid": 13196,
+      "pipe_token": {
+        "appcontainer": 1,
+        "sid_matches": true
+      },
+      "identity_binding_accepted": true,
+      "staged_blob": {
+        "object_id": "blob-2af97a1fbb68486fb8af4939e1ed3ef1",
+        "file_id": "4fd81800000027000000000000000000",
+        "sha256": "6e378ef19ff1692c2d0580c9bb92bdf9e6bec0648eeec9fb1da3160606276d66"
+      },
+      "new_blob_count": 1,
+      "host_exit": 53,
+      "job_active": 0,
+      "job_pids": [],
+      "native": {
+        "started": "S33_NATIVE_STARTED",
+        "pipe_open_error": 0,
+        "second_pipe_instance_error": 5,
+        "reply": "STAGED blob-2af97a1fbb68486fb8af4939e1ed3ef1 6e378ef19ff1692c2d0580c9bb92bdf9e6bec0648eeec9fb1da3160606276d66",
+        "direct_read_error": 5,
+        "direct_write_error": 5,
+        "complete": "S33_NATIVE_COMPLETE"
+      },
+      "final_host_exit": 53,
+      "final_job_active": 0,
+      "final_job_pids": []
+    },
+    {
+      "mode": "wrong_pid",
+      "pipe_remote_rejected": true,
+      "pipe_first_instance": true,
+      "handle_inheritance": false,
+      "pipe_namespace": "AppContainer SID",
+      "effective_pipe_sddl": "O:<BROKER_SID>G:<HOST_ACCOUNT_SID>D:P(A;;FA;;;<BROKER_SID>)(A;;0x12019b;;;<APPCONTAINER_SID>)S:AI(ML;;NW;;;LW)",
+      "pid": 24740,
+      "primary_token": {
+        "appcontainer": 1,
+        "sid_matches": true,
+        "integrity": "S-1-16-4096",
+        "capabilities": 0
+      },
+      "actual_pipe_pid": 24740,
+      "pipe_token": {
+        "appcontainer": 1,
+        "sid_matches": true
+      },
+      "identity_binding_accepted": false,
+      "new_blob_count": 0,
+      "host_exit": 53,
+      "job_active": 0,
+      "job_pids": [],
+      "native": {
+        "started": "S33_NATIVE_STARTED",
+        "pipe_open_error": 0,
+        "second_pipe_instance_error": 5,
+        "reply": "REJECTED_IDENTITY",
+        "complete": "S33_NATIVE_COMPLETE"
+      },
+      "final_host_exit": 53,
+      "final_job_active": 0,
+      "final_job_pids": []
+    }
+  ],
+  "imported_source_sha256": {
+    "boundary_probe.py": "b3337e327cf10a585407d1fc074c23d6c5ecc7ba67334579c34858f3a6fdf6bd",
+    "windows_api.py": "1afd34eb11fd5ab9a34c37de2a80aabcec04224826a092ff122d5212bd3a50c4"
+  },
+  "profile_absent_before": true,
+  "compiler": {
+    "cl_sha256": "f4eba2208e132daf500b7d7bbdf051e930c59dbdc1d87c35e146479427ffeb8d",
+    "link_sha256": "1a9889872481270ca45febcdaf26e75c53cea505c9eb214daea1098d4cf706bd",
+    "msvc_version": "14.44.35207",
+    "sdk_version": "10.0.26100.0",
+    "source_sha256": "21a04277dca1285f1717afea8d5f0cfe4d6d82fcbeac03fd45b7f484471618bf",
+    "compile": {
+      "host_exit": 0,
+      "stdout": "boundary_child.c\r\n",
+      "stderr": "",
+      "timeout_seconds": 25
+    },
+    "link": {
+      "host_exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout_seconds": 25
+    }
+  },
+  "native_executable_sha256": "0c4234e2482861786566333b6e2d350e8b4867ae7acaeecc824f433bb3b72f63",
+  "native_executable_relative": "studio/.local/review-raw/S33/GT02-S33-IPC-05-d393fb2f4f0c4499b9a8fea92cef9470.exe",
+  "create_profile_hresult": 0,
+  "profile_exists_after_create": true,
+  "marker": "S33_IPC_STAGING_DIAGNOSTIC_COMPLETE",
+  "delete_profile_hresult": 0,
+  "profile_absent_after": true,
+  "owned_temp_removed": true,
+  "diagnostic_complete": true,
+  "raw_relative": "studio/.local/review-raw/S33/GT02-S33-IPC-05-d393fb2f4f0c4499b9a8fea92cef9470.json",
+  "raw_sha256": "ce9f218580f7d863c51f6aa93a97965f6e2da83d3ddbcbfe2d673e98ccf7f924"
+}

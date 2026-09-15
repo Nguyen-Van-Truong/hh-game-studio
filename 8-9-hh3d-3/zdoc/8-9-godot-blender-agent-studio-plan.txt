@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 15-09-2026, Asia/Saigon | Revision S32 | TRIỂN KHAI THEO GATE
+Ngày 16-09-2026, Asia/Saigon | Revision S33 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,16 +25,17 @@ RUNTIME_ACCEPTANCE=GT01_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S32
+PLAN_REVISION=S33
 EXECUTION_MODE=SOLO_OWNER_20260915
 SUBAGENTS_ENABLED=0
 GT02_EVIDENCE_STATUS=FROZEN_CANDIDATE_S32_01
 GT02_REVIEW_STATUS=NOT_REVIEWED_SOLO_S32
 GT02_LAST_TESTED_SOURCE_CLOSURE=983e205a2c815c6e530bf6ef4255d84cc17b4fae0e05a5e9a2848960515d82b1
-GT02_CHECKPOINT_COMMITS=96c506b,e52b5c0,faedb0d,642d6f5,74d1cc2,52ca04c,52def92,957ea88
+GT02_CHECKPOINT_COMMITS=96c506b,e52b5c0,faedb0d,642d6f5,74d1cc2,52ca04c,52def92,957ea88,572185e
 GT02_SAFE_WRITE_STATUS=GAP_UNSUPPORTED_WINDOWS
+GT02_BOUNDARY_EVIDENCE=S33_FIXED_IPC_STAGING_ONLY
 
-TIẾN ĐỘ HIỆN HÀNH — S32, 15-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S33, cập nhật 16-09-2026
 Owner chuyển sang solo: hai lane S32 đang chạy đã interrupt, lane activation
 contract đã hoàn tất; không tạo/đánh thức subagent. Coordinator tiếp quản source,
 test, report dở và plan. Formal review S30 giữ đúng hash; source mới không được
@@ -112,8 +113,17 @@ Report native-store là review draft bị ngắt, không phải final critic sou
 Activation contract đề xuất append-only selector thay mutable pointer; vẫn phải
 giữ expected generation/hash, journal/lease, release closure và consumer readback.
 
-Tiếp theo solo: tích hợp actual worker
-với private store qua bytes-only IPC, rồi activation/crash recovery. Chưa mở consumer mutation.
+S33 solo: native AppContainer → pipe → private_store thật đã chạy qua2 case.
+PID/process handle + pipe token/SID được kiểm, revert impersonation trước ghi.
+Case hợp lệ tạo1 blob/readback; sai expected PID reject/tạo0 blob. Worker bị chặn
+đọc/ghi trực tiếp blob; second pipe instance bị chặn. Hai native exit53, markers,
+Job/PID sạch; profile/mapping/TEMP đã dọn. Manifest28 artifacts kiểm raw/native
+binary và source S32; report reviews/20260915-gt02-s33-ipc.md. Đây là fixed
+diagnostic protocol, chưa có journal/lease/Stop/activation trên đường IPC này.
+
+Tiếp theo solo: tích hợp production envelope/journal/lease/Stop với IPC đã thử;
+giữ ownership khi cancel overlapped I/O; triển khai expected-generation selector
+và crash/recovery. Chưa mở consumer mutation.
 Giữ GT-02 CANDIDATE khi còn requirement/review thiếu. Không
 dispatch GT-03/04 mutation qua dependency/gap. Không hỏi lại phần triển khai đã
 được owner cấp quyền; không hạ DoD để hợp code hoặc dùng test pass thay chức năng.
@@ -143,6 +153,10 @@ KINH NGHIỆM ĐANG ÁP DỤNG
   constructor; mock đóng thật rồi báo lỗi chưa kiểm trường hợp handle còn mở.
   Probe numeric handle không inherit có thể gặp strict SEH; chỉ bắt đúng lỗi
   dự kiến và xác minh full FileId trước đọc, không suy handle number là identity.
+- IPC lỗi phải lưu actual child exit/log ngay cả khi connect timeout. Trên build
+  đã kiểm, pipe LOCAL không resolve từ legacy AppContainer; namespace SID và
+  grant individual rights chạy được. Không suy một bit cụ thể sửa lỗi nếu chỉ
+  mới kiểm cả bundle; không dùng pipe access để cấp quyền filesystem.
 - Sửa có repro, chạy hồi quy ảnh hưởng rồi remint. Không lặp fullsuite cùng
   source đã đạt nếu không có thay đổi/failure/gap liên quan; giữ evidence lỗi.
 

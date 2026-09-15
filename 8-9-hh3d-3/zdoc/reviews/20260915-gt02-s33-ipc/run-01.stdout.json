@@ -1,0 +1,62 @@
+{
+  "run_id": "GT02-S33-IPC-01",
+  "timestamp_utc": "2026-09-15T16:50:26.863683+00:00",
+  "source_sha256": "f9656c6d13726d12c71bdf5e6541ee11b1a4f22f1c9c084488b6b5882f0635e8",
+  "native_source_sha256": "246cea725644e363c5799a73cbdef53ad3a491e6a5a386d861320bc2e63a4ae3",
+  "private_store_sha256": "8b92645edf34469efdab7e6e02ea70507f3db16154471685697e6e9bbad2cdc1",
+  "safe_write": "UNSUPPORTED_SAFE_OPEN_WINDOWS",
+  "production_protocol": false,
+  "cases": [
+    {
+      "mode": "stage",
+      "pipe_remote_rejected": true,
+      "pipe_first_instance": true,
+      "handle_inheritance": false,
+      "pid": 27328,
+      "primary_token": {
+        "appcontainer": 1,
+        "sid_matches": true,
+        "integrity": "S-1-16-4096",
+        "capabilities": 0
+      },
+      "error": {
+        "type": "TimeoutError",
+        "message": "Owned pipe operation timed out",
+        "winerror": null
+      }
+    }
+  ],
+  "profile_absent_before": true,
+  "compiler": {
+    "cl_sha256": "f4eba2208e132daf500b7d7bbdf051e930c59dbdc1d87c35e146479427ffeb8d",
+    "link_sha256": "1a9889872481270ca45febcdaf26e75c53cea505c9eb214daea1098d4cf706bd",
+    "msvc_version": "14.44.35207",
+    "sdk_version": "10.0.26100.0",
+    "source_sha256": "246cea725644e363c5799a73cbdef53ad3a491e6a5a386d861320bc2e63a4ae3",
+    "compile": {
+      "host_exit": 0,
+      "stdout": "boundary_child.c\r\n",
+      "stderr": "",
+      "timeout_seconds": 25
+    },
+    "link": {
+      "host_exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout_seconds": 25
+    }
+  },
+  "native_executable_sha256": "be1f84c6b5da0950180f595233a088427291444960f885b0398b5fa1e7439de0",
+  "create_profile_hresult": 0,
+  "error": {
+    "type": "RuntimeError",
+    "message": "IPC case failed: stage",
+    "winerror": null
+  },
+  "delete_profile_hresult": 0,
+  "profile_absent_after": true,
+  "owned_temp_removed": true,
+  "diagnostic_complete": false,
+  "raw_relative": "studio/.local/review-raw/S33/GT02-S33-IPC-01-c84ef6eb68e740bdab1b696405c9234e.json",
+  "raw_sha256": "3782cdbe30f7a583d20b0b9a20d613923a2a53e947c57496b990c8bdd591f7f2"
+}

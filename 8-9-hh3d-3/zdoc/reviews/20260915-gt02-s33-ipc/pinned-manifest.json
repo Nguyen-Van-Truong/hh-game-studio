@@ -1,0 +1,40 @@
+{
+  "schema": "S33_IPC_DIAGNOSTIC_V1",
+  "runtime_source_closure": "983e205a2c815c6e530bf6ef4255d84cc17b4fae0e05a5e9a2848960515d82b1",
+  "artifacts": {
+    "boundary_child.c": "21a04277dca1285f1717afea8d5f0cfe4d6d82fcbeac03fd45b7f484471618bf",
+    "boundary_child_run01.c": "246cea725644e363c5799a73cbdef53ad3a491e6a5a386d861320bc2e63a4ae3",
+    "boundary_child_run02.c": "246cea725644e363c5799a73cbdef53ad3a491e6a5a386d861320bc2e63a4ae3",
+    "boundary_child_run03.c": "246cea725644e363c5799a73cbdef53ad3a491e6a5a386d861320bc2e63a4ae3",
+    "boundary_child_run04.c": "246cea725644e363c5799a73cbdef53ad3a491e6a5a386d861320bc2e63a4ae3",
+    "capture_run.py": "e571bfc392b8bd2ca5d6f2dce523b4dc50b4848e3b2eb7188a9fd0ba77e9f49e",
+    "ipc_probe.py": "8450006dc57cd437b5164a96bf5ff2b9001e55ab2bee4c956cdeb10042522d54",
+    "ipc_probe_run01.py": "f9656c6d13726d12c71bdf5e6541ee11b1a4f22f1c9c084488b6b5882f0635e8",
+    "ipc_probe_run02.py": "406a0451d2dff90a5aa2739728f03d9f569b9000a12e494ef65c003f9f3d5202",
+    "ipc_probe_run03.py": "10e34fa9dea0406641dfed2fae5fce3cdcfc7bcbb3dadde6881de60b49490df1",
+    "ipc_probe_run04.py": "ea79b502000c7ddf69fb488bce6a32db83f68e6e71afcfb5fff7a9e4fef8a02f",
+    "redaction-ledger.json": "188042c6838bffbd82d49c76c6a4aaec7f410e28cd0afd12bc6ecd9d88c68922",
+    "run-01.host.json": "bda089e0858a642dccefafb2a874ba11bcf5051cbc85c9a9476dab0d8afb62ee",
+    "run-01.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "run-01.stdout.json": "f974d407e7456661f70a70abeaa53201ff8dfbe6bebcbfe29795436aa0e905aa",
+    "run-02.host.json": "db28f06cf918447ddd48f0225601641c4024c4850b4397fe44e73ae6f95d2abe",
+    "run-02.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "run-02.stdout.json": "8c4111fbee212bcadc8b2cf8e1a317e6c05b163a0dfe66ac8ac34b821092e60e",
+    "run-03.host.json": "c01feee6b5368e78257687bda53fe00c8ff07c7c3923e7135ad2da34110e516c",
+    "run-03.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "run-03.stdout.json": "8abaf41b3b91b20d861e9168dff66147b8d7b61174296e10fd2e594f77c8b23d",
+    "run-04.host.json": "b4428e44affd184cad6f5d943ed05179ef9b615081559d8009820383df2629e8",
+    "run-04.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "run-04.stdout.json": "00cf77eef0408ccb5be4806b7a5127befda5e283081d6e56489a88d831c9d931",
+    "run-05.host.json": "ed4a194bff118ddbe94f5ab5ee57ddc7aa6739c23cc57ee93cf08d31789aef03",
+    "run-05.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "run-05.stdout.json": "4cad418eba435d2ead0c91227eaf5fc68bd2c83ca3bcfec7f9bbb9355d7a31e9",
+    "verify_package.py": "94e9ac5952f506c7940d0e1681dd4df787607263ee0f3a267f429dff918afa2c"
+  },
+  "dependencies": {
+    "zdoc/reviews/20260915-gt02-s32-boundary/boundary_probe.py": "b3337e327cf10a585407d1fc074c23d6c5ecc7ba67334579c34858f3a6fdf6bd",
+    "zdoc/reviews/20260915-gt02-s32-boundary/windows_api.py": "1afd34eb11fd5ab9a34c37de2a80aabcec04224826a092ff122d5212bd3a50c4",
+    "zdoc/reviews/20260915-gt02-s32-01/source-closure.json": "aaf9afafc2aa1f042b49785c1682277cc43fee8d4107e7332d583fe85381cbbc"
+  },
+  "formal_acceptance": false
+}
