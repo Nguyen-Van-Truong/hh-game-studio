@@ -54,3 +54,19 @@ section: `../20260916-plan-history-s33/tools-plan-s33.txt`, SHA-256
 `1eb33e360f2c6f712768e453e0bb751e6d539eefb922347614b5e4a613a192f0`.
 Historical failed runs, findings, critic verdicts and the earlier blocked S30
 TEMP cleanup are preserved. No cleanup retry was performed on that old target.
+
+Source/evidence checkpoint: `abc88b0`. Both index reconstruction before commit
+and exact-HEAD reconstruction passed; the second proof is stored as
+`git-byte-verification-head.json`. No source change followed the frozen run.
+
+An additional legacy repository-wide governance diagnostic was accidentally
+run without a launch-time deadline: `python tests/bootstrap/test_authoritative_plan.py`.
+Its `rglob` reads all files, including binary/tool caches outside this tools
+scope. It produced no completion marker and was manually stopped after an
+observed 207.571 seconds (already beyond the intended 120-second budget).
+The target was re-identified by PID 37020, parent 24476, exact command and
+creation time `2026-09-15T17:24:38.9409100Z`; a subsequent process query was empty.
+The shell's exit 0 after that forced stop is **not** the Python test's exit or
+a PASS. This extra diagnostic is not either of the passed frozen candidate
+suites. Do not repeat it unbounded or relabel it SKIP/PASS. Future broad checks
+must use the existing bounded host runner from launch, if the scope needs one.

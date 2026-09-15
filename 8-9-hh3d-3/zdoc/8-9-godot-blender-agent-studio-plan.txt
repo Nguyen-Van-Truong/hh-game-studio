@@ -31,7 +31,7 @@ SUBAGENTS_ENABLED=0
 GT02_EVIDENCE_STATUS=FROZEN_CANDIDATE_S34_01
 GT02_REVIEW_STATUS=NOT_REVIEWED_SOLO_S34
 GT02_LAST_TESTED_SOURCE_CLOSURE=2d524684563bfff75e77a67a39ac00f1a63f46d5c2cbcd99725c79d2edb12fe7
-GT02_CHECKPOINT_COMMITS=96c506b,e52b5c0,faedb0d,642d6f5,74d1cc2,52ca04c,52def92,957ea88,572185e,9839be9
+GT02_CHECKPOINT_COMMITS=96c506b,e52b5c0,faedb0d,642d6f5,74d1cc2,52ca04c,52def92,957ea88,572185e,9839be9,abc88b0
 GT02_SAFE_WRITE_STATUS=GAP_UNSUPPORTED_WINDOWS
 GT02_BOUNDARY_EVIDENCE=S33_FIXED_IPC_STAGING_ONLY
 
@@ -49,6 +49,8 @@ Actual host exit/process tree sạch, source/snapshot không đổi;68 source fi
 9 artifacts được rehash. Python/Node/Godot khớp2396 canonical rows/hash; Godot
 thêm9 negative cases. Bảng requirement → test → evidence và audit tái dựng
 Git nằm ở reviews/20260916-gt02-s34-audit/. Chưa có review độc lập cho source này.
+Checkpoint source/evidence S34: abc88b0; index và HEAD đều tái dựng68 source/
+9 artifacts khớp byte. Source không đổi sau lượt test; metadata commit riêng.
 
 Đã có typed schema/JCS/limits, journal/CAS8 process, terminal reservation,
 archive/tombstone, authenticated loopback, Stop/Cancel/UNKNOWN, redaction cả
@@ -99,6 +101,12 @@ GT-10. Inventory S29: Docker local phản hồi, chưa thấy ADB/Android kết 
 đó không là proof Linux/Android đạt. Chưa có cơ sở hẹn ngày xong toàn plan.
 
 KINH NGHIỆM ĐANG ÁP DỤNG
+- Không gọi lại checker legacy toàn repo chỉ vì đổi plan tools. Lượt S34 gọi
+  tests/bootstrap/test_authoritative_plan.py quét cả binary/cache ngoài scope,
+  chưa có marker sau207.57s nên bị dừng đúng PID+creation+parent+command; không
+  tính exit của shell sau Stop-Process là exit test/PASS. Checker scope tools
+  và source freeze dùng runner bounded; nếu cần kiểm rộng, phải đặt host timeout
+  ngay khi launch, không chờ rồi mới giới hạn bằng polling thủ công.
 - CancelIoEx chỉ yêu cầu hủy; chưa quan sát completion thì không giải phóng
   buffer/OVERLAPPED/event. Giữ owner có giới hạn và tiếp tục cleanup đúng handle.
 - no_effect cần chứng minh chưa bắt đầu mutation; mã lỗi validation xuất hiện
@@ -1076,7 +1084,7 @@ pin ghi UNVERIFIED trước implementation. Không cài binary trong lượt rev
 PLAN_DESIGN_REVIEW=SEE_EXACT_HASH_REPORT
 Kiến trúc hiện hành giữ scope tools trước game, fixture độc lập, pin official,
 semantic API, evidence/closure, safe default, gate tuần tự và Android máy thật.
-Tinh gọn S28 chỉ di chuyển nhật ký cũ và đồng bộ chế độ solo; không hạ DoD,
+Tinh gọn S28/S34 chỉ di chuyển nhật ký cũ và đồng bộ chế độ solo; không hạ DoD,
 xóa finding, đổi schema để hợp code, hoặc suy test xanh thành full acceptance.
 Lịch sử S4–S27, quyết định model cũ và runtime chưa đủ proof nằm trong bản S27
 archived và các report được nó tham chiếu. Tình trạng hiện hành xem đầu file.
