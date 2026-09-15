@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 15-09-2026, Asia/Saigon | Revision S30 | TRIỂN KHAI THEO GATE
+Ngày 15-09-2026, Asia/Saigon | Revision S31 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=GT01_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S30
+PLAN_REVISION=S31
 EXECUTION_MODE=CODEX_ASTRA_XHIGH_OWNER_20260915
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=FROZEN_CANDIDATE_S30_01
@@ -34,14 +34,15 @@ GT02_LAST_TESTED_SOURCE_CLOSURE=60799065f406fbb3b13d2dc0df093477210927f86e84b541
 GT02_CHECKPOINT_COMMITS=96c506b,e52b5c0,faedb0d,642d6f5,74d1cc2
 GT02_SAFE_WRITE_STATUS=GAP_UNSUPPORTED_WINDOWS
 
-TIẾN ĐỘ HIỆN HÀNH — S30, 15-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S31, 15-09-2026
 Owner mở lại ba Codex subagent Astra xhigh. Hai lane audit read-only độc lập
 (durability và contract/security), một lane Windows safe-write probe riêng.
 Coordinator là writer source/test/plan và tích hợp; không dùng Grok CLI.
 Các lane S29 và formal review S30 đã kết thúc; verdict giữ đúng hash.
-Các lane tiếp theo: AppContainer probe, broker contract và adapter prerequisites
-read-only. Source S30 checkpoint 74d1cc2; tái dựng từ Git HEAD xác nhận 62 source/
-9 artifacts khớp hash (s30-audit/git-byte-verification-head.json).
+S31 AppContainer probe, broker contract và adapter prerequisites đã hoàn tất;
+đây là diagnostic/preparation, không nghiệm thu thêm gate. Source S30 checkpoint
+74d1cc2; audit metadata 52ca04c. Tái dựng Git xác nhận 62 source/9 artifacts khớp
+hash (s30-audit/git-byte-verification-head.json).
 
 GT-01 ACCEPTED tại a0fb247; closure
 3ace23bcf84598cda64d54bbe3fc4736acde877f9f714fb71e2355d3e809eea4,
@@ -81,11 +82,21 @@ Các report ...s30-windows-probe.md và ...s30-appcontainer-probe/ là diagnosti
 Một TEMP riêng của probe run03 còn lại sau cleanup bị automatic approval review
 chặn; đường dẫn chi tiết và lý do ở report. Không claim mọi TEMP đã sạch.
 
-Tiếp theo: kiểm exact Git bytes và checkpoint S30; lane S31 thử AppContainer
-profile riêng (tạo/cleanup đúng profile do probe sở hữu, không global policy),
-positive control trước negative checks, rồi broker/private-namespace với OS
-isolation và crash/recovery trước
-consumer mutation. Giữ GT-02 CANDIDATE khi còn requirement/review thiếu. Không
+S31 run04 có primary AppContainer thật: đúng SID, Low integrity, zero capability,
+scratch write thành công; read/write/delete/rename/hardlink private đều bị chặn.
+Control cùng command thực hiện được cả năm thao tác. Hai process exit37, đủ
+markers; Job drain về0/PID list rỗng. Profile/package/mapping/TEMP của S31 đã
+dọn và đọc lại xác nhận. Verifier read-only kiểm18 artifacts và raw redaction,
+manifest42a33a9206e5e855ee509aa32c0af1ea602b97da0c885a62074a7b9fef829784.
+Report: reviews/20260915-gt02-s31-appcontainer.md. Đây chỉ là fixed-command
+filesystem boundary; chưa chứng minh IPC/network, handle duplication, reparse
+race, publish/durability hoặc sandbox cho Godot/Blender. Các run lỗi01–03 giữ
+nguyên. Broker contract và GT03/04 prerequisites nằm trong hai report cùng ngày.
+
+Tiếp theo S32: coordinator triển khai CREATE_NEW/readback bằng retained handle
+trong namespace riêng của broker; ba lane kiểm OS boundary nâng cao, activation
+journal contract và native-store failure cases. Chưa mở consumer mutation.
+Giữ GT-02 CANDIDATE khi còn requirement/review thiếu. Không
 dispatch GT-03/04 mutation qua dependency/gap. Không hỏi lại phần triển khai đã
 được owner cấp quyền; không hạ DoD để hợp code hoặc dùng test pass thay chức năng.
 
@@ -106,6 +117,10 @@ KINH NGHIỆM ĐANG ÁP DỤNG
 - JSON records tách LF; không splitlines() làm vỡ Unicode trong chuỗi.
 - Hash source phải tái tạo từ Git blob; evidence giữ exact bytes qua checkout.
 - Không đọc mỗi thuộc tính rồi suy handle đã khóa rename/hardlink.
+- AppContainer cần kiểm primary token, marker và positive control. Environment
+  tối thiểu thiếu biến chuẩn có thể làm CreateProcessW lỗi203; không suy lỗi do
+  một biến khi chỉ mới kiểm cả bundle. Job accounting cần bounded drain; profile
+  API trả đường dẫn AC con, cleanup cần đọc lại package/mapping/TEMP.
 - Sửa có repro, chạy hồi quy ảnh hưởng rồi remint. Không lặp fullsuite cùng
   source đã đạt nếu không có thay đổi/failure/gap liên quan; giữ evidence lỗi.
 
