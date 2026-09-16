@@ -14,6 +14,9 @@
 *.tscn text eol=lf
 *.cfg text eol=lf
 *.blend binary
+# Native-generated pinned Blender fixtures were frozen as CRLF bytes.
+studio/blender-addon/exporter.lock.json -text
+studio/tests/blender/fixtures/box-export-baseline.json -text
 *.snapshot -text
 studio/evidence/** -text
 zdoc/reviews/20260910-r6/worker-output/** -text
@@ -45,6 +48,10 @@ zdoc/reviews/*-gt03-s52*/**/*-engine.log whitespace=-blank-at-eol,-blank-at-eof,
 zdoc/reviews/*-gt03-s52*/**/engine.log whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
 zdoc/reviews/*-gt03-s52*/**/engine-stdout.txt whitespace=blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
 zdoc/reviews/*-gt03-s52*.md -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+# S53 preserves raw component diagnostics and their byte-bound reports.
+zdoc/reviews/*-gt03-s53*.md -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+zdoc/reviews/*-gt03-s53*/**/*-engine.log whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+zdoc/reviews/*-gt03-s53*/**/engine-stdout.txt whitespace=blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
 zdoc/reviews/20260917-plan-history-s50/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 zdoc/reviews/20260917-gt03-s49-profile-evidence-01/stderr.txt whitespace=-blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 zdoc/reviews/20260916-gt03-s47-sandbox/read-only-privileges.txt whitespace=-blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

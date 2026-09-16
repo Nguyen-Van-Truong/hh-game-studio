@@ -1,0 +1,4 @@
+{
+  "scene": "[gd_scene load_steps=2 format=3]\n\n[ext_resource type=\"Script\" path=\"res://scripts/fixture_actor.gd\" id=\"1_script\"]\n\n[node name=\"Fixture\" type=\"Node3D\"]\nscript = ExtResource(\"1_script\")\nfixture_value = 23\nmetadata/hh_studio_id = \"root\"\n",
+  "script": "extends Node3D\n@export var fixture_value: int = 9\n@export var move_speed: float = 2.25\n@export var turn_speed: float = 90.0\n@export var enabled: bool = false\n"
+}

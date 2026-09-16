@@ -1,0 +1,147 @@
+{
+  "checks": [
+    {
+      "label": "actual_owned_gui",
+      "passed": true
+    },
+    {
+      "label": "initial_complete",
+      "passed": true
+    },
+    {
+      "label": "fresh_empty_owned_scene",
+      "passed": true
+    },
+    {
+      "label": "authenticated_native_create",
+      "passed": true
+    },
+    {
+      "label": "duplicate_original_receipt",
+      "passed": true
+    },
+    {
+      "label": "native_undo_over_ipc",
+      "passed": true
+    },
+    {
+      "label": "native_redo_over_ipc",
+      "passed": true
+    },
+    {
+      "label": "native_transform_readback",
+      "passed": true
+    },
+    {
+      "label": "stale_revision_rejected",
+      "passed": true
+    },
+    {
+      "label": "after-stale_complete",
+      "passed": true
+    },
+    {
+      "label": "stale_has_no_effect",
+      "passed": true
+    },
+    {
+      "label": "fixed_owned_save",
+      "passed": true
+    },
+    {
+      "label": "saved_file_exact_bytes",
+      "passed": true
+    },
+    {
+      "label": "background_export_native_complete",
+      "passed": true
+    },
+    {
+      "label": "background_export_job_caps_and_cleanup",
+      "passed": true
+    },
+    {
+      "label": "bounded_glb_preflight",
+      "passed": true
+    },
+    {
+      "label": "native_glb_transform_readback",
+      "passed": true
+    },
+    {
+      "label": "after-export_complete",
+      "passed": true
+    },
+    {
+      "label": "export_does_not_change_ui_state",
+      "passed": true
+    },
+    {
+      "label": "native_library_texture_driver_addon_rejected",
+      "passed": true
+    },
+    {
+      "label": "priority_control_stop",
+      "passed": true
+    },
+    {
+      "label": "stop_retains_original_result",
+      "passed": true
+    },
+    {
+      "label": "stop_refuses_new_dispatch",
+      "passed": true
+    },
+    {
+      "label": "graceful_actual_gui_exit",
+      "passed": true
+    },
+    {
+      "label": "no_secret_in_host_artifacts",
+      "passed": true
+    }
+  ],
+  "cleanup": {
+    "actual_process_exit": {
+      "pid": 32932,
+      "exit_code": 0
+    },
+    "wrapper_exit_code": 0,
+    "job": {
+      "configured": true,
+      "assigned": true,
+      "closed": true,
+      "handle_retained": false,
+      "tainted": false,
+      "zero_observed": true,
+      "active_count": 0,
+      "create_uncertain": false,
+      "close_uncertain": false,
+      "failed_operations": [],
+      "native_error": null
+    },
+    "logs_overflow": false,
+    "closed": true,
+    "held": false,
+    "public_ack": false
+  },
+  "save": {
+    "name": "fixture.blend",
+    "sha256": "233c857230186dc300bfec4ac8a98d77a5d3f11d426a34201ac611c48d297be5",
+    "size_bytes": 97445
+  },
+  "stop_elapsed_ms": 16.00000000325963,
+  "live_job_count": 3,
+  "files": {
+    "close.json": "24b61d8f9f6b7c6f1566852182a280ec55d5eeca37453381822028e47163e3f9",
+    "control-hello.json": "9a4089df275992f46684dfd875866299d0c49ff373bddf8db5def1e3a3b0e15f",
+    "data-hello.json": "9a4089df275992f46684dfd875866299d0c49ff373bddf8db5def1e3a3b0e15f",
+    "launch.json": "e2628e6dc35368750ec3e8112cb26c6f18f94234e8c1fb3e7b177dd21a52b621",
+    "process-exit.json": "844e60f4414684df03b7c75299d3706081719145f2e485bf318d92934994e3b5",
+    "process-start.json": "70f51965ad6170aa15877c562cf83bf28f7ea3013976c0a337f89378c296aa9d",
+    "stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout.txt": "822134b6083f436f4f6828b0f4c9113a0f4a4548af9b8c1123074931dbd2b45f"
+  },
+  "public_ack": false,
+  "acceptance": false
+}

@@ -1,0 +1,119 @@
+{
+  "context_kind": "isolated_candidate",
+  "command_id": "baseline.actual",
+  "run_id": "hh-gt03-a6f58f6686e14137b91243e08d2aa11d",
+  "validation_started_ms": 1789591336178,
+  "validation_completed_ms": 1789591350066,
+  "project_revision": "sha256:a97a20e1ed95dbe67c6ef3a6ce373745f4f63280dfa7254a58e26620f43cc5e8",
+  "manifest_sha256": "a9665b4af9971d5adc06e5618d007d441e74d2783ed099adf831bd97759ae53e",
+  "validator_engine_sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
+  "source_release_sha256": "7ca9aec02710dee4894676f1af74f3774b2d00564361092a266f71e41bc333a3",
+  "semantic": {
+    "context_kind": "isolated_candidate",
+    "jcs_sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+    "revision": "sha256:97d020e63a03d5cdf99d1256feee64bdd8a8b20bf8111ea5f5be6321349832b8",
+    "schema": "hh-godot-semantic-snapshot-1",
+    "serializer_sha256": "dbb2f3163c5442c9b5696490676ba533c4a1ca9aab7b4a089acaea321f27c042",
+    "state": {
+      "nodes": [
+        {
+          "groups": [],
+          "name": "Fixture",
+          "node_type": "Node3D",
+          "owner_id": "",
+          "parent_id": "",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation_degrees": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "sibling_index": 0,
+          "stable_id": "root",
+          "stored": {
+            "auto_translate_mode": 0,
+            "editor_description": "",
+            "enabled": false,
+            "fixture_value": 23,
+            "metadata/hh_studio_id": "root",
+            "move_speed": 2.25,
+            "physics_interpolation_mode": 0,
+            "process_mode": 0,
+            "process_physics_priority": 0,
+            "process_priority": 0,
+            "process_thread_group": 0,
+            "rotation_edit_mode": 0,
+            "rotation_order": 2,
+            "script": {
+              "path": "res://scripts/fixture_actor.gd",
+              "source_sha256": "ddbae2682cac26555cf52a4dce8593f96246eba9ea84881727dcf0d5d55cdd8c",
+              "type": "GDScript"
+            },
+            "top_level": false,
+            "transform": {
+              "type": 18,
+              "value": [
+                {
+                  "type": 17,
+                  "value": [
+                    {
+                      "type": 9,
+                      "value": [
+                        1,
+                        0,
+                        0
+                      ]
+                    },
+                    {
+                      "type": 9,
+                      "value": [
+                        0,
+                        1,
+                        0
+                      ]
+                    },
+                    {
+                      "type": 9,
+                      "value": [
+                        0,
+                        0,
+                        1
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": 9,
+                  "value": [
+                    0,
+                    0,
+                    0
+                  ]
+                }
+              ]
+            },
+            "turn_speed": 90,
+            "unique_name_in_owner": false,
+            "visibility_parent": {
+              "type": 22,
+              "value": ""
+            },
+            "visible": true
+          }
+        }
+      ]
+    }
+  },
+  "public_ack": false,
+  "selected_state_verified": false,
+  "live_editor_adoption_verified": false
+}

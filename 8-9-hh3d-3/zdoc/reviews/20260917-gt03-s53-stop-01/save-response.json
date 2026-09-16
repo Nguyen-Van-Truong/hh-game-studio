@@ -1,0 +1,17 @@
+{
+  "status": 200,
+  "result": {
+    "code": "GODOT_PUBLICATION_RECONCILE_REQUIRED",
+    "command_id": "command.save",
+    "postconditions": {
+      "next_action": "lookup.reconcile",
+      "public_ack": false,
+      "reason": "owner.effect.uncertain",
+      "request_digest": "sha256:e3576abe8a3a179a677f463372938638db626eec0f14465d1918d5e7b3b35f2b"
+    },
+    "result_hash": null,
+    "result_revision": null,
+    "status": "UNKNOWN"
+  },
+  "received_ms": 1789591849997
+}

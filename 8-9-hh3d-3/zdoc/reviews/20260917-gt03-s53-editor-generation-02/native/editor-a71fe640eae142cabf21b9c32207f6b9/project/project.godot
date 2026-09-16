@@ -1,0 +1,10 @@
+config_version=5
+[application]
+config/name="HH managed fixture"
+run/main_scene="res://scenes/fixture.tscn"
+[rendering]
+renderer/rendering_method="gl_compatibility"
+[threading]
+worker_pool/max_threads=4
+[editor_plugins]
+enabled=PackedStringArray("res://addons/hh_studio/plugin.cfg")

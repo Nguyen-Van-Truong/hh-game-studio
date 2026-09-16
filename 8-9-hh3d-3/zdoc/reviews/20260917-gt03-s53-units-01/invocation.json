@@ -1,0 +1,9 @@
+{
+  "code": "import unittest,json,sys\nsuite=unittest.defaultTestLoader.discover('tests/godot',pattern='test_*.py')\ndef flatten(suite):\n    for item in suite:\n        if isinstance(item,unittest.TestSuite):yield from flatten(item)\n        else:yield item\nall_tests=list(flatten(suite));ids=[case.id() for case in all_tests]\nassert len(ids)==len(set(ids))\njournal=sys.argv[1]=='journals'\nchosen=[case for case in all_tests if case.id().startswith('test_publication_journal')==journal]\nprint('GT03_UNIT_INVENTORY '+json.dumps({'all':sorted(ids),'chosen':sorted(case.id() for case in chosen)}),flush=True)\nresult=unittest.TextTestRunner(verbosity=2).run(unittest.TestSuite(chosen))\nprint('GT03_UNIT_COMPLETE '+json.dumps({'run':result.testsRun,'failures':len(result.failures),'errors':len(result.errors),'skips':len(result.skipped)}),flush=True)\nsys.exit(not result.wasSuccessful())\n",
+  "partitions": [
+    "journals",
+    "other"
+  ],
+  "runner_sha256": "ea522450acc46f90be5e2a7b9257e73ce8b619948105b2c9073aac1f881c7328",
+  "controller_sha256": "c58bf9605e17f21655863cac383ecc57b2795f722c90301756dc114db328c9b7"
+}

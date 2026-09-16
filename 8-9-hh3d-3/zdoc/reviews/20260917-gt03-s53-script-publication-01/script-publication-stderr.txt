@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s53-script-publication-01\source\studio\tests\godot\run_script_publication_probe.py", line 306, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s53-script-publication-01\source\studio\tests\godot\run_script_publication_probe.py", line 268, in main
+    return frozen(args.output, args.binary, args.closure)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s53-script-publication-01\source\studio\tests\godot\run_script_publication_probe.py", line 140, in frozen
+    check('publication_lease_renewed', status == 200)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s53-script-publication-01\source\studio\tests\godot\run_script_publication_probe.py", line 57, in check
+    raise AssertionError(label)
+AssertionError: publication_lease_renewed

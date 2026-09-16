@@ -1,0 +1,27 @@
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-ipc-02\source\studio\tests\blender\run_blender_ipc_probe.py", line 137, in <module>
+    if __name__=='__main__':raise SystemExit(main())
+                                             ^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-ipc-02\source\studio\tests\blender\run_blender_ipc_probe.py", line 114, in main
+    if args.frozen:return frozen(out,args.binary)
+                          ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-ipc-02\source\studio\tests\blender\run_blender_ipc_probe.py", line 76, in frozen
+    saved=owner.execute(command('save','checkpoint.save',now,{'slot':'fixture'}))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-ipc-02\source\studio\host\blender\ui_host.py", line 224, in execute
+    row=self.submit(command); deadline=time.monotonic()+timeout
+        ^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-ipc-02\source\studio\host\blender\ui_host.py", line 217, in submit
+    return self._ask('data','submit',{'command':command,'ttl_ms':ttl_ms})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-ipc-02\source\studio\host\blender\ui_host.py", line 197, in _ask
+    reply=self._wait(channel,deadline)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-ipc-02\source\studio\host\blender\ui_host.py", line 183, in _wait
+    value=channel.poll()
+          ^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-ipc-02\source\studio\blender-addon\ipc_client.py", line 86, in poll
+    need(bool(raw), 'IPC_EOF')
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-ipc-02\source\studio\blender-addon\ipc_client.py", line 40, in need
+    raise IPCError(code)
+_hh_blender_fe9d394d5a566766d7c7f22df0b3bdfc044934c1b59e31eab0838a5a1e1e6b59.IPCError: IPC_EOF

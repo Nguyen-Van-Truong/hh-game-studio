@@ -1,0 +1,56 @@
+{
+  "source_closure_sha256": "ce5972578aaf06c53fc2860027c68b8dfd4cd8d8bfe48ffbddead9007440a1dd",
+  "unit": {
+    "wrapper_pid": 12576,
+    "started_at": "2026-09-16T20:58:16.376622+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests/blender",
+      "-p",
+      "test_*.py",
+      "-v"
+    ],
+    "exit_code": 0,
+    "target_pid": 41448,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "unit-stdout.txt",
+    "stderr": "unit-stderr.txt",
+    "host": "unit-host.json"
+  },
+  "host": {
+    "wrapper_pid": 27776,
+    "started_at": "2026-09-16T20:58:17.298676+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "$SNAPSHOT/tests/blender/run_blender_ipc_probe.py",
+      "--frozen",
+      "--output",
+      "20260917-gt04-export-04",
+      "--binary",
+      "blender.exe",
+      "--export"
+    ],
+    "exit_code": 0,
+    "target_pid": 5512,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "native-stdout.txt",
+    "stderr": "native-stderr.txt",
+    "host": "native-host.json"
+  },
+  "candidate_only": true,
+  "public_ack": false,
+  "source_unchanged": true,
+  "snapshot_unchanged": true
+}

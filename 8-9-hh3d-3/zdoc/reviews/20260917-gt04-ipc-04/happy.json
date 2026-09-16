@@ -1,0 +1,119 @@
+{
+  "checks": [
+    {
+      "label": "actual_owned_gui",
+      "passed": true
+    },
+    {
+      "label": "initial_complete",
+      "passed": true
+    },
+    {
+      "label": "fresh_empty_owned_scene",
+      "passed": true
+    },
+    {
+      "label": "authenticated_native_create",
+      "passed": true
+    },
+    {
+      "label": "duplicate_original_receipt",
+      "passed": true
+    },
+    {
+      "label": "native_undo_over_ipc",
+      "passed": true
+    },
+    {
+      "label": "native_redo_over_ipc",
+      "passed": true
+    },
+    {
+      "label": "native_transform_readback",
+      "passed": true
+    },
+    {
+      "label": "stale_revision_rejected",
+      "passed": true
+    },
+    {
+      "label": "after-stale_complete",
+      "passed": true
+    },
+    {
+      "label": "stale_has_no_effect",
+      "passed": true
+    },
+    {
+      "label": "fixed_owned_save",
+      "passed": true
+    },
+    {
+      "label": "saved_file_exact_bytes",
+      "passed": true
+    },
+    {
+      "label": "priority_control_stop",
+      "passed": true
+    },
+    {
+      "label": "stop_retains_original_result",
+      "passed": true
+    },
+    {
+      "label": "stop_refuses_new_dispatch",
+      "passed": true
+    },
+    {
+      "label": "graceful_actual_gui_exit",
+      "passed": true
+    },
+    {
+      "label": "no_secret_in_host_artifacts",
+      "passed": true
+    }
+  ],
+  "cleanup": {
+    "actual_process_exit": {
+      "pid": 28696,
+      "exit_code": 0
+    },
+    "wrapper_exit_code": 0,
+    "job": {
+      "configured": true,
+      "assigned": true,
+      "closed": true,
+      "handle_retained": false,
+      "tainted": false,
+      "zero_observed": true,
+      "active_count": 0,
+      "create_uncertain": false,
+      "close_uncertain": false,
+      "failed_operations": [],
+      "native_error": null
+    },
+    "logs_overflow": false,
+    "closed": true,
+    "held": false,
+    "public_ack": false
+  },
+  "save": {
+    "name": "fixture.blend",
+    "sha256": "5fc90305d08f69a974508de893316fe9d469750ae36503c4545dec35cbe04c86",
+    "size_bytes": 97417
+  },
+  "stop_elapsed_ms": 16.00000000325963,
+  "live_job_count": 3,
+  "files": {
+    "close.json": "e4c9b48bbde4525275426aa056dcace03366dda5280e7ee5e912e7c5b5c8a2f4",
+    "control-hello.json": "d8f18fec6b6c17010c82e2ccc903b0a092cc2ebef91cacecbc8808f54aefd979",
+    "data-hello.json": "d8f18fec6b6c17010c82e2ccc903b0a092cc2ebef91cacecbc8808f54aefd979",
+    "launch.json": "a9c4a73b355f36f4c742eb7e9c926d3fb06250d72f751009a73894c3af436cc7",
+    "process-exit.json": "822b41e4fe4caa4467dd5617d09ccc73a7b7eefdaa76b2ef190ea5cc301b8a78",
+    "process-start.json": "788f176835766f74886820f4972942db2f1227ddcd007131eb1da47812b1565b",
+    "stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout.txt": "11ac86c762a5f62dde0e5d3dff443078a64495526366428853a1c252c51db4fa"
+  },
+  "public_ack": false,
+  "acceptance": false
+}

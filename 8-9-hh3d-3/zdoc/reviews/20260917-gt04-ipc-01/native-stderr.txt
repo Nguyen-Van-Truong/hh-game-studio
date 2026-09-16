@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-ipc-01\source\studio\tests\blender\run_blender_ipc_probe.py", line 136, in <module>
+    if __name__=='__main__':raise SystemExit(main())
+                                             ^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-ipc-01\source\studio\tests\blender\run_blender_ipc_probe.py", line 113, in main
+    if args.frozen:return frozen(out,args.binary)
+                          ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-ipc-01\source\studio\tests\blender\run_blender_ipc_probe.py", line 54, in frozen
+    check('actual_owned_gui',owner.pid>0 and owner._job.active_count()==2)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-ipc-01\source\studio\tests\blender\run_blender_ipc_probe.py", line 42, in check
+    if value is not True:raise ValueError(label)
+                         ^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: actual_owned_gui

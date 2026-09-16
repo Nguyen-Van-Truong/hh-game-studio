@@ -1,0 +1,300 @@
+{
+  "public_ack": false,
+  "candidate_only": true,
+  "completed": true,
+  "native": {
+    "schema": "HH-BLENDER-EXPORT-RESULT-1",
+    "profile": {
+      "schema": "HH-BLENDER-BOX-EXPORT-PROFILE-1",
+      "objects": 1,
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 0,
+      "images": 0,
+      "bones": 0,
+      "clips": 0,
+      "libraries": 0,
+      "drivers": 0,
+      "exporter_version": [
+        5,
+        2,
+        40
+      ],
+      "exporter_files_sha256": "22a180855eda3e7f1a075bf28d7c256e4498be16c96be4e7412a438ce96ec481",
+      "public_ack": false
+    },
+    "input_sha256": "3e933c7d8146104fa9f219ba82a0f6b11133059d86a72b7119b26006a0bb8ae1",
+    "scene_revision": "sha256:d85c9f3a35e9f1b3f171f6095319c45418888174a2f528cb27389576683200ff",
+    "snapshot": {
+      "schema": "HH-BLENDER-FIXTURE-SCENE-1",
+      "objects": [
+        {
+          "object_id": "box",
+          "name": "GT04_box",
+          "mesh_name": "GT04_mesh_box",
+          "location": [
+            2.0,
+            -3.0,
+            4.0
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            2.0,
+            1.0
+          ],
+          "vertices": [
+            [
+              -0.5,
+              -1.0,
+              -1.5
+            ],
+            [
+              0.5,
+              -1.0,
+              -1.5
+            ],
+            [
+              0.5,
+              1.0,
+              -1.5
+            ],
+            [
+              -0.5,
+              1.0,
+              -1.5
+            ],
+            [
+              -0.5,
+              -1.0,
+              1.5
+            ],
+            [
+              0.5,
+              -1.0,
+              1.5
+            ],
+            [
+              0.5,
+              1.0,
+              1.5
+            ],
+            [
+              -0.5,
+              1.0,
+              1.5
+            ]
+          ],
+          "faces": [
+            [
+              0,
+              3,
+              2,
+              1
+            ],
+            [
+              4,
+              5,
+              6,
+              7
+            ],
+            [
+              0,
+              1,
+              5,
+              4
+            ],
+            [
+              1,
+              2,
+              6,
+              5
+            ],
+            [
+              2,
+              3,
+              7,
+              6
+            ],
+            [
+              3,
+              0,
+              4,
+              7
+            ]
+          ]
+        }
+      ],
+      "units": {
+        "system": "METRIC",
+        "scale_length": 1.0
+      }
+    },
+    "context": {
+      "mode": "OBJECT",
+      "active_id": null,
+      "selected_ids": []
+    },
+    "output_sha256": "633d51e7292e60a93d1a77992f8efc107f5bce5bb2afaa97f6e2d4cdf33efd4c",
+    "output_size_bytes": 1456,
+    "public_ack": false,
+    "native_finished": true,
+    "context_unchanged": true,
+    "admission_probe": [
+      {
+        "label": "object_driver",
+        "passed": true
+      },
+      {
+        "label": "scene_driver",
+        "passed": true
+      },
+      {
+        "label": "material",
+        "passed": true
+      },
+      {
+        "label": "missing_texture",
+        "passed": true
+      },
+      {
+        "label": "geometry_nodes",
+        "passed": true
+      },
+      {
+        "label": "unapproved_addon",
+        "passed": true
+      },
+      {
+        "label": "missing_exporter_addon",
+        "passed": true
+      },
+      {
+        "label": "linked_library",
+        "passed": true
+      },
+      {
+        "label": "missing_library",
+        "passed": true
+      }
+    ]
+  },
+  "preflight": {
+    "schema": "HH-GLB-BOX-PREFLIGHT-1",
+    "sha256": "633d51e7292e60a93d1a77992f8efc107f5bce5bb2afaa97f6e2d4cdf33efd4c",
+    "size_bytes": 1456,
+    "objects": 1,
+    "triangles": 12,
+    "decoded_buffer_bytes": 648,
+    "texture_decoded_bytes": 0,
+    "materials": 0,
+    "images": 0,
+    "extensions": [],
+    "uri_count": 0,
+    "meshes": [
+      {
+        "name": "GT04_box",
+        "mesh": 0,
+        "vertices": 24,
+        "triangles": 12,
+        "unique_positions": [
+          [
+            -0.5,
+            -1.5,
+            -1.0
+          ],
+          [
+            -0.5,
+            -1.5,
+            1.0
+          ],
+          [
+            -0.5,
+            1.5,
+            -1.0
+          ],
+          [
+            -0.5,
+            1.5,
+            1.0
+          ],
+          [
+            0.5,
+            -1.5,
+            -1.0
+          ],
+          [
+            0.5,
+            -1.5,
+            1.0
+          ],
+          [
+            0.5,
+            1.5,
+            -1.0
+          ],
+          [
+            0.5,
+            1.5,
+            1.0
+          ]
+        ],
+        "translation": [
+          2,
+          4,
+          3
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          2
+        ]
+      }
+    ],
+    "public_ack": false
+  },
+  "artifact": {
+    "name": "output.glb",
+    "sha256": "633d51e7292e60a93d1a77992f8efc107f5bce5bb2afaa97f6e2d4cdf33efd4c",
+    "size_bytes": 1456
+  },
+  "status": "INTERNAL_EXPORT_VERIFIED",
+  "job": {
+    "configured": true,
+    "assigned": true,
+    "closed": true,
+    "handle_retained": false,
+    "tainted": false,
+    "zero_observed": true,
+    "active_count": 0,
+    "create_uncertain": false,
+    "close_uncertain": false,
+    "failed_operations": [],
+    "native_error": null
+  },
+  "wrapper_exit_code": 0,
+  "limits": {
+    "job_memory_bytes": 2147483648,
+    "job_user_time_100ns": 150000000,
+    "active_process_limit": 4,
+    "limit_flags": 8716,
+    "wall_seconds": 20,
+    "workspace_bytes_limit": 33554432,
+    "workspace_limit_is_watchdog": true,
+    "each_log_capture_bytes": 262144
+  },
+  "actual_process_exit": {
+    "pid": 12988,
+    "exit_code": 0
+  }
+}

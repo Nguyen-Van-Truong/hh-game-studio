@@ -1,0 +1,48 @@
+{
+  "code": "GODOT_PREVIEW_READY",
+  "command_id": "preview.script",
+  "postconditions": {
+    "affected_files": [
+      "scripts/fixture_actor.gd"
+    ],
+    "changes_applied": false,
+    "checkpoint_required": true,
+    "command_id": "preview.script",
+    "diff": [
+      {
+        "after_lines": 2,
+        "after_sha256": "5dccc23e426d491cd176c39a1b0b085efa12546651b2994627043b8a67091a4d",
+        "after_utf8_bytes": 50,
+        "before_sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+        "diff_truncated": false,
+        "display_utf8_bytes": 162,
+        "full_diff_lines": 6,
+        "kind": "script.replace",
+        "path": "scripts/fixture_actor.gd",
+        "unified_diff": [
+          "--- scripts/fixture_actor.gd\n",
+          "+++ scripts/fixture_actor.gd\n",
+          "@@ -1,2 +1,2 @@\n",
+          " extends Node3D\n",
+          "-@export var fixture_value: int = 7\n",
+          "+@export var fixture_value: int = 9\n"
+        ]
+      }
+    ],
+    "expected_generation": 1,
+    "expected_revision": "sha256:b490f5e3619050c6b5b726e29000c0f2c8223f6c2659429dbd5cebd49259c48e",
+    "operation": "script_text.replace",
+    "preview_of": "script_text.replace",
+    "project_revision": "sha256:23347d391bcba8de45d84860d55659d43b05650175ccba865389eb1d0d2e0808",
+    "recovery": "checkpoint_and_staged_parse_publish",
+    "request_digest": "sha256:62704db98141440e073aa30a401bd514ac41e39db6f6c87c4ca60f8f68c7cbab",
+    "requires_runtime_validation": true,
+    "runtime_authorized": false,
+    "scene_revision": "sha256:b490f5e3619050c6b5b726e29000c0f2c8223f6c2659429dbd5cebd49259c48e",
+    "script_parse_status": "NOT_RUN",
+    "script_profile": "hh-godot-declarative-1"
+  },
+  "result_hash": null,
+  "result_revision": null,
+  "status": "COMMITTED"
+}

@@ -1,0 +1,21 @@
+{
+  "command_id": "command.script",
+  "schema_version": "hh-studio-0.1",
+  "project_id": "project.fixture",
+  "operation": "script_text.replace",
+  "lease_id": "lease.daf424f25acb959453d6ae940f23e184",
+  "fencing_epoch": 1,
+  "expected_revision": "sha256:b490f5e3619050c6b5b726e29000c0f2c8223f6c2659429dbd5cebd49259c48e",
+  "target": {
+    "path": "scripts/fixture_actor.gd"
+  },
+  "payload": {
+    "expected_generation": 1,
+    "expected_project_revision": "sha256:23347d391bcba8de45d84860d55659d43b05650175ccba865389eb1d0d2e0808",
+    "expected_sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+    "text": "extends Node3D\n@export var fixture_value: int = 9\n"
+  },
+  "payload_hash": "sha256:f0cdc607096504de09d7d957cfdaa5863a88b4bdd96470c9ebed9d2e8ece26eb",
+  "deadline_ms": 1789591577241,
+  "digest": "sha256:2b8991bfdf0ccbd399293fb0b38797ebba1da30fb1b4029ba91333d2a4e515d9"
+}
