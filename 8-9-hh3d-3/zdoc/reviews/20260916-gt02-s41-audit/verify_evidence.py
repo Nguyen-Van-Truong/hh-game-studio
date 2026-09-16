@@ -6,7 +6,7 @@ ROOT = Path(__file__).resolve().parents[3]
 STUDIO = ROOT / 'studio'
 PACK = ROOT / 'zdoc/reviews/20260916-gt02-s39-02'
 DIAG = ROOT / 'zdoc/reviews/20260916-gt02-s41-audit'
-MANIFEST_HASH = 'b070562fcaf8b9eb1882e5bcabe72ac14ac4eb9e3088cf7a657485297a1ade03'
+MANIFEST_HASH = '603effd14b10f253dfb02f9d0dfd74bf33390ef00436d5ff63dcc6b8ad4a3c19'
 
 def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
 def read(p): return json.loads(p.read_text(encoding='utf-8'))
