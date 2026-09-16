@@ -1,0 +1,585 @@
+{
+  "observed_at_utc": "2026-09-16T22:35:36.533973+00:00",
+  "controller_sha256": "46d27dd3a3c188ad90abd8a951d6723314e989ebd642fae6be68dbe1232394da",
+  "verification_script_sha256": "17a22ba1dc7f58d40763201a716cea2dc84c0ccdc3da0723457795ec41c9904c",
+  "source_closure_sha256": "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+  "native_processes_started": 0,
+  "historical_fixture_replay_only": true,
+  "gt03_acceptance": false,
+  "fixtures": [
+    {
+      "lane": "save",
+      "path": "20260917-gt03-s53-publication-01",
+      "source_closure_sha256": "31a66517322bc57665aa316c53a88686ee27037a38ff055b1744327ad2464cec",
+      "files_sha256": {
+        "publication.json": "d762186d8f067444500bab5c419b13b1cb7862c158c38b8871234f6e5fe82308",
+        "publication-stdout.txt": "35085b49ec3274b1ea871c63cd9207361acef1f76dac5f215b578ab7a5c86a83",
+        "publication-host.json": "7d9115980acd4e7ea4b99d5f64f469684e999f171b07a600144e812d9f8f16ff"
+      },
+      "check_count": 17
+    },
+    {
+      "lane": "script",
+      "path": "20260917-gt03-s53-script-publication-02",
+      "source_closure_sha256": "31a66517322bc57665aa316c53a88686ee27037a38ff055b1744327ad2464cec",
+      "files_sha256": {
+        "publication.json": "d6e1a51a253d8165bbac5f9976290071e6a242b6d15e164ac3776874360d0864",
+        "script-publication-stdout.txt": "607543cc1bd740a6a6c78691abcd201f5eb12d50e32643381a8da30bba195db8",
+        "script-publication-host.json": "f0795f53d13ecbd94c9568b6bf2076c5374e4082236ef086320713dc91c1c37b"
+      },
+      "check_count": 31
+    },
+    {
+      "lane": "edit",
+      "path": "20260917-gt03-s54-edit-publication-03",
+      "source_closure_sha256": "0fa75dac3afe05a7476ad12c852be221eb84c512f46f853d4c8ee1fab2042a32",
+      "files_sha256": {
+        "publication.json": "b4de6eaafffcbaa6bbd1dc1cd095540dfd472300111d422ebbe1a63cd5066ffc",
+        "edit-publication-stdout.txt": "292fe91782c9dbacbc019c82535402a0242369a02f94e98235690c974e99e6f1",
+        "edit-publication-host.json": "3883d077cf9a173845d2b23c072bcb49a4f9410a72b58f278641f2e13fba124d"
+      },
+      "check_count": 61
+    },
+    {
+      "lane": "stop",
+      "path": "20260917-gt03-s53-stop-01",
+      "source_closure_sha256": "31a66517322bc57665aa316c53a88686ee27037a38ff055b1744327ad2464cec",
+      "files_sha256": {
+        "publication-stop.json": "88cd964c0b133f919224c38e2a65ab209f5dff857cb8cebc06d244b099a98f4b",
+        "publication-stop-stdout.txt": "e3b68dfd7bfc366c7da1c24ef086ccbae8bcfbfe91c62b504efc830fe540130d",
+        "publication-stop-host.json": "7a36a4289e3cf8cdbd02f371be533f8623ea3dc86bca6ab87c833540cfdd62bd"
+      },
+      "check_count": 19
+    },
+    {
+      "lane": "fifo",
+      "path": "20260917-gt03-s54-fifo-publication-01",
+      "source_closure_sha256": "54cd2bf1d53ff8aeea0bea7b592f7f8a4a09dd663054c904c2d373dcc2e190d5",
+      "files_sha256": {
+        "fifo-publication.json": "4c156742645fde05c27fff519f8e66a22b6aad95bd96bfd31a192436f5530255",
+        "fifo-publication-stdout.txt": "f2df801cf42ea8e9c2a118effe6491be51768f724b448d6286bce74c94ee3283",
+        "fifo-publication-host.json": "34f20937313219d26df9e1972361496a6e210dfe6d04e9b5174751793cf18981"
+      },
+      "check_count": 44
+    },
+    {
+      "lane": "recovery-publication",
+      "path": "20260917-gt03-s54-recovery-publication-01",
+      "source_closure_sha256": "469b22d6788ef63c7ca4d6e7dc91e703494db439834dffacdef7d476a9464bdc",
+      "files_sha256": {
+        "recovery.json": "2feb30e44bf88e03ec0107d6f32f2ecf64d1637859921ca69cb507d20018ce3b",
+        "recovery-publication-stdout.txt": "d9bf2c932c06c245c872de6c659c0ac59a543e5c42aa788260c5c0ca4d6325c1",
+        "recovery-publication-host.json": "6707ed87a0ab4a143cc0ce789d7dc2dba9e102632da8b6157f546b9e9250f3c2",
+        "original-host.json": "7b2b38a439f1e6864ec3b825c46d32d1dc67662ac8e406362ba08e7e72e70138",
+        "original/original-host.json": "500d7fb4e44a5226e4c87c1010612d30ed1d57baaeed81e32cb233d0fbd348b7"
+      },
+      "check_count": 14
+    },
+    {
+      "lane": "scene-cas",
+      "path": "20260917-gt03-s54-recovery-cuts-02/scene-cas",
+      "source_closure_sha256": "478797d092509af2ae88cf3ad7a71b28b09a55e401d4b51e90c91544c0319564",
+      "files_sha256": {
+        "result.json": "f7dab94d5cfb0acf8b82bf3a90282310bf8488fbd9265ac0cd995e202d53e296",
+        "recovery-cut-stdout.txt": "4b1b5f557430bbee5f7138950810f2a2af8367e0a4140b5a6990b8517dffb7de",
+        "recovery-cut-host.json": "ea37178804a18957a265ba5ef93e3367f9c597f34d21da8a82f702db8b567400",
+        "original-host.json": "865e4a0ffb176689ca2074cf202f147e6db4f10cc142c8d468880992ec68f27e",
+        "original/publisher-host.json": "f53ad5ccdd146586e99b2d3be8407460d9575e9f54e773bc5b5f9ce76a38b08e"
+      },
+      "check_count": 21
+    },
+    {
+      "lane": "script-committed",
+      "path": "20260917-gt03-s54-recovery-cuts-03/script-committed",
+      "source_closure_sha256": "478797d092509af2ae88cf3ad7a71b28b09a55e401d4b51e90c91544c0319564",
+      "files_sha256": {
+        "result.json": "4a7a2bdfd8cde9370ddf0eb1ef2b4f2f209934b8b97230e17426bd2d7fb49be5",
+        "recovery-cut-stdout.txt": "5c2337cbc5c15727ec7dcb73b352e1b08e8fd67d7a7e2982b46cba4b6c9f2657",
+        "recovery-cut-host.json": "9ac55dc468e62e90f253760dbb00b6e09d5be36a22ecf75486e1f6b376c2e2c0",
+        "original-host.json": "f3c53f181c5e04b9909cba81397d8ebb9ef1a619fa0a53b5be313d544a1d539f",
+        "original/publisher-host.json": "ac58dba500294aff8464381befecc647ae32c29a4319f2234cc6cbbc5e9d8ce7"
+      },
+      "check_count": 21
+    },
+    {
+      "lane": "script-retired",
+      "path": "20260917-gt03-s54-recovery-cuts-03/script-retired",
+      "source_closure_sha256": "478797d092509af2ae88cf3ad7a71b28b09a55e401d4b51e90c91544c0319564",
+      "files_sha256": {
+        "result.json": "1051d83f0bc180003b5af60084cde8ad0324abb98a4650e01110e4bf83236471",
+        "recovery-cut-stdout.txt": "77afaaafe1895130e73fbf8266731d3a4e785c96b57a61a6f9a484916053151c",
+        "recovery-cut-host.json": "e09a4df3f09cc8751568bb2000d46db0bdc1ae4b72d91a1253b8b4a95ee90bc5",
+        "original-host.json": "0d72546908a70621539080741f83b41aba7110e370be81adc3d062f4085b6d23",
+        "original/publisher-host.json": "b73592a951a1068c91ab46d4e4be14ca25f23d27f3283dc25b30a15f27ec0ebe"
+      },
+      "check_count": 21
+    },
+    {
+      "lane": "edit-applied",
+      "path": "20260917-gt03-s54-recovery-cuts-03/edit-applied",
+      "source_closure_sha256": "478797d092509af2ae88cf3ad7a71b28b09a55e401d4b51e90c91544c0319564",
+      "files_sha256": {
+        "result.json": "aaaf0168b756a890d2ac110c8c7522382dcc416f89c8ff4e16ef29ed17d94a02",
+        "recovery-cut-stdout.txt": "284e25d908452b299eaa685c64c87633333a9d4bbc12bb3a8693f6f900e1dfa0",
+        "recovery-cut-host.json": "a006fc7a713f57ffaa7f80f26f108e8b32b7aaf7cbe1e03c798ff07f8eb41fb0",
+        "original-host.json": "d1f57e59cfa4632accbc23078a9809d2a1287e79e2c577a44d4627784cc0a161",
+        "original/publisher-host.json": "eee048ad1e9e7e8c3f96d01dacdd17535ea2ffadb1d74767a1ab2a11df319495"
+      },
+      "check_count": 21
+    },
+    {
+      "lane": "script-unwitnessed",
+      "path": "20260917-gt03-s54-recovery-cuts-03/script-unwitnessed",
+      "source_closure_sha256": "478797d092509af2ae88cf3ad7a71b28b09a55e401d4b51e90c91544c0319564",
+      "files_sha256": {
+        "result.json": "00d463ba5e0f87c13fbe8e0a353b14b171fe441878de656a2330839a05b0a88d",
+        "recovery-cut-stdout.txt": "78ae714a70c1a8d847e178bfb48e67aee9dc75f1678e1b13d959a042a3a13325",
+        "recovery-cut-host.json": "fe53d6c4f42066c2e9e3ef7ca209f1230e61464627d154f43c69b4e9dd3e5638",
+        "original-host.json": "7bf603331ebcf6fce8a2ff341d22f35d77b525700671d23304093540287fb2a3",
+        "original/publisher-host.json": "e0d6bf90074f2681cd2861259f0e8edb04e4275e1fdc44906994fee5a9fe07fd"
+      },
+      "check_count": 24
+    }
+  ],
+  "checks": [
+    {
+      "name": "save: historical result/marker/raw exit",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "save: reject raw_pid",
+      "passed": true,
+      "rejection": "outer raw exit mismatch"
+    },
+    {
+      "name": "save: reject raw_exit",
+      "passed": true,
+      "rejection": "outer raw exit mismatch"
+    },
+    {
+      "name": "save: reject source",
+      "passed": true,
+      "rejection": "lane success/source mismatch"
+    },
+    {
+      "name": "save: reject marker",
+      "passed": true,
+      "rejection": "completion marker/result mismatch"
+    },
+    {
+      "name": "save: reject count",
+      "passed": true,
+      "rejection": "completion marker/result mismatch"
+    },
+    {
+      "name": "save: historical bytes unchanged",
+      "passed": true
+    },
+    {
+      "name": "script: historical result/marker/raw exit",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "script: reject raw_pid",
+      "passed": true,
+      "rejection": "outer raw exit mismatch"
+    },
+    {
+      "name": "script: reject raw_exit",
+      "passed": true,
+      "rejection": "outer raw exit mismatch"
+    },
+    {
+      "name": "script: reject source",
+      "passed": true,
+      "rejection": "lane success/source mismatch"
+    },
+    {
+      "name": "script: reject marker",
+      "passed": true,
+      "rejection": "completion marker/result mismatch"
+    },
+    {
+      "name": "script: reject count",
+      "passed": true,
+      "rejection": "completion marker/result mismatch"
+    },
+    {
+      "name": "script: historical bytes unchanged",
+      "passed": true
+    },
+    {
+      "name": "edit: historical result/marker/raw exit",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "edit: reject raw_pid",
+      "passed": true,
+      "rejection": "outer raw exit mismatch"
+    },
+    {
+      "name": "edit: reject raw_exit",
+      "passed": true,
+      "rejection": "outer raw exit mismatch"
+    },
+    {
+      "name": "edit: reject source",
+      "passed": true,
+      "rejection": "lane success/source mismatch"
+    },
+    {
+      "name": "edit: reject marker",
+      "passed": true,
+      "rejection": "completion marker/result mismatch"
+    },
+    {
+      "name": "edit: reject count",
+      "passed": true,
+      "rejection": "completion marker/result mismatch"
+    },
+    {
+      "name": "edit: historical bytes unchanged",
+      "passed": true
+    },
+    {
+      "name": "stop: historical result/marker/raw exit",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "stop: reject raw_pid",
+      "passed": true,
+      "rejection": "outer raw exit mismatch"
+    },
+    {
+      "name": "stop: reject raw_exit",
+      "passed": true,
+      "rejection": "outer raw exit mismatch"
+    },
+    {
+      "name": "stop: reject source",
+      "passed": true,
+      "rejection": "lane success/source mismatch"
+    },
+    {
+      "name": "stop: reject marker",
+      "passed": true,
+      "rejection": "completion marker/result mismatch"
+    },
+    {
+      "name": "stop: reject count",
+      "passed": true,
+      "rejection": "completion marker/result mismatch"
+    },
+    {
+      "name": "stop: historical bytes unchanged",
+      "passed": true
+    },
+    {
+      "name": "fifo: historical result/marker/raw exit",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "fifo: reject raw_pid",
+      "passed": true,
+      "rejection": "outer raw exit mismatch"
+    },
+    {
+      "name": "fifo: reject raw_exit",
+      "passed": true,
+      "rejection": "outer raw exit mismatch"
+    },
+    {
+      "name": "fifo: reject source",
+      "passed": true,
+      "rejection": "lane success/source mismatch"
+    },
+    {
+      "name": "fifo: reject marker",
+      "passed": true,
+      "rejection": "completion marker/result mismatch"
+    },
+    {
+      "name": "fifo: reject count",
+      "passed": true,
+      "rejection": "completion marker/result mismatch"
+    },
+    {
+      "name": "fifo: historical bytes unchanged",
+      "passed": true
+    },
+    {
+      "name": "recovery-publication: historical result/marker/raw exit",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "recovery-publication: reject raw_pid",
+      "passed": true,
+      "rejection": "outer raw exit mismatch"
+    },
+    {
+      "name": "recovery-publication: reject raw_exit",
+      "passed": true,
+      "rejection": "outer raw exit mismatch"
+    },
+    {
+      "name": "recovery-publication: reject source",
+      "passed": true,
+      "rejection": "lane success/source mismatch"
+    },
+    {
+      "name": "recovery-publication: reject marker",
+      "passed": true,
+      "rejection": "completion marker/result mismatch"
+    },
+    {
+      "name": "recovery-publication: reject count",
+      "passed": true,
+      "rejection": "completion marker/result mismatch"
+    },
+    {
+      "name": "recovery-publication: reject original_raw_pid",
+      "passed": true,
+      "rejection": "original crash raw exit/owned Job mismatch"
+    },
+    {
+      "name": "recovery-publication: reject original_raw_exit",
+      "passed": true,
+      "rejection": "original crash raw exit/owned Job mismatch"
+    },
+    {
+      "name": "recovery-publication: historical bytes unchanged",
+      "passed": true
+    },
+    {
+      "name": "scene-cas: historical result/marker/raw exit",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "scene-cas: reject raw_pid",
+      "passed": true,
+      "rejection": "outer raw exit mismatch"
+    },
+    {
+      "name": "scene-cas: reject raw_exit",
+      "passed": true,
+      "rejection": "outer raw exit mismatch"
+    },
+    {
+      "name": "scene-cas: reject source",
+      "passed": true,
+      "rejection": "lane success/source mismatch"
+    },
+    {
+      "name": "scene-cas: reject marker",
+      "passed": true,
+      "rejection": "completion marker/result mismatch"
+    },
+    {
+      "name": "scene-cas: reject count",
+      "passed": true,
+      "rejection": "completion marker/result mismatch"
+    },
+    {
+      "name": "scene-cas: reject original_raw_pid",
+      "passed": true,
+      "rejection": "original crash raw exit/owned Job mismatch"
+    },
+    {
+      "name": "scene-cas: reject original_raw_exit",
+      "passed": true,
+      "rejection": "original crash raw exit/owned Job mismatch"
+    },
+    {
+      "name": "scene-cas: historical bytes unchanged",
+      "passed": true
+    },
+    {
+      "name": "script-committed: historical result/marker/raw exit",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "script-committed: reject raw_pid",
+      "passed": true,
+      "rejection": "outer raw exit mismatch"
+    },
+    {
+      "name": "script-committed: reject raw_exit",
+      "passed": true,
+      "rejection": "outer raw exit mismatch"
+    },
+    {
+      "name": "script-committed: reject source",
+      "passed": true,
+      "rejection": "lane success/source mismatch"
+    },
+    {
+      "name": "script-committed: reject marker",
+      "passed": true,
+      "rejection": "completion marker/result mismatch"
+    },
+    {
+      "name": "script-committed: reject count",
+      "passed": true,
+      "rejection": "completion marker/result mismatch"
+    },
+    {
+      "name": "script-committed: reject original_raw_pid",
+      "passed": true,
+      "rejection": "original crash raw exit/owned Job mismatch"
+    },
+    {
+      "name": "script-committed: reject original_raw_exit",
+      "passed": true,
+      "rejection": "original crash raw exit/owned Job mismatch"
+    },
+    {
+      "name": "script-committed: historical bytes unchanged",
+      "passed": true
+    },
+    {
+      "name": "script-retired: historical result/marker/raw exit",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "script-retired: reject raw_pid",
+      "passed": true,
+      "rejection": "outer raw exit mismatch"
+    },
+    {
+      "name": "script-retired: reject raw_exit",
+      "passed": true,
+      "rejection": "outer raw exit mismatch"
+    },
+    {
+      "name": "script-retired: reject source",
+      "passed": true,
+      "rejection": "lane success/source mismatch"
+    },
+    {
+      "name": "script-retired: reject marker",
+      "passed": true,
+      "rejection": "completion marker/result mismatch"
+    },
+    {
+      "name": "script-retired: reject count",
+      "passed": true,
+      "rejection": "completion marker/result mismatch"
+    },
+    {
+      "name": "script-retired: reject original_raw_pid",
+      "passed": true,
+      "rejection": "original crash raw exit/owned Job mismatch"
+    },
+    {
+      "name": "script-retired: reject original_raw_exit",
+      "passed": true,
+      "rejection": "original crash raw exit/owned Job mismatch"
+    },
+    {
+      "name": "script-retired: historical bytes unchanged",
+      "passed": true
+    },
+    {
+      "name": "edit-applied: historical result/marker/raw exit",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "edit-applied: reject raw_pid",
+      "passed": true,
+      "rejection": "outer raw exit mismatch"
+    },
+    {
+      "name": "edit-applied: reject raw_exit",
+      "passed": true,
+      "rejection": "outer raw exit mismatch"
+    },
+    {
+      "name": "edit-applied: reject source",
+      "passed": true,
+      "rejection": "lane success/source mismatch"
+    },
+    {
+      "name": "edit-applied: reject marker",
+      "passed": true,
+      "rejection": "completion marker/result mismatch"
+    },
+    {
+      "name": "edit-applied: reject count",
+      "passed": true,
+      "rejection": "completion marker/result mismatch"
+    },
+    {
+      "name": "edit-applied: reject original_raw_pid",
+      "passed": true,
+      "rejection": "original crash raw exit/owned Job mismatch"
+    },
+    {
+      "name": "edit-applied: reject original_raw_exit",
+      "passed": true,
+      "rejection": "original crash raw exit/owned Job mismatch"
+    },
+    {
+      "name": "edit-applied: historical bytes unchanged",
+      "passed": true
+    },
+    {
+      "name": "script-unwitnessed: historical result/marker/raw exit",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "script-unwitnessed: reject raw_pid",
+      "passed": true,
+      "rejection": "outer raw exit mismatch"
+    },
+    {
+      "name": "script-unwitnessed: reject raw_exit",
+      "passed": true,
+      "rejection": "outer raw exit mismatch"
+    },
+    {
+      "name": "script-unwitnessed: reject source",
+      "passed": true,
+      "rejection": "lane success/source mismatch"
+    },
+    {
+      "name": "script-unwitnessed: reject marker",
+      "passed": true,
+      "rejection": "completion marker/result mismatch"
+    },
+    {
+      "name": "script-unwitnessed: reject count",
+      "passed": true,
+      "rejection": "completion marker/result mismatch"
+    },
+    {
+      "name": "script-unwitnessed: reject original_raw_pid",
+      "passed": true,
+      "rejection": "original crash raw exit/owned Job mismatch"
+    },
+    {
+      "name": "script-unwitnessed: reject original_raw_exit",
+      "passed": true,
+      "rejection": "original crash raw exit/owned Job mismatch"
+    },
+    {
+      "name": "script-unwitnessed: historical bytes unchanged",
+      "passed": true
+    },
+    {
+      "name": "shared S55 source and manifest unchanged",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

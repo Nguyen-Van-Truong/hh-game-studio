@@ -1,0 +1,26 @@
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-client-03\source\studio\tests\blender\run_client_probe.py", line 333, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-client-03\source\studio\tests\blender\run_client_probe.py", line 271, in main
+    return frozen(output, args.binary)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-client-03\source\studio\tests\blender\run_client_probe.py", line 208, in frozen
+    write('client.json', child)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-client-03\source\studio\tests\blender\run_client_probe.py", line 153, in write
+    stream.write(canonical_bytes(value))
+                 ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-client-03\source\studio\protocol\core.py", line 145, in canonical_bytes
+    return canonical_json(value).encode("utf-8")
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-client-03\source\studio\protocol\core.py", line 131, in canonical_json
+    _walk(value)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-client-03\source\studio\protocol\core.py", line 115, in _walk
+    _walk(item_value, depth + 1, key=item_key)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-client-03\source\studio\protocol\core.py", line 120, in _walk
+    _walk(item, depth + 1, key=key)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-client-03\source\studio\protocol\core.py", line 115, in _walk
+    _walk(item_value, depth + 1, key=item_key)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-client-03\source\studio\protocol\core.py", line 91, in _walk
+    raise ValidationError("SECRET_FIELD_FORBIDDEN", key)
+studio.protocol.core.ValidationError: SECRET_FIELD_FORBIDDEN: credential_label

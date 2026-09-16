@@ -1,0 +1,25 @@
+{
+  "started_at": "2026-09-16T23:51:35.693767+00:00",
+  "exit_code": 0,
+  "timeout_seconds": 30,
+  "argv": [
+    "python.exe",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "8-9-hh3d-3\\zdoc\\reviews\\20260917-gt04-client-audit",
+    "-p",
+    "test_evidence.py",
+    "-v"
+  ],
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "3823162517ce41e25fe9a0958bf8bbfbe8901a0215da09b4ff3e9dc05ed5a746",
+  "audit_sources": {
+    "verify_evidence.py": "ea35f3e4be8a01f81ffdd1860c075948e8bb83cc82ebf7a23f2208c10f88a115",
+    "test_evidence.py": "5167367088b20327218a12c3d1ab049de4943d711e629cee007c10d78b8073f9"
+  },
+  "native_launched": false,
+  "formal_acceptance": false
+}

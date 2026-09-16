@@ -1,0 +1,42 @@
+{
+  "command_id": "edit.create",
+  "schema_version": "hh-studio-0.1",
+  "project_id": "project.fixture",
+  "operation": "scene.node.create",
+  "lease_id": "lease.0edd2e78700b8065e0de6d61ca302807",
+  "fencing_epoch": 1,
+  "expected_revision": "sha256:f3fd9f270886a056f469e70586795e06c8d47b651021a22366629ab06d886162",
+  "target": {
+    "stable_id": "root"
+  },
+  "payload": {
+    "expected_generation": 1,
+    "expected_project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+    "stable_id": "box.public",
+    "node_type": "MeshInstance3D",
+    "name": "PublicBox",
+    "position": [
+      1,
+      2,
+      3
+    ],
+    "rotation_degrees": [
+      0,
+      15,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "box_size": [
+      2,
+      3,
+      4
+    ]
+  },
+  "payload_hash": "sha256:800270e587efec9699a950989b69a379d42f8d2fde143c7e71e033b598da098a",
+  "deadline_ms": 1789598220336,
+  "digest": "sha256:224cd290a067f9c290e6f241428c42516434c2676e1e36d78804e68c3a79fdb8"
+}

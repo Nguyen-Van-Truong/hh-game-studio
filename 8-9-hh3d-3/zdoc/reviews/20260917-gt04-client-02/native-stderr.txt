@@ -1,0 +1,23 @@
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-client-02\source\studio\tests\blender\run_client_probe.py", line 327, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-client-02\source\studio\tests\blender\run_client_probe.py", line 265, in main
+    return frozen(output, args.binary)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-client-02\source\studio\tests\blender\run_client_probe.py", line 167, in frozen
+    owner = BlenderClientOwner.from_host(gui)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-client-02\source\studio\host\blender\client_owner.py", line 52, in from_host
+    observed=owner._read_native(owner._prefix+'-registration',epoch_ms()+min(remaining,catalog.MAX_READ_MS))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-client-02\source\studio\host\blender\client_owner.py", line 109, in _read_native
+    row=self._host.submit(command,ttl_ms=remaining())
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-client-02\source\studio\host\blender\ui_host.py", line 281, in submit
+    return self._ask('data','submit',body)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-client-02\source\studio\host\blender\ui_host.py", line 259, in _ask
+    if reply['body']['ok'] is not True: raise HostError('BLENDER_COMMAND_REJECTED')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+studio.host.blender.ui_host.HostError: BLENDER_COMMAND_REJECTED

@@ -1,0 +1,19 @@
+{
+  "command_id": "edit.remove",
+  "schema_version": "hh-studio-0.1",
+  "project_id": "project.fixture",
+  "operation": "scene.node.remove",
+  "lease_id": "lease.b2c9ba87d1010140c7fd45e2daa3a355",
+  "fencing_epoch": 5,
+  "expected_revision": "sha256:8ad91e5934ecda7dc89aecadbd034e5bf20c4092fb8ec50d3299cd344aeb9502",
+  "target": {
+    "stable_id": "box.public"
+  },
+  "payload": {
+    "expected_generation": 1,
+    "expected_project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3"
+  },
+  "payload_hash": "sha256:76e63950e56ebac5afeb9be4a65c1a9cfee55e334f6030ecbabbde3038073ee1",
+  "deadline_ms": 1789598285942,
+  "digest": "sha256:38b5eb68b47c1f6af4abafdafaf300973ffc53d905093c061c65e8b0fb111794"
+}

@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s55-source-01\source\studio\tests\godot\run_script_publication_probe.py", line 309, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s55-source-01\source\studio\tests\godot\run_script_publication_probe.py", line 271, in main
+    return frozen(args.output, args.binary, args.closure)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s55-source-01\source\studio\tests\godot\run_script_publication_probe.py", line 225, in frozen
+    owner.close()
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s55-source-01\source\studio\godot-addon\publication_owner.py", line 768, in close
+    raise PublicationOwnerError('GODOT_STOP_DRAIN_REQUIRED',cleanup_owner=self)
+script_publication_probe_owner.PublicationOwnerError: GODOT_STOP_DRAIN_REQUIRED

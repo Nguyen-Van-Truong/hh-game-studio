@@ -1,0 +1,72 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "label": "matching_raw_exit_accepted",
+      "passed": true
+    },
+    {
+      "label": "raw_reject_exit_code_False",
+      "passed": true
+    },
+    {
+      "label": "raw_reject_exit_code_2",
+      "passed": true
+    },
+    {
+      "label": "raw_reject_target_pid_9999",
+      "passed": true
+    },
+    {
+      "label": "host_reject_wrapper_exit_code",
+      "passed": true
+    },
+    {
+      "label": "host_reject_tree_verified",
+      "passed": true
+    },
+    {
+      "label": "host_reject_timed_out",
+      "passed": true
+    },
+    {
+      "label": "host_reject_ownership",
+      "passed": true
+    },
+    {
+      "label": "missing_raw_exit_rejected",
+      "passed": true
+    },
+    {
+      "label": "inert_result_marker_bind",
+      "passed": true
+    },
+    {
+      "label": "wrong_source_rejected",
+      "passed": true
+    },
+    {
+      "label": "empty_checks_rejected",
+      "passed": true
+    },
+    {
+      "label": "failed_check_rejected",
+      "passed": true
+    },
+    {
+      "label": "missing_marker_rejected",
+      "passed": true
+    },
+    {
+      "label": "duplicate_marker_rejected",
+      "passed": true
+    },
+    {
+      "label": "unexplained_diagnostic_rejected",
+      "passed": true
+    }
+  ],
+  "controller_sha256": "46d27dd3a3c188ad90abd8a951d6723314e989ebd642fae6be68dbe1232394da",
+  "native_processes_started": 0,
+  "scope": "inert fabricated metadata only, no native evidence or acceptance"
+}

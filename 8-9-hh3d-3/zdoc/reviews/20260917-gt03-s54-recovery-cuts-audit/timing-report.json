@@ -1,0 +1,158 @@
+{
+  "candidate_only": true,
+  "gt03_acceptance": false,
+  "measurement_scope": "read-only artifact mtimes plus existing recorded event timestamps; no new engine or recovery open",
+  "failed_runtime_closure": "c354c978062dc9987f98eae28d5af158bed5256ba25126457be44d43a720150f",
+  "failure": "GODOT_DEADLINE_EXPIRED before commit phase; HTTP UNKNOWN and public_ack=false",
+  "deadline_utc": "2026-09-16T21:57:56.326000+00:00",
+  "file_records": [
+    {
+      "path": "20260917-gt03-s54-recovery-cuts-resume-01/scene-cas/recovery-request.json",
+      "sha256": "c960ec334eb625b7a802ea212608213d9341300d173c4795e345ceb218a71b9c",
+      "mtime_ns": 1789595847326126000,
+      "mtime_utc": "2026-09-16T21:57:27.326126+00:00"
+    },
+    {
+      "path": "20260917-gt03-s54-recovery-cuts-resume-01/scene-cas/before-reconcile-snapshot.json",
+      "sha256": "e478b19b80533ed02648d4debacfd45d7054d778a8ec96672dd9aaea452690b2",
+      "mtime_ns": 1789595846304742300,
+      "mtime_utc": "2026-09-16T21:57:26.304742+00:00"
+    },
+    {
+      "path": "20260917-gt03-s54-recovery-cuts-resume-01/scene-cas/recovery/recovery-editor/editor-75d431ca444b4574897dbf3193533c7b/process-start.json",
+      "sha256": "df08a4c5d847ed11ec531b5c2441dd27bb8411220c963ab6cb48d27f76ad53d1",
+      "mtime_ns": 1789595868122470600,
+      "mtime_utc": "2026-09-16T21:57:48.122471+00:00"
+    },
+    {
+      "path": "20260917-gt03-s54-recovery-cuts-resume-01/scene-cas/recovery/recovery-editor/editor-75d431ca444b4574897dbf3193533c7b/hello.json",
+      "sha256": "2699aa83aae73eae843648a3ee9ba2de4980f1c837e6f188837252bc26e93a06",
+      "mtime_ns": 1789595873366534300,
+      "mtime_utc": "2026-09-16T21:57:53.366534+00:00"
+    },
+    {
+      "path": "20260917-gt03-s54-recovery-cuts-resume-01/scene-cas/response.json",
+      "sha256": "dbd2242f6a8c935c3e37278574049bb43c0496371a06a1b5b37b76d3d6dfc8c3",
+      "mtime_ns": 1789595884942936800,
+      "mtime_utc": "2026-09-16T21:58:04.942937+00:00"
+    },
+    {
+      "path": "20260917-gt03-s54-recovery-cuts-resume-01/scene-cas/recovery/recovery-editor/editor-75d431ca444b4574897dbf3193533c7b/close.json",
+      "sha256": "04060061280167508d1e973ba5a29cee1e97a0db29602df55d8c65733d215bd8",
+      "mtime_ns": 1789595886123971400,
+      "mtime_utc": "2026-09-16T21:58:06.123971+00:00"
+    },
+    {
+      "path": "20260917-gt03-s54-recovery-cuts-resume-01/scene-cas/recovery/recovery-editor/editor-75d431ca444b4574897dbf3193533c7b/process-exit.json",
+      "sha256": "56925ce64d9a638930b7ad056b2101301a2ac37ab45f01b2684bf3237474f50a",
+      "mtime_ns": 1789595886085386400,
+      "mtime_utc": "2026-09-16T21:58:06.085387+00:00"
+    },
+    {
+      "path": "20260917-gt03-s54-recovery-cuts-resume-01/scene-cas/result.json",
+      "sha256": "ff40400f74bda761c45b5f4c442b6f2aa19b2ea7f682ee3d2a24815268ae6400",
+      "mtime_ns": 1789595886129070700,
+      "mtime_utc": "2026-09-16T21:58:06.129071+00:00"
+    },
+    {
+      "path": "20260917-gt03-s54-recovery-cuts-resume-01/scene-cas/recovery-cut-host.json",
+      "sha256": "8a47511d4457811c80705bd901d429d6f05ae27be66e058e57423d3651255392",
+      "mtime_ns": 1789595886182245700,
+      "mtime_utc": "2026-09-16T21:58:06.182246+00:00"
+    }
+  ],
+  "artifact_deltas_seconds": {
+    "request_written_to_editor_process_start": 20.796,
+    "editor_process_start_to_hello": 5.244,
+    "request_written_to_unknown_response": 37.617,
+    "hello_before_request_deadline": 2.959
+  },
+  "native_logs": [
+    {
+      "artifact": {
+        "path": "20260917-gt03-s54-recovery-cuts-resume-01/scene-cas/recovery/recovery-editor/editor-75d431ca444b4574897dbf3193533c7b/stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "mtime_ns": 1789595867992551300,
+        "mtime_utc": "2026-09-16T21:57:47.992551+00:00"
+      },
+      "clean": true
+    },
+    {
+      "artifact": {
+        "path": "20260917-gt03-s54-recovery-cuts-resume-01/scene-cas/recovery/recovery-editor/editor-75d431ca444b4574897dbf3193533c7b/stdout.txt",
+        "sha256": "e86dc130dd37f4ec435c066d1789018be7d337fa25441fa207eedc96da4d3fb1",
+        "mtime_ns": 1789595873437178800,
+        "mtime_utc": "2026-09-16T21:57:53.437179+00:00"
+      },
+      "clean": true
+    }
+  ],
+  "editor_cleanup": {
+    "actual_process_exit": {
+      "exit_code": 0,
+      "pid": 21012
+    },
+    "closed": true,
+    "held": false,
+    "job": {
+      "active_count": 0,
+      "assigned": true,
+      "close_uncertain": false,
+      "closed": true,
+      "configured": true,
+      "create_uncertain": false,
+      "failed_operations": [],
+      "handle_retained": false,
+      "native_error": null,
+      "tainted": false,
+      "zero_observed": true
+    },
+    "logs_overflow": false,
+    "public_ack": false,
+    "wrapper_exit_code": 0
+  },
+  "case_raw_exit": {
+    "target_pid": 20944,
+    "started_at": "2026-09-16T21:57:10.936530+00:00",
+    "exit_code": 2
+  },
+  "earlier_success_different_closure": {
+    "package": "20260917-gt03-s54-recovery-publication-01",
+    "source_closure_sha256": "469b22d6788ef63c7ca4d6e7dc91e703494db439834dffacdef7d476a9464bdc",
+    "events": [
+      {
+        "kind": "ADMITTED",
+        "observed_ms": 1789593978224,
+        "admission": {
+          "admitted_ms": 1789593977300,
+          "authority_epoch": 2,
+          "deadline_ms": 1789594002757,
+          "explicit_reconcile": true,
+          "session_id": "session.ad33fc1a82c8ac8997c2e2f9cfd3a473"
+        },
+        "readback_started_ms": null,
+        "readback_observed_ms": null
+      },
+      {
+        "kind": "READBACK",
+        "observed_ms": 1789593994962,
+        "admission": null,
+        "readback_started_ms": 1789593983385,
+        "readback_observed_ms": 1789593990375
+      },
+      {
+        "kind": "TERMINAL",
+        "observed_ms": 1789593998687,
+        "admission": null,
+        "readback_started_ms": null,
+        "readback_observed_ms": null
+      }
+    ]
+  },
+  "interpretation": [
+    "Root native storage/Registry unit lanes launched at 21:57:43 UTC, inside this recovery attempt, according to their invocation.json. This demonstrates temporal overlap, not causation.",
+    "Most of the request budget elapsed before editor process start; the editor hello left only a few seconds for protected readback and terminal work.",
+    "The earlier successful recovery is a different closure and shorter original journal, so it cannot establish a timing baseline for this scene-CAS route.",
+    "A later authorized quiet retry or profiling is needed to separate fsync contention from journal-length/algorithm cost. The 30-second contract remains unchanged."
+  ]
+}

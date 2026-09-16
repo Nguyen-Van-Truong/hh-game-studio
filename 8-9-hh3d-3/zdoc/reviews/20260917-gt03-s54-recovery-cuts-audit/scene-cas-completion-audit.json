@@ -1,0 +1,362 @@
+{
+  "passed": true,
+  "checks": {
+    "original_capture_false_preserved": true,
+    "functional_result_exactly_21_clean_checks": true,
+    "raw_case_exit_and_pid_match": true,
+    "raw_publisher_exit_and_pid_match": true,
+    "frozen_sources_exact": true,
+    "original_source_stability_proved_by_run": true,
+    "typed_log_evidence_clean": true
+  },
+  "package": "20260917-gt03-s54-recovery-cuts-02",
+  "source_closure_sha256": "478797d092509af2ae88cf3ad7a71b28b09a55e401d4b51e90c91544c0319564",
+  "candidate_only": true,
+  "gt03_acceptance": false,
+  "no_native_process_launched": true,
+  "raw_capture_sha256": "a458a119bb714a03d90e20c386078f06809bbcc42c4574ba60ddb43f05cb8a38",
+  "raw_result_sha256": "f7dab94d5cfb0acf8b82bf3a90282310bf8488fbd9265ac0cd995e202d53e296",
+  "scanner_sha256": "d2fd6a89119cd59d0c8e92efe2ac6c1d143df4f2f8e1f8e255f74905a3036fd2",
+  "log_audit": {
+    "clean": true,
+    "logs": [
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\editor\\editor-0736db7e75f64002af8d7dcac34de3fa\\stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\editor\\editor-0736db7e75f64002af8d7dcac34de3fa\\stdout.txt",
+        "sha256": "e86dc130dd37f4ec435c066d1789018be7d337fa25441fa207eedc96da4d3fb1",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-370f5891ea514be4bfc1b048033c4dc7\\executor\\admission-inventory-stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-370f5891ea514be4bfc1b048033c4dc7\\executor\\admission-inventory-stdout.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-370f5891ea514be4bfc1b048033c4dc7\\executor\\after-command-inspect-stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-370f5891ea514be4bfc1b048033c4dc7\\executor\\after-command-inspect-stdout.txt",
+        "sha256": "1882db3bb5b8ad88850d5138391f42fc15a78de6247328c7c23ce6d3da6374ae",
+        "clean": true,
+        "reason": "parsed_empty_docker_state_error"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-370f5891ea514be4bfc1b048033c4dc7\\executor\\cleanup-inspect-stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-370f5891ea514be4bfc1b048033c4dc7\\executor\\cleanup-inspect-stdout.txt",
+        "sha256": "1882db3bb5b8ad88850d5138391f42fc15a78de6247328c7c23ce6d3da6374ae",
+        "clean": true,
+        "reason": "parsed_empty_docker_state_error"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-370f5891ea514be4bfc1b048033c4dc7\\executor\\context-stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-370f5891ea514be4bfc1b048033c4dc7\\executor\\context-stdout.txt",
+        "sha256": "0d1284cdbf15f9de9be8524a923374e8dffede3d62a65a022b0c8f58bfaa26b7",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-370f5891ea514be4bfc1b048033c4dc7\\executor\\create-stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-370f5891ea514be4bfc1b048033c4dc7\\executor\\create-stdout.txt",
+        "sha256": "57af4ec88b5f3448c7980fad9af95d3aa2b49ed2b35dd06171137c21969114e6",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-370f5891ea514be4bfc1b048033c4dc7\\executor\\created-inspect-stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-370f5891ea514be4bfc1b048033c4dc7\\executor\\created-inspect-stdout.txt",
+        "sha256": "4807942272e02067b731f1c9dfaa52671790db0bfebe62c2c9eafa3b0e1e3685",
+        "clean": true,
+        "reason": "parsed_empty_docker_state_error"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-370f5891ea514be4bfc1b048033c4dc7\\executor\\engine-stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-370f5891ea514be4bfc1b048033c4dc7\\executor\\engine-stdout.txt",
+        "sha256": "30c2a59df56ccbc84ae3a4724f8251a240947a6fc2871dd9c6dde194755bf42b",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-370f5891ea514be4bfc1b048033c4dc7\\executor\\exited-inspect-stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-370f5891ea514be4bfc1b048033c4dc7\\executor\\exited-inspect-stdout.txt",
+        "sha256": "edb5af9bca682ed241272ba0f712892efcc4c826493dbdb08f0b4b835316b9a6",
+        "clean": true,
+        "reason": "parsed_empty_docker_state_error"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-370f5891ea514be4bfc1b048033c4dc7\\executor\\image-stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-370f5891ea514be4bfc1b048033c4dc7\\executor\\image-stdout.txt",
+        "sha256": "9bd349a9b50a1722389dff72d65ce72abbb26a962b68153695f9d1135873dbde",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-370f5891ea514be4bfc1b048033c4dc7\\executor\\owned-remove-stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-370f5891ea514be4bfc1b048033c4dc7\\executor\\owned-remove-stdout.txt",
+        "sha256": "57af4ec88b5f3448c7980fad9af95d3aa2b49ed2b35dd06171137c21969114e6",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-370f5891ea514be4bfc1b048033c4dc7\\executor\\removed-inspect-stderr.txt",
+        "sha256": "c9be59597538eebf71995bbd9024cd82645e098c1d36da53059fcbfec26da6c9",
+        "clean": true,
+        "reason": "exact_owned_container_absence_after_successful_removal"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-370f5891ea514be4bfc1b048033c4dc7\\executor\\removed-inspect-stdout.txt",
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-370f5891ea514be4bfc1b048033c4dc7\\executor\\wait-stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-370f5891ea514be4bfc1b048033c4dc7\\executor\\wait-stdout.txt",
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-5bb5b4e4a1624f70a7c3b76518dca710\\executor\\admission-inventory-stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-5bb5b4e4a1624f70a7c3b76518dca710\\executor\\admission-inventory-stdout.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-5bb5b4e4a1624f70a7c3b76518dca710\\executor\\after-command-inspect-stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-5bb5b4e4a1624f70a7c3b76518dca710\\executor\\after-command-inspect-stdout.txt",
+        "sha256": "15507bf79582206d40d040371f08d847cb6161bf9b939e6fb663cff1698856f9",
+        "clean": true,
+        "reason": "parsed_empty_docker_state_error"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-5bb5b4e4a1624f70a7c3b76518dca710\\executor\\cleanup-inspect-stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-5bb5b4e4a1624f70a7c3b76518dca710\\executor\\cleanup-inspect-stdout.txt",
+        "sha256": "15507bf79582206d40d040371f08d847cb6161bf9b939e6fb663cff1698856f9",
+        "clean": true,
+        "reason": "parsed_empty_docker_state_error"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-5bb5b4e4a1624f70a7c3b76518dca710\\executor\\context-stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-5bb5b4e4a1624f70a7c3b76518dca710\\executor\\context-stdout.txt",
+        "sha256": "0d1284cdbf15f9de9be8524a923374e8dffede3d62a65a022b0c8f58bfaa26b7",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-5bb5b4e4a1624f70a7c3b76518dca710\\executor\\create-stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-5bb5b4e4a1624f70a7c3b76518dca710\\executor\\create-stdout.txt",
+        "sha256": "fc82a25e3dd2e745f1f6c3d74a04cc180319c49f53d4173afe81703831317c6f",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-5bb5b4e4a1624f70a7c3b76518dca710\\executor\\created-inspect-stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-5bb5b4e4a1624f70a7c3b76518dca710\\executor\\created-inspect-stdout.txt",
+        "sha256": "d1f1544394f417dfb6d406ee44fd4c8e77e8c4b01e964539c86a5c208f956651",
+        "clean": true,
+        "reason": "parsed_empty_docker_state_error"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-5bb5b4e4a1624f70a7c3b76518dca710\\executor\\engine-stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-5bb5b4e4a1624f70a7c3b76518dca710\\executor\\engine-stdout.txt",
+        "sha256": "61602ba9e593ea9981f0de0dd6c97f76542f8821b76b531edd832d33014f3037",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-5bb5b4e4a1624f70a7c3b76518dca710\\executor\\exited-inspect-stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-5bb5b4e4a1624f70a7c3b76518dca710\\executor\\exited-inspect-stdout.txt",
+        "sha256": "15507bf79582206d40d040371f08d847cb6161bf9b939e6fb663cff1698856f9",
+        "clean": true,
+        "reason": "parsed_empty_docker_state_error"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-5bb5b4e4a1624f70a7c3b76518dca710\\executor\\image-stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-5bb5b4e4a1624f70a7c3b76518dca710\\executor\\image-stdout.txt",
+        "sha256": "9bd349a9b50a1722389dff72d65ce72abbb26a962b68153695f9d1135873dbde",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-5bb5b4e4a1624f70a7c3b76518dca710\\executor\\owned-remove-stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-5bb5b4e4a1624f70a7c3b76518dca710\\executor\\owned-remove-stdout.txt",
+        "sha256": "fc82a25e3dd2e745f1f6c3d74a04cc180319c49f53d4173afe81703831317c6f",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-5bb5b4e4a1624f70a7c3b76518dca710\\executor\\removed-inspect-stderr.txt",
+        "sha256": "95293b1e924884a7e88e9ce4f1c1d1cabc2b97d536ec021db40cf9862071f9e3",
+        "clean": true,
+        "reason": "exact_owned_container_absence_after_successful_removal"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-5bb5b4e4a1624f70a7c3b76518dca710\\executor\\removed-inspect-stdout.txt",
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-5bb5b4e4a1624f70a7c3b76518dca710\\executor\\wait-stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\owned\\validation\\validate-5bb5b4e4a1624f70a7c3b76518dca710\\executor\\wait-stdout.txt",
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\publisher-stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\original\\publisher-stdout.txt",
+        "sha256": "4015da5cea07acdc80eabb9d31f3f29f865968de3e4e3075708e0ea453afa589",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\recovery\\recovery-editor\\editor-efab50950b5c4c6ab4f64d8e272c5362\\stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\recovery\\recovery-editor\\editor-efab50950b5c4c6ab4f64d8e272c5362\\stdout.txt",
+        "sha256": "e86dc130dd37f4ec435c066d1789018be7d337fa25441fa207eedc96da4d3fb1",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\recovery-cut-stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "clean": true,
+        "reason": "no_diagnostic"
+      },
+      {
+        "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s54-recovery-cuts-02\\scene-cas\\recovery-cut-stdout.txt",
+        "sha256": "4b1b5f557430bbee5f7138950810f2a2af8367e0a4140b5a6990b8517dffb7de",
+        "clean": true,
+        "reason": "no_diagnostic"
+      }
+    ]
+  },
+  "scope": "Reclassifies only empty Docker State.Error and exact owned-container absence probes using native host reports, IDs, removal results and Job cleanup. Original aggregate false remains unchanged."
+}

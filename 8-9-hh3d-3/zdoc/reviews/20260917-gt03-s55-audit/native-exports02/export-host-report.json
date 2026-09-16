@@ -1,0 +1,25 @@
+{
+  "wrapper_pid": 6996,
+  "started_at": "2026-09-16T23:48:06.442768+00:00",
+  "argv": [
+    "python.exe",
+    "-B",
+    "exporter.py",
+    "--frozen",
+    "--output",
+    "native-exports02",
+    "--package",
+    "20260917-gt03-s55-script-02",
+    "--package",
+    "20260917-gt03-s55-save-01"
+  ],
+  "exit_code": 0,
+  "target_pid": 26288,
+  "wrapper_exit_code": 0,
+  "timed_out": false,
+  "tree_verified": true,
+  "ownership": "gated_job_kill_on_close",
+  "stdout": "native-export-stdout.txt",
+  "stderr": "native-export-stderr.txt",
+  "host": "native-export-host.json"
+}

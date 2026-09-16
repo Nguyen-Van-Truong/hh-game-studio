@@ -1,0 +1,20 @@
+{
+  "argv": [
+    "python.exe",
+    "-B",
+    "-c",
+    "import unittest,json,sys\nsuite=unittest.defaultTestLoader.discover('tests/godot',pattern='test_*.py')\ndef flatten(suite):\n    for item in suite:\n        if isinstance(item,unittest.TestSuite):yield from flatten(item)\n        else:yield item\nall_tests=list(flatten(suite));ids=[case.id() for case in all_tests]\nassert len(ids)==len(set(ids))\nlabel=sys.argv[1]\nchosen=[case for case in all_tests if (not case.id().startswith('test_publication_journal')\n    if label=='other' else case.id().split('.')[0]==label)]\nprint('GT03_UNIT_INVENTORY '+json.dumps({'all':sorted(ids),'chosen':sorted(case.id() for case in chosen)}),flush=True)\nresult=unittest.TextTestRunner(verbosity=2).run(unittest.TestSuite(chosen))\nprint('GT03_UNIT_COMPLETE '+json.dumps({'run':result.testsRun,'failures':len(result.failures),'errors':len(result.errors),'skips':len(result.skipped)}),flush=True)\nsys.exit(not result.wasSuccessful())\n",
+    "test_publication_journal"
+  ],
+  "exit_code": 0,
+  "host": "run-host.json",
+  "ownership": "gated_job_kill_on_close",
+  "started_at": "2026-09-16T22:40:26.225978+00:00",
+  "stderr": "run-stderr.txt",
+  "stdout": "run-stdout.txt",
+  "target_pid": 9464,
+  "timed_out": false,
+  "tree_verified": true,
+  "wrapper_exit_code": 0,
+  "wrapper_pid": 18996
+}

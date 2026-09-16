@@ -1,0 +1,25 @@
+{
+  "code": "import unittest,json,sys\nsuite=unittest.defaultTestLoader.discover('tests/godot',pattern='test_*.py')\ndef flatten(suite):\n    for item in suite:\n        if isinstance(item,unittest.TestSuite):yield from flatten(item)\n        else:yield item\nall_tests=list(flatten(suite));ids=[case.id() for case in all_tests]\nassert len(ids)==len(set(ids))\nlabel=sys.argv[1]\nchosen=[case for case in all_tests if (not case.id().startswith('test_publication_journal')\n    if label=='other' else case.id().split('.')[0]==label)]\nprint('GT03_UNIT_INVENTORY '+json.dumps({'all':sorted(ids),'chosen':sorted(case.id() for case in chosen)}),flush=True)\nresult=unittest.TextTestRunner(verbosity=2).run(unittest.TestSuite(chosen))\nprint('GT03_UNIT_COMPLETE '+json.dumps({'run':result.testsRun,'failures':len(result.failures),'errors':len(result.errors),'skips':len(result.skipped)}),flush=True)\nsys.exit(not result.wasSuccessful())\n",
+  "controller_sha256": "f285ddba8fe71bfc9fd7bbfedf0ba13f04fafb741cbb496d039d6e50380dfc7a",
+  "partitions": [
+    "test_publication_journal",
+    "test_publication_journal_v2",
+    "test_publication_journal_v3",
+    "test_publication_journal_v4",
+    "test_publication_journal_v5",
+    "other"
+  ],
+  "runner_sha256": "ea522450acc46f90be5e2a7b9257e73ce8b619948105b2c9073aac1f881c7328",
+  "runtime_package": "../20260917-gt03-s55-source-01",
+  "schema": "hh-gt03-unit-matrix-2",
+  "source_closure_sha256": "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+  "source_manifest_sha256": "70a2e02dc6d67c1ebbf32efea4d78a52fd90686b40158dcf2dae25e3dcebbfd1",
+  "timeouts": {
+    "other": 600,
+    "test_publication_journal": 360,
+    "test_publication_journal_v2": 360,
+    "test_publication_journal_v3": 360,
+    "test_publication_journal_v4": 360,
+    "test_publication_journal_v5": 360
+  }
+}

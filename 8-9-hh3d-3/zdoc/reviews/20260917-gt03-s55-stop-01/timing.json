@@ -1,0 +1,26 @@
+{
+  "validation_entered_ms": 1789598120923,
+  "candidate_project_revision": "sha256:4906b27185598db7279e723bec27aca227bfada8dc6cd1957e3647ec85c48c7f",
+  "stop_started_ms": 1789598124294,
+  "stop_elapsed_ms": 0.0,
+  "stop_completed_ms": 1789598124297,
+  "validation_returned_at_stop_response": false,
+  "registered_validation_receipt": {
+    "command_id": "command.save",
+    "project_revision": "sha256:4906b27185598db7279e723bec27aca227bfada8dc6cd1957e3647ec85c48c7f",
+    "manifest_sha256": "b38718da042e1e8ab3e862d4eb7ff6f288214cc3d386f6795b01218dca894b74",
+    "source_release_sha256": "c6395bd0fdf98afacf22ea6a938cd70b602f86b6fe3dfee22ca4955f5b18c10c",
+    "engine_sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
+    "observation_sha256": "fde90dac312534f67a20ddcb4fe153141d4cf864317cdc3a6770e6e225567e90",
+    "evidence_sha256": "b60cbbeffa1a0615461d41099d345068e272c0f0c4c10d0bf3102f505543d5ae",
+    "run_id": "hh-gt03-31702e9efafc4e7e8137bb34b19b37bd",
+    "status": "OWNED_PROFILE_VALIDATED",
+    "public_ack": false,
+    "selected_state_verified": false
+  },
+  "validation_returned_ms": 1789598136565,
+  "native_started_at": "2026-09-16T22:35:23.792528613Z",
+  "native_finished_at": "2026-09-16T22:35:33.02963427Z",
+  "native_result_relative": "owned/validation/validate-0c97b7d4f77041b3aff9b7af22419d5a/executor/result.json",
+  "native_result_sha256": "d04cf3e21401f7e424099d6fafdcdf0090075996917f1e561d4c4e66da857917"
+}

@@ -1,0 +1,274 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "lane": "supporting",
+      "mutation": "unit source closure",
+      "rejected": true,
+      "reason": "unit invocation/source binding"
+    },
+    {
+      "lane": "supporting",
+      "mutation": "unit controller binding",
+      "rejected": true,
+      "reason": "unit source reference"
+    },
+    {
+      "lane": "supporting",
+      "mutation": "unit forged counts",
+      "rejected": true,
+      "reason": "unit retained round differs"
+    },
+    {
+      "lane": "supporting",
+      "mutation": "unit raw actual exit",
+      "rejected": true,
+      "reason": "raw process exit/PID/Job mismatch"
+    },
+    {
+      "lane": "supporting",
+      "mutation": "inspection actual exit",
+      "rejected": true,
+      "reason": "raw process exit/PID/Job mismatch"
+    },
+    {
+      "lane": "supporting",
+      "mutation": "inspection completion marker",
+      "rejected": true,
+      "reason": "recovery inspection completion"
+    },
+    {
+      "lane": "stop",
+      "mutation": "source reference closure",
+      "rejected": true,
+      "reason": "shared source reference mismatch"
+    },
+    {
+      "lane": "stop",
+      "mutation": "source reference inventory count",
+      "rejected": true,
+      "reason": "shared source reference mismatch"
+    },
+    {
+      "lane": "stop",
+      "mutation": "raw host exit",
+      "rejected": true,
+      "reason": "raw process exit/PID/Job mismatch"
+    },
+    {
+      "lane": "stop",
+      "mutation": "raw host PID",
+      "rejected": true,
+      "reason": "raw process exit/PID/Job mismatch"
+    },
+    {
+      "lane": "stop",
+      "mutation": "snapshot terminal response",
+      "rejected": true,
+      "reason": "pure event fold differs from captured snapshot"
+    },
+    {
+      "lane": "stop",
+      "mutation": "selected FileID",
+      "rejected": true,
+      "reason": "pure event fold differs from captured snapshot"
+    },
+    {
+      "lane": "stop",
+      "mutation": "readback semantic state",
+      "rejected": true,
+      "reason": "actual semantic readback revision differs"
+    },
+    {
+      "lane": "stop",
+      "mutation": "readback files",
+      "rejected": true,
+      "reason": "actual readback full selected files differ"
+    },
+    {
+      "lane": "stop",
+      "mutation": "actual selected bytes",
+      "rejected": true,
+      "reason": "selected file bytes differ: scenes/fixture.tscn"
+    },
+    {
+      "lane": "stop",
+      "mutation": "terminal wire content",
+      "rejected": true,
+      "reason": "original terminal response differs from pure replay"
+    },
+    {
+      "lane": "edit",
+      "mutation": "source reference closure",
+      "rejected": true,
+      "reason": "shared source reference mismatch"
+    },
+    {
+      "lane": "edit",
+      "mutation": "source reference inventory count",
+      "rejected": true,
+      "reason": "shared source reference mismatch"
+    },
+    {
+      "lane": "edit",
+      "mutation": "raw host exit",
+      "rejected": true,
+      "reason": "raw process exit/PID/Job mismatch"
+    },
+    {
+      "lane": "edit",
+      "mutation": "raw host PID",
+      "rejected": true,
+      "reason": "raw process exit/PID/Job mismatch"
+    },
+    {
+      "lane": "edit",
+      "mutation": "snapshot terminal response",
+      "rejected": true,
+      "reason": "pure event fold differs from captured snapshot"
+    },
+    {
+      "lane": "edit",
+      "mutation": "selected FileID",
+      "rejected": true,
+      "reason": "pure event fold differs from captured snapshot"
+    },
+    {
+      "lane": "edit",
+      "mutation": "readback semantic state",
+      "rejected": true,
+      "reason": "actual semantic readback revision differs"
+    },
+    {
+      "lane": "edit",
+      "mutation": "readback files",
+      "rejected": true,
+      "reason": "actual readback full selected files differ"
+    },
+    {
+      "lane": "edit",
+      "mutation": "actual selected bytes",
+      "rejected": true,
+      "reason": "selected file bytes differ: scenes/fixture.tscn"
+    },
+    {
+      "lane": "edit",
+      "mutation": "terminal wire content",
+      "rejected": true,
+      "reason": "original terminal response differs from pure replay"
+    },
+    {
+      "lane": "edit",
+      "mutation": "raw edit observation",
+      "rejected": true,
+      "reason": "PUBLICATION_V5_OBSERVATION_SEMANTICS: pure scene.save publication history v3"
+    },
+    {
+      "lane": "native-export",
+      "mutation": "Registry storage identity",
+      "rejected": true,
+      "reason": "native Registry/project/storage/root binding"
+    },
+    {
+      "lane": "native-export",
+      "mutation": "Registry stream FileID",
+      "rejected": true,
+      "reason": "native Registry/project/storage/root binding"
+    },
+    {
+      "lane": "native-export",
+      "mutation": "selected manifest FileID",
+      "rejected": true,
+      "reason": "native selected manifest FileID differs"
+    },
+    {
+      "lane": "native-export",
+      "mutation": "native resources not closed",
+      "rejected": true,
+      "reason": "native export scope/cleanup"
+    },
+    {
+      "lane": "native-export",
+      "mutation": "export actual exit",
+      "rejected": true,
+      "reason": "raw process exit/PID/Job mismatch"
+    },
+    {
+      "lane": "native-export",
+      "mutation": "native stream bytes",
+      "rejected": true,
+      "reason": "native frame bound"
+    },
+    {
+      "lane": "native-export",
+      "mutation": "native checkpoint blob",
+      "rejected": true,
+      "reason": "native edit blob bytes differ"
+    },
+    {
+      "lane": "script",
+      "mutation": "external driver bytes",
+      "rejected": true,
+      "reason": "effective runtime/driver file map mismatch"
+    },
+    {
+      "lane": "script",
+      "mutation": "effective original probe hash",
+      "rejected": true,
+      "reason": "effective runtime/driver file map mismatch"
+    },
+    {
+      "lane": "script",
+      "mutation": "effective runtime mutation claim",
+      "rejected": true,
+      "reason": "effective runtime/driver file map mismatch"
+    },
+    {
+      "lane": "script",
+      "mutation": "Stop still pending",
+      "rejected": true,
+      "reason": "supplementary durable Stop terminal missing"
+    }
+  ],
+  "verifier_sha256": "784018214be5dbc18be0fa5bd51f65a94b644b400ae6952fc5410b2a9a408da6",
+  "test_sha256": "c1986eaa0882644015b615868d63b7ca6ad2e2bb34383e16520d439b6778987d",
+  "source_closure_sha256": "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+  "native_processes_started": 0,
+  "native_handles_opened": 0,
+  "mutations_in_memory_only": true,
+  "supplemental_lanes_tested": [
+    "script"
+  ],
+  "shared_source_unchanged": true,
+  "historical_evidence_unchanged": true,
+  "tested_files_sha256": {
+    "zdoc/reviews/20260917-gt03-s55-units-01/invocation.json": "d84d7d28a8f94486fc82f86cb66e0c5949954c4c39720a7cef0a24877d0f3f12",
+    "zdoc/reviews/20260917-gt03-s55-units-01/runtime-source-reference.json": "c68ec3b087b0dd2874f3a10a97e468018dca7847bf798aab44c435dd763f9b72",
+    "zdoc/reviews/20260917-gt03-s55-units-01/capture.json": "865c3c3c11c1794540e65f67705b88114a6cabbfdbb5f6a19d2fd7fc630be95e",
+    "zdoc/reviews/20260917-gt03-s55-units-01/attempts/other/0001/run-host.json": "78bed7e773841e40c26f3d6ace069b5e942a7d32c8f908b59b217117ae2eae7c",
+    "zdoc/reviews/20260917-gt03-s55-recovery-inspection-native-01/native-host.json": "452f77a4b2129c435aa9c7b770bf38fa913b54df09e30eb91f4fbeb0ac9de4cb",
+    "zdoc/reviews/20260917-gt03-s55-recovery-inspection-native-01/native-stdout.txt": "51392e037f6908ff70b40f6c059bea288ba8589492e131939e7af57378d7073f",
+    "zdoc/reviews/20260917-gt03-s55-stop-01/source-reference.json": "d18a95eedcb55faf1af224085613da382551e30ceeca5eab4ebeda6f2e434577",
+    "zdoc/reviews/20260917-gt03-s55-stop-01/native-stop-host.json": "0391c8153d83776fa81a3d6c696ca4c79cb6b08266f94f665902ea142a56b99e",
+    "zdoc/reviews/20260917-gt03-s55-stop-01/reopened.json": "3c50ce846aa1db9efd84ef4799fbbdf618404a748636ad65978d770564bf915f",
+    "zdoc/reviews/20260917-gt03-s55-stop-01/after.json": "7ff7efa382b987e8cbe9acdb6c158dba73e21f02a76739b24ec85ed41e803ab4",
+    "zdoc/reviews/20260917-gt03-s55-stop-01/owned/editor/editor-30b4a21224d249e4a00fccd868a3cd8c/project/scenes/fixture.tscn": "51eaa111f832327d74b2031d382eb22ab30c8b725323e26ebcf7a66bbef571cb",
+    "zdoc/reviews/20260917-gt03-s55-stop-01/save-response.json": "a6bf92452daae6c655abd7ccab4d869013dca1455f95284042defaaeab9228ab",
+    "zdoc/reviews/20260917-gt03-s55-edit-01/source-reference.json": "d18a95eedcb55faf1af224085613da382551e30ceeca5eab4ebeda6f2e434577",
+    "zdoc/reviews/20260917-gt03-s55-edit-01/native-edit-host.json": "837b3fc9dfdc3185204a88ffefe9bfc914a1dc1af76da820e22311b0703cdcf1",
+    "zdoc/reviews/20260917-gt03-s55-edit-01/journal-snapshot.json": "3ea12f766b0e3cd4855f7fb98fb75fa1d57495403de7093c57c5643c13905583",
+    "zdoc/reviews/20260917-gt03-s55-edit-01/after-save.json": "98d984470dc83f84df1a918c0ad532eb85e82397733bf91e57de776748a18bdd",
+    "zdoc/reviews/20260917-gt03-s55-edit-01/owned/editor/editor-5861e60106424e37b4654d7ee8bf2b2f/project/scenes/fixture.tscn": "7d77c1697697b51f44e3607966fe6cf3accc32dd01f5583a99350d4020375160",
+    "zdoc/reviews/20260917-gt03-s55-edit-01/edit.create-response.json": "866515d20464a15f5498aef050d4a6086a10651fd38097c30a06ded829846698",
+    "zdoc/reviews/20260917-gt03-s55-edit-01/owned/editor/editor-5861e60106424e37b4654d7ee8bf2b2f/edit-64c34e055b6e477e950ac42b812576dd.json": "b34fb20af3b3545629975de60bda49e1cb0e26f82f603811412dca23aa08f6cd",
+    "zdoc/reviews/20260917-gt03-s55-audit/native-exports01/20260917-gt03-s55-edit-01/native-capture.json": "e752fd3863ed15cade7355c6b74da9c2d193e5c09febcd1ff76612b537e2ff36",
+    "zdoc/reviews/20260917-gt03-s55-audit/native-exports01/native-export-host.json": "3427cf46146b86b6bed34e91007ebc2bd3b69fc4102e2c5452dbdc793414a733",
+    "zdoc/reviews/20260917-gt03-s55-audit/native-exports01/20260917-gt03-s55-edit-01/native-events.bin": "8b17bcbed18d5e933a84dd32bcf04ad7607ca774af1f77d535d6a37bfa0a4ad0",
+    "zdoc/reviews/20260917-gt03-s55-audit/native-exports01/20260917-gt03-s55-edit-01/blobs/blob-08729673fb524c9291f8792575cebd9b": "de670ce0d96f86e282c6cecc82940835030f41a7ef335e16986a2c4289d4709f",
+    "zdoc/reviews/20260917-gt03-s55-script-02/driver.py": "65289bd65371ff1dd132d9a4ae82406db2238766d1d8975968d6a8c8d6eddf2b",
+    "zdoc/reviews/20260917-gt03-s55-script-02/effective-execution.json": "efa57479c08b22071341c8805dedc16954c785d94db1b9b7bafa86ae9cc9836c",
+    "zdoc/reviews/20260917-gt03-s55-script-02/invocation.json": "1719e5b931349bde9064f46699ceb1dd695d85d46c8bd17dd1d282b48fe6f750",
+    "zdoc/reviews/20260917-gt03-s55-script-02/stop-terminal.json": "69fdc0dc3062c23235d276db763f9dff6ecd29a085a94fc6cfd882eeee183f53"
+  },
+  "gt03_acceptance": false
+}

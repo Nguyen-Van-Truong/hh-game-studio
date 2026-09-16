@@ -1,0 +1,48 @@
+{
+  "passed": true,
+  "package": "20260917-gt04-client-04",
+  "source_closure_sha256": "bf2236b0229100062ec266b55722db7196fc0af84716bf6e29e01bd7595ef15f",
+  "source_files": 112,
+  "runtime_source_sha256": "sha256:19be3e24778feb87fa0ebcd7bfabb92a8df0bfc434a5087b305484a11d2fa287",
+  "unit_tests": 233,
+  "unit_inventory_sha256": "01c0a5d497a43b176f27855f91790340ae80553a70a6e5c7a41f2dec522164aa",
+  "client_checks": 32,
+  "http_calls": 15,
+  "client_pid": 19364,
+  "native_pid": 4320,
+  "stop_ms": 16.00000000325963,
+  "artifacts_checked": 151,
+  "preserved_failed_history": [
+    {
+      "package": "20260917-gt04-client-01",
+      "passed": false,
+      "source_closure_sha256": "4b429df76080eaa6f28db1cb37235bc06233f0f3c4d54ba4628799e0f23589d0",
+      "unit_tests": 227,
+      "native_parent_exit": 1,
+      "diagnostic": "invalid identifier"
+    },
+    {
+      "package": "20260917-gt04-client-02",
+      "passed": false,
+      "source_closure_sha256": "0f440370e5fc492e91ab30ef86ed5118f6558191612b3f1b4e2825b16f399b61",
+      "unit_tests": 227,
+      "native_parent_exit": 1,
+      "diagnostic": "BLENDER_COMMAND_REJECTED"
+    },
+    {
+      "package": "20260917-gt04-client-03",
+      "passed": false,
+      "source_closure_sha256": "b3208ab6fe5854e3c38434b28a1058fb4bad1c8acc6c90589ed3949f38d69645",
+      "unit_tests": 233,
+      "native_parent_exit": 1,
+      "diagnostic": "SECRET_FIELD_FORBIDDEN",
+      "child_checks": 32,
+      "child_exit": 0,
+      "note": "Child succeeded; parent artifact serialization failed. Not a completed candidate."
+    }
+  ],
+  "secret_check_scope": "pinned executed scanner plus retained raw-header inspection; ephemeral tokens unavailable",
+  "public_ack": false,
+  "durable": false,
+  "formal_acceptance": false
+}

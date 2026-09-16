@@ -1,0 +1,27 @@
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-client-01\source\studio\blender-addon\ui_queue.py", line 39, in parse
+    c.validate(check)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-client-01\source\studio\blender-addon\contract.py", line 73, in validate
+    identifier(value["command_id"])
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-client-01\source\studio\blender-addon\contract.py", line 28, in identifier
+    raise Rejected("invalid identifier")
+_gt04_contract_4bd42efa716a3ff5c6d3fdd1c8b5cf42b683056f8ce0ee5550b969e181df857a.Rejected: invalid identifier
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-client-01\source\studio\tests\blender\run_client_probe.py", line 327, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-client-01\source\studio\tests\blender\run_client_probe.py", line 265, in main
+    return frozen(output, args.binary)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-client-01\source\studio\tests\blender\run_client_probe.py", line 164, in frozen
+    initial = json.loads(setup.execute_bytes(command('setup.inspect', 'scene.inspect'), writer))['native']['result']
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-client-01\source\studio\host\blender\durable_session.py", line 135, in execute_bytes
+    value=queue.parse(queue.c.canonical(command));key=value['command_id'];digest=queue.c.digest(value)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-client-01\source\studio\blender-addon\ui_queue.py", line 42, in parse
+    raise c.Rejected("INVALID_UI_COMMAND") from exc
+_gt04_contract_4bd42efa716a3ff5c6d3fdd1c8b5cf42b683056f8ce0ee5550b969e181df857a.Rejected: INVALID_UI_COMMAND

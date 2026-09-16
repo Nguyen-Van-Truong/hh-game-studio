@@ -1,0 +1,15 @@
+test_after_cas_before_selected_cut_holds_and_reopen_rejects_unwitnessed_selector (test_publication_journal_v3.JournalV3Tests.test_after_cas_before_selected_cut_holds_and_reopen_rejects_unwitnessed_selector) ... ok
+test_before_cas_cut_reopens_old_selection_and_pending_activating (test_publication_journal_v3.JournalV3Tests.test_before_cas_cut_reopens_old_selection_and_pending_activating) ... ok
+test_capture_and_readback_reject_boolean_integer_alias_without_native_append (test_publication_journal_v3.JournalV3Tests.test_capture_and_readback_reject_boolean_integer_alias_without_native_append) ... ok
+test_complete_native_chain_commits_then_reopens_selected_candidate_readonly (test_publication_journal_v3.JournalV3Tests.test_complete_native_chain_commits_then_reopens_selected_candidate_readonly) ... ok
+test_expired_stage_deadline_rejects_before_native_create (test_publication_journal_v3.JournalV3Tests.test_expired_stage_deadline_rejects_before_native_create) ... ok
+test_failed_unused_prepare_cleanup_retains_outer_owner_and_interrupt (test_publication_journal_v3.JournalV3Tests.test_failed_unused_prepare_cleanup_retains_outer_owner_and_interrupt) ... ok
+test_native_close_failure_retains_owner_for_exact_retry (test_publication_journal_v3.JournalV3Tests.test_native_close_failure_retains_owner_for_exact_retry) ... ok
+test_same_byte_new_file_id_selector_substitution_rejected_after_normal_cas (test_publication_journal_v3.JournalV3Tests.test_same_byte_new_file_id_selector_substitution_rejected_after_normal_cas) ... ok
+test_selected_before_adoption_cut_reopens_new_selection_without_committed_claim (test_publication_journal_v3.JournalV3Tests.test_selected_before_adoption_cut_reopens_new_selection_without_committed_claim) ... ok
+test_selected_content_substitution_rejected_by_actual_native_read (test_publication_journal_v3.JournalV3Tests.test_selected_content_substitution_rejected_by_actual_native_read) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 202.233s
+
+OK

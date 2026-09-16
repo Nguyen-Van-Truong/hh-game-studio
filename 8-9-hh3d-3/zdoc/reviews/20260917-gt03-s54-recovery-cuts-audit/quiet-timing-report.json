@@ -1,0 +1,207 @@
+{
+  "candidate_only": true,
+  "gt03_acceptance": false,
+  "measurement_scope": "read-only artifact mtimes plus existing recorded event timestamps; no new engine or recovery open",
+  "failed_runtime_closure": "c354c978062dc9987f98eae28d5af158bed5256ba25126457be44d43a720150f",
+  "failure": "GODOT_DEADLINE_EXPIRED before commit phase; HTTP UNKNOWN and public_ack=false",
+  "quiet_retry": true,
+  "deadline_utc": "2026-09-16T22:08:39.741000+00:00",
+  "file_records": [
+    {
+      "path": "20260917-gt03-s54-recovery-cuts-resume-02/scene-cas/recovery-request.json",
+      "sha256": "bfc093884736189ef222fdb15ec877d0960478a8fbed52a3abff19c9ea892f3b",
+      "mtime_ns": 1789596490742203500,
+      "mtime_utc": "2026-09-16T22:08:10.742203+00:00"
+    },
+    {
+      "path": "20260917-gt03-s54-recovery-cuts-resume-02/scene-cas/before-reconcile-snapshot.json",
+      "sha256": "52666b1929072bdb5ca9e408c00bfdca5b11a51694dd5214b1eab4eab681ae2d",
+      "mtime_ns": 1789596489575930100,
+      "mtime_utc": "2026-09-16T22:08:09.575930+00:00"
+    },
+    {
+      "path": "20260917-gt03-s54-recovery-cuts-resume-02/scene-cas/recovery/recovery-editor/editor-6d18252647d949deab58afcb534491ef/process-start.json",
+      "sha256": "c046c5f6c0fe5b5efaf825e96443e78a4133c2408414e14c3405cb6b389e60d4",
+      "mtime_ns": 1789596509083293600,
+      "mtime_utc": "2026-09-16T22:08:29.083294+00:00"
+    },
+    {
+      "path": "20260917-gt03-s54-recovery-cuts-resume-02/scene-cas/recovery/recovery-editor/editor-6d18252647d949deab58afcb534491ef/hello.json",
+      "sha256": "d41503866fbeb5a4cff0da38efa5a4ca85fd1c643d1d2a2731b6b436219d00d7",
+      "mtime_ns": 1789596512933979200,
+      "mtime_utc": "2026-09-16T22:08:32.933979+00:00"
+    },
+    {
+      "path": "20260917-gt03-s54-recovery-cuts-resume-02/scene-cas/response.json",
+      "sha256": "dbd2242f6a8c935c3e37278574049bb43c0496371a06a1b5b37b76d3d6dfc8c3",
+      "mtime_ns": 1789596525464074600,
+      "mtime_utc": "2026-09-16T22:08:45.464075+00:00"
+    },
+    {
+      "path": "20260917-gt03-s54-recovery-cuts-resume-02/scene-cas/recovery/recovery-editor/editor-6d18252647d949deab58afcb534491ef/close.json",
+      "sha256": "e8821571757fb88a06ff7570914072c6168bf9492abfae572166a280bcfbcfdb",
+      "mtime_ns": 1789596527699434300,
+      "mtime_utc": "2026-09-16T22:08:47.699434+00:00"
+    },
+    {
+      "path": "20260917-gt03-s54-recovery-cuts-resume-02/scene-cas/recovery/recovery-editor/editor-6d18252647d949deab58afcb534491ef/process-exit.json",
+      "sha256": "99eafc66d72b4543470397d3aabb5bf17c056b8d39b364315ca073779869c52b",
+      "mtime_ns": 1789596527675604300,
+      "mtime_utc": "2026-09-16T22:08:47.675604+00:00"
+    },
+    {
+      "path": "20260917-gt03-s54-recovery-cuts-resume-02/scene-cas/result.json",
+      "sha256": "228b253a7b69893b4fec1790b97029a6d2d951ebf59f59adcaabb357fd4bbbf1",
+      "mtime_ns": 1789596527701465100,
+      "mtime_utc": "2026-09-16T22:08:47.701465+00:00"
+    },
+    {
+      "path": "20260917-gt03-s54-recovery-cuts-resume-02/scene-cas/recovery-cut-host.json",
+      "sha256": "1973cc5806803a86016aed6dea9dcf7fa5191b8ae83c02bdc0ee31243f5c33ba",
+      "mtime_ns": 1789596527722922500,
+      "mtime_utc": "2026-09-16T22:08:47.722923+00:00"
+    }
+  ],
+  "artifact_deltas_seconds": {
+    "request_written_to_editor_process_start": 18.341,
+    "editor_process_start_to_hello": 3.851,
+    "request_written_to_unknown_response": 34.722,
+    "hello_before_request_deadline": 6.807
+  },
+  "native_logs": [
+    {
+      "artifact": {
+        "path": "20260917-gt03-s54-recovery-cuts-resume-02/scene-cas/recovery/recovery-editor/editor-6d18252647d949deab58afcb534491ef/stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "mtime_ns": 1789596508973145800,
+        "mtime_utc": "2026-09-16T22:08:28.973146+00:00"
+      },
+      "clean": true
+    },
+    {
+      "artifact": {
+        "path": "20260917-gt03-s54-recovery-cuts-resume-02/scene-cas/recovery/recovery-editor/editor-6d18252647d949deab58afcb534491ef/stdout.txt",
+        "sha256": "e86dc130dd37f4ec435c066d1789018be7d337fa25441fa207eedc96da4d3fb1",
+        "mtime_ns": 1789596512991185800,
+        "mtime_utc": "2026-09-16T22:08:32.991186+00:00"
+      },
+      "clean": true
+    }
+  ],
+  "editor_cleanup": {
+    "actual_process_exit": {
+      "exit_code": 0,
+      "pid": 32340
+    },
+    "closed": true,
+    "held": false,
+    "job": {
+      "active_count": 0,
+      "assigned": true,
+      "close_uncertain": false,
+      "closed": true,
+      "configured": true,
+      "create_uncertain": false,
+      "failed_operations": [],
+      "handle_retained": false,
+      "native_error": null,
+      "tainted": false,
+      "zero_observed": true
+    },
+    "logs_overflow": false,
+    "public_ack": false,
+    "wrapper_exit_code": 0
+  },
+  "case_raw_exit": {
+    "target_pid": 22828,
+    "started_at": "2026-09-16T22:07:56.120254+00:00",
+    "exit_code": 2
+  },
+  "earlier_success_different_closure": {
+    "package": "20260917-gt03-s54-recovery-publication-01",
+    "source_closure_sha256": "469b22d6788ef63c7ca4d6e7dc91e703494db439834dffacdef7d476a9464bdc",
+    "events": [
+      {
+        "kind": "ADMITTED",
+        "observed_ms": 1789593978224,
+        "admission": {
+          "admitted_ms": 1789593977300,
+          "authority_epoch": 2,
+          "deadline_ms": 1789594002757,
+          "explicit_reconcile": true,
+          "session_id": "session.ad33fc1a82c8ac8997c2e2f9cfd3a473"
+        },
+        "readback_started_ms": null,
+        "readback_observed_ms": null
+      },
+      {
+        "kind": "READBACK",
+        "observed_ms": 1789593994962,
+        "admission": null,
+        "readback_started_ms": 1789593983385,
+        "readback_observed_ms": 1789593990375
+      },
+      {
+        "kind": "TERMINAL",
+        "observed_ms": 1789593998687,
+        "admission": null,
+        "readback_started_ms": null,
+        "readback_observed_ms": null
+      }
+    ]
+  },
+  "interpretation": [
+    "Coordinator ended native storage/Registry unit lanes and transferred the exclusive native slot before this quiet retry; it still exhausted the unchanged deadline.",
+    "Most of the request budget elapsed before editor process start; the editor hello left only a few seconds for protected readback and terminal work.",
+    "The earlier successful recovery is a different closure and shorter original journal, so it cannot establish a timing baseline for this scene-CAS route.",
+    "The quiet failure shows the route cannot finish within its current budget even without the concurrent unit load. The registered selected storage is unchanged but includes the previous failed recovery suffix. Runtime-owner consolidation/profiling is required; the 30-second contract remains unchanged."
+  ],
+  "failed_recovery_events": [
+    {
+      "kind": "HOLD",
+      "observed_ms": 1789595500966,
+      "admission": null,
+      "reason": "unwitnessed-selection"
+    },
+    {
+      "kind": "ADMITTED",
+      "observed_ms": 1789595855399,
+      "admission": {
+        "admitted_ms": 1789595854128,
+        "authority_epoch": 3,
+        "deadline_ms": 1789595876326,
+        "explicit_reconcile": true,
+        "session_id": "session.c1be2db2f906894f491b5439e85702e6"
+      },
+      "reason": null
+    },
+    {
+      "kind": "HOLD",
+      "observed_ms": 1789595879993,
+      "admission": null,
+      "reason": "reconciliation-interrupted"
+    },
+    {
+      "kind": "ADMITTED",
+      "observed_ms": 1789596498949,
+      "admission": {
+        "admitted_ms": 1789596497592,
+        "authority_epoch": 4,
+        "deadline_ms": 1789596519741,
+        "explicit_reconcile": true,
+        "session_id": "session.0853878f79ff94477e9c5f5881a6378c"
+      },
+      "reason": null
+    },
+    {
+      "kind": "HOLD",
+      "observed_ms": 1789596520330,
+      "admission": null,
+      "reason": "reconciliation-interrupted"
+    }
+  ],
+  "final_attempt_phases": [
+    "HELD",
+    "HELD"
+  ]
+}

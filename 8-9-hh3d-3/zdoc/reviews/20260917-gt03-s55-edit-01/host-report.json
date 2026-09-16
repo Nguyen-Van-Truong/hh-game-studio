@@ -1,0 +1,27 @@
+{
+  "wrapper_pid": 14096,
+  "started_at": "2026-09-16T22:36:04.514577+00:00",
+  "argv": [
+    "python.exe",
+    "-B",
+    "$SNAPSHOT/tests/godot/run_edit_publication_probe.py",
+    "--frozen",
+    "--output",
+    "20260917-gt03-s55-edit-01",
+    "--run-id",
+    "GT03-S55-EDIT-01",
+    "--binary",
+    "Godot_v4.7.2-stable_win64.exe",
+    "--closure",
+    "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e"
+  ],
+  "exit_code": 0,
+  "target_pid": 6972,
+  "wrapper_exit_code": 0,
+  "timed_out": false,
+  "tree_verified": true,
+  "ownership": "gated_job_kill_on_close",
+  "stdout": "native-edit-stdout.txt",
+  "stderr": "native-edit-stderr.txt",
+  "host": "native-edit-host.json"
+}

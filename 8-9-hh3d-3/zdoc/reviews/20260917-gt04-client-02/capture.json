@@ -1,0 +1,59 @@
+{
+  "source_closure_sha256": "0f440370e5fc492e91ab30ef86ed5118f6558191612b3f1b4e2825b16f399b61",
+  "unit": {
+    "wrapper_pid": 30400,
+    "started_at": "2026-09-16T23:44:41.542673+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "-c",
+      "import json,sys,unittest\ns=unittest.defaultTestLoader.discover('tests/blender',pattern='test_*.py')\ndef flatten(s):\n for t in s:\n  if isinstance(t,unittest.TestSuite):yield from flatten(t)\n  else:yield t.id()\nids=list(flatten(s));print('GT04_UNIT_INVENTORY '+json.dumps(ids),flush=True)\nr=unittest.TextTestRunner(verbosity=2).run(s)\nprint('GT04_UNIT_COMPLETE '+json.dumps({'run':r.testsRun,'failures':len(r.failures),'errors':len(r.errors),'skips':len(r.skipped)}),flush=True)\nsys.exit(not r.wasSuccessful())\n"
+    ],
+    "exit_code": 0,
+    "target_pid": 40740,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "unit-stdout.txt",
+    "stderr": "unit-stderr.txt",
+    "host": "unit-host.json"
+  },
+  "host": {
+    "wrapper_pid": 2036,
+    "started_at": "2026-09-16T23:44:52.692813+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "$SNAPSHOT/tests/blender/run_client_probe.py",
+      "--frozen",
+      "--output",
+      "20260917-gt04-client-02",
+      "--binary",
+      "blender.exe"
+    ],
+    "exit_code": 1,
+    "target_pid": 29020,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "native-stdout.txt",
+    "stderr": "native-stderr.txt",
+    "host": "native-host.json"
+  },
+  "unit_completion": true,
+  "native_completion": false,
+  "unit_counts": [
+    {
+      "run": 227,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    }
+  ],
+  "source_unchanged": true,
+  "snapshot_unchanged": true,
+  "formal_acceptance": false,
+  "passed": false
+}

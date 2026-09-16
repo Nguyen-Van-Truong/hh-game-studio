@@ -1,0 +1,27 @@
+{
+  "wrapper_pid": 2728,
+  "started_at": "2026-09-16T23:45:50.593341+00:00",
+  "argv": [
+    "python.exe",
+    "-B",
+    "driver.py",
+    "--frozen",
+    "--output",
+    "20260917-gt03-s55-save-01",
+    "--run-id",
+    "GT03-S55-SAVE-01",
+    "--binary",
+    "Godot_v4.7.2-stable_win64.exe",
+    "--closure",
+    "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e"
+  ],
+  "exit_code": 0,
+  "target_pid": 42056,
+  "wrapper_exit_code": 0,
+  "timed_out": false,
+  "tree_verified": true,
+  "ownership": "gated_job_kill_on_close",
+  "stdout": "native-save-stdout.txt",
+  "stderr": "native-save-stderr.txt",
+  "host": "native-save-host.json"
+}

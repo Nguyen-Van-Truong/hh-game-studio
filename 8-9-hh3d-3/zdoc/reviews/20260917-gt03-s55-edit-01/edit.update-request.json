@@ -1,0 +1,26 @@
+{
+  "command_id": "edit.update",
+  "schema_version": "hh-studio-0.1",
+  "project_id": "project.fixture",
+  "operation": "scene.node.update",
+  "lease_id": "lease.7cd6796f06da23348bdd3f36b2ff943c",
+  "fencing_epoch": 2,
+  "expected_revision": "sha256:b1933be63378d97d2b5d5da00632e7a5d7bbe134d629fe7eda098f3af0b0a46f",
+  "target": {
+    "stable_id": "box.public"
+  },
+  "payload": {
+    "expected_generation": 1,
+    "expected_project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+    "changes": {
+      "position": [
+        4,
+        5,
+        6
+      ]
+    }
+  },
+  "payload_hash": "sha256:5b6d39adb8b14c8a6665f17070c2d25ba1f154b17f109778b8dff820ef9e3da2",
+  "deadline_ms": 1789598235802,
+  "digest": "sha256:3c096285a85d84469cda9ea99560af18f8336ea633d41129dbf9173fcdae5efa"
+}

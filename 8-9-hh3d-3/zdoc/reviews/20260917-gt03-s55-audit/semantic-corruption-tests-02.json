@@ -1,0 +1,155 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "lane": "stop",
+      "mutation": "source reference closure",
+      "rejected": true,
+      "reason": "shared source reference mismatch"
+    },
+    {
+      "lane": "stop",
+      "mutation": "source reference inventory count",
+      "rejected": true,
+      "reason": "shared source reference mismatch"
+    },
+    {
+      "lane": "stop",
+      "mutation": "raw host exit",
+      "rejected": true,
+      "reason": "raw process exit/PID/Job mismatch"
+    },
+    {
+      "lane": "stop",
+      "mutation": "raw host PID",
+      "rejected": true,
+      "reason": "raw process exit/PID/Job mismatch"
+    },
+    {
+      "lane": "stop",
+      "mutation": "snapshot terminal response",
+      "rejected": true,
+      "reason": "pure event fold differs from captured snapshot"
+    },
+    {
+      "lane": "stop",
+      "mutation": "selected FileID",
+      "rejected": true,
+      "reason": "pure event fold differs from captured snapshot"
+    },
+    {
+      "lane": "stop",
+      "mutation": "readback semantic state",
+      "rejected": true,
+      "reason": "actual semantic readback revision differs"
+    },
+    {
+      "lane": "stop",
+      "mutation": "readback files",
+      "rejected": true,
+      "reason": "actual readback full selected files differ"
+    },
+    {
+      "lane": "stop",
+      "mutation": "actual selected bytes",
+      "rejected": true,
+      "reason": "selected file bytes differ: scenes/fixture.tscn"
+    },
+    {
+      "lane": "stop",
+      "mutation": "terminal wire content",
+      "rejected": true,
+      "reason": "original terminal response differs from pure replay"
+    },
+    {
+      "lane": "edit",
+      "mutation": "source reference closure",
+      "rejected": true,
+      "reason": "shared source reference mismatch"
+    },
+    {
+      "lane": "edit",
+      "mutation": "source reference inventory count",
+      "rejected": true,
+      "reason": "shared source reference mismatch"
+    },
+    {
+      "lane": "edit",
+      "mutation": "raw host exit",
+      "rejected": true,
+      "reason": "raw process exit/PID/Job mismatch"
+    },
+    {
+      "lane": "edit",
+      "mutation": "raw host PID",
+      "rejected": true,
+      "reason": "raw process exit/PID/Job mismatch"
+    },
+    {
+      "lane": "edit",
+      "mutation": "snapshot terminal response",
+      "rejected": true,
+      "reason": "pure event fold differs from captured snapshot"
+    },
+    {
+      "lane": "edit",
+      "mutation": "selected FileID",
+      "rejected": true,
+      "reason": "pure event fold differs from captured snapshot"
+    },
+    {
+      "lane": "edit",
+      "mutation": "readback semantic state",
+      "rejected": true,
+      "reason": "actual semantic readback revision differs"
+    },
+    {
+      "lane": "edit",
+      "mutation": "readback files",
+      "rejected": true,
+      "reason": "actual readback full selected files differ"
+    },
+    {
+      "lane": "edit",
+      "mutation": "actual selected bytes",
+      "rejected": true,
+      "reason": "selected file bytes differ: scenes/fixture.tscn"
+    },
+    {
+      "lane": "edit",
+      "mutation": "terminal wire content",
+      "rejected": true,
+      "reason": "original terminal response differs from pure replay"
+    },
+    {
+      "lane": "edit",
+      "mutation": "raw edit observation",
+      "rejected": true,
+      "reason": "PUBLICATION_V5_OBSERVATION_SEMANTICS: pure scene.save publication history v3"
+    }
+  ],
+  "verifier_sha256": "447460f8cd1de4fd1e3b7771deaf877d6335b2f34adfeb8e3e8f8ea564b528e3",
+  "test_sha256": "1c2ac82f812b351b260a6b8c3c9bc7be6ad892fb5a69d7e30f279a5f2af2c8f2",
+  "source_closure_sha256": "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+  "native_processes_started": 0,
+  "native_handles_opened": 0,
+  "mutations_in_memory_only": true,
+  "shared_source_unchanged": true,
+  "historical_evidence_unchanged": true,
+  "tested_files_sha256": {
+    "zdoc/reviews/20260917-gt03-s55-stop-01/source-reference.json": "d18a95eedcb55faf1af224085613da382551e30ceeca5eab4ebeda6f2e434577",
+    "zdoc/reviews/20260917-gt03-s55-stop-01/native-stop-host.json": "0391c8153d83776fa81a3d6c696ca4c79cb6b08266f94f665902ea142a56b99e",
+    "zdoc/reviews/20260917-gt03-s55-stop-01/reopened.json": "3c50ce846aa1db9efd84ef4799fbbdf618404a748636ad65978d770564bf915f",
+    "zdoc/reviews/20260917-gt03-s55-stop-01/after.json": "7ff7efa382b987e8cbe9acdb6c158dba73e21f02a76739b24ec85ed41e803ab4",
+    "zdoc/reviews/20260917-gt03-s55-stop-01/owned/editor/editor-30b4a21224d249e4a00fccd868a3cd8c/project/scenes/fixture.tscn": "51eaa111f832327d74b2031d382eb22ab30c8b725323e26ebcf7a66bbef571cb",
+    "zdoc/reviews/20260917-gt03-s55-stop-01/save-response.json": "a6bf92452daae6c655abd7ccab4d869013dca1455f95284042defaaeab9228ab",
+    "zdoc/reviews/20260917-gt03-s55-edit-01/source-reference.json": "d18a95eedcb55faf1af224085613da382551e30ceeca5eab4ebeda6f2e434577",
+    "zdoc/reviews/20260917-gt03-s55-edit-01/native-edit-host.json": "837b3fc9dfdc3185204a88ffefe9bfc914a1dc1af76da820e22311b0703cdcf1",
+    "zdoc/reviews/20260917-gt03-s55-edit-01/journal-snapshot.json": "3ea12f766b0e3cd4855f7fb98fb75fa1d57495403de7093c57c5643c13905583",
+    "zdoc/reviews/20260917-gt03-s55-edit-01/after-save.json": "98d984470dc83f84df1a918c0ad532eb85e82397733bf91e57de776748a18bdd",
+    "zdoc/reviews/20260917-gt03-s55-edit-01/owned/editor/editor-5861e60106424e37b4654d7ee8bf2b2f/project/scenes/fixture.tscn": "7d77c1697697b51f44e3607966fe6cf3accc32dd01f5583a99350d4020375160",
+    "zdoc/reviews/20260917-gt03-s55-edit-01/edit.create-response.json": "866515d20464a15f5498aef050d4a6086a10651fd38097c30a06ded829846698",
+    "zdoc/reviews/20260917-gt03-s55-edit-01/owned/editor/editor-5861e60106424e37b4654d7ee8bf2b2f/edit-64c34e055b6e477e950ac42b812576dd.json": "b34fb20af3b3545629975de60bda49e1cb0e26f82f603811412dca23aa08f6cd"
+  },
+  "gt03_acceptance": false
+}

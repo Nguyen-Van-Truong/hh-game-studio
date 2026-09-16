@@ -1,0 +1,79 @@
+{
+  "passed": true,
+  "checks": {
+    "exact_case_inventory": true,
+    "aggregate_pass": true,
+    "same_frozen_runtime": true,
+    "driver_frozen_exact": true,
+    "runtime_source_bytes_exact": true,
+    "snapshot_stability": true
+  },
+  "cases": [
+    {
+      "case": "script-committed",
+      "passed": true,
+      "checks": {
+        "functional_checks_pass": true,
+        "case_raw_exit": true,
+        "publisher_exact_crash_exit": true,
+        "engine_cleanup": true,
+        "logs_reaudited": true
+      },
+      "functional_check_count": 21,
+      "response_sha256": "2616a07e7687f4c2103bcb5a892f75af6859d0facd179c7dbe6f77991fc551a4",
+      "log_file_count": 58,
+      "expected_diagnostic_count": 10
+    },
+    {
+      "case": "script-retired",
+      "passed": true,
+      "checks": {
+        "functional_checks_pass": true,
+        "case_raw_exit": true,
+        "publisher_exact_crash_exit": true,
+        "engine_cleanup": true,
+        "logs_reaudited": true
+      },
+      "functional_check_count": 21,
+      "response_sha256": "eb604db406bfbd5a1fd5a9cb8a4a15ede2988fc78b4bb48ef771f21801328d48",
+      "log_file_count": 56,
+      "expected_diagnostic_count": 10
+    },
+    {
+      "case": "edit-applied",
+      "passed": true,
+      "checks": {
+        "functional_checks_pass": true,
+        "case_raw_exit": true,
+        "publisher_exact_crash_exit": true,
+        "engine_cleanup": true,
+        "logs_reaudited": true
+      },
+      "functional_check_count": 21,
+      "response_sha256": "f9db7699befacb0171d8bc28e2ab2f932c9365b84b09a21b802dc1a72d8719d6",
+      "log_file_count": 32,
+      "expected_diagnostic_count": 5
+    },
+    {
+      "case": "script-unwitnessed",
+      "passed": true,
+      "checks": {
+        "functional_checks_pass": true,
+        "case_raw_exit": true,
+        "publisher_exact_crash_exit": true,
+        "engine_cleanup": true,
+        "logs_reaudited": true
+      },
+      "functional_check_count": 24,
+      "response_sha256": "db5b0d02ef5972497d0895b92df86e41be163af314544bae77ce97341989656f",
+      "log_file_count": 58,
+      "expected_diagnostic_count": 10
+    }
+  ],
+  "source_closure_sha256": "478797d092509af2ae88cf3ad7a71b28b09a55e401d4b51e90c91544c0319564",
+  "driver_sha256": "d2fd6a89119cd59d0c8e92efe2ac6c1d143df4f2f8e1f8e255f74905a3036fd2",
+  "candidate_only": true,
+  "gt03_acceptance": false,
+  "scope": "Actual distinct crash classes only; no inference of unexecuted adjacent cases or acceptance.",
+  "no_native_process_launched": true
+}

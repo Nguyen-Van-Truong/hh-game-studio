@@ -1,0 +1,6 @@
+{
+  "code": "import unittest,json,sys; suite=unittest.defaultTestLoader.discover('tests/godot',pattern='test_recovery_journal_native.py'); r=unittest.TextTestRunner(verbosity=2).run(suite);print('NATIVE_INSPECTION_COMPLETE '+json.dumps({'run':r.testsRun,'failures':len(r.failures),'errors':len(r.errors),'skips':len(r.skipped)}),flush=True);sys.exit(not r.wasSuccessful())",
+  "runtime_package": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s55-source-01",
+  "source_closure_sha256": "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+  "runner_sha256": "ea522450acc46f90be5e2a7b9257e73ce8b619948105b2c9073aac1f881c7328"
+}

@@ -1,0 +1,65 @@
+{
+  "run_id": "GT03-S55-SAVE-01",
+  "lane": "save",
+  "passed": true,
+  "started_at_utc": "2026-09-16T23:45:50.591888+00:00",
+  "source_closure_sha256": "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+  "controller_sha256": "cf36f1c33fb7d76d18bdcac58b62b930913f05ded8f1f575fe8c4be68266e8e4",
+  "candidate_only": true,
+  "gt03_acceptance": false,
+  "effective_execution": {
+    "policy": "cleanup-only-stop-drain-v1",
+    "runtime_closure_sha256": "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+    "original_probe": "tests/godot/run_publication_probe.py",
+    "original_probe_sha256": "3fb8d48ed891a88fefd40899e537e2594c890d93d86304c15f1da8805edcd81a",
+    "executed_driver": "driver.py",
+    "executed_driver_sha256": "fc1f6498320de8340a8b8bbabcd8471a0cf092ec81a6e7b0929915bae662c09a",
+    "controller_sha256": "cf36f1c33fb7d76d18bdcac58b62b930913f05ded8f1f575fe8c4be68266e8e4",
+    "base_controller_sha256": "46d27dd3a3c188ad90abd8a951d6723314e989ebd642fae6be68dbe1232394da",
+    "runtime_modified": false,
+    "unit_dependencies_modified": false
+  },
+  "host": {
+    "wrapper_pid": 2728,
+    "started_at": "2026-09-16T23:45:50.593341+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "driver.py",
+      "--frozen",
+      "--output",
+      "20260917-gt03-s55-save-01",
+      "--run-id",
+      "GT03-S55-SAVE-01",
+      "--binary",
+      "Godot_v4.7.2-stable_win64.exe",
+      "--closure",
+      "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e"
+    ],
+    "exit_code": 0,
+    "target_pid": 42056,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "native-save-stdout.txt",
+    "stderr": "native-save-stderr.txt",
+    "host": "native-save-host.json"
+  },
+  "result": {
+    "file": "publication.json",
+    "sha256": "cf31c79b4fbbe34c2ed63ab72007f672ea123eeae6207c209246c03e41fc310b",
+    "check_count": 18,
+    "completion_marker": {
+      "passed": true,
+      "checks": 18
+    },
+    "original_host": null
+  },
+  "native_logs_clean": true,
+  "source_inventory_unchanged": true,
+  "controller_unchanged": true,
+  "driver_unchanged": true,
+  "executable_pins_unchanged": true,
+  "finished_at_utc": "2026-09-16T23:47:38.923913+00:00"
+}

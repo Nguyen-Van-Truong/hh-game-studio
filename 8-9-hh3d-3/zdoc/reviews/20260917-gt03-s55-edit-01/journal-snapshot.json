@@ -1,0 +1,2442 @@
+{
+  "candidate_ids": [
+    "candidate-7f43550420e94eb4bbe944f7e079930e"
+  ],
+  "commands": [
+    {
+      "checkpoint": {
+        "capture": {
+          "can_redo": false,
+          "can_undo": false,
+          "effect_completed_ms": 1789598195312,
+          "effect_started_ms": 1789598195302,
+          "observation_id": "capture-3eaef2da49f04e1d953ea3b531432492",
+          "observation_sha256": "917e82ec3d5460eea49a4582a0976233058401682c9afb91527703d74a60957d",
+          "scene_sha256": "069b19b4dbe3efa8bb3c642d0bc85916006e570353df80923eb3c741200b9342",
+          "scene_size_bytes": 266,
+          "semantic_revision": "sha256:f3fd9f270886a056f469e70586795e06c8d47b651021a22366629ab06d886162",
+          "semantic_sha256": "f3fd9f270886a056f469e70586795e06c8d47b651021a22366629ab06d886162"
+        },
+        "capture_blob": {
+          "identity": {
+            "file_id": "06f10a00000003000000000000000000",
+            "size": 3515,
+            "volume": "4938437614955579414"
+          },
+          "object_id": "blob-b8164812994a4b4990da1dfbd1b3ee9f",
+          "sha256": "917e82ec3d5460eea49a4582a0976233058401682c9afb91527703d74a60957d"
+        },
+        "observed_ms": 1789598195444,
+        "scene_blob": {
+          "identity": {
+            "file_id": "05f10a00000003000000000000000000",
+            "size": 266,
+            "volume": "4938437614955579414"
+          },
+          "object_id": "blob-3289c9be739e4232a01fb7d90f1eb86d",
+          "sha256": "069b19b4dbe3efa8bb3c642d0bc85916006e570353df80923eb3c741200b9342"
+        }
+      },
+      "command_id": "edit.create",
+      "digest": "sha256:224cd290a067f9c290e6f241428c42516434c2676e1e36d78804e68c3a79fdb8",
+      "edit_observation": {
+        "can_redo": false,
+        "can_undo": true,
+        "effect_completed_ms": 1789598198013,
+        "effect_started_ms": 1789598197961,
+        "history_id_after": 1,
+        "history_id_before": 1,
+        "observation_id": "edit-64c34e055b6e477e950ac42b812576dd",
+        "observation_sha256": "b34fb20af3b3545629975de60bda49e1cb0e26f82f603811412dca23aa08f6cd",
+        "semantic_revision": "sha256:b1933be63378d97d2b5d5da00632e7a5d7bbe134d629fe7eda098f3af0b0a46f",
+        "semantic_sha256": "b1933be63378d97d2b5d5da00632e7a5d7bbe134d629fe7eda098f3af0b0a46f"
+      },
+      "edit_prepared": {
+        "admission": {
+          "admitted_ms": 1789598192691,
+          "catalog_digest": "sha256:0fdc4e8e1a406a909dff439190bab1b4c6de3d2d2ad20602bced9572ffbe12df",
+          "deadline_ms": 1789598220336,
+          "fencing_epoch": 1,
+          "lease_expires_ms": 1789598278697,
+          "lease_id": "lease.0edd2e78700b8065e0de6d61ca302807",
+          "session_id": "session.8b807c6412b8aff518b4d45a0a61782e"
+        },
+        "before_project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+        "before_scene_revision": "sha256:f3fd9f270886a056f469e70586795e06c8d47b651021a22366629ab06d886162",
+        "command_id": "edit.create",
+        "digest": "sha256:224cd290a067f9c290e6f241428c42516434c2676e1e36d78804e68c3a79fdb8",
+        "editor": {
+          "creation_filetime": "134340717811056149",
+          "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+          "installed_source_sha256": "0d4aaa2a90febf5444d79c7d8702792ef282aaa62c26a26a484147268708f01a",
+          "pid": 37020,
+          "root_identity": {
+            "file_id": "bbf00a00000003000000000000000000",
+            "volume": "4938437614955579414"
+          },
+          "session_id": "editor-93c34746d37e438aa053b0eab379ff86"
+        },
+        "editor_generation": 1,
+        "expected_files": {
+          "addons/hh_studio/jcs_godot.gd": {
+            "role": "trusted_addon",
+            "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+            "size_bytes": 10165
+          },
+          "addons/hh_studio/jcs_godot.gd.uid": {
+            "role": "trusted_uid",
+            "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+            "size_bytes": 20
+          },
+          "addons/hh_studio/plugin.cfg": {
+            "role": "trusted_addon",
+            "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+            "size_bytes": 165
+          },
+          "addons/hh_studio/plugin.gd": {
+            "role": "trusted_addon",
+            "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+            "size_bytes": 23043
+          },
+          "addons/hh_studio/plugin.gd.uid": {
+            "role": "trusted_uid",
+            "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+            "size_bytes": 20
+          },
+          "addons/hh_studio/scene_commands.gd": {
+            "role": "trusted_addon",
+            "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+            "size_bytes": 32174
+          },
+          "addons/hh_studio/scene_commands.gd.uid": {
+            "role": "trusted_uid",
+            "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+            "size_bytes": 19
+          },
+          "project.godot": {
+            "role": "trusted_config",
+            "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+            "size_bytes": 282
+          },
+          "scenes/fixture.tscn": {
+            "role": "managed_scene",
+            "sha256": "51eaa111f832327d74b2031d382eb22ab30c8b725323e26ebcf7a66bbef571cb",
+            "size_bytes": 235
+          },
+          "scripts/fixture_actor.gd": {
+            "role": "managed_script",
+            "sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+            "size_bytes": 50
+          },
+          "scripts/fixture_actor.gd.uid": {
+            "role": "managed_uid",
+            "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+            "size_bytes": 20
+          }
+        },
+        "kind": "EDIT_INTENT",
+        "lease_owner": "session.8b807c6412b8aff518b4d45a0a61782e",
+        "observed_ms": 1789598192691,
+        "operation": "scene.node.create",
+        "parent_selection": {
+          "generation": 0,
+          "identity": "sha256:44cb2673867afd1e10fac38c44a549aa91f128ed9404661809ffe6cb3a53fef8"
+        },
+        "previous_selector_sha256": "abb837881d0afa1983b7af69aa2d0e0885edf2cabd88e0809348e89e5661ed44",
+        "previous_selector_version": {
+          "file_id": "fef00a00000003000000000000000000",
+          "sha256": "abb837881d0afa1983b7af69aa2d0e0885edf2cabd88e0809348e89e5661ed44",
+          "size_bytes": 3461,
+          "volume": "4938437614955579414"
+        },
+        "project_id": "project.fixture",
+        "projection_sha256": "a3d5ab03921a3bf295233f7e7a205191b1c2c39b37152244079c7348941fcfd8",
+        "projection_size_bytes": 395,
+        "root_instance_id": 1524277253837,
+        "schema": "hh-godot-publication-event-5",
+        "scratch_name": "capture-e8442f509f584c72bfb41d8aa20840cc.tscn",
+        "sequence": 2
+      },
+      "observation_blob": {
+        "identity": {
+          "file_id": "08f10a00000003000000000000000000",
+          "size": 5816,
+          "volume": "4938437614955579414"
+        },
+        "object_id": "blob-b913e161f0504562b1c121e749b392fe",
+        "sha256": "b34fb20af3b3545629975de60bda49e1cb0e26f82f603811412dca23aa08f6cd"
+      },
+      "phase": "COMMITTED",
+      "reason": "verified",
+      "receipt": {
+        "after_project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+        "before_project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+        "before_scene_revision": "sha256:f3fd9f270886a056f469e70586795e06c8d47b651021a22366629ab06d886162",
+        "checkpoint": {
+          "capture": {
+            "can_redo": false,
+            "can_undo": false,
+            "effect_completed_ms": 1789598195312,
+            "effect_started_ms": 1789598195302,
+            "observation_id": "capture-3eaef2da49f04e1d953ea3b531432492",
+            "observation_sha256": "917e82ec3d5460eea49a4582a0976233058401682c9afb91527703d74a60957d",
+            "scene_sha256": "069b19b4dbe3efa8bb3c642d0bc85916006e570353df80923eb3c741200b9342",
+            "scene_size_bytes": 266,
+            "semantic_revision": "sha256:f3fd9f270886a056f469e70586795e06c8d47b651021a22366629ab06d886162",
+            "semantic_sha256": "f3fd9f270886a056f469e70586795e06c8d47b651021a22366629ab06d886162"
+          },
+          "capture_blob": {
+            "identity": {
+              "file_id": "06f10a00000003000000000000000000",
+              "size": 3515,
+              "volume": "4938437614955579414"
+            },
+            "object_id": "blob-b8164812994a4b4990da1dfbd1b3ee9f",
+            "sha256": "917e82ec3d5460eea49a4582a0976233058401682c9afb91527703d74a60957d"
+          },
+          "observed_ms": 1789598195444,
+          "scene_blob": {
+            "identity": {
+              "file_id": "05f10a00000003000000000000000000",
+              "size": 266,
+              "volume": "4938437614955579414"
+            },
+            "object_id": "blob-3289c9be739e4232a01fb7d90f1eb86d",
+            "sha256": "069b19b4dbe3efa8bb3c642d0bc85916006e570353df80923eb3c741200b9342"
+          }
+        },
+        "command_id": "edit.create",
+        "digest": "sha256:224cd290a067f9c290e6f241428c42516434c2676e1e36d78804e68c3a79fdb8",
+        "durable_owner_required": true,
+        "editor": {
+          "creation_filetime": "134340717811056149",
+          "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+          "installed_source_sha256": "0d4aaa2a90febf5444d79c7d8702792ef282aaa62c26a26a484147268708f01a",
+          "pid": 37020,
+          "root_identity": {
+            "file_id": "bbf00a00000003000000000000000000",
+            "volume": "4938437614955579414"
+          },
+          "session_id": "editor-93c34746d37e438aa053b0eab379ff86"
+        },
+        "effect_scope": "editor_session",
+        "engine_effects_verified": false,
+        "files_saved": false,
+        "generation": 1,
+        "live_state_durable": false,
+        "observation": {
+          "can_redo": false,
+          "can_undo": true,
+          "effect_completed_ms": 1789598198013,
+          "effect_started_ms": 1789598197961,
+          "history_id_after": 1,
+          "history_id_before": 1,
+          "observation_id": "edit-64c34e055b6e477e950ac42b812576dd",
+          "observation_sha256": "b34fb20af3b3545629975de60bda49e1cb0e26f82f603811412dca23aa08f6cd",
+          "semantic_revision": "sha256:b1933be63378d97d2b5d5da00632e7a5d7bbe134d629fe7eda098f3af0b0a46f",
+          "semantic_sha256": "b1933be63378d97d2b5d5da00632e7a5d7bbe134d629fe7eda098f3af0b0a46f"
+        },
+        "observation_blob": {
+          "identity": {
+            "file_id": "08f10a00000003000000000000000000",
+            "size": 5816,
+            "volume": "4938437614955579414"
+          },
+          "object_id": "blob-b913e161f0504562b1c121e749b392fe",
+          "sha256": "b34fb20af3b3545629975de60bda49e1cb0e26f82f603811412dca23aa08f6cd"
+        },
+        "operation": "scene.node.create",
+        "public_ack": false,
+        "reason": "verified",
+        "root_instance_id": 1524277253837,
+        "schema": "hh-godot-editor-terminal-5",
+        "selection": {
+          "generation": 0,
+          "identity": "sha256:44cb2673867afd1e10fac38c44a549aa91f128ed9404661809ffe6cb3a53fef8"
+        },
+        "selector_version": {
+          "file_id": "fef00a00000003000000000000000000",
+          "sha256": "abb837881d0afa1983b7af69aa2d0e0885edf2cabd88e0809348e89e5661ed44",
+          "size_bytes": 3461,
+          "volume": "4938437614955579414"
+        },
+        "status": "COMMITTED"
+      },
+      "receipt_sha256": "ac56ddfedf1a2244ed3eac5cdebc453b7d8da05de32543489b59d96510a3722e",
+      "response": {
+        "code": "GODOT_EDITOR_EDITED",
+        "command_id": "edit.create",
+        "postconditions": {
+          "can_redo": false,
+          "can_undo": true,
+          "checkpoint_observation_id": "capture-3eaef2da49f04e1d953ea3b531432492",
+          "checkpoint_scene_sha256": "069b19b4dbe3efa8bb3c642d0bc85916006e570353df80923eb3c741200b9342",
+          "durable_receipt_sha256": "ac56ddfedf1a2244ed3eac5cdebc453b7d8da05de32543489b59d96510a3722e",
+          "editor_session_id": "editor-93c34746d37e438aa053b0eab379ff86",
+          "effect_scope": "editor_session",
+          "files_saved": false,
+          "generation": 1,
+          "history_boundary": false,
+          "history_id": 1,
+          "journal_receipt_durable": true,
+          "live_state_durable": false,
+          "managed_fixture_only": true,
+          "project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+          "public_ack": true,
+          "request_digest": "sha256:224cd290a067f9c290e6f241428c42516434c2676e1e36d78804e68c3a79fdb8",
+          "scene_revision": "sha256:b1933be63378d97d2b5d5da00632e7a5d7bbe134d629fe7eda098f3af0b0a46f",
+          "selection": {
+            "generation": 0,
+            "identity": "sha256:44cb2673867afd1e10fac38c44a549aa91f128ed9404661809ffe6cb3a53fef8"
+          }
+        },
+        "result_hash": null,
+        "result_revision": null,
+        "status": "COMMITTED"
+      },
+      "response_sha256": "ae0d4d4668dd968e800a6dc528fa334deed728d64c4837669ad78b9ec3b1d3a6"
+    },
+    {
+      "checkpoint": {
+        "capture": {
+          "can_redo": false,
+          "can_undo": true,
+          "effect_completed_ms": 1789598210123,
+          "effect_started_ms": 1789598210105,
+          "observation_id": "capture-2aec32ee27c744048eea6fee3b192d51",
+          "observation_sha256": "49d9448e5f0653e0e30eabc26c4eefd66bc63e94bffe3688d7f112e1c3368450",
+          "scene_sha256": "9f5e56622becdb133f995b8632c9450124a550aadd327abb2e5bb78e73820262",
+          "scene_size_bytes": 587,
+          "semantic_revision": "sha256:b1933be63378d97d2b5d5da00632e7a5d7bbe134d629fe7eda098f3af0b0a46f",
+          "semantic_sha256": "b1933be63378d97d2b5d5da00632e7a5d7bbe134d629fe7eda098f3af0b0a46f"
+        },
+        "capture_blob": {
+          "identity": {
+            "file_id": "10f10a00000003000000000000000000",
+            "size": 5370,
+            "volume": "4938437614955579414"
+          },
+          "object_id": "blob-85cae0498e154d0abb8a67bc3b7c0fbe",
+          "sha256": "49d9448e5f0653e0e30eabc26c4eefd66bc63e94bffe3688d7f112e1c3368450"
+        },
+        "observed_ms": 1789598210235,
+        "scene_blob": {
+          "identity": {
+            "file_id": "0ff10a00000003000000000000000000",
+            "size": 587,
+            "volume": "4938437614955579414"
+          },
+          "object_id": "blob-7b7c3a64b5384cd29441d538fb0fd079",
+          "sha256": "9f5e56622becdb133f995b8632c9450124a550aadd327abb2e5bb78e73820262"
+        }
+      },
+      "command_id": "edit.update",
+      "digest": "sha256:3c096285a85d84469cda9ea99560af18f8336ea633d41129dbf9173fcdae5efa",
+      "edit_observation": {
+        "can_redo": false,
+        "can_undo": true,
+        "effect_completed_ms": 1789598212800,
+        "effect_started_ms": 1789598212733,
+        "history_id_after": 1,
+        "history_id_before": 1,
+        "observation_id": "edit-864c3010bbbf4fb09622dea3e3c5e180",
+        "observation_sha256": "8886ee8f35e8584b974b3321c6dc1391935480e117cdaf3eccd54fcd0683c633",
+        "semantic_revision": "sha256:8ad91e5934ecda7dc89aecadbd034e5bf20c4092fb8ec50d3299cd344aeb9502",
+        "semantic_sha256": "8ad91e5934ecda7dc89aecadbd034e5bf20c4092fb8ec50d3299cd344aeb9502"
+      },
+      "edit_prepared": {
+        "admission": {
+          "admitted_ms": 1789598207851,
+          "catalog_digest": "sha256:0fdc4e8e1a406a909dff439190bab1b4c6de3d2d2ad20602bced9572ffbe12df",
+          "deadline_ms": 1789598235802,
+          "fencing_epoch": 2,
+          "lease_expires_ms": 1789598295955,
+          "lease_id": "lease.7cd6796f06da23348bdd3f36b2ff943c",
+          "session_id": "session.8b807c6412b8aff518b4d45a0a61782e"
+        },
+        "before_project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+        "before_scene_revision": "sha256:b1933be63378d97d2b5d5da00632e7a5d7bbe134d629fe7eda098f3af0b0a46f",
+        "command_id": "edit.update",
+        "digest": "sha256:3c096285a85d84469cda9ea99560af18f8336ea633d41129dbf9173fcdae5efa",
+        "editor": {
+          "creation_filetime": "134340717811056149",
+          "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+          "installed_source_sha256": "0d4aaa2a90febf5444d79c7d8702792ef282aaa62c26a26a484147268708f01a",
+          "pid": 37020,
+          "root_identity": {
+            "file_id": "bbf00a00000003000000000000000000",
+            "volume": "4938437614955579414"
+          },
+          "session_id": "editor-93c34746d37e438aa053b0eab379ff86"
+        },
+        "editor_generation": 1,
+        "expected_files": {
+          "addons/hh_studio/jcs_godot.gd": {
+            "role": "trusted_addon",
+            "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+            "size_bytes": 10165
+          },
+          "addons/hh_studio/jcs_godot.gd.uid": {
+            "role": "trusted_uid",
+            "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+            "size_bytes": 20
+          },
+          "addons/hh_studio/plugin.cfg": {
+            "role": "trusted_addon",
+            "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+            "size_bytes": 165
+          },
+          "addons/hh_studio/plugin.gd": {
+            "role": "trusted_addon",
+            "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+            "size_bytes": 23043
+          },
+          "addons/hh_studio/plugin.gd.uid": {
+            "role": "trusted_uid",
+            "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+            "size_bytes": 20
+          },
+          "addons/hh_studio/scene_commands.gd": {
+            "role": "trusted_addon",
+            "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+            "size_bytes": 32174
+          },
+          "addons/hh_studio/scene_commands.gd.uid": {
+            "role": "trusted_uid",
+            "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+            "size_bytes": 19
+          },
+          "project.godot": {
+            "role": "trusted_config",
+            "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+            "size_bytes": 282
+          },
+          "scenes/fixture.tscn": {
+            "role": "managed_scene",
+            "sha256": "51eaa111f832327d74b2031d382eb22ab30c8b725323e26ebcf7a66bbef571cb",
+            "size_bytes": 235
+          },
+          "scripts/fixture_actor.gd": {
+            "role": "managed_script",
+            "sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+            "size_bytes": 50
+          },
+          "scripts/fixture_actor.gd.uid": {
+            "role": "managed_uid",
+            "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+            "size_bytes": 20
+          }
+        },
+        "kind": "EDIT_INTENT",
+        "lease_owner": "session.8b807c6412b8aff518b4d45a0a61782e",
+        "observed_ms": 1789598207851,
+        "operation": "scene.node.update",
+        "parent_selection": {
+          "generation": 0,
+          "identity": "sha256:44cb2673867afd1e10fac38c44a549aa91f128ed9404661809ffe6cb3a53fef8"
+        },
+        "previous_selector_sha256": "abb837881d0afa1983b7af69aa2d0e0885edf2cabd88e0809348e89e5661ed44",
+        "previous_selector_version": {
+          "file_id": "fef00a00000003000000000000000000",
+          "sha256": "abb837881d0afa1983b7af69aa2d0e0885edf2cabd88e0809348e89e5661ed44",
+          "size_bytes": 3461,
+          "volume": "4938437614955579414"
+        },
+        "project_id": "project.fixture",
+        "projection_sha256": "f9fd5c15cf375f746b2ef0336f6bcc2fbef0129f340a5af84a712c7eae51caea",
+        "projection_size_bytes": 277,
+        "root_instance_id": 1524277253837,
+        "schema": "hh-godot-publication-event-5",
+        "scratch_name": "capture-f8089003b2644f9d93b785905a813c91.tscn",
+        "sequence": 5
+      },
+      "observation_blob": {
+        "identity": {
+          "file_id": "12f10a00000003000000000000000000",
+          "size": 5816,
+          "volume": "4938437614955579414"
+        },
+        "object_id": "blob-d79138bdfea64c268a7cc9fc32e4a823",
+        "sha256": "8886ee8f35e8584b974b3321c6dc1391935480e117cdaf3eccd54fcd0683c633"
+      },
+      "phase": "COMMITTED",
+      "reason": "verified",
+      "receipt": {
+        "after_project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+        "before_project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+        "before_scene_revision": "sha256:b1933be63378d97d2b5d5da00632e7a5d7bbe134d629fe7eda098f3af0b0a46f",
+        "checkpoint": {
+          "capture": {
+            "can_redo": false,
+            "can_undo": true,
+            "effect_completed_ms": 1789598210123,
+            "effect_started_ms": 1789598210105,
+            "observation_id": "capture-2aec32ee27c744048eea6fee3b192d51",
+            "observation_sha256": "49d9448e5f0653e0e30eabc26c4eefd66bc63e94bffe3688d7f112e1c3368450",
+            "scene_sha256": "9f5e56622becdb133f995b8632c9450124a550aadd327abb2e5bb78e73820262",
+            "scene_size_bytes": 587,
+            "semantic_revision": "sha256:b1933be63378d97d2b5d5da00632e7a5d7bbe134d629fe7eda098f3af0b0a46f",
+            "semantic_sha256": "b1933be63378d97d2b5d5da00632e7a5d7bbe134d629fe7eda098f3af0b0a46f"
+          },
+          "capture_blob": {
+            "identity": {
+              "file_id": "10f10a00000003000000000000000000",
+              "size": 5370,
+              "volume": "4938437614955579414"
+            },
+            "object_id": "blob-85cae0498e154d0abb8a67bc3b7c0fbe",
+            "sha256": "49d9448e5f0653e0e30eabc26c4eefd66bc63e94bffe3688d7f112e1c3368450"
+          },
+          "observed_ms": 1789598210235,
+          "scene_blob": {
+            "identity": {
+              "file_id": "0ff10a00000003000000000000000000",
+              "size": 587,
+              "volume": "4938437614955579414"
+            },
+            "object_id": "blob-7b7c3a64b5384cd29441d538fb0fd079",
+            "sha256": "9f5e56622becdb133f995b8632c9450124a550aadd327abb2e5bb78e73820262"
+          }
+        },
+        "command_id": "edit.update",
+        "digest": "sha256:3c096285a85d84469cda9ea99560af18f8336ea633d41129dbf9173fcdae5efa",
+        "durable_owner_required": true,
+        "editor": {
+          "creation_filetime": "134340717811056149",
+          "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+          "installed_source_sha256": "0d4aaa2a90febf5444d79c7d8702792ef282aaa62c26a26a484147268708f01a",
+          "pid": 37020,
+          "root_identity": {
+            "file_id": "bbf00a00000003000000000000000000",
+            "volume": "4938437614955579414"
+          },
+          "session_id": "editor-93c34746d37e438aa053b0eab379ff86"
+        },
+        "effect_scope": "editor_session",
+        "engine_effects_verified": false,
+        "files_saved": false,
+        "generation": 1,
+        "live_state_durable": false,
+        "observation": {
+          "can_redo": false,
+          "can_undo": true,
+          "effect_completed_ms": 1789598212800,
+          "effect_started_ms": 1789598212733,
+          "history_id_after": 1,
+          "history_id_before": 1,
+          "observation_id": "edit-864c3010bbbf4fb09622dea3e3c5e180",
+          "observation_sha256": "8886ee8f35e8584b974b3321c6dc1391935480e117cdaf3eccd54fcd0683c633",
+          "semantic_revision": "sha256:8ad91e5934ecda7dc89aecadbd034e5bf20c4092fb8ec50d3299cd344aeb9502",
+          "semantic_sha256": "8ad91e5934ecda7dc89aecadbd034e5bf20c4092fb8ec50d3299cd344aeb9502"
+        },
+        "observation_blob": {
+          "identity": {
+            "file_id": "12f10a00000003000000000000000000",
+            "size": 5816,
+            "volume": "4938437614955579414"
+          },
+          "object_id": "blob-d79138bdfea64c268a7cc9fc32e4a823",
+          "sha256": "8886ee8f35e8584b974b3321c6dc1391935480e117cdaf3eccd54fcd0683c633"
+        },
+        "operation": "scene.node.update",
+        "public_ack": false,
+        "reason": "verified",
+        "root_instance_id": 1524277253837,
+        "schema": "hh-godot-editor-terminal-5",
+        "selection": {
+          "generation": 0,
+          "identity": "sha256:44cb2673867afd1e10fac38c44a549aa91f128ed9404661809ffe6cb3a53fef8"
+        },
+        "selector_version": {
+          "file_id": "fef00a00000003000000000000000000",
+          "sha256": "abb837881d0afa1983b7af69aa2d0e0885edf2cabd88e0809348e89e5661ed44",
+          "size_bytes": 3461,
+          "volume": "4938437614955579414"
+        },
+        "status": "COMMITTED"
+      },
+      "receipt_sha256": "5bf8a89aae44fb7fd8403a9a93edcd51600156989eca3bc41786c3c03cb54460",
+      "response": {
+        "code": "GODOT_EDITOR_EDITED",
+        "command_id": "edit.update",
+        "postconditions": {
+          "can_redo": false,
+          "can_undo": true,
+          "checkpoint_observation_id": "capture-2aec32ee27c744048eea6fee3b192d51",
+          "checkpoint_scene_sha256": "9f5e56622becdb133f995b8632c9450124a550aadd327abb2e5bb78e73820262",
+          "durable_receipt_sha256": "5bf8a89aae44fb7fd8403a9a93edcd51600156989eca3bc41786c3c03cb54460",
+          "editor_session_id": "editor-93c34746d37e438aa053b0eab379ff86",
+          "effect_scope": "editor_session",
+          "files_saved": false,
+          "generation": 1,
+          "history_boundary": false,
+          "history_id": 1,
+          "journal_receipt_durable": true,
+          "live_state_durable": false,
+          "managed_fixture_only": true,
+          "project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+          "public_ack": true,
+          "request_digest": "sha256:3c096285a85d84469cda9ea99560af18f8336ea633d41129dbf9173fcdae5efa",
+          "scene_revision": "sha256:8ad91e5934ecda7dc89aecadbd034e5bf20c4092fb8ec50d3299cd344aeb9502",
+          "selection": {
+            "generation": 0,
+            "identity": "sha256:44cb2673867afd1e10fac38c44a549aa91f128ed9404661809ffe6cb3a53fef8"
+          }
+        },
+        "result_hash": null,
+        "result_revision": null,
+        "status": "COMMITTED"
+      },
+      "response_sha256": "d0355f6816f05934696b1f91366a04042aecc6861d1a8a2803cfecba11ee901d"
+    },
+    {
+      "checkpoint": {
+        "capture": {
+          "can_redo": false,
+          "can_undo": true,
+          "effect_completed_ms": 1789598225363,
+          "effect_started_ms": 1789598225345,
+          "observation_id": "capture-964aacbf5bbe43bbac958e757349a236",
+          "observation_sha256": "5774bf76dd867a0018272467831dc13081f05ed5d6f11e6428058dc0b1e1db29",
+          "scene_sha256": "bb60af8ce42fb0afdd88e064e13b238d60aab2d3c30d1fecb28a6a7b0cb7c11e",
+          "scene_size_bytes": 587,
+          "semantic_revision": "sha256:8ad91e5934ecda7dc89aecadbd034e5bf20c4092fb8ec50d3299cd344aeb9502",
+          "semantic_sha256": "8ad91e5934ecda7dc89aecadbd034e5bf20c4092fb8ec50d3299cd344aeb9502"
+        },
+        "capture_blob": {
+          "identity": {
+            "file_id": "1af10a00000003000000000000000000",
+            "size": 5368,
+            "volume": "4938437614955579414"
+          },
+          "object_id": "blob-3cd2eee49c454df5a0b46d1a3c88f8b6",
+          "sha256": "5774bf76dd867a0018272467831dc13081f05ed5d6f11e6428058dc0b1e1db29"
+        },
+        "observed_ms": 1789598225471,
+        "scene_blob": {
+          "identity": {
+            "file_id": "19f10a00000003000000000000000000",
+            "size": 587,
+            "volume": "4938437614955579414"
+          },
+          "object_id": "blob-3b414e95d0534ed98200cce3adf805de",
+          "sha256": "bb60af8ce42fb0afdd88e064e13b238d60aab2d3c30d1fecb28a6a7b0cb7c11e"
+        }
+      },
+      "command_id": "edit.undo",
+      "digest": "sha256:db3dcd207571d1d27c02abbff642fe9cc4c8d6a29e8d1a28f55a260e69cefd4a",
+      "edit_observation": {
+        "can_redo": true,
+        "can_undo": true,
+        "effect_completed_ms": 1789598228202,
+        "effect_started_ms": 1789598228153,
+        "history_id_after": 1,
+        "history_id_before": 1,
+        "observation_id": "edit-9457bf3f1c3947e79187133f83eb49e9",
+        "observation_sha256": "485b124c1eb704a2316fc4a5e557b2c4e9be4467f7473c71671df8e154a38b35",
+        "semantic_revision": "sha256:b1933be63378d97d2b5d5da00632e7a5d7bbe134d629fe7eda098f3af0b0a46f",
+        "semantic_sha256": "b1933be63378d97d2b5d5da00632e7a5d7bbe134d629fe7eda098f3af0b0a46f"
+      },
+      "edit_prepared": {
+        "admission": {
+          "admitted_ms": 1789598222977,
+          "catalog_digest": "sha256:0fdc4e8e1a406a909dff439190bab1b4c6de3d2d2ad20602bced9572ffbe12df",
+          "deadline_ms": 1789598250932,
+          "fencing_epoch": 3,
+          "lease_expires_ms": 1789598311084,
+          "lease_id": "lease.8e449bbe5614bd5f40db0d081fd8e597",
+          "session_id": "session.8b807c6412b8aff518b4d45a0a61782e"
+        },
+        "before_project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+        "before_scene_revision": "sha256:8ad91e5934ecda7dc89aecadbd034e5bf20c4092fb8ec50d3299cd344aeb9502",
+        "command_id": "edit.undo",
+        "digest": "sha256:db3dcd207571d1d27c02abbff642fe9cc4c8d6a29e8d1a28f55a260e69cefd4a",
+        "editor": {
+          "creation_filetime": "134340717811056149",
+          "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+          "installed_source_sha256": "0d4aaa2a90febf5444d79c7d8702792ef282aaa62c26a26a484147268708f01a",
+          "pid": 37020,
+          "root_identity": {
+            "file_id": "bbf00a00000003000000000000000000",
+            "volume": "4938437614955579414"
+          },
+          "session_id": "editor-93c34746d37e438aa053b0eab379ff86"
+        },
+        "editor_generation": 1,
+        "expected_files": {
+          "addons/hh_studio/jcs_godot.gd": {
+            "role": "trusted_addon",
+            "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+            "size_bytes": 10165
+          },
+          "addons/hh_studio/jcs_godot.gd.uid": {
+            "role": "trusted_uid",
+            "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+            "size_bytes": 20
+          },
+          "addons/hh_studio/plugin.cfg": {
+            "role": "trusted_addon",
+            "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+            "size_bytes": 165
+          },
+          "addons/hh_studio/plugin.gd": {
+            "role": "trusted_addon",
+            "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+            "size_bytes": 23043
+          },
+          "addons/hh_studio/plugin.gd.uid": {
+            "role": "trusted_uid",
+            "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+            "size_bytes": 20
+          },
+          "addons/hh_studio/scene_commands.gd": {
+            "role": "trusted_addon",
+            "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+            "size_bytes": 32174
+          },
+          "addons/hh_studio/scene_commands.gd.uid": {
+            "role": "trusted_uid",
+            "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+            "size_bytes": 19
+          },
+          "project.godot": {
+            "role": "trusted_config",
+            "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+            "size_bytes": 282
+          },
+          "scenes/fixture.tscn": {
+            "role": "managed_scene",
+            "sha256": "51eaa111f832327d74b2031d382eb22ab30c8b725323e26ebcf7a66bbef571cb",
+            "size_bytes": 235
+          },
+          "scripts/fixture_actor.gd": {
+            "role": "managed_script",
+            "sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+            "size_bytes": 50
+          },
+          "scripts/fixture_actor.gd.uid": {
+            "role": "managed_uid",
+            "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+            "size_bytes": 20
+          }
+        },
+        "kind": "EDIT_INTENT",
+        "lease_owner": "session.8b807c6412b8aff518b4d45a0a61782e",
+        "observed_ms": 1789598222977,
+        "operation": "scene.undo",
+        "parent_selection": {
+          "generation": 0,
+          "identity": "sha256:44cb2673867afd1e10fac38c44a549aa91f128ed9404661809ffe6cb3a53fef8"
+        },
+        "previous_selector_sha256": "abb837881d0afa1983b7af69aa2d0e0885edf2cabd88e0809348e89e5661ed44",
+        "previous_selector_version": {
+          "file_id": "fef00a00000003000000000000000000",
+          "sha256": "abb837881d0afa1983b7af69aa2d0e0885edf2cabd88e0809348e89e5661ed44",
+          "size_bytes": 3461,
+          "volume": "4938437614955579414"
+        },
+        "project_id": "project.fixture",
+        "projection_sha256": "5bc4a1e0c4d88aacffc9669f66506f7d526ee269f34ddc2789e23b56b27dbddd",
+        "projection_size_bytes": 241,
+        "root_instance_id": 1524277253837,
+        "schema": "hh-godot-publication-event-5",
+        "scratch_name": "capture-ac268192be6343c793438931eaf85450.tscn",
+        "sequence": 8
+      },
+      "observation_blob": {
+        "identity": {
+          "file_id": "1cf10a00000003000000000000000000",
+          "size": 5806,
+          "volume": "4938437614955579414"
+        },
+        "object_id": "blob-8ccf6e846be64785ae47430c452af7cd",
+        "sha256": "485b124c1eb704a2316fc4a5e557b2c4e9be4467f7473c71671df8e154a38b35"
+      },
+      "phase": "COMMITTED",
+      "reason": "verified",
+      "receipt": {
+        "after_project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+        "before_project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+        "before_scene_revision": "sha256:8ad91e5934ecda7dc89aecadbd034e5bf20c4092fb8ec50d3299cd344aeb9502",
+        "checkpoint": {
+          "capture": {
+            "can_redo": false,
+            "can_undo": true,
+            "effect_completed_ms": 1789598225363,
+            "effect_started_ms": 1789598225345,
+            "observation_id": "capture-964aacbf5bbe43bbac958e757349a236",
+            "observation_sha256": "5774bf76dd867a0018272467831dc13081f05ed5d6f11e6428058dc0b1e1db29",
+            "scene_sha256": "bb60af8ce42fb0afdd88e064e13b238d60aab2d3c30d1fecb28a6a7b0cb7c11e",
+            "scene_size_bytes": 587,
+            "semantic_revision": "sha256:8ad91e5934ecda7dc89aecadbd034e5bf20c4092fb8ec50d3299cd344aeb9502",
+            "semantic_sha256": "8ad91e5934ecda7dc89aecadbd034e5bf20c4092fb8ec50d3299cd344aeb9502"
+          },
+          "capture_blob": {
+            "identity": {
+              "file_id": "1af10a00000003000000000000000000",
+              "size": 5368,
+              "volume": "4938437614955579414"
+            },
+            "object_id": "blob-3cd2eee49c454df5a0b46d1a3c88f8b6",
+            "sha256": "5774bf76dd867a0018272467831dc13081f05ed5d6f11e6428058dc0b1e1db29"
+          },
+          "observed_ms": 1789598225471,
+          "scene_blob": {
+            "identity": {
+              "file_id": "19f10a00000003000000000000000000",
+              "size": 587,
+              "volume": "4938437614955579414"
+            },
+            "object_id": "blob-3b414e95d0534ed98200cce3adf805de",
+            "sha256": "bb60af8ce42fb0afdd88e064e13b238d60aab2d3c30d1fecb28a6a7b0cb7c11e"
+          }
+        },
+        "command_id": "edit.undo",
+        "digest": "sha256:db3dcd207571d1d27c02abbff642fe9cc4c8d6a29e8d1a28f55a260e69cefd4a",
+        "durable_owner_required": true,
+        "editor": {
+          "creation_filetime": "134340717811056149",
+          "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+          "installed_source_sha256": "0d4aaa2a90febf5444d79c7d8702792ef282aaa62c26a26a484147268708f01a",
+          "pid": 37020,
+          "root_identity": {
+            "file_id": "bbf00a00000003000000000000000000",
+            "volume": "4938437614955579414"
+          },
+          "session_id": "editor-93c34746d37e438aa053b0eab379ff86"
+        },
+        "effect_scope": "editor_session",
+        "engine_effects_verified": false,
+        "files_saved": false,
+        "generation": 1,
+        "live_state_durable": false,
+        "observation": {
+          "can_redo": true,
+          "can_undo": true,
+          "effect_completed_ms": 1789598228202,
+          "effect_started_ms": 1789598228153,
+          "history_id_after": 1,
+          "history_id_before": 1,
+          "observation_id": "edit-9457bf3f1c3947e79187133f83eb49e9",
+          "observation_sha256": "485b124c1eb704a2316fc4a5e557b2c4e9be4467f7473c71671df8e154a38b35",
+          "semantic_revision": "sha256:b1933be63378d97d2b5d5da00632e7a5d7bbe134d629fe7eda098f3af0b0a46f",
+          "semantic_sha256": "b1933be63378d97d2b5d5da00632e7a5d7bbe134d629fe7eda098f3af0b0a46f"
+        },
+        "observation_blob": {
+          "identity": {
+            "file_id": "1cf10a00000003000000000000000000",
+            "size": 5806,
+            "volume": "4938437614955579414"
+          },
+          "object_id": "blob-8ccf6e846be64785ae47430c452af7cd",
+          "sha256": "485b124c1eb704a2316fc4a5e557b2c4e9be4467f7473c71671df8e154a38b35"
+        },
+        "operation": "scene.undo",
+        "public_ack": false,
+        "reason": "verified",
+        "root_instance_id": 1524277253837,
+        "schema": "hh-godot-editor-terminal-5",
+        "selection": {
+          "generation": 0,
+          "identity": "sha256:44cb2673867afd1e10fac38c44a549aa91f128ed9404661809ffe6cb3a53fef8"
+        },
+        "selector_version": {
+          "file_id": "fef00a00000003000000000000000000",
+          "sha256": "abb837881d0afa1983b7af69aa2d0e0885edf2cabd88e0809348e89e5661ed44",
+          "size_bytes": 3461,
+          "volume": "4938437614955579414"
+        },
+        "status": "COMMITTED"
+      },
+      "receipt_sha256": "a48944f5fa4ae15ef551e2c786a9e7e97c6287bad9a8baca465df919e22e5478",
+      "response": {
+        "code": "GODOT_EDITOR_EDITED",
+        "command_id": "edit.undo",
+        "postconditions": {
+          "can_redo": true,
+          "can_undo": true,
+          "checkpoint_observation_id": "capture-964aacbf5bbe43bbac958e757349a236",
+          "checkpoint_scene_sha256": "bb60af8ce42fb0afdd88e064e13b238d60aab2d3c30d1fecb28a6a7b0cb7c11e",
+          "durable_receipt_sha256": "a48944f5fa4ae15ef551e2c786a9e7e97c6287bad9a8baca465df919e22e5478",
+          "editor_session_id": "editor-93c34746d37e438aa053b0eab379ff86",
+          "effect_scope": "editor_session",
+          "files_saved": false,
+          "generation": 1,
+          "history_boundary": false,
+          "history_id": 1,
+          "journal_receipt_durable": true,
+          "live_state_durable": false,
+          "managed_fixture_only": true,
+          "project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+          "public_ack": true,
+          "request_digest": "sha256:db3dcd207571d1d27c02abbff642fe9cc4c8d6a29e8d1a28f55a260e69cefd4a",
+          "scene_revision": "sha256:b1933be63378d97d2b5d5da00632e7a5d7bbe134d629fe7eda098f3af0b0a46f",
+          "selection": {
+            "generation": 0,
+            "identity": "sha256:44cb2673867afd1e10fac38c44a549aa91f128ed9404661809ffe6cb3a53fef8"
+          }
+        },
+        "result_hash": null,
+        "result_revision": null,
+        "status": "COMMITTED"
+      },
+      "response_sha256": "44c3293e7537476273328d8294251a47c47f10e5e1308f12ac3c144e5b5d9137"
+    },
+    {
+      "checkpoint": {
+        "capture": {
+          "can_redo": true,
+          "can_undo": true,
+          "effect_completed_ms": 1789598242551,
+          "effect_started_ms": 1789598242526,
+          "observation_id": "capture-c320894cebd244aea65420f6768a53d6",
+          "observation_sha256": "7e41b56e656379358b18e6cfd1f3574217537686965bf07fc19c0bf26ed6a9df",
+          "scene_sha256": "eff549b2a667fe380cf76c4c0e4c6e25cf748b73b379e96ebe5da94185d926c3",
+          "scene_size_bytes": 587,
+          "semantic_revision": "sha256:b1933be63378d97d2b5d5da00632e7a5d7bbe134d629fe7eda098f3af0b0a46f",
+          "semantic_sha256": "b1933be63378d97d2b5d5da00632e7a5d7bbe134d629fe7eda098f3af0b0a46f"
+        },
+        "capture_blob": {
+          "identity": {
+            "file_id": "28f10a00000003000000000000000000",
+            "size": 5367,
+            "volume": "4938437614955579414"
+          },
+          "object_id": "blob-6765afaaa3f24f73b3d02bc3511f0f2f",
+          "sha256": "7e41b56e656379358b18e6cfd1f3574217537686965bf07fc19c0bf26ed6a9df"
+        },
+        "observed_ms": 1789598242678,
+        "scene_blob": {
+          "identity": {
+            "file_id": "27f10a00000003000000000000000000",
+            "size": 587,
+            "volume": "4938437614955579414"
+          },
+          "object_id": "blob-2cea69f0a7c149189d9032743d173ec2",
+          "sha256": "eff549b2a667fe380cf76c4c0e4c6e25cf748b73b379e96ebe5da94185d926c3"
+        }
+      },
+      "command_id": "edit.redo",
+      "digest": "sha256:9ecf1d27d1c7aa4dd410f4bca6970c208c5c33aa3b471a17e6d59c68c36b9426",
+      "edit_observation": {
+        "can_redo": false,
+        "can_undo": true,
+        "effect_completed_ms": 1789598245952,
+        "effect_started_ms": 1789598245898,
+        "history_id_after": 1,
+        "history_id_before": 1,
+        "observation_id": "edit-742860f252b14ea28c889c6ed6277469",
+        "observation_sha256": "f7508e051a68fa44ecc188435d5d7df880fdab8f72f1ad40a9425067441ea7de",
+        "semantic_revision": "sha256:8ad91e5934ecda7dc89aecadbd034e5bf20c4092fb8ec50d3299cd344aeb9502",
+        "semantic_sha256": "8ad91e5934ecda7dc89aecadbd034e5bf20c4092fb8ec50d3299cd344aeb9502"
+      },
+      "edit_prepared": {
+        "admission": {
+          "admitted_ms": 1789598239750,
+          "catalog_digest": "sha256:0fdc4e8e1a406a909dff439190bab1b4c6de3d2d2ad20602bced9572ffbe12df",
+          "deadline_ms": 1789598267639,
+          "fencing_epoch": 4,
+          "lease_expires_ms": 1789598327429,
+          "lease_id": "lease.860bac19e2321c763fbbac38abb7046e",
+          "session_id": "session.8b807c6412b8aff518b4d45a0a61782e"
+        },
+        "before_project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+        "before_scene_revision": "sha256:b1933be63378d97d2b5d5da00632e7a5d7bbe134d629fe7eda098f3af0b0a46f",
+        "command_id": "edit.redo",
+        "digest": "sha256:9ecf1d27d1c7aa4dd410f4bca6970c208c5c33aa3b471a17e6d59c68c36b9426",
+        "editor": {
+          "creation_filetime": "134340717811056149",
+          "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+          "installed_source_sha256": "0d4aaa2a90febf5444d79c7d8702792ef282aaa62c26a26a484147268708f01a",
+          "pid": 37020,
+          "root_identity": {
+            "file_id": "bbf00a00000003000000000000000000",
+            "volume": "4938437614955579414"
+          },
+          "session_id": "editor-93c34746d37e438aa053b0eab379ff86"
+        },
+        "editor_generation": 1,
+        "expected_files": {
+          "addons/hh_studio/jcs_godot.gd": {
+            "role": "trusted_addon",
+            "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+            "size_bytes": 10165
+          },
+          "addons/hh_studio/jcs_godot.gd.uid": {
+            "role": "trusted_uid",
+            "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+            "size_bytes": 20
+          },
+          "addons/hh_studio/plugin.cfg": {
+            "role": "trusted_addon",
+            "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+            "size_bytes": 165
+          },
+          "addons/hh_studio/plugin.gd": {
+            "role": "trusted_addon",
+            "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+            "size_bytes": 23043
+          },
+          "addons/hh_studio/plugin.gd.uid": {
+            "role": "trusted_uid",
+            "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+            "size_bytes": 20
+          },
+          "addons/hh_studio/scene_commands.gd": {
+            "role": "trusted_addon",
+            "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+            "size_bytes": 32174
+          },
+          "addons/hh_studio/scene_commands.gd.uid": {
+            "role": "trusted_uid",
+            "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+            "size_bytes": 19
+          },
+          "project.godot": {
+            "role": "trusted_config",
+            "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+            "size_bytes": 282
+          },
+          "scenes/fixture.tscn": {
+            "role": "managed_scene",
+            "sha256": "51eaa111f832327d74b2031d382eb22ab30c8b725323e26ebcf7a66bbef571cb",
+            "size_bytes": 235
+          },
+          "scripts/fixture_actor.gd": {
+            "role": "managed_script",
+            "sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+            "size_bytes": 50
+          },
+          "scripts/fixture_actor.gd.uid": {
+            "role": "managed_uid",
+            "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+            "size_bytes": 20
+          }
+        },
+        "kind": "EDIT_INTENT",
+        "lease_owner": "session.8b807c6412b8aff518b4d45a0a61782e",
+        "observed_ms": 1789598239750,
+        "operation": "scene.redo",
+        "parent_selection": {
+          "generation": 0,
+          "identity": "sha256:44cb2673867afd1e10fac38c44a549aa91f128ed9404661809ffe6cb3a53fef8"
+        },
+        "previous_selector_sha256": "abb837881d0afa1983b7af69aa2d0e0885edf2cabd88e0809348e89e5661ed44",
+        "previous_selector_version": {
+          "file_id": "fef00a00000003000000000000000000",
+          "sha256": "abb837881d0afa1983b7af69aa2d0e0885edf2cabd88e0809348e89e5661ed44",
+          "size_bytes": 3461,
+          "volume": "4938437614955579414"
+        },
+        "project_id": "project.fixture",
+        "projection_sha256": "24241c5201ea2df4b805fdac4320834d122620803a999d446c1e460ccc7a396a",
+        "projection_size_bytes": 241,
+        "root_instance_id": 1524277253837,
+        "schema": "hh-godot-publication-event-5",
+        "scratch_name": "capture-b217e3f705d949a9b4d3e767e0591388.tscn",
+        "sequence": 11
+      },
+      "observation_blob": {
+        "identity": {
+          "file_id": "2df10a00000003000000000000000000",
+          "size": 5807,
+          "volume": "4938437614955579414"
+        },
+        "object_id": "blob-55be9a3f051a49d3b33b1d8f9a13b1da",
+        "sha256": "f7508e051a68fa44ecc188435d5d7df880fdab8f72f1ad40a9425067441ea7de"
+      },
+      "phase": "COMMITTED",
+      "reason": "verified",
+      "receipt": {
+        "after_project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+        "before_project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+        "before_scene_revision": "sha256:b1933be63378d97d2b5d5da00632e7a5d7bbe134d629fe7eda098f3af0b0a46f",
+        "checkpoint": {
+          "capture": {
+            "can_redo": true,
+            "can_undo": true,
+            "effect_completed_ms": 1789598242551,
+            "effect_started_ms": 1789598242526,
+            "observation_id": "capture-c320894cebd244aea65420f6768a53d6",
+            "observation_sha256": "7e41b56e656379358b18e6cfd1f3574217537686965bf07fc19c0bf26ed6a9df",
+            "scene_sha256": "eff549b2a667fe380cf76c4c0e4c6e25cf748b73b379e96ebe5da94185d926c3",
+            "scene_size_bytes": 587,
+            "semantic_revision": "sha256:b1933be63378d97d2b5d5da00632e7a5d7bbe134d629fe7eda098f3af0b0a46f",
+            "semantic_sha256": "b1933be63378d97d2b5d5da00632e7a5d7bbe134d629fe7eda098f3af0b0a46f"
+          },
+          "capture_blob": {
+            "identity": {
+              "file_id": "28f10a00000003000000000000000000",
+              "size": 5367,
+              "volume": "4938437614955579414"
+            },
+            "object_id": "blob-6765afaaa3f24f73b3d02bc3511f0f2f",
+            "sha256": "7e41b56e656379358b18e6cfd1f3574217537686965bf07fc19c0bf26ed6a9df"
+          },
+          "observed_ms": 1789598242678,
+          "scene_blob": {
+            "identity": {
+              "file_id": "27f10a00000003000000000000000000",
+              "size": 587,
+              "volume": "4938437614955579414"
+            },
+            "object_id": "blob-2cea69f0a7c149189d9032743d173ec2",
+            "sha256": "eff549b2a667fe380cf76c4c0e4c6e25cf748b73b379e96ebe5da94185d926c3"
+          }
+        },
+        "command_id": "edit.redo",
+        "digest": "sha256:9ecf1d27d1c7aa4dd410f4bca6970c208c5c33aa3b471a17e6d59c68c36b9426",
+        "durable_owner_required": true,
+        "editor": {
+          "creation_filetime": "134340717811056149",
+          "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+          "installed_source_sha256": "0d4aaa2a90febf5444d79c7d8702792ef282aaa62c26a26a484147268708f01a",
+          "pid": 37020,
+          "root_identity": {
+            "file_id": "bbf00a00000003000000000000000000",
+            "volume": "4938437614955579414"
+          },
+          "session_id": "editor-93c34746d37e438aa053b0eab379ff86"
+        },
+        "effect_scope": "editor_session",
+        "engine_effects_verified": false,
+        "files_saved": false,
+        "generation": 1,
+        "live_state_durable": false,
+        "observation": {
+          "can_redo": false,
+          "can_undo": true,
+          "effect_completed_ms": 1789598245952,
+          "effect_started_ms": 1789598245898,
+          "history_id_after": 1,
+          "history_id_before": 1,
+          "observation_id": "edit-742860f252b14ea28c889c6ed6277469",
+          "observation_sha256": "f7508e051a68fa44ecc188435d5d7df880fdab8f72f1ad40a9425067441ea7de",
+          "semantic_revision": "sha256:8ad91e5934ecda7dc89aecadbd034e5bf20c4092fb8ec50d3299cd344aeb9502",
+          "semantic_sha256": "8ad91e5934ecda7dc89aecadbd034e5bf20c4092fb8ec50d3299cd344aeb9502"
+        },
+        "observation_blob": {
+          "identity": {
+            "file_id": "2df10a00000003000000000000000000",
+            "size": 5807,
+            "volume": "4938437614955579414"
+          },
+          "object_id": "blob-55be9a3f051a49d3b33b1d8f9a13b1da",
+          "sha256": "f7508e051a68fa44ecc188435d5d7df880fdab8f72f1ad40a9425067441ea7de"
+        },
+        "operation": "scene.redo",
+        "public_ack": false,
+        "reason": "verified",
+        "root_instance_id": 1524277253837,
+        "schema": "hh-godot-editor-terminal-5",
+        "selection": {
+          "generation": 0,
+          "identity": "sha256:44cb2673867afd1e10fac38c44a549aa91f128ed9404661809ffe6cb3a53fef8"
+        },
+        "selector_version": {
+          "file_id": "fef00a00000003000000000000000000",
+          "sha256": "abb837881d0afa1983b7af69aa2d0e0885edf2cabd88e0809348e89e5661ed44",
+          "size_bytes": 3461,
+          "volume": "4938437614955579414"
+        },
+        "status": "COMMITTED"
+      },
+      "receipt_sha256": "30d15ec8ee9d6c44cc016e9e6c9b4eba1c46421be28216c8d0a9328c9e2d7528",
+      "response": {
+        "code": "GODOT_EDITOR_EDITED",
+        "command_id": "edit.redo",
+        "postconditions": {
+          "can_redo": false,
+          "can_undo": true,
+          "checkpoint_observation_id": "capture-c320894cebd244aea65420f6768a53d6",
+          "checkpoint_scene_sha256": "eff549b2a667fe380cf76c4c0e4c6e25cf748b73b379e96ebe5da94185d926c3",
+          "durable_receipt_sha256": "30d15ec8ee9d6c44cc016e9e6c9b4eba1c46421be28216c8d0a9328c9e2d7528",
+          "editor_session_id": "editor-93c34746d37e438aa053b0eab379ff86",
+          "effect_scope": "editor_session",
+          "files_saved": false,
+          "generation": 1,
+          "history_boundary": false,
+          "history_id": 1,
+          "journal_receipt_durable": true,
+          "live_state_durable": false,
+          "managed_fixture_only": true,
+          "project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+          "public_ack": true,
+          "request_digest": "sha256:9ecf1d27d1c7aa4dd410f4bca6970c208c5c33aa3b471a17e6d59c68c36b9426",
+          "scene_revision": "sha256:8ad91e5934ecda7dc89aecadbd034e5bf20c4092fb8ec50d3299cd344aeb9502",
+          "selection": {
+            "generation": 0,
+            "identity": "sha256:44cb2673867afd1e10fac38c44a549aa91f128ed9404661809ffe6cb3a53fef8"
+          }
+        },
+        "result_hash": null,
+        "result_revision": null,
+        "status": "COMMITTED"
+      },
+      "response_sha256": "808c126d13fec5761e2fff4df46e8d02edeefdd9d66f7f95bfc76bce27df211b"
+    },
+    {
+      "checkpoint": {
+        "capture": {
+          "can_redo": false,
+          "can_undo": true,
+          "effect_completed_ms": 1789598261285,
+          "effect_started_ms": 1789598261266,
+          "observation_id": "capture-aca9eb06b324470aba69032096cb6441",
+          "observation_sha256": "4d05e6778dda3f43666cd239d1319f2e2bcf19b12125518480e666f1c9af6341",
+          "scene_sha256": "de670ce0d96f86e282c6cecc82940835030f41a7ef335e16986a2c4289d4709f",
+          "scene_size_bytes": 587,
+          "semantic_revision": "sha256:8ad91e5934ecda7dc89aecadbd034e5bf20c4092fb8ec50d3299cd344aeb9502",
+          "semantic_sha256": "8ad91e5934ecda7dc89aecadbd034e5bf20c4092fb8ec50d3299cd344aeb9502"
+        },
+        "capture_blob": {
+          "identity": {
+            "file_id": "35f10a00000003000000000000000000",
+            "size": 5370,
+            "volume": "4938437614955579414"
+          },
+          "object_id": "blob-a528e99e5e2b4ded8ca4deeceada1eb6",
+          "sha256": "4d05e6778dda3f43666cd239d1319f2e2bcf19b12125518480e666f1c9af6341"
+        },
+        "observed_ms": 1789598261395,
+        "scene_blob": {
+          "identity": {
+            "file_id": "34f10a00000003000000000000000000",
+            "size": 587,
+            "volume": "4938437614955579414"
+          },
+          "object_id": "blob-08729673fb524c9291f8792575cebd9b",
+          "sha256": "de670ce0d96f86e282c6cecc82940835030f41a7ef335e16986a2c4289d4709f"
+        }
+      },
+      "command_id": "edit.remove",
+      "digest": "sha256:38b5eb68b47c1f6af4abafdafaf300973ffc53d905093c061c65e8b0fb111794",
+      "edit_observation": {
+        "can_redo": false,
+        "can_undo": true,
+        "effect_completed_ms": 1789598264918,
+        "effect_started_ms": 1789598264877,
+        "history_id_after": 1,
+        "history_id_before": 1,
+        "observation_id": "edit-da7715e53c2e42ef9f8a40e696b8710d",
+        "observation_sha256": "8a8d20b1e61b3c57a0b181cda98f131628bc55dbab32ffd94b011f1c7d4674d3",
+        "semantic_revision": "sha256:f3fd9f270886a056f469e70586795e06c8d47b651021a22366629ab06d886162",
+        "semantic_sha256": "f3fd9f270886a056f469e70586795e06c8d47b651021a22366629ab06d886162"
+      },
+      "edit_prepared": {
+        "admission": {
+          "admitted_ms": 1789598258203,
+          "catalog_digest": "sha256:0fdc4e8e1a406a909dff439190bab1b4c6de3d2d2ad20602bced9572ffbe12df",
+          "deadline_ms": 1789598285942,
+          "fencing_epoch": 5,
+          "lease_expires_ms": 1789598345785,
+          "lease_id": "lease.b2c9ba87d1010140c7fd45e2daa3a355",
+          "session_id": "session.8b807c6412b8aff518b4d45a0a61782e"
+        },
+        "before_project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+        "before_scene_revision": "sha256:8ad91e5934ecda7dc89aecadbd034e5bf20c4092fb8ec50d3299cd344aeb9502",
+        "command_id": "edit.remove",
+        "digest": "sha256:38b5eb68b47c1f6af4abafdafaf300973ffc53d905093c061c65e8b0fb111794",
+        "editor": {
+          "creation_filetime": "134340717811056149",
+          "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+          "installed_source_sha256": "0d4aaa2a90febf5444d79c7d8702792ef282aaa62c26a26a484147268708f01a",
+          "pid": 37020,
+          "root_identity": {
+            "file_id": "bbf00a00000003000000000000000000",
+            "volume": "4938437614955579414"
+          },
+          "session_id": "editor-93c34746d37e438aa053b0eab379ff86"
+        },
+        "editor_generation": 1,
+        "expected_files": {
+          "addons/hh_studio/jcs_godot.gd": {
+            "role": "trusted_addon",
+            "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+            "size_bytes": 10165
+          },
+          "addons/hh_studio/jcs_godot.gd.uid": {
+            "role": "trusted_uid",
+            "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+            "size_bytes": 20
+          },
+          "addons/hh_studio/plugin.cfg": {
+            "role": "trusted_addon",
+            "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+            "size_bytes": 165
+          },
+          "addons/hh_studio/plugin.gd": {
+            "role": "trusted_addon",
+            "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+            "size_bytes": 23043
+          },
+          "addons/hh_studio/plugin.gd.uid": {
+            "role": "trusted_uid",
+            "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+            "size_bytes": 20
+          },
+          "addons/hh_studio/scene_commands.gd": {
+            "role": "trusted_addon",
+            "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+            "size_bytes": 32174
+          },
+          "addons/hh_studio/scene_commands.gd.uid": {
+            "role": "trusted_uid",
+            "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+            "size_bytes": 19
+          },
+          "project.godot": {
+            "role": "trusted_config",
+            "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+            "size_bytes": 282
+          },
+          "scenes/fixture.tscn": {
+            "role": "managed_scene",
+            "sha256": "51eaa111f832327d74b2031d382eb22ab30c8b725323e26ebcf7a66bbef571cb",
+            "size_bytes": 235
+          },
+          "scripts/fixture_actor.gd": {
+            "role": "managed_script",
+            "sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+            "size_bytes": 50
+          },
+          "scripts/fixture_actor.gd.uid": {
+            "role": "managed_uid",
+            "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+            "size_bytes": 20
+          }
+        },
+        "kind": "EDIT_INTENT",
+        "lease_owner": "session.8b807c6412b8aff518b4d45a0a61782e",
+        "observed_ms": 1789598258203,
+        "operation": "scene.node.remove",
+        "parent_selection": {
+          "generation": 0,
+          "identity": "sha256:44cb2673867afd1e10fac38c44a549aa91f128ed9404661809ffe6cb3a53fef8"
+        },
+        "previous_selector_sha256": "abb837881d0afa1983b7af69aa2d0e0885edf2cabd88e0809348e89e5661ed44",
+        "previous_selector_version": {
+          "file_id": "fef00a00000003000000000000000000",
+          "sha256": "abb837881d0afa1983b7af69aa2d0e0885edf2cabd88e0809348e89e5661ed44",
+          "size_bytes": 3461,
+          "volume": "4938437614955579414"
+        },
+        "project_id": "project.fixture",
+        "projection_sha256": "5da0231c8ad60c154d3fe14a7dfca814544380aec14650bc4b17ad1a8a1924b8",
+        "projection_size_bytes": 246,
+        "root_instance_id": 1524277253837,
+        "schema": "hh-godot-publication-event-5",
+        "scratch_name": "capture-98e93c39be8b459eb88f6994da451830.tscn",
+        "sequence": 14
+      },
+      "observation_blob": {
+        "identity": {
+          "file_id": "37f10a00000003000000000000000000",
+          "size": 3960,
+          "volume": "4938437614955579414"
+        },
+        "object_id": "blob-28fb95daf4ab4b42a66e5e65be4e9b90",
+        "sha256": "8a8d20b1e61b3c57a0b181cda98f131628bc55dbab32ffd94b011f1c7d4674d3"
+      },
+      "phase": "COMMITTED",
+      "reason": "verified",
+      "receipt": {
+        "after_project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+        "before_project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+        "before_scene_revision": "sha256:8ad91e5934ecda7dc89aecadbd034e5bf20c4092fb8ec50d3299cd344aeb9502",
+        "checkpoint": {
+          "capture": {
+            "can_redo": false,
+            "can_undo": true,
+            "effect_completed_ms": 1789598261285,
+            "effect_started_ms": 1789598261266,
+            "observation_id": "capture-aca9eb06b324470aba69032096cb6441",
+            "observation_sha256": "4d05e6778dda3f43666cd239d1319f2e2bcf19b12125518480e666f1c9af6341",
+            "scene_sha256": "de670ce0d96f86e282c6cecc82940835030f41a7ef335e16986a2c4289d4709f",
+            "scene_size_bytes": 587,
+            "semantic_revision": "sha256:8ad91e5934ecda7dc89aecadbd034e5bf20c4092fb8ec50d3299cd344aeb9502",
+            "semantic_sha256": "8ad91e5934ecda7dc89aecadbd034e5bf20c4092fb8ec50d3299cd344aeb9502"
+          },
+          "capture_blob": {
+            "identity": {
+              "file_id": "35f10a00000003000000000000000000",
+              "size": 5370,
+              "volume": "4938437614955579414"
+            },
+            "object_id": "blob-a528e99e5e2b4ded8ca4deeceada1eb6",
+            "sha256": "4d05e6778dda3f43666cd239d1319f2e2bcf19b12125518480e666f1c9af6341"
+          },
+          "observed_ms": 1789598261395,
+          "scene_blob": {
+            "identity": {
+              "file_id": "34f10a00000003000000000000000000",
+              "size": 587,
+              "volume": "4938437614955579414"
+            },
+            "object_id": "blob-08729673fb524c9291f8792575cebd9b",
+            "sha256": "de670ce0d96f86e282c6cecc82940835030f41a7ef335e16986a2c4289d4709f"
+          }
+        },
+        "command_id": "edit.remove",
+        "digest": "sha256:38b5eb68b47c1f6af4abafdafaf300973ffc53d905093c061c65e8b0fb111794",
+        "durable_owner_required": true,
+        "editor": {
+          "creation_filetime": "134340717811056149",
+          "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+          "installed_source_sha256": "0d4aaa2a90febf5444d79c7d8702792ef282aaa62c26a26a484147268708f01a",
+          "pid": 37020,
+          "root_identity": {
+            "file_id": "bbf00a00000003000000000000000000",
+            "volume": "4938437614955579414"
+          },
+          "session_id": "editor-93c34746d37e438aa053b0eab379ff86"
+        },
+        "effect_scope": "editor_session",
+        "engine_effects_verified": false,
+        "files_saved": false,
+        "generation": 1,
+        "live_state_durable": false,
+        "observation": {
+          "can_redo": false,
+          "can_undo": true,
+          "effect_completed_ms": 1789598264918,
+          "effect_started_ms": 1789598264877,
+          "history_id_after": 1,
+          "history_id_before": 1,
+          "observation_id": "edit-da7715e53c2e42ef9f8a40e696b8710d",
+          "observation_sha256": "8a8d20b1e61b3c57a0b181cda98f131628bc55dbab32ffd94b011f1c7d4674d3",
+          "semantic_revision": "sha256:f3fd9f270886a056f469e70586795e06c8d47b651021a22366629ab06d886162",
+          "semantic_sha256": "f3fd9f270886a056f469e70586795e06c8d47b651021a22366629ab06d886162"
+        },
+        "observation_blob": {
+          "identity": {
+            "file_id": "37f10a00000003000000000000000000",
+            "size": 3960,
+            "volume": "4938437614955579414"
+          },
+          "object_id": "blob-28fb95daf4ab4b42a66e5e65be4e9b90",
+          "sha256": "8a8d20b1e61b3c57a0b181cda98f131628bc55dbab32ffd94b011f1c7d4674d3"
+        },
+        "operation": "scene.node.remove",
+        "public_ack": false,
+        "reason": "verified",
+        "root_instance_id": 1524277253837,
+        "schema": "hh-godot-editor-terminal-5",
+        "selection": {
+          "generation": 0,
+          "identity": "sha256:44cb2673867afd1e10fac38c44a549aa91f128ed9404661809ffe6cb3a53fef8"
+        },
+        "selector_version": {
+          "file_id": "fef00a00000003000000000000000000",
+          "sha256": "abb837881d0afa1983b7af69aa2d0e0885edf2cabd88e0809348e89e5661ed44",
+          "size_bytes": 3461,
+          "volume": "4938437614955579414"
+        },
+        "status": "COMMITTED"
+      },
+      "receipt_sha256": "1525251ce5a6d2b15ca9857ce960be57db7813fe34cd63326a5532e08d183af5",
+      "response": {
+        "code": "GODOT_EDITOR_EDITED",
+        "command_id": "edit.remove",
+        "postconditions": {
+          "can_redo": false,
+          "can_undo": true,
+          "checkpoint_observation_id": "capture-aca9eb06b324470aba69032096cb6441",
+          "checkpoint_scene_sha256": "de670ce0d96f86e282c6cecc82940835030f41a7ef335e16986a2c4289d4709f",
+          "durable_receipt_sha256": "1525251ce5a6d2b15ca9857ce960be57db7813fe34cd63326a5532e08d183af5",
+          "editor_session_id": "editor-93c34746d37e438aa053b0eab379ff86",
+          "effect_scope": "editor_session",
+          "files_saved": false,
+          "generation": 1,
+          "history_boundary": false,
+          "history_id": 1,
+          "journal_receipt_durable": true,
+          "live_state_durable": false,
+          "managed_fixture_only": true,
+          "project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+          "public_ack": true,
+          "request_digest": "sha256:38b5eb68b47c1f6af4abafdafaf300973ffc53d905093c061c65e8b0fb111794",
+          "scene_revision": "sha256:f3fd9f270886a056f469e70586795e06c8d47b651021a22366629ab06d886162",
+          "selection": {
+            "generation": 0,
+            "identity": "sha256:44cb2673867afd1e10fac38c44a549aa91f128ed9404661809ffe6cb3a53fef8"
+          }
+        },
+        "result_hash": null,
+        "result_revision": null,
+        "status": "COMMITTED"
+      },
+      "response_sha256": "115a6d43c313c6252f146ba6d595e21dde99231720bc16763c7f7e242cf261e8"
+    },
+    {
+      "checkpoint": {
+        "capture": {
+          "can_redo": false,
+          "can_undo": true,
+          "effect_completed_ms": 1789598281491,
+          "effect_started_ms": 1789598281479,
+          "observation_id": "capture-2dbddae72e2f44e6b42d1039795cc0aa",
+          "observation_sha256": "8260557bad7022a14675b7c8d5aba843804f5cd49b765d807c627035468b4fae",
+          "scene_sha256": "a693a3dba123a93b270b119ceb7f61f2388317cb65099363bb71ff1a53024500",
+          "scene_size_bytes": 266,
+          "semantic_revision": "sha256:f3fd9f270886a056f469e70586795e06c8d47b651021a22366629ab06d886162",
+          "semantic_sha256": "f3fd9f270886a056f469e70586795e06c8d47b651021a22366629ab06d886162"
+        },
+        "capture_blob": {
+          "identity": {
+            "file_id": "40f10a00000003000000000000000000",
+            "size": 3515,
+            "volume": "4938437614955579414"
+          },
+          "object_id": "blob-c3d73d67c0674778b2083a36d16aa0b3",
+          "sha256": "8260557bad7022a14675b7c8d5aba843804f5cd49b765d807c627035468b4fae"
+        },
+        "observed_ms": 1789598281604,
+        "scene_blob": {
+          "identity": {
+            "file_id": "3ff10a00000003000000000000000000",
+            "size": 266,
+            "volume": "4938437614955579414"
+          },
+          "object_id": "blob-3165e8c9e7e643228afb32fbfb4a7bc4",
+          "sha256": "a693a3dba123a93b270b119ceb7f61f2388317cb65099363bb71ff1a53024500"
+        }
+      },
+      "command_id": "edit.restore",
+      "digest": "sha256:db3dcd207571d1d27c02abbff642fe9cc4c8d6a29e8d1a28f55a260e69cefd4a",
+      "edit_observation": {
+        "can_redo": true,
+        "can_undo": true,
+        "effect_completed_ms": 1789598286208,
+        "effect_started_ms": 1789598286163,
+        "history_id_after": 1,
+        "history_id_before": 1,
+        "observation_id": "edit-d8792f9b2fa14a98a2d863debd4636d3",
+        "observation_sha256": "f05628564f7a0f251f33c390242d50ef8f48b617747dbc694e7cfee120fc49f7",
+        "semantic_revision": "sha256:8ad91e5934ecda7dc89aecadbd034e5bf20c4092fb8ec50d3299cd344aeb9502",
+        "semantic_sha256": "8ad91e5934ecda7dc89aecadbd034e5bf20c4092fb8ec50d3299cd344aeb9502"
+      },
+      "edit_prepared": {
+        "admission": {
+          "admitted_ms": 1789598277824,
+          "catalog_digest": "sha256:0fdc4e8e1a406a909dff439190bab1b4c6de3d2d2ad20602bced9572ffbe12df",
+          "deadline_ms": 1789598305526,
+          "fencing_epoch": 6,
+          "lease_expires_ms": 1789598365537,
+          "lease_id": "lease.4d7ddd17569d9b8027d361f47e673c4c",
+          "session_id": "session.8b807c6412b8aff518b4d45a0a61782e"
+        },
+        "before_project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+        "before_scene_revision": "sha256:f3fd9f270886a056f469e70586795e06c8d47b651021a22366629ab06d886162",
+        "command_id": "edit.restore",
+        "digest": "sha256:db3dcd207571d1d27c02abbff642fe9cc4c8d6a29e8d1a28f55a260e69cefd4a",
+        "editor": {
+          "creation_filetime": "134340717811056149",
+          "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+          "installed_source_sha256": "0d4aaa2a90febf5444d79c7d8702792ef282aaa62c26a26a484147268708f01a",
+          "pid": 37020,
+          "root_identity": {
+            "file_id": "bbf00a00000003000000000000000000",
+            "volume": "4938437614955579414"
+          },
+          "session_id": "editor-93c34746d37e438aa053b0eab379ff86"
+        },
+        "editor_generation": 1,
+        "expected_files": {
+          "addons/hh_studio/jcs_godot.gd": {
+            "role": "trusted_addon",
+            "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+            "size_bytes": 10165
+          },
+          "addons/hh_studio/jcs_godot.gd.uid": {
+            "role": "trusted_uid",
+            "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+            "size_bytes": 20
+          },
+          "addons/hh_studio/plugin.cfg": {
+            "role": "trusted_addon",
+            "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+            "size_bytes": 165
+          },
+          "addons/hh_studio/plugin.gd": {
+            "role": "trusted_addon",
+            "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+            "size_bytes": 23043
+          },
+          "addons/hh_studio/plugin.gd.uid": {
+            "role": "trusted_uid",
+            "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+            "size_bytes": 20
+          },
+          "addons/hh_studio/scene_commands.gd": {
+            "role": "trusted_addon",
+            "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+            "size_bytes": 32174
+          },
+          "addons/hh_studio/scene_commands.gd.uid": {
+            "role": "trusted_uid",
+            "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+            "size_bytes": 19
+          },
+          "project.godot": {
+            "role": "trusted_config",
+            "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+            "size_bytes": 282
+          },
+          "scenes/fixture.tscn": {
+            "role": "managed_scene",
+            "sha256": "51eaa111f832327d74b2031d382eb22ab30c8b725323e26ebcf7a66bbef571cb",
+            "size_bytes": 235
+          },
+          "scripts/fixture_actor.gd": {
+            "role": "managed_script",
+            "sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+            "size_bytes": 50
+          },
+          "scripts/fixture_actor.gd.uid": {
+            "role": "managed_uid",
+            "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+            "size_bytes": 20
+          }
+        },
+        "kind": "EDIT_INTENT",
+        "lease_owner": "session.8b807c6412b8aff518b4d45a0a61782e",
+        "observed_ms": 1789598277824,
+        "operation": "scene.undo",
+        "parent_selection": {
+          "generation": 0,
+          "identity": "sha256:44cb2673867afd1e10fac38c44a549aa91f128ed9404661809ffe6cb3a53fef8"
+        },
+        "previous_selector_sha256": "abb837881d0afa1983b7af69aa2d0e0885edf2cabd88e0809348e89e5661ed44",
+        "previous_selector_version": {
+          "file_id": "fef00a00000003000000000000000000",
+          "sha256": "abb837881d0afa1983b7af69aa2d0e0885edf2cabd88e0809348e89e5661ed44",
+          "size_bytes": 3461,
+          "volume": "4938437614955579414"
+        },
+        "project_id": "project.fixture",
+        "projection_sha256": "13db302b04a303c7d1e3774425fb8cb50c5b2c63830a474db906d64b22c9c25b",
+        "projection_size_bytes": 244,
+        "root_instance_id": 1524277253837,
+        "schema": "hh-godot-publication-event-5",
+        "scratch_name": "capture-d9a4f5b873b94f12be1d9ca34f05629f.tscn",
+        "sequence": 17
+      },
+      "observation_blob": {
+        "identity": {
+          "file_id": "42f10a00000003000000000000000000",
+          "size": 5809,
+          "volume": "4938437614955579414"
+        },
+        "object_id": "blob-37d1d70082334c498b6ae99ee22c768b",
+        "sha256": "f05628564f7a0f251f33c390242d50ef8f48b617747dbc694e7cfee120fc49f7"
+      },
+      "phase": "COMMITTED",
+      "reason": "verified",
+      "receipt": {
+        "after_project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+        "before_project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+        "before_scene_revision": "sha256:f3fd9f270886a056f469e70586795e06c8d47b651021a22366629ab06d886162",
+        "checkpoint": {
+          "capture": {
+            "can_redo": false,
+            "can_undo": true,
+            "effect_completed_ms": 1789598281491,
+            "effect_started_ms": 1789598281479,
+            "observation_id": "capture-2dbddae72e2f44e6b42d1039795cc0aa",
+            "observation_sha256": "8260557bad7022a14675b7c8d5aba843804f5cd49b765d807c627035468b4fae",
+            "scene_sha256": "a693a3dba123a93b270b119ceb7f61f2388317cb65099363bb71ff1a53024500",
+            "scene_size_bytes": 266,
+            "semantic_revision": "sha256:f3fd9f270886a056f469e70586795e06c8d47b651021a22366629ab06d886162",
+            "semantic_sha256": "f3fd9f270886a056f469e70586795e06c8d47b651021a22366629ab06d886162"
+          },
+          "capture_blob": {
+            "identity": {
+              "file_id": "40f10a00000003000000000000000000",
+              "size": 3515,
+              "volume": "4938437614955579414"
+            },
+            "object_id": "blob-c3d73d67c0674778b2083a36d16aa0b3",
+            "sha256": "8260557bad7022a14675b7c8d5aba843804f5cd49b765d807c627035468b4fae"
+          },
+          "observed_ms": 1789598281604,
+          "scene_blob": {
+            "identity": {
+              "file_id": "3ff10a00000003000000000000000000",
+              "size": 266,
+              "volume": "4938437614955579414"
+            },
+            "object_id": "blob-3165e8c9e7e643228afb32fbfb4a7bc4",
+            "sha256": "a693a3dba123a93b270b119ceb7f61f2388317cb65099363bb71ff1a53024500"
+          }
+        },
+        "command_id": "edit.restore",
+        "digest": "sha256:db3dcd207571d1d27c02abbff642fe9cc4c8d6a29e8d1a28f55a260e69cefd4a",
+        "durable_owner_required": true,
+        "editor": {
+          "creation_filetime": "134340717811056149",
+          "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+          "installed_source_sha256": "0d4aaa2a90febf5444d79c7d8702792ef282aaa62c26a26a484147268708f01a",
+          "pid": 37020,
+          "root_identity": {
+            "file_id": "bbf00a00000003000000000000000000",
+            "volume": "4938437614955579414"
+          },
+          "session_id": "editor-93c34746d37e438aa053b0eab379ff86"
+        },
+        "effect_scope": "editor_session",
+        "engine_effects_verified": false,
+        "files_saved": false,
+        "generation": 1,
+        "live_state_durable": false,
+        "observation": {
+          "can_redo": true,
+          "can_undo": true,
+          "effect_completed_ms": 1789598286208,
+          "effect_started_ms": 1789598286163,
+          "history_id_after": 1,
+          "history_id_before": 1,
+          "observation_id": "edit-d8792f9b2fa14a98a2d863debd4636d3",
+          "observation_sha256": "f05628564f7a0f251f33c390242d50ef8f48b617747dbc694e7cfee120fc49f7",
+          "semantic_revision": "sha256:8ad91e5934ecda7dc89aecadbd034e5bf20c4092fb8ec50d3299cd344aeb9502",
+          "semantic_sha256": "8ad91e5934ecda7dc89aecadbd034e5bf20c4092fb8ec50d3299cd344aeb9502"
+        },
+        "observation_blob": {
+          "identity": {
+            "file_id": "42f10a00000003000000000000000000",
+            "size": 5809,
+            "volume": "4938437614955579414"
+          },
+          "object_id": "blob-37d1d70082334c498b6ae99ee22c768b",
+          "sha256": "f05628564f7a0f251f33c390242d50ef8f48b617747dbc694e7cfee120fc49f7"
+        },
+        "operation": "scene.undo",
+        "public_ack": false,
+        "reason": "verified",
+        "root_instance_id": 1524277253837,
+        "schema": "hh-godot-editor-terminal-5",
+        "selection": {
+          "generation": 0,
+          "identity": "sha256:44cb2673867afd1e10fac38c44a549aa91f128ed9404661809ffe6cb3a53fef8"
+        },
+        "selector_version": {
+          "file_id": "fef00a00000003000000000000000000",
+          "sha256": "abb837881d0afa1983b7af69aa2d0e0885edf2cabd88e0809348e89e5661ed44",
+          "size_bytes": 3461,
+          "volume": "4938437614955579414"
+        },
+        "status": "COMMITTED"
+      },
+      "receipt_sha256": "aa999ed247b13f4657ad2dd474eb05e41e7a2b13d167cda6b9ba28af2fd35b91",
+      "response": {
+        "code": "GODOT_EDITOR_EDITED",
+        "command_id": "edit.restore",
+        "postconditions": {
+          "can_redo": true,
+          "can_undo": true,
+          "checkpoint_observation_id": "capture-2dbddae72e2f44e6b42d1039795cc0aa",
+          "checkpoint_scene_sha256": "a693a3dba123a93b270b119ceb7f61f2388317cb65099363bb71ff1a53024500",
+          "durable_receipt_sha256": "aa999ed247b13f4657ad2dd474eb05e41e7a2b13d167cda6b9ba28af2fd35b91",
+          "editor_session_id": "editor-93c34746d37e438aa053b0eab379ff86",
+          "effect_scope": "editor_session",
+          "files_saved": false,
+          "generation": 1,
+          "history_boundary": false,
+          "history_id": 1,
+          "journal_receipt_durable": true,
+          "live_state_durable": false,
+          "managed_fixture_only": true,
+          "project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+          "public_ack": true,
+          "request_digest": "sha256:db3dcd207571d1d27c02abbff642fe9cc4c8d6a29e8d1a28f55a260e69cefd4a",
+          "scene_revision": "sha256:8ad91e5934ecda7dc89aecadbd034e5bf20c4092fb8ec50d3299cd344aeb9502",
+          "selection": {
+            "generation": 0,
+            "identity": "sha256:44cb2673867afd1e10fac38c44a549aa91f128ed9404661809ffe6cb3a53fef8"
+          }
+        },
+        "result_hash": null,
+        "result_revision": null,
+        "status": "COMMITTED"
+      },
+      "response_sha256": "777be99d9d3b0df537600b9fa2efe0615e88e4760b196737a635f83b7a3ebc3b"
+    },
+    {
+      "command_id": "edit.save",
+      "digest": "sha256:84518a8896938d1574cea2c437a56e8db92f47959b975d9716dde12939932d59",
+      "phase": "COMMITTED",
+      "receipt": {
+        "adoption_sha256": "f2b9aab9f44b81827c2d73b40d408112642963317b118072b7faa7ab4c00bd50",
+        "after_project_revision": "sha256:f0b0395ee73165c8c0f23b69c7ece68770bba8a0edc7b1fd39ca60b0a943cb09",
+        "before_project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+        "before_scene_revision": "sha256:8ad91e5934ecda7dc89aecadbd034e5bf20c4092fb8ec50d3299cd344aeb9502",
+        "command_id": "edit.save",
+        "digest": "sha256:84518a8896938d1574cea2c437a56e8db92f47959b975d9716dde12939932d59",
+        "durable_owner_required": true,
+        "engine_effects_verified": false,
+        "operation": "scene.save",
+        "public_ack": false,
+        "readback_event_sha256": "0f3ecdf2dbf1abe44e27c72373c72340726037ecdd9d7d338a797c058501b068",
+        "reason": "verified",
+        "scene_revision": "sha256:8ad91e5934ecda7dc89aecadbd034e5bf20c4092fb8ec50d3299cd344aeb9502",
+        "schema": "hh-godot-publication-terminal-4",
+        "selection": {
+          "generation": 1,
+          "identity": "sha256:f47497c2da477e47bfb22aaba28bf6d3df82802d5209c9cffd5833ef2e71d5f4"
+        },
+        "selector_version": {
+          "file_id": "47f10a00000004000000000000000000",
+          "sha256": "dee28b6d71ada2da12f4d36c861de82a053641349e71edae2d9b23cb2905cad0",
+          "size_bytes": 3550,
+          "volume": "4938437614955579414"
+        },
+        "status": "COMMITTED"
+      },
+      "receipt_sha256": "54cc178a1e597009a89df6127682d32061be3022bed97fcc939c9d00966c5684",
+      "response": {
+        "code": "GODOT_MANAGED_SCENE_SAVED",
+        "command_id": "edit.save",
+        "postconditions": {
+          "durable_receipt_sha256": "54cc178a1e597009a89df6127682d32061be3022bed97fcc939c9d00966c5684",
+          "generation": 2,
+          "history_boundary": true,
+          "managed_fixture_only": true,
+          "project_revision": "sha256:f0b0395ee73165c8c0f23b69c7ece68770bba8a0edc7b1fd39ca60b0a943cb09",
+          "public_ack": true,
+          "request_digest": "sha256:84518a8896938d1574cea2c437a56e8db92f47959b975d9716dde12939932d59",
+          "scene_revision": "sha256:8ad91e5934ecda7dc89aecadbd034e5bf20c4092fb8ec50d3299cd344aeb9502",
+          "selection": {
+            "generation": 1,
+            "identity": "sha256:f47497c2da477e47bfb22aaba28bf6d3df82802d5209c9cffd5833ef2e71d5f4"
+          }
+        },
+        "result_hash": null,
+        "result_revision": null,
+        "status": "COMMITTED"
+      },
+      "response_sha256": "26192e616d14d2051bca636a7a45a40226a27b42eee52a73d63ce6b4cfea7be2"
+    }
+  ],
+  "content_file_ids": [
+    "f0f00a00000003000000000000000000",
+    "f1f00a00000003000000000000000000",
+    "f2f00a00000003000000000000000000",
+    "f3f00a00000003000000000000000000",
+    "f4f00a00000003000000000000000000",
+    "f5f00a00000003000000000000000000",
+    "f8f00a00000003000000000000000000",
+    "f9f00a00000003000000000000000000",
+    "faf00a00000003000000000000000000",
+    "fbf00a00000003000000000000000000",
+    "fcf00a00000003000000000000000000",
+    "fdf00a00000003000000000000000000",
+    "96f10a00000003000000000000000000",
+    "97f10a00000003000000000000000000",
+    "98f10a00000003000000000000000000",
+    "99f10a00000003000000000000000000",
+    "9af10a00000003000000000000000000",
+    "9bf10a00000003000000000000000000",
+    "9cf10a00000003000000000000000000",
+    "9df10a00000003000000000000000000",
+    "9ef10a00000003000000000000000000",
+    "9ff10a00000003000000000000000000",
+    "a0f10a00000003000000000000000000",
+    "a1f10a00000003000000000000000000"
+  ],
+  "content_root_identity": {
+    "file_id": "e9f00a00000003000000000000000000",
+    "volume": "4938437614955579414"
+  },
+  "edit_blobs": [
+    {
+      "identity": {
+        "file_id": "05f10a00000003000000000000000000",
+        "size": 266,
+        "volume": "4938437614955579414"
+      },
+      "object_id": "blob-3289c9be739e4232a01fb7d90f1eb86d",
+      "sha256": "069b19b4dbe3efa8bb3c642d0bc85916006e570353df80923eb3c741200b9342"
+    },
+    {
+      "identity": {
+        "file_id": "06f10a00000003000000000000000000",
+        "size": 3515,
+        "volume": "4938437614955579414"
+      },
+      "object_id": "blob-b8164812994a4b4990da1dfbd1b3ee9f",
+      "sha256": "917e82ec3d5460eea49a4582a0976233058401682c9afb91527703d74a60957d"
+    },
+    {
+      "identity": {
+        "file_id": "08f10a00000003000000000000000000",
+        "size": 5816,
+        "volume": "4938437614955579414"
+      },
+      "object_id": "blob-b913e161f0504562b1c121e749b392fe",
+      "sha256": "b34fb20af3b3545629975de60bda49e1cb0e26f82f603811412dca23aa08f6cd"
+    },
+    {
+      "identity": {
+        "file_id": "0ff10a00000003000000000000000000",
+        "size": 587,
+        "volume": "4938437614955579414"
+      },
+      "object_id": "blob-7b7c3a64b5384cd29441d538fb0fd079",
+      "sha256": "9f5e56622becdb133f995b8632c9450124a550aadd327abb2e5bb78e73820262"
+    },
+    {
+      "identity": {
+        "file_id": "10f10a00000003000000000000000000",
+        "size": 5370,
+        "volume": "4938437614955579414"
+      },
+      "object_id": "blob-85cae0498e154d0abb8a67bc3b7c0fbe",
+      "sha256": "49d9448e5f0653e0e30eabc26c4eefd66bc63e94bffe3688d7f112e1c3368450"
+    },
+    {
+      "identity": {
+        "file_id": "12f10a00000003000000000000000000",
+        "size": 5816,
+        "volume": "4938437614955579414"
+      },
+      "object_id": "blob-d79138bdfea64c268a7cc9fc32e4a823",
+      "sha256": "8886ee8f35e8584b974b3321c6dc1391935480e117cdaf3eccd54fcd0683c633"
+    },
+    {
+      "identity": {
+        "file_id": "19f10a00000003000000000000000000",
+        "size": 587,
+        "volume": "4938437614955579414"
+      },
+      "object_id": "blob-3b414e95d0534ed98200cce3adf805de",
+      "sha256": "bb60af8ce42fb0afdd88e064e13b238d60aab2d3c30d1fecb28a6a7b0cb7c11e"
+    },
+    {
+      "identity": {
+        "file_id": "1af10a00000003000000000000000000",
+        "size": 5368,
+        "volume": "4938437614955579414"
+      },
+      "object_id": "blob-3cd2eee49c454df5a0b46d1a3c88f8b6",
+      "sha256": "5774bf76dd867a0018272467831dc13081f05ed5d6f11e6428058dc0b1e1db29"
+    },
+    {
+      "identity": {
+        "file_id": "1cf10a00000003000000000000000000",
+        "size": 5806,
+        "volume": "4938437614955579414"
+      },
+      "object_id": "blob-8ccf6e846be64785ae47430c452af7cd",
+      "sha256": "485b124c1eb704a2316fc4a5e557b2c4e9be4467f7473c71671df8e154a38b35"
+    },
+    {
+      "identity": {
+        "file_id": "27f10a00000003000000000000000000",
+        "size": 587,
+        "volume": "4938437614955579414"
+      },
+      "object_id": "blob-2cea69f0a7c149189d9032743d173ec2",
+      "sha256": "eff549b2a667fe380cf76c4c0e4c6e25cf748b73b379e96ebe5da94185d926c3"
+    },
+    {
+      "identity": {
+        "file_id": "28f10a00000003000000000000000000",
+        "size": 5367,
+        "volume": "4938437614955579414"
+      },
+      "object_id": "blob-6765afaaa3f24f73b3d02bc3511f0f2f",
+      "sha256": "7e41b56e656379358b18e6cfd1f3574217537686965bf07fc19c0bf26ed6a9df"
+    },
+    {
+      "identity": {
+        "file_id": "2df10a00000003000000000000000000",
+        "size": 5807,
+        "volume": "4938437614955579414"
+      },
+      "object_id": "blob-55be9a3f051a49d3b33b1d8f9a13b1da",
+      "sha256": "f7508e051a68fa44ecc188435d5d7df880fdab8f72f1ad40a9425067441ea7de"
+    },
+    {
+      "identity": {
+        "file_id": "34f10a00000003000000000000000000",
+        "size": 587,
+        "volume": "4938437614955579414"
+      },
+      "object_id": "blob-08729673fb524c9291f8792575cebd9b",
+      "sha256": "de670ce0d96f86e282c6cecc82940835030f41a7ef335e16986a2c4289d4709f"
+    },
+    {
+      "identity": {
+        "file_id": "35f10a00000003000000000000000000",
+        "size": 5370,
+        "volume": "4938437614955579414"
+      },
+      "object_id": "blob-a528e99e5e2b4ded8ca4deeceada1eb6",
+      "sha256": "4d05e6778dda3f43666cd239d1319f2e2bcf19b12125518480e666f1c9af6341"
+    },
+    {
+      "identity": {
+        "file_id": "37f10a00000003000000000000000000",
+        "size": 3960,
+        "volume": "4938437614955579414"
+      },
+      "object_id": "blob-28fb95daf4ab4b42a66e5e65be4e9b90",
+      "sha256": "8a8d20b1e61b3c57a0b181cda98f131628bc55dbab32ffd94b011f1c7d4674d3"
+    },
+    {
+      "identity": {
+        "file_id": "3ff10a00000003000000000000000000",
+        "size": 266,
+        "volume": "4938437614955579414"
+      },
+      "object_id": "blob-3165e8c9e7e643228afb32fbfb4a7bc4",
+      "sha256": "a693a3dba123a93b270b119ceb7f61f2388317cb65099363bb71ff1a53024500"
+    },
+    {
+      "identity": {
+        "file_id": "40f10a00000003000000000000000000",
+        "size": 3515,
+        "volume": "4938437614955579414"
+      },
+      "object_id": "blob-c3d73d67c0674778b2083a36d16aa0b3",
+      "sha256": "8260557bad7022a14675b7c8d5aba843804f5cd49b765d807c627035468b4fae"
+    },
+    {
+      "identity": {
+        "file_id": "42f10a00000003000000000000000000",
+        "size": 5809,
+        "volume": "4938437614955579414"
+      },
+      "object_id": "blob-37d1d70082334c498b6ae99ee22c768b",
+      "sha256": "f05628564f7a0f251f33c390242d50ef8f48b617747dbc694e7cfee120fc49f7"
+    }
+  ],
+  "editor_engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+  "event_count": 29,
+  "held": false,
+  "highest_fencing_epoch": 7,
+  "last_good": {
+    "bundle_manifest": {
+      "caller_observations": {
+        "engine_sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
+        "scene_revision": "sha256:8ad91e5934ecda7dc89aecadbd034e5bf20c4092fb8ec50d3299cd344aeb9502"
+      },
+      "files": {
+        "addons/hh_studio/jcs_godot.gd": {
+          "role": "trusted_addon",
+          "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+          "size_bytes": 10165
+        },
+        "addons/hh_studio/jcs_godot.gd.uid": {
+          "role": "trusted_uid",
+          "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+          "size_bytes": 20
+        },
+        "addons/hh_studio/plugin.cfg": {
+          "role": "trusted_addon",
+          "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+          "size_bytes": 165
+        },
+        "addons/hh_studio/plugin.gd": {
+          "role": "trusted_addon",
+          "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+          "size_bytes": 23043
+        },
+        "addons/hh_studio/plugin.gd.uid": {
+          "role": "trusted_uid",
+          "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+          "size_bytes": 20
+        },
+        "addons/hh_studio/scene_commands.gd": {
+          "role": "trusted_addon",
+          "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+          "size_bytes": 32174
+        },
+        "addons/hh_studio/scene_commands.gd.uid": {
+          "role": "trusted_uid",
+          "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+          "size_bytes": 19
+        },
+        "project.godot": {
+          "role": "trusted_config",
+          "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+          "size_bytes": 282
+        },
+        "scenes/fixture.tscn": {
+          "role": "managed_scene",
+          "sha256": "7d77c1697697b51f44e3607966fe6cf3accc32dd01f5583a99350d4020375160",
+          "size_bytes": 587
+        },
+        "scripts/fixture_actor.gd": {
+          "role": "managed_script",
+          "sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+          "size_bytes": 50
+        },
+        "scripts/fixture_actor.gd.uid": {
+          "role": "managed_uid",
+          "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+          "size_bytes": 20
+        }
+      },
+      "profile": "hh-godot-managed-fixture-1",
+      "project_revision": "sha256:f0b0395ee73165c8c0f23b69c7ece68770bba8a0edc7b1fd39ca60b0a943cb09",
+      "schema": "hh-godot-fixture-bundle-2",
+      "trusted_source_revision": "sha256:a9c5a31fa66ab0002e61f6fab5270b18b23357b322eb6fc6674b34dd29e2d4bc"
+    },
+    "selector": {
+      "command_id": "edit.save",
+      "descriptor": {
+        "files": {
+          "addons/hh_studio/jcs_godot.gd": {
+            "file_id": "96f10a00000003000000000000000000",
+            "name": "obj-fc31d20f9f144c3cbca796675a8d8108",
+            "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+            "size_bytes": 10165,
+            "volume": "4938437614955579414"
+          },
+          "addons/hh_studio/jcs_godot.gd.uid": {
+            "file_id": "97f10a00000003000000000000000000",
+            "name": "obj-d127ee3efce845cc90e91476d224c8fa",
+            "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+            "size_bytes": 20,
+            "volume": "4938437614955579414"
+          },
+          "addons/hh_studio/plugin.cfg": {
+            "file_id": "98f10a00000003000000000000000000",
+            "name": "obj-3ee6212eb7d648b5b17bce5ac49ab61d",
+            "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+            "size_bytes": 165,
+            "volume": "4938437614955579414"
+          },
+          "addons/hh_studio/plugin.gd": {
+            "file_id": "99f10a00000003000000000000000000",
+            "name": "obj-f31972ccd81749c0bec10442152a5bd4",
+            "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+            "size_bytes": 23043,
+            "volume": "4938437614955579414"
+          },
+          "addons/hh_studio/plugin.gd.uid": {
+            "file_id": "9af10a00000003000000000000000000",
+            "name": "obj-cfb38b7b6b1f47de8126ea508295bd1e",
+            "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+            "size_bytes": 20,
+            "volume": "4938437614955579414"
+          },
+          "addons/hh_studio/scene_commands.gd": {
+            "file_id": "9bf10a00000003000000000000000000",
+            "name": "obj-a5403330da11414dbd9001c4d3612162",
+            "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+            "size_bytes": 32174,
+            "volume": "4938437614955579414"
+          },
+          "addons/hh_studio/scene_commands.gd.uid": {
+            "file_id": "9cf10a00000003000000000000000000",
+            "name": "obj-7b170ef389394cd8949282659a369222",
+            "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+            "size_bytes": 19,
+            "volume": "4938437614955579414"
+          },
+          "project.godot": {
+            "file_id": "9df10a00000003000000000000000000",
+            "name": "obj-96d4e42c59f24045a1cf1e8b4fa3378e",
+            "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+            "size_bytes": 282,
+            "volume": "4938437614955579414"
+          },
+          "scenes/fixture.tscn": {
+            "file_id": "9ef10a00000003000000000000000000",
+            "name": "obj-887a9ae003c3479ea4edf53593c439f6",
+            "sha256": "7d77c1697697b51f44e3607966fe6cf3accc32dd01f5583a99350d4020375160",
+            "size_bytes": 587,
+            "volume": "4938437614955579414"
+          },
+          "scripts/fixture_actor.gd": {
+            "file_id": "9ff10a00000003000000000000000000",
+            "name": "obj-ec697b742dcf43d49d8fbeac2f56c9e9",
+            "sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+            "size_bytes": 50,
+            "volume": "4938437614955579414"
+          },
+          "scripts/fixture_actor.gd.uid": {
+            "file_id": "a0f10a00000003000000000000000000",
+            "name": "obj-4c8c587fb74345338b1ba5b7566d1dc7",
+            "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+            "size_bytes": 20,
+            "volume": "4938437614955579414"
+          }
+        },
+        "manifest": {
+          "file_id": "a1f10a00000003000000000000000000",
+          "name": "obj-872bb39b8a61401da9bccf26f3b97c5e",
+          "sha256": "f413632c01fa19eb1d281c7cc04120363751d35f334e74fba614f0edcf78f06f",
+          "size_bytes": 2105,
+          "volume": "4938437614955579414"
+        },
+        "project_revision": "sha256:f0b0395ee73165c8c0f23b69c7ece68770bba8a0edc7b1fd39ca60b0a943cb09",
+        "root_identity": {
+          "file_id": "e9f00a00000003000000000000000000",
+          "volume": "4938437614955579414"
+        }
+      },
+      "descriptor_sha256": "b1a463f8240bf14921adebb558c98272e9013901eacd3471992670b8401b35c4",
+      "parent_selection": {
+        "generation": 0,
+        "identity": "sha256:44cb2673867afd1e10fac38c44a549aa91f128ed9404661809ffe6cb3a53fef8"
+      },
+      "schema": "hh-godot-active-selection-1",
+      "selection": {
+        "generation": 1,
+        "identity": "sha256:f47497c2da477e47bfb22aaba28bf6d3df82802d5209c9cffd5833ef2e71d5f4"
+      }
+    },
+    "selector_version": {
+      "file_id": "47f10a00000004000000000000000000",
+      "sha256": "dee28b6d71ada2da12f4d36c861de82a053641349e71edae2d9b23cb2905cad0",
+      "size_bytes": 3550,
+      "volume": "4938437614955579414"
+    }
+  },
+  "last_observed_ms": 1789598379913,
+  "observation_ids": [
+    "capture-3eaef2da49f04e1d953ea3b531432492",
+    "edit-64c34e055b6e477e950ac42b812576dd",
+    "capture-2aec32ee27c744048eea6fee3b192d51",
+    "edit-864c3010bbbf4fb09622dea3e3c5e180",
+    "capture-964aacbf5bbe43bbac958e757349a236",
+    "edit-9457bf3f1c3947e79187133f83eb49e9",
+    "capture-c320894cebd244aea65420f6768a53d6",
+    "edit-742860f252b14ea28c889c6ed6277469",
+    "capture-aca9eb06b324470aba69032096cb6441",
+    "edit-da7715e53c2e42ef9f8a40e696b8710d",
+    "capture-2dbddae72e2f44e6b42d1039795cc0aa",
+    "edit-d8792f9b2fa14a98a2d863debd4636d3",
+    "capture-0d5d76a7f91c4ee0a25f0ec2660605e8",
+    "adoption-a223e39a34c9438ba265ac7831ca0603"
+  ],
+  "pending_command_id": null,
+  "planned_names": [
+    "obj-5b3cbf0a758d4fee90b67ac739ecee58",
+    "obj-11de0d41537a4acc8f47918fb3643fa3",
+    "obj-2fb0703126744923880d7bccf0b9c2af",
+    "obj-ab881072deb64093be36a7f9c790e0fe",
+    "obj-05e73f9f28b2462684036f52493498dc",
+    "obj-1c07f4798c8548dcb7fd79db13419d92",
+    "obj-fa2c8fad506c42f2856eb62a8e4097b7",
+    "obj-b1708b5b458b4311b2995aa42951cc7b",
+    "obj-ea34bbfb40b8460cbf29cb0388b2269b",
+    "obj-38bbb854c25e47b2b432292135196797",
+    "obj-95d658b0c61d4a5f803e9cee308c51fe",
+    "obj-44927df2372a4801868eadc5d9a23455",
+    "obj-872bb39b8a61401da9bccf26f3b97c5e",
+    "obj-fc31d20f9f144c3cbca796675a8d8108",
+    "obj-d127ee3efce845cc90e91476d224c8fa",
+    "obj-3ee6212eb7d648b5b17bce5ac49ab61d",
+    "obj-f31972ccd81749c0bec10442152a5bd4",
+    "obj-cfb38b7b6b1f47de8126ea508295bd1e",
+    "obj-a5403330da11414dbd9001c4d3612162",
+    "obj-7b170ef389394cd8949282659a369222",
+    "obj-96d4e42c59f24045a1cf1e8b4fa3378e",
+    "obj-887a9ae003c3479ea4edf53593c439f6",
+    "obj-ec697b742dcf43d49d8fbeac2f56c9e9",
+    "obj-4c8c587fb74345338b1ba5b7566d1dc7"
+  ],
+  "project_id": "project.fixture",
+  "retirement_intent_ids": [],
+  "scratch_names": [
+    "capture-e8442f509f584c72bfb41d8aa20840cc.tscn",
+    "capture-f8089003b2644f9d93b785905a813c91.tscn",
+    "capture-ac268192be6343c793438931eaf85450.tscn",
+    "capture-b217e3f705d949a9b4d3e767e0591388.tscn",
+    "capture-98e93c39be8b459eb88f6994da451830.tscn",
+    "capture-d9a4f5b873b94f12be1d9ca34f05629f.tscn",
+    "capture-75cf57ec422045899805ba562ef08cb3.tscn"
+  ],
+  "selected": {
+    "bundle_manifest": {
+      "caller_observations": {
+        "engine_sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
+        "scene_revision": "sha256:8ad91e5934ecda7dc89aecadbd034e5bf20c4092fb8ec50d3299cd344aeb9502"
+      },
+      "files": {
+        "addons/hh_studio/jcs_godot.gd": {
+          "role": "trusted_addon",
+          "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+          "size_bytes": 10165
+        },
+        "addons/hh_studio/jcs_godot.gd.uid": {
+          "role": "trusted_uid",
+          "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+          "size_bytes": 20
+        },
+        "addons/hh_studio/plugin.cfg": {
+          "role": "trusted_addon",
+          "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+          "size_bytes": 165
+        },
+        "addons/hh_studio/plugin.gd": {
+          "role": "trusted_addon",
+          "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+          "size_bytes": 23043
+        },
+        "addons/hh_studio/plugin.gd.uid": {
+          "role": "trusted_uid",
+          "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+          "size_bytes": 20
+        },
+        "addons/hh_studio/scene_commands.gd": {
+          "role": "trusted_addon",
+          "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+          "size_bytes": 32174
+        },
+        "addons/hh_studio/scene_commands.gd.uid": {
+          "role": "trusted_uid",
+          "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+          "size_bytes": 19
+        },
+        "project.godot": {
+          "role": "trusted_config",
+          "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+          "size_bytes": 282
+        },
+        "scenes/fixture.tscn": {
+          "role": "managed_scene",
+          "sha256": "7d77c1697697b51f44e3607966fe6cf3accc32dd01f5583a99350d4020375160",
+          "size_bytes": 587
+        },
+        "scripts/fixture_actor.gd": {
+          "role": "managed_script",
+          "sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+          "size_bytes": 50
+        },
+        "scripts/fixture_actor.gd.uid": {
+          "role": "managed_uid",
+          "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+          "size_bytes": 20
+        }
+      },
+      "profile": "hh-godot-managed-fixture-1",
+      "project_revision": "sha256:f0b0395ee73165c8c0f23b69c7ece68770bba8a0edc7b1fd39ca60b0a943cb09",
+      "schema": "hh-godot-fixture-bundle-2",
+      "trusted_source_revision": "sha256:a9c5a31fa66ab0002e61f6fab5270b18b23357b322eb6fc6674b34dd29e2d4bc"
+    },
+    "selector": {
+      "command_id": "edit.save",
+      "descriptor": {
+        "files": {
+          "addons/hh_studio/jcs_godot.gd": {
+            "file_id": "96f10a00000003000000000000000000",
+            "name": "obj-fc31d20f9f144c3cbca796675a8d8108",
+            "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+            "size_bytes": 10165,
+            "volume": "4938437614955579414"
+          },
+          "addons/hh_studio/jcs_godot.gd.uid": {
+            "file_id": "97f10a00000003000000000000000000",
+            "name": "obj-d127ee3efce845cc90e91476d224c8fa",
+            "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+            "size_bytes": 20,
+            "volume": "4938437614955579414"
+          },
+          "addons/hh_studio/plugin.cfg": {
+            "file_id": "98f10a00000003000000000000000000",
+            "name": "obj-3ee6212eb7d648b5b17bce5ac49ab61d",
+            "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+            "size_bytes": 165,
+            "volume": "4938437614955579414"
+          },
+          "addons/hh_studio/plugin.gd": {
+            "file_id": "99f10a00000003000000000000000000",
+            "name": "obj-f31972ccd81749c0bec10442152a5bd4",
+            "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+            "size_bytes": 23043,
+            "volume": "4938437614955579414"
+          },
+          "addons/hh_studio/plugin.gd.uid": {
+            "file_id": "9af10a00000003000000000000000000",
+            "name": "obj-cfb38b7b6b1f47de8126ea508295bd1e",
+            "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+            "size_bytes": 20,
+            "volume": "4938437614955579414"
+          },
+          "addons/hh_studio/scene_commands.gd": {
+            "file_id": "9bf10a00000003000000000000000000",
+            "name": "obj-a5403330da11414dbd9001c4d3612162",
+            "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+            "size_bytes": 32174,
+            "volume": "4938437614955579414"
+          },
+          "addons/hh_studio/scene_commands.gd.uid": {
+            "file_id": "9cf10a00000003000000000000000000",
+            "name": "obj-7b170ef389394cd8949282659a369222",
+            "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+            "size_bytes": 19,
+            "volume": "4938437614955579414"
+          },
+          "project.godot": {
+            "file_id": "9df10a00000003000000000000000000",
+            "name": "obj-96d4e42c59f24045a1cf1e8b4fa3378e",
+            "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+            "size_bytes": 282,
+            "volume": "4938437614955579414"
+          },
+          "scenes/fixture.tscn": {
+            "file_id": "9ef10a00000003000000000000000000",
+            "name": "obj-887a9ae003c3479ea4edf53593c439f6",
+            "sha256": "7d77c1697697b51f44e3607966fe6cf3accc32dd01f5583a99350d4020375160",
+            "size_bytes": 587,
+            "volume": "4938437614955579414"
+          },
+          "scripts/fixture_actor.gd": {
+            "file_id": "9ff10a00000003000000000000000000",
+            "name": "obj-ec697b742dcf43d49d8fbeac2f56c9e9",
+            "sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+            "size_bytes": 50,
+            "volume": "4938437614955579414"
+          },
+          "scripts/fixture_actor.gd.uid": {
+            "file_id": "a0f10a00000003000000000000000000",
+            "name": "obj-4c8c587fb74345338b1ba5b7566d1dc7",
+            "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+            "size_bytes": 20,
+            "volume": "4938437614955579414"
+          }
+        },
+        "manifest": {
+          "file_id": "a1f10a00000003000000000000000000",
+          "name": "obj-872bb39b8a61401da9bccf26f3b97c5e",
+          "sha256": "f413632c01fa19eb1d281c7cc04120363751d35f334e74fba614f0edcf78f06f",
+          "size_bytes": 2105,
+          "volume": "4938437614955579414"
+        },
+        "project_revision": "sha256:f0b0395ee73165c8c0f23b69c7ece68770bba8a0edc7b1fd39ca60b0a943cb09",
+        "root_identity": {
+          "file_id": "e9f00a00000003000000000000000000",
+          "volume": "4938437614955579414"
+        }
+      },
+      "descriptor_sha256": "b1a463f8240bf14921adebb558c98272e9013901eacd3471992670b8401b35c4",
+      "parent_selection": {
+        "generation": 0,
+        "identity": "sha256:44cb2673867afd1e10fac38c44a549aa91f128ed9404661809ffe6cb3a53fef8"
+      },
+      "schema": "hh-godot-active-selection-1",
+      "selection": {
+        "generation": 1,
+        "identity": "sha256:f47497c2da477e47bfb22aaba28bf6d3df82802d5209c9cffd5833ef2e71d5f4"
+      }
+    },
+    "selector_version": {
+      "file_id": "47f10a00000004000000000000000000",
+      "sha256": "dee28b6d71ada2da12f4d36c861de82a053641349e71edae2d9b23cb2905cad0",
+      "size_bytes": 3550,
+      "volume": "4938437614955579414"
+    }
+  },
+  "source_closure_sha256": "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+  "stopped": true,
+  "validation_runs": [
+    "hh-gt03-ce0a071eb7fa4a7cbce4a00d4d9ffc0d"
+  ],
+  "validation_source_release_sha256": "c6395bd0fdf98afacf22ea6a938cd70b602f86b6fe3dfee22ca4955f5b18c10c",
+  "validator_engine_sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e"
+}

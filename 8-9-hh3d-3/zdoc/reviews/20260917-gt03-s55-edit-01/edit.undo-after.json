@@ -1,0 +1,401 @@
+{
+  "can_redo": true,
+  "can_undo": true,
+  "code": "SCENE_INSPECTED",
+  "editor_session_id": "editor-93c34746d37e438aa053b0eab379ff86",
+  "filesystem_mutated": false,
+  "generation": 1,
+  "held": false,
+  "history_id": 1,
+  "offset": 0,
+  "ok": true,
+  "revision": "sha256:b1933be63378d97d2b5d5da00632e7a5d7bbe134d629fe7eda098f3af0b0a46f",
+  "root_instance_id": "1524277253837",
+  "scene_path": "res://scenes/fixture.tscn",
+  "state": {
+    "nodes": [
+      {
+        "groups": [],
+        "name": "Fixture",
+        "node_type": "Node3D",
+        "owner_id": "",
+        "parent_id": "",
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_degrees": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "sibling_index": 0,
+        "stable_id": "root",
+        "stored": {
+          "auto_translate_mode": 0,
+          "editor_description": "",
+          "fixture_value": 23,
+          "metadata/hh_studio_id": "root",
+          "physics_interpolation_mode": 0,
+          "process_mode": 0,
+          "process_physics_priority": 0,
+          "process_priority": 0,
+          "process_thread_group": 0,
+          "rotation_edit_mode": 0,
+          "rotation_order": 2,
+          "script": {
+            "path": "res://scripts/fixture_actor.gd",
+            "source_sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+            "type": "GDScript"
+          },
+          "top_level": false,
+          "transform": {
+            "type": 18,
+            "value": [
+              {
+                "type": 17,
+                "value": [
+                  {
+                    "type": 9,
+                    "value": [
+                      1.0,
+                      0.0,
+                      0.0
+                    ]
+                  },
+                  {
+                    "type": 9,
+                    "value": [
+                      0.0,
+                      1.0,
+                      0.0
+                    ]
+                  },
+                  {
+                    "type": 9,
+                    "value": [
+                      0.0,
+                      0.0,
+                      1.0
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": 9,
+                "value": [
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              }
+            ]
+          },
+          "unique_name_in_owner": false,
+          "visibility_parent": {
+            "type": 22,
+            "value": ""
+          },
+          "visible": true
+        }
+      },
+      {
+        "box_size": [
+          2.0,
+          3.0,
+          4.0
+        ],
+        "groups": [],
+        "name": "PublicBox",
+        "node_type": "MeshInstance3D",
+        "owner_id": "root",
+        "parent_id": "root",
+        "position": [
+          1.0,
+          2.0,
+          3.0
+        ],
+        "rotation_degrees": [
+          0.0,
+          15.000000953674316,
+          0.0
+        ],
+        "scale": [
+          0.9999999403953552,
+          1.0,
+          0.9999999403953552
+        ],
+        "sibling_index": 0,
+        "stable_id": "box.public",
+        "stored": {
+          "auto_translate_mode": 0,
+          "cast_shadow": 1,
+          "custom_aabb": {
+            "type": 16,
+            "value": [
+              {
+                "type": 9,
+                "value": [
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              {
+                "type": 9,
+                "value": [
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              }
+            ]
+          },
+          "editor_description": "",
+          "extra_cull_margin": 0.0,
+          "gi_lightmap_texel_scale": 1.0,
+          "gi_mode": 1,
+          "ignore_occlusion_culling": false,
+          "layers": 1,
+          "lod_bias": 1.0,
+          "material_overlay": null,
+          "material_override": null,
+          "mesh": {
+            "stored": {
+              "add_uv2": false,
+              "custom_aabb": {
+                "type": 16,
+                "value": [
+                  {
+                    "type": 9,
+                    "value": [
+                      0.0,
+                      0.0,
+                      0.0
+                    ]
+                  },
+                  {
+                    "type": 9,
+                    "value": [
+                      0.0,
+                      0.0,
+                      0.0
+                    ]
+                  }
+                ]
+              },
+              "flip_faces": false,
+              "lightmap_size_hint": {
+                "type": 6,
+                "value": [
+                  0,
+                  0
+                ]
+              },
+              "material": null,
+              "resource_local_to_scene": false,
+              "resource_name": "",
+              "script": null,
+              "size": {
+                "type": 9,
+                "value": [
+                  2.0,
+                  3.0,
+                  4.0
+                ]
+              },
+              "subdivide_depth": 0,
+              "subdivide_height": 0,
+              "subdivide_width": 0,
+              "uv2_padding": 2.0
+            },
+            "type": "BoxMesh"
+          },
+          "metadata/hh_studio_id": "box.public",
+          "physics_interpolation_mode": 0,
+          "process_mode": 0,
+          "process_physics_priority": 0,
+          "process_priority": 0,
+          "process_thread_group": 0,
+          "rotation_edit_mode": 0,
+          "rotation_order": 2,
+          "script": null,
+          "skeleton": {
+            "type": 22,
+            "value": ""
+          },
+          "skin": null,
+          "sorting_offset": 0.0,
+          "sorting_use_aabb_center": true,
+          "surface_material_override/0": null,
+          "top_level": false,
+          "transform": {
+            "type": 18,
+            "value": [
+              {
+                "type": 17,
+                "value": [
+                  {
+                    "type": 9,
+                    "value": [
+                      0.9659258127212524,
+                      0.0,
+                      -0.258819043636322
+                    ]
+                  },
+                  {
+                    "type": 9,
+                    "value": [
+                      0.0,
+                      1.0,
+                      0.0
+                    ]
+                  },
+                  {
+                    "type": 9,
+                    "value": [
+                      0.258819043636322,
+                      0.0,
+                      0.9659258127212524
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": 9,
+                "value": [
+                  1.0,
+                  2.0,
+                  3.0
+                ]
+              }
+            ]
+          },
+          "transparency": 0.0,
+          "unique_name_in_owner": false,
+          "visibility_parent": {
+            "type": 22,
+            "value": ""
+          },
+          "visibility_range_begin": 0.0,
+          "visibility_range_begin_margin": 0.0,
+          "visibility_range_end": 0.0,
+          "visibility_range_end_margin": 0.0,
+          "visibility_range_fade_mode": 0,
+          "visible": true
+        }
+      }
+    ]
+  },
+  "total": 2,
+  "working_files": {
+    "addons/hh_studio/jcs_godot.gd": {
+      "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+      "size_bytes": 10165
+    },
+    "addons/hh_studio/jcs_godot.gd.uid": {
+      "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+      "size_bytes": 20
+    },
+    "addons/hh_studio/plugin.cfg": {
+      "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+      "size_bytes": 165
+    },
+    "addons/hh_studio/plugin.gd": {
+      "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+      "size_bytes": 23043
+    },
+    "addons/hh_studio/plugin.gd.uid": {
+      "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+      "size_bytes": 20
+    },
+    "addons/hh_studio/scene_commands.gd": {
+      "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+      "size_bytes": 32174
+    },
+    "addons/hh_studio/scene_commands.gd.uid": {
+      "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+      "size_bytes": 19
+    },
+    "project.godot": {
+      "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+      "size_bytes": 282
+    },
+    "scenes/fixture.tscn": {
+      "sha256": "51eaa111f832327d74b2031d382eb22ab30c8b725323e26ebcf7a66bbef571cb",
+      "size_bytes": 235
+    },
+    "scripts/fixture_actor.gd": {
+      "sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+      "size_bytes": 50
+    },
+    "scripts/fixture_actor.gd.uid": {
+      "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+      "size_bytes": 20
+    }
+  },
+  "project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+  "selected_files": {
+    "addons/hh_studio/jcs_godot.gd": {
+      "role": "trusted_addon",
+      "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+      "size_bytes": 10165
+    },
+    "addons/hh_studio/jcs_godot.gd.uid": {
+      "role": "trusted_uid",
+      "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+      "size_bytes": 20
+    },
+    "addons/hh_studio/plugin.cfg": {
+      "role": "trusted_addon",
+      "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+      "size_bytes": 165
+    },
+    "addons/hh_studio/plugin.gd": {
+      "role": "trusted_addon",
+      "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+      "size_bytes": 23043
+    },
+    "addons/hh_studio/plugin.gd.uid": {
+      "role": "trusted_uid",
+      "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+      "size_bytes": 20
+    },
+    "addons/hh_studio/scene_commands.gd": {
+      "role": "trusted_addon",
+      "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+      "size_bytes": 32174
+    },
+    "addons/hh_studio/scene_commands.gd.uid": {
+      "role": "trusted_uid",
+      "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+      "size_bytes": 19
+    },
+    "project.godot": {
+      "role": "trusted_config",
+      "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+      "size_bytes": 282
+    },
+    "scenes/fixture.tscn": {
+      "role": "managed_scene",
+      "sha256": "51eaa111f832327d74b2031d382eb22ab30c8b725323e26ebcf7a66bbef571cb",
+      "size_bytes": 235
+    },
+    "scripts/fixture_actor.gd": {
+      "role": "managed_script",
+      "sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+      "size_bytes": 50
+    },
+    "scripts/fixture_actor.gd.uid": {
+      "role": "managed_uid",
+      "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+      "size_bytes": 20
+    }
+  }
+}

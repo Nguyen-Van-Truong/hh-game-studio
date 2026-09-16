@@ -1,0 +1,16 @@
+test_after_real_cas_loss_holds_without_terminal_ack (test_publication_journal_v5.JournalV5Tests.test_after_real_cas_loss_holds_without_terminal_ack) ... ok
+test_blob_failure_retains_unknown_owner_and_intent_without_ready (test_publication_journal_v5.JournalV5Tests.test_blob_failure_retains_unknown_owner_and_intent_without_ready) ... ok
+test_changed_checkpoint_blob_is_rejected_on_native_reopen (test_publication_journal_v5.JournalV5Tests.test_changed_checkpoint_blob_is_rejected_on_native_reopen) ... ok
+test_failed_retirement_cannot_select_stop_is_durable_unknown (test_publication_journal_v5.JournalV5Tests.test_failed_retirement_cannot_select_stop_is_durable_unknown) ... ok
+test_invalid_checkpoint_or_projection_has_no_blob_write (test_publication_journal_v5.JournalV5Tests.test_invalid_checkpoint_or_projection_has_no_blob_write) ... ok
+test_mixed_edit_then_actual_save_same_custody_replays_both_responses (test_publication_journal_v5.JournalV5Tests.test_mixed_edit_then_actual_save_same_custody_replays_both_responses) ... ok
+test_native_edit_checkpoint_response_dedupe_and_readonly_reopen (test_publication_journal_v5.JournalV5Tests.test_native_edit_checkpoint_response_dedupe_and_readonly_reopen) ... ok
+test_save_uses_same_native_chain_with_preserved_script_and_original_response (test_publication_journal_v5.JournalV5Tests.test_save_uses_same_native_chain_with_preserved_script_and_original_response) ... ok
+test_script_whole_bundle_cas_exact_response_then_readonly_reopen (test_publication_journal_v5.JournalV5Tests.test_script_whole_bundle_cas_exact_response_then_readonly_reopen) ... ok
+test_stop_ready_keeps_checkpoint_and_unknown_response_after_reopen (test_publication_journal_v5.JournalV5Tests.test_stop_ready_keeps_checkpoint_and_unknown_response_after_reopen) ... ok
+test_wrong_script_delta_rejected_before_native_stage (test_publication_journal_v5.JournalV5Tests.test_wrong_script_delta_rejected_before_native_stage) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 212.852s
+
+OK

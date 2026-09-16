@@ -1,0 +1,139 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "lane": "stop",
+      "mutation": "source reference closure",
+      "rejected": true,
+      "reason": "shared source reference mismatch"
+    },
+    {
+      "lane": "stop",
+      "mutation": "source reference inventory count",
+      "rejected": true,
+      "reason": "shared source reference mismatch"
+    },
+    {
+      "lane": "stop",
+      "mutation": "raw host exit",
+      "rejected": true,
+      "reason": "raw process exit/PID/Job mismatch"
+    },
+    {
+      "lane": "stop",
+      "mutation": "raw host PID",
+      "rejected": true,
+      "reason": "raw process exit/PID/Job mismatch"
+    },
+    {
+      "lane": "stop",
+      "mutation": "snapshot terminal response",
+      "rejected": true,
+      "reason": "pure event fold differs from captured snapshot"
+    },
+    {
+      "lane": "stop",
+      "mutation": "selected FileID",
+      "rejected": true,
+      "reason": "pure event fold differs from captured snapshot"
+    },
+    {
+      "lane": "stop",
+      "mutation": "readback semantic state",
+      "rejected": true,
+      "reason": "actual semantic readback revision differs"
+    },
+    {
+      "lane": "stop",
+      "mutation": "readback files",
+      "rejected": true,
+      "reason": "actual readback full selected files differ"
+    },
+    {
+      "lane": "stop",
+      "mutation": "actual selected bytes",
+      "rejected": true,
+      "reason": "selected file bytes differ: scenes/fixture.tscn"
+    },
+    {
+      "lane": "stop",
+      "mutation": "terminal wire content",
+      "rejected": true,
+      "reason": "original terminal response differs from pure replay"
+    },
+    {
+      "lane": "edit",
+      "mutation": "source reference closure",
+      "rejected": true,
+      "reason": "shared source reference mismatch"
+    },
+    {
+      "lane": "edit",
+      "mutation": "source reference inventory count",
+      "rejected": true,
+      "reason": "shared source reference mismatch"
+    },
+    {
+      "lane": "edit",
+      "mutation": "raw host exit",
+      "rejected": true,
+      "reason": "raw process exit/PID/Job mismatch"
+    },
+    {
+      "lane": "edit",
+      "mutation": "raw host PID",
+      "rejected": true,
+      "reason": "raw process exit/PID/Job mismatch"
+    },
+    {
+      "lane": "edit",
+      "mutation": "snapshot terminal response",
+      "rejected": true,
+      "reason": "pure event fold differs from captured snapshot"
+    },
+    {
+      "lane": "edit",
+      "mutation": "selected FileID",
+      "rejected": true,
+      "reason": "pure event fold differs from captured snapshot"
+    },
+    {
+      "lane": "edit",
+      "mutation": "readback semantic state",
+      "rejected": true,
+      "reason": "actual semantic readback revision differs"
+    },
+    {
+      "lane": "edit",
+      "mutation": "readback files",
+      "rejected": true,
+      "reason": "actual readback full selected files differ"
+    },
+    {
+      "lane": "edit",
+      "mutation": "actual selected bytes",
+      "rejected": true,
+      "reason": "selected file bytes differ: scenes/fixture.tscn"
+    },
+    {
+      "lane": "edit",
+      "mutation": "terminal wire content",
+      "rejected": true,
+      "reason": "original terminal response differs from pure replay"
+    },
+    {
+      "lane": "edit",
+      "mutation": "raw edit observation",
+      "rejected": true,
+      "reason": "PUBLICATION_V5_OBSERVATION_SEMANTICS: pure scene.save publication history v3"
+    }
+  ],
+  "verifier_sha256": "56e429b1ad4fc0afd85ee93bcaccc6dd5fc255cd55c832cb3efb4f0171a16d03",
+  "test_sha256": "db9d94b60dee21d3ad9b258b8d5608cafbed805810a884d093ce67829aee95de",
+  "source_closure_sha256": "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+  "native_processes_started": 0,
+  "native_handles_opened": 0,
+  "mutations_in_memory_only": true,
+  "shared_source_unchanged": true,
+  "gt03_acceptance": false
+}
