@@ -1,0 +1,15 @@
+test_actual_complete_package (test_verify_probe.AuditTests.test_actual_complete_package) ... ok
+test_boolean_is_not_native_exit_integer (test_verify_probe.AuditTests.test_boolean_is_not_native_exit_integer) ... ok
+test_changed_saved_file_after_inventory_rehash (test_verify_probe.AuditTests.test_changed_saved_file_after_inventory_rehash) ... ok
+test_changed_source_after_inventory_rehash (test_verify_probe.AuditTests.test_changed_source_after_inventory_rehash) ... ok
+test_checkpoint_readback_cannot_be_relabelled_saved_scene (test_verify_probe.AuditTests.test_checkpoint_readback_cannot_be_relabelled_saved_scene) ... ok
+test_duplicate_raw_terminal_marker (test_verify_probe.AuditTests.test_duplicate_raw_terminal_marker) ... ok
+test_extra_artifact_cannot_be_blessed_by_inventory (test_verify_probe.AuditTests.test_extra_artifact_cannot_be_blessed_by_inventory) ... ok
+test_host_exit_cannot_be_replaced_by_summary_pass (test_verify_probe.AuditTests.test_host_exit_cannot_be_replaced_by_summary_pass) ... ok
+test_one_is_not_true_even_when_both_logs_match (test_verify_probe.AuditTests.test_one_is_not_true_even_when_both_logs_match) ... ok
+test_unlisted_artifact_rejected (test_verify_probe.AuditTests.test_unlisted_artifact_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 4.586s
+
+OK

@@ -1,0 +1,54 @@
+{
+  "acceptance": false,
+  "public_ack": false,
+  "runs": [
+    {
+      "argv": [
+        "python.exe",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "$SNAPSHOT/zdoc/reviews/20260917-gt04-blender-audit",
+        "-p",
+        "test_*.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "host": "audit-tests-host.json",
+      "ownership": "gated_job_kill_on_close",
+      "started_at": "2026-09-16T19:03:27.143426+00:00",
+      "stderr": "audit-tests-stderr.txt",
+      "stdout": "audit-tests-stdout.txt",
+      "target_pid": 15068,
+      "timed_out": false,
+      "tree_verified": true,
+      "wrapper_exit_code": 0,
+      "wrapper_pid": 33908
+    },
+    {
+      "argv": [
+        "python.exe",
+        "-B",
+        "$SNAPSHOT/zdoc/reviews/20260917-gt04-blender-audit/verify_probe.py"
+      ],
+      "exit_code": 0,
+      "host": "audit-verify-host.json",
+      "ownership": "gated_job_kill_on_close",
+      "started_at": "2026-09-16T19:03:32.077280+00:00",
+      "stderr": "audit-verify-stderr.txt",
+      "stdout": "audit-verify-stdout.txt",
+      "target_pid": 25828,
+      "timed_out": false,
+      "tree_verified": true,
+      "wrapper_exit_code": 0,
+      "wrapper_pid": 2504
+    }
+  ],
+  "source_sha256": {
+    "test_verify_probe.py": "a708a5efe5b96cad3d40e38ba4b3f437d73bb8a409885d44bf928ba6f34e74b4",
+    "verify_probe.py": "0abd43648371797edd8e85de6368118acc8949a4dd4edc9a88b6824650118aaf"
+  },
+  "source_unchanged": true
+}
