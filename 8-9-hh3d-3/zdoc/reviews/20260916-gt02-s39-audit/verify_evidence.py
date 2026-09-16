@@ -4,7 +4,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 STUDIO = ROOT / 'studio'
-PACK = ROOT / 'zdoc/reviews/20260916-gt02-s39-01'
+PACK = ROOT / 'zdoc/reviews/20260916-gt02-s39-02'
 DIAG = ROOT / 'zdoc/reviews/20260916-gt02-s39-audit'
 MANIFEST_HASH = '2169c69734dc416b805f905ff24e67c7cacc77ce4a62f7b060c9f4728b803630'
 

@@ -1,7 +1,7 @@
-# S39 authenticated selector endpoint — CANDIDATE
+# S39 authenticated selector endpoint â€” CANDIDATE
 
-Frozen candidate: `GT02-S39-20260916-01`, closure
-`6972f55fbc72e3095ef4869c69428b89c5aea68ca24532a96d174dbc2c33131f`.
+Frozen candidate: `GT02-S39-20260916-02`, closure
+`2fb0ec013c4037c844b38f7be221c0aa7a6bd905492fa7c4a53eaa8e474c9d59`.
 The protocol lane ran **283: 279 pass + 4 explicit skips** and bootstrap ran
 **56/56**. The source snapshot and owned process trees were unchanged/clean.
 This is coordinator evidence only; independent critics and GT-02 acceptance are

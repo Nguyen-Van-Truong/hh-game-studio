@@ -30,7 +30,7 @@ EXECUTION_MODE=SOLO_OWNER_20260915
 SUBAGENTS_ENABLED=0
 GT02_EVIDENCE_STATUS=FROZEN_CANDIDATE_S39_01
 GT02_REVIEW_STATUS=NOT_REVIEWED_SOLO_S39
-GT02_LAST_TESTED_SOURCE_CLOSURE=6972f55fbc72e3095ef4869c69428b89c5aea68ca24532a96d174dbc2c33131f
+GT02_LAST_TESTED_SOURCE_CLOSURE=2fb0ec013c4037c844b38f7be221c0aa7a6bd905492fa7c4a53eaa8e474c9d59
 GT02_CHECKPOINT_COMMITS=96c506b,e52b5c0,faedb0d,642d6f5,74d1cc2,52ca04c,52def92,957ea88,572185e,9839be9,abc88b0,6bfbc3e,43192c0,15801ad,adb2e52,2e24912
 GT02_SAFE_WRITE_STATUS=GAP_UNSUPPORTED_WINDOWS
 GT02_BOUNDARY_EVIDENCE=S35_NATIVE_TYPED_COUNTER_AND_S33_SEPARATE_STAGING
@@ -50,7 +50,7 @@ Actual host exit/process tree sạch, source/snapshot không đổi;82 source fi
 9 artifacts được rehash. Python/Node/Godot khớp2396 canonical rows/hash; Godot
 thêm9 negative cases. Bảng requirement → test → evidence và audit tái dựng
 Git nằm ở reviews/20260916-gt02-s38-audit/. Chưa có review độc lập cho source này.
-Checkpoint S38:2e24912 source/evidence; S39 candidate đang chờ commit và Git proof.
+Checkpoint S38:2e24912 source/evidence; S39-02 candidate đang chờ Git proof; S39-01 giữ lịch sử hash mismatch do tài liệu sửa sau freeze.
 S37:adb2e52 source/evidence; S36:15801ad.
 S38 rehash82 source/9 candidate/45 diagnostic artifacts;9 crash cut được parse
 riêng,7 kiểm tra âm của verifier từ chối đúng. Không chuyển chữ ký critic cũ.
@@ -119,10 +119,10 @@ selection/receipt, quota toàn operation, generation CAS và consumer readback.
 27/27 test selector đạt trên snapshot cuối, gồm9 crash cut bằng process thật.
 Stop tới trong quota scan/pin bị chặn trước effect admission; log/store/consumer
 mỗi object chỉ có một selector. 5 focused runs giữ đúng source riêng 17/21/21/24/27 tests.
-S39 candidate chạy 283 test:279 pass+4 skip, bootstrap56/56. RPC focused16/16.
+S39-02 candidate chạy 283 test:279 pass+4 skip, bootstrap56/56. RPC focused16/16.
 Native AppContainer7/7 case exit61, Job/PID0, private root và .events trả
 ERROR_ACCESS_DENIED(5); submit retry giữ một receipt/effect. Source closure hiện
-84 file, candidate artifact9, closure6972f55fbc72e3095ef4869c69428b89c5aea68ca24532a96d174dbc2c33131f.
+84 file, candidate artifact9, closure2fb0ec013c4037c844b38f7be221c0aa7a6bd905492fa7c4a53eaa8e474c9d59.
 Reopen chỉ quan sát; explicit reconcile có thể nhận lại manifest đã ghi trước
 crash, không staging lại. Restore tăng generation và giữ UNKNOWN/restored.
 Đây là internal fixture; chưa có confined client gọi selector hoặc engine adapter.

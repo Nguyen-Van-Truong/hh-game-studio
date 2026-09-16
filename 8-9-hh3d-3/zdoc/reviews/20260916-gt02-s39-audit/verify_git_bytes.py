@@ -3,7 +3,7 @@ import hashlib, json, subprocess, sys, tempfile
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[4]; PREFIX='8-9-hh3d-3/'
-PACK=PREFIX+'zdoc/reviews/20260916-gt02-s39-01/'
+PACK=PREFIX+'zdoc/reviews/20260916-gt02-s39-02/'
 AUDIT=PREFIX+'zdoc/reviews/20260916-gt02-s39-audit/'
 
 def git(*args): return subprocess.check_output(['git',*args],cwd=ROOT,timeout=20)
