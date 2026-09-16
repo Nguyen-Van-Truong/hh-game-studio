@@ -29,9 +29,9 @@ PLAN_REVISION=S41
 EXECUTION_MODE=SOLO_OWNER_20260915
 SUBAGENTS_ENABLED=0
 GT02_EVIDENCE_STATUS=FROZEN_CANDIDATE_S39_02
-GT02_REVIEW_STATUS=CRITICS_S41_PENDING
+GT02_REVIEW_STATUS=CRITICS_S41_COMPLETE_TICK_NO
 GT02_LAST_TESTED_SOURCE_CLOSURE=2fb0ec013c4037c844b38f7be221c0aa7a6bd905492fa7c4a53eaa8e474c9d59
-GT02_CHECKPOINT_COMMITS=96c506b,e52b5c0,faedb0d,642d6f5,74d1cc2,52ca04c,52def92,957ea88,572185e,9839be9,abc88b0,6bfbc3e,43192c0,15801ad,adb2e52,31f27b2,2e24912,579b7e7,287a6c2,644c985,65cd47e,2ae0623,e47c93d,d5c5f1b,06cad08,e23aefb,c2c285a
+GT02_CHECKPOINT_COMMITS=96c506b,e52b5c0,faedb0d,642d6f5,74d1cc2,52ca04c,52def92,957ea88,572185e,9839be9,abc88b0,6bfbc3e,43192c0,15801ad,adb2e52,31f27b2,2e24912,579b7e7,287a6c2,644c985,65cd47e,2ae0623,e47c93d,d5c5f1b,06cad08,e23aefb,c2c285a,487e5fc,1296ecc
 GT02_SAFE_WRITE_STATUS=GAP_UNSUPPORTED_WINDOWS
 GT02_BOUNDARY_EVIDENCE=S41_EXACT_CLOSURE_NATIVE_SELECTOR_IPC_PLUS_S40_SAFE_WRITE_GAP
 GT02_WORKING_SOURCE_STATUS=S39_FROZEN_TESTED
@@ -142,6 +142,11 @@ run_id GT02-S41-NATIVE-01. Runtime closure digest và toàn bộ 84 file hash kh
 ở reviews/20260916-gt02-s41-audit/ bắt buộc so sánh cả digest lẫn path→hash map.
 S41 critic B tìm đúng lỗi binding của S39; native evidence cũ giữ nguyên lịch sử,
 không dùng lại làm proof.
+Hai critic độc lập S41 đã review cùng closure `2fb0ec...`: critic A và B
+đều `VERDICT=FAIL`, `TICK=no`. A giữ TX15 safe-write/atomic-replace là P1; B
+bắt lỗi native closure cũ và xác nhận S41 remint đã sửa đúng binding nhưng
+không biến primitive unsupported thành PASS. Vì vậy GT-02 vẫn CANDIDATE và
+GT-03/GT-04 vẫn khóa.
 
 S40 ghi quyết định đóng gap theo hướng fail-closed tại
 reviews/20260916-gt02-s40-safe-write-gap/. Các test adversarial hiện có
