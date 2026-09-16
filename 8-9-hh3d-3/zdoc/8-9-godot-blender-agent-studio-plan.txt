@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 16-09-2026, Asia/Saigon | Revision S40 | TRIỂN KHAI THEO GATE
+Ngày 16-09-2026, Asia/Saigon | Revision S41 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,18 +25,18 @@ RUNTIME_ACCEPTANCE=GT01_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S40
+PLAN_REVISION=S41
 EXECUTION_MODE=SOLO_OWNER_20260915
 SUBAGENTS_ENABLED=0
 GT02_EVIDENCE_STATUS=FROZEN_CANDIDATE_S39_02
-GT02_REVIEW_STATUS=NOT_REVIEWED_SOLO_S40
+GT02_REVIEW_STATUS=CRITICS_S41_PENDING
 GT02_LAST_TESTED_SOURCE_CLOSURE=2fb0ec013c4037c844b38f7be221c0aa7a6bd905492fa7c4a53eaa8e474c9d59
-GT02_CHECKPOINT_COMMITS=96c506b,e52b5c0,faedb0d,642d6f5,74d1cc2,52ca04c,52def92,957ea88,572185e,9839be9,abc88b0,6bfbc3e,43192c0,15801ad,adb2e52,31f27b2,2e24912,579b7e7,287a6c2,644c985,65cd47e,2ae0623,e47c93d,d5c5f1b,06cad08,e23aefb
+GT02_CHECKPOINT_COMMITS=96c506b,e52b5c0,faedb0d,642d6f5,74d1cc2,52ca04c,52def92,957ea88,572185e,9839be9,abc88b0,6bfbc3e,43192c0,15801ad,adb2e52,31f27b2,2e24912,579b7e7,287a6c2,644c985,65cd47e,2ae0623,e47c93d,d5c5f1b,06cad08,e23aefb,c2c285a
 GT02_SAFE_WRITE_STATUS=GAP_UNSUPPORTED_WINDOWS
-GT02_BOUNDARY_EVIDENCE=S39_NATIVE_SELECTOR_IPC_PLUS_S35_COUNTER_AND_S33_STAGING
+GT02_BOUNDARY_EVIDENCE=S41_EXACT_CLOSURE_NATIVE_SELECTOR_IPC_PLUS_S40_SAFE_WRITE_GAP
 GT02_WORKING_SOURCE_STATUS=S39_FROZEN_TESTED
 
-TIẾN ĐỘ HIỆN HÀNH — S40, cập nhật 16-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S41, cập nhật 16-09-2026
 Coordinator làm solo; các subagent đã dừng. Không tạo/đánh thức worker hoặc
 critic, không dùng Grok CLI. Solo self-review không thay hai chữ ký độc lập.
 
@@ -50,7 +50,7 @@ Actual host exit/process tree sạch, source/snapshot không đổi;84 source fi
 9 artifacts. Python/Node/Godot khớp2396 canonical rows/hash; Godot thêm9
 negative cases. Selector RPC16/16; native AppContainer7/7, exit61, Job/PID0,
 private root/.events denied. Bảng requirement → test → evidence và audit nằm ở
-reviews/20260916-gt02-s39-audit/. Chưa có review độc lập cho source này.
+reviews/20260916-gt02-s41-audit/. Native S39 cũ bị critic phát hiện lệch closure; S41 remint đã khớp exact source. Chưa đủ hai review độc lập.
 Checkpoint S39:2ae0623 source/evidence; exact index/HEAD proof:65cd47e và
 2ae0623. S39-01 giữ lịch sử hash mismatch do tài liệu sửa sau freeze; S38:
 2e24912; S37:adb2e52; S36:15801ad. Không chuyển chữ ký critic cũ.
@@ -135,6 +135,13 @@ source/log lỗi, sửa delivery_unknown trước run02. Run02 16/16 và native7
 Thêm kiểm broker ownership và Cancel đọc lại phase dưới selector lock sau khi
 chờ storage. S39-02 đã freeze; S39-01 được giữ làm lịch sử vì hash tài liệu
 đổi sau freeze và Git proof đã bắt đúng lỗi đó.
+
+S41 remint native AppContainer tại reviews/20260916-gt02-s41-native/ với
+run_id GT02-S41-NATIVE-01. Runtime closure digest và toàn bộ 84 file hash khớp
+2fb0ec013c4037c844b38f7be221c0aa7a6bd905492fa7c4a53eaa8e474c9d59; verifier mới
+ở reviews/20260916-gt02-s41-audit/ bắt buộc so sánh cả digest lẫn path→hash map.
+S41 critic B tìm đúng lỗi binding của S39; native evidence cũ giữ nguyên lịch sử,
+không dùng lại làm proof.
 
 S40 ghi quyết định đóng gap theo hướng fail-closed tại
 reviews/20260916-gt02-s40-safe-write-gap/. Các test adversarial hiện có
