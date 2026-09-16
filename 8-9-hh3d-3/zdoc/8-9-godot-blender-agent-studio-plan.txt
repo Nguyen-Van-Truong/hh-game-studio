@@ -50,7 +50,8 @@ Actual host exit/process tree sạch, source/snapshot không đổi;82 source fi
 9 artifacts được rehash. Python/Node/Godot khớp2396 canonical rows/hash; Godot
 thêm9 negative cases. Bảng requirement → test → evidence và audit tái dựng
 Git nằm ở reviews/20260916-gt02-s38-audit/. Chưa có review độc lập cho source này.
-Checkpoint S38:2e24912 source/evidence; S39-02 candidate đang chờ Git proof; S39-01 giữ lịch sử hash mismatch do tài liệu sửa sau freeze.
+Checkpoint S38:2e24912 source/evidence; S39-02 candidate và exact Git proof đã đạt tại 65cd47e; S39-01 giữ lịch sử
+hash mismatch do tài liệu sửa sau freeze.
 S37:adb2e52 source/evidence; S36:15801ad.
 S38 rehash82 source/9 candidate/45 diagnostic artifacts;9 crash cut được parse
 riêng,7 kiểm tra âm của verifier từ chối đúng. Không chuyển chữ ký critic cũ.
