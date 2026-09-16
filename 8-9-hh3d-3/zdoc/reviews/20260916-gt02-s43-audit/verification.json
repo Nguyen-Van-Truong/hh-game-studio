@@ -1,0 +1,33 @@
+{
+  "schema": "hh-gt02-s43-coordinator-verification-v1",
+  "status": "COORDINATOR_LOGIC_VERIFIED",
+  "source_closure_sha256": "6b7707a126449d46aac937504113e8c7e6fb9aa5db4f73948b7e65df0e0ce7fc",
+  "source_files": 86,
+  "candidate_artifacts": 9,
+  "protocol": {
+    "run": 294,
+    "passed": 290,
+    "skipped": 4
+  },
+  "bootstrap": {
+    "run": 56,
+    "passed": 56,
+    "skipped": 0
+  },
+  "selector_rpc": {
+    "run": 16,
+    "passed": 16
+  },
+  "native_cases": 7,
+  "native_exit": 61,
+  "private_access_denied": true,
+  "formal_acceptance": false,
+  "independent_critic_signatures": 0,
+  "critic_verdicts": [],
+  "limits": [
+    "S43 native endpoint now exercises selector fixture only; no Godot/Blender consumer",
+    "source/game revisions and clock are trusted broker observations",
+    "safe_write/atomic_replace remain unsupported; power-loss witness custody is open",
+    "S41 critics apply to the old closure; this S43 closure has not been independently reviewed"
+  ]
+}

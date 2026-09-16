@@ -1,0 +1,1103 @@
+{
+  "run_id": "GT02-S43-NATIVE-01",
+  "timestamp_utc": "2026-09-16T13:33:03.573011+00:00",
+  "source_sha256": "62ecb14a5afb4c1e28bc955fa148f6ec468104a76f630fc66d8581a46ea399ed",
+  "native_source_sha256": "223f62175d1944a510fc0d07608a8698540e721c3e81440602584430b9ff08bd",
+  "cases": [
+    {
+      "mode": "submit",
+      "inherit_handles": false,
+      "primary_token_verified": true,
+      "pid": 15148,
+      "retained_process_binding": {
+        "work": [
+          15148,
+          134340391843443262
+        ],
+        "control": [
+          15148,
+          134340391843443262
+        ]
+      },
+      "work_dispatch": {
+        "status": "ACCEPTED_PENDING",
+        "code": "SELECTOR_PENDING",
+        "command_id": "s39.submit",
+        "result_revision": null,
+        "result_hash": null,
+        "postconditions": {
+          "phase": "INTENT",
+          "request_digest": "sha256:176fc563e026058e96973725509093f1089a16c1d39eac38fa674b5fd349aab4"
+        }
+      },
+      "phases": [
+        {
+          "status": "ACCEPTED_PENDING",
+          "code": "SELECTOR_PENDING",
+          "command_id": "s39.submit",
+          "result_revision": null,
+          "result_hash": null,
+          "postconditions": {
+            "phase": "STAGED",
+            "request_digest": "sha256:176fc563e026058e96973725509093f1089a16c1d39eac38fa674b5fd349aab4"
+          }
+        },
+        {
+          "status": "UNKNOWN",
+          "code": "SELECTOR_PENDING",
+          "command_id": "s39.submit",
+          "result_revision": null,
+          "result_hash": null,
+          "postconditions": {
+            "phase": "SELECTED",
+            "request_digest": "sha256:176fc563e026058e96973725509093f1089a16c1d39eac38fa674b5fd349aab4"
+          }
+        },
+        {
+          "status": "COMMITTED",
+          "code": "FIXTURE_RELEASE_ACTIVE",
+          "command_id": "s39.submit",
+          "result_revision": "selection-9edd478abecf4763e79307ff067a8a916209f8adcd30dab508ee6d99b075c62c",
+          "result_hash": "sha256:2db7e919b0ec660756eebc1eb2c3abd54128d6416cb03b54f1163429a4a45a89",
+          "postconditions": {
+            "asset_set_sha256": "2db7e919b0ec660756eebc1eb2c3abd54128d6416cb03b54f1163429a4a45a89",
+            "generation": 1,
+            "manifest_sha256": "65a9a8bbbd60a3f8fdd94324a94a128af993fc71246469340c43607f6cdadf24",
+            "release_id": "release-109f76217a9740f4bb8a841e22c7e1e6",
+            "selection_hash": "9edd478abecf4763e79307ff067a8a916209f8adcd30dab508ee6d99b075c62c"
+          }
+        }
+      ],
+      "control_dispatch": {
+        "status": "COMMITTED",
+        "code": "FIXTURE_RELEASE_ACTIVE",
+        "command_id": "s39.submit",
+        "result_revision": "selection-9edd478abecf4763e79307ff067a8a916209f8adcd30dab508ee6d99b075c62c",
+        "result_hash": "sha256:2db7e919b0ec660756eebc1eb2c3abd54128d6416cb03b54f1163429a4a45a89",
+        "postconditions": {
+          "asset_set_sha256": "2db7e919b0ec660756eebc1eb2c3abd54128d6416cb03b54f1163429a4a45a89",
+          "generation": 1,
+          "manifest_sha256": "65a9a8bbbd60a3f8fdd94324a94a128af993fc71246469340c43607f6cdadf24",
+          "release_id": "release-109f76217a9740f4bb8a841e22c7e1e6",
+          "selection_hash": "9edd478abecf4763e79307ff067a8a916209f8adcd30dab508ee6d99b075c62c"
+        }
+      },
+      "native_retry_dispatch": {
+        "status": "COMMITTED",
+        "code": "FIXTURE_RELEASE_ACTIVE",
+        "command_id": "s39.submit",
+        "result_revision": "selection-9edd478abecf4763e79307ff067a8a916209f8adcd30dab508ee6d99b075c62c",
+        "result_hash": "sha256:2db7e919b0ec660756eebc1eb2c3abd54128d6416cb03b54f1163429a4a45a89",
+        "postconditions": {
+          "asset_set_sha256": "2db7e919b0ec660756eebc1eb2c3abd54128d6416cb03b54f1163429a4a45a89",
+          "generation": 1,
+          "manifest_sha256": "65a9a8bbbd60a3f8fdd94324a94a128af993fc71246469340c43607f6cdadf24",
+          "release_id": "release-109f76217a9740f4bb8a841e22c7e1e6",
+          "selection_hash": "9edd478abecf4763e79307ff067a8a916209f8adcd30dab508ee6d99b075c62c"
+        }
+      },
+      "snapshot": {
+        "generation": 1,
+        "selection_hash": "9edd478abecf4763e79307ff067a8a916209f8adcd30dab508ee6d99b075c62c",
+        "selected": {
+          "generation": 1,
+          "selection_hash": "9edd478abecf4763e79307ff067a8a916209f8adcd30dab508ee6d99b075c62c",
+          "release": {
+            "manifest": {
+              "file_id": "787e1a0000002a000000000000000000",
+              "object_id": "blob-762e7ff6e4fa4426bca1e3da04fd1df8",
+              "sha256": "65a9a8bbbd60a3f8fdd94324a94a128af993fc71246469340c43607f6cdadf24",
+              "size": 952,
+              "volume": "5641548138504128675"
+            },
+            "release_id": "release-109f76217a9740f4bb8a841e22c7e1e6"
+          }
+        },
+        "last_verified_adopted": {
+          "generation": 1,
+          "selection_hash": "9edd478abecf4763e79307ff067a8a916209f8adcd30dab508ee6d99b075c62c",
+          "release": {
+            "manifest": {
+              "file_id": "787e1a0000002a000000000000000000",
+              "object_id": "blob-762e7ff6e4fa4426bca1e3da04fd1df8",
+              "sha256": "65a9a8bbbd60a3f8fdd94324a94a128af993fc71246469340c43607f6cdadf24",
+              "size": 952,
+              "volume": "5641548138504128675"
+            },
+            "release_id": "release-109f76217a9740f4bb8a841e22c7e1e6"
+          }
+        },
+        "revisions": {
+          "game_revision": "selection-9edd478abecf4763e79307ff067a8a916209f8adcd30dab508ee6d99b075c62c",
+          "source_revision": "source-0",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "stopped": false,
+        "ready": true,
+        "pending_command": null
+      },
+      "blob_count": 3,
+      "consumer_adoptions": 1,
+      "work_receipt": {
+        "status": "COMMITTED",
+        "code": "FIXTURE_RELEASE_ACTIVE",
+        "command_id": "s39.submit",
+        "result_revision": "selection-9edd478abecf4763e79307ff067a8a916209f8adcd30dab508ee6d99b075c62c",
+        "result_hash": "sha256:2db7e919b0ec660756eebc1eb2c3abd54128d6416cb03b54f1163429a4a45a89",
+        "postconditions": {
+          "asset_set_sha256": "2db7e919b0ec660756eebc1eb2c3abd54128d6416cb03b54f1163429a4a45a89",
+          "generation": 1,
+          "manifest_sha256": "65a9a8bbbd60a3f8fdd94324a94a128af993fc71246469340c43607f6cdadf24",
+          "release_id": "release-109f76217a9740f4bb8a841e22c7e1e6",
+          "selection_hash": "9edd478abecf4763e79307ff067a8a916209f8adcd30dab508ee6d99b075c62c"
+        }
+      },
+      "event_kinds": [
+        "GENESIS",
+        "CONFIG",
+        "LEASE",
+        "INTENT",
+        "STAGING",
+        "STAGED",
+        "SELECT",
+        "TERMINAL"
+      ],
+      "host_exit": 61,
+      "native": {
+        "started": "S39_NATIVE_STARTED",
+        "pipe_write_dac_error": 5,
+        "pipe_write_owner_error": 5,
+        "second_instance_error": 5,
+        "private_read_error": 5,
+        "private_write_error": 5,
+        "events_access_error": 5,
+        "work_reply_received": true,
+        "work_reply_hex": "7b22636f6465223a2253454c4543544f525f50454e44494e47222c22636f6d6d616e645f6964223a227333392e7375626d6974222c22706f7374636f6e646974696f6e73223a7b227068617365223a22494e54454e54222c22726571756573745f646967657374223a227368613235363a31373666633536336530323630353865393639373337323535303930393366313038396131366331643339656163333866613637346235666433343961616234227d2c22726573756c745f68617368223a6e756c6c2c22726573756c745f7265766973696f6e223a6e756c6c2c22737461747573223a2241434345505445445f50454e44494e47227d",
+        "control_reply_hex": "7b22636f6465223a22464958545552455f52454c454153455f414354495645222c22636f6d6d616e645f6964223a227333392e7375626d6974222c22706f7374636f6e646974696f6e73223a7b2261737365745f7365745f736861323536223a2232646237653931396230656336363037353665656263316562326333616264353431323864363431366362303362353466313136333432396134613435613839222c2267656e65726174696f6e223a312c226d616e69666573745f736861323536223a2236356139613862626264363061336638666464393433323461393461313238616639393366633731323436343639333430633433363037663663646164663234222c2272656c656173655f6964223a2272656c656173652d3130396637363231376139373430663462623861383431653232633765316536222c2273656c656374696f6e5f68617368223a2239656464343738616265636634373633653739333037666630363761386139313632303966386164636433306461623530386565366439396230373563363263227d2c22726573756c745f68617368223a227368613235363a32646237653931396230656336363037353665656263316562326333616264353431323864363431366362303362353466313136333432396134613435613839222c22726573756c745f7265766973696f6e223a2273656c656374696f6e2d39656464343738616265636634373633653739333037666630363761386139313632303966386164636433306461623530386565366439396230373563363263222c22737461747573223a22434f4d4d4954544544227d",
+        "retry_reply_hex": "7b22636f6465223a22464958545552455f52454c454153455f414354495645222c22636f6d6d616e645f6964223a227333392e7375626d6974222c22706f7374636f6e646974696f6e73223a7b2261737365745f7365745f736861323536223a2232646237653931396230656336363037353665656263316562326333616264353431323864363431366362303362353466313136333432396134613435613839222c2267656e65726174696f6e223a312c226d616e69666573745f736861323536223a2236356139613862626264363061336638666464393433323461393461313238616639393366633731323436343639333430633433363037663663646164663234222c2272656c656173655f6964223a2272656c656173652d3130396637363231376139373430663462623861383431653232633765316536222c2273656c656374696f6e5f68617368223a2239656464343738616265636634373633653739333037666630363761386139313632303966386164636433306461623530386565366439396230373563363263227d2c22726573756c745f68617368223a227368613235363a32646237653931396230656336363037353665656263316562326333616264353431323864363431366362303362353466313136333432396134613435613839222c22726573756c745f7265766973696f6e223a2273656c656374696f6e2d39656464343738616265636634373633653739333037666630363761386139313632303966386164636433306461623530386565366439396230373563363263222c22737461747573223a22434f4d4d4954544544227d",
+        "complete": "S39_NATIVE_COMPLETE"
+      },
+      "final_host_exit": 61,
+      "final_job_active": 0,
+      "final_job_pids": []
+    },
+    {
+      "mode": "wrong_token",
+      "inherit_handles": false,
+      "primary_token_verified": true,
+      "pid": 19912,
+      "retained_process_binding": {
+        "work": [
+          19912,
+          134340391847942525
+        ],
+        "control": [
+          19912,
+          134340391847942525
+        ]
+      },
+      "work_dispatch": {
+        "status": "REJECTED",
+        "code": "SESSION_BINDING_MISMATCH",
+        "command_id": "transport.request",
+        "result_revision": null,
+        "result_hash": null,
+        "postconditions": {}
+      },
+      "phases": [],
+      "control_dispatch": {
+        "status": "REJECTED",
+        "code": "COMMAND_NOT_FOUND",
+        "command_id": "s39.wrong_token",
+        "result_revision": null,
+        "result_hash": null,
+        "postconditions": {}
+      },
+      "snapshot": {
+        "generation": 0,
+        "selection_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "selected": null,
+        "last_verified_adopted": null,
+        "revisions": {
+          "game_revision": "game-0",
+          "source_revision": "source-0",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "stopped": false,
+        "ready": false,
+        "pending_command": null
+      },
+      "blob_count": 0,
+      "consumer_adoptions": 0,
+      "work_receipt": {
+        "status": "REJECTED",
+        "code": "COMMAND_NOT_FOUND",
+        "command_id": "s39.wrong_token",
+        "result_revision": null,
+        "result_hash": null,
+        "postconditions": {}
+      },
+      "event_kinds": [
+        "GENESIS",
+        "CONFIG",
+        "LEASE"
+      ],
+      "host_exit": 61,
+      "native": {
+        "started": "S39_NATIVE_STARTED",
+        "pipe_write_dac_error": 5,
+        "pipe_write_owner_error": 5,
+        "second_instance_error": 5,
+        "private_read_error": 5,
+        "private_write_error": 5,
+        "events_access_error": 5,
+        "work_reply_received": true,
+        "work_reply_hex": "7b22636f6465223a2253455353494f4e5f42494e44494e475f4d49534d41544348222c22636f6d6d616e645f6964223a227472616e73706f72742e72657175657374222c22706f7374636f6e646974696f6e73223a7b7d2c22726573756c745f68617368223a6e756c6c2c22726573756c745f7265766973696f6e223a6e756c6c2c22737461747573223a2252454a4543544544227d",
+        "control_reply_hex": "7b22636f6465223a22434f4d4d414e445f4e4f545f464f554e44222c22636f6d6d616e645f6964223a227333392e77726f6e675f746f6b656e222c22706f7374636f6e646974696f6e73223a7b7d2c22726573756c745f68617368223a6e756c6c2c22726573756c745f7265766973696f6e223a6e756c6c2c22737461747573223a2252454a4543544544227d",
+        "complete": "S39_NATIVE_COMPLETE"
+      },
+      "final_host_exit": 61,
+      "final_job_active": 0,
+      "final_job_pids": []
+    },
+    {
+      "mode": "stale_lease",
+      "inherit_handles": false,
+      "primary_token_verified": true,
+      "pid": 40080,
+      "retained_process_binding": {
+        "work": [
+          40080,
+          134340391849207785
+        ],
+        "control": [
+          40080,
+          134340391849207785
+        ]
+      },
+      "work_dispatch": {
+        "status": "REJECTED",
+        "code": "SELECTOR_STALE_LEASE",
+        "command_id": "s39.stale_lease",
+        "result_revision": null,
+        "result_hash": null,
+        "postconditions": {}
+      },
+      "phases": [],
+      "control_dispatch": {
+        "status": "REJECTED",
+        "code": "COMMAND_NOT_FOUND",
+        "command_id": "s39.stale_lease",
+        "result_revision": null,
+        "result_hash": null,
+        "postconditions": {}
+      },
+      "snapshot": {
+        "generation": 0,
+        "selection_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "selected": null,
+        "last_verified_adopted": null,
+        "revisions": {
+          "game_revision": "game-0",
+          "source_revision": "source-0",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "stopped": false,
+        "ready": false,
+        "pending_command": null
+      },
+      "blob_count": 0,
+      "consumer_adoptions": 0,
+      "work_receipt": {
+        "status": "REJECTED",
+        "code": "COMMAND_NOT_FOUND",
+        "command_id": "s39.stale_lease",
+        "result_revision": null,
+        "result_hash": null,
+        "postconditions": {}
+      },
+      "event_kinds": [
+        "GENESIS",
+        "CONFIG",
+        "LEASE"
+      ],
+      "host_exit": 61,
+      "native": {
+        "started": "S39_NATIVE_STARTED",
+        "pipe_write_dac_error": 5,
+        "pipe_write_owner_error": 5,
+        "second_instance_error": 5,
+        "private_read_error": 5,
+        "private_write_error": 5,
+        "events_access_error": 5,
+        "work_reply_received": true,
+        "work_reply_hex": "7b22636f6465223a2253454c4543544f525f5354414c455f4c45415345222c22636f6d6d616e645f6964223a227333392e7374616c655f6c65617365222c22706f7374636f6e646974696f6e73223a7b7d2c22726573756c745f68617368223a6e756c6c2c22726573756c745f7265766973696f6e223a6e756c6c2c22737461747573223a2252454a4543544544227d",
+        "control_reply_hex": "7b22636f6465223a22434f4d4d414e445f4e4f545f464f554e44222c22636f6d6d616e645f6964223a227333392e7374616c655f6c65617365222c22706f7374636f6e646974696f6e73223a7b7d2c22726573756c745f68617368223a6e756c6c2c22726573756c745f7265766973696f6e223a6e756c6c2c22737461747573223a2252454a4543544544227d",
+        "complete": "S39_NATIVE_COMPLETE"
+      },
+      "final_host_exit": 61,
+      "final_job_active": 0,
+      "final_job_pids": []
+    },
+    {
+      "mode": "drop_reply",
+      "inherit_handles": false,
+      "primary_token_verified": true,
+      "pid": 1020,
+      "retained_process_binding": {
+        "work": [
+          1020,
+          134340391850770221
+        ],
+        "control": [
+          1020,
+          134340391850770221
+        ]
+      },
+      "work_transport_error": "PIPE_IO_FAILED",
+      "phases": [
+        {
+          "status": "ACCEPTED_PENDING",
+          "code": "SELECTOR_PENDING",
+          "command_id": "s39.drop_reply",
+          "result_revision": null,
+          "result_hash": null,
+          "postconditions": {
+            "phase": "STAGED",
+            "request_digest": "sha256:176fc563e026058e96973725509093f1089a16c1d39eac38fa674b5fd349aab4"
+          }
+        },
+        {
+          "status": "UNKNOWN",
+          "code": "SELECTOR_PENDING",
+          "command_id": "s39.drop_reply",
+          "result_revision": null,
+          "result_hash": null,
+          "postconditions": {
+            "phase": "SELECTED",
+            "request_digest": "sha256:176fc563e026058e96973725509093f1089a16c1d39eac38fa674b5fd349aab4"
+          }
+        },
+        {
+          "status": "COMMITTED",
+          "code": "FIXTURE_RELEASE_ACTIVE",
+          "command_id": "s39.drop_reply",
+          "result_revision": "selection-cadc5d012f552991911acfded76b7f7959158cf3fea8ffb0b21c6084cd33cb12",
+          "result_hash": "sha256:2db7e919b0ec660756eebc1eb2c3abd54128d6416cb03b54f1163429a4a45a89",
+          "postconditions": {
+            "asset_set_sha256": "2db7e919b0ec660756eebc1eb2c3abd54128d6416cb03b54f1163429a4a45a89",
+            "generation": 1,
+            "manifest_sha256": "0f05134ae085732b1e90ba05d7db7195134724ca86baa23a5a3e481df8f31ed7",
+            "release_id": "release-4592d522fe6b42ee8b6cca442c6f0881",
+            "selection_hash": "cadc5d012f552991911acfded76b7f7959158cf3fea8ffb0b21c6084cd33cb12"
+          }
+        }
+      ],
+      "control_dispatch": {
+        "status": "COMMITTED",
+        "code": "FIXTURE_RELEASE_ACTIVE",
+        "command_id": "s39.drop_reply",
+        "result_revision": "selection-cadc5d012f552991911acfded76b7f7959158cf3fea8ffb0b21c6084cd33cb12",
+        "result_hash": "sha256:2db7e919b0ec660756eebc1eb2c3abd54128d6416cb03b54f1163429a4a45a89",
+        "postconditions": {
+          "asset_set_sha256": "2db7e919b0ec660756eebc1eb2c3abd54128d6416cb03b54f1163429a4a45a89",
+          "generation": 1,
+          "manifest_sha256": "0f05134ae085732b1e90ba05d7db7195134724ca86baa23a5a3e481df8f31ed7",
+          "release_id": "release-4592d522fe6b42ee8b6cca442c6f0881",
+          "selection_hash": "cadc5d012f552991911acfded76b7f7959158cf3fea8ffb0b21c6084cd33cb12"
+        }
+      },
+      "snapshot": {
+        "generation": 1,
+        "selection_hash": "cadc5d012f552991911acfded76b7f7959158cf3fea8ffb0b21c6084cd33cb12",
+        "selected": {
+          "generation": 1,
+          "selection_hash": "cadc5d012f552991911acfded76b7f7959158cf3fea8ffb0b21c6084cd33cb12",
+          "release": {
+            "manifest": {
+              "file_id": "a07e1a0000002f000000000000000000",
+              "object_id": "blob-b023fa2b9d524460a090c78c3be6d8fa",
+              "sha256": "0f05134ae085732b1e90ba05d7db7195134724ca86baa23a5a3e481df8f31ed7",
+              "size": 952,
+              "volume": "5641548138504128675"
+            },
+            "release_id": "release-4592d522fe6b42ee8b6cca442c6f0881"
+          }
+        },
+        "last_verified_adopted": {
+          "generation": 1,
+          "selection_hash": "cadc5d012f552991911acfded76b7f7959158cf3fea8ffb0b21c6084cd33cb12",
+          "release": {
+            "manifest": {
+              "file_id": "a07e1a0000002f000000000000000000",
+              "object_id": "blob-b023fa2b9d524460a090c78c3be6d8fa",
+              "sha256": "0f05134ae085732b1e90ba05d7db7195134724ca86baa23a5a3e481df8f31ed7",
+              "size": 952,
+              "volume": "5641548138504128675"
+            },
+            "release_id": "release-4592d522fe6b42ee8b6cca442c6f0881"
+          }
+        },
+        "revisions": {
+          "game_revision": "selection-cadc5d012f552991911acfded76b7f7959158cf3fea8ffb0b21c6084cd33cb12",
+          "source_revision": "source-0",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "stopped": false,
+        "ready": true,
+        "pending_command": null
+      },
+      "blob_count": 3,
+      "consumer_adoptions": 1,
+      "work_receipt": {
+        "status": "COMMITTED",
+        "code": "FIXTURE_RELEASE_ACTIVE",
+        "command_id": "s39.drop_reply",
+        "result_revision": "selection-cadc5d012f552991911acfded76b7f7959158cf3fea8ffb0b21c6084cd33cb12",
+        "result_hash": "sha256:2db7e919b0ec660756eebc1eb2c3abd54128d6416cb03b54f1163429a4a45a89",
+        "postconditions": {
+          "asset_set_sha256": "2db7e919b0ec660756eebc1eb2c3abd54128d6416cb03b54f1163429a4a45a89",
+          "generation": 1,
+          "manifest_sha256": "0f05134ae085732b1e90ba05d7db7195134724ca86baa23a5a3e481df8f31ed7",
+          "release_id": "release-4592d522fe6b42ee8b6cca442c6f0881",
+          "selection_hash": "cadc5d012f552991911acfded76b7f7959158cf3fea8ffb0b21c6084cd33cb12"
+        }
+      },
+      "event_kinds": [
+        "GENESIS",
+        "CONFIG",
+        "LEASE",
+        "INTENT",
+        "STAGING",
+        "STAGED",
+        "SELECT",
+        "TERMINAL"
+      ],
+      "host_exit": 61,
+      "native": {
+        "started": "S39_NATIVE_STARTED",
+        "pipe_write_dac_error": 5,
+        "pipe_write_owner_error": 5,
+        "second_instance_error": 5,
+        "private_read_error": 5,
+        "private_write_error": 5,
+        "events_access_error": 5,
+        "work_reply_received": false,
+        "control_reply_hex": "7b22636f6465223a22464958545552455f52454c454153455f414354495645222c22636f6d6d616e645f6964223a227333392e64726f705f7265706c79222c22706f7374636f6e646974696f6e73223a7b2261737365745f7365745f736861323536223a2232646237653931396230656336363037353665656263316562326333616264353431323864363431366362303362353466313136333432396134613435613839222c2267656e65726174696f6e223a312c226d616e69666573745f736861323536223a2230663035313334616530383537333262316539306261303564376462373139353133343732346361383662616132336135613365343831646638663331656437222c2272656c656173655f6964223a2272656c656173652d3435393264353232666536623432656538623663636134343263366630383831222c2273656c656374696f6e5f68617368223a2263616463356430313266353532393931393131616366646564373662376637393539313538636633666561386666623062323163363038346364333363623132227d2c22726573756c745f68617368223a227368613235363a32646237653931396230656336363037353665656263316562326333616264353431323864363431366362303362353466313136333432396134613435613839222c22726573756c745f7265766973696f6e223a2273656c656374696f6e2d63616463356430313266353532393931393131616366646564373662376637393539313538636633666561386666623062323163363038346364333363623132222c22737461747573223a22434f4d4d4954544544227d",
+        "complete": "S39_NATIVE_COMPLETE"
+      },
+      "final_host_exit": 61,
+      "final_job_active": 0,
+      "final_job_pids": []
+    },
+    {
+      "mode": "cancel",
+      "inherit_handles": false,
+      "primary_token_verified": true,
+      "pid": 32552,
+      "retained_process_binding": {
+        "work": [
+          32552,
+          134340391854912511
+        ],
+        "control": [
+          32552,
+          134340391854912511
+        ]
+      },
+      "work_dispatch": {
+        "status": "ACCEPTED_PENDING",
+        "code": "SELECTOR_PENDING",
+        "command_id": "s39.cancel",
+        "result_revision": null,
+        "result_hash": null,
+        "postconditions": {
+          "phase": "INTENT",
+          "request_digest": "sha256:176fc563e026058e96973725509093f1089a16c1d39eac38fa674b5fd349aab4"
+        }
+      },
+      "phases": [
+        {
+          "status": "ACCEPTED_PENDING",
+          "code": "SELECTOR_PENDING",
+          "command_id": "s39.cancel",
+          "result_revision": null,
+          "result_hash": null,
+          "postconditions": {
+            "phase": "STAGED",
+            "request_digest": "sha256:176fc563e026058e96973725509093f1089a16c1d39eac38fa674b5fd349aab4"
+          }
+        }
+      ],
+      "control_dispatch": {
+        "status": "CANCELED",
+        "code": "FIXTURE_ACTIVATION_CANCELED",
+        "command_id": "s39.cancel",
+        "result_revision": null,
+        "result_hash": null,
+        "postconditions": {
+          "selection_effect": false,
+          "staging_may_exist": true
+        }
+      },
+      "snapshot": {
+        "generation": 0,
+        "selection_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "selected": null,
+        "last_verified_adopted": null,
+        "revisions": {
+          "game_revision": "game-0",
+          "source_revision": "source-0",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "stopped": false,
+        "ready": false,
+        "pending_command": null
+      },
+      "blob_count": 3,
+      "consumer_adoptions": 0,
+      "work_receipt": {
+        "status": "CANCELED",
+        "code": "FIXTURE_ACTIVATION_CANCELED",
+        "command_id": "s39.cancel",
+        "result_revision": null,
+        "result_hash": null,
+        "postconditions": {
+          "selection_effect": false,
+          "staging_may_exist": true
+        }
+      },
+      "event_kinds": [
+        "GENESIS",
+        "CONFIG",
+        "LEASE",
+        "INTENT",
+        "STAGING",
+        "STAGED",
+        "TERMINAL"
+      ],
+      "host_exit": 61,
+      "native": {
+        "started": "S39_NATIVE_STARTED",
+        "pipe_write_dac_error": 5,
+        "pipe_write_owner_error": 5,
+        "second_instance_error": 5,
+        "private_read_error": 5,
+        "private_write_error": 5,
+        "events_access_error": 5,
+        "work_reply_received": true,
+        "work_reply_hex": "7b22636f6465223a2253454c4543544f525f50454e44494e47222c22636f6d6d616e645f6964223a227333392e63616e63656c222c22706f7374636f6e646974696f6e73223a7b227068617365223a22494e54454e54222c22726571756573745f646967657374223a227368613235363a31373666633536336530323630353865393639373337323535303930393366313038396131366331643339656163333866613637346235666433343961616234227d2c22726573756c745f68617368223a6e756c6c2c22726573756c745f7265766973696f6e223a6e756c6c2c22737461747573223a2241434345505445445f50454e44494e47227d",
+        "control_reply_hex": "7b22636f6465223a22464958545552455f41435449564154494f4e5f43414e43454c4544222c22636f6d6d616e645f6964223a227333392e63616e63656c222c22706f7374636f6e646974696f6e73223a7b2273656c656374696f6e5f656666656374223a66616c73652c2273746167696e675f6d61795f6578697374223a747275657d2c22726573756c745f68617368223a6e756c6c2c22726573756c745f7265766973696f6e223a6e756c6c2c22737461747573223a2243414e43454c4544227d",
+        "complete": "S39_NATIVE_COMPLETE"
+      },
+      "final_host_exit": 61,
+      "final_job_active": 0,
+      "final_job_pids": []
+    },
+    {
+      "mode": "stop",
+      "inherit_handles": false,
+      "primary_token_verified": true,
+      "pid": 14692,
+      "retained_process_binding": {
+        "work": [
+          14692,
+          134340391857809850
+        ],
+        "control": [
+          14692,
+          134340391857809850
+        ]
+      },
+      "work_dispatch": {
+        "status": "ACCEPTED_PENDING",
+        "code": "SELECTOR_PENDING",
+        "command_id": "s39.stop",
+        "result_revision": null,
+        "result_hash": null,
+        "postconditions": {
+          "phase": "INTENT",
+          "request_digest": "sha256:176fc563e026058e96973725509093f1089a16c1d39eac38fa674b5fd349aab4"
+        }
+      },
+      "phases": [
+        {
+          "status": "ACCEPTED_PENDING",
+          "code": "SELECTOR_PENDING",
+          "command_id": "s39.stop",
+          "result_revision": null,
+          "result_hash": null,
+          "postconditions": {
+            "phase": "STAGED",
+            "request_digest": "sha256:176fc563e026058e96973725509093f1089a16c1d39eac38fa674b5fd349aab4"
+          }
+        }
+      ],
+      "control_dispatch": {
+        "stopped": true,
+        "pending_command": null,
+        "command": {
+          "status": "CANCELED",
+          "code": "FIXTURE_ACTIVATION_CANCELED",
+          "command_id": "s39.stop",
+          "result_revision": null,
+          "result_hash": null,
+          "postconditions": {
+            "selection_effect": false,
+            "staging_may_exist": true
+          }
+        }
+      },
+      "snapshot": {
+        "generation": 0,
+        "selection_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "selected": null,
+        "last_verified_adopted": null,
+        "revisions": {
+          "game_revision": "game-0",
+          "source_revision": "source-0",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "stopped": true,
+        "ready": false,
+        "pending_command": null
+      },
+      "blob_count": 3,
+      "consumer_adoptions": 0,
+      "work_receipt": {
+        "status": "CANCELED",
+        "code": "FIXTURE_ACTIVATION_CANCELED",
+        "command_id": "s39.stop",
+        "result_revision": null,
+        "result_hash": null,
+        "postconditions": {
+          "selection_effect": false,
+          "staging_may_exist": true
+        }
+      },
+      "event_kinds": [
+        "GENESIS",
+        "CONFIG",
+        "LEASE",
+        "INTENT",
+        "STAGING",
+        "STAGED",
+        "STOP",
+        "TERMINAL"
+      ],
+      "host_exit": 61,
+      "native": {
+        "started": "S39_NATIVE_STARTED",
+        "pipe_write_dac_error": 5,
+        "pipe_write_owner_error": 5,
+        "second_instance_error": 5,
+        "private_read_error": 5,
+        "private_write_error": 5,
+        "events_access_error": 5,
+        "work_reply_received": true,
+        "work_reply_hex": "7b22636f6465223a2253454c4543544f525f50454e44494e47222c22636f6d6d616e645f6964223a227333392e73746f70222c22706f7374636f6e646974696f6e73223a7b227068617365223a22494e54454e54222c22726571756573745f646967657374223a227368613235363a31373666633536336530323630353865393639373337323535303930393366313038396131366331643339656163333866613637346235666433343961616234227d2c22726573756c745f68617368223a6e756c6c2c22726573756c745f7265766973696f6e223a6e756c6c2c22737461747573223a2241434345505445445f50454e44494e47227d",
+        "control_reply_hex": "7b22636f6d6d616e64223a7b22636f6465223a22464958545552455f41435449564154494f4e5f43414e43454c4544222c22636f6d6d616e645f6964223a227333392e73746f70222c22706f7374636f6e646974696f6e73223a7b2273656c656374696f6e5f656666656374223a66616c73652c2273746167696e675f6d61795f6578697374223a747275657d2c22726573756c745f68617368223a6e756c6c2c22726573756c745f7265766973696f6e223a6e756c6c2c22737461747573223a2243414e43454c4544227d2c2270656e64696e675f636f6d6d616e64223a6e756c6c2c2273746f70706564223a747275657d",
+        "complete": "S39_NATIVE_COMPLETE"
+      },
+      "final_host_exit": 61,
+      "final_job_active": 0,
+      "final_job_pids": []
+    },
+    {
+      "mode": "stop_selected",
+      "inherit_handles": false,
+      "primary_token_verified": true,
+      "pid": 40288,
+      "retained_process_binding": {
+        "work": [
+          40288,
+          134340391861288748
+        ],
+        "control": [
+          40288,
+          134340391861288748
+        ]
+      },
+      "work_dispatch": {
+        "status": "ACCEPTED_PENDING",
+        "code": "SELECTOR_PENDING",
+        "command_id": "s39.stop_selected",
+        "result_revision": null,
+        "result_hash": null,
+        "postconditions": {
+          "phase": "INTENT",
+          "request_digest": "sha256:176fc563e026058e96973725509093f1089a16c1d39eac38fa674b5fd349aab4"
+        }
+      },
+      "phases": [
+        {
+          "status": "ACCEPTED_PENDING",
+          "code": "SELECTOR_PENDING",
+          "command_id": "s39.stop_selected",
+          "result_revision": null,
+          "result_hash": null,
+          "postconditions": {
+            "phase": "STAGED",
+            "request_digest": "sha256:176fc563e026058e96973725509093f1089a16c1d39eac38fa674b5fd349aab4"
+          }
+        },
+        {
+          "status": "UNKNOWN",
+          "code": "SELECTOR_PENDING",
+          "command_id": "s39.stop_selected",
+          "result_revision": null,
+          "result_hash": null,
+          "postconditions": {
+            "phase": "SELECTED",
+            "request_digest": "sha256:176fc563e026058e96973725509093f1089a16c1d39eac38fa674b5fd349aab4"
+          }
+        }
+      ],
+      "control_dispatch": {
+        "stopped": true,
+        "pending_command": "s39.stop_selected",
+        "command": {
+          "status": "UNKNOWN",
+          "code": "SELECTOR_PENDING",
+          "command_id": "s39.stop_selected",
+          "result_revision": null,
+          "result_hash": null,
+          "postconditions": {
+            "phase": "SELECTED",
+            "request_digest": "sha256:176fc563e026058e96973725509093f1089a16c1d39eac38fa674b5fd349aab4"
+          }
+        }
+      },
+      "snapshot": {
+        "generation": 1,
+        "selection_hash": "4b32dec513ff4e6787cc8c37c192f3a5cc07358c7b6d89bd0eb490422cd0b52d",
+        "selected": {
+          "generation": 1,
+          "selection_hash": "4b32dec513ff4e6787cc8c37c192f3a5cc07358c7b6d89bd0eb490422cd0b52d",
+          "release": {
+            "manifest": {
+              "file_id": "077f1a00000013000000000000000000",
+              "object_id": "blob-efb1c099fa83453aaf07fbff7b4ec891",
+              "sha256": "dcb6256c50366cdae029e83b535b28f201039d06cb15ca7099b6adc8dcef2171",
+              "size": 952,
+              "volume": "5641548138504128675"
+            },
+            "release_id": "release-c4de770df9ba46e5a7436e5721a36de3"
+          }
+        },
+        "last_verified_adopted": null,
+        "revisions": {
+          "game_revision": "game-0",
+          "source_revision": "source-0",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "stopped": true,
+        "ready": false,
+        "pending_command": "s39.stop_selected"
+      },
+      "blob_count": 3,
+      "consumer_adoptions": 0,
+      "work_receipt": {
+        "status": "UNKNOWN",
+        "code": "SELECTOR_PENDING",
+        "command_id": "s39.stop_selected",
+        "result_revision": null,
+        "result_hash": null,
+        "postconditions": {
+          "phase": "SELECTED",
+          "request_digest": "sha256:176fc563e026058e96973725509093f1089a16c1d39eac38fa674b5fd349aab4"
+        }
+      },
+      "event_kinds": [
+        "GENESIS",
+        "CONFIG",
+        "LEASE",
+        "INTENT",
+        "STAGING",
+        "STAGED",
+        "SELECT",
+        "STOP"
+      ],
+      "restore_receipt": {
+        "status": "UNKNOWN",
+        "code": "FIXTURE_ACTIVATION_RESTORED",
+        "command_id": "s39.stop_selected",
+        "result_revision": "game-0",
+        "result_hash": null,
+        "postconditions": {
+          "restored": true,
+          "generation": 2,
+          "selection_hash": "7003a59315af2378771e61bff6a53235f5957a53b39b4392471a7c630a78b770"
+        }
+      },
+      "restored_snapshot": {
+        "generation": 2,
+        "selection_hash": "7003a59315af2378771e61bff6a53235f5957a53b39b4392471a7c630a78b770",
+        "selected": {
+          "generation": 2,
+          "selection_hash": "7003a59315af2378771e61bff6a53235f5957a53b39b4392471a7c630a78b770",
+          "release": null
+        },
+        "last_verified_adopted": {
+          "generation": 2,
+          "selection_hash": "7003a59315af2378771e61bff6a53235f5957a53b39b4392471a7c630a78b770",
+          "release": null
+        },
+        "revisions": {
+          "game_revision": "game-0",
+          "source_revision": "source-0",
+          "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "stopped": true,
+        "ready": true,
+        "pending_command": null
+      },
+      "host_exit": 61,
+      "native": {
+        "started": "S39_NATIVE_STARTED",
+        "pipe_write_dac_error": 5,
+        "pipe_write_owner_error": 5,
+        "second_instance_error": 5,
+        "private_read_error": 5,
+        "private_write_error": 5,
+        "events_access_error": 5,
+        "work_reply_received": true,
+        "work_reply_hex": "7b22636f6465223a2253454c4543544f525f50454e44494e47222c22636f6d6d616e645f6964223a227333392e73746f705f73656c6563746564222c22706f7374636f6e646974696f6e73223a7b227068617365223a22494e54454e54222c22726571756573745f646967657374223a227368613235363a31373666633536336530323630353865393639373337323535303930393366313038396131366331643339656163333866613637346235666433343961616234227d2c22726573756c745f68617368223a6e756c6c2c22726573756c745f7265766973696f6e223a6e756c6c2c22737461747573223a2241434345505445445f50454e44494e47227d",
+        "control_reply_hex": "7b22636f6d6d616e64223a7b22636f6465223a2253454c4543544f525f50454e44494e47222c22636f6d6d616e645f6964223a227333392e73746f705f73656c6563746564222c22706f7374636f6e646974696f6e73223a7b227068617365223a2253454c4543544544222c22726571756573745f646967657374223a227368613235363a31373666633536336530323630353865393639373337323535303930393366313038396131366331643339656163333866613637346235666433343961616234227d2c22726573756c745f68617368223a6e756c6c2c22726573756c745f7265766973696f6e223a6e756c6c2c22737461747573223a22554e4b4e4f574e227d2c2270656e64696e675f636f6d6d616e64223a227333392e73746f705f73656c6563746564222c2273746f70706564223a747275657d",
+        "complete": "S39_NATIVE_COMPLETE"
+      },
+      "final_host_exit": 61,
+      "final_job_active": 0,
+      "final_job_pids": []
+    }
+  ],
+  "safe_write": false,
+  "acceptance": false,
+  "runtime_closure": {
+    "source_closure_sha256": "6b7707a126449d46aac937504113e8c7e6fb9aa5db4f73948b7e65df0e0ce7fc",
+    "files": {
+      "build/bootstrap/install_toolchain.py": "77d66093b1ffea33c19d9f955df63ccde8341c889d05d9946fdc271a045e51fd",
+      "build/bootstrap/lifecycle_probe.py": "3e924419046b5a299e133dc80fb838b8a9e0f18e2f0749f8dcb6cfa8f1942d99",
+      "build/bootstrap/README.md": "d919042f99bd86b1cc8c426b674e4724bda3905430fbd0c6df0dd218f5aca241",
+      "build/bootstrap/run_fixture.py": "ea522450acc46f90be5e2a7b9257e73ce8b619948105b2c9073aac1f881c7328",
+      "build/bootstrap/verify_archive.py": "754a5d9998055252de982e4f24b7bd581841755821c5f32f2776160152592f8b",
+      "fixtures/sample-blender/create_fixture.py": "01403514c6779b1ae8df995af3aae84437b7032e7a2aecc5aa2acfcbee62743a",
+      "fixtures/sample-blender/README.md": "bab712d9432337dab45ecf95555050bb4520de4888d3531d0d541d683bea58e7",
+      "fixtures/sample-game/addons/gt01_probe/plugin.cfg": "4f6cb4697715835fce9b5a8c6cf4203ca6146a16413a40d7f899f03327ed3903",
+      "fixtures/sample-game/addons/gt01_probe/probe.gd": "03bdab66a7622a341a3ca1d8dea0e20ee6e2f6c56441aece801dcfdb34200d16",
+      "fixtures/sample-game/addons/gt01_probe/probe.gd.uid": "ac30861f6f2988c2e19a70dc00934ae05ce4a761e5260320d3d3da19d6a8c1c3",
+      "fixtures/sample-game/main.tscn": "194adf560f792e15a0db062ec2d436db4f15569e709da9a976b913a6c1307b42",
+      "fixtures/sample-game/project.godot": "e4990da976a4aefb75650bae0830dc74fa732c0b39cb7409fdb7ba1da4a879b9",
+      "fixtures/sample-game/scripts/main.gd": "688827516b16e31162b191b6b23bbfe2a90801fd54499ae2c81766ce9b2b044e",
+      "fixtures/sample-game/scripts/main.gd.uid": "5fc2d82e403a8b31fe608c6a2bf971396d98f3f26341948cf248b563b143b568",
+      "fixtures/sample-game/scripts/trace.gd": "09584e2b6a06f9c339548e73422a0316342b4002240e799cb5d9e2ee2e79dd6c",
+      "fixtures/sample-game/scripts/trace.gd.uid": "87010b6fd149d35fc52dcf29bfaffde8a0cffb1d472f6ba3796ea5bcfc9f4d78",
+      "host/core/fixture_pipe.py": "a6bad4fc4bfa27d91573e0a5784f76f4411a8c29dfe1c5282f9190461ce48246",
+      "host/core/FIXTURE_RELEASE.md": "bca53ef0838f6501f1d7a12e744a622eff0d1d9139d5bc0fa4e3a463f62355c3",
+      "host/core/fixture_release.py": "547a01252b7c5f31fba0655fec01e71039d094d6c328e3fa39428120bd464e47",
+      "host/core/FIXTURE_SELECTOR.md": "00efdc0e3d585ee676e39fa57fb130f9b41d8ee5b495d1b101e9deada206c698",
+      "host/core/fixture_selector.py": "39f33d0757d10874ae33877198f9f7e44532193592a44a51375c429e4343dec4",
+      "host/core/JOURNAL.md": "2513c5a0f9f299e9148ae7bb3201cbe0be42a32c563c029dfa8f70a5fb9f2875",
+      "host/core/journal.py": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6",
+      "host/core/limits.py": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f",
+      "host/core/PIPE_ENDPOINT.md": "2f2aaa1c733ed8911a2e6aeb2320b7f8286aad13ca973b8bfa0eb414de121d5a",
+      "host/core/pipe_endpoint.py": "07c9cea3c7102a4559e2f603af8e2cd5127e973508d21659ea42f296850a71cc",
+      "host/core/PIPE_IO.md": "ed3226eb27f4fd0cca6f7ac11701a897ba804d643b0b200863e20dfee414401e",
+      "host/core/pipe_io.py": "647e420b7d72506b8b1611a54a2f9bcef2e590a34230dd4a5f54fb136fcd6946",
+      "host/core/PRIVATE_EVENTS.md": "d0a720e12b773a50a82ad128021ff74a12e978a9f6e72771b16f599e6fa1b056",
+      "host/core/private_events.py": "85a62c0cc4fb6b67564efb7ed5322ee1bbf08023b67d865e42283f4e072399a3",
+      "host/core/PRIVATE_STORE.md": "2dc70665093ec72d7441bd1ca9276402a784da5f6a44e4711e7d42c3c4a37888",
+      "host/core/private_store.py": "8b92645edf34469efdab7e6e02ea70507f3db16154471685697e6e9bbad2cdc1",
+      "host/core/redaction.py": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f",
+      "host/core/safe_create.py": "3c863f534428694f722c0a403c4689dbef428888a9bd84cf8b5fcffba4d48f4a",
+      "host/core/safe_open.py": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535",
+      "host/core/selector_pipe.py": "afe8ead710413220c0191b804f72c44a7fe5780878578aac2d17d07495dc4e9c",
+      "host/core/transport.py": "1ec03356b1cb8c8987e1604bcb164aea6a9934dbe259451c19e12de36398aba0",
+      "protocol/__init__.py": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f",
+      "protocol/_rfc8785/__init__.py": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b",
+      "protocol/_rfc8785/_impl.py": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec",
+      "protocol/_rfc8785/LICENSE-APACHE-2.0": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+      "protocol/core.py": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e",
+      "protocol/ERRORS.md": "14e58b1bd8e07f96d6a72c994b5057f4ba43d13481e25ec6780f55883813fdae",
+      "protocol/errors.py": "71bfdc042101185fd284adcd51017bd71934ec5b95ec23c8a280acf565bfd652",
+      "protocol/golden_consumer.gd": "908d8c56feb23b4a8fca8ffc2d75bba788a16c1167b2baf8cf189263f54e0968",
+      "protocol/jcs_godot.gd": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+      "protocol/JCS_GODOT.md": "49f74172a9cded5e770b7a10985fdfaca30493bcf8234c917639770bb6add819",
+      "protocol/names.py": "507ccd5a3a67446bb7ebfd943698358bd193cfa65ef91bee5dc083c76adabe30",
+      "protocol/vectors/jcs-binary64-vectors.json": "aa9e4e41f73a0c22e67942c033c8a8b1715d0373c782e93baa4db9ea508ac9fa",
+      "protocol/vectors/jcs-vectors.json": "0a2e83db83d1f518a3bc1fb5067ce4fa1d7a5e72cc418fb483fe0cff248dcb8c",
+      "tests/bootstrap/test_archive_and_install.py": "094cc24a87f4413354b3d4a91cdba8ea65333d985e08ea2241e5feecba6fed4f",
+      "tests/bootstrap/test_gt01.py": "8e9301964d9ec1d593ca22558fa2bb2e3a32075397f4679728c565295c826d37",
+      "tests/bootstrap/test_lifecycle_process.py": "4bafb5ce855b2dae3d11b48891f322e8dd5a454df774d984710c43f302d4e2b1",
+      "tests/bootstrap/test_run_fixture.py": "a80ca91c0ce63a108241ca61b92931516ebb3f1450f0c38cfb441e9b7ba9cbca",
+      "tests/bootstrap/test_runner_admission.py": "e7688ccbc77b939c19a3a412a4ca9e57b0704925a8392f59dcca87363b0be9fb",
+      "tests/bootstrap/test_tq01_portability.py": "d092bc98c2d93d00df79024e0072d002488b9c3763218abf4a6d215801a5f3e0",
+      "tests/bootstrap/test_verify_archive.py": "32d42acfc1378ae138cd8bb58039fd98f18c917c4445ca3cd5780b2b87d0a5eb",
+      "tests/bootstrap/test_version_probe.py": "1274388f8eef37acc35031c1fcf8c9400fbc502440907321d12671a08e3df2c1",
+      "tests/protocol/run_gt02_candidate.py": "6c5c0c08e25fbf43a5b541c1d637714bd6eaf2dae9dc4b66f408f57db6be171f",
+      "tests/protocol/test_candidate_evidence.py": "15399759c84f2f71c0b83a72007862398708082cdc91ed6933e4fce109d804bf",
+      "tests/protocol/test_core.py": "1a90e3d67c2760da2a71f255af9d7fa42a554d65b289135b295188fa01593d67",
+      "tests/protocol/test_domain_contract.py": "576cbfd650bf86fc51689d3368752f1f15769f1183fd847e3097744b0d31bed0",
+      "tests/protocol/test_fixture_pipe.py": "704f59fb5721c3e251ece76b2727586ab2b7bced65385cf0a1a87fae48b20620",
+      "tests/protocol/test_fixture_release.py": "2646f28f115142e379ff7e429eae42dff0427a7bce03be3b8b1b3d8b536f8ce0",
+      "tests/protocol/test_fixture_selector.py": "b1b708dab40918ce567db1ad18a89ae5e4885e5f427cf5f70b9e1801b3e2bf4f",
+      "tests/protocol/test_golden_vectors.py": "4cb34d8279e1ea9b5b20764f7c2ed12e01bdf66ec0eee9241f44f262b2a69176",
+      "tests/protocol/test_integration.py": "4ff42a75e5bb9c77765f41cd845aea8ead34b663484b0c251cd2551938934caa",
+      "tests/protocol/test_journal.py": "cb8849a5dab8e6a5c2b905f87d6ce41bd8bed395da0d58a96fb047835ebdadcb",
+      "tests/protocol/test_journal_cas.py": "3060bb1e39b4c24509554c3b93a84b4f7246ee29c3758743c5f5609ab60814cc",
+      "tests/protocol/test_journal_durability.py": "ce6d69aba0ef8c13d123678e1fd73b1559db966a153f0fd2a236a3208953b567",
+      "tests/protocol/test_journal_platform.py": "e9ae24b8c7f564046f5d7b9ff6f3dbca7c93681832737b8fcecbc21785879b33",
+      "tests/protocol/test_journal_retention.py": "43ada799eadb67c6a0d799b5468e9d7626f115c229a5ac13bde331176839932f",
+      "tests/protocol/test_limits.py": "26016773e44a902f66272f00bf09d009f42455c0e9b21480cb0b7da03e19c82c",
+      "tests/protocol/test_pipe_endpoint.py": "bf4a89907757c4e40ee19cc16b8283998a1b4c92673f24e392e85f4f393de536",
+      "tests/protocol/test_pipe_io.py": "7bc7c0f4799e95c1f446bcd326b5414239504a7469dd3d4226e7a5f740bc644e",
+      "tests/protocol/test_private_events.py": "97629105ea17a3260ca589836a715f51603b8f6dd3b19d189cd134f4bafdc879",
+      "tests/protocol/test_private_store.py": "3a03a146f42fa82f9b128b2d441052ede0ac01591a543332bbb6801ef264f6d2",
+      "tests/protocol/test_redaction.py": "a9a803fc456f50a0a989bb2e6d03c6b809692f69faf1cb2f740647195a8740f6",
+      "tests/protocol/test_rejection_matrix.py": "f7db8f55003e505f910fe02d58538e02bb3e6eda90eef509e25138b2f37a3bd6",
+      "tests/protocol/test_safe_create.py": "be5200d98565f7f201ad5c5527bbd24ed9aaf680c8c917a0a214b5d25279492d",
+      "tests/protocol/test_safe_open.py": "f10869164a7e95f4372160dbd9f466e451a5ba9421ee7e4ebb4dcfe88d7cf8ab",
+      "tests/protocol/test_security_vectors.py": "ea3c2b51f3412a6597abb665e34e4c20555df9621c79ebd8481b3ea1f70fbbd7",
+      "tests/protocol/test_selector_pipe.py": "0f1d727e792b8a19268b0e75152728a85971f961dc1edc22da2df85f3962bb3e",
+      "tests/protocol/test_transport.py": "96facb0bd708e107fc6828eea85ff07fd349e4bc1d48a6a46a983abed448424c",
+      "tests/protocol/test_transport_recovery.py": "09e8e958fa437ad05d3169ffd60b12ffe5cf7d40802178e3e1e214a125194941",
+      "toolchain.lock.json": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9"
+    }
+  },
+  "runtime_snapshot_used": true,
+  "loaded_runtime_modules": {
+    "studio.protocol._rfc8785._impl": {
+      "relative": "protocol/_rfc8785/_impl.py",
+      "sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec"
+    },
+    "studio.protocol._rfc8785": {
+      "relative": "protocol/_rfc8785/__init__.py",
+      "sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b"
+    },
+    "studio.protocol.core": {
+      "relative": "protocol/core.py",
+      "sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e"
+    },
+    "studio.protocol": {
+      "relative": "protocol/__init__.py",
+      "sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f"
+    },
+    "studio.host.core.limits": {
+      "relative": "host/core/limits.py",
+      "sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f"
+    },
+    "studio.host.core.journal": {
+      "relative": "host/core/journal.py",
+      "sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6"
+    },
+    "studio.host.core.pipe_io": {
+      "relative": "host/core/pipe_io.py",
+      "sha256": "647e420b7d72506b8b1611a54a2f9bcef2e590a34230dd4a5f54fb136fcd6946"
+    },
+    "studio.host.core.safe_open": {
+      "relative": "host/core/safe_open.py",
+      "sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535"
+    },
+    "studio.host.core.private_store": {
+      "relative": "host/core/private_store.py",
+      "sha256": "8b92645edf34469efdab7e6e02ea70507f3db16154471685697e6e9bbad2cdc1"
+    },
+    "studio.host.core.pipe_endpoint": {
+      "relative": "host/core/pipe_endpoint.py",
+      "sha256": "07c9cea3c7102a4559e2f603af8e2cd5127e973508d21659ea42f296850a71cc"
+    },
+    "studio.host.core.redaction": {
+      "relative": "host/core/redaction.py",
+      "sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f"
+    },
+    "studio.host.core.transport": {
+      "relative": "host/core/transport.py",
+      "sha256": "1ec03356b1cb8c8987e1604bcb164aea6a9934dbe259451c19e12de36398aba0"
+    },
+    "studio.host.core.fixture_pipe": {
+      "relative": "host/core/fixture_pipe.py",
+      "sha256": "a6bad4fc4bfa27d91573e0a5784f76f4411a8c29dfe1c5282f9190461ce48246"
+    },
+    "studio.host.core.private_events": {
+      "relative": "host/core/private_events.py",
+      "sha256": "85a62c0cc4fb6b67564efb7ed5322ee1bbf08023b67d865e42283f4e072399a3"
+    },
+    "studio.host.core.fixture_release": {
+      "relative": "host/core/fixture_release.py",
+      "sha256": "547a01252b7c5f31fba0655fec01e71039d094d6c328e3fa39428120bd464e47"
+    },
+    "studio.host.core.fixture_selector": {
+      "relative": "host/core/fixture_selector.py",
+      "sha256": "39f33d0757d10874ae33877198f9f7e44532193592a44a51375c429e4343dec4"
+    },
+    "studio.host.core.selector_pipe": {
+      "relative": "host/core/selector_pipe.py",
+      "sha256": "afe8ead710413220c0191b804f72c44a7fe5780878578aac2d17d07495dc4e9c"
+    }
+  },
+  "runtime_source_sha256": {
+    "pipe_io.py": "647e420b7d72506b8b1611a54a2f9bcef2e590a34230dd4a5f54fb136fcd6946",
+    "pipe_endpoint.py": "07c9cea3c7102a4559e2f603af8e2cd5127e973508d21659ea42f296850a71cc",
+    "selector_pipe.py": "afe8ead710413220c0191b804f72c44a7fe5780878578aac2d17d07495dc4e9c",
+    "fixture_selector.py": "39f33d0757d10874ae33877198f9f7e44532193592a44a51375c429e4343dec4",
+    "private_events.py": "85a62c0cc4fb6b67564efb7ed5322ee1bbf08023b67d865e42283f4e072399a3",
+    "fixture_release.py": "547a01252b7c5f31fba0655fec01e71039d094d6c328e3fa39428120bd464e47",
+    "private_store.py": "8b92645edf34469efdab7e6e02ea70507f3db16154471685697e6e9bbad2cdc1",
+    "transport.py": "1ec03356b1cb8c8987e1604bcb164aea6a9934dbe259451c19e12de36398aba0"
+  },
+  "imported_source_sha256": {
+    "boundary_probe.py": "b3337e327cf10a585407d1fc074c23d6c5ecc7ba67334579c34858f3a6fdf6bd",
+    "windows_api.py": "1afd34eb11fd5ab9a34c37de2a80aabcec04224826a092ff122d5212bd3a50c4"
+  },
+  "profile_absent_before": true,
+  "compiler": {
+    "cl_sha256": "f4eba2208e132daf500b7d7bbdf051e930c59dbdc1d87c35e146479427ffeb8d",
+    "link_sha256": "1a9889872481270ca45febcdaf26e75c53cea505c9eb214daea1098d4cf706bd",
+    "msvc_version": "14.44.35207",
+    "sdk_version": "10.0.26100.0",
+    "source_sha256": "223f62175d1944a510fc0d07608a8698540e721c3e81440602584430b9ff08bd",
+    "compile": {
+      "host_exit": 0,
+      "stdout": "boundary_child.c\r\n",
+      "stderr": "",
+      "timeout_seconds": 25
+    },
+    "link": {
+      "host_exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "timeout_seconds": 25
+    }
+  },
+  "native_executable_sha256": "6212259a848edd4794fa1666f7f1cbf8e15386c1456880ffaf2348e40e3a97cf",
+  "native_executable_relative": "studio/.local/review-raw/S39/GT02-S43-NATIVE-01-2245644f0a9141ceb3f6428be146665b.exe",
+  "create_profile_hresult": 0,
+  "profile_exists_after_create": true,
+  "wrong_client": {
+    "mode": "wrong_client_pid",
+    "placeholder_resumed": false,
+    "dispatcher_called": false,
+    "bound_identity": [
+      42640,
+      134340391842593472
+    ],
+    "rejection": "PIPE_CLIENT_MISMATCH",
+    "actual_client_pid": 35720,
+    "placeholder_exit": 125,
+    "job_active": 0,
+    "job_pids": []
+  },
+  "remaining_endpoint_owners": 0,
+  "remaining_io_owners": 0,
+  "remaining_event_owners": 0,
+  "marker": "S39_SELECTOR_IPC_DIAGNOSTIC_COMPLETE",
+  "delete_profile_hresult": 0,
+  "profile_absent_after": true,
+  "owned_temp_removed": true,
+  "runtime_source_unchanged": true,
+  "runtime_snapshot_unchanged": true,
+  "runtime_snapshot_removed": true,
+  "diagnostic_complete": true,
+  "raw_relative": "studio/.local/review-raw/S39/GT02-S43-NATIVE-01-2245644f0a9141ceb3f6428be146665b.json",
+  "raw_sha256": "711dfb9f8cbfa14816320baf4d09b312d6395c0b03255a5e79b4d0553c5670ff"
+}

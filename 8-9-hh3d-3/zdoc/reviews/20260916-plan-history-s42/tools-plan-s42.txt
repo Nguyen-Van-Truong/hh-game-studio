@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 16-09-2026, Asia/Saigon | Revision S43 | TRIỂN KHAI THEO GATE
+Ngày 16-09-2026, Asia/Saigon | Revision S42 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -16,7 +16,7 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 
 CURRENT_VALID_WP=GT-02
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=GT02_CANDIDATE_EXPERIMENTAL_CREATE_ONLY_REPLACE_GAP
+IMPLEMENTATION=GT02_CANDIDATE_EXPERIMENTAL_STAGING_SAFE_WRITE_GAP
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
 GT01_PENDING=NONE
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
@@ -25,75 +25,170 @@ RUNTIME_ACCEPTANCE=GT01_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S43
+PLAN_REVISION=S42
 EXECUTION_MODE=SOLO_OWNER_20260915
 SUBAGENTS_ENABLED=0
-GT02_EVIDENCE_STATUS=FROZEN_CANDIDATE_S43_01
-GT02_REVIEW_STATUS=NOT_REVIEWED_SOLO_S43
-GT02_LAST_TESTED_SOURCE_CLOSURE=6b7707a126449d46aac937504113e8c7e6fb9aa5db4f73948b7e65df0e0ce7fc
-GT02_CHECKPOINT_COMMITS=2e24912,579b7e7,287a6c2,487e5fc,6a6dfb8,08f70cf
+GT02_EVIDENCE_STATUS=FROZEN_CANDIDATE_S39_02
+GT02_REVIEW_STATUS=CRITICS_S41_COMPLETE_TICK_NO
+GT02_LAST_TESTED_SOURCE_CLOSURE=2fb0ec013c4037c844b38f7be221c0aa7a6bd905492fa7c4a53eaa8e474c9d59
+GT02_CHECKPOINT_COMMITS=96c506b,e52b5c0,faedb0d,642d6f5,74d1cc2,52ca04c,52def92,957ea88,572185e,9839be9,abc88b0,6bfbc3e,43192c0,15801ad,adb2e52,31f27b2,2e24912,579b7e7,287a6c2,644c985,65cd47e,2ae0623,e47c93d,d5c5f1b,06cad08,e23aefb,c2c285a,487e5fc,1296ecc,d009d0e,7ac48ca,1462c27,6c786d0,b7959a4
 GT02_SAFE_WRITE_STATUS=GAP_UNSUPPORTED_WINDOWS
-GT02_BOUNDARY_EVIDENCE=S43_EXACT_CLOSURE_NATIVE_SELECTOR_IPC_CREATE_ONLY_UNIT_PROBE
-GT02_WORKING_SOURCE_STATUS=S43_FROZEN_TESTED
+GT02_BOUNDARY_EVIDENCE=S41_EXACT_CLOSURE_NATIVE_SELECTOR_IPC_PLUS_S40_SAFE_WRITE_GAP
+GT02_WORKING_SOURCE_STATUS=S39_FROZEN_TESTED
 
-TIẾN ĐỘ HIỆN HÀNH — S43, cập nhật 16-09-2026
-Coordinator triển khai solo; không còn worker/critic chạy. Hai critic S41
-FAIL/TICK=no áp dụng source S39-02, không chuyển chữ ký sang source S43.
+TIẾN ĐỘ HIỆN HÀNH — S42, cập nhật 16-09-2026
+Coordinator triển khai solo; hai critic chỉ đọc S41 theo yêu cầu owner 16-09
+đã hoàn tất và hiện không còn worker/critic chạy. Không dùng Grok CLI. Solo
+self-review không thay hai chữ ký độc lập.
 
 GT-01 ACCEPTED tại a0fb247; closure
 3ace23bcf84598cda64d54bbe3fc4736acde877f9f714fb71e2355d3e809eea4,
 evidence reviews/20260913-r21-gt01-final; hai critic PASS/TICK=yes.
 
-GT-02 candidate hiện hành: reviews/20260916-gt02-s43-01. Protocol294 tests:
-290 pass,4 skips; bootstrap56/56. 86 source files,9 artifacts; actual host
-exit/tree sạch, source/snapshot không đổi. Python/Node/Godot golden2396 rows.
-Native selector AppContainer S43 remint7/7, child exit61, Job/PID0; exact
-runtime closure khớp candidate. Audit: reviews/20260916-gt02-s43-audit/.
-Focused RPC S39 16/16 dùng lại chỉ cho2 file source không đổi, không suy thành
-native proof của closure mới.
+GT-02 candidate hiện hành: reviews/20260916-gt02-s39-02. Protocol283 tests:
+279 pass,4 skips (3 thiếu quyền symlink,1 negative Linux-only); bootstrap56/56.
+Actual host exit/process tree sạch, source/snapshot không đổi;84 source files,
+9 artifacts. Python/Node/Godot khớp2396 canonical rows/hash; Godot thêm9
+negative cases. Selector RPC16/16; native AppContainer7/7, exit61, Job/PID0,
+private root/.events denied. Bảng requirement → test → evidence và audit nằm ở
+reviews/20260916-gt02-s41-audit/. Native S39 cũ bị critic phát hiện lệch closure; S41 remint đã khớp exact source. Hai review độc lập đã có nhưng đều TICK=no.
+Checkpoint S39:2ae0623 source/evidence; exact index/HEAD proof:65cd47e và
+2ae0623. S39-01 giữ lịch sử hash mismatch do tài liệu sửa sau freeze; S38:
+2e24912; S37:adb2e52; S36:15801ad. Không chuyển chữ ký critic cũ.
+Closure S35:264ed3e3f35ca76038ba20cc00f41f3345ba6e9352e111b3be5e7ed38fe6e111. Các bản
+Git proof ghi commit thực sự đã kiểm trong git-byte-verification-*.json.
 
-Đã có schema/JCS/limits, journal/CAS8 process/retention, auth loopback,
-Stop/Cancel/UNKNOWN, redaction, AppContainer IPC, private staging/events,
-release graph và fixture selector/recovery. Chưa có Godot/Blender consumer.
+Đã có typed schema/JCS/limits, journal/CAS8 process, terminal reservation,
+archive/tombstone, authenticated loopback, Stop/Cancel/UNKNOWN, redaction cả
+credential cũ, NFC names và UNSUPPORTED_OPEN_LANE. Godot vectors chứng minh
+serializer; Python host sở hữu raw-wire admission. Private staging S32 giữ
+ancestor/root/guard/blob handles, protected DACL, quota và write/flush/readback.
 
-S43 thêm safe_create.py (internal create-only experiment) và11 regression:
-- Create mới, retained handle, delete-pending, link count trước ghi, flush,
-  readback, rename không replace, final-path/identity và directory flush.
-- Alias trước pending bị chặn trước payload; alias trong ghi trả error5;
-  collision với writer khác giữ bytes writer, không overwrite.
-- Sau publish/flush lỗi trả UNKNOWN và khóa retry; root swap, Unicode/empty
-  data và rename không có postcondition đều được kiểm.
-Public safe_open.safe_write/atomic_replace vẫn false. Module mới chưa đăng ký
-vào transport/capability, chưa có recovery/custody toàn tuyến hoặc2 critic PASS.
-S43 chỉ chứng minh phần create-only; không suy ra target identity CAS của replace.
+S34 thêm pipe_io.py: framed bytes tối đa256KiB, deadline chung header/body,
+Stop độc lập, một I/O/pipe và tối đa32 pipe được giữ ownership. Cancel chưa có
+completion thì giữ nguyên buffer/OVERLAPPED/event/pipe trong registry; close
+lần sau tiếp tục dọn chính operation đó.19 tests dùng Windows pipe thật đạt,
+gồm cancellation không hoàn tất, lỗi wait/result/close, short write, disconnect,
+concurrent Stop/close và caller bỏ reference. S35 tích hợp endpoint/dispatcher bên dưới.
 
-Điều chỉnh nhận định S42: sharing violation do immediate destination parent
-không chia sẻ WRITE. Cho parent share READ|WRITE nhưng không DELETE cho phép
-native publish mà vẫn giữ ancestor handles. Chế độ này cho writer khác sửa
-namespace con: create-only có collision reject, còn replace cần CAS riêng.
-Native filename buffer phải có NUL dự phòng và đọc lại final-path; BOOL success
-đơn lẻ không chứng minh rename tới đúng tên. Không thử nghiệm bằng capability true.
+S34 cũng sửa lỗi phase ở transport: exception khi thoát guard hoặc sau mutation
+bắt đầu phải giữ UNKNOWN/pending, đóng admission và không tự apply lại. Hai
+regression mới tái hiện4 failure trên method từ Git9839be9; source sửa đạt cả2.
+Bằng chứng phase-regression.json giữ hash của method/test và kết quả từng case.
 
-Việc tiếp theo:
-1. Hoàn thiện ownership/crash/đường native preopened-handle của create-only;
-   không mặc định bật global safe_write từ os.name.
-2. Chứng minh replacement đúng expected target identity khi writer khác xen
-   vào, hoặc triển khai protected/versioned namespace giữ nguyên semantic CAS.
-   Không đổi gate hoặc coi create-only đã thay thế atomic-replace.
-3. Freeze/test/remint native + audit source mới; hai critic PASS trên cùng
-   closure mới mở GT-03/GT-04. S41 finding stale native closure đã sửa; không
-   ghi rằng critic B đã ký lại S41 remint khi chưa có review đó.
+Windows safe-write vẫn GAP theo TX15. Native S31/S32 đã chứng minh các thao tác
+filesystem/process/hardlink/inheritance bị chặn trong fixed AppContainer. S33
+thực thi AppContainer → authenticated pipe → staging: hợp lệ tạo1 blob/readback,
+sai PID tạo0 blob; denied direct read/write/second instance, exit53/Job/PID sạch.
+S33 vẫn fixed diagnostic, chưa dùng pipe_io mới hoặc journal/lease/Stop/selector.
+Report: reviews/20260915-gt02-s33-ipc.md; checkpoint9839be9. Không suy unit test
+pipe thành proof sandbox/production IPC hoặc durable namespace activation.
 
-Còn sau GT-02: GT-03 Godot, GT-04 Blender, GT-05 pipeline, GT-06 play/input/
-observe, GT-07 recovery, GT-08 CI/Linux/Android thiết bị thật, GT-09 conformance,
-GT-10 package/upgrade/rollback/handoff. HH World thuộc plan game sau GT-10;
-không gộp vào nghiệm thu plan công cụ. Chưa có cơ sở hẹn ngày xong toàn plan.
-Không suy Godot/Blender vắng khỏi PATH là chưa cài: dùng pin trong studio/.local.
+S35 endpoint kiểm protected DACL/Low label, retained process PID+creation/
+primary AppContainer SID/session/token và nối dispatcher fixture với envelope/
+auth/lease/journal/Stop. Native run03 dùng đúng snapshot73 source, xác minh13
+module thực sự loaded;6 cases submit/token sai/lease cũ/mất reply/Cancel/Stop
+đều có marker, exit57 và Job/PID0. Submit/retry chỉ1 effect; các case từ chối/
+hủy không có effect. Work/control dùng process và session binding thật.
+Negative client PID khác bị chặn trước dispatch; placeholder không chạy,
+được cleanup exit125, không tính là application PASS. Package14 artifacts và
+2 dependencies được hash tại reviews/20260916-gt02-s35-native/; kiểm portable,
+Python -O và artifact thiếu/sửa đều đúng. Đây là counter fixture; private
+staging/selector vẫn chưa tích hợp, safe_write/atomic_replace chưa được cấp.
 
-Lịch sử S34–S42 và checkpoints chi tiết được giữ nguyên bytes ở
-reviews/20260916-plan-history-s42/tools-plan-s42.txt (AUTHORITY=0), SHA-256
-9bc157aab9207bb432343626e5a6fbb5abcdb111481e9977448efbdd13fadcd8.
-Các report/test lỗi cũ vẫn giữ, không overwrite bằng PASS mới.
+S36 thêm private_events.py: một root/guard/stream giữ handle, protected DACL,
+JCS framed/hash chain, expected-head append và fresh flush trước đọc lịch sử.
+Giới hạn512 records/8MiB, body16KiB, index chỉ giữ offset/hash; tối đa16 owner.
+18 tests Windows thật đạt: CAS2 thread, writer process thứ2 bị chặn, crash cut
+write/flush, torn/checksum/order/EOF, witness suffix, alias và close/init lỗi.
+Giữ bytes/ownership khi chưa rõ kết quả; không truncate hay tự retry. S35 native
+counter source vẫn khớp byte nhưng chưa exercise stream mới. Đây là lớp lưu
+trữ cho selector; chưa có typed selection/adoption/recovery hoặc namespace
+publication ACK. Diagnostic lỗi được giữ kèm đúng source hash trong ...s36-events-01/02.
+
+S37 thêm fixture_release.py: graph JSON đóng (value+references), kiểm đủ mọi
+dependency/reachable asset trước ghi, immutable manifest bind project/store/
+FileID/hash và source/base-game revisions. Pin đọc lại toàn bộ file thành bytes
+bất biến; release mới không đổi pin cũ, thiếu/hỏng file không trả partial pin.
+12 tests mới đạt, kể cả fresh process và quota/readback lỗi sau partial stage.
+Completeness chỉ cho fixture grammar; chưa là dependency scan Godot/Blender.
+Staged release chưa active; revisions trong manifest vẫn là metadata producer,
+selector phải so với authoritative state/lease trước selection và adoption.
+
+S39 thêm selector_pipe.py và native AppContainer proof; S38 thêm fixture_selector.py: một stream giữ intent/lease/revisions/
+selection/receipt, quota toàn operation, generation CAS và consumer readback.
+27/27 test selector đạt trên snapshot cuối, gồm9 crash cut bằng process thật.
+Stop tới trong quota scan/pin bị chặn trước effect admission; log/store/consumer
+mỗi object chỉ có một selector. 5 focused runs giữ đúng source riêng 17/21/21/24/27 tests.
+S39-02 candidate chạy 283 test:279 pass+4 skip, bootstrap56/56. RPC focused16/16.
+Native AppContainer7/7 case exit61, Job/PID0, private root và .events trả
+ERROR_ACCESS_DENIED(5); submit retry giữ một receipt/effect. Source closure hiện
+84 file, candidate artifact9, closure2fb0ec013c4037c844b38f7be221c0aa7a6bd905492fa7c4a53eaa8e474c9d59.
+Reopen chỉ quan sát; explicit reconcile có thể nhận lại manifest đã ghi trước
+crash, không staging lại. Restore tăng generation và giữ UNKNOWN/restored.
+Đây là internal fixture; S39 native confined client đã gọi selector qua endpoint thật,
+nhưng consumer vẫn là in-memory inert fixture, chưa phải Godot/Blender adapter.
+
+S39 đã nối selector_pipe.py: endpoint PID/token + session/role trước parse,
+local broker pump từng phase, Stop riêng, không tự chạy pending sau reopen.
+Focused run01:13/14 pass,1 lỗi fixture truyền sai keyword PipeIOError; giữ
+source/log lỗi, sửa delivery_unknown trước run02. Run02 16/16 và native7/7 đã đạt.
+Thêm kiểm broker ownership và Cancel đọc lại phase dưới selector lock sau khi
+chờ storage. S39-02 đã freeze; S39-01 được giữ làm lịch sử vì hash tài liệu
+đổi sau freeze và Git proof đã bắt đúng lỗi đó.
+
+S41 remint native AppContainer tại reviews/20260916-gt02-s41-native/ với
+run_id GT02-S41-NATIVE-01. Runtime closure digest và toàn bộ 84 file hash khớp
+2fb0ec013c4037c844b38f7be221c0aa7a6bd905492fa7c4a53eaa8e474c9d59; verifier mới
+ở reviews/20260916-gt02-s41-audit/ bắt buộc so sánh cả digest lẫn path→hash map.
+S41 critic B tìm đúng lỗi binding của S39; native evidence cũ giữ nguyên lịch sử,
+không dùng lại làm proof.
+Hai critic độc lập S41 đã review cùng closure `2fb0ec...`: critic A và B
+đều `VERDICT=FAIL`, `TICK=no`. A giữ TX15 safe-write/atomic-replace là P1; B
+bắt lỗi native closure cũ và xác nhận S41 remint đã sửa đúng binding nhưng
+không biến primitive unsupported thành PASS. Vì vậy GT-02 vẫn CANDIDATE và
+GT-03/GT-04 vẫn khóa.
+S42 probe thử delete-pending staging: hardlink bị chặn trong lúc ghi/flush và
+readback đạt, nhưng native rename trả `ERROR_SHARING_VIOLATION(32)` khi giữ
+đủ ancestor chain. Direct success với handle set rút gọn không đủ TX15; không được hạ custody để lấy PASS. Report `reviews/20260916-gt02-s42-safe-write-probe/`;
+capability vẫn `safe_write=false`, `atomic_replace=false`.
+
+S40 ghi quyết định đóng gap theo hướng fail-closed tại
+reviews/20260916-gt02-s40-safe-write-gap/. Các test adversarial hiện có
+`test_exclusive_handle_hardlink_counterexample_keeps_mutation_disabled`,
+`test_final_file_swap_to_hardlink_between_resolve_and_open_rejects`,
+`test_every_mutation_rejects_before_io_even_during_junction_swaps`,
+`test_ancestor_swap_between_resolve_and_open_is_rejected` và
+`test_parent_handle_blocks_rename_before_final_file_is_open` chứng minh vì sao
+không được mở WriteFile/atomic replace với primitive hiện tại. S40 chỉ thêm
+record và hash manifest; source closure S39-02 không đổi nên không chạy lại
+đại bộ test. `safe_write=false`, `atomic_replace=false` và
+`UNSUPPORTED_SAFE_OPEN_WINDOWS` vẫn là trạng thái đúng; private staging và
+AppContainer boundary không nâng quyền thành public project-root write.
+
+Tiếp theo solo, theo thứ tự để tránh làm lại:
+1. Giữ GT-02 ở CANDIDATE: public safe_write/atomic_replace vẫn false vì
+   primitive Windows chống hardlink/TOCTOU chưa được chứng minh; không hạ gate
+   bằng fixture AppContainer. S39 đã hoàn thành authenticated selector path;
+   S40 đã ghi quyết định fail-closed và evidence counterexample, không giả PASS.
+2. Giữ source/evidence S39-02 bất biến; chỉ sửa khi xử lý finding mới. Hai critic
+   S41 đều FAIL/TICK=no; sau khi có primitive mới phải freeze/test/review lại
+   source mới. Không mở GT-03/GT-04 khi GT-02 chưa đủ DoD.
+GT-03/04 consumer mutation chưa đủ dependency; không hạ DoD để hợp code.
+
+Các finding/lượt lỗi S30–S33 và lý do quyết định giữ nguyên trong reports và
+reviews/20260916-plan-history-s33/tools-plan-s33.txt (AUTHORITY=0), SHA-256
+1eb33e360f2c6f712768e453e0bb751e6d539eefb922347614b5e4a613a192f0.
+Hai critic S30 chỉ áp dụng closure S30: A FAIL/TICK=no vì TX15 availability GAP;
+B PASS/TICK=yes cho baseline fixture. Không chuyển chữ ký đó sang S39. Một
+TEMP probe S30 cũ còn lại do automatic approval review chặn cleanup; giữ báo
+cáo ...s30-windows-probe.md, không thử lại bằng công cụ khác hoặc claim TEMP0.
+
+Còn lại sau GT-02: GT-03 Godot adapter, GT-04 Blender adapter, GT-05 asset
+pipeline, GT-06 Play/input/observe, GT-07 recovery/multi-agent, GT-08 CI/Windows/
+Linux/Android máy thật, GT-09 conformance, GT-10 package/handoff. HH World đợi
+GT-10. Inventory S29: Docker local phản hồi, chưa thấy ADB/Android kết nối;
+đó không là proof Linux/Android đạt. Chưa có cơ sở hẹn ngày xong toàn plan.
 
 KINH NGHIỆM ĐANG ÁP DỤNG
 - S39: candidate hash phải được dựng lại sau mọi sửa tài liệu; Git proof đã bắt

@@ -1,0 +1,22 @@
+{
+  "native_binding_regressions": [
+    {
+      "case": "stale_closure",
+      "rejected": true
+    },
+    {
+      "case": "file_changed_digest_retained",
+      "rejected": true
+    },
+    {
+      "case": "map_missing",
+      "rejected": true
+    },
+    {
+      "case": "digest_missing",
+      "rejected": true
+    }
+  ],
+  "normal_status": "COORDINATOR_LOGIC_VERIFIED",
+  "source_closure": "6b7707a126449d46aac937504113e8c7e6fb9aa5db4f73948b7e65df0e0ce7fc"
+}
