@@ -308,6 +308,10 @@ class FixtureReleaseConsumer:
         self._pin: PinnedRelease | None = None
         self.adoption_count = 0
 
+    def check_mutation_available(self):
+        """The fixed in-memory consumer has no persistent write hold."""
+        return None
+
     def adopt(self, selected, pin):
         if pin is not None:
             _need(type(pin) is PinnedRelease and pin.project_id == self.project_id
@@ -356,6 +360,12 @@ class FileFixtureReleaseConsumer(FixtureReleaseConsumer):
             self._closed = True
             if getattr(self.files, '_fixture_file_consumer', None) is self:
                 self.files._fixture_file_consumer = None
+
+    def check_mutation_available(self):
+        """Refuse new work before the selector persists an intent or assets."""
+        with self._mutex:
+            _need(not self._closed, 'CONSUMER_CLOSED')
+            self.files.check_mutation_available()
 
     def _wire(self, selected, pin):
         return canonical_json({'schema':'hh-fixture-consumer-1','project_id':self.project_id,
@@ -542,6 +552,10 @@ class FixtureSelector:
                 return old
             _need(not self._stop_requested.is_set(), 'SELECTOR_STOPPED')
             _need(not self._uncertain, 'SELECTOR_RECONCILIATION_REQUIRED')
+            # Duplicate receipts remain available while a consumer is held.
+            # New work must not consume journal/blob capacity when publication
+            # is already known to be unavailable. Recovery has its own path.
+            self.consumer.check_mutation_available()
             self._stage_capacity(request['payload'])
             _need(not self._stop_requested.is_set(), 'SELECTOR_STOPPED')
             self._append({'kind': 'INTENT', 'request': request, 'digest': digest,

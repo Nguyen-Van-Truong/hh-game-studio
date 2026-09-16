@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import dataclasses
+from contextlib import contextmanager, ExitStack
 import gc
 import hashlib
 import json
@@ -13,6 +14,7 @@ import tempfile
 import threading
 import unittest
 from unittest import mock
+import uuid
 import weakref
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -34,6 +36,226 @@ class PrivateEventTests(unittest.TestCase):
     def tearDown(self):
         self.log.close()
         self.temp.cleanup()
+
+    def test_custody_rejects_callbacks_and_subclasses_without_writes(self):
+        from host.core.custody import WitnessCustody
+
+        class DerivedCustody(WitnessCustody):
+            pass
+
+        before = self.log.binding()
+        for value in (None, object(), lambda binding: None, DerivedCustody.__new__(DerivedCustody)):
+            with self.subTest(value_type=type(value).__name__):
+                with self.assertRaisesRegex(EventLogError, 'EVENT_CUSTODY_REQUIRED'):
+                    self.log.bind_custody(value)
+                self.assertEqual(self.log.binding(), before)
+
+    def test_bound_append_persists_real_custody_and_reopen_preserves_identity(self):
+        from host.core.custody import WitnessCustody, decode_record
+
+        with self._custody() as (registry, custody):
+            before = registry.read()
+            with mock.patch.object(custody, 'persist_binding', wraps=custody.persist_binding) as persist:
+                self.log.bind_custody(custody)
+                persist.assert_not_called()
+                self.assertEqual(registry.read(), before)
+                head = self.log.append({'kind': 'INTENT'}, custody.binding.witnessed)
+                persist.assert_called_once()
+            self.assertEqual(custody.binding.witnessed, head)
+            self.assertEqual(decode_record(registry.read())['events']['binding']['witnessed'], dataclasses.asdict(head))
+            with self.assertRaisesRegex(EventLogError, 'EVENT_CUSTODY_ALREADY_BOUND'):
+                self.log.bind_custody(custody)
+            root, binding = self.log.root, custody.binding
+            self.log.close()
+            # Read the actual registry again; mutable stream size at reopen
+            # must not be confused with its stable volume/FileID identity.
+            reopened_custody = WitnessCustody(registry, storage_id=registry.local_id, project_id='events-test')
+            self.log = PrivateEventLog.reopen(root, reopened_custody.binding)
+            self.assertNotEqual(binding.stream.size, self.log.binding().stream.size)
+            self.log.bind_custody(reopened_custody)
+            next_head = self.log.append({'kind': 'NEXT'}, head)
+            self.assertEqual(reopened_custody.binding.witnessed, next_head)
+
+    def test_stale_or_wrong_custody_cannot_attach_or_advance_itself(self):
+        with self._custody() as (registry, custody):
+            raw = registry.read()
+            # An unrelated valid stream is not authority for this log.
+            with PrivateEventLog.create(self.base) as other:
+                with self.assertRaisesRegex(EventLogError, 'EVENT_CUSTODY_BINDING_MISMATCH'):
+                    other.bind_custody(custody)
+            self.log.append({'kind': 'AHEAD'}, self.log.binding().witnessed)
+            with mock.patch.object(custody, 'persist_binding', side_effect=AssertionError('bind must not advance')):
+                with self.assertRaisesRegex(EventLogError, 'EVENT_CUSTODY_BINDING_MISMATCH'):
+                    self.log.bind_custody(custody)
+            self.assertEqual(registry.read(), raw)
+            self.assertEqual(custody.binding.witnessed.sequence, 1)
+            self.assertEqual(self.log.binding().witnessed.sequence, 2)
+
+    def test_custody_failure_after_event_flush_is_unknown_and_no_automatic_rebind(self):
+        with self._custody() as (registry, custody):
+            self.log.bind_custody(custody)
+            saved, raw = custody.binding, registry.read()
+            flushes, flush = [], self.log._api.flush
+            def recorded_flush(handle):
+                flush(handle)
+                flushes.append(handle)
+            def fail_custody(binding):
+                # This callback is a test-only fault injection into the exact
+                # custody type, not a callback accepted by the product API.
+                self.assertGreaterEqual(flushes.count(self.log._handle), 3)
+                self.assertEqual(self.log._index[-1][2], binding.witnessed)
+                self.assertEqual(self.log._inspect().size, binding.witnessed.size)
+                raise RuntimeError('injected unexpected custody failure')
+            with mock.patch.object(self.log._api, 'flush', side_effect=recorded_flush), \
+                 mock.patch.object(custody, 'persist_binding', side_effect=fail_custody):
+                with self.assertRaisesRegex(EventLogError, 'EVENT_APPEND_UNCERTAIN') as caught:
+                    self.log.append({'kind': 'UNACKNOWLEDGED'}, saved.witnessed)
+            self.assertTrue(caught.exception.outcome_unknown)
+            self.assertEqual(registry.read(), raw)
+            with self.assertRaisesRegex(EventLogError, 'EVENT_RECOVERY_REQUIRED'):
+                self.log.append({'kind': 'NO_RETRY'}, saved.witnessed)
+            root = self.log.root
+            self.log.close()
+            retained = (root / '.events').read_bytes()
+            self.log = PrivateEventLog.reopen(root, saved)
+            self.assertEqual(self.log.binding().witnessed.sequence, 2)
+            self.assertEqual(json.loads(self.log.read(2).event), {'kind': 'UNACKNOWLEDGED'})
+            with self.assertRaisesRegex(EventLogError, 'EVENT_CUSTODY_BINDING_MISMATCH'):
+                self.log.bind_custody(custody)
+            self.log.close()
+            self.assertEqual((root / '.events').read_bytes(), retained)
+            self.assertEqual(registry.read(), raw)
+
+    def test_custody_barrier_retains_log_lock_until_acknowledgment(self):
+        with self._custody() as (_, custody):
+            self.log.bind_custody(custody)
+            parent = custody.binding.witnessed
+            entered, release, appended, read_done = (threading.Event() for _ in range(4))
+            persist, results, errors = custody.persist_binding, [], []
+            def delayed(binding):
+                entered.set()
+                if not release.wait(5):
+                    raise RuntimeError('test custody wait timed out')
+                persist(binding)
+            def append():
+                try:
+                    results.append(self.log.append({'kind': 'INTENT'}, parent))
+                    appended.set()
+                except BaseException as exc:
+                    errors.append(type(exc).__name__)
+            def read():
+                try:
+                    results.append(self.log.binding().witnessed)
+                except BaseException as exc:
+                    errors.append(type(exc).__name__)
+                finally:
+                    read_done.set()
+            writer = threading.Thread(target=append, daemon=True)
+            reader = threading.Thread(target=read, daemon=True)
+            with mock.patch.object(custody, 'persist_binding', side_effect=delayed):
+                writer.start()
+                try:
+                    self.assertTrue(entered.wait(5))
+                    reader.start()
+                    self.assertFalse(read_done.wait(.05))
+                    self.assertFalse(appended.is_set())
+                    self.assertEqual(custody.binding.witnessed, parent)
+                finally:
+                    release.set()
+                    writer.join(5)
+                    if reader.ident is not None:
+                        reader.join(5)
+            self.assertFalse(writer.is_alive() or reader.is_alive())
+            self.assertEqual(errors, [])
+            self.assertEqual(len(results), 2)
+            self.assertEqual(results[0], results[1])
+            self.assertEqual(custody.binding.witnessed, results[0])
+
+    def test_native_custody_flush_failure_prevents_append_ack(self):
+        from host.core.custody import CustodyError
+        from host.core.custody_registry import CustodyError as RegistryError
+
+        with self._custody() as (registry, custody):
+            self.log.bind_custody(custody)
+            saved = custody.binding
+            flush, calls = registry._api.flush, 0
+            def fail_after_state_set(handle):
+                nonlocal calls
+                calls += 1
+                if calls == 2:
+                    raise RegistryError('CUSTODY_FLUSH_FAILED')
+                flush(handle)
+            with mock.patch.object(registry._api, 'flush', side_effect=fail_after_state_set):
+                with self.assertRaisesRegex(EventLogError, 'EVENT_APPEND_UNCERTAIN') as caught:
+                    self.log.append({'kind': 'CUSTODY_FLUSH_UNKNOWN'}, saved.witnessed)
+            self.assertTrue(caught.exception.outcome_unknown)
+            self.assertEqual(calls, 2)
+            with self.assertRaisesRegex(CustodyError, 'CUSTODY_RECONCILIATION_REQUIRED'):
+                custody.binding
+            with self.assertRaisesRegex(EventLogError, 'EVENT_RECOVERY_REQUIRED'):
+                self.log.binding()
+            root = self.log.root
+            self.log.close()
+            with PrivateEventLog.reopen(root, saved) as reopened:
+                self.assertEqual(json.loads(reopened.read(2).event), {'kind': 'CUSTODY_FLUSH_UNKNOWN'})
+
+    def test_actual_exit_after_event_flush_before_custody_keeps_ahead_hold(self):
+        from host.core.custody import WitnessCustody
+        from host.core.custody_registry import RegistryCustody
+
+        with self._custody() as (registry, custody):
+            saved, root = custody.binding, self.log.root
+            config = {'root': str(root), 'binding': dataclasses.asdict(saved), 'local_id': registry.local_id}
+            self.log.close()
+            registry.close()
+            script = self._imports() + """
+import os
+from host.core.custody import WitnessCustody
+from host.core.custody_registry import RegistryCustody
+registry = RegistryCustody.reopen(c['local_id'])
+custody = WitnessCustody(registry, storage_id=c['local_id'], project_id='events-test')
+log = PrivateEventLog.reopen(c['root'], custody.binding)
+log.bind_custody(custody)
+def cut(new_binding):
+    assert log._index[-1][2] == new_binding.witnessed
+    print('EVENT_CUSTODY_CUT_AFTER_FLUSH', flush=True)
+    os._exit(91)
+custody.persist_binding = cut
+log.append({'kind':'CUSTODY_CRASH_UNACKNOWLEDGED'}, custody.binding.witnessed)
+raise AssertionError('cut was not reached')
+"""
+            result = self._child(script, config)
+            self.assertEqual(result.returncode, 91, result.stderr)
+            self.assertEqual(result.stdout.strip(), 'EVENT_CUSTODY_CUT_AFTER_FLUSH')
+            self.assertEqual(result.stderr, '')
+            with RegistryCustody.reopen(config['local_id']) as recovered_registry:
+                recovered = WitnessCustody(recovered_registry, storage_id=config['local_id'], project_id='events-test')
+                self.assertEqual(recovered.binding.witnessed, saved.witnessed)
+                self.log = PrivateEventLog.reopen(root, recovered.binding)
+                self.assertEqual(self.log.binding().witnessed.sequence, 2)
+                self.assertEqual(json.loads(self.log.read(2).event), {'kind': 'CUSTODY_CRASH_UNACKNOWLEDGED'})
+                with self.assertRaisesRegex(EventLogError, 'EVENT_CUSTODY_BINDING_MISMATCH'):
+                    self.log.bind_custody(recovered)
+            print('HH_GT02_EVENT_CUSTODY_CUT ' + json.dumps({
+                'host_exit': result.returncode, 'custody_sequence': saved.witnessed.sequence,
+                'reopened_sequence': self.log.binding().witnessed.sequence, 'automatic_bind': False}), flush=True)
+
+    def test_failed_close_retains_custody_owner_until_real_cleanup(self):
+        from host.core.private_events import _CUSTODY_OWNERS
+
+        with self._custody() as (_, custody):
+            self.log.bind_custody(custody)
+            native_close, handle = self.log._api.close, self.log._handle
+            def fail_stream(value):
+                if value == handle:
+                    raise PrivateStoreError('PRIVATE_CLOSE_FAILED')
+                native_close(value)
+            with mock.patch.object(self.log._api, 'close', side_effect=fail_stream):
+                with self.assertRaisesRegex(EventLogError, 'EVENT_CLOSE_UNCERTAIN'):
+                    self.log.close()
+            self.assertIs(_CUSTODY_OWNERS.get(id(custody)), self.log)
+            self.log.close()
+            self.assertNotIn(id(custody), _CUSTODY_OWNERS)
 
     def test_genesis_append_immutable_records_and_disk_index(self):
         initial = self.log.binding()
@@ -362,6 +584,59 @@ raise AssertionError('cut not reached')
         self.assertNotIn(owner, pending_event_cleanup())
         self.assertEqual((owner.root / '.events').stat().st_size, 7)
 
+    def test_api_constructor_token_close_failure_transfers_to_event_cleanup_owner(self):
+        import ctypes as C
+        from ctypes import wintypes as W
+        from host.core.private_store import _StoreApi
+
+        original_close, retained = _StoreApi.close, {}
+        before = set(self.base.iterdir())
+        def refuse_token(api, handle):
+            if not retained:
+                # The first _StoreApi.close occurs on the actual process
+                # token in _owner_sid, before a blob-store root is minted.
+                retained.update(api=api, handle=handle)
+            if api is retained['api'] and handle == retained['handle']:
+                raise PrivateStoreError('PRIVATE_CLOSE_FAILED')
+            original_close(api, handle)
+        owner = None
+        try:
+            with mock.patch.object(_StoreApi, 'close', refuse_token):
+                with self.assertRaisesRegex(EventLogError, 'EVENT_INIT_CLEANUP_UNCERTAIN') as caught:
+                    PrivateEventLog.create(self.base)
+                owner = caught.exception.cleanup_owner
+                self.assertTrue(caught.exception.outcome_unknown)
+                self.assertIsNone(owner._store)
+                self.assertIs(owner._init_cleanup_api, retained['api'])
+                self.assertIn(owner, pending_event_cleanup())
+                with self.assertRaisesRegex(EventLogError, 'EVENT_CLOSE_UNCERTAIN'):
+                    owner.close()
+                self.assertIn(owner, pending_event_cleanup())
+                self.assertIn(retained['handle'], retained['api']._owned_handles)
+                info = retained['api'].dll.GetHandleInformation
+                info.argtypes, info.restype = [W.HANDLE, C.POINTER(W.DWORD)], W.BOOL
+                flags = W.DWORD()
+                self.assertTrue(info(retained['handle'], C.byref(flags)))
+                with mock.patch('host.core.private_events.MAX_OPEN_LOGS', len(pending_event_cleanup())):
+                    with self.assertRaisesRegex(EventLogError, 'EVENT_OWNER_LIMIT'):
+                        PrivateEventLog.create(self.base)
+            # Only the top-level cleanup owner is needed after native refusal
+            # ends. No cause-chain lookup or direct API cleanup is required.
+            owner.close()
+            self.assertIsNone(owner._init_cleanup_api)
+            self.assertNotIn(owner, pending_event_cleanup())
+            self.assertEqual(retained['api']._owned_handles, set())
+            self.assertFalse(info(retained['handle'], C.byref(flags)))
+            self.assertEqual(C.get_last_error(), 6)  # ERROR_INVALID_HANDLE
+            self.assertEqual(set(self.base.iterdir()), before)
+        finally:
+            # Preserve clean fixtures even when a future regression trips an
+            # assertion before transfer or after partial cleanup.
+            if owner is not None:
+                owner.close()
+            if retained:
+                retained['api'].close_owned()
+
     def test_post_append_readback_failure_quarantines_complete_record(self):
         binding = self.log.binding()
         read = self.log._read_at
@@ -454,6 +729,40 @@ raise AssertionError('cut not reached')
     @staticmethod
     def _config(log):
         return {'root': str(log.root), 'binding': dataclasses.asdict(log.binding())}
+
+    @contextmanager
+    def _custody(self):
+        """Real registry and native roots, with exact unique-leaf cleanup."""
+        from host.core.custody import WitnessCustody
+        from host.core.custody_registry import RegistryCustody, BASE_PATH
+        from host.core.private_store import PrivateBlobStore
+        from host.core.safe_replace import ProtectedFileRoot
+        import winreg
+
+        RegistryCustody.provision_base()
+        local_id = uuid.uuid4().hex
+        key_path = BASE_PATH + '\\' + local_id
+        parent = self.base / ('custody-files-' + local_id)
+        parent.mkdir()
+        with ExitStack() as stack:
+            files = stack.enter_context(ProtectedFileRoot.create(parent))
+            blobs = stack.enter_context(PrivateBlobStore.create(self.base))
+            registry = RegistryCustody.create(local_id)
+            def remove_owned_leaf():
+                # create() succeeded for this unique ID; verify the exact
+                # marker before deleting only that leaf, never shared parents.
+                with winreg.OpenKey(winreg.HKEY_CURRENT_USER, key_path, 0,
+                                    winreg.KEY_QUERY_VALUE | winreg.KEY_WOW64_64KEY) as key:
+                    marker, kind = winreg.QueryValueEx(key, 'Format')
+                self.assertEqual((marker, kind), (b'hh-registry-custody-1\0' + local_id.encode(), winreg.REG_BINARY))
+                winreg.DeleteKeyEx(winreg.HKEY_CURRENT_USER, key_path, winreg.KEY_WOW64_64KEY, 0)
+            stack.callback(remove_owned_leaf)
+            stack.callback(registry.close)
+            custody = WitnessCustody(registry, storage_id=local_id, project_id='events-test', create=True)
+            custody.activate(file_root=files.root, file_identity=files.root_identity,
+                             blob_root=blobs.root, blob_identity=blobs.root_identity,
+                             event_root=self.log.root, event_binding=self.log.binding())
+            yield registry, custody
 
     @staticmethod
     def _binding(config):

@@ -1,0 +1,29 @@
+{
+  "schema": "hh-custody-focused-evidence-1",
+  "timestamp": "2026-09-16T15:01:58.226127+00:00",
+  "host": {
+    "wrapper_pid": 24700,
+    "started_at": "2026-09-16T15:01:57.474984+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "-c",
+      "import json,unittest,sys; suite=unittest.defaultTestLoader.discover('tests/protocol',pattern='test_custody_registry.py'); r=unittest.TextTestRunner(verbosity=2).run(suite); print('HH_CUSTODY_TEST_RESULT '+json.dumps({'tests_run':r.testsRun,'failures':len(r.failures),'errors':len(r.errors),'skips':len(r.skipped)}),flush=True); sys.exit(0 if r.wasSuccessful() else 1)"
+    ],
+    "exit_code": 0,
+    "target_pid": 9052,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "custody-stdout.txt",
+    "stderr": "custody-stderr.txt",
+    "host": "custody-host.json"
+  },
+  "source_sha256": {
+    "host/core/custody_registry.py": "9847805e467c3d237bd8621138f9a1c8218b9097b3840ac41e13e603a50fcb69",
+    "tests/protocol/test_custody_registry.py": "52ceb642757b144aef8683ebc38ab1d98795d5501488816802e6d7327d13dadb"
+  },
+  "source_unchanged": true,
+  "scope": "standalone registry custody; not whole GT02 acceptance; no AppContainer boundary claim"
+}

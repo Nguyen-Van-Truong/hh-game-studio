@@ -1,0 +1,12 @@
+{
+  "code": "import unittest,json,sys; s=unittest.defaultTestLoader.discover('tests/protocol',pattern='test_managed_fixture.py');r=unittest.TextTestRunner(verbosity=2).run(s);print('MANAGED_COMPLETE '+json.dumps({'run':r.testsRun,'failures':len(r.failures),'errors':len(r.errors),'skips':len(r.skipped)}),flush=True);sys.exit(not r.wasSuccessful())",
+  "source_hashes": {
+    "host/core/custody.py": "aa4320faeccb3b729d0eebf29ac3e962d2590bca1e3aba14b0aef620b021fbc9",
+    "host/core/managed_fixture.py": "0cb0b4ec945b1079eac1012d1768a05b13908a2c43f1c9cc3ec9d155d3d5f719",
+    "tests/protocol/test_managed_fixture.py": "532207e058159777310797f3e0a66010648cf2d899d082986e2a8d7699674f80",
+    "host/core/custody_registry.py": "54a45327faf5630f750108781e427c0b01f04ae6482df7d2572dfba1b6ea3db2",
+    "host/core/private_events.py": "2155676f73f29948f702d7ab073fb9a47246e76779feac050fa6ccbc6a07fd54",
+    "host/core/safe_replace.py": "d3e2ac47ceb203d1f52b1f73e45a27c7a618eee84f1088577cc5e307d16f3661",
+    "host/core/fixture_selector.py": "07537994a695039b2217d0b46cd336ba4adcb11b63751c24ab3008837c6a7597"
+  }
+}

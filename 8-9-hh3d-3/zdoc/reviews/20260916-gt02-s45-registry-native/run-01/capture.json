@@ -1,0 +1,33 @@
+{
+  "host": {
+    "wrapper_pid": 27884,
+    "started_at": "2026-09-16T15:09:14.962744+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "registry_probe.py",
+      "GT02-S45-REGISTRY-01"
+    ],
+    "exit_code": 0,
+    "target_pid": 8820,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "registry-native-stdout.txt",
+    "stderr": "registry-native-stderr.txt",
+    "host": "registry-native-host.json"
+  },
+  "job_samples": [
+    {
+      "active": 1,
+      "pids": [
+        12404
+      ]
+    },
+    {
+      "active": 0,
+      "pids": []
+    }
+  ]
+}

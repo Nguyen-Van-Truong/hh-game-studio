@@ -34,12 +34,41 @@ Short writes, flush/readback/identity failures quarantine the instance and
 report uncertainty. Torn/checksum-invalid/noncanonical/reordered history or a
 missing witnessed suffix requires recovery and preserves every byte. There is
 no automatic truncation, compaction, retry, tail repair, rollback or deletion.
-An old witness cannot detect loss of a newer complete suffix; durable witness/
-receipt custody remains required for any stronger rollback-detection claim.
+An old witness alone cannot detect loss of a newer complete suffix. A production
+supervisor must obtain the current witness and root identities from durable
+custody and require that custody before admitting public mutations.
+
+`bind_custody()` optionally attaches one exact local `WitnessCustody` instance;
+it accepts no callback, subclass, wire object or client configuration. The
+stored root/stream FileIDs and exact high-water head must match a freshly
+flushed and scanned log. Identity sizes are observations, not identity keys:
+the same stream's size changes between its creation and later reopen. Binding
+does not write or advance custody. A complete log ahead of the saved witness
+requires an explicit supervisor reconciliation of selector/file state before
+binding; a scan alone does not authorize that decision.
+
+Once attached, custody cannot be replaced or detached. Each custody object has
+one log owner, retained until successful log close. The caller still owns the
+custody resource lifetime. Append keeps the log mutex through event write,
+flush, complete chain/frame/EOF readback and then `persist_binding()`. It returns
+the new head only after the custody barrier succeeds. A custody exception,
+including an unexpected implementation error, poisons the log and returns
+UNKNOWN; the complete event is preserved and never automatically appended
+again. The custody implementation must not call back into the log.
+
+Existing unbound internal fixture logs remain supported. That compatibility is
+not permission for a supervisor to downgrade or reconnect a public writer
+without custody. Reopen still exposes valid ahead records for explicit recovery;
+it neither attaches custody automatically nor resumes effects.
 
 At most 16 log owners are strongly retained. Stream close happens before root/
 guard close. Failed close retains exact ownership for a later `close()`, even
 after a constructor write/cleanup failure or a caller drops its reference.
+If the native storage API fails before a `PrivateBlobStore` is constructed,
+the event owner also adopts its `cleanup_api` token owner. The top-level
+`EventLogError.cleanup_owner` is sufficient to retry cleanup: the log stays in
+the bounded ownership registry until that API's actual native close succeeds.
+Callers need not retain or traverse nested exception causes.
 The mutex has a two-second admission timeout. Native file I/O remains
 synchronous: byte/record caps are not a storage-device latency bound; the
 supervisor must own a bounded process/job when testing potentially hung I/O.
@@ -48,7 +77,10 @@ The trust boundary is the broker versus OS-confined workers. Unrestricted
 same-account actors/admins are not excluded by this DACL. No worker receives
 the object, root/configuration authority, file/volume/mapping handles or an
 impersonating broker thread. S35 proved native counter IPC on its own frozen
-closure; it does not yet prove this event stream integrated with a worker.
+closure. S44's file-consumer IPC package integrated this event stream with an
+actual confined worker on the S44 frozen closure. That historical proof does
+not cover the new S45 registry-custody attachment; native worker proof for that
+path is still pending.
 
 NTFS metadata/write-through and FlushFileBuffers are the persistence API
 assumptions. Creation flushes the guard and writes/flushes/readbacks a nonempty

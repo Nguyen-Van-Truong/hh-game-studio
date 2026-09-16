@@ -1,0 +1,26 @@
+{
+  "schema": "hh-gt02-s45-coordinator-verification-v1",
+  "status": "COORDINATOR_LOGIC_VERIFIED",
+  "source_closure_sha256": "26a225b45f8283796448512987595fd962cad204e6c57164c3929ee7a067c243",
+  "source_files": 97,
+  "candidate_artifacts": 9,
+  "protocol": {
+    "run": 375,
+    "passed": 371,
+    "skipped": 4
+  },
+  "bootstrap": {
+    "run": 56,
+    "passed": 56
+  },
+  "golden_rows_per_consumer": 2396,
+  "registry_denied_attempts": 45,
+  "registry_broker_updates": 12,
+  "formal_acceptance": false,
+  "limits": [
+    "public scoped dispatch/lifecycle incomplete",
+    "native registry proof is not managed selector IPC proof",
+    "ambiguous pending and Stop roots stay held; no power-loss claim",
+    "S44 reviews do not apply to S45 acceptance"
+  ]
+}

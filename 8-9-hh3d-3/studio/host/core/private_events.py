@@ -15,11 +15,14 @@ import hashlib
 from pathlib import Path
 import re
 import threading
-from typing import Iterator
+from typing import TYPE_CHECKING, Iterator
 
 from .limits import SafetyViolation, canonical_json, parse_json_utf8
-from .private_store import PrivateBlobStore
+from .private_store import PrivateBlobStore, _StoreApi
 from .safe_open import FileIdentity
+
+if TYPE_CHECKING:
+    from .custody import WitnessCustody
 
 MAX_EVENT_BYTES = 16 * 1024
 MAX_LOG_BYTES = 8 * 1024 * 1024
@@ -27,6 +30,7 @@ MAX_RECORDS = 512
 _ZERO = '0' * 64
 _FORMAT = 'hh-private-events-1'
 _OWNERS: dict[int, PrivateEventLog] = {}
+_CUSTODY_OWNERS: dict[int, PrivateEventLog] = {}
 _OWNERS_LOCK = threading.Lock()
 MAX_OPEN_LOGS = 16
 
@@ -103,9 +107,11 @@ class PrivateEventLog:
         self._mutex = threading.Lock()
         self._closed = self._poisoned = False
         self._store: PrivateBlobStore | None = None
+        self._init_cleanup_api: _StoreApi | None = None
         self._handle: int | None = None
         self._index: list[tuple[int, int, EventHead]] = []
         self._witness: EventHead | None = None
+        self._custody: WitnessCustody | None = None
         with _OWNERS_LOCK:
             if len(_OWNERS) >= MAX_OPEN_LOGS:
                 raise EventLogError('EVENT_OWNER_LIMIT')
@@ -142,6 +148,11 @@ class PrivateEventLog:
         except BaseException as exc:
             if self._store is None and type(getattr(exc, 'cleanup_owner', None)) is PrivateBlobStore:
                 self._store = exc.cleanup_owner
+            if self._store is None and type(getattr(exc, 'cleanup_api', None)) is _StoreApi:
+                # API initialization can fail before PrivateBlobStore exists.
+                # Preserve its still-open token through our wrapper; the
+                # supervisor must not need to walk an exception cause chain.
+                self._init_cleanup_api = exc.cleanup_api
             self._poisoned = True
             try:
                 self.close()
@@ -258,6 +269,33 @@ class PrivateEventLog:
             self._witness = self._index[-1][2]
             return EventBinding(self._store.root_identity, self._identity, self._witness)
 
+    def bind_custody(self, custody: WitnessCustody) -> None:
+        """Attach one exact trusted local custody owner without advancing it.
+
+        A reopened stream may contain complete records ahead of saved custody.
+        Such a stream cannot bind until the supervisor explicitly reconciles
+        its semantic/file state and persists that decision. This method never
+        treats a successful storage scan as permission to advance custody.
+        """
+        from .custody import WitnessCustody
+
+        if type(custody) is not WitnessCustody:
+            raise EventLogError('EVENT_CUSTODY_REQUIRED')
+        with self._locked():
+            if self._custody is not None:
+                raise EventLogError('EVENT_CUSTODY_ALREADY_BOUND')
+            self._scan()
+            current = EventBinding(self._store.root_identity, self._identity, self._index[-1][2])
+            saved = custody.binding
+            if (type(saved) is not EventBinding or not saved.root.same_file(current.root)
+                    or not saved.stream.same_file(current.stream) or saved.witnessed != current.witnessed):
+                raise EventLogError('EVENT_CUSTODY_BINDING_MISMATCH')
+            with _OWNERS_LOCK:
+                if id(custody) in _CUSTODY_OWNERS:
+                    raise EventLogError('EVENT_CUSTODY_ALREADY_OWNED')
+                self._custody = custody
+                _CUSTODY_OWNERS[id(custody)] = self
+
     def read(self, sequence: int) -> EventRecord:
         if type(sequence) is not int or not 1 <= sequence <= MAX_RECORDS:
             raise EventLogError('INVALID_EVENT_SEQUENCE')
@@ -335,6 +373,14 @@ class PrivateEventLog:
                     raise EventLogError('EVENT_APPEND_READBACK_FAILED')
                 if self._inspect().size != head.size:
                     raise EventLogError('EVENT_HISTORY_CHANGED')
+                if self._custody is not None:
+                    # The native event is complete, but it is not acknowledged
+                    # until the separate durable witness barrier succeeds.
+                    # Custody never calls back into this locked event log.
+                    try:
+                        self._custody.persist_binding(EventBinding(self._store.root_identity, self._identity, head))
+                    except BaseException as exc:
+                        raise EventLogError('EVENT_CUSTODY_UNCERTAIN', outcome_unknown=True) from exc
                 self._witness = head
                 return head
             except BaseException as exc:
@@ -358,8 +404,16 @@ class PrivateEventLog:
                 self._handle = None
             if self._store is not None:
                 self._store.close()
+            if self._init_cleanup_api is not None:
+                try:
+                    self._init_cleanup_api.close_owned()
+                except SafetyViolation as exc:
+                    raise EventLogError('EVENT_CLOSE_UNCERTAIN', outcome_unknown=True) from exc
+                self._init_cleanup_api = None
             with _OWNERS_LOCK:
                 _OWNERS.pop(id(self), None)
+                if self._custody is not None and _CUSTODY_OWNERS.get(id(self._custody)) is self:
+                    _CUSTODY_OWNERS.pop(id(self._custody))
         finally:
             self._mutex.release()
 

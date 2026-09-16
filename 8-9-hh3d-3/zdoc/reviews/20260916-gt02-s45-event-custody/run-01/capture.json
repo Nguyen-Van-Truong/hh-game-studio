@@ -1,0 +1,39 @@
+{
+  "run_id": "S45-EVENT-CUSTODY-01",
+  "command_id": "cmd.s45-event-custody.1",
+  "source_before": {
+    "host/core/private_events.py": "2155676f73f29948f702d7ab073fb9a47246e76779feac050fa6ccbc6a07fd54",
+    "host/core/custody.py": "4d2c6ecd0e45eee7921239b03fbde858aba29856bbe33833eb05e71765708cab",
+    "host/core/custody_registry.py": "dd9e8ce9b1048cac1ee26f7baad5cfe6e4ff94735c45687a64684a12819f28c7",
+    "tests/protocol/test_private_events.py": "f8747d2b784fedfe1347265207edb22546ea0615b19f76ffac356f8dcd531c87",
+    "host/core/PRIVATE_EVENTS.md": "660030c53b1c4efdd116044b1fbbc168e9f63c95871a285ed7e84ce4a17c24a0"
+  },
+  "source_after": {
+    "host/core/private_events.py": "2155676f73f29948f702d7ab073fb9a47246e76779feac050fa6ccbc6a07fd54",
+    "host/core/custody.py": "4d2c6ecd0e45eee7921239b03fbde858aba29856bbe33833eb05e71765708cab",
+    "host/core/custody_registry.py": "dd9e8ce9b1048cac1ee26f7baad5cfe6e4ff94735c45687a64684a12819f28c7",
+    "tests/protocol/test_private_events.py": "f8747d2b784fedfe1347265207edb22546ea0615b19f76ffac356f8dcd531c87",
+    "host/core/PRIVATE_EVENTS.md": "660030c53b1c4efdd116044b1fbbc168e9f63c95871a285ed7e84ce4a17c24a0"
+  },
+  "source_unchanged": true,
+  "host": {
+    "wrapper_pid": 14796,
+    "started_at": "2026-09-16T15:00:28.357606+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "-c",
+      "import sys,json,unittest\nsys.path.insert(0,'tests/protocol')\nsuite=unittest.defaultTestLoader.loadTestsFromName('test_private_events')\nr=unittest.TextTestRunner(verbosity=2).run(suite)\nprint('S45_EVENT_CUSTODY_RESULT '+json.dumps({'run':r.testsRun,'failed':len(r.failures),'errors':len(r.errors),'skipped':len(r.skipped)}),flush=True)\nsys.exit(0 if r.wasSuccessful() else 1)\n"
+    ],
+    "exit_code": 1,
+    "target_pid": 7628,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "event-custody-stdout.txt",
+    "stderr": "event-custody-stderr.txt",
+    "host": "event-custody-host.json"
+  },
+  "acceptance": false
+}

@@ -23,9 +23,11 @@ does not delete a published pathname. Failed native closes remain owned for
 retry. API constructor errors retain unclosed token ownership in the local
 cleanup_api exception field. Handles and cleanup objects never go to clients.
 
-Reopen requires trusted saved root identity and is read-only. confirm_barrier
+Reopen requires trusted saved root identity and initially is read-only. confirm_barrier
 revalidates and flushes a known file/directory without rewriting or enabling
-mutation. Cache readback cannot clear uncertainty alone. Five actual process
+mutation. The private ManagedFixtureOwner may rearm only a verified terminal
+active.json under durable custody/fresh fencing; orphan/pending/Stop stay held.
+Cache readback cannot clear uncertainty alone. Five actual process
 cuts prove old/new visibility on this host; they are not power-loss proof.
 
 FileFixtureReleaseConsumer publishes the complete inert fixture snapshot to
@@ -33,9 +35,9 @@ the fixed active.json name. Selector CONFIG binds its root identity. COMMITTED
 requires actual file readback and the journal terminal barrier. Duplicate IDs
 return prior receipts. Lost-receipt recovery may confirm exact selected bytes
 without another replace. Mismatched bytes cannot be overwritten on reopen;
-the write hold requires a future durable reconciliation/custody mechanism.
-No engine consumer, public discovery registration or production supervisor is
-provided by these internal building blocks.
+the write hold requires verified supervisor reconciliation. MANAGED_FIXTURE.md
+defines the bounded terminal-state restart owner. No engine consumer or public
+discovery registration is provided by these internal building blocks.
 
 Provision files in a dedicated parent: a peer journal/blob store holds shared
 ancestors without write sharing and can block a flush of that same parent.

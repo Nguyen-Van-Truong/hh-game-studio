@@ -1,0 +1,4 @@
+{
+  "code": "import unittest,sys,json;sys.path.insert(0,'tests/protocol');from test_transport import TransportTests;s=unittest.TestSuite(TransportTests('test_queued_revision_and_lease_are_checked_again_before_apply') for _ in range(5));r=unittest.TextTestRunner(verbosity=2).run(s);print('LEASE_COMPLETE '+json.dumps({'run':r.testsRun,'errors':len(r.errors),'failures':len(r.failures)}),flush=True);sys.exit(not r.wasSuccessful())",
+  "source_sha256": "c3d691b939d8896d15912080aa2dd6b504016d941000bd76c5af4766e45420db"
+}

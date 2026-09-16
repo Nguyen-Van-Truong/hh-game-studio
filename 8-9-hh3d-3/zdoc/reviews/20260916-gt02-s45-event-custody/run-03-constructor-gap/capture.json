@@ -1,0 +1,25 @@
+{
+  "run_id": "S45-EVENT-CUSTODY-CONSTRUCTOR-GAP-03",
+  "command_id": "cmd.s45-event-custody.constructor-gap.3",
+  "event_source_sha256": "2155676f73f29948f702d7ab073fb9a47246e76779feac050fa6ccbc6a07fd54",
+  "host": {
+    "wrapper_pid": 41500,
+    "started_at": "2026-09-16T15:04:20.229362+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "-c",
+      "import json,tempfile\nfrom unittest import mock\nfrom host.core.private_store import _StoreApi, PrivateStoreError\nfrom host.core.private_events import PrivateEventLog, EventLogError, pending_event_cleanup\noriginal=_StoreApi.close; captured={}\ndef refused(api,handle):\n if not captured: captured.update(api=api,handle=handle)\n if api is captured['api'] and handle == captured['handle']: raise PrivateStoreError('PRIVATE_CLOSE_FAILED')\n original(api,handle)\nwith tempfile.TemporaryDirectory(prefix='event-api-owner-repro-') as parent:\n try:\n  with mock.patch.object(_StoreApi,'close',refused):\n   try: PrivateEventLog.create(parent)\n   except EventLogError as e: failure=e\n   else: raise AssertionError('fault not reached')\n  owner=failure.cleanup_owner\n  owner.close()\n  print('EVENT_INIT_API_OWNER_GAP '+json.dumps({'event_code':failure.code,'store_is_none':owner._store is None,'owner_retained':owner in pending_event_cleanup(),'token_still_owned_after_cleanup_owner_close':captured['handle'] in captured['api']._owned_handles}),flush=True)\n finally:\n  captured['api'].close_owned()\nassert not captured['api']._owned_handles\n"
+    ],
+    "exit_code": 0,
+    "target_pid": 38780,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "constructor-gap-stdout.txt",
+    "stderr": "constructor-gap-stderr.txt",
+    "host": "constructor-gap-host.json"
+  },
+  "acceptance": false
+}

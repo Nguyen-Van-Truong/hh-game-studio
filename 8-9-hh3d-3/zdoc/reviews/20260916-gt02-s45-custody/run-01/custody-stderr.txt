@@ -1,0 +1,24 @@
+test_api_constructor_localfree_failure_keeps_allocations (test_custody_registry.RegistryCustodyTests.test_api_constructor_localfree_failure_keeps_allocations) ... ok
+test_api_constructor_token_close_failure_keeps_cleanup_owner (test_custody_registry.RegistryCustodyTests.test_api_constructor_token_close_failure_keeps_cleanup_owner) ... ok
+test_binary_empty_and_maximum_are_distinct_from_absence (test_custody_registry.RegistryCustodyTests.test_binary_empty_and_maximum_are_distinct_from_absence) ... ok
+test_conflict_does_not_set_or_poison (test_custody_registry.RegistryCustodyTests.test_conflict_does_not_set_or_poison) ... ok
+test_create_store_and_fresh_process_reopen_exact_bytes (test_custody_registry.RegistryCustodyTests.test_create_store_and_fresh_process_reopen_exact_bytes) ... ok
+test_created_empty_key_after_exit_is_incomplete_not_a_new_store (test_custody_registry.RegistryCustodyTests.test_created_empty_key_after_exit_is_incomplete_not_a_new_store) ... ok
+test_duplicate_local_owner_and_existing_create_are_refused (test_custody_registry.RegistryCustodyTests.test_duplicate_local_owner_and_existing_create_are_refused) ... ok
+test_flush_failure_after_set_is_unknown_then_reopen_requires_barrier (test_custody_registry.RegistryCustodyTests.test_flush_failure_after_set_is_unknown_then_reopen_requires_barrier) ... ok
+test_invalid_ids_are_rejected_before_native_api (test_custody_registry.RegistryCustodyTests.test_invalid_ids_are_rejected_before_native_api) ... ok
+test_invalid_payloads_and_expected_values_have_no_write (test_custody_registry.RegistryCustodyTests.test_invalid_payloads_and_expected_values_have_no_write) ... ok
+test_key_close_failure_retains_exact_handle_and_local_owner (test_custody_registry.RegistryCustodyTests.test_key_close_failure_retains_exact_handle_and_local_owner) ... ok
+test_native_registry_symbolic_link_is_rejected_without_target_write (test_custody_registry.RegistryCustodyTests.test_native_registry_symbolic_link_is_rejected_without_target_write) ... ok
+test_owner_comparison_and_impersonation_guard_fail_before_write (test_custody_registry.RegistryCustodyTests.test_owner_comparison_and_impersonation_guard_fail_before_write) ... ok
+test_reopen_missing_is_open_only (test_custody_registry.RegistryCustodyTests.test_reopen_missing_is_open_only) ... ok
+test_reprovision_existing_base_does_not_set_security_or_values (test_custody_registry.RegistryCustodyTests.test_reprovision_existing_base_does_not_set_security_or_values) ... ok
+test_security_change_is_detected_from_actual_handle (test_custody_registry.RegistryCustodyTests.test_security_change_is_detected_from_actual_handle) ... ok
+test_set_failure_and_lying_set_both_poison (test_custody_registry.RegistryCustodyTests.test_set_failure_and_lying_set_both_poison) ... ok
+test_state_removed_after_provision_never_resets_to_empty (test_custody_registry.RegistryCustodyTests.test_state_removed_after_provision_never_resets_to_empty) ... ok
+test_wrong_marker_wrong_type_oversize_remain_preserved (test_custody_registry.RegistryCustodyTests.test_wrong_marker_wrong_type_oversize_remain_preserved) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 0.314s
+
+OK

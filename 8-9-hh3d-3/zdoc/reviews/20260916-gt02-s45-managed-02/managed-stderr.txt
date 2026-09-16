@@ -1,0 +1,17 @@
+test_actual_process_exit_reopens_only_from_durable_storage_id (test_managed_fixture.ManagedFixtureTests.test_actual_process_exit_reopens_only_from_durable_storage_id) ... ok
+test_corrupt_or_swapped_custody_never_opens_new_roots (test_managed_fixture.ManagedFixtureTests.test_corrupt_or_swapped_custody_never_opens_new_roots) ... ok
+test_custody_failure_after_terminal_write_is_unknown_then_confirms_once (test_managed_fixture.ManagedFixtureTests.test_custody_failure_after_terminal_write_is_unknown_then_confirms_once) ... ok
+test_invalid_setup_is_rejected_before_registry_or_root_creation (test_managed_fixture.ManagedFixtureTests.test_invalid_setup_is_rejected_before_registry_or_root_creation) ... ok
+test_pending_restart_preserves_file_and_denies_fresh_admission (test_managed_fixture.ManagedFixtureTests.test_pending_restart_preserves_file_and_denies_fresh_admission) ... ok
+test_poisoned_custody_retries_remain_unknown_without_writes (test_managed_fixture.ManagedFixtureTests.test_poisoned_custody_retries_remain_unknown_without_writes) ... ok
+test_rearm_refuses_orphan_namespace_without_overwriting_or_deleting (test_managed_fixture.ManagedFixtureTests.test_rearm_refuses_orphan_namespace_without_overwriting_or_deleting) ... ok
+test_restart_fences_unexpired_old_lease_before_new_session (test_managed_fixture.ManagedFixtureTests.test_restart_fences_unexpired_old_lease_before_new_session) ... ok
+test_second_owner_cannot_change_custody_while_guard_is_owned (test_managed_fixture.ManagedFixtureTests.test_second_owner_cannot_change_custody_while_guard_is_owned) ... ok
+test_stop_restart_keeps_write_hold_and_never_resumes (test_managed_fixture.ManagedFixtureTests.test_stop_restart_keeps_write_hold_and_never_resumes) ... ok
+test_terminal_restart_rearms_fresh_command_and_keeps_original_receipts (test_managed_fixture.ManagedFixtureTests.test_terminal_restart_rearms_fresh_command_and_keeps_original_receipts) ... ok
+test_whole_record_loss_below_durable_witness_is_rejected (test_managed_fixture.ManagedFixtureTests.test_whole_record_loss_below_durable_witness_is_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 4.194s
+
+OK

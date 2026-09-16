@@ -151,7 +151,7 @@ def main():
                                 "python_sha256": sha(Path(sys.executable))},
                 "lanes": lanes, "acceptance": "NOT_REVIEWED",
                 "acceptance_ready": False,
-                "known_gaps": ["Public safe-write/replace disabled; protected file fixture has IPC/journal integration but reopened mutation, custody and production supervisor remain incomplete",
+                "known_gaps": ["Public scoped file registration/endpoint lifecycle incomplete; managed terminal restart has registry custody, while ambiguous pending effects stay held",
                                "Godot JCS proves serialization; raw wire admission remains separate",
                                "two independent frozen-source critic verdicts required"],
                 "status": "CANDIDATE" if stable and all(lane["passed"] for lane in lanes) else "DIAGNOSTIC",

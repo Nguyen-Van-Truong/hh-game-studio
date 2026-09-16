@@ -230,6 +230,44 @@ else:
         with self.assertRaisesRegex(SafeReplaceError, "REQUIRES_RECONCILIATION"):
             self.files.create_new("new.txt", b"no")
 
+    def test_mutation_preflight_checks_security_without_writing_or_rearming(self):
+        first = self.files.create_new("a.txt", b"before")
+        handles = set(self.files._api._owned_handles)
+        with mock.patch.object(self.files._api, "open_file", side_effect=AssertionError("preflight opened file")), \
+             mock.patch.object(self.files._api, "write_flush", side_effect=AssertionError("preflight wrote file")), \
+             mock.patch.object(self.files._api, "flush_directory", side_effect=AssertionError("preflight flushed directory")):
+            self.files.check_mutation_available()
+            with mock.patch.object(self.files._api, "check_security", side_effect=SafetyViolation("PRIVATE_ACL_CHANGED")):
+                with self.assertRaisesRegex(SafetyViolation, "PRIVATE_ACL_CHANGED"):
+                    self.files.check_mutation_available()
+        self.assertEqual(set(self.files._api._owned_handles), handles)
+        self.assertEqual(self.files.read("a.txt"), (first, b"before"))
+        root, identity = self.files.root, self.files.root_identity
+        self.files.close()
+        self.files = ProtectedFileRoot.reopen_readonly(root, identity)
+        with self.assertRaisesRegex(SafeReplaceError, "SAFE_REOPEN_REQUIRES_RECONCILIATION") as caught:
+            self.files.check_mutation_available()
+        self.assertFalse(caught.exception.outcome_unknown)
+        self.files.confirm_barrier("a.txt", first)
+        with self.assertRaisesRegex(SafeReplaceError, "SAFE_REOPEN_REQUIRES_RECONCILIATION"):
+            self.files.check_mutation_available()
+        self.assertEqual(self.files.read("a.txt"), (first, b"before"))
+
+    def test_mutation_preflight_closed_and_poisoned_keep_unknown_semantics(self):
+        self.files._poisoned = True
+        with self.assertRaisesRegex(SafeReplaceError, "SAFE_REPLACE_RECONCILIATION_REQUIRED") as caught:
+            self.files.check_mutation_available()
+        self.assertTrue(caught.exception.outcome_unknown)
+        self.files.close()
+        with self.assertRaisesRegex(SafeReplaceError, "SAFE_REPLACE_RECONCILIATION_REQUIRED") as caught:
+            self.files.check_mutation_available()
+        self.assertTrue(caught.exception.outcome_unknown)
+        self.files = ProtectedFileRoot.create(self.base)
+        self.files.close()
+        with self.assertRaisesRegex(SafeReplaceError, "SAFE_REPLACE_RECONCILIATION_REQUIRED") as caught:
+            self.files.check_mutation_available()
+        self.assertFalse(caught.exception.outcome_unknown)
+
     def test_reopen_wrong_identity_rejects(self):
         root, identity = self.files.root, self.files.root_identity
         self.files.close()

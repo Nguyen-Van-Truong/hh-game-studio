@@ -10,13 +10,17 @@ import unittest
 from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT))
-from host.core.fixture_selector import FixtureSelector, FixtureReleaseConsumer, FileFixtureReleaseConsumer, SelectorError
-from host.core.private_events import PrivateEventLog, EventBinding, EventHead
-from host.core.private_store import PrivateBlobStore
-from host.core.safe_replace import ProtectedFileRoot, SafeReplaceError
-from host.core.safe_open import FileIdentity
-from host.core.limits import Request, payload_digest, SafetyViolation
+sys.path.insert(0, str(ROOT.parent))
+from studio.host.core.fixture_selector import FixtureSelector, FixtureReleaseConsumer, FileFixtureReleaseConsumer, SelectorError
+from studio.host.core.private_events import PrivateEventLog, EventBinding, EventHead
+from studio.host.core.private_store import PrivateBlobStore
+from studio.host.core.safe_replace import ProtectedFileRoot, SafeReplaceError
+from studio.host.core.safe_open import FileIdentity
+from studio.host.core.limits import Request, payload_digest, SafetyViolation
+from studio.host.core.fixture_pipe import fixture_frame
+from studio.host.core.pipe_endpoint import AppContainerEndpoint
+from studio.host.core.selector_pipe import SelectorFixtureBroker, SelectorPipeServer
+from studio.host.core.transport import epoch_ms
 
 
 @unittest.skipUnless(os.name == 'nt', 'Windows NTFS selector file fixture required')
@@ -135,6 +139,121 @@ class FileConsumerTests(unittest.TestCase):
         self.assertTrue(self.selector.snapshot()['ready'])
         with self.assertRaisesRegex(SafeReplaceError, 'REQUIRES_RECONCILIATION'):
             self.files.atomic_replace('active.json', b'cannot-unlock-write', expected=version)
+
+    def test_readonly_reopen_refuses_new_intent_and_preserves_duplicate_receipt(self):
+        original = self.request()
+        receipt = self.activate(original)
+        self.reopen()
+        self.selector.load_committed(now_ms=201)
+        request = self.request('after-reopen', 'new-value')
+        snapshot, head = self.selector.snapshot(), self.log.binding().witnessed
+        blobs = sorted(self.store.root.iterdir())
+        file_before = self.files.read('active.json')
+        with self.assertRaisesRegex(SafeReplaceError, 'SAFE_REOPEN_REQUIRES_RECONCILIATION') as caught:
+            self.selector.prepare(request, now_ms=202)
+        self.assertFalse(caught.exception.outcome_unknown)
+        self.assertIsNone(self.selector.lookup('after-reopen'))
+        self.assertEqual(self.selector.prepare(original, now_ms=50_000), receipt)
+        self.assertEqual(self.selector.lookup(original['command_id']), receipt)
+        self.assertEqual(self.log.binding().witnessed, head)
+        self.assertEqual(sorted(self.store.root.iterdir()), blobs)
+        self.assertEqual(self.files.read('active.json'), file_before)
+        self.assertEqual(self.selector.snapshot(), snapshot)
+        self.assertTrue(snapshot['ready'])
+
+    def test_closed_or_poisoned_root_refuses_before_intent_with_original_uncertainty(self):
+        request = self.request()
+        head = self.log.binding().witnessed
+        blobs = sorted(self.store.root.iterdir())
+        for poisoned in (False, True):
+            with self.subTest(poisoned=poisoned):
+                if poisoned:
+                    self.files._poisoned = True
+                else:
+                    self.files.close()
+                with self.assertRaisesRegex(SafeReplaceError, 'SAFE_REPLACE_RECONCILIATION_REQUIRED') as caught:
+                    self.selector.prepare(request, now_ms=101)
+                self.assertEqual(caught.exception.outcome_unknown, poisoned)
+                self.assertIsNone(self.selector.lookup(request['command_id']))
+                self.assertEqual(self.log.binding().witnessed, head)
+                self.assertEqual(sorted(self.store.root.iterdir()), blobs)
+                self.assertIsNone(self.selector._state['pending'])
+                self.assertEqual(self.selector._state['generation'], 0)
+
+    def test_invalid_request_rejects_before_consumer_preflight_or_intent(self):
+        request = self.request()
+        head = self.log.binding().witnessed
+        with mock.patch.object(self.consumer, 'check_mutation_available', side_effect=AssertionError('invalid input reached consumer')):
+            for changes in ({'payload_hash':'sha256:'+'0'*64}, {'schema_version':'unsupported'}, {'command_id':''}):
+                with self.subTest(changes=changes), self.assertRaises(SafetyViolation):
+                    self.selector.prepare({**request, **changes}, now_ms=101)
+        self.assertEqual(self.log.binding().witnessed, head)
+        self.assertEqual(list(self.store.root.glob('blob-*')), [])
+
+    def test_broker_readonly_admission_rejects_without_effect_and_retry_still_commits(self):
+        # Real storage, session authentication and dispatch; frame I/O is
+        # substituted. This is not a new AppContainer boundary claim.
+        original = self.request()
+        receipt = self.activate(original)
+        self.reopen()
+        self.selector.load_committed(now_ms=201)
+        with ExitStack() as stack:
+            broker = SelectorFixtureBroker(self.selector); stack.callback(broker.close)
+            credential = broker.sessions.issue(scopes=frozenset({'fixture.read','fixture.write'}))
+            endpoint = AppContainerEndpoint.create('S-1-15-2-1-2-3-4-5-6-7', role='work'); stack.callback(endpoint.close)
+            server = SelectorPipeServer(endpoint, broker, credential)
+            def rpc(route, body):
+                with mock.patch.object(endpoint, 'read_frame', return_value=fixture_frame(credential, route, body)), \
+                     mock.patch.object(endpoint, 'write_frame') as send:
+                    server.serve_one()
+                self.assertEqual(send.call_count, 1)
+                return json.loads(send.call_args.args[0])
+            self.lease = rpc('/v1/lease', {'project_id':'project-one','ttl_ms':30_000})
+            request = {**self.request('broker-after-reopen','new-value'), 'deadline_ms':epoch_ms()+10_000}
+            snapshot, head = self.selector.snapshot(), self.log.binding().witnessed
+            blobs, file_before = sorted(self.store.root.iterdir()), self.files.read('active.json')
+            response = rpc('/v1/commands', request)
+            self.assertEqual((response['status'], response['code']), ('REJECTED','SAFE_REOPEN_REQUIRES_RECONCILIATION'))
+            self.assertEqual(rpc('/v1/commands', original), receipt)
+            self.assertIsNone(broker._job)
+            self.assertIsNone(broker.advance())
+            self.assertFalse(broker._hold.is_set())
+            self.assertIsNone(self.selector.lookup(request['command_id']))
+            self.assertEqual(self.log.binding().witnessed, head)
+            self.assertEqual(sorted(self.store.root.iterdir()), blobs)
+            self.assertEqual(self.files.read('active.json'), file_before)
+            self.assertEqual(self.selector.snapshot(), snapshot)
+
+    def test_broker_poisoned_admission_is_unknown_without_new_intent(self):
+        original = self.request()
+        receipt = self.activate(original)
+        with ExitStack() as stack:
+            broker = SelectorFixtureBroker(self.selector); stack.callback(broker.close)
+            credential = broker.sessions.issue(scopes=frozenset({'fixture.read','fixture.write'}))
+            endpoint = AppContainerEndpoint.create('S-1-15-2-1-2-3-4-5-6-7', role='work'); stack.callback(endpoint.close)
+            server = SelectorPipeServer(endpoint, broker, credential)
+            def rpc(route, body):
+                with mock.patch.object(endpoint, 'read_frame', return_value=fixture_frame(credential, route, body)), \
+                     mock.patch.object(endpoint, 'write_frame') as send:
+                    server.serve_one()
+                self.assertEqual(send.call_count, 1)
+                return json.loads(send.call_args.args[0])
+            self.lease = rpc('/v1/lease', {'project_id':'project-one','ttl_ms':30_000})
+            request = {**self.request('broker-after-poison','new-value'), 'deadline_ms':epoch_ms()+10_000}
+            head = self.log.binding().witnessed
+            blobs = sorted(self.store.root.iterdir())
+            generation = self.selector.snapshot()['generation']
+            self.files._poisoned = True
+            response = rpc('/v1/commands', request)
+            self.assertEqual((response['status'], response['code']), ('UNKNOWN','SAFE_REPLACE_RECONCILIATION_REQUIRED'))
+            self.assertTrue(broker._hold.is_set())
+            self.assertIsNone(broker._job)
+            self.assertIsNone(self.selector.lookup(request['command_id']))
+            self.assertEqual(rpc('/v1/commands', original), receipt)
+            self.assertEqual(self.log.binding().witnessed, head)
+            self.assertEqual(sorted(self.store.root.iterdir()), blobs)
+            self.assertIsNone(self.selector._state['pending'])
+            self.assertEqual(self.selector._state['generation'], generation)
 
     def test_wrong_managed_root_and_memory_consumer_cannot_rebind_journal(self):
         self.activate(self.request())

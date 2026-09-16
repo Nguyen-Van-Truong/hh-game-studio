@@ -19,7 +19,9 @@ Identifiers and revision hashes remain distinct from filesystem paths.
 Admission copies and validates input, checks project/command digest, lease,
 deadline, source/game revisions and parent generation/hash. A duplicate returns
 the saved receipt even after its old deadline/lease expired; it never stages or
-selects again. The same ID with a different digest is a conflict. Only one
+selects again. New command admission checks consumer mutation availability
+before INTENT; readonly/closed/poisoned file roots cannot strand new work.
+The same ID with a different digest is a conflict. Only one
 activation may be pending. The state projection keeps compact command indexes;
 terminal receipts are read from the log on demand, not retained in full in RAM.
 
@@ -94,11 +96,14 @@ The protected-file consumer binds its root identity in CONFIG and publishes
 the complete inert snapshot to `active.json` with native expected-version
 replace. Readback reads that file, and recovery of an identical value includes
 a fresh file/directory barrier. A read-only reopen cannot rewrite mismatched
-bytes or resume mutation. See SAFE_REPLACE.md for its boundary and limitations.
+bytes or independently resume mutation. A managed owner may rearm a verified
+terminal snapshot after durable custody/fencing checks; see MANAGED_FIXTURE.md
+and SAFE_REPLACE.md. The generic recovery table does not waive file write holds.
 
 Current limits: clocks/revision observations are trusted fixture inputs, not
 proof of external source-file revisions. AppContainer IPC has exercised the
-S39 fixed selector client on Windows; this remains a fixture, not a
+S44 fixed selector and real file consumer on Windows; S45 adds local registry
+custody/restart ownership and requires its own native proof. This remains a fixture, not a
 Godot/Blender consumer. Witness custody,
 physical power-loss/namespace persistence, damaged-tail repair and engine
 consumers remain separate gaps. `safe_write` and `atomic_replace` stay false.

@@ -1,0 +1,21 @@
+{
+  "host": {
+    "wrapper_pid": 3272,
+    "started_at": "2026-09-16T15:09:49.824918+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "-c",
+      "import unittest,sys,json;sys.path.insert(0,'tests/protocol');from test_transport import TransportTests;s=unittest.TestSuite(TransportTests('test_queued_revision_and_lease_are_checked_again_before_apply') for _ in range(5));r=unittest.TextTestRunner(verbosity=2).run(s);print('LEASE_COMPLETE '+json.dumps({'run':r.testsRun,'errors':len(r.errors),'failures':len(r.failures)}),flush=True);sys.exit(not r.wasSuccessful())"
+    ],
+    "exit_code": 0,
+    "target_pid": 29416,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "lease-stdout.txt",
+    "stderr": "lease-stderr.txt",
+    "host": "lease-host.json"
+  }
+}

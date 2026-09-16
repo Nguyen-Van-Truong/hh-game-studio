@@ -1,0 +1,41 @@
+{
+  "run_id": "S45-EVENT-CUSTODY-04",
+  "command_id": "cmd.s45-event-custody.4",
+  "source_before": {
+    "host/core/private_events.py": "5beb556dda4e9c7f137ece366b1ed231bf3b5039e365299f657b089911cf9171",
+    "host/core/private_store.py": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476",
+    "host/core/custody.py": "aa4320faeccb3b729d0eebf29ac3e962d2590bca1e3aba14b0aef620b021fbc9",
+    "host/core/custody_registry.py": "54a45327faf5630f750108781e427c0b01f04ae6482df7d2572dfba1b6ea3db2",
+    "tests/protocol/test_private_events.py": "ee5354f0c5d4a8a8d5bd555ebf5dd495029eaa7f42df2c8581b21800d1bb0382",
+    "host/core/PRIVATE_EVENTS.md": "250db9037e868cb1a92116261e65d9f98c44ff5abd99b0ff282a654c414ca09d"
+  },
+  "source_after": {
+    "host/core/private_events.py": "5beb556dda4e9c7f137ece366b1ed231bf3b5039e365299f657b089911cf9171",
+    "host/core/private_store.py": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476",
+    "host/core/custody.py": "aa4320faeccb3b729d0eebf29ac3e962d2590bca1e3aba14b0aef620b021fbc9",
+    "host/core/custody_registry.py": "54a45327faf5630f750108781e427c0b01f04ae6482df7d2572dfba1b6ea3db2",
+    "tests/protocol/test_private_events.py": "ee5354f0c5d4a8a8d5bd555ebf5dd495029eaa7f42df2c8581b21800d1bb0382",
+    "host/core/PRIVATE_EVENTS.md": "250db9037e868cb1a92116261e65d9f98c44ff5abd99b0ff282a654c414ca09d"
+  },
+  "source_unchanged": true,
+  "host": {
+    "wrapper_pid": 32992,
+    "started_at": "2026-09-16T15:06:07.248064+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "-c",
+      "import sys,json,unittest\nsys.path.insert(0,'tests/protocol')\nsuite=unittest.defaultTestLoader.loadTestsFromName('test_private_events')\nr=unittest.TextTestRunner(verbosity=2).run(suite)\nprint('S45_EVENT_CUSTODY_RESULT '+json.dumps({'run':r.testsRun,'failed':len(r.failures),'errors':len(r.errors),'skipped':len(r.skipped)}),flush=True)\nsys.exit(0 if r.wasSuccessful() else 1)\n"
+    ],
+    "exit_code": 0,
+    "target_pid": 27784,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "event-custody-stdout.txt",
+    "stderr": "event-custody-stderr.txt",
+    "host": "event-custody-host.json"
+  },
+  "acceptance": false
+}

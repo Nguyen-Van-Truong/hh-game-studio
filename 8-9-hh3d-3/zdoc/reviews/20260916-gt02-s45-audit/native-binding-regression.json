@@ -1,0 +1,26 @@
+{
+  "native_binding_regressions": [
+    {
+      "lane": "20260916-gt02-s45-registry-native",
+      "case": "stale_closure",
+      "rejected": true
+    },
+    {
+      "lane": "20260916-gt02-s45-registry-native",
+      "case": "file_changed_digest_retained",
+      "rejected": true
+    },
+    {
+      "lane": "20260916-gt02-s45-registry-native",
+      "case": "map_missing",
+      "rejected": true
+    },
+    {
+      "lane": "20260916-gt02-s45-registry-native",
+      "case": "digest_missing",
+      "rejected": true
+    }
+  ],
+  "normal_status": "COORDINATOR_LOGIC_VERIFIED",
+  "source_closure": "26a225b45f8283796448512987595fd962cad204e6c57164c3929ee7a067c243"
+}

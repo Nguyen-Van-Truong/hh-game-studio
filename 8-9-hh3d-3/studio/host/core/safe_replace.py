@@ -169,6 +169,46 @@ class ProtectedFileRoot:
             self._closed = True
             self._api.close_owned()
 
+    def check_mutation_available(self) -> None:
+        """Read-only admission preflight; never clears a hold or reserves a write.
+
+        The actual operation still rechecks under this mutex. Callers must not
+        treat a successful preflight as permission to bypass later checks.
+        """
+        with self._mutex:
+            self._check(mutation=True)
+
+    def _rearm_verified_snapshot(self, expected: FileVersion) -> None:
+        """Private supervisor step after terminal/custody/fence verification.
+
+        Only the fixed file consumer can use a reopened root. A caller cannot
+        turn an arbitrary root/version list into recovered write authority.
+        This does not replay a command or repair an incomplete namespace.
+        """
+        with self._mutex:
+            self._check()
+            if (not self._readonly or type(expected) is not FileVersion
+                    or getattr(self, '_fixture_file_consumer', None) is None):
+                raise SafeReplaceError('SAFE_REARM_REQUIRES_VERIFIED_CONSUMER')
+            if {entry.name for entry in self.root.iterdir()} != {'.writer', 'active.json'}:
+                raise SafeReplaceError('SAFE_REARM_NAMESPACE_UNCERTAIN', outcome_unknown=True)
+            path = self._path('active.json')
+            handle = self._api.open_file(path, flush=True)
+            try:
+                if self._version(handle, path)[0] != expected:
+                    raise SafeReplaceError('SAFE_TARGET_CONFLICT')
+                self._api.flush(handle)
+                self._api.flush_directory(self.root, self.root_identity)
+                if self._version(handle, path)[0] != expected:
+                    raise SafeReplaceError('SAFE_TARGET_CONFLICT')
+                self._check()
+            except BaseException:
+                self._poisoned = True
+                raise SafeReplaceError('SAFE_REARM_BARRIER_UNCERTAIN', outcome_unknown=True) from None
+            finally:
+                self._close_operation(handle)
+            self._readonly = False
+
     def _check(self, *, mutation: bool = False) -> None:
         if self._closed or self._poisoned:
             raise SafeReplaceError("SAFE_REPLACE_RECONCILIATION_REQUIRED", outcome_unknown=self._poisoned)
