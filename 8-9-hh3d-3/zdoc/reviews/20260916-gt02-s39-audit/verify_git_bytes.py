@@ -36,6 +36,6 @@ def main():
             'head_at_verification':commit,'source_closure_sha256':closure['source_closure_sha256'],
             'source_files':len(closure['files']),'candidate_artifacts':len(candidate['artifacts']),
             'diagnostic_files':len(dm['files']),'formal_acceptance':False,'independent_critic_signatures':0}
-    out=ROOT/PREFIX/AUDIT[len(PREFIX):]/('git-byte-verification-'+source.lower()+'.json')
+    out=ROOT/PREFIX/AUDIT/('git-byte-verification-'+source.lower()+'.json')
     out.write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8'); print(json.dumps(result))
 if __name__=='__main__': main()
