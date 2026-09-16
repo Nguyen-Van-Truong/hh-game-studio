@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 16-09-2026, Asia/Saigon | Revision S45 | TRIỂN KHAI THEO GATE
+Ngày 16-09-2026, Asia/Saigon | Revision S46 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -16,7 +16,7 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 
 CURRENT_VALID_WP=GT-02
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=GT02_CANDIDATE_DURABLE_CUSTODY_RESTART
+IMPLEMENTATION=GT02_CANDIDATE_SCOPED_PUBLIC_SERVICE
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
 GT01_PENDING=NONE
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
@@ -25,32 +25,37 @@ RUNTIME_ACCEPTANCE=GT01_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S45
+PLAN_REVISION=S46
 EXECUTION_MODE=COORDINATOR_THREE_CODEX_OWNER_20260916
 SUBAGENTS_ENABLED=3
-GT02_EVIDENCE_STATUS=FROZEN_CANDIDATE_S45_02
-GT02_REVIEW_STATUS=S45_NOT_REVIEWED_S44_FAIL_RETAINED
-GT02_LAST_TESTED_SOURCE_CLOSURE=26a225b45f8283796448512987595fd962cad204e6c57164c3929ee7a067c243
-GT02_CHECKPOINT_COMMITS=2e24912,579b7e7,287a6c2,487e5fc,6a6dfb8,08f70cf,59c7b1e
-GT02_SAFE_WRITE_STATUS=GAP_SCOPED_PUBLIC_DISPATCH_LIFECYCLE
-GT02_BOUNDARY_EVIDENCE=S45_EXACT_CLOSURE_REGISTRY_NATIVE_S44_FILE_IPC_HISTORICAL
-GT02_WORKING_SOURCE_STATUS=S45_FROZEN_TESTED
+GT02_EVIDENCE_STATUS=FROZEN_CANDIDATE_S46_01
+GT02_REVIEW_STATUS=INDEPENDENT_REVIEW_IN_PROGRESS_S46
+GT02_LAST_TESTED_SOURCE_CLOSURE=f28056d8ff705a60d48a54f9dee80f16554494fa976bd0bfabee84bb51fecbbf
+GT02_CHECKPOINT_COMMITS=2e24912,579b7e7,287a6c2,487e5fc,6a6dfb8,08f70cf,59c7b1e,1951d80
+GT02_SAFE_WRITE_STATUS=SCOPED_NATIVE_PROOF_PENDING_REVIEW
+GT02_BOUNDARY_EVIDENCE=S46_EXACT_CLOSURE_SERVICE_REPLACE_REGISTRY
+GT02_WORKING_SOURCE_STATUS=S46_FROZEN_TESTED
 
-TIẾN ĐỘ HIỆN HÀNH — S45, cập nhật 16-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S46 candidate, ngày 16-09-2026
 Owner mở lại3 subagent Codex Astra extra high ngày16-09; coordinator giữ
 một writer/file. Hai critic S44 FAIL/TICK=no đúng closure S44; lỗi admission
-và custody được sửa ở S45, nhưng chưa có2 review độc lập cho source S45.
+và custody được sửa ở S45. Hai critic mới đang rà cùng closure S46, chưa tick.
 
 GT-01 ACCEPTED tại a0fb247; closure
 3ace23bcf84598cda64d54bbe3fc4736acde877f9f714fb71e2355d3e809eea4,
 evidence reviews/20260913-r21-gt01-final; hai critic PASS/TICK=yes.
 
-GT-02 candidate S45-02: reviews/20260916-gt02-s45-02. Protocol375 tests:
-371 pass,4 skips; bootstrap56/56. 97 source files,9 artifacts; actual host
+GT-02 candidate S46-01: reviews/20260916-gt02-s46-01. Protocol417 tests:
+413 pass,4 skips; bootstrap56/56. 106 source files,9 artifacts; actual host
 exit/tree sạch, source/snapshot không đổi. Python/Node/Godot golden2396 rows.
-Native Registry run-02 khớp exact closure/map97 file:45/45 denied attempts,
-positive control,12 broker updates, actual child exit89/Job/PID0. Audit và4
-negative native-binding checks: reviews/20260916-gt02-s45-audit/.
+Scoped discovery/client/service đã nối: native AppContainer tạo release,
+restart owner bằng storage ID rồi replace/retry/Stop; work mất reply vẫn có
+control lookup/Stop. Ba child exit86, service/thread/endpoint/Job/PID đều0.
+Native boundary cùng closure:20 replace giữa306 denied attempts; Registry
+36 denied/12 updates và positive control. Audit s46-audit kiểm lại toàn bộ
+hash,12/12 corruption của native digest/map bị từ chối. Chưa là nghiệm thu.
+Checkpoint S45 1951d80 và Git HEAD proof được giữ; không gán chữ ký/hash cũ
+sang S46. Ba worker đã giao source, hai critic mới độc lập đang read-only.
 
 Đã có schema/JCS/limits, journal/CAS8 process/retention, auth loopback,
 Stop/Cancel/UNKNOWN, redaction, AppContainer IPC, private staging/events,
@@ -69,13 +74,13 @@ release graph và file consumer. Chưa có Godot/Blender consumer.
   admission trước khi advance test clock;5/5 focused và fullsuite sạch. Giữ
   lượt lỗi và native run-01 đúng hash cũ, không overwrite bằng PASS mới.
 Public generic safe_open.safe_write/atomic_replace vẫn false. Khả năng ghi
-công khai phải khai báo theo protected fixture scope, không theo os.name.
+công khai chỉ fixture.active-release qua ManagedFixtureOwner đã kiểm custody;
+không arbitrary path, engine consumer hay khả năng suy từ os.name.
 
 Việc tiếp theo:
-1. Scoped public discovery/client/dispatch + bounded endpoint lifecycle cho
-   managed fixture; restart custody không đồng nghĩa đã có public endpoint.
-2. Native toàn tuyến trên route đó, freeze/test/audit closure mới.
-3. Hai critic độc lập PASS cùng closure rồi coordinator mới ACCEPTED GT-02.
+1. Hoàn tất Git byte proof và hai review độc lập trên cùng closure S46.
+2. Sửa nếu critic tìm lỗi, remint source/evidence tương ứng; không chuyển PASS.
+3. Chỉ hai critic PASS/TICK=yes rồi coordinator mới ACCEPTED GT-02, mở GT-03.
 
 Còn sau GT-02: GT-03 Godot, GT-04 Blender, GT-05 pipeline, GT-06 play/input/
 observe, GT-07 recovery, GT-08 CI/Linux/Android thiết bị thật, GT-09 conformance,
@@ -89,6 +94,10 @@ reviews/20260916-plan-history-s42/tools-plan-s42.txt (AUTHORITY=0), SHA-256
 Các report/test lỗi cũ vẫn giữ, không overwrite bằng PASS mới.
 
 KINH NGHIỆM ĐANG ÁP DỤNG
+- S46: timer nằm trong pump không đủ khi native phase bị kẹt. Cross-review
+  tái hiện lease được cấp50ms sau deadline; đã giữ evidence lỗi, thêm watchdog
+  độc lập và check sau frame read/trước dispatch. Close phải giữ toàn bộ owner
+  chain khi thread/I/O chưa drain; lỗi work giữ control lookup/Stop hoạt động.
 - S39: candidate hash phải được dựng lại sau mọi sửa tài liệu; Git proof đã bắt
   việc sửa FIXTURE_SELECTOR.md sau freeze và buộc tạo S39-02 thay vì dùng lại
   S39-01. Native AppContainer proof phải ghi actual child exit/Job/PID và kiểm

@@ -1,0 +1,21 @@
+test_bootstrap_is_explicit_bounded_and_never_exposes_bearer_in_repr (test_selector_client.SelectorClientTests.test_bootstrap_is_explicit_bounded_and_never_exposes_bearer_in_repr) ... ok
+test_builder_copies_assets_and_rejects_bad_graph_and_deadline (test_selector_client.SelectorClientTests.test_builder_copies_assets_and_rejects_bad_graph_and_deadline) ... ok
+test_busy_channel_times_out_without_sending_and_close_retains_owner (test_selector_client.SelectorClientTests.test_busy_channel_times_out_without_sending_and_close_retains_owner) ... ok
+test_cancel_and_stop_are_typed_control_calls (test_selector_client.SelectorClientTests.test_cancel_and_stop_are_typed_control_calls) ... ok
+test_capability_scope_mismatch_does_not_enable_builder (test_selector_client.SelectorClientTests.test_capability_scope_mismatch_does_not_enable_builder) ... ok
+test_close_failure_keeps_actual_native_handle_until_retry (test_selector_client.SelectorClientTests.test_close_failure_keeps_actual_native_handle_until_retry) ... ok
+test_constructor_refusal_keeps_channels_with_original_owner (test_selector_client.SelectorClientTests.test_constructor_refusal_keeps_channels_with_original_owner) ... ok
+test_control_remains_available_while_work_reply_stalls (test_selector_client.SelectorClientTests.test_control_remains_available_while_work_reply_stalls) ... ok
+test_inspect_extra_paths_and_oversized_reply_reject (test_selector_client.SelectorClientTests.test_inspect_extra_paths_and_oversized_reply_reject) ... ok
+test_lost_reply_is_unknown_control_lookup_and_no_work_resend (test_selector_client.SelectorClientTests.test_lost_reply_is_unknown_control_lookup_and_no_work_resend) ... ok
+test_native_read_timeout_quarantines_only_work_channel (test_selector_client.SelectorClientTests.test_native_read_timeout_quarantines_only_work_channel) ... ok
+test_one_budget_covers_write_and_read (test_selector_client.SelectorClientTests.test_one_budget_covers_write_and_read) ... ok
+test_real_roundtrip_discovery_inspect_activation_and_lookup (test_selector_client.SelectorClientTests.test_real_roundtrip_discovery_inspect_activation_and_lookup) ... ok
+test_response_command_mismatch_is_unknown (test_selector_client.SelectorClientTests.test_response_command_mismatch_is_unknown) ... ok
+test_schema_mismatch_does_not_enable_builder (test_selector_client.SelectorClientTests.test_schema_mismatch_does_not_enable_builder) ... ok
+test_stopped_discovery_withholds_new_activation_builder (test_selector_client.SelectorClientTests.test_stopped_discovery_withholds_new_activation_builder) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 3.445s
+
+OK

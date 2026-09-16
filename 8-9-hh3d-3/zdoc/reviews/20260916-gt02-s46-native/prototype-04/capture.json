@@ -1,0 +1,33 @@
+{
+  "host": {
+    "wrapper_pid": 21212,
+    "started_at": "2026-09-16T15:34:06.224858+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "managed_probe.py",
+      "GT02-S46-NATIVE-PROTOTYPE-04"
+    ],
+    "exit_code": 0,
+    "target_pid": 33192,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "managed-native-stdout.txt",
+    "stderr": "managed-native-stderr.txt",
+    "host": "managed-native-host.json"
+  },
+  "job_samples": [
+    {
+      "active": 1,
+      "pids": [
+        41344
+      ]
+    },
+    {
+      "active": 0,
+      "pids": []
+    }
+  ]
+}

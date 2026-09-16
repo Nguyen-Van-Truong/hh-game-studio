@@ -1,0 +1,66 @@
+{
+  "native_binding_regressions": [
+    {
+      "lane": "20260916-gt02-s46-native",
+      "case": "stale_closure",
+      "rejected": true
+    },
+    {
+      "lane": "20260916-gt02-s46-native",
+      "case": "file_changed_digest_retained",
+      "rejected": true
+    },
+    {
+      "lane": "20260916-gt02-s46-native",
+      "case": "map_missing",
+      "rejected": true
+    },
+    {
+      "lane": "20260916-gt02-s46-native",
+      "case": "digest_missing",
+      "rejected": true
+    },
+    {
+      "lane": "20260916-gt02-s46-boundary",
+      "case": "stale_closure",
+      "rejected": true
+    },
+    {
+      "lane": "20260916-gt02-s46-boundary",
+      "case": "file_changed_digest_retained",
+      "rejected": true
+    },
+    {
+      "lane": "20260916-gt02-s46-boundary",
+      "case": "map_missing",
+      "rejected": true
+    },
+    {
+      "lane": "20260916-gt02-s46-boundary",
+      "case": "digest_missing",
+      "rejected": true
+    },
+    {
+      "lane": "20260916-gt02-s46-registry-native",
+      "case": "stale_closure",
+      "rejected": true
+    },
+    {
+      "lane": "20260916-gt02-s46-registry-native",
+      "case": "file_changed_digest_retained",
+      "rejected": true
+    },
+    {
+      "lane": "20260916-gt02-s46-registry-native",
+      "case": "map_missing",
+      "rejected": true
+    },
+    {
+      "lane": "20260916-gt02-s46-registry-native",
+      "case": "digest_missing",
+      "rejected": true
+    }
+  ],
+  "normal_status": "COORDINATOR_LOGIC_VERIFIED",
+  "source_closure": "f28056d8ff705a60d48a54f9dee80f16554494fa976bd0bfabee84bb51fecbbf"
+}

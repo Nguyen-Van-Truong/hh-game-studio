@@ -1,0 +1,9 @@
+{
+  "code": "import unittest,json,sys; s=unittest.defaultTestLoader.discover('tests/protocol',pattern='test_managed_service.py'); r=unittest.TextTestRunner(verbosity=2).run(s); print('SERVICE_RESULT '+json.dumps({'run':r.testsRun,'failures':len(r.failures),'errors':len(r.errors),'skips':len(r.skipped)}),flush=True); sys.exit(not r.wasSuccessful())",
+  "source_hashes": {
+    "host/core/managed_service.py": "6ecacbe9c36b1785e30be93202ab146948f32fb50d48a406c62361e49f245b05",
+    "host/core/managed_fixture.py": "5be6efa0c9daab785cbc1661a5e03a71d6fb14bd30892f15f2fd75ab81191b3b",
+    "host/core/selector_pipe.py": "d2cf880b4ac8d4e6bcbf0cc0b5a85dbaf7079ea53e444b717a272a15e6fdc7c5",
+    "tests/protocol/test_managed_service.py": "3a52ea2a6e5c66b8544428870c4771d817dd1bd8e7e7724bcd4ec1c5f853b778"
+  }
+}

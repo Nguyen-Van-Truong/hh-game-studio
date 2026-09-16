@@ -32,3 +32,5 @@ zdoc/reviews/20260915-gt02-s29-safe-write-design.md whitespace=-blank-at-eol,bla
 zdoc/reviews/20260915-gt02-s30-appcontainer-probe/sid-only-01.stdout.txt whitespace=-blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 # Preserve the failed unittest progress line exactly, including its trailing space.
 zdoc/reviews/20260916-gt02-s44-diagnostics/consumer-03/consumer-stderr.txt whitespace=-blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+# Preserve the failed S46 unittest progress line byte-for-byte.
+zdoc/reviews/20260916-gt02-s46-public/attempt-01/focused-stderr.txt whitespace=-blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

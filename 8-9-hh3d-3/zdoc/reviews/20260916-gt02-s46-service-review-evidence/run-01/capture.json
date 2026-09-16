@@ -1,0 +1,33 @@
+{
+  "schema": "hh-service-design-review-diagnostic-v1",
+  "started_utc": "2026-09-16T15:34:42.889561+00:00",
+  "completed_utc": "2026-09-16T15:34:44.846099+00:00",
+  "source_closure_sha256": "c8bfc4a717d2f07570c5758194e6b7fd2cff522a05f8070538f87523e107191a",
+  "source_unchanged": true,
+  "snapshot_unchanged": true,
+  "host": {
+    "wrapper_pid": 8960,
+    "started_at": "2026-09-16T15:34:43.069356+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "deadline_reproducer.py"
+    ],
+    "exit_code": 0,
+    "target_pid": 27232,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "diagnostic-stdout.txt",
+    "stderr": "diagnostic-stderr.txt",
+    "host": "diagnostic-host.json"
+  },
+  "scope": "READ_ONLY_IMPLEMENTATION_REVIEW_NOT_ACCEPTANCE",
+  "artifacts": {
+    "diagnostic-host.json": "3a946e93cbbe03cee731c3ac29a4930e340ce2d9884f89abcc76d2d2e8c656b3",
+    "diagnostic-stderr.txt": "233cdd0636babf6d9abb0119832c7e711cb2923a52cfaabe3f510cb84ee9bea4",
+    "diagnostic-stdout.txt": "9570132015dff7ebae18e8ede8805ca1745b5e9b248062f44bd5ffdb24b1cd65",
+    "source-closure.json": "2c365ea982f0c284ff373064ac1a8a7f596564d45e7e63771ce33d24591ba306"
+  }
+}

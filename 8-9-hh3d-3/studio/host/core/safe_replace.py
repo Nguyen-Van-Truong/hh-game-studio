@@ -1,8 +1,9 @@
 """Experimental atomic replacement inside a broker-owned NTFS namespace.
 
-This is a local primitive, not a transport command or COMMITTED receipt. Only
-fresh protected roots can mutate. Reopen is read-only until a higher-level
-durable transaction reconciles prior work. Public safe_open stays disabled.
+This is a local primitive, not a transport command or COMMITTED receipt. Fresh
+protected roots can mutate. Reopen is read-only until a higher-level durable
+transaction verifies the committed snapshot and rearms it. Public generic
+safe_open stays disabled.
 
 The expected target CAS relies on ONE broker writer and OS-confined workers:
 the owner-only DACL excludes AppContainer workers, the guard excludes another

@@ -1,0 +1,19 @@
+test_bootstrap_delivery_failure_keeps_cleanup_owner_without_readers (test_managed_service.ManagedServiceTests.test_bootstrap_delivery_failure_keeps_cleanup_owner_without_readers) ... ok
+test_bootstrap_once_and_clean_shutdown_retain_durable_owner (test_managed_service.ManagedServiceTests.test_bootstrap_once_and_clean_shutdown_retain_durable_owner) ... ok
+test_close_timeout_retains_entire_chain_until_blocked_phase_finishes (test_managed_service.ManagedServiceTests.test_close_timeout_retains_entire_chain_until_blocked_phase_finishes) ... ok
+test_constructor_rejects_identity_mismatch_without_transfer (test_managed_service.ManagedServiceTests.test_constructor_rejects_identity_mismatch_without_transfer) ... ok
+test_control_failure_revokes_rotated_session_and_stops_work (test_managed_service.ManagedServiceTests.test_control_failure_revokes_rotated_session_and_stops_work) ... ok
+test_deadline_revokes_admission_even_while_phase_pump_is_blocked (test_managed_service.ManagedServiceTests.test_deadline_revokes_admission_even_while_phase_pump_is_blocked) ... ok
+test_endpoint_close_failure_preserves_owner_and_retries_same_handle (test_managed_service.ManagedServiceTests.test_endpoint_close_failure_preserves_owner_and_retries_same_handle) ... ok
+test_idle_session_deadline_ends_all_threads (test_managed_service.ManagedServiceTests.test_idle_session_deadline_ends_all_threads) ... ok
+test_job_runs_while_accepted_reply_is_blocked_and_control_remains_live (test_managed_service.ManagedServiceTests.test_job_runs_while_accepted_reply_is_blocked_and_control_remains_live) ... ok
+test_late_read_cannot_dispatch_before_watchdog_observes_expiry (test_managed_service.ManagedServiceTests.test_late_read_cannot_dispatch_before_watchdog_observes_expiry) ... ok
+test_lost_accepted_reply_holds_after_admitted_phase_without_replay (test_managed_service.ManagedServiceTests.test_lost_accepted_reply_holds_after_admitted_phase_without_replay) ... ok
+test_owner_and_broker_cannot_close_beneath_unstarted_service (test_managed_service.ManagedServiceTests.test_owner_and_broker_cannot_close_beneath_unstarted_service) ... ok
+test_partial_thread_start_failure_drains_the_started_thread (test_managed_service.ManagedServiceTests.test_partial_thread_start_failure_drains_the_started_thread) ... ok
+test_work_failure_holds_admission_but_preserves_control_stop (test_managed_service.ManagedServiceTests.test_work_failure_holds_admission_but_preserves_control_stop) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 3.453s
+
+OK

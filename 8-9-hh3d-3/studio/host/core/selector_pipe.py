@@ -1,21 +1,26 @@
-"""Internal authenticated fixture-release IPC, with an explicit broker pump.
+"""Authenticated fixed fixture-release IPC, with an explicit broker pump.
 
-No engine operation, public discovery capability or general file write is
-enabled. The caller owns endpoint/process/Job lifetimes and schedules advance()
-only for a newly admitted local job. Reopen and lookup never schedule effects.
+Only from_managed registers the bounded public active-release scope. Direct
+construction stays internal. No engine operation or general file write is
+enabled. The caller owns endpoint/process/Job lifetimes and the explicit pump.
 """
 from __future__ import annotations
 
 from collections import deque
+from contextlib import nullcontext
 from dataclasses import dataclass, field
 import threading
+import time
 
-from ...protocol.core import Request, Response, Status, ValidationError
-from .fixture_selector import FixtureSelector, _name
+from ...protocol.core import (Capability, Discovery, PROTOCOL_VERSION, SCHEMA_VERSION,
+                              Request, Response, Status, ValidationError, canonical_bytes)
+from .fixture_selector import FixtureSelector, FileFixtureReleaseConsumer, _name
 from .limits import SafetyViolation, parse_json_utf8
 from .pipe_endpoint import AppContainerEndpoint
 from .pipe_io import MAX_FRAME_BYTES
 from .transport import SessionAuthority, SessionCredential, TransportLimits, epoch_ms, _response
+from .selector_contract import (SELECTOR_SCHEMA_DIGEST, SELECTOR_SCOPE,
+                                SELECTOR_INSPECT_MAX_BYTES, SELECTOR_PAYLOAD_MAX_BYTES)
 
 _BROKER_BIND = threading.Lock()
 
@@ -48,6 +53,61 @@ class SelectorFixtureBroker:
     next phase; already admitted synchronous native I/O may finish. Session
     locks are never held over disk I/O, so control authentication remains free.
     """
+    @classmethod
+    def from_managed(cls, owner, *, limits=TransportLimits()):
+        from .managed_fixture import ManagedFixtureOwner
+        if cls is not SelectorFixtureBroker or type(owner) is not ManagedFixtureOwner:
+            raise SafetyViolation('SELECTOR_MANAGED_OWNER_REQUIRED')
+        with owner._lifecycle_lock:
+            cls._verify_managed(owner)
+            broker = cls(owner.selector, limits=limits)
+            broker._managed_owner = owner
+            return broker
+
+    @staticmethod
+    def _verify_managed(owner):
+        """Read-only live binding check; no registry update, lease or admission."""
+        from .custody import WitnessCustody, identity_from
+        from .custody_registry import RegistryCustody
+        from .managed_fixture import ManagedFixtureOwner
+        from .private_events import PrivateEventLog
+        from .private_store import PrivateBlobStore
+        from .safe_replace import ProtectedFileRoot
+        if (type(owner) is not ManagedFixtureOwner or type(owner.registry) is not RegistryCustody
+                or type(owner.custody) is not WitnessCustody or type(owner.files) is not ProtectedFileRoot
+                or type(owner.store) is not PrivateBlobStore or type(owner.log) is not PrivateEventLog
+                or type(owner.selector) is not FixtureSelector or type(owner.consumer) is not FileFixtureReleaseConsumer):
+            raise SafetyViolation('SELECTOR_MANAGED_BINDING_INVALID')
+        selector = owner.selector
+        with selector._mutex:
+            if (selector._closed or owner.consumer._closed or owner._cleanup_errors
+                    or selector.project_id != owner.project_id or owner.registry.local_id != owner.storage_id
+                    or owner.custody._registry is not owner.registry or owner.log._custody is not owner.custody
+                    or selector.log is not owner.log or selector.store is not owner.store
+                    or selector.consumer is not owner.consumer or owner.consumer.files is not owner.files
+                    or getattr(owner.files, '_fixture_file_consumer', None) is not owner.consumer
+                    or any(getattr(item, '_fixture_selector', None) is not selector
+                           for item in (owner.log, owner.store, owner.consumer))):
+                raise SafetyViolation('SELECTOR_MANAGED_BINDING_INVALID')
+            owner.custody.confirm_current()
+            record = owner.custody.record
+            if (record['phase'] != 'READY' or record['project_id'] != owner.project_id
+                    or record['storage_id'] != owner.storage_id):
+                raise SafetyViolation('SELECTOR_MANAGED_BINDING_INVALID')
+            for name, component in (('files', owner.files), ('blobs', owner.store)):
+                if (record[name]['path'] != str(component.root)
+                        or not identity_from(record[name]['identity']).same_file(component.root_identity)):
+                    raise SafetyViolation('SELECTOR_MANAGED_BINDING_INVALID')
+            with owner.files._mutex:
+                owner.files._check()
+            with owner.store._mutex:
+                owner.store._check()
+            saved, actual = owner.custody.binding, owner.log.binding()
+            if (record['events']['path'] != str(owner.log.root)
+                    or not saved.root.same_file(actual.root) or not saved.stream.same_file(actual.stream)
+                    or saved.witnessed != actual.witnessed):
+                raise SafetyViolation('SELECTOR_MANAGED_BINDING_INVALID')
+
     def __init__(self, selector: FixtureSelector, *, limits=TransportLimits()):
         if type(selector) is not FixtureSelector or type(limits) is not TransportLimits:
             raise SafetyViolation('SELECTOR_TRUSTED_COMPONENT_REQUIRED')
@@ -62,6 +122,9 @@ class SelectorFixtureBroker:
         self._hold = threading.Event()
         self._diagnostics = deque(maxlen=limits.max_diagnostics)
         self._closed = False
+        self._managed_owner = None
+        self._service_owner = None
+        self._wake = threading.Event()
         with _BROKER_BIND:
             if getattr(selector, '_pipe_broker', None) is not None:
                 raise SafetyViolation('SELECTOR_BROKER_ALREADY_BOUND')
@@ -70,6 +133,13 @@ class SelectorFixtureBroker:
     def close(self):
         # Supervisor must first join its pump/endpoint threads. Do not transfer
         # ownership while an already admitted phase still holds these locks.
+        owner = self._managed_owner
+        with owner._lifecycle_lock if owner is not None else nullcontext():
+            if self._service_owner is not None:
+                raise SafetyViolation('SELECTOR_SERVICE_ACTIVE')
+            self._close_unserved()
+
+    def _close_unserved(self):
         if not self._admission.acquire(blocking=False):
             raise SafetyViolation('SELECTOR_BROKER_BUSY')
         try:
@@ -89,6 +159,69 @@ class SelectorFixtureBroker:
     def _check_open(self):
         if self._closed:
             raise SafetyViolation('SELECTOR_BROKER_CLOSED')
+
+    def _check_registration(self):
+        if self._managed_owner is not None:
+            self._verify_managed(self._managed_owner)
+            if self._managed_owner.selector is not self.selector:
+                raise SafetyViolation('SELECTOR_MANAGED_BINDING_INVALID')
+
+    def discovery(self, session):
+        self._check_open()
+        if self._managed_owner is None:
+            raise SafetyViolation('SELECTOR_NOT_REGISTERED')
+        self.sessions.check_current(session)
+        self._check_registration()
+        state = self.selector.snapshot()
+        capabilities = []
+        if 'fixture.read' in session.credential.scopes:
+            capabilities.append(Capability('fixture.release.inspect', (SELECTOR_SCOPE,), (),
+                                           {'max_response_bytes':min(SELECTOR_INSPECT_MAX_BYTES, self.limits.max_response_bytes)}))
+        available = (not self._hold.is_set() and not self.selector._stop_requested.is_set()
+                     and not state['stopped'] and state['pending_command'] is None)
+        if available and 'fixture.write' in session.credential.scopes:
+            from .safe_replace import SafeReplaceError
+            try:
+                self.selector.consumer.check_mutation_available()
+            except SafeReplaceError as exc:
+                if exc.code != 'SAFE_REOPEN_REQUIRES_RECONCILIATION' or exc.outcome_unknown:
+                    raise
+            else:
+                capabilities.append(Capability('fixture.release.activate', (), (SELECTOR_SCOPE,),
+                    {'max_payload_bytes':SELECTOR_PAYLOAD_MAX_BYTES,'max_assets':16,'max_references_per_asset':16}))
+        self.sessions.check_current(session)
+        return Discovery(PROTOCOL_VERSION, SCHEMA_VERSION, SELECTOR_SCHEMA_DIGEST,
+                         'gt02-managed-selector', '1.0', self.project_id, tuple(capabilities),
+                         {'max_body_bytes':min(self.limits.max_body_bytes, MAX_FRAME_BYTES),
+                          'max_response_bytes':min(self.limits.max_response_bytes, MAX_FRAME_BYTES),
+                          'max_payload_bytes':SELECTOR_PAYLOAD_MAX_BYTES,
+                          'max_inspect_bytes':min(SELECTOR_INSPECT_MAX_BYTES, self.limits.max_response_bytes),
+                          'max_pending':1,'max_lease_ttl_ms':30_000,
+                          'request_timeout_ms':self.limits.request_timeout_ms})
+
+    def inspect(self, session):
+        self._check_open()
+        if self._managed_owner is None:
+            raise SafetyViolation('SELECTOR_NOT_REGISTERED')
+        self._scope(session, 'fixture.read')
+        self._check_registration()
+        state = self.selector.snapshot()
+        def selection(value):
+            if value is None:
+                return None
+            release = value['release']
+            return {'generation':value['generation'],'selection_hash':value['selection_hash'],
+                    'release_id':release['release_id'] if release else None,
+                    'manifest_sha256':release['manifest']['sha256'] if release else None}
+        result = {'project_id':self.project_id,'protocol_version':PROTOCOL_VERSION,'schema_digest':SELECTOR_SCHEMA_DIGEST,
+                  'generation':state['generation'],'selection_hash':state['selection_hash'],
+                  'revisions':state['revisions'],'stopped':state['stopped'],'ready':state['ready'],
+                  'pending_command':state['pending_command'],'selected':selection(state['selected']),
+                  'last_verified_adopted':selection(state['last_verified_adopted'])}
+        self.sessions.check_current(session)
+        if len(canonical_bytes(result)) > min(SELECTOR_INSPECT_MAX_BYTES, self.limits.max_response_bytes):
+            raise SafetyViolation('SELECTOR_INSPECT_LIMIT')
+        return result
 
     def _scope(self, session, name):
         self.sessions.check_current(session)
@@ -110,7 +243,7 @@ class SelectorFixtureBroker:
 
     def dispatch(self, route, body, session, *, control):
         self._check_open()
-        allowed = {'/v1/lookup','/v1/cancel','/v1/stop'} if control else {'/v1/lease','/v1/commands'}
+        allowed = {'/v1/lookup','/v1/cancel','/v1/stop','/v1/inspect'} if control else {'/v1/lease','/v1/commands','/v1/discovery'}
         if route not in allowed:
             raise SafetyViolation('UNSUPPORTED_ROUTE')
         if type(body) is not dict or body.get('project_id') != self.project_id:
@@ -120,11 +253,19 @@ class SelectorFixtureBroker:
         # Redaction must not silently change command identity or content hashes.
         if self.sessions.redact_output(body) != body:
             raise SafetyViolation('SENSITIVE_INPUT_FORBIDDEN')
+        if route in ('/v1/discovery','/v1/inspect'):
+            _shape(body, ('project_id','protocol_version'))
+            if body['protocol_version'] != PROTOCOL_VERSION:
+                raise SafetyViolation('UNSUPPORTED_VERSION')
+            return self.discovery(session) if route == '/v1/discovery' else self.inspect(session)
         if route == '/v1/lease':
             _shape(body, ('project_id','ttl_ms'))
             self._scope(session, 'fixture.write')
+            self._check_registration()
             if self._hold.is_set() or self.selector.snapshot()['stopped']:
                 raise SafetyViolation('SELECTOR_STOPPED')
+            if self._managed_owner is not None:
+                self.selector.consumer.check_mutation_available()
             lease = self.selector.lease(session.credential.session_id, now_ms=epoch_ms(), ttl_ms=body['ttl_ms'])
             with self._state_lock:
                 # One current lease exists in the selector, so retain only it.
@@ -132,6 +273,7 @@ class SelectorFixtureBroker:
             return {key:lease[key] for key in ('lease_id','fencing_epoch','expires_ms')}
         if route == '/v1/commands':
             self._scope(session, 'fixture.write')
+            self._check_registration()
             request = Request.from_dict(body)
             if (request.operation != 'fixture.release.activate' or request.target != {'stable_id':'active-release'}
                     or request.expected_revision != request.payload.get('expected_game_revision')):
@@ -157,6 +299,7 @@ class SelectorFixtureBroker:
                 result = self.selector.prepare(body, now_ms=epoch_ms())
                 with self._state_lock:
                     self._job = _Activation(request.command_id, session)
+                    self._wake.set()  # Publish to the owned pump before response I/O.
                 return _reply(result, request.command_id)
             finally:
                 self._admission.release()
@@ -168,12 +311,18 @@ class SelectorFixtureBroker:
         self.sessions.validate_public_identifier(identifier)
         if route == '/v1/lookup':
             self._scope(session, 'fixture.read')
+            self._check_registration()
             return self._lookup(identifier)
         self._scope(session, 'control.stop' if route == '/v1/stop' else 'control.cancel')
         with self._state_lock:
             job = self._job
             if job is not None and (route == '/v1/stop' or job.command_id == identifier):
                 job.cancel.set()
+        if route == '/v1/stop':
+            # Authenticated control must fence the next effect before waiting
+            # for a phase's selector/storage locks in registration validation.
+            self.selector._stop_requested.set()
+        self._check_registration()
         if route == '/v1/stop':
             # command_id identifies the work whose receipt the caller wants;
             # this reply reports durable stop state, not a second command ACK.
@@ -203,6 +352,7 @@ class SelectorFixtureBroker:
             raise SafetyViolation('SELECTOR_PUMP_BUSY')
         try:
             self._check_open()
+            self._check_registration()
             with self._state_lock:
                 job = self._job
             if job is None:
@@ -254,9 +404,13 @@ class SelectorPipeServer:
         self.endpoint, self.broker = endpoint, broker
         self.session_id = credential.session_id
 
-    def serve_one(self):
+    def serve_one(self, *, deadline=None):
         broker, identifier = self.broker, 'transport.request'
         raw = self.endpoint.read_frame(timeout_ms=broker.limits.request_timeout_ms)
+        # Local supervisor budget only, never a wire field. A reader may have
+        # waited across expiry while the watchdog was awaiting CPU scheduling.
+        if deadline is not None and time.monotonic() >= deadline:
+            raise SafetyViolation('SELECTOR_SESSION_DEADLINE')
         dispatch_started = False
         try:
             parts = raw.split(b'\n', 2)
@@ -276,6 +430,8 @@ class SelectorPipeServer:
                 _name(body['command_id'])
                 broker.sessions.validate_public_identifier(body['command_id'])
                 identifier = body['command_id']
+            if deadline is not None and time.monotonic() >= deadline:
+                raise SafetyViolation('SELECTOR_SESSION_DEADLINE')
             dispatch_started = True
             result = broker.dispatch(route, body, session, control=self.endpoint.role == 'control')
         except (SafetyViolation, ValidationError) as exc:
@@ -293,7 +449,7 @@ class SelectorPipeServer:
             broker._hold.set()
             broker._diagnostic('SELECTOR_DISPATCH_UNKNOWN')
             result = _response(Status.UNKNOWN, 'SELECTOR_DISPATCH_UNKNOWN', identifier)
-        value = result.as_dict() if isinstance(result, Response) else result
+        value = result.as_dict() if isinstance(result, (Response, Discovery)) else result
         encoded = broker.sessions.encode_output(value)
         if len(encoded) > min(MAX_FRAME_BYTES, broker.limits.max_response_bytes):
             result = _response(Status.UNKNOWN, 'RESULT_TOO_LARGE', identifier)

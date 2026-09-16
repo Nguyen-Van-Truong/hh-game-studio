@@ -8,6 +8,7 @@ retain cleanup ownership and preserve provisioned data for reconciliation.
 from __future__ import annotations
 
 from pathlib import Path
+import threading
 import uuid
 
 from .custody import WitnessCustody, CustodyError, identity_from
@@ -104,6 +105,8 @@ class ManagedFixtureOwner:
             owner._failed_init(exc)
 
     def __init__(self):
+        self._lifecycle_lock = threading.RLock()
+        self._service = None
         self.registry = self.custody = self.files = self.store = self.log = None
         self.consumer = self.selector = None
         self._cleanup_errors = []
@@ -121,6 +124,12 @@ class ManagedFixtureOwner:
                                   cleanup_owner=self) from exc
 
     def close(self):
+        with self._lifecycle_lock:
+            if self._service is not None or getattr(self.selector, '_pipe_broker', None) is not None:
+                raise ManagedFixtureError('MANAGED_FIXTURE_SERVICE_ACTIVE', cleanup_owner=self)
+            self._close_components()
+
+    def _close_components(self):
         failures = []
         # Close downstream logical owners before the resources they reference.
         for key in ('selector', 'consumer', 'log', 'store', 'files', 'registry'):
