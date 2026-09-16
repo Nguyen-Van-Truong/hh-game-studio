@@ -1,0 +1,25 @@
+test_adversarial_variants_never_append_or_publish (__main__.IndependentAdmission.test_adversarial_variants_never_append_or_publish) ... ok
+test_internal_broker_and_unbound_or_closed_owner_cannot_register (test_selector_public.SelectorPublicTests.test_internal_broker_and_unbound_or_closed_owner_cannot_register) ... ok
+test_registration_is_rechecked_after_custody_detaches (test_selector_public.SelectorPublicTests.test_registration_is_rechecked_after_custody_detaches) ... ok
+test_authentication_revocation_roles_and_versions_reject_without_events (test_selector_public.SelectorPublicTests.test_authentication_revocation_roles_and_versions_reject_without_events) ... ok
+test_revoked_control_cannot_signal_stop_or_cancel (test_selector_public.SelectorPublicTests.test_revoked_control_cannot_signal_stop_or_cancel) ... ok
+test_late_read_cannot_dispatch_before_watchdog_observes_expiry (test_managed_service.ManagedServiceTests.test_late_read_cannot_dispatch_before_watchdog_observes_expiry) ... ok
+test_deadline_revokes_admission_even_while_phase_pump_is_blocked (test_managed_service.ManagedServiceTests.test_deadline_revokes_admission_even_while_phase_pump_is_blocked) ... ok
+test_hardlinked_target_rejects_and_outside_bytes_stay_unchanged (test_safe_replace.ProtectedReplaceTests.test_hardlinked_target_rejects_and_outside_bytes_stay_unchanged) ... ok
+test_owner_swap_before_open_is_detected_and_preserves_contender (test_safe_replace.ProtectedReplaceTests.test_owner_swap_before_open_is_detected_and_preserves_contender) ... ok
+test_cycles_depth_nodes_strings_and_output_caps_reject_before_sink (test_redaction.RedactionTests.test_cycles_depth_nodes_strings_and_output_caps_reject_before_sink) ... ok
+test_deterministic_encoding_and_no_source_mutation (test_redaction.RedactionTests.test_deterministic_encoding_and_no_source_mutation) ... ok
+test_host_paths_and_registered_roots_do_not_escape (test_redaction.RedactionTests.test_host_paths_and_registered_roots_do_not_escape) ... ok
+test_invalid_unicode_and_binary_do_not_echo_input (test_redaction.RedactionTests.test_invalid_unicode_and_binary_do_not_echo_input) ... ok
+test_no_recursive_secret_marker_expansion (test_redaction.RedactionTests.test_no_recursive_secret_marker_expansion) ... ok
+test_nonfinite_unknown_keys_and_redacted_collision_fail_closed (test_redaction.RedactionTests.test_nonfinite_unknown_keys_and_redacted_collision_fail_closed) ... ok
+test_real_log_receipt_output_file_contains_only_redacted_bytes (test_redaction.RedactionTests.test_real_log_receipt_output_file_contains_only_redacted_bytes) ... ok
+test_registered_secret_encodings_and_parser_fragments (test_redaction.RedactionTests.test_registered_secret_encodings_and_parser_fragments) ... ok
+test_registration_bounded_and_repr_does_not_expose_secrets (test_redaction.RedactionTests.test_registration_bounded_and_repr_does_not_expose_secrets) ... ok
+test_sensitive_containers_are_omitted_without_serializing (test_redaction.RedactionTests.test_sensitive_containers_are_omitted_without_serializing) ... ok
+test_sink_error_does_not_leak_exception_detail (test_redaction.RedactionTests.test_sink_error_does_not_leak_exception_detail) ... ok
+
+----------------------------------------------------------------------
+Ran 20 tests in 2.241s
+
+OK

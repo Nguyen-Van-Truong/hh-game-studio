@@ -1,5 +1,10 @@
 # S46 registered managed fixture candidate
 
+Coordinator closeout: **GT-02 ACCEPTED** on 2026-09-16 after two independent
+PASS/TICK=yes reviews of this exact closure. `acceptance.json` binds their
+reports/evidence and the pre-acceptance Git HEAD proof. The original candidate
+and coordinator verification keep their historical NOT_REVIEWED/non-vote fields.
+
 Frozen source: `f28056d8ff705a60d48a54f9dee80f16554494fa976bd0bfabee84bb51fecbbf`,
 106 files. Candidate `GT02-S46-20260916-01` has 417 protocol tests: **413 passed,
 4 documented skips**, plus bootstrap **56/56**. All actual target/wrapper exits

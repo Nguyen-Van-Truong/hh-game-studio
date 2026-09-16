@@ -1,0 +1,18 @@
+{
+  "wrapper_pid": 23804,
+  "started_at": "2026-09-16T15:43:39.099508+00:00",
+  "argv": [
+    "python.exe",
+    "-B",
+    "$SNAPSHOT/zdoc/reviews/20260916-gt02-s46-critic-a-evidence/review_probe.py"
+  ],
+  "exit_code": 0,
+  "target_pid": 13972,
+  "wrapper_exit_code": 0,
+  "timed_out": false,
+  "tree_verified": true,
+  "ownership": "gated_job_kill_on_close",
+  "stdout": "critic-a-stdout.txt",
+  "stderr": "critic-a-stderr.txt",
+  "host": "critic-a-host.json"
+}

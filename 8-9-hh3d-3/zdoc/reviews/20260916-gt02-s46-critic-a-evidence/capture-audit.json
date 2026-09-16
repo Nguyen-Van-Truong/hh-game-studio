@@ -1,0 +1,18 @@
+{
+  "wrapper_pid": 9688,
+  "started_at": "2026-09-16T15:45:56.015495+00:00",
+  "argv": [
+    "python.exe",
+    "-B",
+    "$SNAPSHOT/zdoc/reviews/20260916-gt02-s46-critic-a-evidence/audit_probe.py"
+  ],
+  "exit_code": 0,
+  "target_pid": 41400,
+  "wrapper_exit_code": 0,
+  "timed_out": false,
+  "tree_verified": true,
+  "ownership": "gated_job_kill_on_close",
+  "stdout": "critic-a-audit-stdout.txt",
+  "stderr": "critic-a-audit-stderr.txt",
+  "host": "critic-a-audit-host.json"
+}

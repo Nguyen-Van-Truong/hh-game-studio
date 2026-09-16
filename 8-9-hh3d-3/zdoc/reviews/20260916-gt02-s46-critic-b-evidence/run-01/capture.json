@@ -1,0 +1,45 @@
+{
+  "schema": "hh-critic-b-focused-v1",
+  "run_id": "GT02-S46-CRITIC-B-20260916-01",
+  "command_id": "cmd.gt02-s46-critic-b.recovery.1",
+  "started_utc": "2026-09-16T15:43:50.425157+00:00",
+  "completed_utc": "2026-09-16T15:43:59.790982+00:00",
+  "source_closure_sha256": "f28056d8ff705a60d48a54f9dee80f16554494fa976bd0bfabee84bb51fecbbf",
+  "source_unchanged": true,
+  "snapshot_unchanged": true,
+  "host": {
+    "wrapper_pid": 42676,
+    "started_at": "2026-09-16T15:43:50.634706+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "recovery_probe.py"
+    ],
+    "exit_code": 0,
+    "target_pid": 42452,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "recovery-stdout.txt",
+    "stderr": "recovery-stderr.txt",
+    "host": "recovery-host.json"
+  },
+  "summary": {
+    "run": 19,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0
+  },
+  "passed": true,
+  "harness_sha256": {
+    "run_review.py": "9a38424d59b6c999ad20d47a83d05e4e2d2ca31f7a10543df091eb5410ab3ae4",
+    "recovery_probe.py": "d1dacc3e0c423d62504cbaec7ef51e162e204e4933608126930ffb6357c0f767"
+  },
+  "artifacts": {
+    "recovery-host.json": "a1fa02aea6fab858b1996b79ed41d95898ac1c4b3d3ca53fac24d2ba26dfb7f2",
+    "recovery-stderr.txt": "f31e6141d0b60e0bbf244886fe838b1c9a81ed4520221d481c85541e12f2c01d",
+    "recovery-stdout.txt": "3487bc543900b188d1167a2f537318d38d577c75f2aeaa81797df37cdf9e714b",
+    "source-closure.json": "0c6d9a05763ac2fa3c4ee3176081b0dfad9230e94c28d0b62c8f9bbbadc63c2a"
+  }
+}

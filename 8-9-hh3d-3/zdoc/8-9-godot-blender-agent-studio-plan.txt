@@ -1,11 +1,11 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 16-09-2026, Asia/Saigon | Revision S46 | TRIỂN KHAI THEO GATE
+Ngày 16-09-2026, Asia/Saigon | Revision S47 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
 01 | GT-01 | Chốt pin/phạm vi/reuse; bootstrap dự án mẫu độc lập | OWNER_START | ACCEPTED
-02 | GT-02 | Protocol, capability, journal và an toàn lệnh tối thiểu | GT-01 | CANDIDATE
-03 | GT-03 | Godot EditorPlugin: sửa scene, UndoRedo, save/readback | GT-02 | PLANNED
+02 | GT-02 | Protocol, capability, journal và an toàn lệnh tối thiểu | GT-01 | ACCEPTED
+03 | GT-03 | Godot EditorPlugin: sửa scene, UndoRedo, save/readback | GT-02 | IN_PROGRESS
 04 | GT-04 | Blender adapter UI và background jobs an toàn | GT-02 | PLANNED
 05 | GT-05 | Pipeline .blend → GLB → Godot, asset manifest | GT-03, GT-04 | PLANNED
 06 | GT-06 | Play/input/pause/stop/observe/capture qua công cụ | GT-05 | PLANNED
@@ -14,38 +14,41 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 09 | GT-09 | Agent conformance và toàn tuyến trên dự án mẫu | GT-08 | PLANNED
 10 | GT-10 | Gói công cụ v0.1, cài/upgrade/rollback, bàn giao game | GT-09 | PLANNED
 
-CURRENT_VALID_WP=GT-02
+CURRENT_VALID_WP=GT-03
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=GT02_CANDIDATE_SCOPED_PUBLIC_SERVICE
+IMPLEMENTATION=GT03_IN_PROGRESS
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
 GT01_PENDING=NONE
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
 PLAN_DESIGN_CRITICS=NO_ACCEPTED_VERDICT_S6_TO_S21
-RUNTIME_ACCEPTANCE=GT01_ACCEPTED
+RUNTIME_ACCEPTANCE=GT01_GT02_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S46
+PLAN_REVISION=S47
 EXECUTION_MODE=COORDINATOR_THREE_CODEX_OWNER_20260916
 SUBAGENTS_ENABLED=3
-GT02_EVIDENCE_STATUS=FROZEN_CANDIDATE_S46_01
-GT02_REVIEW_STATUS=INDEPENDENT_REVIEW_IN_PROGRESS_S46
+GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
+GT02_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S46
 GT02_LAST_TESTED_SOURCE_CLOSURE=f28056d8ff705a60d48a54f9dee80f16554494fa976bd0bfabee84bb51fecbbf
-GT02_CHECKPOINT_COMMITS=2e24912,579b7e7,287a6c2,487e5fc,6a6dfb8,08f70cf,59c7b1e,1951d80
-GT02_SAFE_WRITE_STATUS=SCOPED_NATIVE_PROOF_PENDING_REVIEW
+GT02_CHECKPOINT_COMMITS=2e24912,579b7e7,287a6c2,487e5fc,6a6dfb8,08f70cf,59c7b1e,1951d80,0de2ce0
+GT02_SAFE_WRITE_STATUS=ACCEPTED_SCOPED_WINDOWS_MANAGED_FIXTURE
 GT02_BOUNDARY_EVIDENCE=S46_EXACT_CLOSURE_SERVICE_REPLACE_REGISTRY
-GT02_WORKING_SOURCE_STATUS=S46_FROZEN_TESTED
+GT02_WORKING_SOURCE_STATUS=S46_FROZEN_ACCEPTED
+GT03_EVIDENCE_STATUS=NONE
+GT03_REVIEW_STATUS=NOT_STARTED
 
-TIẾN ĐỘ HIỆN HÀNH — S46 candidate, ngày 16-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S47 mở GT-03, ngày 16-09-2026
 Owner mở lại3 subagent Codex Astra extra high ngày16-09; coordinator giữ
 một writer/file. Hai critic S44 FAIL/TICK=no đúng closure S44; lỗi admission
-và custody được sửa ở S45. Hai critic mới đang rà cùng closure S46, chưa tick.
+và custody được sửa ở S45. Hai critic mới PASS/TICK=yes cùng closure S46;
+coordinator đã nghiệm thu GT-02 đúng scope fixture Windows, không engine.
 
 GT-01 ACCEPTED tại a0fb247; closure
 3ace23bcf84598cda64d54bbe3fc4736acde877f9f714fb71e2355d3e809eea4,
 evidence reviews/20260913-r21-gt01-final; hai critic PASS/TICK=yes.
 
-GT-02 candidate S46-01: reviews/20260916-gt02-s46-01. Protocol417 tests:
+GT-02 ACCEPTED từ S46-01: reviews/20260916-gt02-s46-01. Protocol417 tests:
 413 pass,4 skips; bootstrap56/56. 106 source files,9 artifacts; actual host
 exit/tree sạch, source/snapshot không đổi. Python/Node/Godot golden2396 rows.
 Scoped discovery/client/service đã nối: native AppContainer tạo release,
@@ -53,9 +56,12 @@ restart owner bằng storage ID rồi replace/retry/Stop; work mất reply vẫn
 control lookup/Stop. Ba child exit86, service/thread/endpoint/Job/PID đều0.
 Native boundary cùng closure:20 replace giữa306 denied attempts; Registry
 36 denied/12 updates và positive control. Audit s46-audit kiểm lại toàn bộ
-hash,12/12 corruption của native digest/map bị từ chối. Chưa là nghiệm thu.
+hash,12/12 corruption của native digest/map bị từ chối. Hai review:
+reviews/20260916-gt02-s46-critic-a.md và -critic-b.md, cùng closure trên.
+Critic A chạy20/20 thêm13 reject/no-intent; critic B19/19 recovery/lifecycle.
+Acceptance scope/hashes tại reviews/20260916-gt02-s46-audit/acceptance.json.
 Checkpoint S45 1951d80 và Git HEAD proof được giữ; không gán chữ ký/hash cũ
-sang S46. Ba worker đã giao source, hai critic mới độc lập đang read-only.
+sang S46. S46 checkpoint0de2ce0 và Git HEAD proof106 source/138 evidence đạt.
 
 Đã có schema/JCS/limits, journal/CAS8 process/retention, auth loopback,
 Stop/Cancel/UNKNOWN, redaction, AppContainer IPC, private staging/events,
@@ -78,11 +84,13 @@ công khai chỉ fixture.active-release qua ManagedFixtureOwner đã kiểm cust
 không arbitrary path, engine consumer hay khả năng suy từ os.name.
 
 Việc tiếp theo:
-1. Hoàn tất Git byte proof và hai review độc lập trên cùng closure S46.
-2. Sửa nếu critic tìm lỗi, remint source/evidence tương ứng; không chuyển PASS.
-3. Chỉ hai critic PASS/TICK=yes rồi coordinator mới ACCEPTED GT-02, mở GT-03.
+1. GT-03: catalog typed Godot commands, stable IDs, actual main-thread
+   EditorPlugin mutation/UndoRedo, diff/checkpoint và stale revision rejection.
+2. Staged scene + script parse/import, manifest/journal save/recovery/readback;
+   actual editor undo/redo/reopen và crash/lost-response trước hai critic GT-03.
+3. Giữ protocol/core GT-02 frozen; phạm vi Godot nằm trong addon/tests/godot.
 
-Còn sau GT-02: GT-03 Godot, GT-04 Blender, GT-05 pipeline, GT-06 play/input/
+Còn: GT-03 Godot, GT-04 Blender, GT-05 pipeline, GT-06 play/input/
 observe, GT-07 recovery, GT-08 CI/Linux/Android thiết bị thật, GT-09 conformance,
 GT-10 package/upgrade/rollback/handoff. HH World thuộc plan game sau GT-10;
 không gộp vào nghiệm thu plan công cụ. Chưa có cơ sở hẹn ngày xong toàn plan.
@@ -1098,7 +1106,7 @@ Tinh gọn S28/S34 chỉ di chuyển nhật ký cũ và đồng bộ chế độ
 xóa finding, đổi schema để hợp code, hoặc suy test xanh thành full acceptance.
 Lịch sử S4–S27, quyết định model cũ và runtime chưa đủ proof nằm trong bản S27
 archived và các report được nó tham chiếu. Tình trạng hiện hành xem đầu file.
-GT-01 đã ACCEPTED; GT-02 candidate chưa đủ review source mới; GT-03–GT-10 chưa nghiệm thu.
+GT-01 và GT-02 đã ACCEPTED; GT-03 đang triển khai, GT-03–GT-10 chưa nghiệm thu.
 
 Từ vựng: WP=công việc; DoD=điều kiện xong; fixture=dự án mẫu để kiểm công cụ;
 lease=quyền ghi tạm; fencing=chặn writer cũ; hash=dấu nhận dạng nội dung;

@@ -1,0 +1,73 @@
+{
+  "schema": "hh-gt02-coordinator-acceptance-v1",
+  "gate": "GT-02",
+  "status": "ACCEPTED",
+  "timestamp_utc": "2026-09-16T15:50:35.202129+00:00",
+  "source_checkpoint": "0de2ce0",
+  "source_closure_sha256": "f28056d8ff705a60d48a54f9dee80f16554494fa976bd0bfabee84bb51fecbbf",
+  "source_files": 106,
+  "candidate": "zdoc/reviews/20260916-gt02-s46-01",
+  "coordinator_verification_sha256": "b80460988e12b701cdbf302537488b90515d89d1b13b79397eff4d8f1a45d989",
+  "git_head_proof_sha256": "4d1041d9dff3700cc005c9317fa14732028c677f752f953a7491828fe1a63e25",
+  "critics": [
+    {
+      "reviewer": "independent-a",
+      "report": "zdoc/reviews/20260916-gt02-s46-critic-a.md",
+      "sha256": "c5309f4c3ca23fdf1f0b93f864938793c1d4ec91e8d1b07f5e11f87cf288f5c8",
+      "verdict": "PASS",
+      "tick": "yes",
+      "evidence": {
+        "zdoc/reviews/20260916-gt02-s46-critic-a-evidence/admission-rows-v2.json": "1930a44a8d117f375944f78546ca7be4e8ab6932561374d5833b9af4874349e0",
+        "zdoc/reviews/20260916-gt02-s46-critic-a-evidence/admission-rows.json": "48cd5736f1a2482bdb879e293539474c25bb040b61a32e9f967d5dc878a3bcc2",
+        "zdoc/reviews/20260916-gt02-s46-critic-a-evidence/audit-verification.json": "655fdf9b87592a38c3d1c56db09d505b8605808658a0f2fcb3ecf91c31d6fe5a",
+        "zdoc/reviews/20260916-gt02-s46-critic-a-evidence/audit_probe.py": "96bc98124ae1e1dea193051ee9dd7c238579070dab8ca5fc8a82186c508bcf61",
+        "zdoc/reviews/20260916-gt02-s46-critic-a-evidence/capture-audit.json": "2a2cc77f64766c5157af788beb0c8f3f5d0d92536f0721fda681cf65407e9130",
+        "zdoc/reviews/20260916-gt02-s46-critic-a-evidence/capture-v2.json": "a45ee4ee109cf00fc6e517f0e27c04cc6a3907c38574af5b808836d3b8be98ed",
+        "zdoc/reviews/20260916-gt02-s46-critic-a-evidence/capture.json": "a0cea4856fad36183bbc16ae13b3eda1981f29f372e5df4a35c2d30c929ba9bd",
+        "zdoc/reviews/20260916-gt02-s46-critic-a-evidence/capture.py": "5b2bfbc6b09fbad8b043782a3121916dae8df2d04f482da9da2d6345f51146e9",
+        "zdoc/reviews/20260916-gt02-s46-critic-a-evidence/capture_audit.py": "a7e85422deb1f6621c153072fa010883167fd96bcc6fb75e78239dec7f48235b",
+        "zdoc/reviews/20260916-gt02-s46-critic-a-evidence/capture_v2.py": "35133529d1c8350d5efdd7877a47183a6240e7bc0a1f1cd99b9e2f4e32e2224f",
+        "zdoc/reviews/20260916-gt02-s46-critic-a-evidence/critic-a-audit-host.json": "3d07ba753c41faee2b70653d0680df0899010a2243ba73142c14964540f9c173",
+        "zdoc/reviews/20260916-gt02-s46-critic-a-evidence/critic-a-audit-stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "zdoc/reviews/20260916-gt02-s46-critic-a-evidence/critic-a-audit-stdout.txt": "f14e4d33d15857c1cd4c20eb46c8a03bb5763ec2205aab8e7ec4dfff7bfb2c25",
+        "zdoc/reviews/20260916-gt02-s46-critic-a-evidence/critic-a-host.json": "5f83230dc0976a36daaf4913ebf0b8d06dd0971fc2688d2a6007ecb2731db9e5",
+        "zdoc/reviews/20260916-gt02-s46-critic-a-evidence/critic-a-stderr.txt": "de4ae21525ef1ff8263209faf3889267a4402f5fa855b0465a576c3c253b7065",
+        "zdoc/reviews/20260916-gt02-s46-critic-a-evidence/critic-a-stdout.txt": "23064f192909bc5cc8928434904394257c53526832f21cd47aa30ed4029998ab",
+        "zdoc/reviews/20260916-gt02-s46-critic-a-evidence/critic-a-v2-host.json": "342151e1c06899758a51159dd8ae595ab7d47d3f46d25edaf87bb96ef5bda14a",
+        "zdoc/reviews/20260916-gt02-s46-critic-a-evidence/critic-a-v2-stderr.txt": "f27e7f6f8b40bfda9bc30af5054c91e9ab36d6f6b68e8ca069880803cfb7c055",
+        "zdoc/reviews/20260916-gt02-s46-critic-a-evidence/critic-a-v2-stdout.txt": "23064f192909bc5cc8928434904394257c53526832f21cd47aa30ed4029998ab",
+        "zdoc/reviews/20260916-gt02-s46-critic-a-evidence/evidence-manifest.json": "78c756e5a6a6a5ee43a1a21a9aceeb1b20638dd18a482838ae016c2622d878e9",
+        "zdoc/reviews/20260916-gt02-s46-critic-a-evidence/review_probe.py": "774e7278ef8273d2d9b955eb650b6f5377924868ef0a8f38a6dab8dd16ea8001",
+        "zdoc/reviews/20260916-gt02-s46-critic-a-evidence/review_probe_v2.py": "7be51b7341f99f06b8d3c83dc4bb6fced35c38de16bc6e36075ecedd8977f358",
+        "zdoc/reviews/20260916-gt02-s46-critic-a-evidence/verification-v2.json": "e56120a8ad7e29cc31a21abb199e17d06378bf7b99c653c1ff8c7b1acf9a71f0",
+        "zdoc/reviews/20260916-gt02-s46-critic-a-evidence/verification.json": "e56120a8ad7e29cc31a21abb199e17d06378bf7b99c653c1ff8c7b1acf9a71f0"
+      }
+    },
+    {
+      "reviewer": "independent-b",
+      "report": "zdoc/reviews/20260916-gt02-s46-critic-b.md",
+      "sha256": "74e4f95253c56b2435e953928fefac8486cb5072676df30498cac5517718742a",
+      "verdict": "PASS",
+      "tick": "yes",
+      "evidence": {
+        "zdoc/reviews/20260916-gt02-s46-critic-b-evidence/audit.py": "3cac6abeda2a9045b45ac3bc109532eb62db36e8dcc5cd39f5a1df1abe7af68f",
+        "zdoc/reviews/20260916-gt02-s46-critic-b-evidence/integrity.json": "fd85c0b441e7f2d9d2fdd530a462cb14c46cb4b893285fc14909bf683b8a0ea8",
+        "zdoc/reviews/20260916-gt02-s46-critic-b-evidence/recovery_probe.py": "d1dacc3e0c423d62504cbaec7ef51e162e204e4933608126930ffb6357c0f767",
+        "zdoc/reviews/20260916-gt02-s46-critic-b-evidence/run-01/capture.json": "13953c53018937f73d52899964fde6ee49cab44cf6d948aa5872a26f84e152ac",
+        "zdoc/reviews/20260916-gt02-s46-critic-b-evidence/run-01/recovery-host.json": "a1fa02aea6fab858b1996b79ed41d95898ac1c4b3d3ca53fac24d2ba26dfb7f2",
+        "zdoc/reviews/20260916-gt02-s46-critic-b-evidence/run-01/recovery-stderr.txt": "f31e6141d0b60e0bbf244886fe838b1c9a81ed4520221d481c85541e12f2c01d",
+        "zdoc/reviews/20260916-gt02-s46-critic-b-evidence/run-01/recovery-stdout.txt": "3487bc543900b188d1167a2f537318d38d577c75f2aeaa81797df37cdf9e714b",
+        "zdoc/reviews/20260916-gt02-s46-critic-b-evidence/run-01/source-closure.json": "0c6d9a05763ac2fa3c4ee3176081b0dfad9230e94c28d0b62c8f9bbbadc63c2a",
+        "zdoc/reviews/20260916-gt02-s46-critic-b-evidence/run_review.py": "9a38424d59b6c999ad20d47a83d05e4e2d2ca31f7a10543df091eb5410ab3ae4"
+      }
+    }
+  ],
+  "scope": "Windows local NTFS protected managed fixture.active-release with typed public client/service and durable custody",
+  "limitations": [
+    "Generic arbitrary-path safe_write/atomic_replace unsupported",
+    "No Godot/Blender mutation acceptance; GT-03 and GT-04 remain separate",
+    "Pending, stopped and verified-empty recovered roots stay held; no automatic recovery or power-loss claim",
+    "Linux and physical Android conformance remain future gates"
+  ],
+  "next_gate": "GT-03"
+}

@@ -1,0 +1,92 @@
+{
+  "normal": {
+    "schema": "hh-gt02-s46-coordinator-verification-v1",
+    "status": "COORDINATOR_LOGIC_VERIFIED",
+    "source_closure_sha256": "f28056d8ff705a60d48a54f9dee80f16554494fa976bd0bfabee84bb51fecbbf",
+    "source_files": 106,
+    "candidate_artifacts": 9,
+    "protocol": {
+      "run": 417,
+      "passed": 413,
+      "skipped": 4
+    },
+    "bootstrap": {
+      "run": 56,
+      "passed": 56
+    },
+    "golden_rows_per_consumer": 2396,
+    "native_service_cases": 3,
+    "concurrent_replacements": 20,
+    "file_boundary_denied_attempts": 306,
+    "registry_denied_attempts": 36,
+    "formal_acceptance": false,
+    "limits": [
+      "generic arbitrary-path mutation unsupported",
+      "native restart opens owner in same broker process; actual process-crash restart covered by unit subprocess",
+      "pending, stopped and verified-empty restart held; no power-loss claim",
+      "two independent same-closure verdicts required separately"
+    ]
+  },
+  "independent_negative_variants": [
+    {
+      "lane": "20260916-gt02-s46-native",
+      "case": "wrong_digest",
+      "rejected": true
+    },
+    {
+      "lane": "20260916-gt02-s46-native",
+      "case": "wrong_file",
+      "rejected": true
+    },
+    {
+      "lane": "20260916-gt02-s46-native",
+      "case": "missing_map",
+      "rejected": true
+    },
+    {
+      "lane": "20260916-gt02-s46-native",
+      "case": "missing_digest",
+      "rejected": true
+    },
+    {
+      "lane": "20260916-gt02-s46-boundary",
+      "case": "wrong_digest",
+      "rejected": true
+    },
+    {
+      "lane": "20260916-gt02-s46-boundary",
+      "case": "wrong_file",
+      "rejected": true
+    },
+    {
+      "lane": "20260916-gt02-s46-boundary",
+      "case": "missing_map",
+      "rejected": true
+    },
+    {
+      "lane": "20260916-gt02-s46-boundary",
+      "case": "missing_digest",
+      "rejected": true
+    },
+    {
+      "lane": "20260916-gt02-s46-registry-native",
+      "case": "wrong_digest",
+      "rejected": true
+    },
+    {
+      "lane": "20260916-gt02-s46-registry-native",
+      "case": "wrong_file",
+      "rejected": true
+    },
+    {
+      "lane": "20260916-gt02-s46-registry-native",
+      "case": "missing_map",
+      "rejected": true
+    },
+    {
+      "lane": "20260916-gt02-s46-registry-native",
+      "case": "missing_digest",
+      "rejected": true
+    }
+  ]
+}

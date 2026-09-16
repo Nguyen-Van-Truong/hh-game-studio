@@ -1,0 +1,93 @@
+{
+  "schema": "hh-s46-critic-b-integrity-v1",
+  "timestamp_utc": "2026-09-16T15:48:43.440204+00:00",
+  "status": "PASS",
+  "source_closure_sha256": "f28056d8ff705a60d48a54f9dee80f16554494fa976bd0bfabee84bb51fecbbf",
+  "source_files": 106,
+  "candidate_sha256": "0e9e9dee65a0ee36158e96436800dcae93c43383746ed07e833ca697c5c1b267",
+  "source_manifest_sha256": "7d9dc3f2a0e905df69e1a15b2b61ba7b5c7958866321886692073fa40f30932a",
+  "independent_exact_inventory_and_hashes": true,
+  "artifacts": {
+    "bootstrap-host.json": "2d69e32dc222a38aeb43bc080ccfb12bf46b792e80c12fbd2fe53ed357619e07",
+    "bootstrap-stderr.txt": "118743d4a57675ea364ee15a4a078e3565dac69c059959df4bd371c6d124a032",
+    "bootstrap-stdout.txt": "5ace6c8ff00224ee0ee55e3ff771257c3602603966972be0cb86a78788feed6f",
+    "protocol-host.json": "b8bcb4ab62f31cb2a63825a44865d6c0afca3e3fe109b567142229446ed8da76",
+    "protocol-stderr.txt": "6208ef0f71e48c9f6597a134228ad7f8dc274bd7fd7000e92a71659fa44bb291",
+    "protocol-stdout.txt": "8ba4033f20d01e174e2050f9c271354a353a28c6526a3edf48f87170ecbfca90",
+    "source-closure.json": "7d9dc3f2a0e905df69e1a15b2b61ba7b5c7958866321886692073fa40f30932a",
+    "golden/hh-gt02-godot-g9p563kv.json": "480248eecb60b46de11814c304f28bd7ad2fa471c6651b6a1ca73aadaef1cfbb",
+    "golden/hh-gt02-node-nyvztxhy.json": "a80a31c90f293bff3b12d7038f6bec60a941607f6aa5b7acba1a1b50f27ab11d"
+  },
+  "lanes": [
+    {
+      "suite": "protocol",
+      "run": 417,
+      "skips": 4
+    },
+    {
+      "suite": "bootstrap",
+      "run": 56,
+      "skips": 0
+    }
+  ],
+  "native": [
+    {
+      "name": "20260916-gt02-s46-native",
+      "same_map": true,
+      "files": 106,
+      "capture_sha256": "d7b8d1c015218580b0c79e91dc5593670b2b0431737ca73c76b805a2ea7162c3",
+      "stdout_sha256": "36b4c8de7ff771e67ac687b88884a0a6a5da061087e997353273fa4a786f961c",
+      "host_sha256": "17c31da13324d899d82bc75ff2741cf65ec907135237fe6e534a9a3c72168ade"
+    },
+    {
+      "name": "20260916-gt02-s46-boundary",
+      "same_map": true,
+      "files": 106,
+      "capture_sha256": "9331ee6da2200fcd4ce2efc41fbd211adb1984f5e0865f203040597b5da3c468",
+      "stdout_sha256": "a03ddd7ce6b91dc1886082e7246617b46acaca832832bdbd63b93affc22eb845",
+      "host_sha256": "51a2c64d3c0d4209198ad69113cbdd1a22affb70e56a8e57d1c085778eb3ed11"
+    },
+    {
+      "name": "20260916-gt02-s46-registry-native",
+      "same_map": true,
+      "files": 106,
+      "capture_sha256": "0eab020a60e649f602d80aab2f5afbb6afecb399941701b39741bf908b772a48",
+      "stdout_sha256": "845c6650771ef18121b94a0f50e4f2d2df4251c48525ccefa3fe19af6874f5c4",
+      "host_sha256": "72093bf81e7d87835a76fa502d4fa5770d0b07fc1ac20c8ad1bb14bcea7b1c7a"
+    }
+  ],
+  "reviewed_verifier_sha256": "95af2c4ef55ee561858ebfe72e9a82166fbb35c78be5b7ab4705e5722326a45a",
+  "coordinator_verification": {
+    "schema": "hh-gt02-s46-coordinator-verification-v1",
+    "status": "COORDINATOR_LOGIC_VERIFIED",
+    "source_closure_sha256": "f28056d8ff705a60d48a54f9dee80f16554494fa976bd0bfabee84bb51fecbbf",
+    "source_files": 106,
+    "candidate_artifacts": 9,
+    "protocol": {
+      "run": 417,
+      "passed": 413,
+      "skipped": 4
+    },
+    "bootstrap": {
+      "run": 56,
+      "passed": 56
+    },
+    "golden_rows_per_consumer": 2396,
+    "native_service_cases": 3,
+    "concurrent_replacements": 20,
+    "file_boundary_denied_attempts": 306,
+    "registry_denied_attempts": 36,
+    "formal_acceptance": false,
+    "limits": [
+      "generic arbitrary-path mutation unsupported",
+      "native restart opens owner in same broker process; actual process-crash restart covered by unit subprocess",
+      "pending, stopped and verified-empty restart held; no power-loss claim",
+      "two independent same-closure verdicts required separately"
+    ]
+  },
+  "independent_git_index_bytes": {
+    "source_files": 106,
+    "evidence_files": 138,
+    "proof_sha256": "3ca162c106f7b184769ab369ee24da4913b4c56a36a0afc489aa106fab2396be"
+  }
+}

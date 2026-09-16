@@ -1,0 +1,77 @@
+[
+  {
+    "case": "operation",
+    "code": "DIGEST_MISMATCH",
+    "intent_absent": true,
+    "state_unchanged": true
+  },
+  {
+    "case": "path",
+    "code": "SENSITIVE_INPUT_FORBIDDEN",
+    "intent_absent": true,
+    "state_unchanged": true
+  },
+  {
+    "case": "boolgeneration",
+    "code": "DIGEST_MISMATCH",
+    "intent_absent": true,
+    "state_unchanged": true
+  },
+  {
+    "case": "dangling",
+    "code": "DIGEST_MISMATCH",
+    "intent_absent": true,
+    "state_unchanged": true
+  },
+  {
+    "case": "extraassetfield",
+    "code": "DIGEST_MISMATCH",
+    "intent_absent": true,
+    "state_unchanged": true
+  },
+  {
+    "case": "stalegame",
+    "code": "SELECTOR_REQUEST_SCOPE",
+    "intent_absent": true,
+    "state_unchanged": true
+  },
+  {
+    "case": "expired",
+    "code": "DEADLINE_OUT_OF_RANGE",
+    "intent_absent": true,
+    "state_unchanged": true
+  },
+  {
+    "case": "retiredbearer",
+    "code": "SENSITIVE_INPUT_FORBIDDEN",
+    "intent_absent": true,
+    "state_unchanged": true
+  },
+  {
+    "case": "hostpath",
+    "code": "SENSITIVE_INPUT_FORBIDDEN",
+    "intent_absent": true,
+    "state_unchanged": true
+  },
+  {
+    "case": "oversize",
+    "code": "DIGEST_MISMATCH",
+    "intent_absent": true,
+    "state_unchanged": true
+  },
+  {
+    "case": "duplicate",
+    "code": "DUPLICATE_KEY",
+    "state_unchanged": true
+  },
+  {
+    "case": "nonfinite",
+    "code": "NON_FINITE_NUMBER",
+    "state_unchanged": true
+  },
+  {
+    "case": "utf8",
+    "code": "INVALID_UTF8",
+    "state_unchanged": true
+  }
+]
