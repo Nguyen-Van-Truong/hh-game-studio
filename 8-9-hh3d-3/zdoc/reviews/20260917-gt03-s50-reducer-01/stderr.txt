@@ -1,0 +1,89 @@
+test_all_eleven_metadata_rows_are_checked (__main__.PublicationV2Tests.test_all_eleven_metadata_rows_are_checked) ... ok
+test_codec_algorithm_roles_and_project_digest_match_actual_bytes (__main__.PublicationV2Tests.test_codec_algorithm_roles_and_project_digest_match_actual_bytes) ... ok
+test_duplicate_lookup_and_changed_digest_do_not_mutate (__main__.PublicationV2Tests.test_duplicate_lookup_and_changed_digest_do_not_mutate) ... ok
+test_each_file_bound_rejects_oversize_zero_and_bool (__main__.PublicationV2Tests.test_each_file_bound_rejects_oversize_zero_and_bool) ... ok
+test_event_capacity_reserves_all_success_phases_and_stop (__main__.PublicationV2Tests.test_event_capacity_reserves_all_success_phases_and_stop) ... ERROR
+test_every_phase_cut_replay_is_identical_and_never_executes (__main__.PublicationV2Tests.test_every_phase_cut_replay_is_identical_and_never_executes) ... ok
+test_expired_lease_and_stale_fence_at_activation_reject (__main__.PublicationV2Tests.test_expired_lease_and_stale_fence_at_activation_reject) ... ok
+test_failure_only_before_possible_publication (__main__.PublicationV2Tests.test_failure_only_before_possible_publication) ... ok
+test_fileversions_names_hash_lengths_and_aliases_reject (__main__.PublicationV2Tests.test_fileversions_names_hash_lengths_and_aliases_reject) ... ok
+test_foreign_root_volume_and_root_fileid_reject (__main__.PublicationV2Tests.test_foreign_root_volume_and_root_fileid_reject) ... ok
+test_full_scene_and_script_operations_have_inert_terminal_receipts (__main__.PublicationV2Tests.test_full_scene_and_script_operations_have_inert_terminal_receipts) ... ok
+test_immutable_history_and_detached_lookup (__main__.PublicationV2Tests.test_immutable_history_and_detached_lookup) ... ok
+test_metadata_role_engine_trusted_revision_and_digest_reject (__main__.PublicationV2Tests.test_metadata_role_engine_trusted_revision_and_digest_reject) ... ok
+test_native_event_frame_and_complete_history_capacity_are_bounded (__main__.PublicationV2Tests.test_native_event_frame_and_complete_history_capacity_are_bounded) ... ok
+test_native_parse_import_exit_tree_and_logs_attestations_must_pass (__main__.PublicationV2Tests.test_native_parse_import_exit_tree_and_logs_attestations_must_pass) ... ok
+test_noncanonical_oversize_duplicate_json_and_bool_sequence_reject (__main__.PublicationV2Tests.test_noncanonical_oversize_duplicate_json_and_bool_sequence_reject) ... ok
+test_plan_must_have_exact_twelve_unique_obj_names (__main__.PublicationV2Tests.test_plan_must_have_exact_twelve_unique_obj_names) ... ok
+test_plan_names_cannot_be_reused_after_terminal_failure (__main__.PublicationV2Tests.test_plan_names_cannot_be_reused_after_terminal_failure) ... ok
+test_readback_requires_new_observation_and_new_session (__main__.PublicationV2Tests.test_readback_requires_new_observation_and_new_session) ... ok
+test_reordered_duplicate_truncated_and_wrong_project_history (__main__.PublicationV2Tests.test_reordered_duplicate_truncated_and_wrong_project_history) ... ok
+test_replay_and_lookup_perform_no_io (__main__.PublicationV2Tests.test_replay_and_lookup_perform_no_io) ... ok
+test_same_fresh_candidate_observation_can_supply_validation_without_second_engine_pass (__main__.PublicationV2Tests.test_same_fresh_candidate_observation_can_supply_validation_without_second_engine_pass) ... ok
+test_scene_observation_id_cannot_recur_on_another_command (__main__.PublicationV2Tests.test_scene_observation_id_cannot_recur_on_another_command) ... ok
+test_scene_save_binds_live_unsaved_revision (__main__.PublicationV2Tests.test_scene_save_binds_live_unsaved_revision) ... ok
+test_scene_save_preserves_script_uid_and_all_trusted_bytes (__main__.PublicationV2Tests.test_scene_save_preserves_script_uid_and_all_trusted_bytes) ... ok
+test_script_replace_preserves_scene_uid_and_all_trusted_bytes (__main__.PublicationV2Tests.test_script_replace_preserves_scene_uid_and_all_trusted_bytes) ... ok
+test_script_replace_requires_explicit_fresh_full_digest_observation (__main__.PublicationV2Tests.test_script_replace_requires_explicit_fresh_full_digest_observation) ... ok
+test_selection_descriptor_identity_and_terminal_readback_binding (__main__.PublicationV2Tests.test_selection_descriptor_identity_and_terminal_readback_binding) ... ok
+test_stale_base_single_pending_and_same_epoch_rebinding_reject (__main__.PublicationV2Tests.test_stale_base_single_pending_and_same_epoch_rebinding_reject) ... ok
+test_stop_at_all_phase_cuts_preserves_or_holds_without_resume (__main__.PublicationV2Tests.test_stop_at_all_phase_cuts_preserves_or_holds_without_resume) ... ok
+test_terminal_after_deadline_retains_original_admission (__main__.PublicationV2Tests.test_terminal_after_deadline_retains_original_admission) ... ok
+test_terminal_command_capacity_keeps_original_ids_and_stop_room (__main__.PublicationV2Tests.test_terminal_command_capacity_keeps_original_ids_and_stop_room) ... ERROR
+test_unknown_each_effect_boundary_is_permanent_hold (__main__.PublicationV2Tests.test_unknown_each_effect_boundary_is_permanent_hold) ... ok
+test_wrong_version_unknown_fields_and_exact_metadata_shape (__main__.PublicationV2Tests.test_wrong_version_unknown_fields_and_exact_metadata_shape) ... ok
+
+======================================================================
+ERROR: test_event_capacity_reserves_all_success_phases_and_stop (__main__.PublicationV2Tests.test_event_capacity_reserves_all_success_phases_and_stop)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_publication_state_v2.py", line 408, in test_event_capacity_reserves_all_success_phases_and_stop
+    state = publication.reduce_event(state, prepared(state, 'cmd.complete.' + str(index)))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\godot-addon\publication_state_v2.py", line 528, in reduce_event
+    return PublicationState((*history, _event_bytes(event)))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 4, in __init__
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\godot-addon\publication_state_v2.py", line 511, in __post_init__
+    snapshot = canonical_bytes(state)
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\protocol\core.py", line 145, in canonical_bytes
+    return canonical_json(value).encode("utf-8")
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\protocol\core.py", line 131, in canonical_json
+    _walk(value)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\protocol\core.py", line 115, in _walk
+    _walk(item_value, depth + 1, key=item_key)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\protocol\core.py", line 118, in _walk
+    raise ValidationError("ARRAY_ITEM_LIMIT", key or "array")
+studio.protocol.core.ValidationError: ARRAY_ITEM_LIMIT: used_names
+
+======================================================================
+ERROR: test_terminal_command_capacity_keeps_original_ids_and_stop_room (__main__.PublicationV2Tests.test_terminal_command_capacity_keeps_original_ids_and_stop_room)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_publication_state_v2.py", line 398, in test_terminal_command_capacity_keeps_original_ids_and_stop_room
+    state = publication.reduce_event(state, prepared(state, identifier))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\godot-addon\publication_state_v2.py", line 528, in reduce_event
+    return PublicationState((*history, _event_bytes(event)))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 4, in __init__
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\godot-addon\publication_state_v2.py", line 511, in __post_init__
+    snapshot = canonical_bytes(state)
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\protocol\core.py", line 145, in canonical_bytes
+    return canonical_json(value).encode("utf-8")
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\protocol\core.py", line 131, in canonical_json
+    _walk(value)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\protocol\core.py", line 115, in _walk
+    _walk(item_value, depth + 1, key=item_key)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\protocol\core.py", line 118, in _walk
+    raise ValidationError("ARRAY_ITEM_LIMIT", key or "array")
+studio.protocol.core.ValidationError: ARRAY_ITEM_LIMIT: used_names
+
+----------------------------------------------------------------------
+Ran 34 tests in 26.202s
+
+FAILED (errors=2)

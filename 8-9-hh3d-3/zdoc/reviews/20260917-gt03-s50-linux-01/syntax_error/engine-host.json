@@ -1,0 +1,45 @@
+{
+  "argv": [
+    "docker.exe",
+    "--context",
+    "desktop-linux",
+    "start",
+    "--attach",
+    "497e35b5054a565a91800febf41a718f38ad0a2b402cd7d3684fd01a9a165e17"
+  ],
+  "exit_code": 1,
+  "timeout_seconds": 22,
+  "timed_out": false,
+  "stream_cap_exceeded": false,
+  "stream_cap_bytes_each": 262144,
+  "stdout": "engine-stdout.txt",
+  "stderr": "engine-stderr.txt",
+  "job_active_count": 0,
+  "readers_stopped": true,
+  "job_owner": {
+    "configured": true,
+    "assigned": true,
+    "closed": true,
+    "handle_retained": false,
+    "tainted": false,
+    "zero_observed": true,
+    "active_count": 0,
+    "create_uncertain": false,
+    "close_uncertain": false,
+    "failed_operations": [],
+    "native_error": null
+  },
+  "stream_byte_counts": [
+    73,
+    269
+  ],
+  "stream_reader_eof": [
+    true,
+    true
+  ],
+  "stream_reader_errors": [
+    null,
+    null
+  ],
+  "elapsed_seconds": 1.672
+}

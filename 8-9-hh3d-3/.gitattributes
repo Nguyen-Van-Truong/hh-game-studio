@@ -30,6 +30,10 @@ zdoc/reviews/*-gt03-s48-linux-*/*/engine-stdout.txt whitespace=blank-at-eol,-bla
 # S49 raw engine streams and failed test progress retain their observed bytes.
 zdoc/reviews/*-gt03-s49*/**/*-engine.log whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
 zdoc/reviews/*-gt03-s49*/**/engine-stdout.txt whitespace=blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+# S50 captured native spacing and failed reducer progress are immutable evidence.
+zdoc/reviews/*-gt03-s50*/**/*-engine.log whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+zdoc/reviews/*-gt03-s50*/**/engine-stdout.txt whitespace=blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+zdoc/reviews/*-gt03-s50-reducer-*/stderr.txt whitespace=-blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 zdoc/reviews/20260917-gt03-s49-profile-evidence-01/stderr.txt whitespace=-blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 zdoc/reviews/20260916-gt03-s47-sandbox/read-only-privileges.txt whitespace=-blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 zdoc/reviews/20260914-plan-history-s27/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

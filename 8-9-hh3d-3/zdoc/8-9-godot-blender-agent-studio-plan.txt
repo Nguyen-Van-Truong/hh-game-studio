@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 17-09-2026, Asia/Saigon | Revision S49 | TRIỂN KHAI THEO GATE
+Ngày 17-09-2026, Asia/Saigon | Revision S50 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=GT01_GT02_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S49
+PLAN_REVISION=S50
 EXECUTION_MODE=COORDINATOR_THREE_CODEX_OWNER_20260916
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -35,14 +35,14 @@ GT02_CHECKPOINT_COMMITS=2e24912,579b7e7,287a6c2,487e5fc,6a6dfb8,08f70cf,59c7b1e,
 GT02_SAFE_WRITE_STATUS=ACCEPTED_SCOPED_WINDOWS_MANAGED_FIXTURE
 GT02_BOUNDARY_EVIDENCE=S46_EXACT_CLOSURE_SERVICE_REPLACE_REGISTRY
 GT02_WORKING_SOURCE_STATUS=S46_FROZEN_ACCEPTED
-GT03_EVIDENCE_STATUS=S49_EDITOR_LINUX_PROFILE_HOST_DEATH_CANDIDATE
+GT03_EVIDENCE_STATUS=S50_EDITOR_COMPONENTS_PROFILE_HOST_DEATH_CANDIDATE
 GT03_REVIEW_STATUS=IMPLEMENTATION_CROSS_REVIEW_ONLY
-GT03_LAST_TESTED_SOURCE_CLOSURE=c1ec00f1da94f7bd29e04d8a57e9974999065c7c0df0ceff76d115fda4e4f4ca
-GT03_SANDBOX_STATUS=S49_BOUNDED_PROFILE_READBACK_CANDIDATE
-GT03_CHECKPOINT_COMMIT=e09f780
-GT03_WORKING_SOURCE_STATUS=S49_FROZEN_TESTED_AUDITED_WIP
+GT03_LAST_TESTED_SOURCE_CLOSURE=e6fcee30d7000aef5a5781e7cebe04c08e2be9a961c033fae3f0926d1e44bc3d
+GT03_SANDBOX_STATUS=S50_CANCELLATION_OWNER_BOUNDED_PROFILE_CANDIDATE
+GT03_CHECKPOINT_COMMIT=7ae3f97
+GT03_WORKING_SOURCE_STATUS=S50_FROZEN_TESTED
 
-TIẾN ĐỘ HIỆN HÀNH — S49 tiếp GT-03, ngày 17-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S50 tiếp GT-03, ngày 17-09-2026
 Owner mở lại3 subagent Codex Astra extra high ngày16-09; coordinator giữ
 một writer/file. Hai critic S44 FAIL/TICK=no đúng closure S44; lỗi admission
 và custody được sửa ở S45. Hai critic mới PASS/TICK=yes cùng closure S46;
@@ -153,9 +153,26 @@ phải sandbox escape đã chứng minh; sửa và test cancellation trước pu
 ở S50. S49 vẫn WIP, không có chữ ký nghiệm thu GT-03 hay public save ACK.
 Audit s49-audit kiểm107 source files,2194 artifacts và raw evidence cả4 gói;
 21/21 tamper tests đạt. GT-02 acceptance vẫn verified đúng closure S46.
+Checkpoint S49 7ae3f97; Git index/HEAD proof2301 file byte-exact đạt.
+S50 cùng closure hiện hành: reviews/20260917-gt03-s50-editor-01,
+-components-01, -linux-01, -profile-01 và -host-death-01. Python421/421 không
+skip; Godot Windows103/10/31; Linux11/11 diagnostics,5/5 eligible profiles.
+Hai complete bundles được ghi bằng ProtectedFileRoot, namespace barrier thực,
+validate bằng Godot Linux, đóng rồi reopen readonly/đọc đúng cả hai descriptor.
+Host-death lặp lại đúng closure S50; actual exit/tree/source đều sạch.
+Cancellation ownership giữ native owner khi KeyboardInterrupt/SystemExit;
+ValidationOwner chỉ cấp receipt sau owned run, raw readback và cleanup; import
+cache được bind đủ transitive source để không dùng code cũ dưới hash mới.
+Reducer v2 lưu complete11-file descriptor và bắt READBACK sau ACTIVATING;
+CONFIG/engine fields của reducer vẫn là attestations, không public save ACK.
+S50 chưa có selector/journal v2 tích hợp hoặc actual semantic candidate revision.
+Review chéo bắt lỗi timestamp, cached source và constructor cleanup; đã sửa và
+test lại. Giữ reducer-01 lỗi capacity, -02 và -03 đúng phiên bản riêng.
+Audit s50-audit reuse auditor S49 pin SHA, kiểm raw evidence +9 tamper tests;
+không coi review chéo là hai critic nghiệm thu. GT-02 acceptance vẫn verified.
 
 Việc tiếp theo:
-0. Sửa native CLI Job cancellation ownership; checkpoint S49 không che gap.
+0. Nối store-owned active selector/CAS; cancel unused prepare giữ tombstone.
 1. Nối authenticated host, recheck lease/fence tại effect và durable receipts;
    phân biệt project revision của scene+script với semantic scene revision.
 2. Nối journal đã có với actual blob staging/selection/readback, đầy đủ UID/

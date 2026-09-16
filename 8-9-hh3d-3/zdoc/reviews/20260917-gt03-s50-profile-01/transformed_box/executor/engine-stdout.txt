@@ -1,0 +1,34 @@
+HH_PROFILE_PHASE_BEGIN parse
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+HH_PROFILE_PHASE_END parse 0
+HH_PROFILE_PHASE_BEGIN import
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+[   0% ] [90m[1mfirst_scan_filesystem[22m | Started Project initialization (5 steps)[39m[0m
+[   0% ] [90m[1mfirst_scan_filesystem[22m | Scanning file structure...[39m[0m
+[  16% ] [90m[1mfirst_scan_filesystem[22m | Loading global class names...[39m[0m
+[  33% ] [90m[1mfirst_scan_filesystem[22m | Verifying GDExtensions...[39m[0m
+[  50% ] [90m[1mfirst_scan_filesystem[22m | Creating autoload scripts...[39m[0m
+[  66% ] [90m[1mfirst_scan_filesystem[22m | Initializing plugins...[39m[0m
+[  83% ] [90m[1mfirst_scan_filesystem[22m | Starting file scan...[39m[0m
+[92m[ DONE ][39m [1mfirst_scan_filesystem[22m
+[0m
+[   0% ] [90m[1mupdate_scripts_classes[22m | Started Registering global classes... (4 steps)[39m[0m
+[   0% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  20% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  40% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  60% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[92m[ DONE ][39m [1mupdate_scripts_classes[22m
+[0m
+[   0% ] [90m[1mloading_editor_layout[22m | Started Loading editor (5 steps)[39m[0m
+[   0% ] [90m[1mloading_editor_layout[22m | Loading editor layout...[39m[0m
+[  16% ] [90m[1mloading_editor_layout[22m | Loading docks...[39m[0m
+[92m[ DONE ][39m [1mloading_editor_layout[22m
+[0m
+HH_PROFILE_PHASE_END import 0
+HH_PROFILE_PHASE_BEGIN readback
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+HH_PROFILE_READBACK {"engine_version":"4.7.2-stable (official)","fresh_script":{"exports":{"enabled":{"type":"bool","value":false},"fixture_value":{"type":"int","value":9},"move_speed":{"type":"float","value":2.25},"turn_speed":{"type":"float","value":90.0}},"source_sha256":"ddbae2682cac26555cf52a4dce8593f96246eba9ea84881727dcf0d5d55cdd8c","type":"Node3D"},"instance_nodes":[{"exports":{"enabled":{"type":"bool","value":false},"fixture_value":{"type":"int","value":23},"move_speed":{"type":"float","value":2.25},"turn_speed":{"type":"float","value":90.0}},"groups":[],"mesh":null,"name":"Fixture","owner":"","path":".","script_sha256":"ddbae2682cac26555cf52a4dce8593f96246eba9ea84881727dcf0d5d55cdd8c","stable_id":"root","transform_rows_origin":[1.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0],"type":"Node3D"},{"exports":{},"groups":[],"mesh":{"id":"BoxMesh_one","size":[3.0,2.0,1.0],"type":"BoxMesh"},"name":"BoxOne","owner":".","path":"BoxOne","script_sha256":null,"stable_id":"box-one","transform_rows_origin":[0.0,-3.0,0.0,2.0,0.0,0.0,0.0,0.0,4.0,4.0,5.0,6.0],"type":"MeshInstance3D"}],"ok":true,"pid":261,"public_ack":false,"scene":{"connections":0,"inherited":false,"node_count":2,"nodes":[{"groups":[],"index":0,"instanced":false,"name":"Fixture","owner":"","parent":"","path":".","placeholder":"","properties":[{"name":"script","value":{"path":"res://scripts/fixture_actor.gd","source_sha256":"ddbae2682cac26555cf52a4dce8593f96246eba9ea84881727dcf0d5d55cdd8c","type":"GDScript"}},{"name":"fixture_value","value":{"type":"int","value":23}},{"name":"metadata/hh_studio_id","value":{"type":"string","value":"root"}}],"type":"Node3D"},{"groups":[],"index":1,"instanced":false,"name":"BoxOne","owner":".","parent":".","path":"./BoxOne","placeholder":"","properties":[{"name":"transform","value":{"type":"Transform3D","value":[0.0,-3.0,0.0,2.0,0.0,0.0,0.0,0.0,4.0,4.0,5.0,6.0]}},{"name":"mesh","value":{"id":"BoxMesh_one","size":[3.0,2.0,1.0],"type":"BoxMesh"}},{"name":"metadata/hh_studio_id","value":{"type":"string","value":"box-one"}}],"type":"MeshInstance3D"}],"source_sha256":"0f57341aa2958415aab345dcda00724da94a4c9bd2cce8c5b566d22331dbac43"},"schema":"hh-godot-profile-readback-1","script":{"base_type":"Node3D","can_instantiate":true,"constants":[],"defaults":{"enabled":{"type":"bool","value":false},"fixture_value":{"type":"int","value":9},"move_speed":{"type":"float","value":2.25},"turn_speed":{"type":"float","value":90.0}},"disk_sha256":"ddbae2682cac26555cf52a4dce8593f96246eba9ea84881727dcf0d5d55cdd8c","global_name":"","has_base_script":false,"is_tool":false,"methods":[],"reload_code":0,"resource_uid":"uid://bjbtti8c7afyc","signals":[],"source_sha256":"ddbae2682cac26555cf52a4dce8593f96246eba9ea84881727dcf0d5d55cdd8c","uid_source":"uid://bjbtti8c7afyc\n"}}
+HH_PROFILE_PHASE_END readback 0

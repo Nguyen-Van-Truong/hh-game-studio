@@ -1,0 +1,18 @@
+{
+  "exit_code": 0,
+  "timeout": false,
+  "elapsed_seconds": 3.172,
+  "tests": [
+    "test_readback_timestamp_must_follow_activation_even_with_rehashed_commit",
+    "test_full_scene_and_script_operations_have_inert_terminal_receipts",
+    "test_every_phase_cut_replay_is_identical_and_never_executes",
+    "test_stop_at_all_phase_cuts_preserves_or_holds_without_resume",
+    "test_terminal_after_deadline_retains_original_admission",
+    "test_readback_requires_new_observation_and_new_session",
+    "test_same_fresh_candidate_observation_can_supply_validation_without_second_engine_pass",
+    "test_selection_descriptor_identity_and_terminal_readback_binding",
+    "test_unknown_each_effect_boundary_is_permanent_hold",
+    "test_replay_and_lookup_perform_no_io"
+  ],
+  "source_unchanged": true
+}

@@ -1,0 +1,77 @@
+{
+  "status": "S50_DIAGNOSTIC_CHECKPOINT_VERIFIED",
+  "authority": 0,
+  "acceptance": false,
+  "formal_acceptance": false,
+  "public_ack": false,
+  "source_closure_sha256": "e6fcee30d7000aef5a5781e7cebe04c08e2be9a961c033fae3f0926d1e44bc3d",
+  "source_files": 120,
+  "artifacts": 1607,
+  "unit": {
+    "run": 421,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0
+  },
+  "engine_checks": {
+    "edit": 103,
+    "reopen": 10,
+    "contract": 31
+  },
+  "linux": {
+    "fixtures": 11,
+    "public_ack": false,
+    "sandbox_acceptance": false,
+    "validation_attribution_proven": false
+  },
+  "profile": {
+    "cases": [
+      {
+        "case": "defaults_override",
+        "passed": true,
+        "project_revision": "sha256:21b3846c7ae0de01fb472aa4de9749ed95c66484ad9a3b9480c5e6d75d72c509"
+      },
+      {
+        "case": "transformed_box",
+        "passed": true,
+        "project_revision": "sha256:e69187c521d3b8d059e3237c98ea7bc6a3af9e2a730032dee1de072458b4c3ea"
+      },
+      {
+        "case": "typed_scene_override",
+        "passed": true,
+        "project_revision": "sha256:650b1c07a0edd18194dc938ffb15087a1607d75ff57df4d14065302f89be6699"
+      },
+      {
+        "case": "tiny_export",
+        "passed": true,
+        "project_revision": "sha256:7b6d4a21ae09fb3a939299675637a22e6c8060baf5556f85ce87cd4f37d13513"
+      },
+      {
+        "case": "nested_node",
+        "passed": true,
+        "project_revision": "sha256:d723893dcc2f364c7581f91e418076493dea9794521a2c07e7c1e9ca8df372f0"
+      }
+    ],
+    "public_ack": false,
+    "sandbox_acceptance": false
+  },
+  "host_death": {
+    "observed": true,
+    "native_exit": 124,
+    "container_lifetime_seconds": 7.265339,
+    "public_ack": false,
+    "sandbox_acceptance": false
+  },
+  "components": {
+    "components": 2,
+    "native_descriptor_files": 24,
+    "historical_native_readback_bound": true,
+    "readonly_reopen_host_verified": true,
+    "independent_live_root_verification": false,
+    "public_ack": false,
+    "selected_state_verified": false,
+    "semantic_scene_revision_verified": false
+  },
+  "reused_auditor_sha256": "ad040b4512fbdfd865131a7d281ca958fad853cee36b1c21e3e0b2870338271f",
+  "host_death_marker": "S50_IDLE_BODY_AFTER_HOST_DEATH"
+}
