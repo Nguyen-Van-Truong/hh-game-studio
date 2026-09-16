@@ -75,7 +75,7 @@ def verify():
             'protocol':{'run':283,'passed':279,'skipped':4},'bootstrap':{'run':56,'passed':56,'skipped':0},
             'selector_rpc':{'run':16,'passed':16},'native_cases':7,'native_exit':61,
             'private_access_denied':True,'formal_acceptance':False,'independent_critic_signatures':0,
-            'limits':['S39 native endpoint now exercises selector fixture only; no Godot/Blender consumer',
+            'limits':['S41 native endpoint now exercises selector fixture only; no Godot/Blender consumer',
                       'source/game revisions and clock are trusted broker observations',
                       'safe_write/atomic_replace remain unsupported; power-loss witness custody is open',
                       'one coordinator verification is not two independent reviews']}
