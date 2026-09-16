@@ -1,0 +1,88 @@
+{
+  "observed_utc": "2026-09-16T21:36:59.071138+00:00",
+  "comparison_only": true,
+  "gt03_acceptance": false,
+  "frozen_closure": "469b22d6788ef63c7ca4d6e7dc91e703494db439834dffacdef7d476a9464bdc",
+  "differences": [
+    {
+      "path": "godot-addon/addons/hh_studio/scene_commands.gd",
+      "frozen_sha256": "dbb2f3163c5442c9b5696490676ba533c4a1ca9aab7b4a089acaea321f27c042",
+      "observed_live_sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069"
+    },
+    {
+      "path": "godot-addon/CONTRACT.md",
+      "frozen_sha256": "cc0879b85177baff918a1faf6bd9194c4fd8f78c1a71ecd84111f83387d7e2b2",
+      "observed_live_sha256": "02fe996178f7dd4f68e375a29265e172ffb9e315c0ccf1c277a92a49e052854b"
+    },
+    {
+      "path": "godot-addon/fixture_profile/source-pins.json",
+      "frozen_sha256": "187ab65ca3c06c35f296e89cc2c5fc59d8e92756f0356400579a0fff9e7852fc",
+      "observed_live_sha256": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2"
+    },
+    {
+      "path": "godot-addon/operations.json",
+      "frozen_sha256": "ce6342f23533cc545ab91f879b5589c2ec469f878afcf7f1708347768012e789",
+      "observed_live_sha256": "93e4287b197d328bd575a1fe938bf596535d044563c43ebe989e497cfb20a9e7"
+    },
+    {
+      "path": "godot-addon/PUBLICATION_OWNER.md",
+      "frozen_sha256": "a19e615b8b3fb3c05f5e718d966d5f9a7dd48305db42fa689cf40c4c08a51b31",
+      "observed_live_sha256": "62f18053d3e8918d0219e936c6b691ffa811a7e76186b6581afa90ba30638b49"
+    },
+    {
+      "path": "godot-addon/publication_owner.py",
+      "frozen_sha256": "07c0a5bfea8cbe65fa3aaee9ffddaffb9075ba14a583917770d33bd9785bf303",
+      "observed_live_sha256": "ea233ee1ef38d1d0a29d17961b64c9cfb1cacd5c75ce04b4bc27f4796f0e0de9"
+    },
+    {
+      "path": "godot-addon/publication_state_v5.py",
+      "frozen_sha256": "253b9d19c07cb07d46aca8407b7dd717c8cf728ae93187e4941114aa983b7e8c",
+      "observed_live_sha256": "e41d9e905a376c86655f33ce5769942f9ee6ccdf780a8f58b5eebadd6ce8eaf6"
+    },
+    {
+      "path": "godot-addon/README.md",
+      "frozen_sha256": "4ecfbf5ae5fdc236ca8886d3b8ac760c10d6303031c17795c903307ae6b55a05",
+      "observed_live_sha256": "4f7327927ecff7bd2d36d9e963440332f1f36e6cfe63dd330f234ccc065700ee"
+    },
+    {
+      "path": "tests/godot/run_edit_publication_probe.py",
+      "frozen_sha256": "a70fa6e47a21cb87e3d32f0b21ffc1a19ff6ac3ef3e6a29089750e32ca0e909b",
+      "observed_live_sha256": "4f9cd47d2328c730f33b330ce92c5e5c6a7c25feea0686d161c0bcb2d5c04f7d"
+    },
+    {
+      "path": "tests/godot/run_editor_edit_probe.py",
+      "frozen_sha256": "05478422088934769b0334f4fe51dc0176bf0babc113a806f24174e8ca8da2a1",
+      "observed_live_sha256": "ad6f1a909dc3fc7b1590c13b33637a4edccdaa08c27aa52765ce4e40ceff8221"
+    },
+    {
+      "path": "tests/godot/run_publication_probe.py",
+      "frozen_sha256": "974dee7c007c5fad5b107c0c4a74333dddd7137214fc865503280ead8c7fde93",
+      "observed_live_sha256": "0658af2413d8bbbd68b6056eef2cbd4697802be28b6721ae305829799efb50ad"
+    },
+    {
+      "path": "tests/godot/run_publication_stop_probe.py",
+      "frozen_sha256": "f6ebcec33ba183f2db56e8750d8c9383d7b1e823e28b57b877eb80ec79e7366c",
+      "observed_live_sha256": "21a39585485ab67f91b7ddcfb5cfd34d4fa3ddfa5a5d240352e5a40ed4f4f28f"
+    },
+    {
+      "path": "tests/godot/run_script_publication_probe.py",
+      "frozen_sha256": "50d02fee14fbf4ab0f1aea35bb4a958b83f46c08c22cf81c676b000bf641ee46",
+      "observed_live_sha256": "18f7d818a93803a9f66426066caefbc401197ee203e9bd0533213d4a29ac98f4"
+    },
+    {
+      "path": "tests/godot/test_contract.py",
+      "frozen_sha256": "4896a414e6995193095c6b54286a1fde61fdb0ace080b2c2d6f2a588bd4c808a",
+      "observed_live_sha256": "2363b5b90fb56fbe30c7114296f756accb0167ec5e8648e3334fff1b3ec3ced3"
+    },
+    {
+      "path": "tests/godot/test_publication_owner.py",
+      "frozen_sha256": "7aca97f494914a586f02b737c5e3a5d71fccc8133f334fb421c97e018e8f7bdf",
+      "observed_live_sha256": "aaab50e4e86b7efe651319596462ec93b943b33d4f1f37dda91255c5b754e0b7"
+    },
+    {
+      "path": "tests/godot/test_publication_state_v5.py",
+      "frozen_sha256": "1861cedfcfa508ade1bdbf3b8c69cad969c725ab12b686198825c9efcfedd7b1",
+      "observed_live_sha256": "a8769768d5f6e13586826486dfcf39e29332865d7edf7e807ae5015046f3c23c"
+    }
+  ]
+}

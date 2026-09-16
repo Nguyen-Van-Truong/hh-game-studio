@@ -1,0 +1,215 @@
+{
+  "schema": "HH-BLENDER-EXPORT-RESULT-1",
+  "profile": {
+    "schema": "HH-BLENDER-MATERIAL-EXPORT-PROFILE-1",
+    "objects": 1,
+    "vertices": 8,
+    "triangles": 12,
+    "materials": 1,
+    "images": 0,
+    "bones": 0,
+    "clips": 0,
+    "libraries": 0,
+    "drivers": 0,
+    "exporter_version": [
+      5,
+      2,
+      40
+    ],
+    "exporter_files_sha256": "22a180855eda3e7f1a075bf28d7c256e4498be16c96be4e7412a438ce96ec481",
+    "public_ack": false
+  },
+  "input_sha256": "9e8a73b86711935f2f502b71f1099f5f27e6da80d008d314fa043e84b121074c",
+  "scene_revision": "sha256:5772124bd10f023066913c8f69baec682ff966fbb3275dd8921e4c0527fbecf7",
+  "snapshot": {
+    "schema": "HH-BLENDER-FIXTURE-SCENE-1",
+    "objects": [
+      {
+        "object_id": "box",
+        "name": "GT04_box",
+        "mesh_name": "GT04_mesh_box",
+        "location": [
+          2.0,
+          -3.0,
+          4.0
+        ],
+        "rotation": [
+          0.20000000298023224,
+          -0.30000001192092896,
+          0.4000000059604645
+        ],
+        "scale": [
+          1.0,
+          2.0,
+          1.0
+        ],
+        "vertices": [
+          [
+            -0.5,
+            -1.0,
+            -1.5
+          ],
+          [
+            0.5,
+            -1.0,
+            -1.5
+          ],
+          [
+            0.5,
+            1.0,
+            -1.5
+          ],
+          [
+            -0.5,
+            1.0,
+            -1.5
+          ],
+          [
+            -0.5,
+            -1.0,
+            1.5
+          ],
+          [
+            0.5,
+            -1.0,
+            1.5
+          ],
+          [
+            0.5,
+            1.0,
+            1.5
+          ],
+          [
+            -0.5,
+            1.0,
+            1.5
+          ]
+        ],
+        "faces": [
+          [
+            0,
+            3,
+            2,
+            1
+          ],
+          [
+            4,
+            5,
+            6,
+            7
+          ],
+          [
+            0,
+            1,
+            5,
+            4
+          ],
+          [
+            1,
+            2,
+            6,
+            5
+          ],
+          [
+            2,
+            3,
+            7,
+            6
+          ],
+          [
+            3,
+            0,
+            4,
+            7
+          ]
+        ],
+        "material": {
+          "material_id": "copper",
+          "name": "HH_Material_copper",
+          "base_color": [
+            0.10000000149011612,
+            0.4000000059604645,
+            0.800000011920929,
+            1.0
+          ],
+          "metallic": 0.20000000298023224,
+          "roughness": 0.800000011920929,
+          "double_sided": true,
+          "alpha_mode": "OPAQUE"
+        }
+      }
+    ],
+    "units": {
+      "system": "METRIC",
+      "scale_length": 1.0
+    }
+  },
+  "context": {
+    "mode": "OBJECT",
+    "active_id": null,
+    "selected_ids": []
+  },
+  "output_sha256": "86078c4ebcee90e2999e764ac66d254fde87403822c4eef8743029eb15309068",
+  "output_size_bytes": 1800,
+  "public_ack": false,
+  "native_finished": true,
+  "context_unchanged": true,
+  "admission_probe": [
+    {
+      "label": "object_driver",
+      "passed": true
+    },
+    {
+      "label": "scene_driver",
+      "passed": true
+    },
+    {
+      "label": "material",
+      "passed": true
+    },
+    {
+      "label": "missing_texture",
+      "passed": true
+    },
+    {
+      "label": "geometry_nodes",
+      "passed": true
+    },
+    {
+      "label": "unapproved_addon",
+      "passed": true
+    },
+    {
+      "label": "missing_exporter_addon",
+      "passed": true
+    },
+    {
+      "label": "linked_library",
+      "passed": true
+    },
+    {
+      "label": "missing_library",
+      "passed": true
+    },
+    {
+      "label": "material_transmission",
+      "passed": true
+    },
+    {
+      "label": "material_alpha",
+      "passed": true
+    },
+    {
+      "label": "material_procedural_node",
+      "passed": true
+    },
+    {
+      "label": "material_node_driver",
+      "passed": true
+    },
+    {
+      "label": "material_extra_slot",
+      "passed": true
+    }
+  ]
+}

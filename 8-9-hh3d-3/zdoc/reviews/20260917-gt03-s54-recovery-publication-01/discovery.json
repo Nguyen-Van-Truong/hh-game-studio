@@ -1,0 +1,21 @@
+{
+  "catalog_digest": "sha256:4911ebb2f903c1c4ec32a895423a22de4bfa4d2d9b393c1b07da4c8ea69608bb",
+  "max_deadline_ms": 30000,
+  "new_mutation_permitted": false,
+  "operation": "project.reconcile",
+  "path": "[HOST_PATH]",
+  "project_files_read_only": true,
+  "project_id": "project.fixture",
+  "public_ack": false,
+  "request_fields": [
+    "project_id",
+    "command_id",
+    "digest",
+    "lease_id",
+    "fencing_epoch",
+    "deadline_ms"
+  ],
+  "runtime_enabled": true,
+  "schema": "hh-godot-recovery-catalog-1",
+  "scope": "godot.fixture"
+}

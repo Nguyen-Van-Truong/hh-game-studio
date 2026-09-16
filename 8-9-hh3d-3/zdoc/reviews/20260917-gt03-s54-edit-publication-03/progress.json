@@ -1,0 +1,246 @@
+[
+  {
+    "label": "authenticated_discovery",
+    "passed": true
+  },
+  {
+    "label": "authenticated_writer_lease",
+    "passed": true
+  },
+  {
+    "label": "operation_grant_denied_before_journal_or_editor",
+    "passed": true
+  },
+  {
+    "label": "edit.create_committed",
+    "passed": true
+  },
+  {
+    "label": "edit.create_scope_truthful",
+    "passed": true
+  },
+  {
+    "label": "edit.create_same_editor_and_disk",
+    "passed": true
+  },
+  {
+    "label": "edit.create_exact_durable_response",
+    "passed": true
+  },
+  {
+    "label": "edit.create_retry_no_effect",
+    "passed": true
+  },
+  {
+    "label": "native_create_observed",
+    "passed": true
+  },
+  {
+    "label": "edit.update_fresh_fence",
+    "passed": true
+  },
+  {
+    "label": "edit.update_committed",
+    "passed": true
+  },
+  {
+    "label": "edit.update_scope_truthful",
+    "passed": true
+  },
+  {
+    "label": "edit.update_same_editor_and_disk",
+    "passed": true
+  },
+  {
+    "label": "edit.update_exact_durable_response",
+    "passed": true
+  },
+  {
+    "label": "edit.update_retry_no_effect",
+    "passed": true
+  },
+  {
+    "label": "native_update_observed",
+    "passed": true
+  },
+  {
+    "label": "edit.undo_fresh_fence",
+    "passed": true
+  },
+  {
+    "label": "edit.undo_committed",
+    "passed": true
+  },
+  {
+    "label": "edit.undo_scope_truthful",
+    "passed": true
+  },
+  {
+    "label": "edit.undo_same_editor_and_disk",
+    "passed": true
+  },
+  {
+    "label": "edit.undo_exact_durable_response",
+    "passed": true
+  },
+  {
+    "label": "edit.undo_retry_no_effect",
+    "passed": true
+  },
+  {
+    "label": "native_undo_restores_created_state",
+    "passed": true
+  },
+  {
+    "label": "edit.redo_fresh_fence",
+    "passed": true
+  },
+  {
+    "label": "edit.redo_committed",
+    "passed": true
+  },
+  {
+    "label": "edit.redo_scope_truthful",
+    "passed": true
+  },
+  {
+    "label": "edit.redo_same_editor_and_disk",
+    "passed": true
+  },
+  {
+    "label": "edit.redo_exact_durable_response",
+    "passed": true
+  },
+  {
+    "label": "edit.redo_retry_no_effect",
+    "passed": true
+  },
+  {
+    "label": "native_redo_restores_updated_state",
+    "passed": true
+  },
+  {
+    "label": "edit.remove_fresh_fence",
+    "passed": true
+  },
+  {
+    "label": "edit.remove_committed",
+    "passed": true
+  },
+  {
+    "label": "edit.remove_scope_truthful",
+    "passed": true
+  },
+  {
+    "label": "edit.remove_same_editor_and_disk",
+    "passed": true
+  },
+  {
+    "label": "edit.remove_exact_durable_response",
+    "passed": true
+  },
+  {
+    "label": "edit.remove_retry_no_effect",
+    "passed": true
+  },
+  {
+    "label": "native_remove_observed",
+    "passed": true
+  },
+  {
+    "label": "edit.restore_fresh_fence",
+    "passed": true
+  },
+  {
+    "label": "edit.restore_committed",
+    "passed": true
+  },
+  {
+    "label": "edit.restore_scope_truthful",
+    "passed": true
+  },
+  {
+    "label": "edit.restore_same_editor_and_disk",
+    "passed": true
+  },
+  {
+    "label": "edit.restore_exact_durable_response",
+    "passed": true
+  },
+  {
+    "label": "edit.restore_retry_no_effect",
+    "passed": true
+  },
+  {
+    "label": "native_remove_undo_restores_node",
+    "passed": true
+  },
+  {
+    "label": "old_ack_stays_historical_after_later_edits",
+    "passed": true
+  },
+  {
+    "label": "stale_revision_rejected_without_effect",
+    "passed": true
+  },
+  {
+    "label": "rotated_writer_new_fence",
+    "passed": true
+  },
+  {
+    "label": "edited_scene_subsequently_saved",
+    "passed": true
+  },
+  {
+    "label": "save_persists_state_and_creates_history_boundary",
+    "passed": true
+  },
+  {
+    "label": "idle_stop_control_response_bounded",
+    "passed": true
+  },
+  {
+    "label": "idle_stop_native_journal_barrier",
+    "passed": true
+  },
+  {
+    "label": "stopped_owner_replays_original_edit_ack",
+    "passed": true
+  },
+  {
+    "label": "readonly_reopen_source_binding",
+    "passed": true
+  },
+  {
+    "label": "readonly_reopen_preserves_idle_stop",
+    "passed": true
+  },
+  {
+    "label": "readonly_reopen_selection_exact",
+    "passed": true
+  },
+  {
+    "label": "edit.create_reopen_exact_response",
+    "passed": true
+  },
+  {
+    "label": "edit.update_reopen_exact_response",
+    "passed": true
+  },
+  {
+    "label": "edit.undo_reopen_exact_response",
+    "passed": true
+  },
+  {
+    "label": "edit.redo_reopen_exact_response",
+    "passed": true
+  },
+  {
+    "label": "edit.remove_reopen_exact_response",
+    "passed": true
+  },
+  {
+    "label": "edit.restore_reopen_exact_response",
+    "passed": true
+  }
+]

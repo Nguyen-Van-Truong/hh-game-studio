@@ -1,0 +1,27 @@
+{
+  "wrapper_pid": 33232,
+  "started_at": "2026-09-16T21:25:41.540152+00:00",
+  "argv": [
+    "python.exe",
+    "-B",
+    "$SNAPSHOT/tests/godot/run_recovery_publication_probe.py",
+    "--crash-child",
+    "--output",
+    "original",
+    "--binary",
+    "Godot_v4.7.2-stable_win64.exe",
+    "--closure",
+    "469b22d6788ef63c7ca4d6e7dc91e703494db439834dffacdef7d476a9464bdc",
+    "--run-id",
+    "ORIGINAL-CRASH"
+  ],
+  "exit_code": 92,
+  "target_pid": 20780,
+  "wrapper_exit_code": 0,
+  "timed_out": false,
+  "tree_verified": true,
+  "ownership": "gated_job_kill_on_close",
+  "stdout": "original-stdout.txt",
+  "stderr": "original-stderr.txt",
+  "host": "original-host.json"
+}

@@ -1,0 +1,44 @@
+{
+  "schema": "hh-recovery-publication-audit-1",
+  "passed": true,
+  "candidate_only": true,
+  "gt03_acceptance": false,
+  "independent_acceptance_critic": false,
+  "source_closure_sha256": "469b22d6788ef63c7ca4d6e7dc91e703494db439834dffacdef7d476a9464bdc",
+  "source_files_verified": 168,
+  "harness_assertions_verified": 14,
+  "native_sequence": 9,
+  "native_selected_files": 11,
+  "original_target_exit": 92,
+  "outer_target_exit": 0,
+  "validation_container_id": "4284c57d74fb27c261b0374179d2bf618c5802af0493a06206f393e5d2be7213",
+  "actual_pids": {
+    "outer": 37088,
+    "original": 20780,
+    "original_editor": 34192,
+    "recovery_editor": 20768
+  },
+  "runtime_release_sha256": {
+    "validation": "32059eb8f008c87ca1bf1717b9414b89253001a380563cd34502ae78bfe6d163",
+    "editor": "12bf8037cd3584c16fe3fc812c7dc020d7997ad140b420d56808c3b794450443"
+  },
+  "linux_phase_exits": {
+    "parse": 0,
+    "import": 0,
+    "readback": 0
+  },
+  "recovery_editor_exit": 0,
+  "original_response": "absent; original command remains CAPTURE_PREPARED",
+  "recovered_response": "REJECTED / GODOT_RECOVERED_LAST_GOOD",
+  "public_mutation_enabled": false,
+  "original_live_source_unchanged": false,
+  "scope": "exact frozen component chain; captured HTTP assertions; read-only native post-run export",
+  "limitations": [
+    "No independent GT03 acceptance signature.",
+    "No full HTTP packet transcript is persisted; retry/auth claims are captured harness assertions.",
+    "Original editor has no graceful exit receipt after intentional host crash; enclosing owned Job tree is captured clean.",
+    "Portable custody export detects alteration but does not itself reproduce Windows ACL authority.",
+    "No proof transfers to newer live source, V5 edit recovery, Undo/Redo, unknown restoration, orphan COMMITTED, or GT07."
+  ],
+  "tamper_rejections": 20
+}

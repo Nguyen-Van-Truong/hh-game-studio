@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 17-09-2026, Asia/Saigon | Revision S53 | TRIỂN KHAI THEO GATE
+Ngày 17-09-2026, Asia/Saigon | Revision S54 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,8 +25,8 @@ RUNTIME_ACCEPTANCE=GT01_GT02_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S53
-EXECUTION_MODE=COORDINATOR_THREE_CODEX_OWNER_20260916
+PLAN_REVISION=S54
+EXECUTION_MODE=COORDINATOR_THREE_CODEX_ULTRA_OWNER_20260917
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
 GT02_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S46
@@ -35,216 +35,140 @@ GT02_CHECKPOINT_COMMITS=2e24912,579b7e7,287a6c2,487e5fc,6a6dfb8,08f70cf,59c7b1e,
 GT02_SAFE_WRITE_STATUS=ACCEPTED_SCOPED_WINDOWS_MANAGED_FIXTURE
 GT02_BOUNDARY_EVIDENCE=S46_EXACT_CLOSURE_SERVICE_REPLACE_REGISTRY
 GT02_WORKING_SOURCE_STATUS=S46_FROZEN_ACCEPTED
-GT03_EVIDENCE_STATUS=S53_SCENE_SCRIPT_SAVE_STOP_SAME_CLOSURE_CANDIDATE
+GT03_EVIDENCE_STATUS=S53_FULL_PLUS_S54_SEPARATE_COMPONENT_CANDIDATES
 GT03_REVIEW_STATUS=IMPLEMENTATION_CROSS_REVIEW_ONLY
 GT03_LAST_TESTED_SOURCE_CLOSURE=31a66517322bc57665aa316c53a88686ee27037a38ff055b1744327ad2464cec
 GT03_SANDBOX_STATUS=S51_BOUNDED_PROFILE_SEMANTIC_PARITY_CANDIDATE
-GT03_CHECKPOINT_COMMIT=20465cc
-GT03_WORKING_SOURCE_STATUS=S53_FROZEN_INTEGRATION_TESTED
-GT04_EVIDENCE_STATUS=INTERNAL_CAPPED_EXPORT_CANDIDATE_04
-GT04_LAST_TESTED_SOURCE_CLOSURE=ce5972578aaf06c53fc2860027c68b8dfd4cd8d8bfe48ffbddead9007440a1dd
+GT03_CHECKPOINT_COMMIT=babfadd
+GT03_WORKING_SOURCE_STATUS=S54_AUTHENTICATED_EDIT_RECOVERY_IN_PROGRESS
+GT04_EVIDENCE_STATUS=INTERNAL_PROTECTED_PUBLICATION_COMPONENT_CANDIDATE_GAPS_OPEN
+GT04_LAST_TESTED_SOURCE_CLOSURE=fc54433ac4a373e6e79aac33de1e6641e1a434cf2894a8ced622a445db36cd20
+GT04_WORKING_SOURCE_STATUS=S54_PUBLICATION_TESTED_RECOVERY_GAPS_OPEN
 
-TIẾN ĐỘ HIỆN HÀNH — S53 tiếp GT-03 và GT-04, ngày 17-09-2026
-Owner mở lại3 subagent Codex Astra extra high ngày16-09; coordinator giữ
-một writer/file. Hai critic S44 FAIL/TICK=no đúng closure S44; lỗi admission
-và custody được sửa ở S45. Hai critic mới PASS/TICK=yes cùng closure S46;
-coordinator đã nghiệm thu GT-02 đúng scope fixture Windows, không engine.
+TIẾN ĐỘ HIỆN HÀNH — S54, ngày 17-09-2026
+GT-01 và GT-02 ACCEPTED; GT-03 và GT-04 triển khai song song vì cùng phụ thuộc
+GT-02. GT-05 chưa mở. Root điều phối3 worker Codex Astra ultra, một writer mỗi
+file/vùng được giao; chỉ một Linux executor chạy tại một thời điểm.
 
-GT-01 ACCEPTED tại a0fb247; closure
-3ace23bcf84598cda64d54bbe3fc4736acde877f9f714fb71e2355d3e809eea4,
-evidence reviews/20260913-r21-gt01-final; hai critic PASS/TICK=yes.
+Đã nghiệm thu:
+- GT-01: a0fb247, reviews/20260913-r21-gt01-final; closure
+  3ace23bcf84598cda64d54bbe3fc4736acde877f9f714fb71e2355d3e809eea4.
+- GT-02: reviews/20260916-gt02-s46-01 và -s46-audit/acceptance.json;
+  closure f28056d8ff705a60d48a54f9dee80f16554494fa976bd0bfabee84bb51fecbbf.
+  Protocol413/417 pass+4 skip, bootstrap56/56, golden2396 rows; native
+  AppContainer/service/replace/Registry, exact custody/restart/Stop/retry đã
+  chạy. Hai critic độc lập PASS/TICK=yes cùng closure S46; checkpoint0de2ce0.
+  Public write chỉ managed fixture.active-release; generic arbitrary-path
+  safe_write/atomic_replace vẫn false. Không suy acceptance này cho engine.
 
-GT-02 ACCEPTED từ S46-01: reviews/20260916-gt02-s46-01. Protocol417 tests:
-413 pass,4 skips; bootstrap56/56. 106 source files,9 artifacts; actual host
-exit/tree sạch, source/snapshot không đổi. Python/Node/Godot golden2396 rows.
-Scoped discovery/client/service đã nối: native AppContainer tạo release,
-restart owner bằng storage ID rồi replace/retry/Stop; work mất reply vẫn có
-control lookup/Stop. Ba child exit86, service/thread/endpoint/Job/PID đều0.
-Native boundary cùng closure:20 replace giữa306 denied attempts; Registry
-36 denied/12 updates và positive control. Audit s46-audit kiểm lại toàn bộ
-hash,12/12 corruption của native digest/map bị từ chối. Hai review:
-reviews/20260916-gt02-s46-critic-a.md và -critic-b.md, cùng closure trên.
-Critic A chạy20/20 thêm13 reject/no-intent; critic B19/19 recovery/lifecycle.
-Acceptance scope/hashes tại reviews/20260916-gt02-s46-audit/acceptance.json.
-Checkpoint S45 1951d80 và Git HEAD proof được giữ; không gán chữ ký/hash cũ
-sang S46. S46 checkpoint0de2ce0 và Git HEAD proof106 source/138 evidence đạt.
+Checkpoint đã commit gần nhất: babfadd (S53), trước đó20465cc và98f344c.
+- Godot S53:557/557 unit, script31/save17/Stop19 native cùng closure
+  31a66517322bc57665aa316c53a88686ee27037a38ff055b1744327ad2464cec.
+  Authenticated complete scene+script bundle, Linux validation, native
+  selector CAS, editor retire/adopt/readback, durable exact Response.
+  Audit reviews/20260917-gt03-s53-audit, Git HEAD1305 byte-exact.
+- S53 Blender export04 có closure riêng, không gán bằng chứng Godot sang nó.
 
-Đã có schema/JCS/limits, journal/CAS8 process/retention, auth loopback,
-Stop/Cancel/UNKNOWN, redaction, AppContainer IPC, private staging/events,
-release graph và file consumer. Chưa có Godot/Blender consumer.
-- S44 checkpoint59c7b1e: protected NTFS native replace và file-selector IPC7/7,
-  expected FileID/hash, actual file readback/barriers,20 native replace giữa
-  288 denied attempts. Đây là evidence closure S44, không gán lại cho S45.
-- S45 chặn readonly/poisoned mutation trước INTENT, sau duplicate lookup;
-  Registry giữ typed root/stream IDs và event high-water, flush/readback trước
-  append trả về. UNKNOWN giữ nguyên khi barrier/cleanup lỗi.
-- Managed owner restart bằng storage ID + protected Registry, xác minh terminal
-  snapshot thực, cấp lease ID/fence mới rồi rearm fixed active.json. Test actual
-  process exit87 rồi commit tiếp; pending/Stop/orphan không tự resume. Event
-  crash exit91 giữa log và custody bị giữ; constructor token ownership đã sửa.
-- Full S45-01 fail1 do test lease40ms hết trước submit. S45-02 kiểm accepted
-  admission trước khi advance test clock;5/5 focused và fullsuite sạch. Giữ
-  lượt lỗi và native run-01 đúng hash cũ, không overwrite bằng PASS mới.
-Public generic safe_open.safe_write/atomic_replace vẫn false. Khả năng ghi
-công khai chỉ fixture.active-release qua ManagedFixtureOwner đã kiểm custody;
-không arbitrary path, engine consumer hay khả năng suy từ os.name.
+S54 đang làm — CHƯA COMMIT, CHƯA NGHIỆM THU:
+1. Godot registered edit + public host: CRUD/UndoRedo giữ nguyên editor/history;
+   checkpoint blob bền vững trước effect, V5 lưu exact historical response.
+   Edit ACK chỉ editor_session, files_saved=false/live_state_durable=false;
+   scene.save mới công bố saved project. Native editor03 đạt29 pure/40 edit/
+   39 rotation/19 generation; closure
+   abee9b1cfd4803497aef549c87c59f08021d73591213c2afcf003467b6ba9a66.
+   HTTP edit01 giữ FAIL do Euler/scale cache sau Undo; đã normalize từ chính
+   transform, giữ exact float32 matrix, không nới epsilon. HTTP edit02 qua
+   create/update/undo/redo/remove, restore bị DEADLINE_EXPIRED do lease chung
+   90s hết; không phải Undo failure. Harness03 cấp fresh fence giữa từng lệnh,
+   đạt61/61 edit→save→durable idle Stop→readonly reopen; closure
+   0fa75dac3afe05a7476ad12c852be221eb84c512f46f853d4c8ee1fab2042a32.
+   Audit s54-edit-audit kiểm170 sources/391 portable files,33 native records,
+   18 edit blobs,11 selected files và8 tamper rejects. Chỉ frozen component;
+   origin đã đổi, không gán proof này cho runtime mới hơn.
+2. Stop đã có owned drain và trạng thái persistence PENDING/DURABLE/UNKNOWN;
+   control không chờ disk. Cross-review bắt historical receipt lookup giữ
+   owner lock làm Stop chậm; đã đưa I/O ra ngoài lock,5 regression đạt.
+   Capacity admission giữ slot capture/adopt và một validator attempt cho
+   save sau edit; không nhận edit rồi mới phát hiện hết khả năng lưu.
+   Focused owner32, recovery HTTP12, transport7, grants19 đạt. FIFO Godot đã
+   nối toàn bộ writer routes, kể cả legacy lease;16 queue+4 HTTP tests đạt,
+   actual-engine FIFO đang chờ resource slot. Discovery công bố budget còn
+   lại; busy owner trả nhanh. Đây là component checks, chưa phải full S54.
+   Units01 closure ad72fff7d3a4856f959a5da38c2db1d40d5c2cdfb1ab971aca11b256ccfdf77c:
+   lane other627/627 đạt, actual exits/tree sạch; journal chạm600s ở V5,
+   chưa có completion marker nên full matrix INCOMPLETE. Runner giữ kết quả
+   timeout và chia journal theo module; không tính các dòng ok thay host exit.
+3. Recovery public01 đạt14/14 trên frozen closure
+   469b22d6788ef63c7ca4d6e7dc91e703494db439834dffacdef7d476a9464bdc:
+   actual Linux→HTTP save→capture→child exit92→fresh higher fence/editor→
+   readback→durable recovered last-good→fresh HTTP retry không effect.
+   Audit reviews/20260917-gt03-s54-recovery-publication-audit:168 sources,
+   300 portable artifacts,20 tamper cases; selector/all11files/custody exact.
+   Curation đã bỏ17 live storage files không dùng khỏi inventory317 cũ;
+   native exports giữ nguyên, verifier không cần ACL/private writer locks.
+   Origin đã khác, không gán proof cho live source. Original command vẫn
+   pending; recovered REJECTED tách biệt, không giả original COMMITTED.
+   Storage/editor components và mỗi closure riêng giữ trong s54-recovery-*.
+   Recovery Stop nay có same-stream STOPPED; fresh host không tự resume.
+   HOLD sau custody failure giữ terminal đã được witness, không biến response
+   cũ thành UNKNOWN; pure18/18 và4 native tests trong lane other đã đạt.
+   Crash-cut scene-CAS đã có actual publisher exit93; outer bị ngắt nên
+   incomplete. Recovery-only resume giữ original storage/source đã thất bại
+   deadline29s:20.796s trước spawn,5.244s tới hello. Chạy unit fsync đồng thời
+   là observation. Quiet resume02 cũng hết deadline29s ở commit admission;
+   contention không giải thích toàn bộ. Đường thành công hiện quét/replay36
+   lần; tối ưu kế tiếp gom một journal inspection trong cùng lock, không cache
+   qua phase hoặc bỏ barrier/check quyền, không nới deadline hay chạy lại
+   publisher nếu vẫn dùng cùng runtime/storage.
+4. Blender cleanup/durable/material đã có component candidates. Cleanup giữ
+   đúng Job owner để retry CloseHandle; host-death journal UNKNOWN/exact replay;
+   bounded Principled material + fresh blend reopen + capped native export.
+   Material02:108 Python/16 native/14 rejects; closure
+   dc6c9f4dad98adb7250feec88eea40a0990d51eeb05b0a90775559669f77b28a.
+   FIFO03:119 Python/19 native, fresh two-client queue/cancel/expiry/fencing,
+   closure7eab49db44887486919d4d827a36f597260ca99e02797c293827a03fb37e58d1.
+   Protected publication03:135 Python/16 native đạt; closure
+   fc54433ac4a373e6e79aac33de1e6641e1a434cf2894a8ced622a445db36cd20.
+   Audit gt04-publication-audit kiểm97 sources/152 artifacts,14 audit tests;
+   .blend/GLB/manifest/selector và6 native events cùng custody, fresh Blender
+   reopen đúng checkpoint. Public_ack=false/live_scene_recovered=false;
+   còn real crash/Stop recovery và consumer/public transport.
+   FIFO01 quá ngắn300ms nên hết lease trước effect;02 đạt nhưng03 dùng budget
+   10s cho success, expiry test riêng. Không overwrite các lượt cũ.
 
-GT-03: S47 (933c134) thêm EditorPlugin/main-thread, typed operations, stable
-IDs, manual-edit guards, UndoRedo và reopen. S48 (e09f780) thêm scene+script
-bundle, journal v1 và Linux hostile-input diagnostics; S49 (7ae3f97) thêm
-complete11-file profile, native parse/import/readback, admission1 và bounded
-PID1 sống qua host chết. Source/evidence/hash từng phiên giữ tại reviews/
-20260916-gt03-s47-* và 20260917-gt03-s48-*/s49-*; không chuyển proof giữa hash.
-S50 checkpoint c4fac2e:421/421 Python, Godot103/10/31, Linux11/11, profile5/5,
-2 actual bundles/barriers/readonly reopen, host-death sạch. Closure
- e6fcee30d7000aef5a5781e7cebe04c08e2be9a961c033fae3f0926d1e44bc3d.
-Audit s50-audit kiểm120 source/1607 artifacts; Git HEAD1727 file byte-exact.
-Đã sửa cancellation ownership, source-cache binding và READBACK sau ACTIVATING.
+Việc kế tiếp theo đường găng:
+- Sửa recovery inspection lặp rồi hoàn tất full Godot matrix; actual FIFO theo TX06 dùng
+  source đã tích hợp, không đẩy requirement này sang GT-07.
+- Bổ sung crash cut native scene+script ở selector/COMMITTED và recovery;
+  root cấp Linux slot tuần tự, worker code/audit vẫn chạy song song.
+- Blender nối crash/Stop recovery vào protected publication đã chạy;
+  giữ đúng supported profile và không nhận arbitrary .blend.
+- Khi runtime ổn định: freeze, full matrix + native regression có ảnh hưởng,
+  verify raw exits/Jobs/hashes, Git byte proof và checkpoint. Không lặp full
+  suite sau mỗi sửa nhỏ; không gán component proof khác closure thành full.
+- Chỉ hai critic độc lập cùng final frozen closure mới có thể nghiệm thu;
+  implementation/cross-review hiện tại không thay acceptance reviews.
 
-S51 checkpoint98f344c:471/471 Python và Godot103/10/31 đạt trên frozen closure
-55f15f2a431b8b065565143d456bd4cafbc59bca78a99492e3674ef93a97007c.
-Components01 đạt2 actual candidates: semantic observation→new manifest giữ
-nguyên11 input files→native stage/barrier→selectorA/B→readonly reopen. Receipt
-phân biệt isolated candidate với live editor; chưa public/authenticated save.
-Full semantic parity04 đạt6/6 Linux/Windows cùng closure hiện hành; Linux11/11,
-profile5/5 và host-death đều đạt, actual exit/tree/source sạch. Audit25 test
-corruption đạt; manifest/Git HEAD3279 file byte-exact, chưa nghiệm thu GT-03.
-Journalv2 bootstrap ghi intent trước tạofile/selector rồi mới CONFIG; complete
-stage/readback có actual descriptors. Reopen phải so selector bytes/FileVersion
-với journal, không chỉ tin history; uncertainty giữ đúng outer lifecycle owner.
-S51 review bắt lỗi selector mất/thay khi đóng, child cleanup owner và receipt
-fields bị đổi tại chỗ; đã sửa/regression. Không tự coi review chéo là nghiệm thu.
-Các lượt lỗi và review trước sửa được giữ nguyên trong reviews/20260917-gt03-s51-*.
+Còn GT-03/04; sau đó GT-05 pipeline, GT-06 Play/input/observe, GT-07 recovery/
+concurrency, GT-08 CI/Linux/Android thiết bị thật, GT-09 conformance và GT-10
+package/upgrade/rollback/handoff. HH World thuộc plan game riêng sau GT-10.
+Chưa có cơ sở hẹn ngày hoàn tất toàn plan. Android real-device là hard gate.
 
-GT-04 song song đúng §8.1, checkpoint8985207: reviews/20260917-gt04-blender-02,
-closure6190abcf73ab5c01e2e5799ed5210179b771a4165f76a430a3275948c729b847.
-18 pure tests + Blender27 edit/9 reopen/7 checkpoint checks đạt; target/wrapper
-exit0, tree sạch,9 source không đổi. Audit kiểm28 artifacts,10 tamper tests;
-Git HEAD69 file byte-exact. Có main-thread typed inspect/create box/transform,
-context restore, process-local dedupe, checkpoint/fresh-process readback.
-Còn UI/IPC/UndoRedo/durable journal/lease, hostile-input/resource caps/export.
-Giữ -01 lỗi version display5.2.1 LTS; không coi autoexec/offline flags là sandbox.
-GT-04 UI06 đã chạy thêm40/40 Python, actual GUI36/9/7 và background27/9/7;
-bảy target/wrapper exit0, cây tiến trình sạch,15 source không đổi. Evidence
-reviews/20260917-gt04-ui-06; handoff kiểm lại50 artifact và native records.
-Có timer queue/main-thread, Object/Edit Mesh context restore, native UndoRedo,
-deadline/Stop/dedupe và fixed-slot save/reopen. Chưa authenticated IPC, durable
-journal/lease, hostile-input caps/export. Không gán UI proof cho background02.
-
-S52 đã nối authenticated scene.save từ đầu đến cuối. Lượt publication05 đạt
-16/16: HTTP grant/lease→actual editor capture→isolated Linux validation→native
-12-object stage/selector CAS→same-editor reload/full semantic readback→durable
-COMMITTED/public ACK; retry/lookup không effect, readonly reopen đúng selection.
-Closure riêng6b326a9054c13c1c4a416d61492a7f060a9694f5fd55db087927b0add1248373;
-origin/snapshot không đổi, target33588/wrapper33652 exit0 và tree sạch.
-Stop01 đạt19/19 trên closure049732df02cca60a46a01b75404d0480be70aa7f8dfb5d1a7780abc343d44928:
-control HTTP trả trong cửa sổ timestamp3ms khi đúng container Linux còn Running;
-validator drain thật rồi UNKNOWN/noACK, không stage/select/adopt, selector và
-editor root giữ nguyên, readonly recovery đúng. Runtime per-file map trùng
-publication05; hai full closure khác đúng harness timeout720→600, không đổi log.
-Full editor02 cùng closure publication05:504/522 pass,18 fail do hai module
-test giữ giả định cũ chỉ scene_commands đổi hash so với fixture S49; S52 plugin
-IPC cũng đổi. Godot103/10/31 đạt, mọi target/wrapper exit0/tree sạch ngoài unit
-exit1 đúng18 failure; không sửa capture thành PASS. Đã sửa đúng hai kiểm tra
-provenance, giữ fixture S49 nguyên bytes và nhãn replay-only. Frozen repair02
-chạy lại cả hai module30/30 pass, source/snapshot sạch; runtime và mọi test khác
-không đổi. Closure repair dd596edd95bfe6d29f9ec485cc0b1f1d0f0a7d7431782d37de6e2325751e9833.
-Coverage tổng hợp522 test IDs, không claim một full run522/522 trên cùngclosure.
-Audit phải kiểm exact runtime map, diff chỉ hai testfile, failed IDs có trong
-repair và actual host/engine records; không rerun lane native đã sạch chỉ vì
-sửa test provenance. Hai source closure/old failure vẫn giữ nguyên.
-Audit s52-audit đã xác minh955 artifact tối thiểu,145 source/64 runtime files,
-4 corruption tests và Git index1102 file byte-exact. Ba full closure được giữ
-riêng; runtime maps trùng, không chuyển chữ ký hay đổi capture lỗi thành PASS.
-Checkpoint còn giữ2833 artifact lịch sử đã so byte với index; cache/Registry/
-private storage không đưa vào Git. Git proof bắt CRLF của ba report Markdown:
-đã giữ raw bytes bằng attributes+restage, không sửa log để khớp hash.
-GT-03/04 vẫn IN_PROGRESS, chưa có hai critic nghiệm thu. Public ACK ở trên chỉ
-cho command scene.save managed fixture đã chạy, không đồng nghĩa gate accepted.
-
-Giảm vòng chờ: focused tests trong lúc sửa; full freeze/matrix tại integration
-milestone. Không mở thêm helper/review checkpoint khi luồng chính chưa nối.
-Publication04 trả UNKNOWN vì coordinator chạy đồng thời hai Linux probe và
-executor từ chối EXECUTOR_ADMISSION_BUSY; không lỗi phase của engine. Engine
-lanes dùng chung admission1 phải chạy tuần tự, worker code/audit vẫn song song.
-Editor01 chưa mở process vì timeout720 vượt cap600 của runner đã accepted;
-đã sửa harness600, giữ toàn bộ lượt lỗi, không sửa bootstrap/core GT-02.
-
-S52 checkpoint20465cc, Git HEAD1102 byte-exact đạt. S53 tiếp luồng
-script_text.replace chung scene+script bundle/journal, retire editor cũ và mở
-editor generation mới từ selection đã validate. Coordinator giữ grant/diff và
-owner integration; worker editor giữ generation/retirement/readback; worker
-journal giữ schema v4/response bền vững; worker Blender nối external IPC vào
-main-thread queue. Không source/core GT-02 nào được sửa. Focused grant16/16,
-contract/preview24/24, owner20/20 và transport7/7 đạt. Editor generation04 đạt
-17/17 native, scene-only regression19/19; journalv4 pure12/12, native5/5 đạt.
-Mỗi component giữ closure riêng. S53 script-publication02 sau đó đạt31/31 toàn
-tuyến; scene.save regression17/17 và Stop19/19 đều cùng closure31a66517 ở
-marker. Unit matrix557/557, không failure/error/skip, chia511+46 test IDs
-không trùng/thiếu, bounded runner riêng và snapshot/source không đổi. Audit
-s53-audit kiểm1151 artifact, actual exits/Jobs/semantic/receipt và6 corruption
-cases; chưa hai critic nghiệm thu GT-03. Nguyên dirty scene+script mới được
-select cùng11 file, old editor retire rồi mới mở generation mới. Script run01
-fail do probe xin write lease lần hai; đã dùng read lease cho preview, write
-lease đầu cho publication. Sửa metadata comparison của probe trước run02;
-không sửa runtime để làm lượt lỗi thành PASS.
-V4 lưu nguyên Response canonical; lỗi sau COMMITTED trước trả reply phải đọc
-terminal đã lưu, không hạ thành UNKNOWN chỉ vì cache RAM chưa cập nhật. Test
-Stop khi retire, giữ cleanup owner của editor mới và lost-return đã được thêm.
-IPC Blender05 đạt61/61 Python,20/20 native trên67 source; closure ghi ở marker
-GT04. Có HMAC/session/sequence, control riêng, main-thread polling, actual host
-exit73 làm Job kết thúc Blender. Chỉ internal fixture/public_ack=false; chưa
-durable journal/lease/export/hostile admission. Audit gt04-ipc-audit giữ106
-artifact portable; không coi tắt autoexec là sandbox hoặc tick GT-04.
-Grant phase đã bind operation để script-only không nhận quyền scene.save;
-preview diff bounded và giữ hash đủ input ngay khi phần hiển thị bị truncate.
-Không gán proof S52 cho runtime S53.
-GT04 export04 sau đó đạt83 Python/31 native checks/9 native admission rejects,
-77 source/41 runtime,174 portable proof; 4 corruption cases đạt. Heavy export
-chạy background Job riêng, pin128 exporter files,2GiB/15sCPU/4process/20swall;
-32MiB workspace watchdog chưa phải filesystem quota. Full GLB vertices/name/
-TRS bind snapshot, có XYZ rotation. Hai job thành công; deadline/Stop/OOM thất
-bại đúng dự kiến, actual exit/Job0. Stop15ms dùng pause fixture trước operator,
-không claim đo giữa operator. Public ACK/durable lease/journal còn thiếu;
-box-only zero-material/rig chưa đủ workload material/rig ở các gate sau.
-Ultra review phát hiện ExportJob close-error chưa giữ owner để retry cleanup;
-giữ gap này cho lượt tiếp, không coi candidate đã nghiệm thu.
-
-Lịch sử tiến độ trước khi tinh gọn được giữ nguyên tại
-reviews/20260917-plan-history-s50/tools-plan-before-s51-close.txt (AUTHORITY=0),
-SHA256 421478ecb84fcff6264e8567e61d6715da12aac252c1d8a7b1203ae0859d87d9.
-Không xóa gate/DoD, lỗi cũ, chữ ký hoặc lý do quyết định để rút ngắn phần đọc.
-
-Việc tiếp theo:
-1. S53 save/script/Stop đã có cùng frozen closure; checkpoint rồi nối create/
-   update/remove/UndoRedo qua authenticated host, giữ history và checkpoint.
-   COMMITTED của edit trong editor phải nói files_saved=false; không tự save/
-   reload mỗi edit để lách và làm mất UndoRedo.
-2. Cùng-app crash recovery phải reload/readback và reconcile bền vững; kiểm
-   Stop/revoke/manual edit giữa phase, response-loss và các crash cut còn thiếu.
-3. GT-04 IPC/main-thread/UndoRedo đã có candidate; tiếp durable lease/journal,
-   fixed export/background job/resource caps, rồi review độc lập.
-4. Recovery cùng app phải thật sự reload/readback rồi complete hoặc restore
-   last-good theo journal/custody. Idle Stop hiện chỉ latch trong RAM. Journalv4 đã có
-   original response readonly replay; authenticated owner reconnect/recovery
-   và terminal reconciliation vẫn chưa được chứng minh. Không bật writable reopen để né gap.
-   Có thể hoàn thiện reconcile trong khi protected files vẫn readonly; generic
-   publish tiếp sau restart cần authority/rearm riêng, không sửa ngầm core GT-02.
-5. Freeze từng gate hoàn chỉnh, hai critic độc lập; giữ protocol/core GT-02
-   frozen, không đổi acceptance để khớp những phần mới chỉ implementation.
-
-Còn: GT-03 Godot, GT-04 Blender, GT-05 pipeline, GT-06 play/input/
-observe, GT-07 recovery, GT-08 CI/Linux/Android thiết bị thật, GT-09 conformance,
-GT-10 package/upgrade/rollback/handoff. HH World thuộc plan game sau GT-10;
-không gộp vào nghiệm thu plan công cụ. Chưa có cơ sở hẹn ngày xong toàn plan.
-Không suy Godot/Blender vắng khỏi PATH là chưa cài: dùng pin trong studio/.local.
-
-Lịch sử S34–S42 và checkpoints chi tiết được giữ nguyên bytes ở
-reviews/20260916-plan-history-s42/tools-plan-s42.txt (AUTHORITY=0), SHA-256
-9bc157aab9207bb432343626e5a6fbb5abcdb111481e9977448efbdd13fadcd8.
-Các report/test lỗi cũ vẫn giữ, không overwrite bằng PASS mới.
+Plan giữ dependency/evidence/critic tốt; cải tiến tốc độ là đối chiếu đủ DoD
+ngay trước implementation, focused tests khi sửa, freeze tại integration
+milestone, tránh queue/lease budget thiếu và tránh tranh Linux admission1.
+Không xóa yêu cầu khó để tick. Lịch sử chi tiết S47–S54 trước tinh gọn được
+lưu nguyên bytes tại reviews/20260917-plan-history-s54/
+tools-plan-before-s54-integration.txt (AUTHORITY=0), SHA256 31563ad7857113b74d7be14ab68fb383830827949419d7ff685fb51f401f5572.
+Các archive S27/S42/S50 và mọi failure/verdict cũ vẫn giữ nguyên.
 
 KINH NGHIỆM ĐANG ÁP DỤNG
+- S54: deadline-sensitive engine integration không chạy chung với full native
+  journal/Registry fsync matrix. Chia code/review song song, điều phối I/O;
+  phân biệt overlap với nguyên nhân đã chứng minh. Resume crash storage bằng
+  fresh authority, không lặp publisher hoặc overwrite evidence lỗi. Native
+  snapshot chứa float giữ exact JSON bytes: JCS semantic equality không thay
+  hash bytes Blender. Không nới ACL để hợp primitive khác.
 - S49: SceneState dùng ./Child trong khi NodePath instance dùng Child; giữ
   hai contract riêng. Float script là binary64: không dùng epsilon cho phép
   1e-13 bị đọc thành0; vector native float32 có tolerance riêng. UID/config/
@@ -1139,7 +1063,7 @@ khác scope; không cả ba cùng mở rộng audit framework. Giữ báo cáo h
 ngắn, lịch sử ở Git/reviews. Lỗi harness/argv sửa rồi tiếp tục từ lane chưa xong,
 không chạy lại các lane đã hoàn tất nếu source không đổi.
 
-Owner steering mới nhất 17-09-2026: ba Codex subagent Astra xhigh và coordinator.
+Owner steering mới nhất 17-09-2026: ba Codex subagent Astra ultra và coordinator.
 Mỗi lane có WP/dependency, scope file, baseline/hash, deliverable và bounded
 verify; một writer/file. Không Grok CLI hoặc tự thay model khi thiếu quota.
 Critic đọc source/evidence độc lập, không đọc verdict nhau; source freeze trong

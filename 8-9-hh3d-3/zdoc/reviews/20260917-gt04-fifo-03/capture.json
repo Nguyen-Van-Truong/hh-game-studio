@@ -1,0 +1,55 @@
+{
+  "source_closure_sha256": "7eab49db44887486919d4d827a36f597260ca99e02797c293827a03fb37e58d1",
+  "unit": {
+    "wrapper_pid": 22056,
+    "started_at": "2026-09-16T21:37:15.619618+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests/blender",
+      "-p",
+      "test_*.py",
+      "-v"
+    ],
+    "exit_code": 0,
+    "target_pid": 18168,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "unit-stdout.txt",
+    "stderr": "unit-stderr.txt",
+    "host": "unit-host.json"
+  },
+  "host": {
+    "wrapper_pid": 6612,
+    "started_at": "2026-09-16T21:37:18.856049+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "$SNAPSHOT/tests/blender/run_writer_fifo_probe.py",
+      "--frozen",
+      "--output",
+      "20260917-gt04-fifo-03",
+      "--binary",
+      "blender.exe"
+    ],
+    "exit_code": 0,
+    "target_pid": 35976,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "native-stdout.txt",
+    "stderr": "native-stderr.txt",
+    "host": "native-host.json"
+  },
+  "candidate_only": true,
+  "public_ack": false,
+  "source_unchanged": true,
+  "snapshot_unchanged": true
+}

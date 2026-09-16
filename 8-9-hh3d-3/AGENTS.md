@@ -1,6 +1,6 @@
 # HH3D-3 — routing hiện hành
 
-Owner steering mới nhất 16-09-2026: mở lại 3 subagent Codex Astra extra high
+Owner steering mới nhất 17-09-2026: chạy 3 subagent Codex Astra ultra
 để chia việc và review độc lập; không dùng Grok CLI. Coordinator giữ một
 writer/file, giao scope hữu hạn, không sửa frozen source trong lúc review.
 Nghiệm thu vẫn cần hai critic độc lập cùng frozen closure; không chuyển chữ ký

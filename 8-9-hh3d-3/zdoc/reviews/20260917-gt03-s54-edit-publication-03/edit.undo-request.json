@@ -1,0 +1,20 @@
+{
+  "command_id": "edit.undo",
+  "schema_version": "hh-studio-0.1",
+  "project_id": "project.fixture",
+  "operation": "scene.undo",
+  "lease_id": "lease.d7bc6518f28cf0f95db5d288587913ca",
+  "fencing_epoch": 3,
+  "expected_revision": "sha256:8ad91e5934ecda7dc89aecadbd034e5bf20c4092fb8ec50d3299cd344aeb9502",
+  "target": {
+    "stable_id": "root"
+  },
+  "payload": {
+    "expected_generation": 1,
+    "expected_project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+    "steps": 1
+  },
+  "payload_hash": "sha256:b0a7258cc0f3ecb599e4372385001c48136fe94577bc6e0bbb7fc1d6a9e3704b",
+  "deadline_ms": 1789594842203,
+  "digest": "sha256:db3dcd207571d1d27c02abbff642fe9cc4c8d6a29e8d1a28f55a260e69cefd4a"
+}

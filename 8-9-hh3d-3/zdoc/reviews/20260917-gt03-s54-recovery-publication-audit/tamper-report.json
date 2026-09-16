@@ -1,0 +1,109 @@
+{
+  "schema": "hh-recovery-audit-tamper-1",
+  "passed": true,
+  "rejected": 20,
+  "original_package_mutated": false,
+  "engine_rerun": false,
+  "cases": [
+    {
+      "case": "changed frozen recovery source",
+      "rejected": true,
+      "reason": "SOURCE_FILE:godot-addon/publication_recovery.py"
+    },
+    {
+      "case": "forged outer success",
+      "rejected": true,
+      "reason": "ACTUAL_TARGET_EXIT"
+    },
+    {
+      "case": "lost actual crash92",
+      "rejected": true,
+      "reason": "ACTUAL_TARGET_EXIT"
+    },
+    {
+      "case": "unclosed Linux host Job",
+      "rejected": true,
+      "reason": "LINUX_HOST_CLEANUP:engine-host.json"
+    },
+    {
+      "case": "nonzero actual docker wait",
+      "rejected": true,
+      "reason": "DOCKER_WAIT_EXIT"
+    },
+    {
+      "case": "forged container success",
+      "rejected": true,
+      "reason": "LINUX_HOST_STREAMS:exited-inspect-host.json"
+    },
+    {
+      "case": "changed isolated input",
+      "rejected": true,
+      "reason": "LINUX_INPUT_BYTES:scenes/fixture.tscn"
+    },
+    {
+      "case": "substituted selected native FileID",
+      "rejected": true,
+      "reason": "ALL_NATIVE_FILE_VERSIONS"
+    },
+    {
+      "case": "truncated protected event stream",
+      "rejected": true,
+      "reason": "NATIVE_EXPORT_BYTES"
+    },
+    {
+      "case": "changed native terminal bytes",
+      "rejected": true,
+      "reason": "NATIVE_EXPORT_BYTES"
+    },
+    {
+      "case": "rolled back durable custody witness",
+      "rejected": true,
+      "reason": "CUSTODY_CHECKSUM"
+    },
+    {
+      "case": "changed actual recovered semantic state",
+      "rejected": true,
+      "reason": "RECOVERY_SEMANTIC_READBACK"
+    },
+    {
+      "case": "reused old editor session",
+      "rejected": true,
+      "reason": "ACTUAL_FRESH_EDITOR_IDENTITY"
+    },
+    {
+      "case": "invented successful original save",
+      "rejected": true,
+      "reason": "EXACT_TERMINAL_WIRE"
+    },
+    {
+      "case": "non-exact terminal wire retry bytes",
+      "rejected": true,
+      "reason": "EXACT_TERMINAL_WIRE"
+    },
+    {
+      "case": "inflated acceptance claim",
+      "rejected": true,
+      "reason": "HARNESS_SCOPE"
+    },
+    {
+      "case": "stale reconciliation authority",
+      "rejected": true,
+      "reason": "RECOVERY_FRESH_ADMISSION"
+    },
+    {
+      "case": "forged recovery generation",
+      "rejected": true,
+      "reason": "RECOVERY_EDITOR_GENERATION"
+    },
+    {
+      "case": "forged terminal save success",
+      "rejected": true,
+      "reason": "RECOVERY_TERMINAL_RESPONSE_MISMATCH"
+    },
+    {
+      "case": "changed recovery prefix digest",
+      "rejected": true,
+      "reason": "RECOVERY_EVENT_ORDER"
+    }
+  ]
+}

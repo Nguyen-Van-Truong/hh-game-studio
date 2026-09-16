@@ -1,0 +1,61 @@
+{
+  "passed": false,
+  "formal_acceptance": false,
+  "source_closure_sha256": "ad72fff7d3a4856f959a5da38c2db1d40d5c2cdfb1ab971aca11b256ccfdf77c",
+  "snapshot_unchanged": true,
+  "other": {
+    "passed": true,
+    "counts": {
+      "run": 627,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    "host": {
+      "wrapper_pid": 18852,
+      "started_at": "2026-09-16T21:57:43.727174+00:00",
+      "argv": [
+        "python.exe",
+        "-B",
+        "-c",
+        "import unittest,json,sys\nsuite=unittest.defaultTestLoader.discover('tests/godot',pattern='test_*.py')\ndef flatten(suite):\n    for item in suite:\n        if isinstance(item,unittest.TestSuite):yield from flatten(item)\n        else:yield item\nall_tests=list(flatten(suite));ids=[case.id() for case in all_tests]\nassert len(ids)==len(set(ids))\njournal=sys.argv[1]=='journals'\nchosen=[case for case in all_tests if case.id().startswith('test_publication_journal')==journal]\nprint('GT03_UNIT_INVENTORY '+json.dumps({'all':sorted(ids),'chosen':sorted(case.id() for case in chosen)}),flush=True)\nresult=unittest.TextTestRunner(verbosity=2).run(unittest.TestSuite(chosen))\nprint('GT03_UNIT_COMPLETE '+json.dumps({'run':result.testsRun,'failures':len(result.failures),'errors':len(result.errors),'skips':len(result.skipped)}),flush=True)\nsys.exit(not result.wasSuccessful())\n",
+        "other"
+      ],
+      "exit_code": 0,
+      "target_pid": 29032,
+      "wrapper_exit_code": 0,
+      "timed_out": false,
+      "tree_verified": true,
+      "ownership": "gated_job_kill_on_close",
+      "stdout": "other-stdout.txt",
+      "stderr": "other-stderr.txt",
+      "host": "other-host.json"
+    }
+  },
+  "journals": {
+    "passed": false,
+    "host": {
+      "wrapper_pid": 16020,
+      "started_at": "2026-09-16T21:57:43.726174+00:00",
+      "argv": [
+        "python.exe",
+        "-B",
+        "-c",
+        "import unittest,json,sys\nsuite=unittest.defaultTestLoader.discover('tests/godot',pattern='test_*.py')\ndef flatten(suite):\n    for item in suite:\n        if isinstance(item,unittest.TestSuite):yield from flatten(item)\n        else:yield item\nall_tests=list(flatten(suite));ids=[case.id() for case in all_tests]\nassert len(ids)==len(set(ids))\njournal=sys.argv[1]=='journals'\nchosen=[case for case in all_tests if case.id().startswith('test_publication_journal')==journal]\nprint('GT03_UNIT_INVENTORY '+json.dumps({'all':sorted(ids),'chosen':sorted(case.id() for case in chosen)}),flush=True)\nresult=unittest.TextTestRunner(verbosity=2).run(unittest.TestSuite(chosen))\nprint('GT03_UNIT_COMPLETE '+json.dumps({'run':result.testsRun,'failures':len(result.failures),'errors':len(result.errors),'skips':len(result.skipped)}),flush=True)\nsys.exit(not result.wasSuccessful())\n",
+        "journals"
+      ],
+      "exit_code": null,
+      "target_pid": null,
+      "wrapper_exit_code": 2,
+      "timed_out": true,
+      "tree_verified": true,
+      "ownership": "gated_job_kill_on_close",
+      "stdout": "journals-stdout.txt",
+      "stderr": "journals-stderr.txt",
+      "host": "journals-host.json"
+    },
+    "completion_marker": false
+  },
+  "controller_error": "TypeError while rendering missing completion counts; lane result files retained",
+  "next_action": "Resume uncompleted tests for diagnostics; formal matrix needs captured completion of journal partitions."
+}

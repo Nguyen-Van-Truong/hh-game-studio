@@ -1,0 +1,55 @@
+{
+  "source_closure_sha256": "dc6c9f4dad98adb7250feec88eea40a0990d51eeb05b0a90775559669f77b28a",
+  "unit": {
+    "wrapper_pid": 20192,
+    "started_at": "2026-09-16T21:24:50.386073+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests/blender",
+      "-p",
+      "test_*.py",
+      "-v"
+    ],
+    "exit_code": 0,
+    "target_pid": 14900,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "unit-stdout.txt",
+    "stderr": "unit-stderr.txt",
+    "host": "unit-host.json"
+  },
+  "host": {
+    "wrapper_pid": 39104,
+    "started_at": "2026-09-16T21:24:51.884104+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "$SNAPSHOT/tests/blender/run_material_probe.py",
+      "--frozen",
+      "--output",
+      "20260917-gt04-material-02",
+      "--binary",
+      "blender.exe"
+    ],
+    "exit_code": 0,
+    "target_pid": 32928,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "native-stdout.txt",
+    "stderr": "native-stderr.txt",
+    "host": "native-host.json"
+  },
+  "candidate_only": true,
+  "public_ack": false,
+  "source_unchanged": true,
+  "snapshot_unchanged": true
+}

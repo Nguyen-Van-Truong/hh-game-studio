@@ -15,8 +15,8 @@
 *.cfg text eol=lf
 *.blend binary
 # Native-generated pinned Blender fixtures were frozen as CRLF bytes.
-studio/blender-addon/exporter.lock.json -text
-studio/tests/blender/fixtures/box-export-baseline.json -text
+studio/blender-addon/exporter.lock.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+studio/tests/blender/fixtures/box-export-baseline.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 *.snapshot -text
 studio/evidence/** -text
 zdoc/reviews/20260910-r6/worker-output/** -text
@@ -53,6 +53,9 @@ zdoc/reviews/*-gt03-s53*.md -text whitespace=blank-at-eol,blank-at-eof,space-bef
 zdoc/reviews/*-gt03-s53*/**/*-engine.log whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
 zdoc/reviews/*-gt03-s53*/**/engine-stdout.txt whitespace=blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
 zdoc/reviews/20260917-plan-history-s50/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+zdoc/reviews/20260917-plan-history-s54/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+# Keep the incomplete unit progress line captured at the owned timeout.
+zdoc/reviews/20260917-gt03-s54-units-01/journals-stderr.txt whitespace=-blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 zdoc/reviews/20260917-gt03-s49-profile-evidence-01/stderr.txt whitespace=-blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 zdoc/reviews/20260916-gt03-s47-sandbox/read-only-privileges.txt whitespace=-blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 zdoc/reviews/20260914-plan-history-s27/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

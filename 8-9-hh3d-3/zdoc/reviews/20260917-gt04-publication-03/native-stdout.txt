@@ -1,0 +1,17 @@
+GT04_PUBLICATION_CHECK {"label": "foreign_path_rejected_before_intent_or_native_file", "passed": true}
+GT04_PUBLICATION_CHECK {"label": "unsupported_context_rejected_before_intent", "passed": true}
+GT04_PUBLICATION_CHECK {"label": "actual_terminal_reply_loss_is_reported_unknown", "passed": true}
+GT04_PUBLICATION_CHECK {"label": "lookup_recovers_exact_durable_committed_response", "passed": true}
+GT04_PUBLICATION_CHECK {"label": "duplicate_after_reply_loss_has_no_new_effect", "passed": true}
+GT04_PUBLICATION_CHECK {"label": "conflicting_duplicate_preserves_original_receipt", "passed": true}
+GT04_PUBLICATION_CHECK {"label": "complete_protected_binary_manifest_closure", "passed": true}
+GT04_PUBLICATION_CHECK {"label": "all_artifacts_exact_native_hashes", "passed": true}
+GT04_PUBLICATION_CHECK {"label": "native_ui_unchanged_after_publication", "passed": true}
+GT04_PUBLICATION_CHECK {"label": "managed_native_handles_closed_before_reopen", "passed": true}
+GT04_PUBLICATION_CHECK {"label": "custody_reopen_exact_response_without_gui_replay", "passed": true}
+GT04_PUBLICATION_CHECK {"label": "protected_readonly_reopen_exact_complete_bundle", "passed": true}
+GT04_PUBLICATION_CHECK {"label": "readonly_duplicate_only_returns_original", "passed": true}
+GT04_PUBLICATION_CHECK {"label": "actual_gui_exit_and_job_zero", "passed": true}
+GT04_PUBLICATION_CHECK {"label": "native_protected_checkpoint_reopen_actual_exit", "passed": true}
+GT04_PUBLICATION_CHECK {"label": "native_published_mesh_transform_material_readback", "passed": true}
+GT04_PUBLICATION_COMPLETE {"passed": true, "checks": 16}

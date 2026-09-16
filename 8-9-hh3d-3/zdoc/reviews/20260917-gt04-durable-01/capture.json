@@ -1,0 +1,55 @@
+{
+  "source_closure_sha256": "820c6d7a955a0addb814f66935a7fc1471cb58ce17e355505c134b846840edb1",
+  "unit": {
+    "wrapper_pid": 42412,
+    "started_at": "2026-09-16T21:16:57.177809+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests/blender",
+      "-p",
+      "test_*.py",
+      "-v"
+    ],
+    "exit_code": 0,
+    "target_pid": 30452,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "unit-stdout.txt",
+    "stderr": "unit-stderr.txt",
+    "host": "unit-host.json"
+  },
+  "host": {
+    "wrapper_pid": 35408,
+    "started_at": "2026-09-16T21:16:58.451189+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "$SNAPSHOT/tests/blender/run_durable_session_probe.py",
+      "--frozen",
+      "--output",
+      "20260917-gt04-durable-01",
+      "--binary",
+      "blender.exe"
+    ],
+    "exit_code": 0,
+    "target_pid": 24888,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "native-stdout.txt",
+    "stderr": "native-stderr.txt",
+    "host": "native-host.json"
+  },
+  "candidate_only": true,
+  "public_ack": false,
+  "source_unchanged": true,
+  "snapshot_unchanged": true
+}
