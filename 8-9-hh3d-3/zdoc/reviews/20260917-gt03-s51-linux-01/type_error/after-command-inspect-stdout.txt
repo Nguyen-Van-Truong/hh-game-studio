@@ -1,0 +1,327 @@
+[
+    {
+        "Id": "4d9cbadfe7b942ee422e7720b52a2de9c6e79c23c869124e9e76a85fce5bda4f",
+        "Created": "2026-09-16T19:07:23.775354301Z",
+        "Path": "/usr/local/bin/python3",
+        "Args": [
+            "-I",
+            "-B",
+            "-c",
+            "import os,pathlib,hashlib,sys; assert os.getpid()==1 and os.getuid()==65532; assert pathlib.Path('/proc/sys/kernel/yama/ptrace_scope').read_text().strip() in ('1','2','3'); assert hashlib.sha256(pathlib.Path('/usr/bin/timeout').read_bytes()).hexdigest()=='5ef0eaaaa4220593add7716aad74da927ca3bb10605e964330de64fecc3ef15e'; os.execv('/usr/bin/timeout',['/usr/bin/timeout',*sys.argv[1:]])",
+            "--signal=TERM",
+            "--kill-after=1s",
+            "19s",
+            "/tool/Godot_v4.7.2-stable_linux.x86_64",
+            "--headless",
+            "--path",
+            "/project",
+            "--log-file",
+            "/tmp/engine.log",
+            "--check-only",
+            "--script",
+            "res://scripts/fixture_actor.gd"
+        ],
+        "State": {
+            "Status": "exited",
+            "Running": false,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 0,
+            "ExitCode": 1,
+            "Error": "",
+            "StartedAt": "2026-09-16T19:07:24.535836293Z",
+            "FinishedAt": "2026-09-16T19:07:25.391099257Z"
+        },
+        "Image": "sha256:581429e3df12d76e6af4be5ab7d0e7fc2013eb57dc23d2de691411c8efdbb970",
+        "ResolvConfPath": "/var/lib/docker/containers/4d9cbadfe7b942ee422e7720b52a2de9c6e79c23c869124e9e76a85fce5bda4f/resolv.conf",
+        "HostnamePath": "/var/lib/docker/containers/4d9cbadfe7b942ee422e7720b52a2de9c6e79c23c869124e9e76a85fce5bda4f/hostname",
+        "HostsPath": "/var/lib/docker/containers/4d9cbadfe7b942ee422e7720b52a2de9c6e79c23c869124e9e76a85fce5bda4f/hosts",
+        "LogPath": "",
+        "Name": "/hh-gt03-8b4257b0dca24badb418b2b669e7ffa5",
+        "RestartCount": 0,
+        "Driver": "overlayfs",
+        "Platform": "linux",
+        "MountLabel": "",
+        "ProcessLabel": "",
+        "AppArmorProfile": "",
+        "ExecIDs": null,
+        "HostConfig": {
+            "Binds": null,
+            "ContainerIDFile": "",
+            "LogConfig": {
+                "Type": "none",
+                "Config": {}
+            },
+            "NetworkMode": "none",
+            "PortBindings": {},
+            "RestartPolicy": {
+                "Name": "no",
+                "MaximumRetryCount": 0
+            },
+            "AutoRemove": false,
+            "VolumeDriver": "",
+            "VolumesFrom": null,
+            "ConsoleSize": [
+                0,
+                0
+            ],
+            "CapAdd": null,
+            "CapDrop": [
+                "ALL"
+            ],
+            "CgroupnsMode": "private",
+            "Dns": null,
+            "DnsOptions": [],
+            "DnsSearch": [],
+            "ExtraHosts": null,
+            "GroupAdd": null,
+            "IpcMode": "private",
+            "Cgroup": "",
+            "Links": null,
+            "OomScoreAdj": 0,
+            "PidMode": "",
+            "Privileged": false,
+            "PublishAllPorts": false,
+            "ReadonlyRootfs": true,
+            "SecurityOpt": [
+                "no-new-privileges=true",
+                "seccomp=builtin"
+            ],
+            "Tmpfs": {
+                "/home/validator": "rw,nosuid,nodev,noexec,size=16m,nr_inodes=2048,uid=65532,gid=65532,mode=0700",
+                "/project/.godot": "rw,nosuid,nodev,noexec,size=64m,nr_inodes=8192,uid=65532,gid=65532,mode=0700",
+                "/run": "rw,nosuid,nodev,noexec,size=4m,nr_inodes=512,uid=65532,gid=65532,mode=0700",
+                "/tmp": "rw,nosuid,nodev,noexec,size=16m,nr_inodes=2048,uid=65532,gid=65532,mode=0700"
+            },
+            "UTSMode": "",
+            "UsernsMode": "",
+            "ShmSize": 16777216,
+            "Runtime": "runc",
+            "Isolation": "",
+            "CpuShares": 0,
+            "Memory": 1073741824,
+            "NanoCpus": 1000000000,
+            "CgroupParent": "",
+            "BlkioWeight": 0,
+            "BlkioWeightDevice": [],
+            "BlkioDeviceReadBps": [],
+            "BlkioDeviceWriteBps": [],
+            "BlkioDeviceReadIOps": [],
+            "BlkioDeviceWriteIOps": [],
+            "CpuPeriod": 0,
+            "CpuQuota": 0,
+            "CpuRealtimePeriod": 0,
+            "CpuRealtimeRuntime": 0,
+            "CpusetCpus": "",
+            "CpusetMems": "",
+            "Devices": [],
+            "DeviceCgroupRules": null,
+            "DeviceRequests": null,
+            "MemoryReservation": 0,
+            "MemorySwap": 1073741824,
+            "MemorySwappiness": null,
+            "OomKillDisable": null,
+            "PidsLimit": 64,
+            "Ulimits": [
+                {
+                    "Name": "core",
+                    "Hard": 0,
+                    "Soft": 0
+                },
+                {
+                    "Name": "cpu",
+                    "Hard": 10,
+                    "Soft": 10
+                },
+                {
+                    "Name": "fsize",
+                    "Hard": 8388608,
+                    "Soft": 8388608
+                },
+                {
+                    "Name": "msgqueue",
+                    "Hard": 8192,
+                    "Soft": 8192
+                },
+                {
+                    "Name": "nofile",
+                    "Hard": 256,
+                    "Soft": 256
+                }
+            ],
+            "CpuCount": 0,
+            "CpuPercent": 0,
+            "IOMaximumIOps": 0,
+            "IOMaximumBandwidth": 0,
+            "Mounts": [
+                {
+                    "Type": "bind",
+                    "Source": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\tooling\\godot-4.7.2-stable-linux",
+                    "Target": "/tool",
+                    "ReadOnly": true,
+                    "BindOptions": {
+                        "Propagation": "rprivate"
+                    }
+                },
+                {
+                    "Type": "bind",
+                    "Source": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s51-linux-01\\type_error\\snapshot",
+                    "Target": "/project",
+                    "ReadOnly": true,
+                    "BindOptions": {
+                        "Propagation": "rprivate"
+                    }
+                }
+            ],
+            "MaskedPaths": [
+                "/proc/acpi",
+                "/proc/asound",
+                "/proc/interrupts",
+                "/proc/kcore",
+                "/proc/keys",
+                "/proc/latency_stats",
+                "/proc/sched_debug",
+                "/proc/scsi",
+                "/proc/timer_list",
+                "/proc/timer_stats",
+                "/sys/devices/virtual/powercap",
+                "/sys/firmware"
+            ],
+            "ReadonlyPaths": [
+                "/proc/bus",
+                "/proc/fs",
+                "/proc/irq",
+                "/proc/sys",
+                "/proc/sysrq-trigger"
+            ]
+        },
+        "Storage": {
+            "RootFS": {
+                "Snapshot": {
+                    "Name": "overlayfs"
+                }
+            }
+        },
+        "Mounts": [
+            {
+                "Type": "bind",
+                "Source": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\tooling\\godot-4.7.2-stable-linux",
+                "Destination": "/tool",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s51-linux-01\\type_error\\snapshot",
+                "Destination": "/project",
+                "Mode": "",
+                "RW": false,
+                "Propagation": "rprivate"
+            }
+        ],
+        "Config": {
+            "Hostname": "4d9cbadfe7b9",
+            "Domainname": "",
+            "User": "65532:65532",
+            "AttachStdin": false,
+            "AttachStdout": true,
+            "AttachStderr": true,
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "HOME=/home/validator",
+                "TMPDIR=/tmp",
+                "XDG_CACHE_HOME=/home/validator/cache",
+                "XDG_CONFIG_HOME=/home/validator/config",
+                "XDG_DATA_HOME=/home/validator/data",
+                "XDG_RUNTIME_DIR=/run",
+                "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "LANG=C.UTF-8",
+                "GPG_KEY=7169605F62C751356D054A26A821E680E5FA6305",
+                "PYTHON_VERSION=3.12.14",
+                "PYTHON_SHA256=5c8462af5790baf43a321a1559dbe0db06d1be4300fb85fb53c40060668e548a"
+            ],
+            "Cmd": [
+                "-I",
+                "-B",
+                "-c",
+                "import os,pathlib,hashlib,sys; assert os.getpid()==1 and os.getuid()==65532; assert pathlib.Path('/proc/sys/kernel/yama/ptrace_scope').read_text().strip() in ('1','2','3'); assert hashlib.sha256(pathlib.Path('/usr/bin/timeout').read_bytes()).hexdigest()=='5ef0eaaaa4220593add7716aad74da927ca3bb10605e964330de64fecc3ef15e'; os.execv('/usr/bin/timeout',['/usr/bin/timeout',*sys.argv[1:]])",
+                "--signal=TERM",
+                "--kill-after=1s",
+                "19s",
+                "/tool/Godot_v4.7.2-stable_linux.x86_64",
+                "--headless",
+                "--path",
+                "/project",
+                "--log-file",
+                "/tmp/engine.log",
+                "--check-only",
+                "--script",
+                "res://scripts/fixture_actor.gd"
+            ],
+            "Healthcheck": {
+                "Test": [
+                    "NONE"
+                ]
+            },
+            "Image": "sha256:581429e3df12d76e6af4be5ab7d0e7fc2013eb57dc23d2de691411c8efdbb970",
+            "Volumes": null,
+            "WorkingDir": "/project",
+            "Entrypoint": [
+                "/usr/local/bin/python3"
+            ],
+            "Labels": {
+                "hh.gt03.executor": "hh-gt03-linux-desktop-v1",
+                "hh.gt03.owner": "hh-gt03-8b4257b0dca24badb418b2b669e7ffa5"
+            },
+            "StopTimeout": 2
+        },
+        "NetworkSettings": {
+            "SandboxID": "",
+            "SandboxKey": "",
+            "Ports": {},
+            "Networks": {
+                "none": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": null,
+                    "DriverOpts": null,
+                    "GwPriority": 0,
+                    "NetworkID": "37df0d956f923d138257771813ee4eb90ccc9d5ba577b37aeccc925b4a431b75",
+                    "EndpointID": "",
+                    "Gateway": "",
+                    "IPAddress": "",
+                    "MacAddress": "",
+                    "IPPrefixLen": 0,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "DNSNames": null
+                }
+            }
+        },
+        "ImageManifestDescriptor": {
+            "mediaType": "application/vnd.oci.image.manifest.v1+json",
+            "digest": "sha256:9bbdaa0482ba166a4aa36b03162892a871c269311817cf7132db0922d6c7e91d",
+            "size": 2325,
+            "annotations": {
+                "com.docker.official-images.bashbrew.arch": "amd64",
+                "org.opencontainers.image.base.digest": "sha256:c8e8f3d6e647f782059d933878e9a0de6889cec350149a770d51d1baa245a60e",
+                "org.opencontainers.image.base.name": "buildpack-deps:bookworm",
+                "org.opencontainers.image.created": "2026-08-25T03:34:59Z",
+                "org.opencontainers.image.revision": "f2c5d1b8a6adecb5b00b3c9331d4f863beade6b3",
+                "org.opencontainers.image.source": "https://github.com/docker-library/python.git#f2c5d1b8a6adecb5b00b3c9331d4f863beade6b3:3.12/bookworm",
+                "org.opencontainers.image.url": "https://hub.docker.com/_/python",
+                "org.opencontainers.image.version": "3.12.14-bookworm"
+            },
+            "platform": {
+                "architecture": "amd64",
+                "os": "linux"
+            }
+        }
+    }
+]

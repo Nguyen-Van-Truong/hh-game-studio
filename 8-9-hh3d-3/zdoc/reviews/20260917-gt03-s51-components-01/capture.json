@@ -1,0 +1,39 @@
+{
+  "run_id": "GT03-S51-COMPONENTS-01",
+  "source_closure_sha256": "55f15f2a431b8b065565143d456bd4cafbc59bca78a99492e3674ef93a97007c",
+  "host": {
+    "wrapper_pid": 35440,
+    "started_at": "2026-09-16T19:04:51.032572+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "-c",
+      "import importlib.util,sys;from pathlib import Path;p=Path(\"tests/godot/run_components_probe.py\").resolve();s=importlib.util.spec_from_file_location(\"frozen_components\",p);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);sys.exit(m.frozen_run(Path(sys.argv[1])))",
+      "20260917-gt03-s51-components-01"
+    ],
+    "exit_code": 0,
+    "target_pid": 41440,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "components-stdout.txt",
+    "stderr": "components-stderr.txt",
+    "host": "components-host.json"
+  },
+  "result": {
+    "passed": true,
+    "components": 2,
+    "readonly_reopen_verified": true,
+    "temporary_removed": true,
+    "public_ack": false,
+    "selected_state_verified": false,
+    "live_editor_adoption_verified": false,
+    "selector_bytes_verified": true,
+    "candidate_semantic_revision_verified": true
+  },
+  "source_unchanged": true,
+  "snapshot_unchanged": true,
+  "public_ack": false,
+  "passed": true
+}

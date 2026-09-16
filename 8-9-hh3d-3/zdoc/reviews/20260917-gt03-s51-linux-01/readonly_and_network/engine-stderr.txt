@@ -1,0 +1,4 @@
+ERROR: Connection to remote host failed!
+   at: connect_to_host (core/io/stream_peer_tcp.cpp:90)
+   GDScript backtrace (most recent call first):
+       [0] _enter_tree (res://scripts/fixture_actor.gd:8)

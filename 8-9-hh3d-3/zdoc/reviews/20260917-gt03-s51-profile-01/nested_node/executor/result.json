@@ -1,0 +1,231 @@
+{
+  "schema": "hh-gt03-linux-diagnostic-1",
+  "run_id": "hh-gt03-971faab737294b59a05c393f36912052",
+  "mode": "profile-validate",
+  "public_ack": false,
+  "sandbox_acceptance": false,
+  "diagnostic_process_clean": true,
+  "container_id": "2c9ceb40204c316ad8dc321427655318c58174e93aedc36e09b9578e3fd56734",
+  "state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-09-16T19:09:59.405107253Z",
+    "FinishedAt": "2026-09-16T19:10:07.90682455Z"
+  },
+  "owned_removed": true,
+  "input_unchanged": true,
+  "snapshot_unchanged": true,
+  "commandhost": {
+    "argv": [
+      "docker.exe",
+      "--context",
+      "desktop-linux",
+      "start",
+      "--attach",
+      "2c9ceb40204c316ad8dc321427655318c58174e93aedc36e09b9578e3fd56734"
+    ],
+    "exit_code": 0,
+    "timeout_seconds": 22,
+    "timed_out": false,
+    "stream_cap_exceeded": false,
+    "stream_cap_bytes_each": 262144,
+    "stdout": "engine-stdout.txt",
+    "stderr": "engine-stderr.txt",
+    "job_active_count": 0,
+    "readers_stopped": true,
+    "job_owner": {
+      "configured": true,
+      "assigned": true,
+      "closed": true,
+      "handle_retained": false,
+      "tainted": false,
+      "zero_observed": true,
+      "active_count": 0,
+      "create_uncertain": false,
+      "close_uncertain": false,
+      "failed_operations": [],
+      "native_error": null
+    },
+    "stream_byte_counts": [
+      9041,
+      0
+    ],
+    "stream_reader_eof": [
+      true,
+      true
+    ],
+    "stream_reader_errors": [
+      null,
+      null
+    ],
+    "elapsed_seconds": 8.907
+  },
+  "input_hashes_before": {
+    "addons/hh_studio/jcs_godot.gd": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+    "addons/hh_studio/jcs_godot.gd.uid": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+    "addons/hh_studio/plugin.cfg": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+    "addons/hh_studio/plugin.gd": "2a5eeb10e9adf0b705293545936f2abd8e352cfbe6b4df7d13411b0cf610243b",
+    "addons/hh_studio/plugin.gd.uid": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+    "addons/hh_studio/scene_commands.gd": "dbb2f3163c5442c9b5696490676ba533c4a1ca9aab7b4a089acaea321f27c042",
+    "addons/hh_studio/scene_commands.gd.uid": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+    "project.godot": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+    "scenes/fixture.tscn": "3140b11bec54954b7767ac09deba924ab4c359e964650b0fd31e32e1a93ab82e",
+    "scripts/fixture_actor.gd": "ddbae2682cac26555cf52a4dce8593f96246eba9ea84881727dcf0d5d55cdd8c",
+    "scripts/fixture_actor.gd.uid": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142"
+  },
+  "stdout": "engine-stdout.txt",
+  "stderr": "engine-stderr.txt",
+  "errors": [],
+  "profile_eligible": true,
+  "profile_harness_sha256": "efde8370a6157ed2f66544ee13b82ee2556b59130f5306e9e0774ed0e3be79a5",
+  "profile_harness_unchanged": true,
+  "admission": {
+    "acquired": true,
+    "wait_ms": 0,
+    "abandoned_mutex": false,
+    "maximum_active": 1,
+    "recovery": {
+      "previous_owner": null,
+      "reconciled": true,
+      "removed": false
+    },
+    "released": true
+  },
+  "owner_record_retained": false,
+  "supervisor": {
+    "path": "/usr/bin/timeout",
+    "sha256": "5ef0eaaaa4220593add7716aad74da927ca3bb10605e964330de64fecc3ef15e",
+    "term_after_seconds": 19,
+    "kill_after_seconds": 1,
+    "total_deadline_seconds": 20,
+    "pid": 1,
+    "requires_yama_scope": [
+      1,
+      2,
+      3
+    ],
+    "host_death_acceptance": false
+  },
+  "toolchain": {
+    "schema": "hh-gt03-linux-validator-1",
+    "status": "diagnostic_only",
+    "godot_version": "4.7.2-stable",
+    "source_commit": "ed1daf0bf001b61586d9930840f2f1394092c079",
+    "binary_name": "Godot_v4.7.2-stable_linux.x86_64",
+    "binary_sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
+    "archive_url": "https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip",
+    "archive_sha256": "cadd3204e728a35d3f13adb7fd0d7902636b79f6b95c40c265eb73b6c35329e4",
+    "archive_sha512": "9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65",
+    "official_sums_sha256": "b8bdff6704f833e7a021df16ec08e1478edd5a285c1f894929b91a7f74a5c7c0",
+    "image_id": "sha256:581429e3df12d76e6af4be5ab7d0e7fc2013eb57dc23d2de691411c8efdbb970",
+    "image_repo_digest": "python@sha256:581429e3df12d76e6af4be5ab7d0e7fc2013eb57dc23d2de691411c8efdbb970",
+    "docker_context": "desktop-linux",
+    "docker_endpoint": "npipe:////./pipe/dockerDesktopLinuxEngine",
+    "owned_runner_sha256": "ea522450acc46f90be5e2a7b9257e73ce8b619948105b2c9073aac1f881c7328",
+    "supervisor_path": "/usr/bin/timeout",
+    "supervisor_version": "GNU coreutils 9.1",
+    "supervisor_sha256": "5ef0eaaaa4220593add7716aad74da927ca3bb10605e964330de64fecc3ef15e",
+    "supervisor_bootstrap_sha256": "0194f9d31f6f8abaa8a33cc8c412075efa198546c2f187599ee023bd6be5c377",
+    "supervisor_requires_yama_scope": [
+      1,
+      2,
+      3
+    ],
+    "profile_bootstrap_sha256": "efde8370a6157ed2f66544ee13b82ee2556b59130f5306e9e0774ed0e3be79a5",
+    "profile_mode": "profile-validate"
+  },
+  "docker_wait_exit": 0,
+  "input_hashes_after": {
+    "addons/hh_studio/jcs_godot.gd": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+    "addons/hh_studio/jcs_godot.gd.uid": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+    "addons/hh_studio/plugin.cfg": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+    "addons/hh_studio/plugin.gd": "2a5eeb10e9adf0b705293545936f2abd8e352cfbe6b4df7d13411b0cf610243b",
+    "addons/hh_studio/plugin.gd.uid": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+    "addons/hh_studio/scene_commands.gd": "dbb2f3163c5442c9b5696490676ba533c4a1ca9aab7b4a089acaea321f27c042",
+    "addons/hh_studio/scene_commands.gd.uid": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+    "project.godot": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+    "scenes/fixture.tscn": "3140b11bec54954b7767ac09deba924ab4c359e964650b0fd31e32e1a93ab82e",
+    "scripts/fixture_actor.gd": "ddbae2682cac26555cf52a4dce8593f96246eba9ea84881727dcf0d5d55cdd8c",
+    "scripts/fixture_actor.gd.uid": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142"
+  },
+  "snapshot_hashes_after": {
+    "addons/hh_studio/jcs_godot.gd": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+    "addons/hh_studio/jcs_godot.gd.uid": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+    "addons/hh_studio/plugin.cfg": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+    "addons/hh_studio/plugin.gd": "2a5eeb10e9adf0b705293545936f2abd8e352cfbe6b4df7d13411b0cf610243b",
+    "addons/hh_studio/plugin.gd.uid": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+    "addons/hh_studio/scene_commands.gd": "dbb2f3163c5442c9b5696490676ba533c4a1ca9aab7b4a089acaea321f27c042",
+    "addons/hh_studio/scene_commands.gd.uid": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+    "project.godot": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+    "scenes/fixture.tscn": "3140b11bec54954b7767ac09deba924ab4c359e964650b0fd31e32e1a93ab82e",
+    "scripts/fixture_actor.gd": "ddbae2682cac26555cf52a4dce8593f96246eba9ea84881727dcf0d5d55cdd8c",
+    "scripts/fixture_actor.gd.uid": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142"
+  },
+  "binary_unchanged": true,
+  "log_clean": true,
+  "command_host": {
+    "argv": [
+      "docker.exe",
+      "--context",
+      "desktop-linux",
+      "start",
+      "--attach",
+      "2c9ceb40204c316ad8dc321427655318c58174e93aedc36e09b9578e3fd56734"
+    ],
+    "exit_code": 0,
+    "timeout_seconds": 22,
+    "timed_out": false,
+    "stream_cap_exceeded": false,
+    "stream_cap_bytes_each": 262144,
+    "stdout": "engine-stdout.txt",
+    "stderr": "engine-stderr.txt",
+    "job_active_count": 0,
+    "readers_stopped": true,
+    "job_owner": {
+      "configured": true,
+      "assigned": true,
+      "closed": true,
+      "handle_retained": false,
+      "tainted": false,
+      "zero_observed": true,
+      "active_count": 0,
+      "create_uncertain": false,
+      "close_uncertain": false,
+      "failed_operations": [],
+      "native_error": null
+    },
+    "stream_byte_counts": [
+      9041,
+      0
+    ],
+    "stream_reader_eof": [
+      true,
+      true
+    ],
+    "stream_reader_errors": [
+      null,
+      null
+    ],
+    "elapsed_seconds": 8.907
+  },
+  "container_state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-09-16T19:09:59.405107253Z",
+    "FinishedAt": "2026-09-16T19:10:07.90682455Z"
+  }
+}

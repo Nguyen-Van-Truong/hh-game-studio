@@ -1,0 +1,62 @@
+{
+  "run_id": "GT03-S51-PROFILE-01",
+  "source_closure_sha256": "55f15f2a431b8b065565143d456bd4cafbc59bca78a99492e3674ef93a97007c",
+  "host": {
+    "wrapper_pid": 33872,
+    "started_at": "2026-09-16T19:08:58.343303+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "-c",
+      "import importlib.util,sys; from pathlib import Path; p=Path(\"tests/godot/run_profile_probe.py\").resolve(); s=importlib.util.spec_from_file_location(\"frozen_profile\",p); m=importlib.util.module_from_spec(s);s.loader.exec_module(m); sys.exit(m.frozen_cases(Path(sys.argv[1])))",
+      "20260917-gt03-s51-profile-01"
+    ],
+    "exit_code": 0,
+    "target_pid": 34828,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "profile-stdout.txt",
+    "stderr": "profile-stderr.txt",
+    "host": "profile-host.json"
+  },
+  "source_unchanged": true,
+  "snapshot_unchanged": true,
+  "public_ack": false,
+  "sandbox_acceptance": false,
+  "production_save_verified": false,
+  "cases": {
+    "passed": true,
+    "cases": [
+      {
+        "case": "defaults_override",
+        "passed": true,
+        "project_revision": "sha256:0a3954b677b005f09dd0ad0c00add57aebe8d30b8914c5b93b1c462cf3deb485"
+      },
+      {
+        "case": "transformed_box",
+        "passed": true,
+        "project_revision": "sha256:2fa9f661e5d1b974d2d87a737eaa8c221c660ee24f6c115b412ae0f49874f316"
+      },
+      {
+        "case": "typed_scene_override",
+        "passed": true,
+        "project_revision": "sha256:69828df839416f43d69707738fb861a910d0d5a10db6fbe7bbad28f26e4abf38"
+      },
+      {
+        "case": "tiny_export",
+        "passed": true,
+        "project_revision": "sha256:63a881354a9bb65937a1205629326ee291e11055d60598bc84467510bf0c8bf0"
+      },
+      {
+        "case": "nested_node",
+        "passed": true,
+        "project_revision": "sha256:b6a754098b345d3785071fc3e9016aae92bcacb73ccfa841cdbfa544d0d95fef"
+      }
+    ],
+    "public_ack": false,
+    "sandbox_acceptance": false
+  },
+  "passed": true
+}

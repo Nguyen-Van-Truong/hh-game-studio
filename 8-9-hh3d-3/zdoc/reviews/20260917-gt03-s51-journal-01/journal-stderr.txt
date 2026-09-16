@@ -1,0 +1,12 @@
+test_actual_prepare_persisted_before_staging_and_descriptor_replays (test_publication_journal_v2.JournalV2Tests.test_actual_prepare_persisted_before_staging_and_descriptor_replays) ... ok
+test_bad_stage_time_rejects_before_files_and_preserves_prepared (test_publication_journal_v2.JournalV2Tests.test_bad_stage_time_rejects_before_files_and_preserves_prepared) ... ok
+test_bootstrap_durable_order_actual_selected_bundle_and_readonly_reopen (test_publication_journal_v2.JournalV2Tests.test_bootstrap_durable_order_actual_selected_bundle_and_readonly_reopen) ... ok
+test_cancellation_during_native_bootstrap_preserved_after_cleanup (test_publication_journal_v2.JournalV2Tests.test_cancellation_during_native_bootstrap_preserved_after_cleanup) ... ok
+test_direct_synthetic_preparation_cannot_reach_native_log (test_publication_journal_v2.JournalV2Tests.test_direct_synthetic_preparation_cannot_reach_native_log) ... ok
+test_invalid_prepared_revision_cancels_reservation_without_file_write (test_publication_journal_v2.JournalV2Tests.test_invalid_prepared_revision_cancels_reservation_without_file_write) ... ok
+test_lost_bootstrap_select_result_prevents_config_and_restart (test_publication_journal_v2.JournalV2Tests.test_lost_bootstrap_select_result_prevents_config_and_restart) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 19.752s
+
+OK

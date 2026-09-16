@@ -1,0 +1,97 @@
+{
+  "status": "S51_DIAGNOSTIC_CHECKPOINT_VERIFIED",
+  "authority": 0,
+  "acceptance": false,
+  "formal_acceptance": false,
+  "public_ack": false,
+  "source_closure_sha256": "55f15f2a431b8b065565143d456bd4cafbc59bca78a99492e3674ef93a97007c",
+  "source_files": 129,
+  "artifacts": 3150,
+  "unit": {
+    "run": 471,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0
+  },
+  "engine_checks": {
+    "edit": 103,
+    "reopen": 10,
+    "contract": 31
+  },
+  "linux": {
+    "fixtures": 11,
+    "public_ack": false,
+    "sandbox_acceptance": false,
+    "validation_attribution_proven": false
+  },
+  "profile": {
+    "cases": [
+      {
+        "case": "defaults_override",
+        "passed": true,
+        "project_revision": "sha256:0a3954b677b005f09dd0ad0c00add57aebe8d30b8914c5b93b1c462cf3deb485"
+      },
+      {
+        "case": "transformed_box",
+        "passed": true,
+        "project_revision": "sha256:2fa9f661e5d1b974d2d87a737eaa8c221c660ee24f6c115b412ae0f49874f316"
+      },
+      {
+        "case": "typed_scene_override",
+        "passed": true,
+        "project_revision": "sha256:69828df839416f43d69707738fb861a910d0d5a10db6fbe7bbad28f26e4abf38"
+      },
+      {
+        "case": "tiny_export",
+        "passed": true,
+        "project_revision": "sha256:63a881354a9bb65937a1205629326ee291e11055d60598bc84467510bf0c8bf0"
+      },
+      {
+        "case": "nested_node",
+        "passed": true,
+        "project_revision": "sha256:b6a754098b345d3785071fc3e9016aae92bcacb73ccfa841cdbfa544d0d95fef"
+      }
+    ],
+    "public_ack": false,
+    "sandbox_acceptance": false
+  },
+  "host_death": {
+    "observed": true,
+    "native_exit": 124,
+    "container_lifetime_seconds": 7.266038,
+    "public_ack": false,
+    "sandbox_acceptance": false
+  },
+  "components": {
+    "components": 2,
+    "native_descriptor_files": 24,
+    "source_closure_sha256": "55f15f2a431b8b065565143d456bd4cafbc59bca78a99492e3674ef93a97007c",
+    "source_release_sha256": "bf79fec6999d68e54635d81b51c3ca7d5e004fbc8f06d00121523bff3d5bd2e1",
+    "original_validation_raw_facts_verified": true,
+    "full_semantic_jcs_binding_verified": true,
+    "historical_native_readback_bound": true,
+    "selector_chain_host_verified": true,
+    "readonly_reopen_host_verified": true,
+    "validation_interval_available_bounds_verified": true,
+    "final_host_completion_upper_bound_available": false,
+    "selector_native_versions_persisted": false,
+    "independent_live_root_verification": false,
+    "public_ack": false,
+    "selected_state_verified": false,
+    "live_editor_adoption_verified": false,
+    "authenticated_publication_verified": false
+  },
+  "semantic": {
+    "cases": 6,
+    "exact_jcs_parity": true,
+    "script_replacement_changed_revision": true,
+    "public_ack": false,
+    "selected_state_verified": false,
+    "sandbox_acceptance": false
+  },
+  "reused_auditor_sha256": "ad040b4512fbdfd865131a7d281ca958fad853cee36b1c21e3e0b2870338271f",
+  "components_helper_sha256": "af144df7107fe1dbaba4f2f8242452962a9d514805255f70b4eb31bcea9ea55e",
+  "host_death_marker": "S51_IDLE_BODY_AFTER_HOST_DEATH",
+  "git_bytes": "index",
+  "verified_files": 3279
+}

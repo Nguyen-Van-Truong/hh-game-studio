@@ -1,0 +1,147 @@
+{
+  "passed": true,
+  "host": {
+    "wrapper_pid": 20324,
+    "started_at": "2026-09-16T19:11:47.772878+00:00",
+    "argv": [
+      "Godot_v4.7.2-stable_win64.exe",
+      "--headless",
+      "--editor",
+      "--path",
+      "$SNAPSHOT/.",
+      "--log-file",
+      "engine.log",
+      "res://scenes/fixture.tscn"
+    ],
+    "exit_code": 0,
+    "target_pid": 33648,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "editor-stdout.txt",
+    "stderr": "editor-stderr.txt",
+    "host": "editor-host.json"
+  },
+  "inputs_unchanged": true,
+  "logs_clean": true,
+  "observation": {
+    "context_kind": "live_editor",
+    "editor_hint": true,
+    "engine_version": "4.7.2-stable (official)",
+    "pid": 33648,
+    "public_ack": false,
+    "schema": "hh-editor-semantic-probe-1",
+    "snapshot": {
+      "code": "SCENE_INSPECTED",
+      "filesystem_mutated": false,
+      "generation": 1,
+      "held": false,
+      "history_id": 1,
+      "offset": 0,
+      "ok": true,
+      "revision": "sha256:117fe58159b2398e07abdaa1b2f9593922d86704dd9364d1c8cb33e3c24b7007",
+      "state": {
+        "nodes": [
+          {
+            "groups": [],
+            "name": "Fixture",
+            "node_type": "Node3D",
+            "owner_id": "",
+            "parent_id": "",
+            "position": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "rotation_degrees": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "scale": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "sibling_index": 0,
+            "stable_id": "root",
+            "stored": {
+              "auto_translate_mode": 0,
+              "editor_description": "",
+              "enabled": false,
+              "fixture_value": 23,
+              "metadata/hh_studio_id": "root",
+              "move_speed": 2.25,
+              "physics_interpolation_mode": 0,
+              "process_mode": 0,
+              "process_physics_priority": 0,
+              "process_priority": 0,
+              "process_thread_group": 0,
+              "rotation_edit_mode": 0,
+              "rotation_order": 2,
+              "script": {
+                "path": "res://scripts/fixture_actor.gd",
+                "source_sha256": "b652b26f640c088094c68e82e19047e64c55f519a86cbb083ea5a1b463c8f279",
+                "type": "GDScript"
+              },
+              "top_level": false,
+              "transform": {
+                "type": 18,
+                "value": [
+                  {
+                    "type": 17,
+                    "value": [
+                      {
+                        "type": 9,
+                        "value": [
+                          1.0,
+                          0.0,
+                          0.0
+                        ]
+                      },
+                      {
+                        "type": 9,
+                        "value": [
+                          0.0,
+                          1.0,
+                          0.0
+                        ]
+                      },
+                      {
+                        "type": 9,
+                        "value": [
+                          0.0,
+                          0.0,
+                          1.0
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": 9,
+                    "value": [
+                      0.0,
+                      0.0,
+                      0.0
+                    ]
+                  }
+                ]
+              },
+              "turn_speed": 90.0,
+              "unique_name_in_owner": false,
+              "visibility_parent": {
+                "type": 22,
+                "value": ""
+              },
+              "visible": true
+            }
+          }
+        ]
+      },
+      "total": 1
+    }
+  },
+  "observation_source": "editor-engine.log",
+  "binary_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424"
+}

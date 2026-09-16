@@ -1,0 +1,52 @@
+{
+  "run_id": "GT03-S51-SEMANTIC-01",
+  "source_closure_sha256": "ad5617efe18f02fc8a2db42c8092cebeb5f1d93e471238a8540e766a02aba361",
+  "host": {
+    "wrapper_pid": 24536,
+    "started_at": "2026-09-16T18:56:30.736738+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "-c",
+      "import importlib.util,sys;from pathlib import Path;p=Path(\"tests/godot/run_semantic_probe.py\").resolve();s=importlib.util.spec_from_file_location(\"frozen_semantic\",p);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);sys.exit(m.frozen_cases(Path(sys.argv[1]),Path(sys.argv[2])))",
+      "20260917-gt03-s51-semantic-01",
+      "Godot_v4.7.2-stable_win64.exe"
+    ],
+    "exit_code": 1,
+    "target_pid": 42544,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "semantic-stdout.txt",
+    "stderr": "semantic-stderr.txt",
+    "host": "semantic-host.json"
+  },
+  "cases": {
+    "passed": false,
+    "cases": [
+      {
+        "name": "defaults_override",
+        "passed": false,
+        "linux": {
+          "passed": false,
+          "public_ack": false,
+          "sandbox_acceptance": false,
+          "phases_match": false,
+          "marker_count": 0,
+          "owned_lifecycle_verified": false
+        },
+        "public_ack": false
+      }
+    ],
+    "public_ack": false,
+    "sandbox_acceptance": false
+  },
+  "snapshot_unchanged": true,
+  "origin_source_unchanged": true,
+  "windows_binary_unchanged": true,
+  "public_ack": false,
+  "sandbox_acceptance": false,
+  "selected_state_verified": false,
+  "passed": false
+}

@@ -1,0 +1,29 @@
+{
+  "host": {
+    "wrapper_pid": 16536,
+    "started_at": "2026-09-16T18:57:57.746547+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "-c",
+      "import unittest,json,sys; s=unittest.defaultTestLoader.discover('tests/godot',pattern='test_publication_journal_v2.py'); r=unittest.TextTestRunner(verbosity=2).run(s); print('JOURNAL_V2_COMPLETE '+json.dumps({'run':r.testsRun,'failures':len(r.failures),'errors':len(r.errors),'skips':len(r.skipped)}),flush=True); sys.exit(not r.wasSuccessful())"
+    ],
+    "exit_code": 0,
+    "target_pid": 31464,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "journal-stdout.txt",
+    "stderr": "journal-stderr.txt",
+    "host": "journal-host.json"
+  },
+  "source_files": {
+    "godot-addon/publication_journal_v2.py": "79a597442abb7799bf75fbff651ad52bd7867c2f6d0847bf1bb5df99a80ea1d2",
+    "godot-addon/protected_bundle.py": "263e2253ee83f0ee9086159dc3aa9ab83843614751299f12bf5fec94090e2032",
+    "godot-addon/publication_state_v2.py": "ae484cd1c7f5ccbe2b1739d3e7106c3fc38f188ac1d7812cd3444bbe5a4620e4",
+    "tests/godot/test_publication_journal_v2.py": "27bed82e4ca9e43e790fad8fa9fab6196ce34e7653a85ba60cdcb6c7d6aba3d9"
+  },
+  "source_unchanged": true,
+  "diagnostic": true
+}
