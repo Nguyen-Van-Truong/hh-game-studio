@@ -28,7 +28,7 @@ PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
 PLAN_REVISION=S39
 EXECUTION_MODE=SOLO_OWNER_20260915
 SUBAGENTS_ENABLED=0
-GT02_EVIDENCE_STATUS=FROZEN_CANDIDATE_S39_01
+GT02_EVIDENCE_STATUS=FROZEN_CANDIDATE_S39_02
 GT02_REVIEW_STATUS=NOT_REVIEWED_SOLO_S39
 GT02_LAST_TESTED_SOURCE_CLOSURE=2fb0ec013c4037c844b38f7be221c0aa7a6bd905492fa7c4a53eaa8e474c9d59
 GT02_CHECKPOINT_COMMITS=96c506b,e52b5c0,faedb0d,642d6f5,74d1cc2,52ca04c,52def92,957ea88,572185e,9839be9,abc88b0,6bfbc3e,43192c0,15801ad,adb2e52,2e24912
@@ -44,17 +44,16 @@ GT-01 ACCEPTED tại a0fb247; closure
 3ace23bcf84598cda64d54bbe3fc4736acde877f9f714fb71e2355d3e809eea4,
 evidence reviews/20260913-r21-gt01-final; hai critic PASS/TICK=yes.
 
-GT-02 candidate gần nhất đã freeze: reviews/20260916-gt02-s38-01. Protocol267 tests:
-263 pass,4 skips (3 thiếu quyền symlink,1 negative Linux-only); bootstrap56/56.
-Actual host exit/process tree sạch, source/snapshot không đổi;82 source files,
-9 artifacts được rehash. Python/Node/Godot khớp2396 canonical rows/hash; Godot
-thêm9 negative cases. Bảng requirement → test → evidence và audit tái dựng
-Git nằm ở reviews/20260916-gt02-s38-audit/. Chưa có review độc lập cho source này.
-Checkpoint S38:2e24912 source/evidence; S39-02 candidate và exact Git proof đã đạt tại 65cd47e; S39-01 giữ lịch sử
-hash mismatch do tài liệu sửa sau freeze.
-S37:adb2e52 source/evidence; S36:15801ad.
-S38 rehash82 source/9 candidate/45 diagnostic artifacts;9 crash cut được parse
-riêng,7 kiểm tra âm của verifier từ chối đúng. Không chuyển chữ ký critic cũ.
+GT-02 candidate hiện hành: reviews/20260916-gt02-s39-02. Protocol283 tests:
+279 pass,4 skips (3 thiếu quyền symlink,1 negative Linux-only); bootstrap56/56.
+Actual host exit/process tree sạch, source/snapshot không đổi;84 source files,
+9 artifacts. Python/Node/Godot khớp2396 canonical rows/hash; Godot thêm9
+negative cases. Selector RPC16/16; native AppContainer7/7, exit61, Job/PID0,
+private root/.events denied. Bảng requirement → test → evidence và audit nằm ở
+reviews/20260916-gt02-s39-audit/. Chưa có review độc lập cho source này.
+Checkpoint S39:2ae0623 source/evidence; exact index/HEAD proof:65cd47e và
+2ae0623. S39-01 giữ lịch sử hash mismatch do tài liệu sửa sau freeze; S38:
+2e24912; S37:adb2e52; S36:15801ad. Không chuyển chữ ký critic cũ.
 Closure S35:264ed3e3f35ca76038ba20cc00f41f3345ba6e9352e111b3be5e7ed38fe6e111. Các bản
 Git proof ghi commit thực sự đã kiểm trong git-byte-verification-*.json.
 
@@ -126,27 +125,31 @@ ERROR_ACCESS_DENIED(5); submit retry giữ một receipt/effect. Source closure 
 84 file, candidate artifact9, closure2fb0ec013c4037c844b38f7be221c0aa7a6bd905492fa7c4a53eaa8e474c9d59.
 Reopen chỉ quan sát; explicit reconcile có thể nhận lại manifest đã ghi trước
 crash, không staging lại. Restore tăng generation và giữ UNKNOWN/restored.
-Đây là internal fixture; chưa có confined client gọi selector hoặc engine adapter.
+Đây là internal fixture; S39 native confined client đã gọi selector qua endpoint thật,
+nhưng consumer vẫn là in-memory inert fixture, chưa phải Godot/Blender adapter.
 
 S39 đã nối selector_pipe.py: endpoint PID/token + session/role trước parse,
 local broker pump từng phase, Stop riêng, không tự chạy pending sau reopen.
 Focused run01:13/14 pass,1 lỗi fixture truyền sai keyword PipeIOError; giữ
-source/log lỗi, sửa delivery_unknown trước run02. Run02 16/16 và native7/7 đã đạt. Thêm kiểm broker ownership
-và Cancel đọc lại phase dưới selector lock sau khi chờ storage. Chưa freeze
-source S39 hoặc chuyển proof AppContainer S35 sang transaction mới.
+source/log lỗi, sửa delivery_unknown trước run02. Run02 16/16 và native7/7 đã đạt.
+Thêm kiểm broker ownership và Cancel đọc lại phase dưới selector lock sau khi
+chờ storage. S39-02 đã freeze; S39-01 được giữ làm lịch sử vì hash tài liệu
+đổi sau freeze và Git proof đã bắt đúng lỗi đó.
 
 Tiếp theo solo, theo thứ tự để tránh làm lại:
-1. Nối authenticated confined client với selector/staging mới; kiểm Stop, mất
-   reply, identity/lease sai và lookup không duplicate trên đúng source closure.
-2. Freeze closure mới và adversarial verification; giữ CANDIDATE khi review còn thiếu.
-   Không lặp fullsuite cùng source đã đạt chỉ vì sửa metadata.
+1. Giữ GT-02 ở CANDIDATE: public safe_write/atomic_replace vẫn false vì
+   primitive Windows chống hardlink/TOCTOU chưa được chứng minh; không hạ gate
+   bằng fixture AppContainer. S39 đã hoàn thành authenticated selector path.
+2. Giữ source/evidence S39-02 bất biến; chỉ sửa nếu có finding mới. Hai critic
+   độc lập trên cùng closure vẫn còn thiếu trong chế độ solo, nên không đánh dấu
+   ACCEPTED. Không mở GT-03/GT-04 khi GT-02 chưa đủ DoD.
 GT-03/04 consumer mutation chưa đủ dependency; không hạ DoD để hợp code.
 
 Các finding/lượt lỗi S30–S33 và lý do quyết định giữ nguyên trong reports và
 reviews/20260916-plan-history-s33/tools-plan-s33.txt (AUTHORITY=0), SHA-256
 1eb33e360f2c6f712768e453e0bb751e6d539eefb922347614b5e4a613a192f0.
 Hai critic S30 chỉ áp dụng closure S30: A FAIL/TICK=no vì TX15 availability GAP;
-B PASS/TICK=yes cho baseline fixture. Không chuyển chữ ký đó sang S38. Một
+B PASS/TICK=yes cho baseline fixture. Không chuyển chữ ký đó sang S39. Một
 TEMP probe S30 cũ còn lại do automatic approval review chặn cleanup; giữ báo
 cáo ...s30-windows-probe.md, không thử lại bằng công cụ khác hoặc claim TEMP0.
 
@@ -157,6 +160,10 @@ GT-10. Inventory S29: Docker local phản hồi, chưa thấy ADB/Android kết 
 đó không là proof Linux/Android đạt. Chưa có cơ sở hẹn ngày xong toàn plan.
 
 KINH NGHIỆM ĐANG ÁP DỤNG
+- S39: candidate hash phải được dựng lại sau mọi sửa tài liệu; Git proof đã bắt
+  việc sửa FIXTURE_SELECTOR.md sau freeze và buộc tạo S39-02 thay vì dùng lại
+  S39-01. Native AppContainer proof phải ghi actual child exit/Job/PID và kiểm
+  private root/.events access denied; frame mock không được thay thế boundary.
 - S38: Stop có thể tới trong quota scan/pin dù mutex đang bị giữ; kiểm lại
   signal trước effect admission. Một consumer cũng chỉ có một selector owner.
   Mất record STAGED không có nghĩa file chưa ghi: tìm và pin đúng manifest
