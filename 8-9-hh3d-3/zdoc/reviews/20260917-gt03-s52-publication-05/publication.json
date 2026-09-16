@@ -1,0 +1,73 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "label": "authenticated_discovery",
+      "passed": true
+    },
+    {
+      "label": "foreign_bearer_denied",
+      "passed": true
+    },
+    {
+      "label": "actual_editor_transform",
+      "passed": true
+    },
+    {
+      "label": "dirty_scene_differs_from_selection",
+      "passed": true
+    },
+    {
+      "label": "authenticated_lease",
+      "passed": true
+    },
+    {
+      "label": "authenticated_save_committed",
+      "passed": true
+    },
+    {
+      "label": "same_semantic_after_actual_reload",
+      "passed": true
+    },
+    {
+      "label": "actual_new_editor_root",
+      "passed": true
+    },
+    {
+      "label": "selected_project_changed",
+      "passed": true
+    },
+    {
+      "label": "history_boundary",
+      "passed": true
+    },
+    {
+      "label": "duplicate_exact_reply_no_effect",
+      "passed": true
+    },
+    {
+      "label": "control_lookup_exact_reply",
+      "passed": true
+    },
+    {
+      "label": "authenticated_stop",
+      "passed": true
+    },
+    {
+      "label": "readonly_reopen_exact_selection",
+      "passed": true
+    },
+    {
+      "label": "readonly_reopen_durable_commit",
+      "passed": true
+    },
+    {
+      "label": "readonly_reopen_selected_bundle",
+      "passed": true
+    }
+  ],
+  "candidate_only": true,
+  "gt03_acceptance": false,
+  "authenticated_scene_save_observed": true,
+  "source_closure_sha256": "6b326a9054c13c1c4a416d61492a7f060a9694f5fd55db087927b0add1248373"
+}

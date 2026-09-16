@@ -1,0 +1,23 @@
+{
+  "command_id": "command.save",
+  "schema_version": "hh-studio-0.1",
+  "project_id": "project.fixture",
+  "operation": "scene.save",
+  "lease_id": "lease.93214e7ad98ef2d135c7b9b9e6b184c2",
+  "fencing_epoch": 1,
+  "expected_revision": "sha256:b490f5e3619050c6b5b726e29000c0f2c8223f6c2659429dbd5cebd49259c48e",
+  "target": {
+    "stable_id": "root"
+  },
+  "payload": {
+    "expected_generation": 1,
+    "expected_project_revision": "sha256:27010f1da2a88115101fb8488bb90fb59105200bd41133fa4deaa1eee5dc6f70",
+    "expected_files": {
+      "scenes/fixture.tscn": "51eaa111f832327d74b2031d382eb22ab30c8b725323e26ebcf7a66bbef571cb",
+      "scripts/fixture_actor.gd": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd"
+    }
+  },
+  "payload_hash": "sha256:605fc577f131fd1e9de23191b28a958cfac191987b47c61286b77e2c68207d53",
+  "deadline_ms": 1789588442170,
+  "digest": "sha256:255a7ec0ce1912c96eb50bc9f8cd569f246fb3d32f5aa2519c608fce288c07bd"
+}

@@ -1,0 +1,20 @@
+{
+  "wrapper_pid": 9208,
+  "started_at": "2026-09-16T19:39:59.498188+00:00",
+  "argv": [
+    "python.exe",
+    "-B",
+    "$SNAPSHOT/8-9-hh3d-3/studio/tests/godot/run_editor_owner_probe.py",
+    "--output",
+    "$SNAPSHOT/8-9-hh3d-3/zdoc/reviews/20260917-gt03-s52-editor-owner-02/native"
+  ],
+  "exit_code": 2,
+  "target_pid": 14556,
+  "wrapper_exit_code": 0,
+  "timed_out": false,
+  "tree_verified": true,
+  "ownership": "gated_job_kill_on_close",
+  "stdout": "editor-owner-stdout.txt",
+  "stderr": "editor-owner-stderr.txt",
+  "host": "editor-owner-host.json"
+}

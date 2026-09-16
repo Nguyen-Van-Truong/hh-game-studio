@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "host": {
+    "wrapper_pid": 14536,
+    "started_at": "2026-09-16T19:55:15.211147+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "mint_baseline.py",
+      "--child",
+      "--studio",
+      "$SNAPSHOT/.",
+      "--output",
+      "20260917-gt03-s52-validation-baseline-01"
+    ],
+    "exit_code": 0,
+    "target_pid": 5960,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "baseline-stdout.txt",
+    "stderr": "baseline-stderr.txt",
+    "host": "baseline-host.json"
+  },
+  "snapshot_unchanged": true,
+  "validation_source_release_sha256": "524ac89054b988a74aa814396ce26dc0e8d283437fd96f6e03850868067ac914",
+  "public_ack": false,
+  "scope": "actual Linux baseline only"
+}

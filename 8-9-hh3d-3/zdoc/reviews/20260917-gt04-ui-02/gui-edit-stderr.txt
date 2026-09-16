@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-ui-02\source\studio\tests\blender\blender_ui_probe.py", line 189, in step
+    next(generator)
+    ~~~~^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-ui-02\source\studio\tests\blender\blender_ui_probe.py", line 106, in edit
+    yield from queued(owner, make(owner, "undo-edit", "history.undo"))
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-ui-02\source\studio\tests\blender\blender_ui_probe.py", line 49, in queued
+    raise RuntimeError("queue result " + json.dumps(row))
+RuntimeError: queue result {"command_digest": "sha256:97a4ddb2e593d88d1eb30f3b934ca18cecb11ed450f46229d50f380ca2512853", "command_id": "undo-edit", "public_ack": false, "reason": "HISTORY_READBACK_MISMATCH", "state": "REJECTED"}

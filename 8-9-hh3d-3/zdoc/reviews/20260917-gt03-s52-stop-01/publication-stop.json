@@ -1,0 +1,86 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "label": "actual_editor_mutation",
+      "passed": true
+    },
+    {
+      "label": "dirty_editor_differs_from_selection",
+      "passed": true
+    },
+    {
+      "label": "authenticated_lease",
+      "passed": true
+    },
+    {
+      "label": "real_validator_entered_after_capture",
+      "passed": true
+    },
+    {
+      "label": "actual_owned_linux_validator_running",
+      "passed": true
+    },
+    {
+      "label": "http_stop_latches_without_waiting_validation",
+      "passed": true
+    },
+    {
+      "label": "save_drained_bounded",
+      "passed": true
+    },
+    {
+      "label": "save_http_thread_exited",
+      "passed": true
+    },
+    {
+      "label": "interrupted_save_unknown_no_ack",
+      "passed": true
+    },
+    {
+      "label": "real_validation_completed_with_registered_receipt",
+      "passed": true
+    },
+    {
+      "label": "same_validator_run_exited_cleanly",
+      "passed": true
+    },
+    {
+      "label": "stop_time_inside_native_validation_interval",
+      "passed": true
+    },
+    {
+      "label": "selected_native_bytes_and_identity_unchanged",
+      "passed": true
+    },
+    {
+      "label": "no_native_stage_objects_created",
+      "passed": true
+    },
+    {
+      "label": "durable_unknown_before_stage_select_adopt",
+      "passed": true
+    },
+    {
+      "label": "same_dirty_editor_root_no_adoption",
+      "passed": true
+    },
+    {
+      "label": "authenticated_lookup_original_unknown",
+      "passed": true
+    },
+    {
+      "label": "actual_editor_exit_and_owned_job_clean",
+      "passed": true
+    },
+    {
+      "label": "readonly_reopen_preserves_unknown_and_original_selection",
+      "passed": true
+    }
+  ],
+  "candidate_only": true,
+  "gt03_acceptance": false,
+  "actual_http_stop_during_linux_validation": true,
+  "source_closure_sha256": "049732df02cca60a46a01b75404d0480be70aa7f8dfb5d1a7780abc343d44928",
+  "stop_elapsed_ms": 0.0
+}

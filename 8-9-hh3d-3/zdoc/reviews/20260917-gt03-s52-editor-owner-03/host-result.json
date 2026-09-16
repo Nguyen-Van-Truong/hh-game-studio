@@ -1,0 +1,20 @@
+{
+  "wrapper_pid": 40680,
+  "started_at": "2026-09-16T19:44:27.085277+00:00",
+  "argv": [
+    "python.exe",
+    "-B",
+    "$SNAPSHOT/tests/godot/run_editor_owner_probe.py",
+    "--output",
+    "native"
+  ],
+  "exit_code": 2,
+  "target_pid": 33916,
+  "wrapper_exit_code": 0,
+  "timed_out": false,
+  "tree_verified": true,
+  "ownership": "gated_job_kill_on_close",
+  "stdout": "editor-owner-stdout.txt",
+  "stderr": "editor-owner-stderr.txt",
+  "host": "editor-owner-host.json"
+}

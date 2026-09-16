@@ -1,0 +1,23 @@
+{
+  "acceptance": false,
+  "artifact_files": 50,
+  "live_and_frozen_source_exact": true,
+  "native_checks": {
+    "background-checkpoint": 7,
+    "background-edit": 27,
+    "background-reopen": 9,
+    "gui-checkpoint": 7,
+    "gui-edit": 36,
+    "gui-reopen": 9
+  },
+  "ok": true,
+  "processes": 7,
+  "public_ack": false,
+  "python_tests": 40,
+  "result_sha256": "6f0fa5b7fb159dd8526afa3c3710f736836ad87d28d6e8ea617596c6bd781dce",
+  "scope": "read-only historical byte/raw-marker consistency, no new engine run or acceptance review",
+  "source_closure_sha256": "f82734f69558da106732e0f6638d14687c2d9fc71141ad1acb35cc734c2048c8",
+  "source_files": 15,
+  "strict_raw_boolean_and_integer_types": true,
+  "verified_at": "2026-09-16T19:45:58.791123+00:00"
+}

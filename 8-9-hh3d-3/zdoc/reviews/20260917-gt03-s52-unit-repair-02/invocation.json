@@ -1,0 +1,9 @@
+{
+  "code": "import json,sys,unittest\nsuite=unittest.TestSuite(unittest.defaultTestLoader.discover('tests/godot',pattern=p) for p in ('test_profile_probe_evidence.py','test_profile_readback.py'))\ndef flatten(s):\n for t in s:\n  if isinstance(t,unittest.TestSuite):yield from flatten(t)\n  else:yield t.id()\nids=list(flatten(suite))\nr=unittest.TextTestRunner(verbosity=2).run(suite)\nprint('GT03_UNIT_REPAIR_COMPLETE '+json.dumps({'run':r.testsRun,'failures':len(r.failures),'errors':len(r.errors),'skips':len(r.skipped),'tests':ids}),flush=True)\nsys.exit(not r.wasSuccessful())\n",
+  "runner_sha256": "ea522450acc46f90be5e2a7b9257e73ce8b619948105b2c9073aac1f881c7328",
+  "repair_of": "20260917-gt03-s52-editor-02",
+  "changed_source_files": [
+    "tests/godot/test_profile_probe_evidence.py",
+    "tests/godot/test_profile_readback.py"
+  ]
+}

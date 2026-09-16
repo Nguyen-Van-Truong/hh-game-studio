@@ -1,0 +1,12 @@
+GT04_CHECK {"label": "actual_pinned_background", "passed": true}
+GT04_CHECK {"label": "automatic_python_disabled", "passed": true}
+GT04_CHECK {"label": "reopen_exact_file_hash", "passed": true}
+00:00.750  blend            | Read blend: "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-ui-05\background-fixture\checkpoint.blend"
+GT04_CHECK {"label": "reopen_native_finished", "passed": true}
+GT04_CHECK {"label": "checkpoint_reopens_empty", "passed": true}
+GT04_CHECK {"label": "reopen_no_external_dependencies", "passed": true}
+GT04_CHECK {"label": "reopen_no_public_ack", "passed": true}
+GT04_RESULT {"acceptance": false, "actual_blender": true, "checks": [{"label": "actual_pinned_background", "passed": true}, {"label": "automatic_python_disabled", "passed": true}, {"label": "reopen_exact_file_hash", "passed": true}, {"label": "reopen_native_finished", "passed": true}, {"label": "checkpoint_reopens_empty", "passed": true}, {"label": "reopen_no_external_dependencies", "passed": true}, {"label": "reopen_no_public_ack", "passed": true}], "ok": true, "phase": "checkpoint", "public_ack": false, "result": {"revision": "sha256:30bf66b61ef6ccda3a2724338925481cb04d89bd990815d8a30ed309e3b789e3", "saved": {"name": "checkpoint.blend", "sha256": "de843b2d7b3c36af462cbd319ad0e33ccefd7edb90e0ea151ba4c51aa311ddd8", "size_bytes": 85684}, "snapshot": {"objects": [], "schema": "HH-BLENDER-FIXTURE-SCENE-1", "units": {"scale_length": 1.0, "system": "METRIC"}}}, "schema": "HH-GT04-NATIVE-PROBE-1", "version": "5.2.1 LTS"}
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 02:38:20)
+
+Blender quit

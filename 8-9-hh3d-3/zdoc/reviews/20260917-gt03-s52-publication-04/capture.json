@@ -1,0 +1,36 @@
+{
+  "run_id": "GT03-S52-PUBLICATION-04",
+  "host": {
+    "wrapper_pid": 39080,
+    "started_at": "2026-09-16T20:01:46.626194+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "$SNAPSHOT/tests/godot/run_publication_probe.py",
+      "--frozen",
+      "--output",
+      "20260917-gt03-s52-publication-04",
+      "--run-id",
+      "GT03-S52-PUBLICATION-04",
+      "--binary",
+      "Godot_v4.7.2-stable_win64.exe",
+      "--closure",
+      "049732df02cca60a46a01b75404d0480be70aa7f8dfb5d1a7780abc343d44928"
+    ],
+    "exit_code": 1,
+    "target_pid": 27692,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "publication-stdout.txt",
+    "stderr": "publication-stderr.txt",
+    "host": "publication-host.json"
+  },
+  "passed": false,
+  "source_closure_sha256": "049732df02cca60a46a01b75404d0480be70aa7f8dfb5d1a7780abc343d44928",
+  "origin_source_unchanged": true,
+  "snapshot_unchanged": true,
+  "candidate_only": true,
+  "gt03_acceptance": false
+}

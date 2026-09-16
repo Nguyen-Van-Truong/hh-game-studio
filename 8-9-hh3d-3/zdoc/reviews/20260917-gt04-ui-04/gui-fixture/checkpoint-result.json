@@ -1,0 +1,55 @@
+{
+  "acceptance": false,
+  "actual_blender_gui": true,
+  "checks": [
+    {
+      "label": "actual_pinned_gui",
+      "passed": true
+    },
+    {
+      "label": "actual_window_event_loop",
+      "passed": true
+    },
+    {
+      "label": "automatic_python_disabled",
+      "passed": true
+    },
+    {
+      "label": "reopen_exact_file_hash",
+      "passed": true
+    },
+    {
+      "label": "native_gui_open_finished",
+      "passed": true
+    },
+    {
+      "label": "checkpoint_exact_empty_scene",
+      "passed": true
+    },
+    {
+      "label": "reopen_no_public_ack",
+      "passed": true
+    }
+  ],
+  "ok": true,
+  "phase": "checkpoint",
+  "public_ack": false,
+  "result": {
+    "revision": "sha256:30bf66b61ef6ccda3a2724338925481cb04d89bd990815d8a30ed309e3b789e3",
+    "saved": {
+      "name": "checkpoint.blend",
+      "sha256": "f4178df5bb3b9d21f1fb7dc5f619f4f154019773779645413cdf9b07d65ec248",
+      "size_bytes": 96640
+    },
+    "snapshot": {
+      "objects": [],
+      "schema": "HH-BLENDER-FIXTURE-SCENE-1",
+      "units": {
+        "scale_length": 1.0,
+        "system": "METRIC"
+      }
+    }
+  },
+  "schema": "HH-GT04-UI-PROBE-1",
+  "version": "5.2.1 LTS"
+}

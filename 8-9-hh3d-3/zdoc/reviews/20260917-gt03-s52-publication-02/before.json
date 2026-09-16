@@ -1,0 +1,215 @@
+{
+  "can_redo": false,
+  "can_undo": false,
+  "code": "SCENE_INSPECTED",
+  "editor_session_id": "editor-0f952a9302834c3a89f151c58452abe2",
+  "filesystem_mutated": false,
+  "generation": 1,
+  "held": false,
+  "history_id": 1,
+  "offset": 0,
+  "ok": true,
+  "revision": "sha256:f3fd9f270886a056f469e70586795e06c8d47b651021a22366629ab06d886162",
+  "root_instance_id": "1524260476621",
+  "scene_path": "res://scenes/fixture.tscn",
+  "state": {
+    "nodes": [
+      {
+        "groups": [],
+        "name": "Fixture",
+        "node_type": "Node3D",
+        "owner_id": "",
+        "parent_id": "",
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_degrees": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "sibling_index": 0,
+        "stable_id": "root",
+        "stored": {
+          "auto_translate_mode": 0,
+          "editor_description": "",
+          "fixture_value": 23,
+          "metadata/hh_studio_id": "root",
+          "physics_interpolation_mode": 0,
+          "process_mode": 0,
+          "process_physics_priority": 0,
+          "process_priority": 0,
+          "process_thread_group": 0,
+          "rotation_edit_mode": 0,
+          "rotation_order": 2,
+          "script": {
+            "path": "res://scripts/fixture_actor.gd",
+            "source_sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+            "type": "GDScript"
+          },
+          "top_level": false,
+          "transform": {
+            "type": 18,
+            "value": [
+              {
+                "type": 17,
+                "value": [
+                  {
+                    "type": 9,
+                    "value": [
+                      1.0,
+                      0.0,
+                      0.0
+                    ]
+                  },
+                  {
+                    "type": 9,
+                    "value": [
+                      0.0,
+                      1.0,
+                      0.0
+                    ]
+                  },
+                  {
+                    "type": 9,
+                    "value": [
+                      0.0,
+                      0.0,
+                      1.0
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": 9,
+                "value": [
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              }
+            ]
+          },
+          "unique_name_in_owner": false,
+          "visibility_parent": {
+            "type": 22,
+            "value": ""
+          },
+          "visible": true
+        }
+      }
+    ]
+  },
+  "total": 1,
+  "working_files": {
+    "addons/hh_studio/jcs_godot.gd": {
+      "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+      "size_bytes": 10165
+    },
+    "addons/hh_studio/jcs_godot.gd.uid": {
+      "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+      "size_bytes": 20
+    },
+    "addons/hh_studio/plugin.cfg": {
+      "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+      "size_bytes": 165
+    },
+    "addons/hh_studio/plugin.gd": {
+      "sha256": "951b30efdc494b25117553d5bd34629ff7b5c29c5267c8df268a40c624acb157",
+      "size_bytes": 16152
+    },
+    "addons/hh_studio/plugin.gd.uid": {
+      "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+      "size_bytes": 20
+    },
+    "addons/hh_studio/scene_commands.gd": {
+      "sha256": "dbb2f3163c5442c9b5696490676ba533c4a1ca9aab7b4a089acaea321f27c042",
+      "size_bytes": 31837
+    },
+    "addons/hh_studio/scene_commands.gd.uid": {
+      "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+      "size_bytes": 19
+    },
+    "project.godot": {
+      "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+      "size_bytes": 282
+    },
+    "scenes/fixture.tscn": {
+      "sha256": "51eaa111f832327d74b2031d382eb22ab30c8b725323e26ebcf7a66bbef571cb",
+      "size_bytes": 235
+    },
+    "scripts/fixture_actor.gd": {
+      "sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+      "size_bytes": 50
+    },
+    "scripts/fixture_actor.gd.uid": {
+      "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+      "size_bytes": 20
+    }
+  },
+  "project_revision": "sha256:27010f1da2a88115101fb8488bb90fb59105200bd41133fa4deaa1eee5dc6f70",
+  "selected_files": {
+    "addons/hh_studio/jcs_godot.gd": {
+      "role": "trusted_addon",
+      "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+      "size_bytes": 10165
+    },
+    "addons/hh_studio/jcs_godot.gd.uid": {
+      "role": "trusted_uid",
+      "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+      "size_bytes": 20
+    },
+    "addons/hh_studio/plugin.cfg": {
+      "role": "trusted_addon",
+      "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+      "size_bytes": 165
+    },
+    "addons/hh_studio/plugin.gd": {
+      "role": "trusted_addon",
+      "sha256": "951b30efdc494b25117553d5bd34629ff7b5c29c5267c8df268a40c624acb157",
+      "size_bytes": 16152
+    },
+    "addons/hh_studio/plugin.gd.uid": {
+      "role": "trusted_uid",
+      "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+      "size_bytes": 20
+    },
+    "addons/hh_studio/scene_commands.gd": {
+      "role": "trusted_addon",
+      "sha256": "dbb2f3163c5442c9b5696490676ba533c4a1ca9aab7b4a089acaea321f27c042",
+      "size_bytes": 31837
+    },
+    "addons/hh_studio/scene_commands.gd.uid": {
+      "role": "trusted_uid",
+      "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+      "size_bytes": 19
+    },
+    "project.godot": {
+      "role": "trusted_config",
+      "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+      "size_bytes": 282
+    },
+    "scenes/fixture.tscn": {
+      "role": "managed_scene",
+      "sha256": "51eaa111f832327d74b2031d382eb22ab30c8b725323e26ebcf7a66bbef571cb",
+      "size_bytes": 235
+    },
+    "scripts/fixture_actor.gd": {
+      "role": "managed_script",
+      "sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+      "size_bytes": 50
+    },
+    "scripts/fixture_actor.gd.uid": {
+      "role": "managed_uid",
+      "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+      "size_bytes": 20
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "code": "import unittest,sys; suite=unittest.TestSuite(); [suite.addTests(unittest.defaultTestLoader.discover('tests/godot',pattern=n)) for n in ('test_publication_session.py','test_publication_transport.py')]; result=unittest.TextTestRunner(verbosity=2).run(suite); sys.exit(not result.wasSuccessful())",
+  "source_hashes": {
+    "godot-addon/publication_session.py": "57c127b9b80e3b95b28555c9bf60fbdced4653f4daec658fa6fc3801c71e1640",
+    "godot-addon/publication_transport.py": "ece929bb735e6b70287e348749b67cd3be72b4587f57c8a7c4cd79408f67ea78",
+    "tests/godot/test_publication_session.py": "a373ff28fef8d289e8920087c6ee0778fb4e8b580b5a2843239d13b348fe3969",
+    "tests/godot/test_publication_transport.py": "8d00912092fdc2c8ec443934f0b0b47c98f496aae939ddb90d2eae7c78c38b30"
+  },
+  "source_unchanged": true,
+  "host": {
+    "wrapper_pid": 17424,
+    "started_at": "2026-09-16T19:49:32.245242+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "-c",
+      "import unittest,sys; suite=unittest.TestSuite(); [suite.addTests(unittest.defaultTestLoader.discover('tests/godot',pattern=n)) for n in ('test_publication_session.py','test_publication_transport.py')]; result=unittest.TextTestRunner(verbosity=2).run(suite); sys.exit(not result.wasSuccessful())"
+    ],
+    "exit_code": 0,
+    "target_pid": 11756,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "focused-stdout.txt",
+    "stderr": "focused-stderr.txt",
+    "host": "focused-host.json"
+  },
+  "scope": "implementation regression only; no acceptance claim"
+}

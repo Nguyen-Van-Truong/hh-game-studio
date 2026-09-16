@@ -1,0 +1,29 @@
+{
+  "code": "import unittest,sys; suite=unittest.defaultTestLoader.discover('tests/godot',pattern='test_publication_transport.py'); result=unittest.TextTestRunner(verbosity=2).run(suite); sys.exit(not result.wasSuccessful())",
+  "source_hashes": {
+    "godot-addon/publication_session.py": "a12a50c3ee3774c2f4497fb3820f3f06f87a861237ee7b6a859d5bc46307559a",
+    "godot-addon/publication_transport.py": "ece929bb735e6b70287e348749b67cd3be72b4587f57c8a7c4cd79408f67ea78",
+    "tests/godot/test_publication_transport.py": "9fd599517346cedb89b54c8f3575e3156e1fb494052c1862c62dbaa340253393"
+  },
+  "source_unchanged": true,
+  "host": {
+    "wrapper_pid": 13056,
+    "started_at": "2026-09-16T19:52:28.789832+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "-c",
+      "import unittest,sys; suite=unittest.defaultTestLoader.discover('tests/godot',pattern='test_publication_transport.py'); result=unittest.TextTestRunner(verbosity=2).run(suite); sys.exit(not result.wasSuccessful())"
+    ],
+    "exit_code": 0,
+    "target_pid": 5436,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "transport-regression-stdout.txt",
+    "stderr": "transport-regression-stderr.txt",
+    "host": "transport-regression-host.json"
+  },
+  "scope": "second-listener start failure regression, implementation only"
+}

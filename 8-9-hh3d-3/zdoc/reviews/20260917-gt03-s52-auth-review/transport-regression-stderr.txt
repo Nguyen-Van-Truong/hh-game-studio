@@ -1,0 +1,12 @@
+test_actual_loopback_requires_both_registered_bearer_and_catalog (test_publication_transport.PublicationTransportTests.test_actual_loopback_requires_both_registered_bearer_and_catalog) ... ok
+test_browser_origin_foreign_host_and_compression_are_rejected (test_publication_transport.PublicationTransportTests.test_browser_origin_foreign_host_and_compression_are_rejected) ... ok
+test_control_listener_stops_while_work_handler_waits (test_publication_transport.PublicationTransportTests.test_control_listener_stops_while_work_handler_waits) ... ok
+test_control_work_routes_cannot_consume_each_others_capacity (test_publication_transport.PublicationTransportTests.test_control_work_routes_cannot_consume_each_others_capacity) ... ok
+test_duplicate_headers_are_rejected_before_backend (test_publication_transport.PublicationTransportTests.test_duplicate_headers_are_rejected_before_backend) ... ok
+test_second_listener_start_failure_closes_started_and_unstarted_owners (test_publication_transport.PublicationTransportTests.test_second_listener_start_failure_closes_started_and_unstarted_owners) ... ok
+test_secret_identifier_not_echoed_and_diagnostics_stay_bounded (test_publication_transport.PublicationTransportTests.test_secret_identifier_not_echoed_and_diagnostics_stay_bounded) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.892s
+
+OK

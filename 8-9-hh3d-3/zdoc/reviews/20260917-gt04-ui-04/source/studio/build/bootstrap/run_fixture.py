@@ -1,0 +1,654 @@
+"""Fail-closed GT-01 bootstrap runner.
+
+Successful process exits are insufficient: the runner checks the pinned
+binary, immutable source closure, exact trace, clean stderr and process tree.
+The resulting evidence remains a candidate until the plan's critics approve.
+"""
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import math
+import os
+import shutil
+import signal
+import subprocess
+import sys
+import re
+import time
+import stat
+from datetime import datetime, timezone
+from pathlib import Path
+
+EXCLUDED_DIRS = {".godot", "__pycache__", ".local", "evidence"}
+VERSION_RE = re.compile(r"(?P<version>\d+\.\d+\.\d+\.stable\.official(?:\.[0-9a-f]+)?)")
+WARNING_RE = re.compile(r"(?:^|[^a-z])(warning|warn|error|failed|fatal)(?:[^a-z]|$)", re.IGNORECASE)
+TRACE_LABELS = ["menu", "start", "moved", "paused_frozen", "resumed", "quitting"]
+
+
+def _validate_trace(trace_data: object) -> bool:
+    """Validate the semantic GT01 trace, including observed state transitions."""
+    if not isinstance(trace_data, dict) or trace_data.get("result") != "PASS" or trace_data.get("phase") != "QUITTING":
+        return False
+    if not isinstance(trace_data.get("sim_tick"), int) or isinstance(trace_data.get("sim_tick"), bool):
+        return False
+    observations = trace_data.get("observations")
+    if not isinstance(observations, list) or len(observations) != len(TRACE_LABELS):
+        return False
+    rows = []
+    for expected, item in zip(TRACE_LABELS, observations):
+        if not isinstance(item, dict) or item.get("label") != expected:
+            return False
+        if not isinstance(item.get("phase"), str) or not isinstance(item.get("sim_tick"), int) or isinstance(item.get("sim_tick"), bool):
+            return False
+        body, focus = item.get("body"), item.get("focus")
+        if (not isinstance(body, list) or len(body) != 2 or
+                any(isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v) for v in body) or
+                not isinstance(focus, str) or not focus):
+            return False
+        rows.append(item)
+    phases = [r["phase"] for r in rows]
+    if phases != ["MENU", "PLAY", "PLAY", "PAUSED", "PLAY", "QUITTING"]:
+        return False
+    ticks = [r["sim_tick"] for r in rows]
+    if any(b < a for a, b in zip(ticks, ticks[1:])) or trace_data["sim_tick"] != ticks[-1]:
+        return False
+    if rows[2]["body"][0] <= rows[1]["body"][0]:
+        return False
+    # Entering pause consumes one authored transition tick; while paused the
+    # body snapshot must remain unchanged until resume.
+    if rows[3]["sim_tick"] != rows[2]["sim_tick"] + 1 or rows[3]["body"] != rows[4]["body"]:
+        return False
+    if rows[4]["sim_tick"] <= rows[3]["sim_tick"]:
+        return False
+    return True
+
+
+def utc_now() -> str:
+    return datetime.now(timezone.utc).isoformat()
+
+
+def hash_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def source_closure_sha256(source_manifest: dict[str, str]) -> str:
+    """Return the canonical hash used by the frozen GT-01 closure.
+
+    ``checked_files`` reports paths relative to ``studio``.  The freeze
+    manifest canonicalises those same paths under the stable product prefix,
+    then sorts by path and joins ``path NUL sha256 NEWLINE`` records.  Keeping
+    the prefix stable makes this value independent of the checkout's absolute
+    location while remaining byte-for-byte compatible with the freeze
+    verifier's ``closure_hash`` algorithm.
+    """
+    if not isinstance(source_manifest, dict):
+        raise ValueError("source manifest must be an object")
+    canonical_rows: list[str] = []
+    for path, digest in source_manifest.items():
+        if not isinstance(path, str) or not path or "\\" in path or path.startswith("/"):
+            raise ValueError("source manifest contains an unsafe path")
+        parts = path.split("/")
+        if any(part in ("", ".", "..") for part in parts):
+            raise ValueError("source manifest contains traversal")
+        if not isinstance(digest, str) or not re.fullmatch(r"[0-9a-f]{64}", digest):
+            raise ValueError("source manifest contains an invalid digest")
+        canonical_rows.append(f"8-9-hh3d-3/studio/{path}\0{digest}\n")
+    if not canonical_rows:
+        raise ValueError("source manifest is empty")
+    return hashlib.sha256("".join(sorted(canonical_rows)).encode("utf-8")).hexdigest()
+
+
+def _is_reparse(path: Path) -> bool:
+    if os.name != "nt":
+        return path.is_symlink()
+    try:
+        return bool(path.stat(follow_symlinks=False).st_file_attributes & 0x400)
+    except (AttributeError, FileNotFoundError, OSError):
+        return path.is_symlink()
+
+
+def _within(path: Path, root: Path) -> bool:
+    try:
+        path.resolve(strict=False).relative_to(root.resolve(strict=False))
+        return True
+    except ValueError:
+        return False
+
+
+def checked_files(root: Path) -> dict[str, str]:
+    if any(_is_reparse(p) for p in [root, *root.parents] if p.exists()):
+        raise ValueError("symlink/reparse in source path")
+    root = root.resolve(strict=True)
+    result: dict[str, str] = {}
+    for directory, names, files in os.walk(root, followlinks=False):
+        directory_path = Path(directory)
+        names[:] = sorted(n for n in names if n not in EXCLUDED_DIRS)
+        if any(_is_reparse(directory_path / n) for n in names):
+            raise ValueError("symlink/reparse directory in closure")
+        for name in sorted(files):
+            path = directory_path / name
+            if path.suffix == ".pyc" or _is_reparse(path):
+                raise ValueError(f"symlink/reparse or unsupported path in closure: {path}")
+            if path.is_file():
+                result[path.relative_to(root).as_posix()] = hash_file(path)
+    return result
+
+
+def _job_for_process(process: subprocess.Popen[bytes]):
+    if os.name != "nt":
+        return None
+    import ctypes
+    from ctypes import wintypes
+    kernel = ctypes.WinDLL("kernel32", use_last_error=True)
+    kernel.CreateJobObjectW.argtypes = [wintypes.LPVOID, wintypes.LPCWSTR]
+    kernel.CreateJobObjectW.restype = wintypes.HANDLE
+    kernel.AssignProcessToJobObject.argtypes = [wintypes.HANDLE, wintypes.HANDLE]
+    kernel.AssignProcessToJobObject.restype = wintypes.BOOL
+    kernel.CloseHandle.argtypes = [wintypes.HANDLE]
+    kernel.TerminateJobObject.argtypes = [wintypes.HANDLE, wintypes.UINT]
+    kernel.TerminateJobObject.restype = wintypes.BOOL
+    class BasicLimit(ctypes.Structure):
+        _fields_ = [("process_time", ctypes.c_longlong), ("job_time", ctypes.c_longlong),
+                    ("flags", wintypes.DWORD), ("min_ws", ctypes.c_size_t), ("max_ws", ctypes.c_size_t),
+                    ("active_limit", wintypes.DWORD), ("affinity", ctypes.c_size_t),
+                    ("priority", wintypes.DWORD), ("scheduling", wintypes.DWORD)]
+    class ExtendedLimit(ctypes.Structure):
+        _fields_ = [("basic", BasicLimit), ("io", ctypes.c_ulonglong * 6),
+                    ("process_memory", ctypes.c_size_t), ("job_memory", ctypes.c_size_t),
+                    ("peak_process_memory", ctypes.c_size_t), ("peak_job_memory", ctypes.c_size_t)]
+    kernel.SetInformationJobObject.argtypes = [wintypes.HANDLE, wintypes.DWORD, ctypes.POINTER(ExtendedLimit), wintypes.DWORD]
+    kernel.SetInformationJobObject.restype = wintypes.BOOL
+    job = kernel.CreateJobObjectW(None, None)
+    if not job:
+        raise OSError(ctypes.get_last_error(), "CreateJobObjectW")
+    limits = ExtendedLimit()
+    limits.basic.flags = 0x2000  # JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE, no breakaway
+    if not kernel.SetInformationJobObject(job, 9, ctypes.byref(limits), ctypes.sizeof(limits)):
+        error = ctypes.get_last_error()
+        kernel.CloseHandle(job)
+        raise OSError(error, "SetInformationJobObject")
+    if not kernel.AssignProcessToJobObject(job, wintypes.HANDLE(process._handle)):
+        error = ctypes.get_last_error()
+        kernel.CloseHandle(job)
+        raise OSError(error, "AssignProcessToJobObject")
+    return kernel, job
+
+
+def _terminate_job(job_state) -> None:
+    if job_state:
+        job_state[0].TerminateJobObject(job_state[1], 2)
+
+
+def _job_active_count(job_state) -> int | None:
+    if not job_state:
+        return 0
+    import ctypes
+    from ctypes import wintypes
+    class Basic(ctypes.Structure):
+        _fields_ = [("total_user_time", ctypes.c_longlong), ("total_kernel_time", ctypes.c_longlong),
+                    ("period_user_time", ctypes.c_longlong), ("period_kernel_time", ctypes.c_longlong),
+                    ("total_page_faults", wintypes.DWORD), ("total_processes", wintypes.DWORD),
+                    ("active_processes", wintypes.DWORD), ("total_terminated", wintypes.DWORD)]
+    kernel, job = job_state
+    kernel.QueryInformationJobObject.argtypes = [wintypes.HANDLE, wintypes.DWORD, ctypes.POINTER(Basic), wintypes.DWORD, ctypes.POINTER(wintypes.DWORD)]
+    kernel.QueryInformationJobObject.restype = wintypes.BOOL
+    value, returned = Basic(), wintypes.DWORD()
+    if not kernel.QueryInformationJobObject(job, 1, ctypes.byref(value), ctypes.sizeof(value), ctypes.byref(returned)):
+        return None
+    return int(value.active_processes)
+
+
+def _close_job(job_state) -> None:
+    if job_state:
+        job_state[0].CloseHandle(job_state[1])
+
+
+def run_process(argv: list[str], *, cwd: Path, output: Path, timeout: int, label: str,
+                env: dict[str, str] | None = None) -> dict:
+    if not re.fullmatch(r"[A-Za-z0-9_-]+", label) or not 1 <= timeout <= 600:
+        raise ValueError("invalid process label or timeout")
+    stdout_path, stderr_path = output / f"{label}-stdout.txt", output / f"{label}-stderr.txt"
+    if stdout_path.exists() or stderr_path.exists():
+        raise ValueError(f"duplicate process output for {label}")
+    flags = subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0
+    started = utc_now()
+    # The helper cannot launch the target until assigned to the job. This
+    # removes the race where the target could spawn children before assignment.
+    host_path = output / f"{label}-host.json"
+    if host_path.exists():
+        raise ValueError("duplicate host report")
+    helper = "import subprocess,sys,json,datetime; token=sys.stdin.readline(); sys.exit(125) if token != 'GO\\n' else None; started=datetime.datetime.now(datetime.timezone.utc).isoformat(); p=subprocess.Popen(sys.argv[2:]); code=p.wait(); f=open(sys.argv[1],'x',encoding='utf-8'); json.dump({'target_pid':p.pid,'started_at':started,'exit_code':code},f); f.close()"
+    with stdout_path.open("xb") as stdout, stderr_path.open("xb") as stderr:
+        process = subprocess.Popen([sys.executable, "-c", helper, str(host_path), *argv], cwd=cwd, stdout=stdout, stderr=stderr,
+                                   stdin=subprocess.PIPE, creationflags=flags, start_new_session=os.name != "nt",
+                                   env=env)
+        job_state = None
+        timed_out = False
+        tree_verified = False
+        exit_code = None
+        try:
+            if os.name == "nt":
+                job_state = _job_for_process(process)
+            process.stdin.write(b"GO\n")
+            process.stdin.close()
+            try:
+                exit_code = process.wait(timeout=timeout)
+            except subprocess.TimeoutExpired:
+                timed_out = True
+                if os.name == "nt":
+                    _terminate_job(job_state)
+                else:
+                    os.killpg(process.pid, signal.SIGKILL)
+                exit_code = process.wait(timeout=10)
+            deadline = time.monotonic() + 3
+            while time.monotonic() < deadline:
+                if os.name == "nt":
+                    tree_verified = _job_active_count(job_state) == 0
+                else:
+                    try:
+                        os.killpg(process.pid, 0)
+                    except ProcessLookupError:
+                        tree_verified = True
+                if tree_verified:
+                    break
+                time.sleep(0.02)
+        finally:
+            if process.poll() is None:
+                process.kill()
+                process.wait(timeout=10)
+            if not tree_verified:
+                if job_state:
+                    _terminate_job(job_state)
+                elif os.name != "nt":
+                    try:
+                        os.killpg(process.pid, signal.SIGKILL)
+                    except ProcessLookupError:
+                        pass
+            _close_job(job_state)
+    host_report = json.loads(host_path.read_text(encoding="utf-8")) if host_path.exists() else {}
+    portable_argv = [Path(argv[0]).name]
+    for arg in argv[1:]:
+        if os.path.isabs(arg):
+            portable_argv.append("$SNAPSHOT/" + Path(arg).relative_to(cwd).as_posix() if _within(Path(arg), cwd) else Path(arg).name)
+        else:
+            portable_argv.append(arg)
+    return {"wrapper_pid": process.pid, "started_at": started, "argv": portable_argv,
+            "exit_code": host_report.get("exit_code"), "target_pid": host_report.get("target_pid"),
+            "wrapper_exit_code": exit_code, "timed_out": timed_out,
+            "tree_verified": tree_verified, "ownership": "gated_job_kill_on_close" if os.name == "nt" else "process_group", "stdout": stdout_path.name,
+            "stderr": stderr_path.name, "host": host_path.name}
+
+
+def _isolated_user_env(output: Path) -> dict[str, str]:
+    """Return a per-run Godot user-data environment without mutating the host."""
+    user_root = (output / "godot-user").resolve()
+    user_root.mkdir(parents=True, exist_ok=True)
+    env = os.environ.copy()
+    # Godot uses platform-specific variables; setting all of these is harmless
+    # and prevents editor imports/cache from leaking into a developer profile.
+    env.update({"APPDATA": str(user_root / "Roaming"),
+                "LOCALAPPDATA": str(user_root / "Local"),
+                "USERPROFILE": str(user_root / "Profile"),
+                "HOME": str(user_root / "Home"),
+                "XDG_CONFIG_HOME": str(user_root / "config"),
+                "XDG_DATA_HOME": str(user_root / "data"),
+                "XDG_CACHE_HOME": str(user_root / "cache")})
+    for key in ("APPDATA", "LOCALAPPDATA", "USERPROFILE", "HOME", "XDG_CONFIG_HOME", "XDG_DATA_HOME", "XDG_CACHE_HOME"):
+        Path(env[key]).mkdir(parents=True, exist_ok=True)
+    return env
+
+
+def _file_sha256_if_present(path: Path) -> str | None:
+    try:
+        return hash_file(path) if path.is_file() else None
+    except OSError:
+        return None
+
+
+def fail(message: str) -> int:
+    print(f"GT01_GAP: {message}", file=sys.stderr)
+    return 2
+
+
+def _observed_version(godot: Path, timeout: int) -> tuple[str, str]:
+    import tempfile
+    with tempfile.TemporaryDirectory(prefix="hh3d-version-") as directory:
+        output = Path(directory)
+        result = run_process([str(godot), "--version"], cwd=godot.parent,
+                             output=output, timeout=min(timeout, 30), label="version")
+        if (result.get("exit_code") != 0 or result.get("wrapper_exit_code") != 0
+                or result.get("timed_out") is not False
+                or result.get("tree_verified") is not True):
+            raise ValueError("version probe lacks clean exit/process-tree proof")
+        stdout, stderr = output / result["stdout"], output / result["stderr"]
+        if stdout.stat().st_size > 512 or stderr.stat().st_size != 0:
+            raise ValueError("version probe logs exceed limit or stderr is nonempty")
+        observed = stdout.read_bytes().decode("utf-8", errors="strict").strip()
+        if not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+\.stable\.official\.[0-9a-f]{7,40}", observed):
+            raise ValueError("version probe must contain one official version only")
+        return observed, observed
+
+
+def _version_matches(observed: str, expected: str) -> bool:
+    normalized = expected.replace("-", ".")
+    return observed == normalized or observed.startswith(normalized + ".")
+
+
+def _reject_reparse_ancestors(path: Path) -> None:
+    """Check the lexical path before resolve(), including existing ancestors."""
+    raw = os.fspath(path)
+    if any(part == ".." for part in Path(raw).parts) or raw.startswith(("\\\\", "//")):
+        raise ValueError("traversal or network path is not allowed")
+    raw_parts = Path(raw).parts
+    for index, part in enumerate(raw_parts):
+        if index == 0 and re.match(r"^[A-Za-z]:", part):
+            continue
+        if ":" in part or part.endswith((" ", ".")):
+            raise ValueError("alias or alternate stream path is not allowed")
+    absolute = Path(os.path.abspath(raw))
+    current = absolute
+    while True:
+        try:
+            info = os.lstat(current)
+        except FileNotFoundError:
+            info = None
+        except OSError as exc:
+            raise ValueError("input path is unavailable") from exc
+        if info is not None and (stat.S_ISLNK(info.st_mode) or (getattr(info, "st_file_attributes", 0) & 0x400)):
+            raise ValueError(f"symlink/reparse path component: {current}")
+        parent = current.parent
+        if parent == current:
+            break
+        current = parent
+
+def _regular_identity(path: Path) -> tuple[int, int, int, int, int]:
+    try:
+        info = os.stat(path, follow_symlinks=False)
+    except OSError as exc:
+        raise ValueError(f"file unavailable: {path}") from exc
+    if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1 or _is_reparse(path):
+        raise ValueError(f"file must be regular and single-link: {path}")
+    return (info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns)
+def _load_toolchain_lock(studio: Path) -> dict:
+    lock_path = studio / "toolchain.lock.json"
+    _regular_identity(lock_path)
+    try:
+        def pairs(items):
+            result = {}
+            for key, value in items:
+                if key in result:
+                    raise ValueError("toolchain lock contains duplicate keys")
+                result[key] = value
+            return result
+        lock = json.loads(lock_path.read_text(encoding="utf-8"), object_pairs_hook=pairs)
+        godot = lock["godot"]
+        required = ("version", "console_executable", "gui_executable",
+                    "console_sha256", "gui_sha256", "observed_version")
+        if lock.get("schema") != "HH-STUDIO-TOOLCHAIN-LOCK-2" or lock.get("status") != "CANDIDATE" or any(not isinstance(godot.get(k), (str, dict)) for k in required):
+            raise ValueError("toolchain lock is incomplete or not candidate")
+        if not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+-stable", godot["version"]):
+            raise ValueError("toolchain version invalid")
+        if godot["source_tag"] != godot["version"] or not re.fullmatch(r"[0-9a-f]{40}", godot["source_commit"]):
+            raise ValueError("toolchain provenance invalid")
+        if godot["source"] != f"https://github.com/godotengine/godot-builds/releases/tag/{godot['version']}" or godot["source_commit_url"] != f"https://api.github.com/repos/godotengine/godot/git/ref/tags/{godot['version']}":
+            raise ValueError("toolchain provenance URL invalid")
+        for key in ("console_sha256", "gui_sha256"):
+            if not re.fullmatch(r"[0-9a-f]{64}", godot[key].lower()):
+                raise ValueError("toolchain lock checksum is invalid")
+        if not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+\.stable\.official\.[0-9a-f]{7,40}", godot["observed_version"]):
+            raise ValueError("observed version provenance invalid")
+        if (".official." + godot["source_commit"][:7]) not in godot["observed_version"]:
+            raise ValueError("observed version commit mismatch")
+        return lock
+    except (OSError, UnicodeError, json.JSONDecodeError, KeyError, TypeError) as exc:
+        raise ValueError(f"invalid toolchain lock: {exc}") from exc
+
+
+def _streams_clean(output: Path, runs: list[dict]) -> bool:
+    """Reject warnings/errors in either stream while allowing normal engine logs."""
+    for run in runs:
+        for field in ("stdout", "stderr"):
+            path = output / run[field]
+            try:
+                text = path.read_text(encoding="utf-8", errors="strict")
+            except (OSError, UnicodeError):
+                return False
+            if WARNING_RE.search(text):
+                return False
+    return True
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--studio-root", required=True, type=Path)
+    parser.add_argument("--godot-exe", required=True, type=Path)
+    parser.add_argument("--expected-version", required=True)
+    parser.add_argument("--console-sha256", required=True)
+    parser.add_argument("--gui-sha256", required=True)
+    parser.add_argument("--run-id", required=True)
+    parser.add_argument("--command-id", required=True)
+    parser.add_argument("--output", required=True, type=Path)
+    parser.add_argument("--timeout-seconds", default=60, type=int)
+    parser.add_argument("--check-only", action="store_true")
+    parser.add_argument("--headed", action="store_true",
+                        help="also run the real editor and GUI trace lanes")
+    args = parser.parse_args(argv)
+    if not 1 <= args.timeout_seconds <= 600:
+        return fail("timeout outside 1..600 seconds")
+    try:
+        _reject_reparse_ancestors(args.studio_root)
+        _reject_reparse_ancestors(args.godot_exe)
+        _reject_reparse_ancestors(args.output.parent)
+        studio, godot, output = args.studio_root.resolve(), args.godot_exe.resolve(), args.output.resolve()
+    except (OSError, RuntimeError, ValueError) as error:
+        return fail(str(error))
+    fixture = studio / "fixtures" / "sample-game"
+    if not studio.is_dir() or not fixture.is_dir() or not godot.is_file():
+        return fail("studio, fixture, or Godot executable is missing")
+    if output.exists() or _within(output, studio):
+        return fail("output must be new and outside studio root")
+    if _is_reparse(studio) or _is_reparse(godot):
+        return fail("reparse/symlink root or executable")
+    try:
+        lock = _load_toolchain_lock(studio)
+        pinned = lock["godot"]
+        expected_version = pinned["version"].replace("-", ".")
+        if args.expected_version.replace("-", ".") not in (expected_version, pinned["observed_version"]):
+            return fail("caller expected version differs from toolchain lock")
+        if Path(godot).name != pinned["console_executable"]:
+            return fail("console executable differs from toolchain lock")
+        if args.console_sha256.lower() != pinned["console_sha256"].lower() or args.gui_sha256.lower() != pinned["gui_sha256"].lower():
+            return fail("caller checksum differs from toolchain lock")
+        before = checked_files(studio)
+        _regular_identity(godot)
+        if hash_file(godot) != pinned["console_sha256"].lower():
+            return fail("console checksum mismatch")
+        gui = godot.with_name(godot.name.replace("_console", ""))
+        _reject_reparse_ancestors(gui)
+        if gui.name != pinned["gui_executable"] or not gui.is_file() or _regular_identity(gui) is None or hash_file(gui) != pinned["gui_sha256"].lower():
+            return fail("GUI companion missing or checksum mismatch")
+        observed, raw_version = _observed_version(godot, args.timeout_seconds)
+        if observed != pinned["observed_version"] or not _version_matches(observed, expected_version):
+            return fail(f"version mismatch: {raw_version}")
+    except (OSError, ValueError, subprocess.SubprocessError) as error:
+        return fail(str(error))
+    try:
+        source_closure_digest = source_closure_sha256(before)
+    except ValueError as error:
+        return fail(str(error))
+    if args.check_only:
+        print(json.dumps({"status": "CHECK_ONLY_PASS", "expected_version": args.expected_version,
+                          "observed_version": observed, "source_files": len(before),
+                          "source_closure_sha256": source_closure_digest}))
+        return 0
+    output.mkdir(parents=True, exist_ok=False)
+    snapshot = output / "snapshot-unicode-đ" / "sample-game"
+    shutil.copytree(fixture, snapshot, ignore=shutil.ignore_patterns(".godot", "*.pyc", "__pycache__"))
+    after = checked_files(studio)
+    fixture_prefix = "fixtures/sample-game/"
+    expected_snapshot = {key.removeprefix(fixture_prefix): value for key, value in before.items()
+                         if key.startswith(fixture_prefix)}
+    snapshot_matches = checked_files(snapshot) == expected_snapshot
+    if before != after or not snapshot_matches or hash_file(godot) != pinned["console_sha256"].lower() or hash_file(gui) != pinned["gui_sha256"].lower():
+        return fail("source closure changed while snapshot was copied")
+    runs = []
+    env = _isolated_user_env(output)
+    for number, run_argv in enumerate((
+        [str(godot), "--headless", "--path", str(snapshot), "--import"],
+        [str(godot), "--headless", "--path", str(snapshot), "--check-only", "--script", "res://scripts/trace.gd"],
+        [str(godot), "--headless", "--path", str(snapshot), "--script", "res://scripts/trace.gd"],
+    ), 1):
+        runs.append(run_process(run_argv, cwd=snapshot, output=output,
+                                        timeout=args.timeout_seconds, label=f"run-{number}", env=env))
+        runs[-1]["lane"] = ("import" if number == 1 else
+                             "parse" if number == 2 else "trace-headless")
+        if runs[-1]["exit_code"] != 0 or runs[-1]["timed_out"] or not runs[-1]["tree_verified"]:
+            break
+    if args.headed and len(runs) == 3 and all(r["exit_code"] == 0 and r["wrapper_exit_code"] == 0 and not r["timed_out"] and r["tree_verified"] for r in runs):
+        env["GT01_EDITOR_PROBE_OUTPUT"] = str(output / "editor-probe.json")
+        headed_argv = [str(gui), "--editor", "--path", str(snapshot), "res://main.tscn", "--", "--gt01-editor-probe"]
+        editor_run = run_process(headed_argv, cwd=snapshot, output=output,
+                                         timeout=args.timeout_seconds, label="run-4-editor", env=env)
+        editor_run["lane"] = "editor-headed"
+        runs.append(editor_run)
+        if editor_run["exit_code"] == 0 and editor_run["wrapper_exit_code"] == 0 and not editor_run["timed_out"] and editor_run["tree_verified"]:
+            capture_path = output / "menu.png"
+            env["GT01_TRACE_OUTPUT"] = str(output / "headed-trace.json")
+            headed_trace_argv = [str(gui), "--path", str(snapshot), "--script", "res://scripts/trace.gd",
+                                 "--", "--capture", "--capture-path", str(capture_path)]
+            headed_trace = run_process(headed_trace_argv, cwd=snapshot, output=output,
+                                               timeout=args.timeout_seconds, label="run-5-headed-trace", env=env)
+            headed_trace["lane"] = "trace-headed"
+            runs.append(headed_trace)
+            headed_trace["capture_path"] = capture_path.name
+            # GUI binaries have no console subsystem on Windows.  The fixture
+            # writes its structured event to this sidecar; bind that exact
+            # event into the captured stream for independent review.
+            sidecar = output / "headed-trace.json"
+            if sidecar.exists() and (output / headed_trace["stdout"]).stat().st_size == 0:
+                (output / headed_trace["stdout"]).write_text(
+                    "GT01_TRACE " + sidecar.read_text(encoding="utf-8").strip() + "\n", encoding="utf-8")
+        sidecar = output / "editor-probe.json"
+        if sidecar.exists() and (output / editor_run["stdout"]).stat().st_size == 0:
+            (output / editor_run["stdout"]).write_text(
+                "GT01_EDITOR_TRACE " + sidecar.read_text(encoding="utf-8").strip() + "\n", encoding="utf-8")
+    trace_path = output / "run-3-stdout.txt"
+    trace_text = trace_path.read_text(encoding="utf-8", errors="replace") if trace_path.exists() else ""
+    trace_lines = [line for line in trace_text.splitlines() if line.startswith("GT01_TRACE ")]
+    clean_stderr = all(not (output / run["stderr"]).read_text(encoding="utf-8", errors="replace").strip() for run in runs)
+    streams_clean = _streams_clean(output, runs)
+    log_hashes: dict[str, str] = {}
+    for run in runs:
+        for field in ("stdout", "stderr", "host"):
+            name = run.get(field)
+            if isinstance(name, str):
+                digest = _file_sha256_if_present(output / name)
+                if digest is not None:
+                    log_hashes[name] = digest
+    editor_trace_lines = []
+    editor_stdout = output / "run-4-editor-stdout.txt"
+    if editor_stdout.exists():
+        editor_trace_lines = [line for line in editor_stdout.read_text(encoding="utf-8", errors="replace").splitlines()
+                              if line.startswith("GT01_EDITOR_TRACE ")]
+    if not editor_trace_lines:
+        sidecar = output / "editor-probe.json"
+        if sidecar.exists():
+            try:
+                editor_trace_lines = ["GT01_EDITOR_TRACE " + sidecar.read_text(encoding="utf-8").strip()]
+            except (OSError, UnicodeError):
+                pass
+    capture_ok = False
+    capture_meta = None
+    headed_trace_path = output / "run-5-headed-trace-stdout.txt"
+    if headed_trace_path.exists():
+        headed_lines = [line for line in headed_trace_path.read_text(encoding="utf-8", errors="replace").splitlines()
+                        if line.startswith("GT01_TRACE ")]
+        if len(headed_lines) == 1:
+            try:
+                headed_data = json.loads(headed_lines[0].removeprefix("GT01_TRACE "))
+                capture_meta = headed_data.get("capture")
+            except (ValueError, TypeError):
+                capture_meta = None
+    if capture_meta is None:
+        sidecar = output / "headed-trace.json"
+        if sidecar.exists():
+            try:
+                capture_meta = json.loads(sidecar.read_text(encoding="utf-8")).get("capture")
+            except (OSError, UnicodeError, ValueError, TypeError):
+                pass
+    capture_file = output / "menu.png"
+    if capture_file.is_file():
+        try:
+            header = capture_file.read_bytes()[:24]
+            capture_ok = (header[:8] == b"\x89PNG\r\n\x1a\n" and int.from_bytes(header[16:20], "big") == 640
+                          and int.from_bytes(header[20:24], "big") == 360 and isinstance(capture_meta, dict)
+                          and capture_meta.get("size") == [640, 360]
+                          and capture_meta.get("display_server") not in (None, "headless"))
+        except (OSError, ValueError):
+            capture_ok = False
+    artifact_hashes = {}
+    if capture_ok:
+        artifact_hashes["menu.png"] = hash_file(capture_file)
+    try:
+        source_stable = checked_files(studio) == before
+        snapshot_stable = checked_files(snapshot) == expected_snapshot
+        binaries_stable = (hash_file(godot) == pinned["console_sha256"].lower()
+                           and hash_file(gui) == pinned["gui_sha256"].lower())
+        _reject_reparse_ancestors(godot)
+        _reject_reparse_ancestors(gui)
+    except (OSError, ValueError):
+        source_stable = snapshot_stable = binaries_stable = False
+    trace_ok = False
+    if len(trace_lines) == 1:
+        try:
+            def _pairs(items):
+                out = {}
+                for key, value in items:
+                    if key in out:
+                        raise ValueError("duplicate trace key")
+                    out[key] = value
+                return out
+            trace_data = json.loads(trace_lines[0].removeprefix("GT01_TRACE "), object_pairs_hook=_pairs)
+            trace_ok = _validate_trace(trace_data)
+        except (ValueError, TypeError):
+            pass
+    base_ok = (len(runs) >= 3 and all(r["exit_code"] == 0 and r["wrapper_exit_code"] == 0
+              and not r["timed_out"] and r["tree_verified"] for r in runs)
+              and trace_ok and clean_stderr and streams_clean and source_stable
+              and snapshot_stable and binaries_stable)
+    headed_ok = True
+    if args.headed:
+        headed_ok = (len(runs) == 5 and runs[3].get("lane") == "editor-headed"
+                     and runs[4].get("lane") == "trace-headed"
+                     and len(editor_trace_lines) == 1 and capture_ok)
+    all_ok = base_ok and headed_ok
+    evidence = {"schema": "hh-gt01-bootstrap-evidence-v2", "status": "CANDIDATE" if all_ok else "DIAGNOSTIC",
+                "run_id": args.run_id, "command_id": args.command_id, "recorded_at": utc_now(),
+                "expected_version": args.expected_version, "observed_version": observed,
+                "console_sha256": args.console_sha256.lower(), "gui_sha256": args.gui_sha256.lower(),
+                "source_manifest": before, "source_closure_sha256": source_closure_digest,
+                "runs": runs, "trace_lines": trace_lines, "editor_trace_lines": editor_trace_lines,
+                "headed_trace_lines": ([line for line in (output / "run-5-headed-trace-stdout.txt").read_text(encoding="utf-8", errors="replace").splitlines() if line.startswith("GT01_TRACE ")] if (output / "run-5-headed-trace-stdout.txt").exists() else []),
+                "log_hashes": log_hashes,
+                "artifact_hashes": artifact_hashes,
+                "checks": {"trace_exactly_one_pass": trace_ok, "stderr_clean": clean_stderr, "streams_clean": streams_clean,
+                           "source_stable": source_stable, "snapshot_stable": snapshot_stable,
+                           "binaries_stable": binaries_stable, "lock_bound": True,
+                           "process_tree_verified": all(r["tree_verified"] for r in runs),
+                           "headed_editor_trace": (not args.headed or len(editor_trace_lines) == 1),
+                           "headed_capture": (not args.headed or capture_ok)},
+                "limits": ["candidate evidence still requires TQ01/TX12/TX14 and two independent critics",
+                           "headed lanes require an interactive display; --headed is never silently downgraded"]}
+    (output / "evidence.json").write_text(json.dumps(evidence, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    print(json.dumps({"status": evidence["status"], "output": str(output), "runs": runs}, indent=2))
+    return 0 if all_ok else 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

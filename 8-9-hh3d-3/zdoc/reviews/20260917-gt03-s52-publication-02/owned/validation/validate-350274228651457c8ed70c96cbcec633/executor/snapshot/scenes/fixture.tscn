@@ -1,0 +1,9 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://bjbtti8c7afyc" path="res://scripts/fixture_actor.gd" id="1_0ixsl"]
+
+[node name="Fixture" type="Node3D" unique_id=1344618183]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 3, 4)
+script = ExtResource("1_0ixsl")
+fixture_value = 23
+metadata/hh_studio_id = "root"

@@ -1,0 +1,26 @@
+GT04_UI_CHECK {"label": "actual_pinned_gui", "passed": true}
+GT04_UI_CHECK {"label": "actual_window_event_loop", "passed": true}
+GT04_UI_CHECK {"label": "automatic_python_disabled", "passed": true}
+GT04_UI_CHECK {"label": "empty_owned_ui_fixture", "passed": true}
+Info: Saved copy as "stage-checkpoint.blend"
+GT04_UI_CHECK {"label": "native_gui_checkpoint", "passed": true}
+GT04_UI_CHECK {"label": "enqueue_has_no_native_effect", "passed": true}
+GT04_UI_CHECK {"label": "timer_create_native_mesh", "passed": true}
+GT04_UI_CHECK {"label": "create_restores_context", "passed": true}
+GT04_UI_CHECK {"label": "native_undo_removes_mesh", "passed": true}
+GT04_UI_CHECK {"label": "duplicate_undo_original_receipt", "passed": true}
+GT04_UI_CHECK {"label": "duplicate_undo_no_second_effect", "passed": true}
+GT04_UI_CHECK {"label": "native_redo_restores_mesh", "passed": true}
+GT04_UI_CHECK {"label": "duplicate_create_original_receipt", "passed": true}
+GT04_UI_CHECK {"label": "duplicate_create_no_extra_mesh", "passed": true}
+GT04_UI_CHECK {"label": "create_preserves_active_selection", "passed": true}
+GT04_UI_CHECK {"label": "transform_native_readback", "passed": true}
+GT04_UI_CHECK {"label": "transform_restores_context", "passed": true}
+GT04_UI_CHECK {"label": "native_undo_exact_transform", "passed": true}
+GT04_UI_CHECK {"label": "native_redo_exact_transform", "passed": true}
+GT04_UI_CHECK {"label": "inspect_keeps_edit_mesh", "passed": true}
+GT04_UI_CHECK {"label": "edit_transform_restores_context", "passed": true}
+GT04_UI_RESULT {"acceptance": false, "actual_blender_gui": true, "checks": [{"label": "actual_pinned_gui", "passed": true}, {"label": "actual_window_event_loop", "passed": true}, {"label": "automatic_python_disabled", "passed": true}, {"label": "empty_owned_ui_fixture", "passed": true}, {"label": "native_gui_checkpoint", "passed": true}, {"label": "enqueue_has_no_native_effect", "passed": true}, {"label": "timer_create_native_mesh", "passed": true}, {"label": "create_restores_context", "passed": true}, {"label": "native_undo_removes_mesh", "passed": true}, {"label": "duplicate_undo_original_receipt", "passed": true}, {"label": "duplicate_undo_no_second_effect", "passed": true}, {"label": "native_redo_restores_mesh", "passed": true}, {"label": "duplicate_create_original_receipt", "passed": true}, {"label": "duplicate_create_no_extra_mesh", "passed": true}, {"label": "create_preserves_active_selection", "passed": true}, {"label": "transform_native_readback", "passed": true}, {"label": "transform_restores_context", "passed": true}, {"label": "native_undo_exact_transform", "passed": true}, {"label": "native_redo_exact_transform", "passed": true}, {"label": "inspect_keeps_edit_mesh", "passed": true}, {"label": "edit_transform_restores_context", "passed": true}], "failure": "RuntimeError: queue result {\"command_digest\": \"sha256:97a4ddb2e593d88d1eb30f3b934ca18cecb11ed450f46229d50f380ca2512853\", \"command_id\": \"undo-edit\", \"public_ack\": false, \"reason\": \"HISTORY_READBACK_MISMATCH\", \"state\": \"REJECTED\"}", "ok": false, "phase": "edit", "public_ack": false, "schema": "HH-GT04-UI-PROBE-1", "version": "5.2.1 LTS"}
+00:02.813  blend            | Saved session recovery to "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-ui-02\temp\quit.blend"
+
+Blender quit

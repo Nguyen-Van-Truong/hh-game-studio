@@ -1,0 +1,42 @@
+GT04_UI_CHECK {"label": "actual_pinned_gui", "passed": true}
+GT04_UI_CHECK {"label": "actual_window_event_loop", "passed": true}
+GT04_UI_CHECK {"label": "automatic_python_disabled", "passed": true}
+GT04_UI_CHECK {"label": "empty_owned_ui_fixture", "passed": true}
+Info: Saved copy as "stage-checkpoint.blend"
+GT04_UI_CHECK {"label": "native_gui_checkpoint", "passed": true}
+GT04_UI_CHECK {"label": "enqueue_has_no_native_effect", "passed": true}
+GT04_UI_CHECK {"label": "timer_create_native_mesh", "passed": true}
+GT04_UI_CHECK {"label": "create_restores_context", "passed": true}
+GT04_UI_CHECK {"label": "native_undo_removes_mesh", "passed": true}
+GT04_UI_CHECK {"label": "duplicate_undo_original_receipt", "passed": true}
+GT04_UI_CHECK {"label": "duplicate_undo_no_second_effect", "passed": true}
+GT04_UI_CHECK {"label": "native_redo_restores_mesh", "passed": true}
+GT04_UI_CHECK {"label": "duplicate_create_original_receipt", "passed": true}
+GT04_UI_CHECK {"label": "duplicate_create_no_extra_mesh", "passed": true}
+GT04_UI_CHECK {"label": "create_preserves_active_selection", "passed": true}
+GT04_UI_CHECK {"label": "transform_native_readback", "passed": true}
+GT04_UI_CHECK {"label": "transform_restores_context", "passed": true}
+GT04_UI_CHECK {"label": "native_undo_exact_transform", "passed": true}
+GT04_UI_CHECK {"label": "native_redo_exact_transform", "passed": true}
+GT04_UI_CHECK {"label": "inspect_keeps_edit_mesh", "passed": true}
+GT04_UI_CHECK {"label": "edit_transform_restores_context", "passed": true}
+GT04_UI_CHECK {"label": "native_undo_edit_transform", "passed": true}
+GT04_UI_CHECK {"label": "native_redo_edit_transform", "passed": true}
+GT04_UI_CHECK {"label": "edit_create_restores_context", "passed": true}
+GT04_UI_CHECK {"label": "native_two_step_edit_undo", "passed": true}
+GT04_UI_CHECK {"label": "native_two_step_edit_redo", "passed": true}
+GT04_UI_CHECK {"label": "new_edit_discards_redo_branch", "passed": true}
+GT04_UI_CHECK {"label": "queue_deadline_no_effect", "passed": true}
+GT04_UI_CHECK {"label": "stale_revision_rejected_no_effect", "passed": true}
+Info: Saved copy as "stage-fixture.blend"
+GT04_UI_CHECK {"label": "native_gui_save_exact_revision", "passed": true}
+GT04_UI_CHECK {"label": "duplicate_save_original_receipt", "passed": true}
+GT04_UI_CHECK {"label": "save_refuses_overwrite", "passed": true}
+GT04_UI_CHECK {"label": "stop_cancels_queued_no_effect", "passed": true}
+GT04_UI_CHECK {"label": "stop_preserves_receipt", "passed": true}
+GT04_UI_CHECK {"label": "no_public_ack", "passed": true}
+GT04_UI_CHECK {"label": "owned_timer_unregistered", "passed": true}
+GT04_UI_RESULT {"acceptance": false, "actual_blender_gui": true, "checks": [{"label": "actual_pinned_gui", "passed": true}, {"label": "actual_window_event_loop", "passed": true}, {"label": "automatic_python_disabled", "passed": true}, {"label": "empty_owned_ui_fixture", "passed": true}, {"label": "native_gui_checkpoint", "passed": true}, {"label": "enqueue_has_no_native_effect", "passed": true}, {"label": "timer_create_native_mesh", "passed": true}, {"label": "create_restores_context", "passed": true}, {"label": "native_undo_removes_mesh", "passed": true}, {"label": "duplicate_undo_original_receipt", "passed": true}, {"label": "duplicate_undo_no_second_effect", "passed": true}, {"label": "native_redo_restores_mesh", "passed": true}, {"label": "duplicate_create_original_receipt", "passed": true}, {"label": "duplicate_create_no_extra_mesh", "passed": true}, {"label": "create_preserves_active_selection", "passed": true}, {"label": "transform_native_readback", "passed": true}, {"label": "transform_restores_context", "passed": true}, {"label": "native_undo_exact_transform", "passed": true}, {"label": "native_redo_exact_transform", "passed": true}, {"label": "inspect_keeps_edit_mesh", "passed": true}, {"label": "edit_transform_restores_context", "passed": true}, {"label": "native_undo_edit_transform", "passed": true}, {"label": "native_redo_edit_transform", "passed": true}, {"label": "edit_create_restores_context", "passed": true}, {"label": "native_two_step_edit_undo", "passed": true}, {"label": "native_two_step_edit_redo", "passed": true}, {"label": "new_edit_discards_redo_branch", "passed": true}, {"label": "queue_deadline_no_effect", "passed": true}, {"label": "stale_revision_rejected_no_effect", "passed": true}, {"label": "native_gui_save_exact_revision", "passed": true}, {"label": "duplicate_save_original_receipt", "passed": true}, {"label": "save_refuses_overwrite", "passed": true}, {"label": "stop_cancels_queued_no_effect", "passed": true}, {"label": "stop_preserves_receipt", "passed": true}, {"label": "no_public_ack", "passed": true}, {"label": "owned_timer_unregistered", "passed": true}], "ok": true, "phase": "edit", "public_ack": false, "result": {"checkpoint": {"name": "checkpoint.blend", "sha256": "212faa19218130e465aac2c3919c5582c45aac0a919218909af0445c2a81b8c7", "size_bytes": 96411}, "context": {"active_id": "anchor", "mode": "OBJECT", "selected_ids": ["anchor"]}, "revision": "sha256:2f147ee190ffeb1af9dac0aa20c7e6d714a3c7b9354c2c32d8372895cf4d190c", "saved": {"name": "fixture.blend", "sha256": "6afce13ffd4af90f382aad5b0d024584e567ff18865b3d39484e40423b244dd2", "size_bytes": 98750}, "snapshot": {"objects": [{"faces": [[0, 3, 2, 1], [4, 5, 6, 7], [0, 1, 5, 4], [1, 2, 6, 5], [2, 3, 7, 6], [3, 0, 4, 7]], "location": [4.0, -1.0, 6.0], "mesh_name": "GT04_mesh_anchor", "name": "GT04_anchor", "object_id": "anchor", "rotation": [0.20000000298023224, 0.30000001192092896, 0.4000000059604645], "scale": [1.0, 2.0, 0.5], "vertices": [[-0.5, -1.0, -1.5], [0.5, -1.0, -1.5], [0.5, 1.0, -1.5], [-0.5, 1.0, -1.5], [-0.5, -1.0, 1.5], [0.5, -1.0, 1.5], [0.5, 1.0, 1.5], [-0.5, 1.0, 1.5]]}, {"faces": [[0, 3, 2, 1], [4, 5, 6, 7], [0, 1, 5, 4], [1, 2, 6, 5], [2, 3, 7, 6], [3, 0, 4, 7]], "location": [0.0, 0.0, 0.0], "mesh_name": "GT04_mesh_second", "name": "GT04_second", "object_id": "second", "rotation": [0.0, 0.0, 0.0], "scale": [1.0, 1.0, 1.0], "vertices": [[-0.05000000074505806, -0.10000000149011612, -0.15000000596046448], [0.05000000074505806, -0.10000000149011612, -0.15000000596046448], [0.05000000074505806, 0.10000000149011612, -0.15000000596046448], [-0.05000000074505806, 0.10000000149011612, -0.15000000596046448], [-0.05000000074505806, -0.10000000149011612, 0.15000000596046448], [0.05000000074505806, -0.10000000149011612, 0.15000000596046448], [0.05000000074505806, 0.10000000149011612, 0.15000000596046448], [-0.05000000074505806, 0.10000000149011612, 0.15000000596046448]]}], "schema": "HH-BLENDER-FIXTURE-SCENE-1", "units": {"scale_length": 1.0, "system": "METRIC"}}}, "schema": "HH-GT04-UI-PROBE-1", "version": "5.2.1 LTS"}
+00:03.484  blend            | Saved session recovery to "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-ui-06\temp\quit.blend"
+
+Blender quit

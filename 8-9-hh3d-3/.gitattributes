@@ -40,6 +40,11 @@ zdoc/reviews/*-gt03-s50-reducer-*/stderr.txt whitespace=-blank-at-eol,blank-at-e
 zdoc/reviews/*-gt03-s51*/**/*-engine.log whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
 zdoc/reviews/*-gt03-s51*/**/engine.log whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
 zdoc/reviews/*-gt03-s51*/**/engine-stdout.txt whitespace=blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+# S52 native logs keep the exact captured whitespace; source remains LF above.
+zdoc/reviews/*-gt03-s52*/**/*-engine.log whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+zdoc/reviews/*-gt03-s52*/**/engine.log whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+zdoc/reviews/*-gt03-s52*/**/engine-stdout.txt whitespace=blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+zdoc/reviews/*-gt03-s52*.md -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 zdoc/reviews/20260917-plan-history-s50/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 zdoc/reviews/20260917-gt03-s49-profile-evidence-01/stderr.txt whitespace=-blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 zdoc/reviews/20260916-gt03-s47-sandbox/read-only-privileges.txt whitespace=-blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

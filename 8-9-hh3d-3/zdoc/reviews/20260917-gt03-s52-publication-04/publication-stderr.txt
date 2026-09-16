@@ -1,0 +1,24 @@
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s52-publication-04\source\studio\godot-addon\publication_owner.py", line 258, in _save
+    original = self._validator.validate(command,candidate)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s52-publication-04\source\studio\godot-addon\validation_owner.py", line 327, in validate
+    observation, comparison = evaluate_run(result, stdout, stderr, bundle)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s52-publication-04\source\studio\godot-addon\validation_owner.py", line 160, in evaluate_run
+    _need(ordered == phases[:-1] + ['HH_PROFILE_READBACK', phases[-1]] and len(markers) == 1,
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s52-publication-04\source\studio\godot-addon\validation_owner.py", line 39, in _need
+    raise ValidationOwnerError(code)
+_hh_publication_owner_8a46b7e4539f8ef3883a1d38ae26b6b6197e417767fa9c07fa23b24ea64f5398.ValidationOwnerError: VALIDATION_PHASE_ORDER
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s52-publication-04\source\studio\tests\godot\run_publication_probe.py", line 186, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s52-publication-04\source\studio\tests\godot\run_publication_probe.py", line 153, in main
+    if args.frozen: return frozen(args.output,args.binary,args.closure)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s52-publication-04\source\studio\tests\godot\run_publication_probe.py", line 94, in frozen
+    check('authenticated_save_committed',status==200 and result.get('status')=='COMMITTED'
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s52-publication-04\source\studio\tests\godot\run_publication_probe.py", line 49, in check
+    raise AssertionError(label)
+AssertionError: authenticated_save_committed

@@ -1,0 +1,25 @@
+{
+  "host": {
+    "wrapper_pid": 10320,
+    "started_at": "2026-09-16T20:19:45.690007+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "-c",
+      "import json,sys,unittest\nsuite=unittest.TestSuite(unittest.defaultTestLoader.discover('tests/godot',pattern=p) for p in ('test_profile_probe_evidence.py','test_profile_readback.py'))\ndef flatten(s):\n for t in s:\n  if isinstance(t,unittest.TestSuite):yield from flatten(t)\n  else:yield t.id()\nids=list(flatten(suite))\nr=unittest.TextTestRunner(verbosity=2).run(suite)\nprint('GT03_UNIT_REPAIR_COMPLETE '+json.dumps({'run':r.testsRun,'failures':len(r.failures),'errors':len(r.errors),'skips':len(r.skipped),'tests':ids}),flush=True)\nsys.exit(not r.wasSuccessful())\n"
+    ],
+    "exit_code": 0,
+    "target_pid": 33500,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "unit-repair-stdout.txt",
+    "stderr": "unit-repair-stderr.txt",
+    "host": "unit-repair-host.json"
+  },
+  "origin_source_unchanged": true,
+  "snapshot_unchanged": true,
+  "source_closure_sha256": "dd596edd95bfe6d29f9ec485cc0b1f1d0f0a7d7431782d37de6e2325751e9833",
+  "candidate_only": true
+}

@@ -1,0 +1,24 @@
+{
+  "host": {
+    "wrapper_pid": 32896,
+    "started_at": "2026-09-16T19:48:42.249444+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "-c",
+      "from pathlib import Path\nimport importlib.util,sys,tempfile,threading\nfrom unittest.mock import patch\nroot=Path.cwd().parent; sys.path.insert(0,str(root))\ndef load(name):\n p=Path.cwd()/'godot-addon'/(name+'.py'); s=importlib.util.spec_from_file_location('review_'+name,p); m=importlib.util.module_from_spec(s); sys.modules[s.name]=m; s.loader.exec_module(m); return m\nsession=load('publication_session'); transport=load('publication_transport')\nclass Backend: pass\nwith tempfile.TemporaryDirectory() as d:\n b=Backend(); b.sessions=session.PublicationSession('project.fixture',Path(d),'sha256:'+'1'*64)\n t=transport.PublicationTransport(b)\n original=threading.Thread.start; calls=[0]\n def fail_second(self):\n  calls[0]+=1\n  if calls[0]==2: raise RuntimeError('INJECT_SECOND_THREAD_START_FAILURE')\n  return original(self)\n try:\n  with patch.object(threading.Thread,'start',fail_second): t.start()\n except RuntimeError:\n  print('SECOND_THREAD_START_FAILED',flush=True)\n print('CLOSE_ENTERED',flush=True)\n t.close()\n print('CLOSE_RETURNED',flush=True)\n"
+    ],
+    "exit_code": 0,
+    "target_pid": 28172,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "partial-start-stdout.txt",
+    "stderr": "partial-start-stderr.txt",
+    "host": "partial-start-host.json"
+  },
+  "source_unchanged": true,
+  "expectation": "partial start failure must have bounded close",
+  "actual_stdout": "SECOND_THREAD_START_FAILED\nCLOSE_ENTERED\nCLOSE_RETURNED\n"
+}

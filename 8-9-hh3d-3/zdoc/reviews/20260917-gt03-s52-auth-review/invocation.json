@@ -1,0 +1,8 @@
+{
+  "code": "from pathlib import Path\nimport importlib.util,sys,tempfile,threading\nfrom unittest.mock import patch\nroot=Path.cwd().parent; sys.path.insert(0,str(root))\ndef load(name):\n p=Path.cwd()/'godot-addon'/(name+'.py'); s=importlib.util.spec_from_file_location('review_'+name,p); m=importlib.util.module_from_spec(s); sys.modules[s.name]=m; s.loader.exec_module(m); return m\nsession=load('publication_session'); transport=load('publication_transport')\nclass Backend: pass\nwith tempfile.TemporaryDirectory() as d:\n b=Backend(); b.sessions=session.PublicationSession('project.fixture',Path(d),'sha256:'+'1'*64)\n t=transport.PublicationTransport(b)\n original=threading.Thread.start; calls=[0]\n def fail_second(self):\n  calls[0]+=1\n  if calls[0]==2: raise RuntimeError('INJECT_SECOND_THREAD_START_FAILURE')\n  return original(self)\n try:\n  with patch.object(threading.Thread,'start',fail_second): t.start()\n except RuntimeError:\n  print('SECOND_THREAD_START_FAILED',flush=True)\n print('CLOSE_ENTERED',flush=True)\n t.close()\n print('CLOSE_RETURNED',flush=True)\n",
+  "source_hashes": {
+    "godot-addon/publication_session.py": "57c127b9b80e3b95b28555c9bf60fbdced4653f4daec658fa6fc3801c71e1640",
+    "godot-addon/publication_transport.py": "ece929bb735e6b70287e348749b67cd3be72b4587f57c8a7c4cd79408f67ea78"
+  },
+  "timeout_seconds": 4
+}

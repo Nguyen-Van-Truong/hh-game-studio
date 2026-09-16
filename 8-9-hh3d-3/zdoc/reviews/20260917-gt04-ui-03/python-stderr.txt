@@ -1,0 +1,41 @@
+test_create_roundtrip_detached (test_contract.ContractTests.test_create_roundtrip_detached) ... ok
+test_duplicate_json_and_nonfinite (test_contract.ContractTests.test_duplicate_json_and_nonfinite) ... ok
+test_exact_fields_all_levels (test_contract.ContractTests.test_exact_fields_all_levels) ... ok
+test_ids_are_not_paths (test_contract.ContractTests.test_ids_are_not_paths) ... ok
+test_inspect (test_contract.ContractTests.test_inspect) ... ok
+test_main_thread_guard_before_bpy_import (test_contract.ContractTests.test_main_thread_guard_before_bpy_import) ... ok
+test_missing_fields (test_contract.ContractTests.test_missing_fields) ... ok
+test_numbers (test_contract.ContractTests.test_numbers) ... ok
+test_revision_required (test_contract.ContractTests.test_revision_required) ... ok
+test_selection_and_mode (test_contract.ContractTests.test_selection_and_mode) ... ok
+test_size_and_depth_limits (test_contract.ContractTests.test_size_and_depth_limits) ... ok
+test_transform (test_contract.ContractTests.test_transform) ... ok
+test_unsupported_operation (test_contract.ContractTests.test_unsupported_operation) ... ok
+test_wrong_vector_shape (test_contract.ContractTests.test_wrong_vector_shape) ... ok
+test_complete_synthetic_report (test_probe_evidence.EvidenceTests.test_complete_synthetic_report) ... ok
+test_missing_duplicate_false_checks (test_probe_evidence.EvidenceTests.test_missing_duplicate_false_checks) ... ok
+test_raw_log_mismatch_or_diagnostic (test_probe_evidence.EvidenceTests.test_raw_log_mismatch_or_diagnostic) ... ok
+test_wrong_native_phase_and_flags (test_probe_evidence.EvidenceTests.test_wrong_native_phase_and_flags) ... ok
+test_missing_duplicate_false_rows (test_ui_evidence.UIEvidenceTests.test_missing_duplicate_false_rows) ... ok
+test_raw_mismatch_and_diagnostic (test_ui_evidence.UIEvidenceTests.test_raw_mismatch_and_diagnostic) ... ok
+test_synthetic_complete (test_ui_evidence.UIEvidenceTests.test_synthetic_complete) ... ok
+test_wrong_flags (test_ui_evidence.UIEvidenceTests.test_wrong_flags) ... ok
+test_bad_deadlines (test_ui_queue.QueueTests.test_bad_deadlines) ... ok
+test_cancellation_holds_and_stops (test_ui_queue.QueueTests.test_cancellation_holds_and_stops) ... ok
+test_deadline_no_effect_and_retry_cannot_extend (test_ui_queue.QueueTests.test_deadline_no_effect_and_retry_cannot_extend) ... ok
+test_duplicate_conflict (test_ui_queue.QueueTests.test_duplicate_conflict) ... ok
+test_duplicate_pending_and_completed_detached (test_ui_queue.QueueTests.test_duplicate_pending_and_completed_detached) ... ok
+test_history_duplicate_does_not_dispatch_twice (test_ui_queue.QueueTests.test_history_duplicate_does_not_dispatch_twice) ... ok
+test_history_requires_revision_context_and_empty_payload (test_ui_queue.QueueTests.test_history_requires_revision_context_and_empty_payload) ... ok
+test_no_effect_on_submit_and_one_per_tick (test_ui_queue.QueueTests.test_no_effect_on_submit_and_one_per_tick) ... ok
+test_no_thread_entry (test_ui_queue.QueueTests.test_no_thread_entry) ... ok
+test_pending_capacity (test_ui_queue.QueueTests.test_pending_capacity) ... ok
+test_rejection_is_retained (test_ui_queue.QueueTests.test_rejection_is_retained) ... ok
+test_stop_cancels_pending_retains_results (test_ui_queue.QueueTests.test_stop_cancels_pending_retains_results) ... ok
+test_total_receipt_capacity (test_ui_queue.QueueTests.test_total_receipt_capacity) ... ok
+test_unsafe_payloads (test_ui_queue.QueueTests.test_unsafe_payloads) ... ok
+
+----------------------------------------------------------------------
+Ran 36 tests in 0.017s
+
+OK

@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "run": 4,
+  "failures": 0,
+  "errors": 0,
+  "skips": 0,
+  "read_only_evidence": true,
+  "native_processes_launched": false,
+  "formal_acceptance": false,
+  "audit_sha256": "a4500bf057cd0e7d50201453b427e7124db2c04efb99cc114f8d73606ff31c66",
+  "test_sha256": "2f119d8ea5e255cb4999ddcc3911e79d7929c451d9a035237cb037cd44cde061",
+  "output": "test_bool_host_exit_and_unclean_tree_rejected (__main__.CorruptionTests.test_bool_host_exit_and_unclean_tree_rejected) ... ok\ntest_completed_response_and_event_substitution_rejected (__main__.CorruptionTests.test_completed_response_and_event_substitution_rejected) ... ok\ntest_runtime_file_map_substitution_rejected (__main__.CorruptionTests.test_runtime_file_map_substitution_rejected) ... ok\ntest_stop_response_after_actual_native_exit_rejected (__main__.CorruptionTests.test_stop_response_after_actual_native_exit_rejected) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 4.719s\n\nOK\n"
+}

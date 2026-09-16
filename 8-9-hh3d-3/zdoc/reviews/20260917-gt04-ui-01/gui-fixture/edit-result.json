@@ -1,0 +1,44 @@
+{
+  "acceptance": false,
+  "actual_blender_gui": true,
+  "checks": [
+    {
+      "label": "actual_pinned_gui",
+      "passed": true
+    },
+    {
+      "label": "actual_window_event_loop",
+      "passed": true
+    },
+    {
+      "label": "automatic_python_disabled",
+      "passed": true
+    },
+    {
+      "label": "empty_owned_ui_fixture",
+      "passed": true
+    },
+    {
+      "label": "native_gui_checkpoint",
+      "passed": true
+    },
+    {
+      "label": "enqueue_has_no_native_effect",
+      "passed": true
+    },
+    {
+      "label": "timer_create_native_mesh",
+      "passed": true
+    },
+    {
+      "label": "create_restores_context",
+      "passed": true
+    }
+  ],
+  "failure": "RuntimeError: queue result {\"command_digest\": \"sha256:24e3214696ad787f8cdbe8b2fb7d4bebb3c524557823e061a6fa0e03ce9064eb\", \"command_id\": \"undo-create\", \"public_ack\": false, \"reason\": \"UNSUPPORTED_DEPENDENCY\", \"state\": \"REJECTED\"}",
+  "ok": false,
+  "phase": "edit",
+  "public_ack": false,
+  "schema": "HH-GT04-UI-PROBE-1",
+  "version": "5.2.1 LTS"
+}

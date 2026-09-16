@@ -1,0 +1,40 @@
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s52-publication-02\source\studio\godot-addon\publication_owner.py", line 253, in _save
+    self._journal.validated(command,digest,asdict(semantic_receipt),observed_ms=epoch_ms())
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s52-publication-02\source\studio\godot-addon\publication_journal_v3.py", line 248, in validated
+    return self._attested('VALIDATED', 'validation', semantic_receipt_dict, command_id, command_digest, observed_ms)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s52-publication-02\source\studio\godot-addon\publication_journal_v3.py", line 206, in _attested
+    self._append_event(self._event(kind, observed_ms, command_id=command_id, digest=command_digest, **{key: facts}))
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s52-publication-02\source\studio\godot-addon\publication_journal_v3.py", line 145, in _append_event
+    prospective = state_model.reduce_event(self._state, event)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s52-publication-02\source\studio\godot-addon\publication_state_v3.py", line 463, in reduce_event
+    return PublicationState((() if state is None else state.events) + (_event_bytes(event),))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 4, in __init__
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s52-publication-02\source\studio\godot-addon\publication_state_v3.py", line 448, in __post_init__
+    state = _step(state, parse_json(_event_bytes(raw)), raw)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s52-publication-02\source\studio\godot-addon\publication_state_v3.py", line 390, in _step
+    _validation(event['validation'], state, command); command['validation'] = event['validation']
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s52-publication-02\source\studio\godot-addon\publication_state_v3.py", line 225, in _validation
+    _deadline(command, state['last_observed_ms'])
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s52-publication-02\source\studio\godot-addon\publication_state_v3.py", line 172, in _deadline
+    need(now < min(admission['deadline_ms'], admission['lease_expires_ms']), 'PUBLICATION_V3_DEADLINE')
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s52-publication-02\source\studio\godot-addon\publication_state_v3.py", line 71, in need
+    raise PublicationError(code)
+_hh_journal_v3_0b3f9cd001e8961d6f8bb6e07bf4f8ebcf6cde347c57d5b64ddf52804f9d3879.PublicationError: PUBLICATION_V3_DEADLINE: pure scene.save publication history v3
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s52-publication-02\source\studio\tests\godot\run_publication_probe.py", line 177, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s52-publication-02\source\studio\tests\godot\run_publication_probe.py", line 144, in main
+    if args.frozen: return frozen(args.output,args.binary,args.closure)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s52-publication-02\source\studio\tests\godot\run_publication_probe.py", line 94, in frozen
+    check('authenticated_save_committed',status==200 and result.get('status')=='COMMITTED'
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s52-publication-02\source\studio\tests\godot\run_publication_probe.py", line 49, in check
+    raise AssertionError(label)
+AssertionError: authenticated_save_committed

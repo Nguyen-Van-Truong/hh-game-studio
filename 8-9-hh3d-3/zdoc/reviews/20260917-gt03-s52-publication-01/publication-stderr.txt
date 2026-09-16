@@ -1,0 +1,21 @@
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s52-publication-01\source\studio\tests\godot\run_publication_probe.py", line 174, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s52-publication-01\source\studio\tests\godot\run_publication_probe.py", line 143, in main
+    if args.frozen: return frozen(args.output,args.binary,args.closure)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s52-publication-01\source\studio\tests\godot\run_publication_probe.py", line 50, in frozen
+    owner = module.GodotPublicationOwner.create(workspace,project_id='project.fixture',
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s52-publication-01\source\studio\godot-addon\publication_owner.py", line 88, in create
+    initial_receipt = owner._validator.validate('bootstrap.validation', initial_bundle)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s52-publication-01\source\studio\godot-addon\validation_owner.py", line 327, in validate
+    observation, comparison = evaluate_run(result, stdout, stderr, bundle)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s52-publication-01\source\studio\godot-addon\validation_owner.py", line 160, in evaluate_run
+    _need(ordered == phases[:-1] + ['HH_PROFILE_READBACK', phases[-1]] and len(markers) == 1,
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s52-publication-01\source\studio\godot-addon\validation_owner.py", line 39, in _need
+    raise ValidationOwnerError(code)
+_hh_publication_owner_289a4482b0bb56611cfa506c5b77531ed932e4c7ca23e978a6b5273452c07737.ValidationOwnerError: VALIDATION_PHASE_ORDER

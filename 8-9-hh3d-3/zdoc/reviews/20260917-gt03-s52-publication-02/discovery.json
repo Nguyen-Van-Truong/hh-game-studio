@@ -1,0 +1,43 @@
+{
+  "build": "2.0",
+  "capabilities": [
+    {
+      "limits": {
+        "max_payload_bytes": 65536
+      },
+      "operation": "scene.inspect",
+      "read_scopes": [
+        "godot.fixture"
+      ],
+      "write_scopes": []
+    },
+    {
+      "limits": {
+        "max_payload_bytes": 65536
+      },
+      "operation": "scene.save",
+      "read_scopes": [
+        "godot.fixture"
+      ],
+      "write_scopes": [
+        "godot.fixture"
+      ]
+    }
+  ],
+  "limits": {
+    "max_deadline_ms": 30000,
+    "max_depth": 16,
+    "max_id_chars": 64,
+    "max_inspect_nodes": 64,
+    "max_name_chars": 48,
+    "max_nodes": 64,
+    "max_payload_bytes": 65536,
+    "max_projection_bytes": 65536,
+    "max_script_utf8_bytes": 16384
+  },
+  "project_id": "project.fixture",
+  "protocol_version": "1.0",
+  "schema_digest": "sha256:e6bf789b0d70a711dab497664a8f9cdbc2d98c9873711e2faadaf2c03375bfd5",
+  "schema_version": "hh-studio-0.1",
+  "server": "gt03-godot-catalog"
+}

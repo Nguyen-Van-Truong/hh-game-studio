@@ -1,0 +1,28 @@
+{
+  "source_hashes": {
+    "studio/godot-addon/publication_state_v3.py": "557b0b2997b50b873ac1f866d698a59a56cd422faa39e7f4e4201d8a68859ea4",
+    "studio/godot-addon/publication_journal_v3.py": "bfd83886c4ef9a623b56bf17afe5c7c648559e4b5b06069ebf304193562f15d9",
+    "studio/tests/godot/test_publication_journal_v3.py": "c2b5afc609be93f08d83587787e26256d3642d271406d3fd7da49ded50425959"
+  },
+  "source_unchanged": true,
+  "host": {
+    "wrapper_pid": 40156,
+    "started_at": "2026-09-16T19:51:30.059354+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "-c",
+      "import sys,unittest;sys.path.insert(0,'tests/godot');suite=unittest.defaultTestLoader.loadTestsFromName('test_publication_journal_v3.JournalV3Tests.test_expired_stage_deadline_rejects_before_native_create');result=unittest.TextTestRunner(verbosity=2).run(suite);sys.exit(not result.wasSuccessful())"
+    ],
+    "exit_code": 0,
+    "target_pid": 34464,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "journal-stdout.txt",
+    "stderr": "journal-stderr.txt",
+    "host": "journal-host.json"
+  },
+  "scope": "One additional deadline/bound regression after prior nine native storage tests; no real engine/auth evidence."
+}

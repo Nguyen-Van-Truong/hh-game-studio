@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-ui-01\source\studio\tests\blender\blender_ui_probe.py", line 189, in step
+    next(generator)
+    ~~~~^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-ui-01\source\studio\tests\blender\blender_ui_probe.py", line 75, in edit
+    undone = yield from queued(owner, undo)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-ui-01\source\studio\tests\blender\blender_ui_probe.py", line 49, in queued
+    raise RuntimeError("queue result " + json.dumps(row))
+RuntimeError: queue result {"command_digest": "sha256:24e3214696ad787f8cdbe8b2fb7d4bebb3c524557823e061a6fa0e03ce9064eb", "command_id": "undo-create", "public_ack": false, "reason": "UNSUPPORTED_DEPENDENCY", "state": "REJECTED"}
