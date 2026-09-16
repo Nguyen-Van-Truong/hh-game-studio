@@ -33,7 +33,8 @@ prove protected staging and confined endpoint access for their tested fixture;
 they do not upgrade the public project-root safe-write capability or remove the
 same-account hardlink threat. Therefore GT-02 remains a candidate and GT-03/GT-04
 remain gated. No long-suite rerun was needed: S40 changes only the decision
-record, and all referenced source bytes remain unchanged from S39-02.
+record, and all referenced source bytes remain unchanged from S39-02. A
+bounded focused rerun of the five cases above completed 5/5 with no skips.
 
 ## Reproduction boundary
 

@@ -17,5 +17,13 @@
     "test_ancestor_swap_between_resolve_and_open_is_rejected",
     "test_parent_handle_blocks_rename_before_final_file_is_open"
   ],
-  "rerun": "not_required_source_unchanged"
+  "rerun": "focused_only_source_unchanged",
+  "focused_rerun": {
+    "run": 5,
+    "passed": 5,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "command": "python -B -m unittest -v studio.tests.protocol.test_safe_open.WindowsSafeOpenTests.test_exclusive_handle_hardlink_counterexample_keeps_mutation_disabled studio.tests.protocol.test_safe_open.WindowsSafeOpenTests.test_final_file_swap_to_hardlink_between_resolve_and_open_rejects studio.tests.protocol.test_safe_open.WindowsSafeOpenTests.test_every_mutation_rejects_before_io_even_during_junction_swaps studio.tests.protocol.test_safe_open.WindowsSafeOpenTests.test_ancestor_swap_between_resolve_and_open_is_rejected studio.tests.protocol.test_safe_open.WindowsSafeOpenTests.test_parent_handle_blocks_rename_before_final_file_is_open"
+  }
 }
