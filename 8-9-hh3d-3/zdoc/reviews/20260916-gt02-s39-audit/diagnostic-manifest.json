@@ -1,0 +1,19 @@
+{
+  "schema": "hh-gt02-s39-diagnostic-manifest-v1",
+  "files": {
+    "zdoc/reviews/20260916-gt02-s39-rpc-02/capture.json": "5c0957e0eeb4266ff4736fb4c8874588b7f33888840bf1a42e883c9928c41625",
+    "zdoc/reviews/20260916-gt02-s39-rpc-02/invocation.json": "54e6f12e7838508a7db853117d1e92621b168f7838ca486d8648871cd714fac7",
+    "zdoc/reviews/20260916-gt02-s39-rpc-02/rpc-host.json": "1cc143a13ebd0cb15045749b238d7e4d639b368b478f982bb42b102110b3a6da",
+    "zdoc/reviews/20260916-gt02-s39-rpc-02/rpc-stderr.txt": "3e66eb7d7f461caebc5d1973e43b0dced1cea55dd2f277ce39679fca2ffa65ff",
+    "zdoc/reviews/20260916-gt02-s39-rpc-02/rpc-stdout.txt": "bd25c35c79c225d9679bff388dfaa0671111f0258f9e8ca276614bdfb19628ed",
+    "zdoc/reviews/20260916-gt02-s39-rpc-02/selector_pipe.py": "afe8ead710413220c0191b804f72c44a7fe5780878578aac2d17d07495dc4e9c",
+    "zdoc/reviews/20260916-gt02-s39-rpc-02/test_selector_pipe.py": "0f1d727e792b8a19268b0e75152728a85971f961dc1edc22da2df85f3962bb3e",
+    "zdoc/reviews/20260916-gt02-s39-native/boundary_child.c": "223f62175d1944a510fc0d07608a8698540e721c3e81440602584430b9ff08bd",
+    "zdoc/reviews/20260916-gt02-s39-native/capture_run.py": "e571bfc392b8bd2ca5d6f2dce523b4dc50b4848e3b2eb7188a9fd0ba77e9f49e",
+    "zdoc/reviews/20260916-gt02-s39-native/ipc_probe.py": "d9fd3d6a17795d96ab048c1f69a9053e52c52ead6b25a4e448e5e242a6794a2c",
+    "zdoc/reviews/20260916-gt02-s39-native/run-01.host.json": "746c20aa9b8efd51058e090435a48700df63539df8d78bb27f4630a6e7552fdc",
+    "zdoc/reviews/20260916-gt02-s39-native/run-01.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "zdoc/reviews/20260916-gt02-s39-native/run-01.stdout.json": "b2145c6a8ff371c2d2c402be292ccc80b6639cb17ddb70360bb0faafbcc5468f"
+  },
+  "scope": "S39 selector RPC focused run and native AppContainer run; older S38 diagnostics remain bound to 31f27b2"
+}

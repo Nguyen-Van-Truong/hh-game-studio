@@ -1,0 +1,22 @@
+{
+  "host": {
+    "wrapper_pid": 14240,
+    "started_at": "2026-09-15T19:36:19.871071+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "-c",
+      "import unittest,json,sys; suite=unittest.defaultTestLoader.discover('tests/protocol',pattern='test_selector_pipe.py'); r=unittest.TextTestRunner(verbosity=2).run(suite); print('SELECTOR_RPC_COMPLETE '+json.dumps({'run':r.testsRun,'failures':len(r.failures),'errors':len(r.errors),'skips':len(r.skipped)}),flush=True); sys.exit(not r.wasSuccessful())"
+    ],
+    "exit_code": 1,
+    "target_pid": 29104,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "rpc-stdout.txt",
+    "stderr": "rpc-stderr.txt",
+    "host": "rpc-host.json"
+  },
+  "source_unchanged": true
+}

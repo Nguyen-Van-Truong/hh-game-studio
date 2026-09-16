@@ -1,0 +1,21 @@
+test_admission_and_three_phases_have_one_durable_receipt (test_selector_pipe.SelectorPipeTests.test_admission_and_three_phases_have_one_durable_receipt) ... ok
+test_auth_before_parse_and_session_binding_rejects_another_valid_token (test_selector_pipe.SelectorPipeTests.test_auth_before_parse_and_session_binding_rejects_another_valid_token) ... ok
+test_bearer_in_inert_payload_is_rejected_before_persistent_intent (test_selector_pipe.SelectorPipeTests.test_bearer_in_inert_payload_is_rejected_before_persistent_intent) ... ok
+test_broker_ownership_cannot_transfer_during_active_phase (test_selector_pipe.SelectorPipeTests.test_broker_ownership_cannot_transfer_during_active_phase) ... ok
+test_cancel_after_staging_preserves_files_without_selection (test_selector_pipe.SelectorPipeTests.test_cancel_after_staging_preserves_files_without_selection) ... ok
+test_cancel_rechecks_phase_after_waiting_for_storage (test_selector_pipe.SelectorPipeTests.test_cancel_rechecks_phase_after_waiting_for_storage) ... ok
+test_control_auth_is_available_during_admitted_storage_phase (test_selector_pipe.SelectorPipeTests.test_control_auth_is_available_during_admitted_storage_phase) ... ok
+test_durable_stop_returns_work_receipt_and_duplicate_never_resumes (test_selector_pipe.SelectorPipeTests.test_durable_stop_returns_work_receipt_and_duplicate_never_resumes) ... ok
+test_lease_belongs_to_session_even_with_stolen_public_lease_fields (test_selector_pipe.SelectorPipeTests.test_lease_belongs_to_session_even_with_stolen_public_lease_fields) ... ok
+test_lost_pending_reply_can_lookup_and_execute_only_one_activation (test_selector_pipe.SelectorPipeTests.test_lost_pending_reply_can_lookup_and_execute_only_one_activation) ... ok
+test_new_broker_does_not_pump_inherited_pending_intent (test_selector_pipe.SelectorPipeTests.test_new_broker_does_not_pump_inherited_pending_intent) ... ok
+test_revocation_after_selection_holds_unknown_until_explicit_recovery (test_selector_pipe.SelectorPipeTests.test_revocation_after_selection_holds_unknown_until_explicit_recovery) ... ok
+test_rotation_before_next_phase_cancels_without_consumer_effect (test_selector_pipe.SelectorPipeTests.test_rotation_before_next_phase_cancels_without_consumer_effect) ... ok
+test_stop_after_selection_keeps_unknown_and_restore_is_local_only (test_selector_pipe.SelectorPipeTests.test_stop_after_selection_keeps_unknown_and_restore_is_local_only) ... ok
+test_uncertain_intent_error_is_unknown_and_holds_admission (test_selector_pipe.SelectorPipeTests.test_uncertain_intent_error_is_unknown_and_holds_admission) ... ok
+test_wrong_project_role_scope_and_lease_never_stage (test_selector_pipe.SelectorPipeTests.test_wrong_project_role_scope_and_lease_never_stage) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 3.508s
+
+OK

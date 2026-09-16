@@ -91,9 +91,9 @@ an explicit recovery decision. Durable STOP survives reopen and blocks normal
 adoption/new commands; restore remains possible. It is never auto-cleared.
 
 Current limits: clocks/revision observations are trusted fixture inputs, not
-proof of external source-file revisions. AppContainer IPC has only exercised
-the earlier S35 counter and separate S33 staging, not this selector. The new
-transaction needs its own authenticated confined-client proof. Witness custody,
+proof of external source-file revisions. AppContainer IPC has exercised the
+S39 fixed selector client on Windows; this remains a fixture, not a
+Godot/Blender consumer. Witness custody,
 physical power-loss/namespace persistence, damaged-tail repair and engine
 consumers remain separate gaps. `safe_write` and `atomic_replace` stay false.
 

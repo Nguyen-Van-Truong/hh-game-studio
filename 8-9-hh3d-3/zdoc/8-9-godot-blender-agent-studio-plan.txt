@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 16-09-2026, Asia/Saigon | Revision S38 | TRIỂN KHAI THEO GATE
+Ngày 16-09-2026, Asia/Saigon | Revision S39 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,18 +25,18 @@ RUNTIME_ACCEPTANCE=GT01_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S38
+PLAN_REVISION=S39
 EXECUTION_MODE=SOLO_OWNER_20260915
 SUBAGENTS_ENABLED=0
-GT02_EVIDENCE_STATUS=FROZEN_CANDIDATE_S38_01
-GT02_REVIEW_STATUS=NOT_REVIEWED_SOLO_S38
-GT02_LAST_TESTED_SOURCE_CLOSURE=370e98395f8e75f7b48b4b290790a026ca5fdb27008da14cd584b4c51db32b59
+GT02_EVIDENCE_STATUS=FROZEN_CANDIDATE_S39_01
+GT02_REVIEW_STATUS=NOT_REVIEWED_SOLO_S39
+GT02_LAST_TESTED_SOURCE_CLOSURE=6972f55fbc72e3095ef4869c69428b89c5aea68ca24532a96d174dbc2c33131f
 GT02_CHECKPOINT_COMMITS=96c506b,e52b5c0,faedb0d,642d6f5,74d1cc2,52ca04c,52def92,957ea88,572185e,9839be9,abc88b0,6bfbc3e,43192c0,15801ad,adb2e52,2e24912
 GT02_SAFE_WRITE_STATUS=GAP_UNSUPPORTED_WINDOWS
 GT02_BOUNDARY_EVIDENCE=S35_NATIVE_TYPED_COUNTER_AND_S33_SEPARATE_STAGING
-GT02_WORKING_SOURCE_STATUS=S38_FROZEN_TESTED
+GT02_WORKING_SOURCE_STATUS=S39_FROZEN_TESTED
 
-TIẾN ĐỘ HIỆN HÀNH — S38, cập nhật 16-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S39, cập nhật 16-09-2026
 Coordinator làm solo; các subagent đã dừng. Không tạo/đánh thức worker hoặc
 critic, không dùng Grok CLI. Solo self-review không thay hai chữ ký độc lập.
 
@@ -44,13 +44,13 @@ GT-01 ACCEPTED tại a0fb247; closure
 3ace23bcf84598cda64d54bbe3fc4736acde877f9f714fb71e2355d3e809eea4,
 evidence reviews/20260913-r21-gt01-final; hai critic PASS/TICK=yes.
 
-GT-02 candidate hiện hành: reviews/20260916-gt02-s38-01. Protocol267 tests:
+GT-02 candidate gần nhất đã freeze: reviews/20260916-gt02-s38-01. Protocol267 tests:
 263 pass,4 skips (3 thiếu quyền symlink,1 negative Linux-only); bootstrap56/56.
 Actual host exit/process tree sạch, source/snapshot không đổi;82 source files,
 9 artifacts được rehash. Python/Node/Godot khớp2396 canonical rows/hash; Godot
 thêm9 negative cases. Bảng requirement → test → evidence và audit tái dựng
 Git nằm ở reviews/20260916-gt02-s38-audit/. Chưa có review độc lập cho source này.
-Checkpoint S38:2e24912 source/evidence; Git index/HEAD proof đạt.
+Checkpoint S38:2e24912 source/evidence; S39 candidate đang chờ commit và Git proof.
 S37:adb2e52 source/evidence; S36:15801ad.
 S38 rehash82 source/9 candidate/45 diagnostic artifacts;9 crash cut được parse
 riêng,7 kiểm tra âm của verifier từ chối đúng. Không chuyển chữ ký critic cũ.
@@ -114,14 +114,25 @@ Completeness chỉ cho fixture grammar; chưa là dependency scan Godot/Blender.
 Staged release chưa active; revisions trong manifest vẫn là metadata producer,
 selector phải so với authoritative state/lease trước selection và adoption.
 
-S38 thêm fixture_selector.py: một stream giữ intent/lease/revisions/
+S39 thêm selector_pipe.py và native AppContainer proof; S38 thêm fixture_selector.py: một stream giữ intent/lease/revisions/
 selection/receipt, quota toàn operation, generation CAS và consumer readback.
 27/27 test selector đạt trên snapshot cuối, gồm9 crash cut bằng process thật.
 Stop tới trong quota scan/pin bị chặn trước effect admission; log/store/consumer
-mỗi object chỉ có một selector.5 focused runs giữ đúng source riêng17/21/21/24/27 tests.
+mỗi object chỉ có một selector. 5 focused runs giữ đúng source riêng 17/21/21/24/27 tests.
+S39 candidate chạy 283 test:279 pass+4 skip, bootstrap56/56. RPC focused16/16.
+Native AppContainer7/7 case exit61, Job/PID0, private root và .events trả
+ERROR_ACCESS_DENIED(5); submit retry giữ một receipt/effect. Source closure hiện
+84 file, candidate artifact9, closure6972f55fbc72e3095ef4869c69428b89c5aea68ca24532a96d174dbc2c33131f.
 Reopen chỉ quan sát; explicit reconcile có thể nhận lại manifest đã ghi trước
 crash, không staging lại. Restore tăng generation và giữ UNKNOWN/restored.
 Đây là internal fixture; chưa có confined client gọi selector hoặc engine adapter.
+
+S39 đã nối selector_pipe.py: endpoint PID/token + session/role trước parse,
+local broker pump từng phase, Stop riêng, không tự chạy pending sau reopen.
+Focused run01:13/14 pass,1 lỗi fixture truyền sai keyword PipeIOError; giữ
+source/log lỗi, sửa delivery_unknown trước run02. Run02 16/16 và native7/7 đã đạt. Thêm kiểm broker ownership
+và Cancel đọc lại phase dưới selector lock sau khi chờ storage. Chưa freeze
+source S39 hoặc chuyển proof AppContainer S35 sang transaction mới.
 
 Tiếp theo solo, theo thứ tự để tránh làm lại:
 1. Nối authenticated confined client với selector/staging mới; kiểm Stop, mất
