@@ -1,0 +1,17 @@
+{
+  "run_id": "GT02-S42-20260916-SAFE-WRITE-PROBE",
+  "decision": "GAP_REMAINS",
+  "source_changed": false,
+  "capabilities": {
+    "safe_write": false,
+    "atomic_replace": false
+  },
+  "observations": {
+    "delete_pending_hardlink": "blocked_error_5",
+    "write_flush_readback": "pass",
+    "post_clear_hardlink": "allowed",
+    "rename_with_full_ancestor_chain": "sharing_violation_32",
+    "directory_flush_separate_write_handle": "available_but_unproven"
+  },
+  "scope": "disposable TEMP only"
+}
