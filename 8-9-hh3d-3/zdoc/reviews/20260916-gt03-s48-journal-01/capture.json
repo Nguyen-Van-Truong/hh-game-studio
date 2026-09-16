@@ -1,0 +1,25 @@
+{
+  "wrapper_pid": 6852,
+  "started_at": "2026-09-16T16:55:12.859291+00:00",
+  "argv": [
+    "python.exe",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "$SNAPSHOT/tests/godot",
+    "-p",
+    "test_publication_journal.py",
+    "-v"
+  ],
+  "exit_code": 0,
+  "target_pid": 33620,
+  "wrapper_exit_code": 0,
+  "timed_out": false,
+  "tree_verified": true,
+  "ownership": "gated_job_kill_on_close",
+  "stdout": "journal-native-stdout.txt",
+  "stderr": "journal-native-stderr.txt",
+  "host": "journal-native-host.json"
+}

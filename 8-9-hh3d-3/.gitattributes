@@ -25,6 +25,8 @@ zdoc/reviews/*-gt02-s[0-9]*.md -text whitespace=blank-at-eol,blank-at-eof,space-
 zdoc/reviews/*-gt03-s[0-9]*/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 # Preserve native engine progress spacing and the crash log's final blank line.
 zdoc/reviews/*-gt03-s47-editor-*/*-engine.log whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+zdoc/reviews/*-gt03-s48-editor-*/*-engine.log whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+zdoc/reviews/*-gt03-s48-linux-*/*/engine-stdout.txt whitespace=blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
 zdoc/reviews/20260916-gt03-s47-sandbox/read-only-privileges.txt whitespace=-blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 zdoc/reviews/20260914-plan-history-s27/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 zdoc/reviews/20260915-plan-history-s28/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

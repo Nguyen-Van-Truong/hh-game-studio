@@ -1,0 +1,208 @@
+{
+  "run_id": "GT03-S48-EDITOR-02",
+  "scope": "trusted_actual_editor_in_memory_and_pack_reopen",
+  "source_closure_sha256": "096239b1035bfcce0cb4cecf3251392d837cdaea66800428d920a7f4a5c462a5",
+  "godot_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+  "lanes": [
+    {
+      "mode": "edit",
+      "host": {
+        "wrapper_pid": 32680,
+        "started_at": "2026-09-16T17:08:08.149987+00:00",
+        "argv": [
+          "Godot_v4.7.2-stable_win64.exe",
+          "--headless",
+          "--editor",
+          "--path",
+          "$SNAPSHOT/.",
+          "--log-file",
+          "$SNAPSHOT/edit-engine.log",
+          "res://scenes/fixture.tscn",
+          "--",
+          "--hh-studio-editor-probe",
+          "--probe-mode=edit"
+        ],
+        "exit_code": 0,
+        "target_pid": 19856,
+        "wrapper_exit_code": 0,
+        "timed_out": false,
+        "tree_verified": true,
+        "ownership": "gated_job_kill_on_close",
+        "stdout": "edit-stdout.txt",
+        "stderr": "edit-stderr.txt",
+        "host": "edit-host.json"
+      },
+      "clean_log": true,
+      "result_valid": true,
+      "result_validation_error": null,
+      "execution_before": {
+        "addons/hh_studio/diagnostic_plugin.gd": "b800e39945e5b66c8f7911a5d28cc4e13932c2b0743488025dff577765d745a8",
+        "addons/hh_studio/jcs_godot.gd": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+        "addons/hh_studio/plugin.cfg": "fd8f9693fec5f52352a218fca0ef7289c0e963cea7f04336ad007bcbfef177b9",
+        "addons/hh_studio/plugin.gd": "2a5eeb10e9adf0b705293545936f2abd8e352cfbe6b4df7d13411b0cf610243b",
+        "addons/hh_studio/scene_commands.gd": "ac4bf9e239b082efe9dd542f14c6cb8e202597bdfa1b8160e5da7905413aa0ea",
+        "project.godot": "b9b60c04369c0957cbeb4098df55cef7b91df513b675798819092aed019d018e",
+        "scripts/fixture_actor.gd": "7baa116876bb347f265768f93cf6d0821a6c6b082e8d84f1434267fb69d31c7f",
+        "tests/editor_probe.gd": "bcd13de384c328e3f8509be4407a9894c7403a44077b7341ede7f0aa406b4fd5"
+      },
+      "execution_after": {
+        "addons/hh_studio/diagnostic_plugin.gd": "b800e39945e5b66c8f7911a5d28cc4e13932c2b0743488025dff577765d745a8",
+        "addons/hh_studio/jcs_godot.gd": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+        "addons/hh_studio/plugin.cfg": "fd8f9693fec5f52352a218fca0ef7289c0e963cea7f04336ad007bcbfef177b9",
+        "addons/hh_studio/plugin.gd": "2a5eeb10e9adf0b705293545936f2abd8e352cfbe6b4df7d13411b0cf610243b",
+        "addons/hh_studio/scene_commands.gd": "ac4bf9e239b082efe9dd542f14c6cb8e202597bdfa1b8160e5da7905413aa0ea",
+        "project.godot": "b9b60c04369c0957cbeb4098df55cef7b91df513b675798819092aed019d018e",
+        "scripts/fixture_actor.gd": "7baa116876bb347f265768f93cf6d0821a6c6b082e8d84f1434267fb69d31c7f",
+        "tests/editor_probe.gd": "bcd13de384c328e3f8509be4407a9894c7403a44077b7341ede7f0aa406b4fd5"
+      },
+      "execution_unchanged": true,
+      "exact_reopen_revision": true,
+      "passed": true
+    },
+    {
+      "mode": "reopen",
+      "host": {
+        "wrapper_pid": 8684,
+        "started_at": "2026-09-16T17:08:14.795982+00:00",
+        "argv": [
+          "Godot_v4.7.2-stable_win64.exe",
+          "--headless",
+          "--editor",
+          "--path",
+          "$SNAPSHOT/.",
+          "--log-file",
+          "$SNAPSHOT/reopen-engine.log",
+          "res://scenes/fixture.tscn",
+          "--",
+          "--hh-studio-editor-probe",
+          "--probe-mode=reopen"
+        ],
+        "exit_code": 0,
+        "target_pid": 38224,
+        "wrapper_exit_code": 0,
+        "timed_out": false,
+        "tree_verified": true,
+        "ownership": "gated_job_kill_on_close",
+        "stdout": "reopen-stdout.txt",
+        "stderr": "reopen-stderr.txt",
+        "host": "reopen-host.json"
+      },
+      "clean_log": true,
+      "result_valid": true,
+      "result_validation_error": null,
+      "execution_before": {
+        "addons/hh_studio/diagnostic_plugin.gd": "b800e39945e5b66c8f7911a5d28cc4e13932c2b0743488025dff577765d745a8",
+        "addons/hh_studio/jcs_godot.gd": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+        "addons/hh_studio/plugin.cfg": "fd8f9693fec5f52352a218fca0ef7289c0e963cea7f04336ad007bcbfef177b9",
+        "addons/hh_studio/plugin.gd": "2a5eeb10e9adf0b705293545936f2abd8e352cfbe6b4df7d13411b0cf610243b",
+        "addons/hh_studio/scene_commands.gd": "ac4bf9e239b082efe9dd542f14c6cb8e202597bdfa1b8160e5da7905413aa0ea",
+        "project.godot": "b9b60c04369c0957cbeb4098df55cef7b91df513b675798819092aed019d018e",
+        "scripts/fixture_actor.gd": "7baa116876bb347f265768f93cf6d0821a6c6b082e8d84f1434267fb69d31c7f",
+        "tests/editor_probe.gd": "bcd13de384c328e3f8509be4407a9894c7403a44077b7341ede7f0aa406b4fd5"
+      },
+      "execution_after": {
+        "addons/hh_studio/diagnostic_plugin.gd": "b800e39945e5b66c8f7911a5d28cc4e13932c2b0743488025dff577765d745a8",
+        "addons/hh_studio/jcs_godot.gd": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+        "addons/hh_studio/plugin.cfg": "fd8f9693fec5f52352a218fca0ef7289c0e963cea7f04336ad007bcbfef177b9",
+        "addons/hh_studio/plugin.gd": "2a5eeb10e9adf0b705293545936f2abd8e352cfbe6b4df7d13411b0cf610243b",
+        "addons/hh_studio/scene_commands.gd": "ac4bf9e239b082efe9dd542f14c6cb8e202597bdfa1b8160e5da7905413aa0ea",
+        "project.godot": "b9b60c04369c0957cbeb4098df55cef7b91df513b675798819092aed019d018e",
+        "scripts/fixture_actor.gd": "7baa116876bb347f265768f93cf6d0821a6c6b082e8d84f1434267fb69d31c7f",
+        "tests/editor_probe.gd": "bcd13de384c328e3f8509be4407a9894c7403a44077b7341ede7f0aa406b4fd5"
+      },
+      "execution_unchanged": true,
+      "exact_reopen_revision": true,
+      "passed": true
+    },
+    {
+      "mode": "contract",
+      "host": {
+        "wrapper_pid": 29592,
+        "started_at": "2026-09-16T17:08:19.148417+00:00",
+        "argv": [
+          "Godot_v4.7.2-stable_win64.exe",
+          "--headless",
+          "--editor",
+          "--path",
+          "$SNAPSHOT/.",
+          "--log-file",
+          "$SNAPSHOT/contract-engine.log",
+          "res://scenes/fixture.tscn",
+          "--",
+          "--hh-studio-editor-probe",
+          "--probe-mode=contract"
+        ],
+        "exit_code": 0,
+        "target_pid": 20552,
+        "wrapper_exit_code": 0,
+        "timed_out": false,
+        "tree_verified": true,
+        "ownership": "gated_job_kill_on_close",
+        "stdout": "contract-stdout.txt",
+        "stderr": "contract-stderr.txt",
+        "host": "contract-host.json"
+      },
+      "clean_log": true,
+      "result_valid": true,
+      "result_validation_error": null,
+      "execution_before": {
+        "addons/hh_studio/diagnostic_plugin.gd": "b800e39945e5b66c8f7911a5d28cc4e13932c2b0743488025dff577765d745a8",
+        "addons/hh_studio/jcs_godot.gd": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+        "addons/hh_studio/plugin.cfg": "fd8f9693fec5f52352a218fca0ef7289c0e963cea7f04336ad007bcbfef177b9",
+        "addons/hh_studio/plugin.gd": "2a5eeb10e9adf0b705293545936f2abd8e352cfbe6b4df7d13411b0cf610243b",
+        "addons/hh_studio/scene_commands.gd": "ac4bf9e239b082efe9dd542f14c6cb8e202597bdfa1b8160e5da7905413aa0ea",
+        "project.godot": "b9b60c04369c0957cbeb4098df55cef7b91df513b675798819092aed019d018e",
+        "scripts/fixture_actor.gd": "7baa116876bb347f265768f93cf6d0821a6c6b082e8d84f1434267fb69d31c7f",
+        "tests/editor_probe.gd": "bcd13de384c328e3f8509be4407a9894c7403a44077b7341ede7f0aa406b4fd5"
+      },
+      "execution_after": {
+        "addons/hh_studio/diagnostic_plugin.gd": "b800e39945e5b66c8f7911a5d28cc4e13932c2b0743488025dff577765d745a8",
+        "addons/hh_studio/jcs_godot.gd": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+        "addons/hh_studio/plugin.cfg": "fd8f9693fec5f52352a218fca0ef7289c0e963cea7f04336ad007bcbfef177b9",
+        "addons/hh_studio/plugin.gd": "2a5eeb10e9adf0b705293545936f2abd8e352cfbe6b4df7d13411b0cf610243b",
+        "addons/hh_studio/scene_commands.gd": "ac4bf9e239b082efe9dd542f14c6cb8e202597bdfa1b8160e5da7905413aa0ea",
+        "project.godot": "b9b60c04369c0957cbeb4098df55cef7b91df513b675798819092aed019d018e",
+        "scripts/fixture_actor.gd": "7baa116876bb347f265768f93cf6d0821a6c6b082e8d84f1434267fb69d31c7f",
+        "tests/editor_probe.gd": "bcd13de384c328e3f8509be4407a9894c7403a44077b7341ede7f0aa406b4fd5"
+      },
+      "execution_unchanged": true,
+      "exact_reopen_revision": true,
+      "passed": true
+    }
+  ],
+  "production_save_verified": false,
+  "hostile_script_sandbox_verified": false,
+  "unit": {
+    "host": {
+      "wrapper_pid": 39156,
+      "started_at": "2026-09-16T17:07:24.282637+00:00",
+      "argv": [
+        "python.exe",
+        "-B",
+        "-c",
+        "import unittest,json,sys; suite=unittest.defaultTestLoader.discover('tests/godot',pattern='test_*.py'); result=unittest.TextTestRunner(verbosity=2).run(suite); print('GT03_UNIT_COMPLETE '+json.dumps({'run':result.testsRun,'failures':len(result.failures),'errors':len(result.errors),'skips':len(result.skipped)}),flush=True); sys.exit(not result.wasSuccessful())"
+      ],
+      "exit_code": 0,
+      "target_pid": 19168,
+      "wrapper_exit_code": 0,
+      "timed_out": false,
+      "tree_verified": true,
+      "ownership": "gated_job_kill_on_close",
+      "stdout": "unit-stdout.txt",
+      "stderr": "unit-stderr.txt",
+      "host": "unit-host.json"
+    },
+    "counts": {
+      "run": 130,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    "passed": true
+  },
+  "temporary_removed": true,
+  "source_unchanged": true,
+  "snapshot_unchanged": true,
+  "binary_unchanged": true,
+  "passed": true
+}

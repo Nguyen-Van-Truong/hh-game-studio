@@ -1,0 +1,32 @@
+{
+  "host": {
+    "wrapper_pid": 39092,
+    "started_at": "2026-09-16T17:02:16.549034+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "$SNAPSHOT/tests/godot",
+      "-p",
+      "test_publication_journal.py",
+      "-v"
+    ],
+    "exit_code": 0,
+    "target_pid": 34836,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "journal-native-stdout.txt",
+    "stderr": "journal-native-stderr.txt",
+    "host": "journal-native-host.json"
+  },
+  "source_unchanged": true,
+  "source_file_count": 32,
+  "source_snapshot_captured": false,
+  "complete_runtime_closure_claim": false,
+  "python_sha256": "5f7b89a612c9b8af1d6456cdfcd1dbe5ca630849e79aebced9bee9a6694952ec"
+}

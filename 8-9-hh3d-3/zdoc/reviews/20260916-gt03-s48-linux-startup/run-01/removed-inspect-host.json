@@ -1,0 +1,21 @@
+{
+  "argv": [
+    "docker.exe",
+    "--context",
+    "desktop-linux",
+    "inspect",
+    "93b30832dfc7094f1e41baacca1f96f1b0fff656ea4bca28f5f3107d48cd8045"
+  ],
+  "exit_code": 1,
+  "timeout_seconds": 5,
+  "timed_out": false,
+  "stream_cap_bytes_each": 4096,
+  "stream_byte_counts": [
+    3,
+    88
+  ],
+  "stream_cap_exceeded": false,
+  "readers_stopped": true,
+  "job_active_count": 0,
+  "elapsed_seconds": 0.313
+}

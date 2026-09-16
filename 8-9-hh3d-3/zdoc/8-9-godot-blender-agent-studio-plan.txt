@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 16-09-2026, Asia/Saigon | Revision S47 | TRIỂN KHAI THEO GATE
+Ngày 17-09-2026, Asia/Saigon | Revision S48 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=GT01_GT02_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S47
+PLAN_REVISION=S48
 EXECUTION_MODE=COORDINATOR_THREE_CODEX_OWNER_20260916
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -35,12 +35,14 @@ GT02_CHECKPOINT_COMMITS=2e24912,579b7e7,287a6c2,487e5fc,6a6dfb8,08f70cf,59c7b1e,
 GT02_SAFE_WRITE_STATUS=ACCEPTED_SCOPED_WINDOWS_MANAGED_FIXTURE
 GT02_BOUNDARY_EVIDENCE=S46_EXACT_CLOSURE_SERVICE_REPLACE_REGISTRY
 GT02_WORKING_SOURCE_STATUS=S46_FROZEN_ACCEPTED
-GT03_EVIDENCE_STATUS=S47_TRUSTED_EDITOR_CHECKPOINT_08
+GT03_EVIDENCE_STATUS=S48_EDITOR_JOURNAL_LINUX_DIAGNOSTIC_02
 GT03_REVIEW_STATUS=IMPLEMENTATION_CROSS_REVIEW_ONLY
-GT03_LAST_TESTED_SOURCE_CLOSURE=ea1ec66db84efe3c2708c48337eb5ff56f799cd946a71eebccfee13940668593
-GT03_SANDBOX_STATUS=APPCONTAINER_STARTUP_DISK_CAP_GAP
+GT03_LAST_TESTED_SOURCE_CLOSURE=096239b1035bfcce0cb4cecf3251392d837cdaea66800428d920a7f4a5c462a5
+GT03_SANDBOX_STATUS=LINUX_BOUNDED_DIAGNOSTICS_ATTRIBUTION_GAP
+GT03_CHECKPOINT_COMMIT=933c134
+GT03_WORKING_SOURCE_STATUS=S48_FROZEN_TESTED
 
-TIẾN ĐỘ HIỆN HÀNH — S47 mở GT-03, ngày 16-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S48 tiếp GT-03, ngày 17-09-2026
 Owner mở lại3 subagent Codex Astra extra high ngày16-09; coordinator giữ
 một writer/file. Hai critic S44 FAIL/TICK=no đúng closure S44; lỗi admission
 và custody được sửa ở S45. Hai critic mới PASS/TICK=yes cùng closure S46;
@@ -104,14 +106,37 @@ exit87/Job0; HOME riêng loại4 lỗi môi trường, còn2 lỗi volume query 
 nguồn pin. Chưa chứng minh hard disk cap cho mọi writable surface; token hiện
 không có SeManageVolumePrivilege để attach fixed VHD. Giữ arbitrary script
 fail-closed; không tính startup hoặc directory polling thành sandbox đạt.
+S47 đã commit933c134; Git HEAD proof343 file đạt, GT-02 acceptance vẫn verify.
+S48 source74 file cùng closure trên: reviews/20260917-gt03-s48-editor-02
+và -linux-02. 130/130 Python, không skip; Godot Windows thật103 edit/UndoRedo,
+10 reopen,31 contract checks. Attached script mẫu giữ exactsource hash và
+exported value qua Undo/reopen; UID sinh ra được giữ trong evidence.
+Project CAS bind scene+script; reducer31 tests và journal native19 tests giữ
+phase/dedupe/Stop/custody. Journal reopen luôn readonly; COMMITTED nội bộ chỉ
+là chuỗi attestations đã lưu, chưa chứng minh blob hay engine effects.
+Linux11/11 fixtures thực: parse hợp lệ/sai syntax/type, @tool, readonly/network,
+tmpfs đầy, timeout, log cap, forged PASS và static_init kể cả --check-only.
+Container sở hữu đều exit/PID0/remove; source/snapshot/binary không đổi. Đây là
+bounded diagnostics, không tự chứng minh sandbox/validation acceptance.
+Còn GAP giới hạn tổng số run, deadline sống qua host chết và orphan recovery;
+boundary audit ở reviews/20260917-gt03-s48-linux-boundary-audit.md.
+Audit s48-audit đối chiếu actual host/exit, source/editor/Linux cùng hash,
+artifact và vectors. GT02 acceptance vẫn verify, core/protocol không đổi.
+Run editor01 129 tests và Linux01 8/9 giữ hash cũ; busy3s chỉ timeout startup,
+không được tính callback PASS. Run02 tăng10s để quan sát callback rồi timeout.
+Không tin cờ clean/saved verdict nếu actual exit/EOF/source/input khác;
+resume phải kiểm lại raw evidence và đủ artifact. Chi tiết/lỗi ở s48-audit.
+Thiết kế parse attribution: reviews/20260917-gt03-s48-validation-attribution.md;
+profile khai báo typed literal là đề xuất availability, chưa tự đổi DoD.
+Hai content blobs chưa gồm .gd.uid/config/addon closure: còn GAP publish thực.
 
 Việc tiếp theo:
 1. Nối authenticated host, recheck lease/fence tại effect và durable receipts;
    phân biệt project revision của scene+script với semantic scene revision.
-2. Godot-specific staged publish/journal/recovery/readback, scene+script crash
-   và lost-response; core inert consumer không thay ACK của Godot.
-3. Chốt disk-bounded sandbox trước script parse/import/@tool; sau đó script
-   preservation/reload hash, role handoff và hai critic đúng frozen closure.
+2. Nối journal đã có với actual blob staging/selection/readback, đầy đủ UID/
+   config/addon closure; crash/response-loss và restart owner vẫn còn GAP.
+3. Chốt eligible script profile và trusted validation attribution sau sandbox
+   diagnostics; actual reload/readback, role handoff và hai critic cùng closure.
 4. Giữ protocol/core GT-02 frozen; phạm vi Godot nằm trong addon/tests/godot.
 
 Còn: GT-03 Godot, GT-04 Blender, GT-05 pipeline, GT-06 play/input/
@@ -126,6 +151,11 @@ reviews/20260916-plan-history-s42/tools-plan-s42.txt (AUTHORITY=0), SHA-256
 Các report/test lỗi cũ vẫn giữ, không overwrite bằng PASS mới.
 
 KINH NGHIỆM ĐANG ÁP DỤNG
+- S48: --check-only vẫn chạy static_init; clean exit hoặc child PASS không
+  chứng minh validation. Phân biệt sandbox containment và nguồn báo kết quả.
+  Timeout quá ngắn có thể chỉ đo startup; phải thấy callback trước fault.
+  Pure digest conflict không poison journal; native custody/append ambiguity
+  mới giữ UNKNOWN. Không cache reducer từ checkout khác qua tên sys.modules.
 - S47: typed-null native Object không đồng nghĩa TYPE_NIL; lấy inventory thực
   thay vì đoán serializer. Undo có thể dịch cursor dù callback từ chối: giữ
   adapter và reload, kiểm parent/owner identity cùng detached state trước effect.

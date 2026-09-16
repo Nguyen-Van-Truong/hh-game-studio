@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "docker.exe",
+    "--context",
+    "desktop-linux",
+    "image",
+    "inspect",
+    "python:3.12-bookworm"
+  ],
+  "exit_code": 0,
+  "timeout_seconds": 20,
+  "timed_out": false,
+  "stream_cap_bytes_each": 262144,
+  "stream_byte_counts": [
+    2168,
+    0
+  ],
+  "stream_cap_exceeded": false,
+  "readers_stopped": true,
+  "job_active_count": 0,
+  "elapsed_seconds": 0.328
+}

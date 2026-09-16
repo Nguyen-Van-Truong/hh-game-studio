@@ -1,0 +1,152 @@
+# Internal Linux diagnostic executor
+
+`linux_executor.py` uses the already installed, running Docker Desktop Linux
+backend from a trusted Windows host. It is not a public command endpoint, a
+trusted parser attestation, a production save transaction or an acceptance
+runner. Public discovery remains disabled. Child output may be forged by the
+submitted project, even when the engine exits 0 without visible errors.
+
+```python
+result = linux_executor.run(
+    project: Path,
+    mode="parse",             # exactly "parse" or "import"
+    output=fresh_output_path,
+    timeout_seconds=20,        # integer 1..20
+)
+```
+
+The example illustrates the call signature; pass a `Path` value as `project`.
+There is no caller-supplied argv, entrypoint, Docker context, image, mount list,
+resource limit, environment or container name. Invalid preflight arguments or
+input raise `ExecutorError` before any container exists. After creation is
+attempted, failures return a diagnostic record and perform owned cleanup or
+explicitly report why ownership/completion could not be established.
+
+## Exact input and pin
+
+`REQUIRED_FILES` is exactly `project.godot`, `scenes/fixture.tscn` and
+`scripts/fixture_actor.gd`. Scene bytes are capped at 1 MiB and script bytes at
+16 KiB. Script syntax is not interpreted by this host module. The only input
+directories are `scenes`, `scripts` and an optional empty `.godot`. Extra files,
+cache contents, symlinks, Windows reparse points, hardlinks and a modified
+`project.godot` are rejected. Paths and ancestor entries are checked before
+reading; each bounded file read checks metadata again afterward.
+
+Use the exported `PROJECT_TEMPLATE` verbatim as UTF-8:
+
+```ini
+config_version=5
+[application]
+config/name="HH GT03 Linux validator"
+[rendering]
+renderer/rendering_method="gl_compatibility"
+[threading]
+worker_pool/max_threads=4
+```
+
+A terminal LF is required. The worker pool is explicitly bounded because the
+documented default uses available logical cores; CPU quota alone is not a
+thread-count limit. This setting still needs actual pin-specific probe evidence.
+[Godot ProjectSettings](https://docs.godotengine.org/en/4.6/classes/class_projectsettings.html#class-projectsettings-property-threading-worker-pool-max-threads).
+
+The executor copies verified bytes to its new `output/snapshot`, creates only
+an empty `.godot` mountpoint there, and records input hashes. The source and
+snapshot are checked again before startup and after shutdown. It does not
+change the caller's project. `output` must be a fresh directory beneath an
+existing checked parent and must not overlap the input tree.
+
+`validator-toolchain.lock.json` separately binds the existing Linux/amd64 Python
+image, official Godot 4.7.2 Linux executable/archive/checksum-list hashes, source
+commit, Docker context/endpoint and accepted Windows owned-runner dependency.
+The module verifies the exact lock bytes and actual binary hash. It does not
+edit `studio/toolchain.lock.json`, install dependencies or pull images.
+
+For a frozen source copy, trusted host configuration may set
+`HH_STUDIO_LINUX_GODOT` to the existing binary's full absolute path. The filename,
+hash, link checks and sole-file tool-directory restriction still apply. The
+variable is never an IPC request field and never authorizes script execution.
+Without it, the installation is located below the module's `studio/.local/tooling`.
+
+## Fixed commands and containment
+
+The entrypoint is the verified `/tool/Godot_v4.7.2-stable_linux.x86_64`:
+
+```text
+parse:  --headless --path /project --log-file /tmp/engine.log --check-only --script res://scripts/fixture_actor.gd
+import: --headless --editor --import --path /project --log-file /tmp/engine.log res://scenes/fixture.tscn
+```
+
+Import opens the fixed scene, which may reference the fixed script. Tool code
+can therefore execute inside the container; parser success does not grant it
+live-editor or publication authority.
+
+Each unique UUID container uses a read-only root and exactly two read-only
+private binds (`/tool` and the disposable `/project` snapshot), UID/GID 65532,
+all capabilities dropped, no-new-privileges, built-in seccomp, private IPC and
+cgroup namespaces, network `none`, no devices/socket/ports, no healthcheck or
+restart, and `--pull=never`. The host checks the actual created configuration,
+image, environment, mounts, system masks and limits before start.
+
+| Resource | Fixed limit |
+| --- | --- |
+| `.godot` tmpfs | 64 MiB, 8192 inodes |
+| `/tmp` and `/home/validator` tmpfs | 16 MiB and 2048 inodes each |
+| `/run` tmpfs | 4 MiB, 512 inodes |
+| `/dev/shm` | 16 MiB |
+| Memory / swap | 1 GiB memory; memory-plus-swap also 1 GiB, prohibiting container swap |
+| CPU / PIDs | One CPU quota; 64 PIDs; per-process CPU time 10 seconds |
+| Regular file / core / descriptors / message queue | 8 MiB per file; no core dump; 256 descriptors; 8192-byte POSIX queue limit |
+| Engine wall time | Caller-selected integer 1..20 seconds |
+| Host stdout and stderr | 256 KiB each, then stop; `--log-driver none` |
+
+Writable data tmpfs mounts are nodev/nosuid/noexec and owned by 65532 with mode
+0700. HOME/XDG/TMP point into these mounts. Docker also supplies special runtime
+mounts; their complete effective behavior still requires the hostile-fixture
+and resource-exhaustion matrix. These settings are not a claim of zero host
+metadata or whole-VM disk use. [Docker tmpfs](https://docs.docker.com/engine/storage/tmpfs/),
+[resource limits](https://docs.docker.com/engine/containers/resource_constraints/),
+[network none](https://docs.docker.com/engine/network/drivers/none/).
+
+## Host streams and lifecycle
+
+Every Docker CLI process is gated into a Windows owned kill-on-close Job before
+the CLI launches. Both streams are drained with byte limits. A read error or
+missing EOF cannot become a clean result merely because the process exited 0.
+Reader exceptions, EOF completion, timeout, cap overflow, process exit and
+settled Job count are recorded. Incomplete pipe ownership is retained and
+blocks further runs in that module instance.
+
+The container is daemon-owned, not a child of the Windows CLI Job. A lost
+create reply is reconciled using the unique name, UUID label and exact image;
+only its verified full ID is used for kill/wait/remove. Timeout/cap/failed attach
+requires fresh inspect and owned termination, followed by actual stopped state
+and PID zero before removal. A final inspect must report that exact ID missing.
+Daemon loss or uncertain identity stays a recorded gap; no prune, broad stop,
+foreign-container removal or assumed cleanup occurs.
+
+Engine streams are `engine-stdout.txt` and `engine-stderr.txt`. The engine's
+`/tmp/engine.log` is intentionally ephemeral; it is not claimed as a captured
+artifact. State, CLI logs, create argv, file hashes and `result.json` are kept
+on success and failure. `command_host` / `container_state` are aliases of
+`commandhost` / `state`; all are supplied for the fixture runner.
+
+`diagnostic_process_clean` requires the observed command/engine exit and clean
+stream completion, no warning/error pattern, no OOM, input/snapshot/binary
+integrity and verified owned removal. It never means that a submitted script
+is benign, that its own output proves anything, or that parser/import semantics
+are complete. `public_ack` and `sandbox_acceptance` are always false.
+
+The host performs useful no-link/hash checks but does **not** claim protected
+source paths or custody against a concurrent same-user host attacker. There
+is no lease, protected output importer, durable command journal, source
+attestation, save/publication integration, or persistent recovery service here.
+Those boundaries remain separate from the diagnostic executor.
+
+## Verification scope
+
+`studio/tests/godot/test_linux_executor.py` performs pure rejection and mocked
+lifecycle checks: unsafe inputs/configurations, immutable command shapes, lock
+drift, lost create reply, capped output cleanup and stream-read failure. It
+does not start Docker or Godot. The coordinator's actual Linux fixture runner
+owns pin-specific parse/import, hostile-input, resource-limit and teardown
+evidence; source presence and pure tests do not establish those runtime claims.

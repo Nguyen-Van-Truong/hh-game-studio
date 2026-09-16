@@ -1,0 +1,21 @@
+{
+  "argv": [
+    "docker.exe",
+    "--context",
+    "desktop-linux",
+    "rm",
+    "69f3e07b62acb71082c919bfd5f8c7761f3bd7a3690d05c7c98d39bb73310a58"
+  ],
+  "exit_code": 0,
+  "timeout_seconds": 5,
+  "timed_out": false,
+  "stream_cap_bytes_each": 1024,
+  "stream_byte_counts": [
+    65,
+    0
+  ],
+  "stream_cap_exceeded": false,
+  "readers_stopped": true,
+  "job_active_count": 0,
+  "elapsed_seconds": 0.313
+}
