@@ -1,0 +1,19 @@
+{
+  "wrapper_pid": 36564,
+  "started_at": "2026-09-16T14:37:57.152048+00:00",
+  "argv": [
+    "python.exe",
+    "-B",
+    "tests/protocol/test_file_consumer.py",
+    "-v"
+  ],
+  "exit_code": 1,
+  "target_pid": 39848,
+  "wrapper_exit_code": 0,
+  "timed_out": false,
+  "tree_verified": true,
+  "ownership": "gated_job_kill_on_close",
+  "stdout": "consumer-stdout.txt",
+  "stderr": "consumer-stderr.txt",
+  "host": "consumer-host.json"
+}

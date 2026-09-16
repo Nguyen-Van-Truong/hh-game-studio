@@ -44,6 +44,7 @@ class PrivateStoreError(SafetyViolation):
         self.outcome_unknown = outcome_unknown
         # Internal local cleanup ownership, never serialized to a client.
         self.cleanup_owner: PrivateBlobStore | None = None
+        self.cleanup_api: _StoreApi | None = None
         super().__init__(code)
 
 
@@ -84,12 +85,21 @@ class _StoreApi(_WindowsApi):
         for dll, name, args, result in signatures:
             function = getattr(dll, name)
             function.argtypes, function.restype = args, result
-        self.owner = self._owner_sid()
-        # OWNER RIGHTS suppresses implicit owner WRITE_DAC; only the broker
-        # user's explicit ACE grants mutation. No inherited/package grants.
-        self.sddl = f"O:{self.owner}D:P(A;;RC;;;OW)(A;;FA;;;{self.owner})"
-        with self.descriptor() as descriptor:
-            self.expected_security = self._render_security(descriptor)
+        try:
+            self.owner = self._owner_sid()
+            # OWNER RIGHTS suppresses implicit owner WRITE_DAC; only the broker
+            # user's explicit ACE grants mutation. No inherited/package grants.
+            self.sddl = f"O:{self.owner}D:P(A;;RC;;;OW)(A;;FA;;;{self.owner})"
+            with self.descriptor() as descriptor:
+                self.expected_security = self._render_security(descriptor)
+        except BaseException:
+            try:
+                self.close_owned()
+            except SafetyViolation:
+                error = PrivateStoreError("PRIVATE_API_INIT_CLEANUP_UNCERTAIN", outcome_unknown=True)
+                error.cleanup_api = self
+                raise error from None
+            raise
 
     def _checked(self, result: object, code: str) -> None:
         if not result:
@@ -98,6 +108,7 @@ class _StoreApi(_WindowsApi):
     def check_no_impersonation(self) -> None:
         thread = W.HANDLE()
         if self.adv.OpenThreadToken(self.dll.GetCurrentThread(), 8, True, C.byref(thread)):
+            self._owned_handles.add(thread.value)
             self.close(thread.value)
             raise PrivateStoreError("BROKER_IMPERSONATION_UNSUPPORTED")
         if C.get_last_error() != 1008:  # ERROR_NO_TOKEN
@@ -107,6 +118,7 @@ class _StoreApi(_WindowsApi):
         self.check_no_impersonation()
         token, rendered = W.HANDLE(), W.LPWSTR()
         self._checked(self.adv.OpenProcessToken(self.dll.GetCurrentProcess(), 8, C.byref(token)), "BROKER_TOKEN_UNVERIFIED")
+        self._owned_handles.add(token.value)
         try:
             count, container = W.DWORD(), W.DWORD()
             self._checked(self.adv.GetTokenInformation(token, 29, C.byref(container), C.sizeof(container), C.byref(count)), "BROKER_TOKEN_UNVERIFIED")

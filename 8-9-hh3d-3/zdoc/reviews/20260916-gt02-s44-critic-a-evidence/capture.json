@@ -1,0 +1,21 @@
+{
+  "wrapper_pid": 16576,
+  "started_at": "2026-09-16T14:48:15.056272+00:00",
+  "argv": [
+    "python.exe",
+    "-B",
+    "$SNAPSHOT/zdoc/reviews/20260916-gt02-s44-critic-a-evidence/reproduce.py"
+  ],
+  "exit_code": 0,
+  "target_pid": 36484,
+  "wrapper_exit_code": 0,
+  "timed_out": false,
+  "tree_verified": true,
+  "ownership": "gated_job_kill_on_close",
+  "stdout": "readonly-admission-stdout.txt",
+  "stderr": "readonly-admission-stderr.txt",
+  "host": "readonly-admission-host.json",
+  "source_unchanged": true,
+  "source_closure_sha256": "6730c6f54cd682920b7585d139835088ae60f893f68fff8cd24662e268716964",
+  "scope": "Diagnostic completion is not a compliance PASS."
+}

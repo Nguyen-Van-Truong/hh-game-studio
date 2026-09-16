@@ -329,7 +329,7 @@ else:
         self.assertEqual(owner._api._owned_handles, set())
         native = _StoreApi.close
         def fail_owned(api, handle):
-            if handle in api._owned_handles:
+            if hasattr(api, "expected_security") and handle in api._owned_handles:
                 raise PrivateStoreError("PRIVATE_CLOSE_FAILED")
             native(api, handle)
         with mock.patch.object(_StoreApi, "ntfs", side_effect=PrivateStoreError("INJECTED_REFUSAL")), \
@@ -340,6 +340,27 @@ else:
         self.assertTrue(owner._api._owned_handles)
         owner.close()
         self.assertEqual(owner._api._owned_handles, set())
+
+    def test_api_constructor_token_close_failure_keeps_cleanup_owner(self):
+        from host.core.private_store import _StoreApi
+        retained = []
+        def fail_token(api, handle):
+            self.assertIn(handle, api._owned_handles)
+            retained.append(handle)
+            raise PrivateStoreError("PRIVATE_CLOSE_FAILED")
+        with mock.patch.object(_StoreApi, "close", new=fail_token):
+            with self.assertRaisesRegex(PrivateStoreError, "PRIVATE_API_INIT_CLEANUP_UNCERTAIN") as caught:
+                PrivateBlobStore.create(self.base)
+        api = caught.exception.cleanup_api
+        self.assertIsNotNone(api)
+        self.assertTrue(api._owned_handles)
+        self.assertEqual(api._owned_handles, set(retained))
+        info = api.dll.GetHandleInformation
+        info.argtypes, info.restype = [W.HANDLE, C.POINTER(W.DWORD)], W.BOOL
+        for handle in api._owned_handles:
+            self.assertTrue(info(handle, C.byref(W.DWORD())))
+        api.close_owned()
+        self.assertEqual(api._owned_handles, set())
 
 
 if __name__ == "__main__":

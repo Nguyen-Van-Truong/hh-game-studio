@@ -1,7 +1,7 @@
 """Internal, single-pending fixture activation transaction and recovery.
 
 One private event stream owns leases, revisions, intent, selection and receipts.
-The fixed consumer is an in-memory fixture, not an engine or IPC endpoint. No
+Consumers are fixed memory/protected-file fixtures, not engine adapters. No
 public capability is enabled. Clocks/revision observations come from trusted
 broker code; arbitrary clients cannot call these methods or supply a consumer.
 """
@@ -18,6 +18,7 @@ from .limits import (SafetyViolation, canonical_json, parse_json_utf8, validate_
                      request_digest, Request, ValidationError)
 from .private_events import PrivateEventLog, EventHead, EventRecord, EventLogError, MAX_EVENT_BYTES
 from .private_store import PrivateBlobStore, StagedBlob, MAX_BLOB_BYTES, MAX_STAGED_OBJECTS, MAX_STAGED_BYTES
+from .safe_replace import ProtectedFileRoot, SafeReplaceError
 from .fixture_release import (stage_fixture_release, pin_fixture_release, parse_release,
                               release_value, StagedRelease, PinnedRelease, MAX_ASSET_BYTES, _asset, _graph)
 
@@ -153,11 +154,21 @@ def _reduce(state, record: EventRecord):
     _need(type(event) is dict and type(event.get('kind')) is str)
     kind = event['kind']
     if kind == 'CONFIG':
-        _fields(event, ('kind', 'project_id', 'store', 'revisions'))
+        config_fields = ('kind', 'project_id', 'store', 'revisions')
+        _fields(event, (*config_fields, 'consumer') if 'consumer' in event else config_fields)
         _need(record.head.sequence == 2 and state['config'] is None)
         _name(event['project_id'])
         _revisions(event['revisions'])
         _fields(event['store'], ('name', 'volume', 'file_id'))
+        if 'consumer' in event:
+            consumer = event['consumer']
+            _fields(consumer, ('kind', 'name', 'volume', 'file_id'))
+            _need(consumer['kind'] == 'protected-file-v1'
+                  and type(consumer['name']) is str and re.fullmatch(r'hh-files-[0-9a-f]{32}', consumer['name'])
+                  and type(consumer['volume']) is str and re.fullmatch(r'0|[1-9][0-9]{0,19}', consumer['volume'])
+                  and int(consumer['volume']) < 2**64
+                  and type(consumer['file_id']) is str and re.fullmatch(r'[0-9a-f]{32}', consumer['file_id']),
+                  'SELECTOR_CONSUMER_BINDING_INVALID')
         state['config'] = event
         state['revisions'] = event['revisions']
         return state
@@ -318,6 +329,75 @@ class FixtureReleaseConsumer:
                                 _asset_hash(self._pin.assets if self._pin else ()))
 
 
+class FileFixtureReleaseConsumer(FixtureReleaseConsumer):
+    """Persist the complete inert fixture snapshot at one fixed protected name.
+
+    The selector binds the root identity in CONFIG. Recovery may confirm the
+    exact already-published value on a read-only reopen; it cannot overwrite
+    mismatched bytes or enable future mutation by guessing the prior outcome.
+    Caller owns the ProtectedFileRoot lifetime and closes this consumer after
+    closing its selector. No root/path/version is supplied over the wire.
+    """
+    def __init__(self, project_id, files):
+        super().__init__(project_id)
+        _need(type(files) is ProtectedFileRoot, 'CONSUMER_PROTECTED_ROOT_REQUIRED')
+        self.files, self._version = files, None
+        self._closed = False
+        self._mutex = threading.RLock()
+        self.binding = {'kind':'protected-file-v1','name':files.root.name,
+                        'volume':str(files.root_identity.volume),'file_id':files.root_identity.file_id}
+        with _BIND_LOCK:
+            _need(getattr(files, '_fixture_file_consumer', None) is None, 'CONSUMER_ROOT_ALREADY_BOUND')
+            files._fixture_file_consumer = self
+
+    def close(self):
+        with self._mutex, _BIND_LOCK:
+            _need(getattr(self, '_fixture_selector', None) is None, 'CONSUMER_SELECTOR_STILL_BOUND')
+            self._closed = True
+            if getattr(self.files, '_fixture_file_consumer', None) is self:
+                self.files._fixture_file_consumer = None
+
+    def _wire(self, selected, pin):
+        return canonical_json({'schema':'hh-fixture-consumer-1','project_id':self.project_id,
+                               'selected':selected,
+                               'assets':{name:parse_json_utf8(data) for name,data in pin.assets} if pin else {}})
+
+    def adopt(self, selected, pin):
+        with self._mutex:
+            _need(not self._closed, 'CONSUMER_CLOSED')
+            checked = FixtureReleaseConsumer(self.project_id)
+            checked.adopt(selected, pin)
+            wire = self._wire(selected, pin)
+            try:
+                current, actual = self.files.read('active.json')
+            except SafeReplaceError as exc:
+                if exc.code != 'PATH_NOT_FOUND' or self._version is not None:
+                    raise
+                version = self.files.create_new('active.json', wire)
+            else:
+                if self._version is not None:
+                    _need(current == self._version, 'CONSUMER_FILE_VERSION_CHANGED')
+                elif actual != wire:
+                    raise SelectorError('CONSUMER_RECONCILIATION_REQUIRED')
+                if actual == wire:
+                    self.files.confirm_barrier('active.json', current)
+                    version = current
+                else:
+                    version = self.files.atomic_replace('active.json', wire, expected=current)
+            self._version = version
+            super().adopt(selected, pin)
+
+    def readback(self):
+        with self._mutex:
+            _need(not self._closed, 'CONSUMER_CLOSED')
+            if self._selected is None:
+                return None
+            current, actual = self.files.read('active.json')
+            _need(current == self._version and actual == self._wire(self._selected, self._pin),
+                  'CONSUMER_FILE_READBACK_FAILED')
+            return super().readback()
+
+
 class FixtureSelector:
     """Trusted fixture transaction owner; existing log/store lifetimes stay
     with the caller. Reopen reconstructs history but never resumes pending work.
@@ -325,7 +405,7 @@ class FixtureSelector:
     """
     def __init__(self, log, store, consumer, *, project_id, initial_revisions=None):
         _need(type(log) is PrivateEventLog and type(store) is PrivateBlobStore
-              and type(consumer) is FixtureReleaseConsumer, 'SELECTOR_TRUSTED_COMPONENT_REQUIRED')
+              and type(consumer) in (FixtureReleaseConsumer, FileFixtureReleaseConsumer), 'SELECTOR_TRUSTED_COMPONENT_REQUIRED')
         _name(project_id)
         _need(consumer.project_id == project_id, 'SELECTOR_PROJECT_MISMATCH')
         self.log, self.store, self.consumer = log, store, consumer
@@ -336,6 +416,7 @@ class FixtureSelector:
         self._stop_requested = threading.Event()
         self._store_binding = {'name': store.root.name, 'volume': str(store.root_identity.volume),
                                'file_id': store.root_identity.file_id}
+        self._consumer_binding = copy.deepcopy(consumer.binding) if type(consumer) is FileFixtureReleaseConsumer else None
         with _BIND_LOCK:
             _need(getattr(log, '_fixture_selector', None) is None
                   and getattr(store, '_fixture_selector', None) is None
@@ -350,6 +431,8 @@ class FixtureSelector:
                 _need(head.sequence == 1, 'SELECTOR_ALREADY_CONFIGURED')
                 event = {'kind': 'CONFIG', 'project_id': project_id, 'store': self._store_binding,
                          'revisions': initial_revisions}
+                if self._consumer_binding is not None:
+                    event['consumer'] = self._consumer_binding
                 log.append(event, head, reserve_records=1, reserve_bytes=MAX_EVENT_BYTES + 36)
             self._reload()
         except BaseException:
@@ -369,7 +452,8 @@ class FixtureSelector:
         self._head, self._state = self.log.fold(_empty_state(), _reduce)
         config = self._state['config']
         _need(config is not None and config['project_id'] == self.project_id
-              and config['store'] == self._store_binding, 'SELECTOR_BINDING_MISMATCH')
+              and config['store'] == self._store_binding
+              and config.get('consumer') == self._consumer_binding, 'SELECTOR_BINDING_MISMATCH')
 
     def _append(self, event):
         # Validate the exact transition before a native write. The predicted

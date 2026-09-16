@@ -1,0 +1,384 @@
+test_commit_reads_actual_file_then_second_revision_replaces_once (test_file_consumer.FileConsumerTests.test_commit_reads_actual_file_then_second_revision_replaces_once) ... ERROR
+test_load_committed_confirms_file_without_new_effect_or_receipt (test_file_consumer.FileConsumerTests.test_load_committed_confirms_file_without_new_effect_or_receipt) ... ERROR
+test_out_of_band_file_change_never_reads_as_verified_consumer (test_file_consumer.FileConsumerTests.test_out_of_band_file_change_never_reads_as_verified_consumer) ... ERROR
+test_recovery_barrier_failure_cannot_be_a_commit (test_file_consumer.FileConsumerTests.test_recovery_barrier_failure_cannot_be_a_commit) ... ERROR
+test_second_consumer_and_close_while_bound_reject (test_file_consumer.FileConsumerTests.test_second_consumer_and_close_while_bound_reject) ... ERROR
+test_stop_before_adoption_leaves_existing_file_unchanged (test_file_consumer.FileConsumerTests.test_stop_before_adoption_leaves_existing_file_unchanged) ... ERROR
+test_terminal_loss_reconciles_same_bytes_without_rewrite (test_file_consumer.FileConsumerTests.test_terminal_loss_reconciles_same_bytes_without_rewrite) ... ERROR
+test_wrong_managed_root_and_memory_consumer_cannot_rebind_journal (test_file_consumer.FileConsumerTests.test_wrong_managed_root_and_memory_consumer_cannot_rebind_journal) ... ERROR
+test_blob_slots_are_reserved_before_intent_and_failure_does_not_poison (test_fixture_selector.FixtureSelectorTests.test_blob_slots_are_reserved_before_intent_and_failure_does_not_poison) ... ok
+test_consumer_cannot_be_shared_by_two_independent_selectors (test_fixture_selector.FixtureSelectorTests.test_consumer_cannot_be_shared_by_two_independent_selectors) ... ok
+test_consumer_changed_before_failed_terminal_requires_readback_reconcile (test_fixture_selector.FixtureSelectorTests.test_consumer_changed_before_failed_terminal_requires_readback_reconcile) ... ok
+test_duplicate_after_deadline_and_lease_change_returns_original_receipt (test_fixture_selector.FixtureSelectorTests.test_duplicate_after_deadline_and_lease_change_returns_original_receipt) ... ok
+test_expired_adoption_needs_fresh_recovery_lease (test_fixture_selector.FixtureSelectorTests.test_expired_adoption_needs_fresh_recovery_lease) ... ok
+test_explicit_recovery_stage_and_selection_bind_fresh_fence_in_history (test_fixture_selector.FixtureSelectorTests.test_explicit_recovery_stage_and_selection_bind_fresh_fence_in_history) ... ok
+test_false_consumer_readback_never_commits_or_marks_ready (test_fixture_selector.FixtureSelectorTests.test_false_consumer_readback_never_commits_or_marks_ready) ... ok
+test_fresh_runtime_load_is_explicit_and_does_not_reselect_or_restage (test_fixture_selector.FixtureSelectorTests.test_fresh_runtime_load_is_explicit_and_does_not_reselect_or_restage) ... ok
+test_intent_precedes_staging_and_selection_precedes_readback_receipt (test_fixture_selector.FixtureSelectorTests.test_intent_precedes_staging_and_selection_precedes_readback_receipt) ... ok
+test_invalid_request_has_no_journal_or_blob_effect (test_fixture_selector.FixtureSelectorTests.test_invalid_request_has_no_journal_or_blob_effect) ... ok
+test_late_revision_and_fence_changes_refuse_selection (test_fixture_selector.FixtureSelectorTests.test_late_revision_and_fence_changes_refuse_selection) ... ok
+test_lost_terminal_reply_replays_receipt_and_never_adopts_twice (test_fixture_selector.FixtureSelectorTests.test_lost_terminal_reply_replays_receipt_and_never_adopts_twice) ... ok
+test_partial_staging_is_cancel_only_and_files_are_preserved (test_fixture_selector.FixtureSelectorTests.test_partial_staging_is_cancel_only_and_files_are_preserved) ... ok
+test_real_process_cuts_preserve_phase_and_resume_without_duplicate_files (test_fixture_selector.FixtureSelectorTests.test_real_process_cuts_preserve_phase_and_resume_without_duplicate_files) ... ok
+test_reopen_requires_explicit_reconcile_and_does_not_restage (test_fixture_selector.FixtureSelectorTests.test_reopen_requires_explicit_reconcile_and_does_not_restage) ... ok
+test_restore_refuses_new_owner_revision_without_overwrite (test_fixture_selector.FixtureSelectorTests.test_restore_refuses_new_owner_revision_without_overwrite) ... ok
+test_same_id_changed_payload_and_wrong_project_never_reuse_receipt (test_fixture_selector.FixtureSelectorTests.test_same_id_changed_payload_and_wrong_project_never_reuse_receipt) ... ok
+test_selected_stop_requires_restore_preserving_monotonic_generation (test_fixture_selector.FixtureSelectorTests.test_selected_stop_requires_restore_preserving_monotonic_generation) ... ok
+test_staged_discovery_rejects_ambiguous_manifest_without_creating_files (test_fixture_selector.FixtureSelectorTests.test_staged_discovery_rejects_ambiguous_manifest_without_creating_files) ... ok
+test_stop_arriving_during_pin_prevents_later_selection_and_adoption (test_fixture_selector.FixtureSelectorTests.test_stop_arriving_during_pin_prevents_later_selection_and_adoption) ... ok
+test_stop_cancels_preselection_and_stays_stopped_after_reopen (test_fixture_selector.FixtureSelectorTests.test_stop_cancels_preselection_and_stays_stopped_after_reopen) ... ok
+test_stop_during_quota_scan_prevents_intent_or_staging (test_fixture_selector.FixtureSelectorTests.test_stop_during_quota_scan_prevents_intent_or_staging) ... ok
+test_stop_signal_blocks_selection_while_waiting_for_selector_lock (test_fixture_selector.FixtureSelectorTests.test_stop_signal_blocks_selection_while_waiting_for_selector_lock) ... ok
+test_two_same_parent_commands_admit_one_then_reject_stale_parent (test_fixture_selector.FixtureSelectorTests.test_two_same_parent_commands_admit_one_then_reject_stale_parent) ... ok
+test_two_selectors_cannot_reserve_the_same_store_and_failed_init_unbinds (test_fixture_selector.FixtureSelectorTests.test_two_selectors_cannot_reserve_the_same_store_and_failed_init_unbinds) ... ok
+test_valid_checksum_cannot_authorize_semantically_invalid_event (test_fixture_selector.FixtureSelectorTests.test_valid_checksum_cannot_authorize_semantically_invalid_event) ... ok
+test_whole_operation_capacity_reserved_before_intent (test_fixture_selector.FixtureSelectorTests.test_whole_operation_capacity_reserved_before_intent) ... ok
+test_admission_and_three_phases_have_one_durable_receipt (test_selector_pipe.SelectorPipeTests.test_admission_and_three_phases_have_one_durable_receipt) ... ok
+test_auth_before_parse_and_session_binding_rejects_another_valid_token (test_selector_pipe.SelectorPipeTests.test_auth_before_parse_and_session_binding_rejects_another_valid_token) ... ok
+test_bearer_in_inert_payload_is_rejected_before_persistent_intent (test_selector_pipe.SelectorPipeTests.test_bearer_in_inert_payload_is_rejected_before_persistent_intent) ... ok
+test_broker_ownership_cannot_transfer_during_active_phase (test_selector_pipe.SelectorPipeTests.test_broker_ownership_cannot_transfer_during_active_phase) ... ok
+test_cancel_after_staging_preserves_files_without_selection (test_selector_pipe.SelectorPipeTests.test_cancel_after_staging_preserves_files_without_selection) ... ok
+test_cancel_rechecks_phase_after_waiting_for_storage (test_selector_pipe.SelectorPipeTests.test_cancel_rechecks_phase_after_waiting_for_storage) ... ok
+test_control_auth_is_available_during_admitted_storage_phase (test_selector_pipe.SelectorPipeTests.test_control_auth_is_available_during_admitted_storage_phase) ... ok
+test_durable_stop_returns_work_receipt_and_duplicate_never_resumes (test_selector_pipe.SelectorPipeTests.test_durable_stop_returns_work_receipt_and_duplicate_never_resumes) ... ok
+test_lease_belongs_to_session_even_with_stolen_public_lease_fields (test_selector_pipe.SelectorPipeTests.test_lease_belongs_to_session_even_with_stolen_public_lease_fields) ... ok
+test_lost_pending_reply_can_lookup_and_execute_only_one_activation (test_selector_pipe.SelectorPipeTests.test_lost_pending_reply_can_lookup_and_execute_only_one_activation) ... ok
+test_new_broker_does_not_pump_inherited_pending_intent (test_selector_pipe.SelectorPipeTests.test_new_broker_does_not_pump_inherited_pending_intent) ... ok
+test_revocation_after_selection_holds_unknown_until_explicit_recovery (test_selector_pipe.SelectorPipeTests.test_revocation_after_selection_holds_unknown_until_explicit_recovery) ... ok
+test_rotation_before_next_phase_cancels_without_consumer_effect (test_selector_pipe.SelectorPipeTests.test_rotation_before_next_phase_cancels_without_consumer_effect) ... ok
+test_stop_after_selection_keeps_unknown_and_restore_is_local_only (test_selector_pipe.SelectorPipeTests.test_stop_after_selection_keeps_unknown_and_restore_is_local_only) ... ok
+test_uncertain_intent_error_is_unknown_and_holds_admission (test_selector_pipe.SelectorPipeTests.test_uncertain_intent_error_is_unknown_and_holds_admission) ... ok
+test_wrong_project_role_scope_and_lease_never_stage (test_selector_pipe.SelectorPipeTests.test_wrong_project_role_scope_and_lease_never_stage) ... ok
+
+======================================================================
+ERROR: test_commit_reads_actual_file_then_second_revision_replaces_once (test_file_consumer.FileConsumerTests.test_commit_reads_actual_file_then_second_revision_replaces_once)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\protocol\test_file_consumer.py", line 26, in setUp
+    self.files = ProtectedFileRoot.create(self.base)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\host\core\safe_replace.py", line 97, in create
+    return cls(parent, expected_root=None)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\host\core\safe_replace.py", line 158, in __init__
+    raise error from None
+host.core.safe_replace.SafeReplaceError: SAFE_REPLACE_INIT_UNCERTAIN
+
+======================================================================
+ERROR: test_load_committed_confirms_file_without_new_effect_or_receipt (test_file_consumer.FileConsumerTests.test_load_committed_confirms_file_without_new_effect_or_receipt)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\protocol\test_file_consumer.py", line 26, in setUp
+    self.files = ProtectedFileRoot.create(self.base)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\host\core\safe_replace.py", line 97, in create
+    return cls(parent, expected_root=None)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\host\core\safe_replace.py", line 158, in __init__
+    raise error from None
+host.core.safe_replace.SafeReplaceError: SAFE_REPLACE_INIT_UNCERTAIN
+
+======================================================================
+ERROR: test_out_of_band_file_change_never_reads_as_verified_consumer (test_file_consumer.FileConsumerTests.test_out_of_band_file_change_never_reads_as_verified_consumer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\protocol\test_file_consumer.py", line 26, in setUp
+    self.files = ProtectedFileRoot.create(self.base)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\host\core\safe_replace.py", line 97, in create
+    return cls(parent, expected_root=None)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\host\core\safe_replace.py", line 158, in __init__
+    raise error from None
+host.core.safe_replace.SafeReplaceError: SAFE_REPLACE_INIT_UNCERTAIN
+
+======================================================================
+ERROR: test_recovery_barrier_failure_cannot_be_a_commit (test_file_consumer.FileConsumerTests.test_recovery_barrier_failure_cannot_be_a_commit)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\protocol\test_file_consumer.py", line 26, in setUp
+    self.files = ProtectedFileRoot.create(self.base)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\host\core\safe_replace.py", line 97, in create
+    return cls(parent, expected_root=None)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\host\core\safe_replace.py", line 158, in __init__
+    raise error from None
+host.core.safe_replace.SafeReplaceError: SAFE_REPLACE_INIT_UNCERTAIN
+
+======================================================================
+ERROR: test_second_consumer_and_close_while_bound_reject (test_file_consumer.FileConsumerTests.test_second_consumer_and_close_while_bound_reject)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\protocol\test_file_consumer.py", line 26, in setUp
+    self.files = ProtectedFileRoot.create(self.base)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\host\core\safe_replace.py", line 97, in create
+    return cls(parent, expected_root=None)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\host\core\safe_replace.py", line 158, in __init__
+    raise error from None
+host.core.safe_replace.SafeReplaceError: SAFE_REPLACE_INIT_UNCERTAIN
+
+======================================================================
+ERROR: test_stop_before_adoption_leaves_existing_file_unchanged (test_file_consumer.FileConsumerTests.test_stop_before_adoption_leaves_existing_file_unchanged)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\protocol\test_file_consumer.py", line 26, in setUp
+    self.files = ProtectedFileRoot.create(self.base)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\host\core\safe_replace.py", line 97, in create
+    return cls(parent, expected_root=None)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\host\core\safe_replace.py", line 158, in __init__
+    raise error from None
+host.core.safe_replace.SafeReplaceError: SAFE_REPLACE_INIT_UNCERTAIN
+
+======================================================================
+ERROR: test_terminal_loss_reconciles_same_bytes_without_rewrite (test_file_consumer.FileConsumerTests.test_terminal_loss_reconciles_same_bytes_without_rewrite)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\protocol\test_file_consumer.py", line 26, in setUp
+    self.files = ProtectedFileRoot.create(self.base)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\host\core\safe_replace.py", line 97, in create
+    return cls(parent, expected_root=None)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\host\core\safe_replace.py", line 158, in __init__
+    raise error from None
+host.core.safe_replace.SafeReplaceError: SAFE_REPLACE_INIT_UNCERTAIN
+
+======================================================================
+ERROR: test_wrong_managed_root_and_memory_consumer_cannot_rebind_journal (test_file_consumer.FileConsumerTests.test_wrong_managed_root_and_memory_consumer_cannot_rebind_journal)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\protocol\test_file_consumer.py", line 26, in setUp
+    self.files = ProtectedFileRoot.create(self.base)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\host\core\safe_replace.py", line 97, in create
+    return cls(parent, expected_root=None)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\host\core\safe_replace.py", line 158, in __init__
+    raise error from None
+host.core.safe_replace.SafeReplaceError: SAFE_REPLACE_INIT_UNCERTAIN
+
+----------------------------------------------------------------------
+Ran 51 tests in 13.386s
+
+FAILED (errors=8)
+Traceback (most recent call last):
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 632, in _rmtree_unsafe
+    os.unlink(fullname)
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\truon\\AppData\\Local\\Temp\\gt02-file-consumer-pnk47jx0\\hh-private-56c0233e39b74b7e8fdb6665bf48d1b7\\.writer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\weakref.py", line 666, in _exitfunc
+    f()
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\tempfile.py", line 933, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\tempfile.py", line 929, in _rmtree
+    _shutil.rmtree(name, onerror=onerror)
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 787, in rmtree
+    return _rmtree_unsafe(path, onerror)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 629, in _rmtree_unsafe
+    _rmtree_unsafe(fullname, onerror)
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 634, in _rmtree_unsafe
+    onerror(os.unlink, fullname, sys.exc_info())
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\tempfile.py", line 893, in onerror
+    _os.unlink(path)
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\truon\\AppData\\Local\\Temp\\gt02-file-consumer-pnk47jx0\\hh-private-56c0233e39b74b7e8fdb6665bf48d1b7\\.writer'
+Traceback (most recent call last):
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 632, in _rmtree_unsafe
+    os.unlink(fullname)
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\truon\\AppData\\Local\\Temp\\gt02-file-consumer-wcij9fr1\\hh-private-07ad2d30f475489bb588b8dae71b1bca\\.writer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\weakref.py", line 666, in _exitfunc
+    f()
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\tempfile.py", line 933, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\tempfile.py", line 929, in _rmtree
+    _shutil.rmtree(name, onerror=onerror)
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 787, in rmtree
+    return _rmtree_unsafe(path, onerror)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 629, in _rmtree_unsafe
+    _rmtree_unsafe(fullname, onerror)
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 634, in _rmtree_unsafe
+    onerror(os.unlink, fullname, sys.exc_info())
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\tempfile.py", line 893, in onerror
+    _os.unlink(path)
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\truon\\AppData\\Local\\Temp\\gt02-file-consumer-wcij9fr1\\hh-private-07ad2d30f475489bb588b8dae71b1bca\\.writer'
+Traceback (most recent call last):
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 632, in _rmtree_unsafe
+    os.unlink(fullname)
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\truon\\AppData\\Local\\Temp\\gt02-file-consumer-jk7xc57a\\hh-private-6ef8a52b3444479b8bf29bcf108d9e9c\\.events'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\weakref.py", line 666, in _exitfunc
+    f()
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\tempfile.py", line 933, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\tempfile.py", line 929, in _rmtree
+    _shutil.rmtree(name, onerror=onerror)
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 787, in rmtree
+    return _rmtree_unsafe(path, onerror)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 629, in _rmtree_unsafe
+    _rmtree_unsafe(fullname, onerror)
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 634, in _rmtree_unsafe
+    onerror(os.unlink, fullname, sys.exc_info())
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\tempfile.py", line 893, in onerror
+    _os.unlink(path)
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\truon\\AppData\\Local\\Temp\\gt02-file-consumer-jk7xc57a\\hh-private-6ef8a52b3444479b8bf29bcf108d9e9c\\.events'
+Traceback (most recent call last):
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 632, in _rmtree_unsafe
+    os.unlink(fullname)
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\truon\\AppData\\Local\\Temp\\gt02-file-consumer-_esusnsi\\hh-private-0687cf7f3ea44c08b4d12a3310df0d22\\.writer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\weakref.py", line 666, in _exitfunc
+    f()
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\tempfile.py", line 933, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\tempfile.py", line 929, in _rmtree
+    _shutil.rmtree(name, onerror=onerror)
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 787, in rmtree
+    return _rmtree_unsafe(path, onerror)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 629, in _rmtree_unsafe
+    _rmtree_unsafe(fullname, onerror)
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 634, in _rmtree_unsafe
+    onerror(os.unlink, fullname, sys.exc_info())
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\tempfile.py", line 893, in onerror
+    _os.unlink(path)
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\truon\\AppData\\Local\\Temp\\gt02-file-consumer-_esusnsi\\hh-private-0687cf7f3ea44c08b4d12a3310df0d22\\.writer'
+Traceback (most recent call last):
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 632, in _rmtree_unsafe
+    os.unlink(fullname)
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\truon\\AppData\\Local\\Temp\\gt02-file-consumer-fe7kcchr\\hh-private-87d7167c79d540179e1f1133d4a19faa\\.events'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\weakref.py", line 666, in _exitfunc
+    f()
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\tempfile.py", line 933, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\tempfile.py", line 929, in _rmtree
+    _shutil.rmtree(name, onerror=onerror)
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 787, in rmtree
+    return _rmtree_unsafe(path, onerror)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 629, in _rmtree_unsafe
+    _rmtree_unsafe(fullname, onerror)
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 634, in _rmtree_unsafe
+    onerror(os.unlink, fullname, sys.exc_info())
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\tempfile.py", line 893, in onerror
+    _os.unlink(path)
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\truon\\AppData\\Local\\Temp\\gt02-file-consumer-fe7kcchr\\hh-private-87d7167c79d540179e1f1133d4a19faa\\.events'
+Traceback (most recent call last):
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 632, in _rmtree_unsafe
+    os.unlink(fullname)
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\truon\\AppData\\Local\\Temp\\gt02-file-consumer-suq3j5xi\\hh-private-e5f8bbc37e574bca871e461f9d133aba\\.events'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\weakref.py", line 666, in _exitfunc
+    f()
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\tempfile.py", line 933, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\tempfile.py", line 929, in _rmtree
+    _shutil.rmtree(name, onerror=onerror)
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 787, in rmtree
+    return _rmtree_unsafe(path, onerror)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 629, in _rmtree_unsafe
+    _rmtree_unsafe(fullname, onerror)
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 634, in _rmtree_unsafe
+    onerror(os.unlink, fullname, sys.exc_info())
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\tempfile.py", line 893, in onerror
+    _os.unlink(path)
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\truon\\AppData\\Local\\Temp\\gt02-file-consumer-suq3j5xi\\hh-private-e5f8bbc37e574bca871e461f9d133aba\\.events'
+Traceback (most recent call last):
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 632, in _rmtree_unsafe
+    os.unlink(fullname)
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\truon\\AppData\\Local\\Temp\\gt02-file-consumer-cqwehn7f\\hh-private-60479ab8de014bb5931d7d5bcb113730\\.events'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\weakref.py", line 666, in _exitfunc
+    f()
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\tempfile.py", line 933, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\tempfile.py", line 929, in _rmtree
+    _shutil.rmtree(name, onerror=onerror)
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 787, in rmtree
+    return _rmtree_unsafe(path, onerror)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 629, in _rmtree_unsafe
+    _rmtree_unsafe(fullname, onerror)
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 634, in _rmtree_unsafe
+    onerror(os.unlink, fullname, sys.exc_info())
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\tempfile.py", line 893, in onerror
+    _os.unlink(path)
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\truon\\AppData\\Local\\Temp\\gt02-file-consumer-cqwehn7f\\hh-private-60479ab8de014bb5931d7d5bcb113730\\.events'
+Traceback (most recent call last):
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 632, in _rmtree_unsafe
+    os.unlink(fullname)
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\truon\\AppData\\Local\\Temp\\gt02-file-consumer-_rc80zd2\\hh-private-00fc4e2475a94cc2a60191d35f69b913\\.events'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\weakref.py", line 666, in _exitfunc
+    f()
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\tempfile.py", line 933, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\tempfile.py", line 929, in _rmtree
+    _shutil.rmtree(name, onerror=onerror)
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 787, in rmtree
+    return _rmtree_unsafe(path, onerror)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 629, in _rmtree_unsafe
+    _rmtree_unsafe(fullname, onerror)
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\shutil.py", line 634, in _rmtree_unsafe
+    onerror(os.unlink, fullname, sys.exc_info())
+  File "C:\Users\truon\AppData\Local\Programs\Python\Python311\Lib\tempfile.py", line 893, in onerror
+    _os.unlink(path)
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\truon\\AppData\\Local\\Temp\\gt02-file-consumer-_rc80zd2\\hh-private-00fc4e2475a94cc2a60191d35f69b913\\.events'

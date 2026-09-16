@@ -1,0 +1,39 @@
+{
+  "host": {
+    "wrapper_pid": 41872,
+    "started_at": "2026-09-16T14:34:32.642882+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "ipc_probe.py"
+    ],
+    "exit_code": 0,
+    "target_pid": 23648,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "native-stdout.txt",
+    "stderr": "native-stderr.txt",
+    "host": "native-host.json"
+  },
+  "job_samples": [
+    {
+      "active": 1,
+      "pids": [
+        35648
+      ],
+      "images": [
+        {
+          "pid": 35648,
+          "image": "C:\\Windows\\System32\\conhost.exe"
+        }
+      ]
+    },
+    {
+      "active": 0,
+      "pids": [],
+      "images": []
+    }
+  ]
+}

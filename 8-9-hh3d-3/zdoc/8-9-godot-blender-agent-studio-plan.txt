@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 16-09-2026, Asia/Saigon | Revision S43 | TRIỂN KHAI THEO GATE
+Ngày 16-09-2026, Asia/Saigon | Revision S44 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -16,7 +16,7 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 
 CURRENT_VALID_WP=GT-02
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=GT02_CANDIDATE_EXPERIMENTAL_CREATE_ONLY_REPLACE_GAP
+IMPLEMENTATION=GT02_CANDIDATE_PROTECTED_REPLACE_FILE_CONSUMER
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
 GT01_PENDING=NONE
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
@@ -25,32 +25,33 @@ RUNTIME_ACCEPTANCE=GT01_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S43
-EXECUTION_MODE=SOLO_OWNER_20260915
-SUBAGENTS_ENABLED=0
-GT02_EVIDENCE_STATUS=FROZEN_CANDIDATE_S43_01
-GT02_REVIEW_STATUS=NOT_REVIEWED_SOLO_S43
-GT02_LAST_TESTED_SOURCE_CLOSURE=6b7707a126449d46aac937504113e8c7e6fb9aa5db4f73948b7e65df0e0ce7fc
+PLAN_REVISION=S44
+EXECUTION_MODE=COORDINATOR_THREE_CODEX_OWNER_20260916
+SUBAGENTS_ENABLED=3
+GT02_EVIDENCE_STATUS=FROZEN_CANDIDATE_S44_02
+GT02_REVIEW_STATUS=TWO_INDEPENDENT_FAIL_TICK_NO_S44
+GT02_LAST_TESTED_SOURCE_CLOSURE=6730c6f54cd682920b7585d139835088ae60f893f68fff8cd24662e268716964
 GT02_CHECKPOINT_COMMITS=2e24912,579b7e7,287a6c2,487e5fc,6a6dfb8,08f70cf
-GT02_SAFE_WRITE_STATUS=GAP_UNSUPPORTED_WINDOWS
-GT02_BOUNDARY_EVIDENCE=S43_EXACT_CLOSURE_NATIVE_SELECTOR_IPC_CREATE_ONLY_UNIT_PROBE
-GT02_WORKING_SOURCE_STATUS=S43_FROZEN_TESTED
+GT02_SAFE_WRITE_STATUS=GAP_PUBLIC_REGISTRATION_RESTART_CUSTODY
+GT02_BOUNDARY_EVIDENCE=S44_EXACT_CLOSURE_FILE_IPC_AND_NATIVE_REPLACE
+GT02_WORKING_SOURCE_STATUS=S44_FROZEN_TESTED_CRITIC_FAIL
 
-TIẾN ĐỘ HIỆN HÀNH — S43, cập nhật 16-09-2026
-Coordinator triển khai solo; không còn worker/critic chạy. Hai critic S41
-FAIL/TICK=no áp dụng source S39-02, không chuyển chữ ký sang source S43.
+TIẾN ĐỘ HIỆN HÀNH — S44, cập nhật 16-09-2026
+Owner mở lại3 subagent Codex Astra extra high ngày16-09; coordinator chốt
+evidence,2 critic độc lập kiểm S44 và1 worker rà readiness. Hai critic S41
+FAIL/TICK=no thuộc source S39-02, không chuyển chữ ký sang closure mới.
 
 GT-01 ACCEPTED tại a0fb247; closure
 3ace23bcf84598cda64d54bbe3fc4736acde877f9f714fb71e2355d3e809eea4,
 evidence reviews/20260913-r21-gt01-final; hai critic PASS/TICK=yes.
 
-GT-02 candidate hiện hành: reviews/20260916-gt02-s43-01. Protocol294 tests:
-290 pass,4 skips; bootstrap56/56. 86 source files,9 artifacts; actual host
+GT-02 candidate S44-02: reviews/20260916-gt02-s44-02. Protocol326 tests:
+322 pass,4 skips; bootstrap56/56. 90 source files,9 artifacts; actual host
 exit/tree sạch, source/snapshot không đổi. Python/Node/Godot golden2396 rows.
-Native selector AppContainer S43 remint7/7, child exit61, Job/PID0; exact
-runtime closure khớp candidate. Audit: reviews/20260916-gt02-s43-audit/.
-Focused RPC S39 16/16 dùng lại chỉ cho2 file source không đổi, không suy thành
-native proof của closure mới.
+Native file-selector IPC run-02:7/7; boundary run-06:20 replace và288 lần
+truy cập trái quyền bị deny. Cả hai khớp exact closure/map90 file; native child
+exit61/67 và Job/PID0. Audit: reviews/20260916-gt02-s44-audit/;8 negative
+verifier cases từ chối stale/missing/changed digest/map. S43 giữ lịch sử.
 
 Đã có schema/JCS/limits, journal/CAS8 process/retention, auth loopback,
 Stop/Cancel/UNKNOWN, redaction, AppContainer IPC, private staging/events,
@@ -74,15 +75,31 @@ namespace con: create-only có collision reject, còn replace cần CAS riêng.
 Native filename buffer phải có NUL dự phòng và đọc lại final-path; BOOL success
 đơn lẻ không chứng minh rename tới đúng tên. Không thử nghiệm bằng capability true.
 
+S44 đã freeze/test, hai critic độc lập FAIL/TICK=no: safe_replace.py thêm ProtectedFileRoot,
+namespace mới với owner-only DACL, một guard/mutex, expected FileID+SHA256,
+retained source/target handles, POSIX replace/readback và directory barrier.
+Không áp dụng primitive này cho thư mục shared writer; không đổi threat model.
+- Native preopened zero-access hardlink + positive control; constructor/token/
+  close ownership và5 process cuts. Lỗi CloseHandle phải giữ cả token từ API
+  constructor để cleanup retry; không coi cache readback là durability.
+- FileFixtureReleaseConsumer nối journal selector với active.json trong root
+  riêng; CONFIG bind root identity.9 integration tests gồm3 actual process
+  cuts ở revision thứ hai. IPC kiểm commit/lost reply/auth/lease/Cancel/Stop
+  trên file thực; restored selection tăng generation nhưng receipt giữ UNKNOWN.
+- Provision namespace files trong parent riêng: journal/blob giữ ancestor
+  share READ nên dùng chung immediate parent có thể chặn directory flush.
+  Đăng ký cleanup ngay khi nhận resource; compiler helper thuộc Job riêng.
+- Hai critic cùng closure FAIL/TICK=no: public/custody còn thiếu; reopen chỉ
+  đọc vẫn nhận INTENT mới rồi fail khi adopt. Cần guard trước admission, giữ
+  lookup/confirm cũ. Reports: reviews/20260916-gt02-s44-critic-a.md và
+  reviews/20260916-gt02-s44-critic-b.md; không mượn verdict cho source sửa.
+
 Việc tiếp theo:
-1. Hoàn thiện ownership/crash/đường native preopened-handle của create-only;
-   không mặc định bật global safe_write từ os.name.
-2. Chứng minh replacement đúng expected target identity khi writer khác xen
-   vào, hoặc triển khai protected/versioned namespace giữ nguyên semantic CAS.
-   Không đổi gate hoặc coi create-only đã thay thế atomic-replace.
-3. Freeze/test/remint native + audit source mới; hai critic PASS trên cùng
-   closure mới mở GT-03/GT-04. S41 finding stale native closure đã sửa; không
-   ghi rằng critic B đã ký lại S41 remint khi chưa có review đó.
+1. Chốt checkpoint S44; sửa pre-admission write hold theo critic, chạy hồi quy.
+2. Durable witness custody + rearm chỉ sau verified terminal last-good; pending
+   mơ hồ giữ UNKNOWN. Đăng ký capability/dispatch theo scope protected fixture.
+3. Public safe-write/atomic-replace vẫn GAP tới khi đủ contract/evidence và2
+   critic độc lập PASS cùng closure. Source sửa cần remint, không mượn chữ ký.
 
 Còn sau GT-02: GT-03 Godot, GT-04 Blender, GT-05 pipeline, GT-06 play/input/
 observe, GT-07 recovery, GT-08 CI/Linux/Android thiết bị thật, GT-09 conformance,

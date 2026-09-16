@@ -1,0 +1,9 @@
+{
+  "source_hashes": {
+    "host/core/safe_create.py": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606",
+    "host/core/safe_replace.py": "4ba553ac2a19e510dde3774d5c6b310b0a29190ad967ea4aa92a85a35628afcb",
+    "tests/protocol/test_safe_create.py": "eea9b9d6e37367546c87517c294421256f210f9c2bdc71d88df978f3bbdf6a7c",
+    "tests/protocol/test_safe_replace.py": "27fc2c9339afd23f8113519aec9d6b553b5037fc98036437f9244effd53d32df"
+  },
+  "code": "import unittest,json,sys; suite=unittest.defaultTestLoader.discover('tests/protocol',pattern='test_safe*.py'); r=unittest.TextTestRunner(verbosity=2).run(suite); print('SAFE_FOCUSED_COMPLETE '+json.dumps({'run':r.testsRun,'failures':len(r.failures),'errors':len(r.errors),'skips':len(r.skipped)}),flush=True); sys.exit(not r.wasSuccessful())"
+}

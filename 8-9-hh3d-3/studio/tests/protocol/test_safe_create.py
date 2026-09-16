@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import os
+import ctypes as C
+from ctypes import wintypes as W
 from pathlib import Path
 import sys
 import tempfile
@@ -10,7 +12,7 @@ from unittest import mock
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 from host.core.limits import SafetyViolation
-from host.core.safe_create import SafeCreateOnly, SafeCreateError
+from host.core.safe_create import SafeCreateOnly, SafeCreateError, SafeCreateApi, _RenameInfo
 
 
 @unittest.skipUnless(os.name == "nt", "Windows handle primitive required")
@@ -147,6 +149,96 @@ class SafeCreateOnlyTests(unittest.TestCase):
             self.assertEqual(result.size, index)
             self.assertEqual((self.root / name).read_bytes(), value)
         self.assertEqual(sorted(p.name for p in self.root.iterdir()), sorted(names))
+
+    def test_pending_blocks_link_from_native_preopened_zero_access_handle(self):
+        """The attacker opens BEFORE pending; it need not reopen by pathname."""
+        ntdll = C.WinDLL("ntdll")
+        ntdll.NtSetInformationFile.argtypes = [W.HANDLE, C.c_void_p, C.c_void_p, W.ULONG, C.c_int]
+        ntdll.NtSetInformationFile.restype = C.c_long
+        alias = self.outside / "preopened-alias"
+        pending, write = self.api._api.pending, self.api._api.write_flush
+        attacker = []
+        outcomes = []
+        def before_pending(handle, value):
+            if value and not attacker:
+                stage = next(self.root.glob(".hh-stage-*"))
+                other = self.api._api.dll.CreateFileW(str(stage), 0, 7, None, 3, 0x00200000, None)
+                self.assertNotEqual(other, C.c_void_p(-1).value)
+                attacker.append(other)
+            return pending(handle, value)
+        def link_from(handle):
+            # FileLinkInformation has the same ABI layout as rename info.
+            encoded = ("\\??\\" + str(alias)).encode("utf-16-le")
+            buffer = C.create_string_buffer(C.sizeof(_RenameInfo) + len(encoded) + 2)
+            header = _RenameInfo.from_buffer(buffer)
+            header.flags, header.root, header.length = 0, None, len(encoded)
+            C.memmove(C.addressof(buffer) + _RenameInfo.name.offset, encoded, len(encoded))
+            status = C.create_string_buffer(2 * C.sizeof(C.c_void_p))
+            return ntdll.NtSetInformationFile(handle, status, buffer, len(buffer), 11)
+        def at_write(handle, data):
+            result = link_from(attacker[0])
+            outcomes.append(result & 0xffffffff)
+            self.assertIn(result & 0xffffffff, (0xc0000022, 0xc0000056))
+            self.assertFalse(alias.exists())
+            return write(handle, data)
+        try:
+            with mock.patch.object(self.api._api, "pending", side_effect=before_pending), mock.patch.object(self.api._api, "write_flush", side_effect=at_write):
+                self.api.create_new("proof.txt", b"private-bytes")
+        finally:
+            for handle in attacker:
+                self.api._api.dll.CloseHandle(handle)
+        self.assertEqual(len(outcomes), 1)
+        self.assertEqual((self.root / "proof.txt").read_bytes(), b"private-bytes")
+        self.assertFalse(alias.exists())
+        # Same syscall/buffer with a non-pending file must actually succeed.
+        # Otherwise a malformed test could mistake INVALID_PARAMETER for safety.
+        control = self.api._api.dll.CreateFileW(str(self.root / "proof.txt"), 0, 7, None, 3, 0x00200000, None)
+        self.assertNotEqual(control, C.c_void_p(-1).value)
+        try:
+            self.assertEqual(link_from(control), 0)
+            self.assertEqual(alias.read_bytes(), b"private-bytes")
+        finally:
+            self.api._api.dll.CloseHandle(control)
+            if alias.exists():
+                alias.unlink()
+
+    def test_constructor_failure_retains_real_unclosed_handles_for_retry(self):
+        original = SafeCreateApi.close
+        retained = []
+        def refuse(api, handle):
+            retained.append(handle)
+            raise SafeCreateError("REAL_CLOSE_REFUSED", outcome_unknown=True)
+        with mock.patch.object(SafeCreateApi, "close", refuse):
+            with self.assertRaisesRegex(SafeCreateError, "INIT_CLEANUP_UNCERTAIN") as caught:
+                SafeCreateOnly(self.root)
+        owner = caught.exception.cleanup_owner
+        self.assertIsNotNone(owner)
+        self.assertTrue(retained)
+        self.assertTrue(owner._api.owned)
+        owner.close()
+        self.assertFalse(owner._api.owned)
+        self.assertIs(SafeCreateApi.close, original)
+
+    def test_operation_ancestor_close_failure_poisons_and_retains_owner(self):
+        close = self.api._api.close
+        failures = []
+        def refuse_directory(handle):
+            try:
+                self.api._api.inspect(handle, self.root, directory=True)
+            except SafetyViolation:
+                return close(handle)
+            failures.append(handle)
+            raise SafeCreateError("REAL_DIRECTORY_CLOSE_REFUSED", outcome_unknown=True)
+        with mock.patch.object(self.api._api, "close", side_effect=refuse_directory):
+            with self.assertRaises(SafeCreateError) as caught:
+                self.api.create_new("uncertain.txt", b"value")
+        self.assertTrue(caught.exception.outcome_unknown)
+        self.assertTrue(failures)
+        self.assertTrue(self.api._api.owned)
+        with self.assertRaisesRegex(SafeCreateError, "RECONCILIATION_REQUIRED"):
+            self.api.create_new("retry.txt", b"no")
+        self.api.close()
+        self.assertFalse(self.api._api.owned)
 
 
 if __name__ == "__main__":

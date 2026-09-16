@@ -1,0 +1,40 @@
+{
+  "host": {
+    "wrapper_pid": 27832,
+    "started_at": "2026-09-16T14:36:19.298987+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "replace_probe.py",
+      "GT02-S44-BOUNDARY-05"
+    ],
+    "exit_code": 0,
+    "target_pid": 27356,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "native-stdout.txt",
+    "stderr": "native-stderr.txt",
+    "host": "native-host.json"
+  },
+  "job_samples": [
+    {
+      "active": 1,
+      "pids": [
+        29576
+      ],
+      "images": [
+        {
+          "pid": 29576,
+          "image": "C:\\Windows\\System32\\conhost.exe"
+        }
+      ]
+    },
+    {
+      "active": 0,
+      "pids": [],
+      "images": []
+    }
+  ]
+}

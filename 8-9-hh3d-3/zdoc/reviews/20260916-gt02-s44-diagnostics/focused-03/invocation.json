@@ -1,0 +1,11 @@
+{
+  "source_hashes": {
+    "host/core/private_store.py": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476",
+    "host/core/safe_create.py": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606",
+    "host/core/safe_replace.py": "4ba553ac2a19e510dde3774d5c6b310b0a29190ad967ea4aa92a85a35628afcb",
+    "tests/protocol/test_private_store.py": "87790b8aef8af4027ef453130679deca061d0f8b55c62b243e7a20bb1f0119b3",
+    "tests/protocol/test_safe_create.py": "6ebde9e9b1042eb41e0983abb7457d4c9cd4a08372a68876c24588dc5f66d0c8",
+    "tests/protocol/test_safe_replace.py": "85e5318712246e7b744e604761ed71454497e645f06f838729fbb7544f5b9a2a"
+  },
+  "code": "import unittest,json,sys; suite=unittest.TestSuite([unittest.defaultTestLoader.discover('tests/protocol',pattern=p) for p in ('test_safe*.py','test_private_store.py')]); r=unittest.TextTestRunner(verbosity=2).run(suite); print('SAFE_FOCUSED_COMPLETE '+json.dumps({'run':r.testsRun,'failures':len(r.failures),'errors':len(r.errors),'skips':len(r.skipped)}),flush=True); sys.exit(not r.wasSuccessful())"
+}

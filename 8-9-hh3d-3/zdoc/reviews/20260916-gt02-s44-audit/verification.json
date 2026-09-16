@@ -1,0 +1,28 @@
+{
+  "schema": "hh-gt02-s44-coordinator-verification-v1",
+  "status": "COORDINATOR_LOGIC_VERIFIED",
+  "source_closure_sha256": "6730c6f54cd682920b7585d139835088ae60f893f68fff8cd24662e268716964",
+  "source_files": 90,
+  "candidate_artifacts": 9,
+  "protocol": {
+    "run": 326,
+    "passed": 322,
+    "skipped": 4
+  },
+  "bootstrap": {
+    "run": 56,
+    "passed": 56
+  },
+  "golden_rows_per_consumer": 2396,
+  "native_ipc_cases": 7,
+  "native_replacements": 20,
+  "denied_attempts": 288,
+  "formal_acceptance": false,
+  "limits": [
+    "public safe_write/atomic_replace disabled",
+    "readonly recovery cannot resume mutation",
+    "witness custody/production supervisor incomplete",
+    "no power-loss or engine consumer proof",
+    "independent critic reports are separate; coordinator does not supply signatures"
+  ]
+}

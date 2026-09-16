@@ -1,0 +1,13 @@
+test_commit_reads_actual_file_then_second_revision_replaces_once (test_file_consumer.FileConsumerTests.test_commit_reads_actual_file_then_second_revision_replaces_once) ... ok
+test_load_committed_confirms_file_without_new_effect_or_receipt (test_file_consumer.FileConsumerTests.test_load_committed_confirms_file_without_new_effect_or_receipt) ... ok
+test_out_of_band_file_change_never_reads_as_verified_consumer (test_file_consumer.FileConsumerTests.test_out_of_band_file_change_never_reads_as_verified_consumer) ... ok
+test_recovery_barrier_failure_cannot_be_a_commit (test_file_consumer.FileConsumerTests.test_recovery_barrier_failure_cannot_be_a_commit) ... ok
+test_second_consumer_and_close_while_bound_reject (test_file_consumer.FileConsumerTests.test_second_consumer_and_close_while_bound_reject) ... ok
+test_stop_before_adoption_leaves_existing_file_unchanged (test_file_consumer.FileConsumerTests.test_stop_before_adoption_leaves_existing_file_unchanged) ... ok
+test_terminal_loss_reconciles_same_bytes_without_rewrite (test_file_consumer.FileConsumerTests.test_terminal_loss_reconciles_same_bytes_without_rewrite) ... ok
+test_wrong_managed_root_and_memory_consumer_cannot_rebind_journal (test_file_consumer.FileConsumerTests.test_wrong_managed_root_and_memory_consumer_cannot_rebind_journal) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 2.534s
+
+OK

@@ -1,0 +1,46 @@
+{
+  "native_binding_regressions": [
+    {
+      "lane": "20260916-gt02-s44-native",
+      "case": "stale_closure",
+      "rejected": true
+    },
+    {
+      "lane": "20260916-gt02-s44-native",
+      "case": "file_changed_digest_retained",
+      "rejected": true
+    },
+    {
+      "lane": "20260916-gt02-s44-native",
+      "case": "map_missing",
+      "rejected": true
+    },
+    {
+      "lane": "20260916-gt02-s44-native",
+      "case": "digest_missing",
+      "rejected": true
+    },
+    {
+      "lane": "20260916-gt02-s44-boundary",
+      "case": "stale_closure",
+      "rejected": true
+    },
+    {
+      "lane": "20260916-gt02-s44-boundary",
+      "case": "file_changed_digest_retained",
+      "rejected": true
+    },
+    {
+      "lane": "20260916-gt02-s44-boundary",
+      "case": "map_missing",
+      "rejected": true
+    },
+    {
+      "lane": "20260916-gt02-s44-boundary",
+      "case": "digest_missing",
+      "rejected": true
+    }
+  ],
+  "normal_status": "COORDINATOR_LOGIC_VERIFIED",
+  "source_closure": "6730c6f54cd682920b7585d139835088ae60f893f68fff8cd24662e268716964"
+}

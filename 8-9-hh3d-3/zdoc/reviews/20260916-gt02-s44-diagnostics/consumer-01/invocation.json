@@ -1,0 +1,8 @@
+{
+  "source_hashes": {
+    "host/core/fixture_selector.py": "70791784470c0e5d29a36e7c99145a8537681c0bd1b8b01935db971297692210",
+    "host/core/safe_replace.py": "b0d0008af539a7ddbc488d040c54d86695451920970add9d748a98eb924827ec",
+    "tests/protocol/test_file_consumer.py": "dd80496be96cb2b7141234ae942d06e79e197f792d0ce8ff1fdb8f7f3d53b7d1"
+  },
+  "code": "import unittest,json,sys; suite=unittest.TestSuite([unittest.defaultTestLoader.discover('tests/protocol',pattern=p) for p in ('test_file_consumer.py','test_fixture_selector.py','test_selector_pipe.py')]); r=unittest.TextTestRunner(verbosity=2).run(suite); print('CONSUMER_COMPLETE '+json.dumps({'run':r.testsRun,'failures':len(r.failures),'errors':len(r.errors),'skips':len(r.skipped)}),flush=True); sys.exit(not r.wasSuccessful())"
+}

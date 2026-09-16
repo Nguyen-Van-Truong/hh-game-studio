@@ -1,7 +1,7 @@
 # Internal fixture selector transaction
 
 `FixtureSelector` joins `PrivateEventLog`, `PrivateBlobStore` and the fixed
-in-memory `FixtureReleaseConsumer`. This is trusted broker code, with no public
+`FixtureReleaseConsumer` or protected-file `FileFixtureReleaseConsumer`. This is trusted broker code, with no public
 operation registration, engine adapter or safe-write capability. The client
 cannot supply a consumer, callback, clock, filesystem name or recovery policy.
 Each log, store and consumer has one selector owner. Native log/store lifetimes
@@ -51,7 +51,7 @@ receipt after adoption is UNKNOWN, never permission to repeat the command.
 and the current consumer readback. A fresh consumer is not ready just because
 an earlier process committed. Explicit `load_committed()` under a fresh lease
 can load that same saved snapshot without reselecting, restaging or writing a
-new command receipt. The consumer is a synchronous inert-byte fixture: these
+new command receipt. Both consumers are synchronous inert-byte fixtures: these
 checks do not prove Godot/Blender main-thread or UndoRedo behavior.
 
 Reopen validates existing identities, history and witness; it does not resume
@@ -89,6 +89,12 @@ synchronous disk. Before selection it cancels pending activation and explicitly
 reports whether staging may exist. After selection it preserves UNKNOWN until
 an explicit recovery decision. Durable STOP survives reopen and blocks normal
 adoption/new commands; restore remains possible. It is never auto-cleared.
+
+The protected-file consumer binds its root identity in CONFIG and publishes
+the complete inert snapshot to `active.json` with native expected-version
+replace. Readback reads that file, and recovery of an identical value includes
+a fresh file/directory barrier. A read-only reopen cannot rewrite mismatched
+bytes or resume mutation. See SAFE_REPLACE.md for its boundary and limitations.
 
 Current limits: clocks/revision observations are trusted fixture inputs, not
 proof of external source-file revisions. AppContainer IPC has exercised the

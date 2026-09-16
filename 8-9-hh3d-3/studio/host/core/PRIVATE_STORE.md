@@ -26,7 +26,9 @@ the instance. It refuses new writes until the external broker reconciles the
 command. Handles whose native close fails remain in an ownership registry;
 `close()` may be called again to finish cleanup. Constructor failures after
 root creation report uncertainty and retain `cleanup_owner` in the local
-exception. This object is never serialized or exposed to a worker. Cleanup
+exception. API initialization also registers token handles; a failed token
+close retains a local `cleanup_api` owner for retry. These objects are never
+serialized or exposed to a worker. Cleanup
 closes owned handles; it does not delete staging, restore ACLs, kill arbitrary
 processes or remove a possibly published file.
 

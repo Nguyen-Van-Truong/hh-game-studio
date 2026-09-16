@@ -13,7 +13,7 @@ import ctypes
 from ctypes import wintypes
 import os
 from pathlib import Path
-import struct
+import re
 import threading
 import uuid
 from typing import Iterator
@@ -28,7 +28,13 @@ MAX_BYTES = 1024 * 1024
 class SafeCreateError(SafetyViolation):
     def __init__(self, code: str, *, outcome_unknown: bool = False) -> None:
         self.outcome_unknown = outcome_unknown
+        self.cleanup_owner: SafeCreateOnly | None = None
         super().__init__(code)
+
+
+class _RenameInfo(ctypes.Structure):
+    _fields_ = [("flags", wintypes.DWORD), ("root", wintypes.HANDLE),
+                ("length", wintypes.DWORD), ("name", wintypes.WCHAR * 1)]
 
 
 class SafeCreateApi(_WindowsApi):
@@ -43,6 +49,17 @@ class SafeCreateApi(_WindowsApi):
         self.dll.SetFileInformationByHandle.argtypes = [wintypes.HANDLE, ctypes.c_int,
                                                         ctypes.c_void_p, wintypes.DWORD]
         self.dll.SetFileInformationByHandle.restype = wintypes.BOOL
+        self.dll.GetVolumeInformationByHandleW.argtypes = [
+            wintypes.HANDLE, wintypes.LPWSTR, wintypes.DWORD, ctypes.c_void_p,
+            ctypes.c_void_p, ctypes.c_void_p, wintypes.LPWSTR, wintypes.DWORD]
+        self.dll.GetVolumeInformationByHandleW.restype = wintypes.BOOL
+
+    def check_platform(self, handle: int) -> None:
+        name = ctypes.create_unicode_buffer(256)
+        if not self.dll.GetVolumeInformationByHandleW(handle, None, 0, None, None, None, name, len(name)):
+            raise SafetyViolation("SAFE_VOLUME_UNVERIFIED")
+        if name.value != "NTFS" or ctypes.sizeof(wintypes.WCHAR) != 2:
+            raise SafetyViolation("SAFE_FILESYSTEM_UNSUPPORTED")
 
     def open_parent(self, path: Path, *, publish: bool) -> int:
         # The final parent permits the kernel's destination open to complete
@@ -102,13 +119,15 @@ class SafeCreateApi(_WindowsApi):
         if not self.dll.FlushFileBuffers(handle):
             raise SafetyViolation("SAFE_FLUSH_FAILED")
 
-    def rename(self, handle: int, destination: Path) -> None:
+    def rename(self, handle: int, destination: Path, *, replace: bool = False) -> None:
         encoded = str(destination).encode("utf-16-le")
-        payload = bytearray(20 + len(encoded) + 2)
-        struct.pack_into("<I4xQI", payload, 0, 0, 0, len(encoded))
-        payload[20:20 + len(encoded)] = encoded
-        view = (ctypes.c_ubyte * len(payload)).from_buffer(payload)
-        if not self.dll.SetFileInformationByHandle(handle, 3, view, len(payload)):
+        # Use the native ABI offsets and keep terminator/padding outside length.
+        # Ex/POSIX permits a retained old read handle, but is NOT target CAS.
+        buffer = ctypes.create_string_buffer(ctypes.sizeof(_RenameInfo) + len(encoded) + 2)
+        header = _RenameInfo.from_buffer(buffer)
+        header.flags, header.root, header.length = (3 if replace else 0), None, len(encoded)
+        ctypes.memmove(ctypes.addressof(buffer) + _RenameInfo.name.offset, encoded, len(encoded))
+        if not self.dll.SetFileInformationByHandle(handle, 22 if replace else 3, buffer, len(buffer)):
             raise SafetyViolation("SAFE_RENAME_FAILED")
 
     def flush_parent(self, path: Path, expected: FileIdentity) -> None:
@@ -132,14 +151,29 @@ class SafeCreateOnly:
     def __init__(self, root: str | os.PathLike[str]) -> None:
         if os.name != "nt":
             raise SafetyViolation("UNSUPPORTED_SAFE_OPEN_LINUX")
+        spelling = os.fspath(root)
+        if type(spelling) is not str or not re.match(r"^[A-Za-z]:[\\/]", spelling) or spelling.startswith("\\\\"):
+            raise SafetyViolation("INVALID_PROJECT_ROOT")
         self._resolver = SafePathResolver(root)
         self._root = self._resolver.root
+        if os.path.normcase(str(self._root)) != os.path.normcase(os.path.abspath(spelling)):
+            raise SafetyViolation("ROOT_PATH_CHANGED")
         self._api = SafeCreateApi()
         self._root_identity: FileIdentity | None = None
         self._poisoned = self._closed = False
         self._mutex = threading.Lock()
-        with self._parents(self._root) as handle:
-            self._root_identity = self._api.inspect(handle, self._root, directory=True)
+        try:
+            with self._parents(self._root) as handle:
+                self._api.check_platform(handle)
+                self._root_identity = self._api.inspect(handle, self._root, directory=True)
+        except BaseException:
+            try:
+                self.close()
+            except SafeCreateError:
+                error = SafeCreateError("SAFE_CREATE_INIT_CLEANUP_UNCERTAIN", outcome_unknown=True)
+                error.cleanup_owner = self
+                raise error from None
+            raise
 
     def close(self) -> None:
         with self._mutex:
@@ -183,7 +217,7 @@ class SafeCreateOnly:
             try:
                 return self._create_new(relative, data)
             except BaseException:
-                if self._started:
+                if self._started or self._api.owned:
                     self._poisoned = True
                     raise SafeCreateError("SAFE_CREATE_UNCERTAIN", outcome_unknown=True) from None
                 raise

@@ -1,0 +1,20 @@
+{
+  "wrapper_pid": 34000,
+  "started_at": "2026-09-16T14:38:33.008504+00:00",
+  "argv": [
+    "python.exe",
+    "-B",
+    "tests/protocol/test_file_consumer.py",
+    "FileConsumerTests.test_actual_crash_between_replace_and_terminal_reconciles_without_rewrite",
+    "-v"
+  ],
+  "exit_code": 0,
+  "target_pid": 27812,
+  "wrapper_exit_code": 0,
+  "timed_out": false,
+  "tree_verified": true,
+  "ownership": "gated_job_kill_on_close",
+  "stdout": "consumer-stdout.txt",
+  "stderr": "consumer-stderr.txt",
+  "host": "consumer-host.json"
+}
