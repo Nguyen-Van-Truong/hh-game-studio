@@ -1,0 +1,21 @@
+{
+  "run_id": "GT02-S40-20260916-SAFE-WRITE-GAP",
+  "source_closure": "2fb0ec013c4037c844b38f7be221c0aa7a6bd905492fa7c4a53eaa8e474c9d59",
+  "decision": "FAIL_CLOSED_GAP",
+  "formal_acceptance": false,
+  "source_unchanged_from_s39_02": true,
+  "files": {
+    "studio/host/core/safe_open.py": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535",
+    "studio/tests/protocol/test_safe_open.py": "f10869164a7e95f4372160dbd9f466e451a5ba9421ee7e4ebb4dcfe88d7cf8ab",
+    "studio/host/core/PRIVATE_STORE.md": "2dc70665093ec72d7441bd1ca9276402a784da5f6a44e4711e7d42c3c4a37888",
+    "zdoc/reviews/20260916-gt02-s39-02/candidate.json": "1dda2ae2e34f0d03849e196d36421bdebd44fa16007f2a4918f91af61be76a1c"
+  },
+  "tests": [
+    "test_exclusive_handle_hardlink_counterexample_keeps_mutation_disabled",
+    "test_final_file_swap_to_hardlink_between_resolve_and_open_rejects",
+    "test_every_mutation_rejects_before_io_even_during_junction_swaps",
+    "test_ancestor_swap_between_resolve_and_open_is_rejected",
+    "test_parent_handle_blocks_rename_before_final_file_is_open"
+  ],
+  "rerun": "not_required_source_unchanged"
+}

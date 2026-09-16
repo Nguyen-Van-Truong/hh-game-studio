@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 16-09-2026, Asia/Saigon | Revision S39 | TRIỂN KHAI THEO GATE
+Ngày 16-09-2026, Asia/Saigon | Revision S40 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,18 +25,18 @@ RUNTIME_ACCEPTANCE=GT01_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S39
+PLAN_REVISION=S40
 EXECUTION_MODE=SOLO_OWNER_20260915
 SUBAGENTS_ENABLED=0
 GT02_EVIDENCE_STATUS=FROZEN_CANDIDATE_S39_02
-GT02_REVIEW_STATUS=NOT_REVIEWED_SOLO_S39
+GT02_REVIEW_STATUS=NOT_REVIEWED_SOLO_S40
 GT02_LAST_TESTED_SOURCE_CLOSURE=2fb0ec013c4037c844b38f7be221c0aa7a6bd905492fa7c4a53eaa8e474c9d59
 GT02_CHECKPOINT_COMMITS=96c506b,e52b5c0,faedb0d,642d6f5,74d1cc2,52ca04c,52def92,957ea88,572185e,9839be9,abc88b0,6bfbc3e,43192c0,15801ad,adb2e52,31f27b2,2e24912,579b7e7,287a6c2,644c985,65cd47e,2ae0623,e47c93d,d5c5f1b
 GT02_SAFE_WRITE_STATUS=GAP_UNSUPPORTED_WINDOWS
 GT02_BOUNDARY_EVIDENCE=S39_NATIVE_SELECTOR_IPC_PLUS_S35_COUNTER_AND_S33_STAGING
 GT02_WORKING_SOURCE_STATUS=S39_FROZEN_TESTED
 
-TIẾN ĐỘ HIỆN HÀNH — S39, cập nhật 16-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S40, cập nhật 16-09-2026
 Coordinator làm solo; các subagent đã dừng. Không tạo/đánh thức worker hoặc
 critic, không dùng Grok CLI. Solo self-review không thay hai chữ ký độc lập.
 
@@ -136,10 +136,24 @@ Thêm kiểm broker ownership và Cancel đọc lại phase dưới selector loc
 chờ storage. S39-02 đã freeze; S39-01 được giữ làm lịch sử vì hash tài liệu
 đổi sau freeze và Git proof đã bắt đúng lỗi đó.
 
+S40 ghi quyết định đóng gap theo hướng fail-closed tại
+reviews/20260916-gt02-s40-safe-write-gap/. Các test adversarial hiện có
+`test_exclusive_handle_hardlink_counterexample_keeps_mutation_disabled`,
+`test_final_file_swap_to_hardlink_between_resolve_and_open_rejects`,
+`test_every_mutation_rejects_before_io_even_during_junction_swaps`,
+`test_ancestor_swap_between_resolve_and_open_is_rejected` và
+`test_parent_handle_blocks_rename_before_final_file_is_open` chứng minh vì sao
+không được mở WriteFile/atomic replace với primitive hiện tại. S40 chỉ thêm
+record và hash manifest; source closure S39-02 không đổi nên không chạy lại
+đại bộ test. `safe_write=false`, `atomic_replace=false` và
+`UNSUPPORTED_SAFE_OPEN_WINDOWS` vẫn là trạng thái đúng; private staging và
+AppContainer boundary không nâng quyền thành public project-root write.
+
 Tiếp theo solo, theo thứ tự để tránh làm lại:
 1. Giữ GT-02 ở CANDIDATE: public safe_write/atomic_replace vẫn false vì
    primitive Windows chống hardlink/TOCTOU chưa được chứng minh; không hạ gate
-   bằng fixture AppContainer. S39 đã hoàn thành authenticated selector path.
+   bằng fixture AppContainer. S39 đã hoàn thành authenticated selector path;
+   S40 đã ghi quyết định fail-closed và evidence counterexample, không giả PASS.
 2. Giữ source/evidence S39-02 bất biến; chỉ sửa nếu có finding mới. Hai critic
    độc lập trên cùng closure vẫn còn thiếu trong chế độ solo, nên không đánh dấu
    ACCEPTED. Không mở GT-03/GT-04 khi GT-02 chưa đủ DoD.
