@@ -22,11 +22,15 @@
   "native_exit": 61,
   "private_access_denied": true,
   "formal_acceptance": false,
-  "independent_critic_signatures": 0,
+  "independent_critic_signatures": 2,
+  "critic_verdicts": [
+    "FAIL",
+    "FAIL"
+  ],
   "limits": [
     "S41 native endpoint now exercises selector fixture only; no Godot/Blender consumer",
     "source/game revisions and clock are trusted broker observations",
     "safe_write/atomic_replace remain unsupported; power-loss witness custody is open",
-    "one coordinator verification is not two independent reviews"
+    "two independent reviews are recorded; both reject acceptance"
   ]
 }

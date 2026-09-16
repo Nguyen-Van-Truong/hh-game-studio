@@ -6,7 +6,7 @@ ROOT = Path(__file__).resolve().parents[3]
 STUDIO = ROOT / 'studio'
 PACK = ROOT / 'zdoc/reviews/20260916-gt02-s39-02'
 DIAG = ROOT / 'zdoc/reviews/20260916-gt02-s41-audit'
-MANIFEST_HASH = '3b41d11845051ac9f854e8a94f380fc01876bfa5016c951e0b9ad089ee6cfdd6'
+MANIFEST_HASH = 'b070562fcaf8b9eb1882e5bcabe72ac14ac4eb9e3088cf7a657485297a1ade03'
 
 def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
 def read(p): return json.loads(p.read_text(encoding='utf-8'))
@@ -50,6 +50,12 @@ def verify():
     assert candidate['lanes'][0]['summary']['tests_run'] == 283
     assert candidate['lanes'][0]['summary']['skips'] == 4
     assert candidate['lanes'][1]['summary']['tests_run'] == 56
+    critics=[]
+    for rel in ('zdoc/reviews/20260916-gt02-s41-critic-a.md','zdoc/reviews/20260916-gt02-s41-critic-b.md'):
+        text = (ROOT/rel).read_text(encoding='utf-8')
+        assert '2fb0ec013c4037c844b38f7be221c0aa7a6bd905492fa7c4a53eaa8e474c9d59' in text
+        assert ('TICK=no' in text or ('TICK:** no' in text and 'Verdict:** `FAIL`' in text))
+        critics.append(rel)
     # Focused RPC run has one real owned host exit and no errors.
     rpc = ROOT/'zdoc/reviews/20260916-gt02-s39-rpc-02'; cap=read(rpc/'capture.json'); h=cap['host']
     assert cap['source_unchanged'] is True and h['exit_code']==h['wrapper_exit_code']==0
@@ -74,11 +80,11 @@ def verify():
             'source_closure_sha256':closure,'source_files':84,'candidate_artifacts':9,
             'protocol':{'run':283,'passed':279,'skipped':4},'bootstrap':{'run':56,'passed':56,'skipped':0},
             'selector_rpc':{'run':16,'passed':16},'native_cases':7,'native_exit':61,
-            'private_access_denied':True,'formal_acceptance':False,'independent_critic_signatures':0,
+            'private_access_denied':True,'formal_acceptance':False,'independent_critic_signatures':2,'critic_verdicts':['FAIL','FAIL'],
             'limits':['S41 native endpoint now exercises selector fixture only; no Godot/Blender consumer',
                       'source/game revisions and clock are trusted broker observations',
                       'safe_write/atomic_replace remain unsupported; power-loss witness custody is open',
-                      'one coordinator verification is not two independent reviews']}
+                      'two independent reviews are recorded; both reject acceptance']}
 
 if __name__ == '__main__':
     if not __debug__: raise SystemExit('OPTIMIZED_VERIFICATION_FORBIDDEN')
