@@ -1,0 +1,68 @@
+{
+  "scope": "TRUSTED_SOURCE_UID_CAPTURE_ONLY",
+  "public_ack": false,
+  "lanes": [
+    {
+      "host": {
+        "wrapper_pid": 26412,
+        "started_at": "2026-09-16T17:19:48.376266+00:00",
+        "argv": [
+          "Godot_v4.7.2-stable_win64.exe",
+          "--headless",
+          "--path",
+          "$SNAPSHOT/.",
+          "--editor",
+          "--import",
+          "res://scenes/fixture.tscn"
+        ],
+        "exit_code": 0,
+        "target_pid": 29360,
+        "wrapper_exit_code": 0,
+        "timed_out": false,
+        "tree_verified": true,
+        "ownership": "gated_job_kill_on_close",
+        "stdout": "import-stdout.txt",
+        "stderr": "import-stderr.txt",
+        "host": "import-host.json"
+      },
+      "clean": true,
+      "passed": true
+    },
+    {
+      "host": {
+        "wrapper_pid": 20640,
+        "started_at": "2026-09-16T17:19:52.672310+00:00",
+        "argv": [
+          "Godot_v4.7.2-stable_win64.exe",
+          "--headless",
+          "--path",
+          "$SNAPSHOT/.",
+          "--script",
+          "res://uid_probe.gd"
+        ],
+        "exit_code": 0,
+        "target_pid": 31736,
+        "wrapper_exit_code": 0,
+        "timed_out": false,
+        "tree_verified": true,
+        "ownership": "gated_job_kill_on_close",
+        "stdout": "readback-stdout.txt",
+        "stderr": "readback-stderr.txt",
+        "host": "readback-host.json"
+      },
+      "clean": true,
+      "passed": true
+    }
+  ],
+  "passed": false,
+  "readback": null,
+  "input_unchanged": true,
+  "source_unchanged": true,
+  "binary_unchanged": true,
+  "uids": {
+    "addons/hh_studio/plugin.gd.uid": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+    "addons/hh_studio/scene_commands.gd.uid": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+    "addons/hh_studio/jcs_godot.gd.uid": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+    "scripts/fixture_actor.gd.uid": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "argv": [
+    "docker.exe",
+    "--context",
+    "desktop-linux",
+    "inspect",
+    "9d197ef5fb2c750f729041809cacedb336e484bfe8b1f9f053779393cb68c454"
+  ],
+  "exit_code": 0,
+  "timeout_seconds": 8,
+  "timed_out": false,
+  "stream_cap_exceeded": false,
+  "stream_cap_bytes_each": 16384,
+  "stdout": "exited-inspect-stdout.txt",
+  "stderr": "exited-inspect-stderr.txt",
+  "job_active_count": 0,
+  "readers_stopped": true,
+  "stream_byte_counts": [
+    10874,
+    0
+  ],
+  "stream_reader_eof": [
+    true,
+    true
+  ],
+  "stream_reader_errors": [
+    null,
+    null
+  ],
+  "elapsed_seconds": 0.281
+}

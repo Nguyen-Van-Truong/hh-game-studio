@@ -1,0 +1,27 @@
+{
+  "status": "S48_DIAGNOSTIC_CHECKPOINT_VERIFIED",
+  "formal_acceptance": false,
+  "source_closure_sha256": "096239b1035bfcce0cb4cecf3251392d837cdaea66800428d920a7f4a5c462a5",
+  "source_files": 74,
+  "artifacts": 1332,
+  "unit": {
+    "run": 130,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0
+  },
+  "linux": {
+    "fixtures": 11,
+    "public_ack": false,
+    "sandbox_acceptance": false,
+    "validation_attribution_proven": false
+  },
+  "engine_checks": {
+    "edit": 103,
+    "reopen": 10,
+    "contract": 31
+  },
+  "git_bytes": "HEAD",
+  "verified_files": 1406,
+  "git_head": "e09f7806a6e3198e82c4ac1dd42dffd342531ef5"
+}

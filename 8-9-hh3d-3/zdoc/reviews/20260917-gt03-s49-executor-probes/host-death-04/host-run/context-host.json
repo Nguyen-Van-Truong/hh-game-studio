@@ -1,0 +1,34 @@
+{
+  "argv": [
+    "docker.exe",
+    "--context",
+    "desktop-linux",
+    "context",
+    "inspect",
+    "desktop-linux",
+    "--format",
+    "{{json .Endpoints.docker.Host}}"
+  ],
+  "exit_code": 0,
+  "timeout_seconds": 20,
+  "timed_out": false,
+  "stream_cap_exceeded": false,
+  "stream_cap_bytes_each": 262144,
+  "stdout": "context-stdout.txt",
+  "stderr": "context-stderr.txt",
+  "job_active_count": 0,
+  "readers_stopped": true,
+  "stream_byte_counts": [
+    44,
+    0
+  ],
+  "stream_reader_eof": [
+    true,
+    true
+  ],
+  "stream_reader_errors": [
+    null,
+    null
+  ],
+  "elapsed_seconds": 0.282
+}

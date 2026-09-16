@@ -1,0 +1,65 @@
+{
+  "name": "hh-gt03-ea046f6ae4094f86bcd54788b09ffb52",
+  "public_ack": false,
+  "sandbox_acceptance": false,
+  "command_host": {
+    "argv": [
+      "docker.exe",
+      "--context",
+      "desktop-linux",
+      "start",
+      "--attach",
+      "896b4ccfc7b90f03d41f29fa4f955d5c8781fb21846075883e91ad8c81e93855"
+    ],
+    "exit_code": 137,
+    "timeout_seconds": 9,
+    "timed_out": false,
+    "stream_cap_exceeded": false,
+    "stream_cap_bytes_each": 16384,
+    "stdout": "engine-stdout.txt",
+    "stderr": "engine-stderr.txt",
+    "job_active_count": 0,
+    "readers_stopped": true,
+    "stream_byte_counts": [
+      63,
+      0
+    ],
+    "stream_reader_eof": [
+      true,
+      true
+    ],
+    "stream_reader_errors": [
+      null,
+      null
+    ],
+    "elapsed_seconds": 5.468
+  },
+  "state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 137,
+    "Error": "",
+    "StartedAt": "2026-09-16T17:24:50.606027202Z",
+    "FinishedAt": "2026-09-16T17:24:55.714912135Z"
+  },
+  "final_state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 137,
+    "Error": "",
+    "StartedAt": "2026-09-16T17:24:50.606027202Z",
+    "FinishedAt": "2026-09-16T17:24:55.714912135Z"
+  },
+  "owned_removed": true,
+  "container_id": "896b4ccfc7b90f03d41f29fa4f955d5c8781fb21846075883e91ad8c81e93855"
+}

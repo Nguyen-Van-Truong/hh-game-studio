@@ -1,0 +1,27 @@
+{
+  "wrapper_pid": 41052,
+  "started_at": "2026-09-16T17:32:15.240643+00:00",
+  "argv": [
+    "python.exe",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "$SNAPSHOT/tests/godot",
+    "-p",
+    "test_bundle*.py",
+    "-v"
+  ],
+  "exit_code": 0,
+  "target_pid": 17528,
+  "wrapper_exit_code": 0,
+  "timed_out": false,
+  "tree_verified": true,
+  "ownership": "gated_job_kill_on_close",
+  "stdout": "bundle-tests-stdout.txt",
+  "stderr": "bundle-tests-stderr.txt",
+  "host": "bundle-tests-host.json",
+  "source_unchanged": true,
+  "manifest_scope": "Assigned six files plus directly used v1, core, protocol, runner Python sources; not a complete execution closure claim"
+}

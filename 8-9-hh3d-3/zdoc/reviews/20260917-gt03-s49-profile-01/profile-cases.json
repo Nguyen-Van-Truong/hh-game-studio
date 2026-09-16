@@ -1,0 +1,22 @@
+{
+  "passed": false,
+  "cases": [
+    {
+      "case": "defaults_override",
+      "passed": true,
+      "project_revision": "sha256:21b3846c7ae0de01fb472aa4de9749ed95c66484ad9a3b9480c5e6d75d72c509"
+    },
+    {
+      "case": "transformed_box",
+      "passed": false,
+      "project_revision": "sha256:e69187c521d3b8d059e3237c98ea7bc6a3af9e2a730032dee1de072458b4c3ea"
+    },
+    {
+      "case": "typed_scene_override",
+      "passed": false,
+      "project_revision": "sha256:650b1c07a0edd18194dc938ffb15087a1607d75ff57df4d14065302f89be6699"
+    }
+  ],
+  "public_ack": false,
+  "sandbox_acceptance": false
+}

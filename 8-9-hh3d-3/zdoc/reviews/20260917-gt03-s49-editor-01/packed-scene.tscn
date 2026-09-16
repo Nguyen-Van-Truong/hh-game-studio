@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://c4p3hprrm2xq3"]
+
+[ext_resource type="Script" uid="uid://dc8011bj471fi" path="res://scripts/fixture_actor.gd" id="1_ycb52"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_23b4i"]
+size = Vector3(3, 3, 3)
+
+[node name="Fixture" type="Node3D" unique_id=870638322]
+script = ExtResource("1_ycb52")
+fixture_value = 23
+metadata/hh_studio_id = "root"
+
+[node name="BoxOne" type="MeshInstance3D" parent="." unique_id=204548301]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 5, 6)
+mesh = SubResource("BoxMesh_23b4i")
+metadata/hh_studio_id = "box-one"

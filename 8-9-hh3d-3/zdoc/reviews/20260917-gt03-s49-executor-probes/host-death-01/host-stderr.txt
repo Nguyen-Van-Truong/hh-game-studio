@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt03-s49-executor-probes\probe_host_death.py", line 103, in <module>
+    result=executor.run(Path(sys.argv[2]),mode='parse',output=Path(sys.argv[3]),timeout_seconds=8)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\godot-addon\linux_executor.py", line 480, in run
+    initial = _project_bytes(project)
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\godot-addon\linux_executor.py", line 112, in _project_bytes
+    _need(values['project.godot'] == PROJECT_TEMPLATE.encode(), 'EXECUTOR_PROJECT_TEMPLATE')
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\godot-addon\linux_executor.py", line 59, in _need
+    raise ExecutorError(code)
+s49_executor.ExecutorError: EXECUTOR_PROJECT_TEMPLATE

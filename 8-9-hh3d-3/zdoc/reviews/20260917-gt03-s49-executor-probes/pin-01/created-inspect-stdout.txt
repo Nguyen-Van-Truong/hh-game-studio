@@ -1,0 +1,254 @@
+[
+    {
+        "Id": "7df8bd916e7dce9885de6ea4cee13862dfc4e14407393b6a41e763fb49cc1693",
+        "Created": "2026-09-16T17:18:56.711848595Z",
+        "Path": "/usr/local/bin/python3",
+        "Args": [
+            "-B",
+            "-c",
+            "import pathlib,hashlib,json,subprocess,os; p=pathlib.Path('/usr/bin/timeout'); print(json.dumps({'timeout_sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'timeout_bytes':p.stat().st_size,'version':subprocess.run([str(p),'--version'],capture_output=True,text=True,timeout=3).stdout.splitlines()[0],'yama':pathlib.Path('/proc/sys/kernel/yama/ptrace_scope').read_text().strip(),'pid':os.getpid()}))"
+        ],
+        "State": {
+            "Status": "created",
+            "Running": false,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 0,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "0001-01-01T00:00:00Z",
+            "FinishedAt": "0001-01-01T00:00:00Z"
+        },
+        "Image": "sha256:581429e3df12d76e6af4be5ab7d0e7fc2013eb57dc23d2de691411c8efdbb970",
+        "ResolvConfPath": "",
+        "HostnamePath": "",
+        "HostsPath": "",
+        "LogPath": "",
+        "Name": "/hh-gt03-5225a984afde4a0996a912647be37acb",
+        "RestartCount": 0,
+        "Driver": "overlayfs",
+        "Platform": "linux",
+        "MountLabel": "",
+        "ProcessLabel": "",
+        "AppArmorProfile": "",
+        "ExecIDs": null,
+        "HostConfig": {
+            "Binds": null,
+            "ContainerIDFile": "",
+            "LogConfig": {
+                "Type": "none",
+                "Config": {}
+            },
+            "NetworkMode": "none",
+            "PortBindings": {},
+            "RestartPolicy": {
+                "Name": "no",
+                "MaximumRetryCount": 0
+            },
+            "AutoRemove": false,
+            "VolumeDriver": "",
+            "VolumesFrom": null,
+            "ConsoleSize": [
+                0,
+                0
+            ],
+            "CapAdd": null,
+            "CapDrop": [
+                "ALL"
+            ],
+            "CgroupnsMode": "private",
+            "Dns": null,
+            "DnsOptions": [],
+            "DnsSearch": [],
+            "ExtraHosts": null,
+            "GroupAdd": null,
+            "IpcMode": "private",
+            "Cgroup": "",
+            "Links": null,
+            "OomScoreAdj": 0,
+            "PidMode": "",
+            "Privileged": false,
+            "PublishAllPorts": false,
+            "ReadonlyRootfs": true,
+            "SecurityOpt": [
+                "no-new-privileges=true",
+                "seccomp=builtin"
+            ],
+            "Tmpfs": {
+                "/tmp": "rw,nosuid,nodev,noexec,size=16m,nr_inodes=2048,uid=65532,gid=65532,mode=0700"
+            },
+            "UTSMode": "",
+            "UsernsMode": "",
+            "ShmSize": 16777216,
+            "Runtime": "runc",
+            "Isolation": "",
+            "CpuShares": 0,
+            "Memory": 1073741824,
+            "NanoCpus": 1000000000,
+            "CgroupParent": "",
+            "BlkioWeight": 0,
+            "BlkioWeightDevice": [],
+            "BlkioDeviceReadBps": [],
+            "BlkioDeviceWriteBps": [],
+            "BlkioDeviceReadIOps": [],
+            "BlkioDeviceWriteIOps": [],
+            "CpuPeriod": 0,
+            "CpuQuota": 0,
+            "CpuRealtimePeriod": 0,
+            "CpuRealtimeRuntime": 0,
+            "CpusetCpus": "",
+            "CpusetMems": "",
+            "Devices": [],
+            "DeviceCgroupRules": null,
+            "DeviceRequests": null,
+            "MemoryReservation": 0,
+            "MemorySwap": 1073741824,
+            "MemorySwappiness": null,
+            "OomKillDisable": false,
+            "PidsLimit": 64,
+            "Ulimits": [
+                {
+                    "Name": "core",
+                    "Hard": 0,
+                    "Soft": 0
+                },
+                {
+                    "Name": "cpu",
+                    "Hard": 10,
+                    "Soft": 10
+                },
+                {
+                    "Name": "fsize",
+                    "Hard": 8388608,
+                    "Soft": 8388608
+                },
+                {
+                    "Name": "msgqueue",
+                    "Hard": 8192,
+                    "Soft": 8192
+                },
+                {
+                    "Name": "nofile",
+                    "Hard": 256,
+                    "Soft": 256
+                }
+            ],
+            "CpuCount": 0,
+            "CpuPercent": 0,
+            "IOMaximumIOps": 0,
+            "IOMaximumBandwidth": 0,
+            "MaskedPaths": [
+                "/proc/acpi",
+                "/proc/asound",
+                "/proc/interrupts",
+                "/proc/kcore",
+                "/proc/keys",
+                "/proc/latency_stats",
+                "/proc/sched_debug",
+                "/proc/scsi",
+                "/proc/timer_list",
+                "/proc/timer_stats",
+                "/sys/devices/virtual/powercap",
+                "/sys/firmware"
+            ],
+            "ReadonlyPaths": [
+                "/proc/bus",
+                "/proc/fs",
+                "/proc/irq",
+                "/proc/sys",
+                "/proc/sysrq-trigger"
+            ]
+        },
+        "Storage": {
+            "RootFS": {
+                "Snapshot": {
+                    "Name": "overlayfs"
+                }
+            }
+        },
+        "Mounts": [],
+        "Config": {
+            "Hostname": "7df8bd916e7d",
+            "Domainname": "",
+            "User": "65532:65532",
+            "AttachStdin": false,
+            "AttachStdout": true,
+            "AttachStderr": true,
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "LANG=C.UTF-8",
+                "GPG_KEY=7169605F62C751356D054A26A821E680E5FA6305",
+                "PYTHON_VERSION=3.12.14",
+                "PYTHON_SHA256=5c8462af5790baf43a321a1559dbe0db06d1be4300fb85fb53c40060668e548a"
+            ],
+            "Cmd": [
+                "-B",
+                "-c",
+                "import pathlib,hashlib,json,subprocess,os; p=pathlib.Path('/usr/bin/timeout'); print(json.dumps({'timeout_sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'timeout_bytes':p.stat().st_size,'version':subprocess.run([str(p),'--version'],capture_output=True,text=True,timeout=3).stdout.splitlines()[0],'yama':pathlib.Path('/proc/sys/kernel/yama/ptrace_scope').read_text().strip(),'pid':os.getpid()}))"
+            ],
+            "Healthcheck": {
+                "Test": [
+                    "NONE"
+                ]
+            },
+            "Image": "sha256:581429e3df12d76e6af4be5ab7d0e7fc2013eb57dc23d2de691411c8efdbb970",
+            "Volumes": null,
+            "WorkingDir": "",
+            "Entrypoint": [
+                "/usr/local/bin/python3"
+            ],
+            "Labels": {
+                "hh.gt03.owner": "hh-gt03-5225a984afde4a0996a912647be37acb"
+            },
+            "StopTimeout": 1
+        },
+        "NetworkSettings": {
+            "SandboxID": "",
+            "SandboxKey": "",
+            "Ports": {},
+            "Networks": {
+                "none": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": null,
+                    "DriverOpts": null,
+                    "GwPriority": 0,
+                    "NetworkID": "",
+                    "EndpointID": "",
+                    "Gateway": "",
+                    "IPAddress": "",
+                    "MacAddress": "",
+                    "IPPrefixLen": 0,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "DNSNames": null
+                }
+            }
+        },
+        "ImageManifestDescriptor": {
+            "mediaType": "application/vnd.oci.image.manifest.v1+json",
+            "digest": "sha256:9bbdaa0482ba166a4aa36b03162892a871c269311817cf7132db0922d6c7e91d",
+            "size": 2325,
+            "annotations": {
+                "com.docker.official-images.bashbrew.arch": "amd64",
+                "org.opencontainers.image.base.digest": "sha256:c8e8f3d6e647f782059d933878e9a0de6889cec350149a770d51d1baa245a60e",
+                "org.opencontainers.image.base.name": "buildpack-deps:bookworm",
+                "org.opencontainers.image.created": "2026-08-25T03:34:59Z",
+                "org.opencontainers.image.revision": "f2c5d1b8a6adecb5b00b3c9331d4f863beade6b3",
+                "org.opencontainers.image.source": "https://github.com/docker-library/python.git#f2c5d1b8a6adecb5b00b3c9331d4f863beade6b3:3.12/bookworm",
+                "org.opencontainers.image.url": "https://hub.docker.com/_/python",
+                "org.opencontainers.image.version": "3.12.14-bookworm"
+            },
+            "platform": {
+                "architecture": "amd64",
+                "os": "linux"
+            }
+        }
+    }
+]

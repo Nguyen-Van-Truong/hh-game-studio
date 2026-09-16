@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 17-09-2026, Asia/Saigon | Revision S48 | TRIỂN KHAI THEO GATE
+Ngày 17-09-2026, Asia/Saigon | Revision S49 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=GT01_GT02_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S48
+PLAN_REVISION=S49
 EXECUTION_MODE=COORDINATOR_THREE_CODEX_OWNER_20260916
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -35,14 +35,14 @@ GT02_CHECKPOINT_COMMITS=2e24912,579b7e7,287a6c2,487e5fc,6a6dfb8,08f70cf,59c7b1e,
 GT02_SAFE_WRITE_STATUS=ACCEPTED_SCOPED_WINDOWS_MANAGED_FIXTURE
 GT02_BOUNDARY_EVIDENCE=S46_EXACT_CLOSURE_SERVICE_REPLACE_REGISTRY
 GT02_WORKING_SOURCE_STATUS=S46_FROZEN_ACCEPTED
-GT03_EVIDENCE_STATUS=S48_EDITOR_JOURNAL_LINUX_DIAGNOSTIC_02
+GT03_EVIDENCE_STATUS=S49_EDITOR_LINUX_PROFILE_HOST_DEATH_CANDIDATE
 GT03_REVIEW_STATUS=IMPLEMENTATION_CROSS_REVIEW_ONLY
-GT03_LAST_TESTED_SOURCE_CLOSURE=096239b1035bfcce0cb4cecf3251392d837cdaea66800428d920a7f4a5c462a5
-GT03_SANDBOX_STATUS=LINUX_BOUNDED_DIAGNOSTICS_ATTRIBUTION_GAP
-GT03_CHECKPOINT_COMMIT=933c134
-GT03_WORKING_SOURCE_STATUS=S48_FROZEN_TESTED
+GT03_LAST_TESTED_SOURCE_CLOSURE=c1ec00f1da94f7bd29e04d8a57e9974999065c7c0df0ceff76d115fda4e4f4ca
+GT03_SANDBOX_STATUS=S49_BOUNDED_PROFILE_READBACK_CANDIDATE
+GT03_CHECKPOINT_COMMIT=e09f780
+GT03_WORKING_SOURCE_STATUS=S49_FROZEN_TESTED_AUDITED_WIP
 
-TIẾN ĐỘ HIỆN HÀNH — S48 tiếp GT-03, ngày 17-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S49 tiếp GT-03, ngày 17-09-2026
 Owner mở lại3 subagent Codex Astra extra high ngày16-09; coordinator giữ
 một writer/file. Hai critic S44 FAIL/TICK=no đúng closure S44; lỗi admission
 và custody được sửa ở S45. Hai critic mới PASS/TICK=yes cùng closure S46;
@@ -129,8 +129,33 @@ resume phải kiểm lại raw evidence và đủ artifact. Chi tiết/lỗi ở
 Thiết kế parse attribution: reviews/20260917-gt03-s48-validation-attribution.md;
 profile khai báo typed literal là đề xuất availability, chưa tự đổi DoD.
 Hai content blobs chưa gồm .gd.uid/config/addon closure: còn GAP publish thực.
+S48 checkpoint e09f780; Git index và HEAD proof1406 file byte-exact đạt.
+S49 cùng closure trên: reviews/20260917-gt03-s49-editor-01, -linux-01,
+-profile-02 và -host-death-01. Python321/321 không skip; Godot Windows thật
+103 edit/UndoRedo,10 reopen,31 contract. Linux11/11 diagnostics đạt và5/5
+profile parse→import→fresh-instance/readback đạt: exported defaults/override,
+BoxMesh transform, int→typed float, float1e-13 và nested scene path.
+Complete bundle có11 content files gồm scene/script/UID/config/addon, cùng
+manifest; profile chỉ cho typed literal declarations và scene graph hữu hạn.
+Factory kiểm9 byte sources đã pin; trusted helper đọc cả SceneState và actual
+detached instance. Không nhận caller marker làm validation, không chạy code
+tùy ý trong live editor. Native staging mới chỉ chứng minh bytes/file flush;
+namespace barrier/selection/public save còn phải nối.
+Linux có admission1 bằng named mutex, durable owner record, pinned timeout
+PID1 sống qua Windows host chết. Native host-death01 giữ orphan quan sát chạy
+sau Job host đã0, child tự dừng sau7.262461s, PID0 rồi exact-owner recovery
+remove; concurrent request bị BUSY. Đây là kiểm process death, không power loss.
+Giữ profile01 lỗi ./Child so với Node path Child và các diagnostic lỗi cũ;
+profile02 dùng closure mới, không sửa evidence01 để biến thành PASS.
+Cross-review tìm thêm lỗ cleanup khi KeyboardInterrupt/SystemExit trong native
+Job constructor: S49 xử lý Exception, chưa bảo toàn mọi BaseException. Không
+phải sandbox escape đã chứng minh; sửa và test cancellation trước public use
+ở S50. S49 vẫn WIP, không có chữ ký nghiệm thu GT-03 hay public save ACK.
+Audit s49-audit kiểm107 source files,2194 artifacts và raw evidence cả4 gói;
+21/21 tamper tests đạt. GT-02 acceptance vẫn verified đúng closure S46.
 
 Việc tiếp theo:
+0. Sửa native CLI Job cancellation ownership; checkpoint S49 không che gap.
 1. Nối authenticated host, recheck lease/fence tại effect và durable receipts;
    phân biệt project revision của scene+script với semantic scene revision.
 2. Nối journal đã có với actual blob staging/selection/readback, đầy đủ UID/
@@ -151,6 +176,15 @@ reviews/20260916-plan-history-s42/tools-plan-s42.txt (AUTHORITY=0), SHA-256
 Các report/test lỗi cũ vẫn giữ, không overwrite bằng PASS mới.
 
 KINH NGHIỆM ĐANG ÁP DỤNG
+- S49: SceneState dùng ./Child trong khi NodePath instance dùng Child; giữ
+  hai contract riêng. Float script là binary64: không dùng epsilon cho phép
+  1e-13 bị đọc thành0; vector native float32 có tolerance riêng. UID/config/
+  addon phải nằm trong complete source closure. Deadline trong Windows host
+  không sống qua host chết; kiểm PID1 thật, actual orphan và exact cleanup.
+- File flush/readback không tự chứng minh namespace barrier. PrivateBlobStore
+  giữ share-READ nên không thể mở GENERIC_WRITE để flush directory; hướng S50
+  dùng ProtectedFileRoot đã có native checked create/rename/root barriers,
+  không sửa primitive GT-02 hay tự rearm readonly root bằng private marker.
 - S48: --check-only vẫn chạy static_init; clean exit hoặc child PASS không
   chứng minh validation. Phân biệt sandbox containment và nguồn báo kết quả.
   Timeout quá ngắn có thể chỉ đo startup; phải thấy callback trước fault.

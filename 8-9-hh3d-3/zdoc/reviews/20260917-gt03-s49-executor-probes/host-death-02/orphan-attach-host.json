@@ -1,0 +1,33 @@
+{
+  "argv": [
+    "docker.exe",
+    "--context",
+    "desktop-linux",
+    "attach",
+    "--no-stdin",
+    "--sig-proxy=false",
+    "a59d48ad3c4fbd336f781ec8d891de3756707899fb380828fabe0250155429ac"
+  ],
+  "exit_code": 124,
+  "timeout_seconds": 12,
+  "timed_out": false,
+  "stream_cap_exceeded": false,
+  "stream_cap_bytes_each": 32768,
+  "stdout": "orphan-attach-stdout.txt",
+  "stderr": "orphan-attach-stderr.txt",
+  "job_active_count": 0,
+  "readers_stopped": true,
+  "stream_byte_counts": [
+    32,
+    0
+  ],
+  "stream_reader_eof": [
+    true,
+    true
+  ],
+  "stream_reader_errors": [
+    null,
+    null
+  ],
+  "elapsed_seconds": 7.157
+}

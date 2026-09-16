@@ -1,0 +1,268 @@
+{
+  "passed": true,
+  "public_ack": false,
+  "sandbox_acceptance": false,
+  "phases_match": true,
+  "marker_count": 1,
+  "owned_lifecycle_verified": true,
+  "comparison": {
+    "status": "PROFILE_OBSERVATIONS_MATCH",
+    "public_ack": false,
+    "process_attribution_proven": false,
+    "sandbox_acceptance": false,
+    "project_revision": "sha256:650b1c07a0edd18194dc938ffb15087a1607d75ff57df4d14065302f89be6699",
+    "script_sha256": "39f08d00a161551ccbd9020ee95982ad6afc8ef59408b1f57dfee3f25c25e918",
+    "scene_sha256": "27b24490b2a362b55f01044cb3d8b5b0d491cd2df767a75d5b395540f0fe74b9",
+    "uid_sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+    "nodes": 2,
+    "resources": 1
+  },
+  "observation": {
+    "engine_version": "4.7.2-stable (official)",
+    "fresh_script": {
+      "exports": {
+        "enabled": {
+          "type": "bool",
+          "value": false
+        },
+        "fixture_value": {
+          "type": "int",
+          "value": 17
+        },
+        "move_speed": {
+          "type": "float",
+          "value": 2.25
+        },
+        "turn_speed": {
+          "type": "float",
+          "value": 90.0
+        }
+      },
+      "source_sha256": "39f08d00a161551ccbd9020ee95982ad6afc8ef59408b1f57dfee3f25c25e918",
+      "type": "Node3D"
+    },
+    "instance_nodes": [
+      {
+        "exports": {
+          "enabled": {
+            "type": "bool",
+            "value": true
+          },
+          "fixture_value": {
+            "type": "int",
+            "value": -23
+          },
+          "move_speed": {
+            "type": "float",
+            "value": 7.0
+          },
+          "turn_speed": {
+            "type": "float",
+            "value": 90.0
+          }
+        },
+        "groups": [],
+        "mesh": null,
+        "name": "Fixture",
+        "owner": "",
+        "path": ".",
+        "script_sha256": "39f08d00a161551ccbd9020ee95982ad6afc8ef59408b1f57dfee3f25c25e918",
+        "stable_id": "root",
+        "transform_rows_origin": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "type": "Node3D"
+      },
+      {
+        "exports": {},
+        "groups": [],
+        "mesh": {
+          "id": "BoxMesh_one",
+          "size": [
+            3.0,
+            2.0,
+            1.0
+          ],
+          "type": "BoxMesh"
+        },
+        "name": "BoxOne",
+        "owner": ".",
+        "path": "BoxOne",
+        "script_sha256": null,
+        "stable_id": "box-one",
+        "transform_rows_origin": [
+          0.0,
+          -3.0,
+          0.0,
+          2.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          4.0,
+          4.0,
+          5.0,
+          6.0
+        ],
+        "type": "MeshInstance3D"
+      }
+    ],
+    "ok": true,
+    "pid": 261,
+    "public_ack": false,
+    "scene": {
+      "connections": 0,
+      "inherited": false,
+      "node_count": 2,
+      "nodes": [
+        {
+          "groups": [],
+          "index": 0,
+          "instanced": false,
+          "name": "Fixture",
+          "owner": "",
+          "parent": "",
+          "path": ".",
+          "placeholder": "",
+          "properties": [
+            {
+              "name": "script",
+              "value": {
+                "path": "res://scripts/fixture_actor.gd",
+                "source_sha256": "39f08d00a161551ccbd9020ee95982ad6afc8ef59408b1f57dfee3f25c25e918",
+                "type": "GDScript"
+              }
+            },
+            {
+              "name": "fixture_value",
+              "value": {
+                "type": "int",
+                "value": -23
+              }
+            },
+            {
+              "name": "move_speed",
+              "value": {
+                "type": "int",
+                "value": 7
+              }
+            },
+            {
+              "name": "enabled",
+              "value": {
+                "type": "bool",
+                "value": true
+              }
+            },
+            {
+              "name": "metadata/hh_studio_id",
+              "value": {
+                "type": "string",
+                "value": "root"
+              }
+            }
+          ],
+          "type": "Node3D"
+        },
+        {
+          "groups": [],
+          "index": 1,
+          "instanced": false,
+          "name": "BoxOne",
+          "owner": ".",
+          "parent": ".",
+          "path": "./BoxOne",
+          "placeholder": "",
+          "properties": [
+            {
+              "name": "transform",
+              "value": {
+                "type": "Transform3D",
+                "value": [
+                  0.0,
+                  -3.0,
+                  0.0,
+                  2.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  4.0,
+                  4.0,
+                  5.0,
+                  6.0
+                ]
+              }
+            },
+            {
+              "name": "mesh",
+              "value": {
+                "id": "BoxMesh_one",
+                "size": [
+                  3.0,
+                  2.0,
+                  1.0
+                ],
+                "type": "BoxMesh"
+              }
+            },
+            {
+              "name": "metadata/hh_studio_id",
+              "value": {
+                "type": "string",
+                "value": "box-one"
+              }
+            }
+          ],
+          "type": "MeshInstance3D"
+        }
+      ],
+      "source_sha256": "27b24490b2a362b55f01044cb3d8b5b0d491cd2df767a75d5b395540f0fe74b9"
+    },
+    "schema": "hh-godot-profile-readback-1",
+    "script": {
+      "base_type": "Node3D",
+      "can_instantiate": true,
+      "constants": [],
+      "defaults": {
+        "enabled": {
+          "type": "bool",
+          "value": false
+        },
+        "fixture_value": {
+          "type": "int",
+          "value": 17
+        },
+        "move_speed": {
+          "type": "float",
+          "value": 2.25
+        },
+        "turn_speed": {
+          "type": "float",
+          "value": 90.0
+        }
+      },
+      "disk_sha256": "39f08d00a161551ccbd9020ee95982ad6afc8ef59408b1f57dfee3f25c25e918",
+      "global_name": "",
+      "has_base_script": false,
+      "is_tool": false,
+      "methods": [],
+      "reload_code": 0,
+      "resource_uid": "uid://bjbtti8c7afyc",
+      "signals": [],
+      "source_sha256": "39f08d00a161551ccbd9020ee95982ad6afc8ef59408b1f57dfee3f25c25e918",
+      "uid_source": "uid://bjbtti8c7afyc\n"
+    }
+  }
+}

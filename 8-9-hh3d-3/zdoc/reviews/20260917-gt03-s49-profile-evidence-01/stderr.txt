@@ -1,0 +1,209 @@
+test_consistent_replay_data_is_internal_comparison_only (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_consistent_replay_data_is_internal_comparison_only) ... ok
+test_each_missing_reordered_duplicate_or_failed_phase_rejected (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_each_missing_reordered_duplicate_or_failed_phase_rejected) ... ok
+test_harness_hash_is_actual_frozen_helper_hash (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_harness_hash_is_actual_frozen_helper_hash) ... ok
+test_missing_actual_exit_or_wait_fact_rejected_despite_clean_flag (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_missing_actual_exit_or_wait_fact_rejected_despite_clean_flag) ... ok
+test_missing_duplicate_malformed_or_duplicate_key_report_rejected (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_missing_duplicate_malformed_or_duplicate_key_report_rejected) ... ok
+test_missing_or_changed_lifecycle_checks_rejected (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_missing_or_changed_lifecycle_checks_rejected) ... ok
+test_missing_top_level_report_fact_or_nonfinite_value_rejected (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_missing_top_level_report_fact_or_nonfinite_value_rejected) ... ok
+test_native_integer_facts_cannot_be_booleans_or_float_counts (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_native_integer_facts_cannot_be_booleans_or_float_counts) ... ok
+test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag) ... 
+  test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag) (key='closed', change='dirty') ... FAIL
+  test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag) (key='closed', change='missing') ... FAIL
+  test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag) (key='zero_observed', change='dirty') ... FAIL
+  test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag) (key='zero_observed', change='missing') ... FAIL
+  test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag) (key='tainted', change='dirty') ... FAIL
+  test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag) (key='tainted', change='missing') ... FAIL
+  test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag) (key='handle_retained', change='dirty') ... FAIL
+  test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag) (key='handle_retained', change='missing') ... FAIL
+test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag) ... FAIL
+test_nonzero_exit_live_pid_oom_or_incomplete_stream_rejected (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_nonzero_exit_live_pid_oom_or_incomplete_stream_rejected) ... ok
+test_raw_warning_error_and_leak_in_either_stream_override_saved_clean_flag (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_raw_warning_error_and_leak_in_either_stream_override_saved_clean_flag) ... ok
+test_raw_wrong_uid_source_hash_type_and_value_rejected (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_raw_wrong_uid_source_hash_type_and_value_rejected) ... ok
+test_readback_marker_must_be_between_readback_begin_and_end (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_readback_marker_must_be_between_readback_begin_and_end) ... ok
+test_required_negative_stream_facts_and_boolean_eof_are_exact (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_required_negative_stream_facts_and_boolean_eof_are_exact) ... 
+  test_required_negative_stream_facts_and_boolean_eof_are_exact (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_required_negative_stream_facts_and_boolean_eof_are_exact) (key='timed_out', change='missing') ... FAIL
+  test_required_negative_stream_facts_and_boolean_eof_are_exact (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_required_negative_stream_facts_and_boolean_eof_are_exact) (key='timed_out', change='integer') ... FAIL
+  test_required_negative_stream_facts_and_boolean_eof_are_exact (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_required_negative_stream_facts_and_boolean_eof_are_exact) (key='stream_cap_exceeded', change='missing') ... FAIL
+  test_required_negative_stream_facts_and_boolean_eof_are_exact (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_required_negative_stream_facts_and_boolean_eof_are_exact) (key='stream_cap_exceeded', change='integer') ... FAIL
+test_required_negative_stream_facts_and_boolean_eof_are_exact (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_required_negative_stream_facts_and_boolean_eof_are_exact) ... FAIL
+test_stale_missing_or_extra_input_hash_any_phase_rejected (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_stale_missing_or_extra_input_hash_any_phase_rejected) ... ok
+test_stale_raw_report_rejected_even_when_lifecycle_hashes_match_new_bundle (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_stale_raw_report_rejected_even_when_lifecycle_hashes_match_new_bundle) ... ok
+test_wrong_schema_or_mode_cannot_transplant_profile_evidence (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_wrong_schema_or_mode_cannot_transplant_profile_evidence) ... 
+  test_wrong_schema_or_mode_cannot_transplant_profile_evidence (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_wrong_schema_or_mode_cannot_transplant_profile_evidence) (key='schema', value='other') ... FAIL
+  test_wrong_schema_or_mode_cannot_transplant_profile_evidence (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_wrong_schema_or_mode_cannot_transplant_profile_evidence) (key='mode', value='parse') ... FAIL
+  test_wrong_schema_or_mode_cannot_transplant_profile_evidence (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_wrong_schema_or_mode_cannot_transplant_profile_evidence) (key='mode', value='import') ... FAIL
+
+======================================================================
+FAIL: test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag) (key='closed', change='dirty')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_profile_probe_evidence.py", line 193, in test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag
+    self.rejected(result=bad)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_profile_probe_evidence.py", line 78, in rejected
+    self.assertIs(verdict['passed'], False)
+AssertionError: True is not False
+
+======================================================================
+FAIL: test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag) (key='closed', change='missing')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_profile_probe_evidence.py", line 196, in test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag
+    self.rejected(result=bad)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_profile_probe_evidence.py", line 78, in rejected
+    self.assertIs(verdict['passed'], False)
+AssertionError: True is not False
+
+======================================================================
+FAIL: test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag) (key='zero_observed', change='dirty')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_profile_probe_evidence.py", line 193, in test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag
+    self.rejected(result=bad)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_profile_probe_evidence.py", line 78, in rejected
+    self.assertIs(verdict['passed'], False)
+AssertionError: True is not False
+
+======================================================================
+FAIL: test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag) (key='zero_observed', change='missing')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_profile_probe_evidence.py", line 196, in test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag
+    self.rejected(result=bad)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_profile_probe_evidence.py", line 78, in rejected
+    self.assertIs(verdict['passed'], False)
+AssertionError: True is not False
+
+======================================================================
+FAIL: test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag) (key='tainted', change='dirty')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_profile_probe_evidence.py", line 193, in test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag
+    self.rejected(result=bad)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_profile_probe_evidence.py", line 78, in rejected
+    self.assertIs(verdict['passed'], False)
+AssertionError: True is not False
+
+======================================================================
+FAIL: test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag) (key='tainted', change='missing')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_profile_probe_evidence.py", line 196, in test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag
+    self.rejected(result=bad)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_profile_probe_evidence.py", line 78, in rejected
+    self.assertIs(verdict['passed'], False)
+AssertionError: True is not False
+
+======================================================================
+FAIL: test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag) (key='handle_retained', change='dirty')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_profile_probe_evidence.py", line 193, in test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag
+    self.rejected(result=bad)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_profile_probe_evidence.py", line 78, in rejected
+    self.assertIs(verdict['passed'], False)
+AssertionError: True is not False
+
+======================================================================
+FAIL: test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag) (key='handle_retained', change='missing')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_profile_probe_evidence.py", line 196, in test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag
+    self.rejected(result=bad)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_profile_probe_evidence.py", line 78, in rejected
+    self.assertIs(verdict['passed'], False)
+AssertionError: True is not False
+
+======================================================================
+FAIL: test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_profile_probe_evidence.py", line 199, in test_native_job_close_facts_are_required_and_cannot_be_overridden_by_clean_flag
+    self.rejected(result=bad)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_profile_probe_evidence.py", line 78, in rejected
+    self.assertIs(verdict['passed'], False)
+AssertionError: True is not False
+
+======================================================================
+FAIL: test_required_negative_stream_facts_and_boolean_eof_are_exact (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_required_negative_stream_facts_and_boolean_eof_are_exact) (key='timed_out', change='missing')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_profile_probe_evidence.py", line 178, in test_required_negative_stream_facts_and_boolean_eof_are_exact
+    self.rejected(result=bad)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_profile_probe_evidence.py", line 78, in rejected
+    self.assertIs(verdict['passed'], False)
+AssertionError: True is not False
+
+======================================================================
+FAIL: test_required_negative_stream_facts_and_boolean_eof_are_exact (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_required_negative_stream_facts_and_boolean_eof_are_exact) (key='timed_out', change='integer')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_profile_probe_evidence.py", line 181, in test_required_negative_stream_facts_and_boolean_eof_are_exact
+    self.rejected(result=bad)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_profile_probe_evidence.py", line 78, in rejected
+    self.assertIs(verdict['passed'], False)
+AssertionError: True is not False
+
+======================================================================
+FAIL: test_required_negative_stream_facts_and_boolean_eof_are_exact (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_required_negative_stream_facts_and_boolean_eof_are_exact) (key='stream_cap_exceeded', change='missing')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_profile_probe_evidence.py", line 178, in test_required_negative_stream_facts_and_boolean_eof_are_exact
+    self.rejected(result=bad)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_profile_probe_evidence.py", line 78, in rejected
+    self.assertIs(verdict['passed'], False)
+AssertionError: True is not False
+
+======================================================================
+FAIL: test_required_negative_stream_facts_and_boolean_eof_are_exact (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_required_negative_stream_facts_and_boolean_eof_are_exact) (key='stream_cap_exceeded', change='integer')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_profile_probe_evidence.py", line 181, in test_required_negative_stream_facts_and_boolean_eof_are_exact
+    self.rejected(result=bad)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_profile_probe_evidence.py", line 78, in rejected
+    self.assertIs(verdict['passed'], False)
+AssertionError: True is not False
+
+======================================================================
+FAIL: test_required_negative_stream_facts_and_boolean_eof_are_exact (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_required_negative_stream_facts_and_boolean_eof_are_exact)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_profile_probe_evidence.py", line 185, in test_required_negative_stream_facts_and_boolean_eof_are_exact
+    self.rejected(result=bad)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_profile_probe_evidence.py", line 78, in rejected
+    self.assertIs(verdict['passed'], False)
+AssertionError: True is not False
+
+======================================================================
+FAIL: test_wrong_schema_or_mode_cannot_transplant_profile_evidence (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_wrong_schema_or_mode_cannot_transplant_profile_evidence) (key='schema', value='other')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_profile_probe_evidence.py", line 171, in test_wrong_schema_or_mode_cannot_transplant_profile_evidence
+    self.rejected(result=bad)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_profile_probe_evidence.py", line 78, in rejected
+    self.assertIs(verdict['passed'], False)
+AssertionError: True is not False
+
+======================================================================
+FAIL: test_wrong_schema_or_mode_cannot_transplant_profile_evidence (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_wrong_schema_or_mode_cannot_transplant_profile_evidence) (key='mode', value='parse')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_profile_probe_evidence.py", line 171, in test_wrong_schema_or_mode_cannot_transplant_profile_evidence
+    self.rejected(result=bad)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_profile_probe_evidence.py", line 78, in rejected
+    self.assertIs(verdict['passed'], False)
+AssertionError: True is not False
+
+======================================================================
+FAIL: test_wrong_schema_or_mode_cannot_transplant_profile_evidence (test_profile_probe_evidence.ProfileProbeEvidenceTests.test_wrong_schema_or_mode_cannot_transplant_profile_evidence) (key='mode', value='import')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_profile_probe_evidence.py", line 171, in test_wrong_schema_or_mode_cannot_transplant_profile_evidence
+    self.rejected(result=bad)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\godot\test_profile_probe_evidence.py", line 78, in rejected
+    self.assertIs(verdict['passed'], False)
+AssertionError: True is not False
+
+----------------------------------------------------------------------
+Ran 17 tests in 0.359s
+
+FAILED (failures=17)

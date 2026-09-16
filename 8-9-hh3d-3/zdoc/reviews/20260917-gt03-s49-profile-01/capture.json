@@ -1,0 +1,52 @@
+{
+  "run_id": "GT03-S49-PROFILE-01",
+  "source_closure_sha256": "b81a7e782bca2c5d9ead48145a3f1cbd5770fbdad7c159cdf59197fc33056dff",
+  "host": {
+    "wrapper_pid": 38536,
+    "started_at": "2026-09-16T17:44:25.684935+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "-c",
+      "import importlib.util,sys; from pathlib import Path; p=Path(\"tests/godot/run_profile_probe.py\").resolve(); s=importlib.util.spec_from_file_location(\"frozen_profile\",p); m=importlib.util.module_from_spec(s);s.loader.exec_module(m); sys.exit(m.frozen_cases(Path(sys.argv[1])))",
+      "20260917-gt03-s49-profile-01"
+    ],
+    "exit_code": 1,
+    "target_pid": 38780,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "profile-stdout.txt",
+    "stderr": "profile-stderr.txt",
+    "host": "profile-host.json"
+  },
+  "source_unchanged": false,
+  "snapshot_unchanged": true,
+  "public_ack": false,
+  "sandbox_acceptance": false,
+  "production_save_verified": false,
+  "cases": {
+    "passed": false,
+    "cases": [
+      {
+        "case": "defaults_override",
+        "passed": true,
+        "project_revision": "sha256:21b3846c7ae0de01fb472aa4de9749ed95c66484ad9a3b9480c5e6d75d72c509"
+      },
+      {
+        "case": "transformed_box",
+        "passed": false,
+        "project_revision": "sha256:e69187c521d3b8d059e3237c98ea7bc6a3af9e2a730032dee1de072458b4c3ea"
+      },
+      {
+        "case": "typed_scene_override",
+        "passed": false,
+        "project_revision": "sha256:650b1c07a0edd18194dc938ffb15087a1607d75ff57df4d14065302f89be6699"
+      }
+    ],
+    "public_ack": false,
+    "sandbox_acceptance": false
+  },
+  "passed": false
+}
