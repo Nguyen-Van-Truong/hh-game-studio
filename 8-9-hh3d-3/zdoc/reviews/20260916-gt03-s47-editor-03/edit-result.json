@@ -1,0 +1,437 @@
+{
+	"actual_editor": true,
+	"checks": [
+		{
+			"detail": {
+				"code": "SCENE_INSPECTED",
+				"filesystem_mutated": false,
+				"generation": 1,
+				"held": false,
+				"history_id": 1,
+				"offset": 0,
+				"ok": true,
+				"revision": "sha256:b5d1a70f806b4b076923bb9750f18728586ee8a66659b55eab34a68e1f0c6546",
+				"state": {
+					"nodes": [
+						{
+							"groups": [],
+							"name": "Fixture",
+							"node_type": "Node3D",
+							"owner_id": "",
+							"parent_id": "",
+							"position": [
+								0.0,
+								0.0,
+								0.0
+							],
+							"rotation_degrees": [
+								0.0,
+								0.0,
+								0.0
+							],
+							"scale": [
+								1.0,
+								1.0,
+								1.0
+							],
+							"sibling_index": 0,
+							"stable_id": "root",
+							"stored": {
+								"auto_translate_mode": 0,
+								"editor_description": "",
+								"metadata/hh_studio_id": "root",
+								"physics_interpolation_mode": 0,
+								"process_mode": 0,
+								"process_physics_priority": 0,
+								"process_priority": 0,
+								"process_thread_group": 0,
+								"rotation_edit_mode": 0,
+								"rotation_order": 2,
+								"script": null,
+								"top_level": false,
+								"transform": {
+									"type": 18,
+									"value": [
+										{
+											"type": 17,
+											"value": [
+												{
+													"type": 9,
+													"value": [
+														1.0,
+														0.0,
+														0.0
+													]
+												},
+												{
+													"type": 9,
+													"value": [
+														0.0,
+														1.0,
+														0.0
+													]
+												},
+												{
+													"type": 9,
+													"value": [
+														0.0,
+														0.0,
+														1.0
+													]
+												}
+											]
+										},
+										{
+											"type": 9,
+											"value": [
+												0.0,
+												0.0,
+												0.0
+											]
+										}
+									]
+								},
+								"unique_name_in_owner": false,
+								"visibility_parent": {
+									"type": 22,
+									"value": ""
+								},
+								"visible": true
+							}
+						}
+					]
+				},
+				"total": 1
+			},
+			"label": "actual_editor_initialized",
+			"passed": true
+		},
+		{
+			"detail": {},
+			"label": "main_thread",
+			"passed": true
+		},
+		{
+			"detail": {
+				"code": "SCENE_INSPECTED",
+				"filesystem_mutated": false,
+				"generation": 1,
+				"held": false,
+				"history_id": 1,
+				"offset": 0,
+				"ok": true,
+				"revision": "sha256:b5d1a70f806b4b076923bb9750f18728586ee8a66659b55eab34a68e1f0c6546",
+				"state": {
+					"nodes": [
+						{
+							"groups": [],
+							"name": "Fixture",
+							"node_type": "Node3D",
+							"owner_id": "",
+							"parent_id": "",
+							"position": [
+								0.0,
+								0.0,
+								0.0
+							],
+							"rotation_degrees": [
+								0.0,
+								0.0,
+								0.0
+							],
+							"scale": [
+								1.0,
+								1.0,
+								1.0
+							],
+							"sibling_index": 0,
+							"stable_id": "root",
+							"stored": {
+								"auto_translate_mode": 0,
+								"editor_description": "",
+								"metadata/hh_studio_id": "root",
+								"physics_interpolation_mode": 0,
+								"process_mode": 0,
+								"process_physics_priority": 0,
+								"process_priority": 0,
+								"process_thread_group": 0,
+								"rotation_edit_mode": 0,
+								"rotation_order": 2,
+								"script": null,
+								"top_level": false,
+								"transform": {
+									"type": 18,
+									"value": [
+										{
+											"type": 17,
+											"value": [
+												{
+													"type": 9,
+													"value": [
+														1.0,
+														0.0,
+														0.0
+													]
+												},
+												{
+													"type": 9,
+													"value": [
+														0.0,
+														1.0,
+														0.0
+													]
+												},
+												{
+													"type": 9,
+													"value": [
+														0.0,
+														0.0,
+														1.0
+													]
+												}
+											]
+										},
+										{
+											"type": 9,
+											"value": [
+												0.0,
+												0.0,
+												0.0
+											]
+										}
+									]
+								},
+								"unique_name_in_owner": false,
+								"visibility_parent": {
+									"type": 22,
+									"value": ""
+								},
+								"visible": true
+							}
+						}
+					]
+				},
+				"total": 1
+			},
+			"label": "root_stable_id",
+			"passed": true
+		},
+		{
+			"detail": {},
+			"label": "thread_started",
+			"passed": true
+		},
+		{
+			"detail": {
+				"code": "EDITOR_MAIN_THREAD_REQUIRED",
+				"ok": false
+			},
+			"label": "off_thread_rejected_before_scene_access",
+			"passed": true
+		},
+		{
+			"detail": {
+				"code": "SCENE_STORED_PROPERTY_UNSUPPORTED",
+				"filesystem_mutated": false,
+				"next_action": "inspect_reconcile",
+				"ok": false
+			},
+			"label": "preview_valid",
+			"passed": false
+		},
+		{
+			"detail": {},
+			"label": "preview_has_no_effect",
+			"passed": true
+		},
+		{
+			"detail": {
+				"code": "SCENE_STORED_PROPERTY_UNSUPPORTED",
+				"filesystem_mutated": false,
+				"next_action": "inspect_reconcile",
+				"ok": false
+			},
+			"label": "create_applied",
+			"passed": false
+		},
+		{
+			"detail": {
+				"encoding": {
+					"canonical": "{\"child_count\":0,\"class\":\"MeshInstance3D\",\"editable\":{\"box_size\":[1,1,1],\"name\":\"BoxOne\",\"node_type\":\"MeshInstance3D\",\"position\":[0,0,0],\"rotation_degrees\":[0,0,0],\"scale\":[1,1,1]},\"stored\":{\"unique_name_in_owner\":false}}",
+					"ok": true,
+					"sha256": "sha256:e2cab5e56e9d89b51f2c74eb0cd28cadb0e6f19de090903616046d6b2cfb5004",
+					"utf8_hex": "7b226368696c645f636f756e74223a302c22636c617373223a224d657368496e7374616e63653344222c226564697461626c65223a7b22626f785f73697a65223a5b312c312c315d2c226e616d65223a22426f784f6e65222c226e6f64655f74797065223a224d657368496e7374616e63653344222c22706f736974696f6e223a5b302c302c305d2c22726f746174696f6e5f64656772656573223a5b302c302c305d2c227363616c65223a5b312c312c315d7d2c2273746f726564223a7b22756e697175655f6e616d655f696e5f6f776e6572223a66616c73657d7d"
+				},
+				"properties": [
+					{
+						"name": "unique_name_in_owner",
+						"type": 1
+					},
+					{
+						"name": "process_mode",
+						"type": 2
+					},
+					{
+						"name": "process_priority",
+						"type": 2
+					},
+					{
+						"name": "process_physics_priority",
+						"type": 2
+					},
+					{
+						"name": "process_thread_group",
+						"type": 2
+					},
+					{
+						"name": "physics_interpolation_mode",
+						"type": 2
+					},
+					{
+						"name": "auto_translate_mode",
+						"type": 2
+					},
+					{
+						"name": "editor_description",
+						"type": 4
+					},
+					{
+						"name": "transform",
+						"type": 18
+					},
+					{
+						"name": "rotation_edit_mode",
+						"type": 2
+					},
+					{
+						"name": "rotation_order",
+						"type": 2
+					},
+					{
+						"name": "top_level",
+						"type": 1
+					},
+					{
+						"name": "visible",
+						"type": 1
+					},
+					{
+						"name": "visibility_parent",
+						"type": 22
+					},
+					{
+						"name": "layers",
+						"type": 2
+					},
+					{
+						"name": "sorting_offset",
+						"type": 3
+					},
+					{
+						"name": "sorting_use_aabb_center",
+						"type": 1
+					},
+					{
+						"name": "material_override",
+						"type": 24
+					},
+					{
+						"name": "material_overlay",
+						"type": 24
+					},
+					{
+						"name": "transparency",
+						"type": 3
+					},
+					{
+						"name": "cast_shadow",
+						"type": 2
+					},
+					{
+						"name": "extra_cull_margin",
+						"type": 3
+					},
+					{
+						"name": "custom_aabb",
+						"type": 16
+					},
+					{
+						"name": "lod_bias",
+						"type": 3
+					},
+					{
+						"name": "ignore_occlusion_culling",
+						"type": 1
+					},
+					{
+						"name": "gi_mode",
+						"type": 2
+					},
+					{
+						"name": "gi_lightmap_texel_scale",
+						"type": 3
+					},
+					{
+						"name": "visibility_range_begin",
+						"type": 3
+					},
+					{
+						"name": "visibility_range_begin_margin",
+						"type": 3
+					},
+					{
+						"name": "visibility_range_end",
+						"type": 3
+					},
+					{
+						"name": "visibility_range_end_margin",
+						"type": 3
+					},
+					{
+						"name": "visibility_range_fade_mode",
+						"type": 2
+					},
+					{
+						"name": "mesh",
+						"type": 24
+					},
+					{
+						"name": "skin",
+						"type": 24
+					},
+					{
+						"name": "skeleton",
+						"type": 22
+					},
+					{
+						"name": "surface_material_override/0",
+						"type": 24
+					},
+					{
+						"name": "script",
+						"type": 0
+					},
+					{
+						"name": "metadata/hh_studio_id",
+						"type": 4
+					}
+				],
+				"scan_code": "SCENE_STORED_PROPERTY_UNSUPPORTED",
+				"stored": {
+					"unique_name_in_owner": false
+				}
+			},
+			"label": "native_encoding_diagnostic",
+			"passed": false
+		}
+	],
+	"failures": [
+		"preview_valid",
+		"create_applied"
+	],
+	"hostile_script_sandbox_verified": false,
+	"mode": "edit",
+	"ok": false,
+	"production_save_verified": false,
+	"saved_revision": ""
+}

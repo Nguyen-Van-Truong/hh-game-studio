@@ -1,0 +1,27 @@
+{
+  "timestamp_utc": "2026-09-16T16:10:08.4920055Z",
+  "checkpoint": "0c3b00a0450e6a7255e40ae02c69ae1db6d3d6c3",
+  "scope": "Read-only audit after runs; support files match accepted checkpoint, not a full GT03 source closure",
+  "files": [
+    {
+      "path": "8-9-hh3d-3/zdoc/reviews/20260915-gt02-s32-boundary/windows_api.py",
+      "sha256": "1afd34eb11fd5ab9a34c37de2a80aabcec04224826a092ff122d5212bd3a50c4",
+      "equals_checkpoint_0c3b00a": true
+    },
+    {
+      "path": "8-9-hh3d-3/zdoc/reviews/20260915-gt02-s32-boundary/boundary_probe.py",
+      "sha256": "b3337e327cf10a585407d1fc074c23d6c5ecc7ba67334579c34858f3a6fdf6bd",
+      "equals_checkpoint_0c3b00a": true
+    },
+    {
+      "path": "8-9-hh3d-3/studio/build/bootstrap/run_fixture.py",
+      "sha256": "ea522450acc46f90be5e2a7b9257e73ce8b619948105b2c9073aac1f881c7328",
+      "equals_checkpoint_0c3b00a": true
+    },
+    {
+      "path": "8-9-hh3d-3/studio/toolchain.lock.json",
+      "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+      "equals_checkpoint_0c3b00a": true
+    }
+  ]
+}

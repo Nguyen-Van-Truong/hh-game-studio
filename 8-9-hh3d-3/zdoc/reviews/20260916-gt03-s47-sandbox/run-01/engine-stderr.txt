@@ -1,0 +1,12 @@
+ERROR: Condition "res != ((HRESULT)0x00000000)" is true. Returning: String()
+   at: get_system_dir (platform/windows/os_windows.cpp:2502)
+ERROR: Condition "res != ((HRESULT)0x00000000)" is true. Returning: String()
+   at: get_system_dir (platform/windows/os_windows.cpp:2502)
+ERROR: Method/function failed. Returning: ""
+   at: get_filesystem_type (drivers/windows/dir_access_windows.cpp:412)
+ERROR: Method/function failed. Returning: ""
+   at: get_filesystem_type (drivers/windows/dir_access_windows.cpp:412)
+ERROR: Condition "res != ((HRESULT)0x00000000)" is true. Returning: String()
+   at: get_system_dir (platform/windows/os_windows.cpp:2502)
+ERROR: Condition "res != ((HRESULT)0x00000000)" is true. Returning: String()
+   at: get_system_dir (platform/windows/os_windows.cpp:2502)

@@ -1,0 +1,46 @@
+{
+  "run_id": "GT03-S47-EDITOR-02",
+  "scope": "trusted_actual_editor_in_memory_and_pack_reopen",
+  "source_closure_sha256": "4c2dbf04f73d0b1744494373663d3cbad0776280115e94d858f55c62382c9364",
+  "godot_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+  "lanes": [
+    {
+      "mode": "edit",
+      "host": {
+        "wrapper_pid": 28860,
+        "started_at": "2026-09-16T16:08:38.409371+00:00",
+        "argv": [
+          "Godot_v4.7.2-stable_win64.exe",
+          "--headless",
+          "--editor",
+          "--path",
+          "$SNAPSHOT/.",
+          "--log-file",
+          "$SNAPSHOT/edit-engine.log",
+          "res://scenes/fixture.tscn",
+          "--",
+          "--hh-studio-editor-probe",
+          "--probe-mode=edit"
+        ],
+        "exit_code": 21,
+        "target_pid": 15536,
+        "wrapper_exit_code": 0,
+        "timed_out": false,
+        "tree_verified": true,
+        "ownership": "gated_job_kill_on_close",
+        "stdout": "edit-stdout.txt",
+        "stderr": "edit-stderr.txt",
+        "host": "edit-host.json"
+      },
+      "clean_log": true,
+      "exact_reopen_revision": true,
+      "passed": false
+    }
+  ],
+  "production_save_verified": false,
+  "hostile_script_sandbox_verified": false,
+  "temporary_removed": true,
+  "source_unchanged": true,
+  "snapshot_unchanged": true,
+  "passed": false
+}

@@ -1,0 +1,44 @@
+{
+  "captured_at_utc": "2026-09-16T16:07:29.2620120Z",
+  "action": "read-only",
+  "os": {
+    "Caption": "Microsoft Windows 11 Pro",
+    "Version": "10.0.26200",
+    "BuildNumber": "26200"
+  },
+  "volumes": [
+    {
+      "DriveLetter": "C",
+      "FileSystem": "NTFS",
+      "DriveType": "Fixed",
+      "HealthStatus": "Healthy",
+      "Size": 313722400768,
+      "SizeRemaining": 56171470848
+    },
+    {
+      "DriveLetter": null,
+      "FileSystem": "NTFS",
+      "DriveType": "Fixed",
+      "HealthStatus": "Healthy",
+      "Size": 850391040,
+      "SizeRemaining": 84189184
+    },
+    {
+      "DriveLetter": "E",
+      "FileSystem": "NTFS",
+      "DriveType": "Fixed",
+      "HealthStatus": "Healthy",
+      "Size": 196739067904,
+      "SizeRemaining": 69820817408
+    },
+    {
+      "DriveLetter": "D",
+      "FileSystem": "NTFS",
+      "DriveType": "Fixed",
+      "HealthStatus": "Healthy",
+      "Size": 447667499008,
+      "SizeRemaining": 241263415296
+    }
+  ],
+  "note": "No quota query requiring privilege, mount, provisioning, elevation, install, or ACL change performed."
+}

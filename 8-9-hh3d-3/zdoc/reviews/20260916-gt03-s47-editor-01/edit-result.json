@@ -1,0 +1,190 @@
+{
+	"actual_editor": true,
+	"checks": [
+		{
+			"detail": {
+				"code": "SCENE_INSPECTED",
+				"filesystem_mutated": false,
+				"generation": 1,
+				"held": false,
+				"history_id": 1,
+				"offset": 0,
+				"ok": true,
+				"revision": "sha256:3d9329130397932cca220ec94113731135a22ae9fe91238b5ce4ac48e86fd0bc",
+				"state": {
+					"nodes": [
+						{
+							"groups": [],
+							"name": "Fixture",
+							"node_type": "Node3D",
+							"owner_id": "",
+							"parent_id": "",
+							"position": [
+								0.0,
+								0.0,
+								0.0
+							],
+							"rotation_degrees": [
+								0.0,
+								0.0,
+								0.0
+							],
+							"scale": [
+								1.0,
+								1.0,
+								1.0
+							],
+							"sibling_index": 0,
+							"stable_id": "root",
+							"stored": {
+								"auto_translate_mode": 0,
+								"editor_description": "",
+								"metadata/hh_studio_id": "root",
+								"physics_interpolation_mode": 0,
+								"process_mode": 0,
+								"process_physics_priority": 0,
+								"process_priority": 0,
+								"process_thread_group": 0,
+								"rotation_edit_mode": 0,
+								"rotation_order": 2,
+								"script": null,
+								"top_level": false,
+								"transform": {
+									"binary": "120000000000803f0000000000000000000000000000803f0000000000000000000000000000803f000000000000000000000000",
+									"type": 18
+								},
+								"unique_name_in_owner": false,
+								"visibility_parent": {
+									"type": 22,
+									"value": ""
+								},
+								"visible": true
+							}
+						}
+					]
+				},
+				"total": 1
+			},
+			"label": "actual_editor_initialized",
+			"passed": true
+		},
+		{
+			"detail": {},
+			"label": "main_thread",
+			"passed": true
+		},
+		{
+			"detail": {
+				"code": "SCENE_INSPECTED",
+				"filesystem_mutated": false,
+				"generation": 1,
+				"held": false,
+				"history_id": 1,
+				"offset": 0,
+				"ok": true,
+				"revision": "sha256:3d9329130397932cca220ec94113731135a22ae9fe91238b5ce4ac48e86fd0bc",
+				"state": {
+					"nodes": [
+						{
+							"groups": [],
+							"name": "Fixture",
+							"node_type": "Node3D",
+							"owner_id": "",
+							"parent_id": "",
+							"position": [
+								0.0,
+								0.0,
+								0.0
+							],
+							"rotation_degrees": [
+								0.0,
+								0.0,
+								0.0
+							],
+							"scale": [
+								1.0,
+								1.0,
+								1.0
+							],
+							"sibling_index": 0,
+							"stable_id": "root",
+							"stored": {
+								"auto_translate_mode": 0,
+								"editor_description": "",
+								"metadata/hh_studio_id": "root",
+								"physics_interpolation_mode": 0,
+								"process_mode": 0,
+								"process_physics_priority": 0,
+								"process_priority": 0,
+								"process_thread_group": 0,
+								"rotation_edit_mode": 0,
+								"rotation_order": 2,
+								"script": null,
+								"top_level": false,
+								"transform": {
+									"binary": "120000000000803f0000000000000000000000000000803f0000000000000000000000000000803f000000000000000000000000",
+									"type": 18
+								},
+								"unique_name_in_owner": false,
+								"visibility_parent": {
+									"type": 22,
+									"value": ""
+								},
+								"visible": true
+							}
+						}
+					]
+				},
+				"total": 1
+			},
+			"label": "root_stable_id",
+			"passed": true
+		},
+		{
+			"detail": {},
+			"label": "thread_started",
+			"passed": true
+		},
+		{
+			"detail": {
+				"code": "EDITOR_MAIN_THREAD_REQUIRED",
+				"ok": false
+			},
+			"label": "off_thread_rejected_before_scene_access",
+			"passed": true
+		},
+		{
+			"detail": {
+				"code": "SCENE_STORED_PROPERTY_UNSUPPORTED",
+				"filesystem_mutated": false,
+				"next_action": "inspect_reconcile",
+				"ok": false
+			},
+			"label": "preview_valid",
+			"passed": false
+		},
+		{
+			"detail": {},
+			"label": "preview_has_no_effect",
+			"passed": true
+		},
+		{
+			"detail": {
+				"code": "SCENE_STORED_PROPERTY_UNSUPPORTED",
+				"filesystem_mutated": false,
+				"next_action": "inspect_reconcile",
+				"ok": false
+			},
+			"label": "create_applied",
+			"passed": false
+		}
+	],
+	"failures": [
+		"preview_valid",
+		"create_applied"
+	],
+	"hostile_script_sandbox_verified": false,
+	"mode": "edit",
+	"ok": false,
+	"production_save_verified": false
+}

@@ -1,0 +1,42 @@
+{
+  "catalog_version": "gt03-godot-1",
+  "protocol_version": "1.0",
+  "schema_version": "hh-studio-0.1",
+  "scope": "godot.fixture",
+  "scene_path": "scenes/fixture.tscn",
+  "script_path": "scripts/fixture_actor.gd",
+  "root_stable_id": "root",
+  "metadata_key": "hh_studio_id",
+  "revision": "sha256:<64 lowercase hex>; semantic scene state; generation is reload epoch",
+  "limits": {
+    "max_nodes": 64,
+    "max_depth": 16,
+    "max_name_chars": 48,
+    "max_id_chars": 64,
+    "max_inspect_nodes": 64,
+    "max_script_utf8_bytes": 16384,
+    "max_payload_bytes": 65536,
+    "max_projection_bytes": 65536,
+    "max_deadline_ms": 30000
+  },
+  "node_types": ["Node3D", "MeshInstance3D"],
+  "resource_types": ["BoxMesh"],
+  "properties": {
+    "name": {"pattern": "[A-Za-z][A-Za-z0-9_]{0,47}"},
+    "position": {"length": 3, "minimum": -10000, "maximum": 10000},
+    "rotation_degrees": {"length": 3, "minimum": -360, "maximum": 360},
+    "scale": {"length": 3, "minimum": 0.001, "maximum": 1000},
+    "box_size": {"length": 3, "minimum": 0.001, "maximum": 1000}
+  },
+  "operations": {
+    "scene.inspect": {"kind": "inspect", "target": "root", "required": ["expected_generation", "offset", "limit"], "optional": [], "recovery": "none", "implemented": false, "runtime_enabled": false},
+    "scene.node.create": {"kind": "mutation", "target": "parent", "required": ["expected_generation", "stable_id", "node_type", "name", "position", "rotation_degrees", "scale"], "optional": ["box_size"], "recovery": "undo_or_checkpoint", "implemented": false, "runtime_enabled": false},
+    "scene.node.update": {"kind": "mutation", "target": "node", "required": ["expected_generation", "changes"], "optional": [], "recovery": "undo_or_checkpoint", "implemented": false, "runtime_enabled": false},
+    "scene.node.remove": {"kind": "mutation", "target": "node", "required": ["expected_generation"], "optional": [], "recovery": "checkpoint_then_undo", "implemented": false, "runtime_enabled": false},
+    "script_text.replace": {"kind": "mutation", "target": "script", "required": ["expected_generation", "expected_sha256", "text"], "optional": [], "recovery": "checkpoint_and_staged_parse_publish", "implemented": false, "runtime_enabled": false},
+    "scene.undo": {"kind": "mutation", "target": "root", "required": ["expected_generation", "steps"], "optional": [], "recovery": "revision_checked_history", "implemented": false, "runtime_enabled": false},
+    "scene.redo": {"kind": "mutation", "target": "root", "required": ["expected_generation", "steps"], "optional": [], "recovery": "revision_checked_history", "implemented": false, "runtime_enabled": false},
+    "scene.preview": {"kind": "preview", "target": "root", "required": ["expected_generation", "operation", "target", "payload"], "optional": [], "recovery": "none", "implemented": false, "runtime_enabled": false},
+    "scene.save": {"kind": "publication", "target": "root", "required": ["expected_generation", "expected_files"], "optional": [], "recovery": "checkpoint_and_journaled_atomic_release", "implemented": false, "runtime_enabled": false}
+  }
+}

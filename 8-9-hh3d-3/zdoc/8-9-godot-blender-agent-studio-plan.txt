@@ -31,12 +31,14 @@ SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
 GT02_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S46
 GT02_LAST_TESTED_SOURCE_CLOSURE=f28056d8ff705a60d48a54f9dee80f16554494fa976bd0bfabee84bb51fecbbf
-GT02_CHECKPOINT_COMMITS=2e24912,579b7e7,287a6c2,487e5fc,6a6dfb8,08f70cf,59c7b1e,1951d80,0de2ce0
+GT02_CHECKPOINT_COMMITS=2e24912,579b7e7,287a6c2,487e5fc,6a6dfb8,08f70cf,59c7b1e,1951d80,0de2ce0,0c3b00a
 GT02_SAFE_WRITE_STATUS=ACCEPTED_SCOPED_WINDOWS_MANAGED_FIXTURE
 GT02_BOUNDARY_EVIDENCE=S46_EXACT_CLOSURE_SERVICE_REPLACE_REGISTRY
 GT02_WORKING_SOURCE_STATUS=S46_FROZEN_ACCEPTED
-GT03_EVIDENCE_STATUS=NONE
-GT03_REVIEW_STATUS=NOT_STARTED
+GT03_EVIDENCE_STATUS=S47_TRUSTED_EDITOR_CHECKPOINT_08
+GT03_REVIEW_STATUS=IMPLEMENTATION_CROSS_REVIEW_ONLY
+GT03_LAST_TESTED_SOURCE_CLOSURE=ea1ec66db84efe3c2708c48337eb5ff56f799cd946a71eebccfee13940668593
+GT03_SANDBOX_STATUS=APPCONTAINER_STARTUP_DISK_CAP_GAP
 
 TIẾN ĐỘ HIỆN HÀNH — S47 mở GT-03, ngày 16-09-2026
 Owner mở lại3 subagent Codex Astra extra high ngày16-09; coordinator giữ
@@ -83,12 +85,34 @@ Public generic safe_open.safe_write/atomic_replace vẫn false. Khả năng ghi
 công khai chỉ fixture.active-release qua ManagedFixtureOwner đã kiểm custody;
 không arbitrary path, engine consumer hay khả năng suy từ os.name.
 
+GT-03 S47 checkpoint: reviews/20260916-gt03-s47-editor-08; 51/51 Python,
+97 edit/UndoRedo +7 reopen +28 contract checks trên Godot thật. Ba editor
+exit0/tree sạch, không warning/error; full semantic revision khớp sau reopen.
+Đã có catalog/validator, EditorPlugin main thread, stable ID/generation,
+guard sửa tay và history custody; immutable bundle codec bind cả scene/script.
+Contract lane dùng shared Request hợp lệ để preview và apply create; chưa là
+public IPC/auth. Script sidecar chưa gắn vào scene; pack/reopen hiện chứng minh
+scene, không script preservation/parse. Discovery runtime mặc định rỗng;
+không dùng SCENE_APPLIED_IN_MEMORY làm COMMITTED cho file save.
+Verifier kiểm đủ nhãn, progress/result, byte source/project/binary và actual
+host; 17 negative evidence tests nằm trong51 tests. Review chéo triển khai đã
+sửa parent identity, external/shared mesh và detached group/signal/deletion;
+đây không phải hai critic nghiệm thu GT-03. Audit ở s47-audit, coverage ở
+reviews/20260916-gt03-s47-coverage.md; các lượt lỗi01–06 được giữ nguyên.
+AppContainer startup run02 zero capabilities, private access denied, child
+exit87/Job0; HOME riêng loại4 lỗi môi trường, còn2 lỗi volume query đã truy
+nguồn pin. Chưa chứng minh hard disk cap cho mọi writable surface; token hiện
+không có SeManageVolumePrivilege để attach fixed VHD. Giữ arbitrary script
+fail-closed; không tính startup hoặc directory polling thành sandbox đạt.
+
 Việc tiếp theo:
-1. GT-03: catalog typed Godot commands, stable IDs, actual main-thread
-   EditorPlugin mutation/UndoRedo, diff/checkpoint và stale revision rejection.
-2. Staged scene + script parse/import, manifest/journal save/recovery/readback;
-   actual editor undo/redo/reopen và crash/lost-response trước hai critic GT-03.
-3. Giữ protocol/core GT-02 frozen; phạm vi Godot nằm trong addon/tests/godot.
+1. Nối authenticated host, recheck lease/fence tại effect và durable receipts;
+   phân biệt project revision của scene+script với semantic scene revision.
+2. Godot-specific staged publish/journal/recovery/readback, scene+script crash
+   và lost-response; core inert consumer không thay ACK của Godot.
+3. Chốt disk-bounded sandbox trước script parse/import/@tool; sau đó script
+   preservation/reload hash, role handoff và hai critic đúng frozen closure.
+4. Giữ protocol/core GT-02 frozen; phạm vi Godot nằm trong addon/tests/godot.
 
 Còn: GT-03 Godot, GT-04 Blender, GT-05 pipeline, GT-06 play/input/
 observe, GT-07 recovery, GT-08 CI/Linux/Android thiết bị thật, GT-09 conformance,
@@ -102,6 +126,12 @@ reviews/20260916-plan-history-s42/tools-plan-s42.txt (AUTHORITY=0), SHA-256
 Các report/test lỗi cũ vẫn giữ, không overwrite bằng PASS mới.
 
 KINH NGHIỆM ĐANG ÁP DỤNG
+- S47: typed-null native Object không đồng nghĩa TYPE_NIL; lấy inventory thực
+  thay vì đoán serializer. Undo có thể dịch cursor dù callback từ chối: giữ
+  adapter và reload, kiểm parent/owner identity cùng detached state trước effect.
+  History custody đã free detached node thì fixture không free lần hai; lỗi này
+  gây native exit0xC0000374 ở05/06, flush progress đã xác định đúng điểm cleanup.
+  Không giữ hai scene cùng UID trong imported project; packed evidence ở ngoài.
 - S46: timer nằm trong pump không đủ khi native phase bị kẹt. Cross-review
   tái hiện lease được cấp50ms sau deadline; đã giữ evidence lỗi, thêm watchdog
   độc lập và check sau frame read/trước dispatch. Close phải giữ toàn bộ owner

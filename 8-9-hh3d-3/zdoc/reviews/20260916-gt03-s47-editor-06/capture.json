@@ -1,0 +1,74 @@
+{
+  "run_id": "GT03-S47-EDITOR-06",
+  "scope": "trusted_actual_editor_in_memory_and_pack_reopen",
+  "source_closure_sha256": "e2226163a7726a5ccd27846ff9793058d129f17a03d4d0a28788a4bbbbc3d5b8",
+  "godot_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+  "lanes": [
+    {
+      "mode": "edit",
+      "host": {
+        "wrapper_pid": 26216,
+        "started_at": "2026-09-16T16:22:52.244513+00:00",
+        "argv": [
+          "Godot_v4.7.2-stable_win64.exe",
+          "--headless",
+          "--editor",
+          "--path",
+          "$SNAPSHOT/.",
+          "--log-file",
+          "$SNAPSHOT/edit-engine.log",
+          "res://scenes/fixture.tscn",
+          "--",
+          "--hh-studio-editor-probe",
+          "--probe-mode=edit"
+        ],
+        "exit_code": 3221226356,
+        "target_pid": 41236,
+        "wrapper_exit_code": 0,
+        "timed_out": false,
+        "tree_verified": true,
+        "ownership": "gated_job_kill_on_close",
+        "stdout": "edit-stdout.txt",
+        "stderr": "edit-stderr.txt",
+        "host": "edit-host.json"
+      },
+      "clean_log": true,
+      "exact_reopen_revision": true,
+      "passed": false
+    }
+  ],
+  "production_save_verified": false,
+  "hostile_script_sandbox_verified": false,
+  "unit": {
+    "host": {
+      "wrapper_pid": 31308,
+      "started_at": "2026-09-16T16:22:51.265691+00:00",
+      "argv": [
+        "python.exe",
+        "-B",
+        "-c",
+        "import unittest,json,sys; suite=unittest.defaultTestLoader.discover('tests/godot',pattern='test_*.py'); result=unittest.TextTestRunner(verbosity=2).run(suite); print('GT03_UNIT_COMPLETE '+json.dumps({'run':result.testsRun,'failures':len(result.failures),'errors':len(result.errors),'skips':len(result.skipped)}),flush=True); sys.exit(not result.wasSuccessful())"
+      ],
+      "exit_code": 0,
+      "target_pid": 37904,
+      "wrapper_exit_code": 0,
+      "timed_out": false,
+      "tree_verified": true,
+      "ownership": "gated_job_kill_on_close",
+      "stdout": "unit-stdout.txt",
+      "stderr": "unit-stderr.txt",
+      "host": "unit-host.json"
+    },
+    "counts": {
+      "run": 34,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    "passed": true
+  },
+  "temporary_removed": true,
+  "source_unchanged": true,
+  "snapshot_unchanged": true,
+  "passed": false
+}
