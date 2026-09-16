@@ -150,7 +150,7 @@ không biến primitive unsupported thành PASS. Vì vậy GT-02 vẫn CANDIDATE
 GT-03/GT-04 vẫn khóa.
 S42 probe thử delete-pending staging: hardlink bị chặn trong lúc ghi/flush và
 readback đạt, nhưng native rename trả `ERROR_SHARING_VIOLATION(32)` khi giữ
-đủ ancestor chain. Direct success với handle set rút gọn không đủ TX15; khôngđược hạ custody để lấy PASS. Report `reviews/20260916-gt02-s42-safe-write-probe/`;
+đủ ancestor chain. Direct success với handle set rút gọn không đủ TX15; không được hạ custody để lấy PASS. Report `reviews/20260916-gt02-s42-safe-write-probe/`;
 capability vẫn `safe_write=false`, `atomic_replace=false`.
 
 S40 ghi quyết định đóng gap theo hướng fail-closed tại
