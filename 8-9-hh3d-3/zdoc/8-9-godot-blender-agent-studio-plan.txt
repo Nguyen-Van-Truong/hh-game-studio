@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 17-09-2026, Asia/Saigon | Revision S56 | TRIỂN KHAI THEO GATE
+Ngày 17-09-2026, Asia/Saigon | Revision S57 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,9 +25,9 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S56
-EXECUTION_MODE=COORDINATOR_THREE_CODEX_ULTRA_OWNER_20260917
-SUBAGENTS_ENABLED=3
+PLAN_REVISION=S57
+EXECUTION_MODE=SOLO_OWNER_20260917
+SUBAGENTS_ENABLED=0
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
 GT02_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S46
 GT02_LAST_TESTED_SOURCE_CLOSURE=f28056d8ff705a60d48a54f9dee80f16554494fa976bd0bfabee84bb51fecbbf
@@ -45,12 +45,12 @@ GT03_WORKING_SOURCE_STATUS=S55_FROZEN_ACCEPTED
 GT03_PENDING_SOURCE_CLOSURE=NONE
 GT03_TEST_DRIVER_MODE=PINNED_CLEANUP_SUPPLEMENT_OVER_UNCHANGED_S55_RUNTIME
 GT04_EVIDENCE_STATUS=WRITER_CLIENT_AND_INTERNAL_PUBLICATION_COMPONENT_CANDIDATES_GAPS_OPEN
-GT04_LAST_TESTED_SOURCE_CLOSURE=71332451f3914f42f3a35dc8702a1c0eb3cb3cb6d99adfa4b8ca317373dd8162
-GT04_WORKING_SOURCE_STATUS=S56_WRITER_HTTP_NATIVE_TESTED_COMPONENT_CANDIDATE
+GT04_LAST_TESTED_SOURCE_CLOSURE=c7eb8fdf0fa9d564259657cbe2e3eaec7205eee36f4c5db22b500b2923e384d4
+GT04_WORKING_SOURCE_STATUS=S57_PREVIEW_EXPORT_HTTP_NATIVE_TESTED_COMPONENT_CANDIDATE
 
-TIẾN ĐỘ HIỆN HÀNH — S56, ngày 17-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S57, ngày 17-09-2026
 GT-01, GT-02 và GT-03 ACCEPTED; đang hoàn thiện GT-04.
-GT-05 chưa mở. Root điều phối3 worker Codex Astra ultra, một writer/file;
+GT-05 chưa mở. Owner chuyển solo; không còn worker chạy. Giữ một writer/file;
 chỉ một engine/Linux/native-journal integration lane chạy tại một thời điểm.
 Checkpoint source323882b đã kiểm2706file byte index/HEAD; hai criticGT03
 PASS/TICK=yes cùng effective closure. GT04 vẫn chưa nghiệm thu.
@@ -81,7 +81,19 @@ Godot GT-03 đã khép tại S55:
   (AUTHORITY=0), SHA256 305d9fa5314db5a7dc73689e465f699caf4146434edaad646c68be430ae53940.
 
 Blender GT-04:
-- S56 writer đã có native HTTP evidence trên closure713324... ở markers trên:
+- S57-writer02 hoàn tất trên closure c7eb8f... ở markers trên:137 sourcefiles,
+  540/540 unit,45 client checks/32 HTTP calls và10 native checks đạt. Có
+  native preview cho5 edit operations, actual diff, repeat preview không reserve
+  ID, public export với8 common INTENT/terminal pairs; đúng15 native data requests.
+  Protected .blend/GLB/manifest/selector và common/private receipts khớp;
+  actual GUI/background/client/host/wrapper exits0, owned Jobs0. File-only
+  s57-audit đạt3332 assertions, không mở native handle hay chạy engine.
+  Save/checkpoint chưa nối, public_ack=false; GT04 chưa được nghiệm thu.
+  Solo theo owner mới nhất, không còn worker. Checkpoint S56 9b7eb60.
+  S57-writer01 giữ INCOMPLETE: log540/540 nhưng gián đoạn trước wrapper/native
+  proof. Fresh02 bù proof thiếu; không đổi lượt01 thành PASS. Hai critic độc
+  lập còn phải có trên closure cuối; solo self-review không thay chữ ký.
+- S56 writer đã có native HTTP evidence riêng trên closure713324... (S56):
   reviews/20260917-gt04-s56-deadline-02 đạt440/440 toàn bộ unit+19 native;
   reviews/20260917-gt04-s56-writer-01 cùng source,174 focused tests cũng đạt.
   Client HTTP process riêng tạo/transform/material/Undo/Redo/read, exact retry,
@@ -131,8 +143,7 @@ Blender GT-04:
   Chưa nghiệm thuGT04. Failure01 là đọc exclusive writer
   guard sai thời điểm trong harness; runtime không đổi, giữ evidenceFAIL.
 
-Tiếp theo: GT04 nối public writer/typed mutations với ledger, native deadline
-và protected publication; chốt final source/evidence rồi hai critic. Sau đó
+Tiếp theo: GT04 nối scene.save/checkpoint.save vào protected publication; chốt final source/evidence rồi hai critic. Sau đó
 GT05 pipeline, GT06 Play/input/observe, GT07 concurrency/recovery, GT08 CI/
 Android thiết bị thật, GT09 conformance, GT10 package/upgrade/rollback/handoff.
 HH World là plan game riêng sauGT10. Chưa có cơ sở hẹn ngày xong toànplan;
@@ -146,6 +157,10 @@ tools-plan-before-s55.txt (AUTHORITY=0), SHA256 b07c86c36c565c3a95404a6084cd6df0
 Các archive và mọi failure/verdict cũ giữ nguyên; không hạDoD đểtick.
 
 KINH NGHIỆM ĐANG ÁP DỤNG
+- S57: preview là quan sát có kiểm quyền, không INTENT hoặc reserve apply ID.
+  Native preview/apply dùng chung preconditions. Redaction kiểm lại exact bytes
+  khi gửi preview, không chỉ tại owner. Stop phải tới đúng publisher._job,
+  không chỉ GUI host._export_job. Giữ deadline gốc tới mọi publication phase.
 - S56: lưu kết quả effect và cho phép giao response là hai bước; revoke trong
   lúc native chạy không xóa effect nhưng phải chặn giao observation sau revoke.
   Nếu terminal đã ghi mà mất reply, giữ receipt gốc/UNKNOWN và lookup; không

@@ -1,0 +1,158 @@
+{
+  "schema": "HH-BLENDER-EXPORT-RESULT-1",
+  "profile": {
+    "schema": "HH-BLENDER-MATERIAL-EXPORT-PROFILE-1",
+    "objects": 1,
+    "vertices": 8,
+    "triangles": 12,
+    "materials": 1,
+    "images": 0,
+    "bones": 0,
+    "clips": 0,
+    "libraries": 0,
+    "drivers": 0,
+    "exporter_version": [
+      5,
+      2,
+      40
+    ],
+    "exporter_files_sha256": "22a180855eda3e7f1a075bf28d7c256e4498be16c96be4e7412a438ce96ec481",
+    "public_ack": false
+  },
+  "input_sha256": "bd703daadbd4069088eee59bf75534c9e63a8f6182b85e1e2175ed96a055c202",
+  "scene_revision": "sha256:9c2205007254681e23f3bcaf694532900c964e29ff3d960f79b024d7b621b569",
+  "snapshot": {
+    "schema": "HH-BLENDER-FIXTURE-SCENE-1",
+    "objects": [
+      {
+        "object_id": "probe_box",
+        "name": "GT04_probe_box",
+        "mesh_name": "GT04_mesh_probe_box",
+        "location": [
+          2.0,
+          -3.0,
+          4.0
+        ],
+        "rotation": [
+          0.25,
+          0.0,
+          -0.5
+        ],
+        "scale": [
+          1.0,
+          2.0,
+          0.5
+        ],
+        "vertices": [
+          [
+            -0.5,
+            -1.0,
+            -1.5
+          ],
+          [
+            0.5,
+            -1.0,
+            -1.5
+          ],
+          [
+            0.5,
+            1.0,
+            -1.5
+          ],
+          [
+            -0.5,
+            1.0,
+            -1.5
+          ],
+          [
+            -0.5,
+            -1.0,
+            1.5
+          ],
+          [
+            0.5,
+            -1.0,
+            1.5
+          ],
+          [
+            0.5,
+            1.0,
+            1.5
+          ],
+          [
+            -0.5,
+            1.0,
+            1.5
+          ]
+        ],
+        "faces": [
+          [
+            0,
+            3,
+            2,
+            1
+          ],
+          [
+            4,
+            5,
+            6,
+            7
+          ],
+          [
+            0,
+            1,
+            5,
+            4
+          ],
+          [
+            1,
+            2,
+            6,
+            5
+          ],
+          [
+            2,
+            3,
+            7,
+            6
+          ],
+          [
+            3,
+            0,
+            4,
+            7
+          ]
+        ],
+        "material": {
+          "material_id": "probe_copper",
+          "name": "HH_Material_probe_copper",
+          "base_color": [
+            0.25,
+            0.5,
+            0.75,
+            1.0
+          ],
+          "metallic": 0.5,
+          "roughness": 0.25,
+          "double_sided": true,
+          "alpha_mode": "OPAQUE"
+        }
+      }
+    ],
+    "units": {
+      "system": "METRIC",
+      "scale_length": 1.0
+    }
+  },
+  "context": {
+    "mode": "OBJECT",
+    "active_id": null,
+    "selected_ids": []
+  },
+  "output_sha256": "a70d4ca6d5ad1780ee4df1a9f4dd30a198987b700d253731b73e488cf85f4818",
+  "output_size_bytes": 1752,
+  "public_ack": false,
+  "native_finished": true,
+  "context_unchanged": true,
+  "admission_probe": null
+}
