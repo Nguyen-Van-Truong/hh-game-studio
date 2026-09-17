@@ -1,0 +1,102 @@
+diff --git a/8-9-hh3d-3/studio/tests/replay/benchmark_assembly.py b/8-9-hh3d-3/studio/tests/replay/benchmark_assembly.py
+--- a/8-9-hh3d-3/studio/tests/replay/benchmark_assembly.py
++++ b/8-9-hh3d-3/studio/tests/replay/benchmark_assembly.py
+@@ -11,8 +11,10 @@
+ times. Reported millisecond timings are checked against their own clock with
+ at most one microsecond of host timestamp truncation.
+ 
+-assemble_run(root, manifest) verifies 35 batches and frozen source copies.
+-assemble_dataset(provenance, runs) applies the unchanged profile v2 validator.
++assemble_run(root, manifest) verifies 35 batches and frozen source copies,
++then returns a BoundRun with exact source/toolchain/profile provenance.
++assemble_dataset(provenance, runs) requires matching BoundRun envelopes,
++then applies the unchanged profile v2 validator to their existing run values.
+ Hashes and recorded process evidence do not independently attest execution;
+ the coordinator must bind manifests to its captured child/Job lifecycle.
+ No engines, writes, repairs, retries, or acceptance decisions occur here.
+@@ -114,6 +116,29 @@
+         _need(type(self.raw) is bytes and 0 < len(self.raw) <= MAX_RAW_BYTES
+               and _sha(self.raw) == self.sha256, 'ARTIFACT_BINDING')
+         return _parse(self.raw)
++
++
++@dataclass(frozen=True)
++class BoundRun:
++    """Immutable run bytes bound together with their verified provenance.
++
++    value contains source_closure_sha256, toolchain_sha256, profile_sha256,
++    and run. Only run is serialized into the strict profile dataset. Like
++    BoundArtifact, this is a checked data container, not execution attestation.
++    """
++    sha256: str
++    raw: bytes
++
++    @property
++    def value(self):
++        _need(type(self.raw) is bytes and 0 < len(self.raw) <= profile.MAX_BYTES
++              and _sha(self.raw) == self.sha256, 'RUN_BINDING')
++        value = _parse(self.raw)
++        _shape(value, 'source_closure_sha256 toolchain_sha256 profile_sha256 run')
++        for name in ('source_closure_sha256', 'toolchain_sha256', 'profile_sha256'):
++            _digest(value[name])
++        _need(type(value['run']) is dict, 'RUN_BINDING')
++        return value
+ 
+ 
+ def read_artifact(root: Path, reference: dict) -> BoundArtifact:
+@@ -522,7 +547,7 @@
+ 
+ 
+ def assemble_run(root, manifest):
+-    """Assemble a parent-finalized run; its host exit must already be captured.
++    """Return a BoundRun; the parent must already have captured the host exit.
+ 
+ Manifest fields: schema_id/schema_version ('hh-studio.benchmark-run-assembly',
+ '1.0.0'), run_id,index,profile_sha256,source_closure_sha256,processes,refs,
+@@ -647,12 +672,29 @@
+           and cleanup['owned_tree_zero'] is True, 'CLEANUP_BINDING')
+     for key in ('host_exit_code', 'editor_exit_code', 'held_handles'):
+         _integer(cleanup[key], 0, 0)
+-    return {'run_id': manifest['run_id'], 'index': manifest['index'], 'processes': manifest['processes'],
+-            'baseline': {'after_batch_index': 4, 'memory': samples[4]['memory']}, 'samples': samples,
+-            'cleanup': {key: cleanup[key] for key in ('host_exit_code', 'editor_exit_code', 'owned_tree_zero', 'held_handles')}}
++    run = {'run_id': manifest['run_id'], 'index': manifest['index'], 'processes': manifest['processes'],
++           'baseline': {'after_batch_index': 4, 'memory': samples[4]['memory']}, 'samples': samples,
++           'cleanup': {key: cleanup[key] for key in ('host_exit_code', 'editor_exit_code', 'owned_tree_zero', 'held_handles')}}
++    raw = _encode({'source_closure_sha256': closure, 'toolchain_sha256': artifacts['toolchain'].sha256,
++                   'profile_sha256': profile.PROFILE_SHA256, 'run': run})
++    return BoundRun(sha256=_sha(raw), raw=raw)
+ 
+ 
+ def assemble_dataset(provenance, runs):
+-    """Require all ten independently captured runs; never promote diagnostics."""
++    """Require ten bound runs with one source/toolchain/profile; never promote diagnostics."""
++    _shape(provenance, 'source_closure_sha256 toolchain_sha256 workstation_profile_sha256 driver_sha256 capture_manifest_sha256',
++           '$.provenance')
++    for digest in provenance.values():
++        _digest(digest)
++    _need(type(runs) is list, 'BOUND_RUNS_REQUIRED')
++    expected = {'source_closure_sha256': provenance['source_closure_sha256'],
++                'toolchain_sha256': provenance['toolchain_sha256'], 'profile_sha256': profile.PROFILE_SHA256}
++    values = []
++    for index, bound in enumerate(runs):
++        path = f'$.runs[{index}]'
++        _need(type(bound) is BoundRun, 'BOUND_RUN_REQUIRED', path)
++        value = bound.value
++        _need(all(value[name] == digest for name, digest in expected.items()), 'RUN_PROVENANCE_MISMATCH', path)
++        values.append(value['run'])
+     return profile.validate_dataset({'schema_id': 'hh-studio.tools-ux-benchmark', 'schema_version': '1.1.0',
+-        'profile_sha256': profile.PROFILE_SHA256, 'evidence_kind': 'native', 'provenance': provenance, 'runs': runs})
++        'profile_sha256': profile.PROFILE_SHA256, 'evidence_kind': 'native', 'provenance': provenance, 'runs': values})
+diff --git a/8-9-hh3d-3/studio/tests/replay/run_benchmark_campaign.py b/8-9-hh3d-3/studio/tests/replay/run_benchmark_campaign.py
+--- a/8-9-hh3d-3/studio/tests/replay/run_benchmark_campaign.py
++++ b/8-9-hh3d-3/studio/tests/replay/run_benchmark_campaign.py
+@@ -390,7 +390,7 @@
+                 manifest[name] = [row[key] for row in child['batches']]
+             assembled = assemble_run(output, manifest)
+             write(output / 'assembly-manifest.json', manifest)
+-            write(output / 'assembled-run.json', assembled)
++            write(output / 'assembled-run.json', assembled.value['run'])
+             artifacts = {p.relative_to(output).as_posix(): sha(artifact_bytes(p))
+                          for p in sorted(output.rglob('*')) if p.is_file()
+                          and '.godot' not in p.relative_to(output).parts}

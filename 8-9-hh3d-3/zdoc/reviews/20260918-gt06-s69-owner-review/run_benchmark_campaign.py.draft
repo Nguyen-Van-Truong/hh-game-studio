@@ -172,64 +172,6 @@ def verify_sources(files):
     require(source_files() == files, 'CAMPAIGN_SOURCE_CHANGED')
 
 
-def stop_requested(output, *, run_id, source_closure_sha256, campaign_sha256):
-    """Local fixed-slot control; a request can only stop this exact owned run.
-
-    Publish with an exclusive temp file and no-overwrite rename. Invalid or
-    stale control fails closed through the same owner cleanup. No new process,
-    resume, PID-based signal, or successful measurement is inferred from it.
-    """
-    path = output / 'stop-request.json'
-    if not os.path.lexists(path):
-        return False
-
-    def unique_pairs(rows):
-        value = {}
-        for key, item in rows:
-            require(key not in value, 'CAMPAIGN_STOP_DUPLICATE_KEY')
-            value[key] = item
-        return value
-
-    value = json.loads(read_regular(path, 4096), object_pairs_hook=unique_pairs)
-    expected = {'schema': 'HH-GT06-CAMPAIGN-STOP-1', 'run_id': run_id,
-        'source_closure_sha256': source_closure_sha256,
-        'campaign_sha256': campaign_sha256, 'reason': 'OPERATOR_STOP'}
-    require(type(value) is dict and value == expected, 'CAMPAIGN_STOP_BINDING')
-    return True
-
-
-def require_campaign_running(root, *, active=None):
-    """A Stop in any fixed attempt slot stays latched across run boundaries.
-
-    The active run validates its control payload separately. Presence in an
-    older slot is sufficient to fail closed, including a broken symlink.
-    Check only the bounded 10 x MAX_ATTEMPTS slots, not arbitrary directories.
-    """
-    for index in range(10):
-        for attempt in range(1, MAX_ATTEMPTS + 1):
-            output = root / f'run-{index:02d}-attempt-{attempt:02d}'
-            if output != active:
-                require(not os.path.lexists(output / 'stop-request.json'), 'CAMPAIGN_STOP_LATCHED')
-
-
-def wait_owned_run(owner, output, *, run_id, source_closure_sha256, campaign_sha256,
-                   check_campaign_stop=None):
-    while True:
-        if check_campaign_stop is not None:
-            check_campaign_stop()
-        stop = stop_requested(output, run_id=run_id,
-            source_closure_sha256=source_closure_sha256, campaign_sha256=campaign_sha256)
-        if owner.tick(stop=stop) is not None:
-            # Stop can arrive while tick observes the terminal process exit.
-            require(not stop_requested(output, run_id=run_id,
-                source_closure_sha256=source_closure_sha256, campaign_sha256=campaign_sha256),
-                'BENCHMARK_STOPPED')
-            if check_campaign_stop is not None:
-                check_campaign_stop()
-            return
-        time.sleep(.05)
-
-
 def screen_sample(sample, baseline):
     """Stop an already-failing prefix; only all ten complete runs can pass."""
     for role in ('host', 'editor'):
@@ -377,7 +319,6 @@ def run_campaign(campaign_id, root):
             identities.add(identity)
 
     for index in range(10):
-        require_campaign_running(root)
         finished = []
         attempts = []
         for attempt in range(1, MAX_ATTEMPTS + 1):
@@ -392,7 +333,6 @@ def run_campaign(campaign_id, root):
                                    index=index, attempt=attempt, campaign_sha256=campaign_sha)
                 finished.append((output, captured))
         require(len(finished) <= 1, 'CAMPAIGN_DUPLICATE_SUCCESS')
-        require_campaign_running(root)
         if finished:
             output, captured = finished[0]
             remember(captured)
@@ -402,7 +342,6 @@ def run_campaign(campaign_id, root):
         # A failed process pair is never silently reused. Prior attempts must
         # have a parent-captured closed/zero record before starting another.
         for prior in attempts:
-            require(not (prior / 'stop-request.json').exists(), 'CAMPAIGN_STOP_LATCHED')
             failure = json.loads(read_regular(prior / 'parent-failure.json'))
             require(failure.get('owned_tree_zero') is True and failure.get('owner_closed') is True,
                     'CAMPAIGN_PRIOR_OWNER_HELD')
@@ -424,16 +363,13 @@ def run_campaign(campaign_id, root):
         primary = None
         try:
             verify_sources(before)
-            require_campaign_running(root)
             owner = BenchmarkProcess([sys.executable, '-B', str(Path(__file__).resolve()), '--campaign-id', campaign_id,
                 '--child-index', str(index), '--attempt', str(attempt)], cwd=output, output=output / 'host-owner',
                 source_root=STUDIO, source_files=before,
                 binary_sha256=sha(read_regular(Path(sys.executable), 256 * 1024**2)))
-            wait_owned_run(owner, output, run_id=run_id,
-                source_closure_sha256=digest, campaign_sha256=campaign_sha,
-                check_campaign_stop=lambda: require_campaign_running(root, active=output))
+            while owner.tick() is None:
+                time.sleep(.05)
             host = owner.finish()
-            require_campaign_running(root)
             child = json.loads(read_regular(output / 'child-result.json'))
             require(host['actual_process_exit']['pid'] == child['processes']['host']['pid'], 'CAMPAIGN_HOST_IDENTITY')
             write(output / 'cleanup.json', {'schema_id': 'hh-studio.benchmark-cleanup', 'schema_version': '1.0.0',
@@ -453,9 +389,8 @@ def run_campaign(campaign_id, root):
                 'joint_observations': 'joint', 'ready_artifacts': 'ready', 'start_artifacts': 'start', 'ack_artifacts': 'ack'}.items():
                 manifest[name] = [row[key] for row in child['batches']]
             assembled = assemble_run(output, manifest)
-            require_campaign_running(root)
             write(output / 'assembly-manifest.json', manifest)
-            write(output / 'assembled-run.json', assembled.value['run'])
+            write(output / 'assembled-run.json', assembled)
             artifacts = {p.relative_to(output).as_posix(): sha(artifact_bytes(p))
                          for p in sorted(output.rglob('*')) if p.is_file()
                          and '.godot' not in p.relative_to(output).parts}
@@ -465,9 +400,7 @@ def run_campaign(campaign_id, root):
                 'artifacts': artifacts, 'formal_acceptance': False, 'measurement_acceptance': 'RUN_ASSEMBLED_DATASET_PENDING'}
             verify_run_capture(output, captured, digest, campaign_id=campaign_id,
                                index=index, attempt=attempt, campaign_sha256=campaign_sha)
-            require_campaign_running(root)
             write(output / 'run-capture.json', captured)
-            require_campaign_running(root)
             remember(captured)
             completed.append({'index': index, 'run_id': run_id, 'capture': reference(root, output / 'run-capture.json')})
             print('HH_GT06_CAMPAIGN_RUN_COMPLETE ' + json.dumps(completed[-1]), flush=True)
@@ -495,7 +428,6 @@ def run_campaign(campaign_id, root):
             if owner is not None and primary is None:
                 owner.close()
     verify_sources(before)
-    require_campaign_running(root)
     result = {'schema_id': 'hh-studio.benchmark-campaign-capture', 'schema_version': '1.0.0',
         'campaign_id': campaign_id, 'completed': True, 'formal_acceptance': False,
         'source_closure_sha256': digest, 'profile_sha256': profile.PROFILE_SHA256,
@@ -508,7 +440,6 @@ def run_campaign(campaign_id, root):
         write(final, result)
     runs = []
     for row in completed:
-        require_campaign_running(root)
         output = root / row['capture']['file'].rsplit('/', 1)[0]
         runs.append(assemble_run(output, json.loads(read_regular(output / 'assembly-manifest.json'))))
     provenance = {'source_closure_sha256': digest, 'toolchain_sha256': sha(lock_raw),
@@ -517,14 +448,12 @@ def run_campaign(campaign_id, root):
     dataset = assemble_dataset(provenance, runs)
     summary = profile.summarize_dataset(dataset)
     for name, value in (('dataset.json', dataset), ('summary.json', summary)):
-        require_campaign_running(root)
         target = root / name
         if target.exists():
             require(json.loads(read_regular(target, profile.MAX_BYTES)) == value, 'CAMPAIGN_FINAL_CHANGED')
         else:
             write(target, value)
     require(summary['status'] == 'PASS', 'CAMPAIGN_MEASUREMENTS_NOT_PASS')
-    require_campaign_running(root)
     return 0
 
 

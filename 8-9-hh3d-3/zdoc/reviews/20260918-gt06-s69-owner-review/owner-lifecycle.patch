@@ -1,0 +1,503 @@
+--- a/8-9-hh3d-3/studio/tests/replay/benchmark_job.py
++++ b/8-9-hh3d-3/studio/tests/replay/benchmark_job.py
+@@ -89,6 +89,13 @@
+             and observed.job_memory == limits.job_memory, 'BENCHMARK_JOB_LIMIT_MISMATCH')
+     return {'limit_flags': int(observed.basic.flags), 'active_process_limit': int(observed.basic.active_limit),
+             'job_user_time_100ns': int(observed.basic.job_time), 'job_memory_bytes': int(observed.job_memory)}
++
++
++def close_process_handle_native(handle):
++    """Return the checked Win32 BOOL; callers own uncertainty and retry state."""
++    kernel = ctypes.WinDLL('kernel32', use_last_error=True)
++    kernel.CloseHandle.argtypes, kernel.CloseHandle.restype = [w.HANDLE], w.BOOL
++    return bool(kernel.CloseHandle(handle))
+ 
+ 
+ def check_path(path):
+@@ -148,6 +155,11 @@
+             and job.get('create_uncertain') is False and job.get('close_uncertain') is False
+             and job.get('failed_operations') == [] and job.get('native_error') is None,
+             'BENCHMARK_CAPTURE_JOB_STATE')
++    wrapper_handle = capture.get('wrapper_process_handle')
++    expected_handle = {'required': True, 'closed': True, 'close_uncertain': False, 'handle_retained': False}
++    require(type(wrapper_handle) is dict and set(wrapper_handle) == set(expected_handle)
++            and all(type(wrapper_handle[key]) is bool and wrapper_handle[key] is value
++                    for key, value in expected_handle.items()), 'BENCHMARK_CAPTURE_PROCESS_HANDLE')
+     elapsed = capture.get('elapsed_seconds')
+     require(type(elapsed) in (float, int) and math.isfinite(elapsed) and elapsed > 0,
+             'BENCHMARK_CAPTURE_ELAPSED')
+@@ -197,6 +209,9 @@
+         self.cwd, self.output, self.source_root = Path(cwd).absolute(), Path(output).absolute(), Path(source_root).absolute()
+         self.source_files, self.argv = dict(source_files), list(argv)
+         self.process = self.job = None
++        self._process_handle = None
++        self._process_handle_closed = False
++        self._process_handle_close_uncertain = False
+         self.threads, self.errors = [], []
+         self.overflow = threading.Event()
+         self.closed = self.released = False
+@@ -233,7 +248,15 @@
+             self.released = True
+         except BaseException as error:
+             self._remember_failure(error)
+-            self.close()
++            # A failed constructor never reaches the caller's assignment. Keep
++            # this owner discoverable even when cleanup has already succeeded.
++            # Preserve the initiating exception and its existing explicit cause.
++            error.cleanup_owner = self
++            try:
++                self.close()
++            except BaseException as cleanup_error:
++                error.cleanup_error = cleanup_error
++                raise error
+             raise
+ 
+     def check_sources(self):
+@@ -339,6 +362,7 @@
+                   'actual_process_start': launched, 'actual_process_exit': actual, 'wrapper_exit_code': 0,
+                   'active_at_wrapper_exit': active_at_exit, 'active_before_cleanup': active,
+                   'natural_tree_exit': True, 'job': self.job.snapshot(), 'artifacts': hashes,
++                  'wrapper_process_handle': self.process_handle_snapshot(),
+                   'source_unchanged': True, 'formal_acceptance': False, 'elapsed_seconds': time.monotonic() - self.started,
+                   'argv': self.argv, 'cwd': str(self.cwd), 'source_root': str(self.source_root),
+                   'source_files': self.source_files, 'binary_sha256': self.binary_sha256,
+@@ -346,6 +370,41 @@
+                   'invocation_sha256': hashlib.sha256((self.output / 'invocation.json').read_bytes()).hexdigest()}
+         write(self.output / 'capture.json', result)
+         return result
++
++    def process_handle_snapshot(self):
++        required = self.process is not None
++        closed = not required or getattr(self, '_process_handle_closed', False)
++        return {'required': required, 'closed': closed,
++                'close_uncertain': getattr(self, '_process_handle_close_uncertain', False),
++                'handle_retained': required and not closed}
++
++    def _close_process_handle(self):
++        if self.process is None:
++            return
++        handle = self.process._handle
++        retained = getattr(self, '_process_handle', None)
++        if retained is None:
++            self._process_handle = retained = handle
++        require(handle is retained, 'BENCHMARK_PROCESS_HANDLE_CHANGED')
++        if getattr(self, '_process_handle_closed', False):
++            return
++        require(not getattr(self, '_process_handle_close_uncertain', False),
++                'BENCHMARK_PROCESS_HANDLE_CLOSE_UNCERTAIN')
++        require(not handle.closed and type(self.process.returncode) is int,
++                'BENCHMARK_PROCESS_HANDLE_STATE')
++        # CPython 3.11 Handle.Close sets closed=True BEFORE native CloseHandle;
++        # it cannot distinguish a checked failure from successful release.
++        # Suppress its destructor while the native result is uncertain. Keep
++        # the exact Handle object, and re-arm it only after a checked FALSE.
++        # No cancellation path may retry/auto-close a potentially reused value.
++        self._process_handle_close_uncertain = True
++        handle.closed = True
++        if not close_process_handle_native(int(handle)):
++            handle.closed = False
++            self._process_handle_close_uncertain = False
++            raise BenchmarkJobError('BENCHMARK_PROCESS_HANDLE_CLOSE')
++        self._process_handle_closed = True
++        self._process_handle_close_uncertain = False
+ 
+     def close(self):
+         # Ordinary instances initialize this before launch. The fallback also
+@@ -364,6 +423,8 @@
+             self._remember_failure(BenchmarkJobError('BENCHMARK_CLOSED_BEFORE_FINISH'))
+         self._report_number += 1
+         try:
++            require(not getattr(self, '_process_handle_close_uncertain', False),
++                    'BENCHMARK_PROCESS_HANDLE_CLOSE_UNCERTAIN')
+             if self.job is None and self.process is not None:
+                 self.job = cli_job.owner_for_process(self.process)
+             if self.job is not None:
+@@ -385,8 +446,10 @@
+                 for pipe in (self.process.stdin, self.process.stdout, self.process.stderr):
+                     if pipe is not None and not pipe.closed:
+                         pipe.close()
++            self._close_process_handle()
+             write(self.output / f'cleanup-{self._report_number:03d}.json', {'closed': True,
+                 'job': self.job.snapshot() if self.job else None, 'wrapper_exit_code': self.process.returncode if self.process else None,
++                'wrapper_process_handle': self.process_handle_snapshot(),
+                 'failure_code': getattr(self, '_failure_code', None), 'completed': False})
+             self.closed = True
+             HELD_OWNERS.remove(self)
+--- a/8-9-hh3d-3/studio/tests/replay/run_benchmark_campaign.py
++++ b/8-9-hh3d-3/studio/tests/replay/run_benchmark_campaign.py
+@@ -595,6 +595,15 @@
+                 == {k: v for k, v in snapshot.items() if k != MUTABLE_SCENE}, 'CAMPAIGN_PROJECT_DRIFT')
+         probe.close()
+         producer.close()
++        # Derive the retained owner/probe handle count after checked cleanup.
++        # The parent independently verifies its wrapper handle after host exit.
++        held_handles = sum((
++            int(native_capture['job']['handle_retained']),
++            int(native_capture['wrapper_process_handle']['handle_retained']),
++            int(probe.handle is not None),
++            int(producer.observer.probe.handle is not None),
++        ))
++        require(owner.closed and producer.closed and held_handles == 0, 'CAMPAIGN_CLEANUP_HELD')
+         verify_sources(before)
+         write(root / 'child-result.json', {'completed': True, 'formal_acceptance': False,
+             'run_id': run_id, 'index': context['index'], 'sequence': SEQUENCE, 'processes': processes,
+@@ -603,7 +612,7 @@
+             'editor_capture': reference(root, root / 'editor-host/capture.json'),
+             'import_capture': reference(root, root / 'import-host/capture.json'),
+             'source_unchanged': True, 'cleanup': {'editor_exit_code': native_capture['actual_process_exit']['exit_code'],
+-                'editor_owned_tree_zero': native_capture['job']['zero_observed'], 'held_handles': 0},
++                'editor_owned_tree_zero': native_capture['job']['zero_observed'], 'held_handles': held_handles},
+             'host_exit_not_yet_observed': True})
+     except BaseException as error:
+         retained = getattr(error, 'cleanup_owner', None)
+--- a/8-9-hh3d-3/studio/tests/replay/test_benchmark_job.py
++++ b/8-9-hh3d-3/studio/tests/replay/test_benchmark_job.py
+@@ -14,6 +14,12 @@
+ STUDIO = Path(__file__).resolve().parents[2]
+ sys.path.insert(0, str(STUDIO.parent))
+ from studio.tests.replay import benchmark_job as owner
++
++
++class InertProcessHandle(int):
++    # Never wrap a real OS handle in lifecycle doubles. Native close must be
++    # intercepted by any test that exercises cleanup of these process doubles.
++    closed = False
+ 
+ 
+ class BenchmarkJobLifecycleTests(unittest.TestCase):
+@@ -52,14 +58,17 @@
+ 
+     def test_stop_observation_is_latched_even_when_later_poll_sees_exit_zero(self):
+         value = self.inert_owner()
+-        value.process = SimpleNamespace(poll=lambda: 0)
++        value.process = SimpleNamespace(poll=lambda: 0, returncode=0,
++            _handle=InertProcessHandle(900001), wait=Mock(return_value=0),
++            stdin=None, stdout=None, stderr=None)
+         with self.assertRaises(owner.BenchmarkJobError):
+             value.tick(stop=True)
+         with self.assertRaises(owner.BenchmarkJobError):
+             value.tick(stop=False)
+ 
+     def test_empty_source_closure_rejected_before_helper_creation(self):
+-        process = SimpleNamespace(stdin=Mock(), stdout=Mock(), stderr=Mock())
++        process = SimpleNamespace(stdin=Mock(), stdout=Mock(), stderr=Mock(),
++            _handle=InertProcessHandle(900002), returncode=0, wait=Mock(return_value=0))
+         fake_job = SimpleNamespace()
+         # Every external effect is intercepted. The only successful behavior is
+         # rejection before Popen; current code wrongly releases the mocked gate.
+--- /dev/null
++++ b/8-9-hh3d-3/studio/tests/replay/test_benchmark_job_owner.py
+@@ -0,0 +1,313 @@
++"""DRAFT: inert owner regressions; no subprocess, engine, or native handle call.
++
++Integrate as studio/tests/replay/test_benchmark_job_owner.py with the owner
++patch before running. These synthetic artifacts are never acceptance evidence.
++"""
++from __future__ import annotations
++
++from contextlib import ExitStack
++from copy import deepcopy
++import hashlib
++import json
++from pathlib import Path
++import sys
++import tempfile
++import threading
++from types import SimpleNamespace
++import unittest
++from unittest.mock import Mock, patch
++
++STUDIO = Path(__file__).resolve().parents[2]
++sys.path.insert(0, str(STUDIO.parent))
++from studio.tests.replay import benchmark_job as owner
++
++
++class InertHandle(int):
++    """Mirror CPython's close flag, without ever touching a real OS handle."""
++    def __new__(cls, value=987654321):
++        instance = int.__new__(cls, value)
++        instance.closed = False
++        instance.automatic_close_calls = []
++        return instance
++
++    def Close(self):
++        if not self.closed:
++            self.closed = True
++            self.automatic_close_calls.append(int(self))
++
++
++def inert_process():
++    return SimpleNamespace(_handle=InertHandle(), returncode=0,
++        stdin=None, stdout=None, stderr=None,
++        poll=Mock(return_value=0), wait=Mock(return_value=0))
++
++
++def inert_job():
++    job = SimpleNamespace(closed=True, zero_observed=True, tainted=False)
++    job.close = Mock()
++    job.snapshot = lambda: {'closed': True, 'zero_observed': True,
++        'handle_retained': False, 'tainted': False}
++    return job
++
++
++class OwnerCloseTests(unittest.TestCase):
++    def setUp(self):
++        registry = patch.object(owner, 'HELD_OWNERS', [])
++        registry.start()
++        self.addCleanup(registry.stop)
++        directory = tempfile.TemporaryDirectory(prefix='gt06-inert-owner-')
++        self.addCleanup(directory.cleanup)
++        self.output = Path(directory.name)
++
++    def make_owner(self):
++        value = owner.BenchmarkProcess.__new__(owner.BenchmarkProcess)
++        value.process, value.job = inert_process(), inert_job()
++        value.closed = value.released = False
++        value._finishing = True
++        value._failure_code = None
++        value._report_number = 0
++        value._cleanup_lock = threading.RLock()
++        value._process_handle = None
++        value._process_handle_closed = False
++        value._process_handle_close_uncertain = False
++        value.output = self.output
++        value.threads, value.errors = [], []
++        owner.HELD_OWNERS.append(value)
++        return value
++
++    def test_success_closes_native_handle_once_and_proves_it_in_cleanup(self):
++        value = self.make_owner()
++        handle = value.process._handle
++        with patch.object(owner, 'close_process_handle_native', return_value=True) as native:
++            self.assertTrue(value.close())
++            self.assertTrue(value.close())
++        native.assert_called_once_with(int(handle))
++        self.assertIs(value._process_handle, handle)
++        self.assertTrue(handle.closed)
++        self.assertEqual(value.process_handle_snapshot(), {
++            'required': True, 'closed': True,
++            'close_uncertain': False, 'handle_retained': False})
++        proof = json.loads((self.output / 'cleanup-001.json').read_bytes())
++        self.assertEqual(proof['wrapper_process_handle'], value.process_handle_snapshot())
++        self.assertFalse(proof['completed'])
++        self.assertNotIn(value, owner.HELD_OWNERS)
++        # Simulate Handle.__del__; it must not issue a second close.
++        handle.Close()
++        self.assertEqual(handle.automatic_close_calls, [])
++
++    def test_checked_false_retains_exact_handle_until_successful_retry(self):
++        value = self.make_owner()
++        handle = value.process._handle
++        with patch.object(owner, 'close_process_handle_native', side_effect=[False, True]) as native:
++            with self.assertRaisesRegex(owner.BenchmarkJobError, 'BENCHMARK_CLEANUP_HELD') as caught:
++                value.close()
++            self.assertIs(caught.exception.cleanup_owner, value)
++            self.assertEqual(caught.exception.__cause__.code, 'BENCHMARK_PROCESS_HANDLE_CLOSE')
++            self.assertIs(value._process_handle, handle)
++            self.assertIs(value.process._handle, handle)
++            self.assertFalse(handle.closed)
++            self.assertFalse(value.closed)
++            self.assertEqual(value.process_handle_snapshot(), {
++                'required': True, 'closed': False,
++                'close_uncertain': False, 'handle_retained': True})
++            self.assertIn(value, owner.HELD_OWNERS)
++            self.assertFalse(list(self.output.glob('cleanup-*.json')))
++            self.assertTrue(value.close())
++            self.assertEqual([call.args for call in native.call_args_list], [(int(handle),), (int(handle),)])
++        self.assertNotIn(value, owner.HELD_OWNERS)
++        # Cleaning up a failed owner must not turn that owner into a successful run.
++        with self.assertRaisesRegex(owner.BenchmarkJobError, 'BENCHMARK_PROCESS_HANDLE_CLOSE'):
++            value.finish()
++
++    def test_unknown_native_result_blocks_retry_and_automatic_destructor_close(self):
++        value = self.make_owner()
++        handle = value.process._handle
++        interrupted = KeyboardInterrupt('native return was not observed')
++        with patch.object(owner, 'close_process_handle_native', side_effect=interrupted) as native:
++            with self.assertRaises(owner.BenchmarkJobError) as caught:
++                value.close()
++            self.assertIs(caught.exception.cleanup_owner, value)
++            self.assertIs(caught.exception.__cause__, interrupted)
++            waits = value.process.wait.call_count
++            with self.assertRaises(owner.BenchmarkJobError) as second:
++                value.close()
++            self.assertEqual(second.exception.__cause__.code, 'BENCHMARK_PROCESS_HANDLE_CLOSE_UNCERTAIN')
++            self.assertEqual(value.process.wait.call_count, waits)
++            native.assert_called_once_with(int(handle))
++        self.assertIs(value._process_handle, handle)
++        self.assertFalse(value.closed)
++        self.assertIn(value, owner.HELD_OWNERS)
++        self.assertEqual(value.process_handle_snapshot(), {
++            'required': True, 'closed': False,
++            'close_uncertain': True, 'handle_retained': True})
++        handle.Close()
++        self.assertEqual(handle.automatic_close_calls, [])
++        self.assertFalse(list(self.output.glob('cleanup-*.json')))
++
++    def test_cleanup_evidence_failure_after_native_close_does_not_double_close(self):
++        value = self.make_owner()
++        actual_write = owner.write
++        attempts = []
++        def write_after_first_failure(path, body):
++            attempts.append(path.name)
++            if len(attempts) == 1:
++                raise OSError('synthetic write failure before creating file')
++            actual_write(path, body)
++        with patch.object(owner, 'close_process_handle_native', return_value=True) as native, \
++             patch.object(owner, 'write', side_effect=write_after_first_failure):
++            with self.assertRaises(owner.BenchmarkJobError) as caught:
++                value.close()
++            self.assertIs(caught.exception.cleanup_owner, value)
++            self.assertFalse(value.closed)
++            self.assertTrue(value.process_handle_snapshot()['closed'])
++            self.assertIn(value, owner.HELD_OWNERS)
++            self.assertTrue(value.close())
++            native.assert_called_once()
++        self.assertEqual(attempts, ['cleanup-001.json', 'cleanup-002.json'])
++        self.assertNotIn(value, owner.HELD_OWNERS)
++
++    def test_changed_handle_after_failed_close_is_never_closed_by_number(self):
++        value = self.make_owner()
++        original = value.process._handle
++        with patch.object(owner, 'close_process_handle_native', return_value=False) as native:
++            with self.assertRaises(owner.BenchmarkJobError):
++                value.close()
++            value.process._handle = InertHandle(int(original))
++            with self.assertRaises(owner.BenchmarkJobError) as caught:
++                value.close()
++            self.assertEqual(caught.exception.__cause__.code, 'BENCHMARK_PROCESS_HANDLE_CHANGED')
++            native.assert_called_once_with(int(original))
++        self.assertIs(value._process_handle, original)
++        self.assertIn(value, owner.HELD_OWNERS)
++
++
++class ConstructorProofTests(unittest.TestCase):
++    def setUp(self):
++        registry = patch.object(owner, 'HELD_OWNERS', [])
++        registry.start()
++        self.addCleanup(registry.stop)
++
++    def exercise_constructor(self, close_results):
++        process, job = inert_process(), inert_job()
++        original = owner.BenchmarkJobError('BENCHMARK_JOB_CONFIGURE')
++        original_cause = OSError('original configure failure')
++        original.__cause__ = original_cause
++        binary = b'inert binary; must never be launched'
++        with tempfile.TemporaryDirectory(prefix='gt06-inert-constructor-') as directory, ExitStack() as stack:
++            root = Path(directory)
++            stack.enter_context(patch.object(owner, 'check_path'))
++            stack.enter_context(patch.object(owner.BenchmarkProcess, 'check_sources'))
++            stack.enter_context(patch.object(Path, 'mkdir'))
++            stack.enter_context(patch.object(Path, 'read_bytes', return_value=binary))
++            evidence = stack.enter_context(patch.object(owner, 'write'))
++            stack.enter_context(patch.object(owner, 'isolated_env', return_value={}))
++            launch = stack.enter_context(patch.object(owner.subprocess, 'Popen', return_value=process))
++            stack.enter_context(patch.object(owner.cli_job, 'create', return_value=job))
++            stack.enter_context(patch.object(owner, 'configure', side_effect=original))
++            native = stack.enter_context(patch.object(owner, 'close_process_handle_native', side_effect=close_results))
++            # The installed Windows runtime supplies CREATE_NO_WINDOW. Every
++            # launch and native close is nevertheless replaced with inert doubles.
++            with self.assertRaises(owner.BenchmarkJobError) as caught:
++                owner.BenchmarkProcess([str(root / 'inert.exe')], cwd=root,
++                    output=root / 'owner', source_root=root,
++                    source_files={'fixture.py': hashlib.sha256(b'fixture').hexdigest()},
++                    binary_sha256=hashlib.sha256(binary).hexdigest())
++            self.assertIs(caught.exception, original)
++            self.assertIs(original.__cause__, original_cause)
++            retained = original.cleanup_owner
++            self.assertIs(retained.process, process)
++            launch.assert_called_once()
++            if len(close_results) == 1:
++                self.assertTrue(retained.closed)
++                self.assertTrue(retained.job.zero_observed)
++                self.assertNotIn(retained, owner.HELD_OWNERS)
++                self.assertFalse(hasattr(original, 'cleanup_error'))
++                proof = evidence.call_args.args[1]
++                self.assertTrue(proof['closed'])
++                self.assertTrue(proof['job']['zero_observed'])
++            else:
++                self.assertFalse(retained.closed)
++                self.assertIn(retained, owner.HELD_OWNERS)
++                self.assertIs(original.cleanup_error.cleanup_owner, retained)
++                # This is the parent's retry of retained cleanup, not rerunning
++                # the constructor or silently promoting the failed attempt.
++                self.assertTrue(retained.close())
++                self.assertTrue(retained.job.zero_observed)
++                self.assertNotIn(retained, owner.HELD_OWNERS)
++                self.assertIs(original.__cause__, original_cause)
++            self.assertEqual(native.call_count, len(close_results))
++            self.assertEqual(retained._failure_code, 'BENCHMARK_JOB_CONFIGURE')
++
++    def test_setup_error_exposes_owner_even_after_successful_cleanup(self):
++        self.exercise_constructor([True])
++
++    def test_cleanup_failure_keeps_initiating_exception_and_original_cause(self):
++        self.exercise_constructor([False, True])
++
++
++class CaptureHandleProofTests(unittest.TestCase):
++    """Rehashed synthetic reports cannot bypass the new checked-close proof."""
++    def setUp(self):
++        directory = tempfile.TemporaryDirectory(prefix='gt06-synthetic-handle-proof-')
++        self.addCleanup(directory.cleanup)
++        self.root = Path(directory.name)
++        self.output = self.root / 'capture'
++        self.output.mkdir()
++        self.binary = self.root / 'inert.exe'
++        self.binary.write_bytes(b'not executable')
++        self.binary_hash = hashlib.sha256(self.binary.read_bytes()).hexdigest()
++        (self.root / 'fixture.py').write_bytes(b'# inert source\n')
++        self.sources = {'fixture.py': hashlib.sha256((self.root / 'fixture.py').read_bytes()).hexdigest()}
++        invocation = {'argv': [str(self.binary)], 'cwd': str(self.root), 'source_root': str(self.root),
++            'source_files': self.sources, 'binary_sha256': self.binary_hash,
++            'profile': owner.PROFILE, 'formal_acceptance': False}
++        owner.write(self.output / 'invocation.json', invocation)
++        launched, actual = {'pid': 123}, {'pid': 123, 'exit_code': 0}
++        owner.write(self.output / 'process-start.json', launched)
++        owner.write(self.output / 'process-exit.json', actual)
++        for name in ('stdout.txt', 'stderr.txt'):
++            (self.output / name).write_bytes(b'')
++        self.capture = {'schema': 'HH-GT06-BENCHMARK-CAPTURE-1', **invocation,
++            'completed': True, 'natural_tree_exit': True, 'source_unchanged': True,
++            'actual_process_start': launched, 'actual_process_exit': actual, 'wrapper_exit_code': 0,
++            'active_at_wrapper_exit': 0, 'active_before_cleanup': 0, 'elapsed_seconds': 1.0,
++            'wrapper_process_handle': {'required': True, 'closed': True,
++                'close_uncertain': False, 'handle_retained': False},
++            'job': {'closed': True, 'zero_observed': True, 'tainted': False, 'handle_retained': False,
++                'configured': True, 'assigned': True, 'active_count': 0,
++                'create_uncertain': False, 'close_uncertain': False,
++                'failed_operations': [], 'native_error': None},
++            'limits': {'limit_flags': 0x2000 | 0x200 | 0x8 | 0x4,
++                'active_process_limit': owner.PROFILE['process_limit'],
++                'job_user_time_100ns': owner.PROFILE['cpu_seconds'] * 10_000_000,
++                'job_memory_bytes': owner.PROFILE['memory_bytes']},
++            'invocation_sha256': hashlib.sha256((self.output / 'invocation.json').read_bytes()).hexdigest(),
++            'artifacts': {name: hashlib.sha256((self.output / name).read_bytes()).hexdigest()
++                for name in ('stdout.txt', 'stderr.txt', 'process-start.json', 'process-exit.json')}}
++
++    def verify(self, capture):
++        raw = (json.dumps(capture, sort_keys=True) + '\n').encode()
++        (self.output / 'capture.json').write_bytes(raw)
++        return owner.verify_capture(self.output, hashlib.sha256(raw).hexdigest(),
++            source_root=self.root, expected_source_files=self.sources,
++            expected_binary_sha256=self.binary_hash)
++
++    def test_exact_checked_close_proof_is_required(self):
++        self.assertEqual(self.verify(self.capture), self.capture)
++        cases = [None,
++            {'required': True, 'closed': False, 'close_uncertain': False, 'handle_retained': True},
++            {'required': True, 'closed': False, 'close_uncertain': True, 'handle_retained': True},
++            {'required': True, 'closed': True, 'close_uncertain': False, 'handle_retained': 0}]
++        for handle in cases:
++            with self.subTest(handle=handle):
++                capture = deepcopy(self.capture)
++                if handle is None:
++                    capture.pop('wrapper_process_handle')
++                else:
++                    capture['wrapper_process_handle'] = handle
++                with self.assertRaisesRegex(owner.BenchmarkJobError, 'BENCHMARK_CAPTURE_PROCESS_HANDLE'):
++                    self.verify(capture)
++
++
++if __name__ == '__main__':
++    unittest.main()

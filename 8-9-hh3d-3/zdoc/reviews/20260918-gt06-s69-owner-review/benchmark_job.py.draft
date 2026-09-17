@@ -140,7 +140,7 @@ def verify_capture(output, expected_sha256, *, source_root, expected_source_file
     capture_raw = _read_checked(output / 'capture.json', 1024 * 1024)
     require(hashlib.sha256(capture_raw).hexdigest() == expected_sha256, 'BENCHMARK_CAPTURE_HASH')
     capture = _decode(capture_raw)
-    require(type(capture) is dict and capture.get('schema') == 'HH-GT06-BENCHMARK-CAPTURE-2', 'BENCHMARK_CAPTURE_SCHEMA')
+    require(type(capture) is dict and capture.get('schema') == 'HH-GT06-BENCHMARK-CAPTURE-1', 'BENCHMARK_CAPTURE_SCHEMA')
     for name in ('stdout.txt', 'stderr.txt', 'process-start.json', 'process-exit.json'):
         raw = _read_checked(output / name, PROFILE['log_bytes_each'] if name.endswith('.txt') else 8192)
         if name.endswith('.json'):
@@ -358,7 +358,7 @@ class BenchmarkProcess:
         require(not self.job.tainted, 'BENCHMARK_JOB_TAINTED')
         hashes = {name: hashlib.sha256((self.output / name).read_bytes()).hexdigest()
                   for name in ('stdout.txt', 'stderr.txt', 'process-start.json', 'process-exit.json')}
-        result = {'schema': 'HH-GT06-BENCHMARK-CAPTURE-2', 'completed': True,
+        result = {'schema': 'HH-GT06-BENCHMARK-CAPTURE-1', 'completed': True,
                   'actual_process_start': launched, 'actual_process_exit': actual, 'wrapper_exit_code': 0,
                   'active_at_wrapper_exit': active_at_exit, 'active_before_cleanup': active,
                   'natural_tree_exit': True, 'job': self.job.snapshot(), 'artifacts': hashes,

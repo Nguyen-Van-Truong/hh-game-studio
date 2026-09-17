@@ -168,6 +168,11 @@ class CampaignOwnershipTests(unittest.TestCase):
             self.assertFalse((root / 'run-00-attempt-01/run-capture.json').exists())
             frozen_profile = (root / 'benchmark-profile.json').read_bytes()
             self.assertEqual(campaign.sha(frozen_profile), campaign.profile.PROFILE_SHA256)
+            # A closed/zero failed attempt must not silently override a Stop.
+            (root / 'run-00-attempt-01/stop-request.json').write_bytes(b'{}')
+            with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_STOP_LATCHED'):
+                campaign.run_campaign('gt06-synthetic-owner', root)
+            launch.assert_called_once()
 
     def test_parent_cleanup_failure_preserves_primary_artifact_and_held_owner(self):
         with tempfile.TemporaryDirectory(prefix='gt06-campaign-held-') as directory, ExitStack() as stack:

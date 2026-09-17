@@ -1,0 +1,28 @@
+{
+  "host": {
+    "wrapper_pid": 43640,
+    "started_at": "2026-09-17T17:40:19.224636+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "-m",
+      "studio.host.replay.repair_replay",
+      "--run-id",
+      "gt06-s69-managed-replay-01",
+      "--repair-run",
+      "gt06-s65-repair-02",
+      "--repair-capture-sha256",
+      "514a1f3a01ebab7f6f327a49170e4e9260a55310ee5c84b20c28f6bcf6a0ea14"
+    ],
+    "exit_code": 0,
+    "target_pid": 12380,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "replay-stdout.txt",
+    "stderr": "replay-stderr.txt",
+    "host": "replay-host.json"
+  },
+  "formal_acceptance": false
+}

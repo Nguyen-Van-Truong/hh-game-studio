@@ -1,0 +1,22 @@
+{
+  "host": {
+    "wrapper_pid": 40164,
+    "started_at": "2026-09-17T17:50:39.276795+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "-c",
+      "import unittest,json,sys; suite=unittest.TestLoader().loadTestsFromNames(['studio.tests.replay.test_benchmark_job', 'studio.tests.replay.test_benchmark_job_owner', 'studio.tests.replay.test_benchmark_stop', 'studio.tests.replay.test_benchmark_campaign', 'studio.tests.replay.test_benchmark_campaign_stop_completion', 'studio.tests.replay.test_benchmark_assembly']); r=unittest.TextTestRunner(verbosity=2).run(suite); print('GT06_S69_STOP_UNITS '+json.dumps({'run':r.testsRun,'failures':len(r.failures),'errors':len(r.errors),'skips':len(r.skipped)}),flush=True); sys.exit(not r.wasSuccessful())"
+    ],
+    "exit_code": 0,
+    "target_pid": 29180,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "units-stdout.txt",
+    "stderr": "units-stderr.txt",
+    "host": "units-host.json"
+  },
+  "source_unchanged": true
+}

@@ -1,0 +1,65 @@
+{
+  "natural": {
+    "verified": true,
+    "capture_sha256": "67cc822905b7f4a5a49a1e79aa9154907a50b6537133d0a21e24324bd1956a2c",
+    "wrapper_process_handle": {
+      "close_uncertain": false,
+      "closed": true,
+      "handle_retained": false,
+      "required": true
+    },
+    "actual_exit": {
+      "exit_code": 0,
+      "pid": 13100
+    }
+  },
+  "stop": {
+    "closed": true,
+    "job": {
+      "configured": true,
+      "assigned": true,
+      "closed": true,
+      "handle_retained": false,
+      "tainted": false,
+      "zero_observed": true,
+      "active_count": 0,
+      "create_uncertain": false,
+      "close_uncertain": false,
+      "failed_operations": [],
+      "native_error": null
+    },
+    "wrapper_process_handle": {
+      "required": true,
+      "closed": true,
+      "close_uncertain": false,
+      "handle_retained": false
+    },
+    "success_after_stop_rejected": true
+  },
+  "setup_failure": {
+    "closed": true,
+    "job": {
+      "configured": true,
+      "assigned": true,
+      "closed": true,
+      "handle_retained": false,
+      "tainted": false,
+      "zero_observed": true,
+      "active_count": 0,
+      "create_uncertain": false,
+      "close_uncertain": false,
+      "failed_operations": [],
+      "native_error": null
+    },
+    "wrapper_process_handle": {
+      "required": true,
+      "closed": true,
+      "close_uncertain": false,
+      "handle_retained": false
+    },
+    "target_not_launched": true,
+    "original_error_preserved": true
+  },
+  "source_unchanged": true,
+  "formal_acceptance": false
+}

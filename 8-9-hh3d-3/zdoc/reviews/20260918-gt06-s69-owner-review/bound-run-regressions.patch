@@ -1,0 +1,136 @@
+diff --git a/8-9-hh3d-3/studio/tests/replay/test_benchmark_assembly.py b/8-9-hh3d-3/studio/tests/replay/test_benchmark_assembly.py
+--- a/8-9-hh3d-3/studio/tests/replay/test_benchmark_assembly.py
++++ b/8-9-hh3d-3/studio/tests/replay/test_benchmark_assembly.py
+@@ -1,7 +1,7 @@
+ """Synthetic assembly plus one tiny loopback fixture; no engines or native claims."""
+ import copy
+ from contextlib import contextmanager
+-from dataclasses import asdict
++from dataclasses import asdict, replace
+ import hashlib
+ import json
+ from pathlib import Path
+@@ -521,7 +521,13 @@
+             yield
+ 
+     def test_complete_35_batch_run_preserves_warmup_boundaries_and_source_hashes(self):
+-        run = assembly.assemble_run(self.root, self.manifest)
++        bound = assembly.assemble_run(self.root, self.manifest)
++        self.assertIsInstance(bound, assembly.BoundRun)
++        envelope = bound.value
++        self.assertEqual(envelope['source_closure_sha256'], self.manifest['source_closure_sha256'])
++        self.assertEqual(envelope['toolchain_sha256'], self.manifest['refs']['toolchain']['sha256'])
++        self.assertEqual(envelope['profile_sha256'], self.manifest['profile_sha256'])
++        run = envelope['run']
+         self.assertEqual(len(run['samples']), 35)
+         self.assertEqual([sample['warmup'] for sample in run['samples']], [True] * 5 + [False] * 30)
+         self.assertEqual(run['baseline'], {'after_batch_index': 4, 'memory': run['samples'][4]['memory']})
+@@ -537,11 +543,13 @@
+         # A complete run is deliberately insufficient for a ten-run campaign.
+         provenance = dict.fromkeys(('source_closure_sha256', 'toolchain_sha256', 'workstation_profile_sha256',
+                                    'driver_sha256', 'capture_manifest_sha256'), 'a' * 64)
++        provenance.update(source_closure_sha256=envelope['source_closure_sha256'],
++                          toolchain_sha256=envelope['toolchain_sha256'])
+         with self.assertRaisesRegex(profile.BenchmarkError, 'INCOMPLETE_ARRAY'):
+-            assembly.assemble_dataset(provenance, [run])
++            assembly.assemble_dataset(provenance, [bound])
+         # Verify the runner handoff without manufacturing nine extra runs.
+         with patch.object(profile, 'validate_dataset', side_effect=lambda dataset: dataset) as validate:
+-            dataset = assembly.assemble_dataset(provenance, [run])
++            dataset = assembly.assemble_dataset(provenance, [bound])
+         validate.assert_called_once_with(dataset)
+         self.assertEqual(dataset['schema_version'], '1.1.0')
+         self.assertEqual(dataset['runs'], [run])
+@@ -595,5 +603,92 @@
+                 assembly.assemble_run(self.root, self.manifest)
+ 
+ 
++class BoundRunProvenanceTests(unittest.TestCase):
++    """Synthetic complete shapes test provenance equality, not native execution."""
++    @staticmethod
++    def bind(value):
++        raw = json.dumps(value, sort_keys=True, separators=(',', ':'), allow_nan=False).encode()
++        return assembly.BoundRun(sha256=hashlib.sha256(raw).hexdigest(), raw=raw)
++
++    @classmethod
++    def setUpClass(cls):
++        from studio.tests.replay.test_benchmark_profile import synthetic_dataset
++        cls.template = synthetic_dataset()
++        cls.bound_runs = [cls.bind({
++            'source_closure_sha256': cls.template['provenance']['source_closure_sha256'],
++            'toolchain_sha256': cls.template['provenance']['toolchain_sha256'],
++            'profile_sha256': profile.PROFILE_SHA256, 'run': run})
++            for run in cls.template['runs']]
++
++    def setUp(self):
++        self.provenance = dict(self.template['provenance'])
++        self.runs = list(self.bound_runs)
++
++    def test_matching_ten_run_provenance_preserves_strict_dataset_schema(self):
++        actual = assembly.assemble_dataset(self.provenance, self.runs)
++        expected = copy.deepcopy(self.template)
++        # Synthetic containers deliberately exercise the native assembly entry
++        # point; this remains unit data and is not written as native evidence.
++        expected['evidence_kind'] = 'native'
++        self.assertEqual(actual, expected)
++
++    def test_one_run_with_different_source_toolchain_or_profile_is_rejected(self):
++        for field in ('source_closure_sha256', 'toolchain_sha256', 'profile_sha256'):
++            with self.subTest(field=field):
++                value = self.bound_runs[3].value
++                value[field] = '0' * 64
++                runs = list(self.bound_runs)
++                runs[3] = self.bind(value)
++                with self.assertRaisesRegex(assembly.AssemblyError, 'RUN_PROVENANCE_MISMATCH'):
++                    assembly.assemble_dataset(self.provenance, runs)
++
++    def test_wrong_declared_dataset_source_or_toolchain_is_rejected(self):
++        for field in ('source_closure_sha256', 'toolchain_sha256'):
++            with self.subTest(field=field):
++                provenance = dict(self.provenance, **{field: '0' * 64})
++                with self.assertRaisesRegex(assembly.AssemblyError, 'RUN_PROVENANCE_MISMATCH'):
++                    assembly.assemble_dataset(provenance, self.runs)
++
++    def test_plain_valid_run_dictionary_cannot_bypass_binding(self):
++        self.runs[3] = self.bound_runs[3].value['run']
++        with self.assertRaisesRegex(assembly.AssemblyError, 'BOUND_RUN_REQUIRED'):
++            assembly.assemble_dataset(self.provenance, self.runs)
++
++    def test_changed_run_or_provenance_bytes_require_a_new_binding(self):
++        for field in ('run', 'source_closure_sha256'):
++            with self.subTest(field=field):
++                value = self.bound_runs[0].value
++                if field == 'run':
++                    value['run']['run_id'] = 'changed.run'
++                else:
++                    value[field] = '0' * 64
++                changed = self.bind(value)
++                runs = list(self.bound_runs)
++                runs[0] = replace(self.bound_runs[0], raw=changed.raw)
++                with self.assertRaisesRegex(assembly.AssemblyError, 'RUN_BINDING'):
++                    assembly.assemble_dataset(self.provenance, runs)
++
++    def test_readback_mutation_cannot_change_the_retained_run_or_provenance(self):
++        value = self.bound_runs[0].value
++        value['run']['samples'][5]['stop_receipt_ms'] = 999
++        value['source_closure_sha256'] = '0' * 64
++        retained = self.bound_runs[0].value
++        self.assertEqual(retained['run'], self.template['runs'][0])
++        self.assertEqual(retained['source_closure_sha256'], self.provenance['source_closure_sha256'])
++
++    def test_rehashed_envelope_still_requires_exact_provenance_fields(self):
++        for change, code in (
++            (lambda value: value.pop('toolchain_sha256'), 'FIELDS'),
++            (lambda value: value.update(toolchain_sha256='not-a-hash'), 'HASH'),
++            (lambda value: value.update(unexpected=True), 'FIELDS')):
++            with self.subTest(code=code):
++                value = self.bound_runs[0].value
++                change(value)
++                runs = list(self.bound_runs)
++                runs[0] = self.bind(value)
++                with self.assertRaisesRegex(assembly.AssemblyError, code):
++                    assembly.assemble_dataset(self.provenance, runs)
++
++
+ if __name__ == '__main__':
+     unittest.main()

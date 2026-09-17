@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 18-09-2026, Asia/Saigon | Revision S68 | TRIỂN KHAI THEO GATE
+Ngày 18-09-2026, Asia/Saigon | Revision S69 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S68
+PLAN_REVISION=S69
 EXECUTION_MODE=COORDINATOR_THREE_ASTRA_XHIGH_OWNER_20260918
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -56,10 +56,11 @@ GT05_CHECKPOINT_COMMIT=808d8ba
 GT06_EVIDENCE_STATUS=NATIVE_DIAGNOSTICS_IN_PROGRESS_NO_ACCEPTANCE
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
 
-TIẾN ĐỘ HIỆN HÀNH — S68, ngày 18-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S69, ngày 18-09-2026
 GT-01–05 đã ACCEPTED. GT-06 mở sau hai review độc lập S64 cùng manifest.
 Owner đã cho phép lại ba Astra extra high; coordinator tiếp tục từ S68 đã tích hợp.
-Ba review mới bị ngắt/chưa có verdict; không tính vào nghiệm thu.
+Ba worker mới đã hoàn thành review implementation/mapping S69; không phải critic
+nghiệm thu. Hai review độc lập trên final frozen closure vẫn còn phải làm.
 Native engine/integration lanes chạy tuần tự với process/cache/evidence riêng.
 
 Đã nghiệm thu:
@@ -162,6 +163,28 @@ GT-06 hiện hành — implementation đã tích hợp, native diagnostics đang
   giữ nguyên10runs×35batch, mix, thresholds và deadline tổng7410s/run.
   Ownership sửa Stop latch, closed/zero khác historicaltaint, giữ owner khi
   constructor/cleanup lỗi. Chưa có fullcampaign PASS hoặc hai critic nghiệm thu.
+- S69 tiếp từ checkpoint S68 c5e56c7 (77 file trong Git proof khớp byte).
+  Campaign03 đã hoàn tất batch đầu: 1000 HTTP commands + 100 native cycles,
+  ready/start/ACK và joint readback qua assembler. Dừng có kiểm soát để sửa
+  lỗi owner được review phát hiện; editor exit79, host exit1, parent Job closed/zero.
+  Đây là diagnostic một batch, không phải full benchmark PASS.
+  Đã sửa mất cleanup_owner khi constructor lỗi và wrapper process handle chưa
+  đóng; capture v2 bắt buộc proof đóng handle, không nâng cấp giả capture cũ.
+  Native smoke mới kiểm natural exit, Stop, setup failure đều giữ đúng ownership.
+  Dataset assembler buộc mỗi run gắn source/toolchain/profile, từ chối trộn source.
+  Stop benchmark dùng fixed-slot request gắn run/campaign hash; không tìm/kill
+  theo tên tiến trình, không tự resume run đã Stop. Full units 434/434 đạt,
+  không skip, 146.685s, actual exits0/tree sạch/source ổn định. Review sau đó
+  phát hiện Stop có thể đến giữa terminal poll và chuyển run; đã thêm kiểm
+  completion/publication/resume và latch các attempt cũ. Lượt kiểm phần ảnh
+  hưởng đạt66/66, 21.646s, không skip, actual exits0/tree sạch/source ổn định;
+  không cộng số test trùng hoặc gán full434 vào source sau sửa.
+  Ba service adversary mới saturated-stop/revoked-result/stale-capture đạt
+  15/18/17 checks, actual exits0/tree sạch. Managed replay mới đạt, dùng lại
+  receipt repair02 đã kiểm hash; không làm lại mutation đã đúng.
+  Các dependency của GUI S68 complete02/stop02 không đổi nên giữ evidence đó.
+  Mapping và review: reviews/20260918-gt06-s69-owner-review/.
+  Capture/hash và giới hạn: reviews/20260918-gt06-s69-progress/README.md.
 - Chưa có GT06 accepted candidate. Benchmark1000commands+100cycles theo plan
   vẫn phải chạy đúng profile; unit nhỏ không thay benchmark. Không nâng shared
   caps để hợp artifact; raw series có parser/quota riêng, wire chỉ hash/reference.
@@ -185,6 +208,13 @@ tools-plan-before-s55.txt (AUTHORITY=0), SHA256 b07c86c36c565c3a95404a6084cd6df0
 Các archive và mọi failure/verdict cũ giữ nguyên; không hạDoD đểtick.
 
 KINH NGHIỆM ĐANG ÁP DỤNG
+- S69: process.wait() trên Windows không tự đóng handle Popen; proof cleanup
+  phải kiểm native close, giữ đúng owner khi lỗi và tránh double-close khi kết quả
+  chưa rõ. Constructor lỗi vẫn phải trả ownership dù cleanup đã thành công.
+  Đánh giá dependency theo từng lane để chỉ remint phần bị ảnh hưởng; không gán
+  chữ ký cũ vào closure mới, cũng không lặp toàn bộ gate chỉ vì thêm file test.
+  Stop phải kiểm cả ranh giới completion/assembly/chuyển run và resume attempt
+  đã complete; kiểm trước polling đơn lẻ chưa đủ. Giữ latch của attempt cũ.
 - S68: không suy nguyên nhân từ mã lỗi identity khi chưa lưu phản hồi terminal;
   lookupUNKNOWN chỉ reconcile cùngID trong deadline, không gửi lại mutation.
   Giữ failedprefix và actualexit; chỉ nối lại run hoàn chỉnh cùng source/profile,

@@ -1,0 +1,20 @@
+{
+  "base_commit": "c5e56c7e05e5bf784d1e67741cd44cd18b6bd493",
+  "base_sha256": {
+    "benchmark_assembly.py": "d2f9587774c42357c85182fcad27ed2d16db26192b6ef25eaa4b28a2763f34bd",
+    "run_benchmark_campaign.py": "cd22296437e1b73e9521f95593a76d097623d80393bd0c55f214494ef4ed532d",
+    "test_benchmark_assembly.py": "e868903e32f77f57f36450106928626cca38074df5ba41daac4135cf4b58866a"
+  },
+  "live_source_written": false,
+  "patch_sha256": {
+    "bound-run-provenance.patch": "80795097df31f50d00c2cfa3ff89dfc3b91a37a9348aef70d1534f39c3bd3f05",
+    "bound-run-regressions.patch": "51bcd639e9226d8c0a816cbec27b3c747290e5175fa556ce8f44af4e2772d35d"
+  },
+  "resulting_source_sha256": {
+    "benchmark_assembly.py": "16ba15ea1961d78c89d5ea2b8c389e89b960a4df25e6a2783e4cc8a6d0c1111a",
+    "run_benchmark_campaign.py": "9d5c51be25c75f7d446693a0189db6224c88647bfa5d0dfb0b44b86767ba89a7",
+    "test_benchmark_assembly.py": "9292883b9f8dcda5bebc3b99ff0c8bbb0b159b01533760b7f6081fc73445215c"
+  },
+  "runtime_or_tests_executed": false,
+  "status": "DRAFT_ONLY_NOT_TESTED_NOT_APPLIED"
+}
