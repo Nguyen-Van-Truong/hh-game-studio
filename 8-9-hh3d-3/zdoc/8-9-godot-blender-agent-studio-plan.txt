@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 17-09-2026, Asia/Saigon | Revision S66 | TRIỂN KHAI THEO GATE
+Ngày 17-09-2026, Asia/Saigon | Revision S67 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S66
+PLAN_REVISION=S67
 EXECUTION_MODE=COORDINATOR_THREE_ASTRA_XHIGH_OWNER_20260917
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -56,7 +56,7 @@ GT05_CHECKPOINT_COMMIT=808d8ba
 GT06_EVIDENCE_STATUS=NATIVE_DIAGNOSTICS_IN_PROGRESS_NO_ACCEPTANCE
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
 
-TIẾN ĐỘ HIỆN HÀNH — S66, ngày 17-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S67, ngày 17-09-2026
 GT-01–05 đã ACCEPTED. GT-06 mở sau hai review độc lập S64 cùng manifest.
 Owner cho phép ba Astra extra high; coordinator tích hợp và giữ một writer/file.
 Native engine/integration lanes chạy tuần tự với process/cache/evidence riêng.
@@ -118,7 +118,25 @@ GT-06 hiện hành — ba lane implementation, native diagnostics đã bắt đ�
   243/243 replay unit đạt. Start pending→native readback→COMMITTED; retry không
   tạo Play mới, retained inspector phântrang/capture đúnghash, Stop latch riêng.
   25.0122ms là một receiptStop, chưa phải benchmarkp95. Chi tiết:
-  reviews/20260917-gt06-s66-service/. Đang làm reviewerUX và native adversary lanes.
+  reviews/20260917-gt06-s66-service/, checkpoint843e681.
+- S67: native saturated-stop04/revoked-result01/stale-capture01 đạt15/18/17checks
+  trên source171file S66. Reviewer Tk/client hiện60/60unit; thêm6/6 kiểm chứng
+  timing benchmark. GUI thật complete02 (Play/Inspect/Capture) và stop01 (Esc)
+  đạt, exits0/tree sạch, reviewer closure665320a25e388c97c5e0db9d910a51fdb09edc6eff90a929ffeb536c32ab66d0.
+  Replay mới dùng no-focus để bàn phím người dùng/Stop thuộc reviewer; native
+  kiểm flag trước trace. Closure39d4e8429921f08adef94b3fb4035210e98c2a82676c8d1ba4f965a4ff0f7c41;
+  không gán kết quả S66 vào source này. Giữ failure/raw và kiểm riêng từngclosure.
+  Chi tiết: reviews/20260917-gt06-s67-progress/. MẫuCPU100% giữ làm context,
+  không kết luận mọi timeout cùngnguyênnhân hoặc nângdeadline đểPASS.
+- Benchmark đang xây driver giữcùng editorPID qua reload và rawmỗi batch;
+  10runs×(5warmup+30measured),1000commands+100nativecycles/mẫu vẫn giữnguyên.
+  Mockprotocol và directnativecycle là hai lane riêng; không claim nativeeffect
+  từmock. Pythonhost không có GodotObjectDB/ResourceCache: ghi NOT_APPLICABLE,
+  còn RSS/handles host và mọi countereditor vẫn phải có đo thật.
+  Diagnostic02 đạt1chu kỳ native trên1editorPID: create/undo/save/reload,
+  actualexits0/tree sạch/hash ổn định. Diagnostic01 giữFAIL vì Godot tự chuẩn
+  hóa project.godot; đã tạo đúng config pin trước freeze, không bỏ kiểmhash.
+  Chưa là fullbenchmark; đang đo batch1000lệnh đầu để kiểm scaling thực tế.
 - Chưa có GT06 accepted candidate. Benchmark1000commands+100cycles theo plan
   vẫn phải chạy đúng profile; unit nhỏ không thay benchmark. Không nâng shared
   caps để hợp artifact; raw series có parser/quota riêng, wire chỉ hash/reference.
@@ -142,6 +160,17 @@ tools-plan-before-s55.txt (AUTHORITY=0), SHA256 b07c86c36c565c3a95404a6084cd6df0
 Các archive và mọi failure/verdict cũ giữ nguyên; không hạDoD đểtick.
 
 KINH NGHIỆM ĐANG ÁP DỤNG
+- S67 GUI: không autopoll khi closing hoặc PLAY local cònpending; nếu lookup
+  chạy trước launchworker thì NO_COMMAND local không được hủy trạng tháiqueued.
+  Godot Windows có thể release held-input khi mấtfocus: fixedtrace dùng no-focus
+  từstartup, không bơm lại phím hoặc sửa trace để che lỗi. Nativebenchmark cần
+  save-signal nằm trong save→reload, reloadframe trướcquiescence; bannercomplete
+  không thắng source-drift/hostFAIL. Giữ config Godot canonical trướcfreeze.
+- S67: lookup khi POST đầu cònchuẩn bị không phải COMMAND_NOT_FOUND terminal;
+  giữqueued cục bộ, sau response-loss chỉlookup cùngID. Sockettimeout theo từng
+  read không là deadline toànrequest: có timer ngắt đúng socketowned và chặn
+  responseđếnmuộn. Stopcưỡngbức kiểm PID/startartifact+Jobzero, không đòi natural
+  exitrecord chưa tồn tại. Ghi từngcheck ngay để lỗi cuối không mất bằngchứng.
 - S66: collision của một submit mới không được đổi receipt pending của lệnhgốc.
   Completion lỗi phải trảUNKNOWN khi lookup, kể cả journal không ghi được;
   receipt terminal đãdurable luôn thắng overlay tạm. Tokenrotation giữsessionID

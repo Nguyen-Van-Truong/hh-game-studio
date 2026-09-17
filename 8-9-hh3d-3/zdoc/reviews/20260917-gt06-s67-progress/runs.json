@@ -1,0 +1,232 @@
+{
+  "schema": "HH-GT06-S67-PROGRESS-1",
+  "formal_acceptance": false,
+  "runs": {
+    "gt06-s66-saturated-stop-04": {
+      "completed": true,
+      "host_capture": ".local/reviews/gt06-s66-saturated-stop-04-outer/capture.json",
+      "artifacts": {
+        ".local/reviews/gt06-s66-saturated-stop-04/http-adversary/check-001.json": "5cb35ccc782e0d7b1f158fbc27bef1615d75431367882960cd750c777303455e",
+        ".local/reviews/gt06-s66-saturated-stop-04/http-adversary/check-002.json": "65d096d7f05a1f5d742794fd0af60c75d1ad8bc9b847831b11ae60cf66eefab6",
+        ".local/reviews/gt06-s66-saturated-stop-04/http-adversary/check-003.json": "394a5f99a001346804425ea171cddac6a02e89b1b305d451e24756234b9aace4",
+        ".local/reviews/gt06-s66-saturated-stop-04/http-adversary/check-004.json": "944bf7c79c5144dd2e24ed59a057d58b96e4b8da225de69a48eecaaaf03588eb",
+        ".local/reviews/gt06-s66-saturated-stop-04/http-adversary/check-005.json": "bebf9e828ae347dc6308b02406f47d58ea3747ed3fb5e3a8b6ba7821fa2e61f2",
+        ".local/reviews/gt06-s66-saturated-stop-04/http-adversary/check-006.json": "8bf9ca53124711f754d36532ea7b924ba8c1545ebce9ddc2d48dae8a21011678",
+        ".local/reviews/gt06-s66-saturated-stop-04/http-adversary/check-007.json": "802f1586a588ab9552a2e95e1b9526b5b6cae08555001a1b433c0a163f871f10",
+        ".local/reviews/gt06-s66-saturated-stop-04/http-adversary/check-008.json": "c38f4153bd9578193f4c0062b8989a2f66852628fdd39bf7fb7d7a3e0aaf89ec",
+        ".local/reviews/gt06-s66-saturated-stop-04/http-adversary/check-009.json": "30146194a12f074638ed18ea6d00287efa4255358dbfc045c7f07e9c57655325",
+        ".local/reviews/gt06-s66-saturated-stop-04/http-adversary/check-010.json": "421f7af3a9427b44ea8208ea331209dd8ff88fbaaafd3476812941cc0c88abcd",
+        ".local/reviews/gt06-s66-saturated-stop-04/http-adversary/check-011.json": "8f47de9382aea295b7844688b5b86329d495790f48dc7f89345dc6962342b4d6",
+        ".local/reviews/gt06-s66-saturated-stop-04/http-adversary/check-012.json": "1d2c9783513bcc01de35b6f47e30e7c2cbefeb6c99858bfd67dc87cad4f8b69c",
+        ".local/reviews/gt06-s66-saturated-stop-04/http-adversary/check-013.json": "9dcffce19569abfe8263ff2d5ce14232532562eb6638f1ac3f526e8506207625",
+        ".local/reviews/gt06-s66-saturated-stop-04/http-adversary/check-014.json": "0f88fac31a970748a5113defe861e4dd7573f2f536f57b89361b511cc9dc4eb3",
+        ".local/reviews/gt06-s66-saturated-stop-04/http-adversary/check-015.json": "10c8b0bddc94479e55996fc274fca13d6aed0099e6b54094b30775e3c9926f02",
+        ".local/reviews/gt06-s66-saturated-stop-04/http-adversary/http-0.json": "b405be6394df3b65a4f5ca0a6e94465b61eab9599f4d1bafe35ebef9fd542c53",
+        ".local/reviews/gt06-s66-saturated-stop-04/http-adversary/http-1.json": "0d5534000642994940c1f01916b76fea17029c990a4dc0a5418968d1f9c596a4",
+        ".local/reviews/gt06-s66-saturated-stop-04/http-adversary/http-2.json": "304a36d20ffe597b4dfa3dad68847672a5d7b1cedbf7a86a4c5a72c8bc2870f4",
+        ".local/reviews/gt06-s66-saturated-stop-04/http-adversary/http-3.json": "9ae7399f2aa48d60a067ab8c1f118e133ab2b056a073500ec69302e19c2112de",
+        ".local/reviews/gt06-s66-saturated-stop-04/http-adversary/http-4.json": "4710ce36ec83ec2bbc4e2c425b962f154971f1a30cbc0174c3e6b8edc9505673",
+        ".local/reviews/gt06-s66-saturated-stop-04/http-adversary/http-5.json": "d99b23463f3420779a4cf7ada5247d70a05c67751390b5e3c778baa81ae04873",
+        ".local/reviews/gt06-s66-saturated-stop-04/http-adversary/result.json": "6b0222f9fdae643c537405157ad44bc9e7679802a1b4507858fdb6fb36b96834",
+        ".local/reviews/gt06-s66-saturated-stop-04/import-host/capture.json": "e7a8a63cc77f7eb5329451bbc783f12f9a33ca1c4c09026698c3839818d2f45d",
+        ".local/reviews/gt06-s66-saturated-stop-04/invocation.json": "b23315ac2d9d7b25f8774a72d45a76305382f4526c34125e8a65f6171ace55ba",
+        ".local/reviews/gt06-s66-saturated-stop-04/runtime-host/capture.json": "f9325ef991f202757f6735ae8bc82455c13fa95419bd7bed96ab0378e559c367",
+        ".local/reviews/gt06-s66-saturated-stop-04/source-files.json": "b33fdd75744fb446229716fe2f8024bf702afbcfde86fe4141fe5731bd13a01f",
+        ".local/reviews/gt06-s66-saturated-stop-04-outer/adversary-host.json": "5fd215f7bc0e8d250858789cb8e0e469610bae9c5fc1a16ff0c9f2f276ee2cef",
+        ".local/reviews/gt06-s66-saturated-stop-04-outer/adversary-stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        ".local/reviews/gt06-s66-saturated-stop-04-outer/adversary-stdout.txt": "be79244dac3083533d81a74a3ae4d0ffc54a167bba39b9251cb4d11f8789e83a",
+        ".local/reviews/gt06-s66-saturated-stop-04-outer/capture.json": "bc3f3997227cc4fcb2e4ba0b57dffebcb9598ab2c4762866d0ddfd2e627bc644"
+      },
+      "source_closure": "2c623754803e14d59f5d143b3964443a73d21eadaf5947d91fd4a83423e34da2",
+      "checks": 15,
+      "timings": [
+        {
+          "elapsed_ms": 30.4756,
+          "label": "ADVERSARY_LOOKUP_DURING_WORK_SATURATION",
+          "passed": true
+        },
+        {
+          "elapsed_ms": 3.0307,
+          "label": "ADVERSARY_STOP_DURING_WORK_SATURATION",
+          "passed": true
+        }
+      ]
+    },
+    "gt06-s66-revoked-result-01": {
+      "completed": true,
+      "host_capture": ".local/reviews/gt06-s66-revoked-result-01-outer/capture.json",
+      "artifacts": {
+        ".local/reviews/gt06-s66-revoked-result-01/capture.json": "3b80642182bb7b7511efd3fe66f1045c4858800e08d6b02725293887719f1318",
+        ".local/reviews/gt06-s66-revoked-result-01/http-adversary/check-001.json": "5cb35ccc782e0d7b1f158fbc27bef1615d75431367882960cd750c777303455e",
+        ".local/reviews/gt06-s66-revoked-result-01/http-adversary/check-002.json": "65d096d7f05a1f5d742794fd0af60c75d1ad8bc9b847831b11ae60cf66eefab6",
+        ".local/reviews/gt06-s66-revoked-result-01/http-adversary/check-003.json": "22ffb33e6bbb45e53bdd126c99e419b884041ec88ad667ca26182c48a55791b1",
+        ".local/reviews/gt06-s66-revoked-result-01/http-adversary/check-004.json": "95cd4a6b9b3e4122235149b411bab8c1f94863ea00b71ec4ccab90e589e0c68a",
+        ".local/reviews/gt06-s66-revoked-result-01/http-adversary/check-005.json": "b127b1d66093dc649bf9a3c023014151e3ac85ee58b653eccda38918e8e33696",
+        ".local/reviews/gt06-s66-revoked-result-01/http-adversary/check-006.json": "21f36cca976c6dba9ee3cb8f4a2be404b361591883d1df1640d319cc8b77bdf1",
+        ".local/reviews/gt06-s66-revoked-result-01/http-adversary/check-007.json": "7a5e3f5346f6287c91e9ebdd77e3ba0f87050e7dd893d9cd65813226f312a5f8",
+        ".local/reviews/gt06-s66-revoked-result-01/http-adversary/check-008.json": "e88e8fe6c25fe239d19865b82673cc3637511031d7f54d0efb0f3729592a138d",
+        ".local/reviews/gt06-s66-revoked-result-01/http-adversary/check-009.json": "71731312a315cc7a5ac740b48c4bc336b22d8a66b5e808eaa15ec438d476d66f",
+        ".local/reviews/gt06-s66-revoked-result-01/http-adversary/check-010.json": "743554a5ab7ce039802266142a311d76e664e7dabdd870509d62bcac68ad5d32",
+        ".local/reviews/gt06-s66-revoked-result-01/http-adversary/check-011.json": "421f7af3a9427b44ea8208ea331209dd8ff88fbaaafd3476812941cc0c88abcd",
+        ".local/reviews/gt06-s66-revoked-result-01/http-adversary/check-012.json": "b8ea3fb94bab6e153ccab4e8cd2132af09b6a05bdb74fa6e32a48881929718df",
+        ".local/reviews/gt06-s66-revoked-result-01/http-adversary/check-013.json": "8f47de9382aea295b7844688b5b86329d495790f48dc7f89345dc6962342b4d6",
+        ".local/reviews/gt06-s66-revoked-result-01/http-adversary/check-014.json": "1d2c9783513bcc01de35b6f47e30e7c2cbefeb6c99858bfd67dc87cad4f8b69c",
+        ".local/reviews/gt06-s66-revoked-result-01/http-adversary/check-015.json": "ac628488b37f70d9493882d1d68e543ebad6262314d160df183fdc892fc71474",
+        ".local/reviews/gt06-s66-revoked-result-01/http-adversary/check-016.json": "9dcffce19569abfe8263ff2d5ce14232532562eb6638f1ac3f526e8506207625",
+        ".local/reviews/gt06-s66-revoked-result-01/http-adversary/check-017.json": "0f88fac31a970748a5113defe861e4dd7573f2f536f57b89361b511cc9dc4eb3",
+        ".local/reviews/gt06-s66-revoked-result-01/http-adversary/check-018.json": "10c8b0bddc94479e55996fc274fca13d6aed0099e6b54094b30775e3c9926f02",
+        ".local/reviews/gt06-s66-revoked-result-01/http-adversary/http-0.json": "a967b0b4066f38766d1a767110c6fa1e1e7295ae4e0d5b6c9c3dec5a689fdaa9",
+        ".local/reviews/gt06-s66-revoked-result-01/http-adversary/http-1.json": "c4e7951d86cafcfc48de58e2d2ceac453332c4c8c6fea8628b677d6e08999be1",
+        ".local/reviews/gt06-s66-revoked-result-01/http-adversary/http-2.json": "962d42df32e2443fdfa7dab6aa40330484cb883d87aef86917e8f7bd7ce7c991",
+        ".local/reviews/gt06-s66-revoked-result-01/http-adversary/http-3.json": "b4067028f697b583bdd57b409f98fd8feb4209b90d53c34d099ff8c45c19372c",
+        ".local/reviews/gt06-s66-revoked-result-01/http-adversary/http-4.json": "54df8db311975049a719898cca57cfa94a59a3f8fc683c93138b5361cece83ce",
+        ".local/reviews/gt06-s66-revoked-result-01/http-adversary/http-5.json": "955feb44c76ed73a740ce44557320dd159c521064c6135d4b08f4417f29341ab",
+        ".local/reviews/gt06-s66-revoked-result-01/http-adversary/http-6.json": "f506a9d6791f8c6503488d1c79d590cea96bfc9e0a2007a9bacb3a6ab98c117b",
+        ".local/reviews/gt06-s66-revoked-result-01/http-adversary/http-7.json": "83c06bc27e58353c17e9490e7f413fdfa3257781ab395a6ed35ab4aa1d6d44bf",
+        ".local/reviews/gt06-s66-revoked-result-01/http-adversary/result.json": "9ba58ba88d2b64d1466eee1c6ef363697b8399bd471b2bc213bc7f9a278c3c31",
+        ".local/reviews/gt06-s66-revoked-result-01/import-host/capture.json": "b92a1c5e1b128d4b6e71b33b135e942f9d391580cc62f34ce22275b5413e5789",
+        ".local/reviews/gt06-s66-revoked-result-01/invocation.json": "c150b52effd3cc3dcf6f410d543963fbd52bd20a9a53dea58acb04dd04ece773",
+        ".local/reviews/gt06-s66-revoked-result-01/runtime-host/capture.json": "ff2cc08b702bbbdcd643aa01845004a94ed49c2971909a465b66ae5119022d6b",
+        ".local/reviews/gt06-s66-revoked-result-01/source-files.json": "b33fdd75744fb446229716fe2f8024bf702afbcfde86fe4141fe5731bd13a01f",
+        ".local/reviews/gt06-s66-revoked-result-01-outer/adversary-host.json": "f2691e68e9951c896590939a2bda45225eaf406f1ea6ff5039e7ddb1b5598a8c",
+        ".local/reviews/gt06-s66-revoked-result-01-outer/adversary-stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        ".local/reviews/gt06-s66-revoked-result-01-outer/adversary-stdout.txt": "8fdd9d302f0f726b1d506f19895aff3eb4428970b7b16f1e098698fc1c894674",
+        ".local/reviews/gt06-s66-revoked-result-01-outer/capture.json": "077e88192922cdfe479797629b42e701f65c81d98a25ce12b248773bbd966eaf"
+      },
+      "source_closure": "2c623754803e14d59f5d143b3964443a73d21eadaf5947d91fd4a83423e34da2",
+      "checks": 18,
+      "timings": []
+    },
+    "gt06-s66-stale-capture-01": {
+      "completed": true,
+      "host_capture": ".local/reviews/gt06-s66-stale-capture-01-outer/capture.json",
+      "artifacts": {
+        ".local/reviews/gt06-s66-stale-capture-01/capture.json": "fbc7cfc512e93590e2f90503bf106b495d8cc7cb32d217cf4e9a92e601921cf7",
+        ".local/reviews/gt06-s66-stale-capture-01/http-adversary/check-001.json": "5cb35ccc782e0d7b1f158fbc27bef1615d75431367882960cd750c777303455e",
+        ".local/reviews/gt06-s66-stale-capture-01/http-adversary/check-002.json": "65d096d7f05a1f5d742794fd0af60c75d1ad8bc9b847831b11ae60cf66eefab6",
+        ".local/reviews/gt06-s66-stale-capture-01/http-adversary/check-003.json": "7d05f378508e016051eae48cc196133436ae431e581f3ebcfd15cfb4422c125d",
+        ".local/reviews/gt06-s66-stale-capture-01/http-adversary/check-004.json": "6a2f55cb5bba82dd32bc681d75c4852e587adb3d16eec5b7ff3786c9416218b8",
+        ".local/reviews/gt06-s66-stale-capture-01/http-adversary/check-005.json": "694cb078836c2019daab91a5cc4fdccfc4e741bb27abefdbef0b17070f3fb23b",
+        ".local/reviews/gt06-s66-stale-capture-01/http-adversary/check-006.json": "a98441e465781eabf30d71682d701add5a12a6dfa3ad1d8572042ffea8022787",
+        ".local/reviews/gt06-s66-stale-capture-01/http-adversary/check-007.json": "c75366214a4a6de3bc4177340f071db01c522c6b4f456bf64bf8b41b57a5f754",
+        ".local/reviews/gt06-s66-stale-capture-01/http-adversary/check-008.json": "def99d90d291e79ebd5e832b1bd05def3b2c0ba4b3947c264530181f96de3da0",
+        ".local/reviews/gt06-s66-stale-capture-01/http-adversary/check-009.json": "c3fbe922ca3a3c433e915b818af938e191472ceacf9aa8ccdd80fb2e8855acd4",
+        ".local/reviews/gt06-s66-stale-capture-01/http-adversary/check-010.json": "421f7af3a9427b44ea8208ea331209dd8ff88fbaaafd3476812941cc0c88abcd",
+        ".local/reviews/gt06-s66-stale-capture-01/http-adversary/check-011.json": "b8ea3fb94bab6e153ccab4e8cd2132af09b6a05bdb74fa6e32a48881929718df",
+        ".local/reviews/gt06-s66-stale-capture-01/http-adversary/check-012.json": "8f47de9382aea295b7844688b5b86329d495790f48dc7f89345dc6962342b4d6",
+        ".local/reviews/gt06-s66-stale-capture-01/http-adversary/check-013.json": "1d2c9783513bcc01de35b6f47e30e7c2cbefeb6c99858bfd67dc87cad4f8b69c",
+        ".local/reviews/gt06-s66-stale-capture-01/http-adversary/check-014.json": "ac628488b37f70d9493882d1d68e543ebad6262314d160df183fdc892fc71474",
+        ".local/reviews/gt06-s66-stale-capture-01/http-adversary/check-015.json": "9dcffce19569abfe8263ff2d5ce14232532562eb6638f1ac3f526e8506207625",
+        ".local/reviews/gt06-s66-stale-capture-01/http-adversary/check-016.json": "0f88fac31a970748a5113defe861e4dd7573f2f536f57b89361b511cc9dc4eb3",
+        ".local/reviews/gt06-s66-stale-capture-01/http-adversary/check-017.json": "10c8b0bddc94479e55996fc274fca13d6aed0099e6b54094b30775e3c9926f02",
+        ".local/reviews/gt06-s66-stale-capture-01/http-adversary/http-0.json": "8f4da627d6753c9633e43c554fda4d5a745551111f4d737b7d176d745661967b",
+        ".local/reviews/gt06-s66-stale-capture-01/http-adversary/http-1.json": "4db12464ea41901aa146b3276cbcbe37c8f232c9f1d338deb1041addca1b6857",
+        ".local/reviews/gt06-s66-stale-capture-01/http-adversary/http-2.json": "f821598f2eef9a97d8cd4608bd078721e5da5fdc3455cb15a920886cf3ac2475",
+        ".local/reviews/gt06-s66-stale-capture-01/http-adversary/http-3.json": "a117657d5731ee1d412dcf68f1514e59cfbd15caff5327385ee8a0e5db1a56e5",
+        ".local/reviews/gt06-s66-stale-capture-01/http-adversary/http-4.json": "0f7c4a285be06b99ed12fad2a7743a82a072b5b518b287fc899cc80b066c8074",
+        ".local/reviews/gt06-s66-stale-capture-01/http-adversary/http-5.json": "6173f78be858c6b0e52e9011e965296e6c15e703b118181a5c192825ae4fff5b",
+        ".local/reviews/gt06-s66-stale-capture-01/http-adversary/http-6.json": "3ddd61e7baa508878d6c84071c8bfe186148b166a951d14b6e8f64e399d59204",
+        ".local/reviews/gt06-s66-stale-capture-01/http-adversary/http-7.json": "9ca60dfe01d49cdf19dc871939ba159ceeceee634653c26d3fff67969027a4dc",
+        ".local/reviews/gt06-s66-stale-capture-01/http-adversary/http-8.json": "b3e6b110b2551912ce94f40f7e8f57210a3d7d9b64d95cdbf37ce856f51a6a88",
+        ".local/reviews/gt06-s66-stale-capture-01/http-adversary/intentional-capture-mutation.json": "d9c74789d1bf040911ae436afdd3db6fcbe6a5eff2a1681d0a2573b1ffe304d5",
+        ".local/reviews/gt06-s66-stale-capture-01/http-adversary/result.json": "c085157cf3a53d57b0e2eb420d9e5531882657599d8c42dd84806299493397ef",
+        ".local/reviews/gt06-s66-stale-capture-01/import-host/capture.json": "18fd8aaf39ed56c71fe141bca3169d7c87ad7835902e13cab60a0e338553bc93",
+        ".local/reviews/gt06-s66-stale-capture-01/invocation.json": "bd82d92e8eb221c1dbc44c255e80d2c3d09869269e73260d9f3bf06e54a169e6",
+        ".local/reviews/gt06-s66-stale-capture-01/runtime-host/capture.json": "e01fc209c9d4865caa524f5954b0d3b6252f33cd941d15548b36ef0554ceed16",
+        ".local/reviews/gt06-s66-stale-capture-01/source-files.json": "b33fdd75744fb446229716fe2f8024bf702afbcfde86fe4141fe5731bd13a01f",
+        ".local/reviews/gt06-s66-stale-capture-01-outer/adversary-host.json": "e31b2c2b8c2d47e6b62d2fd7b3df2670f4b2a83b692fd3e6ecdb9853dc897144",
+        ".local/reviews/gt06-s66-stale-capture-01-outer/adversary-stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        ".local/reviews/gt06-s66-stale-capture-01-outer/adversary-stdout.txt": "018789d8540441326a9141a9a5c62ff4eee18deef9ea74ed86cbd2a4ee81e07f",
+        ".local/reviews/gt06-s66-stale-capture-01-outer/capture.json": "97078f421d078efb4921e1ebcc346a29f5f934a5b0d2c5598c63c85eee897351"
+      },
+      "source_closure": "2c623754803e14d59f5d143b3964443a73d21eadaf5947d91fd4a83423e34da2",
+      "checks": 17,
+      "timings": []
+    },
+    "gt06-s66-saturated-stop-01": {
+      "completed": false,
+      "host_capture": ".local/reviews/gt06-s66-saturated-stop-01-outer/capture.json",
+      "artifacts": {
+        ".local/reviews/gt06-s66-saturated-stop-01/import-host/capture.json": "aa62165aba8c4033c620e2999b2b599b7790a42f94e6cce78b742e1a934b8257",
+        ".local/reviews/gt06-s66-saturated-stop-01/invocation.json": "2b2b4eeb49cb795e64905ee2674b2dbcf37f59b70800c25ee4b69b533c73c07b",
+        ".local/reviews/gt06-s66-saturated-stop-01/source-files.json": "b33fdd75744fb446229716fe2f8024bf702afbcfde86fe4141fe5731bd13a01f",
+        ".local/reviews/gt06-s66-saturated-stop-01-outer/adversary-host.json": "adf4ed231e47fd2e667f3f1f8c111b5d42e77a3a6b5c687039a7aabbc5fd32b6",
+        ".local/reviews/gt06-s66-saturated-stop-01-outer/adversary-stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        ".local/reviews/gt06-s66-saturated-stop-01-outer/adversary-stdout.txt": "f4eb822dcdd4c9bbf055586bbeef70c06d54c2384ba0a78364572e59c5f228f4",
+        ".local/reviews/gt06-s66-saturated-stop-01-outer/capture.json": "d20c1deca2f8137e079d61b80f8b3d3a1a9d480b02eb0c11cd607adb701372be"
+      }
+    },
+    "gt06-s66-saturated-stop-02": {
+      "completed": false,
+      "host_capture": ".local/reviews/gt06-s66-saturated-stop-02-outer/capture.json",
+      "artifacts": {
+        ".local/reviews/gt06-s66-saturated-stop-02/import-host/capture.json": "4cb4b845d60e7721e3b994a8107356a1867a32faeea7579ebce0854e3501f870",
+        ".local/reviews/gt06-s66-saturated-stop-02/invocation.json": "9fff1dd78c0b5db541ce3b10a5006ba8b4639d31a9c1b69864cfa4bc2775e018",
+        ".local/reviews/gt06-s66-saturated-stop-02/source-files.json": "b33fdd75744fb446229716fe2f8024bf702afbcfde86fe4141fe5731bd13a01f",
+        ".local/reviews/gt06-s66-saturated-stop-02-outer/adversary-host.json": "85509436e0bc6c47df02da2b8563a683eff97113ee9af8f64d83a91dcac41a06",
+        ".local/reviews/gt06-s66-saturated-stop-02-outer/adversary-stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        ".local/reviews/gt06-s66-saturated-stop-02-outer/adversary-stdout.txt": "bde12aa6c5dfa7293c5cfe7a151631f65a2b3fd2af0bb18ef6c9855e7fb4f7cc",
+        ".local/reviews/gt06-s66-saturated-stop-02-outer/capture.json": "2012f1df69fc686afd11ec80f5b8815565d05c1c35e64d92b0a14a25d69eb693"
+      }
+    },
+    "gt06-s66-saturated-stop-03": {
+      "completed": false,
+      "host_capture": ".local/reviews/gt06-s66-saturated-stop-03-outer/capture.json",
+      "artifacts": {
+        ".local/reviews/gt06-s66-saturated-stop-03/http-adversary/http-0.json": "86b4e349459cbf8ac6d8cad8e23b9dd7498a55261a9bab4a416012d439bdd45c",
+        ".local/reviews/gt06-s66-saturated-stop-03/http-adversary/http-1.json": "ca324dcfec8db3a5327f1fe408c99815b7283b0652ed2a4858e74108b84c2281",
+        ".local/reviews/gt06-s66-saturated-stop-03/http-adversary/http-2.json": "0e3df4b8a0cb8680ea0302866f7428feeedbcfaccdeea57a6c04f5e24865d2bc",
+        ".local/reviews/gt06-s66-saturated-stop-03/http-adversary/http-3.json": "53e1e55293867849ebe52631f81fa2722853b6769d9e4e99aa40441f5a55f70c",
+        ".local/reviews/gt06-s66-saturated-stop-03/http-adversary/http-4.json": "03f06214102668ae71711353ef4a3610c3e42f11e5395acc0fd04ab492b231e5",
+        ".local/reviews/gt06-s66-saturated-stop-03/http-adversary/http-5.json": "593ab37f7ce8daf63e30c22d2ed3d02a8252266898354199acd844501624c09c",
+        ".local/reviews/gt06-s66-saturated-stop-03/import-host/capture.json": "cc2060c70125c112f89a78f30fbdc9bd630b3edb399b571f5362fd496034c2a0",
+        ".local/reviews/gt06-s66-saturated-stop-03/invocation.json": "f716f9521bc719ad9d55db845a28df343cb88bfc94321cda4672d42498e8585e",
+        ".local/reviews/gt06-s66-saturated-stop-03/runtime-host/capture.json": "38e18b31fc75128710b262cfdcd0f29a21f211b017e4e627aaa3038a5d9bd067",
+        ".local/reviews/gt06-s66-saturated-stop-03/source-files.json": "b33fdd75744fb446229716fe2f8024bf702afbcfde86fe4141fe5731bd13a01f",
+        ".local/reviews/gt06-s66-saturated-stop-03-outer/adversary-host.json": "ac216a98a3e057c09d6639d7acd5ecac20872ae8960a6e999a704c167e0a9a7b",
+        ".local/reviews/gt06-s66-saturated-stop-03-outer/adversary-stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        ".local/reviews/gt06-s66-saturated-stop-03-outer/adversary-stdout.txt": "891a8a81a02d9a08c41563c1bfcded977f8d3c782cb2b5c926a8a54e6266ede0",
+        ".local/reviews/gt06-s66-saturated-stop-03-outer/capture.json": "06777b0bbfebac6f2392cff838e1770e0afa89dd6beec86254f3b2fa81c5993a"
+      }
+    },
+    "gt06-s66-reviewer-complete-01": {
+      "completed": false,
+      "host_capture": ".local/reviews/gt06-s66-reviewer-complete-01-driver/capture.json",
+      "artifacts": {
+        ".local/reviews/gt06-s66-reviewer-complete-01/import-host/capture.json": "7c651855cf47a48ffb1963beb740cd20137091cecd78dbcdefda4fcc113a24f7",
+        ".local/reviews/gt06-s66-reviewer-complete-01/invocation.json": "31655a1f67ff900c9165481869c7bf916739c6654a141ae8ca379606ca9dab2c",
+        ".local/reviews/gt06-s66-reviewer-complete-01/reviewer-probe/observations.json": "693028a2cf617b5528d04637a19c0d29fbf9c5f46fd1ef8d273cc9c5f78c532a",
+        ".local/reviews/gt06-s66-reviewer-complete-01/reviewer-probe/source.json": "d2d733b3e6dbbfa8756c015a277a7c00c129f4eaacc74d6980f7ab61d54d7854",
+        ".local/reviews/gt06-s66-reviewer-complete-01/source-files.json": "b33fdd75744fb446229716fe2f8024bf702afbcfde86fe4141fe5731bd13a01f",
+        ".local/reviews/gt06-s66-reviewer-complete-01-driver/capture.json": "66e84865c482f83db472f881708859bd701a857038396945e6ad75c5d8177d5c",
+        ".local/reviews/gt06-s66-reviewer-complete-01-driver/reviewer-host.json": "ef33ac228d6128494fa744ad3e8494a7256c376c858bad34f035ceeb438e6c90",
+        ".local/reviews/gt06-s66-reviewer-complete-01-driver/reviewer-stderr.txt": "d75b5c8341e35a86da1eee86f0835d03360546476be51e5aa0f37d2d735bb198",
+        ".local/reviews/gt06-s66-reviewer-complete-01-driver/reviewer-stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "gt06-s66-reviewer-complete-02": {
+      "completed": false,
+      "host_capture": ".local/reviews/gt06-s66-reviewer-complete-02-driver/capture.json",
+      "artifacts": {
+        ".local/reviews/gt06-s66-reviewer-complete-02/invocation.json": "61c0a5059b79ceb7f6a445c7cdc21a20c416a8d495ef0dd5db696cdc25355bcc",
+        ".local/reviews/gt06-s66-reviewer-complete-02/source-files.json": "b33fdd75744fb446229716fe2f8024bf702afbcfde86fe4141fe5731bd13a01f",
+        ".local/reviews/gt06-s66-reviewer-complete-02-driver/capture.json": "90da2a99d93a72725e72cb707d666c05c3ffb05562c37e0ec47de74e51c9a101",
+        ".local/reviews/gt06-s66-reviewer-complete-02-driver/reviewer-stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        ".local/reviews/gt06-s66-reviewer-complete-02-driver/reviewer-stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "gt06-s66-reviewer-complete-03": {
+      "completed": false,
+      "host_capture": ".local/reviews/gt06-s66-reviewer-complete-03-driver/capture.json",
+      "artifacts": {
+        ".local/reviews/gt06-s66-reviewer-complete-03/import-host/capture.json": "0302c86625145d77fe4f31201fa410d519a3e9acec76ff1965693973e6e0603d",
+        ".local/reviews/gt06-s66-reviewer-complete-03/invocation.json": "d2dbf130099f694a071376801675d8192127ce5f8ce85065197ba367d04f36b7",
+        ".local/reviews/gt06-s66-reviewer-complete-03/source-files.json": "b33fdd75744fb446229716fe2f8024bf702afbcfde86fe4141fe5731bd13a01f",
+        ".local/reviews/gt06-s66-reviewer-complete-03-driver/capture.json": "0d3a4140b6cdf4f14c25562f67f0f9d00a91aee603ccb5009205c0f952a74c88",
+        ".local/reviews/gt06-s66-reviewer-complete-03-driver/reviewer-host.json": "a13f685014c827a9ae1f960b8e2d55f549434cd3ec05331a1908586eea52f9e6",
+        ".local/reviews/gt06-s66-reviewer-complete-03-driver/reviewer-stderr.txt": "3bae70e6d9c48e7e9e76773757af0933e7159dbc597ba73b8734bb31b633a720",
+        ".local/reviews/gt06-s66-reviewer-complete-03-driver/reviewer-stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  }
+}

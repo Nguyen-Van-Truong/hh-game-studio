@@ -140,6 +140,8 @@ func prepare(target: Node3D) -> bool:
 	var native_handle: int = 0
 	if DisplayServer.get_name() != "headless":
 		native_handle = DisplayServer.window_get_native_handle(DisplayServer.WINDOW_HANDLE, window_id)
+		if not need(DisplayServer.window_get_flag(DisplayServer.WINDOW_FLAG_NO_FOCUS, window_id), "GT06_TRACE_WINDOW_FOCUS_POLICY"):
+			return false
 	if not need(trace["captures"].is_empty() or (DisplayServer.get_name() != "headless" and native_handle != 0), "GT06_REAL_WINDOW_REQUIRED"):
 		return false
 	started_us = Time.get_ticks_usec()

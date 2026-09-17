@@ -1,0 +1,15 @@
+{
+  "code": "import unittest,json,sys; suite=unittest.defaultTestLoader.discover('tests/reviewer',pattern='test_*.py'); r=unittest.TextTestRunner(verbosity=2).run(suite); print('GT06_S67_REVIEWER_UNIT '+json.dumps({'run':r.testsRun,'failures':len(r.failures),'errors':len(r.errors),'skips':len(r.skipped)}),flush=True); sys.exit(not r.wasSuccessful())",
+  "source_sha256": {
+    "reviewer/app.py": "d1a8126bc443e43e4d2483b8ce3fe4755b941d6f0209191077555825df317452",
+    "reviewer/client.py": "843a6c2743eef5f85ed45f24bbe3054a187afaec1658cb9447ff046e0f83508d",
+    "reviewer/main.py": "2e6190fb28b81c50aae110694d74fddc6a0f7f1115156333e972311bfa94666a",
+    "reviewer/model.py": "895841b6765bbed49ba822986c6c8c863c833d431fe6678e11a09f0a0f4c9ff0",
+    "tests/reviewer/test_app.py": "c4f307e988355f08d43b2e7277a5d4eb7decbd3287d607896825f7dcaee59947",
+    "tests/reviewer/test_client.py": "6189e0fd717ed43f16fac988aca49c187940a60472a8595efb8a9a29ec0a7efa",
+    "tests/reviewer/test_client_adversarial.py": "9417848b9544bec50ab4605e60baae8e5b2ddfca07f96f601a84d4a4d6e17cf8",
+    "tests/reviewer/test_model.py": "4c60e54e509af115e2832df67b0f378959d0bc996b2d668476f9ae14552e9834",
+    "tests/reviewer/test_owner.py": "965d012f6858cf25668eb2cd52875d3828a020c0b6f5c27165c9a730d5cf7e60"
+  },
+  "runner_sha256": "ea522450acc46f90be5e2a7b9257e73ce8b619948105b2c9073aac1f881c7328"
+}
