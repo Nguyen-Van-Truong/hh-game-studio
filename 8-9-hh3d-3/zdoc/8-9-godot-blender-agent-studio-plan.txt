@@ -101,15 +101,17 @@ Blender GT-04 — S59:
   replay; selector tồn tại không tự làACK. public_ack=false, scene_state_durable
   vẫnfalse; chỉ protected bundle có durable_publication=true.
 - File-only audit: s59-audit/verify_evidence.py cho3profiles và verify_matrix.py
-  đều đạt;15negative evidence cases đạt. Chưa có hai critic độc lập trên gói
+  đều đạt;15negative cases và1regression empty-stderr inventory đạt. Chưa có hai critic độc lập trên gói
   cuối. GT04 vẫn IN_PROGRESS; solo/self-review không thay reviewer độc lập.
 - Giữ failed matrix01: runner đặt temp/user trong fixture cần rỗng. Matrix02
   stop_after_selector dùng kỳ vọng publication03 cũ, nên FAIL được giữ
   nguyên; matrix03 kiểm đúng hai phía terminal và không sửa runtime để né lỗi.
   Blender tạo7pyc trong snapshot dù env tắt bytecode: ghi hash, chỉ dọn đúng
   7file derived sau owned exits;139sourcefiles luônkhớp. Negative-audit attempt
-  đầu bị chặn bởi cache, không tínhPASS; đã rerun đủ15case sau dọn.
-- Checkpoint trước: S58=36f9937 (Git827files), S57=94eb83b (462files),
+  đầu bị chặn bởi cache, không tínhPASS; đã rerun đủ15case sau dọn; thêm1regression đóng gói stderr rỗng.
+- Source checkpoint S59=dc20308; dựng lại1479file từGit index,4/4file-only
+  verifier exit0/owned tree sạch (portable-check-02); chỉ bổ sung17file thiếu/
+  đổi từ lượt trước, không chạy lại native. Checkpoint trước: S58=36f9937 (Git827files), S57=94eb83b (462files),
   S56=9b7eb60. Các package cũ giữ source hash riêng. Lịch sử tớiS57 ở
   reviews/20260917-plan-history-s57/tools-plan-s57.txt, AUTHORITY=0.
 

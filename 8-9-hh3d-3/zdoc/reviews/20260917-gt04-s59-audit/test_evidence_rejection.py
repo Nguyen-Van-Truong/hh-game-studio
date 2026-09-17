@@ -33,6 +33,11 @@ class RejectCorruptEvidence(unittest.TestCase):
     def test_changed_snapshot_digest(self):
         self.reject('source-closure.json',lambda v:v['files'].__setitem__('host/blender/client_preview.py','0'*64))
 
+    def test_empty_client_stderr_is_required_in_portable_inventory(self):
+        self.assertTrue(audit.verify()['passed'])
+        key=(audit.PACKAGE/'client-stderr.txt').relative_to(audit.ROOT).as_posix()
+        self.assertEqual(audit.base.FILES[key],audit.sha(b''))
+
     def test_stale_closure(self):
         self.reject('capture.json',lambda v:v.__setitem__('source_closure_sha256','0'*64))
 

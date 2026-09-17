@@ -38,6 +38,7 @@ def verify():
     capture, report, gui, launch, runtime = base.package_facts(PACKAGE, manifest, runner, COUNT, 'writer-native.json')
     inventory = read(PACKAGE/'evidence-inventory.json')
     client = read(PACKAGE/'client.json')
+    need(raw(PACKAGE/'client-stderr.txt') == b'', 'portable raw client stderr present and empty')
     need(client == runner.client_report(raw(PACKAGE/'client-stdout.txt')), 'exact client report')
     exited = read(PACKAGE/'client-exit.json')
     need(exited == report['client_cleanup'] and runner.cli_cleanup_passed(exited)

@@ -8,6 +8,9 @@ Runtime/test closure (139 files):
 `943cff74f23a61427765071f7fd6661acbdad23c0e8386364f5615a2a0016134`.
 The final review inventory is `review-closure.json`; Git byte inventory is
 `files.json`. Exact earlier attempts remain separate.
+`portable-check-02` reconstructs 1,479 files from Git index: all four file-only
+verifiers exit 0 with clean owned trees. It repairs only 17 missing/changed
+files from the earlier reconstruction; it does not rerun native effects.
 
 | Requirement | Proof |
 |---|---|
@@ -17,7 +20,7 @@ The final review inventory is `review-closure.json`; Git byte inventory is
 | Stop/deadline/OOM, exact process ownership | IPC fault cases, deadline 19, cleanup retry 13, four publication Stop cuts |
 | Durable receipt/fencing/FIFO | Durable 16, FIFO 19; public ledger nine intent/terminal pairs per profile |
 | Closed protected publication/reopen, no effect replay | Checkpoint recovery 22; five crash cuts around intent, selector and terminal witness |
-| Exact source/process/artifact evidence | Three profile audits, matrix audit, 15 negative evidence cases, Git byte proof |
+| Exact source/process/artifact evidence | Three profile audits, matrix audit, 15 negative evidence cases plus the empty-stderr inventory regression, Git byte proof |
 
 `20260917-gt04-s59-scene-01` ran **594/594** complete Blender unit tests.
 Checkpoint/export profiles each ran **328/328** focused tests. Each of the
@@ -61,6 +64,11 @@ COMMITTED receipt. Read-only reopen never replays either effect.
   Its assertion now checks gate closure and exact retained Job ownership.
 - Public documentation fetches returned HTTP 402/403 in this session; no new
   external API claim was treated as verified from those failed requests.
+- The first clean Git reconstruction exposed an omitted empty client stderr
+  file: the completion checker read it but the portable inventory had not
+  recorded it. The audit now requires and inventories all three raw client
+  stderr files. Runtime/native runs are unchanged; only file-only verification
+  and Git reconstruction are repeated.
 
 Native `.writer` sentinels and live `.guard`/generated cache paths are not
 installed as portable authority. Closed guard/cache bytes are copied under
