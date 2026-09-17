@@ -1,0 +1,23 @@
+{
+  "schema": "HH-GT06-S74-RESIDENCY-VERIFICATION-1",
+  "actual_exit": {
+    "target_pid": 16692,
+    "started_at": "2026-09-17T21:36:37.060193+00:00",
+    "exit_code": 0
+  },
+  "owned_tree_verified": true,
+  "script_unchanged": true,
+  "samples": 102,
+  "duration_s": 100.0059092999436,
+  "idle_working_set_range": [
+    49451008,
+    49508352
+  ],
+  "idle_private_range": [
+    42082304,
+    42188800
+  ],
+  "fault_increase_after_active": 11,
+  "large_residency_drop_reproduced": false,
+  "formal_acceptance": false
+}

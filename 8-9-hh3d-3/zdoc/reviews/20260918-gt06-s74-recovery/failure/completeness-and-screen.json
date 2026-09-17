@@ -1,0 +1,161 @@
+{
+  "observed_utc": "2026-09-17T21:35:21.543767+00:00",
+  "scope": "Read-only interpretation of frozen failed-run records; not root-cause proof or acceptance",
+  "source_checkpoint_designated_by_coordinator": "cb4d1f6f633e6824a30a45873f05024c3bf7cd58",
+  "run_id": "gt06-s73-campaign-01.r00.a01",
+  "recorded_failure": "CAMPAIGN_RSS_GROWTH",
+  "recorded_phase": {
+    "batch": 5,
+    "phase": "joint_observation"
+  },
+  "captured_batch_indexes": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "warmup_batches": 5,
+  "collected_measured_batches": 1,
+  "screen_passed_measured_batches": 0,
+  "complete_runs": 0,
+  "host_rss_baseline_bytes": 18939904,
+  "host_rss_failed_sample_bytes": 23056384,
+  "host_rss_growth_bytes": 4116480,
+  "host_rss_growth_percent": 21.734429065743946,
+  "rss_limit_percent": 10,
+  "host_rss_reject_integer_comparison": true,
+  "baseline_memory": {
+    "editor": {
+      "held_handles": {
+        "unavailable_reason": null,
+        "value": 555
+      },
+      "objects": {
+        "unavailable_reason": null,
+        "value": 71161
+      },
+      "resources": {
+        "unavailable_reason": null,
+        "value": 6
+      },
+      "rss_bytes": {
+        "unavailable_reason": null,
+        "value": 359473152
+      }
+    },
+    "host": {
+      "held_handles": {
+        "unavailable_reason": null,
+        "value": 194
+      },
+      "objects": {
+        "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+        "value": null
+      },
+      "resources": {
+        "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+        "value": null
+      },
+      "rss_bytes": {
+        "unavailable_reason": null,
+        "value": 18939904
+      }
+    },
+    "phase": "post_batch_quiescent"
+  },
+  "failed_sample_memory": {
+    "editor": {
+      "held_handles": {
+        "unavailable_reason": null,
+        "value": 555
+      },
+      "objects": {
+        "unavailable_reason": null,
+        "value": 71161
+      },
+      "resources": {
+        "unavailable_reason": null,
+        "value": 6
+      },
+      "rss_bytes": {
+        "unavailable_reason": null,
+        "value": 93556736
+      }
+    },
+    "host": {
+      "held_handles": {
+        "unavailable_reason": null,
+        "value": 194
+      },
+      "objects": {
+        "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+        "value": null
+      },
+      "resources": {
+        "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+        "value": null
+      },
+      "rss_bytes": {
+        "unavailable_reason": null,
+        "value": 23056384
+      }
+    },
+    "phase": "post_batch_quiescent"
+  },
+  "additional_observed_limit_exceedance": {
+    "metric": "max_status_gap_ms",
+    "observed": 2010.742,
+    "limit": 2000,
+    "emitted_failure": false,
+    "reason": "Frozen screen_sample raised host RSS error before reaching status-gap check"
+  },
+  "next_native_ready_exists": true,
+  "confirmed_absences": {
+    "project/benchmark/out/batch-06.json": true,
+    "project/benchmark/out/batch-07.json": true,
+    "project/benchmark/out/batch-08.json": true,
+    "project/benchmark/out/batch-09.json": true,
+    "project/benchmark/out/batch-10.json": true,
+    "project/benchmark/out/batch-11.json": true,
+    "project/benchmark/out/batch-12.json": true,
+    "project/benchmark/out/batch-13.json": true,
+    "project/benchmark/out/batch-14.json": true,
+    "project/benchmark/out/batch-15.json": true,
+    "project/benchmark/out/batch-16.json": true,
+    "project/benchmark/out/batch-17.json": true,
+    "project/benchmark/out/batch-18.json": true,
+    "project/benchmark/out/batch-19.json": true,
+    "project/benchmark/out/batch-20.json": true,
+    "project/benchmark/out/batch-21.json": true,
+    "project/benchmark/out/batch-22.json": true,
+    "project/benchmark/out/batch-23.json": true,
+    "project/benchmark/out/batch-24.json": true,
+    "project/benchmark/out/batch-25.json": true,
+    "project/benchmark/out/batch-26.json": true,
+    "project/benchmark/out/batch-27.json": true,
+    "project/benchmark/out/batch-28.json": true,
+    "project/benchmark/out/batch-29.json": true,
+    "project/benchmark/out/batch-30.json": true,
+    "project/benchmark/out/batch-31.json": true,
+    "project/benchmark/out/batch-32.json": true,
+    "project/benchmark/out/batch-33.json": true,
+    "project/benchmark/out/batch-34.json": true,
+    "project/benchmark/input/start-06.json": true,
+    "project/benchmark/input/ack-06.json": true,
+    "project/benchmark/out/index.json": true,
+    "child-result.json": true,
+    "cleanup.json": true,
+    "assembly-manifest.json": true,
+    "assembled-run.json": true,
+    "run-capture.json": true,
+    "editor-host/process-exit.json": true,
+    "../campaign-capture.json": true,
+    "../dataset.json": true,
+    "../summary.json": true
+  },
+  "stop_slots_checked": 30,
+  "stop_latches_present": 0,
+  "preserved_partial_data_is_accepted": false
+}

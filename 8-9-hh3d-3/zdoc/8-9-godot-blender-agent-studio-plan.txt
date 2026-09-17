@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 18-09-2026, Asia/Saigon | Revision S73 | TRIỂN KHAI THEO GATE
+Ngày 18-09-2026, Asia/Saigon | Revision S74 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S73
+PLAN_REVISION=S74
 EXECUTION_MODE=COORDINATOR_THREE_ASTRA_XHIGH_OWNER_20260918
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -54,13 +54,13 @@ GT05_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260917_S64
 GT05_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S64
 GT05_CHECKPOINT_COMMIT=808d8ba
 GT06_EVIDENCE_STATUS=NATIVE_DIAGNOSTICS_IN_PROGRESS_NO_ACCEPTANCE
-GT06_WORKING_SOURCE_STATUS=S73_PRIVATE_HISTORY_FINGERPRINT_TESTED
+GT06_WORKING_SOURCE_STATUS=S73_FROZEN_RSS_FAILURE_UNDER_INVESTIGATION
 GT06_CURRENT_SOURCE_CLOSURE=6f5d4c8a14ef8476c4cff6afb06ab161b17905f8593f9a685cd235593d7ee913
 GT06_BENCHMARK_CAMPAIGN=gt06-s73-campaign-01
-GT06_BENCHMARK_STATUS=RUNNING_S73_LAUNCH1_OBSERVED_0412
+GT06_BENCHMARK_STATUS=FAILED_S73_RSS_B05
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
 
-TIẾN ĐỘ HIỆN HÀNH — S73, ngày 18-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S74, ngày 18-09-2026
 GT-01–05 đã ACCEPTED. GT-06 mở sau hai review độc lập S64 cùng manifest.
 Owner đã cho phép lại ba Astra extra high; coordinator tiếp tục từ S68 đã tích hợp.
 Ba Astra xhigh S73 đã điều tra response-loss, đo tối ưu hash và giữ failure;
@@ -185,6 +185,25 @@ GT-06 hiện hành — phần đã làm và đường tới nghiệm thu
   dao động lớn; b04 gồm57.27sHTTP+133.91snative, không quy mọi chậm cho hash.
   -s73-next/warmup-watchpoint.json giữ số liệu; chưa đủ dự đoán quá7410s/run.
   Theo dõi command/native riêng tại heartbeat thường lệ, không restart/nới gate.
+- S74: S73campaign01 đã FAILED sau1131.563s,6batchcapture=5warmup+1measured
+  bị loại tại screen. PrimaryCAMPAIGN_RSS_GROWTH: hostRSS baselineb04
+  18,939,904→23,056,384B (+21.73%); editor359,473,152→93,556,736B,
+  objects71161/resources6/handles555 không đổi. b05commandgap2010.742ms cũng
+  vượt2000 nhưng bị RSScheck trước che mã lỗi. Không gọi đây là leak đã chứng
+  minh hoặc môi trường đã được miễn trừ; giữ cả hai failureconditions.
+  Live schedulerstate3/result1/instancesrỗng; hostPID38244actualexit1;
+  editorPID2984nativeexit thiếu, wrapper2 không thay. Cả hai Jobzero/closed,
+  wrapperhandlesreleased. SourceS73 vẫn nguyên; không có Stop hoặc runPASS.
+  Ba worker đang giữ evidence/đối chiếu counter/nghiên cứu Windows; root kiểm
+  môi trường và chọn diagnostic nhỏ trước khi quyết định resume/candidate mới.
+  Evidence mới: -s74-recovery/. Không nớiRSS/deadline hay dùngpeak/privatebytes
+  thayRSS. Chưa có ETA mới; startup/warmup estimates phía trên là lịch sử.
+  Diagnostic own-process32MiB/100s đã actualexit0/treeclean:102samples,
+  idleRSS49.45–49.51MB/private42.08–42.19MB, không tái hiện drop lớn. Sampler/
+  baseline/ngưỡng chưa thấy lỗi; nguyên nhân benchmark vẫn chưa chứng minh.
+  Không sửa source hoặc hệ thống. Chọn một attempt mới cùng S73 qua launch2
+  sau terminal/cleanup/source/Stop checks; chưa coi lỗi đã sửa. Nếu tái diễn,
+  cần diagnostic priority/commit/fault của owned workload trước retry tiếp.
 - Sau benchmark: verify complete10×35, raw/hash/schema/counters/actual exits;
   ghép functional bằng dependency đã kiểm; đóng final source/review/raw manifest
   và requirement→test→evidence. Hai critic mới đọc độc lập cùng final hash,

@@ -1,0 +1,341 @@
+{
+  "observed_utc": "2026-09-17T21:33:55.467255+00:00",
+  "git_head_at_preservation": "115297d3bd9decf1ad79c5fd0332c771fa014e8c",
+  "status_launcher_sha256": "405e2abfa39332b1313871763184fdda0755ff998ec83310e67e10cebfe2ebb9",
+  "formal_acceptance": false,
+  "scheduler": {
+    "schema": "HH-GT06-TASK-STATUS-1",
+    "task_path": "\\HHStudio.GT06.gt06-s73-campaign-01",
+    "campaign_id": "gt06-s73-campaign-01",
+    "mode": "campaign",
+    "launch_number": 1,
+    "state": 3,
+    "last_run_time": "2026-09-18T04:11:26.0000000",
+    "last_task_result": 1,
+    "instances": [],
+    "output_directory": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s73-campaign-01-supervisor",
+    "formal_acceptance": false,
+    "status_scope": "Scheduler state only; not actual process exit or owned-tree proof"
+  },
+  "native_process_names_observed": [],
+  "child_failure_code": "CAMPAIGN_RSS_GROWTH",
+  "child_failure_phase": {
+    "batch": 5,
+    "phase": "joint_observation"
+  },
+  "completed_batches": 6,
+  "warmup_batches_completed": 5,
+  "captured_measured_batches": 1,
+  "measured_sample_screen_pass_count": 0,
+  "completed_full_runs": 0,
+  "partial_command": null,
+  "host_actual_target_exit": {
+    "pid": 38244,
+    "exit_code": 1
+  },
+  "editor_actual_target_start": {
+    "pid": 2984
+  },
+  "editor_actual_target_exit": null,
+  "host_cleanup": {
+    "closed": true,
+    "completed": false,
+    "failure_code": "BENCHMARK_WRAPPER_EXIT",
+    "job": {
+      "active_count": 0,
+      "assigned": true,
+      "close_uncertain": false,
+      "closed": true,
+      "configured": true,
+      "create_uncertain": false,
+      "failed_operations": [],
+      "handle_retained": false,
+      "native_error": null,
+      "tainted": false,
+      "zero_observed": true
+    },
+    "wrapper_exit_code": 1,
+    "wrapper_process_handle": {
+      "close_uncertain": false,
+      "closed": true,
+      "handle_retained": false,
+      "required": true
+    }
+  },
+  "editor_cleanup": {
+    "closed": true,
+    "completed": false,
+    "failure_code": "BENCHMARK_CLOSED_BEFORE_FINISH",
+    "job": {
+      "active_count": 0,
+      "assigned": true,
+      "close_uncertain": false,
+      "closed": true,
+      "configured": true,
+      "create_uncertain": false,
+      "failed_operations": [],
+      "handle_retained": false,
+      "native_error": null,
+      "tainted": false,
+      "zero_observed": true
+    },
+    "wrapper_exit_code": 2,
+    "wrapper_process_handle": {
+      "close_uncertain": false,
+      "closed": true,
+      "handle_retained": false,
+      "required": true
+    }
+  },
+  "import_capture": {
+    "completed": true,
+    "formal_acceptance": false,
+    "public_ack": false,
+    "limits": {
+      "job_memory_bytes": 2147483648,
+      "job_user_time_100ns": 150000000,
+      "active_process_limit": 4,
+      "limit_flags": 8716,
+      "wall_seconds": 20,
+      "workspace_bytes_limit": 33554432,
+      "workspace_limit_is_watchdog": true,
+      "each_log_capture_bytes": 262144,
+      "effective_wall_seconds": 20
+    },
+    "active_at_wrapper_exit": 0,
+    "active_before_cleanup": 0,
+    "natural_tree_exit": true,
+    "final_workspace_bytes": 3405058,
+    "actual_process_exit": {
+      "pid": 44056,
+      "exit_code": 0
+    },
+    "wrapper_exit_code": 0,
+    "job": {
+      "configured": true,
+      "assigned": true,
+      "closed": true,
+      "handle_retained": false,
+      "tainted": false,
+      "zero_observed": true,
+      "active_count": 0,
+      "create_uncertain": false,
+      "close_uncertain": false,
+      "failed_operations": [],
+      "native_error": null
+    },
+    "elapsed_seconds": 4.782000000006519,
+    "artifacts": {
+      "process-start.json": "56871559b16d8ab09af712de415174fd1d8e73921171e33abc359d88c10258b7",
+      "process-exit.json": "6e6265a33bf05c4a0bf0a3887f835fdcb536f7c47800e37480f4476eab85ab99",
+      "stdout.txt": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003",
+      "stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "fixed_attempt_slots": [
+    {
+      "path": "run-00-attempt-01",
+      "exists": true,
+      "stop_request_lexists": false,
+      "run_capture_exists": false
+    },
+    {
+      "path": "run-00-attempt-02",
+      "exists": false,
+      "stop_request_lexists": false,
+      "run_capture_exists": false
+    },
+    {
+      "path": "run-00-attempt-03",
+      "exists": false,
+      "stop_request_lexists": false,
+      "run_capture_exists": false
+    },
+    {
+      "path": "run-01-attempt-01",
+      "exists": false,
+      "stop_request_lexists": false,
+      "run_capture_exists": false
+    },
+    {
+      "path": "run-01-attempt-02",
+      "exists": false,
+      "stop_request_lexists": false,
+      "run_capture_exists": false
+    },
+    {
+      "path": "run-01-attempt-03",
+      "exists": false,
+      "stop_request_lexists": false,
+      "run_capture_exists": false
+    },
+    {
+      "path": "run-02-attempt-01",
+      "exists": false,
+      "stop_request_lexists": false,
+      "run_capture_exists": false
+    },
+    {
+      "path": "run-02-attempt-02",
+      "exists": false,
+      "stop_request_lexists": false,
+      "run_capture_exists": false
+    },
+    {
+      "path": "run-02-attempt-03",
+      "exists": false,
+      "stop_request_lexists": false,
+      "run_capture_exists": false
+    },
+    {
+      "path": "run-03-attempt-01",
+      "exists": false,
+      "stop_request_lexists": false,
+      "run_capture_exists": false
+    },
+    {
+      "path": "run-03-attempt-02",
+      "exists": false,
+      "stop_request_lexists": false,
+      "run_capture_exists": false
+    },
+    {
+      "path": "run-03-attempt-03",
+      "exists": false,
+      "stop_request_lexists": false,
+      "run_capture_exists": false
+    },
+    {
+      "path": "run-04-attempt-01",
+      "exists": false,
+      "stop_request_lexists": false,
+      "run_capture_exists": false
+    },
+    {
+      "path": "run-04-attempt-02",
+      "exists": false,
+      "stop_request_lexists": false,
+      "run_capture_exists": false
+    },
+    {
+      "path": "run-04-attempt-03",
+      "exists": false,
+      "stop_request_lexists": false,
+      "run_capture_exists": false
+    },
+    {
+      "path": "run-05-attempt-01",
+      "exists": false,
+      "stop_request_lexists": false,
+      "run_capture_exists": false
+    },
+    {
+      "path": "run-05-attempt-02",
+      "exists": false,
+      "stop_request_lexists": false,
+      "run_capture_exists": false
+    },
+    {
+      "path": "run-05-attempt-03",
+      "exists": false,
+      "stop_request_lexists": false,
+      "run_capture_exists": false
+    },
+    {
+      "path": "run-06-attempt-01",
+      "exists": false,
+      "stop_request_lexists": false,
+      "run_capture_exists": false
+    },
+    {
+      "path": "run-06-attempt-02",
+      "exists": false,
+      "stop_request_lexists": false,
+      "run_capture_exists": false
+    },
+    {
+      "path": "run-06-attempt-03",
+      "exists": false,
+      "stop_request_lexists": false,
+      "run_capture_exists": false
+    },
+    {
+      "path": "run-07-attempt-01",
+      "exists": false,
+      "stop_request_lexists": false,
+      "run_capture_exists": false
+    },
+    {
+      "path": "run-07-attempt-02",
+      "exists": false,
+      "stop_request_lexists": false,
+      "run_capture_exists": false
+    },
+    {
+      "path": "run-07-attempt-03",
+      "exists": false,
+      "stop_request_lexists": false,
+      "run_capture_exists": false
+    },
+    {
+      "path": "run-08-attempt-01",
+      "exists": false,
+      "stop_request_lexists": false,
+      "run_capture_exists": false
+    },
+    {
+      "path": "run-08-attempt-02",
+      "exists": false,
+      "stop_request_lexists": false,
+      "run_capture_exists": false
+    },
+    {
+      "path": "run-08-attempt-03",
+      "exists": false,
+      "stop_request_lexists": false,
+      "run_capture_exists": false
+    },
+    {
+      "path": "run-09-attempt-01",
+      "exists": false,
+      "stop_request_lexists": false,
+      "run_capture_exists": false
+    },
+    {
+      "path": "run-09-attempt-02",
+      "exists": false,
+      "stop_request_lexists": false,
+      "run_capture_exists": false
+    },
+    {
+      "path": "run-09-attempt-03",
+      "exists": false,
+      "stop_request_lexists": false,
+      "run_capture_exists": false
+    }
+  ],
+  "confirmed_absences": {
+    "run-00-attempt-01/editor-host/process-exit.json": true,
+    "run-00-attempt-01/editor-host/capture.json": true,
+    "run-00-attempt-01/host-owner/capture.json": true,
+    "run-00-attempt-01/child-result.json": true,
+    "run-00-attempt-01/cleanup.json": true,
+    "run-00-attempt-01/assembly-manifest.json": true,
+    "run-00-attempt-01/assembled-run.json": true,
+    "run-00-attempt-01/run-capture.json": true,
+    "run-00-attempt-01/project/benchmark/out/index.json": true,
+    "run-00-attempt-01/project/benchmark/out/batch-06.json": true,
+    "run-00-attempt-01/project/benchmark/out/batch-34.json": true,
+    "run-00-attempt-01/project/benchmark/input/start-06.json": true,
+    "run-00-attempt-01/project/benchmark/input/ack-06.json": true,
+    "campaign-capture.json": true,
+    "dataset.json": true,
+    "summary.json": true
+  },
+  "raw_file_count": 239,
+  "raw_total_bytes": 25861512,
+  "preserved_input_file_count": 64,
+  "preserved_input_bytes": 1130974,
+  "started_utc": "2026-09-17T21:33:50.507028+00:00",
+  "finished_utc": "2026-09-17T21:33:55.468262+00:00"
+}

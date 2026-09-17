@@ -1,0 +1,19 @@
+{
+  "wrapper_pid": 20916,
+  "started_at": "2026-09-17T21:36:36.914698+00:00",
+  "argv": [
+    "python.exe",
+    "-B",
+    "$SNAPSHOT/zdoc/reviews/20260918-gt06-s74-recovery/residency_probe.py",
+    "$SNAPSHOT/zdoc/reviews/20260918-gt06-s74-recovery/residency-01/result.json"
+  ],
+  "exit_code": 0,
+  "target_pid": 16692,
+  "wrapper_exit_code": 0,
+  "timed_out": false,
+  "tree_verified": true,
+  "ownership": "gated_job_kill_on_close",
+  "stdout": "residency-stdout.txt",
+  "stderr": "residency-stderr.txt",
+  "host": "residency-host.json"
+}
