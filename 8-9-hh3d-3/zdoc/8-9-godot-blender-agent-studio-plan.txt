@@ -185,6 +185,12 @@ GT-06 hiện hành — implementation đã tích hợp, native diagnostics đang
   Các dependency của GUI S68 complete02/stop02 không đổi nên giữ evidence đó.
   Mapping và review: reviews/20260918-gt06-s69-owner-review/.
   Capture/hash và giới hạn: reviews/20260918-gt06-s69-progress/README.md.
+  Checkpoint3147778; 62 file trong Git proof khớp HEAD/disk. Full campaign mới
+  gt06-s69-campaign-01 đã khởi chạy từ source closure
+  15945096c0ef3fc42f17f121842060a70ea530ec1cbacd2cba21566d0f3e37eb
+  (46 dependency của lane benchmark), không phải closure nghiệm thu toànGT06.
+  RUNNING tại bản ghi launch, chưa PASS; trạng thái thực đọc raw/capture.
+  10 processpairs chạy tuần tự; không chạy engine/test nặng cạnh benchmark.
 - Chưa có GT06 accepted candidate. Benchmark1000commands+100cycles theo plan
   vẫn phải chạy đúng profile; unit nhỏ không thay benchmark. Không nâng shared
   caps để hợp artifact; raw series có parser/quota riêng, wire chỉ hash/reference.

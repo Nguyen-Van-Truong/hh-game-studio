@@ -1,0 +1,14 @@
+{
+  "schema": "HH-GT06-S69-CAMPAIGN-LAUNCH-1",
+  "status": "RUNNING_NOT_ACCEPTANCE",
+  "checkpoint": "3147778fe42b6b4eb71ecfbb20e79840de22eb2a",
+  "git_proof_files": 62,
+  "git_proof_matches_HEAD": true,
+  "campaign_id": "gt06-s69-campaign-01",
+  "source_closure_sha256": "15945096c0ef3fc42f17f121842060a70ea530ec1cbacd2cba21566d0f3e37eb",
+  "source_file_count": 46,
+  "campaign_sha256": "b65ff937eb24fefd1df4a0ac0782b4efcad611f06d5e2b8421a4efa755e5ee63",
+  "first_run_id": "gt06-s69-campaign-01.r00.a01",
+  "command": "python -B studio/tests/replay/run_benchmark_campaign.py --campaign-id gt06-s69-campaign-01",
+  "formal_acceptance": false
+}

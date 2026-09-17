@@ -94,6 +94,24 @@ runs may resume only on the same source/machine/profile. No thresholds,
 sample counts, or 7410-second per-run owner cap were relaxed. Do not run other
 engines or heavy test lanes during this measured campaign.
 
+Checkpoint `3147778` contains the S69 implementation. Its 62 listed Git-proof
+files match HEAD and disk. `campaign-launch.json` records the new full launch,
+`gt06-s69-campaign-01`, with 46 benchmark dependencies and source closure
+`15945096c0ef3fc42f17f121842060a70ea530ec1cbacd2cba21566d0f3e37eb`.
+The launch record's RUNNING status is a timestamped observation, not a durable
+completion verdict. Read the current raw captures for later status. This
+benchmark dependency closure is not the full GT06 acceptance closure.
+
+Reproduction from `8-9-hh3d-3`:
+
+```text
+python -B studio/tests/replay/run_benchmark_campaign.py --campaign-id gt06-s69-campaign-01
+```
+
+Never invoke that command while its existing coordinator is still active.
+Resuming completed runs requires unchanged source, profile and workstation;
+an interrupted attempt needs independently captured owner cleanup first.
+
 After a successful campaign, freeze the final requirement/evidence mapping
 and obtain two independent critic verdicts before accepting GT06. GT07
 recovery/concurrency, GT08 CI and physical Android, GT09 conformance and GT10
