@@ -1,0 +1,15 @@
+{
+  "status": "INCOMPLETE",
+  "review_closure_sha256": "8a27eb7e0a57c17e43ac52a10e6aa8850605457d8e141677e44ef7ff71ff6f96",
+  "source_closure_sha256": "943cff74f23a61427765071f7fd6661acbdad23c0e8386364f5615a2a0016134",
+  "final_critic_reports": [],
+  "preliminary_findings": [
+    "Unsupported library/image paths resolved and probed before reject (independently reproduced without external I/O)",
+    "Committed nested raw evidence includes absolute workstation paths contrary to TQ01"
+  ],
+  "resume_error": "refresh token revoked",
+  "latest_owner_mode": "solo; pause all subagents; no further critic dispatch",
+  "coordinator_record_only": true,
+  "formal_acceptance": false,
+  "latest_dispatch_result": "Astra capacity failures; one fallback stream-disconnected; no completed final verdict"
+}

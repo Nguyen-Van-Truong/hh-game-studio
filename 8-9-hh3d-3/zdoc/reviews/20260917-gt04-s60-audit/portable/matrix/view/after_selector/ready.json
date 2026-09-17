@@ -1,0 +1,349 @@
+{
+  "case": "after_selector",
+  "gui_directory": "blender-53d5104c8e2b4089a7bda94c7f514b83",
+  "gui_pid": 44072,
+  "gui_wrapper_pid": 7308,
+  "host_pid": 24964,
+  "image": {
+    "artifacts": {
+      "active.json": {
+        "identity": {
+          "file_id": "6a450b00000002000000000000000000",
+          "size": 595,
+          "volume": "4938437614955579414"
+        },
+        "sha256": "271b1d6c66ead3ae54c33dae32a62810264dd671d92ccc97c5ece18826aeaa9d"
+      },
+      "checkpoint.blend": {
+        "identity": {
+          "file_id": "65450b00000002000000000000000000",
+          "size": 99227,
+          "volume": "4938437614955579414"
+        },
+        "sha256": "425adb59cd9f46da4803fb45680757779d54249ca597963aef65794798eb1a84"
+      },
+      "manifest.json": {
+        "identity": {
+          "file_id": "69450b00000002000000000000000000",
+          "size": 9077,
+          "volume": "4938437614955579414"
+        },
+        "sha256": "303021b1eb201b7e8642aea4565d8c2fa25d6c0455cafb39bb55da53d5daef88"
+      },
+      "scene.glb": {
+        "identity": {
+          "file_id": "67450b00000002000000000000000000",
+          "size": 1672,
+          "volume": "4938437614955579414"
+        },
+        "sha256": "3177956ef42e70b769e6c724cc065ef0fb73b9ad7bef301bbd6d9eac1ac2d51f"
+      }
+    },
+    "custody": {
+      "blobs": {
+        "identity": {
+          "file_id": "4e450b00000002000000000000000000",
+          "size": 0,
+          "volume": "4938437614955579414"
+        },
+        "path": "$PROJECT\\studio\\.local\\reviews\\20260917-gt04-s60-matrix\\after_selector\\hh-private-2fbbbeeade27475ab9f30e1b9e0b0ed4"
+      },
+      "epoch": 5,
+      "events": {
+        "binding": {
+          "root": {
+            "file_id": "50450b00000002000000000000000000",
+            "size": 0,
+            "volume": "4938437614955579414"
+          },
+          "stream": {
+            "file_id": "53450b00000002000000000000000000",
+            "size": 0,
+            "volume": "4938437614955579414"
+          },
+          "witnessed": {
+            "sequence": 5,
+            "sha256": "a6fa1735c877e116114843781f80317ee321d6b6d7d4af05332c6b88920a31a4",
+            "size": 3893
+          }
+        },
+        "path": "$PROJECT\\studio\\.local\\reviews\\20260917-gt04-s60-matrix\\after_selector\\hh-private-496abccf64f340aaa4c604ea41c5c263"
+      },
+      "files": {
+        "identity": {
+          "file_id": "4c450b00000002000000000000000000",
+          "size": 0,
+          "volume": "4938437614955579414"
+        },
+        "path": "$PROJECT\\studio\\.local\\reviews\\20260917-gt04-s60-matrix\\after_selector\\hh-files-a0d256761f5c401fa0aa37dd56318af2"
+      },
+      "phase": "READY",
+      "project_id": "blender.owned-publication",
+      "schema": "hh-fixture-custody-1",
+      "storage_id": "da012abd200c4e1e8ed462fca8ed02bb"
+    },
+    "event_head": {
+      "sequence": 5,
+      "sha256": "a6fa1735c877e116114843781f80317ee321d6b6d7d4af05332c6b88920a31a4",
+      "size": 3893
+    },
+    "events_sha256": "ae09a0908d71925286dc948dec8ee8ef36f6547a2d336bac803eb80e3fa50158",
+    "phase": "SELECTING",
+    "public_ack": false,
+    "state": {
+      "config": {
+        "binary_sha256": "8f7a131ad8bc148edc218b334f07d92a57f5a357fa66d913b290537fd8353c06",
+        "generation": "d113a2173fa34d8da6c6a2d82417bd64",
+        "kind": "CONFIG",
+        "publication_profile": "export.publish",
+        "schema": "HH-BLENDER-PUBLICATION-1",
+        "source_sha256": "27846f581ba8ac356a8f4abe7f4010789cc47241dcb52c7707e24ef7c85f6040"
+      },
+      "intent": {
+        "kind": "INTENT",
+        "lease_epoch": 1,
+        "request": {
+          "command_id": "publish",
+          "expected_context": {
+            "active_id": null,
+            "mode": "OBJECT",
+            "selected_ids": []
+          },
+          "expected_revision": "sha256:bcd8d7424952663f596e337ae4616b235fa4b5f799f4f50c112148f8e821402e",
+          "schema": "HH-BLENDER-PUBLICATION-1"
+        },
+        "request_sha256": "8abf306cf0a5d79d55cc07884e900f56ef67fd3d87aca1060865ef1700ce7dc1",
+        "schema": "HH-BLENDER-PUBLICATION-1"
+      },
+      "phase": "SELECTING",
+      "selector": {
+        "command_id": "publish",
+        "generation": 1,
+        "manifest": {
+          "file_version": {
+            "identity": {
+              "file_id": "69450b00000002000000000000000000",
+              "size": 9077,
+              "volume": "4938437614955579414"
+            },
+            "sha256": "303021b1eb201b7e8642aea4565d8c2fa25d6c0455cafb39bb55da53d5daef88"
+          },
+          "identity": {
+            "file_id": "68450b00000002000000000000000000",
+            "size": 9077,
+            "volume": "4938437614955579414"
+          },
+          "object_id": "blob-4499556e71f14ef9a4ee06b7a99f8cdc",
+          "sha256": "303021b1eb201b7e8642aea4565d8c2fa25d6c0455cafb39bb55da53d5daef88"
+        },
+        "request_sha256": "8abf306cf0a5d79d55cc07884e900f56ef67fd3d87aca1060865ef1700ce7dc1",
+        "schema": "HH-BLENDER-PUBLICATION-1"
+      },
+      "staged": {
+        "artifacts": {
+          "checkpoint.blend": {
+            "file_version": {
+              "identity": {
+                "file_id": "65450b00000002000000000000000000",
+                "size": 99227,
+                "volume": "4938437614955579414"
+              },
+              "sha256": "425adb59cd9f46da4803fb45680757779d54249ca597963aef65794798eb1a84"
+            },
+            "identity": {
+              "file_id": "64450b00000002000000000000000000",
+              "size": 99227,
+              "volume": "4938437614955579414"
+            },
+            "object_id": "blob-6b3baa444da34646b3609427e2376be8",
+            "sha256": "425adb59cd9f46da4803fb45680757779d54249ca597963aef65794798eb1a84"
+          },
+          "scene.glb": {
+            "file_version": {
+              "identity": {
+                "file_id": "67450b00000002000000000000000000",
+                "size": 1672,
+                "volume": "4938437614955579414"
+              },
+              "sha256": "3177956ef42e70b769e6c724cc065ef0fb73b9ad7bef301bbd6d9eac1ac2d51f"
+            },
+            "identity": {
+              "file_id": "66450b00000002000000000000000000",
+              "size": 1672,
+              "volume": "4938437614955579414"
+            },
+            "object_id": "blob-1bca39835ffd4c5cb39d005947fae93b",
+            "sha256": "3177956ef42e70b769e6c724cc065ef0fb73b9ad7bef301bbd6d9eac1ac2d51f"
+          }
+        },
+        "command_id": "publish",
+        "kind": "STAGED",
+        "manifest": {
+          "file_version": {
+            "identity": {
+              "file_id": "69450b00000002000000000000000000",
+              "size": 9077,
+              "volume": "4938437614955579414"
+            },
+            "sha256": "303021b1eb201b7e8642aea4565d8c2fa25d6c0455cafb39bb55da53d5daef88"
+          },
+          "identity": {
+            "file_id": "68450b00000002000000000000000000",
+            "size": 9077,
+            "volume": "4938437614955579414"
+          },
+          "object_id": "blob-4499556e71f14ef9a4ee06b7a99f8cdc",
+          "sha256": "303021b1eb201b7e8642aea4565d8c2fa25d6c0455cafb39bb55da53d5daef88"
+        },
+        "request_sha256": "8abf306cf0a5d79d55cc07884e900f56ef67fd3d87aca1060865ef1700ce7dc1",
+        "schema": "HH-BLENDER-PUBLICATION-1"
+      },
+      "stopped": false
+    }
+  },
+  "public_ack": false,
+  "request": {
+    "command_id": "publish",
+    "expected_context": {
+      "active_id": null,
+      "mode": "OBJECT",
+      "selected_ids": []
+    },
+    "expected_revision": "sha256:bcd8d7424952663f596e337ae4616b235fa4b5f799f4f50c112148f8e821402e",
+    "schema": "HH-BLENDER-PUBLICATION-1"
+  },
+  "scene": {
+    "context": {
+      "active_id": null,
+      "mode": "OBJECT",
+      "selected_ids": []
+    },
+    "public_ack": false,
+    "revision": "sha256:bcd8d7424952663f596e337ae4616b235fa4b5f799f4f50c112148f8e821402e",
+    "snapshot": {
+      "objects": [
+        {
+          "faces": [
+            [
+              0,
+              3,
+              2,
+              1
+            ],
+            [
+              4,
+              5,
+              6,
+              7
+            ],
+            [
+              0,
+              1,
+              5,
+              4
+            ],
+            [
+              1,
+              2,
+              6,
+              5
+            ],
+            [
+              2,
+              3,
+              7,
+              6
+            ],
+            [
+              3,
+              0,
+              4,
+              7
+            ]
+          ],
+          "location": [
+            0,
+            0,
+            0
+          ],
+          "material": {
+            "alpha_mode": "OPAQUE",
+            "base_color": [
+              0.699999988079071,
+              0.20000000298023224,
+              0.10000000149011612,
+              1
+            ],
+            "double_sided": true,
+            "material_id": "copper",
+            "metallic": 0.6000000238418579,
+            "name": "HH_Material_copper",
+            "roughness": 0.3499999940395355
+          },
+          "mesh_name": "GT04_mesh_box",
+          "name": "GT04_box",
+          "object_id": "box",
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "vertices": [
+            [
+              -0.5,
+              -1,
+              -1.5
+            ],
+            [
+              0.5,
+              -1,
+              -1.5
+            ],
+            [
+              0.5,
+              1,
+              -1.5
+            ],
+            [
+              -0.5,
+              1,
+              -1.5
+            ],
+            [
+              -0.5,
+              -1,
+              1.5
+            ],
+            [
+              0.5,
+              -1,
+              1.5
+            ],
+            [
+              0.5,
+              1,
+              1.5
+            ],
+            [
+              -0.5,
+              1,
+              1.5
+            ]
+          ]
+        }
+      ],
+      "schema": "HH-BLENDER-FIXTURE-SCENE-1",
+      "units": {
+        "scale_length": 1,
+        "system": "METRIC"
+      }
+    },
+    "undo_supported": true
+  },
+  "storage_id": "da012abd200c4e1e8ed462fca8ed02bb"
+}

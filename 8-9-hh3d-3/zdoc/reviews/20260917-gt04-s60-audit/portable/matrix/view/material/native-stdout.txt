@@ -1,0 +1,17 @@
+GT04_MATERIAL_CHECK {"label": "native_material_create_complete", "passed": true}
+GT04_MATERIAL_CHECK {"label": "native_closed_pbr_readback", "passed": true}
+GT04_MATERIAL_CHECK {"label": "duplicate_material_has_original_receipt", "passed": true}
+GT04_MATERIAL_CHECK {"label": "native_material_creation_undo", "passed": true}
+GT04_MATERIAL_CHECK {"label": "native_material_creation_redo", "passed": true}
+GT04_MATERIAL_CHECK {"label": "native_material_update_changes_revision", "passed": true}
+GT04_MATERIAL_CHECK {"label": "native_material_update_undo", "passed": true}
+GT04_MATERIAL_CHECK {"label": "native_material_update_redo", "passed": true}
+GT04_MATERIAL_CHECK {"label": "transform_preserves_material", "passed": true}
+GT04_MATERIAL_CHECK {"label": "material_export_reopen_and_geometry_bound", "passed": true}
+GT04_MATERIAL_CHECK {"label": "bounded_glb_material_readback", "passed": true}
+GT04_MATERIAL_CHECK {"label": "actual_hostile_material_grammar_rejected", "passed": true}
+GT04_MATERIAL_CHECK {"label": "export_preserves_ui_snapshot", "passed": true}
+GT04_MATERIAL_CHECK {"label": "gui_actual_exit_zero", "passed": true}
+GT04_MATERIAL_CHECK {"label": "fresh_checkpoint_reopen_actual_exit", "passed": true}
+GT04_MATERIAL_CHECK {"label": "fresh_checkpoint_mesh_transform_material_equal", "passed": true}
+GT04_MATERIAL_COMPLETE {"passed": true, "checks": 16}

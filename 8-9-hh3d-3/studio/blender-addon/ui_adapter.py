@@ -259,12 +259,12 @@ class UIAdapter(base.FixtureAdapter):
         self._guard()
         operation = command["operation"]
         profile = None
-        if operation == "export.prepare":
-            profile = self._export_preflight()
         if operation == "scene.inspect":
             return self.inspect()
         before = self.inspect()
         self._check_preconditions(command, before)
+        if operation == "export.prepare":
+            profile = self._export_preflight()
         with self._view():
             if operation == "export.prepare":
                 result = self._save(command, before)

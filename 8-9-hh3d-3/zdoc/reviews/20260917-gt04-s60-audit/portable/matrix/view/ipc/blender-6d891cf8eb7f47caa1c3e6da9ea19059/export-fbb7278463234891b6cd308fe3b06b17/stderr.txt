@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "$PROJECT\studio\.local\reviews\20260917-gt04-s60-scene-01\source\studio\blender-addon\export_background.py", line 62, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "$PROJECT\studio\.local\reviews\20260917-gt04-s60-scene-01\source\studio\blender-addon\export_background.py", line 47, in main
+    else:bytearray(3*1024**3)  # Exceeds the verified 2-GiB owned Job limit.
+         ~~~~~~~~~^^^^^^^^^^^
+MemoryError
+
+Error: script failed, file: '$PROJECT\studio\.local\reviews\20260917-gt04-s60-scene-01\source\studio\blender-addon\export_background.py', exiting.

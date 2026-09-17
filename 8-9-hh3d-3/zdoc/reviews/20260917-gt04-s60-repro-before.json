@@ -1,0 +1,19 @@
+{
+  "schema": "GT04-S60-EXTERNAL-PREFLIGHT-REPRO-1",
+  "source_sha256": "472df51a4f139b297d749ac59581d3ecb71a5422ca5b50c078bda9faadd9de63",
+  "rows": [
+    {
+      "case": "library",
+      "external_resolution_calls": 1,
+      "outcome": "AssertionError: unowned path resolution reached",
+      "real_external_io": false
+    },
+    {
+      "case": "texture",
+      "external_resolution_calls": 1,
+      "outcome": "AssertionError: unowned path resolution reached",
+      "real_external_io": false
+    }
+  ],
+  "reproduced": true
+}

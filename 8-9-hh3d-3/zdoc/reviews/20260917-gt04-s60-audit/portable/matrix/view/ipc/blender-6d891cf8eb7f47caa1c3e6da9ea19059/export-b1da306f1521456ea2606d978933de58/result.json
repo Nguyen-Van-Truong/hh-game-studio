@@ -1,0 +1,184 @@
+{
+  "schema": "HH-BLENDER-EXPORT-RESULT-1",
+  "profile": {
+    "schema": "HH-BLENDER-BOX-EXPORT-PROFILE-1",
+    "objects": 1,
+    "vertices": 8,
+    "triangles": 12,
+    "materials": 0,
+    "images": 0,
+    "bones": 0,
+    "clips": 0,
+    "libraries": 0,
+    "drivers": 0,
+    "exporter_version": [
+      5,
+      2,
+      40
+    ],
+    "exporter_files_sha256": "22a180855eda3e7f1a075bf28d7c256e4498be16c96be4e7412a438ce96ec481",
+    "public_ack": false
+  },
+  "input_sha256": "aee2e62cb801ef713a12a866d213a623d4d43a06abad71396cf5f31811cb2239",
+  "scene_revision": "sha256:b6a2a1b70fb43ccc97058eca915eaeeed503ab56eb363ff009279894d51006a1",
+  "snapshot": {
+    "schema": "HH-BLENDER-FIXTURE-SCENE-1",
+    "objects": [
+      {
+        "object_id": "box",
+        "name": "GT04_box",
+        "mesh_name": "GT04_mesh_box",
+        "location": [
+          2.0,
+          -3.0,
+          4.0
+        ],
+        "rotation": [
+          0.20000000298023224,
+          -0.30000001192092896,
+          0.4000000059604645
+        ],
+        "scale": [
+          1.0,
+          2.0,
+          1.0
+        ],
+        "vertices": [
+          [
+            -0.5,
+            -1.0,
+            -1.5
+          ],
+          [
+            0.5,
+            -1.0,
+            -1.5
+          ],
+          [
+            0.5,
+            1.0,
+            -1.5
+          ],
+          [
+            -0.5,
+            1.0,
+            -1.5
+          ],
+          [
+            -0.5,
+            -1.0,
+            1.5
+          ],
+          [
+            0.5,
+            -1.0,
+            1.5
+          ],
+          [
+            0.5,
+            1.0,
+            1.5
+          ],
+          [
+            -0.5,
+            1.0,
+            1.5
+          ]
+        ],
+        "faces": [
+          [
+            0,
+            3,
+            2,
+            1
+          ],
+          [
+            4,
+            5,
+            6,
+            7
+          ],
+          [
+            0,
+            1,
+            5,
+            4
+          ],
+          [
+            1,
+            2,
+            6,
+            5
+          ],
+          [
+            2,
+            3,
+            7,
+            6
+          ],
+          [
+            3,
+            0,
+            4,
+            7
+          ]
+        ]
+      }
+    ],
+    "units": {
+      "system": "METRIC",
+      "scale_length": 1.0
+    }
+  },
+  "context": {
+    "mode": "OBJECT",
+    "active_id": null,
+    "selected_ids": []
+  },
+  "output_sha256": "dd1454732073de208975a7887a20422812950726411249fca72e64cefd92e1fa",
+  "output_size_bytes": 1548,
+  "public_ack": false,
+  "native_finished": true,
+  "context_unchanged": true,
+  "admission_probe": [
+    {
+      "label": "object_driver",
+      "passed": true
+    },
+    {
+      "label": "scene_driver",
+      "passed": true
+    },
+    {
+      "label": "material",
+      "passed": true
+    },
+    {
+      "label": "missing_texture",
+      "passed": true,
+      "filesystem_access_blocked": true
+    },
+    {
+      "label": "geometry_nodes",
+      "passed": true
+    },
+    {
+      "label": "unapproved_addon",
+      "passed": true
+    },
+    {
+      "label": "missing_exporter_addon",
+      "passed": true
+    },
+    {
+      "label": "linked_library",
+      "passed": true,
+      "filesystem_access_blocked": true
+    },
+    {
+      "label": "missing_library",
+      "passed": true,
+      "filesystem_access_blocked": true
+    }
+  ]
+}

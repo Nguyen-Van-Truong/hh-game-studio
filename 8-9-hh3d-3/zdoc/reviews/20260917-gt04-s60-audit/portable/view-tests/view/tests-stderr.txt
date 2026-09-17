@@ -1,0 +1,17 @@
+test_binary_and_source_are_hash_only_not_transformed (__main__.EvidenceViewTests.test_binary_and_source_are_hash_only_not_transformed) ... ok
+test_changed_transformation_mode_rejected_against_originals (__main__.EvidenceViewTests.test_changed_transformation_mode_rejected_against_originals) ... ok
+test_duplicate_keys_nonfinite_or_personal_values_reject (__main__.EvidenceViewTests.test_duplicate_keys_nonfinite_or_personal_values_reject) ... ok
+test_empty_stderr_is_preserved_and_inventoried (__main__.EvidenceViewTests.test_empty_stderr_is_preserved_and_inventoried) ... ok
+test_existing_view_is_never_overwritten (__main__.EvidenceViewTests.test_existing_view_is_never_overwritten) ... ok
+test_json_escaping_unicode_case_and_slashes_are_scrubbed_without_raw_mutation (__main__.EvidenceViewTests.test_json_escaping_unicode_case_and_slashes_are_scrubbed_without_raw_mutation) ... ok
+test_path_key_collision_rejected (__main__.EvidenceViewTests.test_path_key_collision_rejected) ... ok
+test_raw_tamper_cannot_be_verified_by_view_hash (__main__.EvidenceViewTests.test_raw_tamper_cannot_be_verified_by_view_hash) ... ok
+test_sibling_prefix_and_unknown_drive_unc_posix_fail_before_output (__main__.EvidenceViewTests.test_sibling_prefix_and_unknown_drive_unc_posix_fail_before_output) ... ok
+test_unsafe_manifest_path_is_never_opened (__main__.EvidenceViewTests.test_unsafe_manifest_path_is_never_opened) ... ok
+test_view_cannot_claim_raw_is_present (__main__.EvidenceViewTests.test_view_cannot_claim_raw_is_present) ... ok
+test_view_tamper_and_missing_empty_stream_reject (__main__.EvidenceViewTests.test_view_tamper_and_missing_empty_stream_reject) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.228s
+
+OK

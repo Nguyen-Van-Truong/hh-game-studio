@@ -1,0 +1,15 @@
+test_changed_snapshot_digest (__main__.RejectCorruptEvidence.test_changed_snapshot_digest) ... ok
+test_empty_client_stderr_is_required_in_portable_inventory (__main__.RejectCorruptEvidence.test_empty_client_stderr_is_required_in_portable_inventory) ... ok
+test_fabricated_file_preview_hash (__main__.RejectCorruptEvidence.test_fabricated_file_preview_hash) ... ok
+test_fabricated_zero_exit (__main__.RejectCorruptEvidence.test_fabricated_zero_exit) ... ok
+test_foreign_bundle_profile (__main__.RejectCorruptEvidence.test_foreign_bundle_profile) ... ok
+test_forged_artifact_digest (__main__.RejectCorruptEvidence.test_forged_artifact_digest) ... ok
+test_missing_runtime_file (__main__.RejectCorruptEvidence.test_missing_runtime_file) ... ok
+test_retained_native_job (__main__.RejectCorruptEvidence.test_retained_native_job) ... ok
+test_stale_closure (__main__.RejectCorruptEvidence.test_stale_closure) ... ok
+test_wrong_native_exit_pid (__main__.RejectCorruptEvidence.test_wrong_native_exit_pid) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 3.085s
+
+OK

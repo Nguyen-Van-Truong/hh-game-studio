@@ -1,0 +1,46 @@
+{
+  "formal_acceptance": false,
+  "rows": [
+    {
+      "cases": [
+        {
+          "filesystem_access_blocked": true,
+          "label": "missing_texture",
+          "passed": true
+        },
+        {
+          "filesystem_access_blocked": true,
+          "label": "linked_library",
+          "passed": true
+        },
+        {
+          "filesystem_access_blocked": true,
+          "label": "missing_library",
+          "passed": true
+        }
+      ],
+      "lane": "ipc"
+    },
+    {
+      "cases": [
+        {
+          "filesystem_access_blocked": true,
+          "label": "missing_texture",
+          "passed": true
+        },
+        {
+          "filesystem_access_blocked": true,
+          "label": "linked_library",
+          "passed": true
+        },
+        {
+          "filesystem_access_blocked": true,
+          "label": "missing_library",
+          "passed": true
+        }
+      ],
+      "lane": "material"
+    }
+  ],
+  "source_closure_sha256": "f5ae5dfbb451d3204197c2b21486c586698089ac24d14d23641a9182b5e42673"
+}

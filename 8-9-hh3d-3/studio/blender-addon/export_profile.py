@@ -29,15 +29,13 @@ def preflight(bpy):
     need(threading.current_thread() is threading.main_thread(),'EXPORT_MAIN_THREAD')
     need(bpy.app.version[:3]==(5,2,1),'EXPORT_BLENDER_PIN')
     need(not bpy.context.preferences.filepaths.use_scripts_auto_execute,'EXPORT_AUTOEXEC_ENABLED')
+    # This profile has no library/image intake. Reject datablocks without
+    # resolving or probing their filepaths: even is_file() may access a UNC
+    # share. Existing and missing inputs receive the same no-I/O rejection.
+    need(not bpy.data.libraries,'EXPORT_LINKED_LIBRARY_UNSUPPORTED')
+    need(not bpy.data.images,'EXPORT_IMAGE_UNSUPPORTED')
     lock=json.loads(Path(__file__).with_name('exporter.lock.json').read_bytes())
     need(sorted(bpy.context.preferences.addons.keys())==lock['factory_addons'],'EXPORT_ADDON_SET')
-    for library in bpy.data.libraries:
-        path=Path(bpy.path.abspath(library.filepath))
-        need(path.is_file(),'EXPORT_MISSING_LIBRARY')
-    need(not bpy.data.libraries,'EXPORT_LINKED_LIBRARY_UNSUPPORTED')
-    for image in bpy.data.images:
-        if image.source=='FILE' and not image.packed_file:
-            need(Path(bpy.path.abspath(image.filepath)).is_file(),'EXPORT_MISSING_TEXTURE')
     for name in ('objects','meshes','scenes','materials','worlds','node_groups','armatures','shape_keys'):
         collection=getattr(bpy.data,name)
         need(len(collection)<=64,'EXPORT_DATABLOCK_CAP')

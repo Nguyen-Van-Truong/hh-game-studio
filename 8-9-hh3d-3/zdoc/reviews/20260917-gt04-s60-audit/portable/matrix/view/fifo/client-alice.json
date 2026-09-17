@@ -1,0 +1,169 @@
+{
+  "pid": 30092,
+  "exit_code": 0,
+  "done": {
+    "op": "done",
+    "pid": 30092,
+    "ticket_id": "ticket-alice",
+    "writer": "alice",
+    "command_id": "create-alice"
+  },
+  "ticket": {
+    "generation": "8dc2bcaa22974d4aa9b357eebb703ff5",
+    "lease": {
+      "expires_ms": 1789632734592,
+      "fencing_epoch": 2,
+      "owner": "alice",
+      "project_id": "blender.owned-fixture",
+      "target": "blender.owned-scene"
+    },
+    "lease_ms": 10000,
+    "public_ack": false,
+    "queue_expires_ms": 1789632745097,
+    "reason": null,
+    "state": "GRANTED",
+    "ticket_id": "ticket-alice",
+    "wait_ms": 30000,
+    "writer": "alice"
+  },
+  "response": {
+    "command_id": "create-alice",
+    "native": {
+      "command_digest": "sha256:233404fe2a4d75761bec7c6bf0f08ba52b27cb4fc1ddd0909bc9ec68a758393c",
+      "command_id": "create-alice",
+      "public_ack": false,
+      "result": {
+        "after": {
+          "context": {
+            "active_id": null,
+            "mode": "OBJECT",
+            "selected_ids": []
+          },
+          "public_ack": false,
+          "revision": "sha256:b1682932688bc04d287ff462fa4b592f98144166457f4be9beed7f4419a738ff",
+          "snapshot": {
+            "objects": [
+              {
+                "faces": [
+                  [
+                    0,
+                    3,
+                    2,
+                    1
+                  ],
+                  [
+                    4,
+                    5,
+                    6,
+                    7
+                  ],
+                  [
+                    0,
+                    1,
+                    5,
+                    4
+                  ],
+                  [
+                    1,
+                    2,
+                    6,
+                    5
+                  ],
+                  [
+                    2,
+                    3,
+                    7,
+                    6
+                  ],
+                  [
+                    3,
+                    0,
+                    4,
+                    7
+                  ]
+                ],
+                "location": [
+                  0,
+                  0,
+                  0
+                ],
+                "mesh_name": "GT04_mesh_alice",
+                "name": "GT04_alice",
+                "object_id": "alice",
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ],
+                "vertices": [
+                  [
+                    -0.5,
+                    -0.5,
+                    -0.5
+                  ],
+                  [
+                    0.5,
+                    -0.5,
+                    -0.5
+                  ],
+                  [
+                    0.5,
+                    0.5,
+                    -0.5
+                  ],
+                  [
+                    -0.5,
+                    0.5,
+                    -0.5
+                  ],
+                  [
+                    -0.5,
+                    -0.5,
+                    0.5
+                  ],
+                  [
+                    0.5,
+                    -0.5,
+                    0.5
+                  ],
+                  [
+                    0.5,
+                    0.5,
+                    0.5
+                  ],
+                  [
+                    -0.5,
+                    0.5,
+                    0.5
+                  ]
+                ]
+              }
+            ],
+            "schema": "HH-BLENDER-FIXTURE-SCENE-1",
+            "units": {
+              "scale_length": 1,
+              "system": "METRIC"
+            }
+          },
+          "undo_supported": true
+        },
+        "before_revision": "sha256:30bf66b61ef6ccda3a2724338925481cb04d89bd990815d8a30ed309e3b789e3",
+        "native_operator_finished": true,
+        "operation": "mesh.create_box",
+        "public_ack": false,
+        "status": "INTERNAL_UI_READBACK"
+      },
+      "state": "COMPLETED"
+    },
+    "public_ack": false,
+    "reason": null,
+    "scene_state_durable": false,
+    "schema": "HH-BLENDER-DURABLE-RESPONSE-1",
+    "status": "COMMITTED"
+  }
+}

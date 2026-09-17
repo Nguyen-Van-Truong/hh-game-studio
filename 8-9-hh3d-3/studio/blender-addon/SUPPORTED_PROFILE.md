@@ -11,6 +11,13 @@ drivers, constraints, linked libraries or external URI. At most four original
 materials are supported, one per owning mesh. Native reopen snapshots and
 bounded GLB vertices/names/TRS/material values must agree.
 
+Library and image datablocks are rejected before reading their filepaths,
+resolving Blender-relative names, or probing the filesystem. Missing, existing,
+packed and generated images are equally unsupported; this profile does not
+grant external-input intake. Export preparation checks revision/context before
+the exporter preflight. A later materialized-input profile needs its own
+confined intake and closure proof; an existence check cannot authorize it.
+
 The UI command catalog is inspect, create box, typed transform, opaque Principled
 material create/update, native undo/redo,
 fixed-slot checkpoint save, and fixed-slot export preparation. The external

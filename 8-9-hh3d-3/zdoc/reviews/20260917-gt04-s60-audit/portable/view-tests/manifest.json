@@ -1,0 +1,30 @@
+{
+  "exact_raw_available_in_view": false,
+  "files": {
+    "tests-host.json": {
+      "mode": "exact-text",
+      "raw_sha256": "ccbbb9ec191a43a7379c71e380d83153bfbc52fbe3a6aabfd9ff35e7b1ea63d7",
+      "raw_size": 87,
+      "view_sha256": "ccbbb9ec191a43a7379c71e380d83153bfbc52fbe3a6aabfd9ff35e7b1ea63d7",
+      "view_size": 87
+    },
+    "tests-stderr.txt": {
+      "mode": "exact-text",
+      "raw_sha256": "042e5179c3f8a5bb4b94c525ce470a1389327545d88e8f7c6e66b6ce2a86a85a",
+      "raw_size": 1770,
+      "view_sha256": "042e5179c3f8a5bb4b94c525ce470a1389327545d88e8f7c6e66b6ce2a86a85a",
+      "view_size": 1770
+    },
+    "tests-stdout.txt": {
+      "mode": "exact-text",
+      "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_size": 0,
+      "view_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "view_size": 0
+    }
+  },
+  "formal_acceptance": false,
+  "raw_inventory_sha256": "9164f183bf8b5369a0e5ff64e0c44f2a3fe1537bda13fdad778bbe0d38ba5ab1",
+  "requires_local_raw_for_exact_verification": true,
+  "schema": "HH-GT04-EVIDENCE-VIEW-1"
+}

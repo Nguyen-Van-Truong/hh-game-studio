@@ -1,0 +1,264 @@
+{
+  "public_ack": false,
+  "candidate_only": true,
+  "completed": true,
+  "native": {
+    "schema": "HH-BLENDER-EXPORT-RESULT-1",
+    "profile": {
+      "schema": "HH-BLENDER-BOX-EXPORT-PROFILE-1",
+      "objects": 1,
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 0,
+      "images": 0,
+      "bones": 0,
+      "clips": 0,
+      "libraries": 0,
+      "drivers": 0,
+      "exporter_version": [
+        5,
+        2,
+        40
+      ],
+      "exporter_files_sha256": "22a180855eda3e7f1a075bf28d7c256e4498be16c96be4e7412a438ce96ec481",
+      "public_ack": false
+    },
+    "input_sha256": "f5bd57844543fb1074ea96be9bcf054eb89c21ecd6ff1c886ac5abd91f796138",
+    "scene_revision": "sha256:1e80a5dd3c345c2a6550a3040a0403f4c7340084e390e43e9adcd39ca9f4993d",
+    "snapshot": {
+      "schema": "HH-BLENDER-FIXTURE-SCENE-1",
+      "objects": [
+        {
+          "object_id": "box",
+          "name": "GT04_box",
+          "mesh_name": "GT04_mesh_box",
+          "location": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "vertices": [
+            [
+              -0.5,
+              -1.0,
+              -1.5
+            ],
+            [
+              0.5,
+              -1.0,
+              -1.5
+            ],
+            [
+              0.5,
+              1.0,
+              -1.5
+            ],
+            [
+              -0.5,
+              1.0,
+              -1.5
+            ],
+            [
+              -0.5,
+              -1.0,
+              1.5
+            ],
+            [
+              0.5,
+              -1.0,
+              1.5
+            ],
+            [
+              0.5,
+              1.0,
+              1.5
+            ],
+            [
+              -0.5,
+              1.0,
+              1.5
+            ]
+          ],
+          "faces": [
+            [
+              0,
+              3,
+              2,
+              1
+            ],
+            [
+              4,
+              5,
+              6,
+              7
+            ],
+            [
+              0,
+              1,
+              5,
+              4
+            ],
+            [
+              1,
+              2,
+              6,
+              5
+            ],
+            [
+              2,
+              3,
+              7,
+              6
+            ],
+            [
+              3,
+              0,
+              4,
+              7
+            ]
+          ]
+        }
+      ],
+      "units": {
+        "system": "METRIC",
+        "scale_length": 1.0
+      }
+    },
+    "context": {
+      "mode": "OBJECT",
+      "active_id": null,
+      "selected_ids": []
+    },
+    "output_sha256": "a9a2f522c1a07d6c6154fc0ae53f2337907746ede08f3521f97d990c32fefcb8",
+    "output_size_bytes": 1420,
+    "public_ack": false,
+    "native_finished": true,
+    "context_unchanged": true,
+    "admission_probe": null
+  },
+  "preflight": {
+    "schema": "HH-GLB-BOX-PREFLIGHT-1",
+    "sha256": "a9a2f522c1a07d6c6154fc0ae53f2337907746ede08f3521f97d990c32fefcb8",
+    "size_bytes": 1420,
+    "objects": 1,
+    "triangles": 12,
+    "decoded_buffer_bytes": 648,
+    "texture_decoded_bytes": 0,
+    "materials": 0,
+    "images": 0,
+    "extensions": [],
+    "uri_count": 0,
+    "meshes": [
+      {
+        "name": "GT04_box",
+        "mesh": 0,
+        "vertices": 24,
+        "triangles": 12,
+        "unique_positions": [
+          [
+            -0.5,
+            -1.5,
+            -1.0
+          ],
+          [
+            -0.5,
+            -1.5,
+            1.0
+          ],
+          [
+            -0.5,
+            1.5,
+            -1.0
+          ],
+          [
+            -0.5,
+            1.5,
+            1.0
+          ],
+          [
+            0.5,
+            -1.5,
+            -1.0
+          ],
+          [
+            0.5,
+            -1.5,
+            1.0
+          ],
+          [
+            0.5,
+            1.5,
+            -1.0
+          ],
+          [
+            0.5,
+            1.5,
+            1.0
+          ]
+        ],
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      }
+    ],
+    "public_ack": false
+  },
+  "snapshot_geometry_bound": true,
+  "artifact": {
+    "name": "output.glb",
+    "sha256": "a9a2f522c1a07d6c6154fc0ae53f2337907746ede08f3521f97d990c32fefcb8",
+    "size_bytes": 1420
+  },
+  "status": "INTERNAL_EXPORT_VERIFIED",
+  "job": {
+    "active_count": 0,
+    "assigned": true,
+    "close_uncertain": false,
+    "closed": true,
+    "configured": true,
+    "create_uncertain": false,
+    "failed_operations": [],
+    "handle_retained": false,
+    "native_error": null,
+    "tainted": false,
+    "zero_observed": true
+  },
+  "wrapper_exit_code": 0,
+  "actual_process_exit": {
+    "exit_code": 0,
+    "pid": 43052
+  },
+  "limits": {
+    "job_memory_bytes": 2147483648,
+    "job_user_time_100ns": 150000000,
+    "active_process_limit": 4,
+    "limit_flags": 8716,
+    "wall_seconds": 20,
+    "workspace_bytes_limit": 33554432,
+    "workspace_limit_is_watchdog": true,
+    "each_log_capture_bytes": 262144
+  }
+}

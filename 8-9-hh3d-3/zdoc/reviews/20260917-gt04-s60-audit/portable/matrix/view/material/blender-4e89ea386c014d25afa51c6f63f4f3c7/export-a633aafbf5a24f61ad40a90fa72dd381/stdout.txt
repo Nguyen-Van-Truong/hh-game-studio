@@ -1,0 +1,26 @@
+00:00.719  blend            | Read blend: "$PROJECT\studio\.local\reviews\20260917-gt04-s60-matrix\material\blender-4e89ea386c014d25afa51c6f63f4f3c7\export-a633aafbf5a24f61ad40a90fa72dd381\input.blend"
+GT04_EXPORT_REJECT object_driver True
+GT04_EXPORT_REJECT scene_driver True
+GT04_EXPORT_REJECT material True
+GT04_EXPORT_REJECT missing_texture True
+GT04_EXPORT_REJECT geometry_nodes True
+GT04_EXPORT_REJECT unapproved_addon True
+GT04_EXPORT_REJECT missing_exporter_addon True
+GT04_EXPORT_REJECT linked_library True
+GT04_EXPORT_REJECT missing_library True
+GT04_EXPORT_REJECT material_transmission True
+GT04_EXPORT_REJECT material_alpha True
+GT04_EXPORT_REJECT material_procedural_node True
+GT04_EXPORT_REJECT material_node_driver True
+GT04_EXPORT_REJECT material_extra_slot True
+INFO Draco is available, use library at $PROJECT\studio\.local\tooling\blender-5.2.1-windows-x64\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_draco_bridge.dll
+INFO MeshOptimizer is available, use library at $PROJECT\studio\.local\tooling\blender-5.2.1-windows-x64\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_meshopt_bridge.dll
+14:54:04 | INFO: Starting glTF 2.0 export
+14:54:04 | INFO: Extracting primitive: GT04_mesh_box
+14:54:04 | INFO: Primitives created: 1
+14:54:04 | INFO: Finished glTF 2.0 export in 0.05747103691101074 s
+
+GT04_EXPORT_COMPLETE {"schema": "HH-BLENDER-EXPORT-RESULT-1", "profile": {"schema": "HH-BLENDER-MATERIAL-EXPORT-PROFILE-1", "objects": 1, "vertices": 8, "triangles": 12, "materials": 1, "images": 0, "bones": 0, "clips": 0, "libraries": 0, "drivers": 0, "exporter_version": [5, 2, 40], "exporter_files_sha256": "22a180855eda3e7f1a075bf28d7c256e4498be16c96be4e7412a438ce96ec481", "public_ack": false}, "input_sha256": "3a971d57b2601ed2d8909cca9dcede686cd9e1e4320196e6e4d3531b1492e25c", "scene_revision": "sha256:5772124bd10f023066913c8f69baec682ff966fbb3275dd8921e4c0527fbecf7", "snapshot": {"schema": "HH-BLENDER-FIXTURE-SCENE-1", "objects": [{"object_id": "box", "name": "GT04_box", "mesh_name": "GT04_mesh_box", "location": [2.0, -3.0, 4.0], "rotation": [0.20000000298023224, -0.30000001192092896, 0.4000000059604645], "scale": [1.0, 2.0, 1.0], "vertices": [[-0.5, -1.0, -1.5], [0.5, -1.0, -1.5], [0.5, 1.0, -1.5], [-0.5, 1.0, -1.5], [-0.5, -1.0, 1.5], [0.5, -1.0, 1.5], [0.5, 1.0, 1.5], [-0.5, 1.0, 1.5]], "faces": [[0, 3, 2, 1], [4, 5, 6, 7], [0, 1, 5, 4], [1, 2, 6, 5], [2, 3, 7, 6], [3, 0, 4, 7]], "material": {"material_id": "copper", "name": "HH_Material_copper", "base_color": [0.10000000149011612, 0.4000000059604645, 0.800000011920929, 1.0], "metallic": 0.20000000298023224, "roughness": 0.800000011920929, "double_sided": true, "alpha_mode": "OPAQUE"}}], "units": {"system": "METRIC", "scale_length": 1.0}}, "context": {"mode": "OBJECT", "active_id": null, "selected_ids": []}, "output_sha256": "86078c4ebcee90e2999e764ac66d254fde87403822c4eef8743029eb15309068", "output_size_bytes": 1800, "public_ack": false, "native_finished": true, "context_unchanged": true, "admission_probe": [{"label": "object_driver", "passed": true}, {"label": "scene_driver", "passed": true}, {"label": "material", "passed": true}, {"label": "missing_texture", "passed": true, "filesystem_access_blocked": true}, {"label": "geometry_nodes", "passed": true}, {"label": "unapproved_addon", "passed": true}, {"label": "missing_exporter_addon", "passed": true}, {"label": "linked_library", "passed": true, "filesystem_access_blocked": true}, {"label": "missing_library", "passed": true, "filesystem_access_blocked": true}, {"label": "material_transmission", "passed": true}, {"label": "material_alpha", "passed": true}, {"label": "material_procedural_node", "passed": true}, {"label": "material_node_driver", "passed": true}, {"label": "material_extra_slot", "passed": true}]}
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 02:38:20)
+
+Blender quit

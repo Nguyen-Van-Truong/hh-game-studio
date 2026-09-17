@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 17-09-2026, Asia/Saigon | Revision S59 | TRIỂN KHAI THEO GATE
+Ngày 17-09-2026, Asia/Saigon | Revision S60 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,9 +25,9 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S59
-EXECUTION_MODE=SOLO_OWNER_20260917
-SUBAGENTS_ENABLED=0
+PLAN_REVISION=S60
+EXECUTION_MODE=COORDINATOR_THREE_ASTRA_XHIGH_OWNER_20260917
+SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
 GT02_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S46
 GT02_LAST_TESTED_SOURCE_CLOSURE=f28056d8ff705a60d48a54f9dee80f16554494fa976bd0bfabee84bb51fecbbf
@@ -44,14 +44,16 @@ GT03_CHECKPOINT_COMMIT=323882b
 GT03_WORKING_SOURCE_STATUS=S55_FROZEN_ACCEPTED
 GT03_PENDING_SOURCE_CLOSURE=NONE
 GT03_TEST_DRIVER_MODE=PINNED_CLEANUP_SUPPLEMENT_OVER_UNCHANGED_S55_RUNTIME
-GT04_EVIDENCE_STATUS=WRITER_CLIENT_AND_INTERNAL_PUBLICATION_COMPONENT_CANDIDATES_GAPS_OPEN
-GT04_LAST_TESTED_SOURCE_CLOSURE=943cff74f23a61427765071f7fd6661acbdad23c0e8386364f5615a2a0016134
-GT04_WORKING_SOURCE_STATUS=S59_FILE_PREVIEW_AND_NATIVE_MATRIX_TESTED
-GT04_REVIEW_STATUS=NOT_REVIEWED_SOLO_S59
+GT04_EVIDENCE_STATUS=S60_CANDIDATE_EXACT_LOCAL_RAW_AND_SANITIZED_VIEW
+GT04_LAST_TESTED_SOURCE_CLOSURE=f5ae5dfbb451d3204197c2b21486c586698089ac24d14d23641a9182b5e42673
+GT04_WORKING_SOURCE_STATUS=S60_FROZEN_NATIVE_AND_AUDIT_TESTED
+GT04_REVIEW_STATUS=S60_FINAL_REVIEW_PENDING_TWO_INDEPENDENT_CRITICS
 
-TIẾN ĐỘ HIỆN HÀNH — S59, ngày 17-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S60, ngày 17-09-2026
 GT-01, GT-02 và GT-03 ACCEPTED; đang hoàn thiện GT-04.
-GT-05 chưa mở. Owner chuyển solo; không còn worker chạy. Giữ một writer/file;
+GT-05 chưa mở integration. Owner cho phép ba Astra extra high: hai critic
+GT-04 độc lập và một agent chuẩn bị dependency GT-05, không tick trước gate.
+Giữ một writer/file;
 chỉ một engine/Linux/native-journal integration lane chạy tại một thời điểm.
 Checkpoint source323882b đã kiểm2706file byte index/HEAD; hai criticGT03
 PASS/TICK=yes cùng effective closure. GT04 vẫn chưa nghiệm thu.
@@ -81,46 +83,46 @@ Godot GT-03 đã khép tại S55:
 - Lịch sử chi tiết S55: reviews/20260917-plan-history-s55/tools-plan-s55.txt
   (AUTHORITY=0), SHA256 305d9fa5314db5a7dc73689e465f699caf4146434edaad646c68be430ae53940.
 
-Blender GT-04 — S59:
-- reviews/20260917-gt04-s59-{scene,checkpoint,export}-01 cùng139sourcefiles/
-  closure ở marker trên. Scene594/594 toàn bộ unit; checkpoint/export328/328
-  focused mỗi lane. Mỗi profile49HTTPchecks/36calls/10nativechecks,17native
-  data requests; 8COMMITTED+1known capacity rejection, exit/owned Job sạch.
-- Preview5editops và3fileprofiles kiểm live native fence/revision/context;
-  file preview kiểm profile, slot, capacity/namespace trước effect. Không ghi
-  file/INTENT/reserveID, không bịa hash output; apply lặp kiểm tra riêng.
-  scene.save/checkpoint.save/export.publish vẫn một immutable bundle/profile,
-  OBJECT/nonempty bounded fixture, background reopen/GLB/geometry/material.
-- Matrix-02 có15lane đạt; matrix-03 bổ sung2lane Stop trên cùng runtime.
-  Tổng17lane/240top-level native checks, gồm6GUI/background phases, IPC,
-  material, cleanup retry, durable/FIFO, checkpoint reopen, deadline,5crash
-  cuts và4Stop cuts. Audit phân biệt hai execution closures; không gán chữ ký
-  hoặc kết quả driver cũ cho driver mới. Source runtime không đổi giữa lane.
-- Stop sau selector trước terminal giữUNKNOWN/SELECTING/hold; Stop sau terminal
-  giữCOMMITTED exact receipt. Cả hai đã chạy native và reopen readonly không
-  replay; selector tồn tại không tự làACK. public_ack=false, scene_state_durable
-  vẫnfalse; chỉ protected bundle có durable_publication=true.
-- File-only audit: s59-audit/verify_evidence.py cho3profiles và verify_matrix.py
-  đều đạt;15negative cases và1regression empty-stderr inventory đạt. Chưa có hai critic độc lập trên gói
-  cuối. GT04 vẫn IN_PROGRESS; solo/self-review không thay reviewer độc lập.
-- Giữ failed matrix01: runner đặt temp/user trong fixture cần rỗng. Matrix02
-  stop_after_selector dùng kỳ vọng publication03 cũ, nên FAIL được giữ
-  nguyên; matrix03 kiểm đúng hai phía terminal và không sửa runtime để né lỗi.
-  Blender tạo7pyc trong snapshot dù env tắt bytecode: ghi hash, chỉ dọn đúng
-  7file derived sau owned exits;139sourcefiles luônkhớp. Negative-audit attempt
-  đầu bị chặn bởi cache, không tínhPASS; đã rerun đủ15case sau dọn; thêm1regression đóng gói stderr rỗng.
-- Source checkpoint S59=dc20308; dựng lại1479file từGit index,4/4file-only
-  verifier exit0/owned tree sạch (portable-check-02); chỉ bổ sung17file thiếu/
-  đổi từ lượt trước, không chạy lại native. Checkpoint trước: S58=36f9937 (Git827files), S57=94eb83b (462files),
-  S56=9b7eb60. Các package cũ giữ source hash riêng. Lịch sử tớiS57 ở
-  reviews/20260917-plan-history-s57/tools-plan-s57.txt, AUTHORITY=0.
+Blender GT-04 — S60 candidate sau sửa review S59:
+- Source: 140 file, hash ở marker trên. Matrix execution closure:
+  407fff4e453fb1702a32fbc8ae1ee5eff7c3dcb0b99338a504ae39dc69d67824.
+  Full Blender: 599/599 unit. Checkpoint/export: 328/328 focused mỗi profile.
+  Cả ba profile: 49 HTTP checks, 36 calls, 10 native checks; exit/owned Jobs sạch.
+- Đủ 17 native lane/240 checks: UI/material/IPC/cleanup/durable/FIFO,
+  checkpoint/deadline, 5 crash cuts và 4 Stop cuts. Ba profile và matrix
+  file-only audit đạt; 15 negative cases + 1 empty-stderr regression,
+  12 kiểm tra evidence-view đạt. Không chuyển kết quả S59 sang S60.
+- Đã sửa library/image bị dò path trước reject: nay từ chối trước đọc filepath,
+  resolve hoặc stat; kiểm revision/context trước export preflight. Có 5 unit
+  regression và 6 native no-I/O checks; không truy cập UNC/network thật.
+- Raw S60 ở studio/.local/reviews, không commit log chứa đường dẫn máy.
+  reviews/20260917-gt04-s60-audit/portable giữ view với root $PROJECT, hash
+  raw/view riêng. Binary/source chỉ lưu hash trong view; raw gốc giữ cục bộ.
+  Clean checkout kiểm view integrity/source và có thể tạo run mới, không giả
+  sở hữu raw bytes của run cũ. Hai critic cuối phải đánh giá phạm vi này với TQ01.
+- Review S59 dừng trước final verdict. S60 đã dispatch Astra theo lệnh owner,
+  nhưng các lượt trả model-at-capacity; một fallback bị stream-disconnected.
+  Chưa có PASS/TICK=yes cuối. Owner mới cho phép hai critic Astra extra high
+  đọc cùng checkpoint S60; review gián đoạn trước đó không tính chữ ký.
+  GT-04 vẫn IN_PROGRESS; self-review không thay hai critic độc lập.
+- Dựng lại 909 file từ Git index: view trên bản sao sạch đạt, raw verification
+  từ chối đúng khi thiếu original; target/wrapper exit 0, owned trees sạch.
+- Coverage và repro: reviews/20260917-gt04-s60-audit/README.md, coverage.json.
+  S59 nguyên bytes: reviews/20260917-plan-history-s59/tools-plan-s59.snapshot.
+  Routing/closure trước lệnh solo nằm ở s60-audit/routing-history (AUTHORITY=0).
+  Các fail/incomplete giữ nguyên. Runtime S60 không đổi khi cập nhật routing.
 
-Tiếp theo: chốt review package/coverage GT04 và hai critic độc lập cùng closure.
-Chế độ owner hiện tại SOLO/SUBAGENTS_ENABLED=0; không tự tạo critic hoặc tựtick.
-Sau nghiệm thu: GT05 pipeline, GT06 Play/input/observe, GT07 concurrency/recovery,
-GT08 CI/Android thiết bị thật, GT09 conformance, GT10 package/upgrade/rollback/
-handoff. HH World là plan game riêng sauGT10. Chưa đủ cơ sở hẹn ngày xong
-  toànplan; thiết bị Android thật và independent reviews vẫn là hard gates.
+Tiếp theo: hai review độc lập cùng closure của checkpoint S60 trước nghiệm
+thu GT-04. Source/native proof đã xong; không chạy lại chỉ vì thiếu reviewer. Sau đó thực hiện tuần tự:
+1. GT-05: .blend → GLB → Godot, rig/clip/LOD/PBR, manifest và reimport.
+2. GT-06: Play/input/pause/observe, UX và đo hiệu năng.
+3. GT-07: concurrency, lease/fencing, activation và recovery xuyên ứng dụng.
+4. GT-08: Windows/Linux/Android; thiết bị Android thật là hard gate.
+5. GT-09: conformance toàn tuyến bằng client thực tế.
+6. GT-10: package/install/upgrade/rollback/uninstall/handoff.
+HH World dùng plan riêng sau GT-10. Chưa đủ cơ sở hẹn ngày xong toàn plan.
+Mục tiêu/gate phù hợp; tối ưu bằng coverage ngắn, snapshot cố định, chỉ chạy
+lại lane liên quan khi source/failure/gap thay đổi, giữ lịch sử ngoài phần hiện hành.
 
 Cải tiến plan/tốc độ: scope song song theo dependency; serialize native lanes;
 resume attempt lỗi thay vì lặp lanePASS; một frozen source cho final matrix;
@@ -130,6 +132,11 @@ tools-plan-before-s55.txt (AUTHORITY=0), SHA256 b07c86c36c565c3a95404a6084cd6df0
 Các archive và mọi failure/verdict cũ giữ nguyên; không hạDoD đểtick.
 
 KINH NGHIỆM ĐANG ÁP DỤNG
+- S60: unsupported input phải reject trước mọi existence check; is_file/stat
+  vẫn là I/O và có thể chạm UNC. Kiểm no-I/O bằng sentinel, không dùng mạng thật
+  trong negative test. Raw local logs và bản view để commit có hash-domain
+  riêng; thiếu đường dẫn trong top-level capture không chứng minh nested logs
+  đã sạch. Review bị gián đoạn hoặc auth lỗi không phải verdict.
 - S59: tách thư mục TEMP/user khỏi fixture cần rỗng. Freeze runtime một lần,
   dùng driver supplement có hash riêng cho harness cũ; resume lane đạt thay
   vì chạy lại tất cả. Kỳ vọng recovery phải bám terminal witness: Stop giữa
@@ -1063,14 +1070,13 @@ milestone hoặc candidate nghiệm thu. Không rerun engine vì chỉ sửa pla
 Evidence cũ giữ đúng source đã chạy; chỉ reuse khi xác minh đủ dependency không
 đổi, không gán hash mới cho log cũ. Source đổi phần thực thi thì chạy lại lane
 bị ảnh hưởng. Một full frozen closure và hai critic vẫn bắt buộc trước tick gate.
-GT-03 tiếp theo phải nối authenticated save→selector→actual editor adoption/
-readback/recovery; không mở thêm API nội bộ nếu không phục vụ luồng này.
-GT-04 tiếp tục lane độc lập. Khi chờ run dài, worker làm implementation/review
+GT-03 đã ACCEPTED; không mở lại gate đã đóng khi dependency không đổi.
+GT-04 chốt review S60. Khi chờ run dài, worker làm implementation/review
 khác scope; không cả ba cùng mở rộng audit framework. Giữ báo cáo hiện hành
 ngắn, lịch sử ở Git/reviews. Lỗi harness/argv sửa rồi tiếp tục từ lane chưa xong,
 không chạy lại các lane đã hoàn tất nếu source không đổi.
 
-Owner steering mới nhất 17-09-2026: ba Codex subagent Astra ultra và coordinator.
+Owner steering mới nhất 17-09-2026: ba Codex subagent Astra extra high và coordinator.
 Mỗi lane có WP/dependency, scope file, baseline/hash, deliverable và bounded
 verify; một writer/file. Không Grok CLI hoặc tự thay model khi thiếu quota.
 Critic đọc source/evidence độc lập, không đọc verdict nhau; source freeze trong

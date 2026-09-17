@@ -1,5 +1,6 @@
 """Trusted tiny negative fixtures inside the resource-capped export process."""
 def run(bpy,profile,root):
+    from unittest.mock import patch
     rows=[]
     def rejected(label,code):
         try:profile.preflight(bpy)
@@ -8,6 +9,11 @@ def run(bpy,profile,root):
         rows.append({'label':label,'passed':passed})
         print('GT04_EXPORT_REJECT '+label+' '+str(passed),flush=True)
         if not passed:raise RuntimeError('native admission case failed: '+label)
+    def rejected_without_io(label,code):
+        with patch.object(profile,'Path',side_effect=AssertionError('unsupported dependency filesystem access')), \
+             patch.object(bpy.path,'abspath',side_effect=AssertionError('unsupported dependency resolution')):
+            rejected(label,code)
+        rows[-1]['filesystem_access_blocked']=True
     obj=bpy.data.objects[0]
     original_x=obj.location.x
     obj.driver_add('location',0).driver.expression=str(original_x)
@@ -20,7 +26,7 @@ def run(bpy,profile,root):
     rejected('material','EXPORT_MATERIAL_STABLE_ID');bpy.data.materials.remove(material)
     image=bpy.data.images.new('GT04_MISSING_IMAGE',1,1)
     image.source='FILE';image.filepath=str(root/'does-not-exist.png')
-    rejected('missing_texture','EXPORT_MISSING_TEXTURE');bpy.data.images.remove(image)
+    rejected_without_io('missing_texture','EXPORT_IMAGE_UNSUPPORTED');bpy.data.images.remove(image)
     group=bpy.data.node_groups.new('GT04_UNSUPPORTED_GN','GeometryNodeTree')
     rejected('geometry_nodes','EXPORT_DEPENDENCY_UNSUPPORTED');bpy.data.node_groups.remove(group)
     addons=bpy.context.preferences.addons
@@ -31,9 +37,9 @@ def run(bpy,profile,root):
     path=root/'owned-library.blend'
     bpy.data.libraries.write(str(path),{obj},fake_user=True)
     with bpy.data.libraries.load(str(path),link=True) as (source,target):target.objects=[source.objects[0]]
-    rejected('linked_library','EXPORT_LINKED_LIBRARY_UNSUPPORTED')
+    rejected_without_io('linked_library','EXPORT_LINKED_LIBRARY_UNSUPPORTED')
     path.unlink()
-    rejected('missing_library','EXPORT_MISSING_LIBRARY')
+    rejected_without_io('missing_library','EXPORT_LINKED_LIBRARY_UNSUPPORTED')
     for linked in list(bpy.data.objects):
         if linked.library:bpy.data.objects.remove(linked,do_unlink=True)
     for mesh in list(bpy.data.meshes):

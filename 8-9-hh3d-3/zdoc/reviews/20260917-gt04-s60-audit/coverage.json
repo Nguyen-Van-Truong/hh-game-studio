@@ -1,0 +1,243 @@
+{
+  "source_closure_sha256": "f5ae5dfbb451d3204197c2b21486c586698089ac24d14d23641a9182b5e42673",
+  "requirements": [
+    {
+      "requirement": "GT04/TQ04/TX02 main thread, mode/context, native undo/redo and save/reopen",
+      "artifacts": [
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-matrix/ui/native.json",
+          "sha256": "984af570e7266d39ba97493eb5995a1ba0ec4cdded84a3447133b78092c73600"
+        }
+      ],
+      "scope": "S60 bounded fixture component; acceptance pending"
+    },
+    {
+      "requirement": "GT04/TQ04/TX03/TX04 unsupported references before filesystem access",
+      "artifacts": [
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-matrix/ipc/admission.json",
+          "sha256": "ee8c35959ce54385d06716a74183ba59a0714086e16ffbda7a43b2f29d7309f4"
+        },
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-matrix/material/native.json",
+          "sha256": "4eb09c29154d0cd7e4fe88dc470d085cc083e406705b096ad855c9f7dc5d88d7"
+        }
+      ],
+      "scope": "S60 bounded fixture component; acceptance pending"
+    },
+    {
+      "requirement": "GT04/TQ04 material and GLB readback match scene",
+      "artifacts": [
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-matrix/material/native.json",
+          "sha256": "4eb09c29154d0cd7e4fe88dc470d085cc083e406705b096ad855c9f7dc5d88d7"
+        },
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-matrix/ipc/export.json",
+          "sha256": "8b37437ad0d28516b1f0c925ce4bddc7f1c59bc1515f712f8c67ab7245a0d00c"
+        }
+      ],
+      "scope": "S60 bounded fixture component; acceptance pending"
+    },
+    {
+      "requirement": "GT04/TX05 deadlines, memory caps, priority Stop and owned-process cleanup",
+      "artifacts": [
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-matrix/ipc/native.json",
+          "sha256": "a2a9474d97bd3941ef2e09712aadb1621a6938ac9b8afc11ffda257c7e239ebd"
+        },
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-matrix/deadline/absolute-deadline-native.json",
+          "sha256": "b1e4220259f845cf6d1834d93f452492bb6b3a5f30feccc287d2e6418a9d5b00"
+        },
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-matrix/cleanup/native.json",
+          "sha256": "195384c023cf2586b8141444f4d39ab20f8b3e7384facaa88b6f55cf12e168e1"
+        }
+      ],
+      "scope": "S60 bounded fixture component; acceptance pending"
+    },
+    {
+      "requirement": "GT04/TX06 fencing/dedupe/FIFO and terminal recovery",
+      "artifacts": [
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-matrix/durable/native.json",
+          "sha256": "0ce2b89be5fe73d72090c58526c5e1312ebfe63428820ba26d3beb5a620b38e7"
+        },
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-matrix/fifo/native.json",
+          "sha256": "86ed2bb31ed1d8229af32677a855837f68737e2e673a6ebf5ff3e153879283db"
+        },
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-matrix/checkpoint/native.json",
+          "sha256": "38c0e3ea154df55a845c177cc8de0c9c476c38d27a3f7207ede3e1d265e59cde"
+        }
+      ],
+      "scope": "S60 bounded fixture component; acceptance pending"
+    },
+    {
+      "requirement": "GT04 baseline crash/Stop preserve exact witnessed terminal; no writable restart",
+      "artifacts": [
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-matrix/after_intent/observed.json",
+          "sha256": "c241fb3b795baec61f1092688ca9292b3f21d9727b5fd142327c743b09ce24fa"
+        },
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-matrix/before_selector/observed.json",
+          "sha256": "d2bec3aa611fd9cfafa331246b868273044dc267421b3d6535eb4a251834896c"
+        },
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-matrix/after_selector/observed.json",
+          "sha256": "598dd85d17231d9e8c02926b9f550c61b5653a47645ada42d88475bf8ce1560f"
+        },
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-matrix/before_terminal_witness/observed.json",
+          "sha256": "8a074bfc2bbec28d48e8cf31829606ed94b7a7289cf72cbe0032f2112ae2b3ed"
+        },
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-matrix/after_terminal_witness/observed.json",
+          "sha256": "5e650e5db994f196e1ed76a1ff782a7b35b4c3c52797897eec592e89e0d03d7d"
+        },
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-matrix/stop_export/observed.json",
+          "sha256": "0a93e17cfcc7e980d3c1e2b7e3ecb363238ca064b23cd78de717d2be1a270351"
+        },
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-matrix/stop_before_selector/observed.json",
+          "sha256": "af14d83f9f4da724404daf98965fdc5d45e0dc35a077cd250af03a31f47372f8"
+        },
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-matrix/stop_after_selector/observed.json",
+          "sha256": "8e63b73bef8a389ac80d424ac9d7fa935c06f0f9df92e3bef74ab9c97da34b08"
+        },
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-matrix/stop_after_terminal/observed.json",
+          "sha256": "5ec36e63a70bb6eecb935221d101aae6a7e392763381dac32c2cd7703d16d3d3"
+        }
+      ],
+      "scope": "S60 bounded fixture component; acceptance pending"
+    },
+    {
+      "requirement": "GT04 section2.2/2.6 typed auth preview/apply/publication/retry: scene",
+      "artifacts": [
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-scene-01/source-closure.json",
+          "sha256": "2dc6898759bfaa30529578de5b6db9dd476710e4e7a3a18e0878acde789ea157"
+        },
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-scene-01/capture.json",
+          "sha256": "cfcece1bbf386b2f7a7839362bfdaac9987c931cc2bf9647b63aa1d1140cb9a1"
+        },
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-scene-01/client.json",
+          "sha256": "857a1945b9d91ff0df291407ee5c86be072448709463c80f111e7d3bda7ba40c"
+        },
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-scene-01/client-stdout.txt",
+          "sha256": "693fbf28ff4d44dc415cbb50e9c434d7005ed95b4d25eed091fe1a6022803883"
+        },
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-scene-01/client-stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-scene-01/writer-native.json",
+          "sha256": "3c227d12fc2fa3b8968b62b72560771d221a4b33a1e40b098086edb9fc26fe2c"
+        },
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-scene-01/publication.json",
+          "sha256": "e24a1c7c10ff2f48b8a1f8ae3f1eb5a94863446f7aea8853227d3cbcfd55d9e6"
+        }
+      ],
+      "scope": "one immutable protected bundle; no scene-state durability/public ACK"
+    },
+    {
+      "requirement": "GT04 section2.2/2.6 typed auth preview/apply/publication/retry: checkpoint",
+      "artifacts": [
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-checkpoint-01/source-closure.json",
+          "sha256": "eea3f8b9144c9ff88af7d2cee16512d68d1c00f7eb9309a36a6558238ac7df8e"
+        },
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-checkpoint-01/capture.json",
+          "sha256": "3e14c4ba32700645e8dc199f5503dc885664c1970f24a2b6441dde6a054e4af3"
+        },
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-checkpoint-01/client.json",
+          "sha256": "7dac0c1b30c97ca2f1768d9c1aa19b44b86b90458e14b501d8ec6c944ff092eb"
+        },
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-checkpoint-01/client-stdout.txt",
+          "sha256": "8f4e5d256d9de855b218788a776c7047505d79494a579ec6cdd3f1529e544ea6"
+        },
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-checkpoint-01/client-stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-checkpoint-01/writer-native.json",
+          "sha256": "cdf0e3bb25c132bc0aba0ae4f2ceaede5906d924d2734b4a2a50b9537dc9ac0f"
+        },
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-checkpoint-01/publication.json",
+          "sha256": "d49f37d496759366483a9d8ff6055f551c327ac2035d4cbdcb1ba674f9f19f40"
+        }
+      ],
+      "scope": "one immutable protected bundle; no scene-state durability/public ACK"
+    },
+    {
+      "requirement": "GT04 section2.2/2.6 typed auth preview/apply/publication/retry: export",
+      "artifacts": [
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-export-01/source-closure.json",
+          "sha256": "984e831714e430435bba15727f03195b1f6df3a74167b8970fce2b6aab816ef5"
+        },
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-export-01/capture.json",
+          "sha256": "a3e54e7477457afdfcf48c7c84e2cff014db2f00367b5d168dda99287409efee"
+        },
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-export-01/client.json",
+          "sha256": "d1672d88eff82bd3a1c0bf331b7fa26f8ff32eac2b4b65a9eedd1ffe939a27b5"
+        },
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-export-01/client-stdout.txt",
+          "sha256": "9ed21703e386f0c9326805d61c6feb20cfd2043d714df6c063ab4a0c0c0a4309"
+        },
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-export-01/client-stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-export-01/writer-native.json",
+          "sha256": "cbdd7599620715f7764cf934b99e277bc925cac68411b9c7969b789820009446"
+        },
+        {
+          "path": "studio/.local/reviews/20260917-gt04-s60-export-01/publication.json",
+          "sha256": "b8239d22b114e455ee0f8e2adcf09904e59f9ff8a1ee0b4b185aaa11a14bda24"
+        }
+      ],
+      "scope": "one immutable protected bundle; no scene-state durability/public ACK"
+    },
+    {
+      "requirement": "TQ01 current evidence privacy and provenance",
+      "artifacts": [
+        {
+          "path": "zdoc/reviews/20260917-gt04-s60-audit/view-verification.json",
+          "sha256": "bccbe49afe5c042c7845c70f2a23e1d23cf4af62d51c45efc8fb9a375116b552"
+        }
+      ],
+      "scope": "sanitized view for Git; exact raw remains local; formal adequacy pending independent review"
+    }
+  ],
+  "formal_acceptance": false,
+  "remaining_gates": [
+    "two independent final verdicts on same review closure",
+    "GT05 pipeline and full art intake",
+    "GT06 Play/input/UX/performance",
+    "GT07 active cross-app scheduling/recovery",
+    "GT08 Windows/Linux/real Android",
+    "GT09 actual-client conformance",
+    "GT10 complete package/upgrade/rollback/handoff"
+  ]
+}

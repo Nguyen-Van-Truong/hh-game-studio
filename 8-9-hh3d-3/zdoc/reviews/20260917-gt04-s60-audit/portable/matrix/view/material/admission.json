@@ -1,0 +1,351 @@
+{
+  "public_ack": false,
+  "candidate_only": true,
+  "completed": true,
+  "native": {
+    "schema": "HH-BLENDER-EXPORT-RESULT-1",
+    "profile": {
+      "schema": "HH-BLENDER-MATERIAL-EXPORT-PROFILE-1",
+      "objects": 1,
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "images": 0,
+      "bones": 0,
+      "clips": 0,
+      "libraries": 0,
+      "drivers": 0,
+      "exporter_version": [
+        5,
+        2,
+        40
+      ],
+      "exporter_files_sha256": "22a180855eda3e7f1a075bf28d7c256e4498be16c96be4e7412a438ce96ec481",
+      "public_ack": false
+    },
+    "input_sha256": "3a971d57b2601ed2d8909cca9dcede686cd9e1e4320196e6e4d3531b1492e25c",
+    "scene_revision": "sha256:5772124bd10f023066913c8f69baec682ff966fbb3275dd8921e4c0527fbecf7",
+    "snapshot": {
+      "schema": "HH-BLENDER-FIXTURE-SCENE-1",
+      "objects": [
+        {
+          "object_id": "box",
+          "name": "GT04_box",
+          "mesh_name": "GT04_mesh_box",
+          "location": [
+            2.0,
+            -3.0,
+            4.0
+          ],
+          "rotation": [
+            0.20000000298023224,
+            -0.30000001192092896,
+            0.4000000059604645
+          ],
+          "scale": [
+            1.0,
+            2.0,
+            1.0
+          ],
+          "vertices": [
+            [
+              -0.5,
+              -1.0,
+              -1.5
+            ],
+            [
+              0.5,
+              -1.0,
+              -1.5
+            ],
+            [
+              0.5,
+              1.0,
+              -1.5
+            ],
+            [
+              -0.5,
+              1.0,
+              -1.5
+            ],
+            [
+              -0.5,
+              -1.0,
+              1.5
+            ],
+            [
+              0.5,
+              -1.0,
+              1.5
+            ],
+            [
+              0.5,
+              1.0,
+              1.5
+            ],
+            [
+              -0.5,
+              1.0,
+              1.5
+            ]
+          ],
+          "faces": [
+            [
+              0,
+              3,
+              2,
+              1
+            ],
+            [
+              4,
+              5,
+              6,
+              7
+            ],
+            [
+              0,
+              1,
+              5,
+              4
+            ],
+            [
+              1,
+              2,
+              6,
+              5
+            ],
+            [
+              2,
+              3,
+              7,
+              6
+            ],
+            [
+              3,
+              0,
+              4,
+              7
+            ]
+          ],
+          "material": {
+            "material_id": "copper",
+            "name": "HH_Material_copper",
+            "base_color": [
+              0.10000000149011612,
+              0.4000000059604645,
+              0.800000011920929,
+              1.0
+            ],
+            "metallic": 0.20000000298023224,
+            "roughness": 0.800000011920929,
+            "double_sided": true,
+            "alpha_mode": "OPAQUE"
+          }
+        }
+      ],
+      "units": {
+        "system": "METRIC",
+        "scale_length": 1.0
+      }
+    },
+    "context": {
+      "mode": "OBJECT",
+      "active_id": null,
+      "selected_ids": []
+    },
+    "output_sha256": "86078c4ebcee90e2999e764ac66d254fde87403822c4eef8743029eb15309068",
+    "output_size_bytes": 1800,
+    "public_ack": false,
+    "native_finished": true,
+    "context_unchanged": true,
+    "admission_probe": [
+      {
+        "label": "object_driver",
+        "passed": true
+      },
+      {
+        "label": "scene_driver",
+        "passed": true
+      },
+      {
+        "label": "material",
+        "passed": true
+      },
+      {
+        "label": "missing_texture",
+        "passed": true,
+        "filesystem_access_blocked": true
+      },
+      {
+        "label": "geometry_nodes",
+        "passed": true
+      },
+      {
+        "label": "unapproved_addon",
+        "passed": true
+      },
+      {
+        "label": "missing_exporter_addon",
+        "passed": true
+      },
+      {
+        "label": "linked_library",
+        "passed": true,
+        "filesystem_access_blocked": true
+      },
+      {
+        "label": "missing_library",
+        "passed": true,
+        "filesystem_access_blocked": true
+      },
+      {
+        "label": "material_transmission",
+        "passed": true
+      },
+      {
+        "label": "material_alpha",
+        "passed": true
+      },
+      {
+        "label": "material_procedural_node",
+        "passed": true
+      },
+      {
+        "label": "material_node_driver",
+        "passed": true
+      },
+      {
+        "label": "material_extra_slot",
+        "passed": true
+      }
+    ]
+  },
+  "preflight": {
+    "schema": "HH-GLB-BOX-PREFLIGHT-1",
+    "sha256": "86078c4ebcee90e2999e764ac66d254fde87403822c4eef8743029eb15309068",
+    "size_bytes": 1800,
+    "objects": 1,
+    "triangles": 12,
+    "decoded_buffer_bytes": 648,
+    "texture_decoded_bytes": 0,
+    "materials": 1,
+    "images": 0,
+    "extensions": [],
+    "uri_count": 0,
+    "meshes": [
+      {
+        "name": "GT04_box",
+        "mesh": 0,
+        "vertices": 24,
+        "triangles": 12,
+        "unique_positions": [
+          [
+            -0.5,
+            -1.5,
+            -1.0
+          ],
+          [
+            -0.5,
+            -1.5,
+            1.0
+          ],
+          [
+            -0.5,
+            1.5,
+            -1.0
+          ],
+          [
+            -0.5,
+            1.5,
+            1.0
+          ],
+          [
+            0.5,
+            -1.5,
+            -1.0
+          ],
+          [
+            0.5,
+            -1.5,
+            1.0
+          ],
+          [
+            0.5,
+            1.5,
+            -1.0
+          ],
+          [
+            0.5,
+            1.5,
+            1.0
+          ]
+        ],
+        "translation": [
+          2,
+          4,
+          3
+        ],
+        "rotation": [
+          0.12628516554832458,
+          0.2100786566734314,
+          0.12611651420593262,
+          0.9612563252449036
+        ],
+        "scale": [
+          1,
+          1,
+          2
+        ],
+        "material": {
+          "name": "HH_Material_copper",
+          "base_color": [
+            0.10000000149011612,
+            0.4000000059604645,
+            0.800000011920929,
+            1
+          ],
+          "metallic": 0.20000000298023224,
+          "roughness": 0.800000011920929,
+          "double_sided": true,
+          "alpha_mode": "OPAQUE"
+        }
+      }
+    ],
+    "public_ack": false
+  },
+  "snapshot_geometry_bound": true,
+  "artifact": {
+    "name": "output.glb",
+    "sha256": "86078c4ebcee90e2999e764ac66d254fde87403822c4eef8743029eb15309068",
+    "size_bytes": 1800
+  },
+  "status": "INTERNAL_EXPORT_VERIFIED",
+  "job": {
+    "active_count": 0,
+    "assigned": true,
+    "close_uncertain": false,
+    "closed": true,
+    "configured": true,
+    "create_uncertain": false,
+    "failed_operations": [],
+    "handle_retained": false,
+    "native_error": null,
+    "tainted": false,
+    "zero_observed": true
+  },
+  "wrapper_exit_code": 0,
+  "actual_process_exit": {
+    "exit_code": 0,
+    "pid": 38380
+  },
+  "limits": {
+    "job_memory_bytes": 2147483648,
+    "job_user_time_100ns": 150000000,
+    "active_process_limit": 4,
+    "limit_flags": 8716,
+    "wall_seconds": 20,
+    "workspace_bytes_limit": 33554432,
+    "workspace_limit_is_watchdog": true,
+    "each_log_capture_bytes": 262144
+  }
+}

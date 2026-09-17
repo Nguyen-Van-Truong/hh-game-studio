@@ -1,0 +1,20 @@
+{
+  "host_pid": 18812,
+  "host_exit_code": 74,
+  "blender_pid": 19256,
+  "live_wait_before": 258,
+  "dead_wait_after": 0,
+  "native_exit_code": 0,
+  "native_effect_observed_before_terminal_persist": true,
+  "recovered_response": {
+    "command_id": "interrupted",
+    "native": null,
+    "public_ack": false,
+    "reason": "UNRESOLVED_DURABLE_INTENT",
+    "scene_state_durable": false,
+    "schema": "HH-BLENDER-DURABLE-RESPONSE-1",
+    "status": "UNKNOWN"
+  },
+  "retry_without_host_same_bytes": true,
+  "public_ack": false
+}

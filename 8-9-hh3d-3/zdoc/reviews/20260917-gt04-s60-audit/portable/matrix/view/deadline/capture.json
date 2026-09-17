@@ -1,0 +1,44 @@
+{
+  "lane": "deadline",
+  "host": {
+    "wrapper_pid": 35920,
+    "started_at": "2026-09-17T08:12:29.362075+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "matrix.py",
+      "--child",
+      "deadline"
+    ],
+    "exit_code": 0,
+    "target_pid": 46844,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "native-stdout.txt",
+    "stderr": "native-stderr.txt",
+    "host": "native-host.json"
+  },
+  "source_closure_sha256": "f5ae5dfbb451d3204197c2b21486c586698089ac24d14d23641a9182b5e42673",
+  "execution_closure_sha256": "407fff4e453fb1702a32fbc8ae1ee5eff7c3dcb0b99338a504ae39dc69d67824",
+  "passed": true,
+  "formal_acceptance": false,
+  "checks": 19,
+  "artifacts": {
+    "absolute-deadline-native.json": "b1e4220259f845cf6d1834d93f452492bb6b3a5f30feccc287d2e6418a9d5b00",
+    "native-host.json": "10fc765917ebaca55c9b65d0fa718bf7fa997909f492bc401a54e6f6c049b758",
+    "native-stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "native-stdout.txt": "90004eaec911cd5f1e192a30925c95228894345dc934001d01fa88b45a67e16b",
+    "runtime-binding.json": "c7f886e71b5ec651b768424cde64469e8566e892203fd5172b0b36c123f53ba4",
+    "blender-9ec49b0280254b2aa71c7385529cd4d2/close.json": "890e6a6a12b563a5fc888331552af2398e5a969eb7ecc5482731ae6849fde0f6",
+    "blender-9ec49b0280254b2aa71c7385529cd4d2/control-hello.json": "353b1898017f9f139c13ac0f12156ad0a5e33ada4054a974fb49e28739d2a1b7",
+    "blender-9ec49b0280254b2aa71c7385529cd4d2/data-hello.json": "353b1898017f9f139c13ac0f12156ad0a5e33ada4054a974fb49e28739d2a1b7",
+    "blender-9ec49b0280254b2aa71c7385529cd4d2/launch.json": "bf35731583b31447870da5e6362bef9034aadd1bf0c7cb79a3c710691fa40626",
+    "blender-9ec49b0280254b2aa71c7385529cd4d2/process-exit.json": "ed2879442551661cb4fb1addd23f29f6e7ae01d804757f2498367abd8105fe74",
+    "blender-9ec49b0280254b2aa71c7385529cd4d2/process-start.json": "05c4e54c8e32653b8392d0d38568d7a9c65a2cb78c06c43b3d8c0e5ba1e89ceb",
+    "blender-9ec49b0280254b2aa71c7385529cd4d2/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "blender-9ec49b0280254b2aa71c7385529cd4d2/stdout.txt": "bf78305a7fffa27ae8e3eb57f4ff68f18800bd11b5543c1111744157e190cf2c",
+    "blender-9ec49b0280254b2aa71c7385529cd4d2/temp/quit.blend": "5457e64908d082932ef3880f0127db856b39c13a0c42694df39c95aff7bcc260"
+  }
+}
