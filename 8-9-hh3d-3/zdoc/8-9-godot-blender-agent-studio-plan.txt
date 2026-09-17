@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 17-09-2026, Asia/Saigon | Revision S64 | TRIỂN KHAI THEO GATE
+Ngày 17-09-2026, Asia/Saigon | Revision S65 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -7,25 +7,25 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 02 | GT-02 | Protocol, capability, journal và an toàn lệnh tối thiểu | GT-01 | ACCEPTED
 03 | GT-03 | Godot EditorPlugin: sửa scene, UndoRedo, save/readback | GT-02 | ACCEPTED
 04 | GT-04 | Blender adapter UI và background jobs an toàn | GT-02 | ACCEPTED
-05 | GT-05 | Pipeline .blend → GLB → Godot, asset manifest | GT-03, GT-04 | IN_PROGRESS
-06 | GT-06 | Play/input/pause/stop/observe/capture qua công cụ | GT-05 | PLANNED
+05 | GT-05 | Pipeline .blend → GLB → Godot, asset manifest | GT-03, GT-04 | ACCEPTED
+06 | GT-06 | Play/input/pause/stop/observe/capture qua công cụ | GT-05 | IN_PROGRESS
 07 | GT-07 | Đa agent, publish, lease/fencing và recovery | GT-05, GT-06 | PLANNED
 08 | GT-08 | Clean import/export/CI, target và cache matrix | GT-07 | PLANNED
 09 | GT-09 | Agent conformance và toàn tuyến trên dự án mẫu | GT-08 | PLANNED
 10 | GT-10 | Gói công cụ v0.1, cài/upgrade/rollback, bàn giao game | GT-09 | PLANNED
 
-CURRENT_VALID_WP=GT-05
+CURRENT_VALID_WP=GT-06
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=GT05_IN_PROGRESS
+IMPLEMENTATION=GT06_IN_PROGRESS
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
 GT01_PENDING=NONE
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
 PLAN_DESIGN_CRITICS=NO_ACCEPTED_VERDICT_S6_TO_S21
-RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_ACCEPTED
+RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S64
+PLAN_REVISION=S65
 EXECUTION_MODE=COORDINATOR_THREE_ASTRA_XHIGH_OWNER_20260917
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -50,12 +50,14 @@ GT04_WORKING_SOURCE_STATUS=S60_FROZEN_ACCEPTED
 GT04_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S60
 GT04_CHECKPOINT_COMMIT=38f6b9a
 GT04_REVIEW_CLOSURE=8ea276e98f3137a5f3623fce00d0760ae0c1fe6d17a77a330e98fa8839a31950
-GT05_EVIDENCE_STATUS=S64_FINAL_CANDIDATE_ALL_LANES_CAPTURED
-GT05_REVIEW_STATUS=AWAITING_TWO_FINAL_SAME_MANIFEST_VERDICTS
+GT05_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260917_S64
+GT05_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S64
+GT05_CHECKPOINT_COMMIT=808d8ba
+GT06_EVIDENCE_STATUS=IMPLEMENTATION_NO_RUNTIME_CLAIM
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
 
-TIẾN ĐỘ HIỆN HÀNH — S64, ngày 17-09-2026
-GT-01–04 đã ACCEPTED. GT-05 mở sau hai review độc lập S60 cùng closure.
+TIẾN ĐỘ HIỆN HÀNH — S65, ngày 17-09-2026
+GT-01–05 đã ACCEPTED. GT-06 mở sau hai review độc lập S64 cùng manifest.
 Owner cho phép ba Astra extra high; coordinator tích hợp và giữ một writer/file.
 Native engine/integration lanes chạy tuần tự với process/cache/evidence riêng.
 
@@ -81,56 +83,33 @@ Native engine/integration lanes chạy tuần tự với process/cache/evidence 
   public_ack=false, scene_state_durable=false. Arbitrary artist input,
   writable restart, restored Undo và cross-app activation chưa được claim.
 
-GT-05 hiện hành — foundation 99fb5f2; candidate cuối S64 chờ hai verdict:
-- Đã đóng gap nav bằng native pathfinding: map0→1 chưa có owner→2 có owner;
-  4vertices/2triangles/24m², hai đường chéo3điểm/5.83095169m đúng endpoint,
-  region và UP normal. Không dùng region/count làm bằng chứng đường đi.
-  TX09 STAGED supplement s64-02 đạt death86/UNKNOWN/last-good unchanged trên
-  cùng final source. Hai critic đã rà delta; chưa có verdict nghiệm thu cuối.
-- Khóa tolerance/naming/import preset, decoded caps và dependency pins; pipeline
-  chỉ original fixture đã khai báo. Không tăng shared storage cap hay tự bật
-  arbitrary artist input. Manifest chứa source/license/bounds/bones/clips/
-  textures/LOD/proxies và semantic/artifact hash theo domain rõ ràng.
-- Native chain hiện hành: producer-repeat-01 + producer-s62-01; hai GLB cùng
-  SHA e85e536137208ba84adbc875b6fb647b5a4e49156344e03e2e8947a7ae91e377.
-  producer-edited-01 tăng crate0.6→0.8m, đổi đúng geometry/collider/signature.
-  Validation-s62-01/s62-02/edited-s62-02: 114accessors/54885scalars/3PNG/
-  1200triangles; Python và Khronos thực tế0error/0warning. Blender có đúng4
-  root-skin +1shared-ORM warning exporter pin đã giải thích và kiểm body/count.
-- consumer-s64-02/visual-s64-01/reimport-s64-01 chạy Godot thật: 12mesh/12bone/
-  792pose samples/2160skin vertices/2clips, reimport cùng project/cache giữ
-  authored script/socket/material override. 68PNG/9draw calls mỗi ảnh dưới
-  lighting Godot, PBR gốc và override restore. Chín ảnh được coordinator xem;
-  side views có occlusion tự nhiên, không claim thấy mọi mặt hay art game final.
-- rejections-s64-01:27/27 reject đúng error/site; đây là mutation-observation
-  campaign. Bone-migration-s64-02 bổ sung Blender thật rename/delete bn_head,
-  save/reopen và reject OBSERVED_NAME_SET trước export; có affected-consumer
-  graph/mapping đề xuất, không tự migration. Strict chain verifier kiểm
-  9evidence roles/4payload và770file (47source+723raw); source từng component khớp
-  frozen map hiện hành. Baseline sau reimport dùng original ordinal snapshots;
-  preset trước/sau import có hash-domain riêng. Không gán log cũ cho source mới.
-- units-s64-02:233run=232pass+1Windows symlink-permission skip,0failure/error.
-  snapshot-native-s64-02:11/11, bảy child chết thật exit86, Stop/write failure,
-  UNKNOWN/readonly recovery; completed snapshot trước đó không đổi từng case.
-  Đây là synthetic-storage proof; injected I/O error không là antivirus thật.
-- publication-s64-02 chạy strict provider, publish4payload thật, protected
-  readback + same-owner/cross-owner exact retry không chạy lại provider + readonly
-  reopen. public_ack=false; staged assets, chưa kích hoạt editor/game.
-- Units/native/publication/STAGED/bone S64 cuối bind cùng143source files, closure
-  c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135.
-  Provider dùng JCS source-map hash-domain riêng nhưng cùng per-file map.
-  Heavy verification deadline60s, engine stage20s; Stop/lease/deadline tới từng
-  phase. Các attempt lỗi vẫn giữ .local/reviews: thiếu offline cache ở snapshot
-  test, comparator loop endpoint, nav sync/normal và log Error: đã sửa;
-  regression tới đúng check site, không dùng attempt lỗi làm acceptance.
-- Gói candidate/requirement coverage: reviews/20260917-gt05-s63-audit.
-  Giữ tên folder phát triển S63; requirements-s64.md và manifest chọn run S64.
-  Còn Git-byte proof và hai critic độc lập trên manifest cuối. Ba worker đã
-  bàn giao; peer review không thay critic mới. Cross-app activation ở GT-07.
-  Raw stays .local/reviews/gt05-*; inventory commit không thay raw. Checkpoint
-  foundation và design history giữ nguyên, không xóa failure/verdict cũ.
+- GT-05: source808d8ba; reviews/20260917-gt05-s64-acceptance/acceptance.json.
+  Hai critic độc lập gt05-s64-critic-a.md và gt05-s64-critic-b-final.md đều
+  PASS/TICK=yes cùng manifest fd0b4a984c7bee261c083c07d461baf55325e936d66df2eeab897b422ee0a02b.
+  Source143,review13,raw1722;157Git blobs khớp.233unit=232pass+1symlink skip;
+  native11cases+STAGEDdeath86; actual Blender bone rename/delete reject2/2.
+  GLB repeat byte-identical, edited crate đổi geometry; Godot import/reimport,
+  actual nav paths/skin/clip/collision/68PNG và4payload protected publication.
+  Chính xác1skin dùng bởi4mesh instances; shorthand4skins trong coverage cũ
+  không nghĩa4rig độc lập. public_ack=false/editor_activation=false; staged
+  snapshot. Giữ raw gốc; source/review S64 ở808d8ba và governance snapshot,
+  không đổi chữ ký theo source mới. Full details: gt05-s63-audit/requirements-s64.md.
 
-Các phần còn lại để xong plan: hoàn tất GT-05, rồi GT-06 play/input/observe,
+GT-06 hiện hành — ba lane chuẩn bị xong, bắt đầu implementation:
+- Fixture/observe: immutable Play riêng Editor; trace60Hz/seed/pressed-held-released
+  qua Input.parse_input_event, sau callback mới readback. Menu/move/outfit/emote/
+  prop/pause/resume/quit, camera và capture đúng frame/PID/source.
+- Perf: schema versioned, raw frame-boundary monotonic intervals, p50/p95/p99 và
+  1%low=1000/mean(ceil1% frame lớn nhất). TIME_PROCESS là monitor tổng hợp,
+  không raw per-frame; render primitives không được gọi thành triangle count.
+- Host/integration: reuse checked Job/process ownership và typed transport;
+  source/hash/trace binding, Stop riêng/latch, inspector bounded, không hidden
+  resume. Seed move_speed=0 rồi repair qua GT03, new snapshot/replay cùng trace.
+- Chưa có GT06 runtime/evidence/PASS. Benchmark1000commands+100cycles theo plan
+  vẫn phải chạy đúng profile; unit nhỏ không thay benchmark. Không nâng shared
+  caps để hợp artifact; raw series có parser/quota riêng, wire chỉ hash/reference.
+
+Các phần còn lại để xong plan: GT-06 play/input/observe,
 GT-07 concurrency/recovery/cross-app activation, GT-08 Windows/Linux/Android
 thiết bị thật (hard gate), GT-09 conformance, GT-10 package/install/upgrade/
 rollback/uninstall/handoff. HH World là plan riêng sau GT-10. Chưa có ETA
@@ -1267,7 +1246,7 @@ Tinh gọn S28/S34 chỉ di chuyển nhật ký cũ và đồng bộ chế độ
 xóa finding, đổi schema để hợp code, hoặc suy test xanh thành full acceptance.
 Lịch sử S4–S27, quyết định model cũ và runtime chưa đủ proof nằm trong bản S27
 archived và các report được nó tham chiếu. Tình trạng hiện hành xem đầu file.
-GT-01 và GT-02 đã ACCEPTED; GT-03 đang triển khai, GT-03–GT-10 chưa nghiệm thu.
+Trạng thái nghiệm thu hiện hành chỉ xem bảng đầu file; không giữ bản sao tại đây.
 
 Từ vựng: WP=công việc; DoD=điều kiện xong; fixture=dự án mẫu để kiểm công cụ;
 lease=quyền ghi tạm; fencing=chặn writer cũ; hash=dấu nhận dạng nội dung;
@@ -1277,4 +1256,4 @@ CCU=người online cùng lúc trong game, không số agent phát triển game.
 
 
 END_OF_TOOLS_PLAN
-DATE=2026-09-16 Asia/Saigon
+DATE=2026-09-17 Asia/Saigon

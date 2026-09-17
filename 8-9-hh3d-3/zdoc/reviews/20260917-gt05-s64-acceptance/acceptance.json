@@ -1,0 +1,56 @@
+{
+  "schema": "hh-gt05-coordinator-acceptance-1",
+  "accepted_at_utc": "2026-09-17T12:53:48.312428+00:00",
+  "gate": "GT-05",
+  "status": "ACCEPTED",
+  "dependencies": [
+    "GT-03 ACCEPTED S55",
+    "GT-04 ACCEPTED S60"
+  ],
+  "source_checkpoint": "808d8ba94e3c39b19c8381072775590b7cafdc0c",
+  "review_package": "zdoc/reviews/20260917-gt05-s63-audit",
+  "manifest_sha256": "fd0b4a984c7bee261c083c07d461baf55325e936d66df2eeab897b422ee0a02b",
+  "critics": [
+    {
+      "reviewer": "gt05_critic_a_s63",
+      "model": "gpt-6-astra",
+      "reasoning_effort": "xhigh",
+      "report": "zdoc/reviews/20260917-gt05-s64-critic-a.md",
+      "sha256": "b57826ab438037ef777af9aa068bed13c2f18714be0b97ea78d0e816fbc5f94f",
+      "verdict": "PASS",
+      "tick": "yes"
+    },
+    {
+      "reviewer": "gt05_critic_b_final_s64",
+      "model": "gpt-6-astra",
+      "reasoning_effort": "xhigh",
+      "report": "zdoc/reviews/20260917-gt05-s64-critic-b-final.md",
+      "sha256": "f71e78b8ccb1f2193a9c77c20bb62e5ded00c03bce7d184a20beefb5bda2e596",
+      "verdict": "PASS",
+      "tick": "yes"
+    }
+  ],
+  "tests_run": 233,
+  "tests_passed": 232,
+  "explicit_skips": 1,
+  "native_storage_cases": 11,
+  "supplemental_staged_death_cases": 1,
+  "native_bone_migration_rejections": 2,
+  "git_blobs": 157,
+  "next_gate": "GT-06",
+  "limits": [
+    "Fixed original fixture on pinned Windows Blender/Godot; staged immutable snapshot publication only; public_ack=false/editor_activation=false",
+    "One distinct glTF skin shared by four mesh instances; requirements shorthand 4 skins means four consumers",
+    "Native observation negative campaign is not 27 malformed native imports; synthetic storage faults are separate from actual four-payload publication",
+    "One unavailable symlink creation test explicitly skipped; no physical disk-exhaustion, antivirus or power-loss certification",
+    "Original raw evidence remains local; Git stores source/review and inventories, not all generated binaries",
+    "No GT06 performance/input, GT07 activation, GT08 physical Android, GT09 conformance, GT10 release or HH World acceptance"
+  ],
+  "source_closure_sha256": "c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135",
+  "source_files": 143,
+  "review_closure_sha256": "21061e5e6c8cae1ab7bcb724f2c21dace72c6d1198d0ecab70b7c32e9a4c12e1",
+  "review_files": 13,
+  "raw_closure_sha256": "1cd71ca1c2ae173f7bc4701e25f44ed35e0750a426bafd7afc8bc560be99feb5",
+  "raw_files": 1722,
+  "git_head_proof_sha256": "7cc7c3d1059123e9ffc557884b4698d44dfd8a62fa985a3231eaf2f4f525a8c7"
+}

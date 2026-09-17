@@ -1,12 +1,12 @@
 # HH3D-3 — routing hiện hành
 
 Owner steering mới nhất 17-09-2026: ba Codex subagent Astra extra high.
-GT-04 đã được coordinator nghiệm thu S60 sau hai critic độc lập cùng closure.
-GT-05 hiện hành; chia validator, original producer và Godot consumer theo scope
+GT-05 đã được coordinator nghiệm thu S64 sau hai critic độc lập cùng manifest.
+GT-06 hiện hành; chia fixture/observe, perf schema và host replay theo scope
 file riêng. Coordinator tích hợp, cập nhật plan và serialize native engine lanes.
 Không Grok CLI. Lệnh solo trước đó là lịch sử. Giữ một writer/file, actual exits,
 source/evidence hash và checkpoint. Hai review độc lập vẫn bắt buộc cho gate mới;
-không chuyển chữ ký S60 sang source mới. Plan đầu file giữ trạng thái hiện hành.
+không chuyển chữ ký S64 sang source mới. Plan đầu file giữ trạng thái hiện hành.
 
 Chỉ có đúng hai plan TXT đang hoạt động:
 

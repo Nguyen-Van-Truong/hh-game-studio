@@ -1,0 +1,74 @@
+{
+  "schema": "HH-GT05-REVIEW-VERIFY-1",
+  "verified": true,
+  "formal_acceptance": false,
+  "manifest_sha256": "fd0b4a984c7bee261c083c07d461baf55325e936d66df2eeab897b422ee0a02b",
+  "source_files": 143,
+  "review_files": 13,
+  "raw_files": 1722,
+  "units": {
+    "tests": 233,
+    "skips": [
+      {
+        "id": "test_producer_contract.ProducerContractTests.test_symlink_staging_rejected_where_supported",
+        "reason": "Host does not grant symlink creation"
+      }
+    ],
+    "python_sha256": "5f7b89a612c9b8af1d6456cdfcd1dbe5ca630849e79aebced9bee9a6694952ec"
+  },
+  "snapshot_native": {
+    "cases": 11,
+    "actual_crash_exit": 86,
+    "last_good_retained_sha256": "4d85f5bacd6f97fabb686ffd9d23f5e14ad8af7136c6a0f3e48ca1692779d3ca",
+    "scope": "synthetic protected-storage behavior; child exit is captured by the hash-bound owned worker"
+  },
+  "snapshot_staged": {
+    "phase": "STAGED",
+    "actual_crash_exit": 86,
+    "recovery": "UNKNOWN",
+    "selector_absent": true
+  },
+  "publication": {
+    "storage_id": "60d94e6f77e445a88e82cab9de62af43",
+    "receipt_sha256": "261d4ba19c7ba985d1201c9aea9f1668c4a5c73d801f50954d77318426e58403",
+    "proof_sha256": "4239fd7586d0106b6d363e4534e77163829f0c555ca74a1f6035dfab313769e7"
+  },
+  "visual_review": {
+    "captured_frames": 68,
+    "coordinator_inspected_images": 9,
+    "independent_critic": false
+  },
+  "bone_migration": {
+    "cases": [
+      "rename",
+      "delete"
+    ],
+    "rejection": "OBSERVED_NAME_SET",
+    "migration_required": true,
+    "accepted_mapping": false,
+    "affected_ids": {
+      "bones": [
+        "bn_head"
+      ],
+      "skins": [
+        "chr_fixture_avatar_rig"
+      ],
+      "meshes": [
+        "chr_fixture_avatar_lod0",
+        "chr_fixture_avatar_lod1",
+        "chr_fixture_outfit_lod0",
+        "chr_fixture_outfit_lod1"
+      ],
+      "clips": [
+        "idle",
+        "walk"
+      ],
+      "sockets": []
+    },
+    "last_good_unchanged": true
+  },
+  "git": {
+    "ref": "HEAD",
+    "blobs": 157
+  }
+}
