@@ -151,6 +151,15 @@ GT-06 hiện hành — tóm tắt theo kết quả, chi tiết giữ trong evide
   75/75 affectedtests tại -s70-units-03 đạt19.106s, khôngskip, actualexits0,
   tree sạch/source ổn định. Không cộng với75test ở -02 (trước bổ sung schema).
   Source đã đổi nên campaign02 phải tạo fresh; không dùng prefix01 làm sample.
+- Checkpoint9bc28b6 đã khởi chạy gt06-s70-campaign-02 lúc01:25:28 ngày18-09
+  qua TaskScheduler on-demand. Quan sát01:27:07: taskRUNNING, warmupbatch0
+  đãcapture và sáu artifactrefs khớp; host/editorstderr trống, đangbatch1.
+  49sourcefiles khớp live/frozen/Git; closure
+  21a17b2a350160efb17950979adada0a2b3e12dbd95e12158833acbe9f233aa0.
+  Đây là startup/warmup, chưa có fullrun/measuredsample/PASS. Mỗi lượt tiếp
+  phải query task hiện tại, không suy RUNNING từ dòng lịch sử này. Launchproof:
+  reviews/20260918-gt06-s70-resume/campaign02-launch.json. Matrixdraft,
+  closure-packaging-check và campaign-operations đã lưu trong cùng thư mục.
 - Chưa có GT06 accepted candidate. Sau benchmark đúng profile phải đóng
   requirement→test→evidence trên frozen closure, hai critic độc lập PASS/TICK=yes,
   rồi coordinator mới chuyểnGT06ACCEPTED. Không mở implementation GT07 trước đó.

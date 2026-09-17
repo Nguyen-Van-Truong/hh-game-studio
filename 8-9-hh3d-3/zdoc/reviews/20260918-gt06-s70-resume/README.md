@@ -122,6 +122,16 @@ earlier75/75 in `-units-02` predates adding the schema; counts are not additive.
 Because source changed, campaign02 must use a fresh root. No completed run is
 discarded: campaign01 never reached a batch.
 
+The fixed source was committed at `9bc28b6`; campaign02 was dispatched at
+2026-09-17T18:25:28Z. `campaign02-launch.json` records the01:27:07 local
+observation: running scheduler instance, clean host/editor stderr and the first
+complete warm-up batch with six byte-verified artifact references. All49 source
+files match live disk, frozen copy and Git. This is not a full run or a measured
+sample; actual terminal captures and the full dataset remain required. Requery
+the exact task in `campaign-operations.md` when resuming rather than treating
+this launch record as current status. The three preparation reports are not
+final independent acceptance verdicts.
+
 ## Remaining work
 
 Changed-driver verification and nested native ownership proof are recorded.
