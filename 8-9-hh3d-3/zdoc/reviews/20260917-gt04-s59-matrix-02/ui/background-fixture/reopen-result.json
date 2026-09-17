@@ -1,0 +1,264 @@
+{
+  "acceptance": false,
+  "actual_blender": true,
+  "checks": [
+    {
+      "label": "actual_pinned_background",
+      "passed": true
+    },
+    {
+      "label": "automatic_python_disabled",
+      "passed": true
+    },
+    {
+      "label": "reopen_exact_file_hash",
+      "passed": true
+    },
+    {
+      "label": "reopen_native_finished",
+      "passed": true
+    },
+    {
+      "label": "reopen_exact_scene_revision",
+      "passed": true
+    },
+    {
+      "label": "reopen_exact_mesh_transform",
+      "passed": true
+    },
+    {
+      "label": "reopen_two_stable_meshes",
+      "passed": true
+    },
+    {
+      "label": "reopen_no_external_dependencies",
+      "passed": true
+    },
+    {
+      "label": "reopen_no_public_ack",
+      "passed": true
+    }
+  ],
+  "ok": true,
+  "phase": "reopen",
+  "public_ack": false,
+  "result": {
+    "revision": "sha256:658a55c1341ce7ee82c358e7fe019964c8c46c884a9f773a02daa171b2026a30",
+    "saved": {
+      "name": "fixture.blend",
+      "sha256": "d914cf214236ad8d50e157ba4926085e9b01ae0b2e5229186902bff60c6ad26f",
+      "size_bytes": 86942
+    },
+    "snapshot": {
+      "objects": [
+        {
+          "faces": [
+            [
+              0,
+              3,
+              2,
+              1
+            ],
+            [
+              4,
+              5,
+              6,
+              7
+            ],
+            [
+              0,
+              1,
+              5,
+              4
+            ],
+            [
+              1,
+              2,
+              6,
+              5
+            ],
+            [
+              2,
+              3,
+              7,
+              6
+            ],
+            [
+              3,
+              0,
+              4,
+              7
+            ]
+          ],
+          "location": [
+            2.0,
+            -3.0,
+            4.0
+          ],
+          "mesh_name": "GT04_mesh_anchor",
+          "name": "GT04_anchor",
+          "object_id": "anchor",
+          "rotation": [
+            0.10000000149011612,
+            0.20000000298023224,
+            0.30000001192092896
+          ],
+          "scale": [
+            1.0,
+            2.0,
+            0.5
+          ],
+          "vertices": [
+            [
+              -0.5,
+              -1.0,
+              -1.5
+            ],
+            [
+              0.5,
+              -1.0,
+              -1.5
+            ],
+            [
+              0.5,
+              1.0,
+              -1.5
+            ],
+            [
+              -0.5,
+              1.0,
+              -1.5
+            ],
+            [
+              -0.5,
+              -1.0,
+              1.5
+            ],
+            [
+              0.5,
+              -1.0,
+              1.5
+            ],
+            [
+              0.5,
+              1.0,
+              1.5
+            ],
+            [
+              -0.5,
+              1.0,
+              1.5
+            ]
+          ]
+        },
+        {
+          "faces": [
+            [
+              0,
+              3,
+              2,
+              1
+            ],
+            [
+              4,
+              5,
+              6,
+              7
+            ],
+            [
+              0,
+              1,
+              5,
+              4
+            ],
+            [
+              1,
+              2,
+              6,
+              5
+            ],
+            [
+              2,
+              3,
+              7,
+              6
+            ],
+            [
+              3,
+              0,
+              4,
+              7
+            ]
+          ],
+          "location": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mesh_name": "GT04_mesh_second",
+          "name": "GT04_second",
+          "object_id": "second",
+          "rotation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "vertices": [
+            [
+              -0.05000000074505806,
+              -0.10000000149011612,
+              -0.15000000596046448
+            ],
+            [
+              0.05000000074505806,
+              -0.10000000149011612,
+              -0.15000000596046448
+            ],
+            [
+              0.05000000074505806,
+              0.10000000149011612,
+              -0.15000000596046448
+            ],
+            [
+              -0.05000000074505806,
+              0.10000000149011612,
+              -0.15000000596046448
+            ],
+            [
+              -0.05000000074505806,
+              -0.10000000149011612,
+              0.15000000596046448
+            ],
+            [
+              0.05000000074505806,
+              -0.10000000149011612,
+              0.15000000596046448
+            ],
+            [
+              0.05000000074505806,
+              0.10000000149011612,
+              0.15000000596046448
+            ],
+            [
+              -0.05000000074505806,
+              0.10000000149011612,
+              0.15000000596046448
+            ]
+          ]
+        }
+      ],
+      "schema": "HH-BLENDER-FIXTURE-SCENE-1",
+      "units": {
+        "scale_length": 1.0,
+        "system": "METRIC"
+      }
+    }
+  },
+  "schema": "HH-GT04-NATIVE-PROBE-1",
+  "version": "5.2.1 LTS"
+}

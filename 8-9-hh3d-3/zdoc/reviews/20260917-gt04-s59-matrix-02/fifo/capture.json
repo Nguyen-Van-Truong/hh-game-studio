@@ -1,0 +1,52 @@
+{
+  "lane": "fifo",
+  "host": {
+    "wrapper_pid": 42536,
+    "started_at": "2026-09-17T03:37:16.135761+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "matrix.py",
+      "--child",
+      "fifo"
+    ],
+    "exit_code": 0,
+    "target_pid": 8932,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "native-stdout.txt",
+    "stderr": "native-stderr.txt",
+    "host": "native-host.json"
+  },
+  "source_closure_sha256": "943cff74f23a61427765071f7fd6661acbdad23c0e8386364f5615a2a0016134",
+  "execution_closure_sha256": "039dcc977b11c9a119f618517f2c61523c1bf4a8ae2beaac43b14f3fde3dee3f",
+  "passed": true,
+  "formal_acceptance": false,
+  "checks": 19,
+  "artifacts": {
+    "client-0-exit.json": "507e1995602a2d574cde0f01d247ee5f8c04874bf031b52e601af544f944621a",
+    "client-0-stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "client-1-exit.json": "a9fbaf8f64f004f8b0f1205d150943b34b410dde73e844e90b910fc34c5e2d6b",
+    "client-1-stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "client-alice.json": "e2741168b1a6d099ad9897ec44de699375024187e315f97a3ee053d9cde75a98",
+    "client-bob.json": "bdfcff2db13e0b7f3a83660bf8d1e38e597b6ed877579f44dd6de2d29422a692",
+    "native-host.json": "db8e93cbed00fb13a51a6e3abe0e26fe78b4e959d257e36128d9fe13a60e7f76",
+    "native-stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "native-stdout.txt": "5f72176947fc5e619b59c298dfd885798de2d07840b2f769faba6615990e3d87",
+    "native.json": "a0a13b50c6dd682e15bc6f2cd8d82802a82188cfaa2bfb9289d1aa47136add8c",
+    "runtime-binding.json": "ce118558ad56a1f88baff2444fd7990b189d17e0ea6b363a54e5006fd808b31a",
+    "blender-fcc2ddfb0b8d4caf857228209c9dcb9d/close.json": "6bd8166d59d8d276da9c0cb164a6669faba69818409a77b8fe88c8b5b996fbc2",
+    "blender-fcc2ddfb0b8d4caf857228209c9dcb9d/control-hello.json": "0cd346c3e719a1ec82ef39565fb64522912bd8da037282d9f74426791f5db220",
+    "blender-fcc2ddfb0b8d4caf857228209c9dcb9d/data-hello.json": "0cd346c3e719a1ec82ef39565fb64522912bd8da037282d9f74426791f5db220",
+    "blender-fcc2ddfb0b8d4caf857228209c9dcb9d/launch.json": "61a4e14ae131a7632731105318dcdea0b201088f730d103d35fd8ba053aae82a",
+    "blender-fcc2ddfb0b8d4caf857228209c9dcb9d/process-exit.json": "9bf0e70238020febfe5e8a9c511293b50da81e606675ff7511a9a2812510e05b",
+    "blender-fcc2ddfb0b8d4caf857228209c9dcb9d/process-start.json": "3ce4b5c60f63c57f3801a9bbdc54269a9846316d7e330417ee5b1f99deb17399",
+    "blender-fcc2ddfb0b8d4caf857228209c9dcb9d/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "blender-fcc2ddfb0b8d4caf857228209c9dcb9d/stdout.txt": "26a0aa7eaa2f04c74f05badf7a5aef7248d7833306969b170d1c84d06b335098",
+    "blender-fcc2ddfb0b8d4caf857228209c9dcb9d/journal/blender-journal.jsonl": "103cfe6ecc13e822784b64ff6846bec76116da81619e9f7aaaec26784173eb5c",
+    "blender-fcc2ddfb0b8d4caf857228209c9dcb9d/journal/blender-journal.jsonl.guard": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "blender-fcc2ddfb0b8d4caf857228209c9dcb9d/temp/quit.blend": "3364ed3e80abb9d0748f2e608f62131b08a8039efcae40a37947bcee747562c3"
+  }
+}

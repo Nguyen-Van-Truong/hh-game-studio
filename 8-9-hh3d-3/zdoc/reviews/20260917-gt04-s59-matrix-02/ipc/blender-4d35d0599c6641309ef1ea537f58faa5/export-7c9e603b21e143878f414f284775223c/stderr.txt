@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-s59-scene-01\source\studio\blender-addon\export_background.py", line 62, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-s59-scene-01\source\studio\blender-addon\export_background.py", line 47, in main
+    else:bytearray(3*1024**3)  # Exceeds the verified 2-GiB owned Job limit.
+         ~~~~~~~~~^^^^^^^^^^^
+MemoryError
+
+Error: script failed, file: 'D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-s59-scene-01\source\studio\blender-addon\export_background.py', exiting.

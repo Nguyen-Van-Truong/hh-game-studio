@@ -1,0 +1,119 @@
+{
+  "passed": true,
+  "formal_acceptance": false,
+  "source_closure_sha256": "943cff74f23a61427765071f7fd6661acbdad23c0e8386364f5615a2a0016134",
+  "source_files": 139,
+  "lanes": [
+    {
+      "lane": "ui",
+      "checks": 95,
+      "execution_closure_sha256": "039dcc977b11c9a119f618517f2c61523c1bf4a8ae2beaac43b14f3fde3dee3f",
+      "directory": "zdoc/reviews/20260917-gt04-s59-matrix-02/ui"
+    },
+    {
+      "lane": "ipc",
+      "checks": 31,
+      "execution_closure_sha256": "039dcc977b11c9a119f618517f2c61523c1bf4a8ae2beaac43b14f3fde3dee3f",
+      "directory": "zdoc/reviews/20260917-gt04-s59-matrix-02/ipc"
+    },
+    {
+      "lane": "material",
+      "checks": 16,
+      "execution_closure_sha256": "039dcc977b11c9a119f618517f2c61523c1bf4a8ae2beaac43b14f3fde3dee3f",
+      "directory": "zdoc/reviews/20260917-gt04-s59-matrix-02/material"
+    },
+    {
+      "lane": "cleanup",
+      "checks": 13,
+      "execution_closure_sha256": "039dcc977b11c9a119f618517f2c61523c1bf4a8ae2beaac43b14f3fde3dee3f",
+      "directory": "zdoc/reviews/20260917-gt04-s59-matrix-02/cleanup"
+    },
+    {
+      "lane": "durable",
+      "checks": 16,
+      "execution_closure_sha256": "039dcc977b11c9a119f618517f2c61523c1bf4a8ae2beaac43b14f3fde3dee3f",
+      "directory": "zdoc/reviews/20260917-gt04-s59-matrix-02/durable"
+    },
+    {
+      "lane": "fifo",
+      "checks": 19,
+      "execution_closure_sha256": "039dcc977b11c9a119f618517f2c61523c1bf4a8ae2beaac43b14f3fde3dee3f",
+      "directory": "zdoc/reviews/20260917-gt04-s59-matrix-02/fifo"
+    },
+    {
+      "lane": "checkpoint",
+      "checks": 22,
+      "execution_closure_sha256": "039dcc977b11c9a119f618517f2c61523c1bf4a8ae2beaac43b14f3fde3dee3f",
+      "directory": "zdoc/reviews/20260917-gt04-s59-matrix-02/checkpoint"
+    },
+    {
+      "lane": "deadline",
+      "checks": 19,
+      "execution_closure_sha256": "039dcc977b11c9a119f618517f2c61523c1bf4a8ae2beaac43b14f3fde3dee3f",
+      "directory": "zdoc/reviews/20260917-gt04-s59-matrix-02/deadline"
+    },
+    {
+      "lane": "after_intent",
+      "checks": 1,
+      "execution_closure_sha256": "039dcc977b11c9a119f618517f2c61523c1bf4a8ae2beaac43b14f3fde3dee3f",
+      "directory": "zdoc/reviews/20260917-gt04-s59-matrix-02/after_intent"
+    },
+    {
+      "lane": "before_selector",
+      "checks": 1,
+      "execution_closure_sha256": "039dcc977b11c9a119f618517f2c61523c1bf4a8ae2beaac43b14f3fde3dee3f",
+      "directory": "zdoc/reviews/20260917-gt04-s59-matrix-02/before_selector"
+    },
+    {
+      "lane": "after_selector",
+      "checks": 1,
+      "execution_closure_sha256": "039dcc977b11c9a119f618517f2c61523c1bf4a8ae2beaac43b14f3fde3dee3f",
+      "directory": "zdoc/reviews/20260917-gt04-s59-matrix-02/after_selector"
+    },
+    {
+      "lane": "before_terminal_witness",
+      "checks": 1,
+      "execution_closure_sha256": "039dcc977b11c9a119f618517f2c61523c1bf4a8ae2beaac43b14f3fde3dee3f",
+      "directory": "zdoc/reviews/20260917-gt04-s59-matrix-02/before_terminal_witness"
+    },
+    {
+      "lane": "after_terminal_witness",
+      "checks": 1,
+      "execution_closure_sha256": "039dcc977b11c9a119f618517f2c61523c1bf4a8ae2beaac43b14f3fde3dee3f",
+      "directory": "zdoc/reviews/20260917-gt04-s59-matrix-02/after_terminal_witness"
+    },
+    {
+      "lane": "stop_export",
+      "checks": 1,
+      "execution_closure_sha256": "039dcc977b11c9a119f618517f2c61523c1bf4a8ae2beaac43b14f3fde3dee3f",
+      "directory": "zdoc/reviews/20260917-gt04-s59-matrix-02/stop_export"
+    },
+    {
+      "lane": "stop_before_selector",
+      "checks": 1,
+      "execution_closure_sha256": "039dcc977b11c9a119f618517f2c61523c1bf4a8ae2beaac43b14f3fde3dee3f",
+      "directory": "zdoc/reviews/20260917-gt04-s59-matrix-02/stop_before_selector"
+    },
+    {
+      "lane": "stop_after_selector",
+      "checks": 1,
+      "execution_closure_sha256": "21469e6d76ba40c246462b99ac6d86a51d2944100c73b3517f4f701355ea1a5e",
+      "directory": "zdoc/reviews/20260917-gt04-s59-matrix-03/stop_after_selector"
+    },
+    {
+      "lane": "stop_after_terminal",
+      "checks": 1,
+      "execution_closure_sha256": "21469e6d76ba40c246462b99ac6d86a51d2944100c73b3517f4f701355ea1a5e",
+      "directory": "zdoc/reviews/20260917-gt04-s59-matrix-03/stop_after_terminal"
+    }
+  ],
+  "lane_count": 17,
+  "top_level_native_checks": 240,
+  "assertions": 14656,
+  "native_handles_opened": 0,
+  "limitations": [
+    "component proof only",
+    "two independent final critics pending",
+    "no writable restart or restored Undo claim"
+  ]
+}

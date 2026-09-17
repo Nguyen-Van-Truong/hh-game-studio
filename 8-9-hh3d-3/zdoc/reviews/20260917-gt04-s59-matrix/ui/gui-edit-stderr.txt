@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-s59-scene-01\source\studio\tests\blender\blender_ui_probe.py", line 216, in step
+    next(generator)
+    ~~~~^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-s59-scene-01\source\studio\tests\blender\blender_ui_probe.py", line 64, in edit
+    OWNER = owner = ui.UIAdapter(owned_root=root)
+                    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-s59-scene-01\source\studio\blender-addon\ui_adapter.py", line 36, in __init__
+    raise c.Rejected("FRESH_OWNED_SAVE_DIRECTORY_REQUIRED")
+_gt04_contract_4bd42efa716a3ff5c6d3fdd1c8b5cf42b683056f8ce0ee5550b969e181df857a.Rejected: FRESH_OWNED_SAVE_DIRECTORY_REQUIRED

@@ -1,0 +1,166 @@
+{
+  "host_pid": 13624,
+  "blender_pid": 7612,
+  "owner_directory": "blender-d2fad11bbcdd474aa86f0b3233f26d4a",
+  "journal_directory": "blender-d2fad11bbcdd474aa86f0b3233f26d4a/journal",
+  "request": {
+    "schema": "HH-BLENDER-UI-COMMAND-1",
+    "command_id": "interrupted",
+    "operation": "mesh.create_box",
+    "expected_revision": "sha256:30bf66b61ef6ccda3a2724338925481cb04d89bd990815d8a30ed309e3b789e3",
+    "expected_context": {
+      "active_id": null,
+      "mode": "OBJECT",
+      "selected_ids": []
+    },
+    "payload": {
+      "object_id": "interrupted",
+      "size": [
+        1,
+        1,
+        1
+      ]
+    }
+  },
+  "native_observed_before_death": {
+    "command_id": "interrupted",
+    "native": {
+      "command_digest": "sha256:58d2387e012edd736e32a99aa4ccf1eb0531bda47ab5dca74c803e52685bd40c",
+      "command_id": "interrupted",
+      "public_ack": false,
+      "result": {
+        "after": {
+          "context": {
+            "active_id": null,
+            "mode": "OBJECT",
+            "selected_ids": []
+          },
+          "public_ack": false,
+          "revision": "sha256:bc76f8adeaf397618ec24a8a097bea3a69d9ce2a4e75d60b583dc4632da22317",
+          "snapshot": {
+            "objects": [
+              {
+                "faces": [
+                  [
+                    0,
+                    3,
+                    2,
+                    1
+                  ],
+                  [
+                    4,
+                    5,
+                    6,
+                    7
+                  ],
+                  [
+                    0,
+                    1,
+                    5,
+                    4
+                  ],
+                  [
+                    1,
+                    2,
+                    6,
+                    5
+                  ],
+                  [
+                    2,
+                    3,
+                    7,
+                    6
+                  ],
+                  [
+                    3,
+                    0,
+                    4,
+                    7
+                  ]
+                ],
+                "location": [
+                  0,
+                  0,
+                  0
+                ],
+                "mesh_name": "GT04_mesh_interrupted",
+                "name": "GT04_interrupted",
+                "object_id": "interrupted",
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ],
+                "vertices": [
+                  [
+                    -0.5,
+                    -0.5,
+                    -0.5
+                  ],
+                  [
+                    0.5,
+                    -0.5,
+                    -0.5
+                  ],
+                  [
+                    0.5,
+                    0.5,
+                    -0.5
+                  ],
+                  [
+                    -0.5,
+                    0.5,
+                    -0.5
+                  ],
+                  [
+                    -0.5,
+                    -0.5,
+                    0.5
+                  ],
+                  [
+                    0.5,
+                    -0.5,
+                    0.5
+                  ],
+                  [
+                    0.5,
+                    0.5,
+                    0.5
+                  ],
+                  [
+                    -0.5,
+                    0.5,
+                    0.5
+                  ]
+                ]
+              }
+            ],
+            "schema": "HH-BLENDER-FIXTURE-SCENE-1",
+            "units": {
+              "scale_length": 1,
+              "system": "METRIC"
+            }
+          },
+          "undo_supported": true
+        },
+        "before_revision": "sha256:30bf66b61ef6ccda3a2724338925481cb04d89bd990815d8a30ed309e3b789e3",
+        "native_operator_finished": true,
+        "operation": "mesh.create_box",
+        "public_ack": false,
+        "status": "INTERNAL_UI_READBACK"
+      },
+      "state": "COMPLETED"
+    },
+    "public_ack": false,
+    "reason": null,
+    "scene_state_durable": false,
+    "schema": "HH-BLENDER-DURABLE-RESPONSE-1",
+    "status": "COMMITTED"
+  },
+  "public_ack": false
+}

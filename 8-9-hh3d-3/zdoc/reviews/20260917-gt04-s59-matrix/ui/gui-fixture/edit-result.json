@@ -1,0 +1,24 @@
+{
+  "acceptance": false,
+  "actual_blender_gui": true,
+  "checks": [
+    {
+      "label": "actual_pinned_gui",
+      "passed": true
+    },
+    {
+      "label": "actual_window_event_loop",
+      "passed": true
+    },
+    {
+      "label": "automatic_python_disabled",
+      "passed": true
+    }
+  ],
+  "failure": "Rejected: FRESH_OWNED_SAVE_DIRECTORY_REQUIRED",
+  "ok": false,
+  "phase": "edit",
+  "public_ack": false,
+  "schema": "HH-GT04-UI-PROBE-1",
+  "version": "5.2.1 LTS"
+}

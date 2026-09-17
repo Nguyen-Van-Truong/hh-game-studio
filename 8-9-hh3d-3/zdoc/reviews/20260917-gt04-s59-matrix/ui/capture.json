@@ -1,0 +1,39 @@
+{
+  "lane": "ui",
+  "host": {
+    "wrapper_pid": 23456,
+    "started_at": "2026-09-17T03:35:06.162965+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "matrix.py",
+      "--child",
+      "ui"
+    ],
+    "exit_code": 1,
+    "target_pid": 43388,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "native-stdout.txt",
+    "stderr": "native-stderr.txt",
+    "host": "native-host.json"
+  },
+  "source_closure_sha256": "943cff74f23a61427765071f7fd6661acbdad23c0e8386364f5615a2a0016134",
+  "execution_closure_sha256": "bcff02731b87bb0f80a826a8bf261b080a926460499862f52f36b1a5ad850b6f",
+  "passed": false,
+  "formal_acceptance": false,
+  "failure": "AssertionError: ",
+  "artifacts": {
+    "gui-edit-host.json": "d55bf50a3b2223d9f676a5eeb2278c4e3bcd33e54363f0e61873ae3d0e45d694",
+    "gui-edit-stderr.txt": "0860b6d27ecbd5674319ee63d22d2933126b065de874a24fc1b2db5faf66a0fc",
+    "gui-edit-stdout.txt": "87bd58c2a3e6379fd5aff0cb77d7d9d2bca001c0e12902cb6a6747edba8a8ca7",
+    "native-host.json": "74ceb19718f64d1d9c79673de986be89f72cf8dc620b9a778b6309d87cfa8e48",
+    "native-stderr.txt": "b973227316d65a7ec86028d42705d91c599029d38a9f65841f166ec13bcc0eff",
+    "native-stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runtime-binding.json": "4b25e2f3d72242d139aaa2333425a00397aa4372f948ada27b97638ad62e3fa4",
+    "gui-fixture/edit-result.json": "04ae09e2d2b43e7ab969e954da39102d6f5787507b9fc5c6a177fd094eb69af8",
+    "gui-fixture/temp/quit.blend": "604a984bc13b179975d01bf72e291b383703c05959030f5ea6d42b1edcb747dc"
+  }
+}

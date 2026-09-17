@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-s59-matrix-02\matrix.py", line 157, in <module>
+    if args.child: raise SystemExit(child(args.child,HERE/args.child))
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-s59-matrix-02\matrix.py", line 88, in child
+    result=(recovery.observe_crash if lane in CRASH else recovery.stop_case)(output,BINARY,lane)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-s59-matrix-02\publication_recovery_bound.py", line 290, in stop_case
+    need(response['status']==('COMMITTED' if committed else 'UNKNOWN') and response['public_ack'] is False,'Stop durable outcome')
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-s59-matrix-02\publication_recovery_bound.py", line 32, in need
+    if not value:raise AssertionError(label)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Stop durable outcome

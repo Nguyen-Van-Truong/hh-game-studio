@@ -1,0 +1,12 @@
+00:00.984  blend            | Read blend: "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260917-gt04-s59-matrix-02\cleanup\blender-132f16398097434f8210a18e9f0844b1\export-6444016de5e147fb8f17c61ca1961afa\input.blend"
+INFO Draco is available, use library at D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\.local\tooling\blender-5.2.1-windows-x64\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_draco_bridge.dll
+INFO MeshOptimizer is available, use library at D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\.local\tooling\blender-5.2.1-windows-x64\5.2\scripts\addons_core\io_scene_gltf2\bf_intern_meshopt_bridge.dll
+10:36:52 | INFO: Starting glTF 2.0 export
+10:36:52 | INFO: Extracting primitive: GT04_mesh_box
+10:36:52 | INFO: Primitives created: 1
+10:36:52 | INFO: Finished glTF 2.0 export in 0.0038297176361083984 s
+
+GT04_EXPORT_COMPLETE {"schema": "HH-BLENDER-EXPORT-RESULT-1", "profile": {"schema": "HH-BLENDER-BOX-EXPORT-PROFILE-1", "objects": 1, "vertices": 8, "triangles": 12, "materials": 0, "images": 0, "bones": 0, "clips": 0, "libraries": 0, "drivers": 0, "exporter_version": [5, 2, 40], "exporter_files_sha256": "22a180855eda3e7f1a075bf28d7c256e4498be16c96be4e7412a438ce96ec481", "public_ack": false}, "input_sha256": "cca5f7f95756b599d1be8ac506d639a931b4943cd2b85858813a1a5d91617728", "scene_revision": "sha256:1e80a5dd3c345c2a6550a3040a0403f4c7340084e390e43e9adcd39ca9f4993d", "snapshot": {"schema": "HH-BLENDER-FIXTURE-SCENE-1", "objects": [{"object_id": "box", "name": "GT04_box", "mesh_name": "GT04_mesh_box", "location": [0.0, 0.0, 0.0], "rotation": [0.0, 0.0, 0.0], "scale": [1.0, 1.0, 1.0], "vertices": [[-0.5, -1.0, -1.5], [0.5, -1.0, -1.5], [0.5, 1.0, -1.5], [-0.5, 1.0, -1.5], [-0.5, -1.0, 1.5], [0.5, -1.0, 1.5], [0.5, 1.0, 1.5], [-0.5, 1.0, 1.5]], "faces": [[0, 3, 2, 1], [4, 5, 6, 7], [0, 1, 5, 4], [1, 2, 6, 5], [2, 3, 7, 6], [3, 0, 4, 7]]}], "units": {"system": "METRIC", "scale_length": 1.0}}, "context": {"mode": "OBJECT", "active_id": null, "selected_ids": []}, "output_sha256": "a9a2f522c1a07d6c6154fc0ae53f2337907746ede08f3521f97d990c32fefcb8", "output_size_bytes": 1420, "public_ack": false, "native_finished": true, "context_unchanged": true, "admission_probe": null}
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 02:38:20)
+
+Blender quit

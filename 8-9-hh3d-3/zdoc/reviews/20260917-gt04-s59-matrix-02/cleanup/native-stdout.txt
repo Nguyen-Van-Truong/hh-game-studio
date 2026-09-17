@@ -1,0 +1,14 @@
+GT04_CLEANUP_CHECK {"label": "normal_export_verified_and_drained", "passed": true}
+GT04_CLEANUP_CHECK {"label": "native_close_failure_exposes_export_owner", "passed": true}
+GT04_CLEANUP_CHECK {"label": "failed_run_done_but_no_success_receipt", "passed": true}
+GT04_CLEANUP_CHECK {"label": "same_native_owner_retained_before_retry", "passed": true}
+GT04_CLEANUP_CHECK {"label": "failed_host_retry_retains_outer_owner", "passed": true}
+GT04_CLEANUP_CHECK {"label": "gui_drained_while_export_close_held", "passed": true}
+GT04_CLEANUP_CHECK {"label": "same_export_handle_remains_owned_after_host_close", "passed": true}
+GT04_CLEANUP_CHECK {"label": "retry_closes_exact_export_owner", "passed": true}
+GT04_CLEANUP_CHECK {"label": "gui_and_wrapper_actual_exit_zero", "passed": true}
+GT04_CLEANUP_CHECK {"label": "initial_unknown_report_preserved", "passed": true}
+GT04_CLEANUP_CHECK {"label": "append_only_failure_failure_success_evidence", "passed": true}
+GT04_CLEANUP_CHECK {"label": "repeated_close_no_new_attempt", "passed": true}
+GT04_CLEANUP_CHECK {"label": "no_retained_native_hold", "passed": true}
+GT04_CLEANUP_COMPLETE {"passed": true, "checks": 13}

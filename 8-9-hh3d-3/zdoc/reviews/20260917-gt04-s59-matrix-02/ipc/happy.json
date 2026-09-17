@@ -1,0 +1,163 @@
+{
+  "checks": [
+    {
+      "label": "actual_owned_gui",
+      "passed": true
+    },
+    {
+      "label": "initial_complete",
+      "passed": true
+    },
+    {
+      "label": "fresh_empty_owned_scene",
+      "passed": true
+    },
+    {
+      "label": "authenticated_native_create",
+      "passed": true
+    },
+    {
+      "label": "duplicate_original_receipt",
+      "passed": true
+    },
+    {
+      "label": "native_undo_over_ipc",
+      "passed": true
+    },
+    {
+      "label": "native_redo_over_ipc",
+      "passed": true
+    },
+    {
+      "label": "native_transform_readback",
+      "passed": true
+    },
+    {
+      "label": "stale_revision_rejected",
+      "passed": true
+    },
+    {
+      "label": "after-stale_complete",
+      "passed": true
+    },
+    {
+      "label": "stale_has_no_effect",
+      "passed": true
+    },
+    {
+      "label": "fixed_owned_save",
+      "passed": true
+    },
+    {
+      "label": "saved_file_exact_bytes",
+      "passed": true
+    },
+    {
+      "label": "background_export_native_complete",
+      "passed": true
+    },
+    {
+      "label": "background_export_job_caps_and_cleanup",
+      "passed": true
+    },
+    {
+      "label": "bounded_glb_preflight",
+      "passed": true
+    },
+    {
+      "label": "native_glb_transform_readback",
+      "passed": true
+    },
+    {
+      "label": "after-export_complete",
+      "passed": true
+    },
+    {
+      "label": "export_does_not_change_ui_state",
+      "passed": true
+    },
+    {
+      "label": "export_retry_original_receipt_no_new_job",
+      "passed": true
+    },
+    {
+      "label": "native_library_texture_driver_addon_rejected",
+      "passed": true
+    },
+    {
+      "label": "native_export_deadline_owned_cleanup",
+      "passed": true
+    },
+    {
+      "label": "native_export_memory_limit_owned_cleanup",
+      "passed": true
+    },
+    {
+      "label": "active_export_priority_stop_owned_cleanup",
+      "passed": true
+    },
+    {
+      "label": "priority_control_stop",
+      "passed": true
+    },
+    {
+      "label": "stop_retains_original_result",
+      "passed": true
+    },
+    {
+      "label": "stop_refuses_new_dispatch",
+      "passed": true
+    },
+    {
+      "label": "graceful_actual_gui_exit",
+      "passed": true
+    },
+    {
+      "label": "no_secret_in_host_artifacts",
+      "passed": true
+    }
+  ],
+  "cleanup": {
+    "actual_process_exit": {
+      "pid": 37856,
+      "exit_code": 0
+    },
+    "wrapper_exit_code": 0,
+    "job": {
+      "configured": true,
+      "assigned": true,
+      "closed": true,
+      "handle_retained": false,
+      "tainted": false,
+      "zero_observed": true,
+      "active_count": 0,
+      "create_uncertain": false,
+      "close_uncertain": false,
+      "failed_operations": [],
+      "native_error": null
+    },
+    "logs_overflow": false,
+    "closed": true,
+    "held": false,
+    "public_ack": false
+  },
+  "save": {
+    "name": "fixture.blend",
+    "sha256": "7ebc854373e760d9369eb6068fefc2f64cfffd26d076e0d9b113ed5f9025ad3f",
+    "size_bytes": 97470
+  },
+  "stop_elapsed_ms": 31.000000017229468,
+  "live_job_count": 3,
+  "files": {
+    "close.json": "2c25314572b203545edc33ecf925829d1c80fab159767d7a42685e5944aad26d",
+    "control-hello.json": "2b6f1d0410e1cce940be5a2866e18bec941ef1b1d5115755f5c0b63cd036f73d",
+    "data-hello.json": "2b6f1d0410e1cce940be5a2866e18bec941ef1b1d5115755f5c0b63cd036f73d",
+    "launch.json": "18b7ea99b6b3b95ee93cada4eff5956d6198b92997588a9b6232e9c3d1477b18",
+    "process-exit.json": "17e3ba5b69fb107a92a13dce56cef3a4b2e82fc0f121d6996d97ba73ab3b2935",
+    "process-start.json": "d29602f6363f8a56fee5d6cf27b75fbaf0086ede2af0503bf99a10be447626f2",
+    "stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout.txt": "c0abd7f980b9b1b3c1ccc04971d864a840ead918fb0bb5d55643266486e37cdc"
+  },
+  "public_ack": false,
+  "acceptance": false
+}

@@ -1,0 +1,269 @@
+{
+  "pid": 30724,
+  "exit_code": 0,
+  "done": {
+    "op": "done",
+    "pid": 30724,
+    "ticket_id": "ticket-bob",
+    "writer": "bob",
+    "command_id": "create-bob"
+  },
+  "ticket": {
+    "generation": "889118499f6f4202b8fa6a0e88411b5c",
+    "lease": {
+      "expires_ms": 1789616271444,
+      "fencing_epoch": 3,
+      "owner": "bob",
+      "project_id": "blender.owned-fixture",
+      "target": "blender.owned-scene"
+    },
+    "lease_ms": 10000,
+    "public_ack": false,
+    "queue_expires_ms": 1789616272154,
+    "reason": null,
+    "state": "GRANTED",
+    "ticket_id": "ticket-bob",
+    "wait_ms": 30000,
+    "writer": "bob"
+  },
+  "response": {
+    "command_id": "create-bob",
+    "native": {
+      "command_digest": "sha256:15089a1799b1a02d6d78904e5a5df8a1544a5711f264505dd3e0a347aecf7b7a",
+      "command_id": "create-bob",
+      "public_ack": false,
+      "result": {
+        "after": {
+          "context": {
+            "active_id": null,
+            "mode": "OBJECT",
+            "selected_ids": []
+          },
+          "public_ack": false,
+          "revision": "sha256:1dd5b4d9cfcc2f1967336b673aeca167e4626a1a792a332c934c4e7c5d91e1ed",
+          "snapshot": {
+            "objects": [
+              {
+                "faces": [
+                  [
+                    0,
+                    3,
+                    2,
+                    1
+                  ],
+                  [
+                    4,
+                    5,
+                    6,
+                    7
+                  ],
+                  [
+                    0,
+                    1,
+                    5,
+                    4
+                  ],
+                  [
+                    1,
+                    2,
+                    6,
+                    5
+                  ],
+                  [
+                    2,
+                    3,
+                    7,
+                    6
+                  ],
+                  [
+                    3,
+                    0,
+                    4,
+                    7
+                  ]
+                ],
+                "location": [
+                  0,
+                  0,
+                  0
+                ],
+                "mesh_name": "GT04_mesh_alice",
+                "name": "GT04_alice",
+                "object_id": "alice",
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ],
+                "vertices": [
+                  [
+                    -0.5,
+                    -0.5,
+                    -0.5
+                  ],
+                  [
+                    0.5,
+                    -0.5,
+                    -0.5
+                  ],
+                  [
+                    0.5,
+                    0.5,
+                    -0.5
+                  ],
+                  [
+                    -0.5,
+                    0.5,
+                    -0.5
+                  ],
+                  [
+                    -0.5,
+                    -0.5,
+                    0.5
+                  ],
+                  [
+                    0.5,
+                    -0.5,
+                    0.5
+                  ],
+                  [
+                    0.5,
+                    0.5,
+                    0.5
+                  ],
+                  [
+                    -0.5,
+                    0.5,
+                    0.5
+                  ]
+                ]
+              },
+              {
+                "faces": [
+                  [
+                    0,
+                    3,
+                    2,
+                    1
+                  ],
+                  [
+                    4,
+                    5,
+                    6,
+                    7
+                  ],
+                  [
+                    0,
+                    1,
+                    5,
+                    4
+                  ],
+                  [
+                    1,
+                    2,
+                    6,
+                    5
+                  ],
+                  [
+                    2,
+                    3,
+                    7,
+                    6
+                  ],
+                  [
+                    3,
+                    0,
+                    4,
+                    7
+                  ]
+                ],
+                "location": [
+                  0,
+                  0,
+                  0
+                ],
+                "mesh_name": "GT04_mesh_bob",
+                "name": "GT04_bob",
+                "object_id": "bob",
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ],
+                "scale": [
+                  1,
+                  1,
+                  1
+                ],
+                "vertices": [
+                  [
+                    -0.5,
+                    -0.5,
+                    -0.5
+                  ],
+                  [
+                    0.5,
+                    -0.5,
+                    -0.5
+                  ],
+                  [
+                    0.5,
+                    0.5,
+                    -0.5
+                  ],
+                  [
+                    -0.5,
+                    0.5,
+                    -0.5
+                  ],
+                  [
+                    -0.5,
+                    -0.5,
+                    0.5
+                  ],
+                  [
+                    0.5,
+                    -0.5,
+                    0.5
+                  ],
+                  [
+                    0.5,
+                    0.5,
+                    0.5
+                  ],
+                  [
+                    -0.5,
+                    0.5,
+                    0.5
+                  ]
+                ]
+              }
+            ],
+            "schema": "HH-BLENDER-FIXTURE-SCENE-1",
+            "units": {
+              "scale_length": 1,
+              "system": "METRIC"
+            }
+          },
+          "undo_supported": true
+        },
+        "before_revision": "sha256:b1682932688bc04d287ff462fa4b592f98144166457f4be9beed7f4419a738ff",
+        "native_operator_finished": true,
+        "operation": "mesh.create_box",
+        "public_ack": false,
+        "status": "INTERNAL_UI_READBACK"
+      },
+      "state": "COMPLETED"
+    },
+    "public_ack": false,
+    "reason": null,
+    "scene_state_durable": false,
+    "schema": "HH-BLENDER-DURABLE-RESPONSE-1",
+    "status": "COMMITTED"
+  }
+}

@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 17-09-2026, Asia/Saigon | Revision S58 | TRIỂN KHAI THEO GATE
+Ngày 17-09-2026, Asia/Saigon | Revision S59 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S58
+PLAN_REVISION=S59
 EXECUTION_MODE=SOLO_OWNER_20260917
 SUBAGENTS_ENABLED=0
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -45,10 +45,11 @@ GT03_WORKING_SOURCE_STATUS=S55_FROZEN_ACCEPTED
 GT03_PENDING_SOURCE_CLOSURE=NONE
 GT03_TEST_DRIVER_MODE=PINNED_CLEANUP_SUPPLEMENT_OVER_UNCHANGED_S55_RUNTIME
 GT04_EVIDENCE_STATUS=WRITER_CLIENT_AND_INTERNAL_PUBLICATION_COMPONENT_CANDIDATES_GAPS_OPEN
-GT04_LAST_TESTED_SOURCE_CLOSURE=0785f748ee93882e38f4b261a6db3764271c7fbdb84508e6df00231df4e19efc
-GT04_WORKING_SOURCE_STATUS=S58_THREE_FIXED_PUBLICATION_PROFILES_NATIVE_TESTED
+GT04_LAST_TESTED_SOURCE_CLOSURE=943cff74f23a61427765071f7fd6661acbdad23c0e8386364f5615a2a0016134
+GT04_WORKING_SOURCE_STATUS=S59_FILE_PREVIEW_AND_NATIVE_MATRIX_TESTED
+GT04_REVIEW_STATUS=NOT_REVIEWED_SOLO_S59
 
-TIẾN ĐỘ HIỆN HÀNH — S58, ngày 17-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S59, ngày 17-09-2026
 GT-01, GT-02 và GT-03 ACCEPTED; đang hoàn thiện GT-04.
 GT-05 chưa mở. Owner chuyển solo; không còn worker chạy. Giữ một writer/file;
 chỉ một engine/Linux/native-journal integration lane chạy tại một thời điểm.
@@ -80,40 +81,44 @@ Godot GT-03 đã khép tại S55:
 - Lịch sử chi tiết S55: reviews/20260917-plan-history-s55/tools-plan-s55.txt
   (AUTHORITY=0), SHA256 305d9fa5314db5a7dc73689e465f699caf4146434edaad646c68be430ae53940.
 
-Blender GT-04:
-- S58 scene02/checkpoint01/export01 cùng closure ở markers trên,138sourcefiles.
-  Scene lane571/571 toàn bộ unit; hai lane còn lại305/305 focused mỗi lane.
-  Mỗi lane47client checks/34HTTPcalls/10native checks,15native data requests;
-  9common INTENT/terminal pairs:8COMMITTED,1capacity rejection trước effect.
-  GUI/background/CLI/host/wrapper exit0 và owned Jobs0, source/snapshot/logs sạch.
-- scene.save/checkpoint.save/export.publish dùng3profile cố định, chung reducer
-  và protected bundle(checkpoint.blend,GLBsidecar,manifest,selector). Native copy
-  vào slot riêng rồi background reopen+geometry/material verify. Chỉ OBJECT
-  mode/nonempty supported fixture, một bundle/profile; không arbitrary path,
-  không overwrite. Capacity reject không poison editor; sameID retry exact.
-- Preview native5editops không effect/không reserveID; actual diff kiểm received
-  JCS và giữ native revision opaque. Save preview hiện schema-only; cần rà
-  live preflight và final regression matrix trước nghiệm thu. File-only audit
-  s58-audit:3x3445assertions đạt, common/private/selected bytes/raw exits khớp.
-  Chưa có hai critic độc lập trên closure cuối; solo không thay critic.
-- S57 checkpoint94eb83b:540/540units,45HTTPchecks/10native; Git462files đạt.
-  S56 checkpoint9b7eb60:440all/174focused; native deadline19checks và writer31.
-  S57-writer01 INCOMPLETE do gián đoạn trước wrapper/nativeproof; không coi log
-  test làPASS. S58-scene01 PASS trên closure5c0b5b... riêng, trước capacityfix;
-  giữ evidence cũ, không gán cho scene02. Không có worker đang chạy.
-- Component evidence trước đó: publication03/recovery02/cleanup supplement/
-  read-only checkpoint GUI/client ledger/FIFO được giữ; cần đối chiếu runtime
-  trước khi đưa vào final matrix. GT04 vẫn IN_PROGRESS, public_ack=false,
-  writable restart/restoredUndo/cross-app recovery thuộcGT07.
-- Lịch sử đầy đủ tớiS57: reviews/20260917-plan-history-s57/tools-plan-s57.txt
-  AUTHORITY=0, SHA256 f35907454b71584ba621bf4432809b192c91d0de86fb606c84cab88c4332bd7a.
+Blender GT-04 — S59:
+- reviews/20260917-gt04-s59-{scene,checkpoint,export}-01 cùng139sourcefiles/
+  closure ở marker trên. Scene594/594 toàn bộ unit; checkpoint/export328/328
+  focused mỗi lane. Mỗi profile49HTTPchecks/36calls/10nativechecks,17native
+  data requests; 8COMMITTED+1known capacity rejection, exit/owned Job sạch.
+- Preview5editops và3fileprofiles kiểm live native fence/revision/context;
+  file preview kiểm profile, slot, capacity/namespace trước effect. Không ghi
+  file/INTENT/reserveID, không bịa hash output; apply lặp kiểm tra riêng.
+  scene.save/checkpoint.save/export.publish vẫn một immutable bundle/profile,
+  OBJECT/nonempty bounded fixture, background reopen/GLB/geometry/material.
+- Matrix-02 có15lane đạt; matrix-03 bổ sung2lane Stop trên cùng runtime.
+  Tổng17lane/240top-level native checks, gồm6GUI/background phases, IPC,
+  material, cleanup retry, durable/FIFO, checkpoint reopen, deadline,5crash
+  cuts và4Stop cuts. Audit phân biệt hai execution closures; không gán chữ ký
+  hoặc kết quả driver cũ cho driver mới. Source runtime không đổi giữa lane.
+- Stop sau selector trước terminal giữUNKNOWN/SELECTING/hold; Stop sau terminal
+  giữCOMMITTED exact receipt. Cả hai đã chạy native và reopen readonly không
+  replay; selector tồn tại không tự làACK. public_ack=false, scene_state_durable
+  vẫnfalse; chỉ protected bundle có durable_publication=true.
+- File-only audit: s59-audit/verify_evidence.py cho3profiles và verify_matrix.py
+  đều đạt;15negative evidence cases đạt. Chưa có hai critic độc lập trên gói
+  cuối. GT04 vẫn IN_PROGRESS; solo/self-review không thay reviewer độc lập.
+- Giữ failed matrix01: runner đặt temp/user trong fixture cần rỗng. Matrix02
+  stop_after_selector dùng kỳ vọng publication03 cũ, nên FAIL được giữ
+  nguyên; matrix03 kiểm đúng hai phía terminal và không sửa runtime để né lỗi.
+  Blender tạo7pyc trong snapshot dù env tắt bytecode: ghi hash, chỉ dọn đúng
+  7file derived sau owned exits;139sourcefiles luônkhớp. Negative-audit attempt
+  đầu bị chặn bởi cache, không tínhPASS; đã rerun đủ15case sau dọn.
+- Checkpoint trước: S58=36f9937 (Git827files), S57=94eb83b (462files),
+  S56=9b7eb60. Các package cũ giữ source hash riêng. Lịch sử tớiS57 ở
+  reviews/20260917-plan-history-s57/tools-plan-s57.txt, AUTHORITY=0.
 
-Tiếp theo: GT04 live preflight/dry-run cho file operations, final native regression
-matrix và hai critic trên cùng closure. Sau đó
-GT05 pipeline, GT06 Play/input/observe, GT07 concurrency/recovery, GT08 CI/
-Android thiết bị thật, GT09 conformance, GT10 package/upgrade/rollback/handoff.
-HH World là plan game riêng sauGT10. Chưa có cơ sở hẹn ngày xong toànplan;
-Android real-device vẫn là hard gate, không thay bằng emulator.
+Tiếp theo: chốt review package/coverage GT04 và hai critic độc lập cùng closure.
+Chế độ owner hiện tại SOLO/SUBAGENTS_ENABLED=0; không tự tạo critic hoặc tựtick.
+Sau nghiệm thu: GT05 pipeline, GT06 Play/input/observe, GT07 concurrency/recovery,
+GT08 CI/Android thiết bị thật, GT09 conformance, GT10 package/upgrade/rollback/
+handoff. HH World là plan game riêng sauGT10. Chưa đủ cơ sở hẹn ngày xong
+  toànplan; thiết bị Android thật và independent reviews vẫn là hard gates.
 
 Cải tiến plan/tốc độ: scope song song theo dependency; serialize native lanes;
 resume attempt lỗi thay vì lặp lanePASS; một frozen source cho final matrix;
@@ -123,6 +128,11 @@ tools-plan-before-s55.txt (AUTHORITY=0), SHA256 b07c86c36c565c3a95404a6084cd6df0
 Các archive và mọi failure/verdict cũ giữ nguyên; không hạDoD đểtick.
 
 KINH NGHIỆM ĐANG ÁP DỤNG
+- S59: tách thư mục TEMP/user khỏi fixture cần rỗng. Freeze runtime một lần,
+  dùng driver supplement có hash riêng cho harness cũ; resume lane đạt thay
+  vì chạy lại tất cả. Kỳ vọng recovery phải bám terminal witness: Stop giữa
+  selector vàterminal không được báo COMMITTED. Negative-audit phải xác nhận
+  mutation đã được chạm; lỗi setup/cache không phải test rejection thành công.
 - S58: tái dùng một publication reducer cho3profile; profile phải được pin
   trong CONFIG/manifest, native slot và common translation phải khớp. Lỗi known
   trước publication INTENT trảREJECTED; lỗi sauINTENT vẫnUNKNOWN/hold. Test
