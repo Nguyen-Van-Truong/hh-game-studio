@@ -53,7 +53,7 @@ GT04_REVIEW_CLOSURE=8ea276e98f3137a5f3623fce00d0760ae0c1fe6d17a77a330e98fa8839a3
 GT05_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260917_S64
 GT05_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S64
 GT05_CHECKPOINT_COMMIT=808d8ba
-GT06_EVIDENCE_STATUS=IMPLEMENTATION_NO_RUNTIME_CLAIM
+GT06_EVIDENCE_STATUS=NATIVE_DIAGNOSTICS_IN_PROGRESS_NO_ACCEPTANCE
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
 
 TIẾN ĐỘ HIỆN HÀNH — S65, ngày 17-09-2026
@@ -95,7 +95,7 @@ Native engine/integration lanes chạy tuần tự với process/cache/evidence 
   snapshot. Giữ raw gốc; source/review S64 ở808d8ba và governance snapshot,
   không đổi chữ ký theo source mới. Full details: gt05-s63-audit/requirements-s64.md.
 
-GT-06 hiện hành — ba lane chuẩn bị xong, bắt đầu implementation:
+GT-06 hiện hành — ba lane implementation, native diagnostics đã bắt đầu:
 - Fixture/observe: immutable Play riêng Editor; trace60Hz/seed/pressed-held-released
   qua Input.parse_input_event, sau callback mới readback. Menu/move/outfit/emote/
   prop/pause/resume/quit, camera và capture đúng frame/PID/source.
@@ -105,7 +105,16 @@ GT-06 hiện hành — ba lane chuẩn bị xong, bắt đầu implementation:
 - Host/integration: reuse checked Job/process ownership và typed transport;
   source/hash/trace binding, Stop riêng/latch, inspector bounded, không hidden
   resume. Seed move_speed=0 rồi repair qua GT03, new snapshot/replay cùng trace.
-- Chưa có GT06 runtime/evidence/PASS. Benchmark1000commands+100cycles theo plan
+- Native04→repair02→native05 đã chứng minh fault0m→authenticated GT03
+  script_text.replace→native readback→replay1.500000238m. Hai Play cùngsource/
+  trace/seed/GLB;7ảnh đúngphase/camera, pause/interaction/quit đạt.160/160 unit
+  trong bounded milestone lane đạt, no skips, source ổn định/exit0/tree sạch.
+  Perf export giữ355raw rows,352measured rows +250RSS; đây là diagnostic có
+  screenshot overhead, không benchmark. Chi tiết +hash: reviews/20260917-gt06-s65-progress/.
+  Giữ lỗi native01/capture02/repair01; chỉ sửa/chạy lại lane bị ảnh hưởng.
+- Đang nối service Play và Stop có xác thực, retained inspector/capture,
+  dedupe/reconnect/timeout/ownership. Session/contract không tự tạo publicACK.
+- Chưa có GT06 accepted candidate. Benchmark1000commands+100cycles theo plan
   vẫn phải chạy đúng profile; unit nhỏ không thay benchmark. Không nâng shared
   caps để hợp artifact; raw series có parser/quota riêng, wire chỉ hash/reference.
 
@@ -128,6 +137,13 @@ tools-plan-before-s55.txt (AUTHORITY=0), SHA256 b07c86c36c565c3a95404a6084cd6df0
 Các archive và mọi failure/verdict cũ giữ nguyên; không hạDoD đểtick.
 
 KINH NGHIỆM ĐANG ÁP DỤNG
+- S65: Input.parse_input_event có thể xếp hàng; flush_buffered_events sau cả
+  nhóm edge cùngtick rồi mới đọc lại. Kiểm API trên đúng Mesh subclass/pin.
+  Process exit0 không đủ: menu capture phải giữ đúng phase/camera sau render.
+  Chờ render readiness trước bắt đầu trace; giữ startup raw riêng, đánh dấu
+  counter chưa sẵn sàng và khai báo cửa sổ đo, không biến unavailable thành0.
+  Hash native JSON string nguyên byte; không serialize lại float bằng Python.
+  Pin editor identity trước retirement/close; không đọc identity từ owner đãđóng.
 - S64: object tồn tại/enabled/counts không thay postcondition sử dụng thật;
   nav region phải có map synchronized và đường đi tới endpoint đúng. Crash
   cạnh hai phase không thay crash ngay phase còn thiếu. Tách driver bổ sung

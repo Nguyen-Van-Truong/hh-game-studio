@@ -1,0 +1,107 @@
+{
+  "schema": "HH-GT06-S65-PROGRESS-1",
+  "formal_acceptance": false,
+  "runs": {
+    "gt06-s65-native-01": {
+      "artifacts": {
+        "invocation.json": "46866bfd725e19cf89a7bd3432187932830eee2ddcf9e18924399eaf691eb745",
+        "source-files.json": "514e58ea8d5efa83f99254de919a953ba885985c1d75a21ea8cbfaafc75c8635",
+        "runtime-snapshot.json": "6774b103cddda09ce47022c28578e5bdc4160283dcfa0e4ccaa306baed4a4ba3",
+        "import-host/capture.json": "3a37ab82d8bec21529731d1aa6e160d590b7ec7c29d291c7dc9a66f03f08f987",
+        "runtime-host/capture.json": "9b4da16bb733d847595014cf2f5800bcfac866217b8d308cfa6c8ae7da69b0dc",
+        "process-metrics.json": "a6dcdc78195dbcd6e908987cf4c1c8214017dc0f89d1c5e54fb4fef25c10c01d"
+      },
+      "formal_acceptance": false,
+      "source_files_count": 154
+    },
+    "gt06-s65-native-02": {
+      "artifacts": {
+        "capture.json": "93da06fc24418172f4cf8e3f6303ee5f51273c95980ed903c48fd9d58c792f5c",
+        "invocation.json": "2b4dc9c3a79ae130ec8341460e7223b370f7ecb8752f30fcf20b40a6f609427b",
+        "source-files.json": "3e5cc5592dd4f0942a15373dae4f8d7ec85887331eb63234824b8ff223c24c5e",
+        "runtime-snapshot.json": "e8c6796dc9e7b56e5e5a43841e76c0113af90b9c8dca038a2302d90670548458",
+        "import-host/capture.json": "d0d282c476add5ad1cdfce8a2687650811577b05ad1c38ba1879fc39997f5686",
+        "runtime-host/capture.json": "879298a8415aae28f9df887dade8ca0fab281805d434bc6a033f9731ea11cd52",
+        "process-metrics.json": "69d11f9b4d69ed64b5d8c4af5a9dfc10a2959c4c1bf6e7eccfe398ddf94cd99e",
+        "project/out/report.json": "8966ec24db4a3343d5186b06de97722399dfe13e2cf439ec7ed6a49099ad07ab",
+        "perf-export-v1.json": "82587ab5efb1323cdc5a73896ae2dff5f5c11f7c19c5ff9a2b599f956337939f"
+      },
+      "formal_acceptance": false,
+      "source_files_count": 154
+    },
+    "gt06-s65-native-03": {
+      "artifacts": {
+        "capture.json": "1e7b5313686ff36312b0e775990b1175002603f2a014e4fea16101401b915c27",
+        "invocation.json": "3424c6203ecdd46419eeea1bc8e58edb3a2335a6ab58fe37ffef2be38e0c916d",
+        "source-files.json": "b32ccc427519e62758431cee486cb2de6c19a2178827bf1e670dd29ac2f35e2b",
+        "runtime-snapshot.json": "9b709531b020a62764759a303aa0ef87dd50b53b74ad1381c02447122ac76a67",
+        "import-host/capture.json": "c2ba1e3adf5996aee4c1955120d5bd8749c677bce41be1a277803e25a1ed14ef",
+        "runtime-host/capture.json": "82ed11d2c3696ff1a15354ef08a9e5687812f9c5210ebdc49da2d0efa1e54b6d",
+        "process-metrics.json": "fa78ce0be663efe49043054fe0956e13208d05ed2c001687205929d501168771",
+        "project/out/report.json": "b75e41e4b8724ae0065ab698958e6215d75a29a5316cc8dc59e403468dd427e5"
+      },
+      "formal_acceptance": false,
+      "source_files_count": 154
+    },
+    "gt06-s65-native-04": {
+      "artifacts": {
+        "capture.json": "d3469bee92f7decad37d1f937631cff467548c8751f03ca99eac029c7547b7a1",
+        "invocation.json": "41af1b9e694393bda4c438ee8a0cbe03a647b4d164c046d56af5a16bc2406f5d",
+        "source-files.json": "5103ec7ea27c64450fe05951de102ec639a9ad3cc8f11cccfeacfa0d91c11ab5",
+        "runtime-snapshot.json": "6efc696d896836b05e0740a77f0bdbf2a7db8321ba24ec0a06f93bf6cf58742e",
+        "import-host/capture.json": "2d649d74e2a8f81c08614d84483ba7ffca4c9b268b9c853cf215fd52eeeaac19",
+        "runtime-host/capture.json": "82ac4929c779c2a4f31e9d75329fe6bb33a9cd70460a2aedc186ab3f82a22a3f",
+        "process-metrics.json": "b3ca405165d8c216cee2bb6d260e1f8e0e3dc4259a0563d88816e07d7b540ba8",
+        "project/out/report.json": "f8001332502b3650f564ac8084893f0bed1fa526786c9219f9b5da8c901424ea",
+        "perf-export-v1.json": "6ef655c72cc1699affd2fadf03eb90f9ea2f259c468372d7637be428483b264d"
+      },
+      "formal_acceptance": false,
+      "source_files_count": 154
+    },
+    "gt06-s65-repair-01": {
+      "artifacts": {
+        "capture.json": "d14223c74911f285425f8e0bcac16b97f49e2a2b6eec89113c70797d1787403c",
+        "source-files.json": "16d126808949bd87a0fe3179d99d92a7f8c753dfc1fad6a418c458e3e6cce0ed",
+        "fault-binding.json": "c0c7956175b911c0b5143fc7f106de1e73db9836d5a4cc0283081f37cdcc25f1",
+        "response-wire.json": "4dbbfd5beddb47e293071adc95b9ce65c5a949636cb632fcedacfc8754c5d4c6",
+        "repair-host.json": "0c5df4da2589ac340ab2e997f72afa237d6279f0e729430348568f8459e6cf0f",
+        "repair-stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "repair-stderr.txt": "7a98f514455e5c7c4a77f3599bf41c9397b7b50628e181fb5bd9e7bfc06a34f9"
+      },
+      "formal_acceptance": false,
+      "source_files_count": 156
+    },
+    "gt06-s65-repair-02": {
+      "artifacts": {
+        "capture.json": "514a1f3a01ebab7f6f327a49170e4e9260a55310ee5c84b20c28f6bcf6a0ea14",
+        "source-files.json": "8f986d550d57daa8beb9d35a6ff67e4af056673e9f410107fea24db9c399bf7f",
+        "repair.json": "82fc0266726ea824626334d52a5f4e8d604ac21b56b2e99bab9d2d467425274b",
+        "fault-binding.json": "c0c7956175b911c0b5143fc7f106de1e73db9836d5a4cc0283081f37cdcc25f1",
+        "response-wire.json": "46cfef5a866833af5760907fc2d896dab6115c1271a4cd4aefc23a81a0f92d74",
+        "selected-config.gd": "4fe3141b9afe6b411b585b203cebae77e851a406c291ac26620eb8cd7c018d90",
+        "native-readback.json": "ead764d643affd0912d81c435a003ffcbf04bad799fdb91e1e515172556ba5c5",
+        "repair-host.json": "5de346530b773af5ecc7ae183563ba370ed141883f4a2d337c6cf8ce04d75f6d",
+        "repair-stdout.txt": "1f0ee894e9ccc4564883896f774a66833e59aa06e001fd168c9b262feaccf19c",
+        "repair-stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "formal_acceptance": false,
+      "source_files_count": 156
+    },
+    "gt06-s65-native-05": {
+      "artifacts": {
+        "capture.json": "6d6d481aa47ed3d781c176247d2562a941081499aa436f7dbd1534439d5acaca",
+        "invocation.json": "527bb4fe6e9d01e2f2625368be1f4fb162c2a192866de362320ee7c4fc1fb863",
+        "source-files.json": "5103ec7ea27c64450fe05951de102ec639a9ad3cc8f11cccfeacfa0d91c11ab5",
+        "runtime-snapshot.json": "e7d730b6a07df2eb85fb26b9960c326f39d601e08897f92c44bbd267e3f4346a",
+        "import-host/capture.json": "dc15cc435526b51090c7abd262a456ef67e509cae685bd0174ba7828a4f180dc",
+        "runtime-host/capture.json": "01be1cab447bf39a7e7822cd9a7a1a3a1948246bc6fbdf40f379052baad304c7",
+        "process-metrics.json": "fd47046cfe02e5b9733d41d1e62a99ed0808e29e71230a3ee16c318ad8f1c289",
+        "project/out/report.json": "896362c6649b28f8746a3b1d283d25398a617468af89f139063a628e60bce5ee",
+        "repair-replay.json": "2bf972bef01b795de93c2e1569e0f6ab9ac65794524430f11d6db02057986396",
+        "perf-export-v1.json": "56a5fc1771bebddcd237b66fb9037f565e57912328aa84323c86c9ff03d6af60"
+      },
+      "formal_acceptance": false,
+      "source_files_count": 154
+    }
+  }
+}
