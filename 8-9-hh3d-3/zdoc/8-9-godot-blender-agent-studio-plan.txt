@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 17-09-2026, Asia/Saigon | Revision S57 | TRIỂN KHAI THEO GATE
+Ngày 17-09-2026, Asia/Saigon | Revision S58 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S57
+PLAN_REVISION=S58
 EXECUTION_MODE=SOLO_OWNER_20260917
 SUBAGENTS_ENABLED=0
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -45,10 +45,10 @@ GT03_WORKING_SOURCE_STATUS=S55_FROZEN_ACCEPTED
 GT03_PENDING_SOURCE_CLOSURE=NONE
 GT03_TEST_DRIVER_MODE=PINNED_CLEANUP_SUPPLEMENT_OVER_UNCHANGED_S55_RUNTIME
 GT04_EVIDENCE_STATUS=WRITER_CLIENT_AND_INTERNAL_PUBLICATION_COMPONENT_CANDIDATES_GAPS_OPEN
-GT04_LAST_TESTED_SOURCE_CLOSURE=c7eb8fdf0fa9d564259657cbe2e3eaec7205eee36f4c5db22b500b2923e384d4
-GT04_WORKING_SOURCE_STATUS=S57_PREVIEW_EXPORT_HTTP_NATIVE_TESTED_COMPONENT_CANDIDATE
+GT04_LAST_TESTED_SOURCE_CLOSURE=0785f748ee93882e38f4b261a6db3764271c7fbdb84508e6df00231df4e19efc
+GT04_WORKING_SOURCE_STATUS=S58_THREE_FIXED_PUBLICATION_PROFILES_NATIVE_TESTED
 
-TIẾN ĐỘ HIỆN HÀNH — S57, ngày 17-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S58, ngày 17-09-2026
 GT-01, GT-02 và GT-03 ACCEPTED; đang hoàn thiện GT-04.
 GT-05 chưa mở. Owner chuyển solo; không còn worker chạy. Giữ một writer/file;
 chỉ một engine/Linux/native-journal integration lane chạy tại một thời điểm.
@@ -81,69 +81,35 @@ Godot GT-03 đã khép tại S55:
   (AUTHORITY=0), SHA256 305d9fa5314db5a7dc73689e465f699caf4146434edaad646c68be430ae53940.
 
 Blender GT-04:
-- S57-writer02 hoàn tất trên closure c7eb8f... ở markers trên:137 sourcefiles,
-  540/540 unit,45 client checks/32 HTTP calls và10 native checks đạt. Có
-  native preview cho5 edit operations, actual diff, repeat preview không reserve
-  ID, public export với8 common INTENT/terminal pairs; đúng15 native data requests.
-  Protected .blend/GLB/manifest/selector và common/private receipts khớp;
-  actual GUI/background/client/host/wrapper exits0, owned Jobs0. File-only
-  s57-audit đạt3332 assertions, không mở native handle hay chạy engine.
-  Save/checkpoint chưa nối, public_ack=false; GT04 chưa được nghiệm thu.
-  Solo theo owner mới nhất, không còn worker. Checkpoint S56 9b7eb60.
-  S57-writer01 giữ INCOMPLETE: log540/540 nhưng gián đoạn trước wrapper/native
-  proof. Fresh02 bù proof thiếu; không đổi lượt01 thành PASS. Hai critic độc
-  lập còn phải có trên closure cuối; solo self-review không thay chữ ký.
-- S56 writer đã có native HTTP evidence riêng trên closure713324... (S56):
-  reviews/20260917-gt04-s56-deadline-02 đạt440/440 toàn bộ unit+19 native;
-  reviews/20260917-gt04-s56-writer-01 cùng source,174 focused tests cũng đạt.
-  Client HTTP process riêng tạo/transform/material/Undo/Redo/read, exact retry,
-  conflict và chống dùng lạiID từ phiên khác, lookup và Stop; đúng7 native
-  data dispatches, actual CLI/GUI/host/wrapper exits0 và owned Job0.
-  Ledger46/46, owner37/37 gồm regression revoke, mất terminal reply và
-  cross-session public-ID. Deadline01 giữFAIL do probe tính native revision
-  từ JCS; runtime không đổi, sửa hai chỗ trong probe và chạy fresh02.
-  File-only audit s56-audit đạt: 300 portable files,23 HTTP calls/31 checks,
-  7 common commands/15 ledger records và3 native lease records khớp source,
-  Request/private operation/Response, raw exits và closed Job. Chưa nghiệm thuGT04.
-  Root giữ đường tích hợp; worker tách tests/review/probe, không sửa coreGT02.
-  Owner candidate chỉ inspect và edit chưa save: intent trước effect, exact
-  native lease, deadline gốc tới main thread, terminal receipt rồi mới giao
-  kết quả qua kiểm quyền. Save/export, preview/diff và durable common binding
-  còn phải nối trước nghiệm thu; public_ack vẫn false.
-- Material/FIFO/protected publication/crash+Stop có component evidence riêng;
-  publication03 là135Python/16native trên closurefc54433...; audit giữ hash đầy đủ.
-- Recovery02 đã chạy8cases. Focused stop_export supplement khép actual child
-  exit/wrapper/Job0 còn thiếu; Stop47ms. Required-exit audit486artifacts đạt.
-- Fresh checkpoint GUI recovery02 đạt150Python+22native, closure
-  d288c887386242e6c131c162559afeb9ba2aea8cceb854f899db68b7142cbc56.
-  Producer/fresh GUI đều exit0/Job0; exact scene/context/material/profile/PID
-  đọc lại, host/native đều chặn edit/lease. Chỉ clean closed predecessor,
-  public_ack=false/recovery_durable=false/undo_history_restored=false.
-- Portable audit24/24 đạt,167artifacts; gap map xác nhận còn public facade.
-  Client read-only facade đạt77/77 pure/socket tests, gồm26 transport checks;
-  Stop có listener riêng. Cross-review đã sửa race Stop/revoke khi lưu response,
-  cleanup owner và chặn redaction làm sai hash observation. Probe client process
-  riêng đã chạy tại reviews/20260917-gt04-client-04:233/233 units,32 client
-  checks và6 parent checks đạt; actual client/GUI/host/wrapper exits0, Job0.
-  Closure bf2236b0229100062ec266b55722db7196fc0af84716bf6e29e01bd7595ef15f.
-  Client01/02/03 giữ FAIL riêng: ID setup sai grammar; read bị writer fence
-  chặn; key evidence bị secret-field guard chặn. Không chuyển thành PASS từ
-  các check giữa chừng. Đã sửa đúng từng nguyên nhân, không nới core policy.
-  Còn public mutations và durable common Request/Response binding. Writable
-  restart/khôi phục Undo cũ/recovery cross-app thuộc GT07, không kéo vào GT04.
-  Ledger binding riêng ban đầu đạt28/28 pure tests (105/105 khi ghép client).
-  Review độc lập phát hiện lỗi guard-release chưa phân loại UNKNOWN; đã sửa
-  cả admission/terminal,30/30 ledger tests đạt trên source sửa. Probe thật
-  reviews/20260917-gt04-ledger-native-01 đạt42focused tests+25native checks;
-  117sourcefiles tại source-closure.json của package ledger-native-01;
-  actual GUI/host/wrapper exit0,Job0. Đây là source S55 riêng, không phảiS56.
-  File-only audit khớp journal/Request/native/Response và9corruptionchecks.
-  Ledger chưa quảng bá write capability/public ACK; reopen trong probe chỉ
-  Journal mới của cùng live owner, không claim phục hồi GUI đã crash.
-  Chưa nghiệm thuGT04. Failure01 là đọc exclusive writer
-  guard sai thời điểm trong harness; runtime không đổi, giữ evidenceFAIL.
+- S58 scene02/checkpoint01/export01 cùng closure ở markers trên,138sourcefiles.
+  Scene lane571/571 toàn bộ unit; hai lane còn lại305/305 focused mỗi lane.
+  Mỗi lane47client checks/34HTTPcalls/10native checks,15native data requests;
+  9common INTENT/terminal pairs:8COMMITTED,1capacity rejection trước effect.
+  GUI/background/CLI/host/wrapper exit0 và owned Jobs0, source/snapshot/logs sạch.
+- scene.save/checkpoint.save/export.publish dùng3profile cố định, chung reducer
+  và protected bundle(checkpoint.blend,GLBsidecar,manifest,selector). Native copy
+  vào slot riêng rồi background reopen+geometry/material verify. Chỉ OBJECT
+  mode/nonempty supported fixture, một bundle/profile; không arbitrary path,
+  không overwrite. Capacity reject không poison editor; sameID retry exact.
+- Preview native5editops không effect/không reserveID; actual diff kiểm received
+  JCS và giữ native revision opaque. Save preview hiện schema-only; cần rà
+  live preflight và final regression matrix trước nghiệm thu. File-only audit
+  s58-audit:3x3445assertions đạt, common/private/selected bytes/raw exits khớp.
+  Chưa có hai critic độc lập trên closure cuối; solo không thay critic.
+- S57 checkpoint94eb83b:540/540units,45HTTPchecks/10native; Git462files đạt.
+  S56 checkpoint9b7eb60:440all/174focused; native deadline19checks và writer31.
+  S57-writer01 INCOMPLETE do gián đoạn trước wrapper/nativeproof; không coi log
+  test làPASS. S58-scene01 PASS trên closure5c0b5b... riêng, trước capacityfix;
+  giữ evidence cũ, không gán cho scene02. Không có worker đang chạy.
+- Component evidence trước đó: publication03/recovery02/cleanup supplement/
+  read-only checkpoint GUI/client ledger/FIFO được giữ; cần đối chiếu runtime
+  trước khi đưa vào final matrix. GT04 vẫn IN_PROGRESS, public_ack=false,
+  writable restart/restoredUndo/cross-app recovery thuộcGT07.
+- Lịch sử đầy đủ tớiS57: reviews/20260917-plan-history-s57/tools-plan-s57.txt
+  AUTHORITY=0, SHA256 f35907454b71584ba621bf4432809b192c91d0de86fb606c84cab88c4332bd7a.
 
-Tiếp theo: GT04 nối scene.save/checkpoint.save vào protected publication; chốt final source/evidence rồi hai critic. Sau đó
+Tiếp theo: GT04 live preflight/dry-run cho file operations, final native regression
+matrix và hai critic trên cùng closure. Sau đó
 GT05 pipeline, GT06 Play/input/observe, GT07 concurrency/recovery, GT08 CI/
 Android thiết bị thật, GT09 conformance, GT10 package/upgrade/rollback/handoff.
 HH World là plan game riêng sauGT10. Chưa có cơ sở hẹn ngày xong toànplan;
@@ -157,6 +123,10 @@ tools-plan-before-s55.txt (AUTHORITY=0), SHA256 b07c86c36c565c3a95404a6084cd6df0
 Các archive và mọi failure/verdict cũ giữ nguyên; không hạDoD đểtick.
 
 KINH NGHIỆM ĐANG ÁP DỤNG
+- S58: tái dùng một publication reducer cho3profile; profile phải được pin
+  trong CONFIG/manifest, native slot và common translation phải khớp. Lỗi known
+  trước publication INTENT trảREJECTED; lỗi sauINTENT vẫnUNKNOWN/hold. Test
+  capacity phải chứng minh editor còn dùng được và không mở lại effect cũ.
 - S57: preview là quan sát có kiểm quyền, không INTENT hoặc reserve apply ID.
   Native preview/apply dùng chung preconditions. Redaction kiểm lại exact bytes
   khi gửi preview, không chỉ tại owner. Stop phải tới đúng publisher._job,
