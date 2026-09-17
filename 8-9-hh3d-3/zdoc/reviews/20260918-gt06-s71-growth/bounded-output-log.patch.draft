@@ -1,0 +1,36 @@
+--- a/8-9-hh3d-3/studio/tests/replay/run_native_benchmark.py
++++ b/8-9-hh3d-3/studio/tests/replay/run_native_benchmark.py
+@@ -143,7 +143,8 @@
+ 
+     The installed fixture remains unchanged. Godot normalizes minimal project
+     text on editor startup; that is not an allowed source mutation in this run.
+-    Only add the benchmark plugin and the pinned engine feature declaration.
++    Add the benchmark plugin, pinned engine feature declaration, and a fixed
++    stock Output display limit. Full stdout/stderr remain externally captured.
+     """
+     sections = {}
+     current = None
+@@ -166,6 +167,9 @@
+         'editor_plugins': ['enabled=PackedStringArray("res://addons/hh_studio/plugin.cfg")'],
+     }, 'DIAGNOSTIC_PLUGIN_CONFIG')
+     sections['application'].append('config/features=PackedStringArray("4.7")')
++    # Each visible Output paragraph is an Object. Saturate this stock rolling
++    # display during warmup; do not alter the raw ObjectDB counter or log capture.
++    sections['editor_overrides'] = ['run/output/max_lines=100']
+     sections['editor_plugins'] = ['enabled=PackedStringArray("res://addons/hh_studio/plugin.cfg", "res://addons/hh_benchmark/plugin.cfg")']
+     header = ("; Engine configuration file.\n; It's best edited using the editor UI and not directly,\n"
+         "; since the parameters that go here are not all obvious.\n;\n; Format:\n"
+--- a/8-9-hh3d-3/studio/tests/replay/benchmark_native.gd
++++ b/8-9-hh3d-3/studio/tests/replay/benchmark_native.gd
+@@ -151,6 +151,11 @@
+     if not Engine.is_editor_hint() or not _main_thread() or _mode not in ["full", "diagnostic"]:
+         _fail("BENCHMARK_CONTEXT")
+         return
++    # get_setting() resolves the project override; Object.get() does not.
++    var editor_settings: EditorSettings = EditorInterface.get_editor_settings()
++    if editor_settings == null or editor_settings.get_setting("run/output/max_lines") != 100:
++        _fail("BENCHMARK_OUTPUT_LOG_LIMIT")
++        return
+     var input_file: FileAccess = FileAccess.open(INPUT, FileAccess.READ)
+     if input_file == null:
+         _fail("BENCHMARK_INPUT_MISSING")

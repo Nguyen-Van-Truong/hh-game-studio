@@ -1,0 +1,973 @@
+{
+  "exact_git_bytes": true,
+  "files": {
+    "8-9-hh3d-3/studio/tests/replay/benchmark_native.gd": {
+      "sha256": "be16dc41c6eb1654521dfbb38e91853bb6067cf07adc28579ddb9bdf95de75a5",
+      "size_bytes": 40931
+    },
+    "8-9-hh3d-3/studio/tests/replay/run_native_benchmark.py": {
+      "sha256": "1e598f107cafd1dadee9c2e6427708a1ef6feb409bde7d1cb9ea8226f6414b8a",
+      "size_bytes": 25591
+    },
+    "8-9-hh3d-3/zdoc/8-9-godot-blender-agent-studio-plan.txt": {
+      "sha256": "b45f2629cf9ad47ef238f3c66a32050f4d312eaa10e4c5d57fe0cbea62c1b2b7",
+      "size_bytes": 104865
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/.gitattributes": {
+      "sha256": "8fbca517371118eae0c7c93150f33e39fc87b0d4809000ee9415b3d067f7be2e",
+      "size_bytes": 442
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/README.md": {
+      "sha256": "cad3e4272e393920af70fea92744e93bd29123cdf1ed5b6eb0b121feb80ad442",
+      "size_bytes": 3230
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/bounded-output-log.patch.draft": {
+      "sha256": "81c7790c0cadb11f7afd0aab5e957fa4bdbacf0add543c403f87f3c360142d28",
+      "size_bytes": 2119
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/.gitattributes": {
+      "sha256": "3c0aef5178737a18562815bc3e7f26fd41e4d17bcbbe9ec6473d61e1b470bd1d",
+      "size_bytes": 38
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/README.md": {
+      "sha256": "25c8b453ef891fd7500c25b50a12c4132f6508fb8fc8e5f6f228cd8ae2d6d542",
+      "size_bytes": 5103
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/benchmark-profile.json": {
+      "sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+      "size_bytes": 718
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/campaign.json": {
+      "sha256": "7aae14996dc3518808b84b0f319fbf83b86e26c396979196cadc99a14ad9ff53",
+      "size_bytes": 6295
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/batch-capture-00.json": {
+      "sha256": "d67db5094f0c5db0683d4a8b6a5aafee40547d9ca3dc02b7c76887e43f5b82ef",
+      "size_bytes": 868
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/batch-capture-01.json": {
+      "sha256": "58c8cd8b2fe69e31864296f9ec3f484bf38b4a9d0f649f7fd22aa04e4ae3e224",
+      "size_bytes": 868
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/batch-capture-02.json": {
+      "sha256": "8e85f097852e968c381ce4286ac503b584fcaff2277bc6d9a040d9850dab7f49",
+      "size_bytes": 868
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/batch-capture-03.json": {
+      "sha256": "1332e7de224c5e2ddf08db929111cff1c17103075753ec4154de347162a09c8d",
+      "size_bytes": 868
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/batch-capture-04.json": {
+      "sha256": "a21c640e1445a360684c9faa54998c7219dec1dbdf2839cc35ae221f67a7cbfc",
+      "size_bytes": 868
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/batch-capture-05.json": {
+      "sha256": "77f57b7b6f443b0cb1cb249d7c03df520019db2b2fbca97352faf7597ffc9a01",
+      "size_bytes": 868
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/benchmark-profile.json": {
+      "sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+      "size_bytes": 718
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/child-failure.json": {
+      "sha256": "d7bcb91140e7b854edf107861a5b4e46734e0bdd49c9cdf2616a0f284eefad7a",
+      "size_bytes": 221
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/context.json": {
+      "sha256": "9fa05168187213d893b3925310fba76d450b248e097742392c41be6358da7603",
+      "size_bytes": 5280
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/editor-host/cleanup-001.json": {
+      "sha256": "9ff26d2260e6188703654517521ac75e80f618c4e517723042f5f4babc109ee1",
+      "size_bytes": 556
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/editor-host/invocation.json": {
+      "sha256": "6e8fdbab858988bbaf65fe7cb22bcc92a3b154f47be088be252a663027a4f33e",
+      "size_bytes": 8753
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/editor-host/process-start.json": {
+      "sha256": "13bf49c02d6f268f825ff4fc0834ea5a794b1711941835740682c925c1827da7",
+      "size_bytes": 14
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/editor-host/stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/editor-snapshot.json": {
+      "sha256": "c733f34fd30afeca4b282ef0bb86d8414edf7bafd3a1272f587d635c0f61d6e5",
+      "size_bytes": 1485
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/host-owner/cleanup-001.json": {
+      "sha256": "31f58e29075f8f16bb2df0bb72471bfcd0df794b729d6497022554d84959cfc8",
+      "size_bytes": 548
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/host-owner/invocation.json": {
+      "sha256": "cd03ed07e0135697f6ff5cc92148f48b96b3cbccbb1aebf38acd4a5e2f8b692f",
+      "size_bytes": 6364
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/host-owner/process-exit.json": {
+      "sha256": "3c5f67b7bd24f6638c778f1e8b15c45e13e050d1d2aa0ce5cddbdf8adc593123",
+      "size_bytes": 30
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/host-owner/process-start.json": {
+      "sha256": "755a2c617d9a6e58f6695141f706efc48c10e324b5f6c8c250ea55ad1c891c92",
+      "size_bytes": 14
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/host-owner/stderr.txt": {
+      "sha256": "a2d7dfb1ea048b15d20b1d6f41314b19d4d4a4c5ef77264a29d934c77d823315",
+      "size_bytes": 1246
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/import-host/capture.json": {
+      "sha256": "6a08aad7e12e3408d6d8bf037f108454ab34785bdeece02ff85c127e5b58903e",
+      "size_bytes": 1340
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/import-host/invocation.json": {
+      "sha256": "e693c5b42a3297412b225e45acbdc042dc1a03f38a5afd284dd197af9775880b",
+      "size_bytes": 5976
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/import-host/process-exit.json": {
+      "sha256": "d16ebde0f66e807c598bde299ce609f793243fe2b4bf507d820c6d40edc40e42",
+      "size_bytes": 29
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/import-host/process-start.json": {
+      "sha256": "172ae74a4395e2e6d19ef45910b277dbfd7d490b407e601a393d1264b6b68378",
+      "size_bytes": 13
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/import-host/stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/import-host/stdout.txt": {
+      "sha256": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003",
+      "size_bytes": 1492
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/initial-project-files.json": {
+      "sha256": "1b1c02c5512a9942bd5c7933e2befe26fe2febac0ae00db4b69cb2dc0dc50098",
+      "size_bytes": 1372
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/joint-00.json": {
+      "sha256": "8bf7851f0d2d416559785e784211b2d57ada57560ac1636cece3169b6c4127ca",
+      "size_bytes": 2284
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/joint-01.json": {
+      "sha256": "a42941876148e40d762e9f7f5156b495f9ba5423ccc6ceb837911ce5a6cda1b1",
+      "size_bytes": 2290
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/joint-02.json": {
+      "sha256": "1eb5b53522b4c505c216df0767e49373312ba3a16b82340e5fd764605b4e033c",
+      "size_bytes": 2290
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/joint-03.json": {
+      "sha256": "af425c1ec56485cff372dec40324a78a8a240708ddf3e836dc09bb0cd8445bfc",
+      "size_bytes": 2290
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/joint-04.json": {
+      "sha256": "d1e21d09a234bdc343d65e5998a300cf21ae59acb2a21be29fbcf2a4a87389a8",
+      "size_bytes": 2290
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/joint-05.json": {
+      "sha256": "5a8a4c04992e8592297f3bb9833b1b9ce4c072b77dba2b6e0fc4ccd534087754",
+      "size_bytes": 2291
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/parent-failure.json": {
+      "sha256": "bb8c672ac79412c26ed3a366b7ea4bd8a5f6e45af5677144d4b10c5adf43bb29",
+      "size_bytes": 182
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/sample-preview-00.json": {
+      "sha256": "306746084baa18777e6727604269d2694515deb2201fe2bf455d457f2d17907b",
+      "size_bytes": 72708
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/sample-preview-01.json": {
+      "sha256": "cb757ad61a747cb3e0ae14877a4553c6bc62dbd6a68ab8b5920581304a1ebff3",
+      "size_bytes": 72704
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/sample-preview-02.json": {
+      "sha256": "68862b85f458758dc178cdd12a8bf487369cf6b075d16edf981f5d04726c5b09",
+      "size_bytes": 72867
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/sample-preview-03.json": {
+      "sha256": "20f50ed3883bb2184582b88090eed106f4900b7b574cebf9aa31a5fea7f5705d",
+      "size_bytes": 72895
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/sample-preview-04.json": {
+      "sha256": "593307e15fb49b3695baea64c36ef6c9eb46b0c4cf87fcb3e005890f84d91e14",
+      "size_bytes": 72893
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/sample-preview-05.json": {
+      "sha256": "2f5a7039b99f390dd678734fa148509ed79709522c2330ab00f6286b98d6a2da",
+      "size_bytes": 72947
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/source-files.json": {
+      "sha256": "4ce35b98d4f850ba1fdf8aa9d86058cabc4ac45f72e1ef661626149235da2ebf",
+      "size_bytes": 4941
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/campaign/run-00-attempt-01/toolchain.lock.json": {
+      "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+      "size_bytes": 3026
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/inventory.json": {
+      "sha256": "1c969b56350b54076990ea709733af8116fb6811012e308934be9dde2e790edb",
+      "size_bytes": 23518
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/supervisor/claim": {
+      "sha256": "a55ff796f4fb95def5b44d1599752d3ac9b1b5ecd3c1f840db980e6edda79b4c",
+      "size_bytes": 24
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/supervisor/failure.json": {
+      "sha256": "374420879944eea47d635dc134d498db01d36d4527cbfcdb6d36a3a95f4f196f",
+      "size_bytes": 73
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/supervisor/request.json": {
+      "sha256": "83bdd1a0b6c233caab1fbe5deb76ee38a7de9942febd967bbf3f3c696034ca0c",
+      "size_bytes": 373
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/supervisor/return.json": {
+      "sha256": "80018c4a0236f274215f528771f4dee97b5dd6170b80000b9824df3458f8117c",
+      "size_bytes": 198
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/supervisor/scheduler-terminal.json": {
+      "sha256": "7ae755de8bae4992ac0d67f7f433897af91fa85e22801568ed303d7455b53e36",
+      "size_bytes": 591
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/supervisor/start.json": {
+      "sha256": "9a58c815601d3fd25ce4cfb6edfc814f1992e1c1aa2507fd697772455cfb23a0",
+      "size_bytes": 501
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/supervisor/status-after-first-batch.json": {
+      "sha256": "d0f065d2c55ebcbbfbd5050f019b7ac1ddd7a74d982feaa9723da2e09f4e7efc",
+      "size_bytes": 736
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/supervisor/stderr.txt": {
+      "sha256": "30175b8f6fb73c1c0838a18c31b4f7a1bc4bddbb49d1db5a9df9caf769d975ad",
+      "size_bytes": 1651
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/supervisor/stdout.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/supervisor/task-definition.expected.xml": {
+      "sha256": "82d70624af323e8b033e29e2a4a0ff45d8c13b4bc0de58cdc78247d184e4f215",
+      "size_bytes": 2006
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/supervisor/task-definition.sha256": {
+      "sha256": "f127947363df6604e1434bc38565bdb71b96b42c10100042fd70ae39fc9b83b6",
+      "size_bytes": 65
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/supervisor/task-definition.xml": {
+      "sha256": "3c7bee10a1f48388ca828084db1a40483bbb8b70c354925b26631df66fc568f9",
+      "size_bytes": 1660
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/supervisor/task-deleted.json": {
+      "sha256": "70dc7983de503a8f39fa206d1a84863f710834b744aaee51b38b6b55ff58723c",
+      "size_bytes": 342
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/supervisor/task-registration.json": {
+      "sha256": "86fbc734715607bbb48e7c96f28d0c13b26fc93f8ede070512b668f8732e0eb8",
+      "size_bytes": 879
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/campaign02-failure/supervisor/task-start.json": {
+      "sha256": "5783fab20517f4d92f2d9cb38ce2e6fab2eb2155695ed1a3c2c253de711d91f9",
+      "size_bytes": 838
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/check_output_guard.py": {
+      "sha256": "856990ab43d47f5ba522240cd35fb8013d2b5353b681eb5e5ae395f899495318",
+      "size_bytes": 3953
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/diagnose_output_retention-v1.py": {
+      "sha256": "8feeefcadf612d2302d94bb343a0e4c2f5665fbbcdc9661c7ce370741c0f6407",
+      "size_bytes": 6004
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/diagnose_output_retention.py": {
+      "sha256": "f4ad52c2d14d1b8d25612d01340adfa646919c53fd18c28210565ab681f4da38",
+      "size_bytes": 6124
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/host-retention-analysis.md": {
+      "sha256": "f1f8ff6a8e902993f3c69b911715d93ee275d8c0ec143727f717b5a92a76dcd1",
+      "size_bytes": 9544
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/line-attribution.json": {
+      "sha256": "37ca564f280fec43870febd77126e4ee005ffacac4cecc9c79d601392a1d3b2f",
+      "size_bytes": 3147
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/measurement-contract-review.md": {
+      "sha256": "89b6f5050fb45667388f19a6a0c708eae2ae443d923740c863295e8f7c128bc0",
+      "size_bytes": 10298
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/native-fixed/.gitattributes": {
+      "sha256": "8b9c3028d6467ff3be7c793141927841d70f47f52d0590677438f488ca154992",
+      "size_bytes": 9
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/native-fixed/benchmark-profile.json": {
+      "sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+      "size_bytes": 718
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/native-fixed/capture.json": {
+      "sha256": "6324afc0d296a590f7f77aceca4f349f8cf838c99a10b13ce0ffd157f58b2226",
+      "size_bytes": 2042
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/native-fixed/diagnostic-profile.json": {
+      "sha256": "2aacbd74186e97058bc37d2def108324ed22b882c7992096e7d41636ad31c4dd",
+      "size_bytes": 458
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/native-fixed/editor-host/capture.json": {
+      "sha256": "fb5e7fcc6058c57c749238c88244257bbd222225cc03ae2840292edbca3b7c65",
+      "size_bytes": 1341
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/native-fixed/editor-host/invocation.json": {
+      "sha256": "5600a7b824d61a7608e6d7edeb8b904476d0e6b1e3e2a1e4e661758b59fedd57",
+      "size_bytes": 6874
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/native-fixed/editor-host/process-exit.json": {
+      "sha256": "be33eec8ff84b3848c9759d180098ce979c3d1eb89c0da855cb0381cbc94c6e6",
+      "size_bytes": 30
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/native-fixed/editor-host/process-start.json": {
+      "sha256": "f1789a960994474628c683dfed116a803fe6f579ea11ce6e4a2a47f6782591f0",
+      "size_bytes": 14
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/native-fixed/editor-host/stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/native-fixed/editor-host/stdout.txt": {
+      "sha256": "ca477b38d1120cb90407eb47fd92b97198b92cee4046e0b013f81f21168f5fd0",
+      "size_bytes": 1798
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/native-fixed/editor-snapshot.json": {
+      "sha256": "28bbd6ba9f2c605b30e5b79d7f7a57aed631fd2eec4c1d644892d6eddcb22af5",
+      "size_bytes": 1485
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/native-fixed/final-project-files.json": {
+      "sha256": "2015b3a80b7dcd8709f29795f14cf5912d4d5a0344b60ddcd4a764f96fac0581",
+      "size_bytes": 1485
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/native-fixed/final-scene.tscn": {
+      "sha256": "2331682af9bd0e74683495a094bcd4b5087b9179635d65bae58e0af1df279fcd",
+      "size_bytes": 295
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/native-fixed/import-host/capture.json": {
+      "sha256": "43285e1fd3aa98f93ae17a3af5c06cbcdcaff3655b610ad97700ba67d057766f",
+      "size_bytes": 1341
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/native-fixed/import-host/invocation.json": {
+      "sha256": "5768803dfb7bec3ed88db3b1b5b8441eb1e4a4ad4e18eb935452d4e3020a57de",
+      "size_bytes": 4677
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/native-fixed/import-host/process-exit.json": {
+      "sha256": "5f31c55a951058416c95b2784371ddeb4186a75bc63757f2d8f7c9bd9cd5944b",
+      "size_bytes": 30
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/native-fixed/import-host/process-start.json": {
+      "sha256": "5cf37914f13e579d7a46f71a65a321810125e8419adb046994dead443fde83d7",
+      "size_bytes": 14
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/native-fixed/import-host/stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/native-fixed/import-host/stdout.txt": {
+      "sha256": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003",
+      "size_bytes": 1492
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/native-fixed/initial-project-files.json": {
+      "sha256": "67c684b75f043a8e82b66363d9fb4a6e89367b9e8e9529a4bed9a3352e1c2406",
+      "size_bytes": 1372
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/native-fixed/initial-scene.tscn": {
+      "sha256": "51eaa111f832327d74b2031d382eb22ab30c8b725323e26ebcf7a66bbef571cb",
+      "size_bytes": 235
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/native-fixed/inventory.json": {
+      "sha256": "5bbe1894f7b66423a27f5e231d0c79b2a5384482f7ea1bcd5847d3459a4d8396",
+      "size_bytes": 4341
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/native-fixed/invocation.json": {
+      "sha256": "d8ee41c36b7ab03b1bed240c7ee37f9ad95c2c253344134567ce262c4e2ec2ea",
+      "size_bytes": 5515
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/native-fixed/process-metrics.json": {
+      "sha256": "94971883ea7511fa5ad9dc5a3409131083701ba25958edf5cfef86668744169d",
+      "size_bytes": 23285
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/native-fixed/project/benchmark/input.json": {
+      "sha256": "cef94539d79453f0c395848098a249f4d448eaaa69ec878283bcd6583c70f284",
+      "size_bytes": 380
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/native-fixed/project/benchmark/out/batch-00.json": {
+      "sha256": "04be0c8b90c4b58e293a2a8dcebe0de8f2aea83026e01359c7a534adb10201d6",
+      "size_bytes": 1743
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/native-fixed/project/benchmark/out/index.json": {
+      "sha256": "3b59be422588c7e2d0c33e70595486e1ffd49ea1a44785fe964edfb71f35b993",
+      "size_bytes": 2659
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/native-fixed/project/project.godot": {
+      "sha256": "b11a6ba55d6dbe25262034c04eea6dacb09a989aaf77382fe4aa74ca42f3d878",
+      "size_bytes": 659
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/native-fixed/source-files.json": {
+      "sha256": "105a830affcaf2aa855d3a7d74643806427dbaff5ce0a89b92a7cbda8d8e3dcb",
+      "size_bytes": 3744
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-cap-contract-review.md": {
+      "sha256": "9e06447d2497ad65ad52853ef94da7b71fbd6c7f3dd7473cee99c8ba389c15c5",
+      "size_bytes": 7687
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/.gitattributes": {
+      "sha256": "4d7fd6fa12d2346e5362cc40263ea87532dff6237224a23b694bce0f518cb0db",
+      "size_bytes": 39
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/README.md": {
+      "sha256": "6c3431a323a7733109b6030579f8df2f93979d94a8a2d99fab865cdf7e3842f6",
+      "size_bytes": 7030
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/collector.py": {
+      "sha256": "f4ad52c2d14d1b8d25612d01340adfa646919c53fd18c28210565ab681f4da38",
+      "size_bytes": 6124
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/diagnostic.json": {
+      "sha256": "fc514650938f56e958757c2c7625e16c91c9df3b573e298f02aef5e480789854",
+      "size_bytes": 5937
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/editor-host/capture.json": {
+      "sha256": "1c014a00c4b23f6fc948e9e29eaf76ca9a51b02eeb8800aadab3d4ac695e1b04",
+      "size_bytes": 8824
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/editor-host/cleanup-001.json": {
+      "sha256": "379d7a25b4032e6cb243e100aa8a5ebcd3d82a94e45b71e0f18e47fe7e569534",
+      "size_bytes": 528
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/editor-host/invocation.json": {
+      "sha256": "1d8de7abe2c1913dc5f9b518933dfe931b3b376371a05a78f0a4f48f863fda29",
+      "size_bytes": 7401
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/editor-host/process-exit.json": {
+      "sha256": "625cc3718ebf91c79bf873682f0cf3889d63e936509b9e7739d4b0e2ed4aa740",
+      "size_bytes": 30
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/editor-host/process-start.json": {
+      "sha256": "b63f3d2c4c082245528107127c3ada9d564f8bc9e48dbb82b327ce685a7f90fe",
+      "size_bytes": 14
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/editor-host/stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/editor-host/stdout.txt": {
+      "sha256": "cad722aea5e2bad0573cad6697b819de432e948bfa55e3bc15ba16f480aef886",
+      "size_bytes": 12080
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/import-host/capture.json": {
+      "sha256": "eb50f98f270deb7863c016fadc6a6ccb15ba8e55f33780bb0ae33be18838e4c6",
+      "size_bytes": 1341
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/import-host/invocation.json": {
+      "sha256": "75360fb35358da19a024c7976d09c60001841bc9242df042897a261593cd753e",
+      "size_bytes": 4786
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/import-host/process-exit.json": {
+      "sha256": "aead746fce8eb182828fc6b5900c8e81c1f80c236e459b1988d2ffa15e51ad56",
+      "size_bytes": 30
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/import-host/process-start.json": {
+      "sha256": "94cbd68ea9648f7786c48d2c535556e4a57e7b142f509e050f3d9bb2ab607748",
+      "size_bytes": 14
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/import-host/stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/import-host/stdout.txt": {
+      "sha256": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003",
+      "size_bytes": 1492
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/result.json": {
+      "sha256": "23637cc6375c9234eba8018533c75fc03e23f90977ad3678b13c10a9c8750caa",
+      "size_bytes": 1772
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/runtime-source-files.json": {
+      "sha256": "62fc80101dcb08b3d521e9aed1cbcf8809045c186497ce8f68a1672bc4216ba8",
+      "size_bytes": 5937
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/blender-addon/ipc_client.py": {
+      "sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9",
+      "size_bytes": 16349
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/godot-addon/addons/hh_studio/plugin.cfg": {
+      "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+      "size_bytes": 165
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/godot-addon/addons/hh_studio/plugin.gd": {
+      "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+      "size_bytes": 23043
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/godot-addon/addons/hh_studio/scene_commands.gd": {
+      "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+      "size_bytes": 32174
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/godot-addon/bundle_staging.py": {
+      "sha256": "3d614edbec8e9a7f5ad3caf2b9694d7498df129de95683952268621f91d68e43",
+      "size_bytes": 15005
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/godot-addon/bundle_v2.py": {
+      "sha256": "2c5cdc71cdaf80f58bb93ec791e84bab8bd02cd4d9bdbd93d635db13583de62a",
+      "size_bytes": 8475
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/godot-addon/cli_job.py": {
+      "sha256": "5a0f37bc129bde409a2657054fb091d637d838e442d45a69e7adc1f1527d4c88",
+      "size_bytes": 12672
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/godot-addon/fixture_profile.py": {
+      "sha256": "25e1667dd930dcf0746b071fc29ea3460bc18d5fb9f3f83e806c1793028f21ae",
+      "size_bytes": 6020
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid": {
+      "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+      "size_bytes": 20
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid": {
+      "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+      "size_bytes": 20
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid": {
+      "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+      "size_bytes": 19
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/godot-addon/fixture_profile/project.godot": {
+      "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+      "size_bytes": 282
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/godot-addon/fixture_profile/scripts/fixture_actor.gd.uid": {
+      "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+      "size_bytes": 20
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/godot-addon/fixture_profile/source-pins.json": {
+      "sha256": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2",
+      "size_bytes": 1873
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/host/blender/__init__.py": {
+      "sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90",
+      "size_bytes": 69
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/host/blender/deadline.py": {
+      "sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926",
+      "size_bytes": 1130
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/host/blender/export_job.py": {
+      "sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe",
+      "size_bytes": 13605
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/host/blender/glb_preflight.py": {
+      "sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62",
+      "size_bytes": 11815
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/host/blender/ui_host.py": {
+      "sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35",
+      "size_bytes": 22464
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/host/core/limits.py": {
+      "sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f",
+      "size_bytes": 15813
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/host/core/private_store.py": {
+      "sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476",
+      "size_bytes": 20476
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/host/core/safe_create.py": {
+      "sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606",
+      "size_bytes": 13170
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/host/core/safe_open.py": {
+      "sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535",
+      "size_bytes": 12093
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/host/replay/perf.py": {
+      "sha256": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7",
+      "size_bytes": 19085
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/host/replay/process_probe.py": {
+      "sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500",
+      "size_bytes": 5485
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/pipeline/__init__.py": {
+      "sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68",
+      "size_bytes": 79
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/pipeline/native_job.py": {
+      "sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca",
+      "size_bytes": 12512
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/protocol/__init__.py": {
+      "sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f",
+      "size_bytes": 881
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/protocol/_rfc8785/__init__.py": {
+      "sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b",
+      "size_bytes": 505
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/protocol/_rfc8785/_impl.py": {
+      "sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec",
+      "size_bytes": 7251
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/protocol/core.py": {
+      "sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e",
+      "size_bytes": 19886
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/protocol/jcs_godot.gd": {
+      "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+      "size_bytes": 10165
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/tests/replay/benchmark_job.py": {
+      "sha256": "be424a6f37ae573ac4bf40954b31017025daee2147699c80b05f9a0ab70e1611",
+      "size_bytes": 24991
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/tests/replay/benchmark_native.gd": {
+      "sha256": "da0bb949ebaf3bc3881a1e9ad325d98ac6496fc3a0454b825a28655fdbc37515",
+      "size_bytes": 40402
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/tests/replay/benchmark_plugin.cfg": {
+      "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092",
+      "size_bytes": 189
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/tests/replay/benchmark_profile.py": {
+      "sha256": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233",
+      "size_bytes": 19625
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/tests/replay/run_native_benchmark.py": {
+      "sha256": "f61e031920232f5476a3f5f6850f5217765b9058d4474a678d6e09f103f29392",
+      "size_bytes": 25209
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-100/verification-source/studio/toolchain.lock.json": {
+      "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+      "size_bytes": 3026
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/collector.py": {
+      "sha256": "8feeefcadf612d2302d94bb343a0e4c2f5665fbbcdc9661c7ce370741c0f6407",
+      "size_bytes": 6004
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/diagnostic.json": {
+      "sha256": "77bef891d30f6c1a6c848b85f494a64b877ea674ce020ecb3ea0c3b54c73c6e3",
+      "size_bytes": 5943
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/editor-host/capture.json": {
+      "sha256": "4122fff36efea530390766cdfba0ba253428441bba204c190e5c9a0ad769be6b",
+      "size_bytes": 8854
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/editor-host/cleanup-001.json": {
+      "sha256": "379d7a25b4032e6cb243e100aa8a5ebcd3d82a94e45b71e0f18e47fe7e569534",
+      "size_bytes": 528
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/editor-host/invocation.json": {
+      "sha256": "181ab6d01400c0dbc9593ba4affbdc0ebd2d0d162785129ea0a235b8016787ee",
+      "size_bytes": 7433
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/editor-host/process-exit.json": {
+      "sha256": "f5aa0e10d355a1ad9b755632461d81891d92d3ac743bec5b411cfcb6c1dbdfa3",
+      "size_bytes": 29
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/editor-host/process-start.json": {
+      "sha256": "ea06d179aa80ed35ad317f7ccd9fe27c1a0bf918b0ac7805a89059ea3995779f",
+      "size_bytes": 13
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/editor-host/stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/editor-host/stdout.txt": {
+      "sha256": "955e7284b7ccf15365615750c80d04d0a636a6a46ab3955dae56ba584fbb1cdd",
+      "size_bytes": 12116
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/failure.json": {
+      "sha256": "204c35238a5fdd082840ce0cbccdfa8ea1b25311c8636685586104e33ca328e2",
+      "size_bytes": 71
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/import-host/capture.json": {
+      "sha256": "07a7fe1730074c094c72d5fba4c569b0187f143c126549c0d2e0ba695623ed27",
+      "size_bytes": 1329
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/import-host/invocation.json": {
+      "sha256": "22495f865b2b608ae3bfa471423223947aa8b50532042a8b059deb21d3c31d2e",
+      "size_bytes": 4790
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/import-host/process-exit.json": {
+      "sha256": "746143a5a510bddc9cc404238cfe457067dc04d21c46bc3f1789263aa39671e5",
+      "size_bytes": 30
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/import-host/process-start.json": {
+      "sha256": "2201dc94d9d3d630587d1f1bb48bfe3b70db829190cbbef97021f280a7cbe8e9",
+      "size_bytes": 14
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/import-host/stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/import-host/stdout.txt": {
+      "sha256": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003",
+      "size_bytes": 1492
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/recovered-result.json": {
+      "sha256": "afab862e3d7f831580afe8220d93d3e3840bc4a60a206d94dbd3143e4e54768a",
+      "size_bytes": 3259
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/runtime-source-files.json": {
+      "sha256": "ba669547d679a953b46271d317828a2ceb11fddf77d8898b2017851bdc01abbc",
+      "size_bytes": 5965
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/blender-addon/ipc_client.py": {
+      "sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9",
+      "size_bytes": 16349
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/godot-addon/addons/hh_studio/plugin.cfg": {
+      "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+      "size_bytes": 165
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/godot-addon/addons/hh_studio/plugin.gd": {
+      "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+      "size_bytes": 23043
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/godot-addon/addons/hh_studio/scene_commands.gd": {
+      "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+      "size_bytes": 32174
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/godot-addon/bundle_staging.py": {
+      "sha256": "3d614edbec8e9a7f5ad3caf2b9694d7498df129de95683952268621f91d68e43",
+      "size_bytes": 15005
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/godot-addon/bundle_v2.py": {
+      "sha256": "2c5cdc71cdaf80f58bb93ec791e84bab8bd02cd4d9bdbd93d635db13583de62a",
+      "size_bytes": 8475
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/godot-addon/cli_job.py": {
+      "sha256": "5a0f37bc129bde409a2657054fb091d637d838e442d45a69e7adc1f1527d4c88",
+      "size_bytes": 12672
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/godot-addon/fixture_profile.py": {
+      "sha256": "25e1667dd930dcf0746b071fc29ea3460bc18d5fb9f3f83e806c1793028f21ae",
+      "size_bytes": 6020
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid": {
+      "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+      "size_bytes": 20
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid": {
+      "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+      "size_bytes": 20
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid": {
+      "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+      "size_bytes": 19
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/godot-addon/fixture_profile/project.godot": {
+      "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+      "size_bytes": 282
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/godot-addon/fixture_profile/scripts/fixture_actor.gd.uid": {
+      "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+      "size_bytes": 20
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/godot-addon/fixture_profile/source-pins.json": {
+      "sha256": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2",
+      "size_bytes": 1873
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/host/blender/__init__.py": {
+      "sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90",
+      "size_bytes": 69
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/host/blender/deadline.py": {
+      "sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926",
+      "size_bytes": 1130
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/host/blender/export_job.py": {
+      "sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe",
+      "size_bytes": 13605
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/host/blender/glb_preflight.py": {
+      "sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62",
+      "size_bytes": 11815
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/host/blender/ui_host.py": {
+      "sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35",
+      "size_bytes": 22464
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/host/core/limits.py": {
+      "sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f",
+      "size_bytes": 15813
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/host/core/private_store.py": {
+      "sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476",
+      "size_bytes": 20476
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/host/core/safe_create.py": {
+      "sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606",
+      "size_bytes": 13170
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/host/core/safe_open.py": {
+      "sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535",
+      "size_bytes": 12093
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/host/replay/perf.py": {
+      "sha256": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7",
+      "size_bytes": 19085
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/host/replay/process_probe.py": {
+      "sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500",
+      "size_bytes": 5485
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/pipeline/__init__.py": {
+      "sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68",
+      "size_bytes": 79
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/pipeline/native_job.py": {
+      "sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca",
+      "size_bytes": 12512
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/protocol/__init__.py": {
+      "sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f",
+      "size_bytes": 881
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/protocol/_rfc8785/__init__.py": {
+      "sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b",
+      "size_bytes": 505
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/protocol/_rfc8785/_impl.py": {
+      "sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec",
+      "size_bytes": 7251
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/protocol/core.py": {
+      "sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e",
+      "size_bytes": 19886
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/protocol/jcs_godot.gd": {
+      "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+      "size_bytes": 10165
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/tests/replay/benchmark_job.py": {
+      "sha256": "be424a6f37ae573ac4bf40954b31017025daee2147699c80b05f9a0ab70e1611",
+      "size_bytes": 24991
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/tests/replay/benchmark_native.gd": {
+      "sha256": "da0bb949ebaf3bc3881a1e9ad325d98ac6496fc3a0454b825a28655fdbc37515",
+      "size_bytes": 40402
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/tests/replay/benchmark_plugin.cfg": {
+      "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092",
+      "size_bytes": 189
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/tests/replay/benchmark_profile.py": {
+      "sha256": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233",
+      "size_bytes": 19625
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/tests/replay/run_native_benchmark.py": {
+      "sha256": "f61e031920232f5476a3f5f6850f5217765b9058d4474a678d6e09f103f29392",
+      "size_bytes": 25209
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/cap-10000/verification-source/studio/toolchain.lock.json": {
+      "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+      "size_bytes": 3026
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/collect_verify.py": {
+      "sha256": "cda365f69b4338985cacb2609316b245349cd95183a44400f03c5fdef0cd585e",
+      "size_bytes": 23000
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/comparison.json": {
+      "sha256": "70b8c7f92d9bf3bf8aba1e736912028d62e2901aed647e760adb9a11e2c95b2d",
+      "size_bytes": 13264
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-comparison/inventory.json": {
+      "sha256": "212cf805c09d1953a431c9a7d447645949b92c31598fe547c9e04bf2b29241e1",
+      "size_bytes": 71250
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-guard/.gitattributes": {
+      "sha256": "8b9c3028d6467ff3be7c793141927841d70f47f52d0590677438f488ca154992",
+      "size_bytes": 9
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-guard/diagnostic.json": {
+      "sha256": "a9916120e8cc406bbd1bb255494517779afb6ab6f1dfc49084db74408fea9ae6",
+      "size_bytes": 5704
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-guard/editor-host/capture.json": {
+      "sha256": "8e7794d3328b4d884583c282beef1a4a60c64af3d108889bef1618e94570d1ac",
+      "size_bytes": 1307
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-guard/editor-host/invocation.json": {
+      "sha256": "7341ee70d317303c27709ce1a6a3f3e3bf684b826f24794fed55e96745cc601a",
+      "size_bytes": 6874
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-guard/editor-host/process-exit.json": {
+      "sha256": "5bc13483134aca617a9311f55aa09fc394dcbf362ecc0bfce75abb69a970d437",
+      "size_bytes": 31
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-guard/editor-host/process-start.json": {
+      "sha256": "5deb41280fdafad9525d3867ff95961e64f5437228692d06156c4c09ba75cfb6",
+      "size_bytes": 14
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-guard/editor-host/stderr.txt": {
+      "sha256": "7dddd217a9bd4fea7360395f693a5263d1087698e43b2b89d4670896753a2009",
+      "size_bytes": 104
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-guard/editor-host/stdout.txt": {
+      "sha256": "b2f9626552f54a972af1cf82670504a08e1925f6a0524e4ed341e3bd7feefbd9",
+      "size_bytes": 289
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-guard/import-host/capture.json": {
+      "sha256": "a9748a46e6c6f75ccb03ba08b4462a6de0fe5fcd5214cd81b7295cb4dcb443f3",
+      "size_bytes": 1327
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-guard/import-host/process-exit.json": {
+      "sha256": "6c1e33a348ef4b942d8056d25edec2d4e24cc9c2f313685c161187a8e1f7a73c",
+      "size_bytes": 30
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-guard/import-host/process-start.json": {
+      "sha256": "d173e03ed58464c161acde8902b387fc8c586b520f975d27e16705046ae90e0b",
+      "size_bytes": 14
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-guard/import-host/stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-guard/import-host/stdout.txt": {
+      "sha256": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003",
+      "size_bytes": 1492
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/output-guard/verification.json": {
+      "sha256": "e080212f48abe0d7e882b88bf1fd3ec9e69a14684e04ecd5f1fd8a6fbdd6a68e",
+      "size_bytes": 2174
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/retained-object-growth.md": {
+      "sha256": "2c93a51ab15dbd37a80df881bd1546db54660b6dd0a4ca521ff7d4f07911117f",
+      "size_bytes": 10795
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/source-git-index.json": {
+      "sha256": "1ac645d121b1ebcca85efce45ac2ecebf46aa442225cc36c85498a44f2d67940",
+      "size_bytes": 5555
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-growth/verify_source_checkpoint.py": {
+      "sha256": "10b6e18cacba247e60612148127afd88b6b572efbd0becb13a852e14cef25f06",
+      "size_bytes": 1316
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-units-01/.gitattributes": {
+      "sha256": "308a40fa1d89ae5ea4390b4c9b46a0108b09f171f07898f25d451fa0c69c4e9f",
+      "size_bytes": 72
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-units-01/capture.json": {
+      "sha256": "a929f89635d6fc5e4bceee5cc3be9d5a3409d69178a7c80465b937af8dbe1a96",
+      "size_bytes": 1012
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-units-01/invocation.json": {
+      "sha256": "b66f88fcd0aa4796e4d416ffaf100b90801fcfa473f932ff523f127e85c7f7ab",
+      "size_bytes": 16194
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-units-01/units-host.json": {
+      "sha256": "28209fdfab37254c1813b78c06450864a411c863280539df8f19591d1cf1945c",
+      "size_bytes": 87
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-units-01/units-stderr.txt": {
+      "sha256": "58ea863cdef5ccd6234b6f4f460852b7a442c995e5c6e49f16d7091d2d056d43",
+      "size_bytes": 14739
+    },
+    "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s71-units-01/units-stdout.txt": {
+      "sha256": "58c2aaaff96bdcf1a13231542c7117e5b044ea47335eb760214b354133f50ece",
+      "size_bytes": 68
+    }
+  }
+}

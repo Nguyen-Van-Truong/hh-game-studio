@@ -1,0 +1,22 @@
+{
+  "host": {
+    "wrapper_pid": 31844,
+    "started_at": "2026-09-17T19:04:44.439882+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "-c",
+      "import unittest,json,sys; suite=unittest.TestLoader().loadTestsFromNames(['studio.tests.replay.test_native_benchmark','studio.tests.replay.test_benchmark_profile','studio.tests.replay.test_benchmark_campaign','studio.tests.replay.test_benchmark_assembly','studio.tests.replay.test_campaign_task']); r=unittest.TextTestRunner(verbosity=2).run(suite); print('GT06_S71_UNITS '+json.dumps({'run':r.testsRun,'failures':len(r.failures),'errors':len(r.errors),'skips':len(r.skipped)}),flush=True); sys.exit(not r.wasSuccessful())"
+    ],
+    "exit_code": 0,
+    "target_pid": 15068,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "units-stdout.txt",
+    "stderr": "units-stderr.txt",
+    "host": "units-host.json"
+  },
+  "source_unchanged": true
+}

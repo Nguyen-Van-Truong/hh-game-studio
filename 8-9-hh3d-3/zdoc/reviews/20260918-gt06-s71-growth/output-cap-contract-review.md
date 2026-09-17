@@ -1,0 +1,38 @@
+# S71 Output display cap — narrow contract assessment
+
+Read-only assessment on 2026-09-18 at HEAD `58d2bffe2b6fe25493dfaabeead931d6a6862211`. No engine/test/task action or implementation edit. This is a review of a proposed control, not a fix verification or GT06 acceptance signature.
+
+**Assessment:** fixing the disposable benchmark project's stock Output display limit at100 before import/launch is a defensible configuration control. It makes diagnostic presentation retention explicit, as required by the plan's bounded-diagnostic-retention intent. It does not excuse a retained-object increase under the unchanged gate. The measured scope must say **Output display paragraph limit100**; it must not imply default-editor configuration or a100-message bound on all editor memory.
+
+## Pinned API and bounds
+
+The engine pin is `ed1daf0bf001b61586d9930840f2f1394092c079`. Independent reads of the pinned official source confirm:
+
+- `editor_overrides/` is the project-setting prefix and `EditorSettings.get_setting()` resolves that override before the raw editor preference. Thus `[editor_overrides] run/output/max_lines=100` and the proposed native `get_setting()` assertion use the right API. The stock default is10000 and the declared supported range starts at100. [ProjectSettings prefix](https://github.com/godotengine/godot/blob/ed1daf0bf001b61586d9930840f2f1394092c079/core/config/project_settings.h), [override accessor](https://github.com/godotengine/godot/blob/ed1daf0bf001b61586d9930840f2f1394092c079/core/config/project_settings.cpp), [EditorSettings](https://github.com/godotengine/godot/blob/ed1daf0bf001b61586d9930840f2f1394092c079/editor/settings/editor_settings.cpp).
+- EditorLog reads the effective setting during construction. Its append path removes oldest RichTextLabel paragraphs while the count exceeds `line_limit+1` (one trailing paragraph). UndoRedo commit callbacks also add editor messages. However, the separate message vector still retains message text and supports rebuilding the display; this setting does not cap that vector. [Pinned EditorLog](https://github.com/godotengine/godot/blob/ed1daf0bf001b61586d9930840f2f1394092c079/editor/editor_log.cpp).
+- RichTextLabel's `Line` constructor instantiates a `TextParagraph`; paragraph removal releases line storage. That provides a concrete mechanism for the observed ObjectDB growth and for limiting its display component. [Line storage](https://github.com/godotengine/godot/blob/ed1daf0bf001b61586d9930840f2f1394092c079/scene/gui/rich_text_label.h), [paragraph removal](https://github.com/godotengine/godot/blob/ed1daf0bf001b61586d9930840f2f1394092c079/scene/gui/rich_text_label.cpp).
+
+The bound is100 displayed message paragraphs plus the trailing paragraph in this widget, **not100 whole-editor Objects**,100 physical wrapped text rows, or100 retained message strings. Other Objects, resources, OS handles and memory remain in the unadjusted totals.
+
+## Why the proposal can be valid, and the claim limit
+
+The proposal keeps a normal rolling display enabled, uses a supported stock setting, and preserves every workload operation and external stdout/stderr capture. Applying it once in the generated project before source freeze gives warmups and measured samples the same retention policy. An initial fill followed by ordinary oldest-paragraph eviction is a sustained implementation behavior; it is not selective cleanup at measurement boundaries. The plan already requires bounded diagnostic retention (`zdoc/8-9-godot-blender-agent-studio-plan.txt:1127`–1130) and freezes workload/metrics (`:1037`–1054).
+
+The setting nevertheless changes a material benchmark configuration. Declare its value and reason in the new candidate/configuration revision and bind it through the frozen generator, generated `project.godot` hash and native readback. Do not combine campaign02's default-cap samples with the replacement campaign or call their configurations identical. The existing v2 workload/threshold profile hash can remain only if it continues to mean the same mathematical workload and gates; the separate source/project configuration identity must visibly change. Changing a threshold, workload, sampling rule or the meaning of v2 would instead require explicit profile version/review. No such gate change is proposed here.
+
+The resulting claim is tools performance under this capped-display fixture configuration. A benchmark-only override does not prove performance with the stock10000-line display or automatically establish that a shipped/default editor configuration has the same retention behavior.
+
+## Evidence needed from integration
+
+1. Freeze the100 limit in generated project text before import/launch; include its exact bytes and the changed generator/native source in the dependency closure. Do not mutate global editor preferences, remove warning/error filters, switch to output-suppressing APIs, or clear histories between batches.
+2. Fail before workload starts if native `EditorInterface.get_editor_settings().get_setting("run/output/max_lines")` is missing or not the expected integer100. Preserve the observed value with the run/source/PID binding so reviewers need not infer configuration solely from source. The project hash and source checks must continue to reject configuration drift. The proposed comparison is directionally correct; typed readback is clearer than accepting a numerically equal foreign type.
+3. Demonstrate effective behavior in fresh native evidence. A one-cycle bootstrap can show loading/readback but cannot show post-fill stability. Repeated full-size batches must retain the same policy after the display fills, and all original ObjectDB/ResourceCache/RSS/handle checks remain active. Existing batch/ACK timing, baseline04,5+30 batches and10-process-run requirements remain unchanged.
+4. Preserve complete external stdout/stderr, raw counters, scene readbacks and error scanning. Older paragraphs disappearing from the Output widget must not erase evidence or prevent a warning/error from failing the run. Do not subtract estimated TextParagraph counts or reinterpret an unexplained residual as allowed growth. The retained internal strings remain subject to the original whole-editor RSS gate.
+
+`line-attribution.json` supports the mechanism: transition04→05 is+476 objects =376 captured stdout lines +100 create commits, and the last three transitions have zero arithmetic residual. Earlier warmup01→02 has+2 unassigned. This aggregate agreement is strong attribution evidence, not a per-object census or proof that every other lifetime is correct. A fresh measurement is still required.
+
+## Suggested report wording
+
+> The replacement benchmark fixture pins Godot's stock Output display paragraph limit to100 before startup and verifies the effective project override in the native editor. Complete external logs and unadjusted whole-process counters remain captured. This bounds displayed paragraph retention while retaining the existing workload, sampling and failure thresholds; it does not cap all internal editor log strings. Campaign02 remains failed/incomplete under its original configuration. The replacement run has a new frozen source/project identity and requires the complete campaign and two independent final candidate reviews before GT06 acceptance.
+
+Inputs reviewed: `bounded-output-log.patch.draft` SHA256 `81c7790c0cadb11f7afd0aab5e957fa4bdbacf0add543c403f87f3c360142d28`; `line-attribution.json` SHA256 `37ca564f280fec43870febd77126e4ee005ffacac4cecc9c79d601392a1d3b2f`; companion `retained-object-growth.md` and `measurement-contract-review.md`. No existing acceptance verdict or signature is extended by this assessment.

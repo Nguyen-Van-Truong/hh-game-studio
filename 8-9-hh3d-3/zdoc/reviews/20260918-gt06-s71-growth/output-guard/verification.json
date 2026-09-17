@@ -1,0 +1,41 @@
+{
+  "formal_acceptance": false,
+  "negative_guard_demonstrated": true,
+  "native_exit": {
+    "pid": 21368,
+    "exit_code": 86
+  },
+  "wrapper_exit": 86,
+  "job": {
+    "configured": true,
+    "assigned": true,
+    "closed": true,
+    "handle_retained": false,
+    "tainted": false,
+    "zero_observed": true,
+    "active_count": 0,
+    "create_uncertain": false,
+    "close_uncertain": false,
+    "failed_operations": [],
+    "native_error": null
+  },
+  "scene_unchanged": true,
+  "no_batch": true,
+  "warning": "WARNING: Scan thread aborted...\n   at: _notification (editor/file_system/editor_file_system.cpp:1757)\n",
+  "original_collector_outcome": "ASSERTION_FAILURE_ON_STDERR_AFTER_GUARD_CHECKS; original preserved, no rerun",
+  "interpretation": "Explicit startup rejection aborts editor filesystem scan. This is not a clean success lane. Positive fixed-setting native diagnostic stderr is empty.",
+  "files": {
+    "diagnostic.json": "a9916120e8cc406bbd1bb255494517779afb6ab6f1dfc49084db74408fea9ae6",
+    "import-host/capture.json": "a9748a46e6c6f75ccb03ba08b4462a6de0fe5fcd5214cd81b7295cb4dcb443f3",
+    "import-host/process-start.json": "d173e03ed58464c161acde8902b387fc8c586b520f975d27e16705046ae90e0b",
+    "import-host/process-exit.json": "6c1e33a348ef4b942d8056d25edec2d4e24cc9c2f313685c161187a8e1f7a73c",
+    "import-host/stdout.txt": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003",
+    "import-host/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "editor-host/invocation.json": "7341ee70d317303c27709ce1a6a3f3e3bf684b826f24794fed55e96745cc601a",
+    "editor-host/capture.json": "8e7794d3328b4d884583c282beef1a4a60c64af3d108889bef1618e94570d1ac",
+    "editor-host/process-start.json": "5deb41280fdafad9525d3867ff95961e64f5437228692d06156c4c09ba75cfb6",
+    "editor-host/process-exit.json": "5bc13483134aca617a9311f55aa09fc394dcbf362ecc0bfce75abb69a970d437",
+    "editor-host/stdout.txt": "b2f9626552f54a972af1cf82670504a08e1925f6a0524e4ed341e3bd7feefbd9",
+    "editor-host/stderr.txt": "7dddd217a9bd4fea7360395f693a5263d1087698e43b2b89d4670896753a2009"
+  }
+}

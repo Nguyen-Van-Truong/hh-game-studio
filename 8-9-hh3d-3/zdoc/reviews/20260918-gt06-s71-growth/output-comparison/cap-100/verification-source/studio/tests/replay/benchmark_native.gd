@@ -1,7 +1,7 @@
 @tool
 extends EditorPlugin
 ## Disposable native fixture only: direct accepted semantic adapter operations.
-## Fixed benchmark fixture; native diagnostics do not imply full acceptance.
+## DRAFT ONLY. Not activated or engine-validated; root integrates after freeze.
 ## This is not the public/API command benchmark and grants no publication ACK.
 ## Copy with benchmark_plugin.cfg to res://addons/hh_benchmark/; enable beside
 ## unchanged hh_studio. Import with HH_BENCHMARK_MODE unset. Activate using
@@ -150,16 +150,6 @@ func _boot() -> void:
         return
     if not Engine.is_editor_hint() or not _main_thread() or _mode not in ["full", "diagnostic"]:
         _fail("BENCHMARK_CONTEXT")
-        return
-    # get_setting() resolves the frozen project override; Object.get() does not.
-    # This bounds displayed paragraphs only; raw ObjectDB/RSS checks stay intact.
-    var editor_settings: EditorSettings = EditorInterface.get_editor_settings()
-    if editor_settings == null:
-        _fail("BENCHMARK_OUTPUT_LOG_LIMIT")
-        return
-    var output_limit: Variant = editor_settings.get_setting("run/output/max_lines")
-    if not output_limit is int or output_limit != 100:
-        _fail("BENCHMARK_OUTPUT_LOG_LIMIT")
         return
     var input_file: FileAccess = FileAccess.open(INPUT, FileAccess.READ)
     if input_file == null:

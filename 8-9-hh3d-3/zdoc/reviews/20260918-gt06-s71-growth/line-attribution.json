@@ -1,0 +1,104 @@
+{
+  "scope": "Read-only arithmetic from preserved stdout and sample/native JSON; no native execution or acceptance verdict",
+  "source_closure_sha256": "21a17b2a350160efb17950979adada0a2b3e12dbd95e12158833acbe9f233aa0",
+  "stdout_sha256": "ba0aad8543c6a4a878f507ed3bdc3019ca6751b3d13957d27db627f497bc9cc4",
+  "rows": [
+    {
+      "batch": 0,
+      "stdout_batch_line_1based": 126,
+      "raw_objects": 71259,
+      "ack_objects": 71261,
+      "cycles": 100
+    },
+    {
+      "batch": 1,
+      "stdout_batch_line_1based": 262,
+      "raw_objects": 71495,
+      "ack_objects": 71497,
+      "cycles": 100,
+      "previous_batch": 0,
+      "stdout_lines_since_previous_batch": 136,
+      "object_delta": 236,
+      "residual_after_stdout_plus_create_commits": 0,
+      "stdout_event_counts": {
+        "HH_GT06_BENCHMARK_BATCH": 1,
+        "HH_GT06_BENCHMARK_HEARTBEAT": 132,
+        "HH_GT06_BENCHMARK_ACK": 1,
+        "HH_GT06_BENCHMARK_READY": 1,
+        "HH_GT06_BENCHMARK_START": 1
+      }
+    },
+    {
+      "batch": 2,
+      "stdout_batch_line_1based": 608,
+      "raw_objects": 71943,
+      "ack_objects": 71945,
+      "cycles": 100,
+      "previous_batch": 1,
+      "stdout_lines_since_previous_batch": 346,
+      "object_delta": 448,
+      "residual_after_stdout_plus_create_commits": 2,
+      "stdout_event_counts": {
+        "HH_GT06_BENCHMARK_BATCH": 1,
+        "HH_GT06_BENCHMARK_HEARTBEAT": 342,
+        "HH_GT06_BENCHMARK_ACK": 1,
+        "HH_GT06_BENCHMARK_READY": 1,
+        "HH_GT06_BENCHMARK_START": 1
+      }
+    },
+    {
+      "batch": 3,
+      "stdout_batch_line_1based": 963,
+      "raw_objects": 72398,
+      "ack_objects": 72400,
+      "cycles": 100,
+      "previous_batch": 2,
+      "stdout_lines_since_previous_batch": 355,
+      "object_delta": 455,
+      "residual_after_stdout_plus_create_commits": 0,
+      "stdout_event_counts": {
+        "HH_GT06_BENCHMARK_BATCH": 1,
+        "HH_GT06_BENCHMARK_HEARTBEAT": 351,
+        "HH_GT06_BENCHMARK_ACK": 1,
+        "HH_GT06_BENCHMARK_READY": 1,
+        "HH_GT06_BENCHMARK_START": 1
+      }
+    },
+    {
+      "batch": 4,
+      "stdout_batch_line_1based": 1329,
+      "raw_objects": 72864,
+      "ack_objects": 72866,
+      "cycles": 100,
+      "previous_batch": 3,
+      "stdout_lines_since_previous_batch": 366,
+      "object_delta": 466,
+      "residual_after_stdout_plus_create_commits": 0,
+      "stdout_event_counts": {
+        "HH_GT06_BENCHMARK_BATCH": 1,
+        "HH_GT06_BENCHMARK_HEARTBEAT": 362,
+        "HH_GT06_BENCHMARK_ACK": 1,
+        "HH_GT06_BENCHMARK_READY": 1,
+        "HH_GT06_BENCHMARK_START": 1
+      }
+    },
+    {
+      "batch": 5,
+      "stdout_batch_line_1based": 1705,
+      "raw_objects": 73340,
+      "ack_objects": 73342,
+      "cycles": 100,
+      "previous_batch": 4,
+      "stdout_lines_since_previous_batch": 376,
+      "object_delta": 476,
+      "residual_after_stdout_plus_create_commits": 0,
+      "stdout_event_counts": {
+        "HH_GT06_BENCHMARK_BATCH": 1,
+        "HH_GT06_BENCHMARK_HEARTBEAT": 372,
+        "HH_GT06_BENCHMARK_ACK": 1,
+        "HH_GT06_BENCHMARK_READY": 1,
+        "HH_GT06_BENCHMARK_START": 1
+      }
+    }
+  ]
+}

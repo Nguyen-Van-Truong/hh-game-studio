@@ -143,8 +143,7 @@ def benchmark_project_config(trusted):
 
     The installed fixture remains unchanged. Godot normalizes minimal project
     text on editor startup; that is not an allowed source mutation in this run.
-    Add the benchmark plugin, pinned engine feature declaration, and a fixed
-    stock Output display limit. Full stdout/stderr remain externally captured.
+    Only add the benchmark plugin and the pinned engine feature declaration.
     """
     sections = {}
     current = None
@@ -167,10 +166,6 @@ def benchmark_project_config(trusted):
         'editor_plugins': ['enabled=PackedStringArray("res://addons/hh_studio/plugin.cfg")'],
     }, 'DIAGNOSTIC_PLUGIN_CONFIG')
     sections['application'].append('config/features=PackedStringArray("4.7")')
-    # Visible Output paragraphs own Objects. Bound the display before startup,
-    # so warmup can fill it; raw counters and externally captured logs remain.
-    # EditorLog retains message strings separately, still covered by RSS checks.
-    sections['editor_overrides'] = ['run/output/max_lines=100']
     sections['editor_plugins'] = ['enabled=PackedStringArray("res://addons/hh_studio/plugin.cfg", "res://addons/hh_benchmark/plugin.cfg")']
     header = ("; Engine configuration file.\n; It's best edited using the editor UI and not directly,\n"
         "; since the parameters that go here are not all obvious.\n;\n; Format:\n"

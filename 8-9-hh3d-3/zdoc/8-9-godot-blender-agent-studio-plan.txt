@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 18-09-2026, Asia/Saigon | Revision S70 | TRIỂN KHAI THEO GATE
+Ngày 18-09-2026, Asia/Saigon | Revision S71 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S70
+PLAN_REVISION=S71
 EXECUTION_MODE=COORDINATOR_THREE_ASTRA_XHIGH_OWNER_20260918
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -56,7 +56,7 @@ GT05_CHECKPOINT_COMMIT=808d8ba
 GT06_EVIDENCE_STATUS=NATIVE_DIAGNOSTICS_IN_PROGRESS_NO_ACCEPTANCE
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
 
-TIẾN ĐỘ HIỆN HÀNH — S70, ngày 18-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S71, ngày 18-09-2026
 GT-01–05 đã ACCEPTED. GT-06 mở sau hai review độc lập S64 cùng manifest.
 Owner đã cho phép lại ba Astra extra high; coordinator tiếp tục từ S68 đã tích hợp.
 Ba worker mới đã hoàn thành review implementation/mapping S69; không phải critic
@@ -151,22 +151,37 @@ GT-06 hiện hành — tóm tắt theo kết quả, chi tiết giữ trong evide
   75/75 affectedtests tại -s70-units-03 đạt19.106s, khôngskip, actualexits0,
   tree sạch/source ổn định. Không cộng với75test ở -02 (trước bổ sung schema).
   Source đã đổi nên campaign02 phải tạo fresh; không dùng prefix01 làm sample.
-- Checkpoint9bc28b6 đã khởi chạy gt06-s70-campaign-02 lúc01:25:28 ngày18-09
-  qua TaskScheduler on-demand. Quan sát01:27:07: taskRUNNING, warmupbatch0
-  đãcapture và sáu artifactrefs khớp; host/editorstderr trống, đangbatch1.
-  49sourcefiles khớp live/frozen/Git; closure
-  21a17b2a350160efb17950979adada0a2b3e12dbd95e12158833acbe9f233aa0.
-  Đây là startup/warmup, chưa có fullrun/measuredsample/PASS. Mỗi lượt tiếp
-  phải query task hiện tại, không suy RUNNING từ dòng lịch sử này. Launchproof:
-  reviews/20260918-gt06-s70-resume/campaign02-launch.json. Matrixdraft,
-  closure-packaging-check và campaign-operations đã lưu trong cùng thư mục.
+- S70 campaign02 (source9bc28b6, closure21a17b2a…aa0) đã FAILED sau910.578s:
+  5warmup+batchđođầutiên, không có fullrun. EditorObjects72866→73342 (+476)
+  vi phạm nguyên ngưỡng; resource/handles đứng yên, RSS không vi phạm.
+  Hostactualexit1; editor bị cleanup với wrapper2, thiếu nativeexitrecord:
+  không gán wrapper2 thành nativeexit. Jobclosedzero/handlesreleased đã kiểm,
+  schedulerterminal1 và task đã xóa. Giữ58file failure/counter/ownership nhỏ,
+  hash và raw gốc: reviews/20260918-gt06-s71-growth/campaign02-failure/.
+- S71 chẩn đoán khớp +476 =376stdoutparagraph+100UndoRedoactionparagraph
+  trong Output stockGodot; không phải bằng chứng scene leak. Đối chứng riêng
+  3×50nativecycles giữ full external logs: cap100 đã phẳng giữa hai batchcuối.
+  Cấu hình project cố định editor_overrides/run/output/max_lines=100 trước
+  import/freeze, nativebootstrap kiểm effectiveget_setting/type/value. Chỉ
+  giới hạn paragraph hiển thị; chuỗi log nội bộ vẫn giữ nên RSS gate không đổi.
+  Không trừ/resetcounter/clearhistory, không đổi5+30×10 hoặc ngưỡng nghiệm thu.
+  Source chỉ đổi hai benchmarkdriver; acceptedadapter và production không đổi.
+  Native1cycle source mới đạt exit0/Jobclosedzero/stderrtrống. Setting101 bị
+  reject trước cycle0, native/helper86, scene nguyên và Jobclosedzero; giữ cả
+  cảnh báo Scan thread aborted của negativecase, không gọi cleanPASS.
+  Hai diagnosticcollector có lỗi đọc index/giả định stderrtrống; giữ lỗi và
+  khôi phục kết quả từ raw đã hoàn tất, không chạy lại native để sửa metadata.
+  Chi tiết/research/đối chứng: reviews/20260918-gt06-s71-growth/.
+  79/79 affectedunit đạt49.540s, actualexits0/ownedtree/sourceunchanged;
+  evidence riêng -s71-units-01, không cộng với các lượt test cũ.
+  Cần freshcampaign cho source mới; không resume/trộn sample campaign02.
 - Owner yêu cầu tiếp tục qua đêm18-09: heartbeat task hiện tại đã ACTIVE,
   id=ti-p-t-c-hh3d-tools-qua-m, kiểm/tiếp việc mỗi15phút. Readback lưu tại
   reviews/20260918-gt06-s70-resume/overnight-schedule.json. Không tạo lịch trùng;
   chỉ đọc status/tail khi đang đo, sửa/resume phần lỗi theo proof khi terminal,
   đủ evidence thì hai critic độc lập cùnghash rồi mới mở gate kế tiếp.
-  Ba warmup đầu mất58.20/64.92/181.94s: ước lượng sớm6–18giờ riêng benchmark,
-  biến động lớn và chưa có measuredsample/fullrun, không hứa xongplan trước sáng.
+  Ước lượng6–18giờ trước đây chỉ từ warmup campaign02 đãFAILED; không phải ETA
+  hiện hành. Chỉ ước lượng lại từ batch hoàn chỉnh của campaign mới.
   Máy/app phải hoạt động; không chạy thêm engine/test nặng cạnh phép đo.
   Ba worker đã lưu overnight-estimate.md, fault-coverage-links.md và
   android-prerequisite-status.md: F11/F12 có dependency/test links, không thấy
@@ -197,6 +212,10 @@ Lịch sử chi tiết S69 trước tinh gọn: reviews/20260918-plan-history-s6
 tools-plan-s69.txt (AUTHORITY=0), SHA256 924bbf4e4d6f182a33ea7dd7bee23a8b83323669a00ae5fb318f7ef72f6407a2.
 
 KINH NGHIỆM ĐANG ÁP DỤNG
+- S71: counter toàn editor gồm object của Output UI. Cố định display capacity
+  trước warmup, kiểm native readback, giữ full raw log/RSS và disclosure cấu hình;
+  không giảm ngưỡng để khớp số đo. Metadata collector phải đọc đúng schema;
+  native đã hoàn tất thì sửa/verify collector từ raw, không lặp workload.
 - S70 closure: sys.modules chỉ cho dependency đang import trong một process;
   khai báo thêm entrypoint/data dependency dùng chung và so map ở interpreter
   riêng trước lượt dài. Launcher probe ngắn không thay actual campaign startup.

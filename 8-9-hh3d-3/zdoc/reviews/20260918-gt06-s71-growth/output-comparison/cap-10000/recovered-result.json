@@ -1,0 +1,117 @@
+{
+  "formal_acceptance": false,
+  "no_native_rerun": true,
+  "original_collector_failed": true,
+  "original_failure_retained": true,
+  "recovered_result": {
+    "actual_process_exit": {
+      "exit_code": 0,
+      "pid": 6052
+    },
+    "batches": [
+      {
+        "index": 0,
+        "memory": {
+          "editor": {
+            "held_handles": {
+              "unavailable_reason": "Requires retained host process sampler",
+              "value": null
+            },
+            "objects": {
+              "unavailable_reason": null,
+              "value": 71110
+            },
+            "resources": {
+              "unavailable_reason": null,
+              "value": 6
+            },
+            "rss_bytes": {
+              "unavailable_reason": "Requires retained host process sampler",
+              "value": null
+            }
+          },
+          "monotonic_us": 16695777,
+          "phase": "post_batch_quiescent",
+          "process_frame": 980,
+          "settle_frames": 161,
+          "settle_us": 1107022
+        }
+      },
+      {
+        "index": 1,
+        "memory": {
+          "editor": {
+            "held_handles": {
+              "unavailable_reason": "Requires retained host process sampler",
+              "value": null
+            },
+            "objects": {
+              "unavailable_reason": null,
+              "value": 71182
+            },
+            "resources": {
+              "unavailable_reason": null,
+              "value": 6
+            },
+            "rss_bytes": {
+              "unavailable_reason": "Requires retained host process sampler",
+              "value": null
+            }
+          },
+          "monotonic_us": 26826406,
+          "phase": "post_batch_quiescent",
+          "process_frame": 1792,
+          "settle_frames": 162,
+          "settle_us": 1115154
+        }
+      },
+      {
+        "index": 2,
+        "memory": {
+          "editor": {
+            "held_handles": {
+              "unavailable_reason": "Requires retained host process sampler",
+              "value": null
+            },
+            "objects": {
+              "unavailable_reason": null,
+              "value": 71254
+            },
+            "resources": {
+              "unavailable_reason": null,
+              "value": 6
+            },
+            "rss_bytes": {
+              "unavailable_reason": "Requires retained host process sampler",
+              "value": null
+            }
+          },
+          "monotonic_us": 36982305,
+          "phase": "post_batch_quiescent",
+          "process_frame": 2604,
+          "settle_frames": 162,
+          "settle_us": 1111424
+        }
+      }
+    ],
+    "capture_sha256": "4122fff36efea530390766cdfba0ba253428441bba204c190e5c9a0ad769be6b",
+    "completed_diagnostic": true,
+    "formal_acceptance": false,
+    "full_benchmark": false,
+    "job": {
+      "active_count": 0,
+      "assigned": true,
+      "close_uncertain": false,
+      "closed": true,
+      "configured": true,
+      "create_uncertain": false,
+      "failed_operations": [],
+      "handle_retained": false,
+      "native_error": null,
+      "tainted": false,
+      "zero_observed": true
+    },
+    "output_max_lines": 10000
+  },
+  "recovery": "read-only reconstruction from existing batch index keys"
+}

@@ -1,0 +1,6 @@
+# Captures and frozen source copies retain original bytes, including CRLF.
+* -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+# Unified diff context contains an intentional leading space on blank lines.
+*.patch.draft whitespace=-blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+# Godot emits a final blank line in captured native stdout.
+**/stdout.txt whitespace=blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
