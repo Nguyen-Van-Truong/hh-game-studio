@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "scope": "GT04_S56_COMPONENT_FILE_AUDIT",
+  "formal_acceptance": false,
+  "recorded_at": "2026-09-17T00:45:52.116130+00:00",
+  "source_closure_sha256": "71332451f3914f42f3a35dc8702a1c0eb3cb3cb6d99adfa4b8ca317373dd8162",
+  "source_files_per_snapshot": 129,
+  "unit_tests": {
+    "deadline_all": 440,
+    "writer_focused": 174
+  },
+  "native_checks": {
+    "deadline": 19,
+    "writer_parent": 7
+  },
+  "http_calls": 23,
+  "http_checks": 31,
+  "common_commands": 7,
+  "common_journal_records": 15,
+  "native_lease_records": 3,
+  "assertions": 4321,
+  "native_handles_opened": 0,
+  "engines_launched": 0,
+  "journal_constructors_called": 0,
+  "public_ack": false,
+  "scene_state_durable": false,
+  "limitations": [
+    "Component evidence only; GT04 remains unaccepted.",
+    "Seven native submission counter checks are captured harness observations; no raw IPC packet log is claimed.",
+    "Known-secret byte comparison is captured by the frozen harness; this audit also rejects credential-shaped fields.",
+    "Historical native revisions are opaque float-preserving tokens; only declared JCS observation hashes are recomputed."
+  ]
+}

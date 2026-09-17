@@ -1,0 +1,18 @@
+{
+  "original_source_closure": "9cf755399b6b7ffcf69fdd0ff7b8c56178cee7da1413197e886cd353fd9e970f",
+  "fixed_source_closure": "71332451f3914f42f3a35dc8702a1c0eb3cb3cb6d99adfa4b8ca317373dd8162",
+  "changed_files": {
+    "tests/blender/run_absolute_deadline_probe.py": {
+      "before": "f1da84ad81da0eeb5068dbbf37aff7d7fb1a02ec49c234f1a7db39e78bad2391",
+      "after": "b48814318aa2034ba0ddde285b1de7fb61d4d7ac61d9451e96c10ce0f3bd6ddc"
+    },
+    "tests/blender/test_absolute_deadline_probe.py": {
+      "before": "caf3a605e9b4591cbca96896554481e93775f8f47ebcd1300261658d5c71d57a",
+      "after": "d83fa759b3d466ab38138c5710a58afec22878ef39c7e185bb732b0c4e9cdfea"
+    }
+  },
+  "runtime_files_unchanged": true,
+  "original_native_result": "FAIL",
+  "fixed_native_result": "PASS",
+  "formal_acceptance": false
+}

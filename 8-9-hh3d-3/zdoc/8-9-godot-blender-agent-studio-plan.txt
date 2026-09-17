@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 17-09-2026, Asia/Saigon | Revision S55 | TRIỂN KHAI THEO GATE
+Ngày 17-09-2026, Asia/Saigon | Revision S56 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S55
+PLAN_REVISION=S56
 EXECUTION_MODE=COORDINATOR_THREE_CODEX_ULTRA_OWNER_20260917
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -44,11 +44,11 @@ GT03_CHECKPOINT_COMMIT=323882b
 GT03_WORKING_SOURCE_STATUS=S55_FROZEN_ACCEPTED
 GT03_PENDING_SOURCE_CLOSURE=NONE
 GT03_TEST_DRIVER_MODE=PINNED_CLEANUP_SUPPLEMENT_OVER_UNCHANGED_S55_RUNTIME
-GT04_EVIDENCE_STATUS=READ_CLIENT_AND_INTERNAL_PUBLICATION_COMPONENT_CANDIDATES_GAPS_OPEN
-GT04_LAST_TESTED_SOURCE_CLOSURE=a18e6de9563e770fe7258242c369abdef04f2af692995360ff3f5402b488d9b7
-GT04_WORKING_SOURCE_STATUS=S55_READ_CLIENT_AND_LEDGER_NATIVE_TESTED_WRITES_UNADVERTISED
+GT04_EVIDENCE_STATUS=WRITER_CLIENT_AND_INTERNAL_PUBLICATION_COMPONENT_CANDIDATES_GAPS_OPEN
+GT04_LAST_TESTED_SOURCE_CLOSURE=71332451f3914f42f3a35dc8702a1c0eb3cb3cb6d99adfa4b8ca317373dd8162
+GT04_WORKING_SOURCE_STATUS=S56_WRITER_HTTP_NATIVE_TESTED_COMPONENT_CANDIDATE
 
-TIẾN ĐỘ HIỆN HÀNH — S55, ngày 17-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S56, ngày 17-09-2026
 GT-01, GT-02 và GT-03 ACCEPTED; đang hoàn thiện GT-04.
 GT-05 chưa mở. Root điều phối3 worker Codex Astra ultra, một writer/file;
 chỉ một engine/Linux/native-journal integration lane chạy tại một thời điểm.
@@ -67,50 +67,37 @@ PASS/TICK=yes cùng effective closure. GT04 vẫn chưa nghiệm thu.
   runtime3a220b.../effectivebde6e7... ở markers trên. Hai critic độc lập
   reviews/20260917-gt03-s55-critic-{a,b}-final.md PASS/TICK=yes cùng closure.
 
-Godot GT-03:
-- Baseline S53 hoàn chỉnh557/557 unit + script31/save17/Stop19 native,
-  closure31a66517322bc57665aa316c53a88686ee27037a38ff055b1744327ad2464cec,
-  audit reviews/20260917-gt03-s53-audit. Đây là baseline, chưa phải GT03ACCEPTED.
-- S54 edit-publication03 đạt61/61 CRUD/UndoRedo→save→durable idle Stop→reopen;
-  FIFO native01 đạt44/44 +17 audit; recovery-publication01 đạt14/14.
-  Mỗi package giữ closure riêng; không gán kết quả này sang live source mới.
-- S54 recovery-cuts02/03 đạt5 nhóm crash108 checks, actual publisher exits
-  93/94/96/98/95 và case0/wrapper0/Jobs sạch, cùngruntime
-  478797d092509af2ae88cf3ad7a71b28b09a55e401d4b51e90c91544c0319564.
-  Audit: reviews/20260917-gt03-s54-recovery-cuts-audit/component-summary.md.
-  Atomic inspection bỏ đọc lặp trong một lock, không cache qua phase hoặc
-  bỏ barrier/quyền. Hai resume deadline29s cũ và raw scannerFAIL được giữ.
-- Stop có canonical stop_port riêng; lookup có một I/O slot. Slow headers/
-  lookup trên work/control không giữ cổng Stop; saturation chính Stop và OS
-  scheduling không nằm trong cam kết này. Focused65/65 đạt. Hết64 ticket:
-  chỉ exact active caller lease còn write; caller khác/hết hạn chỉ read.
-- S55 khóa176sourcefiles chung tại reviews/20260917-gt03-s55-source-01,
-  closure3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e.
-  Trên snapshot này: extended recovery native4/4 và canonical Stop20/20 đạt,
-  actual exits0/0/tree/logs/source sạch. Edit native61/61 cũng đạt; full unit
-  matrix đã hoàn tất699/699, không skip/error/failure, sáu module cùng snapshot
-  và actual exits/owned trees hợp lệ. Script02 đạt32/32, save01 đạt18/18;
-  cả bốn lane Stop/edit/script/save đã đối chiếu native custody/selected bytes.
-  FIFO đạt44/44, recovery-publication14/14; scene-CAS, script-committed,
-  script-retired và edit-applied đều21/21. Script-unwitnessed01 bị gián đoạn,
-  thiếu raw host exit/capture nên giữ INCOMPLETE; lane02 đã đạt24/24 với
-  actual original crash95, recovery0/wrapper0 và owned trees sạch. Cả11lane
-  native đã hoàn tất trên cùng source; custody cả11lane đã đối chiếu đúng.
-  semantic08 đầy đủ:699unit,297native assertions,19rawLinuxruns;52/52
-  corruption checks,2120portablefiles, final effective closure204files ở trên.
-  Hai critic cuối PASS/TICK=yes cùng hash; coordinator đã nghiệm thuGT03.
-- Script S55-01 giữ FAIL: harness gọi close khi Stop persistence còn PENDING;
-  owner trả DRAIN_REQUIRED và giữ quyền cleanup đúng contract. Driver bổ sung
-  chỉ chờ DURABLE/capture state trước close, có hash/argv riêng. Runtime176file
-  và unit dependencies không đổi; chỉ rerun lane bị ảnh hưởng. Final manifest
-  phải ghi cả runtime và driver thực thi để hai critic review cùng một hash.
-- Units S54-01 vẫn INCOMPLETE: other627/627 nhưng journal thiếu completion
-  sau600s. Không dùng các dòng ok thay exit. Runner mới chia module và lưu
-  từng attempt; chỉ reuse lane hoàn tất có hash/inventory/rawexit hợp lệ.
-- Bảng DoD/gap hiện hành: reviews/20260917-gt03-s54-gap-audit/gt03-closeout-map.md.
-  Các gap final matrix/Git proof/hai critic đã khép tại semantic08/S55.
+Godot GT-03 đã khép tại S55:
+- Source 323882b; runtime 176 file và effective closure 204 file ở markers trên.
+  semantic-08: 699/699 unit, 11 native lanes/297 assertions/19 raw Linux runs;
+  actual exits/owned trees/custody/source sạch. 52 corruption checks đạt,
+  2120 portable files; Git proof 2706 files byte index/HEAD khớp checkpoint.
+- Hai critic cuối PASS/TICK=yes cùng effective closure; acceptance.json giữ
+  toàn bộ binding và phạm vi hỗ trợ. Không chạy lại GT03 khi chỉ sửa Blender.
+- Các lượt FAIL/INCOMPLETE và lý do sửa giữ trong evidence: script01 cleanup
+  trước durable Stop; script-unwitnessed01 thiếu raw exit/capture; unitsS54-01
+  journal thiếu completion. Chỉ rerun lane tương ứng trên đúng source.
+- Lịch sử chi tiết S55: reviews/20260917-plan-history-s55/tools-plan-s55.txt
+  (AUTHORITY=0), SHA256 305d9fa5314db5a7dc73689e465f699caf4146434edaad646c68be430ae53940.
 
 Blender GT-04:
+- S56 writer đã có native HTTP evidence trên closure713324... ở markers trên:
+  reviews/20260917-gt04-s56-deadline-02 đạt440/440 toàn bộ unit+19 native;
+  reviews/20260917-gt04-s56-writer-01 cùng source,174 focused tests cũng đạt.
+  Client HTTP process riêng tạo/transform/material/Undo/Redo/read, exact retry,
+  conflict và chống dùng lạiID từ phiên khác, lookup và Stop; đúng7 native
+  data dispatches, actual CLI/GUI/host/wrapper exits0 và owned Job0.
+  Ledger46/46, owner37/37 gồm regression revoke, mất terminal reply và
+  cross-session public-ID. Deadline01 giữFAIL do probe tính native revision
+  từ JCS; runtime không đổi, sửa hai chỗ trong probe và chạy fresh02.
+  File-only audit s56-audit đạt: 300 portable files,23 HTTP calls/31 checks,
+  7 common commands/15 ledger records và3 native lease records khớp source,
+  Request/private operation/Response, raw exits và closed Job. Chưa nghiệm thuGT04.
+  Root giữ đường tích hợp; worker tách tests/review/probe, không sửa coreGT02.
+  Owner candidate chỉ inspect và edit chưa save: intent trước effect, exact
+  native lease, deadline gốc tới main thread, terminal receipt rồi mới giao
+  kết quả qua kiểm quyền. Save/export, preview/diff và durable common binding
+  còn phải nối trước nghiệm thu; public_ack vẫn false.
 - Material/FIFO/protected publication/crash+Stop có component evidence riêng;
   publication03 là135Python/16native trên closurefc54433...; audit giữ hash đầy đủ.
 - Recovery02 đã chạy8cases. Focused stop_export supplement khép actual child
@@ -136,7 +123,8 @@ Blender GT-04:
   Review độc lập phát hiện lỗi guard-release chưa phân loại UNKNOWN; đã sửa
   cả admission/terminal,30/30 ledger tests đạt trên source sửa. Probe thật
   reviews/20260917-gt04-ledger-native-01 đạt42focused tests+25native checks;
-  117sourcefiles closurea18e6de... ở trên, actual GUI/host/wrapper exit0,Job0.
+  117sourcefiles tại source-closure.json của package ledger-native-01;
+  actual GUI/host/wrapper exit0,Job0. Đây là source S55 riêng, không phảiS56.
   File-only audit khớp journal/Request/native/Response và9corruptionchecks.
   Ledger chưa quảng bá write capability/public ACK; reopen trong probe chỉ
   Journal mới của cùng live owner, không claim phục hồi GUI đã crash.
@@ -158,6 +146,18 @@ tools-plan-before-s55.txt (AUTHORITY=0), SHA256 b07c86c36c565c3a95404a6084cd6df0
 Các archive và mọi failure/verdict cũ giữ nguyên; không hạDoD đểtick.
 
 KINH NGHIỆM ĐANG ÁP DỤNG
+- S56: lưu kết quả effect và cho phép giao response là hai bước; revoke trong
+  lúc native chạy không xóa effect nhưng phải chặn giao observation sau revoke.
+  Nếu terminal đã ghi mà mất reply, giữ receipt gốc/UNKNOWN và lookup; không
+  gọi finish lần hai bằng response khác. Native float-JSON revision không
+  được tính lại từ snapshot qua JCS (1.0 thành1); giữ native revision và công
+  bố hash-domain riêng cho observation. Deadline tuyệt đối phải tới queue
+  Blender, TTL lúc IPC nhận không được gia hạn lệnh cũ.
+  Dedupe vẫn là(project_id,command_id): session chỉ giới hạn quyền đọc receipt,
+  không được tạo namespace mới để cùng ID chạy effect lần nữa. Test phải đổi
+  authenticated grant và cấp fence mới, không chỉ thử token lạ/lease hết hạn.
+  Raw unittest/engine logs trên Windows có CRLF: parser nhận cảCRLF/LF, không
+  sửa bytes evidence để hợp regex. Hash luôn tính trên file gốc đã capture.
 - S55: Stop latching khác durable Stop completion; giữ owner và poll trạng
   thái persistence trước cleanup. Public/native ID có grammar khác nhau;
   validate fixture setup trước launch. Test phải ghép read client với writer
