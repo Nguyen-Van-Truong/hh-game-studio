@@ -1,0 +1,156 @@
+{
+  "schema": "HH-GT06-S73-AFFECTED-DEPENDENCY-BRIDGE-DRAFT-1",
+  "status": "PREPARATION_ONLY_RECORDED_INPUTS_NOT_REAUDITED",
+  "formal_acceptance": false,
+  "critic_verdict": null,
+  "campaign_id": "gt06-s73-campaign-01",
+  "source_revision": "cb4d1f6f",
+  "benchmark_source_closure_sha256": "6f5d4c8a14ef8476c4cff6afb06ab161b17905f8593f9a685cd235593d7ee913",
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "changed_dependency": {
+    "path": "host/replay/verified_journal.py",
+    "previous_sha256": "3bdc1414166c132236149629b14bde456d142578cc3d08e0fd1faf5a4285d5eb",
+    "current_sha256": "9128749e6a04242106e56a86e959b6de0a67e0f10ffb97965e1bc88390d5a6f2",
+    "scope": "Private in-memory full-history fingerprint uses SHA512; 64KiB read loop and existing shape/identity/size/policy/parser/fsync checks retained. Persisted records, wire digests and evidence/source hashes remain SHA256."
+  },
+  "consumers": [
+    "studio/tests/replay/benchmark_commands.py",
+    "studio/host/replay/service.py"
+  ],
+  "focused_validation": "zdoc/reviews/20260918-gt06-s73-recovery/focused-validation.json",
+  "service_manifest": "zdoc/reviews/20260918-gt06-s73-recovery/service-remint/verification.json",
+  "service_manifest_sha256_recorded": "f29b942a9dd84fe9c73e6e537650f57fab2fd40470ac3dce870f7e7fa86de1d5",
+  "recorded_total_checks": 158,
+  "recorded_raw_files": 1281,
+  "recorded_raw_bytes": 43962707,
+  "lanes": [
+    {
+      "mode": "http-complete",
+      "run_id": "gt06-s73-http-complete-01",
+      "recorded_checks": 96,
+      "expected_stop": false,
+      "raw_root": "studio/.local/reviews/gt06-s73-http-complete-01",
+      "coordinator_owner_root": "zdoc/reviews/20260918-gt06-s73-recovery/service-remint/http-complete",
+      "review_selected_copy": "zdoc/reviews/20260918-gt06-s73-recovery/service-remint/selected/gt06-s73-http-complete-01",
+      "additional_raw_owner": null,
+      "native_exit_interpretation": "recorded natural native exit0; verify original process-exit plus owning Job capture",
+      "finalization": "Bind original raw receipts/checks/captures/source-files/runtime logs and owner invocation/actual exits; copied summary or outer exit alone is insufficient."
+    },
+    {
+      "mode": "http-stop",
+      "run_id": "gt06-s73-http-stop-01",
+      "recorded_checks": 12,
+      "expected_stop": true,
+      "raw_root": "studio/.local/reviews/gt06-s73-http-stop-01",
+      "coordinator_owner_root": "zdoc/reviews/20260918-gt06-s73-recovery/service-remint/http-stop",
+      "review_selected_copy": "zdoc/reviews/20260918-gt06-s73-recovery/service-remint/selected/gt06-s73-http-stop-01",
+      "additional_raw_owner": null,
+      "native_exit_interpretation": "intentional Stop; native_actual_exit null; require zero/closed Job, distinct actual outer exit0",
+      "finalization": "Bind original raw receipts/checks/captures/source-files/runtime logs and owner invocation/actual exits; copied summary or outer exit alone is insufficient."
+    },
+    {
+      "mode": "saturated-stop",
+      "run_id": "gt06-s73-saturated-stop-01",
+      "recorded_checks": 15,
+      "expected_stop": true,
+      "raw_root": "studio/.local/reviews/gt06-s73-saturated-stop-01",
+      "coordinator_owner_root": "zdoc/reviews/20260918-gt06-s73-recovery/service-remint/saturated-stop",
+      "review_selected_copy": "zdoc/reviews/20260918-gt06-s73-recovery/service-remint/selected/gt06-s73-saturated-stop-01",
+      "additional_raw_owner": "studio/.local/reviews/gt06-s73-saturated-stop-01-outer",
+      "native_exit_interpretation": "intentional Stop; native_actual_exit null; require zero/closed Job, distinct actual outer exit0",
+      "finalization": "Bind original raw receipts/checks/captures/source-files/runtime logs and owner invocation/actual exits; copied summary or outer exit alone is insufficient."
+    },
+    {
+      "mode": "revoked-result",
+      "run_id": "gt06-s73-revoked-result-01",
+      "recorded_checks": 18,
+      "expected_stop": false,
+      "raw_root": "studio/.local/reviews/gt06-s73-revoked-result-01",
+      "coordinator_owner_root": "zdoc/reviews/20260918-gt06-s73-recovery/service-remint/revoked-result",
+      "review_selected_copy": "zdoc/reviews/20260918-gt06-s73-recovery/service-remint/selected/gt06-s73-revoked-result-01",
+      "additional_raw_owner": "studio/.local/reviews/gt06-s73-revoked-result-01-outer",
+      "native_exit_interpretation": "recorded natural native exit0; verify original process-exit plus owning Job capture",
+      "finalization": "Bind original raw receipts/checks/captures/source-files/runtime logs and owner invocation/actual exits; copied summary or outer exit alone is insufficient."
+    },
+    {
+      "mode": "stale-capture",
+      "run_id": "gt06-s73-stale-capture-01",
+      "recorded_checks": 17,
+      "expected_stop": false,
+      "raw_root": "studio/.local/reviews/gt06-s73-stale-capture-01",
+      "coordinator_owner_root": "zdoc/reviews/20260918-gt06-s73-recovery/service-remint/stale-capture",
+      "review_selected_copy": "zdoc/reviews/20260918-gt06-s73-recovery/service-remint/selected/gt06-s73-stale-capture-01",
+      "additional_raw_owner": "studio/.local/reviews/gt06-s73-stale-capture-01-outer",
+      "native_exit_interpretation": "recorded natural native exit0; verify original process-exit plus owning Job capture",
+      "finalization": "Bind original raw receipts/checks/captures/source-files/runtime logs and owner invocation/actual exits; copied summary or outer exit alone is insufficient."
+    }
+  ],
+  "source_domains": [
+    {
+      "domain": "benchmark",
+      "count": 49,
+      "map": "zdoc/reviews/20260918-gt06-s73-recovery/source-git-index.json#/source_files",
+      "algorithm": "studio-relative path+NUL+per-fileSHA256+LF map closure",
+      "sha256": "6f5d4c8a14ef8476c4cff6afb06ab161b17905f8593f9a685cd235593d7ee913"
+    },
+    {
+      "domain": "remint_review_runner",
+      "count": 148,
+      "map": "zdoc/reviews/20260918-gt06-s73-recovery/service-remint/source-files.json",
+      "sha256": null,
+      "note": "Separate review source map; not the173-file runtime map."
+    },
+    {
+      "domain": "remint_runtime_each_lane",
+      "count": 173,
+      "map": "each raw_root/source-files.json",
+      "map_file_sha256_recorded": "d09916f43504aaba9a440cdadd59859ac7e7ca24c307ae3b99f4275feeb6dc95",
+      "note": "Hash is exact source-files.json bytes, not benchmark map closure."
+    }
+  ],
+  "named_comparison_observed": {
+    "path": "host/replay/verified_journal.py",
+    "sha256": "9128749e6a04242106e56a86e959b6de0a67e0f10ffb97965e1bc88390d5a6f2",
+    "maps_read": [
+      "zdoc/reviews/20260918-gt06-s73-recovery/source-git-index.json",
+      "zdoc/reviews/20260918-gt06-s73-recovery/service-remint/source-files.json",
+      "zdoc/reviews/20260918-gt06-s73-recovery/service-remint/selected/gt06-s73-http-complete-01/source-files.json"
+    ],
+    "scope": "Only this named changed-dependency value was compared; no full raw/source hash audit during measurement."
+  },
+  "original_causal_chain": [
+    {
+      "stage": "S65 seeded fault",
+      "root": "studio/.local/reviews/gt06-s65-native-04",
+      "provenance": "original frozen source/trace/capture"
+    },
+    {
+      "stage": "S65 authenticated GT03 repair",
+      "root": "studio/.local/reviews/gt06-s65-repair-02",
+      "provenance": "original command_id, before/after source and durable repair02 receipt"
+    },
+    {
+      "stage": "S65 replay",
+      "root": "studio/.local/reviews/gt06-s65-native-05",
+      "provenance": "original repaired trace/capture; diagnostic scope unchanged"
+    },
+    {
+      "stage": "S69 managed replay",
+      "root": "studio/.local/reviews/gt06-s69-managed-replay-01",
+      "driver_root": "studio/.local/reviews/gt06-s69-managed-replay-01-driver",
+      "source_closure_sha256": "491b65875f8246e7606c7b860d9c61d6a85657fc0077075fa6dc7209128dca2b",
+      "capture_sha256": "d2f4985f75d6017e8ce13078d69973b9c7294a2719748cc978ba0977c0e6d0e5",
+      "selected_config_sha256": "4fe3141b9afe6b411b585b203cebae77e851a406c291ac26620eb8cd7c018d90",
+      "provenance": "original repair-replay.json links original repair02 receipt; not rerun or relabelled S73"
+    }
+  ],
+  "finalization_rules": [
+    "After terminal, compare full path sets and hashes within each lane domain, and enumerate changed/added/removed dependencies.",
+    "Older S68 GUI runtime173 maps and S69 service173 maps include the changed journal dependency: record that difference and the scoped S73 bridge; never claim exact-current equality.",
+    "Preserve original S68 reviewer5-file UI map and GUI captures as historical observations, with unchanged relevant UI dependencies checked separately.",
+    "The five remints bridge the changed journal/service behavior only; they do not replace causal repair provenance, GUI observations, native benchmark samples, or unrelated missing requirements.",
+    "Link F01-F15 to concrete evidence across source domains and state limits explicitly. A missing dependency edge remains a gap.",
+    "Require separately captured actual exits/Stop cleanup; do not synthesize natural native exit0 from an outer driver.",
+    "No historic S65/S69/GT05 signature transfers; two independent critics must review the new final manifest/source hash."
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "schema": "HH-GT06-S73-SEAL-PREPARATION-INPUTS-1",
+  "prepared_utc": "2026-09-17T21:14:12.216477+00:00",
+  "formal_acceptance": false,
+  "tests_executed": false,
+  "validators_executed": false,
+  "live_campaign_inspected": false,
+  "full_hash_audit_performed": false,
+  "authority_read": {
+    "agents": "AGENTS.md",
+    "plan": "zdoc/8-9-godot-blender-agent-studio-plan.txt",
+    "observed_plan_revision": "S73",
+    "current_valid_wp": "GT-06",
+    "mutable_governance_snapshot_pending": true
+  },
+  "bindings": {
+    "campaign": "gt06-s73-campaign-01",
+    "source_revision": "cb4d1f6f",
+    "source_closure_sha256": "6f5d4c8a14ef8476c4cff6afb06ab161b17905f8593f9a685cd235593d7ee913",
+    "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+    "provenance": "coordinator assignment plus small existing recovery source-index and focused-validation reports; named-commit final verification pending"
+  },
+  "historical_preparation_inputs": "zdoc/reviews/20260918-gt06-s71-next/seal/preparation-inputs.json",
+  "historical_input_hash_policy": "Those hashes describe historical S71/S72 inspection time only. They are not copied as S73 current input hashes.",
+  "read_inputs": [
+    "zdoc/reviews/20260918-gt06-s71-next/seal/README.md",
+    "zdoc/reviews/20260918-gt06-s71-next/seal/collection-recipe.json",
+    "zdoc/reviews/20260918-gt06-s71-next/seal/verify_campaign_readonly.py.draft",
+    "zdoc/reviews/20260918-gt06-s71-next/seal/draft-review.md",
+    "zdoc/reviews/20260918-gt06-s71-next/seal/draft-check.json",
+    "zdoc/reviews/20260918-gt06-s73-recovery/README.md",
+    "zdoc/reviews/20260918-gt06-s73-recovery/focused-validation.json",
+    "zdoc/reviews/20260918-gt06-s73-recovery/source-git-index.json",
+    "zdoc/reviews/20260918-gt06-s73-recovery/service-remint/verification.json",
+    "zdoc/reviews/20260918-gt06-s73-recovery/service-remint/capture.json",
+    "zdoc/reviews/20260918-gt06-s73-recovery/service-remint/source-files.json",
+    "zdoc/reviews/20260918-gt06-s73-recovery/service-remint/selected/gt06-s73-http-complete-01/source-files.json",
+    "zdoc/reviews/20260918-gt06-s73-recovery/service-remint/http-complete/capture.json",
+    "zdoc/reviews/20260918-gt06-s73-recovery/units-01/capture.json",
+    "zdoc/reviews/20260918-gt06-s69-owner-review/integration-followup.md",
+    "zdoc/reviews/20260918-gt06-s71-growth/verify_source_checkpoint.py",
+    "studio/host/replay/service.py"
+  ],
+  "allowed_write_directory": "zdoc/reviews/20260918-gt06-s73-next/seal",
+  "note": "Only named metadata/source reads and bounded commit path diff; no campaign validator, engine, test, raw-tree hash pass, source/plan edit, or acceptance."
+}

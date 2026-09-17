@@ -1,0 +1,18 @@
+{
+  "schema": "HH-GT06-S73-SEAL-STATIC-1",
+  "observed_at": "2026-09-17T21:16:18.672325+00:00",
+  "adapter_sha256": "3f54ee26e3a42c0e9b4b5a3858d2a002cf7961e19c916378191d8118ee0156ff",
+  "syntax_parse": true,
+  "generated_json_parse": true,
+  "recipe_map_locator": "campaign.json#/source_files",
+  "checkpoint_map_locator": "zdoc/reviews/20260918-gt06-s73-recovery/source-git-index.json#/source_files",
+  "resolved_checkpoint_map_equals_saved_launch_map": true,
+  "recipe_profile_equals_saved_launch_profile": true,
+  "source_files": 49,
+  "formal_acceptance": false,
+  "adapter_executed": false,
+  "engines_or_tests_run": false,
+  "live_raw_validation": false,
+  "initial_check_correction": "Initial helper compared a JSON-pointer locator string directly with a map and asserted. Corrected helper validates the locator and resolves its named checkpoint map. Preparation and measurement source were unchanged.",
+  "scope": "Syntax and small preparation metadata only; final evidence verification remains after terminal."
+}

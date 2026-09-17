@@ -177,6 +177,9 @@ GT-06 hiện hành — phần đã làm và đường tới nghiệm thu
   Evidence/readback/repro: -s73-recovery/README.md và -s73-next/launch/.
   S72 a15cd42c giữ lịch sử. Collector ban đầu chặn vì phase đã tiến triển;
   sửa đọc progressmarker đúngrun, giữ capture và không restart workload.
+  -s73-next/seal/ đã rebind draft theo source/campaign S73, thêm5service remints
+  và giữ provenance S65/S69. Chỉ kiểm syntax/JSON/map với savedlaunch; adapter
+  chưa chạy, chưa finalseal hoặc critic. Startup checkpoint06bc5fcf.
 - Sau benchmark: verify complete10×35, raw/hash/schema/counters/actual exits;
   ghép functional bằng dependency đã kiểm; đóng final source/review/raw manifest
   và requirement→test→evidence. Hai critic mới đọc độc lập cùng final hash,

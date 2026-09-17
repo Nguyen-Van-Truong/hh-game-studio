@@ -1,0 +1,583 @@
+{
+  "schema": "HH-GT06-S73-SEAL-RECIPE-DRAFT-1",
+  "status": "PREPARATION_ONLY_FINAL_EVIDENCE_PENDING",
+  "formal_acceptance": false,
+  "executed": false,
+  "path_root": "8-9-hh3d-3",
+  "authority": "zdoc/8-9-godot-blender-agent-studio-plan.txt",
+  "campaign": {
+    "id": "gt06-s73-campaign-01",
+    "raw_root": "studio/.local/reviews/gt06-s73-campaign-01",
+    "source_revision": "cb4d1f6f",
+    "source_count": 49,
+    "source_closure_sha256": "6f5d4c8a14ef8476c4cff6afb06ab161b17905f8593f9a685cd235593d7ee913",
+    "source_map": "campaign.json#/source_files",
+    "source_path_domain": "studio-relative",
+    "checkpoint_map": "zdoc/reviews/20260918-gt06-s73-recovery/source-git-index.json#/source_files",
+    "profile_id": "gt06-tools-ux-exact-v2",
+    "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+    "toolchain_sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+    "measurement_contract": {
+      "fresh_host_editor_pairs": 10,
+      "batches_per_pair": 35,
+      "warmup_batch_indices": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "measured_batch_indices_inclusive": [
+        5,
+        34
+      ],
+      "commands_per_batch": {
+        "inspect": 500,
+        "validation_reject": 300,
+        "admitted_queue": 200
+      },
+      "native_create_undo_save_reload_cycles_per_batch": 100,
+      "total_batches_including_warmup": 350,
+      "total_commands_including_warmup": 350000,
+      "total_native_cycles_including_warmup": 35000,
+      "measured_batches": 300,
+      "measured_commands": 300000,
+      "measured_native_cycles": 30000,
+      "inspect_and_stop_receipt_p95_limit_ms": 500,
+      "status_gap_limit_ms": 2000,
+      "warm_memory_baseline_batch": 4,
+      "all_measured_rss_percent_of_baseline_max": 110,
+      "all_measured_applicable_non_rss_counters_max": "baseline value; no subtraction/reset",
+      "host_objects_resources": "NOT_APPLICABLE_PYTHON_HOST; never synthetic zero",
+      "run_wall_limit_seconds": 7410,
+      "editor_active_process_limit": 4,
+      "campaign_parent_active_process_limit": 6,
+      "output_display_setting": {
+        "project_key": "editor_overrides/run/output/max_lines",
+        "effective_editor_setting": "run/output/max_lines",
+        "type": "int",
+        "value": 100
+      },
+      "counter_log_disclosure": "Fixed before import/freeze; all external raw logs retained. Output display bound is not log deletion, memory subtraction, relaxed RSS, or leak attribution."
+    },
+    "checkpoint_revision_caveat": "Existing source-git-index records revision=index. After terminal, rerun the named-revision helper against cb4d1f6f into a new report; do not relabel the index report as a commit verification."
+  },
+  "terminal_preconditions": {
+    "do_not_execute_while_measuring": true,
+    "required_campaign_files": [
+      "campaign.json",
+      "benchmark-profile.json",
+      "campaign-capture.json",
+      "dataset.json",
+      "summary.json"
+    ],
+    "required_final_supervisor_files": [
+      "request.json",
+      "claim",
+      "task-definition.expected.xml",
+      "task-definition.xml",
+      "task-definition.sha256",
+      "task-registration.json",
+      "task-start.json",
+      "start.json",
+      "return.json",
+      "stdout.txt",
+      "stderr.txt"
+    ],
+    "supervisor_root_pattern": "studio/.local/reviews/gt06-s73-campaign-01-supervisor{suffix}",
+    "suffix_rule": "launch1 uses empty suffix; launchN>1 uses -launch-NN",
+    "collect_every_actual_launch": true,
+    "status_command_argv": [
+      "powershell.exe",
+      "-NoProfile",
+      "-ExecutionPolicy",
+      "Bypass",
+      "-File",
+      "studio/tests/replay/campaign_task.ps1",
+      "-Command",
+      "status",
+      "-CampaignId",
+      "gt06-s73-campaign-01",
+      "-LaunchNumber",
+      "{actual_launch_number}"
+    ],
+    "status_capture_rule": "Collect the command's real exit/stdout/stderr. Save parsed exact status as a new review artifact, not into an already sealed raw run. Require final task Ready/state3, instances[], result0, matching task/launch/output and final supervisor return0; preserve any previous unsuccessful launch separately.",
+    "return_record_limit": "return.json has actual_process_exit_not_yet_observed=true; it is not terminal scheduler or native ownership proof",
+    "deletion_rule": "If a task is later deleted, retain terminal status first and task-deleted.json. This recipe does not perform deletion.",
+    "missing_artifact_rule": "Record INCOMPLETE/GAP and stop final sealing. Do not manufacture a capture, dataset, summary, exit or PASS from existing files, tails, launch receipts or vanished processes."
+  },
+  "validator_reuse": [
+    {
+      "id": "V_SOURCE_GIT",
+      "entrypoint": "zdoc/reviews/20260918-gt06-s71-growth/verify_source_checkpoint.py",
+      "argv": [
+        "{pinned_python_console}",
+        "-B",
+        "zdoc/reviews/20260918-gt06-s71-growth/verify_source_checkpoint.py",
+        "cb4d1f6f",
+        "--output",
+        "{new_review_output}/source-git-final.json"
+      ],
+      "then_require": "revision=cb4d1f6f; exact_git_bytes=true; count49; exact map equals frozen S73 campaign source_files including path set; closure6f5d4c8a14ef8476c4cff6afb06ab161b17905f8593f9a685cd235593d7ee913; unchanged profile; actual process exit0",
+      "writes": "one exclusive new verification report only"
+    },
+    {
+      "id": "V_RUN_CAPTURE",
+      "call": "studio.tests.replay.run_benchmark_campaign.verify_run_capture(run_root, run_capture, expected_source_digest, campaign_id=campaign_id, index=index, attempt=attempt, campaign_sha256=sha256(raw_campaign_json))",
+      "precondition": "Exact campaign source map equals live map and each context/source-files map; invoke with campaign-pinned Python console executable.",
+      "delegates_to": [
+        "run_benchmark_campaign.verify_owner_captures",
+        "benchmark_job.verify_capture",
+        "pipeline.native_job.verify_captured_stage"
+      ],
+      "checks": [
+        "every recorded selected-run artifact hash",
+        "source/profile/run/context binding",
+        "actual target and helper exits",
+        "native identities",
+        "closed zero untainted Job",
+        "capture-v2 closed wrapper process handle",
+        "invocation and binary pin",
+        "35 complete batches"
+      ],
+      "not_sufficient_alone": [
+        "scheduler supervisor chain",
+        "omitted dependencies in historic lane maps",
+        "final requirement/source/review/raw closure"
+      ]
+    },
+    {
+      "id": "V_ASSEMBLE",
+      "call_sequence": [
+        "bound = benchmark_assembly.assemble_run(run_root, assembly_manifest)",
+        "require bound.value['run'] == existing assembled-run.json",
+        "dataset = benchmark_assembly.assemble_dataset(derived_provenance, ten_bound_runs)",
+        "summary = benchmark_profile.summarize_dataset(dataset)",
+        "require dataset == existing dataset.json and summary == existing summary.json"
+      ],
+      "plain_run_dicts_forbidden": true,
+      "checks": [
+        "same source/toolchain/profile across BoundRun envelopes",
+        "all 35 six-way raw reference sets",
+        "native index and full stdout/stderr",
+        "ready/start/joint/ACK order",
+        "same pair across each run",
+        "native semantic continuity/readback",
+        "unchanged exact workload/counters/thresholds"
+      ],
+      "interpretation": "measurement PASS is not GT06 acceptance"
+    },
+    {
+      "id": "DRAFT_ADAPTER",
+      "path": "zdoc/reviews/20260918-gt06-s73-next/seal/verify_campaign_readonly.py.draft",
+      "argv": [
+        "{pinned_python_console}",
+        "-B",
+        "zdoc/reviews/20260918-gt06-s73-next/seal/verify_campaign_readonly.py.draft",
+        "--product-root",
+        "{absolute_product_root}",
+        "--scheduler-status",
+        "{final_terminal_status_json}",
+        "--launch-number",
+        "{final_actual_launch_number}"
+      ],
+      "review_before_use": true,
+      "executed_in_preparation": false,
+      "writes": "stdout report only; coordinator captures exit/stdout/stderr in a new review artifact",
+      "does_not_seal": true,
+      "source_revision_binding": "Expected cb4d1f6f; V_SOURCE_GIT provides named-commit byte verification separately. Adapter validates exact source bytes/closure, not Git metadata."
+    }
+  ],
+  "source_policy": {
+    "four_mandatory_fixed_dependencies": [
+      "tests/replay/run_benchmark_campaign.py",
+      "tests/replay/run_campaign_task.py",
+      "tests/replay/campaign_task.ps1",
+      "contracts/perf-collector.schema.json"
+    ],
+    "exact_equality": [
+      "Set of paths plus every per-file hash, not subset/count equality",
+      "Campaign source_files equals current campaign.source_files() after load_fixture",
+      "Every selected attempt context.source_files and source-files.json equals campaign map",
+      "Campaign and selected-run source/studio copies match every listed hash",
+      "Native runtime source set and generated project/input mappings remain checked by assemble_run",
+      "Compare each inherited lane's complete declared map independently; inspect new imports/data/runtime branches relevant to that lane before calling that map complete"
+    ],
+    "functional_reuse": "S73 changes a dependency consumed by both benchmark and ReplayService. Older service/GUI lane maps must not be described as exact-current maps. Preserve their original maps and require explicit per-lane changed-path comparisons plus E73_FOCUSED and E73_SERVICE bridge evidence. Unchanged UI/trace/runtime subgraphs may be reused only with scoped dependency justification. The five remints do not silently re-sign historical evidence or reopen accepted GT03-05.",
+    "historical_causal_exception": "S65 fault/repair and S69 managed replay preserve their exact original trace/configuration/source/capture/repair02 receipt provenance. S69 remains a historical replay-generation bridge, not a replay executed on S73. Use the S73 focused-validation and reminted service lanes only for the changed journal/service dependency, and map that edge explicitly. Never rewrite historical source to cb4d1f6f or splice old benchmark samples into S73.",
+    "historical_s71_studio_diff": {
+      "from": "9bc28b6",
+      "to": "bb881a4a",
+      "exact_changed_paths": [
+        "tests/replay/benchmark_native.gd",
+        "tests/replay/run_native_benchmark.py"
+      ]
+    },
+    "s73_studio_diff": {
+      "from": "bb881a4a",
+      "to": "cb4d1f6f",
+      "exact_changed_paths": [
+        "host/replay/verified_journal.py"
+      ],
+      "observed_by": "bounded git diff --name-only bb881a4a cb4d1f6f -- 8-9-hh3d-3/studio; no source hashing during campaign"
+    },
+    "s73_runtime_change": {
+      "path": "host/replay/verified_journal.py",
+      "previous_sha256": "3bdc1414166c132236149629b14bde456d142578cc3d08e0fd1faf5a4285d5eb",
+      "current_sha256": "9128749e6a04242106e56a86e959b6de0a67e0f10ffb97965e1bc88390d5a6f2",
+      "scope": "Private in-memory full-history fingerprint uses SHA512; 64KiB read loop and existing shape/identity/size/policy/parser/fsync checks retained. Persisted records, wire digests and evidence/source hashes remain SHA256."
+    },
+    "affected_dependency_bridge": "zdoc/reviews/20260918-gt06-s73-next/seal/affected-dependency-bridge.json"
+  },
+  "selected_campaign_collection": {
+    "selection": "campaign-capture.json runs[0..9].capture; one complete attempt per index, attempt1..3; row run_id and path must match; twenty unique host/editor (pid,process_start) identities",
+    "include_top_level": [
+      "campaign.json",
+      "benchmark-profile.json",
+      "campaign-capture.json",
+      "dataset.json",
+      "summary.json",
+      "source/studio/{every campaign source map key}"
+    ],
+    "per_run_membership": "run-capture.json plus every key in run-capture.json#/artifacts, preserving exact bytes/size/hash; the capture does not list itself",
+    "mandatory_join": [
+      "context.json",
+      "source-files.json",
+      "toolchain.lock.json",
+      "benchmark-profile.json",
+      "editor-snapshot.json",
+      "child-result.json",
+      "cleanup.json",
+      "assembly-manifest.json",
+      "assembled-run.json",
+      "host-owner/capture.json",
+      "editor-host/capture.json",
+      "import-host/capture.json",
+      "their actual invocation/start/exit/log/cleanup artifacts",
+      "all 35 command/native/joint/ready/start/ACK reference sets"
+    ],
+    "unselected_attempts": "Enumerate only bounded run-00..09-attempt-01..03 slots, list every existing nonselected slot and all retained artifacts in a separate forensic inventory after terminal. Include stop/failure/cleanup/exit proof and explicit missing-artifact rows. Never append its samples to a selected run.",
+    "historical_campaigns": "S68/S69 partial campaigns, S70 campaign01/02 and FAILED S71 campaign01 remain inventoried under their original source and failure labels. S71 has33 complete batches plus a failed prefix; none are eligible S73 measurements. Keep S73 selected attempts internally complete with unchanged process pair and source.",
+    "stop_semantics": "Forced STAGE_STOPPED/BENCHMARK_STOPPED plus checked cleanup is separate evidence. It is not natural target exit0; process absence and wrapper exit are not substitutes for missing native exit records.",
+    "supervisor_supplement": "Campaign capture omits sibling supervisor roots. Explicitly hash all named launcher artifacts for every launch, plus task XML hash/request/registration/instance/principal/source/python/pythonw relationships, terminal scheduler statuses and deletion receipts if present."
+  },
+  "inherited_evidence": [
+    {
+      "id": "E05",
+      "manifest": "zdoc/reviews/20260917-gt05-s63-audit/manifest.json",
+      "manifest_sha256": "fd0b4a984c7bee261c083c07d461baf55325e936d66df2eeab897b422ee0a02b",
+      "acceptance": "zdoc/reviews/20260917-gt05-s64-acceptance/acceptance.json",
+      "accepted_ref": "808d8ba",
+      "raw_selector": "raw_files keys are studio-relative, values are sha256",
+      "join": "actual edited/validated/imported consumed GLB sha256=e85e536137208ba84adbc875b6fb647b5a4e49156344e03e2e8947a7ae91e377",
+      "signature_transfer": false
+    },
+    {
+      "id": "E65",
+      "roots": [
+        "studio/.local/reviews/gt06-s65-native-04",
+        "studio/.local/reviews/gt06-s65-repair-02",
+        "studio/.local/reviews/gt06-s65-native-05"
+      ],
+      "index": "zdoc/reviews/20260917-gt06-s65-progress/runs.json",
+      "scope": "historic fault/repair/replay causal chain and perf diagnostic; retain original source maps/receipts/logs/captures; not benchmark",
+      "selected_config_sha256": "4fe3141b9afe6b411b585b203cebae77e851a406c291ac26620eb8cd7c018d90"
+    },
+    {
+      "id": "E68GUI",
+      "roots": [
+        "studio/.local/reviews/gt06-s68-reviewer-complete-02",
+        "studio/.local/reviews/gt06-s68-reviewer-stop-02"
+      ],
+      "maps_per_root": [
+        {
+          "file": "source-files.json",
+          "format": "bare studio-relative hash map",
+          "recorded_count": 173
+        },
+        {
+          "file": "reviewer-probe/source.json",
+          "format": "bare studio-relative hash map",
+          "recorded_count": 5
+        }
+      ],
+      "required": [
+        "runtime source map",
+        "reviewer source map",
+        "real driver/host captures/logs/exits",
+        "observation-checks.json",
+        "project/out/report.json",
+        "seven raw PNG bindings",
+        "reviewer-probe/result.json"
+      ],
+      "status": "REUSE_REQUIRES_EXACT_LANE_COMPARISON",
+      "s73_dependency_status": "HISTORICAL_SOURCE_PRESERVED; changed VerifiedJournal edge requires E73_FOCUSED/E73_SERVICE bridge and final lane comparison, not exact-current reuse."
+    },
+    {
+      "id": "E69INDEX",
+      "inventory": "zdoc/reviews/20260918-gt06-s69-progress/native-progress.json",
+      "inventory_sha256": "b91aeca785fea3a6397087f1190648fcf7577392bb3c7db2192fcae4f8dca1b1",
+      "selector": "runs[*].raw_root + '/' + each runs[*].artifacts key; metadata sha256,size_bytes",
+      "recorded_files": 1124,
+      "classify_each_root": "three service adversaries plus outer owners; managed replay plus driver; owner smoke; historical incomplete S68 campaign03 prefix",
+      "all_count_is_not_pass_count": true
+    },
+    {
+      "id": "E69A",
+      "roots": [
+        "studio/.local/reviews/gt06-s69-saturated-stop-01",
+        "studio/.local/reviews/gt06-s69-revoked-result-01",
+        "studio/.local/reviews/gt06-s69-stale-capture-01"
+      ],
+      "also_include": "each sibling -outer directory from E69INDEX",
+      "source_map": "source-files.json",
+      "recorded_source_count": 173,
+      "limits": "stale PNG mutation is negative evidence; Stop native stopped status is distinct from outer/helper exit0",
+      "s73_dependency_status": "HISTORICAL_SOURCE_PRESERVED; changed VerifiedJournal edge requires E73_FOCUSED/E73_SERVICE bridge and final lane comparison, not exact-current reuse."
+    },
+    {
+      "id": "E69R",
+      "root": "studio/.local/reviews/gt06-s69-managed-replay-01",
+      "driver_root": "studio/.local/reviews/gt06-s69-managed-replay-01-driver",
+      "source_map": "source-files.json",
+      "recorded_source_count": 159,
+      "source_closure_sha256": "491b65875f8246e7606c7b860d9c61d6a85657fc0077075fa6dc7209128dca2b",
+      "capture_sha256": "d2f4985f75d6017e8ce13078d69973b9c7294a2719748cc978ba0977c0e6d0e5",
+      "join": "Original repair-replay.json + verified original S65 repair02 receipt + selected-config hash + original S69 replay runtime/raw report/captures; preserve all original hashes. S73 affected dependency is bridged separately.",
+      "s73_dependency_status": "CAUSAL_HISTORY_NOT_RELABELLED_S73"
+    },
+    {
+      "id": "E69OWNER",
+      "root": "studio/.local/reviews/gt06-s69-owner-smoke-01",
+      "inventory": "E69INDEX",
+      "scope": "natural, Stop and setup-failure owner records; unchanged owner dependency projection only"
+    },
+    {
+      "id": "E70",
+      "inventory": "zdoc/reviews/20260918-gt06-s70-resume/evidence-inventory.json",
+      "selector": "runs[*].raw_root + '/' + each runs[*].files key; preserve original metadata",
+      "recorded_roots": 6,
+      "scope": "task natural/Stop/manual-launch2 and nested owner legacy/composed diagnostics, original source pins; no full measurement claim"
+    },
+    {
+      "id": "E71",
+      "review_root": "zdoc/reviews/20260918-gt06-s71-growth",
+      "required_named_inputs": [
+        "README.md",
+        "retained-object-growth.md",
+        "host-retention-analysis.md",
+        "output-cap-contract-review.md",
+        "measurement-contract-review.md",
+        "source-git-index.json",
+        "git-evidence-index.json",
+        "campaign-launch.json"
+      ],
+      "expand": "explicit raw/evidence references from these reports and indexed file maps after terminal; retain negative101/warnings and collector recovery metadata as diagnostic",
+      "scope": "cap100 source/configuration and exact byte provenance; negative case does not become clean PASS"
+    },
+    {
+      "id": "E73_FOCUSED",
+      "review_root": "zdoc/reviews/20260918-gt06-s73-recovery",
+      "required_named_inputs": [
+        "README.md",
+        "focused-validation.json",
+        "source-git-index.json",
+        "git-evidence-index.json",
+        "admission-diagnosis.md",
+        "large-history/candidate-01-report.json",
+        "units-01/capture.json",
+        "units-01/invocation.json",
+        "units-01/units-host.json",
+        "units-01/units-stdout.txt",
+        "units-01/units-stderr.txt"
+      ],
+      "recorded_results_only": {
+        "units": {
+          "run": 382,
+          "pass": 382,
+          "skip": 0
+        },
+        "history_http_inspections": 30,
+        "history_added_records": 60,
+        "history_terminal_p95_ms": 282.0598,
+        "history_max_response_gap_ms": 166.111
+      },
+      "history_report_sha256_recorded": "0a254d21121059b6dfb1107e003acd51f01ca4d939821e78b4c14a39da4d811f",
+      "collection": "Expand original invocation/source/actual target/helper exit and ownership artifacts using the recovery index after terminal. The 30-inspection history copy is diagnostic, not the 10x35 benchmark.",
+      "scope": "S73 private-fingerprint affected-dependency evidence; no new acceptance or critic verdict in this preparation."
+    },
+    {
+      "id": "E73_SERVICE",
+      "manifest": "zdoc/reviews/20260918-gt06-s73-recovery/service-remint/verification.json",
+      "manifest_sha256_recorded": "f29b942a9dd84fe9c73e6e537650f57fab2fd40470ac3dce870f7e7fa86de1d5",
+      "capture": "zdoc/reviews/20260918-gt06-s73-recovery/service-remint/capture.json",
+      "review_source_map": "zdoc/reviews/20260918-gt06-s73-recovery/service-remint/source-files.json",
+      "review_source_map_count": 148,
+      "raw_lane_source_map_count": 173,
+      "raw_lane_source_map_file_sha256_recorded": "d09916f43504aaba9a440cdadd59859ac7e7ca24c307ae3b99f4275feeb6dc95",
+      "selector": "verification.json#/raw_files contains product-relative path keys and exact sha256,size_bytes values; retain all1281 referenced raw files, including empty logs. Selected review copies are supplemental and do not replace the complete raw locator.",
+      "recorded_files": 1281,
+      "recorded_bytes": 43962707,
+      "recorded_checks": 158,
+      "bridge": "zdoc/reviews/20260918-gt06-s73-next/seal/affected-dependency-bridge.json",
+      "stop_scope": "Three natural native targets report exit0. http-stop and saturated-stop intentionally stop: require closed/zero Job and outer actual exit, and retain native_actual_exit=null; never infer natural native exit0."
+    },
+    {
+      "id": "E71_FAILED",
+      "review_root": "zdoc/reviews/20260918-gt06-s73-recovery/failure",
+      "raw_root": "studio/.local/reviews/gt06-s71-campaign-01",
+      "supplement": "zdoc/reviews/20260918-gt06-s73-recovery/s71-task-deleted.json",
+      "scope": "FAILED forensic history only; same-ID QUEUED/COMMITTED does not repair lost ACK or make partial measurements eligible. Deletion receipt is later than the frozen failure inventory."
+    }
+  ],
+  "test_invocations": [
+    {
+      "id": "U69_FULL",
+      "root": "zdoc/reviews/20260918-gt06-s69-units-01",
+      "recorded": {
+        "run": 434,
+        "pass": 434,
+        "skip": 0
+      }
+    },
+    {
+      "id": "U69_STOP_AFFECTED",
+      "root": "zdoc/reviews/20260918-gt06-s69-stop-units-01",
+      "recorded": {
+        "run": 66,
+        "pass": 66,
+        "skip": 0
+      }
+    },
+    {
+      "id": "U70_CLOSURE_AFFECTED",
+      "root": "zdoc/reviews/20260918-gt06-s70-units-03",
+      "recorded": {
+        "run": 75,
+        "pass": 75,
+        "skip": 0
+      }
+    },
+    {
+      "id": "U71_AFFECTED",
+      "root": "zdoc/reviews/20260918-gt06-s71-units-01",
+      "recorded": {
+        "run": 79,
+        "pass": 79,
+        "skip": 0
+      }
+    },
+    {
+      "id": "GT05_DEPENDENCY",
+      "root": "studio/.local/reviews/gt05-units-s64-02",
+      "recorded": {
+        "run": 233,
+        "pass": 232,
+        "skip": 1
+      },
+      "skip": "recorded unrelated symlink skip; preserve exact test and reason"
+    },
+    {
+      "id": "U73_AFFECTED_REPLAY",
+      "root": "zdoc/reviews/20260918-gt06-s73-recovery/units-01",
+      "recorded": {
+        "run": 382,
+        "pass": 382,
+        "skip": 0
+      },
+      "join": "zdoc/reviews/20260918-gt06-s73-recovery/focused-validation.json",
+      "scope": "Existing replay suite on S73 candidate; use invocation/source/actual exit capture. Do not sum with earlier overlapping suites."
+    }
+  ],
+  "test_collection_rule": "For each invoked suite bind invocation/source map/runner hash, test IDs and full stdout/stderr, units-host/capture actual target/helper exits and tree proof. Counts above are reported history, not newly verified results. Keep all skips/failures and reasons. Never sum overlapping suites or replace older evidence's source with HEAD. Include S68 journal-contract03 and earlier U70 diagnostics only under their own invocations when referenced by a final requirement row.",
+  "fault_coverage": {
+    "mapping": "zdoc/reviews/20260918-gt06-s70-resume/fault-coverage-links.md",
+    "accepted_s60_oom": "studio/.local/reviews/20260917-gt04-s60-matrix/ipc/oom.json",
+    "s60_oom_sha256": "80f9d81a99c045356c53f9223c1d9bdd4c364751f4be17dade4bc882659a38a8",
+    "s60_scope": "actual native MemoryError with target/wrapper17 and closed-zero ownership in accepted shared Blender primitive; not a Godot OOM playthrough",
+    "s64_scope": "unchanged shared runner deadline/nonzero/live-child/bounded-disk/log handling plus explicit one symlink skip",
+    "s69_scope": "GT06 persistence/UNKNOWN/ownership/admission/quota/slow I/O/priority Stop consumers and native congestion/reconnect",
+    "no_expanded_claims": [
+      "physical disk exhaustion",
+      "power-loss certification",
+      "forced OS PID recycling",
+      "arbitrary multi-project scheduling",
+      "physical cable-disconnect certification",
+      "Android physical device verified"
+    ],
+    "later_gates": "General scheduling/cross-app activation GT07; physical Android install/launch GT08. Neither replaces pending GT06 measurements or final critics.",
+    "s73_scope": "Five reminted complete/Stop/saturated-stop/revoked-result/stale-capture service lanes bridge the private-history fingerprint change. Original S65/S69 causal traces and repair receipts retain their source generations; no broader fault/Android claim."
+  },
+  "hash_domains": {
+    "raw_file": "sha256(exact file bytes), with size_bytes; preserve empty files and native float spellings",
+    "source_map_closure": "sha256(UTF8(concat(path + NUL + lowercase_sha256 + LF for path in ordinal sorted map keys)))",
+    "source_path_rule": "Preserve studio-relative 49-map closure as its own domain; a repository-prefixed union has a different closure and must be named separately.",
+    "profile": "sha256(canonical compact sorted JSON bytes generated by existing profile code); no added newline",
+    "runtime_snapshot": "Use producer/verifier's declared runtime snapshot algorithm, never substitute file or review-map hash",
+    "review_manifest": "sha256(exact final manifest bytes); manifest itself excluded from its own member lists",
+    "portable": "Own raw-byte file hashes and closure; mapping includes raw_origin_sha256 and transformation/source path. Byte-preserved files can share hashes; normalized/rendered/redacted views cannot claim raw equality.",
+    "storage_rules": [
+      "Explicit path/size/hash references; no symlink/reparse/traversal/case aliases",
+      "Merge duplicate identical domain+path entries once; conflicting hash/size is a gap, not last-writer-wins",
+      "Preserve source closure by lane when historic generations differ",
+      "No generated .godot/cache added to Git; declared raw cache evidence remains locally hash-addressable when already referenced",
+      "No secret/token/global environment introduced into portable review; any necessary redacted view has a separate hash domain and raw locator"
+    ]
+  },
+  "final_manifest_design": {
+    "schema_name_is_proposed_not_accepted": "HH-GT06-FINAL-CANDIDATE-1",
+    "formal_acceptance": false,
+    "required_sections": [
+      "campaign exact pins and completed artifact refs",
+      "source_domains per benchmark and inherited lane",
+      "lane_dependency_comparisons with added/removed/changed paths",
+      "review_files with exact sizes/hashes",
+      "raw_files with exact sizes/hashes and local locators",
+      "portable_files and origin mappings if a view exists",
+      "external toolchain paths/hashes and lock",
+      "all supervisor launch records",
+      "selected versus excluded attempt inventory",
+      "test invocations and skip/failure ledger",
+      "F01-F15 requirement-test-source-evidence-scope matrix",
+      "verification commands and actual verifier exits",
+      "governance snapshots",
+      "known limits and unresolved gaps",
+      "S73 focused-validation and five service-remint affected-dependency bridge with distinct49/148/173 source domains",
+      "S65 fault -> S65 authenticated repair02 -> S69 managed replay original-provenance causal joins, with separately justified S73 changed dependency edge"
+    ],
+    "forbidden_shortcuts": [
+      "accept from completed file count",
+      "accept from a PASS banner or scheduler dispatch",
+      "copy an old critic signature onto a new source",
+      "replace unavailable counters by zero",
+      "splice partial failed attempts",
+      "change native profile, thresholds, batch count, wall limit or warm baseline",
+      "make a portable view stand in for unavailable raw bytes"
+    ],
+    "candidate_manifest_path": null,
+    "candidate_manifest_sha256": null,
+    "candidate_review_closure_sha256": null,
+    "raw_closure_sha256": null,
+    "independent_critics": [
+      {
+        "id": "A",
+        "report": null,
+        "candidate_sha256": null,
+        "verdict": null
+      },
+      {
+        "id": "B",
+        "report": null,
+        "candidate_sha256": null,
+        "verdict": null
+      }
+    ],
+    "review_rule": "Both critics read-only and independent, both explicitly bind the identical final manifest/source hashes. Keep critic files outside the reviewed manifest to avoid a hash cycle. New source/candidate bytes require new review of those bytes. Coordinator acceptance remains separate.",
+    "current_disposition": "Preparation only for S73. Live campaign not inspected or validated here; terminal10x35 evidence, final dependency comparison, manifest and two new same-hash critics remain required."
+  },
+  "derived_from": {
+    "directory": "zdoc/reviews/20260918-gt06-s71-next/seal",
+    "copy_policy": "Historical draft preserved unchanged; S73 bindings and affected-dependency bridge authored in this new directory only.",
+    "historical_reviews_transfer": false
+  }
+}
