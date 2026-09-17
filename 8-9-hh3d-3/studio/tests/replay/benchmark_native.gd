@@ -162,6 +162,32 @@ func _boot() -> void:
     if not output_limit is int or output_limit != 100:
         _fail("BENCHMARK_OUTPUT_LOG_LIMIT")
         return
+    # Require explicit frozen project keys as well as effective values. Defaults
+    # alone would let a missing focused key pass because its stock value is 6900.
+    var expected_editor_settings: Dictionary = {
+        "interface/editor/display/update_continuously": false,
+        "interface/editor/timers/low_processor_mode_sleep_usec": 6900,
+        "interface/editor/timers/unfocused_low_processor_mode_sleep_usec": 6900,
+        "run/output/max_lines": 100}
+    var project_config := ConfigFile.new()
+    if project_config.load("res://project.godot") != OK or not project_config.has_section("editor_overrides"):
+        _fail("BENCHMARK_EDITOR_CADENCE")
+        return
+    if project_config.get_section_keys("editor_overrides").size() != expected_editor_settings.size():
+        _fail("BENCHMARK_EDITOR_CADENCE")
+        return
+    var editor_readback: Dictionary = {}
+    for setting: String in expected_editor_settings:
+        if not project_config.has_section_key("editor_overrides", setting):
+            _fail("BENCHMARK_EDITOR_CADENCE")
+            return
+        var expected_value: Variant = expected_editor_settings[setting]
+        var configured_value: Variant = project_config.get_value("editor_overrides", setting)
+        var effective_value: Variant = editor_settings.get_setting(setting)
+        if typeof(configured_value) != typeof(expected_value) or configured_value != expected_value or typeof(effective_value) != typeof(expected_value) or effective_value != expected_value:
+            _fail("BENCHMARK_EDITOR_CADENCE")
+            return
+        editor_readback[setting] = effective_value
     if not FileAccess.file_exists(EVIDENCE_IGNORE) or FileAccess.get_file_as_bytes(EVIDENCE_IGNORE) != "# HH Studio benchmark evidence is not a Godot asset.\n".to_utf8_buffer():
         _fail("BENCHMARK_EVIDENCE_IGNORE")
         return
@@ -213,6 +239,13 @@ func _boot() -> void:
             _fail("BENCHMARK_SOURCE_MISSING")
             return
         _source_hashes[path] = digest
+    # Supplemental native readback, bound to this already-validated input. This
+    # adds no file or source path and does not change batch/index/profile schemas.
+    print("HH_GT06_BENCHMARK_CADENCE " + JSON.stringify({"run_id": _input.run_id,
+        "pid": OS.get_process_id(), "source_closure_sha256": _input.source_closure_sha256,
+        "profile_sha256": _input.profile_sha256, "settings": editor_readback,
+        "os_low_processor_usage_mode": OS.low_processor_usage_mode,
+        "os_low_processor_usage_mode_sleep_usec": OS.low_processor_usage_mode_sleep_usec}))
     if _mode == "diagnostic":
         _batch_limit = 1
         _cycle_limit = 1

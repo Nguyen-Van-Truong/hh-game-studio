@@ -1,8 +1,54 @@
 """Negative checks for the native diagnostic evidence boundary; no engine."""
+from configparser import ConfigParser
 from copy import deepcopy
 import unittest
 
 from studio.tests.replay import run_native_benchmark as subject
+
+
+class ProjectConfigurationTests(unittest.TestCase):
+    def setUp(self):
+        self.trusted = (subject.STUDIO / 'godot-addon/fixture_profile/project.godot').read_bytes()
+
+    def test_generated_overrides_pin_exact_typed_cadence_without_other_settings(self):
+        raw = subject.benchmark_project_config(self.trusted)
+        config = ConfigParser(interpolation=None)
+        config.read_string('[root]\n' + raw.decode('utf-8'))
+        self.assertEqual(dict(config['editor_overrides']), {
+            'interface/editor/display/update_continuously': 'false',
+            'interface/editor/timers/low_processor_mode_sleep_usec': '6900',
+            'interface/editor/timers/unfocused_low_processor_mode_sleep_usec': '6900',
+            'run/output/max_lines': '100',
+        })
+        self.assertEqual(set(config.sections()), {
+            'root', 'application', 'editor_overrides', 'editor_plugins', 'rendering', 'threading'})
+        self.assertEqual(config['root']['config_version'], '5')
+        self.assertEqual(config['threading']['worker_pool/max_threads'], '4')
+        self.assertEqual(config['rendering']['renderer/rendering_method'], '"gl_compatibility"')
+        self.assertNotIn(b'\r', raw)
+        self.assertFalse(raw.startswith(b'\xef\xbb\xbf'))
+
+    def test_config_serialization_is_deterministic_across_input_line_endings(self):
+        lf = self.trusted.replace(b'\r\n', b'\n')
+        expected = subject.benchmark_project_config(lf)
+        self.assertEqual(subject.benchmark_project_config(lf.replace(b'\n', b'\r\n')), expected)
+        self.assertEqual(subject.benchmark_project_config(b'; ignored comment\n' + lf), expected)
+        self.assertEqual(subject.benchmark_project_config(lf), expected)
+
+    def test_caller_supplied_overrides_are_rejected_instead_of_normalized(self):
+        # Only the pinned trusted fixture is input. Preexisting keys, even valid
+        # ones, cannot replace or silently select the benchmark configuration.
+        for setting in (
+            b'interface/editor/timers/unfocused_low_processor_mode_sleep_usec=100000',
+            b'interface/editor/unfocused_low_processor_mode_sleep_usec=6900',
+            b'interface/editor/timers/low_processor_mode_sleep_usec="6900"',
+            b'interface/editor/display/update_continuously=0',
+            b'interface/editor/timers/unfocused_low_processor_mode_sleep_usec=6900',
+        ):
+            with self.subTest(setting=setting):
+                with self.assertRaisesRegex(subject.DiagnosticError, 'DIAGNOSTIC_PLUGIN_CONFIG'):
+                    subject.benchmark_project_config(
+                        self.trusted + b'\n[editor_overrides]\n' + setting + b'\n')
 
 
 class TimingProofTests(unittest.TestCase):

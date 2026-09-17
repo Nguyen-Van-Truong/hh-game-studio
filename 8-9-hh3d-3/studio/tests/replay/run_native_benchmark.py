@@ -148,7 +148,8 @@ def benchmark_project_config(trusted):
     The installed fixture remains unchanged. Godot normalizes minimal project
     text on editor startup; that is not an allowed source mutation in this run.
     Add the benchmark plugin, pinned engine feature declaration, and a fixed
-    stock Output display limit. Full stdout/stderr remain externally captured.
+    stock Output display limit and focus-independent editor sleep. Full
+    stdout/stderr remain externally captured; no profile or deadline changes.
     """
     sections = {}
     current = None
@@ -174,7 +175,14 @@ def benchmark_project_config(trusted):
     # Visible Output paragraphs own Objects. Bound the display before startup,
     # so warmup can fill it; raw counters and externally captured logs remain.
     # EditorLog retains message strings separately, still covered by RSS checks.
-    sections['editor_overrides'] = ['run/output/max_lines=100']
+    # Both focus states retain the stock focused sleep. Configure before import;
+    # the restart-required setting must not depend on which window has focus.
+    sections['editor_overrides'] = [
+        'interface/editor/display/update_continuously=false',
+        'interface/editor/timers/low_processor_mode_sleep_usec=6900',
+        'interface/editor/timers/unfocused_low_processor_mode_sleep_usec=6900',
+        'run/output/max_lines=100',
+    ]
     sections['editor_plugins'] = ['enabled=PackedStringArray("res://addons/hh_studio/plugin.cfg", "res://addons/hh_benchmark/plugin.cfg")']
     header = ("; Engine configuration file.\n; It's best edited using the editor UI and not directly,\n"
         "; since the parameters that go here are not all obvious.\n;\n; Format:\n"
