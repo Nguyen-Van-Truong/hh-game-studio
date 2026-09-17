@@ -1,0 +1,17 @@
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\run_campaign_task.py", line 134, in main
+    code = execute(args.campaign_id, args.mode, output, sha(request))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\run_campaign_task.py", line 83, in execute
+    campaign.wait_owned_run(owner, output, **binding)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\run_benchmark_campaign.py", line 228, in wait_owned_run
+    if owner.tick(stop=stop) is not None:
+       ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\benchmark_job.py", line 312, in tick
+    return self._tick(stop=stop)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\benchmark_job.py", line 320, in _tick
+    require(not stop, 'BENCHMARK_STOPPED')
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\benchmark_job.py", line 46, in require
+    raise BenchmarkJobError(code)
+studio.tests.replay.benchmark_job.BenchmarkJobError: BENCHMARK_STOPPED

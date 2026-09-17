@@ -284,12 +284,41 @@ class CaptureHandleProofTests(unittest.TestCase):
             'artifacts': {name: hashlib.sha256((self.output / name).read_bytes()).hexdigest()
                 for name in ('stdout.txt', 'stderr.txt', 'process-start.json', 'process-exit.json')}}
 
-    def verify(self, capture):
+    def verify(self, capture, *, campaign_host=False):
         raw = (json.dumps(capture, sort_keys=True) + '\n').encode()
         (self.output / 'capture.json').write_bytes(raw)
         return owner.verify_capture(self.output, hashlib.sha256(raw).hexdigest(),
             source_root=self.root, expected_source_files=self.sources,
-            expected_binary_sha256=self.binary_hash)
+            expected_binary_sha256=self.binary_hash, expected_campaign_host=campaign_host)
+
+    def test_nested_host_profile_requires_external_expected_role_and_exact_limits(self):
+        capture = deepcopy(self.capture)
+        invocation = json.loads((self.output / 'invocation.json').read_bytes())
+        invocation['profile'] = deepcopy(owner.HOST_PROFILE)
+        raw = (json.dumps(invocation, sort_keys=True) + '\n').encode()
+        (self.output / 'invocation.json').write_bytes(raw)
+        capture['invocation_sha256'] = hashlib.sha256(raw).hexdigest()
+        capture['profile'] = invocation['profile']
+        capture['limits']['active_process_limit'] = owner.HOST_PROFILE['process_limit']
+        with self.assertRaisesRegex(owner.BenchmarkJobError, 'BENCHMARK_CAPTURE_PROFILE'):
+            self.verify(capture)
+        self.assertEqual(self.verify(capture, campaign_host=True), capture)
+        for wrong in (4, 5, 7):
+            capture['limits']['active_process_limit'] = wrong
+            with self.assertRaisesRegex(owner.BenchmarkJobError, 'BENCHMARK_CAPTURE_LIMITS'):
+                self.verify(capture, campaign_host=True)
+
+    def test_owner_roles_preserve_resource_budgets_and_reserve_only_composed_slots(self):
+        normal, host = owner.owner_profile(False), owner.owner_profile(True)
+        self.assertEqual(normal['process_limit'], 4)
+        self.assertEqual(host['process_limit'], 2 + normal['process_limit'])
+        for field in ('wall_seconds', 'cpu_seconds', 'memory_bytes', 'log_bytes_each', 'workspace_bytes'):
+            self.assertEqual(host[field], normal[field])
+        for invalid in (1, None, 'host'):
+            with self.assertRaisesRegex(owner.BenchmarkJobError, 'BENCHMARK_OWNER_ROLE'):
+                owner.owner_profile(invalid)
+        host['process_limit'] = 99
+        self.assertEqual(owner.owner_profile(True)['process_limit'], 6)
 
     def test_exact_checked_close_proof_is_required(self):
         self.assertEqual(self.verify(self.capture), self.capture)

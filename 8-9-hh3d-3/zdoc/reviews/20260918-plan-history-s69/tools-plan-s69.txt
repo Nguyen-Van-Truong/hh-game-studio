@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 18-09-2026, Asia/Saigon | Revision S70 | TRIỂN KHAI THEO GATE
+Ngày 18-09-2026, Asia/Saigon | Revision S69 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S70
+PLAN_REVISION=S69
 EXECUTION_MODE=COORDINATOR_THREE_ASTRA_XHIGH_OWNER_20260918
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -56,7 +56,7 @@ GT05_CHECKPOINT_COMMIT=808d8ba
 GT06_EVIDENCE_STATUS=NATIVE_DIAGNOSTICS_IN_PROGRESS_NO_ACCEPTANCE
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
 
-TIẾN ĐỘ HIỆN HÀNH — S70, ngày 18-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S69, ngày 18-09-2026
 GT-01–05 đã ACCEPTED. GT-06 mở sau hai review độc lập S64 cùng manifest.
 Owner đã cho phép lại ba Astra extra high; coordinator tiếp tục từ S68 đã tích hợp.
 Ba worker mới đã hoàn thành review implementation/mapping S69; không phải critic
@@ -97,55 +97,103 @@ Native engine/integration lanes chạy tuần tự với process/cache/evidence 
   snapshot. Giữ raw gốc; source/review S64 ở808d8ba và governance snapshot,
   không đổi chữ ký theo source mới. Full details: gt05-s63-audit/requirements-s64.md.
 
-GT-06 hiện hành — tóm tắt theo kết quả, chi tiết giữ trong evidence/archive:
-- Play/input/observe đã chạy thật trên fixture: Play tách Editor; fixedtrace60Hz,
-  readback sau callback, pause/resume/interaction/camera và capture đúng hash/PID.
-  Fault0m→authenticated GT03 repair→replay1.500000238m có causal chain S65;
-  S69 managed replay kiểm lại runtime hiện hành bằng receipt repair02, không
-  lặp mutation đã đúng. Perf raw diagnostic không được tính là benchmark.
-- HTTP service/Stop/inspector và reviewer GUI đã chạy thật. S69 ba adversary
-  saturated-stop/revoked-result/stale-capture đạt15/18/17 checks; outer exits0,
-  owned trees sạch. Native Stop là STAGE_STOPPED + Jobclosed/zero, không phải
-  natural native exit0. Dependency GUI S68 complete02/stop02 còn khớp173+5file,
-  giữ evidence theo từng lane, không gán chữ ký/source cũ vào closure mới.
-- Journal replay dùng exact-byte verified cache dưới accepted lock; compact
-  offsets giữ đủ receipt/tombstone. Core Journal đã nghiệm thu không đổi.
-  Checkpoint c5e56c7: full415/415 và journalcontract62/62. Checkpoint3147778:
-  full434/434 (146.685s), sau sửa Stop phần ảnh hưởng66/66 (21.646s), khôngskip,
-  actual exits0/tree sạch/source ổn định. Không cộng test trùng hoặc suy %done.
-- S69 owner đã sửa cleanup_owner khi constructor lỗi, native wrapper-handle
-  close và latch Stop ở completion/assembly/resume. Capturev2 yêu cầu proof
-  đóng handle; không nâng cấp giả v1. BoundRun chặn trộn source/toolchain/profile.
-  Raw/capture: reviews/20260918-gt06-s69-progress/; review/mapping và phạm vi
-  reuse: reviews/20260918-gt06-s69-owner-review/integration-followup.md.
-- Full benchmark chưa PASS. Giữ10freshpairs×35batch (5warmup+30measured),
-  mỗi batch1000HTTPcommands+100nativecycles; ready/start/joint/ACK, cùngPID
-  xuyên batch; thresholds và7410s/run không đổi. Không chạy engine/test nặng
-  cạnh lượt đo. Partial attempt không được nối thành runPASS.
-- S68 campaign03 và S69 campaign01 có một assembled warmup batch nhưng không
-  đủ run35batch. S69 campaign01 đã ngắt ởbatch1/nativecycle33, thiếu process
-  exits/cleanup; process không còn không thay proof. Editor stderr còn lỗi tạo
-  --test-rd-creation child, nên kể cả hoàn tất cũng chưa đạt clean-log gate.
-  Không gọi RUNNING theo launch record cũ; e469f58 chỉ ghi thời điểm khởi chạy.
-- S70 đang sửa launcher tác vụ dài để không phụ thuộc vòng đời tool session,
-  dùng task on-demand có deadline/current-user/Stop, không auto-restart. Probe
-  natural đạt actualexit0/closedzero/handlesreleased sau lệnh dispatch trả về;
-  probeStop đạt BENCHMARK_STOPPED và cleanupclosedzero, không naturalPASS.
-  Schedulerpriority6→WindowsNORMAL được kiểm; task không có trigger/restart.
-  Driver reject stderr sớm. Source stockGodot xác nhận explicitOpenGL không
-  bỏ RDprobe. Giữ editorcap4; parentJob phải chứa2host+4editorslots=6. Đây là
-  sửa khai báo aggregateownership, không nới CPU/RAM/wall hoặc tiêu chí đo.
-  Nestednative cũ4 tái hiện lỗi RDprobe; mới6 sạch và hoàn tất cycle19.094s.
-  Cảhai giữ actualhost/editor/helper exits0/closedzero/handlesreleased; legacy
-  controllerexit1 vì logFAIL. Không biến diagnostic một cycle thànhbenchmark.
-  Launcher có manualLaunchNumber để resume cùngcampaign vào evidence/taskriêng,
-  không ghiđè run cũ; probeLaunch2 đạt. 73/73 affectedtests đạt17.551s,
-  khôngskip, actualexits0/tree sạch/source ổn định. Chi tiết/hash/research:
-  reviews/20260918-gt06-s70-resume/README.md và -s70-units-01/.
-  Ba worker rà ownership/forensics/criticalpath; không phải critic nghiệm thu.
-- Chưa có GT06 accepted candidate. Sau benchmark đúng profile phải đóng
-  requirement→test→evidence trên frozen closure, hai critic độc lập PASS/TICK=yes,
-  rồi coordinator mới chuyểnGT06ACCEPTED. Không mở implementation GT07 trước đó.
+GT-06 hiện hành — implementation đã tích hợp, native diagnostics đang chạy:
+- Fixture/observe: immutable Play riêng Editor; trace60Hz/seed/pressed-held-released
+  qua Input.parse_input_event, sau callback mới readback. Menu/move/outfit/emote/
+  prop/pause/resume/quit, camera và capture đúng frame/PID/source.
+- Perf: schema versioned, raw frame-boundary monotonic intervals, p50/p95/p99 và
+  1%low=1000/mean(ceil1% frame lớn nhất). TIME_PROCESS là monitor tổng hợp,
+  không raw per-frame; render primitives không được gọi thành triangle count.
+- Host/integration: reuse checked Job/process ownership và typed transport;
+  source/hash/trace binding, Stop riêng/latch, inspector bounded, không hidden
+  resume. Seed move_speed=0 rồi repair qua GT03, new snapshot/replay cùng trace.
+- Native04→repair02→native05 đã chứng minh fault0m→authenticated GT03
+  script_text.replace→native readback→replay1.500000238m. Hai Play cùngsource/
+  trace/seed/GLB;7ảnh đúngphase/camera, pause/interaction/quit đạt.160/160 unit
+  trong bounded milestone lane đạt, no skips, source ổn định/exit0/tree sạch.
+  Perf export giữ355raw rows,352measured rows +250RSS; đây là diagnostic có
+  screenshot overhead, không benchmark. Chi tiết +hash: reviews/20260917-gt06-s65-progress/.
+  Giữ lỗi native01/capture02/repair01; chỉ sửa/chạy lại lane bị ảnh hưởng.
+- Checkpoint3186d40 giữ milestoneS65. ServiceS66 đã chạy HTTP/Godot thật:
+  complete01 đạt13 nhómcheck, Stop01 đạt11 nhómcheck, exits0/tree sạch, cùng
+  source2c623754803e14d59f5d143b3964443a73d21eadaf5947d91fd4a83423e34da2.
+  243/243 replay unit đạt. Start pending→native readback→COMMITTED; retry không
+  tạo Play mới, retained inspector phântrang/capture đúnghash, Stop latch riêng.
+  25.0122ms là một receiptStop, chưa phải benchmarkp95. Chi tiết:
+  reviews/20260917-gt06-s66-service/, checkpoint843e681.
+- S67: native saturated-stop04/revoked-result01/stale-capture01 đạt15/18/17checks
+  trên source171file S66. Reviewer Tk/client hiện60/60unit; thêm6/6 kiểm chứng
+  timing benchmark. GUI thật complete02 (Play/Inspect/Capture) và stop01 (Esc)
+  đạt, exits0/tree sạch, reviewer closure665320a25e388c97c5e0db9d910a51fdb09edc6eff90a929ffeb536c32ab66d0.
+  Replay mới dùng no-focus để bàn phím người dùng/Stop thuộc reviewer; native
+  kiểm flag trước trace. Closure39d4e8429921f08adef94b3fb4035210e98c2a82676c8d1ba4f965a4ff0f7c41;
+  không gán kết quả S66 vào source này. Giữ failure/raw và kiểm riêng từngclosure.
+  Chi tiết: reviews/20260917-gt06-s67-progress/. MẫuCPU100% giữ làm context,
+  không kết luận mọi timeout cùngnguyênnhân hoặc nângdeadline đểPASS.
+- Benchmark đang xây driver giữcùng editorPID qua reload và rawmỗi batch;
+  10runs×(5warmup+30measured),1000commands+100nativecycles/mẫu vẫn giữnguyên.
+  Mockprotocol và directnativecycle là hai lane riêng; không claim nativeeffect
+  từmock. Pythonhost không có GodotObjectDB/ResourceCache: ghi NOT_APPLICABLE,
+  còn RSS/handles host và mọi countereditor vẫn phải có đo thật.
+  Diagnostic02 đạt1chu kỳ native trên1editorPID: create/undo/save/reload,
+  actualexits0/tree sạch/hash ổn định. Diagnostic01 giữFAIL vì Godot tự chuẩn
+  hóa project.godot; đã tạo đúng config pin trước freeze, không bỏ kiểmhash.
+  Chưa là fullbenchmark; đang đo batch1000lệnh đầu để kiểm scaling thực tế.
+- S68: replay/reviewer347/347 và journal contract48/48 đạt trên source đã ghi
+  trong reviews/20260917-gt06-s68-units-02 và -journal-contract-02. GUI dùng
+  journal mới complete01/stop01 đạt, exits0/tree sạch; chưa gán sang source mới.
+  Một batch1000commands đạt32.282s; run cũ600s timeout được giữ nguyên.
+  Residency35batch dừng ởbatch12:11batch đủ11000lệnh, lỗiTERMINAL_IDENTITY;
+  journal vẫn cóCOMMITTED cho lệnhcuối, chưa đủ bằng chứng kết luận vì sao
+  phản hồi lookup khôngkhớp. Actualchild/wrapperexit1, Jobclosed/zero; khôngPASS.
+  RSS ởbatch10=37,933,056B(+9.197% so baselinebatch4), chưa chứng minh35batch.
+  Raw: studio/.local/reviews/gt06-s68-residency-01. Lần diagnostic có tranhchấp
+  tải từ unit/parse lane nên không là benchmark nghiệm thu hoặc speedup định lượng.
+  Đã tích hợp index RAM gọn giữ đủreceipt/tombstone; boundedlookup cùngID,
+  không resubmit mutation; ghi từnglookup/terminal response trước kiểmidentity.
+  Journal contract mới62/62; replay/reviewer mới415/415 (units-03), actualexits0,
+  tree sạch và source không đổi. GUI complete02/stop02 đều đạt trên source mới.
+  Native1.2 một GUIcycle thật đạt; owner smoke kiểm naturalexit/Stop latch đạt.
+  Campaign01/02 bị ngắt ngoài owner trong batch0 nativecycles; không có actual
+  exit/cleanup record, không tính PASS. Kiểm tiến trình sau ngắt thấy không còn
+  Python/Godot của campaign; điều này không thay Jobclosed/zero evidence.
+  Start-Process Hidden cũng không giữ được campaign02 qua ngắt phiên.
+  Giữ raw và không nối partialbatch; cần freshpair cho workload cùngPID. Thứtự
+  1000hostcommands→100nativecycles→jointsample/ACK; chỉ đổi synchronization,
+  giữ nguyên10runs×35batch, mix, thresholds và deadline tổng7410s/run.
+  Ownership sửa Stop latch, closed/zero khác historicaltaint, giữ owner khi
+  constructor/cleanup lỗi. Chưa có fullcampaign PASS hoặc hai critic nghiệm thu.
+- S69 tiếp từ checkpoint S68 c5e56c7 (77 file trong Git proof khớp byte).
+  Campaign03 đã hoàn tất batch đầu: 1000 HTTP commands + 100 native cycles,
+  ready/start/ACK và joint readback qua assembler. Dừng có kiểm soát để sửa
+  lỗi owner được review phát hiện; editor exit79, host exit1, parent Job closed/zero.
+  Đây là diagnostic một batch, không phải full benchmark PASS.
+  Đã sửa mất cleanup_owner khi constructor lỗi và wrapper process handle chưa
+  đóng; capture v2 bắt buộc proof đóng handle, không nâng cấp giả capture cũ.
+  Native smoke mới kiểm natural exit, Stop, setup failure đều giữ đúng ownership.
+  Dataset assembler buộc mỗi run gắn source/toolchain/profile, từ chối trộn source.
+  Stop benchmark dùng fixed-slot request gắn run/campaign hash; không tìm/kill
+  theo tên tiến trình, không tự resume run đã Stop. Full units 434/434 đạt,
+  không skip, 146.685s, actual exits0/tree sạch/source ổn định. Review sau đó
+  phát hiện Stop có thể đến giữa terminal poll và chuyển run; đã thêm kiểm
+  completion/publication/resume và latch các attempt cũ. Lượt kiểm phần ảnh
+  hưởng đạt66/66, 21.646s, không skip, actual exits0/tree sạch/source ổn định;
+  không cộng số test trùng hoặc gán full434 vào source sau sửa.
+  Ba service adversary mới saturated-stop/revoked-result/stale-capture đạt
+  15/18/17 checks, actual exits0/tree sạch. Managed replay mới đạt, dùng lại
+  receipt repair02 đã kiểm hash; không làm lại mutation đã đúng.
+  Các dependency của GUI S68 complete02/stop02 không đổi nên giữ evidence đó.
+  Mapping và review: reviews/20260918-gt06-s69-owner-review/.
+  Capture/hash và giới hạn: reviews/20260918-gt06-s69-progress/README.md.
+  Checkpoint3147778; 62 file trong Git proof khớp HEAD/disk. Full campaign mới
+  gt06-s69-campaign-01 đã khởi chạy từ source closure
+  15945096c0ef3fc42f17f121842060a70ea530ec1cbacd2cba21566d0f3e37eb
+  (46 dependency của lane benchmark), không phải closure nghiệm thu toànGT06.
+  RUNNING tại bản ghi launch, chưa PASS; trạng thái thực đọc raw/capture.
+  10 processpairs chạy tuần tự; không chạy engine/test nặng cạnh benchmark.
+- Chưa có GT06 accepted candidate. Benchmark1000commands+100cycles theo plan
+  vẫn phải chạy đúng profile; unit nhỏ không thay benchmark. Không nâng shared
+  caps để hợp artifact; raw series có parser/quota riêng, wire chỉ hash/reference.
 
 Các phần còn lại để xong plan: GT-06 play/input/observe,
 GT-07 concurrency/recovery/cross-app activation, GT-08 Windows/Linux/Android
@@ -165,14 +213,7 @@ Lịch sử S54 đầy đủ trước tinh gọn: reviews/20260917-plan-history-
 tools-plan-before-s55.txt (AUTHORITY=0), SHA256 b07c86c36c565c3a95404a6084cd6df0999300f622412ce3cd988cd279a49909.
 Các archive và mọi failure/verdict cũ giữ nguyên; không hạDoD đểtick.
 
-Lịch sử chi tiết S69 trước tinh gọn: reviews/20260918-plan-history-s69/
-tools-plan-s69.txt (AUTHORITY=0), SHA256 924bbf4e4d6f182a33ea7dd7bee23a8b83323669a00ae5fb318f7ef72f6407a2.
-
 KINH NGHIỆM ĐANG ÁP DỤNG
-- S70: process nền vẫn có thể thuộc Job của tool; Start-Process Hidden không
-  chứng minh sống qua phiên. Task on-demand phải probe, có deadline/Stop và
-  chứng cứ actual exit riêng. Lỗi stderr startup phải fail sớm, không chờ hết
-  hàng giờ benchmark; không nới profile để che lỗi.
 - S69: process.wait() trên Windows không tự đóng handle Popen; proof cleanup
   phải kiểm native close, giữ đúng owner khi lỗi và tránh double-close khi kết quả
   chưa rõ. Constructor lỗi vẫn phải trả ownership dù cleanup đã thành công.

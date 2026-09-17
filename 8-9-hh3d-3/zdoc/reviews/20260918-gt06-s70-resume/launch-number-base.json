@@ -1,0 +1,14 @@
+{
+  "status": "DRAFT_NO_LAUNCH_OR_REGISTRATION",
+  "base_files": {
+    "8-9-hh3d-3/studio/tests/replay/campaign_task.ps1": "de87d7360867ca9ba02d945d8de3e4f89440471f089ef5f9b0532db2bc9bbd80",
+    "8-9-hh3d-3/studio/tests/replay/run_campaign_task.py": "80879ff9600e7efc2f73841b70f8a991daf9c839f5b9bab10d59975c39901e71"
+  },
+  "draft_files": {
+    "campaign_task.launch-number.ps1.draft": "405e2abfa39332b1313871763184fdda0755ff998ec83310e67e10cebfe2ebb9",
+    "run_campaign_task.launch-number.py.draft": "f5cb71fa96b8fd2f935ac933dcd5190cef2b3b6821f031bfe72becb2d360a6fd",
+    "launch-number.patch": "a2d845b93a51214952141580f097fbf06ff8f8316aaf98e210ba18aa58be7d5e"
+  },
+  "source_note": "Changing wrapper source invalidates prior source pins; preserve probe/Stop snapshots. Same campaign root and campaign source/Stop gates are unchanged.",
+  "concurrency_note": "Fixed exact task slots1..99 are inspected before registration/Run. Coordinator still serializes manual commands; no cross-task transactional launch lock."
+}

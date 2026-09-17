@@ -1,0 +1,410 @@
+"""DRAFT: integrate unchanged as studio/tests/replay/nested_owner_probe.py.
+
+Coordinator-only CLI: python -B studio/tests/replay/nested_owner_probe.py
+    --run-id gt06-nested-owner-composed-01 --parent-profile composed
+Use a DIFFERENT fresh run ID with --parent-profile legacy for the control.
+No arbitrary executable, project, script, resource cap or workload is accepted.
+This is one native semantic cycle, never a full benchmark or acceptance result.
+
+The parent owns helper -> Python host; that host owns helper -> stock editor.
+The editor retains BenchmarkProcess's default four-process Job in both modes.
+Only the outer role differs: legacy four / composed two plus four. Import is
+serial and uses the existing bounded native_job stage. No engine fork or new
+process-launch primitive is introduced. The original benchmark caps are intact.
+
+A separate 100-second workload watchdog leaves 20 seconds inside the fixed
+120-second diagnostic deadline for checked cleanup/reporting. Deadline breaches
+and uncertain cleanup fail; they must never be represented as natural exits.
+"""
+from __future__ import annotations
+
+import argparse
+from dataclasses import asdict
+import json
+import os
+from pathlib import Path
+import re
+import sys
+import threading
+import time
+
+STUDIO = Path(__file__).resolve().parents[2]
+SCRIPT = STUDIO / 'tests/replay/nested_owner_probe.py'
+sys.path.insert(0, str(STUDIO.parent))
+from studio.tests.replay import run_benchmark_campaign as campaign
+from studio.tests.replay import run_native_benchmark as native
+from studio.tests.replay.benchmark_job import (
+    BenchmarkProcess, HELD_OWNERS, owner_profile, require, verify_capture,
+)
+from studio.host.replay.process_probe import HELD_PROBES, ProcessProbe
+from studio.pipeline import native_job
+
+WALL_SECONDS = 120
+WORK_SECONDS = 100
+
+
+def put(path, value):
+    raw = value if type(value) is bytes else campaign.encoded(value)
+    campaign.write(path, raw)
+    require(campaign.read_regular(path) == raw, 'NESTED_PROBE_WRITE_READBACK')
+
+
+def read_json(path):
+    return json.loads(campaign.read_regular(path))
+
+
+def check_time(context, *, work=True):
+    field = 'work_deadline_ns' if work else 'deadline_ns'
+    require(time.monotonic_ns() < context[field], 'NESTED_PROBE_DEADLINE')
+
+
+def ref(root, path):
+    return campaign.reference(root, path)
+
+
+def clean_logs(directory):
+    stderr = campaign.artifact_bytes(directory / 'stderr.txt')
+    stdout = campaign.artifact_bytes(directory / 'stdout.txt')
+    require(not stderr and not re.search(
+        rb'\b(?:WARNING|ERROR)\b|ObjectDB instances leaked|HH_GT06_BENCHMARK_FAILED', stdout),
+        'NESTED_PROBE_NATIVE_LOG')
+    return stdout
+
+
+def expected_child_argv(context):
+    return [sys.executable, '-B', str(SCRIPT), '--run-id', context['run_id'],
+            '--parent-profile', context['parent_profile'], '--child']
+
+
+def runtime_sources(root, before, snapshot):
+    result = dict(before)
+    result.update({(root / 'project' / name).relative_to(STUDIO).as_posix(): value
+                   for name, value in snapshot.items() if name != native.MUTABLE_SCENE})
+    return result
+
+
+def verify_editor(root, context, snapshot):
+    path = root / 'editor-host/capture.json'
+    return verify_capture(root / 'editor-host', campaign.sha(campaign.read_regular(path)),
+        source_root=STUDIO, expected_source_files=runtime_sources(root, context['source_files'], snapshot),
+        expected_binary_sha256=context['godot']['gui_sha256'], expected_campaign_host=False)
+
+
+def validate_output(root, context, editor, process, snapshot):
+    """Repeat the trusted diagnostic's native/scene/timing/marker checks."""
+    binding = context['binding']
+    index, batch, index_raw, batch_raw = native.validate_native(
+        root / 'project', binding, snapshot, editor, process, context['godot'])
+    stdout = clean_logs(root / 'editor-host')
+    expected = {'run_id': context['run_id'], 'pid': process['identity']['pid'],
+        'mode': 'diagnostic', 'batches': 1, 'index_sha256': campaign.sha(index_raw),
+        'benchmark_complete': False, 'host_integrated': False}
+    require(native.markers(stdout, 'HH_GT06_BENCHMARK_COMPLETE ') == [expected],
+            'NESTED_PROBE_COMPLETE_MARKER')
+    for suffix in ('FAILED', 'ACK', 'READY', 'START'):
+        require(not native.markers(stdout, 'HH_GT06_BENCHMARK_' + suffix + ' '),
+                'NESTED_PROBE_UNEXPECTED_MARKER')
+    require(native.markers(stdout, 'HH_GT06_BENCHMARK_BATCH ') == [{
+        'run_id': context['run_id'], 'pid': process['identity']['pid'], 'index': 0,
+        'sha256': campaign.sha(batch_raw), 'memory_mono_us': batch['ended_mono_us'],
+        'barrier': {'mode': 'diagnostic_none', 'required': False}}], 'NESTED_PROBE_BATCH_MARKER')
+    after = campaign.project_files(root / 'project')
+    require({k: v for k, v in after.items() if k != native.MUTABLE_SCENE}
+            == {k: v for k, v in snapshot.items() if k != native.MUTABLE_SCENE},
+            'NESTED_PROBE_PROJECT_DRIFT')
+    return index, batch
+
+
+def error_code(error):
+    return getattr(error, 'code', str(error) if isinstance(
+        error, (native.DiagnosticError, native_job.StageFailed)) else type(error).__name__)
+
+
+def run_child(root, context):
+    # The internal mode must be the exact child recorded by the gated outer
+    # helper. It cannot reuse a previous context to run without that owner.
+    launch = root / 'host-owner/process-start.json'
+    launch_deadline = min(context['work_deadline_ns'], time.monotonic_ns() + 2_000_000_000)
+    while True:
+        try:
+            launched = read_json(launch)
+            break
+        except (FileNotFoundError, json.JSONDecodeError):
+            require(time.monotonic_ns() < launch_deadline, 'NESTED_PROBE_HOST_START')
+            time.sleep(.01)
+    invocation = read_json(root / 'host-owner/invocation.json')
+    require(launched == {'pid': os.getpid()} and invocation['argv'] == expected_child_argv(context)
+            and invocation['source_files'] == context['source_files']
+            and invocation['binary_sha256'] == context['python_sha256']
+            and invocation['profile'] == owner_profile(context['parent_profile'] == 'composed'),
+            'NESTED_PROBE_CHILD_BINDING')
+    factory, trusted = campaign.load_fixture()
+    campaign.verify_sources(context['source_files'])
+    lock_raw = campaign.read_regular(STUDIO / 'toolchain.lock.json')
+    require(context['godot'] == json.loads(lock_raw)['godot']
+            and context['toolchain_sha256'] == campaign.sha(lock_raw)
+            and context['source_closure_sha256'] == campaign.closure(context['source_files'])
+            and context['binding'] == {
+                'schema_id': 'hh-studio.native-cycle-benchmark-run', 'schema_version': '1.2.0',
+                'run_id': context['run_id'], 'mode': 'diagnostic',
+                'source_closure_sha256': context['source_closure_sha256'],
+                'profile_sha256': native.benchmark_profile.PROFILE_SHA256,
+                'batch_barrier': 'diagnostic_none', 'batch_start': 'diagnostic_immediate'}
+            and context['work_deadline_ns'] - context['started_ns'] == WORK_SECONDS * 1_000_000_000
+            and context['deadline_ns'] - context['started_ns'] == WALL_SECONDS * 1_000_000_000,
+            'NESTED_PROBE_CONTEXT_BINDING')
+    check_time(context)
+    project = root / 'project'
+    initial = campaign.prepare(project, factory, trusted, context['binding'])
+    put(root / 'initial-project-files.json', initial)
+    put(root / 'initial-scene.tscn', campaign.read_regular(project / native.MUTABLE_SCENE))
+    executable = STUDIO / '.local/tooling/godot-4.7.2-stable' / context['godot']['gui_executable']
+    owner = probe = None
+    process = {'identity': None, 'samples': [], 'errors': []}
+    result = {'completed_diagnostic': False, 'full_benchmark': False, 'formal_acceptance': False,
+              'run_id': context['run_id'], 'host_pid': os.getpid(), 'parent_profile': context['parent_profile']}
+    try:
+        native_job.run_trusted_stage(
+            [str(executable), '--headless', '--editor', '--path', str(project), '--import'],
+            cwd=project, output=root / 'import-host', source_files=context['source_files'],
+            source_root=STUDIO, binary_sha256=context['godot']['gui_sha256'],
+            timeout_seconds=min(native_job.WALL_SECONDS,
+                                (context['work_deadline_ns'] - time.monotonic_ns()) / 1e9))
+        native_job.verify_captured_stage(root / 'import-host',
+            campaign.sha(campaign.read_regular(root / 'import-host/capture.json')))
+        clean_logs(root / 'import-host')
+        check_time(context)
+        require(not list((project / 'benchmark/out').iterdir()), 'NESTED_PROBE_IMPORT_ACTIVATED')
+        snapshot = campaign.project_files(project)
+        require(all(snapshot.get(k) == v for k, v in initial.items()), 'NESTED_PROBE_IMPORT_DRIFT')
+        put(root / 'editor-snapshot.json', snapshot)
+        owner = BenchmarkProcess(
+            [str(executable), '--editor', '--path', str(project), 'res://scenes/fixture.tscn',
+             '--', '--hh-benchmark-mode=diagnostic'],
+            cwd=project, output=root / 'editor-host', source_root=STUDIO,
+            source_files=runtime_sources(root, context['source_files'], snapshot),
+            binary_sha256=context['godot']['gui_sha256'])
+        result['editor_helper_pid'] = owner.process.pid
+        peak = 0
+        while True:
+            check_time(context)
+            code = owner.tick()
+            count = owner.job.active_count()
+            require(type(count) is int, 'NESTED_PROBE_INNER_JOB_QUERY')
+            peak = max(peak, count)
+            if code is not None:
+                break
+            if probe is None:
+                try:
+                    started = read_json(root / 'editor-host/process-start.json')
+                except (FileNotFoundError, json.JSONDecodeError):
+                    started = None
+                if started is not None:
+                    require(set(started) == {'pid'}, 'NESTED_PROBE_EDITOR_START')
+                    probe = ProcessProbe(started['pid'], executable)
+                    process['identity'] = {'pid': probe.pid, 'process_start': probe.process_start}
+            if probe is not None:
+                sample = probe.sample()
+                if sample is not None:
+                    require(len(process['samples']) < 5_000, 'NESTED_PROBE_SAMPLE_CAP')
+                    process['samples'].append(sample)
+            # Intentionally preserve natural exits after a logged RD-probe
+            # error. Strict log validation below still makes that diagnostic FAIL.
+            time.sleep(.02)
+        if probe is not None:
+            probe.close()
+            probe = None
+        editor = owner.finish()
+        verified = verify_editor(root, context, snapshot)
+        require(editor == verified, 'NESTED_PROBE_EDITOR_CAPTURE_DRIFT')
+        result['inner_peak_observed'] = peak
+        result['editor_capture'] = ref(root, root / 'editor-host/capture.json')
+        put(root / 'process-metrics.json', process)
+        validate_output(root, context, editor, process, snapshot)
+        campaign.verify_sources(context['source_files'])
+        check_time(context)
+        put(root / 'final-scene.tscn', campaign.read_regular(project / native.MUTABLE_SCENE))
+        put(root / 'final-project-files.json', campaign.project_files(project))
+        result['completed_diagnostic'] = True
+    except BaseException as error:
+        result['failure'] = error_code(error)
+        retained = getattr(error, 'cleanup_owner', None)
+        if isinstance(retained, BenchmarkProcess):
+            owner = retained
+        elif isinstance(retained, ProcessProbe):
+            probe = retained
+        elif retained is not None:
+            # Imported stage's checked Job owner, if it retained cleanup state.
+            try:
+                retained.close()
+            except BaseException as cleanup:
+                result['import_cleanup_failure'] = error_code(cleanup)
+    finally:
+        failures = []
+        for owned in (probe, owner):
+            if owned is not None:
+                try:
+                    owned.close()
+                except BaseException as error:
+                    failures.append(error_code(error))
+        result['cleanup_failures'] = failures
+        result['held_owners'] = len(HELD_OWNERS)
+        result['held_probes'] = len(HELD_PROBES)
+        if failures or HELD_OWNERS or HELD_PROBES:
+            result['completed_diagnostic'] = False
+        if owner is not None:
+            result['editor_job'] = owner.job.snapshot() if owner.job else None
+            result['editor_wrapper_handle'] = owner.process_handle_snapshot()
+        put(root / 'child-result.json', result)
+    # Exit zero means this controller recorded its result, not that the native
+    # diagnostic passed. Parent independently validates result + raw evidence.
+    return 0
+
+
+def run_parent(root, run_id, parent_profile, started_ns):
+    factory, trusted = campaign.load_fixture()  # stabilize imported source closure
+    before = campaign.source_files()
+    require(SCRIPT.relative_to(STUDIO).as_posix() in before, 'NESTED_PROBE_SELF_BINDING')
+    root.mkdir(exist_ok=False)
+    lock_raw = campaign.read_regular(STUDIO / 'toolchain.lock.json')
+    lock = json.loads(lock_raw)['godot']
+    profile_raw = json.dumps(asdict(native.benchmark_profile.PROFILE), sort_keys=True,
+                             separators=(',', ':'), allow_nan=False).encode()
+    require(campaign.sha(profile_raw) == native.benchmark_profile.PROFILE_SHA256, 'NESTED_PROBE_PROFILE')
+    binding = {'schema_id': 'hh-studio.native-cycle-benchmark-run', 'schema_version': '1.2.0',
+        'run_id': run_id, 'mode': 'diagnostic', 'source_closure_sha256': campaign.closure(before),
+        'profile_sha256': native.benchmark_profile.PROFILE_SHA256,
+        'batch_barrier': 'diagnostic_none', 'batch_start': 'diagnostic_immediate'}
+    context = {'schema_id': 'hh-studio.nested-owner-probe', 'schema_version': '1.0.0',
+        'run_id': run_id, 'parent_profile': parent_profile, 'source_files': before,
+        'source_closure_sha256': campaign.closure(before), 'godot': lock,
+        'python_sha256': campaign.sha(campaign.read_regular(Path(sys.executable), 256 * 1024**2)),
+        'toolchain_sha256': campaign.sha(lock_raw), 'binding': binding,
+        'started_ns': started_ns, 'work_deadline_ns': started_ns + WORK_SECONDS * 1_000_000_000,
+        'deadline_ns': started_ns + WALL_SECONDS * 1_000_000_000,
+        'parent_owner_profile': owner_profile(parent_profile == 'composed'),
+        'editor_owner_profile': owner_profile(False), 'full_benchmark': False, 'formal_acceptance': False}
+    put(root / 'context.json', context)
+    put(root / 'benchmark-profile.json', profile_raw)
+    for name, expected in before.items():
+        raw = campaign.read_regular(STUDIO / name)
+        require(campaign.sha(raw) == expected, 'NESTED_PROBE_FREEZE_DRIFT')
+        put(root / 'source/studio' / name, raw)
+    owner = None
+    done = threading.Event()
+    timed_out = threading.Event()
+    watchdog_failures = []
+
+    def watchdog():
+        if done.wait(max(0, (context['work_deadline_ns'] - time.monotonic_ns()) / 1e9)):
+            return
+        timed_out.set()
+        # Includes an owner retained by a failed/in-flight constructor. This
+        # process has exactly one BenchmarkProcess; nested owner lives elsewhere.
+        for retained in tuple(HELD_OWNERS):
+            try:
+                retained.close()
+            except BaseException as error:
+                watchdog_failures.append(error_code(error))
+
+    guard = threading.Thread(target=watchdog, name='nested-owner-deadline', daemon=True)
+    guard.start()
+    result = {'schema_id': 'hh-studio.nested-owner-probe-capture', 'schema_version': '1.0.0',
+        'run_id': run_id, 'parent_profile': parent_profile, 'completed_diagnostic': False,
+        'full_benchmark': False, 'formal_acceptance': False, 'public_ack': False,
+        'context': ref(root, root / 'context.json')}
+    try:
+        check_time(context)
+        owner = BenchmarkProcess(expected_child_argv(context), cwd=root, output=root / 'host-owner',
+            source_root=STUDIO, source_files=before, binary_sha256=context['python_sha256'],
+            campaign_host=parent_profile == 'composed')
+        result['host_helper_pid'] = owner.process.pid
+        peak = 0
+        while owner.tick() is None:
+            check_time(context)
+            count = owner.job.active_count()
+            require(type(count) is int, 'NESTED_PROBE_OUTER_JOB_QUERY')
+            peak = max(peak, count)
+            time.sleep(.02)
+        require(not timed_out.is_set(), 'NESTED_PROBE_DEADLINE')
+        host = owner.finish()
+        verified = verify_capture(root / 'host-owner',
+            campaign.sha(campaign.read_regular(root / 'host-owner/capture.json')),
+            source_root=STUDIO, expected_source_files=before,
+            expected_binary_sha256=context['python_sha256'],
+            expected_campaign_host=parent_profile == 'composed')
+        require(host == verified, 'NESTED_PROBE_HOST_CAPTURE_DRIFT')
+        clean_logs(root / 'host-owner')
+        child = read_json(root / 'child-result.json')
+        result['outer_peak_observed'] = peak
+        result['child_failure'] = child.get('failure')
+        require(child['run_id'] == run_id and child['parent_profile'] == parent_profile
+                and child['host_pid'] == host['actual_process_exit']['pid'], 'NESTED_PROBE_CHILD_IDENTITY')
+        require(child['completed_diagnostic'] is True and not child['cleanup_failures']
+                and child['held_owners'] == 0 and child['held_probes'] == 0,
+                'NESTED_PROBE_CHILD_DIAGNOSTIC_FAILED')
+        snapshot = read_json(root / 'editor-snapshot.json')
+        editor = verify_editor(root, context, snapshot)
+        native_job.verify_captured_stage(root / 'import-host',
+            campaign.sha(campaign.read_regular(root / 'import-host/capture.json')))
+        clean_logs(root / 'import-host')
+        validate_output(root, context, editor, read_json(root / 'process-metrics.json'), snapshot)
+        campaign.verify_sources(before)
+        check_time(context)
+        require(not timed_out.is_set(), 'NESTED_PROBE_DEADLINE')
+        result['source_unchanged'] = True
+        result['completed_diagnostic'] = True
+    except BaseException as error:
+        result['failure'] = error_code(error)
+        retained = getattr(error, 'cleanup_owner', None)
+        if isinstance(retained, BenchmarkProcess):
+            owner = retained
+    finally:
+        # Do not cancel the watchdog before the owned tree has been closed.
+        if owner is not None:
+            try:
+                owner.close()
+            except BaseException as error:
+                result['cleanup_failure'] = error_code(error)
+                result['completed_diagnostic'] = False
+        done.set()
+        guard.join(2)
+        result['timed_out'] = timed_out.is_set()
+        result['watchdog_failures'] = watchdog_failures
+        result['held_owners'] = len(HELD_OWNERS)
+        result['elapsed_seconds'] = (time.monotonic_ns() - started_ns) / 1e9
+        if guard.is_alive() or timed_out.is_set() or watchdog_failures or HELD_OWNERS \
+                or result['elapsed_seconds'] >= WALL_SECONDS:
+            result['completed_diagnostic'] = False
+        if owner is not None:
+            result['host_job'] = owner.job.snapshot() if owner.job else None
+            result['host_wrapper_handle'] = owner.process_handle_snapshot()
+        result['artifacts'] = {name: ref(root, root / name) for name in (
+            'child-result.json', 'host-owner/capture.json', 'editor-host/capture.json',
+            'import-host/capture.json', 'process-metrics.json', 'editor-snapshot.json')
+            if (root / name).is_file()}
+        put(root / 'capture.json', result)
+    print(json.dumps(result, sort_keys=True), flush=True)
+    return 0 if result['completed_diagnostic'] else 1
+
+
+def main():
+    started_ns = time.monotonic_ns()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--run-id', required=True)
+    parser.add_argument('--parent-profile', required=True, choices=('legacy', 'composed'))
+    parser.add_argument('--child', action='store_true', help=argparse.SUPPRESS)
+    args = parser.parse_args()
+    require(os.name == 'nt' and Path(__file__).resolve() == SCRIPT
+            and re.fullmatch(r'gt06-nested-owner-[a-z0-9-]{1,35}', args.run_id), 'NESTED_PROBE_SCOPE')
+    root = STUDIO / '.local/reviews' / args.run_id
+    if args.child:
+        context = read_json(root / 'context.json')
+        require(context['run_id'] == args.run_id and context['parent_profile'] == args.parent_profile,
+                'NESTED_PROBE_CHILD_ARGUMENTS')
+        return run_child(root, context)
+    return run_parent(root, args.run_id, args.parent_profile, started_ns)
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())

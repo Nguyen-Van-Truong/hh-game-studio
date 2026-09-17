@@ -4,7 +4,7 @@ Owner steering mới nhất 18-09-2026: cho phép lại ba Astra extra high.
 GT-05 đã được coordinator nghiệm thu S64 sau hai critic độc lập cùng manifest.
 GT-06 hiện hành; kết quả worker S68 đã tích hợp theo scope file riêng.
 Coordinator tiếp tục, cập nhật plan và serialize native engine lanes.
-Ba worker S69 đã bàn giao review implementation/mapping và bản sửa theo file lease;
+Ba worker S70 rà launcher, native ownership và critical path theo file lease;
 coordinator tích hợp, kiểm thực thi. Đây không phải verdict nghiệm thu GT-06.
 Giữ một writer/file, actual exits,
 source/evidence hash và checkpoint. Hai review độc lập vẫn bắt buộc cho gate mới;

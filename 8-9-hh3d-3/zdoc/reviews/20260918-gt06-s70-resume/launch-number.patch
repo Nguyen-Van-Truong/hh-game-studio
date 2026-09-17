@@ -1,0 +1,249 @@
+--- a/8-9-hh3d-3/studio/tests/replay/campaign_task.ps1
++++ b/8-9-hh3d-3/studio/tests/replay/campaign_task.ps1
+@@ -12,7 +12,10 @@
+     [string]$CampaignId,
+ 
+     [ValidateSet('probe', 'campaign')]
+-    [string]$Mode
++    [string]$Mode,
++
++    [ValidateRange(1, 99)]
++    [int]$LaunchNumber = 1
+ )
+ 
+ Set-StrictMode -Version Latest
+@@ -95,6 +98,25 @@
+             $failureException = $failureException.InnerException
+         }
+         throw
++    }
++}
++
++function Launch-Suffix([int]$Number) {
++    if ($Number -eq 1) { return '' }
++    return ('-launch-{0:D2}' -f $Number)
++}
++
++function Assert-CampaignIdle($Folder) {
++    # Fixed slots only. The coordinator must serialize manual launch commands;
++    # these scheduler readbacks are not an atomic cross-task launch lock.
++    for ($number = 1; $number -le 99; $number++) {
++        $candidateName = $baseTaskName + (Launch-Suffix $number)
++        $candidate = Get-OwnTask $Folder $candidateName
++        if ($null -ne $candidate) {
++            Require ((Sid-Of $candidate.Definition.Principal.UserId) -eq $userSid) 'TASK_CAMPAIGN_PRINCIPAL'
++            Require ($candidate.GetInstances(0).Count -eq 0 -and
++                $candidate.State -in @(1, 3)) 'TASK_CAMPAIGN_ALREADY_ACTIVE'
++        }
+     }
+ }
+ 
+@@ -125,12 +147,20 @@
+ }
+ 
+ function Action-Arguments([string]$SelectedMode) {
+-    return ('-B "{0}" --campaign-id {1} --mode {2}' -f $scriptPath, $CampaignId, $SelectedMode)
++    $arguments = ('-B "{0}" --campaign-id {1} --mode {2}' -f $scriptPath, $CampaignId, $SelectedMode)
++    if ($LaunchNumber -gt 1) { $arguments += (' --launch-number {0}' -f $LaunchNumber) }
++    return $arguments
+ }
+ 
+ function Assert-Request($Request) {
+     $keys = @($Request.PSObject.Properties.Name | Sort-Object)
+-    $expectedKeys = @('schema', 'campaign_id', 'mode', 'script_sha256', 'pythonw_sha256', 'python_sha256' | Sort-Object)
++    $expectedKeys = @('schema', 'campaign_id', 'mode', 'script_sha256', 'pythonw_sha256', 'python_sha256')
++    if ($LaunchNumber -gt 1) {
++        $expectedKeys += 'launch_number'
++        Require (($Request.launch_number -is [int] -or $Request.launch_number -is [long]) -and
++            $Request.launch_number -eq $LaunchNumber) 'TASK_REQUEST_LAUNCH_NUMBER'
++    }
++    $expectedKeys = @($expectedKeys | Sort-Object)
+     Require (($keys -join ',') -ceq ($expectedKeys -join ',')) 'TASK_REQUEST_FIELDS'
+     Require ($Request.schema -ceq 'HH-GT06-TASK-REQUEST-1' -and $Request.campaign_id -ceq $CampaignId) 'TASK_REQUEST_BINDING'
+     Require ($Request.mode -cin @('probe', 'campaign')) 'TASK_REQUEST_MODE'
+@@ -153,9 +183,11 @@
+     $pythonwPath = Join-Path ([System.IO.Path]::GetDirectoryName($pythonPath)) 'pythonw.exe'
+     $userIdentity = [System.Security.Principal.WindowsIdentity]::GetCurrent()
+     try { $userSid = $userIdentity.User.Value } finally { $userIdentity.Dispose() }
+-    $taskName = 'HHStudio.GT06.' + $CampaignId
++    $baseTaskName = 'HHStudio.GT06.' + $CampaignId
++    $launchSuffix = Launch-Suffix $LaunchNumber
++    $taskName = $baseTaskName + $launchSuffix
+     $reviews = Join-Path $studio '.local\reviews'
+-    $outputDirectory = Join-Path $reviews ($CampaignId + '-supervisor')
++    $outputDirectory = Join-Path $reviews ($CampaignId + '-supervisor' + $launchSuffix)
+     $requestPath = Join-Path $outputDirectory 'request.json'
+     $xmlPath = Join-Path $outputDirectory 'task-definition.xml'
+     $registrationPath = Join-Path $outputDirectory 'task-registration.json'
+@@ -171,6 +203,7 @@
+         $stage = 'prepare'
+         Require ($Mode -cin @('probe', 'campaign')) 'TASK_MODE_REQUIRED'
+         Require ($null -eq $task) 'TASK_ALREADY_EXISTS'
++        Assert-CampaignIdle $folder
+         Require (-not (Test-Path -LiteralPath $outputDirectory)) 'TASK_OUTPUT_ALREADY_EXISTS'
+         $null = New-Item -ItemType Directory -Path $outputDirectory -ErrorAction Stop
+         $createdOutput = $true
+@@ -182,6 +215,7 @@
+             pythonw_sha256 = Hash-File $pythonwPath
+             python_sha256 = Hash-File $pythonPath
+         }
++        if ($LaunchNumber -gt 1) { $request['launch_number'] = $LaunchNumber }
+         Write-NewJson $requestPath $request
+         $request = Read-Json $requestPath
+         Assert-Request $request
+@@ -229,7 +263,7 @@
+         $xmlHash = Hash-File $xmlPath
+         Write-NewText (Join-Path $outputDirectory 'task-definition.sha256') ($xmlHash + "`n")
+         Write-NewJson $registrationPath ([ordered]@{
+-            schema = 'HH-GT06-TASK-REGISTRATION-1'; campaign_id = $CampaignId; mode = $Mode
++            schema = 'HH-GT06-TASK-REGISTRATION-1'; campaign_id = $CampaignId; mode = $Mode; launch_number = $LaunchNumber
+             task_path = '\' + $taskName; principal_sid = $userSid
+             script_path = $scriptPath; python_path = $pythonPath; pythonw_path = $pythonwPath
+             request_sha256 = Hash-File $requestPath; task_definition_sha256 = $xmlHash
+@@ -244,12 +278,13 @@
+         Require ((Hash-File $requestPath) -ceq $registration.request_sha256) 'TASK_REQUEST_CHANGED'
+         Assert-SourcePins (Read-Json $requestPath)
+         Require ($task.GetInstances(0).Count -eq 0) 'TASK_ALREADY_RUNNING'
++        Assert-CampaignIdle $folder
+         $stage = 'run'
+         $runInvoked = $true
+         $running = $task.Run($null)
+         Require ($null -ne $running -and -not [string]::IsNullOrWhiteSpace($running.InstanceGuid)) 'TASK_RUN_UNPROVEN'
+         $receipt = [ordered]@{
+-            schema = 'HH-GT06-TASK-START-1'; campaign_id = $CampaignId; mode = $Mode
++            schema = 'HH-GT06-TASK-START-1'; campaign_id = $CampaignId; mode = $Mode; launch_number = $LaunchNumber
+             task_path = '\' + $taskName; instance_guid = [string]$running.InstanceGuid
+             state = [int]$running.State; scheduler_engine_pid = [int]$running.EnginePID
+             requested_utc = [DateTime]::UtcNow.ToString('o')
+@@ -269,6 +304,13 @@
+     if ($PSBoundParameters.ContainsKey('Mode')) { Require ($Mode -ceq $request.mode) 'TASK_MODE_MISMATCH' }
+     $Mode = $request.mode
+     $registration = Read-Json $registrationPath
++    $storedLaunch = $registration.PSObject.Properties['launch_number']
++    if ($null -ne $storedLaunch) {
++        Require (($storedLaunch.Value -is [int] -or $storedLaunch.Value -is [long]) -and
++            $storedLaunch.Value -eq $LaunchNumber) 'TASK_REGISTRATION_LAUNCH_NUMBER'
++    } else {
++        Require ($LaunchNumber -eq 1) 'TASK_REGISTRATION_LAUNCH_NUMBER'
++    }
+     Require ($registration.schema -ceq 'HH-GT06-TASK-REGISTRATION-1' -and
+         $registration.task_path -ceq ('\' + $taskName) -and $registration.campaign_id -ceq $CampaignId -and
+         $registration.mode -ceq $Mode -and $registration.principal_sid -ceq $userSid) 'TASK_REGISTRATION_BINDING'
+@@ -284,7 +326,7 @@
+                 state = [int]$instance.State; scheduler_engine_pid = [int]$instance.EnginePID }
+         }
+         [ordered]@{ schema = 'HH-GT06-TASK-STATUS-1'; task_path = '\' + $taskName
+-            campaign_id = $CampaignId; mode = $Mode; state = [int]$task.State
++            campaign_id = $CampaignId; mode = $Mode; launch_number = $LaunchNumber; state = [int]$task.State
+             last_run_time = $task.LastRunTime.ToString('o'); last_task_result = [long]$task.LastTaskResult
+             instances = $rows; output_directory = $outputDirectory; formal_acceptance = $false
+             status_scope = 'Scheduler state only; not actual process exit or owned-tree proof'
+@@ -298,7 +340,7 @@
+     $folder.DeleteTask($taskName, 0)
+     Require ($null -eq (Get-OwnTask $folder $taskName)) 'TASK_DELETE_UNPROVEN'
+     $deleted = [ordered]@{ schema = 'HH-GT06-TASK-DELETED-1'; task_path = '\' + $taskName
+-        campaign_id = $CampaignId; deleted_utc = [DateTime]::UtcNow.ToString('o')
++        campaign_id = $CampaignId; launch_number = $LaunchNumber; deleted_utc = [DateTime]::UtcNow.ToString('o')
+         task_definition_sha256 = $registration.task_definition_sha256; formal_acceptance = $false }
+     Write-NewJson (Join-Path $outputDirectory 'task-deleted.json') $deleted
+     $deleted | ConvertTo-Json -Depth 12
+@@ -307,7 +349,7 @@
+     # A failed/uncertain Run call is never automatically retried or deleted.
+     # Preserve the task for exact status inspection and the original exception.
+     $failure = [ordered]@{ schema = 'HH-GT06-TASK-LAUNCHER-FAILURE-1'; campaign_id = $CampaignId
+-        command = $Command; stage = $stage; run_invoked = $runInvoked
++        command = $Command; launch_number = $LaunchNumber; stage = $stage; run_invoked = $runInvoked
+         exception_type = $_.Exception.GetType().FullName; message = $_.Exception.Message
+         hresult = $_.Exception.HResult; utc = [DateTime]::UtcNow.ToString('o'); formal_acceptance = $false }
+     if ($Command -eq 'register-run' -and $createdOutput -and $outputDirectory -and [System.IO.Directory]::Exists($outputDirectory)) {
+--- a/8-9-hh3d-3/studio/tests/replay/run_campaign_task.py
++++ b/8-9-hh3d-3/studio/tests/replay/run_campaign_task.py
+@@ -36,10 +36,21 @@
+         os.fsync(stream.fileno())
+ 
+ 
+-def validate_request(value, campaign_id, mode, script, windowed, console):
++def launch_suffix(launch_number):
++    if type(launch_number) is not int or not 1 <= launch_number <= 99:
++        raise ValueError('TASK_LAUNCH_NUMBER')
++    return '' if launch_number == 1 else f'-launch-{launch_number:02d}'
++
++
++def validate_request(value, campaign_id, mode, script, windowed, console, *, launch_number=1):
++    launch_suffix(launch_number)
+     expected = {'schema': 'HH-GT06-TASK-REQUEST-1', 'campaign_id': campaign_id,
+         'mode': mode, 'script_sha256': sha(script),
+         'pythonw_sha256': sha(windowed), 'python_sha256': sha(console)}
++    if launch_number > 1:
++        expected['launch_number'] = launch_number
++        if type(value) is not dict or type(value.get('launch_number')) is not int:
++            raise ValueError('TASK_REQUEST_BINDING')
+     if type(value) is not dict or value != expected:
+         raise ValueError('TASK_REQUEST_BINDING')
+ 
+@@ -62,7 +73,7 @@
+         'process_start': 'windows:' + str(created.dwLowDateTime | created.dwHighDateTime << 32)}
+ 
+ 
+-def execute(campaign_id, mode, output, request_sha):
++def execute(campaign_id, mode, output, request_sha, *, launch_number=1):
+     from studio.tests.replay import run_benchmark_campaign as campaign
+     from studio.tests.replay.benchmark_job import BenchmarkProcess, HELD_OWNERS, verify_capture
+     if mode == 'campaign':
+@@ -77,7 +88,7 @@
+             "import time; time.sleep(12); print('HH_GT06_TASK_PROBE_COMPLETE',flush=True)"],
+             cwd=output, output=output / 'probe-owner', source_root=STUDIO,
+             source_files=sources, binary_sha256=sha(Path(sys.executable)))
+-        binding = {'run_id': campaign_id + '.probe',
++        binding = {'run_id': campaign_id + '.probe' + launch_suffix(launch_number),
+             'source_closure_sha256': campaign.closure(sources), 'campaign_sha256': request_sha}
+         write(output / 'probe-context.json', binding)
+         campaign.wait_owned_run(owner, output, **binding)
+@@ -100,10 +111,13 @@
+     parser = argparse.ArgumentParser(description=__doc__)
+     parser.add_argument('--campaign-id', required=True)
+     parser.add_argument('--mode', choices=('probe', 'campaign'), required=True)
++    parser.add_argument('--launch-number', type=int, default=1)
+     args = parser.parse_args()
+     if os.name != 'nt' or not re.fullmatch(r'gt06-[a-z0-9-]{1,25}', args.campaign_id):
+         raise ValueError('TASK_ID_OR_PLATFORM')
+-    output = STUDIO / '.local/reviews' / (args.campaign_id + '-supervisor')
++    suffix = launch_suffix(args.launch_number)
++    output = STUDIO / '.local/reviews' / (args.campaign_id + '-supervisor' + suffix)
++    launch_fields = {} if args.launch_number == 1 else {'launch_number': args.launch_number}
+     # Single-use claim precedes logs. Duplicate manual task starts cannot
+     # overwrite evidence or silently resume an earlier invocation.
+     with (output / 'claim').open('xb') as claim:
+@@ -122,24 +136,26 @@
+                 raise ValueError('TASK_WINDOWED_INTERPRETER_REQUIRED')
+             request = output / 'request.json'
+             value = json.loads(request.read_bytes())
+-            validate_request(value, args.campaign_id, args.mode, Path(__file__), windowed, console)
++            validate_request(value, args.campaign_id, args.mode, Path(__file__), windowed, console,
++                launch_number=args.launch_number)
+             # The scheduler console stays hidden; owned helpers use the
+             # checked console companion with their existing redirected pipes.
+             sys.executable = str(console)
+             observation = process_observation()
+-            write(output / 'start.json', {**observation, 'campaign_id': args.campaign_id,
++            write(output / 'start.json', {**observation, **launch_fields, 'campaign_id': args.campaign_id,
+                 'mode': args.mode, 'started_at': datetime.now(timezone.utc).isoformat(),
+                 'request_sha256': sha(request), 'supervisor_script_sha256': sha(Path(__file__)),
+                 'scheduler_result_still_required': True, 'formal_acceptance': False})
+-            code = execute(args.campaign_id, args.mode, output, sha(request))
+-            validate_request(value, args.campaign_id, args.mode, Path(__file__), windowed, console)
++            code = execute(args.campaign_id, args.mode, output, sha(request), launch_number=args.launch_number)
++            validate_request(value, args.campaign_id, args.mode, Path(__file__), windowed, console,
++                launch_number=args.launch_number)
+         except BaseException as error:
+             code = 1
+             traceback.print_exc()
+-            write(output / 'failure.json', {'code': getattr(error, 'code', type(error).__name__),
++            write(output / 'failure.json', {**launch_fields, 'code': getattr(error, 'code', type(error).__name__),
+                 'formal_acceptance': False})
+         finally:
+-            write(output / 'return.json', {'returned_exit_code': code,
++            write(output / 'return.json', {**launch_fields, 'returned_exit_code': code,
+                 'elapsed_seconds': time.monotonic() - started,
+                 'actual_process_exit_not_yet_observed': True,
+                 'scheduler_result_still_required': True, 'formal_acceptance': False})
