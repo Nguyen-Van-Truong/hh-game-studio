@@ -1,0 +1,650 @@
+{
+  "observed_utc": "2026-09-17T19:32:36.410884+00:00",
+  "campaign_id": "gt06-s71-campaign-01",
+  "source_closure_sha256": "38a0848b68c4d6b34f1a03839008d54aa9e99a33458abaa88a939c8d2a744d86",
+  "scheduler": {
+    "schema": "HH-GT06-TASK-STATUS-1",
+    "task_path": "\\HHStudio.GT06.gt06-s71-campaign-01",
+    "campaign_id": "gt06-s71-campaign-01",
+    "mode": "campaign",
+    "launch_number": 1,
+    "state": 4,
+    "last_run_time": "2026-09-18T02:10:39.0000000",
+    "last_task_result": 267009,
+    "instances": [
+      {
+        "instance_guid": "{8132F21A-241B-40AE-82BF-4F66053680B4}",
+        "state": 4,
+        "scheduler_engine_pid": 46392
+      }
+    ],
+    "output_directory": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s71-campaign-01-supervisor",
+    "formal_acceptance": false,
+    "status_scope": "Scheduler state only; not actual process exit or owned-tree proof"
+  },
+  "full_runs": 0,
+  "captured_batches": 13,
+  "measured_batches": 8,
+  "samples": [
+    {
+      "batch": 0,
+      "warmup": true,
+      "seconds": 56.228409,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 566
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71135
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 755449856
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 194
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 36483072
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 540.527,
+      "sample_sha256": "b30bda86e4904472218f2fb2af11681f69ee605c357b058eaf19e14a522ab3b2"
+    },
+    {
+      "batch": 1,
+      "warmup": true,
+      "seconds": 64.16041,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 564
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71135
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 754733056
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 194
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 38838272
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 540.291,
+      "sample_sha256": "db7f1eaed7784705e1d346ed1ff250f4136049d14e1154c45a253cac6bb24bbb"
+    },
+    {
+      "batch": 2,
+      "warmup": true,
+      "seconds": 70.958267,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 560
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71135
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 510685184
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 194
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 37261312
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 550.353,
+      "sample_sha256": "4da740ed7d551aed2ee412fcf5cd35153702a91defd1a9a7003adb0b598bc09b"
+    },
+    {
+      "batch": 3,
+      "warmup": true,
+      "seconds": 78.695708,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 560
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71135
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 338169856
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 194
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 33611776
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 574.573,
+      "sample_sha256": "9931b81b1fe0c9733c8ffd85911db12362e68c8aa01ee2ab60cf768bd4150a63"
+    },
+    {
+      "batch": 4,
+      "warmup": true,
+      "seconds": 86.191389,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 566
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71135
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 247459840
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 194
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 34279424
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 607.291,
+      "sample_sha256": "e05891d6272f82d04118426eacb7a0db08945a82589c3e62dbb4daaa88358c9a"
+    },
+    {
+      "batch": 5,
+      "warmup": false,
+      "seconds": 92.847395,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 566
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71135
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 196616192
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 194
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 33357824
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 557.996,
+      "sample_sha256": "68cee576a5bcc109b1bb36f53a4685e5e529e2b3a90af6fbf342816804235056"
+    },
+    {
+      "batch": 6,
+      "warmup": false,
+      "seconds": 100.271769,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 560
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71135
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 179204096
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 194
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 33165312
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 540.057,
+      "sample_sha256": "8f20b0c86cb08d6d6d801bf5e2c2cf52e1a4140309d2c527c3a2d23451968d8c"
+    },
+    {
+      "batch": 7,
+      "warmup": false,
+      "seconds": 105.74576,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 560
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71135
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 143306752
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 194
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 34054144
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 535.949,
+      "sample_sha256": "2a0d2b93787d423c529fb95332d2ade51a3a37049c6fc5067d66d762149b3c67"
+    },
+    {
+      "batch": 8,
+      "warmup": false,
+      "seconds": 114.210214,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 556
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71135
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 114774016
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 194
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 34127872
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 540.268,
+      "sample_sha256": "f9388fe71af6e115e4d051f5e3bc907fa30809dc49d2ccc8420635774f29ddec"
+    },
+    {
+      "batch": 9,
+      "warmup": false,
+      "seconds": 121.498551,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 556
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71135
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 111300608
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 194
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 34177024
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 535.165,
+      "sample_sha256": "2f5bc7fc5f4aae108be60a68cfec29f4775d4946743840308c1c2da5eddd8407"
+    },
+    {
+      "batch": 10,
+      "warmup": false,
+      "seconds": 127.030304,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 556
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71135
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 111038464
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 194
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 31920128
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 524.331,
+      "sample_sha256": "26cb63219548e2121977efcae95987dcca8427076f09072012efd57a8685a664"
+    },
+    {
+      "batch": 11,
+      "warmup": false,
+      "seconds": 136.430848,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 556
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71135
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 110202880
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 194
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 32493568
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 535.602,
+      "sample_sha256": "8f0fd02eff32c02ad527ff90176f8631606ed2ace52247e0af478e70cf83c6ef"
+    },
+    {
+      "batch": 12,
+      "warmup": false,
+      "seconds": 145.433292,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 556
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71135
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 109793280
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 194
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 32546816
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 536.365,
+      "sample_sha256": "6a4e4c4136f22079200525495b3810670120cfba1dd5d6cd7eef352d2affe8ac"
+    }
+  ],
+  "partial_p95_ms": {
+    "inspect": 157.59874,
+    "admitted": 109.66941,
+    "rejected": 24.61894
+  },
+  "partial_stop_p95_ms": 84.32903999999999,
+  "stderr_bytes": {
+    ".local\\reviews\\gt06-s71-campaign-01-supervisor\\stderr.txt": 0,
+    ".local\\reviews\\gt06-s71-campaign-01\\run-00-attempt-01\\host-owner\\stderr.txt": 0,
+    ".local\\reviews\\gt06-s71-campaign-01\\run-00-attempt-01\\editor-host\\stderr.txt": 0
+  },
+  "estimate": {
+    "basis": "Linear fit to completed measured batches; extrapolated workload only, excludes assembly/review/fixes and startup",
+    "seconds_added_per_batch": 7.381412416666665,
+    "intercept_seconds": 55.191511083333346,
+    "projected_fresh_run_seconds": 6323.643275833332,
+    "current_run_remaining_seconds": 5030.40346325,
+    "campaign_remaining_hours": 17.20644248493055,
+    "assumption": "Same approximately linear per-run growth and same workstation; no failure/retry. Early provisional scenario, not a promised ETA."
+  },
+  "formal_acceptance": false,
+  "complete_run_verified": false
+}

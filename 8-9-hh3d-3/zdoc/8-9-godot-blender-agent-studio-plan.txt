@@ -181,6 +181,14 @@ GT-06 hiện hành — tóm tắt theo kết quả, chi tiết giữ trong evide
   sáu artifactrefs khớp; live/frozen/Gitindex49map trùng. Chưa fullrun/PASS;
   không resume/trộn sample campaign02. Launchproof và lịch tiếp15phút đã
   cập nhật trong -s71-growth/campaign-launch.json và overnight-schedule.json.
+- Quan sát02:32:36: S71campaign01 vẫnRUNNING, run00 đãcapture13/35batch
+  gồm5warmup+8measured, chưa fullrun. EditorObjects71135 đứng yên toàn13batch,
+  stderrtrống; partialinspectp95=157.599ms, partialStopp95=84.329ms. Số liệu
+  tạm chưa thay fullrun/dataset/exitproof. Thời gian batch tăng khoảng7.38s
+  mỗi batch; fit8measured dự kiến còn17.2giờ workload nếu xu hướng và máy giữ
+  nguyên, chưa gồm assembly/review/sửa lỗi. Đây là kịch bản sớm, không hứa ETA.
+  Chi tiết có timestamp/sourcebinding: -s71-growth/progress-01.json. Giữ source,
+  không chạy test/engine nặng cạnh phép đo; lịch15phút hiện hành tiếp tục.
 - Owner yêu cầu tiếp tục qua đêm18-09: heartbeat task hiện tại đã ACTIVE,
   id=ti-p-t-c-hh3d-tools-qua-m, kiểm/tiếp việc mỗi15phút. Readback lưu tại
   reviews/20260918-gt06-s70-resume/overnight-schedule.json. Không tạo lịch trùng;
