@@ -1,0 +1,326 @@
+{
+  "schema": "GT05-S62-FOUNDATION-CHECKPOINT-1",
+  "created_at_utc": "2026-09-17T11:30:34.075764+00:00",
+  "formal_acceptance": false,
+  "wp": "GT-05",
+  "tests": {
+    "run": 134,
+    "failures": 0,
+    "errors": 0,
+    "skips": [
+      [
+        "test_symlink_staging_rejected_where_supported (test_producer_contract.ProducerContractTests.test_symlink_staging_rejected_where_supported)",
+        "Host does not grant symlink creation"
+      ]
+    ]
+  },
+  "tested_source_files": {
+    "pipeline/__init__.py": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68",
+    "pipeline/glb_container.py": "4a537f68de409b853cafb4d9b8483523676da94e60458ab7982290396f475a1f",
+    "pipeline/naming.py": "8b621b7c0a6fc652916825f2d56e3d8e1263c85fa58b052a0c094e3865358f67",
+    "pipeline/png_decode.py": "815ef7b50de753c768dc12732ec48913a7ac3c2a832b736566056e88762929b3",
+    "pipeline/accessor_values.py": "2ac8443c7a391519b35e198ef045716463d7acf8c4e58e3d97798d4ab97af798",
+    "pipeline/glb_semantics.py": "4f7cda030907fa15dc936d60f8f8614ada73e7a83154febb343ead8ee485210e",
+    "pipeline/preflight.py": "00e0ad46ab2c9b4035c2af483cf001a7a94d76fcce97620e4141c3fa8c61b52d",
+    "pipeline/admission_worker.py": "99ecbcc3f30ee61a3383ac77e2400b71d4470e438fffe09dacabf13014e29b72",
+    "pipeline/native_job.py": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca",
+    "pipeline/run_diagnostic.py": "81f1f3cf03747ac8a8b9eabb523ba456c90b11572c6dbab0b11982936f8f219e",
+    "pipeline/run_validation.py": "301bfd7f25f4ceab199ceef2068c76cb4a714c25ceba03c7302fde1ead5f07c4",
+    "pipeline/validate_glb.cjs": "390a79ae71c0c30de21500d26a1fb279198d363d6b865afb1284e483998ae5cb",
+    "pipeline/dependencies/gltf-validator.lock.json": "1c89a3ff71c9b7a4f1c4af6d2bcfd1d08a1b0b903db4e9e05b379f208ca24c86",
+    "pipeline/dependencies/node.lock.json": "3ace5add694afbd25bf0c3d00e589defa1f164e9a3662333c6930be23d64a4bb",
+    "pipeline/producer/__init__.py": "0c37cb9e5ddf97a1bdcf99f751a7098cf0ad3ec82bc007677472ec4983bc257e",
+    "pipeline/producer/contract.py": "1f4c485dacb691394a71f78b4f0edcb09556b2acee2a93c72d407124706c6dc0",
+    "pipeline/producer/run_blender.py": "b7c618161f6ab440d3784162d7955832a40af9820b00ae989f9536654da360c5",
+    "contracts/naming-convention-v1.md": "f7c3ab1caea02dab01eab5cb81b089e384ac81d5cef76b0b7f62b22ccbcb19b3",
+    "fixtures/assets-src/fixture-source.json": "4978f13abe7f2a334b48606588c12866b0b97f7c3fbe4e0a4b935c4b4d143440",
+    "tests/asset-profile.json": "58be789853b900de63fee948b1e42a8d56001f356735777388df53725624a08a",
+    "toolchain.lock.json": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+    "blender-addon/exporter.lock.json": "1f7c53126318568e1de7497eb33154973bb287d2ad0dc86cd6ac381796e36558",
+    "tests/pipeline/test_naming.py": "bd9e650447d8b78fe210f6eac7bc623aeec2da17a03093f6a530e9f1a2ab5eb7",
+    "tests/pipeline/test_glb_container.py": "759259c8467bae41bf8d6d84caa0437813b1720fe7a003528d56d1545971d9aa",
+    "tests/pipeline/test_png_decode.py": "693f933c22e82b5f716820694c6b1ffd6a657bfa3d2093bccaa2a76b730176c9",
+    "tests/pipeline/test_accessor_values.py": "c7ccb4c6ac175ca4b808017f4879dd918acfc4996d3440e4335da02c7e0cad20",
+    "tests/pipeline/test_glb_semantics.py": "1c251ae4ec0d9595c48fdebfa80f18f6de773f62bc4be021b755537bcdbc3e73",
+    "tests/pipeline/test_admission_worker.py": "50f520be7a83801aa6ec1d61ef76bdcedc9543cc6e58a161b7ba5705c8025709",
+    "tests/pipeline/test_native_job.py": "16d825addc32ea8dce04785fab8003853cc3cfc843597c64d40eb17c8059d01c",
+    "tests/pipeline/test_khronos_stage.py": "8aa6a16450eb4b6b60d73cb7e838fc2c750c5ff7df5751ea66a005deedc42568",
+    "tests/pipeline/test_preflight.py": "9e656a8568efc74bd48f4e51dbf51eab97db2666b28fca571e91f8b492b6a2e7",
+    "tests/pipeline/test_capture_binding.py": "a22b89f5687bcc3b870767938b6f9fab933836bdfb51e239f3d0d556a74a0dd1",
+    "tests/pipeline/test_producer_contract.py": "1ccf08df170aa11b93526a25b5069e1a71b6dc4d403dca058c9099d986c9fbad"
+  },
+  "current_source_files": {
+    "pipeline/__init__.py": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68",
+    "pipeline/glb_container.py": "4a537f68de409b853cafb4d9b8483523676da94e60458ab7982290396f475a1f",
+    "pipeline/naming.py": "8b621b7c0a6fc652916825f2d56e3d8e1263c85fa58b052a0c094e3865358f67",
+    "pipeline/png_decode.py": "815ef7b50de753c768dc12732ec48913a7ac3c2a832b736566056e88762929b3",
+    "pipeline/accessor_values.py": "2ac8443c7a391519b35e198ef045716463d7acf8c4e58e3d97798d4ab97af798",
+    "pipeline/glb_semantics.py": "4f7cda030907fa15dc936d60f8f8614ada73e7a83154febb343ead8ee485210e",
+    "pipeline/preflight.py": "00e0ad46ab2c9b4035c2af483cf001a7a94d76fcce97620e4141c3fa8c61b52d",
+    "pipeline/admission_worker.py": "99ecbcc3f30ee61a3383ac77e2400b71d4470e438fffe09dacabf13014e29b72",
+    "pipeline/native_job.py": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca",
+    "pipeline/run_diagnostic.py": "81f1f3cf03747ac8a8b9eabb523ba456c90b11572c6dbab0b11982936f8f219e",
+    "pipeline/run_validation.py": "607531ae705e2fb54377cdbd21930937aecb0a13d75452c61dc7efff2ccbd7a2",
+    "pipeline/validate_glb.cjs": "390a79ae71c0c30de21500d26a1fb279198d363d6b865afb1284e483998ae5cb",
+    "pipeline/dependencies/gltf-validator.lock.json": "39d376d0ce24827de0c0199d0816d7558cddf8e3dfd1d9e9411a001adebf3293",
+    "pipeline/dependencies/node.lock.json": "3ace5add694afbd25bf0c3d00e589defa1f164e9a3662333c6930be23d64a4bb",
+    "pipeline/producer/__init__.py": "0c37cb9e5ddf97a1bdcf99f751a7098cf0ad3ec82bc007677472ec4983bc257e",
+    "pipeline/producer/contract.py": "1f4c485dacb691394a71f78b4f0edcb09556b2acee2a93c72d407124706c6dc0",
+    "pipeline/producer/run_blender.py": "b7c618161f6ab440d3784162d7955832a40af9820b00ae989f9536654da360c5",
+    "contracts/naming-convention-v1.md": "f7c3ab1caea02dab01eab5cb81b089e384ac81d5cef76b0b7f62b22ccbcb19b3",
+    "fixtures/assets-src/fixture-source.json": "4978f13abe7f2a334b48606588c12866b0b97f7c3fbe4e0a4b935c4b4d143440",
+    "tests/asset-profile.json": "58be789853b900de63fee948b1e42a8d56001f356735777388df53725624a08a",
+    "toolchain.lock.json": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+    "blender-addon/exporter.lock.json": "1f7c53126318568e1de7497eb33154973bb287d2ad0dc86cd6ac381796e36558",
+    "tests/pipeline/test_naming.py": "bd9e650447d8b78fe210f6eac7bc623aeec2da17a03093f6a530e9f1a2ab5eb7",
+    "tests/pipeline/test_glb_container.py": "759259c8467bae41bf8d6d84caa0437813b1720fe7a003528d56d1545971d9aa",
+    "tests/pipeline/test_png_decode.py": "693f933c22e82b5f716820694c6b1ffd6a657bfa3d2093bccaa2a76b730176c9",
+    "tests/pipeline/test_accessor_values.py": "c7ccb4c6ac175ca4b808017f4879dd918acfc4996d3440e4335da02c7e0cad20",
+    "tests/pipeline/test_glb_semantics.py": "1c251ae4ec0d9595c48fdebfa80f18f6de773f62bc4be021b755537bcdbc3e73",
+    "tests/pipeline/test_admission_worker.py": "50f520be7a83801aa6ec1d61ef76bdcedc9543cc6e58a161b7ba5705c8025709",
+    "tests/pipeline/test_native_job.py": "16d825addc32ea8dce04785fab8003853cc3cfc843597c64d40eb17c8059d01c",
+    "tests/pipeline/test_khronos_stage.py": "8aa6a16450eb4b6b60d73cb7e838fc2c750c5ff7df5751ea66a005deedc42568",
+    "tests/pipeline/test_preflight.py": "9e656a8568efc74bd48f4e51dbf51eab97db2666b28fca571e91f8b492b6a2e7",
+    "tests/pipeline/test_capture_binding.py": "a22b89f5687bcc3b870767938b6f9fab933836bdfb51e239f3d0d556a74a0dd1",
+    "tests/pipeline/test_producer_contract.py": "1ccf08df170aa11b93526a25b5069e1a71b6dc4d403dca058c9099d986c9fbad"
+  },
+  "changes_after_suite": {
+    "pipeline/dependencies/gltf-validator.lock.json": "Stable PINNED label replaces stale progress label; dependency content pins unchanged.",
+    "pipeline/run_validation.py": "Pre-run exact source snapshots added; exercised by validation-s62-01 actual admission and Khronos Jobs."
+  },
+  "runs": {
+    "gt05-foundation-suite-01": {
+      "capture.json": {
+        "sha256": "86010be014e9208d5065ea3659f3700b50483ed481af026ab9672091fd5429de",
+        "bytes": 4780
+      },
+      "foundation-stdout.txt": {
+        "sha256": "f3845dab57d94bee0358fdb993030c15c12528c5531ab3bf7e4fd6238d8df97a",
+        "bytes": 260
+      },
+      "foundation-stderr.txt": {
+        "sha256": "630fb80585b3526ff6239eede516707d4a098bfb73a7ca550ca17ac53bc768e1",
+        "bytes": 20724
+      },
+      "foundation-host.json": {
+        "sha256": "9e575e7fbfbc6c4ff983840a42e752ecc8b37a49ead329c2701f78944c0753ea",
+        "bytes": 87
+      }
+    },
+    "gt05-producer-native-05": {
+      "diagnostic.json": {
+        "sha256": "d438652b57d872fd860e3c0b4f1b6c5d3d7cbce594591588ac8c6644cf564d37",
+        "bytes": 3377
+      },
+      "source-files.json": {
+        "sha256": "42a3974073c91f2591e6a779dc1a9e3bd210f00959a6fe8838b2c039e8c3165b",
+        "bytes": 2681
+      },
+      "fixture/producer-report.json": {
+        "sha256": "208f008b5e109edac7cbb097079d4e45f2968282cd21ec0a43d848400f3843ed",
+        "bytes": 328463
+      },
+      "fixture/fixture.blend": {
+        "sha256": "b4b3d94e63197c29f15a53799592ebeff016a69b4563d2b11548fd4bda162273",
+        "bytes": 134559
+      },
+      "fixture/fixture.glb": {
+        "sha256": "e85e536137208ba84adbc875b6fb647b5a4e49156344e03e2e8947a7ae91e377",
+        "bytes": 216436
+      },
+      "host/capture.json": {
+        "sha256": "01abcdb62a0c33e4ffef50e4f70780431379803fa569a1ceee11c9b9e11920e0",
+        "bytes": 1340
+      },
+      "host/stdout.txt": {
+        "sha256": "14dbf11bc6a744f5f50fbb68c182d99ab89dc9933b9deb65509aa3fd9a11dfa8",
+        "bytes": 3206
+      },
+      "host/stderr.txt": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "host/process-start.json": {
+        "sha256": "cda9048218277304383ef2d8a805f94e7bb25f71b3b935233aacfdfe801e1daf",
+        "bytes": 14
+      },
+      "host/process-exit.json": {
+        "sha256": "aa43ff8d292ccafb74f448a5fba81a6d85719a8a4181588a9957f859e9fce973",
+        "bytes": 30
+      }
+    },
+    "gt05-producer-repeat-01": {
+      "diagnostic.json": {
+        "sha256": "1da8c420d6f7e825f381006be4eae98d6980972a0cb5403ab6dd0387af66b973",
+        "bytes": 3495
+      },
+      "source-files.json": {
+        "sha256": "b8e4e5a1abcca6e413a9376bab17d369173d83ae4388e09ebf94c16e48eae357",
+        "bytes": 2681
+      },
+      "fixture/producer-report.json": {
+        "sha256": "13a0416950aa2f6e4589442e1fa917c023bfe8395af717f803d1a1362fce8eee",
+        "bytes": 328463
+      },
+      "fixture/fixture.blend": {
+        "sha256": "ad88ee8d6c15d85acc7332d6896818f82309869a57c9cf4667ea91019a245956",
+        "bytes": 134559
+      },
+      "fixture/fixture.glb": {
+        "sha256": "e85e536137208ba84adbc875b6fb647b5a4e49156344e03e2e8947a7ae91e377",
+        "bytes": 216436
+      },
+      "host/capture.json": {
+        "sha256": "61a0a28ba9d025b7c50dd16ebf9ee8bcb18b59a814617054294755fe1fcd6803",
+        "bytes": 1339
+      }
+    },
+    "gt05-producer-edited-01": {
+      "diagnostic.json": {
+        "sha256": "192f610fab69db9fc55a19ae31f02307c81931c86dac927ff367847c1529ba05",
+        "bytes": 3493
+      },
+      "source-files.json": {
+        "sha256": "b8e4e5a1abcca6e413a9376bab17d369173d83ae4388e09ebf94c16e48eae357",
+        "bytes": 2681
+      },
+      "fixture/producer-report.json": {
+        "sha256": "24063aa6ddd831c7708b274a8c5e5d5992a8d30cf29c86d5a3806bb500563eb1",
+        "bytes": 328539
+      },
+      "fixture/fixture.blend": {
+        "sha256": "104752d876d84d3f043503f10194a9c3ffe43f2fd08814daaa08ae66ab0c1364",
+        "bytes": 134560
+      },
+      "fixture/fixture.glb": {
+        "sha256": "ff04facd858fcdc6516c0dc5610ee6b1155706c6aff21c59321422197d93066d",
+        "bytes": 216464
+      },
+      "host/capture.json": {
+        "sha256": "b05981722993a897dff2d53eae782b9e0413fca187245f122db36b8572761ae8",
+        "bytes": 1339
+      }
+    },
+    "gt05-validation-s62-01": {
+      "validation.json": {
+        "sha256": "01605962600e8f44cc2104842b8ad977eb5f580267a428188e5da2b59bb5f512",
+        "bytes": 723
+      },
+      "manifest.json": {
+        "sha256": "1dfb3a3897c7471a0f1be22fde78d1bdc751823a5f6b9268c38d3e28c166665a",
+        "bytes": 6682
+      },
+      "preflight.json": {
+        "sha256": "c6fb0d62877d36ccf1b9f3a1c6a999c357c9b89d044e470e04a85ba3b5674dd7",
+        "bytes": 1297
+      },
+      "semantic.json": {
+        "sha256": "8dbfeb09adf1c927962bf5206a16d171509bcbb01e7128326897ce9306a05b84",
+        "bytes": 418650
+      },
+      "validator.json": {
+        "sha256": "5cd88ff89419f51331d83603d80f1a147c28a8ced33d5181398b05a562fc06d9",
+        "bytes": 4919
+      },
+      "source-files.json": {
+        "sha256": "d3282d0ced659fba851cc745ceec3a9adf35079d7a0ce2eb6716546d5e2827f3",
+        "bytes": 4349
+      },
+      "admission-source-files.json": {
+        "sha256": "c430442f20e47b4a0d9cd9f22809190b2e74011632509b2220cfee2f8030aede",
+        "bytes": 2720
+      },
+      "host/capture.json": {
+        "sha256": "cb3dbd3a581a5e31a7f8245b00624d6363d66c12c97ae4ab5071f619e2b2249c",
+        "bytes": 1342
+      },
+      "admission-host/capture.json": {
+        "sha256": "f28aa31eceb85a05b938f277e9f5f38468b62231d8b306cd696a964364767554",
+        "bytes": 1341
+      }
+    },
+    "gt05-consumer-native-04": {
+      "consumer.json": {
+        "sha256": "3f64b402804c0b213a8a33c77994868b8084d64b7340c560df6c8c7016032d3f",
+        "bytes": 629
+      },
+      "source-files.json": {
+        "sha256": "7a2adcf82ee8eec0ca7551e1ecc49eac6514077dd3707825847d2574ad1c0735",
+        "bytes": 4991
+      },
+      "comparison.json": {
+        "sha256": "2809066157fcc767a4fa32f1a046fbb342fd2b5b8b4b40549c76e2796b3596a9",
+        "bytes": 124
+      },
+      "import-host/capture.json": {
+        "sha256": "761f9180e7b6c8479e3c62f7e0073462bc72f571e66bb90c6d2b064f9a2efb40",
+        "bytes": 1340
+      },
+      "baseline-host/capture.json": {
+        "sha256": "16d142c0b85e6e6c9081e38c69c99eb893eb8b9291505e2b3b171bc5fb25ccee",
+        "bytes": 1340
+      },
+      "project/out/baseline.json": {
+        "sha256": "8191849225be1d976b0db26beccdd9397799ca0b91f3c63ad2bcaa235deb730e",
+        "bytes": 762275
+      }
+    },
+    "gt05-consumer-visual-01": {
+      "followup.json": {
+        "sha256": "3c9d2901d17d9ba18ef989758867c540bda746b9854f58cbed66e3562d94a9da",
+        "bytes": 944
+      },
+      "comparison.json": {
+        "sha256": "2809066157fcc767a4fa32f1a046fbb342fd2b5b8b4b40549c76e2796b3596a9",
+        "bytes": 124
+      },
+      "source-files.json": {
+        "sha256": "34cfffad06e8d1fef4782ee63d2d2039a6b3840359d30b25d39533af35bb00a9",
+        "bytes": 4991
+      },
+      "visual-host/capture.json": {
+        "sha256": "1a789c1a4e9ba27569220c406d3f05732e6f5d648a777507e63c7cbadb73f803",
+        "bytes": 1341
+      }
+    },
+    "gt05-consumer-reimport-01": {
+      "followup.json": {
+        "sha256": "8f9b3cdb45fea8928130fab115da0b533641c75257b5353901a19407bbf5f6fd",
+        "bytes": 1053
+      },
+      "comparison.json": {
+        "sha256": "2809066157fcc767a4fa32f1a046fbb342fd2b5b8b4b40549c76e2796b3596a9",
+        "bytes": 124
+      },
+      "source-files.json": {
+        "sha256": "346d8e0b982fc4e9c74b4e9caf20c7f22a9a5e1983bee57c3861a1fa2aee236b",
+        "bytes": 4991
+      },
+      "import-host/capture.json": {
+        "sha256": "4d7de79e6fc2595297af4d13b5f81ace1c6c2e4d7b3cb72786ac65a234bf9fd2",
+        "bytes": 1329
+      },
+      "reimport-host/capture.json": {
+        "sha256": "a2a605289132290af6dd5311c4c726d27d14cfa44517cc01e1725809e44cb382",
+        "bytes": 1342
+      }
+    },
+    "gt05-native-observation-rejections-01": {
+      "output/result.json": {
+        "sha256": "9282e526cbb6f5c97d1824c1482061710c4c6ad0edfe5fa74b07b900806603cc",
+        "bytes": 27065
+      }
+    },
+    "gt05-producer-direct-check-01": {
+      "result.json": {
+        "sha256": "ef1d51cecb932ce9d4852217259034e1611ead2f44a87dd250cffb3805eda986",
+        "bytes": 4449
+      }
+    }
+  },
+  "raw_location_relative_to_studio": ".local/reviews",
+  "portable_hash_domain": "exact local bytes; this index is not a replacement for raw evidence",
+  "native_scope": "Component diagnostics across distinct source snapshots, not a single frozen final closure",
+  "known_visual_gap": "Old visual01 uses authored override on crate, so original PBR look is not proved; visual/performance changes still WIP.",
+  "uncommitted_components": "Godot consumer/driver and observation rejection checker remain WIP until visual changes are verified."
+}

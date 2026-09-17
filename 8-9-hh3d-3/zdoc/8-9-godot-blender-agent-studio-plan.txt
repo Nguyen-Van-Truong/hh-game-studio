@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 17-09-2026, Asia/Saigon | Revision S61 | TRIỂN KHAI THEO GATE
+Ngày 17-09-2026, Asia/Saigon | Revision S62 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S61
+PLAN_REVISION=S62
 EXECUTION_MODE=COORDINATOR_THREE_ASTRA_XHIGH_OWNER_20260917
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -50,10 +50,10 @@ GT04_WORKING_SOURCE_STATUS=S60_FROZEN_ACCEPTED
 GT04_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S60
 GT04_CHECKPOINT_COMMIT=38f6b9a
 GT04_REVIEW_CLOSURE=8ea276e98f3137a5f3623fce00d0760ae0c1fe6d17a77a330e98fa8839a31950
-GT05_EVIDENCE_STATUS=DATA_CONTRACT_PREPARATION_ONLY
+GT05_EVIDENCE_STATUS=COMPONENT_PIPELINE_REIMPORT_PASS_PUBLICATION_GAP
 GT05_REVIEW_STATUS=NOT_REVIEWED
 
-TIẾN ĐỘ HIỆN HÀNH — S61, ngày 17-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S62, ngày 17-09-2026
 GT-01–04 đã ACCEPTED. GT-05 mở sau hai review độc lập S60 cùng closure.
 Owner cho phép ba Astra extra high; coordinator tích hợp và giữ một writer/file.
 Native engine/integration lanes chạy tuần tự với process/cache/evidence riêng.
@@ -81,18 +81,38 @@ Native engine/integration lanes chạy tuần tự với process/cache/evidence 
   writable restart, restored Undo và cross-app activation chưa được claim.
 
 GT-05 hiện hành:
-- Khóa dữ liệu trước native run: studio/tests/asset-profile.json và
-  studio/contracts/naming-convention-v1.md. Pure naming lint có 12/12 tests,
-  actual target/wrapper exit 0, owned tree sạch; chưa là pipeline acceptance.
-- Pin Khronos gltf-validator 2.0.0-dev.3.10, SHA-512/SHA-256 và 9 package files;
-  cache đã kiểm, chưa chạy validator, không npm install script hay nâng shared cap.
-- Lộ trình gọn: bounded GLB/PNG validator → original rig/outfit/PBR/clip fixture
-  → isolated Godot import/reimport/readback/6-view → staged snapshot candidate.
-  Dùng profile mới; không nới grammar box của GT-04 hoặc fixture của GT-03.
-  Initial artifact <=1 MiB theo protected store hiện có. Prefix/tolerance/
-  LOD/proxy/axis semantics đã ghi rõ; naming pass không chứng minh geometry.
-- Báo cáo phân chia/reuse: reviews/20260917-gt05-readiness-s60.md.
-  Giữ focused tests khi phát triển, gom full native matrix ở integration milestone.
+- Khóa profile/tolerance/naming trong studio/tests/asset-profile.json và
+  studio/contracts/naming-convention-v1.md; không tăng shared storage cap.
+- Foundation suite: 134 run = 133 pass + 1 Windows symlink-permission skip,
+  actual target/wrapper 0, owned tree sạch; source/test hashes tách rõ tại
+  reviews/20260917-gt05-s62-foundation/checkpoint.json. Hai thay đổi sau suite
+  (lock label và snapshot driver) đã có native validation-s62-01 riêng.
+- Native producer05/repeat01: .blend save/reopen + GLB xuất thật. Hai GLB cùng
+  SHA e85e536137208ba84adbc875b6fb647b5a4e49156344e03e2e8947a7ae91e377.
+  Edited01 tăng crate width 0.6→0.8m, đổi đúng mesh+collider/signature; mọi rig,
+  clip/material/texture khác giữ nguyên. verify_repeat.py kiểm lại dữ liệu.
+- Admission Python và Node/Khronos chạy trong Job có cap riêng; 114 accessor,
+  54885 scalars, 3 PNG/192 RGBA bytes, 1200 triangles; Khronos 0 error/0 warning.
+  Blender có đúng 4 cảnh báo root-skin và 1 shared-ORM sampler của exporter pin;
+  đã giải thích/kiểm đúng count/body và direct GLB bone/bind/sample proof.
+- Godot consumer04 đã đọc thật 12 mesh/12 bone/792 sampled poses/2160 skin
+  vertices/2clips; reimport01 trên cùng project/cache giữ authored script,
+  override/socket và đọc lại geometry mới. Baseline input đã đổi sau reimport:
+  dùng frozen ordinal source snapshots khi kiểm baseline, không đọc input hiện tại.
+- 27/27 mutation-observation cases bị reject đúng, kể cả rename/delete bone →
+  MIGRATION_REQUIRED. Visual01 có 68 PNG nhưng crate bị authored override che
+  PBR gốc; chưa được coi visual DoD đạt. Probe đang sửa material/perf metadata.
+- Evidence vẫn là component diagnostics với source map từng run, chưa một
+  final frozen closure. Toàn bộ raw nằm studio/.local/reviews/gt05-*; portable
+  hash index không thay raw. Validation04/repeat01/edited01 đã phục hồi source
+  snapshot từ bytes đúng hash và ghi rõ POST_EXECUTION; validation-s62-01 mới
+  snapshot trước GO. Giữ mọi attempt lỗi, không gán source/evidence lẫn phiên bản.
+- Còn trước GT-05 acceptance: đóng visual PBR/draw-call <=150; verifier chain;
+  protected staged snapshot với journal/Stop/crash/reopen; final source freeze,
+  matrix/Git-byte proof và hai critic độc lập. Cross-app activation chờ GT-07.
+- Worker vừa bị ngắt giữa lượt; code/evidence đã giữ, không còn native engine.
+  Chỉ resume phần chưa xong, không chạy lại gate GT-01–04. Reuse/publication:
+  reviews/20260917-gt05-publication-readiness.md (non-authoritative).
 
 Các phần còn lại để xong plan: hoàn tất GT-05, rồi GT-06 play/input/observe,
 GT-07 concurrency/recovery/cross-app activation, GT-08 Windows/Linux/Android
@@ -113,6 +133,17 @@ tools-plan-before-s55.txt (AUTHORITY=0), SHA256 b07c86c36c565c3a95404a6084cd6df0
 Các archive và mọi failure/verdict cũ giữ nguyên; không hạDoD đểtick.
 
 KINH NGHIỆM ĐANG ÁP DỤNG
+- S62: packed PNG hash không chứng minh bpy/exporter dùng đúng pixel; phải
+  kiểm pixel native, save/reopen và GLB decoded pixel. Root/joint chuyển trục
+  khác mesh do exporter giữ bone basis; đối chiếu actual GLB và pinned source.
+  Cleanup cưỡng bức child không phải natural exit. Resume kiểm raw exit/PID/
+  marker đầy đủ và dùng nguyên bytes đã xác minh, không đọc lại chưa kiểm.
+  Godot default animation optimizer có error lớn hơn tolerance fixture: pin tắt,
+  kiểm actual 31 keys/36 tracks/clip, không nới epsilon. Console wrapper PID
+  không phải engine PID: launch GUI binary pin trực tiếp khi cần bind OS PID.
+  Preflight allocation caps không thay CPU/wall cap; chạy decode trong Job riêng.
+  Watchdog stat chấp nhận đúng FileNotFound do owned scratch bị xóa, vẫn reject
+  access/reparse errors; disk watchdog không được claim thành quota filesystem.
 - S61: retry worker phải phân biệt lỗi auth/capacity với verdict; chỉ hai report
   cuối đúng hash mới cho nghiệm thu. Asset ID phải chừa chỗ suffix; importer
   suffix có thể đổi node nên pin/tắt và readback. Không tăng shared storage cap

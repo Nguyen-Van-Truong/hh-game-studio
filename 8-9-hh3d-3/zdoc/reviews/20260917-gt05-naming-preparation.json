@@ -1,0 +1,31 @@
+{
+  "scope": "GT05_DATA_ONLY_PREPARATION",
+  "formal_acceptance": false,
+  "source_files": {
+    "contracts/naming-convention-v1.md": "f7c3ab1caea02dab01eab5cb81b089e384ac81d5cef76b0b7f62b22ccbcb19b3",
+    "tests/asset-profile.json": "58be789853b900de63fee948b1e42a8d56001f356735777388df53725624a08a",
+    "pipeline/__init__.py": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68",
+    "pipeline/naming.py": "8b621b7c0a6fc652916825f2d56e3d8e1263c85fa58b052a0c094e3865358f67",
+    "tests/pipeline/test_naming.py": "bd9e650447d8b78fe210f6eac7bc623aeec2da17a03093f6a530e9f1a2ab5eb7"
+  },
+  "run": {
+    "run": 12,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0
+  },
+  "actual_exit_code": 0,
+  "wrapper_exit_code": 0,
+  "owned_tree_verified": true,
+  "source_unchanged": true,
+  "native_engines_launched": 0,
+  "raw_directory": "studio/.local/reviews/gt05-naming-preparation-01",
+  "raw_files": {
+    "capture.json": "eb2d68b4b9b3a46241feeb670c8629d944858ed38b8cd5d90bb7b0f9f62ad46f",
+    "naming-host.json": "54469ae39b33f44be459ea7c1deefb40cb2a8121374b365dd0a5c23e6ce1ecad",
+    "naming-stderr.txt": "be86b7c205ec2b8ba5ccf204ec2eef3624e1bfa2ab83c2da5b017b194464d77a",
+    "naming-stdout.txt": "33378b7e1402202a601ad6a8088691c477fb3b59b0258a528fadc0ec1f554d06"
+  },
+  "gt04_review_checkpoint": "38f6b9abd261cfc0f85f5f119a1eeeba84e35c74",
+  "gt04_review_unchanged": true
+}
