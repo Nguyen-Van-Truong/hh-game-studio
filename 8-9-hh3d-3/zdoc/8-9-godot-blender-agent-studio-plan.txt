@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 17-09-2026, Asia/Saigon | Revision S65 | TRIỂN KHAI THEO GATE
+Ngày 17-09-2026, Asia/Saigon | Revision S66 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S65
+PLAN_REVISION=S66
 EXECUTION_MODE=COORDINATOR_THREE_ASTRA_XHIGH_OWNER_20260917
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -56,7 +56,7 @@ GT05_CHECKPOINT_COMMIT=808d8ba
 GT06_EVIDENCE_STATUS=NATIVE_DIAGNOSTICS_IN_PROGRESS_NO_ACCEPTANCE
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
 
-TIẾN ĐỘ HIỆN HÀNH — S65, ngày 17-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S66, ngày 17-09-2026
 GT-01–05 đã ACCEPTED. GT-06 mở sau hai review độc lập S64 cùng manifest.
 Owner cho phép ba Astra extra high; coordinator tích hợp và giữ một writer/file.
 Native engine/integration lanes chạy tuần tự với process/cache/evidence riêng.
@@ -112,8 +112,13 @@ GT-06 hiện hành — ba lane implementation, native diagnostics đã bắt đ�
   Perf export giữ355raw rows,352measured rows +250RSS; đây là diagnostic có
   screenshot overhead, không benchmark. Chi tiết +hash: reviews/20260917-gt06-s65-progress/.
   Giữ lỗi native01/capture02/repair01; chỉ sửa/chạy lại lane bị ảnh hưởng.
-- Đang nối service Play và Stop có xác thực, retained inspector/capture,
-  dedupe/reconnect/timeout/ownership. Session/contract không tự tạo publicACK.
+- Checkpoint3186d40 giữ milestoneS65. ServiceS66 đã chạy HTTP/Godot thật:
+  complete01 đạt13 nhómcheck, Stop01 đạt11 nhómcheck, exits0/tree sạch, cùng
+  source2c623754803e14d59f5d143b3964443a73d21eadaf5947d91fd4a83423e34da2.
+  243/243 replay unit đạt. Start pending→native readback→COMMITTED; retry không
+  tạo Play mới, retained inspector phântrang/capture đúnghash, Stop latch riêng.
+  25.0122ms là một receiptStop, chưa phải benchmarkp95. Chi tiết:
+  reviews/20260917-gt06-s66-service/. Đang làm reviewerUX và native adversary lanes.
 - Chưa có GT06 accepted candidate. Benchmark1000commands+100cycles theo plan
   vẫn phải chạy đúng profile; unit nhỏ không thay benchmark. Không nâng shared
   caps để hợp artifact; raw series có parser/quota riêng, wire chỉ hash/reference.
@@ -137,6 +142,12 @@ tools-plan-before-s55.txt (AUTHORITY=0), SHA256 b07c86c36c565c3a95404a6084cd6df0
 Các archive và mọi failure/verdict cũ giữ nguyên; không hạDoD đểtick.
 
 KINH NGHIỆM ĐANG ÁP DỤNG
+- S66: collision của một submit mới không được đổi receipt pending của lệnhgốc.
+  Completion lỗi phải trảUNKNOWN khi lookup, kể cả journal không ghi được;
+  receipt terminal đãdurable luôn thắng overlay tạm. Tokenrotation giữsessionID
+  nên lease cần bind đúng grantobject, không chỉ sessionID. Prepare lỗi vẫnphải
+  nhận cleanup_owner và drain. SDK không thấy không có nghĩa máy không gắnAndroid;
+  device authorization cònUNVERIFIED cho tới khi kiểmadb đúngphạmvi.
 - S65: Input.parse_input_event có thể xếp hàng; flush_buffered_events sau cả
   nhóm edge cùngtick rồi mới đọc lại. Kiểm API trên đúng Mesh subclass/pin.
   Process exit0 không đủ: menu capture phải giữ đúng phase/camera sau render.

@@ -1,0 +1,22 @@
+{
+  "host": {
+    "wrapper_pid": 33680,
+    "started_at": "2026-09-17T13:56:49.750130+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "-c",
+      "import unittest,json,sys; suite=unittest.defaultTestLoader.discover('tests/replay',pattern='test_*.py'); r=unittest.TextTestRunner(verbosity=2).run(suite); print('GT06_S66_UNIT_COMPLETE '+json.dumps({'run':r.testsRun,'failures':len(r.failures),'errors':len(r.errors),'skips':len(r.skipped)}),flush=True); sys.exit(not r.wasSuccessful())"
+    ],
+    "exit_code": 0,
+    "target_pid": 39364,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "units-stdout.txt",
+    "stderr": "units-stderr.txt",
+    "host": "units-host.json"
+  },
+  "source_unchanged": true
+}

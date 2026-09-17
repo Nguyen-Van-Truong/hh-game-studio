@@ -1,0 +1,96 @@
+{
+  "schema": "HH-GT06-S66-SERVICE-PROGRESS-1",
+  "formal_acceptance": false,
+  "runs": {
+    "gt06-s66-service-complete-01": {
+      "source_count": 171,
+      "source_closure": "2c623754803e14d59f5d143b3964443a73d21eadaf5947d91fd4a83423e34da2",
+      "driver_sha256": "436c965f06beef99ec2b3c10817aa9e098063ad9cf80db48d1fdc40f62a53d32",
+      "unique_checks": [
+        "actual_bound_lease",
+        "bounded_historical_inspector",
+        "bounded_terminal_observed",
+        "completed_owner_stops",
+        "driver_source_unchanged",
+        "fixed_catalog_discovered",
+        "foreign_bearer_denied",
+        "hash_bound_menu_capture",
+        "inspection_lease_refreshed",
+        "lookup_authenticated",
+        "native_launch_pending",
+        "native_postcondition_committed",
+        "same_command_no_second_runtime"
+      ],
+      "stop_ms": [
+        3.1128
+      ],
+      "raw_sha256": {
+        ".local/reviews/gt06-s66-service-complete-01/capture.json": "a74eca22fd91eee58ef05cf9bb523df0f384bcea0eeb3e8a9aba915c1bda7c18",
+        ".local/reviews/gt06-s66-service-complete-01/http-probe/http-0.json": "29a7bc4a5051790eb04211e81afc8450f63fd07c057ffd89f47e2c9cdfebe68e",
+        ".local/reviews/gt06-s66-service-complete-01/http-probe/http-1.json": "1e826ef1bcd048aec0695523f0b1de40cd6f2e78e999adc69d40757be0fab22f",
+        ".local/reviews/gt06-s66-service-complete-01/http-probe/http-2.json": "3602d6865ee5b7fa6ca4f038bb44d7c609d930446440b9c7fc935e8f8cfaf83b",
+        ".local/reviews/gt06-s66-service-complete-01/http-probe/http-3.json": "7fd2275ccf5779fbd6f03f9e49f2a4dfc60bf4b4a1ef1a133d1fac4a3b1c1d18",
+        ".local/reviews/gt06-s66-service-complete-01/http-probe/http-4.json": "43ee9e23571a47d122e088adb108068147b2fed4717791405a6172e41eba81c6",
+        ".local/reviews/gt06-s66-service-complete-01/http-probe/http-5.json": "3cb6f83681d8a3494e7a3b68db3562bad65e8ebd244e4406c41916882b713499",
+        ".local/reviews/gt06-s66-service-complete-01/http-probe/http-6.json": "1d8558792419075bb4a22f2bfb0da94a19213387ae33407991f1f0d4dad0a7ab",
+        ".local/reviews/gt06-s66-service-complete-01/http-probe/http-7.json": "5fb277e951434070fb97ac997826f3a36fec4e213b5e1226226cde29b6b3502f",
+        ".local/reviews/gt06-s66-service-complete-01/http-probe/http-8.json": "bf56b5936116e5892ad02dedf8b2809cfb8d0e4634d9f964f8a683937832abd6",
+        ".local/reviews/gt06-s66-service-complete-01/http-probe/http-9.json": "1ae1a52bf33324a54230c4af1822fadaf4252380b73c1ea9d2840dde031a6ddf",
+        ".local/reviews/gt06-s66-service-complete-01/http-probe/result.json": "fb65a9231275ed826f85911544689bcf2f722a0cf66cbcd32dd33a825355a871",
+        ".local/reviews/gt06-s66-service-complete-01/import-host/capture.json": "019d21efa702168ce0a2a44a733d5f5adb48b0bd0bb0fb6609e1c52954e80427",
+        ".local/reviews/gt06-s66-service-complete-01/invocation.json": "8dafd0488d79ee9525202345a5127efe4816cce625d10608e81b061a51a807a4",
+        ".local/reviews/gt06-s66-service-complete-01/observation-checks.json": "9ee3c0118b02419b7e317c7a174d1ab30997ceab5cbfd054eb7ea86b655e5504",
+        ".local/reviews/gt06-s66-service-complete-01/process-metrics.json": "24a9ebe0f5dae4d64cf8df9765078eb285d4ef94f99b555dd2ab824006ef7396",
+        ".local/reviews/gt06-s66-service-complete-01/runtime-host/capture.json": "72524324ed4eda88c0589694305c47b659e5442ea8c45f4a818c5e1f03ec43f6",
+        ".local/reviews/gt06-s66-service-complete-01/runtime-snapshot.json": "e7d730b6a07df2eb85fb26b9960c326f39d601e08897f92c44bbd267e3f4346a",
+        ".local/reviews/gt06-s66-service-complete-01/source-files.json": "b33fdd75744fb446229716fe2f8024bf702afbcfde86fe4141fe5731bd13a01f",
+        ".local/reviews/gt06-s66-service-complete-01-driver/capture.json": "4f30744c023e19b297e9cd72d346222c749b8481377f927b3a3ceb4934d158b2",
+        ".local/reviews/gt06-s66-service-complete-01-driver/invocation.json": "78305568ee89b3847ec688dbbe6bab528be5b32bd9f6fb36d20e40fdfd7d7231",
+        ".local/reviews/gt06-s66-service-complete-01-driver/service-host.json": "ae9766e5ac92d82402da4c2187bb7f3823185d781a8b0f650727089d48cc301a",
+        ".local/reviews/gt06-s66-service-complete-01-driver/service-stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        ".local/reviews/gt06-s66-service-complete-01-driver/service-stdout.txt": "c77496ba119141ae7d430a24fb086cefb06e99d3fb6ae08c9534f7e5d0be4b10"
+      }
+    },
+    "gt06-s66-service-stop-01": {
+      "source_count": 171,
+      "source_closure": "2c623754803e14d59f5d143b3964443a73d21eadaf5947d91fd4a83423e34da2",
+      "driver_sha256": "436c965f06beef99ec2b3c10817aa9e098063ad9cf80db48d1fdc40f62a53d32",
+      "unique_checks": [
+        "actual_bound_lease",
+        "bounded_terminal_observed",
+        "driver_source_unchanged",
+        "fixed_catalog_discovered",
+        "foreign_bearer_denied",
+        "lookup_authenticated",
+        "native_launch_pending",
+        "priority_stop_latched",
+        "reconnect_cannot_resume",
+        "stopped_owned_tree_drained",
+        "stopped_without_fake_commit"
+      ],
+      "stop_ms": [
+        25.0122
+      ],
+      "raw_sha256": {
+        ".local/reviews/gt06-s66-service-stop-01/http-probe/http-0.json": "9a4a1492cf2fb701a120e12b9e8b985b4158c8759090f22720053afa92e75da2",
+        ".local/reviews/gt06-s66-service-stop-01/http-probe/http-1.json": "5a85a56f438bf01c99f035dcf5d6d1a8168cb1e7ad5ace178e29ac98c7317af1",
+        ".local/reviews/gt06-s66-service-stop-01/http-probe/http-2.json": "41394418c44ce2bc402a0619b6e8df5556ddf19c58e5f68974d2925c32cda172",
+        ".local/reviews/gt06-s66-service-stop-01/http-probe/http-3.json": "b81ced08b937059cfc2a396e431842fcfab314c764be96d55879037b2dcacbf8",
+        ".local/reviews/gt06-s66-service-stop-01/http-probe/http-4.json": "5b03f03092d633d72ed01619ec8c4894036f1817f358a85b43a5fe51e4dc3bfc",
+        ".local/reviews/gt06-s66-service-stop-01/http-probe/http-5.json": "dc1106432b2f3ca93b9890cfb8c3313d03a2171f2c587c662fe4a7c0e22c422b",
+        ".local/reviews/gt06-s66-service-stop-01/http-probe/http-6.json": "f6fc32f2ca6a445f3ac55fde28fe3ece11902cbce7e2449c7bf7a9deee24efe2",
+        ".local/reviews/gt06-s66-service-stop-01/http-probe/result.json": "43d31e87a34d469130668e1087ec0c3dc8a856d88dc2c17f75cf56f49128c9f0",
+        ".local/reviews/gt06-s66-service-stop-01/import-host/capture.json": "9ad988a1d3d2887c16ea4144e6bca6b8effb165d2443fa06a14f48cd4fd7946b",
+        ".local/reviews/gt06-s66-service-stop-01/invocation.json": "b6cdfa7321705bc1b2bd37e230191c5628821322b172e5af723ee93eb9a105d8",
+        ".local/reviews/gt06-s66-service-stop-01/runtime-host/capture.json": "34251de8e41e7df70b4acfe420ea3b6702ca4624e690d6d6eadcafc6c8e16422",
+        ".local/reviews/gt06-s66-service-stop-01/runtime-snapshot.json": "e7d730b6a07df2eb85fb26b9960c326f39d601e08897f92c44bbd267e3f4346a",
+        ".local/reviews/gt06-s66-service-stop-01/source-files.json": "b33fdd75744fb446229716fe2f8024bf702afbcfde86fe4141fe5731bd13a01f",
+        ".local/reviews/gt06-s66-service-stop-01-driver/capture.json": "8fcc2b32a135334413379a0397c2822f75001e380f7b23d05ee2886f51f3cefe",
+        ".local/reviews/gt06-s66-service-stop-01-driver/invocation.json": "7c8c09bc7d2ac03f86efa5b458da867bc193406c6225ab044ebaf78049d90b64",
+        ".local/reviews/gt06-s66-service-stop-01-driver/service-host.json": "381b52b0078c306554ccff8aa51fd9982052596cf23fda101aa90957a6192f68",
+        ".local/reviews/gt06-s66-service-stop-01-driver/service-stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        ".local/reviews/gt06-s66-service-stop-01-driver/service-stdout.txt": "a523acdd32f1000dd93c0ba99f28cbef0e4892b74819f755babf0e27481b0aec"
+      }
+    }
+  }
+}
