@@ -1,0 +1,53 @@
+{
+  "schema": "hh-gt04-coordinator-acceptance-1",
+  "accepted_at_utc": "2026-09-17T10:42:02.983065+00:00",
+  "gate": "GT-04",
+  "status": "ACCEPTED",
+  "dependency": "GT-02 ACCEPTED S46",
+  "source_checkpoint": "38f6b9abd261cfc0f85f5f119a1eeeba84e35c74",
+  "review_closure_sha256": "8ea276e98f3137a5f3623fce00d0760ae0c1fe6d17a77a330e98fa8839a31950",
+  "source_closure_sha256": "f5ae5dfbb451d3204197c2b21486c586698089ac24d14d23641a9182b5e42673",
+  "execution_closure_sha256": "407fff4e453fb1702a32fbc8ae1ee5eff7c3dcb0b99338a504ae39dc69d67824",
+  "source_files": 140,
+  "execution_files": 143,
+  "review_git_files": 909,
+  "git_byte_inventory_files": 910,
+  "retained_local_raw_files": 1385,
+  "critics": [
+    {
+      "reviewer": "independent-a2",
+      "model": "gpt-6-astra",
+      "reasoning_effort": "xhigh",
+      "report": "zdoc/reviews/20260917-gt04-s60-final-critic-a2.md",
+      "sha256": "6bab2d8e8eecc5847deccd03ecf1eba2011a6ba8f72cb7a5efd06e7c8a597783",
+      "verdict": "PASS",
+      "tick": "yes"
+    },
+    {
+      "reviewer": "independent-b2",
+      "model": "gpt-6-astra",
+      "reasoning_effort": "xhigh",
+      "report": "zdoc/reviews/20260917-gt04-s60-final-critic-b2.md",
+      "sha256": "af3b41dd4835ea2c2a10c102e6a396af96bac6ca3c18f9f4cdccaa700b017acc",
+      "verdict": "PASS",
+      "tick": "yes"
+    }
+  ],
+  "full_unit_tests": 599,
+  "focused_unit_tests_per_other_profile": 328,
+  "http_profiles": 3,
+  "native_lanes": 17,
+  "native_checks": 240,
+  "native_checks_are_not_distinct_requirements": true,
+  "review_package": "zdoc/reviews/20260917-gt04-s60-audit",
+  "git_head_proof_sha256": "45bd299cc657333e499e2fbc4d32b220a0274af2cb95b502794e27108e640376",
+  "limits": [
+    "Pinned Windows Blender5.2.1 managed fixture; box meshes, typed transforms, closed opaque materials and main-thread history",
+    "Three fixed create-only protected immutable publication profiles; arbitrary artist files, images, linked libraries, rigs, clips and paths unsupported by GT04",
+    "public_ack=false and scene_state_durable=false; only verified selected bundle is durable_publication=true",
+    "Historical replay/read-only checkpoint reopen do not restore writable editor generation or Undo",
+    "Original raw files retained locally; portable view alone does not reproduce original native binary or process evidence",
+    "No physical power-loss/disk-exhaustion certification, GT05 import/visual parity, GT07 cross-app activation, Android, release or HH World acceptance"
+  ],
+  "next_gate": "GT-05"
+}

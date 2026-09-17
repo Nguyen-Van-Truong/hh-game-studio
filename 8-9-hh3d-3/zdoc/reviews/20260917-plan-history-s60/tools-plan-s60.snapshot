@@ -1,31 +1,31 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 17-09-2026, Asia/Saigon | Revision S61 | TRIỂN KHAI THEO GATE
+Ngày 17-09-2026, Asia/Saigon | Revision S60 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
 01 | GT-01 | Chốt pin/phạm vi/reuse; bootstrap dự án mẫu độc lập | OWNER_START | ACCEPTED
 02 | GT-02 | Protocol, capability, journal và an toàn lệnh tối thiểu | GT-01 | ACCEPTED
 03 | GT-03 | Godot EditorPlugin: sửa scene, UndoRedo, save/readback | GT-02 | ACCEPTED
-04 | GT-04 | Blender adapter UI và background jobs an toàn | GT-02 | ACCEPTED
-05 | GT-05 | Pipeline .blend → GLB → Godot, asset manifest | GT-03, GT-04 | IN_PROGRESS
+04 | GT-04 | Blender adapter UI và background jobs an toàn | GT-02 | IN_PROGRESS
+05 | GT-05 | Pipeline .blend → GLB → Godot, asset manifest | GT-03, GT-04 | PLANNED
 06 | GT-06 | Play/input/pause/stop/observe/capture qua công cụ | GT-05 | PLANNED
 07 | GT-07 | Đa agent, publish, lease/fencing và recovery | GT-05, GT-06 | PLANNED
 08 | GT-08 | Clean import/export/CI, target và cache matrix | GT-07 | PLANNED
 09 | GT-09 | Agent conformance và toàn tuyến trên dự án mẫu | GT-08 | PLANNED
 10 | GT-10 | Gói công cụ v0.1, cài/upgrade/rollback, bàn giao game | GT-09 | PLANNED
 
-CURRENT_VALID_WP=GT-05
+CURRENT_VALID_WP=GT-04
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=GT05_IN_PROGRESS
+IMPLEMENTATION=GT04_IN_PROGRESS
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
 GT01_PENDING=NONE
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
 PLAN_DESIGN_CRITICS=NO_ACCEPTED_VERDICT_S6_TO_S21
-RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_ACCEPTED
+RUNTIME_ACCEPTANCE=GT01_GT02_GT03_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S61
+PLAN_REVISION=S60
 EXECUTION_MODE=COORDINATOR_THREE_ASTRA_XHIGH_OWNER_20260917
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -44,66 +44,85 @@ GT03_CHECKPOINT_COMMIT=323882b
 GT03_WORKING_SOURCE_STATUS=S55_FROZEN_ACCEPTED
 GT03_PENDING_SOURCE_CLOSURE=NONE
 GT03_TEST_DRIVER_MODE=PINNED_CLEANUP_SUPPLEMENT_OVER_UNCHANGED_S55_RUNTIME
-GT04_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260917_S60
+GT04_EVIDENCE_STATUS=S60_CANDIDATE_EXACT_LOCAL_RAW_AND_SANITIZED_VIEW
 GT04_LAST_TESTED_SOURCE_CLOSURE=f5ae5dfbb451d3204197c2b21486c586698089ac24d14d23641a9182b5e42673
-GT04_WORKING_SOURCE_STATUS=S60_FROZEN_ACCEPTED
-GT04_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S60
-GT04_CHECKPOINT_COMMIT=38f6b9a
-GT04_REVIEW_CLOSURE=8ea276e98f3137a5f3623fce00d0760ae0c1fe6d17a77a330e98fa8839a31950
-GT05_EVIDENCE_STATUS=DATA_CONTRACT_PREPARATION_ONLY
-GT05_REVIEW_STATUS=NOT_REVIEWED
+GT04_WORKING_SOURCE_STATUS=S60_FROZEN_NATIVE_AND_AUDIT_TESTED
+GT04_REVIEW_STATUS=S60_FINAL_REVIEW_PENDING_TWO_INDEPENDENT_CRITICS
 
-TIẾN ĐỘ HIỆN HÀNH — S61, ngày 17-09-2026
-GT-01–04 đã ACCEPTED. GT-05 mở sau hai review độc lập S60 cùng closure.
-Owner cho phép ba Astra extra high; coordinator tích hợp và giữ một writer/file.
-Native engine/integration lanes chạy tuần tự với process/cache/evidence riêng.
+TIẾN ĐỘ HIỆN HÀNH — S60, ngày 17-09-2026
+GT-01, GT-02 và GT-03 ACCEPTED; đang hoàn thiện GT-04.
+GT-05 chưa mở integration. Owner cho phép ba Astra extra high: hai critic
+GT-04 độc lập và một agent chuẩn bị dependency GT-05, không tick trước gate.
+Giữ một writer/file;
+chỉ một engine/Linux/native-journal integration lane chạy tại một thời điểm.
+Checkpoint source323882b đã kiểm2706file byte index/HEAD; hai criticGT03
+PASS/TICK=yes cùng effective closure. GT04 vẫn chưa nghiệm thu.
 
 Đã nghiệm thu:
 - GT-01: a0fb247, reviews/20260913-r21-gt01-final; closure
   3ace23bcf84598cda64d54bbe3fc4736acde877f9f714fb71e2355d3e809eea4.
-- GT-02: reviews/20260916-gt02-s46-audit/acceptance.json; 413/417 pass,
-  4 skip, bootstrap 56/56 và 2396 golden rows. Public write chỉ managed
-  fixture; arbitrary-path safe_write/atomic_replace vẫn không được cấp.
-- GT-03: source 323882b, reviews/20260917-gt03-s55-audit/acceptance.json;
-  699/699 unit và 11 native lanes. Phạm vi Godot fixture đã khai báo;
-  không chạy lại gate này khi dependency không đổi.
-- GT-04: source 38f6b9a, reviews/20260917-gt04-s60-acceptance/acceptance.json.
-  Hai critic reviews/20260917-gt04-s60-final-critic-{a2,b2}.md đều PASS/TICK=yes
-  cùng review/source/execution closure. 140 source, 143 execution file;
-  909 file trong review closure + closure manifest = 910 Git blobs khớp byte.
-  1385 raw file cục bộ được kiểm độc lập; portable view có hash-domain riêng.
-  Full unit 599/599; hai profile còn lại 328/328 mỗi profile; ba profile HTTP
-  có 49 checks/36 calls/10 native checks; 17 native lanes/240 checks đạt.
-  Native exits/owned trees, Stop/crash/FIFO/recovery và no-external-I/O đều
-  nằm trong cùng S60. Giữ raw gốc để tái audit; view không thay raw binary.
-  Chỉ box/opaque material và ba fixed-slot protected immutable publications;
-  public_ack=false, scene_state_durable=false. Arbitrary artist input,
-  writable restart, restored Undo và cross-app activation chưa được claim.
+- GT-02: reviews/20260916-gt02-s46-01 và -s46-audit/acceptance.json;
+  closure f28056d8ff705a60d48a54f9dee80f16554494fa976bd0bfabee84bb51fecbbf.
+  Protocol413/417 pass+4 skip, bootstrap56/56, golden2396rows; hai critic
+  độc lập PASS/TICK=yes cùngclosure. Public write chỉ managed fixture;
+  generic arbitrary-path safe_write/atomic_replace vẫn false.
+- GT-03: source323882b, reviews/20260917-gt03-s55-audit/acceptance.json;
+  runtime3a220b.../effectivebde6e7... ở markers trên. Hai critic độc lập
+  reviews/20260917-gt03-s55-critic-{a,b}-final.md PASS/TICK=yes cùng closure.
 
-GT-05 hiện hành:
-- Khóa dữ liệu trước native run: studio/tests/asset-profile.json và
-  studio/contracts/naming-convention-v1.md. Pure naming lint có 12/12 tests,
-  actual target/wrapper exit 0, owned tree sạch; chưa là pipeline acceptance.
-- Pin Khronos gltf-validator 2.0.0-dev.3.10, SHA-512/SHA-256 và 9 package files;
-  cache đã kiểm, chưa chạy validator, không npm install script hay nâng shared cap.
-- Lộ trình gọn: bounded GLB/PNG validator → original rig/outfit/PBR/clip fixture
-  → isolated Godot import/reimport/readback/6-view → staged snapshot candidate.
-  Dùng profile mới; không nới grammar box của GT-04 hoặc fixture của GT-03.
-  Initial artifact <=1 MiB theo protected store hiện có. Prefix/tolerance/
-  LOD/proxy/axis semantics đã ghi rõ; naming pass không chứng minh geometry.
-- Báo cáo phân chia/reuse: reviews/20260917-gt05-readiness-s60.md.
-  Giữ focused tests khi phát triển, gom full native matrix ở integration milestone.
+Godot GT-03 đã khép tại S55:
+- Source 323882b; runtime 176 file và effective closure 204 file ở markers trên.
+  semantic-08: 699/699 unit, 11 native lanes/297 assertions/19 raw Linux runs;
+  actual exits/owned trees/custody/source sạch. 52 corruption checks đạt,
+  2120 portable files; Git proof 2706 files byte index/HEAD khớp checkpoint.
+- Hai critic cuối PASS/TICK=yes cùng effective closure; acceptance.json giữ
+  toàn bộ binding và phạm vi hỗ trợ. Không chạy lại GT03 khi chỉ sửa Blender.
+- Các lượt FAIL/INCOMPLETE và lý do sửa giữ trong evidence: script01 cleanup
+  trước durable Stop; script-unwitnessed01 thiếu raw exit/capture; unitsS54-01
+  journal thiếu completion. Chỉ rerun lane tương ứng trên đúng source.
+- Lịch sử chi tiết S55: reviews/20260917-plan-history-s55/tools-plan-s55.txt
+  (AUTHORITY=0), SHA256 305d9fa5314db5a7dc73689e465f699caf4146434edaad646c68be430ae53940.
 
-Các phần còn lại để xong plan: hoàn tất GT-05, rồi GT-06 play/input/observe,
-GT-07 concurrency/recovery/cross-app activation, GT-08 Windows/Linux/Android
-thiết bị thật (hard gate), GT-09 conformance, GT-10 package/install/upgrade/
-rollback/uninstall/handoff. HH World là plan riêng sau GT-10. Chưa có ETA
-đáng tin cậy cho toàn bộ; số test không là phần trăm sản phẩm đã hoàn thành.
+Blender GT-04 — S60 candidate sau sửa review S59:
+- Source: 140 file, hash ở marker trên. Matrix execution closure:
+  407fff4e453fb1702a32fbc8ae1ee5eff7c3dcb0b99338a504ae39dc69d67824.
+  Full Blender: 599/599 unit. Checkpoint/export: 328/328 focused mỗi profile.
+  Cả ba profile: 49 HTTP checks, 36 calls, 10 native checks; exit/owned Jobs sạch.
+- Đủ 17 native lane/240 checks: UI/material/IPC/cleanup/durable/FIFO,
+  checkpoint/deadline, 5 crash cuts và 4 Stop cuts. Ba profile và matrix
+  file-only audit đạt; 15 negative cases + 1 empty-stderr regression,
+  12 kiểm tra evidence-view đạt. Không chuyển kết quả S59 sang S60.
+- Đã sửa library/image bị dò path trước reject: nay từ chối trước đọc filepath,
+  resolve hoặc stat; kiểm revision/context trước export preflight. Có 5 unit
+  regression và 6 native no-I/O checks; không truy cập UNC/network thật.
+- Raw S60 ở studio/.local/reviews, không commit log chứa đường dẫn máy.
+  reviews/20260917-gt04-s60-audit/portable giữ view với root $PROJECT, hash
+  raw/view riêng. Binary/source chỉ lưu hash trong view; raw gốc giữ cục bộ.
+  Clean checkout kiểm view integrity/source và có thể tạo run mới, không giả
+  sở hữu raw bytes của run cũ. Hai critic cuối phải đánh giá phạm vi này với TQ01.
+- Review S59 dừng trước final verdict. S60 đã dispatch Astra theo lệnh owner,
+  nhưng các lượt trả model-at-capacity; một fallback bị stream-disconnected.
+  Chưa có PASS/TICK=yes cuối. Owner mới cho phép hai critic Astra extra high
+  đọc cùng checkpoint S60; review gián đoạn trước đó không tính chữ ký.
+  GT-04 vẫn IN_PROGRESS; self-review không thay hai critic độc lập.
+- Dựng lại 909 file từ Git index: view trên bản sao sạch đạt, raw verification
+  từ chối đúng khi thiếu original; target/wrapper exit 0, owned trees sạch.
+- Coverage và repro: reviews/20260917-gt04-s60-audit/README.md, coverage.json.
+  S59 nguyên bytes: reviews/20260917-plan-history-s59/tools-plan-s59.snapshot.
+  Routing/closure trước lệnh solo nằm ở s60-audit/routing-history (AUTHORITY=0).
+  Các fail/incomplete giữ nguyên. Runtime S60 không đổi khi cập nhật routing.
 
-Plan/gate phù hợp; đã bỏ routing solo/ultra và câu GT-03 “tiếp theo” bị cũ.
-S60 đã review giữ nguyên tại checkpoint 38f6b9a; snapshot governance trong
-reviews/20260917-plan-history-s60 (AUTHORITY=0). Kiểm accepted closure từ Git
-ref đó; plan hiện hành và hoạt động GT-05 không được gán vào chữ ký S60.
+Tiếp theo: hai review độc lập cùng closure của checkpoint S60 trước nghiệm
+thu GT-04. Source/native proof đã xong; không chạy lại chỉ vì thiếu reviewer. Sau đó thực hiện tuần tự:
+1. GT-05: .blend → GLB → Godot, rig/clip/LOD/PBR, manifest và reimport.
+2. GT-06: Play/input/pause/observe, UX và đo hiệu năng.
+3. GT-07: concurrency, lease/fencing, activation và recovery xuyên ứng dụng.
+4. GT-08: Windows/Linux/Android; thiết bị Android thật là hard gate.
+5. GT-09: conformance toàn tuyến bằng client thực tế.
+6. GT-10: package/install/upgrade/rollback/uninstall/handoff.
+HH World dùng plan riêng sau GT-10. Chưa đủ cơ sở hẹn ngày xong toàn plan.
+Mục tiêu/gate phù hợp; tối ưu bằng coverage ngắn, snapshot cố định, chỉ chạy
+lại lane liên quan khi source/failure/gap thay đổi, giữ lịch sử ngoài phần hiện hành.
 
 Cải tiến plan/tốc độ: scope song song theo dependency; serialize native lanes;
 resume attempt lỗi thay vì lặp lanePASS; một frozen source cho final matrix;
@@ -113,10 +132,6 @@ tools-plan-before-s55.txt (AUTHORITY=0), SHA256 b07c86c36c565c3a95404a6084cd6df0
 Các archive và mọi failure/verdict cũ giữ nguyên; không hạDoD đểtick.
 
 KINH NGHIỆM ĐANG ÁP DỤNG
-- S61: retry worker phải phân biệt lỗi auth/capacity với verdict; chỉ hai report
-  cuối đúng hash mới cho nghiệm thu. Asset ID phải chừa chỗ suffix; importer
-  suffix có thể đổi node nên pin/tắt và readback. Không tăng shared storage cap
-  để hợp fixture; dùng asset nhỏ và profile pipeline riêng trước.
 - S60: unsupported input phải reject trước mọi existence check; is_file/stat
   vẫn là I/O và có thể chạm UNC. Kiểm no-I/O bằng sentinel, không dùng mạng thật
   trong negative test. Raw local logs và bản view để commit có hash-domain
@@ -1056,7 +1071,7 @@ Evidence cũ giữ đúng source đã chạy; chỉ reuse khi xác minh đủ de
 đổi, không gán hash mới cho log cũ. Source đổi phần thực thi thì chạy lại lane
 bị ảnh hưởng. Một full frozen closure và hai critic vẫn bắt buộc trước tick gate.
 GT-03 đã ACCEPTED; không mở lại gate đã đóng khi dependency không đổi.
-GT-04 đã ACCEPTED tại S60. Khi chờ run dài, worker làm implementation/review
+GT-04 chốt review S60. Khi chờ run dài, worker làm implementation/review
 khác scope; không cả ba cùng mở rộng audit framework. Giữ báo cáo hiện hành
 ngắn, lịch sử ở Git/reviews. Lỗi harness/argv sửa rồi tiếp tục từ lane chưa xong,
 không chạy lại các lane đã hoàn tất nếu source không đổi.

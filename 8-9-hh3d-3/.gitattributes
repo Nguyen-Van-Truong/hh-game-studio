@@ -18,6 +18,8 @@
 studio/blender-addon/exporter.lock.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 studio/tests/blender/fixtures/box-export-baseline.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 *.snapshot -text
+# Preserve intentional Markdown hard breaks in the signed S60 critic report.
+zdoc/reviews/20260917-gt04-s60-final-critic-b2.md whitespace=-blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 studio/evidence/** -text
 zdoc/reviews/20260910-r6/worker-output/** -text
 # Hash-bound GT-02 run packages and their historical records retain exact bytes.
