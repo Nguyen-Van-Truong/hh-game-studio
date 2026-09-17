@@ -150,6 +150,41 @@ def main():
                 checks.append({'lane': lane, 'mutation': 'original HTTP response wire', 'rejected': True, 'reason': str(error)})
             else:
                 checks.append({'lane': lane, 'mutation': 'original HTTP response wire', 'rejected': False})
+    recovery_lanes_tested = []
+    for lane, suffix in (('script-committed', '01'), ('script-unwitnessed', '02')):
+        package = audit.REVIEWS / ('20260917-gt03-s55-' + lane + '-' + suffix)
+        events, snap, _ = audit.journal(ev, package, lane, mods)
+        audit.recovery_original_evidence(ev, package, lane, events, snap, mods)
+        audit.custody_export(ev, package, events, snap)
+        recovery_lanes_tested.append(lane)
+        if lane == 'script-committed':
+            path = (package / 'original/original-response-canonical.json').resolve()
+            cases = [('witnessed original reply changed', {path: b'forged original ACK'})]
+        else:
+            boundary = package / 'original/crash-boundary.json'
+            native_capture = HERE / 'native-exports03' / package.name / 'native-capture.json'
+            saved = json.loads(boundary.read_bytes())['custody']['events']['binding']['witnessed']
+            cases = [
+                ('orphan cut exit claim', changed(boundary, ['expected_exit_code'], 0)),
+                ('orphan crash head hash', changed(boundary, ['native_head_before_return', 'sha256'], '0' * 64)),
+                ('original response falsely returned', changed(boundary, ['public_response_returned'], True)),
+                ('orphan exposed by prior lookup', changed(package / 'before-reconcile-lookup.json', ['response', 'status'], 'COMMITTED')),
+                ('orphan block removed', changed(package / 'before-reconcile-snapshot.json', ['recovery', 'blocked_original_commands'], [])),
+                ('orphan relabelled recovered reply', {(package / 'original/unwitnessed-response-candidate.json').resolve(): (package / 'response-wire.json').read_bytes()}),
+                ('original outcome uncertainty removed', changed(package / 'journal-snapshot.json', ['recovery', 'attempts', 0, 'response', 'postconditions', 'original_outcome_unknown'], False)),
+                ('current witness replaced by crash witness', changed(native_capture, ['native_binding', 'witnessed'], saved)),
+            ]
+        for label, overlay in cases:
+            originals.update({path: audit.sha(path.read_bytes()) for path in overlay})
+            try:
+                altered = audit.Evidence(overlay)
+                altered_events, altered_snapshot, _ = audit.journal(altered, package, lane, mods)
+                audit.recovery_original_evidence(altered, package, lane, altered_events, altered_snapshot, mods)
+                audit.custody_export(altered, package, altered_events, altered_snapshot)
+            except (ValueError, KeyError, TypeError, AssertionError) as error:
+                checks.append({'lane': lane, 'mutation': label, 'rejected': True, 'reason': str(error)})
+            else:
+                checks.append({'lane': lane, 'mutation': label, 'rejected': False})
     audit.need(audit.controller.inventory() == files, 'shared source changed')
     audit.need(all(audit.sha(path.read_bytes()) == digest for path, digest in originals.items()), 'historical evidence changed')
     audit.need(all(audit.sha((audit.ROOT / name).read_bytes()) == value for name, value in ev.files.items()), 'audit input changed')
@@ -158,6 +193,7 @@ def main():
               'test_sha256': audit.sha(Path(__file__).read_bytes()), 'source_closure_sha256': audit.CLOSURE,
               'native_processes_started': 0, 'native_handles_opened': 0, 'mutations_in_memory_only': True,
               'supplemental_lanes_tested': supplemental_lanes_tested,
+              'recovery_lanes_tested': recovery_lanes_tested,
               'shared_source_unchanged': True, 'historical_evidence_unchanged': True,
               'tested_files_sha256': {path.relative_to(audit.ROOT).as_posix(): value for path, value in originals.items()},
               'gt03_acceptance': False}

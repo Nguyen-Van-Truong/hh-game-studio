@@ -1,0 +1,615 @@
+[
+  {
+    "content_root_identity": {
+      "file_id": "18f70a00000003000000000000000000",
+      "volume": "4938437614955579414"
+    },
+    "editor_engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+    "initial": {
+      "bundle_manifest": {
+        "caller_observations": {
+          "engine_sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
+          "scene_revision": "sha256:f3fd9f270886a056f469e70586795e06c8d47b651021a22366629ab06d886162"
+        },
+        "files": {
+          "addons/hh_studio/jcs_godot.gd": {
+            "role": "trusted_addon",
+            "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+            "size_bytes": 10165
+          },
+          "addons/hh_studio/jcs_godot.gd.uid": {
+            "role": "trusted_uid",
+            "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+            "size_bytes": 20
+          },
+          "addons/hh_studio/plugin.cfg": {
+            "role": "trusted_addon",
+            "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+            "size_bytes": 165
+          },
+          "addons/hh_studio/plugin.gd": {
+            "role": "trusted_addon",
+            "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+            "size_bytes": 23043
+          },
+          "addons/hh_studio/plugin.gd.uid": {
+            "role": "trusted_uid",
+            "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+            "size_bytes": 20
+          },
+          "addons/hh_studio/scene_commands.gd": {
+            "role": "trusted_addon",
+            "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+            "size_bytes": 32174
+          },
+          "addons/hh_studio/scene_commands.gd.uid": {
+            "role": "trusted_uid",
+            "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+            "size_bytes": 19
+          },
+          "project.godot": {
+            "role": "trusted_config",
+            "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+            "size_bytes": 282
+          },
+          "scenes/fixture.tscn": {
+            "role": "managed_scene",
+            "sha256": "51eaa111f832327d74b2031d382eb22ab30c8b725323e26ebcf7a66bbef571cb",
+            "size_bytes": 235
+          },
+          "scripts/fixture_actor.gd": {
+            "role": "managed_script",
+            "sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+            "size_bytes": 50
+          },
+          "scripts/fixture_actor.gd.uid": {
+            "role": "managed_uid",
+            "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+            "size_bytes": 20
+          }
+        },
+        "profile": "hh-godot-managed-fixture-1",
+        "project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+        "schema": "hh-godot-fixture-bundle-2",
+        "trusted_source_revision": "sha256:a9c5a31fa66ab0002e61f6fab5270b18b23357b322eb6fc6674b34dd29e2d4bc"
+      },
+      "selector": {
+        "command_id": "bootstrap.initial",
+        "descriptor": {
+          "files": {
+            "addons/hh_studio/jcs_godot.gd": {
+              "file_id": "1ff70a00000003000000000000000000",
+              "name": "obj-d9d04ee9a1a6499cb2e2fe54a1433901",
+              "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+              "size_bytes": 10165,
+              "volume": "4938437614955579414"
+            },
+            "addons/hh_studio/jcs_godot.gd.uid": {
+              "file_id": "20f70a00000003000000000000000000",
+              "name": "obj-76d652ea20ff4b89af6132632963c1b9",
+              "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+              "size_bytes": 20,
+              "volume": "4938437614955579414"
+            },
+            "addons/hh_studio/plugin.cfg": {
+              "file_id": "21f70a00000003000000000000000000",
+              "name": "obj-f595be0c8dae4730b5f29f951f84120d",
+              "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+              "size_bytes": 165,
+              "volume": "4938437614955579414"
+            },
+            "addons/hh_studio/plugin.gd": {
+              "file_id": "22f70a00000003000000000000000000",
+              "name": "obj-66119f2af23b44bc807ad2043fa14952",
+              "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+              "size_bytes": 23043,
+              "volume": "4938437614955579414"
+            },
+            "addons/hh_studio/plugin.gd.uid": {
+              "file_id": "23f70a00000003000000000000000000",
+              "name": "obj-84d83c221275401b90447b9d50320326",
+              "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+              "size_bytes": 20,
+              "volume": "4938437614955579414"
+            },
+            "addons/hh_studio/scene_commands.gd": {
+              "file_id": "24f70a00000003000000000000000000",
+              "name": "obj-d9cd2f540a0e49208e484463cc466935",
+              "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+              "size_bytes": 32174,
+              "volume": "4938437614955579414"
+            },
+            "addons/hh_studio/scene_commands.gd.uid": {
+              "file_id": "27f70a00000003000000000000000000",
+              "name": "obj-d696768247c84bb48bfac6004bbb9216",
+              "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+              "size_bytes": 19,
+              "volume": "4938437614955579414"
+            },
+            "project.godot": {
+              "file_id": "28f70a00000003000000000000000000",
+              "name": "obj-aa027fa37c0e4272983531a350b2d3c8",
+              "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+              "size_bytes": 282,
+              "volume": "4938437614955579414"
+            },
+            "scenes/fixture.tscn": {
+              "file_id": "29f70a00000003000000000000000000",
+              "name": "obj-2e231d6e7a41457a96db938d11c06b01",
+              "sha256": "51eaa111f832327d74b2031d382eb22ab30c8b725323e26ebcf7a66bbef571cb",
+              "size_bytes": 235,
+              "volume": "4938437614955579414"
+            },
+            "scripts/fixture_actor.gd": {
+              "file_id": "2af70a00000003000000000000000000",
+              "name": "obj-91f4f4ea2b9b4eb1b1c1db87f1f1d12a",
+              "sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+              "size_bytes": 50,
+              "volume": "4938437614955579414"
+            },
+            "scripts/fixture_actor.gd.uid": {
+              "file_id": "2bf70a00000003000000000000000000",
+              "name": "obj-fdc99f52121e493ba49706ed413268c4",
+              "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+              "size_bytes": 20,
+              "volume": "4938437614955579414"
+            }
+          },
+          "manifest": {
+            "file_id": "2cf70a00000003000000000000000000",
+            "name": "obj-bf2215b4973747b188793048fc8dd0ef",
+            "sha256": "44cb2673867afd1e10fac38c44a549aa91f128ed9404661809ffe6cb3a53fef8",
+            "size_bytes": 2105,
+            "volume": "4938437614955579414"
+          },
+          "project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+          "root_identity": {
+            "file_id": "18f70a00000003000000000000000000",
+            "volume": "4938437614955579414"
+          }
+        },
+        "descriptor_sha256": "63752a43573506510cf1f6cdb503e5571b93db27e0a9e2fcfb230831021790ee",
+        "parent_selection": null,
+        "schema": "hh-godot-active-selection-1",
+        "selection": {
+          "generation": 0,
+          "identity": "sha256:44cb2673867afd1e10fac38c44a549aa91f128ed9404661809ffe6cb3a53fef8"
+        }
+      },
+      "selector_version": {
+        "file_id": "2df70a00000003000000000000000000",
+        "sha256": "b89c0b1699f1a2b0503e6996323b0c2296fc557bf1ecd4e48cdc015597b9a948",
+        "size_bytes": 3461,
+        "volume": "4938437614955579414"
+      }
+    },
+    "kind": "CONFIG",
+    "observed_ms": 1789602638861,
+    "project_id": "project.fixture",
+    "schema": "hh-godot-publication-event-4",
+    "sequence": 1,
+    "source_closure_sha256": "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+    "validation_source_release_sha256": "c6395bd0fdf98afacf22ea6a938cd70b602f86b6fe3dfee22ca4955f5b18c10c",
+    "validator_engine_sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e"
+  },
+  {
+    "admission": {
+      "admitted_ms": 1789602644072,
+      "catalog_digest": "sha256:0fdc4e8e1a406a909dff439190bab1b4c6de3d2d2ad20602bced9572ffbe12df",
+      "deadline_ms": 1789602672167,
+      "fencing_epoch": 1,
+      "lease_expires_ms": 1789602672285,
+      "lease_id": "lease.1d6a8af70e8b50b298b2504fe1df2e60",
+      "session_id": "session.e1831f8c0c4312bf6645edfc5ee35906"
+    },
+    "before_project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+    "before_scene_revision": "sha256:f3fd9f270886a056f469e70586795e06c8d47b651021a22366629ab06d886162",
+    "command_id": "fifo.edit.a",
+    "digest": "sha256:1f88b438a2ebbf6936c12c7f11b6f7ed67a3b835cf5295937772e436dcb629db",
+    "editor": {
+      "creation_filetime": "134340762348072932",
+      "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+      "installed_source_sha256": "0d4aaa2a90febf5444d79c7d8702792ef282aaa62c26a26a484147268708f01a",
+      "pid": 32276,
+      "root_identity": {
+        "file_id": "ecf60a00000003000000000000000000",
+        "volume": "4938437614955579414"
+      },
+      "session_id": "editor-8a3a6a1362444475b1a392cba85bc809"
+    },
+    "editor_generation": 1,
+    "expected_files": {
+      "addons/hh_studio/jcs_godot.gd": {
+        "role": "trusted_addon",
+        "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+        "size_bytes": 10165
+      },
+      "addons/hh_studio/jcs_godot.gd.uid": {
+        "role": "trusted_uid",
+        "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+        "size_bytes": 20
+      },
+      "addons/hh_studio/plugin.cfg": {
+        "role": "trusted_addon",
+        "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+        "size_bytes": 165
+      },
+      "addons/hh_studio/plugin.gd": {
+        "role": "trusted_addon",
+        "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+        "size_bytes": 23043
+      },
+      "addons/hh_studio/plugin.gd.uid": {
+        "role": "trusted_uid",
+        "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+        "size_bytes": 20
+      },
+      "addons/hh_studio/scene_commands.gd": {
+        "role": "trusted_addon",
+        "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+        "size_bytes": 32174
+      },
+      "addons/hh_studio/scene_commands.gd.uid": {
+        "role": "trusted_uid",
+        "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+        "size_bytes": 19
+      },
+      "project.godot": {
+        "role": "trusted_config",
+        "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+        "size_bytes": 282
+      },
+      "scenes/fixture.tscn": {
+        "role": "managed_scene",
+        "sha256": "51eaa111f832327d74b2031d382eb22ab30c8b725323e26ebcf7a66bbef571cb",
+        "size_bytes": 235
+      },
+      "scripts/fixture_actor.gd": {
+        "role": "managed_script",
+        "sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+        "size_bytes": 50
+      },
+      "scripts/fixture_actor.gd.uid": {
+        "role": "managed_uid",
+        "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+        "size_bytes": 20
+      }
+    },
+    "kind": "EDIT_INTENT",
+    "lease_owner": "session.e1831f8c0c4312bf6645edfc5ee35906",
+    "observed_ms": 1789602644072,
+    "operation": "scene.node.create",
+    "parent_selection": {
+      "generation": 0,
+      "identity": "sha256:44cb2673867afd1e10fac38c44a549aa91f128ed9404661809ffe6cb3a53fef8"
+    },
+    "previous_selector_sha256": "b89c0b1699f1a2b0503e6996323b0c2296fc557bf1ecd4e48cdc015597b9a948",
+    "previous_selector_version": {
+      "file_id": "2df70a00000003000000000000000000",
+      "sha256": "b89c0b1699f1a2b0503e6996323b0c2296fc557bf1ecd4e48cdc015597b9a948",
+      "size_bytes": 3461,
+      "volume": "4938437614955579414"
+    },
+    "project_id": "project.fixture",
+    "projection_sha256": "f46c584ff7f89de33bce5bf8d2de90486a6810c421f85b9f76cdf49ec2c5b6b6",
+    "projection_size_bytes": 384,
+    "root_instance_id": 1524277253837,
+    "schema": "hh-godot-publication-event-5",
+    "scratch_name": "capture-74929fc172314d209e19644dbfbec4d3.tscn",
+    "sequence": 2
+  },
+  {
+    "capture": {
+      "can_redo": false,
+      "can_undo": false,
+      "effect_completed_ms": 1789602645958,
+      "effect_started_ms": 1789602645946,
+      "observation_id": "capture-e037ee720c2647139d006f3b02a9398a",
+      "observation_sha256": "ac136e2d9241f6c4fed7206620217efb9cb01c3c3a3c4d57351563de2ac714d4",
+      "scene_sha256": "7786a06c25be37cae7412b1d3d37d2f729adf5ca9d020c9f8eccdfe2d8f41cac",
+      "scene_size_bytes": 267,
+      "semantic_revision": "sha256:f3fd9f270886a056f469e70586795e06c8d47b651021a22366629ab06d886162",
+      "semantic_sha256": "f3fd9f270886a056f469e70586795e06c8d47b651021a22366629ab06d886162"
+    },
+    "capture_blob": {
+      "identity": {
+        "file_id": "38f70a00000003000000000000000000",
+        "size": 3515,
+        "volume": "4938437614955579414"
+      },
+      "object_id": "blob-59e32ad394d145519664884ae5748fe8",
+      "sha256": "ac136e2d9241f6c4fed7206620217efb9cb01c3c3a3c4d57351563de2ac714d4"
+    },
+    "command_id": "fifo.edit.a",
+    "digest": "sha256:1f88b438a2ebbf6936c12c7f11b6f7ed67a3b835cf5295937772e436dcb629db",
+    "kind": "EDIT_READY",
+    "observed_ms": 1789602646065,
+    "project_id": "project.fixture",
+    "scene_blob": {
+      "identity": {
+        "file_id": "37f70a00000003000000000000000000",
+        "size": 267,
+        "volume": "4938437614955579414"
+      },
+      "object_id": "blob-73078078a1a14df09196f13b8bf87e86",
+      "sha256": "7786a06c25be37cae7412b1d3d37d2f729adf5ca9d020c9f8eccdfe2d8f41cac"
+    },
+    "schema": "hh-godot-publication-event-5",
+    "sequence": 3
+  },
+  {
+    "command_id": "fifo.edit.a",
+    "digest": "sha256:1f88b438a2ebbf6936c12c7f11b6f7ed67a3b835cf5295937772e436dcb629db",
+    "kind": "EDIT_COMMITTED",
+    "observation": {
+      "can_redo": false,
+      "can_undo": true,
+      "effect_completed_ms": 1789602648406,
+      "effect_started_ms": 1789602648363,
+      "history_id_after": 1,
+      "history_id_before": 1,
+      "observation_id": "edit-f569898c304c438f84d9458fb607a328",
+      "observation_sha256": "cc62fb6c7946592306af80b5ab799492178e025ff7e45d707d5c55a0f8b60e81",
+      "semantic_revision": "sha256:7dba874092982a675ba199d568b049d76de430103869758695a953b7f9115ec4",
+      "semantic_sha256": "7dba874092982a675ba199d568b049d76de430103869758695a953b7f9115ec4"
+    },
+    "observation_blob": {
+      "identity": {
+        "file_id": "3af70a00000003000000000000000000",
+        "size": 5683,
+        "volume": "4938437614955579414"
+      },
+      "object_id": "blob-22d7ae53e6eb484a95046ca62d4cc9cc",
+      "sha256": "cc62fb6c7946592306af80b5ab799492178e025ff7e45d707d5c55a0f8b60e81"
+    },
+    "observed_ms": 1789602648576,
+    "project_id": "project.fixture",
+    "response": {
+      "code": "GODOT_EDITOR_EDITED",
+      "command_id": "fifo.edit.a",
+      "postconditions": {
+        "can_redo": false,
+        "can_undo": true,
+        "checkpoint_observation_id": "capture-e037ee720c2647139d006f3b02a9398a",
+        "checkpoint_scene_sha256": "7786a06c25be37cae7412b1d3d37d2f729adf5ca9d020c9f8eccdfe2d8f41cac",
+        "durable_receipt_sha256": "9150b85d6c750d791b56aa085d11810d1e2bd6a80c8b9079de0253776e4141fc",
+        "editor_session_id": "editor-8a3a6a1362444475b1a392cba85bc809",
+        "effect_scope": "editor_session",
+        "files_saved": false,
+        "generation": 1,
+        "history_boundary": false,
+        "history_id": 1,
+        "journal_receipt_durable": true,
+        "live_state_durable": false,
+        "managed_fixture_only": true,
+        "project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+        "public_ack": true,
+        "request_digest": "sha256:1f88b438a2ebbf6936c12c7f11b6f7ed67a3b835cf5295937772e436dcb629db",
+        "scene_revision": "sha256:7dba874092982a675ba199d568b049d76de430103869758695a953b7f9115ec4",
+        "selection": {
+          "generation": 0,
+          "identity": "sha256:44cb2673867afd1e10fac38c44a549aa91f128ed9404661809ffe6cb3a53fef8"
+        }
+      },
+      "result_hash": null,
+      "result_revision": null,
+      "status": "COMMITTED"
+    },
+    "schema": "hh-godot-publication-event-5",
+    "sequence": 4
+  },
+  {
+    "admission": {
+      "admitted_ms": 1789602678230,
+      "catalog_digest": "sha256:0fdc4e8e1a406a909dff439190bab1b4c6de3d2d2ad20602bced9572ffbe12df",
+      "deadline_ms": 1789602702289,
+      "fencing_epoch": 2,
+      "lease_expires_ms": 1789602702289,
+      "lease_id": "lease.bf0c17a0d86de4cb186868a140ac3bb0",
+      "session_id": "session.fadcc5948ced89971c835680ddac1513"
+    },
+    "before_project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+    "before_scene_revision": "sha256:7dba874092982a675ba199d568b049d76de430103869758695a953b7f9115ec4",
+    "command_id": "fifo.edit.b",
+    "digest": "sha256:f9332fd412f8e7d88fc50885771298417690cbb7b31bf18ef6402e609f4c27b1",
+    "editor": {
+      "creation_filetime": "134340762348072932",
+      "engine_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+      "installed_source_sha256": "0d4aaa2a90febf5444d79c7d8702792ef282aaa62c26a26a484147268708f01a",
+      "pid": 32276,
+      "root_identity": {
+        "file_id": "ecf60a00000003000000000000000000",
+        "volume": "4938437614955579414"
+      },
+      "session_id": "editor-8a3a6a1362444475b1a392cba85bc809"
+    },
+    "editor_generation": 1,
+    "expected_files": {
+      "addons/hh_studio/jcs_godot.gd": {
+        "role": "trusted_addon",
+        "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+        "size_bytes": 10165
+      },
+      "addons/hh_studio/jcs_godot.gd.uid": {
+        "role": "trusted_uid",
+        "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+        "size_bytes": 20
+      },
+      "addons/hh_studio/plugin.cfg": {
+        "role": "trusted_addon",
+        "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+        "size_bytes": 165
+      },
+      "addons/hh_studio/plugin.gd": {
+        "role": "trusted_addon",
+        "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+        "size_bytes": 23043
+      },
+      "addons/hh_studio/plugin.gd.uid": {
+        "role": "trusted_uid",
+        "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+        "size_bytes": 20
+      },
+      "addons/hh_studio/scene_commands.gd": {
+        "role": "trusted_addon",
+        "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+        "size_bytes": 32174
+      },
+      "addons/hh_studio/scene_commands.gd.uid": {
+        "role": "trusted_uid",
+        "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+        "size_bytes": 19
+      },
+      "project.godot": {
+        "role": "trusted_config",
+        "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+        "size_bytes": 282
+      },
+      "scenes/fixture.tscn": {
+        "role": "managed_scene",
+        "sha256": "51eaa111f832327d74b2031d382eb22ab30c8b725323e26ebcf7a66bbef571cb",
+        "size_bytes": 235
+      },
+      "scripts/fixture_actor.gd": {
+        "role": "managed_script",
+        "sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+        "size_bytes": 50
+      },
+      "scripts/fixture_actor.gd.uid": {
+        "role": "managed_uid",
+        "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+        "size_bytes": 20
+      }
+    },
+    "kind": "EDIT_INTENT",
+    "lease_owner": "session.fadcc5948ced89971c835680ddac1513",
+    "observed_ms": 1789602678230,
+    "operation": "scene.node.create",
+    "parent_selection": {
+      "generation": 0,
+      "identity": "sha256:44cb2673867afd1e10fac38c44a549aa91f128ed9404661809ffe6cb3a53fef8"
+    },
+    "previous_selector_sha256": "b89c0b1699f1a2b0503e6996323b0c2296fc557bf1ecd4e48cdc015597b9a948",
+    "previous_selector_version": {
+      "file_id": "2df70a00000003000000000000000000",
+      "sha256": "b89c0b1699f1a2b0503e6996323b0c2296fc557bf1ecd4e48cdc015597b9a948",
+      "size_bytes": 3461,
+      "volume": "4938437614955579414"
+    },
+    "project_id": "project.fixture",
+    "projection_sha256": "73da0117c8895a0622f41f4992c41816e6a27f375348f7d59daea679c65edff2",
+    "projection_size_bytes": 384,
+    "root_instance_id": 1524277253837,
+    "schema": "hh-godot-publication-event-5",
+    "scratch_name": "capture-e15c08dbaf56499688db5bd0c9912f74.tscn",
+    "sequence": 5
+  },
+  {
+    "capture": {
+      "can_redo": false,
+      "can_undo": true,
+      "effect_completed_ms": 1789602680899,
+      "effect_started_ms": 1789602680880,
+      "observation_id": "capture-fd30f763d20045238d894368b71a8ccf",
+      "observation_sha256": "25456caa4580a7af7ef44840591f3c31d981cf92a01c79ea2cfa15308f67f739",
+      "scene_sha256": "2dc4660e5ad85ae7de3b048c56bf50d304b995a89ac3c248061f577e83973b96",
+      "scene_size_bytes": 543,
+      "semantic_revision": "sha256:7dba874092982a675ba199d568b049d76de430103869758695a953b7f9115ec4",
+      "semantic_sha256": "7dba874092982a675ba199d568b049d76de430103869758695a953b7f9115ec4"
+    },
+    "capture_blob": {
+      "identity": {
+        "file_id": "4ef70a00000003000000000000000000",
+        "size": 5237,
+        "volume": "4938437614955579414"
+      },
+      "object_id": "blob-a5b50c8a58514fa5a881c219ee46de86",
+      "sha256": "25456caa4580a7af7ef44840591f3c31d981cf92a01c79ea2cfa15308f67f739"
+    },
+    "command_id": "fifo.edit.b",
+    "digest": "sha256:f9332fd412f8e7d88fc50885771298417690cbb7b31bf18ef6402e609f4c27b1",
+    "kind": "EDIT_READY",
+    "observed_ms": 1789602681018,
+    "project_id": "project.fixture",
+    "scene_blob": {
+      "identity": {
+        "file_id": "4df70a00000003000000000000000000",
+        "size": 543,
+        "volume": "4938437614955579414"
+      },
+      "object_id": "blob-b2c23cd1dfac433483bfad0e7a933a30",
+      "sha256": "2dc4660e5ad85ae7de3b048c56bf50d304b995a89ac3c248061f577e83973b96"
+    },
+    "schema": "hh-godot-publication-event-5",
+    "sequence": 6
+  },
+  {
+    "command_id": "fifo.edit.b",
+    "digest": "sha256:f9332fd412f8e7d88fc50885771298417690cbb7b31bf18ef6402e609f4c27b1",
+    "kind": "EDIT_COMMITTED",
+    "observation": {
+      "can_redo": false,
+      "can_undo": true,
+      "effect_completed_ms": 1789602683804,
+      "effect_started_ms": 1789602683729,
+      "history_id_after": 1,
+      "history_id_before": 1,
+      "observation_id": "edit-114b5226a5464dd2b32dbafbc04c81b1",
+      "observation_sha256": "8ed0fca2b5035cfa4717ab43973f29ee747692f6e0f851c1dea5a68730042df1",
+      "semantic_revision": "sha256:5082ebe30d63813a0e81a6b6a038dd7097e9a0bdd07c51ea8042dadf13595293",
+      "semantic_sha256": "5082ebe30d63813a0e81a6b6a038dd7097e9a0bdd07c51ea8042dadf13595293"
+    },
+    "observation_blob": {
+      "identity": {
+        "file_id": "42f70a00000004000000000000000000",
+        "size": 7406,
+        "volume": "4938437614955579414"
+      },
+      "object_id": "blob-cb2f9af6d0e74acab27bad81813193a8",
+      "sha256": "8ed0fca2b5035cfa4717ab43973f29ee747692f6e0f851c1dea5a68730042df1"
+    },
+    "observed_ms": 1789602683994,
+    "project_id": "project.fixture",
+    "response": {
+      "code": "GODOT_EDITOR_EDITED",
+      "command_id": "fifo.edit.b",
+      "postconditions": {
+        "can_redo": false,
+        "can_undo": true,
+        "checkpoint_observation_id": "capture-fd30f763d20045238d894368b71a8ccf",
+        "checkpoint_scene_sha256": "2dc4660e5ad85ae7de3b048c56bf50d304b995a89ac3c248061f577e83973b96",
+        "durable_receipt_sha256": "08d37822bb5214a5f386793b494c6a1b937ef64dd273a24fb76280334dae5bd2",
+        "editor_session_id": "editor-8a3a6a1362444475b1a392cba85bc809",
+        "effect_scope": "editor_session",
+        "files_saved": false,
+        "generation": 1,
+        "history_boundary": false,
+        "history_id": 1,
+        "journal_receipt_durable": true,
+        "live_state_durable": false,
+        "managed_fixture_only": true,
+        "project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+        "public_ack": true,
+        "request_digest": "sha256:f9332fd412f8e7d88fc50885771298417690cbb7b31bf18ef6402e609f4c27b1",
+        "scene_revision": "sha256:5082ebe30d63813a0e81a6b6a038dd7097e9a0bdd07c51ea8042dadf13595293",
+        "selection": {
+          "generation": 0,
+          "identity": "sha256:44cb2673867afd1e10fac38c44a549aa91f128ed9404661809ffe6cb3a53fef8"
+        }
+      },
+      "result_hash": null,
+      "result_revision": null,
+      "status": "COMMITTED"
+    },
+    "schema": "hh-godot-publication-event-5",
+    "sequence": 7
+  },
+  {
+    "kind": "STOP",
+    "observed_ms": 1789602703865,
+    "project_id": "project.fixture",
+    "reason": "owner.stop",
+    "schema": "hh-godot-publication-event-4",
+    "sequence": 8
+  }
+]

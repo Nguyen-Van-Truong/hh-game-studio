@@ -1,0 +1,29 @@
+{
+  "wrapper_pid": 4088,
+  "started_at": "2026-09-16T23:55:20.493381+00:00",
+  "argv": [
+    "python.exe",
+    "-B",
+    "$SNAPSHOT/tests/godot/run_recovery_cut_matrix.py",
+    "--crash-child",
+    "--case",
+    "script-committed",
+    "--output",
+    "original",
+    "--binary",
+    "Godot_v4.7.2-stable_win64.exe",
+    "--closure",
+    "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+    "--run-id",
+    "GT03-S55-SCRIPT-COMMITTED-01"
+  ],
+  "exit_code": 94,
+  "target_pid": 20384,
+  "wrapper_exit_code": 0,
+  "timed_out": false,
+  "tree_verified": true,
+  "ownership": "gated_job_kill_on_close",
+  "stdout": "publisher-stdout.txt",
+  "stderr": "publisher-stderr.txt",
+  "host": "publisher-host.json"
+}

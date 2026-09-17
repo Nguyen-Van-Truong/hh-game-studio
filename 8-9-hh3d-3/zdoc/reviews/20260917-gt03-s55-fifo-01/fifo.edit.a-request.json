@@ -1,0 +1,42 @@
+{
+  "command_id": "fifo.edit.a",
+  "schema_version": "hh-studio-0.1",
+  "project_id": "project.fixture",
+  "operation": "scene.node.create",
+  "lease_id": "lease.1d6a8af70e8b50b298b2504fe1df2e60",
+  "fencing_epoch": 1,
+  "expected_revision": "sha256:f3fd9f270886a056f469e70586795e06c8d47b651021a22366629ab06d886162",
+  "target": {
+    "stable_id": "root"
+  },
+  "payload": {
+    "expected_generation": 1,
+    "expected_project_revision": "sha256:259ff692c27a5ba6818827974486df6aa9da84e0c22d1764fbc04eed267ddea3",
+    "stable_id": "box.a",
+    "node_type": "MeshInstance3D",
+    "name": "BoxA",
+    "position": [
+      1,
+      2,
+      3
+    ],
+    "rotation_degrees": [
+      0,
+      0,
+      0
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ],
+    "box_size": [
+      1,
+      2,
+      3
+    ]
+  },
+  "payload_hash": "sha256:32d9d0f950b1fdfca785e4546d7174f681a5907830ec03554437370b18186ff8",
+  "deadline_ms": 1789602672167,
+  "digest": "sha256:1f88b438a2ebbf6936c12c7f11b6f7ed67a3b835cf5295937772e436dcb629db"
+}

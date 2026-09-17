@@ -1,0 +1,83 @@
+{
+  "run_id": "GT03-S55-SCRIPT-RETIRED-01",
+  "lane": "script-retired",
+  "passed": true,
+  "started_at_utc": "2026-09-16T23:58:15.779871+00:00",
+  "source_closure_sha256": "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+  "controller_sha256": "46d27dd3a3c188ad90abd8a951d6723314e989ebd642fae6be68dbe1232394da",
+  "candidate_only": true,
+  "gt03_acceptance": false,
+  "host": {
+    "wrapper_pid": 660,
+    "started_at": "2026-09-16T23:58:15.780870+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "$SNAPSHOT/tests/godot/run_recovery_cut_matrix.py",
+      "--frozen",
+      "--output",
+      "20260917-gt03-s55-script-retired-01",
+      "--run-id",
+      "GT03-S55-SCRIPT-RETIRED-01",
+      "--binary",
+      "Godot_v4.7.2-stable_win64.exe",
+      "--closure",
+      "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+      "--case",
+      "script-retired"
+    ],
+    "exit_code": 0,
+    "target_pid": 14228,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "native-script-retired-stdout.txt",
+    "stderr": "native-script-retired-stderr.txt",
+    "host": "native-script-retired-host.json"
+  },
+  "result": {
+    "file": "result.json",
+    "sha256": "0d16631282e3a4ae79ce81078d8ec77c8976f4da05c26a3376fd96de9d9d9f2a",
+    "check_count": 21,
+    "completion_marker": {
+      "case": "script-retired",
+      "ok": true,
+      "checks": 21
+    },
+    "original_host": {
+      "wrapper_pid": 3056,
+      "started_at": "2026-09-16T23:58:16.248608+00:00",
+      "argv": [
+        "python.exe",
+        "-B",
+        "$SNAPSHOT/tests/godot/run_recovery_cut_matrix.py",
+        "--crash-child",
+        "--case",
+        "script-retired",
+        "--output",
+        "original",
+        "--binary",
+        "Godot_v4.7.2-stable_win64.exe",
+        "--closure",
+        "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+        "--run-id",
+        "GT03-S55-SCRIPT-RETIRED-01"
+      ],
+      "exit_code": 96,
+      "target_pid": 27848,
+      "wrapper_exit_code": 0,
+      "timed_out": false,
+      "tree_verified": true,
+      "ownership": "gated_job_kill_on_close",
+      "stdout": "publisher-stdout.txt",
+      "stderr": "publisher-stderr.txt",
+      "host": "publisher-host.json"
+    }
+  },
+  "native_logs_clean": true,
+  "source_inventory_unchanged": true,
+  "controller_unchanged": true,
+  "executable_pins_unchanged": true,
+  "finished_at_utc": "2026-09-17T00:00:28.243696+00:00"
+}

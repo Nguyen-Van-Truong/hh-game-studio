@@ -1,0 +1,123 @@
+{
+  "ok": true,
+  "case": "script-committed",
+  "cut": "committed-before-return",
+  "source_closure_sha256": "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+  "checks": [
+    {
+      "label": "actual_cut_exit_wrapper0_owned_tree_clean",
+      "passed": true
+    },
+    {
+      "label": "original_case_and_frozen_runtime_match",
+      "passed": true
+    },
+    {
+      "label": "crash_at_exact_original_phase_without_response",
+      "passed": true
+    },
+    {
+      "label": "actual_old_editor_retired_clean_before_cut",
+      "passed": true
+    },
+    {
+      "label": "witnessed_terminal_replays_exact_original_before_reconcile",
+      "passed": true
+    },
+    {
+      "label": "recovery_does_not_replace_selected_version",
+      "passed": true
+    },
+    {
+      "label": "lookup_only_grant_rejected_before_recovery_effect",
+      "passed": true
+    },
+    {
+      "label": "new_authority_fencing_epoch",
+      "passed": true
+    },
+    {
+      "label": "actual_recovery_has_expected_durable_terminal",
+      "passed": true
+    },
+    {
+      "label": "exact_recovered_response_bytes",
+      "passed": true
+    },
+    {
+      "label": "durable_commit_before_return_preserves_original_ack",
+      "passed": true
+    },
+    {
+      "label": "fresh_engine_complete_expected_semantics",
+      "passed": true
+    },
+    {
+      "label": "fresh_editor_identity_and_generation",
+      "passed": true
+    },
+    {
+      "label": "all_selected_input_hashes_match_readback",
+      "passed": true
+    },
+    {
+      "label": "all_eleven_selected_bytes_preserved",
+      "passed": true
+    },
+    {
+      "label": "fresh_script_source_disk_and_default",
+      "passed": true
+    },
+    {
+      "label": "same_custody_terminal_and_readonly_selection",
+      "passed": true
+    },
+    {
+      "label": "retry_exact_without_new_editor_or_event",
+      "passed": true
+    },
+    {
+      "label": "lookup_exact_terminal",
+      "passed": true
+    },
+    {
+      "label": "fresh_host_replays_exact_terminal",
+      "passed": true
+    },
+    {
+      "label": "fresh_host_retry_no_engine_append_or_selection",
+      "passed": true
+    }
+  ],
+  "candidate_only": true,
+  "gt03_acceptance": false,
+  "original_host": {
+    "wrapper_pid": 4088,
+    "started_at": "2026-09-16T23:55:20.493381+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "$SNAPSHOT/tests/godot/run_recovery_cut_matrix.py",
+      "--crash-child",
+      "--case",
+      "script-committed",
+      "--output",
+      "original",
+      "--binary",
+      "Godot_v4.7.2-stable_win64.exe",
+      "--closure",
+      "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+      "--run-id",
+      "GT03-S55-SCRIPT-COMMITTED-01"
+    ],
+    "exit_code": 94,
+    "target_pid": 20384,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "publisher-stdout.txt",
+    "stderr": "publisher-stderr.txt",
+    "host": "publisher-host.json"
+  }
+}

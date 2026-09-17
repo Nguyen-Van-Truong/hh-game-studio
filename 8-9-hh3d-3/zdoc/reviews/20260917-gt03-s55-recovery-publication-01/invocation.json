@@ -1,0 +1,44 @@
+{
+  "lane": "recovery-publication",
+  "run_id": "GT03-S55-RECOVERY-PUBLICATION-01",
+  "argv": [
+    "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "-B",
+    "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s55-source-01\\source\\studio\\tests\\godot\\run_recovery_publication_probe.py",
+    "--frozen",
+    "--output",
+    "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s55-recovery-publication-01",
+    "--run-id",
+    "GT03-S55-RECOVERY-PUBLICATION-01",
+    "--binary",
+    "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\tooling\\godot-4.7.2-stable\\Godot_v4.7.2-stable_win64.exe",
+    "--closure",
+    "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e"
+  ],
+  "cwd": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260917-gt03-s55-source-01\\source\\studio",
+  "timeout_seconds": 240,
+  "source_closure_sha256": "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+  "controller_sha256": "46d27dd3a3c188ad90abd8a951d6723314e989ebd642fae6be68dbe1232394da",
+  "runtime_entrypoint_sha256": "7687f92338b5c784fcfeee8a2a3e3076ed8d733f10b031c0f1b265f0cad81047",
+  "python": {
+    "path": "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "version": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+    "sha256": "5f7b89a612c9b8af1d6456cdfcd1dbe5ca630849e79aebced9bee9a6694952ec"
+  },
+  "pins": {
+    "windows_gui": {
+      "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\tooling\\godot-4.7.2-stable\\Godot_v4.7.2-stable_win64.exe",
+      "sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424"
+    },
+    "linux": {
+      "path": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\tooling\\godot-4.7.2-stable-linux\\Godot_v4.7.2-stable_linux.x86_64",
+      "sha256": "8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e"
+    }
+  },
+  "environment_overrides": {
+    "HH_STUDIO_LINUX_GODOT": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\tooling\\godot-4.7.2-stable-linux\\Godot_v4.7.2-stable_linux.x86_64",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "one_lane_only": true,
+  "requires_coordinator_native_slot": true
+}

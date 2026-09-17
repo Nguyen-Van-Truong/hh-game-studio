@@ -111,7 +111,7 @@ def source(ev):
 def modules():
     sys.path.insert(0, str(SOURCE.parent))
     return {name: base.H.module('s55_semantic_' + name, SOURCE / 'godot-addon' / (name + '.py'))
-            for name in ('publication_state_v5', 'publication_recovery', 'validation_owner', 'editor_owner')}
+            for name in ('publication_state_v4', 'publication_state_v5', 'publication_recovery', 'validation_owner', 'editor_owner')}
 
 
 def raw_host(ev, package, host, expected=0):
@@ -293,7 +293,9 @@ def journal(ev, package, lane, mods):
                  and previous_snapshot['journal_event_sequence'] == len(prior) + 4
                  and previous_snapshot['bootstrap_bytes_verified'] is True, 'pre-Stop snapshot fold')
     cut = next((index for index, row in enumerate(events) if row['schema'] == mods['publication_recovery'].RECOVERY_SCHEMA), len(events))
-    state = mods['publication_state_v5'].replay(events[:cut])
+    has_edits = any(row['schema'] == 'hh-godot-publication-event-5' for row in events[:cut])
+    state_model = mods['publication_state_v5'] if has_edits or not recovery_lane else mods['publication_state_v4']
+    state = state_model.replay(events[:cut])
     replayed = state.snapshot()
     recovered = None
     if recovery_lane:
@@ -351,8 +353,65 @@ def journal(ev, package, lane, mods):
     return events, snapshot, responses
 
 
+def recovery_original_evidence(ev, package, lane, events, snapshot, mods):
+    if lane not in controller.CRASH_EXITS:
+        return None
+    attempt = snapshot['recovery']['attempts'][-1]
+    if lane == 'script-committed':
+        original = ev.raw(package / 'original/original-response-canonical.json')
+        need(original == ev.raw(package / 'response-wire.json')
+             == canonical(ev.read(package / 'before-reconcile-lookup.json')['response']),
+             'witnessed original response not replayed exactly')
+        return {'original_ack': 'witnessed_exact_original', 'recovery_route': attempt['route']}
+    if lane != 'script-unwitnessed':
+        return {'original_ack': 'not_terminal_at_cut', 'recovery_route': attempt['route']}
+    original = ev.read(package / 'original/original.json')
+    boundary = ev.read(package / 'original/crash-boundary.json')
+    command, digest = attempt['command_id'], attempt['digest']
+    from studio.protocol.core import Request
+    request = Request.from_dict(original['request'])
+    need(original['case'] == boundary['case'] == lane and original['cut'] == boundary['cut'] == 'committed-before-custody'
+         and original['expected_exit_code'] == boundary['expected_exit_code'] == 95
+         and original['source_closure_sha256'] == CLOSURE and boundary['public_response_returned'] is False
+         and request.command_id == boundary['command']['command_id'] == command
+         and request.digest == boundary['command']['digest'] == digest and boundary['command']['phase'] == 'READBACK',
+         'unwitnessed original cut identity')
+    stdout = raw_host(ev, package / 'original', ev.read(package / 'original-host.json'), 95)
+    need(base.H.markers(stdout, 'HH_NATIVE_PUBLICATION_CUT ') ==
+         [{'case': lane, 'cut': 'committed-before-custody', 'exit_code': 95}], 'unwitnessed original crash marker')
+    split = next(index for index, row in enumerate(events) if row['schema'] == mods['publication_recovery'].RECOVERY_SCHEMA)
+    prefix = events[:split]
+    at_cut = boundary['publication_events']
+    holds = [row for row in events[split:] if row['kind'] == 'HOLD']
+    need(len(holds) == 1, 'one original orphan HOLD required')
+    hold = holds[0]
+    saved = boundary['custody']['events']['binding']['witnessed']
+    pending = boundary['unwitnessed_binding']['witnessed']
+    need(hold['reason'] == 'unwitnessed-tail' and hold['saved_head'] == saved == boundary['native_head_before_return']
+         and hold['observed_head'] == pending and pending['sequence'] == saved['sequence'] + 1
+         and saved['sequence'] == len(at_cut) + 4 and prefix[:-1] == at_cut
+         and prefix[-1]['kind'] == 'COMMITTED' and prefix[-1]['command_id'] == command
+         and hold['blocked_original_commands'] == snapshot['recovery']['blocked_original_commands'] == [command],
+         'unwitnessed original/HOLD boundary')
+    before = ev.read(package / 'before-reconcile-snapshot.json')
+    lookup = ev.read(package / 'before-reconcile-lookup.json')['response']
+    need(before['recovery']['blocked_original_commands'] == [command] and lookup.get('status') != 'COMMITTED'
+         and lookup.get('postconditions', {}).get('public_ack') is not True, 'orphan original ACK exposed before reconciliation')
+    candidate = ev.raw(package / 'original/unwitnessed-response-candidate.json')
+    state = mods['publication_state_v5'].replay(prefix)
+    need(candidate == mods['publication_state_v5'].lookup_response(state, command, digest)
+         and candidate != ev.raw(package / 'response-wire.json') and attempt['route'] == 'complete-selected'
+         and attempt['response']['postconditions']['original_outcome_unknown'] is True
+         and attempt['response']['postconditions']['reconciled'] is True,
+         'orphan candidate relabelled as authorized original response')
+    return {'original_ack': 'unwitnessed_original_permanently_blocked', 'original_outcome_unknown': True,
+            'saved_crash_head': saved, 'orphan_terminal_head': pending, 'recovery_route': attempt['route'],
+            'current_custody_does_not_authorize_original_ack': True}
+
+
 def editor_evidence(ev, package, lane, snapshot):
-    roots = sorted((package / 'owned/editor').glob('editor-*'))
+    editor_parent = package / ('recovery/recovery-editor' if lane in controller.CRASH_EXITS or lane == 'recovery-publication' else 'owned/editor')
+    roots = sorted(editor_parent.glob('editor-*'))
     need(bool(roots), 'fresh editor evidence missing')
     for root in roots:
         start, hello, exited, close = [ev.read(root / name) for name in ('process-start.json', 'hello.json', 'process-exit.json', 'close.json')]
@@ -529,6 +588,16 @@ def custody_export(ev, package, events, snapshot):
     need([row['event'] for row in records[4:]] == events and records == native['native_records'], 'native event bytes differ from replay')
     need(records[-1]['head'] == custody['record']['events']['binding']['witnessed'] == native['native_binding']['witnessed']
          and sha(raw) == native['stream_sha256'] and len(raw) == native['stream_size_bytes'], 'native witnessed terminal differs')
+    for index, framed in enumerate(records):
+        row = framed['event']
+        if row.get('schema') != 'hh-godot-publication-recovery-1':
+            continue
+        for name in ('saved_head', 'observed_head', 'native_head'):
+            if name in row:
+                position = row[name]['sequence'] - 1
+                need(0 <= position < index and records[position]['head'] == row[name], 'recovery head not bound to native frame')
+                if name in ('observed_head', 'native_head'):
+                    need(position == index - 1, 'recovery observation is not immediate native prefix')
     record = custody['record']
     recovery = snapshot.get('recovery') is not None
     storage_parent = package / ('original/owned/storage' if recovery else 'owned/storage')
@@ -581,6 +650,7 @@ def verify_lane(package, files, mods, overlay=None):
     ev = Evidence(overlay)
     lane, count = common(ev, package, files)
     events, snapshot, responses = journal(ev, package, lane, mods)
+    original_ack = recovery_original_evidence(ev, package, lane, events, snapshot, mods)
     actual = editor_evidence(ev, package, lane, snapshot)
     edit_observations(ev, package, lane, snapshot, mods)
     runs = linux_evidence(ev, package, mods)
@@ -622,6 +692,7 @@ def verify_lane(package, files, mods, overlay=None):
     return ev, {'lane': lane, 'package': package.name, 'available_evidence_verified': True,
                 'source_closure_sha256': CLOSURE, 'harness_checks': count, 'typed_events': len(events),
                 'effective_execution': ev.read(package / 'invocation.json').get('effective_execution'),
+                'recovery_original_ack': original_ack,
                 'supplementary_stop_drain': stop_drain,
                 'raw_linux_runs': len(runs), 'terminal_responses': responses, 'custody': custody,
                 'gaps': ([] if custody['verified'] else [custody['gap']]), 'gt03_acceptance': False}
@@ -667,6 +738,13 @@ def execution_manifest(ev, files, rows):
         return key
     base_key = external(HERE / 'run_native_lane.py')
     unit_key = external(REVIEWS / '20260917-gt03-s55-units-01/controller.py')
+    audit_dependencies = [external(path) for path in (
+        Path(__file__), HERE / 'export_native_evidence.py', HERE / 'test_semantic_evidence.py',
+        HERE / 'verify_native_lane_controller.py', HELPER, base.HELPER, PUBLICATION_HELPER,
+        REVIEWS / '20260917-gt03-s54-edit-audit/verify_edit.py')]
+    for export_root in sorted(HERE.glob('native-exports*')):
+        if (export_root / 'export-results.json').exists():
+            audit_dependencies.append(external(export_root / 'exporter.py'))
     lanes.append({'lane': 'unit-matrix', 'package': '20260917-gt03-s55-units-01',
                   'entrypoint': unit_key, 'dependencies': dependencies + [unit_key],
                   'external_cleanup_drivers_executed_by_units': False})
@@ -692,6 +770,7 @@ def execution_manifest(ev, files, rows):
             'files_sha256': sha(''.join(name + '\0' + value + '\n'
                  for name, value in sorted(execution_files.items())).encode()),
             'lanes': lanes, 'all_native_lane_maps_present': len(verified) == len(controller.LANES),
+            'audit_dependencies': sorted(audit_dependencies),
             'unit_matrix_scope': '699 tests ran the unchanged176-file runtime/unit snapshot; external cleanup drivers are separately executed native harnesses.',
             'gt03_acceptance': False}
     # Hash the dependency/entrypoint map as well as the file bytes. Two critics
@@ -732,6 +811,19 @@ def main():
             rows.append({'package': package.name, 'lane': invocation['lane'], 'available_evidence_verified': False,
                          'error': type(error).__name__ + ': ' + str(error)})
     observed = {row['lane'] for row in rows if row.get('available_evidence_verified')}
+    for row in rows:
+        if row.get('pending') and row['lane'] in observed:
+            package = REVIEWS / row['package']
+            invocation = ev.read(package / 'invocation.json')
+            reference = ev.read(package / 'source-reference.json')
+            need(invocation['source_closure_sha256'] == reference['source_closure_sha256'] == CLOSURE
+                 and invocation['controller_sha256'] == reference['controller_sha256']
+                 == sha(ev.raw(package / 'controller.py')) == CONTROLLER_PIN, 'incomplete predecessor source binding')
+            row.pop('pending')
+            row.update(incomplete_execution_retained=True, actual_exit_available=False, functional_pass=False,
+                       gt03_acceptance=False, gap='historical incomplete execution; actual completion unavailable',
+                       superseded_by_completed_package=next(item['package'] for item in rows
+                           if item['lane'] == row['lane'] and item.get('available_evidence_verified')))
     gaps = ['lane pending: ' + lane for lane in controller.LANES if lane not in observed]
     gaps += [row['package'] + ': ' + gap for row in rows for gap in row.get('gaps', [])]
     gaps += [row['package'] + ': ' + row['error'] for row in rows if 'error' in row]

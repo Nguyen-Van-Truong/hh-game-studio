@@ -1,0 +1,83 @@
+{
+  "run_id": "GT03-S55-EDIT-APPLIED-01",
+  "lane": "edit-applied",
+  "passed": true,
+  "started_at_utc": "2026-09-17T00:00:30.151981+00:00",
+  "source_closure_sha256": "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+  "controller_sha256": "46d27dd3a3c188ad90abd8a951d6723314e989ebd642fae6be68dbe1232394da",
+  "candidate_only": true,
+  "gt03_acceptance": false,
+  "host": {
+    "wrapper_pid": 19656,
+    "started_at": "2026-09-17T00:00:30.152979+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "$SNAPSHOT/tests/godot/run_recovery_cut_matrix.py",
+      "--frozen",
+      "--output",
+      "20260917-gt03-s55-edit-applied-01",
+      "--run-id",
+      "GT03-S55-EDIT-APPLIED-01",
+      "--binary",
+      "Godot_v4.7.2-stable_win64.exe",
+      "--closure",
+      "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+      "--case",
+      "edit-applied"
+    ],
+    "exit_code": 0,
+    "target_pid": 21220,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "native-edit-applied-stdout.txt",
+    "stderr": "native-edit-applied-stderr.txt",
+    "host": "native-edit-applied-host.json"
+  },
+  "result": {
+    "file": "result.json",
+    "sha256": "90fd5eebb1f850fb240a50b01b4cc3492b7616797807b81debfa7d11dea6565b",
+    "check_count": 21,
+    "completion_marker": {
+      "case": "edit-applied",
+      "ok": true,
+      "checks": 21
+    },
+    "original_host": {
+      "wrapper_pid": 27788,
+      "started_at": "2026-09-17T00:00:30.648327+00:00",
+      "argv": [
+        "python.exe",
+        "-B",
+        "$SNAPSHOT/tests/godot/run_recovery_cut_matrix.py",
+        "--crash-child",
+        "--case",
+        "edit-applied",
+        "--output",
+        "original",
+        "--binary",
+        "Godot_v4.7.2-stable_win64.exe",
+        "--closure",
+        "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+        "--run-id",
+        "GT03-S55-EDIT-APPLIED-01"
+      ],
+      "exit_code": 98,
+      "target_pid": 35084,
+      "wrapper_exit_code": 0,
+      "timed_out": false,
+      "tree_verified": true,
+      "ownership": "gated_job_kill_on_close",
+      "stdout": "publisher-stdout.txt",
+      "stderr": "publisher-stderr.txt",
+      "host": "publisher-host.json"
+    }
+  },
+  "native_logs_clean": true,
+  "source_inventory_unchanged": true,
+  "controller_unchanged": true,
+  "executable_pins_unchanged": true,
+  "finished_at_utc": "2026-09-17T00:01:44.004227+00:00"
+}

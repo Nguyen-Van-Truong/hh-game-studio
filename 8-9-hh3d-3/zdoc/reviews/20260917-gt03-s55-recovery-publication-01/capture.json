@@ -1,0 +1,78 @@
+{
+  "run_id": "GT03-S55-RECOVERY-PUBLICATION-01",
+  "lane": "recovery-publication",
+  "passed": true,
+  "started_at_utc": "2026-09-16T23:52:00.129034+00:00",
+  "source_closure_sha256": "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+  "controller_sha256": "46d27dd3a3c188ad90abd8a951d6723314e989ebd642fae6be68dbe1232394da",
+  "candidate_only": true,
+  "gt03_acceptance": false,
+  "host": {
+    "wrapper_pid": 40120,
+    "started_at": "2026-09-16T23:52:00.129034+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "$SNAPSHOT/tests/godot/run_recovery_publication_probe.py",
+      "--frozen",
+      "--output",
+      "20260917-gt03-s55-recovery-publication-01",
+      "--run-id",
+      "GT03-S55-RECOVERY-PUBLICATION-01",
+      "--binary",
+      "Godot_v4.7.2-stable_win64.exe",
+      "--closure",
+      "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e"
+    ],
+    "exit_code": 0,
+    "target_pid": 15792,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "native-recovery-publication-stdout.txt",
+    "stderr": "native-recovery-publication-stderr.txt",
+    "host": "native-recovery-publication-host.json"
+  },
+  "result": {
+    "file": "recovery.json",
+    "sha256": "261326099dd7f03bc25654a374d290da9e828dd5aff4c24a95c95342e6aec7fd",
+    "check_count": 14,
+    "completion_marker": {
+      "passed": true,
+      "checks": 14
+    },
+    "original_host": {
+      "wrapper_pid": 3528,
+      "started_at": "2026-09-16T23:52:00.633623+00:00",
+      "argv": [
+        "python.exe",
+        "-B",
+        "$SNAPSHOT/tests/godot/run_recovery_publication_probe.py",
+        "--crash-child",
+        "--output",
+        "original",
+        "--binary",
+        "Godot_v4.7.2-stable_win64.exe",
+        "--closure",
+        "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+        "--run-id",
+        "ORIGINAL-CRASH"
+      ],
+      "exit_code": 92,
+      "target_pid": 26528,
+      "wrapper_exit_code": 0,
+      "timed_out": false,
+      "tree_verified": true,
+      "ownership": "gated_job_kill_on_close",
+      "stdout": "original-stdout.txt",
+      "stderr": "original-stderr.txt",
+      "host": "original-host.json"
+    }
+  },
+  "native_logs_clean": true,
+  "source_inventory_unchanged": true,
+  "controller_unchanged": true,
+  "executable_pins_unchanged": true,
+  "finished_at_utc": "2026-09-16T23:53:02.629172+00:00"
+}

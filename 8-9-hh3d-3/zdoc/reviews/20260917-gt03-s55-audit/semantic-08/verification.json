@@ -1,0 +1,478 @@
+{
+  "schema": "hh-s55-semantic-audit-1",
+  "observed_at_utc": "2026-09-17T00:13:35.453799+00:00",
+  "source_closure_sha256": "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+  "source_file_count": 176,
+  "lanes": [
+    {
+      "lane": "edit",
+      "package": "20260917-gt03-s55-edit-01",
+      "available_evidence_verified": true,
+      "source_closure_sha256": "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+      "harness_checks": 61,
+      "typed_events": 29,
+      "effective_execution": null,
+      "recovery_original_ack": null,
+      "supplementary_stop_drain": null,
+      "raw_linux_runs": 2,
+      "terminal_responses": [
+        {
+          "command_id": "edit.create",
+          "response_sha256": "ae0d4d4668dd968e800a6dc528fa334deed728d64c4837669ad78b9ec3b1d3a6",
+          "raw_http_response_wire_retained": true
+        },
+        {
+          "command_id": "edit.redo",
+          "response_sha256": "808c126d13fec5761e2fff4df46e8d02edeefdd9d66f7f95bfc76bce27df211b",
+          "raw_http_response_wire_retained": true
+        },
+        {
+          "command_id": "edit.remove",
+          "response_sha256": "115a6d43c313c6252f146ba6d595e21dde99231720bc16763c7f7e242cf261e8",
+          "raw_http_response_wire_retained": true
+        },
+        {
+          "command_id": "edit.restore",
+          "response_sha256": "777be99d9d3b0df537600b9fa2efe0615e88e4760b196737a635f83b7a3ebc3b",
+          "raw_http_response_wire_retained": true
+        },
+        {
+          "command_id": "edit.undo",
+          "response_sha256": "44c3293e7537476273328d8294251a47c47f10e5e1308f12ac3c144e5b5d9137",
+          "raw_http_response_wire_retained": true
+        },
+        {
+          "command_id": "edit.update",
+          "response_sha256": "d0355f6816f05934696b1f91366a04042aecc6861d1a8a2803cfecba11ee901d",
+          "raw_http_response_wire_retained": true
+        }
+      ],
+      "custody": {
+        "verified": true,
+        "native_records": 33,
+        "portable_custody_is_not_acl_authority": true
+      },
+      "gaps": [],
+      "gt03_acceptance": false
+    },
+    {
+      "lane": "edit-applied",
+      "package": "20260917-gt03-s55-edit-applied-01",
+      "available_evidence_verified": true,
+      "source_closure_sha256": "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+      "harness_checks": 21,
+      "typed_events": 6,
+      "effective_execution": null,
+      "recovery_original_ack": {
+        "original_ack": "not_terminal_at_cut",
+        "recovery_route": "restore-last-good"
+      },
+      "supplementary_stop_drain": null,
+      "raw_linux_runs": 1,
+      "terminal_responses": [
+        {
+          "command_id": "matrix.original",
+          "route": "restore-last-good",
+          "response_sha256": "387ad31a9237278a78d13a6a13aaf8cd0a32a1687def3b019453d42d0a28b7ff"
+        }
+      ],
+      "custody": {
+        "verified": true,
+        "native_records": 10,
+        "portable_custody_is_not_acl_authority": true
+      },
+      "gaps": [],
+      "gt03_acceptance": false
+    },
+    {
+      "lane": "fifo",
+      "package": "20260917-gt03-s55-fifo-01",
+      "available_evidence_verified": true,
+      "source_closure_sha256": "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+      "harness_checks": 44,
+      "typed_events": 8,
+      "effective_execution": null,
+      "recovery_original_ack": null,
+      "supplementary_stop_drain": null,
+      "raw_linux_runs": 1,
+      "terminal_responses": [
+        {
+          "command_id": "fifo.edit.a",
+          "response_sha256": "50bc1bd9c56deec5ab198217ba85d4308a9e697d851ce65fc0b0fe189678e632",
+          "raw_http_response_wire_retained": true
+        },
+        {
+          "command_id": "fifo.edit.b",
+          "response_sha256": "5554282b22ed5f4b07f084c29b5a0fe19f9efb53378f3d01aad19035c42ae542",
+          "raw_http_response_wire_retained": true
+        }
+      ],
+      "custody": {
+        "verified": true,
+        "native_records": 12,
+        "portable_custody_is_not_acl_authority": true
+      },
+      "gaps": [],
+      "gt03_acceptance": false
+    },
+    {
+      "lane": "recovery-publication",
+      "package": "20260917-gt03-s55-recovery-publication-01",
+      "available_evidence_verified": true,
+      "source_closure_sha256": "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+      "harness_checks": 14,
+      "typed_events": 5,
+      "effective_execution": null,
+      "recovery_original_ack": null,
+      "supplementary_stop_drain": null,
+      "raw_linux_runs": 1,
+      "terminal_responses": [
+        {
+          "command_id": "recovery.original",
+          "route": "restore-last-good",
+          "response_sha256": "8648d0c812242f2a591b2a82c812a1fc0a768b629592cf5076644a9678cbbe40"
+        }
+      ],
+      "custody": {
+        "verified": true,
+        "native_records": 9,
+        "portable_custody_is_not_acl_authority": true
+      },
+      "gaps": [],
+      "gt03_acceptance": false
+    },
+    {
+      "lane": "save",
+      "package": "20260917-gt03-s55-save-01",
+      "available_evidence_verified": true,
+      "source_closure_sha256": "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+      "harness_checks": 18,
+      "typed_events": 11,
+      "effective_execution": {
+        "policy": "cleanup-only-stop-drain-v1",
+        "runtime_closure_sha256": "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+        "original_probe": "tests/godot/run_publication_probe.py",
+        "original_probe_sha256": "3fb8d48ed891a88fefd40899e537e2594c890d93d86304c15f1da8805edcd81a",
+        "executed_driver": "driver.py",
+        "executed_driver_sha256": "fc1f6498320de8340a8b8bbabcd8471a0cf092ec81a6e7b0929915bae662c09a",
+        "controller_sha256": "cf36f1c33fb7d76d18bdcac58b62b930913f05ded8f1f575fe8c4be68266e8e4",
+        "base_controller_sha256": "46d27dd3a3c188ad90abd8a951d6723314e989ebd642fae6be68dbe1232394da",
+        "runtime_modified": false,
+        "unit_dependencies_modified": false
+      },
+      "recovery_original_ack": null,
+      "supplementary_stop_drain": {
+        "initial_persistence": "PENDING",
+        "terminal_persistence": "DURABLE",
+        "drain_elapsed_ms": 3906.0000000172295,
+        "terminal_http_status_observed_by_poll": true
+      },
+      "raw_linux_runs": 2,
+      "terminal_responses": [
+        {
+          "command_id": "command.save",
+          "response_sha256": "0af9659e8b99e9a087575dccadbd6c83ac91c5cc3b4243c8c3d164c83c953c0b",
+          "raw_http_response_wire_retained": false
+        }
+      ],
+      "custody": {
+        "verified": true,
+        "native_records": 15,
+        "portable_custody_is_not_acl_authority": true
+      },
+      "gaps": [],
+      "gt03_acceptance": false
+    },
+    {
+      "lane": "scene-cas",
+      "package": "20260917-gt03-s55-scene-cas-01",
+      "available_evidence_verified": true,
+      "source_closure_sha256": "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+      "harness_checks": 21,
+      "typed_events": 14,
+      "effective_execution": null,
+      "recovery_original_ack": {
+        "original_ack": "not_terminal_at_cut",
+        "recovery_route": "complete-selected"
+      },
+      "supplementary_stop_drain": null,
+      "raw_linux_runs": 2,
+      "terminal_responses": [
+        {
+          "command_id": "matrix.original",
+          "route": "complete-selected",
+          "response_sha256": "d0e7657666eaea9c04c352291adebd28daa1e0653689aa278dbde4beba70e3b0"
+        }
+      ],
+      "custody": {
+        "verified": true,
+        "native_records": 18,
+        "portable_custody_is_not_acl_authority": true
+      },
+      "gaps": [],
+      "gt03_acceptance": false
+    },
+    {
+      "package": "20260917-gt03-s55-script-01",
+      "lane": "script",
+      "available_evidence_verified": false,
+      "failed_execution_retained": true,
+      "raw_exit": 1,
+      "wrapper_exit": 0,
+      "owned_tree_verified": true,
+      "failure": "ValueError: native lane raw exit/wrapper/owned Job mismatch",
+      "functional_pass": false,
+      "gt03_acceptance": false
+    },
+    {
+      "lane": "script",
+      "package": "20260917-gt03-s55-script-02",
+      "available_evidence_verified": true,
+      "source_closure_sha256": "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+      "harness_checks": 32,
+      "typed_events": 13,
+      "effective_execution": {
+        "policy": "cleanup-only-stop-drain-v1",
+        "runtime_closure_sha256": "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+        "original_probe": "tests/godot/run_script_publication_probe.py",
+        "original_probe_sha256": "4925b3886875c6cf1fa674be2f8c5c0ad0e1b399749d7c34a13cc7ebb979f77f",
+        "executed_driver": "driver.py",
+        "executed_driver_sha256": "65289bd65371ff1dd132d9a4ae82406db2238766d1d8975968d6a8c8d6eddf2b",
+        "controller_sha256": "cf36f1c33fb7d76d18bdcac58b62b930913f05ded8f1f575fe8c4be68266e8e4",
+        "base_controller_sha256": "46d27dd3a3c188ad90abd8a951d6723314e989ebd642fae6be68dbe1232394da",
+        "runtime_modified": false,
+        "unit_dependencies_modified": false
+      },
+      "recovery_original_ack": null,
+      "supplementary_stop_drain": {
+        "initial_persistence": "PENDING",
+        "terminal_persistence": "DURABLE",
+        "drain_elapsed_ms": 4389.999999955762,
+        "terminal_http_status_observed_by_poll": true
+      },
+      "raw_linux_runs": 2,
+      "terminal_responses": [
+        {
+          "command_id": "command.script",
+          "response_sha256": "59b07e7fbdff351df4ecf42d477b99c4caa48756440a5373a0dbab75b13e1290",
+          "raw_http_response_wire_retained": true
+        }
+      ],
+      "custody": {
+        "verified": true,
+        "native_records": 17,
+        "portable_custody_is_not_acl_authority": true
+      },
+      "gaps": [],
+      "gt03_acceptance": false
+    },
+    {
+      "lane": "script-committed",
+      "package": "20260917-gt03-s55-script-committed-01",
+      "available_evidence_verified": true,
+      "source_closure_sha256": "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+      "harness_checks": 21,
+      "typed_events": 18,
+      "effective_execution": null,
+      "recovery_original_ack": {
+        "original_ack": "witnessed_exact_original",
+        "recovery_route": "verify-original"
+      },
+      "supplementary_stop_drain": null,
+      "raw_linux_runs": 2,
+      "terminal_responses": [
+        {
+          "command_id": "matrix.original",
+          "route": "verify-original",
+          "response_sha256": "b19289b9940c4ac08d3d1fc08bf3268d4c2f08fddcd227e156a9ce573f8b0700"
+        }
+      ],
+      "custody": {
+        "verified": true,
+        "native_records": 22,
+        "portable_custody_is_not_acl_authority": true
+      },
+      "gaps": [],
+      "gt03_acceptance": false
+    },
+    {
+      "lane": "script-retired",
+      "package": "20260917-gt03-s55-script-retired-01",
+      "available_evidence_verified": true,
+      "source_closure_sha256": "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+      "harness_checks": 21,
+      "typed_events": 14,
+      "effective_execution": null,
+      "recovery_original_ack": {
+        "original_ack": "not_terminal_at_cut",
+        "recovery_route": "restore-last-good"
+      },
+      "supplementary_stop_drain": null,
+      "raw_linux_runs": 2,
+      "terminal_responses": [
+        {
+          "command_id": "matrix.original",
+          "route": "restore-last-good",
+          "response_sha256": "359806be16e9f0491db5cf0423b25db6991d8d5de6b97f6a000e535febfb8693"
+        }
+      ],
+      "custody": {
+        "verified": true,
+        "native_records": 18,
+        "portable_custody_is_not_acl_authority": true
+      },
+      "gaps": [],
+      "gt03_acceptance": false
+    },
+    {
+      "package": "20260917-gt03-s55-script-unwitnessed-01",
+      "lane": "script-unwitnessed",
+      "available_evidence_verified": false,
+      "gap": "historical incomplete execution; actual completion unavailable",
+      "incomplete_execution_retained": true,
+      "actual_exit_available": false,
+      "functional_pass": false,
+      "gt03_acceptance": false,
+      "superseded_by_completed_package": "20260917-gt03-s55-script-unwitnessed-02"
+    },
+    {
+      "lane": "script-unwitnessed",
+      "package": "20260917-gt03-s55-script-unwitnessed-02",
+      "available_evidence_verified": true,
+      "source_closure_sha256": "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+      "harness_checks": 24,
+      "typed_events": 19,
+      "effective_execution": null,
+      "recovery_original_ack": {
+        "original_ack": "unwitnessed_original_permanently_blocked",
+        "original_outcome_unknown": true,
+        "saved_crash_head": {
+          "sequence": 18,
+          "sha256": "ebc18f9145214abf643d3f9e17bfa8a8a834908c67b3a598a01ce4a69671c739",
+          "size": 57459
+        },
+        "orphan_terminal_head": {
+          "sequence": 19,
+          "sha256": "1f9bf3ba96692208b15d7b4afee453a5f38c3b85a8f08b35265d4137e2beb146",
+          "size": 58697
+        },
+        "recovery_route": "complete-selected",
+        "current_custody_does_not_authorize_original_ack": true
+      },
+      "supplementary_stop_drain": null,
+      "raw_linux_runs": 2,
+      "terminal_responses": [
+        {
+          "command_id": "matrix.original",
+          "route": "complete-selected",
+          "response_sha256": "6aa11abc8cf45dbe62371312c31b6b08d279d04e992eea31c208e5e8d198d5e3"
+        }
+      ],
+      "custody": {
+        "verified": true,
+        "native_records": 23,
+        "portable_custody_is_not_acl_authority": true
+      },
+      "gaps": [],
+      "gt03_acceptance": false
+    },
+    {
+      "lane": "stop",
+      "package": "20260917-gt03-s55-stop-01",
+      "available_evidence_verified": true,
+      "source_closure_sha256": "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+      "harness_checks": 20,
+      "typed_events": 5,
+      "effective_execution": null,
+      "recovery_original_ack": null,
+      "supplementary_stop_drain": null,
+      "raw_linux_runs": 2,
+      "terminal_responses": [
+        {
+          "command_id": "command.save",
+          "response_sha256": "319de632fc797f1531a91aeea1bffeeeaee34e2be9e389b87acc5b8472c6e6a4",
+          "raw_http_response_wire_retained": false
+        }
+      ],
+      "custody": {
+        "verified": true,
+        "native_records": 9,
+        "portable_custody_is_not_acl_authority": true
+      },
+      "gaps": [],
+      "gt03_acceptance": false
+    }
+  ],
+  "remaining_gaps": [],
+  "supporting_evidence": {
+    "unit_matrix": {
+      "verified": true,
+      "package": "20260917-gt03-s55-units-01",
+      "run": 699,
+      "partitions": [
+        {
+          "partition": "test_publication_journal",
+          "attempt": "attempts/test_publication_journal/0001",
+          "run": 19,
+          "raw_exit": 0,
+          "wrapper_exit": 0
+        },
+        {
+          "partition": "test_publication_journal_v2",
+          "attempt": "attempts/test_publication_journal_v2/0001",
+          "run": 12,
+          "raw_exit": 0,
+          "wrapper_exit": 0
+        },
+        {
+          "partition": "test_publication_journal_v3",
+          "attempt": "attempts/test_publication_journal_v3/0001",
+          "run": 10,
+          "raw_exit": 0,
+          "wrapper_exit": 0
+        },
+        {
+          "partition": "test_publication_journal_v4",
+          "attempt": "attempts/test_publication_journal_v4/0001",
+          "run": 5,
+          "raw_exit": 0,
+          "wrapper_exit": 0
+        },
+        {
+          "partition": "test_publication_journal_v5",
+          "attempt": "attempts/test_publication_journal_v5/0001",
+          "run": 11,
+          "raw_exit": 0,
+          "wrapper_exit": 0
+        },
+        {
+          "partition": "other",
+          "attempt": "attempts/other/0001",
+          "run": 642,
+          "raw_exit": 0,
+          "wrapper_exit": 0
+        }
+      ],
+      "source_closure_sha256": "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e"
+    },
+    "extended_recovery_inspection": {
+      "verified": true,
+      "package": "20260917-gt03-s55-recovery-inspection-native-01",
+      "run": 4,
+      "counts_overlap_unit_matrix": true,
+      "source_closure_sha256": "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+      "limitation": "Native storage with synthetic readback; embedded crash91 host line is a unit assertion, not separately retained raw crash evidence."
+    }
+  },
+  "effective_execution_closure_sha256": "bde6e7b5c848f2f060c0ccfb85d697dd4e64bc2638c90aa2f16ef6f164b84830",
+  "effective_execution_manifest": "effective-execution-manifest.json",
+  "all_requested_evidence_complete": true,
+  "native_processes_started": 0,
+  "live_registry_or_storage_opened": false,
+  "gt03_acceptance": false,
+  "limitations": [
+    "Captured HTTP retry/auth assertions are not an independent full packet transcript.",
+    "Portable custody checksums detect alteration; they do not recreate native ACL authority.",
+    "Acceptance requires coordinator dependencies and two independent critics on this exact source."
+  ]
+}

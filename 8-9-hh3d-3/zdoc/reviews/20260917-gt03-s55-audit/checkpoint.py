@@ -16,7 +16,7 @@ def sha(raw):
     return hashlib.sha256(raw).hexdigest()
 
 
-def inventory(manifests):
+def inventory(manifests, extra_packages=()):
     files = {}
 
     def add(path, expected=None):
@@ -31,8 +31,9 @@ def inventory(manifests):
         files[name] = value
 
     # Exact tested live bytes; a later untested module is not silently included.
-    for package in ('20260917-gt03-s55-source-01', '20260917-gt04-client-04'):
-        folder = REVIEWS / package
+    for package in ('20260917-gt03-s55-source-01', '20260917-gt04-client-04', *extra_packages):
+        folder = (REVIEWS / package).resolve()
+        assert folder.parent == REVIEWS.resolve(), 'source package must be a direct review child'
         mapping = json.loads((folder / 'source-closure.json').read_bytes())['files']
         for name, digest in mapping.items():
             add(folder / 'source/studio' / name, digest)
@@ -87,6 +88,8 @@ def verify_git(files, ref):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--manifest', type=Path, action='append', default=[])
+    parser.add_argument('--source-package', action='append', default=[],
+                        help='additional completed source package, checked against live bytes')
     parser.add_argument('--output', required=True, type=Path)
     parser.add_argument('--git-ref', choices=('index', 'HEAD'))
     args = parser.parse_args()
@@ -104,7 +107,7 @@ def main():
             json.dump(report, stream, indent=2); stream.write('\n')
     else:
         assert args.manifest, 'at least one verified portable manifest required'
-        files = inventory(args.manifest)
+        files = inventory(args.manifest, args.source_package)
         output.mkdir(exist_ok=False)
         digest = sha(json.dumps(files, sort_keys=True, separators=(',', ':')).encode())
         (output / 'files.json').write_text(json.dumps({'files': files, 'files_sha256': digest,

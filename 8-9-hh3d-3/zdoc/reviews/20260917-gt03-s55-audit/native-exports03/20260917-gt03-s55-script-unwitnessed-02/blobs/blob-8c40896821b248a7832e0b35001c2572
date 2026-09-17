@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://bjbtti8c7afyc" path="res://scripts/fixture_actor.gd" id="1_whgog"]
+
+[node name="Fixture" type="Node3D" unique_id=1506200852]
+script = ExtResource("1_whgog")
+fixture_value = 23
+metadata/hh_studio_id = "root"

@@ -1,0 +1,65 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "label": "actual_original_target_exit92_wrapper0_tree_clean",
+      "passed": true
+    },
+    {
+      "label": "actual_capture_precedes_crash_uncommitted",
+      "passed": true
+    },
+    {
+      "label": "fresh_recovery_discovery",
+      "passed": true
+    },
+    {
+      "label": "fresh_recovery_fence",
+      "passed": true
+    },
+    {
+      "label": "read_only_grant_cannot_reconcile",
+      "passed": true
+    },
+    {
+      "label": "actual_recovery_has_durable_terminal",
+      "passed": true
+    },
+    {
+      "label": "exact_recovered_response_bytes",
+      "passed": true
+    },
+    {
+      "label": "last_good_selector_unchanged",
+      "passed": true
+    },
+    {
+      "label": "actual_new_editor_identity",
+      "passed": true
+    },
+    {
+      "label": "actual_reopened_last_good_state",
+      "passed": true
+    },
+    {
+      "label": "retry_exact_without_second_editor_or_events",
+      "passed": true
+    },
+    {
+      "label": "control_lookup_exact_terminal",
+      "passed": true
+    },
+    {
+      "label": "fresh_http_host_lookup_replays_terminal",
+      "passed": true
+    },
+    {
+      "label": "fresh_http_host_retry_has_no_new_engine_or_event",
+      "passed": true
+    }
+  ],
+  "candidate_only": true,
+  "gt03_acceptance": false,
+  "source_closure_sha256": "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+  "actual_authenticated_recovery": true
+}

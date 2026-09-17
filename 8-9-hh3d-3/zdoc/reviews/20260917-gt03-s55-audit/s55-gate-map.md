@@ -15,15 +15,16 @@ or unrelated GT-06/GT-07 workload to be rerun.
 | Script preview/publication, retirement, fresh generation and script readback | `script` | `20260917-gt03-s55-script-02`: actual host 0, 32 producer checks; 13 final events, two Linux executions, original raw reply wire/duplicate/lookup and old/new editor bindings verified. Explicit cleanup driver below. `native-exports02` binds 17 native records and 11 selected files. Failed `script-01` remains failure. |
 | Authenticated CRUD, Undo/Redo, checkpoint observations, final save and idle durable Stop | `edit` | `20260917-gt03-s55-edit-01`: actual host 0, 61 producer checks; 29 events replayed, six original response wires, raw checkpoint/effect/readback files and two Linux executions verified. `native-exports01` binds 33 native records, 11 selected files and 18 checkpoint/observation blobs. |
 | Canonical Stop while actual Linux validator runs; immediate latch and later drain | `stop` | `20260917-gt03-s55-stop-01`: actual host 0, 20 producer checks; five events replayed, actual running inspect/timing, dirty-state preservation, original UNKNOWN and two Linux executions verified. `native-exports01` binds nine native records and 11 selected files. |
-| Two writers, FIFO, real expiry, stale fence, cancellation and Stop | `fifo` | Pending |
-| Original capture before durable capture event; fresh registered recovery and last-good restoration | `recovery-publication` | Pending; expected original host exit 92 |
-| Actual selector CAS before durable SELECTED | `scene-cas` | Pending; expected original host exit 93 |
-| Durable witnessed terminal before original response returns | `script-committed` | Pending; expected original host exit 94 |
-| Script editor retired before selector CAS | `script-retired` | Pending; expected original host exit 96 |
-| Actual V5 edit effect after EDIT_READY but before EDIT_COMMITTED | `edit-applied` | Pending; expected original host exit 98 |
-| Original terminal appended without saved custody witness | `script-unwitnessed` | Pending; expected original host exit 95 |
+| Two writers, FIFO, real expiry, stale fence, cancellation and Stop | `fifo` | `fifo-01`: 44 producer checks, actual host 0; 12 native records, 11 selected files, six checkpoint/observation blobs verified. |
+| Original capture before durable capture event; fresh registered recovery and last-good restoration | `recovery-publication` | `recovery-publication-01`: 14 checks, actual original host exit 92 and recovery exit 0; V4 prefix, fresh editor, nine native records and 11 selected files verified. |
+| Actual selector CAS before durable SELECTED | `scene-cas` | `scene-cas-01`: 21 checks, actual original exit 93 and recovery exit 0; complete-selected recovery, 18 native records, 11 selected files and three blobs verified. |
+| Durable witnessed terminal before original response returns | `script-committed` | `script-committed-01`: 21 checks, actual original exit 94 and recovery exit 0; exact witnessed original reply before/after reconciliation, 22 native records, 11 selected files and three blobs verified. |
+| Script editor retired before selector CAS | `script-retired` | `script-retired-01`: 21 checks, actual original exit 96 and recovery exit 0; restore-last-good recovery, 18 native records, 11 selected files and three blobs verified. |
+| Actual V5 edit effect after EDIT_READY but before EDIT_COMMITTED | `edit-applied` | `edit-applied-01`: 21 checks, actual original exit 98 and recovery exit 0; restore-last-good recovery, 10 native records, 11 selected files and two blobs verified. |
+| Original terminal appended without saved custody witness | `script-unwitnessed` | `script-unwitnessed-02`: 24 checks, actual original exit 95 and recovery exit 0; blocked original ACK, distinct recovered response, 23 native records, 11 selected files and three blobs verified. Interrupted `-01` remains INCOMPLETE. |
 
-The pending rows are existing affected regressions, not new requirements.
+All 11 rows now have completed affected regressions and native exports: 297
+producer assertions in total. This count is not an acceptance verdict.
 `20260917-gt03-s55-units-01` completed **699/699**, zero failures/errors/skips.
 This audit rebuilds all six sealed attempts from the pinned unit controller,
 checks actual target/wrapper exits, identical full inventories and disjoint
@@ -40,6 +41,11 @@ does not acquire an S55 closure by being cited here.
 owned Job and unchanged runtime. It called `owner.close()` while durable Stop
 was `PENDING`, which correctly raised `GODOT_STOP_DRAIN_REQUIRED`. Earlier
 successful assertions from that run are not counted as a completed lane.
+
+`script-unwitnessed-01` is retained as INCOMPLETE: its invocation and source
+reference exist, but there is no captured actual publisher/outer exit or final
+capture. It supplies no crash95 or functional PASS. The fresh `-02` package
+uses the same immutable source and supplies the complete observed lane.
 
 Coordinator-owned `run_drained_publication_lane.py` is pinned at
 `cf36f1c33fb7d76d18bdcac58b62b930913f05ded8f1f575fe8c4be68266e8e4`.
@@ -61,7 +67,8 @@ its initial Stop was also `PENDING`, followed by polled `DURABLE` after 3906 ms.
 Every new semantic report writes `effective-execution-manifest.json`. It keeps
 runtime closure `3a220b...` distinct from the effective execution closure, whose
 canonical hash covers all 176 runtime/unit file hashes, exact external driver
-and controller bytes, plus each lane's entrypoint/dependency map. The 699 unit
+and controller bytes, current auditor/exporter/test scripts and pinned helper
+dependencies, plus each lane's entrypoint/dependency map. The 699 unit
 tests did not execute the external cleanup drivers. An incomplete map remains
 candidate evidence; the final two critics must sign the same complete layered
 manifest, not transfer signatures from an earlier source or partial map.
@@ -129,6 +136,22 @@ no timeout and both native resource chains closed without cleanup errors. The
 176-file runtime stayed unchanged. These exports bind the same layered script/
 save execution maps already checked above; they do not imply that unit tests
 executed the external cleanup drivers.
+
+`native-exports03` completed the remaining seven packages (FIFO, recovery
+publication and the five cuts): actual target PID 23460 exit 0, wrapper PID
+38952 exit 0, no timeout, clean owned Job, seven resource chains closed without
+cleanup errors. It opened no new storage and changed no source. Unwitnessed02's
+current 23-record native head matches its current saved witness strictly; the
+exporter was not weakened to accept an unwitnessed current suffix.
+
+The negative original-ACK boundary remains explicit. Unwitnessed02 retained
+crash witness 18 and orphan COMMITTED 19, then a durable HOLD with the exact
+saved/observed heads and blocked original command. The auditor binds every
+recovery head reference to actual native frames, checks the pre-reconcile
+lookup is not COMMITTED, preserves the blocked command, and requires a distinct
+recovered reply carrying `original_outcome_unknown=true`. A current recovery
+witness does not retroactively authorize the original ACK. Pure corruption
+checks alter these facts and must be rejected.
 
 Each export is a fresh `native-exports*` directory under this audit; one lane
 must not have ambiguous duplicate exports. Portable manifests exclude private

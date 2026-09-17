@@ -1,0 +1,191 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "label": "two_distinct_registered_credentials",
+      "passed": true
+    },
+    {
+      "label": "authenticated_discovery",
+      "passed": true
+    },
+    {
+      "label": "legacy_route_issues_real_registered_lease",
+      "passed": true
+    },
+    {
+      "label": "fifo.edit.a_actual_authenticated_edit",
+      "passed": true
+    },
+    {
+      "label": "fifo.edit.a_truthful_editor_session_scope",
+      "passed": true
+    },
+    {
+      "label": "fifo.edit.a_native_node_observed",
+      "passed": true
+    },
+    {
+      "label": "fifo.edit.a_exact_durable_reply",
+      "passed": true
+    },
+    {
+      "label": "fifo.wait.b_enqueue_accepted",
+      "passed": true
+    },
+    {
+      "label": "fifo.wait.a_enqueue_accepted",
+      "passed": true
+    },
+    {
+      "label": "two_waiters_stay_queued_behind_active_writer",
+      "passed": true
+    },
+    {
+      "label": "legacy_lease_cannot_duplicate_own_waiter",
+      "passed": true
+    },
+    {
+      "label": "later_waiter_poll_cannot_jump_active_writer",
+      "passed": true
+    },
+    {
+      "label": "first_lease_really_expired",
+      "passed": true
+    },
+    {
+      "label": "later_poll_grants_head_without_jumping_it",
+      "passed": true
+    },
+    {
+      "label": "head_gets_fresh_registered_fence_after_expiry",
+      "passed": true
+    },
+    {
+      "label": "ticket_retry_after_unread_response_is_exact",
+      "passed": true
+    },
+    {
+      "label": "stale_fence_rejected_before_native_edit_or_intent",
+      "passed": true
+    },
+    {
+      "label": "fifo.edit.b_actual_authenticated_edit",
+      "passed": true
+    },
+    {
+      "label": "fifo.edit.b_truthful_editor_session_scope",
+      "passed": true
+    },
+    {
+      "label": "fifo.edit.b_native_node_observed",
+      "passed": true
+    },
+    {
+      "label": "fifo.edit.b_exact_durable_reply",
+      "passed": true
+    },
+    {
+      "label": "both_writer_edits_survive_in_same_owned_editor",
+      "passed": true
+    },
+    {
+      "label": "edits_did_not_publish_project_or_script_bytes",
+      "passed": true
+    },
+    {
+      "label": "queued_incumbent_cancellation_does_not_revoke_head",
+      "passed": true
+    },
+    {
+      "label": "cancel_terminal_is_exact",
+      "passed": true
+    },
+    {
+      "label": "fifo.wait.legacy.head_enqueue_accepted",
+      "passed": true
+    },
+    {
+      "label": "legacy_case_has_one_older_waiter",
+      "passed": true
+    },
+    {
+      "label": "second_lease_really_expired",
+      "passed": true
+    },
+    {
+      "label": "fresh_legacy_request_cannot_bypass_older_waiter_after_real_expiry",
+      "passed": true
+    },
+    {
+      "label": "legacy_route_grants_only_older_head_then_cancels_own_waiter",
+      "passed": true
+    },
+    {
+      "label": "expired_ticket_retry_is_exact_without_reviving_stale_writer",
+      "passed": true
+    },
+    {
+      "label": "fifo.wait.stop_enqueue_accepted",
+      "passed": true
+    },
+    {
+      "label": "stop_case_has_pending_writer",
+      "passed": true
+    },
+    {
+      "label": "stop_control_latches_without_queue_wait",
+      "passed": true
+    },
+    {
+      "label": "stop_cancels_pending_writer_ticket",
+      "passed": true
+    },
+    {
+      "label": "stopped_owner_cannot_grant_new_writer",
+      "passed": true
+    },
+    {
+      "label": "idle_stop_is_durable_after_owned_drain",
+      "passed": true
+    },
+    {
+      "label": "fifo.edit.a_lookup_after_stop_exact",
+      "passed": true
+    },
+    {
+      "label": "fifo.edit.b_lookup_after_stop_exact",
+      "passed": true
+    },
+    {
+      "label": "stop_preserves_both_actual_edits",
+      "passed": true
+    },
+    {
+      "label": "one_actual_bootstrap_validator_only",
+      "passed": true
+    },
+    {
+      "label": "readonly_reopen_keeps_stop_and_original_selection",
+      "passed": true
+    },
+    {
+      "label": "fifo.edit.a_historical_durable_reply_reopens",
+      "passed": true
+    },
+    {
+      "label": "fifo.edit.b_historical_durable_reply_reopens",
+      "passed": true
+    }
+  ],
+  "source_closure_sha256": "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+  "candidate_only": true,
+  "gt03_acceptance": false,
+  "queue_durable_across_restart": false,
+  "actual_authenticated_two_writer_fifo": true,
+  "actual_clock_expiry": true,
+  "editor_edits_observed": 2,
+  "files_saved": false,
+  "live_state_durable": false,
+  "bootstrap_validators": 1
+}

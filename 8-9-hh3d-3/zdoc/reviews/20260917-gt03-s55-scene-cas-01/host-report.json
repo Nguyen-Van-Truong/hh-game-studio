@@ -1,0 +1,29 @@
+{
+  "wrapper_pid": 16812,
+  "started_at": "2026-09-16T23:53:04.475595+00:00",
+  "argv": [
+    "python.exe",
+    "-B",
+    "$SNAPSHOT/tests/godot/run_recovery_cut_matrix.py",
+    "--frozen",
+    "--output",
+    "20260917-gt03-s55-scene-cas-01",
+    "--run-id",
+    "GT03-S55-SCENE-CAS-01",
+    "--binary",
+    "Godot_v4.7.2-stable_win64.exe",
+    "--closure",
+    "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+    "--case",
+    "scene-cas"
+  ],
+  "exit_code": 0,
+  "target_pid": 40436,
+  "wrapper_exit_code": 0,
+  "timed_out": false,
+  "tree_verified": true,
+  "ownership": "gated_job_kill_on_close",
+  "stdout": "native-scene-cas-stdout.txt",
+  "stderr": "native-scene-cas-stderr.txt",
+  "host": "native-scene-cas-host.json"
+}

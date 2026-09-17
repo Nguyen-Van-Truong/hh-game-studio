@@ -1,0 +1,83 @@
+{
+  "run_id": "GT03-S55-SCRIPT-UNWITNESSED-02",
+  "lane": "script-unwitnessed",
+  "passed": true,
+  "started_at_utc": "2026-09-17T00:05:02.855116+00:00",
+  "source_closure_sha256": "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+  "controller_sha256": "46d27dd3a3c188ad90abd8a951d6723314e989ebd642fae6be68dbe1232394da",
+  "candidate_only": true,
+  "gt03_acceptance": false,
+  "host": {
+    "wrapper_pid": 36784,
+    "started_at": "2026-09-17T00:05:02.855116+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "$SNAPSHOT/tests/godot/run_recovery_cut_matrix.py",
+      "--frozen",
+      "--output",
+      "20260917-gt03-s55-script-unwitnessed-02",
+      "--run-id",
+      "GT03-S55-SCRIPT-UNWITNESSED-02",
+      "--binary",
+      "Godot_v4.7.2-stable_win64.exe",
+      "--closure",
+      "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+      "--case",
+      "script-unwitnessed"
+    ],
+    "exit_code": 0,
+    "target_pid": 21456,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "native-script-unwitnessed-stdout.txt",
+    "stderr": "native-script-unwitnessed-stderr.txt",
+    "host": "native-script-unwitnessed-host.json"
+  },
+  "result": {
+    "file": "result.json",
+    "sha256": "6ad79ce637deac3329ee901110133a2b4797e23f699f6eb3ff5afcbf6373a318",
+    "check_count": 24,
+    "completion_marker": {
+      "case": "script-unwitnessed",
+      "ok": true,
+      "checks": 24
+    },
+    "original_host": {
+      "wrapper_pid": 27844,
+      "started_at": "2026-09-17T00:05:03.272656+00:00",
+      "argv": [
+        "python.exe",
+        "-B",
+        "$SNAPSHOT/tests/godot/run_recovery_cut_matrix.py",
+        "--crash-child",
+        "--case",
+        "script-unwitnessed",
+        "--output",
+        "original",
+        "--binary",
+        "Godot_v4.7.2-stable_win64.exe",
+        "--closure",
+        "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+        "--run-id",
+        "GT03-S55-SCRIPT-UNWITNESSED-02"
+      ],
+      "exit_code": 95,
+      "target_pid": 36532,
+      "wrapper_exit_code": 0,
+      "timed_out": false,
+      "tree_verified": true,
+      "ownership": "gated_job_kill_on_close",
+      "stdout": "publisher-stdout.txt",
+      "stderr": "publisher-stderr.txt",
+      "host": "publisher-host.json"
+    }
+  },
+  "native_logs_clean": true,
+  "source_inventory_unchanged": true,
+  "controller_unchanged": true,
+  "executable_pins_unchanged": true,
+  "finished_at_utc": "2026-09-17T00:07:35.979428+00:00"
+}

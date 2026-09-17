@@ -35,23 +35,25 @@ GT02_CHECKPOINT_COMMITS=2e24912,579b7e7,287a6c2,487e5fc,6a6dfb8,08f70cf,59c7b1e,
 GT02_SAFE_WRITE_STATUS=ACCEPTED_SCOPED_WINDOWS_MANAGED_FIXTURE
 GT02_BOUNDARY_EVIDENCE=S46_EXACT_CLOSURE_SERVICE_REPLACE_REGISTRY
 GT02_WORKING_SOURCE_STATUS=S46_FROZEN_ACCEPTED
-GT03_EVIDENCE_STATUS=S53_FULL_PLUS_S54_SEPARATE_COMPONENT_CANDIDATES
-GT03_REVIEW_STATUS=IMPLEMENTATION_CROSS_REVIEW_ONLY
-GT03_LAST_TESTED_SOURCE_CLOSURE=31a66517322bc57665aa316c53a88686ee27037a38ff055b1744327ad2464cec
+GT03_EVIDENCE_STATUS=S55_COMPLETE_CANDIDATE_SEMANTIC08
+GT03_REVIEW_STATUS=TWO_FINAL_INDEPENDENT_CRITICS_IN_PROGRESS
+GT03_LAST_TESTED_SOURCE_CLOSURE=3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e
+GT03_EFFECTIVE_EXECUTION_CLOSURE=bde6e7b5c848f2f060c0ccfb85d697dd4e64bc2638c90aa2f16ef6f164b84830
 GT03_SANDBOX_STATUS=S51_BOUNDED_PROFILE_SEMANTIC_PARITY_CANDIDATE
-GT03_CHECKPOINT_COMMIT=4eb8eee
-GT03_WORKING_SOURCE_STATUS=S55_FROZEN_REGRESSION_IN_PROGRESS
+GT03_CHECKPOINT_COMMIT=4b10c53
+GT03_WORKING_SOURCE_STATUS=S55_FROZEN_COMPLETE_AWAITING_FINAL_CRITICS
 GT03_PENDING_SOURCE_CLOSURE=3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e
 GT03_TEST_DRIVER_MODE=PINNED_CLEANUP_SUPPLEMENT_OVER_UNCHANGED_S55_RUNTIME
 GT04_EVIDENCE_STATUS=READ_CLIENT_AND_INTERNAL_PUBLICATION_COMPONENT_CANDIDATES_GAPS_OPEN
-GT04_LAST_TESTED_SOURCE_CLOSURE=bf2236b0229100062ec266b55722db7196fc0af84716bf6e29e01bd7595ef15f
-GT04_WORKING_SOURCE_STATUS=S55_READ_CLIENT_NATIVE_TESTED_PUBLIC_MUTATION_GAPS_OPEN
+GT04_LAST_TESTED_SOURCE_CLOSURE=a18e6de9563e770fe7258242c369abdef04f2af692995360ff3f5402b488d9b7
+GT04_WORKING_SOURCE_STATUS=S55_READ_CLIENT_AND_LEDGER_NATIVE_TESTED_WRITES_UNADVERTISED
 
 TIẾN ĐỘ HIỆN HÀNH — S55, ngày 17-09-2026
 GT-01 và GT-02 ACCEPTED; GT-03/04 đang triển khai song song trên scope riêng.
 GT-05 chưa mở. Root điều phối3 worker Codex Astra ultra, một writer/file;
 chỉ một engine/Linux/native-journal integration lane chạy tại một thời điểm.
-Checkpoint Git gần nhất4eb8eee là S54 WIP; phần S55 chưa nghiệm thu.
+Checkpoint Git gần nhất4b10c53 là S55 WIP;1482 file đã kiểm byte index/HEAD.
+GT03/04 vẫn chưa nghiệm thu; các lane chạy tiếp giữ evidence riêng.
 
 Đã nghiệm thu:
 - GT-01: a0fb247, reviews/20260913-r21-gt01-final; closure
@@ -86,7 +88,14 @@ Godot GT-03:
   matrix đã hoàn tất699/699, không skip/error/failure, sáu module cùng snapshot
   và actual exits/owned trees hợp lệ. Script02 đạt32/32, save01 đạt18/18;
   cả bốn lane Stop/edit/script/save đã đối chiếu native custody/selected bytes.
-  FIFO/recovery-publication và năm crash cuts đang khép lần lượt.
+  FIFO đạt44/44, recovery-publication14/14; scene-CAS, script-committed,
+  script-retired và edit-applied đều21/21. Script-unwitnessed01 bị gián đoạn,
+  thiếu raw host exit/capture nên giữ INCOMPLETE; lane02 đã đạt24/24 với
+  actual original crash95, recovery0/wrapper0 và owned trees sạch. Cả11lane
+  native đã hoàn tất trên cùng source; custody cả11lane đã đối chiếu đúng.
+  semantic08 đầy đủ:699unit,297native assertions,19rawLinuxruns;52/52
+  corruption checks,2120portablefiles, final effective closure204files ở trên.
+  Hai critic cuối đang kiểm cùng hash; chưa có verdict nghiệm thu cuối.
 - Script S55-01 giữ FAIL: harness gọi close khi Stop persistence còn PENDING;
   owner trả DRAIN_REQUIRED và giữ quyền cleanup đúng contract. Driver bổ sung
   chỉ chờ DURABLE/capture state trước close, có hash/argv riêng. Runtime176file
@@ -120,6 +129,14 @@ Blender GT-04:
   các check giữa chừng. Đã sửa đúng từng nguyên nhân, không nới core policy.
   Còn public mutations và durable common Request/Response binding. Writable
   restart/khôi phục Undo cũ/recovery cross-app thuộc GT07, không kéo vào GT04.
+  Ledger binding riêng ban đầu đạt28/28 pure tests (105/105 khi ghép client).
+  Review độc lập phát hiện lỗi guard-release chưa phân loại UNKNOWN; đã sửa
+  cả admission/terminal,30/30 ledger tests đạt trên source sửa. Probe thật
+  reviews/20260917-gt04-ledger-native-01 đạt42focused tests+25native checks;
+  117sourcefiles closurea18e6de... ở trên, actual GUI/host/wrapper exit0,Job0.
+  File-only audit khớp journal/Request/native/Response và9corruptionchecks.
+  Ledger chưa quảng bá write capability/public ACK; reopen trong probe chỉ
+  Journal mới của cùng live owner, không claim phục hồi GUI đã crash.
   Chưa nghiệm thuGT04. Failure01 là đọc exclusive writer
   guard sai thời điểm trong harness; runtime không đổi, giữ evidenceFAIL.
 
@@ -144,6 +161,10 @@ KINH NGHIỆM ĐANG ÁP DỤNG
   fence đã arm; mock transport không chứng minh giao điểm này. Metadata tên
   client_role chỉ là vai trò, không dùng key credential_* bị policy từ chối.
   Encode evidence trước khi mở file để validation failure không để file rỗng.
+  Phiên runner mất sau gián đoạn không đồng nghĩa process PASS: kiểm raw host
+  exit/capture và owned processes; chỉ rerun lane thiếu proof, giữ lane đã đạt.
+  Native guard có thể lỗi lúc thoát sau readback: bao toàn bộ journal call,
+  giữ UNKNOWN/hold và exact retry, không chỉ bắt lỗi trong thân append.
 - S54: deadline-sensitive engine integration không chạy chung với full native
   journal/Registry fsync matrix. Chia code/review song song, điều phối I/O;
   phân biệt overlap với nguyên nhân đã chứng minh. Resume crash storage bằng
