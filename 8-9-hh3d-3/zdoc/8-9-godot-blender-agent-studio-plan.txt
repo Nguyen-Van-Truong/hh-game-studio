@@ -180,6 +180,11 @@ GT-06 hiện hành — phần đã làm và đường tới nghiệm thu
   -s73-next/seal/ đã rebind draft theo source/campaign S73, thêm5service remints
   và giữ provenance S65/S69. Chỉ kiểm syntax/JSON/map với savedlaunch; adapter
   chưa chạy, chưa finalseal hoặc critic. Startup checkpoint06bc5fcf.
+  Quan sát04:27:5warmup hoàn chỉnh, bắt đầu batch5 measured; live taskstate4,
+  host/native cùngrun, stderr trống, chưafailure/Stop. Warmup duration60.6–206.7s
+  dao động lớn; b04 gồm57.27sHTTP+133.91snative, không quy mọi chậm cho hash.
+  -s73-next/warmup-watchpoint.json giữ số liệu; chưa đủ dự đoán quá7410s/run.
+  Theo dõi command/native riêng tại heartbeat thường lệ, không restart/nới gate.
 - Sau benchmark: verify complete10×35, raw/hash/schema/counters/actual exits;
   ghép functional bằng dependency đã kiểm; đóng final source/review/raw manifest
   và requirement→test→evidence. Hai critic mới đọc độc lập cùng final hash,

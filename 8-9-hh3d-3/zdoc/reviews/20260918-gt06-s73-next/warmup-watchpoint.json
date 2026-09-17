@@ -1,0 +1,103 @@
+{
+  "schema": "HH-GT06-S73-WARMUP-WATCHPOINT-1",
+  "observed_at": "2026-09-17T21:31:20.989605+00:00",
+  "campaign_id": "gt06-s73-campaign-01",
+  "source_checkpoint": "cb4d1f6f",
+  "scope": "Five completed warmup observations only. No full capture validation, measurement result or acceptance. Source/profile unchanged.",
+  "inputs": [
+    {
+      "path": "joint-00.json",
+      "size_bytes": 2282,
+      "sha256": "a737b21088a7b201d79e226850d7eae5b169dbd8e0deb3475544f86decd8162c"
+    },
+    {
+      "path": "joint-01.json",
+      "size_bytes": 2288,
+      "sha256": "519f9ec287e3c4860668beb8977c04380eceb2953b95eb0f0a64812bad6ca6bd"
+    },
+    {
+      "path": "joint-02.json",
+      "size_bytes": 2288,
+      "sha256": "92856072d4022e5976e1d3f838e33b123850afbae0b00829f291fd991d467312"
+    },
+    {
+      "path": "joint-03.json",
+      "size_bytes": 2288,
+      "sha256": "573bd317b301d7808d8d01596e5a8502f5919fa13cc1f16c5569f0217d957632"
+    },
+    {
+      "path": "joint-04.json",
+      "size_bytes": 2290,
+      "sha256": "4680d3a8edab6caa19f48bc8b134723c7c404a5f985c62b5060eeef2ae5de8d3"
+    },
+    {
+      "path": "command-04.json",
+      "size_bytes": 1142740,
+      "sha256": "ea01cbe8a32aaf9b02c2516b1023d218f9c2c295e9bc2182eee2ebc8f022a9b3"
+    },
+    {
+      "path": "project/benchmark/out/batch-04.json",
+      "size_bytes": 98459,
+      "sha256": "8f6e6ef51a0f51d9eeeecf74f4b3ba69991de0b61de58b4de50c4ec1a0f820bd"
+    }
+  ],
+  "warmups": [
+    {
+      "batch": 0,
+      "joint_seconds": 60.583168,
+      "editor_objects": 71135,
+      "editor_rss_bytes": 753053696,
+      "native_ack_mono_us": 67666005
+    },
+    {
+      "batch": 1,
+      "joint_seconds": 103.500033,
+      "editor_objects": 71135,
+      "editor_rss_bytes": 753352704,
+      "native_ack_mono_us": 171337275
+    },
+    {
+      "batch": 2,
+      "joint_seconds": 75.900018,
+      "editor_objects": 71159,
+      "editor_rss_bytes": 753618944,
+      "native_ack_mono_us": 247413168
+    },
+    {
+      "batch": 3,
+      "joint_seconds": 206.711672,
+      "editor_objects": 71161,
+      "editor_rss_bytes": 616329216,
+      "native_ack_mono_us": 454261779
+    },
+    {
+      "batch": 4,
+      "joint_seconds": 191.761368,
+      "editor_objects": 71161,
+      "editor_rss_bytes": 359473152,
+      "native_ack_mono_us": 646183366
+    }
+  ],
+  "batch4_seconds": {
+    "commands": 57.273596,
+    "native": 133.909678,
+    "joint": 191.761368,
+    "other": 0.578093999999993
+  },
+  "at_batch4_budget": {
+    "run_limit_s": 7410,
+    "native_ack_clock_s": 646.183366,
+    "remaining_batches": 30,
+    "optimistic_average_remaining_budget_s": 225.46055446666665,
+    "caveat": "Boundary watchpoint only. Native clock excludes pre-native setup; not an exact live watchdog budget or ETA."
+  },
+  "interpretation": [
+    "Variability in five warmups does not justify linear extrapolation or restart.",
+    "About70percent of batch4 joint wall time was native; hashing cost alone does not explain its duration.",
+    "Native work is frame-driven with asynchronous save/reload; underlying scheduling or I/O cause is not identified.",
+    "Warmup object changes precede the batch4 baseline and do not establish measured growth."
+  ],
+  "next_monitor": "At next ordinary heartbeat inspect completed command/native durations separately and remaining run budget. Do not change source/profile/settings or launch concurrent heavy work.",
+  "formal_acceptance": false,
+  "critic_verdict": null
+}
