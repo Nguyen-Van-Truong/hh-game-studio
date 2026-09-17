@@ -1,0 +1,243 @@
+{
+  "exact_copies": 239,
+  "formal_acceptance": false,
+  "full_benchmark": false,
+  "notes": [
+    "native01/guard01 precede bytearray/assembly correction; historical only",
+    "native02 and BOM guard verify final affected native path; no full campaign proof",
+    "negative scan-thread warning retained; not allowed in positive runs"
+  ],
+  "raw_files": 411,
+  "runs": {
+    "gt06-s75-ignore-bom-01": {
+      "job": {
+        "active_count": 0,
+        "assigned": true,
+        "close_uncertain": false,
+        "closed": true,
+        "configured": true,
+        "create_uncertain": false,
+        "failed_operations": [],
+        "handle_retained": false,
+        "native_error": null,
+        "tainted": false,
+        "zero_observed": true
+      },
+      "result": {
+        "actual_exit": {
+          "exit_code": 86,
+          "pid": 19668
+        },
+        "collector_asserted_on_expected_early_exit_scan_warning": false,
+        "guard_rejected": true,
+        "result_file_present": true
+      },
+      "stderr": "WARNING: Scan thread aborted...\n   at: _notification (editor/file_system/editor_file_system.cpp:1757)\n"
+    },
+    "gt06-s75-ignore-guard-01": {
+      "job": {
+        "active_count": 0,
+        "assigned": true,
+        "close_uncertain": false,
+        "closed": true,
+        "configured": true,
+        "create_uncertain": false,
+        "failed_operations": [],
+        "handle_retained": false,
+        "native_error": null,
+        "tainted": false,
+        "zero_observed": true
+      },
+      "result": {
+        "actual_exit": {
+          "exit_code": 86,
+          "pid": 11720
+        },
+        "collector_asserted_on_expected_early_exit_scan_warning": true,
+        "guard_rejected": true,
+        "result_file_present": false
+      },
+      "stderr": "WARNING: Scan thread aborted...\n   at: _notification (editor/file_system/editor_file_system.cpp:1757)\n"
+    },
+    "gt06-s75-native-01": {
+      "job": {
+        "active_count": 0,
+        "assigned": true,
+        "close_uncertain": false,
+        "closed": true,
+        "configured": true,
+        "create_uncertain": false,
+        "failed_operations": [],
+        "handle_retained": false,
+        "native_error": null,
+        "tainted": false,
+        "zero_observed": true
+      },
+      "result": {
+        "actual_exits": {
+          "editor": {
+            "exit_code": 0,
+            "pid": 47456
+          },
+          "import": {
+            "exit_code": 0,
+            "pid": 29772
+          }
+        },
+        "batch_sha256": "c3ccbf5fc6219b4b303816d284c2a18c7f42f21f5e12ffbc8b1b70795a01dabe",
+        "binary_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+        "binding": {
+          "batch_barrier": "diagnostic_none",
+          "batch_start": "diagnostic_immediate",
+          "mode": "diagnostic",
+          "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+          "run_id": "gt06-s75-native-01",
+          "schema_id": "hh-studio.native-cycle-benchmark-run",
+          "schema_version": "1.2.0",
+          "source_closure_sha256": "7005f0a129688846777e146b85e04a010c8048b11e280171ee6db20f52aa9913"
+        },
+        "completed_diagnostic": true,
+        "formal_acceptance": false,
+        "full_benchmark": false,
+        "host_integrated": false,
+        "index_sha256": "e49da9df3fec982bde28c6ff9b6dd9fab666b06acee05d6af7e3d494650fe842",
+        "input_sha256": "65543d5126e4a8213d14c32d0cca6a43919312ab5dc3e506112d7d6ee58c69e9",
+        "jobs": {
+          "editor": {
+            "active_count": 0,
+            "assigned": true,
+            "close_uncertain": false,
+            "closed": true,
+            "configured": true,
+            "create_uncertain": false,
+            "failed_operations": [],
+            "handle_retained": false,
+            "native_error": null,
+            "tainted": false,
+            "zero_observed": true
+          },
+          "import": {
+            "active_count": 0,
+            "assigned": true,
+            "close_uncertain": false,
+            "closed": true,
+            "configured": true,
+            "create_uncertain": false,
+            "failed_operations": [],
+            "handle_retained": false,
+            "native_error": null,
+            "tainted": false,
+            "zero_observed": true
+          }
+        },
+        "process": {
+          "pid": 47456,
+          "process_start": "windows:134341576268732058"
+        },
+        "process_metrics_sha256": "5cab31c58c0e0c48e69b2dbc06f33aaa7b819cc0f83d09149f3ef1b8a67eaec7",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "public_ack": false,
+        "run_id": "gt06-s75-native-01",
+        "schema_id": "hh-studio.native-cycle-diagnostic-capture",
+        "schema_version": "1.0.0",
+        "scope": "one GUI editor, one direct-semantic cycle; no full campaign or host/API mix",
+        "source_unchanged": true,
+        "stage_captures": {
+          "editor": "1dadf27f4d8c5c9b4670f656ca8356e5b0331e569bd089d0d55670d693b318bd",
+          "import": "105d7a17811727845876a8205b4c011128d5b245751c8a09cb8ae327c8df59a5"
+        }
+      },
+      "stderr": ""
+    },
+    "gt06-s75-native-02": {
+      "job": {
+        "active_count": 0,
+        "assigned": true,
+        "close_uncertain": false,
+        "closed": true,
+        "configured": true,
+        "create_uncertain": false,
+        "failed_operations": [],
+        "handle_retained": false,
+        "native_error": null,
+        "tainted": false,
+        "zero_observed": true
+      },
+      "result": {
+        "actual_exits": {
+          "editor": {
+            "exit_code": 0,
+            "pid": 36144
+          },
+          "import": {
+            "exit_code": 0,
+            "pid": 49440
+          }
+        },
+        "batch_sha256": "ef407f4b33d74183ba4125ac98219f093e9ab6555c743628b9047f502a0a39df",
+        "binary_sha256": "ab1824f85bfd8e0e4128182c000c4003a3e042245b2967848d089b2a04b22424",
+        "binding": {
+          "batch_barrier": "diagnostic_none",
+          "batch_start": "diagnostic_immediate",
+          "mode": "diagnostic",
+          "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+          "run_id": "gt06-s75-native-02",
+          "schema_id": "hh-studio.native-cycle-benchmark-run",
+          "schema_version": "1.2.0",
+          "source_closure_sha256": "8c5860756d7288714c5d696677d30ddef01ad2bd24b0f6175dc50b8ca5ec1f2e"
+        },
+        "completed_diagnostic": true,
+        "formal_acceptance": false,
+        "full_benchmark": false,
+        "host_integrated": false,
+        "index_sha256": "08d9f91338ca89431b4ed2b3553f663a843a6c9f2eb3f3b3d32c8bb7e8f76711",
+        "input_sha256": "2c9f9772b7a2c497787eceac5e9a0384766c912463a8a44cd288c6958fd3ae75",
+        "jobs": {
+          "editor": {
+            "active_count": 0,
+            "assigned": true,
+            "close_uncertain": false,
+            "closed": true,
+            "configured": true,
+            "create_uncertain": false,
+            "failed_operations": [],
+            "handle_retained": false,
+            "native_error": null,
+            "tainted": false,
+            "zero_observed": true
+          },
+          "import": {
+            "active_count": 0,
+            "assigned": true,
+            "close_uncertain": false,
+            "closed": true,
+            "configured": true,
+            "create_uncertain": false,
+            "failed_operations": [],
+            "handle_retained": false,
+            "native_error": null,
+            "tainted": false,
+            "zero_observed": true
+          }
+        },
+        "process": {
+          "pid": 36144,
+          "process_start": "windows:134341580048836018"
+        },
+        "process_metrics_sha256": "0afd43413086a5d369c545d7729e47d5c449543531d780b134dcb5c53cac7223",
+        "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+        "public_ack": false,
+        "run_id": "gt06-s75-native-02",
+        "schema_id": "hh-studio.native-cycle-diagnostic-capture",
+        "schema_version": "1.0.0",
+        "scope": "one GUI editor, one direct-semantic cycle; no full campaign or host/API mix",
+        "source_unchanged": true,
+        "stage_captures": {
+          "editor": "964331817172dfafd3df79f71cb1628508f4a4089447392fd5e9bd0652253de0",
+          "import": "100ad63b5a50b3ca9f9d26dfb0dfe0e712f1d62397e8ea1cb7f7f43186516fa2"
+        }
+      },
+      "stderr": ""
+    }
+  }
+}

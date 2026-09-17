@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260918-gt06-s75-recovery\next\prepare_bridge.py", line 109, in <module>
+    assert repair['response_sha256'] == sha(read(repair_root + 'response.json'))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

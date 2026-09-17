@@ -1,0 +1,4 @@
+# Preserve the bytes bound by diagnostic/failure manifests, including CRLF logs.
+* -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+**/stdout.txt whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+**/stderr.txt whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol

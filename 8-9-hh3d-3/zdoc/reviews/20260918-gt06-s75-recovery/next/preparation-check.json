@@ -1,0 +1,37 @@
+{
+  "schema": "HH-GT06-S75-PREPARATION-CHECK-1",
+  "source_stable_during_preparation": true,
+  "source_count": 49,
+  "source_closure_sha256": "638304f54851366ac2a79a792a8009406fc927c3c6c410ad8f65cc2dd9b14995",
+  "declared_maps_compared": 14,
+  "validator_ast_parse": "PASS_SYNTAX_ONLY",
+  "validator_executed": false,
+  "tests_executed": false,
+  "engines_launched": false,
+  "raw_byte_hash_domains_preserved": true,
+  "full_raw_evidence_audit": false,
+  "formal_acceptance": false,
+  "critic_verdict": null,
+  "output_refs": [
+    {
+      "file": "zdoc/reviews/20260918-gt06-s75-recovery/next/source-files.json",
+      "sha256": "366c86b47ff25b78087387c50ae835eef1a1a96e6cd3d15f09b4bde0435f00f3",
+      "size_bytes": 5138
+    },
+    {
+      "file": "zdoc/reviews/20260918-gt06-s75-recovery/next/affected-dependency-bridge.json",
+      "sha256": "bd4d682ba90d5388bed9ed5ca0842e3af67ca92bf9f537ba690fe102d9159614",
+      "size_bytes": 25239
+    },
+    {
+      "file": "zdoc/reviews/20260918-gt06-s75-recovery/next/collection-recipe.json",
+      "sha256": "f8a538b3d04ed35bb4339fe12617a19080828c6bb33fc51cf69e9aba9ff7583b",
+      "size_bytes": 32196
+    },
+    {
+      "file": "zdoc/reviews/20260918-gt06-s75-recovery/next/verify_campaign_readonly.py.draft",
+      "sha256": "536a97bf105047e3ae0f847f8d0901ef4b94e8a7e27b90bf0cbf66029c0270d1",
+      "size_bytes": 10564
+    }
+  ]
+}

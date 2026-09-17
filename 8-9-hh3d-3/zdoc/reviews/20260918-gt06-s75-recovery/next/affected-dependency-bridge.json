@@ -1,0 +1,540 @@
+{
+  "schema": "HH-GT06-S75-AFFECTED-DEPENDENCY-BRIDGE-DRAFT-1",
+  "status": "SOURCE_PROJECTIONS_CHECKED_CAMPAIGN_NOT_RUN_BY_PREPARER",
+  "prepared_utc": "2026-09-17T22:36:24.896951+00:00",
+  "formal_acceptance": false,
+  "critic_verdict": null,
+  "candidate_campaign_id": "gt06-s75-campaign-01",
+  "observed_git_head": "1dda560c2eb46739cbe5aff69293ec1c6056be6c",
+  "candidate_source_revision": null,
+  "named_commit_byte_verification": "PENDING_COORDINATOR_CHECKPOINT",
+  "source_count": 49,
+  "candidate_source_closure_sha256": "638304f54851366ac2a79a792a8009406fc927c3c6c410ad8f65cc2dd9b14995",
+  "candidate_source_map": "zdoc/reviews/20260918-gt06-s75-recovery/next/source-files.json",
+  "source_domain": "studio-relative runtime49",
+  "frozen_s73_campaign": {
+    "file": "studio/.local/reviews/gt06-s73-campaign-01/campaign.json",
+    "sha256": "de6debe4f6c23eefb5dac1c552d0986961ee4885e61455791f7e0af1c37989fb",
+    "size_bytes": 6295
+  },
+  "frozen_s73_source_closure_sha256": "6f5d4c8a14ef8476c4cff6afb06ab161b17905f8593f9a685cd235593d7ee913",
+  "added_runtime_paths": [],
+  "removed_runtime_paths": [],
+  "changed_runtime_paths": {
+    "tests/replay/benchmark_assembly.py": {
+      "s73_sha256": "16ba15ea1961d78c89d5ea2b8c389e89b960a4df25e6a2783e4cc8a6d0c1111a",
+      "candidate_sha256": "c1c6f67734e5e7feebae109ed7ce7d960fa578a8e1504ec5390c3620c6a65003"
+    },
+    "tests/replay/benchmark_native.gd": {
+      "s73_sha256": "be16dc41c6eb1654521dfbb38e91853bb6067cf07adc28579ddb9bdf95de75a5",
+      "candidate_sha256": "4f78fd09c70de45faf9cfa23fb25b86dc1bb5ab2e461e72b74e0483b172135b5"
+    },
+    "tests/replay/run_native_benchmark.py": {
+      "s73_sha256": "1e598f107cafd1dadee9c2e6427708a1ef6feb409bde7d1cb9ea8226f6414b8a",
+      "candidate_sha256": "de46a8bdbd90f83961844f76c5d6a667451d042c3bb19a5e9b6858495ef023e1"
+    }
+  },
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "profile_unchanged": true,
+  "toolchain_sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+  "toolchain_unchanged": true,
+  "comparisons": [
+    {
+      "domain": "review_runner",
+      "file": "zdoc/reviews/20260918-gt06-s73-recovery/service-remint/source-files.json",
+      "sha256": "a5ff5174f884a372831d330e28d623db31befaa371676dc4aec67a96c34ae10b",
+      "size_bytes": 15335,
+      "declared_count": 148,
+      "declared_map_closure_sha256": "7e9ae919debe32b902b7ddf3b2fbf482d5efcc7cb20b01021fe13a1ecb7e5957",
+      "current_projection_closure_sha256": "d4f7b74ca51b3e4a75d274ee1b65ad7566926e765cbe1c15ba6ff47eea8fa368",
+      "compared_count": 148,
+      "missing_paths": [],
+      "changed": {
+        "tests/replay/benchmark_assembly.py": {
+          "recorded_sha256": "16ba15ea1961d78c89d5ea2b8c389e89b960a4df25e6a2783e4cc8a6d0c1111a",
+          "current_sha256": "c1c6f67734e5e7feebae109ed7ce7d960fa578a8e1504ec5390c3620c6a65003"
+        },
+        "tests/replay/benchmark_native.gd": {
+          "recorded_sha256": "be16dc41c6eb1654521dfbb38e91853bb6067cf07adc28579ddb9bdf95de75a5",
+          "current_sha256": "4f78fd09c70de45faf9cfa23fb25b86dc1bb5ab2e461e72b74e0483b172135b5"
+        },
+        "tests/replay/run_native_benchmark.py": {
+          "recorded_sha256": "1e598f107cafd1dadee9c2e6427708a1ef6feb409bde7d1cb9ea8226f6414b8a",
+          "current_sha256": "de46a8bdbd90f83961844f76c5d6a667451d042c3bb19a5e9b6858495ef023e1"
+        },
+        "tests/replay/test_benchmark_assembly.py": {
+          "recorded_sha256": "9292883b9f8dcda5bebc3b99ff0c8bbb0b159b01533760b7f6081fc73445215c",
+          "current_sha256": "56f39cc9d2a77288fbad10081182cc3f1e364b611224ebbd66fc772bdd254cda"
+        }
+      },
+      "s75_changed_runtime_overlap": [
+        "tests/replay/benchmark_assembly.py",
+        "tests/replay/benchmark_native.gd",
+        "tests/replay/run_native_benchmark.py"
+      ],
+      "exact_current_declared_projection": false,
+      "scope": "Every declared path compared to current bytes; does not independently prove original map completeness or raw execution."
+    },
+    {
+      "domain": "service_current_runtime",
+      "file": "studio/.local/reviews/gt06-s73-http-complete-01/source-files.json",
+      "sha256": "d09916f43504aaba9a440cdadd59859ac7e7ca24c307ae3b99f4275feeb6dc95",
+      "size_bytes": 17106,
+      "declared_count": 173,
+      "declared_map_closure_sha256": "fbc305e145489a7f0b07ef978fb471e290c96a0fe4328bd6ef78ba3e35b1d7b6",
+      "current_projection_closure_sha256": "fbc305e145489a7f0b07ef978fb471e290c96a0fe4328bd6ef78ba3e35b1d7b6",
+      "compared_count": 173,
+      "missing_paths": [],
+      "changed": {},
+      "s75_changed_runtime_overlap": [],
+      "exact_current_declared_projection": true,
+      "scope": "Every declared path compared to current bytes; does not independently prove original map completeness or raw execution."
+    },
+    {
+      "domain": "service_current_runtime",
+      "file": "studio/.local/reviews/gt06-s73-http-stop-01/source-files.json",
+      "sha256": "d09916f43504aaba9a440cdadd59859ac7e7ca24c307ae3b99f4275feeb6dc95",
+      "size_bytes": 17106,
+      "declared_count": 173,
+      "declared_map_closure_sha256": "fbc305e145489a7f0b07ef978fb471e290c96a0fe4328bd6ef78ba3e35b1d7b6",
+      "current_projection_closure_sha256": "fbc305e145489a7f0b07ef978fb471e290c96a0fe4328bd6ef78ba3e35b1d7b6",
+      "compared_count": 173,
+      "missing_paths": [],
+      "changed": {},
+      "s75_changed_runtime_overlap": [],
+      "exact_current_declared_projection": true,
+      "scope": "Every declared path compared to current bytes; does not independently prove original map completeness or raw execution."
+    },
+    {
+      "domain": "service_current_runtime",
+      "file": "studio/.local/reviews/gt06-s73-saturated-stop-01/source-files.json",
+      "sha256": "d09916f43504aaba9a440cdadd59859ac7e7ca24c307ae3b99f4275feeb6dc95",
+      "size_bytes": 17106,
+      "declared_count": 173,
+      "declared_map_closure_sha256": "fbc305e145489a7f0b07ef978fb471e290c96a0fe4328bd6ef78ba3e35b1d7b6",
+      "current_projection_closure_sha256": "fbc305e145489a7f0b07ef978fb471e290c96a0fe4328bd6ef78ba3e35b1d7b6",
+      "compared_count": 173,
+      "missing_paths": [],
+      "changed": {},
+      "s75_changed_runtime_overlap": [],
+      "exact_current_declared_projection": true,
+      "scope": "Every declared path compared to current bytes; does not independently prove original map completeness or raw execution."
+    },
+    {
+      "domain": "service_current_runtime",
+      "file": "studio/.local/reviews/gt06-s73-revoked-result-01/source-files.json",
+      "sha256": "d09916f43504aaba9a440cdadd59859ac7e7ca24c307ae3b99f4275feeb6dc95",
+      "size_bytes": 17106,
+      "declared_count": 173,
+      "declared_map_closure_sha256": "fbc305e145489a7f0b07ef978fb471e290c96a0fe4328bd6ef78ba3e35b1d7b6",
+      "current_projection_closure_sha256": "fbc305e145489a7f0b07ef978fb471e290c96a0fe4328bd6ef78ba3e35b1d7b6",
+      "compared_count": 173,
+      "missing_paths": [],
+      "changed": {},
+      "s75_changed_runtime_overlap": [],
+      "exact_current_declared_projection": true,
+      "scope": "Every declared path compared to current bytes; does not independently prove original map completeness or raw execution."
+    },
+    {
+      "domain": "service_current_runtime",
+      "file": "studio/.local/reviews/gt06-s73-stale-capture-01/source-files.json",
+      "sha256": "d09916f43504aaba9a440cdadd59859ac7e7ca24c307ae3b99f4275feeb6dc95",
+      "size_bytes": 17106,
+      "declared_count": 173,
+      "declared_map_closure_sha256": "fbc305e145489a7f0b07ef978fb471e290c96a0fe4328bd6ef78ba3e35b1d7b6",
+      "current_projection_closure_sha256": "fbc305e145489a7f0b07ef978fb471e290c96a0fe4328bd6ef78ba3e35b1d7b6",
+      "compared_count": 173,
+      "missing_paths": [],
+      "changed": {},
+      "s75_changed_runtime_overlap": [],
+      "exact_current_declared_projection": true,
+      "scope": "Every declared path compared to current bytes; does not independently prove original map completeness or raw execution."
+    },
+    {
+      "domain": "gui_historical_runtime",
+      "file": "studio/.local/reviews/gt06-s68-reviewer-complete-02/source-files.json",
+      "sha256": "76e3172e9b4b9be6a3b703685213ad2d96b705a923a7955545ca1002d4dd2b53",
+      "size_bytes": 17106,
+      "declared_count": 173,
+      "declared_map_closure_sha256": "153926756107745108aa0df1941b6a189a77dd0a814f2424cd24c3a489abed7b",
+      "current_projection_closure_sha256": "fbc305e145489a7f0b07ef978fb471e290c96a0fe4328bd6ef78ba3e35b1d7b6",
+      "compared_count": 173,
+      "missing_paths": [],
+      "changed": {
+        "host/replay/verified_journal.py": {
+          "recorded_sha256": "3bdc1414166c132236149629b14bde456d142578cc3d08e0fd1faf5a4285d5eb",
+          "current_sha256": "9128749e6a04242106e56a86e959b6de0a67e0f10ffb97965e1bc88390d5a6f2"
+        }
+      },
+      "s75_changed_runtime_overlap": [],
+      "exact_current_declared_projection": false,
+      "scope": "Every declared path compared to current bytes; does not independently prove original map completeness or raw execution."
+    },
+    {
+      "domain": "gui_historical_runtime",
+      "file": "studio/.local/reviews/gt06-s68-reviewer-stop-02/source-files.json",
+      "sha256": "76e3172e9b4b9be6a3b703685213ad2d96b705a923a7955545ca1002d4dd2b53",
+      "size_bytes": 17106,
+      "declared_count": 173,
+      "declared_map_closure_sha256": "153926756107745108aa0df1941b6a189a77dd0a814f2424cd24c3a489abed7b",
+      "current_projection_closure_sha256": "fbc305e145489a7f0b07ef978fb471e290c96a0fe4328bd6ef78ba3e35b1d7b6",
+      "compared_count": 173,
+      "missing_paths": [],
+      "changed": {
+        "host/replay/verified_journal.py": {
+          "recorded_sha256": "3bdc1414166c132236149629b14bde456d142578cc3d08e0fd1faf5a4285d5eb",
+          "current_sha256": "9128749e6a04242106e56a86e959b6de0a67e0f10ffb97965e1bc88390d5a6f2"
+        }
+      },
+      "s75_changed_runtime_overlap": [],
+      "exact_current_declared_projection": false,
+      "scope": "Every declared path compared to current bytes; does not independently prove original map completeness or raw execution."
+    },
+    {
+      "domain": "service_historical_runtime",
+      "file": "studio/.local/reviews/gt06-s69-saturated-stop-01/source-files.json",
+      "sha256": "76e3172e9b4b9be6a3b703685213ad2d96b705a923a7955545ca1002d4dd2b53",
+      "size_bytes": 17106,
+      "declared_count": 173,
+      "declared_map_closure_sha256": "153926756107745108aa0df1941b6a189a77dd0a814f2424cd24c3a489abed7b",
+      "current_projection_closure_sha256": "fbc305e145489a7f0b07ef978fb471e290c96a0fe4328bd6ef78ba3e35b1d7b6",
+      "compared_count": 173,
+      "missing_paths": [],
+      "changed": {
+        "host/replay/verified_journal.py": {
+          "recorded_sha256": "3bdc1414166c132236149629b14bde456d142578cc3d08e0fd1faf5a4285d5eb",
+          "current_sha256": "9128749e6a04242106e56a86e959b6de0a67e0f10ffb97965e1bc88390d5a6f2"
+        }
+      },
+      "s75_changed_runtime_overlap": [],
+      "exact_current_declared_projection": false,
+      "scope": "Every declared path compared to current bytes; does not independently prove original map completeness or raw execution."
+    },
+    {
+      "domain": "service_historical_runtime",
+      "file": "studio/.local/reviews/gt06-s69-revoked-result-01/source-files.json",
+      "sha256": "76e3172e9b4b9be6a3b703685213ad2d96b705a923a7955545ca1002d4dd2b53",
+      "size_bytes": 17106,
+      "declared_count": 173,
+      "declared_map_closure_sha256": "153926756107745108aa0df1941b6a189a77dd0a814f2424cd24c3a489abed7b",
+      "current_projection_closure_sha256": "fbc305e145489a7f0b07ef978fb471e290c96a0fe4328bd6ef78ba3e35b1d7b6",
+      "compared_count": 173,
+      "missing_paths": [],
+      "changed": {
+        "host/replay/verified_journal.py": {
+          "recorded_sha256": "3bdc1414166c132236149629b14bde456d142578cc3d08e0fd1faf5a4285d5eb",
+          "current_sha256": "9128749e6a04242106e56a86e959b6de0a67e0f10ffb97965e1bc88390d5a6f2"
+        }
+      },
+      "s75_changed_runtime_overlap": [],
+      "exact_current_declared_projection": false,
+      "scope": "Every declared path compared to current bytes; does not independently prove original map completeness or raw execution."
+    },
+    {
+      "domain": "service_historical_runtime",
+      "file": "studio/.local/reviews/gt06-s69-stale-capture-01/source-files.json",
+      "sha256": "76e3172e9b4b9be6a3b703685213ad2d96b705a923a7955545ca1002d4dd2b53",
+      "size_bytes": 17106,
+      "declared_count": 173,
+      "declared_map_closure_sha256": "153926756107745108aa0df1941b6a189a77dd0a814f2424cd24c3a489abed7b",
+      "current_projection_closure_sha256": "fbc305e145489a7f0b07ef978fb471e290c96a0fe4328bd6ef78ba3e35b1d7b6",
+      "compared_count": 173,
+      "missing_paths": [],
+      "changed": {
+        "host/replay/verified_journal.py": {
+          "recorded_sha256": "3bdc1414166c132236149629b14bde456d142578cc3d08e0fd1faf5a4285d5eb",
+          "current_sha256": "9128749e6a04242106e56a86e959b6de0a67e0f10ffb97965e1bc88390d5a6f2"
+        }
+      },
+      "s75_changed_runtime_overlap": [],
+      "exact_current_declared_projection": false,
+      "scope": "Every declared path compared to current bytes; does not independently prove original map completeness or raw execution."
+    },
+    {
+      "domain": "managed_replay_runtime",
+      "file": "studio/.local/reviews/gt06-s69-managed-replay-01/source-files.json",
+      "sha256": "b0091dc3e16801af4c8bb39f39da9bb4bfd8b71be66f0ade7dac1e9b522ed11c",
+      "size_bytes": 15774,
+      "declared_count": 159,
+      "declared_map_closure_sha256": "491b65875f8246e7606c7b860d9c61d6a85657fc0077075fa6dc7209128dca2b",
+      "current_projection_closure_sha256": "491b65875f8246e7606c7b860d9c61d6a85657fc0077075fa6dc7209128dca2b",
+      "compared_count": 159,
+      "missing_paths": [],
+      "changed": {},
+      "s75_changed_runtime_overlap": [],
+      "exact_current_declared_projection": true,
+      "scope": "Every declared path compared to current bytes; does not independently prove original map completeness or raw execution."
+    },
+    {
+      "domain": "reviewer_ui",
+      "file": "studio/.local/reviews/gt06-s68-reviewer-complete-02/reviewer-probe/source.json",
+      "sha256": "4476fe477abab0859f9957403d84ab3a869db458f46b4ff251672ffc560df640",
+      "size_bytes": 454,
+      "declared_count": 5,
+      "declared_map_closure_sha256": "7665621f1090836c2bc711ccc7f6857c3961b99be5b077292baaadc933b712fb",
+      "current_projection_closure_sha256": "7665621f1090836c2bc711ccc7f6857c3961b99be5b077292baaadc933b712fb",
+      "compared_count": 5,
+      "missing_paths": [],
+      "changed": {},
+      "s75_changed_runtime_overlap": [],
+      "exact_current_declared_projection": true,
+      "scope": "Every declared path compared to current bytes; does not independently prove original map completeness or raw execution."
+    },
+    {
+      "domain": "reviewer_ui",
+      "file": "studio/.local/reviews/gt06-s68-reviewer-stop-02/reviewer-probe/source.json",
+      "sha256": "4476fe477abab0859f9957403d84ab3a869db458f46b4ff251672ffc560df640",
+      "size_bytes": 454,
+      "declared_count": 5,
+      "declared_map_closure_sha256": "7665621f1090836c2bc711ccc7f6857c3961b99be5b077292baaadc933b712fb",
+      "current_projection_closure_sha256": "7665621f1090836c2bc711ccc7f6857c3961b99be5b077292baaadc933b712fb",
+      "compared_count": 5,
+      "missing_paths": [],
+      "changed": {},
+      "s75_changed_runtime_overlap": [],
+      "exact_current_declared_projection": true,
+      "scope": "Every declared path compared to current bytes; does not independently prove original map completeness or raw execution."
+    }
+  ],
+  "historical_s73_bridge": {
+    "file": "zdoc/reviews/20260918-gt06-s73-next/seal/affected-dependency-bridge.json",
+    "sha256": "f84b08714d1ebf46ec8636287462f5fc3a4c33058a8c0922481687f07161b3bb",
+    "size_bytes": 9298
+  },
+  "service_manifest": {
+    "file": "zdoc/reviews/20260918-gt06-s73-recovery/service-remint/verification.json",
+    "sha256": "f29b942a9dd84fe9c73e6e537650f57fab2fd40470ac3dce870f7e7fa86de1d5",
+    "size_bytes": 258377
+  },
+  "service_lane_recorded_results": [
+    {
+      "run_id": "gt06-s73-http-complete-01",
+      "checks": 96,
+      "checks_passed": true,
+      "raw_files": 253,
+      "expected_stop": false,
+      "native_actual_exit": {
+        "pid": 50972,
+        "exit_code": 0
+      },
+      "job_zero_closed": true,
+      "outer_exit": {
+        "target_pid": 9092,
+        "started_at": "2026-09-17T21:05:09.749815+00:00",
+        "exit_code": 0
+      },
+      "source_sha256": "d09916f43504aaba9a440cdadd59859ac7e7ca24c307ae3b99f4275feeb6dc95"
+    },
+    {
+      "run_id": "gt06-s73-http-stop-01",
+      "checks": 12,
+      "checks_passed": true,
+      "raw_files": 231,
+      "expected_stop": true,
+      "native_actual_exit": null,
+      "job_zero_closed": true,
+      "outer_exit": {
+        "target_pid": 43404,
+        "started_at": "2026-09-17T21:05:37.209657+00:00",
+        "exit_code": 0
+      },
+      "source_sha256": "d09916f43504aaba9a440cdadd59859ac7e7ca24c307ae3b99f4275feeb6dc95"
+    },
+    {
+      "run_id": "gt06-s73-saturated-stop-01",
+      "checks": 15,
+      "checks_passed": true,
+      "raw_files": 249,
+      "expected_stop": true,
+      "native_actual_exit": null,
+      "job_zero_closed": true,
+      "outer_exit": {
+        "target_pid": 33612,
+        "started_at": "2026-09-17T21:05:45.353099+00:00",
+        "exit_code": 0
+      },
+      "source_sha256": "d09916f43504aaba9a440cdadd59859ac7e7ca24c307ae3b99f4275feeb6dc95"
+    },
+    {
+      "run_id": "gt06-s73-revoked-result-01",
+      "checks": 18,
+      "checks_passed": true,
+      "raw_files": 273,
+      "expected_stop": false,
+      "native_actual_exit": {
+        "pid": 34472,
+        "exit_code": 0
+      },
+      "job_zero_closed": true,
+      "outer_exit": {
+        "target_pid": 39840,
+        "started_at": "2026-09-17T21:05:54.075596+00:00",
+        "exit_code": 0
+      },
+      "source_sha256": "d09916f43504aaba9a440cdadd59859ac7e7ca24c307ae3b99f4275feeb6dc95"
+    },
+    {
+      "run_id": "gt06-s73-stale-capture-01",
+      "checks": 17,
+      "checks_passed": true,
+      "raw_files": 275,
+      "expected_stop": false,
+      "native_actual_exit": {
+        "pid": 17912,
+        "exit_code": 0
+      },
+      "job_zero_closed": true,
+      "outer_exit": {
+        "target_pid": 4864,
+        "started_at": "2026-09-17T21:06:16.216805+00:00",
+        "exit_code": 0
+      },
+      "source_sha256": "d09916f43504aaba9a440cdadd59859ac7e7ca24c307ae3b99f4275feeb6dc95"
+    }
+  ],
+  "original_causal_chain": [
+    {
+      "stage": "S65 seeded fault",
+      "root": "studio/.local/reviews/gt06-s65-native-04",
+      "provenance": "original frozen source/trace/capture"
+    },
+    {
+      "stage": "S65 authenticated GT03 repair",
+      "root": "studio/.local/reviews/gt06-s65-repair-02",
+      "provenance": "original command_id, before/after source and durable repair02 receipt"
+    },
+    {
+      "stage": "S65 replay",
+      "root": "studio/.local/reviews/gt06-s65-native-05",
+      "provenance": "original repaired trace/capture; diagnostic scope unchanged"
+    },
+    {
+      "stage": "S69 managed replay",
+      "root": "studio/.local/reviews/gt06-s69-managed-replay-01",
+      "driver_root": "studio/.local/reviews/gt06-s69-managed-replay-01-driver",
+      "source_closure_sha256": "491b65875f8246e7606c7b860d9c61d6a85657fc0077075fa6dc7209128dca2b",
+      "capture_sha256": "d2f4985f75d6017e8ce13078d69973b9c7294a2719748cc978ba0977c0e6d0e5",
+      "selected_config_sha256": "4fe3141b9afe6b411b585b203cebae77e851a406c291ac26620eb8cd7c018d90",
+      "provenance": "original repair-replay.json links original repair02 receipt; not rerun or relabelled S73"
+    }
+  ],
+  "causal_named_artifact_byte_refs": [
+    {
+      "file": "studio/.local/reviews/gt06-s65-native-04/capture.json",
+      "sha256": "d3469bee92f7decad37d1f937631cff467548c8751f03ca99eac029c7547b7a1",
+      "size_bytes": 1081
+    },
+    {
+      "file": "studio/.local/reviews/gt06-s65-native-04/source-files.json",
+      "sha256": "5103ec7ea27c64450fe05951de102ec639a9ad3cc8f11cccfeacfa0d91c11ab5",
+      "size_bytes": 15221
+    },
+    {
+      "file": "studio/.local/reviews/gt06-s65-native-04/runtime-snapshot.json",
+      "sha256": "6efc696d896836b05e0740a77f0bdbf2a7db8321ba24ec0a06f93bf6cf58742e",
+      "size_bytes": 1815
+    },
+    {
+      "file": "studio/.local/reviews/gt06-s65-repair-02/capture.json",
+      "sha256": "514a1f3a01ebab7f6f327a49170e4e9260a55310ee5c84b20c28f6bcf6a0ea14",
+      "size_bytes": 2890
+    },
+    {
+      "file": "studio/.local/reviews/gt06-s65-repair-02/source-files.json",
+      "sha256": "8f986d550d57daa8beb9d35a6ff67e4af056673e9f410107fea24db9c399bf7f",
+      "size_bytes": 15408
+    },
+    {
+      "file": "studio/.local/reviews/gt06-s65-repair-02/repair.json",
+      "sha256": "82fc0266726ea824626334d52a5f4e8d604ac21b56b2e99bab9d2d467425274b",
+      "size_bytes": 1174
+    },
+    {
+      "file": "studio/.local/reviews/gt06-s65-repair-02/request.json",
+      "sha256": "41804080859781bb697df92ab03271ad91d7112c16051d7bc8e1b3063e44c73c",
+      "size_bytes": 873
+    },
+    {
+      "file": "studio/.local/reviews/gt06-s65-repair-02/response.json",
+      "sha256": "325079c574e7373e2f867315fc8ecea201a08ade474259afec361b5fc36cac82",
+      "size_bytes": 727
+    },
+    {
+      "file": "studio/.local/reviews/gt06-s65-repair-02/response-wire.json",
+      "sha256": "46cfef5a866833af5760907fc2d896dab6115c1271a4cd4aefc23a81a0f92d74",
+      "size_bytes": 726
+    },
+    {
+      "file": "studio/.local/reviews/gt06-s65-repair-02/lookup-response.json",
+      "sha256": "325079c574e7373e2f867315fc8ecea201a08ade474259afec361b5fc36cac82",
+      "size_bytes": 727
+    },
+    {
+      "file": "studio/.local/reviews/gt06-s65-repair-02/retry-response.json",
+      "sha256": "325079c574e7373e2f867315fc8ecea201a08ade474259afec361b5fc36cac82",
+      "size_bytes": 727
+    },
+    {
+      "file": "studio/.local/reviews/gt06-s65-repair-02/selected-config.gd",
+      "sha256": "4fe3141b9afe6b411b585b203cebae77e851a406c291ac26620eb8cd7c018d90",
+      "size_bytes": 86
+    },
+    {
+      "file": "studio/.local/reviews/gt06-s65-native-05/capture.json",
+      "sha256": "6d6d481aa47ed3d781c176247d2562a941081499aa436f7dbd1534439d5acaca",
+      "size_bytes": 1081
+    },
+    {
+      "file": "studio/.local/reviews/gt06-s65-native-05/source-files.json",
+      "sha256": "5103ec7ea27c64450fe05951de102ec639a9ad3cc8f11cccfeacfa0d91c11ab5",
+      "size_bytes": 15221
+    },
+    {
+      "file": "studio/.local/reviews/gt06-s65-native-05/repair-replay.json",
+      "sha256": "2bf972bef01b795de93c2e1569e0f6ab9ac65794524430f11d6db02057986396",
+      "size_bytes": 3187
+    },
+    {
+      "file": "studio/.local/reviews/gt06-s69-managed-replay-01/capture.json",
+      "sha256": "d2f4985f75d6017e8ce13078d69973b9c7294a2719748cc978ba0977c0e6d0e5",
+      "size_bytes": 1113
+    },
+    {
+      "file": "studio/.local/reviews/gt06-s69-managed-replay-01/source-files.json",
+      "sha256": "b0091dc3e16801af4c8bb39f39da9bb4bfd8b71be66f0ade7dac1e9b522ed11c",
+      "size_bytes": 15774
+    },
+    {
+      "file": "studio/.local/reviews/gt06-s69-managed-replay-01/repair-replay.json",
+      "sha256": "301b9ec859c0d5bbb2278d253ece23480781bb9c733cdd8acbd1d8159a48976a",
+      "size_bytes": 3187
+    }
+  ],
+  "causal_join_checks": {
+    "checked_named_hash_links_only": true,
+    "command_id": "gt06.repair.move-speed",
+    "durable_receipt_sha256_recorded": "03fa2fcc99450a7390132949576516b1c508ba9814dcdd5cc4e83bed3f16d083",
+    "repair_response_hash_domain": "Original response-wire.json bytes; response.json adds LF and has a distinct exact-byte hash.",
+    "receipt_semantics_revalidated": false,
+    "replayed": false
+  },
+  "remint_required": [
+    "new S75 benchmark campaign: all ten complete fresh process pairs and 35 batches each",
+    "affected benchmark fixture/assembly validation on final source: positive native marker, exact-byte negative marker and assembly missing/coherently-altered marker rejection",
+    "new source checkpoint proof, selected-run verification, final source/review/raw manifest and two independent same-hash critics"
+  ],
+  "reuse_scopes": [
+    "S73 five service runtime173 projections: exact-current; retain original run IDs, owners, logs, exits and raw hashes",
+    "S69 managed replay159: exact-current declared projection, preserve original S65 fault/repair02 receipt and S69 generation",
+    "S68 reviewer UI5: exact-current; runtime173 historical verified_journal edge remains bridged by S73 five service remints",
+    "S69 adversary173: historical only for changed journal edge; S73 remints supply current service behavior",
+    "S73 broad review-runner148: historical map, not exact-current; benchmark-only changed paths do not invalidate unaffected service execution",
+    "GT03-05 accepted packages: preserve scoped original acceptance; no reopening or signature transfer"
+  ],
+  "full_raw_audit_performed": false,
+  "engines_launched": false,
+  "tests_executed": false,
+  "validators_executed": false,
+  "automations_modified": false,
+  "plan_modified": false
+}

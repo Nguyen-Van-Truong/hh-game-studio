@@ -1,0 +1,659 @@
+{
+  "observed_utc": "2026-09-17T22:20:49.576243+00:00",
+  "scope": "Read-only interpretation of failed-run records; no root-cause proof or acceptance",
+  "source_checkpoint": "cb4d1f6f633e6824a30a45873f05024c3bf7cd58",
+  "run_id": "gt06-s73-campaign-01.r00.a02",
+  "recorded_failure": "CAMPAIGN_RETAINED_COUNTER_GROWTH",
+  "recorded_phase": {
+    "batch": 9,
+    "phase": "joint_observation"
+  },
+  "captured_batch_indexes": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "warmup_batches": 5,
+  "collected_measured_batches": 5,
+  "screen_passed_measured_batches": 4,
+  "complete_runs": 0,
+  "baseline_memory": {
+    "editor": {
+      "held_handles": {
+        "unavailable_reason": null,
+        "value": 566
+      },
+      "objects": {
+        "unavailable_reason": null,
+        "value": 71175
+      },
+      "resources": {
+        "unavailable_reason": null,
+        "value": 6
+      },
+      "rss_bytes": {
+        "unavailable_reason": null,
+        "value": 258248704
+      }
+    },
+    "host": {
+      "held_handles": {
+        "unavailable_reason": null,
+        "value": 194
+      },
+      "objects": {
+        "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+        "value": null
+      },
+      "resources": {
+        "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+        "value": null
+      },
+      "rss_bytes": {
+        "unavailable_reason": null,
+        "value": 30543872
+      }
+    },
+    "phase": "post_batch_quiescent"
+  },
+  "failed_sample_memory": {
+    "editor": {
+      "held_handles": {
+        "unavailable_reason": null,
+        "value": 568
+      },
+      "objects": {
+        "unavailable_reason": null,
+        "value": 71213
+      },
+      "resources": {
+        "unavailable_reason": null,
+        "value": 6
+      },
+      "rss_bytes": {
+        "unavailable_reason": null,
+        "value": 119283712
+      }
+    },
+    "host": {
+      "held_handles": {
+        "unavailable_reason": null,
+        "value": 194
+      },
+      "objects": {
+        "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+        "value": null
+      },
+      "resources": {
+        "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+        "value": null
+      },
+      "rss_bytes": {
+        "unavailable_reason": null,
+        "value": 9490432
+      }
+    },
+    "phase": "post_batch_quiescent"
+  },
+  "primary_failing_comparison": {
+    "role": "editor",
+    "metric": "held_handles",
+    "value": 568,
+    "baseline": 566,
+    "code": "CAMPAIGN_RETAINED_COUNTER_GROWTH"
+  },
+  "additional_observed_comparison": {
+    "role": "editor",
+    "metric": "objects",
+    "value": 71213,
+    "baseline": 71175,
+    "code": "CAMPAIGN_RETAINED_COUNTER_GROWTH"
+  },
+  "additional_comparison_emitted_separate_failure": false,
+  "runtime_editor_counter_order": [
+    "rss_bytes",
+    "held_handles",
+    "objects",
+    "resources"
+  ],
+  "order_evidence": "Frozen benchmark_assembly.py constructs editor counter order; run_benchmark_campaign.py screen_sample iterates that order",
+  "samples": [
+    {
+      "index": 0,
+      "measured": false,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 576
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71135
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 757526528
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 194
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 36659200
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 707.084,
+      "status_gap_above_2000": false,
+      "warmup_status_gap_exempt_under_frozen_screen": true,
+      "applicable_screen_breaches": []
+    },
+    {
+      "index": 1,
+      "measured": false,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 568
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71151
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 757448704
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 194
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 39055360
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 711.982,
+      "status_gap_above_2000": false,
+      "warmup_status_gap_exempt_under_frozen_screen": true,
+      "applicable_screen_breaches": []
+    },
+    {
+      "index": 2,
+      "measured": false,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 568
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71151
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 567410688
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 194
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 38146048
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 661.472,
+      "status_gap_above_2000": false,
+      "warmup_status_gap_exempt_under_frozen_screen": true,
+      "applicable_screen_breaches": []
+    },
+    {
+      "index": 3,
+      "measured": false,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 569
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71167
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 345481216
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 194
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 30445568
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 2004.0029,
+      "status_gap_above_2000": true,
+      "warmup_status_gap_exempt_under_frozen_screen": true,
+      "applicable_screen_breaches": []
+    },
+    {
+      "index": 4,
+      "measured": false,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 566
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71175
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 258248704
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 194
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 30543872
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 682.691,
+      "status_gap_above_2000": false,
+      "warmup_status_gap_exempt_under_frozen_screen": true,
+      "applicable_screen_breaches": []
+    },
+    {
+      "index": 5,
+      "measured": true,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 566
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71175
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 217059328
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 194
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 27275264
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 745.607,
+      "status_gap_above_2000": false,
+      "warmup_status_gap_exempt_under_frozen_screen": false,
+      "applicable_screen_breaches": []
+    },
+    {
+      "index": 6,
+      "measured": true,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 566
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71175
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 160325632
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 194
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 26902528
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 644.783,
+      "status_gap_above_2000": false,
+      "warmup_status_gap_exempt_under_frozen_screen": false,
+      "applicable_screen_breaches": []
+    },
+    {
+      "index": 7,
+      "measured": true,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 566
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71175
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 123879424
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 194
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 26476544
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 686.985,
+      "status_gap_above_2000": false,
+      "warmup_status_gap_exempt_under_frozen_screen": false,
+      "applicable_screen_breaches": []
+    },
+    {
+      "index": 8,
+      "measured": true,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 566
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71175
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 110637056
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 194
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 27066368
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 1063.398,
+      "status_gap_above_2000": false,
+      "warmup_status_gap_exempt_under_frozen_screen": false,
+      "applicable_screen_breaches": []
+    },
+    {
+      "index": 9,
+      "measured": true,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 568
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71213
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 119283712
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 194
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 9490432
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 748.668,
+      "status_gap_above_2000": false,
+      "warmup_status_gap_exempt_under_frozen_screen": false,
+      "applicable_screen_breaches": [
+        {
+          "role": "editor",
+          "metric": "held_handles",
+          "value": 568,
+          "baseline": 566,
+          "code": "CAMPAIGN_RETAINED_COUNTER_GROWTH"
+        },
+        {
+          "role": "editor",
+          "metric": "objects",
+          "value": 71213,
+          "baseline": 71175,
+          "code": "CAMPAIGN_RETAINED_COUNTER_GROWTH"
+        }
+      ]
+    }
+  ],
+  "next_native_ready_exists": true,
+  "confirmed_absences": {
+    "run-00-attempt-02/editor-host/process-exit.json": true,
+    "run-00-attempt-02/editor-host/capture.json": true,
+    "run-00-attempt-02/host-owner/capture.json": true,
+    "run-00-attempt-02/child-result.json": true,
+    "run-00-attempt-02/cleanup.json": true,
+    "run-00-attempt-02/assembly-manifest.json": true,
+    "run-00-attempt-02/assembled-run.json": true,
+    "run-00-attempt-02/run-capture.json": true,
+    "run-00-attempt-02/project/benchmark/out/index.json": true,
+    "run-00-attempt-02/project/benchmark/input/start-10.json": true,
+    "run-00-attempt-02/project/benchmark/input/ack-10.json": true,
+    "run-00-attempt-02/project/benchmark/out/batch-10.json": true,
+    "run-00-attempt-02/project/benchmark/out/batch-11.json": true,
+    "run-00-attempt-02/project/benchmark/out/batch-12.json": true,
+    "run-00-attempt-02/project/benchmark/out/batch-13.json": true,
+    "run-00-attempt-02/project/benchmark/out/batch-14.json": true,
+    "run-00-attempt-02/project/benchmark/out/batch-15.json": true,
+    "run-00-attempt-02/project/benchmark/out/batch-16.json": true,
+    "run-00-attempt-02/project/benchmark/out/batch-17.json": true,
+    "run-00-attempt-02/project/benchmark/out/batch-18.json": true,
+    "run-00-attempt-02/project/benchmark/out/batch-19.json": true,
+    "run-00-attempt-02/project/benchmark/out/batch-20.json": true,
+    "run-00-attempt-02/project/benchmark/out/batch-21.json": true,
+    "run-00-attempt-02/project/benchmark/out/batch-22.json": true,
+    "run-00-attempt-02/project/benchmark/out/batch-23.json": true,
+    "run-00-attempt-02/project/benchmark/out/batch-24.json": true,
+    "run-00-attempt-02/project/benchmark/out/batch-25.json": true,
+    "run-00-attempt-02/project/benchmark/out/batch-26.json": true,
+    "run-00-attempt-02/project/benchmark/out/batch-27.json": true,
+    "run-00-attempt-02/project/benchmark/out/batch-28.json": true,
+    "run-00-attempt-02/project/benchmark/out/batch-29.json": true,
+    "run-00-attempt-02/project/benchmark/out/batch-30.json": true,
+    "run-00-attempt-02/project/benchmark/out/batch-31.json": true,
+    "run-00-attempt-02/project/benchmark/out/batch-32.json": true,
+    "run-00-attempt-02/project/benchmark/out/batch-33.json": true,
+    "run-00-attempt-02/project/benchmark/out/batch-34.json": true,
+    "campaign-capture.json": true,
+    "dataset.json": true,
+    "summary.json": true
+  },
+  "stop_slots_checked": 30,
+  "stop_latches_present": 0,
+  "preserved_partial_data_is_accepted": false
+}

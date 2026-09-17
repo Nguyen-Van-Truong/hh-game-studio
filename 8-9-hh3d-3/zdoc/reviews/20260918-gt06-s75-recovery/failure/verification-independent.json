@@ -1,0 +1,57 @@
+{
+  "verified_utc": "2026-09-17T22:23:15.509239+00:00",
+  "status": "PASS",
+  "scope": "Preservation/static consistency only; no runtime or acceptance verdict",
+  "raw_files": 447,
+  "exact_copies": 77,
+  "source_files": 49,
+  "source_closure": "6f5d4c8a14ef8476c4cff6afb06ab161b17905f8593f9a685cd235593d7ee913",
+  "batch_references": 60,
+  "sample_identity_rows": 10,
+  "processes": {
+    "editor": {
+      "pid": 8776,
+      "process_start": "windows:134341548516419558"
+    },
+    "host": {
+      "pid": 27508,
+      "process_start": "windows:134341548391087746"
+    }
+  },
+  "actual_host_exit": {
+    "pid": 27508,
+    "exit_code": 1
+  },
+  "actual_editor_exit": null,
+  "actual_import_exit": {
+    "pid": 35564,
+    "exit_code": 0
+  },
+  "owner_checks": [
+    {
+      "role": "host",
+      "job_zero_closed": true,
+      "job_handle_released": true,
+      "wrapper_handle_released": true,
+      "wrapper_exit": 1
+    },
+    {
+      "role": "editor",
+      "job_zero_closed": true,
+      "job_handle_released": true,
+      "wrapper_handle_released": true,
+      "wrapper_exit": 2
+    }
+  ],
+  "read_only_observer_exit_zero_count": 4,
+  "stop_slots_checked": 30,
+  "stop_latches_present": 0,
+  "existing_attempt_slots": [
+    "run-00-attempt-01",
+    "run-00-attempt-02"
+  ],
+  "scheduler_state": 3,
+  "scheduler_result": 1,
+  "scheduler_instances": 0,
+  "errors": []
+}

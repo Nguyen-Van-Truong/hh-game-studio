@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 18-09-2026, Asia/Saigon | Revision S74 | TRIỂN KHAI THEO GATE
+Ngày 18-09-2026, Asia/Saigon | Revision S75 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S74
+PLAN_REVISION=S75
 EXECUTION_MODE=COORDINATOR_THREE_ASTRA_XHIGH_OWNER_20260918
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -54,13 +54,13 @@ GT05_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260917_S64
 GT05_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S64
 GT05_CHECKPOINT_COMMIT=808d8ba
 GT06_EVIDENCE_STATUS=NATIVE_DIAGNOSTICS_IN_PROGRESS_NO_ACCEPTANCE
-GT06_WORKING_SOURCE_STATUS=S73_UNCHANGED_RETRY_RSS_CAUSE_UNPROVEN
-GT06_CURRENT_SOURCE_CLOSURE=6f5d4c8a14ef8476c4cff6afb06ab161b17905f8593f9a685cd235593d7ee913
+GT06_WORKING_SOURCE_STATUS=S75_IGNORE_MARKER_NATIVE_UNIT_VERIFIED
+GT06_CURRENT_SOURCE_CLOSURE=638304f54851366ac2a79a792a8009406fc927c3c6c410ad8f65cc2dd9b14995
 GT06_BENCHMARK_CAMPAIGN=gt06-s73-campaign-01
-GT06_BENCHMARK_STATUS=RUNNING_S73_LAUNCH2_OBSERVED_0441
+GT06_BENCHMARK_STATUS=FAILED_S73_LAUNCH2_RETAINED_COUNTER_GROWTH
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
 
-TIẾN ĐỘ HIỆN HÀNH — S74, ngày 18-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S75, ngày 18-09-2026
 GT-01–05 đã ACCEPTED. GT-06 mở sau hai review độc lập S64 cùng manifest.
 Owner đã cho phép lại ba Astra extra high; coordinator tiếp tục từ S68 đã tích hợp.
 Ba Astra xhigh S73 đã điều tra response-loss, đo tối ưu hash và giữ failure;
@@ -210,6 +210,37 @@ GT-06 hiện hành — phần đã làm và đường tới nghiệm thu
   Quan sát riêng04:41:53: schedulerstate4/mộtinstance; host/native8776 cùnga02,
   batch0nativecycles, stderrtrống. Chỉ là startup, không chứng minh sửa nguyên
   nhân hoặc PASS. Lịch15phút đã đổi sanglaunch2; evidence ở -s74-recovery/launch-02/.
+- S75: launch2 đã terminal sau2133.782s, schedulerstate3/result1/instancesrỗng.
+  Run00attempt02 có10capture, batch9 joint bị CAMPAIGN_RETAINED_COUNTER_GROWTH:
+  editor objects71175→71213 (+38), handles566→568 (+2); resources6 không đổi.
+  Bốn measured batch trước ổn định; không có fullrunPASS. Measured statusgap
+  cao nhất1063.398ms; warmupb3 có2004.0029ms vẫn giữ nguyên trong raw.
+  HostPID27508actualexit1; editorPID8776nativeexit thiếu, wrapper2 không thay.
+  Hai Jobzero/closed và handlesreleased. Source/profile chưa đổi; không tự
+  launch3. Ba Astra xhigh chia preservation, counter/preview diagnosis và
+  owned-process priority/commit/fault telemetry bổ sung. Evidence -s75-recovery/;
+  đây là investigation, không phải critic hoặc nguồn miễn trừ ngưỡng.
+  Bài học: healthy heartbeat/partial plateau không thay complete35batch;
+  lỗi phải đối chiếu tất cả counter, không chỉ mã đầu tiên bị raise.
+  Failure seal4c8ed5ab625e7c953a4e723c1b0e7c1daa74e352cdc5ecea0367391c514a3e36;
+  77exactcopies/447rawfiles,60batchrefs/source49/30Stopslots đã kiểm.
+  Probe A/B tái hiện38JSON→38FileSystemTreeItems/+76Objects; .gdignore arm
+  không tăng. scan_sources() v3 dùng đúng sources_changed(bool); v2 ignored
+  timeout được giữ (filesystem_changed chỉ emit khi có thay đổi), không giảPASS.
+  Đây là cơ chế đã chứng minh trên probe; không gán ngược chính xác19file cho
+  +38object của campaign hoặc nói đã sửa +2handle/RSS. Census/raw/hash ở
+  -s75-recovery/editor-files-proof/, source audit riêng không là acceptance.
+  S75 chỉ sửa fixture chuẩn bị benchmark/.gdignore trước import, native guard
+  byte-exact và sourcebinding; assembly cũng kiểm marker thứ10/exactbytes.
+  Source_files thêm dependency perf schema; profile/ngưỡng/workload giữ nguyên.
+  Preflight bắt được old9-source-set và BOM text-decoding; đã sửa trước remint.
+  115/115 affectedunit đạt, hostactual0/treeclean/sourceunchanged. Native02
+  import/editoractual0/Jobszero; BOMnegative native86/noeffect/clean. Scan-thread
+  warning khi guard thoát sớm được giữ ở negativecase, không cho positive lane.
+  Native/guard evidence ở -s75-recovery/native-validation; guard01 collector
+  assert warning được phân loại từ raw, không chạy lại engine để sửa metadata.
+  Closure49 mới638304f54851366ac2a79a792a8009406fc927c3c6c410ad8f65cc2dd9b14995;
+  phải campaign mới, không resume S73 bằng source S75. Chưa fullbenchmarkPASS.
 - Sau benchmark: verify complete10×35, raw/hash/schema/counters/actual exits;
   ghép functional bằng dependency đã kiểm; đóng final source/review/raw manifest
   và requirement→test→evidence. Hai critic mới đọc độc lập cùng final hash,
