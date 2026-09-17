@@ -174,7 +174,13 @@ GT-06 hiện hành — tóm tắt theo kết quả, chi tiết giữ trong evide
   Chi tiết/research/đối chứng: reviews/20260918-gt06-s71-growth/.
   79/79 affectedunit đạt49.540s, actualexits0/ownedtree/sourceunchanged;
   evidence riêng -s71-units-01, không cộng với các lượt test cũ.
-  Cần freshcampaign cho source mới; không resume/trộn sample campaign02.
+  Checkpointbb881a4a; exactGitbytes49source, closure
+  38a0848b68c4d6b34f1a03839008d54aa9e99a33458abaa88a939c8d2a744d86.
+  Freshgt06-s71-campaign-01 launch1 khởi chạy02:10:39; quan sát02:13:35
+  taskRUNNING, đangwarmupbatch2/commands, stderrtrống. Batch0 mất56.228s,
+  sáu artifactrefs khớp; live/frozen/Gitindex49map trùng. Chưa fullrun/PASS;
+  không resume/trộn sample campaign02. Launchproof và lịch tiếp15phút đã
+  cập nhật trong -s71-growth/campaign-launch.json và overnight-schedule.json.
 - Owner yêu cầu tiếp tục qua đêm18-09: heartbeat task hiện tại đã ACTIVE,
   id=ti-p-t-c-hh3d-tools-qua-m, kiểm/tiếp việc mỗi15phút. Readback lưu tại
   reviews/20260918-gt06-s70-resume/overnight-schedule.json. Không tạo lịch trùng;

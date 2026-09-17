@@ -1,0 +1,33 @@
+{
+  "observed_utc": "2026-09-17T19:13:35.237021+00:00",
+  "source_commit": "bb881a4a",
+  "source_count": 49,
+  "source_closure_sha256": "38a0848b68c4d6b34f1a03839008d54aa9e99a33458abaa88a939c8d2a744d86",
+  "live_frozen_git_index_maps_equal": true,
+  "scheduler": {
+    "schema": "HH-GT06-TASK-STATUS-1",
+    "task_path": "\\HHStudio.GT06.gt06-s71-campaign-01",
+    "campaign_id": "gt06-s71-campaign-01",
+    "mode": "campaign",
+    "launch_number": 1,
+    "state": 4,
+    "last_run_time": "2026-09-18T02:10:39.0000000",
+    "last_task_result": 267009,
+    "instances": [
+      {
+        "instance_guid": "{8132F21A-241B-40AE-82BF-4F66053680B4}",
+        "state": 4,
+        "scheduler_engine_pid": 46392
+      }
+    ],
+    "output_directory": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s71-campaign-01-supervisor",
+    "formal_acceptance": false,
+    "status_scope": "Scheduler state only; not actual process exit or owned-tree proof"
+  },
+  "latest_progress": "HH_GT06_CAMPAIGN_PROGRESS {\"run_id\": \"gt06-s71-campaign-01.r00.a01\", \"batch\": 2, \"phase\": \"commands\"}",
+  "warmup0_duration_seconds": 56.228409,
+  "warmup0_six_artifact_refs_verified": true,
+  "stderr_empty_at_observation": true,
+  "formal_acceptance": false,
+  "full_run_completed": false
+}

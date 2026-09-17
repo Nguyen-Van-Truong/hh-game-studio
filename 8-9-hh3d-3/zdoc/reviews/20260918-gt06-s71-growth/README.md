@@ -48,3 +48,13 @@ verified tree cleanup and unchanged source. Counts are not additive with older
 runs. Final full measurement must use a fresh campaign ID and the complete
 campaign source closure, which explicitly includes the schema and launcher.
 No S70 partial samples or prior acceptance signatures transfer to that run.
+
+Source checkpoint `bb881a4a` was dispatched as `gt06-s71-campaign-01`, launch1,
+at02:10:39 local. The02:13:35 observation confirms a running scheduler instance,
+warmup batch2 in its command phase, and empty supervisor/host/editor stderr.
+The first warmup took56.228s and all six artifact references match. The49-file
+campaign map matches live/frozen/Git bytes at closure
+`38a0848b68c4d6b34f1a03839008d54aa9e99a33458abaa88a939c8d2a744d86`.
+See `campaign-launch.json` and `campaign-launch/`; this is startup evidence,
+not a completed run. Requery live task state on resumption. The existing
+15-minute heartbeat was updated in place, recorded in `overnight-schedule.json`.
