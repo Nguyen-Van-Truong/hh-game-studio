@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 18-09-2026, Asia/Saigon | Revision S72 | TRIỂN KHAI THEO GATE
+Ngày 18-09-2026, Asia/Saigon | Revision S71 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S72
+PLAN_REVISION=S71
 EXECUTION_MODE=COORDINATOR_THREE_ASTRA_XHIGH_OWNER_20260918
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -56,11 +56,11 @@ GT05_CHECKPOINT_COMMIT=808d8ba
 GT06_EVIDENCE_STATUS=NATIVE_DIAGNOSTICS_IN_PROGRESS_NO_ACCEPTANCE
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
 
-TIẾN ĐỘ HIỆN HÀNH — S72, ngày 18-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S71, ngày 18-09-2026
 GT-01–05 đã ACCEPTED. GT-06 mở sau hai review độc lập S64 cùng manifest.
 Owner đã cho phép lại ba Astra extra high; coordinator tiếp tục từ S68 đã tích hợp.
-Ba Astra xhigh đã chuẩn bị performance/final seal/Android theo scope riêng;
-không phải critic nghiệm thu. Hai review độc lập trên final closure còn phải làm.
+Ba worker mới đã hoàn thành review implementation/mapping S69; không phải critic
+nghiệm thu. Hai review độc lập trên final frozen closure vẫn còn phải làm.
 Native engine/integration lanes chạy tuần tự với process/cache/evidence riêng.
 
 Đã nghiệm thu:
@@ -97,112 +97,336 @@ Native engine/integration lanes chạy tuần tự với process/cache/evidence 
   snapshot. Giữ raw gốc; source/review S64 ở808d8ba và governance snapshot,
   không đổi chữ ký theo source mới. Full details: gt05-s63-audit/requirements-s64.md.
 
-GT-06 hiện hành — phần đã làm và đường tới nghiệm thu
-- Functional: Play tách Editor; trace60Hz, real menu/input/pause/resume/quit,
-  interaction/camera/capture và perf export đã chạy thật trên fixture. S65 fault
-  → authenticated GT03 repair → replay có causal chain; S69 managed replay
-  dùng receipt repair02. HTTP/Stop/inspector/reviewer GUI và ba adversary
-  saturated-stop/revoked-result/stale-capture đã có evidence theo lane.
-  GUI S68 và functional S69 chỉ được reuse khi toàn dependency khớp; không
-  gán source mới cho log cũ. Mapping: reviews/20260918-gt06-s70-resume/
-  requirements-final-draft.md, closure-packaging-check.md, fault-coverage-links.md.
-- Journal dùng exact-byte verified cache dưới accepted lock, giữ receipt,
-  tombstone và offsets sau compact. Stop bao completion/assembly/resume;
-  ownership giữ khi constructor/CloseHandle lỗi. Chi tiết/checkpoints c5e56c7,
-  3147778 và S69 ở archive; core Journal đã nghiệm thu không đổi.
-- Benchmark bắt buộc:10 fresh host/editor pairs ×35batch (5warmup+30measured),
-  mỗi batch1000HTTPcommands+100nativecycles, cùngPID xuyên run. Giữ ready/start/
-  joint/ACK, ngưỡng và7410s/run. Partial attempt không ghép thành runPASS.
-  Không chạy engine/test nặng cạnh phép đo. Scheduler0 không thay actual
-  target/helper exit, Jobzero/closed, released handles và complete dataset.
-- Nguồn đang đo: bb881a4a,49file, closure
+GT-06 hiện hành — tóm tắt theo kết quả, chi tiết giữ trong evidence/archive:
+- Play/input/observe đã chạy thật trên fixture: Play tách Editor; fixedtrace60Hz,
+  readback sau callback, pause/resume/interaction/camera và capture đúng hash/PID.
+  Fault0m→authenticated GT03 repair→replay1.500000238m có causal chain S65;
+  S69 managed replay kiểm lại runtime hiện hành bằng receipt repair02, không
+  lặp mutation đã đúng. Perf raw diagnostic không được tính là benchmark.
+- HTTP service/Stop/inspector và reviewer GUI đã chạy thật. S69 ba adversary
+  saturated-stop/revoked-result/stale-capture đạt15/18/17 checks; outer exits0,
+  owned trees sạch. Native Stop là STAGE_STOPPED + Jobclosed/zero, không phải
+  natural native exit0. Dependency GUI S68 complete02/stop02 còn khớp173+5file,
+  giữ evidence theo từng lane, không gán chữ ký/source cũ vào closure mới.
+- Journal replay dùng exact-byte verified cache dưới accepted lock; compact
+  offsets giữ đủ receipt/tombstone. Core Journal đã nghiệm thu không đổi.
+  Checkpoint c5e56c7: full415/415 và journalcontract62/62. Checkpoint3147778:
+  full434/434 (146.685s), sau sửa Stop phần ảnh hưởng66/66 (21.646s), khôngskip,
+  actual exits0/tree sạch/source ổn định. Không cộng test trùng hoặc suy %done.
+- S69 owner đã sửa cleanup_owner khi constructor lỗi, native wrapper-handle
+  close và latch Stop ở completion/assembly/resume. Capturev2 yêu cầu proof
+  đóng handle; không nâng cấp giả v1. BoundRun chặn trộn source/toolchain/profile.
+  Raw/capture: reviews/20260918-gt06-s69-progress/; review/mapping và phạm vi
+  reuse: reviews/20260918-gt06-s69-owner-review/integration-followup.md.
+- Full benchmark chưa PASS. Giữ10freshpairs×35batch (5warmup+30measured),
+  mỗi batch1000HTTPcommands+100nativecycles; ready/start/joint/ACK, cùngPID
+  xuyên batch; thresholds và7410s/run không đổi. Không chạy engine/test nặng
+  cạnh lượt đo. Partial attempt không được nối thành runPASS.
+- S68 campaign03 và S69 campaign01 có một assembled warmup batch nhưng không
+  đủ run35batch. S69 campaign01 đã ngắt ởbatch1/nativecycle33, thiếu process
+  exits/cleanup; process không còn không thay proof. Editor stderr còn lỗi tạo
+  --test-rd-creation child, nên kể cả hoàn tất cũng chưa đạt clean-log gate.
+  Không gọi RUNNING theo launch record cũ; e469f58 chỉ ghi thời điểm khởi chạy.
+- S70 đã lưu launcher tại a007b21 để không phụ thuộc vòng đời tool session,
+  dùng task on-demand có deadline/current-user/Stop, không auto-restart. Probe
+  natural đạt actualexit0/closedzero/handlesreleased sau lệnh dispatch trả về;
+  probeStop đạt BENCHMARK_STOPPED và cleanupclosedzero, không naturalPASS.
+  Schedulerpriority6→WindowsNORMAL được kiểm; task không có trigger/restart.
+  Driver reject stderr sớm. Source stockGodot xác nhận explicitOpenGL không
+  bỏ RDprobe. Giữ editorcap4; parentJob phải chứa2host+4editorslots=6. Đây là
+  sửa khai báo aggregateownership, không nới CPU/RAM/wall hoặc tiêu chí đo.
+  Nestednative cũ4 tái hiện lỗi RDprobe; mới6 sạch và hoàn tất cycle19.094s.
+  Cảhai giữ actualhost/editor/helper exits0/closedzero/handlesreleased; legacy
+  controllerexit1 vì logFAIL. Không biến diagnostic một cycle thànhbenchmark.
+  Launcher có manualLaunchNumber để resume cùngcampaign vào evidence/taskriêng,
+  không ghiđè run cũ; probeLaunch2 đạt. 73/73 affectedtests đạt17.551s,
+  khôngskip, actualexits0/tree sạch/source ổn định. Chi tiết/hash/research:
+  reviews/20260918-gt06-s70-resume/README.md và -s70-units-01/.
+  Ba worker rà ownership/forensics/criticalpath; không phải critic nghiệm thu.
+- S70 campaign01 dừng sau1.422s trước native: source closure theo sys.modules
+  có launcher ở parent nhưng thiếu ở child. Actualexit1/Jobclosedzero/handleclosed,
+  schedulerterminal1 đã giữ; task đã xóa sau kiểm cleanup. Bản sửa khai báo đủ
+  fixed launcherPython/PowerShell và perf schema, giữ exact source equality.
+  Hai interpreter riêng chứng minh cùng map; mutation launcher/schema bị chặn.
+  75/75 affectedtests tại -s70-units-03 đạt19.106s, khôngskip, actualexits0,
+  tree sạch/source ổn định. Không cộng với75test ở -02 (trước bổ sung schema).
+  Source đã đổi nên campaign02 phải tạo fresh; không dùng prefix01 làm sample.
+- S70 campaign02 (source9bc28b6, closure21a17b2a…aa0) đã FAILED sau910.578s:
+  5warmup+batchđođầutiên, không có fullrun. EditorObjects72866→73342 (+476)
+  vi phạm nguyên ngưỡng; resource/handles đứng yên, RSS không vi phạm.
+  Hostactualexit1; editor bị cleanup với wrapper2, thiếu nativeexitrecord:
+  không gán wrapper2 thành nativeexit. Jobclosedzero/handlesreleased đã kiểm,
+  schedulerterminal1 và task đã xóa. Giữ58file failure/counter/ownership nhỏ,
+  hash và raw gốc: reviews/20260918-gt06-s71-growth/campaign02-failure/.
+- S71 chẩn đoán khớp +476 =376stdoutparagraph+100UndoRedoactionparagraph
+  trong Output stockGodot; không phải bằng chứng scene leak. Đối chứng riêng
+  3×50nativecycles giữ full external logs: cap100 đã phẳng giữa hai batchcuối.
+  Cấu hình project cố định editor_overrides/run/output/max_lines=100 trước
+  import/freeze, nativebootstrap kiểm effectiveget_setting/type/value. Chỉ
+  giới hạn paragraph hiển thị; chuỗi log nội bộ vẫn giữ nên RSS gate không đổi.
+  Không trừ/resetcounter/clearhistory, không đổi5+30×10 hoặc ngưỡng nghiệm thu.
+  Source chỉ đổi hai benchmarkdriver; acceptedadapter và production không đổi.
+  Native1cycle source mới đạt exit0/Jobclosedzero/stderrtrống. Setting101 bị
+  reject trước cycle0, native/helper86, scene nguyên và Jobclosedzero; giữ cả
+  cảnh báo Scan thread aborted của negativecase, không gọi cleanPASS.
+  Hai diagnosticcollector có lỗi đọc index/giả định stderrtrống; giữ lỗi và
+  khôi phục kết quả từ raw đã hoàn tất, không chạy lại native để sửa metadata.
+  Chi tiết/research/đối chứng: reviews/20260918-gt06-s71-growth/.
+  79/79 affectedunit đạt49.540s, actualexits0/ownedtree/sourceunchanged;
+  evidence riêng -s71-units-01, không cộng với các lượt test cũ.
+  Checkpointbb881a4a; exactGitbytes49source, closure
   38a0848b68c4d6b34f1a03839008d54aa9e99a33458abaa88a939c8d2a744d86.
-  Campaign gt06-s71-campaign-01, launch1, Windows task
-  \HHStudio.GT06.gt06-s71-campaign-01; raw studio/.local/reviews/gt06-s71-campaign-01
-  và sibling -supervisor; launcher studio/tests/replay/campaign_task.ps1.
-  Startup02:10:39 ngày18-09; quan sát03:37 đạt30/35batch run00, gồm25measured,
-  objects71135 đứng yên, stderrtrống, partialinspectp95=320.730ms/Stop159.864ms.
-  Chưa fullrun hoặc GT06PASS. Ước lượng tuyến tính lúc đó còn khoảng16.7giờ
-  riêng workload nếu xu hướng và máy giữ nguyên; không hứa xongplan trước sáng.
-  Mỗi lần tiếp phải query task sống/log mới; không suy RUNNING từ dòng này.
-- S71 đã sửa nguồn ObjectDB tăng do Output UI: cố định stock displaycap100 trước
-  import/freeze, native get_setting kiểm type/value. Internal message strings
-  vẫn giữ nên RSS gate còn nguyên; full stdout/stderr/counters không bị cắt/trừ.
-  A/B diagnostic3×50 chỉ bổ sung: default71110→71182→71254, cap10071109→71131→71131.
-  Native mới1cycle exit0/clean; setting101 bị chặn trước effect (native/helper86,
-  giữ scan-warning negativecase).79/79 affectedunit đạt; source/ownedtree sạch.
-  Evidence/hash/Git proof: reviews/20260918-gt06-s71-growth/ và -s71-units-01/.
-- Các attempt lỗi đã giữ nguyên. S68/S69 partial thiếu fullrun/cleanup không
-  được dùng. S70campaign01 lỗi entrypoint closure trước native; campaign02 fail
-  +476objects ở batch5. Task cũ đã terminal/xóa đúng scope, raw/evidence còn.
-  Không gọi editorwrapper2 là nativeexit khi thiếu native record. Failure58file:
-  -s71-growth/campaign02-failure/. A/B thiếu non-Python schema trong map chỉ là
-  supplemental; full campaign49map có schema. Không trộn sample/source cũ.
-- Ba report chuẩn bị ở reviews/20260918-gt06-s71-next/: performance-path.md
-  chỉ ra mỗi batch thêm1403records và ít nhất3207 full-history hash scans;
-  chi phí tăng theo journal, wall-time attribution chưa đo. Tối ưu riêng sau
-  campaign nếu cần; không đổi source/reset journal/nới gate giữa phép đo.
-  seal/ chứa collection recipe và adapter validator CHƯA CHẠY, tái dùng
-  verify_run_capture/BoundRun/profile; terminal mới audit toàn raw và đóng gói.
-  android-readiness.md xác nhận templates/JDK cục bộ, SDK/physical device/ADB
-  authorization vẫn UNVERIFIED. Chưa cần owner thao tác cho GT06. Các report
-  chuẩn bị này không phải critic hoặc nghiệm thu.
-- Sau benchmark: verify complete10×35, raw/hash/schema/counters/actual exits;
-  ghép functional bằng dependency đã kiểm; đóng final source/review/raw manifest
-  và requirement→test→evidence. Hai critic mới đọc độc lập cùng final hash,
-  PASS/TICK=yes rồi coordinator mới ACCEPT GT06 và mở implementation GT07.
+  Freshgt06-s71-campaign-01 launch1 khởi chạy02:10:39; quan sát02:13:35
+  taskRUNNING, đangwarmupbatch2/commands, stderrtrống. Batch0 mất56.228s,
+  sáu artifactrefs khớp; live/frozen/Gitindex49map trùng. Chưa fullrun/PASS;
+  không resume/trộn sample campaign02. Launchproof và lịch tiếp15phút đã
+  cập nhật trong -s71-growth/campaign-launch.json và overnight-schedule.json.
+- Quan sát02:32:36: S71campaign01 vẫnRUNNING, run00 đãcapture13/35batch
+  gồm5warmup+8measured, chưa fullrun. EditorObjects71135 đứng yên toàn13batch,
+  stderrtrống; partialinspectp95=157.599ms, partialStopp95=84.329ms. Số liệu
+  tạm chưa thay fullrun/dataset/exitproof. Thời gian batch tăng khoảng7.38s
+  mỗi batch; fit8measured dự kiến còn17.2giờ workload nếu xu hướng và máy giữ
+  nguyên, chưa gồm assembly/review/sửa lỗi. Đây là kịch bản sớm, không hứa ETA.
+  Chi tiết có timestamp/sourcebinding: -s71-growth/progress-01.json. Giữ source,
+  không chạy test/engine nặng cạnh phép đo; lịch15phút hiện hành tiếp tục.
+- Owner yêu cầu tiếp tục qua đêm18-09: heartbeat task hiện tại đã ACTIVE,
+  id=ti-p-t-c-hh3d-tools-qua-m, kiểm/tiếp việc mỗi15phút. Readback lưu tại
+  reviews/20260918-gt06-s70-resume/overnight-schedule.json. Không tạo lịch trùng;
+  chỉ đọc status/tail khi đang đo, sửa/resume phần lỗi theo proof khi terminal,
+  đủ evidence thì hai critic độc lập cùnghash rồi mới mở gate kế tiếp.
+  Ước lượng6–18giờ trước đây chỉ từ warmup campaign02 đãFAILED; không phải ETA
+  hiện hành. Chỉ ước lượng lại từ batch hoàn chỉnh của campaign mới.
+  Máy/app phải hoạt động; không chạy thêm engine/test nặng cạnh phép đo.
+  Ba worker đã lưu overnight-estimate.md, fault-coverage-links.md và
+  android-prerequisite-status.md: F11/F12 có dependency/test links, không thấy
+  orphan functional mới; Android/adb vẫnUNVERIFIED, chưa là blocker GT06.
+- Chưa có GT06 accepted candidate. Sau benchmark đúng profile phải đóng
+  requirement→test→evidence trên frozen closure, hai critic độc lập PASS/TICK=yes,
+  rồi coordinator mới chuyểnGT06ACCEPTED. Không mở implementation GT07 trước đó.
 
-Phần còn lại để xong plan
-GT-07: scheduling/concurrency/recovery và cross-app activation.
-GT-08: clean Windows/Linux/Android export; máy Android thật là hard gate.
-GT-09: full client conformance, MCP spike đã pin và toàn tuyến trên fixture.
-GT-10: package/install/upgrade/rollback/uninstall/handoff. HH World là plan riêng
-sau GT-10. Không suy phần trăm sản phẩm hoặc ETA toàn plan từ số test/gate.
+Các phần còn lại để xong plan: GT-06 play/input/observe,
+GT-07 concurrency/recovery/cross-app activation, GT-08 Windows/Linux/Android
+thiết bị thật (hard gate), GT-09 conformance, GT-10 package/install/upgrade/
+rollback/uninstall/handoff. HH World là plan riêng sau GT-10. Chưa có ETA
+đáng tin cậy cho toàn bộ; số test không là phần trăm sản phẩm đã hoàn thành.
 
-Thực thi và tốc độ
-- Tiêu chí/gate hiện phù hợp; ưu tiên đường chức năng, file lease độc lập,
-  focused regression và dependency reuse. Không mở thêm vòng audit/helper không
-  phục vụ requirement còn thiếu; không chạy lại lanePASS chỉ vì sửa báo cáo.
-- Owner18-09 cho phép heartbeat tiếp tục qua đêm. Lịch hiện có
-  ti-p-t-c-hh3d-tools-qua-m ACTIVE, mỗi15phút; sửa chính lịch này, không tạo trùng.
-  Readback mới: -s71-next/overnight-schedule.json. Khi đang đo chỉ xem compact
-  status/tail; terminal mới audit đầy đủ. Máy và app phải hoạt động.
-- Chưa cần owner thao tác cho GT06. Thiết bị/SDK Android phải kiểm thực tế ở
-  prerequisite; thiếu PATH không chứng minh thiếu công cụ hoặc không có thiết bị.
+Plan/gate phù hợp; đã bỏ routing solo/ultra và câu GT-03 “tiếp theo” bị cũ.
+S60 đã review giữ nguyên tại checkpoint 38f6b9a; snapshot governance trong
+reviews/20260917-plan-history-s60 (AUTHORITY=0). Kiểm accepted closure từ Git
+ref đó; plan hiện hành và hoạt động GT-05 không được gán vào chữ ký S60.
+
+Cải tiến plan/tốc độ: scope song song theo dependency; serialize native lanes;
+resume attempt lỗi thay vì lặp lanePASS; một frozen source cho final matrix;
+MCP measured spike chuyển sangGT09 khi API ổn định, không bỏ conformance.
+Lịch sử S54 đầy đủ trước tinh gọn: reviews/20260917-plan-history-s54-final/
+tools-plan-before-s55.txt (AUTHORITY=0), SHA256 b07c86c36c565c3a95404a6084cd6df0999300f622412ce3cd988cd279a49909.
+Các archive và mọi failure/verdict cũ giữ nguyên; không hạDoD đểtick.
+
+Lịch sử chi tiết S69 trước tinh gọn: reviews/20260918-plan-history-s69/
+tools-plan-s69.txt (AUTHORITY=0), SHA256 924bbf4e4d6f182a33ea7dd7bee23a8b83323669a00ae5fb318f7ef72f6407a2.
 
 KINH NGHIỆM ĐANG ÁP DỤNG
-1. Hash từng lane theo đúng dependency đã chạy; source thay thì chỉ remint phần
-   ảnh hưởng. Native JSON/float và JCS có hash-domain riêng. Giữ nguyên CRLF/raw
-   bytes; Git blob phải dựng lại đúng hash. Không chuyển chữ ký cũ sang hash mới.
-2. Capture đã hoàn tất nhưng collector sai thì sửa verifier trên raw gốc;
-   giữ failure và supplemental rõ scope. Không chạy lại engine để sửa metadata.
-3. ACK chỉ sau semantic/native readback; no_effect phải chứng minh chưa effect.
-   Sau effect chưa rõ thì UNKNOWN/reconcile cùng command_id, không mutation lại.
-4. Stop/deadline kiểm mọi phase và cả completion/assembly/resume. Giữ latch cũ,
-   receipt terminal/tombstone/fence, redaction history sau rotate/revoke.
-5. Owned process phải có actual target/helper exit và Job/PID/handle proof.
-   Wrapperexit, bannerPASS hoặc process biến mất không thay proof; constructor/
-   CancelIoEx/CloseHandle lỗi giữ đúng owner và chờ drain, không free/reuse sớm.
-6. Task on-demand phải kiểm lifetime sau dispatch, deadline/principal/limits/
-   Stop và source closure chung giữa các entrypoint. sys.modules không bao đủ
-   data/schema hoặc mọi entrypoint; khai báo chúng và test interpreter riêng.
-7. Resource lease theo native lane; không chạy fsync/native matrix cạnh phép đo.
-   PID/start/source/window/camera, pause clock và no-focus input phải khớp.
-   Giới hạn Output display trước warmup; không reset/subtract counter hoặc nới gate.
-8. Windows filesystem safety cần handle identity/barrier/no-follow/ACL thật;
-   share=0/readback/page-cache không chứng minh chống alias hoặc durability.
-   Không nới quyền/quota để hợp lỗi fixture; giữ fail-closed/UNKNOWN khi primitive thiếu.
-9. Test negative phải chạm đúng fault, không dùng setup/argv/cache failure làm
-   bằng chứng reject. Scope tools dùng runner bounded, không quét checker legacy
-   toàn repo hoặc kill process dự án khác. Nghiên cứu API đúng pin từ nguồn gốc.
+- S71: counter toàn editor gồm object của Output UI. Cố định display capacity
+  trước warmup, kiểm native readback, giữ full raw log/RSS và disclosure cấu hình;
+  không giảm ngưỡng để khớp số đo. Metadata collector phải đọc đúng schema;
+  native đã hoàn tất thì sửa/verify collector từ raw, không lặp workload.
+- S70 closure: sys.modules chỉ cho dependency đang import trong một process;
+  khai báo thêm entrypoint/data dependency dùng chung và so map ở interpreter
+  riêng trước lượt dài. Launcher probe ngắn không thay actual campaign startup.
+- S70: process nền vẫn có thể thuộc Job của tool; Start-Process Hidden không
+  chứng minh sống qua phiên. Task on-demand phải probe, có deadline/Stop và
+  chứng cứ actual exit riêng. Lỗi stderr startup phải fail sớm, không chờ hết
+  hàng giờ benchmark; không nới profile để che lỗi.
+- S69: process.wait() trên Windows không tự đóng handle Popen; proof cleanup
+  phải kiểm native close, giữ đúng owner khi lỗi và tránh double-close khi kết quả
+  chưa rõ. Constructor lỗi vẫn phải trả ownership dù cleanup đã thành công.
+  Đánh giá dependency theo từng lane để chỉ remint phần bị ảnh hưởng; không gán
+  chữ ký cũ vào closure mới, cũng không lặp toàn bộ gate chỉ vì thêm file test.
+  Stop phải kiểm cả ranh giới completion/assembly/chuyển run và resume attempt
+  đã complete; kiểm trước polling đơn lẻ chưa đủ. Giữ latch của attempt cũ.
+- S68: không suy nguyên nhân từ mã lỗi identity khi chưa lưu phản hồi terminal;
+  lookupUNKNOWN chỉ reconcile cùngID trong deadline, không gửi lại mutation.
+  Giữ failedprefix và actualexit; chỉ nối lại run hoàn chỉnh cùng source/profile,
+  không trộn PID hay sample của run đã gãy. Profilehash dựa đúng canonicalbytes
+  (không tự thêm LF); command/native clock là hai miền khác nhau. Readysignal
+  trướccommands và ACK saucycles tránh đo bộnhớ nhầm phase. Constructor lỗi
+  vẫn phải nhận cleanup_owner; Stopđãlatch không được quay lạicompleted.
+- S67 GUI: không autopoll khi closing hoặc PLAY local cònpending; nếu lookup
+  chạy trước launchworker thì NO_COMMAND local không được hủy trạng tháiqueued.
+  Godot Windows có thể release held-input khi mấtfocus: fixedtrace dùng no-focus
+  từstartup, không bơm lại phím hoặc sửa trace để che lỗi. Nativebenchmark cần
+  save-signal nằm trong save→reload, reloadframe trướcquiescence; bannercomplete
+  không thắng source-drift/hostFAIL. Giữ config Godot canonical trướcfreeze.
+- S67: lookup khi POST đầu cònchuẩn bị không phải COMMAND_NOT_FOUND terminal;
+  giữqueued cục bộ, sau response-loss chỉlookup cùngID. Sockettimeout theo từng
+  read không là deadline toànrequest: có timer ngắt đúng socketowned và chặn
+  responseđếnmuộn. Stopcưỡngbức kiểm PID/startartifact+Jobzero, không đòi natural
+  exitrecord chưa tồn tại. Ghi từngcheck ngay để lỗi cuối không mất bằngchứng.
+- S66: collision của một submit mới không được đổi receipt pending của lệnhgốc.
+  Completion lỗi phải trảUNKNOWN khi lookup, kể cả journal không ghi được;
+  receipt terminal đãdurable luôn thắng overlay tạm. Tokenrotation giữsessionID
+  nên lease cần bind đúng grantobject, không chỉ sessionID. Prepare lỗi vẫnphải
+  nhận cleanup_owner và drain. SDK không thấy không có nghĩa máy không gắnAndroid;
+  device authorization cònUNVERIFIED cho tới khi kiểmadb đúngphạmvi.
+- S65: Input.parse_input_event có thể xếp hàng; flush_buffered_events sau cả
+  nhóm edge cùngtick rồi mới đọc lại. Kiểm API trên đúng Mesh subclass/pin.
+  Process exit0 không đủ: menu capture phải giữ đúng phase/camera sau render.
+  Chờ render readiness trước bắt đầu trace; giữ startup raw riêng, đánh dấu
+  counter chưa sẵn sàng và khai báo cửa sổ đo, không biến unavailable thành0.
+  Hash native JSON string nguyên byte; không serialize lại float bằng Python.
+  Pin editor identity trước retirement/close; không đọc identity từ owner đãđóng.
+- S64: object tồn tại/enabled/counts không thay postcondition sử dụng thật;
+  nav region phải có map synchronized và đường đi tới endpoint đúng. Crash
+  cạnh hai phase không thay crash ngay phase còn thiếu. Tách driver bổ sung
+  khỏi runtime để bổ sung proof mà không sửa code đã đạt không cần thiết.
+  Map/region iteration>0 vẫn có thể là snapshot chưa chứa surface: kiểm owner
+  ở endpoint trước query. Plane và NavigationServer có convention normal khác,
+  phải kiểm normal native; diagnostic API cần đối chiếu pin trước khi dùng.
+  Word-boundary sau dấu ':' không bắt được 'Error: message'; test lỗi log phải
+  reseal đầy đủ capture để chứng minh tới đúng check, không fail ở hash trước đó.
+- S63: clean exit không chứng minh test hook đã chạy; bind case/marker/hash raw
+  observation và fault-fired witness. Đọc profile để tạo metadata phải so đúng
+  digest frozen ngay tại lần đọc đó, không chỉ hash cả tree trước/sau. Stop/deadline
+  phải tới từng read/phase của verifier. Incomplete staged prefix mở lại phải
+  kiểm bytes đã ghi nhưng vẫn UNKNOWN nếu thiếu terminal witness. Snapshot test
+  phải mang đủ offline dependency + scratch parent; không dùng missing setup làm skip.
+- S62: packed PNG hash không chứng minh bpy/exporter dùng đúng pixel; phải
+  kiểm pixel native, save/reopen và GLB decoded pixel. Root/joint chuyển trục
+  khác mesh do exporter giữ bone basis; đối chiếu actual GLB và pinned source.
+  Cleanup cưỡng bức child không phải natural exit. Resume kiểm raw exit/PID/
+  marker đầy đủ và dùng nguyên bytes đã xác minh, không đọc lại chưa kiểm.
+  Godot default animation optimizer có error lớn hơn tolerance fixture: pin tắt,
+  kiểm actual 31 keys/36 tracks/clip, không nới epsilon. Console wrapper PID
+  không phải engine PID: launch GUI binary pin trực tiếp khi cần bind OS PID.
+  Preflight allocation caps không thay CPU/wall cap; chạy decode trong Job riêng.
+  Watchdog stat chấp nhận đúng FileNotFound do owned scratch bị xóa, vẫn reject
+  access/reparse errors; disk watchdog không được claim thành quota filesystem.
+- S61: retry worker phải phân biệt lỗi auth/capacity với verdict; chỉ hai report
+  cuối đúng hash mới cho nghiệm thu. Asset ID phải chừa chỗ suffix; importer
+  suffix có thể đổi node nên pin/tắt và readback. Không tăng shared storage cap
+  để hợp fixture; dùng asset nhỏ và profile pipeline riêng trước.
+- S60: unsupported input phải reject trước mọi existence check; is_file/stat
+  vẫn là I/O và có thể chạm UNC. Kiểm no-I/O bằng sentinel, không dùng mạng thật
+  trong negative test. Raw local logs và bản view để commit có hash-domain
+  riêng; thiếu đường dẫn trong top-level capture không chứng minh nested logs
+  đã sạch. Review bị gián đoạn hoặc auth lỗi không phải verdict.
+- S59: tách thư mục TEMP/user khỏi fixture cần rỗng. Freeze runtime một lần,
+  dùng driver supplement có hash riêng cho harness cũ; resume lane đạt thay
+  vì chạy lại tất cả. Kỳ vọng recovery phải bám terminal witness: Stop giữa
+  selector vàterminal không được báo COMMITTED. Negative-audit phải xác nhận
+  mutation đã được chạm; lỗi setup/cache không phải test rejection thành công.
+- S58: tái dùng một publication reducer cho3profile; profile phải được pin
+  trong CONFIG/manifest, native slot và common translation phải khớp. Lỗi known
+  trước publication INTENT trảREJECTED; lỗi sauINTENT vẫnUNKNOWN/hold. Test
+  capacity phải chứng minh editor còn dùng được và không mở lại effect cũ.
+- S57: preview là quan sát có kiểm quyền, không INTENT hoặc reserve apply ID.
+  Native preview/apply dùng chung preconditions. Redaction kiểm lại exact bytes
+  khi gửi preview, không chỉ tại owner. Stop phải tới đúng publisher._job,
+  không chỉ GUI host._export_job. Giữ deadline gốc tới mọi publication phase.
+- S56: lưu kết quả effect và cho phép giao response là hai bước; revoke trong
+  lúc native chạy không xóa effect nhưng phải chặn giao observation sau revoke.
+  Nếu terminal đã ghi mà mất reply, giữ receipt gốc/UNKNOWN và lookup; không
+  gọi finish lần hai bằng response khác. Native float-JSON revision không
+  được tính lại từ snapshot qua JCS (1.0 thành1); giữ native revision và công
+  bố hash-domain riêng cho observation. Deadline tuyệt đối phải tới queue
+  Blender, TTL lúc IPC nhận không được gia hạn lệnh cũ.
+  Dedupe vẫn là(project_id,command_id): session chỉ giới hạn quyền đọc receipt,
+  không được tạo namespace mới để cùng ID chạy effect lần nữa. Test phải đổi
+  authenticated grant và cấp fence mới, không chỉ thử token lạ/lease hết hạn.
+  Raw unittest/engine logs trên Windows có CRLF: parser nhận cảCRLF/LF, không
+  sửa bytes evidence để hợp regex. Hash luôn tính trên file gốc đã capture.
+- S55: Stop latching khác durable Stop completion; giữ owner và poll trạng
+  thái persistence trước cleanup. Public/native ID có grammar khác nhau;
+  validate fixture setup trước launch. Test phải ghép read client với writer
+  fence đã arm; mock transport không chứng minh giao điểm này. Metadata tên
+  client_role chỉ là vai trò, không dùng key credential_* bị policy từ chối.
+  Encode evidence trước khi mở file để validation failure không để file rỗng.
+  Phiên runner mất sau gián đoạn không đồng nghĩa process PASS: kiểm raw host
+  exit/capture và owned processes; chỉ rerun lane thiếu proof, giữ lane đã đạt.
+  Native guard có thể lỗi lúc thoát sau readback: bao toàn bộ journal call,
+  giữ UNKNOWN/hold và exact retry, không chỉ bắt lỗi trong thân append.
+- S54: deadline-sensitive engine integration không chạy chung với full native
+  journal/Registry fsync matrix. Chia code/review song song, điều phối I/O;
+  phân biệt overlap với nguyên nhân đã chứng minh. Resume crash storage bằng
+  fresh authority, không lặp publisher hoặc overwrite evidence lỗi. Native
+  snapshot chứa float giữ exact JSON bytes: JCS semantic equality không thay
+  hash bytes Blender. Không nới ACL để hợp primitive khác.
+- S49: SceneState dùng ./Child trong khi NodePath instance dùng Child; giữ
+  hai contract riêng. Float script là binary64: không dùng epsilon cho phép
+  1e-13 bị đọc thành0; vector native float32 có tolerance riêng. UID/config/
+  addon phải nằm trong complete source closure. Deadline trong Windows host
+  không sống qua host chết; kiểm PID1 thật, actual orphan và exact cleanup.
+- File flush/readback không tự chứng minh namespace barrier. PrivateBlobStore
+  giữ share-READ nên không thể mở GENERIC_WRITE để flush directory; hướng S50
+  dùng ProtectedFileRoot đã có native checked create/rename/root barriers,
+  không sửa primitive GT-02 hay tự rearm readonly root bằng private marker.
+- S48: --check-only vẫn chạy static_init; clean exit hoặc child PASS không
+  chứng minh validation. Phân biệt sandbox containment và nguồn báo kết quả.
+  Timeout quá ngắn có thể chỉ đo startup; phải thấy callback trước fault.
+  Pure digest conflict không poison journal; native custody/append ambiguity
+  mới giữ UNKNOWN. Không cache reducer từ checkout khác qua tên sys.modules.
+- S47: typed-null native Object không đồng nghĩa TYPE_NIL; lấy inventory thực
+  thay vì đoán serializer. Undo có thể dịch cursor dù callback từ chối: giữ
+  adapter và reload, kiểm parent/owner identity cùng detached state trước effect.
+  History custody đã free detached node thì fixture không free lần hai; lỗi này
+  gây native exit0xC0000374 ở05/06, flush progress đã xác định đúng điểm cleanup.
+  Không giữ hai scene cùng UID trong imported project; packed evidence ở ngoài.
+- S46: timer nằm trong pump không đủ khi native phase bị kẹt. Cross-review
+  tái hiện lease được cấp50ms sau deadline; đã giữ evidence lỗi, thêm watchdog
+  độc lập và check sau frame read/trước dispatch. Close phải giữ toàn bộ owner
+  chain khi thread/I/O chưa drain; lỗi work giữ control lookup/Stop hoạt động.
+- S39: candidate hash phải được dựng lại sau mọi sửa tài liệu; Git proof đã bắt
+  việc sửa FIXTURE_SELECTOR.md sau freeze và buộc tạo S39-02 thay vì dùng lại
+  S39-01. Native AppContainer proof phải ghi actual child exit/Job/PID và kiểm
+  private root/.events access denied; frame mock không được thay thế boundary.
+- S38: Stop có thể tới trong quota scan/pin dù mutex đang bị giữ; kiểm lại
+  signal trước effect admission. Một consumer cũng chỉ có một selector owner.
+  Mất record STAGED không có nghĩa file chưa ghi: tìm và pin đúng manifest
+  của intent; partial/ambiguous thì giữ nguyên và reconcile, không ghi lại.
+- S36: không giả định alias tạo được với mọi access/flag; live os.link ở stream
+  này trả sharing violation32, còn alias sau close thực sự bị chặn khi reopen.
+  Giữ counterexample cũ; không suy share=0 là sandbox. Kiểm EOF sau readback,
+  không chỉ sau scan. Witness cũ không phát hiện suffix mới bị mất nguyên record;
+  cần custody/high-water bền vững trước claim chống rollback toàn bộ.
+- Không gọi lại checker legacy toàn repo chỉ vì đổi plan tools. Lượt S34 gọi
+  tests/bootstrap/test_authoritative_plan.py quét cả binary/cache ngoài scope,
+  chưa có marker sau207.57s nên bị dừng đúng PID+creation+parent+command; không
+  tính exit của shell sau Stop-Process là exit test/PASS. Checker scope tools
+  và source freeze dùng runner bounded; nếu cần kiểm rộng, phải đặt host timeout
+  ngay khi launch, không chờ rồi mới giới hạn bằng polling thủ công.
+- CancelIoEx chỉ yêu cầu hủy; chưa quan sát completion thì không giải phóng
+  buffer/OVERLAPPED/event. Giữ owner có giới hạn và tiếp tục cleanup đúng handle.
+- no_effect cần chứng minh chưa bắt đầu mutation; mã lỗi validation xuất hiện
+  ở guard-exit không chứng minh điều đó. Sau effect phải UNKNOWN/reconcile.
+- Byte đọc được từ page cache không chứng minh fsync đã thành công. Recovery
+  cần barrier thành công; lỗi guard/reload không suy REJECTED chỉ từ mã lỗi.
+  Phase trước admission khác phase chưa đọc được lịch sử của ID đã apply.
+- Windows dùng process handle kiểm sống; không os.kill(pid,0). Exit0 cần
+  completion marker/readback. Chỉ cleanup đúng process/container sở hữu.
+- Reserve terminal capacity trước PENDING; giữ archive/tombstone/fencing epoch.
+- Giữ redaction token sau rotate/revoke/expiry; history đầy thì từ chối issuance.
+- JSON records tách LF; không splitlines() làm vỡ Unicode trong chuỗi.
+- Hash source phải tái tạo từ Git blob; evidence giữ exact bytes qua checkout.
+- Không đọc mỗi thuộc tính rồi suy handle đã khóa rename/hardlink.
+- AppContainer cần kiểm primary token, marker và positive control. Environment
+  tối thiểu thiếu biến chuẩn có thể làm CreateProcessW lỗi203; không suy lỗi do
+  một biến khi chỉ mới kiểm cả bundle. Job accounting cần bounded drain; profile
+  API trả đường dẫn AC con, cleanup cần đọc lại package/mapping/TEMP.
+- CloseHandle lỗi phải giữ ownership để retry cleanup, kể cả ancestor và lỗi
+  constructor; mock đóng thật rồi báo lỗi chưa kiểm trường hợp handle còn mở.
+  Probe numeric handle không inherit có thể gặp strict SEH; chỉ bắt đúng lỗi
+  dự kiến và xác minh full FileId trước đọc, không suy handle number là identity.
+- IPC lỗi phải lưu actual child exit/log ngay cả khi connect timeout. Trên build
+  đã kiểm, pipe LOCAL không resolve từ legacy AppContainer; namespace SID và
+  grant individual rights chạy được. Không suy một bit cụ thể sửa lỗi nếu chỉ
+  mới kiểm cả bundle; không dùng pipe access để cấp quyền filesystem.
+- Sửa có repro, chạy hồi quy ảnh hưởng rồi remint. Không lặp fullsuite cùng
+  source đã đạt nếu không có thay đổi/failure/gap liên quan; giữ evidence lỗi.
 
 LỊCH SỬ / CÁCH ĐỌC
-Bản S71 đầy đủ trước tinh gọn giữ tại reviews/20260918-plan-history-s71/
-tools-plan-s71.txt, AUTHORITY=0; SHA256 1f3ca50b8a0931a12f8c334ea2e6cf969d8d667d8af659ac22fa523996390963.
-Chi tiết lessons S27–S71, lỗi/giải pháp và các archive/hash cũ giữ trong bản đó
-và Git/reviews, không xóa verdict. Phần requirement/DoD/TQ/TX bên dưới giữ nguyên.
-Tiến độ hiện hành chỉ ở bảng/markers đầu file. Đọc GT hiện tại và references
-liên quan; không cần đọc lại mọi nhật ký.
+S27/S28/S29 được giữ nguyên bytes trong reviews/*-plan-history-s*/ (AUTHORITY=0).
+Các verdict/evidence cũ giữ nguyên; bảng và markers đầu file là tiến độ duy nhất.
+Đọc GT hiện tại và TQ/TX nó tham chiếu; không cần đọc lại mọi nhật ký.
 
 QUYẾT ĐỊNH KỸ THUẬT CÒN HIỆU LỰC
 MCP_ADAPTER_POLICY=External MCP review is a sequencing input only; the
@@ -1101,10 +1325,7 @@ processes/ports/user_dirs + tests đã đạt/chưa + pending human/input.
 Nếu chỉ có file này và source repo, agent vẫn tìm được goal/deps/test/DoD.
 Không cần chat history, không dựa 'vẫn làm như cũ'. Mỗi phạm vi một file; agent
 chỉ đọc mục liên quan qua stable IDs; update đoạn nhỏ tránh file timeout.
-Owner18-09 đã cho phép heartbeat tiếp tục task này khi chờ lâu; dùng lịch hiện
-hành, không tạo trùng. Quyền đó không bỏ dependency/critic/Android gate. Khi
-plan hoàn tất xóa lịch; nếu chỉ còn blocker cần owner và hết việc hữu ích thì
-báo hành động cụ thể, tạm dừng lịch và không claim đã hoàn tất.
+Không tạo automation/watchdog/heartbeat chạy về sau trong lượt plan này.
 
 
 9. NGUỒN, KẾT QUẢ RÀ SOÁT VÀ BÀN GIAO

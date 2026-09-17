@@ -1,0 +1,90 @@
+{
+  "schema": "HH-GT06-S71-SEAL-PREPARATION-INPUTS-1",
+  "observed_utc": "2026-09-17T20:46:01.1455079Z",
+  "formal_acceptance": false,
+  "tests_executed": false,
+  "validators_executed": false,
+  "note": "Named input hashes only; not a source/raw closure audit or final evidence. Draft JSON was parsed for readback only.",
+  "inputs": [
+    {
+      "path": "AGENTS.md",
+      "size_bytes": 2572,
+      "sha256": "c93a79b7833f8a02246d0373545f05efc680fc299e2090002b756ae9b0e6d49f"
+    },
+    {
+      "path": "zdoc/8-9-godot-blender-agent-studio-plan.txt",
+      "size_bytes": 86088,
+      "sha256": "492c9d8046ea3ea0a35204a97448e97d54841dd01374d07598ce8fc6623683aa"
+    },
+    {
+      "path": "zdoc/reviews/20260918-gt06-s70-resume/closure-packaging-check.md",
+      "size_bytes": 7635,
+      "sha256": "9fa87a8bbf58c385e03150e22b26530ff0f35b9de9fc0315d2f523a36740dc1e"
+    },
+    {
+      "path": "zdoc/reviews/20260918-gt06-s70-resume/requirements-final-draft.md",
+      "size_bytes": 20109,
+      "sha256": "c298a92c0b5232e7a0059b893dcfe42eda0695e896640525e7d0dac08cfc0251"
+    },
+    {
+      "path": "zdoc/reviews/20260918-gt06-s70-resume/fault-coverage-links.md",
+      "size_bytes": 14000,
+      "sha256": "c9393a736c85fd45fe3a85c75c40cb66bcf347f8e9c2c1ecc0fafe579e637bd8"
+    },
+    {
+      "path": "zdoc/reviews/20260918-gt06-s69-owner-review/integration-followup.md",
+      "size_bytes": 2454,
+      "sha256": "086993d18e0feaf057db172e5d0c3b360d67ae5883664e45e00f000dac148abd"
+    },
+    {
+      "path": "zdoc/reviews/20260918-gt06-s69-owner-review/requirements-map.md",
+      "size_bytes": 10222,
+      "sha256": "bea8f9431d9ef2a4fac2dfd9ed79a379ff69fe3691ad41422804c769d66e1680"
+    },
+    {
+      "path": "zdoc/reviews/20260918-gt06-s69-owner-review/assembly-review.md",
+      "size_bytes": 5704,
+      "sha256": "562a7a39d6af98a32284f1bfd4a1d63ecc0c5606293a3c7f33741487ed00af41"
+    },
+    {
+      "path": "zdoc/reviews/20260918-gt06-s71-growth/source-git-index.json",
+      "size_bytes": 5555,
+      "sha256": "1ac645d121b1ebcca85efce45ac2ecebf46aa442225cc36c85498a44f2d67940"
+    },
+    {
+      "path": "zdoc/reviews/20260918-gt06-s71-growth/verify_source_checkpoint.py",
+      "size_bytes": 1316,
+      "sha256": "10b6e18cacba247e60612148127afd88b6b572efbd0becb13a852e14cef25f06"
+    },
+    {
+      "path": "studio/tests/replay/run_benchmark_campaign.py",
+      "size_bytes": 41503,
+      "sha256": "09f9d6a24c6281193f21c9aa89c48602ac5d70dfe86882fbaf76e8366c66dd6c"
+    },
+    {
+      "path": "studio/tests/replay/benchmark_assembly.py",
+      "size_bytes": 47028,
+      "sha256": "16ba15ea1961d78c89d5ea2b8c389e89b960a4df25e6a2783e4cc8a6d0c1111a"
+    },
+    {
+      "path": "studio/tests/replay/benchmark_profile.py",
+      "size_bytes": 19625,
+      "sha256": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233"
+    },
+    {
+      "path": "studio/tests/replay/benchmark_job.py",
+      "size_bytes": 24991,
+      "sha256": "be424a6f37ae573ac4bf40954b31017025daee2147699c80b05f9a0ab70e1611"
+    },
+    {
+      "path": "studio/tests/replay/run_campaign_task.py",
+      "size_bytes": 8033,
+      "sha256": "f5cb71fa96b8fd2f935ac933dcd5190cef2b3b6821f031bfe72becb2d360a6fd"
+    },
+    {
+      "path": "studio/tests/replay/campaign_task.ps1",
+      "size_bytes": 18607,
+      "sha256": "405e2abfa39332b1313871763184fdda0755ff998ec83310e67e10cebfe2ebb9"
+    }
+  ]
+}
