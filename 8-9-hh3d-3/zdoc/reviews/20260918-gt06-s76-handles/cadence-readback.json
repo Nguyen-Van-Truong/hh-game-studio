@@ -1,0 +1,19 @@
+{
+  "event": {
+    "os_low_processor_usage_mode": true,
+    "os_low_processor_usage_mode_sleep_usec": 6900,
+    "pid": 24908,
+    "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+    "run_id": "gt06-s76-cadence-native-01",
+    "settings": {
+      "interface/editor/display/update_continuously": false,
+      "interface/editor/timers/low_processor_mode_sleep_usec": 6900,
+      "interface/editor/timers/unfocused_low_processor_mode_sleep_usec": 6900,
+      "run/output/max_lines": 100
+    },
+    "source_closure_sha256": "52d87aa58d3b504c77caf5fc54d4342b0759fadf6c6ecd9e8c8eae890a697467"
+  },
+  "capture_sha256": "d0b44676ae5c187b067ed4440102dfcc5bf9198601634ca9a1f1927e6b2b18ed",
+  "verified": true,
+  "formal_acceptance": false
+}

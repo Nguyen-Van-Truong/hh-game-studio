@@ -1,0 +1,15 @@
+{
+  "argv": [
+    "C:\\Users\\truon\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe",
+    "-NoProfile",
+    "-Command",
+    "$items = @(Get-CimInstance Win32_Process | Where-Object { $_.Name -match 'Godot|Blender|python' } | Select-Object ProcessId,ParentProcessId,Name); ConvertTo-Json -InputObject $items -Depth 4"
+  ],
+  "cwd": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3",
+  "started_utc": "2026-09-17T23:19:47.271322+00:00",
+  "finished_utc": "2026-09-17T23:19:48.794721+00:00",
+  "returncode": 0,
+  "scope": "read-only observation; not a native target exit receipt",
+  "stdout_sha256": "dface8a1107d02d4e8c19dac8b6e68dac40ec57fb10d8f1edd47dfa078ce9349",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

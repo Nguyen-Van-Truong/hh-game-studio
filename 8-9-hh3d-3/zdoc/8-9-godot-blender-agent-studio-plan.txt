@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 18-09-2026, Asia/Saigon | Revision S75 | TRIỂN KHAI THEO GATE
+Ngày 18-09-2026, Asia/Saigon | Revision S76 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S75
+PLAN_REVISION=S76
 EXECUTION_MODE=COORDINATOR_THREE_ASTRA_XHIGH_OWNER_20260918
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -54,20 +54,22 @@ GT05_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260917_S64
 GT05_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S64
 GT05_CHECKPOINT_COMMIT=808d8ba
 GT06_EVIDENCE_STATUS=NATIVE_DIAGNOSTICS_IN_PROGRESS_NO_ACCEPTANCE
-GT06_WORKING_SOURCE_STATUS=S75_IGNORE_MARKER_NATIVE_UNIT_VERIFIED
-GT06_CURRENT_SOURCE_CLOSURE=638304f54851366ac2a79a792a8009406fc927c3c6c410ad8f65cc2dd9b14995
-GT06_SOURCE_CHECKPOINT=979f98ef
+GT06_WORKING_SOURCE_STATUS=S76_CADENCE_UNIT_NATIVE_GUARDS_VERIFIED
+GT06_CURRENT_SOURCE_CLOSURE=ffa6071a1fb9d324da7cd860fb41b656e99135a3118367873c7399e85e8432fe
+GT06_SOURCE_CHECKPOINT=04b2f4dc
 GT06_BENCHMARK_CAMPAIGN=gt06-s75-campaign-01
-GT06_BENCHMARK_STATUS=RUNNING_S75_LAUNCH1_OBSERVED_20260918_054243
+GT06_BENCHMARK_STATUS=FAILED_S75_LAUNCH1_HANDLES_AND_STATUS_GAP
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
 
-TIẾN ĐỘ HIỆN HÀNH — S75, ngày 18-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S76, ngày 18-09-2026
 GT-01–05 đã ACCEPTED. GT-06 mở sau hai review độc lập S64 cùng manifest.
-Hiện đang chờ phép đo dài S75; không thay source hoặc chạy engine/test nặng.
-Campaign mới chạy từ05:38:54; quan sát05:42:43 xác nhận taskstate4/mộtinstance,
-log05:43 có2warmupcapture và batch2nativecycles cùngrun. Chưa có fullrunPASS.
-Startup/telemetry/checkpoint ở reviews/20260918-gt06-s75-recovery/launch/.
-Các campaign S70–S73 phía dưới là lịch sử lỗi, không phải lượt đang chạy.
+S75 đã FAILED ở batch8: editorhandles577→579, statusgap2016.2214ms>2000.
+ObjectDB71130/resources6 ổn định. Có9capture, không có fullrunPASS.
+Đã giữ failure/source/cleanup; sửa cadence đã qua unit/native/5guard âm tính.
+Ba worker S76 đã hoàn tất preservation, handle analysis và critical-path report.
+Fullbenchmark chưa chạy lại; không dùng partial samples hoặc nới gate.
+Evidence hiện hành: reviews/20260918-gt06-s76-handles/; S75 plan exactarchive ở
+reviews/20260918-plan-history-s75/ (AUTHORITY=0). Source mới04b2f4dc chưa fullcampaign.
 Owner đã cho phép lại ba Astra extra high; coordinator tiếp tục từ S68 đã tích hợp.
 Ba Astra xhigh S73 đã điều tra response-loss, đo tối ưu hash và giữ failure;
 không phải critic nghiệm thu. Hai review độc lập trên final closure còn phải làm.
@@ -125,138 +127,41 @@ GT-06 hiện hành — phần đã làm và đường tới nghiệm thu
   joint/ACK, ngưỡng và7410s/run. Partial attempt không ghép thành runPASS.
   Không chạy engine/test nặng cạnh phép đo. Scheduler0 không thay actual
   target/helper exit, Jobzero/closed, released handles và complete dataset.
-- Nguồn lượt đo đã dừng lỗi: bb881a4a,49file, closure
-  38a0848b68c4d6b34f1a03839008d54aa9e99a33458abaa88a939c8d2a744d86.
-  Campaign gt06-s71-campaign-01, launch1, Windows task
-  \HHStudio.GT06.gt06-s71-campaign-01; raw studio/.local/reviews/gt06-s71-campaign-01
-  và sibling -supervisor; launcher studio/tests/replay/campaign_task.ps1.
-  Startup02:10:39 ngày18-09; terminal03:54 sau6200.516s, scheduler1/state3,
-  instances rỗng. Run00 có33/35batch hoàn chỉnh, lỗi ADMISSION_UNKNOWN ở b33
-  inspect.316: receipt CONNECTION_LOST_LOOKUP sau2013.8505ms. Journal ghi đúng
-  ID/digest QUEUED rồi COMMITTED, effect_count6726; không mất effect/receipt.
-  47188checksumrecords hợp lệ,33.2MB<64MiB, lease chưa hết; raw không lưu loại
-  exception nên chưa khẳng định timeout/socket subtype hoặc cost attribution.
-  Hostactual1; editorwrapper2 không thay nativeexit đang thiếu. Hai Jobzero/
-  closed và wrapper handles released. S71 vẫn FAILED, không ghép33batch thành
-  PASS hoặc đổi UNKNOWN thành ACK. Estimate16.7giờ cũ không còn áp dụng.
-  Failure/diagnosis ở reviews/20260918-gt06-s73-recovery/. Giữ nguyên raw,
-  xác định tối ưu có đo kiểm trước campaign mới; không retry mù cùng lỗi.
-- S71 đã sửa nguồn ObjectDB tăng do Output UI: cố định stock displaycap100 trước
-  import/freeze, native get_setting kiểm type/value. Internal message strings
-  vẫn giữ nên RSS gate còn nguyên; full stdout/stderr/counters không bị cắt/trừ.
-  A/B diagnostic3×50 chỉ bổ sung: default71110→71182→71254, cap10071109→71131→71131.
-  Native mới1cycle exit0/clean; setting101 bị chặn trước effect (native/helper86,
-  giữ scan-warning negativecase).79/79 affectedunit đạt; source/ownedtree sạch.
-  Evidence/hash/Git proof: reviews/20260918-gt06-s71-growth/ và -s71-units-01/.
-- Các attempt lỗi đã giữ nguyên. S68/S69 partial thiếu fullrun/cleanup không
-  được dùng. S70campaign01 lỗi entrypoint closure trước native; campaign02 fail
-  +476objects ở batch5. Task cũ đã terminal/xóa đúng scope, raw/evidence còn.
-  Không gọi editorwrapper2 là nativeexit khi thiếu native record. Failure58file:
-  -s71-growth/campaign02-failure/. A/B thiếu non-Python schema trong map chỉ là
-  supplemental; full campaign49map có schema. Không trộn sample/source cũ.
-- Ba report chuẩn bị ở reviews/20260918-gt06-s71-next/: performance-path.md
-  chỉ ra mỗi batch thêm1403records và ít nhất3207 full-history hash scans;
-  chi phí tăng theo journal, wall-time attribution chưa đo. Tối ưu riêng sau
-  campaign nếu cần; không đổi source/reset journal/nới gate giữa phép đo.
-  seal/ chứa collection recipe và adapter validator CHƯA CHẠY, tái dùng
-  verify_run_capture/BoundRun/profile; terminal mới audit toàn raw và đóng gói.
-  android-readiness.md xác nhận templates/JDK cục bộ, SDK/physical device/ADB
-  authorization vẫn UNVERIFIED. Chưa cần owner thao tác cho GT06. Các report
-  chuẩn bị này không phải critic hoặc nghiệm thu.
-- S73 đã chọn SHA512 cho fingerprint cache nội bộ, giữ readloop64KiB và mọi
-  full-byte/identity/parser/fsync check; record/wire/source vẫn SHA256. Paired
-  study32MiB median76.177→56.900ms (~25.3%); không phải fullworkload speedup.
-  Buffer-only chỉ~1–4%; không cache toàn receipts trongRAM hoặc thêm nativeAPI.
-  Không nới2s status/500ms p95/workload.382/382 replayunit đạt, actualexit0 và
-  ownedtree/source sạch. HTTP trên COPY33MBjournal đạt30/30: terminalp95=282.060ms,
-  maxgap166.111ms,60records mới, original/prefix nguyên vẹn, khôngresubmit.
-  ReplayService cũng dùng cache: đã remint5HTTP/native/adversary lanes158checks;
-  3naturalnativeexit0,2Stopintentional Jobzero/closed (không gán nativeexit0).
-  Source49file Gitindex khớp closure6f5d4c8a14ef8476c4cff6afb06ab161b17905f8593f9a685cd235593d7ee913.
-  Source checkpoint cb4d1f6f; GitHEAD49file khớp. Campaign gt06-s73-campaign-01
-  launch1 bắt đầu04:11:26 ngày18-09 (21:11:26Z ngày17-09), task
-  \HHStudio.GT06.gt06-s73-campaign-01. Raw cùng tên dưới studio/.local/reviews/
-  và sibling -supervisor. Quan sát04:12:57: live schedulerstate4/1instance,
-  host batch1/commands và nativePID2984 heartbeat cùngrun; stderr trống.
-  Đây là startup, chưa complete run/benchmarkPASS. Giữ source khi đang đo;
-  chưa có ETA mới đáng tin, không suy từ batch đầu hoặc microbenchmark.
-  Evidence/readback/repro: -s73-recovery/README.md và -s73-next/launch/.
-  S72 a15cd42c giữ lịch sử. Collector ban đầu chặn vì phase đã tiến triển;
-  sửa đọc progressmarker đúngrun, giữ capture và không restart workload.
-  -s73-next/seal/ đã rebind draft theo source/campaign S73, thêm5service remints
-  và giữ provenance S65/S69. Chỉ kiểm syntax/JSON/map với savedlaunch; adapter
-  chưa chạy, chưa finalseal hoặc critic. Startup checkpoint06bc5fcf.
-  Quan sát04:27:5warmup hoàn chỉnh, bắt đầu batch5 measured; live taskstate4,
-  host/native cùngrun, stderr trống, chưafailure/Stop. Warmup duration60.6–206.7s
-  dao động lớn; b04 gồm57.27sHTTP+133.91snative, không quy mọi chậm cho hash.
-  -s73-next/warmup-watchpoint.json giữ số liệu; chưa đủ dự đoán quá7410s/run.
-  Theo dõi command/native riêng tại heartbeat thường lệ, không restart/nới gate.
-- S74: S73campaign01 đã FAILED sau1131.563s,6batchcapture=5warmup+1measured
-  bị loại tại screen. PrimaryCAMPAIGN_RSS_GROWTH: hostRSS baselineb04
-  18,939,904→23,056,384B (+21.73%); editor359,473,152→93,556,736B,
-  objects71161/resources6/handles555 không đổi. b05commandgap2010.742ms cũng
-  vượt2000 nhưng bị RSScheck trước che mã lỗi. Không gọi đây là leak đã chứng
-  minh hoặc môi trường đã được miễn trừ; giữ cả hai failureconditions.
-  Live schedulerstate3/result1/instancesrỗng; hostPID38244actualexit1;
-  editorPID2984nativeexit thiếu, wrapper2 không thay. Cả hai Jobzero/closed,
-  wrapperhandlesreleased. SourceS73 vẫn nguyên; không có Stop hoặc runPASS.
-  Ba worker đã giữ evidence/đối chiếu counter/nghiên cứu Windows; root kiểm
-  môi trường và chạy diagnostic nhỏ trước khi quyết định resume.
-  Evidence mới: -s74-recovery/. Không nớiRSS/deadline hay dùngpeak/privatebytes
-  thayRSS. Chưa có ETA mới; startup/warmup estimates phía trên là lịch sử.
-  Diagnostic own-process32MiB/100s đã actualexit0/treeclean:102samples,
-  idleRSS49.45–49.51MB/private42.08–42.19MB, không tái hiện drop lớn. Sampler/
-  baseline/ngưỡng chưa thấy lỗi; nguyên nhân benchmark vẫn chưa chứng minh.
-  Không sửa source hoặc hệ thống. Chọn một attempt mới cùng S73 qua launch2
-  sau terminal/cleanup/source/Stop checks; chưa coi lỗi đã sửa. Nếu tái diễn,
-  cần diagnostic priority/commit/fault của owned workload trước retry tiếp.
-  Recovery checkpoint82f62a71. Launch2 bắt đầu04:40:37 ngày18-09, task
-  \HHStudio.GT06.gt06-s73-campaign-01-launch-02, raw vẫn cùngcampaign nhưng
-  supervisor là sibling -supervisor-launch-02 và run00 dùngattempt02.
-  Quan sát riêng04:41:53: schedulerstate4/mộtinstance; host/native8776 cùnga02,
-  batch0nativecycles, stderrtrống. Chỉ là startup, không chứng minh sửa nguyên
-  nhân hoặc PASS. Lịch15phút đã đổi sanglaunch2; evidence ở -s74-recovery/launch-02/.
-- S75: launch2 đã terminal sau2133.782s, schedulerstate3/result1/instancesrỗng.
-  Run00attempt02 có10capture, batch9 joint bị CAMPAIGN_RETAINED_COUNTER_GROWTH:
-  editor objects71175→71213 (+38), handles566→568 (+2); resources6 không đổi.
-  Bốn measured batch trước ổn định; không có fullrunPASS. Measured statusgap
-  cao nhất1063.398ms; warmupb3 có2004.0029ms vẫn giữ nguyên trong raw.
-  HostPID27508actualexit1; editorPID8776nativeexit thiếu, wrapper2 không thay.
-  Hai Jobzero/closed và handlesreleased. Source/profile chưa đổi; không tự
-  launch3. Ba Astra xhigh chia preservation, counter/preview diagnosis và
-  owned-process priority/commit/fault telemetry bổ sung. Evidence -s75-recovery/;
-  đây là investigation, không phải critic hoặc nguồn miễn trừ ngưỡng.
-  Bài học: healthy heartbeat/partial plateau không thay complete35batch;
-  lỗi phải đối chiếu tất cả counter, không chỉ mã đầu tiên bị raise.
-  Failure seal4c8ed5ab625e7c953a4e723c1b0e7c1daa74e352cdc5ecea0367391c514a3e36;
-  77exactcopies/447rawfiles,60batchrefs/source49/30Stopslots đã kiểm.
-  Probe A/B tái hiện38JSON→38FileSystemTreeItems/+76Objects; .gdignore arm
-  không tăng. scan_sources() v3 dùng đúng sources_changed(bool); v2 ignored
-  timeout được giữ (filesystem_changed chỉ emit khi có thay đổi), không giảPASS.
-  Đây là cơ chế đã chứng minh trên probe; không gán ngược chính xác19file cho
-  +38object của campaign hoặc nói đã sửa +2handle/RSS. Census/raw/hash ở
-  -s75-recovery/editor-files-proof/, source audit riêng không là acceptance.
-  S75 chỉ sửa fixture chuẩn bị benchmark/.gdignore trước import, native guard
-  byte-exact và sourcebinding; assembly cũng kiểm marker thứ10/exactbytes.
-  Source_files thêm dependency perf schema; profile/ngưỡng/workload giữ nguyên.
-  Preflight bắt được old9-source-set và BOM text-decoding; đã sửa trước remint.
-  115/115 affectedunit đạt, hostactual0/treeclean/sourceunchanged. Native02
-  import/editoractual0/Jobszero; BOMnegative native86/noeffect/clean. Scan-thread
-  warning khi guard thoát sớm được giữ ở negativecase, không cho positive lane.
-  Native/guard evidence ở -s75-recovery/native-validation; guard01 collector
-  assert warning được phân loại từ raw, không chạy lại engine để sửa metadata.
-  Closure49 mới638304f54851366ac2a79a792a8009406fc927c3c6c410ad8f65cc2dd9b14995;
-  phải campaign mới, không resume S73 bằng source S75. Chưa fullbenchmarkPASS.
-  Source checkpoint979f98ef; S75campaign01 launch1 đã chạy05:38:54 ngày18-09,
-  task\\HHStudio.GT06.gt06-s75-campaign-01, raw cùngID và sibling-supervisor.
-  Source map49/profile khớp savedlaunch; GitHEAD bytes đã kiểm trước phép đo.
-  Telemetry ngoài120s/120samples chỉ bổ sung: observeractual36540exit0,
-  wrapper48732exit0/treeverified, allAPIok/handlesclosed. Host/editor đều
-  CPUNORMAL32/memorypriority3; availableRAM0.91–2.21GiB, commit95.33–96.65%limit.
-  Fault tăng không tách hard/soft; privatecommit cũng đổi, chưa chứng minh
-  trimming hoặc miễn gate. Không sửa priority/RAM/process; observer đã kết thúc.
-  startup-telemetry-01/ giữ raw/summary. Watch tiếp theo từ lịch15phút;
-  không mở worker/test thêm chỉ để lấp thời gian chờ benchmark.
+- Các campaign S70/S71/S73/S75 trước đều là FAILED/partial, không có fullrun
+  PASS. Nguyên nhân đã sửa có Output display growth, indexing JSON evidence,
+  response-loss retry và chi phí journal. Giữ mọi failure/source/actual-exit
+  record; chi tiết S70–S75 ở reviews/20260918-plan-history-s75/tools-plan-s75.txt
+  (AUTHORITY=0, SHA256 fc338e3651a406d09dffd3199b9bc49acc1dad9c5445f233babff25fb5af6a0e).
+  Không retry campaign cũ dưới source mới, bỏ Stop hoặc trộn partial samples.
+- Dependency reuse: S73 382/382 unit, 5 service/native lanes158checks; S75
+  next/dependency bridge14maps nối S73 service, S69 managed replay và S68 GUI.
+  Chỉ reuse dependency không đổi; draft seal chưa phải closure nghiệm thu.
+- Workstation telemetry cũ có RAM available0.91–2.21GiB, commit95.33–96.65%limit.
+  Không chứng minh trimming là nguyên nhân. Không đổi priority, pinRAM, lấy
+  private/peak thayRSS, dừng app khác hoặc dùng WPR ReferenceSet toàn hệ thống.
+- S76: S75launch1 terminal schedulerstate3/result1/noinstances. Host16220actual1,
+  editor13024nativeexit thiếu (wrapper2 riêng); import35452actual0; Jobszero/closed
+  và wrapperhandlesreleased. Failure264rawfiles/162exactcopies/54refs/49source,
+  30Stopslots absent; seal c32c448713aed56f48c73c79ae68613903b41e9fabf36fb8a69ef1852c21e6e9.
+  b8inspect226 hồi phục từ CONNECTION_LOST_LOOKUP tới COMMITTED; effect/receipt
+  không mất nhưng gap2016.2214ms vẫn fail. Không chỉ sửa handle rồi gọi PASS.
+  Diagnostic stock6×50 có6capture nhưng bị ngắt ở idle; thiếu nativeexit/Job
+  proof, không gọi PASS. Responsive6×50+60s idle actual0/treeclean, Object71123
+  giữ ổn trong workload. Median khoảng cách batch66.329s→23.895s (2.776×),
+  chỉ supplemental: armstock incomplete, focus khác ở các điểm đầu, không cóHTTP.
+  Responsive actualsleep6900 cả focus/unfocus; handles574→...→559→561→558idle.
+  +2 ở cuối là Event+IoCompletion; stock+2 là Event+Thread. Chưa xác định caller
+  hoặc chứng minh fullcampaign hết leak;192PSSentries chưa có type hợp lệ.
+  PSS dùng exactPID/creation/executable, typeflags/namehash và checkedcleanup.
+  Source mới chỉ đổi benchmark project cadence/guard, profile/ngưỡng giữ nguyên.
+  57/57unit, one-cycle nativeactual0/clean và5negative config reject86 trướceffect.
+  Collector old-key sửa trên raw: failure.json là negative evidence hợp lệ;
+  scanabortwarning exactallowlist chỉ cho earlyreject, không cho positive/full.
+  DiagnosticHTTP33MB copy30/30, p95terminal466.165ms, maxgap308.506ms; chưa tái hiện
+  2s failure.122snapshot10.683s gồm read2.424s, open0.330s, fsync0.169s; residual
+  chưa tách hash/scheduler/metadata. Không thaydurability hoặc coi30read làfullmix.
+  Report/readback/repro/limitations: reviews/20260918-gt06-s76-handles/README.md.
+  Chỉ mở fullcampaign mới sau khi chẩn đoán handle/latency; không retry mù.
 - Sau benchmark: verify complete10×35, raw/hash/schema/counters/actual exits;
   ghép functional bằng dependency đã kiểm; đóng final source/review/raw manifest
   và requirement→test→evidence. Hai critic mới đọc độc lập cùng final hash,
@@ -275,9 +180,11 @@ Thực thi và tốc độ
   phục vụ requirement còn thiếu; không chạy lại lanePASS chỉ vì sửa báo cáo.
 - Owner18-09 cho phép heartbeat tiếp tục qua đêm. Lịch hiện có
   ti-p-t-c-hh3d-tools-qua-m ACTIVE, mỗi15phút; sửa chính lịch này, không tạo trùng.
-  Readback mới: -s75-recovery/launch/overnight-schedule.json. Khi đang đo chỉ xem compact
+  Readback hiện hành nằm trong -s76-handles/overnight-schedule.json. Khi đang đo chỉ xem compact
   status/tail; terminal mới audit đầy đủ. Máy và app phải hoạt động.
-- Chưa cần owner thao tác cho GT06. Thiết bị/SDK Android phải kiểm thực tế ở
+- Hai worker follow-up vừa báo workspace hếtcredit; ba report ban đầu đã giữ.
+  Coordinator tiếp tục local; chưa có critic mới. Không tự nhận hai review thay.
+  Thiết bị/SDK Android phải kiểm thực tế ở
   prerequisite; thiếu PATH không chứng minh thiếu công cụ hoặc không có thiết bị.
 
 KINH NGHIỆM ĐANG ÁP DỤNG

@@ -1,0 +1,22 @@
+{
+  "host": {
+    "wrapper_pid": 13520,
+    "started_at": "2026-09-17T23:34:51.898727+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "$SNAPSHOT/zdoc/reviews/20260918-gt06-s76-handles/diagnose_handles.py",
+      "--responsive"
+    ],
+    "exit_code": 0,
+    "target_pid": 45400,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "probe-stdout.txt",
+    "stderr": "probe-stderr.txt",
+    "host": "probe-host.json"
+  },
+  "source_unchanged": true
+}

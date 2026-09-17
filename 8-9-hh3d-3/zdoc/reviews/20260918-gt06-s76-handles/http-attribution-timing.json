@@ -1,0 +1,58 @@
+{
+  "formal_acceptance": false,
+  "instrumentation_adds_overhead": true,
+  "durations_are_inclusive_do_not_sum_parent_and_child": true,
+  "snapshot_residual_includes_hash_metadata_scheduling_and_wrapper_overhead": true,
+  "counts": {
+    "snapshot.open": {
+      "calls": 122,
+      "inclusive_ns": 329685300,
+      "max_ns": 14874400
+    },
+    "snapshot.stream.read": {
+      "calls": 62090,
+      "inclusive_ns": 2423526700,
+      "max_ns": 2189100
+    },
+    "journal._snapshot": {
+      "calls": 122,
+      "inclusive_ns": 10683346700,
+      "max_ns": 193894400
+    },
+    "journal._load": {
+      "calls": 1,
+      "inclusive_ns": 33018225900,
+      "max_ns": 33018225900
+    },
+    "snapshot.stream.flush": {
+      "calls": 121,
+      "inclusive_ns": 1507400,
+      "max_ns": 1073200
+    },
+    "snapshot.fsync": {
+      "calls": 121,
+      "inclusive_ns": 169114600,
+      "max_ns": 91899100
+    },
+    "journal._reload": {
+      "calls": 121,
+      "inclusive_ns": 10609761600,
+      "max_ns": 193927100
+    },
+    "journal._append": {
+      "calls": 60,
+      "inclusive_ns": 587004900,
+      "max_ns": 24352700
+    },
+    "http.submit": {
+      "calls": 30,
+      "inclusive_ns": 5584032600,
+      "max_ns": 287087000
+    },
+    "http.lookup": {
+      "calls": 31,
+      "inclusive_ns": 6271885100,
+      "max_ns": 308382300
+    }
+  }
+}

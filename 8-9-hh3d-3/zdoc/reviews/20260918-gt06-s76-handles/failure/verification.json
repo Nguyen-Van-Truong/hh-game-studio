@@ -1,0 +1,447 @@
+{
+  "verified_utc": "2026-09-17T23:20:08.053196+00:00",
+  "status": "PASS",
+  "scope": "Forensic byte preservation and static checks only; no engine test, critic signature, or GT-06 acceptance",
+  "raw_files_rehashed": 264,
+  "exact_copies_reverified": 162,
+  "batch_references_verified": 54,
+  "completed_batch_capture_count": 9,
+  "source_closure_recomputed": "638304f54851366ac2a79a792a8009406fc927c3c6c410ad8f65cc2dd9b14995",
+  "source_git_checkpoint_blobs_verified": 49,
+  "stop_slots_checked": 30,
+  "errors": [],
+  "batch_references": [
+    {
+      "capture": "batch-capture-00.json",
+      "kind": "ack",
+      "file": "project/benchmark/input/ack-00.json",
+      "sha256": "2503239f435f3488ed15d2916c76f9f12bb1f23bddfb8a36ac683c57b7d7458d",
+      "size_bytes": 423,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-00.json",
+      "kind": "command",
+      "file": "command-00.json",
+      "sha256": "4c5da25d9fd09ed27eff5813d1867e4effde2f99f29dd7112546a5a9c2194a9b",
+      "size_bytes": 1138577,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-00.json",
+      "kind": "joint",
+      "file": "joint-00.json",
+      "sha256": "cf487088bfed013e3f720e1a087d449f89b0465b16c801d2f67d7aed3ed7767b",
+      "size_bytes": 2285,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-00.json",
+      "kind": "native",
+      "file": "project/benchmark/out/batch-00.json",
+      "sha256": "12888544619268a676e2878864139e00c07f54b2587817962b7a42a8bd903a97",
+      "size_bytes": 97108,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-00.json",
+      "kind": "ready",
+      "file": "project/benchmark/out/ready-00.json",
+      "sha256": "c637a0e00716de73445dc9dc3555f88405868ec9154155bdff458c524f12c3ac",
+      "size_bytes": 658,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-00.json",
+      "kind": "start",
+      "file": "project/benchmark/input/start-00.json",
+      "sha256": "32b76356eaf0ffd1279331cedb9b8a7064e689417d84319e1cf6a2d7a1766820",
+      "size_bytes": 508,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-01.json",
+      "kind": "ack",
+      "file": "project/benchmark/input/ack-01.json",
+      "sha256": "94bedbcaa7039c9b096b51cd072253f442f05c19e81f8ef49b52c37a0c55e59e",
+      "size_bytes": 423,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-01.json",
+      "kind": "command",
+      "file": "command-01.json",
+      "sha256": "bfdd9e4a2bc27d1349967cf9f8c9accc00a21849580802fcb01e0bc81194bab6",
+      "size_bytes": 1142356,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-01.json",
+      "kind": "joint",
+      "file": "joint-01.json",
+      "sha256": "5cf085ff4d1899c502e7ad7cbac6058580812fac98f0850cc4611af5da9f5f88",
+      "size_bytes": 2290,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-01.json",
+      "kind": "native",
+      "file": "project/benchmark/out/batch-01.json",
+      "sha256": "3c4829377939fc9e43f2276af7dcfe1a4016b888ba36cb1f0d309ca0313a8a90",
+      "size_bytes": 98353,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-01.json",
+      "kind": "ready",
+      "file": "project/benchmark/out/ready-01.json",
+      "sha256": "7e73dc9cc3cb9137464a1d991c812e99aa153ea85a92b15fa00b9081f923c3a9",
+      "size_bytes": 662,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-01.json",
+      "kind": "start",
+      "file": "project/benchmark/input/start-01.json",
+      "sha256": "677cb43d03793887ed20204c75fc8eb03b7bca96b2360b6bbe5ae980d7cc9ac4",
+      "size_bytes": 508,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-02.json",
+      "kind": "ack",
+      "file": "project/benchmark/input/ack-02.json",
+      "sha256": "124f2f8f69c50aba02fdbbd934939bdaa1a6e9df32bd832472a7cad5e5b93702",
+      "size_bytes": 423,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-02.json",
+      "kind": "command",
+      "file": "command-02.json",
+      "sha256": "a8b28471df5806339edf621962cbd5a6fd5c5465b841f103b7de051167aacacc",
+      "size_bytes": 1142987,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-02.json",
+      "kind": "joint",
+      "file": "joint-02.json",
+      "sha256": "ccf067b2d87ab62cb890187d83cfad6956fc06b92bb504a6db7bec16db073a93",
+      "size_bytes": 2291,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-02.json",
+      "kind": "native",
+      "file": "project/benchmark/out/batch-02.json",
+      "sha256": "ed799f09c21b36b714a7df33cbc46931f1892b0a3804f2a2b89bec9b4b268ab0",
+      "size_bytes": 98436,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-02.json",
+      "kind": "ready",
+      "file": "project/benchmark/out/ready-02.json",
+      "sha256": "0ce5596c9fa7d2e57754d66d117f9294cf93dcfe13e550b795b286f48f898003",
+      "size_bytes": 664,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-02.json",
+      "kind": "start",
+      "file": "project/benchmark/input/start-02.json",
+      "sha256": "a6d3f6712620eddf5bc0c4b6ee1afb58f821dbbef26919c355b3af660ed2ef72",
+      "size_bytes": 508,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-03.json",
+      "kind": "ack",
+      "file": "project/benchmark/input/ack-03.json",
+      "sha256": "43b0106abed4c55e665a751f8906b721a20ee5f52dcdc1c83c33d583c775f6f2",
+      "size_bytes": 423,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-03.json",
+      "kind": "command",
+      "file": "command-03.json",
+      "sha256": "a6bd5cd879069fe045c50dd7d60d1659dc16ac832dfe90a5201418447494c8fa",
+      "size_bytes": 1144790,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-03.json",
+      "kind": "joint",
+      "file": "joint-03.json",
+      "sha256": "f1702c50ca8a5f06e44dfbf57410b967ffe20dc392bedc47c4b62353cc0e8ec9",
+      "size_bytes": 2291,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-03.json",
+      "kind": "native",
+      "file": "project/benchmark/out/batch-03.json",
+      "sha256": "436189e792265afabdd3350e7b4714b3a152cc542e3b89f1724a90c8bfdee348",
+      "size_bytes": 98420,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-03.json",
+      "kind": "ready",
+      "file": "project/benchmark/out/ready-03.json",
+      "sha256": "46c564862ee2000064e06a082250aae5f45a5b740a09588c382c699e2e6834e3",
+      "size_bytes": 664,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-03.json",
+      "kind": "start",
+      "file": "project/benchmark/input/start-03.json",
+      "sha256": "353781c99659b4c8cae257e5a6d95c116f3134ea22f2a5cba943f85572737dd4",
+      "size_bytes": 508,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-04.json",
+      "kind": "ack",
+      "file": "project/benchmark/input/ack-04.json",
+      "sha256": "868fc1d46ce6bda8c86cf861fe9bbc61db83998f437fcf711abeabb003f2f701",
+      "size_bytes": 423,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-04.json",
+      "kind": "command",
+      "file": "command-04.json",
+      "sha256": "735caedcf0297d55c210d50c4cb58fa7196d22ca3f70946d9e497580a54c0f7a",
+      "size_bytes": 1143831,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-04.json",
+      "kind": "joint",
+      "file": "joint-04.json",
+      "sha256": "5d5ca7504b77f883f9cfffb573cc8be190a84f9bf163a64774e6dd68a230d400",
+      "size_bytes": 2291,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-04.json",
+      "kind": "native",
+      "file": "project/benchmark/out/batch-04.json",
+      "sha256": "87016ff2a5a7c0bf0eb7724f636297d49988784afcfe73e1295feb928e6cd695",
+      "size_bytes": 98407,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-04.json",
+      "kind": "ready",
+      "file": "project/benchmark/out/ready-04.json",
+      "sha256": "4ef45e1f02d3ced01c8943e7b1cebcb9d84f1347a04f020cac1be8a1597353f0",
+      "size_bytes": 665,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-04.json",
+      "kind": "start",
+      "file": "project/benchmark/input/start-04.json",
+      "sha256": "7f6b3e0947592eb51a1a90416fc18593f054e2d2e7645f04dafc1938316ce406",
+      "size_bytes": 509,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-05.json",
+      "kind": "ack",
+      "file": "project/benchmark/input/ack-05.json",
+      "sha256": "92d57a14c400fc780c65dd14e7b7fd89b3e1bf7a3173c1a466b7425ccd6ae77e",
+      "size_bytes": 424,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-05.json",
+      "kind": "command",
+      "file": "command-05.json",
+      "sha256": "e38592f1c1f87f8653dc7884734b7bfd3467eb2951ae8393e1f7e5638550826f",
+      "size_bytes": 1150448,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-05.json",
+      "kind": "joint",
+      "file": "joint-05.json",
+      "sha256": "80d8332a69d50eaebe2c6bf4ee73c5d8c32ebc7764202f86d7cf8045662320d4",
+      "size_bytes": 2292,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-05.json",
+      "kind": "native",
+      "file": "project/benchmark/out/batch-05.json",
+      "sha256": "eef5b5402efe9d98ff30eed3d3585a6fec3ca2d0f1655b3d4aaeadb15da35176",
+      "size_bytes": 98415,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-05.json",
+      "kind": "ready",
+      "file": "project/benchmark/out/ready-05.json",
+      "sha256": "6b81ecd629f074a23a914037e249499bc58384525e4d9ca4f4db67f51111e7a6",
+      "size_bytes": 665,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-05.json",
+      "kind": "start",
+      "file": "project/benchmark/input/start-05.json",
+      "sha256": "766287d38868c819dc875b4c0eeb194d9c1dc35b5333602437406f370908f5e3",
+      "size_bytes": 509,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-06.json",
+      "kind": "ack",
+      "file": "project/benchmark/input/ack-06.json",
+      "sha256": "76c9adcb7ea4579c88397521af5247118d8fba35b3676b1ef193fe1f834c7297",
+      "size_bytes": 424,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-06.json",
+      "kind": "command",
+      "file": "command-06.json",
+      "sha256": "26fdbccdba862e7461fb5b451a58a7625e9d52f37197319bbe1edfc46534cc1b",
+      "size_bytes": 1150552,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-06.json",
+      "kind": "joint",
+      "file": "joint-06.json",
+      "sha256": "cac91c44c5c83d772bdfdf8621c240f624a4ca9c632a5f6b8ac983ef6c30724d",
+      "size_bytes": 2295,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-06.json",
+      "kind": "native",
+      "file": "project/benchmark/out/batch-06.json",
+      "sha256": "b095b56768f445d14b2eea3d45592828ecbdf937d5ee51c99db3b809dce24948",
+      "size_bytes": 99348,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-06.json",
+      "kind": "ready",
+      "file": "project/benchmark/out/ready-06.json",
+      "sha256": "296a0370bd82f752232a85668c6b29bb272064f810050cc95c3860cac1501a2a",
+      "size_bytes": 665,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-06.json",
+      "kind": "start",
+      "file": "project/benchmark/input/start-06.json",
+      "sha256": "323615fc1c69ae085d0fdf714a5e3e427c95d530cafd36412aedb84be4aaf126",
+      "size_bytes": 509,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-07.json",
+      "kind": "ack",
+      "file": "project/benchmark/input/ack-07.json",
+      "sha256": "57bdf6271e7fefb2b6fbef6c8c4411ee257f5283d50be38a2be5de549fe785e8",
+      "size_bytes": 424,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-07.json",
+      "kind": "command",
+      "file": "command-07.json",
+      "sha256": "0c98675ea8e1a7871140c89501c3c578ee21a202612921dc7aac2f0614ba7aba",
+      "size_bytes": 1151690,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-07.json",
+      "kind": "joint",
+      "file": "joint-07.json",
+      "sha256": "7c4229d3088e6cbca2b0fcc0c50a6cac347229929203ee8e6b8651a2a1701f58",
+      "size_bytes": 2295,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-07.json",
+      "kind": "native",
+      "file": "project/benchmark/out/batch-07.json",
+      "sha256": "13d169ba315d6250dcbe41c5de1df901d3c6fd8842a52b9002d8a0eb43269f0c",
+      "size_bytes": 99356,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-07.json",
+      "kind": "ready",
+      "file": "project/benchmark/out/ready-07.json",
+      "sha256": "c54a901a51f0ace621d8717a429e34a2bea55f74186803c10ff85fc8e08d9a3a",
+      "size_bytes": 666,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-07.json",
+      "kind": "start",
+      "file": "project/benchmark/input/start-07.json",
+      "sha256": "2a42da9ab3f4bb2b95cb46ab7584a9a7430d6a4a29a7856344ce4e198f3de207",
+      "size_bytes": 509,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-08.json",
+      "kind": "ack",
+      "file": "project/benchmark/input/ack-08.json",
+      "sha256": "355cb22f87e20c5c189b72343953e4a9eca51c9a4c830f7ed1e540fecbc9e1ea",
+      "size_bytes": 424,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-08.json",
+      "kind": "command",
+      "file": "command-08.json",
+      "sha256": "43daf97dcda536688c4687d00f71c284b24a0312e9a877a4c310a9f73aede2ed",
+      "size_bytes": 1152931,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-08.json",
+      "kind": "joint",
+      "file": "joint-08.json",
+      "sha256": "c86a7b4ac261908b893eba0354fb9f591a4c3b300efce2f903bc8169794c5c15",
+      "size_bytes": 2295,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-08.json",
+      "kind": "native",
+      "file": "project/benchmark/out/batch-08.json",
+      "sha256": "31d8d9607cf77e21fb460381180690de93b03767744e042e7cd879347a94b8de",
+      "size_bytes": 99341,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-08.json",
+      "kind": "ready",
+      "file": "project/benchmark/out/ready-08.json",
+      "sha256": "098fe9472fe3206f04703c2095793a1ee7f0adbd38fbe61189852d328d3f1730",
+      "size_bytes": 666,
+      "verified": true
+    },
+    {
+      "capture": "batch-capture-08.json",
+      "kind": "start",
+      "file": "project/benchmark/input/start-08.json",
+      "sha256": "4b7a456edb93f1cd35d08f46becf8b0aa283c9ae5b78961e4a49ecaa55f9ed4d",
+      "size_bytes": 509,
+      "verified": true
+    }
+  ]
+}

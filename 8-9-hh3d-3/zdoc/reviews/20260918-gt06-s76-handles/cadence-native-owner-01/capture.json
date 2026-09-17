@@ -1,0 +1,19 @@
+{
+  "wrapper_pid": 39900,
+  "started_at": "2026-09-17T23:41:24.163392+00:00",
+  "argv": [
+    "python.exe",
+    "-B",
+    "-c",
+    "from studio.tests.replay import run_native_benchmark as n; import json; r=n.run('gt06-s76-cadence-native-01'); print(json.dumps(r))"
+  ],
+  "exit_code": 0,
+  "target_pid": 50788,
+  "wrapper_exit_code": 0,
+  "timed_out": false,
+  "tree_verified": true,
+  "ownership": "gated_job_kill_on_close",
+  "stdout": "native-stdout.txt",
+  "stderr": "native-stderr.txt",
+  "host": "native-host.json"
+}

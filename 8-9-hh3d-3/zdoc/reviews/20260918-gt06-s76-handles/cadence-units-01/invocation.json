@@ -1,0 +1,9 @@
+{
+  "code": "import unittest,json,sys; suite=unittest.defaultTestLoader.loadTestsFromNames(['studio.tests.replay.test_native_benchmark','studio.tests.replay.test_benchmark_assembly','studio.tests.replay.test_benchmark_campaign']); r=unittest.TextTestRunner(verbosity=2).run(suite); print('CADENCE_UNITS_COMPLETE '+json.dumps({'run':r.testsRun,'failures':len(r.failures),'errors':len(r.errors),'skips':len(r.skipped)}),flush=True); sys.exit(not r.wasSuccessful())",
+  "source_hashes": {
+    "tests/replay/run_native_benchmark.py": "6919f07d0e148d03dd15a4804f42b5bf1aba427610af3533d87c5f3a691a3788",
+    "tests/replay/benchmark_native.gd": "61ca9916f9b8cf758e702b59bf05d316f7f12c6c491d54f788054761da385ea1",
+    "tests/replay/test_native_benchmark.py": "73485cc4744a6b7a03b30fae9342bc60d3336ded4dd356ee97e4920d8b0f7918"
+  },
+  "runner_sha256": "ea522450acc46f90be5e2a7b9257e73ce8b619948105b2c9073aac1f881c7328"
+}

@@ -1,0 +1,35 @@
+{
+  "time_utc": "2026-09-17T23:34:43.812744+00:00",
+  "reason": "User turn interruption; unified session30335 no longer exists; native PID18428 absent at direct observation. No native exit or final Job proof was written.",
+  "completed_point_files": [
+    "batch-00.json",
+    "batch-01.json",
+    "batch-02.json",
+    "batch-03.json",
+    "batch-04.json",
+    "batch-05.json"
+  ],
+  "completed_diagnostic": false,
+  "formal_acceptance": false,
+  "result_exists": false,
+  "outer_capture_exists": false,
+  "observed_processes": [
+    {
+      "ProcessId": 37924,
+      "ParentProcessId": 50228,
+      "CreationDate": "/Date(1789688081900)/",
+      "CommandLine": "\"C:\\Users\\truon\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe\" -Command \"try { [Console]::OutputEncoding=[System.Text.Encoding]::UTF8 } catch {}\n@'\nfrom pathlib import Path\nimport json,subprocess,hashlib,datetime\nbase=Path('8-9-hh3d-3/zdoc/reviews/20260918-gt06-s76-handles'); raw=Path('8-9-hh3d-3/studio/.local/reviews/gt06-s76-handles-stock-01')\nrows=json.loads(subprocess.check_output(['powershell','-NoProfile','-Command',\\\"@(Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -like '*gt06-s76-handles-stock-01*' -or $_.CommandLine -like '*diagnose_handles.py*' -or $_.CommandLine -like '*run_handle_probe.py*' -or $_.ProcessId -eq 18428 } | Select-Object ProcessId,ParentProcessId,CreationDate,CommandLine) | ConvertTo-Json -Compress\\\"],text=True) or '[]')\nif isinstance(rows,dict):rows=[rows]\n# The observer command itself names these strings; retain all rows for attribution.\nrecord={'time_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'reason':'User turn interruption; unified session30335 no longer exists; native PID18428 absent at direct observation. No native exit or final Job proof was written.', 'completed_point_files':sorted(p.name for p in (raw/'points').glob('*.json')), 'completed_diagnostic':False,'formal_acceptance':False,'result_exists':(raw/'result.json').exists(),'outer_capture_exists':(base/'stock-owner-02/capture.json').exists(),'observed_processes':rows,'source_hashes':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in [base/'pss_handles.py',base/'diagnose_handles.py',base/'run_handle_probe.py']}}\np=base/'stock-interruption.json'; assert not p.exists();p.write_text(json.dumps(record,indent=2)+'\\n',encoding='utf-8')\nprint(json.dumps({k:v for k,v in record.items() if k!='observed_processes'}))\nfor item in rows:print(item['ProcessId'],item.get('CommandLine','')[:200])\n'@ | python -B -\""
+    },
+    {
+      "ProcessId": 10632,
+      "ParentProcessId": 41256,
+      "CreationDate": "/Date(1789688082747)/",
+      "CommandLine": "powershell -NoProfile -Command \"@(Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -like '*gt06-s76-handles-stock-01*' -or $_.CommandLine -like '*diagnose_handles.py*' -or $_.CommandLine -like '*run_handle_probe.py*' -or $_.ProcessId -eq 18428 } | Select-Object ProcessId,ParentProcessId,CreationDate,CommandLine) | ConvertTo-Json -Compress\""
+    }
+  ],
+  "source_hashes": {
+    "pss_handles.py": "020970b27fd1bd8106b1a398dc06abeb4b3cc732bafa02d211658928e89afa7e",
+    "diagnose_handles.py": "20dcb6ed902584ea9d865ad28a2377f75594f8d23d9e52498046690f7a50d60d",
+    "run_handle_probe.py": "b9c86e9f1548289db6e004a91cb5fbd54a6c830d7df69aba459655c015b5e470"
+  }
+}

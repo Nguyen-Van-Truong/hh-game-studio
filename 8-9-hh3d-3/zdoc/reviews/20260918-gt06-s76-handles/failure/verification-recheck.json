@@ -1,0 +1,157 @@
+{
+  "verified_utc": "2026-09-17T23:21:51.052002+00:00",
+  "status": "PASS",
+  "scope": "Preservation/static consistency only; no runtime or acceptance verdict",
+  "raw_files": 264,
+  "exact_copies": 162,
+  "source_files": 49,
+  "source_closure": "638304f54851366ac2a79a792a8009406fc927c3c6c410ad8f65cc2dd9b14995",
+  "batch_references": 54,
+  "sample_identity_rows": 9,
+  "processes": {
+    "editor": {
+      "pid": 13024,
+      "process_start": "windows:134341583460096238"
+    },
+    "host": {
+      "pid": 16220,
+      "process_start": "windows:134341583363370969"
+    }
+  },
+  "actual_host_exit": {
+    "pid": 16220,
+    "exit_code": 1
+  },
+  "actual_editor_exit": null,
+  "actual_import_exit": {
+    "pid": 35452,
+    "exit_code": 0
+  },
+  "owner_checks": [
+    {
+      "role": "host",
+      "job_zero_closed": true,
+      "job_handle_released": true,
+      "wrapper_handle_released": true,
+      "wrapper_exit": 1
+    },
+    {
+      "role": "editor",
+      "job_zero_closed": true,
+      "job_handle_released": true,
+      "wrapper_handle_released": true,
+      "wrapper_exit": 2
+    }
+  ],
+  "sample_workload_rows": [
+    {
+      "index": 0,
+      "measured": false,
+      "command_count": 1000,
+      "native_cycles": 100,
+      "inspect_p95_ms": 70.68984999999999,
+      "inspect_p95_over_500": false,
+      "max_status_gap_ms": 616.906,
+      "stop_receipt_ms": 35.3181,
+      "note": "Per-batch descriptive statistics only; not a complete run or dataset percentile verdict"
+    },
+    {
+      "index": 1,
+      "measured": false,
+      "command_count": 1000,
+      "native_cycles": 100,
+      "inspect_p95_ms": 68.78221999999998,
+      "inspect_p95_over_500": false,
+      "max_status_gap_ms": 664.904,
+      "stop_receipt_ms": 32.1849,
+      "note": "Per-batch descriptive statistics only; not a complete run or dataset percentile verdict"
+    },
+    {
+      "index": 2,
+      "measured": false,
+      "command_count": 1000,
+      "native_cycles": 100,
+      "inspect_p95_ms": 90.12725499999988,
+      "inspect_p95_over_500": false,
+      "max_status_gap_ms": 1050.536,
+      "stop_receipt_ms": 45.7972,
+      "note": "Per-batch descriptive statistics only; not a complete run or dataset percentile verdict"
+    },
+    {
+      "index": 3,
+      "measured": false,
+      "command_count": 1000,
+      "native_cycles": 100,
+      "inspect_p95_ms": 279.8556249999998,
+      "inspect_p95_over_500": false,
+      "max_status_gap_ms": 1149.121,
+      "stop_receipt_ms": 92.5022,
+      "note": "Per-batch descriptive statistics only; not a complete run or dataset percentile verdict"
+    },
+    {
+      "index": 4,
+      "measured": false,
+      "command_count": 1000,
+      "native_cycles": 100,
+      "inspect_p95_ms": 143.06379999999996,
+      "inspect_p95_over_500": false,
+      "max_status_gap_ms": 675.134,
+      "stop_receipt_ms": 57.6095,
+      "note": "Per-batch descriptive statistics only; not a complete run or dataset percentile verdict"
+    },
+    {
+      "index": 5,
+      "measured": true,
+      "command_count": 1000,
+      "native_cycles": 100,
+      "inspect_p95_ms": 164.27550499999998,
+      "inspect_p95_over_500": false,
+      "max_status_gap_ms": 681.402,
+      "stop_receipt_ms": 70.3221,
+      "note": "Per-batch descriptive statistics only; not a complete run or dataset percentile verdict"
+    },
+    {
+      "index": 6,
+      "measured": true,
+      "command_count": 1000,
+      "native_cycles": 100,
+      "inspect_p95_ms": 132.411765,
+      "inspect_p95_over_500": false,
+      "max_status_gap_ms": 752.183,
+      "stop_receipt_ms": 50.9572,
+      "note": "Per-batch descriptive statistics only; not a complete run or dataset percentile verdict"
+    },
+    {
+      "index": 7,
+      "measured": true,
+      "command_count": 1000,
+      "native_cycles": 100,
+      "inspect_p95_ms": 191.44967999999994,
+      "inspect_p95_over_500": false,
+      "max_status_gap_ms": 929.787,
+      "stop_receipt_ms": 51.3411,
+      "note": "Per-batch descriptive statistics only; not a complete run or dataset percentile verdict"
+    },
+    {
+      "index": 8,
+      "measured": true,
+      "command_count": 1000,
+      "native_cycles": 100,
+      "inspect_p95_ms": 275.0141599999992,
+      "inspect_p95_over_500": false,
+      "max_status_gap_ms": 2016.2214,
+      "stop_receipt_ms": 106.773,
+      "note": "Per-batch descriptive statistics only; not a complete run or dataset percentile verdict"
+    }
+  ],
+  "read_only_observer_exit_zero_count": 4,
+  "stop_slots_checked": 30,
+  "stop_latches_present": 0,
+  "existing_attempt_slots": [
+    "run-00-attempt-01"
+  ],
+  "scheduler_state": 3,
+  "scheduler_result": 1,
+  "scheduler_instances": 0,
+  "errors": []
+}

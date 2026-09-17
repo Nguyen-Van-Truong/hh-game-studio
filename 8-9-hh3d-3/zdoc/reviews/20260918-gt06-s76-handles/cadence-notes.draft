@@ -1,0 +1,24 @@
+CONDITIONAL DRAFT ONLY â€” do not apply while any owned diagnostic/campaign uses live studio source.
+
+Coordinator may consider this patch after serialized A/B establishes effective cadence. This worker ran no tests, engine, import, or patch application. Python tests are new drafts, not PASS evidence. No live studio bytes were changed by this task.
+
+Scope: exactly three production/test files represented by the three *.draft files and cadence.patch. Native SOURCE_PATHS is byte-for-byte untouched at ten entries. No new source/dependency file, .gdignore or marker asset, profile/timeout/settle changes, accepted adapter mutation, or existing batch/index schema change. One supplemental HH_GT06_BENCHMARK_CADENCE stdout record uses validated run/source/profile/PID and records effective EditorSettings plus instantaneous OS low-processor values. NativeLog retains one bounded extra event; existing diagnostic/assembly complete-marker logic is unchanged. This record is readback, not acceptance.
+
+Guard: old output-cap check remains. Before input or INITIALIZE/cycle effects, require exactly four configured editor_overrides keys, exact types and values, and matching effective get_setting values. ConfigFile is necessary to reject missing focused/continuous keys whose default values otherwise coincide. Alias without timers/, wrong value, float/string versus int, integer0 versus boolfalse, unknown extra key and missing key all fail BENCHMARK_EDITOR_CADENCE before effects. ConfigFile is function-local, not retained in benchmark state.
+
+Targeted unit command after safe application (NOT RUN): from 8-9-hh3d-3 run python -B -m unittest studio.tests.replay.test_native_benchmark studio.tests.replay.test_benchmark_assembly studio.tests.replay.test_benchmark_campaign. The three new configuration tests independently parse output, enforce deterministic encoding and reject supplied override sections. They do not execute GDScript and cannot prove native guard behavior.
+
+Required native validation (NOT RUN): positive import round-trip keeps exact generated config bytes; bounded actual editor run emits one matching cadence record, config values typed and OS effective sleep6900, then actual cycle save signal/hash/new-root/generation/readback and clean host/native exits/Jobzero. Test one wrong-key variant (rename focused key to old no-timers name, retain fourkeys) and wrong value/type variants (unfocused100000, focused6900.0 or string, update_continuously0), before sourcefreeze, in separate disposable owned copies. Expect exit86/failure before any cycle/ready/start/batch/semantic effect; retain raw logs and phase/readback. Explain early-exit scan warnings if present; do not label negativecase warning a positive PASS. Default-to-value fallback must not rescue a missing key. No window-focus mutation is required.
+
+The exact profile remains unchanged; any adopted driver/config revision requires new source closure, fresh run identifiers and source-bound diagnostic/campaign evidence. Do not transfer S75 raw captures or critic verdicts. Native handle growth and HTTP statusgap need independent resolution.
+
+Base source SHA256 (raw on-disk bytes before drafting):
+studio/tests/replay/run_native_benchmark.py de46a8bdbd90f83961844f76c5d6a667451d042c3bb19a5e9b6858495ef023e1
+studio/tests/replay/benchmark_native.gd 4f78fd09c70de45faf9cfa23fb25b86dc1bb5ab2e461e72b74e0483b172135b5
+studio/tests/replay/test_native_benchmark.py 1536a60273aff49a6843bc8ecd44d21c6ec73f2824f23aa4d686ad8da4e49f89
+
+Draft SHA256:
+cadence.patch ce8e82f0d508c76a8beed1b74bc510e3193af86820bf580007cca74bffbac3e2
+run_native_benchmark.py.draft 6919f07d0e148d03dd15a4804f42b5bf1aba427610af3533d87c5f3a691a3788
+benchmark_native.gd.draft 61ca9916f9b8cf758e702b59bf05d316f7f12c6c491d54f788054761da385ea1
+test_native_benchmark.py.draft 73485cc4744a6b7a03b30fae9342bc60d3336ded4dd356ee97e4920d8b0f7918

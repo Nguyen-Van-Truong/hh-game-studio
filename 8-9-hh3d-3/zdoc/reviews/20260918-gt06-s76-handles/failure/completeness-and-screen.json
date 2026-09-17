@@ -1,0 +1,610 @@
+{
+  "observed_utc": "2026-09-17T23:20:06.731164+00:00",
+  "scope": "Read-only interpretation of failed-run records; no root-cause proof or acceptance",
+  "source_checkpoint": "979f98ef27dbca1613c2382a917b4dd4f73fecb6",
+  "run_id": "gt06-s75-campaign-01.r00.a01",
+  "recorded_failure": "CAMPAIGN_RETAINED_COUNTER_GROWTH",
+  "recorded_phase": {
+    "batch": 8,
+    "phase": "joint_observation"
+  },
+  "captured_batch_indexes": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "warmup_batches": 5,
+  "collected_measured_batches": 4,
+  "screen_passed_measured_batches": 3,
+  "complete_runs": 0,
+  "baseline_memory": {
+    "editor": {
+      "held_handles": {
+        "unavailable_reason": null,
+        "value": 577
+      },
+      "objects": {
+        "unavailable_reason": null,
+        "value": 71130
+      },
+      "resources": {
+        "unavailable_reason": null,
+        "value": 6
+      },
+      "rss_bytes": {
+        "unavailable_reason": null,
+        "value": 185987072
+      }
+    },
+    "host": {
+      "held_handles": {
+        "unavailable_reason": null,
+        "value": 194
+      },
+      "objects": {
+        "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+        "value": null
+      },
+      "resources": {
+        "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+        "value": null
+      },
+      "rss_bytes": {
+        "unavailable_reason": null,
+        "value": 27201536
+      }
+    },
+    "phase": "post_batch_quiescent"
+  },
+  "failed_sample_memory": {
+    "editor": {
+      "held_handles": {
+        "unavailable_reason": null,
+        "value": 579
+      },
+      "objects": {
+        "unavailable_reason": null,
+        "value": 71130
+      },
+      "resources": {
+        "unavailable_reason": null,
+        "value": 6
+      },
+      "rss_bytes": {
+        "unavailable_reason": null,
+        "value": 96612352
+      }
+    },
+    "host": {
+      "held_handles": {
+        "unavailable_reason": null,
+        "value": 194
+      },
+      "objects": {
+        "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+        "value": null
+      },
+      "resources": {
+        "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+        "value": null
+      },
+      "rss_bytes": {
+        "unavailable_reason": null,
+        "value": 11411456
+      }
+    },
+    "phase": "post_batch_quiescent"
+  },
+  "primary_failing_comparison": {
+    "role": "editor",
+    "metric": "held_handles",
+    "value": 579,
+    "baseline": 577,
+    "code": "CAMPAIGN_RETAINED_COUNTER_GROWTH"
+  },
+  "additional_observed_comparison": {
+    "metric": "max_status_gap_ms",
+    "value": 2016.2214,
+    "limit": 2000,
+    "code": "CAMPAIGN_STATUS_GAP"
+  },
+  "additional_comparison_emitted_separate_failure": false,
+  "runtime_editor_counter_order": [
+    "rss_bytes",
+    "held_handles",
+    "objects",
+    "resources"
+  ],
+  "order_evidence": "Frozen benchmark_assembly.py constructs editor counter order; run_benchmark_campaign.py screen_sample iterates that order",
+  "samples": [
+    {
+      "index": 0,
+      "measured": false,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 587
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71124
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 714346496
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 194
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 30822400
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 616.906,
+      "status_gap_above_2000": false,
+      "warmup_status_gap_exempt_under_frozen_screen": true,
+      "applicable_screen_breaches": []
+    },
+    {
+      "index": 1,
+      "measured": false,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 581
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71124
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 716439552
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 194
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 33779712
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 664.904,
+      "status_gap_above_2000": false,
+      "warmup_status_gap_exempt_under_frozen_screen": true,
+      "applicable_screen_breaches": []
+    },
+    {
+      "index": 2,
+      "measured": false,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 581
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71124
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 390594560
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 194
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 13242368
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 1050.536,
+      "status_gap_above_2000": false,
+      "warmup_status_gap_exempt_under_frozen_screen": true,
+      "applicable_screen_breaches": []
+    },
+    {
+      "index": 3,
+      "measured": false,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 584
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71130
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 179384320
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 194
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 27508736
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 1149.121,
+      "status_gap_above_2000": false,
+      "warmup_status_gap_exempt_under_frozen_screen": true,
+      "applicable_screen_breaches": []
+    },
+    {
+      "index": 4,
+      "measured": false,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 577
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71130
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 185987072
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 194
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 27201536
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 675.134,
+      "status_gap_above_2000": false,
+      "warmup_status_gap_exempt_under_frozen_screen": true,
+      "applicable_screen_breaches": []
+    },
+    {
+      "index": 5,
+      "measured": true,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 577
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71130
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 186888192
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 194
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 29204480
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 681.402,
+      "status_gap_above_2000": false,
+      "warmup_status_gap_exempt_under_frozen_screen": false,
+      "applicable_screen_breaches": []
+    },
+    {
+      "index": 6,
+      "measured": true,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 577
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71130
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 159019008
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 194
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 29368320
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 752.183,
+      "status_gap_above_2000": false,
+      "warmup_status_gap_exempt_under_frozen_screen": false,
+      "applicable_screen_breaches": []
+    },
+    {
+      "index": 7,
+      "measured": true,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 577
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71130
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 112214016
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 194
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 28995584
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 929.787,
+      "status_gap_above_2000": false,
+      "warmup_status_gap_exempt_under_frozen_screen": false,
+      "applicable_screen_breaches": []
+    },
+    {
+      "index": 8,
+      "measured": true,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 579
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71130
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 96612352
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 194
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 11411456
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 2016.2214,
+      "status_gap_above_2000": true,
+      "warmup_status_gap_exempt_under_frozen_screen": false,
+      "applicable_screen_breaches": [
+        {
+          "role": "editor",
+          "metric": "held_handles",
+          "value": 579,
+          "baseline": 577,
+          "code": "CAMPAIGN_RETAINED_COUNTER_GROWTH"
+        },
+        {
+          "metric": "max_status_gap_ms",
+          "value": 2016.2214,
+          "limit": 2000,
+          "code": "CAMPAIGN_STATUS_GAP"
+        }
+      ]
+    }
+  ],
+  "next_native_ready_exists": true,
+  "confirmed_absences": {
+    "run-00-attempt-01/editor-host/process-exit.json": true,
+    "run-00-attempt-01/editor-host/capture.json": true,
+    "run-00-attempt-01/host-owner/capture.json": true,
+    "run-00-attempt-01/child-result.json": true,
+    "run-00-attempt-01/cleanup.json": true,
+    "run-00-attempt-01/assembly-manifest.json": true,
+    "run-00-attempt-01/assembled-run.json": true,
+    "run-00-attempt-01/run-capture.json": true,
+    "run-00-attempt-01/project/benchmark/out/index.json": true,
+    "run-00-attempt-01/project/benchmark/input/start-09.json": true,
+    "run-00-attempt-01/project/benchmark/input/ack-09.json": true,
+    "run-00-attempt-01/project/benchmark/out/batch-09.json": true,
+    "run-00-attempt-01/project/benchmark/out/batch-10.json": true,
+    "run-00-attempt-01/project/benchmark/out/batch-11.json": true,
+    "run-00-attempt-01/project/benchmark/out/batch-12.json": true,
+    "run-00-attempt-01/project/benchmark/out/batch-13.json": true,
+    "run-00-attempt-01/project/benchmark/out/batch-14.json": true,
+    "run-00-attempt-01/project/benchmark/out/batch-15.json": true,
+    "run-00-attempt-01/project/benchmark/out/batch-16.json": true,
+    "run-00-attempt-01/project/benchmark/out/batch-17.json": true,
+    "run-00-attempt-01/project/benchmark/out/batch-18.json": true,
+    "run-00-attempt-01/project/benchmark/out/batch-19.json": true,
+    "run-00-attempt-01/project/benchmark/out/batch-20.json": true,
+    "run-00-attempt-01/project/benchmark/out/batch-21.json": true,
+    "run-00-attempt-01/project/benchmark/out/batch-22.json": true,
+    "run-00-attempt-01/project/benchmark/out/batch-23.json": true,
+    "run-00-attempt-01/project/benchmark/out/batch-24.json": true,
+    "run-00-attempt-01/project/benchmark/out/batch-25.json": true,
+    "run-00-attempt-01/project/benchmark/out/batch-26.json": true,
+    "run-00-attempt-01/project/benchmark/out/batch-27.json": true,
+    "run-00-attempt-01/project/benchmark/out/batch-28.json": true,
+    "run-00-attempt-01/project/benchmark/out/batch-29.json": true,
+    "run-00-attempt-01/project/benchmark/out/batch-30.json": true,
+    "run-00-attempt-01/project/benchmark/out/batch-31.json": true,
+    "run-00-attempt-01/project/benchmark/out/batch-32.json": true,
+    "run-00-attempt-01/project/benchmark/out/batch-33.json": true,
+    "run-00-attempt-01/project/benchmark/out/batch-34.json": true,
+    "campaign-capture.json": true,
+    "dataset.json": true,
+    "summary.json": true
+  },
+  "stop_slots_checked": 30,
+  "stop_latches_present": 0,
+  "preserved_partial_data_is_accepted": false
+}

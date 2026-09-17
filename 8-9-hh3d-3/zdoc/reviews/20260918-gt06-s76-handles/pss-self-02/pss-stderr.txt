@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260918-gt06-s76-handles\pss_handles.py", line 179, in <module>
+    self_test()
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260918-gt06-s76-handles\pss_handles.py", line 171, in self_test
+    assert len(rows)==1 and rows[0]['type']=='Event' and rows[0]['object_type']==4
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

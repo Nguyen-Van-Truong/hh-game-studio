@@ -1,0 +1,19 @@
+{
+  "wrapper_pid": 17452,
+  "started_at": "2026-09-17T23:44:19.791126+00:00",
+  "argv": [
+    "python.exe",
+    "-B",
+    "$SNAPSHOT/zdoc/reviews/20260918-gt06-s76-handles/check_cadence_guard.py",
+    "float"
+  ],
+  "exit_code": 0,
+  "target_pid": 34704,
+  "wrapper_exit_code": 0,
+  "timed_out": false,
+  "tree_verified": true,
+  "ownership": "gated_job_kill_on_close",
+  "stdout": "guard-stdout.txt",
+  "stderr": "guard-stderr.txt",
+  "host": "guard-host.json"
+}
