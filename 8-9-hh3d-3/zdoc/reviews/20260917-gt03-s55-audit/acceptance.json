@@ -1,0 +1,44 @@
+{
+  "schema": "hh-gt03-coordinator-acceptance-1",
+  "accepted_at_utc": "2026-09-17T00:18:43.207881+00:00",
+  "status": "ACCEPTED",
+  "gate": "GT-03",
+  "dependency": "GT-02 ACCEPTED S46",
+  "source_checkpoint": "323882b7640ca30793c07935505ebe8fa4741c75",
+  "runtime_source_closure_sha256": "3a220b51105166274bad4bde950f4cc1d975e87b009b66e52428fad9dc27b02e",
+  "effective_execution_closure_sha256": "bde6e7b5c848f2f060c0ccfb85d697dd4e64bc2638c90aa2f16ef6f164b84830",
+  "portable_files_sha256": "da7a206b82ddd913faee801d068cd17384aa269185d12efeb94b689ee526c037",
+  "evidence": "zdoc/reviews/20260917-gt03-s55-audit/semantic-08",
+  "critics": [
+    {
+      "path": "zdoc/reviews/20260917-gt03-s55-critic-a-final.md",
+      "sha256": "d9d13d3372b1f79ecc7a96a55e4b401841156d3944c491e1a05082afe2a1a403",
+      "verdict": "PASS",
+      "tick": "yes"
+    },
+    {
+      "path": "zdoc/reviews/20260917-gt03-s55-critic-b-final.md",
+      "sha256": "f6384ebf309f65db6ebc900761939fdeef1976703b9b66f50a02b2d0282cb3bd",
+      "verdict": "PASS",
+      "tick": "yes"
+    }
+  ],
+  "git_proof": "zdoc/reviews/20260917-gt03-s55-audit/checkpoint-03/git-HEAD.json",
+  "runtime_files": 176,
+  "effective_files": 204,
+  "unit_tests": 699,
+  "native_lanes": 11,
+  "native_assertions": 297,
+  "native_assertions_are_not_distinct_requirements": true,
+  "limits": [
+    "Windows managed fixture on pinned Godot 4.7.2; declared nodes/resources and declarative script profile only",
+    "Unsaved editor effect differs from durable saved bundle; no volatile undo restoration after crash",
+    "Adjacent fault hooks covered by documented equivalence, not individually claimed execution",
+    "No GT04, Play/input, cross-app activation, real Android, release or human approval implied"
+  ],
+  "historical_failures_preserved": [
+    "script-01 FAIL",
+    "script-unwitnessed-01 INCOMPLETE"
+  ],
+  "next_gate": "GT-04"
+}
