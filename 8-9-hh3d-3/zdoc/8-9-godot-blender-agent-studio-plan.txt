@@ -127,7 +127,7 @@ GT-06 hiện hành — tóm tắt theo kết quả, chi tiết giữ trong evide
   exits/cleanup; process không còn không thay proof. Editor stderr còn lỗi tạo
   --test-rd-creation child, nên kể cả hoàn tất cũng chưa đạt clean-log gate.
   Không gọi RUNNING theo launch record cũ; e469f58 chỉ ghi thời điểm khởi chạy.
-- S70 đang sửa launcher tác vụ dài để không phụ thuộc vòng đời tool session,
+- S70 đã lưu launcher tại a007b21 để không phụ thuộc vòng đời tool session,
   dùng task on-demand có deadline/current-user/Stop, không auto-restart. Probe
   natural đạt actualexit0/closedzero/handlesreleased sau lệnh dispatch trả về;
   probeStop đạt BENCHMARK_STOPPED và cleanupclosedzero, không naturalPASS.
@@ -143,6 +143,14 @@ GT-06 hiện hành — tóm tắt theo kết quả, chi tiết giữ trong evide
   khôngskip, actualexits0/tree sạch/source ổn định. Chi tiết/hash/research:
   reviews/20260918-gt06-s70-resume/README.md và -s70-units-01/.
   Ba worker rà ownership/forensics/criticalpath; không phải critic nghiệm thu.
+- S70 campaign01 dừng sau1.422s trước native: source closure theo sys.modules
+  có launcher ở parent nhưng thiếu ở child. Actualexit1/Jobclosedzero/handleclosed,
+  schedulerterminal1 đã giữ; task đã xóa sau kiểm cleanup. Bản sửa khai báo đủ
+  fixed launcherPython/PowerShell và perf schema, giữ exact source equality.
+  Hai interpreter riêng chứng minh cùng map; mutation launcher/schema bị chặn.
+  75/75 affectedtests tại -s70-units-03 đạt19.106s, khôngskip, actualexits0,
+  tree sạch/source ổn định. Không cộng với75test ở -02 (trước bổ sung schema).
+  Source đã đổi nên campaign02 phải tạo fresh; không dùng prefix01 làm sample.
 - Chưa có GT06 accepted candidate. Sau benchmark đúng profile phải đóng
   requirement→test→evidence trên frozen closure, hai critic độc lập PASS/TICK=yes,
   rồi coordinator mới chuyểnGT06ACCEPTED. Không mở implementation GT07 trước đó.
@@ -169,6 +177,9 @@ Lịch sử chi tiết S69 trước tinh gọn: reviews/20260918-plan-history-s6
 tools-plan-s69.txt (AUTHORITY=0), SHA256 924bbf4e4d6f182a33ea7dd7bee23a8b83323669a00ae5fb318f7ef72f6407a2.
 
 KINH NGHIỆM ĐANG ÁP DỤNG
+- S70 closure: sys.modules chỉ cho dependency đang import trong một process;
+  khai báo thêm entrypoint/data dependency dùng chung và so map ở interpreter
+  riêng trước lượt dài. Launcher probe ngắn không thay actual campaign startup.
 - S70: process nền vẫn có thể thuộc Job của tool; Start-Process Hidden không
   chứng minh sống qua phiên. Task on-demand phải probe, có deadline/Stop và
   chứng cứ actual exit riêng. Lỗi stderr startup phải fail sớm, không chờ hết

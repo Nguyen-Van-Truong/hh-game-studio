@@ -99,10 +99,33 @@ source are required; these counts supplement the earlier full suite.
 small captures are copied under `captures/`. Full raw data remains local;
 copied summaries do not replace it or imply a final GT06 review closure.
 
+## Full campaign startup correction
+
+Checkpoint `a007b21` was dispatched as `gt06-s70-campaign-01`. The scheduler
+supervisor exited1 after1.422s; its child rejected `CAMPAIGN_SOURCE_CHANGED`
+before creating a native project. The imported-module inventory contained
+`run_campaign_task.py` only in the parent, producing unequal entrypoint maps.
+The actual target/helper exits1, closed/zero Job and released process handle
+are retained, along with scheduler terminal1. The finished task was deleted;
+the failed source/prefix remain and contribute no benchmark samples.
+`campaign01-failure-inventory.json` binds both raw roots; selected original
+captures are copied under `captures/`.
+
+The campaign now unions its imported dependency closure with both Python
+entrypoints, the PowerShell launcher and `contracts/perf-collector.schema.json`
+(loaded by the performance module). Exact parent/child equality remains.
+Separate-interpreter regression reproduces the two import environments and
+checks matching maps; changes to any fixed launcher/schema source are rejected.
+`../20260918-gt06-s70-units-03/` records75/75 affected tests in19.106s, no skips,
+actual child/helper exits0, verified tree cleanup and unchanged source. The
+earlier75/75 in `-units-02` predates adding the schema; counts are not additive.
+Because source changed, campaign02 must use a fresh root. No completed run is
+discarded: campaign01 never reached a batch.
+
 ## Remaining work
 
-Finish changed-driver verification and nested native ownership proof, freeze
-the source, and launch the exact full campaign. Keep all failed prefixes and
+Changed-driver verification and nested native ownership proof are recorded.
+Freeze the corrected source and launch the exact full campaign. Keep all failed prefixes and
 resume only complete runs under unchanged source/profile/workstation, with
 verified cleanup for previous failed attempts. No heavy native/test work runs
 concurrently with measured batches.

@@ -31,7 +31,7 @@ from studio.tests.replay.benchmark_job import BenchmarkProcess, require, verify_
 from studio.tests.replay import benchmark_profile as profile
 from studio.tests.replay.benchmark_assembly import read_artifact, assemble_sample, assemble_run, assemble_dataset
 from studio.tests.replay.run_native_benchmark import (
-    load_fixture, source_files, closure, read_regular, write, sha, encoded,
+    load_fixture, source_files as imported_source_files, closure, read_regular, write, sha, encoded,
     prepare, project_files, MUTABLE_SCENE, validate_cycle_timing,
 )
 from studio.host.replay.process_probe import ProcessProbe
@@ -39,6 +39,23 @@ from studio.pipeline import native_job
 
 SEQUENCE = 'host1000_then_native100_then_joint_ack_v1'
 MAX_ATTEMPTS = 3
+
+# Both entry points belong to the campaign even when only one is imported in
+# this process. Bind the scheduler registration too, without weakening the
+# imported dependency closure or the exact parent/child equality check.
+CAMPAIGN_FIXED_SOURCES = (
+    'tests/replay/run_benchmark_campaign.py',
+    'tests/replay/run_campaign_task.py',
+    'tests/replay/campaign_task.ps1',
+    'contracts/perf-collector.schema.json',
+)
+
+
+def source_files():
+    files = imported_source_files()
+    for relative in CAMPAIGN_FIXED_SOURCES:
+        files[relative] = sha(read_regular(STUDIO / relative))
+    return dict(sorted(files.items()))
 
 
 def clock():

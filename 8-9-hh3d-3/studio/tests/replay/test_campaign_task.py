@@ -1,10 +1,12 @@
 """Local scheduler request binding and early native error regressions."""
 from pathlib import Path
+import json
+import subprocess
 import sys
 import tempfile
 from types import SimpleNamespace
 import unittest
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
 from studio.tests.replay import run_campaign_task as task
@@ -56,6 +58,46 @@ class TaskRequestTests(unittest.TestCase):
             with self.assertRaises(FileExistsError):
                 task.write(path, {'code': 0})
             self.assertEqual(path.read_bytes(), previous)
+
+
+class CampaignEntryClosureTests(unittest.TestCase):
+    def test_separate_parent_and_child_interpreters_agree_on_exact_source_map(self):
+        # Separate interpreters prevent this test module's imports from hiding
+        # the launcher-only dependency that broke the real scheduler run.
+        common = (
+            'from studio.tests.replay import run_benchmark_campaign as c; '
+            'c.load_fixture(); print(json.dumps(c.source_files(),sort_keys=True))'
+        )
+        maps = []
+        for prefix in ('from studio.tests.replay import run_campaign_task; ', ''):
+            result = subprocess.run([sys.executable, '-B', '-c', 'import json; ' + prefix + common],
+                cwd=campaign.STUDIO.parent, capture_output=True, text=True, timeout=20, check=True)
+            self.assertEqual(result.stderr, '')
+            maps.append(json.loads(result.stdout))
+        self.assertEqual(maps[0], maps[1])
+        for relative in campaign.CAMPAIGN_FIXED_SOURCES:
+            self.assertEqual(maps[0][relative], task.sha(campaign.STUDIO / relative))
+        self.assertIn('host/core/transport.py', maps[0])
+
+    def test_launcher_or_schema_mutation_is_rejected_even_when_not_imported(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for relative in campaign.CAMPAIGN_FIXED_SOURCES:
+                path = root / relative
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(relative.encode())
+            with patch.object(campaign, 'STUDIO', root), \
+                 patch.object(campaign, 'imported_source_files', return_value={'dependency.py': 'a' * 64}):
+                before = campaign.source_files()
+                self.assertEqual(before['dependency.py'], 'a' * 64)
+                for relative in campaign.CAMPAIGN_FIXED_SOURCES:
+                    path = root / relative
+                    original = path.read_bytes()
+                    path.write_bytes(b'changed launcher')
+                    with self.assertRaisesRegex(BenchmarkJobError, 'CAMPAIGN_SOURCE_CHANGED'):
+                        campaign.verify_sources(before)
+                    path.write_bytes(original)
+                campaign.verify_sources(before)
 
 
 class NativeStderrTests(unittest.TestCase):
