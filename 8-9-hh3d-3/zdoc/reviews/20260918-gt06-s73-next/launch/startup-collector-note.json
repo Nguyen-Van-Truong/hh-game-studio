@@ -1,0 +1,7 @@
+{
+  "schema": "HH-GT06-S73-COLLECTOR-NOTE-1",
+  "original_error": "AssertionError at live commands phase assertion",
+  "cause": "A live tail can advance from commands to native/next batch while reading. Requiring one transient phase is invalid.",
+  "recovery": "Retain all copied static files and successful status capture; read bounded progress tails for matching run markers regardless of phase. No benchmark relaunch or source change.",
+  "formal_acceptance": false
+}

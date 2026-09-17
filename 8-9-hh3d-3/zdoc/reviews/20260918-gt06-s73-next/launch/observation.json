@@ -1,0 +1,97 @@
+{
+  "schema": "HH-GT06-S73-LAUNCH-OBSERVATION-1",
+  "observed_at": "2026-09-17T21:12:57.626912+00:00",
+  "source_checkpoint": "cb4d1f6f",
+  "campaign_id": "gt06-s73-campaign-01",
+  "scheduler_capture": "scheduler-status.capture.json",
+  "scheduler_state": 4,
+  "instance": {
+    "instance_guid": "{9190D014-B2E6-4CE8-9449-423DEDF1E72B}",
+    "state": 4,
+    "scheduler_engine_pid": 7320
+  },
+  "source_count": 49,
+  "source_matches_git_proof": true,
+  "source_closure_sha256": "6f5d4c8a14ef8476c4cff6afb06ab161b17905f8593f9a685cd235593d7ee913",
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "copied_static_inputs": [
+    {
+      "raw": ".local\\reviews\\gt06-s73-campaign-01\\campaign.json",
+      "copy": "campaign.json",
+      "sha256": "de6debe4f6c23eefb5dac1c552d0986961ee4885e61455791f7e0af1c37989fb",
+      "bytes": 6295
+    },
+    {
+      "raw": ".local\\reviews\\gt06-s73-campaign-01-supervisor\\request.json",
+      "copy": "request.json",
+      "sha256": "eba4b4d14a9d760d759605e45d650858c8ee16c6fca1f5f9ad724ca81af41b38",
+      "bytes": 373
+    },
+    {
+      "raw": ".local\\reviews\\gt06-s73-campaign-01-supervisor\\start.json",
+      "copy": "start.json",
+      "sha256": "0fea736d70fde7a5612bc4cd9d78317ba0ae38363e5921aaaf12eb15a41154a9",
+      "bytes": 500
+    },
+    {
+      "raw": ".local\\reviews\\gt06-s73-campaign-01-supervisor\\task-registration.json",
+      "copy": "task-registration.json",
+      "sha256": "b6c07a51e050c86bb8bc598d769c80cdcf2d907aac159a59c00f09abdc61f576",
+      "bytes": 879
+    },
+    {
+      "raw": ".local\\reviews\\gt06-s73-campaign-01-supervisor\\task-start.json",
+      "copy": "task-start.json",
+      "sha256": "190fc1159959d36a6110928b70f4a21a9bd9f22841c3491c44049560f66aa49f",
+      "bytes": 837
+    },
+    {
+      "raw": ".local\\reviews\\gt06-s73-campaign-01-supervisor\\task-definition.xml",
+      "copy": "task-definition.xml",
+      "sha256": "4f339748dac276ebd5c40fa3aa98dbc4adaea04e75fa84550162f7314efbb791",
+      "bytes": 1660
+    },
+    {
+      "raw": ".local\\reviews\\gt06-s73-campaign-01\\run-00-attempt-01\\context.json",
+      "copy": "context.json",
+      "sha256": "1683c52219e8f860bf29a487e4201fd0fea7b846cb2a388e474a2c93fa9b00f2",
+      "bytes": 5280
+    },
+    {
+      "raw": ".local\\reviews\\gt06-s73-campaign-01\\run-00-attempt-01\\source-files.json",
+      "copy": "source-files.json",
+      "sha256": "a147cdbcc1e85fa5a0ab97dc8e308a4dc1e06f74d6622c82b4884961ae958d85",
+      "bytes": 4941
+    }
+  ],
+  "live_tail_observations": {
+    "host-owner/stdout.txt": {
+      "observed_bytes": 9280,
+      "tail": [
+        "HH_GT06_CAMPAIGN_PROGRESS {\"run_id\": \"gt06-s73-campaign-01.r00.a01\", \"batch\": 1, \"phase\": \"commands\"}",
+        "HH_GT06_CAMPAIGN_PROGRESS {\"run_id\": \"gt06-s73-campaign-01.r00.a01\", \"batch\": 1, \"phase\": \"commands\"}",
+        "HH_GT06_CAMPAIGN_PROGRESS {\"run_id\": \"gt06-s73-campaign-01.r00.a01\", \"batch\": 1, \"phase\": \"commands\"}",
+        "HH_GT06_CAMPAIGN_PROGRESS {\"run_id\": \"gt06-s73-campaign-01.r00.a01\", \"batch\": 1, \"phase\": \"commands\"}"
+      ]
+    },
+    "host-owner/stderr.txt": {
+      "observed_bytes": 0,
+      "tail": []
+    },
+    "editor-host/stdout.txt": {
+      "observed_bytes": 28746,
+      "tail": [
+        "HH_GT06_BENCHMARK_HEARTBEAT {\"batch\":1,\"cycle\":0,\"main_thread\":true,\"monotonic_us\":82288772,\"phase\":\"HOST_START\",\"pid\":2984,\"run_id\":\"gt06-s73-campaign-01.r00.a01\"}",
+        "HH_GT06_BENCHMARK_HEARTBEAT {\"batch\":1,\"cycle\":0,\"main_thread\":true,\"monotonic_us\":82793214,\"phase\":\"HOST_START\",\"pid\":2984,\"run_id\":\"gt06-s73-campaign-01.r00.a01\"}",
+        "HH_GT06_BENCHMARK_HEARTBEAT {\"batch\":1,\"cycle\":0,\"main_thread\":true,\"monotonic_us\":83297282,\"phase\":\"HOST_START\",\"pid\":2984,\"run_id\":\"gt06-s73-campaign-01.r00.a01\"}",
+        "HH_GT06_BENCHMARK_HEARTBEAT {\"batch\":1,\"cycle\":0,\"main_thread\":true,\"monotonic_us\":83800964,\"phase\":\"HOST_START\",\"pid\":2984,\"run_id\":\"gt06-s73-campaign-01.r00.a01\"}"
+      ]
+    },
+    "editor-host/stderr.txt": {
+      "observed_bytes": 0,
+      "tail": []
+    }
+  },
+  "formal_acceptance": false,
+  "scope": "Startup observation only. Scheduler capture time and tail time are separate. No completed-run, performance or cleanup claim."
+}

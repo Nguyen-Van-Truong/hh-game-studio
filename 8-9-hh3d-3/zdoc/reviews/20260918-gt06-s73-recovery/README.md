@@ -13,3 +13,10 @@ Validation completed:382/382 existing replay unit tests in113.004s, actual child
 Five affected service lanes were reminted: complete/Stop and saturated-stop/revoked-result/stale-capture,158checks. All outer targets exited0; three natural runtime targets exited0 and two intentional Stop cases have checked closed/zero Jobs without a natural nativeexit claim. `service-remint/verification.json` binds1,281 rawfiles/43,962,707bytes and selected copied capture/log/source/result artifacts. `focused-validation.json` joins these results. The old task was deleted only after terminal scheduler/cleanup evidence; `s71-task-deleted.json` is a later supplemental receipt, not part of the earlier frozen failure inventory.
 
 `source-git-index.json` verifies49 exact runtime Gitbytes at closure `6f5d4c8a14ef8476c4cff6afb06ab161b17905f8593f9a685cd235593d7ee913`; unchanged profile `0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85`. A fresh `gt06-s73-campaign-01` is ready to launch after checkpoint. Preserve S65/S69 game trace/repair artifacts under their original dependencies; do not relabel them as S73. Final10x35 measurement and two independent same-closure critics remain outstanding. The S71 sealing draft is historical preparation: rebind its campaign/source constants explicitly for S73 before final use; do not edit an old signed manifest or use S71raw as S73 samples.
+
+Launch follow-up: source was checkpointed at `cb4d1f6f`, and
+`source-git-head.json` confirmed the same49 exact bytes before dispatch.
+Campaign launch1 started `2026-09-17T21:11:26Z`; a separate scheduler query
+and host/native progress observation confirmed startup. See
+`../20260918-gt06-s73-next/launch/README.md` for the time-scoped observation
+and updated continuation schedule. This does not establish benchmark PASS.

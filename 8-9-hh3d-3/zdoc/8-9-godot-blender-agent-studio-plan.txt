@@ -57,7 +57,7 @@ GT06_EVIDENCE_STATUS=NATIVE_DIAGNOSTICS_IN_PROGRESS_NO_ACCEPTANCE
 GT06_WORKING_SOURCE_STATUS=S73_PRIVATE_HISTORY_FINGERPRINT_TESTED
 GT06_CURRENT_SOURCE_CLOSURE=6f5d4c8a14ef8476c4cff6afb06ab161b17905f8593f9a685cd235593d7ee913
 GT06_BENCHMARK_CAMPAIGN=gt06-s73-campaign-01
-GT06_BENCHMARK_STATUS=READY_NOT_LAUNCHED_S73
+GT06_BENCHMARK_STATUS=RUNNING_S73_LAUNCH1_OBSERVED_0412
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
 
 TIẾN ĐỘ HIỆN HÀNH — S73, ngày 18-09-2026
@@ -167,8 +167,16 @@ GT-06 hiện hành — phần đã làm và đường tới nghiệm thu
   ReplayService cũng dùng cache: đã remint5HTTP/native/adversary lanes158checks;
   3naturalnativeexit0,2Stopintentional Jobzero/closed (không gán nativeexit0).
   Source49file Gitindex khớp closure6f5d4c8a14ef8476c4cff6afb06ab161b17905f8593f9a685cd235593d7ee913.
-  Candidate gt06-s73-campaign-01 sẵn sàng nhưng chưa launch trong checkpoint này.
-  Evidence/readback/repro: -s73-recovery/README.md. S72 a15cd42c giữ lịch sử.
+  Source checkpoint cb4d1f6f; GitHEAD49file khớp. Campaign gt06-s73-campaign-01
+  launch1 bắt đầu04:11:26 ngày18-09 (21:11:26Z ngày17-09), task
+  \HHStudio.GT06.gt06-s73-campaign-01. Raw cùng tên dưới studio/.local/reviews/
+  và sibling -supervisor. Quan sát04:12:57: live schedulerstate4/1instance,
+  host batch1/commands và nativePID2984 heartbeat cùngrun; stderr trống.
+  Đây là startup, chưa complete run/benchmarkPASS. Giữ source khi đang đo;
+  chưa có ETA mới đáng tin, không suy từ batch đầu hoặc microbenchmark.
+  Evidence/readback/repro: -s73-recovery/README.md và -s73-next/launch/.
+  S72 a15cd42c giữ lịch sử. Collector ban đầu chặn vì phase đã tiến triển;
+  sửa đọc progressmarker đúngrun, giữ capture và không restart workload.
 - Sau benchmark: verify complete10×35, raw/hash/schema/counters/actual exits;
   ghép functional bằng dependency đã kiểm; đóng final source/review/raw manifest
   và requirement→test→evidence. Hai critic mới đọc độc lập cùng final hash,
@@ -187,7 +195,7 @@ Thực thi và tốc độ
   phục vụ requirement còn thiếu; không chạy lại lanePASS chỉ vì sửa báo cáo.
 - Owner18-09 cho phép heartbeat tiếp tục qua đêm. Lịch hiện có
   ti-p-t-c-hh3d-tools-qua-m ACTIVE, mỗi15phút; sửa chính lịch này, không tạo trùng.
-  Readback mới: -s71-next/overnight-schedule.json. Khi đang đo chỉ xem compact
+  Readback mới: -s73-next/launch/overnight-schedule.json. Khi đang đo chỉ xem compact
   status/tail; terminal mới audit đầy đủ. Máy và app phải hoạt động.
 - Chưa cần owner thao tác cho GT06. Thiết bị/SDK Android phải kiểm thực tế ở
   prerequisite; thiếu PATH không chứng minh thiếu công cụ hoặc không có thiết bị.
