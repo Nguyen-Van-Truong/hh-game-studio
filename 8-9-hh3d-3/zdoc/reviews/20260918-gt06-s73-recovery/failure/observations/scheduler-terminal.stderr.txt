@@ -1,0 +1,23 @@
+D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\campaign_task.ps
+1 : {
+    "schema":  "HH-GT06-TASK-LAUNCHER-FAILURE-1",
+    "campaign_id":  "gt06-s71-campaign-01",
+    "command":  "status",
+    "launch_number":  1,
+    "stage":  "inspect-existing",
+    "run_invoked":  false,
+    "exception_type":  "System.Management.Automation.CommandNotFoundException",
+    "message":  "The term \u0027Get-FileHash\u0027 is not recognized as the name of a cmdlet, function, script file, 
+or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and 
+try again.",
+    "hresult":  -2146233087,
+    "utc":  "2026-09-17T20:57:42.7371737Z",
+    "formal_acceptance":  false
+}
+At D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\campaign_task
+.ps1:358 char:5
++     $failure | ConvertTo-Json -Depth 12 | Write-Error
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:) [Write-Error], WriteErrorException
+    + FullyQualifiedErrorId : Microsoft.PowerShell.Commands.WriteErrorException,campaign_task.ps1
+ 

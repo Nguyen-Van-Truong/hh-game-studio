@@ -1,0 +1,35 @@
+{
+  "host": {
+    "wrapper_pid": 41548,
+    "started_at": "2026-09-17T21:04:19.234223+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "$SNAPSHOT/zdoc/reviews/20260918-gt06-s73-recovery/large-history/large_history_http.py",
+      "--source-root",
+      "$SNAPSHOT/.",
+      "--journal",
+      "$SNAPSHOT/studio/.local/reviews/gt06-s71-campaign-01/run-00-attempt-01/commands/commands.jsonl",
+      "--source-map",
+      "$SNAPSHOT/studio/.local/reviews/gt06-s71-campaign-01/run-00-attempt-01/source-files.json",
+      "--output",
+      "$SNAPSHOT/studio/.local/reviews/gt06-s73-history-http-01-child",
+      "--run-id",
+      "gt06-s73-history-http-01",
+      "--commands",
+      "30",
+      "--deadline-seconds",
+      "90"
+    ],
+    "exit_code": 0,
+    "target_pid": 47260,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "http-history-stdout.txt",
+    "stderr": "http-history-stderr.txt",
+    "host": "http-history-host.json"
+  },
+  "formal_acceptance": false
+}

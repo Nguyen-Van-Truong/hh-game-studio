@@ -1,0 +1,27 @@
+{
+  "host": {
+    "wrapper_pid": 49164,
+    "started_at": "2026-09-17T21:05:53.945488+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "$SNAPSHOT/studio/tests/replay/run_service_adversary.py",
+      "--run-id",
+      "gt06-s73-revoked-result-01",
+      "--mode",
+      "revoked-result"
+    ],
+    "exit_code": 0,
+    "target_pid": 39840,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "owner-stdout.txt",
+    "stderr": "owner-stderr.txt",
+    "host": "owner-host.json"
+  },
+  "source_unchanged": true,
+  "run_id": "gt06-s73-revoked-result-01",
+  "formal_acceptance": false
+}

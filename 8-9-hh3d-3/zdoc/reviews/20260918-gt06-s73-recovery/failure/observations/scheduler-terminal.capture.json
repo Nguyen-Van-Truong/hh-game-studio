@@ -1,0 +1,23 @@
+{
+  "argv": [
+    "powershell.exe",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-File",
+    "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\tests\\replay\\campaign_task.ps1",
+    "-Command",
+    "status",
+    "-CampaignId",
+    "gt06-s71-campaign-01",
+    "-LaunchNumber",
+    "1"
+  ],
+  "cwd": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3",
+  "started_utc": "2026-09-17T20:57:41.985024+00:00",
+  "finished_utc": "2026-09-17T20:57:42.935543+00:00",
+  "returncode": 1,
+  "scope": "read-only observation; not a native target exit receipt",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "c2e83db1d35dd558bced96ea6e0e99f9df4fdbaa1afd4bdbb97b643e3d52f32c"
+}

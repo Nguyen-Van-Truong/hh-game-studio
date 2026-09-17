@@ -1,0 +1,220 @@
+{
+  "kind": "paired_private_fingerprint_microbenchmark_not_native_or_acceptance",
+  "utc_completed": "2026-09-17T21:01:21.088051+00:00",
+  "dataset_bytes": 33554432,
+  "dataset_digests": {
+    "sha256_read64k": "e09320c5b00b34bb704802136c599a95b3996332ba84d7c7f21112b6231b6bd0",
+    "sha512_read64k": "d04ad46b089cc94e3a620f401c0fed9c7350e9c9f7092b6afb033c7b54d29655b4d1e6e5c3af555cc2e1852bb82c8ee6cc28342ba48ec408a1a8e177a5d75b20",
+    "sha512_readinto256k": "d04ad46b089cc94e3a620f401c0fed9c7350e9c9f7092b6afb033c7b54d29655b4d1e6e5c3af555cc2e1852bb82c8ee6cc28342ba48ec408a1a8e177a5d75b20"
+  },
+  "harness_sha256": "667e9fd7ef2c427db01d2013ef235c124d564b9dced5b8443bdb84edc89c4db5",
+  "shared_scan_harness_sha256": "7e2f18c603a97b727ccf74ece71aac322d2e7cb407c0c2af1277bdd03363d148",
+  "warm_file_cache_only": true,
+  "fsync_every_scan": true,
+  "samples_ms": {
+    "sha256_read64k": [
+      82.91860006283969,
+      87.65060000587255,
+      74.92599997203797,
+      74.32329992298037,
+      75.51740005146712,
+      76.17689995095134,
+      88.9772999798879,
+      83.91239994671196,
+      75.26780001353472
+    ],
+    "sha512_read64k": [
+      56.89960008021444,
+      60.11119997128844,
+      53.45680005848408,
+      80.75309998821467,
+      75.00720000825822,
+      53.35419997572899,
+      54.267299943603575,
+      55.26819999795407,
+      60.16649992670864
+    ],
+    "sha512_readinto256k": [
+      55.90600008144975,
+      59.263500035740435,
+      50.4294999409467,
+      51.26009997911751,
+      51.62509996443987,
+      50.533700035884976,
+      52.08379996474832,
+      51.37180001474917,
+      51.34899995755404
+    ]
+  },
+  "sample_order": [
+    {
+      "round": 0,
+      "method": "sha512_readinto256k",
+      "ms": 55.90600008144975
+    },
+    {
+      "round": 0,
+      "method": "sha256_read64k",
+      "ms": 82.91860006283969
+    },
+    {
+      "round": 0,
+      "method": "sha512_read64k",
+      "ms": 56.89960008021444
+    },
+    {
+      "round": 1,
+      "method": "sha512_read64k",
+      "ms": 60.11119997128844
+    },
+    {
+      "round": 1,
+      "method": "sha256_read64k",
+      "ms": 87.65060000587255
+    },
+    {
+      "round": 1,
+      "method": "sha512_readinto256k",
+      "ms": 59.263500035740435
+    },
+    {
+      "round": 2,
+      "method": "sha256_read64k",
+      "ms": 74.92599997203797
+    },
+    {
+      "round": 2,
+      "method": "sha512_readinto256k",
+      "ms": 50.4294999409467
+    },
+    {
+      "round": 2,
+      "method": "sha512_read64k",
+      "ms": 53.45680005848408
+    },
+    {
+      "round": 3,
+      "method": "sha512_read64k",
+      "ms": 80.75309998821467
+    },
+    {
+      "round": 3,
+      "method": "sha256_read64k",
+      "ms": 74.32329992298037
+    },
+    {
+      "round": 3,
+      "method": "sha512_readinto256k",
+      "ms": 51.26009997911751
+    },
+    {
+      "round": 4,
+      "method": "sha512_read64k",
+      "ms": 75.00720000825822
+    },
+    {
+      "round": 4,
+      "method": "sha512_readinto256k",
+      "ms": 51.62509996443987
+    },
+    {
+      "round": 4,
+      "method": "sha256_read64k",
+      "ms": 75.51740005146712
+    },
+    {
+      "round": 5,
+      "method": "sha256_read64k",
+      "ms": 76.17689995095134
+    },
+    {
+      "round": 5,
+      "method": "sha512_readinto256k",
+      "ms": 50.533700035884976
+    },
+    {
+      "round": 5,
+      "method": "sha512_read64k",
+      "ms": 53.35419997572899
+    },
+    {
+      "round": 6,
+      "method": "sha256_read64k",
+      "ms": 88.9772999798879
+    },
+    {
+      "round": 6,
+      "method": "sha512_readinto256k",
+      "ms": 52.08379996474832
+    },
+    {
+      "round": 6,
+      "method": "sha512_read64k",
+      "ms": 54.267299943603575
+    },
+    {
+      "round": 7,
+      "method": "sha512_read64k",
+      "ms": 55.26819999795407
+    },
+    {
+      "round": 7,
+      "method": "sha512_readinto256k",
+      "ms": 51.37180001474917
+    },
+    {
+      "round": 7,
+      "method": "sha256_read64k",
+      "ms": 83.91239994671196
+    },
+    {
+      "round": 8,
+      "method": "sha512_readinto256k",
+      "ms": 51.34899995755404
+    },
+    {
+      "round": 8,
+      "method": "sha512_read64k",
+      "ms": 60.16649992670864
+    },
+    {
+      "round": 8,
+      "method": "sha256_read64k",
+      "ms": 75.26780001353472
+    }
+  ],
+  "summary": {
+    "sha256_read64k": {
+      "n": 9,
+      "median_ms": 76.17689995095134,
+      "min_ms": 74.32329992298037,
+      "max_ms": 88.9772999798879
+    },
+    "sha512_read64k": {
+      "n": 9,
+      "median_ms": 56.89960008021444,
+      "min_ms": 53.35419997572899,
+      "max_ms": 80.75309998821467
+    },
+    "sha512_readinto256k": {
+      "n": 9,
+      "median_ms": 51.37180001474917,
+      "min_ms": 50.4294999409467,
+      "max_ms": 59.263500035740435
+    }
+  },
+  "paired_sha512_read64k_reduction_percent": [
+    31.37896679744569,
+    31.419522550603165,
+    28.653871715514104,
+    -8.651122961301995,
+    0.6756059436119122,
+    29.960132257833273,
+    39.009949778348016,
+    34.13583685718464,
+    20.063426968917064
+  ],
+  "median_paired_reduction_percent": 29.960132257833273,
+  "wall_seconds_before_report": 2.2386050999630243,
+  "scope": "same 65536-byte allocating read loop; private fingerprint factory only"
+}

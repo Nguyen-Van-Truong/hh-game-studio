@@ -1,0 +1,783 @@
+{
+  "created_utc": "2026-09-17T20:58:04.227872+00:00",
+  "scope": "Exact unmodified selected input bytes; derived observations and analysis are separate.",
+  "files": [
+    {
+      "path": "raw/campaign/campaign.json",
+      "raw_root": "campaign",
+      "raw_path": "campaign.json",
+      "bytes": 6295,
+      "sha256": "b3b16b01ae2ec65beb3397861977cd0a0b339f6fe310667ca244648aaead9a12"
+    },
+    {
+      "path": "raw/campaign/benchmark-profile.json",
+      "raw_root": "campaign",
+      "raw_path": "benchmark-profile.json",
+      "bytes": 718,
+      "sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/child-failure.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/child-failure.json",
+      "bytes": 729944,
+      "sha256": "5c858e32b9c55df70e46eb12bed7ea657e5d8314f7e7670a54d03089e31f20e3"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/parent-failure.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/parent-failure.json",
+      "bytes": 182,
+      "sha256": "05d4988d328fe72e40283df7f03fffcd84c559bde952e843fa24fa53fc6b71a9"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/context.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/context.json",
+      "bytes": 5280,
+      "sha256": "ac18514590155b25fcd694cf6b0b1affa21b99d3914ca33b665ac3f16502d011"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/source-files.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/source-files.json",
+      "bytes": 4941,
+      "sha256": "478f879161938837df151dec5847fab99596081f60d29a78f0d15e046fb3f865"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/benchmark-profile.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/benchmark-profile.json",
+      "bytes": 718,
+      "sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/toolchain.lock.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/toolchain.lock.json",
+      "bytes": 3026,
+      "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/initial-project-files.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/initial-project-files.json",
+      "bytes": 1372,
+      "sha256": "dd9fdb0532acb8b78c14320d5da55df919f3b43043b05ee4ade6ec7504414adb"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/editor-snapshot.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/editor-snapshot.json",
+      "bytes": 1485,
+      "sha256": "f1c22864366254df7ef4dd6a85bf2fd1f7e6a1fea4ce6d181321510ea7776268"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/host-owner/cleanup-001.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/host-owner/cleanup-001.json",
+      "bytes": 548,
+      "sha256": "31f58e29075f8f16bb2df0bb72471bfcd0df794b729d6497022554d84959cfc8"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/host-owner/invocation.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/host-owner/invocation.json",
+      "bytes": 6364,
+      "sha256": "af61269b3f1e531d13afbe3cc4015be2ac246bb194b7d086ba9a166c2c422af0"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/host-owner/process-exit.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/host-owner/process-exit.json",
+      "bytes": 30,
+      "sha256": "cfcb7efd8dd85e1f9e04f97e04ae5998403c2a629f6605559b64a5b305321dcc"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/host-owner/process-start.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/host-owner/process-start.json",
+      "bytes": 14,
+      "sha256": "6e6232c47dd14f4eee316561d1ff8e07ee9ffbb49af0c839ee4deae738b1ef27"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/host-owner/stderr.txt",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/host-owner/stderr.txt",
+      "bytes": 2133,
+      "sha256": "1a48398bb4afa878962bd0edf16f1de8ca9bb550e8373b0b4b60fb8135cbfef0"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/host-owner/stdout.txt",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/host-owner/stdout.txt",
+      "bytes": 640927,
+      "sha256": "8e790531586e336676903303653208c6c760bb3277c72b1ceb3c8b6d2a0e416b"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/editor-host/cleanup-001.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/editor-host/cleanup-001.json",
+      "bytes": 556,
+      "sha256": "9ff26d2260e6188703654517521ac75e80f618c4e517723042f5f4babc109ee1"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/editor-host/invocation.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/editor-host/invocation.json",
+      "bytes": 8753,
+      "sha256": "85262c853df7124e503876a676ec099bb7920f1bd51946fc071959c1c72fad77"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/editor-host/process-start.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/editor-host/process-start.json",
+      "bytes": 14,
+      "sha256": "2ef84288c7f51909db346d772d9c9a9f0137c9620f23c5a9f79dd71630f08cee"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/editor-host/stderr.txt",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/editor-host/stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/editor-host/stdout.txt",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/editor-host/stdout.txt",
+      "bytes": 2165070,
+      "sha256": "c5d6afe12ae8ec2a65618c3d2d84a23d2ba9cd5ce3e853f8ac702a9bbbb49c37"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/import-host/capture.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/import-host/capture.json",
+      "bytes": 1341,
+      "sha256": "494097f2d30a7cb5f3404cca0fd3f8de592839fc4e9ffa96ed1abffab4d49c68"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/import-host/invocation.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/import-host/invocation.json",
+      "bytes": 5976,
+      "sha256": "391434714bcbfeb10816b2e97fc7c28a86daf2f5a0280907f8eaac9c5ebef123"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/import-host/process-exit.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/import-host/process-exit.json",
+      "bytes": 30,
+      "sha256": "a5af415f0162c41b7ae97642b43e2259e4f61cc66c809683cbca2dfb86753189"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/import-host/process-start.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/import-host/process-start.json",
+      "bytes": 14,
+      "sha256": "3c1af36bf04f3eca2506f93c6fddf0bda90188793f1a15cb803c76b1d24f2d31"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/import-host/stderr.txt",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/import-host/stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/import-host/stdout.txt",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/import-host/stdout.txt",
+      "bytes": 1492,
+      "sha256": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/joint-00.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/joint-00.json",
+      "bytes": 2284,
+      "sha256": "a49185187c9f3084b961fe798a40a3e48cc1b6b9c4444d183ea3411da634277f"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/joint-01.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/joint-01.json",
+      "bytes": 2290,
+      "sha256": "69f023303f366600bafdad6f4664603350e804523e715dfafd6e4b0b209f6529"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/joint-02.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/joint-02.json",
+      "bytes": 2290,
+      "sha256": "a1fa468dfdf2f74f46f993211936f6a945b3934a919d93b0a8a4bf575e62927d"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/joint-03.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/joint-03.json",
+      "bytes": 2290,
+      "sha256": "c7842fef01f209638c4f17f41348a3c8fbcd3e53ad43669db5955ccf5f66f94f"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/joint-04.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/joint-04.json",
+      "bytes": 2291,
+      "sha256": "0b75057c09ff44692166454f70174b049a897842784cba0f3e0a74b45c78fb32"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/joint-05.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/joint-05.json",
+      "bytes": 2291,
+      "sha256": "55b804db78e70b72c24e908095849920d1e880dde47c50110056e0d7d03f83c1"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/joint-06.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/joint-06.json",
+      "bytes": 2291,
+      "sha256": "bd59c5afc8df41c5ae2fe0a995214dcc01baadb2be609317bafe2e67cb00c47a"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/joint-07.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/joint-07.json",
+      "bytes": 2291,
+      "sha256": "b1c43977564d57e2b46a9bed06fb600302033ef516d860e74b676b80a3400242"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/joint-08.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/joint-08.json",
+      "bytes": 2293,
+      "sha256": "3c2568fbdd03c78bfda88ccef99fbd929e26c6125c26f9a8c4d7fdb7ec49ec33"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/joint-09.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/joint-09.json",
+      "bytes": 2294,
+      "sha256": "10bb6b1f78b8bbacea656051d2c3cec45aa307f4e509d7c429e2b1b1d8420946"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/joint-10.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/joint-10.json",
+      "bytes": 2300,
+      "sha256": "b21d862d3280d863cafd481688cb565b5a37d4a119e14bc598641a23777f9904"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/joint-11.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/joint-11.json",
+      "bytes": 2301,
+      "sha256": "8143bb8f82f4321f54518b4ef567b20bc5e7684c995fee5322058088f228812f"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/joint-12.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/joint-12.json",
+      "bytes": 2301,
+      "sha256": "25db88108af78c267b19537b874340e891d46368823f5b7967c367c10f6939a5"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/joint-13.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/joint-13.json",
+      "bytes": 2301,
+      "sha256": "f7fd5930677cd1305aa60e3829624dbeb7466799f20b7b75d3a7c571b31d1328"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/joint-14.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/joint-14.json",
+      "bytes": 2301,
+      "sha256": "ed6dffedfab4126f05a34a77d7dd336b67a039902648f53cae6e047aadf27664"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/joint-15.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/joint-15.json",
+      "bytes": 2301,
+      "sha256": "ed95b95f1ac43312101a6016e5ad499f58666cc830d681d250074b6e7b278f84"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/joint-16.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/joint-16.json",
+      "bytes": 2301,
+      "sha256": "b9f44bc79bacdfca51d36f84c92e32212e0e1ae41dbcf648cc073a8337a60c24"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/joint-17.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/joint-17.json",
+      "bytes": 2300,
+      "sha256": "94d4d2ec8be32c86b94592d49a4c6b6edf7ca36b40c2e66ee2dfcf6ad2094e0b"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/joint-18.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/joint-18.json",
+      "bytes": 2301,
+      "sha256": "0c396eee9cf41307da2be0aaa8cdb59a9c93518eae1c651a14ea6d790b69d2f5"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/joint-19.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/joint-19.json",
+      "bytes": 2301,
+      "sha256": "6348e381aa8685a8aecc048a28dab5caa3ad4f39c5cec2a54ae4c5059d9f717f"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/joint-20.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/joint-20.json",
+      "bytes": 2301,
+      "sha256": "2e60bf0f37c662e143eb5bbe5344f1c32267588b3b010fe6a19c6f2cdb91b0ff"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/joint-21.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/joint-21.json",
+      "bytes": 2301,
+      "sha256": "63a4f30fa4d1faca7de2992fe430ebac3034841529c93547fa03574363361db2"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/joint-22.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/joint-22.json",
+      "bytes": 2301,
+      "sha256": "39b6fe2fc7f45b3b25dcbf1e70d4617893771f6b0045c4ec9d1f37c789a990c2"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/joint-23.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/joint-23.json",
+      "bytes": 2301,
+      "sha256": "8070099efb79b8b532f78793d5124458c350dcfc90e5d29461daa0a2cb6910fd"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/joint-24.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/joint-24.json",
+      "bytes": 2300,
+      "sha256": "ce316c14d24b05f7dea99706aafdd997bec4fa9572aa03953b327484e6f90059"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/joint-25.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/joint-25.json",
+      "bytes": 2301,
+      "sha256": "fec3290215365696ccd6be18e55de0d38bebba44467a7f144230ee16fc63c368"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/joint-26.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/joint-26.json",
+      "bytes": 2301,
+      "sha256": "2da89fa6978ad307710cc14f268e35f091ffad41fad0c891217b71e6e4f76b48"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/joint-27.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/joint-27.json",
+      "bytes": 2301,
+      "sha256": "a66290c76cc023273d1ee65dda149217ac9493aa843f005a3d7858d90e5eec01"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/joint-28.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/joint-28.json",
+      "bytes": 2301,
+      "sha256": "7dc383d57b153b27d6a8b9f55d0e1bce55cb77818621b3defdf0b1bfaea39da4"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/joint-29.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/joint-29.json",
+      "bytes": 2301,
+      "sha256": "50b64e0f0472e39c80373b00eb5c20f31e8da2bc8d463131717087cdbf74c943"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/joint-30.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/joint-30.json",
+      "bytes": 2301,
+      "sha256": "8dc7f090d38a3452e3e4d62ea6cf228fa472cdb09578945293e1561f8710e724"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/joint-31.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/joint-31.json",
+      "bytes": 2301,
+      "sha256": "b7d30958085b390ec6605aba01eefeb36389b7fe983ffe90bcd76ca6e8b502ec"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/joint-32.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/joint-32.json",
+      "bytes": 2300,
+      "sha256": "82635b176bd122c535856f2ef68affc66bb8be5319629071615e3e3067908e82"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/batch-capture-00.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/batch-capture-00.json",
+      "bytes": 868,
+      "sha256": "09d5281c40aa87d244f96122e11273b152528d233417483a51fac14882fa0004"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/batch-capture-01.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/batch-capture-01.json",
+      "bytes": 868,
+      "sha256": "25b792ed41515b121f67252b09de394582c63283d6b2dafa7ac670315479dadc"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/batch-capture-02.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/batch-capture-02.json",
+      "bytes": 868,
+      "sha256": "15871094c3e3daba2456751478ecaa88f034897f85547fa662ad9edecfd4c896"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/batch-capture-03.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/batch-capture-03.json",
+      "bytes": 868,
+      "sha256": "7e6e6418e5a1f3128379f3c5752025e151ab44b25a9fcc1e290c05b580ce24fb"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/batch-capture-04.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/batch-capture-04.json",
+      "bytes": 868,
+      "sha256": "ab7384850f0eae1e5b15ecce90387015e27a5c04ba795a4f5073bd4f5eab7f4d"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/batch-capture-05.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/batch-capture-05.json",
+      "bytes": 868,
+      "sha256": "f2ad178576011ab111c0ee7dd37a29892928f9366be7c0383bdc8466f309901d"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/batch-capture-06.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/batch-capture-06.json",
+      "bytes": 868,
+      "sha256": "a038f35c16cf66a19305690f928b99f801f3ca7d6701f9265eae3a95e9a636fd"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/batch-capture-07.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/batch-capture-07.json",
+      "bytes": 868,
+      "sha256": "b39602d68c8162bb1105ea26ea17a7c61a66d72511aa3dbdc589136a82e6aca9"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/batch-capture-08.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/batch-capture-08.json",
+      "bytes": 868,
+      "sha256": "1dbbe709f4977e51fbe0d324e70a5c3f4a21bac022aee9d557958448a2d0d695"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/batch-capture-09.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/batch-capture-09.json",
+      "bytes": 868,
+      "sha256": "52301eaad94613963f0c454fd2de9e72b42ba927c5ff541d6d6799555ba6f8cd"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/batch-capture-10.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/batch-capture-10.json",
+      "bytes": 869,
+      "sha256": "7a4f09c3e58fcb109bce15f451362b95793408543f74fd374518c09a87e07797"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/batch-capture-11.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/batch-capture-11.json",
+      "bytes": 869,
+      "sha256": "97b78f12290dd56bb575606d583441496e1ab4d40038cec303d297d8ca3aad8f"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/batch-capture-12.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/batch-capture-12.json",
+      "bytes": 869,
+      "sha256": "b6033687f0fc859b96b518df55881bfd97c3513a03656a5d25ee4e56ae5abd95"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/batch-capture-13.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/batch-capture-13.json",
+      "bytes": 869,
+      "sha256": "938ef7dc2258891afebad7ff290ed4cd1f395a7ff09e76e256b50ef0c4f82874"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/batch-capture-14.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/batch-capture-14.json",
+      "bytes": 869,
+      "sha256": "051b9fd08179638bb59dba865827494b4d7abbd279d577efce4615d07e345eae"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/batch-capture-15.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/batch-capture-15.json",
+      "bytes": 869,
+      "sha256": "cffc8ecca4b74212b9c7d42a3dd35f9256457bff822ff31bff209819ac450f26"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/batch-capture-16.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/batch-capture-16.json",
+      "bytes": 869,
+      "sha256": "a30714a0ae8ea5967c34db82505358dfc5d8e57e0c38a26b96fe722637ad4cf9"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/batch-capture-17.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/batch-capture-17.json",
+      "bytes": 869,
+      "sha256": "cf0d685e56c954d510f740ff256b7daf78fedf33c246846cc8fbcc9d47b86921"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/batch-capture-18.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/batch-capture-18.json",
+      "bytes": 869,
+      "sha256": "e8b5d9abc4be0f3018fb88438ff5d682b6b7cd9dcd5bfd56ed39e206868e4748"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/batch-capture-19.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/batch-capture-19.json",
+      "bytes": 869,
+      "sha256": "c9e82d9ab00e0377edab7a269adbd802829589b2c1b75b6ba9ed50fb1f9a1917"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/batch-capture-20.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/batch-capture-20.json",
+      "bytes": 869,
+      "sha256": "c1413e75fd4b8115e6c93026ae36b3af72b1c580284cf3daf74e77907fca76de"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/batch-capture-21.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/batch-capture-21.json",
+      "bytes": 869,
+      "sha256": "4c0ae0bdbe4d299dc06648285bc1e646b148063032e170f6ff57a59d1bd739ae"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/batch-capture-22.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/batch-capture-22.json",
+      "bytes": 869,
+      "sha256": "d982de1811d711686884227d08df7f558bd25ca6b6b8d43dc86764f19f3f79e4"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/batch-capture-23.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/batch-capture-23.json",
+      "bytes": 869,
+      "sha256": "07f5681130816b7240beae354a46049bee574593a71148dc2aaa6419268f4c58"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/batch-capture-24.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/batch-capture-24.json",
+      "bytes": 869,
+      "sha256": "d090cd6fc3f9cddafcb01eb64e8b890664ab5a23b3a51ac34392fc5aef4c5cd6"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/batch-capture-25.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/batch-capture-25.json",
+      "bytes": 869,
+      "sha256": "8abcf2409d431bff79638cb8fb9da51aff4b53114fcb9939eb20c3366666683f"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/batch-capture-26.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/batch-capture-26.json",
+      "bytes": 869,
+      "sha256": "5472a6e59d6d0dfd04e0b7e0a30c4652cb96c9f2074a9937bbf10392250c498a"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/batch-capture-27.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/batch-capture-27.json",
+      "bytes": 869,
+      "sha256": "8fb48129b44164aa20f5f8371b22fbf16a5a5e5a2a17f28941bc161a8a3b4d8d"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/batch-capture-28.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/batch-capture-28.json",
+      "bytes": 869,
+      "sha256": "a0ee5bc638c666f063c2b9049345c084258d79fbe84c21c803627c7ad97d017a"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/batch-capture-29.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/batch-capture-29.json",
+      "bytes": 869,
+      "sha256": "5aeb9a54f967bbeaa96bc5712d062ff450932bdc4110cf96b37bff3200efeaf3"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/batch-capture-30.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/batch-capture-30.json",
+      "bytes": 869,
+      "sha256": "b7eb2f12643adf0a9a03a5560f928cde25230da24f43a650d152fd0ad48cb471"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/batch-capture-31.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/batch-capture-31.json",
+      "bytes": 869,
+      "sha256": "0773a00b6596d5c0d4ce90575225fb97eb51e9284e52ba715d6d0f7ac327e966"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/batch-capture-32.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/batch-capture-32.json",
+      "bytes": 869,
+      "sha256": "b0dad535f31feb2501f07e9a2344411f5dbfaf383c8d597e84f94c720b6035b0"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/project/benchmark/input.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/project/benchmark/input.json",
+      "bytes": 368,
+      "sha256": "aa113250d154b14b74d3af4bab39b7021ceb6cea5b61952bc2b0c9c8026439e8"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/project/benchmark/input/ack-32.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/project/benchmark/input/ack-32.json",
+      "bytes": 425,
+      "sha256": "044305bc0c6132b4809542d9bb7ce24639377b5c4bf0015112102dbf57cdd2cf"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/project/benchmark/input/start-32.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/project/benchmark/input/start-32.json",
+      "bytes": 510,
+      "sha256": "af2699f09bf627866c2b2994fa610bcc3e3cf23619d3f26107e4c26cc1805d96"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/project/benchmark/out/ready-32.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/project/benchmark/out/ready-32.json",
+      "bytes": 670,
+      "sha256": "2b164d7ed6818f135f268a3ba2ab6b747a9f74672b2f1f59e6c91f5e5b52df2d"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/project/benchmark/out/ready-33.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/project/benchmark/out/ready-33.json",
+      "bytes": 670,
+      "sha256": "a2df97d29100cd24d71f6715acf9ac4cc6955beaa39d19d9908e80f002129a79"
+    },
+    {
+      "path": "raw/campaign/run-00-attempt-01/project/benchmark/out/batch-32.json",
+      "raw_root": "campaign",
+      "raw_path": "run-00-attempt-01/project/benchmark/out/batch-32.json",
+      "bytes": 99652,
+      "sha256": "3c9bdadb403f5a37b96c7537c81c427aa9710bc7446dc8a352f7607ad84bbd31"
+    },
+    {
+      "path": "raw/supervisor/claim",
+      "raw_root": "supervisor",
+      "raw_path": "claim",
+      "bytes": 24,
+      "sha256": "a55ff796f4fb95def5b44d1599752d3ac9b1b5ecd3c1f840db980e6edda79b4c"
+    },
+    {
+      "path": "raw/supervisor/failure.json",
+      "raw_root": "supervisor",
+      "raw_path": "failure.json",
+      "bytes": 73,
+      "sha256": "374420879944eea47d635dc134d498db01d36d4527cbfcdb6d36a3a95f4f196f"
+    },
+    {
+      "path": "raw/supervisor/request.json",
+      "raw_root": "supervisor",
+      "raw_path": "request.json",
+      "bytes": 373,
+      "sha256": "7c2d0d69055e6aa47c83f2f1d2852635293a4cdb64afe0778b900f13a54c14de"
+    },
+    {
+      "path": "raw/supervisor/return.json",
+      "raw_root": "supervisor",
+      "raw_path": "return.json",
+      "bytes": 198,
+      "sha256": "a2aa62880da3873211617e6943a702a7e8c8ec49154efb20ba6ebc0b7279bbc0"
+    },
+    {
+      "path": "raw/supervisor/start.json",
+      "raw_root": "supervisor",
+      "raw_path": "start.json",
+      "bytes": 501,
+      "sha256": "3b22fdd7122c9ec8c0580fcbe5a8e899fcf8ff7f358f913bcea6f0e919fa2bb8"
+    },
+    {
+      "path": "raw/supervisor/stderr.txt",
+      "raw_root": "supervisor",
+      "raw_path": "stderr.txt",
+      "bytes": 1651,
+      "sha256": "30175b8f6fb73c1c0838a18c31b4f7a1bc4bddbb49d1db5a9df9caf769d975ad"
+    },
+    {
+      "path": "raw/supervisor/stdout.txt",
+      "raw_root": "supervisor",
+      "raw_path": "stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/supervisor/task-definition.expected.xml",
+      "raw_root": "supervisor",
+      "raw_path": "task-definition.expected.xml",
+      "bytes": 2006,
+      "sha256": "8475e532fff0daf0c19c7dedbad517428527e9923886ad0cb074158e2256c8b5"
+    },
+    {
+      "path": "raw/supervisor/task-definition.sha256",
+      "raw_root": "supervisor",
+      "raw_path": "task-definition.sha256",
+      "bytes": 65,
+      "sha256": "f2f61fd9128d3a796255d8d96ef3588e12eeb6751aaa85fe226b0a3a4014fc0b"
+    },
+    {
+      "path": "raw/supervisor/task-definition.xml",
+      "raw_root": "supervisor",
+      "raw_path": "task-definition.xml",
+      "bytes": 1660,
+      "sha256": "394fc37fbcf61876c5afe0cc3ce9cfed8c99e387c74cee949966240907c0991c"
+    },
+    {
+      "path": "raw/supervisor/task-registration.json",
+      "raw_root": "supervisor",
+      "raw_path": "task-registration.json",
+      "bytes": 879,
+      "sha256": "121704e9cb532ee7a9a243ef4ea40a4ad02e2f0ce2e9b44c7a867e44b317ff65"
+    },
+    {
+      "path": "raw/supervisor/task-start.json",
+      "raw_root": "supervisor",
+      "raw_path": "task-start.json",
+      "bytes": 838,
+      "sha256": "cc079b16c8d5dc2aaa2afc7136fc0ab651847fe7e4b8bd48a02d6f32e5e1dbbc"
+    }
+  ]
+}

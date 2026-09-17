@@ -1,0 +1,36 @@
+{
+  "schema": "HH-GT06-S73-FOCUSED-VALIDATION-1",
+  "unit_tests": {
+    "run": 382,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0
+  },
+  "unit_actual_exit": {
+    "target_pid": 36060,
+    "started_at": "2026-09-17T21:02:03.382350+00:00",
+    "exit_code": 0
+  },
+  "history_actual_exit": {
+    "target_pid": 47260,
+    "started_at": "2026-09-17T21:04:19.356057+00:00",
+    "exit_code": 0
+  },
+  "history_report_sha256": "0a254d21121059b6dfb1107e003acd51f01ca4d939821e78b4c14a39da4d811f",
+  "history_summary": {
+    "gap_scope": "HTTP command response observations, including failure/repeat lookups; excludes setup/shutdown",
+    "inspect_terminal_p95_ms": 282.0598,
+    "max_response_gap_ms": 166.111,
+    "percentile_method": "linear_type7",
+    "receipt_p95_ms": 139.18975,
+    "receipt_samples": 30,
+    "terminal_samples": 30,
+    "total_child_work_ms": 25827.99999997951
+  },
+  "history_original_unchanged": true,
+  "history_source_unchanged": true,
+  "formal_acceptance": false,
+  "service_native_remint": "FIVE_LANES_VERIFIED",
+  "service_total_checks": 158,
+  "service_manifest_sha256": "f29b942a9dd84fe9c73e6e537650f57fab2fd40470ac3dce870f7e7fa86de1d5"
+}

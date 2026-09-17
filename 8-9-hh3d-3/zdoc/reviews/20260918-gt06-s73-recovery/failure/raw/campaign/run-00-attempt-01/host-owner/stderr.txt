@@ -1,0 +1,26 @@
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\benchmark_commands.py", line 293, in _run
+    self._command(kind, command_id, lease, row)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\benchmark_commands.py", line 226, in _command
+    _need(result.status is Status.ACCEPTED_PENDING, 'ADMISSION_' + result.status.value)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\benchmark_commands.py", line 57, in _need
+    raise CommandError(code)
+studio.tests.replay.benchmark_commands.CommandError: ADMISSION_UNKNOWN
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\run_benchmark_campaign.py", line 760, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\run_benchmark_campaign.py", line 753, in main
+    run_child(root / f'run-{args.child_index:02d}-attempt-{args.attempt:02d}')
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\run_benchmark_campaign.py", line 614, in run_child
+    report = producer.run_batch(index)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\benchmark_commands.py", line 263, in run_batch
+    return self._run(index, GROUPS, 'benchmark')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\benchmark_commands.py", line 311, in _run
+    raise CommandError(report['failure_code'], report=report, cleanup_owner=self) from error
+studio.tests.replay.benchmark_commands.CommandError: ADMISSION_UNKNOWN

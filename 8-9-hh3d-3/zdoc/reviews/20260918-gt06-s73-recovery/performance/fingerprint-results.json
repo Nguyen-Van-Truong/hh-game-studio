@@ -1,0 +1,346 @@
+{
+  "kind": "isolated_private_fingerprint_microbenchmark_not_native_or_acceptance",
+  "utc_completed": "2026-09-17T20:59:44.256655+00:00",
+  "python": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "dataset_bytes": 33554432,
+  "dataset_digests": {
+    "sha256_read64k": "e09320c5b00b34bb704802136c599a95b3996332ba84d7c7f21112b6231b6bd0",
+    "sha256_readinto256k": "e09320c5b00b34bb704802136c599a95b3996332ba84d7c7f21112b6231b6bd0",
+    "sha512_readinto256k": "d04ad46b089cc94e3a620f401c0fed9c7350e9c9f7092b6afb033c7b54d29655b4d1e6e5c3af555cc2e1852bb82c8ee6cc28342ba48ec408a1a8e177a5d75b20",
+    "blake2b256_readinto256k": "c6d2fe1d2e63f70265946bc0d8ad78a190cada3fff9b5cb101f3da023416b5ba",
+    "blake2s256_readinto256k": "0e05ed4daf057b6766e5a1ed790b9859971b351fb315a65c8b4ab23c9079a3b8"
+  },
+  "harness_sha256": "7e2f18c603a97b727ccf74ece71aac322d2e7cb407c0c2af1277bdd03363d148",
+  "fsync_every_scan": true,
+  "warm_file_cache_only": true,
+  "completed_rounds": 9,
+  "requested_rounds": 9,
+  "warmups_ms": {
+    "sha256_read64k": 105.29220011085272,
+    "sha256_readinto256k": 84.97139997780323,
+    "sha512_readinto256k": 52.707600058056414,
+    "blake2b256_readinto256k": 80.6860999437049,
+    "blake2s256_readinto256k": 130.63539995346218
+  },
+  "samples_ms": {
+    "sha256_read64k": [
+      84.60590010508895,
+      81.88129996415228,
+      98.08520006481558,
+      78.79920001141727,
+      82.39170000888407,
+      77.29479996487498,
+      81.69979997910559,
+      101.7495000269264,
+      86.64350002072752
+    ],
+    "sha256_readinto256k": [
+      72.91600003372878,
+      88.9307000907138,
+      78.91240005847067,
+      75.88479993864894,
+      78.84039997588843,
+      74.75849997717887,
+      80.90179995633662,
+      74.1458999691531,
+      77.66030007041991
+    ],
+    "sha512_readinto256k": [
+      57.99130001105368,
+      52.78489994816482,
+      51.238799933344126,
+      54.53189997933805,
+      53.85310004930943,
+      56.43480003345758,
+      62.597200041636825,
+      63.6672000400722,
+      60.844500083476305
+    ],
+    "blake2b256_readinto256k": [
+      85.98500001244247,
+      80.85290004964918,
+      79.41859995480627,
+      80.8186000213027,
+      96.55669995117933,
+      79.8192999791354,
+      79.5180998975411,
+      84.39819992054254,
+      82.28329999838024
+    ],
+    "blake2s256_readinto256k": [
+      141.289500053972,
+      146.31440001539886,
+      148.37660000193864,
+      147.32810005079955,
+      154.07039993442595,
+      136.43960002809763,
+      155.15420003794134,
+      155.5511000333354,
+      153.71280000545084
+    ]
+  },
+  "sample_order": [
+    {
+      "round": 0,
+      "method": "sha256_readinto256k",
+      "ms": 72.91600003372878
+    },
+    {
+      "round": 0,
+      "method": "blake2b256_readinto256k",
+      "ms": 85.98500001244247
+    },
+    {
+      "round": 0,
+      "method": "sha512_readinto256k",
+      "ms": 57.99130001105368
+    },
+    {
+      "round": 0,
+      "method": "sha256_read64k",
+      "ms": 84.60590010508895
+    },
+    {
+      "round": 0,
+      "method": "blake2s256_readinto256k",
+      "ms": 141.289500053972
+    },
+    {
+      "round": 1,
+      "method": "sha256_readinto256k",
+      "ms": 88.9307000907138
+    },
+    {
+      "round": 1,
+      "method": "blake2b256_readinto256k",
+      "ms": 80.85290004964918
+    },
+    {
+      "round": 1,
+      "method": "sha512_readinto256k",
+      "ms": 52.78489994816482
+    },
+    {
+      "round": 1,
+      "method": "sha256_read64k",
+      "ms": 81.88129996415228
+    },
+    {
+      "round": 1,
+      "method": "blake2s256_readinto256k",
+      "ms": 146.31440001539886
+    },
+    {
+      "round": 2,
+      "method": "blake2s256_readinto256k",
+      "ms": 148.37660000193864
+    },
+    {
+      "round": 2,
+      "method": "sha512_readinto256k",
+      "ms": 51.238799933344126
+    },
+    {
+      "round": 2,
+      "method": "blake2b256_readinto256k",
+      "ms": 79.41859995480627
+    },
+    {
+      "round": 2,
+      "method": "sha256_read64k",
+      "ms": 98.08520006481558
+    },
+    {
+      "round": 2,
+      "method": "sha256_readinto256k",
+      "ms": 78.91240005847067
+    },
+    {
+      "round": 3,
+      "method": "sha512_readinto256k",
+      "ms": 54.53189997933805
+    },
+    {
+      "round": 3,
+      "method": "sha256_readinto256k",
+      "ms": 75.88479993864894
+    },
+    {
+      "round": 3,
+      "method": "blake2b256_readinto256k",
+      "ms": 80.8186000213027
+    },
+    {
+      "round": 3,
+      "method": "sha256_read64k",
+      "ms": 78.79920001141727
+    },
+    {
+      "round": 3,
+      "method": "blake2s256_readinto256k",
+      "ms": 147.32810005079955
+    },
+    {
+      "round": 4,
+      "method": "blake2s256_readinto256k",
+      "ms": 154.07039993442595
+    },
+    {
+      "round": 4,
+      "method": "blake2b256_readinto256k",
+      "ms": 96.55669995117933
+    },
+    {
+      "round": 4,
+      "method": "sha512_readinto256k",
+      "ms": 53.85310004930943
+    },
+    {
+      "round": 4,
+      "method": "sha256_readinto256k",
+      "ms": 78.84039997588843
+    },
+    {
+      "round": 4,
+      "method": "sha256_read64k",
+      "ms": 82.39170000888407
+    },
+    {
+      "round": 5,
+      "method": "sha256_read64k",
+      "ms": 77.29479996487498
+    },
+    {
+      "round": 5,
+      "method": "blake2s256_readinto256k",
+      "ms": 136.43960002809763
+    },
+    {
+      "round": 5,
+      "method": "sha256_readinto256k",
+      "ms": 74.75849997717887
+    },
+    {
+      "round": 5,
+      "method": "blake2b256_readinto256k",
+      "ms": 79.8192999791354
+    },
+    {
+      "round": 5,
+      "method": "sha512_readinto256k",
+      "ms": 56.43480003345758
+    },
+    {
+      "round": 6,
+      "method": "blake2s256_readinto256k",
+      "ms": 155.15420003794134
+    },
+    {
+      "round": 6,
+      "method": "sha256_readinto256k",
+      "ms": 80.90179995633662
+    },
+    {
+      "round": 6,
+      "method": "sha256_read64k",
+      "ms": 81.69979997910559
+    },
+    {
+      "round": 6,
+      "method": "blake2b256_readinto256k",
+      "ms": 79.5180998975411
+    },
+    {
+      "round": 6,
+      "method": "sha512_readinto256k",
+      "ms": 62.597200041636825
+    },
+    {
+      "round": 7,
+      "method": "sha256_readinto256k",
+      "ms": 74.1458999691531
+    },
+    {
+      "round": 7,
+      "method": "blake2s256_readinto256k",
+      "ms": 155.5511000333354
+    },
+    {
+      "round": 7,
+      "method": "sha512_readinto256k",
+      "ms": 63.6672000400722
+    },
+    {
+      "round": 7,
+      "method": "blake2b256_readinto256k",
+      "ms": 84.39819992054254
+    },
+    {
+      "round": 7,
+      "method": "sha256_read64k",
+      "ms": 101.7495000269264
+    },
+    {
+      "round": 8,
+      "method": "blake2s256_readinto256k",
+      "ms": 153.71280000545084
+    },
+    {
+      "round": 8,
+      "method": "blake2b256_readinto256k",
+      "ms": 82.28329999838024
+    },
+    {
+      "round": 8,
+      "method": "sha256_read64k",
+      "ms": 86.64350002072752
+    },
+    {
+      "round": 8,
+      "method": "sha512_readinto256k",
+      "ms": 60.844500083476305
+    },
+    {
+      "round": 8,
+      "method": "sha256_readinto256k",
+      "ms": 77.66030007041991
+    }
+  ],
+  "summary": {
+    "sha256_read64k": {
+      "n": 9,
+      "median_ms": 82.39170000888407,
+      "min_ms": 77.29479996487498,
+      "max_ms": 101.7495000269264
+    },
+    "sha256_readinto256k": {
+      "n": 9,
+      "median_ms": 77.66030007041991,
+      "min_ms": 72.91600003372878,
+      "max_ms": 88.9307000907138
+    },
+    "sha512_readinto256k": {
+      "n": 9,
+      "median_ms": 56.43480003345758,
+      "min_ms": 51.238799933344126,
+      "max_ms": 63.6672000400722
+    },
+    "blake2b256_readinto256k": {
+      "n": 9,
+      "median_ms": 80.85290004964918,
+      "min_ms": 79.41859995480627,
+      "max_ms": 96.55669995117933
+    },
+    "blake2s256_readinto256k": {
+      "n": 9,
+      "median_ms": 148.37660000193864,
+      "min_ms": 136.43960002809763,
+      "max_ms": 155.5511000333354
+    }
+  },
+  "copy_then_append_sanity": true,
+  "same_size_mtime_mutation_detected_all_algorithms": true,
+  "wall_seconds_before_report": 5.67662750009913,
+  "scope": "private cache fingerprint candidates only; no record/wire/source-hash change"
+}

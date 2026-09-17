@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 18-09-2026, Asia/Saigon | Revision S72 | TRIỂN KHAI THEO GATE
+Ngày 18-09-2026, Asia/Saigon | Revision S73 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S72
+PLAN_REVISION=S73
 EXECUTION_MODE=COORDINATOR_THREE_ASTRA_XHIGH_OWNER_20260918
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -54,12 +54,16 @@ GT05_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260917_S64
 GT05_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S64
 GT05_CHECKPOINT_COMMIT=808d8ba
 GT06_EVIDENCE_STATUS=NATIVE_DIAGNOSTICS_IN_PROGRESS_NO_ACCEPTANCE
+GT06_WORKING_SOURCE_STATUS=S73_PRIVATE_HISTORY_FINGERPRINT_TESTED
+GT06_CURRENT_SOURCE_CLOSURE=6f5d4c8a14ef8476c4cff6afb06ab161b17905f8593f9a685cd235593d7ee913
+GT06_BENCHMARK_CAMPAIGN=gt06-s73-campaign-01
+GT06_BENCHMARK_STATUS=READY_NOT_LAUNCHED_S73
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
 
-TIẾN ĐỘ HIỆN HÀNH — S72, ngày 18-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S73, ngày 18-09-2026
 GT-01–05 đã ACCEPTED. GT-06 mở sau hai review độc lập S64 cùng manifest.
 Owner đã cho phép lại ba Astra extra high; coordinator tiếp tục từ S68 đã tích hợp.
-Ba Astra xhigh đã chuẩn bị performance/final seal/Android theo scope riêng;
+Ba Astra xhigh S73 đã điều tra response-loss, đo tối ưu hash và giữ failure;
 không phải critic nghiệm thu. Hai review độc lập trên final closure còn phải làm.
 Native engine/integration lanes chạy tuần tự với process/cache/evidence riêng.
 
@@ -115,16 +119,22 @@ GT-06 hiện hành — phần đã làm và đường tới nghiệm thu
   joint/ACK, ngưỡng và7410s/run. Partial attempt không ghép thành runPASS.
   Không chạy engine/test nặng cạnh phép đo. Scheduler0 không thay actual
   target/helper exit, Jobzero/closed, released handles và complete dataset.
-- Nguồn đang đo: bb881a4a,49file, closure
+- Nguồn lượt đo đã dừng lỗi: bb881a4a,49file, closure
   38a0848b68c4d6b34f1a03839008d54aa9e99a33458abaa88a939c8d2a744d86.
   Campaign gt06-s71-campaign-01, launch1, Windows task
   \HHStudio.GT06.gt06-s71-campaign-01; raw studio/.local/reviews/gt06-s71-campaign-01
   và sibling -supervisor; launcher studio/tests/replay/campaign_task.ps1.
-  Startup02:10:39 ngày18-09; quan sát03:37 đạt30/35batch run00, gồm25measured,
-  objects71135 đứng yên, stderrtrống, partialinspectp95=320.730ms/Stop159.864ms.
-  Chưa fullrun hoặc GT06PASS. Ước lượng tuyến tính lúc đó còn khoảng16.7giờ
-  riêng workload nếu xu hướng và máy giữ nguyên; không hứa xongplan trước sáng.
-  Mỗi lần tiếp phải query task sống/log mới; không suy RUNNING từ dòng này.
+  Startup02:10:39 ngày18-09; terminal03:54 sau6200.516s, scheduler1/state3,
+  instances rỗng. Run00 có33/35batch hoàn chỉnh, lỗi ADMISSION_UNKNOWN ở b33
+  inspect.316: receipt CONNECTION_LOST_LOOKUP sau2013.8505ms. Journal ghi đúng
+  ID/digest QUEUED rồi COMMITTED, effect_count6726; không mất effect/receipt.
+  47188checksumrecords hợp lệ,33.2MB<64MiB, lease chưa hết; raw không lưu loại
+  exception nên chưa khẳng định timeout/socket subtype hoặc cost attribution.
+  Hostactual1; editorwrapper2 không thay nativeexit đang thiếu. Hai Jobzero/
+  closed và wrapper handles released. S71 vẫn FAILED, không ghép33batch thành
+  PASS hoặc đổi UNKNOWN thành ACK. Estimate16.7giờ cũ không còn áp dụng.
+  Failure/diagnosis ở reviews/20260918-gt06-s73-recovery/. Giữ nguyên raw,
+  xác định tối ưu có đo kiểm trước campaign mới; không retry mù cùng lỗi.
 - S71 đã sửa nguồn ObjectDB tăng do Output UI: cố định stock displaycap100 trước
   import/freeze, native get_setting kiểm type/value. Internal message strings
   vẫn giữ nên RSS gate còn nguyên; full stdout/stderr/counters không bị cắt/trừ.
@@ -147,6 +157,18 @@ GT-06 hiện hành — phần đã làm và đường tới nghiệm thu
   android-readiness.md xác nhận templates/JDK cục bộ, SDK/physical device/ADB
   authorization vẫn UNVERIFIED. Chưa cần owner thao tác cho GT06. Các report
   chuẩn bị này không phải critic hoặc nghiệm thu.
+- S73 đã chọn SHA512 cho fingerprint cache nội bộ, giữ readloop64KiB và mọi
+  full-byte/identity/parser/fsync check; record/wire/source vẫn SHA256. Paired
+  study32MiB median76.177→56.900ms (~25.3%); không phải fullworkload speedup.
+  Buffer-only chỉ~1–4%; không cache toàn receipts trongRAM hoặc thêm nativeAPI.
+  Không nới2s status/500ms p95/workload.382/382 replayunit đạt, actualexit0 và
+  ownedtree/source sạch. HTTP trên COPY33MBjournal đạt30/30: terminalp95=282.060ms,
+  maxgap166.111ms,60records mới, original/prefix nguyên vẹn, khôngresubmit.
+  ReplayService cũng dùng cache: đã remint5HTTP/native/adversary lanes158checks;
+  3naturalnativeexit0,2Stopintentional Jobzero/closed (không gán nativeexit0).
+  Source49file Gitindex khớp closure6f5d4c8a14ef8476c4cff6afb06ab161b17905f8593f9a685cd235593d7ee913.
+  Candidate gt06-s73-campaign-01 sẵn sàng nhưng chưa launch trong checkpoint này.
+  Evidence/readback/repro: -s73-recovery/README.md. S72 a15cd42c giữ lịch sử.
 - Sau benchmark: verify complete10×35, raw/hash/schema/counters/actual exits;
   ghép functional bằng dependency đã kiểm; đóng final source/review/raw manifest
   và requirement→test→evidence. Hai critic mới đọc độc lập cùng final hash,

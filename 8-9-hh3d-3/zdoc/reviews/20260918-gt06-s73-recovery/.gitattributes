@@ -1,0 +1,5 @@
+* -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+# These captured bytes retain the original diagnostic/source whitespace.
+failure/observations/scheduler-terminal.stderr.txt whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+units-01/source/pipeline/godot/authored.tscn whitespace=blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+units-01/source/pipeline/godot/project.godot whitespace=blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
