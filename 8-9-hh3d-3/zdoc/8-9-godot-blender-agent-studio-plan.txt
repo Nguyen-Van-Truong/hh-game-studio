@@ -56,12 +56,18 @@ GT05_CHECKPOINT_COMMIT=808d8ba
 GT06_EVIDENCE_STATUS=NATIVE_DIAGNOSTICS_IN_PROGRESS_NO_ACCEPTANCE
 GT06_WORKING_SOURCE_STATUS=S75_IGNORE_MARKER_NATIVE_UNIT_VERIFIED
 GT06_CURRENT_SOURCE_CLOSURE=638304f54851366ac2a79a792a8009406fc927c3c6c410ad8f65cc2dd9b14995
-GT06_BENCHMARK_CAMPAIGN=gt06-s73-campaign-01
-GT06_BENCHMARK_STATUS=FAILED_S73_LAUNCH2_RETAINED_COUNTER_GROWTH
+GT06_SOURCE_CHECKPOINT=979f98ef
+GT06_BENCHMARK_CAMPAIGN=gt06-s75-campaign-01
+GT06_BENCHMARK_STATUS=RUNNING_S75_LAUNCH1_OBSERVED_20260918_054243
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
 
 TIẾN ĐỘ HIỆN HÀNH — S75, ngày 18-09-2026
 GT-01–05 đã ACCEPTED. GT-06 mở sau hai review độc lập S64 cùng manifest.
+Hiện đang chờ phép đo dài S75; không thay source hoặc chạy engine/test nặng.
+Campaign mới chạy từ05:38:54; quan sát05:42:43 xác nhận taskstate4/mộtinstance,
+log05:43 có2warmupcapture và batch2nativecycles cùngrun. Chưa có fullrunPASS.
+Startup/telemetry/checkpoint ở reviews/20260918-gt06-s75-recovery/launch/.
+Các campaign S70–S73 phía dưới là lịch sử lỗi, không phải lượt đang chạy.
 Owner đã cho phép lại ba Astra extra high; coordinator tiếp tục từ S68 đã tích hợp.
 Ba Astra xhigh S73 đã điều tra response-loss, đo tối ưu hash và giữ failure;
 không phải critic nghiệm thu. Hai review độc lập trên final closure còn phải làm.
@@ -241,6 +247,16 @@ GT-06 hiện hành — phần đã làm và đường tới nghiệm thu
   assert warning được phân loại từ raw, không chạy lại engine để sửa metadata.
   Closure49 mới638304f54851366ac2a79a792a8009406fc927c3c6c410ad8f65cc2dd9b14995;
   phải campaign mới, không resume S73 bằng source S75. Chưa fullbenchmarkPASS.
+  Source checkpoint979f98ef; S75campaign01 launch1 đã chạy05:38:54 ngày18-09,
+  task\\HHStudio.GT06.gt06-s75-campaign-01, raw cùngID và sibling-supervisor.
+  Source map49/profile khớp savedlaunch; GitHEAD bytes đã kiểm trước phép đo.
+  Telemetry ngoài120s/120samples chỉ bổ sung: observeractual36540exit0,
+  wrapper48732exit0/treeverified, allAPIok/handlesclosed. Host/editor đều
+  CPUNORMAL32/memorypriority3; availableRAM0.91–2.21GiB, commit95.33–96.65%limit.
+  Fault tăng không tách hard/soft; privatecommit cũng đổi, chưa chứng minh
+  trimming hoặc miễn gate. Không sửa priority/RAM/process; observer đã kết thúc.
+  startup-telemetry-01/ giữ raw/summary. Watch tiếp theo từ lịch15phút;
+  không mở worker/test thêm chỉ để lấp thời gian chờ benchmark.
 - Sau benchmark: verify complete10×35, raw/hash/schema/counters/actual exits;
   ghép functional bằng dependency đã kiểm; đóng final source/review/raw manifest
   và requirement→test→evidence. Hai critic mới đọc độc lập cùng final hash,
@@ -259,7 +275,7 @@ Thực thi và tốc độ
   phục vụ requirement còn thiếu; không chạy lại lanePASS chỉ vì sửa báo cáo.
 - Owner18-09 cho phép heartbeat tiếp tục qua đêm. Lịch hiện có
   ti-p-t-c-hh3d-tools-qua-m ACTIVE, mỗi15phút; sửa chính lịch này, không tạo trùng.
-  Readback mới: -s74-recovery/launch-02/overnight-schedule.json. Khi đang đo chỉ xem compact
+  Readback mới: -s75-recovery/launch/overnight-schedule.json. Khi đang đo chỉ xem compact
   status/tail; terminal mới audit đầy đủ. Máy và app phải hoạt động.
 - Chưa cần owner thao tác cho GT06. Thiết bị/SDK Android phải kiểm thực tế ở
   prerequisite; thiếu PATH không chứng minh thiếu công cụ hoặc không có thiết bị.

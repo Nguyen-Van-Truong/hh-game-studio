@@ -1,0 +1,126 @@
+{
+  "scheduler_observed_at": "2026-09-17T22:42:43.9694869Z",
+  "logs_observed_at": "2026-09-17T22:43:40.417876+00:00",
+  "source_checkpoint": "979f98ef",
+  "campaign_id": "gt06-s75-campaign-01",
+  "launch_number": 1,
+  "task_status": {
+    "schema": "HH-GT06-TASK-STATUS-1",
+    "task_path": "\\HHStudio.GT06.gt06-s75-campaign-01",
+    "campaign_id": "gt06-s75-campaign-01",
+    "mode": "campaign",
+    "launch_number": 1,
+    "state": 4,
+    "last_run_time": "2026-09-18T05:38:54.0000000",
+    "last_task_result": 267009,
+    "instances": [
+      {
+        "instance_guid": "{5121D356-03CC-4814-AEAE-0242479C1632}",
+        "state": 4,
+        "scheduler_engine_pid": 29164
+      }
+    ],
+    "output_directory": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s75-campaign-01-supervisor",
+    "formal_acceptance": false,
+    "status_scope": "Scheduler state only; not actual process exit or owned-tree proof"
+  },
+  "source_map_sha256": "638304f54851366ac2a79a792a8009406fc927c3c6c410ad8f65cc2dd9b14995",
+  "closure_domain": "sorted path + NUL + hex digest + LF, UTF-8",
+  "source_map_files": 49,
+  "live_source_rehash_performed": false,
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "batch_capture_names": [
+    "batch-capture-00.json",
+    "batch-capture-01.json"
+  ],
+  "log_tails": {
+    "host-owner": {
+      "stdout.txt": {
+        "size_bytes_at_read": 29576,
+        "last_lines": [
+          "HH_GT06_CAMPAIGN_PROGRESS {\"run_id\": \"gt06-s75-campaign-01.r00.a01\", \"batch\": 2, \"phase\": \"native_cycles\"}",
+          "HH_GT06_CAMPAIGN_PROGRESS {\"run_id\": \"gt06-s75-campaign-01.r00.a01\", \"batch\": 2, \"phase\": \"native_cycles\"}",
+          "HH_GT06_CAMPAIGN_PROGRESS {\"run_id\": \"gt06-s75-campaign-01.r00.a01\", \"batch\": 2, \"phase\": \"native_cycles\"}"
+        ]
+      },
+      "stderr.txt": {
+        "size_bytes_at_read": 0,
+        "last_lines": []
+      }
+    },
+    "editor-host": {
+      "stdout.txt": {
+        "size_bytes_at_read": 90138,
+        "last_lines": [
+          "HH_GT06_BENCHMARK_HEARTBEAT {\"batch\":2,\"cycle\":35,\"main_thread\":true,\"monotonic_us\":273099497,\"phase\":\"CYCLE_BEGIN\",\"pid\":13024,\"run_id\":\"gt06-s75-campaign-01.r00.a01\"}",
+          "HH_GT06_BENCHMARK_HEARTBEAT {\"batch\":2,\"cycle\":35,\"main_thread\":true,\"monotonic_us\":273623003,\"phase\":\"SAVE_WAIT\",\"pid\":13024,\"run_id\":\"gt06-s75-campaign-01.r00.a01\"}",
+          "HH_GT06_BENCHMARK_HEARTBEAT {\"batch\":2,\"cycle\":35,\"main_thread\":true,\"monotonic_us\":274182446,\"phase\":\"SAVE_WAIT\",\"pid\":13024,\"run_id\":\"gt06-s75-campaign-01.r00.a01\"}"
+        ]
+      },
+      "stderr.txt": {
+        "size_bytes_at_read": 0,
+        "last_lines": []
+      }
+    }
+  },
+  "scope": "Startup observation only, not completed-run or benchmark acceptance",
+  "formal_acceptance": false,
+  "copies": {
+    "supervisor/request.json": {
+      "sha256": "772e348534aaca4951aa3c408157ebe5be866c0d44d37e7e5400c80ae8e26838",
+      "size_bytes": 373
+    },
+    "supervisor/start.json": {
+      "sha256": "91e5645a798b7092b28878571b321a04747e32c6c4ffe9d781d14afadcd6750b",
+      "size_bytes": 501
+    },
+    "supervisor/task-definition.expected.xml": {
+      "sha256": "0977efc43044f9309c10e3a33e77218d68191706554c390053c706f473c819e6",
+      "size_bytes": 2006
+    },
+    "supervisor/task-definition.sha256": {
+      "sha256": "59cd9871c57cea69e587b82bbffe0cbf7aa7926a9ae5502bc01da6acf97699e5",
+      "size_bytes": 65
+    },
+    "supervisor/task-definition.xml": {
+      "sha256": "e76c0fc7be1b1fbf38c9b019188cbcaf2e1104a91018d4219564dc9f362b0609",
+      "size_bytes": 1660
+    },
+    "supervisor/task-registration.json": {
+      "sha256": "3fcba65bd36ee42b782f6af4a29c92ccb367f0d1db84702eed6558175119748e",
+      "size_bytes": 879
+    },
+    "supervisor/task-start.json": {
+      "sha256": "7f448c50bef57ffbb64046ecd7149d313e3b5d9ae8215fd1797ccf279bb7c8c3",
+      "size_bytes": 838
+    },
+    "campaign/benchmark-profile.json": {
+      "sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+      "size_bytes": 718
+    },
+    "campaign/campaign.json": {
+      "sha256": "333adeec03380863d93f6ed146f8783e431f5928c3b6e15d06701ac9f5746313",
+      "size_bytes": 6295
+    },
+    "run/context.json": {
+      "sha256": "d0c90756321e9a01459bbda3d3a37f38d26ea54e1e4beca83f7fb1d6799de59e",
+      "size_bytes": 5280
+    },
+    "run/source-files.json": {
+      "sha256": "f21df4baf447484e8fe9e71a3bff20c03f3cb8eabdb59190b5b176a28368158c",
+      "size_bytes": 4941
+    },
+    "run/editor-host/process-start.json": {
+      "sha256": "d7890cb0b31988067b1c4fdf7ab521734c72ff5478972482703556cb3779bdd3",
+      "size_bytes": 14
+    },
+    "run/host-owner/process-start.json": {
+      "sha256": "2118029dabe87f08d8d468ddf0a20bf1750be116c7b5ac84bde0f836aa4290f2",
+      "size_bytes": 14
+    }
+  },
+  "observer_corrections": [
+    "Initial nested Windows PowerShell status call lacked Get-FileHash. No launch/stop action occurred. Retained stderr; retried only read-only status with configured shell.",
+    "Initial collector used canonical JSON for source closure and rejected correctly; corrected to existing path-NUL-hash-LF domain. Preserved identical partial copies; no engine rerun."
+  ]
+}

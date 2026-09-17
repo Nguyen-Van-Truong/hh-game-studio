@@ -55,4 +55,28 @@ with PID+creation+executable identity checks. Its self-test does not establish
 the campaign's priorities, RSS behavior, or kernel handle cause. `next/` prepares
 dependency projection and sealing; its draft is not a final campaign verdict.
 Two fresh independent critics still require the completed frozen closure.
-Source changed, so S73 cannot resume as S75; a fresh campaign is required.
+Source changed, so S73 cannot resume as S75. Fresh campaign
+`gt06-s75-campaign-01`, launch1, started at 2026-09-17T22:38:54Z using source
+checkpoint `979f98ef`. `launch/observation.json` records the time-scoped live
+scheduler and log observations, exact startup copies and source-map binding.
+No completed-run or full-benchmark PASS is claimed. Keep source fixed while
+this campaign measures; the same overnight automation follows it every15min.
+
+`startup-telemetry-01/` is the single disclosed external120s observer window:
+120samples, actual observer36540exit0, wrapper48732exit0, tree verified by the
+owned wrapper, both query handles closed and all API groups successful. CPU
+priority is NORMAL32 and memory priority3 for both host16220/editor13024.
+Available RAM spans0.91–2.21GiB and system commit95.33–96.65% of its limit.
+RSS/private commit both vary and page-fault counts rise; this does not isolate
+hard faults, establish trimming causation, reconstruct old attempts or change
+any benchmark baseline/gate. Exact byte values and artifact hashes are in
+`summary.json`. Sampling is sequential and its overhead is not calibrated.
+The read-only investigator cross-checked the small capture independently;
+this is supplemental analysis, not an acceptance critic verdict.
+
+The startup collector initially invoked nested Windows PowerShell where
+`Get-FileHash` was unavailable. Its failure was retained and only the read-only
+status query retried in the configured shell. A separate metadata assertion
+caught use of canonical JSON instead of the existing source-closure domain
+(sorted path + NUL + digest + LF). Identical partial copies were retained and
+the metadata calculation corrected; neither incident restarted the workload.

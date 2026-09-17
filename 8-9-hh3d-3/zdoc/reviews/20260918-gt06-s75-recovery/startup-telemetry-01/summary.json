@@ -1,0 +1,129 @@
+{
+  "formal_acceptance": false,
+  "scope": "Supplemental 120-second read-only startup observation; not benchmark gate or target exit proof",
+  "sample_count": 120,
+  "first_sample_utc": "2026-09-17T22:39:32.736582+00:00",
+  "last_sample_utc": "2026-09-17T22:41:31.953226+00:00",
+  "completion": {
+    "schema": "hh.gt06.owned-telemetry.v1",
+    "event": "end",
+    "run_id": "gt06-s75-startup-telemetry-01",
+    "utc": "2026-09-17T22:41:32.736234+00:00",
+    "monotonic_ns": 583096648124500,
+    "diagnostic_only": true,
+    "result_code": 0,
+    "samples": 120,
+    "api_error_count": 0,
+    "cleanup": [
+      {
+        "pid": 13024,
+        "status": "closed"
+      },
+      {
+        "pid": 16220,
+        "status": "closed"
+      }
+    ],
+    "all_opened_handles_closed": true,
+    "elapsed_seconds": 120.00105750001967
+  },
+  "observer_actual_exit": {
+    "target_pid": 36540,
+    "started_at": "2026-09-17T22:39:32.544552+00:00",
+    "exit_code": 0
+  },
+  "observer_wrapper_exit": 0,
+  "observer_tree_verified_by_wrapper": true,
+  "processes": {
+    "16220": {
+      "current_rss_bytes": [
+        20004864,
+        35438592
+      ],
+      "private_commit_bytes": [
+        24125440,
+        28327936
+      ],
+      "page_fault_count_u32": [
+        416707,
+        1781675
+      ],
+      "fault_first_last": [
+        416707,
+        1781675
+      ],
+      "cpu_priority_classes": [
+        32
+      ],
+      "memory_priorities": [
+        3
+      ],
+      "handle_range": [
+        194,
+        210
+      ]
+    },
+    "13024": {
+      "current_rss_bytes": [
+        691236864,
+        739180544
+      ],
+      "private_commit_bytes": [
+        855638016,
+        919928832
+      ],
+      "page_fault_count_u32": [
+        222365,
+        428914
+      ],
+      "fault_first_last": [
+        222365,
+        428914
+      ],
+      "cpu_priority_classes": [
+        32
+      ],
+      "memory_priorities": [
+        3
+      ],
+      "handle_range": [
+        584,
+        598
+      ]
+    }
+  },
+  "system": {
+    "physical_available_bytes": [
+      978223104,
+      2370555904
+    ],
+    "commit_total_bytes": [
+      56426364928,
+      57205514240
+    ],
+    "commit_limit_bytes": [
+      59190677504,
+      59190677504
+    ],
+    "commit_percent_range": [
+      95.32981764600821,
+      96.64615553037748
+    ]
+  },
+  "artifact_hashes": {
+    "capture.json": "f6d9e2a217d541ecc750e63af85621818162155599fc64e8809a4542a6c53104",
+    "invocation.json": "49f6cef4b3f605c0a499d7fc3ab8566fc0c359bf0a555982add1ad47e05b3d1b",
+    "telemetry-host.json": "48e13312979c328b73cd52970c3c3f462586d8546be91ccf802e0e78d7042972",
+    "telemetry-stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "telemetry-stdout.txt": "ab34cd3cad66182b21cd5ffa29266b8d1025a4f9603dbd6e422151e5ad1669d2"
+  },
+  "limitations": [
+    "Observer overhead not calibrated",
+    "Sequential sampling is not atomic",
+    "Faults do not separate hard faults or IO",
+    "No trimming causation or old-attempt reconstruction",
+    "Private commit also changes",
+    "No priority/settings changed",
+    "Retained target handles closed; campaign still separately owns its processes"
+  ]
+}
