@@ -1,0 +1,20 @@
+{
+  "wrapper_pid": 3868,
+  "started_at": "2026-09-17T15:27:18.347360+00:00",
+  "argv": [
+    "python.exe",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport json,time,sys\nfrom studio.tests.replay.benchmark_commands import CommandProducer\nfrom studio.tests.replay.run_native_benchmark import source_files,closure,encoded\nout=Path(sys.argv[1]); before=source_files(); (out/'source-files.json').write_bytes(encoded(before))\np=None; start=time.monotonic()\ntry:\n p=CommandProducer(out/'commands','gt06-s68-cmd-batch02'); report=p.run_batch(0); (out/'batch.json').write_bytes(encoded(report)); p.close()\n result={'completed':True,'elapsed_seconds':time.monotonic()-start,'source_unchanged':before==source_files(),'source_closure':closure(before),'command_count':len(report['commands']),'max_status_gap_ms':report['max_status_gap_ms'],'journal_bytes':report['journal_bytes']}\n (out/'result.json').write_bytes(encoded(result)); print(json.dumps(result),flush=True)\nexcept BaseException as e:\n (out/'failure.json').write_bytes(encoded({'type':type(e).__name__,'code':getattr(e,'code',None),'partial':getattr(e,'report',None)})); raise\nfinally:\n if p is not None: p.close()\n",
+    "$SNAPSHOT/studio/.local/reviews/gt06-s68-command-batch-02"
+  ],
+  "exit_code": 0,
+  "target_pid": 37724,
+  "wrapper_exit_code": 0,
+  "timed_out": false,
+  "tree_verified": true,
+  "ownership": "gated_job_kill_on_close",
+  "stdout": "batch-stdout.txt",
+  "stderr": "batch-stderr.txt",
+  "host": "batch-host.json"
+}

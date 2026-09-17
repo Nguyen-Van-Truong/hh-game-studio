@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 17-09-2026, Asia/Saigon | Revision S67 | TRIỂN KHAI THEO GATE
+Ngày 18-09-2026, Asia/Saigon | Revision S68 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,8 +25,8 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S67
-EXECUTION_MODE=COORDINATOR_THREE_ASTRA_XHIGH_OWNER_20260917
+PLAN_REVISION=S68
+EXECUTION_MODE=COORDINATOR_THREE_ASTRA_XHIGH_OWNER_20260918
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
 GT02_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S46
@@ -56,9 +56,10 @@ GT05_CHECKPOINT_COMMIT=808d8ba
 GT06_EVIDENCE_STATUS=NATIVE_DIAGNOSTICS_IN_PROGRESS_NO_ACCEPTANCE
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
 
-TIẾN ĐỘ HIỆN HÀNH — S67, ngày 17-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S68, ngày 18-09-2026
 GT-01–05 đã ACCEPTED. GT-06 mở sau hai review độc lập S64 cùng manifest.
-Owner cho phép ba Astra extra high; coordinator tích hợp và giữ một writer/file.
+Owner đã cho phép lại ba Astra extra high; coordinator tiếp tục từ S68 đã tích hợp.
+Ba review mới bị ngắt/chưa có verdict; không tính vào nghiệm thu.
 Native engine/integration lanes chạy tuần tự với process/cache/evidence riêng.
 
 Đã nghiệm thu:
@@ -95,7 +96,7 @@ Native engine/integration lanes chạy tuần tự với process/cache/evidence 
   snapshot. Giữ raw gốc; source/review S64 ở808d8ba và governance snapshot,
   không đổi chữ ký theo source mới. Full details: gt05-s63-audit/requirements-s64.md.
 
-GT-06 hiện hành — ba lane implementation, native diagnostics đã bắt đầu:
+GT-06 hiện hành — implementation đã tích hợp, native diagnostics đang chạy:
 - Fixture/observe: immutable Play riêng Editor; trace60Hz/seed/pressed-held-released
   qua Input.parse_input_event, sau callback mới readback. Menu/move/outfit/emote/
   prop/pause/resume/quit, camera và capture đúng frame/PID/source.
@@ -137,6 +138,30 @@ GT-06 hiện hành — ba lane implementation, native diagnostics đã bắt đ�
   actualexits0/tree sạch/hash ổn định. Diagnostic01 giữFAIL vì Godot tự chuẩn
   hóa project.godot; đã tạo đúng config pin trước freeze, không bỏ kiểmhash.
   Chưa là fullbenchmark; đang đo batch1000lệnh đầu để kiểm scaling thực tế.
+- S68: replay/reviewer347/347 và journal contract48/48 đạt trên source đã ghi
+  trong reviews/20260917-gt06-s68-units-02 và -journal-contract-02. GUI dùng
+  journal mới complete01/stop01 đạt, exits0/tree sạch; chưa gán sang source mới.
+  Một batch1000commands đạt32.282s; run cũ600s timeout được giữ nguyên.
+  Residency35batch dừng ởbatch12:11batch đủ11000lệnh, lỗiTERMINAL_IDENTITY;
+  journal vẫn cóCOMMITTED cho lệnhcuối, chưa đủ bằng chứng kết luận vì sao
+  phản hồi lookup khôngkhớp. Actualchild/wrapperexit1, Jobclosed/zero; khôngPASS.
+  RSS ởbatch10=37,933,056B(+9.197% so baselinebatch4), chưa chứng minh35batch.
+  Raw: studio/.local/reviews/gt06-s68-residency-01. Lần diagnostic có tranhchấp
+  tải từ unit/parse lane nên không là benchmark nghiệm thu hoặc speedup định lượng.
+  Đã tích hợp index RAM gọn giữ đủreceipt/tombstone; boundedlookup cùngID,
+  không resubmit mutation; ghi từnglookup/terminal response trước kiểmidentity.
+  Journal contract mới62/62; replay/reviewer mới415/415 (units-03), actualexits0,
+  tree sạch và source không đổi. GUI complete02/stop02 đều đạt trên source mới.
+  Native1.2 một GUIcycle thật đạt; owner smoke kiểm naturalexit/Stop latch đạt.
+  Campaign01/02 bị ngắt ngoài owner trong batch0 nativecycles; không có actual
+  exit/cleanup record, không tính PASS. Kiểm tiến trình sau ngắt thấy không còn
+  Python/Godot của campaign; điều này không thay Jobclosed/zero evidence.
+  Start-Process Hidden cũng không giữ được campaign02 qua ngắt phiên.
+  Giữ raw và không nối partialbatch; cần freshpair cho workload cùngPID. Thứtự
+  1000hostcommands→100nativecycles→jointsample/ACK; chỉ đổi synchronization,
+  giữ nguyên10runs×35batch, mix, thresholds và deadline tổng7410s/run.
+  Ownership sửa Stop latch, closed/zero khác historicaltaint, giữ owner khi
+  constructor/cleanup lỗi. Chưa có fullcampaign PASS hoặc hai critic nghiệm thu.
 - Chưa có GT06 accepted candidate. Benchmark1000commands+100cycles theo plan
   vẫn phải chạy đúng profile; unit nhỏ không thay benchmark. Không nâng shared
   caps để hợp artifact; raw series có parser/quota riêng, wire chỉ hash/reference.
@@ -160,6 +185,13 @@ tools-plan-before-s55.txt (AUTHORITY=0), SHA256 b07c86c36c565c3a95404a6084cd6df0
 Các archive và mọi failure/verdict cũ giữ nguyên; không hạDoD đểtick.
 
 KINH NGHIỆM ĐANG ÁP DỤNG
+- S68: không suy nguyên nhân từ mã lỗi identity khi chưa lưu phản hồi terminal;
+  lookupUNKNOWN chỉ reconcile cùngID trong deadline, không gửi lại mutation.
+  Giữ failedprefix và actualexit; chỉ nối lại run hoàn chỉnh cùng source/profile,
+  không trộn PID hay sample của run đã gãy. Profilehash dựa đúng canonicalbytes
+  (không tự thêm LF); command/native clock là hai miền khác nhau. Readysignal
+  trướccommands và ACK saucycles tránh đo bộnhớ nhầm phase. Constructor lỗi
+  vẫn phải nhận cleanup_owner; Stopđãlatch không được quay lạicompleted.
 - S67 GUI: không autopoll khi closing hoặc PLAY local cònpending; nếu lookup
   chạy trước launchworker thì NO_COMMAND local không được hủy trạng tháiqueued.
   Godot Windows có thể release held-input khi mấtfocus: fixedtrace dùng no-focus

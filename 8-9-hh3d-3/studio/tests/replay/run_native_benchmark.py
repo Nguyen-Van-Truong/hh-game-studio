@@ -35,9 +35,9 @@ DRIVER_SOURCES = {
     'addons/hh_benchmark/plugin.cfg': 'tests/replay/benchmark_plugin.cfg',
 }
 DIAGNOSTIC_PROFILE = {
-    'schema_id': 'hh-studio.native-cycle-diagnostic-profile', 'schema_version': '1.0.0',
+    'schema_id': 'hh-studio.native-cycle-diagnostic-profile', 'schema_version': '1.1.0',
     'mode': 'diagnostic', 'batches': 1, 'cycles_per_batch': 1, 'warmup_batches': 0,
-    'batch_barrier': 'diagnostic_none', 'host_integrated': False,
+    'batch_barrier': 'diagnostic_none', 'batch_start': 'diagnostic_immediate', 'host_integrated': False,
     'minimum_settle_frames': 4, 'minimum_settle_us': 1_100_000,
     'runner': 'studio.pipeline.native_job.run_trusted_stage',
     'wall_seconds': native_job.WALL_SECONDS, 'runner_limits_unchanged': True,
@@ -259,6 +259,12 @@ def markers(raw, prefix):
 
 
 def validate_native(project, binding, snapshot, stage, process, lock):
+    need(set(binding) == {'schema_id', 'schema_version', 'run_id', 'mode', 'source_closure_sha256',
+         'profile_sha256', 'batch_barrier', 'batch_start'}
+         and binding.get('schema_id') == 'hh-studio.native-cycle-benchmark-run'
+         and binding.get('schema_version') == '1.2.0' and binding.get('mode') == 'diagnostic'
+         and binding.get('batch_barrier') == 'diagnostic_none'
+         and binding.get('batch_start') == 'diagnostic_immediate', 'DIAGNOSTIC_INPUT_PROFILE')
     index_raw = read_regular(project / 'benchmark/out/index.json', 1_048_576)
     batch_raw = read_regular(project / 'benchmark/out/batch-00.json', 1_048_576)
     index, batch = json.loads(index_raw), json.loads(batch_raw)
@@ -266,11 +272,14 @@ def validate_native(project, binding, snapshot, stage, process, lock):
     need(process['identity'] is not None and process['identity']['pid'] == pid
          and process['samples'] and not process['errors'], 'DIAGNOSTIC_PROCESS_OBSERVATION')
     need(any(row['visible_window_handles'] for row in process['samples']), 'DIAGNOSTIC_GUI_WINDOW')
-    need(index.get('schema_id') == 'hh-studio.native-cycle-benchmark' and index.get('schema_version') == '1.1.0'
+    need(index.get('schema_id') == 'hh-studio.native-cycle-benchmark' and index.get('schema_version') == '1.2.0'
          and index.get('input') == binding and index.get('pid') == pid, 'DIAGNOSTIC_INDEX_BINDING')
     need(index.get('completed') is True and index.get('benchmark_complete') is False
          and index.get('formal_acceptance') is False and index.get('host_integrated') is False
-         and index.get('host_barriers') == [] and index.get('batches_completed') == 1
+         and index.get('host_barriers') == [] and index.get('start_permits') == []
+         and index.get('batch_order') == 'diagnostic_native_cycle_only'
+         and index.get('host_start_timeout_us') == 600_000_000
+         and index.get('host_barrier_timeout_us') == 30_000_000 and index.get('batches_completed') == 1
          and index.get('cycles_per_batch') == 1, 'DIAGNOSTIC_SCOPE')
     need(index.get('editor_hint') is True and index.get('main_thread') is True
          and index.get('display_server') == 'Windows'
@@ -285,10 +294,11 @@ def validate_native(project, binding, snapshot, stage, process, lock):
     need(type(native_sources) is dict and set(native_sources) == required_sources
          and all(snapshot[name.removeprefix('res://')] == value for name, value in native_sources.items()),
          'DIAGNOSTIC_NATIVE_SOURCE')
-    need(batch.get('schema_id') == 'hh-studio.native-cycle-batch' and batch.get('schema_version') == '1.1.0'
+    need(batch.get('schema_id') == 'hh-studio.native-cycle-batch' and batch.get('schema_version') == '1.2.0'
          and batch.get('run_id') == binding['run_id'] and batch.get('pid') == pid
          and batch.get('index') == 0 and batch.get('mode') == 'diagnostic' and batch.get('warmup') is False
-         and batch.get('barrier') == {'mode': 'diagnostic_none', 'required': False}, 'DIAGNOSTIC_BATCH_BINDING')
+         and batch.get('barrier') == {'mode': 'diagnostic_none', 'required': False}
+         and 'start_permit' in batch and batch['start_permit'] is None, 'DIAGNOSTIC_BATCH_BINDING')
     need(type(batch.get('cycles')) is list and len(batch['cycles']) == 1
          and type(batch.get('raw_timings')) is list and len(batch['raw_timings']) == 1, 'DIAGNOSTIC_CYCLE_COUNT')
     cycle, timing = batch['cycles'][0], batch['raw_timings'][0]
@@ -331,9 +341,10 @@ def run(run_id):
     need(sha(read_regular(executable, 256 * 1024 * 1024)) == lock['gui_sha256'], 'DIAGNOSTIC_ENGINE_PIN')
     profile_raw = json.dumps(asdict(benchmark_profile.PROFILE), sort_keys=True, separators=(',', ':'), allow_nan=False).encode()
     need(sha(profile_raw) == benchmark_profile.PROFILE_SHA256, 'DIAGNOSTIC_PROFILE_HASH')
-    binding = {'schema_id': 'hh-studio.native-cycle-benchmark-run', 'schema_version': '1.1.0',
+    binding = {'schema_id': 'hh-studio.native-cycle-benchmark-run', 'schema_version': '1.2.0',
         'run_id': run_id, 'mode': 'diagnostic', 'source_closure_sha256': closure(before),
-        'profile_sha256': benchmark_profile.PROFILE_SHA256, 'batch_barrier': 'diagnostic_none'}
+        'profile_sha256': benchmark_profile.PROFILE_SHA256, 'batch_barrier': 'diagnostic_none',
+        'batch_start': 'diagnostic_immediate'}
     root = STUDIO / '.local/reviews' / run_id
     root.mkdir(exist_ok=False)
     project = root / 'project'
@@ -398,7 +409,9 @@ def run(run_id):
         expected = {'run_id': run_id, 'pid': process['identity']['pid'], 'mode': 'diagnostic',
                     'batches': 1, 'index_sha256': sha(index_raw), 'benchmark_complete': False, 'host_integrated': False}
         need(complete == [expected] and not markers(stdout, 'HH_GT06_BENCHMARK_FAILED ')
-             and not markers(stdout, 'HH_GT06_BENCHMARK_ACK '), 'DIAGNOSTIC_COMPLETE_MARKER')
+             and not markers(stdout, 'HH_GT06_BENCHMARK_ACK ')
+             and not markers(stdout, 'HH_GT06_BENCHMARK_READY ')
+             and not markers(stdout, 'HH_GT06_BENCHMARK_START '), 'DIAGNOSTIC_COMPLETE_MARKER')
         batch_markers = markers(stdout, 'HH_GT06_BENCHMARK_BATCH ')
         need(batch_markers == [{'run_id': run_id, 'pid': process['identity']['pid'], 'index': 0,
              'sha256': sha(batch_raw), 'memory_mono_us': batch['ended_mono_us'],

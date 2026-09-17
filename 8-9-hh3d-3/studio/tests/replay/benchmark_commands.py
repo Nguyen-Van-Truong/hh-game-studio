@@ -8,6 +8,10 @@ validation rejection is the actual INVALID_FIXTURE_PAYLOAD wire response.
 Auxiliary discovery, lease, lookup and Cancel calls are outside the 1000 mix.
 One delayed mock job is canceled after group 49 through the control listener.
 No native effects, engine launches, public cap increases or journal clearing.
+Only explicit connection-loss uncertainty during lookup is reconciled by
+another lookup of the same ID, within the original five-second terminal budget.
+This covers a known uncertainty path; it does not establish the cause of any
+older failure whose lookup response was not captured.
 
 Failure retains partial rows on CommandError.report and latches the producer.
 Call close() even on failure; uncertain cleanup retains cleanup_owner.
@@ -29,7 +33,7 @@ import time
 STUDIO = Path(__file__).resolve().parents[2]
 if __name__ == '__main__':
     sys.path.insert(0, str(STUDIO.parent))
-from studio.host.core.journal import Journal
+from studio.host.replay.verified_journal import VerifiedJournal as Journal
 from studio.host.core.transport import FixtureClient, LoopbackFixtureHost, epoch_ms
 from studio.host.replay.process_probe import ProcessProbe
 from studio.protocol.core import Status, canonical_bytes
@@ -146,14 +150,46 @@ class CommandProducer:
                   'HOST_DIAGNOSTICS')
         return now
 
-    def _terminal(self, command_id):
-        deadline = time.monotonic() + TERMINAL_TIMEOUT_SECONDS
+    def _terminal(self, command_id, request_digest, row, *, started_ns=None):
+        deadline = None
         while True:
-            result = self.client.lookup(command_id)
-            self._received()
-            if result.status is not Status.ACCEPTED_PENDING:
-                return result
-            _need(time.monotonic() < deadline, 'TERMINAL_TIMEOUT')
+            started = _clock()
+            if deadline is None:
+                deadline = started + TERMINAL_TIMEOUT_SECONDS * 1_000_000_000
+                if started_ns is None:
+                    started_ns = started
+            remaining = (deadline - started) / 1_000_000_000
+            _need(remaining > 0, 'TERMINAL_TIMEOUT')
+            attempt = {'status': None, 'code': None, 'command_id': command_id,
+                       'request_digest': None, 'started_mono_us': started // 1000,
+                       'ended_mono_us': None}
+            row['lookup_attempts'].append(attempt)
+            original_timeout = self.client.timeout
+            try:
+                # Bound this call by the remaining existing budget. The
+                # accepted transport and its normal timeout are unchanged.
+                self.client.timeout = min(original_timeout, remaining)
+                result = self.client.lookup(command_id)
+            finally:
+                self.client.timeout = original_timeout
+            # Persist the actual response before any identity/status/readback
+            # guard, including the response that makes a partial batch fail.
+            row['terminal_response'] = result.as_dict()
+            attempt.update(status=result.status.value, code=result.code,
+                           command_id=result.command_id,
+                           request_digest=result.postconditions.get('request_digest'),
+                           ended_mono_us=_clock() // 1000)
+            ended = self._received()
+            attempt['ended_mono_us'] = ended // 1000
+            row['terminal_mono_us'] = ended // 1000
+            row['terminal_ms'] = (ended - started_ns) / 1_000_000
+            _need(ended <= deadline, 'TERMINAL_TIMEOUT')
+            _need(result.command_id == command_id, 'TERMINAL_IDENTITY')
+            uncertain = result.status is Status.UNKNOWN and result.code == 'CONNECTION_LOST_LOOKUP'
+            digest = result.postconditions.get('request_digest')
+            _need(digest == request_digest or uncertain and digest is None, 'TERMINAL_IDENTITY')
+            if result.status is not Status.ACCEPTED_PENDING and not uncertain:
+                return result, ended
             time.sleep(0.001)
 
     def _readback(self, result, expected_effects, expected_value=None):
@@ -169,6 +205,7 @@ class CommandProducer:
 
     def _command(self, kind, command_id, lease, row):
         expected = self.effects
+        row['lookup_attempts'] = []
         # All three classes use the real fixed catalog; rejection has a valid
         # payload digest and is rejected specifically by host payload validation.
         value = expected + 1 if kind == 'admitted' else 1_000_001 if kind == 'rejected' else None
@@ -188,10 +225,7 @@ class CommandProducer:
             return
         _need(result.status is Status.ACCEPTED_PENDING, 'ADMISSION_' + result.status.value)
         _need(result.postconditions.get('request_digest') == request.digest, 'RECEIPT_DIGEST')
-        terminal = self._terminal(command_id)
-        ended = _clock()
-        _need(terminal.command_id == command_id and terminal.postconditions.get('request_digest') == request.digest,
-              'TERMINAL_IDENTITY')
+        terminal, ended = self._terminal(command_id, request.digest, row, started_ns=start)
         snapshot = self._readback(terminal, expected + (kind == 'admitted'), value if kind == 'admitted' else None)
         row.update(terminal_mono_us=ended // 1000, terminal_ms=(ended - start) / 1_000_000,
                    terminal_status=terminal.status.value, terminal_code=terminal.code,
@@ -199,10 +233,12 @@ class CommandProducer:
                    effect_count_before=expected, effect_count_after=self.effects)
         row['latency_ms'] = row['receipt_ms'] if kind == 'admitted' else row['terminal_ms']
 
-    def _cancel_probe(self, index, lease):
+    def _cancel_probe(self, index, lease, row):
         command_id = f'{self.run_id}.b{index}.cancel'
         request = self.client.request(command_id, value=999_999, delay_ms=1000,
                                       lease=replace(lease, revision=self.revision))
+        row.update(command_id=command_id, kind='cancel', separate_from_mix=True,
+                   delay_ms=1000, request_digest=request.digest, lookup_attempts=[])
         queued = self.client.submit(request)
         self._received()
         _need(queued.status is Status.ACCEPTED_PENDING, 'CANCEL_JOB_NOT_ADMITTED')
@@ -211,18 +247,17 @@ class CommandProducer:
         start = _clock()
         receipt = self.client.cancel(command_id)
         end = self._received()
+        row.update(started_mono_us=start // 1000, receipt_mono_us=end // 1000,
+                   receipt_ms=(end - start) / 1_000_000, status=receipt.status.value)
         _need(receipt.status is Status.CANCELED and receipt.code == 'CANCELED_BEFORE_APPLY', 'CANCEL_NOT_LATCHED')
         _need(receipt.command_id == command_id and receipt.postconditions.get('request_digest') == request.digest,
               'CANCEL_RECEIPT_IDENTITY')
-        terminal = self._terminal(command_id)
+        terminal, ended = self._terminal(command_id, request.digest, row, started_ns=start)
         _need(terminal.status is Status.CANCELED and terminal.postconditions.get('no_effect') is True, 'CANCEL_TERMINAL')
-        _need(terminal.command_id == command_id and terminal.postconditions.get('request_digest') == request.digest,
-              'CANCEL_TERMINAL_IDENTITY')
         _need(self.host.fixture.effect_count == self.effects, 'CANCEL_JOB_EFFECT')
-        return {'command_id': command_id, 'kind': 'cancel', 'separate_from_mix': True,
-                'delay_ms': 1000, 'started_mono_us': start // 1000, 'receipt_mono_us': end // 1000,
-                'receipt_ms': (end - start) / 1_000_000, 'status': receipt.status.value,
-                'terminal_status': terminal.status.value, 'request_digest': request.digest, 'no_effect': True}
+        row.update(terminal_mono_us=ended // 1000, terminal_ms=(ended - start) / 1_000_000,
+                   terminal_status=terminal.status.value, no_effect=True)
+        return row
 
     def run_batch(self, index):
         return self._run(index, GROUPS, 'benchmark')
@@ -235,7 +270,7 @@ class CommandProducer:
         _need(type(index) is int and index == self.next_index and 0 <= index < MAX_BATCHES, 'BATCH_ORDER')
         _need(self.mode in (None, mode), 'MODE_MIX')
         self.mode = mode
-        report = {'schema_id': 'hh-studio.benchmark-command-batch', 'schema_version': '1.0.0',
+        report = {'schema_id': 'hh-studio.benchmark-command-batch', 'schema_version': '1.1.0',
                   'run_id': self.run_id, 'index': index, 'mode': mode, 'complete_command_mix': False,
                   'native_acceptance': False, 'effects_kind': 'in_process_mock_fixture',
                   'transport_kind': 'accepted_loopback_fixture_http', 'observation_kind': self.observer.kind,
@@ -260,7 +295,8 @@ class CommandProducer:
                     if kind == 'admitted':
                         report['effects_per_admission'].append(row['effect_count_after'] - row['effect_count_before'])
                 if group == (groups - 1) // 2:
-                    report['cancel'] = self._cancel_probe(index, lease)
+                    report['cancel'] = {}
+                    self._cancel_probe(index, lease, report['cancel'])
             _need(self.effects == initial_effects + groups * 2, 'BATCH_EFFECT_COUNT')
             report['memory_after'] = self._observe()
             report.update(status='COMPLETE' if mode == 'benchmark' else 'DIAGNOSTIC',

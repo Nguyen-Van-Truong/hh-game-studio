@@ -21,18 +21,19 @@ from studio.reviewer.model import UiAction, Phase, UiCode
 def run(run_id, mode):
     paths = sorted((STUDIO / 'reviewer').glob('*.py')) + [Path(__file__)]
     source = {p.relative_to(STUDIO).as_posix(): native.sha(p.read_bytes()) for p in paths}
-    owner = PreparedReviewer.prepare(run_id)
-    output = owner.backend.root / 'reviewer-probe'
-    output.mkdir()
-    native.write(output / 'source.json', source)
-    for index, path in enumerate(paths):
-        native.write(output / 'source' / (str(index) + '.py'), path.read_bytes())
     root = None
-    errors, events, heartbeats = [], [], []
-    flags = {'play_key': False, 'stop_key': False, 'inspect_button': False,
-             'capture_button': False, 'close_requested': False}
-    started = time.monotonic()
+    original_error = None
+    owner = PreparedReviewer.prepare(run_id)
     try:
+        output = owner.backend.root / 'reviewer-probe'
+        output.mkdir()
+        native.write(output / 'source.json', source)
+        for index, path in enumerate(paths):
+            native.write(output / 'source' / (str(index) + '.py'), path.read_bytes())
+        errors, events, heartbeats = [], [], []
+        flags = {'play_key': False, 'stop_key': False, 'inspect_button': False,
+                 'capture_button': False, 'close_requested': False}
+        started = time.monotonic()
         root = tk.Tk()
         root.geometry('940x620+60+60')
         window = ReviewerWindow(root, owner.client, on_close=owner.close)
@@ -120,13 +121,24 @@ def run(run_id, mode):
         native.write(output / 'result.json', result)
         print('HH_GT06_REVIEWER_COMPLETE ' + __import__('json').dumps({'run_id': run_id,
               'mode': mode, 'result_sha256': native.sha(native.encoded(result))}), flush=True)
+    except BaseException as error:
+        original_error = error
+        raise
     finally:
-        owner.close()
-        if root is not None:
-            try:
-                root.destroy()
-            except tk.TclError:
-                pass
+        try:
+            owner.close()
+        except BaseException as cleanup_error:
+            # PreparedReviewer retains an uncertain owner in HELD_REVIEWERS.
+            # Preserve the initiating failure, with cleanup failure as its cause.
+            if original_error is not None:
+                raise original_error from cleanup_error
+            raise
+        finally:
+            if root is not None:
+                try:
+                    root.destroy()
+                except tk.TclError:
+                    pass
 
 
 def bounded_run(run_id, mode):

@@ -16,6 +16,10 @@
 *.tres text eol=lf
 *.cfg text eol=lf
 *.blend binary
+# Preserve S68 Windows evidence bytes; CRLF is part of captured logs, not a source defect.
+zdoc/reviews/20260917-gt06-s68-*/** whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+# Unified diff context lines include an intentional single leading space.
+zdoc/reviews/20260917-gt06-s68-progress/*.patch whitespace=-blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 # Native-generated pinned Blender fixtures were frozen as CRLF bytes.
 studio/blender-addon/exporter.lock.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 studio/tests/blender/fixtures/box-export-baseline.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

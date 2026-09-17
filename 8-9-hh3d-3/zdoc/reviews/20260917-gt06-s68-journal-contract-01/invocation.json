@@ -1,0 +1,14 @@
+{
+  "code": "import importlib.util,json,sys,unittest\nfrom pathlib import Path\nfrom studio.host.replay.verified_journal import VerifiedJournal\nfrom studio.host.core import journal as base\nsuite=unittest.TestSuite()\nfor name in ('test_journal','test_journal_retention','test_journal_platform','test_journal_cas','test_journal_durability'):\n path=Path('studio/tests/protocol')/(name+'.py'); spec=importlib.util.spec_from_file_location('candidate_'+name,path); module=importlib.util.module_from_spec(spec); spec.loader.exec_module(module)\n if hasattr(module,'Journal'): module.Journal=VerifiedJournal; module.JournalError=base.JournalError; module.JournalLimits=base.JournalLimits\n if hasattr(module,'jm'): module.jm.Journal=VerifiedJournal\n suite.addTests(unittest.defaultTestLoader.loadTestsFromModule(module))\nsuite.addTests(unittest.defaultTestLoader.loadTestsFromName('studio.tests.replay.test_verified_journal'))\nr=unittest.TextTestRunner(verbosity=2).run(suite); print('VERIFIED_JOURNAL_CONTRACT '+json.dumps({'run':r.testsRun,'failures':len(r.failures),'errors':len(r.errors),'skips':len(r.skipped),'child_contract':'legacy subprocesses retain accepted Journal; new regression uses four VerifiedJournal children'}),flush=True); sys.exit(not r.wasSuccessful())\n",
+  "source_files": {
+    "host/replay/verified_journal.py": "4e72d059b5b8204566dfeae4e23f20d9259db0626b6f2312dbd94359156f9cc7",
+    "host/core/journal.py": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6",
+    "tests/replay/test_verified_journal.py": "16abfa22a9baadd4957efd924c26c86c5d4c67cffda79a887c0e89a0cb893e30",
+    "tests/protocol/test_journal.py": "cb8849a5dab8e6a5c2b905f87d6ce41bd8bed395da0d58a96fb047835ebdadcb",
+    "tests/protocol/test_journal_cas.py": "3060bb1e39b4c24509554c3b93a84b4f7246ee29c3758743c5f5609ab60814cc",
+    "tests/protocol/test_journal_durability.py": "ce6d69aba0ef8c13d123678e1fd73b1559db966a153f0fd2a236a3208953b567",
+    "tests/protocol/test_journal_platform.py": "e9ae24b8c7f564046f5d7b9ff6f3dbca7c93681832737b8fcecbc21785879b33",
+    "tests/protocol/test_journal_retention.py": "43ada799eadb67c6a0d799b5468e9d7626f115c229a5ac13bde331176839932f"
+  },
+  "runner_sha256": "ea522450acc46f90be5e2a7b9257e73ce8b619948105b2c9073aac1f881c7328"
+}

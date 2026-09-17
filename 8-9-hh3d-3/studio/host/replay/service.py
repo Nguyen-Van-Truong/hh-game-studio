@@ -13,13 +13,14 @@ import secrets
 import threading
 import time
 
-from studio.host.core.journal import Journal, JournalError, JournalLimits
+from studio.host.core.journal import JournalError, JournalLimits
 from studio.host.core.limits import SafetyViolation
 from studio.host.core.transport import epoch_ms
 from studio.protocol.core import Request, Response, Status, canonical_bytes
 from . import contract, inspector, native_runner as native
 from .backend import PreparedPlay, BackendError
 from .session import ReplaySession, ReplaySessionError
+from .verified_journal import VerifiedJournal as Journal
 
 
 def need(value, code):
