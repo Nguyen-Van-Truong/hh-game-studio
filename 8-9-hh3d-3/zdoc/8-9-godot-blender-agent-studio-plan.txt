@@ -160,6 +160,17 @@ GT-06 hiện hành — tóm tắt theo kết quả, chi tiết giữ trong evide
   phải query task hiện tại, không suy RUNNING từ dòng lịch sử này. Launchproof:
   reviews/20260918-gt06-s70-resume/campaign02-launch.json. Matrixdraft,
   closure-packaging-check và campaign-operations đã lưu trong cùng thư mục.
+- Owner yêu cầu tiếp tục qua đêm18-09: heartbeat task hiện tại đã ACTIVE,
+  id=ti-p-t-c-hh3d-tools-qua-m, kiểm/tiếp việc mỗi15phút. Readback lưu tại
+  reviews/20260918-gt06-s70-resume/overnight-schedule.json. Không tạo lịch trùng;
+  chỉ đọc status/tail khi đang đo, sửa/resume phần lỗi theo proof khi terminal,
+  đủ evidence thì hai critic độc lập cùnghash rồi mới mở gate kế tiếp.
+  Ba warmup đầu mất58.20/64.92/181.94s: ước lượng sớm6–18giờ riêng benchmark,
+  biến động lớn và chưa có measuredsample/fullrun, không hứa xongplan trước sáng.
+  Máy/app phải hoạt động; không chạy thêm engine/test nặng cạnh phép đo.
+  Ba worker đã lưu overnight-estimate.md, fault-coverage-links.md và
+  android-prerequisite-status.md: F11/F12 có dependency/test links, không thấy
+  orphan functional mới; Android/adb vẫnUNVERIFIED, chưa là blocker GT06.
 - Chưa có GT06 accepted candidate. Sau benchmark đúng profile phải đóng
   requirement→test→evidence trên frozen closure, hai critic độc lập PASS/TICK=yes,
   rồi coordinator mới chuyểnGT06ACCEPTED. Không mở implementation GT07 trước đó.
