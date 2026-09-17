@@ -59,6 +59,7 @@ GT06_CURRENT_SOURCE_CLOSURE=ffa6071a1fb9d324da7cd860fb41b656e99135a3118367873c73
 GT06_SOURCE_CHECKPOINT=04b2f4dc
 GT06_BENCHMARK_CAMPAIGN=gt06-s75-campaign-01
 GT06_BENCHMARK_STATUS=FAILED_S75_LAUNCH1_HANDLES_AND_STATUS_GAP
+GT06_ACTIVE_DIAGNOSTIC=GT06_S76_RETENTION_01_8X100_NATIVE_ONLY
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
 
 TIẾN ĐỘ HIỆN HÀNH — S76, ngày 18-09-2026
@@ -68,6 +69,8 @@ ObjectDB71130/resources6 ổn định. Có9capture, không có fullrunPASS.
 Đã giữ failure/source/cleanup; sửa cadence đã qua unit/native/5guard âm tính.
 Ba worker S76 đã hoàn tất preservation, handle analysis và critical-path report.
 Fullbenchmark chưa chạy lại; không dùng partial samples hoặc nới gate.
+Retention8×100native+60sidle đã dispatch23:50:56UTC, taskstate4 tại23:51:54UTC;
+query sống trước khi gọi RUNNING. Checkpoint source04b2f4dc/evidenceccfb27ab.
 Evidence hiện hành: reviews/20260918-gt06-s76-handles/; S75 plan exactarchive ở
 reviews/20260918-plan-history-s75/ (AUTHORITY=0). Source mới04b2f4dc chưa fullcampaign.
 Owner đã cho phép lại ba Astra extra high; coordinator tiếp tục từ S68 đã tích hợp.
@@ -162,6 +165,9 @@ GT-06 hiện hành — phần đã làm và đường tới nghiệm thu
   chưa tách hash/scheduler/metadata. Không thaydurability hoặc coi30read làfullmix.
   Report/readback/repro/limitations: reviews/20260918-gt06-s76-handles/README.md.
   Chỉ mở fullcampaign mới sau khi chẩn đoán handle/latency; không retry mù.
+  Diagnosticretention8×100 đang chạy qua taskWindows riêng, runner600s/inner540s;
+  không cóHTTP, không thayfullcampaign. retention_task.ps1 status/delete chỉ
+  đúngtask HHStudio.GT06.gt06-s76-retention-01; actualexit/Job vẫn bắtbuộc.
 - Sau benchmark: verify complete10×35, raw/hash/schema/counters/actual exits;
   ghép functional bằng dependency đã kiểm; đóng final source/review/raw manifest
   và requirement→test→evidence. Hai critic mới đọc độc lập cùng final hash,
@@ -212,6 +218,10 @@ KINH NGHIỆM ĐANG ÁP DỤNG
 9. Test negative phải chạm đúng fault, không dùng setup/argv/cache failure làm
    bằng chứng reject. Scope tools dùng runner bounded, không quét checker legacy
    toàn repo hoặc kill process dự án khác. Nghiên cứu API đúng pin từ nguồn gốc.
+10. Windows commandline có cap: Gitproof dùng ítpathprefix rồi lọc trongPython,
+    không truyền823pathargv. Gate shellphụ thuộc phải checkexit trướccommit;
+    S76indexprobe lỗi206, đã verify lại823HEADblobs của ccfb27ab. Resolve
+    sys.executable trướcpythonw, vì PATH có thể làapp-executionalias.
 
 LỊCH SỬ / CÁCH ĐỌC
 Bản S71 đầy đủ trước tinh gọn giữ tại reviews/20260918-plan-history-s71/
