@@ -1,0 +1,84 @@
+{
+  "schema": "HH-GT06-S74-RESUME-OBSERVATION-1",
+  "observed_at": "2026-09-17T21:41:53.654709+00:00",
+  "campaign": "gt06-s73-campaign-01",
+  "launch": 2,
+  "run": "gt06-s73-campaign-01.r00.a02",
+  "scheduler_state": 4,
+  "instance": {
+    "instance_guid": "{784D1951-8B63-45B3-8E1E-D1D08FAA2D1D}",
+    "state": 4,
+    "scheduler_engine_pid": 24600
+  },
+  "source_checkpoint": "cb4d1f6f",
+  "source_closure_sha256": "6f5d4c8a14ef8476c4cff6afb06ab161b17905f8593f9a685cd235593d7ee913",
+  "source_matches_prior_git_proof": true,
+  "copied_inputs": [
+    {
+      "raw": ".local\\reviews\\gt06-s73-campaign-01\\campaign.json",
+      "copy": "campaign.json",
+      "bytes": 6295,
+      "sha256": "de6debe4f6c23eefb5dac1c552d0986961ee4885e61455791f7e0af1c37989fb"
+    },
+    {
+      "raw": ".local\\reviews\\gt06-s73-campaign-01-supervisor-launch-02\\request.json",
+      "copy": "request.json",
+      "bytes": 396,
+      "sha256": "530371f01c83d3c4a274048557c128cc09e4b98f295c8a913e126f3c05229ac3"
+    },
+    {
+      "raw": ".local\\reviews\\gt06-s73-campaign-01-supervisor-launch-02\\start.json",
+      "copy": "start.json",
+      "bytes": 524,
+      "sha256": "c4d86ea470a414eb8d15a53c53822ac93249074ed6ee92f93e2c5008588d1942"
+    },
+    {
+      "raw": ".local\\reviews\\gt06-s73-campaign-01-supervisor-launch-02\\task-registration.json",
+      "copy": "task-registration.json",
+      "bytes": 889,
+      "sha256": "31ad2f1a04eb1e6486026014339a9a3178ec9a064524c76f03e7164d103a9fb9"
+    },
+    {
+      "raw": ".local\\reviews\\gt06-s73-campaign-01-supervisor-launch-02\\task-start.json",
+      "copy": "task-start.json",
+      "bytes": 858,
+      "sha256": "e75195ec245f662ff3f2e564788d8026d475fbde6c5dcf631e3f16f636cec0b9"
+    },
+    {
+      "raw": ".local\\reviews\\gt06-s73-campaign-01-supervisor-launch-02\\task-definition.xml",
+      "copy": "task-definition.xml",
+      "bytes": 1688,
+      "sha256": "5d513698db3ab382e46f087a396a684ef0cdefdd33c875d4c39da05c34c0145f"
+    },
+    {
+      "raw": ".local\\reviews\\gt06-s73-campaign-01\\run-00-attempt-02\\context.json",
+      "copy": "context.json",
+      "bytes": 5280,
+      "sha256": "fa8d0e72e7f97955fe10b2cc3b01da477125889a6d8af8fdce8eb829b9321e37"
+    },
+    {
+      "raw": ".local\\reviews\\gt06-s73-campaign-01\\run-00-attempt-02\\source-files.json",
+      "copy": "source-files.json",
+      "bytes": 4941,
+      "sha256": "a147cdbcc1e85fa5a0ab97dc8e308a4dc1e06f74d6622c82b4884961ae958d85"
+    }
+  ],
+  "tails": {
+    "host-owner": {
+      "tail": [
+        "HH_GT06_CAMPAIGN_PROGRESS {\"run_id\": \"gt06-s73-campaign-01.r00.a02\", \"batch\": 0, \"phase\": \"native_cycles\"}",
+        "HH_GT06_CAMPAIGN_PROGRESS {\"run_id\": \"gt06-s73-campaign-01.r00.a02\", \"batch\": 0, \"phase\": \"native_cycles\"}"
+      ],
+      "stderr_bytes": 0
+    },
+    "editor-host": {
+      "tail": [
+        "HH_GT06_BENCHMARK_HEARTBEAT {\"batch\":0,\"cycle\":33,\"main_thread\":true,\"monotonic_us\":61203199,\"phase\":\"SAVE_WAIT\",\"pid\":8776,\"run_id\":\"gt06-s73-campaign-01.r00.a02\"}",
+        "HH_GT06_BENCHMARK_HEARTBEAT {\"batch\":0,\"cycle\":35,\"main_thread\":true,\"monotonic_us\":61712661,\"phase\":\"SAVE_WAIT\",\"pid\":8776,\"run_id\":\"gt06-s73-campaign-01.r00.a02\"}"
+      ],
+      "stderr_bytes": 0
+    }
+  },
+  "formal_acceptance": false,
+  "scope": "Separate live scheduler and native/host startup observation; not full-run or root-cause repair proof."
+}

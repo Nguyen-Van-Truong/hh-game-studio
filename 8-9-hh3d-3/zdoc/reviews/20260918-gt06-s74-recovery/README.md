@@ -49,3 +49,12 @@ starts a whole35-batch run. Prior failed data remains separately inventoried.
 Do not infer a PASS from this decision. If the same failures recur, investigate
 the owned scheduler process priorities and commit/fault behavior before another
 retry; do not blindly dispatch launch3 or weaken the fixed gates.
+
+Resume follow-up: recovery checkpoint `82f62a71`; launch2 requested at
+`2026-09-17T21:40:37Z`. Separate live scheduler query and bounded tails at
+`21:41:53Z` showed state4/one instance and matching host/native run a02
+progress, native PID8776, empty stderr. `launch-02/observation.json` binds the
+static launch/context/source copies and distinguishes startup from acceptance.
+The existing15-minute heartbeat now uses launch2 and its supervisor directory;
+`launch-02/overnight-schedule.json` retains the readback. Source remains the
+unchanged49-file S73 closure. No benchmark result or root-cause repair is claimed.
