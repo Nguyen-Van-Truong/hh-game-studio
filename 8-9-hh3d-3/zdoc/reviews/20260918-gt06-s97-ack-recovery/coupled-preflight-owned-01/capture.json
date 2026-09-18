@@ -1,0 +1,19 @@
+{
+  "wrapper_pid": 40148,
+  "started_at": "2026-09-18T17:19:52.591683+00:00",
+  "argv": [
+    "python.exe",
+    "-B",
+    "$SNAPSHOT/zdoc/reviews/20260918-gt06-s97-ack-recovery/coupled-next/coupled_phases.py",
+    "--preflight"
+  ],
+  "exit_code": 0,
+  "target_pid": 54188,
+  "wrapper_exit_code": 0,
+  "timed_out": false,
+  "tree_verified": true,
+  "ownership": "gated_job_kill_on_close",
+  "stdout": "preflight-stdout.txt",
+  "stderr": "preflight-stderr.txt",
+  "host": "preflight-host.json"
+}

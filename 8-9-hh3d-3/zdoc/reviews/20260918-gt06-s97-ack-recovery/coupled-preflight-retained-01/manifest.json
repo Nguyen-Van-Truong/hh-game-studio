@@ -1,0 +1,497 @@
+{
+  "actual_import_exit": {
+    "exit_code": 0,
+    "pid": 17624
+  },
+  "base_source_sha256": "cfc4b55a5407891bfd54d22d9f1ac45a74b6c744898199a0e4690d6230a6c1d6",
+  "effective_native_sha256": "4568a2b10b0dc4793a837558ab9113c7b4acffdf71e5a57183fcac5c9cd8eecd",
+  "files": {
+    "benchmark-profile.json": {
+      "copy": "000-benchmark-profile.json",
+      "sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+      "size_bytes": 718
+    },
+    "context.json": {
+      "copy": "001-context.json",
+      "sha256": "308fddc34706b27940884e08619d9079c5abdfbbf84580ab8b226ffa67ae8767",
+      "size_bytes": 5503
+    },
+    "diagnostic.json": {
+      "copy": "002-diagnostic.json",
+      "sha256": "a8328758dc6e9c111b762f5b793912cf14bf5140b3c0a7d5fc3353f5a4b4f41a",
+      "size_bytes": 8462
+    },
+    "effective-benchmark-native.gd": {
+      "copy": "003-effective-benchmark-native.gd",
+      "sha256": "4568a2b10b0dc4793a837558ab9113c7b4acffdf71e5a57183fcac5c9cd8eecd",
+      "size_bytes": 63817
+    },
+    "import-host/capture.json": {
+      "copy": "004-capture.json",
+      "sha256": "736c7b336e22a7457c176e17c70e90a7716443e2533cb9a34834ca13e344ccd8",
+      "size_bytes": 1341
+    },
+    "import-host/invocation.json": {
+      "copy": "005-invocation.json",
+      "sha256": "dbf9b294d5605a65f783a44398b93de2bb2342c8dab8dae2f672a8b82104bf31",
+      "size_bytes": 8646
+    },
+    "import-host/process-exit.json": {
+      "copy": "006-process-exit.json",
+      "sha256": "4b703548e90d02f19aaefe58b14280dbd4eff016122b689f4bfb17ab3ddfb6bd",
+      "size_bytes": 30
+    },
+    "import-host/process-start.json": {
+      "copy": "007-process-start.json",
+      "sha256": "6c3f0a8971d3b0926e34029b4e351a0f21ca0d22fc77369c48e7a9cd3923a94c",
+      "size_bytes": 14
+    },
+    "import-host/stderr.txt": {
+      "copy": "008-stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "import-host/stdout.txt": {
+      "copy": "009-stdout.txt",
+      "sha256": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003",
+      "size_bytes": 1492
+    },
+    "native-overlay.json": {
+      "copy": "010-native-overlay.json",
+      "sha256": "f38040adbd086b73f868fdd0e42df796b74ae9236d4e282ae06edfa60f38d5d3",
+      "size_bytes": 873
+    },
+    "preflight.json": {
+      "copy": "011-preflight.json",
+      "sha256": "2cd1b852c4f69eb1008b93ca315254be209c95a137384da0148ca77bd6d1845a",
+      "size_bytes": 3051
+    },
+    "project/addons/hh_benchmark/benchmark_native.gd": {
+      "copy": "012-benchmark_native.gd",
+      "sha256": "4568a2b10b0dc4793a837558ab9113c7b4acffdf71e5a57183fcac5c9cd8eecd",
+      "size_bytes": 63817
+    },
+    "project/addons/hh_benchmark/benchmark_native.gd.uid": {
+      "copy": "013-benchmark_native.gd.uid",
+      "sha256": "5784a59c8c71332231f06fe8c8c7c75896bfb5dddf1f4c19d823be9ab8408040",
+      "size_bytes": 20
+    },
+    "project/addons/hh_benchmark/plugin.cfg": {
+      "copy": "014-plugin.cfg",
+      "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092",
+      "size_bytes": 189
+    },
+    "project/addons/hh_studio/jcs_godot.gd": {
+      "copy": "015-jcs_godot.gd",
+      "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+      "size_bytes": 10165
+    },
+    "project/addons/hh_studio/jcs_godot.gd.uid": {
+      "copy": "016-jcs_godot.gd.uid",
+      "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+      "size_bytes": 20
+    },
+    "project/addons/hh_studio/plugin.cfg": {
+      "copy": "017-plugin.cfg",
+      "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+      "size_bytes": 165
+    },
+    "project/addons/hh_studio/plugin.gd": {
+      "copy": "018-plugin.gd",
+      "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+      "size_bytes": 23043
+    },
+    "project/addons/hh_studio/plugin.gd.uid": {
+      "copy": "019-plugin.gd.uid",
+      "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+      "size_bytes": 20
+    },
+    "project/addons/hh_studio/scene_commands.gd": {
+      "copy": "020-scene_commands.gd",
+      "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+      "size_bytes": 32174
+    },
+    "project/addons/hh_studio/scene_commands.gd.uid": {
+      "copy": "021-scene_commands.gd.uid",
+      "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+      "size_bytes": 19
+    },
+    "project/benchmark/.gdignore": {
+      "copy": "022-.gdignore",
+      "sha256": "3d078ee3c08af2f64daca29255d23d366dc0a9bdbef8a872442d5642bfb84cf8",
+      "size_bytes": 53
+    },
+    "project/benchmark/input.json": {
+      "copy": "023-input.json",
+      "sha256": "5607e05cf9f8784415ffadb798f74f07e02f0ef329139d579112d86482b16d0e",
+      "size_bytes": 376
+    },
+    "project/project.godot": {
+      "copy": "024-project.godot",
+      "sha256": "819b521edff745f02f7c30e96ceffe21c70d8ef4fc32e95b96df37877e817ce1",
+      "size_bytes": 838
+    },
+    "project/scenes/fixture.tscn": {
+      "copy": "025-fixture.tscn",
+      "sha256": "51eaa111f832327d74b2031d382eb22ab30c8b725323e26ebcf7a66bbef571cb",
+      "size_bytes": 235
+    },
+    "project/scripts/fixture_actor.gd": {
+      "copy": "026-fixture_actor.gd",
+      "sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+      "size_bytes": 50
+    },
+    "project/scripts/fixture_actor.gd.uid": {
+      "copy": "027-fixture_actor.gd.uid",
+      "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+      "size_bytes": 20
+    },
+    "s96-composition.json": {
+      "copy": "028-s96-composition.json",
+      "sha256": "e23415d6771d26c79a4c28f0ef9a1d0e61c6634c502286006ccdec051abb42ab",
+      "size_bytes": 768
+    },
+    "source-files.json": {
+      "copy": "094-source-files.json",
+      "sha256": "982c58924d26fd601aa9c4f7741e1c95ecc55e0cf896f1088e02f6b1431bcb72",
+      "size_bytes": 5156
+    },
+    "source/studio/blender-addon/ipc_client.py": {
+      "copy": "029-ipc_client.py",
+      "sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9",
+      "size_bytes": 16349
+    },
+    "source/studio/contracts/perf-collector.schema.json": {
+      "copy": "030-perf-collector.schema.json",
+      "sha256": "394d1df03bdfd736ea3fe9f260e9d718d35f3820cde35d1c45ccab65fbc24834",
+      "size_bytes": 30060
+    },
+    "source/studio/godot-addon/addons/hh_studio/plugin.cfg": {
+      "copy": "031-plugin.cfg",
+      "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+      "size_bytes": 165
+    },
+    "source/studio/godot-addon/addons/hh_studio/plugin.gd": {
+      "copy": "032-plugin.gd",
+      "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+      "size_bytes": 23043
+    },
+    "source/studio/godot-addon/addons/hh_studio/scene_commands.gd": {
+      "copy": "033-scene_commands.gd",
+      "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+      "size_bytes": 32174
+    },
+    "source/studio/godot-addon/bundle_staging.py": {
+      "copy": "034-bundle_staging.py",
+      "sha256": "3d614edbec8e9a7f5ad3caf2b9694d7498df129de95683952268621f91d68e43",
+      "size_bytes": 15005
+    },
+    "source/studio/godot-addon/bundle_v2.py": {
+      "copy": "035-bundle_v2.py",
+      "sha256": "2c5cdc71cdaf80f58bb93ec791e84bab8bd02cd4d9bdbd93d635db13583de62a",
+      "size_bytes": 8475
+    },
+    "source/studio/godot-addon/cli_job.py": {
+      "copy": "036-cli_job.py",
+      "sha256": "5a0f37bc129bde409a2657054fb091d637d838e442d45a69e7adc1f1527d4c88",
+      "size_bytes": 12672
+    },
+    "source/studio/godot-addon/fixture_profile.py": {
+      "copy": "043-fixture_profile.py",
+      "sha256": "25e1667dd930dcf0746b071fc29ea3460bc18d5fb9f3f83e806c1793028f21ae",
+      "size_bytes": 6020
+    },
+    "source/studio/godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid": {
+      "copy": "037-jcs_godot.gd.uid",
+      "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+      "size_bytes": 20
+    },
+    "source/studio/godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid": {
+      "copy": "038-plugin.gd.uid",
+      "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+      "size_bytes": 20
+    },
+    "source/studio/godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid": {
+      "copy": "039-scene_commands.gd.uid",
+      "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+      "size_bytes": 19
+    },
+    "source/studio/godot-addon/fixture_profile/project.godot": {
+      "copy": "040-project.godot",
+      "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+      "size_bytes": 282
+    },
+    "source/studio/godot-addon/fixture_profile/scripts/fixture_actor.gd.uid": {
+      "copy": "041-fixture_actor.gd.uid",
+      "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+      "size_bytes": 20
+    },
+    "source/studio/godot-addon/fixture_profile/source-pins.json": {
+      "copy": "042-source-pins.json",
+      "sha256": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2",
+      "size_bytes": 1873
+    },
+    "source/studio/host/blender/__init__.py": {
+      "copy": "044-__init__.py",
+      "sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90",
+      "size_bytes": 69
+    },
+    "source/studio/host/blender/deadline.py": {
+      "copy": "045-deadline.py",
+      "sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926",
+      "size_bytes": 1130
+    },
+    "source/studio/host/blender/export_job.py": {
+      "copy": "046-export_job.py",
+      "sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe",
+      "size_bytes": 13605
+    },
+    "source/studio/host/blender/glb_preflight.py": {
+      "copy": "047-glb_preflight.py",
+      "sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62",
+      "size_bytes": 11815
+    },
+    "source/studio/host/blender/ui_host.py": {
+      "copy": "048-ui_host.py",
+      "sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35",
+      "size_bytes": 22464
+    },
+    "source/studio/host/core/journal.py": {
+      "copy": "049-journal.py",
+      "sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6",
+      "size_bytes": 29602
+    },
+    "source/studio/host/core/limits.py": {
+      "copy": "050-limits.py",
+      "sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f",
+      "size_bytes": 15813
+    },
+    "source/studio/host/core/private_store.py": {
+      "copy": "051-private_store.py",
+      "sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476",
+      "size_bytes": 20476
+    },
+    "source/studio/host/core/redaction.py": {
+      "copy": "052-redaction.py",
+      "sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f",
+      "size_bytes": 10038
+    },
+    "source/studio/host/core/safe_create.py": {
+      "copy": "053-safe_create.py",
+      "sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606",
+      "size_bytes": 13170
+    },
+    "source/studio/host/core/safe_open.py": {
+      "copy": "054-safe_open.py",
+      "sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535",
+      "size_bytes": 12093
+    },
+    "source/studio/host/core/transport.py": {
+      "copy": "055-transport.py",
+      "sha256": "1ec03356b1cb8c8987e1604bcb164aea6a9934dbe259451c19e12de36398aba0",
+      "size_bytes": 47056
+    },
+    "source/studio/host/replay/disk_journal_index.py": {
+      "copy": "056-disk_journal_index.py",
+      "sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28",
+      "size_bytes": 13593
+    },
+    "source/studio/host/replay/perf.py": {
+      "copy": "057-perf.py",
+      "sha256": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7",
+      "size_bytes": 19085
+    },
+    "source/studio/host/replay/process_probe.py": {
+      "copy": "058-process_probe.py",
+      "sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500",
+      "size_bytes": 5485
+    },
+    "source/studio/host/replay/verified_journal.py": {
+      "copy": "059-verified_journal.py",
+      "sha256": "129baa4d9e08c8a1d5acf2ea05c9c89a4fdddb53ca6f3baf2d61311ab98e62ab",
+      "size_bytes": 9155
+    },
+    "source/studio/pipeline/__init__.py": {
+      "copy": "060-__init__.py",
+      "sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68",
+      "size_bytes": 79
+    },
+    "source/studio/pipeline/native_job.py": {
+      "copy": "061-native_job.py",
+      "sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca",
+      "size_bytes": 12512
+    },
+    "source/studio/protocol/__init__.py": {
+      "copy": "062-__init__.py",
+      "sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f",
+      "size_bytes": 881
+    },
+    "source/studio/protocol/_rfc8785/__init__.py": {
+      "copy": "063-__init__.py",
+      "sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b",
+      "size_bytes": 505
+    },
+    "source/studio/protocol/_rfc8785/_impl.py": {
+      "copy": "064-_impl.py",
+      "sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec",
+      "size_bytes": 7251
+    },
+    "source/studio/protocol/core.py": {
+      "copy": "065-core.py",
+      "sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e",
+      "size_bytes": 19886
+    },
+    "source/studio/protocol/jcs_godot.gd": {
+      "copy": "066-jcs_godot.gd",
+      "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+      "size_bytes": 10165
+    },
+    "source/studio/tests/replay/benchmark_assembly.py": {
+      "copy": "067-benchmark_assembly.py",
+      "sha256": "19c684d72995327e65458422ab66384e4d586705cad31f3ab3fd8615934f2a22",
+      "size_bytes": 50798
+    },
+    "source/studio/tests/replay/benchmark_commands.py": {
+      "copy": "068-benchmark_commands.py",
+      "sha256": "29ab59c799855e6695f5c0db18b21ed4ee3f7cd70fb42dcc3b9784e8960d6ca0",
+      "size_bytes": 21010
+    },
+    "source/studio/tests/replay/benchmark_job.py": {
+      "copy": "069-benchmark_job.py",
+      "sha256": "be424a6f37ae573ac4bf40954b31017025daee2147699c80b05f9a0ab70e1611",
+      "size_bytes": 24991
+    },
+    "source/studio/tests/replay/benchmark_native.gd": {
+      "copy": "070-benchmark_native.gd",
+      "sha256": "13e65360cd0bc0033d0ad414fb3238e216b0d6dcc08e57dc7026ec4fc9eb8b95",
+      "size_bytes": 54580
+    },
+    "source/studio/tests/replay/benchmark_plugin.cfg": {
+      "copy": "071-benchmark_plugin.cfg",
+      "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092",
+      "size_bytes": 189
+    },
+    "source/studio/tests/replay/benchmark_profile.py": {
+      "copy": "072-benchmark_profile.py",
+      "sha256": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233",
+      "size_bytes": 19625
+    },
+    "source/studio/tests/replay/benchmark_readiness.py": {
+      "copy": "073-benchmark_readiness.py",
+      "sha256": "842db6244d93384932929544045654f089d67f6f304624b7348b7d5c4583ab68",
+      "size_bytes": 6746
+    },
+    "source/studio/tests/replay/benchmark_transport.py": {
+      "copy": "074-benchmark_transport.py",
+      "sha256": "3b789fc025c5d217d8567ee1a3cd97ccf4c2e01214c974417643c080622848df",
+      "size_bytes": 4687
+    },
+    "source/studio/tests/replay/campaign_task.ps1": {
+      "copy": "075-campaign_task.ps1",
+      "sha256": "405e2abfa39332b1313871763184fdda0755ff998ec83310e67e10cebfe2ebb9",
+      "size_bytes": 18607
+    },
+    "source/studio/tests/replay/run_benchmark_campaign.py": {
+      "copy": "076-run_benchmark_campaign.py",
+      "sha256": "bb43ecc04c2de4872177a440eb071d533efdaa9e8194f62b4e0907bad8d4b252",
+      "size_bytes": 53592
+    },
+    "source/studio/tests/replay/run_campaign_task.py": {
+      "copy": "077-run_campaign_task.py",
+      "sha256": "f5cb71fa96b8fd2f935ac933dcd5190cef2b3b6821f031bfe72becb2d360a6fd",
+      "size_bytes": 8033
+    },
+    "source/studio/tests/replay/run_native_benchmark.py": {
+      "copy": "078-run_native_benchmark.py",
+      "sha256": "e6b0f8e9711ac881cfa65b4537232c685ff577af0a13778a51cc54999b1c1fc7",
+      "size_bytes": 26986
+    },
+    "source/studio/toolchain.lock.json": {
+      "copy": "079-toolchain.lock.json",
+      "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+      "size_bytes": 3026
+    },
+    "source/zdoc/reviews/20260918-gt06-s93-sparse-attribution/diagnose_sequence_s91.py": {
+      "copy": "080-diagnose_sequence_s91.py",
+      "sha256": "5b93e33f9589c38889d8cc9ae6cf69e6c98d8e0624753ccf535b5e3a3a168cae",
+      "size_bytes": 13398
+    },
+    "source/zdoc/reviews/20260918-gt06-s93-sparse-attribution/launch_observer.py": {
+      "copy": "081-launch_observer.py",
+      "sha256": "aebbff3662c03f6e130354a0ea99a53f00da01f948b632c3fca9adbe48e0cad6",
+      "size_bytes": 19290
+    },
+    "source/zdoc/reviews/20260918-gt06-s93-sparse-attribution/patch_native_s91.py": {
+      "copy": "082-patch_native_s91.py",
+      "sha256": "f4226f40839e40579ae5c489cfd33800e3739bb6e280193c38a54414afaf2bc0",
+      "size_bytes": 4260
+    },
+    "source/zdoc/reviews/20260918-gt06-s95-native-isolation/object_probe_s95.gd": {
+      "copy": "083-object_probe_s95.gd",
+      "sha256": "8a1ef457b6d4612fbf61176bc99598ec046d72c081e01c73665bb3237680784e",
+      "size_bytes": 9120
+    },
+    "source/zdoc/reviews/20260918-gt06-s95-result-prep/http-phases/phase_observer.py": {
+      "copy": "084-phase_observer.py",
+      "sha256": "9a79e5767f07674e80fb457b6d8f6326cb3558e9feb1d5d51884ad7784f5be57",
+      "size_bytes": 11653
+    },
+    "source/zdoc/reviews/20260918-gt06-s95-status-recovery/source-current.json": {
+      "copy": "085-source-current.json",
+      "sha256": "7480a3cce54d1b596d40abdb633c509915554c23ecce91e2e86bc4ad81cf371d",
+      "size_bytes": 5665
+    },
+    "source/zdoc/reviews/20260918-gt06-s96-coupled-phases/coupled_phases.py": {
+      "copy": "086-coupled_phases.py",
+      "sha256": "b1e311144b5beaad3fc0188b4d09e285351a4978502e64c0ac015122d4465ee0",
+      "size_bytes": 15603
+    },
+    "source/zdoc/reviews/20260918-gt06-s96-coupled-phases/register_task.ps1": {
+      "copy": "087-register_task.ps1",
+      "sha256": "691ea6b4cf3fffc3859ec5cf2522fad1338f6e43e71b89dbc889ae8f594fa859",
+      "size_bytes": 11579
+    },
+    "source/zdoc/reviews/20260918-gt06-s96-coupled-phases/test_coupled_phases.py": {
+      "copy": "088-test_coupled_phases.py",
+      "sha256": "efd3952d4ed479ec863e469f546ebe952dd2e45b50c1d79d3424f59af8d5efd1",
+      "size_bytes": 4710
+    },
+    "source/zdoc/reviews/20260918-gt06-s97-ack-recovery/coupled-next/README.md": {
+      "copy": "090-README.md",
+      "sha256": "1c7b04534644ea3b7f88f8b7df73196c43d2a40d055aedbd18f30a7c751c38d7",
+      "size_bytes": 4850
+    },
+    "source/zdoc/reviews/20260918-gt06-s97-ack-recovery/coupled-next/coupled_phases.py": {
+      "copy": "089-coupled_phases.py",
+      "sha256": "e145d74563143abfb6473b4050350d7d95f6cfa2ee9c3aee0e9931ee7b721b3f",
+      "size_bytes": 5564
+    },
+    "source/zdoc/reviews/20260918-gt06-s97-ack-recovery/coupled-next/register_task.ps1": {
+      "copy": "091-register_task.ps1",
+      "sha256": "5309721418eabf15229cf3c527ac5487b1fd4c09c1315741394d4306a2e6420f",
+      "size_bytes": 2631
+    },
+    "source/zdoc/reviews/20260918-gt06-s97-ack-recovery/coupled-next/source-current.json": {
+      "copy": "092-source-current.json",
+      "sha256": "58b941fa5dcc7530b9cdb0cb4bd6c5f9d33b97b956d854df29ef698aae896481",
+      "size_bytes": 5947
+    },
+    "source/zdoc/reviews/20260918-gt06-s97-ack-recovery/coupled-next/test_coupled_phases.py": {
+      "copy": "093-test_coupled_phases.py",
+      "sha256": "19277e0d71d8732466126d3a49363c056868e9892dee7cb32f8e749f49cd19fd",
+      "size_bytes": 4213
+    },
+    "toolchain.lock.json": {
+      "copy": "095-toolchain.lock.json",
+      "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+      "size_bytes": 3026
+    }
+  },
+  "formal_acceptance": false,
+  "git_head_exact_files": 65,
+  "helper_exit": 0,
+  "helper_sha256": "e5c9b2a2c06e42dae8c0892227523db023e14ffafcebbfe21d97c7860412b09c",
+  "raw_relative": "studio/.local/reviews/gt06-s97-coupled-phases-preflight-01",
+  "source_checkpoint": "4293acf2d6281c0206740b47ae520a20c044704c",
+  "verified_import": true
+}

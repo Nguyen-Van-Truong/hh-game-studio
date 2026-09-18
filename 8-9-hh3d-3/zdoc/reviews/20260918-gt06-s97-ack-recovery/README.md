@@ -65,7 +65,7 @@ Current source/implementation status belongs only to the tools plan. The exact
 previous S96 progress is `tools-plan-s96.txt`, hash in `plan-archive.json`, with
 AUTHORITY=0. All S70–S96 failures and S93 latency/S86 ObjectDB questions remain.
 
-## Candidate validation (in progress)
+## Candidate validation and current coupled run
 
 The sole runtime delta is benchmark_native.gd, SHA256
 `13e65360cd0bc0033d0ad414fb3238e216b0d6dcc08e57dc7026ec4fc9eb8b95`.
@@ -80,10 +80,35 @@ target12764 exit1 and raw resultfalse remain. The strict metadata-only
 revalidator checked exact bytes, source/stack binding, actual exits and cleanup;
 target22088/helper532 exited0 and produced reader-start-malformed-revalidated-01.json
 (SHA2561ef2b2e863efc8d312e91c5c07496cdd2b41080e4b2c0f3939ad1c3d494130cd).
-No engine rerun occurred. Remaining cases use the revised driver and fresh IDs.
+No engine rerun occurred. The remaining19 cases completed with the revised driver and fresh IDs.
+All24 cases were revalidated from packet bytes; manifest SHA256
+`e377ecbff14bfb284f9ee70084138571c6f1f5959609e760622f7d2e1b70555c`.
+The packet has821 shared evidence files plus3 metadata files and2727 logical
+records, with original outer1 and metadata correction kept distinct.
 The prelaunch intermediate-pin rejection in reader-revalidation-owned-01
 launched no child; wait for a writer stable handoff before taking a helper pin.
 
 Use the current tools-plan markers for whether reader validation or a coupled
 diagnostic is still active. A candidate/source change always requires a new
 run identity. Old and new helper hashes remain separate in their freezes.
+
+## Frozen continuation and operational lessons
+
+Source checkpoint4293acf2d628 binds the51-file candidate. Preflight completed
+with import17624 exit0 and outer54188/helper40148 exit0;96 selected exact copies
+are retained in coupled-preflight-retained-01. Source plus14 helpers matched65
+Git HEAD blobs. The new coupled diagnostic dispatched17:21:33 UTC; read the
+current tools plan and coupled-next/launch-01 for live state, not this dispatch.
+
+- Publication/name visibility does not guarantee every FileAccess open can
+  succeed immediately. Retry availability only inside the original deadline;
+  preserve fatal content validation and exact postconditions.
+- Expected malformed JSON emits a pinned parser diagnostic. Match its exact
+  bytes and frozen stack locations; retain original collector failure and
+  correct metadata from actual native exits instead of rerunning the engine.
+- Observer adoption schemas differ: supervisor uses process, host/editor use
+  target. Null from a wrong field is an observer error, not process death.
+  startup-liveness-02 corrects01 with actual PID/start/image checks.
+- Wait for writer handoff before pinning a helper. Use explicit UTF-8 for
+  Python text reads/writes on Windows. Git staging of the existing deep packet
+  needed per-command core.longpaths=true; no global configuration was changed.

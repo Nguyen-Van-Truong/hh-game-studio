@@ -1,0 +1,33 @@
+{
+  "observed_utc": "2026-09-18T17:23:11.8913681Z",
+  "run_id": "gt06-s97-coupled-phases-01",
+  "formal_acceptance": false,
+  "processes": [
+    {
+      "role": "supervisor",
+      "pid": 8924,
+      "alive": true,
+      "start_match": true,
+      "executable_match": true
+    },
+    {
+      "role": "host",
+      "pid": 22184,
+      "alive": true,
+      "start_match": true,
+      "executable_match": true
+    },
+    {
+      "role": "editor",
+      "pid": 33500,
+      "alive": true,
+      "start_match": true,
+      "executable_match": true
+    }
+  ],
+  "supersedes": "startup-liveness-01.json: supervisor null is a reader schema error, not evidence of death; editor adoption uses editor role",
+  "stderr_bytes": {
+    "host": 0,
+    "editor": 0
+  }
+}

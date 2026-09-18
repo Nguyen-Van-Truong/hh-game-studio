@@ -1,0 +1,1174 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:hh-studio:perf-collector:1.0.0",
+  "title": "HH Studio runtime frame collector v1",
+  "description": "Closed local artifact; not a shared command envelope. Structural plus semantic validation is implemented in host/replay/perf.py. Timing is runtime frame-boundary elapsed time, not GPU presentation latency. Raw SHA-256 fields have separate documented hash domains.",
+  "type": "object",
+  "properties": {
+    "schema_id": {
+      "const": "hh-studio.perf-collector",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0.0",
+      "type": "string"
+    },
+    "artifact_kind": {
+      "const": "runtime_frame_capture",
+      "type": "string"
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "run_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,127}$"
+        },
+        "command_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,127}$"
+        },
+        "project_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,127}$"
+        },
+        "runtime_instance_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,127}$"
+        },
+        "seed": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "input_hz": {
+          "const": 60,
+          "type": "integer"
+        },
+        "source_closure_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "runtime_snapshot_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "toolchain_lock_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "trace_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "profile_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "collector_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "run_id",
+        "command_id",
+        "project_id",
+        "runtime_instance_id",
+        "seed",
+        "input_hz",
+        "source_closure_sha256",
+        "runtime_snapshot_sha256",
+        "toolchain_lock_sha256",
+        "trace_sha256",
+        "profile_sha256",
+        "collector_sha256"
+      ],
+      "additionalProperties": false
+    },
+    "process": {
+      "type": "object",
+      "properties": {
+        "pid": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4294967295
+        },
+        "process_start": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^(?:windows:[1-9][0-9]{0,19}|linux:[0-9a-f-]{36}:[1-9][0-9]{0,19})$"
+        },
+        "role": {
+          "const": "play",
+          "type": "string"
+        },
+        "executable_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "host_job_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,127}$"
+        },
+        "window_status": {
+          "type": "string",
+          "enum": [
+            "available",
+            "unavailable"
+          ]
+        },
+        "window_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "native_window_handle": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "window_unavailable_reason": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 256
+        }
+      },
+      "required": [
+        "pid",
+        "process_start",
+        "role",
+        "executable_sha256",
+        "host_job_id",
+        "window_status",
+        "window_id",
+        "native_window_handle",
+        "window_unavailable_reason"
+      ],
+      "additionalProperties": false
+    },
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "godot_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "godot_build": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "platform": {
+          "type": "string",
+          "enum": [
+            "windows",
+            "linux",
+            "android"
+          ]
+        },
+        "device_profile_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,127}$"
+        },
+        "renderer": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "rendering_driver": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "display_server": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "resolution": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 16384
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "vsync_mode": {
+          "type": "string",
+          "enum": [
+            "disabled",
+            "enabled",
+            "adaptive",
+            "mailbox"
+          ]
+        },
+        "max_fps": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000
+        },
+        "physics_hz": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000
+        },
+        "time_scale": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 100
+        },
+        "build_mode": {
+          "type": "string",
+          "enum": [
+            "debug",
+            "release"
+          ]
+        },
+        "fixed_fps": {
+          "type": "boolean"
+        },
+        "delta_smoothing": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "godot_version",
+        "godot_build",
+        "platform",
+        "device_profile_id",
+        "renderer",
+        "rendering_driver",
+        "display_server",
+        "resolution",
+        "vsync_mode",
+        "max_fps",
+        "physics_hz",
+        "time_scale",
+        "build_mode",
+        "fixed_fps",
+        "delta_smoothing"
+      ],
+      "additionalProperties": false
+    },
+    "clock": {
+      "type": "object",
+      "properties": {
+        "started_utc_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "ended_utc_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "runtime_clock": {
+          "const": "Godot.Time.get_ticks_usec",
+          "type": "string"
+        },
+        "host_clock": {
+          "const": "host.monotonic_ns_div_1000",
+          "type": "string"
+        },
+        "runtime_start_mono_us": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "runtime_end_mono_us": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "host_start_mono_us": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "host_end_mono_us": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": [
+        "started_utc_ms",
+        "ended_utc_ms",
+        "runtime_clock",
+        "host_clock",
+        "runtime_start_mono_us",
+        "runtime_end_mono_us",
+        "host_start_mono_us",
+        "host_end_mono_us"
+      ],
+      "additionalProperties": false
+    },
+    "sampling": {
+      "type": "object",
+      "properties": {
+        "metric": {
+          "const": "runtime_frame_boundary_interval",
+          "type": "string"
+        },
+        "hook": {
+          "type": "string",
+          "enum": [
+            "frame_post_draw",
+            "process_frame"
+          ]
+        },
+        "warmup_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 600000
+        },
+        "max_frames": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 120000
+        },
+        "max_rss_samples": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 12000
+        },
+        "max_duration_ms": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 600000
+        },
+        "max_artifact_bytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 67108864
+        },
+        "counter_interval_frames": {
+          "const": 1,
+          "type": "integer"
+        },
+        "rss_interval_ms": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 600000
+        },
+        "captures_in_window": {
+          "type": "boolean"
+        },
+        "complete": {
+          "const": true,
+          "type": "boolean"
+        },
+        "dropped_frames": {
+          "const": 0,
+          "type": "integer"
+        },
+        "dropped_godot_counters": {
+          "const": 0,
+          "type": "integer"
+        },
+        "dropped_rss_samples": {
+          "const": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "metric",
+        "hook",
+        "warmup_ms",
+        "max_frames",
+        "max_rss_samples",
+        "max_duration_ms",
+        "max_artifact_bytes",
+        "counter_interval_frames",
+        "rss_interval_ms",
+        "captures_in_window",
+        "complete",
+        "dropped_frames",
+        "dropped_godot_counters",
+        "dropped_rss_samples"
+      ],
+      "additionalProperties": false
+    },
+    "counter_definitions": {
+      "type": "object",
+      "properties": {
+        "scene_triangles": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "availability": {
+                  "type": "string",
+                  "enum": [
+                    "available",
+                    "unavailable"
+                  ]
+                },
+                "provider": {
+                  "const": "runtime_mesh_surface_readback",
+                  "type": "string"
+                },
+                "unit": {
+                  "const": "triangles",
+                  "type": "string"
+                },
+                "scope": {
+                  "const": "loaded_instanced_active_lod_topology",
+                  "type": "string"
+                },
+                "freshness": {
+                  "const": "readback_topology",
+                  "type": "string"
+                },
+                "reason": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "minLength": 1,
+                  "maxLength": 256
+                }
+              },
+              "required": [
+                "availability",
+                "provider",
+                "unit",
+                "scope",
+                "freshness",
+                "reason"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "availability": {
+                  "type": "string",
+                  "enum": [
+                    "available",
+                    "unavailable"
+                  ]
+                },
+                "provider": {
+                  "type": "string",
+                  "const": "Mesh.get_faces"
+                },
+                "unit": {
+                  "type": "string",
+                  "const": "triangles"
+                },
+                "scope": {
+                  "type": "string",
+                  "const": "visible_in_tree_mesh_topology_excludes_ui_and_gpu_culling"
+                },
+                "freshness": {
+                  "const": "readback_topology",
+                  "type": "string"
+                },
+                "reason": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "minLength": 1,
+                  "maxLength": 256
+                }
+              },
+              "required": [
+                "availability",
+                "provider",
+                "unit",
+                "scope",
+                "freshness",
+                "reason"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "render_primitives": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "availability": {
+                  "type": "string",
+                  "enum": [
+                    "available",
+                    "unavailable"
+                  ]
+                },
+                "provider": {
+                  "const": "Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME",
+                  "type": "string"
+                },
+                "unit": {
+                  "const": "vertices_or_indices",
+                  "type": "string"
+                },
+                "scope": {
+                  "const": "last_rendered_frame_including_passes",
+                  "type": "string"
+                },
+                "freshness": {
+                  "const": "native_monitor",
+                  "type": "string"
+                },
+                "reason": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "minLength": 1,
+                  "maxLength": 256
+                }
+              },
+              "required": [
+                "availability",
+                "provider",
+                "unit",
+                "scope",
+                "freshness",
+                "reason"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "availability": {
+                  "type": "string",
+                  "enum": [
+                    "available",
+                    "unavailable"
+                  ]
+                },
+                "provider": {
+                  "type": "string",
+                  "const": "RenderingServer.viewport_get_render_info"
+                },
+                "unit": {
+                  "type": "string",
+                  "const": "points_lines_or_triangles"
+                },
+                "scope": {
+                  "type": "string",
+                  "const": "bound_viewport_visible"
+                },
+                "freshness": {
+                  "const": "native_monitor",
+                  "type": "string"
+                },
+                "reason": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "minLength": 1,
+                  "maxLength": 256
+                }
+              },
+              "required": [
+                "availability",
+                "provider",
+                "unit",
+                "scope",
+                "freshness",
+                "reason"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "draw_calls": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "availability": {
+                  "type": "string",
+                  "enum": [
+                    "available",
+                    "unavailable"
+                  ]
+                },
+                "provider": {
+                  "const": "Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME",
+                  "type": "string"
+                },
+                "unit": {
+                  "const": "calls",
+                  "type": "string"
+                },
+                "scope": {
+                  "const": "last_rendered_frame_including_passes",
+                  "type": "string"
+                },
+                "freshness": {
+                  "const": "native_monitor",
+                  "type": "string"
+                },
+                "reason": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "minLength": 1,
+                  "maxLength": 256
+                }
+              },
+              "required": [
+                "availability",
+                "provider",
+                "unit",
+                "scope",
+                "freshness",
+                "reason"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "availability": {
+                  "type": "string",
+                  "enum": [
+                    "available",
+                    "unavailable"
+                  ]
+                },
+                "provider": {
+                  "type": "string",
+                  "const": "RenderingServer.viewport_get_render_info"
+                },
+                "unit": {
+                  "type": "string",
+                  "const": "calls"
+                },
+                "scope": {
+                  "type": "string",
+                  "const": "bound_viewport_visible_plus_shadow"
+                },
+                "freshness": {
+                  "const": "native_monitor",
+                  "type": "string"
+                },
+                "reason": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "minLength": 1,
+                  "maxLength": 256
+                }
+              },
+              "required": [
+                "availability",
+                "provider",
+                "unit",
+                "scope",
+                "freshness",
+                "reason"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "texture_bytes": {
+          "type": "object",
+          "properties": {
+            "availability": {
+              "type": "string",
+              "enum": [
+                "available",
+                "unavailable"
+              ]
+            },
+            "provider": {
+              "const": "Performance.RENDER_TEXTURE_MEM_USED",
+              "type": "string"
+            },
+            "unit": {
+              "const": "bytes",
+              "type": "string"
+            },
+            "scope": {
+              "const": "allocated_texture_memory",
+              "type": "string"
+            },
+            "freshness": {
+              "const": "native_monitor_may_lag",
+              "type": "string"
+            },
+            "reason": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1,
+              "maxLength": 256
+            }
+          },
+          "required": [
+            "availability",
+            "provider",
+            "unit",
+            "scope",
+            "freshness",
+            "reason"
+          ],
+          "additionalProperties": false
+        },
+        "rss_bytes": {
+          "type": "object",
+          "properties": {
+            "availability": {
+              "type": "string",
+              "enum": [
+                "available",
+                "unavailable"
+              ]
+            },
+            "provider": {
+              "type": "string",
+              "enum": [
+                "GetProcessMemoryInfo.WorkingSetSize",
+                "proc_pid_statm.resident_pages"
+              ]
+            },
+            "unit": {
+              "const": "bytes",
+              "type": "string"
+            },
+            "scope": {
+              "const": "runtime_process_resident_memory",
+              "type": "string"
+            },
+            "freshness": {
+              "const": "host_observed",
+              "type": "string"
+            },
+            "reason": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1,
+              "maxLength": 256
+            }
+          },
+          "required": [
+            "availability",
+            "provider",
+            "unit",
+            "scope",
+            "freshness",
+            "reason"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "scene_triangles",
+        "render_primitives",
+        "draw_calls",
+        "texture_bytes",
+        "rss_bytes"
+      ],
+      "additionalProperties": false
+    },
+    "frames": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "seq": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 119999
+          },
+          "engine_process_frame": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "engine_draw_frame": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "runtime_mono_us": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "frame_ms": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "sim_tick": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "ui_tick": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "phase": {
+            "type": "string",
+            "enum": [
+              "MENU",
+              "PLAY",
+              "PAUSED",
+              "QUITTING"
+            ]
+          },
+          "state_hash": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "minLength": 64,
+            "maxLength": 64
+          }
+        },
+        "required": [
+          "seq",
+          "engine_process_frame",
+          "engine_draw_frame",
+          "runtime_mono_us",
+          "frame_ms",
+          "sim_tick",
+          "ui_tick",
+          "phase",
+          "state_hash"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "maxItems": 120000
+    },
+    "godot_counters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "sample_seq": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 119999
+          },
+          "frame_seq": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 119999
+          },
+          "runtime_mono_us": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "scene_triangles": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "render_primitives": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "draw_calls": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "texture_bytes": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "sample_seq",
+          "frame_seq",
+          "runtime_mono_us",
+          "scene_triangles",
+          "render_primitives",
+          "draw_calls",
+          "texture_bytes"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "maxItems": 120000
+    },
+    "rss_samples": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "sample_seq": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 11999
+          },
+          "host_mono_us": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "rss_bytes": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "sample_seq",
+          "host_mono_us",
+          "rss_bytes"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0,
+      "maxItems": 12000
+    },
+    "summary": {
+      "type": "object",
+      "properties": {
+        "sample_count": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 120000
+        },
+        "duration_ms": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "mean_frame_ms": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "p50_frame_ms": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "p95_frame_ms": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "p99_frame_ms": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "one_percent_sample_count": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1200
+        },
+        "one_percent_mean_frame_ms": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "one_percent_low_fps": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "percentile_method": {
+          "const": "linear_type7",
+          "type": "string"
+        },
+        "one_percent_method": {
+          "const": "ceil_largest_mean_reciprocal",
+          "type": "string"
+        }
+      },
+      "required": [
+        "sample_count",
+        "duration_ms",
+        "mean_frame_ms",
+        "p50_frame_ms",
+        "p95_frame_ms",
+        "p99_frame_ms",
+        "one_percent_sample_count",
+        "one_percent_mean_frame_ms",
+        "one_percent_low_fps",
+        "percentile_method",
+        "one_percent_method"
+      ],
+      "additionalProperties": false
+    },
+    "references": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "reference_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,127}$"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "source_manifest",
+              "runtime_manifest",
+              "toolchain_lock",
+              "trace",
+              "profile",
+              "collector",
+              "process_result",
+              "capture",
+              "readback"
+            ]
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512,
+            "pattern": "^[A-Za-z0-9._/-]+$"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "minLength": 64,
+            "maxLength": 64
+          },
+          "bytes": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 67108864
+          }
+        },
+        "required": [
+          "reference_id",
+          "role",
+          "path",
+          "sha256",
+          "bytes"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0,
+      "maxItems": 32
+    },
+    "battery": {
+      "type": "object",
+      "properties": {
+        "provider": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "started_host_mono_us": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "ended_host_mono_us": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "start_percent": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "end_percent": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "charging_start": {
+          "type": "boolean"
+        },
+        "charging_end": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "provider",
+        "started_host_mono_us",
+        "ended_host_mono_us",
+        "start_percent",
+        "end_percent",
+        "charging_start",
+        "charging_end"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schema_id",
+    "schema_version",
+    "artifact_kind",
+    "provenance",
+    "process",
+    "configuration",
+    "clock",
+    "sampling",
+    "counter_definitions",
+    "frames",
+    "godot_counters",
+    "rss_samples",
+    "summary",
+    "references"
+  ],
+  "additionalProperties": false
+}

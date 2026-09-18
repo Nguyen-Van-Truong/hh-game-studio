@@ -1,0 +1,44 @@
+{
+  "observed_utc": "2026-09-18T17:26:43.337155+00:00",
+  "run_id": "gt06-s97-coupled-phases-01",
+  "formal_acceptance": false,
+  "rows": [
+    {
+      "batch": 0,
+      "native_pid": 33500,
+      "native_batch_sha256": "56748326a7b867c027d81e2922ca94b8beef8fb8cf5a1af8910cf1a431ac5a99",
+      "ack_sha256": "1ec74a4cf5b98ca5f2e625b5e65cc4ab3208e29e5c608f1797d2da6d64950e12",
+      "joint_sha256": "88468fe0223ece941525d23a1bf8f0caed208b12d5363c3ca00e16417082649e",
+      "objects": {
+        "unavailable_reason": null,
+        "value": 71128
+      },
+      "resources": {
+        "unavailable_reason": null,
+        "value": 6
+      },
+      "max_native_status_gap_ms": 570.482,
+      "hash_run_pid_barrier_binding_checked": true,
+      "host_window_seconds": 63.308666
+    },
+    {
+      "batch": 1,
+      "native_pid": 33500,
+      "native_batch_sha256": "9b1be3f3dcb7e5d5aa341b96164b8927b3edc9b5009d7346cd78994df479b45e",
+      "ack_sha256": "e3091391ba31d39af7dd8ce43d0816ac4720e49715e651558932614b6a1b2332",
+      "joint_sha256": "5fef785a8cf0c34da9585988347b3d907c70577480a5148bdf2e27e3579b4de5",
+      "objects": {
+        "unavailable_reason": null,
+        "value": 71128
+      },
+      "resources": {
+        "unavailable_reason": null,
+        "value": 6
+      },
+      "max_native_status_gap_ms": 682.956,
+      "hash_run_pid_barrier_binding_checked": true,
+      "host_window_seconds": 70.298164
+    }
+  ],
+  "scope": "Selected immutable early prefix binding checks only; no full dataset or terminal validation; baseline4 still requires separate sparse binding check"
+}
