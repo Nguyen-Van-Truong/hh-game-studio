@@ -104,7 +104,7 @@ Child record để trống host/supervisor exit theo thiết kế self-observati
 S97 vẫn diagnostic-only, formal_acceptance=false, eligible_for_dataset=false;
 không no-leak/PASS và không nhập F13/F14.
 
-LƯỢT ĐANG CHẠY: gt06-s98-campaign-01 launch1, task \\HHStudio.GT06.gt06-s98-campaign-01; full acceptance campaign mới, source/profile/
+LƯỢT ĐANG CHẠY: gt06-s98-campaign-01 launch1, task \\HHStudio.GT06.gt06-s98-campaign-01; full acceptance campaign mới; đã hoàn tất 8/35 batch của cặp đầu, batch 8 đang chạy, source/profile/
 workstation giữ nguyên; raw supervisor ở studio/.local/reviews/gt06-s98-campaign-01-supervisor. Scheduler receipt chỉ là dispatch, cần query liveness/actual exits. Sẽ chạy10 fresh host/editor
 pairs ×35 batch (5 warmup+30 measured), 1000 HTTP+100 native mỗi batch, giữ
 nguyên deadline/gate, rồi kiểm dataset, hashes, actual exits, trees, handles và
@@ -1319,3 +1319,4 @@ CCU=người online cùng lúc trong game, không số agent phát triển game.
 
 END_OF_TOOLS_PLAN
 DATE=2026-09-17 Asia/Saigon
+
