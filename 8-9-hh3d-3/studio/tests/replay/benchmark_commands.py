@@ -15,6 +15,9 @@ older failure whose lookup response was not captured.
 
 Failure retains partial rows on CommandError.report and latches the producer.
 Call close() even on failure; uncertain cleanup retains cleanup_owner.
+Each lookup attempt also retains the transport's fixed, secret-free failure
+observation before a later retry clears it. This is diagnostic metadata, not
+an additional response/status sample or a change to reconciliation policy.
 Each returned batch is a separate intermediate artifact, not the combined
 benchmark_profile dataset. Persist it before releasing the caller's reference.
 """
@@ -174,7 +177,7 @@ class CommandProducer:
             _need(remaining > 0, 'TERMINAL_TIMEOUT')
             attempt = {'status': None, 'code': None, 'command_id': command_id,
                        'request_digest': None, 'started_mono_us': started // 1000,
-                       'ended_mono_us': None}
+                       'ended_mono_us': None, 'transport_failure': None}
             row['lookup_attempts'].append(attempt)
             original_timeout = self.client.timeout
             try:
@@ -182,6 +185,11 @@ class CommandProducer:
                 # accepted transport and its normal timeout are unchanged.
                 self.client.timeout = min(original_timeout, remaining)
                 result = self.client.lookup(command_id)
+                # The next _call clears the client's observation, including
+                # when a lost lookup is reconciled successfully. Preserve the
+                # sanitized fields now, before retry or diagnostic guards.
+                failure = getattr(self.client, 'last_transport_failure', None)
+                attempt['transport_failure'] = None if failure is None else dict(failure)
             finally:
                 self.client.timeout = original_timeout
             # Persist the actual response before any identity/status/readback
@@ -282,7 +290,7 @@ class CommandProducer:
         _need(type(index) is int and index == self.next_index and 0 <= index < MAX_BATCHES, 'BATCH_ORDER')
         _need(self.mode in (None, mode), 'MODE_MIX')
         self.mode = mode
-        report = {'schema_id': 'hh-studio.benchmark-command-batch', 'schema_version': '1.2.0',
+        report = {'schema_id': 'hh-studio.benchmark-command-batch', 'schema_version': '1.3.0',
                   'run_id': self.run_id, 'index': index, 'mode': mode, 'complete_command_mix': False,
                   'native_acceptance': False, 'effects_kind': 'in_process_mock_fixture',
                   'transport_kind': 'accepted_loopback_fixture_http', 'observation_kind': self.observer.kind,

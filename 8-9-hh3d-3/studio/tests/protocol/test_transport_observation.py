@@ -46,7 +46,7 @@ class TransportObservationTests(unittest.TestCase):
                     failing.side_effect = error_type("private-exception-text")
                     with mock.patch("studio.tests.replay.benchmark_transport.http.client.HTTPConnection",
                                     return_value=self.connection) as constructor, \
-                         mock.patch("studio.tests.replay.benchmark_transport.time.monotonic_ns",
+                         mock.patch("studio.tests.replay.benchmark_transport.time.perf_counter_ns",
                                     side_effect=[1_000_000, 3_500_000]):
                         result = self.client._call("/v1/commands", self.body)
                     self.assertEqual(result, expected_response)
@@ -58,6 +58,38 @@ class TransportObservationTests(unittest.TestCase):
                     self.assertEqual(self.connection.getresponse.call_count, int(stage != "request"))
                     self.assertEqual(self.reply.read.call_count, int(stage == "read"))
                     self.connection.close.assert_called_once()
+
+    def test_failure_elapsed_uses_enclosing_perf_clock_not_coarse_monotonic(self):
+        from studio.tests.replay.benchmark_commands import _clock as producer_clock
+
+        for stage in ("request", "getresponse", "read"):
+            self.connection.reset_mock(side_effect=True)
+            self.reply.reset_mock(side_effect=True)
+            failing = self.reply.read if stage == "read" else getattr(self.connection, stage)
+            failing.side_effect = TimeoutError("private exception must not be retained")
+            # Windows Python 3.11 GetTickCount64 can advance 15.625 ms across
+            # only 6 ms of QPC time. Both nested durations must use QPC, not a
+            # looser elapsed-time validation bound for that quantization.
+            with self.subTest(stage=stage), \
+                 mock.patch("studio.tests.replay.benchmark_transport.http.client.HTTPConnection",
+                            return_value=self.connection) as constructor, \
+                 mock.patch("studio.tests.replay.benchmark_transport.time.perf_counter_ns",
+                            side_effect=[1_000_000_000, 1_001_000_000, 1_004_000_000, 1_006_000_000]) as perf, \
+                 mock.patch("studio.tests.replay.benchmark_transport.time.monotonic_ns",
+                            side_effect=[5_000_000_000, 5_015_625_000]) as coarse:
+                started = producer_clock()
+                result = self.client.lookup("clock.lookup")
+                ended = producer_clock()
+                self.assertEqual(self.client.last_transport_failure,
+                    {"endpoint": "lookup", "stage": stage, "category": "timeout", "elapsed_ms": 3.0})
+                self.assertLessEqual(self.client.last_transport_failure["elapsed_ms"], (ended - started) / 1_000_000)
+                self.assertEqual(perf.call_count, 4)
+                coarse.assert_not_called()
+                self.assertEqual((result.status.value, result.code, result.command_id),
+                                 ("UNKNOWN", "CONNECTION_LOST_LOOKUP", "clock.lookup"))
+                self.assertEqual(self.client.timeout, 2.0)
+                constructor.assert_called_once_with("127.0.0.1", 12346, timeout=2.0)
+                self.connection.close.assert_called_once_with()
 
     def test_endpoint_enum_does_not_retain_arbitrary_path_or_exception_fields(self):
         endpoints = {"discovery": "discovery", "lease": "lease", "commands": "commands",
@@ -101,7 +133,7 @@ class TransportObservationTests(unittest.TestCase):
                 self.assertIsNone(self.client.last_transport_failure)
 
             self.connection.request.side_effect = request
-            with mock.patch("studio.tests.replay.benchmark_transport.time.monotonic_ns", return_value=5_000_000) as clock:
+            with mock.patch("studio.tests.replay.benchmark_transport.time.perf_counter_ns", return_value=5_000_000) as clock:
                 result = self.client._call("/v1/lookup", self.body, control=True)
             clock.assert_called_once()
         self.assertEqual(result, {"observed": "success"})

@@ -62,7 +62,7 @@ class CommandProducerTests(unittest.TestCase):
         self.assertEqual(second['effect_count_after'], 4)
         ids = []
         for index, row in enumerate((first, second)):
-            self.assertEqual(row['schema_version'], '1.2.0')
+            self.assertEqual(row['schema_version'], '1.3.0')
             self.assertEqual(row['index'], index)
             self.assertEqual(row['status'], 'DIAGNOSTIC')
             self.assertFalse(row['complete_command_mix'])
@@ -266,8 +266,61 @@ class CommandProducerTests(unittest.TestCase):
             self.assertGreater(row['terminal_ms'], row['receipt_ms'])
             for attempt in attempts:
                 self.assertEqual(set(attempt), {'status', 'code', 'command_id', 'request_digest',
-                                               'started_mono_us', 'ended_mono_us'})
+                                               'started_mono_us', 'ended_mono_us', 'transport_failure'})
                 self.assertIn(attempt['ended_mono_us'], report['host_response_mono_us'])
+
+    def test_recovered_lookup_disconnect_keeps_per_attempt_transport_failure(self):
+        actual_lookup, actual_submit = FixtureClient.lookup, FixtureClient.submit
+        targets = {'test.commands.b0.inspect.0', 'test.commands.b0.cancel'}
+        cut, submits = set(), []
+
+        def lookup(client, command_id):
+            if command_id in targets and command_id not in cut:
+                cut.add(command_id)
+                self.producer.host.arm_disconnect('/v1/lookup', 'before_reply')
+            return actual_lookup(client, command_id)
+
+        def submit(client, request):
+            submits.append(request.command_id)
+            return actual_submit(client, request)
+
+        with patch.object(FixtureClient, 'lookup', lookup), patch.object(FixtureClient, 'submit', submit):
+            report = self.producer.run_diagnostic()
+        self.assertEqual(cut, targets)
+        self.assertEqual(len(submits), 11)
+        self.assertEqual(len(set(submits)), 11)
+        self.assertEqual(report['effect_count_after'], 2)
+        self.assertIsNone(self.producer.client.last_transport_failure)
+        for row in (report['commands'][0], report['cancel']):
+            attempt = row['lookup_attempts'][0]
+            self.assertEqual((attempt['status'], attempt['code']), ('UNKNOWN', 'CONNECTION_LOST_LOOKUP'))
+            failure = attempt['transport_failure']
+            self.assertEqual(set(failure), {'endpoint', 'stage', 'category', 'elapsed_ms'})
+            self.assertEqual((failure['endpoint'], failure['stage'], failure['category']),
+                             ('lookup', 'getresponse', 'connection'))
+            self.assertGreaterEqual(failure['elapsed_ms'], 0)
+            self.assertLessEqual(failure['elapsed_ms'],
+                                 (attempt['ended_mono_us'] - attempt['started_mono_us']) / 1000 + .001001)
+            self.assertTrue(all(item['transport_failure'] is None for item in row['lookup_attempts'][1:]))
+            self.assertEqual(row['lookup_attempts'][-1]['request_digest'], row['request_digest'])
+            self.assertIn(attempt['ended_mono_us'], report['host_response_mono_us'])
+        self.assertNotIn(self.producer.credential.bearer, json.dumps(report))
+        self.assertNotIn('transport_failure', report)
+
+    def test_lookup_transport_failure_retained_before_diagnostic_guard(self):
+        failure = {'endpoint': 'lookup', 'stage': 'read', 'category': 'timeout', 'elapsed_ms': 0.0}
+        self.producer.client = SimpleNamespace(timeout=2.0, last_transport_failure=failure,
+            lookup=lambda command_id: Response(Status.UNKNOWN, 'CONNECTION_LOST_LOOKUP', command_id))
+        row = {'lookup_attempts': []}
+        with patch.object(self.producer, '_received', side_effect=benchmark.CommandError('TEST_AFTER_CAPTURE')):
+            with self.assertRaisesRegex(benchmark.CommandError, 'TEST_AFTER_CAPTURE'):
+                self.producer._terminal('same.command', 'sha256:' + 'a' * 64, row)
+        saved = dict(failure)
+        failure['category'] = 'os'
+        self.assertEqual(row['lookup_attempts'][0]['transport_failure'], saved)
+        self.assertEqual(row['lookup_attempts'][0]['status'], 'UNKNOWN')
+        self.assertIsNotNone(row['lookup_attempts'][0]['ended_mono_us'])
+        self.assertEqual(self.producer.client.timeout, 2.0)
 
     def test_persistent_lookup_uncertainty_exhausts_original_budget_and_restores_timeout(self):
         now = [1_000_000_000]

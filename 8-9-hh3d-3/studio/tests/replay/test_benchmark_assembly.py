@@ -46,7 +46,8 @@ def terminal_fields(row, *, canceled=False):
                           **({'no_effect': True} if canceled else {'snapshot': row['snapshot']})}}
     return {'terminal_response': response, 'lookup_attempts': [{'status': status, 'code': code,
         'command_id': row['command_id'], 'request_digest': row['request_digest'],
-        'started_mono_us': row['receipt_mono_us'] + 1, 'ended_mono_us': row['terminal_mono_us']}]}
+        'started_mono_us': row['receipt_mono_us'] + 1, 'ended_mono_us': row['terminal_mono_us'],
+        'transport_failure': None}]}
 
 
 def command_fixture(index=0):
@@ -96,7 +97,7 @@ def command_fixture(index=0):
     end = tick + 100
     status.append(end)
     observation = lambda time: {'process': copy.deepcopy(PROCESSES['host']), 'monotonic_us': time, 'counters': host_counters()}
-    return {'schema_id': 'hh-studio.benchmark-command-batch', 'schema_version': '1.2.0',
+    return {'schema_id': 'hh-studio.benchmark-command-batch', 'schema_version': '1.3.0',
             'run_id': RUN, 'index': index, 'mode': 'benchmark', 'complete_command_mix': True,
             'native_acceptance': False, 'effects_kind': 'in_process_mock_fixture',
             'transport_kind': 'accepted_loopback_fixture_http', 'observation_kind': 'native_windows_process_probe',
@@ -136,7 +137,8 @@ def add_lookup_recovery(value, *, canceled=False, extra_us=2000):
         value['latency_ms']['inspect'][0] = row['terminal_ms']
     attempt = {'status': 'UNKNOWN', 'code': 'CONNECTION_LOST_LOOKUP', 'command_id': row['command_id'],
         'request_digest': None, 'started_mono_us': row['receipt_mono_us'] + 1,
-        'ended_mono_us': row['receipt_mono_us'] + 50}
+        'ended_mono_us': row['receipt_mono_us'] + 50,
+        'transport_failure': {'endpoint': 'lookup', 'stage': 'getresponse', 'category': 'http', 'elapsed_ms': .04}}
     row['lookup_attempts'][0]['started_mono_us'] = attempt['ended_mono_us'] + 1000
     row['lookup_attempts'].insert(0, attempt)
     stamps = value['host_response_mono_us']
@@ -360,6 +362,65 @@ class AssemblyTests(unittest.TestCase):
         self.assertEqual(validated['effect_count_after'], 200)
         self.assertEqual(validated['effects_per_admission'], [1] * 200)
 
+    def test_lookup_transport_failure_metadata_preserves_timing_and_status_gap(self):
+        for canceled in (False, True):
+            for category in ('timeout', 'connection', 'http', 'os'):
+                for stage in ('request', 'getresponse', 'read'):
+                    value = command_fixture()
+                    row = add_lookup_recovery(value, canceled=canceled, extra_us=2100000)
+                    attempt = row['lookup_attempts'][0]
+                    attempt['transport_failure'].update(stage=stage, category=category,
+                        elapsed_ms=(attempt['ended_mono_us'] - attempt['started_mono_us']) / 1000)
+                    original_stamps = list(value['host_response_mono_us'])
+                    original_gap = value['max_status_gap_ms']
+                    with self.subTest(canceled=canceled, category=category, stage=stage):
+                        validated = assembly.validate_command_batch(value, run_id=RUN, index=0,
+                                                                     host_identity=PROCESSES['host'])
+                        self.assertEqual(validated['host_response_mono_us'], original_stamps)
+                        self.assertEqual(validated['max_status_gap_ms'], original_gap)
+                        self.assertGreater(original_gap, 2000)
+                        self.assertEqual(validated['effects_per_admission'], [1] * 200)
+
+    def test_lookup_transport_failure_rejects_missing_unbounded_or_unsanitized_fields(self):
+        changes = (
+            (lambda attempt: attempt.pop('transport_failure'), 'FIELDS'),
+            (lambda attempt: attempt.update(transport_failure=None), 'LOOKUP_TRANSPORT_MISSING'),
+            (lambda attempt: attempt['transport_failure'].update(endpoint='commands'), 'LOOKUP_TRANSPORT_ENDPOINT'),
+            (lambda attempt: attempt['transport_failure'].update(stage='parse'), 'LOOKUP_TRANSPORT_STAGE'),
+            (lambda attempt: attempt['transport_failure'].update(category='TimeoutError: raw text'), 'LOOKUP_TRANSPORT_CATEGORY'),
+            (lambda attempt: attempt['transport_failure'].update(exception='private value'), 'FIELDS'),
+            (lambda attempt: attempt['transport_failure'].pop('category'), 'FIELDS'),
+            (lambda attempt: attempt['transport_failure'].update(elapsed_ms=-1), 'NUMBER'),
+            (lambda attempt: attempt['transport_failure'].update(elapsed_ms=True), 'NUMBER'),
+            (lambda attempt: attempt['transport_failure'].update(elapsed_ms=float('inf')), 'NUMBER'),
+            (lambda attempt: attempt['transport_failure'].update(elapsed_ms=float('nan')), 'NUMBER'),
+            (lambda attempt: attempt['transport_failure'].update(elapsed_ms=.051), 'NUMBER'))
+        for change, code in changes:
+            value = command_fixture()
+            row = add_lookup_recovery(value)
+            change(row['lookup_attempts'][0])
+            with self.subTest(code=code), self.assertRaisesRegex(assembly.AssemblyError, code):
+                assembly.validate_command_batch(value, run_id=RUN, index=0, host_identity=PROCESSES['host'])
+
+    def test_lookup_transport_failure_cannot_attach_to_success_or_invent_progress(self):
+        value = command_fixture()
+        row = add_lookup_recovery(value)
+        row['lookup_attempts'][-1]['transport_failure'] = dict(row['lookup_attempts'][0]['transport_failure'])
+        with self.assertRaisesRegex(assembly.AssemblyError, 'LOOKUP_TRANSPORT_UNEXPECTED'):
+            assembly.validate_command_batch(value, run_id=RUN, index=0, host_identity=PROCESSES['host'])
+        value = command_fixture()
+        row = add_lookup_recovery(value)
+        value['host_response_mono_us'].append(row['lookup_attempts'][0]['started_mono_us'])
+        value['host_response_mono_us'].sort()
+        stamps = value['host_response_mono_us']
+        value['max_status_gap_ms'] = max(b - a for a, b in zip(stamps, stamps[1:])) / 1000
+        with self.assertRaisesRegex(assembly.AssemblyError, 'STATUS_RESPONSE_BINDING'):
+            assembly.validate_command_batch(value, run_id=RUN, index=0, host_identity=PROCESSES['host'])
+        value = command_fixture()
+        value['schema_version'] = '1.2.0'
+        with self.assertRaisesRegex(assembly.AssemblyError, 'COMMAND_SCHEMA'):
+            assembly.validate_command_batch(value, run_id=RUN, index=0, host_identity=PROCESSES['host'])
+
     def test_setup_trace_rejects_omissions_reordering_and_invented_progress(self):
         for mutation, code in (
             (lambda value: value.update(schema_version='1.1.0'), 'COMMAND_SCHEMA'),
@@ -380,8 +441,8 @@ class AssemblyTests(unittest.TestCase):
         changes = (
             (lambda row: row['lookup_attempts'][0].update(command_id='other.command'), 'LOOKUP_IDENTITY'),
             (lambda row: row['lookup_attempts'][0].update(request_digest='sha256:' + '0' * 64), 'LOOKUP_DIGEST'),
-            (lambda row: row['lookup_attempts'][0].update(code='OTHER_UNKNOWN', request_digest=row['request_digest']), 'LOOKUP_RETRY_SCOPE'),
-            (lambda row: row['lookup_attempts'][0].update(status='REJECTED', request_digest=row['request_digest']), 'LOOKUP_RETRY_SCOPE'),
+            (lambda row: row['lookup_attempts'][0].update(code='OTHER_UNKNOWN', request_digest=row['request_digest'], transport_failure=None), 'LOOKUP_RETRY_SCOPE'),
+            (lambda row: row['lookup_attempts'][0].update(status='REJECTED', request_digest=row['request_digest'], transport_failure=None), 'LOOKUP_RETRY_SCOPE'),
             (lambda row: row['lookup_attempts'][-1].update(ended_mono_us=row['terminal_mono_us'] - 1), 'LOOKUP_TERMINAL'),
             (lambda row: row['terminal_response'].update(command_id='other.command'), 'TERMINAL_RESPONSE_IDENTITY'),
             (lambda row: row['terminal_response']['postconditions']['snapshot'].update(value=123), 'TERMINAL_RESPONSE_READBACK'),
@@ -500,7 +561,7 @@ class AssemblyTests(unittest.TestCase):
                 report = producer.run_diagnostic()
             finally:
                 producer.close()
-        self.assertEqual(report['schema_version'], '1.2.0')
+        self.assertEqual(report['schema_version'], '1.3.0')
         self.assertEqual(len(report['commands']), 10)
         for row in report['commands']:
             if row['kind'] == 'rejected':

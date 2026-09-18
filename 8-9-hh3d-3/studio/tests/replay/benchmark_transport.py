@@ -60,7 +60,10 @@ class BenchmarkFixtureClient(FixtureClient):
         # Deliberate small copy of accepted FixtureClient._call so the accepted
         # source stays pinned. Differential tests protect all wire/error paths.
         self._last_transport_failure = None
-        started_ns = time.monotonic_ns()
+        # Use the producer's QPC clock domain. On pinned Windows Python 3.11,
+        # monotonic_ns uses coarse GetTickCount64 and can report an inner
+        # elapsed interval larger than the enclosing perf_counter_ns attempt.
+        started_ns = time.perf_counter_ns()
         stage = "request"
         port = self.control_port if control else self.port
         connection = http.client.HTTPConnection("127.0.0.1", port, timeout=self.timeout)
@@ -85,7 +88,7 @@ class BenchmarkFixtureClient(FixtureClient):
                         "http" if isinstance(error, http.client.HTTPException) else "os")
             self._last_transport_failure = {
                 "endpoint": _ENDPOINTS.get(path, "unknown"), "stage": stage,
-                "category": category, "elapsed_ms": (time.monotonic_ns() - started_ns) / 1_000_000,
+                "category": category, "elapsed_ms": (time.perf_counter_ns() - started_ns) / 1_000_000,
             }
             command_id = body.get("command_id", "transport.request")
             return _response(Status.UNKNOWN, "CONNECTION_LOST_LOOKUP", command_id, next_action="lookup").as_dict()

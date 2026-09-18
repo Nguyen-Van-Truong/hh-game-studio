@@ -231,7 +231,7 @@ def _lookup_trace(row, *, canceled=False):
               'TERMINAL_RESPONSE_READBACK')
     previous, first_start, ends = row['receipt_mono_us'], None, []
     for index, attempt in enumerate(attempts):
-        _shape(attempt, 'status code command_id request_digest started_mono_us ended_mono_us')
+        _shape(attempt, 'status code command_id request_digest started_mono_us ended_mono_us transport_failure')
         _integer(attempt['started_mono_us'], previous)
         if first_start is None:
             first_start = attempt['started_mono_us']
@@ -239,6 +239,21 @@ def _lookup_trace(row, *, canceled=False):
         _need(attempt['command_id'] == row['command_id'], 'LOOKUP_IDENTITY')
         _need(type(attempt['code']) is str and 1 <= len(attempt['code']) <= 160, 'LOOKUP_CODE')
         uncertain = attempt['status'] == 'UNKNOWN' and attempt['code'] == 'CONNECTION_LOST_LOOKUP'
+        failure = attempt['transport_failure']
+        if uncertain:
+            # This code is synthesized only by the client's transport catch;
+            # it must retain that call's observation, not a later retry's.
+            _need(type(failure) is dict, 'LOOKUP_TRANSPORT_MISSING')
+            _shape(failure, 'endpoint stage category elapsed_ms')
+            _need(failure['endpoint'] == 'lookup', 'LOOKUP_TRANSPORT_ENDPOINT')
+            _need(failure['stage'] in ('request', 'getresponse', 'read'), 'LOOKUP_TRANSPORT_STAGE')
+            _need(failure['category'] in ('timeout', 'connection', 'http', 'os'), 'LOOKUP_TRANSPORT_CATEGORY')
+            # Inner monotonic transport timing cannot exceed the enclosing
+            # attempt. Allow only its existing microsecond truncation epsilon.
+            elapsed_limit = (attempt['ended_mono_us'] - attempt['started_mono_us']) / 1000 + .001001
+            _number(failure['elapsed_ms'], 0, elapsed_limit)
+        else:
+            _need(failure is None, 'LOOKUP_TRANSPORT_UNEXPECTED')
         _need(attempt['request_digest'] == row['request_digest']
               or (uncertain and attempt['request_digest'] is None), 'LOOKUP_DIGEST')
         if index == len(attempts) - 1:
@@ -255,7 +270,7 @@ def validate_command_batch(value, *, run_id, index, host_identity):
     """Verify all 1000 rows, aggregates, effect chain and separate Cancel."""
     _shape(value, 'schema_id schema_version run_id index mode complete_command_mix native_acceptance effects_kind transport_kind observation_kind host_process warmup commands latency_ms effects_per_admission cancel status started_mono_us setup_responses memory_before memory_after effect_count_before effect_count_after dropped_commands dropped_telemetry journal_bytes diagnostic_retention ended_mono_us host_response_mono_us max_status_gap_ms status_gap_scope')
     _identity(host_identity)
-    _need(value['schema_id'] == 'hh-studio.benchmark-command-batch' and value['schema_version'] == '1.2.0', 'COMMAND_SCHEMA')
+    _need(value['schema_id'] == 'hh-studio.benchmark-command-batch' and value['schema_version'] == '1.3.0', 'COMMAND_SCHEMA')
     _need(value['mode'] == 'benchmark' and value['status'] == 'COMPLETE'
           and value['complete_command_mix'] is True and value['native_acceptance'] is False, 'COMMAND_INCOMPLETE_OR_DIAGNOSTIC')
     _need(value['effects_kind'] == 'in_process_mock_fixture'
