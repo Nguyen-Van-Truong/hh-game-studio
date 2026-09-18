@@ -114,6 +114,10 @@ cycles completed, editor25368 actual0, import34140 actual0; outer target37480
 and wrapper30776 actual0. Jobs zero/closed, retained native handles released,
 source unchanged, logs clean. Scheduler terminalstate3/result0/noinstances was
 recorded separately in `retention-terminal-task.json` before deleting that task.
+The123 copies include16 isolated appdata/localappdata cache files retained only
+locally under the repository's existing ignore rules. Git carries107 retention
+copies; the verifier uses the declared local raw domain and does not claim a
+standalone Git-only reproduction of those caches. No cache ignore was overridden.
 
 Handles:573,565,565,557,559,559,559,559, then559 at idle. Batch3→4 adds an Event
 and IoCompletion; neither the count nor repeated numeric slots establish object
@@ -164,6 +168,10 @@ One fresh process pair resumes the same frozen campaign as **launch2**, dispatch
 be queried before calling it running. No old partial samples are used. If import
 or the unresolved measured failure repeats, do not automatically launch a third
 attempt. Preserve evidence and diagnose the new phase first.
+At00:09:35UTC a separate live observation confirmed one running scheduler
+instance, host40900/editor38684 and matching command/native progress. Import10272
+finished in5.797s with actualexit0/clean Job. This observation does not retroactively
+explain launch1's stall and does not predict later campaign success.
 
 The first ad hoc workstation prerequisite check compared Python's OS tuple to
 the saved JSON array and rejected before copying evidence. The preserved verifier
