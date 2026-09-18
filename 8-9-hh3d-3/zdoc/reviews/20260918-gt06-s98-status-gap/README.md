@@ -6,4 +6,6 @@ Result: FAILED at batch 17 after 18 complete batches because host command stream
 
 This packet is derived from immutable raw files. It is diagnostic only, not PASS, not a no-leak claim, and not eligible for the GT06 dataset. Root cause is unproven. Preserve all 18 batches and diagnose owned-workload/environment attribution before any fresh campaign; do not loosen the gate or retry blindly.
 
-Derived packet: attribution.json (SHA256 ce20bdf8f9b6586614c9b3035b30cf7ff8b77d51f75826b07026b8a7ebab0f11).
+The triggering command was admitted.96: lookup timed out at getresponse after 2002.5627 ms, then its retry recovered READBACK_CONFIRMED. This identifies the gate trigger, not the OS/server/lock root cause.
+
+Derived packet: attribution.json (SHA256 7b9f4f6fe4702c6bd9e2df6f1cb8f85dcef9fa29e01b9e0fa4956935b2ea3ca6).

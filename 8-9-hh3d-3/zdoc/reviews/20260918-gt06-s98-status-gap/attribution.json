@@ -14,7 +14,17 @@
     "command_max_status_gap_ms": 2043.7348,
     "gate_ms": 2000.0,
     "gap_pair_index": 833,
-    "host_response_gap_ms": 2043.735
+    "host_response_gap_ms": 2043.735,
+    "trigger_command_id": "gt06-s98-campaign-01.r00.a01.b17.admitted.96",
+    "host_gap_pair_us": [
+      668604795100,
+      668606838835
+    ],
+    "transport_timeout_ms": 2002.5627,
+    "transport_stage": "getresponse",
+    "transport_endpoint": "lookup",
+    "retry_recovered": true,
+    "recovery_terminal_mono_us": 668608458140
   },
   "joint_native_observation": {
     "max_status_gap_ms": 594.998,
@@ -32,7 +42,7 @@
     "handles_released": true,
     "native_error": null
   },
-  "interpretation": "Host command response gap exceeded the locked 2000 ms gate; joint native ACK remained bound and counters/resources stayed stable. Raw evidence does not establish root cause. Preserve and diagnose environment/owned-workload attribution before any fresh campaign.",
+  "interpretation": "The locked gate was triggered by an admitted command lookup timeout (CONNECTION_LOST_LOOKUP at getresponse after 2002.5627 ms); its retry later recovered READBACK_CONFIRMED. The native/editor ACK lane remained healthy, so the two gaps are separate scopes. Evidence establishes the trigger and recovery, but no OS/server/lock root cause. Preserve and diagnose environment/owned-workload attribution before any fresh campaign.",
   "source_files": [
     "command-17.json",
     "joint-17.json",
@@ -41,5 +51,12 @@
     "child-terminal-cleanup.json",
     "host-owner/stderr.txt",
     "supervisor-return.json"
-  ]
+  ],
+  "source_hashes": {
+    "command_17": "bc4178c5c933a3e3207b2a39541c64803b88bfc8e1641560312887323ce907a",
+    "sample_preview_17": "7091cf17eeb8985b3fc6ce4336c0cb9b3321c78023576b0e6094740873109823",
+    "child_failure": "f2f740c5a9aaed70a4878d784ee9918e10429a7d8b88d2340a82b4ac3e120d15",
+    "child_cleanup": "33fad65821b3f34e3373e386f3af0337c36c731277f08217d13699d8ba9ba597",
+    "parent_failure": "ced7e1d379ddd33a8ddc58c55f6a39c4b82275fb770f9df8e6e56c76692cf09b"
+  }
 }
