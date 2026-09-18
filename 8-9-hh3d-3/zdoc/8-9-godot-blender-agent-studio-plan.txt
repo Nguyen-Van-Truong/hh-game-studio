@@ -66,6 +66,7 @@ GT06_FULL_CAMPAIGN=gt06-s98-campaign-01; LAUNCH_1_FAILED_BATCH17_AFTER_18_BATCHE
 GT06_S98_CLEANUP_STATUS=DIAGNOSTIC_ZERO_JOBS_HANDLES_RELEASED_BUT_EDITOR_TARGET_EXIT_MISSING_SUPERVISOR_EXIT_MISSING_SCHEDULER_STATE3_RESULT1
 GT06_NEXT_ACTION=Reconcile S98 scheduler/outer exits and preserve attribution packet; diagnose owned-workload/environment cause of status gap before any fresh campaign; only then use a new source-identical campaign ID if retry gates pass, followed by full 10-pair dataset and final critics.
 GT06_S98_WORKSTATION_PREFLIGHT=workstation-attribution-preflight-01; SHA256=28609498f97969d1609b69c50b84c30c60e1cc7c1379ee72cbfa4cc3d880c5eb; READ_ONLY_POST_TERMINAL_NO_OWNED_WORKLOAD; CAUSALITY_UNAVAILABLE; NO_ACCEPTANCE
+GT06_S99_COMMAND_DIAGNOSTIC=gt06-s99-command-residency-01; COMMAND_ONLY_35_BATCH; COMPLETED_PREFIX_14; MAX_GAP_OBSERVED=934.3129MS; FORMAL_ACCEPTANCE=FALSE; RESULT_PENDING
 GT06_S88_SCHEDULER_TASK=OBSERVED_ABSENT_20260918; historic_delete_report_retained_in_chat; durable_delete_receipt_missing
 GT06_S90_DIAGNOSTIC=gt06-s90-lifecycle-attribution-01; preflight=gt06-s90-lifecycle-attribution-preflight-06; five_partial_batches; interrupted_before_batch5_capture; formal_acceptance=false; eligible_for_dataset=false
 GT06_DIAGNOSTIC_EXCLUSION=S81-S90 diagnostic and partial/failure prefixes are excluded from F13/F14 acceptance datasets; see s83-mapping requirements and each packet manifest.
