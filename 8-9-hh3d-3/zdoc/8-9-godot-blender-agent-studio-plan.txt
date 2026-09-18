@@ -62,7 +62,7 @@ GT06_SOURCE_CHECKPOINT=4293acf2d628
 GT06_BENCHMARK_CAMPAIGN=gt06-s86-campaign-01
 GT06_BENCHMARK_STATUS=S86_FAILURE_RETAINED_OBJECTDB_GROWTH_BATCH17_20260918T120235Z
 GT06_ACTIVE_DIAGNOSTIC=S97_COMPLETE_35_BATCHES; DERIVED_EXIT_RECONCILIATION_VERIFIED; NO_ACCEPTANCE
-GT06_FULL_CAMPAIGN=gt06-s98-campaign-01; DISPATCH_PENDING_REGISTRATION; SOURCE_IDENTICAL_TO_S97; FRESH_ID_REQUIRED
+GT06_FULL_CAMPAIGN=gt06-s98-campaign-01; LAUNCH_1_ACTIVE_20260918T215233Z; SOURCE_IDENTICAL_TO_S97; FRESH_ID_REQUIRED
 GT06_NEXT_ACTION=Register and start source-identical S98 full campaign (10 fresh pairs x35 batches, original profile); preserve S97 diagnostic and derived exit correction, then verify all actual exits/cleanup/dataset before final manifest and two new critics.
 GT06_S88_SCHEDULER_TASK=OBSERVED_ABSENT_20260918; historic_delete_report_retained_in_chat; durable_delete_receipt_missing
 GT06_S90_DIAGNOSTIC=gt06-s90-lifecycle-attribution-01; preflight=gt06-s90-lifecycle-attribution-preflight-06; five_partial_batches; interrupted_before_batch5_capture; formal_acceptance=false; eligible_for_dataset=false
@@ -103,8 +103,8 @@ Child record để trống host/supervisor exit theo thiết kế self-observati
 S97 vẫn diagnostic-only, formal_acceptance=false, eligible_for_dataset=false;
 không no-leak/PASS và không nhập F13/F14.
 
-LƯỢT TIẾP THEO: gt06-s98-campaign-01, full acceptance campaign mới, source/profile/
-workstation giữ nguyên; task chưa đăng ký ở mốc này. Sẽ chạy10 fresh host/editorpairs ×35 batch (5 warmup+30 measured), 1000 HTTP+100 native mỗi batch, giữnguyên deadline/gate, rồi kiểm dataset, hashes, actual exits, trees, handles vàmọi failed-attempt inventory trước khi đóng manifest và gọi hai critic mới.
+LƯỢT ĐANG CHẠY: gt06-s98-campaign-01 launch1, task \\HHStudio.GT06.gt06-s98-campaign-01; full acceptance campaign mới, source/profile/
+workstation giữ nguyên; raw supervisor ở studio/.local/reviews/gt06-s98-campaign-01-supervisor. Scheduler receipt chỉ là dispatch, cần query liveness/actual exits. Sẽ chạy10 fresh host/editorpairs ×35 batch (5 warmup+30 measured), 1000 HTTP+100 native mỗi batch, giữnguyên deadline/gate, rồi kiểm dataset, hashes, actual exits, trees, handles vàmọi failed-attempt inventory trước khi đóng manifest và gọi hai critic mới.
 Helper/launch ở reviews/20260918-gt06-s97-ack-recovery/coupled-next/;
 raw studio/.local/reviews/gt06-s97-coupled-phases-01. Helper14closure
  e5c9b2a2c06e42dae8c0892227523db023e14ffafcebbfe21d97c7860412b09c;
