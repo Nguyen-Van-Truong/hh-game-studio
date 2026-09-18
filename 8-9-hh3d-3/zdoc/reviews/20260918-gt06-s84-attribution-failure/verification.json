@@ -1,0 +1,33 @@
+{
+  "authority": 0,
+  "formal_acceptance": false,
+  "status": "PRESERVATION_RECHECK_VERIFIED",
+  "scope": "Actual host tool outcomes for preservation only; not diagnostic native exits, tests or independent critic",
+  "collector": {
+    "command": "python -B zdoc/reviews/20260918-gt06-s84-attribution-failure/preserve.py collect",
+    "tool": "exec_command",
+    "chunk_id": "b4969a",
+    "actual_exit_code": 0,
+    "wall_seconds": 5.5059782
+  },
+  "verifier": {
+    "command": "python -B zdoc/reviews/20260918-gt06-s84-attribution-failure/preserve.py verify",
+    "tool": "exec_command",
+    "chunk_id": "32d331",
+    "actual_exit_code": 0,
+    "wall_seconds": 2.6006765
+  },
+  "raw_hashed_files": 156,
+  "raw_metadata_only_exclusions": 36,
+  "exact_copies": 105,
+  "source_files": 51,
+  "source_closure_sha256": "e010180a1bf85b7f565e9aa39734f8551caf170a85b36c50598be556b723ce7f",
+  "captured_batches": 6,
+  "artifact_references": 36,
+  "command_rows": 6000,
+  "native_cycle_rows": 600,
+  "complete_runs": 0,
+  "primary_failure": "CAMPAIGN_RSS_GROWTH",
+  "editor_actual_exit_missing": true,
+  "supervisor_actual_exit_missing": true
+}

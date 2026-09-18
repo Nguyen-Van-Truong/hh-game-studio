@@ -1,0 +1,373 @@
+{
+  "authority": 0,
+  "formal_acceptance": false,
+  "godot_execution_verified": false,
+  "initial_ids_are_not_growth": true,
+  "inputs": [
+    {
+      "path": "8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s84-cost-compact-growth-01\\project\\benchmark\\out\\object-0000.json",
+      "sha256": "53f22cfec1d7bad485d938e6cd18966d921202a538739f94e0f4ecc873a95edd",
+      "size_bytes": 843163
+    },
+    {
+      "path": "8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s84-cost-compact-growth-01\\project\\benchmark\\out\\object-0001.json",
+      "sha256": "55b025541f7be7ca4e2b496503aa285eaa3cab39ad40190e0ad0f4fa56901071",
+      "size_bytes": 16750
+    },
+    {
+      "path": "8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s84-cost-compact-growth-01\\project\\benchmark\\out\\object-0002.json",
+      "sha256": "d6555cd7fad816e2d9ef0e902add23f119538440b087e130986725c64e422b91",
+      "size_bytes": 13700
+    }
+  ],
+  "ordinary_content_changes_observed": false,
+  "publication_receipts_verified": false,
+  "scope": "published compact census arithmetic only",
+  "snapshots": [
+    {
+      "delta": null,
+      "objects": 71047,
+      "reachable": 27402,
+      "sequence": 0,
+      "unattributed": 43645
+    },
+    {
+      "delta": {
+        "added_count": 15,
+        "added_rows": [
+          {
+            "class": "Tree",
+            "columns": 1,
+            "hide_root": false,
+            "id": "1542748968324",
+            "inside_tree": true,
+            "name": "DiagnosticCensusTree",
+            "parent_id": "26524779966",
+            "path": "/root/DiagnosticCensusTree",
+            "queued_for_deletion": false,
+            "relation": "incoming_signal_to:26524779966",
+            "scene_file_path": "",
+            "visible": true
+          },
+          {
+            "cell_texts": [
+              {
+                "column": 0,
+                "length": 21,
+                "sha256": "86b7bbf186e8cfb4c8b965b1d3f175db4e99893958a7639fdb65ea7c7849c9dd",
+                "text": "diagnostic-added-item",
+                "truncated": false
+              }
+            ],
+            "class": "TreeItem",
+            "columns": 1,
+            "id": "1543218730408",
+            "owner_tree_id": "1542748968324",
+            "owner_tree_path": "/root/DiagnosticCensusTree",
+            "owner_tree_visible": true,
+            "parent_item_id": "",
+            "queued_for_deletion": false,
+            "relation": "tree_item:1542748968324"
+          },
+          {
+            "class": "Timer",
+            "id": "1543185175974",
+            "inside_tree": true,
+            "name": "@Timer@20641",
+            "parent_id": "1542748968324",
+            "path": "/root/DiagnosticCensusTree/@Timer@20641",
+            "queued_for_deletion": false,
+            "relation": "incoming_signal_to:1542748968324",
+            "scene_file_path": "",
+            "stopped": true,
+            "timeout_callbacks": [
+              {
+                "method": "Tree::_range_click_timeout",
+                "target_id": "1542748968324"
+              }
+            ],
+            "wait_time": 1.0
+          },
+          {
+            "class": "Timer",
+            "id": "1543201953191",
+            "inside_tree": true,
+            "name": "@Timer@20642",
+            "parent_id": "1542748968324",
+            "path": "/root/DiagnosticCensusTree/@Timer@20642",
+            "queued_for_deletion": false,
+            "relation": "incoming_signal_to:1542748968324",
+            "scene_file_path": "",
+            "stopped": true,
+            "timeout_callbacks": [
+              {
+                "method": "Tree::_on_dropping_unfold_timer_timeout",
+                "target_id": "1542748968324"
+              }
+            ],
+            "wait_time": 1.0
+          },
+          {
+            "class": "HScrollBar",
+            "id": "1543118067106",
+            "inside_tree": true,
+            "name": "@HScrollBar@20639",
+            "parent_id": "1542748968324",
+            "path": "/root/DiagnosticCensusTree/@HScrollBar@20639",
+            "queued_for_deletion": false,
+            "relation": "incoming_signal_to:1542748968324",
+            "scene_file_path": "",
+            "visible": true
+          },
+          {
+            "class": "VScrollBar",
+            "id": "1543151621540",
+            "inside_tree": true,
+            "name": "@VScrollBar@20640",
+            "parent_id": "1542748968324",
+            "path": "/root/DiagnosticCensusTree/@VScrollBar@20640",
+            "queued_for_deletion": false,
+            "relation": "incoming_signal_to:1542748968324",
+            "scene_file_path": "",
+            "visible": true
+          },
+          {
+            "class": "LineEdit",
+            "id": "1542899963285",
+            "inside_tree": true,
+            "name": "@LineEdit@20632",
+            "parent_id": "1542866408851",
+            "path": "/root/DiagnosticCensusTree/@Popup@20630/@VBoxContainer@20631/@LineEdit@20632",
+            "queued_for_deletion": false,
+            "relation": "incoming_signal_to:1542748968324",
+            "scene_file_path": "",
+            "visible": false
+          },
+          {
+            "class": "TextEdit",
+            "id": "1542933517719",
+            "inside_tree": true,
+            "name": "@TextEdit@20638",
+            "parent_id": "1542866408851",
+            "path": "/root/DiagnosticCensusTree/@Popup@20630/@VBoxContainer@20631/@TextEdit@20638",
+            "queued_for_deletion": false,
+            "relation": "incoming_signal_to:1542748968324",
+            "scene_file_path": "",
+            "visible": false
+          },
+          {
+            "class": "Popup",
+            "id": "1542799299983",
+            "inside_tree": true,
+            "name": "@Popup@20630",
+            "parent_id": "1542748968324",
+            "path": "/root/DiagnosticCensusTree/@Popup@20630",
+            "queued_for_deletion": false,
+            "relation": "incoming_signal_to:1542748968324",
+            "scene_file_path": ""
+          },
+          {
+            "class": "VBoxContainer",
+            "id": "1542866408851",
+            "inside_tree": true,
+            "name": "@VBoxContainer@20631",
+            "parent_id": "1542799299983",
+            "path": "/root/DiagnosticCensusTree/@Popup@20630/@VBoxContainer@20631",
+            "queued_for_deletion": false,
+            "relation": "incoming_signal_to:1542799299983",
+            "scene_file_path": "",
+            "visible": false
+          },
+          {
+            "class": "HScrollBar",
+            "id": "1543000626587",
+            "inside_tree": true,
+            "name": "@HScrollBar@20633",
+            "parent_id": "1542933517719",
+            "path": "/root/DiagnosticCensusTree/@Popup@20630/@VBoxContainer@20631/@TextEdit@20638/@HScrollBar@20633",
+            "queued_for_deletion": false,
+            "relation": "incoming_signal_to:1542933517719",
+            "scene_file_path": "",
+            "visible": false
+          },
+          {
+            "class": "VScrollBar",
+            "id": "1543034181021",
+            "inside_tree": true,
+            "name": "@VScrollBar@20634",
+            "parent_id": "1542933517719",
+            "path": "/root/DiagnosticCensusTree/@Popup@20630/@VBoxContainer@20631/@TextEdit@20638/@VScrollBar@20634",
+            "queued_for_deletion": false,
+            "relation": "incoming_signal_to:1542933517719",
+            "scene_file_path": "",
+            "visible": false
+          },
+          {
+            "class": "Timer",
+            "id": "1543067735455",
+            "inside_tree": true,
+            "name": "@Timer@20635",
+            "parent_id": "1542933517719",
+            "path": "/root/DiagnosticCensusTree/@Popup@20630/@VBoxContainer@20631/@TextEdit@20638/@Timer@20635",
+            "queued_for_deletion": false,
+            "relation": "incoming_signal_to:1542933517719",
+            "scene_file_path": "",
+            "stopped": true,
+            "timeout_callbacks": [
+              {
+                "method": "TextEdit::_toggle_draw_caret",
+                "target_id": "1542933517719"
+              }
+            ],
+            "wait_time": 0.65
+          },
+          {
+            "class": "Timer",
+            "id": "1543084512672",
+            "inside_tree": true,
+            "name": "@Timer@20636",
+            "parent_id": "1542933517719",
+            "path": "/root/DiagnosticCensusTree/@Popup@20630/@VBoxContainer@20631/@TextEdit@20638/@Timer@20636",
+            "queued_for_deletion": false,
+            "relation": "incoming_signal_to:1542933517719",
+            "scene_file_path": "",
+            "stopped": true,
+            "timeout_callbacks": [
+              {
+                "method": "TextEdit::_click_selection_held",
+                "target_id": "1542933517719"
+              }
+            ],
+            "wait_time": 0.05
+          },
+          {
+            "class": "Timer",
+            "id": "1543101289889",
+            "inside_tree": true,
+            "name": "@Timer@20637",
+            "parent_id": "1542933517719",
+            "path": "/root/DiagnosticCensusTree/@Popup@20630/@VBoxContainer@20631/@TextEdit@20638/@Timer@20637",
+            "queued_for_deletion": false,
+            "relation": "incoming_signal_to:1542933517719",
+            "scene_file_path": "",
+            "stopped": true,
+            "timeout_callbacks": [
+              {
+                "method": "TextEdit::_push_current_op",
+                "target_id": "1542933517719"
+              }
+            ],
+            "wait_time": 3.0
+          }
+        ],
+        "changed_summaries": [
+          {
+            "character_count": 3796,
+            "class": "RichTextLabel",
+            "id": "565375435050",
+            "inside_tree": true,
+            "name": "@RichTextLabel@8120",
+            "paragraph_count": 23,
+            "parent_id": "565341880616",
+            "path": "/root/@EditorNode@20318/@Panel@14/@VBoxContainer@15/DockVSplitMain/DockHSplitMain/@VBoxContainer@37/DockVSplitCenter/@EditorBottomPanel@8114/Output/@HBoxContainer@8116/@VBoxContainer@8117/@RichTextLabel@8120",
+            "queued_for_deletion": false,
+            "relation": "incoming_signal_to:26524779966",
+            "scene_file_path": "",
+            "visible": false
+          }
+        ],
+        "changed_summary_count": 1,
+        "class_net": {
+          "HScrollBar": 2,
+          "LineEdit": 1,
+          "Popup": 1,
+          "TextEdit": 1,
+          "Timer": 5,
+          "Tree": 1,
+          "TreeItem": 1,
+          "VBoxContainer": 1,
+          "VScrollBar": 2
+        },
+        "objectdb_net": 35,
+        "objectdb_since_baseline": 35,
+        "owner_tree_count_net": {
+          "1542748968324": 1
+        },
+        "reachable_net": 15,
+        "reachable_since_baseline": 15,
+        "removed_count": 0,
+        "removed_ids_with_unknown_prior_metadata": [],
+        "removed_still_valid": [],
+        "unattributed_net": 20
+      },
+      "objects": 71082,
+      "reachable": 27417,
+      "sequence": 1,
+      "unattributed": 43665
+    },
+    {
+      "delta": {
+        "added_count": 0,
+        "added_rows": [],
+        "changed_summaries": [
+          {
+            "character_count": 4646,
+            "class": "RichTextLabel",
+            "id": "565375435050",
+            "inside_tree": true,
+            "name": "@RichTextLabel@8120",
+            "paragraph_count": 28,
+            "parent_id": "565341880616",
+            "path": "/root/@EditorNode@20318/@Panel@14/@VBoxContainer@15/DockVSplitMain/DockHSplitMain/@VBoxContainer@37/DockVSplitCenter/@EditorBottomPanel@8114/Output/@HBoxContainer@8116/@VBoxContainer@8117/@RichTextLabel@8120",
+            "queued_for_deletion": false,
+            "relation": "incoming_signal_to:26524779966",
+            "scene_file_path": "",
+            "visible": false
+          }
+        ],
+        "changed_summary_count": 1,
+        "class_net": {
+          "HScrollBar": -2,
+          "LineEdit": -1,
+          "Popup": -1,
+          "TextEdit": -1,
+          "Timer": -5,
+          "Tree": -1,
+          "TreeItem": -1,
+          "VBoxContainer": -1,
+          "VScrollBar": -2
+        },
+        "objectdb_net": -25,
+        "objectdb_since_baseline": 10,
+        "owner_tree_count_net": {
+          "1542748968324": -1
+        },
+        "reachable_net": -15,
+        "reachable_since_baseline": 0,
+        "removed_count": 15,
+        "removed_ids_with_unknown_prior_metadata": [
+          "1543218730408",
+          "1543185175974",
+          "1543201953191",
+          "1543118067106",
+          "1543151621540",
+          "1542899963285",
+          "1542933517719",
+          "1542799299983",
+          "1542866408851",
+          "1543000626587",
+          "1543034181021",
+          "1543067735455",
+          "1543084512672",
+          "1543101289889"
+        ],
+        "removed_still_valid": [],
+        "unattributed_net": -10
+      },
+      "objects": 71057,
+      "reachable": 27402,
+      "sequence": 2,
+      "unattributed": 43655
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 18-09-2026, Asia/Saigon | Revision S83 | TRIỂN KHAI THEO GATE
+Ngày 18-09-2026, Asia/Saigon | Revision S84 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S83
+PLAN_REVISION=S84
 EXECUTION_MODE=COORDINATOR_THREE_ASTRA_XHIGH_OWNER_20260918
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -60,10 +60,10 @@ GT06_CURRENT_SOURCE_CLOSURE=e010180a1bf85b7f565e9aa39734f8551caf170a85b36c50598b
 GT06_SOURCE_CHECKPOINT=b3862a10
 GT06_BENCHMARK_CAMPAIGN=gt06-s81-campaign-01
 GT06_BENCHMARK_STATUS=S81_LAUNCH1_FAILED_RETAINED_COUNTER_GROWTH_20260918T084856Z
-GT06_ACTIVE_DIAGNOSTIC=S82_FULL_SEQUENCE_ATTRIBUTION_RUNNING_20260918T094118Z
+GT06_ACTIVE_DIAGNOSTIC=S84_COMPACT_SEQUENCE_PREFLIGHT_VERIFIED_PENDING_LAUNCH
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
 
-TIẾN ĐỘ HIỆN HÀNH — S83, ngày 18-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S84, ngày 18-09-2026
 GT-01–05 ACCEPTED; GT-06 IN_PROGRESS; GT-07–10 chưa mở.
 Runtime giữ nguyên source b3862a10, 51 file e010180a…; profile 0cd5b530…
 
@@ -86,29 +86,50 @@ vì assertion cũ đòi6 thay vì16batch. Sửa derived metadata từ raw, giữ
 script/error đã chạy. Không rerun engine để sửa lỗi tổng hợp. Chi tiết/verify:
 reviews/20260918-gt06-s82-diagnosis/ và -diagnosis-long/.
 
-Đang chạy một disposable run đúng chuỗi HTTP→native→joint ACK,
-chỉ thêm census reachable identities ở ACK4 và khi ObjectDB tăng, ghi xong
-trước ACK để cleanup không mất dữ liệu. Không đổi runtime, profile, ngưỡng,
-35batch hoặc screen_sample. Raw và overlay có hash riêng; không đủ điều kiện
-vào dataset nghiệm thu. Phép đo có overhead và không bao toàn bộ ObjectDB.
-Preflight02 import Godot thật28016 exit0/tree sạch; chưa chứng minh runtime
-attribution. Run gt06-s82-attribution-01 khởi chạy09:41:18Z; supervisor19068,
-editor32860; quan sát sau launch có batch0 HTTP và stderr trống. Kiểm live
-trước khi suy vẫn chạy; đây không phải campaign nghiệm thu. Giới hạn7410s,
-lỗi cũ xuất hiện khoảng31phút; không đảm bảo tái hiện. Runner/instructions: reviews/20260918-gt06-s82-attribution/.
-Baseline ACK4 đã chạy hook thật: ObjectDB71128 trước/sau publication,
-reachable27401 và residual43727; collection820390us. Đã qua5batch, chưa có
-fullrun hoặc kết luận nguyên nhân. launch/baseline-observation.json ghi hash.
+Diagnostic gt06-s82-attribution-01 đã FAILED lúc09:49:50Z, không còn chạy.
+Có6captures; batch5 editorRSS758169600→881020928B(+16.20%), ObjectDB71128
+không tăng. Host command gap2044.2252ms là lỗi riêng; không phải thời gian
+census hay native heartbeat. Host42832 actualexit1; editor32860 naturalexit
+thiếu/helper47556 exit2, supervisor19068 actualexit thiếu. Jobszero/closed,
+handles released; cả3PID đã absent. Không dùng run này làm sample nghiệm thu.
+ACK4 census giữ27401descriptors, residual43727ObjectDB; collection820390us.
+OS RSS baseline được đọc trước census, sample sau đọc sau census, nên cần
+đo riêng overhead của công cụ đo trước khi retry chuỗi dài. Chưa chứng minh
+census là nguyên nhân hostgap hoặc sửa được lỗiObjectDB+2 của campaignS81.
+
+S84 A/B ngắn đã xong: original census tăngRSS117919744B/static103247732B;
+sham khôngcensus RSS-221184B/static+10952B; compact chỉ+2412544B/static5255684B.
+Giải phóng cache original làm static giảm71693308B nhưng RSS không giảm;
+không gọi giữ working-set là leak. Ba arm đều nativeexit0/Jobs/handles sạch.
+Original collector exit1 vì assertion object count qua nhiều pha quá chặt;
+giữ nguyên lỗi/source/exit, phân tích raw thay vì chạy lại engine vô ích.
+Object count tăng theo startup cả trong sham; không gán tăng đó cho census.
+Compact có7test, native controlledTree/TreeItem thêm→xóa verified, ownercount
+0→1→0, reachable27402→27417→27402; residualObjectDB vẫn chưa giải thích.
+Các số là diagnostic intervention một lượt, không thay benchmark phân phối.
+
+Chuẩn bị diagnostic mới gt06-s84-attribution-01 với collector compact, giữ
+đúng HTTP→native→jointACK và gate/source/profile. Preflight native54548 exit0,
+wrapper0/Jobzero/closed, stderr trống. Helper20ed7e62…; runnerdacfc917…;
+effectiveplugin08afdefc…. Chỉ chạy sau checkpoint; firstACK4 dự kiến5–10phút,
+35batch khoảng45–75phút nếu không lỗi; hardlimit7410s, không phải ETAtoànplan.
+Census vẫn có overhead và chỉ bao reachableobjects; fullsequence này không
+đủ điều kiện làm sample nghiệm thu. Original+2ObjectDB và hostgap còn mở.
+Artifacts: reviews/20260918-gt06-s84-probe-cost/, -s84-cost-evidence/,
+-s84-compact-probe/, -s84-attribution/ và -s84-attribution-failure/.
+Giữ failedraw; không retrymù, đổi outputID hay giảPASS từ nguyên nhân giả định.
 Ba worker S82 và ba lane S83 đã xong. Chuẩn bị S83 nằm ở:
 - reviews/20260918-gt06-s83-analyzer/: đọc census/owner diff và terminal facts;
-  mới AST/compile, chưa chạy analyzer/test. Baseline mode không suy liveness.
+  sửa1099signednegativeID bị validator cũ từ chối;10focusedtestsPASS.
+  analysis02 đọc rawthật: diagnostic_failed_without_attributed_growth;
+  không suy noleak hoặc fullsequence nonreproduction. Giữ source/output lỗi cũ.
 - reviews/20260918-gt06-s83-mapping/: đủ F01–F15 với test/artifact/provenance;
   đã kiểm path tồn tại, chưa rehash/final seal hoặc có critic verdict.
 - reviews/20260918-gt06-s83-android-readiness/: JDK/templates có file; SDK/ADB
   không thấy trong các path chuẩn đã kiểm. Thiết bị thật và quyền debug còn
   UNVERIFIED; không suy không có thiết bị từ bộ lọc PnP rỗng. Khi GT08 mở,
   agent chuẩn bị SDK; kết nối/unlock/chấp nhận debug có thể cần owner.
-Không chạy engine/test cạnh diagnostic. Các lane trên là preparation,
+Các lane trên là preparation,
 không phải hai critic nghiệm thu và không mở GT07/GT08 trước dependency.
 
 Bài học để tránh làm lại: phân biệt count ổn định với identity không đổi;
@@ -129,7 +150,8 @@ chỉ từ một prefix sau đó. Draft seal/matrix ở s80-closeout và s81-nex
 PASS/TICK=yes →GT06 ACCEPTED. Sau đó GT07 recovery/concurrency, GT08 CI/
 export/Android thật, GT09 conformance, GT10 package/install/upgrade/rollback.
 HH World là plan riêng sau GT10. Chưa có ETA toàn plan đáng tin cậy. Lịch
-hiện có được cập nhật theo job, không tạo trùng; không hứa xong trước sáng.
+cũ ti-p-t-c-hh3d-tools-qua-m đã không tồn tại (tool xác nhận); đã tạo lại
+một heartbeat ti-p-t-c-hh3d-tools mỗi15phút cho task này. Không hứa xong trước sáng.
 
 Đã rút gọn lịch sử hiện hành; nguyên văn S82 tại
 reviews/20260918-plan-history-s82/tools-plan-s82.txt, AUTHORITY=0,

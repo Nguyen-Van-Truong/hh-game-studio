@@ -1,0 +1,33 @@
+{
+  "schema": "HH-S83-ANALYZER-PRE-REPAIR-PRESERVATION-1",
+  "authority": 0,
+  "formal_acceptance": false,
+  "observed_utc": "2026-09-18T09:56:28.256130+00:00",
+  "reason": "Original terminal analysis rejected signed decimal Godot InstanceIDs; preserve source and failed result before correcting analyzer.",
+  "files": [
+    {
+      "original": "analyze_attribution.py",
+      "preserved": "superseded-derived/analyze_attribution.py.raw",
+      "sha256": "2bf2f07084987900b20123e18177fd2a474018e5df0c79caebe55f178dfbeda4",
+      "size_bytes": 35235
+    },
+    {
+      "original": "analysis-attribution-01.json",
+      "preserved": "superseded-derived/analysis-attribution-01.json.raw",
+      "sha256": "fac3aade3474fc3876447941148621ec646229f04588b68affc3929b7007a143",
+      "size_bytes": 237
+    },
+    {
+      "original": "static-validation.json",
+      "preserved": "superseded-derived/static-validation.json.raw",
+      "sha256": "26422798120ea59c5ff0678b48609d6c72f661a2841b87e604fee18e81d3a586",
+      "size_bytes": 526
+    },
+    {
+      "original": "README.md",
+      "preserved": "superseded-derived/README.md.raw",
+      "sha256": "1ae94a4a6bd8b2cf94aba642f9059941a68ecb5b8a088a6cb270705790b0b9cf",
+      "size_bytes": 5815
+    }
+  ]
+}

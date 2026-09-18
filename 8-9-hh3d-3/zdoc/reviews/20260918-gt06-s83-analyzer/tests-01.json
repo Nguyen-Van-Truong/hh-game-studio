@@ -1,0 +1,20 @@
+{
+  "schema": "HH-S83-FOCUSED-TEST-RECEIPT-1",
+  "authority": 0,
+  "formal_acceptance": false,
+  "observed_utc": "2026-09-18T09:58:00.409352+00:00",
+  "argv": [
+    "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "-B",
+    "8-9-hh3d-3\\zdoc\\reviews\\20260918-gt06-s83-analyzer\\test_attribution.py"
+  ],
+  "actual_exit_code": 0,
+  "engine_launched": false,
+  "runtime_imported": false,
+  "source_sha256": {
+    "analyze_attribution.py": "da8ecb76ff4871e7ecb827bfb57bfa61319748009bfde17f3da7e4da2c461903",
+    "test_attribution.py": "277fc450f5d4e5535e7588b82ebf15f7165c87a53d0275ed3a3f7b77b24b2831"
+  },
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "8d9b12789dc7f4dab411d101491d09fc50a149a78196df162bf3f1c099676b99"
+}

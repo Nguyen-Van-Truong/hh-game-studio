@@ -88,7 +88,31 @@ Limits retained deliberately:
 - This is not the campaign validator: it does not reassemble samples, assess all
   latency/RSS limits, validate every native cycle, or supply a critic signature.
 
-Validation so far is AST parsing and Python bytecode compilation only, without
-executing this analyzer. No synthetic, unit, terminal or engine test has run.
-The active-engine restriction remains in force until the coordinator authorizes
-further validation. See `static-validation.json` for the final source hash.
+The initial terminal invocation, `analysis-attribution-01.json`, failed because
+the analyzer incorrectly required positive decimal InstanceIDs. The raw baseline
+contains 1,099 negative decimal IDs. The corrected analyzer accepts nonzero
+signed 64-bit decimal strings, retaining the IDs exactly as written. The failed
+result and its original source, README and static receipt remain byte-for-byte
+in `superseded-derived/`, bound by `pre-repair-preservation.json`; the original
+failed result has not been overwritten.
+
+After the coordinator confirmed the diagnostic was terminal and authorized
+tests, all ten focused synthetic tests passed (`tests-01.json`, actual exit 0).
+Coverage includes signed baseline/growth IDs, malformed ID rejection, baseline
+versus growth, churn with zero inventory net, changed owner descriptors,
+malformed/drifting counters, class census mismatch, digest tampering, wrong-run
+publication receipts, and failure to verify growth with a missing publication
+receipt. The final static AST/compile check is in `static-validation.json`.
+
+The new terminal analysis is `analysis-attribution-02.json`; its actual analyzer
+exit was 0 with empty stderr, recorded in `analysis-attribution-02-run.json`.
+Its diagnostic verdict is `status=error` and
+`run_outcome=diagnostic_failed_without_attributed_growth`: the existing child
+failure is `CAMPAIGN_RSS_GROWTH` at batch 5, after six captured batches. The sole
+attribution snapshot is the valid batch-4 baseline; no growth snapshot exists.
+The analyzer does not turn that partial failure into full-sequence
+nonreproduction. Its snapshot analysis does not independently establish all
+intervening ObjectDB values; the coordinator's joint/sample review is separate.
+Recorded cleanup Jobs are zero/closed, but editor actual target exit and
+supervisor actual exit remain explicit missing receipts. No engine was relaunched
+and no runtime or original raw evidence was edited.

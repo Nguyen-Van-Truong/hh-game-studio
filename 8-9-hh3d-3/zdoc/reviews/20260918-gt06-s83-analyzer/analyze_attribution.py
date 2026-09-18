@@ -62,12 +62,18 @@ def integer(value, name, minimum=0):
     return int(value)
 
 
+def instance_id(value):
+    # GDScript exposes the uint64 ObjectID bit pattern through signed int64.
+    # RefCounted identities in the actual S82 census include negative strings.
+    return type(value) is str and re.fullmatch(r"-?[1-9][0-9]*", value) is not None \
+        and -(2**63) <= int(value) <= 2**63 - 1
+
+
 def ids(rows, label):
     require(type(rows) is list, label + " must be a list")
     result = {}
     for row in rows:
-        require(type(row) is dict and type(row.get("id")) is str
-                and re.fullmatch(r"[1-9][0-9]*", row["id"])
+        require(type(row) is dict and instance_id(row.get("id"))
                 and type(row.get("class")) is str, label + " row identity/class")
         require(row["id"] not in result, label + " duplicate id")
         result[row["id"]] = row
@@ -266,7 +272,7 @@ def analyze_points(reader, full, run_id, pid):
             require(point["label"] == "joint_baseline" and point["batch"] == 4
                     and not removed and not changed, "baseline position/deltas")
             membership = point["initial_id_classes"].copy()
-            require(all(type(k) is str and re.fullmatch(r"[1-9][0-9]*", k) and type(v) is str
+            require(all(instance_id(k) and type(v) is str
                         for k, v in membership.items()), "baseline ID/class shape")
             require(all(membership.get(k) == row["class"] and row["class"] in ("Tree", "RichTextLabel")
                         for k, row in added.items()), "baseline selected descriptors")
@@ -330,7 +336,8 @@ def analyze_points(reader, full, run_id, pid):
     return {"baseline_available": True, "initial_ids_are_not_growth": True,
             "baseline_id_count": base["inventory_count"], "baseline_selected_descriptor_count": len(base["added"]),
             "baseline_trees": [row for row in base["added"] if row["class"] == "Tree"],
-            "growth_observed": len(reports) > 1, "points": reports, "integrity_gaps": integrity_gaps}
+            "growth_observed": len(reports) > 1, "points": reports, "integrity_gaps": integrity_gaps,
+            "attribution_integrity_verified": not integrity_gaps}
 
 
 def job_check(job):

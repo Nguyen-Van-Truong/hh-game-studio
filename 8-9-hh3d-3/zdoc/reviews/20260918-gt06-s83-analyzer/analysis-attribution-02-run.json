@@ -1,0 +1,21 @@
+{
+  "schema": "HH-S83-TERMINAL-ANALYZER-RUN-1",
+  "authority": 0,
+  "formal_acceptance": false,
+  "observed_utc": "2026-09-18T09:58:10.872386+00:00",
+  "argv": [
+    "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "-B",
+    "8-9-hh3d-3\\zdoc\\reviews\\20260918-gt06-s83-analyzer\\analyze_attribution.py",
+    "--raw-root",
+    "8-9-hh3d-3/studio/.local/reviews/gt06-s82-attribution-01",
+    "--mode",
+    "terminal",
+    "--terminal-confirmed"
+  ],
+  "actual_exit_code": 0,
+  "engine_launched": false,
+  "source_sha256": "da8ecb76ff4871e7ecb827bfb57bfa61319748009bfde17f3da7e4da2c461903",
+  "output_sha256": "655d517e92d4b2cc4198f65c7ffeddaf34efe6f4543969282dd569f46230a198",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

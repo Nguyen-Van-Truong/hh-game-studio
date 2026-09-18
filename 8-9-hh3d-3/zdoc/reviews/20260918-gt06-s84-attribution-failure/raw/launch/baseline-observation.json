@@ -1,0 +1,30 @@
+{
+  "observed_utc": "2026-09-18T09:50:49.748747+00:00",
+  "run_id": "gt06-s82-attribution-01",
+  "scope": "Baseline only; not terminal or acceptance",
+  "source_checkpoint": "b3862a10",
+  "runtime_hook_exercised_at_baseline": true,
+  "objects": 71128,
+  "inventory_count": 27401,
+  "unattributed_object_count": 43727,
+  "collection_us": 820390,
+  "artifacts": {
+    "project/benchmark/out/object-0000.json": {
+      "sha256": "44b27284e18131866a8d76081c84d73ba63fffb6f7366fec15f8d42027be1e18",
+      "bytes": 842623
+    },
+    "project/benchmark/out/attribution-04.json": {
+      "sha256": "c6f5ac9362b146f7292aaee088a3c75535b1da9a3c4e55c2c7e0f3dfe54de6f4",
+      "bytes": 155
+    },
+    "joint-04.json": {
+      "sha256": "44a95b1e299f59b98efbdab238c13bf4e15e6f653283c9e73748bb53745f14e6",
+      "bytes": 2286
+    },
+    "sample-preview-04.json": {
+      "sha256": "87f23a73a1b5c0300d8ea3a97bbda2f5fc9d769897384b1bb73a097136ac9b4c",
+      "bytes": 72755
+    }
+  },
+  "formal_acceptance": false
+}

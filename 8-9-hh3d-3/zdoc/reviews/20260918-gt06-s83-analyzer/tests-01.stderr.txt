@@ -1,0 +1,15 @@
+test_churn_keeps_net_and_valid_removed_identity_distinct (__main__.AttributionTests.test_churn_keeps_net_and_valid_removed_identity_distinct) ... ok
+test_class_census_mismatch_rejected (__main__.AttributionTests.test_class_census_mismatch_rejected) ... ok
+test_collection_counter_drift_rejected (__main__.AttributionTests.test_collection_counter_drift_rejected) ... ok
+test_digest_tamper_rejected (__main__.AttributionTests.test_digest_tamper_rejected) ... ok
+test_growth_missing_publication_receipt_cannot_be_verified (__main__.AttributionTests.test_growth_missing_publication_receipt_cannot_be_verified) ... ok
+test_malformed_counter_rejected (__main__.AttributionTests.test_malformed_counter_rejected) ... ok
+test_signed_baseline_is_not_growth (__main__.AttributionTests.test_signed_baseline_is_not_growth) ... ok
+test_signed_growth_reconciles_actual_counter_and_residual (__main__.AttributionTests.test_signed_growth_reconciles_actual_counter_and_residual) ... ok
+test_signed_ids_and_reject_malformed_or_out_of_range (__main__.AttributionTests.test_signed_ids_and_reject_malformed_or_out_of_range) ... ok
+test_wrong_publication_run_rejected (__main__.AttributionTests.test_wrong_publication_run_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.411s
+
+OK

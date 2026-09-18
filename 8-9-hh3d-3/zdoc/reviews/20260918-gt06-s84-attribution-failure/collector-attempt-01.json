@@ -1,0 +1,12 @@
+{
+  "scope": "Preservation collector pre-copy failure, not diagnostic runtime",
+  "tool": "exec_command",
+  "chunk_id": "628a94",
+  "actual_exit": 1,
+  "wall_seconds": 4.3378309999999995,
+  "failed_check": "limited credential-pattern screen",
+  "path": "source/studio/host/core/transport.py",
+  "raw_copies_written": 0,
+  "raw_mutated": false,
+  "resolution": "Keep controlled frozen runtime source in hash inventory only; copy invoked source/helper maps and executed diagnostic helpers plus project overlay. Do not copy source content that triggers the screen."
+}

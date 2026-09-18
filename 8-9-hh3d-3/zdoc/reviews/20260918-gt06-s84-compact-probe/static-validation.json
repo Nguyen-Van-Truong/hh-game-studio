@@ -1,0 +1,46 @@
+{
+  "schema": "HH-S84-COMPACT-STATIC-VALIDATION-1",
+  "authority": 0,
+  "formal_acceptance": false,
+  "observed_utc": "2026-09-18T10:05:37.723636+00:00",
+  "helper": {
+    "file": "object_probe.gd",
+    "sha256": "20ed7e62658c247265a8165024682efac78ae9c475a810bb6368e8fe9c75dd40",
+    "bytes": 13962,
+    "split_marker_count": 1,
+    "clear_entry_count": 1,
+    "retained_container_declarations": [
+      [
+        "_object_probe_previous",
+        "Dictionary"
+      ],
+      [
+        "_object_probe_previous_summaries",
+        "Dictionary"
+      ],
+      [
+        "_object_probe_signature",
+        "Array"
+      ]
+    ],
+    "gdscript_parse_executed_by_worker": false
+  },
+  "python": [
+    {
+      "file": "check_compact_snapshots.py",
+      "sha256": "ecbba5c59443290f3267e85d8c3530378d0dd24d0321c92226143375c845c929",
+      "bytes": 6896,
+      "ast_parse": "PASS",
+      "bytecode_compile": "PASS"
+    },
+    {
+      "file": "test_compact_contract.py",
+      "sha256": "812354ad6d7427095f8b0309ee43a1fb14cb597d5243d72bf46983f95919766f",
+      "bytes": 4880,
+      "ast_parse": "PASS",
+      "bytecode_compile": "PASS"
+    }
+  ],
+  "engine_launched_by_worker": false,
+  "scope": "Python AST/compile and GDScript text inventory only; native validation belongs to separately owned coordinator evidence."
+}

@@ -1,17 +1,32 @@
 {
-  "schema": "HH-S83-ANALYZER-STATIC-VALIDATION-1",
+  "schema": "HH-S83-ANALYZER-STATIC-VALIDATION-2",
   "authority": 0,
   "formal_acceptance": false,
-  "validated_utc": "2026-09-18T09:53:58.290589+00:00",
-  "file": "analyze_attribution.py",
-  "sha256": "2bf2f07084987900b20123e18177fd2a474018e5df0c79caebe55f178dfbeda4",
-  "bytes": 35235,
-  "lines": 591,
-  "ast_parse": "PASS",
-  "bytecode_compile": "PASS",
-  "analyzer_executed": false,
-  "tests_executed": false,
+  "validated_utc": "2026-09-18T09:58:53.639756+00:00",
+  "files": [
+    {
+      "file": "analyze_attribution.py",
+      "sha256": "da8ecb76ff4871e7ecb827bfb57bfa61319748009bfde17f3da7e4da2c461903",
+      "bytes": 35521,
+      "lines": 598,
+      "ast_parse": "PASS",
+      "bytecode_compile": "PASS"
+    },
+    {
+      "file": "test_attribution.py",
+      "sha256": "277fc450f5d4e5535e7588b82ebf15f7165c87a53d0275ed3a3f7b77b24b2831",
+      "bytes": 8991,
+      "lines": 166,
+      "ast_parse": "PASS",
+      "bytecode_compile": "PASS"
+    }
+  ],
+  "operation_scope": "AST parse/compile only; executed tests and terminal analysis have separate actual-exit receipts",
+  "analyzer_executed_by_this_operation": false,
+  "tests_executed_by_this_operation": false,
   "runtime_modules_imported": false,
   "raw_files_read": false,
-  "engine_launched": false
+  "engine_launched": false,
+  "preserved_pre_repair_bytes_verified": true,
+  "original_failed_analysis_unchanged": true
 }
