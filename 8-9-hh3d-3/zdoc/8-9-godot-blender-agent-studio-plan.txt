@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 18-09-2026, Asia/Saigon | Revision S79 | TRIỂN KHAI THEO GATE
+Ngày 18-09-2026, Asia/Saigon | Revision S80 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S79
+PLAN_REVISION=S80
 EXECUTION_MODE=COORDINATOR_THREE_ASTRA_XHIGH_OWNER_20260918
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -53,52 +53,49 @@ GT04_REVIEW_CLOSURE=8ea276e98f3137a5f3623fce00d0760ae0c1fe6d17a77a330e98fa8839a3
 GT05_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260917_S64
 GT05_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S64
 GT05_CHECKPOINT_COMMIT=808d8ba
-GT06_EVIDENCE_STATUS=S78_FAILED_BATCH12_S79_DIAGNOSIS
-GT06_WORKING_SOURCE_STATUS=S79_INDEX_FAULT_FIX_95_TESTS_PASS_NATIVE_PENDING
-GT06_CURRENT_SOURCE_CLOSURE=22c30ca840fcd38ec75d919dfd80c6eda3e7965035d8a3e22b0b5246a6152107
-GT06_SOURCE_CHECKPOINT=24efe967
-GT06_BENCHMARK_CAMPAIGN=gt06-s78-campaign-01
-GT06_BENCHMARK_STATUS=S78_LAUNCH1_FAILED_OBJECT_GROWTH_AFTER_BATCH12
-GT06_ACTIVE_DIAGNOSTIC=S79_OBJECT03_COMPLETE_FOCUS_HYPOTHESIS_PROBE_DRAFT
+GT06_EVIDENCE_STATUS=S79_SERVICE_GUI_REMINT_PASS_FOCUS_MECHANISM_CONFIRMED
+GT06_WORKING_SOURCE_STATUS=S80_STARTUP_READINESS_FROZEN_TESTED
+GT06_LAST_TESTED_SOURCE_CLOSURE=97b85f38c877854ebe4b869b119a0d7b7c6f24e62637540e4d31537c4e6815f6
+GT06_CURRENT_SOURCE_CLOSURE=97b85f38c877854ebe4b869b119a0d7b7c6f24e62637540e4d31537c4e6815f6
+GT06_SOURCE_CHECKPOINT=f75a5d08
+GT06_BENCHMARK_CAMPAIGN=gt06-s80-campaign-01
+GT06_BENCHMARK_STATUS=S80_FROZEN_READY_TO_DISPATCH
+GT06_ACTIVE_DIAGNOSTIC=S79_FOCUS01_COMPLETE_SYNTHETIC_CAUSAL_MECHANISM
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
 
-TIẾN ĐỘ HIỆN HÀNH — S79, ngày 18-09-2026
-GT-01–05 ACCEPTED; GT-06 đang làm, GT-07–10 chưa mở.
-S78 campaign gt06-s78-campaign-01 launch1 FAILED sau1304.844s ở batch12:
-ObjectDB71124→71128 so baseline batch4; chưa có run hoàn chỉnh PASS.
-Hostactual1/importactual0; native editor exit còn thiếu, wrapper2 không thay.
-Cleanup/metrics/source audit mới nằm tại reviews/20260918-gt06-s79-diagnosis/.
-Raw giữ nguyên; không ghép partial, không tự retry trước khi xác định nguyên nhân.
-S78 derived SQLite command/offset index ở a6312a95 giữ JSONL làm authority.
-S79 sửa ba gap tìm qua fault injection: pending durable lỗi index phải halt/
-UNKNOWN; cursor.close phải giữ JournalError uncertainty; constructor thất bại
-phải close hoặc trả cleanup_owner. Owned95/95 đạt, gồm12fault cases và verified
-journal suite; actual0/wrapper0/treeverified, source407file không đổi trong run.
-Không coi source49closure mới là source của campaign S78 đã fail.
-S77 diagnostic03:6×100native+60sidle, actual0/cleanup; hai TreeItem mới và
-hai object chưa định danh. Lần đó thiếu path của Tree chủ nên chưa đủ attribution.
-S79 diagnostic01 lỗi trước spawn: outer720s vượt cap600s của owned runner;
-không có native sample. Giữ receipt/snapshot, task01 đã xóa sau terminal.
-S79 diagnostic02 lỗi instrumentation: băm text rỗng gây Godot ERROR rồi chạm
-log cap; actual editor exit thiếu/wrapper2, outer1, Jobszero/closed/handlesreleased.
-Giữ raw/receipt, không dùng số đo; sửa helper sang String.sha256_text().
-Diagnostic03:6×100native+120sidle, ownerTree/path/parentID/celltext và initial
-Tree descriptors; dispatch06:23:44UTC, task HHStudio.GT06.gt06-s79-object-diagnostic-03.
-Limits540/600/720s. Đã terminal: native30616exit0/import9416exit0;25points,
-120.142sidle, ObjectDB71125 ổn định. Analyzer/cleanup/hash đạt; không tái hiện+4.
-Pinned Godot focus-in tạo rootTreeItem tại2dialog là giả thuyết đang kiểm
-bằng cùngPID/callback/rootitem; không joinObjectID giữa process.
-Năm service và hai GUI lane đang remint tuần tự trên source24efe967.
-Luôn query live; dispatch không phải PASS. Không phải full campaign/HTTP lane.
-Ba Astra xhigh rà object attribution, derived-index faults, failure cleanup;
-không phải hai critic final. Source mới còn cần native service remint và fullcampaign.
-Chỉ chạy engine tuần tự, một writer/file; kiểm cap runner trước khi tăng timeout.
-Bước tiếp: kiểm terminal/source/cleanup, đọc ownerTree để sửa đúng nguyên nhân;
-đóng index fault gaps; chỉ remint dependencies bị đổi, rồi fullbenchmark.
-Nghiệm thu GT06 vẫn cần10freshpairs×35batches và hai critic cùng frozenclosure.
-Plan S78 exact archive: reviews/20260918-plan-history-s78/ (AUTHORITY=0),
-SHA256=08bd0d60123ecf0a1299a1a79315c06b569c9fb9fee491232322ec897464f473.
-Không xóa lịch sử failure; phần hiện hành gọn, chi tiết ở review/archive.
+TIẾN ĐỘ HIỆN HÀNH — S80, ngày 18-09-2026
+GT-01–05 ACCEPTED; GT-06 đang làm; GT-07–10 chưa mở.
+S78 campaign failed batch12, ObjectDB71124→71128; chưa có fullrunPASS.
+Failure/raw/source/cleanup giữ nguyên. Không ghép partial sample hoặc retry mù.
+S79 source24efe967 sửa index uncertainty và constructor cleanup:95/95 tests.
+Năm service remint151checks và hai GUI Complete/Stop đã đạt cùng backend174file
+644b90abfe769bf1a3654ba506cef50f8a38393f05f0be5ca7aae8050aaaa527;
+453frozenfiles/1778rawfiles kiểm khớp. Complete có actualnative0; Stop giữ
+naturalexit=null, wrapper2 riêng với Jobzero/closed/handlesreleased.
+Chi tiết: reviews/20260918-gt06-s79-diagnosis/service-remint-01/REPORT.md.
+S79 object03 clean25points/120sidle không tái hiện+4. Focusprobe01 tiếp theo
+native28368actual0/Jobclean, cùngPID: hai rootTree ban đầu trống, thông báo
+APPLICATION_FOCUS_IN tổng hợp tạo2blankroots và ObjectDB71038→71042.
+Lần2 thay cả2rootID, oldIDs invalid, vẫn71042; filehash/mtime/scene không đổi.
+Đây là chứng minh cơ chế synthetic trong probe; không hồi tố nguyên nhân
+S77/S78, không coi là OSfocusE2E hoặc fullbenchmarkPASS. Evidence120raw/97copies
+ở reviews/20260918-gt06-s79-diagnosis/focus-probe/result-01/.
+S80 đã thêm đúng1syntheticfocus trong startup trước intervalsettle hiện có;
+callback/root/source/scene readback failclosed; index1.3 ghi receipt đầy đủ.
+Giữ5warmup+30measured,4frame/1.1ssettle, mọi ngưỡng và thời hạn như cũ.
+96/96 focusedtests đạt; thêm2regression rồi remint riêng nativechecker11/11,
+98test khác nhau. Native37788exit0, setup1dispatch/1observed, source không đổi.
+Negative bỏdispatch: native19752exit86, INITIALIZE trướcbatch0/sceneunchanged,
+Jobclean. Collector đọc nhầm success-onlyfield đã sửa trên raw; không rerunengine.
+Source f75a5d08 đã freeze, Gitbytes khớp; chi tiết ở
+reviews/20260918-gt06-s80-readiness/README.md.
+Ba worker phân file .gd/validator/review đã xong; không phải critic final.
+Tiếp: campaign mới gt06-s80-campaign-01 launch1,
+10freshpairs×35batches; chỉ remint dependency thay đổi. Hai critic mới cùng final
+closure PASS/TICK=yes mới nghiệm thuGT06. Không có ETA toànplan đáng tin cậy.
+HistoryS79 exact ở reviews/20260918-plan-history-s79/ (AUTHORITY=0),
+SHA256=3d5ef7ef4acc26bbe721a3ff0628edf3c2d7d9755da8b75394d998795a250a44.
+Không xóa failure/history; sửa collector trên raw khi engine đã hoàn tất.
 
 Rà phạm vi claim S76: GT-01–05 ACCEPTED theo fixture/catalog đã công bố,
 chưa chứng minh authoring gameplay tổng quát. Godot writer hiện chỉ Node3D/

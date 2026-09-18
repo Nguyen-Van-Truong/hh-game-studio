@@ -1,0 +1,420 @@
+{
+  "schema": "HH-GT06-S80-DEPENDENCY-BRIDGE-1",
+  "prepared_utc": "2026-09-18T06:57:23.540383+00:00",
+  "scope": "Exact declared dependency maps and current source projections only; no raw artifact/copy/engine/binary re-audit or test run",
+  "formal_acceptance": false,
+  "critic_verdict": null,
+  "observed_git_head": "e4bbc1fe3a99d5860fb0c5ca9e163860b05f4d2a",
+  "s80_source_observation": {
+    "tests/replay/benchmark_native.gd": {
+      "recorded_s79_broad_snapshot": "61ca9916f9b8cf758e702b59bf05d316f7f12c6c491d54f788054761da385ea1",
+      "observed_current": "52fbd9af5c6191ada5baf1d7195a75685ed5e27a95f4d244af8b4d679f8c00f2",
+      "in_backend174": false
+    },
+    "tests/replay/run_native_benchmark.py": {
+      "recorded_s79_broad_snapshot": "6919f07d0e148d03dd15a4804f42b5bf1aba427610af3533d87c5f3a691a3788",
+      "observed_current": "e6b0f8e9711ac881cfa65b4537232c685ff577af0a13778a51cc54999b1c1fc7",
+      "in_backend174": false
+    },
+    "tests/replay/run_benchmark_campaign.py": {
+      "recorded_s79_broad_snapshot": "09f9d6a24c6281193f21c9aa89c48602ac5d70dfe86882fbaf76e8366c66dd6c",
+      "observed_current": "e98d2be8ea1d32d5cec44d119c395e53b50008f38cbc3852ec24da50c4f9f906",
+      "in_backend174": false
+    },
+    "tests/replay/benchmark_assembly.py": {
+      "recorded_s79_broad_snapshot": "c1c6f67734e5e7feebae109ed7ce7d960fa578a8e1504ec5390c3620c6a65003",
+      "observed_current": "7573ca96986eb1c10298b8998b3dbaa3326fd80da2c2696150aeb22165d2911d",
+      "in_backend174": false
+    },
+    "tests/replay/benchmark_readiness.py": {
+      "recorded_s79_broad_snapshot": null,
+      "observed_current": "842db6244d93384932929544045654f089d67f6f304624b7348b7d5c4583ab68",
+      "in_backend174": false
+    },
+    "tests/replay/test_benchmark_assembly.py": {
+      "recorded_s79_broad_snapshot": "56f39cc9d2a77288fbad10081182cc3f1e364b611224ebbd66fc772bdd254cda",
+      "observed_current": "1aff82225075b71bc4d2e8389c01afbb758659edeff2624a1e7852c0f0cd9083",
+      "in_backend174": false
+    },
+    "tests/replay/test_benchmark_readiness.py": {
+      "recorded_s79_broad_snapshot": null,
+      "observed_current": "895a32fe071cc6d714fc97035dd7bd166b43d23a49520f1da9169217eebffdb8",
+      "in_backend174": false
+    }
+  },
+  "broad_s79_snapshot": {
+    "file": "zdoc/reviews/20260918-gt06-s79-diagnosis/service-remint-01/freeze.json",
+    "recorded_head": "e4bbc1fe3a99d5860fb0c5ca9e163860b05f4d2a",
+    "report_md_head_label": "24efe96757a7b0a25c4a11471152fd1911d764f0",
+    "head_label_mismatch": true,
+    "declared_files": 453,
+    "source_scope": "broad historical snapshot, not each lane runtime dependency map",
+    "modified_s80_existing_paths": [
+      "tests/replay/benchmark_native.gd",
+      "tests/replay/run_native_benchmark.py",
+      "tests/replay/run_benchmark_campaign.py",
+      "tests/replay/benchmark_assembly.py",
+      "tests/replay/test_benchmark_assembly.py"
+    ],
+    "new_s80_paths": [
+      "tests/replay/benchmark_readiness.py",
+      "tests/replay/test_benchmark_readiness.py"
+    ],
+    "whole_broad_map_rehashed": false
+  },
+  "required_backend_map": {
+    "declared_files": 174,
+    "declared_closure_sha256": "644b90abfe769bf1a3654ba506cef50f8a38393f05f0be5ca7aae8050aaaa527",
+    "matches_freeze_closure": true,
+    "current_collector_path_count": 174,
+    "added_current_paths": [],
+    "removed_current_paths": [],
+    "collector_source_hashes": {
+      "host/replay/native_runner.py": "20e1e58ea2848b29ac1b4137028bce8476ad2ec1312c879266d3091daf4325ca",
+      "host/replay/backend.py": "b3370fef203068cc00fd1f51c091be8e2bf0f941c64347bc29fec0efd72be65a",
+      "reviewer/main.py": "2e6190fb28b81c50aae110694d74fddc6a0f7f1115156333e972311bfa94666a"
+    }
+  },
+  "comparisons": [
+    {
+      "domain": "S79 service/reviewer backend",
+      "source_map": "studio/.local/reviews/gt06-s79-http-complete-01/source-files.json",
+      "declared_files": 174,
+      "declared_closure_sha256": "644b90abfe769bf1a3654ba506cef50f8a38393f05f0be5ca7aae8050aaaa527",
+      "matches_current": true,
+      "changed": {},
+      "s80_overlap": [],
+      "run_id": "gt06-s79-http-complete-01",
+      "equals_frozen_backend_map": true
+    },
+    {
+      "domain": "S79 service/reviewer backend",
+      "source_map": "studio/.local/reviews/gt06-s79-http-stop-01/source-files.json",
+      "declared_files": 174,
+      "declared_closure_sha256": "644b90abfe769bf1a3654ba506cef50f8a38393f05f0be5ca7aae8050aaaa527",
+      "matches_current": true,
+      "changed": {},
+      "s80_overlap": [],
+      "run_id": "gt06-s79-http-stop-01",
+      "equals_frozen_backend_map": true
+    },
+    {
+      "domain": "S79 service/reviewer backend",
+      "source_map": "studio/.local/reviews/gt06-s79-saturated-stop-01/source-files.json",
+      "declared_files": 174,
+      "declared_closure_sha256": "644b90abfe769bf1a3654ba506cef50f8a38393f05f0be5ca7aae8050aaaa527",
+      "matches_current": true,
+      "changed": {},
+      "s80_overlap": [],
+      "run_id": "gt06-s79-saturated-stop-01",
+      "equals_frozen_backend_map": true
+    },
+    {
+      "domain": "S79 service/reviewer backend",
+      "source_map": "studio/.local/reviews/gt06-s79-revoked-result-01/source-files.json",
+      "declared_files": 174,
+      "declared_closure_sha256": "644b90abfe769bf1a3654ba506cef50f8a38393f05f0be5ca7aae8050aaaa527",
+      "matches_current": true,
+      "changed": {},
+      "s80_overlap": [],
+      "run_id": "gt06-s79-revoked-result-01",
+      "equals_frozen_backend_map": true
+    },
+    {
+      "domain": "S79 service/reviewer backend",
+      "source_map": "studio/.local/reviews/gt06-s79-stale-capture-01/source-files.json",
+      "declared_files": 174,
+      "declared_closure_sha256": "644b90abfe769bf1a3654ba506cef50f8a38393f05f0be5ca7aae8050aaaa527",
+      "matches_current": true,
+      "changed": {},
+      "s80_overlap": [],
+      "run_id": "gt06-s79-stale-capture-01",
+      "equals_frozen_backend_map": true
+    },
+    {
+      "domain": "S79 service/reviewer backend",
+      "source_map": "studio/.local/reviews/gt06-s79-reviewer-complete-01/source-files.json",
+      "declared_files": 174,
+      "declared_closure_sha256": "644b90abfe769bf1a3654ba506cef50f8a38393f05f0be5ca7aae8050aaaa527",
+      "matches_current": true,
+      "changed": {},
+      "s80_overlap": [],
+      "run_id": "gt06-s79-reviewer-complete-01",
+      "equals_frozen_backend_map": true
+    },
+    {
+      "domain": "S79 service/reviewer backend",
+      "source_map": "studio/.local/reviews/gt06-s79-reviewer-stop-01/source-files.json",
+      "declared_files": 174,
+      "declared_closure_sha256": "644b90abfe769bf1a3654ba506cef50f8a38393f05f0be5ca7aae8050aaaa527",
+      "matches_current": true,
+      "changed": {},
+      "s80_overlap": [],
+      "run_id": "gt06-s79-reviewer-stop-01",
+      "equals_frozen_backend_map": true
+    },
+    {
+      "domain": "S79 reviewer UI",
+      "source_map": "studio/.local/reviews/gt06-s79-reviewer-complete-01/reviewer-probe/source.json",
+      "declared_files": 5,
+      "declared_closure_sha256": "7665621f1090836c2bc711ccc7f6857c3961b99be5b077292baaadc933b712fb",
+      "matches_current": true,
+      "changed": {},
+      "s80_overlap": []
+    },
+    {
+      "domain": "S79 reviewer UI",
+      "source_map": "studio/.local/reviews/gt06-s79-reviewer-stop-01/reviewer-probe/source.json",
+      "declared_files": 5,
+      "declared_closure_sha256": "7665621f1090836c2bc711ccc7f6857c3961b99be5b077292baaadc933b712fb",
+      "matches_current": true,
+      "changed": {},
+      "s80_overlap": []
+    },
+    {
+      "domain": "gt06-s69-managed-replay-01",
+      "source_map": "studio/.local/reviews/gt06-s69-managed-replay-01/source-files.json",
+      "declared_files": 159,
+      "declared_closure_sha256": "491b65875f8246e7606c7b860d9c61d6a85657fc0077075fa6dc7209128dca2b",
+      "matches_current": true,
+      "changed": {},
+      "s80_overlap": []
+    },
+    {
+      "domain": "gt06-s65-native-04",
+      "source_map": "studio/.local/reviews/gt06-s65-native-04/source-files.json",
+      "declared_files": 154,
+      "declared_closure_sha256": "58710f5d13a31190accfe8addb7fcb4885e3ee831a8a5152b4917cc9a103959f",
+      "matches_current": false,
+      "changed": {
+        "fixtures/play-observe/project.godot": {
+          "recorded": "e91d3fc6a99c67982e33dbb20a2b80e6e1188b2cafb0fb096a982542f5f09e80",
+          "observed_current": "e97f22356c828f1fec7737f63cd01e64490455895c19f477a8c362e5a8364b2f"
+        },
+        "godot-addon/observe/trace_bridge.gd": {
+          "recorded": "9eabb7326f39a1d694ff7b828759f6a647406e077dde81ba8ed099aa8135ae16",
+          "observed_current": "f66a649117217562cae1add178109490eb4b890557ce38555e66962f9e2d15d0"
+        }
+      },
+      "s80_overlap": []
+    },
+    {
+      "domain": "gt06-s65-native-05",
+      "source_map": "studio/.local/reviews/gt06-s65-native-05/source-files.json",
+      "declared_files": 154,
+      "declared_closure_sha256": "58710f5d13a31190accfe8addb7fcb4885e3ee831a8a5152b4917cc9a103959f",
+      "matches_current": false,
+      "changed": {
+        "fixtures/play-observe/project.godot": {
+          "recorded": "e91d3fc6a99c67982e33dbb20a2b80e6e1188b2cafb0fb096a982542f5f09e80",
+          "observed_current": "e97f22356c828f1fec7737f63cd01e64490455895c19f477a8c362e5a8364b2f"
+        },
+        "godot-addon/observe/trace_bridge.gd": {
+          "recorded": "9eabb7326f39a1d694ff7b828759f6a647406e077dde81ba8ed099aa8135ae16",
+          "observed_current": "f66a649117217562cae1add178109490eb4b890557ce38555e66962f9e2d15d0"
+        }
+      },
+      "s80_overlap": []
+    },
+    {
+      "domain": "gt06-s68-reviewer-complete-02",
+      "source_map": "studio/.local/reviews/gt06-s68-reviewer-complete-02/source-files.json",
+      "declared_files": 173,
+      "declared_closure_sha256": "153926756107745108aa0df1941b6a189a77dd0a814f2424cd24c3a489abed7b",
+      "matches_current": false,
+      "changed": {
+        "host/replay/service.py": {
+          "recorded": "a09641c7954938aebf1207bd37bf66825eb483e51e7c386032b09fcde496121a",
+          "observed_current": "d8d046ea2144ade026cce7e63a53b52885a28b213193fed19f932a773a9758a5"
+        },
+        "host/replay/verified_journal.py": {
+          "recorded": "3bdc1414166c132236149629b14bde456d142578cc3d08e0fd1faf5a4285d5eb",
+          "observed_current": "129baa4d9e08c8a1d5acf2ea05c9c89a4fdddb53ca6f3baf2d61311ab98e62ab"
+        }
+      },
+      "s80_overlap": []
+    },
+    {
+      "domain": "gt06-s68-reviewer-stop-02",
+      "source_map": "studio/.local/reviews/gt06-s68-reviewer-stop-02/source-files.json",
+      "declared_files": 173,
+      "declared_closure_sha256": "153926756107745108aa0df1941b6a189a77dd0a814f2424cd24c3a489abed7b",
+      "matches_current": false,
+      "changed": {
+        "host/replay/service.py": {
+          "recorded": "a09641c7954938aebf1207bd37bf66825eb483e51e7c386032b09fcde496121a",
+          "observed_current": "d8d046ea2144ade026cce7e63a53b52885a28b213193fed19f932a773a9758a5"
+        },
+        "host/replay/verified_journal.py": {
+          "recorded": "3bdc1414166c132236149629b14bde456d142578cc3d08e0fd1faf5a4285d5eb",
+          "observed_current": "129baa4d9e08c8a1d5acf2ea05c9c89a4fdddb53ca6f3baf2d61311ab98e62ab"
+        }
+      },
+      "s80_overlap": []
+    },
+    {
+      "domain": "gt06-s69-managed-replay-01 verifier",
+      "source_map": "studio/.local/reviews/gt06-s69-managed-replay-01/repair-replay.json#/verifier_sources",
+      "declared_files": 4,
+      "declared_closure_sha256": "b8f605a63f917895f2fe26d7f80f50b1f8eea3708d491c0ffd7cc9d85bdde39d",
+      "matches_current": true,
+      "changed": {},
+      "s80_overlap": []
+    },
+    {
+      "domain": "gt06-s65-native-05 verifier",
+      "source_map": "studio/.local/reviews/gt06-s65-native-05/repair-replay.json#/verifier_sources",
+      "declared_files": 4,
+      "declared_closure_sha256": "b8f605a63f917895f2fe26d7f80f50b1f8eea3708d491c0ffd7cc9d85bdde39d",
+      "matches_current": true,
+      "changed": {},
+      "s80_overlap": []
+    },
+    {
+      "domain": "gt06-s65-native-04 perf postprocess",
+      "source_map": "studio/.local/reviews/gt06-s65-native-04/perf-export-v1.json#/postprocess_collector/source_files",
+      "declared_files": 3,
+      "declared_closure_sha256": "7db13b1790e69ec225215cd309d54ccadf7ee629415d8b5bffb2769a53e35f0e",
+      "matches_current": true,
+      "changed": {},
+      "s80_overlap": []
+    },
+    {
+      "domain": "gt06-s65-native-05 perf postprocess",
+      "source_map": "studio/.local/reviews/gt06-s65-native-05/perf-export-v1.json#/postprocess_collector/source_files",
+      "declared_files": 3,
+      "declared_closure_sha256": "7db13b1790e69ec225215cd309d54ccadf7ee629415d8b5bffb2769a53e35f0e",
+      "matches_current": true,
+      "changed": {},
+      "s80_overlap": []
+    },
+    {
+      "domain": "S79 declared service/UI drivers and outer owner",
+      "source_map": "zdoc/reviews/20260918-gt06-s79-diagnosis/service-remint-01/freeze.json#/source_files",
+      "declared_files": 4,
+      "declared_closure_sha256": "49ee8507a3f0ffe6a791f6b920ffd2ce9ce5fbf9aa19322ef1109992bbe784de",
+      "matches_current": true,
+      "changed": {},
+      "s80_overlap": []
+    }
+  ],
+  "profile_and_toolchain": {
+    "tests/replay/benchmark_profile.py": {
+      "recorded_s79": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233",
+      "observed_current": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233"
+    },
+    "toolchain.lock.json": {
+      "recorded_s79": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+      "observed_current": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9"
+    }
+  },
+  "current_source_hash_budget": {
+    "distinct_files": 190,
+    "total_bytes": 2230516,
+    "raw_artifacts_hashed": 0
+  },
+  "anchors": {
+    "zdoc/reviews/20260918-gt06-s79-diagnosis/service-remint-01/freeze.json": {
+      "sha256": "adea95e23a6487f879e5e41a366530286869c0ccca05bcbd49fad68af5b70f28",
+      "size_bytes": 71594
+    },
+    "zdoc/reviews/20260918-gt06-s79-diagnosis/service-remint-01/verification.json": {
+      "sha256": "e217e1fe61f167483276bf68eb6777838823442b661cb7b45e4f5296742c6ce4",
+      "size_bytes": 13660
+    },
+    "studio/.local/reviews/gt06-s79-http-complete-01/source-files.json": {
+      "sha256": "63f6f5a9058a6f62e9db39e9eec362f79c88aa4b5510710dbcdf53ced5ab2208",
+      "size_bytes": 17209
+    },
+    "studio/.local/reviews/gt06-s79-http-stop-01/source-files.json": {
+      "sha256": "63f6f5a9058a6f62e9db39e9eec362f79c88aa4b5510710dbcdf53ced5ab2208",
+      "size_bytes": 17209
+    },
+    "studio/.local/reviews/gt06-s79-saturated-stop-01/source-files.json": {
+      "sha256": "63f6f5a9058a6f62e9db39e9eec362f79c88aa4b5510710dbcdf53ced5ab2208",
+      "size_bytes": 17209
+    },
+    "studio/.local/reviews/gt06-s79-revoked-result-01/source-files.json": {
+      "sha256": "63f6f5a9058a6f62e9db39e9eec362f79c88aa4b5510710dbcdf53ced5ab2208",
+      "size_bytes": 17209
+    },
+    "studio/.local/reviews/gt06-s79-stale-capture-01/source-files.json": {
+      "sha256": "63f6f5a9058a6f62e9db39e9eec362f79c88aa4b5510710dbcdf53ced5ab2208",
+      "size_bytes": 17209
+    },
+    "studio/.local/reviews/gt06-s79-reviewer-complete-01/source-files.json": {
+      "sha256": "63f6f5a9058a6f62e9db39e9eec362f79c88aa4b5510710dbcdf53ced5ab2208",
+      "size_bytes": 17209
+    },
+    "studio/.local/reviews/gt06-s79-reviewer-stop-01/source-files.json": {
+      "sha256": "63f6f5a9058a6f62e9db39e9eec362f79c88aa4b5510710dbcdf53ced5ab2208",
+      "size_bytes": 17209
+    },
+    "studio/.local/reviews/gt06-s79-reviewer-complete-01/reviewer-probe/source.json": {
+      "sha256": "4476fe477abab0859f9957403d84ab3a869db458f46b4ff251672ffc560df640",
+      "size_bytes": 454
+    },
+    "studio/.local/reviews/gt06-s79-reviewer-stop-01/reviewer-probe/source.json": {
+      "sha256": "4476fe477abab0859f9957403d84ab3a869db458f46b4ff251672ffc560df640",
+      "size_bytes": 454
+    },
+    "studio/.local/reviews/gt06-s69-managed-replay-01/source-files.json": {
+      "sha256": "b0091dc3e16801af4c8bb39f39da9bb4bfd8b71be66f0ade7dac1e9b522ed11c",
+      "size_bytes": 15774
+    },
+    "studio/.local/reviews/gt06-s65-native-04/source-files.json": {
+      "sha256": "5103ec7ea27c64450fe05951de102ec639a9ad3cc8f11cccfeacfa0d91c11ab5",
+      "size_bytes": 15221
+    },
+    "studio/.local/reviews/gt06-s65-native-05/source-files.json": {
+      "sha256": "5103ec7ea27c64450fe05951de102ec639a9ad3cc8f11cccfeacfa0d91c11ab5",
+      "size_bytes": 15221
+    },
+    "studio/.local/reviews/gt06-s68-reviewer-complete-02/source-files.json": {
+      "sha256": "76e3172e9b4b9be6a3b703685213ad2d96b705a923a7955545ca1002d4dd2b53",
+      "size_bytes": 17106
+    },
+    "studio/.local/reviews/gt06-s68-reviewer-stop-02/source-files.json": {
+      "sha256": "76e3172e9b4b9be6a3b703685213ad2d96b705a923a7955545ca1002d4dd2b53",
+      "size_bytes": 17106
+    },
+    "studio/.local/reviews/gt06-s69-managed-replay-01/repair-replay.json": {
+      "sha256": "301b9ec859c0d5bbb2278d253ece23480781bb9c733cdd8acbd1d8159a48976a",
+      "size_bytes": 3187
+    },
+    "studio/.local/reviews/gt06-s65-native-05/repair-replay.json": {
+      "sha256": "2bf972bef01b795de93c2e1569e0f6ab9ac65794524430f11d6db02057986396",
+      "size_bytes": 3187
+    },
+    "studio/.local/reviews/gt06-s65-native-04/perf-export-v1.json": {
+      "sha256": "6ef655c72cc1699affd2fadf03eb90f9ea2f259c468372d7637be428483b264d",
+      "size_bytes": 174148
+    },
+    "studio/.local/reviews/gt06-s65-native-05/perf-export-v1.json": {
+      "sha256": "56a5fc1771bebddcd237b66fb9037f565e57912328aa84323c86c9ff03d6af60",
+      "size_bytes": 174135
+    },
+    "zdoc/reviews/20260917-gt05-s63-audit/manifest.json": {
+      "sha256": "fd0b4a984c7bee261c083c07d461baf55325e936d66df2eeab897b422ee0a02b",
+      "size_bytes": 307506
+    }
+  },
+  "disposition": {
+    "S79_seven_lanes": "Reuse original scoped service/adversary/GUI evidence: all seven174 maps, both GUI5 maps, and declared driver/outer-owner bytes match; no S80 dependency overlap. No relabeling as S80 runs.",
+    "S69_managed_replay": "Reuse original scoped159-file native replay plus four verifier sources, preserving S65 fault/repair02 causal anchors.",
+    "S65_native04_native05": "Historical154-file native evidence, not exact-current runtime: project.godot and trace_bridge.gd already differ. Perf postprocess map3 and repair verifier map4 still match. Use S69/S79 current functional evidence where applicable.",
+    "S68_GUI": "Historical integrated173 maps differ in service.py/verified_journal.py and lack current disk index; current integrated GUI proof is S79, not a retroactive S68 claim.",
+    "S80_benchmark": "Remint diagnostic/campaign and affected unit evidence on newly frozen source; old aggregate1.2.0 results cannot prove startup_readiness1.3.0. Full campaign and two final critics remain outstanding."
+  },
+  "limitations": [
+    "No raw screenshots, GLBs, journals, native logs, executable binaries or source-copy trees rehashed. This is a dependency bridge, not execution/cleanup acceptance.",
+    "S79 historical broad verify.py checks live453 and would reject changed benchmark files; preserve its old snapshot and report, do not weaken or rewrite the historical receipt.",
+    "Current source hashes are an observation while coordinator integration continues, not a final frozen S80 source claim. Recheck affected dependencies if later source changes."
+  ],
+  "supplemental_launcher_binding": {
+    "path": "zdoc/reviews/20260918-gt06-s79-diagnosis/run_service_remints.py",
+    "recorded_sha256": "2882623fdf73370456763b0e27e52c7783bd92fb1fd83086cb07a9ad42fe252a",
+    "observed_current_sha256": "2882623fdf73370456763b0e27e52c7783bd92fb1fd83086cb07a9ad42fe252a",
+    "matches_current": true
+  }
+}

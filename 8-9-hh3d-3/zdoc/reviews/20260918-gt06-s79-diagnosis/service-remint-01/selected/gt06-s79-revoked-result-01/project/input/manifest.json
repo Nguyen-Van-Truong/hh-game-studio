@@ -1,0 +1,233 @@
+{
+  "schema": "HH-GT05-ASSET-MANIFEST-1",
+  "profile_id": "gt05-original-fixture-v1",
+  "license": "original-fixture",
+  "external_inputs": [],
+  "variant": "baseline",
+  "source_pins": {
+    "blender_binary_sha256": "8f7a131ad8bc148edc218b334f07d92a57f5a357fa66d913b290537fd8353c06",
+    "blender_version": "5.2.1 LTS",
+    "exporter_file_count": 128,
+    "exporter_files_sha256": "22a180855eda3e7f1a075bf28d7c256e4498be16c96be4e7412a438ce96ec481",
+    "exporter_version": [
+      5,
+      2,
+      40
+    ],
+    "naming_sha256": "f7c3ab1caea02dab01eab5cb81b089e384ac81d5cef76b0b7f62b22ccbcb19b3",
+    "profile_sha256": "58be789853b900de63fee948b1e42a8d56001f356735777388df53725624a08a",
+    "python_version": "3.13.13",
+    "settings_sha256": "e5cdd04f2c72964af6c49697a1d7ad661d95066a78a36f02cc76be50ba791222",
+    "source_files": {
+      "blender-addon/exporter.lock.json": "1f7c53126318568e1de7497eb33154973bb287d2ad0dc86cd6ac381796e36558",
+      "contracts/naming-convention-v1.md": "f7c3ab1caea02dab01eab5cb81b089e384ac81d5cef76b0b7f62b22ccbcb19b3",
+      "fixtures/assets-src/fixture-source.json": "4978f13abe7f2a334b48606588c12866b0b97f7c3fbe4e0a4b935c4b4d143440",
+      "pipeline/naming.py": "8b621b7c0a6fc652916825f2d56e3d8e1263c85fa58b052a0c094e3865358f67",
+      "pipeline/producer/__init__.py": "0c37cb9e5ddf97a1bdcf99f751a7098cf0ad3ec82bc007677472ec4983bc257e",
+      "pipeline/producer/contract.py": "1f4c485dacb691394a71f78b4f0edcb09556b2acee2a93c72d407124706c6dc0",
+      "pipeline/producer/run_blender.py": "b7c618161f6ab440d3784162d7955832a40af9820b00ae989f9536654da360c5",
+      "tests/asset-profile.json": "58be789853b900de63fee948b1e42a8d56001f356735777388df53725624a08a",
+      "toolchain.lock.json": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9"
+    },
+    "source_sha256": "448a96062e7a9efb9d44ebf7a4a7310169f2af51f3a168cf69c229030fe58818",
+    "toolchain_sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9"
+  },
+  "artifacts": {
+    "fixture.blend": {
+      "bytes": 134559,
+      "sha256": "ad88ee8d6c15d85acc7332d6896818f82309869a57c9cf4667ea91019a245956"
+    },
+    "fixture.glb": {
+      "bytes": 216436,
+      "sha256": "e85e536137208ba84adbc875b6fb647b5a4e49156344e03e2e8947a7ae91e377"
+    }
+  },
+  "producer_report_sha256": "13a0416950aa2f6e4589442e1fa917c023bfe8395af717f803d1a1362fce8eee",
+  "preflight_sha256": "c6fb0d62877d36ccf1b9f3a1c6a999c357c9b89d044e470e04a85ba3b5674dd7",
+  "validator_sha256": "5cd88ff89419f51331d83603d80f1a147c28a8ced33d5181398b05a562fc06d9",
+  "semantic_sha256": "2e90b974e76db1bc6188b179f89b6ba0c40a11b80d73f1a9c4cbe1ddb5f16c20",
+  "semantic_hash_domain": "decoded-core-indexed-v1/json-sort-compact",
+  "catalog": {
+    "assets": [
+      {
+        "asset_id": "env_fixture_axis_cube",
+        "bones": [],
+        "class": "environment",
+        "clips": [],
+        "materials": [
+          "mat_axis_cube"
+        ],
+        "nodes": [
+          {
+            "lod": 0,
+            "name": "env_fixture_axis_cube_lod0",
+            "role": "render"
+          },
+          {
+            "name": "env_fixture_axis_cube_nav",
+            "role": "nav"
+          }
+        ],
+        "sockets": []
+      },
+      {
+        "asset_id": "env_fixture_axis_x",
+        "bones": [],
+        "class": "environment",
+        "clips": [],
+        "materials": [
+          "mat_axis_x"
+        ],
+        "nodes": [
+          {
+            "lod": 0,
+            "name": "env_fixture_axis_x_lod0",
+            "role": "render"
+          }
+        ],
+        "sockets": []
+      },
+      {
+        "asset_id": "env_fixture_axis_y",
+        "bones": [],
+        "class": "environment",
+        "clips": [],
+        "materials": [
+          "mat_axis_y"
+        ],
+        "nodes": [
+          {
+            "lod": 0,
+            "name": "env_fixture_axis_y_lod0",
+            "role": "render"
+          }
+        ],
+        "sockets": []
+      },
+      {
+        "asset_id": "env_fixture_axis_z",
+        "bones": [],
+        "class": "environment",
+        "clips": [],
+        "materials": [
+          "mat_axis_z"
+        ],
+        "nodes": [
+          {
+            "lod": 0,
+            "name": "env_fixture_axis_z_lod0",
+            "role": "render"
+          }
+        ],
+        "sockets": []
+      },
+      {
+        "asset_id": "env_fixture_front",
+        "bones": [],
+        "class": "environment",
+        "clips": [],
+        "materials": [
+          "mat_axis_y"
+        ],
+        "nodes": [
+          {
+            "lod": 0,
+            "name": "env_fixture_front_lod0",
+            "role": "render"
+          }
+        ],
+        "sockets": []
+      },
+      {
+        "asset_id": "prp_fixture_crate",
+        "bones": [],
+        "class": "prop",
+        "clips": [],
+        "materials": [
+          "mat_fixture_crate"
+        ],
+        "nodes": [
+          {
+            "lod": 0,
+            "name": "prp_fixture_crate_lod0",
+            "role": "render"
+          },
+          {
+            "name": "prp_fixture_crate_collider",
+            "role": "collider"
+          }
+        ],
+        "sockets": []
+      },
+      {
+        "asset_id": "chr_fixture_avatar",
+        "bones": [
+          "bn_root",
+          "bn_pelvis",
+          "bn_spine",
+          "bn_head",
+          "bn_upperarm_l",
+          "bn_hand_l",
+          "bn_upperarm_r",
+          "bn_hand_r",
+          "bn_thigh_l",
+          "bn_shin_l",
+          "bn_thigh_r",
+          "bn_shin_r"
+        ],
+        "class": "character",
+        "clips": [
+          "idle",
+          "walk"
+        ],
+        "materials": [
+          "mat_fixture_skin"
+        ],
+        "nodes": [
+          {
+            "lod": 0,
+            "name": "chr_fixture_avatar_lod0",
+            "role": "render"
+          },
+          {
+            "lod": 1,
+            "name": "chr_fixture_avatar_lod1",
+            "role": "render"
+          },
+          {
+            "name": "chr_fixture_avatar_rig",
+            "role": "rig"
+          }
+        ],
+        "sockets": [
+          "socket_hand_r"
+        ]
+      },
+      {
+        "asset_id": "chr_fixture_outfit",
+        "bones": [],
+        "class": "character",
+        "clips": [],
+        "materials": [
+          "mat_fixture_cloth"
+        ],
+        "nodes": [
+          {
+            "lod": 0,
+            "name": "chr_fixture_outfit_lod0",
+            "role": "render"
+          },
+          {
+            "lod": 1,
+            "name": "chr_fixture_outfit_lod1",
+            "role": "render"
+          }
+        ],
+        "sockets": []
+      }
+    ],
+    "schema": "HH-ASSET-NAMES-1"
+  },
+  "formal_acceptance": false,
+  "public_ack": false
+}

@@ -1,0 +1,506 @@
+{
+  "schema": "HH-GT06-S79-SERVICE-REMINT-1",
+  "lanes": [
+    {
+      "run_id": "gt06-s79-http-complete-01",
+      "checks": 89,
+      "all_checks_passed": true,
+      "source_files": 174,
+      "source_sha256": "644b90abfe769bf1a3654ba506cef50f8a38393f05f0be5ca7aae8050aaaa527",
+      "source_unchanged": true,
+      "outer": {
+        "actual_target": {
+          "target_pid": 18684,
+          "started_at": "2026-09-18T06:44:41.434301+00:00",
+          "exit_code": 0
+        },
+        "helper_pid": 52436,
+        "helper_exit": 0,
+        "tree_verified": true
+      },
+      "inner": null,
+      "import": {
+        "pid": 30444,
+        "actual_native_exit": {
+          "pid": 30444,
+          "exit_code": 0
+        },
+        "completed": true,
+        "wrapper_exit": 0,
+        "job": {
+          "configured": true,
+          "assigned": true,
+          "closed": true,
+          "handle_retained": false,
+          "tainted": false,
+          "zero_observed": true,
+          "active_count": 0,
+          "create_uncertain": false,
+          "close_uncertain": false,
+          "failed_operations": [],
+          "native_error": null
+        }
+      },
+      "runtime": {
+        "pid": 45000,
+        "actual_native_exit": {
+          "pid": 45000,
+          "exit_code": 0
+        },
+        "completed": true,
+        "wrapper_exit": 0,
+        "job": {
+          "configured": true,
+          "assigned": true,
+          "closed": true,
+          "handle_retained": false,
+          "tainted": false,
+          "zero_observed": true,
+          "active_count": 0,
+          "create_uncertain": false,
+          "close_uncertain": false,
+          "failed_operations": [],
+          "native_error": null
+        }
+      },
+      "raw_file_count": 254,
+      "raw_bytes": 10645870,
+      "formal_acceptance": false
+    },
+    {
+      "run_id": "gt06-s79-http-stop-01",
+      "checks": 12,
+      "all_checks_passed": true,
+      "source_files": 174,
+      "source_sha256": "644b90abfe769bf1a3654ba506cef50f8a38393f05f0be5ca7aae8050aaaa527",
+      "source_unchanged": true,
+      "outer": {
+        "actual_target": {
+          "target_pid": 50552,
+          "started_at": "2026-09-18T06:45:08.870688+00:00",
+          "exit_code": 0
+        },
+        "helper_pid": 13752,
+        "helper_exit": 0,
+        "tree_verified": true
+      },
+      "inner": null,
+      "import": {
+        "pid": 15244,
+        "actual_native_exit": {
+          "pid": 15244,
+          "exit_code": 0
+        },
+        "completed": true,
+        "wrapper_exit": 0,
+        "job": {
+          "configured": true,
+          "assigned": true,
+          "closed": true,
+          "handle_retained": false,
+          "tainted": false,
+          "zero_observed": true,
+          "active_count": 0,
+          "create_uncertain": false,
+          "close_uncertain": false,
+          "failed_operations": [],
+          "native_error": null
+        }
+      },
+      "runtime": {
+        "pid": 35872,
+        "actual_native_exit": null,
+        "completed": false,
+        "wrapper_exit": 2,
+        "job": {
+          "configured": true,
+          "assigned": true,
+          "closed": true,
+          "handle_retained": false,
+          "tainted": false,
+          "zero_observed": true,
+          "active_count": 0,
+          "create_uncertain": false,
+          "close_uncertain": false,
+          "failed_operations": [],
+          "native_error": null
+        }
+      },
+      "raw_file_count": 232,
+      "raw_bytes": 6060318,
+      "formal_acceptance": false
+    },
+    {
+      "run_id": "gt06-s79-saturated-stop-01",
+      "checks": 15,
+      "all_checks_passed": true,
+      "source_files": 174,
+      "source_sha256": "644b90abfe769bf1a3654ba506cef50f8a38393f05f0be5ca7aae8050aaaa527",
+      "source_unchanged": true,
+      "outer": {
+        "actual_target": {
+          "target_pid": 47556,
+          "started_at": "2026-09-18T06:45:19.704956+00:00",
+          "exit_code": 0
+        },
+        "helper_pid": 20496,
+        "helper_exit": 0,
+        "tree_verified": true
+      },
+      "inner": {
+        "actual_target": {
+          "target_pid": 17368,
+          "started_at": "2026-09-18T06:45:20.237868+00:00",
+          "exit_code": 0
+        },
+        "helper_pid": 53520,
+        "helper_exit": 0,
+        "tree_verified": true
+      },
+      "import": {
+        "pid": 17608,
+        "actual_native_exit": {
+          "pid": 17608,
+          "exit_code": 0
+        },
+        "completed": true,
+        "wrapper_exit": 0,
+        "job": {
+          "configured": true,
+          "assigned": true,
+          "closed": true,
+          "handle_retained": false,
+          "tainted": false,
+          "zero_observed": true,
+          "active_count": 0,
+          "create_uncertain": false,
+          "close_uncertain": false,
+          "failed_operations": [],
+          "native_error": null
+        }
+      },
+      "runtime": {
+        "pid": 23944,
+        "actual_native_exit": null,
+        "completed": false,
+        "wrapper_exit": 2,
+        "job": {
+          "configured": true,
+          "assigned": true,
+          "closed": true,
+          "handle_retained": false,
+          "tainted": false,
+          "zero_observed": true,
+          "active_count": 0,
+          "create_uncertain": false,
+          "close_uncertain": false,
+          "failed_operations": [],
+          "native_error": null
+        }
+      },
+      "raw_file_count": 249,
+      "raw_bytes": 6062518,
+      "formal_acceptance": false
+    },
+    {
+      "run_id": "gt06-s79-revoked-result-01",
+      "checks": 18,
+      "all_checks_passed": true,
+      "source_files": 174,
+      "source_sha256": "644b90abfe769bf1a3654ba506cef50f8a38393f05f0be5ca7aae8050aaaa527",
+      "source_unchanged": true,
+      "outer": {
+        "actual_target": {
+          "target_pid": 44964,
+          "started_at": "2026-09-18T06:45:30.057774+00:00",
+          "exit_code": 0
+        },
+        "helper_pid": 30616,
+        "helper_exit": 0,
+        "tree_verified": true
+      },
+      "inner": {
+        "actual_target": {
+          "target_pid": 21648,
+          "started_at": "2026-09-18T06:45:30.611112+00:00",
+          "exit_code": 0
+        },
+        "helper_pid": 49188,
+        "helper_exit": 0,
+        "tree_verified": true
+      },
+      "import": {
+        "pid": 39668,
+        "actual_native_exit": {
+          "pid": 39668,
+          "exit_code": 0
+        },
+        "completed": true,
+        "wrapper_exit": 0,
+        "job": {
+          "configured": true,
+          "assigned": true,
+          "closed": true,
+          "handle_retained": false,
+          "tainted": false,
+          "zero_observed": true,
+          "active_count": 0,
+          "create_uncertain": false,
+          "close_uncertain": false,
+          "failed_operations": [],
+          "native_error": null
+        }
+      },
+      "runtime": {
+        "pid": 51768,
+        "actual_native_exit": {
+          "pid": 51768,
+          "exit_code": 0
+        },
+        "completed": true,
+        "wrapper_exit": 0,
+        "job": {
+          "configured": true,
+          "assigned": true,
+          "closed": true,
+          "handle_retained": false,
+          "tainted": false,
+          "zero_observed": true,
+          "active_count": 0,
+          "create_uncertain": false,
+          "close_uncertain": false,
+          "failed_operations": [],
+          "native_error": null
+        }
+      },
+      "raw_file_count": 274,
+      "raw_bytes": 10630884,
+      "formal_acceptance": false
+    },
+    {
+      "run_id": "gt06-s79-stale-capture-01",
+      "checks": 17,
+      "all_checks_passed": true,
+      "source_files": 174,
+      "source_sha256": "644b90abfe769bf1a3654ba506cef50f8a38393f05f0be5ca7aae8050aaaa527",
+      "source_unchanged": true,
+      "outer": {
+        "actual_target": {
+          "target_pid": 5020,
+          "started_at": "2026-09-18T06:45:54.956417+00:00",
+          "exit_code": 0
+        },
+        "helper_pid": 51964,
+        "helper_exit": 0,
+        "tree_verified": true
+      },
+      "inner": {
+        "actual_target": {
+          "target_pid": 44856,
+          "started_at": "2026-09-18T06:45:55.535001+00:00",
+          "exit_code": 0
+        },
+        "helper_pid": 10080,
+        "helper_exit": 0,
+        "tree_verified": true
+      },
+      "import": {
+        "pid": 17812,
+        "actual_native_exit": {
+          "pid": 17812,
+          "exit_code": 0
+        },
+        "completed": true,
+        "wrapper_exit": 0,
+        "job": {
+          "configured": true,
+          "assigned": true,
+          "closed": true,
+          "handle_retained": false,
+          "tainted": false,
+          "zero_observed": true,
+          "active_count": 0,
+          "create_uncertain": false,
+          "close_uncertain": false,
+          "failed_operations": [],
+          "native_error": null
+        }
+      },
+      "runtime": {
+        "pid": 36900,
+        "actual_native_exit": {
+          "pid": 36900,
+          "exit_code": 0
+        },
+        "completed": true,
+        "wrapper_exit": 0,
+        "job": {
+          "configured": true,
+          "assigned": true,
+          "closed": true,
+          "handle_retained": false,
+          "tainted": false,
+          "zero_observed": true,
+          "active_count": 0,
+          "create_uncertain": false,
+          "close_uncertain": false,
+          "failed_operations": [],
+          "native_error": null
+        }
+      },
+      "raw_file_count": 276,
+      "raw_bytes": 10678539,
+      "formal_acceptance": false
+    },
+    {
+      "run_id": "gt06-s79-reviewer-complete-01",
+      "checks": 0,
+      "all_checks_passed": true,
+      "source_files": 174,
+      "source_sha256": "644b90abfe769bf1a3654ba506cef50f8a38393f05f0be5ca7aae8050aaaa527",
+      "source_unchanged": true,
+      "outer": {
+        "actual_target": {
+          "target_pid": 10256,
+          "started_at": "2026-09-18T06:46:23.356774+00:00",
+          "exit_code": 0
+        },
+        "helper_pid": 30820,
+        "helper_exit": 0,
+        "tree_verified": true
+      },
+      "inner": {
+        "actual_target": {
+          "target_pid": 53516,
+          "started_at": "2026-09-18T06:46:24.000937+00:00",
+          "exit_code": 0
+        },
+        "helper_pid": 17844,
+        "helper_exit": 0,
+        "tree_verified": true
+      },
+      "import": {
+        "pid": 1196,
+        "actual_native_exit": {
+          "pid": 1196,
+          "exit_code": 0
+        },
+        "completed": true,
+        "wrapper_exit": 0,
+        "job": {
+          "configured": true,
+          "assigned": true,
+          "closed": true,
+          "handle_retained": false,
+          "tainted": false,
+          "zero_observed": true,
+          "active_count": 0,
+          "create_uncertain": false,
+          "close_uncertain": false,
+          "failed_operations": [],
+          "native_error": null
+        }
+      },
+      "runtime": {
+        "pid": 23748,
+        "actual_native_exit": {
+          "pid": 23748,
+          "exit_code": 0
+        },
+        "completed": true,
+        "wrapper_exit": 0,
+        "job": {
+          "configured": true,
+          "assigned": true,
+          "closed": true,
+          "handle_retained": false,
+          "tainted": false,
+          "zero_observed": true,
+          "active_count": 0,
+          "create_uncertain": false,
+          "close_uncertain": false,
+          "failed_operations": [],
+          "native_error": null
+        }
+      },
+      "raw_file_count": 257,
+      "raw_bytes": 10694514,
+      "formal_acceptance": false
+    },
+    {
+      "run_id": "gt06-s79-reviewer-stop-01",
+      "checks": 0,
+      "all_checks_passed": true,
+      "source_files": 174,
+      "source_sha256": "644b90abfe769bf1a3654ba506cef50f8a38393f05f0be5ca7aae8050aaaa527",
+      "source_unchanged": true,
+      "outer": {
+        "actual_target": {
+          "target_pid": 14252,
+          "started_at": "2026-09-18T06:46:52.299413+00:00",
+          "exit_code": 0
+        },
+        "helper_pid": 4552,
+        "helper_exit": 0,
+        "tree_verified": true
+      },
+      "inner": {
+        "actual_target": {
+          "target_pid": 10676,
+          "started_at": "2026-09-18T06:46:52.894789+00:00",
+          "exit_code": 0
+        },
+        "helper_pid": 44504,
+        "helper_exit": 0,
+        "tree_verified": true
+      },
+      "import": {
+        "pid": 12740,
+        "actual_native_exit": {
+          "pid": 12740,
+          "exit_code": 0
+        },
+        "completed": true,
+        "wrapper_exit": 0,
+        "job": {
+          "configured": true,
+          "assigned": true,
+          "closed": true,
+          "handle_retained": false,
+          "tainted": false,
+          "zero_observed": true,
+          "active_count": 0,
+          "create_uncertain": false,
+          "close_uncertain": false,
+          "failed_operations": [],
+          "native_error": null
+        }
+      },
+      "runtime": {
+        "pid": 51760,
+        "actual_native_exit": null,
+        "completed": false,
+        "wrapper_exit": 2,
+        "job": {
+          "configured": true,
+          "assigned": true,
+          "closed": true,
+          "handle_retained": false,
+          "tainted": false,
+          "zero_observed": true,
+          "active_count": 0,
+          "create_uncertain": false,
+          "close_uncertain": false,
+          "failed_operations": [],
+          "native_error": null
+        }
+      },
+      "raw_file_count": 236,
+      "raw_bytes": 6109931,
+      "formal_acceptance": false
+    }
+  ],
+  "source_unchanged": true,
+  "frozen_files": 453,
+  "formal_acceptance": false
+}

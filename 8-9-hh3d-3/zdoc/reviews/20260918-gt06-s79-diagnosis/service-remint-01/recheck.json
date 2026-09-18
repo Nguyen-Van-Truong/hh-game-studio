@@ -1,0 +1,64 @@
+{
+  "schema": "HH-GT06-S79-SERVICE-RECHECK-1",
+  "passed": true,
+  "verifier_sha256": "1d201957304f09bea417c82ca9a11987cc22bc2d2d4e172b58b0d54d28a6c0ec",
+  "launcher_sha256": "2882623fdf73370456763b0e27e52c7783bd92fb1fd83086cb07a9ad42fe252a",
+  "freeze_sha256": "adea95e23a6487f879e5e41a366530286869c0ccca05bcbd49fad68af5b70f28",
+  "frozen_files": 453,
+  "backend_source_files": 174,
+  "backend_source_sha256": "644b90abfe769bf1a3654ba506cef50f8a38393f05f0be5ca7aae8050aaaa527",
+  "raw_files": 1778,
+  "raw_bytes": 60882574,
+  "selected_files": 1663,
+  "http_checks": 151,
+  "lanes": [
+    {
+      "run_id": "gt06-s79-http-complete-01",
+      "checks": 89,
+      "actual_native_exit": {
+        "pid": 45000,
+        "exit_code": 0
+      }
+    },
+    {
+      "run_id": "gt06-s79-http-stop-01",
+      "checks": 12,
+      "actual_native_exit": null
+    },
+    {
+      "run_id": "gt06-s79-saturated-stop-01",
+      "checks": 15,
+      "actual_native_exit": null
+    },
+    {
+      "run_id": "gt06-s79-revoked-result-01",
+      "checks": 18,
+      "actual_native_exit": {
+        "pid": 51768,
+        "exit_code": 0
+      }
+    },
+    {
+      "run_id": "gt06-s79-stale-capture-01",
+      "checks": 17,
+      "actual_native_exit": {
+        "pid": 36900,
+        "exit_code": 0
+      }
+    },
+    {
+      "run_id": "gt06-s79-reviewer-complete-01",
+      "checks": 0,
+      "actual_native_exit": {
+        "pid": 23748,
+        "exit_code": 0
+      }
+    },
+    {
+      "run_id": "gt06-s79-reviewer-stop-01",
+      "checks": 0,
+      "actual_native_exit": null
+    }
+  ],
+  "formal_acceptance": false
+}

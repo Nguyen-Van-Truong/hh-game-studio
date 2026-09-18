@@ -1,0 +1,20 @@
+{
+  "wrapper_pid": 48868,
+  "started_at": "2026-09-18T06:58:23.665515+00:00",
+  "argv": [
+    "python.exe",
+    "-B",
+    "studio/tests/replay/run_native_benchmark.py",
+    "--run-id",
+    "gt06-s80-native-01"
+  ],
+  "exit_code": 0,
+  "target_pid": 26452,
+  "wrapper_exit_code": 0,
+  "timed_out": false,
+  "tree_verified": true,
+  "ownership": "gated_job_kill_on_close",
+  "stdout": "native-stdout.txt",
+  "stderr": "native-stderr.txt",
+  "host": "native-host.json"
+}

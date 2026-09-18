@@ -1,0 +1,87 @@
+{
+  "schema": "HH-ASSET-PROFILE-1",
+  "profile_id": "gt05-original-fixture-v1",
+  "status": "PREPARATION_NOT_ACCEPTED",
+  "integration_requires": ["GT-03_ACCEPTED", "GT-04_ACCEPTED"],
+  "naming_contract": "contracts/naming-convention-v1.md",
+  "units": {"meters_per_unit": 1},
+  "axes": {
+    "blender_up": "+Z",
+    "blender_asset_front": "-Y",
+    "gltf_godot_up": "+Y",
+    "gltf_godot_asset_front": "+Z",
+    "blender_to_gltf_position": ["x", "z", "-y"],
+    "controller_front_is_separate": true
+  },
+  "tolerances": {
+    "position_euclidean_m": 0.001,
+    "bounds_component_absolute_m": 0.001,
+    "scale_component_absolute": 0.0001,
+    "quaternion_geodesic_degrees": 0.1,
+    "clip_sample_rate_hz": 30,
+    "clip_time_absolute_samples": 1,
+    "skin_weight_sum_absolute": 0.0001,
+    "material_factor_component_absolute": 0.0001,
+    "exact_fields": ["asset_id", "names", "roles", "license", "source_hashes", "artifact_sha256"]
+  },
+  "limits": {
+    "glb_bytes": 1048576,
+    "json_bytes": 262144,
+    "texture_decoded_rgba8_bytes_total": 134217728,
+    "texture_dimension": 4096,
+    "textures": 16,
+    "nodes": 256,
+    "meshes": 128,
+    "accessors": 2048,
+    "buffer_views": 2048,
+    "hierarchy_depth": 32,
+    "avatar_lod0_triangles": 8000,
+    "avatar_lod1_triangles": 2000,
+    "avatar_bones": 60,
+    "avatar_materials": 2,
+    "fixture_scene_triangles": 300000,
+    "fixture_scene_draw_calls": 150
+  },
+  "intake": {
+    "container": "GLB_2",
+    "extensions_allowlist": [],
+    "uri_allowed": false,
+    "image_mime_allowlist": ["image/png"],
+    "image_storage": "bufferView",
+    "decoded_fixture_format": "RGBA8",
+    "negative_scale": "REJECT",
+    "nonuniform_scale": "REJECT_BEFORE_EXPORT_UNLESS_BAKED_AND_VERIFIED",
+    "sparse_accessors": "REJECT_INITIAL_PROFILE",
+    "morph_targets": "REJECT_INITIAL_PROFILE",
+    "animation_interpolation": ["LINEAR", "STEP"],
+    "root_motion": "IN_PLACE_MOTOR_OWNED"
+  },
+  "publication": {
+    "profile": "EXISTING_PROTECTED_SMALL_BLOB_LIMITS",
+    "per_blob_bytes": 1048576,
+    "shared_gt02_limits_may_not_be_raised_implicitly": true,
+    "source_and_output_require_independent_capacity_checks": true
+  },
+  "required_fixtures": [
+    "axis_arrows_and_1m_cube",
+    "opaque_pbr_prop_with_embedded_png",
+    "one_original_rigged_avatar",
+    "one_skinned_outfit",
+    "idle_and_walk_clips",
+    "body_and_outfit_lod0_lod1",
+    "named_attachment_socket",
+    "explicit_collider_and_nav_roles",
+    "authored_godot_script_consumer"
+  ],
+  "required_proofs": [
+    "pinned_khronos_validator",
+    "bounded_texture_decode_and_accessor_checks",
+    "actual_godot_import_and_readback",
+    "six_views_and_idle_walk_in_godot",
+    "two_exports_semantic_comparison_and_exact_binary_hashes",
+    "source_edit_changes_semantics",
+    "reimport_preserves_authored_script_and_attachments",
+    "bone_rename_delete_requires_migration",
+    "malformed_and_unsupported_inputs_reject_before_publish"
+  ]
+}

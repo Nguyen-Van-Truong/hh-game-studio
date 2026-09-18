@@ -1,0 +1,29 @@
+; Original bounded GT06 Play fixture. Supervisor supplies the immutable inputs.
+config_version=5
+
+[application]
+config/name="HH Studio Play & Observe"
+run/main_scene="res://main.tscn"
+run/max_fps=60
+
+[display]
+window/size/viewport_width=960
+window/size/viewport_height=640
+window/size/window_width_override=960
+window/size/window_height_override=640
+; Authored trace owns Play input; reviewer owns the user's keyboard/Stop.
+; Prevent desktop activation from releasing synthetic held keys mid-trace.
+window/size/no_focus=true
+window/vsync/vsync_mode=1
+
+[physics]
+common/physics_ticks_per_second=60
+common/physics_interpolation=false
+
+[rendering]
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+environment/defaults/default_clear_color=Color(0.035, 0.05, 0.08, 1)
+
+[debug]
+gdscript/warnings/untyped_declaration=1

@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260918-gt06-s80-readiness\run_negative.py", line 85, in <module>
+    raise SystemExit(child())
+                     ^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260918-gt06-s80-readiness\run_negative.py", line 41, in child
+    assert capture['actual_process_exit'] == exited and exited['exit_code'] == 86
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'actual_process_exit'

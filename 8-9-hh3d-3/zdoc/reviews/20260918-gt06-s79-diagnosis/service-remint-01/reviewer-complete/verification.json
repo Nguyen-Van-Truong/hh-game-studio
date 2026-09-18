@@ -1,0 +1,75 @@
+{
+  "run_id": "gt06-s79-reviewer-complete-01",
+  "checks": 0,
+  "all_checks_passed": true,
+  "source_files": 174,
+  "source_sha256": "644b90abfe769bf1a3654ba506cef50f8a38393f05f0be5ca7aae8050aaaa527",
+  "source_unchanged": true,
+  "outer": {
+    "actual_target": {
+      "target_pid": 10256,
+      "started_at": "2026-09-18T06:46:23.356774+00:00",
+      "exit_code": 0
+    },
+    "helper_pid": 30820,
+    "helper_exit": 0,
+    "tree_verified": true
+  },
+  "inner": {
+    "actual_target": {
+      "target_pid": 53516,
+      "started_at": "2026-09-18T06:46:24.000937+00:00",
+      "exit_code": 0
+    },
+    "helper_pid": 17844,
+    "helper_exit": 0,
+    "tree_verified": true
+  },
+  "import": {
+    "pid": 1196,
+    "actual_native_exit": {
+      "pid": 1196,
+      "exit_code": 0
+    },
+    "completed": true,
+    "wrapper_exit": 0,
+    "job": {
+      "configured": true,
+      "assigned": true,
+      "closed": true,
+      "handle_retained": false,
+      "tainted": false,
+      "zero_observed": true,
+      "active_count": 0,
+      "create_uncertain": false,
+      "close_uncertain": false,
+      "failed_operations": [],
+      "native_error": null
+    }
+  },
+  "runtime": {
+    "pid": 23748,
+    "actual_native_exit": {
+      "pid": 23748,
+      "exit_code": 0
+    },
+    "completed": true,
+    "wrapper_exit": 0,
+    "job": {
+      "configured": true,
+      "assigned": true,
+      "closed": true,
+      "handle_retained": false,
+      "tainted": false,
+      "zero_observed": true,
+      "active_count": 0,
+      "create_uncertain": false,
+      "close_uncertain": false,
+      "failed_operations": [],
+      "native_error": null
+    }
+  },
+  "raw_file_count": 257,
+  "raw_bytes": 10694514,
+  "formal_acceptance": false
+}

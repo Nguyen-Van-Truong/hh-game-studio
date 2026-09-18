@@ -1,0 +1,24 @@
+{
+  "host": {
+    "wrapper_pid": 20496,
+    "started_at": "2026-09-18T06:45:19.572745+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "$SNAPSHOT/studio/tests/replay/run_service_adversary.py",
+      "--run-id",
+      "gt06-s79-saturated-stop-01",
+      "--mode",
+      "saturated-stop"
+    ],
+    "exit_code": 0,
+    "target_pid": 47556,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "owner-stdout.txt",
+    "stderr": "owner-stderr.txt",
+    "host": "owner-host.json"
+  }
+}

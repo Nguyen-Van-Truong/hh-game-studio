@@ -1,0 +1,13 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://authored.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://input/fixture.glb" id="2_asset"]
+[ext_resource type="Material" path="res://authored_material.tres" id="3_override"]
+
+[node name="AuthoredConsumer" type="Node3D"]
+script = ExtResource("1_script")
+authored_material = ExtResource("3_override")
+authored_marker = "gt05-authored-consumer-v1"
+
+[node name="Imported" parent="." instance=ExtResource("2_asset")]
+

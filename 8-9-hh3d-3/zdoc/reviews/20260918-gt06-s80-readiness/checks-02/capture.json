@@ -1,0 +1,22 @@
+{
+  "host": {
+    "wrapper_pid": 33644,
+    "started_at": "2026-09-18T06:58:08.871644+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "-c",
+      "import unittest,json,sys; names=['studio.tests.replay.test_native_benchmark']; suite=unittest.TestSuite(unittest.defaultTestLoader.loadTestsFromName(n) for n in names); r=unittest.TextTestRunner(verbosity=2).run(suite); print(\"S80_READINESS_CHECKS \"+json.dumps({\"run\":r.testsRun,\"failures\":len(r.failures),\"errors\":len(r.errors),\"skips\":len(r.skipped)}),flush=True); sys.exit(not r.wasSuccessful())"
+    ],
+    "exit_code": 0,
+    "target_pid": 31304,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "unit-stdout.txt",
+    "stderr": "unit-stderr.txt",
+    "host": "unit-host.json"
+  },
+  "source_unchanged": true
+}

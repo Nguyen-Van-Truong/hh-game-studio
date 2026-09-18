@@ -1,0 +1,24 @@
+{
+  "host": {
+    "wrapper_pid": 4552,
+    "started_at": "2026-09-18T06:46:52.131137+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "$SNAPSHOT/studio/tests/reviewer/run_reviewer_probe.py",
+      "--run-id",
+      "gt06-s79-reviewer-stop-01",
+      "--mode",
+      "stop"
+    ],
+    "exit_code": 0,
+    "target_pid": 14252,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "owner-stdout.txt",
+    "stderr": "owner-stderr.txt",
+    "host": "owner-host.json"
+  }
+}

@@ -1,0 +1,46 @@
+# S80 startup readiness — supplemental code preflight
+
+Reviewed 2026-09-18 at approximately 13:56 +07:00 (Asia/Saigon), after both implementers reported their patches stable and released their file leases. Scope: GDScript producer, shared Python receipt validator, native diagnostic checker, full assembly, coordinator's campaign integration and directly related synthetic fixtures. Only this report was written. No engine, tests or runtime edits were performed. This is supplemental preflight, not a final critic, acceptance signature or `TICK`.
+
+**No blocking integration finding in the bytes listed below.** The implementation is consistent with the narrow, explicitly synthetic startup setup authorized after the coordinator's causal probe. Native compilation, warning-free execution, actual timing and full benchmark acceptance remain the coordinator's work. Any subsequent source edit changes the review scope and requires checking the affected integration again.
+
+The coordinator reports that the separate clean probe observed both roots absent at 71038 objects, the first synthetic notification producing two blank roots at 71042, and the second replacing both IDs with old IDs invalid while the count remained 71042; files/mtime/titles stayed unchanged and dialogs stayed invisible. This review uses that supplied result as the implementation premise. It does not independently re-audit the probe or infer that a real OS event caused the historical S78 failure.
+
+## Integration checks
+
+| Concern | Review observation |
+|---|---|
+| Exact owner identity | `benchmark_native.gd::_startup_callback()` (line 352) recognizes `EditorNode` + normalized `_reload_modified_scenes` and `ScriptEditor` + normalized `reload_scripts`; the Python `OWNERS` map matches exactly. Discovery requires both distinct roles, a unique Tree under each recognized dialog and bounded traversal. Snapshot readback verifies the same target IDs/classes/methods and dialog→Tree relationship. This identifies the specific role callback, not every connection on the dialog's `confirmed` signal. Other callbacks are not invoked by the discovery code. |
+| One-shot delivery | `_startup_begin()` (line 470) rejects an existing dispatch or receipt; `_initialize()` (line 313) calls it only before setting the startup-settle frame. `_notification()` (line 124) increments only while `_startup_dispatching` is true and only for notification 2016. Receipt and validator require one dispatched and one observed notification. Natural focus notifications are not mislabeled as synthetic observations. |
+| No mutation fallback | The only setup stimulus is `SceneTree.root.propagate_notification(Node.NOTIFICATION_APPLICATION_FOCUS_IN)`, labeled `synthetic=true`. There is no `grab_focus`, click, signal emission, direct private handler call, TreeItem creation/clearing, focus-out simulation or retry fallback in the added code. Standard editor notification handlers perform the observed initialization. |
+| Runtime readback | `_startup_snapshot()` (line 422) retains primitive evidence: same scene root/revision/raw file hash and source bytes; live owner identities; one-column blank childless roots; invisible dialogs. Immediate and settled root records must match. Initially absent or already present blank roots are both allowed; immediate/settled missing roots fail. No Node/TreeItem/Callable reference is retained in the receipt. |
+| Settle and clocks | The existing four frames/1,100,000 microseconds start after the immediate readback returns. Setup stays inside the existing INITIALIZE phase and run watchdog; it does not reset the 15-second phase deadline. Python requires ordered native times, synchronous before/immediate frame equality, minimum settled interval, and completion before batch 0 and, for full mode, READY 0. It does not compare native time to the host monotonic clock. |
+| Diagnostic scene bytes | `run_native_benchmark.py::validate_native()` (line 279; call near 330) binds startup to `snapshot[MUTABLE_SCENE]`, captured before runtime. It separately verifies the final on-disk scene against the first cycle's `saved_file_sha256`. These hashes must remain distinct: the initial `.tscn` can be valid yet serialized differently by Godot's later save. The patch does not require raw startup bytes to equal canonicalized saved bytes. |
+| Full campaign scene bytes | `benchmark_assembly.py::assemble_run()` (line 550; call near 648) binds startup to the first READY artifact's pre-cycle scene hash and first cycle's root identity, with READY time/frame bounds. The coordinator's `run_benchmark_campaign.py` additionally binds to the original runtime snapshot hash at completion. It therefore does not substitute a later saved scene hash for startup bytes. |
+| Closed receipt and bindings | `benchmark_readiness.py::validate_startup_readiness()` (line 47) rejects unknown/missing shapes, wrong run/source/PID, false synthetic label, other operation/notification/counts, owner/root aliases, dirty/visible/missing roots, changed scene/source data, short settle, changed settled roots and late setup. Receipt fields produced by GDScript agree with the shared validator's closed schema. |
+| Version/source closure | Only the aggregate native-index schema becomes 1.3.0. Input and per-batch contracts remain 1.2.0, ready/start/ACK remain 1.0.0. Diagnostic, assembly and coordinator campaign integration use aggregate 1.3.0 consistently. Both runtime entrypoints import the new validator, so the existing imported Python closure includes it; assembly explicitly requires its frozen source entry. Existing native source mapping still includes the changed GDScript. |
+| Evidence timing | Readiness is gated by the native producer before batch 0; its receipt is retained in the final hash-bound native index and validated by completion/assembly. There is no new separate early host startup marker in this implementation. That differs from the earlier optional implementation proposal, but it does not allow an incomplete/missing receipt to pass final assembly. |
+
+## Acceptance invariants and limits
+
+The production profile hash remains `ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233`, unchanged from the preimplementation review. Five warmup batches, thirty measured batches, ten fresh process pairs, 1000 host commands and 100 native cycles per full batch, memory baseline exactly batch 4, retained-object/resource/handle comparisons and RSS bound remain unchanged. The native four-frame/1.1-second settling constants, 15-second phase, 20-second host READY wait, 7410-second run limit, status coverage and actual-exit/cleanup requirements were not relaxed by these patches. No counter subtraction, +4 exemption, baseline shift or added warmup iteration was found.
+
+The complete synthetic assembly fixture now offsets native times by 2,000,000 microseconds and frames by 100 so its existing batch sequence can follow a valid startup receipt. This changes test fixture timestamps, not the production workload or baseline. The reviewed negative cases exercise missing/old schema, bad dispatch, scene/source drift, root drift and timing violations. The final worker addition in `test_native_benchmark.py::StartupProofTests` also invokes the actual diagnostic validator with synthetic artifacts: it keeps the original startup hash while changing the saved scene bytes/hash, and rejects missing, old, late or mismatched startup proof. These tests were read, not executed by this reviewer.
+
+The receipt proves these target roots remain stable across the fixed startup settle. It does **not** assert that every editor background subsystem is idle: there is no filesystem `is_scanning` field or guard in this patch. It also does not prove real OS focus, full ObjectDB attribution or general leak freedom. Subsequent measured growth still fails the unchanged benchmark. A natural focus event during the settle can replace roots and trigger a fail-closed startup rejection; this patch does not conceal that with a retry.
+
+Proceed to the coordinator's focused tests and native readiness validation on these frozen bytes. This report alone does not establish GDScript compilation, resource timing, clean native exit, complete benchmark performance, independent final critic approval or GT-06 acceptance.
+
+## Reviewed SHA-256 anchors
+
+All paths below are under `8-9-hh3d-3/studio/tests/replay/`:
+
+- `benchmark_native.gd`: `52fbd9af5c6191ada5baf1d7195a75685ed5e27a95f4d244af8b4d679f8c00f2`.
+- `benchmark_readiness.py`: `842db6244d93384932929544045654f089d67f6f304624b7348b7d5c4583ab68`.
+- `run_native_benchmark.py`: `e6b0f8e9711ac881cfa65b4537232c685ff577af0a13778a51cc54999b1c1fc7`.
+- `benchmark_assembly.py`: `7573ca96986eb1c10298b8998b3dbaa3326fd80da2c2696150aeb22165d2911d`.
+- `run_benchmark_campaign.py`: `e98d2be8ea1d32d5cec44d119c395e53b50008f38cbc3852ec24da50c4f9f906`.
+- `test_benchmark_readiness.py`: `895a32fe071cc6d714fc97035dd7bd166b43d23a49520f1da9169217eebffdb8`.
+- `test_benchmark_assembly.py`: `1aff82225075b71bc4d2e8389c01afbb758659edeff2624a1e7852c0f0cd9083`.
+- `test_native_benchmark.py`: `3745ff2a25700b2b1c7236b34d1068c7164a0e40af3563a174e18779b255f2ad`.
+- `benchmark_profile.py`: `ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233`.

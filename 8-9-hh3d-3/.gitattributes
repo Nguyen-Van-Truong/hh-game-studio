@@ -88,3 +88,8 @@ zdoc/reviews/20260918-plan-history-s78/** -text whitespace=blank-at-eol,blank-at
 zdoc/reviews/20260918-gt06-s79-diagnosis/index-checks-01/source/** whitespace=blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
 # Unified diff context lines intentionally contain a single space.
 zdoc/reviews/20260918-gt06-s79-diagnosis/index_fix_draft.patch whitespace=-blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+# Frozen S79/S80 snapshots and process logs retain their exact captured bytes.
+zdoc/reviews/20260918-gt06-s79-diagnosis/service-remint-01/** -text whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+zdoc/reviews/20260918-gt06-s79-diagnosis/focus-probe/result-01/** -text whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+zdoc/reviews/20260918-gt06-s80-readiness/** -text whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+zdoc/reviews/20260918-plan-history-s79/** -text whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
