@@ -62,7 +62,7 @@ class CommandProducerTests(unittest.TestCase):
         self.assertEqual(second['effect_count_after'], 4)
         ids = []
         for index, row in enumerate((first, second)):
-            self.assertEqual(row['schema_version'], '1.1.0')
+            self.assertEqual(row['schema_version'], '1.2.0')
             self.assertEqual(row['index'], index)
             self.assertEqual(row['status'], 'DIAGNOSTIC')
             self.assertFalse(row['complete_command_mix'])
@@ -107,7 +107,9 @@ class CommandProducerTests(unittest.TestCase):
         self.producer.host._diagnostic('TRANSPORT_FAILED')
         with self.assertRaisesRegex(benchmark.CommandError, 'HOST_DIAGNOSTICS') as caught:
             self.producer.run_diagnostic()
-        self.assertEqual(len(caught.exception.report['commands']), 1)
+        # Setup responses now surface an existing unexpected diagnostic before
+        # the first command can be submitted.
+        self.assertEqual(len(caught.exception.report['commands']), 0)
         self.assertTrue(self.producer.failed)
 
     def test_wrong_auth_is_real_rejection_and_cannot_add_effect(self):
@@ -186,6 +188,47 @@ class CommandProducerTests(unittest.TestCase):
         tampered = replace(result, result_hash='sha256:' + 'f' * 64)
         with self.assertRaisesRegex(benchmark.CommandError, 'READBACK_HASH'):
             self.producer._readback(tampered, 0)
+
+    def test_setup_records_real_http_returns_without_excluding_startup(self):
+        report = self.producer.run_diagnostic()
+        discovery, lease = report['setup_responses']
+        self.assertEqual([row['kind'] for row in report['setup_responses']], ['discovery', 'lease'])
+        self.assertLessEqual(report['started_mono_us'], discovery['started_mono_us'])
+        self.assertLessEqual(discovery['receipt_mono_us'], lease['started_mono_us'])
+        self.assertLessEqual(lease['receipt_mono_us'], report['memory_before']['monotonic_us'])
+        self.assertEqual(report['host_response_mono_us'][:3],
+            [report['started_mono_us'], discovery['receipt_mono_us'], lease['receipt_mono_us']])
+        expected = [report['started_mono_us'], report['ended_mono_us'],
+                    discovery['receipt_mono_us'], lease['receipt_mono_us'],
+                    report['cancel']['queued_mono_us'], report['cancel']['receipt_mono_us']]
+        for row in report['commands']:
+            expected.append(row['receipt_mono_us'])
+        for row in report['commands'] + [report['cancel']]:
+            expected.extend(item['ended_mono_us'] for item in row.get('lookup_attempts', []))
+        self.assertEqual(report['host_response_mono_us'], sorted(expected))
+
+    def test_missing_discovery_response_does_not_create_progress_sample(self):
+        with patch.object(benchmark.FixtureClient, 'discover', side_effect=benchmark.CommandError('TEST_NO_RESPONSE')):
+            with self.assertRaises(benchmark.CommandError) as caught:
+                self.producer.run_diagnostic()
+        report = caught.exception.report
+        self.assertEqual(report['setup_responses'], [])
+        self.assertEqual(report['commands'], [])
+        self.assertEqual(report['host_response_mono_us'],
+                         [report['started_mono_us'], report['ended_mono_us']])
+
+    def test_real_response_sampling_does_not_hide_a_two_second_setup_stall(self):
+        real_clock, real_discover = benchmark._clock, benchmark.FixtureClient.discover
+        offset = [0]
+        def discover(client):
+            # Synthetic elapsed time around an actual HTTP response, no sleep.
+            offset[0] += 2_100_000_000
+            return real_discover(client)
+        with patch.object(benchmark, '_clock', side_effect=lambda: real_clock() + offset[0]), \
+             patch.object(benchmark.FixtureClient, 'discover', discover):
+            report = self.producer.run_diagnostic()
+        self.assertGreater(report['max_status_gap_ms'], 2000)
+        self.assertGreater(report['setup_responses'][0]['receipt_mono_us'] - report['started_mono_us'], 2_000_000)
 
     def test_lost_lookup_responses_reconcile_same_ids_without_resubmit_or_extra_effect(self):
         actual_lookup, actual_submit = FixtureClient.lookup, FixtureClient.submit

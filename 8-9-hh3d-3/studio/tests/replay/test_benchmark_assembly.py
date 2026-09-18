@@ -52,7 +52,9 @@ def terminal_fields(row, *, canceled=False):
 def command_fixture(index=0):
     start = 1000000000000 + index * 10000000  # Incomparable with Godot's clock origin.
     tick, effects = start + 100, index * 200
-    rows, status = [], [start]
+    setup = [{'kind': 'discovery', 'started_mono_us': start + 1, 'receipt_mono_us': start + 20},
+             {'kind': 'lease', 'started_mono_us': start + 21, 'receipt_mono_us': start + 40}]
+    rows, status = [], [start, start + 20, start + 40]
     latencies = {kind: [] for kind in ('inspect', 'rejected', 'admitted')}
     cancel = None
     for ordinal in range(1000):
@@ -82,7 +84,8 @@ def command_fixture(index=0):
         rows.append(row)
         if ordinal == 499:
             cancel = {'command_id': f'{RUN}.b{index}.cancel', 'kind': 'cancel', 'separate_from_mix': True,
-                      'delay_ms': 1000, 'started_mono_us': tick + 100, 'receipt_mono_us': tick + 1100,
+                      'delay_ms': 1000, 'queued_mono_us': tick + 50,
+                      'started_mono_us': tick + 100, 'receipt_mono_us': tick + 1100,
                       'receipt_ms': 1.0, 'status': 'CANCELED', 'terminal_status': 'CANCELED',
                       'request_digest': 'sha256:' + 'f' * 64, 'no_effect': True,
                       'terminal_mono_us': tick + 1200, 'terminal_ms': 1.1}
@@ -93,13 +96,14 @@ def command_fixture(index=0):
     end = tick + 100
     status.append(end)
     observation = lambda time: {'process': copy.deepcopy(PROCESSES['host']), 'monotonic_us': time, 'counters': host_counters()}
-    return {'schema_id': 'hh-studio.benchmark-command-batch', 'schema_version': '1.1.0',
+    return {'schema_id': 'hh-studio.benchmark-command-batch', 'schema_version': '1.2.0',
             'run_id': RUN, 'index': index, 'mode': 'benchmark', 'complete_command_mix': True,
             'native_acceptance': False, 'effects_kind': 'in_process_mock_fixture',
             'transport_kind': 'accepted_loopback_fixture_http', 'observation_kind': 'native_windows_process_probe',
             'host_process': copy.deepcopy(PROCESSES['host']), 'warmup': index < 5, 'commands': rows,
             'latency_ms': latencies, 'effects_per_admission': [1] * 200, 'cancel': cancel, 'status': 'COMPLETE',
-            'started_mono_us': start, 'ended_mono_us': end, 'memory_before': observation(start + 1),
+            'started_mono_us': start, 'ended_mono_us': end, 'setup_responses': setup,
+            'memory_before': observation(start + 50),
             'memory_after': observation(end - 1), 'effect_count_before': index * 200, 'effect_count_after': (index + 1) * 200,
             'dropped_commands': 0, 'dropped_telemetry': 0, 'journal_bytes': 100000,
             'diagnostic_retention': 'expected rejection receipts retained', 'host_response_mono_us': status,
@@ -356,6 +360,22 @@ class AssemblyTests(unittest.TestCase):
         self.assertEqual(validated['effect_count_after'], 200)
         self.assertEqual(validated['effects_per_admission'], [1] * 200)
 
+    def test_setup_trace_rejects_omissions_reordering_and_invented_progress(self):
+        for mutation, code in (
+            (lambda value: value.update(schema_version='1.1.0'), 'COMMAND_SCHEMA'),
+            (lambda value: value['setup_responses'].pop(), 'SETUP_RESPONSE_COUNT'),
+            (lambda value: value['setup_responses'].reverse(), 'SETUP_RESPONSE_ORDER'),
+            (lambda value: value['host_response_mono_us'].insert(1, value['started_mono_us'] + 10), 'STATUS_RESPONSE_BINDING'),
+            (lambda value: value['host_response_mono_us'].insert(1, value['host_response_mono_us'][1]), 'STATUS_RESPONSE_BINDING'),
+            (lambda value: value['host_response_mono_us'].remove(value['setup_responses'][0]['receipt_mono_us']), 'STATUS_SETUP_RECEIPT_MISSING'),
+        ):
+            value = command_fixture()
+            mutation(value)
+            stamps = value['host_response_mono_us']
+            value['max_status_gap_ms'] = max(b - a for a, b in zip(stamps, stamps[1:])) / 1000
+            with self.subTest(code=code), self.assertRaisesRegex(assembly.AssemblyError, code):
+                assembly.validate_command_batch(value, run_id=RUN, index=0, host_identity=PROCESSES['host'])
+
     def test_lookup_wrong_identity_digest_retry_class_response_and_missing_clock_reject(self):
         changes = (
             (lambda row: row['lookup_attempts'][0].update(command_id='other.command'), 'LOOKUP_IDENTITY'),
@@ -480,7 +500,7 @@ class AssemblyTests(unittest.TestCase):
                 report = producer.run_diagnostic()
             finally:
                 producer.close()
-        self.assertEqual(report['schema_version'], '1.1.0')
+        self.assertEqual(report['schema_version'], '1.2.0')
         self.assertEqual(len(report['commands']), 10)
         for row in report['commands']:
             if row['kind'] == 'rejected':

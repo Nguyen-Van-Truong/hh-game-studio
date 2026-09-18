@@ -103,6 +103,7 @@ class CommandProducer:
         self.next_index, self.failed, self.closed, self.mode = 0, False, False, None
         self.effects, self.revision = 0, 'rev-0'
         self._status_ns = []
+        self._setup_responses = []
         self.root.mkdir(parents=False, exist_ok=False)
         try:
             self.observer = self.observer or NativeObserver()
@@ -136,9 +137,17 @@ class CommandProducer:
         else:
             self.credential = self.host.sessions.issue(scopes=_SCOPES, ttl_ms=900_000)
         self.client = FixtureClient(self.host.port, self.host.control_port, self.credential)
+        started = _clock()
         discovery = self.client.discover()
+        received = self._received()
+        self._setup_responses.append({'kind': 'discovery',
+            'started_mono_us': started // 1000, 'receipt_mono_us': received // 1000})
         _need(discovery.supports('fixture.inspect') and discovery.supports('fixture.set'), 'CATALOG')
+        started = _clock()
         lease = self.client.lease(ttl_ms=900_000)
+        received = self._received()
+        self._setup_responses.append({'kind': 'lease',
+            'started_mono_us': started // 1000, 'receipt_mono_us': received // 1000})
         _need(lease.revision == self.revision, 'REVISION_DRIFT')
         return lease
 
@@ -243,7 +252,7 @@ class CommandProducer:
         row.update(command_id=command_id, kind='cancel', separate_from_mix=True,
                    delay_ms=1000, request_digest=request.digest, lookup_attempts=[])
         queued = self.client.submit(request)
-        self._received()
+        row['queued_mono_us'] = self._received() // 1000
         _need(queued.status is Status.ACCEPTED_PENDING, 'CANCEL_JOB_NOT_ADMITTED')
         _need(queued.command_id == command_id and queued.postconditions.get('request_digest') == request.digest,
               'CANCEL_JOB_IDENTITY')
@@ -273,15 +282,17 @@ class CommandProducer:
         _need(type(index) is int and index == self.next_index and 0 <= index < MAX_BATCHES, 'BATCH_ORDER')
         _need(self.mode in (None, mode), 'MODE_MIX')
         self.mode = mode
-        report = {'schema_id': 'hh-studio.benchmark-command-batch', 'schema_version': '1.1.0',
+        report = {'schema_id': 'hh-studio.benchmark-command-batch', 'schema_version': '1.2.0',
                   'run_id': self.run_id, 'index': index, 'mode': mode, 'complete_command_mix': False,
                   'native_acceptance': False, 'effects_kind': 'in_process_mock_fixture',
                   'transport_kind': 'accepted_loopback_fixture_http', 'observation_kind': self.observer.kind,
                   'host_process': dict(self.identity), 'warmup': index < 5,
                   'commands': [], 'latency_ms': {'inspect': [], 'rejected': [], 'admitted': []},
-                  'effects_per_admission': [], 'cancel': None, 'status': 'RUNNING'}
+                  'effects_per_admission': [], 'cancel': None, 'status': 'RUNNING',
+                  'setup_responses': []}
         start, initial_effects = _clock(), self.effects
         self._status_ns = [start]
+        self._setup_responses = report['setup_responses']
         report['started_mono_us'] = start // 1000
         try:
             lease = self._connect_batch()

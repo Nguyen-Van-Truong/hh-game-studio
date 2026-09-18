@@ -253,9 +253,9 @@ def _lookup_trace(row, *, canceled=False):
 
 def validate_command_batch(value, *, run_id, index, host_identity):
     """Verify all 1000 rows, aggregates, effect chain and separate Cancel."""
-    _shape(value, 'schema_id schema_version run_id index mode complete_command_mix native_acceptance effects_kind transport_kind observation_kind host_process warmup commands latency_ms effects_per_admission cancel status started_mono_us memory_before memory_after effect_count_before effect_count_after dropped_commands dropped_telemetry journal_bytes diagnostic_retention ended_mono_us host_response_mono_us max_status_gap_ms status_gap_scope')
+    _shape(value, 'schema_id schema_version run_id index mode complete_command_mix native_acceptance effects_kind transport_kind observation_kind host_process warmup commands latency_ms effects_per_admission cancel status started_mono_us setup_responses memory_before memory_after effect_count_before effect_count_after dropped_commands dropped_telemetry journal_bytes diagnostic_retention ended_mono_us host_response_mono_us max_status_gap_ms status_gap_scope')
     _identity(host_identity)
-    _need(value['schema_id'] == 'hh-studio.benchmark-command-batch' and value['schema_version'] == '1.1.0', 'COMMAND_SCHEMA')
+    _need(value['schema_id'] == 'hh-studio.benchmark-command-batch' and value['schema_version'] == '1.2.0', 'COMMAND_SCHEMA')
     _need(value['mode'] == 'benchmark' and value['status'] == 'COMPLETE'
           and value['complete_command_mix'] is True and value['native_acceptance'] is False, 'COMMAND_INCOMPLETE_OR_DIAGNOSTIC')
     _need(value['effects_kind'] == 'in_process_mock_fixture'
@@ -273,11 +273,22 @@ def validate_command_batch(value, *, run_id, index, host_identity):
         _host_observation(value[name], host_identity)
         _need(value['started_mono_us'] <= value[name]['monotonic_us'] <= value['ended_mono_us'], 'COMMAND_MEMORY_TIME')
     _need(value['memory_before']['monotonic_us'] <= value['memory_after']['monotonic_us'], 'COMMAND_MEMORY_TIME')
+    setup = value['setup_responses']
+    _need(type(setup) is list and len(setup) == 2, 'SETUP_RESPONSE_COUNT')
+    previous = value['started_mono_us']
+    for row, kind in zip(setup, ('discovery', 'lease')):
+        _shape(row, 'kind started_mono_us receipt_mono_us')
+        _need(row['kind'] == kind, 'SETUP_RESPONSE_ORDER')
+        _integer(row['started_mono_us'], value['started_mono_us'], value['ended_mono_us'])
+        _integer(row['receipt_mono_us'], row['started_mono_us'], value['ended_mono_us'])
+        _need(previous <= row['started_mono_us'], 'SETUP_CLOCK_ORDER')
+        previous = row['receipt_mono_us']
+    _need(previous <= value['memory_before']['monotonic_us'], 'SETUP_CLOCK_ORDER')
     _need(type(value['commands']) is list and len(value['commands']) == 1000, 'COMMAND_COUNT')
     _shape(value['latency_ms'], 'inspect rejected admitted')
     latencies = {kind: [] for kind in ('inspect', 'rejected', 'admitted')}
     effects, lookup_ends = [], []
-    count, previous = index * 200, value['started_mono_us']
+    count, previous = index * 200, value['memory_before']['monotonic_us']
     _integer(value['effect_count_before'], count, count)
     base = 'ordinal group kind command_id started_mono_us receipt_mono_us receipt_ms receipt_status receipt_code request_digest latency_ms terminal_status effect_count_before effect_count_after lookup_attempts'
     extra = ' terminal_mono_us terminal_ms terminal_code result_hash snapshot terminal_response'
@@ -326,7 +337,7 @@ def validate_command_batch(value, *, run_id, index, host_identity):
             _number(latency, .000000001)
     _integer(value['effect_count_after'], count, count)
     cancel = value['cancel']
-    _shape(cancel, 'command_id kind separate_from_mix delay_ms started_mono_us receipt_mono_us receipt_ms status terminal_status request_digest no_effect lookup_attempts terminal_response terminal_mono_us terminal_ms')
+    _shape(cancel, 'command_id kind separate_from_mix delay_ms queued_mono_us started_mono_us receipt_mono_us receipt_ms status terminal_status request_digest no_effect lookup_attempts terminal_response terminal_mono_us terminal_ms')
     _need(cancel['command_id'] == f'{run_id}.b{index}.cancel' and cancel['kind'] == 'cancel'
           and cancel['separate_from_mix'] is True and cancel['no_effect'] is True
           and cancel['status'] == cancel['terminal_status'] == 'CANCELED', 'CANCEL_BINDING')
@@ -334,11 +345,14 @@ def validate_command_batch(value, *, run_id, index, host_identity):
     _digest(cancel['request_digest'], True)
     _timing(cancel['started_mono_us'], cancel['receipt_mono_us'], cancel['receipt_ms'], host=True)
     _timing(cancel['started_mono_us'], cancel['terminal_mono_us'], cancel['terminal_ms'], host=True)
+    _integer(cancel['queued_mono_us'], value['started_mono_us'], value['ended_mono_us'])
     lookup_ends.extend(_lookup_trace(cancel, canceled=True))
-    _need(value['commands'][499]['terminal_mono_us'] <= cancel['started_mono_us']
+    _need(value['commands'][499]['terminal_mono_us'] <= cancel['queued_mono_us'] <= cancel['started_mono_us']
           and cancel['terminal_mono_us'] <= value['commands'][500]['started_mono_us'], 'CANCEL_SCHEDULE')
     stamps = value['host_response_mono_us']
-    _need(type(stamps) is list and 1705 <= len(stamps) <= 100000, 'STATUS_SAMPLES')
+    # Exact cardinality follows from event binding below. Keep missing-receipt
+    # diagnostics ahead of that check instead of masking them with a count.
+    _need(type(stamps) is list and 2 <= len(stamps) <= 100000, 'STATUS_SAMPLES')
     for stamp in stamps:
         _integer(stamp, value['started_mono_us'], value['ended_mono_us'])
     _need(stamps[0] == value['started_mono_us'] and stamps[-1] == value['ended_mono_us']
@@ -348,8 +362,15 @@ def validate_command_batch(value, *, run_id, index, host_identity):
           'STATUS_GAP_MISMATCH')
     stamp_set = set(stamps)
     _need(all(row['receipt_mono_us'] in stamp_set for row in value['commands'])
-          and cancel['receipt_mono_us'] in stamps, 'STATUS_RECEIPT_MISSING')
+          and cancel['receipt_mono_us'] in stamp_set
+          and cancel['queued_mono_us'] in stamp_set, 'STATUS_RECEIPT_MISSING')
     _need(all(stamp in stamp_set for stamp in lookup_ends), 'STATUS_LOOKUP_MISSING')
+    _need(all(row['receipt_mono_us'] in stamp_set for row in setup), 'STATUS_SETUP_RECEIPT_MISSING')
+    expected_stamps = [value['started_mono_us'], value['ended_mono_us'],
+                       *(row['receipt_mono_us'] for row in setup),
+                       *(row['receipt_mono_us'] for row in value['commands']),
+                       *lookup_ends, cancel['queued_mono_us'], cancel['receipt_mono_us']]
+    _need(stamps == sorted(expected_stamps), 'STATUS_RESPONSE_BINDING')
     _need(value['status_gap_scope'] == 'host command-lane response progress; not editor UI heartbeat', 'STATUS_SCOPE')
     return value
 
