@@ -1,0 +1,22 @@
+{
+  "batch": 0,
+  "code": "S81_EXPECTED_CLEANUP_SMOKE",
+  "commands_executed": 0,
+  "effects_claimed": false,
+  "formal_acceptance": false,
+  "native_batches_executed": 0,
+  "ready": {
+    "file": "project/benchmark/out/ready-00.json",
+    "sha256": "d9a8d2a5d93dae84d396cfee2919e50ae5e060d0aeb1cdb18c0aa3df6068c498",
+    "size_bytes": 663
+  },
+  "real_host_threads_alive": [
+    true,
+    true,
+    true
+  ],
+  "real_journal_index_open": true,
+  "real_listeners_open": true,
+  "real_observer_probe_open": true,
+  "run_id": "gt06-s81-cleanup-probe-01.r00.a01"
+}

@@ -1,0 +1,107 @@
+{
+  "confirmed_absences": [
+    "child-result.json",
+    "command-00.json",
+    "batch-capture-00.json",
+    "sample-preview-00.json",
+    "project/benchmark/input/start-00.json",
+    "project/benchmark/out/batch-00.json",
+    "project/benchmark/out/index.json"
+  ],
+  "direct_after_finally": {
+    "editor_helper_exit": 2,
+    "editor_helper_pid": 33296,
+    "editor_job": {
+      "active_count": 0,
+      "assigned": true,
+      "close_uncertain": false,
+      "closed": true,
+      "configured": true,
+      "create_uncertain": false,
+      "failed_operations": [],
+      "handle_retained": false,
+      "native_error": null,
+      "tainted": false,
+      "zero_observed": true
+    },
+    "editor_owner_closed": true,
+    "editor_probe_close_uncertain": false,
+    "editor_probe_released": true,
+    "editor_wrapper_handle": {
+      "close_uncertain": false,
+      "closed": true,
+      "handle_retained": false,
+      "required": true
+    },
+    "held_owner_count": 0,
+    "held_probe_count": 0,
+    "host_closing": true,
+    "host_probe_close_uncertain": false,
+    "host_probe_released": true,
+    "host_stopped": true,
+    "host_threads_alive": [
+      false,
+      false,
+      false
+    ],
+    "journal_cache_closed": true,
+    "journal_index_detached": true,
+    "listener_filenos": [
+      -1,
+      -1
+    ],
+    "producer_closed": true,
+    "producer_failed": true,
+    "retained_index_database_closed": true,
+    "retained_index_directory_released": true
+  },
+  "editor_actual_exit": null,
+  "editor_helper_exit": 2,
+  "effects_claimed": false,
+  "formal_acceptance": false,
+  "full_benchmark": false,
+  "import_actual_exit": {
+    "exit_code": 0,
+    "pid": 34944
+  },
+  "injected_primary_preserved": true,
+  "observer_pid": 14112,
+  "original_cause_preserved": true,
+  "refs": {
+    "child-failure.json": {
+      "file": "child-failure.json",
+      "sha256": "5741c3ca2160272eb9d1f413a47d1ffe1bb4302b16af2a8be625da67e1fa826a",
+      "size_bytes": 211
+    },
+    "child-terminal-cleanup.json": {
+      "file": "child-terminal-cleanup.json",
+      "sha256": "0b5a8eff3bb52d5a6b58b8a30de2f64f8213a46ec78376bc107461c40b98c29f",
+      "size_bytes": 3451
+    },
+    "context.json": {
+      "file": "context.json",
+      "sha256": "aeff759ca6beee48566e7d6e7b7a8993436e79d972e2405cc42b8a5866247aec",
+      "size_bytes": 5838
+    },
+    "editor-host/cleanup-001.json": {
+      "file": "editor-host/cleanup-001.json",
+      "sha256": "9ff26d2260e6188703654517521ac75e80f618c4e517723042f5f4babc109ee1",
+      "size_bytes": 556
+    },
+    "import-host/capture.json": {
+      "file": "import-host/capture.json",
+      "sha256": "e95da3b7e242a2e345e1f9795a31d06dd58f1d828903322d077c50868ce54dd4",
+      "size_bytes": 1341
+    },
+    "injection.json": {
+      "file": "injection.json",
+      "sha256": "5373d31d6bdb8bcc04f6d412bc43f74b3fd0ec0d91bd1268336ffea02dfeea32",
+      "size_bytes": 562
+    }
+  },
+  "run_id": "gt06-s81-cleanup-probe-01.r00.a01",
+  "schema": "HH-GT06-CHILD-CLEANUP-PROBE-RESULT-1",
+  "source_closure_sha256": "e010180a1bf85b7f565e9aa39734f8551caf170a85b36c50598be556b723ce7f",
+  "source_unchanged": true,
+  "status": "CLEANUP_SMOKE_VERIFIED"
+}

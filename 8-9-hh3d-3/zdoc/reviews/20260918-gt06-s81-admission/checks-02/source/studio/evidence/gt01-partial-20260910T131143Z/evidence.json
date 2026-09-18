@@ -1,0 +1,483 @@
+{
+  "schema": "hh-gt01-partial-v1",
+  "run_id": "20260910T131143Z",
+  "status": "PARTIAL_RUNTIME_PASS",
+  "source_manifest": {
+    "toolchain.lock.json": "f4a9c2d8278adc66b86fff83ba3e00af2f19c894d8907d31b039d0ca1dd41c16",
+    "build/bootstrap/README.md": "d919042f99bd86b1cc8c426b674e4724bda3905430fbd0c6df0dd218f5aca241",
+    "build/bootstrap/run_fixture.py": "743a0050ac5379f0d456d36911f1e6dcd194a35d2e627d79ed3c6de91163e909",
+    "fixtures/sample-blender/README.md": "bab712d9432337dab45ecf95555050bb4520de4888d3531d0d541d683bea58e7",
+    "fixtures/sample-blender/create_fixture.py": "01403514c6779b1ae8df995af3aae84437b7032e7a2aecc5aa2acfcbee62743a",
+    "fixtures/sample-game/main.tscn": "194adf560f792e15a0db062ec2d436db4f15569e709da9a976b913a6c1307b42",
+    "fixtures/sample-game/project.godot": "47a17c6038e7e43e90c46647642faa8e7547381601c484306d9ef2f953157dee",
+    "fixtures/sample-game/scripts/main.gd": "688827516b16e31162b191b6b23bbfe2a90801fd54499ae2c81766ce9b2b044e",
+    "fixtures/sample-game/scripts/trace.gd": "d24719e1f6e80dfd2961d86f58b1d03e0a315b1f1664528aea54fa4385408ae8",
+    "tests/bootstrap/test_gt01.py": "7d4b2fddda262a95db05800e22acb13b44064b50afbc1578ee34d334dd48eff1",
+    "tests/bootstrap/test_run_fixture.py": "0536b4db8e67a0efbe21cf534616f1382481b92807ec482f68ea06a0e34434a0"
+  },
+  "snapshot_matches": true,
+  "source_unchanged": true,
+  "runs": [
+    {
+      "wrapper_pid": 29540,
+      "started_at": "2026-09-10T13:11:43.127109+00:00",
+      "argv": [
+        "Godot_v4.7.2-stable_win64_console.exe",
+        "--version"
+      ],
+      "exit_code": 0,
+      "target_pid": 37392,
+      "wrapper_exit_code": 0,
+      "timed_out": false,
+      "tree_verified": true,
+      "ownership": "gated_job_kill_on_close",
+      "stdout": "version-stdout.txt",
+      "stderr": "version-stderr.txt",
+      "label": "version",
+      "expected_exit": 0,
+      "check_pass": true,
+      "stdout_clean": true
+    },
+    {
+      "wrapper_pid": 31312,
+      "started_at": "2026-09-10T13:11:43.789219+00:00",
+      "argv": [
+        "Godot_v4.7.2-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "$SNAPSHOT/.",
+        "--import"
+      ],
+      "exit_code": 0,
+      "target_pid": 24100,
+      "wrapper_exit_code": 0,
+      "timed_out": false,
+      "tree_verified": true,
+      "ownership": "gated_job_kill_on_close",
+      "stdout": "import-stdout.txt",
+      "stderr": "import-stderr.txt",
+      "label": "import",
+      "expected_exit": 0,
+      "check_pass": true,
+      "stdout_clean": true
+    },
+    {
+      "wrapper_pid": 6192,
+      "started_at": "2026-09-10T13:11:47.726424+00:00",
+      "argv": [
+        "Godot_v4.7.2-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "$SNAPSHOT/.",
+        "--check-only",
+        "--script",
+        "res://scripts/trace.gd"
+      ],
+      "exit_code": 0,
+      "target_pid": 15968,
+      "wrapper_exit_code": 0,
+      "timed_out": false,
+      "tree_verified": true,
+      "ownership": "gated_job_kill_on_close",
+      "stdout": "parse-stdout.txt",
+      "stderr": "parse-stderr.txt",
+      "label": "parse",
+      "expected_exit": 0,
+      "check_pass": true,
+      "stdout_clean": true
+    },
+    {
+      "wrapper_pid": 36244,
+      "started_at": "2026-09-10T13:11:48.194410+00:00",
+      "argv": [
+        "Godot_v4.7.2-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "$SNAPSHOT/.",
+        "--script",
+        "res://scripts/trace.gd"
+      ],
+      "exit_code": 0,
+      "target_pid": 30008,
+      "wrapper_exit_code": 0,
+      "timed_out": false,
+      "tree_verified": true,
+      "ownership": "gated_job_kill_on_close",
+      "stdout": "trace-headless-stdout.txt",
+      "stderr": "trace-headless-stderr.txt",
+      "label": "trace-headless",
+      "expected_exit": 0,
+      "check_pass": true,
+      "stdout_clean": true,
+      "trace": [
+        {
+          "observations": [
+            {
+              "body": [
+                320.0,
+                220.0
+              ],
+              "focus": "StartButton",
+              "label": "menu",
+              "phase": "MENU",
+              "sim_tick": 0
+            },
+            {
+              "body": [
+                320.0,
+                220.0
+              ],
+              "focus": "StartButton",
+              "label": "start",
+              "phase": "PLAY",
+              "sim_tick": 1
+            },
+            {
+              "body": [
+                338.0,
+                220.0
+              ],
+              "focus": "StartButton",
+              "label": "moved",
+              "phase": "PLAY",
+              "sim_tick": 7
+            },
+            {
+              "body": [
+                338.0,
+                220.0
+              ],
+              "focus": "StartButton",
+              "label": "paused_frozen",
+              "phase": "PAUSED",
+              "sim_tick": 8
+            },
+            {
+              "body": [
+                338.0,
+                220.0
+              ],
+              "focus": "StartButton",
+              "label": "resumed",
+              "phase": "PLAY",
+              "sim_tick": 9
+            },
+            {
+              "body": [
+                338.0,
+                220.0
+              ],
+              "focus": "StartButton",
+              "label": "quitting",
+              "phase": "QUITTING",
+              "sim_tick": 10
+            }
+          ],
+          "phase": "QUITTING",
+          "result": "PASS",
+          "sim_tick": 10
+        }
+      ]
+    },
+    {
+      "wrapper_pid": 17084,
+      "started_at": "2026-09-10T13:11:48.954748+00:00",
+      "argv": [
+        "Godot_v4.7.2-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        "$SNAPSHOT/.",
+        "--script",
+        "res://scripts/trace.gd",
+        "--",
+        "--menu-quit"
+      ],
+      "exit_code": 0,
+      "target_pid": 19360,
+      "wrapper_exit_code": 0,
+      "timed_out": false,
+      "tree_verified": true,
+      "ownership": "gated_job_kill_on_close",
+      "stdout": "trace-menu-quit-stdout.txt",
+      "stderr": "trace-menu-quit-stderr.txt",
+      "label": "trace-menu-quit",
+      "expected_exit": 0,
+      "check_pass": true,
+      "stdout_clean": true,
+      "trace": [
+        {
+          "observations": [
+            {
+              "body": [
+                320.0,
+                220.0
+              ],
+              "focus": "StartButton",
+              "label": "menu",
+              "phase": "MENU",
+              "sim_tick": 0
+            },
+            {
+              "body": [
+                320.0,
+                220.0
+              ],
+              "focus": "QuitButton",
+              "label": "quit_focused",
+              "phase": "MENU",
+              "sim_tick": 0
+            },
+            {
+              "body": [
+                320.0,
+                220.0
+              ],
+              "focus": "QuitButton",
+              "label": "quitting",
+              "phase": "QUITTING",
+              "sim_tick": 0
+            }
+          ],
+          "phase": "QUITTING",
+          "result": "PASS",
+          "sim_tick": 0
+        }
+      ]
+    },
+    {
+      "wrapper_pid": 15356,
+      "started_at": "2026-09-10T13:11:49.441818+00:00",
+      "argv": [
+        "Godot_v4.7.2-stable_win64_console.exe",
+        "--path",
+        "$SNAPSHOT/.",
+        "--script",
+        "res://scripts/trace.gd",
+        "--",
+        "--capture"
+      ],
+      "exit_code": 0,
+      "target_pid": 23132,
+      "wrapper_exit_code": 0,
+      "timed_out": false,
+      "tree_verified": true,
+      "ownership": "gated_job_kill_on_close",
+      "stdout": "trace-window-stdout.txt",
+      "stderr": "trace-window-stderr.txt",
+      "label": "trace-window",
+      "expected_exit": 0,
+      "check_pass": true,
+      "stdout_clean": true,
+      "trace": [
+        {
+          "observations": [
+            {
+              "body": [
+                320.0,
+                220.0
+              ],
+              "focus": "StartButton",
+              "label": "menu",
+              "phase": "MENU",
+              "sim_tick": 0
+            },
+            {
+              "body": [
+                320.0,
+                220.0
+              ],
+              "focus": "StartButton",
+              "label": "start",
+              "phase": "PLAY",
+              "sim_tick": 2
+            },
+            {
+              "body": [
+                338.0,
+                220.0
+              ],
+              "focus": "StartButton",
+              "label": "moved",
+              "phase": "PLAY",
+              "sim_tick": 8
+            },
+            {
+              "body": [
+                338.0,
+                220.0
+              ],
+              "focus": "StartButton",
+              "label": "paused_frozen",
+              "phase": "PAUSED",
+              "sim_tick": 9
+            },
+            {
+              "body": [
+                338.0,
+                220.0
+              ],
+              "focus": "StartButton",
+              "label": "resumed",
+              "phase": "PLAY",
+              "sim_tick": 10
+            },
+            {
+              "body": [
+                338.0,
+                220.0
+              ],
+              "focus": "StartButton",
+              "label": "quitting",
+              "phase": "QUITTING",
+              "sim_tick": 11
+            }
+          ],
+          "phase": "QUITTING",
+          "result": "PASS",
+          "sim_tick": 11
+        }
+      ]
+    },
+    {
+      "wrapper_pid": 37356,
+      "started_at": "2026-09-10T13:11:51.319634+00:00",
+      "argv": [
+        "Godot_v4.7.2-stable_win64_console.exe",
+        "--path",
+        "$SNAPSHOT/.",
+        "--script",
+        "res://scripts/trace.gd",
+        "--",
+        "--menu-quit"
+      ],
+      "exit_code": 0,
+      "target_pid": 18772,
+      "wrapper_exit_code": 0,
+      "timed_out": false,
+      "tree_verified": true,
+      "ownership": "gated_job_kill_on_close",
+      "stdout": "trace-window-quit-stdout.txt",
+      "stderr": "trace-window-quit-stderr.txt",
+      "label": "trace-window-quit",
+      "expected_exit": 0,
+      "check_pass": true,
+      "stdout_clean": true,
+      "trace": [
+        {
+          "observations": [
+            {
+              "body": [
+                320.0,
+                220.0
+              ],
+              "focus": "StartButton",
+              "label": "menu",
+              "phase": "MENU",
+              "sim_tick": 0
+            },
+            {
+              "body": [
+                320.0,
+                220.0
+              ],
+              "focus": "QuitButton",
+              "label": "quit_focused",
+              "phase": "MENU",
+              "sim_tick": 0
+            },
+            {
+              "body": [
+                320.0,
+                220.0
+              ],
+              "focus": "QuitButton",
+              "label": "quitting",
+              "phase": "QUITTING",
+              "sim_tick": 0
+            }
+          ],
+          "phase": "QUITTING",
+          "result": "PASS",
+          "sim_tick": 0
+        }
+      ]
+    },
+    {
+      "wrapper_pid": 36472,
+      "started_at": "2026-09-10T13:11:52.984939+00:00",
+      "argv": [
+        "blender.exe",
+        "--background",
+        "--factory-startup",
+        "--disable-autoexec",
+        "--python-exit-code",
+        "2",
+        "--python",
+        "$SNAPSHOT/create_fixture.py",
+        "--",
+        "--output",
+        "$SNAPSHOT/cube.blend"
+      ],
+      "exit_code": 0,
+      "target_pid": 30564,
+      "wrapper_exit_code": 0,
+      "timed_out": false,
+      "tree_verified": true,
+      "ownership": "gated_job_kill_on_close",
+      "stdout": "blender-stdout.txt",
+      "stderr": "blender-stderr.txt",
+      "label": "blender",
+      "expected_exit": 0,
+      "check_pass": true,
+      "stdout_clean": true,
+      "trace": [
+        {
+          "result": "PASS",
+          "filename": "cube.blend",
+          "version": "5.2.1 LTS",
+          "axis": "Z_UP_RIGHT_HANDED",
+          "origin": [
+            0,
+            0,
+            0
+          ],
+          "unit_meters": 1,
+          "vertices": 8,
+          "polygons": 6
+        }
+      ]
+    },
+    {
+      "wrapper_pid": 6852,
+      "started_at": "2026-09-10T13:11:54.309645+00:00",
+      "argv": [
+        "blender.exe",
+        "--background",
+        "--factory-startup",
+        "--disable-autoexec",
+        "--python-exit-code",
+        "2",
+        "--python",
+        "$SNAPSHOT/create_fixture.py",
+        "--",
+        "--output",
+        "$SNAPSHOT/cube.blend"
+      ],
+      "exit_code": 2,
+      "target_pid": 34700,
+      "wrapper_exit_code": 0,
+      "timed_out": false,
+      "tree_verified": true,
+      "ownership": "gated_job_kill_on_close",
+      "stdout": "blender-reject-existing-stdout.txt",
+      "stderr": "blender-reject-existing-stderr.txt",
+      "label": "blender-reject-existing",
+      "expected_exit": 2,
+      "check_pass": true
+    }
+  ],
+  "limits": [
+    "Not GT01 acceptance: bootstrap hardening/reproducibility/rollback/independent critics remain.",
+    "Synthetic input through native Godot event path; not human playtest or OS input automation."
+  ]
+}

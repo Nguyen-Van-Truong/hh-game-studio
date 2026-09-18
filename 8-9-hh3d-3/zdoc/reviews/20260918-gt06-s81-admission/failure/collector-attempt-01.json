@@ -1,0 +1,12 @@
+{
+  "schema": "HH-GT06-FORENSIC-COLLECTOR-FAILURE-1",
+  "collector": "preserve.py",
+  "observed_process_exit": 1,
+  "failure": "AssertionError at line 122, initial-project-files equality assertion",
+  "written_before_failure": ["raw-locator-hashmaps.json", "preserved-byte-manifest.json", "raw/** selected copies"],
+  "reason": "Collector incorrectly treated the benchmark's actively mutated fixture scene as an immutable startup file. 14 initial project files match; scenes/fixture.tscn has different terminal bytes.",
+  "runtime_reexecuted": false,
+  "raw_modified": false,
+  "existing_evidence_overwritten": false,
+  "recovery": "preserve_resume.py reuses preserved inventories/copies, recomputes source validation, records all initial-to-terminal project comparisons and completes second full raw inventory. Original collector remains unchanged."
+}

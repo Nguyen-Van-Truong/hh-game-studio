@@ -1,0 +1,143 @@
+{
+  "schema": "HH-GT06-S81-PRESERVATION-INDEPENDENT-1",
+  "created_utc": "2026-09-18T07:46:32.954167+00:00",
+  "status": "PRESERVATION_VERIFIED",
+  "formal_acceptance": false,
+  "scope": "Independent collector byte checks and Stop receipt inspection, not a native test or final critic verdict.",
+  "raw_files": 314,
+  "copies": 263,
+  "source_files": 50,
+  "source_closure": "1dc889ef923dee9b53c6faeeb1d6fd781acc3a89a4b860b531b55fc3a124cf8f",
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "all_raw_hashes_and_mtimes_unchanged": true,
+  "prefix_commands": 15000,
+  "prefix_native_cycles": 1500,
+  "completed_batches": 15,
+  "warmup_batches": 5,
+  "measured_batches": 10,
+  "complete_runs": 0,
+  "per_batch_cancel_receipts": [
+    {
+      "index": 0,
+      "command_count": 1000,
+      "cancel_target": "gt06-s80-campaign-01.r00.a01.b0.cancel",
+      "cancel_status": "CANCELED",
+      "no_effect": true
+    },
+    {
+      "index": 1,
+      "command_count": 1000,
+      "cancel_target": "gt06-s80-campaign-01.r00.a01.b1.cancel",
+      "cancel_status": "CANCELED",
+      "no_effect": true
+    },
+    {
+      "index": 2,
+      "command_count": 1000,
+      "cancel_target": "gt06-s80-campaign-01.r00.a01.b2.cancel",
+      "cancel_status": "CANCELED",
+      "no_effect": true
+    },
+    {
+      "index": 3,
+      "command_count": 1000,
+      "cancel_target": "gt06-s80-campaign-01.r00.a01.b3.cancel",
+      "cancel_status": "CANCELED",
+      "no_effect": true
+    },
+    {
+      "index": 4,
+      "command_count": 1000,
+      "cancel_target": "gt06-s80-campaign-01.r00.a01.b4.cancel",
+      "cancel_status": "CANCELED",
+      "no_effect": true
+    },
+    {
+      "index": 5,
+      "command_count": 1000,
+      "cancel_target": "gt06-s80-campaign-01.r00.a01.b5.cancel",
+      "cancel_status": "CANCELED",
+      "no_effect": true
+    },
+    {
+      "index": 6,
+      "command_count": 1000,
+      "cancel_target": "gt06-s80-campaign-01.r00.a01.b6.cancel",
+      "cancel_status": "CANCELED",
+      "no_effect": true
+    },
+    {
+      "index": 7,
+      "command_count": 1000,
+      "cancel_target": "gt06-s80-campaign-01.r00.a01.b7.cancel",
+      "cancel_status": "CANCELED",
+      "no_effect": true
+    },
+    {
+      "index": 8,
+      "command_count": 1000,
+      "cancel_target": "gt06-s80-campaign-01.r00.a01.b8.cancel",
+      "cancel_status": "CANCELED",
+      "no_effect": true
+    },
+    {
+      "index": 9,
+      "command_count": 1000,
+      "cancel_target": "gt06-s80-campaign-01.r00.a01.b9.cancel",
+      "cancel_status": "CANCELED",
+      "no_effect": true
+    },
+    {
+      "index": 10,
+      "command_count": 1000,
+      "cancel_target": "gt06-s80-campaign-01.r00.a01.b10.cancel",
+      "cancel_status": "CANCELED",
+      "no_effect": true
+    },
+    {
+      "index": 11,
+      "command_count": 1000,
+      "cancel_target": "gt06-s80-campaign-01.r00.a01.b11.cancel",
+      "cancel_status": "CANCELED",
+      "no_effect": true
+    },
+    {
+      "index": 12,
+      "command_count": 1000,
+      "cancel_target": "gt06-s80-campaign-01.r00.a01.b12.cancel",
+      "cancel_status": "CANCELED",
+      "no_effect": true
+    },
+    {
+      "index": 13,
+      "command_count": 1000,
+      "cancel_target": "gt06-s80-campaign-01.r00.a01.b13.cancel",
+      "cancel_status": "CANCELED",
+      "no_effect": true
+    },
+    {
+      "index": 14,
+      "command_count": 1000,
+      "cancel_target": "gt06-s80-campaign-01.r00.a01.b14.cancel",
+      "cancel_status": "CANCELED",
+      "no_effect": true
+    }
+  ],
+  "operator_stop_slots_absent": 30,
+  "failed_partial_command_rows": 801,
+  "failed_partial_last_command": {
+    "command_id": "gt06-s80-campaign-01.r00.a01.b15.inspect.400",
+    "group": 80,
+    "kind": "inspect",
+    "lookup_attempts": [],
+    "ordinal": 800,
+    "receipt_code": "CONNECTION_LOST_LOOKUP",
+    "receipt_mono_us": 615168733920,
+    "receipt_ms": 2003.3888,
+    "receipt_status": "UNKNOWN",
+    "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+    "started_mono_us": 615166730531
+  },
+  "missing_editor_natural_exit_preserved": true,
+  "editor_wrapper_exit_is_not_native_exit": true
+}

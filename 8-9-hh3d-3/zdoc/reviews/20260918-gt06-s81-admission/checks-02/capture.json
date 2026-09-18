@@ -1,0 +1,22 @@
+{
+  "host": {
+    "wrapper_pid": 36760,
+    "started_at": "2026-09-18T08:05:44.498924+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "-c",
+      "import unittest,json,sys; names=['studio.tests.protocol.test_transport_observation', 'studio.tests.protocol.test_transport_fault_lock', 'studio.tests.protocol.test_transport', 'studio.tests.protocol.test_transport_recovery', 'studio.tests.protocol.test_integration', 'studio.tests.protocol.test_security_vectors', 'studio.tests.replay.test_benchmark_commands', 'studio.tests.replay.test_benchmark_assembly', 'studio.tests.replay.test_verified_journal', 'studio.tests.replay.test_index_faults', 'studio.tests.replay.test_service', 'studio.tests.replay.test_benchmark_campaign', 'studio.tests.replay.test_benchmark_campaign_stop_completion', 'studio.tests.replay.test_campaign_terminal_cleanup', 'studio.tests.replay.test_benchmark_job_owner', 'studio.tests.replay.test_process_probe']; suite=unittest.TestSuite(unittest.defaultTestLoader.loadTestsFromName(n) for n in names); r=unittest.TextTestRunner(verbosity=2).run(suite); print(\"S81_REPAIR_CHECKS \"+json.dumps({\"run\":r.testsRun,\"failures\":len(r.failures),\"errors\":len(r.errors),\"skips\":len(r.skipped)}),flush=True); sys.exit(not r.wasSuccessful())"
+    ],
+    "exit_code": 0,
+    "target_pid": 10500,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "unit-stdout.txt",
+    "stderr": "unit-stderr.txt",
+    "host": "unit-host.json"
+  },
+  "source_unchanged": true
+}

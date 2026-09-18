@@ -1,0 +1,444 @@
+{
+  "additional_faults_or_delays": false,
+  "appended_records": 1403,
+  "batch_status": "COMPLETE",
+  "client_timeout_seconds": 2.0,
+  "command_batch_sha256": "17b2ad14f24bbaa2f73eac7551470c467a97b66d2e50d17ffbfd33b61a1cabcb",
+  "command_count": 1000,
+  "cooperative_seconds": 210,
+  "copied_journal_sha256_after": "8e7d321e837f454ec8cc668c40ddd118ee1c2a4844398917654bb424b50b9aa2",
+  "copied_prefix_sha256_after": "4d8ecb5bacd76a57d3137e9f812c36c3a6a759d4d51d41008627e9114ee1377a",
+  "driver_sha256": "bff88484e4410fff7f0b750248c477c6698d3e4d38763cddff8e33c26cbbaa0a",
+  "ended_utc": "2026-09-18T07:56:22.034406+00:00",
+  "engine_runs": 0,
+  "failures": [],
+  "fixture_scope": "Fresh distinct project and counter at rev-0; historical project runtime/leases are not restored",
+  "formal_acceptance": false,
+  "full_benchmark": false,
+  "history_bytes": 15586409,
+  "history_records": 22170,
+  "history_sha256": "4d8ecb5bacd76a57d3137e9f812c36c3a6a759d4d51d41008627e9114ee1377a",
+  "loaded_module_closure_after_import": {
+    "studio.host.core.journal": {
+      "path": "studio/host/core/journal.py",
+      "sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6"
+    },
+    "studio.host.core.limits": {
+      "path": "studio/host/core/limits.py",
+      "sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f"
+    },
+    "studio.host.core.redaction": {
+      "path": "studio/host/core/redaction.py",
+      "sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f"
+    },
+    "studio.host.core.transport": {
+      "path": "studio/host/core/transport.py",
+      "sha256": "c6b1cd49ef7b3186f8f64a0a6c581c14b7ec67e45d8e5d8ec760cdf2f728ff65"
+    },
+    "studio.host.replay.disk_journal_index": {
+      "path": "studio/host/replay/disk_journal_index.py",
+      "sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28"
+    },
+    "studio.host.replay.process_probe": {
+      "path": "studio/host/replay/process_probe.py",
+      "sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500"
+    },
+    "studio.host.replay.verified_journal": {
+      "path": "studio/host/replay/verified_journal.py",
+      "sha256": "129baa4d9e08c8a1d5acf2ea05c9c89a4fdddb53ca6f3baf2d61311ab98e62ab"
+    },
+    "studio.protocol": {
+      "path": "studio/protocol/__init__.py",
+      "sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f"
+    },
+    "studio.protocol._rfc8785": {
+      "path": "studio/protocol/_rfc8785/__init__.py",
+      "sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b"
+    },
+    "studio.protocol._rfc8785._impl": {
+      "path": "studio/protocol/_rfc8785/_impl.py",
+      "sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec"
+    },
+    "studio.protocol.core": {
+      "path": "studio/protocol/core.py",
+      "sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e"
+    },
+    "studio.tests.replay.benchmark_commands": {
+      "path": "studio/tests/replay/benchmark_commands.py",
+      "sha256": "e14d4794649e6341f3a7b10a6c7cbd1bcfb1369eb2a3d06e2b7a86453aefe21a"
+    }
+  },
+  "loaded_module_closure_after_shutdown": {
+    "studio.host.core.journal": {
+      "path": "studio/host/core/journal.py",
+      "sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6"
+    },
+    "studio.host.core.limits": {
+      "path": "studio/host/core/limits.py",
+      "sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f"
+    },
+    "studio.host.core.redaction": {
+      "path": "studio/host/core/redaction.py",
+      "sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f"
+    },
+    "studio.host.core.transport": {
+      "path": "studio/host/core/transport.py",
+      "sha256": "c6b1cd49ef7b3186f8f64a0a6c581c14b7ec67e45d8e5d8ec760cdf2f728ff65"
+    },
+    "studio.host.replay.disk_journal_index": {
+      "path": "studio/host/replay/disk_journal_index.py",
+      "sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28"
+    },
+    "studio.host.replay.process_probe": {
+      "path": "studio/host/replay/process_probe.py",
+      "sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500"
+    },
+    "studio.host.replay.verified_journal": {
+      "path": "studio/host/replay/verified_journal.py",
+      "sha256": "129baa4d9e08c8a1d5acf2ea05c9c89a4fdddb53ca6f3baf2d61311ab98e62ab"
+    },
+    "studio.protocol": {
+      "path": "studio/protocol/__init__.py",
+      "sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f"
+    },
+    "studio.protocol._rfc8785": {
+      "path": "studio/protocol/_rfc8785/__init__.py",
+      "sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b"
+    },
+    "studio.protocol._rfc8785._impl": {
+      "path": "studio/protocol/_rfc8785/_impl.py",
+      "sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec"
+    },
+    "studio.protocol.core": {
+      "path": "studio/protocol/core.py",
+      "sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e"
+    },
+    "studio.tests.replay.benchmark_commands": {
+      "path": "studio/tests/replay/benchmark_commands.py",
+      "sha256": "e14d4794649e6341f3a7b10a6c7cbd1bcfb1369eb2a3d06e2b7a86453aefe21a"
+    }
+  },
+  "native_acceptance": false,
+  "original_cancel_delay_ms": 1000,
+  "original_history_sha256_after": "4d8ecb5bacd76a57d3137e9f812c36c3a6a759d4d51d41008627e9114ee1377a",
+  "owned_cleanup": {
+    "control_listener_fd": -1,
+    "host_threads_all_stopped": true,
+    "journal_index_owner_released": true,
+    "main_listener_fd": -1,
+    "observer_handle_released": true,
+    "producer_closed": true
+  },
+  "phase_timing_scope": "Supplemental wrappers; overlapping spans; fixed labels only, no headers/body/token/exception text",
+  "pid": 39776,
+  "private_index_directories_remaining": [],
+  "project_id": "gt06.s81.http.gt06-s81-http-probe-01",
+  "run_id": "gt06-s81-http-probe-01",
+  "schema_id": "hh-studio.s81-supplemental-http-probe",
+  "schema_version": "1.0.0",
+  "source_files_unchanged": true,
+  "source_manifest_sha256": "74e2b3f522d85f55e07d5789a814c447989d6e9eccd044732cfdc78674466ff8",
+  "spans": {
+    "http_batch.canonical_fsync": {
+      "count": 4610,
+      "max_ms": 245.9026,
+      "slowest": [
+        {
+          "elapsed_ms": 245.9026,
+          "ended_mono_us": 616340992159,
+          "endpoint": "none",
+          "started_mono_us": 616340746256
+        },
+        {
+          "elapsed_ms": 12.8897,
+          "ended_mono_us": 616387829809,
+          "endpoint": "none",
+          "started_mono_us": 616387816919
+        },
+        {
+          "elapsed_ms": 12.8774,
+          "ended_mono_us": 616349886209,
+          "endpoint": "lookup",
+          "started_mono_us": 616349873331
+        }
+      ],
+      "sum_ms": 2278.563999999992
+    },
+    "http_batch.host_dispatch.cancel": {
+      "count": 1,
+      "max_ms": 79.7362,
+      "slowest": [
+        {
+          "elapsed_ms": 79.7362,
+          "ended_mono_us": 616328235939,
+          "endpoint": "cancel",
+          "started_mono_us": 616328156203
+        }
+      ],
+      "sum_ms": 79.7362
+    },
+    "http_batch.host_dispatch.commands": {
+      "count": 1001,
+      "max_ms": 144.2021,
+      "slowest": [
+        {
+          "elapsed_ms": 144.2021,
+          "ended_mono_us": 616378955632,
+          "endpoint": "commands",
+          "started_mono_us": 616378811430
+        },
+        {
+          "elapsed_ms": 133.6815,
+          "ended_mono_us": 616319056126,
+          "endpoint": "commands",
+          "started_mono_us": 616318922444
+        },
+        {
+          "elapsed_ms": 131.0525,
+          "ended_mono_us": 616351576340,
+          "endpoint": "commands",
+          "started_mono_us": 616351445288
+        }
+      ],
+      "sum_ms": 52522.24630000002
+    },
+    "http_batch.host_dispatch.discovery": {
+      "count": 1,
+      "max_ms": 0.2728,
+      "slowest": [
+        {
+          "elapsed_ms": 0.2728,
+          "ended_mono_us": 616266294901,
+          "endpoint": "discovery",
+          "started_mono_us": 616266294628
+        }
+      ],
+      "sum_ms": 0.2728
+    },
+    "http_batch.host_dispatch.lease": {
+      "count": 1,
+      "max_ms": 32.8523,
+      "slowest": [
+        {
+          "elapsed_ms": 32.8523,
+          "ended_mono_us": 616266331037,
+          "endpoint": "lease",
+          "started_mono_us": 616266298185
+        }
+      ],
+      "sum_ms": 32.8523
+    },
+    "http_batch.host_dispatch.lookup": {
+      "count": 701,
+      "max_ms": 76.9333,
+      "slowest": [
+        {
+          "elapsed_ms": 76.9333,
+          "ended_mono_us": 616331821654,
+          "endpoint": "lookup",
+          "started_mono_us": 616331744721
+        },
+        {
+          "elapsed_ms": 59.606,
+          "ended_mono_us": 616318651497,
+          "endpoint": "lookup",
+          "started_mono_us": 616318591891
+        },
+        {
+          "elapsed_ms": 52.6654,
+          "ended_mono_us": 616378189823,
+          "endpoint": "lookup",
+          "started_mono_us": 616378137158
+        }
+      ],
+      "sum_ms": 21664.007799999996
+    },
+    "http_batch.host_fault_probe.after_dispatch": {
+      "count": 1405,
+      "max_ms": 342.4381,
+      "slowest": [
+        {
+          "elapsed_ms": 342.4381,
+          "ended_mono_us": 616341018497,
+          "endpoint": "commands",
+          "started_mono_us": 616340676058
+        },
+        {
+          "elapsed_ms": 116.9928,
+          "ended_mono_us": 616379072652,
+          "endpoint": "commands",
+          "started_mono_us": 616378955659
+        },
+        {
+          "elapsed_ms": 110.2009,
+          "ended_mono_us": 616354732848,
+          "endpoint": "commands",
+          "started_mono_us": 616354622648
+        }
+      ],
+      "sum_ms": 15478.991200000008
+    },
+    "http_batch.host_fault_probe.after_reply": {
+      "count": 1405,
+      "max_ms": 122.9196,
+      "slowest": [
+        {
+          "elapsed_ms": 122.9196,
+          "ended_mono_us": 616378763115,
+          "endpoint": "commands",
+          "started_mono_us": 616378640196
+        },
+        {
+          "elapsed_ms": 112.0614,
+          "ended_mono_us": 616358479422,
+          "endpoint": "commands",
+          "started_mono_us": 616358367360
+        },
+        {
+          "elapsed_ms": 93.7315,
+          "ended_mono_us": 616371158913,
+          "endpoint": "commands",
+          "started_mono_us": 616371065181
+        }
+      ],
+      "sum_ms": 25028.246799999884
+    },
+    "http_batch.host_fault_probe.before_dispatch": {
+      "count": 1705,
+      "max_ms": 120.2676,
+      "slowest": [
+        {
+          "elapsed_ms": 120.2676,
+          "ended_mono_us": 616378763044,
+          "endpoint": "lookup",
+          "started_mono_us": 616378642777
+        },
+        {
+          "elapsed_ms": 92.0884,
+          "ended_mono_us": 616371158856,
+          "endpoint": "lookup",
+          "started_mono_us": 616371066768
+        },
+        {
+          "elapsed_ms": 91.0712,
+          "ended_mono_us": 616369896069,
+          "endpoint": "lookup",
+          "started_mono_us": 616369804998
+        }
+      ],
+      "sum_ms": 23405.416099999897
+    },
+    "http_batch.host_fault_probe.before_reply": {
+      "count": 1405,
+      "max_ms": 92.5853,
+      "slowest": [
+        {
+          "elapsed_ms": 92.5853,
+          "ended_mono_us": 616383813061,
+          "endpoint": "commands",
+          "started_mono_us": 616383720476
+        },
+        {
+          "elapsed_ms": 91.7213,
+          "ended_mono_us": 616315286326,
+          "endpoint": "commands",
+          "started_mono_us": 616315194605
+        },
+        {
+          "elapsed_ms": 90.5448,
+          "ended_mono_us": 616343290115,
+          "endpoint": "commands",
+          "started_mono_us": 616343199570
+        }
+      ],
+      "sum_ms": 3118.6988999999903
+    },
+    "http_batch.host_send": {
+      "count": 1705,
+      "max_ms": 3.8837,
+      "slowest": [
+        {
+          "elapsed_ms": 3.8837,
+          "ended_mono_us": 616318655424,
+          "endpoint": "lookup",
+          "started_mono_us": 616318651540
+        },
+        {
+          "elapsed_ms": 2.0178,
+          "ended_mono_us": 616323576974,
+          "endpoint": "lookup",
+          "started_mono_us": 616323574956
+        },
+        {
+          "elapsed_ms": 1.9624,
+          "ended_mono_us": 616373425224,
+          "endpoint": "commands",
+          "started_mono_us": 616373423262
+        }
+      ],
+      "sum_ms": 1087.0509000000015
+    },
+    "http_batch.journal_snapshot_true": {
+      "count": 3207,
+      "max_ms": 272.8374,
+      "slowest": [
+        {
+          "elapsed_ms": 272.8374,
+          "ended_mono_us": 616340992469,
+          "endpoint": "none",
+          "started_mono_us": 616340719631
+        },
+        {
+          "elapsed_ms": 69.4261,
+          "ended_mono_us": 616304652478,
+          "endpoint": "commands",
+          "started_mono_us": 616304583052
+        },
+        {
+          "elapsed_ms": 63.8488,
+          "ended_mono_us": 616318729972,
+          "endpoint": "commands",
+          "started_mono_us": 616318666124
+        }
+      ],
+      "sum_ms": 93754.04539999983
+    },
+    "initialize.canonical_fsync": {
+      "count": 1,
+      "max_ms": 0.1333,
+      "slowest": [
+        {
+          "elapsed_ms": 0.1333,
+          "ended_mono_us": 616266236108,
+          "endpoint": "none",
+          "started_mono_us": 616266235975
+        }
+      ],
+      "sum_ms": 0.1333
+    },
+    "initialize.journal_snapshot_false": {
+      "count": 2,
+      "max_ms": 25.4871,
+      "slowest": [
+        {
+          "elapsed_ms": 25.4871,
+          "ended_mono_us": 616256008132,
+          "endpoint": "none",
+          "started_mono_us": 616255982645
+        },
+        {
+          "elapsed_ms": 25.2718,
+          "ended_mono_us": 616266264717,
+          "endpoint": "none",
+          "started_mono_us": 616266239445
+        }
+      ],
+      "sum_ms": 50.7589
+    }
+  },
+  "started_utc": "2026-09-18T07:54:05.605610+00:00",
+  "status": "SUPPLEMENTAL_COMPLETE",
+  "terminal_budget_seconds": 5,
+  "transport_failure": null,
+  "workload": "Unchanged CommandProducer.run_batch(0), 1000 commands in 5/3/2 mix plus original auxiliary Cancel"
+}

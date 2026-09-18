@@ -1,0 +1,22 @@
+{
+  "host": {
+    "wrapper_pid": 51656,
+    "started_at": "2026-09-18T07:49:13.203814+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "-c",
+      "import unittest,json,sys; names=['studio.tests.protocol.test_transport_observation', 'studio.tests.protocol.test_transport', 'studio.tests.protocol.test_transport_recovery', 'studio.tests.protocol.test_integration', 'studio.tests.protocol.test_security_vectors', 'studio.tests.replay.test_benchmark_commands', 'studio.tests.replay.test_benchmark_assembly', 'studio.tests.replay.test_verified_journal', 'studio.tests.replay.test_index_faults', 'studio.tests.replay.test_service']; suite=unittest.TestSuite(unittest.defaultTestLoader.loadTestsFromName(n) for n in names); r=unittest.TextTestRunner(verbosity=2).run(suite); print(\"S81_TRANSPORT_CHECKS \"+json.dumps({\"run\":r.testsRun,\"failures\":len(r.failures),\"errors\":len(r.errors),\"skips\":len(r.skipped)}),flush=True); sys.exit(not r.wasSuccessful())"
+    ],
+    "exit_code": 0,
+    "target_pid": 11240,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "unit-stdout.txt",
+    "stderr": "unit-stderr.txt",
+    "host": "unit-host.json"
+  },
+  "source_unchanged": true
+}

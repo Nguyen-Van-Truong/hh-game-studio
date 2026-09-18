@@ -1,0 +1,217 @@
+{
+  "artifacts": {
+    "index-probe/arm-00-sync2/result.json": {
+      "bytes": 49228,
+      "sha256": "1e42bfafb649ddf0e6202e86a62f2b02ac2f1d8f8358b517957c437558e4d3e8"
+    },
+    "index-probe/arm-01-sync0/result.json": {
+      "bytes": 49120,
+      "sha256": "c5e39444e0998484fc52986e3c0c0007e83bac5c85846c6cd4477f7718b22980"
+    },
+    "index-probe/arm-02-sync0/result.json": {
+      "bytes": 49192,
+      "sha256": "b4a0d95c1f43d6bb3839c778718eb6e2bb0a329ec3df99b0cc19b191288534ed"
+    },
+    "index-probe/arm-03-sync2/result.json": {
+      "bytes": 49183,
+      "sha256": "64febce857c0e899af5730a2361bc7f656a5ed550bfb2527079b2d137a1af8f6"
+    },
+    "index-probe/host.json": {
+      "bytes": 632,
+      "sha256": "4a68fdd2e4534b497de4d1882c369355289000226ec6c442b038087c1892cf3a"
+    },
+    "index-probe/probe.py": {
+      "bytes": 9569,
+      "sha256": "9f8dea95ab9bf07839b25b6f1c71597755d4995af72c72681740f530f880724c"
+    },
+    "index-probe/result.json": {
+      "bytes": 225141,
+      "sha256": "7526858880438905071ac113dcf8767043a71e5ddad507e3bd772d6453a81b06"
+    },
+    "index-probe/run_probe.py": {
+      "bytes": 1737,
+      "sha256": "173f636660107314cdd435a191cd67c7151c9ba40fd48831f64b66a625922482"
+    },
+    "index-probe/stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "index-probe/stdout.txt": {
+      "bytes": 449,
+      "sha256": "ca79856243c5b6450951f37b927cd806b9c7ad4fa1c79d7200aae3695efbe43f"
+    }
+  },
+  "authority": 0,
+  "baseline_head": "d8da8a21d22d415e097bef884d6056942a0fe719",
+  "conclusions": {
+    "capacity_boundary_found": false,
+    "dominant_observed_cost": "Full-history snapshot including recovery fsync: approximately 84-85% of uncontended diagnostic time.",
+    "limits_or_timeouts_change_recommended": false,
+    "next_step": "Attribute real LoopbackFixtureHost request spans and repeated verification/lock waits before selecting causal fix.",
+    "smallest_safety_justifiable_candidate": "Only derived index synchronous=0; retain DELETE, rollback, never reopen old index, canonical hash/fsync and UNKNOWN. Not shown to fix S80.",
+    "standalone_sync0_fix_supported": false,
+    "two_second_condition_reproduced": false
+  },
+  "failure": {
+    "backend_index_exception_observed": false,
+    "code": "ADMISSION_UNKNOWN",
+    "completed_batches": 15,
+    "exact_latency_cause_proven": false,
+    "last_command": {
+      "command_id": "gt06-s80-campaign-01.r00.a01.b15.inspect.400",
+      "group": 80,
+      "kind": "inspect",
+      "lookup_attempts": [],
+      "ordinal": 800,
+      "receipt_code": "CONNECTION_LOST_LOOKUP",
+      "receipt_mono_us": 615168733920,
+      "receipt_ms": 2003.3888,
+      "receipt_status": "UNKNOWN",
+      "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+      "started_mono_us": 615166730531
+    },
+    "phase": {
+      "batch": 15,
+      "phase": "commands"
+    },
+    "tail_status_sequence": [
+      "ACCEPTED_PENDING",
+      "CANCELED"
+    ],
+    "tail_terminal_code": "CANCELED_BEFORE_APPLY"
+  },
+  "formal_acceptance": false,
+  "journal_analysis": {
+    "all_record_checksums_match": true,
+    "bytes": 15586409,
+    "checksum_validation_scope": "pure canonical JSON SHA-256 check; not accepted Journal parser execution",
+    "failed_admission_with_terminal_reservation": {
+      "bytes": 15847902,
+      "record_slots": 22170
+    },
+    "final_pending": 0,
+    "limits": {
+      "max_bytes": 67108864,
+      "max_pending": 1024,
+      "max_records": 100000,
+      "terminal_reservation_bytes_per_pending": 262144
+    },
+    "peak_pending": 1,
+    "records": 22170,
+    "same_shape_35_batch_projection": {
+      "bytes_at_max_observed_778_byte_row": 38203690,
+      "conditional": true,
+      "records": 49105
+    },
+    "status_counts": {
+      "ACCEPTED_PENDING": 11077,
+      "CANCELED": 17,
+      "COMMITTED": 11060,
+      "lease": 16
+    },
+    "surviving_original_sqlite_files": [],
+    "unique_commands": 11077
+  },
+  "native_acceptance": false,
+  "probe": {
+    "aggregate_by_synchronous": {
+      "0": {
+        "canonical_fsync_calls": 320,
+        "max_ms": 120.6289,
+        "operation_count": 240,
+        "p50_ms": 33.6655,
+        "p95_ms": 59.7106,
+        "phase_sums_ms": {
+          "canonical_fsync_ms": 111.6197,
+          "snapshot_including_fsync_ms": 7540.223999999998,
+          "sqlite_commit_ms": 33.318799999999996,
+          "sqlite_execute_including_commit_ms": 147.99670000000003
+        },
+        "sqlite_commit_calls": 80,
+        "sum_ms": 8874.816699999996
+      },
+      "2": {
+        "canonical_fsync_calls": 320,
+        "max_ms": 87.7843,
+        "operation_count": 240,
+        "p50_ms": 33.6491,
+        "p95_ms": 54.5137,
+        "phase_sums_ms": {
+          "canonical_fsync_ms": 211.4471000000001,
+          "snapshot_including_fsync_ms": 7299.687499999999,
+          "sqlite_commit_ms": 211.43800000000005,
+          "sqlite_execute_including_commit_ms": 320.8832
+        },
+        "sqlite_commit_calls": 80,
+        "sum_ms": 8732.019099999994
+      }
+    },
+    "all_final_copied_journal_bytes_equal": true,
+    "all_owned_indices_closed_and_removed": true,
+    "final_copied_journal_sha256": "7838da7671fe4fe34a73795440de698c15be1b7b69bfe61de7737894dcc56a5e",
+    "frozen_source_unchanged": true,
+    "host": {
+      "actual_exit": 0,
+      "actual_pid": 26932,
+      "child_running_after_wait": false,
+      "elapsed_seconds": 65.33252410008572,
+      "ended_utc": "2026-09-18T07:45:26.428017+00:00",
+      "engine_runs": 0,
+      "formal_acceptance": false,
+      "native_acceptance": false,
+      "script_sha256": "9f8dea95ab9bf07839b25b6f1c71597755d4995af72c72681740f530f880724c",
+      "started_utc": "2026-09-18T07:44:21.094541+00:00",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "ca79856243c5b6450951f37b927cd806b9c7ad4fa1c79d7200aae3695efbe43f",
+      "timed_out": false,
+      "timeout_seconds": 180
+    },
+    "original_journal_unchanged": true,
+    "phase_overlap": "Snapshot includes recovery fsync; SQLite execute includes COMMIT; canonical fsync includes both append and reload. Do not sum phase columns.",
+    "result_path": "index-probe/result.json",
+    "scope_limit": "Uncontended journal-only diagnostic; no HTTP/editor/campaign or S80 causal proof."
+  },
+  "production_edits": [],
+  "raw_inputs": {
+    "child-failure.json": {
+      "bytes": 923281,
+      "sha256": "9ea461e39d74924e3a3f42044e7c00fd2525220ec7b3ae277648ceb6f79aad25"
+    },
+    "commands/commands.jsonl": {
+      "bytes": 15586409,
+      "sha256": "4d8ecb5bacd76a57d3137e9f812c36c3a6a759d4d51d41008627e9114ee1377a"
+    }
+  },
+  "regression_obligations": [
+    "Policy readback and canonical fsync barrier",
+    "Rollback rows/meta and nested transactions",
+    "Commit-after-fsync UNKNOWN/dedupe/rebuild and ownership retention",
+    "Fresh generation ignores crash-left stale/corrupt disposable index",
+    "Exact corruption/external writer/expiry/tombstone/capacity/pending boundaries",
+    "Actual command-host uncertain admission/no-effect/retry/cleanup path"
+  ],
+  "run_id": "gt06-s80-campaign-01.r00.a01",
+  "schema_id": "hh-studio.gt06-s81-index-analysis",
+  "schema_version": "1.0.0",
+  "scope": "read-only raw metadata and coordinator-authorized copied-history A/B; no engine or test suite",
+  "source_checkpoint": "f75a5d08",
+  "source_files": {
+    "host/core/journal.py": {
+      "initial_live_matches_frozen": true,
+      "sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6"
+    },
+    "host/core/limits.py": {
+      "initial_live_matches_frozen": true,
+      "sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f"
+    },
+    "host/replay/disk_journal_index.py": {
+      "initial_live_matches_frozen": true,
+      "sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28"
+    },
+    "host/replay/verified_journal.py": {
+      "initial_live_matches_frozen": true,
+      "sha256": "129baa4d9e08c8a1d5acf2ea05c9c89a4fdddb53ca6f3baf2d61311ab98e62ab"
+    }
+  },
+  "written_utc": "2026-09-18T07:48:13.209650+00:00"
+}

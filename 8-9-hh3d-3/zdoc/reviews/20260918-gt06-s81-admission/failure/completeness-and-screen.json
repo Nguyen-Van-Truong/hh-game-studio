@@ -1,0 +1,745 @@
+{
+  "observed_utc": "2026-09-18T07:44:59.018982+00:00",
+  "scope": "Failed-run partial-prefix preservation and static checks only; no full-run PASS, no cause claim, no critic verdict.",
+  "recorded_failure": "ADMISSION_UNKNOWN",
+  "recorded_phase": {
+    "batch": 15,
+    "phase": "commands"
+  },
+  "source_closure": "1dc889ef923dee9b53c6faeeb1d6fd781acc3a89a4b860b531b55fc3a124cf8f",
+  "captured_batch_indexes": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+  ],
+  "warmup_batches": 5,
+  "collected_measured_batches": 10,
+  "completed_full_runs": 0,
+  "required_full_runs": 10,
+  "missing_measured_this_run": 20,
+  "baseline_batch_index": 4,
+  "samples": [
+    {
+      "index": 0,
+      "warmup": true,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 566
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 752095232
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 197
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 39337984
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 622.797,
+      "stop_receipt_ms": 28.4209,
+      "stop_target_instance_id": "gt06-s80-campaign-01.r00.a01.b0.cancel",
+      "applicable_screen_breaches": []
+    },
+    {
+      "index": 1,
+      "warmup": true,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 562
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 752394240
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 197
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 39972864
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 586.653,
+      "stop_receipt_ms": 36.8786,
+      "stop_target_instance_id": "gt06-s80-campaign-01.r00.a01.b1.cancel",
+      "applicable_screen_breaches": []
+    },
+    {
+      "index": 2,
+      "warmup": true,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 556
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 752926720
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 197
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 40296448
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 589.624,
+      "stop_receipt_ms": 37.6842,
+      "stop_target_instance_id": "gt06-s80-campaign-01.r00.a01.b2.cancel",
+      "applicable_screen_breaches": []
+    },
+    {
+      "index": 3,
+      "warmup": true,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 556
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 753483776
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 197
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 40452096
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 825.196,
+      "stop_receipt_ms": 69.052,
+      "stop_target_instance_id": "gt06-s80-campaign-01.r00.a01.b3.cancel",
+      "applicable_screen_breaches": []
+    },
+    {
+      "index": 4,
+      "warmup": true,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 562
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 641355776
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 197
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 37310464
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 583.66,
+      "stop_receipt_ms": 50.3534,
+      "stop_target_instance_id": "gt06-s80-campaign-01.r00.a01.b4.cancel",
+      "applicable_screen_breaches": []
+    },
+    {
+      "index": 5,
+      "warmup": false,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 556
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 495448064
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 197
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 36937728
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 626.407,
+      "stop_receipt_ms": 44.0938,
+      "stop_target_instance_id": "gt06-s80-campaign-01.r00.a01.b5.cancel",
+      "applicable_screen_breaches": []
+    },
+    {
+      "index": 6,
+      "warmup": false,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 559
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 430497792
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 197
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 34734080
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 657.052,
+      "stop_receipt_ms": 53.5484,
+      "stop_target_instance_id": "gt06-s80-campaign-01.r00.a01.b6.cancel",
+      "applicable_screen_breaches": []
+    },
+    {
+      "index": 7,
+      "warmup": false,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 556
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 349646848
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 197
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 29290496
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 612.663,
+      "stop_receipt_ms": 51.1654,
+      "stop_target_instance_id": "gt06-s80-campaign-01.r00.a01.b7.cancel",
+      "applicable_screen_breaches": []
+    },
+    {
+      "index": 8,
+      "warmup": false,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 558
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 294473728
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 197
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 29478912
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 639.7783,
+      "stop_receipt_ms": 58.3384,
+      "stop_target_instance_id": "gt06-s80-campaign-01.r00.a01.b8.cancel",
+      "applicable_screen_breaches": []
+    },
+    {
+      "index": 9,
+      "warmup": false,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 558
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 264368128
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 197
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 29208576
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 768.528,
+      "stop_receipt_ms": 57.7799,
+      "stop_target_instance_id": "gt06-s80-campaign-01.r00.a01.b9.cancel",
+      "applicable_screen_breaches": []
+    },
+    {
+      "index": 10,
+      "warmup": false,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 556
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 257294336
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 197
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 27754496
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 1128.0714,
+      "stop_receipt_ms": 68.4721,
+      "stop_target_instance_id": "gt06-s80-campaign-01.r00.a01.b10.cancel",
+      "applicable_screen_breaches": []
+    },
+    {
+      "index": 11,
+      "warmup": false,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 556
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 221581312
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 197
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 27770880
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 778.7967,
+      "stop_receipt_ms": 63.9798,
+      "stop_target_instance_id": "gt06-s80-campaign-01.r00.a01.b11.cancel",
+      "applicable_screen_breaches": []
+    },
+    {
+      "index": 12,
+      "warmup": false,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 556
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 180228096
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 197
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 28033024
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 993.0796,
+      "stop_receipt_ms": 67.3774,
+      "stop_target_instance_id": "gt06-s80-campaign-01.r00.a01.b12.cancel",
+      "applicable_screen_breaches": []
+    },
+    {
+      "index": 13,
+      "warmup": false,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 556
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 137334784
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 197
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 27754496
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 804.8046,
+      "stop_receipt_ms": 70.8743,
+      "stop_target_instance_id": "gt06-s80-campaign-01.r00.a01.b13.cancel",
+      "applicable_screen_breaches": []
+    },
+    {
+      "index": 14,
+      "warmup": false,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 556
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 126726144
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 197
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 27533312
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 682.954,
+      "stop_receipt_ms": 78.0499,
+      "stop_target_instance_id": "gt06-s80-campaign-01.r00.a01.b14.cancel",
+      "applicable_screen_breaches": []
+    }
+  ],
+  "operator_stop_slots_checked": 30,
+  "operator_stop_latches_present": 0,
+  "per_batch_stop_targets_unique": true,
+  "per_batch_stop_receipts": 15,
+  "preserved_partial_data_is_accepted": false
+}

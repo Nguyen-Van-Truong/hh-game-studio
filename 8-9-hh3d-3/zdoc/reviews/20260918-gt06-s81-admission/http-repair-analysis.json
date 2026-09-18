@@ -1,0 +1,1003 @@
+{
+  "authority": 0,
+  "changed_frozen_source_entries": [
+    {
+      "after_sha256": "1ec03356b1cb8c8987e1604bcb164aea6a9934dbe259451c19e12de36398aba0",
+      "before_sha256": "c6b1cd49ef7b3186f8f64a0a6c581c14b7ec67e45d8e5d8ec760cdf2f728ff65",
+      "path": "studio/host/core/transport.py"
+    },
+    {
+      "after_sha256": "4292473f77c47253ad35f058ce50c9297b76539a4e5e5e113a75cba894367d86",
+      "before_sha256": null,
+      "path": "studio/tests/protocol/test_transport_fault_lock.py"
+    },
+    {
+      "after_sha256": "8a39d98af49b7c13bf32de40a6bf69a6e7d27c160372b71e1897fca7db86da45",
+      "before_sha256": "7195c5889729069524af574d635ed0ecd788ea8ec5f2181dab2b7906de205fd8",
+      "path": "studio/tests/protocol/test_transport_observation.py"
+    },
+    {
+      "after_sha256": "707b6f9a9291214d9ee848d77f1e4a3dc2267de5f2aeb5e48fa4365866a842c9",
+      "before_sha256": "e14d4794649e6341f3a7b10a6c7cbd1bcfb1369eb2a3d06e2b7a86453aefe21a",
+      "path": "studio/tests/replay/benchmark_commands.py"
+    },
+    {
+      "after_sha256": "87875809baa4845fcffba8e2c7d82f7a5bce833099c89d4852f2aab931c34df0",
+      "before_sha256": null,
+      "path": "studio/tests/replay/benchmark_transport.py"
+    },
+    {
+      "after_sha256": "bb43ecc04c2de4872177a440eb071d533efdaa9e8194f62b4e0907bad8d4b252",
+      "before_sha256": "e98d2be8ea1d32d5cec44d119c395e53b50008f38cbc3852ec24da50c4f9f906",
+      "path": "studio/tests/replay/run_benchmark_campaign.py"
+    },
+    {
+      "after_sha256": "258a2f0f09e7d78866def2c8fdcf1c65a52b0e3241340e8be32d3f93792f2292",
+      "before_sha256": "a0437e7473af980fa156060ab6d99e78537f46ffc4811c382093e4e62228b08a",
+      "path": "studio/tests/replay/test_benchmark_campaign.py"
+    },
+    {
+      "after_sha256": "a0f136c9621bad2360d88d3619c516730d20fc195c80b8d432e6a8c3ed9e2253",
+      "before_sha256": null,
+      "path": "studio/tests/replay/test_campaign_terminal_cleanup.py"
+    }
+  ],
+  "deltas": {
+    "admitted_receipt_p95_percent": -40.61889309474422,
+    "all_receipt_p95_percent": -41.97359777230885,
+    "batch_elapsed_percent": 0.8553685334890648,
+    "batch_elapsed_seconds": 1.0727799999999945
+  },
+  "formal_acceptance": false,
+  "limitations": [
+    "One supplemental batch per source, instrumentation enabled, distinct fresh project/counter; not controlled repeated campaign comparison.",
+    "Phase aggregates overlap; their sums are not disjoint time or predicted recoverable wall time.",
+    "No phase p95 is available from aggregate plus three slowest spans.",
+    "Actual S80 timeout cause and full GT06 campaign acceptance remain unproved.",
+    "Cleanup verification here checks recorded exit/Job evidence and remaining index paths, not a new live process inspection."
+  ],
+  "new_runs": 0,
+  "original_history_sha256": "4d8ecb5bacd76a57d3137e9f812c36c3a6a759d4d51d41008627e9114ee1377a",
+  "p95_method": "linear type 7; status gaps from retained integer microsecond observations",
+  "phase_p95_available": false,
+  "phase_p95_reason": "phase data retains aggregates and only three slowest spans",
+  "results": [
+    {
+      "all_receipts": {
+        "count": 1000,
+        "maximum_ms": 452.7726,
+        "mean_ms": 76.69455340000005,
+        "p95_type7_ms": 186.46570499999999
+      },
+      "batch_elapsed_seconds": 125.417286,
+      "batch_sha256": "17b2ad14f24bbaa2f73eac7551470c467a97b66d2e50d17ffbfd33b61a1cabcb",
+      "capture": {
+        "exit_code": 0,
+        "ownership": "gated_job_kill_on_close",
+        "source_files_unchanged": true,
+        "target_pid": 39776,
+        "timed_out": false,
+        "tree_verified": true,
+        "wrapper_exit_code": 0,
+        "wrapper_pid": 42432
+      },
+      "capture_sha256": "e03cc24376bf7b11255b3c9f2f0e08a3cd96527e2a3df92df8bb3aa492532398",
+      "child_report_wall_seconds": 136.428796,
+      "driver_sha256": "bff88484e4410fff7f0b750248c477c6698d3e4d38763cddff8e33c26cbbaa0a",
+      "evidence_hashes": {
+        "child/command-batch.json": "17b2ad14f24bbaa2f73eac7551470c467a97b66d2e50d17ffbfd33b61a1cabcb",
+        "child/commands/commands.jsonl": "8e7d321e837f454ec8cc668c40ddd118ee1c2a4844398917654bb424b50b9aa2",
+        "child/commands/commands.jsonl.guard": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "child/prepared.json": "92b0c46041f9c264595f8b3c00c45dd3cb44e5097dadefe12f3b6be22558a3f0",
+        "child/report.json": "f75389625b9a326118e4cc8a1b5e774a5823b1fefb0ceecef9b721e589e4c56a",
+        "http-probe-host.json": "99e5ba8175cfb92792348a70bd0b306a9011f17130d15dc347c200c462896a0b",
+        "http-probe-stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "http-probe-stdout.txt": "02052cd64ceffb213b5113e7c5073d4d4b4333442d612463a89ab79ead048e49",
+        "invocation.json": "cc9703f54563de7b0e4262c07c1339c0724432e391d9b30e4a30a5b1e17004cc",
+        "owner-source.py": "7c85e3e8cb2c61d98a1d68860c0e92448eeb756b88c4384ff132382cc42aacb1",
+        "probe.py": "bff88484e4410fff7f0b750248c477c6698d3e4d38763cddff8e33c26cbbaa0a",
+        "source-files.json": "74e2b3f522d85f55e07d5789a814c447989d6e9eccd044732cfdc78674466ff8"
+      },
+      "frozen_source_directory": "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s81-admission/checks-01/source",
+      "id": 1,
+      "journal": {
+        "appended_records": 1403,
+        "bytes": 16576852,
+        "prefix_bytes": 15586409,
+        "prefix_sha256": "4d8ecb5bacd76a57d3137e9f812c36c3a6a759d4d51d41008627e9114ee1377a",
+        "sha256": "8e7d321e837f454ec8cc668c40ddd118ee1c2a4844398917654bb424b50b9aa2",
+        "verified_record_checksums": 23573
+      },
+      "max_receipt": {
+        "command_id": "gt06-s81-http-probe-01.b0.admitted.119",
+        "kind": "admitted",
+        "ordinal": 599,
+        "receipt_mono_us": 616341019196,
+        "receipt_ms": 452.7726,
+        "started_mono_us": 616340566424,
+        "terminal_ms": 485.0468
+      },
+      "metrics": {
+        "admitted": {
+          "latency_metric": {
+            "count": 200,
+            "maximum_ms": 452.7726,
+            "mean_ms": 162.56056799999996,
+            "p95_type7_ms": 202.68039999999996
+          },
+          "receipt": {
+            "count": 200,
+            "maximum_ms": 452.7726,
+            "mean_ms": 162.56056799999996,
+            "p95_type7_ms": 202.68039999999996
+          },
+          "terminal": {
+            "count": 200,
+            "maximum_ms": 485.0468,
+            "mean_ms": 221.47719950000013,
+            "p95_type7_ms": 251.8964
+          }
+        },
+        "inspect": {
+          "latency_metric": {
+            "count": 500,
+            "maximum_ms": 254.7831,
+            "mean_ms": 157.61210940000004,
+            "p95_type7_ms": 179.64427
+          },
+          "receipt": {
+            "count": 500,
+            "maximum_ms": 208.4991,
+            "mean_ms": 84.76324119999994,
+            "p95_type7_ms": 142.06392999999997
+          },
+          "terminal": {
+            "count": 500,
+            "maximum_ms": 254.7831,
+            "mean_ms": 157.61210940000004,
+            "p95_type7_ms": 179.64427
+          }
+        },
+        "rejected": {
+          "latency_metric": {
+            "count": 300,
+            "maximum_ms": 27.2823,
+            "mean_ms": 6.002730666666668,
+            "p95_type7_ms": 22.556460000000005
+          },
+          "receipt": {
+            "count": 300,
+            "maximum_ms": 27.2823,
+            "mean_ms": 6.002730666666668,
+            "p95_type7_ms": 22.556460000000005
+          }
+        }
+      },
+      "multi_lookup_rows": [],
+      "owner_sha256": "7c85e3e8cb2c61d98a1d68860c0e92448eeb756b88c4384ff132382cc42aacb1",
+      "private_index_directories_remaining": [],
+      "python_sha256": "5f7b89a612c9b8af1d6456cdfcd1dbe5ca630849e79aebced9bee9a6694952ec",
+      "recorded_local_cleanup": {
+        "control_listener_fd": -1,
+        "host_threads_all_stopped": true,
+        "journal_index_owner_released": true,
+        "main_listener_fd": -1,
+        "observer_handle_released": true,
+        "producer_closed": true
+      },
+      "report_sha256": "f75389625b9a326118e4cc8a1b5e774a5823b1fefb0ceecef9b721e589e4c56a",
+      "run_id": "gt06-s81-http-probe-01",
+      "runner_sha256": "ea522450acc46f90be5e2a7b9257e73ce8b619948105b2c9073aac1f881c7328",
+      "snapshot_work": {
+        "canonical_fsync_count_equals_scans_plus_appends": true,
+        "mean_snapshot_ms": 29.234189398191404,
+        "minimum_history_bytes_read": 49985613663,
+        "snapshot_non_fsync_inclusive_lower_bound_ms": 91475.48139999983,
+        "snapshot_sum_fraction_of_batch": 0.7475368698378613
+      },
+      "source_manifest_sha256": "74e2b3f522d85f55e07d5789a814c447989d6e9eccd044732cfdc78674466ff8",
+      "spans": {
+        "http_batch.canonical_fsync": {
+          "count": 4610,
+          "max_ms": 245.9026,
+          "slowest": [
+            {
+              "elapsed_ms": 245.9026,
+              "ended_mono_us": 616340992159,
+              "endpoint": "none",
+              "started_mono_us": 616340746256
+            },
+            {
+              "elapsed_ms": 12.8897,
+              "ended_mono_us": 616387829809,
+              "endpoint": "none",
+              "started_mono_us": 616387816919
+            },
+            {
+              "elapsed_ms": 12.8774,
+              "ended_mono_us": 616349886209,
+              "endpoint": "lookup",
+              "started_mono_us": 616349873331
+            }
+          ],
+          "sum_ms": 2278.563999999992
+        },
+        "http_batch.host_dispatch.cancel": {
+          "count": 1,
+          "max_ms": 79.7362,
+          "slowest": [
+            {
+              "elapsed_ms": 79.7362,
+              "ended_mono_us": 616328235939,
+              "endpoint": "cancel",
+              "started_mono_us": 616328156203
+            }
+          ],
+          "sum_ms": 79.7362
+        },
+        "http_batch.host_dispatch.commands": {
+          "count": 1001,
+          "max_ms": 144.2021,
+          "slowest": [
+            {
+              "elapsed_ms": 144.2021,
+              "ended_mono_us": 616378955632,
+              "endpoint": "commands",
+              "started_mono_us": 616378811430
+            },
+            {
+              "elapsed_ms": 133.6815,
+              "ended_mono_us": 616319056126,
+              "endpoint": "commands",
+              "started_mono_us": 616318922444
+            },
+            {
+              "elapsed_ms": 131.0525,
+              "ended_mono_us": 616351576340,
+              "endpoint": "commands",
+              "started_mono_us": 616351445288
+            }
+          ],
+          "sum_ms": 52522.24630000002
+        },
+        "http_batch.host_dispatch.discovery": {
+          "count": 1,
+          "max_ms": 0.2728,
+          "slowest": [
+            {
+              "elapsed_ms": 0.2728,
+              "ended_mono_us": 616266294901,
+              "endpoint": "discovery",
+              "started_mono_us": 616266294628
+            }
+          ],
+          "sum_ms": 0.2728
+        },
+        "http_batch.host_dispatch.lease": {
+          "count": 1,
+          "max_ms": 32.8523,
+          "slowest": [
+            {
+              "elapsed_ms": 32.8523,
+              "ended_mono_us": 616266331037,
+              "endpoint": "lease",
+              "started_mono_us": 616266298185
+            }
+          ],
+          "sum_ms": 32.8523
+        },
+        "http_batch.host_dispatch.lookup": {
+          "count": 701,
+          "max_ms": 76.9333,
+          "slowest": [
+            {
+              "elapsed_ms": 76.9333,
+              "ended_mono_us": 616331821654,
+              "endpoint": "lookup",
+              "started_mono_us": 616331744721
+            },
+            {
+              "elapsed_ms": 59.606,
+              "ended_mono_us": 616318651497,
+              "endpoint": "lookup",
+              "started_mono_us": 616318591891
+            },
+            {
+              "elapsed_ms": 52.6654,
+              "ended_mono_us": 616378189823,
+              "endpoint": "lookup",
+              "started_mono_us": 616378137158
+            }
+          ],
+          "sum_ms": 21664.007799999996
+        },
+        "http_batch.host_fault_probe.after_dispatch": {
+          "count": 1405,
+          "max_ms": 342.4381,
+          "slowest": [
+            {
+              "elapsed_ms": 342.4381,
+              "ended_mono_us": 616341018497,
+              "endpoint": "commands",
+              "started_mono_us": 616340676058
+            },
+            {
+              "elapsed_ms": 116.9928,
+              "ended_mono_us": 616379072652,
+              "endpoint": "commands",
+              "started_mono_us": 616378955659
+            },
+            {
+              "elapsed_ms": 110.2009,
+              "ended_mono_us": 616354732848,
+              "endpoint": "commands",
+              "started_mono_us": 616354622648
+            }
+          ],
+          "sum_ms": 15478.991200000008
+        },
+        "http_batch.host_fault_probe.after_reply": {
+          "count": 1405,
+          "max_ms": 122.9196,
+          "slowest": [
+            {
+              "elapsed_ms": 122.9196,
+              "ended_mono_us": 616378763115,
+              "endpoint": "commands",
+              "started_mono_us": 616378640196
+            },
+            {
+              "elapsed_ms": 112.0614,
+              "ended_mono_us": 616358479422,
+              "endpoint": "commands",
+              "started_mono_us": 616358367360
+            },
+            {
+              "elapsed_ms": 93.7315,
+              "ended_mono_us": 616371158913,
+              "endpoint": "commands",
+              "started_mono_us": 616371065181
+            }
+          ],
+          "sum_ms": 25028.246799999884
+        },
+        "http_batch.host_fault_probe.before_dispatch": {
+          "count": 1705,
+          "max_ms": 120.2676,
+          "slowest": [
+            {
+              "elapsed_ms": 120.2676,
+              "ended_mono_us": 616378763044,
+              "endpoint": "lookup",
+              "started_mono_us": 616378642777
+            },
+            {
+              "elapsed_ms": 92.0884,
+              "ended_mono_us": 616371158856,
+              "endpoint": "lookup",
+              "started_mono_us": 616371066768
+            },
+            {
+              "elapsed_ms": 91.0712,
+              "ended_mono_us": 616369896069,
+              "endpoint": "lookup",
+              "started_mono_us": 616369804998
+            }
+          ],
+          "sum_ms": 23405.416099999897
+        },
+        "http_batch.host_fault_probe.before_reply": {
+          "count": 1405,
+          "max_ms": 92.5853,
+          "slowest": [
+            {
+              "elapsed_ms": 92.5853,
+              "ended_mono_us": 616383813061,
+              "endpoint": "commands",
+              "started_mono_us": 616383720476
+            },
+            {
+              "elapsed_ms": 91.7213,
+              "ended_mono_us": 616315286326,
+              "endpoint": "commands",
+              "started_mono_us": 616315194605
+            },
+            {
+              "elapsed_ms": 90.5448,
+              "ended_mono_us": 616343290115,
+              "endpoint": "commands",
+              "started_mono_us": 616343199570
+            }
+          ],
+          "sum_ms": 3118.6988999999903
+        },
+        "http_batch.host_send": {
+          "count": 1705,
+          "max_ms": 3.8837,
+          "slowest": [
+            {
+              "elapsed_ms": 3.8837,
+              "ended_mono_us": 616318655424,
+              "endpoint": "lookup",
+              "started_mono_us": 616318651540
+            },
+            {
+              "elapsed_ms": 2.0178,
+              "ended_mono_us": 616323576974,
+              "endpoint": "lookup",
+              "started_mono_us": 616323574956
+            },
+            {
+              "elapsed_ms": 1.9624,
+              "ended_mono_us": 616373425224,
+              "endpoint": "commands",
+              "started_mono_us": 616373423262
+            }
+          ],
+          "sum_ms": 1087.0509000000015
+        },
+        "http_batch.journal_snapshot_true": {
+          "count": 3207,
+          "max_ms": 272.8374,
+          "slowest": [
+            {
+              "elapsed_ms": 272.8374,
+              "ended_mono_us": 616340992469,
+              "endpoint": "none",
+              "started_mono_us": 616340719631
+            },
+            {
+              "elapsed_ms": 69.4261,
+              "ended_mono_us": 616304652478,
+              "endpoint": "commands",
+              "started_mono_us": 616304583052
+            },
+            {
+              "elapsed_ms": 63.8488,
+              "ended_mono_us": 616318729972,
+              "endpoint": "commands",
+              "started_mono_us": 616318666124
+            }
+          ],
+          "sum_ms": 93754.04539999983
+        },
+        "initialize.canonical_fsync": {
+          "count": 1,
+          "max_ms": 0.1333,
+          "slowest": [
+            {
+              "elapsed_ms": 0.1333,
+              "ended_mono_us": 616266236108,
+              "endpoint": "none",
+              "started_mono_us": 616266235975
+            }
+          ],
+          "sum_ms": 0.1333
+        },
+        "initialize.journal_snapshot_false": {
+          "count": 2,
+          "max_ms": 25.4871,
+          "slowest": [
+            {
+              "elapsed_ms": 25.4871,
+              "ended_mono_us": 616256008132,
+              "endpoint": "none",
+              "started_mono_us": 616255982645
+            },
+            {
+              "elapsed_ms": 25.2718,
+              "ended_mono_us": 616266264717,
+              "endpoint": "none",
+              "started_mono_us": 616266239445
+            }
+          ],
+          "sum_ms": 50.7589
+        }
+      },
+      "status_gaps": {
+        "derived_from_microseconds": {
+          "count": 1704,
+          "maximum_ms": 452.986,
+          "mean_ms": 73.60169366197178,
+          "p95_type7_ms": 180.37529999999998
+        },
+        "reported_maximum_ms": 452.9861
+      },
+      "unbound_evidence_files": [],
+      "verified_evidence_files": 12,
+      "verified_frozen_source_files": 355,
+      "verified_loaded_modules": 12,
+      "workload": {
+        "admitted": 200,
+        "cancel_lookups": 1,
+        "cancel_no_effect": true,
+        "cancel_terminal_ms": 128.0172,
+        "commands": 1000,
+        "effect_count_after": 200,
+        "inspect": 500,
+        "mix_lookups": 700,
+        "rejected": 300
+      }
+    },
+    {
+      "all_receipts": {
+        "count": 1000,
+        "maximum_ms": 354.3874,
+        "mean_ms": 59.01509740000009,
+        "p95_type7_ms": 108.19934
+      },
+      "batch_elapsed_seconds": 126.490066,
+      "batch_sha256": "57ddf49c4ca5baf77b667d5587441cb6efbbe9f391084099966f5d137de36b1c",
+      "capture": {
+        "exit_code": 0,
+        "ownership": "gated_job_kill_on_close",
+        "source_files_unchanged": true,
+        "target_pid": 7060,
+        "timed_out": false,
+        "tree_verified": true,
+        "wrapper_exit_code": 0,
+        "wrapper_pid": 53616
+      },
+      "capture_sha256": "6032cfc212a5a33f0a3702f887c307a8a4fafab4e40acdfa8bcf14388d07ea63",
+      "child_report_wall_seconds": 137.380213,
+      "driver_sha256": "426d0665a2abe934d91b8de84aaf28949bf6a21ca719f623fbcaa24e2bf5be46",
+      "evidence_hashes": {
+        "child/command-batch.json": "57ddf49c4ca5baf77b667d5587441cb6efbbe9f391084099966f5d137de36b1c",
+        "child/commands/commands.jsonl": "6aa6dd03b891a27e9ad18fa5dd5b0ccc622e09ac0dd1b1fa564bb9970dbd2c04",
+        "child/commands/commands.jsonl.guard": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "child/prepared.json": "bae12885eddeb6c9db3657ed787e1367dfab0dba03d4450978343f4293af17db",
+        "child/report.json": "445b07cf14b8a7b6c3a60427d6017a2bb5c8d7a382231a80a0f76e3c9678a770",
+        "http-probe-host.json": "4a6468fcd0c1651c079ea35e6062302e5a39f20316b7fca2a02232e3d5784664",
+        "http-probe-stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "http-probe-stdout.txt": "02052cd64ceffb213b5113e7c5073d4d4b4333442d612463a89ab79ead048e49",
+        "invocation.json": "e1e85f13c785f217ac96d57730de3a2b466b441a00e2f2df0f86ed3f8ddba6e1",
+        "owner-source.py": "7c85e3e8cb2c61d98a1d68860c0e92448eeb756b88c4384ff132382cc42aacb1",
+        "probe.py": "426d0665a2abe934d91b8de84aaf28949bf6a21ca719f623fbcaa24e2bf5be46",
+        "source-files.json": "3e0320f2b75d6a019a0c246abefbfefc25da9c1c362df7f603e52167da992afc"
+      },
+      "frozen_source_directory": "8-9-hh3d-3/zdoc/reviews/20260918-gt06-s81-admission/checks-02/source",
+      "id": 2,
+      "journal": {
+        "appended_records": 1403,
+        "bytes": 16576852,
+        "prefix_bytes": 15586409,
+        "prefix_sha256": "4d8ecb5bacd76a57d3137e9f812c36c3a6a759d4d51d41008627e9114ee1377a",
+        "sha256": "6aa6dd03b891a27e9ad18fa5dd5b0ccc622e09ac0dd1b1fa564bb9970dbd2c04",
+        "verified_record_checksums": 23573
+      },
+      "max_receipt": {
+        "command_id": "gt06-s81-http-probe-02.b0.admitted.110",
+        "kind": "admitted",
+        "ordinal": 558,
+        "receipt_mono_us": 617094411498,
+        "receipt_ms": 354.3874,
+        "started_mono_us": 617094057110,
+        "terminal_ms": 477.7482
+      },
+      "metrics": {
+        "admitted": {
+          "latency_metric": {
+            "count": 200,
+            "maximum_ms": 354.3874,
+            "mean_ms": 103.62242799999999,
+            "p95_type7_ms": 120.353865
+          },
+          "receipt": {
+            "count": 200,
+            "maximum_ms": 354.3874,
+            "mean_ms": 103.62242799999999,
+            "p95_type7_ms": 120.353865
+          },
+          "terminal": {
+            "count": 200,
+            "maximum_ms": 477.7482,
+            "mean_ms": 220.70040099999997,
+            "p95_type7_ms": 243.1559099999999
+          }
+        },
+        "inspect": {
+          "latency_metric": {
+            "count": 500,
+            "maximum_ms": 410.9706,
+            "mean_ms": 160.45857740000002,
+            "p95_type7_ms": 182.51765499999996
+          },
+          "receipt": {
+            "count": 500,
+            "maximum_ms": 131.4852,
+            "mean_ms": 73.3779232000001,
+            "p95_type7_ms": 89.27803
+          },
+          "terminal": {
+            "count": 500,
+            "maximum_ms": 410.9706,
+            "mean_ms": 160.45857740000002,
+            "p95_type7_ms": 182.51765499999996
+          }
+        },
+        "rejected": {
+          "latency_metric": {
+            "count": 300,
+            "maximum_ms": 26.9863,
+            "mean_ms": 5.338833999999999,
+            "p95_type7_ms": 22.847625
+          },
+          "receipt": {
+            "count": 300,
+            "maximum_ms": 26.9863,
+            "mean_ms": 5.338833999999999,
+            "p95_type7_ms": 22.847625
+          }
+        }
+      },
+      "multi_lookup_rows": [
+        {
+          "attempts": [
+            {
+              "code": "QUEUED",
+              "command_id": "gt06-s81-http-probe-02.b0.admitted.146",
+              "ended_mono_us": 617117208638,
+              "request_digest": "sha256:0918f68f2fb54015c90b3cb37a8d0e31ffbee5180179d9a5fb3a2ac95b53d57b",
+              "started_mono_us": 617117138019,
+              "status": "ACCEPTED_PENDING"
+            },
+            {
+              "code": "READBACK_CONFIRMED",
+              "command_id": "gt06-s81-http-probe-02.b0.admitted.146",
+              "ended_mono_us": 617117283655,
+              "request_digest": "sha256:0918f68f2fb54015c90b3cb37a8d0e31ffbee5180179d9a5fb3a2ac95b53d57b",
+              "started_mono_us": 617117209780,
+              "status": "COMMITTED"
+            }
+          ],
+          "command_id": "gt06-s81-http-probe-02.b0.admitted.146"
+        }
+      ],
+      "owner_sha256": "7c85e3e8cb2c61d98a1d68860c0e92448eeb756b88c4384ff132382cc42aacb1",
+      "private_index_directories_remaining": [],
+      "python_sha256": "5f7b89a612c9b8af1d6456cdfcd1dbe5ca630849e79aebced9bee9a6694952ec",
+      "recorded_local_cleanup": {
+        "control_listener_fd": -1,
+        "host_threads_all_stopped": true,
+        "journal_index_owner_released": true,
+        "main_listener_fd": -1,
+        "observer_handle_released": true,
+        "producer_closed": true
+      },
+      "report_sha256": "445b07cf14b8a7b6c3a60427d6017a2bb5c8d7a382231a80a0f76e3c9678a770",
+      "run_id": "gt06-s81-http-probe-02",
+      "runner_sha256": "ea522450acc46f90be5e2a7b9257e73ce8b619948105b2c9073aac1f881c7328",
+      "snapshot_work": {
+        "canonical_fsync_count_equals_scans_plus_appends": true,
+        "mean_snapshot_ms": 29.743263466334184,
+        "minimum_history_bytes_read": 50001200072,
+        "snapshot_non_fsync_inclusive_lower_bound_ms": 92722.13640000006,
+        "snapshot_sum_fraction_of_batch": 0.7543389944946354
+      },
+      "source_manifest_sha256": "3e0320f2b75d6a019a0c246abefbfefc25da9c1c362df7f603e52167da992afc",
+      "spans": {
+        "http_batch.canonical_fsync": {
+          "count": 4611,
+          "max_ms": 259.6473,
+          "slowest": [
+            {
+              "elapsed_ms": 259.6473,
+              "ended_mono_us": 617094404373,
+              "endpoint": "commands",
+              "started_mono_us": 617094144726
+            },
+            {
+              "elapsed_ms": 240.0271,
+              "ended_mono_us": 617132331815,
+              "endpoint": "none",
+              "started_mono_us": 617132091788
+            },
+            {
+              "elapsed_ms": 36.4311,
+              "ended_mono_us": 617126132644,
+              "endpoint": "commands",
+              "started_mono_us": 617126096213
+            }
+          ],
+          "sum_ms": 2694.252800000002
+        },
+        "http_batch.host_dispatch.cancel": {
+          "count": 1,
+          "max_ms": 79.833,
+          "slowest": [
+            {
+              "elapsed_ms": 79.833,
+              "ended_mono_us": 617087064155,
+              "endpoint": "cancel",
+              "started_mono_us": 617086984322
+            }
+          ],
+          "sum_ms": 79.833
+        },
+        "http_batch.host_dispatch.commands": {
+          "count": 1001,
+          "max_ms": 352.7463,
+          "slowest": [
+            {
+              "elapsed_ms": 352.7463,
+              "ended_mono_us": 617094410808,
+              "endpoint": "commands",
+              "started_mono_us": 617094058062
+            },
+            {
+              "elapsed_ms": 183.3247,
+              "ended_mono_us": 617130366384,
+              "endpoint": "commands",
+              "started_mono_us": 617130183059
+            },
+            {
+              "elapsed_ms": 138.1272,
+              "ended_mono_us": 617126169819,
+              "endpoint": "commands",
+              "started_mono_us": 617126031692
+            }
+          ],
+          "sum_ms": 53603.27680000005
+        },
+        "http_batch.host_dispatch.discovery": {
+          "count": 1,
+          "max_ms": 0.1669,
+          "slowest": [
+            {
+              "elapsed_ms": 0.1669,
+              "ended_mono_us": 617024743422,
+              "endpoint": "discovery",
+              "started_mono_us": 617024743255
+            }
+          ],
+          "sum_ms": 0.1669
+        },
+        "http_batch.host_dispatch.lease": {
+          "count": 1,
+          "max_ms": 33.4548,
+          "slowest": [
+            {
+              "elapsed_ms": 33.4548,
+              "ended_mono_us": 617024798592,
+              "endpoint": "lease",
+              "started_mono_us": 617024765137
+            }
+          ],
+          "sum_ms": 33.4548
+        },
+        "http_batch.host_dispatch.lookup": {
+          "count": 702,
+          "max_ms": 330.091,
+          "slowest": [
+            {
+              "elapsed_ms": 330.091,
+              "ended_mono_us": 617132378720,
+              "endpoint": "lookup",
+              "started_mono_us": 617132048629
+            },
+            {
+              "elapsed_ms": 146.8515,
+              "ended_mono_us": 617133362648,
+              "endpoint": "lookup",
+              "started_mono_us": 617133215796
+            },
+            {
+              "elapsed_ms": 144.1541,
+              "ended_mono_us": 617080527172,
+              "endpoint": "lookup",
+              "started_mono_us": 617080383018
+            }
+          ],
+          "sum_ms": 63905.655700000025
+        },
+        "http_batch.host_fault_probe.after_dispatch": {
+          "count": 1406,
+          "max_ms": 0.0343,
+          "slowest": [
+            {
+              "elapsed_ms": 0.0343,
+              "ended_mono_us": 617124424713,
+              "endpoint": "lookup",
+              "started_mono_us": 617124424679
+            },
+            {
+              "elapsed_ms": 0.0244,
+              "ended_mono_us": 617070747983,
+              "endpoint": "lookup",
+              "started_mono_us": 617070747959
+            },
+            {
+              "elapsed_ms": 0.0198,
+              "ended_mono_us": 617063059285,
+              "endpoint": "lookup",
+              "started_mono_us": 617063059265
+            }
+          ],
+          "sum_ms": 2.9347999999999934
+        },
+        "http_batch.host_fault_probe.after_reply": {
+          "count": 1406,
+          "max_ms": 0.0148,
+          "slowest": [
+            {
+              "elapsed_ms": 0.0148,
+              "ended_mono_us": 617096038231,
+              "endpoint": "lookup",
+              "started_mono_us": 617096038216
+            },
+            {
+              "elapsed_ms": 0.0124,
+              "ended_mono_us": 617143519836,
+              "endpoint": "lookup",
+              "started_mono_us": 617143519823
+            },
+            {
+              "elapsed_ms": 0.0045,
+              "ended_mono_us": 617122876948,
+              "endpoint": "commands",
+              "started_mono_us": 617122876943
+            }
+          ],
+          "sum_ms": 2.4604000000000075
+        },
+        "http_batch.host_fault_probe.before_dispatch": {
+          "count": 1706,
+          "max_ms": 0.0175,
+          "slowest": [
+            {
+              "elapsed_ms": 0.0175,
+              "ended_mono_us": 617099548761,
+              "endpoint": "commands",
+              "started_mono_us": 617099548744
+            },
+            {
+              "elapsed_ms": 0.0154,
+              "ended_mono_us": 617134160252,
+              "endpoint": "lookup",
+              "started_mono_us": 617134160236
+            },
+            {
+              "elapsed_ms": 0.0068,
+              "ended_mono_us": 617122879899,
+              "endpoint": "lookup",
+              "started_mono_us": 617122879892
+            }
+          ],
+          "sum_ms": 3.277699999999976
+        },
+        "http_batch.host_fault_probe.before_reply": {
+          "count": 1406,
+          "max_ms": 0.0148,
+          "slowest": [
+            {
+              "elapsed_ms": 0.0148,
+              "ended_mono_us": 617070748017,
+              "endpoint": "lookup",
+              "started_mono_us": 617070748002
+            },
+            {
+              "elapsed_ms": 0.0122,
+              "ended_mono_us": 617032448125,
+              "endpoint": "commands",
+              "started_mono_us": 617032448113
+            },
+            {
+              "elapsed_ms": 0.0022,
+              "ended_mono_us": 617078595483,
+              "endpoint": "commands",
+              "started_mono_us": 617078595481
+            }
+          ],
+          "sum_ms": 1.0522000000000147
+        },
+        "http_batch.host_send": {
+          "count": 1706,
+          "max_ms": 4.993,
+          "slowest": [
+            {
+              "elapsed_ms": 4.993,
+              "ended_mono_us": 617092578973,
+              "endpoint": "commands",
+              "started_mono_us": 617092573980
+            },
+            {
+              "elapsed_ms": 3.0129,
+              "ended_mono_us": 617122876743,
+              "endpoint": "commands",
+              "started_mono_us": 617122873731
+            },
+            {
+              "elapsed_ms": 2.6671,
+              "ended_mono_us": 617038740715,
+              "endpoint": "commands",
+              "started_mono_us": 617038738048
+            }
+          ],
+          "sum_ms": 1135.2239000000015
+        },
+        "http_batch.journal_snapshot_true": {
+          "count": 3208,
+          "max_ms": 286.8566,
+          "slowest": [
+            {
+              "elapsed_ms": 286.8566,
+              "ended_mono_us": 617094404461,
+              "endpoint": "commands",
+              "started_mono_us": 617094117604
+            },
+            {
+              "elapsed_ms": 83.5686,
+              "ended_mono_us": 617122863848,
+              "endpoint": "commands",
+              "started_mono_us": 617122780279
+            },
+            {
+              "elapsed_ms": 67.6054,
+              "ended_mono_us": 617130288485,
+              "endpoint": "commands",
+              "started_mono_us": 617130220879
+            }
+          ],
+          "sum_ms": 95416.38920000006
+        },
+        "initialize.canonical_fsync": {
+          "count": 1,
+          "max_ms": 0.192,
+          "slowest": [
+            {
+              "elapsed_ms": 0.192,
+              "ended_mono_us": 617024696369,
+              "endpoint": "none",
+              "started_mono_us": 617024696177
+            }
+          ],
+          "sum_ms": 0.192
+        },
+        "initialize.journal_snapshot_false": {
+          "count": 2,
+          "max_ms": 27.0648,
+          "slowest": [
+            {
+              "elapsed_ms": 27.0648,
+              "ended_mono_us": 617024728909,
+              "endpoint": "none",
+              "started_mono_us": 617024701844
+            },
+            {
+              "elapsed_ms": 25.5437,
+              "ended_mono_us": 617014712314,
+              "endpoint": "none",
+              "started_mono_us": 617014686770
+            }
+          ],
+          "sum_ms": 52.60850000000001
+        }
+      },
+      "status_gaps": {
+        "derived_from_microseconds": {
+          "count": 1705,
+          "maximum_ms": 354.611,
+          "mean_ms": 74.18772199413486,
+          "p95_type7_ms": 118.131
+        },
+        "reported_maximum_ms": 354.6104
+      },
+      "unbound_evidence_files": [],
+      "verified_evidence_files": 12,
+      "verified_frozen_source_files": 358,
+      "verified_loaded_modules": 13,
+      "workload": {
+        "admitted": 200,
+        "cancel_lookups": 1,
+        "cancel_no_effect": true,
+        "cancel_terminal_ms": 134.9345,
+        "commands": 1000,
+        "effect_count_after": 200,
+        "inspect": 500,
+        "mix_lookups": 701,
+        "rejected": 300
+      }
+    }
+  ],
+  "schema_id": "hh-studio.s81-http-repair-analysis"
+}

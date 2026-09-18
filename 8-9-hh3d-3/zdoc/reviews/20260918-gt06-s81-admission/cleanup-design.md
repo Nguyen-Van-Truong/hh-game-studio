@@ -1,0 +1,85 @@
+# Proposed child terminal cleanup record
+
+AUTHORITY=0; design only, no implementation, test execution or acceptance verdict. Read on 2026-09-18 against HEAD `d8da8a21`; `run_benchmark_campaign.py` is unchanged from the S80 checkpoint. The coordinator's five-line transport diagnostic addition in `benchmark_commands.py` was already present during inspection and does not change `close()`. The sealed S80 failure packet is unchanged.
+
+Recommendation: add one exclusive, durable `child-terminal-cleanup.json` for every child that enters owned execution. Capture it **after all existing finally cleanup attempts**, including failure and interruption, from the retained objects and existing process receipts. Keep this separate from the success-only `cleanup.json`. It supplies missing failure evidence; it cannot turn partial batches into a valid run or fill a missing native exit.
+
+## Observed gap
+
+`run_child` in `studio/tests/replay/run_benchmark_campaign.py:556` creates an editor owner, an editor ProcessProbe and a CommandProducer. Its success path (`:705`) closes producer/probe and derives four retained-handle components, then writes `child-result.json`. Its exception path (`:726`) writes `child-failure.json` before cleanup. Its finally (`:738`) stops the heartbeat and attempts producer, probe and editor-owner closure independently, but persists no final producer/probe state.
+
+Consequently S80 proves host/editor Job closure and wrapper-handle release from owner receipts, but has no durable final producer observer-probe or editor-probe inventory. Its editor `process-exit.json` is absent, despite wrapper exit 2. The host actual exit 1 and import actual exit 0 remain separate valid receipts.
+
+Two secondary failure details matter to the small change. `thread.join(2)` currently precedes the guarded owner loop, so an exception there can skip that loop. A write failure inside the except block can also replace the initiating exception before finally reads `sys.exc_info()`. Finally's `raise primary from failures[0]` keeps the primary exception object but replaces its explicit cause, and represents only the first cleanup failure. The proposal should avoid introducing the same information loss into the new artifact.
+
+`CommandProducer.close()` (`benchmark_commands.py:327`) intentionally runs host, observer, then journal sequentially and stops if one raises. Its `closed` flag alone therefore does not establish which subresources remain. The proposal must observe this state, not force-close the journal while host threads may still use it. The outer loop must still attempt the independent editor probe and editor owner.
+
+## Minimal control flow and scope
+
+Keep the benchmark loop, timings, thresholds, retry policy, source map and existing success artifact schema unchanged. Suggested implementation scope is `run_benchmark_campaign.py` plus a focused `test_benchmark_child_cleanup.py`; a small private helper in the campaign module avoids importing a new measured dependency. No accepted core transport/journal changes are required.
+
+1. Initialize `primary_error`, `failure_evidence_error`, owned-role references and a bounded secondary-error list before owned work. Move heartbeat start into the owned try region so partial thread start is represented. Save the initiating error object immediately on entry to except, before attempting `child-failure.json`. Failure-artifact I/O errors join secondary errors and do not replace the initiating error.
+2. Keep the exact role references, including `cleanup_owner` returned by failed constructors. Never overwrite a different live owner with a new retained one: preserve both with explicit role labels. Existing `BenchmarkProcess` and ProcessProbe registries remain authoritative; retain a strong reference to any unresolved CommandProducer. If a native import returns a `StageFailed.cleanup_owner` (the Job owner in `native_job.py:265`), preserve it as a separate import role rather than silently discarding it because it is not one of the current three classes. Restrict adapters to the known trusted owner types.
+3. Attempt heartbeat stop/join and each independent close in their existing order, recording each exception and continuing. Catch `BaseException` for bookkeeping so interruption cannot skip the remaining cleanup. Do not retry an uncertain native close, create a second owner, perform PID-based kills, or remove objects from held registries. Existing checked `close()` methods retain their own retry/uncertainty rules.
+4. Place a terminal observation postlude in an **outer finally** around those cleanup attempts. Thus it executes after the inner finally, whether the body, heartbeat, a close or the old failure writer raised. Snapshot each role independently; one snapshot failure produces an unavailable field and a bounded observation error, and must not suppress other roles. This is a fresh post-cleanup observation of state, not a projection of `close()` return values or copied success metadata.
+5. Write the terminal record with create-new, flush/fsync and byte readback. The imported `run_native_benchmark.write()` only writes/closes; reuse the checked durable owner writer or a narrow local equivalent rather than silently claiming fsync. Refuse to overwrite an existing artifact. No per-batch writes or additional polling go into the measured interval.
+6. After the postlude, propagate the **same initiating exception** with its original traceback and original cause intact. Attach secondary exception objects and unresolved owners as bounded attributes such as `cleanup_errors` and `cleanup_owners`; this preserves every strong ownership reference. Do not serialize those objects. If the body succeeded but cleanup/observation/persistence failed, raise a terminal cleanup error carrying those references. A receipt-write error cannot produce success. If all cleanup succeeds after a body failure, the original body failure still propagates.
+
+On success the existing child result may already have been written before finally; the parent still requires actual host exit 0 before consuming it. A terminal cleanup failure must force nonzero child exit so that file cannot authorize assembly. The new record should be included by the parent's existing whole-attempt artifact map automatically. Binding/verification of this new record for future success can be a small explicit parent check; do not retrofit it into S80 or rewrite historical acceptance.
+
+## Proposed bounded schema
+
+Use `schema_id=hh-studio.benchmark-child-terminal-cleanup`, `schema_version=1.0.0`, `formal_acceptance=false`, with `run_id`, context/source/profile hashes, UTC timestamp and monotonic observation window, phase/batch at body exit, and `completed_batches`. Bind the exact `context.json` and existing receipt files by relative path/size/SHA-256. An absent file stays null with a fixed reason; malformed or wrong-PID receipts are errors, never valid null-equivalents.
+
+| Record | Post-cleanup observation and provenance |
+|---|---|
+| Primary/secondary failures | Null or safe type/code/stage only. Keep close and observation failures separate. Never serialize arbitrary exception text, credentials, requests, live object reprs or native handle numbers. |
+| Heartbeat | Whether created/started, done-event state, thread alive after join; unknown if observation fails. |
+| Editor owner | `present`, `closed`, `released`, fresh `job.snapshot()`, fresh `process_handle_snapshot()`, drain-thread alive flags and recorded errors; explicit registry membership for this object. Job snapshot is its retained checked state, not a new live query on a closed handle. |
+| Editor observer probe | `present`, known PID/start, `handle_retained = handle is not None`, `close_uncertain`, membership in `HELD_PROBES`. Never reopen the PID to manufacture exit proof. |
+| Producer | `present`, `closed`, `failed`; host `_stopped`/`_closing`, each known host thread's `is_alive()`, main/control socket `fileno()==-1`; observer probe retained/uncertain fields; journal `_cache_closed`, `_index_store is None`, and if retained, index `_db is not None` / `_dir is not None`. Report unavailable fields explicitly. These are observation adapters over the known implementation, not new public APIs. |
+| Import | Hash-bound import capture/process records if present; separate retained import Job snapshot only if supplied by a failed stage. Do not invent an import wrapper-handle receipt that the stage does not record. |
+| Actual editor/import target exits | Copy only validated exact `process-exit.json` records matching the corresponding process-start PID, with artifact refs. File absent means `actual_target_exit=null`, reason `TARGET_EXIT_NOT_RECORDED`. An observed exit is not labeled natural unless the independent capture proves natural tree exit. |
+| Helper exit | Editor helper `owner.process.returncode` after existing wait/poll has observed it, with helper PID if the Popen object is present, plus wrapper-handle snapshot. A missing returncode stays null. Do not poll again through an already closed process handle. Wrapper returncode 2 never becomes editor exit 2. |
+| Host/supervisor exits | Both null in this child record with `NOT_OBSERVABLE_BY_THIS_CHILD_TERMINAL_RECORD`; host exit is supplied later by its parent, supervisor exit needs external observation. |
+| Retention summary | Per-role retained/unknown flags, a known retained-handle count and `retained_handle_count_complete`. No total zero when a role/snapshot is unavailable. `cleanup_observed_complete` may be true only when all created roles are observed released, threads stopped, relevant checked Job/handle states clean and no cleanup/observation errors occurred. This is cleanup completion, not benchmark completion. |
+
+Capture producer subresource references before closing so they remain inspectable if `close()` clears a field after release. Deduplicate by object identity for cleanup without exposing `id()` values in JSON. A boolean such as `_cache_closed` is not equivalent to SQLite release; require the independent retained index fields. An absent resource that was never constructed is `not_created`, not a resource whose creation/identity is unknown.
+
+The smallest version can omit socket/journal details and explicitly label the result `native_handle_inventory_only`; it must not then claim complete producer cleanup. Recommended version includes the bounded rows above because the S80 gap concerns the producer as well as the two probes.
+
+## Existing tests and their limits
+
+These are source-inspected tests; none were run for this design task.
+
+| Existing test | What it already covers |
+|---|---|
+| `test_benchmark_campaign.py:137`, `test_constructor_retained_owner_is_closed_and_primary_error_preserved` | **Parent** constructor ownership recovery, primary exception identity, no capture/next launch, Stop-latched prior attempt. It does not call `run_child`. |
+| `test_benchmark_campaign.py:177`, `test_parent_cleanup_failure_preserves_primary_artifact_and_held_owner` | **Parent** cleanup failure, strong owner reference in cause, recorded nonzero ownership and retry refusal. It intentionally expects the present parent cause convention; do not change that test for an unrelated child change. |
+| `test_benchmark_commands.py:159`, `test_cleanup_held_is_retained_and_retry_is_explicit` | Producer observer close failure keeps the producer open; explicit retry releases observer and listener ports. No terminal child artifact or multiple-owner failure coverage. |
+| `test_benchmark_commands.py:126`, `test_failure_keeps_partial_row_and_latches_no_retry` | Failed command report and cleanup_owner retained; no reuse. Current coordinator diagnostic additions also check transport categories. |
+| `test_process_probe.py:36`, `:48`, `:57` | Checked FALSE can explicitly retry; interrupted native close stays uncertain without reuse; held probe blocks new probe. |
+| `test_benchmark_job_owner.py:77`, `:98`, `:121`, `:146`, `:168` | Native wrapper handle closes once; checked close failure retained; unknown result suppresses retry/destructor; cleanup-evidence failure does not double-close; changed handle cannot be closed by number. |
+| `test_benchmark_job_owner.py:240`, `:243` | Constructor preserves retained owner and initiating exception/original cause through cleanup. |
+| `test_benchmark_job.py:46`, `:59` | Cleanup cannot promote historical taint or latched Stop to success. |
+| `test_index_faults.py`, `BenchmarkIndexFaultTests._assert_halted_and_reconciled` | Actual HTTP index-error cases eventually close producer/observer, clear index DB/store/directory and preserve durable journal. This is component coverage, not child-finally observation. |
+| `test_benchmark_campaign_stop_completion.py:100` | Stop during parent assembly blocks capture/next launch. No child-finally receipt coverage. |
+
+No test under `studio/tests/replay/test*.py` currently invokes `run_child`; the proposed terminal path needs direct integration through an inert child harness, not only snapshot helper tests.
+
+## Additional tests needed for the narrow implementation
+
+Use synthetic retained objects / fake native handles and a temporary exclusive attempt directory. Patch engine/import/HTTP execution; do not launch engines. Make terminal snapshots change only after the fake close so the ordering assertions are meaningful.
+
+1. `test_child_failure_writes_terminal_after_all_closes`: throw a specific CommandError with partial report at commands; verify the same exception propagates, the partial failure remains, all three closes execute in order, terminal snapshots see post-close state, no success result/capture exists and formal_acceptance=false.
+2. `test_child_terminal_keeps_missing_target_exit_distinct_from_wrapper_exit`: editor cleanup has helper returncode 2 and no process-exit file; verify target exit null/reason, helper 2 separately, and no inferred natural exit. Parameterize valid matching exit, wrong PID, malformed JSON and boolean exit code. Verify host/supervisor exit remain null.
+3. `test_child_cleanup_failures_do_not_skip_other_owners_or_mask_primary`: producer close and editor probe close both fail, editor owner still closes; heartbeat failure variant also continues. Preserve initiating exception identity, traceback/original cause, all secondary failures and all retained owner references. No fake zero count.
+4. `test_child_cleanup_failure_without_body_failure_is_nonzero`: otherwise successful body with a close failure cannot return success; if child-result already exists, parent actual nonzero exit still blocks assembly. Include heartbeat still alive and snapshot-unavailable variants.
+5. `test_child_constructor_retained_owner_survives_terminal_snapshot`: parameterize editor-owner constructor, producer constructor, editor-probe constructor and import-stage cleanup_owner. Verify each retained resource is observed/retained, blank roles are marked not_created and multiple distinct retained references are not overwritten.
+6. `test_child_probe_uncertainty_is_not_retried_by_terminal_observer`: checked-failure and interrupted-close variants reuse existing fake handle behavior; terminal observation causes no CloseHandle, OpenProcess, kill, extra close, or registry removal. It records held/uncertain accurately.
+7. `test_child_producer_partial_close_reports_subresource_holds`: host close failure leaves observer/journal unclosed; observer failure leaves journal retained; journal failure reports retained DB/directory despite `_cache_closed=true`. Independent editor owners still receive cleanup. Do not make the observer force-close producer internals.
+8. `test_child_terminal_writer_failure_preserves_primary_and_owners`: inject create/fsync/readback failures, including `child-failure.json` failure before cleanup. Verify initiating exception survives, write failure remains secondary, all closures execute and no success claim is returned. With no primary, terminal write failure itself fails the child.
+9. `test_child_terminal_receipt_is_single_use_bound_and_secret_free`: existing file is not overwritten; run/source/profile/context refs exact; unknown/missing fields are distinct from false; arbitrary exception text containing a bearer never appears; no raw handles or live repr. Snapshot-error collection is bounded.
+10. `test_child_success_terminal_inventory_is_observed_and_parent_bound`: an inert complete path writes the same existing success shape, then a clean terminal snapshot before child exit; parent's new optional-required-for-new-schema verifier accepts the matching artifact and rejects retained/uncertain/tampered/wrong-context versions. No measured sample or threshold changes.
+
+For meaningful cross-layer coverage, cases 1, 2 and 3 must reach the real `run_child` exception/finally structure with fakes at launch/producer boundaries. Pure helper tests alone would miss the current except-writer and heartbeat-join ordering gaps. Existing component tests remain useful regressions; this proposal does not justify replaying the failed campaign or rerunning unrelated accepted gates.

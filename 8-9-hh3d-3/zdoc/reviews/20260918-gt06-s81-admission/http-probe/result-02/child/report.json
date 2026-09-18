@@ -1,0 +1,452 @@
+{
+  "additional_faults_or_delays": false,
+  "appended_records": 1403,
+  "batch_status": "COMPLETE",
+  "client_timeout_seconds": 2.0,
+  "command_batch_sha256": "57ddf49c4ca5baf77b667d5587441cb6efbbe9f391084099966f5d137de36b1c",
+  "command_count": 1000,
+  "cooperative_seconds": 210,
+  "copied_journal_sha256_after": "6aa6dd03b891a27e9ad18fa5dd5b0ccc622e09ac0dd1b1fa564bb9970dbd2c04",
+  "copied_prefix_sha256_after": "4d8ecb5bacd76a57d3137e9f812c36c3a6a759d4d51d41008627e9114ee1377a",
+  "driver_sha256": "426d0665a2abe934d91b8de84aaf28949bf6a21ca719f623fbcaa24e2bf5be46",
+  "ended_utc": "2026-09-18T08:09:01.676010+00:00",
+  "engine_runs": 0,
+  "failures": [],
+  "fixture_scope": "Fresh distinct project and counter at rev-0; historical project runtime/leases are not restored",
+  "formal_acceptance": false,
+  "full_benchmark": false,
+  "history_bytes": 15586409,
+  "history_records": 22170,
+  "history_sha256": "4d8ecb5bacd76a57d3137e9f812c36c3a6a759d4d51d41008627e9114ee1377a",
+  "loaded_module_closure_after_import": {
+    "studio.host.core.journal": {
+      "path": "studio/host/core/journal.py",
+      "sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6"
+    },
+    "studio.host.core.limits": {
+      "path": "studio/host/core/limits.py",
+      "sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f"
+    },
+    "studio.host.core.redaction": {
+      "path": "studio/host/core/redaction.py",
+      "sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f"
+    },
+    "studio.host.core.transport": {
+      "path": "studio/host/core/transport.py",
+      "sha256": "1ec03356b1cb8c8987e1604bcb164aea6a9934dbe259451c19e12de36398aba0"
+    },
+    "studio.host.replay.disk_journal_index": {
+      "path": "studio/host/replay/disk_journal_index.py",
+      "sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28"
+    },
+    "studio.host.replay.process_probe": {
+      "path": "studio/host/replay/process_probe.py",
+      "sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500"
+    },
+    "studio.host.replay.verified_journal": {
+      "path": "studio/host/replay/verified_journal.py",
+      "sha256": "129baa4d9e08c8a1d5acf2ea05c9c89a4fdddb53ca6f3baf2d61311ab98e62ab"
+    },
+    "studio.protocol": {
+      "path": "studio/protocol/__init__.py",
+      "sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f"
+    },
+    "studio.protocol._rfc8785": {
+      "path": "studio/protocol/_rfc8785/__init__.py",
+      "sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b"
+    },
+    "studio.protocol._rfc8785._impl": {
+      "path": "studio/protocol/_rfc8785/_impl.py",
+      "sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec"
+    },
+    "studio.protocol.core": {
+      "path": "studio/protocol/core.py",
+      "sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e"
+    },
+    "studio.tests.replay.benchmark_commands": {
+      "path": "studio/tests/replay/benchmark_commands.py",
+      "sha256": "707b6f9a9291214d9ee848d77f1e4a3dc2267de5f2aeb5e48fa4365866a842c9"
+    },
+    "studio.tests.replay.benchmark_transport": {
+      "path": "studio/tests/replay/benchmark_transport.py",
+      "sha256": "87875809baa4845fcffba8e2c7d82f7a5bce833099c89d4852f2aab931c34df0"
+    }
+  },
+  "loaded_module_closure_after_shutdown": {
+    "studio.host.core.journal": {
+      "path": "studio/host/core/journal.py",
+      "sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6"
+    },
+    "studio.host.core.limits": {
+      "path": "studio/host/core/limits.py",
+      "sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f"
+    },
+    "studio.host.core.redaction": {
+      "path": "studio/host/core/redaction.py",
+      "sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f"
+    },
+    "studio.host.core.transport": {
+      "path": "studio/host/core/transport.py",
+      "sha256": "1ec03356b1cb8c8987e1604bcb164aea6a9934dbe259451c19e12de36398aba0"
+    },
+    "studio.host.replay.disk_journal_index": {
+      "path": "studio/host/replay/disk_journal_index.py",
+      "sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28"
+    },
+    "studio.host.replay.process_probe": {
+      "path": "studio/host/replay/process_probe.py",
+      "sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500"
+    },
+    "studio.host.replay.verified_journal": {
+      "path": "studio/host/replay/verified_journal.py",
+      "sha256": "129baa4d9e08c8a1d5acf2ea05c9c89a4fdddb53ca6f3baf2d61311ab98e62ab"
+    },
+    "studio.protocol": {
+      "path": "studio/protocol/__init__.py",
+      "sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f"
+    },
+    "studio.protocol._rfc8785": {
+      "path": "studio/protocol/_rfc8785/__init__.py",
+      "sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b"
+    },
+    "studio.protocol._rfc8785._impl": {
+      "path": "studio/protocol/_rfc8785/_impl.py",
+      "sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec"
+    },
+    "studio.protocol.core": {
+      "path": "studio/protocol/core.py",
+      "sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e"
+    },
+    "studio.tests.replay.benchmark_commands": {
+      "path": "studio/tests/replay/benchmark_commands.py",
+      "sha256": "707b6f9a9291214d9ee848d77f1e4a3dc2267de5f2aeb5e48fa4365866a842c9"
+    },
+    "studio.tests.replay.benchmark_transport": {
+      "path": "studio/tests/replay/benchmark_transport.py",
+      "sha256": "87875809baa4845fcffba8e2c7d82f7a5bce833099c89d4852f2aab931c34df0"
+    }
+  },
+  "native_acceptance": false,
+  "original_cancel_delay_ms": 1000,
+  "original_history_sha256_after": "4d8ecb5bacd76a57d3137e9f812c36c3a6a759d4d51d41008627e9114ee1377a",
+  "owned_cleanup": {
+    "control_listener_fd": -1,
+    "host_threads_all_stopped": true,
+    "journal_index_owner_released": true,
+    "main_listener_fd": -1,
+    "observer_handle_released": true,
+    "producer_closed": true
+  },
+  "phase_timing_scope": "Supplemental wrappers; overlapping spans; fixed labels only, no headers/body/token/exception text",
+  "pid": 7060,
+  "private_index_directories_remaining": [],
+  "project_id": "gt06.s81.http.gt06-s81-http-probe-02",
+  "run_id": "gt06-s81-http-probe-02",
+  "schema_id": "hh-studio.s81-supplemental-http-probe",
+  "schema_version": "1.0.0",
+  "source_files_unchanged": true,
+  "source_manifest_sha256": "3e0320f2b75d6a019a0c246abefbfefc25da9c1c362df7f603e52167da992afc",
+  "spans": {
+    "http_batch.canonical_fsync": {
+      "count": 4611,
+      "max_ms": 259.6473,
+      "slowest": [
+        {
+          "elapsed_ms": 259.6473,
+          "ended_mono_us": 617094404373,
+          "endpoint": "commands",
+          "started_mono_us": 617094144726
+        },
+        {
+          "elapsed_ms": 240.0271,
+          "ended_mono_us": 617132331815,
+          "endpoint": "none",
+          "started_mono_us": 617132091788
+        },
+        {
+          "elapsed_ms": 36.4311,
+          "ended_mono_us": 617126132644,
+          "endpoint": "commands",
+          "started_mono_us": 617126096213
+        }
+      ],
+      "sum_ms": 2694.252800000002
+    },
+    "http_batch.host_dispatch.cancel": {
+      "count": 1,
+      "max_ms": 79.833,
+      "slowest": [
+        {
+          "elapsed_ms": 79.833,
+          "ended_mono_us": 617087064155,
+          "endpoint": "cancel",
+          "started_mono_us": 617086984322
+        }
+      ],
+      "sum_ms": 79.833
+    },
+    "http_batch.host_dispatch.commands": {
+      "count": 1001,
+      "max_ms": 352.7463,
+      "slowest": [
+        {
+          "elapsed_ms": 352.7463,
+          "ended_mono_us": 617094410808,
+          "endpoint": "commands",
+          "started_mono_us": 617094058062
+        },
+        {
+          "elapsed_ms": 183.3247,
+          "ended_mono_us": 617130366384,
+          "endpoint": "commands",
+          "started_mono_us": 617130183059
+        },
+        {
+          "elapsed_ms": 138.1272,
+          "ended_mono_us": 617126169819,
+          "endpoint": "commands",
+          "started_mono_us": 617126031692
+        }
+      ],
+      "sum_ms": 53603.27680000005
+    },
+    "http_batch.host_dispatch.discovery": {
+      "count": 1,
+      "max_ms": 0.1669,
+      "slowest": [
+        {
+          "elapsed_ms": 0.1669,
+          "ended_mono_us": 617024743422,
+          "endpoint": "discovery",
+          "started_mono_us": 617024743255
+        }
+      ],
+      "sum_ms": 0.1669
+    },
+    "http_batch.host_dispatch.lease": {
+      "count": 1,
+      "max_ms": 33.4548,
+      "slowest": [
+        {
+          "elapsed_ms": 33.4548,
+          "ended_mono_us": 617024798592,
+          "endpoint": "lease",
+          "started_mono_us": 617024765137
+        }
+      ],
+      "sum_ms": 33.4548
+    },
+    "http_batch.host_dispatch.lookup": {
+      "count": 702,
+      "max_ms": 330.091,
+      "slowest": [
+        {
+          "elapsed_ms": 330.091,
+          "ended_mono_us": 617132378720,
+          "endpoint": "lookup",
+          "started_mono_us": 617132048629
+        },
+        {
+          "elapsed_ms": 146.8515,
+          "ended_mono_us": 617133362648,
+          "endpoint": "lookup",
+          "started_mono_us": 617133215796
+        },
+        {
+          "elapsed_ms": 144.1541,
+          "ended_mono_us": 617080527172,
+          "endpoint": "lookup",
+          "started_mono_us": 617080383018
+        }
+      ],
+      "sum_ms": 63905.655700000025
+    },
+    "http_batch.host_fault_probe.after_dispatch": {
+      "count": 1406,
+      "max_ms": 0.0343,
+      "slowest": [
+        {
+          "elapsed_ms": 0.0343,
+          "ended_mono_us": 617124424713,
+          "endpoint": "lookup",
+          "started_mono_us": 617124424679
+        },
+        {
+          "elapsed_ms": 0.0244,
+          "ended_mono_us": 617070747983,
+          "endpoint": "lookup",
+          "started_mono_us": 617070747959
+        },
+        {
+          "elapsed_ms": 0.0198,
+          "ended_mono_us": 617063059285,
+          "endpoint": "lookup",
+          "started_mono_us": 617063059265
+        }
+      ],
+      "sum_ms": 2.9347999999999934
+    },
+    "http_batch.host_fault_probe.after_reply": {
+      "count": 1406,
+      "max_ms": 0.0148,
+      "slowest": [
+        {
+          "elapsed_ms": 0.0148,
+          "ended_mono_us": 617096038231,
+          "endpoint": "lookup",
+          "started_mono_us": 617096038216
+        },
+        {
+          "elapsed_ms": 0.0124,
+          "ended_mono_us": 617143519836,
+          "endpoint": "lookup",
+          "started_mono_us": 617143519823
+        },
+        {
+          "elapsed_ms": 0.0045,
+          "ended_mono_us": 617122876948,
+          "endpoint": "commands",
+          "started_mono_us": 617122876943
+        }
+      ],
+      "sum_ms": 2.4604000000000075
+    },
+    "http_batch.host_fault_probe.before_dispatch": {
+      "count": 1706,
+      "max_ms": 0.0175,
+      "slowest": [
+        {
+          "elapsed_ms": 0.0175,
+          "ended_mono_us": 617099548761,
+          "endpoint": "commands",
+          "started_mono_us": 617099548744
+        },
+        {
+          "elapsed_ms": 0.0154,
+          "ended_mono_us": 617134160252,
+          "endpoint": "lookup",
+          "started_mono_us": 617134160236
+        },
+        {
+          "elapsed_ms": 0.0068,
+          "ended_mono_us": 617122879899,
+          "endpoint": "lookup",
+          "started_mono_us": 617122879892
+        }
+      ],
+      "sum_ms": 3.277699999999976
+    },
+    "http_batch.host_fault_probe.before_reply": {
+      "count": 1406,
+      "max_ms": 0.0148,
+      "slowest": [
+        {
+          "elapsed_ms": 0.0148,
+          "ended_mono_us": 617070748017,
+          "endpoint": "lookup",
+          "started_mono_us": 617070748002
+        },
+        {
+          "elapsed_ms": 0.0122,
+          "ended_mono_us": 617032448125,
+          "endpoint": "commands",
+          "started_mono_us": 617032448113
+        },
+        {
+          "elapsed_ms": 0.0022,
+          "ended_mono_us": 617078595483,
+          "endpoint": "commands",
+          "started_mono_us": 617078595481
+        }
+      ],
+      "sum_ms": 1.0522000000000147
+    },
+    "http_batch.host_send": {
+      "count": 1706,
+      "max_ms": 4.993,
+      "slowest": [
+        {
+          "elapsed_ms": 4.993,
+          "ended_mono_us": 617092578973,
+          "endpoint": "commands",
+          "started_mono_us": 617092573980
+        },
+        {
+          "elapsed_ms": 3.0129,
+          "ended_mono_us": 617122876743,
+          "endpoint": "commands",
+          "started_mono_us": 617122873731
+        },
+        {
+          "elapsed_ms": 2.6671,
+          "ended_mono_us": 617038740715,
+          "endpoint": "commands",
+          "started_mono_us": 617038738048
+        }
+      ],
+      "sum_ms": 1135.2239000000015
+    },
+    "http_batch.journal_snapshot_true": {
+      "count": 3208,
+      "max_ms": 286.8566,
+      "slowest": [
+        {
+          "elapsed_ms": 286.8566,
+          "ended_mono_us": 617094404461,
+          "endpoint": "commands",
+          "started_mono_us": 617094117604
+        },
+        {
+          "elapsed_ms": 83.5686,
+          "ended_mono_us": 617122863848,
+          "endpoint": "commands",
+          "started_mono_us": 617122780279
+        },
+        {
+          "elapsed_ms": 67.6054,
+          "ended_mono_us": 617130288485,
+          "endpoint": "commands",
+          "started_mono_us": 617130220879
+        }
+      ],
+      "sum_ms": 95416.38920000006
+    },
+    "initialize.canonical_fsync": {
+      "count": 1,
+      "max_ms": 0.192,
+      "slowest": [
+        {
+          "elapsed_ms": 0.192,
+          "ended_mono_us": 617024696369,
+          "endpoint": "none",
+          "started_mono_us": 617024696177
+        }
+      ],
+      "sum_ms": 0.192
+    },
+    "initialize.journal_snapshot_false": {
+      "count": 2,
+      "max_ms": 27.0648,
+      "slowest": [
+        {
+          "elapsed_ms": 27.0648,
+          "ended_mono_us": 617024728909,
+          "endpoint": "none",
+          "started_mono_us": 617024701844
+        },
+        {
+          "elapsed_ms": 25.5437,
+          "ended_mono_us": 617014712314,
+          "endpoint": "none",
+          "started_mono_us": 617014686770
+        }
+      ],
+      "sum_ms": 52.60850000000001
+    }
+  },
+  "started_utc": "2026-09-18T08:06:44.295797+00:00",
+  "status": "SUPPLEMENTAL_COMPLETE",
+  "terminal_budget_seconds": 5,
+  "transport_failure": null,
+  "workload": "Unchanged CommandProducer.run_batch(0), 1000 commands in 5/3/2 mix plus original auxiliary Cancel"
+}
