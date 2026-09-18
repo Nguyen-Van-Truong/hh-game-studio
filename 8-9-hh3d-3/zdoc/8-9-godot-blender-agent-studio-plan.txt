@@ -96,7 +96,8 @@ S97 đã hoàn tất diagnostic35batch, task đã kết thúc và không có eng
 Raw `studio/.local/reviews/gt06-s97-coupled-phases-01` có đủ35 joint/ACK/native/capture/
 sample rows0–34. Các bộ đếm mọi joint row là ObjectDB71128/resources6;
 max native status gap756.589ms. HTTP phases ghi zero transport failure,
-zero unfinished spans, zero identity loss và zero dropped spans. Host/editor/importactual exits đều0; jobs zero/closed, handles released, source unchanged, lỗi trống.
+zero unfinished spans, zero identity loss và zero dropped spans. Host/editor/import
+actual exits đều0; jobs zero/closed, handles released, source unchanged, lỗi trống.
 Child record để trống host/supervisor exit theo thiết kế self-observation; script
 `reconcile_s97_terminal.py` đối chiếu receipt ngoài và tạo
 `s97-terminal-exit-reconciliation.json`, không sửa raw, không suy natural self-exit.
@@ -104,7 +105,10 @@ S97 vẫn diagnostic-only, formal_acceptance=false, eligible_for_dataset=false;
 không no-leak/PASS và không nhập F13/F14.
 
 LƯỢT ĐANG CHẠY: gt06-s98-campaign-01 launch1, task \\HHStudio.GT06.gt06-s98-campaign-01; full acceptance campaign mới, source/profile/
-workstation giữ nguyên; raw supervisor ở studio/.local/reviews/gt06-s98-campaign-01-supervisor. Scheduler receipt chỉ là dispatch, cần query liveness/actual exits. Sẽ chạy10 fresh host/editorpairs ×35 batch (5 warmup+30 measured), 1000 HTTP+100 native mỗi batch, giữnguyên deadline/gate, rồi kiểm dataset, hashes, actual exits, trees, handles vàmọi failed-attempt inventory trước khi đóng manifest và gọi hai critic mới.
+workstation giữ nguyên; raw supervisor ở studio/.local/reviews/gt06-s98-campaign-01-supervisor. Scheduler receipt chỉ là dispatch, cần query liveness/actual exits. Sẽ chạy10 fresh host/editor
+pairs ×35 batch (5 warmup+30 measured), 1000 HTTP+100 native mỗi batch, giữ
+nguyên deadline/gate, rồi kiểm dataset, hashes, actual exits, trees, handles và
+mọi failed-attempt inventory trước khi đóng manifest và gọi hai critic mới.
 Helper/launch ở reviews/20260918-gt06-s97-ack-recovery/coupled-next/;
 raw studio/.local/reviews/gt06-s97-coupled-phases-01. Helper14closure
  e5c9b2a2c06e42dae8c0892227523db023e14ffafcebbfe21d97c7860412b09c;
@@ -1315,4 +1319,3 @@ CCU=người online cùng lúc trong game, không số agent phát triển game.
 
 END_OF_TOOLS_PLAN
 DATE=2026-09-17 Asia/Saigon
-
