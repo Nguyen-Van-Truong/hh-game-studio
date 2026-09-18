@@ -28,6 +28,7 @@ STUDIO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(STUDIO.parent))
 from studio.tests.replay.benchmark_commands import CommandProducer
 from studio.tests.replay.benchmark_job import BenchmarkProcess, require, verify_capture
+from studio.tests.replay.benchmark_readiness import validate_startup_readiness
 from studio.tests.replay import benchmark_profile as profile
 from studio.tests.replay.benchmark_assembly import read_artifact, assemble_sample, assemble_run, assemble_dataset
 from studio.tests.replay.run_native_benchmark import (
@@ -680,10 +681,23 @@ def run_child(root):
         require(not (root / 'editor-host/stderr.txt').read_bytes().strip(), 'CAMPAIGN_NATIVE_STDERR')
         index_path = project / 'benchmark/out/index.json'
         native_index = json.loads(read_regular(index_path))
-        require(native_index['completed'] is True and native_index['benchmark_complete'] is True
+        require(native_index['schema_version'] == '1.3.0'
+                and native_index['completed'] is True and native_index['benchmark_complete'] is True
                 and native_index['input'] == binding and native_index['pid'] == probe.pid
                 and len(native_index['host_barriers']) == len(native_index['batches']) == 35,
                 'CAMPAIGN_NATIVE_COMPLETION')
+        first_ready = json.loads(read_regular(project / 'benchmark/out/ready-00.json'))
+        first_batch = json.loads(read_regular(project / 'benchmark/out/batch-00.json'))
+        validate_startup_readiness(native_index['startup_readiness'], binding=binding,
+            pid=probe.pid, source_files={name: snapshot[name.removeprefix('res://')]
+                for name in native_index['source_files']},
+            baseline_revision=native_index['baseline_revision'],
+            scene_file_sha256=snapshot[MUTABLE_SCENE],
+            first_batch_started_mono_us=first_batch['started_mono_us'],
+            first_cycle_root_before=first_batch['cycles'][0]['root_before'],
+            run_started_mono_us=native_index['started_mono_us'],
+            first_ready_mono_us=first_ready['issued_mono_us'],
+            first_ready_frame=first_ready['process_frame'])
         expected_inputs = {f'benchmark/input/{kind}-{i:02d}.json' for kind in ('ack', 'start') for i in range(35)}
         after = project_files(project)
         require({k: v for k, v in after.items() if k != MUTABLE_SCENE and k not in expected_inputs}

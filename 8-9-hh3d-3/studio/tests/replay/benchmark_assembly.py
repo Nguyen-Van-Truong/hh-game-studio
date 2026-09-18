@@ -30,6 +30,7 @@ import re
 
 from studio.protocol.core import Response, ValidationError, canonical_bytes
 from studio.tests.replay import benchmark_profile as profile
+from studio.tests.replay.benchmark_readiness import ReadinessError, validate_startup_readiness
 
 MAX_RAW_BYTES = 8 * 1024 * 1024
 _HASH = re.compile(r'[0-9a-f]{64}\Z')
@@ -578,8 +579,8 @@ with run_id,processes,host_exit_code,editor_exit_code,owned_tree_zero,held_handl
     closure = _sha(''.join(name + '\0' + files[name] + '\n' for name in sorted(files)).encode())
     _need(closure == manifest['source_closure_sha256'] and files.get('toolchain.lock.json') == artifacts['toolchain'].sha256, 'SOURCE_CLOSURE')
     native_index = artifacts['native_index'].value
-    _shape(native_index, 'schema_id schema_version input pid engine display_server editor_hint main_thread started_mono_us ended_mono_us started_unix source_files batches batches_completed host_barriers host_integrated cycles_per_batch baseline_revision max_status_gap_ms heartbeat_target_met quiescence host_barrier_timeout_us counter_definitions scope benchmark_complete completed formal_acceptance start_permits host_start_timeout_us batch_order')
-    _need(native_index.get('schema_id') == 'hh-studio.native-cycle-benchmark' and native_index.get('schema_version') == '1.2.0'
+    _shape(native_index, 'schema_id schema_version input pid engine display_server editor_hint main_thread started_mono_us ended_mono_us started_unix source_files batches batches_completed host_barriers host_integrated cycles_per_batch baseline_revision max_status_gap_ms heartbeat_target_met quiescence host_barrier_timeout_us counter_definitions scope benchmark_complete completed formal_acceptance start_permits host_start_timeout_us batch_order startup_readiness')
+    _need(native_index.get('schema_id') == 'hh-studio.native-cycle-benchmark' and native_index.get('schema_version') == '1.3.0'
           and native_index.get('completed') is True and native_index.get('benchmark_complete') is True
           and native_index.get('host_integrated') is True and native_index.get('formal_acceptance') is False
           and native_index.get('editor_hint') is True and native_index.get('main_thread') is True
@@ -623,7 +624,7 @@ with run_id,processes,host_exit_code,editor_exit_code,owned_tree_zero,held_handl
     _need(all(files.get(source) == native_index['source_files']['res://' + destination]
               for destination, source in source_mapping.items()), 'NATIVE_SOURCE_CLOSURE')
     for name in ('tests/replay/benchmark_profile.py', 'tests/replay/benchmark_commands.py',
-                 'tests/replay/benchmark_assembly.py', 'host/core/transport.py',
+                 'tests/replay/benchmark_assembly.py', 'tests/replay/benchmark_readiness.py', 'host/core/transport.py',
                  'host/replay/verified_journal.py', 'protocol/core.py'):
         _need(name in files, 'SOURCE_CLOSURE_INCOMPLETE')
     input_path = Path(root) / 'project/benchmark/input.json'
@@ -642,6 +643,17 @@ with run_id,processes,host_exit_code,editor_exit_code,owned_tree_zero,held_handl
               and native_index['start_permits'][index] == n.value['start_permit'], 'INDEX_BATCH_BINDING')
         sample = assemble_sample(n, c, j, run_id=manifest['run_id'], index=index, processes=manifest['processes'],
             source_closure_sha256=closure, barrier_receipt=native_index['host_barriers'][index], ack=a, ready=r, start=s)
+        if index == 0:
+            try:
+                validate_startup_readiness(native_index['startup_readiness'], binding=binding,
+                    pid=manifest['processes']['editor']['pid'], source_files=native_index['source_files'],
+                    baseline_revision=native_index['baseline_revision'], scene_file_sha256=r.value['scene_file_sha256'],
+                    first_batch_started_mono_us=n.value['started_mono_us'],
+                    first_cycle_root_before=n.value['cycles'][0]['root_before'],
+                    run_started_mono_us=native_index['started_mono_us'],
+                    first_ready_mono_us=r.value['issued_mono_us'], first_ready_frame=r.value['process_frame'])
+            except ReadinessError as error:
+                raise AssemblyError(error.code) from error
         if samples:
             _need(sample['started_mono_us'] >= samples[-1]['ended_mono_us']
                   and sample['cycles'][0]['root_before'] == samples[-1]['cycles'][-1]['root_after']

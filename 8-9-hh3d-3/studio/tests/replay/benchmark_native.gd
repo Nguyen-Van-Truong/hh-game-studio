@@ -113,7 +113,17 @@ var _max_status_gap_us: int = 0
 var _batch_status_gap_us: int = 0
 var _startup_settle_frame: int = -1
 var _startup_settle_us: int = 0
+var _startup_owners: Dictionary = {}
+var _startup_readiness: Dictionary = {}
+var _startup_dispatching: bool = false
+var _startup_dispatch_count: int = 0
+var _startup_notification_count: int = 0
 var _failed: bool = false
+
+
+func _notification(what: int) -> void:
+    if _startup_dispatching and what == NOTIFICATION_APPLICATION_FOCUS_IN:
+        _startup_notification_count += 1
 
 
 func _enter_tree() -> void:
@@ -317,17 +327,174 @@ func _initialize() -> void:
         _fail("BENCHMARK_APPROVED_ROOT")
         return
     if _startup_settle_frame < 0:
+        _baseline_revision = str(snapshot.revision)
+        if not _startup_begin(snapshot, root):
+            return
         _startup_settle_frame = Engine.get_process_frames()
         _startup_settle_us = Time.get_ticks_usec()
-        _baseline_revision = str(snapshot.revision)
         return
     if Engine.get_process_frames() < _startup_settle_frame + SETTLE_FRAMES or Time.get_ticks_usec() - _startup_settle_us < SETTLE_US:
         return
     if str(snapshot.revision) != _baseline_revision or not _revision(_baseline_revision):
         _fail("BENCHMARK_INITIAL_STATE_CHANGED")
         return
+    var settled: Dictionary = _startup_snapshot(snapshot, root, true)
+    if _failed:
+        return
+    if settled.roots != _startup_readiness.immediate.roots:
+        _fail("BENCHMARK_STARTUP_ROOTS_UNSETTLED")
+        return
+    _startup_readiness["settled"] = settled
     _last_root_id = root.get_instance_id()
     _begin_batch()
+
+
+func _startup_callback(dialog: ConfirmationDialog) -> Dictionary:
+    var found: Dictionary = {}
+    var connections: Array[Dictionary] = dialog.get_signal_connection_list("confirmed")
+    if connections.size() > 16:
+        _fail("BENCHMARK_STARTUP_CALLBACK_CAP")
+        return {}
+    for connection: Dictionary in connections:
+        var callback: Callable = connection["callable"]
+        var target: Object = callback.get_object()
+        if not is_instance_valid(target):
+            continue
+        var method: String = str(callback.get_method())
+        method = method.get_slice("::", method.get_slice_count("::") - 1)
+        var role: String = ""
+        if target.get_class() == "EditorNode" and method == "_reload_modified_scenes":
+            role = "editor_disk_changes"
+        elif target.get_class() == "ScriptEditor" and method == "reload_scripts":
+            role = "script_disk_changes"
+        if role.is_empty():
+            continue
+        if not found.is_empty():
+            _fail("BENCHMARK_STARTUP_CALLBACK_AMBIGUOUS")
+            return {}
+        found = {"role": role, "callback_target_id": str(callback.get_object_id()),
+            "callback_target_class": target.get_class(), "callback_method": method}
+    return found
+
+
+func _startup_discover() -> void:
+    var pending: Array[Node] = [get_tree().root]
+    var visited: int = 0
+    while not pending.is_empty() and not _failed:
+        var node: Node = pending.pop_back()
+        visited += 1
+        if visited > 50000:
+            _fail("BENCHMARK_STARTUP_NODE_CAP")
+            return
+        if node is ConfirmationDialog:
+            var owner: Dictionary = _startup_callback(node as ConfirmationDialog)
+            if not owner.is_empty():
+                var role: String = str(owner.role)
+                if _startup_owners.has(role):
+                    _fail("BENCHMARK_STARTUP_OWNER_AMBIGUOUS")
+                    return
+                var descendants: Array[Node] = node.get_children(true)
+                var tree_id: String = ""
+                while not descendants.is_empty():
+                    var child: Node = descendants.pop_back()
+                    visited += 1
+                    if visited > 50000:
+                        _fail("BENCHMARK_STARTUP_NODE_CAP")
+                        return
+                    if child is Tree:
+                        if not tree_id.is_empty():
+                            _fail("BENCHMARK_STARTUP_TREE_AMBIGUOUS")
+                            return
+                        tree_id = str(child.get_instance_id())
+                    descendants.append_array(child.get_children(true))
+                if tree_id.is_empty():
+                    _fail("BENCHMARK_STARTUP_TREE_MISSING")
+                    return
+                owner.erase("role")
+                owner["dialog_id"] = str(node.get_instance_id())
+                owner["tree_id"] = tree_id
+                _startup_owners[role] = owner
+        pending.append_array(node.get_children(true))
+    if _startup_owners.size() != 2 or not _startup_owners.has_all(["editor_disk_changes", "script_disk_changes"]):
+        _fail("BENCHMARK_STARTUP_OWNERS_MISSING")
+
+
+func _startup_snapshot(snapshot: Dictionary, root: Node, require_roots: bool) -> Dictionary:
+    if not _good_snapshot(snapshot) or root == null or root.scene_file_path != SCENE or snapshot.revision != _baseline_revision:
+        _fail("BENCHMARK_STARTUP_SCENE_DRIFT")
+        return {}
+    var point: Dictionary = {"mono_us": Time.get_ticks_usec(), "frame": Engine.get_process_frames(),
+        "scene_root_id": str(root.get_instance_id()), "scene_revision": str(snapshot.revision),
+        "scene_file_sha256": FileAccess.get_sha256(SCENE), "source_files": {}, "roots": {}}
+    if not _hex(point.scene_file_sha256):
+        _fail("BENCHMARK_STARTUP_SCENE_HASH")
+        return {}
+    if _startup_readiness.has("before"):
+        for key: String in ["scene_root_id", "scene_revision", "scene_file_sha256"]:
+            if point[key] != _startup_readiness.before[key]:
+                _fail("BENCHMARK_STARTUP_SCENE_DRIFT")
+                return {}
+    for path: String in SOURCE_PATHS:
+        var digest: String = FileAccess.get_sha256(path)
+        if digest != _source_hashes[path]:
+            _fail("BENCHMARK_STARTUP_SOURCE_DRIFT")
+            return {}
+        point.source_files[path] = digest
+    for role: String in ["editor_disk_changes", "script_disk_changes"]:
+        var owner: Dictionary = _startup_owners[role]
+        var dialog: ConfirmationDialog = instance_from_id(int(owner.dialog_id)) as ConfirmationDialog
+        var tree: Tree = instance_from_id(int(owner.tree_id)) as Tree
+        if not is_instance_valid(dialog) or not is_instance_valid(tree) or not dialog.is_ancestor_of(tree):
+            _fail("BENCHMARK_STARTUP_OWNER_LOST")
+            return {}
+        var callback: Dictionary = _startup_callback(dialog)
+        var expected: Dictionary = owner.duplicate()
+        expected.erase("dialog_id")
+        expected.erase("tree_id")
+        expected["role"] = role
+        if _failed or callback != expected:
+            _fail("BENCHMARK_STARTUP_CALLBACK_DRIFT")
+            return {}
+        var item: TreeItem = tree.get_root()
+        if dialog.visible or tree.columns != 1 or (require_roots and item == null):
+            _fail("BENCHMARK_STARTUP_BLANK_ROOT_REQUIRED")
+            return {}
+        if item != null and (item.get_parent() != null or item.get_first_child() != null or not item.get_text(0).is_empty()):
+            _fail("BENCHMARK_STARTUP_BLANK_ROOT_REQUIRED")
+            return {}
+        point.roots[role] = {"root_id": str(item.get_instance_id()) if item != null else "",
+            "columns": tree.columns, "child_count": 0, "text": "", "dialog_visible": dialog.visible}
+    return point
+
+
+func _startup_begin(snapshot: Dictionary, root: Node) -> bool:
+    if _startup_dispatch_count != 0 or not _startup_readiness.is_empty():
+        _fail("BENCHMARK_STARTUP_DUPLICATE_DISPATCH")
+        return false
+    _startup_discover()
+    if _failed:
+        return false
+    var before: Dictionary = _startup_snapshot(snapshot, root, false)
+    if _failed:
+        return false
+    _startup_readiness = {"schema_id": "hh-studio.native-startup-readiness", "schema_version": "1.0.0",
+        "run_id": _input.run_id, "pid": OS.get_process_id(), "source_closure_sha256": _input.source_closure_sha256,
+        "synthetic": true, "notification": NOTIFICATION_APPLICATION_FOCUS_IN,
+        "operation": "SceneTree.root.propagate_notification(Node.NOTIFICATION_APPLICATION_FOCUS_IN)",
+        "minimum_settle_frames": SETTLE_FRAMES, "minimum_settle_us": SETTLE_US,
+        "owners": _startup_owners.duplicate(true), "before": before}
+    # Explicit synthetic startup stimulus; never OS focus manipulation or private Tree mutation.
+    _startup_dispatch_count += 1
+    _startup_dispatching = true
+    get_tree().root.propagate_notification(NOTIFICATION_APPLICATION_FOCUS_IN)
+    _startup_dispatching = false
+    if _startup_notification_count != 1:
+        _fail("BENCHMARK_STARTUP_NOTIFICATION_READBACK")
+        return false
+    _startup_readiness["dispatch_count"] = _startup_dispatch_count
+    _startup_readiness["observed_dispatch_count"] = _startup_notification_count
+    _startup_readiness["immediate"] = _startup_snapshot(_adapter.inspect_scene(), EditorInterface.get_edited_scene_root(), true)
+    return not _failed
 
 
 func _find_adapter() -> Adapter:
@@ -758,11 +925,12 @@ func _finish() -> void:
         if FileAccess.get_sha256(path) != _source_hashes[path]:
             _fail("BENCHMARK_SOURCE_CHANGED")
             return
-    var report: Dictionary = {"schema_id": "hh-studio.native-cycle-benchmark", "schema_version": "1.2.0",
+    var report: Dictionary = {"schema_id": "hh-studio.native-cycle-benchmark", "schema_version": "1.3.0",
         "input": _input, "pid": OS.get_process_id(), "engine": Engine.get_version_info(),
         "display_server": DisplayServer.get_name(), "editor_hint": Engine.is_editor_hint(), "main_thread": _main_thread(),
         "started_mono_us": _run_started_us, "ended_mono_us": Time.get_ticks_usec(),
         "started_unix": _run_started_unix,
+        "startup_readiness": _startup_readiness,
         "source_files": _source_hashes, "batches": _batches, "batches_completed": _batch,
         "host_barriers": _barrier_receipts, "host_integrated": _mode == "full",
         "start_permits": _start_receipts, "host_start_timeout_us": HOST_START_TIMEOUT_US,

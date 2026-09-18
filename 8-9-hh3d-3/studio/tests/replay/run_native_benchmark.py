@@ -27,6 +27,7 @@ sys.path.insert(0, str(STUDIO.parent))
 from studio.pipeline import native_job
 from studio.host.replay.process_probe import HELD_PROBES, ProcessProbe
 from studio.tests.replay import benchmark_profile
+from studio.tests.replay.benchmark_readiness import ReadinessError, validate_startup_readiness
 
 SAFE_INTEGER = (1 << 53) - 1
 MUTABLE_SCENE = 'scenes/fixture.tscn'
@@ -289,7 +290,7 @@ def validate_native(project, binding, snapshot, stage, process, lock):
     need(process['identity'] is not None and process['identity']['pid'] == pid
          and process['samples'] and not process['errors'], 'DIAGNOSTIC_PROCESS_OBSERVATION')
     need(any(row['visible_window_handles'] for row in process['samples']), 'DIAGNOSTIC_GUI_WINDOW')
-    need(index.get('schema_id') == 'hh-studio.native-cycle-benchmark' and index.get('schema_version') == '1.2.0'
+    need(index.get('schema_id') == 'hh-studio.native-cycle-benchmark' and index.get('schema_version') == '1.3.0'
          and index.get('input') == binding and index.get('pid') == pid, 'DIAGNOSTIC_INDEX_BINDING')
     need(index.get('completed') is True and index.get('benchmark_complete') is False
          and index.get('formal_acceptance') is False and index.get('host_integrated') is False
@@ -325,6 +326,13 @@ def validate_native(project, binding, snapshot, stage, process, lock):
          'DIAGNOSTIC_CYCLE_SHAPE')
     need(integer(cycle['root_before'], 1) and integer(cycle['root_after'], 1)
          and cycle['root_before'] != cycle['root_after'], 'DIAGNOSTIC_ROOT_CHANGE')
+    try:
+        validate_startup_readiness(index.get('startup_readiness'), binding=binding, pid=pid,
+            source_files=native_sources, baseline_revision=index.get('baseline_revision'),
+            scene_file_sha256=snapshot[MUTABLE_SCENE], first_batch_started_mono_us=batch.get('started_mono_us'),
+            first_cycle_root_before=cycle['root_before'], run_started_mono_us=index.get('started_mono_us'))
+    except ReadinessError as error:
+        raise DiagnosticError(error.code) from error
     need(all(digest(cycle[key]) for key in ('before_sha256', 'created_sha256', 'undone_sha256',
          'saved_file_sha256', 'reloaded_sha256')) and cycle['before_sha256'] == cycle['undone_sha256'] == cycle['reloaded_sha256']
          and cycle['created_sha256'] != cycle['before_sha256']

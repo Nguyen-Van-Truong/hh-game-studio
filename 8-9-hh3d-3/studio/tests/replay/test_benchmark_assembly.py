@@ -142,8 +142,8 @@ def add_lookup_recovery(value, *, canceled=False, extra_us=2000):
     return row
 
 
-def fixture(index=0, source=SOURCE, scene_hash='c' * 64):
-    native_base, root_base, generation_base, frame_base = index * 10000000, 1000 + index * 100, 1 + index * 100, index * 2000
+def fixture(index=0, source=SOURCE, scene_hash='c' * 64, *, native_offset=0, frame_offset=0):
+    native_base, root_base, generation_base, frame_base = index * 10000000 + native_offset, 1000 + index * 100, 1 + index * 100, index * 2000 + frame_offset
     suffix = f'{index:02d}.json'
     command_value = command_fixture(index)
     command = artifact('commands/batch-' + suffix, command_value)
@@ -239,7 +239,7 @@ def complete_run_fixture(root):
         'addons/hh_benchmark/benchmark_native.gd': 'tests/replay/benchmark_native.gd',
         'addons/hh_benchmark/plugin.cfg': 'tests/replay/benchmark_plugin.cfg'}
     source_names = set(mapping.values()) | {'toolchain.lock.json', 'tests/replay/benchmark_profile.py',
-        'tests/replay/benchmark_commands.py', 'tests/replay/benchmark_assembly.py',
+        'tests/replay/benchmark_commands.py', 'tests/replay/benchmark_assembly.py', 'tests/replay/benchmark_readiness.py',
         'host/core/transport.py', 'host/replay/verified_journal.py', 'protocol/core.py'}
     files = {}
     for name in sorted(source_names):
@@ -270,7 +270,7 @@ def complete_run_fixture(root):
         **{field: [] for field in field_names.values()}}
     batches, barriers, permits = [], [], []
     for index in range(35):
-        values = fixture(index, closure, scene_hash)
+        values = fixture(index, closure, scene_hash, native_offset=2000000, frame_offset=100)
         for name, field in field_names.items():
             bound = values[name]
             manifest[field].append(write_raw(root, bound.file, bound.raw))
@@ -280,7 +280,8 @@ def complete_run_fixture(root):
         barriers.append(values['barrier_receipt'])
         permits.append(bound.value['start_permit'])
     lock = json.loads((STUDIO / 'toolchain.lock.json').read_bytes())
-    native_index = {'schema_id': 'hh-studio.native-cycle-benchmark', 'schema_version': '1.2.0',
+    from studio.tests.replay.test_benchmark_readiness import readiness_fixture
+    native_index = {'schema_id': 'hh-studio.native-cycle-benchmark', 'schema_version': '1.3.0',
         'input': binding, 'pid': PROCESSES['editor']['pid'], 'engine': {'hash': lock['godot']['source_commit']},
         'display_server': 'Windows', 'editor_hint': True, 'main_thread': True, 'started_mono_us': 1,
         'ended_mono_us': barriers[-1]['ack_observed_mono_us'] + 100, 'started_unix': 1700000000.0,
@@ -292,7 +293,9 @@ def complete_run_fixture(root):
             'resources': 'Performance.OBJECT_RESOURCE_COUNT -> ResourceCache::get_cached_resource_count'},
         'scope': 'direct-semantic test fixture; excludes public/API command mix and Stop latency',
         'benchmark_complete': True, 'completed': True, 'formal_acceptance': False, 'start_permits': permits,
-        'host_start_timeout_us': 600000000, 'batch_order': 'host_commands_then_native_cycles_then_joint_ack'}
+        'host_start_timeout_us': 600000000, 'batch_order': 'host_commands_then_native_cycles_then_joint_ack',
+        'startup_readiness': readiness_fixture(binding=binding, pid=PROCESSES['editor']['pid'],
+            source_files=native_sources, scene_file_sha256=scene_hash)}
     refs['native_index'] = write_value(root, 'project/benchmark/out/index.json', native_index)
     complete = {'run_id': RUN, 'pid': PROCESSES['editor']['pid'], 'mode': 'full', 'batches': 35,
                 'index_sha256': refs['native_index']['sha256'], 'benchmark_complete': True, 'host_integrated': True}
@@ -568,7 +571,7 @@ class CompleteRunTests(unittest.TestCase):
 
     def test_global_clock_baseline_counter_definition_and_start_receipt_rejects(self):
         for change, code in (
-            (lambda value: value.update(started_mono_us=101), 'NATIVE_RUN_CLOCK'),
+            (lambda value: value.update(started_mono_us=2000101), 'STARTUP_READINESS_INTEGER'),
             (lambda value: value['counter_definitions'].update(objects='invented counter'), 'NATIVE_COUNTER_DEFINITION'),
             (lambda value: value['start_permits'][0].update(command_batch_sha256='0' * 64), 'INDEX_BATCH_BINDING'),
             (lambda value: value['host_barriers'][0].update(objects=counter(500)), 'JOINT_BINDING'),
@@ -608,6 +611,21 @@ class CompleteRunTests(unittest.TestCase):
         with self.changed_index(lambda value: value.update(benchmark_complete=False, host_integrated=False)):
             with self.assertRaisesRegex(assembly.AssemblyError, 'NATIVE_INDEX_SCOPE'):
                 assembly.assemble_run(self.root, self.manifest)
+
+    def test_native_aggregate_requires_current_closed_startup_receipt(self):
+        for change, code in (
+            (lambda value: value.update(schema_version='1.2.0'), 'NATIVE_INDEX_SCOPE'),
+            (lambda value: value.pop('startup_readiness'), 'FIELDS'),
+            (lambda value: value.update(startup_readiness=None), 'STARTUP_READINESS_FIELDS'),
+            (lambda value: value['startup_readiness'].update(dispatch_count=2), 'STARTUP_READINESS_SETUP_CONTRACT'),
+            (lambda value: value['startup_readiness']['settled'].update(mono_us=2001001), 'STARTUP_READINESS_AFTER_BATCH'),
+            (lambda value: value['startup_readiness']['settled'].update(mono_us=2000500), 'STARTUP_READINESS_AFTER_READY'),
+            (lambda value: value['startup_readiness']['before'].update(scene_file_sha256='0' * 64), 'STARTUP_READINESS_SCENE_DRIFT'),
+            (lambda value: value['startup_readiness']['immediate'].update(source_files={}), 'STARTUP_READINESS_SOURCE_DRIFT'),
+            (lambda value: value['startup_readiness']['settled']['roots']['editor_disk_changes'].update(root_id='900'), 'STARTUP_READINESS_ROOT_DRIFT')):
+            with self.subTest(code=code), self.changed_index(change):
+                with self.assertRaisesRegex(assembly.AssemblyError, code):
+                    assembly.assemble_run(self.root, self.manifest)
 
     def test_profile_trailing_newline_rejected_even_with_valid_file_hash(self):
         ref = self.manifest['refs']['profile']
