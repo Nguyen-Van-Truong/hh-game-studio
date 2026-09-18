@@ -98,7 +98,7 @@ không tự chứng minh sống/chết. startup-liveness-02.json sửa lỗi rea
 trong quan sát01 (supervisor dùng process, editor là editor-adoption); không phải
 lỗi engine. First ACK0/1 kiểm17:26:43Z: hashes/run/PID/barrier/deadline khớp,
 ObjectDB71128/resources6, max native gaps570.482/682.956ms. Host windows
-63.309/70.298s; warmup prefix không PASS, baseline ACK4 sparse chưa kiểm.
+63.309/70.298s; warmup prefix không PASS. Baseline ACK4 kiểm17:33:26Z: sparse/post/ACK/native bindings khớp, counters71128/6, self-drift=false,4607 IDs một phần. Có7 joint rows0–6; recent5 trung bình91.742s, extrapolation còn43phút nhưng chưa gồm chậm về sau/cleanup; giữ khoảng dự kiến45–80phút. Receipt launch-01/baseline4-observation.json; không no-leak/PASS.
 Helper/launch ở reviews/20260918-gt06-s97-ack-recovery/coupled-next/;
 raw studio/.local/reviews/gt06-s97-coupled-phases-01. Helper14closure
  e5c9b2a2c06e42dae8c0892227523db023e14ffafcebbfe21d97c7860412b09c;
