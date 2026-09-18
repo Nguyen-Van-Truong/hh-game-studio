@@ -1,0 +1,131 @@
+{
+  "authority": 0,
+  "campaign_id": "gt06-s86-campaign-01",
+  "campaign_sample_eligible": false,
+  "completed_batches": 18,
+  "failure_code": "CAMPAIGN_RETAINED_COUNTER_GROWTH",
+  "failure_phase": {
+    "batch": 17,
+    "phase": "joint_observation"
+  },
+  "files": {
+    "raw/gt06-s86-campaign-01-supervisor/failure.json": {
+      "sha256": "374420879944eea47d635dc134d498db01d36d4527cbfcdb6d36a3a95f4f196f",
+      "size_bytes": 73,
+      "source": "studio/.local/reviews/gt06-s86-campaign-01-supervisor/failure.json"
+    },
+    "raw/gt06-s86-campaign-01-supervisor/return.json": {
+      "sha256": "596b24a02528c965639d46861983214d0dc995d00687e41273466b68a09e0f1c",
+      "size_bytes": 199,
+      "source": "studio/.local/reviews/gt06-s86-campaign-01-supervisor/return.json"
+    },
+    "raw/gt06-s86-campaign-01-supervisor/start.json": {
+      "sha256": "dbed1ad87b4401fbc2a013b08bb53032a804765b2f1de488980a3609a38aa225",
+      "size_bytes": 501,
+      "source": "studio/.local/reviews/gt06-s86-campaign-01-supervisor/start.json"
+    },
+    "raw/gt06-s86-campaign-01-supervisor/stderr.txt": {
+      "sha256": "58c6711fb3c459be0de4c140de52575fd9588bafc3fa03bd7cbcbdc9c019eb82",
+      "size_bytes": 1651,
+      "source": "studio/.local/reviews/gt06-s86-campaign-01-supervisor/stderr.txt"
+    },
+    "raw/gt06-s86-campaign-01/run-00-attempt-01/batch-capture-17.json": {
+      "sha256": "9acc13322f76456874aa5fadd2de255cb3f44ee06c3cfc861870be66c8d0c8e7",
+      "size_bytes": 869,
+      "source": "studio/.local/reviews/gt06-s86-campaign-01/run-00-attempt-01/batch-capture-17.json"
+    },
+    "raw/gt06-s86-campaign-01/run-00-attempt-01/child-failure.json": {
+      "sha256": "8e9628aecf4c86c75a367383fcebb565d350933deee4fa698ea699896259ab82",
+      "size_bytes": 223,
+      "source": "studio/.local/reviews/gt06-s86-campaign-01/run-00-attempt-01/child-failure.json"
+    },
+    "raw/gt06-s86-campaign-01/run-00-attempt-01/child-terminal-cleanup.json": {
+      "sha256": "7cb5267afbce490f1d7876abe42428e7527668d67207d120edbd7366e7065f54",
+      "size_bytes": 3468,
+      "source": "studio/.local/reviews/gt06-s86-campaign-01/run-00-attempt-01/child-terminal-cleanup.json"
+    },
+    "raw/gt06-s86-campaign-01/run-00-attempt-01/command-17.json": {
+      "sha256": "d3c511b2da93b40d304e8220e993546fcf56df79bc023841cc001762cc849b82",
+      "size_bytes": 1154052,
+      "source": "studio/.local/reviews/gt06-s86-campaign-01/run-00-attempt-01/command-17.json"
+    },
+    "raw/gt06-s86-campaign-01/run-00-attempt-01/context.json": {
+      "sha256": "f96d19b06eb125ff08fb602ad1cc95812ef3ec5b9291126417915d7c0b19c1df",
+      "size_bytes": 5495,
+      "source": "studio/.local/reviews/gt06-s86-campaign-01/run-00-attempt-01/context.json"
+    },
+    "raw/gt06-s86-campaign-01/run-00-attempt-01/editor-host/cleanup-001.json": {
+      "sha256": "9ff26d2260e6188703654517521ac75e80f618c4e517723042f5f4babc109ee1",
+      "size_bytes": 556,
+      "source": "studio/.local/reviews/gt06-s86-campaign-01/run-00-attempt-01/editor-host/cleanup-001.json"
+    },
+    "raw/gt06-s86-campaign-01/run-00-attempt-01/editor-snapshot.json": {
+      "sha256": "c16476db1343de90ea7dfc93779ebd1734f779864c5b32e4b13d976483403727",
+      "size_bytes": 1574,
+      "source": "studio/.local/reviews/gt06-s86-campaign-01/run-00-attempt-01/editor-snapshot.json"
+    },
+    "raw/gt06-s86-campaign-01/run-00-attempt-01/host-owner/cleanup-001.json": {
+      "sha256": "31f58e29075f8f16bb2df0bb72471bfcd0df794b729d6497022554d84959cfc8",
+      "size_bytes": 548,
+      "source": "studio/.local/reviews/gt06-s86-campaign-01/run-00-attempt-01/host-owner/cleanup-001.json"
+    },
+    "raw/gt06-s86-campaign-01/run-00-attempt-01/host-owner/process-exit.json": {
+      "sha256": "3069ebab50d3733f78d8b80a8712c5368a5b69cee41773e67b94271301a0d8eb",
+      "size_bytes": 30,
+      "source": "studio/.local/reviews/gt06-s86-campaign-01/run-00-attempt-01/host-owner/process-exit.json"
+    },
+    "raw/gt06-s86-campaign-01/run-00-attempt-01/import-host/process-exit.json": {
+      "sha256": "8c0add3b597cf064ff4fc893c984d2244df2b75ee38d5ee0060f083fc8e86704",
+      "size_bytes": 30,
+      "source": "studio/.local/reviews/gt06-s86-campaign-01/run-00-attempt-01/import-host/process-exit.json"
+    },
+    "raw/gt06-s86-campaign-01/run-00-attempt-01/joint-17.json": {
+      "sha256": "a0329967f18f5242dbfa8c62e3fe082cdb03e8d62568ba0531a624b70fa75258",
+      "size_bytes": 2300,
+      "source": "studio/.local/reviews/gt06-s86-campaign-01/run-00-attempt-01/joint-17.json"
+    },
+    "raw/gt06-s86-campaign-01/run-00-attempt-01/parent-failure.json": {
+      "sha256": "1db192337a98ef94d808b84970f8a17aacad2716015d6be5f8f7c305b75fada3",
+      "size_bytes": 182,
+      "source": "studio/.local/reviews/gt06-s86-campaign-01/run-00-attempt-01/parent-failure.json"
+    },
+    "raw/gt06-s86-campaign-01/run-00-attempt-01/project/benchmark/out/batch-17.json": {
+      "sha256": "01950fdadc6845b73fac8be7921b574170ab5e344325b3f312a49fac639b908e",
+      "size_bytes": 99745,
+      "source": "studio/.local/reviews/gt06-s86-campaign-01/run-00-attempt-01/project/benchmark/out/batch-17.json"
+    }
+  },
+  "formal_acceptance": false,
+  "limitations": [
+    "No identity-level object snapshots were emitted by this campaign; no root cause inferred.",
+    "Editor and supervisor actual exits are missing; helper and import exits are separate facts.",
+    "Partial prefix is retained for diagnosis only and must not be spliced into an acceptance dataset."
+  ],
+  "observed": {
+    "dropped_commands": 0,
+    "dropped_telemetry": 0,
+    "editor_actual_exit": null,
+    "editor_held_handles_batch17": 555,
+    "editor_held_handles_before_batch0": 568,
+    "editor_resources_batch17": 6,
+    "editor_rss_batch0": 753299456,
+    "editor_rss_batch17": 162512896,
+    "handles_released": true,
+    "helper_exit": 2,
+    "host_actual_exit": 1,
+    "import_actual_exit": 0,
+    "job_zero": true,
+    "max_status_gap_batch17_ms": 735.9644,
+    "objectdb_after": 71130,
+    "objectdb_before": 71128,
+    "owner_closed": true
+  },
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "required_batches_per_run": 35,
+  "required_runs": 10,
+  "run_id": "gt06-s86-campaign-01.r00.a01",
+  "schema": "hh-studio.gt06-failure-packet",
+  "schema_version": "1.0.0",
+  "source_checkpoint": "b3862a10",
+  "source_closure_sha256": "e010180a1bf85b7f565e9aa39734f8551caf170a85b36c50598be556b723ce7f"
+}
