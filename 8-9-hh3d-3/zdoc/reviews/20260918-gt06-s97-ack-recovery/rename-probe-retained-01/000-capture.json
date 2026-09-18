@@ -1,0 +1,23 @@
+{
+  "host": {
+    "wrapper_pid": 43044,
+    "started_at": "2026-09-18T16:47:22.617825+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "$SNAPSHOT/zdoc/reviews/20260918-gt06-s97-ack-recovery/rename-probe/rename_probe.py",
+      "--run"
+    ],
+    "exit_code": 0,
+    "target_pid": 48464,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "rename-stdout.txt",
+    "stderr": "rename-stderr.txt",
+    "host": "rename-host.json"
+  },
+  "source_unchanged": true,
+  "formal_acceptance": false
+}

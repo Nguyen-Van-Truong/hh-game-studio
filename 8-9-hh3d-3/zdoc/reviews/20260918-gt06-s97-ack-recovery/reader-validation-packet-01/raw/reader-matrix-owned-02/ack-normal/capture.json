@@ -1,0 +1,24 @@
+{
+  "wrapper_pid": 21812,
+  "started_at": "2026-09-18T17:09:53.724957+00:00",
+  "argv": [
+    "python.exe",
+    "-B",
+    "$SNAPSHOT/zdoc/reviews/20260918-gt06-s97-ack-recovery/reader-regression/run_reader_regression.py",
+    "--run-id",
+    "gt06-s97-reader-ack-normal-01",
+    "--stage",
+    "ack",
+    "--case",
+    "normal"
+  ],
+  "exit_code": 0,
+  "target_pid": 50388,
+  "wrapper_exit_code": 0,
+  "timed_out": false,
+  "tree_verified": true,
+  "ownership": "gated_job_kill_on_close",
+  "stdout": "reader-stdout.txt",
+  "stderr": "reader-stderr.txt",
+  "host": "reader-host.json"
+}

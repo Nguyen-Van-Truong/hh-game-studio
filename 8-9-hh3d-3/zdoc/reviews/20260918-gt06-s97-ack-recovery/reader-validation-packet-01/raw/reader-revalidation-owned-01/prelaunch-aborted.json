@@ -1,0 +1,10 @@
+{
+  "schema": "HH-S97-ROOT-PRELAUNCH-ABORT-1",
+  "reason": "Observed intermediate driver pin differed before worker stable handoff; assertion rejected before any run_process call",
+  "expected_intermediate_sha256": "572ffa2812f42fa1862fb1186b95683dc4f58355d3ffbd1e99318190ec8513a4",
+  "actual_final_sha256": "88e4df1040b31a3239057759e8d85d89cdb71a9d2b38b17d8e7c4ce9988611fe",
+  "unified_shell_observed_exit": 1,
+  "owned_child_launched": false,
+  "engine_launched": false,
+  "formal_acceptance": false
+}

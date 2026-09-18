@@ -1,0 +1,175 @@
+{
+  "actual_native_exit": {
+    "exit_code": 0,
+    "pid": 25620
+  },
+  "checks": {
+    "held_delete_blocks_native_open": true,
+    "native_stderr_empty": true,
+    "python_read_handle_allows_native_read": true,
+    "released_same_file_reads_exact": true,
+    "retained_bytes_unchanged": true,
+    "source_unchanged": true,
+    "windows_no_delete_share_error_is_32": true
+  },
+  "completed_probe": true,
+  "elapsed_seconds": 1.7190000000409782,
+  "eligible_for_dataset": false,
+  "errors": [],
+  "formal_acceptance": false,
+  "held_observation": {
+    "control": {
+      "closed": true,
+      "ended_mono_us": 190140,
+      "exists": true,
+      "open_error": 0,
+      "opened": true,
+      "read_error": 0,
+      "read_size": 40,
+      "sha256": "8013aca74ea3cb36142bb0d7ac0418807795fb024722be930be4d39218801d7e",
+      "size": 40,
+      "stage": "python_read_handle_control",
+      "started_mono_us": 189733
+    },
+    "engine": {
+      "build": "official",
+      "hash": "ed1daf0bf001b61586d9930840f2f1394092c079",
+      "hex": 263938,
+      "major": 4,
+      "minor": 7,
+      "patch": 2,
+      "status": "stable",
+      "string": "4.7.2-stable (official)",
+      "timestamp": 0
+    },
+    "formal_acceptance": false,
+    "held": {
+      "closed": true,
+      "ended_mono_us": 190359,
+      "exists": true,
+      "open_error": 12,
+      "opened": false,
+      "read_error": null,
+      "read_size": null,
+      "sha256": null,
+      "size": null,
+      "stage": "delete_handle_held",
+      "started_mono_us": 190182
+    },
+    "pid": 25620
+  },
+  "holder_release_mono_ns": 648254825748400,
+  "mechanism_observed": true,
+  "native_helper_exit": 0,
+  "native_helper_pid": 18964,
+  "native_observations": {
+    "HH_S97_HELD": {
+      "control": {
+        "closed": true,
+        "ended_mono_us": 190140,
+        "exists": true,
+        "open_error": 0,
+        "opened": true,
+        "read_error": 0,
+        "read_size": 40,
+        "sha256": "8013aca74ea3cb36142bb0d7ac0418807795fb024722be930be4d39218801d7e",
+        "size": 40,
+        "stage": "python_read_handle_control",
+        "started_mono_us": 189733
+      },
+      "engine": {
+        "build": "official",
+        "hash": "ed1daf0bf001b61586d9930840f2f1394092c079",
+        "hex": 263938,
+        "major": 4,
+        "minor": 7,
+        "patch": 2,
+        "status": "stable",
+        "string": "4.7.2-stable (official)",
+        "timestamp": 0
+      },
+      "formal_acceptance": false,
+      "held": {
+        "closed": true,
+        "ended_mono_us": 190359,
+        "exists": true,
+        "open_error": 12,
+        "opened": false,
+        "read_error": null,
+        "read_size": null,
+        "sha256": null,
+        "size": null,
+        "stage": "delete_handle_held",
+        "started_mono_us": 190182
+      },
+      "pid": 25620
+    },
+    "HH_S97_RELEASED": {
+      "formal_acceptance": false,
+      "pid": 25620,
+      "released": {
+        "closed": true,
+        "ended_mono_us": 231184,
+        "exists": true,
+        "open_error": 0,
+        "opened": true,
+        "read_error": 0,
+        "read_size": 40,
+        "sha256": "8013aca74ea3cb36142bb0d7ac0418807795fb024722be930be4d39218801d7e",
+        "size": 40,
+        "stage": "delete_handle_released",
+        "started_mono_us": 229950
+      }
+    }
+  },
+  "native_owner": {
+    "closed": true,
+    "drain_threads_alive": [
+      false,
+      false
+    ],
+    "helper_exit": 0,
+    "helper_pid": 18964,
+    "job": {
+      "active_count": 0,
+      "assigned": true,
+      "close_uncertain": false,
+      "closed": true,
+      "configured": true,
+      "create_uncertain": false,
+      "failed_operations": [],
+      "handle_retained": false,
+      "native_error": null,
+      "tainted": false,
+      "zero_observed": true
+    },
+    "wrapper_handle_close_uncertain": false,
+    "wrapper_handle_closed": true
+  },
+  "orchestrator_own_actual_exit_not_yet_observed": true,
+  "python_control_closed": true,
+  "returned_exit_code": 0,
+  "run_id": "gt06-s97-rename-probe-01",
+  "s96_cause_proven": false,
+  "windows_controls": {
+    "actual_rename": true,
+    "holder_delete_access": true,
+    "holder_share_read_write_delete": true,
+    "read_with_share_delete_sha256": "8013aca74ea3cb36142bb0d7ac0418807795fb024722be930be4d39218801d7e",
+    "read_with_share_delete_size": 40,
+    "read_without_share_delete_error": 32,
+    "read_without_share_delete_opened": false
+  },
+  "windows_handles": [
+    {
+      "close_error": null,
+      "closed": true,
+      "role": "rename_delete_holder"
+    },
+    {
+      "close_error": null,
+      "closed": true,
+      "role": "shared_delete_reader"
+    }
+  ]
+}

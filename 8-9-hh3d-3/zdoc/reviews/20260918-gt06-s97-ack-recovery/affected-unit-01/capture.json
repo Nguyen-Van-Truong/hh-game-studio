@@ -1,0 +1,23 @@
+{
+  "host": {
+    "wrapper_pid": 28848,
+    "started_at": "2026-09-18T16:49:55.949062+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "-c",
+      "import unittest,json,sys; s=unittest.defaultTestLoader.loadTestsFromNames(['studio.tests.replay.test_native_benchmark', 'studio.tests.replay.test_benchmark_assembly', 'studio.tests.replay.test_benchmark_campaign', 'studio.tests.replay.test_campaign_terminal_cleanup', 'studio.tests.replay.test_benchmark_campaign_stop_completion']); r=unittest.TextTestRunner(verbosity=2).run(s); print('S97_AFFECTED_UNITS '+json.dumps({'run':r.testsRun,'failures':len(r.failures),'errors':len(r.errors),'skips':len(r.skipped)}),flush=True); sys.exit(not r.wasSuccessful())"
+    ],
+    "exit_code": 0,
+    "target_pid": 4484,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "unit-stdout.txt",
+    "stderr": "unit-stderr.txt",
+    "host": "unit-host.json"
+  },
+  "native_source_unchanged": true,
+  "formal_acceptance": false
+}

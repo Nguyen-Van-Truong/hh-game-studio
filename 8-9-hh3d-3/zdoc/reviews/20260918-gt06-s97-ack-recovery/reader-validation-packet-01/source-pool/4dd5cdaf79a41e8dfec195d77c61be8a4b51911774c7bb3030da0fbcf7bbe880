@@ -1,0 +1,336 @@
+"""One serialized, owned real-editor reader case; never campaign acceptance.
+
+Only the disposable short_read/locked_short_read copy changes candidate bytes.
+All other cases inherit the exact candidate and use real FileAccess handles.
+"""
+from __future__ import annotations
+
+import argparse
+import ctypes
+from ctypes import wintypes as w
+import json
+import os
+from pathlib import Path
+import re
+import sys
+import time
+import traceback
+
+BASE = Path(__file__).resolve().parent
+ROOT = BASE.parents[3]
+STUDIO = ROOT / 'studio'
+sys.path.insert(0, str(ROOT))
+from studio.tests.replay import run_native_benchmark as native
+from studio.tests.replay.run_benchmark_campaign import publish
+from studio.tests.replay.benchmark_job import BenchmarkProcess, check_path
+
+CASES = ('normal', 'read_overlap', 'locked_release', 'locked_timeout',
+         'malformed', 'locked_malformed', 'wrong_hash', 'wrong_schema',
+         'empty', 'oversized', 'short_read', 'locked_short_read')
+CANDIDATE_SHA = '13e65360cd0bc0033d0ad414fb3238e216b0d6dcc08e57dc7026ec4fc9eb8b95'
+FLAGS = {'formal_acceptance': False, 'native_benchmark': False, 's96_cause_proven': False}
+SHORT_LINE = b'    raw.resize(maxi(0, raw.size() - 1)) # S97 injected short-read seam\n'
+
+
+def need(value, code):
+    if not value:
+        raise RuntimeError(code)
+
+
+def write(path, value):
+    native.write(path, value)
+
+
+def read_json(path):
+    return json.loads(native.read_regular(path))
+
+
+def sources():
+    result = {'studio/' + name: digest for name, digest in native.source_files().items()}
+    for name in ('run_reader_regression.py', 'reader_regression.gd'):
+        path = BASE / name
+        result[path.relative_to(ROOT).as_posix()] = native.sha(native.read_regular(path))
+    return dict(sorted(result.items()))
+
+
+def error_row(error):
+    return {'class': type(error).__name__, 'code': str(error) if isinstance(error, RuntimeError) else None,
+            'frames': [{'file': Path(frame.filename).name, 'line': frame.lineno}
+                       for frame in traceback.extract_tb(error.__traceback__)[-10:]]}
+
+
+class Holder:
+    """One checked real Win32 handle. No attempted emulation of FileAccess."""
+    def __init__(self, path, *, delete_access):
+        self.k = ctypes.WinDLL('kernel32', use_last_error=True)
+        self.k.CreateFileW.argtypes = [w.LPCWSTR, w.DWORD, w.DWORD, ctypes.c_void_p, w.DWORD, w.DWORD, w.HANDLE]
+        self.k.CreateFileW.restype = w.HANDLE
+        self.k.CloseHandle.argtypes, self.k.CloseHandle.restype = [w.HANDLE], w.BOOL
+        self.handle = self.k.CreateFileW(str(path), 0x10000 if delete_access else 0x80000000,
+                                         7, None, 3, 0x80, None)
+        need(self.handle != ctypes.c_void_p(-1).value, 'READER_HOLDER_OPEN')
+        self.row = {'delete_access': delete_access, 'share_read_write_delete': True,
+                    'opened_qpc_ns': time.perf_counter_ns(), 'closed': False, 'close_error': None}
+
+    def close(self):
+        if self.row['closed']:
+            return
+        ok = self.k.CloseHandle(self.handle)
+        self.row['close_error'] = None if ok else ctypes.get_last_error()
+        need(ok, 'READER_HOLDER_CLOSE')
+        self.row.update(closed=True, closed_qpc_ns=time.perf_counter_ns())
+
+
+def capture_natural(owner, expected_exit):
+    """Supplemental capture accepts the specified actual negative exit only.
+
+    Deliberately does not call success-only finish()/verify_capture(). The
+    owner's close-before-finish diagnostic is retained, not overwritten.
+    """
+    need(owner.tick() == expected_exit, 'READER_HELPER_EXIT')
+    active_at_exit = active = owner.job.active_count()
+    deadline = time.perf_counter() + .5
+    while active is not None and active > 0 and time.perf_counter() < deadline:
+        time.sleep(.01)
+        active = owner.job.active_count()
+    need(type(active) is int and active == 0 and not owner.job.tainted, 'READER_PRE_CLEANUP_TREE')
+    for thread in owner.threads:
+        thread.join(2)
+    need(not any(thread.is_alive() for thread in owner.threads) and not owner.errors
+         and not owner.overflow.is_set(), 'READER_DRAINS')
+    owner.check_sources()
+    started = read_json(owner.output / 'process-start.json')
+    exited = read_json(owner.output / 'process-exit.json')
+    need(set(started) == {'pid'} and type(started['pid']) is int and started['pid'] > 0
+         and set(exited) == {'pid', 'exit_code'} and type(exited['exit_code']) is int
+         and exited == {'pid': started['pid'], 'exit_code': expected_exit}, 'READER_ACTUAL_NATIVE_EXIT')
+    helper_pid = owner.process.pid
+    owner.close()
+    job, handle = owner.job.snapshot(), owner.process_handle_snapshot()
+    need(owner.closed and owner.job.closed and owner.job.zero_observed and not owner.job.tainted
+         and handle == {'required': True, 'closed': True, 'close_uncertain': False, 'handle_retained': False},
+         'READER_CHECKED_CLEANUP')
+    result = {'schema': 'HH-S97-READER-PROCESS-CAPTURE-1', **FLAGS,
+              'actual_process_start': started, 'actual_process_exit': exited,
+              'helper_pid': helper_pid, 'actual_helper_exit': owner.process.returncode,
+              'active_at_helper_exit': active_at_exit, 'active_before_cleanup': active,
+              'natural_tree_exit': True, 'drains_joined': True, 'job': job,
+              'wrapper_process_handle': handle, 'source_unchanged': True,
+              'close_before_finish_is_diagnostic_only': True,
+              'artifacts': {name: native.sha((owner.output / name).read_bytes()) for name in
+                            ('invocation.json', 'stdout.txt', 'stderr.txt', 'process-start.json', 'process-exit.json')}}
+    write(owner.output / 'reader-capture.json', result)
+    return result
+
+
+def raw_publish(path, raw):
+    """Explicit invalid-byte fixture, with the same close-before-rename order."""
+    need(not path.exists(), 'READER_INPUT_EXISTS')
+    temp = path.with_suffix('.json.tmp')
+    with temp.open('xb') as stream:
+        stream.write(raw)
+        stream.flush()
+        os.fsync(stream.fileno())
+    temp.rename(path)
+    need(path.read_bytes() == raw, 'READER_INPUT_READBACK')
+
+
+def arm(project, case, stage):
+    ready = read_json(project / 'benchmark/out/reader-ready.json')
+    payload = dict(ready['payload'])
+    if case == 'wrong_hash':
+        payload['ready_sha256' if stage == 'start' else 'native_batch_sha256'] = '0' * 64
+    if case == 'wrong_schema':
+        payload['schema_version'] = '9.9.9'
+    target = project / f'benchmark/input/{stage}-00.json'
+    invalid = {'malformed': b'{', 'locked_malformed': b'{', 'empty': b'', 'oversized': b'x' * 8193}
+    if case in invalid:
+        raw_publish(target, invalid[case])
+    else:
+        publish(target, payload)
+    published = {'payload_sha256': native.sha(target.read_bytes()), 'size_bytes': target.stat().st_size}
+    holder = None
+    try:
+        if case.startswith('locked_') or case == 'read_overlap':
+            holder = Holder(target, delete_access=case.startswith('locked_'))
+        publish(project / 'benchmark/input/reader-armed.json', {'armed': True})
+    except BaseException:
+        if holder:
+            holder.close()
+        raise
+    return holder, {**published, 'armed_qpc_ns': time.perf_counter_ns()}
+
+
+def validate_result(output, project, stage, case, capture, publication):
+    observed = read_json(project / 'benchmark/out/reader-result.json')
+    expected = {'normal': 'VALIDATED', 'read_overlap': 'VALIDATED', 'locked_release': 'VALIDATED',
+                'locked_timeout': 'TIMEOUT', 'malformed': 'JSON', 'locked_malformed': 'JSON',
+                'wrong_hash': 'HASH', 'wrong_schema': 'BINDING', 'empty': 'SIZE', 'oversized': 'SIZE',
+                'short_read': 'SHORT_READ', 'locked_short_read': 'SHORT_READ'}[case]
+    success = expected == 'VALIDATED'
+    code = stage.upper() + '_VALIDATED' if success else 'BENCHMARK_HOST_' + stage.upper() + '_' + expected
+    need(observed['code'] == code and observed['status'] == ('success' if success else 'failed')
+         and observed['case'] == case and observed['stage'] == stage
+         and observed['source_candidate_sha256'] == CANDIDATE_SHA
+         and observed['pid'] == capture['actual_process_exit']['pid'], 'READER_RESULT_BINDING')
+    need(observed['buffer_shortening_injected'] is (case in ('short_read', 'locked_short_read')),
+         'READER_INJECTION_PROVENANCE')
+    need(observed['deadline_before_us'] == observed['deadline_after_us'] > 0, 'READER_DEADLINE_CHANGED')
+    need(observed['advances'] == int(success), 'READER_EXACTLY_ONCE_ADVANCE')
+    receipts = observed[stage + '_receipts']
+    need(len(receipts) == int(success) and observed['ack_receipts' if stage == 'start' else 'start_receipts'] == [],
+         'READER_RECEIPT_COUNT')
+    if success:
+        need(receipts[0][stage + '_sha256'] == publication['payload_sha256']
+             and receipts[0][stage + '_size_bytes'] == publication['size_bytes'], 'READER_RECEIPT_BYTES')
+    locked = case.startswith('locked_')
+    timeout = case == 'locked_timeout'
+    need(observed['attempts'] >= 2 if locked else observed['attempts'] == 1, 'READER_ATTEMPTS')
+    need(observed['first_error'] != 0 if locked else observed['first_error'] == 0, 'READER_OPEN_ERROR')
+    need(observed['open_recovered'] is (locked and not timeout), 'READER_OPEN_RECOVERY')
+    if locked:
+        need(observed['pending_frames'] >= 2 and observed['process_frame'] > observed['first_error_frame'],
+             'READER_NEXT_FRAME_RETRY')
+    need(observed['monotonic_us'] > observed['deadline_after_us'] if timeout
+         else observed['monotonic_us'] <= observed['deadline_after_us'], 'READER_TERMINAL_DEADLINE')
+    need(observed['max_heartbeat_gap_us'] <= 2_000_000, 'READER_HEARTBEAT_GAP')
+    lines = (output / 'native-owner/stdout.txt').read_text(encoding='utf-8').splitlines()
+    events = [json.loads(line.split(' ', 1)[1]) for line in lines if line.startswith('HH_GT06_HOST_INPUT_OPEN ')]
+    need([event['event'] for event in events] == (['pending', 'terminal'] if timeout else
+         ['pending', 'recovered'] if locked else []), 'READER_BOUNDED_OPEN_LOGS')
+    if locked:
+        need(all(row['first_error'] == observed['first_error'] and row['first_mono_us'] == observed['first_error_mono_us']
+                 and row['first_process_frame'] == observed['first_error_frame'] for row in events), 'READER_FIRST_ERROR_RETAINED')
+        need(events[-1]['attempts'] == observed['attempts'], 'READER_NO_RETRY_AFTER_RECOVERY')
+        if not timeout:
+            need(events[-1]['process_frame'] == observed['process_frame'], 'READER_RECOVERY_SAME_FRAME_RESULT')
+    need(not (output / 'native-owner/stderr.txt').read_bytes().strip(), 'READER_NATIVE_STDERR')
+    observed['pending_memory_observation_only'] = True
+    observed['whole_editor_memory_plateau_proven'] = False
+    return observed
+
+
+def run(args):
+    need(os.name == 'nt', 'READER_WINDOWS_ONLY')
+    factory, trusted = native.load_fixture()
+    source_files = sources()
+    candidate = native.read_regular(STUDIO / 'tests/replay/benchmark_native.gd')
+    need(native.sha(candidate) == CANDIDATE_SHA, 'READER_CANDIDATE_PIN')
+    lock = read_json(STUDIO / 'toolchain.lock.json')['godot']
+    need(lock['version'] == '4.7.2-stable', 'READER_ENGINE_VERSION')
+    executable = STUDIO / '.local/tooling/godot-4.7.2-stable' / lock['gui_executable']
+    check_path(executable)
+    need(native.sha(executable.read_bytes()) == lock['gui_sha256'], 'READER_ENGINE_PIN')
+    (BASE / 'runs').mkdir(exist_ok=True)
+    check_path(BASE / 'runs')
+    output = BASE / 'runs' / args.run_id
+    output.mkdir(exist_ok=False)
+    project = output / 'project'
+    binding = {'schema_id': 'hh-studio.native-cycle-benchmark-run', 'schema_version': '1.2.0',
+               'run_id': args.run_id, 'mode': 'full', 'source_closure_sha256': native.closure(source_files),
+               'profile_sha256': native.sha(native.encoded({'stage': args.stage, 'case': args.case, **FLAGS})),
+               'batch_barrier': 'host_ack_v1', 'batch_start': 'host_permit_v1'}
+    native.prepare(project, factory, trusted, binding)
+    (project / 'benchmark/input').mkdir()
+    plugin = project / 'addons/hh_benchmark/plugin.cfg'
+    plugin.write_bytes(plugin.read_bytes().replace(b'script="benchmark_native.gd"', b'script="reader_regression.gd"'))
+    write(project / 'addons/hh_benchmark/reader_regression.gd', (BASE / 'reader_regression.gd').read_bytes())
+    overlay = args.case in ('short_read', 'locked_short_read')
+    copied = candidate
+    if overlay:
+        # Newline bytes are restored exactly, not normalized during reversal.
+        newline = b'\r\n' if b'\r\n' in candidate else b'\n'
+        needle = b'    var raw: PackedByteArray = file.get_buffer(size)' + newline
+        injection = SHORT_LINE.replace(b'\n', newline)
+        need(candidate.count(needle) == 2 and injection not in candidate, 'READER_SEAM_POSITION')
+        copied = candidate.replace(needle, needle + injection)
+        need(copied.replace(injection, b'') == candidate, 'READER_SEAM_ROUNDTRIP')
+        (project / 'addons/hh_benchmark/benchmark_native.gd').write_bytes(copied)
+    write(project / 'benchmark/reader-case.json', {'stage': args.stage, 'case': args.case,
+          'binding': binding, 'source_candidate_sha256': CANDIDATE_SHA})
+    fixed_project_files = native.project_files(project)
+    files = {**source_files, **{(project / name).relative_to(ROOT).as_posix(): digest
+                              for name, digest in fixed_project_files.items()}}
+    freeze = {'run_id': args.run_id, 'stage': args.stage, 'case': args.case, **FLAGS,
+              'source_files': source_files, 'project_files': fixed_project_files,
+              'candidate_sha256': CANDIDATE_SHA, 'executed_candidate_sha256': native.sha(copied),
+              'buffer_shortening_injected': overlay, 'seam_exact_reversal': overlay,
+              'godot': str(executable), 'godot_sha256': lock['gui_sha256'], 'godot_commit': lock['source_commit'],
+              'python_sha256': native.sha(Path(sys.executable).read_bytes()), 'stage_wall_seconds': 30,
+              'fixture_deadline_us': 2_500_000 if args.case == 'locked_timeout' else 10_000_000}
+    write(output / 'freeze.json', freeze)
+    for name in files:
+        write(output / 'source' / name, (ROOT / name).read_bytes())
+    result = {'run_id': args.run_id, **FLAGS, 'completed': False, 'checks_passed': False, 'errors': [],
+              'orchestrator_own_actual_exit_not_yet_observed': True}
+    owner = holder = None
+    exit_code = 1
+    try:
+        for importing in (True, False):
+            argv = [str(executable), '--headless', '--editor', '--path', str(project), '--import'] if importing else [
+                str(executable), '--editor', '--path', str(project), 'res://scenes/fixture.tscn', '--', '--hh-reader-regression']
+            owner = BenchmarkProcess(argv, cwd=project, output=output / ('import-owner' if importing else 'native-owner'),
+                                     source_root=ROOT, source_files=files, binary_sha256=lock['gui_sha256'])
+            deadline = time.perf_counter() + 30
+            armed = False
+            pending_at = None
+            while owner.tick() is None:
+                need(time.perf_counter() < deadline, 'READER_STAGE_WALL')
+                if not importing:
+                    if not armed and (project / 'benchmark/out/reader-ready.json').exists():
+                        holder, result['publication'] = arm(project, args.case, args.stage)
+                        armed = True
+                    if holder and not holder.row['closed'] and args.case not in ('locked_timeout', 'read_overlap'):
+                        if pending_at is None and (project / 'benchmark/out/reader-pending.json').exists():
+                            pending_at = time.perf_counter()
+                        if pending_at is not None and time.perf_counter() - pending_at >= .75:
+                            holder.close()
+                time.sleep(.01)
+            expected = 0 if importing or args.case in ('normal', 'read_overlap', 'locked_release') else 86
+            capture = capture_natural(owner, expected)
+            result['import_capture' if importing else 'native_capture'] = capture
+            if importing:
+                need(not (output / 'import-owner/stderr.txt').read_bytes().strip(), 'READER_IMPORT_STDERR')
+            owner = None
+        if holder:
+            holder.close()
+            result['holder'] = holder.row
+        result['reader'] = validate_result(output, project, args.stage, args.case, result['native_capture'], result['publication'])
+        need(sources() == source_files, 'READER_SOURCE_CHANGED')
+        need(all(native.sha(native.read_regular(project / name)) == digest for name, digest in fixed_project_files.items()),
+             'READER_PROJECT_SOURCE_CHANGED')
+        result.update(completed=True, checks_passed=True)
+        exit_code = 0
+    except BaseException as error:
+        owner = owner or getattr(error, 'cleanup_owner', None)
+        result['errors'].append(error_row(error))
+    finally:
+        if holder:
+            try:
+                holder.close()
+            except BaseException as error:
+                result['errors'].append(error_row(error))
+            result['holder'] = holder.row
+        if owner:
+            try:
+                owner.close()
+            except BaseException as error:
+                result['errors'].append(error_row(error))
+            result['failure_owner_cleanup'] = {'closed': owner.closed,
+                'job': owner.job.snapshot() if owner.job else None, 'handle': owner.process_handle_snapshot()}
+        if result['errors']:
+            result['checks_passed'] = False
+            exit_code = 1
+        write(output / 'result.json', result)
+    print(json.dumps({'output': str(output), 'checks_passed': result['checks_passed'], **FLAGS}))
+    return exit_code
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--run-id', required=True)
+    parser.add_argument('--stage', choices=('start', 'ack'), required=True)
+    parser.add_argument('--case', choices=CASES, required=True)
+    args = parser.parse_args()
+    need(re.fullmatch(r'gt06-s97-reader-[a-z0-9-]{1,70}', args.run_id), 'READER_RUN_ID')
+    raise SystemExit(run(args))

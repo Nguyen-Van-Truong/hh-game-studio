@@ -1,0 +1,222 @@
+{
+  "formal_acceptance": false,
+  "source_inventory_sha256": "98976f1fba1ace9d8c2716d575a3c58c160c5f43bca56bbcb508a3f9f7e53d7d",
+  "files": {
+    "rename-probe-owned-01/capture.json": {
+      "sha256": "e1e0a265472a034bc6bc24186c226593d54e62ce993b6d6b23d266d1218bbd28",
+      "size_bytes": 609,
+      "copy": "000-capture.json"
+    },
+    "rename-probe-owned-01/invocation.json": {
+      "sha256": "e9feb7d0eb570621af4f2b20261d5efc7cf8c5fb3eb0b8efdf0044e6831d17cb",
+      "size_bytes": 768,
+      "copy": "001-invocation.json"
+    },
+    "rename-probe-owned-01/rename-host.json": {
+      "sha256": "76461b5fa169835a864b0ef8489a0e302ea681cc9d88d135190515a9edbec1e2",
+      "size_bytes": 87,
+      "copy": "002-rename-host.json"
+    },
+    "rename-probe-owned-01/rename-stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "copy": "003-rename-stderr.txt"
+    },
+    "rename-probe-owned-01/rename-stdout.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "copy": "004-rename-stdout.txt"
+    },
+    "rename-probe/run-01/freeze.json": {
+      "sha256": "100feecbdfb137a5c67920cadc9649bd813790a7389daf69c6aa1805573cba34",
+      "size_bytes": 3070,
+      "copy": "005-freeze.json"
+    },
+    "rename-probe/run-01/native-owner/appdata/Godot/app_userdata/S97 sharing probe/logs/godot.log": {
+      "sha256": "22283d2759524fe1a8d67e9a2499072a2091f4ace1dbdf1a4d69351484e7e2dd",
+      "size_bytes": 1114,
+      "copy": "006-godot.log"
+    },
+    "rename-probe/run-01/native-owner/capture.json": {
+      "sha256": "43896d26c869e76efc667650c2af62096ea356f3220c0d531d7f220cbd684f8d",
+      "size_bytes": 5194,
+      "copy": "007-capture.json"
+    },
+    "rename-probe/run-01/native-owner/cleanup-001.json": {
+      "sha256": "379d7a25b4032e6cb243e100aa8a5ebcd3d82a94e45b71e0f18e47fe7e569534",
+      "size_bytes": 528,
+      "copy": "008-cleanup-001.json"
+    },
+    "rename-probe/run-01/native-owner/invocation.json": {
+      "sha256": "e4925983133ef42d5cd040e5ada8251d857f5b2a8d64380db5308ec1c750e144",
+      "size_bytes": 3770,
+      "copy": "009-invocation.json"
+    },
+    "rename-probe/run-01/native-owner/process-exit.json": {
+      "sha256": "e6f831b1ff857ed50443b1d49d04bb0dfaa70525991490eaf596083851b33084",
+      "size_bytes": 30,
+      "copy": "010-process-exit.json"
+    },
+    "rename-probe/run-01/native-owner/process-start.json": {
+      "sha256": "424103fed7a83c4062d2b238fd567cd0d542af73976b24e712471fa00d95c591",
+      "size_bytes": 14,
+      "copy": "011-process-start.json"
+    },
+    "rename-probe/run-01/native-owner/stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "copy": "012-stderr.txt"
+    },
+    "rename-probe/run-01/native-owner/stdout.txt": {
+      "sha256": "2cd96a9b0aeeb74b94333557c1603e6fc3c2d9abf5d8738b3283525100e3f8c8",
+      "size_bytes": 1118,
+      "copy": "013-stdout.txt"
+    },
+    "rename-probe/run-01/project/control.json": {
+      "sha256": "8013aca74ea3cb36142bb0d7ac0418807795fb024722be930be4d39218801d7e",
+      "size_bytes": 40,
+      "copy": "014-control.json"
+    },
+    "rename-probe/run-01/project/project.godot": {
+      "sha256": "431ae8733af967370ff921e406ae1047588c277de9042b9824af8bed4ff2670c",
+      "size_bytes": 122,
+      "copy": "015-project.godot"
+    },
+    "rename-probe/run-01/project/reader.gd": {
+      "sha256": "1ccc89d54a6f72f768b21657e72add142bf85509997f470d50fde16e547b79be",
+      "size_bytes": 2299,
+      "copy": "016-reader.gd"
+    },
+    "rename-probe/run-01/project/release.flag": {
+      "sha256": "fdc935e6a3f33abdcfb4f5d7a335d408b2b988e7a5f8411d9f73349d1fab39be",
+      "size_bytes": 9,
+      "copy": "017-release.flag"
+    },
+    "rename-probe/run-01/project/renamed.json": {
+      "sha256": "8013aca74ea3cb36142bb0d7ac0418807795fb024722be930be4d39218801d7e",
+      "size_bytes": 40,
+      "copy": "018-renamed.json"
+    },
+    "rename-probe/run-01/result.json": {
+      "sha256": "775fe42d4750968f2128a3029f581bf762998552b4746dcdf4b9c42975ce3804",
+      "size_bytes": 4627,
+      "copy": "019-result.json"
+    },
+    "rename-probe/run-01/source/studio/blender-addon/ipc_client.py": {
+      "sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9",
+      "size_bytes": 16349,
+      "copy": "020-ipc_client.py"
+    },
+    "rename-probe/run-01/source/studio/godot-addon/cli_job.py": {
+      "sha256": "5a0f37bc129bde409a2657054fb091d637d838e442d45a69e7adc1f1527d4c88",
+      "size_bytes": 12672,
+      "copy": "021-cli_job.py"
+    },
+    "rename-probe/run-01/source/studio/host/blender/__init__.py": {
+      "sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90",
+      "size_bytes": 69,
+      "copy": "022-__init__.py"
+    },
+    "rename-probe/run-01/source/studio/host/blender/deadline.py": {
+      "sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926",
+      "size_bytes": 1130,
+      "copy": "023-deadline.py"
+    },
+    "rename-probe/run-01/source/studio/host/blender/export_job.py": {
+      "sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe",
+      "size_bytes": 13605,
+      "copy": "024-export_job.py"
+    },
+    "rename-probe/run-01/source/studio/host/blender/glb_preflight.py": {
+      "sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62",
+      "size_bytes": 11815,
+      "copy": "025-glb_preflight.py"
+    },
+    "rename-probe/run-01/source/studio/host/blender/ui_host.py": {
+      "sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35",
+      "size_bytes": 22464,
+      "copy": "026-ui_host.py"
+    },
+    "rename-probe/run-01/source/studio/host/core/limits.py": {
+      "sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f",
+      "size_bytes": 15813,
+      "copy": "027-limits.py"
+    },
+    "rename-probe/run-01/source/studio/host/core/private_store.py": {
+      "sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476",
+      "size_bytes": 20476,
+      "copy": "028-private_store.py"
+    },
+    "rename-probe/run-01/source/studio/host/core/safe_create.py": {
+      "sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606",
+      "size_bytes": 13170,
+      "copy": "029-safe_create.py"
+    },
+    "rename-probe/run-01/source/studio/host/core/safe_open.py": {
+      "sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535",
+      "size_bytes": 12093,
+      "copy": "030-safe_open.py"
+    },
+    "rename-probe/run-01/source/studio/pipeline/__init__.py": {
+      "sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68",
+      "size_bytes": 79,
+      "copy": "031-__init__.py"
+    },
+    "rename-probe/run-01/source/studio/pipeline/native_job.py": {
+      "sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca",
+      "size_bytes": 12512,
+      "copy": "032-native_job.py"
+    },
+    "rename-probe/run-01/source/studio/protocol/__init__.py": {
+      "sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f",
+      "size_bytes": 881,
+      "copy": "033-__init__.py"
+    },
+    "rename-probe/run-01/source/studio/protocol/_rfc8785/__init__.py": {
+      "sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b",
+      "size_bytes": 505,
+      "copy": "034-__init__.py"
+    },
+    "rename-probe/run-01/source/studio/protocol/_rfc8785/_impl.py": {
+      "sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec",
+      "size_bytes": 7251,
+      "copy": "035-_impl.py"
+    },
+    "rename-probe/run-01/source/studio/protocol/core.py": {
+      "sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e",
+      "size_bytes": 19886,
+      "copy": "036-core.py"
+    },
+    "rename-probe/run-01/source/studio/tests/replay/benchmark_job.py": {
+      "sha256": "be424a6f37ae573ac4bf40954b31017025daee2147699c80b05f9a0ab70e1611",
+      "size_bytes": 24991,
+      "copy": "037-benchmark_job.py"
+    },
+    "rename-probe/run-01/source/studio/toolchain.lock.json": {
+      "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+      "size_bytes": 3026,
+      "copy": "038-toolchain.lock.json"
+    },
+    "rename-probe/run-01/source/zdoc/reviews/20260918-gt06-s97-ack-recovery/rename-probe/reader.gd": {
+      "sha256": "1ccc89d54a6f72f768b21657e72add142bf85509997f470d50fde16e547b79be",
+      "size_bytes": 2299,
+      "copy": "039-reader.gd"
+    },
+    "rename-probe/run-01/source/zdoc/reviews/20260918-gt06-s97-ack-recovery/rename-probe/rename_probe.py": {
+      "sha256": "a3ce5390189edd9943c32b49e6580f52b95f3497ea7d206e5bfd6e6231917208",
+      "size_bytes": 12985,
+      "copy": "040-rename_probe.py"
+    },
+    "rename-probe/run-01/source/zdoc/reviews/20260918-gt06-s97-ack-recovery/rename-probe/run-01/project/project.godot": {
+      "sha256": "431ae8733af967370ff921e406ae1047588c277de9042b9824af8bed4ff2670c",
+      "size_bytes": 122,
+      "copy": "041-project.godot"
+    },
+    "rename-probe/run-01/source/zdoc/reviews/20260918-gt06-s97-ack-recovery/rename-probe/run-01/project/reader.gd": {
+      "sha256": "1ccc89d54a6f72f768b21657e72add142bf85509997f470d50fde16e547b79be",
+      "size_bytes": 2299,
+      "copy": "042-reader.gd"
+    }
+  },
+  "scope": "43 selected exact evidence copies; archived Godot log is an evidence artifact, not runtime cache"
+}

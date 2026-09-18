@@ -1,0 +1,177 @@
+{
+  "schema": "HH-S97-READER-SELECTION-1",
+  "writers_stopped": true,
+  "matrix02_driver_sha256": "88e4df1040b31a3239057759e8d85d89cdb71a9d2b38b17d8e7c4ce9988611fe",
+  "cases": [
+    {
+      "stage": "start",
+      "case": "normal",
+      "run": "reader-regression/runs/gt06-s97-reader-start-normal-01",
+      "outer_capture": "reader-start-normal-owned-01/capture.json",
+      "outer_invocation": "reader-start-normal-owned-01/invocation.json"
+    },
+    {
+      "stage": "start",
+      "case": "read_overlap",
+      "run": "reader-regression/runs/gt06-s97-reader-start-read-overlap-01",
+      "outer_capture": "reader-matrix-owned-01/start-read_overlap/capture.json",
+      "outer_invocation": "reader-matrix-owned-01/invocation.json"
+    },
+    {
+      "stage": "start",
+      "case": "locked_release",
+      "run": "reader-regression/runs/gt06-s97-reader-start-locked-release-01",
+      "outer_capture": "reader-matrix-owned-01/start-locked_release/capture.json",
+      "outer_invocation": "reader-matrix-owned-01/invocation.json"
+    },
+    {
+      "stage": "start",
+      "case": "locked_timeout",
+      "run": "reader-regression/runs/gt06-s97-reader-start-locked-timeout-01",
+      "outer_capture": "reader-matrix-owned-01/start-locked_timeout/capture.json",
+      "outer_invocation": "reader-matrix-owned-01/invocation.json"
+    },
+    {
+      "stage": "start",
+      "case": "malformed",
+      "run": "reader-regression/runs/gt06-s97-reader-start-malformed-01",
+      "outer_capture": "reader-matrix-owned-01/start-malformed/capture.json",
+      "outer_invocation": "reader-matrix-owned-01/invocation.json",
+      "derived_validation": "reader-start-malformed-revalidated-01.json",
+      "derived_outer_capture": "reader-revalidation-owned-02/capture.json"
+    },
+    {
+      "stage": "start",
+      "case": "locked_malformed",
+      "run": "reader-regression/runs/gt06-s97-reader-start-locked-malformed-01",
+      "outer_capture": "reader-matrix-owned-02/start-locked_malformed/capture.json",
+      "outer_invocation": "reader-matrix-owned-02/invocation.json"
+    },
+    {
+      "stage": "start",
+      "case": "wrong_hash",
+      "run": "reader-regression/runs/gt06-s97-reader-start-wrong-hash-01",
+      "outer_capture": "reader-matrix-owned-02/start-wrong_hash/capture.json",
+      "outer_invocation": "reader-matrix-owned-02/invocation.json"
+    },
+    {
+      "stage": "start",
+      "case": "wrong_schema",
+      "run": "reader-regression/runs/gt06-s97-reader-start-wrong-schema-01",
+      "outer_capture": "reader-matrix-owned-02/start-wrong_schema/capture.json",
+      "outer_invocation": "reader-matrix-owned-02/invocation.json"
+    },
+    {
+      "stage": "start",
+      "case": "empty",
+      "run": "reader-regression/runs/gt06-s97-reader-start-empty-01",
+      "outer_capture": "reader-matrix-owned-02/start-empty/capture.json",
+      "outer_invocation": "reader-matrix-owned-02/invocation.json"
+    },
+    {
+      "stage": "start",
+      "case": "oversized",
+      "run": "reader-regression/runs/gt06-s97-reader-start-oversized-01",
+      "outer_capture": "reader-matrix-owned-02/start-oversized/capture.json",
+      "outer_invocation": "reader-matrix-owned-02/invocation.json"
+    },
+    {
+      "stage": "start",
+      "case": "short_read",
+      "run": "reader-regression/runs/gt06-s97-reader-start-short-read-01",
+      "outer_capture": "reader-matrix-owned-02/start-short_read/capture.json",
+      "outer_invocation": "reader-matrix-owned-02/invocation.json"
+    },
+    {
+      "stage": "start",
+      "case": "locked_short_read",
+      "run": "reader-regression/runs/gt06-s97-reader-start-locked-short-read-01",
+      "outer_capture": "reader-matrix-owned-02/start-locked_short_read/capture.json",
+      "outer_invocation": "reader-matrix-owned-02/invocation.json"
+    },
+    {
+      "stage": "ack",
+      "case": "normal",
+      "run": "reader-regression/runs/gt06-s97-reader-ack-normal-01",
+      "outer_capture": "reader-matrix-owned-02/ack-normal/capture.json",
+      "outer_invocation": "reader-matrix-owned-02/invocation.json"
+    },
+    {
+      "stage": "ack",
+      "case": "read_overlap",
+      "run": "reader-regression/runs/gt06-s97-reader-ack-read-overlap-01",
+      "outer_capture": "reader-matrix-owned-02/ack-read_overlap/capture.json",
+      "outer_invocation": "reader-matrix-owned-02/invocation.json"
+    },
+    {
+      "stage": "ack",
+      "case": "locked_release",
+      "run": "reader-regression/runs/gt06-s97-reader-ack-locked-release-01",
+      "outer_capture": "reader-matrix-owned-02/ack-locked_release/capture.json",
+      "outer_invocation": "reader-matrix-owned-02/invocation.json"
+    },
+    {
+      "stage": "ack",
+      "case": "locked_timeout",
+      "run": "reader-regression/runs/gt06-s97-reader-ack-locked-timeout-01",
+      "outer_capture": "reader-matrix-owned-02/ack-locked_timeout/capture.json",
+      "outer_invocation": "reader-matrix-owned-02/invocation.json"
+    },
+    {
+      "stage": "ack",
+      "case": "malformed",
+      "run": "reader-regression/runs/gt06-s97-reader-ack-malformed-01",
+      "outer_capture": "reader-matrix-owned-02/ack-malformed/capture.json",
+      "outer_invocation": "reader-matrix-owned-02/invocation.json"
+    },
+    {
+      "stage": "ack",
+      "case": "locked_malformed",
+      "run": "reader-regression/runs/gt06-s97-reader-ack-locked-malformed-01",
+      "outer_capture": "reader-matrix-owned-02/ack-locked_malformed/capture.json",
+      "outer_invocation": "reader-matrix-owned-02/invocation.json"
+    },
+    {
+      "stage": "ack",
+      "case": "wrong_hash",
+      "run": "reader-regression/runs/gt06-s97-reader-ack-wrong-hash-01",
+      "outer_capture": "reader-matrix-owned-02/ack-wrong_hash/capture.json",
+      "outer_invocation": "reader-matrix-owned-02/invocation.json"
+    },
+    {
+      "stage": "ack",
+      "case": "wrong_schema",
+      "run": "reader-regression/runs/gt06-s97-reader-ack-wrong-schema-01",
+      "outer_capture": "reader-matrix-owned-02/ack-wrong_schema/capture.json",
+      "outer_invocation": "reader-matrix-owned-02/invocation.json"
+    },
+    {
+      "stage": "ack",
+      "case": "empty",
+      "run": "reader-regression/runs/gt06-s97-reader-ack-empty-01",
+      "outer_capture": "reader-matrix-owned-02/ack-empty/capture.json",
+      "outer_invocation": "reader-matrix-owned-02/invocation.json"
+    },
+    {
+      "stage": "ack",
+      "case": "oversized",
+      "run": "reader-regression/runs/gt06-s97-reader-ack-oversized-01",
+      "outer_capture": "reader-matrix-owned-02/ack-oversized/capture.json",
+      "outer_invocation": "reader-matrix-owned-02/invocation.json"
+    },
+    {
+      "stage": "ack",
+      "case": "short_read",
+      "run": "reader-regression/runs/gt06-s97-reader-ack-short-read-01",
+      "outer_capture": "reader-matrix-owned-02/ack-short_read/capture.json",
+      "outer_invocation": "reader-matrix-owned-02/invocation.json"
+    },
+    {
+      "stage": "ack",
+      "case": "locked_short_read",
+      "run": "reader-regression/runs/gt06-s97-reader-ack-locked-short-read-01",
+      "outer_capture": "reader-matrix-owned-02/ack-locked_short_read/capture.json",
+      "outer_invocation": "reader-matrix-owned-02/invocation.json"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "code": "import unittest,json,sys; s=unittest.defaultTestLoader.loadTestsFromNames(['studio.tests.replay.test_native_benchmark', 'studio.tests.replay.test_benchmark_assembly', 'studio.tests.replay.test_benchmark_campaign', 'studio.tests.replay.test_campaign_terminal_cleanup', 'studio.tests.replay.test_benchmark_campaign_stop_completion']); r=unittest.TextTestRunner(verbosity=2).run(s); print('S97_AFFECTED_UNITS '+json.dumps({'run':r.testsRun,'failures':len(r.failures),'errors':len(r.errors),'skips':len(r.skipped)}),flush=True); sys.exit(not r.wasSuccessful())",
+  "native_source_sha256": "13e65360cd0bc0033d0ad414fb3238e216b0d6dcc08e57dc7026ec4fc9eb8b95",
+  "runner_sha256": "ea522450acc46f90be5e2a7b9257e73ce8b619948105b2c9073aac1f881c7328",
+  "formal_acceptance": false
+}

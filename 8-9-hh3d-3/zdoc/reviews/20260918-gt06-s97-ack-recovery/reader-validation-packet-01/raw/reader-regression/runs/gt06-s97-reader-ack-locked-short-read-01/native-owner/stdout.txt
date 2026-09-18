@@ -1,0 +1,9 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 591.74 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce GTX 1660 Ti
+
+HH_GT06_BENCHMARK_HEARTBEAT {"batch":0,"cycle":0,"main_thread":true,"monotonic_us":6996939,"phase":"HOST_BARRIER","pid":31760,"run_id":"gt06-s97-reader-ack-locked-short-read-01"}
+HH_GT06_HOST_INPUT_OPEN {"attempts":1,"batch":0,"code":"HOST_INPUT_OPEN_PENDING","event":"pending","first_error":12,"first_mono_us":6997378,"first_process_frame":168,"monotonic_us":6997381,"process_frame":168,"scope":"open_only_not_receipt","stage":"ack"}
+HH_GT06_BENCHMARK_HEARTBEAT {"batch":0,"cycle":0,"main_thread":true,"monotonic_us":7501359,"phase":"HOST_BARRIER","pid":31760,"run_id":"gt06-s97-reader-ack-locked-short-read-01"}
+HH_GT06_HOST_INPUT_OPEN {"attempts":113,"batch":0,"code":"HOST_INPUT_OPEN_RECOVERED","event":"recovered","first_error":12,"first_mono_us":6997378,"first_process_frame":168,"monotonic_us":7770399,"process_frame":280,"scope":"open_only_not_receipt","stage":"ack"}
+HH_GT06_HOST_INPUT_SHORT_READ {"actual_bytes":433,"batch":0,"expected_bytes":434,"monotonic_us":7770575,"process_frame":280,"read_error":0,"stage":"ack"}
+HH_GT06_BENCHMARK_FAILED {"batch":0,"code":"BENCHMARK_HOST_ACK_SHORT_READ","completed":false,"cycle":0,"pid":31760}

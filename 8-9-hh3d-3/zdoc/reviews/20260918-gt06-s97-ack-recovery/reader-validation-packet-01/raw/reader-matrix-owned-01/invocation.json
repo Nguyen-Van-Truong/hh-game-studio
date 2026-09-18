@@ -1,0 +1,104 @@
+{
+  "source_files": {
+    "zdoc/reviews/20260918-gt06-s97-ack-recovery/reader-regression/run_reader_regression.py": "4dd5cdaf79a41e8dfec195d77c61be8a4b51911774c7bb3030da0fbcf7bbe880",
+    "zdoc/reviews/20260918-gt06-s97-ack-recovery/reader-regression/reader_regression.gd": "4265d17f1767f6f95602a09d7444fdba5dca50dd7237439b833515092e43db91",
+    "studio/build/bootstrap/run_fixture.py": "ea522450acc46f90be5e2a7b9257e73ce8b619948105b2c9073aac1f881c7328",
+    "studio/tests/replay/benchmark_native.gd": "13e65360cd0bc0033d0ad414fb3238e216b0d6dcc08e57dc7026ec4fc9eb8b95"
+  },
+  "work": [
+    [
+      "start",
+      "read_overlap"
+    ],
+    [
+      "start",
+      "locked_release"
+    ],
+    [
+      "start",
+      "locked_timeout"
+    ],
+    [
+      "start",
+      "malformed"
+    ],
+    [
+      "start",
+      "locked_malformed"
+    ],
+    [
+      "start",
+      "wrong_hash"
+    ],
+    [
+      "start",
+      "wrong_schema"
+    ],
+    [
+      "start",
+      "empty"
+    ],
+    [
+      "start",
+      "oversized"
+    ],
+    [
+      "start",
+      "short_read"
+    ],
+    [
+      "start",
+      "locked_short_read"
+    ],
+    [
+      "ack",
+      "normal"
+    ],
+    [
+      "ack",
+      "read_overlap"
+    ],
+    [
+      "ack",
+      "locked_release"
+    ],
+    [
+      "ack",
+      "locked_timeout"
+    ],
+    [
+      "ack",
+      "malformed"
+    ],
+    [
+      "ack",
+      "locked_malformed"
+    ],
+    [
+      "ack",
+      "wrong_hash"
+    ],
+    [
+      "ack",
+      "wrong_schema"
+    ],
+    [
+      "ack",
+      "empty"
+    ],
+    [
+      "ack",
+      "oversized"
+    ],
+    [
+      "ack",
+      "short_read"
+    ],
+    [
+      "ack",
+      "locked_short_read"
+    ]
+  ],
+  "formal_acceptance": false,
+  "initial_normal_case_separate": true
+}

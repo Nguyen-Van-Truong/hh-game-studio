@@ -1,0 +1,179 @@
+{
+  "results": [
+    {
+      "run_id": "gt06-s97-reader-start-locked-malformed-01",
+      "stage": "start",
+      "case": "locked_malformed",
+      "exit_code": 0,
+      "wrapper_exit_code": 0,
+      "tree_verified": true,
+      "elapsed_seconds": 17.188
+    },
+    {
+      "run_id": "gt06-s97-reader-start-wrong-hash-01",
+      "stage": "start",
+      "case": "wrong_hash",
+      "exit_code": 0,
+      "wrapper_exit_code": 0,
+      "tree_verified": true,
+      "elapsed_seconds": 16.547
+    },
+    {
+      "run_id": "gt06-s97-reader-start-wrong-schema-01",
+      "stage": "start",
+      "case": "wrong_schema",
+      "exit_code": 0,
+      "wrapper_exit_code": 0,
+      "tree_verified": true,
+      "elapsed_seconds": 16.984
+    },
+    {
+      "run_id": "gt06-s97-reader-start-empty-01",
+      "stage": "start",
+      "case": "empty",
+      "exit_code": 0,
+      "wrapper_exit_code": 0,
+      "tree_verified": true,
+      "elapsed_seconds": 16.094
+    },
+    {
+      "run_id": "gt06-s97-reader-start-oversized-01",
+      "stage": "start",
+      "case": "oversized",
+      "exit_code": 0,
+      "wrapper_exit_code": 0,
+      "tree_verified": true,
+      "elapsed_seconds": 16.437
+    },
+    {
+      "run_id": "gt06-s97-reader-start-short-read-01",
+      "stage": "start",
+      "case": "short_read",
+      "exit_code": 0,
+      "wrapper_exit_code": 0,
+      "tree_verified": true,
+      "elapsed_seconds": 16.422
+    },
+    {
+      "run_id": "gt06-s97-reader-start-locked-short-read-01",
+      "stage": "start",
+      "case": "locked_short_read",
+      "exit_code": 0,
+      "wrapper_exit_code": 0,
+      "tree_verified": true,
+      "elapsed_seconds": 16.985
+    },
+    {
+      "run_id": "gt06-s97-reader-ack-normal-01",
+      "stage": "ack",
+      "case": "normal",
+      "exit_code": 0,
+      "wrapper_exit_code": 0,
+      "tree_verified": true,
+      "elapsed_seconds": 16.0
+    },
+    {
+      "run_id": "gt06-s97-reader-ack-read-overlap-01",
+      "stage": "ack",
+      "case": "read_overlap",
+      "exit_code": 0,
+      "wrapper_exit_code": 0,
+      "tree_verified": true,
+      "elapsed_seconds": 16.203
+    },
+    {
+      "run_id": "gt06-s97-reader-ack-locked-release-01",
+      "stage": "ack",
+      "case": "locked_release",
+      "exit_code": 0,
+      "wrapper_exit_code": 0,
+      "tree_verified": true,
+      "elapsed_seconds": 16.953
+    },
+    {
+      "run_id": "gt06-s97-reader-ack-locked-timeout-01",
+      "stage": "ack",
+      "case": "locked_timeout",
+      "exit_code": 0,
+      "wrapper_exit_code": 0,
+      "tree_verified": true,
+      "elapsed_seconds": 18.609
+    },
+    {
+      "run_id": "gt06-s97-reader-ack-malformed-01",
+      "stage": "ack",
+      "case": "malformed",
+      "exit_code": 0,
+      "wrapper_exit_code": 0,
+      "tree_verified": true,
+      "elapsed_seconds": 16.328
+    },
+    {
+      "run_id": "gt06-s97-reader-ack-locked-malformed-01",
+      "stage": "ack",
+      "case": "locked_malformed",
+      "exit_code": 0,
+      "wrapper_exit_code": 0,
+      "tree_verified": true,
+      "elapsed_seconds": 16.953
+    },
+    {
+      "run_id": "gt06-s97-reader-ack-wrong-hash-01",
+      "stage": "ack",
+      "case": "wrong_hash",
+      "exit_code": 0,
+      "wrapper_exit_code": 0,
+      "tree_verified": true,
+      "elapsed_seconds": 16.329
+    },
+    {
+      "run_id": "gt06-s97-reader-ack-wrong-schema-01",
+      "stage": "ack",
+      "case": "wrong_schema",
+      "exit_code": 0,
+      "wrapper_exit_code": 0,
+      "tree_verified": true,
+      "elapsed_seconds": 16.625
+    },
+    {
+      "run_id": "gt06-s97-reader-ack-empty-01",
+      "stage": "ack",
+      "case": "empty",
+      "exit_code": 0,
+      "wrapper_exit_code": 0,
+      "tree_verified": true,
+      "elapsed_seconds": 16.375
+    },
+    {
+      "run_id": "gt06-s97-reader-ack-oversized-01",
+      "stage": "ack",
+      "case": "oversized",
+      "exit_code": 0,
+      "wrapper_exit_code": 0,
+      "tree_verified": true,
+      "elapsed_seconds": 16.296
+    },
+    {
+      "run_id": "gt06-s97-reader-ack-short-read-01",
+      "stage": "ack",
+      "case": "short_read",
+      "exit_code": 0,
+      "wrapper_exit_code": 0,
+      "tree_verified": true,
+      "elapsed_seconds": 15.891
+    },
+    {
+      "run_id": "gt06-s97-reader-ack-locked-short-read-01",
+      "stage": "ack",
+      "case": "locked_short_read",
+      "exit_code": 0,
+      "wrapper_exit_code": 0,
+      "tree_verified": true,
+      "elapsed_seconds": 17.359
+    }
+  ],
+  "expected_count": 19,
+  "source_unchanged": true,
+  "all_completed": true,
+  "formal_acceptance": false
+}

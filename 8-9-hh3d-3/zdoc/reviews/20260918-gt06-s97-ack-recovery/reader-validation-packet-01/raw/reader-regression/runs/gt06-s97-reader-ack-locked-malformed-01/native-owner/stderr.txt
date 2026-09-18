@@ -1,0 +1,6 @@
+ERROR: Parse JSON failed. Error at line 0: Expected '}'
+   at: parse_string (core/io/json.cpp:629)
+   GDScript backtrace (most recent call first):
+       [0] _wait_host_ack (res://addons/hh_benchmark/benchmark_native.gd:859)
+       [1] _process (res://addons/hh_benchmark/benchmark_native.gd:317)
+       [2] _process (res://addons/hh_benchmark/reader_regression.gd:48)
