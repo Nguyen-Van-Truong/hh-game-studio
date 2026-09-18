@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 19-09-2026, Asia/Saigon | Revision S97 | TRIỂN KHAI THEO GATE
+Ngày 19-09-2026, Asia/Saigon | Revision S98 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S97
+PLAN_REVISION=S98
 EXECUTION_MODE=COORDINATOR_THREE_ASTRA_ULTRA_OWNER_20260918
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -54,20 +54,21 @@ GT05_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260917_S64
 GT05_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S64
 GT05_CHECKPOINT_COMMIT=808d8ba
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
-GT06_EVIDENCE_STATUS=S97_READER_24_CASES_VERIFIED_COUPLED_DIAGNOSTIC_PENDING_NO_ACCEPTANCE
-GT06_WORKING_SOURCE_STATUS=S97_FROZEN_TARGETED_READER_TESTED_COUPLED_PENDING
+GT06_EVIDENCE_STATUS=S97_READER_24_CASES_AND_35_BATCH_DIAGNOSTIC_COMPLETE_NO_ACCEPTANCE
+GT06_WORKING_SOURCE_STATUS=S97_FROZEN_TARGETED_READER_TESTED_FULL_DIAGNOSTIC_COMPLETE
 GT06_LAST_TESTED_SOURCE_CLOSURE=cfc4b55a5407891bfd54d22d9f1ac45a74b6c744898199a0e4690d6230a6c1d6
 GT06_CURRENT_SOURCE_CLOSURE=cfc4b55a5407891bfd54d22d9f1ac45a74b6c744898199a0e4690d6230a6c1d6
 GT06_SOURCE_CHECKPOINT=4293acf2d628
 GT06_BENCHMARK_CAMPAIGN=gt06-s86-campaign-01
 GT06_BENCHMARK_STATUS=S86_FAILURE_RETAINED_OBJECTDB_GROWTH_BATCH17_20260918T120235Z
-GT06_ACTIVE_DIAGNOSTIC=gt06-s97-coupled-phases-01; DISPATCH_20260918T172133Z; LIVE_IDENTITIES_OBSERVED_20260918T172311Z; NOT_ACCEPTANCE
-GT06_NEXT_ACTION=Observe S97 coupled diagnostic with short fresh liveness/log checks; keep source/helper/profile fixed and no heavy concurrent workload. At terminal verify actual exits, cleanup, HTTP phases and bound sparse ACK identities before deciding repair or full campaign. No retry or acceptance from partial data.
+GT06_ACTIVE_DIAGNOSTIC=S97_COMPLETE_35_BATCHES; DERIVED_EXIT_RECONCILIATION_VERIFIED; NO_ACCEPTANCE
+GT06_FULL_CAMPAIGN=gt06-s98-campaign-01; DISPATCH_PENDING_REGISTRATION; SOURCE_IDENTICAL_TO_S97; FRESH_ID_REQUIRED
+GT06_NEXT_ACTION=Register and start source-identical S98 full campaign (10 fresh pairs x35 batches, original profile); preserve S97 diagnostic and derived exit correction, then verify all actual exits/cleanup/dataset before final manifest and two new critics.
 GT06_S88_SCHEDULER_TASK=OBSERVED_ABSENT_20260918; historic_delete_report_retained_in_chat; durable_delete_receipt_missing
 GT06_S90_DIAGNOSTIC=gt06-s90-lifecycle-attribution-01; preflight=gt06-s90-lifecycle-attribution-preflight-06; five_partial_batches; interrupted_before_batch5_capture; formal_acceptance=false; eligible_for_dataset=false
 GT06_DIAGNOSTIC_EXCLUSION=S81-S90 diagnostic and partial/failure prefixes are excluded from F13/F14 acceptance datasets; see s83-mapping requirements and each packet manifest.
 
-TIẾN ĐỘ HIỆN HÀNH — S97, ngày 19-09-2026 (mốc run ghi UTC)
+TIẾN ĐỘ HIỆN HÀNH — S98, ngày 19-09-2026 (mốc run ghi UTC)
 GT-01–05 ACCEPTED; GT-06 IN_PROGRESS; GT-07–10 chưa mở.
 Source checkpoint4293acf2d628; formal51closure ở marker trên. Profile giữ nguyên
 0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85.
@@ -91,14 +92,19 @@ handle thì cùng process đọc đúng bytes. Native/parent actualexit0, cleanu
 43exactcopies được giữ ở rename-probe-retained-01. Chứng minh cơ chế chia sẻ
 handle, chưa chứng minh nhánh/interleaving cụ thể gây lỗi S96.
 
-LƯỢT ĐANG CHẠY: gt06-s97-coupled-phases-01, task cùng tên với prefix HHStudio.GT06.
-Dispatch17:21:33Z; quan sát mới17:23:11Z thấy supervisor8924/host22184/editor33500
-sống, start/executable khớp; host/editor stderr0. Scheduler state4/instances0
-không tự chứng minh sống/chết. startup-liveness-02.json sửa lỗi reader schema
-trong quan sát01 (supervisor dùng process, editor là editor-adoption); không phải
-lỗi engine. First ACK0/1 kiểm17:26:43Z: hashes/run/PID/barrier/deadline khớp,
-ObjectDB71128/resources6, max native gaps570.482/682.956ms. Host windows
-63.309/70.298s; warmup prefix không PASS. Baseline ACK4 kiểm17:33:26Z: sparse/post/ACK/native bindings khớp, counters71128/6, self-drift=false,4607 IDs một phần. Có7 joint rows0–6; recent5 trung bình91.742s, extrapolation còn43phút nhưng chưa gồm chậm về sau/cleanup; giữ khoảng dự kiến45–80phút. Receipt launch-01/baseline4-observation.json; không no-leak/PASS.
+S97 đã hoàn tất diagnostic35batch, task đã kết thúc và không có engine nào còn chạy.
+Raw `studio/.local/reviews/gt06-s97-coupled-phases-01` có đủ35 joint/ACK/native/capture/
+sample rows0–34. Các bộ đếm mọi joint row là ObjectDB71128/resources6;
+max native status gap756.589ms. HTTP phases ghi zero transport failure,
+zero unfinished spans, zero identity loss và zero dropped spans. Host/editor/importactual exits đều0; jobs zero/closed, handles released, source unchanged, lỗi trống.
+Child record để trống host/supervisor exit theo thiết kế self-observation; script
+`reconcile_s97_terminal.py` đối chiếu receipt ngoài và tạo
+`s97-terminal-exit-reconciliation.json`, không sửa raw, không suy natural self-exit.
+S97 vẫn diagnostic-only, formal_acceptance=false, eligible_for_dataset=false;
+không no-leak/PASS và không nhập F13/F14.
+
+LƯỢT TIẾP THEO: gt06-s98-campaign-01, full acceptance campaign mới, source/profile/
+workstation giữ nguyên; task chưa đăng ký ở mốc này. Sẽ chạy10 fresh host/editorpairs ×35 batch (5 warmup+30 measured), 1000 HTTP+100 native mỗi batch, giữnguyên deadline/gate, rồi kiểm dataset, hashes, actual exits, trees, handles vàmọi failed-attempt inventory trước khi đóng manifest và gọi hai critic mới.
 Helper/launch ở reviews/20260918-gt06-s97-ack-recovery/coupled-next/;
 raw studio/.local/reviews/gt06-s97-coupled-phases-01. Helper14closure
  e5c9b2a2c06e42dae8c0892227523db023e14ffafcebbfe21d97c7860412b09c;

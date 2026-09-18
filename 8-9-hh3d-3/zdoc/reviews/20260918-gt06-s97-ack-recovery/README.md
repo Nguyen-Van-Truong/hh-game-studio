@@ -92,6 +92,27 @@ Use the current tools-plan markers for whether reader validation or a coupled
 diagnostic is still active. A candidate/source change always requires a new
 run identity. Old and new helper hashes remain separate in their freezes.
 
+## S97 terminal result
+
+The coupled diagnostic completed all 35 batches under the frozen source and
+profile. Every batch has its native publication, ACK, joint row, capture and
+sample preview; the sequence is contiguous 0–34. The raw child record leaves
+its own host/supervisor exit fields null by design because a child cannot prove
+its own later termination. Outer receipts independently record host, editor and
+import exit **0**. The derived
+`s97-terminal-exit-reconciliation.json` verifies those receipts against the raw
+hashes, confirms zero/closed jobs and released handles, and records the
+correction without changing any raw file or inferring natural self-exit.
+
+Observed coupled counters remained Objects **71128** and Resources **6** for
+all 35 rows; maximum native status gap was **756.589 ms**. The bounded HTTP
+recorder reported zero transport failures, no unfinished spans, zero identity
+loss and zero dropped spans. This is a completed **diagnostic**, explicitly
+`formal_acceptance=false` and `eligible_for_dataset=false`; it does not prove
+absence of leaks, resolve the older S86 ObjectDB question, or satisfy GT06's
+ten-fresh-pairs acceptance benchmark. The next action is a new, source-identical
+full GT06 campaign with a fresh run identity.
+
 ## Frozen continuation and operational lessons
 
 Source checkpoint4293acf2d628 binds the51-file candidate. Preflight completed
