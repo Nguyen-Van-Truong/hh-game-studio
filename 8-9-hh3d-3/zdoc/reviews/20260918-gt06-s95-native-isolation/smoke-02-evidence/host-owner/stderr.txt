@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260918-gt06-s95-native-isolation\native_isolation.py", line 563, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260918-gt06-s95-native-isolation\native_isolation.py", line 559, in main
+    return child(args) if args.owned_child else parent(args)
+           ^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260918-gt06-s95-native-isolation\native_isolation.py", line 451, in child
+    result.update(verify_native(project, binding, snapshot, capture, lock, args))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260918-gt06-s95-native-isolation\native_isolation.py", line 386, in verify_native
+    sparse = verify_sparse(directory, args, counts, pid)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260918-gt06-s95-native-isolation\native_isolation.py", line 288, in verify_sparse
+    need(type(batch) is int and 4 <= batch < len(counts)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260918-gt06-s95-native-isolation\native_isolation.py", line 46, in need
+    raise RuntimeError(code)
+RuntimeError: ISOLATION_SPARSE_PHASE_COUNTER

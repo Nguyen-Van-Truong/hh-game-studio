@@ -1,0 +1,13 @@
+test_changed_write_batch_prologue_fails_closed (__main__.NativeIsolationOverlayTests.test_changed_write_batch_prologue_fails_closed) ... ok
+test_hook_preserves_counter_lifecycle_and_real_heartbeat_coverage_with_exact_roundtrip (__main__.NativeIsolationOverlayTests.test_hook_preserves_counter_lifecycle_and_real_heartbeat_coverage_with_exact_roundtrip) ... ok
+test_absent_receipt_does_not_start_publication_grace (__main__.ProcessStartPublicationTests.test_absent_receipt_does_not_start_publication_grace) ... ok
+test_completed_invalid_record_is_not_retried (__main__.ProcessStartPublicationTests.test_completed_invalid_record_is_not_retried) ... ok
+test_incomplete_publication_expires_without_reset_on_rewrite_or_disappearance (__main__.ProcessStartPublicationTests.test_incomplete_publication_expires_without_reset_on_rewrite_or_disappearance) ... ok
+test_missing_empty_and_partial_receipt_poll_then_valid_pid (__main__.ProcessStartPublicationTests.test_missing_empty_and_partial_receipt_poll_then_valid_pid) ... ok
+test_oversize_unsafe_and_other_io_errors_are_not_publication_retries (__main__.ProcessStartPublicationTests.test_oversize_unsafe_and_other_io_errors_are_not_publication_retries) ... ok
+test_publication_retry_is_bounded_by_existing_stage_deadline (__main__.ProcessStartPublicationTests.test_publication_retry_is_bounded_by_existing_stage_deadline) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.118s
+
+OK

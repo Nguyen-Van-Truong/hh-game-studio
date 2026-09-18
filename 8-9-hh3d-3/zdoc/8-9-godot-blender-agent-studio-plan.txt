@@ -88,9 +88,15 @@ campaign51map. Ba worker Astra ultra chia helper/native review/HTTP analysis;
 implementation review không thay final critic.
 Chuẩn bị hai thí nghiệm tách biệt, chạy tuần tự: HTTP với bản sao history để
 đo journal/lock phases; native-only35×100 sparse để HTTP không cắt mất lượt
-quan sát ObjectDB. Smoke01 native5×1 đạt readback và cleanup, baseline-only; reviewer phát hiện
-receipt publication race và hook nằm sau timestamp. Sửa helper trước lượt
-dài, giữ smoke01/source cũ, smoke02 mới kiểm phần ảnh hưởng.
+quan sát ObjectDB. Smoke01 giữ nguyên; preflight phát hiện receipt publication race và hook
+sau timestamp. Smoke02 collector fail vì chuyển census trước semantic inspect:
+71062→71063 khác lifecycle, nativeexit0/clean. Sửa hook về cùng thời điểm
+counters, refresh actualtimestamp và heartbeat thật sau capture. Smoke03
+5×1 readback/cleanup đạt: import33312/editor18096exit0, outer1444/helper31040
+exit0/treeverified;8focused tests đạt. Chỉ baseline, chưa là growth/benchmarkPASS.
+Native40closure ebed9418490379bb902d2049e4a2f98a96e3378d09b369aef02684e16214c74e;
+helper4448ab35a6e087c8756063e0d8a025f4dc60a44329fcf56c4b270e6d1474302b.
+Helper/preflight/launch: reviews/20260918-gt06-s95-native-isolation/.
 Native-only là experiment khác, không continuation S93,
 không có benchmark acceptance; thiếu host load/idle/ACK giới hạn kết luận âm.
 

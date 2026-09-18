@@ -1,0 +1,168 @@
+{
+  "formal_acceptance": false,
+  "run_id": "gt06-s95-native-smoke-01",
+  "raw_relative": "8-9-hh3d-3/studio/.local/reviews/gt06-s95-native-smoke-01",
+  "artifacts": {
+    "child-result.json": {
+      "sha256": "44ea142f437af2127d5f8860e01e9973e7ca7d103f40512084964221d5ec1e3c",
+      "size_bytes": 1590
+    },
+    "diagnostic.json": {
+      "sha256": "b5f21e216ced0768e1d4affe76052865c4a607c49325f9cb006333c65acdd98e",
+      "size_bytes": 5153
+    },
+    "editor-host-terminal.json": {
+      "sha256": "0241ce83c80c9eae55d45fa61495f3ee2444417ae5b0634a6dde547515fbaa37",
+      "size_bytes": 2020
+    },
+    "editor-host/capture.json": {
+      "sha256": "e3d14c3a29fc4d8678b0b938009c342b965810efea530f3c0bca23328f6056f6",
+      "size_bytes": 9822
+    },
+    "editor-host/cleanup-001.json": {
+      "sha256": "379d7a25b4032e6cb243e100aa8a5ebcd3d82a94e45b71e0f18e47fe7e569534",
+      "size_bytes": 528
+    },
+    "editor-host/invocation.json": {
+      "sha256": "41399d641f9ed9a5fe4e402743b3ed89f8d3944b44087edc5caed184637c11fa",
+      "size_bytes": 8398
+    },
+    "editor-host/process-exit.json": {
+      "sha256": "935cc8a2b3f2db3a7ed2af306b00b9f8ec2044fe8d1f7209857cf785f6890adb",
+      "size_bytes": 30
+    },
+    "editor-host/process-start.json": {
+      "sha256": "22f18db5a5a6588c89183d86f68a4236751dc95bdfeea61bc3c9c5ecb2d1c6db",
+      "size_bytes": 14
+    },
+    "editor-host/stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "editor-host/stdout.txt": {
+      "sha256": "eadd83014ce4a835b4b87052fddfd82e9195ddfe780a49f628b0d37fcf3074ec",
+      "size_bytes": 5946
+    },
+    "editor-snapshot.json": {
+      "sha256": "117ced14158aa1198fe520ff92419589cca9baf97075927d48fe2ed53854d728",
+      "size_bytes": 1574
+    },
+    "host-owner/capture.json": {
+      "sha256": "a5005e5a2dd351a3584920baacc86023f8d79e98f66375352d7a7c43904b843b",
+      "size_bytes": 7592
+    },
+    "host-owner/cleanup-001.json": {
+      "sha256": "379d7a25b4032e6cb243e100aa8a5ebcd3d82a94e45b71e0f18e47fe7e569534",
+      "size_bytes": 528
+    },
+    "host-owner/invocation.json": {
+      "sha256": "222ef283a8b5b7aed6556379bb62d4ce34ea114e07da18126621dd78608f91df",
+      "size_bytes": 6169
+    },
+    "host-owner/process-exit.json": {
+      "sha256": "bfb4598063288c1de663c0a5d7a4ec18eb2d96fdfd6601ebd5555d754be76006",
+      "size_bytes": 30
+    },
+    "host-owner/process-start.json": {
+      "sha256": "df80b94cf916335b7cdf28f7b109c65409845eb39be3e021880fa9b64bea2af2",
+      "size_bytes": 14
+    },
+    "host-owner/stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "host-owner/stdout.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "import-host-terminal.json": {
+      "sha256": "fd0404589893144ee3b632d2c23d20ea381727038a442c14979c82fcf6a3cf01",
+      "size_bytes": 642
+    },
+    "import-host/capture.json": {
+      "sha256": "b9e03baf5f73ee4c3eb3075e40364cb9123bc1d6de2140d2775e2b2e3a9f4571",
+      "size_bytes": 9750
+    },
+    "import-host/cleanup-001.json": {
+      "sha256": "379d7a25b4032e6cb243e100aa8a5ebcd3d82a94e45b71e0f18e47fe7e569534",
+      "size_bytes": 528
+    },
+    "import-host/invocation.json": {
+      "sha256": "c91fbf68b03d804e8c7dc619601845f819de797e7b68dbb74cf2b1a9369720e1",
+      "size_bytes": 8327
+    },
+    "import-host/process-exit.json": {
+      "sha256": "60620929ce4ac7f1e969d96a72450dc5cee4a45097bd7bfc3c555820ed0aa411",
+      "size_bytes": 30
+    },
+    "import-host/process-start.json": {
+      "sha256": "5f991147564d635801dadf1a9249510aadda37ba97bd17f8389ca9a727ba72d1",
+      "size_bytes": 14
+    },
+    "import-host/stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "import-host/stdout.txt": {
+      "sha256": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003",
+      "size_bytes": 1492
+    },
+    "native-overlay.json": {
+      "sha256": "df86b087fddc5b73d4ff8d435d7b6445739547388fde5933141aef1184bf73f8",
+      "size_bytes": 506
+    },
+    "project-snapshot.json": {
+      "sha256": "c04357d774819cbe98a25373364f7798bfafb27e39b646875c7661cdfaf20ad3",
+      "size_bytes": 1461
+    },
+    "project/benchmark/out/batch-00.json": {
+      "sha256": "becf70deda8b1f0ba167d75ee8e5d25128c9d79e754db5f293f81f3a03fdf26b",
+      "size_bytes": 1745
+    },
+    "project/benchmark/out/batch-01.json": {
+      "sha256": "24c7296c0ea170583dfa48019d72fcb5c634bd0b8e5c593a06ff085e2b1ef3fa",
+      "size_bytes": 1745
+    },
+    "project/benchmark/out/batch-02.json": {
+      "sha256": "3223d53aa9f24a3fa0ec7944ca222f198fff678ff9ecced319e7304ce2e11817",
+      "size_bytes": 1746
+    },
+    "project/benchmark/out/batch-03.json": {
+      "sha256": "27bc9ca8f98e556f58d1da7642313bb904c537511094220ab686538a77f37e6a",
+      "size_bytes": 1756
+    },
+    "project/benchmark/out/batch-04.json": {
+      "sha256": "98972a08ce3de582d88b3cf8a4adcf69f4071afeee6c24735c05f144858a19e9",
+      "size_bytes": 1758
+    },
+    "project/benchmark/out/index.json": {
+      "sha256": "f62fa4913db85b71bd0c7711f2ea332fa31d21c6d382ab0e53a178aafc656ce0",
+      "size_bytes": 8664
+    },
+    "project/benchmark/out/sparse-00.json": {
+      "sha256": "5fe4d47099a799ab5ae71a6ffe678d742ff188af14bbe44df96537288bbd21bc",
+      "size_bytes": 63870
+    },
+    "project/benchmark/out/sparse-post-00.json": {
+      "sha256": "36ab20f656461dcead1c141ff3330e286256e98ef43a4d7077181134fff1caec",
+      "size_bytes": 548
+    },
+    "supervisor-result.json": {
+      "sha256": "0daba7ac8bce12aec67e9e7ca6ea1cef8d9f136abc720996d9c55ad495847c01",
+      "size_bytes": 996
+    },
+    "output-manifest.json": {
+      "sha256": "a08f4396c836074ae33e70a2df69d3e8eb0fc1a41c3eb1c270cbae035434556f",
+      "size_bytes": 5039
+    },
+    "source/zdoc/reviews/20260918-gt06-s95-native-isolation/native_isolation.py": {
+      "sha256": "4e329e88bc2995310ea3e5fe0062c098d757a4ff2092d17954e86d0fee3e4ea6",
+      "size_bytes": 29005
+    },
+    "source/zdoc/reviews/20260918-gt06-s95-native-isolation/object_probe_s95.gd": {
+      "sha256": "8a1ef457b6d4612fbf61176bc99598ec046d72c081e01c73665bb3237680784e",
+      "size_bytes": 9120
+    }
+  },
+  "limitation": "Baseline-only 5x1. Helper preflight findings fixed afterward; no growth or coupled acceptance claim. Outer command exit0 observed by exec session47217; this copy has no independent durable outer receipt."
+}

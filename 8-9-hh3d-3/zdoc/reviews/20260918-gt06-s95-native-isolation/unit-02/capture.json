@@ -1,0 +1,22 @@
+{
+  "host": {
+    "wrapper_pid": 25420,
+    "started_at": "2026-09-18T15:14:53.873068+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "$SNAPSHOT/test_native_isolation.py",
+      "-v"
+    ],
+    "exit_code": 0,
+    "target_pid": 50084,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "unit-stdout.txt",
+    "stderr": "unit-stderr.txt",
+    "host": "unit-host.json"
+  },
+  "source_unchanged": true
+}

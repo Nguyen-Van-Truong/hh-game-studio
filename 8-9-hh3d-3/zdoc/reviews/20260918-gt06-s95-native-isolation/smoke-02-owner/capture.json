@@ -1,0 +1,26 @@
+{
+  "wrapper_pid": 42244,
+  "started_at": "2026-09-18T15:12:56.049795+00:00",
+  "argv": [
+    "python.exe",
+    "-B",
+    "$SNAPSHOT/native_isolation.py",
+    "--mode",
+    "smoke",
+    "--run-id",
+    "gt06-s95-native-smoke-02",
+    "--source-sha256",
+    "ebed9418490379bb902d2049e4a2f98a96e3378d09b369aef02684e16214c74e",
+    "--helper-sha256",
+    "2df270a01476e4f4facce917014416bc7e1101a81604675402f02da304545ebf"
+  ],
+  "exit_code": 1,
+  "target_pid": 46868,
+  "wrapper_exit_code": 0,
+  "timed_out": false,
+  "tree_verified": true,
+  "ownership": "gated_job_kill_on_close",
+  "stdout": "smoke-stdout.txt",
+  "stderr": "smoke-stderr.txt",
+  "host": "smoke-host.json"
+}
