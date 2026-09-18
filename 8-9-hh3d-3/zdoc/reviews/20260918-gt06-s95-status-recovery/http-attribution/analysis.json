@@ -1,0 +1,131 @@
+{
+  "schema": "HH-GT06-S95-HTTP-ATTRIBUTION-ANALYSIS-1",
+  "run": "run-01",
+  "formal_acceptance": false,
+  "eligible_for_dataset": false,
+  "root_cause_established": false,
+  "analysis_scope": "Derived from retained JSON and exact source maps; no new runtime or tests",
+  "inputs": [
+    "run-01/freeze.json",
+    "run-01/child/report.json",
+    "run-01/child/command-00.json through command-19.json",
+    "run-01/owned/capture.json",
+    "run-01/owned/http-host.json",
+    "../source-current.json"
+  ],
+  "source_provenance": {
+    "formal_commit": "ad81e9444313e6d5cf5bc084d5f771582f16c60c",
+    "formal_source_closure_sha256": "564e5b7877f49d33a1af84eaf3b3a7ddf4ea2f846c4161eb694c5c40514fc752",
+    "formal_source_count": 51,
+    "http_source_closure_sha256": "1d7726ca9af7c05989aa5bcd4b74372ab386af41c0ca8d7d43381df1752ad7b7",
+    "http_source_count": 48,
+    "common_file_count": 48,
+    "common_hash_mismatches": [],
+    "http_only_paths": [],
+    "formal_only_files": {
+      "godot-addon/bundle_staging.py": "3d614edbec8e9a7f5ad3caf2b9694d7498df129de95683952268621f91d68e43",
+      "godot-addon/bundle_v2.py": "2c5cdc71cdaf80f58bb93ec791e84bab8bd02cd4d9bdbd93d635db13583de62a",
+      "godot-addon/fixture_profile.py": "25e1667dd930dcf0746b071fc29ea3460bc18d5fb9f3f83e806c1793028f21ae"
+    },
+    "explanation": "The collector includes imported Python modules. The HTTP launcher imports the campaign but does not load the dynamic Godot fixture factory; its exact 48-file map equals the formal 51-file map with only these three factory/bundle files removed. Shared code hashes are identical. This narrower diagnostic closure neither replaces nor certifies the formal closure.",
+    "source_original_unchanged": true,
+    "source_copy_unchanged": true,
+    "loaded_source_matches_freeze": true,
+    "history_sha256": "1e12bfae2d5fe2da1947447a6b75c3da073811baefc70fc6f095513ebc1d361f",
+    "history_bytes": 6928143,
+    "s93_supplies_history_only": true,
+    "original_and_copy_history_unchanged": true
+  },
+  "workload": {
+    "engine_runs": 0,
+    "diagnostic_groups": 20,
+    "commands_per_group": 10,
+    "commands": 200,
+    "inspect": 100,
+    "expected_rejections": 60,
+    "admitted": 40,
+    "mock_effects": 40,
+    "extra_cancel_commands": 20,
+    "cancel_no_effect_confirmed": 20,
+    "lookup_attempts_including_cancel": 160,
+    "discovery_dispatches": 20,
+    "lease_dispatches": 20,
+    "completed": true,
+    "scope": "New project over copied history; repeated ten-command diagnostics, not S93's 1000-command/native workload"
+  },
+  "wire_outcomes": {
+    "command_receipts": {"ACCEPTED_PENDING": 140, "REJECTED": 60, "UNKNOWN": 0},
+    "command_terminals": {"COMMITTED": 140, "REJECTED": 60, "UNKNOWN": 0},
+    "lookup_statuses": {"COMMITTED": 140, "CANCELED": 20, "UNKNOWN": 0},
+    "cancel_unknown_receipts": 0,
+    "lookup_attempts_with_transport_failure_field": 160,
+    "non_null_transport_failures": 0
+  },
+  "phases": {
+    "initialize": {"journal_load_ms": 5031.4, "writer_held_ms": 5031.478},
+    "http": {
+      "first_started_mono_us": 642100103504,
+      "last_ended_mono_us": 642120655333,
+      "elapsed_across_groups_ms": 20551.829,
+      "max_reported_status_gap_ms": 401.4742,
+      "max_gap_group_index": 11,
+      "max_raw_lookup_interval_ms": 141.931,
+      "max_cancel_receipt_ms": 86.9437
+    },
+    "close": {"completed": true, "separate_duration_measured": false},
+    "target_deadline_seconds": 105,
+    "timed_out": false
+  },
+  "operation_timings_ms": {
+    "journal.snapshot": {"count": 782, "total": 12600.4101, "max": 53.4395},
+    "journal.reload": {"count": 780, "total": 12587.3953, "max": 53.482},
+    "journal.append": {"count": 340, "total": 3919.0514, "max": 336.0078},
+    "journal.load": {"count": 1, "total": 5031.4, "max": 5031.4},
+    "journal.writer_wait": {"count": 781, "total": 2179.2728, "max": 29.6578},
+    "journal.writer_held": {"count": 781, "total": 21852.4556, "max": 5031.478, "max_http": 353.2521},
+    "host.commands": {"count": 220, "total": 8206.1267, "max": 399.1932},
+    "host.lookup": {"count": 160, "total": 8948.3793, "max": 139.7425},
+    "host.cancel": {"count": 20, "total": 1197.2897, "max": 85.0698},
+    "host.discovery": {"count": 20, "total": 4.6932, "max": 1.2718},
+    "host.lease": {"count": 20, "total": 456.1189, "max": 52.6308}
+  },
+  "largest_http_span": {
+    "group": 11,
+    "command_ordinal": 4,
+    "command_kind": "inspect",
+    "raw_command_start_mono_us": 642111707415,
+    "raw_command_receipt_mono_us": 642112108708,
+    "raw_command_terminal_mono_us": 642112162690,
+    "raw_inspect_through_terminal_ms": 455.2747,
+    "host_dispatch": {"start_mono_ns": 642111708584800, "end_mono_ns": 642112107778000, "ms": 399.1932},
+    "nested_writer_held": {"start_mono_ns": 642111754464800, "end_mono_ns": 642112107716900, "ms": 353.2521},
+    "nested_append": {"start_mono_ns": 642111771630000, "end_mono_ns": 642112107637800, "ms": 336.0078},
+    "interpretation": "Timestamp containment localizes most of this observed dispatch span inside append while the writer guard was held. The wrapper does not split append into encoding, SQLite, file IO, fsync or scheduling, and this is not S93's rare lookup failure."
+  },
+  "cleanup": {
+    "actual_target_pid": 8824,
+    "actual_target_exit": 0,
+    "actual_helper_pid": 13900,
+    "actual_helper_exit": 0,
+    "target_exit_missing": false,
+    "owned_job_tree_verified_zero": true,
+    "producer_closed": true,
+    "threads_alive": [false, false, false],
+    "main_and_control_sockets_closed": true,
+    "journal_cache_closed": true,
+    "journal_index_retained": false,
+    "observer_handle_retained": false,
+    "observer_close_uncertain": false,
+    "stdout_bytes": 0,
+    "stderr_bytes": 0,
+    "scope_limit": "The reused runner provides owned Job tree and actual helper/target exits, not the separate S93 observer's additional retained process-handle close receipts."
+  },
+  "limitations": [
+    "No UNKNOWN or 2000ms status gap occurred in this short run; non-reproduction does not establish a fix or root cause.",
+    "Initialization load is outside the HTTP group response window; do not confuse its 5.0314 seconds with a status-gap sample.",
+    "Instrumentation retains only the largest sixteen spans at or above 50ms per operation. Operation totals span initialization, HTTP and close; retained samples carry phase labels.",
+    "Nested snapshot/reload/writer-held/dispatch spans overlap; totals are not additive and instrumentation adds overhead.",
+    "returned_count is wrapper normal-return bookkeeping, not an error counter or protocol status; expected rejected operations can unwind wrappers.",
+    "No native benchmark, ObjectDB growth proof, formal source acceptance or F13/F14 verdict is provided."
+  ]
+}

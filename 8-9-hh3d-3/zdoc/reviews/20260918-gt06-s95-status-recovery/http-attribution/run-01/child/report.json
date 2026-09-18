@@ -1,0 +1,929 @@
+{
+  "batches": [
+    {
+      "commands": 10,
+      "effect_count_after": 2,
+      "index": 0,
+      "max_status_gap_ms": 74.9316
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 4,
+      "index": 1,
+      "max_status_gap_ms": 90.8111
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 6,
+      "index": 2,
+      "max_status_gap_ms": 78.2047
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 8,
+      "index": 3,
+      "max_status_gap_ms": 83.6234
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 10,
+      "index": 4,
+      "max_status_gap_ms": 90.2917
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 12,
+      "index": 5,
+      "max_status_gap_ms": 89.3945
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 14,
+      "index": 6,
+      "max_status_gap_ms": 98.2903
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 16,
+      "index": 7,
+      "max_status_gap_ms": 88.9885
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 18,
+      "index": 8,
+      "max_status_gap_ms": 101.5931
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 20,
+      "index": 9,
+      "max_status_gap_ms": 80.1176
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 22,
+      "index": 10,
+      "max_status_gap_ms": 93.8112
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 24,
+      "index": 11,
+      "max_status_gap_ms": 401.4742
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 26,
+      "index": 12,
+      "max_status_gap_ms": 85.1406
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 28,
+      "index": 13,
+      "max_status_gap_ms": 72.8823
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 30,
+      "index": 14,
+      "max_status_gap_ms": 97.5942
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 32,
+      "index": 15,
+      "max_status_gap_ms": 78.464
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 34,
+      "index": 16,
+      "max_status_gap_ms": 142.2451
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 36,
+      "index": 17,
+      "max_status_gap_ms": 76.4867
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 38,
+      "index": 18,
+      "max_status_gap_ms": 83.1065
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 40,
+      "index": 19,
+      "max_status_gap_ms": 88.3106
+    }
+  ],
+  "closed": true,
+  "completed": true,
+  "current_source_closure_sha256": "1d7726ca9af7c05989aa5bcd4b74372ab386af41c0ca8d7d43381df1752ad7b7",
+  "eligible_for_dataset": false,
+  "engine_runs": 0,
+  "formal_acceptance": false,
+  "groups_completed": 20,
+  "groups_requested": 20,
+  "history_after_sha256": "1e12bfae2d5fe2da1947447a6b75c3da073811baefc70fc6f095513ebc1d361f",
+  "history_before_sha256": "1e12bfae2d5fe2da1947447a6b75c3da073811baefc70fc6f095513ebc1d361f",
+  "history_unchanged": true,
+  "host_cleanup": {
+    "closing": true,
+    "control_socket_closed": true,
+    "main_socket_closed": true,
+    "stopped": true
+  },
+  "instrumentation": {
+    "policy_changed": false,
+    "slow_cap_per_operation": 16,
+    "slow_selection": "largest observed spans",
+    "slow_threshold_ns": 50000000,
+    "spans_overlap": true,
+    "timeout_retry_fsync_lock_unchanged": true,
+    "writer_held": "original acquired guard through release, including nested instrumentation",
+    "writer_wait": "entry through original mutex and OS writer guard acquisition"
+  },
+  "journal_cleanup": {
+    "cache_closed": true,
+    "index_retained": false
+  },
+  "loaded_modules": {
+    "studio.host.core.journal": {
+      "path": "studio/host/core/journal.py",
+      "sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6"
+    },
+    "studio.host.core.limits": {
+      "path": "studio/host/core/limits.py",
+      "sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f"
+    },
+    "studio.host.core.redaction": {
+      "path": "studio/host/core/redaction.py",
+      "sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f"
+    },
+    "studio.host.core.transport": {
+      "path": "studio/host/core/transport.py",
+      "sha256": "1ec03356b1cb8c8987e1604bcb164aea6a9934dbe259451c19e12de36398aba0"
+    },
+    "studio.host.replay.disk_journal_index": {
+      "path": "studio/host/replay/disk_journal_index.py",
+      "sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28"
+    },
+    "studio.host.replay.process_probe": {
+      "path": "studio/host/replay/process_probe.py",
+      "sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500"
+    },
+    "studio.host.replay.verified_journal": {
+      "path": "studio/host/replay/verified_journal.py",
+      "sha256": "129baa4d9e08c8a1d5acf2ea05c9c89a4fdddb53ca6f3baf2d61311ab98e62ab"
+    },
+    "studio.protocol": {
+      "path": "studio/protocol/__init__.py",
+      "sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f"
+    },
+    "studio.protocol._rfc8785": {
+      "path": "studio/protocol/_rfc8785/__init__.py",
+      "sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b"
+    },
+    "studio.protocol._rfc8785._impl": {
+      "path": "studio/protocol/_rfc8785/_impl.py",
+      "sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec"
+    },
+    "studio.protocol.core": {
+      "path": "studio/protocol/core.py",
+      "sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e"
+    },
+    "studio.tests.replay.benchmark_commands": {
+      "path": "studio/tests/replay/benchmark_commands.py",
+      "sha256": "29ab59c799855e6695f5c0db18b21ed4ee3f7cd70fb42dcc3b9784e8960d6ca0"
+    },
+    "studio.tests.replay.benchmark_transport": {
+      "path": "studio/tests/replay/benchmark_transport.py",
+      "sha256": "3b789fc025c5d217d8567ee1a3cd97ccf4c2e01214c974417643c080622848df"
+    }
+  },
+  "loaded_source_matches_freeze": true,
+  "observer_cleanup": {
+    "close_uncertain": false,
+    "handle_retained": false
+  },
+  "producer_history_sha256": "1178ae2c913e27d826102f0933879178cdce2dcefb09a0d61ff206941b8d0e96",
+  "schema": "HH-GT06-S95-HTTP-ATTRIBUTION-1",
+  "scope": "New project and producer over copied history; twenty ten-command HTTP diagnostics, not an S93 replay or benchmark",
+  "source_after": {
+    "studio/blender-addon/ipc_client.py": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9",
+    "studio/contracts/perf-collector.schema.json": "394d1df03bdfd736ea3fe9f260e9d718d35f3820cde35d1c45ccab65fbc24834",
+    "studio/godot-addon/addons/hh_studio/plugin.cfg": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+    "studio/godot-addon/addons/hh_studio/plugin.gd": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+    "studio/godot-addon/addons/hh_studio/scene_commands.gd": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+    "studio/godot-addon/cli_job.py": "5a0f37bc129bde409a2657054fb091d637d838e442d45a69e7adc1f1527d4c88",
+    "studio/godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+    "studio/godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+    "studio/godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+    "studio/godot-addon/fixture_profile/project.godot": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+    "studio/godot-addon/fixture_profile/scripts/fixture_actor.gd.uid": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+    "studio/godot-addon/fixture_profile/source-pins.json": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2",
+    "studio/host/blender/__init__.py": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90",
+    "studio/host/blender/deadline.py": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926",
+    "studio/host/blender/export_job.py": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe",
+    "studio/host/blender/glb_preflight.py": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62",
+    "studio/host/blender/ui_host.py": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35",
+    "studio/host/core/journal.py": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6",
+    "studio/host/core/limits.py": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f",
+    "studio/host/core/private_store.py": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476",
+    "studio/host/core/redaction.py": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f",
+    "studio/host/core/safe_create.py": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606",
+    "studio/host/core/safe_open.py": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535",
+    "studio/host/core/transport.py": "1ec03356b1cb8c8987e1604bcb164aea6a9934dbe259451c19e12de36398aba0",
+    "studio/host/replay/disk_journal_index.py": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28",
+    "studio/host/replay/perf.py": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7",
+    "studio/host/replay/process_probe.py": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500",
+    "studio/host/replay/verified_journal.py": "129baa4d9e08c8a1d5acf2ea05c9c89a4fdddb53ca6f3baf2d61311ab98e62ab",
+    "studio/pipeline/__init__.py": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68",
+    "studio/pipeline/native_job.py": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca",
+    "studio/protocol/__init__.py": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f",
+    "studio/protocol/_rfc8785/__init__.py": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b",
+    "studio/protocol/_rfc8785/_impl.py": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec",
+    "studio/protocol/core.py": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e",
+    "studio/protocol/jcs_godot.gd": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+    "studio/tests/replay/benchmark_assembly.py": "19c684d72995327e65458422ab66384e4d586705cad31f3ab3fd8615934f2a22",
+    "studio/tests/replay/benchmark_commands.py": "29ab59c799855e6695f5c0db18b21ed4ee3f7cd70fb42dcc3b9784e8960d6ca0",
+    "studio/tests/replay/benchmark_job.py": "be424a6f37ae573ac4bf40954b31017025daee2147699c80b05f9a0ab70e1611",
+    "studio/tests/replay/benchmark_native.gd": "52fbd9af5c6191ada5baf1d7195a75685ed5e27a95f4d244af8b4d679f8c00f2",
+    "studio/tests/replay/benchmark_plugin.cfg": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092",
+    "studio/tests/replay/benchmark_profile.py": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233",
+    "studio/tests/replay/benchmark_readiness.py": "842db6244d93384932929544045654f089d67f6f304624b7348b7d5c4583ab68",
+    "studio/tests/replay/benchmark_transport.py": "3b789fc025c5d217d8567ee1a3cd97ccf4c2e01214c974417643c080622848df",
+    "studio/tests/replay/campaign_task.ps1": "405e2abfa39332b1313871763184fdda0755ff998ec83310e67e10cebfe2ebb9",
+    "studio/tests/replay/run_benchmark_campaign.py": "bb43ecc04c2de4872177a440eb071d533efdaa9e8194f62b4e0907bad8d4b252",
+    "studio/tests/replay/run_campaign_task.py": "f5cb71fa96b8fd2f935ac933dcd5190cef2b3b6821f031bfe72becb2d360a6fd",
+    "studio/tests/replay/run_native_benchmark.py": "e6b0f8e9711ac881cfa65b4537232c685ff577af0a13778a51cc54999b1c1fc7",
+    "studio/toolchain.lock.json": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9"
+  },
+  "source_before": {
+    "studio/blender-addon/ipc_client.py": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9",
+    "studio/contracts/perf-collector.schema.json": "394d1df03bdfd736ea3fe9f260e9d718d35f3820cde35d1c45ccab65fbc24834",
+    "studio/godot-addon/addons/hh_studio/plugin.cfg": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+    "studio/godot-addon/addons/hh_studio/plugin.gd": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+    "studio/godot-addon/addons/hh_studio/scene_commands.gd": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+    "studio/godot-addon/cli_job.py": "5a0f37bc129bde409a2657054fb091d637d838e442d45a69e7adc1f1527d4c88",
+    "studio/godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+    "studio/godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+    "studio/godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+    "studio/godot-addon/fixture_profile/project.godot": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+    "studio/godot-addon/fixture_profile/scripts/fixture_actor.gd.uid": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+    "studio/godot-addon/fixture_profile/source-pins.json": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2",
+    "studio/host/blender/__init__.py": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90",
+    "studio/host/blender/deadline.py": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926",
+    "studio/host/blender/export_job.py": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe",
+    "studio/host/blender/glb_preflight.py": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62",
+    "studio/host/blender/ui_host.py": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35",
+    "studio/host/core/journal.py": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6",
+    "studio/host/core/limits.py": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f",
+    "studio/host/core/private_store.py": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476",
+    "studio/host/core/redaction.py": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f",
+    "studio/host/core/safe_create.py": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606",
+    "studio/host/core/safe_open.py": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535",
+    "studio/host/core/transport.py": "1ec03356b1cb8c8987e1604bcb164aea6a9934dbe259451c19e12de36398aba0",
+    "studio/host/replay/disk_journal_index.py": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28",
+    "studio/host/replay/perf.py": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7",
+    "studio/host/replay/process_probe.py": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500",
+    "studio/host/replay/verified_journal.py": "129baa4d9e08c8a1d5acf2ea05c9c89a4fdddb53ca6f3baf2d61311ab98e62ab",
+    "studio/pipeline/__init__.py": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68",
+    "studio/pipeline/native_job.py": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca",
+    "studio/protocol/__init__.py": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f",
+    "studio/protocol/_rfc8785/__init__.py": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b",
+    "studio/protocol/_rfc8785/_impl.py": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec",
+    "studio/protocol/core.py": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e",
+    "studio/protocol/jcs_godot.gd": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+    "studio/tests/replay/benchmark_assembly.py": "19c684d72995327e65458422ab66384e4d586705cad31f3ab3fd8615934f2a22",
+    "studio/tests/replay/benchmark_commands.py": "29ab59c799855e6695f5c0db18b21ed4ee3f7cd70fb42dcc3b9784e8960d6ca0",
+    "studio/tests/replay/benchmark_job.py": "be424a6f37ae573ac4bf40954b31017025daee2147699c80b05f9a0ab70e1611",
+    "studio/tests/replay/benchmark_native.gd": "52fbd9af5c6191ada5baf1d7195a75685ed5e27a95f4d244af8b4d679f8c00f2",
+    "studio/tests/replay/benchmark_plugin.cfg": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092",
+    "studio/tests/replay/benchmark_profile.py": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233",
+    "studio/tests/replay/benchmark_readiness.py": "842db6244d93384932929544045654f089d67f6f304624b7348b7d5c4583ab68",
+    "studio/tests/replay/benchmark_transport.py": "3b789fc025c5d217d8567ee1a3cd97ccf4c2e01214c974417643c080622848df",
+    "studio/tests/replay/campaign_task.ps1": "405e2abfa39332b1313871763184fdda0755ff998ec83310e67e10cebfe2ebb9",
+    "studio/tests/replay/run_benchmark_campaign.py": "bb43ecc04c2de4872177a440eb071d533efdaa9e8194f62b4e0907bad8d4b252",
+    "studio/tests/replay/run_campaign_task.py": "f5cb71fa96b8fd2f935ac933dcd5190cef2b3b6821f031bfe72becb2d360a6fd",
+    "studio/tests/replay/run_native_benchmark.py": "e6b0f8e9711ac881cfa65b4537232c685ff577af0a13778a51cc54999b1c1fc7",
+    "studio/toolchain.lock.json": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9"
+  },
+  "source_unchanged": true,
+  "threads_alive": [
+    false,
+    false,
+    false
+  ],
+  "timings": {
+    "host.archive": {
+      "count": 0,
+      "max_ns": 0,
+      "returned_count": 0,
+      "slow_count": 0,
+      "slow_samples": [],
+      "total_ns": 0
+    },
+    "host.cancel": {
+      "count": 20,
+      "max_ns": 85069800,
+      "returned_count": 20,
+      "slow_count": 20,
+      "slow_samples": [
+        {
+          "elapsed_ns": 85069800,
+          "ended_mono_ns": 642108091943100,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642108006873300
+        },
+        {
+          "elapsed_ns": 78575200,
+          "ended_mono_ns": 642101974117600,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642101895542400
+        },
+        {
+          "elapsed_ns": 71366900,
+          "ended_mono_ns": 642107018037800,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642106946670900
+        },
+        {
+          "elapsed_ns": 67352500,
+          "ended_mono_ns": 642111171788500,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642111104436000
+        },
+        {
+          "elapsed_ns": 64354000,
+          "ended_mono_ns": 642103928833800,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642103864479800
+        },
+        {
+          "elapsed_ns": 64101000,
+          "ended_mono_ns": 642112586554600,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642112522453600
+        },
+        {
+          "elapsed_ns": 61644000,
+          "ended_mono_ns": 642113601995000,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642113540351000
+        },
+        {
+          "elapsed_ns": 56920700,
+          "ended_mono_ns": 642117618674800,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642117561754100
+        },
+        {
+          "elapsed_ns": 56726100,
+          "ended_mono_ns": 642118594851000,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642118538124900
+        },
+        {
+          "elapsed_ns": 56713900,
+          "ended_mono_ns": 642119606845900,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642119550132000
+        },
+        {
+          "elapsed_ns": 55877500,
+          "ended_mono_ns": 642102928069200,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642102872191700
+        },
+        {
+          "elapsed_ns": 54722500,
+          "ended_mono_ns": 642115572875600,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642115518153100
+        },
+        {
+          "elapsed_ns": 54685300,
+          "ended_mono_ns": 642110100297400,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642110045612100
+        },
+        {
+          "elapsed_ns": 54644600,
+          "ended_mono_ns": 642105940529500,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642105885884900
+        },
+        {
+          "elapsed_ns": 54314900,
+          "ended_mono_ns": 642114582747100,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642114528432200
+        },
+        {
+          "elapsed_ns": 52874300,
+          "ended_mono_ns": 642100983499500,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642100930625200
+        }
+      ],
+      "total_ns": 1197289700
+    },
+    "host.commands": {
+      "count": 220,
+      "max_ns": 399193200,
+      "returned_count": 160,
+      "slow_count": 64,
+      "slow_samples": [
+        {
+          "elapsed_ns": 399193200,
+          "ended_mono_ns": 642112107778000,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642111708584800
+        },
+        {
+          "elapsed_ns": 95275900,
+          "ended_mono_ns": 642115385846000,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642115290570100
+        },
+        {
+          "elapsed_ns": 89156000,
+          "ended_mono_ns": 642101641504200,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642101552348200
+        },
+        {
+          "elapsed_ns": 88005300,
+          "ended_mono_ns": 642104589849800,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642104501844500
+        },
+        {
+          "elapsed_ns": 87011100,
+          "ended_mono_ns": 642105628205200,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642105541194100
+        },
+        {
+          "elapsed_ns": 86517100,
+          "ended_mono_ns": 642107731616700,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642107645099600
+        },
+        {
+          "elapsed_ns": 82334100,
+          "ended_mono_ns": 642111461171300,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642111378837200
+        },
+        {
+          "elapsed_ns": 81383400,
+          "ended_mono_ns": 642113537812700,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642113456429300
+        },
+        {
+          "elapsed_ns": 79704700,
+          "ended_mono_ns": 642118730098400,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642118650393700
+        },
+        {
+          "elapsed_ns": 74829100,
+          "ended_mono_ns": 642111310337600,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642111235508500
+        },
+        {
+          "elapsed_ns": 72052300,
+          "ended_mono_ns": 642117849600600,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642117777548300
+        },
+        {
+          "elapsed_ns": 69921700,
+          "ended_mono_ns": 642106520599400,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642106450677700
+        },
+        {
+          "elapsed_ns": 68191900,
+          "ended_mono_ns": 642103140313300,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642103072121400
+        },
+        {
+          "elapsed_ns": 66805100,
+          "ended_mono_ns": 642118535046700,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642118468241600
+        },
+        {
+          "elapsed_ns": 66760700,
+          "ended_mono_ns": 642112914754900,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642112847994200
+        },
+        {
+          "elapsed_ns": 65881300,
+          "ended_mono_ns": 642100674534600,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642100608653300
+        }
+      ],
+      "total_ns": 8206126700
+    },
+    "host.discovery": {
+      "count": 20,
+      "max_ns": 1271800,
+      "returned_count": 20,
+      "slow_count": 0,
+      "slow_samples": [],
+      "total_ns": 4693200
+    },
+    "host.lease": {
+      "count": 20,
+      "max_ns": 52630800,
+      "returned_count": 20,
+      "slow_count": 1,
+      "slow_samples": [
+        {
+          "elapsed_ns": 52630800,
+          "ended_mono_ns": 642116599791100,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642116547160300
+        }
+      ],
+      "total_ns": 456118900
+    },
+    "host.lookup": {
+      "count": 160,
+      "max_ns": 139742500,
+      "returned_count": 160,
+      "slow_count": 134,
+      "slow_samples": [
+        {
+          "elapsed_ns": 139742500,
+          "ended_mono_ns": 642117466837900,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642117327095400
+        },
+        {
+          "elapsed_ns": 98851100,
+          "ended_mono_ns": 642109015086600,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642108916235500
+        },
+        {
+          "elapsed_ns": 95800700,
+          "ended_mono_ns": 642106877370200,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642106781569500
+        },
+        {
+          "elapsed_ns": 90888900,
+          "ended_mono_ns": 642111034518100,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642110943629200
+        },
+        {
+          "elapsed_ns": 85999800,
+          "ended_mono_ns": 642120401300900,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642120315301100
+        },
+        {
+          "elapsed_ns": 81361500,
+          "ended_mono_ns": 642103653834800,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642103572473300
+        },
+        {
+          "elapsed_ns": 80523800,
+          "ended_mono_ns": 642112459003200,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642112378479400
+        },
+        {
+          "elapsed_ns": 77482400,
+          "ended_mono_ns": 642110874921000,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642110797438600
+        },
+        {
+          "elapsed_ns": 76033300,
+          "ended_mono_ns": 642116261400200,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642116185366900
+        },
+        {
+          "elapsed_ns": 75753300,
+          "ended_mono_ns": 642102805862300,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642102730109000
+        },
+        {
+          "elapsed_ns": 75691600,
+          "ended_mono_ns": 642105303951900,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642105228260300
+        },
+        {
+          "elapsed_ns": 74583100,
+          "ended_mono_ns": 642117262056600,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642117187473500
+        },
+        {
+          "elapsed_ns": 74149700,
+          "ended_mono_ns": 642118466065800,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642118391916100
+        },
+        {
+          "elapsed_ns": 74114500,
+          "ended_mono_ns": 642103810129800,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642103736015300
+        },
+        {
+          "elapsed_ns": 74078100,
+          "ended_mono_ns": 642119490575400,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642119416497300
+        },
+        {
+          "elapsed_ns": 73844600,
+          "ended_mono_ns": 642113452670000,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642113378825400
+        }
+      ],
+      "total_ns": 8948379300
+    },
+    "host.other": {
+      "count": 0,
+      "max_ns": 0,
+      "returned_count": 0,
+      "slow_count": 0,
+      "slow_samples": [],
+      "total_ns": 0
+    },
+    "host.stop": {
+      "count": 0,
+      "max_ns": 0,
+      "returned_count": 0,
+      "slow_count": 0,
+      "slow_samples": [],
+      "total_ns": 0
+    },
+    "journal.append": {
+      "count": 340,
+      "max_ns": 336007800,
+      "returned_count": 340,
+      "slow_count": 2,
+      "slow_samples": [
+        {
+          "elapsed_ns": 336007800,
+          "ended_mono_ns": 642112107637800,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642111771630000
+        },
+        {
+          "elapsed_ns": 76565500,
+          "ended_mono_ns": 642117446650700,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642117370085200
+        }
+      ],
+      "total_ns": 3919051400
+    },
+    "journal.load": {
+      "count": 1,
+      "max_ns": 5031400000,
+      "returned_count": 1,
+      "slow_count": 1,
+      "slow_samples": [
+        {
+          "elapsed_ns": 5031400000,
+          "ended_mono_ns": 642100098611100,
+          "phase": "initialize",
+          "returned": true,
+          "started_mono_ns": 642095067211100
+        }
+      ],
+      "total_ns": 5031400000
+    },
+    "journal.reload": {
+      "count": 780,
+      "max_ns": 53482000,
+      "returned_count": 780,
+      "slow_count": 2,
+      "slow_samples": [
+        {
+          "elapsed_ns": 53482000,
+          "ended_mono_ns": 642111435533500,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642111382051500
+        },
+        {
+          "elapsed_ns": 52398600,
+          "ended_mono_ns": 642110156833900,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642110104435300
+        }
+      ],
+      "total_ns": 12587395300
+    },
+    "journal.snapshot": {
+      "count": 782,
+      "max_ns": 53439500,
+      "returned_count": 782,
+      "slow_count": 2,
+      "slow_samples": [
+        {
+          "elapsed_ns": 53439500,
+          "ended_mono_ns": 642111435493200,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642111382053700
+        },
+        {
+          "elapsed_ns": 52359300,
+          "ended_mono_ns": 642110156796500,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642110104437200
+        }
+      ],
+      "total_ns": 12600410100
+    },
+    "journal.writer_held": {
+      "count": 781,
+      "max_ns": 5031478000,
+      "returned_count": 621,
+      "slow_count": 13,
+      "slow_samples": [
+        {
+          "elapsed_ns": 5031478000,
+          "ended_mono_ns": 642100098684700,
+          "phase": "initialize",
+          "returned": true,
+          "started_mono_ns": 642095067206700
+        },
+        {
+          "elapsed_ns": 353252100,
+          "ended_mono_ns": 642112107716900,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642111754464800
+        },
+        {
+          "elapsed_ns": 89262300,
+          "ended_mono_ns": 642117446716400,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642117357454100
+        },
+        {
+          "elapsed_ns": 55340900,
+          "ended_mono_ns": 642107731565600,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642107676224700
+        },
+        {
+          "elapsed_ns": 54157400,
+          "ended_mono_ns": 642101438549500,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642101384392100
+        },
+        {
+          "elapsed_ns": 53747800,
+          "ended_mono_ns": 642111435796300,
+          "phase": "http",
+          "returned": false,
+          "started_mono_ns": 642111382048500
+        },
+        {
+          "elapsed_ns": 53501100,
+          "ended_mono_ns": 642115385800600,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642115332299500
+        },
+        {
+          "elapsed_ns": 53337000,
+          "ended_mono_ns": 642110157770300,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642110104433300
+        },
+        {
+          "elapsed_ns": 51924400,
+          "ended_mono_ns": 642106216597200,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642106164672800
+        },
+        {
+          "elapsed_ns": 50785000,
+          "ended_mono_ns": 642108579488700,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642108528703700
+        },
+        {
+          "elapsed_ns": 50647700,
+          "ended_mono_ns": 642105280655400,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642105230007700
+        },
+        {
+          "elapsed_ns": 50140600,
+          "ended_mono_ns": 642116599757600,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642116549617000
+        },
+        {
+          "elapsed_ns": 50003100,
+          "ended_mono_ns": 642105628150200,
+          "phase": "http",
+          "returned": true,
+          "started_mono_ns": 642105578147100
+        }
+      ],
+      "total_ns": 21852455600
+    },
+    "journal.writer_wait": {
+      "count": 781,
+      "max_ns": 29657800,
+      "returned_count": 781,
+      "slow_count": 0,
+      "slow_samples": [],
+      "total_ns": 2179272800
+    }
+  }
+}

@@ -1,0 +1,586 @@
+{
+  "cancel": {
+    "command_id": "gt06.s95.http-attribution.b9.cancel",
+    "delay_ms": 1000,
+    "kind": "cancel",
+    "lookup_attempts": [
+      {
+        "code": "CANCELED_BEFORE_APPLY",
+        "command_id": "gt06.s95.http-attribution.b9.cancel",
+        "ended_mono_us": 642110158533,
+        "request_digest": "sha256:e1a714d97f4a54c7d6c6a5c787c3fed5550825c38890b5cbd323a2d4572e452f",
+        "started_mono_us": 642110101180,
+        "status": "CANCELED",
+        "transport_failure": null
+      }
+    ],
+    "no_effect": true,
+    "queued_mono_us": 642110044299,
+    "receipt_mono_us": 642110100985,
+    "receipt_ms": 56.5301,
+    "request_digest": "sha256:e1a714d97f4a54c7d6c6a5c787c3fed5550825c38890b5cbd323a2d4572e452f",
+    "separate_from_mix": true,
+    "started_mono_us": 642110044455,
+    "status": "CANCELED",
+    "terminal_mono_us": 642110158533,
+    "terminal_ms": 114.0785,
+    "terminal_response": {
+      "code": "CANCELED_BEFORE_APPLY",
+      "command_id": "gt06.s95.http-attribution.b9.cancel",
+      "postconditions": {
+        "no_effect": true,
+        "request_digest": "sha256:e1a714d97f4a54c7d6c6a5c787c3fed5550825c38890b5cbd323a2d4572e452f"
+      },
+      "result_hash": null,
+      "result_revision": null,
+      "status": "CANCELED"
+    },
+    "terminal_status": "CANCELED"
+  },
+  "commands": [
+    {
+      "command_id": "gt06.s95.http-attribution.b9.inspect.0",
+      "effect_count_after": 18,
+      "effect_count_before": 18,
+      "group": 0,
+      "kind": "inspect",
+      "latency_ms": 109.826,
+      "lookup_attempts": [
+        {
+          "code": "READBACK_CONFIRMED",
+          "command_id": "gt06.s95.http-attribution.b9.inspect.0",
+          "ended_mono_us": 642109286448,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 642109223086,
+          "status": "COMMITTED",
+          "transport_failure": null
+        }
+      ],
+      "ordinal": 0,
+      "receipt_code": "QUEUED",
+      "receipt_mono_us": 642109222847,
+      "receipt_ms": 46.2248,
+      "receipt_status": "ACCEPTED_PENDING",
+      "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+      "result_hash": "sha256:e3ca004b5cf8056703a78f633d5c4b80edcbe142b9c6658aeacaf750224837d9",
+      "snapshot": {
+        "effect_count": 18,
+        "revision": "rev-18",
+        "value": 18
+      },
+      "started_mono_us": 642109176622,
+      "terminal_code": "READBACK_CONFIRMED",
+      "terminal_mono_us": 642109286448,
+      "terminal_ms": 109.826,
+      "terminal_response": {
+        "code": "READBACK_CONFIRMED",
+        "command_id": "gt06.s95.http-attribution.b9.inspect.0",
+        "postconditions": {
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "snapshot": {
+            "effect_count": 18,
+            "revision": "rev-18",
+            "value": 18
+          }
+        },
+        "result_hash": "sha256:e3ca004b5cf8056703a78f633d5c4b80edcbe142b9c6658aeacaf750224837d9",
+        "result_revision": "rev-18",
+        "status": "COMMITTED"
+      },
+      "terminal_status": "COMMITTED"
+    },
+    {
+      "command_id": "gt06.s95.http-attribution.b9.inspect.1",
+      "effect_count_after": 18,
+      "effect_count_before": 18,
+      "group": 0,
+      "kind": "inspect",
+      "latency_ms": 141.1346,
+      "lookup_attempts": [
+        {
+          "code": "READBACK_CONFIRMED",
+          "command_id": "gt06.s95.http-attribution.b9.inspect.1",
+          "ended_mono_us": 642109427865,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 642109365360,
+          "status": "COMMITTED",
+          "transport_failure": null
+        }
+      ],
+      "ordinal": 1,
+      "receipt_code": "QUEUED",
+      "receipt_mono_us": 642109365110,
+      "receipt_ms": 78.3802,
+      "receipt_status": "ACCEPTED_PENDING",
+      "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+      "result_hash": "sha256:e3ca004b5cf8056703a78f633d5c4b80edcbe142b9c6658aeacaf750224837d9",
+      "snapshot": {
+        "effect_count": 18,
+        "revision": "rev-18",
+        "value": 18
+      },
+      "started_mono_us": 642109286730,
+      "terminal_code": "READBACK_CONFIRMED",
+      "terminal_mono_us": 642109427865,
+      "terminal_ms": 141.1346,
+      "terminal_response": {
+        "code": "READBACK_CONFIRMED",
+        "command_id": "gt06.s95.http-attribution.b9.inspect.1",
+        "postconditions": {
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "snapshot": {
+            "effect_count": 18,
+            "revision": "rev-18",
+            "value": 18
+          }
+        },
+        "result_hash": "sha256:e3ca004b5cf8056703a78f633d5c4b80edcbe142b9c6658aeacaf750224837d9",
+        "result_revision": "rev-18",
+        "status": "COMMITTED"
+      },
+      "terminal_status": "COMMITTED"
+    },
+    {
+      "command_id": "gt06.s95.http-attribution.b9.inspect.2",
+      "effect_count_after": 18,
+      "effect_count_before": 18,
+      "group": 0,
+      "kind": "inspect",
+      "latency_ms": 97.1124,
+      "lookup_attempts": [
+        {
+          "code": "READBACK_CONFIRMED",
+          "command_id": "gt06.s95.http-attribution.b9.inspect.2",
+          "ended_mono_us": 642109525144,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 642109473242,
+          "status": "COMMITTED",
+          "transport_failure": null
+        }
+      ],
+      "ordinal": 2,
+      "receipt_code": "QUEUED",
+      "receipt_mono_us": 642109473036,
+      "receipt_ms": 45.0042,
+      "receipt_status": "ACCEPTED_PENDING",
+      "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+      "result_hash": "sha256:e3ca004b5cf8056703a78f633d5c4b80edcbe142b9c6658aeacaf750224837d9",
+      "snapshot": {
+        "effect_count": 18,
+        "revision": "rev-18",
+        "value": 18
+      },
+      "started_mono_us": 642109428032,
+      "terminal_code": "READBACK_CONFIRMED",
+      "terminal_mono_us": 642109525144,
+      "terminal_ms": 97.1124,
+      "terminal_response": {
+        "code": "READBACK_CONFIRMED",
+        "command_id": "gt06.s95.http-attribution.b9.inspect.2",
+        "postconditions": {
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "snapshot": {
+            "effect_count": 18,
+            "revision": "rev-18",
+            "value": 18
+          }
+        },
+        "result_hash": "sha256:e3ca004b5cf8056703a78f633d5c4b80edcbe142b9c6658aeacaf750224837d9",
+        "result_revision": "rev-18",
+        "status": "COMMITTED"
+      },
+      "terminal_status": "COMMITTED"
+    },
+    {
+      "command_id": "gt06.s95.http-attribution.b9.inspect.3",
+      "effect_count_after": 18,
+      "effect_count_before": 18,
+      "group": 0,
+      "kind": "inspect",
+      "latency_ms": 92.4778,
+      "lookup_attempts": [
+        {
+          "code": "READBACK_CONFIRMED",
+          "command_id": "gt06.s95.http-attribution.b9.inspect.3",
+          "ended_mono_us": 642109617786,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 642109563616,
+          "status": "COMMITTED",
+          "transport_failure": null
+        }
+      ],
+      "ordinal": 3,
+      "receipt_code": "QUEUED",
+      "receipt_mono_us": 642109563420,
+      "receipt_ms": 38.1117,
+      "receipt_status": "ACCEPTED_PENDING",
+      "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+      "result_hash": "sha256:e3ca004b5cf8056703a78f633d5c4b80edcbe142b9c6658aeacaf750224837d9",
+      "snapshot": {
+        "effect_count": 18,
+        "revision": "rev-18",
+        "value": 18
+      },
+      "started_mono_us": 642109525308,
+      "terminal_code": "READBACK_CONFIRMED",
+      "terminal_mono_us": 642109617786,
+      "terminal_ms": 92.4778,
+      "terminal_response": {
+        "code": "READBACK_CONFIRMED",
+        "command_id": "gt06.s95.http-attribution.b9.inspect.3",
+        "postconditions": {
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "snapshot": {
+            "effect_count": 18,
+            "revision": "rev-18",
+            "value": 18
+          }
+        },
+        "result_hash": "sha256:e3ca004b5cf8056703a78f633d5c4b80edcbe142b9c6658aeacaf750224837d9",
+        "result_revision": "rev-18",
+        "status": "COMMITTED"
+      },
+      "terminal_status": "COMMITTED"
+    },
+    {
+      "command_id": "gt06.s95.http-attribution.b9.inspect.4",
+      "effect_count_after": 18,
+      "effect_count_before": 18,
+      "group": 0,
+      "kind": "inspect",
+      "latency_ms": 96.0927,
+      "lookup_attempts": [
+        {
+          "code": "READBACK_CONFIRMED",
+          "command_id": "gt06.s95.http-attribution.b9.inspect.4",
+          "ended_mono_us": 642109714049,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 642109656911,
+          "status": "COMMITTED",
+          "transport_failure": null
+        }
+      ],
+      "ordinal": 4,
+      "receipt_code": "QUEUED",
+      "receipt_mono_us": 642109656704,
+      "receipt_ms": 38.7473,
+      "receipt_status": "ACCEPTED_PENDING",
+      "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+      "result_hash": "sha256:e3ca004b5cf8056703a78f633d5c4b80edcbe142b9c6658aeacaf750224837d9",
+      "snapshot": {
+        "effect_count": 18,
+        "revision": "rev-18",
+        "value": 18
+      },
+      "started_mono_us": 642109617957,
+      "terminal_code": "READBACK_CONFIRMED",
+      "terminal_mono_us": 642109714049,
+      "terminal_ms": 96.0927,
+      "terminal_response": {
+        "code": "READBACK_CONFIRMED",
+        "command_id": "gt06.s95.http-attribution.b9.inspect.4",
+        "postconditions": {
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "snapshot": {
+            "effect_count": 18,
+            "revision": "rev-18",
+            "value": 18
+          }
+        },
+        "result_hash": "sha256:e3ca004b5cf8056703a78f633d5c4b80edcbe142b9c6658aeacaf750224837d9",
+        "result_revision": "rev-18",
+        "status": "COMMITTED"
+      },
+      "terminal_status": "COMMITTED"
+    },
+    {
+      "command_id": "gt06.s95.http-attribution.b9.rejected.0",
+      "effect_count_after": 18,
+      "effect_count_before": 18,
+      "group": 0,
+      "kind": "rejected",
+      "latency_ms": 2.4223,
+      "lookup_attempts": [],
+      "ordinal": 5,
+      "receipt_code": "INVALID_FIXTURE_PAYLOAD",
+      "receipt_mono_us": 642109716698,
+      "receipt_ms": 2.4223,
+      "receipt_status": "REJECTED",
+      "request_digest": "sha256:edbec0e4931c9e3bbed7a3ff9dbd0252ba1d25e8e8211c0276b99f55a84f8767",
+      "started_mono_us": 642109714276,
+      "terminal_status": "REJECTED"
+    },
+    {
+      "command_id": "gt06.s95.http-attribution.b9.rejected.1",
+      "effect_count_after": 18,
+      "effect_count_before": 18,
+      "group": 0,
+      "kind": "rejected",
+      "latency_ms": 2.2978,
+      "lookup_attempts": [],
+      "ordinal": 6,
+      "receipt_code": "INVALID_FIXTURE_PAYLOAD",
+      "receipt_mono_us": 642109719296,
+      "receipt_ms": 2.2978,
+      "receipt_status": "REJECTED",
+      "request_digest": "sha256:edbec0e4931c9e3bbed7a3ff9dbd0252ba1d25e8e8211c0276b99f55a84f8767",
+      "started_mono_us": 642109716998,
+      "terminal_status": "REJECTED"
+    },
+    {
+      "command_id": "gt06.s95.http-attribution.b9.rejected.2",
+      "effect_count_after": 18,
+      "effect_count_before": 18,
+      "group": 0,
+      "kind": "rejected",
+      "latency_ms": 2.6141,
+      "lookup_attempts": [],
+      "ordinal": 7,
+      "receipt_code": "INVALID_FIXTURE_PAYLOAD",
+      "receipt_mono_us": 642109722327,
+      "receipt_ms": 2.6141,
+      "receipt_status": "REJECTED",
+      "request_digest": "sha256:edbec0e4931c9e3bbed7a3ff9dbd0252ba1d25e8e8211c0276b99f55a84f8767",
+      "started_mono_us": 642109719713,
+      "terminal_status": "REJECTED"
+    },
+    {
+      "command_id": "gt06.s95.http-attribution.b9.admitted.0",
+      "effect_count_after": 19,
+      "effect_count_before": 18,
+      "group": 0,
+      "kind": "admitted",
+      "latency_ms": 51.0951,
+      "lookup_attempts": [
+        {
+          "code": "READBACK_CONFIRMED",
+          "command_id": "gt06.s95.http-attribution.b9.admitted.0",
+          "ended_mono_us": 642109852091,
+          "request_digest": "sha256:d46fbaa01d42a5f59417dfdea9b3872feb4729266c00846b171fd68c9501815c",
+          "started_mono_us": 642109773970,
+          "status": "COMMITTED",
+          "transport_failure": null
+        }
+      ],
+      "ordinal": 8,
+      "receipt_code": "QUEUED",
+      "receipt_mono_us": 642109773701,
+      "receipt_ms": 51.0951,
+      "receipt_status": "ACCEPTED_PENDING",
+      "request_digest": "sha256:d46fbaa01d42a5f59417dfdea9b3872feb4729266c00846b171fd68c9501815c",
+      "result_hash": "sha256:8244606801dfcee3b6406eebba391c8a7334a06116ad6399c6181e333b6ff1ba",
+      "snapshot": {
+        "effect_count": 19,
+        "revision": "rev-19",
+        "value": 19
+      },
+      "started_mono_us": 642109722606,
+      "terminal_code": "READBACK_CONFIRMED",
+      "terminal_mono_us": 642109852091,
+      "terminal_ms": 129.4845,
+      "terminal_response": {
+        "code": "READBACK_CONFIRMED",
+        "command_id": "gt06.s95.http-attribution.b9.admitted.0",
+        "postconditions": {
+          "request_digest": "sha256:d46fbaa01d42a5f59417dfdea9b3872feb4729266c00846b171fd68c9501815c",
+          "snapshot": {
+            "effect_count": 19,
+            "revision": "rev-19",
+            "value": 19
+          }
+        },
+        "result_hash": "sha256:8244606801dfcee3b6406eebba391c8a7334a06116ad6399c6181e333b6ff1ba",
+        "result_revision": "rev-19",
+        "status": "COMMITTED"
+      },
+      "terminal_status": "COMMITTED"
+    },
+    {
+      "command_id": "gt06.s95.http-attribution.b9.admitted.1",
+      "effect_count_after": 20,
+      "effect_count_before": 19,
+      "group": 0,
+      "kind": "admitted",
+      "latency_ms": 53.2989,
+      "lookup_attempts": [
+        {
+          "code": "READBACK_CONFIRMED",
+          "command_id": "gt06.s95.http-attribution.b9.admitted.1",
+          "ended_mono_us": 642109985725,
+          "request_digest": "sha256:13984052353ed9615cd7a827bcc62079691e349e1e63b5751d1812bef4bffaf1",
+          "started_mono_us": 642109906078,
+          "status": "COMMITTED",
+          "transport_failure": null
+        }
+      ],
+      "ordinal": 9,
+      "receipt_code": "QUEUED",
+      "receipt_mono_us": 642109905608,
+      "receipt_ms": 53.2989,
+      "receipt_status": "ACCEPTED_PENDING",
+      "request_digest": "sha256:13984052353ed9615cd7a827bcc62079691e349e1e63b5751d1812bef4bffaf1",
+      "result_hash": "sha256:af65e190d854f86c7b8f0ee29d0a7d161023515602c79aca167fa078b0f43902",
+      "snapshot": {
+        "effect_count": 20,
+        "revision": "rev-20",
+        "value": 20
+      },
+      "started_mono_us": 642109852309,
+      "terminal_code": "READBACK_CONFIRMED",
+      "terminal_mono_us": 642109985725,
+      "terminal_ms": 133.4165,
+      "terminal_response": {
+        "code": "READBACK_CONFIRMED",
+        "command_id": "gt06.s95.http-attribution.b9.admitted.1",
+        "postconditions": {
+          "request_digest": "sha256:13984052353ed9615cd7a827bcc62079691e349e1e63b5751d1812bef4bffaf1",
+          "snapshot": {
+            "effect_count": 20,
+            "revision": "rev-20",
+            "value": 20
+          }
+        },
+        "result_hash": "sha256:af65e190d854f86c7b8f0ee29d0a7d161023515602c79aca167fa078b0f43902",
+        "result_revision": "rev-20",
+        "status": "COMMITTED"
+      },
+      "terminal_status": "COMMITTED"
+    }
+  ],
+  "complete_command_mix": false,
+  "diagnostic_retention": "bounded host ring; every expected rejection retained in command rows; unexpected codes fail at each response",
+  "dropped_commands": 0,
+  "dropped_telemetry": 0,
+  "effect_count_after": 20,
+  "effect_count_before": 18,
+  "effects_kind": "in_process_mock_fixture",
+  "effects_per_admission": [
+    1,
+    1
+  ],
+  "ended_mono_us": 642110159988,
+  "host_process": {
+    "pid": 8824,
+    "process_start": "windows:134342174844440860"
+  },
+  "host_response_mono_us": [
+    642109145602,
+    642109154510,
+    642109175827,
+    642109222847,
+    642109286448,
+    642109365110,
+    642109427865,
+    642109473036,
+    642109525144,
+    642109563420,
+    642109617786,
+    642109656704,
+    642109714049,
+    642109716698,
+    642109719296,
+    642109722327,
+    642109773701,
+    642109852091,
+    642109905608,
+    642109985725,
+    642110044299,
+    642110100985,
+    642110158533,
+    642110159988
+  ],
+  "index": 9,
+  "journal_bytes": 7040938,
+  "latency_ms": {
+    "admitted": [
+      51.0951,
+      53.2989
+    ],
+    "inspect": [
+      109.826,
+      141.1346,
+      97.1124,
+      92.4778,
+      96.0927
+    ],
+    "rejected": [
+      2.4223,
+      2.2978,
+      2.6141
+    ]
+  },
+  "max_status_gap_ms": 80.1176,
+  "memory_after": {
+    "counters": {
+      "held_handles": {
+        "unavailable_reason": null,
+        "value": 175
+      },
+      "objects": {
+        "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+        "value": null
+      },
+      "resources": {
+        "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+        "value": null
+      },
+      "rss_bytes": {
+        "unavailable_reason": null,
+        "value": 34832384
+      }
+    },
+    "monotonic_us": 642110159841,
+    "process": {
+      "pid": 8824,
+      "process_start": "windows:134342174844440860"
+    }
+  },
+  "memory_before": {
+    "counters": {
+      "held_handles": {
+        "unavailable_reason": null,
+        "value": 175
+      },
+      "objects": {
+        "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+        "value": null
+      },
+      "resources": {
+        "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+        "value": null
+      },
+      "rss_bytes": {
+        "unavailable_reason": null,
+        "value": 34791424
+      }
+    },
+    "monotonic_us": 642109176545,
+    "process": {
+      "pid": 8824,
+      "process_start": "windows:134342174844440860"
+    }
+  },
+  "mode": "diagnostic",
+  "native_acceptance": false,
+  "observation_kind": "native_windows_process_probe",
+  "run_id": "gt06.s95.http-attribution",
+  "schema_id": "hh-studio.benchmark-command-batch",
+  "schema_version": "1.3.0",
+  "setup_responses": [
+    {
+      "kind": "discovery",
+      "receipt_mono_us": 642109154510,
+      "started_mono_us": 642109152393
+    },
+    {
+      "kind": "lease",
+      "receipt_mono_us": 642109175827,
+      "started_mono_us": 642109154596
+    }
+  ],
+  "started_mono_us": 642109145602,
+  "status": "DIAGNOSTIC",
+  "status_gap_scope": "host command-lane response progress; not editor UI heartbeat",
+  "transport_kind": "accepted_loopback_fixture_http",
+  "warmup": false
+}

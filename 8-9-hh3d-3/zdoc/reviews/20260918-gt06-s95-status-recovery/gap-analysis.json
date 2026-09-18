@@ -1,0 +1,84 @@
+{
+  "authority": 0,
+  "command": {
+    "command_id": "gt06-s93-sparse-attribution-01.b6.inspect.4",
+    "effect_count_after": 1200,
+    "effect_count_before": 1200,
+    "group": 0,
+    "kind": "inspect",
+    "latency_ms": 3246.0636,
+    "lookup_attempts": [
+      {
+        "code": "CONNECTION_LOST_LOOKUP",
+        "command_id": "gt06-s93-sparse-attribution-01.b6.inspect.4",
+        "ended_mono_us": 641391567730,
+        "request_digest": null,
+        "started_mono_us": 641389564757,
+        "status": "UNKNOWN"
+      },
+      {
+        "code": "READBACK_CONFIRMED",
+        "command_id": "gt06-s93-sparse-attribution-01.b6.inspect.4",
+        "ended_mono_us": 641391910066,
+        "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+        "started_mono_us": 641391598543,
+        "status": "COMMITTED"
+      }
+    ],
+    "ordinal": 4,
+    "receipt_code": "QUEUED",
+    "receipt_mono_us": 641389534598,
+    "receipt_ms": 870.5958,
+    "receipt_status": "ACCEPTED_PENDING",
+    "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+    "result_hash": "sha256:f07628935ff02fc521f59fd834ec04f9ae44842bc7a2e77306dfe5a8cb9cb97e",
+    "snapshot": {
+      "effect_count": 1200,
+      "revision": "rev-1200",
+      "value": 1200
+    },
+    "started_mono_us": 641388664002,
+    "terminal_code": "READBACK_CONFIRMED",
+    "terminal_mono_us": 641391910066,
+    "terminal_ms": 3246.0636,
+    "terminal_response": {
+      "code": "READBACK_CONFIRMED",
+      "command_id": "gt06-s93-sparse-attribution-01.b6.inspect.4",
+      "postconditions": {
+        "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+        "snapshot": {
+          "effect_count": 1200,
+          "revision": "rev-1200",
+          "value": 1200
+        }
+      },
+      "result_hash": "sha256:f07628935ff02fc521f59fd834ec04f9ae44842bc7a2e77306dfe5a8cb9cb97e",
+      "result_revision": "rev-1200",
+      "status": "COMMITTED"
+    },
+    "terminal_status": "COMMITTED"
+  },
+  "command06_sha256": "150d948d776f04a5b19dfed774fef22c93126923f049f6334086ee0591e4984c",
+  "formal_acceptance": false,
+  "gap_status_index": 11,
+  "limitation": "client return UNKNOWN is not a server response; stage/category were not retained per attempt; 2s timeout is an inference only",
+  "max_status_gap_ms": 2033.1318,
+  "native_max_gap_ms": 579.328,
+  "native_start_permit_gap_ms": 514.287,
+  "projected_gap_ms": 2033.132,
+  "run_id": "gt06-s93-sparse-attribution-01",
+  "schema": "1.2.0",
+  "setup_responses": [
+    {
+      "kind": "discovery",
+      "receipt_mono_us": 641384565914,
+      "started_mono_us": 641384562753
+    },
+    {
+      "kind": "lease",
+      "receipt_mono_us": 641385064650,
+      "started_mono_us": 641384566614
+    }
+  ],
+  "source_checkpoint": "b113587b"
+}

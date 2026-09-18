@@ -1,0 +1,33 @@
+{
+  "actual_target_exit_missing": false,
+  "argv": [
+    "python.exe",
+    "-B",
+    "probe.py",
+    "run-01"
+  ],
+  "cleanup_scope": "run_fixture owned Job tree; target exit from helper wait, helper exit from parent wait; missing target receipt after timeout remains GAP",
+  "eligible_for_dataset": false,
+  "engine_runs": 0,
+  "exit_code": 0,
+  "formal_acceptance": false,
+  "history_copy_after_sha256": "1e12bfae2d5fe2da1947447a6b75c3da073811baefc70fc6f095513ebc1d361f",
+  "history_original_after_sha256": "1e12bfae2d5fe2da1947447a6b75c3da073811baefc70fc6f095513ebc1d361f",
+  "history_unchanged": true,
+  "host": "http-host.json",
+  "ownership": "gated_job_kill_on_close",
+  "probe_unchanged": true,
+  "runner_copy_unchanged": true,
+  "runner_original_unchanged": true,
+  "source_copy_unchanged": true,
+  "source_original_mismatch_locations": [],
+  "source_original_unchanged": true,
+  "started_at": "2026-09-18T15:04:44.322387+00:00",
+  "stderr": "http-stderr.txt",
+  "stdout": "http-stdout.txt",
+  "target_pid": 8824,
+  "timed_out": false,
+  "tree_verified": true,
+  "wrapper_exit_code": 0,
+  "wrapper_pid": 13900
+}

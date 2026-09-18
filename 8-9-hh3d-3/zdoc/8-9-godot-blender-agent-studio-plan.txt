@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 18-09-2026, Asia/Saigon | Revision S94 | TRIỂN KHAI THEO GATE
+Ngày 18-09-2026, Asia/Saigon | Revision S95 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -16,7 +16,7 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 
 CURRENT_VALID_WP=GT-06
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=GT06_S93_SPARSE_DIAGNOSTIC_RUNNING
+IMPLEMENTATION=GT06_S95_LOOKUP_OBSERVATION_REPAIR_AND_ISOLATION
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
 GT01_PENDING=NONE
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S94
+PLAN_REVISION=S95
 EXECUTION_MODE=COORDINATOR_THREE_ASTRA_ULTRA_OWNER_20260918
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -54,81 +54,71 @@ GT05_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260917_S64
 GT05_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S64
 GT05_CHECKPOINT_COMMIT=808d8ba
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
-GT06_EVIDENCE_STATUS=S91_FAILURE_STATUS_GAP_BATCH16_RETAINED_NO_ACCEPTANCE
-GT06_WORKING_SOURCE_STATUS=S93_FROZEN_51FILES_DIAGNOSTIC_RUNNING
-GT06_LAST_TESTED_SOURCE_CLOSURE=e05d69137d9b6ff303bf75abe47cf981ad336c41ab7945392cd6f8ae6df0e601
-GT06_CURRENT_SOURCE_CLOSURE=e05d69137d9b6ff303bf75abe47cf981ad336c41ab7945392cd6f8ae6df0e601
-GT06_SOURCE_CHECKPOINT=b113587b
+GT06_EVIDENCE_STATUS=S93_FAILURE_STATUS_GAP_BATCH6_RETAINED_NO_ACCEPTANCE
+GT06_WORKING_SOURCE_STATUS=S95_FROZEN_85_AFFECTED_TESTS_HTTP200_SUPPLEMENTAL
+GT06_LAST_TESTED_SOURCE_CLOSURE=564e5b7877f49d33a1af84eaf3b3a7ddf4ea2f846c4161eb694c5c40514fc752
+GT06_CURRENT_SOURCE_CLOSURE=564e5b7877f49d33a1af84eaf3b3a7ddf4ea2f846c4161eb694c5c40514fc752
+GT06_SOURCE_CHECKPOINT=ad81e944
 GT06_BENCHMARK_CAMPAIGN=gt06-s86-campaign-01
 GT06_BENCHMARK_STATUS=S86_FAILURE_RETAINED_OBJECTDB_GROWTH_BATCH17_20260918T120235Z
-GT06_ACTIVE_DIAGNOSTIC=gt06-s93-sparse-attribution-01; launch-01; started_20260918T144418Z; formal_acceptance=false
-GT06_NEXT_ACTION=Observe S93 live scheduler and bounded log tails at heartbeat; freeze source/helper/profile; at growth/terminal preserve sparse IDs and actual exits/Jobs/handles before diagnosis.
+GT06_ACTIVE_DIAGNOSTIC=NONE_S93_TERMINAL_FAILED_20260918T145447Z
+GT06_NEXT_ACTION=HTTP200 completed supplemental; finish native-only helper preflight and run 35x100 isolation serially. No coupled campaign retry until new attribution is read.
 GT06_S88_SCHEDULER_TASK=OBSERVED_ABSENT_20260918; historic_delete_report_retained_in_chat; durable_delete_receipt_missing
 GT06_S90_DIAGNOSTIC=gt06-s90-lifecycle-attribution-01; preflight=gt06-s90-lifecycle-attribution-preflight-06; five_partial_batches; interrupted_before_batch5_capture; formal_acceptance=false; eligible_for_dataset=false
 GT06_DIAGNOSTIC_EXCLUSION=S81-S90 diagnostic and partial/failure prefixes are excluded from F13/F14 acceptance datasets; see s83-mapping requirements and each packet manifest.
 
-TIẾN ĐỘ HIỆN HÀNH — S94, ngày 18-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S95, ngày 18-09-2026
 GT-01–05 ACCEPTED; GT-06 IN_PROGRESS; GT-07–10 chưa mở.
-S94 chỉ làm rõ tài liệu: memory gate khớp verifier hiện hành; consumer có
-extension owner, phần tối thiểu, WP dùng đầu và proof cụ thể. Ba worker Astra
-ultra đã rà độc lập ba plan, không phải final critic. Không đổi source/profile,
-ngưỡng, verdict cũ hoặc tiến độ WP; runtime vẫn S93. Review và checks tại
-reviews/20260918-s94-plan-clarifications/; bản trước giữ trong Git754186c4.
-S93 diagnostic mới dispatched14:44:18Z; query sau dispatch state4/1instance,
-host đangbatch0commands, editor33152 heartbeatHOST_START tăng. Đây là startup
-observation, không terminal/PASS. Script/receipts ở s93-sparse-attribution/,
-launch-01/observer; raw studio/.local/reviews/gt06-s93-sparse-attribution-01.
-PreflightGodot55232exit0/helper0/Jobzero/closed; nativeprobe/patch giữbyteexact.
-Source b113587b/e05d6913… đã kiểm51Gitbytes. FullHTTP1000/200effects strictschema
-đạt, maxgap487.04ms, actual49788/helper7048exit0/treeverified. Hai tinyarm cũng
-exit0/clean; không tái hiện2s nên chưaclaim sửa toàn bộ performance.
-Giữ currentrun, không thêm engine/test/heavyhash. Lịch ti-p-t-c-hh3d-tools ACTIVE
-mỗi10phút; initial45–75phút cho diagnostic, hiệu chỉnhcompletedbatches.
-Superagent SA2 và HH World S23 làm rõ đầu vào/đầu ra theo góp ý owner; bản
-SA1/S22 giữ tại135cc588. Đây là plan game, chưa triển khai; không thêm gate
-game/Web vào GT hiện hành.
+S93 kết thúc14:54:47Z, KHÔNG còn chạy. CAMPAIGN_STATUS_GAP batch6: host
+2033.1318ms>2000ms, native579.328ms. Có7partial batches, không fullrun/PASS.
+Khoảng lỗi là admission→lookup UNKNOWN của b6.inspect.4; lookup2002.973ms,
+lookup lại COMMITTED. Discovery/lease timestamps đã có, không phải omission S91.
+Stage/category của lỗi lookup bị call sau reset trước lưu; chưa biết nguyên
+nhân latency là socket/disk/lock/CPU/RAM. Không gọi thành công retry là PASS.
 
-S91 đã kết thúc14:26:02Z, KHÔNG còn chạy: CAMPAIGN_STATUS_GAP tại batch16,
-17partial batches. Host gap2072.4595ms>2000ms; native601.142ms. Khoảng lỗi
-đầu batch gồm1214.881ms chuẩn bị +857.5781ms admission inspect đầu tiên.
-Discovery và lease trả response thật nhưng sampler không ghi _received();
-lookup/Cancel có ghi. Đây là omission có căn cứ code; dữ liệu cũ thiếu hai
-mốc nên KHÔNG sửa S91 thànhPASS hoặc tự trừ latency. Probe Python-only trên
-bản sao journal sẽ tách setup phases; giữ ngưỡng/start/end/workload/durability.
-Tăng schema để bind timestamp thật, chặn stamp tự thêm; chỉ chạy lại lane đổi.
+S95 sửa observation: giữ sanitized transport_failure tại từng lookup attempt,
+schema1.3 và strict validator; không đổi timeout/retry/status samples/ngưỡng.
+85/85 affected tests đạt, actual target43688/helper31992exit0/treeverified;
+GitHEAD51source khớp ad81e944. Unit01 giữ77pass/1fail do clock diagnostic
+GetTickCount64 bị lệch với QPC của producer; đã dùng chung perf_counter_ns.
+Không đổi phép đo statusgap S93, không claim đã sửa latency gốc.
+HTTP200 trên copyhistory đã xong: actual8824/helper13900exit0/treeverified,
+maxgap401.4742ms; không tái hiện2s. Hash HTTP closure riêng, không gọi full
+campaign51map. Ba worker Astra ultra chia helper/native review/HTTP analysis;
+implementation review không thay final critic.
+Chuẩn bị hai thí nghiệm tách biệt, chạy tuần tự: HTTP với bản sao history để
+đo journal/lock phases; native-only35×100 sparse để HTTP không cắt mất lượt
+quan sát ObjectDB. Smoke01 native5×1 đạt readback và cleanup, baseline-only; reviewer phát hiện
+receipt publication race và hook nằm sau timestamp. Sửa helper trước lượt
+dài, giữ smoke01/source cũ, smoke02 mới kiểm phần ảnh hưởng.
+Native-only là experiment khác, không continuation S93,
+không có benchmark acceptance; thiếu host load/idle/ACK giới hạn kết luận âm.
 
-Cả17ACK cóObjects71128/resources6. Chỉ sparsebaselinebatch4, không có growth
-snapshot; chưa tái hiện/giải thích S86+2, không chứng minh noleak. S86 failed
-ObjectDB71128→71130 batch17; packet s86-failure giữ nguyên. S88 RSSfailure và
-S90 interrupted5warmup UNKNOWN giữ ở packet cũ, tuyệt đối không làsamplePASS.
-S90 constant+1FileAccess trongACK không giải thích S86+2 trướcACK.
+S93 raw: studio/.local/reviews/gt06-s93-sparse-attribution-01.
+Failure: reviews/20260918-gt06-s95-status-recovery/,96exactcopies/90rawartifacts,
+51frozenruntime+6helpers đã verify; manifest
+ca7e46b7fb7cbfb0ee8c81825c7a262afac80d7dbe2ae0167c01f9368c5de4fc.
+Outer retained handles: supervisor12544/host10984/helper19080 exit1;
+editor33152/helper30580 exit2 forcedcleanup, khôngnatural. Jobszero/closed,
+handlesreleased; innereditor exitfile vẫn thiếu, outer proof giữ domain riêng.
+Scheduler state3/result1/noinstances đã lưu; task retired14:58:03Z sau seal.
+Sparse chỉbaseline, khônggrowth; ACKObjects71128/resources6 ổn định. Chưa
+truy nguyên S86+2, không chứng minh noleak. Giữ toàn bộ S70–S93 failures.
 
-Observer giữhandle đo actual host54540exit1/helper17164exit1, supervisor51464
-exit1, editor22440exit2/helper45548exit2. Editor2 làforcedcleanup, khôngnatural.
-Inner/outerJobszero/closed, handlesreleased, noobservererrors. SchedulerState3,
-result1/noinstances đã query sau terminal; observer không tự ghi ownactualexit.
-Source51 e010180a…/b3862a10 và6helpers/profile0cd5b530… vẫn khớp trước repair.
-Failure packet reviews/20260918-gt06-s92-status-recovery/:159exactcopies,
-170declaredrawartifacts; manifest515d48cf5295fb6653d6e3588d14b4e3a079e6e17dd6c186e2f2d57314b76308.
-Missing innereditorprocess-exit giữ nguyên; outer retainedhandleexit bổ sung
-trong hashdomain riêng. Không resume prefix này; nó là instrumented diagnostic.
+S91 lỗi2072.4595ms và repairS93 giữ tại s92-status-recovery/ cùng b113587b;
+S94 doc-only commitbf88058f làm rõ memory gate khớp code, không nới ngưỡng.
+Superagent SA2/HH World S23 đã bổ sung kit/data/social/device/extension, giữ
+16/32WP; chưa triển khai game. Review/checks: reviews/20260918-s94-plan-clarifications/.
+Chi tiết tiến độ S94 trước rút gọn giữ tại Gitbf88058f; evidence cũ không sửa.
 
-Trong lượt S93, ba worker đã chia rawgapanalysis, source/probe, terminalclosureaudit.
-Hai worker lượt đó báo workspace out of credits; coordinator tiếp quản partial
-files và hoàn tất repair, không giả verdict. Source repair checkpoint b113587b.
-Implementation review không thayfinalcritics. Lịch hiện hành phải theo S93;
-không còn báo S91RUNNING. S92 progression đầy đủ giữ ở Git135cc588; các history
-archive cũ AUTHORITY=0 vẫn nguyên. Không có ETA toànplan đáng tin cậy.
-
-Đường nghiệm thu giữ nguyên: đủ10freshpairs×35batch (5warmup+30measured)
-→final requirement/test/evidence + source/raw/portable manifest
-→hai critic MỚI độc lập cùng hash PASS/TICK=yes →coordinator ACCEPTED.
-Mapping F01–F15: reviews/20260918-gt06-s83-mapping/requirements.md;
-F13/F14 tuyệt đối không dùng partial/failure/diagnostic S86/S88/S90/S91.
-Reuse functional lane chỉ khi đúng dependency, không remint lane không đổi.
-GT07 recovery/concurrency, GT08 CI/export/Android thiết bị thật, GT09
-conformance, GT10 package/install/upgrade/rollback vẫn chưa mở.
-HH World là plan riêng sauGT10. Không có ETA toàn plan đáng tin cậy.
+Lịch duy nhất ti-p-t-c-hh3d-tools ACTIVE mỗi10phút phải đọc trạng thái mới;
+không tiếp tục báo S93RUNNING. Không có ETA toànplan đáng tin cậy.
+Đường nghiệm thu vẫn10freshpairs×35batch (5warmup+30measured), originalprofile
+→final requirement/test/evidence + manifest →hai critic MỚI cùng hash
+PASS/TICK=yes →coordinator ACCEPTED. F01–F15: s83-mapping/requirements.md;
+F13/F14 không dùng diagnostic hoặc partial/failure. Reuse lane đúngdependency.
+Sau GT06 mới GT07 recovery/concurrency, GT08 CI/export/Android máy thật,
+GT09 conformance và GT10 package/install/upgrade/rollback. Games sauGT10 riêng.
 
 Lịch sử đầy đủ S90 trước rút gọn: reviews/20260918-plan-history-s90/
 tools-plan-s90.txt, AUTHORITY=0, SHA256=c5d51b62e2bc78714f49b6f4727dee1b68fa7d702cf5f4a4365ecd7fcdf16e54.

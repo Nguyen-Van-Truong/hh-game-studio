@@ -1,0 +1,32 @@
+{
+  "observed_utc": "2026-09-18T14:45:32.691376+00:00",
+  "scope": "Read-only startup log/adoption snapshot; scheduler queried separately; no acceptance",
+  "files": {
+    "editor-host/stdout.txt": {
+      "exists": true,
+      "tail": [
+        "HH_GT06_BENCHMARK_HEARTBEAT {\"batch\":0,\"cycle\":72,\"main_thread\":true,\"monotonic_us\":65596574,\"phase\":\"SAVE_WAIT\",\"pid\":33152,\"run_id\":\"gt06-s93-sparse-attribution-01\"}",
+        "HH_GT06_BENCHMARK_HEARTBEAT {\"batch\":0,\"cycle\":74,\"main_thread\":true,\"monotonic_us\":66114275,\"phase\":\"SAVE_WAIT\",\"pid\":33152,\"run_id\":\"gt06-s93-sparse-attribution-01\"}"
+      ]
+    },
+    "host-owner/stdout.txt": {
+      "exists": true,
+      "tail": [
+        "HH_GT06_CAMPAIGN_PROGRESS {\"run_id\": \"gt06-s93-sparse-attribution-01\", \"batch\": 0, \"phase\": \"native_cycles\"}",
+        "HH_GT06_CAMPAIGN_PROGRESS {\"run_id\": \"gt06-s93-sparse-attribution-01\", \"batch\": 0, \"phase\": \"native_cycles\"}"
+      ]
+    },
+    "editor-host/stderr.txt": {
+      "exists": true,
+      "tail": []
+    },
+    "host-owner/stderr.txt": {
+      "exists": true,
+      "tail": []
+    },
+    "supervisor-stderr.txt": {
+      "exists": true,
+      "tail": []
+    }
+  }
+}
