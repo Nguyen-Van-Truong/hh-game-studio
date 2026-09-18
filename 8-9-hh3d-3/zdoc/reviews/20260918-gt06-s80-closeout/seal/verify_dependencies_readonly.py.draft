@@ -1,0 +1,178 @@
+"""UNEXECUTED: scoped S79/S69 reuse checks after terminal S80 verification.
+
+Reuses the S79 owned-process checks and existing repair/readback validators.
+Never runs a service, repair, engine, test, campaign, or acceptance action.
+"""
+from pathlib import Path
+import argparse
+import importlib.util
+import json
+import runpy
+import sys
+
+sys.dont_write_bytecode = True
+BASE = Path(__file__).absolute().parent
+adapter = runpy.run_path(str(BASE / 'verify_campaign_readonly.py.draft'))
+need, read, strict, sha = (adapter[name] for name in ('need', 'read', 'strict', 'sha'))
+SOURCE = adapter['SOURCE']
+BACKEND = '644b90abfe769bf1a3654ba506cef50f8a38393f05f0be5ca7aae8050aaaa527'
+REPLAY = '491b65875f8246e7606c7b860d9c61d6a85657fc0077075fa6dc7209128dca2b'
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--product-root', type=Path, required=True)
+    parser.add_argument('--campaign-verification', type=Path, required=True)
+    args = parser.parse_args()
+    product = args.product_root.absolute()
+    studio = product / 'studio'
+    report_raw = read(args.campaign_verification.absolute())
+    campaign_report = strict(report_raw)
+    need(campaign_report.get('schema') == 'HH-GT06-S80-CAMPAIGN-READONLY-DRAFT-1'
+         and campaign_report.get('verified_campaign_artifacts') is True
+         and campaign_report.get('source_closure_sha256') == SOURCE
+         and campaign_report.get('profile_sha256') == adapter['PROFILE']
+         and campaign_report.get('native_index_schema_version') == '1.3.0'
+         and campaign_report.get('startup_readiness_verified_runs') == 10
+         and campaign_report.get('measurement_status') == 'PASS', 'TERMINAL_CAMPAIGN_VERIFICATION_REQUIRED')
+    campaign_root = studio / '.local/reviews' / adapter['CAMPAIGN']
+    need(type(campaign_report.get('artifact_sha256')) is dict
+         and set(campaign_report['artifact_sha256']) == {'campaign.json', 'campaign-capture.json',
+             'dataset.json', 'summary.json', 'benchmark-profile.json'}, 'CAMPAIGN_REPORT_ARTIFACT_SET')
+    for name, digest in campaign_report['artifact_sha256'].items():
+        need(Path(name).name == name and sha(read(campaign_root / name)) == digest, 'CAMPAIGN_REPORT_STALE')
+    # No runtime imports occur before the terminal-verification preflight.
+    sys.path.insert(0, str(product))
+    from studio.host.replay import native_runner as native, repair_replay
+    from studio.host.replay.repair import verified_fault
+    from studio.host.replay.observation import validate_observation
+    from studio.host.replay.trace import validate_trace
+
+    saved = product / 'zdoc/reviews/20260918-gt06-s79-diagnosis/service-remint-01'
+    freeze = strict(read(saved / 'freeze.json'))
+    launcher = saved.parent / 'run_service_remints.py'
+    need(sha(read(launcher)) == freeze['source_files'][launcher.relative_to(product).as_posix()], 'S79_LAUNCHER_BYTES')
+    spec = importlib.util.spec_from_file_location('s80_existing_s79_checks', launcher)
+    old = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(old)
+    # Historical broad453 is preserved as immutable copies, never asserted to
+    # match current benchmark-only files. The historical HEAD is not relabelled.
+    for name, digest in freeze['source_files'].items():
+        need(sha(read(saved / 'source' / name)) == digest, 'S79_HISTORICAL_SOURCE_COPY')
+    _, accepted = native.accepted_inputs()
+    replay_sources = native.sources(accepted)
+    backend = dict(replay_sources)
+    backend.update({p.relative_to(studio).as_posix(): sha(read(p)) for p in (studio / 'host/replay').glob('*.py')})
+    backend['contracts/perf-collector.schema.json'] = sha(read(studio / 'contracts/perf-collector.schema.json'))
+    backend = dict(sorted(backend.items()))
+    need(len(backend) == 174 and native.closure(backend) == BACKEND
+         and backend == freeze['backend_source_files'], 'CURRENT_BACKEND_DEPENDENCIES')
+    results, raw_count = [], 0
+    for label, driver, mode, _ in old.LANES:
+        run_id = 'gt06-s79-' + label + '-01'
+        raw = studio / '.local/reviews' / run_id
+        owner = saved / label
+        outer = old.verify_outer(owner, strict(read(owner / 'capture.json'))['host'])
+        inner = None
+        if 'adversary' in driver or 'reviewer' in driver:
+            inner_root = raw.with_name(run_id + ('-outer' if 'adversary' in driver else '-driver'))
+            inner_capture = strict(read(inner_root / 'capture.json'))
+            need(inner_capture['completed'] is True, 'S79_INNER_INCOMPLETE')
+            inner = old.verify_outer(inner_root, inner_capture['host'])
+        need(strict(read(raw / 'source-files.json')) == backend, 'S79_EXACT_SOURCE_MAP')
+        for index, (name, digest) in enumerate(backend.items()):
+            need(sha(read(raw / 'source' / (str(index) + Path(name).suffix))) == digest, 'S79_SOURCE_COPY')
+        imported = old.verify_stage(raw / 'import-host')
+        runtime = old.verify_stage(raw / 'runtime-host', mode in ('stop', 'saturated-stop'))
+        domain = 'reviewer-probe' if 'reviewer' in driver else 'http-adversary' if 'adversary' in driver else 'http-probe'
+        result_raw = read(raw / domain / 'result.json')
+        result = strict(result_raw)
+        need(result['run_id'] == run_id and result['mode'] == mode
+             and result['binding']['source_closure_sha256'] == BACKEND, 'S79_RESULT_BINDING')
+        need(sha(read(studio / 'tests' / driver)) == freeze['source_files']['studio/tests/' + driver], 'S79_DRIVER_CHANGED')
+        if inner is not None:
+            need(inner_capture['result_sha256'] == sha(result_raw), 'S79_INNER_RESULT')
+        if domain == 'reviewer-probe':
+            ui = strict(read(raw / domain / 'source.json'))
+            paths = sorted((studio / 'reviewer').glob('*.py')) + [studio / 'tests' / driver]
+            need(ui == {p.relative_to(studio).as_posix(): sha(read(p)) for p in paths} and len(ui) == 5, 'S79_UI_DEPENDENCIES')
+            observations = strict(read(raw / domain / 'observations.json'))
+            need(not observations['errors'] and observations['closed'] is True and observations['window_closed'] is True
+                 and result['closed'] is True and result['source_unchanged'] is True, 'S79_UI_CLOSE')
+            flags = result['flags']
+            need(flags['play_key'] is True and (flags['stop_key'] is True if mode == 'stop'
+                 else flags['inspect_button'] is True and flags['capture_button'] is True), 'S79_UI_INPUT')
+        else:
+            need(result['checks'] and all(row['passed'] is True for row in result['checks']), 'S79_CHECK_FAILED')
+            prior = strict(read(product / 'zdoc/reviews/20260918-gt06-s73-recovery/service-remint/selected'
+                / run_id.replace('s79', 's73') / domain / 'result.json'))
+            need({row['label'] for row in prior['checks']} <= {row['label'] for row in result['checks']}, 'S79_NAMED_CHECK_MISSING')
+        if mode == 'stale-capture':
+            mutation = strict(read(raw / domain / 'intentional-capture-mutation.json'))
+            need(sha(read(raw / mutation['original_copy'])) == mutation['original_sha256']
+                 and sha(read(raw / mutation['generated_relative_path'])) == mutation['mutated_sha256']
+                 and mutation['original_sha256'] != mutation['mutated_sha256'] and mutation['restored'] is False,
+                 'S79_EXPECTED_PNG_MUTATION')
+        inventory = strict(read(owner / 'raw-files.json'))
+        for name, entry in inventory.items():
+            path = product / name
+            need(path.is_relative_to(product) and '..' not in Path(name).parts, 'S79_RAW_PATH')
+            value = read(path)
+            need(len(value) == entry['size_bytes'] and sha(value) == entry['sha256'], 'S79_RAW_HASH')
+        raw_count += len(inventory)
+        results.append({'run_id': run_id, 'backend_source_files': 174, 'source_closure_sha256': BACKEND,
+            'outer': outer, 'inner': inner, 'import': imported, 'runtime': runtime,
+            'result_sha256': sha(result_raw), 'raw_inventory_sha256': sha(read(owner / 'raw-files.json'))})
+
+    root = studio / '.local/reviews/gt06-s69-managed-replay-01'
+    recorded = strict(read(root / 'source-files.json'))
+    need(recorded == replay_sources and len(recorded) == 159 and native.closure(recorded) == REPLAY, 'S69_EXACT_DEPENDENCIES')
+    for index, (name, digest) in enumerate(recorded.items()):
+        need(sha(read(root / 'source' / (str(index) + Path(name).suffix))) == digest, 'S69_SOURCE_COPY')
+    proof = strict(read(root / 'repair-replay.json'))
+    need(proof['verifier_sources'] == repair_replay.verifier_sources(), 'S69_VERIFIER_SOURCE')
+    capture_raw = read(root / 'capture.json')
+    capture = strict(capture_raw)
+    need(sha(capture_raw) == proof['native_capture_sha256'] == 'd2f4985f75d6017e8ce13078d69973b9c7294a2719748cc978ba0977c0e6d0e5', 'S69_CAPTURE_PROVENANCE')
+    need(capture['completed_native'] is True and capture['source_unchanged'] is True
+         and capture['run_id'] == root.name and capture['binding']['source_closure_sha256'] == REPLAY,
+         'S69_CAPTURE_BINDING')
+    for relative, field in (('project/out/report.json', 'report_sha256'),
+                            ('process-metrics.json', 'process_metrics_sha256'),
+                            ('import-host/capture.json', 'import_capture_sha256'),
+                            ('runtime-host/capture.json', 'runtime_capture_sha256')):
+        need(sha(read(root / relative)) == capture[field], 'S69_CAPTURE_ARTIFACT_HASH')
+    need(strict(read(root / 'invocation.json'))['managed_repair_binding'] == proof['binding'], 'S69_REPAIR_INVOCATION')
+    config, repair = repair_replay.verified_repair(studio / '.local/reviews/gt06-s65-repair-02', proof['binding']['repair_capture_sha256'])
+    _, fault_capture, fault_checks = verified_fault(studio / '.local/reviews/gt06-s65-native-04', proof['binding']['fault_capture_sha256'])
+    need(sha(config) == proof['binding']['selected_config_sha256'] == repair['selected_config_sha256'], 'S69_SELECTED_CONFIG')
+    trace = validate_trace(native.read_regular(root / 'project/input/trace.json'))
+    need(capture['binding']['trace_sha256'] == fault_capture['binding']['trace_sha256']
+         and capture['binding']['glb_sha256'] == fault_capture['binding']['glb_sha256'], 'S69_CAUSAL_INPUT')
+    checks = validate_observation(native.read_regular(root / 'project/out/report.json'), trace=trace,
+        binding=capture['binding'], config_speed=3.0, project=root / 'project',
+        process=strict(read(root / 'process-metrics.json')))
+    need(checks == proof['replay_checks'] and checks['all_postconditions'] is True
+         and proof['fault_checks'] == fault_checks and proof['managed_repair_proven'] is True, 'S69_CAUSAL_POSTCONDITION')
+    old.verify_stage(root / 'import-host')
+    replay_runtime = old.verify_stage(root / 'runtime-host')
+    need(replay_runtime['pid'] == capture['process']['pid']
+         and strict(read(root / 'process-metrics.json'))['identity'] == capture['process'], 'S69_NATIVE_IDENTITY')
+    driver_root = root.with_name(root.name + '-driver')
+    replay_outer = old.verify_outer(driver_root, strict(read(driver_root / 'capture.json'))['host'])
+    print(json.dumps({'schema': 'HH-GT06-S80-DEPENDENCY-RECHECK-DRAFT-1', 'passed': True,
+        'campaign_verification_sha256': sha(report_raw), 'source_closure_sha256': SOURCE,
+        'service_gui_lanes': results, 'service_raw_files': raw_count,
+        's79_historical_snapshot_head': freeze['head'],
+        'managed_replay': {'run_id': root.name, 'source_closure_sha256': REPLAY,
+            'runtime': replay_runtime, 'outer': replay_outer, 'causal_provenance_preserved': True},
+        'formal_acceptance': False, 'critic_verdict': None}, indent=2))
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except (OSError, KeyError, TypeError, ValueError, RuntimeError) as error:
+        print(json.dumps({'passed': False, 'formal_acceptance': False,
+                          'error_type': type(error).__name__, 'error': str(error)}))
+        raise SystemExit(2)

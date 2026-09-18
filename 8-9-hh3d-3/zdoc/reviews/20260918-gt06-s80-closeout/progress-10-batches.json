@@ -1,0 +1,472 @@
+{
+  "observed_utc": "2026-09-18T07:25:22.886993+00:00",
+  "campaign_id": "gt06-s80-campaign-01",
+  "launch": 1,
+  "run_id": "gt06-s80-campaign-01.r00.a01",
+  "source_closure_sha256": "1dc889ef923dee9b53c6faeeb1d6fd781acc3a89a4b860b531b55fc3a124cf8f",
+  "scope": "Ten existing captures only; no complete run or acceptance claim. Live logs and scheduler queried separately.",
+  "processes": {
+    "editor": {
+      "pid": 5900,
+      "process_start": "windows:134341887996345605"
+    },
+    "host": {
+      "pid": 34988,
+      "process_start": "windows:134341887931302527"
+    }
+  },
+  "rows": [
+    {
+      "batch": 0,
+      "warmup": true,
+      "joint_wall_seconds": 69.093873,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 566
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 752095232
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 197
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 39337984
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 622.797
+    },
+    {
+      "batch": 1,
+      "warmup": true,
+      "joint_wall_seconds": 74.786701,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 562
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 752394240
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 197
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 39972864
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 586.653
+    },
+    {
+      "batch": 2,
+      "warmup": true,
+      "joint_wall_seconds": 81.758899,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 556
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 752926720
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 197
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 40296448
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 589.624
+    },
+    {
+      "batch": 3,
+      "warmup": true,
+      "joint_wall_seconds": 89.480155,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 556
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 753483776
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 197
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 40452096
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 825.196
+    },
+    {
+      "batch": 4,
+      "warmup": true,
+      "joint_wall_seconds": 94.426287,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 562
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 641355776
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 197
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 37310464
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 583.66
+    },
+    {
+      "batch": 5,
+      "warmup": false,
+      "joint_wall_seconds": 99.652197,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 556
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 495448064
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 197
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 36937728
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 626.407
+    },
+    {
+      "batch": 6,
+      "warmup": false,
+      "joint_wall_seconds": 108.978515,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 559
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 430497792
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 197
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 34734080
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 657.052
+    },
+    {
+      "batch": 7,
+      "warmup": false,
+      "joint_wall_seconds": 113.819758,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 556
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 349646848
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 197
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 29290496
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 612.663
+    },
+    {
+      "batch": 8,
+      "warmup": false,
+      "joint_wall_seconds": 118.774545,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 558
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 294473728
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 197
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 29478912
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 639.7783
+    },
+    {
+      "batch": 9,
+      "warmup": false,
+      "joint_wall_seconds": 117.867095,
+      "memory": {
+        "editor": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 558
+          },
+          "objects": {
+            "unavailable_reason": null,
+            "value": 71128
+          },
+          "resources": {
+            "unavailable_reason": null,
+            "value": 6
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 264368128
+          }
+        },
+        "host": {
+          "held_handles": {
+            "unavailable_reason": null,
+            "value": 197
+          },
+          "objects": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "resources": {
+            "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+            "value": null
+          },
+          "rss_bytes": {
+            "unavailable_reason": null,
+            "value": 29208576
+          }
+        },
+        "phase": "post_batch_quiescent"
+      },
+      "max_status_gap_ms": 768.528
+    }
+  ],
+  "measured_median_wall_seconds": 113.819758,
+  "formal_acceptance": false
+}

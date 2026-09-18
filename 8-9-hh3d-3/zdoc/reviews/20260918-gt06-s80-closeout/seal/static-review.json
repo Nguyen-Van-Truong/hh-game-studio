@@ -1,0 +1,26 @@
+{
+  "schema": "HH-GT06-S80-SEAL-STATIC-REVIEW-1",
+  "created_utc": "2026-09-18T07:31:44.483234+00:00",
+  "scope": "Source/API inspection and syntax only; no runtime imports, validators, tests, engines or raw hashing",
+  "scripts": [
+    {
+      "path": "verify_campaign_readonly.py.draft",
+      "sha256": "159784c7dbe04892e48294a16fc638be4e7869535248b450479beee128ca43c8",
+      "syntax": "PASS"
+    },
+    {
+      "path": "verify_dependencies_readonly.py.draft",
+      "sha256": "56ed8d8a7ea0a4493365032fdefac6fb36f674d3b784916333b6f00c1674b4fe",
+      "syntax": "PASS"
+    }
+  ],
+  "corrections": [
+    "Dependency preflight now requires the exact five campaign artifact hashes plus profile/index/readiness-count binding; an empty artifact map cannot skip final-artifact readback.",
+    "S69 report/process/import/runtime capture hashes and native process identity are now joined to the pinned original capture; managed repair invocation is bound to the original proof.",
+    "README now reflects amended S79 REPORT: source24efe967 and frozen HEAD e4bbc1fe are distinguished; older bridge discrepancy is historical."
+  ],
+  "api_path_review": "Called signatures, snapshot/source-copy locations and original capture fields agree with inspected small source APIs. Runtime verification remains pending.",
+  "supersedes_script_hashes_in": "preparation.json",
+  "formal_acceptance": false,
+  "critic_verdict": null
+}

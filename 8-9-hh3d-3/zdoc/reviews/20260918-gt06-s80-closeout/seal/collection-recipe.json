@@ -1,0 +1,100 @@
+{
+  "schema": "HH-GT06-S80-SEAL-RECIPE-DRAFT-1",
+  "status": "PREPARATION_ONLY_TERMINAL_EVIDENCE_PENDING",
+  "formal_acceptance": false,
+  "executed": false,
+  "campaign_id": "gt06-s80-campaign-01",
+  "source_revision": "f75a5d08",
+  "source_count": 50,
+  "source_map": "source-files.expected.json",
+  "source_path_domain": "studio-relative",
+  "source_closure_sha256": "1dc889ef923dee9b53c6faeeb1d6fd781acc3a89a4b860b531b55fc3a124cf8f",
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "toolchain_sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+  "do_not_execute_while_measuring": true,
+  "unchanged_measurement_contract": {
+    "fresh_pairs": 10,
+    "batches_per_pair": 35,
+    "warmup_indices": [0, 1, 2, 3, 4],
+    "measured_indices_inclusive": [5, 34],
+    "commands_per_batch": {"inspect": 500, "validation_reject": 300, "admitted_queue": 200},
+    "native_cycles_per_batch": 100,
+    "run_wall_seconds": 7410,
+    "settle_frames": 4,
+    "settle_us": 1100000,
+    "rss_percent_of_warm_baseline_max": 110,
+    "other_applicable_counters": "must not exceed baseline batch4; no subtraction, offsets or reset",
+    "status_gap_limit_ms": 2000,
+    "inspect_stop_receipt_p95_limit_ms": 500
+  },
+  "native_schema": {
+    "aggregate_index": "1.3.0",
+    "binding_and_batch": "1.2.0",
+    "startup_receipt": "hh-studio.native-startup-readiness/1.0.0",
+    "validator": "studio/tests/replay/benchmark_readiness.py",
+    "rule": "Exact closed receipt; one explicit synthetic focus before existing startup settle and batch0; expected callback owners, blank one-column roots, unchanged source/scene; initial editor snapshot scene hash, first READY and batch0 binding; no measurement reclassification."
+  },
+  "validators": [
+    "zdoc/reviews/20260918-gt06-s71-growth/verify_source_checkpoint.py f75a5d08 --output NEW/source-git-final.json",
+    "verify_campaign_readonly.py.draft --product-root ABS_PRODUCT --scheduler-status FINAL_STATUS_JSON --launch-number N --source-checkpoint NEW/source-git-final.json",
+    "verify_dependencies_readonly.py.draft --product-root ABS_PRODUCT --campaign-verification NEW/campaign-verification.json"
+  ],
+  "selected_campaign_collection": {
+    "raw_root": "studio/.local/reviews/gt06-s80-campaign-01",
+    "selection": "campaign-capture.json runs[0..9].capture; one complete attempt01..03 per index;20 unique PID+creation identities",
+    "top": ["campaign.json", "benchmark-profile.json", "campaign-capture.json", "dataset.json", "summary.json", "source/studio/EVERY_SOURCE_MAP_KEY"],
+    "per_run": "run-capture.json plus every artifact key, context/source/project/assembly/native ownership records, all35 command/native/joint/READY/start/ACK reference sets and actual exits",
+    "failed_attempts": "Enumerate bounded10x3 slots after terminal, retain every nonselected slot in separate forensic inventory with explicit missing exit fields and failure reason; never splice samples.",
+    "supervisors": "All actual launch roots, request/claim/XML/hash/registration/task-start/start/return/logs/terminal status; collect status before deletion. Return record alone is not actual exit.",
+    "historical_failures": "Retain original S70-S78 failure inventories/source labels, including S78 batch12 object-growth failure; no historic prefix contributes to S80 samples."
+  },
+  "dependency_domains": {
+    "S79_service_GUI": {
+      "bridge": "zdoc/reviews/20260918-gt06-s79-diagnosis/s80-dependency-bridge.json",
+      "review_root": "zdoc/reviews/20260918-gt06-s79-diagnosis/service-remint-01",
+      "runtime_files": 174,
+      "runtime_closure": "644b90abfe769bf1a3654ba506cef50f8a38393f05f0be5ca7aae8050aaaa527",
+      "run_suffixes": ["http-complete", "http-stop", "saturated-stop", "revoked-result", "stale-capture", "reviewer-complete", "reviewer-stop"],
+      "run_pattern": "gt06-s79-{suffix}-01",
+      "include_inner_owners": "adversary -outer and reviewer -driver roots",
+      "UI_maps": "both reviewer-probe/source.json maps contain5 unchanged files",
+      "raw_selector": "each review lane raw-files.json has product-relative path,sha256,size_bytes; preserve all1778 entries,including expected stale PNG",
+      "broad453_snapshot": "Historical immutable copies only; do not assert whole broad live map equality after S80 benchmark edits.",
+      "stop_semantics": "http-stop,saturated-stop,reviewer-stop: missing natural native exit stays null; require stopped/empty/closed/untainted Job,no retained Job handle,successful actual target/helper exits."
+    },
+    "S69_managed": {
+      "root": "studio/.local/reviews/gt06-s69-managed-replay-01",
+      "driver_root": "studio/.local/reviews/gt06-s69-managed-replay-01-driver",
+      "runtime_files": 159,
+      "runtime_closure": "491b65875f8246e7606c7b860d9c61d6a85657fc0077075fa6dc7209128dca2b",
+      "capture_sha256": "d2f4985f75d6017e8ce13078d69973b9c7294a2719748cc978ba0977c0e6d0e5",
+      "verifier_sources": "repair-replay.json#/verifier_sources contains4 unchanged files",
+      "causal_roots": ["gt06-s65-native-04", "gt06-s65-repair-02", "gt06-s65-native-05"],
+      "selected_config_sha256": "4fe3141b9afe6b411b585b203cebae77e851a406c291ac26620eb8cd7c018d90",
+      "rule": "Preserve original source generations,command IDs,authenticated repair02 response/readback and GT05 GLB binding; no replay rerun or signature transfer."
+    }
+  },
+  "final_manifest_sections_required": [
+    "exact campaign and named source checkpoint refs",
+    "requirements.md/json and every selected requirement/test/source/evidence edge",
+    "scoped lane dependency comparisons including added/removed/changed paths",
+    "review_files exact hashes/sizes and immutable governance snapshots",
+    "raw_files exact hashes/sizes with physical local locators",
+    "portable_files and origin/transformation mappings if a portable view exists",
+    "all supervisor launch records,external interpreter/Godot pins and actual verifier exits",
+    "selected versus excluded attempt inventories; test failure/skip ledger",
+    "U79 current service/index95test lane,U80 focused checks and startup native proof under their original scopes",
+    "historical causal and accepted GT05 producer/import provenance",
+    "limits/unresolved gaps and two future independent same-hash critic reports outside the candidate"
+  ],
+  "hash_domains": {
+    "raw": "sha256 exact bytes + size; empty files and JSON number spellings retained",
+    "source": "sha256 of sorted path+NUL+digest+LF rows in each named path domain",
+    "review": "own exact-byte map and closure; manifest excluded from itself",
+    "portable": "own exact-byte hashes with raw_origin_sha256/source/transform; never replaces missing raw",
+    "path_rules": "Reject traversal,reparse,symlink and case aliases; conflicts are gaps; do not put generated caches or secrets in Git."
+  },
+  "candidate_manifest": null,
+  "candidate_manifest_sha256": null,
+  "critic_verdict": null
+}

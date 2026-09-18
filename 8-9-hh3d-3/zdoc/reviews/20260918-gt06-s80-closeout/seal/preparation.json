@@ -1,0 +1,27 @@
+{
+  "schema": "HH-GT06-S80-SEAL-PREPARATION-1",
+  "created_utc": "2026-09-18T07:29:13.071192+00:00",
+  "syntax_only": true,
+  "scripts": [
+    {
+      "file": "verify_campaign_readonly.py.draft",
+      "sha256": "159784c7dbe04892e48294a16fc638be4e7869535248b450479beee128ca43c8",
+      "syntax": "PASS"
+    },
+    {
+      "file": "verify_dependencies_readonly.py.draft",
+      "sha256": "96794c7e6cf88145973d927b9f315cbb6cc2b4614717bf9517c7390407e47718",
+      "syntax": "PASS"
+    }
+  ],
+  "declared_source_files": 50,
+  "declared_source_closure_sha256": "1dc889ef923dee9b53c6faeeb1d6fd781acc3a89a4b860b531b55fc3a124cf8f",
+  "source_map_origin": "studio/.local/reviews/gt06-s80-campaign-01/campaign.json#/source_files",
+  "live_runtime_bytes_hashed": false,
+  "campaign_validator_executed": false,
+  "dependency_validator_executed": false,
+  "raw_tree_hashed": false,
+  "tests_executed": false,
+  "engines_started": false,
+  "formal_acceptance": false
+}
