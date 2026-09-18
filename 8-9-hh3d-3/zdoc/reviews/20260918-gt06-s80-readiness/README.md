@@ -3,10 +3,14 @@
 AUTHORITY=0. Supplemental implementation evidence; GT-06 remains unaccepted.
 
 Source checkpoint: `f75a5d08422e5163c638b26de718126cf4c29cf3`.
-Campaign source closure:
-`97b85f38c877854ebe4b869b119a0d7b7c6f24e62637540e4d31537c4e6815f6`.
-`verification.json` binds the exact source map to Git HEAD bytes and preserves
-separate raw/copy hash inventories. Profile hash remains
+Actual 50-file campaign source closure:
+`1dc889ef923dee9b53c6faeeb1d6fd781acc3a89a4b860b531b55fc3a124cf8f`.
+`campaign-closure-binding.json` corrects the preflight map: the original
+`verification.json` queried dynamic imports before loading the trusted fixture,
+so its 47-file digest `97b85f38c877854ebe4b869b119a0d7b7c6f24e62637540e4d31537c4e6815f6`
+is a subset, not the full campaign closure. All 47 hashes match; the three
+additional fixture modules also match source commit f75a5d08. No source changed
+and no engine was rerun. Raw/copy hash inventories remain intact. Profile hash remains
 `0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85`.
 
 The S79 focus probe observed two absent dialog Tree roots, then two blank roots
@@ -54,7 +58,9 @@ pair. Prior failed/partial campaigns remain excluded. Final acceptance still
 needs full evidence assembly and two independent PASS/TICK=yes reviews on the
 same final manifest. GT-07 remains closed until then.
 
-Lessons: freeze edits explicitly before dispatch; a late test-only change needs
+Lessons: load the trusted fixture before taking the dynamic imported-module
+closure; verify the campaign's actual map rather than assuming preflight loaded
+every dependency. Freeze edits explicitly before dispatch; a late test-only change needs
 only its affected lane reminted. Read process-exit artifacts for nonzero native
 exits instead of inventing success-only fields. Repair collectors against valid
 raw evidence before considering another engine run.
