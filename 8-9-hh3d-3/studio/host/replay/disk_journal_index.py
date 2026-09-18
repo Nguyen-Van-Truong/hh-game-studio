@@ -115,13 +115,14 @@ class DiskJournalIndex:
             self._ensure()
             cursor = None
             try:
-                cursor = self._db.execute(sql, args)
-                return cursor.fetchone() if fetch else None
+                try:
+                    cursor = self._db.execute(sql, args)
+                    return cursor.fetchone() if fetch else None
+                finally:
+                    if cursor is not None:
+                        cursor.close()
             except sqlite3.Error as error:
                 raise DiskIndexError("INDEX_IO_FAILED") from error
-            finally:
-                if cursor is not None:
-                    cursor.close()
 
     def _one(self, sql, args=()):
         return self._execute(sql, args, fetch=True)

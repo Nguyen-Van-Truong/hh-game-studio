@@ -38,9 +38,8 @@ class ReplayService:
         self._deadline = epoch_ms() + 120_000
         self.sessions = ReplaySession(project_id, backend.root, catalog_digest=contract.CATALOG_DIGEST,
             binding=backend.binding, owner_deadline_ms=self._deadline)
-        parent = backend.root / 'service'
-        parent.mkdir(exist_ok=False)
-        self._journal = Journal(parent / 'commands.jsonl', limits=JournalLimits(max_records=512, max_pending_commands=2))
+        self._journal = None
+        self._watchdog = None
         self._guard = threading.RLock()
         self._work = threading.Lock()
         self._jobs, self._leases, self._uncertain = {}, {}, {}
@@ -50,8 +49,20 @@ class ReplayService:
         self._launch_thread = None
         self._closed = False
         self._shutdown = threading.Event()
-        self._watchdog = threading.Thread(target=self._expire, name='hh-replay-owner-expiry', daemon=True)
-        self._watchdog.start()
+        try:
+            parent = backend.root / 'service'
+            parent.mkdir(exist_ok=False)
+            self._journal = Journal(parent / 'commands.jsonl', limits=JournalLimits(max_records=512, max_pending_commands=2))
+            self._watchdog = threading.Thread(target=self._expire, name='hh-replay-owner-expiry', daemon=True)
+            self._watchdog.start()
+        except BaseException as error:
+            if self._journal is None and isinstance(error, JournalError):
+                self._journal = getattr(error, 'cleanup_owner', None)
+            try:
+                self.close()
+            except BaseException:
+                error.cleanup_owner = self
+            raise
 
     @property
     def binding(self):
@@ -181,7 +192,11 @@ class ReplayService:
             self._journal.finish_command(project_id=self.project_id, command_id=request.command_id,
                 status='COMMITTED', receipt=reply, now_ms=epoch_ms())
             return reply
-        except BaseException:
+        except BaseException as error:
+            uncertain = isinstance(error, JournalError) and error.outcome_unknown
+            if uncertain:
+                self.sessions.halt()
+                self.backend.stop()
             if permit is not None:
                 state = self.sessions.permit_status(permit)
                 if state == 'RESERVED':
@@ -189,7 +204,7 @@ class ReplayService:
                 elif state == 'STARTED':
                     self.sessions.finish_effect(permit, known=False)
                     self.backend.stop()
-            if admitted_here:
+            if admitted_here or uncertain:
                 self._record_unknown(request.command_id)
             raise
         finally:
@@ -338,10 +353,12 @@ class ReplayService:
                 self._view = None
             # All journal users (HTTP, launch completion and Stop persistence)
             # have drained before releasing the derived index/connection.
-            self._journal.close()
+            if self._journal is not None:
+                self._journal.close()
             self._closed = True
         finally:
             self._work.release()
         self._shutdown.set()
-        self._watchdog.join(1)
-        need(not self._watchdog.is_alive(), 'REPLAY_WATCHDOG_HELD')
+        if self._watchdog is not None and self._watchdog.ident is not None:
+            self._watchdog.join(1)
+            need(not self._watchdog.is_alive(), 'REPLAY_WATCHDOG_HELD')
