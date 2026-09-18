@@ -81,6 +81,14 @@ Ba Astra xhigh S73 đã điều tra response-loss, đo tối ưu hash và giữ 
 không phải critic nghiệm thu. Hai review độc lập trên final closure còn phải làm.
 Native engine/integration lanes chạy tuần tự với process/cache/evidence riêng.
 
+Rà phạm vi claim S76: GT-01–05 ACCEPTED theo fixture/catalog đã công bố,
+chưa chứng minh authoring gameplay tổng quát. Godot writer hiện chỉ Node3D/
+MeshInstance3D/BoxMesh và script khai báo biến; Blender writer box/transform/
+material/fixed publication. Pipeline rig/clip GT-05 dùng trusted producer,
+không tự cấp API authoring rig/animation. GT-10 không đồng nghĩa game hoàn chỉnh.
+Phân tích ba worker read-only và nguồn Godot/Blender/Khronos/Android:
+reviews/20260918-end-to-end-game-claim-research.md (AUTHORITY=0, không verdict).
+
 Đã nghiệm thu:
 - GT-01: a0fb247, reviews/20260913-r21-gt01-final; closure
   3ace23bcf84598cda64d54bbe3fc4736acde877f9f714fb71e2355d3e809eea4.
@@ -1012,6 +1020,26 @@ mới chạy regression affected capabilities+install/rollback+consumer contract
 2critics cho mọi release package thay đổi, giữ last-good package đến khi đủ evidence.
 Consumer upgrade explicit lock diff; project khác chỉ nhận sau owner grant.
 Không phá compatible client đang dùng hoặc silently auto-upgrade global Godot.
+
+Làm rõ phạm vi claim/handoff (S76; không thay gate hoặc mở consumer sớm):
+- Capability matrix phải phân biệt thao tác bằng public catalog đã kiểm với
+  trusted fixture producer/setup. Không suy general gameplay authoring từ
+  tên operation script_text.replace hoặc từ một scene mẫu chạy được.
+- Ghi từng nhu cầu consumer → operation/profile/version → evidence → limit.
+  Hiện: scene box và declarative script có fixture proof; controller/combat/
+  UI/input/audio/physics đa scene và executable gameplay script tổng quát
+  chưa có authoring proof qua catalog; rig/clip intake không phải rig authoring.
+- Claim “agent làm trọn game X” cần source/art nguyên bản hoặc quyền rõ ràng,
+  vòng chơi đầu–cuối, tự chơi/quan sát/sửa lỗi bằng route công bố, save/reload,
+  exported artifact chạy trên target thật và acceptance của plan sản phẩm.
+  GT-09 fixture conformance không thay các proof này hoặc human playtest.
+- “Chơi trên web như Y8” là target claim riêng: package hiện chỉ dự kiến
+  Windows/Android/Linux-headless. Web cần profile và browser evidence riêng;
+  chưa thêm target/gate hay mở scope Vault Fighters bằng ghi chú này.
+- Khi consumer cần năng lực còn thiếu, dùng change request/versioned release
+  ở trên; giữ proof accepted đúng phạm vi, không bypass bằng hidden shell edit.
+  Research/đề xuất thứ tự mở rộng ở reviews/20260918-end-to-end-game-claim-research.md;
+  không có plan thứ ba hoặc claim mới chỉ vì tài liệu nghiên cứu đã hoàn tất.
 
 Bản tách chuyển ranh giới lịch sử (chỉ truy vết, không bảng tiến độ):
 ST-01→GT-02, ST-02→GT-04, ST-03→GT-05, ST-04→GT-06;
