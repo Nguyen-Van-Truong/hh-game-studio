@@ -1,0 +1,22 @@
+{
+  "authority": 0,
+  "scope": "document-only consistency and routing",
+  "time_utc": "2026-09-18T14:28:38.955455+00:00",
+  "base_commit": "875d8ca7e65e1601bde8d6f2bb9a0c0fea324d2f",
+  "sha256": {
+    "AGENTS.md": "c07c495e505ae251fcbcbc68d854301a19342f85d5d561f4e3de1099dec5b043",
+    "zdoc/18-9-superagent-2d-y8-plan.txt": "49b4d6be6fb1e62ef513b9d69f461ac2e6760c4e796a713bd72bf931602f2b93",
+    "zdoc/8-9-hh-world-gameplay-viet-nam-plan.txt": "2af628254c44557e397e117a97ad7ba5c24fc33e498008a873e91ce3a15b5338",
+    "zdoc/8-9-godot-blender-agent-studio-plan.txt": "55da9489cca74af1181331ca474af91ab12ac4c4c04bceea8bf1d2119b79fc76"
+  },
+  "checks": {
+    "superagent_16_rows_specs_order_and_no_cycles": true,
+    "superagent_all_planned_no_legacy_ticks": true,
+    "hhworld_32_rows_dependencies_status_unchanged": true,
+    "tools_10_rows_runtime_closure_run_and_implementation_unchanged": true,
+    "three_plan_routes_exist": true,
+    "utf8_valid": true
+  },
+  "runtime_acceptance": false,
+  "design_acceptance_claim": false
+}

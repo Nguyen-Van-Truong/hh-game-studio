@@ -1,5 +1,5 @@
-HH WORLD — PLAN 2/3: GAMEPLAY, SOCIAL MULTIPLAYER, VIỆT NAM
-Ngày 18-09-2026, Asia/Saigon | Revision S22 | TRIỂN KHAI THEO GATE
+HH WORLD — PLAN 2/2: GAMEPLAY, SOCIAL MULTIPLAYER, VIỆT NAM
+Ngày 12-09-2026, Asia/Saigon | Revision S21 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO GAME
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -40,30 +40,20 @@ CURRENT_VALID_WP=H2-P0-01
 DISPATCHABLE=NO_UNTIL_GT10_ACCEPTED
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
 IMPLEMENTATION=NOT_STARTED
-PLAN_DESIGN_CRITICS=NO_ACCEPTED_VERDICT_S6_TO_S22
+PLAN_DESIGN_CRITICS=NO_ACCEPTED_VERDICT_S6_TO_S21
 RUNTIME_ACCEPTANCE=NONE
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/game-and-services
 PLAN_ROLE=GAME_SOURCE_OF_PROGRESS
-PLAN_REVISION=S22
+PLAN_REVISION=S21
 REVIEW_BASE_COMMIT=b4195ca
 HISTORICAL_REJECTED_COMMIT=54d0c7c
 HISTORICAL_STUDIO_COMMIT=3cc7a85f730c99963a5a64079a0e02dc20edbd40
 HISTORICAL_SOCIAL_COMMIT=71629923641178171ec4339143b3cf1472618adc
 
-CẬP NHẬT S22 — PHẠM VI GAME, CHƯA TRIỂN KHAI
-Rà ngày18-09 đưa cải thiện dữ liệu/nội dung/chơi thử/chi phí vào đúng H2;
-32 WP, dependency và trạng thái PLANNED giữ nguyên. GT-10 vẫn là gate intake.
-Không thêm minigame co-op, Web hoặc game2D thành yêu cầu GT/H2. Source Hoàn Hảo
-đã được đọc; cấu hình VPS/coverage/quyền dataset chưa xác minh.
-Nguồn: reviews/20260918-hoanhao-map-reuse-review.md (AUTHORITY=0).
-Archive S21/hash và scoped checks: reviews/20260918-hhworld-s22-plan-update/.
-REVIEW_BASE_COMMIT phía trên là provenance review cũ, không là verdict S22.
-
 0. ĐỌC FILE NÀY VÀ NHẬN CÔNG CỤ TRƯỚC KHI LÀM GAME
 
-Đây là plan HH World trong ba TXT có scope riêng. Superagent dùng
-./18-9-superagent-2d-y8-plan.txt, không chia sẻ tiến độ H2. Plan công cụ:
+Đây là plan GAME, một trong đúng hai TXT có hiệu lực. Plan công cụ:
 ./8-9-godot-blender-agent-studio-plan.txt
 GT-10 phải ACCEPTED và bàn giao gói v0.1 đã kiểm trước H2-P0-01. GT-08 physical
 Android là hard gate toàn gói; không desktop-only/partial ACCEPT. CURRENT_VALID_WP
@@ -73,7 +63,7 @@ lấy tool conformance làm bằng chứng fun/FPS/multiplayer/kinh tế. Công 
 chờ game, game không yêu cầu fork engine trước gameplay. Hợp đồng nhận gói ở
 mục2 của file này; chỉ mở plan công cụ khi kiểm trạng thái/handoff hoặc sửa tool.
 
-Một bảng H2 duy nhất tại đầu file. Ba plan không chia sẻ checkbox/WP;
+Một bảng H2 duy nhất tại đầu file. Hai plan không chia sẻ checkbox/WP;
 GT có bảng ở plan công cụ, H2 có bảng ở đây. Không cộng thành % sản phẩm;
 33/50 Vault Fighters và 59/60 platform cũ là scope khác. PLANNED → IN_PROGRESS
 → CANDIDATE → ACCEPTED hoặc GAP; coordinator đổi sau evidence/critic đúng hash.
@@ -83,11 +73,11 @@ CURRENT_VALID_WP là hàng đầu chưa ACCEPTED. Được dispatch lane độc 
 Root dự án: hh-game-studio/8-9-hh3d-3. Game sở hữu game/, assets-src/,
 backend/, contracts/, tools/, tests/, geo/ và evidence/ theo WP/lease. studio/
 là source của plan công cụ, game chỉ consume artifact pinned. Generated addon
-trong game không sửa tay. Ba plan hiệu lực nằm trong `hh-game-studio/8-9-hh3d-3/zdoc/`; chỉ coordinator cập nhật plan.
+trong game không sửa tay. Hai plan hiệu lực nằm trong `hh-game-studio/8-9-hh3d-3/zdoc/`; chỉ coordinator cập nhật plan.
 Không cho phép sửa các dịch vụ xã hội/địa lý đang vận hành.
 
 Bản gộp U2 và mọi master HH2 cũ chỉ lịch sử. Các yêu cầu sản phẩm/quality/
-ngoại lệ/server tự chứa ở file này; schema/lock/evidence không là nguồn tiến độ bổ sung.
+ngoại lệ/server tự chứa ở file này; schema/lock/evidence không là plan thứ ba.
 Mâu thuẫn schema/plan phải reconcile đúng scope, không đổi acceptance để hợp
 code đã lỡ làm. Lượt này chỉ tạo plan: chưa làm game/server, cài engine, lấy
 map, thuê máy hay phát hành.
@@ -127,15 +117,6 @@ manual mới hơn phải reconcile, không cứ timeout là rollback đè mọi 
 Revoke/incompatible package giữ source/save và báo recovery; không bypass trust.
 H2-P1-01 kiểm package trên game, H2-P2-04 kiểm .blend→GLB→game loop thực.
 Capability thiếu tạo GAP/minimal repro tại GT owner; không sửa generated addon.
-P0-01 lập ma trận nhu cầu game → public operation/profile/package version →
-evidence/limit/GAP; P1-01 chỉ kiểm capability được dùng trong P1. Hàng cho WP
-sau giữ UNVERIFIED đến WP dùng đầu và phải được kiểm trước mutation. Bao phủ
-controller/camera, UI, executable gameplay scripts, avatar/rig/animation, audio,
-save và house placement theo WP sử dụng. Ghi SUPPORTED_TESTED/UNVERIFIED/
-UNSUPPORTED, command/schema và test/readback; trusted box fixture không chứng
-minh public authoring. Gap đi qua minimal repro và versioned change request
-đến tool owner, rồi kiểm lại package intake; không tự cấp arbitrary eval.
-Chỉ lane phụ thuộc thiếu capability bị chặn; intake không đợi game hoàn chỉnh.
 
 3. GAME HH WORLD: GAMEPLAY TRƯỚC, VIỆT NAM SAU
 3.1 HỢP ĐỒNG TRẢI NGHIỆM GAME (P01–P08)
@@ -602,7 +583,7 @@ restore elapsed dưới cùng query SLO mục7.3 và p99 profile khóa trước 
 100M/300M accounts là capacity gate tương lai phải đo đúng cardinality hoặc
 công bố extrapolation + uncertainty; không chứng nhận bằng 10M hay 32 clients.
 Nếu owner muốn hàng trăm triệu CCU thực thì cần chương trình đa vùng và capacity
-review khác; các plan hiện chưa cam kết năng lực đó. Không tự gắn SCALE_PASS.
+review khác; hai plan hiện chưa cam kết năng lực đó. Không tự gắn SCALE_PASS.
 
 SCALE-LOCKS — quyết định rẻ hôm nay, đắt nếu đổi sau 100M bản ghi. Mỗi lock
 ghi WP owner khóa quyết định (trước consumer đầu tiên của lock đó) và WP đo;
@@ -800,17 +781,6 @@ Báo cáo owner cung cấp mô tả OSM → OpenFreeMap/Protomaps PMTiles, MapLi
 PostGIS, Nominatim và dữ liệu shop/địa điểm riêng. Đây là **báo cáo kiến trúc**,
 chưa là bằng chứng mọi service đang chạy/đủ dữ liệu/được phép dùng cho game.
 H2-P7-01 kiểm tra contract/provider thực tế trước tích hợp, read-only trước.
-Rà source18-09 ở reviews/20260918-hoanhao-map-reuse-review.md: frontend ưu tiên
-style LocationService, OpenFreeMap là default/fallback trong code; backend có
-PMTiles cấu hình, PostGIS và authored map_features line/polygon. Street import
-chỉ có center coordinates; worker shop tạo cluster pins. Không suy đã có
-hình học/height đủ cho thành phố hoặc VPS đang phục vụ đúng cấu hình này.
-P7-01 lập readiness từng lớp roads/footprints/height/water/POI: nguồn/version,
-quyền, coverage/completeness, confidence, dữ liệu thiếu và phần authored bổ sung.
-Kiểm provider/style thực, fonts/sprites/fallback, attribution và geocoder/quota
-riêng; Nominatim SKIP trong tài liệu không thay kiểm tra deployment thực.
-PMTiles phục vụ dữ liệu tĩnh; player/shop state động do authority/DB quản lý.
-Không coi tile hiển thị đã simplify là geometry đầy đủ khi thiếu provenance.
 
 Game trước: khu authored nguyên bản, fixtures local. Sau v0.1: một polygon
 pilot Việt Nam rõ ràng, giới hạn dataset/bytes/date/refresh/cost; không tải
@@ -1337,12 +1307,10 @@ Chưa có approval thì package release-ready local, không tự deploy.
 ## P0 — Nhận tools và bootstrap
 
 ### H2-P0-01 — Consumer package intake
-ALLOWED: `tools/engine.lock.json`, launcher, `.gitignore` mới, consumer capability matrix và evidence WP.
+ALLOWED: `tools/engine.lock.json`, launcher, `.gitignore` mới và evidence WP.
 INPUT: tool package contract và game baseline, git/process/cache inventory, release ledger.
 BUILD: nhận nguyên gói GT-10 theo mục2; verify local trust/signature, manifest,
 capability/target và digest; tạo consumer lock từ toolchain lock đã nghiệm thu.
-Lập capability matrix mục2 với owner/WP dùng đầu và gap; manifest/box fixture
-không tự là proof cho controller, gameplay script hoặc authoring art của game.
 Intake chỉ khi GT-10 toàn gói ACCEPTED, bao gồm Android proof GT-08; không
 coi target GAP của package là đủ để mở source game.
 Pin Linux x86_64/headless, không engine candidate khác, không sửa VF/cache cũ.
@@ -1358,9 +1326,7 @@ ALLOWED: `contracts/quality-profile.json`, `contracts/identity-content-v1.json`,
 `contracts/legal-applicability.md`, `contracts/release-profile-v1.json`, fixture specification/tests, evidence.
 BUILD: ghi SKU/OS/GPU/RAM, desktop/touch preset, resolution, OS/ABI support floor,
 lịch máy thật; khóa Q01-B/F/C/W/T/Q02 và test IDs từng WP, server transport
-matrix dự kiến và bake-off recipe. Khởi tạo cost worksheet mục7.2, giả định/
-UNSET và owner rõ ràng, không tự đặt mức tiền hay đổi scale gate.
-Khóa ID/content SL1/SL6 mục3.2 bằng schema
+matrix dự kiến và bake-off recipe. Khóa ID/content SL1/SL6 mục3.2 bằng schema
 version + test vectors trước P2 save/catalog; GT-05 asset taxonomy vẫn nguồn tên.
 Lập legal matrix LEGAL-VN, data inventory, contact/principal/player/guardian
 cardinality (guardian + ít nhất hai trẻ hợp lệ), purpose/consent, release scope.
@@ -1430,16 +1396,12 @@ DoD: một lệnh logic check và một lệnh headed smoke documented, artifact
 ## P1 — Bằng chứng kỹ thuật trước đầu tư nội dung
 
 ### H2-P1-01 — Game consumer integration
-ALLOWED: `game/addons/hh_world_tools/` generated từ package GT-10, consumer
-capability matrix và tests; `studio/**` chỉ read-only package input.
+ALLOWED: `game/addons/hh_world_tools/` generated từ package GT-10 và consumer tests; `studio/**` chỉ read-only package input.
 BUILD: tích hợp adapter theo consumer contract cho Godot-only editor mutations, loopback token/main-thread/
 lease/UndoRedo, Godot-only staged save rollback và readback ACK. Kiểm editor
 và Play tách process qua launcher P0; official input/pause-clock/capture và
 reviewer toolbar/cross-app activation đều là capability gói GT-10 được tiêu thụ và kiểm lại.
-VERIFY: các hàng capability matrix mục2 được dùng trong P1 bằng mutation/
-readback trên consumer; hàng P2/P5 do WP dùng đầu kiểm trước mutation. Không
-đổi UNSUPPORTED thành PASS từ tên capability trong manifest.
-Invalid/duplicate/stale/conflict/path escape/crash/retry/undo/redo;
+VERIFY: invalid/duplicate/stale/conflict/path escape/crash/retry/undo/redo;
 owner edit giữa lease; editor/Play tách. Không test chỉ happy-path.
 DoD: report có state before/after/undo hash; no partial write; 2 critics.
 
@@ -1512,13 +1474,7 @@ BUILD: 1 phòng/12 catalog props (placeholder có plan thay), đặt/xoay/undo/s
 readback/reimport/rollback; quầy demo và rõ Solo inventory/house namespace tách Online, vòng onboarding
 Solo đầy đủ dưới 10 phút không login. Không import nhà Solo khi mời bạn.
 VERIFY: Q03-A full offline route; relaunch 10 vòng/backup corrupted save;
-Chuẩn bị buổi chơi thử Solo10phút ngay khi slice dùng được: đi/camera/tương tác/
-câu cá/trang trí; ghi thời gian hiểu mục tiêu, chỗ mắc, trợ giúp và việc muốn
-làm tiếp/chơi lại. Consent/ẩn danh theo Q03, không giả feedback bằng agent.
-Chưa có người ghi HUMAN_UNVERIFIED và lịch/đầu mối mời, tiếp tục lane kỹ thuật;
-không thêm hard gate trước P2, không thay nhóm bắt buộc P6-03. Triage lỗi
-điều khiển/loop trước bulk content; P5 kiểm sửa trên build mới. Buổi thử nhỏ
-không là bằng chứng retention hoặc nghiệm thu vui/chất lượng thay người thật.
+ghi feedback người thật nếu có, thiếu không ký thay. Collect issues cho P5.
 Bản ghi Q01-T-P2-04.
 DoD: playable slice video và package; no geometry/placeholders claim final art.
 
@@ -1845,8 +1801,7 @@ of evidence. Missing humans remains UNVERIFIED, not fictitious names.
 ALLOWED: `geo/` contracts/manifests/tests, read-only API integration documentation.
 BUILD: G01–G04 fixture and Hoàn Hảo adapter schema; verify actual provider/API
 availability with permission, source/license/attribution/refresh/cost decision,
-one VN pilot polygon, source data acquisition bound; readiness từng lớp và
-actual dependency/provider theo G01, không coi có code là deployment PASS.
+one VN pilot polygon, source data acquisition bound.
 VERIFY: unknown fields/IDs/CRS, offline provider behavior, license matrix;
 review rights before actual dataset acquire, no Google/reference package rip.
 DoD: approved source+scope; missing rights/provider → keep authored game usable;
@@ -1856,15 +1811,8 @@ DoD: approved source+scope; missing rights/provider → keep authored game usabl
 ALLOWED: `geo/` converter/fixtures/manifests and `game/` chunk loader interface.
 BUILD: WGS84→local meters, approved acquire limited data, roads/buildings/height
 confidence, nav/collision authored adjustments, content hashes/IDs/tombstones.
-Bounded/versioned geometry từ nguồn hợp lệ hoặc PostGIS → tái sử dụng kit art
-nguyên bản có version từ P5 → GLB → Godot; phần thiếu ghi estimated/authored.
-P7-02 chỉ consume kit; art còn thiếu trả đúng owner/path P5, không mở authoring
-ngoài ALLOWED của converter. Không lấy
-shop clusters hoặc road center thay footprints/polylines cho converter.
 VERIFY: Q06 roundtrip/seams/anchor migrations; reproducible artifact generation,
 diff old/new package, offline input tests; no full-country import.
-Ghi giờ acquire/convert/kiểm/sửa tay theo loại lỗi, bytes/asset count, phần kit
-tái sử dụng và phần authored riêng; nối cost worksheet mục7.2.
 DoD: versioned pilot package with lineage and rollback, 2 critics.
 
 ### H2-P7-03 — Hoàn Hảo adapter
@@ -1885,20 +1833,16 @@ BUILD: one approved VN district resembling real topology with stylized art,
 gameplay continuity, safe spawn/nav and house/shop anchors; dataset credits.
 VERIFY: Q03-A/Q03-R/Q06 end-to-end walk/activity/shop/travel/map; real vs authored
 accuracy labels; camera/physics close to origin; geometry update preserves owner data.
-Ghi diện tích/độ phức tạp, giờ sửa art/nav/collision/gameplay, tỷ lệ asset tái
-sử dụng, bytes và Q01/Q02 measurements. Tách chi phí kit một lần với thêm khu.
-Nếu có hai block nhỏ trong cùng polygon đã duyệt thì đo reuse; nếu chưa có,
-ghi dự toán/uncertainty, không bắt dựng thêm district hoàn chỉnh làm gate mới.
 DoD: gameplay still fun; no “1:1 all Vietnam” claim; 2 critics.
 
 ### H2-P8-02 — Pilot capacity/ops
-CONTRACT/VERIFY: EX40/EX41 + max(10M, 2× forecast 90 ngày) records theo mục3.2.1, room mix/houses/no double count mục7.1, backup/restore và measured cap.
+CONTRACT/VERIFY: EX40/EX41 + 10M hoặc 2×forecast records theo mục3.2.1, room mix/houses/no double count mục7.1, backup/restore và measured cap.
 ALLOWED: new scope load/ops scripts, tuning leases, release evidence.
 BUILD: multi-room orchestration/admission and measured cost scaling; seed
 dispersed users and hotspot within caps; restore DB/world packages together.
 VERIFY: Q04-L/Q04-N/Q04-C/Q04-P/Q04-W1/Q05/Q06 on pilot, bounded CCU test with config, room full/party
 overflow, network egress and storage cost, backup restore/drain/update rollback;
-SL1/SL2/SL11 trên cùng max(10M, 2× forecast 90 ngày) records; EX53 mở lại sau bảo trì theo cohort không herd.
+SL1/SL2/SL11 trên 10M records; EX53 mở lại sau bảo trì theo cohort không herd.
 DoD: release cap based on measured headroom and operator capacity, no arithmetic
 CCU extrapolation; 2 critics. Seamless cell sharding still outside this WP.
 DB-D3/D4: đo archive lag, PITR/region-loss RPO và RTO theo failure model,
@@ -2433,14 +2377,6 @@ admission/NIC, average quyết định egress bill; diurnal peaks/reconnect/upda
 CDN surge phải đo. 1000 registered accounts hoặc shop chủ offline không bằng
 1000 concurrent sockets. Không mặc định server GPU hay DB32core chỉ vì user count.
 
-Cost worksheet bắt đầu P0-02 bằng dự toán có giả định; không đợi P6 mới tính.
-Tách chi phí content/tools một lần, vận hành/tháng và phát sinh theo tải; ghi
-currency/ngày giá/nguồn, trần chi tháng/job/acquire, người chịu trách nhiệm,
-alert và điểm dừng trước vượt trần. Mức tiền chưa duyệt ghi UNSET, không tự
-thuê/mua; vẫn làm preparation bằng tài nguyên đã có quyền. P5-01 và P7/P8
-thêm giờ làm kit/asset/khu, sửa tay, tỷ lệ reuse và bytes. P6/P8 thay giả định
-đã đo bằng actual evidence, giữ phần chưa đo rõ; không tự dựng thêm khu chỉ
-để có báo cáo cost. P5-01 tham chiếu phần này cho log chi phí làm nội dung.
 Cost worksheet P6/P8: room nodes+API+protected PG+backup/WAL+object/CDN+L4/L7+
 observability+egress/IP+operator/moderation. Ghi SKU/region/date/unit và budget
 owner duyệt trước thuê; không đưa báo giá giả. Scale/readmission khi CPU/tick/
@@ -2512,7 +2448,7 @@ request đúng GT owner, regression affected consumer; không thêm dependency v
 Mỗi lane có schemas/basehash/lease và artifact paths riêng; dependency bảng đầu
 file là nguồn duy nhất. Concept chuẩn bị sớm không chứng minh WP đã hoàn thành.
 
-Tối đa ba worker/critic có scope độc lập theo owner và slots thực; chỉ chạy khi không
+Concurrency starting2workers+1critic nếu máy/CLI đủ; increase chỉ khi không
 tranh file/RAM/GPU/DB. GPU benchmark official chạy riêng, không Blender render/
 shaderbuild/import nền làm sai frame-time. Critic không chạy cùng official
 path; snapshot riêng, logs riêng và limit máy. Không giữ full renderer game
@@ -2520,12 +2456,14 @@ cạnh nhiều Blender UI khi máy thiếu RAM. Queue/backpressure tốt hơn OO
 
 8.2 Giao việc đủ chi tiết, model đúng yêu cầu hiện hành
 
-Coordinator viết/sửa plan, chia việc, kiểm result và quyết định. Model/effort
-worker và critic theo lệnh owner mới nhất/nested AGENTS.md; hiện cho phép ba
-Codex Astra ultra có scope độc lập. Routing Grok-only/cấm Codex ngày10-09 là
-lịch sử, không yêu cầu đăng nhập Grok hoặc chặn việc đã được owner cho phép.
-Không tự chuyển model khi gặp quota/auth; giữ lỗi thực và tiếp tục lane độc
-lập có quyền. Không in tokens; không giả hỗ trợ fast hoặc kết quả subagent.
+Coordinator viết/sửa plan, chia việc, kiểm result và quyết định. Worker,
+researcher/search và critic dùng Grok CLI chính thức, model grok-4.6,
+reasoning-effort xhigh và --no-subagents theo lệnh owner 10-09-2026.
+Không dùng Codex worker, Cursor, Auto/fallback hoặc hidden subagents. Không tự đổi model khi quota; ghi lỗi thực và giữ
+phần phụ thuộc pending, tiếp tục việc coordinator được phép.
+Auth đã agent login; chỉ chẩn đoán auth khi có lỗi, không in tokens.
+CLI flags/model kiểm bằng grok --help và grok models, cache cùng phiên.
+Không suy diễn cờ fast; chỉ ghi fast nếu CLI/provider có bằng chứng hỗ trợ.
 Prompt read-only không là sandbox: critic đọc snapshot riêng, kiểm lại hashes
 và diff sau run. Worker chỉ ghi trong lease; phiên mới có UUID/attempt mới.
 Mỗi batch tối đa hai lần poll; supervisor ghi exit/PID/start và báo watcher.
@@ -2533,7 +2471,7 @@ Thông báo terminal chỉ là NEEDS_REVIEW/WORKER_INCOMPLETE, không là ACCEPT
 
 Handoff template (điền hết, không gửi 'đọc plan rồi làm tiếp'):
 ROLE=implementer/researcher/critic
-MODEL=<owner-current>; REASONING_EFFORT=<owner-current>; RUNNER=<actual>; FAST_FLAG=ONLY_IF_VERIFIED; NO_HIDDEN_SUBAGENTS
+MODEL=grok-4.6; REASONING_EFFORT=xhigh; CLI=official_grok; FAST_FLAG=ONLY_IF_VERIFIED; NO_CODEX_WORKER/NO_CURSOR/NO_FALLBACK/NO_HIDDEN_SUBAGENTS
 ROOT=<absolute 8-9-hh3d-3>; WORKSPACE=<studio repo>
 PLAN=<absolute one TXT>; OTHER_PLAN=<tools TXT at intake/handoff, otherwise relevant only>; PLAN_REVISION/HASH=<frozen content>
 WP=<one bounded WP/subdeliverable>; DEPENDENCIES=<actual ACCEPTED evidence>
@@ -2584,9 +2522,9 @@ Packer parse real host exits, run ownership, missing/stale/hash/schema/limits;
 caller-supplied exit0 hay field 'PASS' không đủ. Timeout/abort là incomplete;
 cleanup cần kết thúc đúng process, không xóa evidence lỗi để đẹp package.
 
-Worker báo CANDIDATE, không tick. Mỗi gate mới cần hai critic độc lập cùng
-frozen closure, phiên riêng và không đọc verdict nhau; routing theo owner/
-nested AGENTS.md. Worker implementation không thay verdict của critic. Report dùng ACCEPT/
+Worker báo CANDIDATE, không tick. Routine game WP một critic độc lập; tool/
+authority/transaction/security/geo/release, P1-03/P5-03/P6/P8 cần2
+Grok CLI critics sessions riêng, không đọc verdict nhau. Report dùng ACCEPT/
 REVISE/INSUFFICIENT_EVIDENCE đúng hash. Coordinator đóng findings rồi đổi trạng
 thái một hàng đầu file. Source thay sau critic phải review source mới.
 Plan consolidation lần này cũng cần2critics trên cùng hash; review thiết kế
@@ -2615,17 +2553,14 @@ processes/ports/user_dirs + tests đã đạt/chưa + pending human/input.
 Nếu chỉ có file này và source repo, agent vẫn tìm được goal/deps/test/DoD.
 Không cần chat history, không dựa 'vẫn làm như cũ'. Plan một file nhưng agent
 chỉ đọc mục liên quan qua stable IDs; update đoạn nhỏ tránh file timeout.
-Sửa plan game không tự tạo automation game trước GT-10. Lịch tiếp tục công cụ
-theo lệnh owner giữ scope riêng, không dispatch H2 sớm.
+Không tạo automation/watchdog/heartbeat chạy về sau trong lượt plan này.
 
 9. NGUỒN, KẾT QUẢ RÀ SOÁT VÀ BÀN GIAO
 
 9.1 Nguồn công khai và mức tin cậy
 
-Routing Grok của research08–09/09 là lịch sử; dispatch hiện hành theo nested
-AGENTS.md/lệnh owner, không cần đăng nhập Grok để sửa plan. Hai critic độc lập
-vẫn đọc cùng frozen closure khi nghiệm thu; worker implementation không thay
-verdict. Danh mục dưới ghi nguồn kỹ thuật/reference;
+Worker/search/critic hiện dùng Grok CLI grok-4.6 xhigh; nguồn đã đối chiếu
+official ngày08–09/09/2026. Danh mục dưới ghi nguồn kỹ thuật/reference;
 nguồn hỗ trợ thiết kế, không benchmark dự án. /stable, /latest, /current là
 URL động; khi implementation dùng docs đúng version đã khóa. Giá/cấu hình
 nhà cung cấp/rights dataset cụ thể chưa được xác minh nên không có báo giá.
@@ -2771,14 +2706,8 @@ chưa nghiệm thu. Game vẫn chưa triển khai và đợi GT-10; không thay 
 EX/Q, release profile hay capacity gates. Review hiện hành:
 ./reviews/20260910-r6/REVIEW-RESULT.md
 32 H2 PLANNED; chưa có runtime/human/legal/scale
-acceptance. Snapshot/freeze mới dựa full bytes, Git HEAD chỉ provenance.
-Giới hạn hai plan ở thời điểm S18 là lịch sử; S22 có thêm Superagent theo owner.
-
-S22 (18-09): đưa cải thiện consumer capability, chơi thử sớm, map readiness và
-chi phí nội dung vào H2; không thay32WP/GT10/hard gates/thứ tự game trước geo.
-Co-op reward/Web/game2D chưa tự mở. Source review ba lane là research, không
-runtime/human/legal acceptance hay verdict thiết kế. Archive S21 và scoped
-checks: reviews/20260918-hhworld-s22-plan-update/.
+acceptance. Snapshot/freeze mới dựa full bytes, Git HEAD chỉ provenance; không
+có plan thứ ba.
 
 9.3 Kiểm bàn giao và giới hạn
 Bảng32H2/32spec, dependency một chiều GT-10→H2-P0-01, không vòng; Q00–06,
@@ -2803,4 +2732,4 @@ rollback=quay về bản tốt đã kiểm, không đè thay đổi mới chưa 
 
 
 END_OF_GAME_PLAN
-DATE=2026-09-18 Asia/Saigon
+DATE=2026-09-11 Asia/Saigon

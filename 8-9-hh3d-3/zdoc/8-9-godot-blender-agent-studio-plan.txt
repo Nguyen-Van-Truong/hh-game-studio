@@ -1,5 +1,5 @@
-HH STUDIO — PLAN 1/2: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 18-09-2026, Asia/Saigon | Revision S91 | TRIỂN KHAI THEO GATE
+HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
+Ngày 18-09-2026, Asia/Saigon | Revision S92 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,8 +25,8 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S91
-EXECUTION_MODE=COORDINATOR_THREE_ASTRA_XHIGH_OWNER_20260918
+PLAN_REVISION=S92
+EXECUTION_MODE=COORDINATOR_THREE_ASTRA_ULTRA_OWNER_20260918
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
 GT02_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S46
@@ -67,8 +67,10 @@ GT06_S88_SCHEDULER_TASK=OBSERVED_ABSENT_20260918; historic_delete_report_retaine
 GT06_S90_DIAGNOSTIC=gt06-s90-lifecycle-attribution-01; preflight=gt06-s90-lifecycle-attribution-preflight-06; five_partial_batches; interrupted_before_batch5_capture; formal_acceptance=false; eligible_for_dataset=false
 GT06_DIAGNOSTIC_EXCLUSION=S81-S90 diagnostic and partial/failure prefixes are excluded from F13/F14 acceptance datasets; see s83-mapping requirements and each packet manifest.
 
-TIẾN ĐỘ HIỆN HÀNH — S91, ngày 18-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S92 (runtime diagnostic S91), ngày 18-09-2026
 GT-01–05 ACCEPTED; GT-06 IN_PROGRESS; GT-07–10 chưa mở.
+S92 chỉ cập nhật routing ba plan và rà kế hoạch game theo owner; source/runtime
+S91 giữ nguyên, không chạy thêm engine hoặc thay gate GT-06.
 Runtime giữ nguyên source b3862a10, 51 file e010180a…; profile 0cd5b530…
 
 S86 official campaign failed tại batch17: ObjectDB71128→71130; handles/RSS
@@ -327,26 +329,27 @@ never an implicit PASS. Research evidence: reviews/20260913-r12-os/.
 
 0. MỤC TIÊU, PHẠM VI VÀ THỨ TỰ
 
-Hai việc owner yêu cầu được tách thành đúng hai TXT đang có hiệu lực:
-1) File này: Godot + Blender + công cụ giúp người và agent tạo/sửa/kiểm sản phẩm.
-2) File cùng thư mục:
-./8-9-hh-world-gameplay-viet-nam-plan.txt
-   Gameplay HH World, social multiplayer và bản đồ Việt Nam sau gameplay.
-Không tạo plan tổng thứ ba. Tài liệu cũ chỉ lịch sử; báo cáo/test/log/schema
-không là plan con, không giữ bảng tiến độ. Không xóa lịch sử để đếm còn hai file.
+Owner18-09 mở thêm plan sản phẩm2D. Ba TXT có scope/tiến độ riêng:
+1) File này: Godot + Blender + công cụ, ưu tiên hoàn thiện GT-06→GT-10.
+2) ./8-9-hh-world-gameplay-viet-nam-plan.txt — HH World3D/social/Việt Nam.
+3) ./18-9-superagent-2d-y8-plan.txt — Superagent2D, full functional parity
+   bản Y8 đã kiểm kê trừ nhân vật/map mới; hiện chỉ planning theo lệnh owner.
+Không thêm master plan tổng. Report/schema/log không là nguồn tiến độ mới.
+Superagent không lấy tick/code/asset Vault Fighters cũ làm baseline. Hai game
+không phụ thuộc nhau; planning không tự mở runtime trước GT-10 và quyền scope.
 
 Làm CÔNG CỤ TRƯỚC: GT-01 → GT-10 tạo gói v0.1 có phạm vi hữu hạn. Kiểm liên tục
 bằng studio/fixtures/sample-game: 1 khu nhỏ nguyên bản, 1 avatar đại diện,
 đi lại/đổi đồ/emote/tương tác 1 prop, menu/pause/quit. Đây là fixture kỹ thuật,
 không phát triển backend, kinh tế, bản đồ hay bản alpha của HH World ở đây.
-Không công việc GT nào chờ H2 hoàn thành: không có dependency vòng giữa 2 plan.
+Không công việc GT nào chờ H2 hoàn thành: không có dependency vòng giữa công cụ và các game.
 Game H2-P0-01 nhận artifact GT-10, rồi kiểm lại trên game thật tại H2-P1/P2/P5.
 Concept art/brief game có thể chuẩn bị read-only trong lúc chờ; triển khai
 source gameplay bắt đầu sau handoff công cụ. Không xây editor tổng quát vô hạn.
 
 Root tương lai: hh-game-studio/8-9-hh3d-3. Công cụ chỉ sở hữu studio/**,
 bao gồm lock/build/fixture/package của mình. Không đổi Godot/Vault Fighters,
-không sửa root platform/Rust, Web cũ hay dịch vụ Hoàn Hảo. Vị trí hai TXT ở
+không sửa root platform/Rust, Web cũ hay dịch vụ Hoàn Hảo. Vị trí ba TXT ở
 thư mục `hh-game-studio/8-9-hh3d-3/zdoc/` trong repo hiện tại; owner đã mở triển khai studio theo dependency; không mở quyền dịch vụ khác.
 GT-01 đọc capability công cụ có sẵn trong phạm vi được cho phép; muốn reuse
 ngoài scope cần chỉ rõ artifact/source được phép, kiểm license/compatibility.
@@ -1037,7 +1040,7 @@ GT-10 xuất package manifest kỹ thuật có:
 - install/verify/uninstall/rollback commands, no global env changes, recovery
   runbook, compatibility range/deprecation and allowed target OS;
 - representative original GLB/axis/rig fixture, schema and fingerprint profile.
-Manifest/package là implementation artifact, không plan thứ ba.
+Manifest/package là implementation artifact, không giữ bảng tiến độ riêng.
 
 Game H2-P0-01 xác nhận artifact GT-10 + khóa consumer; H2-P1-01 tích hợp và
 verify trên project game, H2-P2-04 chạy asset→game loop thật; không tự sửa
@@ -1071,7 +1074,8 @@ Làm rõ phạm vi claim/handoff (S76; không thay gate hoặc mở consumer s�
 - Khi consumer cần năng lực còn thiếu, dùng change request/versioned release
   ở trên; giữ proof accepted đúng phạm vi, không bypass bằng hidden shell edit.
   Research/đề xuất thứ tự mở rộng ở reviews/20260918-end-to-end-game-claim-research.md;
-  không có plan thứ ba hoặc claim mới chỉ vì tài liệu nghiên cứu đã hoàn tất.
+  research không tự cấp game acceptance. Plan Superagent mới theo lệnh owner
+  18-09 là consumer riêng, không thêm Web/2D vào DoD GT hiện hành.
 
 Bản tách chuyển ranh giới lịch sử (chỉ truy vết, không bảng tiến độ):
 ST-01→GT-02, ST-02→GT-04, ST-03→GT-05, ST-04→GT-06;

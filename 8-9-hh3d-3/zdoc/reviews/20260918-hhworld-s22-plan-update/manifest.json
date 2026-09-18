@@ -1,0 +1,29 @@
+{
+  "authority": 0,
+  "base_commit": "875d8ca7e65e1601bde8d6f2bb9a0c0fea324d2f",
+  "archive": "game-plan-s21.txt",
+  "archive_sha256": "c020c43a3ded39aa6b3141202773aed4cea46060370476c6f7f74713c1c86791",
+  "current_plan_sha256": "2af628254c44557e397e117a97ad7ba5c24fc33e498008a873e91ce3a15b5338",
+  "replacement_count": 23,
+  "checks": {
+    "32_rows_and_dependencies_unchanged": true,
+    "authoritative_markers_unchanged": [
+      "CURRENT_VALID_WP=H2-P0-01",
+      "DISPATCHABLE=NO_UNTIL_GT10_ACCEPTED",
+      "IMPLEMENTATION=NOT_STARTED",
+      "RUNTIME_ACCEPTANCE=NONE",
+      "HUMAN_ACCEPTANCE=NONE",
+      "END_OF_GAME_PLAN"
+    ],
+    "dataset_floor_clarified_not_lowered": true,
+    "32_spec_ids_and_count_unchanged": true
+  },
+  "runtime_tests_run": false,
+  "acceptance_claim": false,
+  "review_fixes": [
+    "Future capabilities verified at first-use WP, not all at P1",
+    "Converter consumes versioned P5 kit within current scope",
+    "Static verification wording distinguishes IDs/count from edited spec text",
+    "Remove stale Grok-only/Codex prohibition and one-critic routing; use two independent current-owner critics"
+  ]
+}

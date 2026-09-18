@@ -1,0 +1,412 @@
+SUPERAGENT — PLAN GAME 2D: ĐỐI CHIẾU ĐẦY ĐỦ SUPERFIGHTERS TRÊN Y8
+Ngày 18-09-2026, Asia/Saigon | Revision SA1 | KẾ HOẠCH, CHƯA TRIỂN KHAI
+
+PRODUCT_NAME=Superagent
+PLAN_ROLE=SUPERAGENT_PRODUCT_SOURCE_OF_PROGRESS
+PLAN_SCOPE=8-9-hh3d-3/superagent
+PLAN_REVISION=SA1
+CURRENT_VALID_WP=SA-01
+EXECUTION_AUTHORIZATION=OWNER_APPROVED_PLANNING
+DISPATCHABLE=NO_IMPLEMENTATION_UNTIL_GT10_ACCEPTED_AND_PRODUCT_START
+IMPLEMENTATION=NOT_STARTED
+RUNTIME_ACCEPTANCE=NONE
+HUMAN_ACCEPTANCE=NONE
+REFERENCE_INVENTORY=NOT_FROZEN
+FUNCTIONAL_PARITY=UNVERIFIED
+RELEASE_STATUS=NOT_BUILT
+LEGACY_PROGRESS_INHERITED=NONE
+
+0. MỤC TIÊU OWNER VÀ RANH GIỚI
+
+Owner18-09 chọn tên Superagent. Mục tiêu bản đầu hoàn chỉnh: giống hành vi
+Superfighters đang chơi trên Y8 về toàn bộ gameplay, điều khiển, công cụ/vũ khí,
+vật thể/vật liệu, tương tác, bot, luật/chế độ, nhịp độ và các luồng menu/chơi.
+Hai ngoại lệ chủ động: hình ảnh nhân vật mới và bản đồ mới. Không tự thu nhỏ
+thành ba khẩu súng/ba màn/hai chế độ rồi gọi là đã đáp ứng yêu cầu này.
+Vertical slice nhỏ chỉ là mốc kiểm sớm, không thay phạm vi hoàn thành cuối.
+
+“Giống” được nghiệm thu bằng ma trận hành vi và thử nghiệm đối chiếu, không
+bằng lời hứa pixel-perfect hoặc đếm checkbox. Chi tiết chưa quan sát phải để
+UNVERIFIED; không tự đoán một giá trị rồi gọi là đúng bản Y8. Không tự thêm
+feature Deluxe, MMO hay HH World chỉ vì chúng cũng có tên Superfighters.
+
+Code tự viết. Art/audio/font có nguồn tự tạo hoặc quyền rõ ràng; không tải,
+rip/decompile game package, sprite/audio/code của nguồn tham khảo. Vũ khí,
+props và vật liệu vẫn phải đúng loại, khả năng nhận diện, chức năng và quan hệ
+tương tác theo reference; không tùy tiện đổi hành vi để né yêu cầu parity.
+Nhân vật/silhouette mới; bản đồ có tên, bố cục/geometry/landmark mới. Không
+trace tọa độ map gốc. UI flow, input, cue và timing vẫn có đối chiếu chức năng;
+provenance kiểm riêng với parity, không lấy một việc thay việc kia.
+
+Đây là sản phẩm mới, không nhận 33/50 hay code/art/evidence Vault Fighters làm
+baseline. Plan cũ không là nguồn tiến độ Superagent; không sửa/xóa legacy để
+thực hiện plan này. Hẻm Bão/Alley Tempest là đề xuất tên đã bỏ, không là sản phẩm.
+
+Tools vẫn ưu tiên hoàn thiện GT-06→GT-10. Lượt này chỉ viết/rà plan; không
+khởi tạo game runtime, chạy engine hoặc làm lệch phép đo tools đang giữ source.
+Sau GT-10, việc mở triển khai Superagent cần lệnh bắt đầu sản phẩm của owner;
+không tự chuyển heartbeat tools sang game. HH World là consumer riêng, không
+phụ thuộc việc Superagent hoàn thành và không mang theo tiến độ của game này.
+
+1. BẢNG TIẾN ĐỘ DUY NHẤT — 16 WP
+
+STT | WP | Kết quả | Phụ thuộc trước triển khai | Trạng thái
+01 | SA-01 | Chốt reference Y8, inventory và hợp đồng parity | GT-10 + PRODUCT_START | PLANNED
+02 | SA-02 | Intake tools, capability 2D và thử Windows/Web sớm | SA-01 | PLANNED
+03 | SA-03 | Movement, input, collision và state machine | SA-02 | PLANNED
+04 | SA-04 | Combat cơ sở: melee/aim/fire/damage/death | SA-03 | PLANNED
+05 | SA-05 | Bot cơ sở và một vòng đấu chơi được | SA-04 | PLANNED
+06 | SA-06 | Vertical slice Start→match→result→restart | SA-05 | PLANNED
+07 | SA-07 | Toàn bộ arsenal, pickup, power-up theo inventory | SA-06 | PLANNED
+08 | SA-08 | Toàn bộ props/material/hazard và interaction matrix | SA-07 | PLANNED
+09 | SA-09 | Toàn bộ mode, local play, progression và save | SA-08 | PLANNED
+10 | SA-10 | Bot đầy đủ, difficulty và chiến thuật theo reference | SA-09 | PLANNED
+11 | SA-11 | Roster bản đồ mới có đủ chức năng và topology cần kiểm | SA-10 | PLANNED
+12 | SA-12 | Nhân vật/art/audio/UI hoàn chỉnh và dễ đọc | SA-11 | PLANNED
+13 | SA-13 | Differential parity, tuning và người thật chơi thử | SA-12 | PLANNED
+14 | SA-14 | Windows/Web reliability, performance và autonomy | SA-13 | PLANNED
+15 | SA-15 | Release candidate, export/install/save/rollback | SA-14 | PLANNED
+16 | SA-16 | Nghiệm thu sản phẩm và gói bàn giao phát hành | SA-15 | PLANNED
+
+Không cộng số WP thành phần trăm độ giống hoặc chất lượng. Coordinator mới
+đổi PLANNED→IN_PROGRESS→CANDIDATE→ACCEPTED sau DoD/evidence và hai critic độc
+lập cùng frozen closure; worker không tự tick. Chữ ký cũ không theo source mới.
+Research/docs/asset concept được chuẩn bị độc lập nếu không đổi source đang đo;
+không mở engine song song trên cùng project, không nghiệm thu vượt dependency.
+
+2. REFERENCE CONTRACT — CHỐT CÁI GÌ PHẢI GIỐNG
+
+Nguồn chính: https://www.y8.com/games/superfighters
+Lưu URL, thời điểm, platform/browser/viewport, version hiển thị nếu có, mode,
+input preset và observed build fingerprint không xâm nhập. Nếu version không
+công khai, dùng mô tả phiên/ảnh nhận diện lưu riêng phục vụ review nội bộ và
+reference ledger; không hash hoặc tải gói proprietary để giả pin phiên bản.
+Quan sát lại sentinel behavior trước lượt differential sau, phát hiện source
+tham khảo đổi thì tạo revision reference mới; không trộn measurements hai bản.
+
+Nguồn tác giả lịch sử giúp giải thích, không tự thay reference hiện hành:
+- https://www.newgrounds.com/portal/view/575163 — tác giả mô tả một/hai người,
+  Stage, Survival solo/co-op, arsenal/map và physics của bản phát hành lịch sử.
+- https://johanhjarpe.newgrounds.com/news/post/594997 — mô tả cách ngắm giữ nút,
+  chỉnh lên/xuống rồi nhả bắn và việc đứng khi ngắm trong thiết kế2011.
+- https://johanhjarpe.com/press/ — phân biệt Superfighters2011 và Deluxe2018.
+Số13vũ khí/4map trong mô tả2011 không chứng minh roster Y8 hiện tại. Không ép
+số lượng thấp hơn hoặc cao hơn nếu chưa kiểm inventory thực tế.
+
+Mỗi hàng parity có ID, category, source/session, evidence, precondition,
+input pressed/held/released, outcome, timing/units, randomness, sample count,
+observed range/uncertainty, phép thử Superagent, source hash và verdict.
+Status: UNVERIFIED → OBSERVED → IMPLEMENTED → MATCHED hoặc GAP.
+NOT_PRESENT chỉ sau kiểm reference đủ điều kiện; không dùng N/A để xóa việc khó.
+Map/character-visual exception phải ghi EXEMPT_BY_OWNER, không tính MATCHED.
+Feature phát hiện muộn trong cùng reference → revision inventory mới → map
+về WP owner → mở lại đúng acceptance/evidence bị ảnh hưởng → verify/review.
+Giữ phần không ảnh hưởng có dependency proof; full parity chờ đóng row mới.
+Không giữ inventory “đóng băng” làm lý do bỏ chức năng chưa thấy lúc đầu.
+Giới hạn hành vi không quan sát được phải nêu điều kiện và cách kiểm tiếp;
+không đảo thành “không có”. Final còn GAP/UNVERIFIED chức năng thì chưa full parity.
+
+Các nhóm bắt buộc phải kiểm kê đầy đủ, kể cả mục sau đó được xác nhận không có:
+R01 input/control presets, hai người chung máy, remap nếu reference có;
+R02 walk/run/sprint/crouch/jump/air control/roll/dive/ledge/ladder/fall;
+R03 melee/kick/combo/grab/disarm/stun/knockdown/get-up/invulnerability;
+R04 aim/fire/recoil/spread/projectile/hitscan/reload/ammo/swap/drop/pickup;
+R05 từng súng/melee weapon/grenade/throwable, fuse/arc/blast và self/team damage;
+R06 power-up/slow-motion/health/armor và thời gian tác dụng/stacking nếu có;
+R07 crates/cover/glass/doors/barrels/moving platforms và vật thể ném/đẩy;
+R08 từng material: chặn/xuyên đạn, damage/break, mass/friction, cháy/lan/nổ,
+    debris, occlusion và vòng đời; shader giống không thay physics giống;
+R09 pits/fire/chemical/electric/environment hazards có trong reference;
+R10 spawn/pickup randomization, health/lives/time-limit/win/lose/tie/restart;
+R11 VS/Stage/Survival, solo/localPvP/co-op, team/progression/unlock/highscore;
+R12 bot perception/pathing/weapon choice/aim/reaction/avoidance/difficulty;
+R13 menu/onboarding/pause/settings/result/save và focus/audio behavior;
+R14 camera/zoom/culling/readability/timing/feedback và giới hạn concurrent actors;
+R15 roster nhân vật, stats/hitbox/unlock/khả năng khác nhau nếu quan sát được.
+Ngoại lệ hình ảnh không miễn khác biệt gameplay của nhân vật. Giao diện website
+Y8 như ads/login/portal không là game behavior; in-game menus phải kiểm đủ.
+
+Không phải mọi item gợi ý R01–R15 đã được chứng minh tồn tại. SA-01 phân biệt
+observed/current/historical/unknown và sinh inventory đầy đủ từ quan sát.
+Tên vũ khí/vật liệu ở ledger dùng để so sánh; metadata thương mại/credits của
+Superagent giữ provenance và tên hiển thị của sản phẩm mới.
+
+Định lượng: khóa tolerance TRƯỚC khi tuning code, dựa trên độ phân giải đo và
+độ dao động reference. Boolean/state order phải khớp; thời gian ghi ms/ticks;
+khoảng cách dùng đơn vị chuẩn hóa theo kích thước nhân vật hoặc scene fixture.
+Random spawn/spread/AI dùng nhiều mẫu và distribution/uncertainty; không gọi
+một mẫu “giống hệt” là distribution match. Không đảo ngưỡng sau khi thấy fail.
+Map mới dùng phòng kiểm vật lý chuẩn và topology features tương đương để tách
+sai lệch mechanics khỏi khoảng cách/layout mới; không so pixel tọa độ map cũ.
+
+3. KIẾN TRÚC VÀ NĂNG LỰC CÔNG CỤ
+
+Project riêng: game/, assets-src/, contracts/, tests/, tools/,
+evidence/; đường trong mục này tương đối 8-9-hh3d-3/superagent/.
+Godot stock theo package GT-10 + typed GDScript, simulation tick cố định;
+Windows portable và desktop Web là target tối thiểu; touch/mobile theo
+reference đã xác minh như quy tắc bên dưới. Không fork Godot/đổi physics
+backend hoặc viết C++ chỉ vì reference từng dùng Box2D; đo behavior trước.
+Blender tùy theo asset cần render sprites/props; game2D không bắt mọi sprite
+qua Blender. Chọn pipeline sprite/atlas giữ đủ animation/collision/cue parity.
+
+GT-10 fixture hiện chưa chứng minh Node2D/CharacterBody2D/physics/input/UI/audio,
+executable gameplay scripts hoặc Web export. SA-02 lập capability matrix:
+nhu cầu → public operation/profile/version → evidence consumer → limit/GAP.
+Capability thiếu gửi minimal repro/change request đúng tool owner; phát hành
+version có affected regression/rollback và hai critic, rồi explicit lock upgrade.
+Không sửa generated addon, hidden shell-edit/eval để giả public authoring.
+Không tự thêm các nhu cầu mới vào gate GT-06 hoặc trì hoãn lần GT-10 đầu tiên.
+Android thật của GT-08 vẫn là gate upstream; không tự thêm Android/mobile/Safari
+thành claim hỗ trợ nếu chưa kiểm. Nếu bản Y8 hiện hành có touch/mobile chơi
+được, SA-01 đưa hành vi đó và target thiết bị thật vào requirements; không
+loại bằng desktop-only để claim full parity. “Mở bằng link” không là online multiplayer.
+
+Windows/Web dùng cùng gameplay contracts. Chọn Compatibility/GDScript và thử
+single-thread Web trước; quyết định threads/headers dựa host thực. Browser smoke
+phải chạy artifact qua HTTP/HTTPS phù hợp; CLI export exit0 không chứng minh
+audio/input/save/render hoạt động. Ghi rõ browser/OS/build/resolution.
+Nguồn: https://docs.godotengine.org/en/stable/tutorials/export/exporting_for_web.html
+Đọc lại docs đúng pin khi triển khai; nguồn /stable có thể thay đổi.
+
+Luồng dữ liệu: InputActions → tick command → actor/combat state → effect/event
+→ presentation. Bot phát cùng command như người; damage không đi qua render.
+Seed riêng cho gameplay random, presentation không thay gameplay RNG. Replay
+khóa build/pin/map/seed; không hứa Godot physics bit-identical xuyên browser/OS.
+Snapshot semantics so được theo tolerance đã khóa; divergence giữ trace tối thiểu.
+Editor/main-thread, transaction/readback, command_id/lease/fence và Stop theo
+tools contract. Code/art chỉ trong project lease; Play dùng snapshot riêng.
+
+4. SCOPE SẢN PHẨM VÀ CHẤT LƯỢNG
+
+Phạm vi hoàn thành là TOÀN BỘ inventory SA-01, không phải số lượng tiện làm.
+Stage/Survival/co-op/local2P phải có nếu current reference có; UI không để nút
+giả. Nếu reference khác mô tả lịch sử, ghi chênh lệch và dùng phiên đã chốt.
+Map roster mới phải cung cấp đủ loại thử thách và luồng progression của bản
+tham khảo; số lượng/biến thể khóa SA-01/SA-11, không tự rút thành ba map.
+Tối đa players/bots/weapons/objects được đo từ reference rồi khóa workload;
+không giới hạn bốn đấu thủ nếu reference đã chứng minh nhiều hơn.
+
+Scope không tự mở: MMO/accounts/backend economy/map Việt Nam/geo/online matching,
+map editor/Workshop/Deluxe extras/ads/payment. Nếu phát hiện feature có thật
+trong current reference đã chốt, đưa vào inventory và báo dependency ảnh hưởng,
+không dùng danh sách loại trừ này để bỏ hành vi owner yêu cầu.
+
+Q1 Correctness: đủ R01–R15, interaction matrix và trace state; không lost input,
+double hit ngoài contract, stuck death/aim/ladder, duplicate reward/unlock/save.
+Q2 Presentation: nhân vật phân biệt rõ, hit/aim/weapon/pickup đọc được; art đủ
+idle/move/air/melee/aim/fire/hurt/down/death theo inventory, không placeholder final.
+Q3 Performance: SA-01 khóa máy phổ thông/browser baseline, actor/FX worst-case,
+resolution và target60Hz. SA-02 đo feasibility trước bulk content. Mục tiêu
+frame p95≤20ms/p99≤33.4ms ở workload đã khóa; các số là target, chưa đo đạt.
+Cold start/download/RAM/artifact budget khóa từ probe sớm trước tuning; không
+lấy workstation cao cấp hay trung bình FPS thay tail/frame-time trên máy target.
+Q4 Lifecycle: scene/match/restart/save/load/focus-loss/stop; bounded pools và
+cleanup chứng minh bằng counters/retained owners, actual exits/process trees.
+Engine cache plateau không tự là leak; tăng unexplained phải minimal repro,
+không nâng baseline hay giấu warning để PASS. Đo sau warmup và nhiều restart.
+Q5 Product: người thật thấy điều khiển/nhịp/vũ khí/bot khớp reference trong
+phạm vi đã đo, và hiểu ngoại lệ nhân vật/map. Agent tests không ký thay họ.
+
+Web specifics: Start unlock audio, focus loss không giữ phím kẹt, resume không
+chạy bù thời gian tab ẩn; test key rollover hai người, resize/fullscreen và
+storage-denied/private mode. Không hứa save bền nếu browser từ chối persistence;
+hiển thị trạng thái phù hợp, không xóa save tốt khi lỗi. Save có schema/version,
+atomic strategy phù hợp target và recovery; không cần DB/identity server.
+Nguồn: https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Autoplay
+https://developer.mozilla.org/en-US/docs/Web/API/Window/requestAnimationFrame
+
+5. WP — DELIVERABLE, VERIFY VÀ ĐIỀU KIỆN XONG
+
+Quy tắc chung: mỗi WP giới hạn source paths, có expected/actual, raw evidence,
+source/assets/tool hashes, repro command và captured exits; không PASS từ banner.
+Thử nghiệm ngắn theo hypothesis trước full run; reuse evidence đúng dependency.
+Failure giữ nguyên, sửa/resume từ checkpoint hợp lệ; đổi source mới chạy phần
+ảnh hưởng và remint evidence, không ghép sample khác source thành một PASS.
+
+### SA-01 — Reference và hợp đồng sản phẩm
+Scope: contracts/, reference ledger ngoài artifact ship, evidence thiết kế.
+Làm: kiểm kê R01–R15; đọc public docs + quan sát phiên Y8 được phép; xác định
+version/session, roster, rules, uncertainty và tolerance/measurement protocol.
+Khóa target/máy/browser và art/map exception; không dùng legacy33/50 làm input.
+Verify: mỗi feature có nguồn, observable test và owner WP; historical/current
+không trộn. Inventory nào chưa đủ quan sát vẫn GAP, không tick closure đầy đủ.
+DoD: đủ inventory loại/mode/content để giao việc và protocol đối chiếu; các
+phép đo định lượng chưa xong có owner WP và UNVERIFIED, không chặn bootstrap
+chỉ để đo mọi trị số trước viết code. Baseline chưa là parity PASS.
+
+### SA-02 — Consumer bootstrap và Web risk probe
+Scope: tools/locks, capability contracts/tests, minimal game bootstrap.
+Làm: nhận accepted GT-10; bổ sung qua versioned tool release nếu cần; scene2D
+nhỏ chứng minh public edit/UndoRedo/save/input/collision/UI/audio/export.
+Verify: Windows chạy/thoát thật; Web serve/Start/input/audio/save/reload thật;
+invalid mutation/rollback/Stop; actual target/helper exits và source closure.
+DoD: đường authoring và hai target có proof cho phần dùng ngay; capability tương
+lai ghi rõ WP dùng đầu, không chặn bootstrap vì art chưa xong.
+
+### SA-03 — Movement/controller
+Scope: actor/input/collision/camera và test rooms, contracts R01/R02.
+Làm: đầy đủ states quan sát được, physics/slope/platform/ladder/air transitions.
+Verify: pressed/held/released ở60Hz, edge cases, reference timing/distance và
+frame-rate variations; không teleport/call state setter làm bằng chứng duy nhất.
+DoD: controller matched trên phòng kiểm chuẩn; chưa suy map mới đã balanced.
+
+### SA-04 — Combat cơ sở
+Scope: health/damage/melee/aim/projectile + một weapon archetype làm nền.
+Làm: hit windows/range, knockback/stun/death/recovery, aim press/hold/release,
+collision ordering và friendly/self-damage theo reference contract.
+Verify: R03/R04 differential cases, simultaneous hit/death, walls/cover, input
+priority và pause; one-shot damage không double apply khi retry/replay.
+DoD: một duel thật kết thúc đúng; arsenal đầy đủ vẫn chờ SA-07, không claim xong.
+
+### SA-05 — Bot cơ sở
+Scope: perception/navigation/decision qua cùng input actions.
+Làm: di chuyển/nhặt/aim/đánh bằng khả năng thật; đủ bot cho slice.
+Verify: bot có thể thắng/thua, đi tuyến nhiều tầng, không teleport/đọc hidden
+state/damage đặc quyền ngoài reference. Ghi giới hạn phản ứng/perception còn thiếu.
+DoD: một trận người–bot có gameplay; không gọi bot slice là bot parity đầy đủ.
+
+### SA-06 — Vertical slice trước mở rộng
+Scope: một arena greybox nguyên bản, Start→duel→win/lose/tie→result→restart/menu.
+Verify: input thật, pause/resume, save/reopen, exports; agent observe→phát hiện
+fault có kiểm soát→sửa bằng public authoring→replay, giữ provenance từng source.
+Chuẩn bị chơi thử sớm nếu có người; thiếu ghi UNVERIFIED, không giả feedback.
+DoD: có vòng chơi đầu–cuối; bảng inventory vẫn ghi rõ toàn bộ phần chưa làm.
+
+### SA-07 — Toàn bộ arsenal/pickup/power-up
+Scope: toàn bộ weapons/items trong frozen inventory, data-driven descriptors.
+Làm: từng loại/cấp ammo/reload/fuse/arc/blast/spread/power-up, swap/drop/spawn.
+Verify: pairwise relevant interactions; timing/damage/range/distribution samples
+theo SA-01; high-rate fire và cùng-frame pickup; UI/ammo/audio cues phù hợp.
+Mỗi loại phải có trace nhặt qua gameplay → dùng → world-hit/effect đọc lại →
+hết/đổi/rơi theo contract; cấp inventory/call damage chỉ là test bổ trợ.
+DoD: không còn weapon/item trong inventory bị thay bằng stub hoặc gộp chung
+chỉ vì hình giống; hành vi khác nhau phải có descriptor/test riêng.
+
+### SA-08 — Vật thể, vật liệu và môi trường
+Scope: R07/R08/R09 đầy đủ; cơ học và material reaction, không chỉ texture.
+Verify: actor×weapon×material/prop/hazard, piercing/break/burn/explosion/chain,
+mass/friction/push/throw và lifetime; cleanup sau chuỗi hiệu ứng; cover thật
+chặn đúng, barrier không invisible mismatch. Giữ samples âm tính lẫn dương tính.
+DoD: ma trận yêu cầu đóng đủ; N/A có bằng chứng điều kiện, không để trống.
+
+### SA-09 — Modes/local play/progression/save
+Scope: tất cả mode quan sát, local PvP/co-op, menus/settings/result/save.
+Verify: selection→match→next/retry/back, thắng/thua/hòa/quit, progression/unlock,
+Survival spawn/score/end, team/friendly fire, hai người chung máy/input conflict,
+corrupt/old/future save. Không thêm online service nếu reference không cần.
+DoD: mỗi mode có route thật đầu–cuối trên greybox đúng contract; không gọi chỉ
+menu render là mode đã có. SA-11/SA-13 kiểm lại trên map cuối.
+
+### SA-10 — Bot đầy đủ và difficulty
+Scope: R12 + tích hợp toàn bộ arsenal/material/mode; không AI chỉ smoke.
+Verify: mỗi topology class/mode và weapon policy, reaction/accuracy/awareness,
+cover/hazard avoidance; nhiều seed, stuck/stalemate detector và traces.
+Mode/bot có thể dùng greybox đúng contract ở WP này; SA-11/SA-13 bắt buộc
+full-map integration sau khi layout cuối được tạo, không bỏ phase này.
+DoD: measured behavior profile khớp phạm vi reference; tỷ lệ thắng đơn lẻ không
+thay kiểm chiến thuật. Unknown AI internals được đánh giá qua observable behavior.
+
+### SA-11 — Bản đồ mới, đủ chức năng
+Scope: roster mới theo contract SA-01; geometry/names/art gốc riêng.
+Mỗi arena có feature graph, routes/elevation/cover/pickup/hazard/spawn contracts.
+Verify: reachability người/bot, camera, dead ends, spawn pressure và mode mapping;
+map progression cung cấp đủ thử thách. Functional coverage không đòi copy tọa độ.
+DoD: không thiếu map role của reference; reviewer phân biệt map exception với
+physics/weapon gap. Layout quá giống reference phải redesign trước release.
+
+### SA-12 — Art/animation/audio/UI hoàn chỉnh
+Scope: assets-src/, sprites/atlases/materials/audio/fonts/UI; provenance ledger.
+Làm: nhân vật mới và map mới, visual language thống nhất; props/weapons nhận
+diện đúng công dụng, cue/timing/flow giữ contract; Blender dùng khi có lợi.
+Verify: mỗi gameplay state có presentation, không asset missing/placeholder,
+animation hit timing không đổi physics; atlas/filter/scaling rõ trên Web/Windows.
+DoD: finished content + credits/license inventory, không ship reference assets.
+
+### SA-13 — Full parity và playtest
+Scope: matrix R01–R15, differential harness/evidence, scoped tuning fixes.
+Verify: mỗi requirement của current reference phải MATCHED theo tolerance
+đã khóa; đúng hai ngoại lệ ghi EXEMPT_BY_OWNER. NOT_PRESENT/historical-only
+đóng bằng disposition có evidence, không cộng vào số matched và không fake
+implementation. Còn functional GAP/UNVERIFIED chưa đạt. Nêu hạn chế không thể
+chứng minh, không viết “y chang100%” vượt evidence.
+Mời ít nhất3 người thật, gồm ít nhất2 người quen reference và một cặp local2P;
+ghi build/session/consent/nhận xét cụ thể về movement/weapons/props/bots/modes.
+Nếu người chơi tìm sai lệch chức năng, mở lại row và sửa; không lấy majority
+vote che deterministic bug. Owner review cảm giác cuối, agent không ký thay.
+Human notes/decision gắn artifact hash + reference revision. SA-14/SA-15 sửa
+controls/timing/AI/presentation phải kiểm lại phần human bị ảnh hưởng trước
+SA-16; packaging không ảnh hưởng được reuse với impact rationale, không mời
+lại cả nhóm chỉ vì một byte tài liệu đổi.
+SA-13 kiểm interaction/modes/bots/P1/P2 trên toàn roster map cuối.
+DoD: full inventory closure + actual play notes và owner scope/quality decision.
+
+### SA-14 — Reliability/performance/agent workflow
+Scope: release-target regression, command-line harness và browser harness.
+Verify: Windows + Chromium/Firefox versions đã khóa; worst-case reference
+workload, long match, ít nhất30 match/restart transitions và10phút peak workload;
+ghi frame tails/RSS/objects/handles, cleanup, focus/tab/audio/save/resize/input.
+Bot replay exact build; cross-target semantic comparison, không giả bit-equality.
+Agent nhận một task mới trong supported scope→edit→play→observe→repair→checkpoint;
+mutation qua tool công bố, không hidden hand-edit. UI/browser proof là riêng,
+CLI smoke không thay được. Không chạy browser lúc tools benchmark đang giữ máy.
+DoD: Q1–Q4 đạt, no unexplained failures/leaks; runtime target claims có evidence.
+
+### SA-15 — Release candidate
+Scope: exports/build recipes/manifests/licenses/help/known issues/rollback.
+Verify: clean export từ pinned source, actual build exits; Windows offline,
+Web serving/headers/cache invalidation, fresh và existing save, downgrade
+unsupported không đè save; installer/archive không secret/cache/debug endpoints.
+DoD: reproducible input closure và artifact hashes, bản last-good restore được;
+release-ready local khác published. Không tự deploy/đăng Y8/mua domain/ký public.
+
+### SA-16 — Nghiệm thu sản phẩm
+Scope: final package + đầy đủ requirement→test→evidence và handoff.
+Verify: hai critic MỚI độc lập cùng final frozen source/assets/tool/artifact hash;
+parity matrix, exceptions, actual runs, human records, provenance và support docs.
+DoD: SA-01–SA-15 ACCEPTED, SA-16 đủ final checks/hai critics/owner quality
+decision thật, không P0/P1 còn mở; coordinator mới chuyển SA-16 ACCEPTED và
+ghi RELEASE_READY. Không dùng trạng thái chính WP cuối làm input cho nó.
+Đăng public/sign/store là hành động riêng cần quyền cụ thể, không tự tick PUBLISHED.
+Nếu thiếu người/thiết bị/quyền thì giữ candidate + chỉ rõ việc cần chủ, vẫn làm
+phần preparation độc lập; không fake review hoặc đổi gate cho kịp một buổi sáng.
+
+6. ĐIỀU PHỐI, CHI PHÍ VÀ TIẾN ĐỘ
+
+Một writer/file; lane độc lập có thể là source, behavior tests và evidence
+review khi contracts đủ. Chỉ coordinator sửa plan. Critic không viết chính
+implementation mà mình nghiệm thu; hai lượt đọc bởi cùng người không là hai critic.
+Không tạo nhiều worker khi hết việc độc lập; không thêm engine/test cạnh benchmark.
+Source pin đổi → phân tích dependency → test affected→freeze mới→review mới.
+
+Sửa kẹt: đọc actual exit/owned tree/Stop/log trước; giữ prefix và lỗi. Không
+xóa Stop latch, không rerun task có tác dụng hai lần. Tool/reference/machine
+đổi phải có run ID mới; lỗi collector sửa từ raw đủ proof trước nghĩ chạy lại.
+Hai thí nghiệm cùng hypothesis không tiến triển thì đổi cách đo/minimal repro
+hoặc ghi gap cụ thể; không lặp cả suite và ghi nhiều checkpoint metadata vô ích.
+
+Chi phí dự kiến: art/audio, model/time, Windows/Web CI và artifact storage/CDN;
+không thuê gameplay backend cho game local. Mỗi khoản có unit/date/estimate,
+actual và trần được duyệt; chưa có trần ghi UNSET, không tự mua. Không tự ép
+Blender nếu sprite workflow trực tiếp giữ chất lượng và tiết kiệm hơn.
+
+Ước lượng theo milestone sau SA-01/SA-02: số row đã quan sát/matched, gaps và
+critical path, không dựa số agent/quota. Full reference parity thường lớn hơn
+slice; không hứa một đêm hoặc gọi một bản prototype là sản phẩm đã hoàn thiện.
+Không tạo lịch triển khai game từ yêu cầu viết plan; lịch tools vẫn chỉ theo GT.
+
+7. QUAN HỆ VỚI CÁC PLAN KHÁC VÀ ĐIỂM TIẾP TỤC
+
+Tools: ./8-9-godot-blender-agent-studio-plan.txt — nền chung, ưu tiên hiện tại.
+HH World: ./8-9-hh-world-gameplay-viet-nam-plan.txt — sản phẩm3D riêng.
+Superagent: file này — sản phẩm2D mới, chỉ nhận gói tools đã nghiệm thu.
+Ba bảng tiến độ tách biệt; không copy ticks, không lấy tools PASS thành game PASS.
+Không sửa zdocs/29-8-vault-fighters-y8-parity-plan.txt hoặc product legacy.
+
+Nguồn web ở mục2/3/4 đã đọc18-09-2026; đây là source research, chưa chơi đối
+chiếu runtime. Reference ledger hiện chưa frozen, gameplay/art chưa làm.
+Việc sau khi duyệt plan: quay về CURRENT_VALID_WP của tools và run đang sống;
+chỉ mở SA-01 implementation khi đủ gate trong header. Mọi sửa scope/parity
+có reason/diff, không xóa yêu cầu owner “mọi chức năng trừ nhân vật/map”.
+
+END_OF_SUPERAGENT_PLAN
