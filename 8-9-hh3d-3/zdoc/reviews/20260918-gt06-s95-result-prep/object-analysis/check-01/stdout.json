@@ -1,0 +1,735 @@
+{
+  "analyzer_sha256": "fab580711220f45756f3c972b317590f9f4cd3db80651af33b4f513b1d40b0d1",
+  "authority": 0,
+  "batch_counts": [
+    {
+      "batch": 0,
+      "duration_seconds": 26.884271,
+      "objects": 71127,
+      "resources": 6
+    },
+    {
+      "batch": 1,
+      "duration_seconds": 27.585937,
+      "objects": 71127,
+      "resources": 6
+    },
+    {
+      "batch": 2,
+      "duration_seconds": 29.470635,
+      "objects": 71127,
+      "resources": 6
+    },
+    {
+      "batch": 3,
+      "duration_seconds": 25.168955,
+      "objects": 71127,
+      "resources": 6
+    },
+    {
+      "batch": 4,
+      "duration_seconds": 24.332138,
+      "objects": 71127,
+      "resources": 6
+    },
+    {
+      "batch": 5,
+      "duration_seconds": 26.728021,
+      "objects": 71127,
+      "resources": 6
+    },
+    {
+      "batch": 6,
+      "duration_seconds": 49.308754,
+      "objects": 71127,
+      "resources": 6
+    },
+    {
+      "batch": 7,
+      "duration_seconds": 28.229556,
+      "objects": 71127,
+      "resources": 6
+    },
+    {
+      "batch": 8,
+      "duration_seconds": 30.461947,
+      "objects": 71127,
+      "resources": 6
+    },
+    {
+      "batch": 9,
+      "duration_seconds": 30.224893,
+      "objects": 71127,
+      "resources": 6
+    },
+    {
+      "batch": 10,
+      "duration_seconds": 28.641227,
+      "objects": 71127,
+      "resources": 6
+    },
+    {
+      "batch": 11,
+      "duration_seconds": 27.606164,
+      "objects": 71127,
+      "resources": 6
+    },
+    {
+      "batch": 12,
+      "duration_seconds": 30.039072,
+      "objects": 71127,
+      "resources": 6
+    },
+    {
+      "batch": 13,
+      "duration_seconds": 27.497768,
+      "objects": 71127,
+      "resources": 6
+    },
+    {
+      "batch": 14,
+      "duration_seconds": 27.858371,
+      "objects": 71127,
+      "resources": 6
+    },
+    {
+      "batch": 15,
+      "duration_seconds": 27.35152,
+      "objects": 71127,
+      "resources": 6
+    },
+    {
+      "batch": 16,
+      "duration_seconds": 27.37931,
+      "objects": 71127,
+      "resources": 6
+    },
+    {
+      "batch": 17,
+      "duration_seconds": 28.515123,
+      "objects": 71127,
+      "resources": 6
+    },
+    {
+      "batch": 18,
+      "duration_seconds": 27.633318,
+      "objects": 71127,
+      "resources": 6
+    },
+    {
+      "batch": 19,
+      "duration_seconds": 27.467075,
+      "objects": 71127,
+      "resources": 6
+    },
+    {
+      "batch": 20,
+      "duration_seconds": 26.150852,
+      "objects": 71127,
+      "resources": 6
+    },
+    {
+      "batch": 21,
+      "duration_seconds": 23.657542,
+      "objects": 71127,
+      "resources": 6
+    },
+    {
+      "batch": 22,
+      "duration_seconds": 23.546709,
+      "objects": 71127,
+      "resources": 6
+    },
+    {
+      "batch": 23,
+      "duration_seconds": 24.441399,
+      "objects": 71127,
+      "resources": 6
+    },
+    {
+      "batch": 24,
+      "duration_seconds": 22.51935,
+      "objects": 71127,
+      "resources": 6
+    },
+    {
+      "batch": 25,
+      "duration_seconds": 24.473356,
+      "objects": 71127,
+      "resources": 6
+    },
+    {
+      "batch": 26,
+      "duration_seconds": 23.576676,
+      "objects": 71127,
+      "resources": 6
+    },
+    {
+      "batch": 27,
+      "duration_seconds": 23.483128,
+      "objects": 71127,
+      "resources": 6
+    },
+    {
+      "batch": 28,
+      "duration_seconds": 23.549682,
+      "objects": 71127,
+      "resources": 6
+    },
+    {
+      "batch": 29,
+      "duration_seconds": 23.64993,
+      "objects": 71127,
+      "resources": 6
+    },
+    {
+      "batch": 30,
+      "duration_seconds": 23.287855,
+      "objects": 71127,
+      "resources": 6
+    },
+    {
+      "batch": 31,
+      "duration_seconds": 23.844526,
+      "objects": 71127,
+      "resources": 6
+    },
+    {
+      "batch": 32,
+      "duration_seconds": 23.229174,
+      "objects": 71127,
+      "resources": 6
+    },
+    {
+      "batch": 33,
+      "duration_seconds": 24.278635,
+      "objects": 71127,
+      "resources": 6
+    },
+    {
+      "batch": 34,
+      "duration_seconds": 23.086526,
+      "objects": 71127,
+      "resources": 6
+    }
+  ],
+  "child_wall_seconds": 951.454000000027,
+  "completed_diagnostic_receipts_present": true,
+  "eligible_for_dataset": false,
+  "execution_receipts": {
+    "captures": {
+      "editor-host": {
+        "actual_process_exit": {
+          "exit_code": 0,
+          "pid": 11288
+        },
+        "job": {
+          "active_count": 0,
+          "assigned": true,
+          "close_uncertain": false,
+          "closed": true,
+          "configured": true,
+          "create_uncertain": false,
+          "failed_operations": [],
+          "handle_retained": false,
+          "native_error": null,
+          "tainted": false,
+          "zero_observed": true
+        },
+        "wrapper_exit_code": 0,
+        "wrapper_process_handle": {
+          "close_uncertain": false,
+          "closed": true,
+          "handle_retained": false,
+          "required": true
+        }
+      },
+      "host-owner": {
+        "actual_process_exit": {
+          "exit_code": 0,
+          "pid": 32268
+        },
+        "job": {
+          "active_count": 0,
+          "assigned": true,
+          "close_uncertain": false,
+          "closed": true,
+          "configured": true,
+          "create_uncertain": false,
+          "failed_operations": [],
+          "handle_retained": false,
+          "native_error": null,
+          "tainted": false,
+          "zero_observed": true
+        },
+        "wrapper_exit_code": 0,
+        "wrapper_process_handle": {
+          "close_uncertain": false,
+          "closed": true,
+          "handle_retained": false,
+          "required": true
+        }
+      },
+      "import-host": {
+        "actual_process_exit": {
+          "exit_code": 0,
+          "pid": 26164
+        },
+        "job": {
+          "active_count": 0,
+          "assigned": true,
+          "close_uncertain": false,
+          "closed": true,
+          "configured": true,
+          "create_uncertain": false,
+          "failed_operations": [],
+          "handle_retained": false,
+          "native_error": null,
+          "tainted": false,
+          "zero_observed": true
+        },
+        "wrapper_exit_code": 0,
+        "wrapper_process_handle": {
+          "close_uncertain": false,
+          "closed": true,
+          "handle_retained": false,
+          "required": true
+        }
+      }
+    },
+    "child_completed_diagnostic": true,
+    "child_error": null,
+    "native_supervisor": {
+      "child_actual_exit": {
+        "exit_code": 0,
+        "pid": 32268
+      },
+      "completed_diagnostic": true,
+      "elapsed_seconds": 952.905999999959,
+      "eligible_for_dataset": false,
+      "formal_acceptance": false,
+      "full_benchmark": false,
+      "host_integrated": false,
+      "job": {
+        "active_count": 0,
+        "assigned": true,
+        "close_uncertain": false,
+        "closed": true,
+        "configured": true,
+        "create_uncertain": false,
+        "failed_operations": [],
+        "handle_retained": false,
+        "native_error": null,
+        "tainted": false,
+        "zero_observed": true
+      },
+      "mode": "isolation",
+      "owner": {
+        "closed": true,
+        "job": {
+          "active_count": 0,
+          "assigned": true,
+          "close_uncertain": false,
+          "closed": true,
+          "configured": true,
+          "create_uncertain": false,
+          "failed_operations": [],
+          "handle_retained": false,
+          "native_error": null,
+          "tainted": false,
+          "zero_observed": true
+        },
+        "wrapper_process_handle": {
+          "close_uncertain": false,
+          "closed": true,
+          "handle_retained": false,
+          "required": true
+        }
+      },
+      "run_id": "gt06-s95-native-isolation-01",
+      "supervisor_own_actual_exit_not_yet_observed": true,
+      "wrapper_handle": {
+        "close_uncertain": false,
+        "closed": true,
+        "handle_retained": false,
+        "required": true
+      }
+    },
+    "outer_terminal": {
+      "actual_supervisor_exit": {
+        "actual_exit": {
+          "exit_code_uint32": 0,
+          "exit_filetime": 134342191703247421,
+          "observed_utc": "2026-09-18T15:32:50Z",
+          "source": "retained_handle_GetExitCodeProcess",
+          "wait_result": 0
+        },
+        "executable": "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "handle_closed": true,
+        "natural_exit_not_inferred": true,
+        "observed_utc": "2026-09-18T15:16:56Z",
+        "parent_pid": 39352,
+        "pid": 21072,
+        "process_start": "windows:134342182165779458"
+      },
+      "actual_supervisor_exit_missing": false,
+      "completed_diagnostic": true,
+      "elapsed_seconds": 954.1570000000065,
+      "eligible_for_dataset": false,
+      "errors": [],
+      "extra_outer_helper_process": false,
+      "formal_acceptance": false,
+      "full_benchmark": false,
+      "intended_outer_return_code": 0,
+      "job": {
+        "active_count": 0,
+        "assigned": true,
+        "close_uncertain": false,
+        "closed": true,
+        "configured": true,
+        "create_uncertain": false,
+        "failed_operations": [],
+        "handle_retained": false,
+        "native_error": null,
+        "tainted": false,
+        "zero_observed": true
+      },
+      "limits": {
+        "inner_benchmark_limits_changed": false,
+        "native_limit_flags": 8200,
+        "process_limit": 7,
+        "reused_s93_descriptive_wall_seconds": 7530,
+        "s93_descriptive_wall_is_not_applied": true,
+        "wall_enforcement": "s95_observer_watchdog",
+        "wall_seconds": 2160
+      },
+      "outer_job_active_before_cleanup": 0,
+      "outer_self_exit_observed": false,
+      "outer_self_exit_source": "Task Scheduler; not this report",
+      "popen_handle_closed": true,
+      "run_id": "gt06-s95-native-isolation-01",
+      "supervisor_popen_actual_exit_code": 0,
+      "timed_out": false
+    }
+  },
+  "formal_acceptance": false,
+  "full_benchmark": false,
+  "full_objectdb_inventory": false,
+  "inputs": [
+    {
+      "file": "child-result.json",
+      "sha256": "e40ddac208b4c0b992e71245df373fd7376cbd3258f5d3359526f083b5c964cb",
+      "size_bytes": 3761
+    },
+    {
+      "file": "diagnostic.json",
+      "sha256": "1faabd017dbc78a2218c706442b266b9024886bc532e3a1b432d0b37bd2d3c94",
+      "size_bytes": 5165
+    },
+    {
+      "file": "editor-host/capture.json",
+      "sha256": "6479f590d6b4b3a40c3b22cbc4decc27e0d3ee82ece20e506f920a562e1ac2d7",
+      "size_bytes": 9889
+    },
+    {
+      "file": "editor-snapshot.json",
+      "sha256": "c70b54f09ec6dce2d82058cf783785d12264dae93b5fbeeda10efcd1ce2ac96a",
+      "size_bytes": 1574
+    },
+    {
+      "file": "host-owner/capture.json",
+      "sha256": "faaefd984b6eb9413670079d61cf1289382bf56f7aa094f3ca3479b432612bd2",
+      "size_bytes": 7603
+    },
+    {
+      "file": "import-host/capture.json",
+      "sha256": "df63d1e8935a092c80dbb83dd3a02815f6699402f208c9b45b5b5f0bd70d9c2e",
+      "size_bytes": 9818
+    },
+    {
+      "file": "native-overlay.json",
+      "sha256": "1a1d6616b01c7283a4bf716b65cf4d62efc30dc73f6e858ca82d34804edafdcd",
+      "size_bytes": 510
+    },
+    {
+      "file": "output-manifest.json",
+      "sha256": "05dc9d07655289812b2a5a78a70dca1d208afdf34fd762dccc0437935eab73d5",
+      "size_bytes": 9103
+    },
+    {
+      "file": "project/benchmark/out/batch-00.json",
+      "sha256": "84e95274559e2b41bdfbb49c6c08b9536f22f38045ab11d63cb211603ffb05e4",
+      "size_bytes": 96045
+    },
+    {
+      "file": "project/benchmark/out/batch-01.json",
+      "sha256": "577b214bdc868d5fff0151a8959088c11cd1f87f2a4ea41370d4786e7802cb10",
+      "size_bytes": 96437
+    },
+    {
+      "file": "project/benchmark/out/batch-02.json",
+      "sha256": "27a43f0524dd78a4bf8f2000d0d90ee06d084adba69178d85ea6b77dc6aea4b7",
+      "size_bytes": 96447
+    },
+    {
+      "file": "project/benchmark/out/batch-03.json",
+      "sha256": "85982fe7baa8f1beda11a2f5c73869befd41e23ab9d7457c3e466187f41debb7",
+      "size_bytes": 97036
+    },
+    {
+      "file": "project/benchmark/out/batch-04.json",
+      "sha256": "9e667df3f62bfe03e4d31858526c1ff05336d300642fb463bf269371578f657c",
+      "size_bytes": 97344
+    },
+    {
+      "file": "project/benchmark/out/batch-05.json",
+      "sha256": "b5d26e755a2aec0d63e07d982ba1c64149f7043828ad3c031524644b1e430794",
+      "size_bytes": 97346
+    },
+    {
+      "file": "project/benchmark/out/batch-06.json",
+      "sha256": "66fbe987d410c2fd33ec2f2a345e6b1c9ab93d26697a6118ccac1baf108eb4f1",
+      "size_bytes": 97409
+    },
+    {
+      "file": "project/benchmark/out/batch-07.json",
+      "sha256": "478c4d178318bb7f20840592085521d1099a98342586775b6e06941d9faebc0a",
+      "size_bytes": 97453
+    },
+    {
+      "file": "project/benchmark/out/batch-08.json",
+      "sha256": "c62111a77331cd32acefea97e2c9a30aff54af23818145f4c407f0bad20206cf",
+      "size_bytes": 97449
+    },
+    {
+      "file": "project/benchmark/out/batch-09.json",
+      "sha256": "f7ff62745404fcf6beeb19f68c1bcb8fe93b2006e2edf192572e7ab69d1925b4",
+      "size_bytes": 97465
+    },
+    {
+      "file": "project/benchmark/out/batch-10.json",
+      "sha256": "7f9b8ffd580108251f784a60b13eb93321149d28657c055d7c00d04834ac7de4",
+      "size_bytes": 97655
+    },
+    {
+      "file": "project/benchmark/out/batch-11.json",
+      "sha256": "2f538f6e8ba9347150d19208be5cae53ddb2fd31bf7e620cb2ac02b853839060",
+      "size_bytes": 97656
+    },
+    {
+      "file": "project/benchmark/out/batch-12.json",
+      "sha256": "ee9f1fccc0215ca61e088c15b545dcfe2b0275020e41ef1f80dcedf25b4343f3",
+      "size_bytes": 97660
+    },
+    {
+      "file": "project/benchmark/out/batch-13.json",
+      "sha256": "09d550c763a3517f058bdebcce84d7552d8726f0be24b5901d5395a7357bd353",
+      "size_bytes": 97663
+    },
+    {
+      "file": "project/benchmark/out/batch-14.json",
+      "sha256": "a8e09e4c92817fd3aaf2e134a65a6e581df5d645f42a1324258c642bfcaf532a",
+      "size_bytes": 97646
+    },
+    {
+      "file": "project/benchmark/out/batch-15.json",
+      "sha256": "cbf029f24cba3e6c1262d0c5ae00e8e4b23712f70570fa09141a97685e13ba79",
+      "size_bytes": 97847
+    },
+    {
+      "file": "project/benchmark/out/batch-16.json",
+      "sha256": "0e550b89630bced0bdbca0da015f8ecc8490c4f56ee1b0001ff29339d3d1142f",
+      "size_bytes": 97850
+    },
+    {
+      "file": "project/benchmark/out/batch-17.json",
+      "sha256": "9f09d37ae6c729b8199d0689975f009f621c92ebdf74e8436942993a5ec455c9",
+      "size_bytes": 97853
+    },
+    {
+      "file": "project/benchmark/out/batch-18.json",
+      "sha256": "18af055b8683a5942df281b1905a0793818f8580d54addb919a2295f7e5e2d97",
+      "size_bytes": 97858
+    },
+    {
+      "file": "project/benchmark/out/batch-19.json",
+      "sha256": "e30043b5d9535ee01e686a71c63e83fd39cb209a804b7b2f9a5b49fca995646b",
+      "size_bytes": 97855
+    },
+    {
+      "file": "project/benchmark/out/batch-20.json",
+      "sha256": "1fdacfd2238227196ead294d00421f0882a5f4335e91c749c5f96cad5e2b9539",
+      "size_bytes": 97823
+    },
+    {
+      "file": "project/benchmark/out/batch-21.json",
+      "sha256": "658a2bdaa9a5aa1c90913bdcc6eaaac8c3b61eb165c51eeed233060c642b6704",
+      "size_bytes": 97756
+    },
+    {
+      "file": "project/benchmark/out/batch-22.json",
+      "sha256": "2606137d541060b936d616e397b0d2cfcbb2ea9366e30c86cbf981245c454de9",
+      "size_bytes": 97768
+    },
+    {
+      "file": "project/benchmark/out/batch-23.json",
+      "sha256": "565d08a72462f22511ca7261b2d04f2f268c11a926680fbc51a74cde2af92c9f",
+      "size_bytes": 97776
+    },
+    {
+      "file": "project/benchmark/out/batch-24.json",
+      "sha256": "27deba377b0778d8a0b42c5657ca10714940846aa3658cecb56a17ffa3e5a77a",
+      "size_bytes": 97756
+    },
+    {
+      "file": "project/benchmark/out/batch-25.json",
+      "sha256": "d36ed2c003bcd6caae49dff8c07be1b908b77d6024e33b9daf2d74b031ab211d",
+      "size_bytes": 97778
+    },
+    {
+      "file": "project/benchmark/out/batch-26.json",
+      "sha256": "18f958ff71ff6272175d45ee4fdd4a2ec55b6849b7bc25629750fd6c0ba0bf92",
+      "size_bytes": 97765
+    },
+    {
+      "file": "project/benchmark/out/batch-27.json",
+      "sha256": "eb142b0501e78d3459c3c4dd7d85a98fd3d0dcaac6239542e129e2e21ba90b0f",
+      "size_bytes": 97783
+    },
+    {
+      "file": "project/benchmark/out/batch-28.json",
+      "sha256": "21194725f0c2b7661c289207e8cccb82490231c1d11ef6ea9986b9caaaf38180",
+      "size_bytes": 97779
+    },
+    {
+      "file": "project/benchmark/out/batch-29.json",
+      "sha256": "4ffe44d0b94b3874b90bd844fb031f42d1dcac61f8cac9e1b09a1c665dd0d7e2",
+      "size_bytes": 97761
+    },
+    {
+      "file": "project/benchmark/out/batch-30.json",
+      "sha256": "1a536c619f037582ee2a8d73dc84d38030eb8ae8c55a28089a1893707a1fa1d6",
+      "size_bytes": 97766
+    },
+    {
+      "file": "project/benchmark/out/batch-31.json",
+      "sha256": "bb73378e04a9274dc55c73c15997aff04df27345b8c68c1b1ed0d1d6307440d9",
+      "size_bytes": 97767
+    },
+    {
+      "file": "project/benchmark/out/batch-32.json",
+      "sha256": "35328229796dbf1eb45f07f3479e6a6eb00bab29edff5501b0fe7ef93cb46cdd",
+      "size_bytes": 97764
+    },
+    {
+      "file": "project/benchmark/out/batch-33.json",
+      "sha256": "fe058186399c05033c28f68c61eb3bd4c53f73bdce9b39cd4b9c63cd03948e24",
+      "size_bytes": 97771
+    },
+    {
+      "file": "project/benchmark/out/batch-34.json",
+      "sha256": "88a258a40db920de55862ead85928c2e36a4e1a3f9f7fc9b9ea51b02060bffdd",
+      "size_bytes": 97774
+    },
+    {
+      "file": "project/benchmark/out/index.json",
+      "sha256": "80712f4d29527d17e9b98df19601b9da75157ff62f49b96c17a192b8eda19465",
+      "size_bytes": 12607
+    },
+    {
+      "file": "project/benchmark/out/sparse-00.json",
+      "sha256": "b199af620a841487e8b7d317d08ab412463cc46e472ee24ad19cfcdec3b3fb92",
+      "size_bytes": 63876
+    },
+    {
+      "file": "project/benchmark/out/sparse-post-00.json",
+      "sha256": "fd1f78560ea79f860309008b0dd4eaa65bc4f4f09a9330a065ccfc458ad2ab4a",
+      "size_bytes": 552
+    },
+    {
+      "file": "source/effective-benchmark_native.gd",
+      "sha256": "33562d84dc95cd1b5e36197aea79ecfbe78e0f5cfb0bfd9e3ba6ec9046a5e835",
+      "size_bytes": 60823
+    },
+    {
+      "file": "source/zdoc/reviews/20260918-gt06-s95-native-isolation/native_isolation.py",
+      "sha256": "1f26934049b4e6f02d5fef0bafffd9d4994b04ac1cd1654f063f468a5cee9860",
+      "size_bytes": 32059
+    },
+    {
+      "file": "source/zdoc/reviews/20260918-gt06-s95-native-isolation/object_probe_s95.gd",
+      "sha256": "8a1ef457b6d4612fbf61176bc99598ec046d72c081e01c73665bb3237680784e",
+      "size_bytes": 9120
+    },
+    {
+      "file": "supervisor-result.json",
+      "sha256": "a001732902ae93e71756577dde8a923a13b656bb8e2eeda0ee4f7faaf2b69e43",
+      "size_bytes": 1003
+    }
+  ],
+  "interpretation": "NOT_REPRODUCED_IN_COMPLETED_ISOLATED_WORKLOAD",
+  "limitations": [
+    "Only reachable Tree owners, their TreeItems and reachable Node3D-family IDs are inventoried; this is not a full ObjectDB census.",
+    "Growth membership is reconstructed from the published baseline and delta, not independently checked against a second full ID list.",
+    "Node3D-family membership does not identify concrete subclasses, object content, allocation stacks or ownership lifetimes.",
+    "Runtime still-valid flags are reported observations; removal from this inventory does not by itself establish destruction or a leak.",
+    "Only batch 4 and the first later object-count increase have identity snapshots. No second snapshot means later identity stability was not measured.",
+    "No HTTP producer, host-start/ACK work, coupled idle durations or post-ACK observation is reproduced here.",
+    "No-growth means not reproduced in this isolated workload; it does not rule out a leak, repair a coupled failure or satisfy a formal memory gate.",
+    "Process/cleanup receipts are preserved, not reverified through OS handles. Task Scheduler must separately capture the outer observer exit."
+  ],
+  "native_batches_observed": 35,
+  "native_elapsed_seconds": 937.112325,
+  "native_heartbeat": {
+    "heartbeat_target_met": true,
+    "max_status_gap_ms": 1102.852
+  },
+  "no_leak_claim": false,
+  "outer_inputs": [
+    {
+      "file": "request-copy.json",
+      "sha256": "4738cd1303b709baac6480dd9da85c79281949267a19c52b86d18e7637699e2d",
+      "size_bytes": 6027
+    },
+    {
+      "file": "terminal.json",
+      "sha256": "de9ae2ae688754bdb774361d582006676f0cf7b1c039984f1ad5914dcde4a239",
+      "size_bytes": 1724
+    }
+  ],
+  "outer_observer_actual_exit_verified": false,
+  "process_lifecycle_independently_verified": false,
+  "reader_sha256": "da8ecb76ff4871e7ecb827bfb57bfa61319748009bfde17f3da7e4da2c461903",
+  "run_id": "gt06-s95-native-isolation-01",
+  "schema": "HH-GT06-S95-SELECTED-IDENTITY-ANALYSIS-1",
+  "selected_identity_analysis": {
+    "all_later_identity_stability_measured": false,
+    "baseline_batch": 4,
+    "baseline_counts": {
+      "nodes": 21482,
+      "objects": 71127,
+      "orphan_nodes": 313,
+      "resources": 6
+    },
+    "baseline_ids_are_not_growth": true,
+    "baseline_selected_counts": {
+      "Node3D_family": 12,
+      "Tree": 102,
+      "TreeItem": 4493
+    },
+    "baseline_selected_id_count": 4607,
+    "baseline_uninventoried_object_count": 66520,
+    "growth": null,
+    "identity_comparison_scope": "baseline_only",
+    "object_growth_batches": []
+  },
+  "source_binding": {
+    "complete_archived_source_bytes_rehashed": false,
+    "effective_driver_sha256": "33562d84dc95cd1b5e36197aea79ecfbe78e0f5cfb0bfd9e3ba6ec9046a5e835",
+    "helper_closure_sha256": "4448ab35a6e087c8756063e0d8a025f4dc60a44329fcf56c4b270e6d1474302b",
+    "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+    "source_closure_sha256": "ebed9418490379bb902d2049e4a2f98a96e3378d09b369aef02684e16214c74e",
+    "source_map_digest_checked": true
+  },
+  "writers_stopped": "operator_assertion_only"
+}

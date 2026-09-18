@@ -1,0 +1,611 @@
+{
+  "authority": 0,
+  "eligible_for_dataset": false,
+  "files": {
+    "outer/invocation.json": {
+      "sha256": "4babb315447d3a8c568f0b9e4577cf9d973e75d2b8a21522808e54a0a73a462c",
+      "size_bytes": 6447,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01-outer/invocation.json"
+    },
+    "outer/request-copy.json": {
+      "sha256": "4738cd1303b709baac6480dd9da85c79281949267a19c52b86d18e7637699e2d",
+      "size_bytes": 6027,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01-outer/request-copy.json"
+    },
+    "outer/supervisor-adoption.json": {
+      "sha256": "b3c36c21fa2e425b21d71f886f546720cf52f543fdccaf38f403dd31bf245cc7",
+      "size_bytes": 729,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01-outer/supervisor-adoption.json"
+    },
+    "outer/supervisor-exit.json": {
+      "sha256": "6190d588a7708e167d598571c4452b3a27bff8b41f87c5f6188f427d3963b149",
+      "size_bytes": 498,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01-outer/supervisor-exit.json"
+    },
+    "outer/supervisor-stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01-outer/supervisor-stderr.txt"
+    },
+    "outer/supervisor-stdout.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01-outer/supervisor-stdout.txt"
+    },
+    "outer/terminal.json": {
+      "sha256": "de9ae2ae688754bdb774361d582006676f0cf7b1c039984f1ad5914dcde4a239",
+      "size_bytes": 1724,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01-outer/terminal.json"
+    },
+    "raw/child-result.json": {
+      "sha256": "e40ddac208b4c0b992e71245df373fd7376cbd3258f5d3359526f083b5c964cb",
+      "size_bytes": 3761,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/child-result.json"
+    },
+    "raw/diagnostic.json": {
+      "sha256": "1faabd017dbc78a2218c706442b266b9024886bc532e3a1b432d0b37bd2d3c94",
+      "size_bytes": 5165,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/diagnostic.json"
+    },
+    "raw/editor-host-terminal.json": {
+      "sha256": "a6c24ae5b57ef91d981e618836c56e5adf855455baca341d1af741bff7707978",
+      "size_bytes": 82836,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/editor-host-terminal.json"
+    },
+    "raw/editor-host/capture.json": {
+      "sha256": "6479f590d6b4b3a40c3b22cbc4decc27e0d3ee82ece20e506f920a562e1ac2d7",
+      "size_bytes": 9889,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/editor-host/capture.json"
+    },
+    "raw/editor-host/cleanup-001.json": {
+      "sha256": "379d7a25b4032e6cb243e100aa8a5ebcd3d82a94e45b71e0f18e47fe7e569534",
+      "size_bytes": 528,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/editor-host/cleanup-001.json"
+    },
+    "raw/editor-host/invocation.json": {
+      "sha256": "8c68034008d5547b89783adab26f3a26df26af5efcbb0057c942a67428ca047a",
+      "size_bytes": 8466,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/editor-host/invocation.json"
+    },
+    "raw/editor-host/process-exit.json": {
+      "sha256": "7d351a3802dea53c60e2f76388c10635dd2ea9ee620f1e4b5bb6e7fc06fd061d",
+      "size_bytes": 30,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/editor-host/process-exit.json"
+    },
+    "raw/editor-host/process-start.json": {
+      "sha256": "0fa12b3df18c8a39dc613b5b285259ceace5f1cf58e4b6c6a43d5e46330c7ffe",
+      "size_bytes": 14,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/editor-host/process-start.json"
+    },
+    "raw/editor-host/stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/editor-host/stderr.txt"
+    },
+    "raw/editor-host/stdout.txt": {
+      "sha256": "eca62b4cee7080f919ed26cdf5b620d92599b679567e23ac67b53b908cea3cb4",
+      "size_bytes": 323655,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/editor-host/stdout.txt"
+    },
+    "raw/editor-snapshot.json": {
+      "sha256": "c70b54f09ec6dce2d82058cf783785d12264dae93b5fbeeda10efcd1ce2ac96a",
+      "size_bytes": 1574,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/editor-snapshot.json"
+    },
+    "raw/host-owner/capture.json": {
+      "sha256": "faaefd984b6eb9413670079d61cf1289382bf56f7aa094f3ca3479b432612bd2",
+      "size_bytes": 7603,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/host-owner/capture.json"
+    },
+    "raw/host-owner/cleanup-001.json": {
+      "sha256": "379d7a25b4032e6cb243e100aa8a5ebcd3d82a94e45b71e0f18e47fe7e569534",
+      "size_bytes": 528,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/host-owner/cleanup-001.json"
+    },
+    "raw/host-owner/invocation.json": {
+      "sha256": "b7a21e7bd618737b589f89039db02e570b8624cfe619cfd8b20ff027171e67e2",
+      "size_bytes": 6181,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/host-owner/invocation.json"
+    },
+    "raw/host-owner/process-exit.json": {
+      "sha256": "780d2124a5351769149e4e0555bcad692b74857c2f7682efd7394280a806a4d5",
+      "size_bytes": 30,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/host-owner/process-exit.json"
+    },
+    "raw/host-owner/process-start.json": {
+      "sha256": "a71c4b15cd0d46d34653aea5cb47b6c30e4f68c4fbd9b1af89e461dffdaa9265",
+      "size_bytes": 14,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/host-owner/process-start.json"
+    },
+    "raw/host-owner/stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/host-owner/stderr.txt"
+    },
+    "raw/host-owner/stdout.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/host-owner/stdout.txt"
+    },
+    "raw/import-host-terminal.json": {
+      "sha256": "e85d159f1858cdd60f9edf0add380a2df5d78c40b00764b7b2532a7038b9649e",
+      "size_bytes": 646,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/import-host-terminal.json"
+    },
+    "raw/import-host/capture.json": {
+      "sha256": "df63d1e8935a092c80dbb83dd3a02815f6699402f208c9b45b5b5f0bd70d9c2e",
+      "size_bytes": 9818,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/import-host/capture.json"
+    },
+    "raw/import-host/cleanup-001.json": {
+      "sha256": "379d7a25b4032e6cb243e100aa8a5ebcd3d82a94e45b71e0f18e47fe7e569534",
+      "size_bytes": 528,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/import-host/cleanup-001.json"
+    },
+    "raw/import-host/invocation.json": {
+      "sha256": "7bfd607f0847ee1dcb0119119d19d514fc558168aa7066afbd29ef2fafa1fee5",
+      "size_bytes": 8395,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/import-host/invocation.json"
+    },
+    "raw/import-host/process-exit.json": {
+      "sha256": "45e866b0a85d4e221a1225aeceefb70f21a8fddddd38b03e8161abada7203705",
+      "size_bytes": 30,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/import-host/process-exit.json"
+    },
+    "raw/import-host/process-start.json": {
+      "sha256": "7bdd90b090edbbffc2bad0438023b94d132f8d2b76b868972dc2d8c3d8494338",
+      "size_bytes": 14,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/import-host/process-start.json"
+    },
+    "raw/import-host/stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/import-host/stderr.txt"
+    },
+    "raw/import-host/stdout.txt": {
+      "sha256": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003",
+      "size_bytes": 1492,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/import-host/stdout.txt"
+    },
+    "raw/native-overlay.json": {
+      "sha256": "1a1d6616b01c7283a4bf716b65cf4d62efc30dc73f6e858ca82d34804edafdcd",
+      "size_bytes": 510,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/native-overlay.json"
+    },
+    "raw/output-manifest.json": {
+      "sha256": "05dc9d07655289812b2a5a78a70dca1d208afdf34fd762dccc0437935eab73d5",
+      "size_bytes": 9103,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/output-manifest.json"
+    },
+    "raw/project-snapshot.json": {
+      "sha256": "0ccf9c7f0ff612d5c7c85cf0d7e5312797166ef37194d78817f409786f8a2685",
+      "size_bytes": 1461,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project-snapshot.json"
+    },
+    "raw/project/benchmark/out/batch-00.json": {
+      "sha256": "84e95274559e2b41bdfbb49c6c08b9536f22f38045ab11d63cb211603ffb05e4",
+      "size_bytes": 96045,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/batch-00.json"
+    },
+    "raw/project/benchmark/out/batch-01.json": {
+      "sha256": "577b214bdc868d5fff0151a8959088c11cd1f87f2a4ea41370d4786e7802cb10",
+      "size_bytes": 96437,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/batch-01.json"
+    },
+    "raw/project/benchmark/out/batch-02.json": {
+      "sha256": "27a43f0524dd78a4bf8f2000d0d90ee06d084adba69178d85ea6b77dc6aea4b7",
+      "size_bytes": 96447,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/batch-02.json"
+    },
+    "raw/project/benchmark/out/batch-03.json": {
+      "sha256": "85982fe7baa8f1beda11a2f5c73869befd41e23ab9d7457c3e466187f41debb7",
+      "size_bytes": 97036,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/batch-03.json"
+    },
+    "raw/project/benchmark/out/batch-04.json": {
+      "sha256": "9e667df3f62bfe03e4d31858526c1ff05336d300642fb463bf269371578f657c",
+      "size_bytes": 97344,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/batch-04.json"
+    },
+    "raw/project/benchmark/out/batch-05.json": {
+      "sha256": "b5d26e755a2aec0d63e07d982ba1c64149f7043828ad3c031524644b1e430794",
+      "size_bytes": 97346,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/batch-05.json"
+    },
+    "raw/project/benchmark/out/batch-06.json": {
+      "sha256": "66fbe987d410c2fd33ec2f2a345e6b1c9ab93d26697a6118ccac1baf108eb4f1",
+      "size_bytes": 97409,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/batch-06.json"
+    },
+    "raw/project/benchmark/out/batch-07.json": {
+      "sha256": "478c4d178318bb7f20840592085521d1099a98342586775b6e06941d9faebc0a",
+      "size_bytes": 97453,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/batch-07.json"
+    },
+    "raw/project/benchmark/out/batch-08.json": {
+      "sha256": "c62111a77331cd32acefea97e2c9a30aff54af23818145f4c407f0bad20206cf",
+      "size_bytes": 97449,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/batch-08.json"
+    },
+    "raw/project/benchmark/out/batch-09.json": {
+      "sha256": "f7ff62745404fcf6beeb19f68c1bcb8fe93b2006e2edf192572e7ab69d1925b4",
+      "size_bytes": 97465,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/batch-09.json"
+    },
+    "raw/project/benchmark/out/batch-10.json": {
+      "sha256": "7f9b8ffd580108251f784a60b13eb93321149d28657c055d7c00d04834ac7de4",
+      "size_bytes": 97655,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/batch-10.json"
+    },
+    "raw/project/benchmark/out/batch-11.json": {
+      "sha256": "2f538f6e8ba9347150d19208be5cae53ddb2fd31bf7e620cb2ac02b853839060",
+      "size_bytes": 97656,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/batch-11.json"
+    },
+    "raw/project/benchmark/out/batch-12.json": {
+      "sha256": "ee9f1fccc0215ca61e088c15b545dcfe2b0275020e41ef1f80dcedf25b4343f3",
+      "size_bytes": 97660,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/batch-12.json"
+    },
+    "raw/project/benchmark/out/batch-13.json": {
+      "sha256": "09d550c763a3517f058bdebcce84d7552d8726f0be24b5901d5395a7357bd353",
+      "size_bytes": 97663,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/batch-13.json"
+    },
+    "raw/project/benchmark/out/batch-14.json": {
+      "sha256": "a8e09e4c92817fd3aaf2e134a65a6e581df5d645f42a1324258c642bfcaf532a",
+      "size_bytes": 97646,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/batch-14.json"
+    },
+    "raw/project/benchmark/out/batch-15.json": {
+      "sha256": "cbf029f24cba3e6c1262d0c5ae00e8e4b23712f70570fa09141a97685e13ba79",
+      "size_bytes": 97847,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/batch-15.json"
+    },
+    "raw/project/benchmark/out/batch-16.json": {
+      "sha256": "0e550b89630bced0bdbca0da015f8ecc8490c4f56ee1b0001ff29339d3d1142f",
+      "size_bytes": 97850,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/batch-16.json"
+    },
+    "raw/project/benchmark/out/batch-17.json": {
+      "sha256": "9f09d37ae6c729b8199d0689975f009f621c92ebdf74e8436942993a5ec455c9",
+      "size_bytes": 97853,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/batch-17.json"
+    },
+    "raw/project/benchmark/out/batch-18.json": {
+      "sha256": "18af055b8683a5942df281b1905a0793818f8580d54addb919a2295f7e5e2d97",
+      "size_bytes": 97858,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/batch-18.json"
+    },
+    "raw/project/benchmark/out/batch-19.json": {
+      "sha256": "e30043b5d9535ee01e686a71c63e83fd39cb209a804b7b2f9a5b49fca995646b",
+      "size_bytes": 97855,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/batch-19.json"
+    },
+    "raw/project/benchmark/out/batch-20.json": {
+      "sha256": "1fdacfd2238227196ead294d00421f0882a5f4335e91c749c5f96cad5e2b9539",
+      "size_bytes": 97823,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/batch-20.json"
+    },
+    "raw/project/benchmark/out/batch-21.json": {
+      "sha256": "658a2bdaa9a5aa1c90913bdcc6eaaac8c3b61eb165c51eeed233060c642b6704",
+      "size_bytes": 97756,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/batch-21.json"
+    },
+    "raw/project/benchmark/out/batch-22.json": {
+      "sha256": "2606137d541060b936d616e397b0d2cfcbb2ea9366e30c86cbf981245c454de9",
+      "size_bytes": 97768,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/batch-22.json"
+    },
+    "raw/project/benchmark/out/batch-23.json": {
+      "sha256": "565d08a72462f22511ca7261b2d04f2f268c11a926680fbc51a74cde2af92c9f",
+      "size_bytes": 97776,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/batch-23.json"
+    },
+    "raw/project/benchmark/out/batch-24.json": {
+      "sha256": "27deba377b0778d8a0b42c5657ca10714940846aa3658cecb56a17ffa3e5a77a",
+      "size_bytes": 97756,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/batch-24.json"
+    },
+    "raw/project/benchmark/out/batch-25.json": {
+      "sha256": "d36ed2c003bcd6caae49dff8c07be1b908b77d6024e33b9daf2d74b031ab211d",
+      "size_bytes": 97778,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/batch-25.json"
+    },
+    "raw/project/benchmark/out/batch-26.json": {
+      "sha256": "18f958ff71ff6272175d45ee4fdd4a2ec55b6849b7bc25629750fd6c0ba0bf92",
+      "size_bytes": 97765,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/batch-26.json"
+    },
+    "raw/project/benchmark/out/batch-27.json": {
+      "sha256": "eb142b0501e78d3459c3c4dd7d85a98fd3d0dcaac6239542e129e2e21ba90b0f",
+      "size_bytes": 97783,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/batch-27.json"
+    },
+    "raw/project/benchmark/out/batch-28.json": {
+      "sha256": "21194725f0c2b7661c289207e8cccb82490231c1d11ef6ea9986b9caaaf38180",
+      "size_bytes": 97779,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/batch-28.json"
+    },
+    "raw/project/benchmark/out/batch-29.json": {
+      "sha256": "4ffe44d0b94b3874b90bd844fb031f42d1dcac61f8cac9e1b09a1c665dd0d7e2",
+      "size_bytes": 97761,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/batch-29.json"
+    },
+    "raw/project/benchmark/out/batch-30.json": {
+      "sha256": "1a536c619f037582ee2a8d73dc84d38030eb8ae8c55a28089a1893707a1fa1d6",
+      "size_bytes": 97766,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/batch-30.json"
+    },
+    "raw/project/benchmark/out/batch-31.json": {
+      "sha256": "bb73378e04a9274dc55c73c15997aff04df27345b8c68c1b1ed0d1d6307440d9",
+      "size_bytes": 97767,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/batch-31.json"
+    },
+    "raw/project/benchmark/out/batch-32.json": {
+      "sha256": "35328229796dbf1eb45f07f3479e6a6eb00bab29edff5501b0fe7ef93cb46cdd",
+      "size_bytes": 97764,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/batch-32.json"
+    },
+    "raw/project/benchmark/out/batch-33.json": {
+      "sha256": "fe058186399c05033c28f68c61eb3bd4c53f73bdce9b39cd4b9c63cd03948e24",
+      "size_bytes": 97771,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/batch-33.json"
+    },
+    "raw/project/benchmark/out/batch-34.json": {
+      "sha256": "88a258a40db920de55862ead85928c2e36a4e1a3f9f7fc9b9ea51b02060bffdd",
+      "size_bytes": 97774,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/batch-34.json"
+    },
+    "raw/project/benchmark/out/index.json": {
+      "sha256": "80712f4d29527d17e9b98df19601b9da75157ff62f49b96c17a192b8eda19465",
+      "size_bytes": 12607,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/index.json"
+    },
+    "raw/project/benchmark/out/sparse-00.json": {
+      "sha256": "b199af620a841487e8b7d317d08ab412463cc46e472ee24ad19cfcdec3b3fb92",
+      "size_bytes": 63876,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/sparse-00.json"
+    },
+    "raw/project/benchmark/out/sparse-post-00.json": {
+      "sha256": "fd1f78560ea79f860309008b0dd4eaa65bc4f4f09a9330a065ccfc458ad2ab4a",
+      "size_bytes": 552,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/project/benchmark/out/sparse-post-00.json"
+    },
+    "raw/source/effective-benchmark_native.gd": {
+      "sha256": "33562d84dc95cd1b5e36197aea79ecfbe78e0f5cfb0bfd9e3ba6ec9046a5e835",
+      "size_bytes": 60823,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/effective-benchmark_native.gd"
+    },
+    "raw/source/studio/blender-addon/ipc_client.py": {
+      "sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9",
+      "size_bytes": 16349,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/blender-addon/ipc_client.py"
+    },
+    "raw/source/studio/contracts/perf-collector.schema.json": {
+      "sha256": "394d1df03bdfd736ea3fe9f260e9d718d35f3820cde35d1c45ccab65fbc24834",
+      "size_bytes": 30060,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/contracts/perf-collector.schema.json"
+    },
+    "raw/source/studio/godot-addon/addons/hh_studio/plugin.cfg": {
+      "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+      "size_bytes": 165,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/godot-addon/addons/hh_studio/plugin.cfg"
+    },
+    "raw/source/studio/godot-addon/addons/hh_studio/plugin.gd": {
+      "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+      "size_bytes": 23043,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/godot-addon/addons/hh_studio/plugin.gd"
+    },
+    "raw/source/studio/godot-addon/addons/hh_studio/scene_commands.gd": {
+      "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+      "size_bytes": 32174,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/godot-addon/addons/hh_studio/scene_commands.gd"
+    },
+    "raw/source/studio/godot-addon/bundle_staging.py": {
+      "sha256": "3d614edbec8e9a7f5ad3caf2b9694d7498df129de95683952268621f91d68e43",
+      "size_bytes": 15005,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/godot-addon/bundle_staging.py"
+    },
+    "raw/source/studio/godot-addon/bundle_v2.py": {
+      "sha256": "2c5cdc71cdaf80f58bb93ec791e84bab8bd02cd4d9bdbd93d635db13583de62a",
+      "size_bytes": 8475,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/godot-addon/bundle_v2.py"
+    },
+    "raw/source/studio/godot-addon/cli_job.py": {
+      "sha256": "5a0f37bc129bde409a2657054fb091d637d838e442d45a69e7adc1f1527d4c88",
+      "size_bytes": 12672,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/godot-addon/cli_job.py"
+    },
+    "raw/source/studio/godot-addon/fixture_profile.py": {
+      "sha256": "25e1667dd930dcf0746b071fc29ea3460bc18d5fb9f3f83e806c1793028f21ae",
+      "size_bytes": 6020,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/godot-addon/fixture_profile.py"
+    },
+    "raw/source/studio/godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid": {
+      "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+      "size_bytes": 20,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid"
+    },
+    "raw/source/studio/godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid": {
+      "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+      "size_bytes": 20,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid"
+    },
+    "raw/source/studio/godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid": {
+      "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+      "size_bytes": 19,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid"
+    },
+    "raw/source/studio/godot-addon/fixture_profile/project.godot": {
+      "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+      "size_bytes": 282,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/godot-addon/fixture_profile/project.godot"
+    },
+    "raw/source/studio/godot-addon/fixture_profile/scripts/fixture_actor.gd.uid": {
+      "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+      "size_bytes": 20,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/godot-addon/fixture_profile/scripts/fixture_actor.gd.uid"
+    },
+    "raw/source/studio/godot-addon/fixture_profile/source-pins.json": {
+      "sha256": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2",
+      "size_bytes": 1873,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/godot-addon/fixture_profile/source-pins.json"
+    },
+    "raw/source/studio/host/blender/__init__.py": {
+      "sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90",
+      "size_bytes": 69,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/host/blender/__init__.py"
+    },
+    "raw/source/studio/host/blender/deadline.py": {
+      "sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926",
+      "size_bytes": 1130,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/host/blender/deadline.py"
+    },
+    "raw/source/studio/host/blender/export_job.py": {
+      "sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe",
+      "size_bytes": 13605,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/host/blender/export_job.py"
+    },
+    "raw/source/studio/host/blender/glb_preflight.py": {
+      "sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62",
+      "size_bytes": 11815,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/host/blender/glb_preflight.py"
+    },
+    "raw/source/studio/host/blender/ui_host.py": {
+      "sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35",
+      "size_bytes": 22464,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/host/blender/ui_host.py"
+    },
+    "raw/source/studio/host/core/limits.py": {
+      "sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f",
+      "size_bytes": 15813,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/host/core/limits.py"
+    },
+    "raw/source/studio/host/core/private_store.py": {
+      "sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476",
+      "size_bytes": 20476,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/host/core/private_store.py"
+    },
+    "raw/source/studio/host/core/safe_create.py": {
+      "sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606",
+      "size_bytes": 13170,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/host/core/safe_create.py"
+    },
+    "raw/source/studio/host/core/safe_open.py": {
+      "sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535",
+      "size_bytes": 12093,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/host/core/safe_open.py"
+    },
+    "raw/source/studio/host/replay/perf.py": {
+      "sha256": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7",
+      "size_bytes": 19085,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/host/replay/perf.py"
+    },
+    "raw/source/studio/host/replay/process_probe.py": {
+      "sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500",
+      "size_bytes": 5485,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/host/replay/process_probe.py"
+    },
+    "raw/source/studio/pipeline/__init__.py": {
+      "sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68",
+      "size_bytes": 79,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/pipeline/__init__.py"
+    },
+    "raw/source/studio/pipeline/native_job.py": {
+      "sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca",
+      "size_bytes": 12512,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/pipeline/native_job.py"
+    },
+    "raw/source/studio/protocol/__init__.py": {
+      "sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f",
+      "size_bytes": 881,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/protocol/__init__.py"
+    },
+    "raw/source/studio/protocol/_rfc8785/__init__.py": {
+      "sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b",
+      "size_bytes": 505,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/protocol/_rfc8785/__init__.py"
+    },
+    "raw/source/studio/protocol/_rfc8785/_impl.py": {
+      "sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec",
+      "size_bytes": 7251,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/protocol/_rfc8785/_impl.py"
+    },
+    "raw/source/studio/protocol/core.py": {
+      "sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e",
+      "size_bytes": 19886,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/protocol/core.py"
+    },
+    "raw/source/studio/protocol/jcs_godot.gd": {
+      "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+      "size_bytes": 10165,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/protocol/jcs_godot.gd"
+    },
+    "raw/source/studio/tests/replay/benchmark_job.py": {
+      "sha256": "be424a6f37ae573ac4bf40954b31017025daee2147699c80b05f9a0ab70e1611",
+      "size_bytes": 24991,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/tests/replay/benchmark_job.py"
+    },
+    "raw/source/studio/tests/replay/benchmark_native.gd": {
+      "sha256": "52fbd9af5c6191ada5baf1d7195a75685ed5e27a95f4d244af8b4d679f8c00f2",
+      "size_bytes": 51618,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/tests/replay/benchmark_native.gd"
+    },
+    "raw/source/studio/tests/replay/benchmark_plugin.cfg": {
+      "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092",
+      "size_bytes": 189,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/tests/replay/benchmark_plugin.cfg"
+    },
+    "raw/source/studio/tests/replay/benchmark_profile.py": {
+      "sha256": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233",
+      "size_bytes": 19625,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/tests/replay/benchmark_profile.py"
+    },
+    "raw/source/studio/tests/replay/benchmark_readiness.py": {
+      "sha256": "842db6244d93384932929544045654f089d67f6f304624b7348b7d5c4583ab68",
+      "size_bytes": 6746,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/tests/replay/benchmark_readiness.py"
+    },
+    "raw/source/studio/tests/replay/run_native_benchmark.py": {
+      "sha256": "e6b0f8e9711ac881cfa65b4537232c685ff577af0a13778a51cc54999b1c1fc7",
+      "size_bytes": 26986,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/tests/replay/run_native_benchmark.py"
+    },
+    "raw/source/studio/toolchain.lock.json": {
+      "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+      "size_bytes": 3026,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/studio/toolchain.lock.json"
+    },
+    "raw/source/zdoc/reviews/20260918-gt06-s95-native-isolation/native_isolation.py": {
+      "sha256": "1f26934049b4e6f02d5fef0bafffd9d4994b04ac1cd1654f063f468a5cee9860",
+      "size_bytes": 32059,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/zdoc/reviews/20260918-gt06-s95-native-isolation/native_isolation.py"
+    },
+    "raw/source/zdoc/reviews/20260918-gt06-s95-native-isolation/object_probe_s95.gd": {
+      "sha256": "8a1ef457b6d4612fbf61176bc99598ec046d72c081e01c73665bb3237680784e",
+      "size_bytes": 9120,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/source/zdoc/reviews/20260918-gt06-s95-native-isolation/object_probe_s95.gd"
+    },
+    "raw/supervisor-result.json": {
+      "sha256": "a001732902ae93e71756577dde8a923a13b656bb8e2eeda0ee4f7faaf2b69e43",
+      "size_bytes": 1003,
+      "source": "studio/.local/reviews/gt06-s95-native-isolation-01/supervisor-result.json"
+    },
+    "scheduler/scheduler-terminal.json": {
+      "sha256": "d41fa97ff1b3219032c1adda94b20a01792e39862af814356758d18fde65aa6a",
+      "size_bytes": 644,
+      "source": "zdoc/reviews/20260918-gt06-s95-native-result/scheduler-terminal.json"
+    },
+    "scheduler/scheduler-terminal.xml": {
+      "sha256": "2e17663e6ef991120910ff7eea1696c2ef7a5341e988270e649a2b45d74d82d9",
+      "size_bytes": 1742,
+      "source": "zdoc/reviews/20260918-gt06-s95-native-result/scheduler-terminal.xml"
+    }
+  },
+  "formal_acceptance": false,
+  "helper_closure_sha256": "4448ab35a6e087c8756063e0d8a025f4dc60a44329fcf56c4b270e6d1474302b",
+  "run_id": "gt06-s95-native-isolation-01",
+  "scope": "Exact diagnostic copies; isolated negative result is not absence of a leak or coupled benchmark PASS.",
+  "source_closure_sha256": "ebed9418490379bb902d2049e4a2f98a96e3378d09b369aef02684e16214c74e"
+}

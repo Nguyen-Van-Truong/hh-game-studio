@@ -1,0 +1,56 @@
+{
+  "actual_supervisor_exit": {
+    "actual_exit": {
+      "exit_code_uint32": 0,
+      "exit_filetime": 134342191703247421,
+      "observed_utc": "2026-09-18T15:32:50Z",
+      "source": "retained_handle_GetExitCodeProcess",
+      "wait_result": 0
+    },
+    "executable": "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "handle_closed": true,
+    "natural_exit_not_inferred": true,
+    "observed_utc": "2026-09-18T15:16:56Z",
+    "parent_pid": 39352,
+    "pid": 21072,
+    "process_start": "windows:134342182165779458"
+  },
+  "actual_supervisor_exit_missing": false,
+  "completed_diagnostic": true,
+  "elapsed_seconds": 954.1570000000065,
+  "eligible_for_dataset": false,
+  "errors": [],
+  "extra_outer_helper_process": false,
+  "formal_acceptance": false,
+  "full_benchmark": false,
+  "intended_outer_return_code": 0,
+  "job": {
+    "active_count": 0,
+    "assigned": true,
+    "close_uncertain": false,
+    "closed": true,
+    "configured": true,
+    "create_uncertain": false,
+    "failed_operations": [],
+    "handle_retained": false,
+    "native_error": null,
+    "tainted": false,
+    "zero_observed": true
+  },
+  "limits": {
+    "inner_benchmark_limits_changed": false,
+    "native_limit_flags": 8200,
+    "process_limit": 7,
+    "reused_s93_descriptive_wall_seconds": 7530,
+    "s93_descriptive_wall_is_not_applied": true,
+    "wall_enforcement": "s95_observer_watchdog",
+    "wall_seconds": 2160
+  },
+  "outer_job_active_before_cleanup": 0,
+  "outer_self_exit_observed": false,
+  "outer_self_exit_source": "Task Scheduler; not this report",
+  "popen_handle_closed": true,
+  "run_id": "gt06-s95-native-isolation-01",
+  "supervisor_popen_actual_exit_code": 0,
+  "timed_out": false
+}

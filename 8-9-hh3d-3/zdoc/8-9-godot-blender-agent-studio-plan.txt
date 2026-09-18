@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 18-09-2026, Asia/Saigon | Revision S95 | TRIỂN KHAI THEO GATE
+Ngày 18-09-2026, Asia/Saigon | Revision S96 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -16,7 +16,7 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 
 CURRENT_VALID_WP=GT-06
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=GT06_S95_LOOKUP_OBSERVATION_REPAIR_AND_ISOLATION
+IMPLEMENTATION=GT06_S96_COUPLED_PHASE_DIAGNOSTIC_PREPARATION
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
 GT01_PENDING=NONE
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S95
+PLAN_REVISION=S96
 EXECUTION_MODE=COORDINATOR_THREE_ASTRA_ULTRA_OWNER_20260918
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -61,13 +61,13 @@ GT06_CURRENT_SOURCE_CLOSURE=564e5b7877f49d33a1af84eaf3b3a7ddf4ea2f846c4161eb694c
 GT06_SOURCE_CHECKPOINT=ad81e944
 GT06_BENCHMARK_CAMPAIGN=gt06-s86-campaign-01
 GT06_BENCHMARK_STATUS=S86_FAILURE_RETAINED_OBJECTDB_GROWTH_BATCH17_20260918T120235Z
-GT06_ACTIVE_DIAGNOSTIC=gt06-s95-native-isolation-01; STARTED_20260918T151656Z; OBSERVED_LIVE_20260918T151759Z; DIAGNOSTIC_ONLY
-GT06_NEXT_ACTION=Keep S95 native-only source/helper fixed; query current task and short progress on heartbeat. On terminal verify raw/counters/sparse/actual exits/owned cleanup before deciding repair or coupled run.
+GT06_ACTIVE_DIAGNOSTIC=NONE; S95_NATIVE_COMPLETED_20260918T153250Z; TASK_RETIRED_20260918T153543Z; S96_PREPARING_NOT_LAUNCHED
+GT06_NEXT_ACTION=Validate bounded HTTP phase recorder and S96 coupled diagnostic composition, then freeze/preflight/launch one observed run. Preserve original runtime/profile/gates and reuse unaffected functional evidence.
 GT06_S88_SCHEDULER_TASK=OBSERVED_ABSENT_20260918; historic_delete_report_retained_in_chat; durable_delete_receipt_missing
 GT06_S90_DIAGNOSTIC=gt06-s90-lifecycle-attribution-01; preflight=gt06-s90-lifecycle-attribution-preflight-06; five_partial_batches; interrupted_before_batch5_capture; formal_acceptance=false; eligible_for_dataset=false
 GT06_DIAGNOSTIC_EXCLUSION=S81-S90 diagnostic and partial/failure prefixes are excluded from F13/F14 acceptance datasets; see s83-mapping requirements and each packet manifest.
 
-TIẾN ĐỘ HIỆN HÀNH — S95, ngày 18-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S96, ngày 18-09-2026
 GT-01–05 ACCEPTED; GT-06 IN_PROGRESS; GT-07–10 chưa mở.
 S93 kết thúc14:54:47Z, KHÔNG còn chạy. CAMPAIGN_STATUS_GAP batch6: host
 2033.1318ms>2000ms, native579.328ms. Có7partial batches, không fullrun/PASS.
@@ -98,16 +98,28 @@ Native40closure ebed9418490379bb902d2049e4a2f98a96e3378d09b369aef02684e16214c74e
 helper4448ab35a6e087c8756063e0d8a025f4dc60a44329fcf56c4b270e6d1474302b.
 Helper/preflight/launch: reviews/20260918-gt06-s95-native-isolation/.
 Checkpoint8136012c giữ failure/HTTP; cd777989 giữ helper/smoke/launcher.
-Lượt35×100 gt06-s95-native-isolation-01 dispatch15:16:56Z; task cùngtên
-\HHStudio.GT06.gt06-s95-native-isolation-01, raw studio/.local/reviews/ cùngID,
-outer sibling -outer. Quan sát15:17:59Z: schedulerstate4/instances0 (không
-suy từinstances0 là chết), outer39352/supervisor21072/child32268/editor11288
-sống và startidentity khớp, logbatch1cycle78 tiếp diễn, stderr0B. Đây là quan
-sát cótimestamp, heartbeat phảiquery lại. Ước lượng15–25phút cho lượt này,
-khôngETA toànplan; parent stage1800s, outer2160s, task40min. Giữ source/helper,
-không engine/test/hash audit nặng song song. Lịch10phút đã đọc lạiACTIVE.
-Native-only là experiment khác, không continuation S93,
-không có benchmark acceptance; thiếu host load/idle/ACK giới hạn kết luận âm.
+S95 native-only35×100 đã hoàn tất15:32:50Z, không còn chạy. Native937.112325s,
+outer954.157s; ObjectDB71127/resource6 ở cả35batch, maxheartbeat1102.852ms.
+Import26164/editor11288/child32268/supervisor21072 actualexit0; các Jobzero/
+closed/handlesreleased, schedulerstate3/result0/noinstances và knownPIDsabsent.
+Task đã retired15:35:43Z sau preservation. Packet120exactcopies/67rawartifacts:
+reviews/20260918-gt06-s95-native-result/, manifest
+e79551bccc6e746a0b6cb50653ec559fd3a1d99c59273d75be1e731deb201f0a.
+Strict analyzer actual47876exit0, khôngbindinggap; baseline chỉ4607selectedIDs
+(Tree102/TreeItem4493/Node3Dfamily12), còn66520ObjectDB ngoài inventory.
+Khônggrowthsnapshot nên identity sau baseline chưa được đo. Kết luận chỉ là
+không tái hiện trong workload native riêng; thiếu HTTP/idle/ACK và lifecycle
+khác coupledpostACK. Khôngclaimno-leak hoặc benchmarkPASS.
+
+S96 đang CHUẨN BỊ, chưalaunch: giữ runtimead81e944/profile, thêm bounded QPC
+phase recorder chỉ trong diagnostic wrapper, correlated loopback connection
+và firstfailure pre-event/open spans; không ghi payload/token hoặc fakeprogress.
+Ba worker: objectanalysis đã xong; recorder+focusedtests và coupledcomposition
+đang chuẩn bị. Root giữ raw/plan/checkpoint. Nextinstrumentedrun vẫn35×1000HTTP
++100native, originalgates, không nhập dataset. Terminal-only phase flush giảm
+I/O ảnh hưởng phép đo; nếu hardkill trướcfinally thì phaseevidence thiếu làGAP.
+Functional lane không đổi chỉ reuse khi exactdependency khớp; mapping/prep:
+reviews/20260918-gt06-s95-result-prep/. Không lặp fullcampaign mù.
 
 S93 raw: studio/.local/reviews/gt06-s93-sparse-attribution-01.
 Failure: reviews/20260918-gt06-s95-status-recovery/,96exactcopies/90rawartifacts,
