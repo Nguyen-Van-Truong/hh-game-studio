@@ -1,0 +1,121 @@
+{
+  "elapsed_seconds": 1982.796999999904,
+  "eligible_for_dataset": false,
+  "errors": [],
+  "formal_acceptance": false,
+  "limits": {
+    "diagnostic_only": true,
+    "inner_benchmark_limits_changed": false,
+    "limit_flags": 8200,
+    "process_limit": 7,
+    "wall_enforcement": "observer_watchdog",
+    "wall_seconds": 7530
+  },
+  "natural_exit_not_inferred": true,
+  "observed_utc": "2026-09-18T14:26:02Z",
+  "observer_actual_exit_not_yet_observed": true,
+  "observer_exit_code": 1,
+  "outer_job": {
+    "active_count": 0,
+    "assigned": true,
+    "close_uncertain": false,
+    "closed": true,
+    "configured": true,
+    "create_uncertain": false,
+    "failed_operations": [],
+    "handle_retained": false,
+    "native_error": null,
+    "tainted": false,
+    "zero_observed": true
+  },
+  "outer_job_active_before_cleanup": 0,
+  "processes": {
+    "editor": {
+      "actual_exit": {
+        "exit_code_uint32": 2,
+        "exit_filetime": 134342151583729983,
+        "observed_utc": "2026-09-18T14:25:58Z",
+        "source": "retained_handle_GetExitCodeProcess",
+        "wait_result": 0
+      },
+      "executable": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\tooling\\godot-4.7.2-stable\\Godot_v4.7.2-stable_win64.exe",
+      "handle_closed": true,
+      "natural_exit_not_inferred": true,
+      "observed_utc": "2026-09-18T13:53:07Z",
+      "parent_pid": 45548,
+      "pid": 22440,
+      "process_start": "windows:134342131878882630"
+    },
+    "editor_helper": {
+      "actual_exit": {
+        "exit_code_uint32": 2,
+        "exit_filetime": 134342151583430578,
+        "observed_utc": "2026-09-18T14:25:58Z",
+        "source": "retained_handle_GetExitCodeProcess",
+        "wait_result": 0
+      },
+      "executable": "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+      "handle_closed": true,
+      "natural_exit_not_inferred": true,
+      "observed_utc": "2026-09-18T13:53:07Z",
+      "parent_pid": 54540,
+      "pid": 45548,
+      "process_start": "windows:134342131878089828"
+    },
+    "host": {
+      "actual_exit": {
+        "exit_code_uint32": 1,
+        "exit_filetime": 134342151591417740,
+        "observed_utc": "2026-09-18T14:25:59Z",
+        "source": "retained_handle_GetExitCodeProcess",
+        "wait_result": 0
+      },
+      "executable": "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+      "handle_closed": true,
+      "natural_exit_not_inferred": true,
+      "observed_utc": "2026-09-18T13:53:00Z",
+      "parent_pid": 17164,
+      "pid": 54540,
+      "process_start": "windows:134342131808831811"
+    },
+    "host_helper": {
+      "actual_exit": {
+        "exit_code_uint32": 1,
+        "exit_filetime": 134342151591981743,
+        "observed_utc": "2026-09-18T14:25:59Z",
+        "source": "retained_handle_GetExitCodeProcess",
+        "wait_result": 0
+      },
+      "executable": "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+      "handle_closed": true,
+      "natural_exit_not_inferred": true,
+      "observed_utc": "2026-09-18T13:53:00Z",
+      "parent_pid": 51464,
+      "pid": 17164,
+      "process_start": "windows:134342131807456983"
+    },
+    "supervisor": {
+      "actual_exit": {
+        "exit_code_uint32": 1,
+        "exit_filetime": 134342151609756498,
+        "observed_utc": "2026-09-18T14:26:01Z",
+        "source": "retained_handle_GetExitCodeProcess",
+        "wait_result": 0
+      },
+      "executable": "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+      "handle_closed": true,
+      "natural_exit_not_inferred": true,
+      "observed_utc": "2026-09-18T13:52:59Z",
+      "parent_pid": 8536,
+      "pid": 51464,
+      "process_start": "windows:134342131793558920"
+    }
+  },
+  "run_id": "gt06-s91-sparse-attribution-01",
+  "scheduler_terminal_result_still_required": true,
+  "schema": "HH-GT06-S91-OBSERVER-TERMINAL-1",
+  "supervisor_popen_actual_exit_code": 1,
+  "supervisor_popen_handle_closed": true,
+  "timeout": false,
+  "unobserved_processes": []
+}

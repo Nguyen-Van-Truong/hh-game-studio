@@ -1,0 +1,29 @@
+{
+  "wrapper_pid": 7048,
+  "started_at": "2026-09-18T14:40:47.284403+00:00",
+  "argv": [
+    "python.exe",
+    "-B",
+    "full_probe.py"
+  ],
+  "exit_code": 0,
+  "target_pid": 49788,
+  "wrapper_exit_code": 0,
+  "timed_out": false,
+  "tree_verified": true,
+  "ownership": "gated_job_kill_on_close",
+  "stdout": "full-http-stdout.txt",
+  "stderr": "full-http-stderr.txt",
+  "host": "full-http-host.json",
+  "formal_acceptance": false,
+  "evidence_hashes": {
+    "full-http-host.json": "f266ee8941a031f904e12952c457dc25d5ca6eebfcddd1a993d567dac3e3a018",
+    "full-http-stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "full-http-stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "invocation.json": "8efbbbc22c6c021abeb81145504d1aa07b82b341d8b199db589a937e403583ad",
+    "child/command.json": "aeec51971e3316de4a3a0097439a18ba0d55bb8e80df7c3e2d9f87c9f37f6542",
+    "child/report.json": "a9191bd62f90427720cbf660cb10ad0964f90beb8aea106ad48aafff69152de9",
+    "child/commands/commands.jsonl": "80afd102f214fddac5366c261c31352f12e4b7d7ea2b1cbdd43a79467cc2e241",
+    "child/commands/commands.jsonl.guard": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

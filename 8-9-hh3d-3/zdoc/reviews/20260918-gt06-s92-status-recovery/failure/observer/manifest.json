@@ -1,0 +1,28 @@
+{
+  "artifacts": {
+    "claim.json": "91ace737ff93cebc6f4d707917e2cd30b1ac1c325b5aebbe940bedded3cd0b2c",
+    "editor-adoption.json": "1c090f820bc3ab79786281ee4119bff079f49972f9c9d3d70969e295869f511b",
+    "editor-exit.json": "42847f0aa4593d3f1bbcddace6635d6ffe5fb2b309ce3d013a8df2266060b4eb",
+    "editor_helper-exit.json": "c7ed8e3667db3cb3ce50e9956cbdfc6104b2bcba25869e32503f961e7c9306ff",
+    "host-adoption.json": "e4ee714b66c32ad62dde9ffedb8ab0fefc887ba2563f7c91d5d23945cbf51d0d",
+    "host-exit.json": "a3cdba4602209e692e85d95afffc25998f7e58baf0a43b309545820a15e7bcbb",
+    "host_helper-exit.json": "69856db2f6454fe9858038760c5d8964643ab7c4a477fecee21d142f4cda5843",
+    "supervisor-adoption.json": "3b09e20a69c926e54abad6c3532459d18f8d80cc776c6f83d5a15a7f07e4cc67",
+    "supervisor-console-stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "supervisor-console-stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "supervisor-exit.json": "4193f36181862f535e04ce9b0820a65ea6ddecde6b0ef32f0730f2ff69d3ea9c",
+    "terminal.json": "317cf0a6fa5133e891dff9e473b98a910f7351b2f58193f81fce2defac2455ee"
+  },
+  "eligible_for_dataset": false,
+  "formal_acceptance": false,
+  "helper_files": {
+    "diagnose_sequence_s91.py": "a7d6087218831527c69066c1519492e038f0c389dac85cd41d1bb2d0e221241a",
+    "launch_observer.py": "3469d0a4a761aed3f0673a2df8a478d136e6366619a1b0b200916604fd0dc8d2",
+    "register_task.ps1": "aee84c903840840a431c17d2df3b9b617993a55cd6484012907312bcde6cc547",
+    "test_launch_observer.py": "aaa71b0d61e6fbc71982af22a6bc8e494017f5e6886e8455c1e8056ec0c5ac34"
+  },
+  "request_sha256": "5d624bd63f2da0894a5954ea859b674f0fb84c803062db4ee25d3b0e16185e42",
+  "run_id": "gt06-s91-sparse-attribution-01",
+  "schema": "HH-GT06-S91-OBSERVER-MANIFEST-1",
+  "task_definition_sha256": "8f92aed25d17a0c0c402b4187cfdcdb7193d37f6a50b0b1bdbb7e53c1984737e"
+}

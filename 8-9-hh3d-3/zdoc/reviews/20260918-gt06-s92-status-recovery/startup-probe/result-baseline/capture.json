@@ -1,0 +1,32 @@
+{
+  "argv": [
+    "python.exe",
+    "-B",
+    "probe.py",
+    "baseline"
+  ],
+  "engine_runs": 0,
+  "evidence_hashes": {
+    "child/command-0.json": "ff5ee7698e3c593812affffaec90a268ca79b55e30c369d0951c11d31a195889",
+    "child/command-1.json": "2a1d6e9c185eb476712d72e54b907fd94d0a909c1cc4f81e6497a69486ec3a81",
+    "child/commands/commands.jsonl": "b2c660bc514e1cbf82657b3482c8f5ae3f438c6d0d8aedad733826c4b219eaf2",
+    "child/commands/commands.jsonl.guard": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "child/report.json": "e6fd605501c5290f75dcc62684f7266f9a0aeea3fc558701dcdd930f49e65d57",
+    "invocation.json": "481beec77765b4da551f3987a05e3cc5019b7c6ec5bd8d1bdb32766879c87578",
+    "startup-host.json": "d2e49ce15b74f66afda414f6c7dea2e1bf78157c7d86fd58f9cdbf842ccb87e3",
+    "startup-stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "startup-stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "exit_code": 0,
+  "formal_acceptance": false,
+  "host": "startup-host.json",
+  "ownership": "gated_job_kill_on_close",
+  "started_at": "2026-09-18T14:39:00.233995+00:00",
+  "stderr": "startup-stderr.txt",
+  "stdout": "startup-stdout.txt",
+  "target_pid": 31928,
+  "timed_out": false,
+  "tree_verified": true,
+  "wrapper_exit_code": 0,
+  "wrapper_pid": 52776
+}

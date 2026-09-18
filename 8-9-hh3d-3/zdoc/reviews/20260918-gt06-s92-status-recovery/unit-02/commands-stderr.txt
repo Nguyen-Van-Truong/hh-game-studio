@@ -1,0 +1,22 @@
+test_cancel_terminal_failure_retains_partial_response (studio.tests.replay.test_benchmark_commands.CommandProducerTests.test_cancel_terminal_failure_retains_partial_response) ... ok
+test_cleanup_held_is_retained_and_retry_is_explicit (studio.tests.replay.test_benchmark_commands.CommandProducerTests.test_cleanup_held_is_retained_and_retry_is_explicit) ... ok
+test_conflicting_digest_or_arbitrary_rejection_is_not_retryable (studio.tests.replay.test_benchmark_commands.CommandProducerTests.test_conflicting_digest_or_arbitrary_rejection_is_not_retryable) ... ok
+test_failure_keeps_partial_row_and_latches_no_retry (studio.tests.replay.test_benchmark_commands.CommandProducerTests.test_failure_keeps_partial_row_and_latches_no_retry) ... ok
+test_lost_lookup_responses_reconcile_same_ids_without_resubmit_or_extra_effect (studio.tests.replay.test_benchmark_commands.CommandProducerTests.test_lost_lookup_responses_reconcile_same_ids_without_resubmit_or_extra_effect) ... ok
+test_missing_discovery_response_does_not_create_progress_sample (studio.tests.replay.test_benchmark_commands.CommandProducerTests.test_missing_discovery_response_does_not_create_progress_sample) ... ok
+test_persistent_lookup_uncertainty_exhausts_original_budget_and_restores_timeout (studio.tests.replay.test_benchmark_commands.CommandProducerTests.test_persistent_lookup_uncertainty_exhausts_original_budget_and_restores_timeout) ... ok
+test_process_drift_and_bad_batch_order_fail_before_claim (studio.tests.replay.test_benchmark_commands.CommandProducerTests.test_process_drift_and_bad_batch_order_fail_before_claim) ... ok
+test_readback_duplicate_loss_and_hash_tamper_rejected (studio.tests.replay.test_benchmark_commands.CommandProducerTests.test_readback_duplicate_loss_and_hash_tamper_rejected) ... ok
+test_real_response_sampling_does_not_hide_a_two_second_setup_stall (studio.tests.replay.test_benchmark_commands.CommandProducerTests.test_real_response_sampling_does_not_hide_a_two_second_setup_stall) ... ok
+test_setup_records_real_http_returns_without_excluding_startup (studio.tests.replay.test_benchmark_commands.CommandProducerTests.test_setup_records_real_http_returns_without_excluding_startup) ... ok
+test_terminal_readback_hash_mismatch_is_persisted_without_retry (studio.tests.replay.test_benchmark_commands.CommandProducerTests.test_terminal_readback_hash_mismatch_is_persisted_without_retry) ... ok
+test_two_small_actual_http_batches_keep_identity_and_effect_chain (studio.tests.replay.test_benchmark_commands.CommandProducerTests.test_two_small_actual_http_batches_keep_identity_and_effect_chain) ... ok
+test_unexpected_diagnostic_cannot_be_hidden_by_expected_rejections (studio.tests.replay.test_benchmark_commands.CommandProducerTests.test_unexpected_diagnostic_cannot_be_hidden_by_expected_rejections) ... ok
+test_wrong_auth_is_real_rejection_and_cannot_add_effect (studio.tests.replay.test_benchmark_commands.CommandProducerTests.test_wrong_auth_is_real_rejection_and_cannot_add_effect) ... ok
+test_wrong_identity_is_persisted_and_never_reconciled (studio.tests.replay.test_benchmark_commands.CommandProducerTests.test_wrong_identity_is_persisted_and_never_reconciled) ... ok
+test_native_identity_rss_handles_and_applicability (studio.tests.replay.test_benchmark_commands.NativeObserverTests.test_native_identity_rss_handles_and_applicability) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 5.241s
+
+OK

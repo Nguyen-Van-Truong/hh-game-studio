@@ -1,0 +1,563 @@
+{
+  "cancel": {
+    "command_id": "gt06.s93.baseline.b0.cancel",
+    "delay_ms": 1000,
+    "kind": "cancel",
+    "lookup_attempts": [
+      {
+        "code": "CANCELED_BEFORE_APPLY",
+        "command_id": "gt06.s93.baseline.b0.cancel",
+        "ended_mono_us": 640565625090,
+        "request_digest": "sha256:e1a714d97f4a54c7d6c6a5c787c3fed5550825c38890b5cbd323a2d4572e452f",
+        "started_mono_us": 640565590398,
+        "status": "CANCELED"
+      }
+    ],
+    "no_effect": true,
+    "receipt_mono_us": 640565590267,
+    "receipt_ms": 105.4242,
+    "request_digest": "sha256:e1a714d97f4a54c7d6c6a5c787c3fed5550825c38890b5cbd323a2d4572e452f",
+    "separate_from_mix": true,
+    "started_mono_us": 640565484842,
+    "status": "CANCELED",
+    "terminal_mono_us": 640565625090,
+    "terminal_ms": 140.2474,
+    "terminal_response": {
+      "code": "CANCELED_BEFORE_APPLY",
+      "command_id": "gt06.s93.baseline.b0.cancel",
+      "postconditions": {
+        "no_effect": true,
+        "request_digest": "sha256:e1a714d97f4a54c7d6c6a5c787c3fed5550825c38890b5cbd323a2d4572e452f"
+      },
+      "result_hash": null,
+      "result_revision": null,
+      "status": "CANCELED"
+    },
+    "terminal_status": "CANCELED"
+  },
+  "commands": [
+    {
+      "command_id": "gt06.s93.baseline.b0.inspect.0",
+      "effect_count_after": 0,
+      "effect_count_before": 0,
+      "group": 0,
+      "kind": "inspect",
+      "latency_ms": 195.0033,
+      "lookup_attempts": [
+        {
+          "code": "READBACK_CONFIRMED",
+          "command_id": "gt06.s93.baseline.b0.inspect.0",
+          "ended_mono_us": 640564186946,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 640564082616,
+          "status": "COMMITTED"
+        }
+      ],
+      "ordinal": 0,
+      "receipt_code": "QUEUED",
+      "receipt_mono_us": 640564082483,
+      "receipt_ms": 90.5407,
+      "receipt_status": "ACCEPTED_PENDING",
+      "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+      "result_hash": "sha256:38d861ba3b44f197a1e1bd13860d7b47e47ee7d4c4fab0bcde4a21c3458d8ebe",
+      "snapshot": {
+        "effect_count": 0,
+        "revision": "rev-0",
+        "value": 0
+      },
+      "started_mono_us": 640563991943,
+      "terminal_code": "READBACK_CONFIRMED",
+      "terminal_mono_us": 640564186946,
+      "terminal_ms": 195.0033,
+      "terminal_response": {
+        "code": "READBACK_CONFIRMED",
+        "command_id": "gt06.s93.baseline.b0.inspect.0",
+        "postconditions": {
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "snapshot": {
+            "effect_count": 0,
+            "revision": "rev-0",
+            "value": 0
+          }
+        },
+        "result_hash": "sha256:38d861ba3b44f197a1e1bd13860d7b47e47ee7d4c4fab0bcde4a21c3458d8ebe",
+        "result_revision": "rev-0",
+        "status": "COMMITTED"
+      },
+      "terminal_status": "COMMITTED"
+    },
+    {
+      "command_id": "gt06.s93.baseline.b0.inspect.1",
+      "effect_count_after": 0,
+      "effect_count_before": 0,
+      "group": 0,
+      "kind": "inspect",
+      "latency_ms": 158.1925,
+      "lookup_attempts": [
+        {
+          "code": "READBACK_CONFIRMED",
+          "command_id": "gt06.s93.baseline.b0.inspect.1",
+          "ended_mono_us": 640564345244,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 640564257552,
+          "status": "COMMITTED"
+        }
+      ],
+      "ordinal": 1,
+      "receipt_code": "QUEUED",
+      "receipt_mono_us": 640564257428,
+      "receipt_ms": 70.3765,
+      "receipt_status": "ACCEPTED_PENDING",
+      "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+      "result_hash": "sha256:38d861ba3b44f197a1e1bd13860d7b47e47ee7d4c4fab0bcde4a21c3458d8ebe",
+      "snapshot": {
+        "effect_count": 0,
+        "revision": "rev-0",
+        "value": 0
+      },
+      "started_mono_us": 640564187051,
+      "terminal_code": "READBACK_CONFIRMED",
+      "terminal_mono_us": 640564345244,
+      "terminal_ms": 158.1925,
+      "terminal_response": {
+        "code": "READBACK_CONFIRMED",
+        "command_id": "gt06.s93.baseline.b0.inspect.1",
+        "postconditions": {
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "snapshot": {
+            "effect_count": 0,
+            "revision": "rev-0",
+            "value": 0
+          }
+        },
+        "result_hash": "sha256:38d861ba3b44f197a1e1bd13860d7b47e47ee7d4c4fab0bcde4a21c3458d8ebe",
+        "result_revision": "rev-0",
+        "status": "COMMITTED"
+      },
+      "terminal_status": "COMMITTED"
+    },
+    {
+      "command_id": "gt06.s93.baseline.b0.inspect.2",
+      "effect_count_after": 0,
+      "effect_count_before": 0,
+      "group": 0,
+      "kind": "inspect",
+      "latency_ms": 153.168,
+      "lookup_attempts": [
+        {
+          "code": "READBACK_CONFIRMED",
+          "command_id": "gt06.s93.baseline.b0.inspect.2",
+          "ended_mono_us": 640564498510,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 640564414016,
+          "status": "COMMITTED"
+        }
+      ],
+      "ordinal": 2,
+      "receipt_code": "QUEUED",
+      "receipt_mono_us": 640564413795,
+      "receipt_ms": 68.4529,
+      "receipt_status": "ACCEPTED_PENDING",
+      "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+      "result_hash": "sha256:38d861ba3b44f197a1e1bd13860d7b47e47ee7d4c4fab0bcde4a21c3458d8ebe",
+      "snapshot": {
+        "effect_count": 0,
+        "revision": "rev-0",
+        "value": 0
+      },
+      "started_mono_us": 640564345342,
+      "terminal_code": "READBACK_CONFIRMED",
+      "terminal_mono_us": 640564498510,
+      "terminal_ms": 153.168,
+      "terminal_response": {
+        "code": "READBACK_CONFIRMED",
+        "command_id": "gt06.s93.baseline.b0.inspect.2",
+        "postconditions": {
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "snapshot": {
+            "effect_count": 0,
+            "revision": "rev-0",
+            "value": 0
+          }
+        },
+        "result_hash": "sha256:38d861ba3b44f197a1e1bd13860d7b47e47ee7d4c4fab0bcde4a21c3458d8ebe",
+        "result_revision": "rev-0",
+        "status": "COMMITTED"
+      },
+      "terminal_status": "COMMITTED"
+    },
+    {
+      "command_id": "gt06.s93.baseline.b0.inspect.3",
+      "effect_count_after": 0,
+      "effect_count_before": 0,
+      "group": 0,
+      "kind": "inspect",
+      "latency_ms": 160.3803,
+      "lookup_attempts": [
+        {
+          "code": "READBACK_CONFIRMED",
+          "command_id": "gt06.s93.baseline.b0.inspect.3",
+          "ended_mono_us": 640564659010,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 640564570379,
+          "status": "COMMITTED"
+        }
+      ],
+      "ordinal": 3,
+      "receipt_code": "QUEUED",
+      "receipt_mono_us": 640564570251,
+      "receipt_ms": 71.6211,
+      "receipt_status": "ACCEPTED_PENDING",
+      "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+      "result_hash": "sha256:38d861ba3b44f197a1e1bd13860d7b47e47ee7d4c4fab0bcde4a21c3458d8ebe",
+      "snapshot": {
+        "effect_count": 0,
+        "revision": "rev-0",
+        "value": 0
+      },
+      "started_mono_us": 640564498630,
+      "terminal_code": "READBACK_CONFIRMED",
+      "terminal_mono_us": 640564659010,
+      "terminal_ms": 160.3803,
+      "terminal_response": {
+        "code": "READBACK_CONFIRMED",
+        "command_id": "gt06.s93.baseline.b0.inspect.3",
+        "postconditions": {
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "snapshot": {
+            "effect_count": 0,
+            "revision": "rev-0",
+            "value": 0
+          }
+        },
+        "result_hash": "sha256:38d861ba3b44f197a1e1bd13860d7b47e47ee7d4c4fab0bcde4a21c3458d8ebe",
+        "result_revision": "rev-0",
+        "status": "COMMITTED"
+      },
+      "terminal_status": "COMMITTED"
+    },
+    {
+      "command_id": "gt06.s93.baseline.b0.inspect.4",
+      "effect_count_after": 0,
+      "effect_count_before": 0,
+      "group": 0,
+      "kind": "inspect",
+      "latency_ms": 158.0195,
+      "lookup_attempts": [
+        {
+          "code": "READBACK_CONFIRMED",
+          "command_id": "gt06.s93.baseline.b0.inspect.4",
+          "ended_mono_us": 640564817134,
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "started_mono_us": 640564730166,
+          "status": "COMMITTED"
+        }
+      ],
+      "ordinal": 4,
+      "receipt_code": "QUEUED",
+      "receipt_mono_us": 640564730015,
+      "receipt_ms": 70.9,
+      "receipt_status": "ACCEPTED_PENDING",
+      "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+      "result_hash": "sha256:38d861ba3b44f197a1e1bd13860d7b47e47ee7d4c4fab0bcde4a21c3458d8ebe",
+      "snapshot": {
+        "effect_count": 0,
+        "revision": "rev-0",
+        "value": 0
+      },
+      "started_mono_us": 640564659115,
+      "terminal_code": "READBACK_CONFIRMED",
+      "terminal_mono_us": 640564817134,
+      "terminal_ms": 158.0195,
+      "terminal_response": {
+        "code": "READBACK_CONFIRMED",
+        "command_id": "gt06.s93.baseline.b0.inspect.4",
+        "postconditions": {
+          "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+          "snapshot": {
+            "effect_count": 0,
+            "revision": "rev-0",
+            "value": 0
+          }
+        },
+        "result_hash": "sha256:38d861ba3b44f197a1e1bd13860d7b47e47ee7d4c4fab0bcde4a21c3458d8ebe",
+        "result_revision": "rev-0",
+        "status": "COMMITTED"
+      },
+      "terminal_status": "COMMITTED"
+    },
+    {
+      "command_id": "gt06.s93.baseline.b0.rejected.0",
+      "effect_count_after": 0,
+      "effect_count_before": 0,
+      "group": 0,
+      "kind": "rejected",
+      "latency_ms": 2.1771,
+      "lookup_attempts": [],
+      "ordinal": 5,
+      "receipt_code": "INVALID_FIXTURE_PAYLOAD",
+      "receipt_mono_us": 640564819447,
+      "receipt_ms": 2.1771,
+      "receipt_status": "REJECTED",
+      "request_digest": "sha256:edbec0e4931c9e3bbed7a3ff9dbd0252ba1d25e8e8211c0276b99f55a84f8767",
+      "started_mono_us": 640564817270,
+      "terminal_status": "REJECTED"
+    },
+    {
+      "command_id": "gt06.s93.baseline.b0.rejected.1",
+      "effect_count_after": 0,
+      "effect_count_before": 0,
+      "group": 0,
+      "kind": "rejected",
+      "latency_ms": 21.6906,
+      "lookup_attempts": [],
+      "ordinal": 6,
+      "receipt_code": "INVALID_FIXTURE_PAYLOAD",
+      "receipt_mono_us": 640564841294,
+      "receipt_ms": 21.6906,
+      "receipt_status": "REJECTED",
+      "request_digest": "sha256:edbec0e4931c9e3bbed7a3ff9dbd0252ba1d25e8e8211c0276b99f55a84f8767",
+      "started_mono_us": 640564819603,
+      "terminal_status": "REJECTED"
+    },
+    {
+      "command_id": "gt06.s93.baseline.b0.rejected.2",
+      "effect_count_after": 0,
+      "effect_count_before": 0,
+      "group": 0,
+      "kind": "rejected",
+      "latency_ms": 1.8219,
+      "lookup_attempts": [],
+      "ordinal": 7,
+      "receipt_code": "INVALID_FIXTURE_PAYLOAD",
+      "receipt_mono_us": 640564843280,
+      "receipt_ms": 1.8219,
+      "receipt_status": "REJECTED",
+      "request_digest": "sha256:edbec0e4931c9e3bbed7a3ff9dbd0252ba1d25e8e8211c0276b99f55a84f8767",
+      "started_mono_us": 640564841459,
+      "terminal_status": "REJECTED"
+    },
+    {
+      "command_id": "gt06.s93.baseline.b0.admitted.0",
+      "effect_count_after": 1,
+      "effect_count_before": 0,
+      "group": 0,
+      "kind": "admitted",
+      "latency_ms": 108.76,
+      "lookup_attempts": [
+        {
+          "code": "READBACK_CONFIRMED",
+          "command_id": "gt06.s93.baseline.b0.admitted.0",
+          "ended_mono_us": 640565079120,
+          "request_digest": "sha256:39a97c75383ef1d27e5d100ea66f9caefe8a65d32a5809b4421ec039f75689fc",
+          "started_mono_us": 640564952512,
+          "status": "COMMITTED"
+        }
+      ],
+      "ordinal": 8,
+      "receipt_code": "QUEUED",
+      "receipt_mono_us": 640564952194,
+      "receipt_ms": 108.76,
+      "receipt_status": "ACCEPTED_PENDING",
+      "request_digest": "sha256:39a97c75383ef1d27e5d100ea66f9caefe8a65d32a5809b4421ec039f75689fc",
+      "result_hash": "sha256:3941b1d6e1201262df92fb41ce71e60f43e88e4d3fc25a777f7e6ebac931f541",
+      "snapshot": {
+        "effect_count": 1,
+        "revision": "rev-1",
+        "value": 1
+      },
+      "started_mono_us": 640564843434,
+      "terminal_code": "READBACK_CONFIRMED",
+      "terminal_mono_us": 640565079120,
+      "terminal_ms": 235.6862,
+      "terminal_response": {
+        "code": "READBACK_CONFIRMED",
+        "command_id": "gt06.s93.baseline.b0.admitted.0",
+        "postconditions": {
+          "request_digest": "sha256:39a97c75383ef1d27e5d100ea66f9caefe8a65d32a5809b4421ec039f75689fc",
+          "snapshot": {
+            "effect_count": 1,
+            "revision": "rev-1",
+            "value": 1
+          }
+        },
+        "result_hash": "sha256:3941b1d6e1201262df92fb41ce71e60f43e88e4d3fc25a777f7e6ebac931f541",
+        "result_revision": "rev-1",
+        "status": "COMMITTED"
+      },
+      "terminal_status": "COMMITTED"
+    },
+    {
+      "command_id": "gt06.s93.baseline.b0.admitted.1",
+      "effect_count_after": 2,
+      "effect_count_before": 1,
+      "group": 0,
+      "kind": "admitted",
+      "latency_ms": 108.8885,
+      "lookup_attempts": [
+        {
+          "code": "READBACK_CONFIRMED",
+          "command_id": "gt06.s93.baseline.b0.admitted.1",
+          "ended_mono_us": 640565318928,
+          "request_digest": "sha256:e298098f9b8815d5265c62bc9d7c9830080f6a2c5a2dd19199d6ee4163df22ad",
+          "started_mono_us": 640565188338,
+          "status": "COMMITTED"
+        }
+      ],
+      "ordinal": 9,
+      "receipt_code": "QUEUED",
+      "receipt_mono_us": 640565188159,
+      "receipt_ms": 108.8885,
+      "receipt_status": "ACCEPTED_PENDING",
+      "request_digest": "sha256:e298098f9b8815d5265c62bc9d7c9830080f6a2c5a2dd19199d6ee4163df22ad",
+      "result_hash": "sha256:44dbadbb19f4a1cd430c90bef5827b6152787014d1e65c0e24294d6202b45d38",
+      "snapshot": {
+        "effect_count": 2,
+        "revision": "rev-2",
+        "value": 2
+      },
+      "started_mono_us": 640565079270,
+      "terminal_code": "READBACK_CONFIRMED",
+      "terminal_mono_us": 640565318928,
+      "terminal_ms": 239.6576,
+      "terminal_response": {
+        "code": "READBACK_CONFIRMED",
+        "command_id": "gt06.s93.baseline.b0.admitted.1",
+        "postconditions": {
+          "request_digest": "sha256:e298098f9b8815d5265c62bc9d7c9830080f6a2c5a2dd19199d6ee4163df22ad",
+          "snapshot": {
+            "effect_count": 2,
+            "revision": "rev-2",
+            "value": 2
+          }
+        },
+        "result_hash": "sha256:44dbadbb19f4a1cd430c90bef5827b6152787014d1e65c0e24294d6202b45d38",
+        "result_revision": "rev-2",
+        "status": "COMMITTED"
+      },
+      "terminal_status": "COMMITTED"
+    }
+  ],
+  "complete_command_mix": false,
+  "diagnostic_retention": "bounded host ring; every expected rejection retained in command rows; unexpected codes fail at each response",
+  "dropped_commands": 0,
+  "dropped_telemetry": 0,
+  "effect_count_after": 2,
+  "effect_count_before": 0,
+  "effects_kind": "in_process_mock_fixture",
+  "effects_per_admission": [
+    1,
+    1
+  ],
+  "ended_mono_us": 640565625967,
+  "host_process": {
+    "pid": 31928,
+    "process_start": "windows:134342159403750014"
+  },
+  "host_response_mono_us": [
+    640563944792,
+    640564082483,
+    640564186946,
+    640564257428,
+    640564345244,
+    640564413795,
+    640564498510,
+    640564570251,
+    640564659010,
+    640564730015,
+    640564817134,
+    640564819447,
+    640564841294,
+    640564843280,
+    640564952194,
+    640565079120,
+    640565188159,
+    640565318928,
+    640565484710,
+    640565590267,
+    640565625090,
+    640565625967
+  ],
+  "index": 0,
+  "journal_bytes": 16878318,
+  "latency_ms": {
+    "admitted": [
+      108.76,
+      108.8885
+    ],
+    "inspect": [
+      195.0033,
+      158.1925,
+      153.168,
+      160.3803,
+      158.0195
+    ],
+    "rejected": [
+      2.1771,
+      21.6906,
+      1.8219
+    ]
+  },
+  "max_status_gap_ms": 165.7822,
+  "memory_after": {
+    "counters": {
+      "held_handles": {
+        "unavailable_reason": null,
+        "value": 174
+      },
+      "objects": {
+        "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+        "value": null
+      },
+      "resources": {
+        "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+        "value": null
+      },
+      "rss_bytes": {
+        "unavailable_reason": null,
+        "value": 33992704
+      }
+    },
+    "monotonic_us": 640565625838,
+    "process": {
+      "pid": 31928,
+      "process_start": "windows:134342159403750014"
+    }
+  },
+  "memory_before": {
+    "counters": {
+      "held_handles": {
+        "unavailable_reason": null,
+        "value": 174
+      },
+      "objects": {
+        "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+        "value": null
+      },
+      "resources": {
+        "unavailable_reason": "NOT_APPLICABLE_PYTHON_HOST",
+        "value": null
+      },
+      "rss_bytes": {
+        "unavailable_reason": null,
+        "value": 33923072
+      }
+    },
+    "monotonic_us": 640563991832,
+    "process": {
+      "pid": 31928,
+      "process_start": "windows:134342159403750014"
+    }
+  },
+  "mode": "diagnostic",
+  "native_acceptance": false,
+  "observation_kind": "native_windows_process_probe",
+  "run_id": "gt06.s93.baseline",
+  "schema_id": "hh-studio.benchmark-command-batch",
+  "schema_version": "1.1.0",
+  "started_mono_us": 640563944792,
+  "status": "DIAGNOSTIC",
+  "status_gap_scope": "host command-lane response progress; not editor UI heartbeat",
+  "transport_kind": "accepted_loopback_fixture_http",
+  "warmup": true
+}

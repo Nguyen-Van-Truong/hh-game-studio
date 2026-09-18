@@ -1,0 +1,20 @@
+{
+  "wrapper_pid": 37088,
+  "started_at": "2026-09-18T14:37:07.773890+00:00",
+  "argv": [
+    "python.exe",
+    "-B",
+    "-c",
+    "import unittest,sys; suite=unittest.TestSuite(unittest.defaultTestLoader.loadTestsFromName('studio.tests.replay.'+n) for n in ['test_benchmark_commands','test_benchmark_assembly','test_benchmark_campaign']); r=unittest.TextTestRunner(verbosity=2).run(suite); sys.exit(not r.wasSuccessful())"
+  ],
+  "exit_code": 1,
+  "target_pid": 17984,
+  "wrapper_exit_code": 0,
+  "timed_out": false,
+  "tree_verified": true,
+  "ownership": "gated_job_kill_on_close",
+  "stdout": "affected-stdout.txt",
+  "stderr": "affected-stderr.txt",
+  "host": "affected-host.json",
+  "source_unchanged": true
+}

@@ -1,0 +1,30 @@
+{
+  "formal_acceptance": false,
+  "helpers": {
+    "diagnose_sequence_s91.py": {
+      "sha256": "5b93e33f9589c38889d8cc9ae6cf69e6c98d8e0624753ccf535b5e3a3a168cae",
+      "same_as_s91": false
+    },
+    "object_probe_s91.gd": {
+      "sha256": "0837a4a6d21715c3706ce376750dc2f28ebae7f4f214f2988b4ea90a71a25281",
+      "same_as_s91": true
+    },
+    "patch_native_s91.py": {
+      "sha256": "f4226f40839e40579ae5c489cfd33800e3739bb6e280193c38a54414afaf2bc0",
+      "same_as_s91": true
+    },
+    "launch_observer.py": {
+      "sha256": "aebbff3662c03f6e130354a0ea99a53f00da01f948b632c3fca9adbe48e0cad6",
+      "same_as_s91": false
+    },
+    "register_task.ps1": {
+      "sha256": "e84c3f32d74a9129cb3512f202938af2b5093cc1cf72d035a337f631833ff465",
+      "same_as_s91": false
+    },
+    "test_launch_observer.py": {
+      "sha256": "aaa71b0d61e6fbc71982af22a6bc8e494017f5e6886e8455c1e8056ec0c5ac34",
+      "same_as_s91": true
+    }
+  },
+  "scope": "Run IDs, launch directory and expected runtime closure rebound; probe and patch bytes unchanged."
+}

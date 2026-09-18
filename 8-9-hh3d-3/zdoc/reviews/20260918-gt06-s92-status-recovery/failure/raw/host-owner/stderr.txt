@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260918-gt06-s91-sparse-attribution\diagnose_sequence_s91.py", line 238, in <module>
+    raise SystemExit(child())
+                     ^^^^^^^
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\zdoc\reviews\20260918-gt06-s91-sparse-attribution\diagnose_sequence_s91.py", line 135, in child
+    c.run_child(output)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\run_benchmark_campaign.py", line 868, in run_child
+    screen_sample(sample, baseline_memory)
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\run_benchmark_campaign.py", line 273, in screen_sample
+    require(sample['max_status_gap_ms'] <= 2000, 'CAMPAIGN_STATUS_GAP')
+  File "D:\dataDiskD\intellji\hoanhaosocial\hoanhaonew-20-6-2025\hh-game-studio\8-9-hh3d-3\studio\tests\replay\benchmark_job.py", line 46, in require
+    raise BenchmarkJobError(code)
+studio.tests.replay.benchmark_job.BenchmarkJobError: CAMPAIGN_STATUS_GAP

@@ -1,0 +1,511 @@
+{
+  "arm": "repaired",
+  "batches": [
+    {
+      "commands": 10,
+      "effect_count_after": 2,
+      "effect_count_before": 0,
+      "index": 0,
+      "original_reported_gap_ms": 171.5723,
+      "schema_version": "1.2.0",
+      "setup_spans": [
+        {
+          "ended_ns": 640582987794200,
+          "kind": "discover",
+          "phase": "batch-0",
+          "returned": true,
+          "started_ns": 640582979941000
+        },
+        {
+          "ended_ns": 640583030344100,
+          "kind": "lease",
+          "phase": "batch-0",
+          "returned": true,
+          "started_ns": 640582987806400
+        }
+      ],
+      "supplemental_gap_including_observed_setup_returns_ms": 171.572
+    },
+    {
+      "commands": 10,
+      "effect_count_after": 4,
+      "effect_count_before": 2,
+      "index": 1,
+      "original_reported_gap_ms": 156.8794,
+      "schema_version": "1.2.0",
+      "setup_spans": [
+        {
+          "ended_ns": 640584677972500,
+          "kind": "discover",
+          "phase": "batch-1",
+          "returned": true,
+          "started_ns": 640584675705300
+        },
+        {
+          "ended_ns": 640584716878900,
+          "kind": "lease",
+          "phase": "batch-1",
+          "returned": true,
+          "started_ns": 640584678002000
+        }
+      ],
+      "supplemental_gap_including_observed_setup_returns_ms": 156.879
+    }
+  ],
+  "closed": true,
+  "completed": true,
+  "eligible_for_dataset": false,
+  "engine_runs": 0,
+  "formal_acceptance": false,
+  "history_bytes": 16867309,
+  "history_sha256": "7fb11ce7c79270cd74fe4ef6941065e358ac9004610ee4cd47a6ff22d5472003",
+  "history_unchanged": true,
+  "loaded_modules": {
+    "studio.host.core.journal": {
+      "path": "studio/host/core/journal.py",
+      "sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6"
+    },
+    "studio.host.core.limits": {
+      "path": "studio/host/core/limits.py",
+      "sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f"
+    },
+    "studio.host.core.redaction": {
+      "path": "studio/host/core/redaction.py",
+      "sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f"
+    },
+    "studio.host.core.transport": {
+      "path": "studio/host/core/transport.py",
+      "sha256": "1ec03356b1cb8c8987e1604bcb164aea6a9934dbe259451c19e12de36398aba0"
+    },
+    "studio.host.replay.disk_journal_index": {
+      "path": "studio/host/replay/disk_journal_index.py",
+      "sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28"
+    },
+    "studio.host.replay.process_probe": {
+      "path": "studio/host/replay/process_probe.py",
+      "sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500"
+    },
+    "studio.host.replay.verified_journal": {
+      "path": "studio/host/replay/verified_journal.py",
+      "sha256": "129baa4d9e08c8a1d5acf2ea05c9c89a4fdddb53ca6f3baf2d61311ab98e62ab"
+    },
+    "studio.protocol": {
+      "path": "studio/protocol/__init__.py",
+      "sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f"
+    },
+    "studio.protocol._rfc8785": {
+      "path": "studio/protocol/_rfc8785/__init__.py",
+      "sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b"
+    },
+    "studio.protocol._rfc8785._impl": {
+      "path": "studio/protocol/_rfc8785/_impl.py",
+      "sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec"
+    },
+    "studio.protocol.core": {
+      "path": "studio/protocol/core.py",
+      "sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e"
+    },
+    "studio.tests.replay.benchmark_commands": {
+      "path": "studio/tests/replay/benchmark_commands.py",
+      "sha256": "d708578a3e3cd37f7cedfe85452529b241d1d987cb3be120fd6b4e3220e43477"
+    },
+    "studio.tests.replay.benchmark_transport": {
+      "path": "studio/tests/replay/benchmark_transport.py",
+      "sha256": "87875809baa4845fcffba8e2c7d82f7a5bce833099c89d4852f2aab931c34df0"
+    }
+  },
+  "scope": "Two ten-command diagnostics, fresh distinct project on copied history; not restoration of old fixture or reproduction of S91 environmental conditions",
+  "source_unchanged": true,
+  "spans": [
+    {
+      "ended_ns": 640582977526100,
+      "kind": "observe",
+      "phase": "initialize",
+      "returned": true,
+      "started_ns": 640582976450400
+    },
+    {
+      "ended_ns": 640582979932000,
+      "kind": "issue",
+      "phase": "batch-0",
+      "returned": true,
+      "started_ns": 640582977581000
+    },
+    {
+      "ended_ns": 640582987794200,
+      "kind": "discover",
+      "phase": "batch-0",
+      "returned": true,
+      "started_ns": 640582979941000
+    },
+    {
+      "ended_ns": 640583030344100,
+      "kind": "lease",
+      "phase": "batch-0",
+      "returned": true,
+      "started_ns": 640582987806400
+    },
+    {
+      "ended_ns": 640583031400900,
+      "kind": "observe",
+      "phase": "batch-0",
+      "returned": true,
+      "started_ns": 640583030358700
+    },
+    {
+      "ended_ns": 640583031493800,
+      "kind": "request",
+      "phase": "batch-0",
+      "returned": true,
+      "started_ns": 640583031423400
+    },
+    {
+      "ended_ns": 640583124459100,
+      "kind": "submit",
+      "phase": "batch-0",
+      "returned": true,
+      "started_ns": 640583031495800
+    },
+    {
+      "ended_ns": 640583230776200,
+      "kind": "request",
+      "phase": "batch-0",
+      "returned": true,
+      "started_ns": 640583230711100
+    },
+    {
+      "ended_ns": 640583305819900,
+      "kind": "submit",
+      "phase": "batch-0",
+      "returned": true,
+      "started_ns": 640583230778900
+    },
+    {
+      "ended_ns": 640583391774800,
+      "kind": "request",
+      "phase": "batch-0",
+      "returned": true,
+      "started_ns": 640583391737100
+    },
+    {
+      "ended_ns": 640583472952700,
+      "kind": "submit",
+      "phase": "batch-0",
+      "returned": true,
+      "started_ns": 640583391776600
+    },
+    {
+      "ended_ns": 640583571416600,
+      "kind": "request",
+      "phase": "batch-0",
+      "returned": true,
+      "started_ns": 640583571357000
+    },
+    {
+      "ended_ns": 640583648690000,
+      "kind": "submit",
+      "phase": "batch-0",
+      "returned": true,
+      "started_ns": 640583571419000
+    },
+    {
+      "ended_ns": 640583744397600,
+      "kind": "request",
+      "phase": "batch-0",
+      "returned": true,
+      "started_ns": 640583744350800
+    },
+    {
+      "ended_ns": 640583813443400,
+      "kind": "submit",
+      "phase": "batch-0",
+      "returned": true,
+      "started_ns": 640583744399600
+    },
+    {
+      "ended_ns": 640583902361000,
+      "kind": "request",
+      "phase": "batch-0",
+      "returned": true,
+      "started_ns": 640583902292000
+    },
+    {
+      "ended_ns": 640583904684300,
+      "kind": "submit",
+      "phase": "batch-0",
+      "returned": true,
+      "started_ns": 640583902362600
+    },
+    {
+      "ended_ns": 640583904845700,
+      "kind": "request",
+      "phase": "batch-0",
+      "returned": true,
+      "started_ns": 640583904780300
+    },
+    {
+      "ended_ns": 640583906834100,
+      "kind": "submit",
+      "phase": "batch-0",
+      "returned": true,
+      "started_ns": 640583904847400
+    },
+    {
+      "ended_ns": 640583907063400,
+      "kind": "request",
+      "phase": "batch-0",
+      "returned": true,
+      "started_ns": 640583906946800
+    },
+    {
+      "ended_ns": 640583908858400,
+      "kind": "submit",
+      "phase": "batch-0",
+      "returned": true,
+      "started_ns": 640583907065600
+    },
+    {
+      "ended_ns": 640583909019500,
+      "kind": "request",
+      "phase": "batch-0",
+      "returned": true,
+      "started_ns": 640583908956800
+    },
+    {
+      "ended_ns": 640584012809400,
+      "kind": "submit",
+      "phase": "batch-0",
+      "returned": true,
+      "started_ns": 640583909020800
+    },
+    {
+      "ended_ns": 640584136663800,
+      "kind": "request",
+      "phase": "batch-0",
+      "returned": true,
+      "started_ns": 640584136596900
+    },
+    {
+      "ended_ns": 640584254400700,
+      "kind": "submit",
+      "phase": "batch-0",
+      "returned": true,
+      "started_ns": 640584136665200
+    },
+    {
+      "ended_ns": 640584379163500,
+      "kind": "request",
+      "phase": "batch-0",
+      "returned": true,
+      "started_ns": 640584379095600
+    },
+    {
+      "ended_ns": 640584550583700,
+      "kind": "submit",
+      "phase": "batch-0",
+      "returned": true,
+      "started_ns": 640584379209600
+    },
+    {
+      "ended_ns": 640584671190000,
+      "kind": "observe",
+      "phase": "batch-0",
+      "returned": true,
+      "started_ns": 640584670372900
+    },
+    {
+      "ended_ns": 640584675694400,
+      "kind": "rotate",
+      "phase": "batch-1",
+      "returned": true,
+      "started_ns": 640584672764500
+    },
+    {
+      "ended_ns": 640584677972500,
+      "kind": "discover",
+      "phase": "batch-1",
+      "returned": true,
+      "started_ns": 640584675705300
+    },
+    {
+      "ended_ns": 640584716878900,
+      "kind": "lease",
+      "phase": "batch-1",
+      "returned": true,
+      "started_ns": 640584678002000
+    },
+    {
+      "ended_ns": 640584718031100,
+      "kind": "observe",
+      "phase": "batch-1",
+      "returned": true,
+      "started_ns": 640584716920700
+    },
+    {
+      "ended_ns": 640584718158400,
+      "kind": "request",
+      "phase": "batch-1",
+      "returned": true,
+      "started_ns": 640584718063500
+    },
+    {
+      "ended_ns": 640584853045500,
+      "kind": "submit",
+      "phase": "batch-1",
+      "returned": true,
+      "started_ns": 640584718161800
+    },
+    {
+      "ended_ns": 640584984428500,
+      "kind": "request",
+      "phase": "batch-1",
+      "returned": true,
+      "started_ns": 640584984391000
+    },
+    {
+      "ended_ns": 640585070061300,
+      "kind": "submit",
+      "phase": "batch-1",
+      "returned": true,
+      "started_ns": 640584984430100
+    },
+    {
+      "ended_ns": 640585160431100,
+      "kind": "request",
+      "phase": "batch-1",
+      "returned": true,
+      "started_ns": 640585160395300
+    },
+    {
+      "ended_ns": 640585233531000,
+      "kind": "submit",
+      "phase": "batch-1",
+      "returned": true,
+      "started_ns": 640585160432800
+    },
+    {
+      "ended_ns": 640585329305300,
+      "kind": "request",
+      "phase": "batch-1",
+      "returned": true,
+      "started_ns": 640585329271500
+    },
+    {
+      "ended_ns": 640585417044800,
+      "kind": "submit",
+      "phase": "batch-1",
+      "returned": true,
+      "started_ns": 640585329306800
+    },
+    {
+      "ended_ns": 640585513555600,
+      "kind": "request",
+      "phase": "batch-1",
+      "returned": true,
+      "started_ns": 640585513522400
+    },
+    {
+      "ended_ns": 640585591819200,
+      "kind": "submit",
+      "phase": "batch-1",
+      "returned": true,
+      "started_ns": 640585513557000
+    },
+    {
+      "ended_ns": 640585682917600,
+      "kind": "request",
+      "phase": "batch-1",
+      "returned": true,
+      "started_ns": 640585682832000
+    },
+    {
+      "ended_ns": 640585684814100,
+      "kind": "submit",
+      "phase": "batch-1",
+      "returned": true,
+      "started_ns": 640585682919800
+    },
+    {
+      "ended_ns": 640585684969400,
+      "kind": "request",
+      "phase": "batch-1",
+      "returned": true,
+      "started_ns": 640585684907400
+    },
+    {
+      "ended_ns": 640585686648300,
+      "kind": "submit",
+      "phase": "batch-1",
+      "returned": true,
+      "started_ns": 640585684970700
+    },
+    {
+      "ended_ns": 640585686809300,
+      "kind": "request",
+      "phase": "batch-1",
+      "returned": true,
+      "started_ns": 640585686747100
+    },
+    {
+      "ended_ns": 640585688509800,
+      "kind": "submit",
+      "phase": "batch-1",
+      "returned": true,
+      "started_ns": 640585686810700
+    },
+    {
+      "ended_ns": 640585688669100,
+      "kind": "request",
+      "phase": "batch-1",
+      "returned": true,
+      "started_ns": 640585688606800
+    },
+    {
+      "ended_ns": 640585837725600,
+      "kind": "submit",
+      "phase": "batch-1",
+      "returned": true,
+      "started_ns": 640585688670400
+    },
+    {
+      "ended_ns": 640585961574600,
+      "kind": "request",
+      "phase": "batch-1",
+      "returned": true,
+      "started_ns": 640585961461800
+    },
+    {
+      "ended_ns": 640586118199300,
+      "kind": "submit",
+      "phase": "batch-1",
+      "returned": true,
+      "started_ns": 640585961577300
+    },
+    {
+      "ended_ns": 640586254279200,
+      "kind": "request",
+      "phase": "batch-1",
+      "returned": true,
+      "started_ns": 640586254213900
+    },
+    {
+      "ended_ns": 640586395687200,
+      "kind": "submit",
+      "phase": "batch-1",
+      "returned": true,
+      "started_ns": 640586254323700
+    },
+    {
+      "ended_ns": 640586516400400,
+      "kind": "observe",
+      "phase": "batch-1",
+      "returned": true,
+      "started_ns": 640586515698000
+    }
+  ],
+  "threads_alive": [
+    false,
+    false,
+    false
+  ]
+}
