@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 19-09-2026, Asia/Saigon | Revision S98 | TRIỂN KHAI THEO GATE
+Ngày 19-09-2026, Asia/Saigon | Revision S99 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S98
+PLAN_REVISION=S99
 EXECUTION_MODE=COORDINATOR_THREE_ASTRA_ULTRA_OWNER_20260918
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -54,21 +54,21 @@ GT05_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260917_S64
 GT05_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S64
 GT05_CHECKPOINT_COMMIT=808d8ba
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
-GT06_EVIDENCE_STATUS=S97_READER_24_CASES_AND_35_BATCH_DIAGNOSTIC_COMPLETE_NO_ACCEPTANCE
-GT06_WORKING_SOURCE_STATUS=S97_FROZEN_TARGETED_READER_TESTED_FULL_DIAGNOSTIC_COMPLETE
+GT06_EVIDENCE_STATUS=S98_FAILURE_STATUS_GAP_BATCH17_AFTER_18_BATCHES_NO_ACCEPTANCE
+GT06_WORKING_SOURCE_STATUS=S98_FROZEN_SOURCE_IDENTICAL_FAILURE_CLEANUP_VERIFIED_NO_ACCEPTANCE
 GT06_LAST_TESTED_SOURCE_CLOSURE=cfc4b55a5407891bfd54d22d9f1ac45a74b6c744898199a0e4690d6230a6c1d6
 GT06_CURRENT_SOURCE_CLOSURE=cfc4b55a5407891bfd54d22d9f1ac45a74b6c744898199a0e4690d6230a6c1d6
 GT06_SOURCE_CHECKPOINT=4293acf2d628
-GT06_BENCHMARK_CAMPAIGN=gt06-s86-campaign-01
-GT06_BENCHMARK_STATUS=S86_FAILURE_RETAINED_OBJECTDB_GROWTH_BATCH17_20260918T120235Z
-GT06_ACTIVE_DIAGNOSTIC=S97_COMPLETE_35_BATCHES; DERIVED_EXIT_RECONCILIATION_VERIFIED; NO_ACCEPTANCE
-GT06_FULL_CAMPAIGN=gt06-s98-campaign-01; LAUNCH_1_ACTIVE_20260918T215233Z; SOURCE_IDENTICAL_TO_S97; FRESH_ID_REQUIRED
-GT06_NEXT_ACTION=Continue monitoring source-identical S98 full campaign (10 fresh pairs x35 batches, original profile); preserve S97 diagnostic and derived exit correction, then verify all actual exits/cleanup/dataset before final manifest and two new critics.
+GT06_BENCHMARK_CAMPAIGN=gt06-s98-campaign-01
+GT06_BENCHMARK_STATUS=S98_FAILURE_RETAINED_STATUS_GAP_BATCH17_2043_7348MS_20260918T222817Z
+GT06_ACTIVE_DIAGNOSTIC=S98_TERMINAL_FAILURE_ATTRIBUTION_WRITTEN; S97_DIAGNOSTIC_PRESERVED; NO_ACCEPTANCE
+GT06_FULL_CAMPAIGN=gt06-s98-campaign-01; LAUNCH_1_FAILED_BATCH17_AFTER_18_BATCHES; SOURCE_IDENTICAL_TO_S97; FRESH_ID_REQUIRED
+GT06_NEXT_ACTION=Preserve S98 raw and attribution packet; diagnose owned-workload/environment cause of status gap before any fresh campaign; only then use a new source-identical campaign ID if retry gates pass, followed by full 10-pair dataset and final critics.
 GT06_S88_SCHEDULER_TASK=OBSERVED_ABSENT_20260918; historic_delete_report_retained_in_chat; durable_delete_receipt_missing
 GT06_S90_DIAGNOSTIC=gt06-s90-lifecycle-attribution-01; preflight=gt06-s90-lifecycle-attribution-preflight-06; five_partial_batches; interrupted_before_batch5_capture; formal_acceptance=false; eligible_for_dataset=false
 GT06_DIAGNOSTIC_EXCLUSION=S81-S90 diagnostic and partial/failure prefixes are excluded from F13/F14 acceptance datasets; see s83-mapping requirements and each packet manifest.
 
-TIẾN ĐỘ HIỆN HÀNH — S98, ngày 19-09-2026 (mốc run ghi UTC)
+TIẾN ĐỘ HIỆN HÀNH — S99, ngày 19-09-2026 (mốc run ghi UTC)
 GT-01–05 ACCEPTED; GT-06 IN_PROGRESS; GT-07–10 chưa mở.
 Source checkpoint4293acf2d628; formal51closure ở marker trên. Profile giữ nguyên
 0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85.
@@ -104,25 +104,9 @@ Child record để trống host/supervisor exit theo thiết kế self-observati
 S97 vẫn diagnostic-only, formal_acceptance=false, eligible_for_dataset=false;
 không no-leak/PASS và không nhập F13/F14.
 
-LƯỢT ĐANG CHẠY: gt06-s98-campaign-01 launch1, task \\HHStudio.GT06.gt06-s98-campaign-01; full acceptance campaign mới; đã hoàn tất 18/35 batch của cặp đầu, batch 18 đang chạy, source/profile/
-workstation giữ nguyên; raw supervisor ở studio/.local/reviews/gt06-s98-campaign-01-supervisor. Scheduler receipt chỉ là dispatch, cần query liveness/actual exits. Sẽ chạy10 fresh host/editor
-pairs ×35 batch (5 warmup+30 measured), 1000 HTTP+100 native mỗi batch, giữ
-nguyên deadline/gate, rồi kiểm dataset, hashes, actual exits, trees, handles và
-mọi failed-attempt inventory trước khi đóng manifest và gọi hai critic mới.
-Helper/launch ở reviews/20260918-gt06-s97-ack-recovery/coupled-next/;
-raw studio/.local/reviews/gt06-s97-coupled-phases-01. Helper14closure
- e5c9b2a2c06e42dae8c0892227523db023e14ffafcebbfe21d97c7860412b09c;
-effective native4568a2b10b0dc4793a837558ab9113c7b4acffdf71e5a57183fcac5c9cd8eecd.
-Preflight import17624actual0, parent54188/helper40148exit0/treeverified;
-96exactcopies giữ ở coupled-preflight-retained-01;65runtime/helper GitHEAD byteexact.
-
-Diagnostic35batch ×(1000HTTP+100native), original gates/7410s inner/7530s outer;
-không nhập F13/F14. ACK census sau validation, trước fresh counters; sparse
-schemaS96 được reuse rõ ràng và bind ACK hash/run/PID/batch/frame/time. HTTP
-bounded phase recorder vẫn giữ first LOOKUP failure. Không subtract overhead.
-Ước lượng lượt60–90phút từ các lượt trước, cập nhật theo durations batch thực;
-chưa có ETA toàn plan. Giữ source/helper/profile/workstation cố định, không
-engine/test/hash audit nặng cạnh phép đo. Query ngắn theo lịch, không polling dày.
+LƯỢT S98 ĐÃ KẾT THÚC BẰNG FAILURE: gt06-s98-campaign-01 launch1, task \\HHStudio.GT06.gt06-s98-campaign-01. Source/profile/workstation không đổi. Run r00.a01 đã hoàn tất 18 batch của cặp đầu rồi FAILED ở batch17 khi host command stream có max_status_gap_ms=2043.7348, vượt gate khóa 2000ms. Joint/native ACK cùng batch vẫn hợp lệ (native gap594.998ms, ObjectDB71128, resources6); 18 hàng partial được giữ nguyên và không nhập F13/F14.
+Failure raw ở `studio/.local/reviews/gt06-s98-campaign-01/run-00-attempt-01`; host wrapper exit1, editor wrapper exit2, cleanup Jobs zero/closed, handles released, owned tree zero, native_error null. `child-failure.json` và `parent-failure.json` giữ verdict failure; không suy target natural exit từ child record. Attribution dẫn xuất ở `zdoc/reviews/20260918-gt06-s98-status-gap/attribution.json`, SHA256 `ce20bdf8f9b6586614c9b3035b30cf7ff8b77d51f75826b07026b8a7ebab0f11`; diagnostic-only, chưa chứng minh root cause, không sửa raw.
+Không retry mù và không nới status-gap/RSS/counter/deadline. Trước campaign mới phải chẩn đoán priority/commit/page-fault hoặc điều kiện workstation của owned workload; nếu chưa đủ attribution thì giữ blocker nội bộ và không claim PASS. Lịch tự động chỉ theo dõi trạng thái terminal/diagnostic, không tự launch3.
 
 S96 đã FAILED batch17/retired16:36:46Z, KHÔNG còn chạy. Có17joint/ACK hoàn chỉnh;
 HTTP batch17 đủ1000 và native đủ100 nhưng ACK17 READ lỗi, thiếu errno/length.
@@ -141,7 +125,7 @@ final manifest →hai critic MỚI độc lập cùng hash PASS/TICK=yes →coor
 SauGT06 mớiGT07 recovery/concurrency,GT08 CI/export/Android máy thật,GT09
 conformance,GT10 package/install/upgrade/rollback. HHWorldS23/SuperagentSA2 là
 game riêng sauGT10; tools không đồng nghĩa authoring trọn game. Lịch duy nhất
-ti-p-t-c-hh3d-tools theo S97, không dùng receipt dispatch như liveness hiện tại.
+ti-p-t-c-hh3d-tools theo S99, không dùng receipt dispatch như liveness hiện tại.
 
 Lịch sử đầy đủ S90 trước rút gọn: reviews/20260918-plan-history-s90/
 tools-plan-s90.txt, AUTHORITY=0, SHA256=c5d51b62e2bc78714f49b6f4727dee1b68fa7d702cf5f4a4365ecd7fcdf16e54.
@@ -1319,5 +1303,4 @@ CCU=người online cùng lúc trong game, không số agent phát triển game.
 
 END_OF_TOOLS_PLAN
 DATE=2026-09-17 Asia/Saigon
-
-
+\n

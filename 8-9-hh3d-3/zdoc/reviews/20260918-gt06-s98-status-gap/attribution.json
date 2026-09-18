@@ -1,0 +1,45 @@
+{
+  "schema_id": "hh-studio.gt06.s98.status-gap-attribution",
+  "schema_version": "1.0.0",
+  "run_id": "gt06-s98-campaign-01.r00.a01",
+  "source_closure_sha256": "cfc4b55a5407891bfd54d22d9f1ac45a74b6c744898199a0e4690d6230a6c1d6",
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "diagnostic_only": true,
+  "formal_acceptance": false,
+  "eligible_for_dataset": false,
+  "failure": {
+    "code": "CAMPAIGN_STATUS_GAP",
+    "batch_index": 17,
+    "completed_batches": 18,
+    "command_max_status_gap_ms": 2043.7348,
+    "gate_ms": 2000.0,
+    "gap_pair_index": 833,
+    "host_response_gap_ms": 2043.735
+  },
+  "joint_native_observation": {
+    "max_status_gap_ms": 594.998,
+    "objects": 71128,
+    "resources": 6,
+    "dropped_commands": 0,
+    "dropped_telemetry": 0
+  },
+  "cleanup": {
+    "host_wrapper_exit": 1,
+    "editor_wrapper_exit": 2,
+    "owned_tree_zero": true,
+    "owner_closed": true,
+    "jobs_zero_and_closed": true,
+    "handles_released": true,
+    "native_error": null
+  },
+  "interpretation": "Host command response gap exceeded the locked 2000 ms gate; joint native ACK remained bound and counters/resources stayed stable. Raw evidence does not establish root cause. Preserve and diagnose environment/owned-workload attribution before any fresh campaign.",
+  "source_files": [
+    "command-17.json",
+    "joint-17.json",
+    "sample-preview-17.json",
+    "child-failure.json",
+    "child-terminal-cleanup.json",
+    "host-owner/stderr.txt",
+    "supervisor-return.json"
+  ]
+}
