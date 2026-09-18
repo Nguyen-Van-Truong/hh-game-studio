@@ -16,7 +16,7 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 
 CURRENT_VALID_WP=GT-06
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=GT06_S96_COUPLED_PHASE_DIAGNOSTIC_PREPARATION
+IMPLEMENTATION=GT06_S96_COUPLED_HTTP_PHASES_AND_ACK_IDENTITY_DIAGNOSTIC
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
 GT01_PENDING=NONE
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
@@ -61,8 +61,8 @@ GT06_CURRENT_SOURCE_CLOSURE=564e5b7877f49d33a1af84eaf3b3a7ddf4ea2f846c4161eb694c
 GT06_SOURCE_CHECKPOINT=ad81e944
 GT06_BENCHMARK_CAMPAIGN=gt06-s86-campaign-01
 GT06_BENCHMARK_STATUS=S86_FAILURE_RETAINED_OBJECTDB_GROWTH_BATCH17_20260918T120235Z
-GT06_ACTIVE_DIAGNOSTIC=NONE; S95_NATIVE_COMPLETED_20260918T153250Z; TASK_RETIRED_20260918T153543Z; S96_PREPARING_NOT_LAUNCHED
-GT06_NEXT_ACTION=Validate bounded HTTP phase recorder and S96 coupled diagnostic composition, then freeze/preflight/launch one observed run. Preserve original runtime/profile/gates and reuse unaffected functional evidence.
+GT06_ACTIVE_DIAGNOSTIC=gt06-s96-coupled-phases-01; STARTED_20260918T155103Z; OBSERVED_LIVE_20260918T155206Z; DIAGNOSTIC_ONLY
+GT06_NEXT_ACTION=Keep S96 runtime/helper/profile fixed. Query live task and short logs; verify first real ACK and batch4 sparse ACK binding. On terminal inspect HTTP first-lookup-failure window, native identity deltas, actual exits and cleanup before repair or next campaign.
 GT06_S88_SCHEDULER_TASK=OBSERVED_ABSENT_20260918; historic_delete_report_retained_in_chat; durable_delete_receipt_missing
 GT06_S90_DIAGNOSTIC=gt06-s90-lifecycle-attribution-01; preflight=gt06-s90-lifecycle-attribution-preflight-06; five_partial_batches; interrupted_before_batch5_capture; formal_acceptance=false; eligible_for_dataset=false
 GT06_DIAGNOSTIC_EXCLUSION=S81-S90 diagnostic and partial/failure prefixes are excluded from F13/F14 acceptance datasets; see s83-mapping requirements and each packet manifest.
@@ -111,15 +111,36 @@ Khônggrowthsnapshot nên identity sau baseline chưa được đo. Kết luận
 không tái hiện trong workload native riêng; thiếu HTTP/idle/ACK và lifecycle
 khác coupledpostACK. Khôngclaimno-leak hoặc benchmarkPASS.
 
-S96 đang CHUẨN BỊ, chưalaunch: giữ runtimead81e944/profile, thêm bounded QPC
-phase recorder chỉ trong diagnostic wrapper, correlated loopback connection
-và firstfailure pre-event/open spans; không ghi payload/token hoặc fakeprogress.
-Ba worker: objectanalysis đã xong; recorder+focusedtests và coupledcomposition
-đang chuẩn bị. Root giữ raw/plan/checkpoint. Nextinstrumentedrun vẫn35×1000HTTP
-+100native, originalgates, không nhập dataset. Terminal-only phase flush giảm
-I/O ảnh hưởng phép đo; nếu hardkill trướcfinally thì phaseevidence thiếu làGAP.
-Functional lane không đổi chỉ reuse khi exactdependency khớp; mapping/prep:
-reviews/20260918-gt06-s95-result-prep/. Không lặp fullcampaign mù.
+S96 đã freeze tại a10ce7f1 và khởi chạy15:51:03Z:
+- Run gt06-s96-coupled-phases-01; task cùng ID với prefix HHStudio.GT06.
+  Raw studio/.local/reviews/gt06-s96-coupled-phases-01; observer nằm trong
+  reviews/20260918-gt06-s96-coupled-phases/launch-01/observer/.
+- Formal source51/profile không đổi. Helper9 closure
+  49305105575402570035bbff7f3f7abdcc5a98653b8cc994932b4ae07f921795.
+  Effective native de1838cf836e7dfd9a80fa05c7636774e43da0121dc3d7b551e02b90f5f746b1.
+- Recorder12/12 và smokeHTTP thật đạt: actual47412/helper17632exit0/clean.
+  Hai disconnect trong smoke là injected; không claim S93 đã tái hiện/sửa.
+  Chỉ first LOOKUP failure giữ bounded pre-event/open spans; endpoint khác
+  được đếm nhưng không chiếm snapshot. Current producer không chủ động drop
+  submit; nhận định ngược từ test cũ đã được sửa, ghi trong coordinator-validation.
+- Composition6/6; import Godot42632/parent24936/helper9388exit0/clean.
+  Census chuyển đúng sau ACK đã validate, ngay trước fresh counters;
+  _write_batch, original observed/deadline/heartbeat giữ byte gốc. Preflight
+  chỉ chứng minh compile/import; first real ACK và baseline4 cần kiểm tiếp.
+- Quan sát15:52:06Z: supervisor6888/host22148/editor50100 sống, PID/start/exe
+  khớp; hostbatch0 commands, native HOST_START, stderr0B. Schedulerstate4/
+  instances0 không tự chứng minh chết hoặc sống. Phải query mới mỗi lần.
+- Workload vẫn35×1000HTTP+100native, nguyên ngưỡng; đây là diagnostic,
+  không F13/F14/PASS. Inner7410s/outer7530s/task130min; ước lượng45–90phút
+  ban đầu, hiệu chỉnh bằng batch hoàn chỉnh. Không ETA toànplan.
+- Terminal-only HTTP flush sau cleanup tránh I/O dưới locks; hardkill trước
+  finally có thể thiếu phase làGAP. Không bỏ Stop hoặc retry ngầm. Giữ source/
+  helper/workstation, không thêm engine/tests/heavyhash trong lúc đo.
+
+Root giữ plan/checkpoint; ba worker đã hoàn tất recorder, composition và
+implementation review. Đây không phải hai critic nghiệm thu. Mapping reuse:
+reviews/20260918-gt06-s95-result-prep/dependency-next.md; chỉ rerun lane đổi
+sau exact dependency join. Lịch10phút đã được cập nhật theo S96 hiện hành.
 
 S93 raw: studio/.local/reviews/gt06-s93-sparse-attribution-01.
 Failure: reviews/20260918-gt06-s95-status-recovery/,96exactcopies/90rawartifacts,
