@@ -1,0 +1,1020 @@
+{
+  "verified": true,
+  "formal_acceptance": false,
+  "full_benchmark": false,
+  "native_cycles": 800,
+  "point_count": 9,
+  "native_exit": {
+    "exit_code": 0,
+    "pid": 25368
+  },
+  "owner": {
+    "wrapper_pid": 30776,
+    "started_at": "2026-09-17T23:50:57.088162+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "$SNAPSHOT/zdoc/reviews/20260918-gt06-s76-handles/diagnose_retention.py"
+    ],
+    "exit_code": 0,
+    "target_pid": 37480,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "probe-stdout.txt",
+    "stderr": "probe-stderr.txt",
+    "host": "probe-host.json"
+  },
+  "source_count": 39,
+  "source_closure": "aa58e8ee7fc4f8399766c8d6beca9dfc1bf10b5247ab7f2aba5cb0d40c259b6f",
+  "campaign_source_closure": "ffa6071a1fb9d324da7cd860fb41b656e99135a3118367873c7399e85e8432fe",
+  "source_is_matching_subset_not_exact_campaign": true,
+  "median_batch_seconds": 32.464334,
+  "batch_seconds": [
+    32.61199,
+    32.00265,
+    32.726777,
+    32.316678,
+    33.098273,
+    32.105942,
+    32.775268,
+    30.30334
+  ],
+  "max_native_status_gap_ms": 578.721,
+  "rows": [
+    {
+      "batch": 0,
+      "focused": true,
+      "focused_sleep": 6900,
+      "frames": 1629,
+      "label": "batch-00",
+      "low_processor_usage_mode": true,
+      "low_processor_usage_mode_sleep_usec": 6900,
+      "mono_us": 42512133,
+      "objects": 71125,
+      "pid": 25368,
+      "resources": 6,
+      "unfocused_sleep": 6900,
+      "update_continuously": false,
+      "held_handles": 573,
+      "type_counts": {
+        "Event": 121,
+        "Key": 37,
+        "WaitCompletionPacket": 28,
+        "IRTimer": 12,
+        "TpWorkerFactory": 6,
+        "IoCompletion": 12,
+        "<unavailable>": 192,
+        "Directory": 2,
+        "SchedulerSharedData": 1,
+        "ALPC Port": 21,
+        "Mutant": 16,
+        "Semaphore": 29,
+        "WindowStation": 2,
+        "Desktop": 1,
+        "File": 26,
+        "Thread": 48,
+        "IoCompletionReserve": 2,
+        "Section": 15,
+        "Timer": 2
+      },
+      "type_delta": {}
+    },
+    {
+      "batch": 1,
+      "focused": true,
+      "focused_sleep": 6900,
+      "frames": 3108,
+      "label": "batch-01",
+      "low_processor_usage_mode": true,
+      "low_processor_usage_mode_sleep_usec": 6900,
+      "mono_us": 74652719,
+      "objects": 71125,
+      "pid": 25368,
+      "resources": 6,
+      "unfocused_sleep": 6900,
+      "update_continuously": false,
+      "held_handles": 565,
+      "type_counts": {
+        "Event": 119,
+        "Key": 37,
+        "WaitCompletionPacket": 28,
+        "IRTimer": 12,
+        "TpWorkerFactory": 6,
+        "IoCompletion": 12,
+        "<unavailable>": 192,
+        "Directory": 2,
+        "SchedulerSharedData": 1,
+        "ALPC Port": 17,
+        "Mutant": 16,
+        "Semaphore": 29,
+        "WindowStation": 2,
+        "Desktop": 1,
+        "File": 26,
+        "Thread": 47,
+        "IoCompletionReserve": 2,
+        "Section": 15,
+        "Timer": 1
+      },
+      "type_delta": {
+        "ALPC Port": -4,
+        "Event": -2,
+        "Thread": -1,
+        "Timer": -1
+      }
+    },
+    {
+      "batch": 2,
+      "focused": true,
+      "focused_sleep": 6900,
+      "frames": 4585,
+      "label": "batch-02",
+      "low_processor_usage_mode": true,
+      "low_processor_usage_mode_sleep_usec": 6900,
+      "mono_us": 107499935,
+      "objects": 71127,
+      "pid": 25368,
+      "resources": 6,
+      "unfocused_sleep": 6900,
+      "update_continuously": false,
+      "held_handles": 565,
+      "type_counts": {
+        "Event": 119,
+        "Key": 37,
+        "WaitCompletionPacket": 28,
+        "IRTimer": 12,
+        "TpWorkerFactory": 6,
+        "IoCompletion": 12,
+        "<unavailable>": 192,
+        "Directory": 2,
+        "SchedulerSharedData": 1,
+        "ALPC Port": 17,
+        "Mutant": 16,
+        "Semaphore": 29,
+        "WindowStation": 2,
+        "Desktop": 1,
+        "File": 26,
+        "Thread": 47,
+        "IoCompletionReserve": 2,
+        "Section": 15,
+        "Timer": 1
+      },
+      "type_delta": {}
+    },
+    {
+      "batch": 3,
+      "focused": true,
+      "focused_sleep": 6900,
+      "frames": 6053,
+      "label": "batch-03",
+      "low_processor_usage_mode": true,
+      "low_processor_usage_mode_sleep_usec": 6900,
+      "mono_us": 139879596,
+      "objects": 71125,
+      "pid": 25368,
+      "resources": 6,
+      "unfocused_sleep": 6900,
+      "update_continuously": false,
+      "held_handles": 557,
+      "type_counts": {
+        "Event": 115,
+        "Key": 37,
+        "WaitCompletionPacket": 28,
+        "IRTimer": 12,
+        "TpWorkerFactory": 6,
+        "IoCompletion": 11,
+        "<unavailable>": 192,
+        "Directory": 2,
+        "SchedulerSharedData": 1,
+        "ALPC Port": 17,
+        "Mutant": 16,
+        "Semaphore": 29,
+        "WindowStation": 2,
+        "Desktop": 1,
+        "File": 26,
+        "Thread": 45,
+        "IoCompletionReserve": 2,
+        "Section": 15
+      },
+      "type_delta": {
+        "Event": -4,
+        "IoCompletion": -1,
+        "Thread": -2,
+        "Timer": -1
+      }
+    },
+    {
+      "batch": 4,
+      "focused": true,
+      "focused_sleep": 6900,
+      "frames": 7535,
+      "label": "batch-04",
+      "low_processor_usage_mode": true,
+      "low_processor_usage_mode_sleep_usec": 6900,
+      "mono_us": 173137265,
+      "objects": 71125,
+      "pid": 25368,
+      "resources": 6,
+      "unfocused_sleep": 6900,
+      "update_continuously": false,
+      "held_handles": 559,
+      "type_counts": {
+        "Event": 116,
+        "Key": 37,
+        "WaitCompletionPacket": 28,
+        "IRTimer": 12,
+        "TpWorkerFactory": 6,
+        "IoCompletion": 12,
+        "<unavailable>": 192,
+        "Directory": 2,
+        "SchedulerSharedData": 1,
+        "ALPC Port": 17,
+        "Mutant": 16,
+        "Semaphore": 29,
+        "WindowStation": 2,
+        "Desktop": 1,
+        "File": 26,
+        "Thread": 45,
+        "IoCompletionReserve": 2,
+        "Section": 15
+      },
+      "type_delta": {
+        "Event": 1,
+        "IoCompletion": 1
+      }
+    },
+    {
+      "batch": 5,
+      "focused": true,
+      "focused_sleep": 6900,
+      "frames": 9005,
+      "label": "batch-05",
+      "low_processor_usage_mode": true,
+      "low_processor_usage_mode_sleep_usec": 6900,
+      "mono_us": 205312184,
+      "objects": 71125,
+      "pid": 25368,
+      "resources": 6,
+      "unfocused_sleep": 6900,
+      "update_continuously": false,
+      "held_handles": 559,
+      "type_counts": {
+        "Event": 116,
+        "Key": 37,
+        "WaitCompletionPacket": 28,
+        "IRTimer": 12,
+        "TpWorkerFactory": 6,
+        "IoCompletion": 12,
+        "<unavailable>": 192,
+        "Directory": 2,
+        "SchedulerSharedData": 1,
+        "ALPC Port": 17,
+        "Mutant": 16,
+        "Semaphore": 29,
+        "WindowStation": 2,
+        "Desktop": 1,
+        "File": 26,
+        "Thread": 45,
+        "IoCompletionReserve": 2,
+        "Section": 15
+      },
+      "type_delta": {}
+    },
+    {
+      "batch": 6,
+      "focused": true,
+      "focused_sleep": 6900,
+      "frames": 10475,
+      "label": "batch-06",
+      "low_processor_usage_mode": true,
+      "low_processor_usage_mode_sleep_usec": 6900,
+      "mono_us": 238154186,
+      "objects": 71125,
+      "pid": 25368,
+      "resources": 6,
+      "unfocused_sleep": 6900,
+      "update_continuously": false,
+      "held_handles": 559,
+      "type_counts": {
+        "Event": 116,
+        "Key": 37,
+        "WaitCompletionPacket": 28,
+        "IRTimer": 12,
+        "TpWorkerFactory": 6,
+        "IoCompletion": 12,
+        "<unavailable>": 192,
+        "Directory": 2,
+        "SchedulerSharedData": 1,
+        "ALPC Port": 17,
+        "Mutant": 16,
+        "Semaphore": 29,
+        "WindowStation": 2,
+        "Desktop": 1,
+        "File": 26,
+        "Thread": 45,
+        "IoCompletionReserve": 2,
+        "Section": 15
+      },
+      "type_delta": {}
+    },
+    {
+      "batch": 7,
+      "focused": true,
+      "focused_sleep": 6900,
+      "frames": 11953,
+      "label": "batch-07",
+      "low_processor_usage_mode": true,
+      "low_processor_usage_mode_sleep_usec": 6900,
+      "mono_us": 268583262,
+      "objects": 71125,
+      "pid": 25368,
+      "resources": 6,
+      "unfocused_sleep": 6900,
+      "update_continuously": false,
+      "held_handles": 559,
+      "type_counts": {
+        "Event": 116,
+        "Key": 37,
+        "WaitCompletionPacket": 28,
+        "IRTimer": 12,
+        "TpWorkerFactory": 6,
+        "IoCompletion": 12,
+        "<unavailable>": 192,
+        "Directory": 2,
+        "SchedulerSharedData": 1,
+        "ALPC Port": 17,
+        "Mutant": 16,
+        "Semaphore": 29,
+        "WindowStation": 2,
+        "Desktop": 1,
+        "File": 26,
+        "Thread": 45,
+        "IoCompletionReserve": 2,
+        "Section": 15
+      },
+      "type_delta": {}
+    },
+    {
+      "batch": 7,
+      "focused": true,
+      "focused_sleep": 6900,
+      "frames": 20668,
+      "label": "idle",
+      "low_processor_usage_mode": true,
+      "low_processor_usage_mode_sleep_usec": 6900,
+      "mono_us": 328704932,
+      "objects": 71127,
+      "pid": 25368,
+      "resources": 6,
+      "unfocused_sleep": 6900,
+      "update_continuously": false,
+      "held_handles": 559,
+      "type_counts": {
+        "Event": 116,
+        "Key": 37,
+        "WaitCompletionPacket": 28,
+        "IRTimer": 12,
+        "TpWorkerFactory": 6,
+        "IoCompletion": 12,
+        "<unavailable>": 192,
+        "Directory": 2,
+        "SchedulerSharedData": 1,
+        "ALPC Port": 17,
+        "Mutant": 16,
+        "Semaphore": 29,
+        "WindowStation": 2,
+        "Desktop": 1,
+        "File": 26,
+        "Thread": 45,
+        "IoCompletionReserve": 2,
+        "Section": 15
+      },
+      "type_delta": {}
+    }
+  ],
+  "limitations": [
+    "Native only, no 1000 HTTP command mix or full campaign.",
+    "PSS numeric handle slots can be reused; type deltas do not identify object lifetimes.",
+    "No RSS claim; unavailable PSS types remain unclassified.",
+    "Post-warmup stability in three diagnostic batches does not establish full benchmark acceptance."
+  ],
+  "exact_copies": [
+    {
+      "file": "diagnostic.json",
+      "bytes": 6240,
+      "sha256": "e8fa96e5432741559a4176596416553ec364736bf177856f6c8d5a5ef748e1d5"
+    },
+    {
+      "file": "editor-host/appdata/Godot/editor_settings-4.7.tres",
+      "bytes": 17958,
+      "sha256": "fddca7b068736a08740e4cd0f048bc5b9ed5495e615af96debe0f9d0a181a923"
+    },
+    {
+      "file": "editor-host/capture.json",
+      "bytes": 8995,
+      "sha256": "d46f0a0a0b26cdfe22b8ef208f2f137685f6e29916b3ffa2506ecf1a97afb537"
+    },
+    {
+      "file": "editor-host/cleanup-001.json",
+      "bytes": 528,
+      "sha256": "379d7a25b4032e6cb243e100aa8a5ebcd3d82a94e45b71e0f18e47fe7e569534"
+    },
+    {
+      "file": "editor-host/invocation.json",
+      "bytes": 7573,
+      "sha256": "2f84e0b85ecb1379b513403dbd9863c0dc25cea36068eb72b55f184fa03805b7"
+    },
+    {
+      "file": "editor-host/localappdata/Godot/editor_doc_cache-4.7.res",
+      "bytes": 3269806,
+      "sha256": "526bdbdaa8a9f2769267657353680dad77c3f0965ccb773f09ade89db91db21a"
+    },
+    {
+      "file": "editor-host/localappdata/Godot/resthumb-14498e628206c86e15a16fe8266772cf.png",
+      "bytes": 755,
+      "sha256": "bbd1ff19bac55b941b0c00441099621180419d420e80eaf9ac83c2a913fb1d48"
+    },
+    {
+      "file": "editor-host/localappdata/Godot/resthumb-14498e628206c86e15a16fe8266772cf.txt",
+      "bytes": 54,
+      "sha256": "d53e85784f7666b9a4aeb308be06d323d32d22b3a93e84d954b25824c28ce88f"
+    },
+    {
+      "file": "editor-host/localappdata/Godot/resthumb-49c5c3376e8cdf90da4052c294f526d9.png",
+      "bytes": 831,
+      "sha256": "f4f80b42111aa8d85a33f670f2753c6cda52fd0698e9868183ae652d9a4f6a6b"
+    },
+    {
+      "file": "editor-host/localappdata/Godot/resthumb-49c5c3376e8cdf90da4052c294f526d9.txt",
+      "bytes": 54,
+      "sha256": "51830d538c9218b58aec9186f570e682090279c027c4f23140bbe6548ffe3e2f"
+    },
+    {
+      "file": "editor-host/localappdata/Godot/resthumb-5fd975620509b76216985d304b527eae.png",
+      "bytes": 4078,
+      "sha256": "622f6f4030ce8e1175ca099665e7a24bd9936058955832090b7858f5911275c9"
+    },
+    {
+      "file": "editor-host/localappdata/Godot/resthumb-5fd975620509b76216985d304b527eae.txt",
+      "bytes": 54,
+      "sha256": "99b6c28080d6b526d3737c2ac899b30184ad0587b7e5f8b7393fe5c8c26efc79"
+    },
+    {
+      "file": "editor-host/localappdata/Godot/resthumb-941df827956d70a9d9bea035e387448a.png",
+      "bytes": 414,
+      "sha256": "3be5f43c5f5c1dfa41cc8c26587f6a18613ce89ee346e425b10806dbd8095def"
+    },
+    {
+      "file": "editor-host/localappdata/Godot/resthumb-941df827956d70a9d9bea035e387448a.txt",
+      "bytes": 54,
+      "sha256": "e8711fd691e29712ef7dd32933f6d83fe3a5c56a170f62f7929012210122d67c"
+    },
+    {
+      "file": "editor-host/localappdata/Godot/resthumb-d6b587237420f887cbfabd3b9eac15d2.png",
+      "bytes": 929,
+      "sha256": "74e4d6e17534aa3f5672f48238a56b5e660183a8dd5a919f27078d0952dcbe10"
+    },
+    {
+      "file": "editor-host/localappdata/Godot/resthumb-d6b587237420f887cbfabd3b9eac15d2.txt",
+      "bytes": 54,
+      "sha256": "6582d3cfede42d25ffcc6cfe0aa36ed0d373f7f6c4398699b4cdf125fa2ee974"
+    },
+    {
+      "file": "editor-host/localappdata/Godot/resthumb-e34e0b39a2e1e298473da5ec7f3c1810.png",
+      "bytes": 852,
+      "sha256": "26623eb8019be5752051ca407aa87cff0989d8e38ce3ffb8fe2f9980bbc1386f"
+    },
+    {
+      "file": "editor-host/localappdata/Godot/resthumb-e34e0b39a2e1e298473da5ec7f3c1810.txt",
+      "bytes": 54,
+      "sha256": "9f6460f5c8a37502ca5a53e77cb9b71bcf846ab03fc470df2af6f484dace99a0"
+    },
+    {
+      "file": "editor-host/process-exit.json",
+      "bytes": 30,
+      "sha256": "594a25f641e5eaf496daf3ff3784716cda035a5173b29de96d2f1f5659505f42"
+    },
+    {
+      "file": "editor-host/process-start.json",
+      "bytes": 14,
+      "sha256": "be90a5b83f8a974c556698ecdf2e798c84091629bf68b97ab80e9043db2f8682"
+    },
+    {
+      "file": "editor-host/stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "editor-host/stdout.txt",
+      "bytes": 83963,
+      "sha256": "55d6f6c934aa0237d49eae882f84dd4b0b7e5b1d2ee040d001bfdc1c4861ad5f"
+    },
+    {
+      "file": "handles/batch-00.json",
+      "bytes": 71188,
+      "sha256": "b758621bc3f83f87b8088d1fa9b908fe707b693201cbad47f30df83799a5a3f6"
+    },
+    {
+      "file": "handles/batch-01.json",
+      "bytes": 70220,
+      "sha256": "15ac0cd9cde5593c63ad8068001813e1544e9603c7bfb752e2a25f94e2a2db5e"
+    },
+    {
+      "file": "handles/batch-02.json",
+      "bytes": 70219,
+      "sha256": "5ac937e4e38284e329ec06ecaa19beb8fee8a884c035eede1f54fc1f6a3a9d26"
+    },
+    {
+      "file": "handles/batch-03.json",
+      "bytes": 69126,
+      "sha256": "6ed8b5bf402acbbef9293a0c8aba027eeacf6a019dc10e2d8ac0b0e35ebbb3d3"
+    },
+    {
+      "file": "handles/batch-04.json",
+      "bytes": 69343,
+      "sha256": "2423cd1f05a3e842202c9b5b83738705be7d52531175ff79a269fbed69895a4d"
+    },
+    {
+      "file": "handles/batch-05.json",
+      "bytes": 69342,
+      "sha256": "e3585674ec6c6e39a3b464591b6a2650d7a57f27da7f16b4701e7c8aac76a207"
+    },
+    {
+      "file": "handles/batch-06.json",
+      "bytes": 69343,
+      "sha256": "f61e1b55c54b8f39c7114f4fe77305d016abbfbd6122e978661d7f89f4b11785"
+    },
+    {
+      "file": "handles/batch-07.json",
+      "bytes": 69342,
+      "sha256": "27a35bf3ee3c4132332aaa963bbf5d1f18899bf4c08cb70709916b53b5846200"
+    },
+    {
+      "file": "handles/idle.json",
+      "bytes": 69342,
+      "sha256": "d27db48737d44f1968fd39c7c162788eebf53f3da5629fb32a4d00cc4902f65b"
+    },
+    {
+      "file": "import-host/appdata/Godot/editor_settings-4.7.tres",
+      "bytes": 17958,
+      "sha256": "806d8978362a4b311da6a10a2f38c3f6017cff7f0c6d52c9e2078941df75fd5d"
+    },
+    {
+      "file": "import-host/capture.json",
+      "bytes": 1341,
+      "sha256": "3e06a5deecdc7d118a6d59543b33fa733c02425a2a9a47efc1028ccbd3ac9038"
+    },
+    {
+      "file": "import-host/invocation.json",
+      "bytes": 4888,
+      "sha256": "e833450d58370a81d521f9e86296132130218438878f2b1c37cae785f8cf5538"
+    },
+    {
+      "file": "import-host/localappdata/Godot/editor_doc_cache-4.7.res",
+      "bytes": 3269734,
+      "sha256": "7b12808f0c60fa716b8e1432220b02c8de233f67b3eb53cbf17a547d297a883e"
+    },
+    {
+      "file": "import-host/process-exit.json",
+      "bytes": 30,
+      "sha256": "f8e22594a1a042cef040b65fdaa5e368d97b2767854661a9f0ba6cb6b72870a1"
+    },
+    {
+      "file": "import-host/process-start.json",
+      "bytes": 14,
+      "sha256": "87e2fccde1c4f12bd29dc267711955fbd15564c4c075b3110dd791cbedba432e"
+    },
+    {
+      "file": "import-host/stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "import-host/stdout.txt",
+      "bytes": 1492,
+      "sha256": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003"
+    },
+    {
+      "file": "points/batch-00.ack",
+      "bytes": 28,
+      "sha256": "4545bcb9523cc00c7eac2398ef61b604ea540e1ed6cc3a0339815e0012ddf634"
+    },
+    {
+      "file": "points/batch-00.json",
+      "bytes": 268,
+      "sha256": "2b89a88ffb52ff3cb984d1fe63f3bb7bdd4f6cf5bd2824eea6adfe0179a9d46d"
+    },
+    {
+      "file": "points/batch-01.ack",
+      "bytes": 28,
+      "sha256": "4545bcb9523cc00c7eac2398ef61b604ea540e1ed6cc3a0339815e0012ddf634"
+    },
+    {
+      "file": "points/batch-01.json",
+      "bytes": 268,
+      "sha256": "0b72fbedbe19fcf161d6c04f072251801708b4fa305b04dba13eb9eb1eeb0ad5"
+    },
+    {
+      "file": "points/batch-02.ack",
+      "bytes": 28,
+      "sha256": "4545bcb9523cc00c7eac2398ef61b604ea540e1ed6cc3a0339815e0012ddf634"
+    },
+    {
+      "file": "points/batch-02.json",
+      "bytes": 269,
+      "sha256": "149cb922127883ad576a8c0fc42d6fcb4cf780c5ac9af1e9f6cac70ba3532379"
+    },
+    {
+      "file": "points/batch-03.ack",
+      "bytes": 28,
+      "sha256": "4545bcb9523cc00c7eac2398ef61b604ea540e1ed6cc3a0339815e0012ddf634"
+    },
+    {
+      "file": "points/batch-03.json",
+      "bytes": 269,
+      "sha256": "2bab5a0a33c2c212b472328eeaf5c1029a3328ef480820684730f46579851cf2"
+    },
+    {
+      "file": "points/batch-04.ack",
+      "bytes": 28,
+      "sha256": "4545bcb9523cc00c7eac2398ef61b604ea540e1ed6cc3a0339815e0012ddf634"
+    },
+    {
+      "file": "points/batch-04.json",
+      "bytes": 269,
+      "sha256": "eb908accbeb6dbf627f1c58b504010a73a94f09809465c08ef3bcc5e65442881"
+    },
+    {
+      "file": "points/batch-05.ack",
+      "bytes": 28,
+      "sha256": "4545bcb9523cc00c7eac2398ef61b604ea540e1ed6cc3a0339815e0012ddf634"
+    },
+    {
+      "file": "points/batch-05.json",
+      "bytes": 269,
+      "sha256": "c51c83d61c2460e525d4fcb87ff81116958ddf698b596765b1cdd09ea9bb815a"
+    },
+    {
+      "file": "points/batch-06.ack",
+      "bytes": 28,
+      "sha256": "4545bcb9523cc00c7eac2398ef61b604ea540e1ed6cc3a0339815e0012ddf634"
+    },
+    {
+      "file": "points/batch-06.json",
+      "bytes": 270,
+      "sha256": "7f41b3d8114e6c2f5234bfd697248bf840229f2dc049757a613625f836c86ee7"
+    },
+    {
+      "file": "points/batch-07.ack",
+      "bytes": 28,
+      "sha256": "4545bcb9523cc00c7eac2398ef61b604ea540e1ed6cc3a0339815e0012ddf634"
+    },
+    {
+      "file": "points/batch-07.json",
+      "bytes": 270,
+      "sha256": "2ba19b136f79e146fbd945aa17770d4ffa5eea89f8e80b403f077276cae1929e"
+    },
+    {
+      "file": "points/idle.ack",
+      "bytes": 28,
+      "sha256": "4545bcb9523cc00c7eac2398ef61b604ea540e1ed6cc3a0339815e0012ddf634"
+    },
+    {
+      "file": "points/idle.json",
+      "bytes": 266,
+      "sha256": "635fd6ab9c59008508280975012aa69f37dd9c42ac3e4d179514d1017235bf23"
+    },
+    {
+      "file": "project/addons/hh_benchmark/benchmark_native.gd",
+      "bytes": 45749,
+      "sha256": "8e81b1850902bf5ab891649f87d359cbb43adb063030123bcc43995890da664e"
+    },
+    {
+      "file": "project/addons/hh_benchmark/benchmark_native.gd.uid",
+      "bytes": 19,
+      "sha256": "bfa6ae8c919f087488920ddb1b188148786afc035ccffa8152dd64c09c744ccb"
+    },
+    {
+      "file": "project/addons/hh_benchmark/plugin.cfg",
+      "bytes": 189,
+      "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092"
+    },
+    {
+      "file": "project/addons/hh_studio/jcs_godot.gd",
+      "bytes": 10165,
+      "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5"
+    },
+    {
+      "file": "project/addons/hh_studio/jcs_godot.gd.uid",
+      "bytes": 20,
+      "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b"
+    },
+    {
+      "file": "project/addons/hh_studio/plugin.cfg",
+      "bytes": 165,
+      "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c"
+    },
+    {
+      "file": "project/addons/hh_studio/plugin.gd",
+      "bytes": 23043,
+      "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036"
+    },
+    {
+      "file": "project/addons/hh_studio/plugin.gd.uid",
+      "bytes": 20,
+      "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d"
+    },
+    {
+      "file": "project/addons/hh_studio/scene_commands.gd",
+      "bytes": 32174,
+      "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069"
+    },
+    {
+      "file": "project/addons/hh_studio/scene_commands.gd.uid",
+      "bytes": 19,
+      "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69"
+    },
+    {
+      "file": "project/benchmark/.gdignore",
+      "bytes": 53,
+      "sha256": "3d078ee3c08af2f64daca29255d23d366dc0a9bdbef8a872442d5642bfb84cf8"
+    },
+    {
+      "file": "project/benchmark/input.json",
+      "bytes": 377,
+      "sha256": "fb7e0863ea91557bae98d8e8156ef83ff6693a390f36e3750c4c4fef1328ab98"
+    },
+    {
+      "file": "project/benchmark/out/batch-00.json",
+      "bytes": 96157,
+      "sha256": "1c6500b6267740360dd26a4537149665d09f23831c1277b35a701700171240b7"
+    },
+    {
+      "file": "project/benchmark/out/batch-01.json",
+      "bytes": 96449,
+      "sha256": "0101dc4b584f0229d82d01993fb98d04d7872a0161868cba8d488982fc756e3d"
+    },
+    {
+      "file": "project/benchmark/out/batch-02.json",
+      "bytes": 96611,
+      "sha256": "e1121a2cf4b37c89aca1bc1092b6466cc4484b766129de4e4c6e9ba33a09c547"
+    },
+    {
+      "file": "project/benchmark/out/batch-03.json",
+      "bytes": 97344,
+      "sha256": "23c8b8918e78a68fd08755eb2d260b50e5b070afea468f82c450f26a9dde6c12"
+    },
+    {
+      "file": "project/benchmark/out/batch-04.json",
+      "bytes": 97343,
+      "sha256": "c0e3f45e48a22803c462a2b9dd154e4346f31aef882fa2a6ea63a4a22f63690b"
+    },
+    {
+      "file": "project/benchmark/out/batch-05.json",
+      "bytes": 97333,
+      "sha256": "b894f7fdba5aa53593b7e5a9a3f48fa26c0d8d75b04d21439118155d2c25e8f1"
+    },
+    {
+      "file": "project/benchmark/out/batch-06.json",
+      "bytes": 97365,
+      "sha256": "1a8632a445f2a262fa2d6c76fa9c03b48ddb7d8af58d4b6227c6a713abf23f00"
+    },
+    {
+      "file": "project/benchmark/out/batch-07.json",
+      "bytes": 97446,
+      "sha256": "51f5025b2caa3e036c06670af25fec558be8851eede0f9042ed79c4d0c0d3437"
+    },
+    {
+      "file": "project/benchmark/out/index.json",
+      "bytes": 3666,
+      "sha256": "6efe0783811c2d28a977f42ee6505421dc9c48fa48917449fabaa62056ff2abe"
+    },
+    {
+      "file": "project/project.godot",
+      "bytes": 838,
+      "sha256": "819b521edff745f02f7c30e96ceffe21c70d8ef4fc32e95b96df37877e817ce1"
+    },
+    {
+      "file": "project/scenes/fixture.tscn",
+      "bytes": 295,
+      "sha256": "8b852d2a4054c2ff502a47646b1bb38ebc3e24127ada126922dbf2644d7089f4"
+    },
+    {
+      "file": "project/scripts/fixture_actor.gd",
+      "bytes": 50,
+      "sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd"
+    },
+    {
+      "file": "project/scripts/fixture_actor.gd.uid",
+      "bytes": 20,
+      "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142"
+    },
+    {
+      "file": "result.json",
+      "bytes": 1088,
+      "sha256": "d719d811e21498e4453c0e960082ba0fba665aa10fd42e1369f9e8303a2dbd1d"
+    },
+    {
+      "file": "runtime-source-files.json",
+      "bytes": 6107,
+      "sha256": "dbea327fd9ca08ed44cc270a2dc79b493a3a4ece9e7f22c202b0eab206a27609"
+    },
+    {
+      "file": "source/studio/blender-addon/ipc_client.py",
+      "bytes": 16349,
+      "sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9"
+    },
+    {
+      "file": "source/studio/contracts/perf-collector.schema.json",
+      "bytes": 30060,
+      "sha256": "394d1df03bdfd736ea3fe9f260e9d718d35f3820cde35d1c45ccab65fbc24834"
+    },
+    {
+      "file": "source/studio/godot-addon/addons/hh_studio/plugin.cfg",
+      "bytes": 165,
+      "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c"
+    },
+    {
+      "file": "source/studio/godot-addon/addons/hh_studio/plugin.gd",
+      "bytes": 23043,
+      "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036"
+    },
+    {
+      "file": "source/studio/godot-addon/addons/hh_studio/scene_commands.gd",
+      "bytes": 32174,
+      "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069"
+    },
+    {
+      "file": "source/studio/godot-addon/bundle_staging.py",
+      "bytes": 15005,
+      "sha256": "3d614edbec8e9a7f5ad3caf2b9694d7498df129de95683952268621f91d68e43"
+    },
+    {
+      "file": "source/studio/godot-addon/bundle_v2.py",
+      "bytes": 8475,
+      "sha256": "2c5cdc71cdaf80f58bb93ec791e84bab8bd02cd4d9bdbd93d635db13583de62a"
+    },
+    {
+      "file": "source/studio/godot-addon/cli_job.py",
+      "bytes": 12672,
+      "sha256": "5a0f37bc129bde409a2657054fb091d637d838e442d45a69e7adc1f1527d4c88"
+    },
+    {
+      "file": "source/studio/godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid",
+      "bytes": 20,
+      "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b"
+    },
+    {
+      "file": "source/studio/godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid",
+      "bytes": 20,
+      "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d"
+    },
+    {
+      "file": "source/studio/godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid",
+      "bytes": 19,
+      "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69"
+    },
+    {
+      "file": "source/studio/godot-addon/fixture_profile/project.godot",
+      "bytes": 282,
+      "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51"
+    },
+    {
+      "file": "source/studio/godot-addon/fixture_profile/scripts/fixture_actor.gd.uid",
+      "bytes": 20,
+      "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142"
+    },
+    {
+      "file": "source/studio/godot-addon/fixture_profile/source-pins.json",
+      "bytes": 1873,
+      "sha256": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2"
+    },
+    {
+      "file": "source/studio/godot-addon/fixture_profile.py",
+      "bytes": 6020,
+      "sha256": "25e1667dd930dcf0746b071fc29ea3460bc18d5fb9f3f83e806c1793028f21ae"
+    },
+    {
+      "file": "source/studio/host/blender/__init__.py",
+      "bytes": 69,
+      "sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90"
+    },
+    {
+      "file": "source/studio/host/blender/deadline.py",
+      "bytes": 1130,
+      "sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926"
+    },
+    {
+      "file": "source/studio/host/blender/export_job.py",
+      "bytes": 13605,
+      "sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe"
+    },
+    {
+      "file": "source/studio/host/blender/glb_preflight.py",
+      "bytes": 11815,
+      "sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62"
+    },
+    {
+      "file": "source/studio/host/blender/ui_host.py",
+      "bytes": 22464,
+      "sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35"
+    },
+    {
+      "file": "source/studio/host/core/limits.py",
+      "bytes": 15813,
+      "sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f"
+    },
+    {
+      "file": "source/studio/host/core/private_store.py",
+      "bytes": 20476,
+      "sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476"
+    },
+    {
+      "file": "source/studio/host/core/safe_create.py",
+      "bytes": 13170,
+      "sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606"
+    },
+    {
+      "file": "source/studio/host/core/safe_open.py",
+      "bytes": 12093,
+      "sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535"
+    },
+    {
+      "file": "source/studio/host/replay/perf.py",
+      "bytes": 19085,
+      "sha256": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7"
+    },
+    {
+      "file": "source/studio/host/replay/process_probe.py",
+      "bytes": 5485,
+      "sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500"
+    },
+    {
+      "file": "source/studio/pipeline/__init__.py",
+      "bytes": 79,
+      "sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68"
+    },
+    {
+      "file": "source/studio/pipeline/native_job.py",
+      "bytes": 12512,
+      "sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca"
+    },
+    {
+      "file": "source/studio/protocol/__init__.py",
+      "bytes": 881,
+      "sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f"
+    },
+    {
+      "file": "source/studio/protocol/_rfc8785/__init__.py",
+      "bytes": 505,
+      "sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b"
+    },
+    {
+      "file": "source/studio/protocol/_rfc8785/_impl.py",
+      "bytes": 7251,
+      "sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec"
+    },
+    {
+      "file": "source/studio/protocol/core.py",
+      "bytes": 19886,
+      "sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e"
+    },
+    {
+      "file": "source/studio/protocol/jcs_godot.gd",
+      "bytes": 10165,
+      "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5"
+    },
+    {
+      "file": "source/studio/tests/replay/benchmark_job.py",
+      "bytes": 24991,
+      "sha256": "be424a6f37ae573ac4bf40954b31017025daee2147699c80b05f9a0ab70e1611"
+    },
+    {
+      "file": "source/studio/tests/replay/benchmark_native.gd",
+      "bytes": 43436,
+      "sha256": "61ca9916f9b8cf758e702b59bf05d316f7f12c6c491d54f788054761da385ea1"
+    },
+    {
+      "file": "source/studio/tests/replay/benchmark_plugin.cfg",
+      "bytes": 189,
+      "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092"
+    },
+    {
+      "file": "source/studio/tests/replay/benchmark_profile.py",
+      "bytes": 19625,
+      "sha256": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233"
+    },
+    {
+      "file": "source/studio/tests/replay/run_native_benchmark.py",
+      "bytes": 26388,
+      "sha256": "6919f07d0e148d03dd15a4804f42b5bf1aba427610af3533d87c5f3a691a3788"
+    },
+    {
+      "file": "source/studio/toolchain.lock.json",
+      "bytes": 3026,
+      "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9"
+    }
+  ],
+  "owner_capture_sha256": "721659d2f8ecb8c916e6054aa1d7e960962fa4e77ee3a4ba72dbbd0abbb6d8b2"
+}

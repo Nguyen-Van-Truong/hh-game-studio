@@ -1,0 +1,21 @@
+{
+  "host": {
+    "wrapper_pid": 30776,
+    "started_at": "2026-09-17T23:50:57.088162+00:00",
+    "argv": [
+      "python.exe",
+      "-B",
+      "$SNAPSHOT/zdoc/reviews/20260918-gt06-s76-handles/diagnose_retention.py"
+    ],
+    "exit_code": 0,
+    "target_pid": 37480,
+    "wrapper_exit_code": 0,
+    "timed_out": false,
+    "tree_verified": true,
+    "ownership": "gated_job_kill_on_close",
+    "stdout": "probe-stdout.txt",
+    "stderr": "probe-stderr.txt",
+    "host": "probe-host.json"
+  },
+  "source_unchanged": true
+}

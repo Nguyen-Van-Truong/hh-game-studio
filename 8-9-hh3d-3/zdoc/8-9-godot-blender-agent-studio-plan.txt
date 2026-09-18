@@ -53,13 +53,13 @@ GT04_REVIEW_CLOSURE=8ea276e98f3137a5f3623fce00d0760ae0c1fe6d17a77a330e98fa8839a3
 GT05_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260917_S64
 GT05_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S64
 GT05_CHECKPOINT_COMMIT=808d8ba
-GT06_EVIDENCE_STATUS=NATIVE_DIAGNOSTICS_IN_PROGRESS_NO_ACCEPTANCE
+GT06_EVIDENCE_STATUS=S76_DIAGNOSTICS_VERIFIED_CAMPAIGN_LAUNCH2_RUNNING_OBSERVED
 GT06_WORKING_SOURCE_STATUS=S76_CADENCE_UNIT_NATIVE_GUARDS_VERIFIED
 GT06_CURRENT_SOURCE_CLOSURE=ffa6071a1fb9d324da7cd860fb41b656e99135a3118367873c7399e85e8432fe
 GT06_SOURCE_CHECKPOINT=04b2f4dc
-GT06_BENCHMARK_CAMPAIGN=gt06-s75-campaign-01
-GT06_BENCHMARK_STATUS=FAILED_S75_LAUNCH1_HANDLES_AND_STATUS_GAP
-GT06_ACTIVE_DIAGNOSTIC=GT06_S76_RETENTION_01_8X100_NATIVE_ONLY
+GT06_BENCHMARK_CAMPAIGN=gt06-s76-campaign-01
+GT06_BENCHMARK_STATUS=S76_LAUNCH2_RUNNING_OBSERVED_AFTER_IMPORT_ZERO
+GT06_ACTIVE_DIAGNOSTIC=NONE_RETENTION_800_COMPLETED
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
 
 TIẾN ĐỘ HIỆN HÀNH — S76, ngày 18-09-2026
@@ -68,11 +68,14 @@ S75 đã FAILED ở batch8: editorhandles577→579, statusgap2016.2214ms>2000.
 ObjectDB71130/resources6 ổn định. Có9capture, không có fullrunPASS.
 Đã giữ failure/source/cleanup; sửa cadence đã qua unit/native/5guard âm tính.
 Ba worker S76 đã hoàn tất preservation, handle analysis và critical-path report.
-Fullbenchmark chưa chạy lại; không dùng partial samples hoặc nới gate.
-Retention8×100native+60sidle đã dispatch23:50:56UTC, taskstate4 tại23:51:54UTC;
-query sống trước khi gọi RUNNING. Checkpoint source04b2f4dc/evidenceccfb27ab.
+Campaign S76 mới: launch1 lỗi import20s trước mọi sample; đã giữ146exactcopies
+và kiểm Jobszero/closed, source/profile/workstation/Stop. Launch2 dispatch00:08:36UTC
+là một lần thử lại có kiểm soát; importactual0 và livehost/editor đã xác nhận.
+Không tự launch3 nếu lỗi lặp. Giữ mọi ngưỡng; querysống trước kết luận hiện tại.
+Retention8×100native+60sidle đã hoàn tất: actualnative25368exit0, ownedtreeclean;
+median32.464s/100cycles, nativegap578.721ms. Source04b2f4dc/checkpointdfbed162.
 Evidence hiện hành: reviews/20260918-gt06-s76-handles/; S75 plan exactarchive ở
-reviews/20260918-plan-history-s75/ (AUTHORITY=0). Source mới04b2f4dc chưa fullcampaign.
+reviews/20260918-plan-history-s75/ (AUTHORITY=0). Source04b2f4dc đang được kiểm trong campaign mới; chưa có fullrunPASS.
 Owner đã cho phép lại ba Astra extra high; coordinator tiếp tục từ S68 đã tích hợp.
 Ba Astra xhigh S73 đã điều tra response-loss, đo tối ưu hash và giữ failure;
 không phải critic nghiệm thu. Hai review độc lập trên final closure còn phải làm.
@@ -165,9 +168,21 @@ GT-06 hiện hành — phần đã làm và đường tới nghiệm thu
   chưa tách hash/scheduler/metadata. Không thaydurability hoặc coi30read làfullmix.
   Report/readback/repro/limitations: reviews/20260918-gt06-s76-handles/README.md.
   Chỉ mở fullcampaign mới sau khi chẩn đoán handle/latency; không retry mù.
-  Diagnosticretention8×100 đang chạy qua taskWindows riêng, runner600s/inner540s;
-  không cóHTTP, không thayfullcampaign. retention_task.ps1 status/delete chỉ
-  đúngtask HHStudio.GT06.gt06-s76-retention-01; actualexit/Job vẫn bắtbuộc.
+  Retention8×100+60sidle đã verified800cycles/9PSSpoints/39source subset49.
+  Native25368exit0, import34140exit0, target37480/wrapper30776exit0; Jobs/handlesclean.
+  Handles573→565→565→557→559→559→559→559→559idle; b3→4 Event+IoCompletion
+  còn tớiidle, không chứng minh transient hoặc lifetime từ numeric slots.
+  Objects71125, riêngb2/idle71127, resources6. Ba batch sauwarmup giữbaseline.
+  KhôngHTTP/RSS/fullbenchmarkclaim. Schedulerterminal0/noinstances đã lưu rồi
+  xóa đúngtask. analyze_retention.py tái verify trênraw, không chạy lạiengine.
+  Ba reviewerAstraxhigh mới rà retention/latency/gate; không phải finalcritic.
+  Lượt tích hợp tiếp theo dùng campaign mới/sourceS76, mọingưỡng giữnguyên.
+  Không triển khai transactionoptimization suy đoán: timeoutS75 xảy ra sauadmission;
+  nguyênnhân chưa chứngminh, sẽ giữfailure và chẩnđoán nếu lặp.
+  CampaignS76launch1 import20s fail,0sample: host23948actual1/native26944exitthiếu,
+  wrapper2riêng, Jobszero/closed, schedulerterminal1. Source/machine/Stopđãkiểm.
+  Launch2 taskHHStudio.GT06.gt06-s76-campaign-01-launch-02, started00:08:36UTC.
+  Querysống trướcRUNNING; giữ20simport/7410srun, khôngautolaunch3 nếu lỗi lặp.
 - Sau benchmark: verify complete10×35, raw/hash/schema/counters/actual exits;
   ghép functional bằng dependency đã kiểm; đóng final source/review/raw manifest
   và requirement→test→evidence. Hai critic mới đọc độc lập cùng final hash,

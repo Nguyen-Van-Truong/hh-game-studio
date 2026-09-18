@@ -97,12 +97,78 @@ The first old-key collector erroneously expected an empty output directory;
 `failure.json` is required negative evidence. Corrected verification reuses the
 native raw without re-running the engine, retaining the failed collector result.
 
-Next: investigate retained-counter definition/cause and host latency with bounded
-diagnostics, then freeze a new campaign. Preserve the original workload/gates;
-do not simply retry the full campaign after this speed fix. Final acceptance needs
+Next: run the first integrated campaign against the guarded S76 cadence after
+the completed retention and HTTP diagnostics below. Preserve the original workload/gates;
+the cause of the earlier rare HTTP gap and handle increases remains unproven. Final acceptance needs
 10×35 complete batches and two independent PASS/TICK=yes on the same final closure.
-Three workers completed the initial S76 analysis; subsequent two follow-ups failed
-with workspace-credit errors, and no new independent review was produced.
+Three workers completed the initial S76 analysis; two older follow-ups failed
+with workspace-credit errors. Three fresh Astra xhigh diagnostic reviewers were
+successfully dispatched on 18 September. These are not final acceptance critics.
+
+## Completed retention probe and next integrated measurement
+
+`analyze_retention.py` verifies and copies the finished `gt06-s76-retention-01`
+raw evidence into `retention-evidence/`; `retention-analysis.json` retains the
+exact copy inventory, nine PSS points and cycle checks. All800 native semantic
+cycles completed, editor25368 actual0, import34140 actual0; outer target37480
+and wrapper30776 actual0. Jobs zero/closed, retained native handles released,
+source unchanged, logs clean. Scheduler terminalstate3/result0/noinstances was
+recorded separately in `retention-terminal-task.json` before deleting that task.
+
+Handles:573,565,565,557,559,559,559,559, then559 at idle. Batch3→4 adds an Event
+and IoCompletion; neither the count nor repeated numeric slots establish object
+identity or ownership. They remain at the last idle point. Objects71125 except
+batch2 and idle71127; resources6 throughout. Batch4 and three subsequent samples
+are stable. Median100-cycle batch32.464s; maximum native statusgap578.721ms.
+No HTTP mix, RSS proof, full benchmark or leak-free acceptance is claimed.
+
+The diagnostic source map has39 files, closure
+`aa58e8ee7fc4f8399766c8d6beca9dfc1bf10b5247ab7f2aba5cb0d40c259b6f`;
+every dependency is an exact subset of the49-file current campaign map. Its
+disposable instrumented plugin has its own project hashes. Do not relabel this
+diagnostic as a full campaign source closure or reuse its samples there.
+
+The earlier responsive arm's net561→558 drop also does not show that its newly
+added Event/IoCompletion pair was released: different numeric slots disappeared.
+See the new independent retention report for this correction. Windows documents
+that completion ports can serve several I/O handles and require closing all
+references; the [API documentation](https://learn.microsoft.com/en-us/windows/win32/fileio/createiocompletionport)
+does not identify the creator of these particular observed handles.
+
+The next run is a new candidate under S76 source, never a resume of failed S75.
+It retains10×35, exact mix, original warmup, RSS/counters/status/p95 limits and
+fail-closed behavior. An integrated failure is preserved and diagnosed before
+another launch. A speculative transaction optimization is deferred: the rare
+S75 timeout happened after admission, and a new lock abstraction would invalidate
+otherwise reusable transport evidence without yet proving that failure's cause.
+
+## Campaign startup and bounded resume
+
+`gt06-s76-campaign-01`, launch1, started00:04:45UTC and failed before any batch:
+the shared import owner enforced20s while Godot was loading global class names.
+The import native26944 has no captured exit; its helperexit2 is recorded separately.
+Host23948 actualexit1, host/import Jobs zero/closed, host owner handle released.
+Scheduler terminal1/noinstances is in `campaign-launch-observation.json`.
+`campaign-import-failure-01/manifest.json` seals146 exact copies with zero samples.
+`preserve_import_failure.py` verifies source/workstation/Stop/cleanup prerequisites.
+
+The independent import review found no source/project/config mismatch: all39
+shared dependencies match; the only relevant project differences from the clean
+retention run are its instrumented diagnostic driver and ignored input binding.
+Retention import completed7.953s; older same-depth campaign imports completed
+4.782–9.171s. This does not establish the cause of the new20s stall. The fixed
+20s safety bound remains unchanged, as do CPU/memory/workstation settings.
+
+One fresh process pair resumes the same frozen campaign as **launch2**, dispatched
+00:08:36UTC under `HHStudio.GT06.gt06-s76-campaign-01-launch-02`. Live status must
+be queried before calling it running. No old partial samples are used. If import
+or the unresolved measured failure repeats, do not automatically launch a third
+attempt. Preserve evidence and diagnose the new phase first.
+
+The first ad hoc workstation prerequisite check compared Python's OS tuple to
+the saved JSON array and rejected before copying evidence. The preserved verifier
+uses the runner's exact JSON representation; the workstation is unchanged.
+No native run was repeated to repair that collector comparison.
 
 GT01–05 do not establish unrestricted2D/3D game authoring. The current Godot
 authoring fixture restricts scene nodes; Blender→GLB success does not establish
