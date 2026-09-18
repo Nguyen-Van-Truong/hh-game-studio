@@ -1,0 +1,734 @@
+{
+  "schema": "HH-GT06-S83-REQUIREMENT-MAPPING-PREP-1",
+  "prepared_utc": "2026-09-18T09:52:19.711322+00:00",
+  "authority": 0,
+  "formal_acceptance": false,
+  "plan": "zdoc/8-9-godot-blender-agent-studio-plan.txt",
+  "gate": "GT-06 IN_PROGRESS",
+  "source_checkpoint": "b3862a10",
+  "campaign_source_files": 51,
+  "campaign_source_closure_sha256": "e010180a1bf85b7f565e9aa39734f8551caf170a85b36c50598be556b723ce7f",
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "campaign_id": "gt06-s81-campaign-01",
+  "campaign_status": "FAILED_BATCH15_NO_COMPLETE_RUN",
+  "final_manifest": null,
+  "critics": {
+    "A": null,
+    "B": null
+  },
+  "coordinator_acceptance": null,
+  "evidence_catalog": {
+    "E05": {
+      "path": "zdoc/reviews/20260917-gt05-s63-audit/manifest.json",
+      "scope": "Accepted GT05 producer/edit/validated GLB/import/reimport provenance; acceptance S64, no transferred GT06 verdict.",
+      "historically_recorded_metadata_sha256": "fd0b4a984c7bee261c083c07d461baf55325e936d66df2eeab897b422ee0a02b",
+      "digest_provenance": "S80 requirements.json; not independently rehashed in S83 preparation"
+    },
+    "E65": {
+      "path": "zdoc/reviews/20260917-gt06-s65-progress/runs.json",
+      "scope": "Historical native04 fault, repair02 and native05/perf. Native154 maps are not current; preserve original causal anchors.",
+      "historically_recorded_metadata_sha256": "949197385c5481b8e90b450dd32370773c50a9ff85cbb9bdc5de5aee40e25182",
+      "digest_provenance": "S80 requirements.json; not independently rehashed in S83 preparation"
+    },
+    "E69R": {
+      "path": "studio/.local/reviews/gt06-s69-managed-replay-01/repair-replay.json",
+      "scope": "Current-matching scoped runtime159 and four verifier sources; seed17; original S65 fault/repair02 bound to native replay.",
+      "historically_recorded_metadata_sha256": "301b9ec859c0d5bbb2278d253ece23480781bb9c733cdd8acbd1d8159a48976a",
+      "digest_provenance": "S80 requirements.json; not independently rehashed in S83 preparation"
+    },
+    "E79": {
+      "path": "zdoc/reviews/20260918-gt06-s79-diagnosis/service-remint-01/verification.json",
+      "scope": "Seven native service/adversary/reviewer runs; runtime174 and GUI5 projections match. Stop natural exit remains null, not fabricated zero.",
+      "historically_recorded_metadata_sha256": "e217e1fe61f167483276bf68eb6777838823442b661cb7b45e4f5296742c6ce4",
+      "digest_provenance": "S80 requirements.json; not independently rehashed in S83 preparation"
+    },
+    "DEP": {
+      "path": "zdoc/reviews/20260918-gt06-s79-diagnosis/s80-dependency-bridge.json",
+      "scope": "S80 per-lane dependency comparison and S65/S68 limits; use DEP81 for restored transport/current scope. REPORT distinguishes source checkpoint24efe967 and frozen Git HEAD e4bbc1fe.",
+      "historically_recorded_metadata_sha256": "ad26cda49911bf29fd4f2eae0faf2337f4df20367ee22cd30912562f461000bc",
+      "digest_provenance": "S80 requirements.json; not independently rehashed in S83 preparation"
+    },
+    "U69": {
+      "path": "zdoc/reviews/20260918-gt06-s69-units-01/invocation.json",
+      "scope": "Original434-test package. Reuse unaffected scoped fault/observer/UI paths; service.py changed and is supplemented by U79/E79.",
+      "historically_recorded_metadata_sha256": "951d3439e92747b658aee9dd9f60df1b0e2c9cca30944c9d2d00792427718ac1",
+      "digest_provenance": "S80 requirements.json; not independently rehashed in S83 preparation"
+    },
+    "U79": {
+      "path": "zdoc/reviews/20260918-gt06-s79-diagnosis/index-checks-01/invocation.json",
+      "scope": "95 recorded index/service/journal regressions, including current service/index fault cases; no whole407 snapshot current claim.",
+      "historically_recorded_metadata_sha256": "f33c3b4fdf8b397b4b2afd7c9c90b7200ffe7748bc8de048aa82119b0ecda549",
+      "digest_provenance": "S80 requirements.json; not independently rehashed in S83 preparation"
+    },
+    "U80": {
+      "path": "zdoc/reviews/20260918-gt06-s80-readiness/verification.json",
+      "scope": "Historical96+11 tests (98 distinct), current readiness source subset only; changed benchmark consumers use U81. Not a current50/51-file execution claim.",
+      "historically_recorded_metadata_sha256": "4dafed5fa9daa88e991f09130e3dacbb3d14cc6d36d98e7caf485a3dfb7e34b9",
+      "digest_provenance": "S80 requirements.json; not independently rehashed in S83 preparation"
+    },
+    "CB80": {
+      "path": "zdoc/reviews/20260918-gt06-s80-readiness/campaign-closure-binding.json",
+      "scope": "Historical actual50 campaign closure and diagnostic source correction; superseded for current campaign by SRC81 51. Keep provenance, never rename it.",
+      "historically_recorded_metadata_sha256": "5dc84b23fb7e13afaa99b13341e66424565c410f57c51f7c40892130a467c81d",
+      "digest_provenance": "S80 requirements.json; not independently rehashed in S83 preparation"
+    },
+    "E80N": {
+      "path": "zdoc/reviews/20260918-gt06-s80-readiness/README.md",
+      "scope": "Historical native positive37788 exit0 and no-focus19752 exit86; source-scoped readiness behavior only, not S81 full-runtime performance.",
+      "historically_recorded_metadata_sha256": "288106323d42b0cd3e0efd4c526cb42a94d5eba35120fa7b293f5c9881889b45",
+      "digest_provenance": "S80 requirements.json; not independently rehashed in S83 preparation"
+    },
+    "FAULT": {
+      "path": "zdoc/reviews/20260918-gt06-s70-resume/fault-coverage-links.md",
+      "scope": "Exact F11/F12 test/artifact links; native S60 OOM, S64 shared-runner bounds, scoped S69 consumer coverage. Current service supplement U79/E79.",
+      "historically_recorded_metadata_sha256": "c9393a736c85fd45fe3a85c75c40cb66bcf347f8e9c2c1ecc0fafe579e637bd8",
+      "digest_provenance": "S80 requirements.json; not independently rehashed in S83 preparation"
+    },
+    "E70": {
+      "path": "zdoc/reviews/20260918-gt06-s70-resume/evidence-inventory.json",
+      "scope": "Historical scheduler/nested-owner natural/Stop/failure examples at original source bindings. They do not prove successful termination of current or future campaign; S80 and S81 campaigns failed.",
+      "historically_recorded_metadata_sha256": "236f25976d39f8121b0bdfbe9e375344591c2d407e5df441860985f39007b034",
+      "digest_provenance": "S80 requirements.json; not independently rehashed in S83 preparation"
+    },
+    "BENCH": {
+      "path": "studio/.local/reviews/gt06-s81-campaign-01",
+      "scope": "FAILED at batch15; 16 captures including5warmup/11measured; ObjectDB71128 to71130, zero complete runs. Retain failed raw/supervisor; no sample pooling. Future successful campaign ID unassigned here."
+    },
+    "DEP81": {
+      "path": "zdoc/reviews/20260918-gt06-s81-admission/dependency-impact.md",
+      "scope": "After accepted transport restoration, recorded exact joins: acceptedGT05 143; S79 backend174 and UI5 with same collector membership; S69 runtime159/verifier4. Benchmark-only paths absent from those maps. No native remint needed solely for this isolated source delta.",
+      "formal_acceptance": false
+    },
+    "SRC81": {
+      "path": "zdoc/reviews/20260918-gt06-s81-admission/repair-source.json",
+      "scope": "Current declared51-file e010180a closure, profile and per-file map. Includes new benchmark_transport and terminal cleanup consumer. Not independently rehashed here.",
+      "formal_acceptance": false
+    },
+    "U81": {
+      "path": "zdoc/reviews/20260918-gt06-s81-admission/checks-02/invocation.json",
+      "scope": "204/204 affected checks, zero skips/failures/errors; actual target10500 exit0/helper36760 exit0, tree verified; 414 captured sources unchanged. Broad414 is a test snapshot, not campaign closure.",
+      "formal_acceptance": false
+    },
+    "H81": {
+      "path": "zdoc/reviews/20260918-gt06-s81-admission/http-probe/result-02/capture.json",
+      "scope": "Instrumented isolated-benchmark HTTP02, target7060 exit0/helper53616 exit0; complete1000-command batch. Removes observed fault-hook contention, not demonstrated total throughput gain, native workload or timeout-cause proof.",
+      "formal_acceptance": false
+    },
+    "C81": {
+      "path": "zdoc/reviews/20260918-gt06-s81-admission/native-cleanup-probe/evidence/verification.json",
+      "scope": "Supplemental same51 runtime, execution52 with driver: ff0246d4629395aefe7962c624d2bb51140ecf1a6658db72ad1c034a79f7b840. Actual READY then injected failure, zero batches/effects. Observer14112/import34944 exit0; editor natural exit null/helper33296 exit2. Import wrapper receipt/outer shell receipt/helper PID gaps remain.",
+      "formal_acceptance": false
+    },
+    "FAIL81": {
+      "path": "zdoc/reviews/20260918-gt06-s82-failure/package-manifest.json",
+      "scope": "Failure preservation only, recorded seal15990322afe5cfdcf8f95a5274493bbd2b72b7ccca323cf7f7c2b9c2aeef1a48. 325raw/172copies; host4132 exit1, editor48332 actual exit missing/helper22376 exit2; closed zero Jobs. Scheduler state3/result1/no instances; supervisor actual exit/import wrapper/helper inventory gaps.",
+      "formal_acceptance": false
+    },
+    "DIAG82": {
+      "path": "zdoc/reviews/20260918-gt06-s82-attribution/README.md",
+      "scope": "Attribution design/overlay and coordinator-controlled disposable run; no runtime claim or live/raw inspection by this preparation. Native-only short/long probes and full-sequence attribution have separate instrumentation/durations. All excluded from accepted campaign samples.",
+      "formal_acceptance": false
+    }
+  },
+  "requirements": [
+    {
+      "id": "F01",
+      "requirement": "First tool vertical slice: Blender edit to GLB/import to real Play and repair/replay",
+      "plan_sections": [
+        "GT-06 BUILD",
+        "TQ00"
+      ],
+      "tests": [
+        "studio/host/replay/native_runner.py:accepted_inputs",
+        "studio/tests/replay/test_repair_replay.py"
+      ],
+      "evidence": [
+        "E05",
+        "E65",
+        "E69R",
+        "DEP81"
+      ],
+      "status": "AVAILABLE_SCOPED_FINAL_CHAIN_JOIN_OPEN",
+      "claim_boundary": "Reuse accepted asset and original repair/replay chain. Final seal must resolve Blender edit/producer->consumed GLB->import/readback->Play->repair02->S69 replay with exact original artifacts/IDs. No rerun absent changed dependencies.",
+      "evidence_artifacts": [
+        "zdoc/reviews/20260917-gt05-s63-audit/manifest.json",
+        "zdoc/reviews/20260917-gt05-s64-acceptance/acceptance.json",
+        "studio/.local/reviews/gt06-s65-native-04/capture.json",
+        "studio/.local/reviews/gt06-s65-repair-02/capture.json",
+        "studio/.local/reviews/gt06-s69-managed-replay-01/repair-replay.json",
+        "studio/.local/reviews/gt05-validation-s62-01/fixture.glb",
+        "studio/.local/reviews/gt06-s69-managed-replay-01/project/input/fixture.glb",
+        "studio/.local/reviews/gt06-s69-managed-replay-01/runtime-snapshot.json"
+      ],
+      "reuse_or_remint": "Reuse accepted asset and original repair/replay chain. Final seal must resolve Blender edit/producer->consumed GLB->import/readback->Play->repair02->S69 replay with exact original artifacts/IDs. No rerun absent changed dependencies.",
+      "acceptance": false,
+      "provenance_status": "Source/proof scopes derived from recorded metadata and dependency reports; no independent current raw/source audit in S83."
+    },
+    {
+      "id": "F02",
+      "requirement": "60Hz real menu/play/input with pressed/held/released and seed",
+      "plan_sections": [
+        "GT-06 VERIFY",
+        "TQ06"
+      ],
+      "tests": [
+        "studio/tests/replay/test_trace.py:test_default_intent_exercises_ordered_real_key_edges_and_pause_probe",
+        "studio/tests/replay/test_observation.py:test_input_event_callback_and_real_menu_button_are_required"
+      ],
+      "evidence": [
+        "E69R",
+        "E79",
+        "U69",
+        "DEP81"
+      ],
+      "status": "AVAILABLE_DEPENDENCY_SCOPED",
+      "claim_boundary": "Reuse original native reports/traces and real callback checks; bind seed17/60Hz/key edges and source/PID/run IDs in final seal. No affected source delta shown for these lanes.",
+      "evidence_artifacts": [
+        "studio/.local/reviews/gt06-s69-managed-replay-01/repair-replay.json",
+        "studio/.local/reviews/gt06-s69-managed-replay-01/project/out/report.json",
+        "studio/.local/reviews/gt06-s79-reviewer-complete-01/reviewer-probe/result.json",
+        "studio/.local/reviews/gt06-s69-managed-replay-01/project/input/trace.json",
+        "studio/.local/reviews/gt06-s69-managed-replay-01/invocation.json"
+      ],
+      "reuse_or_remint": "Reuse original native reports/traces and real callback checks; bind seed17/60Hz/key edges and source/PID/run IDs in final seal. No affected source delta shown for these lanes.",
+      "acceptance": false,
+      "provenance_status": "Source/proof scopes derived from recorded metadata and dependency reports; no independent current raw/source audit in S83."
+    },
+    {
+      "id": "F03",
+      "requirement": "Move, outfit/emote/prop, pause/resume/quit; frozen simulation with responsive UI",
+      "plan_sections": [
+        "GT-06 BUILD/VERIFY",
+        "TQ06",
+        "TX13"
+      ],
+      "tests": [
+        "studio/tests/replay/test_observation.py:test_pause_body_animation_and_simulation_changes_rejected",
+        "studio/tests/replay/test_observation.py:test_ui_must_advance_during_pause",
+        "studio/tests/replay/test_observation.py:test_quit_must_drain_releases_and_captures"
+      ],
+      "evidence": [
+        "E69R",
+        "E79",
+        "U69",
+        "DEP81"
+      ],
+      "status": "AVAILABLE_DEPENDENCY_SCOPED",
+      "claim_boundary": "Reuse post-phase native movement/interaction/pause/resume/quit evidence. Final join retains simulation tick/body freeze and advancing UI; fixture-only, no HH World claim.",
+      "evidence_artifacts": [
+        "studio/.local/reviews/gt06-s69-managed-replay-01/project/out/report.json",
+        "studio/.local/reviews/gt06-s79-reviewer-complete-01/reviewer-probe/result.json",
+        "studio/.local/reviews/gt06-s79-http-complete-01/capture.json"
+      ],
+      "reuse_or_remint": "Reuse post-phase native movement/interaction/pause/resume/quit evidence. Final join retains simulation tick/body freeze and advancing UI; fixture-only, no HH World claim.",
+      "acceptance": false,
+      "provenance_status": "Source/proof scopes derived from recorded metadata and dependency reports; no independent current raw/source audit in S83."
+    },
+    {
+      "id": "F04",
+      "requirement": "Bounded scene/property/runtime inspection and historical pages",
+      "plan_sections": [
+        "GT-06 BUILD",
+        "section2.6"
+      ],
+      "tests": [
+        "studio/tests/replay/test_inspector.py:test_filter_and_pagination_cover_each_matching_tick_once",
+        "studio/tests/replay/test_inspector.py:test_page_filter_and_cursor_caps_reject_before_output"
+      ],
+      "evidence": [
+        "E79",
+        "U69",
+        "DEP81"
+      ],
+      "status": "AVAILABLE_DEPENDENCY_SCOPED",
+      "claim_boundary": "Reuse S79 real Inspect/Capture plus U69 bounded view/pagination negatives. Historical state inspection remains labeled historical; no arbitrary runtime mutation/debugger claim.",
+      "evidence_artifacts": [
+        "studio/.local/reviews/gt06-s79-reviewer-complete-01/reviewer-probe/result.json",
+        "zdoc/reviews/20260918-gt06-s69-units-01/units-stderr.txt"
+      ],
+      "reuse_or_remint": "Reuse S79 real Inspect/Capture plus U69 bounded view/pagination negatives. Historical state inspection remains labeled historical; no arbitrary runtime mutation/debugger claim.",
+      "acceptance": false,
+      "provenance_status": "Source/proof scopes derived from recorded metadata and dependency reports; no independent current raw/source audit in S83."
+    },
+    {
+      "id": "F05",
+      "requirement": "Bookmarks/camera/capture bind actual source, PID/window, frame and time",
+      "plan_sections": [
+        "GT-06 VERIFY",
+        "TQ06",
+        "TX13"
+      ],
+      "tests": [
+        "studio/tests/replay/test_observation.py:test_stale_native_pid_window_or_source_binding_rejected",
+        "studio/tests/replay/test_observation.py:test_capture_request_tick_frame_fence_and_native_frame_binding"
+      ],
+      "evidence": [
+        "E69R",
+        "E79",
+        "U69",
+        "DEP81"
+      ],
+      "status": "AVAILABLE_DEPENDENCY_SCOPED",
+      "claim_boundary": "Resolve seven original PNGs through report/inventory, native frame/time/camera/PID/source binding, and stale-capture original/mutation witness/rejection. Preserve deliberately corrupted PNG; do not reinterpret it as positive output.",
+      "evidence_artifacts": [
+        "studio/.local/reviews/gt06-s69-managed-replay-01/project/out/report.json",
+        "studio/.local/reviews/gt06-s79-stale-capture-01/http-adversary/result.json",
+        "zdoc/reviews/20260918-gt06-s79-diagnosis/service-remint-01/verification.json",
+        "studio/.local/reviews/gt06-s69-managed-replay-01/project/out/menu.png",
+        "studio/.local/reviews/gt06-s69-managed-replay-01/project/out/moved.png",
+        "studio/.local/reviews/gt06-s69-managed-replay-01/project/out/interact.png",
+        "studio/.local/reviews/gt06-s69-managed-replay-01/project/out/paused_a.png",
+        "studio/.local/reviews/gt06-s69-managed-replay-01/project/out/paused_b.png",
+        "studio/.local/reviews/gt06-s69-managed-replay-01/project/out/resumed.png",
+        "studio/.local/reviews/gt06-s69-managed-replay-01/project/out/camera.png"
+      ],
+      "reuse_or_remint": "Resolve seven original PNGs through report/inventory, native frame/time/camera/PID/source binding, and stale-capture original/mutation witness/rejection. Preserve deliberately corrupted PNG; do not reinterpret it as positive output.",
+      "acceptance": false,
+      "provenance_status": "Source/proof scopes derived from recorded metadata and dependency reports; no independent current raw/source audit in S83."
+    },
+    {
+      "id": "F06",
+      "requirement": "Seeded fault observed, typed authenticated repair, fault absent on replay",
+      "plan_sections": [
+        "GT-06 BUILD",
+        "TQ06"
+      ],
+      "tests": [
+        "studio/tests/replay/test_repair_replay.py",
+        "studio/host/replay/repair_replay.py:verified_repair"
+      ],
+      "evidence": [
+        "E65",
+        "E69R",
+        "DEP",
+        "DEP81"
+      ],
+      "status": "AVAILABLE_CAUSAL_HISTORICAL_PLUS_DEPENDENCY_EXACT_REPLAY",
+      "claim_boundary": "Keep S65 zero-speed fault/typed script_text.replace repair02 receipt and selected-config hash, then dependency-exact S69 managed replay. S65 is not current-native; no need to repeat valid repair merely for changed benchmark files.",
+      "evidence_artifacts": [
+        "studio/.local/reviews/gt06-s65-native-04/capture.json",
+        "studio/.local/reviews/gt06-s65-repair-02/capture.json",
+        "studio/.local/reviews/gt06-s69-managed-replay-01/repair-replay.json",
+        "studio/.local/reviews/gt06-s65-repair-02/fault-binding.json",
+        "studio/.local/reviews/gt06-s65-repair-02/request.json",
+        "studio/.local/reviews/gt06-s65-repair-02/response.json",
+        "studio/.local/reviews/gt06-s65-repair-02/native-readback.json",
+        "studio/.local/reviews/gt06-s65-repair-02/repair.json",
+        "studio/.local/reviews/gt06-s65-repair-02/selected-config.gd",
+        "studio/.local/reviews/gt06-s65-repair-02/selected-manifest.json"
+      ],
+      "reuse_or_remint": "Keep S65 zero-speed fault/typed script_text.replace repair02 receipt and selected-config hash, then dependency-exact S69 managed replay. S65 is not current-native; no need to repeat valid repair merely for changed benchmark files.",
+      "acceptance": false,
+      "provenance_status": "Source/proof scopes derived from recorded metadata and dependency reports; no independent current raw/source audit in S83."
+    },
+    {
+      "id": "F07",
+      "requirement": "Versioned raw frame-ms/perf counters, p50/p95/p99 and exact1%low",
+      "plan_sections": [
+        "GT-06 perf contract/VERIFY",
+        "TQ06"
+      ],
+      "tests": [
+        "studio/tests/replay/test_perf.py:test_type7_and_one_percent_goldens",
+        "studio/tests/replay/test_perf.py:test_required_identity_and_low_fields",
+        "studio/tests/replay/test_perf_export.py:test_closed_native_counter_semantics"
+      ],
+      "evidence": [
+        "E65",
+        "DEP",
+        "U69",
+        "SRC81"
+      ],
+      "status": "AVAILABLE_HISTORICAL_NATIVE_CURRENT_COLLECTOR",
+      "claim_boundary": "Reuse historical S65 native/perf exports only within original runtime. Three collector files matched in DEP; schema stays current in SRC81. Resolve export raw frames/schema/counter unavailable markers; performance campaign still open.",
+      "evidence_artifacts": [
+        "studio/.local/reviews/gt06-s65-native-04/perf-export-v1.json",
+        "studio/.local/reviews/gt06-s65-native-05/perf-export-v1.json",
+        "zdoc/reviews/20260918-gt06-s79-diagnosis/s80-dependency-bridge.json"
+      ],
+      "reuse_or_remint": "Reuse historical S65 native/perf exports only within original runtime. Three collector files matched in DEP; schema stays current in SRC81. Resolve export raw frames/schema/counter unavailable markers; performance campaign still open.",
+      "acceptance": false,
+      "provenance_status": "Source/proof scopes derived from recorded metadata and dependency reports; no independent current raw/source audit in S83."
+    },
+    {
+      "id": "F08",
+      "requirement": "Admission/readback/dedupe and durable UNKNOWN; no fabricated ACK",
+      "plan_sections": [
+        "section2.2",
+        "section2.6",
+        "TQ00"
+      ],
+      "tests": [
+        "studio/tests/replay/test_service.py:test_start_is_pending_then_commits_only_after_bound_result_and_dedupes_once",
+        "studio/tests/replay/test_service.py:test_completion_persistence_failure_lookup_is_unknown_without_durable_success",
+        "studio/tests/replay/test_index_faults.py",
+        "studio/tests/protocol/test_transport_observation.py:test_copied_call_preserves_accepted_wire_and_error_behavior",
+        "studio/tests/protocol/test_transport_fault_lock.py:test_durable_pending_ack_arrives_while_terminal_persistence_holds_host_lock"
+      ],
+      "evidence": [
+        "E79",
+        "U79",
+        "U81",
+        "H81",
+        "DEP81"
+      ],
+      "status": "AVAILABLE_SERVICE_DEPENDENCY_SCOPED_BENCHMARK_SUPPLEMENTAL",
+      "claim_boundary": "S79 is current dependency-exact service evidence; U79/U81 replace changed U69 service/index coverage. H81 isolates new benchmark transport and proves only one instrumented HTTP batch. Full benchmark consumers need fresh complete campaign.",
+      "evidence_artifacts": [
+        "studio/.local/reviews/gt06-s79-revoked-result-01/http-adversary/result.json",
+        "zdoc/reviews/20260918-gt06-s79-diagnosis/index-checks-01/invocation.json",
+        "zdoc/reviews/20260918-gt06-s81-admission/checks-02/unit-stderr.txt",
+        "zdoc/reviews/20260918-gt06-s81-admission/http-probe/result-02/capture.json"
+      ],
+      "reuse_or_remint": "S79 is current dependency-exact service evidence; U79/U81 replace changed U69 service/index coverage. H81 isolates new benchmark transport and proves only one instrumented HTTP batch. Full benchmark consumers need fresh complete campaign.",
+      "acceptance": false,
+      "provenance_status": "Source/proof scopes derived from recorded metadata and dependency reports; no independent current raw/source audit in S83."
+    },
+    {
+      "id": "F09",
+      "requirement": "Reviewer keyboard/error/UNKNOWN next action; human Stop survives reconnect",
+      "plan_sections": [
+        "GT-06 CONTRACT/VERIFY",
+        "section2.6"
+      ],
+      "tests": [
+        "studio/tests/reviewer/test_model.py:test_unknown_and_rejected_keep_safe_next_action_without_automatic_replay",
+        "studio/tests/reviewer/test_client_adversarial.py:test_late_committed_play_cannot_overwrite_stop_latch",
+        "studio/tests/reviewer/run_reviewer_probe.py"
+      ],
+      "evidence": [
+        "E79",
+        "U69",
+        "DEP81"
+      ],
+      "status": "AVAILABLE_DEPENDENCY_SCOPED",
+      "claim_boundary": "Reuse S79 UI5/backend174 actual keyboard/buttons plus unit edge states. Preserve Stop latch/UNKNOWN next action/reconnect denial; no unit outcome promoted to native fault proof.",
+      "evidence_artifacts": [
+        "studio/.local/reviews/gt06-s79-reviewer-complete-01/reviewer-probe/result.json",
+        "studio/.local/reviews/gt06-s79-reviewer-stop-01/reviewer-probe/result.json",
+        "zdoc/reviews/20260918-gt06-s69-units-01/units-stderr.txt"
+      ],
+      "reuse_or_remint": "Reuse S79 UI5/backend174 actual keyboard/buttons plus unit edge states. Preserve Stop latch/UNKNOWN next action/reconnect denial; no unit outcome promoted to native fault proof.",
+      "acceptance": false,
+      "provenance_status": "Source/proof scopes derived from recorded metadata and dependency reports; no independent current raw/source audit in S83."
+    },
+    {
+      "id": "F10",
+      "requirement": "Resolve native identity after reload; source-bound startup receipt before measured work",
+      "plan_sections": [
+        "TX02",
+        "TQ00",
+        "GT-06 schema compatibility"
+      ],
+      "tests": [
+        "studio/tests/replay/test_native_benchmark.py:test_missing_old_or_late_startup_receipt_rejected",
+        "studio/tests/replay/test_benchmark_readiness.py:test_source_scene_root_revision_or_bytes_drift_rejected_at_each_point",
+        "studio/tests/replay/test_benchmark_readiness.py:test_setup_after_batch_or_ready_and_short_settle_rejected"
+      ],
+      "evidence": [
+        "U80",
+        "E80N",
+        "U81",
+        "C81",
+        "SRC81",
+        "FAIL81"
+      ],
+      "status": "AVAILABLE_READINESS_SCOPED_FULL_REPEATED_LIFECYCLE_OPEN",
+      "claim_boundary": "Reuse bounded readiness behavior at original bindings; C81 reaches READY but has zero native cycles. Fresh complete campaign must supply source-bound index1.3.0 startup and every cycle/reload/identity/postcondition over10x35; no OS-focus or private-state-reset claim.",
+      "evidence_artifacts": [
+        "zdoc/reviews/20260918-gt06-s80-readiness/verification.json",
+        "zdoc/reviews/20260918-gt06-s80-readiness/campaign-closure-binding.json",
+        "zdoc/reviews/20260918-gt06-s81-admission/checks-02/invocation.json",
+        "zdoc/reviews/20260918-gt06-s81-admission/native-cleanup-probe/evidence/verification.json"
+      ],
+      "reuse_or_remint": "Reuse bounded readiness behavior at original bindings; C81 reaches READY but has zero native cycles. Fresh complete campaign must supply source-bound index1.3.0 startup and every cycle/reload/identity/postcondition over10x35; no OS-focus or private-state-reset claim.",
+      "acceptance": false,
+      "provenance_status": "Source/proof scopes derived from recorded metadata and dependency reports; no independent current raw/source audit in S83."
+    },
+    {
+      "id": "F11",
+      "requirement": "Timeout/OOM/disk failures/Stop/PID identity preserve diagnostics and exact owned cleanup",
+      "plan_sections": [
+        "TX05",
+        "TQ00"
+      ],
+      "tests": [
+        "studio/tests/pipeline/test_native_job.py:test_actual_short_deadline_kills_only_owned_job",
+        "studio/tests/replay/test_backend.py:test_runtime_exit_pid_must_match_sampler_identity",
+        "studio/tests/replay/test_service.py:test_stop_persistence_failure_still_latches_runtime_and_work_admission",
+        "studio/tests/replay/test_campaign_terminal_cleanup.py",
+        "studio/tests/replay/test_campaign_terminal_cleanup.py:test_actual_exit_receipt_is_pid_bound_and_not_a_helper_exit"
+      ],
+      "evidence": [
+        "FAULT",
+        "U69",
+        "U79",
+        "E79",
+        "U81",
+        "C81",
+        "FAIL81"
+      ],
+      "status": "AVAILABLE_SCOPED_FAULTS_CURRENT_CLEANUP_SUPPLEMENT_FULL_SUCCESS_OPEN",
+      "claim_boundary": "Reuse shared accepted S60/S64 and current S79 consumers; U81/C81 cover new terminal-cleanup path with explicit forced-path/missing-receipt limits. Fresh successful campaign must prove actual natural target/helper exits and released ownership. Never substitute helper/scheduler code for missing exit.",
+      "evidence_artifacts": [
+        "studio/.local/reviews/20260917-gt04-s60-matrix/ipc/oom.json",
+        "studio/.local/reviews/gt05-units-s64-02/unit-stderr.txt",
+        "studio/.local/reviews/gt06-s79-http-stop-01/runtime-host/capture.json",
+        "zdoc/reviews/20260918-gt06-s81-admission/checks-02/unit-stderr.txt",
+        "zdoc/reviews/20260918-gt06-s81-admission/native-cleanup-probe/evidence/verification.json",
+        "zdoc/reviews/20260918-gt06-s82-failure/terminal-facts.json"
+      ],
+      "reuse_or_remint": "Reuse shared accepted S60/S64 and current S79 consumers; U81/C81 cover new terminal-cleanup path with explicit forced-path/missing-receipt limits. Fresh successful campaign must prove actual natural target/helper exits and released ownership. Never substitute helper/scheduler code for missing exit.",
+      "acceptance": false,
+      "provenance_status": "Source/proof scopes derived from recorded metadata and dependency reports; no independent current raw/source audit in S83."
+    },
+    {
+      "id": "F12",
+      "requirement": "Bounded queues/results/memory, Stop priority, no retry amplification/UI starvation",
+      "plan_sections": [
+        "GT-06 CONTRACT/VERIFY",
+        "TX18",
+        "section2.6"
+      ],
+      "tests": [
+        "studio/tests/replay/test_transport.py:test_stop_isolated_from_blocked_owner_work_lookup_and_slow_control",
+        "studio/tests/replay/test_session.py:test_budget_is_finite_without_eviction_and_stop_still_works",
+        "studio/tests/reviewer/test_app.py:test_receipts_are_retained_until_taken_and_work_cannot_flood_mailbox",
+        "studio/tests/protocol/test_transport_observation.py:test_copied_call_preserves_accepted_wire_and_error_behavior"
+      ],
+      "evidence": [
+        "FAULT",
+        "U69",
+        "U79",
+        "E79",
+        "U81",
+        "H81"
+      ],
+      "status": "AVAILABLE_SINGLE_RUNTIME_SCOPE_FULL_METRICS_OPEN",
+      "claim_boundary": "Reuse native saturated Stop and bounded quota/retry/UI tests. Full metrics remain F13. General multi-project fairness and recovery remain GT07; physical wire cuts and disk exhaustion are not invented new gates.",
+      "evidence_artifacts": [
+        "studio/.local/reviews/gt06-s79-saturated-stop-01/http-adversary/result.json",
+        "zdoc/reviews/20260918-gt06-s70-resume/fault-coverage-links.md",
+        "zdoc/reviews/20260918-gt06-s79-diagnosis/index-checks-01/invocation.json",
+        "zdoc/reviews/20260918-gt06-s81-admission/checks-02/invocation.json"
+      ],
+      "reuse_or_remint": "Reuse native saturated Stop and bounded quota/retry/UI tests. Full metrics remain F13. General multi-project fairness and recovery remain GT07; physical wire cuts and disk exhaustion are not invented new gates.",
+      "acceptance": false,
+      "provenance_status": "Source/proof scopes derived from recorded metadata and dependency reports; no independent current raw/source audit in S83."
+    },
+    {
+      "id": "F13",
+      "requirement": "Fixed UX/performance workload and latency/status/memory/effect limits",
+      "plan_sections": [
+        "section4 UX benchmark contract"
+      ],
+      "tests": [
+        "studio/tests/replay/test_benchmark_profile.py",
+        "studio/tests/replay/test_benchmark_assembly.py",
+        "studio/tests/replay/test_benchmark_campaign.py",
+        "studio/tests/protocol/test_transport_observation.py:test_copied_call_preserves_accepted_wire_and_error_behavior"
+      ],
+      "evidence": [
+        "U80",
+        "SRC81",
+        "U81",
+        "H81",
+        "C81",
+        "FAIL81",
+        "BENCH"
+      ],
+      "status": "OPEN_FAILED_CAMPAIGN_REQUIRES_FRESH_COMPLETE_MEASUREMENT",
+      "claim_boundary": "Resolve ObjectDB growth on measured source without relaxed gates; freeze any repair and remint10 fresh pairs x35 batches. S81 has16 captures and zero completed runs. H81/C81/S82 attribution/native-only probes and S80/S81 prefixes are excluded from dataset.",
+      "evidence_artifacts": [
+        "zdoc/reviews/20260918-gt06-s81-admission/repair-source.json",
+        "zdoc/reviews/20260918-gt06-s81-admission/checks-02/capture.json",
+        "zdoc/reviews/20260918-gt06-s82-failure/completeness-and-screen.json",
+        "zdoc/reviews/20260918-gt06-s82-failure/package-manifest.json"
+      ],
+      "reuse_or_remint": "Resolve ObjectDB growth on measured source without relaxed gates; freeze any repair and remint10 fresh pairs x35 batches. S81 has16 captures and zero completed runs. H81/C81/S82 attribution/native-only probes and S80/S81 prefixes are excluded from dataset.",
+      "acceptance": false,
+      "provenance_status": "Source/proof scopes derived from recorded metadata and dependency reports; no independent current raw/source audit in S83.",
+      "unit_provenance_note": "Unchanged profile/launcher test references retain original U80 bindings; U81 covers affected campaign/transport/cleanup/assembly modules. This is not an assertion every listed module ran in U81."
+    },
+    {
+      "id": "F14",
+      "requirement": "Sustained campaign ownership, Stop and terminal publication retain actual exits",
+      "plan_sections": [
+        "TQ00",
+        "TX05",
+        "TX13",
+        "section4 UX benchmark contract"
+      ],
+      "tests": [
+        "studio/tests/replay/test_campaign_task.py",
+        "studio/tests/replay/test_benchmark_campaign_stop_completion.py",
+        "studio/tests/replay/test_campaign_terminal_cleanup.py"
+      ],
+      "evidence": [
+        "U80",
+        "E70",
+        "U81",
+        "C81",
+        "FAIL81",
+        "BENCH"
+      ],
+      "status": "OPEN_SUCCESSFUL_CAMPAIGN_TERMINAL_PROOF",
+      "claim_boundary": "Historical scheduler probes remain scoped. A fresh completed campaign needs exact source/request/XML/launch/principal, actual host/editor/helper exits, post-finally terminal cleanup and terminal scheduler observation. Missing supervisor natural-exit evidence stays explicit; return.json is not that receipt.",
+      "evidence_artifacts": [
+        "zdoc/reviews/20260918-gt06-s70-resume/evidence-inventory.json",
+        "zdoc/reviews/20260918-gt06-s81-admission/checks-02/invocation.json",
+        "zdoc/reviews/20260918-gt06-s82-failure/terminal-facts.json",
+        "zdoc/reviews/20260918-gt06-s82-failure/package-manifest.json"
+      ],
+      "reuse_or_remint": "Historical scheduler probes remain scoped. A fresh completed campaign needs exact source/request/XML/launch/principal, actual host/editor/helper exits, post-finally terminal cleanup and terminal scheduler observation. Missing supervisor natural-exit evidence stays explicit; return.json is not that receipt.",
+      "acceptance": false,
+      "provenance_status": "Source/proof scopes derived from recorded metadata and dependency reports; no independent current raw/source audit in S83.",
+      "unit_provenance_note": "Unchanged profile/launcher test references retain original U80 bindings; U81 covers affected campaign/transport/cleanup/assembly modules. This is not an assertion every listed module ran in U81."
+    },
+    {
+      "id": "F15",
+      "requirement": "Complete requirement/artifact/source closure and two independent same-manifest critics",
+      "plan_sections": [
+        "TQ00",
+        "GT-06 DoD"
+      ],
+      "tests": [
+        "studio/tests/replay/benchmark_assembly.py",
+        "final scoped seal verifier (coordinator/seal-owner output pending)"
+      ],
+      "evidence": [
+        "E05",
+        "DEP",
+        "DEP81",
+        "SRC81",
+        "FAIL81",
+        "BENCH"
+      ],
+      "status": "OPEN_FINAL_SEAL_TWO_CRITICS_COORDINATOR",
+      "claim_boundary": "After full measurement, finalize all15 requirement/artifact/source/test/driver/verifier/schema joins and raw bytes, then two new independent PASS/TICK=yes against one final manifest and coordinator decision. No signature or final-manifest hash exists here.",
+      "evidence_artifacts": [
+        "zdoc/reviews/20260918-gt06-s81-admission/dependency-impact.md",
+        "zdoc/reviews/20260918-gt06-s81-admission/repair-source.json",
+        "zdoc/reviews/20260918-gt06-s83-mapping/requirements.json",
+        "zdoc/reviews/20260918-gt06-s83-mapping/seal-checklist.md"
+      ],
+      "reuse_or_remint": "After full measurement, finalize all15 requirement/artifact/source/test/driver/verifier/schema joins and raw bytes, then two new independent PASS/TICK=yes against one final manifest and coordinator decision. No signature or final-manifest hash exists here.",
+      "acceptance": false,
+      "provenance_status": "Source/proof scopes derived from recorded metadata and dependency reports; no independent current raw/source audit in S83."
+    }
+  ],
+  "unit_metadata_bridge": {
+    "reference": "S80 checks-02/invocation.json recorded source map; metadata comparison only",
+    "U69_selected19_mismatches": [
+      "host/replay/service.py"
+    ],
+    "U79_selected7_matches": {
+      "host/replay/service.py": true,
+      "host/replay/verified_journal.py": true,
+      "host/replay/disk_journal_index.py": true,
+      "tests/replay/test_service.py": true,
+      "tests/replay/test_verified_journal.py": true,
+      "tests/replay/test_disk_journal_index.py": true,
+      "tests/replay/test_index_faults.py": true
+    },
+    "whole_old_unit_source_map_current_claim": false,
+    "s83_note": "Original S80 scoped test comparison retained as historical. S81 checks02 is the current affected 204-test supplement; do not sum overlapping totals or claim the whole old snapshot is current."
+  },
+  "causal_anchors": {
+    "accepted_gt05_manifest_sha256": "fd0b4a984c7bee261c083c07d461baf55325e936d66df2eeab897b422ee0a02b",
+    "consumed_glb_sha256": "e85e536137208ba84adbc875b6fb647b5a4e49156344e03e2e8947a7ae91e377",
+    "fault_capture_sha256": "d3469bee92f7decad37d1f937631cff467548c8751f03ca99eac029c7547b7a1",
+    "repair_capture_sha256": "514a1f3a01ebab7f6f327a49170e4e9260a55310ee5c84b20c28f6bcf6a0ea14",
+    "selected_config_sha256": "4fe3141b9afe6b411b585b203cebae77e851a406c291ac26620eb8cd7c018d90",
+    "managed_replay_source_closure": "491b65875f8246e7606c7b860d9c61d6a85657fc0077075fa6dc7209128dca2b",
+    "repair_artifact_digest_provenance": "Original S65 repair02 capture.json artifact map read as metadata, not raw-byte rehash",
+    "repair_response_sha256": "325079c574e7373e2f867315fc8ecea201a08ade474259afec361b5fc36cac82",
+    "repair_native_readback_sha256": "ead764d643affd0912d81c435a003ffcbf04bad799fdb91e1e515172556ba5c5",
+    "repair_request_sha256": "41804080859781bb697df92ab03271ad91d7112c16051d7bc8e1b3063e44c73c"
+  },
+  "remaining_gaps": [
+    {
+      "id": "G1",
+      "requirements": [
+        "F10",
+        "F11",
+        "F12",
+        "F13",
+        "F14"
+      ],
+      "status": "OPEN",
+      "action": "Resolve measured failure, freeze affected source, complete10 fresh process pairs x35batches at unchanged profile with actual successful terminal proof; no diagnostic/partial sample substitution."
+    },
+    {
+      "id": "G2",
+      "requirements": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08",
+        "F09",
+        "F15"
+      ],
+      "status": "OPEN",
+      "action": "Final vertical-slice causal join and source/test/driver/verifier/schema/raw-artifact requirement seal with exact scoped reuse and explicit limits."
+    },
+    {
+      "id": "G3",
+      "requirements": [
+        "F15"
+      ],
+      "status": "OPEN",
+      "action": "Two new independent same-final-manifest PASS/TICK=yes critics, followed by coordinator decision."
+    }
+  ],
+  "additional_native_functional_gap_identified": false,
+  "assessment_limit": "Bounded preparation found no additional native functional orphan; this is not a final completeness/acceptance verdict. Final reviewers can identify genuine missing coverage. No live diagnostic outcome is claimed.",
+  "plan_revision": "S83",
+  "observed_repository_head": "c1726579759bd1d13799cb2365bf75079b03c3a7",
+  "preparation_only": true,
+  "verification_performed": "Bounded metadata/document/source reads only; no runtime/raw rehash, engine, test, process control or acceptance verification. Current identities are declared by S83/S81 and historical comparisons attributed to their reports.",
+  "source_scope_note": "The 51-file hash is benchmark runtime, not all GT06 functional/test source. S79 backend174/UI5 and S69 replay159/verifier4 retain distinct exact dependency projections. Broad historical snapshots are never claimed as current.",
+  "dependency_projections": {
+    "S79_backend": {
+      "files": 174,
+      "closure": "644b90abfe769bf1a3654ba506cef50f8a38393f05f0be5ca7aae8050aaaa527",
+      "source_map_raw_sha256": "63f6f5a9058a6f62e9db39e9eec362f79c88aa4b5510710dbcdf53ced5ab2208",
+      "proof": "DEP81",
+      "rechecked_here": false
+    },
+    "S79_UI": {
+      "files": 5,
+      "closure": "7665621f1090836c2bc711ccc7f6857c3961b99be5b077292baaadc933b712fb",
+      "source_map_raw_sha256": "4476fe477abab0859f9957403d84ab3a869db458f46b4ff251672ffc560df640",
+      "proof": "DEP81",
+      "rechecked_here": false
+    },
+    "S69_managed_runtime": {
+      "files": 159,
+      "closure": "491b65875f8246e7606c7b860d9c61d6a85657fc0077075fa6dc7209128dca2b",
+      "source_map_raw_sha256": "b0091dc3e16801af4c8bb39f39da9bb4bfd8b71be66f0ade7dac1e9b522ed11c",
+      "verifier_files": [
+        "observation.py",
+        "repair.py",
+        "repair_replay.py",
+        "trace.py"
+      ],
+      "proof": "DEP81",
+      "rechecked_here": false
+    }
+  },
+  "s79_run_ids": [
+    "gt06-s79-http-complete-01",
+    "gt06-s79-http-stop-01",
+    "gt06-s79-saturated-stop-01",
+    "gt06-s79-revoked-result-01",
+    "gt06-s79-stale-capture-01",
+    "gt06-s79-reviewer-complete-01",
+    "gt06-s79-reviewer-stop-01"
+  ],
+  "anchor_presence_check": "Every concrete evidence_artifacts path existed during S83 preparation; existence only, not artifact/hash/schema validation."
+}

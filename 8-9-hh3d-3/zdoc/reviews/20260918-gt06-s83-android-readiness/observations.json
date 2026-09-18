@@ -1,0 +1,348 @@
+{
+  "schema": "S83_ANDROID_BOUNDED_READINESS_1",
+  "authority": 0,
+  "observation_start": "2026-09-18T16:49:56.8941473+07:00",
+  "observation_end": "2026-09-18T16:49:58.2206024+07:00",
+  "git_head": "c1726579759bd1d13799cb2365bf75079b03c3a7",
+  "current_gate": "GT-06",
+  "future_gate": "GT-08_PLANNED_NOT_OPENED",
+  "android_lock_state": "GAP_UNTIL_GT08",
+  "android_versions_pinned": false,
+  "local_override_keys": [
+    "schema",
+    "godot_console",
+    "export_templates"
+  ],
+  "environment": [
+    {
+      "name": "ANDROID_HOME",
+      "scope": "Process",
+      "is_set": false,
+      "path": null
+    },
+    {
+      "name": "ANDROID_HOME",
+      "scope": "User",
+      "is_set": false,
+      "path": null
+    },
+    {
+      "name": "ANDROID_HOME",
+      "scope": "Machine",
+      "is_set": false,
+      "path": null
+    },
+    {
+      "name": "ANDROID_SDK_ROOT",
+      "scope": "Process",
+      "is_set": false,
+      "path": null
+    },
+    {
+      "name": "ANDROID_SDK_ROOT",
+      "scope": "User",
+      "is_set": false,
+      "path": null
+    },
+    {
+      "name": "ANDROID_SDK_ROOT",
+      "scope": "Machine",
+      "is_set": false,
+      "path": null
+    },
+    {
+      "name": "JAVA_HOME",
+      "scope": "Process",
+      "is_set": false,
+      "path": null
+    },
+    {
+      "name": "JAVA_HOME",
+      "scope": "User",
+      "is_set": false,
+      "path": null
+    },
+    {
+      "name": "JAVA_HOME",
+      "scope": "Machine",
+      "is_set": false,
+      "path": null
+    }
+  ],
+  "path_resolution": [
+    {
+      "name": "adb.exe",
+      "resolves_on_path": false,
+      "source": null,
+      "file_version": null,
+      "executed": false
+    },
+    {
+      "name": "sdkmanager.bat",
+      "resolves_on_path": false,
+      "source": null,
+      "file_version": null,
+      "executed": false
+    },
+    {
+      "name": "java.exe",
+      "resolves_on_path": true,
+      "source": "%ProgramFiles%/Common Files/Oracle/Java/javapath/java.exe",
+      "file_version": "25.0.1.0",
+      "executed": false
+    },
+    {
+      "name": "javac.exe",
+      "resolves_on_path": true,
+      "source": "%ProgramFiles%/Common Files/Oracle/Java/javapath/javac.exe",
+      "file_version": "25.0.1.0",
+      "executed": false
+    }
+  ],
+  "bounded_candidate_paths": [
+    {
+      "path": "%LOCALAPPDATA%/Android/Sdk",
+      "exists": false
+    },
+    {
+      "path": "%LOCALAPPDATA%/Android/Sdk/platform-tools/adb.exe",
+      "exists": false
+    },
+    {
+      "path": "%ProgramFiles%/Android",
+      "exists": false
+    },
+    {
+      "path": "%ProgramFiles(x86)%/Android",
+      "exists": false
+    },
+    {
+      "path": "C:/Android/Sdk",
+      "exists": false
+    },
+    {
+      "path": "C:/Android/android-sdk",
+      "exists": false
+    },
+    {
+      "path": "C:/Android/platform-tools",
+      "exists": false
+    },
+    {
+      "path": "%ProgramFiles%/Android/Android Studio/jbr",
+      "exists": false
+    },
+    {
+      "path": "%LOCALAPPDATA%/Programs/Android Studio/jbr",
+      "exists": false
+    },
+    {
+      "path": "%APPDATA%/Godot/export_templates/4.7.2.stable",
+      "exists": false
+    }
+  ],
+  "jdk_candidates": [
+    {
+      "path": "%ProgramFiles%/Java/jdk-25",
+      "java_file_present": true,
+      "javac_file_present": true,
+      "release_metadata": {
+        "IMPLEMENTOR": "Oracle Corporation",
+        "JAVA_RUNTIME_VERSION": "25.0.1+8-LTS-27",
+        "JAVA_VERSION": "25.0.1",
+        "OS_ARCH": "x86_64",
+        "OS_NAME": "Windows"
+      },
+      "executed": false
+    },
+    {
+      "path": "%USERPROFILE%/.jdks/corretto-21.0.9",
+      "java_file_present": true,
+      "javac_file_present": true,
+      "release_metadata": {
+        "IMPLEMENTOR": "Amazon.com Inc.",
+        "JAVA_RUNTIME_VERSION": "21.0.9+10-LTS",
+        "JAVA_VERSION": "21.0.9",
+        "OS_ARCH": "x86_64",
+        "OS_NAME": "Windows"
+      },
+      "executed": false
+    },
+    {
+      "path": "%USERPROFILE%/.jdks/corretto-23.0.2",
+      "java_file_present": true,
+      "javac_file_present": true,
+      "release_metadata": {
+        "IMPLEMENTOR": "Amazon.com Inc.",
+        "JAVA_RUNTIME_VERSION": "23.0.2+7-FR",
+        "JAVA_VERSION": "23.0.2",
+        "OS_ARCH": "x86_64",
+        "OS_NAME": "Windows"
+      },
+      "executed": false
+    },
+    {
+      "path": "%USERPROFILE%/.jdks/ms-21.0.8",
+      "java_file_present": true,
+      "javac_file_present": true,
+      "release_metadata": {
+        "IMPLEMENTOR": "Microsoft",
+        "JAVA_RUNTIME_VERSION": "21.0.8+9-LTS",
+        "JAVA_VERSION": "21.0.8",
+        "OS_ARCH": "x86_64",
+        "OS_NAME": "Windows"
+      },
+      "executed": false
+    },
+    {
+      "path": "%USERPROFILE%/.jdks/valhalla-ea-23-valhalla+1-90",
+      "java_file_present": true,
+      "javac_file_present": true,
+      "release_metadata": {
+        "IMPLEMENTOR": "Oracle Corporation",
+        "JAVA_RUNTIME_VERSION": "23-valhalla+1-90",
+        "JAVA_VERSION": "23",
+        "OS_ARCH": "x86_64",
+        "OS_NAME": "Windows"
+      },
+      "executed": false
+    }
+  ],
+  "godot_android_settings": [
+    {
+      "key": "export/android/java_sdk_path",
+      "value": null,
+      "configured_path_exists": false
+    },
+    {
+      "key": "export/android/android_sdk_path",
+      "value": "%LOCALAPPDATA%/Android/Sdk",
+      "configured_path_exists": false
+    }
+  ],
+  "local_tooling_immediate_entries": [
+    {
+      "name": "blender-5.2.1-windows-x64",
+      "is_directory": true,
+      "length_bytes": null
+    },
+    {
+      "name": "godot-4.7.2-stable",
+      "is_directory": true,
+      "length_bytes": null
+    },
+    {
+      "name": "godot-4.7.2-stable-linux",
+      "is_directory": true,
+      "length_bytes": null
+    },
+    {
+      "name": "gt05",
+      "is_directory": true,
+      "length_bytes": null
+    },
+    {
+      "name": "blender-5.2.1-windows-x64.zip",
+      "is_directory": false,
+      "length_bytes": 404851964
+    },
+    {
+      "name": "blender-upstream-checksums.txt",
+      "is_directory": false,
+      "length_bytes": 785
+    },
+    {
+      "name": "download-godot472.py",
+      "is_directory": false,
+      "length_bytes": 1409
+    },
+    {
+      "name": "Godot_v4.7.2-stable_export_templates.tpz",
+      "is_directory": false,
+      "length_bytes": 1281349702
+    },
+    {
+      "name": "Godot_v4.7.2-stable_linux.x86_64.zip",
+      "is_directory": false,
+      "length_bytes": 77860424
+    },
+    {
+      "name": "Godot_v4.7.2-stable_win64.exe.zip",
+      "is_directory": false,
+      "length_bytes": 86013866
+    },
+    {
+      "name": "SHA512-SUMS.txt",
+      "is_directory": false,
+      "length_bytes": 5682
+    }
+  ],
+  "export_template_archive": {
+    "version_member": "4.7.2.stable",
+    "payload_hash_recomputed": false,
+    "path": "<scope>/studio/.local/tooling/Godot_v4.7.2-stable_export_templates.tpz",
+    "selected_members": [
+      {
+        "member": "templates/android_debug.apk",
+        "uncompressed_bytes": 127260725,
+        "compressed_bytes": 125834876
+      },
+      {
+        "member": "templates/android_release.apk",
+        "uncompressed_bytes": 104803333,
+        "compressed_bytes": 103949600
+      },
+      {
+        "member": "templates/android_source.zip",
+        "uncompressed_bytes": 214418211,
+        "compressed_bytes": 214421853
+      },
+      {
+        "member": "templates/version.txt",
+        "uncompressed_bytes": 13,
+        "compressed_bytes": 13
+      }
+    ],
+    "bytes": 1281349702
+  },
+  "pnp_filter": "Present=TRUE AND (PNPClass='WPD' OR Name LIKE '%Android%' OR Name LIKE '%ADB%' OR Name LIKE '%MTP%' OR Name LIKE '%Samsung%' OR Name LIKE '%Xiaomi%' OR Name LIKE '%Pixel%' OR Name LIKE '%Huawei%' OR Name LIKE '%OnePlus%' OR Name LIKE '%OPPO%' OR Name LIKE '%Vivo%')",
+  "matching_present_pnp_count": 0,
+  "matching_present_pnp_descriptions": [],
+  "device_authorization": "UNVERIFIED_NO_ADB_COMMAND",
+  "device_runtime_gpu": "UNVERIFIED",
+  "small_input_hashes": [
+    {
+      "path": "AGENTS.md",
+      "bytes": 2572,
+      "sha256": "c93a79b7833f8a02246d0373545f05efc680fc299e2090002b756ae9b0e6d49f"
+    },
+    {
+      "path": "zdoc/8-9-godot-blender-agent-studio-plan.txt",
+      "bytes": 92436,
+      "sha256": "d5015d75ebe4ca90eab7ca478df3fe4e010cdfc29c67f80bf16a5ce7d27aa0f4"
+    },
+    {
+      "path": "studio/toolchain.lock.json",
+      "bytes": 3026,
+      "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9"
+    },
+    {
+      "path": "studio/.local/toolchain.local.json",
+      "bytes": 415,
+      "sha256": "6a053047b6c1388dd05c5ef6fab8ee4c90f448cb93c7dba36439f39283a7e420"
+    },
+    {
+      "path": "zdoc/reviews/20260918-gt06-s71-next/android-readiness.md",
+      "bytes": 9888,
+      "sha256": "7c618e64093cc9a664a6db8586fceb57e1b22259768f24e844f0e71d651146ba"
+    }
+  ],
+  "scope_limits": [
+    "No recursive disk crawl",
+    "No tool/version process launches",
+    "No device identifiers or content",
+    "No installs/downloads/SDK manager/ADB daemon/emulator",
+    "No large binary hashes",
+    "No runtime/plan edits or gate verdict"
+  ]
+}

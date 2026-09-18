@@ -101,3 +101,5 @@ zdoc/reviews/20260918-plan-history-s80/** -text whitespace=blank-at-eol,blank-at
 # S82 executed probes and native evidence retain exact mixed-newline bytes.
 zdoc/reviews/20260918-gt06-s82-*/** -text whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
 zdoc/reviews/20260918-plan-history-s82/** -text whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+# S83 metadata/probe tooling retain the exact bytes recorded in their hash receipts.
+zdoc/reviews/20260918-gt06-s83-*/** -text whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol

@@ -96,8 +96,20 @@ attribution. Run gt06-s82-attribution-01 khởi chạy09:41:18Z; supervisor19068
 editor32860; quan sát sau launch có batch0 HTTP và stderr trống. Kiểm live
 trước khi suy vẫn chạy; đây không phải campaign nghiệm thu. Giới hạn7410s,
 lỗi cũ xuất hiện khoảng31phút; không đảm bảo tái hiện. Runner/instructions: reviews/20260918-gt06-s82-attribution/.
-Ba worker S82: failure packet, sửa analyzer/provenance, thiết kế attribution;
-đây là implementation/preflight, không phải hai critic nghiệm thu.
+Baseline ACK4 đã chạy hook thật: ObjectDB71128 trước/sau publication,
+reachable27401 và residual43727; collection820390us. Đã qua5batch, chưa có
+fullrun hoặc kết luận nguyên nhân. launch/baseline-observation.json ghi hash.
+Ba worker S82 và ba lane S83 đã xong. Chuẩn bị S83 nằm ở:
+- reviews/20260918-gt06-s83-analyzer/: đọc census/owner diff và terminal facts;
+  mới AST/compile, chưa chạy analyzer/test. Baseline mode không suy liveness.
+- reviews/20260918-gt06-s83-mapping/: đủ F01–F15 với test/artifact/provenance;
+  đã kiểm path tồn tại, chưa rehash/final seal hoặc có critic verdict.
+- reviews/20260918-gt06-s83-android-readiness/: JDK/templates có file; SDK/ADB
+  không thấy trong các path chuẩn đã kiểm. Thiết bị thật và quyền debug còn
+  UNVERIFIED; không suy không có thiết bị từ bộ lọc PnP rỗng. Khi GT08 mở,
+  agent chuẩn bị SDK; kết nối/unlock/chấp nhận debug có thể cần owner.
+Không chạy engine/test cạnh diagnostic. Các lane trên là preparation,
+không phải hai critic nghiệm thu và không mở GT07/GT08 trước dependency.
 
 Bài học để tránh làm lại: phân biệt count ổn định với identity không đổi;
 nonreproduction không loại trừ lỗi; metadata sai thì sửa từ raw đủ bằng chứng;
