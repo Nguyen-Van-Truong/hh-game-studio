@@ -1,0 +1,126 @@
+{
+  "current_files": [
+    {
+      "path": "studio/build/bootstrap/run_fixture.py",
+      "packet_path": "current-context/studio/build/bootstrap/run_fixture.py",
+      "sha256": "ea522450acc46f90be5e2a7b9257e73ce8b619948105b2c9073aac1f881c7328",
+      "scope": "Current file snapshot only; never substituted for per-arm executed source"
+    },
+    {
+      "path": "zdoc/reviews/20260918-gt06-s82-attribution/object_probe.gd",
+      "packet_path": "current-context/zdoc/reviews/20260918-gt06-s82-attribution/object_probe.gd",
+      "sha256": "6221092c70591d89b42aa8c00298198299a716edc7c25b8b4813db5d771fe556",
+      "scope": "Current file snapshot only; never substituted for per-arm executed source"
+    },
+    {
+      "path": "zdoc/reviews/20260918-gt06-s84-compact-probe/object_probe.gd",
+      "packet_path": "current-context/zdoc/reviews/20260918-gt06-s84-compact-probe/object_probe.gd",
+      "sha256": "20ed7e62658c247265a8165024682efac78ae9c475a810bb6368e8fe9c75dd40",
+      "scope": "Current file snapshot only; never substituted for per-arm executed source"
+    },
+    {
+      "path": "zdoc/reviews/20260918-gt06-s84-probe-cost/cost_growth.gd",
+      "packet_path": "current-context/zdoc/reviews/20260918-gt06-s84-probe-cost/cost_growth.gd",
+      "sha256": "728a474655e9c99c7c21a96a7dff9922c4e696bebadbc628317fbca583db1d9c",
+      "scope": "Current file snapshot only; never substituted for per-arm executed source"
+    },
+    {
+      "path": "zdoc/reviews/20260918-gt06-s84-probe-cost/cost_phases.gd",
+      "packet_path": "current-context/zdoc/reviews/20260918-gt06-s84-probe-cost/cost_phases.gd",
+      "sha256": "e3d5059bf485a9ac07a2f59c11a57652dbab4a8a98a9e82638e3dd6e189bef68",
+      "scope": "Current file snapshot only; never substituted for per-arm executed source"
+    },
+    {
+      "path": "zdoc/reviews/20260918-gt06-s84-probe-cost/measure_cost.py",
+      "packet_path": "current-context/zdoc/reviews/20260918-gt06-s84-probe-cost/measure_cost.py",
+      "sha256": "30ae92b366f345a4f40f2653f67012af983ab405ee20b5540eed15db50b5a9c8",
+      "scope": "Current file snapshot only; never substituted for per-arm executed source"
+    }
+  ],
+  "comparisons": [
+    {
+      "arm": "original",
+      "path": "zdoc/reviews/20260918-gt06-s82-attribution/object_probe.gd",
+      "executed_sha256": "6221092c70591d89b42aa8c00298198299a716edc7c25b8b4813db5d771fe556",
+      "current_sha256": "6221092c70591d89b42aa8c00298198299a716edc7c25b8b4813db5d771fe556",
+      "matches": true
+    },
+    {
+      "arm": "original",
+      "path": "zdoc/reviews/20260918-gt06-s84-probe-cost/cost_phases.gd",
+      "executed_sha256": "e3d5059bf485a9ac07a2f59c11a57652dbab4a8a98a9e82638e3dd6e189bef68",
+      "current_sha256": "e3d5059bf485a9ac07a2f59c11a57652dbab4a8a98a9e82638e3dd6e189bef68",
+      "matches": true
+    },
+    {
+      "arm": "original",
+      "path": "zdoc/reviews/20260918-gt06-s84-probe-cost/measure_cost.py",
+      "executed_sha256": "193719fae8ab03ed44a5081195399cbbdeb7243854f0641abdc7b5d00acec14f",
+      "current_sha256": "30ae92b366f345a4f40f2653f67012af983ab405ee20b5540eed15db50b5a9c8",
+      "matches": false
+    },
+    {
+      "arm": "sham",
+      "path": "zdoc/reviews/20260918-gt06-s82-attribution/object_probe.gd",
+      "executed_sha256": "6221092c70591d89b42aa8c00298198299a716edc7c25b8b4813db5d771fe556",
+      "current_sha256": "6221092c70591d89b42aa8c00298198299a716edc7c25b8b4813db5d771fe556",
+      "matches": true
+    },
+    {
+      "arm": "sham",
+      "path": "zdoc/reviews/20260918-gt06-s84-probe-cost/cost_phases.gd",
+      "executed_sha256": "e3d5059bf485a9ac07a2f59c11a57652dbab4a8a98a9e82638e3dd6e189bef68",
+      "current_sha256": "e3d5059bf485a9ac07a2f59c11a57652dbab4a8a98a9e82638e3dd6e189bef68",
+      "matches": true
+    },
+    {
+      "arm": "sham",
+      "path": "zdoc/reviews/20260918-gt06-s84-probe-cost/measure_cost.py",
+      "executed_sha256": "835bb732dcefb697b2847238c250068c98a326ecde9ef888d7e4e7dfc810f69f",
+      "current_sha256": "30ae92b366f345a4f40f2653f67012af983ab405ee20b5540eed15db50b5a9c8",
+      "matches": false
+    },
+    {
+      "arm": "compact",
+      "path": "zdoc/reviews/20260918-gt06-s84-compact-probe/object_probe.gd",
+      "executed_sha256": "20ed7e62658c247265a8165024682efac78ae9c475a810bb6368e8fe9c75dd40",
+      "current_sha256": "20ed7e62658c247265a8165024682efac78ae9c475a810bb6368e8fe9c75dd40",
+      "matches": true
+    },
+    {
+      "arm": "compact",
+      "path": "zdoc/reviews/20260918-gt06-s84-probe-cost/cost_phases.gd",
+      "executed_sha256": "e3d5059bf485a9ac07a2f59c11a57652dbab4a8a98a9e82638e3dd6e189bef68",
+      "current_sha256": "e3d5059bf485a9ac07a2f59c11a57652dbab4a8a98a9e82638e3dd6e189bef68",
+      "matches": true
+    },
+    {
+      "arm": "compact",
+      "path": "zdoc/reviews/20260918-gt06-s84-probe-cost/measure_cost.py",
+      "executed_sha256": "835bb732dcefb697b2847238c250068c98a326ecde9ef888d7e4e7dfc810f69f",
+      "current_sha256": "30ae92b366f345a4f40f2653f67012af983ab405ee20b5540eed15db50b5a9c8",
+      "matches": false
+    },
+    {
+      "arm": "compact-growth",
+      "path": "zdoc/reviews/20260918-gt06-s84-compact-probe/object_probe.gd",
+      "executed_sha256": "20ed7e62658c247265a8165024682efac78ae9c475a810bb6368e8fe9c75dd40",
+      "current_sha256": "20ed7e62658c247265a8165024682efac78ae9c475a810bb6368e8fe9c75dd40",
+      "matches": true
+    },
+    {
+      "arm": "compact-growth",
+      "path": "zdoc/reviews/20260918-gt06-s84-probe-cost/cost_growth.gd",
+      "executed_sha256": "728a474655e9c99c7c21a96a7dff9922c4e696bebadbc628317fbca583db1d9c",
+      "current_sha256": "728a474655e9c99c7c21a96a7dff9922c4e696bebadbc628317fbca583db1d9c",
+      "matches": true
+    },
+    {
+      "arm": "compact-growth",
+      "path": "zdoc/reviews/20260918-gt06-s84-probe-cost/measure_cost.py",
+      "executed_sha256": "30ae92b366f345a4f40f2653f67012af983ab405ee20b5540eed15db50b5a9c8",
+      "current_sha256": "30ae92b366f345a4f40f2653f67012af983ab405ee20b5540eed15db50b5a9c8",
+      "matches": true
+    }
+  ]
+}

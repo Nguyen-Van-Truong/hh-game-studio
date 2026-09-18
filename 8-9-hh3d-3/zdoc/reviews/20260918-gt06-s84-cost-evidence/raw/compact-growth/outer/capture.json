@@ -1,0 +1,21 @@
+{
+  "wrapper_pid": 45692,
+  "started_at": "2026-09-18T10:05:16.227934+00:00",
+  "argv": [
+    "python.exe",
+    "-B",
+    "$SNAPSHOT/zdoc/reviews/20260918-gt06-s84-probe-cost/measure_cost.py",
+    "compact-growth",
+    "1",
+    "--child"
+  ],
+  "exit_code": 0,
+  "target_pid": 17748,
+  "wrapper_exit_code": 0,
+  "timed_out": false,
+  "tree_verified": true,
+  "ownership": "gated_job_kill_on_close",
+  "stdout": "cost-stdout.txt",
+  "stderr": "cost-stderr.txt",
+  "host": "cost-host.json"
+}

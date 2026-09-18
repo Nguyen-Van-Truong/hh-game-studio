@@ -1,0 +1,2339 @@
+{
+  "authority": 0,
+  "formal_acceptance": false,
+  "source_closure_sha256": "e010180a1bf85b7f565e9aa39734f8551caf170a85b36c50598be556b723ce7f",
+  "arms": [
+    {
+      "arm": "original",
+      "formal_acceptance": false,
+      "eligible_for_dataset": false,
+      "outcome": "NATIVE_ALLOCATION_EXPERIMENT_COMPLETED_WITH_COLLECTOR_FAILURE",
+      "source_closure_sha256": "e010180a1bf85b7f565e9aa39734f8551caf170a85b36c50598be556b723ce7f",
+      "source_files": [
+        {
+          "path": "blender-addon/ipc_client.py",
+          "expected_sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9",
+          "frozen_sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9"
+        },
+        {
+          "path": "contracts/perf-collector.schema.json",
+          "expected_sha256": "394d1df03bdfd736ea3fe9f260e9d718d35f3820cde35d1c45ccab65fbc24834",
+          "frozen_sha256": "394d1df03bdfd736ea3fe9f260e9d718d35f3820cde35d1c45ccab65fbc24834"
+        },
+        {
+          "path": "godot-addon/addons/hh_studio/plugin.cfg",
+          "expected_sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+          "frozen_sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c"
+        },
+        {
+          "path": "godot-addon/addons/hh_studio/plugin.gd",
+          "expected_sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+          "frozen_sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036"
+        },
+        {
+          "path": "godot-addon/addons/hh_studio/scene_commands.gd",
+          "expected_sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+          "frozen_sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069"
+        },
+        {
+          "path": "godot-addon/bundle_staging.py",
+          "expected_sha256": "3d614edbec8e9a7f5ad3caf2b9694d7498df129de95683952268621f91d68e43",
+          "frozen_sha256": "3d614edbec8e9a7f5ad3caf2b9694d7498df129de95683952268621f91d68e43"
+        },
+        {
+          "path": "godot-addon/bundle_v2.py",
+          "expected_sha256": "2c5cdc71cdaf80f58bb93ec791e84bab8bd02cd4d9bdbd93d635db13583de62a",
+          "frozen_sha256": "2c5cdc71cdaf80f58bb93ec791e84bab8bd02cd4d9bdbd93d635db13583de62a"
+        },
+        {
+          "path": "godot-addon/cli_job.py",
+          "expected_sha256": "5a0f37bc129bde409a2657054fb091d637d838e442d45a69e7adc1f1527d4c88",
+          "frozen_sha256": "5a0f37bc129bde409a2657054fb091d637d838e442d45a69e7adc1f1527d4c88"
+        },
+        {
+          "path": "godot-addon/fixture_profile.py",
+          "expected_sha256": "25e1667dd930dcf0746b071fc29ea3460bc18d5fb9f3f83e806c1793028f21ae",
+          "frozen_sha256": "25e1667dd930dcf0746b071fc29ea3460bc18d5fb9f3f83e806c1793028f21ae"
+        },
+        {
+          "path": "godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid",
+          "expected_sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+          "frozen_sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b"
+        },
+        {
+          "path": "godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid",
+          "expected_sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+          "frozen_sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d"
+        },
+        {
+          "path": "godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid",
+          "expected_sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+          "frozen_sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69"
+        },
+        {
+          "path": "godot-addon/fixture_profile/project.godot",
+          "expected_sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+          "frozen_sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51"
+        },
+        {
+          "path": "godot-addon/fixture_profile/scripts/fixture_actor.gd.uid",
+          "expected_sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+          "frozen_sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142"
+        },
+        {
+          "path": "godot-addon/fixture_profile/source-pins.json",
+          "expected_sha256": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2",
+          "frozen_sha256": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2"
+        },
+        {
+          "path": "host/blender/__init__.py",
+          "expected_sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90",
+          "frozen_sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90"
+        },
+        {
+          "path": "host/blender/deadline.py",
+          "expected_sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926",
+          "frozen_sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926"
+        },
+        {
+          "path": "host/blender/export_job.py",
+          "expected_sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe",
+          "frozen_sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe"
+        },
+        {
+          "path": "host/blender/glb_preflight.py",
+          "expected_sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62",
+          "frozen_sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62"
+        },
+        {
+          "path": "host/blender/ui_host.py",
+          "expected_sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35",
+          "frozen_sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35"
+        },
+        {
+          "path": "host/core/journal.py",
+          "expected_sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6",
+          "frozen_sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6"
+        },
+        {
+          "path": "host/core/limits.py",
+          "expected_sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f",
+          "frozen_sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f"
+        },
+        {
+          "path": "host/core/private_store.py",
+          "expected_sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476",
+          "frozen_sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476"
+        },
+        {
+          "path": "host/core/redaction.py",
+          "expected_sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f",
+          "frozen_sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f"
+        },
+        {
+          "path": "host/core/safe_create.py",
+          "expected_sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606",
+          "frozen_sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606"
+        },
+        {
+          "path": "host/core/safe_open.py",
+          "expected_sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535",
+          "frozen_sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535"
+        },
+        {
+          "path": "host/core/transport.py",
+          "expected_sha256": "1ec03356b1cb8c8987e1604bcb164aea6a9934dbe259451c19e12de36398aba0",
+          "frozen_sha256": "1ec03356b1cb8c8987e1604bcb164aea6a9934dbe259451c19e12de36398aba0"
+        },
+        {
+          "path": "host/replay/disk_journal_index.py",
+          "expected_sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28",
+          "frozen_sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28"
+        },
+        {
+          "path": "host/replay/perf.py",
+          "expected_sha256": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7",
+          "frozen_sha256": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7"
+        },
+        {
+          "path": "host/replay/process_probe.py",
+          "expected_sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500",
+          "frozen_sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500"
+        },
+        {
+          "path": "host/replay/verified_journal.py",
+          "expected_sha256": "129baa4d9e08c8a1d5acf2ea05c9c89a4fdddb53ca6f3baf2d61311ab98e62ab",
+          "frozen_sha256": "129baa4d9e08c8a1d5acf2ea05c9c89a4fdddb53ca6f3baf2d61311ab98e62ab"
+        },
+        {
+          "path": "pipeline/__init__.py",
+          "expected_sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68",
+          "frozen_sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68"
+        },
+        {
+          "path": "pipeline/native_job.py",
+          "expected_sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca",
+          "frozen_sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca"
+        },
+        {
+          "path": "protocol/__init__.py",
+          "expected_sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f",
+          "frozen_sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f"
+        },
+        {
+          "path": "protocol/_rfc8785/__init__.py",
+          "expected_sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b",
+          "frozen_sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b"
+        },
+        {
+          "path": "protocol/_rfc8785/_impl.py",
+          "expected_sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec",
+          "frozen_sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec"
+        },
+        {
+          "path": "protocol/core.py",
+          "expected_sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e",
+          "frozen_sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e"
+        },
+        {
+          "path": "protocol/jcs_godot.gd",
+          "expected_sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+          "frozen_sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5"
+        },
+        {
+          "path": "tests/replay/benchmark_assembly.py",
+          "expected_sha256": "7573ca96986eb1c10298b8998b3dbaa3326fd80da2c2696150aeb22165d2911d",
+          "frozen_sha256": "7573ca96986eb1c10298b8998b3dbaa3326fd80da2c2696150aeb22165d2911d"
+        },
+        {
+          "path": "tests/replay/benchmark_commands.py",
+          "expected_sha256": "707b6f9a9291214d9ee848d77f1e4a3dc2267de5f2aeb5e48fa4365866a842c9",
+          "frozen_sha256": "707b6f9a9291214d9ee848d77f1e4a3dc2267de5f2aeb5e48fa4365866a842c9"
+        },
+        {
+          "path": "tests/replay/benchmark_job.py",
+          "expected_sha256": "be424a6f37ae573ac4bf40954b31017025daee2147699c80b05f9a0ab70e1611",
+          "frozen_sha256": "be424a6f37ae573ac4bf40954b31017025daee2147699c80b05f9a0ab70e1611"
+        },
+        {
+          "path": "tests/replay/benchmark_native.gd",
+          "expected_sha256": "52fbd9af5c6191ada5baf1d7195a75685ed5e27a95f4d244af8b4d679f8c00f2",
+          "frozen_sha256": "52fbd9af5c6191ada5baf1d7195a75685ed5e27a95f4d244af8b4d679f8c00f2"
+        },
+        {
+          "path": "tests/replay/benchmark_plugin.cfg",
+          "expected_sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092",
+          "frozen_sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092"
+        },
+        {
+          "path": "tests/replay/benchmark_profile.py",
+          "expected_sha256": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233",
+          "frozen_sha256": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233"
+        },
+        {
+          "path": "tests/replay/benchmark_readiness.py",
+          "expected_sha256": "842db6244d93384932929544045654f089d67f6f304624b7348b7d5c4583ab68",
+          "frozen_sha256": "842db6244d93384932929544045654f089d67f6f304624b7348b7d5c4583ab68"
+        },
+        {
+          "path": "tests/replay/benchmark_transport.py",
+          "expected_sha256": "87875809baa4845fcffba8e2c7d82f7a5bce833099c89d4852f2aab931c34df0",
+          "frozen_sha256": "87875809baa4845fcffba8e2c7d82f7a5bce833099c89d4852f2aab931c34df0"
+        },
+        {
+          "path": "tests/replay/campaign_task.ps1",
+          "expected_sha256": "405e2abfa39332b1313871763184fdda0755ff998ec83310e67e10cebfe2ebb9",
+          "frozen_sha256": "405e2abfa39332b1313871763184fdda0755ff998ec83310e67e10cebfe2ebb9"
+        },
+        {
+          "path": "tests/replay/run_benchmark_campaign.py",
+          "expected_sha256": "bb43ecc04c2de4872177a440eb071d533efdaa9e8194f62b4e0907bad8d4b252",
+          "frozen_sha256": "bb43ecc04c2de4872177a440eb071d533efdaa9e8194f62b4e0907bad8d4b252"
+        },
+        {
+          "path": "tests/replay/run_campaign_task.py",
+          "expected_sha256": "f5cb71fa96b8fd2f935ac933dcd5190cef2b3b6821f031bfe72becb2d360a6fd",
+          "frozen_sha256": "f5cb71fa96b8fd2f935ac933dcd5190cef2b3b6821f031bfe72becb2d360a6fd"
+        },
+        {
+          "path": "tests/replay/run_native_benchmark.py",
+          "expected_sha256": "e6b0f8e9711ac881cfa65b4537232c685ff577af0a13778a51cc54999b1c1fc7",
+          "frozen_sha256": "e6b0f8e9711ac881cfa65b4537232c685ff577af0a13778a51cc54999b1c1fc7"
+        },
+        {
+          "path": "toolchain.lock.json",
+          "expected_sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+          "frozen_sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9"
+        }
+      ],
+      "helper_files": [
+        {
+          "path": "zdoc/reviews/20260918-gt06-s82-attribution/object_probe.gd",
+          "executed_sha256": "6221092c70591d89b42aa8c00298198299a716edc7c25b8b4813db5d771fe556",
+          "frozen_sha256": "6221092c70591d89b42aa8c00298198299a716edc7c25b8b4813db5d771fe556"
+        },
+        {
+          "path": "zdoc/reviews/20260918-gt06-s84-probe-cost/cost_phases.gd",
+          "executed_sha256": "e3d5059bf485a9ac07a2f59c11a57652dbab4a8a98a9e82638e3dd6e189bef68",
+          "frozen_sha256": "e3d5059bf485a9ac07a2f59c11a57652dbab4a8a98a9e82638e3dd6e189bef68"
+        },
+        {
+          "path": "zdoc/reviews/20260918-gt06-s84-probe-cost/measure_cost.py",
+          "executed_sha256": "193719fae8ab03ed44a5081195399cbbdeb7243854f0641abdc7b5d00acec14f",
+          "frozen_sha256": "193719fae8ab03ed44a5081195399cbbdeb7243854f0641abdc7b5d00acec14f"
+        }
+      ],
+      "effective_native_sha256": "3a4ddefd20f9706c4d12f7f4df19c2f76c3eb42cd79657c8719dc151b2fbc233",
+      "project_files": [
+        {
+          "path": "addons/hh_benchmark/benchmark_native.gd",
+          "initial_sha256": "3a4ddefd20f9706c4d12f7f4df19c2f76c3eb42cd79657c8719dc151b2fbc233",
+          "actual_sha256": "3a4ddefd20f9706c4d12f7f4df19c2f76c3eb42cd79657c8719dc151b2fbc233",
+          "matches": true
+        },
+        {
+          "path": "addons/hh_benchmark/plugin.cfg",
+          "initial_sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092",
+          "actual_sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092",
+          "matches": true
+        },
+        {
+          "path": "addons/hh_studio/jcs_godot.gd",
+          "initial_sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+          "actual_sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+          "matches": true
+        },
+        {
+          "path": "addons/hh_studio/jcs_godot.gd.uid",
+          "initial_sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+          "actual_sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+          "matches": true
+        },
+        {
+          "path": "addons/hh_studio/plugin.cfg",
+          "initial_sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+          "actual_sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+          "matches": true
+        },
+        {
+          "path": "addons/hh_studio/plugin.gd",
+          "initial_sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+          "actual_sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+          "matches": true
+        },
+        {
+          "path": "addons/hh_studio/plugin.gd.uid",
+          "initial_sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+          "actual_sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+          "matches": true
+        },
+        {
+          "path": "addons/hh_studio/scene_commands.gd",
+          "initial_sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+          "actual_sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+          "matches": true
+        },
+        {
+          "path": "addons/hh_studio/scene_commands.gd.uid",
+          "initial_sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+          "actual_sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+          "matches": true
+        },
+        {
+          "path": "benchmark/.gdignore",
+          "initial_sha256": "3d078ee3c08af2f64daca29255d23d366dc0a9bdbef8a872442d5642bfb84cf8",
+          "actual_sha256": "3d078ee3c08af2f64daca29255d23d366dc0a9bdbef8a872442d5642bfb84cf8",
+          "matches": true
+        },
+        {
+          "path": "benchmark/input.json",
+          "initial_sha256": "90c5f078f761ff337c4aefaec15ec01ae7a839541419b91d12769942830ab1fe",
+          "actual_sha256": "90c5f078f761ff337c4aefaec15ec01ae7a839541419b91d12769942830ab1fe",
+          "matches": true
+        },
+        {
+          "path": "project.godot",
+          "initial_sha256": "819b521edff745f02f7c30e96ceffe21c70d8ef4fc32e95b96df37877e817ce1",
+          "actual_sha256": "819b521edff745f02f7c30e96ceffe21c70d8ef4fc32e95b96df37877e817ce1",
+          "matches": true
+        },
+        {
+          "path": "scenes/fixture.tscn",
+          "initial_sha256": "51eaa111f832327d74b2031d382eb22ab30c8b725323e26ebcf7a66bbef571cb",
+          "actual_sha256": "0de3bf69b391326bd24a6912a09b14fd191535862fc81b80df8f6aaf235e2d86",
+          "matches": false
+        },
+        {
+          "path": "scripts/fixture_actor.gd",
+          "initial_sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+          "actual_sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+          "matches": true
+        },
+        {
+          "path": "scripts/fixture_actor.gd.uid",
+          "initial_sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+          "actual_sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+          "matches": true
+        }
+      ],
+      "native_index_completed": true,
+      "full_benchmark": false,
+      "semantic_cycles": 1,
+      "outer_collector_capture": {
+        "wrapper_pid": 40816,
+        "started_at": "2026-09-18T10:01:38.916901+00:00",
+        "argv": [
+          "python.exe",
+          "-B",
+          "$SNAPSHOT/zdoc/reviews/20260918-gt06-s84-probe-cost/measure_cost.py",
+          "original",
+          "1",
+          "--child"
+        ],
+        "exit_code": 1,
+        "target_pid": 43228,
+        "wrapper_exit_code": 0,
+        "timed_out": false,
+        "tree_verified": true,
+        "ownership": "gated_job_kill_on_close",
+        "stdout": "cost-stdout.txt",
+        "stderr": "cost-stderr.txt",
+        "host": "cost-host.json"
+      },
+      "outer_invocation": {
+        "runner_sha256": "ea522450acc46f90be5e2a7b9257e73ce8b619948105b2c9073aac1f881c7328",
+        "helper_sha256": "193719fae8ab03ed44a5081195399cbbdeb7243854f0641abdc7b5d00acec14f",
+        "arm": "original",
+        "ordinal": 1,
+        "formal_acceptance": false,
+        "timeout_seconds": 240
+      },
+      "captures": {
+        "import-host": {
+          "actual_process_start": {
+            "pid": 23448
+          },
+          "actual_process_exit": {
+            "pid": 23448,
+            "exit_code": 0
+          },
+          "wrapper_exit_code": 0,
+          "wrapper_pid": null,
+          "wrapper_pid_recorded": false,
+          "natural_tree_exit": true,
+          "wrapper_process_handle": null,
+          "job": {
+            "configured": true,
+            "assigned": true,
+            "closed": true,
+            "handle_retained": false,
+            "tainted": false,
+            "zero_observed": true,
+            "active_count": 0,
+            "create_uncertain": false,
+            "close_uncertain": false,
+            "failed_operations": [],
+            "native_error": null
+          },
+          "gap": "Native/helper exit0 is recorded separately; helper PID is not captured in this receipt"
+        },
+        "editor-host": {
+          "actual_process_start": {
+            "pid": 18412
+          },
+          "actual_process_exit": {
+            "pid": 18412,
+            "exit_code": 0
+          },
+          "wrapper_exit_code": 0,
+          "wrapper_pid": null,
+          "wrapper_pid_recorded": false,
+          "natural_tree_exit": true,
+          "wrapper_process_handle": {
+            "close_uncertain": false,
+            "closed": true,
+            "handle_retained": false,
+            "required": true
+          },
+          "job": {
+            "active_count": 0,
+            "assigned": true,
+            "close_uncertain": false,
+            "closed": true,
+            "configured": true,
+            "create_uncertain": false,
+            "failed_operations": [],
+            "handle_retained": false,
+            "native_error": null,
+            "tainted": false,
+            "zero_observed": true
+          },
+          "gap": "Native/helper exit0 is recorded separately; helper PID is not captured in this receipt"
+        }
+      },
+      "cleanup": {
+        "errors": [],
+        "formal_acceptance": false,
+        "owner_closed": true,
+        "probe_handle_retained": false
+      },
+      "observations": [
+        {
+          "phase": 0,
+          "label": "before",
+          "objects": 71046,
+          "resources": 6,
+          "static_memory_bytes": 418169243,
+          "rss_bytes": 749113344,
+          "held_handles": 577,
+          "native_mono_us": 10289924,
+          "host_mono_us": 623926813653,
+          "receipt_sha256": "5e8f7015f16926ca551d0ab5ee92630a8f5be8876d8588f21f6615a24f3ff754",
+          "observation_sha256": "03a21dd7a8862a9c46b88d8e6ba47c13b6f15b07750aa0b3310398df407e9b14",
+          "rss_delta_bytes": 0,
+          "static_delta_bytes": 0,
+          "objects_delta": 0
+        },
+        {
+          "phase": 1,
+          "label": "retained",
+          "objects": 71050,
+          "resources": 6,
+          "static_memory_bytes": 521416975,
+          "rss_bytes": 867033088,
+          "held_handles": 577,
+          "native_mono_us": 13353528,
+          "host_mono_us": 623929767517,
+          "receipt_sha256": "d8b55a6c38ea4547a9d20fb37bef1ba2fdb1dd35dff24c504680288c68da5bdd",
+          "observation_sha256": "9fb90873ad68ac11e1b2755b6c1dee4509e1b19ee3d4a2cea345450c693ca63f",
+          "rss_delta_bytes": 117919744,
+          "static_delta_bytes": 103247732,
+          "objects_delta": 4
+        },
+        {
+          "phase": 2,
+          "label": "released",
+          "objects": 71055,
+          "resources": 6,
+          "static_memory_bytes": 449723667,
+          "rss_bytes": 867033088,
+          "held_handles": 577,
+          "native_mono_us": 15411475,
+          "host_mono_us": 623931825177,
+          "receipt_sha256": "543e7dd4ded33f049041836481e7b25cb91339df79507204e6dc22d05d929f4d",
+          "observation_sha256": "d884aec8b1ade3d8a630bda756e4803c86b74103116da1937d859090a033bb4a",
+          "rss_delta_bytes": 117919744,
+          "static_delta_bytes": 31554424,
+          "objects_delta": 9
+        }
+      ],
+      "census": [
+        {
+          "file": "project/benchmark/out/object-0000.json",
+          "bytes": 842615,
+          "sha256": "74db067a30d0e676de9d574e8bca82c6867e3d8598f23affe5901da96fca4714",
+          "label": "cost_baseline",
+          "inventory_count": 27401,
+          "unattributed_object_count": 43645,
+          "inventory_duration_us": 820954,
+          "counters_before": {
+            "cached_resources": 6,
+            "filesystem_scanning_after": false,
+            "filesystem_scanning_before": false,
+            "objects": 71046,
+            "orphan_nodes": 313,
+            "tree_nodes": 21482
+          },
+          "counters_after": {
+            "cached_resources": 6,
+            "filesystem_scanning_after": false,
+            "filesystem_scanning_before": false,
+            "objects": 71046,
+            "orphan_nodes": 313,
+            "tree_nodes": 21482
+          },
+          "inventory_complete_objectdb": false,
+          "collector_variant": null,
+          "retained_identity_count": null,
+          "retained_ordinary_descriptors": null,
+          "retained_summary_count": null,
+          "ordinary_baseline_content_changes_observed": null,
+          "prior_metadata_for_ordinary_removals": null,
+          "content_change_coverage": null,
+          "per_tree_count_coverage": null,
+          "added_count": 146,
+          "removed_count": 0,
+          "changed_count": 0
+        }
+      ],
+      "operator_stop_lexists": false,
+      "collector_failure": {
+        "detail": "",
+        "type": "AssertionError"
+      },
+      "original_result_missing": true
+    },
+    {
+      "arm": "sham",
+      "formal_acceptance": false,
+      "eligible_for_dataset": false,
+      "outcome": "COST_DIAGNOSTIC_COMPLETED",
+      "source_closure_sha256": "e010180a1bf85b7f565e9aa39734f8551caf170a85b36c50598be556b723ce7f",
+      "source_files": [
+        {
+          "path": "blender-addon/ipc_client.py",
+          "expected_sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9",
+          "frozen_sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9"
+        },
+        {
+          "path": "contracts/perf-collector.schema.json",
+          "expected_sha256": "394d1df03bdfd736ea3fe9f260e9d718d35f3820cde35d1c45ccab65fbc24834",
+          "frozen_sha256": "394d1df03bdfd736ea3fe9f260e9d718d35f3820cde35d1c45ccab65fbc24834"
+        },
+        {
+          "path": "godot-addon/addons/hh_studio/plugin.cfg",
+          "expected_sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+          "frozen_sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c"
+        },
+        {
+          "path": "godot-addon/addons/hh_studio/plugin.gd",
+          "expected_sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+          "frozen_sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036"
+        },
+        {
+          "path": "godot-addon/addons/hh_studio/scene_commands.gd",
+          "expected_sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+          "frozen_sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069"
+        },
+        {
+          "path": "godot-addon/bundle_staging.py",
+          "expected_sha256": "3d614edbec8e9a7f5ad3caf2b9694d7498df129de95683952268621f91d68e43",
+          "frozen_sha256": "3d614edbec8e9a7f5ad3caf2b9694d7498df129de95683952268621f91d68e43"
+        },
+        {
+          "path": "godot-addon/bundle_v2.py",
+          "expected_sha256": "2c5cdc71cdaf80f58bb93ec791e84bab8bd02cd4d9bdbd93d635db13583de62a",
+          "frozen_sha256": "2c5cdc71cdaf80f58bb93ec791e84bab8bd02cd4d9bdbd93d635db13583de62a"
+        },
+        {
+          "path": "godot-addon/cli_job.py",
+          "expected_sha256": "5a0f37bc129bde409a2657054fb091d637d838e442d45a69e7adc1f1527d4c88",
+          "frozen_sha256": "5a0f37bc129bde409a2657054fb091d637d838e442d45a69e7adc1f1527d4c88"
+        },
+        {
+          "path": "godot-addon/fixture_profile.py",
+          "expected_sha256": "25e1667dd930dcf0746b071fc29ea3460bc18d5fb9f3f83e806c1793028f21ae",
+          "frozen_sha256": "25e1667dd930dcf0746b071fc29ea3460bc18d5fb9f3f83e806c1793028f21ae"
+        },
+        {
+          "path": "godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid",
+          "expected_sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+          "frozen_sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b"
+        },
+        {
+          "path": "godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid",
+          "expected_sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+          "frozen_sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d"
+        },
+        {
+          "path": "godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid",
+          "expected_sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+          "frozen_sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69"
+        },
+        {
+          "path": "godot-addon/fixture_profile/project.godot",
+          "expected_sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+          "frozen_sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51"
+        },
+        {
+          "path": "godot-addon/fixture_profile/scripts/fixture_actor.gd.uid",
+          "expected_sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+          "frozen_sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142"
+        },
+        {
+          "path": "godot-addon/fixture_profile/source-pins.json",
+          "expected_sha256": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2",
+          "frozen_sha256": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2"
+        },
+        {
+          "path": "host/blender/__init__.py",
+          "expected_sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90",
+          "frozen_sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90"
+        },
+        {
+          "path": "host/blender/deadline.py",
+          "expected_sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926",
+          "frozen_sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926"
+        },
+        {
+          "path": "host/blender/export_job.py",
+          "expected_sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe",
+          "frozen_sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe"
+        },
+        {
+          "path": "host/blender/glb_preflight.py",
+          "expected_sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62",
+          "frozen_sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62"
+        },
+        {
+          "path": "host/blender/ui_host.py",
+          "expected_sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35",
+          "frozen_sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35"
+        },
+        {
+          "path": "host/core/journal.py",
+          "expected_sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6",
+          "frozen_sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6"
+        },
+        {
+          "path": "host/core/limits.py",
+          "expected_sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f",
+          "frozen_sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f"
+        },
+        {
+          "path": "host/core/private_store.py",
+          "expected_sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476",
+          "frozen_sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476"
+        },
+        {
+          "path": "host/core/redaction.py",
+          "expected_sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f",
+          "frozen_sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f"
+        },
+        {
+          "path": "host/core/safe_create.py",
+          "expected_sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606",
+          "frozen_sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606"
+        },
+        {
+          "path": "host/core/safe_open.py",
+          "expected_sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535",
+          "frozen_sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535"
+        },
+        {
+          "path": "host/core/transport.py",
+          "expected_sha256": "1ec03356b1cb8c8987e1604bcb164aea6a9934dbe259451c19e12de36398aba0",
+          "frozen_sha256": "1ec03356b1cb8c8987e1604bcb164aea6a9934dbe259451c19e12de36398aba0"
+        },
+        {
+          "path": "host/replay/disk_journal_index.py",
+          "expected_sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28",
+          "frozen_sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28"
+        },
+        {
+          "path": "host/replay/perf.py",
+          "expected_sha256": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7",
+          "frozen_sha256": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7"
+        },
+        {
+          "path": "host/replay/process_probe.py",
+          "expected_sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500",
+          "frozen_sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500"
+        },
+        {
+          "path": "host/replay/verified_journal.py",
+          "expected_sha256": "129baa4d9e08c8a1d5acf2ea05c9c89a4fdddb53ca6f3baf2d61311ab98e62ab",
+          "frozen_sha256": "129baa4d9e08c8a1d5acf2ea05c9c89a4fdddb53ca6f3baf2d61311ab98e62ab"
+        },
+        {
+          "path": "pipeline/__init__.py",
+          "expected_sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68",
+          "frozen_sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68"
+        },
+        {
+          "path": "pipeline/native_job.py",
+          "expected_sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca",
+          "frozen_sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca"
+        },
+        {
+          "path": "protocol/__init__.py",
+          "expected_sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f",
+          "frozen_sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f"
+        },
+        {
+          "path": "protocol/_rfc8785/__init__.py",
+          "expected_sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b",
+          "frozen_sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b"
+        },
+        {
+          "path": "protocol/_rfc8785/_impl.py",
+          "expected_sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec",
+          "frozen_sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec"
+        },
+        {
+          "path": "protocol/core.py",
+          "expected_sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e",
+          "frozen_sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e"
+        },
+        {
+          "path": "protocol/jcs_godot.gd",
+          "expected_sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+          "frozen_sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5"
+        },
+        {
+          "path": "tests/replay/benchmark_assembly.py",
+          "expected_sha256": "7573ca96986eb1c10298b8998b3dbaa3326fd80da2c2696150aeb22165d2911d",
+          "frozen_sha256": "7573ca96986eb1c10298b8998b3dbaa3326fd80da2c2696150aeb22165d2911d"
+        },
+        {
+          "path": "tests/replay/benchmark_commands.py",
+          "expected_sha256": "707b6f9a9291214d9ee848d77f1e4a3dc2267de5f2aeb5e48fa4365866a842c9",
+          "frozen_sha256": "707b6f9a9291214d9ee848d77f1e4a3dc2267de5f2aeb5e48fa4365866a842c9"
+        },
+        {
+          "path": "tests/replay/benchmark_job.py",
+          "expected_sha256": "be424a6f37ae573ac4bf40954b31017025daee2147699c80b05f9a0ab70e1611",
+          "frozen_sha256": "be424a6f37ae573ac4bf40954b31017025daee2147699c80b05f9a0ab70e1611"
+        },
+        {
+          "path": "tests/replay/benchmark_native.gd",
+          "expected_sha256": "52fbd9af5c6191ada5baf1d7195a75685ed5e27a95f4d244af8b4d679f8c00f2",
+          "frozen_sha256": "52fbd9af5c6191ada5baf1d7195a75685ed5e27a95f4d244af8b4d679f8c00f2"
+        },
+        {
+          "path": "tests/replay/benchmark_plugin.cfg",
+          "expected_sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092",
+          "frozen_sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092"
+        },
+        {
+          "path": "tests/replay/benchmark_profile.py",
+          "expected_sha256": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233",
+          "frozen_sha256": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233"
+        },
+        {
+          "path": "tests/replay/benchmark_readiness.py",
+          "expected_sha256": "842db6244d93384932929544045654f089d67f6f304624b7348b7d5c4583ab68",
+          "frozen_sha256": "842db6244d93384932929544045654f089d67f6f304624b7348b7d5c4583ab68"
+        },
+        {
+          "path": "tests/replay/benchmark_transport.py",
+          "expected_sha256": "87875809baa4845fcffba8e2c7d82f7a5bce833099c89d4852f2aab931c34df0",
+          "frozen_sha256": "87875809baa4845fcffba8e2c7d82f7a5bce833099c89d4852f2aab931c34df0"
+        },
+        {
+          "path": "tests/replay/campaign_task.ps1",
+          "expected_sha256": "405e2abfa39332b1313871763184fdda0755ff998ec83310e67e10cebfe2ebb9",
+          "frozen_sha256": "405e2abfa39332b1313871763184fdda0755ff998ec83310e67e10cebfe2ebb9"
+        },
+        {
+          "path": "tests/replay/run_benchmark_campaign.py",
+          "expected_sha256": "bb43ecc04c2de4872177a440eb071d533efdaa9e8194f62b4e0907bad8d4b252",
+          "frozen_sha256": "bb43ecc04c2de4872177a440eb071d533efdaa9e8194f62b4e0907bad8d4b252"
+        },
+        {
+          "path": "tests/replay/run_campaign_task.py",
+          "expected_sha256": "f5cb71fa96b8fd2f935ac933dcd5190cef2b3b6821f031bfe72becb2d360a6fd",
+          "frozen_sha256": "f5cb71fa96b8fd2f935ac933dcd5190cef2b3b6821f031bfe72becb2d360a6fd"
+        },
+        {
+          "path": "tests/replay/run_native_benchmark.py",
+          "expected_sha256": "e6b0f8e9711ac881cfa65b4537232c685ff577af0a13778a51cc54999b1c1fc7",
+          "frozen_sha256": "e6b0f8e9711ac881cfa65b4537232c685ff577af0a13778a51cc54999b1c1fc7"
+        },
+        {
+          "path": "toolchain.lock.json",
+          "expected_sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+          "frozen_sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9"
+        }
+      ],
+      "helper_files": [
+        {
+          "path": "zdoc/reviews/20260918-gt06-s82-attribution/object_probe.gd",
+          "executed_sha256": "6221092c70591d89b42aa8c00298198299a716edc7c25b8b4813db5d771fe556",
+          "frozen_sha256": "6221092c70591d89b42aa8c00298198299a716edc7c25b8b4813db5d771fe556"
+        },
+        {
+          "path": "zdoc/reviews/20260918-gt06-s84-probe-cost/cost_phases.gd",
+          "executed_sha256": "e3d5059bf485a9ac07a2f59c11a57652dbab4a8a98a9e82638e3dd6e189bef68",
+          "frozen_sha256": "e3d5059bf485a9ac07a2f59c11a57652dbab4a8a98a9e82638e3dd6e189bef68"
+        },
+        {
+          "path": "zdoc/reviews/20260918-gt06-s84-probe-cost/measure_cost.py",
+          "executed_sha256": "835bb732dcefb697b2847238c250068c98a326ecde9ef888d7e4e7dfc810f69f",
+          "frozen_sha256": "835bb732dcefb697b2847238c250068c98a326ecde9ef888d7e4e7dfc810f69f"
+        }
+      ],
+      "effective_native_sha256": "de120b58ca50d033e980bc4ad425761727ec9c18c53bf4fb316f1a45fd80e27e",
+      "project_files": [
+        {
+          "path": "addons/hh_benchmark/benchmark_native.gd",
+          "initial_sha256": "de120b58ca50d033e980bc4ad425761727ec9c18c53bf4fb316f1a45fd80e27e",
+          "actual_sha256": "de120b58ca50d033e980bc4ad425761727ec9c18c53bf4fb316f1a45fd80e27e",
+          "matches": true
+        },
+        {
+          "path": "addons/hh_benchmark/plugin.cfg",
+          "initial_sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092",
+          "actual_sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092",
+          "matches": true
+        },
+        {
+          "path": "addons/hh_studio/jcs_godot.gd",
+          "initial_sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+          "actual_sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+          "matches": true
+        },
+        {
+          "path": "addons/hh_studio/jcs_godot.gd.uid",
+          "initial_sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+          "actual_sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+          "matches": true
+        },
+        {
+          "path": "addons/hh_studio/plugin.cfg",
+          "initial_sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+          "actual_sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+          "matches": true
+        },
+        {
+          "path": "addons/hh_studio/plugin.gd",
+          "initial_sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+          "actual_sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+          "matches": true
+        },
+        {
+          "path": "addons/hh_studio/plugin.gd.uid",
+          "initial_sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+          "actual_sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+          "matches": true
+        },
+        {
+          "path": "addons/hh_studio/scene_commands.gd",
+          "initial_sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+          "actual_sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+          "matches": true
+        },
+        {
+          "path": "addons/hh_studio/scene_commands.gd.uid",
+          "initial_sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+          "actual_sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+          "matches": true
+        },
+        {
+          "path": "benchmark/.gdignore",
+          "initial_sha256": "3d078ee3c08af2f64daca29255d23d366dc0a9bdbef8a872442d5642bfb84cf8",
+          "actual_sha256": "3d078ee3c08af2f64daca29255d23d366dc0a9bdbef8a872442d5642bfb84cf8",
+          "matches": true
+        },
+        {
+          "path": "benchmark/input.json",
+          "initial_sha256": "ff15e9bc606b7f4016e9a9e5b69ea8070e1385111b6b46524cc1cde2a571b8fb",
+          "actual_sha256": "ff15e9bc606b7f4016e9a9e5b69ea8070e1385111b6b46524cc1cde2a571b8fb",
+          "matches": true
+        },
+        {
+          "path": "project.godot",
+          "initial_sha256": "819b521edff745f02f7c30e96ceffe21c70d8ef4fc32e95b96df37877e817ce1",
+          "actual_sha256": "819b521edff745f02f7c30e96ceffe21c70d8ef4fc32e95b96df37877e817ce1",
+          "matches": true
+        },
+        {
+          "path": "scenes/fixture.tscn",
+          "initial_sha256": "51eaa111f832327d74b2031d382eb22ab30c8b725323e26ebcf7a66bbef571cb",
+          "actual_sha256": "12603be0d0b8eb12eefa0548d8c2cb43754c23211bf2172c9c2ccc270914ae73",
+          "matches": false
+        },
+        {
+          "path": "scripts/fixture_actor.gd",
+          "initial_sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+          "actual_sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+          "matches": true
+        },
+        {
+          "path": "scripts/fixture_actor.gd.uid",
+          "initial_sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+          "actual_sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+          "matches": true
+        }
+      ],
+      "native_index_completed": true,
+      "full_benchmark": false,
+      "semantic_cycles": 1,
+      "outer_collector_capture": {
+        "wrapper_pid": 39204,
+        "started_at": "2026-09-18T10:02:49.252533+00:00",
+        "argv": [
+          "python.exe",
+          "-B",
+          "$SNAPSHOT/zdoc/reviews/20260918-gt06-s84-probe-cost/measure_cost.py",
+          "sham",
+          "1",
+          "--child"
+        ],
+        "exit_code": 0,
+        "target_pid": 43496,
+        "wrapper_exit_code": 0,
+        "timed_out": false,
+        "tree_verified": true,
+        "ownership": "gated_job_kill_on_close",
+        "stdout": "cost-stdout.txt",
+        "stderr": "cost-stderr.txt",
+        "host": "cost-host.json"
+      },
+      "outer_invocation": {
+        "runner_sha256": "ea522450acc46f90be5e2a7b9257e73ce8b619948105b2c9073aac1f881c7328",
+        "helper_sha256": "835bb732dcefb697b2847238c250068c98a326ecde9ef888d7e4e7dfc810f69f",
+        "arm": "sham",
+        "ordinal": 1,
+        "formal_acceptance": false,
+        "timeout_seconds": 240
+      },
+      "captures": {
+        "import-host": {
+          "actual_process_start": {
+            "pid": 7944
+          },
+          "actual_process_exit": {
+            "pid": 7944,
+            "exit_code": 0
+          },
+          "wrapper_exit_code": 0,
+          "wrapper_pid": null,
+          "wrapper_pid_recorded": false,
+          "natural_tree_exit": true,
+          "wrapper_process_handle": null,
+          "job": {
+            "configured": true,
+            "assigned": true,
+            "closed": true,
+            "handle_retained": false,
+            "tainted": false,
+            "zero_observed": true,
+            "active_count": 0,
+            "create_uncertain": false,
+            "close_uncertain": false,
+            "failed_operations": [],
+            "native_error": null
+          },
+          "gap": "Native/helper exit0 is recorded separately; helper PID is not captured in this receipt"
+        },
+        "editor-host": {
+          "actual_process_start": {
+            "pid": 48524
+          },
+          "actual_process_exit": {
+            "pid": 48524,
+            "exit_code": 0
+          },
+          "wrapper_exit_code": 0,
+          "wrapper_pid": null,
+          "wrapper_pid_recorded": false,
+          "natural_tree_exit": true,
+          "wrapper_process_handle": {
+            "close_uncertain": false,
+            "closed": true,
+            "handle_retained": false,
+            "required": true
+          },
+          "job": {
+            "active_count": 0,
+            "assigned": true,
+            "close_uncertain": false,
+            "closed": true,
+            "configured": true,
+            "create_uncertain": false,
+            "failed_operations": [],
+            "handle_retained": false,
+            "native_error": null,
+            "tainted": false,
+            "zero_observed": true
+          },
+          "gap": "Native/helper exit0 is recorded separately; helper PID is not captured in this receipt"
+        }
+      },
+      "cleanup": {
+        "errors": [],
+        "formal_acceptance": false,
+        "owner_closed": true,
+        "probe_handle_retained": false
+      },
+      "observations": [
+        {
+          "phase": 0,
+          "label": "before",
+          "objects": 71047,
+          "resources": 6,
+          "static_memory_bytes": 418168947,
+          "rss_bytes": 748994560,
+          "held_handles": 576,
+          "native_mono_us": 9885739,
+          "host_mono_us": 623996312912,
+          "receipt_sha256": "b5cadeccf3644c1badfa5c25dbef11c9c6b2cb02a905f2a67e3a46ecc13cd9b2",
+          "observation_sha256": "dabfb2956fd0c1e2b9f15360def3554e6f594b6f5dffc12df996a9015b06d3e3",
+          "rss_delta_bytes": 0,
+          "static_delta_bytes": 0,
+          "objects_delta": 0
+        },
+        {
+          "phase": 1,
+          "label": "retained",
+          "objects": 71051,
+          "resources": 6,
+          "static_memory_bytes": 418179899,
+          "rss_bytes": 748773376,
+          "held_handles": 576,
+          "native_mono_us": 11917939,
+          "host_mono_us": 623998348621,
+          "receipt_sha256": "51c0ca4e8bea8a22c348297aae33acd419a2f27fa79a2fb719098fcc6e744ee9",
+          "observation_sha256": "265c254f850d4e4c5dba71d8df212d651b0a7a2509e13db70b4ff2c3fef6c0b8",
+          "rss_delta_bytes": -221184,
+          "static_delta_bytes": 10952,
+          "objects_delta": 4
+        },
+        {
+          "phase": 2,
+          "label": "released",
+          "objects": 71055,
+          "resources": 6,
+          "static_memory_bytes": 418189467,
+          "rss_bytes": 748355584,
+          "held_handles": 576,
+          "native_mono_us": 13946835,
+          "host_mono_us": 624000365293,
+          "receipt_sha256": "755cc5d96f239f1cde60327c9e55b36a17c0fa9b6cfdd28e04c03311fbb069c1",
+          "observation_sha256": "d120540e05b78dcdc3780d25f813bbff774a0012c2fd16a9c2dae6e259a8a553",
+          "rss_delta_bytes": -638976,
+          "static_delta_bytes": 20520,
+          "objects_delta": 8
+        }
+      ],
+      "census": [],
+      "operator_stop_lexists": false,
+      "collector_failure": null,
+      "original_result_missing": false
+    },
+    {
+      "arm": "compact",
+      "formal_acceptance": false,
+      "eligible_for_dataset": false,
+      "outcome": "COST_DIAGNOSTIC_COMPLETED",
+      "source_closure_sha256": "e010180a1bf85b7f565e9aa39734f8551caf170a85b36c50598be556b723ce7f",
+      "source_files": [
+        {
+          "path": "blender-addon/ipc_client.py",
+          "expected_sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9",
+          "frozen_sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9"
+        },
+        {
+          "path": "contracts/perf-collector.schema.json",
+          "expected_sha256": "394d1df03bdfd736ea3fe9f260e9d718d35f3820cde35d1c45ccab65fbc24834",
+          "frozen_sha256": "394d1df03bdfd736ea3fe9f260e9d718d35f3820cde35d1c45ccab65fbc24834"
+        },
+        {
+          "path": "godot-addon/addons/hh_studio/plugin.cfg",
+          "expected_sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+          "frozen_sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c"
+        },
+        {
+          "path": "godot-addon/addons/hh_studio/plugin.gd",
+          "expected_sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+          "frozen_sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036"
+        },
+        {
+          "path": "godot-addon/addons/hh_studio/scene_commands.gd",
+          "expected_sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+          "frozen_sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069"
+        },
+        {
+          "path": "godot-addon/bundle_staging.py",
+          "expected_sha256": "3d614edbec8e9a7f5ad3caf2b9694d7498df129de95683952268621f91d68e43",
+          "frozen_sha256": "3d614edbec8e9a7f5ad3caf2b9694d7498df129de95683952268621f91d68e43"
+        },
+        {
+          "path": "godot-addon/bundle_v2.py",
+          "expected_sha256": "2c5cdc71cdaf80f58bb93ec791e84bab8bd02cd4d9bdbd93d635db13583de62a",
+          "frozen_sha256": "2c5cdc71cdaf80f58bb93ec791e84bab8bd02cd4d9bdbd93d635db13583de62a"
+        },
+        {
+          "path": "godot-addon/cli_job.py",
+          "expected_sha256": "5a0f37bc129bde409a2657054fb091d637d838e442d45a69e7adc1f1527d4c88",
+          "frozen_sha256": "5a0f37bc129bde409a2657054fb091d637d838e442d45a69e7adc1f1527d4c88"
+        },
+        {
+          "path": "godot-addon/fixture_profile.py",
+          "expected_sha256": "25e1667dd930dcf0746b071fc29ea3460bc18d5fb9f3f83e806c1793028f21ae",
+          "frozen_sha256": "25e1667dd930dcf0746b071fc29ea3460bc18d5fb9f3f83e806c1793028f21ae"
+        },
+        {
+          "path": "godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid",
+          "expected_sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+          "frozen_sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b"
+        },
+        {
+          "path": "godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid",
+          "expected_sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+          "frozen_sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d"
+        },
+        {
+          "path": "godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid",
+          "expected_sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+          "frozen_sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69"
+        },
+        {
+          "path": "godot-addon/fixture_profile/project.godot",
+          "expected_sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+          "frozen_sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51"
+        },
+        {
+          "path": "godot-addon/fixture_profile/scripts/fixture_actor.gd.uid",
+          "expected_sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+          "frozen_sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142"
+        },
+        {
+          "path": "godot-addon/fixture_profile/source-pins.json",
+          "expected_sha256": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2",
+          "frozen_sha256": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2"
+        },
+        {
+          "path": "host/blender/__init__.py",
+          "expected_sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90",
+          "frozen_sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90"
+        },
+        {
+          "path": "host/blender/deadline.py",
+          "expected_sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926",
+          "frozen_sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926"
+        },
+        {
+          "path": "host/blender/export_job.py",
+          "expected_sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe",
+          "frozen_sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe"
+        },
+        {
+          "path": "host/blender/glb_preflight.py",
+          "expected_sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62",
+          "frozen_sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62"
+        },
+        {
+          "path": "host/blender/ui_host.py",
+          "expected_sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35",
+          "frozen_sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35"
+        },
+        {
+          "path": "host/core/journal.py",
+          "expected_sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6",
+          "frozen_sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6"
+        },
+        {
+          "path": "host/core/limits.py",
+          "expected_sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f",
+          "frozen_sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f"
+        },
+        {
+          "path": "host/core/private_store.py",
+          "expected_sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476",
+          "frozen_sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476"
+        },
+        {
+          "path": "host/core/redaction.py",
+          "expected_sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f",
+          "frozen_sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f"
+        },
+        {
+          "path": "host/core/safe_create.py",
+          "expected_sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606",
+          "frozen_sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606"
+        },
+        {
+          "path": "host/core/safe_open.py",
+          "expected_sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535",
+          "frozen_sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535"
+        },
+        {
+          "path": "host/core/transport.py",
+          "expected_sha256": "1ec03356b1cb8c8987e1604bcb164aea6a9934dbe259451c19e12de36398aba0",
+          "frozen_sha256": "1ec03356b1cb8c8987e1604bcb164aea6a9934dbe259451c19e12de36398aba0"
+        },
+        {
+          "path": "host/replay/disk_journal_index.py",
+          "expected_sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28",
+          "frozen_sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28"
+        },
+        {
+          "path": "host/replay/perf.py",
+          "expected_sha256": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7",
+          "frozen_sha256": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7"
+        },
+        {
+          "path": "host/replay/process_probe.py",
+          "expected_sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500",
+          "frozen_sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500"
+        },
+        {
+          "path": "host/replay/verified_journal.py",
+          "expected_sha256": "129baa4d9e08c8a1d5acf2ea05c9c89a4fdddb53ca6f3baf2d61311ab98e62ab",
+          "frozen_sha256": "129baa4d9e08c8a1d5acf2ea05c9c89a4fdddb53ca6f3baf2d61311ab98e62ab"
+        },
+        {
+          "path": "pipeline/__init__.py",
+          "expected_sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68",
+          "frozen_sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68"
+        },
+        {
+          "path": "pipeline/native_job.py",
+          "expected_sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca",
+          "frozen_sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca"
+        },
+        {
+          "path": "protocol/__init__.py",
+          "expected_sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f",
+          "frozen_sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f"
+        },
+        {
+          "path": "protocol/_rfc8785/__init__.py",
+          "expected_sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b",
+          "frozen_sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b"
+        },
+        {
+          "path": "protocol/_rfc8785/_impl.py",
+          "expected_sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec",
+          "frozen_sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec"
+        },
+        {
+          "path": "protocol/core.py",
+          "expected_sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e",
+          "frozen_sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e"
+        },
+        {
+          "path": "protocol/jcs_godot.gd",
+          "expected_sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+          "frozen_sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5"
+        },
+        {
+          "path": "tests/replay/benchmark_assembly.py",
+          "expected_sha256": "7573ca96986eb1c10298b8998b3dbaa3326fd80da2c2696150aeb22165d2911d",
+          "frozen_sha256": "7573ca96986eb1c10298b8998b3dbaa3326fd80da2c2696150aeb22165d2911d"
+        },
+        {
+          "path": "tests/replay/benchmark_commands.py",
+          "expected_sha256": "707b6f9a9291214d9ee848d77f1e4a3dc2267de5f2aeb5e48fa4365866a842c9",
+          "frozen_sha256": "707b6f9a9291214d9ee848d77f1e4a3dc2267de5f2aeb5e48fa4365866a842c9"
+        },
+        {
+          "path": "tests/replay/benchmark_job.py",
+          "expected_sha256": "be424a6f37ae573ac4bf40954b31017025daee2147699c80b05f9a0ab70e1611",
+          "frozen_sha256": "be424a6f37ae573ac4bf40954b31017025daee2147699c80b05f9a0ab70e1611"
+        },
+        {
+          "path": "tests/replay/benchmark_native.gd",
+          "expected_sha256": "52fbd9af5c6191ada5baf1d7195a75685ed5e27a95f4d244af8b4d679f8c00f2",
+          "frozen_sha256": "52fbd9af5c6191ada5baf1d7195a75685ed5e27a95f4d244af8b4d679f8c00f2"
+        },
+        {
+          "path": "tests/replay/benchmark_plugin.cfg",
+          "expected_sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092",
+          "frozen_sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092"
+        },
+        {
+          "path": "tests/replay/benchmark_profile.py",
+          "expected_sha256": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233",
+          "frozen_sha256": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233"
+        },
+        {
+          "path": "tests/replay/benchmark_readiness.py",
+          "expected_sha256": "842db6244d93384932929544045654f089d67f6f304624b7348b7d5c4583ab68",
+          "frozen_sha256": "842db6244d93384932929544045654f089d67f6f304624b7348b7d5c4583ab68"
+        },
+        {
+          "path": "tests/replay/benchmark_transport.py",
+          "expected_sha256": "87875809baa4845fcffba8e2c7d82f7a5bce833099c89d4852f2aab931c34df0",
+          "frozen_sha256": "87875809baa4845fcffba8e2c7d82f7a5bce833099c89d4852f2aab931c34df0"
+        },
+        {
+          "path": "tests/replay/campaign_task.ps1",
+          "expected_sha256": "405e2abfa39332b1313871763184fdda0755ff998ec83310e67e10cebfe2ebb9",
+          "frozen_sha256": "405e2abfa39332b1313871763184fdda0755ff998ec83310e67e10cebfe2ebb9"
+        },
+        {
+          "path": "tests/replay/run_benchmark_campaign.py",
+          "expected_sha256": "bb43ecc04c2de4872177a440eb071d533efdaa9e8194f62b4e0907bad8d4b252",
+          "frozen_sha256": "bb43ecc04c2de4872177a440eb071d533efdaa9e8194f62b4e0907bad8d4b252"
+        },
+        {
+          "path": "tests/replay/run_campaign_task.py",
+          "expected_sha256": "f5cb71fa96b8fd2f935ac933dcd5190cef2b3b6821f031bfe72becb2d360a6fd",
+          "frozen_sha256": "f5cb71fa96b8fd2f935ac933dcd5190cef2b3b6821f031bfe72becb2d360a6fd"
+        },
+        {
+          "path": "tests/replay/run_native_benchmark.py",
+          "expected_sha256": "e6b0f8e9711ac881cfa65b4537232c685ff577af0a13778a51cc54999b1c1fc7",
+          "frozen_sha256": "e6b0f8e9711ac881cfa65b4537232c685ff577af0a13778a51cc54999b1c1fc7"
+        },
+        {
+          "path": "toolchain.lock.json",
+          "expected_sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+          "frozen_sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9"
+        }
+      ],
+      "helper_files": [
+        {
+          "path": "zdoc/reviews/20260918-gt06-s84-compact-probe/object_probe.gd",
+          "executed_sha256": "20ed7e62658c247265a8165024682efac78ae9c475a810bb6368e8fe9c75dd40",
+          "frozen_sha256": "20ed7e62658c247265a8165024682efac78ae9c475a810bb6368e8fe9c75dd40"
+        },
+        {
+          "path": "zdoc/reviews/20260918-gt06-s84-probe-cost/cost_phases.gd",
+          "executed_sha256": "e3d5059bf485a9ac07a2f59c11a57652dbab4a8a98a9e82638e3dd6e189bef68",
+          "frozen_sha256": "e3d5059bf485a9ac07a2f59c11a57652dbab4a8a98a9e82638e3dd6e189bef68"
+        },
+        {
+          "path": "zdoc/reviews/20260918-gt06-s84-probe-cost/measure_cost.py",
+          "executed_sha256": "835bb732dcefb697b2847238c250068c98a326ecde9ef888d7e4e7dfc810f69f",
+          "frozen_sha256": "835bb732dcefb697b2847238c250068c98a326ecde9ef888d7e4e7dfc810f69f"
+        }
+      ],
+      "effective_native_sha256": "956510b443c5c6087f3a84078377ce2e8f9785ed32e8b6244db24208e353ed52",
+      "project_files": [
+        {
+          "path": "addons/hh_benchmark/benchmark_native.gd",
+          "initial_sha256": "956510b443c5c6087f3a84078377ce2e8f9785ed32e8b6244db24208e353ed52",
+          "actual_sha256": "956510b443c5c6087f3a84078377ce2e8f9785ed32e8b6244db24208e353ed52",
+          "matches": true
+        },
+        {
+          "path": "addons/hh_benchmark/plugin.cfg",
+          "initial_sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092",
+          "actual_sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092",
+          "matches": true
+        },
+        {
+          "path": "addons/hh_studio/jcs_godot.gd",
+          "initial_sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+          "actual_sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+          "matches": true
+        },
+        {
+          "path": "addons/hh_studio/jcs_godot.gd.uid",
+          "initial_sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+          "actual_sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+          "matches": true
+        },
+        {
+          "path": "addons/hh_studio/plugin.cfg",
+          "initial_sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+          "actual_sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+          "matches": true
+        },
+        {
+          "path": "addons/hh_studio/plugin.gd",
+          "initial_sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+          "actual_sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+          "matches": true
+        },
+        {
+          "path": "addons/hh_studio/plugin.gd.uid",
+          "initial_sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+          "actual_sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+          "matches": true
+        },
+        {
+          "path": "addons/hh_studio/scene_commands.gd",
+          "initial_sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+          "actual_sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+          "matches": true
+        },
+        {
+          "path": "addons/hh_studio/scene_commands.gd.uid",
+          "initial_sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+          "actual_sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+          "matches": true
+        },
+        {
+          "path": "benchmark/.gdignore",
+          "initial_sha256": "3d078ee3c08af2f64daca29255d23d366dc0a9bdbef8a872442d5642bfb84cf8",
+          "actual_sha256": "3d078ee3c08af2f64daca29255d23d366dc0a9bdbef8a872442d5642bfb84cf8",
+          "matches": true
+        },
+        {
+          "path": "benchmark/input.json",
+          "initial_sha256": "b174554d139717a0381fb9bb3a1c6fb032d56f0ff92d0672bc2383c9e729800f",
+          "actual_sha256": "b174554d139717a0381fb9bb3a1c6fb032d56f0ff92d0672bc2383c9e729800f",
+          "matches": true
+        },
+        {
+          "path": "project.godot",
+          "initial_sha256": "819b521edff745f02f7c30e96ceffe21c70d8ef4fc32e95b96df37877e817ce1",
+          "actual_sha256": "819b521edff745f02f7c30e96ceffe21c70d8ef4fc32e95b96df37877e817ce1",
+          "matches": true
+        },
+        {
+          "path": "scenes/fixture.tscn",
+          "initial_sha256": "51eaa111f832327d74b2031d382eb22ab30c8b725323e26ebcf7a66bbef571cb",
+          "actual_sha256": "cde5ea6c9f07390d21d28c08718e0074580732e341655671cecac454ceb2e1ce",
+          "matches": false
+        },
+        {
+          "path": "scripts/fixture_actor.gd",
+          "initial_sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+          "actual_sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+          "matches": true
+        },
+        {
+          "path": "scripts/fixture_actor.gd.uid",
+          "initial_sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+          "actual_sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+          "matches": true
+        }
+      ],
+      "native_index_completed": true,
+      "full_benchmark": false,
+      "semantic_cycles": 1,
+      "outer_collector_capture": {
+        "wrapper_pid": 5544,
+        "started_at": "2026-09-18T10:03:43.472646+00:00",
+        "argv": [
+          "python.exe",
+          "-B",
+          "$SNAPSHOT/zdoc/reviews/20260918-gt06-s84-probe-cost/measure_cost.py",
+          "compact",
+          "1",
+          "--child"
+        ],
+        "exit_code": 0,
+        "target_pid": 43920,
+        "wrapper_exit_code": 0,
+        "timed_out": false,
+        "tree_verified": true,
+        "ownership": "gated_job_kill_on_close",
+        "stdout": "cost-stdout.txt",
+        "stderr": "cost-stderr.txt",
+        "host": "cost-host.json"
+      },
+      "outer_invocation": {
+        "runner_sha256": "ea522450acc46f90be5e2a7b9257e73ce8b619948105b2c9073aac1f881c7328",
+        "helper_sha256": "835bb732dcefb697b2847238c250068c98a326ecde9ef888d7e4e7dfc810f69f",
+        "arm": "compact",
+        "ordinal": 1,
+        "formal_acceptance": false,
+        "timeout_seconds": 240
+      },
+      "captures": {
+        "import-host": {
+          "actual_process_start": {
+            "pid": 40276
+          },
+          "actual_process_exit": {
+            "pid": 40276,
+            "exit_code": 0
+          },
+          "wrapper_exit_code": 0,
+          "wrapper_pid": null,
+          "wrapper_pid_recorded": false,
+          "natural_tree_exit": true,
+          "wrapper_process_handle": null,
+          "job": {
+            "configured": true,
+            "assigned": true,
+            "closed": true,
+            "handle_retained": false,
+            "tainted": false,
+            "zero_observed": true,
+            "active_count": 0,
+            "create_uncertain": false,
+            "close_uncertain": false,
+            "failed_operations": [],
+            "native_error": null
+          },
+          "gap": "Native/helper exit0 is recorded separately; helper PID is not captured in this receipt"
+        },
+        "editor-host": {
+          "actual_process_start": {
+            "pid": 21472
+          },
+          "actual_process_exit": {
+            "pid": 21472,
+            "exit_code": 0
+          },
+          "wrapper_exit_code": 0,
+          "wrapper_pid": null,
+          "wrapper_pid_recorded": false,
+          "natural_tree_exit": true,
+          "wrapper_process_handle": {
+            "close_uncertain": false,
+            "closed": true,
+            "handle_retained": false,
+            "required": true
+          },
+          "job": {
+            "active_count": 0,
+            "assigned": true,
+            "close_uncertain": false,
+            "closed": true,
+            "configured": true,
+            "create_uncertain": false,
+            "failed_operations": [],
+            "handle_retained": false,
+            "native_error": null,
+            "tainted": false,
+            "zero_observed": true
+          },
+          "gap": "Native/helper exit0 is recorded separately; helper PID is not captured in this receipt"
+        }
+      },
+      "cleanup": {
+        "errors": [],
+        "formal_acceptance": false,
+        "owner_closed": true,
+        "probe_handle_retained": false
+      },
+      "observations": [
+        {
+          "phase": 0,
+          "label": "before",
+          "objects": 71047,
+          "resources": 6,
+          "static_memory_bytes": 418194395,
+          "rss_bytes": 747802624,
+          "held_handles": 576,
+          "native_mono_us": 10573332,
+          "host_mono_us": 624051475977,
+          "receipt_sha256": "1ac3356a11a5edf16c0da901bbfd8fa34b0c6a395c88a4094b4fd28d2fdecb8e",
+          "observation_sha256": "acf91210ba298e46690d5557747eb3f9ec02e2a4c61a88d9e6e70abe59e5dbca",
+          "rss_delta_bytes": 0,
+          "static_delta_bytes": 0,
+          "objects_delta": 0
+        },
+        {
+          "phase": 1,
+          "label": "retained",
+          "objects": 71051,
+          "resources": 6,
+          "static_memory_bytes": 423450079,
+          "rss_bytes": 750215168,
+          "held_handles": 576,
+          "native_mono_us": 13184012,
+          "host_mono_us": 624054075946,
+          "receipt_sha256": "85814d11237c0af8aee067f479159626bc310411b3b22188c9e689a0df3fb5c7",
+          "observation_sha256": "390fc00051086596ba1cc86abfd8456c52651be30ab05d3d284e57f33b54304e",
+          "rss_delta_bytes": 2412544,
+          "static_delta_bytes": 5255684,
+          "objects_delta": 4
+        },
+        {
+          "phase": 2,
+          "label": "released",
+          "objects": 71055,
+          "resources": 6,
+          "static_memory_bytes": 418996759,
+          "rss_bytes": 750215168,
+          "held_handles": 576,
+          "native_mono_us": 15206628,
+          "host_mono_us": 624056096478,
+          "receipt_sha256": "1e2e1517725f490a417eb4a546b8312bb445e70d1e1b02685095ec3bf219ec79",
+          "observation_sha256": "1a7b41e8dbfa1ee72d848361576083d460fecc63d02ff3a7ecaf4f561d350aa1",
+          "rss_delta_bytes": 2412544,
+          "static_delta_bytes": 802364,
+          "objects_delta": 8
+        }
+      ],
+      "census": [
+        {
+          "file": "project/benchmark/out/object-0000.json",
+          "bytes": 843157,
+          "sha256": "108e9fa1b66daf0550befa86b70eaae0732ec2a4d91c0ca444c6ecf6b895cfa2",
+          "label": "cost_baseline",
+          "inventory_count": 27402,
+          "unattributed_object_count": 43645,
+          "inventory_duration_us": 521009,
+          "counters_before": {
+            "cached_resources": 6,
+            "filesystem_scanning_after": false,
+            "filesystem_scanning_before": false,
+            "objects": 71047,
+            "orphan_nodes": 313,
+            "tree_nodes": 21482
+          },
+          "counters_after": {
+            "cached_resources": 6,
+            "filesystem_scanning_after": false,
+            "filesystem_scanning_before": false,
+            "objects": 71047,
+            "orphan_nodes": 313,
+            "tree_nodes": 21482
+          },
+          "inventory_complete_objectdb": false,
+          "collector_variant": "compact_ids_summaries_v1",
+          "retained_identity_count": 27402,
+          "retained_ordinary_descriptors": 0,
+          "retained_summary_count": 146,
+          "ordinary_baseline_content_changes_observed": false,
+          "prior_metadata_for_ordinary_removals": "unknown_not_retained_even_if_emitted_when_added",
+          "content_change_coverage": "exact_class_Tree_and_RichTextLabel_summaries_only",
+          "per_tree_count_coverage": "all_reachable_TreeItems; old_per_item_owner_not_retained",
+          "added_count": 146,
+          "removed_count": 0,
+          "changed_count": 0
+        }
+      ],
+      "operator_stop_lexists": false,
+      "collector_failure": null,
+      "original_result_missing": false
+    },
+    {
+      "arm": "compact-growth",
+      "formal_acceptance": false,
+      "eligible_for_dataset": false,
+      "outcome": "COST_DIAGNOSTIC_COMPLETED",
+      "source_closure_sha256": "e010180a1bf85b7f565e9aa39734f8551caf170a85b36c50598be556b723ce7f",
+      "source_files": [
+        {
+          "path": "blender-addon/ipc_client.py",
+          "expected_sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9",
+          "frozen_sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9"
+        },
+        {
+          "path": "contracts/perf-collector.schema.json",
+          "expected_sha256": "394d1df03bdfd736ea3fe9f260e9d718d35f3820cde35d1c45ccab65fbc24834",
+          "frozen_sha256": "394d1df03bdfd736ea3fe9f260e9d718d35f3820cde35d1c45ccab65fbc24834"
+        },
+        {
+          "path": "godot-addon/addons/hh_studio/plugin.cfg",
+          "expected_sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+          "frozen_sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c"
+        },
+        {
+          "path": "godot-addon/addons/hh_studio/plugin.gd",
+          "expected_sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+          "frozen_sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036"
+        },
+        {
+          "path": "godot-addon/addons/hh_studio/scene_commands.gd",
+          "expected_sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+          "frozen_sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069"
+        },
+        {
+          "path": "godot-addon/bundle_staging.py",
+          "expected_sha256": "3d614edbec8e9a7f5ad3caf2b9694d7498df129de95683952268621f91d68e43",
+          "frozen_sha256": "3d614edbec8e9a7f5ad3caf2b9694d7498df129de95683952268621f91d68e43"
+        },
+        {
+          "path": "godot-addon/bundle_v2.py",
+          "expected_sha256": "2c5cdc71cdaf80f58bb93ec791e84bab8bd02cd4d9bdbd93d635db13583de62a",
+          "frozen_sha256": "2c5cdc71cdaf80f58bb93ec791e84bab8bd02cd4d9bdbd93d635db13583de62a"
+        },
+        {
+          "path": "godot-addon/cli_job.py",
+          "expected_sha256": "5a0f37bc129bde409a2657054fb091d637d838e442d45a69e7adc1f1527d4c88",
+          "frozen_sha256": "5a0f37bc129bde409a2657054fb091d637d838e442d45a69e7adc1f1527d4c88"
+        },
+        {
+          "path": "godot-addon/fixture_profile.py",
+          "expected_sha256": "25e1667dd930dcf0746b071fc29ea3460bc18d5fb9f3f83e806c1793028f21ae",
+          "frozen_sha256": "25e1667dd930dcf0746b071fc29ea3460bc18d5fb9f3f83e806c1793028f21ae"
+        },
+        {
+          "path": "godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid",
+          "expected_sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+          "frozen_sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b"
+        },
+        {
+          "path": "godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid",
+          "expected_sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+          "frozen_sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d"
+        },
+        {
+          "path": "godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid",
+          "expected_sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+          "frozen_sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69"
+        },
+        {
+          "path": "godot-addon/fixture_profile/project.godot",
+          "expected_sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+          "frozen_sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51"
+        },
+        {
+          "path": "godot-addon/fixture_profile/scripts/fixture_actor.gd.uid",
+          "expected_sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+          "frozen_sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142"
+        },
+        {
+          "path": "godot-addon/fixture_profile/source-pins.json",
+          "expected_sha256": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2",
+          "frozen_sha256": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2"
+        },
+        {
+          "path": "host/blender/__init__.py",
+          "expected_sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90",
+          "frozen_sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90"
+        },
+        {
+          "path": "host/blender/deadline.py",
+          "expected_sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926",
+          "frozen_sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926"
+        },
+        {
+          "path": "host/blender/export_job.py",
+          "expected_sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe",
+          "frozen_sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe"
+        },
+        {
+          "path": "host/blender/glb_preflight.py",
+          "expected_sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62",
+          "frozen_sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62"
+        },
+        {
+          "path": "host/blender/ui_host.py",
+          "expected_sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35",
+          "frozen_sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35"
+        },
+        {
+          "path": "host/core/journal.py",
+          "expected_sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6",
+          "frozen_sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6"
+        },
+        {
+          "path": "host/core/limits.py",
+          "expected_sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f",
+          "frozen_sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f"
+        },
+        {
+          "path": "host/core/private_store.py",
+          "expected_sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476",
+          "frozen_sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476"
+        },
+        {
+          "path": "host/core/redaction.py",
+          "expected_sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f",
+          "frozen_sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f"
+        },
+        {
+          "path": "host/core/safe_create.py",
+          "expected_sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606",
+          "frozen_sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606"
+        },
+        {
+          "path": "host/core/safe_open.py",
+          "expected_sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535",
+          "frozen_sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535"
+        },
+        {
+          "path": "host/core/transport.py",
+          "expected_sha256": "1ec03356b1cb8c8987e1604bcb164aea6a9934dbe259451c19e12de36398aba0",
+          "frozen_sha256": "1ec03356b1cb8c8987e1604bcb164aea6a9934dbe259451c19e12de36398aba0"
+        },
+        {
+          "path": "host/replay/disk_journal_index.py",
+          "expected_sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28",
+          "frozen_sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28"
+        },
+        {
+          "path": "host/replay/perf.py",
+          "expected_sha256": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7",
+          "frozen_sha256": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7"
+        },
+        {
+          "path": "host/replay/process_probe.py",
+          "expected_sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500",
+          "frozen_sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500"
+        },
+        {
+          "path": "host/replay/verified_journal.py",
+          "expected_sha256": "129baa4d9e08c8a1d5acf2ea05c9c89a4fdddb53ca6f3baf2d61311ab98e62ab",
+          "frozen_sha256": "129baa4d9e08c8a1d5acf2ea05c9c89a4fdddb53ca6f3baf2d61311ab98e62ab"
+        },
+        {
+          "path": "pipeline/__init__.py",
+          "expected_sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68",
+          "frozen_sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68"
+        },
+        {
+          "path": "pipeline/native_job.py",
+          "expected_sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca",
+          "frozen_sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca"
+        },
+        {
+          "path": "protocol/__init__.py",
+          "expected_sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f",
+          "frozen_sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f"
+        },
+        {
+          "path": "protocol/_rfc8785/__init__.py",
+          "expected_sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b",
+          "frozen_sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b"
+        },
+        {
+          "path": "protocol/_rfc8785/_impl.py",
+          "expected_sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec",
+          "frozen_sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec"
+        },
+        {
+          "path": "protocol/core.py",
+          "expected_sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e",
+          "frozen_sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e"
+        },
+        {
+          "path": "protocol/jcs_godot.gd",
+          "expected_sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+          "frozen_sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5"
+        },
+        {
+          "path": "tests/replay/benchmark_assembly.py",
+          "expected_sha256": "7573ca96986eb1c10298b8998b3dbaa3326fd80da2c2696150aeb22165d2911d",
+          "frozen_sha256": "7573ca96986eb1c10298b8998b3dbaa3326fd80da2c2696150aeb22165d2911d"
+        },
+        {
+          "path": "tests/replay/benchmark_commands.py",
+          "expected_sha256": "707b6f9a9291214d9ee848d77f1e4a3dc2267de5f2aeb5e48fa4365866a842c9",
+          "frozen_sha256": "707b6f9a9291214d9ee848d77f1e4a3dc2267de5f2aeb5e48fa4365866a842c9"
+        },
+        {
+          "path": "tests/replay/benchmark_job.py",
+          "expected_sha256": "be424a6f37ae573ac4bf40954b31017025daee2147699c80b05f9a0ab70e1611",
+          "frozen_sha256": "be424a6f37ae573ac4bf40954b31017025daee2147699c80b05f9a0ab70e1611"
+        },
+        {
+          "path": "tests/replay/benchmark_native.gd",
+          "expected_sha256": "52fbd9af5c6191ada5baf1d7195a75685ed5e27a95f4d244af8b4d679f8c00f2",
+          "frozen_sha256": "52fbd9af5c6191ada5baf1d7195a75685ed5e27a95f4d244af8b4d679f8c00f2"
+        },
+        {
+          "path": "tests/replay/benchmark_plugin.cfg",
+          "expected_sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092",
+          "frozen_sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092"
+        },
+        {
+          "path": "tests/replay/benchmark_profile.py",
+          "expected_sha256": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233",
+          "frozen_sha256": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233"
+        },
+        {
+          "path": "tests/replay/benchmark_readiness.py",
+          "expected_sha256": "842db6244d93384932929544045654f089d67f6f304624b7348b7d5c4583ab68",
+          "frozen_sha256": "842db6244d93384932929544045654f089d67f6f304624b7348b7d5c4583ab68"
+        },
+        {
+          "path": "tests/replay/benchmark_transport.py",
+          "expected_sha256": "87875809baa4845fcffba8e2c7d82f7a5bce833099c89d4852f2aab931c34df0",
+          "frozen_sha256": "87875809baa4845fcffba8e2c7d82f7a5bce833099c89d4852f2aab931c34df0"
+        },
+        {
+          "path": "tests/replay/campaign_task.ps1",
+          "expected_sha256": "405e2abfa39332b1313871763184fdda0755ff998ec83310e67e10cebfe2ebb9",
+          "frozen_sha256": "405e2abfa39332b1313871763184fdda0755ff998ec83310e67e10cebfe2ebb9"
+        },
+        {
+          "path": "tests/replay/run_benchmark_campaign.py",
+          "expected_sha256": "bb43ecc04c2de4872177a440eb071d533efdaa9e8194f62b4e0907bad8d4b252",
+          "frozen_sha256": "bb43ecc04c2de4872177a440eb071d533efdaa9e8194f62b4e0907bad8d4b252"
+        },
+        {
+          "path": "tests/replay/run_campaign_task.py",
+          "expected_sha256": "f5cb71fa96b8fd2f935ac933dcd5190cef2b3b6821f031bfe72becb2d360a6fd",
+          "frozen_sha256": "f5cb71fa96b8fd2f935ac933dcd5190cef2b3b6821f031bfe72becb2d360a6fd"
+        },
+        {
+          "path": "tests/replay/run_native_benchmark.py",
+          "expected_sha256": "e6b0f8e9711ac881cfa65b4537232c685ff577af0a13778a51cc54999b1c1fc7",
+          "frozen_sha256": "e6b0f8e9711ac881cfa65b4537232c685ff577af0a13778a51cc54999b1c1fc7"
+        },
+        {
+          "path": "toolchain.lock.json",
+          "expected_sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+          "frozen_sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9"
+        }
+      ],
+      "helper_files": [
+        {
+          "path": "zdoc/reviews/20260918-gt06-s84-compact-probe/object_probe.gd",
+          "executed_sha256": "20ed7e62658c247265a8165024682efac78ae9c475a810bb6368e8fe9c75dd40",
+          "frozen_sha256": "20ed7e62658c247265a8165024682efac78ae9c475a810bb6368e8fe9c75dd40"
+        },
+        {
+          "path": "zdoc/reviews/20260918-gt06-s84-probe-cost/cost_growth.gd",
+          "executed_sha256": "728a474655e9c99c7c21a96a7dff9922c4e696bebadbc628317fbca583db1d9c",
+          "frozen_sha256": "728a474655e9c99c7c21a96a7dff9922c4e696bebadbc628317fbca583db1d9c"
+        },
+        {
+          "path": "zdoc/reviews/20260918-gt06-s84-probe-cost/measure_cost.py",
+          "executed_sha256": "30ae92b366f345a4f40f2653f67012af983ab405ee20b5540eed15db50b5a9c8",
+          "frozen_sha256": "30ae92b366f345a4f40f2653f67012af983ab405ee20b5540eed15db50b5a9c8"
+        }
+      ],
+      "effective_native_sha256": "1484419ddb567500803c3ad47998bed0bfa1e6ff3afc9bfcb5383c9ab8f35d3d",
+      "project_files": [
+        {
+          "path": "addons/hh_benchmark/benchmark_native.gd",
+          "initial_sha256": "1484419ddb567500803c3ad47998bed0bfa1e6ff3afc9bfcb5383c9ab8f35d3d",
+          "actual_sha256": "1484419ddb567500803c3ad47998bed0bfa1e6ff3afc9bfcb5383c9ab8f35d3d",
+          "matches": true
+        },
+        {
+          "path": "addons/hh_benchmark/plugin.cfg",
+          "initial_sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092",
+          "actual_sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092",
+          "matches": true
+        },
+        {
+          "path": "addons/hh_studio/jcs_godot.gd",
+          "initial_sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+          "actual_sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+          "matches": true
+        },
+        {
+          "path": "addons/hh_studio/jcs_godot.gd.uid",
+          "initial_sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+          "actual_sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+          "matches": true
+        },
+        {
+          "path": "addons/hh_studio/plugin.cfg",
+          "initial_sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+          "actual_sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+          "matches": true
+        },
+        {
+          "path": "addons/hh_studio/plugin.gd",
+          "initial_sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+          "actual_sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+          "matches": true
+        },
+        {
+          "path": "addons/hh_studio/plugin.gd.uid",
+          "initial_sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+          "actual_sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+          "matches": true
+        },
+        {
+          "path": "addons/hh_studio/scene_commands.gd",
+          "initial_sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+          "actual_sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+          "matches": true
+        },
+        {
+          "path": "addons/hh_studio/scene_commands.gd.uid",
+          "initial_sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+          "actual_sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+          "matches": true
+        },
+        {
+          "path": "benchmark/.gdignore",
+          "initial_sha256": "3d078ee3c08af2f64daca29255d23d366dc0a9bdbef8a872442d5642bfb84cf8",
+          "actual_sha256": "3d078ee3c08af2f64daca29255d23d366dc0a9bdbef8a872442d5642bfb84cf8",
+          "matches": true
+        },
+        {
+          "path": "benchmark/input.json",
+          "initial_sha256": "cbd71db1f1adc4a7ed35be1e235bcde4dbec99aa01ac2919b11d98d3991d8dfe",
+          "actual_sha256": "cbd71db1f1adc4a7ed35be1e235bcde4dbec99aa01ac2919b11d98d3991d8dfe",
+          "matches": true
+        },
+        {
+          "path": "project.godot",
+          "initial_sha256": "819b521edff745f02f7c30e96ceffe21c70d8ef4fc32e95b96df37877e817ce1",
+          "actual_sha256": "819b521edff745f02f7c30e96ceffe21c70d8ef4fc32e95b96df37877e817ce1",
+          "matches": true
+        },
+        {
+          "path": "scenes/fixture.tscn",
+          "initial_sha256": "51eaa111f832327d74b2031d382eb22ab30c8b725323e26ebcf7a66bbef571cb",
+          "actual_sha256": "cea80b4159077136bea3c85a53586f871e8f8a40d547ef715826ea0922e642bf",
+          "matches": false
+        },
+        {
+          "path": "scripts/fixture_actor.gd",
+          "initial_sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+          "actual_sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd",
+          "matches": true
+        },
+        {
+          "path": "scripts/fixture_actor.gd.uid",
+          "initial_sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+          "actual_sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+          "matches": true
+        }
+      ],
+      "native_index_completed": true,
+      "full_benchmark": false,
+      "semantic_cycles": 1,
+      "outer_collector_capture": {
+        "wrapper_pid": 45692,
+        "started_at": "2026-09-18T10:05:16.227934+00:00",
+        "argv": [
+          "python.exe",
+          "-B",
+          "$SNAPSHOT/zdoc/reviews/20260918-gt06-s84-probe-cost/measure_cost.py",
+          "compact-growth",
+          "1",
+          "--child"
+        ],
+        "exit_code": 0,
+        "target_pid": 17748,
+        "wrapper_exit_code": 0,
+        "timed_out": false,
+        "tree_verified": true,
+        "ownership": "gated_job_kill_on_close",
+        "stdout": "cost-stdout.txt",
+        "stderr": "cost-stderr.txt",
+        "host": "cost-host.json"
+      },
+      "outer_invocation": {
+        "runner_sha256": "ea522450acc46f90be5e2a7b9257e73ce8b619948105b2c9073aac1f881c7328",
+        "helper_sha256": "30ae92b366f345a4f40f2653f67012af983ab405ee20b5540eed15db50b5a9c8",
+        "arm": "compact-growth",
+        "ordinal": 1,
+        "formal_acceptance": false,
+        "timeout_seconds": 240
+      },
+      "captures": {
+        "import-host": {
+          "actual_process_start": {
+            "pid": 41176
+          },
+          "actual_process_exit": {
+            "pid": 41176,
+            "exit_code": 0
+          },
+          "wrapper_exit_code": 0,
+          "wrapper_pid": null,
+          "wrapper_pid_recorded": false,
+          "natural_tree_exit": true,
+          "wrapper_process_handle": null,
+          "job": {
+            "configured": true,
+            "assigned": true,
+            "closed": true,
+            "handle_retained": false,
+            "tainted": false,
+            "zero_observed": true,
+            "active_count": 0,
+            "create_uncertain": false,
+            "close_uncertain": false,
+            "failed_operations": [],
+            "native_error": null
+          },
+          "gap": "Native/helper exit0 is recorded separately; helper PID is not captured in this receipt"
+        },
+        "editor-host": {
+          "actual_process_start": {
+            "pid": 30884
+          },
+          "actual_process_exit": {
+            "pid": 30884,
+            "exit_code": 0
+          },
+          "wrapper_exit_code": 0,
+          "wrapper_pid": null,
+          "wrapper_pid_recorded": false,
+          "natural_tree_exit": true,
+          "wrapper_process_handle": {
+            "close_uncertain": false,
+            "closed": true,
+            "handle_retained": false,
+            "required": true
+          },
+          "job": {
+            "active_count": 0,
+            "assigned": true,
+            "close_uncertain": false,
+            "closed": true,
+            "configured": true,
+            "create_uncertain": false,
+            "failed_operations": [],
+            "handle_retained": false,
+            "native_error": null,
+            "tainted": false,
+            "zero_observed": true
+          },
+          "gap": "Native/helper exit0 is recorded separately; helper PID is not captured in this receipt"
+        }
+      },
+      "cleanup": {
+        "errors": [],
+        "formal_acceptance": false,
+        "owner_closed": true,
+        "probe_handle_retained": false
+      },
+      "observations": [
+        {
+          "phase": 0,
+          "label": "before",
+          "objects": 71047,
+          "resources": 6,
+          "static_memory_bytes": 418257567,
+          "rss_bytes": 750911488,
+          "held_handles": 576,
+          "native_mono_us": 9966498,
+          "host_mono_us": 624143762186,
+          "receipt_sha256": "7e5d71df845e5c39c0b74f4dcf56ff75222cffa20d4b3c451e26c664f200411a",
+          "observation_sha256": "f7ddfddeaf184bffe4d6adf3579382a445191771cab434972ad373dfec6b4f8e",
+          "rss_delta_bytes": 0,
+          "static_delta_bytes": 0,
+          "objects_delta": 0
+        },
+        {
+          "phase": 1,
+          "label": "retained",
+          "objects": 71051,
+          "resources": 6,
+          "static_memory_bytes": 423513307,
+          "rss_bytes": 754208768,
+          "held_handles": 576,
+          "native_mono_us": 12582331,
+          "host_mono_us": 624146363583,
+          "receipt_sha256": "5f51696ca8640f8a49a2cee31eefbfaa23a15c8d8d4fb68cf7f1f1619dae6209",
+          "observation_sha256": "4b4977ae60cd22106331a2353883510b62142d8aaee0b2c096df9629f8525989",
+          "rss_delta_bytes": 3297280,
+          "static_delta_bytes": 5255740,
+          "objects_delta": 4
+        },
+        {
+          "phase": 2,
+          "label": "growth",
+          "objects": 71086,
+          "resources": 6,
+          "static_memory_bytes": 423663331,
+          "rss_bytes": 757690368,
+          "held_handles": 576,
+          "native_mono_us": 15144704,
+          "host_mono_us": 624148934989,
+          "receipt_sha256": "b8ad2bf94e2f171e69621787f54bb0b98da859fd354f8b3e9bacfb735aa17f36",
+          "observation_sha256": "49f7a9adb53f4bfb68af67156abd69e80702e626e527604914c07b6bae31e2fd",
+          "rss_delta_bytes": 6778880,
+          "static_delta_bytes": 5405764,
+          "objects_delta": 39
+        },
+        {
+          "phase": 3,
+          "label": "released",
+          "objects": 71061,
+          "resources": 6,
+          "static_memory_bytes": 419077451,
+          "rss_bytes": 758157312,
+          "held_handles": 576,
+          "native_mono_us": 17771094,
+          "host_mono_us": 624151556283,
+          "receipt_sha256": "5cc9cc3997890f5662c034aa75bebc6c18283a915e89ce94d012baf5635be1c9",
+          "observation_sha256": "52bd6b083a488d92ffbe3a1b923081e61b654905030d3dfec1d82eeaf79f71e1",
+          "rss_delta_bytes": 7245824,
+          "static_delta_bytes": 819884,
+          "objects_delta": 14
+        }
+      ],
+      "census": [
+        {
+          "file": "project/benchmark/out/object-0000.json",
+          "bytes": 843163,
+          "sha256": "53f22cfec1d7bad485d938e6cd18966d921202a538739f94e0f4ecc873a95edd",
+          "label": "cost_baseline",
+          "inventory_count": 27402,
+          "unattributed_object_count": 43645,
+          "inventory_duration_us": 527245,
+          "counters_before": {
+            "cached_resources": 6,
+            "filesystem_scanning_after": false,
+            "filesystem_scanning_before": false,
+            "objects": 71047,
+            "orphan_nodes": 313,
+            "tree_nodes": 21482
+          },
+          "counters_after": {
+            "cached_resources": 6,
+            "filesystem_scanning_after": false,
+            "filesystem_scanning_before": false,
+            "objects": 71047,
+            "orphan_nodes": 313,
+            "tree_nodes": 21482
+          },
+          "inventory_complete_objectdb": false,
+          "collector_variant": "compact_ids_summaries_v1",
+          "retained_identity_count": 27402,
+          "retained_ordinary_descriptors": 0,
+          "retained_summary_count": 146,
+          "ordinary_baseline_content_changes_observed": false,
+          "prior_metadata_for_ordinary_removals": "unknown_not_retained_even_if_emitted_when_added",
+          "content_change_coverage": "exact_class_Tree_and_RichTextLabel_summaries_only",
+          "per_tree_count_coverage": "all_reachable_TreeItems; old_per_item_owner_not_retained",
+          "added_count": 146,
+          "removed_count": 0,
+          "changed_count": 0
+        },
+        {
+          "file": "project/benchmark/out/object-0001.json",
+          "bytes": 16750,
+          "sha256": "55b025541f7be7ca4e2b496503aa285eaa3cab39ad40190e0ad0f4fa56901071",
+          "label": "cost_growth",
+          "inventory_count": 27417,
+          "unattributed_object_count": 43665,
+          "inventory_duration_us": 514697,
+          "counters_before": {
+            "cached_resources": 6,
+            "filesystem_scanning_after": false,
+            "filesystem_scanning_before": false,
+            "objects": 71082,
+            "orphan_nodes": 313,
+            "tree_nodes": 21496
+          },
+          "counters_after": {
+            "cached_resources": 6,
+            "filesystem_scanning_after": false,
+            "filesystem_scanning_before": false,
+            "objects": 71082,
+            "orphan_nodes": 313,
+            "tree_nodes": 21496
+          },
+          "inventory_complete_objectdb": false,
+          "collector_variant": "compact_ids_summaries_v1",
+          "retained_identity_count": 27417,
+          "retained_ordinary_descriptors": 0,
+          "retained_summary_count": 147,
+          "ordinary_baseline_content_changes_observed": false,
+          "prior_metadata_for_ordinary_removals": "unknown_not_retained_even_if_emitted_when_added",
+          "content_change_coverage": "exact_class_Tree_and_RichTextLabel_summaries_only",
+          "per_tree_count_coverage": "all_reachable_TreeItems; old_per_item_owner_not_retained",
+          "added_count": 15,
+          "removed_count": 0,
+          "changed_count": 1
+        },
+        {
+          "file": "project/benchmark/out/object-0002.json",
+          "bytes": 13700,
+          "sha256": "d6555cd7fad816e2d9ef0e902add23f119538440b087e130986725c64e422b91",
+          "label": "cost_restore",
+          "inventory_count": 27402,
+          "unattributed_object_count": 43655,
+          "inventory_duration_us": 568143,
+          "counters_before": {
+            "cached_resources": 6,
+            "filesystem_scanning_after": false,
+            "filesystem_scanning_before": false,
+            "objects": 71057,
+            "orphan_nodes": 313,
+            "tree_nodes": 21482
+          },
+          "counters_after": {
+            "cached_resources": 6,
+            "filesystem_scanning_after": false,
+            "filesystem_scanning_before": false,
+            "objects": 71057,
+            "orphan_nodes": 313,
+            "tree_nodes": 21482
+          },
+          "inventory_complete_objectdb": false,
+          "collector_variant": "compact_ids_summaries_v1",
+          "retained_identity_count": 27402,
+          "retained_ordinary_descriptors": 0,
+          "retained_summary_count": 146,
+          "ordinary_baseline_content_changes_observed": false,
+          "prior_metadata_for_ordinary_removals": "unknown_not_retained_even_if_emitted_when_added",
+          "content_change_coverage": "exact_class_Tree_and_RichTextLabel_summaries_only",
+          "per_tree_count_coverage": "all_reachable_TreeItems; old_per_item_owner_not_retained",
+          "added_count": 0,
+          "removed_count": 15,
+          "changed_count": 1
+        }
+      ],
+      "operator_stop_lexists": false,
+      "collector_failure": null,
+      "original_result_missing": false
+    }
+  ],
+  "limitations": [
+    "Single serial trial per arm; short native diagnostic, no HTTP/native full sequence or campaign acceptance.",
+    "RSS is host sampled; Godot static allocator bytes are supplemental, not replacements for RSS.",
+    "Object counts drift between two-second phase observations even in sham; no count-stability or no-leak conclusion.",
+    "Native census unchanged counters apply only across each synchronous collection, not across phase waits.",
+    "Censuses are partial reachable inventories, not full ObjectDB.",
+    "Native/editor/import wrapper exit0 is recorded, but their helper PIDs are not in the capture receipts. Import wrapper-handle receipt is absent.",
+    "No independent critic, source fix, engine launch or acceptance verdict is supplied by this preservation."
+  ]
+}

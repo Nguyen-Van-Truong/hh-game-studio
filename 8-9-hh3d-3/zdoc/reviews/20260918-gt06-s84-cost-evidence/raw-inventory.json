@@ -1,0 +1,3647 @@
+{
+  "schema": "S84_COST_RAW_INVENTORY_1",
+  "authority": 0,
+  "formal_acceptance": false,
+  "started_utc": "2026-09-18T10:06:41.557170+00:00",
+  "finished_utc": "2026-09-18T10:06:45.221458+00:00",
+  "roots": {
+    "original/raw": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s84-cost-original-01",
+    "original/outer": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260918-gt06-s84-probe-cost\\original-01",
+    "sham/raw": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s84-cost-sham-01",
+    "sham/outer": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260918-gt06-s84-probe-cost\\sham-01",
+    "compact/raw": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s84-cost-compact-01",
+    "compact/outer": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260918-gt06-s84-probe-cost\\compact-01",
+    "compact-growth/raw": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s84-cost-compact-growth-01",
+    "compact-growth/outer": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260918-gt06-s84-probe-cost\\compact-growth-01"
+  },
+  "files": {
+    "original/raw": [
+      {
+        "path": "cleanup.json",
+        "bytes": 90,
+        "mtime_ns": 1789725723424982300,
+        "sha256": "0fceafb402894c2f27053c510e5a4692ab74da5b45d745b7453ed823e5fd4426"
+      },
+      {
+        "path": "editor-host/appdata/Godot/editor_settings-4.7.tres",
+        "bytes": 17966,
+        "mtime_ns": 1789725722424200000,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/capture.json",
+        "bytes": 10344,
+        "mtime_ns": 1789725722808890500,
+        "sha256": "0a0b50add3f803691c6d2d0630e3c38e7d4e42b889e44aa196f04da4964fe8b8"
+      },
+      {
+        "path": "editor-host/cleanup-001.json",
+        "bytes": 528,
+        "mtime_ns": 1789725722793778100,
+        "sha256": "379d7a25b4032e6cb243e100aa8a5ebcd3d82a94e45b71e0f18e47fe7e569534"
+      },
+      {
+        "path": "editor-host/invocation.json",
+        "bytes": 8920,
+        "mtime_ns": 1789725706090585800,
+        "sha256": "ea35653601da666ef0c803230e35c6454eb903bb832efded81f6ae0d5bdc96c9"
+      },
+      {
+        "path": "editor-host/localappdata/Godot/editor_doc_cache-4.7.res",
+        "bytes": 3269805,
+        "mtime_ns": 1789725710050886100,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-241f8a0ed2cc48121725ff9783ba9467.png",
+        "bytes": 831,
+        "mtime_ns": 1789725711997071800,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-241f8a0ed2cc48121725ff9783ba9467.txt",
+        "bytes": 54,
+        "mtime_ns": 1789725711999081600,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-95db8148d2bcef87db50773b1ba7849f.png",
+        "bytes": 4078,
+        "mtime_ns": 1789725713361111900,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-95db8148d2bcef87db50773b1ba7849f.txt",
+        "bytes": 54,
+        "mtime_ns": 1789725713366341100,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-bd11fc91b96b2269c8eb8def991756aa.png",
+        "bytes": 852,
+        "mtime_ns": 1789725712002666000,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-bd11fc91b96b2269c8eb8def991756aa.txt",
+        "bytes": 54,
+        "mtime_ns": 1789725712005184300,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-e4fe7cc4f363e44e739ca7265a1637ad.png",
+        "bytes": 755,
+        "mtime_ns": 1789725711992053200,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-e4fe7cc4f363e44e739ca7265a1637ad.txt",
+        "bytes": 54,
+        "mtime_ns": 1789725711993053400,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-ebd25363dc366f70a601aac8e80eff07.png",
+        "bytes": 929,
+        "mtime_ns": 1789725712008182900,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-ebd25363dc366f70a601aac8e80eff07.txt",
+        "bytes": 54,
+        "mtime_ns": 1789725712009183100,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-f06863440ecb54d1d57936cbbd348966.png",
+        "bytes": 414,
+        "mtime_ns": 1789725712012528900,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-f06863440ecb54d1d57936cbbd348966.txt",
+        "bytes": 54,
+        "mtime_ns": 1789725712013529600,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/process-exit.json",
+        "bytes": 30,
+        "mtime_ns": 1789725722706898500,
+        "sha256": "2d4fffafc1abd1d5f0a8345f96d560ad89c170c4765c6347726bc4e4233bf743"
+      },
+      {
+        "path": "editor-host/process-start.json",
+        "bytes": 14,
+        "mtime_ns": 1789725706221289500,
+        "sha256": "74c36eb6101c5d1a4ccaaacd00d627ed70c57babf98b473a6b61eb8eb870d46d"
+      },
+      {
+        "path": "editor-host/stderr.txt",
+        "bytes": 0,
+        "mtime_ns": 1789725706108407300,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "editor-host/stdout.txt",
+        "bytes": 4508,
+        "mtime_ns": 1789725721679758500,
+        "sha256": "c18052707deac6a6ffcc62c706ddffbc21617061d2332ace315751f0d4fcf2d2"
+      },
+      {
+        "path": "failure.json",
+        "bytes": 38,
+        "mtime_ns": 1789725723424320200,
+        "sha256": "b5435cea251a0a805ca13fc4b564e619cf3ca32eb13acc7fa19bb3a770c12037"
+      },
+      {
+        "path": "import-host/appdata/Godot/editor_settings-4.7.tres",
+        "bytes": 17966,
+        "mtime_ns": 1789725705250656400,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "import-host/capture.json",
+        "bytes": 1341,
+        "mtime_ns": 1789725705504277700,
+        "sha256": "54309a6de6aff9e72798f494ca4b063331e2aeadeb6ffef56dfdfe951270d09b"
+      },
+      {
+        "path": "import-host/invocation.json",
+        "bytes": 6175,
+        "mtime_ns": 1789725700399917300,
+        "sha256": "3023fae526c9a985387f9120161367a149f0378ca2a07058d0d1e254894be253"
+      },
+      {
+        "path": "import-host/localappdata/Godot/editor_doc_cache-4.7.res",
+        "bytes": 3269733,
+        "mtime_ns": 1789725702842123600,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "import-host/process-exit.json",
+        "bytes": 30,
+        "mtime_ns": 1789725705458841400,
+        "sha256": "9532afcbd8139822d0a73112f3d8237cd31ab8e880e8592d2ad4f1ec41bc1399"
+      },
+      {
+        "path": "import-host/process-start.json",
+        "bytes": 14,
+        "mtime_ns": 1789725700536775600,
+        "sha256": "0b9e6567cb960f597d9981478a5ccb85d37eb2dbef29087c481baf40b5a04d49"
+      },
+      {
+        "path": "import-host/stderr.txt",
+        "bytes": 0,
+        "mtime_ns": 1789725700411751800,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "import-host/stdout.txt",
+        "bytes": 1492,
+        "mtime_ns": 1789725705464358800,
+        "sha256": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003"
+      },
+      {
+        "path": "invocation.json",
+        "bytes": 7515,
+        "mtime_ns": 1789725699784044300,
+        "sha256": "05b88696d78a122e9902eebc595599eeca379f4f976255d904953e3380a81165"
+      },
+      {
+        "path": "observation-00.json",
+        "bytes": 465,
+        "mtime_ns": 1789725716651403100,
+        "sha256": "03a21dd7a8862a9c46b88d8e6ba47c13b6f15b07750aa0b3310398df407e9b14"
+      },
+      {
+        "path": "observation-01.json",
+        "bytes": 467,
+        "mtime_ns": 1789725719605090500,
+        "sha256": "9fb90873ad68ac11e1b2755b6c1dee4509e1b19ee3d4a2cea345450c693ca63f"
+      },
+      {
+        "path": "observation-02.json",
+        "bytes": 467,
+        "mtime_ns": 1789725721662523900,
+        "sha256": "d884aec8b1ade3d8a630bda756e4803c86b74103116da1937d859090a033bb4a"
+      },
+      {
+        "path": "project/.godot/.gdignore",
+        "bytes": 1,
+        "mtime_ns": 1789725700629708600,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/editor_layout.cfg",
+        "bytes": 1436,
+        "mtime_ns": 1789725713892401400,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/editor_script_doc_cache.res",
+        "bytes": 11841,
+        "mtime_ns": 1789725721919995200,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/editor_script_doc_cache.res-folding-a7de57390d6e786984ca20c70a831128.cfg",
+        "bytes": 49,
+        "mtime_ns": 1789725721920999800,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/filesystem_cache10",
+        "bytes": 915,
+        "mtime_ns": 1789725711895903500,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/filesystem_update4",
+        "bytes": 26,
+        "mtime_ns": 1789725713335613500,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/fixture.tscn-editstate-a95ffd352fa9c4b59083e0b523419988.cfg",
+        "bytes": 4334,
+        "mtime_ns": 1789725713376375200,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/fixture.tscn-folding-a95ffd352fa9c4b59083e0b523419988.cfg",
+        "bytes": 136,
+        "mtime_ns": 1789725713351327600,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/project_metadata.cfg",
+        "bytes": 273,
+        "mtime_ns": 1789725721921994800,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/script_editor_cache.cfg",
+        "bytes": 0,
+        "mtime_ns": 1789725713890896200,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/global_script_class_cache.cfg",
+        "bytes": 8,
+        "mtime_ns": 1789725704683139400,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/scene_groups_cache.cfg",
+        "bytes": 0,
+        "mtime_ns": 1789725713337134200,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/CanvasShaderGLES3/076cc7f5ca018594656711ce99da014402bbd19aa1eb794136d4aa1fc1916d27/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+        "bytes": 51577,
+        "mtime_ns": 1789725711626551900,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/CopyShaderGLES3/be890b216e2b3fe916307830870fee480049474f8a9590e668b7db55f4333ca0/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+        "bytes": 118055,
+        "mtime_ns": 1789725707051278400,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/CubemapFilterShaderGLES3/f2f060f7884cfc963ab277935a694190c41dc5319199dc60ed40febaeed22ca7/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+        "bytes": 26057,
+        "mtime_ns": 1789725711564499700,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/FeedShaderGLES3/d18a5be4b160faacb02638af5d95197a20d24a8ee2964a921fecdd0450ccfe03/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+        "bytes": 8261,
+        "mtime_ns": 1789725707062014800,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/PostShaderGLES3/591ad1dc6444d48fbbe21612a2afd78e25aaf929315adddd90df3789fa6e5af1/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+        "bytes": 13656,
+        "mtime_ns": 1789725707059500700,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+        "bytes": 800909,
+        "mtime_ns": 1789725707094637800,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/77047cd41f429f33ceff24e890e174f5465e755e.cache",
+        "bytes": 920188,
+        "mtime_ns": 1789725713184594600,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/a38af2d0725c8e99d8492f4c72736f24d6a54cc5.cache",
+        "bytes": 738963,
+        "mtime_ns": 1789725711600649300,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/cafb1506f2db0c3681435e264aa18e216d1a7a40.cache",
+        "bytes": 729679,
+        "mtime_ns": 1789725711579235400,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/SkyShaderGLES3/c1a447880507cb68532c47caeeb2a80984019a797946a43cd3c056a918a45c98/2c82eb5fea9b549e20c9f41e308abf9a4fc5d76f.cache",
+        "bytes": 55632,
+        "mtime_ns": 1789725711559499500,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/uid_cache.bin",
+        "bytes": 283,
+        "mtime_ns": 1789725713335613500,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/addons/hh_benchmark/benchmark_native.gd",
+        "bytes": 63708,
+        "mtime_ns": 1789725699673152800,
+        "sha256": "3a4ddefd20f9706c4d12f7f4df19c2f76c3eb42cd79657c8719dc151b2fbc233"
+      },
+      {
+        "path": "project/addons/hh_benchmark/benchmark_native.gd.uid",
+        "bytes": 19,
+        "mtime_ns": 1789725704639403900,
+        "sha256": "52035945eb59d66522f81ad74634f4cf9260d15c9a2953199bde48ac61fbcd4e"
+      },
+      {
+        "path": "project/addons/hh_benchmark/plugin.cfg",
+        "bytes": 189,
+        "mtime_ns": 1789725699656036300,
+        "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092"
+      },
+      {
+        "path": "project/addons/hh_studio/jcs_godot.gd",
+        "bytes": 10165,
+        "mtime_ns": 1789725699652492000,
+        "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5"
+      },
+      {
+        "path": "project/addons/hh_studio/jcs_godot.gd.uid",
+        "bytes": 20,
+        "mtime_ns": 1789725699654028800,
+        "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b"
+      },
+      {
+        "path": "project/addons/hh_studio/plugin.cfg",
+        "bytes": 165,
+        "mtime_ns": 1789725699649496300,
+        "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c"
+      },
+      {
+        "path": "project/addons/hh_studio/plugin.gd",
+        "bytes": 23043,
+        "mtime_ns": 1789725699650496200,
+        "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036"
+      },
+      {
+        "path": "project/addons/hh_studio/plugin.gd.uid",
+        "bytes": 20,
+        "mtime_ns": 1789725699651497700,
+        "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d"
+      },
+      {
+        "path": "project/addons/hh_studio/scene_commands.gd",
+        "bytes": 32174,
+        "mtime_ns": 1789725699651497700,
+        "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069"
+      },
+      {
+        "path": "project/addons/hh_studio/scene_commands.gd.uid",
+        "bytes": 19,
+        "mtime_ns": 1789725699651497700,
+        "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69"
+      },
+      {
+        "path": "project/benchmark/.gdignore",
+        "bytes": 53,
+        "mtime_ns": 1789725699657036400,
+        "sha256": "3d078ee3c08af2f64daca29255d23d366dc0a9bdbef8a872442d5642bfb84cf8"
+      },
+      {
+        "path": "project/benchmark/input/cost-00.ack",
+        "bytes": 25,
+        "mtime_ns": 1789725716652403900,
+        "sha256": "7e6c7586500629c653390ebeb280e106c73508bd2ec916642d37fc35b93f6bd3"
+      },
+      {
+        "path": "project/benchmark/input/cost-01.ack",
+        "bytes": 25,
+        "mtime_ns": 1789725719605090500,
+        "sha256": "7e6c7586500629c653390ebeb280e106c73508bd2ec916642d37fc35b93f6bd3"
+      },
+      {
+        "path": "project/benchmark/input/cost-02.ack",
+        "bytes": 25,
+        "mtime_ns": 1789725721662523900,
+        "sha256": "7e6c7586500629c653390ebeb280e106c73508bd2ec916642d37fc35b93f6bd3"
+      },
+      {
+        "path": "project/benchmark/input.json",
+        "bytes": 381,
+        "mtime_ns": 1789725699656036300,
+        "sha256": "90c5f078f761ff337c4aefaec15ec01ae7a839541419b91d12769942830ab1fe"
+      },
+      {
+        "path": "project/benchmark/out/batch-00.json",
+        "bytes": 1746,
+        "mtime_ns": 1789725714521880200,
+        "sha256": "0b26ea5b0c9ce472e8460b30b4bc9c6cae26eaefcc6e08f655a269791029f30b"
+      },
+      {
+        "path": "project/benchmark/out/cost-00.json",
+        "bytes": 185,
+        "mtime_ns": 1789725716628239100,
+        "sha256": "5e8f7015f16926ca551d0ab5ee92630a8f5be8876d8588f21f6615a24f3ff754"
+      },
+      {
+        "path": "project/benchmark/out/cost-01.json",
+        "bytes": 187,
+        "mtime_ns": 1789725719596585000,
+        "sha256": "d8b55a6c38ea4547a9d20fb37bef1ba2fdb1dd35dff24c504680288c68da5bdd"
+      },
+      {
+        "path": "project/benchmark/out/cost-02.json",
+        "bytes": 187,
+        "mtime_ns": 1789725721654969600,
+        "sha256": "543e7dd4ded33f049041836481e7b25cb91339df79507204e6dc22d05d929f4d"
+      },
+      {
+        "path": "project/benchmark/out/index.json",
+        "bytes": 8151,
+        "mtime_ns": 1789725721673036000,
+        "sha256": "a33b9e12908e167c1ddfcbba7d7ca349abe586098c8178b4c82ffe081310adab"
+      },
+      {
+        "path": "project/benchmark/out/object-0000.json",
+        "bytes": 842615,
+        "mtime_ns": 1789725717576842400,
+        "sha256": "74db067a30d0e676de9d574e8bca82c6867e3d8598f23affe5901da96fca4714"
+      },
+      {
+        "path": "project/project.godot",
+        "bytes": 838,
+        "mtime_ns": 1789725711459356900,
+        "sha256": "819b521edff745f02f7c30e96ceffe21c70d8ef4fc32e95b96df37877e817ce1"
+      },
+      {
+        "path": "project/scenes/fixture.tscn",
+        "bytes": 295,
+        "mtime_ns": 1789725713324928400,
+        "sha256": "0de3bf69b391326bd24a6912a09b14fd191535862fc81b80df8f6aaf235e2d86"
+      },
+      {
+        "path": "project/scripts/fixture_actor.gd",
+        "bytes": 50,
+        "mtime_ns": 1789725699654028800,
+        "sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd"
+      },
+      {
+        "path": "project/scripts/fixture_actor.gd.uid",
+        "bytes": 20,
+        "mtime_ns": 1789725699648496100,
+        "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142"
+      },
+      {
+        "path": "runtime-source-files.json",
+        "bytes": 7374,
+        "mtime_ns": 1789725705542758900,
+        "sha256": "840eaeeb6fbc023265261f267c5ce23de028812c253860563541e046f562c6a7"
+      },
+      {
+        "path": "source/studio/blender-addon/ipc_client.py",
+        "bytes": 16349,
+        "mtime_ns": 1789725699785107200,
+        "sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9"
+      },
+      {
+        "path": "source/studio/contracts/perf-collector.schema.json",
+        "bytes": 30060,
+        "mtime_ns": 1789725699786161400,
+        "sha256": "394d1df03bdfd736ea3fe9f260e9d718d35f3820cde35d1c45ccab65fbc24834"
+      },
+      {
+        "path": "source/studio/godot-addon/addons/hh_studio/plugin.cfg",
+        "bytes": 165,
+        "mtime_ns": 1789725699787209000,
+        "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c"
+      },
+      {
+        "path": "source/studio/godot-addon/addons/hh_studio/plugin.gd",
+        "bytes": 23043,
+        "mtime_ns": 1789725699788250200,
+        "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036"
+      },
+      {
+        "path": "source/studio/godot-addon/addons/hh_studio/scene_commands.gd",
+        "bytes": 32174,
+        "mtime_ns": 1789725699789259500,
+        "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069"
+      },
+      {
+        "path": "source/studio/godot-addon/bundle_staging.py",
+        "bytes": 15005,
+        "mtime_ns": 1789725699790257200,
+        "sha256": "3d614edbec8e9a7f5ad3caf2b9694d7498df129de95683952268621f91d68e43"
+      },
+      {
+        "path": "source/studio/godot-addon/bundle_v2.py",
+        "bytes": 8475,
+        "mtime_ns": 1789725699791256900,
+        "sha256": "2c5cdc71cdaf80f58bb93ec791e84bab8bd02cd4d9bdbd93d635db13583de62a"
+      },
+      {
+        "path": "source/studio/godot-addon/cli_job.py",
+        "bytes": 12672,
+        "mtime_ns": 1789725699792256100,
+        "sha256": "5a0f37bc129bde409a2657054fb091d637d838e442d45a69e7adc1f1527d4c88"
+      },
+      {
+        "path": "source/studio/godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid",
+        "bytes": 20,
+        "mtime_ns": 1789725699794256600,
+        "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b"
+      },
+      {
+        "path": "source/studio/godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid",
+        "bytes": 20,
+        "mtime_ns": 1789725699794256600,
+        "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d"
+      },
+      {
+        "path": "source/studio/godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid",
+        "bytes": 19,
+        "mtime_ns": 1789725699795257200,
+        "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69"
+      },
+      {
+        "path": "source/studio/godot-addon/fixture_profile/project.godot",
+        "bytes": 282,
+        "mtime_ns": 1789725699796257000,
+        "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51"
+      },
+      {
+        "path": "source/studio/godot-addon/fixture_profile/scripts/fixture_actor.gd.uid",
+        "bytes": 20,
+        "mtime_ns": 1789725699797259300,
+        "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142"
+      },
+      {
+        "path": "source/studio/godot-addon/fixture_profile/source-pins.json",
+        "bytes": 1873,
+        "mtime_ns": 1789725699797259300,
+        "sha256": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2"
+      },
+      {
+        "path": "source/studio/godot-addon/fixture_profile.py",
+        "bytes": 6020,
+        "mtime_ns": 1789725699793257100,
+        "sha256": "25e1667dd930dcf0746b071fc29ea3460bc18d5fb9f3f83e806c1793028f21ae"
+      },
+      {
+        "path": "source/studio/host/blender/__init__.py",
+        "bytes": 69,
+        "mtime_ns": 1789725699798765000,
+        "sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90"
+      },
+      {
+        "path": "source/studio/host/blender/deadline.py",
+        "bytes": 1130,
+        "mtime_ns": 1789725699799771000,
+        "sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926"
+      },
+      {
+        "path": "source/studio/host/blender/export_job.py",
+        "bytes": 13605,
+        "mtime_ns": 1789725699799771000,
+        "sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe"
+      },
+      {
+        "path": "source/studio/host/blender/glb_preflight.py",
+        "bytes": 11815,
+        "mtime_ns": 1789725699800772000,
+        "sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62"
+      },
+      {
+        "path": "source/studio/host/blender/ui_host.py",
+        "bytes": 22464,
+        "mtime_ns": 1789725699800772000,
+        "sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35"
+      },
+      {
+        "path": "source/studio/host/core/journal.py",
+        "bytes": 29602,
+        "mtime_ns": 1789725699802277600,
+        "sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6"
+      },
+      {
+        "path": "source/studio/host/core/limits.py",
+        "bytes": 15813,
+        "mtime_ns": 1789725699803284600,
+        "sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f"
+      },
+      {
+        "path": "source/studio/host/core/private_store.py",
+        "bytes": 20476,
+        "mtime_ns": 1789725699804283800,
+        "sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476"
+      },
+      {
+        "path": "source/studio/host/core/redaction.py",
+        "bytes": 10038,
+        "mtime_ns": 1789725699804283800,
+        "sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f"
+      },
+      {
+        "path": "source/studio/host/core/safe_create.py",
+        "bytes": 13170,
+        "mtime_ns": 1789725699805284000,
+        "sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606"
+      },
+      {
+        "path": "source/studio/host/core/safe_open.py",
+        "bytes": 12093,
+        "mtime_ns": 1789725699806284000,
+        "sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535"
+      },
+      {
+        "path": "source/studio/host/core/transport.py",
+        "bytes": 47056,
+        "mtime_ns": 1789725699807283700,
+        "sha256": "1ec03356b1cb8c8987e1604bcb164aea6a9934dbe259451c19e12de36398aba0"
+      },
+      {
+        "path": "source/studio/host/replay/disk_journal_index.py",
+        "bytes": 13593,
+        "mtime_ns": 1789725699809283600,
+        "sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28"
+      },
+      {
+        "path": "source/studio/host/replay/perf.py",
+        "bytes": 19085,
+        "mtime_ns": 1789725699809787900,
+        "sha256": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7"
+      },
+      {
+        "path": "source/studio/host/replay/process_probe.py",
+        "bytes": 5485,
+        "mtime_ns": 1789725699809787900,
+        "sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500"
+      },
+      {
+        "path": "source/studio/host/replay/verified_journal.py",
+        "bytes": 9155,
+        "mtime_ns": 1789725699811301800,
+        "sha256": "129baa4d9e08c8a1d5acf2ea05c9c89a4fdddb53ca6f3baf2d61311ab98e62ab"
+      },
+      {
+        "path": "source/studio/pipeline/__init__.py",
+        "bytes": 79,
+        "mtime_ns": 1789725699811301800,
+        "sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68"
+      },
+      {
+        "path": "source/studio/pipeline/native_job.py",
+        "bytes": 12512,
+        "mtime_ns": 1789725699812882700,
+        "sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca"
+      },
+      {
+        "path": "source/studio/protocol/__init__.py",
+        "bytes": 881,
+        "mtime_ns": 1789725699813397500,
+        "sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f"
+      },
+      {
+        "path": "source/studio/protocol/_rfc8785/__init__.py",
+        "bytes": 505,
+        "mtime_ns": 1789725699813397500,
+        "sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b"
+      },
+      {
+        "path": "source/studio/protocol/_rfc8785/_impl.py",
+        "bytes": 7251,
+        "mtime_ns": 1789725699814916600,
+        "sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec"
+      },
+      {
+        "path": "source/studio/protocol/core.py",
+        "bytes": 19886,
+        "mtime_ns": 1789725699815925600,
+        "sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e"
+      },
+      {
+        "path": "source/studio/protocol/jcs_godot.gd",
+        "bytes": 10165,
+        "mtime_ns": 1789725699815925600,
+        "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_assembly.py",
+        "bytes": 48182,
+        "mtime_ns": 1789725699817923100,
+        "sha256": "7573ca96986eb1c10298b8998b3dbaa3326fd80da2c2696150aeb22165d2911d"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_commands.py",
+        "bytes": 19779,
+        "mtime_ns": 1789725699817923100,
+        "sha256": "707b6f9a9291214d9ee848d77f1e4a3dc2267de5f2aeb5e48fa4365866a842c9"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_job.py",
+        "bytes": 24991,
+        "mtime_ns": 1789725699819427900,
+        "sha256": "be424a6f37ae573ac4bf40954b31017025daee2147699c80b05f9a0ab70e1611"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_native.gd",
+        "bytes": 51618,
+        "mtime_ns": 1789725699820434100,
+        "sha256": "52fbd9af5c6191ada5baf1d7195a75685ed5e27a95f4d244af8b4d679f8c00f2"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_plugin.cfg",
+        "bytes": 189,
+        "mtime_ns": 1789725699820434100,
+        "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_profile.py",
+        "bytes": 19625,
+        "mtime_ns": 1789725699821434600,
+        "sha256": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_readiness.py",
+        "bytes": 6746,
+        "mtime_ns": 1789725699822435200,
+        "sha256": "842db6244d93384932929544045654f089d67f6f304624b7348b7d5c4583ab68"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_transport.py",
+        "bytes": 4451,
+        "mtime_ns": 1789725699823434500,
+        "sha256": "87875809baa4845fcffba8e2c7d82f7a5bce833099c89d4852f2aab931c34df0"
+      },
+      {
+        "path": "source/studio/tests/replay/campaign_task.ps1",
+        "bytes": 18607,
+        "mtime_ns": 1789725699823434500,
+        "sha256": "405e2abfa39332b1313871763184fdda0755ff998ec83310e67e10cebfe2ebb9"
+      },
+      {
+        "path": "source/studio/tests/replay/run_benchmark_campaign.py",
+        "bytes": 53592,
+        "mtime_ns": 1789725699826435600,
+        "sha256": "bb43ecc04c2de4872177a440eb071d533efdaa9e8194f62b4e0907bad8d4b252"
+      },
+      {
+        "path": "source/studio/tests/replay/run_campaign_task.py",
+        "bytes": 8033,
+        "mtime_ns": 1789725699826435600,
+        "sha256": "f5cb71fa96b8fd2f935ac933dcd5190cef2b3b6821f031bfe72becb2d360a6fd"
+      },
+      {
+        "path": "source/studio/tests/replay/run_native_benchmark.py",
+        "bytes": 26986,
+        "mtime_ns": 1789725699828029400,
+        "sha256": "e6b0f8e9711ac881cfa65b4537232c685ff577af0a13778a51cc54999b1c1fc7"
+      },
+      {
+        "path": "source/studio/toolchain.lock.json",
+        "bytes": 3026,
+        "mtime_ns": 1789725699828029400,
+        "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9"
+      },
+      {
+        "path": "source/zdoc/reviews/20260918-gt06-s82-attribution/object_probe.gd",
+        "bytes": 10893,
+        "mtime_ns": 1789725699830548800,
+        "sha256": "6221092c70591d89b42aa8c00298198299a716edc7c25b8b4813db5d771fe556"
+      },
+      {
+        "path": "source/zdoc/reviews/20260918-gt06-s84-probe-cost/cost_phases.gd",
+        "bytes": 1777,
+        "mtime_ns": 1789725699830548800,
+        "sha256": "e3d5059bf485a9ac07a2f59c11a57652dbab4a8a98a9e82638e3dd6e189bef68"
+      },
+      {
+        "path": "source/zdoc/reviews/20260918-gt06-s84-probe-cost/measure_cost.py",
+        "bytes": 9073,
+        "mtime_ns": 1789725699829543700,
+        "sha256": "193719fae8ab03ed44a5081195399cbbdeb7243854f0641abdc7b5d00acec14f"
+      }
+    ],
+    "original/outer": [
+      {
+        "path": "capture.json",
+        "bytes": 505,
+        "mtime_ns": 1789725723462774300,
+        "sha256": "5e593eb0feca818945c8dcf23b4b488678b04081f9789148ae797bf553b909a4"
+      },
+      {
+        "path": "cost-host.json",
+        "bytes": 87,
+        "mtime_ns": 1789725723448147300,
+        "sha256": "04ca0c5f3836c6cc682cc55d9f5ab0d0c8d19510e20b08f89615a02498b2ef54"
+      },
+      {
+        "path": "cost-stderr.txt",
+        "bytes": 631,
+        "mtime_ns": 1789725723425989800,
+        "sha256": "5065c31ce0dedd7b4b5e7bcbd0942852b7354823715046f78de942075ac25095"
+      },
+      {
+        "path": "cost-stdout.txt",
+        "bytes": 0,
+        "mtime_ns": 1789725698916901000,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "invocation.json",
+        "bytes": 278,
+        "mtime_ns": 1789725698915899100,
+        "sha256": "0def30cf0c0071657f37ce0293bd2d9b1f28af6ac1b5016be0eefa3b65c15579"
+      }
+    ],
+    "sham/raw": [
+      {
+        "path": "cleanup.json",
+        "bytes": 90,
+        "mtime_ns": 1789725791909909200,
+        "sha256": "0fceafb402894c2f27053c510e5a4692ab74da5b45d745b7453ed823e5fd4426"
+      },
+      {
+        "path": "editor-host/appdata/Godot/editor_settings-4.7.tres",
+        "bytes": 17958,
+        "mtime_ns": 1789725790858987400,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/capture.json",
+        "bytes": 10276,
+        "mtime_ns": 1789725791271019800,
+        "sha256": "20e6dc8809730a88bcd3dcbae00a5c35bbb5d4065865a45cfd75ed0b62a53d41"
+      },
+      {
+        "path": "editor-host/cleanup-001.json",
+        "bytes": 528,
+        "mtime_ns": 1789725791258565100,
+        "sha256": "379d7a25b4032e6cb243e100aa8a5ebcd3d82a94e45b71e0f18e47fe7e569534"
+      },
+      {
+        "path": "editor-host/invocation.json",
+        "bytes": 8852,
+        "mtime_ns": 1789725776082175700,
+        "sha256": "eb2b098f2b038f821027ae5b507da4a03556fe6849c873d2b7c21d3445320f53"
+      },
+      {
+        "path": "editor-host/localappdata/Godot/editor_doc_cache-4.7.res",
+        "bytes": 3269807,
+        "mtime_ns": 1789725779710366800,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-2cbe40dc23139e8b6794ff3407814f2b.png",
+        "bytes": 831,
+        "mtime_ns": 1789725781596257500,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-2cbe40dc23139e8b6794ff3407814f2b.txt",
+        "bytes": 54,
+        "mtime_ns": 1789725781597265400,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-442a611bebef76e431c746734432bbb0.png",
+        "bytes": 4078,
+        "mtime_ns": 1789725782963540800,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-442a611bebef76e431c746734432bbb0.txt",
+        "bytes": 54,
+        "mtime_ns": 1789725782968848300,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-45725b07ac3af6c54b877e00d676d02a.png",
+        "bytes": 414,
+        "mtime_ns": 1789725781610812100,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-45725b07ac3af6c54b877e00d676d02a.txt",
+        "bytes": 54,
+        "mtime_ns": 1789725781611388800,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-60d1e74d4e408f0ffce317c118fe5d85.png",
+        "bytes": 852,
+        "mtime_ns": 1789725781601779300,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-60d1e74d4e408f0ffce317c118fe5d85.txt",
+        "bytes": 54,
+        "mtime_ns": 1789725781603284800,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-70c8067b3b638dc1dd0f11f8b65130b9.png",
+        "bytes": 929,
+        "mtime_ns": 1789725781606297000,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-70c8067b3b638dc1dd0f11f8b65130b9.txt",
+        "bytes": 54,
+        "mtime_ns": 1789725781607298400,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-d8dd6f0eb74b1dbb4da4c33e3d18f675.png",
+        "bytes": 755,
+        "mtime_ns": 1789725781591164800,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-d8dd6f0eb74b1dbb4da4c33e3d18f675.txt",
+        "bytes": 54,
+        "mtime_ns": 1789725781593169400,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/process-exit.json",
+        "bytes": 30,
+        "mtime_ns": 1789725791138749400,
+        "sha256": "d310111b4f919c0d1605b3e823692fd24f0ec1216c6f660f0c188119dbf7cfa8"
+      },
+      {
+        "path": "editor-host/process-start.json",
+        "bytes": 14,
+        "mtime_ns": 1789725776221292800,
+        "sha256": "f079727ce377b21615163a3f3cd8f730586fef2ee8914cc2e2afec36f4ce2b2b"
+      },
+      {
+        "path": "editor-host/stderr.txt",
+        "bytes": 0,
+        "mtime_ns": 1789725776104090100,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "editor-host/stdout.txt",
+        "bytes": 4254,
+        "mtime_ns": 1789725790220320000,
+        "sha256": "2d2688d230a71d89957e6bfdbd5e566fed9340d7719f56f04f6f7f8e39107785"
+      },
+      {
+        "path": "import-host/appdata/Godot/editor_settings-4.7.tres",
+        "bytes": 17958,
+        "mtime_ns": 1789725775286248600,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "import-host/capture.json",
+        "bytes": 1328,
+        "mtime_ns": 1789725775543283700,
+        "sha256": "f2534be9a7a5fbd6f3f48b03d34eb6b6823ada4099c49c50acc13fe889e4dbc8"
+      },
+      {
+        "path": "import-host/invocation.json",
+        "bytes": 6167,
+        "mtime_ns": 1789725770666830100,
+        "sha256": "99fdfbf62fca0b066131774896326971e1235d1243280ca3064648bbee62ad22"
+      },
+      {
+        "path": "import-host/localappdata/Godot/editor_doc_cache-4.7.res",
+        "bytes": 3269733,
+        "mtime_ns": 1789725773009440400,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "import-host/process-exit.json",
+        "bytes": 29,
+        "mtime_ns": 1789725775477812000,
+        "sha256": "85a0b5d550bd48bd7f07327b0d1b5c191324bc2acd318eacb3d8ac13c5b8a0db"
+      },
+      {
+        "path": "import-host/process-start.json",
+        "bytes": 13,
+        "mtime_ns": 1789725770845209700,
+        "sha256": "c0ad89f2761526237bfc57fd9970f66a926a551ee289841ed1841d884a83d2af"
+      },
+      {
+        "path": "import-host/stderr.txt",
+        "bytes": 0,
+        "mtime_ns": 1789725770675840200,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "import-host/stdout.txt",
+        "bytes": 1492,
+        "mtime_ns": 1789725775484915800,
+        "sha256": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003"
+      },
+      {
+        "path": "invocation.json",
+        "bytes": 7507,
+        "mtime_ns": 1789725770096058000,
+        "sha256": "8a950ff009872fb52dea81575f2a4161378d2873333f208edfb2791a5d284ce2"
+      },
+      {
+        "path": "observation-00.json",
+        "bytes": 460,
+        "mtime_ns": 1789725786150136400,
+        "sha256": "dabfb2956fd0c1e2b9f15360def3554e6f594b6f5dffc12df996a9015b06d3e3"
+      },
+      {
+        "path": "observation-01.json",
+        "bytes": 463,
+        "mtime_ns": 1789725788185087800,
+        "sha256": "265c254f850d4e4c5dba71d8df212d651b0a7a2509e13db70b4ff2c3fef6c0b8"
+      },
+      {
+        "path": "observation-02.json",
+        "bytes": 463,
+        "mtime_ns": 1789725790202371800,
+        "sha256": "d120540e05b78dcdc3780d25f813bbff774a0012c2fd16a9c2dae6e259a8a553"
+      },
+      {
+        "path": "project/.godot/.gdignore",
+        "bytes": 1,
+        "mtime_ns": 1789725770905665000,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/editor_layout.cfg",
+        "bytes": 1436,
+        "mtime_ns": 1789725783497818200,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/editor_script_doc_cache.res",
+        "bytes": 11841,
+        "mtime_ns": 1789725790437751000,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/editor_script_doc_cache.res-folding-a7de57390d6e786984ca20c70a831128.cfg",
+        "bytes": 49,
+        "mtime_ns": 1789725790439376300,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/filesystem_cache10",
+        "bytes": 915,
+        "mtime_ns": 1789725781496227700,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/filesystem_update4",
+        "bytes": 26,
+        "mtime_ns": 1789725782939127700,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/fixture.tscn-editstate-a95ffd352fa9c4b59083e0b523419988.cfg",
+        "bytes": 4334,
+        "mtime_ns": 1789725782980280100,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/fixture.tscn-folding-a95ffd352fa9c4b59083e0b523419988.cfg",
+        "bytes": 136,
+        "mtime_ns": 1789725782951648100,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/project_metadata.cfg",
+        "bytes": 273,
+        "mtime_ns": 1789725790440891400,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/script_editor_cache.cfg",
+        "bytes": 0,
+        "mtime_ns": 1789725783495807100,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/global_script_class_cache.cfg",
+        "bytes": 8,
+        "mtime_ns": 1789725774706247200,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/scene_groups_cache.cfg",
+        "bytes": 0,
+        "mtime_ns": 1789725782942128500,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/CanvasShaderGLES3/076cc7f5ca018594656711ce99da014402bbd19aa1eb794136d4aa1fc1916d27/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+        "bytes": 51577,
+        "mtime_ns": 1789725781236142300,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/CopyShaderGLES3/be890b216e2b3fe916307830870fee480049474f8a9590e668b7db55f4333ca0/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+        "bytes": 118055,
+        "mtime_ns": 1789725776996117600,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/CubemapFilterShaderGLES3/f2f060f7884cfc963ab277935a694190c41dc5319199dc60ed40febaeed22ca7/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+        "bytes": 26057,
+        "mtime_ns": 1789725781171246400,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/FeedShaderGLES3/d18a5be4b160faacb02638af5d95197a20d24a8ee2964a921fecdd0450ccfe03/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+        "bytes": 8261,
+        "mtime_ns": 1789725777006319100,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/PostShaderGLES3/591ad1dc6444d48fbbe21612a2afd78e25aaf929315adddd90df3789fa6e5af1/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+        "bytes": 13656,
+        "mtime_ns": 1789725777003799300,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+        "bytes": 800909,
+        "mtime_ns": 1789725777030059300,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/77047cd41f429f33ceff24e890e174f5465e755e.cache",
+        "bytes": 920188,
+        "mtime_ns": 1789725782789458800,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/a38af2d0725c8e99d8492f4c72736f24d6a54cc5.cache",
+        "bytes": 738963,
+        "mtime_ns": 1789725781209753800,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/cafb1506f2db0c3681435e264aa18e216d1a7a40.cache",
+        "bytes": 729679,
+        "mtime_ns": 1789725781187206000,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/SkyShaderGLES3/c1a447880507cb68532c47caeeb2a80984019a797946a43cd3c056a918a45c98/2c82eb5fea9b549e20c9f41e308abf9a4fc5d76f.cache",
+        "bytes": 55632,
+        "mtime_ns": 1789725781165728000,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/uid_cache.bin",
+        "bytes": 283,
+        "mtime_ns": 1789725782941128100,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/addons/hh_benchmark/benchmark_native.gd",
+        "bytes": 63669,
+        "mtime_ns": 1789725769995326300,
+        "sha256": "de120b58ca50d033e980bc4ad425761727ec9c18c53bf4fb316f1a45fd80e27e"
+      },
+      {
+        "path": "project/addons/hh_benchmark/benchmark_native.gd.uid",
+        "bytes": 19,
+        "mtime_ns": 1789725774662967100,
+        "sha256": "fb08c36338f32c7f50ee73e4b655fd6daa94d6b1708ddb90ad37d47fd9a648e6"
+      },
+      {
+        "path": "project/addons/hh_benchmark/plugin.cfg",
+        "bytes": 189,
+        "mtime_ns": 1789725769977585600,
+        "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092"
+      },
+      {
+        "path": "project/addons/hh_studio/jcs_godot.gd",
+        "bytes": 10165,
+        "mtime_ns": 1789725769974586200,
+        "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5"
+      },
+      {
+        "path": "project/addons/hh_studio/jcs_godot.gd.uid",
+        "bytes": 20,
+        "mtime_ns": 1789725769975587600,
+        "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b"
+      },
+      {
+        "path": "project/addons/hh_studio/plugin.cfg",
+        "bytes": 165,
+        "mtime_ns": 1789725769971587900,
+        "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c"
+      },
+      {
+        "path": "project/addons/hh_studio/plugin.gd",
+        "bytes": 23043,
+        "mtime_ns": 1789725769972586900,
+        "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036"
+      },
+      {
+        "path": "project/addons/hh_studio/plugin.gd.uid",
+        "bytes": 20,
+        "mtime_ns": 1789725769973586700,
+        "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d"
+      },
+      {
+        "path": "project/addons/hh_studio/scene_commands.gd",
+        "bytes": 32174,
+        "mtime_ns": 1789725769973586700,
+        "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069"
+      },
+      {
+        "path": "project/addons/hh_studio/scene_commands.gd.uid",
+        "bytes": 19,
+        "mtime_ns": 1789725769974586200,
+        "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69"
+      },
+      {
+        "path": "project/benchmark/.gdignore",
+        "bytes": 53,
+        "mtime_ns": 1789725769979021500,
+        "sha256": "3d078ee3c08af2f64daca29255d23d366dc0a9bdbef8a872442d5642bfb84cf8"
+      },
+      {
+        "path": "project/benchmark/input/cost-00.ack",
+        "bytes": 21,
+        "mtime_ns": 1789725786151767300,
+        "sha256": "124c11a4640a084faeef78e53a8b0ba49d91f85ca26dcbe07c760a31e2f7e9a0"
+      },
+      {
+        "path": "project/benchmark/input/cost-01.ack",
+        "bytes": 21,
+        "mtime_ns": 1789725788185087800,
+        "sha256": "124c11a4640a084faeef78e53a8b0ba49d91f85ca26dcbe07c760a31e2f7e9a0"
+      },
+      {
+        "path": "project/benchmark/input/cost-02.ack",
+        "bytes": 21,
+        "mtime_ns": 1789725790203368000,
+        "sha256": "124c11a4640a084faeef78e53a8b0ba49d91f85ca26dcbe07c760a31e2f7e9a0"
+      },
+      {
+        "path": "project/benchmark/input.json",
+        "bytes": 377,
+        "mtime_ns": 1789725769979021500,
+        "sha256": "ff15e9bc606b7f4016e9a9e5b69ea8070e1385111b6b46524cc1cde2a571b8fb"
+      },
+      {
+        "path": "project/benchmark/out/batch-00.json",
+        "bytes": 1741,
+        "mtime_ns": 1789725784119036300,
+        "sha256": "47374d8bcf5a765b10f981f0deeeb46a041b4118aa710e4a6f7fce9ef14f7855"
+      },
+      {
+        "path": "project/benchmark/out/cost-00.json",
+        "bytes": 180,
+        "mtime_ns": 1789725786130945300,
+        "sha256": "b5cadeccf3644c1badfa5c25dbef11c9c6b2cb02a905f2a67e3a46ecc13cd9b2"
+      },
+      {
+        "path": "project/benchmark/out/cost-01.json",
+        "bytes": 183,
+        "mtime_ns": 1789725788163280800,
+        "sha256": "51c0ca4e8bea8a22c348297aae33acd419a2f27fa79a2fb719098fcc6e744ee9"
+      },
+      {
+        "path": "project/benchmark/out/cost-02.json",
+        "bytes": 183,
+        "mtime_ns": 1789725790192088100,
+        "sha256": "755cc5d96f239f1cde60327c9e55b36a17c0fa9b6cfdd28e04c03311fbb069c1"
+      },
+      {
+        "path": "project/benchmark/out/index.json",
+        "bytes": 8141,
+        "mtime_ns": 1789725790211774400,
+        "sha256": "56182430d957de9cb0034d7d24eef4e713a5f9fd560c1979b850d717971385c6"
+      },
+      {
+        "path": "project/project.godot",
+        "bytes": 838,
+        "mtime_ns": 1789725781067195700,
+        "sha256": "819b521edff745f02f7c30e96ceffe21c70d8ef4fc32e95b96df37877e817ce1"
+      },
+      {
+        "path": "project/scenes/fixture.tscn",
+        "bytes": 295,
+        "mtime_ns": 1789725782925417200,
+        "sha256": "12603be0d0b8eb12eefa0548d8c2cb43754c23211bf2172c9c2ccc270914ae73"
+      },
+      {
+        "path": "project/scripts/fixture_actor.gd",
+        "bytes": 50,
+        "mtime_ns": 1789725769976587800,
+        "sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd"
+      },
+      {
+        "path": "project/scripts/fixture_actor.gd.uid",
+        "bytes": 20,
+        "mtime_ns": 1789725769970578400,
+        "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142"
+      },
+      {
+        "path": "result.json",
+        "bytes": 1777,
+        "mtime_ns": 1789725791909909200,
+        "sha256": "6a992b5cf8b25be8a236f8ad9463a878e92acea070d62c8b3e523e13fe6e98b0"
+      },
+      {
+        "path": "runtime-source-files.json",
+        "bytes": 7314,
+        "mtime_ns": 1789725775585180200,
+        "sha256": "674c9ff14c1f55c761a93b26f010535023a623cb6981538f5ff1559a3f47e358"
+      },
+      {
+        "path": "source/studio/blender-addon/ipc_client.py",
+        "bytes": 16349,
+        "mtime_ns": 1789725770098061700,
+        "sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9"
+      },
+      {
+        "path": "source/studio/contracts/perf-collector.schema.json",
+        "bytes": 30060,
+        "mtime_ns": 1789725770098061700,
+        "sha256": "394d1df03bdfd736ea3fe9f260e9d718d35f3820cde35d1c45ccab65fbc24834"
+      },
+      {
+        "path": "source/studio/godot-addon/addons/hh_studio/plugin.cfg",
+        "bytes": 165,
+        "mtime_ns": 1789725770100061600,
+        "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c"
+      },
+      {
+        "path": "source/studio/godot-addon/addons/hh_studio/plugin.gd",
+        "bytes": 23043,
+        "mtime_ns": 1789725770100061600,
+        "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036"
+      },
+      {
+        "path": "source/studio/godot-addon/addons/hh_studio/scene_commands.gd",
+        "bytes": 32174,
+        "mtime_ns": 1789725770101569700,
+        "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069"
+      },
+      {
+        "path": "source/studio/godot-addon/bundle_staging.py",
+        "bytes": 15005,
+        "mtime_ns": 1789725770101569700,
+        "sha256": "3d614edbec8e9a7f5ad3caf2b9694d7498df129de95683952268621f91d68e43"
+      },
+      {
+        "path": "source/studio/godot-addon/bundle_v2.py",
+        "bytes": 8475,
+        "mtime_ns": 1789725770102575800,
+        "sha256": "2c5cdc71cdaf80f58bb93ec791e84bab8bd02cd4d9bdbd93d635db13583de62a"
+      },
+      {
+        "path": "source/studio/godot-addon/cli_job.py",
+        "bytes": 12672,
+        "mtime_ns": 1789725770103580400,
+        "sha256": "5a0f37bc129bde409a2657054fb091d637d838e442d45a69e7adc1f1527d4c88"
+      },
+      {
+        "path": "source/studio/godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid",
+        "bytes": 20,
+        "mtime_ns": 1789725770105740100,
+        "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b"
+      },
+      {
+        "path": "source/studio/godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid",
+        "bytes": 20,
+        "mtime_ns": 1789725770106253800,
+        "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d"
+      },
+      {
+        "path": "source/studio/godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid",
+        "bytes": 19,
+        "mtime_ns": 1789725770107263100,
+        "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69"
+      },
+      {
+        "path": "source/studio/godot-addon/fixture_profile/project.godot",
+        "bytes": 282,
+        "mtime_ns": 1789725770107263100,
+        "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51"
+      },
+      {
+        "path": "source/studio/godot-addon/fixture_profile/scripts/fixture_actor.gd.uid",
+        "bytes": 20,
+        "mtime_ns": 1789725770108263200,
+        "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142"
+      },
+      {
+        "path": "source/studio/godot-addon/fixture_profile/source-pins.json",
+        "bytes": 1873,
+        "mtime_ns": 1789725770109261600,
+        "sha256": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2"
+      },
+      {
+        "path": "source/studio/godot-addon/fixture_profile.py",
+        "bytes": 6020,
+        "mtime_ns": 1789725770103580400,
+        "sha256": "25e1667dd930dcf0746b071fc29ea3460bc18d5fb9f3f83e806c1793028f21ae"
+      },
+      {
+        "path": "source/studio/host/blender/__init__.py",
+        "bytes": 69,
+        "mtime_ns": 1789725770110260700,
+        "sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90"
+      },
+      {
+        "path": "source/studio/host/blender/deadline.py",
+        "bytes": 1130,
+        "mtime_ns": 1789725770110260700,
+        "sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926"
+      },
+      {
+        "path": "source/studio/host/blender/export_job.py",
+        "bytes": 13605,
+        "mtime_ns": 1789725770111767100,
+        "sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe"
+      },
+      {
+        "path": "source/studio/host/blender/glb_preflight.py",
+        "bytes": 11815,
+        "mtime_ns": 1789725770112775900,
+        "sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62"
+      },
+      {
+        "path": "source/studio/host/blender/ui_host.py",
+        "bytes": 22464,
+        "mtime_ns": 1789725770113773500,
+        "sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35"
+      },
+      {
+        "path": "source/studio/host/core/journal.py",
+        "bytes": 29602,
+        "mtime_ns": 1789725770113773500,
+        "sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6"
+      },
+      {
+        "path": "source/studio/host/core/limits.py",
+        "bytes": 15813,
+        "mtime_ns": 1789725770114776800,
+        "sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f"
+      },
+      {
+        "path": "source/studio/host/core/private_store.py",
+        "bytes": 20476,
+        "mtime_ns": 1789725770115776000,
+        "sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476"
+      },
+      {
+        "path": "source/studio/host/core/redaction.py",
+        "bytes": 10038,
+        "mtime_ns": 1789725770116776200,
+        "sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f"
+      },
+      {
+        "path": "source/studio/host/core/safe_create.py",
+        "bytes": 13170,
+        "mtime_ns": 1789725770116776200,
+        "sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606"
+      },
+      {
+        "path": "source/studio/host/core/safe_open.py",
+        "bytes": 12093,
+        "mtime_ns": 1789725770117775800,
+        "sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535"
+      },
+      {
+        "path": "source/studio/host/core/transport.py",
+        "bytes": 47056,
+        "mtime_ns": 1789725770118777400,
+        "sha256": "1ec03356b1cb8c8987e1604bcb164aea6a9934dbe259451c19e12de36398aba0"
+      },
+      {
+        "path": "source/studio/host/replay/disk_journal_index.py",
+        "bytes": 13593,
+        "mtime_ns": 1789725770119775400,
+        "sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28"
+      },
+      {
+        "path": "source/studio/host/replay/perf.py",
+        "bytes": 19085,
+        "mtime_ns": 1789725770120776000,
+        "sha256": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7"
+      },
+      {
+        "path": "source/studio/host/replay/process_probe.py",
+        "bytes": 5485,
+        "mtime_ns": 1789725770121890100,
+        "sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500"
+      },
+      {
+        "path": "source/studio/host/replay/verified_journal.py",
+        "bytes": 9155,
+        "mtime_ns": 1789725770122897300,
+        "sha256": "129baa4d9e08c8a1d5acf2ea05c9c89a4fdddb53ca6f3baf2d61311ab98e62ab"
+      },
+      {
+        "path": "source/studio/pipeline/__init__.py",
+        "bytes": 79,
+        "mtime_ns": 1789725770122897300,
+        "sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68"
+      },
+      {
+        "path": "source/studio/pipeline/native_job.py",
+        "bytes": 12512,
+        "mtime_ns": 1789725770123899700,
+        "sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca"
+      },
+      {
+        "path": "source/studio/protocol/__init__.py",
+        "bytes": 881,
+        "mtime_ns": 1789725770124898900,
+        "sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f"
+      },
+      {
+        "path": "source/studio/protocol/_rfc8785/__init__.py",
+        "bytes": 505,
+        "mtime_ns": 1789725770124898900,
+        "sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b"
+      },
+      {
+        "path": "source/studio/protocol/_rfc8785/_impl.py",
+        "bytes": 7251,
+        "mtime_ns": 1789725770125899300,
+        "sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec"
+      },
+      {
+        "path": "source/studio/protocol/core.py",
+        "bytes": 19886,
+        "mtime_ns": 1789725770126899700,
+        "sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e"
+      },
+      {
+        "path": "source/studio/protocol/jcs_godot.gd",
+        "bytes": 10165,
+        "mtime_ns": 1789725770127898800,
+        "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_assembly.py",
+        "bytes": 48182,
+        "mtime_ns": 1789725770128901800,
+        "sha256": "7573ca96986eb1c10298b8998b3dbaa3326fd80da2c2696150aeb22165d2911d"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_commands.py",
+        "bytes": 19779,
+        "mtime_ns": 1789725770129901000,
+        "sha256": "707b6f9a9291214d9ee848d77f1e4a3dc2267de5f2aeb5e48fa4365866a842c9"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_job.py",
+        "bytes": 24991,
+        "mtime_ns": 1789725770130901700,
+        "sha256": "be424a6f37ae573ac4bf40954b31017025daee2147699c80b05f9a0ab70e1611"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_native.gd",
+        "bytes": 51618,
+        "mtime_ns": 1789725770132409600,
+        "sha256": "52fbd9af5c6191ada5baf1d7195a75685ed5e27a95f4d244af8b4d679f8c00f2"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_plugin.cfg",
+        "bytes": 189,
+        "mtime_ns": 1789725770132936600,
+        "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_profile.py",
+        "bytes": 19625,
+        "mtime_ns": 1789725770133948300,
+        "sha256": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_readiness.py",
+        "bytes": 6746,
+        "mtime_ns": 1789725770134946100,
+        "sha256": "842db6244d93384932929544045654f089d67f6f304624b7348b7d5c4583ab68"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_transport.py",
+        "bytes": 4451,
+        "mtime_ns": 1789725770135944100,
+        "sha256": "87875809baa4845fcffba8e2c7d82f7a5bce833099c89d4852f2aab931c34df0"
+      },
+      {
+        "path": "source/studio/tests/replay/campaign_task.ps1",
+        "bytes": 18607,
+        "mtime_ns": 1789725770136511700,
+        "sha256": "405e2abfa39332b1313871763184fdda0755ff998ec83310e67e10cebfe2ebb9"
+      },
+      {
+        "path": "source/studio/tests/replay/run_benchmark_campaign.py",
+        "bytes": 53592,
+        "mtime_ns": 1789725770137520600,
+        "sha256": "bb43ecc04c2de4872177a440eb071d533efdaa9e8194f62b4e0907bad8d4b252"
+      },
+      {
+        "path": "source/studio/tests/replay/run_campaign_task.py",
+        "bytes": 8033,
+        "mtime_ns": 1789725770138521300,
+        "sha256": "f5cb71fa96b8fd2f935ac933dcd5190cef2b3b6821f031bfe72becb2d360a6fd"
+      },
+      {
+        "path": "source/studio/tests/replay/run_native_benchmark.py",
+        "bytes": 26986,
+        "mtime_ns": 1789725770139521000,
+        "sha256": "e6b0f8e9711ac881cfa65b4537232c685ff577af0a13778a51cc54999b1c1fc7"
+      },
+      {
+        "path": "source/studio/toolchain.lock.json",
+        "bytes": 3026,
+        "mtime_ns": 1789725770140522500,
+        "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9"
+      },
+      {
+        "path": "source/zdoc/reviews/20260918-gt06-s82-attribution/object_probe.gd",
+        "bytes": 10893,
+        "mtime_ns": 1789725770142522200,
+        "sha256": "6221092c70591d89b42aa8c00298198299a716edc7c25b8b4813db5d771fe556"
+      },
+      {
+        "path": "source/zdoc/reviews/20260918-gt06-s84-probe-cost/cost_phases.gd",
+        "bytes": 1777,
+        "mtime_ns": 1789725770142522200,
+        "sha256": "e3d5059bf485a9ac07a2f59c11a57652dbab4a8a98a9e82638e3dd6e189bef68"
+      },
+      {
+        "path": "source/zdoc/reviews/20260918-gt06-s84-probe-cost/measure_cost.py",
+        "bytes": 9261,
+        "mtime_ns": 1789725770141522400,
+        "sha256": "835bb732dcefb697b2847238c250068c98a326ecde9ef888d7e4e7dfc810f69f"
+      }
+    ],
+    "sham/outer": [
+      {
+        "path": "capture.json",
+        "bytes": 501,
+        "mtime_ns": 1789725791945297900,
+        "sha256": "be3c7f29bf1f748b3da1efa0619d53a7e412a6d0e146b91f46f42d1ed254e952"
+      },
+      {
+        "path": "cost-host.json",
+        "bytes": 87,
+        "mtime_ns": 1789725791930599500,
+        "sha256": "1854b717056fffa8afe8a66ab090600552974aa5ebaf4a2cce5b7256df213fd8"
+      },
+      {
+        "path": "cost-stderr.txt",
+        "bytes": 0,
+        "mtime_ns": 1789725769253534500,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "cost-stdout.txt",
+        "bytes": 0,
+        "mtime_ns": 1789725769253534500,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "invocation.json",
+        "bytes": 274,
+        "mtime_ns": 1789725769252533200,
+        "sha256": "0656086788ad93d61f940dc2b4aefb26ba4edda0280bf10cf9295e3990a8aab9"
+      }
+    ],
+    "compact/raw": [
+      {
+        "path": "cleanup.json",
+        "bytes": 90,
+        "mtime_ns": 1789725847477382500,
+        "sha256": "0fceafb402894c2f27053c510e5a4692ab74da5b45d745b7453ed823e5fd4426"
+      },
+      {
+        "path": "editor-host/appdata/Godot/editor_settings-4.7.tres",
+        "bytes": 17964,
+        "mtime_ns": 1789725846502308600,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/capture.json",
+        "bytes": 10327,
+        "mtime_ns": 1789725846888954200,
+        "sha256": "ce4ecfe0ebb289247d7c94ed47976d84f76278b51602218d2d57fe63581a491e"
+      },
+      {
+        "path": "editor-host/cleanup-001.json",
+        "bytes": 528,
+        "mtime_ns": 1789725846878349400,
+        "sha256": "379d7a25b4032e6cb243e100aa8a5ebcd3d82a94e45b71e0f18e47fe7e569534"
+      },
+      {
+        "path": "editor-host/invocation.json",
+        "bytes": 8903,
+        "mtime_ns": 1789725830545891500,
+        "sha256": "b2a5e45e046fde1735707190ca6d4325cc61aec8da1c0ab9ed12626abd7e153e"
+      },
+      {
+        "path": "editor-host/localappdata/Godot/editor_doc_cache-4.7.res",
+        "bytes": 3269805,
+        "mtime_ns": 1789725834586427500,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-58c5af43c01bd233445fbcab959514f4.png",
+        "bytes": 4078,
+        "mtime_ns": 1789725838119833800,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-58c5af43c01bd233445fbcab959514f4.txt",
+        "bytes": 54,
+        "mtime_ns": 1789725838124844400,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-c21e3bd6b3caae5761dd57a34d914c38.png",
+        "bytes": 929,
+        "mtime_ns": 1789725836770782700,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-c21e3bd6b3caae5761dd57a34d914c38.txt",
+        "bytes": 54,
+        "mtime_ns": 1789725836772792900,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-f0b9e2a76d4e88bacb8267cec84f8811.png",
+        "bytes": 831,
+        "mtime_ns": 1789725836759077900,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-f0b9e2a76d4e88bacb8267cec84f8811.txt",
+        "bytes": 54,
+        "mtime_ns": 1789725836760598000,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-f6bdbbbf1d5d9f9540c381bd758091f3.png",
+        "bytes": 755,
+        "mtime_ns": 1789725836752727700,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-f6bdbbbf1d5d9f9540c381bd758091f3.txt",
+        "bytes": 54,
+        "mtime_ns": 1789725836754572800,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-f902ea9f179ad063e803bf156ee3432d.png",
+        "bytes": 852,
+        "mtime_ns": 1789725836765123900,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-f902ea9f179ad063e803bf156ee3432d.txt",
+        "bytes": 54,
+        "mtime_ns": 1789725836767120500,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-fae33f405eb8d52dc6916867992ad5d4.png",
+        "bytes": 414,
+        "mtime_ns": 1789725836776298200,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-fae33f405eb8d52dc6916867992ad5d4.txt",
+        "bytes": 54,
+        "mtime_ns": 1789725836777307200,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/process-exit.json",
+        "bytes": 30,
+        "mtime_ns": 1789725846775553600,
+        "sha256": "6429528679eb49fc9d870340b60a68c9284eba8251accd14cba85251245377cd"
+      },
+      {
+        "path": "editor-host/process-start.json",
+        "bytes": 14,
+        "mtime_ns": 1789725830693759100,
+        "sha256": "5115da07ebf706b6f8a1455081faa4bf757c3e8fe717448f8b3c11cc84cb3d7f"
+      },
+      {
+        "path": "editor-host/stderr.txt",
+        "bytes": 0,
+        "mtime_ns": 1789725830564581500,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "editor-host/stdout.txt",
+        "bytes": 4486,
+        "mtime_ns": 1789725845952012900,
+        "sha256": "2836df645f4f1514717b4453db8604893a056d612dd0c1c7b6b2c5e59f8b861a"
+      },
+      {
+        "path": "import-host/appdata/Godot/editor_settings-4.7.tres",
+        "bytes": 17964,
+        "mtime_ns": 1789725829695176200,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "import-host/capture.json",
+        "bytes": 1341,
+        "mtime_ns": 1789725829996022800,
+        "sha256": "97d7da013922f84cdc0493b4e1c1aaf66dec4d5b08e81abbdc2ba5841f54fdf2"
+      },
+      {
+        "path": "import-host/invocation.json",
+        "bytes": 6173,
+        "mtime_ns": 1789725824909487900,
+        "sha256": "9fe435daac8077415df246c09179fd21cd2e254decdd03ce106e41a681d15793"
+      },
+      {
+        "path": "import-host/localappdata/Godot/editor_doc_cache-4.7.res",
+        "bytes": 3269734,
+        "mtime_ns": 1789725827283461200,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "import-host/process-exit.json",
+        "bytes": 30,
+        "mtime_ns": 1789725829926377300,
+        "sha256": "bad34828a8f0c497c98f2d75fecef0fc7d23e3ba3085417b89f21ce910ef1335"
+      },
+      {
+        "path": "import-host/process-start.json",
+        "bytes": 14,
+        "mtime_ns": 1789725825031841300,
+        "sha256": "873150c81253bf49b471ee9734e66443be05dc1e871e5c5dcfe504097368c671"
+      },
+      {
+        "path": "import-host/stderr.txt",
+        "bytes": 0,
+        "mtime_ns": 1789725824919119400,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "import-host/stdout.txt",
+        "bytes": 1492,
+        "mtime_ns": 1789725829933404200,
+        "sha256": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003"
+      },
+      {
+        "path": "invocation.json",
+        "bytes": 7515,
+        "mtime_ns": 1789725824241276100,
+        "sha256": "e347f40f8f8abb095e3bacf1dc502435b9b0320d5b45f1353ebaecd6b96f56ac"
+      },
+      {
+        "path": "observation-00.json",
+        "bytes": 463,
+        "mtime_ns": 1789725841313209000,
+        "sha256": "acf91210ba298e46690d5557747eb3f9ec02e2a4c61a88d9e6e70abe59e5dbca"
+      },
+      {
+        "path": "observation-01.json",
+        "bytes": 465,
+        "mtime_ns": 1789725843912961000,
+        "sha256": "390fc00051086596ba1cc86abfd8456c52651be30ab05d3d284e57f33b54304e"
+      },
+      {
+        "path": "observation-02.json",
+        "bytes": 465,
+        "mtime_ns": 1789725845933253000,
+        "sha256": "1a7b41e8dbfa1ee72d848361576083d460fecc63d02ff3a7ecaf4f561d350aa1"
+      },
+      {
+        "path": "project/.godot/.gdignore",
+        "bytes": 1,
+        "mtime_ns": 1789725825082700500,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/editor_layout.cfg",
+        "bytes": 1436,
+        "mtime_ns": 1789725838652172700,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/editor_script_doc_cache.res",
+        "bytes": 11981,
+        "mtime_ns": 1789725846136723600,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/editor_script_doc_cache.res-folding-a7de57390d6e786984ca20c70a831128.cfg",
+        "bytes": 49,
+        "mtime_ns": 1789725846136723600,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/filesystem_cache10",
+        "bytes": 915,
+        "mtime_ns": 1789725836643943900,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/filesystem_update4",
+        "bytes": 26,
+        "mtime_ns": 1789725838099511900,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/fixture.tscn-editstate-a95ffd352fa9c4b59083e0b523419988.cfg",
+        "bytes": 4334,
+        "mtime_ns": 1789725838133749400,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/fixture.tscn-folding-a95ffd352fa9c4b59083e0b523419988.cfg",
+        "bytes": 136,
+        "mtime_ns": 1789725838110799400,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/project_metadata.cfg",
+        "bytes": 273,
+        "mtime_ns": 1789725846138775200,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/script_editor_cache.cfg",
+        "bytes": 0,
+        "mtime_ns": 1789725838649525100,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/global_script_class_cache.cfg",
+        "bytes": 8,
+        "mtime_ns": 1789725829091229000,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/scene_groups_cache.cfg",
+        "bytes": 0,
+        "mtime_ns": 1789725838101519900,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/CanvasShaderGLES3/076cc7f5ca018594656711ce99da014402bbd19aa1eb794136d4aa1fc1916d27/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+        "bytes": 51577,
+        "mtime_ns": 1789725836372166200,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/CopyShaderGLES3/be890b216e2b3fe916307830870fee480049474f8a9590e668b7db55f4333ca0/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+        "bytes": 118055,
+        "mtime_ns": 1789725831507098900,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/CubemapFilterShaderGLES3/f2f060f7884cfc963ab277935a694190c41dc5319199dc60ed40febaeed22ca7/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+        "bytes": 26057,
+        "mtime_ns": 1789725836304756400,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/FeedShaderGLES3/d18a5be4b160faacb02638af5d95197a20d24a8ee2964a921fecdd0450ccfe03/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+        "bytes": 8261,
+        "mtime_ns": 1789725831517075600,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/PostShaderGLES3/591ad1dc6444d48fbbe21612a2afd78e25aaf929315adddd90df3789fa6e5af1/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+        "bytes": 13656,
+        "mtime_ns": 1789725831515073800,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+        "bytes": 800909,
+        "mtime_ns": 1789725831540429800,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/77047cd41f429f33ceff24e890e174f5465e755e.cache",
+        "bytes": 920188,
+        "mtime_ns": 1789725837953786200,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/a38af2d0725c8e99d8492f4c72736f24d6a54cc5.cache",
+        "bytes": 738963,
+        "mtime_ns": 1789725836342713100,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/cafb1506f2db0c3681435e264aa18e216d1a7a40.cache",
+        "bytes": 729679,
+        "mtime_ns": 1789725836321388300,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/SkyShaderGLES3/c1a447880507cb68532c47caeeb2a80984019a797946a43cd3c056a918a45c98/2c82eb5fea9b549e20c9f41e308abf9a4fc5d76f.cache",
+        "bytes": 55632,
+        "mtime_ns": 1789725836299752700,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/uid_cache.bin",
+        "bytes": 283,
+        "mtime_ns": 1789725838100519500,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/addons/hh_benchmark/benchmark_native.gd",
+        "bytes": 66659,
+        "mtime_ns": 1789725824135680700,
+        "sha256": "956510b443c5c6087f3a84078377ce2e8f9785ed32e8b6244db24208e353ed52"
+      },
+      {
+        "path": "project/addons/hh_benchmark/benchmark_native.gd.uid",
+        "bytes": 20,
+        "mtime_ns": 1789725829049692600,
+        "sha256": "c3f1533922b084d0f0583ac7d6a2bde6d74c50aa787d2ed498099e4fe0c35701"
+      },
+      {
+        "path": "project/addons/hh_benchmark/plugin.cfg",
+        "bytes": 189,
+        "mtime_ns": 1789725824117623300,
+        "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092"
+      },
+      {
+        "path": "project/addons/hh_studio/jcs_godot.gd",
+        "bytes": 10165,
+        "mtime_ns": 1789725824114107900,
+        "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5"
+      },
+      {
+        "path": "project/addons/hh_studio/jcs_godot.gd.uid",
+        "bytes": 20,
+        "mtime_ns": 1789725824115108700,
+        "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b"
+      },
+      {
+        "path": "project/addons/hh_studio/plugin.cfg",
+        "bytes": 165,
+        "mtime_ns": 1789725824111109100,
+        "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c"
+      },
+      {
+        "path": "project/addons/hh_studio/plugin.gd",
+        "bytes": 23043,
+        "mtime_ns": 1789725824112110700,
+        "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036"
+      },
+      {
+        "path": "project/addons/hh_studio/plugin.gd.uid",
+        "bytes": 20,
+        "mtime_ns": 1789725824112110700,
+        "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d"
+      },
+      {
+        "path": "project/addons/hh_studio/scene_commands.gd",
+        "bytes": 32174,
+        "mtime_ns": 1789725824113111000,
+        "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069"
+      },
+      {
+        "path": "project/addons/hh_studio/scene_commands.gd.uid",
+        "bytes": 19,
+        "mtime_ns": 1789725824113111000,
+        "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69"
+      },
+      {
+        "path": "project/benchmark/.gdignore",
+        "bytes": 53,
+        "mtime_ns": 1789725824118622200,
+        "sha256": "3d078ee3c08af2f64daca29255d23d366dc0a9bdbef8a872442d5642bfb84cf8"
+      },
+      {
+        "path": "project/benchmark/input/cost-00.ack",
+        "bytes": 24,
+        "mtime_ns": 1789725841314280900,
+        "sha256": "ba56171c2fc6032c19f5c461dcfd5c723dec12f228a0fb6b49a3f351d7428c72"
+      },
+      {
+        "path": "project/benchmark/input/cost-01.ack",
+        "bytes": 24,
+        "mtime_ns": 1789725843913963500,
+        "sha256": "ba56171c2fc6032c19f5c461dcfd5c723dec12f228a0fb6b49a3f351d7428c72"
+      },
+      {
+        "path": "project/benchmark/input/cost-02.ack",
+        "bytes": 24,
+        "mtime_ns": 1789725845934253400,
+        "sha256": "ba56171c2fc6032c19f5c461dcfd5c723dec12f228a0fb6b49a3f351d7428c72"
+      },
+      {
+        "path": "project/benchmark/input.json",
+        "bytes": 380,
+        "mtime_ns": 1789725824118622200,
+        "sha256": "b174554d139717a0381fb9bb3a1c6fb032d56f0ff92d0672bc2383c9e729800f"
+      },
+      {
+        "path": "project/benchmark/out/batch-00.json",
+        "bytes": 1745,
+        "mtime_ns": 1789725839279231600,
+        "sha256": "e2a35b6c750d6476cbec60136e822a9c9e8f24f920ff894c28925f49c226efd8"
+      },
+      {
+        "path": "project/benchmark/out/cost-00.json",
+        "bytes": 184,
+        "mtime_ns": 1789725841291644600,
+        "sha256": "1ac3356a11a5edf16c0da901bbfd8fa34b0c6a395c88a4094b4fd28d2fdecb8e"
+      },
+      {
+        "path": "project/benchmark/out/cost-01.json",
+        "bytes": 186,
+        "mtime_ns": 1789725843901600700,
+        "sha256": "85814d11237c0af8aee067f479159626bc310411b3b22188c9e689a0df3fb5c7"
+      },
+      {
+        "path": "project/benchmark/out/cost-02.json",
+        "bytes": 186,
+        "mtime_ns": 1789725845925056400,
+        "sha256": "1e2e1517725f490a417eb4a546b8312bb445e70d1e1b02685095ec3bf219ec79"
+      },
+      {
+        "path": "project/benchmark/out/index.json",
+        "bytes": 8148,
+        "mtime_ns": 1789725845943555900,
+        "sha256": "d4377a250dd8663d350b07af35c99d9ac84082318dc0c5488271f13a4e746a57"
+      },
+      {
+        "path": "project/benchmark/out/object-0000.json",
+        "bytes": 843157,
+        "mtime_ns": 1789725841883602800,
+        "sha256": "108e9fa1b66daf0550befa86b70eaae0732ec2a4d91c0ca444c6ecf6b895cfa2"
+      },
+      {
+        "path": "project/project.godot",
+        "bytes": 838,
+        "mtime_ns": 1789725836191874000,
+        "sha256": "819b521edff745f02f7c30e96ceffe21c70d8ef4fc32e95b96df37877e817ce1"
+      },
+      {
+        "path": "project/scenes/fixture.tscn",
+        "bytes": 295,
+        "mtime_ns": 1789725838089550200,
+        "sha256": "cde5ea6c9f07390d21d28c08718e0074580732e341655671cecac454ceb2e1ce"
+      },
+      {
+        "path": "project/scripts/fixture_actor.gd",
+        "bytes": 50,
+        "mtime_ns": 1789725824116615300,
+        "sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd"
+      },
+      {
+        "path": "project/scripts/fixture_actor.gd.uid",
+        "bytes": 20,
+        "mtime_ns": 1789725824110111400,
+        "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142"
+      },
+      {
+        "path": "result.json",
+        "bytes": 1783,
+        "mtime_ns": 1789725847476376800,
+        "sha256": "c5af6c0b757719d7bd3388239d607b72896eadbb51d0139776c316d98aaa9254"
+      },
+      {
+        "path": "runtime-source-files.json",
+        "bytes": 7359,
+        "mtime_ns": 1789725830038056300,
+        "sha256": "90a4467176065e64dbb0fedd4d642ebb58da10bc8e447eb336f5813d16412d47"
+      },
+      {
+        "path": "source/studio/blender-addon/ipc_client.py",
+        "bytes": 16349,
+        "mtime_ns": 1789725824242471000,
+        "sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9"
+      },
+      {
+        "path": "source/studio/contracts/perf-collector.schema.json",
+        "bytes": 30060,
+        "mtime_ns": 1789725824243468400,
+        "sha256": "394d1df03bdfd736ea3fe9f260e9d718d35f3820cde35d1c45ccab65fbc24834"
+      },
+      {
+        "path": "source/studio/godot-addon/addons/hh_studio/plugin.cfg",
+        "bytes": 165,
+        "mtime_ns": 1789725824244467600,
+        "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c"
+      },
+      {
+        "path": "source/studio/godot-addon/addons/hh_studio/plugin.gd",
+        "bytes": 23043,
+        "mtime_ns": 1789725824245468200,
+        "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036"
+      },
+      {
+        "path": "source/studio/godot-addon/addons/hh_studio/scene_commands.gd",
+        "bytes": 32174,
+        "mtime_ns": 1789725824245468200,
+        "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069"
+      },
+      {
+        "path": "source/studio/godot-addon/bundle_staging.py",
+        "bytes": 15005,
+        "mtime_ns": 1789725824246468300,
+        "sha256": "3d614edbec8e9a7f5ad3caf2b9694d7498df129de95683952268621f91d68e43"
+      },
+      {
+        "path": "source/studio/godot-addon/bundle_v2.py",
+        "bytes": 8475,
+        "mtime_ns": 1789725824247467700,
+        "sha256": "2c5cdc71cdaf80f58bb93ec791e84bab8bd02cd4d9bdbd93d635db13583de62a"
+      },
+      {
+        "path": "source/studio/godot-addon/cli_job.py",
+        "bytes": 12672,
+        "mtime_ns": 1789725824247467700,
+        "sha256": "5a0f37bc129bde409a2657054fb091d637d838e442d45a69e7adc1f1527d4c88"
+      },
+      {
+        "path": "source/studio/godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid",
+        "bytes": 20,
+        "mtime_ns": 1789725824249468400,
+        "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b"
+      },
+      {
+        "path": "source/studio/godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid",
+        "bytes": 20,
+        "mtime_ns": 1789725824250468500,
+        "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d"
+      },
+      {
+        "path": "source/studio/godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid",
+        "bytes": 19,
+        "mtime_ns": 1789725824250468500,
+        "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69"
+      },
+      {
+        "path": "source/studio/godot-addon/fixture_profile/project.godot",
+        "bytes": 282,
+        "mtime_ns": 1789725824251468400,
+        "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51"
+      },
+      {
+        "path": "source/studio/godot-addon/fixture_profile/scripts/fixture_actor.gd.uid",
+        "bytes": 20,
+        "mtime_ns": 1789725824251468400,
+        "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142"
+      },
+      {
+        "path": "source/studio/godot-addon/fixture_profile/source-pins.json",
+        "bytes": 1873,
+        "mtime_ns": 1789725824252518800,
+        "sha256": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2"
+      },
+      {
+        "path": "source/studio/godot-addon/fixture_profile.py",
+        "bytes": 6020,
+        "mtime_ns": 1789725824248467700,
+        "sha256": "25e1667dd930dcf0746b071fc29ea3460bc18d5fb9f3f83e806c1793028f21ae"
+      },
+      {
+        "path": "source/studio/host/blender/__init__.py",
+        "bytes": 69,
+        "mtime_ns": 1789725824253517800,
+        "sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90"
+      },
+      {
+        "path": "source/studio/host/blender/deadline.py",
+        "bytes": 1130,
+        "mtime_ns": 1789725824254521600,
+        "sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926"
+      },
+      {
+        "path": "source/studio/host/blender/export_job.py",
+        "bytes": 13605,
+        "mtime_ns": 1789725824254521600,
+        "sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe"
+      },
+      {
+        "path": "source/studio/host/blender/glb_preflight.py",
+        "bytes": 11815,
+        "mtime_ns": 1789725824255520100,
+        "sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62"
+      },
+      {
+        "path": "source/studio/host/blender/ui_host.py",
+        "bytes": 22464,
+        "mtime_ns": 1789725824256519500,
+        "sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35"
+      },
+      {
+        "path": "source/studio/host/core/journal.py",
+        "bytes": 29602,
+        "mtime_ns": 1789725824257519500,
+        "sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6"
+      },
+      {
+        "path": "source/studio/host/core/limits.py",
+        "bytes": 15813,
+        "mtime_ns": 1789725824258521000,
+        "sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f"
+      },
+      {
+        "path": "source/studio/host/core/private_store.py",
+        "bytes": 20476,
+        "mtime_ns": 1789725824258521000,
+        "sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476"
+      },
+      {
+        "path": "source/studio/host/core/redaction.py",
+        "bytes": 10038,
+        "mtime_ns": 1789725824259521700,
+        "sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f"
+      },
+      {
+        "path": "source/studio/host/core/safe_create.py",
+        "bytes": 13170,
+        "mtime_ns": 1789725824260518500,
+        "sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606"
+      },
+      {
+        "path": "source/studio/host/core/safe_open.py",
+        "bytes": 12093,
+        "mtime_ns": 1789725824260518500,
+        "sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535"
+      },
+      {
+        "path": "source/studio/host/core/transport.py",
+        "bytes": 47056,
+        "mtime_ns": 1789725824262024700,
+        "sha256": "1ec03356b1cb8c8987e1604bcb164aea6a9934dbe259451c19e12de36398aba0"
+      },
+      {
+        "path": "source/studio/host/replay/disk_journal_index.py",
+        "bytes": 13593,
+        "mtime_ns": 1789725824263033300,
+        "sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28"
+      },
+      {
+        "path": "source/studio/host/replay/perf.py",
+        "bytes": 19085,
+        "mtime_ns": 1789725824264035900,
+        "sha256": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7"
+      },
+      {
+        "path": "source/studio/host/replay/process_probe.py",
+        "bytes": 5485,
+        "mtime_ns": 1789725824264035900,
+        "sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500"
+      },
+      {
+        "path": "source/studio/host/replay/verified_journal.py",
+        "bytes": 9155,
+        "mtime_ns": 1789725824265540800,
+        "sha256": "129baa4d9e08c8a1d5acf2ea05c9c89a4fdddb53ca6f3baf2d61311ab98e62ab"
+      },
+      {
+        "path": "source/studio/pipeline/__init__.py",
+        "bytes": 79,
+        "mtime_ns": 1789725824265540800,
+        "sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68"
+      },
+      {
+        "path": "source/studio/pipeline/native_job.py",
+        "bytes": 12512,
+        "mtime_ns": 1789725824266546700,
+        "sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca"
+      },
+      {
+        "path": "source/studio/protocol/__init__.py",
+        "bytes": 881,
+        "mtime_ns": 1789725824267547400,
+        "sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f"
+      },
+      {
+        "path": "source/studio/protocol/_rfc8785/__init__.py",
+        "bytes": 505,
+        "mtime_ns": 1789725824268685000,
+        "sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b"
+      },
+      {
+        "path": "source/studio/protocol/_rfc8785/_impl.py",
+        "bytes": 7251,
+        "mtime_ns": 1789725824268685000,
+        "sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec"
+      },
+      {
+        "path": "source/studio/protocol/core.py",
+        "bytes": 19886,
+        "mtime_ns": 1789725824269684300,
+        "sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e"
+      },
+      {
+        "path": "source/studio/protocol/jcs_godot.gd",
+        "bytes": 10165,
+        "mtime_ns": 1789725824270684500,
+        "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_assembly.py",
+        "bytes": 48182,
+        "mtime_ns": 1789725824272818700,
+        "sha256": "7573ca96986eb1c10298b8998b3dbaa3326fd80da2c2696150aeb22165d2911d"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_commands.py",
+        "bytes": 19779,
+        "mtime_ns": 1789725824272818700,
+        "sha256": "707b6f9a9291214d9ee848d77f1e4a3dc2267de5f2aeb5e48fa4365866a842c9"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_job.py",
+        "bytes": 24991,
+        "mtime_ns": 1789725824273819700,
+        "sha256": "be424a6f37ae573ac4bf40954b31017025daee2147699c80b05f9a0ab70e1611"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_native.gd",
+        "bytes": 51618,
+        "mtime_ns": 1789725824274826200,
+        "sha256": "52fbd9af5c6191ada5baf1d7195a75685ed5e27a95f4d244af8b4d679f8c00f2"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_plugin.cfg",
+        "bytes": 189,
+        "mtime_ns": 1789725824275818200,
+        "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_profile.py",
+        "bytes": 19625,
+        "mtime_ns": 1789725824275818200,
+        "sha256": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_readiness.py",
+        "bytes": 6746,
+        "mtime_ns": 1789725824276818500,
+        "sha256": "842db6244d93384932929544045654f089d67f6f304624b7348b7d5c4583ab68"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_transport.py",
+        "bytes": 4451,
+        "mtime_ns": 1789725824277820300,
+        "sha256": "87875809baa4845fcffba8e2c7d82f7a5bce833099c89d4852f2aab931c34df0"
+      },
+      {
+        "path": "source/studio/tests/replay/campaign_task.ps1",
+        "bytes": 18607,
+        "mtime_ns": 1789725824278818600,
+        "sha256": "405e2abfa39332b1313871763184fdda0755ff998ec83310e67e10cebfe2ebb9"
+      },
+      {
+        "path": "source/studio/tests/replay/run_benchmark_campaign.py",
+        "bytes": 53592,
+        "mtime_ns": 1789725824278818600,
+        "sha256": "bb43ecc04c2de4872177a440eb071d533efdaa9e8194f62b4e0907bad8d4b252"
+      },
+      {
+        "path": "source/studio/tests/replay/run_campaign_task.py",
+        "bytes": 8033,
+        "mtime_ns": 1789725824279819500,
+        "sha256": "f5cb71fa96b8fd2f935ac933dcd5190cef2b3b6821f031bfe72becb2d360a6fd"
+      },
+      {
+        "path": "source/studio/tests/replay/run_native_benchmark.py",
+        "bytes": 26986,
+        "mtime_ns": 1789725824280820100,
+        "sha256": "e6b0f8e9711ac881cfa65b4537232c685ff577af0a13778a51cc54999b1c1fc7"
+      },
+      {
+        "path": "source/studio/toolchain.lock.json",
+        "bytes": 3026,
+        "mtime_ns": 1789725824281818100,
+        "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9"
+      },
+      {
+        "path": "source/zdoc/reviews/20260918-gt06-s84-compact-probe/object_probe.gd",
+        "bytes": 13962,
+        "mtime_ns": 1789725824283955600,
+        "sha256": "20ed7e62658c247265a8165024682efac78ae9c475a810bb6368e8fe9c75dd40"
+      },
+      {
+        "path": "source/zdoc/reviews/20260918-gt06-s84-probe-cost/cost_phases.gd",
+        "bytes": 1777,
+        "mtime_ns": 1789725824282955800,
+        "sha256": "e3d5059bf485a9ac07a2f59c11a57652dbab4a8a98a9e82638e3dd6e189bef68"
+      },
+      {
+        "path": "source/zdoc/reviews/20260918-gt06-s84-probe-cost/measure_cost.py",
+        "bytes": 9261,
+        "mtime_ns": 1789725824282955800,
+        "sha256": "835bb732dcefb697b2847238c250068c98a326ecde9ef888d7e4e7dfc810f69f"
+      }
+    ],
+    "compact/outer": [
+      {
+        "path": "capture.json",
+        "bytes": 503,
+        "mtime_ns": 1789725847510044200,
+        "sha256": "ea7dc034fb615e9db46a50f32b7cf9e3b4f1c2bc6e496e991d9d73f71184ed9d"
+      },
+      {
+        "path": "cost-host.json",
+        "bytes": 87,
+        "mtime_ns": 1789725847495000600,
+        "sha256": "a401bcc743ccbd4a76ea399161779c05550010685fcdc48c2158a3907cebc78f"
+      },
+      {
+        "path": "cost-stderr.txt",
+        "bytes": 0,
+        "mtime_ns": 1789725823473647400,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "cost-stdout.txt",
+        "bytes": 0,
+        "mtime_ns": 1789725823473647400,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "invocation.json",
+        "bytes": 277,
+        "mtime_ns": 1789725823472646400,
+        "sha256": "017c70b15b6dc0b448894c9d9cc9f7cd6a286e4c7e8a5cfd9b44f5e83ec4d033"
+      }
+    ],
+    "compact-growth/raw": [
+      {
+        "path": "cleanup.json",
+        "bytes": 90,
+        "mtime_ns": 1789725943008210500,
+        "sha256": "0fceafb402894c2f27053c510e5a4692ab74da5b45d745b7453ed823e5fd4426"
+      },
+      {
+        "path": "editor-host/appdata/Godot/editor_settings-4.7.tres",
+        "bytes": 17978,
+        "mtime_ns": 1789725941943751100,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/capture.json",
+        "bytes": 10434,
+        "mtime_ns": 1789725942295708800,
+        "sha256": "507f4d20cb5251b4879e1a4b75b724981420b2d4103b75bb50997ed1b3136490"
+      },
+      {
+        "path": "editor-host/cleanup-001.json",
+        "bytes": 528,
+        "mtime_ns": 1789725942286191200,
+        "sha256": "379d7a25b4032e6cb243e100aa8a5ebcd3d82a94e45b71e0f18e47fe7e569534"
+      },
+      {
+        "path": "editor-host/invocation.json",
+        "bytes": 9022,
+        "mtime_ns": 1789725923439605500,
+        "sha256": "aef8f3db0ebeeafea325d93ea561eea1e754994a26bddb6ca0d99997327941e5"
+      },
+      {
+        "path": "editor-host/localappdata/Godot/editor_doc_cache-4.7.res",
+        "bytes": 3269806,
+        "mtime_ns": 1789725927112325400,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-094e3fc008f2857da1581a8852b81c2d.png",
+        "bytes": 755,
+        "mtime_ns": 1789725929073292500,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-094e3fc008f2857da1581a8852b81c2d.txt",
+        "bytes": 54,
+        "mtime_ns": 1789725929075293200,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-4b95af48696cafc918ef333dc5c06564.png",
+        "bytes": 414,
+        "mtime_ns": 1789725929092940000,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-4b95af48696cafc918ef333dc5c06564.txt",
+        "bytes": 54,
+        "mtime_ns": 1789725929094447400,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-5c7db28a07db9b344de75fec555bf042.png",
+        "bytes": 4078,
+        "mtime_ns": 1789725930413718800,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-5c7db28a07db9b344de75fec555bf042.txt",
+        "bytes": 54,
+        "mtime_ns": 1789725930416719300,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-5cbadabef78857964ee4e1a72e783e60.png",
+        "bytes": 831,
+        "mtime_ns": 1789725929078807500,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-5cbadabef78857964ee4e1a72e783e60.txt",
+        "bytes": 54,
+        "mtime_ns": 1789725929080314200,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-77198b03d1a9e53ec3154f9841284dba.png",
+        "bytes": 852,
+        "mtime_ns": 1789725929083916200,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-77198b03d1a9e53ec3154f9841284dba.txt",
+        "bytes": 54,
+        "mtime_ns": 1789725929084915500,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-881581ee5bdb9ccd916cb0328361feda.png",
+        "bytes": 929,
+        "mtime_ns": 1789725929089430300,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/localappdata/Godot/resthumb-881581ee5bdb9ccd916cb0328361feda.txt",
+        "bytes": 54,
+        "mtime_ns": 1789725929089430300,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "editor-host/process-exit.json",
+        "bytes": 30,
+        "mtime_ns": 1789725942207729100,
+        "sha256": "6b28f2201e251ace2cc5abd6677fa966e0b2fd6cdc15bc8122ad1b83aa3a1a6d"
+      },
+      {
+        "path": "editor-host/process-start.json",
+        "bytes": 14,
+        "mtime_ns": 1789725923582550600,
+        "sha256": "a26847423e1f9ee63b77e7371f0fc111db09d31efd937337be70497e80337e8f"
+      },
+      {
+        "path": "editor-host/stderr.txt",
+        "bytes": 0,
+        "mtime_ns": 1789725923457846300,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "editor-host/stdout.txt",
+        "bytes": 5671,
+        "mtime_ns": 1789725941408801000,
+        "sha256": "e7c5319dec8bb91da3e52085b2830f228e3cc43612a0b53df4876f34ef0d0556"
+      },
+      {
+        "path": "import-host/appdata/Godot/editor_settings-4.7.tres",
+        "bytes": 17978,
+        "mtime_ns": 1789725922628160800,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "import-host/capture.json",
+        "bytes": 1340,
+        "mtime_ns": 1789725922865235400,
+        "sha256": "c27222ea3727af868fffa2c9c5e355cfdbec083cfd7d221e5f0f64922dc01e69"
+      },
+      {
+        "path": "import-host/invocation.json",
+        "bytes": 6187,
+        "mtime_ns": 1789725917732088300,
+        "sha256": "d4e58945e5ce28fea87a1d3cd19315dfa55e6fa0e0fa45c0c60925f7fcaa81fe"
+      },
+      {
+        "path": "import-host/localappdata/Godot/editor_doc_cache-4.7.res",
+        "bytes": 3269733,
+        "mtime_ns": 1789725920258592800,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "import-host/process-exit.json",
+        "bytes": 30,
+        "mtime_ns": 1789725922794086000,
+        "sha256": "9901c83f613f7f71129b9eee9eb495382def9d8103aeaebc91c9885d12f087a8"
+      },
+      {
+        "path": "import-host/process-start.json",
+        "bytes": 14,
+        "mtime_ns": 1789725917904430400,
+        "sha256": "6f08cf9d1bd9552d87fae138fef3413eeeda91fa9d891b86df75152047f45342"
+      },
+      {
+        "path": "import-host/stderr.txt",
+        "bytes": 0,
+        "mtime_ns": 1789725917749661400,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "import-host/stdout.txt",
+        "bytes": 1492,
+        "mtime_ns": 1789725922799921300,
+        "sha256": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003"
+      },
+      {
+        "path": "invocation.json",
+        "bytes": 7529,
+        "mtime_ns": 1789725917011486500,
+        "sha256": "85492d335420386930becb2da4e2677957ba6da7a9c1d10a6f843df7b70d8a25"
+      },
+      {
+        "path": "observation-00.json",
+        "bytes": 469,
+        "mtime_ns": 1789725933599260700,
+        "sha256": "f7ddfddeaf184bffe4d6adf3579382a445191771cab434972ad373dfec6b4f8e"
+      },
+      {
+        "path": "observation-01.json",
+        "bytes": 472,
+        "mtime_ns": 1789725936200644500,
+        "sha256": "4b4977ae60cd22106331a2353883510b62142d8aaee0b2c096df9629f8525989"
+      },
+      {
+        "path": "observation-02.json",
+        "bytes": 470,
+        "mtime_ns": 1789725938772886300,
+        "sha256": "49f7a9adb53f4bfb68af67156abd69e80702e626e527604914c07b6bae31e2fd"
+      },
+      {
+        "path": "observation-03.json",
+        "bytes": 472,
+        "mtime_ns": 1789725941393256900,
+        "sha256": "52bd6b083a488d92ffbe3a1b923081e61b654905030d3dfec1d82eeaf79f71e1"
+      },
+      {
+        "path": "project/.godot/.gdignore",
+        "bytes": 1,
+        "mtime_ns": 1789725917965114600,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/editor_layout.cfg",
+        "bytes": 1436,
+        "mtime_ns": 1789725930929582900,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/editor_script_doc_cache.res",
+        "bytes": 11993,
+        "mtime_ns": 1789725941587891900,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/editor_script_doc_cache.res-folding-a7de57390d6e786984ca20c70a831128.cfg",
+        "bytes": 49,
+        "mtime_ns": 1789725941589892900,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/filesystem_cache10",
+        "bytes": 915,
+        "mtime_ns": 1789725928976245600,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/filesystem_update4",
+        "bytes": 26,
+        "mtime_ns": 1789725930396544700,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/fixture.tscn-editstate-a95ffd352fa9c4b59083e0b523419988.cfg",
+        "bytes": 4334,
+        "mtime_ns": 1789725930423976700,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/fixture.tscn-folding-a95ffd352fa9c4b59083e0b523419988.cfg",
+        "bytes": 136,
+        "mtime_ns": 1789725930406101000,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/project_metadata.cfg",
+        "bytes": 273,
+        "mtime_ns": 1789725941591399700,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/editor/script_editor_cache.cfg",
+        "bytes": 0,
+        "mtime_ns": 1789725930928582100,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/global_script_class_cache.cfg",
+        "bytes": 8,
+        "mtime_ns": 1789725922025907800,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/scene_groups_cache.cfg",
+        "bytes": 0,
+        "mtime_ns": 1789725930398053800,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/CanvasShaderGLES3/076cc7f5ca018594656711ce99da014402bbd19aa1eb794136d4aa1fc1916d27/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+        "bytes": 51577,
+        "mtime_ns": 1789725928649466600,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/CopyShaderGLES3/be890b216e2b3fe916307830870fee480049474f8a9590e668b7db55f4333ca0/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+        "bytes": 118055,
+        "mtime_ns": 1789725924390827600,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/CubemapFilterShaderGLES3/f2f060f7884cfc963ab277935a694190c41dc5319199dc60ed40febaeed22ca7/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+        "bytes": 26057,
+        "mtime_ns": 1789725928581885000,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/FeedShaderGLES3/d18a5be4b160faacb02638af5d95197a20d24a8ee2964a921fecdd0450ccfe03/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+        "bytes": 8261,
+        "mtime_ns": 1789725924403833000,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/PostShaderGLES3/591ad1dc6444d48fbbe21612a2afd78e25aaf929315adddd90df3789fa6e5af1/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+        "bytes": 13656,
+        "mtime_ns": 1789725924399836500,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/6bb7c9a2fd1c4a8fa77cb96555b9b4a720209981.cache",
+        "bytes": 800909,
+        "mtime_ns": 1789725924428488400,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/77047cd41f429f33ceff24e890e174f5465e755e.cache",
+        "bytes": 920188,
+        "mtime_ns": 1789725930262358500,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/a38af2d0725c8e99d8492f4c72736f24d6a54cc5.cache",
+        "bytes": 738963,
+        "mtime_ns": 1789725928619205700,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/SceneShaderGLES3/ebd5ef628945fec79c8fb620654e1e6dfffb8249acd83a4803b1a534aadcbced/cafb1506f2db0c3681435e264aa18e216d1a7a40.cache",
+        "bytes": 729679,
+        "mtime_ns": 1789725928596547900,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/shader_cache/SkyShaderGLES3/c1a447880507cb68532c47caeeb2a80984019a797946a43cd3c056a918a45c98/2c82eb5fea9b549e20c9f41e308abf9a4fc5d76f.cache",
+        "bytes": 55632,
+        "mtime_ns": 1789725928576848800,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/.godot/uid_cache.bin",
+        "bytes": 283,
+        "mtime_ns": 1789725930398053800,
+        "excluded": "Generated cache or per-process settings: metadata only; not hashed/copied",
+        "sha256": null
+      },
+      {
+        "path": "project/addons/hh_benchmark/benchmark_native.gd",
+        "bytes": 67247,
+        "mtime_ns": 1789725916895750200,
+        "sha256": "1484419ddb567500803c3ad47998bed0bfa1e6ff3afc9bfcb5383c9ab8f35d3d"
+      },
+      {
+        "path": "project/addons/hh_benchmark/benchmark_native.gd.uid",
+        "bytes": 19,
+        "mtime_ns": 1789725921985152500,
+        "sha256": "4ec58ddfaa28ebb6aa958643a32afb338a684d90eea40003027d4bded73f285b"
+      },
+      {
+        "path": "project/addons/hh_benchmark/plugin.cfg",
+        "bytes": 189,
+        "mtime_ns": 1789725916867624600,
+        "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092"
+      },
+      {
+        "path": "project/addons/hh_studio/jcs_godot.gd",
+        "bytes": 10165,
+        "mtime_ns": 1789725916863259400,
+        "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5"
+      },
+      {
+        "path": "project/addons/hh_studio/jcs_godot.gd.uid",
+        "bytes": 20,
+        "mtime_ns": 1789725916863767700,
+        "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b"
+      },
+      {
+        "path": "project/addons/hh_studio/plugin.cfg",
+        "bytes": 165,
+        "mtime_ns": 1789725916859257300,
+        "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c"
+      },
+      {
+        "path": "project/addons/hh_studio/plugin.gd",
+        "bytes": 23043,
+        "mtime_ns": 1789725916860258900,
+        "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036"
+      },
+      {
+        "path": "project/addons/hh_studio/plugin.gd.uid",
+        "bytes": 20,
+        "mtime_ns": 1789725916861258200,
+        "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d"
+      },
+      {
+        "path": "project/addons/hh_studio/scene_commands.gd",
+        "bytes": 32174,
+        "mtime_ns": 1789725916861258200,
+        "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069"
+      },
+      {
+        "path": "project/addons/hh_studio/scene_commands.gd.uid",
+        "bytes": 19,
+        "mtime_ns": 1789725916862258100,
+        "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69"
+      },
+      {
+        "path": "project/benchmark/.gdignore",
+        "bytes": 53,
+        "mtime_ns": 1789725916868624800,
+        "sha256": "3d078ee3c08af2f64daca29255d23d366dc0a9bdbef8a872442d5642bfb84cf8"
+      },
+      {
+        "path": "project/benchmark/input/cost-00.ack",
+        "bytes": 31,
+        "mtime_ns": 1789725933599785300,
+        "sha256": "71ca51b2cf7a8a15aa9045e68330b0b119fd46aee5b4cc60a9c628532f952e39"
+      },
+      {
+        "path": "project/benchmark/input/cost-01.ack",
+        "bytes": 31,
+        "mtime_ns": 1789725936201653900,
+        "sha256": "71ca51b2cf7a8a15aa9045e68330b0b119fd46aee5b4cc60a9c628532f952e39"
+      },
+      {
+        "path": "project/benchmark/input/cost-02.ack",
+        "bytes": 31,
+        "mtime_ns": 1789725938772886300,
+        "sha256": "71ca51b2cf7a8a15aa9045e68330b0b119fd46aee5b4cc60a9c628532f952e39"
+      },
+      {
+        "path": "project/benchmark/input/cost-03.ack",
+        "bytes": 31,
+        "mtime_ns": 1789725941393256900,
+        "sha256": "71ca51b2cf7a8a15aa9045e68330b0b119fd46aee5b4cc60a9c628532f952e39"
+      },
+      {
+        "path": "project/benchmark/input.json",
+        "bytes": 387,
+        "mtime_ns": 1789725916867624600,
+        "sha256": "cbd71db1f1adc4a7ed35be1e235bcde4dbec99aa01ac2919b11d98d3991d8dfe"
+      },
+      {
+        "path": "project/benchmark/out/batch-00.json",
+        "bytes": 1752,
+        "mtime_ns": 1789725931566160500,
+        "sha256": "f285a8eaf8a366e3eff5e51d2788bc90e221130f910172573bcb54b7204e36e2"
+      },
+      {
+        "path": "project/benchmark/out/cost-00.json",
+        "bytes": 190,
+        "mtime_ns": 1789725933577072800,
+        "sha256": "7e5d71df845e5c39c0b74f4dcf56ff75222cffa20d4b3c451e26c664f200411a"
+      },
+      {
+        "path": "project/benchmark/out/cost-01.json",
+        "bytes": 193,
+        "mtime_ns": 1789725936192494700,
+        "sha256": "5f51696ca8640f8a49a2cee31eefbfaa23a15c8d8d4fb68cf7f1f1619dae6209"
+      },
+      {
+        "path": "project/benchmark/out/cost-02.json",
+        "bytes": 191,
+        "mtime_ns": 1789725938755679900,
+        "sha256": "b8ad2bf94e2f171e69621787f54bb0b98da859fd354f8b3e9bacfb735aa17f36"
+      },
+      {
+        "path": "project/benchmark/out/cost-03.json",
+        "bytes": 193,
+        "mtime_ns": 1789725941381140500,
+        "sha256": "5cc9cc3997890f5662c034aa75bebc6c18283a915e89ce94d012baf5635be1c9"
+      },
+      {
+        "path": "project/benchmark/out/index.json",
+        "bytes": 8162,
+        "mtime_ns": 1789725941400790500,
+        "sha256": "90150abaf4ee2065a6e00b0cdb0698649ec1ab9c020b55d4cdcc17f8f9d7438e"
+      },
+      {
+        "path": "project/benchmark/out/object-0000.json",
+        "bytes": 843163,
+        "mtime_ns": 1789725934174281700,
+        "sha256": "53f22cfec1d7bad485d938e6cd18966d921202a538739f94e0f4ecc873a95edd"
+      },
+      {
+        "path": "project/benchmark/out/object-0001.json",
+        "bytes": 16750,
+        "mtime_ns": 1789725936738347400,
+        "sha256": "55b025541f7be7ca4e2b496503aa285eaa3cab39ad40190e0ad0f4fa56901071"
+      },
+      {
+        "path": "project/benchmark/out/object-0002.json",
+        "bytes": 13700,
+        "mtime_ns": 1789725939360658900,
+        "sha256": "d6555cd7fad816e2d9ef0e902add23f119538440b087e130986725c64e422b91"
+      },
+      {
+        "path": "project/project.godot",
+        "bytes": 838,
+        "mtime_ns": 1789725928467046400,
+        "sha256": "819b521edff745f02f7c30e96ceffe21c70d8ef4fc32e95b96df37877e817ce1"
+      },
+      {
+        "path": "project/scenes/fixture.tscn",
+        "bytes": 295,
+        "mtime_ns": 1789725930387973800,
+        "sha256": "cea80b4159077136bea3c85a53586f871e8f8a40d547ef715826ea0922e642bf"
+      },
+      {
+        "path": "project/scripts/fixture_actor.gd",
+        "bytes": 50,
+        "mtime_ns": 1789725916865779300,
+        "sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd"
+      },
+      {
+        "path": "project/scripts/fixture_actor.gd.uid",
+        "bytes": 20,
+        "mtime_ns": 1789725916858258200,
+        "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142"
+      },
+      {
+        "path": "result.json",
+        "bytes": 2273,
+        "mtime_ns": 1789725943008210500,
+        "sha256": "d8ef669c8c9f94a45722032ee81cf62006516aa0e597ed4333492cf43dfe878a"
+      },
+      {
+        "path": "runtime-source-files.json",
+        "bytes": 7464,
+        "mtime_ns": 1789725922909653500,
+        "sha256": "aa322b311b7c7840ab431d6965f5e93396e5df55e3329a94d9c14ba0e7fabc74"
+      },
+      {
+        "path": "source/studio/blender-addon/ipc_client.py",
+        "bytes": 16349,
+        "mtime_ns": 1789725917012494900,
+        "sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9"
+      },
+      {
+        "path": "source/studio/contracts/perf-collector.schema.json",
+        "bytes": 30060,
+        "mtime_ns": 1789725917015012400,
+        "sha256": "394d1df03bdfd736ea3fe9f260e9d718d35f3820cde35d1c45ccab65fbc24834"
+      },
+      {
+        "path": "source/studio/godot-addon/addons/hh_studio/plugin.cfg",
+        "bytes": 165,
+        "mtime_ns": 1789725917017013000,
+        "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c"
+      },
+      {
+        "path": "source/studio/godot-addon/addons/hh_studio/plugin.gd",
+        "bytes": 23043,
+        "mtime_ns": 1789725917018012400,
+        "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036"
+      },
+      {
+        "path": "source/studio/godot-addon/addons/hh_studio/scene_commands.gd",
+        "bytes": 32174,
+        "mtime_ns": 1789725917019210700,
+        "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069"
+      },
+      {
+        "path": "source/studio/godot-addon/bundle_staging.py",
+        "bytes": 15005,
+        "mtime_ns": 1789725917021015200,
+        "sha256": "3d614edbec8e9a7f5ad3caf2b9694d7498df129de95683952268621f91d68e43"
+      },
+      {
+        "path": "source/studio/godot-addon/bundle_v2.py",
+        "bytes": 8475,
+        "mtime_ns": 1789725917022024000,
+        "sha256": "2c5cdc71cdaf80f58bb93ec791e84bab8bd02cd4d9bdbd93d635db13583de62a"
+      },
+      {
+        "path": "source/studio/godot-addon/cli_job.py",
+        "bytes": 12672,
+        "mtime_ns": 1789725917023079100,
+        "sha256": "5a0f37bc129bde409a2657054fb091d637d838e442d45a69e7adc1f1527d4c88"
+      },
+      {
+        "path": "source/studio/godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid",
+        "bytes": 20,
+        "mtime_ns": 1789725917026457400,
+        "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b"
+      },
+      {
+        "path": "source/studio/godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid",
+        "bytes": 20,
+        "mtime_ns": 1789725917027578900,
+        "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d"
+      },
+      {
+        "path": "source/studio/godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid",
+        "bytes": 19,
+        "mtime_ns": 1789725917028102600,
+        "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69"
+      },
+      {
+        "path": "source/studio/godot-addon/fixture_profile/project.godot",
+        "bytes": 282,
+        "mtime_ns": 1789725917029178000,
+        "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51"
+      },
+      {
+        "path": "source/studio/godot-addon/fixture_profile/scripts/fixture_actor.gd.uid",
+        "bytes": 20,
+        "mtime_ns": 1789725917030235500,
+        "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142"
+      },
+      {
+        "path": "source/studio/godot-addon/fixture_profile/source-pins.json",
+        "bytes": 1873,
+        "mtime_ns": 1789725917031330300,
+        "sha256": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2"
+      },
+      {
+        "path": "source/studio/godot-addon/fixture_profile.py",
+        "bytes": 6020,
+        "mtime_ns": 1789725917024064600,
+        "sha256": "25e1667dd930dcf0746b071fc29ea3460bc18d5fb9f3f83e806c1793028f21ae"
+      },
+      {
+        "path": "source/studio/host/blender/__init__.py",
+        "bytes": 69,
+        "mtime_ns": 1789725917032956100,
+        "sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90"
+      },
+      {
+        "path": "source/studio/host/blender/deadline.py",
+        "bytes": 1130,
+        "mtime_ns": 1789725917034024500,
+        "sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926"
+      },
+      {
+        "path": "source/studio/host/blender/export_job.py",
+        "bytes": 13605,
+        "mtime_ns": 1789725917035082300,
+        "sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe"
+      },
+      {
+        "path": "source/studio/host/blender/glb_preflight.py",
+        "bytes": 11815,
+        "mtime_ns": 1789725917035613200,
+        "sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62"
+      },
+      {
+        "path": "source/studio/host/blender/ui_host.py",
+        "bytes": 22464,
+        "mtime_ns": 1789725917036619900,
+        "sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35"
+      },
+      {
+        "path": "source/studio/host/core/journal.py",
+        "bytes": 29602,
+        "mtime_ns": 1789725917038624700,
+        "sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6"
+      },
+      {
+        "path": "source/studio/host/core/limits.py",
+        "bytes": 15813,
+        "mtime_ns": 1789725917039132700,
+        "sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f"
+      },
+      {
+        "path": "source/studio/host/core/private_store.py",
+        "bytes": 20476,
+        "mtime_ns": 1789725917040128300,
+        "sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476"
+      },
+      {
+        "path": "source/studio/host/core/redaction.py",
+        "bytes": 10038,
+        "mtime_ns": 1789725917042137100,
+        "sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f"
+      },
+      {
+        "path": "source/studio/host/core/safe_create.py",
+        "bytes": 13170,
+        "mtime_ns": 1789725917042137100,
+        "sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606"
+      },
+      {
+        "path": "source/studio/host/core/safe_open.py",
+        "bytes": 12093,
+        "mtime_ns": 1789725917043134000,
+        "sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535"
+      },
+      {
+        "path": "source/studio/host/core/transport.py",
+        "bytes": 47056,
+        "mtime_ns": 1789725917045160500,
+        "sha256": "1ec03356b1cb8c8987e1604bcb164aea6a9934dbe259451c19e12de36398aba0"
+      },
+      {
+        "path": "source/studio/host/replay/disk_journal_index.py",
+        "bytes": 13593,
+        "mtime_ns": 1789725917046169800,
+        "sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28"
+      },
+      {
+        "path": "source/studio/host/replay/perf.py",
+        "bytes": 19085,
+        "mtime_ns": 1789725917047171500,
+        "sha256": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7"
+      },
+      {
+        "path": "source/studio/host/replay/process_probe.py",
+        "bytes": 5485,
+        "mtime_ns": 1789725917048170600,
+        "sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500"
+      },
+      {
+        "path": "source/studio/host/replay/verified_journal.py",
+        "bytes": 9155,
+        "mtime_ns": 1789725917049393000,
+        "sha256": "129baa4d9e08c8a1d5acf2ea05c9c89a4fdddb53ca6f3baf2d61311ab98e62ab"
+      },
+      {
+        "path": "source/studio/pipeline/__init__.py",
+        "bytes": 79,
+        "mtime_ns": 1789725917050400300,
+        "sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68"
+      },
+      {
+        "path": "source/studio/pipeline/native_job.py",
+        "bytes": 12512,
+        "mtime_ns": 1789725917051686800,
+        "sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca"
+      },
+      {
+        "path": "source/studio/protocol/__init__.py",
+        "bytes": 881,
+        "mtime_ns": 1789725917052693600,
+        "sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f"
+      },
+      {
+        "path": "source/studio/protocol/_rfc8785/__init__.py",
+        "bytes": 505,
+        "mtime_ns": 1789725917052693600,
+        "sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b"
+      },
+      {
+        "path": "source/studio/protocol/_rfc8785/_impl.py",
+        "bytes": 7251,
+        "mtime_ns": 1789725917053692600,
+        "sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec"
+      },
+      {
+        "path": "source/studio/protocol/core.py",
+        "bytes": 19886,
+        "mtime_ns": 1789725917054699400,
+        "sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e"
+      },
+      {
+        "path": "source/studio/protocol/jcs_godot.gd",
+        "bytes": 10165,
+        "mtime_ns": 1789725917055694500,
+        "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_assembly.py",
+        "bytes": 48182,
+        "mtime_ns": 1789725917057694400,
+        "sha256": "7573ca96986eb1c10298b8998b3dbaa3326fd80da2c2696150aeb22165d2911d"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_commands.py",
+        "bytes": 19779,
+        "mtime_ns": 1789725917057694400,
+        "sha256": "707b6f9a9291214d9ee848d77f1e4a3dc2267de5f2aeb5e48fa4365866a842c9"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_job.py",
+        "bytes": 24991,
+        "mtime_ns": 1789725917058695700,
+        "sha256": "be424a6f37ae573ac4bf40954b31017025daee2147699c80b05f9a0ab70e1611"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_native.gd",
+        "bytes": 51618,
+        "mtime_ns": 1789725917059696500,
+        "sha256": "52fbd9af5c6191ada5baf1d7195a75685ed5e27a95f4d244af8b4d679f8c00f2"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_plugin.cfg",
+        "bytes": 189,
+        "mtime_ns": 1789725917060758400,
+        "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_profile.py",
+        "bytes": 19625,
+        "mtime_ns": 1789725917061760600,
+        "sha256": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_readiness.py",
+        "bytes": 6746,
+        "mtime_ns": 1789725917062762000,
+        "sha256": "842db6244d93384932929544045654f089d67f6f304624b7348b7d5c4583ab68"
+      },
+      {
+        "path": "source/studio/tests/replay/benchmark_transport.py",
+        "bytes": 4451,
+        "mtime_ns": 1789725917063762300,
+        "sha256": "87875809baa4845fcffba8e2c7d82f7a5bce833099c89d4852f2aab931c34df0"
+      },
+      {
+        "path": "source/studio/tests/replay/campaign_task.ps1",
+        "bytes": 18607,
+        "mtime_ns": 1789725917064762800,
+        "sha256": "405e2abfa39332b1313871763184fdda0755ff998ec83310e67e10cebfe2ebb9"
+      },
+      {
+        "path": "source/studio/tests/replay/run_benchmark_campaign.py",
+        "bytes": 53592,
+        "mtime_ns": 1789725917065760500,
+        "sha256": "bb43ecc04c2de4872177a440eb071d533efdaa9e8194f62b4e0907bad8d4b252"
+      },
+      {
+        "path": "source/studio/tests/replay/run_campaign_task.py",
+        "bytes": 8033,
+        "mtime_ns": 1789725917066759900,
+        "sha256": "f5cb71fa96b8fd2f935ac933dcd5190cef2b3b6821f031bfe72becb2d360a6fd"
+      },
+      {
+        "path": "source/studio/tests/replay/run_native_benchmark.py",
+        "bytes": 26986,
+        "mtime_ns": 1789725917068469200,
+        "sha256": "e6b0f8e9711ac881cfa65b4537232c685ff577af0a13778a51cc54999b1c1fc7"
+      },
+      {
+        "path": "source/studio/toolchain.lock.json",
+        "bytes": 3026,
+        "mtime_ns": 1789725917068469200,
+        "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9"
+      },
+      {
+        "path": "source/zdoc/reviews/20260918-gt06-s84-compact-probe/object_probe.gd",
+        "bytes": 13962,
+        "mtime_ns": 1789725917071987400,
+        "sha256": "20ed7e62658c247265a8165024682efac78ae9c475a810bb6368e8fe9c75dd40"
+      },
+      {
+        "path": "source/zdoc/reviews/20260918-gt06-s84-probe-cost/cost_growth.gd",
+        "bytes": 2365,
+        "mtime_ns": 1789725917070985400,
+        "sha256": "728a474655e9c99c7c21a96a7dff9922c4e696bebadbc628317fbca583db1d9c"
+      },
+      {
+        "path": "source/zdoc/reviews/20260918-gt06-s84-probe-cost/measure_cost.py",
+        "bytes": 9424,
+        "mtime_ns": 1789725917069978600,
+        "sha256": "30ae92b366f345a4f40f2653f67012af983ab405ee20b5540eed15db50b5a9c8"
+      }
+    ],
+    "compact-growth/outer": [
+      {
+        "path": "capture.json",
+        "bytes": 511,
+        "mtime_ns": 1789725943053701800,
+        "sha256": "e38c9bf51e7058dbaab83665c84020430c9ec9766e630d6d0e87e58c25df1c22"
+      },
+      {
+        "path": "cost-host.json",
+        "bytes": 87,
+        "mtime_ns": 1789725943033884100,
+        "sha256": "acfc26f9428f46f62b51bc4be22f01e24643768e03f3ddb4bac96182dc257995"
+      },
+      {
+        "path": "cost-stderr.txt",
+        "bytes": 0,
+        "mtime_ns": 1789725916228946100,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "cost-stdout.txt",
+        "bytes": 0,
+        "mtime_ns": 1789725916228946100,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "invocation.json",
+        "bytes": 284,
+        "mtime_ns": 1789725916227934500,
+        "sha256": "2de943822389b85d2f3d44ec6c2b273d6191e17048f1094d528429093449d78b"
+      }
+    ]
+  }
+}

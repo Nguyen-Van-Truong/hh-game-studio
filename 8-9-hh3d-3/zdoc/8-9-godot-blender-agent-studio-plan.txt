@@ -60,7 +60,7 @@ GT06_CURRENT_SOURCE_CLOSURE=e010180a1bf85b7f565e9aa39734f8551caf170a85b36c50598b
 GT06_SOURCE_CHECKPOINT=b3862a10
 GT06_BENCHMARK_CAMPAIGN=gt06-s81-campaign-01
 GT06_BENCHMARK_STATUS=S81_LAUNCH1_FAILED_RETAINED_COUNTER_GROWTH_20260918T084856Z
-GT06_ACTIVE_DIAGNOSTIC=S84_COMPACT_SEQUENCE_PREFLIGHT_VERIFIED_PENDING_LAUNCH
+GT06_ACTIVE_DIAGNOSTIC=S84_COMPACT_SEQUENCE_RUNNING_OBSERVED_20260918T101003Z
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
 
 TIẾN ĐỘ HIỆN HÀNH — S84, ngày 18-09-2026
@@ -108,15 +108,21 @@ Compact có7test, native controlledTree/TreeItem thêm→xóa verified, ownercou
 0→1→0, reachable27402→27417→27402; residualObjectDB vẫn chưa giải thích.
 Các số là diagnostic intervention một lượt, không thay benchmark phân phối.
 
-Chuẩn bị diagnostic mới gt06-s84-attribution-01 với collector compact, giữ
+Diagnostic mới gt06-s84-attribution-01 đã dispatch10:09:35Z, supervisor6444,
+checkpoint02823d8f. Quan sát10:10:03Z: host11904/editor44960 cùngrun,
+batch0commands/stderrtrống; không suy trạng thái hiện tại từ launch. Dùng collector compact, giữ
 đúng HTTP→native→jointACK và gate/source/profile. Preflight native54548 exit0,
 wrapper0/Jobzero/closed, stderr trống. Helper20ed7e62…; runnerdacfc917…;
-effectiveplugin08afdefc…. Chỉ chạy sau checkpoint; firstACK4 dự kiến5–10phút,
+effectiveplugin08afdefc…. Kiểm live trước khi suy RUNNING. FirstACK4 dự kiến5–10phút,
 35batch khoảng45–75phút nếu không lỗi; hardlimit7410s, không phải ETAtoànplan.
 Census vẫn có overhead và chỉ bao reachableobjects; fullsequence này không
 đủ điều kiện làm sample nghiệm thu. Original+2ObjectDB và hostgap còn mở.
 Artifacts: reviews/20260918-gt06-s84-probe-cost/, -s84-cost-evidence/,
 -s84-compact-probe/, -s84-attribution/ và -s84-attribution-failure/.
+Cost packet216exactcopies/236files, manifest
+a49799fbc03a90f6ae19876cc42e1c71cb38e3d0fcce5bc7d00b16bd7aa701b7.
+Offline51runtime=204frozencopies,12executedhelpers verified; skipped checks
+của collector original được bổ sung sau, không nói chúng đã chạy trong run.
 Giữ failedraw; không retrymù, đổi outputID hay giảPASS từ nguyên nhân giả định.
 Ba worker S82 và ba lane S83 đã xong. Chuẩn bị S83 nằm ở:
 - reviews/20260918-gt06-s83-analyzer/: đọc census/owner diff và terminal facts;
@@ -151,7 +157,7 @@ PASS/TICK=yes →GT06 ACCEPTED. Sau đó GT07 recovery/concurrency, GT08 CI/
 export/Android thật, GT09 conformance, GT10 package/install/upgrade/rollback.
 HH World là plan riêng sau GT10. Chưa có ETA toàn plan đáng tin cậy. Lịch
 cũ ti-p-t-c-hh3d-tools-qua-m đã không tồn tại (tool xác nhận); đã tạo lại
-một heartbeat ti-p-t-c-hh3d-tools mỗi15phút cho task này. Không hứa xong trước sáng.
+một heartbeat ti-p-t-c-hh3d-tools mỗi10phút cho task này. Không hứa xong trước sáng.
 
 Đã rút gọn lịch sử hiện hành; nguyên văn S82 tại
 reviews/20260918-plan-history-s82/tools-plan-s82.txt, AUTHORITY=0,

@@ -1,0 +1,36 @@
+{
+  "observed_utc": "2026-09-18T10:10:03.8707143Z",
+  "processes": [
+    {
+      "ProcessId": 6444,
+      "ParentProcessId": 7188,
+      "CreationDate": "2026-09-18T17:09:35.422173+07:00",
+      "CommandLine": "\"C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\pythonw.exe\" -B D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260918-gt06-s84-attribution\\diagnose_sequence.py --supervisor"
+    },
+    {
+      "ProcessId": 25480,
+      "ParentProcessId": 6444,
+      "CreationDate": "2026-09-18T17:09:36.579799+07:00",
+      "CommandLine": "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe -B -c \"import json,subprocess,sys\nline=sys.stdin.buffer.readline(4097)\nif len(line)>4096 or not line.endswith(b'\\n'):sys.exit(125)\np=subprocess.Popen(sys.argv[2:],stdin=subprocess.PIPE)\nwith open(sys.argv[1]+'-start.json','x',encoding='utf-8') as f:json.dump({'pid':p.pid},f)\np.stdin.write(line);p.stdin.close();line=b''\ncode=p.wait()\nwith open(sys.argv[1]+'-exit.json','x',encoding='utf-8') as f:json.dump({'pid':p.pid,'exit_code':code},f)\nsys.exit(code)\n\" D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s84-attribution-01\\host-owner\\process C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe -B D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260918-gt06-s84-attribution\\diagnose_sequence.py --owned-child"
+    },
+    {
+      "ProcessId": 11904,
+      "ParentProcessId": 25480,
+      "CreationDate": "2026-09-18T17:09:36.725652+07:00",
+      "CommandLine": "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe -B D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\zdoc\\reviews\\20260918-gt06-s84-attribution\\diagnose_sequence.py --owned-child"
+    },
+    {
+      "ProcessId": 33568,
+      "ParentProcessId": 11904,
+      "CreationDate": "2026-09-18T17:09:46.371938+07:00",
+      "CommandLine": "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe -B -c \"import json,subprocess,sys\nline=sys.stdin.buffer.readline(4097)\nif len(line)>4096 or not line.endswith(b'\\n'):sys.exit(125)\np=subprocess.Popen(sys.argv[2:],stdin=subprocess.PIPE)\nwith open(sys.argv[1]+'-start.json','x',encoding='utf-8') as f:json.dump({'pid':p.pid},f)\np.stdin.write(line);p.stdin.close();line=b''\ncode=p.wait()\nwith open(sys.argv[1]+'-exit.json','x',encoding='utf-8') as f:json.dump({'pid':p.pid,'exit_code':code},f)\nsys.exit(code)\n\" D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s84-attribution-01\\editor-host\\process D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\tooling\\godot-4.7.2-stable\\Godot_v4.7.2-stable_win64.exe --editor --path D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s84-attribution-01\\project res://scenes/fixture.tscn -- --hh-benchmark-mode=full"
+    },
+    {
+      "ProcessId": 44960,
+      "ParentProcessId": 33568,
+      "CreationDate": "2026-09-18T17:09:46.507911+07:00",
+      "CommandLine": "D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\tooling\\godot-4.7.2-stable\\Godot_v4.7.2-stable_win64.exe --editor --path D:\\dataDiskD\\intellji\\hoanhaosocial\\hoanhaonew-20-6-2025\\hh-game-studio\\8-9-hh3d-3\\studio\\.local\\reviews\\gt06-s84-attribution-01\\project res://scenes/fixture.tscn -- --hh-benchmark-mode=full"
+    }
+  ],
+  "formal_acceptance": false
+}

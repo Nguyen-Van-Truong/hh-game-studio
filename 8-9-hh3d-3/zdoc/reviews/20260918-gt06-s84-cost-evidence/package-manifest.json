@@ -1,0 +1,1179 @@
+{
+  "schema": "S84_COST_EVIDENCE_PACKET_1",
+  "created_utc": "2026-09-18T10:11:12.793033+00:00",
+  "authority": 0,
+  "formal_acceptance": false,
+  "hash_domain": "Exact bytes; every packet file except manifest and sidecar",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 8,
+      "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
+    },
+    {
+      "path": "collection.json",
+      "bytes": 274,
+      "sha256": "560b0e8dca538460c9d8f0bb003d73d4aeea869e03e92247c345eaec607b3e7f"
+    },
+    {
+      "path": "copy-map.json",
+      "bytes": 109482,
+      "sha256": "e9dfc28ea4ccb4825a001f3778df1d14b24ca4b39d38c93bf123c3edf2fc067b"
+    },
+    {
+      "path": "current-context/studio/build/bootstrap/run_fixture.py",
+      "bytes": 34632,
+      "sha256": "ea522450acc46f90be5e2a7b9257e73ce8b619948105b2c9073aac1f881c7328"
+    },
+    {
+      "path": "current-context/zdoc/reviews/20260918-gt06-s82-attribution/object_probe.gd",
+      "bytes": 10893,
+      "sha256": "6221092c70591d89b42aa8c00298198299a716edc7c25b8b4813db5d771fe556"
+    },
+    {
+      "path": "current-context/zdoc/reviews/20260918-gt06-s84-compact-probe/object_probe.gd",
+      "bytes": 13962,
+      "sha256": "20ed7e62658c247265a8165024682efac78ae9c475a810bb6368e8fe9c75dd40"
+    },
+    {
+      "path": "current-context/zdoc/reviews/20260918-gt06-s84-probe-cost/cost_growth.gd",
+      "bytes": 2365,
+      "sha256": "728a474655e9c99c7c21a96a7dff9922c4e696bebadbc628317fbca583db1d9c"
+    },
+    {
+      "path": "current-context/zdoc/reviews/20260918-gt06-s84-probe-cost/cost_phases.gd",
+      "bytes": 1777,
+      "sha256": "e3d5059bf485a9ac07a2f59c11a57652dbab4a8a98a9e82638e3dd6e189bef68"
+    },
+    {
+      "path": "current-context/zdoc/reviews/20260918-gt06-s84-probe-cost/measure_cost.py",
+      "bytes": 9424,
+      "sha256": "30ae92b366f345a4f40f2653f67012af983ab405ee20b5540eed15db50b5a9c8"
+    },
+    {
+      "path": "current-helper-comparison.json",
+      "bytes": 6031,
+      "sha256": "5553f9d6f72957c197b85f2be2d70f33f654a8e22180568662d567dffe3b5983"
+    },
+    {
+      "path": "derived-facts.json",
+      "bytes": 106875,
+      "sha256": "c0380ef5ced03100bdaa1aff7cc6472c97eae92be8730a6982ba6987f6182ec8"
+    },
+    {
+      "path": "inventory.py",
+      "bytes": 2720,
+      "sha256": "0b494486d3ed1c31321d4aac934b18d473b2c95683011ba84d52814a8f90e35b"
+    },
+    {
+      "path": "offline-source-check.json",
+      "bytes": 38393,
+      "sha256": "b3639c848589cdd658845c7f005a26612e692aeade885f9715c42a2161d2c6e4"
+    },
+    {
+      "path": "offline_source_check.py",
+      "bytes": 3760,
+      "sha256": "1774f8e02ebb2d31ef95ac62663abde71820975c9c23071c6b7ba2f07f6dbeac"
+    },
+    {
+      "path": "preserve.py",
+      "bytes": 15884,
+      "sha256": "af5599836e314372e99feaee5fdf4a8a30f41738b55616dfa21e25fcb8c076f3"
+    },
+    {
+      "path": "raw/compact/outer/capture.json",
+      "bytes": 503,
+      "sha256": "ea7dc034fb615e9db46a50f32b7cf9e3b4f1c2bc6e496e991d9d73f71184ed9d"
+    },
+    {
+      "path": "raw/compact/outer/cost-host.json",
+      "bytes": 87,
+      "sha256": "a401bcc743ccbd4a76ea399161779c05550010685fcdc48c2158a3907cebc78f"
+    },
+    {
+      "path": "raw/compact/outer/cost-stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/compact/outer/cost-stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/compact/outer/invocation.json",
+      "bytes": 277,
+      "sha256": "017c70b15b6dc0b448894c9d9cc9f7cd6a286e4c7e8a5cfd9b44f5e83ec4d033"
+    },
+    {
+      "path": "raw/compact/raw/cleanup.json",
+      "bytes": 90,
+      "sha256": "0fceafb402894c2f27053c510e5a4692ab74da5b45d745b7453ed823e5fd4426"
+    },
+    {
+      "path": "raw/compact/raw/editor-host/capture.json",
+      "bytes": 10327,
+      "sha256": "ce4ecfe0ebb289247d7c94ed47976d84f76278b51602218d2d57fe63581a491e"
+    },
+    {
+      "path": "raw/compact/raw/editor-host/cleanup-001.json",
+      "bytes": 528,
+      "sha256": "379d7a25b4032e6cb243e100aa8a5ebcd3d82a94e45b71e0f18e47fe7e569534"
+    },
+    {
+      "path": "raw/compact/raw/editor-host/invocation.json",
+      "bytes": 8903,
+      "sha256": "b2a5e45e046fde1735707190ca6d4325cc61aec8da1c0ab9ed12626abd7e153e"
+    },
+    {
+      "path": "raw/compact/raw/editor-host/process-exit.json",
+      "bytes": 30,
+      "sha256": "6429528679eb49fc9d870340b60a68c9284eba8251accd14cba85251245377cd"
+    },
+    {
+      "path": "raw/compact/raw/editor-host/process-start.json",
+      "bytes": 14,
+      "sha256": "5115da07ebf706b6f8a1455081faa4bf757c3e8fe717448f8b3c11cc84cb3d7f"
+    },
+    {
+      "path": "raw/compact/raw/editor-host/stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/compact/raw/editor-host/stdout.txt",
+      "bytes": 4486,
+      "sha256": "2836df645f4f1514717b4453db8604893a056d612dd0c1c7b6b2c5e59f8b861a"
+    },
+    {
+      "path": "raw/compact/raw/import-host/capture.json",
+      "bytes": 1341,
+      "sha256": "97d7da013922f84cdc0493b4e1c1aaf66dec4d5b08e81abbdc2ba5841f54fdf2"
+    },
+    {
+      "path": "raw/compact/raw/import-host/invocation.json",
+      "bytes": 6173,
+      "sha256": "9fe435daac8077415df246c09179fd21cd2e254decdd03ce106e41a681d15793"
+    },
+    {
+      "path": "raw/compact/raw/import-host/process-exit.json",
+      "bytes": 30,
+      "sha256": "bad34828a8f0c497c98f2d75fecef0fc7d23e3ba3085417b89f21ce910ef1335"
+    },
+    {
+      "path": "raw/compact/raw/import-host/process-start.json",
+      "bytes": 14,
+      "sha256": "873150c81253bf49b471ee9734e66443be05dc1e871e5c5dcfe504097368c671"
+    },
+    {
+      "path": "raw/compact/raw/import-host/stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/compact/raw/import-host/stdout.txt",
+      "bytes": 1492,
+      "sha256": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003"
+    },
+    {
+      "path": "raw/compact/raw/invocation.json",
+      "bytes": 7515,
+      "sha256": "e347f40f8f8abb095e3bacf1dc502435b9b0320d5b45f1353ebaecd6b96f56ac"
+    },
+    {
+      "path": "raw/compact/raw/observation-00.json",
+      "bytes": 463,
+      "sha256": "acf91210ba298e46690d5557747eb3f9ec02e2a4c61a88d9e6e70abe59e5dbca"
+    },
+    {
+      "path": "raw/compact/raw/observation-01.json",
+      "bytes": 465,
+      "sha256": "390fc00051086596ba1cc86abfd8456c52651be30ab05d3d284e57f33b54304e"
+    },
+    {
+      "path": "raw/compact/raw/observation-02.json",
+      "bytes": 465,
+      "sha256": "1a7b41e8dbfa1ee72d848361576083d460fecc63d02ff3a7ecaf4f561d350aa1"
+    },
+    {
+      "path": "raw/compact/raw/project/addons/hh_benchmark/benchmark_native.gd",
+      "bytes": 66659,
+      "sha256": "956510b443c5c6087f3a84078377ce2e8f9785ed32e8b6244db24208e353ed52"
+    },
+    {
+      "path": "raw/compact/raw/project/addons/hh_benchmark/benchmark_native.gd.uid",
+      "bytes": 20,
+      "sha256": "c3f1533922b084d0f0583ac7d6a2bde6d74c50aa787d2ed498099e4fe0c35701"
+    },
+    {
+      "path": "raw/compact/raw/project/addons/hh_benchmark/plugin.cfg",
+      "bytes": 189,
+      "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092"
+    },
+    {
+      "path": "raw/compact/raw/project/addons/hh_studio/jcs_godot.gd",
+      "bytes": 10165,
+      "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5"
+    },
+    {
+      "path": "raw/compact/raw/project/addons/hh_studio/jcs_godot.gd.uid",
+      "bytes": 20,
+      "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b"
+    },
+    {
+      "path": "raw/compact/raw/project/addons/hh_studio/plugin.cfg",
+      "bytes": 165,
+      "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c"
+    },
+    {
+      "path": "raw/compact/raw/project/addons/hh_studio/plugin.gd",
+      "bytes": 23043,
+      "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036"
+    },
+    {
+      "path": "raw/compact/raw/project/addons/hh_studio/plugin.gd.uid",
+      "bytes": 20,
+      "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d"
+    },
+    {
+      "path": "raw/compact/raw/project/addons/hh_studio/scene_commands.gd",
+      "bytes": 32174,
+      "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069"
+    },
+    {
+      "path": "raw/compact/raw/project/addons/hh_studio/scene_commands.gd.uid",
+      "bytes": 19,
+      "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69"
+    },
+    {
+      "path": "raw/compact/raw/project/benchmark/.gdignore",
+      "bytes": 53,
+      "sha256": "3d078ee3c08af2f64daca29255d23d366dc0a9bdbef8a872442d5642bfb84cf8"
+    },
+    {
+      "path": "raw/compact/raw/project/benchmark/input/cost-00.ack",
+      "bytes": 24,
+      "sha256": "ba56171c2fc6032c19f5c461dcfd5c723dec12f228a0fb6b49a3f351d7428c72"
+    },
+    {
+      "path": "raw/compact/raw/project/benchmark/input/cost-01.ack",
+      "bytes": 24,
+      "sha256": "ba56171c2fc6032c19f5c461dcfd5c723dec12f228a0fb6b49a3f351d7428c72"
+    },
+    {
+      "path": "raw/compact/raw/project/benchmark/input/cost-02.ack",
+      "bytes": 24,
+      "sha256": "ba56171c2fc6032c19f5c461dcfd5c723dec12f228a0fb6b49a3f351d7428c72"
+    },
+    {
+      "path": "raw/compact/raw/project/benchmark/input.json",
+      "bytes": 380,
+      "sha256": "b174554d139717a0381fb9bb3a1c6fb032d56f0ff92d0672bc2383c9e729800f"
+    },
+    {
+      "path": "raw/compact/raw/project/benchmark/out/batch-00.json",
+      "bytes": 1745,
+      "sha256": "e2a35b6c750d6476cbec60136e822a9c9e8f24f920ff894c28925f49c226efd8"
+    },
+    {
+      "path": "raw/compact/raw/project/benchmark/out/cost-00.json",
+      "bytes": 184,
+      "sha256": "1ac3356a11a5edf16c0da901bbfd8fa34b0c6a395c88a4094b4fd28d2fdecb8e"
+    },
+    {
+      "path": "raw/compact/raw/project/benchmark/out/cost-01.json",
+      "bytes": 186,
+      "sha256": "85814d11237c0af8aee067f479159626bc310411b3b22188c9e689a0df3fb5c7"
+    },
+    {
+      "path": "raw/compact/raw/project/benchmark/out/cost-02.json",
+      "bytes": 186,
+      "sha256": "1e2e1517725f490a417eb4a546b8312bb445e70d1e1b02685095ec3bf219ec79"
+    },
+    {
+      "path": "raw/compact/raw/project/benchmark/out/index.json",
+      "bytes": 8148,
+      "sha256": "d4377a250dd8663d350b07af35c99d9ac84082318dc0c5488271f13a4e746a57"
+    },
+    {
+      "path": "raw/compact/raw/project/benchmark/out/object-0000.json",
+      "bytes": 843157,
+      "sha256": "108e9fa1b66daf0550befa86b70eaae0732ec2a4d91c0ca444c6ecf6b895cfa2"
+    },
+    {
+      "path": "raw/compact/raw/project/project.godot",
+      "bytes": 838,
+      "sha256": "819b521edff745f02f7c30e96ceffe21c70d8ef4fc32e95b96df37877e817ce1"
+    },
+    {
+      "path": "raw/compact/raw/project/scenes/fixture.tscn",
+      "bytes": 295,
+      "sha256": "cde5ea6c9f07390d21d28c08718e0074580732e341655671cecac454ceb2e1ce"
+    },
+    {
+      "path": "raw/compact/raw/project/scripts/fixture_actor.gd",
+      "bytes": 50,
+      "sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd"
+    },
+    {
+      "path": "raw/compact/raw/project/scripts/fixture_actor.gd.uid",
+      "bytes": 20,
+      "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142"
+    },
+    {
+      "path": "raw/compact/raw/result.json",
+      "bytes": 1783,
+      "sha256": "c5af6c0b757719d7bd3388239d607b72896eadbb51d0139776c316d98aaa9254"
+    },
+    {
+      "path": "raw/compact/raw/runtime-source-files.json",
+      "bytes": 7359,
+      "sha256": "90a4467176065e64dbb0fedd4d642ebb58da10bc8e447eb336f5813d16412d47"
+    },
+    {
+      "path": "raw/compact/raw/source/zdoc/reviews/20260918-gt06-s84-compact-probe/object_probe.gd",
+      "bytes": 13962,
+      "sha256": "20ed7e62658c247265a8165024682efac78ae9c475a810bb6368e8fe9c75dd40"
+    },
+    {
+      "path": "raw/compact/raw/source/zdoc/reviews/20260918-gt06-s84-probe-cost/cost_phases.gd",
+      "bytes": 1777,
+      "sha256": "e3d5059bf485a9ac07a2f59c11a57652dbab4a8a98a9e82638e3dd6e189bef68"
+    },
+    {
+      "path": "raw/compact/raw/source/zdoc/reviews/20260918-gt06-s84-probe-cost/measure_cost.py",
+      "bytes": 9261,
+      "sha256": "835bb732dcefb697b2847238c250068c98a326ecde9ef888d7e4e7dfc810f69f"
+    },
+    {
+      "path": "raw/compact-growth/outer/capture.json",
+      "bytes": 511,
+      "sha256": "e38c9bf51e7058dbaab83665c84020430c9ec9766e630d6d0e87e58c25df1c22"
+    },
+    {
+      "path": "raw/compact-growth/outer/cost-host.json",
+      "bytes": 87,
+      "sha256": "acfc26f9428f46f62b51bc4be22f01e24643768e03f3ddb4bac96182dc257995"
+    },
+    {
+      "path": "raw/compact-growth/outer/cost-stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/compact-growth/outer/cost-stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/compact-growth/outer/invocation.json",
+      "bytes": 284,
+      "sha256": "2de943822389b85d2f3d44ec6c2b273d6191e17048f1094d528429093449d78b"
+    },
+    {
+      "path": "raw/compact-growth/raw/cleanup.json",
+      "bytes": 90,
+      "sha256": "0fceafb402894c2f27053c510e5a4692ab74da5b45d745b7453ed823e5fd4426"
+    },
+    {
+      "path": "raw/compact-growth/raw/editor-host/capture.json",
+      "bytes": 10434,
+      "sha256": "507f4d20cb5251b4879e1a4b75b724981420b2d4103b75bb50997ed1b3136490"
+    },
+    {
+      "path": "raw/compact-growth/raw/editor-host/cleanup-001.json",
+      "bytes": 528,
+      "sha256": "379d7a25b4032e6cb243e100aa8a5ebcd3d82a94e45b71e0f18e47fe7e569534"
+    },
+    {
+      "path": "raw/compact-growth/raw/editor-host/invocation.json",
+      "bytes": 9022,
+      "sha256": "aef8f3db0ebeeafea325d93ea561eea1e754994a26bddb6ca0d99997327941e5"
+    },
+    {
+      "path": "raw/compact-growth/raw/editor-host/process-exit.json",
+      "bytes": 30,
+      "sha256": "6b28f2201e251ace2cc5abd6677fa966e0b2fd6cdc15bc8122ad1b83aa3a1a6d"
+    },
+    {
+      "path": "raw/compact-growth/raw/editor-host/process-start.json",
+      "bytes": 14,
+      "sha256": "a26847423e1f9ee63b77e7371f0fc111db09d31efd937337be70497e80337e8f"
+    },
+    {
+      "path": "raw/compact-growth/raw/editor-host/stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/compact-growth/raw/editor-host/stdout.txt",
+      "bytes": 5671,
+      "sha256": "e7c5319dec8bb91da3e52085b2830f228e3cc43612a0b53df4876f34ef0d0556"
+    },
+    {
+      "path": "raw/compact-growth/raw/import-host/capture.json",
+      "bytes": 1340,
+      "sha256": "c27222ea3727af868fffa2c9c5e355cfdbec083cfd7d221e5f0f64922dc01e69"
+    },
+    {
+      "path": "raw/compact-growth/raw/import-host/invocation.json",
+      "bytes": 6187,
+      "sha256": "d4e58945e5ce28fea87a1d3cd19315dfa55e6fa0e0fa45c0c60925f7fcaa81fe"
+    },
+    {
+      "path": "raw/compact-growth/raw/import-host/process-exit.json",
+      "bytes": 30,
+      "sha256": "9901c83f613f7f71129b9eee9eb495382def9d8103aeaebc91c9885d12f087a8"
+    },
+    {
+      "path": "raw/compact-growth/raw/import-host/process-start.json",
+      "bytes": 14,
+      "sha256": "6f08cf9d1bd9552d87fae138fef3413eeeda91fa9d891b86df75152047f45342"
+    },
+    {
+      "path": "raw/compact-growth/raw/import-host/stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/compact-growth/raw/import-host/stdout.txt",
+      "bytes": 1492,
+      "sha256": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003"
+    },
+    {
+      "path": "raw/compact-growth/raw/invocation.json",
+      "bytes": 7529,
+      "sha256": "85492d335420386930becb2da4e2677957ba6da7a9c1d10a6f843df7b70d8a25"
+    },
+    {
+      "path": "raw/compact-growth/raw/observation-00.json",
+      "bytes": 469,
+      "sha256": "f7ddfddeaf184bffe4d6adf3579382a445191771cab434972ad373dfec6b4f8e"
+    },
+    {
+      "path": "raw/compact-growth/raw/observation-01.json",
+      "bytes": 472,
+      "sha256": "4b4977ae60cd22106331a2353883510b62142d8aaee0b2c096df9629f8525989"
+    },
+    {
+      "path": "raw/compact-growth/raw/observation-02.json",
+      "bytes": 470,
+      "sha256": "49f7a9adb53f4bfb68af67156abd69e80702e626e527604914c07b6bae31e2fd"
+    },
+    {
+      "path": "raw/compact-growth/raw/observation-03.json",
+      "bytes": 472,
+      "sha256": "52bd6b083a488d92ffbe3a1b923081e61b654905030d3dfec1d82eeaf79f71e1"
+    },
+    {
+      "path": "raw/compact-growth/raw/project/addons/hh_benchmark/benchmark_native.gd",
+      "bytes": 67247,
+      "sha256": "1484419ddb567500803c3ad47998bed0bfa1e6ff3afc9bfcb5383c9ab8f35d3d"
+    },
+    {
+      "path": "raw/compact-growth/raw/project/addons/hh_benchmark/benchmark_native.gd.uid",
+      "bytes": 19,
+      "sha256": "4ec58ddfaa28ebb6aa958643a32afb338a684d90eea40003027d4bded73f285b"
+    },
+    {
+      "path": "raw/compact-growth/raw/project/addons/hh_benchmark/plugin.cfg",
+      "bytes": 189,
+      "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092"
+    },
+    {
+      "path": "raw/compact-growth/raw/project/addons/hh_studio/jcs_godot.gd",
+      "bytes": 10165,
+      "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5"
+    },
+    {
+      "path": "raw/compact-growth/raw/project/addons/hh_studio/jcs_godot.gd.uid",
+      "bytes": 20,
+      "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b"
+    },
+    {
+      "path": "raw/compact-growth/raw/project/addons/hh_studio/plugin.cfg",
+      "bytes": 165,
+      "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c"
+    },
+    {
+      "path": "raw/compact-growth/raw/project/addons/hh_studio/plugin.gd",
+      "bytes": 23043,
+      "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036"
+    },
+    {
+      "path": "raw/compact-growth/raw/project/addons/hh_studio/plugin.gd.uid",
+      "bytes": 20,
+      "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d"
+    },
+    {
+      "path": "raw/compact-growth/raw/project/addons/hh_studio/scene_commands.gd",
+      "bytes": 32174,
+      "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069"
+    },
+    {
+      "path": "raw/compact-growth/raw/project/addons/hh_studio/scene_commands.gd.uid",
+      "bytes": 19,
+      "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69"
+    },
+    {
+      "path": "raw/compact-growth/raw/project/benchmark/.gdignore",
+      "bytes": 53,
+      "sha256": "3d078ee3c08af2f64daca29255d23d366dc0a9bdbef8a872442d5642bfb84cf8"
+    },
+    {
+      "path": "raw/compact-growth/raw/project/benchmark/input/cost-00.ack",
+      "bytes": 31,
+      "sha256": "71ca51b2cf7a8a15aa9045e68330b0b119fd46aee5b4cc60a9c628532f952e39"
+    },
+    {
+      "path": "raw/compact-growth/raw/project/benchmark/input/cost-01.ack",
+      "bytes": 31,
+      "sha256": "71ca51b2cf7a8a15aa9045e68330b0b119fd46aee5b4cc60a9c628532f952e39"
+    },
+    {
+      "path": "raw/compact-growth/raw/project/benchmark/input/cost-02.ack",
+      "bytes": 31,
+      "sha256": "71ca51b2cf7a8a15aa9045e68330b0b119fd46aee5b4cc60a9c628532f952e39"
+    },
+    {
+      "path": "raw/compact-growth/raw/project/benchmark/input/cost-03.ack",
+      "bytes": 31,
+      "sha256": "71ca51b2cf7a8a15aa9045e68330b0b119fd46aee5b4cc60a9c628532f952e39"
+    },
+    {
+      "path": "raw/compact-growth/raw/project/benchmark/input.json",
+      "bytes": 387,
+      "sha256": "cbd71db1f1adc4a7ed35be1e235bcde4dbec99aa01ac2919b11d98d3991d8dfe"
+    },
+    {
+      "path": "raw/compact-growth/raw/project/benchmark/out/batch-00.json",
+      "bytes": 1752,
+      "sha256": "f285a8eaf8a366e3eff5e51d2788bc90e221130f910172573bcb54b7204e36e2"
+    },
+    {
+      "path": "raw/compact-growth/raw/project/benchmark/out/cost-00.json",
+      "bytes": 190,
+      "sha256": "7e5d71df845e5c39c0b74f4dcf56ff75222cffa20d4b3c451e26c664f200411a"
+    },
+    {
+      "path": "raw/compact-growth/raw/project/benchmark/out/cost-01.json",
+      "bytes": 193,
+      "sha256": "5f51696ca8640f8a49a2cee31eefbfaa23a15c8d8d4fb68cf7f1f1619dae6209"
+    },
+    {
+      "path": "raw/compact-growth/raw/project/benchmark/out/cost-02.json",
+      "bytes": 191,
+      "sha256": "b8ad2bf94e2f171e69621787f54bb0b98da859fd354f8b3e9bacfb735aa17f36"
+    },
+    {
+      "path": "raw/compact-growth/raw/project/benchmark/out/cost-03.json",
+      "bytes": 193,
+      "sha256": "5cc9cc3997890f5662c034aa75bebc6c18283a915e89ce94d012baf5635be1c9"
+    },
+    {
+      "path": "raw/compact-growth/raw/project/benchmark/out/index.json",
+      "bytes": 8162,
+      "sha256": "90150abaf4ee2065a6e00b0cdb0698649ec1ab9c020b55d4cdcc17f8f9d7438e"
+    },
+    {
+      "path": "raw/compact-growth/raw/project/benchmark/out/object-0000.json",
+      "bytes": 843163,
+      "sha256": "53f22cfec1d7bad485d938e6cd18966d921202a538739f94e0f4ecc873a95edd"
+    },
+    {
+      "path": "raw/compact-growth/raw/project/benchmark/out/object-0001.json",
+      "bytes": 16750,
+      "sha256": "55b025541f7be7ca4e2b496503aa285eaa3cab39ad40190e0ad0f4fa56901071"
+    },
+    {
+      "path": "raw/compact-growth/raw/project/benchmark/out/object-0002.json",
+      "bytes": 13700,
+      "sha256": "d6555cd7fad816e2d9ef0e902add23f119538440b087e130986725c64e422b91"
+    },
+    {
+      "path": "raw/compact-growth/raw/project/project.godot",
+      "bytes": 838,
+      "sha256": "819b521edff745f02f7c30e96ceffe21c70d8ef4fc32e95b96df37877e817ce1"
+    },
+    {
+      "path": "raw/compact-growth/raw/project/scenes/fixture.tscn",
+      "bytes": 295,
+      "sha256": "cea80b4159077136bea3c85a53586f871e8f8a40d547ef715826ea0922e642bf"
+    },
+    {
+      "path": "raw/compact-growth/raw/project/scripts/fixture_actor.gd",
+      "bytes": 50,
+      "sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd"
+    },
+    {
+      "path": "raw/compact-growth/raw/project/scripts/fixture_actor.gd.uid",
+      "bytes": 20,
+      "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142"
+    },
+    {
+      "path": "raw/compact-growth/raw/result.json",
+      "bytes": 2273,
+      "sha256": "d8ef669c8c9f94a45722032ee81cf62006516aa0e597ed4333492cf43dfe878a"
+    },
+    {
+      "path": "raw/compact-growth/raw/runtime-source-files.json",
+      "bytes": 7464,
+      "sha256": "aa322b311b7c7840ab431d6965f5e93396e5df55e3329a94d9c14ba0e7fabc74"
+    },
+    {
+      "path": "raw/compact-growth/raw/source/zdoc/reviews/20260918-gt06-s84-compact-probe/object_probe.gd",
+      "bytes": 13962,
+      "sha256": "20ed7e62658c247265a8165024682efac78ae9c475a810bb6368e8fe9c75dd40"
+    },
+    {
+      "path": "raw/compact-growth/raw/source/zdoc/reviews/20260918-gt06-s84-probe-cost/cost_growth.gd",
+      "bytes": 2365,
+      "sha256": "728a474655e9c99c7c21a96a7dff9922c4e696bebadbc628317fbca583db1d9c"
+    },
+    {
+      "path": "raw/compact-growth/raw/source/zdoc/reviews/20260918-gt06-s84-probe-cost/measure_cost.py",
+      "bytes": 9424,
+      "sha256": "30ae92b366f345a4f40f2653f67012af983ab405ee20b5540eed15db50b5a9c8"
+    },
+    {
+      "path": "raw/original/outer/capture.json",
+      "bytes": 505,
+      "sha256": "5e593eb0feca818945c8dcf23b4b488678b04081f9789148ae797bf553b909a4"
+    },
+    {
+      "path": "raw/original/outer/cost-host.json",
+      "bytes": 87,
+      "sha256": "04ca0c5f3836c6cc682cc55d9f5ab0d0c8d19510e20b08f89615a02498b2ef54"
+    },
+    {
+      "path": "raw/original/outer/cost-stderr.txt",
+      "bytes": 631,
+      "sha256": "5065c31ce0dedd7b4b5e7bcbd0942852b7354823715046f78de942075ac25095"
+    },
+    {
+      "path": "raw/original/outer/cost-stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/original/outer/invocation.json",
+      "bytes": 278,
+      "sha256": "0def30cf0c0071657f37ce0293bd2d9b1f28af6ac1b5016be0eefa3b65c15579"
+    },
+    {
+      "path": "raw/original/raw/cleanup.json",
+      "bytes": 90,
+      "sha256": "0fceafb402894c2f27053c510e5a4692ab74da5b45d745b7453ed823e5fd4426"
+    },
+    {
+      "path": "raw/original/raw/editor-host/capture.json",
+      "bytes": 10344,
+      "sha256": "0a0b50add3f803691c6d2d0630e3c38e7d4e42b889e44aa196f04da4964fe8b8"
+    },
+    {
+      "path": "raw/original/raw/editor-host/cleanup-001.json",
+      "bytes": 528,
+      "sha256": "379d7a25b4032e6cb243e100aa8a5ebcd3d82a94e45b71e0f18e47fe7e569534"
+    },
+    {
+      "path": "raw/original/raw/editor-host/invocation.json",
+      "bytes": 8920,
+      "sha256": "ea35653601da666ef0c803230e35c6454eb903bb832efded81f6ae0d5bdc96c9"
+    },
+    {
+      "path": "raw/original/raw/editor-host/process-exit.json",
+      "bytes": 30,
+      "sha256": "2d4fffafc1abd1d5f0a8345f96d560ad89c170c4765c6347726bc4e4233bf743"
+    },
+    {
+      "path": "raw/original/raw/editor-host/process-start.json",
+      "bytes": 14,
+      "sha256": "74c36eb6101c5d1a4ccaaacd00d627ed70c57babf98b473a6b61eb8eb870d46d"
+    },
+    {
+      "path": "raw/original/raw/editor-host/stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/original/raw/editor-host/stdout.txt",
+      "bytes": 4508,
+      "sha256": "c18052707deac6a6ffcc62c706ddffbc21617061d2332ace315751f0d4fcf2d2"
+    },
+    {
+      "path": "raw/original/raw/failure.json",
+      "bytes": 38,
+      "sha256": "b5435cea251a0a805ca13fc4b564e619cf3ca32eb13acc7fa19bb3a770c12037"
+    },
+    {
+      "path": "raw/original/raw/import-host/capture.json",
+      "bytes": 1341,
+      "sha256": "54309a6de6aff9e72798f494ca4b063331e2aeadeb6ffef56dfdfe951270d09b"
+    },
+    {
+      "path": "raw/original/raw/import-host/invocation.json",
+      "bytes": 6175,
+      "sha256": "3023fae526c9a985387f9120161367a149f0378ca2a07058d0d1e254894be253"
+    },
+    {
+      "path": "raw/original/raw/import-host/process-exit.json",
+      "bytes": 30,
+      "sha256": "9532afcbd8139822d0a73112f3d8237cd31ab8e880e8592d2ad4f1ec41bc1399"
+    },
+    {
+      "path": "raw/original/raw/import-host/process-start.json",
+      "bytes": 14,
+      "sha256": "0b9e6567cb960f597d9981478a5ccb85d37eb2dbef29087c481baf40b5a04d49"
+    },
+    {
+      "path": "raw/original/raw/import-host/stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/original/raw/import-host/stdout.txt",
+      "bytes": 1492,
+      "sha256": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003"
+    },
+    {
+      "path": "raw/original/raw/invocation.json",
+      "bytes": 7515,
+      "sha256": "05b88696d78a122e9902eebc595599eeca379f4f976255d904953e3380a81165"
+    },
+    {
+      "path": "raw/original/raw/observation-00.json",
+      "bytes": 465,
+      "sha256": "03a21dd7a8862a9c46b88d8e6ba47c13b6f15b07750aa0b3310398df407e9b14"
+    },
+    {
+      "path": "raw/original/raw/observation-01.json",
+      "bytes": 467,
+      "sha256": "9fb90873ad68ac11e1b2755b6c1dee4509e1b19ee3d4a2cea345450c693ca63f"
+    },
+    {
+      "path": "raw/original/raw/observation-02.json",
+      "bytes": 467,
+      "sha256": "d884aec8b1ade3d8a630bda756e4803c86b74103116da1937d859090a033bb4a"
+    },
+    {
+      "path": "raw/original/raw/project/addons/hh_benchmark/benchmark_native.gd",
+      "bytes": 63708,
+      "sha256": "3a4ddefd20f9706c4d12f7f4df19c2f76c3eb42cd79657c8719dc151b2fbc233"
+    },
+    {
+      "path": "raw/original/raw/project/addons/hh_benchmark/benchmark_native.gd.uid",
+      "bytes": 19,
+      "sha256": "52035945eb59d66522f81ad74634f4cf9260d15c9a2953199bde48ac61fbcd4e"
+    },
+    {
+      "path": "raw/original/raw/project/addons/hh_benchmark/plugin.cfg",
+      "bytes": 189,
+      "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092"
+    },
+    {
+      "path": "raw/original/raw/project/addons/hh_studio/jcs_godot.gd",
+      "bytes": 10165,
+      "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5"
+    },
+    {
+      "path": "raw/original/raw/project/addons/hh_studio/jcs_godot.gd.uid",
+      "bytes": 20,
+      "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b"
+    },
+    {
+      "path": "raw/original/raw/project/addons/hh_studio/plugin.cfg",
+      "bytes": 165,
+      "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c"
+    },
+    {
+      "path": "raw/original/raw/project/addons/hh_studio/plugin.gd",
+      "bytes": 23043,
+      "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036"
+    },
+    {
+      "path": "raw/original/raw/project/addons/hh_studio/plugin.gd.uid",
+      "bytes": 20,
+      "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d"
+    },
+    {
+      "path": "raw/original/raw/project/addons/hh_studio/scene_commands.gd",
+      "bytes": 32174,
+      "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069"
+    },
+    {
+      "path": "raw/original/raw/project/addons/hh_studio/scene_commands.gd.uid",
+      "bytes": 19,
+      "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69"
+    },
+    {
+      "path": "raw/original/raw/project/benchmark/.gdignore",
+      "bytes": 53,
+      "sha256": "3d078ee3c08af2f64daca29255d23d366dc0a9bdbef8a872442d5642bfb84cf8"
+    },
+    {
+      "path": "raw/original/raw/project/benchmark/input/cost-00.ack",
+      "bytes": 25,
+      "sha256": "7e6c7586500629c653390ebeb280e106c73508bd2ec916642d37fc35b93f6bd3"
+    },
+    {
+      "path": "raw/original/raw/project/benchmark/input/cost-01.ack",
+      "bytes": 25,
+      "sha256": "7e6c7586500629c653390ebeb280e106c73508bd2ec916642d37fc35b93f6bd3"
+    },
+    {
+      "path": "raw/original/raw/project/benchmark/input/cost-02.ack",
+      "bytes": 25,
+      "sha256": "7e6c7586500629c653390ebeb280e106c73508bd2ec916642d37fc35b93f6bd3"
+    },
+    {
+      "path": "raw/original/raw/project/benchmark/input.json",
+      "bytes": 381,
+      "sha256": "90c5f078f761ff337c4aefaec15ec01ae7a839541419b91d12769942830ab1fe"
+    },
+    {
+      "path": "raw/original/raw/project/benchmark/out/batch-00.json",
+      "bytes": 1746,
+      "sha256": "0b26ea5b0c9ce472e8460b30b4bc9c6cae26eaefcc6e08f655a269791029f30b"
+    },
+    {
+      "path": "raw/original/raw/project/benchmark/out/cost-00.json",
+      "bytes": 185,
+      "sha256": "5e8f7015f16926ca551d0ab5ee92630a8f5be8876d8588f21f6615a24f3ff754"
+    },
+    {
+      "path": "raw/original/raw/project/benchmark/out/cost-01.json",
+      "bytes": 187,
+      "sha256": "d8b55a6c38ea4547a9d20fb37bef1ba2fdb1dd35dff24c504680288c68da5bdd"
+    },
+    {
+      "path": "raw/original/raw/project/benchmark/out/cost-02.json",
+      "bytes": 187,
+      "sha256": "543e7dd4ded33f049041836481e7b25cb91339df79507204e6dc22d05d929f4d"
+    },
+    {
+      "path": "raw/original/raw/project/benchmark/out/index.json",
+      "bytes": 8151,
+      "sha256": "a33b9e12908e167c1ddfcbba7d7ca349abe586098c8178b4c82ffe081310adab"
+    },
+    {
+      "path": "raw/original/raw/project/benchmark/out/object-0000.json",
+      "bytes": 842615,
+      "sha256": "74db067a30d0e676de9d574e8bca82c6867e3d8598f23affe5901da96fca4714"
+    },
+    {
+      "path": "raw/original/raw/project/project.godot",
+      "bytes": 838,
+      "sha256": "819b521edff745f02f7c30e96ceffe21c70d8ef4fc32e95b96df37877e817ce1"
+    },
+    {
+      "path": "raw/original/raw/project/scenes/fixture.tscn",
+      "bytes": 295,
+      "sha256": "0de3bf69b391326bd24a6912a09b14fd191535862fc81b80df8f6aaf235e2d86"
+    },
+    {
+      "path": "raw/original/raw/project/scripts/fixture_actor.gd",
+      "bytes": 50,
+      "sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd"
+    },
+    {
+      "path": "raw/original/raw/project/scripts/fixture_actor.gd.uid",
+      "bytes": 20,
+      "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142"
+    },
+    {
+      "path": "raw/original/raw/runtime-source-files.json",
+      "bytes": 7374,
+      "sha256": "840eaeeb6fbc023265261f267c5ce23de028812c253860563541e046f562c6a7"
+    },
+    {
+      "path": "raw/original/raw/source/zdoc/reviews/20260918-gt06-s82-attribution/object_probe.gd",
+      "bytes": 10893,
+      "sha256": "6221092c70591d89b42aa8c00298198299a716edc7c25b8b4813db5d771fe556"
+    },
+    {
+      "path": "raw/original/raw/source/zdoc/reviews/20260918-gt06-s84-probe-cost/cost_phases.gd",
+      "bytes": 1777,
+      "sha256": "e3d5059bf485a9ac07a2f59c11a57652dbab4a8a98a9e82638e3dd6e189bef68"
+    },
+    {
+      "path": "raw/original/raw/source/zdoc/reviews/20260918-gt06-s84-probe-cost/measure_cost.py",
+      "bytes": 9073,
+      "sha256": "193719fae8ab03ed44a5081195399cbbdeb7243854f0641abdc7b5d00acec14f"
+    },
+    {
+      "path": "raw/sham/outer/capture.json",
+      "bytes": 501,
+      "sha256": "be3c7f29bf1f748b3da1efa0619d53a7e412a6d0e146b91f46f42d1ed254e952"
+    },
+    {
+      "path": "raw/sham/outer/cost-host.json",
+      "bytes": 87,
+      "sha256": "1854b717056fffa8afe8a66ab090600552974aa5ebaf4a2cce5b7256df213fd8"
+    },
+    {
+      "path": "raw/sham/outer/cost-stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/sham/outer/cost-stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/sham/outer/invocation.json",
+      "bytes": 274,
+      "sha256": "0656086788ad93d61f940dc2b4aefb26ba4edda0280bf10cf9295e3990a8aab9"
+    },
+    {
+      "path": "raw/sham/raw/cleanup.json",
+      "bytes": 90,
+      "sha256": "0fceafb402894c2f27053c510e5a4692ab74da5b45d745b7453ed823e5fd4426"
+    },
+    {
+      "path": "raw/sham/raw/editor-host/capture.json",
+      "bytes": 10276,
+      "sha256": "20e6dc8809730a88bcd3dcbae00a5c35bbb5d4065865a45cfd75ed0b62a53d41"
+    },
+    {
+      "path": "raw/sham/raw/editor-host/cleanup-001.json",
+      "bytes": 528,
+      "sha256": "379d7a25b4032e6cb243e100aa8a5ebcd3d82a94e45b71e0f18e47fe7e569534"
+    },
+    {
+      "path": "raw/sham/raw/editor-host/invocation.json",
+      "bytes": 8852,
+      "sha256": "eb2b098f2b038f821027ae5b507da4a03556fe6849c873d2b7c21d3445320f53"
+    },
+    {
+      "path": "raw/sham/raw/editor-host/process-exit.json",
+      "bytes": 30,
+      "sha256": "d310111b4f919c0d1605b3e823692fd24f0ec1216c6f660f0c188119dbf7cfa8"
+    },
+    {
+      "path": "raw/sham/raw/editor-host/process-start.json",
+      "bytes": 14,
+      "sha256": "f079727ce377b21615163a3f3cd8f730586fef2ee8914cc2e2afec36f4ce2b2b"
+    },
+    {
+      "path": "raw/sham/raw/editor-host/stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/sham/raw/editor-host/stdout.txt",
+      "bytes": 4254,
+      "sha256": "2d2688d230a71d89957e6bfdbd5e566fed9340d7719f56f04f6f7f8e39107785"
+    },
+    {
+      "path": "raw/sham/raw/import-host/capture.json",
+      "bytes": 1328,
+      "sha256": "f2534be9a7a5fbd6f3f48b03d34eb6b6823ada4099c49c50acc13fe889e4dbc8"
+    },
+    {
+      "path": "raw/sham/raw/import-host/invocation.json",
+      "bytes": 6167,
+      "sha256": "99fdfbf62fca0b066131774896326971e1235d1243280ca3064648bbee62ad22"
+    },
+    {
+      "path": "raw/sham/raw/import-host/process-exit.json",
+      "bytes": 29,
+      "sha256": "85a0b5d550bd48bd7f07327b0d1b5c191324bc2acd318eacb3d8ac13c5b8a0db"
+    },
+    {
+      "path": "raw/sham/raw/import-host/process-start.json",
+      "bytes": 13,
+      "sha256": "c0ad89f2761526237bfc57fd9970f66a926a551ee289841ed1841d884a83d2af"
+    },
+    {
+      "path": "raw/sham/raw/import-host/stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "raw/sham/raw/import-host/stdout.txt",
+      "bytes": 1492,
+      "sha256": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003"
+    },
+    {
+      "path": "raw/sham/raw/invocation.json",
+      "bytes": 7507,
+      "sha256": "8a950ff009872fb52dea81575f2a4161378d2873333f208edfb2791a5d284ce2"
+    },
+    {
+      "path": "raw/sham/raw/observation-00.json",
+      "bytes": 460,
+      "sha256": "dabfb2956fd0c1e2b9f15360def3554e6f594b6f5dffc12df996a9015b06d3e3"
+    },
+    {
+      "path": "raw/sham/raw/observation-01.json",
+      "bytes": 463,
+      "sha256": "265c254f850d4e4c5dba71d8df212d651b0a7a2509e13db70b4ff2c3fef6c0b8"
+    },
+    {
+      "path": "raw/sham/raw/observation-02.json",
+      "bytes": 463,
+      "sha256": "d120540e05b78dcdc3780d25f813bbff774a0012c2fd16a9c2dae6e259a8a553"
+    },
+    {
+      "path": "raw/sham/raw/project/addons/hh_benchmark/benchmark_native.gd",
+      "bytes": 63669,
+      "sha256": "de120b58ca50d033e980bc4ad425761727ec9c18c53bf4fb316f1a45fd80e27e"
+    },
+    {
+      "path": "raw/sham/raw/project/addons/hh_benchmark/benchmark_native.gd.uid",
+      "bytes": 19,
+      "sha256": "fb08c36338f32c7f50ee73e4b655fd6daa94d6b1708ddb90ad37d47fd9a648e6"
+    },
+    {
+      "path": "raw/sham/raw/project/addons/hh_benchmark/plugin.cfg",
+      "bytes": 189,
+      "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092"
+    },
+    {
+      "path": "raw/sham/raw/project/addons/hh_studio/jcs_godot.gd",
+      "bytes": 10165,
+      "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5"
+    },
+    {
+      "path": "raw/sham/raw/project/addons/hh_studio/jcs_godot.gd.uid",
+      "bytes": 20,
+      "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b"
+    },
+    {
+      "path": "raw/sham/raw/project/addons/hh_studio/plugin.cfg",
+      "bytes": 165,
+      "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c"
+    },
+    {
+      "path": "raw/sham/raw/project/addons/hh_studio/plugin.gd",
+      "bytes": 23043,
+      "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036"
+    },
+    {
+      "path": "raw/sham/raw/project/addons/hh_studio/plugin.gd.uid",
+      "bytes": 20,
+      "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d"
+    },
+    {
+      "path": "raw/sham/raw/project/addons/hh_studio/scene_commands.gd",
+      "bytes": 32174,
+      "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069"
+    },
+    {
+      "path": "raw/sham/raw/project/addons/hh_studio/scene_commands.gd.uid",
+      "bytes": 19,
+      "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69"
+    },
+    {
+      "path": "raw/sham/raw/project/benchmark/.gdignore",
+      "bytes": 53,
+      "sha256": "3d078ee3c08af2f64daca29255d23d366dc0a9bdbef8a872442d5642bfb84cf8"
+    },
+    {
+      "path": "raw/sham/raw/project/benchmark/input/cost-00.ack",
+      "bytes": 21,
+      "sha256": "124c11a4640a084faeef78e53a8b0ba49d91f85ca26dcbe07c760a31e2f7e9a0"
+    },
+    {
+      "path": "raw/sham/raw/project/benchmark/input/cost-01.ack",
+      "bytes": 21,
+      "sha256": "124c11a4640a084faeef78e53a8b0ba49d91f85ca26dcbe07c760a31e2f7e9a0"
+    },
+    {
+      "path": "raw/sham/raw/project/benchmark/input/cost-02.ack",
+      "bytes": 21,
+      "sha256": "124c11a4640a084faeef78e53a8b0ba49d91f85ca26dcbe07c760a31e2f7e9a0"
+    },
+    {
+      "path": "raw/sham/raw/project/benchmark/input.json",
+      "bytes": 377,
+      "sha256": "ff15e9bc606b7f4016e9a9e5b69ea8070e1385111b6b46524cc1cde2a571b8fb"
+    },
+    {
+      "path": "raw/sham/raw/project/benchmark/out/batch-00.json",
+      "bytes": 1741,
+      "sha256": "47374d8bcf5a765b10f981f0deeeb46a041b4118aa710e4a6f7fce9ef14f7855"
+    },
+    {
+      "path": "raw/sham/raw/project/benchmark/out/cost-00.json",
+      "bytes": 180,
+      "sha256": "b5cadeccf3644c1badfa5c25dbef11c9c6b2cb02a905f2a67e3a46ecc13cd9b2"
+    },
+    {
+      "path": "raw/sham/raw/project/benchmark/out/cost-01.json",
+      "bytes": 183,
+      "sha256": "51c0ca4e8bea8a22c348297aae33acd419a2f27fa79a2fb719098fcc6e744ee9"
+    },
+    {
+      "path": "raw/sham/raw/project/benchmark/out/cost-02.json",
+      "bytes": 183,
+      "sha256": "755cc5d96f239f1cde60327c9e55b36a17c0fa9b6cfdd28e04c03311fbb069c1"
+    },
+    {
+      "path": "raw/sham/raw/project/benchmark/out/index.json",
+      "bytes": 8141,
+      "sha256": "56182430d957de9cb0034d7d24eef4e713a5f9fd560c1979b850d717971385c6"
+    },
+    {
+      "path": "raw/sham/raw/project/project.godot",
+      "bytes": 838,
+      "sha256": "819b521edff745f02f7c30e96ceffe21c70d8ef4fc32e95b96df37877e817ce1"
+    },
+    {
+      "path": "raw/sham/raw/project/scenes/fixture.tscn",
+      "bytes": 295,
+      "sha256": "12603be0d0b8eb12eefa0548d8c2cb43754c23211bf2172c9c2ccc270914ae73"
+    },
+    {
+      "path": "raw/sham/raw/project/scripts/fixture_actor.gd",
+      "bytes": 50,
+      "sha256": "30116960b59778bee92698077689481f7936f41a2d722ddbe23626cbe3fc55cd"
+    },
+    {
+      "path": "raw/sham/raw/project/scripts/fixture_actor.gd.uid",
+      "bytes": 20,
+      "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142"
+    },
+    {
+      "path": "raw/sham/raw/result.json",
+      "bytes": 1777,
+      "sha256": "6a992b5cf8b25be8a236f8ad9463a878e92acea070d62c8b3e523e13fe6e98b0"
+    },
+    {
+      "path": "raw/sham/raw/runtime-source-files.json",
+      "bytes": 7314,
+      "sha256": "674c9ff14c1f55c761a93b26f010535023a623cb6981538f5ff1559a3f47e358"
+    },
+    {
+      "path": "raw/sham/raw/source/zdoc/reviews/20260918-gt06-s82-attribution/object_probe.gd",
+      "bytes": 10893,
+      "sha256": "6221092c70591d89b42aa8c00298198299a716edc7c25b8b4813db5d771fe556"
+    },
+    {
+      "path": "raw/sham/raw/source/zdoc/reviews/20260918-gt06-s84-probe-cost/cost_phases.gd",
+      "bytes": 1777,
+      "sha256": "e3d5059bf485a9ac07a2f59c11a57652dbab4a8a98a9e82638e3dd6e189bef68"
+    },
+    {
+      "path": "raw/sham/raw/source/zdoc/reviews/20260918-gt06-s84-probe-cost/measure_cost.py",
+      "bytes": 9261,
+      "sha256": "835bb732dcefb697b2847238c250068c98a326ecde9ef888d7e4e7dfc810f69f"
+    },
+    {
+      "path": "raw-inventory.json",
+      "bytes": 143277,
+      "sha256": "7a5ca3f0838b6257568d0fbf45b37b67d78df7aaa9e2ceca78443f1874fcc4ef"
+    },
+    {
+      "path": "README.md",
+      "bytes": 8296,
+      "sha256": "f7abbbe047f8b7f5472f4f93a72fc5763078958b863de490724bbd39f7e53729"
+    },
+    {
+      "path": "seal_packet.py",
+      "bytes": 2048,
+      "sha256": "afd84d9575640bb7691665d7b1635670fa433bfd73644175ef0ec3ddbeb54100"
+    }
+  ]
+}
