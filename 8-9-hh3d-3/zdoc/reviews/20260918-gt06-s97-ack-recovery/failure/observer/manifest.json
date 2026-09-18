@@ -1,0 +1,33 @@
+{
+  "artifacts": {
+    "claim.json": "51699bc94f8cf2c0234fb5a119a89e1b410b77ba0e2bcc80ae9b97a851bf5ab2",
+    "editor-adoption.json": "1df2d7a96c8e96a814dcc3addb7d87ae8ddd58202955b9920cf90a3b7acb1ad3",
+    "editor-exit.json": "4ce57d2d72582617eeb338592836889008945e20de35a144d427e80136d6db1e",
+    "editor_helper-exit.json": "6dfa0c2b9d2fe25a78302f5c26db9dc3d64153178feb2c07a39e11c8a00dd405",
+    "host-adoption.json": "359699d2b9e8034abd2fc8cf7f0ebe3af74cb1b8fc095ee4e4d4500b9153f7fb",
+    "host-exit.json": "c2a9b166974a34aa62dfd89b3e6e0b15c2b4a02e7723e497624f6c045fb9a751",
+    "host_helper-exit.json": "600baf1888bc07a563a6777c176095beef6121385a9ea3efe1c2a35abae5a6f7",
+    "supervisor-adoption.json": "19f385831f1752a3f3092c261b2b0f87532d9ef83d898b305c21a938c11cd968",
+    "supervisor-console-stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "supervisor-console-stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "supervisor-exit.json": "6a887d4fc92a14b552946b7cedcad368b79d7cd14e449f2401162454e3c4426e",
+    "terminal.json": "4d5dd2f81d8c01ac54f5f01e7e3a15b33872610c13fb8026323c869b67b733e7"
+  },
+  "eligible_for_dataset": false,
+  "formal_acceptance": false,
+  "helper_files": {
+    "zdoc/reviews/20260918-gt06-s93-sparse-attribution/diagnose_sequence_s91.py": "5b93e33f9589c38889d8cc9ae6cf69e6c98d8e0624753ccf535b5e3a3a168cae",
+    "zdoc/reviews/20260918-gt06-s93-sparse-attribution/launch_observer.py": "aebbff3662c03f6e130354a0ea99a53f00da01f948b632c3fca9adbe48e0cad6",
+    "zdoc/reviews/20260918-gt06-s93-sparse-attribution/patch_native_s91.py": "f4226f40839e40579ae5c489cfd33800e3739bb6e280193c38a54414afaf2bc0",
+    "zdoc/reviews/20260918-gt06-s95-native-isolation/object_probe_s95.gd": "8a1ef457b6d4612fbf61176bc99598ec046d72c081e01c73665bb3237680784e",
+    "zdoc/reviews/20260918-gt06-s95-result-prep/http-phases/phase_observer.py": "9a79e5767f07674e80fb457b6d8f6326cb3558e9feb1d5d51884ad7784f5be57",
+    "zdoc/reviews/20260918-gt06-s95-status-recovery/source-current.json": "7480a3cce54d1b596d40abdb633c509915554c23ecce91e2e86bc4ad81cf371d",
+    "zdoc/reviews/20260918-gt06-s96-coupled-phases/coupled_phases.py": "b1e311144b5beaad3fc0188b4d09e285351a4978502e64c0ac015122d4465ee0",
+    "zdoc/reviews/20260918-gt06-s96-coupled-phases/register_task.ps1": "691ea6b4cf3fffc3859ec5cf2522fad1338f6e43e71b89dbc889ae8f594fa859",
+    "zdoc/reviews/20260918-gt06-s96-coupled-phases/test_coupled_phases.py": "efd3952d4ed479ec863e469f546ebe952dd2e45b50c1d79d3424f59af8d5efd1"
+  },
+  "request_sha256": "9c4a71fb4f4557e55986279298197cd0aa5208b0ad8cd795db260ae137fd8384",
+  "run_id": "gt06-s96-coupled-phases-01",
+  "schema": "HH-GT06-S91-OBSERVER-MANIFEST-1",
+  "task_definition_sha256": "6e83a6199af74a142b74d03a0c217429bbe52cb306794f20fc3ac67499bb189b"
+}

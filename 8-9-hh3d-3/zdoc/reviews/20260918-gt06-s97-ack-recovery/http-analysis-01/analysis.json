@@ -1,0 +1,1507 @@
+{
+  "ack_final_hash_matches_failure_pending": true,
+  "ack_matches_current_native_batch_bytes": true,
+  "analysis_mode": "bounded read-only JSON/source parsing; no engines/tests/runtime imports/source edits",
+  "authority": 0,
+  "batches": [
+    {
+      "batch": 0,
+      "command_latency_stats": {
+        "admitted": {
+          "count": 200,
+          "max_ms": 628.6147,
+          "mean_ms": 31.555319,
+          "median_ms": 19.936799999999998,
+          "min_ms": 15.2046,
+          "p95_ms": 45.2875,
+          "p99_ms": 308.2448
+        },
+        "inspect": {
+          "count": 500,
+          "max_ms": 701.1531,
+          "mean_ms": 55.4680966,
+          "median_ms": 47.567350000000005,
+          "min_ms": 37.9487,
+          "p95_ms": 70.7179,
+          "p99_ms": 202.9324
+        },
+        "rejected": {
+          "count": 300,
+          "max_ms": 27.3684,
+          "mean_ms": 4.024460333333333,
+          "median_ms": 2.3172,
+          "min_ms": 1.7477,
+          "p95_ms": 19.7628,
+          "p99_ms": 25.6417
+        }
+      },
+      "duration_seconds": 44.904416,
+      "effects_after": 200,
+      "effects_before": 0,
+      "ended_mono_us": 644938995942,
+      "journal_bytes": 976405,
+      "lookup_failures": 0,
+      "lookup_stats": {
+        "count": 703,
+        "max_ms": 667.12,
+        "mean_ms": 35.62872546230441,
+        "median_ms": 30.402,
+        "min_ms": 6.488,
+        "p95_ms": 42.919,
+        "p99_ms": 156.983
+      },
+      "lookup_status_counts": {
+        "ACCEPTED_PENDING": 2,
+        "CANCELED": 1,
+        "COMMITTED": 700
+      },
+      "max_response_gap_ms": 667.8646,
+      "started_mono_us": 644894091526,
+      "unknown_lookup_results": 0,
+      "warmup": true
+    },
+    {
+      "batch": 1,
+      "command_latency_stats": {
+        "admitted": {
+          "count": 200,
+          "max_ms": 74.9539,
+          "mean_ms": 27.5039095,
+          "median_ms": 24.4984,
+          "min_ms": 19.7248,
+          "p95_ms": 44.8344,
+          "p99_ms": 69.185
+        },
+        "inspect": {
+          "count": 500,
+          "max_ms": 587.5891,
+          "mean_ms": 62.5448936,
+          "median_ms": 53.1799,
+          "min_ms": 44.9769,
+          "p95_ms": 81.3975,
+          "p99_ms": 315.234
+        },
+        "rejected": {
+          "count": 300,
+          "max_ms": 32.8882,
+          "mean_ms": 4.2542143333333335,
+          "median_ms": 2.3211500000000003,
+          "min_ms": 1.7857,
+          "p95_ms": 20.0713,
+          "p99_ms": 26.4565
+        }
+      },
+      "duration_seconds": 49.643232,
+      "effects_after": 400,
+      "effects_before": 200,
+      "ended_mono_us": 645016555488,
+      "journal_bytes": 1954342,
+      "lookup_failures": 0,
+      "lookup_stats": {
+        "count": 701,
+        "max_ms": 543.342,
+        "mean_ms": 38.0561754636234,
+        "median_ms": 33.23,
+        "min_ms": 7.159,
+        "p95_ms": 48.078,
+        "p99_ms": 171.477
+      },
+      "lookup_status_counts": {
+        "CANCELED": 1,
+        "COMMITTED": 700
+      },
+      "max_response_gap_ms": 554.4625,
+      "started_mono_us": 644966912256,
+      "unknown_lookup_results": 0,
+      "warmup": true
+    },
+    {
+      "batch": 2,
+      "command_latency_stats": {
+        "admitted": {
+          "count": 200,
+          "max_ms": 513.7748,
+          "mean_ms": 40.202948,
+          "median_ms": 30.15515,
+          "min_ms": 24.3213,
+          "p95_ms": 55.3432,
+          "p99_ms": 460.9694
+        },
+        "inspect": {
+          "count": 500,
+          "max_ms": 587.2837,
+          "mean_ms": 69.605612,
+          "median_ms": 60.51975,
+          "min_ms": 50.8521,
+          "p95_ms": 89.6881,
+          "p99_ms": 334.7257
+        },
+        "rejected": {
+          "count": 300,
+          "max_ms": 33.8707,
+          "mean_ms": 4.109568666666667,
+          "median_ms": 2.391,
+          "min_ms": 1.7521,
+          "p95_ms": 17.6077,
+          "p99_ms": 25.616
+        }
+      },
+      "duration_seconds": 56.446861,
+      "effects_after": 600,
+      "effects_before": 400,
+      "ended_mono_us": 645100599805,
+      "journal_bytes": 2932279,
+      "lookup_failures": 0,
+      "lookup_stats": {
+        "count": 703,
+        "max_ms": 552.948,
+        "mean_ms": 43.6406813655761,
+        "median_ms": 37.027,
+        "min_ms": 9.365,
+        "p95_ms": 56.404,
+        "p99_ms": 127.268
+      },
+      "lookup_status_counts": {
+        "ACCEPTED_PENDING": 2,
+        "CANCELED": 1,
+        "COMMITTED": 700
+      },
+      "max_response_gap_ms": 554.2999,
+      "started_mono_us": 645044152944,
+      "unknown_lookup_results": 0,
+      "warmup": true
+    },
+    {
+      "batch": 3,
+      "command_latency_stats": {
+        "admitted": {
+          "count": 200,
+          "max_ms": 484.2363,
+          "mean_ms": 43.1524,
+          "median_ms": 35.1756,
+          "min_ms": 29.6068,
+          "p95_ms": 58.8353,
+          "p99_ms": 205.5817
+        },
+        "inspect": {
+          "count": 500,
+          "max_ms": 578.3514,
+          "mean_ms": 78.3324778,
+          "median_ms": 68.2244,
+          "min_ms": 58.7753,
+          "p95_ms": 97.3983,
+          "p99_ms": 509.5265
+        },
+        "rejected": {
+          "count": 300,
+          "max_ms": 26.7264,
+          "mean_ms": 4.340352333333334,
+          "median_ms": 2.4393000000000002,
+          "min_ms": 1.7618,
+          "p95_ms": 18.0157,
+          "p99_ms": 24.7186
+        }
+      },
+      "duration_seconds": 61.891653,
+      "effects_after": 800,
+      "effects_before": 600,
+      "ended_mono_us": 645190368724,
+      "journal_bytes": 3910216,
+      "lookup_failures": 0,
+      "lookup_stats": {
+        "count": 701,
+        "max_ms": 510.631,
+        "mean_ms": 46.04340656205421,
+        "median_ms": 40.868,
+        "min_ms": 10.959,
+        "p95_ms": 57.689,
+        "p99_ms": 106.105
+      },
+      "lookup_status_counts": {
+        "CANCELED": 1,
+        "COMMITTED": 700
+      },
+      "max_response_gap_ms": 528.4296,
+      "started_mono_us": 645128477071,
+      "unknown_lookup_results": 0,
+      "warmup": true
+    },
+    {
+      "batch": 4,
+      "command_latency_stats": {
+        "admitted": {
+          "count": 200,
+          "max_ms": 81.5756,
+          "mean_ms": 42.9897225,
+          "median_ms": 40.2556,
+          "min_ms": 34.6944,
+          "p95_ms": 58.2342,
+          "p99_ms": 67.3835
+        },
+        "inspect": {
+          "count": 500,
+          "max_ms": 801.9119,
+          "mean_ms": 85.739318,
+          "median_ms": 74.619,
+          "min_ms": 64.3822,
+          "p95_ms": 111.217,
+          "p99_ms": 330.1802
+        },
+        "rejected": {
+          "count": 300,
+          "max_ms": 27.4954,
+          "mean_ms": 4.722480666666667,
+          "median_ms": 2.3539000000000003,
+          "min_ms": 1.7272,
+          "p95_ms": 20.5817,
+          "p99_ms": 25.5276
+        }
+      },
+      "duration_seconds": 69.060018,
+      "effects_after": 1000,
+      "effects_before": 800,
+      "ended_mono_us": 645285426530,
+      "journal_bytes": 4888157,
+      "lookup_failures": 0,
+      "lookup_stats": {
+        "count": 702,
+        "max_ms": 554.469,
+        "mean_ms": 50.54099857549858,
+        "median_ms": 43.852000000000004,
+        "min_ms": 12.546,
+        "p95_ms": 62.597,
+        "p99_ms": 264.386
+      },
+      "lookup_status_counts": {
+        "ACCEPTED_PENDING": 1,
+        "CANCELED": 1,
+        "COMMITTED": 700
+      },
+      "max_response_gap_ms": 768.8247,
+      "started_mono_us": 645216366512,
+      "unknown_lookup_results": 0,
+      "warmup": true
+    },
+    {
+      "batch": 5,
+      "command_latency_stats": {
+        "admitted": {
+          "count": 200,
+          "max_ms": 435.4286,
+          "mean_ms": 52.9123185,
+          "median_ms": 44.53915,
+          "min_ms": 39.3818,
+          "p95_ms": 68.9126,
+          "p99_ms": 236.1932
+        },
+        "inspect": {
+          "count": 500,
+          "max_ms": 1442.9714,
+          "mean_ms": 96.142801,
+          "median_ms": 80.8459,
+          "min_ms": 71.019,
+          "p95_ms": 117.4,
+          "p99_ms": 459.552
+        },
+        "rejected": {
+          "count": 300,
+          "max_ms": 28.6952,
+          "mean_ms": 4.926956666666666,
+          "median_ms": 2.3561500000000004,
+          "min_ms": 1.747,
+          "p95_ms": 21.415,
+          "p99_ms": 27.0061
+        }
+      },
+      "duration_seconds": 74.950828,
+      "effects_after": 1200,
+      "effects_before": 1000,
+      "ended_mono_us": 645383787585,
+      "journal_bytes": 5868894,
+      "lookup_failures": 0,
+      "lookup_stats": {
+        "count": 701,
+        "max_ms": 1187.009,
+        "mean_ms": 53.27397717546362,
+        "median_ms": 46.379,
+        "min_ms": 18.43,
+        "p95_ms": 65.313,
+        "p99_ms": 122.342
+      },
+      "lookup_status_counts": {
+        "CANCELED": 1,
+        "COMMITTED": 700
+      },
+      "max_response_gap_ms": 1194.587,
+      "started_mono_us": 645308836757,
+      "unknown_lookup_results": 0,
+      "warmup": false
+    },
+    {
+      "batch": 6,
+      "command_latency_stats": {
+        "admitted": {
+          "count": 200,
+          "max_ms": 348.8245,
+          "mean_ms": 58.313828,
+          "median_ms": 49.23425,
+          "min_ms": 43.5528,
+          "p95_ms": 74.2431,
+          "p99_ms": 306.1074
+        },
+        "inspect": {
+          "count": 500,
+          "max_ms": 1133.0248,
+          "mean_ms": 96.589291,
+          "median_ms": 85.96435,
+          "min_ms": 76.8773,
+          "p95_ms": 113.4928,
+          "p99_ms": 289.6641
+        },
+        "rejected": {
+          "count": 300,
+          "max_ms": 27.394,
+          "mean_ms": 6.165389333333334,
+          "median_ms": 2.3362,
+          "min_ms": 1.7305,
+          "p95_ms": 24.6179,
+          "p99_ms": 26.9982
+        }
+      },
+      "duration_seconds": 77.521125,
+      "effects_after": 1400,
+      "effects_before": 1200,
+      "ended_mono_us": 645486734233,
+      "journal_bytes": 6849631,
+      "lookup_failures": 0,
+      "lookup_stats": {
+        "count": 701,
+        "max_ms": 586.124,
+        "mean_ms": 55.214062767475035,
+        "median_ms": 49.067,
+        "min_ms": 16.327,
+        "p95_ms": 67.849,
+        "p99_ms": 149.872
+      },
+      "lookup_status_counts": {
+        "CANCELED": 1,
+        "COMMITTED": 700
+      },
+      "max_response_gap_ms": 844.9364,
+      "started_mono_us": 645409213108,
+      "unknown_lookup_results": 0,
+      "warmup": false
+    },
+    {
+      "batch": 7,
+      "command_latency_stats": {
+        "admitted": {
+          "count": 200,
+          "max_ms": 381.4667,
+          "mean_ms": 63.8025385,
+          "median_ms": 54.8921,
+          "min_ms": 49.4923,
+          "p95_ms": 87.3525,
+          "p99_ms": 278.8409
+        },
+        "inspect": {
+          "count": 500,
+          "max_ms": 2005.6215,
+          "mean_ms": 104.827105,
+          "median_ms": 94.57085000000001,
+          "min_ms": 85.287,
+          "p95_ms": 129.9469,
+          "p99_ms": 226.2187
+        },
+        "rejected": {
+          "count": 300,
+          "max_ms": 26.8627,
+          "mean_ms": 4.590737666666667,
+          "median_ms": 2.41685,
+          "min_ms": 1.7393,
+          "p95_ms": 19.7004,
+          "p99_ms": 24.3415
+        }
+      },
+      "duration_seconds": 84.899447,
+      "effects_after": 1600,
+      "effects_before": 1400,
+      "ended_mono_us": 645595856224,
+      "journal_bytes": 7830368,
+      "lookup_failures": 0,
+      "lookup_stats": {
+        "count": 702,
+        "max_ms": 1212.973,
+        "mean_ms": 60.92584757834758,
+        "median_ms": 53.4775,
+        "min_ms": 22.16,
+        "p95_ms": 78.796,
+        "p99_ms": 140.349
+      },
+      "lookup_status_counts": {
+        "ACCEPTED_PENDING": 1,
+        "CANCELED": 1,
+        "COMMITTED": 700
+      },
+      "max_response_gap_ms": 1220.1735,
+      "started_mono_us": 645510956777,
+      "unknown_lookup_results": 0,
+      "warmup": false
+    },
+    {
+      "batch": 8,
+      "command_latency_stats": {
+        "admitted": {
+          "count": 200,
+          "max_ms": 385.3231,
+          "mean_ms": 68.257495,
+          "median_ms": 60.73994999999999,
+          "min_ms": 54.0371,
+          "p95_ms": 93.0029,
+          "p99_ms": 172.3039
+        },
+        "inspect": {
+          "count": 500,
+          "max_ms": 2080.8801,
+          "mean_ms": 115.3870508,
+          "median_ms": 103.02905,
+          "min_ms": 89.3733,
+          "p95_ms": 142.4674,
+          "p99_ms": 253.5563
+        },
+        "rejected": {
+          "count": 300,
+          "max_ms": 26.7458,
+          "mean_ms": 4.661614666666667,
+          "median_ms": 2.4137,
+          "min_ms": 1.8656,
+          "p95_ms": 19.7203,
+          "p99_ms": 25.8703
+        }
+      },
+      "duration_seconds": 91.987446,
+      "effects_after": 1800,
+      "effects_before": 1600,
+      "ended_mono_us": 645711580935,
+      "journal_bytes": 8811105,
+      "lookup_failures": 0,
+      "lookup_stats": {
+        "count": 701,
+        "max_ms": 890.322,
+        "mean_ms": 64.8215577746077,
+        "median_ms": 58.106,
+        "min_ms": 22.218,
+        "p95_ms": 89.122,
+        "p99_ms": 132.091
+      },
+      "lookup_status_counts": {
+        "CANCELED": 1,
+        "COMMITTED": 700
+      },
+      "max_response_gap_ms": 1156.6102,
+      "started_mono_us": 645619593489,
+      "unknown_lookup_results": 0,
+      "warmup": false
+    },
+    {
+      "batch": 9,
+      "command_latency_stats": {
+        "admitted": {
+          "count": 200,
+          "max_ms": 367.4223,
+          "mean_ms": 70.473449,
+          "median_ms": 64.40875,
+          "min_ms": 57.6737,
+          "p95_ms": 87.3415,
+          "p99_ms": 142.389
+        },
+        "inspect": {
+          "count": 500,
+          "max_ms": 1526.6298,
+          "mean_ms": 118.4139112,
+          "median_ms": 107.37944999999999,
+          "min_ms": 95.8204,
+          "p95_ms": 148.1513,
+          "p99_ms": 228.7425
+        },
+        "rejected": {
+          "count": 300,
+          "max_ms": 38.9199,
+          "mean_ms": 5.308157666666666,
+          "median_ms": 2.4047,
+          "min_ms": 1.7599,
+          "p95_ms": 21.514,
+          "p99_ms": 25.4998
+        }
+      },
+      "duration_seconds": 95.119366,
+      "effects_after": 2000,
+      "effects_before": 1800,
+      "ended_mono_us": 645830740402,
+      "journal_bytes": 9791843,
+      "lookup_failures": 0,
+      "lookup_stats": {
+        "count": 702,
+        "max_ms": 387.66,
+        "mean_ms": 67.44572222222222,
+        "median_ms": 59.425,
+        "min_ms": 20.614,
+        "p95_ms": 88.97,
+        "p99_ms": 214.778
+      },
+      "lookup_status_counts": {
+        "ACCEPTED_PENDING": 1,
+        "CANCELED": 1,
+        "COMMITTED": 700
+      },
+      "max_response_gap_ms": 1144.6929,
+      "started_mono_us": 645735621036,
+      "unknown_lookup_results": 0,
+      "warmup": false
+    },
+    {
+      "batch": 10,
+      "command_latency_stats": {
+        "admitted": {
+          "count": 200,
+          "max_ms": 441.6903,
+          "mean_ms": 77.22993,
+          "median_ms": 70.31945,
+          "min_ms": 63.9671,
+          "p95_ms": 95.971,
+          "p99_ms": 160.1215
+        },
+        "inspect": {
+          "count": 500,
+          "max_ms": 1883.6457,
+          "mean_ms": 126.2771068,
+          "median_ms": 114.29050000000001,
+          "min_ms": 104.4472,
+          "p95_ms": 144.8299,
+          "p99_ms": 374.1381
+        },
+        "rejected": {
+          "count": 300,
+          "max_ms": 26.839,
+          "mean_ms": 5.55084,
+          "median_ms": 2.3710500000000003,
+          "min_ms": 1.6668,
+          "p95_ms": 22.9479,
+          "p99_ms": 26.7804
+        }
+      },
+      "duration_seconds": 101.623685,
+      "effects_after": 2200,
+      "effects_before": 2000,
+      "ended_mono_us": 645956410032,
+      "journal_bytes": 10775385,
+      "lookup_failures": 0,
+      "lookup_stats": {
+        "count": 701,
+        "max_ms": 1094.275,
+        "mean_ms": 71.44689300998573,
+        "median_ms": 62.415,
+        "min_ms": 21.797,
+        "p95_ms": 90.777,
+        "p99_ms": 189.773
+      },
+      "lookup_status_counts": {
+        "CANCELED": 1,
+        "COMMITTED": 700
+      },
+      "max_response_gap_ms": 1149.7328,
+      "started_mono_us": 645854786347,
+      "unknown_lookup_results": 0,
+      "warmup": false
+    },
+    {
+      "batch": 11,
+      "command_latency_stats": {
+        "admitted": {
+          "count": 200,
+          "max_ms": 369.2041,
+          "mean_ms": 84.1321345,
+          "median_ms": 75.55494999999999,
+          "min_ms": 67.8876,
+          "p95_ms": 108.5451,
+          "p99_ms": 190.5666
+        },
+        "inspect": {
+          "count": 500,
+          "max_ms": 484.799,
+          "mean_ms": 129.6643174,
+          "median_ms": 122.80435,
+          "min_ms": 109.9986,
+          "p95_ms": 167.2467,
+          "p99_ms": 211.4365
+        },
+        "rejected": {
+          "count": 300,
+          "max_ms": 39.8801,
+          "mean_ms": 5.305365,
+          "median_ms": 2.3212,
+          "min_ms": 1.7307,
+          "p95_ms": 22.2322,
+          "p99_ms": 26.9944
+        }
+      },
+      "duration_seconds": 105.549432,
+      "effects_after": 2400,
+      "effects_before": 2200,
+      "ended_mono_us": 646089767819,
+      "journal_bytes": 11758927,
+      "lookup_failures": 0,
+      "lookup_stats": {
+        "count": 702,
+        "max_ms": 378.29,
+        "mean_ms": 73.71501139601139,
+        "median_ms": 66.67750000000001,
+        "min_ms": 22.968,
+        "p95_ms": 102.125,
+        "p99_ms": 139.247
+      },
+      "lookup_status_counts": {
+        "ACCEPTED_PENDING": 1,
+        "CANCELED": 1,
+        "COMMITTED": 700
+      },
+      "max_response_gap_ms": 409.4565,
+      "started_mono_us": 645984218387,
+      "unknown_lookup_results": 0,
+      "warmup": false
+    },
+    {
+      "batch": 12,
+      "command_latency_stats": {
+        "admitted": {
+          "count": 200,
+          "max_ms": 402.0074,
+          "mean_ms": 88.910202,
+          "median_ms": 79.7124,
+          "min_ms": 73.231,
+          "p95_ms": 113.7538,
+          "p99_ms": 368.2271
+        },
+        "inspect": {
+          "count": 500,
+          "max_ms": 1320.1197,
+          "mean_ms": 142.5762064,
+          "median_ms": 127.99925,
+          "min_ms": 116.9467,
+          "p95_ms": 173.1844,
+          "p99_ms": 441.6283
+        },
+        "rejected": {
+          "count": 300,
+          "max_ms": 27.523,
+          "mean_ms": 6.125765,
+          "median_ms": 2.33285,
+          "min_ms": 1.7693,
+          "p95_ms": 23.1952,
+          "p99_ms": 26.9412
+        }
+      },
+      "duration_seconds": 113.576969,
+      "effects_after": 2600,
+      "effects_before": 2400,
+      "ended_mono_us": 646228187313,
+      "journal_bytes": 12742469,
+      "lookup_failures": 0,
+      "lookup_stats": {
+        "count": 702,
+        "max_ms": 559.515,
+        "mean_ms": 78.92083048433048,
+        "median_ms": 69.893,
+        "min_ms": 39.849,
+        "p95_ms": 104.512,
+        "p99_ms": 165.921
+      },
+      "lookup_status_counts": {
+        "ACCEPTED_PENDING": 1,
+        "CANCELED": 1,
+        "COMMITTED": 700
+      },
+      "max_response_gap_ms": 747.8949,
+      "started_mono_us": 646114610344,
+      "unknown_lookup_results": 0,
+      "warmup": false
+    },
+    {
+      "batch": 13,
+      "command_latency_stats": {
+        "admitted": {
+          "count": 200,
+          "max_ms": 389.3036,
+          "mean_ms": 91.975624,
+          "median_ms": 83.66045,
+          "min_ms": 77.4909,
+          "p95_ms": 120.0947,
+          "p99_ms": 192.955
+        },
+        "inspect": {
+          "count": 500,
+          "max_ms": 496.9323,
+          "mean_ms": 143.289607,
+          "median_ms": 134.44975,
+          "min_ms": 123.8357,
+          "p95_ms": 179.2502,
+          "p99_ms": 279.3474
+        },
+        "rejected": {
+          "count": 300,
+          "max_ms": 34.8888,
+          "mean_ms": 4.758251666666666,
+          "median_ms": 2.25685,
+          "min_ms": 1.7435,
+          "p95_ms": 20.0255,
+          "p99_ms": 25.5268
+        }
+      },
+      "duration_seconds": 114.850557,
+      "effects_after": 2800,
+      "effects_before": 2600,
+      "ended_mono_us": 646367878448,
+      "journal_bytes": 13726011,
+      "lookup_failures": 0,
+      "lookup_stats": {
+        "count": 703,
+        "max_ms": 411.453,
+        "mean_ms": 80.21037980085349,
+        "median_ms": 72.455,
+        "min_ms": 32.406,
+        "p95_ms": 105.452,
+        "p99_ms": 174.825
+      },
+      "lookup_status_counts": {
+        "ACCEPTED_PENDING": 2,
+        "CANCELED": 1,
+        "COMMITTED": 700
+      },
+      "max_response_gap_ms": 424.91,
+      "started_mono_us": 646253027891,
+      "unknown_lookup_results": 0,
+      "warmup": false
+    },
+    {
+      "batch": 14,
+      "command_latency_stats": {
+        "admitted": {
+          "count": 200,
+          "max_ms": 428.2575,
+          "mean_ms": 96.1713315,
+          "median_ms": 89.0332,
+          "min_ms": 82.8687,
+          "p95_ms": 124.7445,
+          "p99_ms": 143.2892
+        },
+        "inspect": {
+          "count": 500,
+          "max_ms": 480.7905,
+          "mean_ms": 147.315202,
+          "median_ms": 139.27800000000002,
+          "min_ms": 129.839,
+          "p95_ms": 175.1144,
+          "p99_ms": 259.1531
+        },
+        "rejected": {
+          "count": 300,
+          "max_ms": 27.3351,
+          "mean_ms": 6.286883,
+          "median_ms": 2.3714,
+          "min_ms": 1.7205,
+          "p95_ms": 22.5333,
+          "p99_ms": 25.9979
+        }
+      },
+      "duration_seconds": 119.45963,
+      "effects_after": 3000,
+      "effects_before": 2800,
+      "ended_mono_us": 646511166407,
+      "journal_bytes": 14709553,
+      "lookup_failures": 0,
+      "lookup_stats": {
+        "count": 701,
+        "max_ms": 419.714,
+        "mean_ms": 82.20398573466477,
+        "median_ms": 75.066,
+        "min_ms": 28.047,
+        "p95_ms": 106.884,
+        "p99_ms": 140.728
+      },
+      "lookup_status_counts": {
+        "CANCELED": 1,
+        "COMMITTED": 700
+      },
+      "max_response_gap_ms": 428.9425,
+      "started_mono_us": 646391706777,
+      "unknown_lookup_results": 0,
+      "warmup": false
+    },
+    {
+      "batch": 15,
+      "command_latency_stats": {
+        "admitted": {
+          "count": 200,
+          "max_ms": 391.9973,
+          "mean_ms": 102.4241585,
+          "median_ms": 94.5745,
+          "min_ms": 87.1211,
+          "p95_ms": 122.2634,
+          "p99_ms": 172.5142
+        },
+        "inspect": {
+          "count": 500,
+          "max_ms": 502.433,
+          "mean_ms": 153.1021544,
+          "median_ms": 147.19235,
+          "min_ms": 135.1783,
+          "p95_ms": 175.5038,
+          "p99_ms": 225.9392
+        },
+        "rejected": {
+          "count": 300,
+          "max_ms": 27.3231,
+          "mean_ms": 6.313437333333334,
+          "median_ms": 2.3619,
+          "min_ms": 1.7635,
+          "p95_ms": 21.5459,
+          "p99_ms": 25.9761
+        }
+      },
+      "duration_seconds": 124.759051,
+      "effects_after": 3200,
+      "effects_before": 3000,
+      "ended_mono_us": 646660149724,
+      "journal_bytes": 15693095,
+      "lookup_failures": 0,
+      "lookup_stats": {
+        "count": 702,
+        "max_ms": 422.38,
+        "mean_ms": 86.26914102564102,
+        "median_ms": 78.213,
+        "min_ms": 30.335,
+        "p95_ms": 111.702,
+        "p99_ms": 152.169
+      },
+      "lookup_status_counts": {
+        "ACCEPTED_PENDING": 1,
+        "CANCELED": 1,
+        "COMMITTED": 700
+      },
+      "max_response_gap_ms": 423.3245,
+      "started_mono_us": 646535390673,
+      "unknown_lookup_results": 0,
+      "warmup": false
+    },
+    {
+      "batch": 16,
+      "command_latency_stats": {
+        "admitted": {
+          "count": 200,
+          "max_ms": 427.3605,
+          "mean_ms": 107.3054465,
+          "median_ms": 99.09219999999999,
+          "min_ms": 91.816,
+          "p95_ms": 124.7329,
+          "p99_ms": 359.6819
+        },
+        "inspect": {
+          "count": 500,
+          "max_ms": 506.6759,
+          "mean_ms": 161.1716516,
+          "median_ms": 152.67475000000002,
+          "min_ms": 140.8987,
+          "p95_ms": 195.3295,
+          "p99_ms": 243.1869
+        },
+        "rejected": {
+          "count": 300,
+          "max_ms": 30.498,
+          "mean_ms": 6.241322666666667,
+          "median_ms": 2.3298,
+          "min_ms": 1.7122,
+          "p95_ms": 23.5933,
+          "p99_ms": 27.2259
+        }
+      },
+      "duration_seconds": 130.40952,
+      "effects_after": 3400,
+      "effects_before": 3200,
+      "ended_mono_us": 646813827109,
+      "journal_bytes": 16676637,
+      "lookup_failures": 0,
+      "lookup_stats": {
+        "count": 702,
+        "max_ms": 323.874,
+        "mean_ms": 89.98593874643875,
+        "median_ms": 81.816,
+        "min_ms": 45.613,
+        "p95_ms": 117.299,
+        "p99_ms": 162.484
+      },
+      "lookup_status_counts": {
+        "ACCEPTED_PENDING": 1,
+        "CANCELED": 1,
+        "COMMITTED": 700
+      },
+      "max_response_gap_ms": 428.0564,
+      "started_mono_us": 646683417589,
+      "unknown_lookup_results": 0,
+      "warmup": false
+    },
+    {
+      "batch": 17,
+      "command_latency_stats": {
+        "admitted": {
+          "count": 200,
+          "max_ms": 352.5689,
+          "mean_ms": 111.2869635,
+          "median_ms": 105.67490000000001,
+          "min_ms": 96.5127,
+          "p95_ms": 140.0554,
+          "p99_ms": 180.6969
+        },
+        "inspect": {
+          "count": 500,
+          "max_ms": 491.3876,
+          "mean_ms": 171.576887,
+          "median_ms": 163.06875,
+          "min_ms": 147.9437,
+          "p95_ms": 213.0381,
+          "p99_ms": 429.2279
+        },
+        "rejected": {
+          "count": 300,
+          "max_ms": 32.1615,
+          "mean_ms": 5.477540333333334,
+          "median_ms": 2.2942,
+          "min_ms": 1.7313,
+          "p95_ms": 22.0502,
+          "p99_ms": 26.526
+        }
+      },
+      "duration_seconds": 138.021311,
+      "effects_after": 3600,
+      "effects_before": 3400,
+      "ended_mono_us": 646977373276,
+      "journal_bytes": 17660179,
+      "lookup_failures": 0,
+      "lookup_stats": {
+        "count": 701,
+        "max_ms": 417.377,
+        "mean_ms": 96.24093437945791,
+        "median_ms": 86.639,
+        "min_ms": 33.209,
+        "p95_ms": 128.522,
+        "p99_ms": 181.439
+      },
+      "lookup_status_counts": {
+        "CANCELED": 1,
+        "COMMITTED": 700
+      },
+      "max_response_gap_ms": 418.1515,
+      "started_mono_us": 646839351965,
+      "unknown_lookup_results": 0,
+      "warmup": false
+    }
+  ],
+  "causal_limits": [
+    "Final trace is the last 512 events, not run-wide phase maxima; 1263154 events were evicted.",
+    "No first failure snapshot was triggered because recorded lookup transport failures were zero.",
+    "Dispatch-to-lookup includes session/shape/scope checks and possible host-lock contention; it is not pure lock-wait time.",
+    "Journal phases are nested/overlapping; durations cannot be summed.",
+    "Growth with journal size is an association; earlier phase traces and controlled comparisons were not retained.",
+    "Native Godot ticks and host QPC timestamps are different domains; no direct subtraction is performed.",
+    "Final valid ACK bytes do not identify which native file-open/short-read branch failed or prove readability at failure.",
+    "No evidence here establishes S93 latency cause or this native ACK read root cause."
+  ],
+  "command_batches_complete": 18,
+  "command_kind_counts": {
+    "admitted": 3600,
+    "inspect": 9000,
+    "rejected": 5400
+  },
+  "final_critic": false,
+  "formal_acceptance": false,
+  "helper_closure_sha256": "49305105575402570035bbff7f3f7abdcc5a98653b8cc994932b4ae07f921795",
+  "input_files": {
+    "child-failure.json": {
+      "bytes": 212,
+      "sha256": "888c580da64a47813d5285027ff02e1a5e2a9cb7b0545899a722cbf64921e0c2"
+    },
+    "command-00.json": {
+      "bytes": 1152262,
+      "sha256": "0b5a43cd25566d6c24edc19c03082324f417106d098bf8fd999e58a04cd4803f"
+    },
+    "command-01.json": {
+      "bytes": 1155433,
+      "sha256": "9b924bf0c00a422a86d725a720cc6f24b39f76f9c92d9c6565aa91f2ee379143"
+    },
+    "command-02.json": {
+      "bytes": 1156053,
+      "sha256": "a7760848b8a4dfd174fe3efde92bcf65f0d0785a06153efde70c1c65547b1409"
+    },
+    "command-03.json": {
+      "bytes": 1155501,
+      "sha256": "a061e0110b8d8d9fa38756eecb56b1c2bc86ef4afb3540552e35951cbcdc5257"
+    },
+    "command-04.json": {
+      "bytes": 1155877,
+      "sha256": "ced9e61d73f7141e618c5cc4761fe536417a71329f5d8de8c1152c5cdfcfa4a9"
+    },
+    "command-05.json": {
+      "bytes": 1162696,
+      "sha256": "0c619c51c860c413832ba2ee19c31904cc9ac8490469ae96f3022f6345e02740"
+    },
+    "command-06.json": {
+      "bytes": 1162827,
+      "sha256": "7d04d41878dceceb3a14d817209b4ec009b79290ff78b0b7177fdbda099e3a67"
+    },
+    "command-07.json": {
+      "bytes": 1163219,
+      "sha256": "921d858ceff7efddc9f71f3d3a2737ccdf8cb930731d2bd445e3700791212753"
+    },
+    "command-08.json": {
+      "bytes": 1163574,
+      "sha256": "5231a47a323e0d6fcd0a67f829a4cf9048b5afcf8c5aa637c30e471ca5f7f410"
+    },
+    "command-09.json": {
+      "bytes": 1164323,
+      "sha256": "7113dbcdf821671dad53de740a665315ce3e0d978f49f19e10b1e681a7db3b9a"
+    },
+    "command-10.json": {
+      "bytes": 1166566,
+      "sha256": "f2b9925f27520c07aa75444040e34a70d96ef4bd76789f478213b2d87aae98d9"
+    },
+    "command-11.json": {
+      "bytes": 1166803,
+      "sha256": "e4d2a45489ae5867b74441cc34a988085ee0d20af8bdd5cd64921ea2b07a7108"
+    },
+    "command-12.json": {
+      "bytes": 1166884,
+      "sha256": "d6d905d05728a23ecb9570b407810b12ba3f9479b1c28d73dcb1d67e7025f583"
+    },
+    "command-13.json": {
+      "bytes": 1167076,
+      "sha256": "90512d2f85fb7827d15f3b0c16ec009551a82bc9f5095765266792b8b2c33a1b"
+    },
+    "command-14.json": {
+      "bytes": 1166649,
+      "sha256": "d1343eaa8a082e44ea375194705a9f5893ccc13409cfd9963920f90db0705ddb"
+    },
+    "command-15.json": {
+      "bytes": 1167071,
+      "sha256": "d2251270d7d957d2d02653e72a60cd9ff8f62b2e56093b83c635cf1e47eff7d1"
+    },
+    "command-16.json": {
+      "bytes": 1167117,
+      "sha256": "20b48ae1bb35b2b8bcc9ce67c0fd3754945b3292129ea5b96f12d3dc83ee494d"
+    },
+    "command-17.json": {
+      "bytes": 1167020,
+      "sha256": "3b18de408d917b89cf4232c1f9563cd0223b71be7818825f051c9813f9bb1cc5"
+    },
+    "diagnostic.json": {
+      "bytes": 7733,
+      "sha256": "dcfd948a38ee9f54158a4246fb138d85e1e3eed84d54de1b0dbdab571336dd2f"
+    },
+    "http-phases-final.json": {
+      "bytes": 137429,
+      "sha256": "9f41e7ba63253e24555ad8d9b1b68cdd83e620ec08da5e6ffb4fcbd002e9dac8"
+    },
+    "project/benchmark/input/ack-17.json": {
+      "bytes": 423,
+      "sha256": "ed082013ff329c80205d253bfe630f125978c5326797aa04e97c711c5e7c95bd"
+    },
+    "project/benchmark/out/batch-17.json": {
+      "bytes": 99651,
+      "sha256": "ba30ed708117e7f9bb526f49f416a4e52dbf25822dc0ad23b9562d069ad3fa11"
+    },
+    "project/benchmark/out/failure.json": {
+      "bytes": 2389,
+      "sha256": "f2c9bb97110a3e469f6d988d5f639b46366f573c947b114b1f2f68ad3a9d93ca"
+    },
+    "source-files.json": {
+      "bytes": 5156,
+      "sha256": "fbf3f5a057e59cea2d5a9c2607a4fc6df3be4cb41396b2132b99b46911d3b397"
+    },
+    "source/studio/host/core/transport.py": {
+      "bytes": 47056,
+      "sha256": "1ec03356b1cb8c8987e1604bcb164aea6a9934dbe259451c19e12de36398aba0"
+    },
+    "source/studio/host/replay/verified_journal.py": {
+      "bytes": 9155,
+      "sha256": "129baa4d9e08c8a1d5acf2ea05c9c89a4fdddb53ca6f3baf2d61311ab98e62ab"
+    },
+    "source/studio/tests/replay/benchmark_commands.py": {
+      "bytes": 21010,
+      "sha256": "29ab59c799855e6695f5c0db18b21ed4ee3f7cd70fb42dcc3b9784e8960d6ca0"
+    },
+    "source/studio/tests/replay/benchmark_native.gd": {
+      "bytes": 51618,
+      "sha256": "52fbd9af5c6191ada5baf1d7195a75685ed5e27a95f4d244af8b4d679f8c00f2"
+    },
+    "source/studio/tests/replay/benchmark_transport.py": {
+      "bytes": 4687,
+      "sha256": "3b789fc025c5d217d8567ee1a3cd97ccf4c2e01214c974417643c080622848df"
+    },
+    "source/zdoc/reviews/20260918-gt06-s95-result-prep/http-phases/phase_observer.py": {
+      "bytes": 11653,
+      "sha256": "9a79e5767f07674e80fb457b6d8f6326cb3558e9feb1d5d51884ad7784f5be57"
+    },
+    "source/zdoc/reviews/20260918-gt06-s96-coupled-phases/coupled_phases.py": {
+      "bytes": 15603,
+      "sha256": "b1e311144b5beaad3fc0188b4d09e285351a4978502e64c0ac015122d4465ee0"
+    }
+  },
+  "joint_batches_complete": 17,
+  "long_end_to_end_commands_ms_gt_2000": [
+    {
+      "batch": 7,
+      "command_id": "gt06-s96-coupled-phases-01.b7.inspect.0",
+      "kind": "inspect",
+      "latency_ms": 2005.6215,
+      "receipt_ms": 785.448
+    },
+    {
+      "batch": 8,
+      "command_id": "gt06-s96-coupled-phases-01.b8.inspect.0",
+      "kind": "inspect",
+      "latency_ms": 2080.8801,
+      "receipt_ms": 1155.3049
+    }
+  ],
+  "lookup_stats": {
+    "count": 12631,
+    "max_ms": 1212.973,
+    "mean_ms": 65.25297569471934,
+    "median_ms": 60.457,
+    "min_ms": 6.488,
+    "p95_ms": 107.965,
+    "p99_ms": 166.441
+  },
+  "lookup_status_counts": {
+    "ACCEPTED_PENDING": 13,
+    "CANCELED": 18,
+    "COMMITTED": 12600
+  },
+  "lookup_transport_failures": 0,
+  "max_response_gap_ms": 1220.1735,
+  "native_barrier_issue_to_failure_ms": 55.117,
+  "native_deadline_remaining_at_failure_ms": 29944.883,
+  "native_failure": {
+    "batch": 17,
+    "code": "BENCHMARK_HOST_ACK_READ",
+    "cycle": 100,
+    "monotonic_us": 2114247696,
+    "phase": "HOST_BARRIER",
+    "pid": 50100
+  },
+  "percentile_method": "nearest rank ceil(p*n)-1; standard median; lookup durations from integer microsecond endpoint subtraction",
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "run_id": "gt06-s96-coupled-phases-01",
+  "schema": "HH-S97-HTTP-PHASE-ANALYSIS-1",
+  "slowest_lookup": {
+    "code": "READBACK_CONFIRMED",
+    "command_id": "gt06-s96-coupled-phases-01.b7.inspect.0",
+    "ended_mono_us": 645513416200,
+    "request_digest": "sha256:9fcd89ae83efa97157edb213f5952b12ee72517c5e535b63a4ecf61f8fe1f19b",
+    "started_mono_us": 645512203227,
+    "status": "COMMITTED",
+    "transport_failure": null
+  },
+  "source_closure_sha256": "564e5b7877f49d33a1af84eaf3b3a7ddf4ea2f846c4161eb694c5c40514fc752",
+  "tail_end_to_final_snapshot_ms": 23857.8478,
+  "tail_event_count": 512,
+  "tail_event_span_ms": 991.5852,
+  "tail_exit_missing_enter_count": 6,
+  "tail_exit_stats": {
+    "client.body": {
+      "count": 13,
+      "max_ms": 0.2491,
+      "mean_ms": 0.16616153846153847,
+      "median_ms": 0.155,
+      "min_ms": 0.1031,
+      "p95_ms": 0.2491,
+      "p99_ms": 0.2491
+    },
+    "client.call": {
+      "count": 13,
+      "max_ms": 127.1717,
+      "mean_ms": 73.02566923076922,
+      "median_ms": 84.1792,
+      "min_ms": 2.1406,
+      "p95_ms": 127.1717,
+      "p99_ms": 127.1717
+    },
+    "client.connect": {
+      "count": 12,
+      "max_ms": 24.8039,
+      "mean_ms": 2.7390916666666665,
+      "median_ms": 0.73055,
+      "min_ms": 0.6408,
+      "p95_ms": 24.8039,
+      "p99_ms": 24.8039
+    },
+    "client.headers": {
+      "count": 13,
+      "max_ms": 125.6203,
+      "mean_ms": 69.66196923076923,
+      "median_ms": 82.6641,
+      "min_ms": 0.1443,
+      "p95_ms": 125.6203,
+      "p99_ms": 125.6203
+    },
+    "client.request": {
+      "count": 12,
+      "max_ms": 25.5686,
+      "mean_ms": 3.1755833333333334,
+      "median_ms": 1.05125,
+      "min_ms": 0.8534,
+      "p95_ms": 25.5686,
+      "p99_ms": 25.5686
+    },
+    "host.finish": {
+      "count": 5,
+      "max_ms": 64.6286,
+      "mean_ms": 54.15992,
+      "median_ms": 52.176,
+      "min_ms": 49.5596,
+      "p95_ms": 64.6286,
+      "p99_ms": 64.6286
+    },
+    "journal.append": {
+      "count": 10,
+      "max_ms": 15.2467,
+      "mean_ms": 9.81816,
+      "median_ms": 9.56065,
+      "min_ms": 5.3304,
+      "p95_ms": 15.2467,
+      "p99_ms": 15.2467
+    },
+    "journal.guard_held": {
+      "count": 24,
+      "max_ms": 61.2887,
+      "mean_ms": 36.56977083333333,
+      "median_ms": 34.483000000000004,
+      "min_ms": 28.6484,
+      "p95_ms": 50.0935,
+      "p99_ms": 61.2887
+    },
+    "journal.guard_wait": {
+      "count": 24,
+      "max_ms": 3.5565,
+      "mean_ms": 2.2448,
+      "median_ms": 1.97755,
+      "min_ms": 1.8078,
+      "p95_ms": 3.3029,
+      "p99_ms": 3.5565
+    },
+    "journal.reload": {
+      "count": 24,
+      "max_ms": 45.1377,
+      "mean_ms": 32.095908333333334,
+      "median_ms": 29.6416,
+      "min_ms": 28.4984,
+      "p95_ms": 39.5164,
+      "p99_ms": 45.1377
+    },
+    "journal.snapshot": {
+      "count": 24,
+      "max_ms": 45.0964,
+      "mean_ms": 32.06444166666667,
+      "median_ms": 29.613599999999998,
+      "min_ms": 28.4606,
+      "p95_ms": 39.4872,
+      "p99_ms": 45.0964
+    },
+    "server.dispatch": {
+      "count": 13,
+      "max_ms": 124.8817,
+      "mean_ms": 68.98839230769231,
+      "median_ms": 81.9256,
+      "min_ms": 0.2732,
+      "p95_ms": 124.8817,
+      "p99_ms": 124.8817
+    },
+    "server.handle": {
+      "count": 13,
+      "max_ms": 125.7719,
+      "mean_ms": 71.80869230769231,
+      "median_ms": 83.0163,
+      "min_ms": 0.9517,
+      "p95_ms": 125.7719,
+      "p99_ms": 125.7719
+    },
+    "server.lookup": {
+      "count": 10,
+      "max_ms": 42.3086,
+      "mean_ms": 33.15336,
+      "median_ms": 31.9566,
+      "min_ms": 30.6852,
+      "p95_ms": 42.3086,
+      "p99_ms": 42.3086
+    },
+    "server.read_request": {
+      "count": 12,
+      "max_ms": 24.147,
+      "mean_ms": 2.1249499999999997,
+      "median_ms": 0.0987,
+      "min_ms": 0.0723,
+      "p95_ms": 24.147,
+      "p99_ms": 24.147
+    },
+    "server.send": {
+      "count": 13,
+      "max_ms": 1.141,
+      "mean_ms": 0.6272384615384615,
+      "median_ms": 0.5503,
+      "min_ms": 0.3355,
+      "p95_ms": 1.141,
+      "p99_ms": 1.141
+    }
+  },
+  "tail_first_event_id": 1263155,
+  "tail_first_event_ns": 646976380132300,
+  "tail_last_event_id": 1263666,
+  "tail_last_event_ns": 646977371717500,
+  "tail_lookup_chains": [
+    {
+      "client_roots": [
+        570211
+      ],
+      "dispatch_ms": 81.9256,
+      "dispatch_to_lookup_ms": 50.0203,
+      "lookup_ms": 31.9002,
+      "overlapping_finish_spans": [
+        {
+          "duration_ms": 53.0316,
+          "end_ns": 646976500113900,
+          "root_id": 570208,
+          "span_id": 570208,
+          "start_ns": 646976447082300
+        }
+      ],
+      "ports": [
+        60571,
+        54859
+      ],
+      "server_root": 570215
+    },
+    {
+      "client_roots": [
+        570250
+      ],
+      "dispatch_ms": 103.9699,
+      "dispatch_to_lookup_ms": 61.6483,
+      "lookup_ms": 42.3086,
+      "overlapping_finish_spans": [
+        {
+          "duration_ms": 64.6286,
+          "end_ns": 646976692921700,
+          "root_id": 570247,
+          "span_id": 570247,
+          "start_ns": 646976628293100
+        }
+      ],
+      "ports": [
+        60571,
+        54861
+      ],
+      "server_root": 570253
+    },
+    {
+      "client_roots": [
+        570289
+      ],
+      "dispatch_ms": 82.1033,
+      "dispatch_to_lookup_ms": 48.5203,
+      "lookup_ms": 33.571,
+      "overlapping_finish_spans": [
+        {
+          "duration_ms": 51.4038,
+          "end_ns": 646976865635400,
+          "root_id": 570286,
+          "span_id": 570286,
+          "start_ns": 646976814231600
+        }
+      ],
+      "ports": [
+        60571,
+        54863
+      ],
+      "server_root": 570292
+    },
+    {
+      "client_roots": [
+        570358
+      ],
+      "dispatch_ms": 124.8817,
+      "dispatch_to_lookup_ms": 90.9662,
+      "lookup_ms": 33.9023,
+      "overlapping_finish_spans": [
+        {
+          "duration_ms": 52.176,
+          "end_ns": 646977106989600,
+          "root_id": 570368,
+          "span_id": 570368,
+          "start_ns": 646977054813600
+        }
+      ],
+      "ports": [
+        60571,
+        54868
+      ],
+      "server_root": 570361
+    },
+    {
+      "client_roots": [
+        570408
+      ],
+      "dispatch_ms": 93.2381,
+      "dispatch_to_lookup_ms": 61.2144,
+      "lookup_ms": 32.013,
+      "overlapping_finish_spans": [
+        {
+          "duration_ms": 49.5596,
+          "end_ns": 646977338797000,
+          "root_id": 570415,
+          "span_id": 570415,
+          "start_ns": 646977289237400
+        }
+      ],
+      "ports": [
+        60571,
+        54870
+      ],
+      "server_root": 570411
+    }
+  ],
+  "trace_metadata": {
+    "active_capacity": 64,
+    "captured_ns": 647001229565300,
+    "clock": "perf_counter_ns",
+    "event_capacity": 512,
+    "events_evicted": 1263154,
+    "failure_trigger": "first_lookup_transport_failure",
+    "first_failure": null,
+    "formal_acceptance": false,
+    "identity_missing": 0,
+    "pid": 22148,
+    "schema": "HH-S95-HTTP-PHASES-1",
+    "spans_dropped": 0,
+    "transport_failures_by_route": {
+      "archive": 0,
+      "cancel": 0,
+      "commands": 0,
+      "discovery": 0,
+      "lease": 0,
+      "lookup": 0,
+      "other": 0,
+      "stop": 0
+    },
+    "transport_failures_observed": 0,
+    "unfinished": []
+  },
+  "unknown_lookup_results": 0
+}

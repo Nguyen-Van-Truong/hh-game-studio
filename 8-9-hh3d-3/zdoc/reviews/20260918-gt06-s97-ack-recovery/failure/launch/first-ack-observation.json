@@ -1,0 +1,40 @@
+{
+  "observed_utc": "2026-09-18T15:55:12.820315+00:00",
+  "run_id": "gt06-s96-coupled-phases-01",
+  "formal_acceptance": false,
+  "first_ack_verified": true,
+  "completed_ack_rows": [
+    {
+      "batch_index": 0,
+      "objects": {
+        "unavailable_reason": null,
+        "value": 71128
+      },
+      "resources": {
+        "unavailable_reason": null,
+        "value": 6
+      },
+      "max_status_gap_ms": 600.493,
+      "native_batch_sha256": "d7c7ba366a5a17a1328154dea155ec5bd689ddf879d5d56b0c8851840e19f8ab",
+      "ack_sha256": "44cd546b57eb887fae29151f2a321a41473863780a10723ceb86747e209a0cd7",
+      "original_barrier_binding_valid": true
+    },
+    {
+      "batch_index": 1,
+      "objects": {
+        "unavailable_reason": null,
+        "value": 71128
+      },
+      "resources": {
+        "unavailable_reason": null,
+        "value": 6
+      },
+      "max_status_gap_ms": 583.175,
+      "native_batch_sha256": "6000fcd69605e9cf531a4176b5ad1a5572f9f0833c896d54d3a7755094014b5a",
+      "ack_sha256": "046117447afa6d31b6faaddda33498b45439d9f8c4f9bd12a3471ae5d4e564a0",
+      "original_barrier_binding_valid": true
+    }
+  ],
+  "baseline4_not_yet_verified": true,
+  "scope": "Partial live observation of completed immutable batch/ACK prefix only; not terminal or acceptance"
+}

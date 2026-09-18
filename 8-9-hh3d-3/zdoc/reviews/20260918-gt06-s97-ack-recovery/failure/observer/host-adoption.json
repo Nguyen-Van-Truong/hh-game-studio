@@ -1,0 +1,35 @@
+{
+  "ancestor": {
+    "actual_exit": null,
+    "executable": "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "handle_closed": false,
+    "natural_exit_not_inferred": true,
+    "observed_utc": "2026-09-18T15:51:05Z",
+    "parent_pid": 53484,
+    "pid": 6888,
+    "process_start": "windows:134342202657183936"
+  },
+  "formal_acceptance": false,
+  "helper": {
+    "actual_exit": null,
+    "executable": "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "handle_closed": false,
+    "natural_exit_not_inferred": true,
+    "observed_utc": "2026-09-18T15:51:08Z",
+    "parent_pid": 6888,
+    "pid": 23452,
+    "process_start": "windows:134342202685942471"
+  },
+  "receipt_sha256": "c5a4b799417e14e90cdeccedb71fa731c71f4c7d5475daf7b657b1f9ef86c040",
+  "role": "host",
+  "target": {
+    "actual_exit": null,
+    "executable": "C:\\Users\\truon\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "handle_closed": false,
+    "natural_exit_not_inferred": true,
+    "observed_utc": "2026-09-18T15:51:08Z",
+    "parent_pid": 23452,
+    "pid": 22148,
+    "process_start": "windows:134342202686852044"
+  }
+}

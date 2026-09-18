@@ -1,0 +1,1957 @@
+{
+  "authority": 0,
+  "declared_raw_artifacts": {
+    "batch-capture-00.json": {
+      "sha256": "5c1203a2b29600413f3e862e5a386b43c03cd540661b5f0eb75d4beb6ea80025",
+      "size_bytes": 868
+    },
+    "batch-capture-01.json": {
+      "sha256": "fc520cbbc8821ae4b97464609a213ffb6e66f479ff9d0498c4c53e2de0d0f6e9",
+      "size_bytes": 868
+    },
+    "batch-capture-02.json": {
+      "sha256": "e46fb32bfca22c5b1a3b5c7460175f4e758e952f1eb462353ecd5dd454eec7fe",
+      "size_bytes": 868
+    },
+    "batch-capture-03.json": {
+      "sha256": "addb94a9cf60ac2ad58dd0bfd4f55e4af061434a5edb5f8865fd88e2767ee008",
+      "size_bytes": 868
+    },
+    "batch-capture-04.json": {
+      "sha256": "060082def1288b7219b6cb1f1c453e208d35758375cab1a643b754e9f1b90cd8",
+      "size_bytes": 868
+    },
+    "batch-capture-05.json": {
+      "sha256": "35ce427e732fca13078ff10a82f018b77245816b0e939508bf64f530196f9453",
+      "size_bytes": 868
+    },
+    "batch-capture-06.json": {
+      "sha256": "40f845bc0e697b3bcbe55710ff9a1cbca9b38b7bbf9af311f0933f85dff2f512",
+      "size_bytes": 868
+    },
+    "batch-capture-07.json": {
+      "sha256": "1b2091c3dd008121027af52b52addd42a8443dd51a4248c12ed5d813e5c5a093",
+      "size_bytes": 868
+    },
+    "batch-capture-08.json": {
+      "sha256": "465bbb4ef8fda40ca3644ac3999a1543e6570a817c5a0f51e5d1d99f0e35cf69",
+      "size_bytes": 868
+    },
+    "batch-capture-09.json": {
+      "sha256": "989abe9ec9f955fca19bbe3e41c6537fa3fe0333d500434fd26d93ffe6c7d764",
+      "size_bytes": 868
+    },
+    "batch-capture-10.json": {
+      "sha256": "56a460b81fe9c5c5530c7251e0942ecd3d9a53abfe9c884694ce2419294e4a4f",
+      "size_bytes": 869
+    },
+    "batch-capture-11.json": {
+      "sha256": "196762ad71464a49440d271e936ee72b5827e3e024afb032232df5794668d042",
+      "size_bytes": 869
+    },
+    "batch-capture-12.json": {
+      "sha256": "b1b20b3191ea77a2bc6e7a8c842fd20381634d2a3412c3f79950d8048e7b5b83",
+      "size_bytes": 869
+    },
+    "batch-capture-13.json": {
+      "sha256": "f1d1861725a21ff500c241c5f4cfd52d65409efa1f087966886e9a2bba0b1fb8",
+      "size_bytes": 869
+    },
+    "batch-capture-14.json": {
+      "sha256": "535d537b95906751213047ceb80cf91be67a743556cbfb284b18e18c090ae1a2",
+      "size_bytes": 869
+    },
+    "batch-capture-15.json": {
+      "sha256": "f710d801fc27c8f14b020842d80bf23884b1f38511a551b82d11f87c7fb71f51",
+      "size_bytes": 869
+    },
+    "batch-capture-16.json": {
+      "sha256": "f2bba9d57236a21b107ed0a56eed4703aaafcf0c51f2f6dc12b91ed38b5a739b",
+      "size_bytes": 869
+    },
+    "benchmark-profile.json": {
+      "sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+      "size_bytes": 718
+    },
+    "child-failure.json": {
+      "sha256": "888c580da64a47813d5285027ff02e1a5e2a9cb7b0545899a722cbf64921e0c2",
+      "size_bytes": 212
+    },
+    "child-terminal-cleanup.json": {
+      "sha256": "5e41c19af3b2a11ec4b6bb574697b073a5bef1e734768b6405862583119e3dce",
+      "size_bytes": 3456
+    },
+    "command-00.json": {
+      "sha256": "0b5a43cd25566d6c24edc19c03082324f417106d098bf8fd999e58a04cd4803f",
+      "size_bytes": 1152262
+    },
+    "command-01.json": {
+      "sha256": "9b924bf0c00a422a86d725a720cc6f24b39f76f9c92d9c6565aa91f2ee379143",
+      "size_bytes": 1155433
+    },
+    "command-02.json": {
+      "sha256": "a7760848b8a4dfd174fe3efde92bcf65f0d0785a06153efde70c1c65547b1409",
+      "size_bytes": 1156053
+    },
+    "command-03.json": {
+      "sha256": "a061e0110b8d8d9fa38756eecb56b1c2bc86ef4afb3540552e35951cbcdc5257",
+      "size_bytes": 1155501
+    },
+    "command-04.json": {
+      "sha256": "ced9e61d73f7141e618c5cc4761fe536417a71329f5d8de8c1152c5cdfcfa4a9",
+      "size_bytes": 1155877
+    },
+    "command-05.json": {
+      "sha256": "0c619c51c860c413832ba2ee19c31904cc9ac8490469ae96f3022f6345e02740",
+      "size_bytes": 1162696
+    },
+    "command-06.json": {
+      "sha256": "7d04d41878dceceb3a14d817209b4ec009b79290ff78b0b7177fdbda099e3a67",
+      "size_bytes": 1162827
+    },
+    "command-07.json": {
+      "sha256": "921d858ceff7efddc9f71f3d3a2737ccdf8cb930731d2bd445e3700791212753",
+      "size_bytes": 1163219
+    },
+    "command-08.json": {
+      "sha256": "5231a47a323e0d6fcd0a67f829a4cf9048b5afcf8c5aa637c30e471ca5f7f410",
+      "size_bytes": 1163574
+    },
+    "command-09.json": {
+      "sha256": "7113dbcdf821671dad53de740a665315ce3e0d978f49f19e10b1e681a7db3b9a",
+      "size_bytes": 1164323
+    },
+    "command-10.json": {
+      "sha256": "f2b9925f27520c07aa75444040e34a70d96ef4bd76789f478213b2d87aae98d9",
+      "size_bytes": 1166566
+    },
+    "command-11.json": {
+      "sha256": "e4d2a45489ae5867b74441cc34a988085ee0d20af8bdd5cd64921ea2b07a7108",
+      "size_bytes": 1166803
+    },
+    "command-12.json": {
+      "sha256": "d6d905d05728a23ecb9570b407810b12ba3f9479b1c28d73dcb1d67e7025f583",
+      "size_bytes": 1166884
+    },
+    "command-13.json": {
+      "sha256": "90512d2f85fb7827d15f3b0c16ec009551a82bc9f5095765266792b8b2c33a1b",
+      "size_bytes": 1167076
+    },
+    "command-14.json": {
+      "sha256": "d1343eaa8a082e44ea375194705a9f5893ccc13409cfd9963920f90db0705ddb",
+      "size_bytes": 1166649
+    },
+    "command-15.json": {
+      "sha256": "d2251270d7d957d2d02653e72a60cd9ff8f62b2e56093b83c635cf1e47eff7d1",
+      "size_bytes": 1167071
+    },
+    "command-16.json": {
+      "sha256": "20b48ae1bb35b2b8bcc9ce67c0fd3754945b3292129ea5b96f12d3dc83ee494d",
+      "size_bytes": 1167117
+    },
+    "command-17.json": {
+      "sha256": "3b18de408d917b89cf4232c1f9563cd0223b71be7818825f051c9813f9bb1cc5",
+      "size_bytes": 1167020
+    },
+    "context.json": {
+      "sha256": "04924f25ec00aceaf2962faa2e8cb80c2707f5b700229cdb250899bbb2347689",
+      "size_bytes": 5493
+    },
+    "diagnostic.json": {
+      "sha256": "dcfd948a38ee9f54158a4246fb138d85e1e3eed84d54de1b0dbdab571336dd2f",
+      "size_bytes": 7733
+    },
+    "editor-host/cleanup-001.json": {
+      "sha256": "9ff26d2260e6188703654517521ac75e80f618c4e517723042f5f4babc109ee1",
+      "size_bytes": 556
+    },
+    "editor-host/invocation.json": {
+      "sha256": "521b171443ce953adaa471bff55e03b0aa5c0978bf2d880fee8c6093f1bd9549",
+      "size_bytes": 8931
+    },
+    "editor-host/process-start.json": {
+      "sha256": "406dca9a9d8ae6c0a6b333ddf981769e2685e44d522bb68911cd5bb5a5ff73e0",
+      "size_bytes": 14
+    },
+    "editor-host/stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "editor-host/stdout.txt": {
+      "sha256": "ad7db886d01f6b46cfa62767a630e09c8aa8865d8afc9d609223023278cb4f9b",
+      "size_bytes": 741017
+    },
+    "editor-snapshot.json": {
+      "sha256": "0b31b27e73d5466d4a5fe0ef9519c00f9628d3d06f129d9969c80a577732fefc",
+      "size_bytes": 1574
+    },
+    "host-owner/cleanup-001.json": {
+      "sha256": "31f58e29075f8f16bb2df0bb72471bfcd0df794b729d6497022554d84959cfc8",
+      "size_bytes": 548
+    },
+    "host-owner/invocation.json": {
+      "sha256": "1cb59a1c7d3f51a5f549657fb649276db45b33b3876367929a63d4f91c15a812",
+      "size_bytes": 8155
+    },
+    "host-owner/process-exit.json": {
+      "sha256": "810a1a5f1ed6f33a0fbc6a36f496d5930be39a7de20662b984339cd520d890f9",
+      "size_bytes": 30
+    },
+    "host-owner/process-start.json": {
+      "sha256": "c5a4b799417e14e90cdeccedb71fa731c71f4c7d5475daf7b657b1f9ef86c040",
+      "size_bytes": 14
+    },
+    "host-owner/stderr.txt": {
+      "sha256": "a82a2c6632ab8398dcc5379c13b04e4f4541d140feae7f04835d82520aebe319",
+      "size_bytes": 435
+    },
+    "host-owner/stdout.txt": {
+      "sha256": "674c06f32bf36d6822abdab2c020b5fc152d6b2ca3b8443927b403658cb426e1",
+      "size_bytes": 215434
+    },
+    "http-phases-final.json": {
+      "sha256": "9f41e7ba63253e24555ad8d9b1b68cdd83e620ec08da5e6ffb4fcbd002e9dac8",
+      "size_bytes": 137429
+    },
+    "import-host/capture.json": {
+      "sha256": "8eac15d4eb4910e94127e37ccc33854aad60dcca67b65b9fb18663072284d920",
+      "size_bytes": 1341
+    },
+    "import-host/invocation.json": {
+      "sha256": "8cc23c8e5235c7e047d84bacdf9148a7ca9ec4d9d214c70e6bedce6189ea569a",
+      "size_bytes": 6177
+    },
+    "import-host/process-exit.json": {
+      "sha256": "37072105693c3b7f72e10c02247f32c0952ce9e24284680c42d493bbddabea4b",
+      "size_bytes": 30
+    },
+    "import-host/process-start.json": {
+      "sha256": "2ed5a3909aaa76179cf00f166987cf79ee1334484e47e9a45dce743df298dece",
+      "size_bytes": 14
+    },
+    "import-host/stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "import-host/stdout.txt": {
+      "sha256": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003",
+      "size_bytes": 1492
+    },
+    "initial-project-files.json": {
+      "sha256": "c4395331745aa570c582e126cf445f14a0d63ef2d1170d730c3b8084bfeb5c5f",
+      "size_bytes": 1461
+    },
+    "joint-00.json": {
+      "sha256": "5066da04e461566df3869d705da6d496599f62ea32942b8ef872af6bc523a411",
+      "size_bytes": 2282
+    },
+    "joint-01.json": {
+      "sha256": "7e5d479ee625d7963147359a261d21b0cd93a7107ed2c5f2ee6162dc422874a3",
+      "size_bytes": 2287
+    },
+    "joint-02.json": {
+      "sha256": "e8569ad988957a080e22f03d273512e0d8bc90aacef5acd43a973cb40a47033d",
+      "size_bytes": 2287
+    },
+    "joint-03.json": {
+      "sha256": "aca641439130cfaef1a9df3d030280c04dea71950f47bfe0e6ef44b7f296ddfb",
+      "size_bytes": 2287
+    },
+    "joint-04.json": {
+      "sha256": "71368b6ba8fadf4fa242712d0fa07ac0115e598300c375ed883389420ff04fd9",
+      "size_bytes": 2288
+    },
+    "joint-05.json": {
+      "sha256": "fba9f13d2808fef1423e870db02a8dfd3eadab88bef1232df61bac142f5bed19",
+      "size_bytes": 2288
+    },
+    "joint-06.json": {
+      "sha256": "229b754dd80945523ec48f7a33f8fd28cf985e0d773404399411ba8f1c600a19",
+      "size_bytes": 2288
+    },
+    "joint-07.json": {
+      "sha256": "d12c1d48182a1b2dc386384066a730edc4f23d62d150e4d5ac529df41324b85f",
+      "size_bytes": 2287
+    },
+    "joint-08.json": {
+      "sha256": "822de2bb6a6804416bbb824bfeb0c3a6729113734cf271a4fc3b42d6973d6094",
+      "size_bytes": 2290
+    },
+    "joint-09.json": {
+      "sha256": "b96751d522724b494712bbe9ecdee6b86ef78d4734fa8b6514e8da19fc81e78d",
+      "size_bytes": 2291
+    },
+    "joint-10.json": {
+      "sha256": "16f2c65810851db9301f9a226627de43e178c84dd3593663bb07213490ec4675",
+      "size_bytes": 2297
+    },
+    "joint-11.json": {
+      "sha256": "7532b7800f13993da27566aec383ea81d5b7d6eebbe0743809bb550decfcd82a",
+      "size_bytes": 2298
+    },
+    "joint-12.json": {
+      "sha256": "f7409fffda873ffd003ab916085d375d3c8c3145ddf7ed4a7c2ad0b097ad250c",
+      "size_bytes": 2298
+    },
+    "joint-13.json": {
+      "sha256": "b8b279edd728b2784dd9a56dabe5a748c146490555f99575f5e999cebadbffcf",
+      "size_bytes": 2298
+    },
+    "joint-14.json": {
+      "sha256": "cfe3af35c51a70ff1c300878b6a88c471deebb8b67851361261b4546afb904b1",
+      "size_bytes": 2298
+    },
+    "joint-15.json": {
+      "sha256": "2c42617d49fbb1b3a11aedda973c21dd19929f2c9fe68928a8ad23df17f9a09e",
+      "size_bytes": 2298
+    },
+    "joint-16.json": {
+      "sha256": "154cc35553082f5aabcf0107f83893ae607aa7ee60c6ad0c6c73d63fc6ab1b79",
+      "size_bytes": 2298
+    },
+    "native-overlay.json": {
+      "sha256": "d6e72a6096b7e1bb3744d45745f53a7e35dcdfa7ee26f7fcc6d6c4ef2c1f83e8",
+      "size_bytes": 873
+    },
+    "project/benchmark/input/ack-00.json": {
+      "sha256": "44cd546b57eb887fae29151f2a321a41473863780a10723ceb86747e209a0cd7",
+      "size_bytes": 421
+    },
+    "project/benchmark/input/ack-01.json": {
+      "sha256": "046117447afa6d31b6faaddda33498b45439d9f8c4f9bd12a3471ae5d4e564a0",
+      "size_bytes": 421
+    },
+    "project/benchmark/input/ack-02.json": {
+      "sha256": "37c262c4ec4ff9821b1e0d431df5b20e7c64156a6a4547ee2730b72a0afde0eb",
+      "size_bytes": 421
+    },
+    "project/benchmark/input/ack-03.json": {
+      "sha256": "57f5ca8ce8f6185dd14b7c95d9e32f04bcd927c11b6fffd5262d1a34ba42ba28",
+      "size_bytes": 421
+    },
+    "project/benchmark/input/ack-04.json": {
+      "sha256": "ad2a2f4f0249e80196722640d12fceb8a2b7506c83f2a01d1828fa8e0daf453a",
+      "size_bytes": 421
+    },
+    "project/benchmark/input/ack-05.json": {
+      "sha256": "34e3ddee7c634eea0402dbbd0ebc53eb882163b38594eee71300edfe7c4546d8",
+      "size_bytes": 421
+    },
+    "project/benchmark/input/ack-06.json": {
+      "sha256": "ba419ccf34dce66a34b417d6b629d44a20fabd225660f4cb0877c209e765af30",
+      "size_bytes": 421
+    },
+    "project/benchmark/input/ack-07.json": {
+      "sha256": "c40e37bd33282f1207b1a4e080307e3e2aad9d533220884df565fe4a619b1527",
+      "size_bytes": 421
+    },
+    "project/benchmark/input/ack-08.json": {
+      "sha256": "48406656d757fb1fbe8b7c1e5314b07245158d3524aa8c7a97065c8103d5feb3",
+      "size_bytes": 421
+    },
+    "project/benchmark/input/ack-09.json": {
+      "sha256": "35c9e5b4280d6b6109f793bb22fb63aadc5821de9d9dcdab0dcf81ca6b89c43d",
+      "size_bytes": 421
+    },
+    "project/benchmark/input/ack-10.json": {
+      "sha256": "9120b6c4fedd4e5411693a034114c4465b03e9486c92b76a0aefd0bd3d2250e9",
+      "size_bytes": 423
+    },
+    "project/benchmark/input/ack-11.json": {
+      "sha256": "c358ba80b4eeccf609d30a0085132a963eee91d331a852b94d34b4e420a56428",
+      "size_bytes": 423
+    },
+    "project/benchmark/input/ack-12.json": {
+      "sha256": "e1819ced99493e55e5e5b8c19d51c893816a1ea2259f6a38680e4badf51ae81a",
+      "size_bytes": 423
+    },
+    "project/benchmark/input/ack-13.json": {
+      "sha256": "ec2b5da049fd40883f240aea818b07eee660e9cb3a02fbdc883410712086d556",
+      "size_bytes": 423
+    },
+    "project/benchmark/input/ack-14.json": {
+      "sha256": "027f765166a1a884155a8647652fcb8794a4f8d519496487526b700af99d9fd0",
+      "size_bytes": 423
+    },
+    "project/benchmark/input/ack-15.json": {
+      "sha256": "052cd2f7ec73a1f0fd6315d894b6d568a5209b303d2bb61f9e8aaa2b86511bf0",
+      "size_bytes": 423
+    },
+    "project/benchmark/input/ack-16.json": {
+      "sha256": "f556ce32e0c0fce727528bd25310de4e720278e39c7d5cc74ebfb1f6d623c6c8",
+      "size_bytes": 423
+    },
+    "project/benchmark/input/ack-17.json": {
+      "sha256": "ed082013ff329c80205d253bfe630f125978c5326797aa04e97c711c5e7c95bd",
+      "size_bytes": 423
+    },
+    "project/benchmark/input/start-00.json": {
+      "sha256": "68a74182cea84667c1210a7ade9d66291fa21ee93ea0ef3d3800fce18962a671",
+      "size_bytes": 506
+    },
+    "project/benchmark/input/start-01.json": {
+      "sha256": "73843808dea6065ac5989174b012a825da0d982c298377b4873b311588bc3d3d",
+      "size_bytes": 506
+    },
+    "project/benchmark/input/start-02.json": {
+      "sha256": "a0e761290da19448c3037d248e9106aa404844c94e265b56771190eeec8a88dd",
+      "size_bytes": 506
+    },
+    "project/benchmark/input/start-03.json": {
+      "sha256": "1f1e616d024d5b5e8cec7b7bc7c7c3aa3dfe3630addec746d2caf5d277ab9bca",
+      "size_bytes": 506
+    },
+    "project/benchmark/input/start-04.json": {
+      "sha256": "e7ba4f8177ace6e1918d07419ad7aae4fc011840e47c4ece4232c23074e480e6",
+      "size_bytes": 506
+    },
+    "project/benchmark/input/start-05.json": {
+      "sha256": "d48829cac8dbce18d288d0fa47b339ebd344e8bb7d35b74bf79db3dd81d6ea16",
+      "size_bytes": 507
+    },
+    "project/benchmark/input/start-06.json": {
+      "sha256": "4bb3bee0910306b7bb53ffd3b796f4a09718d906ea7e4f8c592e17c8b1c0aa60",
+      "size_bytes": 507
+    },
+    "project/benchmark/input/start-07.json": {
+      "sha256": "f6575bd9db84bdceb10cd99f5d3f519c55bf82e986104bc98172ab1258b0e28e",
+      "size_bytes": 507
+    },
+    "project/benchmark/input/start-08.json": {
+      "sha256": "0595e9df664561b826f5020f470effedf9a8aaae8343a823e7f4ef7b76e5521a",
+      "size_bytes": 507
+    },
+    "project/benchmark/input/start-09.json": {
+      "sha256": "19e160e679f8ecd93651a47d74ea494b16b58c55d897b7817d3833e65c2056c8",
+      "size_bytes": 507
+    },
+    "project/benchmark/input/start-10.json": {
+      "sha256": "a60fbf356410548a276eddd9313798ab40a9e2d65517dd7b660923e1b458cd88",
+      "size_bytes": 508
+    },
+    "project/benchmark/input/start-11.json": {
+      "sha256": "caac861fb9f31aafb19ddf57ff41ee3aefb5759af5a44b239c4b8bd4ce64d5a9",
+      "size_bytes": 508
+    },
+    "project/benchmark/input/start-12.json": {
+      "sha256": "37b1f019d02b48fbfc58151023da35d2ddf678234612f01bb837975550a42a9b",
+      "size_bytes": 508
+    },
+    "project/benchmark/input/start-13.json": {
+      "sha256": "e4ff897a9d27e3e957829646341e427e0a447023d65a7e075b64b3ae4e8e6ba9",
+      "size_bytes": 508
+    },
+    "project/benchmark/input/start-14.json": {
+      "sha256": "1b1bdd16749fd53af0c86c1ac5efa330257bf7bfd563d7bb456111d8ea9b0cd0",
+      "size_bytes": 508
+    },
+    "project/benchmark/input/start-15.json": {
+      "sha256": "a2031b87232c4dc0a696da578f3a83449d411c67dbfd8fd6160b54a55a22b948",
+      "size_bytes": 508
+    },
+    "project/benchmark/input/start-16.json": {
+      "sha256": "364364ceb08c9c07be6ab6c463110cbe4095875dac5f9860c37631d433b93bc3",
+      "size_bytes": 508
+    },
+    "project/benchmark/input/start-17.json": {
+      "sha256": "922a1dccbf80c333360d27ac146e641bb6a40cb9331ef349161f63e1617f7127",
+      "size_bytes": 508
+    },
+    "project/benchmark/out/batch-00.json": {
+      "sha256": "d7c7ba366a5a17a1328154dea155ec5bd689ddf879d5d56b0c8851840e19f8ab",
+      "size_bytes": 97097
+    },
+    "project/benchmark/out/batch-01.json": {
+      "sha256": "6000fcd69605e9cf531a4176b5ad1a5572f9f0833c896d54d3a7755094014b5a",
+      "size_bytes": 98318
+    },
+    "project/benchmark/out/batch-02.json": {
+      "sha256": "e7e2e61bccccab7ec0de77a4db437d04252a04b682425d59917d24b94f3d56e2",
+      "size_bytes": 98335
+    },
+    "project/benchmark/out/batch-03.json": {
+      "sha256": "e2e813751cb723f6dab44fd715f09ba397ba332146699e42a8876470bb965dcb",
+      "size_bytes": 98247
+    },
+    "project/benchmark/out/batch-04.json": {
+      "sha256": "fe7c434e68aba95a97f9ccdee0cbab0a8136b0d104b18a8bfd60e293717e2838",
+      "size_bytes": 98233
+    },
+    "project/benchmark/out/batch-05.json": {
+      "sha256": "2dc6cb3b1ad3e42c99f9fbf50322a6ea1a7d83f98b934866d7fe2625d57df5b7",
+      "size_bytes": 98267
+    },
+    "project/benchmark/out/batch-06.json": {
+      "sha256": "e5b95677ebc9fd7561ad96f6de1bcda59d71320477307c4a6af3d8df3dd6bee1",
+      "size_bytes": 98256
+    },
+    "project/benchmark/out/batch-07.json": {
+      "sha256": "83d8bc76952bee87e3867a6997ee69c882026dde569471759459b4e66efd47ad",
+      "size_bytes": 98230
+    },
+    "project/benchmark/out/batch-08.json": {
+      "sha256": "f52a9348a2378ac0bfdedf6bb5f53d44790c9d91135cda7824f81a8f8dba0e70",
+      "size_bytes": 98346
+    },
+    "project/benchmark/out/batch-09.json": {
+      "sha256": "aa4c41cdeffc762db7e8bb776b23c094eaa2ce2906ad1f0d7fd44ef69049071e",
+      "size_bytes": 98353
+    },
+    "project/benchmark/out/batch-10.json": {
+      "sha256": "f67bcd71e3a38aa16493da0b3f481194dabbd8b89797aed5e09af2c758adfc1f",
+      "size_bytes": 99476
+    },
+    "project/benchmark/out/batch-11.json": {
+      "sha256": "f28d3b544697b8d8adfe9a726e164425495e4d4c5806a736c50c61f36b82e874",
+      "size_bytes": 99657
+    },
+    "project/benchmark/out/batch-12.json": {
+      "sha256": "ac8640fe14e869413b239972328a21b5690b12210b941fc96f11349c7ff20871",
+      "size_bytes": 99659
+    },
+    "project/benchmark/out/batch-13.json": {
+      "sha256": "2df48b619a38cd5f658883808b3f3c46fdb84c0c206e1d1500e746eddf851cd3",
+      "size_bytes": 99673
+    },
+    "project/benchmark/out/batch-14.json": {
+      "sha256": "e28bcf9cb7cbc1374bddbf998155a464c908424dfa9ce5a5f0925f2e70643753",
+      "size_bytes": 99654
+    },
+    "project/benchmark/out/batch-15.json": {
+      "sha256": "37830c70a62696286b9c597c2c1bcfd9b2996073fd2c3ca444e79abc1ddaef83",
+      "size_bytes": 99651
+    },
+    "project/benchmark/out/batch-16.json": {
+      "sha256": "039bbace86487742ef524996306a0e77dff57663071ae302dc829f7b9543f180",
+      "size_bytes": 99664
+    },
+    "project/benchmark/out/batch-17.json": {
+      "sha256": "ba30ed708117e7f9bb526f49f416a4e52dbf25822dc0ad23b9562d069ad3fa11",
+      "size_bytes": 99651
+    },
+    "project/benchmark/out/failure.json": {
+      "sha256": "f2c9bb97110a3e469f6d988d5f639b46366f573c947b114b1f2f68ad3a9d93ca",
+      "size_bytes": 2389
+    },
+    "project/benchmark/out/ready-00.json": {
+      "sha256": "b026f2f4c4eba39cb9e4811fb4fe5d81a577da6ea65c41ff5dec88ddc053ea49",
+      "size_bytes": 656
+    },
+    "project/benchmark/out/ready-01.json": {
+      "sha256": "839a12e284bb29c729c7793dc1048e8dee4efd7592d15e6ce3c974a56b18f058",
+      "size_bytes": 660
+    },
+    "project/benchmark/out/ready-02.json": {
+      "sha256": "f02f6712c377c5befe7982abc98e11141aca74b1f91a3a09c166622fc2f4a4da",
+      "size_bytes": 662
+    },
+    "project/benchmark/out/ready-03.json": {
+      "sha256": "c5ecbfa8ba9bf4e008acdeb77e1dae86738a69bf8937b9ab3d6c26e307580d63",
+      "size_bytes": 662
+    },
+    "project/benchmark/out/ready-04.json": {
+      "sha256": "d5302edd99d413d50a80254c29c0e9114553f676a025b0a30f3b76847ae2ce06",
+      "size_bytes": 662
+    },
+    "project/benchmark/out/ready-05.json": {
+      "sha256": "ec7f59739fdf2de60ca80c6ea283b350832218a2ec62d970ee7ab2c4ee2ec3c4",
+      "size_bytes": 663
+    },
+    "project/benchmark/out/ready-06.json": {
+      "sha256": "e0946c8ac0ae92a0139696bdee3b832296fd5e214e5d8ffcad0aa10de1dec2a6",
+      "size_bytes": 663
+    },
+    "project/benchmark/out/ready-07.json": {
+      "sha256": "9271cfc2a425038ced002b715952aca38f9dcc3ee6882f6658ce67f44144e478",
+      "size_bytes": 663
+    },
+    "project/benchmark/out/ready-08.json": {
+      "sha256": "9ac2f70ade353d296e148e8388f8cad9f10bd67660452be8d382f35a3ebf4538",
+      "size_bytes": 663
+    },
+    "project/benchmark/out/ready-09.json": {
+      "sha256": "eec727eae87929ee76c01d8c89e7cab3b65205025063fe751b14e4ee0d30118f",
+      "size_bytes": 664
+    },
+    "project/benchmark/out/ready-10.json": {
+      "sha256": "81e806c56008b169d840b137e4ec988a3f094feae44e53aadf5cdb6201d3c6a5",
+      "size_bytes": 666
+    },
+    "project/benchmark/out/ready-11.json": {
+      "sha256": "ab5cbcb06ede1080e881eadc3f546891b10205755e94747422939af88399e1fb",
+      "size_bytes": 667
+    },
+    "project/benchmark/out/ready-12.json": {
+      "sha256": "61e2bccd0b9e86183fa6278841888e761e7fbb8a825b088133b3eb5f6fc87c27",
+      "size_bytes": 668
+    },
+    "project/benchmark/out/ready-13.json": {
+      "sha256": "f3cb5551dceb60be0ec85d5d8b9470398cfd56b8f8e158373722165573b9f7c6",
+      "size_bytes": 668
+    },
+    "project/benchmark/out/ready-14.json": {
+      "sha256": "7c35d5b2043da4350600f29935b736e38b7ff86fda431272a72408327b9708d0",
+      "size_bytes": 668
+    },
+    "project/benchmark/out/ready-15.json": {
+      "sha256": "d6966dd1a02c6b78d93a65645c853601108858ee864a301627c652c9064f8c40",
+      "size_bytes": 668
+    },
+    "project/benchmark/out/ready-16.json": {
+      "sha256": "694ad708f690ca0616bd24c9e9121835ace13e7945a037b0c20777ab9fdd5cae",
+      "size_bytes": 668
+    },
+    "project/benchmark/out/ready-17.json": {
+      "sha256": "37d123effe16cc1c5b6e5126df9ec460983a6c28655fa1d1087abfe7d74ec006",
+      "size_bytes": 668
+    },
+    "project/benchmark/out/sparse-00.json": {
+      "sha256": "0384675458e6c36e5865525af138c7b82fb70be4a32fded9926f04b6820399ac",
+      "size_bytes": 63966
+    },
+    "project/benchmark/out/sparse-post-00.json": {
+      "sha256": "320cbd83a6a8f92960cff1c5af6aa97e757de899ab6767dddb9155cd91fc4f42",
+      "size_bytes": 639
+    },
+    "s96-composition.json": {
+      "sha256": "bfe08003a9f01a4b4c4376a1f96e2fce0f2e1027b0a44c4ea9896a3dbfc6bf13",
+      "size_bytes": 747
+    },
+    "sample-preview-00.json": {
+      "sha256": "612ce0e80a12e3fc561a0173a15057fd01152229ae0d262d07e85e0a6d99c6a8",
+      "size_bytes": 72794
+    },
+    "sample-preview-01.json": {
+      "sha256": "74422dbce618b47e490c0ce09bc5daab400987cd4f1bf72cd2242f4e7c32af73",
+      "size_bytes": 72784
+    },
+    "sample-preview-02.json": {
+      "sha256": "a0bd1be66b0b20378f6efd1585c9de131421c9c5a386a1eb652b79339bd64950",
+      "size_bytes": 72807
+    },
+    "sample-preview-03.json": {
+      "sha256": "5931fcf4e840aa8954577a7e026026820f49f2488e46f9f6d3c11523ca7a6562",
+      "size_bytes": 72728
+    },
+    "sample-preview-04.json": {
+      "sha256": "c2dba5472192b8b3788e6193f285f895b7c7f3cd74b33bc0a2787f192669c4fb",
+      "size_bytes": 72734
+    },
+    "sample-preview-05.json": {
+      "sha256": "85c4d38448fa1e0f46e820d0531d36f6467926d2ae9067c31348237b303472b4",
+      "size_bytes": 72802
+    },
+    "sample-preview-06.json": {
+      "sha256": "97a29d0fc544eb7e21b77ba6c1a13bf32ab2f7d1dbf23fff0ebf4660ef90017e",
+      "size_bytes": 72825
+    },
+    "sample-preview-07.json": {
+      "sha256": "5aded48c4a2d598903693770017c0de8bbc80a367bc2a8a1ace7211b6e18ea67",
+      "size_bytes": 72826
+    },
+    "sample-preview-08.json": {
+      "sha256": "503f5c898763a7c9087ad6cbd89bcf2a2073a85839471e428ae1ff03bea9c825",
+      "size_bytes": 73056
+    },
+    "sample-preview-09.json": {
+      "sha256": "139c4d784e0db4e9b26a7a36d42dec9ddbeacedb06edd6be564961d779af18f8",
+      "size_bytes": 73213
+    },
+    "sample-preview-10.json": {
+      "sha256": "fecd6e1eb090afc64de690d0503cd7218a468ffd6da610ec47a901efd7f95428",
+      "size_bytes": 73271
+    },
+    "sample-preview-11.json": {
+      "sha256": "2b297e26d1fad97714e6151e2ea7eabceb5f8bbc19c1a40854bfcb1c66963f6d",
+      "size_bytes": 73436
+    },
+    "sample-preview-12.json": {
+      "sha256": "869c7974a3ee9b85db416019e69b5622fe929805e53612f16a3209da5da29f25",
+      "size_bytes": 73460
+    },
+    "sample-preview-13.json": {
+      "sha256": "e2cc6fa893fd55d70756013f24f035ea37fd40701662643014d45017d18eb36a",
+      "size_bytes": 73438
+    },
+    "sample-preview-14.json": {
+      "sha256": "c4d88065a6c7fc856abedee4a69e902d03c351cd2c0132a73b9529ca87109316",
+      "size_bytes": 73480
+    },
+    "sample-preview-15.json": {
+      "sha256": "0f1f6557c968feeb939b40ebbe09b79d40c8ed1ee3f377ab0244e03dcfd3f352",
+      "size_bytes": 73515
+    },
+    "sample-preview-16.json": {
+      "sha256": "b793d46a7265353729a278fe0bb14a395a8c1b1371de7d7c4d72e59fb6ed7330",
+      "size_bytes": 73539
+    },
+    "source-files.json": {
+      "sha256": "fbf3f5a057e59cea2d5a9c2607a4fc6df3be4cb41396b2132b99b46911d3b397",
+      "size_bytes": 5156
+    },
+    "supervisor-return.json": {
+      "sha256": "7c31dbcf4b00ce5ddd53c5cc68d87b9885b636ecba2a8ba49ceb3d09b47e3d5a",
+      "size_bytes": 225
+    },
+    "supervisor-start.json": {
+      "sha256": "5686172a10dd004d25d8075d9a25b2c6e08e4afcc191079f44ab4e145ea120ff",
+      "size_bytes": 76
+    },
+    "supervisor-stderr.txt": {
+      "sha256": "c4f604c87458a1bf0567deb5015f84367c61b283f12f0f86830eb93f4e28a0e4",
+      "size_bytes": 233
+    },
+    "supervisor-stdout.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "toolchain.lock.json": {
+      "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+      "size_bytes": 3026
+    }
+  },
+  "eligible_for_dataset": false,
+  "failure": {
+    "code": "CAMPAIGN_NATIVE_FAILURE",
+    "completed": false,
+    "completed_batches": 17,
+    "formal_acceptance": false,
+    "partial_command": null,
+    "phase": {
+      "batch": 17,
+      "phase": "joint_observation"
+    },
+    "run_id": "gt06-s96-coupled-phases-01"
+  },
+  "files": {
+    "launch/automation-readback.json": {
+      "sha256": "43365f206da4d8e7a7c8efc2e215792e41038f262c6d23a8245970d22b8e385f",
+      "size_bytes": 356,
+      "source": "zdoc/reviews/20260918-gt06-s96-coupled-phases/launch-01/automation-readback.json"
+    },
+    "launch/baseline4-observation.json": {
+      "sha256": "04570819fa1628da50670c802af81461021fad38d26f6a7ba81e66683926394c",
+      "size_bytes": 3462,
+      "source": "zdoc/reviews/20260918-gt06-s96-coupled-phases/launch-01/baseline4-observation.json"
+    },
+    "launch/dispatch-claim.json": {
+      "sha256": "d5d23592e69140e41209e805dd6717684f8d5cc45c8e11a99885e61b3d6254d6",
+      "size_bytes": 128,
+      "source": "zdoc/reviews/20260918-gt06-s96-coupled-phases/launch-01/dispatch-claim.json"
+    },
+    "launch/first-ack-observation.json": {
+      "sha256": "f97f619fdf23eda1109119a7d770231fa4c72fc73842c4c1e0eedae21820d8bf",
+      "size_bytes": 1329,
+      "source": "zdoc/reviews/20260918-gt06-s96-coupled-phases/launch-01/first-ack-observation.json"
+    },
+    "launch/request.json": {
+      "sha256": "9c4a71fb4f4557e55986279298197cd0aa5208b0ad8cd795db260ae137fd8384",
+      "size_bytes": 8000,
+      "source": "zdoc/reviews/20260918-gt06-s96-coupled-phases/launch-01/request.json"
+    },
+    "launch/startup-observation.json": {
+      "sha256": "56f402e63ca6e60ba6bbc40842c4220b01db146a1df725742f34ba5babc8c1ec",
+      "size_bytes": 1359,
+      "source": "zdoc/reviews/20260918-gt06-s96-coupled-phases/launch-01/startup-observation.json"
+    },
+    "launch/task-registered.json": {
+      "sha256": "cbf4558d56ddf25ccb1dd07bd630999060124e6941e618e1bde7bbedc85d35c2",
+      "size_bytes": 314,
+      "source": "zdoc/reviews/20260918-gt06-s96-coupled-phases/launch-01/task-registered.json"
+    },
+    "launch/task-start.json": {
+      "sha256": "fab6dcf54a8bdfe2f17a9fd97ddaab288dd18cf2744c5a264bb54f475a239230",
+      "size_bytes": 479,
+      "source": "zdoc/reviews/20260918-gt06-s96-coupled-phases/launch-01/task-start.json"
+    },
+    "launch/task.xml": {
+      "sha256": "6e83a6199af74a142b74d03a0c217429bbe52cb306794f20fc3ac67499bb189b",
+      "size_bytes": 1675,
+      "source": "zdoc/reviews/20260918-gt06-s96-coupled-phases/launch-01/task.xml"
+    },
+    "observer/claim.json": {
+      "sha256": "51699bc94f8cf2c0234fb5a119a89e1b410b77ba0e2bcc80ae9b97a851bf5ab2",
+      "size_bytes": 182,
+      "source": "zdoc/reviews/20260918-gt06-s96-coupled-phases/launch-01/observer/claim.json"
+    },
+    "observer/editor-adoption.json": {
+      "sha256": "1df2d7a96c8e96a814dcc3addb7d87ae8ddd58202955b9920cf90a3b7acb1ad3",
+      "size_bytes": 1261,
+      "source": "zdoc/reviews/20260918-gt06-s96-coupled-phases/launch-01/observer/editor-adoption.json"
+    },
+    "observer/editor-exit.json": {
+      "sha256": "4ce57d2d72582617eeb338592836889008945e20de35a144d427e80136d6db1e",
+      "size_bytes": 588,
+      "source": "zdoc/reviews/20260918-gt06-s96-coupled-phases/launch-01/observer/editor-exit.json"
+    },
+    "observer/editor_helper-exit.json": {
+      "sha256": "6dfa0c2b9d2fe25a78302f5c26db9dc3d64153178feb2c07a39e11c8a00dd405",
+      "size_bytes": 497,
+      "source": "zdoc/reviews/20260918-gt06-s96-coupled-phases/launch-01/observer/editor_helper-exit.json"
+    },
+    "observer/host-adoption.json": {
+      "sha256": "359699d2b9e8034abd2fc8cf7f0ebe3af74cb1b8fc095ee4e4d4500b9153f7fb",
+      "size_bytes": 1168,
+      "source": "zdoc/reviews/20260918-gt06-s96-coupled-phases/launch-01/observer/host-adoption.json"
+    },
+    "observer/host-exit.json": {
+      "sha256": "c2a9b166974a34aa62dfd89b3e6e0b15c2b4a02e7723e497624f6c045fb9a751",
+      "size_bytes": 498,
+      "source": "zdoc/reviews/20260918-gt06-s96-coupled-phases/launch-01/observer/host-exit.json"
+    },
+    "observer/host_helper-exit.json": {
+      "sha256": "600baf1888bc07a563a6777c176095beef6121385a9ea3efe1c2a35abae5a6f7",
+      "size_bytes": 497,
+      "source": "zdoc/reviews/20260918-gt06-s96-coupled-phases/launch-01/observer/host_helper-exit.json"
+    },
+    "observer/manifest.json": {
+      "sha256": "3d6ffe3cd42892da0c4760551b45183c2452f7ed9814303aa823f967de8a3b1c",
+      "size_bytes": 2827,
+      "source": "zdoc/reviews/20260918-gt06-s96-coupled-phases/launch-01/observer/manifest.json"
+    },
+    "observer/supervisor-adoption.json": {
+      "sha256": "19f385831f1752a3f3092c261b2b0f87532d9ef83d898b305c21a938c11cd968",
+      "size_bytes": 588,
+      "source": "zdoc/reviews/20260918-gt06-s96-coupled-phases/launch-01/observer/supervisor-adoption.json"
+    },
+    "observer/supervisor-console-stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "source": "zdoc/reviews/20260918-gt06-s96-coupled-phases/launch-01/observer/supervisor-console-stderr.txt"
+    },
+    "observer/supervisor-console-stdout.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "source": "zdoc/reviews/20260918-gt06-s96-coupled-phases/launch-01/observer/supervisor-console-stdout.txt"
+    },
+    "observer/supervisor-exit.json": {
+      "sha256": "6a887d4fc92a14b552946b7cedcad368b79d7cd14e449f2401162454e3c4426e",
+      "size_bytes": 497,
+      "source": "zdoc/reviews/20260918-gt06-s96-coupled-phases/launch-01/observer/supervisor-exit.json"
+    },
+    "observer/terminal.json": {
+      "sha256": "4d5dd2f81d8c01ac54f5f01e7e3a15b33872610c13fb8026323c869b67b733e7",
+      "size_bytes": 4091,
+      "source": "zdoc/reviews/20260918-gt06-s96-coupled-phases/launch-01/observer/terminal.json"
+    },
+    "raw/batch-capture-00.json": {
+      "sha256": "5c1203a2b29600413f3e862e5a386b43c03cd540661b5f0eb75d4beb6ea80025",
+      "size_bytes": 868,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/batch-capture-00.json"
+    },
+    "raw/batch-capture-01.json": {
+      "sha256": "fc520cbbc8821ae4b97464609a213ffb6e66f479ff9d0498c4c53e2de0d0f6e9",
+      "size_bytes": 868,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/batch-capture-01.json"
+    },
+    "raw/batch-capture-02.json": {
+      "sha256": "e46fb32bfca22c5b1a3b5c7460175f4e758e952f1eb462353ecd5dd454eec7fe",
+      "size_bytes": 868,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/batch-capture-02.json"
+    },
+    "raw/batch-capture-03.json": {
+      "sha256": "addb94a9cf60ac2ad58dd0bfd4f55e4af061434a5edb5f8865fd88e2767ee008",
+      "size_bytes": 868,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/batch-capture-03.json"
+    },
+    "raw/batch-capture-04.json": {
+      "sha256": "060082def1288b7219b6cb1f1c453e208d35758375cab1a643b754e9f1b90cd8",
+      "size_bytes": 868,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/batch-capture-04.json"
+    },
+    "raw/batch-capture-05.json": {
+      "sha256": "35ce427e732fca13078ff10a82f018b77245816b0e939508bf64f530196f9453",
+      "size_bytes": 868,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/batch-capture-05.json"
+    },
+    "raw/batch-capture-06.json": {
+      "sha256": "40f845bc0e697b3bcbe55710ff9a1cbca9b38b7bbf9af311f0933f85dff2f512",
+      "size_bytes": 868,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/batch-capture-06.json"
+    },
+    "raw/batch-capture-07.json": {
+      "sha256": "1b2091c3dd008121027af52b52addd42a8443dd51a4248c12ed5d813e5c5a093",
+      "size_bytes": 868,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/batch-capture-07.json"
+    },
+    "raw/batch-capture-08.json": {
+      "sha256": "465bbb4ef8fda40ca3644ac3999a1543e6570a817c5a0f51e5d1d99f0e35cf69",
+      "size_bytes": 868,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/batch-capture-08.json"
+    },
+    "raw/batch-capture-09.json": {
+      "sha256": "989abe9ec9f955fca19bbe3e41c6537fa3fe0333d500434fd26d93ffe6c7d764",
+      "size_bytes": 868,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/batch-capture-09.json"
+    },
+    "raw/batch-capture-10.json": {
+      "sha256": "56a460b81fe9c5c5530c7251e0942ecd3d9a53abfe9c884694ce2419294e4a4f",
+      "size_bytes": 869,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/batch-capture-10.json"
+    },
+    "raw/batch-capture-11.json": {
+      "sha256": "196762ad71464a49440d271e936ee72b5827e3e024afb032232df5794668d042",
+      "size_bytes": 869,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/batch-capture-11.json"
+    },
+    "raw/batch-capture-12.json": {
+      "sha256": "b1b20b3191ea77a2bc6e7a8c842fd20381634d2a3412c3f79950d8048e7b5b83",
+      "size_bytes": 869,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/batch-capture-12.json"
+    },
+    "raw/batch-capture-13.json": {
+      "sha256": "f1d1861725a21ff500c241c5f4cfd52d65409efa1f087966886e9a2bba0b1fb8",
+      "size_bytes": 869,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/batch-capture-13.json"
+    },
+    "raw/batch-capture-14.json": {
+      "sha256": "535d537b95906751213047ceb80cf91be67a743556cbfb284b18e18c090ae1a2",
+      "size_bytes": 869,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/batch-capture-14.json"
+    },
+    "raw/batch-capture-15.json": {
+      "sha256": "f710d801fc27c8f14b020842d80bf23884b1f38511a551b82d11f87c7fb71f51",
+      "size_bytes": 869,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/batch-capture-15.json"
+    },
+    "raw/batch-capture-16.json": {
+      "sha256": "f2bba9d57236a21b107ed0a56eed4703aaafcf0c51f2f6dc12b91ed38b5a739b",
+      "size_bytes": 869,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/batch-capture-16.json"
+    },
+    "raw/benchmark-profile.json": {
+      "sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+      "size_bytes": 718,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/benchmark-profile.json"
+    },
+    "raw/child-failure.json": {
+      "sha256": "888c580da64a47813d5285027ff02e1a5e2a9cb7b0545899a722cbf64921e0c2",
+      "size_bytes": 212,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/child-failure.json"
+    },
+    "raw/child-terminal-cleanup.json": {
+      "sha256": "5e41c19af3b2a11ec4b6bb574697b073a5bef1e734768b6405862583119e3dce",
+      "size_bytes": 3456,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/child-terminal-cleanup.json"
+    },
+    "raw/command-17.json": {
+      "sha256": "3b18de408d917b89cf4232c1f9563cd0223b71be7818825f051c9813f9bb1cc5",
+      "size_bytes": 1167020,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/command-17.json"
+    },
+    "raw/context.json": {
+      "sha256": "04924f25ec00aceaf2962faa2e8cb80c2707f5b700229cdb250899bbb2347689",
+      "size_bytes": 5493,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/context.json"
+    },
+    "raw/diagnostic-manifest.json": {
+      "sha256": "5c91e8258db80facb7820bc4080b86c32012fa82e370fc9a5593ee46f2905fad",
+      "size_bytes": 23965,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/diagnostic-manifest.json"
+    },
+    "raw/diagnostic.json": {
+      "sha256": "dcfd948a38ee9f54158a4246fb138d85e1e3eed84d54de1b0dbdab571336dd2f",
+      "size_bytes": 7733,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/diagnostic.json"
+    },
+    "raw/editor-host/cleanup-001.json": {
+      "sha256": "9ff26d2260e6188703654517521ac75e80f618c4e517723042f5f4babc109ee1",
+      "size_bytes": 556,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/editor-host/cleanup-001.json"
+    },
+    "raw/editor-host/invocation.json": {
+      "sha256": "521b171443ce953adaa471bff55e03b0aa5c0978bf2d880fee8c6093f1bd9549",
+      "size_bytes": 8931,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/editor-host/invocation.json"
+    },
+    "raw/editor-host/process-start.json": {
+      "sha256": "406dca9a9d8ae6c0a6b333ddf981769e2685e44d522bb68911cd5bb5a5ff73e0",
+      "size_bytes": 14,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/editor-host/process-start.json"
+    },
+    "raw/editor-host/stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/editor-host/stderr.txt"
+    },
+    "raw/editor-host/stdout.txt": {
+      "sha256": "ad7db886d01f6b46cfa62767a630e09c8aa8865d8afc9d609223023278cb4f9b",
+      "size_bytes": 741017,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/editor-host/stdout.txt"
+    },
+    "raw/editor-snapshot.json": {
+      "sha256": "0b31b27e73d5466d4a5fe0ef9519c00f9628d3d06f129d9969c80a577732fefc",
+      "size_bytes": 1574,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/editor-snapshot.json"
+    },
+    "raw/host-owner/cleanup-001.json": {
+      "sha256": "31f58e29075f8f16bb2df0bb72471bfcd0df794b729d6497022554d84959cfc8",
+      "size_bytes": 548,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/host-owner/cleanup-001.json"
+    },
+    "raw/host-owner/invocation.json": {
+      "sha256": "1cb59a1c7d3f51a5f549657fb649276db45b33b3876367929a63d4f91c15a812",
+      "size_bytes": 8155,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/host-owner/invocation.json"
+    },
+    "raw/host-owner/process-exit.json": {
+      "sha256": "810a1a5f1ed6f33a0fbc6a36f496d5930be39a7de20662b984339cd520d890f9",
+      "size_bytes": 30,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/host-owner/process-exit.json"
+    },
+    "raw/host-owner/process-start.json": {
+      "sha256": "c5a4b799417e14e90cdeccedb71fa731c71f4c7d5475daf7b657b1f9ef86c040",
+      "size_bytes": 14,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/host-owner/process-start.json"
+    },
+    "raw/host-owner/stderr.txt": {
+      "sha256": "a82a2c6632ab8398dcc5379c13b04e4f4541d140feae7f04835d82520aebe319",
+      "size_bytes": 435,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/host-owner/stderr.txt"
+    },
+    "raw/host-owner/stdout.txt": {
+      "sha256": "674c06f32bf36d6822abdab2c020b5fc152d6b2ca3b8443927b403658cb426e1",
+      "size_bytes": 215434,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/host-owner/stdout.txt"
+    },
+    "raw/http-phases-final.json": {
+      "sha256": "9f41e7ba63253e24555ad8d9b1b68cdd83e620ec08da5e6ffb4fcbd002e9dac8",
+      "size_bytes": 137429,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/http-phases-final.json"
+    },
+    "raw/import-host/capture.json": {
+      "sha256": "8eac15d4eb4910e94127e37ccc33854aad60dcca67b65b9fb18663072284d920",
+      "size_bytes": 1341,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/import-host/capture.json"
+    },
+    "raw/import-host/invocation.json": {
+      "sha256": "8cc23c8e5235c7e047d84bacdf9148a7ca9ec4d9d214c70e6bedce6189ea569a",
+      "size_bytes": 6177,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/import-host/invocation.json"
+    },
+    "raw/import-host/process-exit.json": {
+      "sha256": "37072105693c3b7f72e10c02247f32c0952ce9e24284680c42d493bbddabea4b",
+      "size_bytes": 30,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/import-host/process-exit.json"
+    },
+    "raw/import-host/process-start.json": {
+      "sha256": "2ed5a3909aaa76179cf00f166987cf79ee1334484e47e9a45dce743df298dece",
+      "size_bytes": 14,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/import-host/process-start.json"
+    },
+    "raw/import-host/stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/import-host/stderr.txt"
+    },
+    "raw/import-host/stdout.txt": {
+      "sha256": "9b5e37b85c8c4f11090de482aee3734b6c7993ad884a62121b2adcc9dfdd6003",
+      "size_bytes": 1492,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/import-host/stdout.txt"
+    },
+    "raw/initial-project-files.json": {
+      "sha256": "c4395331745aa570c582e126cf445f14a0d63ef2d1170d730c3b8084bfeb5c5f",
+      "size_bytes": 1461,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/initial-project-files.json"
+    },
+    "raw/joint-00.json": {
+      "sha256": "5066da04e461566df3869d705da6d496599f62ea32942b8ef872af6bc523a411",
+      "size_bytes": 2282,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/joint-00.json"
+    },
+    "raw/joint-01.json": {
+      "sha256": "7e5d479ee625d7963147359a261d21b0cd93a7107ed2c5f2ee6162dc422874a3",
+      "size_bytes": 2287,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/joint-01.json"
+    },
+    "raw/joint-02.json": {
+      "sha256": "e8569ad988957a080e22f03d273512e0d8bc90aacef5acd43a973cb40a47033d",
+      "size_bytes": 2287,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/joint-02.json"
+    },
+    "raw/joint-03.json": {
+      "sha256": "aca641439130cfaef1a9df3d030280c04dea71950f47bfe0e6ef44b7f296ddfb",
+      "size_bytes": 2287,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/joint-03.json"
+    },
+    "raw/joint-04.json": {
+      "sha256": "71368b6ba8fadf4fa242712d0fa07ac0115e598300c375ed883389420ff04fd9",
+      "size_bytes": 2288,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/joint-04.json"
+    },
+    "raw/joint-05.json": {
+      "sha256": "fba9f13d2808fef1423e870db02a8dfd3eadab88bef1232df61bac142f5bed19",
+      "size_bytes": 2288,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/joint-05.json"
+    },
+    "raw/joint-06.json": {
+      "sha256": "229b754dd80945523ec48f7a33f8fd28cf985e0d773404399411ba8f1c600a19",
+      "size_bytes": 2288,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/joint-06.json"
+    },
+    "raw/joint-07.json": {
+      "sha256": "d12c1d48182a1b2dc386384066a730edc4f23d62d150e4d5ac529df41324b85f",
+      "size_bytes": 2287,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/joint-07.json"
+    },
+    "raw/joint-08.json": {
+      "sha256": "822de2bb6a6804416bbb824bfeb0c3a6729113734cf271a4fc3b42d6973d6094",
+      "size_bytes": 2290,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/joint-08.json"
+    },
+    "raw/joint-09.json": {
+      "sha256": "b96751d522724b494712bbe9ecdee6b86ef78d4734fa8b6514e8da19fc81e78d",
+      "size_bytes": 2291,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/joint-09.json"
+    },
+    "raw/joint-10.json": {
+      "sha256": "16f2c65810851db9301f9a226627de43e178c84dd3593663bb07213490ec4675",
+      "size_bytes": 2297,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/joint-10.json"
+    },
+    "raw/joint-11.json": {
+      "sha256": "7532b7800f13993da27566aec383ea81d5b7d6eebbe0743809bb550decfcd82a",
+      "size_bytes": 2298,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/joint-11.json"
+    },
+    "raw/joint-12.json": {
+      "sha256": "f7409fffda873ffd003ab916085d375d3c8c3145ddf7ed4a7c2ad0b097ad250c",
+      "size_bytes": 2298,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/joint-12.json"
+    },
+    "raw/joint-13.json": {
+      "sha256": "b8b279edd728b2784dd9a56dabe5a748c146490555f99575f5e999cebadbffcf",
+      "size_bytes": 2298,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/joint-13.json"
+    },
+    "raw/joint-14.json": {
+      "sha256": "cfe3af35c51a70ff1c300878b6a88c471deebb8b67851361261b4546afb904b1",
+      "size_bytes": 2298,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/joint-14.json"
+    },
+    "raw/joint-15.json": {
+      "sha256": "2c42617d49fbb1b3a11aedda973c21dd19929f2c9fe68928a8ad23df17f9a09e",
+      "size_bytes": 2298,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/joint-15.json"
+    },
+    "raw/joint-16.json": {
+      "sha256": "154cc35553082f5aabcf0107f83893ae607aa7ee60c6ad0c6c73d63fc6ab1b79",
+      "size_bytes": 2298,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/joint-16.json"
+    },
+    "raw/native-overlay.json": {
+      "sha256": "d6e72a6096b7e1bb3744d45745f53a7e35dcdfa7ee26f7fcc6d6c4ef2c1f83e8",
+      "size_bytes": 873,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/native-overlay.json"
+    },
+    "raw/project/benchmark/input/ack-00.json": {
+      "sha256": "44cd546b57eb887fae29151f2a321a41473863780a10723ceb86747e209a0cd7",
+      "size_bytes": 421,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/ack-00.json"
+    },
+    "raw/project/benchmark/input/ack-01.json": {
+      "sha256": "046117447afa6d31b6faaddda33498b45439d9f8c4f9bd12a3471ae5d4e564a0",
+      "size_bytes": 421,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/ack-01.json"
+    },
+    "raw/project/benchmark/input/ack-02.json": {
+      "sha256": "37c262c4ec4ff9821b1e0d431df5b20e7c64156a6a4547ee2730b72a0afde0eb",
+      "size_bytes": 421,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/ack-02.json"
+    },
+    "raw/project/benchmark/input/ack-03.json": {
+      "sha256": "57f5ca8ce8f6185dd14b7c95d9e32f04bcd927c11b6fffd5262d1a34ba42ba28",
+      "size_bytes": 421,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/ack-03.json"
+    },
+    "raw/project/benchmark/input/ack-04.json": {
+      "sha256": "ad2a2f4f0249e80196722640d12fceb8a2b7506c83f2a01d1828fa8e0daf453a",
+      "size_bytes": 421,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/ack-04.json"
+    },
+    "raw/project/benchmark/input/ack-05.json": {
+      "sha256": "34e3ddee7c634eea0402dbbd0ebc53eb882163b38594eee71300edfe7c4546d8",
+      "size_bytes": 421,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/ack-05.json"
+    },
+    "raw/project/benchmark/input/ack-06.json": {
+      "sha256": "ba419ccf34dce66a34b417d6b629d44a20fabd225660f4cb0877c209e765af30",
+      "size_bytes": 421,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/ack-06.json"
+    },
+    "raw/project/benchmark/input/ack-07.json": {
+      "sha256": "c40e37bd33282f1207b1a4e080307e3e2aad9d533220884df565fe4a619b1527",
+      "size_bytes": 421,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/ack-07.json"
+    },
+    "raw/project/benchmark/input/ack-08.json": {
+      "sha256": "48406656d757fb1fbe8b7c1e5314b07245158d3524aa8c7a97065c8103d5feb3",
+      "size_bytes": 421,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/ack-08.json"
+    },
+    "raw/project/benchmark/input/ack-09.json": {
+      "sha256": "35c9e5b4280d6b6109f793bb22fb63aadc5821de9d9dcdab0dcf81ca6b89c43d",
+      "size_bytes": 421,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/ack-09.json"
+    },
+    "raw/project/benchmark/input/ack-10.json": {
+      "sha256": "9120b6c4fedd4e5411693a034114c4465b03e9486c92b76a0aefd0bd3d2250e9",
+      "size_bytes": 423,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/ack-10.json"
+    },
+    "raw/project/benchmark/input/ack-11.json": {
+      "sha256": "c358ba80b4eeccf609d30a0085132a963eee91d331a852b94d34b4e420a56428",
+      "size_bytes": 423,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/ack-11.json"
+    },
+    "raw/project/benchmark/input/ack-12.json": {
+      "sha256": "e1819ced99493e55e5e5b8c19d51c893816a1ea2259f6a38680e4badf51ae81a",
+      "size_bytes": 423,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/ack-12.json"
+    },
+    "raw/project/benchmark/input/ack-13.json": {
+      "sha256": "ec2b5da049fd40883f240aea818b07eee660e9cb3a02fbdc883410712086d556",
+      "size_bytes": 423,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/ack-13.json"
+    },
+    "raw/project/benchmark/input/ack-14.json": {
+      "sha256": "027f765166a1a884155a8647652fcb8794a4f8d519496487526b700af99d9fd0",
+      "size_bytes": 423,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/ack-14.json"
+    },
+    "raw/project/benchmark/input/ack-15.json": {
+      "sha256": "052cd2f7ec73a1f0fd6315d894b6d568a5209b303d2bb61f9e8aaa2b86511bf0",
+      "size_bytes": 423,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/ack-15.json"
+    },
+    "raw/project/benchmark/input/ack-16.json": {
+      "sha256": "f556ce32e0c0fce727528bd25310de4e720278e39c7d5cc74ebfb1f6d623c6c8",
+      "size_bytes": 423,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/ack-16.json"
+    },
+    "raw/project/benchmark/input/ack-17.json": {
+      "sha256": "ed082013ff329c80205d253bfe630f125978c5326797aa04e97c711c5e7c95bd",
+      "size_bytes": 423,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/ack-17.json"
+    },
+    "raw/project/benchmark/input/start-00.json": {
+      "sha256": "68a74182cea84667c1210a7ade9d66291fa21ee93ea0ef3d3800fce18962a671",
+      "size_bytes": 506,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/start-00.json"
+    },
+    "raw/project/benchmark/input/start-01.json": {
+      "sha256": "73843808dea6065ac5989174b012a825da0d982c298377b4873b311588bc3d3d",
+      "size_bytes": 506,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/start-01.json"
+    },
+    "raw/project/benchmark/input/start-02.json": {
+      "sha256": "a0e761290da19448c3037d248e9106aa404844c94e265b56771190eeec8a88dd",
+      "size_bytes": 506,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/start-02.json"
+    },
+    "raw/project/benchmark/input/start-03.json": {
+      "sha256": "1f1e616d024d5b5e8cec7b7bc7c7c3aa3dfe3630addec746d2caf5d277ab9bca",
+      "size_bytes": 506,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/start-03.json"
+    },
+    "raw/project/benchmark/input/start-04.json": {
+      "sha256": "e7ba4f8177ace6e1918d07419ad7aae4fc011840e47c4ece4232c23074e480e6",
+      "size_bytes": 506,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/start-04.json"
+    },
+    "raw/project/benchmark/input/start-05.json": {
+      "sha256": "d48829cac8dbce18d288d0fa47b339ebd344e8bb7d35b74bf79db3dd81d6ea16",
+      "size_bytes": 507,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/start-05.json"
+    },
+    "raw/project/benchmark/input/start-06.json": {
+      "sha256": "4bb3bee0910306b7bb53ffd3b796f4a09718d906ea7e4f8c592e17c8b1c0aa60",
+      "size_bytes": 507,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/start-06.json"
+    },
+    "raw/project/benchmark/input/start-07.json": {
+      "sha256": "f6575bd9db84bdceb10cd99f5d3f519c55bf82e986104bc98172ab1258b0e28e",
+      "size_bytes": 507,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/start-07.json"
+    },
+    "raw/project/benchmark/input/start-08.json": {
+      "sha256": "0595e9df664561b826f5020f470effedf9a8aaae8343a823e7f4ef7b76e5521a",
+      "size_bytes": 507,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/start-08.json"
+    },
+    "raw/project/benchmark/input/start-09.json": {
+      "sha256": "19e160e679f8ecd93651a47d74ea494b16b58c55d897b7817d3833e65c2056c8",
+      "size_bytes": 507,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/start-09.json"
+    },
+    "raw/project/benchmark/input/start-10.json": {
+      "sha256": "a60fbf356410548a276eddd9313798ab40a9e2d65517dd7b660923e1b458cd88",
+      "size_bytes": 508,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/start-10.json"
+    },
+    "raw/project/benchmark/input/start-11.json": {
+      "sha256": "caac861fb9f31aafb19ddf57ff41ee3aefb5759af5a44b239c4b8bd4ce64d5a9",
+      "size_bytes": 508,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/start-11.json"
+    },
+    "raw/project/benchmark/input/start-12.json": {
+      "sha256": "37b1f019d02b48fbfc58151023da35d2ddf678234612f01bb837975550a42a9b",
+      "size_bytes": 508,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/start-12.json"
+    },
+    "raw/project/benchmark/input/start-13.json": {
+      "sha256": "e4ff897a9d27e3e957829646341e427e0a447023d65a7e075b64b3ae4e8e6ba9",
+      "size_bytes": 508,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/start-13.json"
+    },
+    "raw/project/benchmark/input/start-14.json": {
+      "sha256": "1b1bdd16749fd53af0c86c1ac5efa330257bf7bfd563d7bb456111d8ea9b0cd0",
+      "size_bytes": 508,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/start-14.json"
+    },
+    "raw/project/benchmark/input/start-15.json": {
+      "sha256": "a2031b87232c4dc0a696da578f3a83449d411c67dbfd8fd6160b54a55a22b948",
+      "size_bytes": 508,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/start-15.json"
+    },
+    "raw/project/benchmark/input/start-16.json": {
+      "sha256": "364364ceb08c9c07be6ab6c463110cbe4095875dac5f9860c37631d433b93bc3",
+      "size_bytes": 508,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/start-16.json"
+    },
+    "raw/project/benchmark/input/start-17.json": {
+      "sha256": "922a1dccbf80c333360d27ac146e641bb6a40cb9331ef349161f63e1617f7127",
+      "size_bytes": 508,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/input/start-17.json"
+    },
+    "raw/project/benchmark/out/batch-00.json": {
+      "sha256": "d7c7ba366a5a17a1328154dea155ec5bd689ddf879d5d56b0c8851840e19f8ab",
+      "size_bytes": 97097,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/batch-00.json"
+    },
+    "raw/project/benchmark/out/batch-01.json": {
+      "sha256": "6000fcd69605e9cf531a4176b5ad1a5572f9f0833c896d54d3a7755094014b5a",
+      "size_bytes": 98318,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/batch-01.json"
+    },
+    "raw/project/benchmark/out/batch-02.json": {
+      "sha256": "e7e2e61bccccab7ec0de77a4db437d04252a04b682425d59917d24b94f3d56e2",
+      "size_bytes": 98335,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/batch-02.json"
+    },
+    "raw/project/benchmark/out/batch-03.json": {
+      "sha256": "e2e813751cb723f6dab44fd715f09ba397ba332146699e42a8876470bb965dcb",
+      "size_bytes": 98247,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/batch-03.json"
+    },
+    "raw/project/benchmark/out/batch-04.json": {
+      "sha256": "fe7c434e68aba95a97f9ccdee0cbab0a8136b0d104b18a8bfd60e293717e2838",
+      "size_bytes": 98233,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/batch-04.json"
+    },
+    "raw/project/benchmark/out/batch-05.json": {
+      "sha256": "2dc6cb3b1ad3e42c99f9fbf50322a6ea1a7d83f98b934866d7fe2625d57df5b7",
+      "size_bytes": 98267,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/batch-05.json"
+    },
+    "raw/project/benchmark/out/batch-06.json": {
+      "sha256": "e5b95677ebc9fd7561ad96f6de1bcda59d71320477307c4a6af3d8df3dd6bee1",
+      "size_bytes": 98256,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/batch-06.json"
+    },
+    "raw/project/benchmark/out/batch-07.json": {
+      "sha256": "83d8bc76952bee87e3867a6997ee69c882026dde569471759459b4e66efd47ad",
+      "size_bytes": 98230,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/batch-07.json"
+    },
+    "raw/project/benchmark/out/batch-08.json": {
+      "sha256": "f52a9348a2378ac0bfdedf6bb5f53d44790c9d91135cda7824f81a8f8dba0e70",
+      "size_bytes": 98346,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/batch-08.json"
+    },
+    "raw/project/benchmark/out/batch-09.json": {
+      "sha256": "aa4c41cdeffc762db7e8bb776b23c094eaa2ce2906ad1f0d7fd44ef69049071e",
+      "size_bytes": 98353,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/batch-09.json"
+    },
+    "raw/project/benchmark/out/batch-10.json": {
+      "sha256": "f67bcd71e3a38aa16493da0b3f481194dabbd8b89797aed5e09af2c758adfc1f",
+      "size_bytes": 99476,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/batch-10.json"
+    },
+    "raw/project/benchmark/out/batch-11.json": {
+      "sha256": "f28d3b544697b8d8adfe9a726e164425495e4d4c5806a736c50c61f36b82e874",
+      "size_bytes": 99657,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/batch-11.json"
+    },
+    "raw/project/benchmark/out/batch-12.json": {
+      "sha256": "ac8640fe14e869413b239972328a21b5690b12210b941fc96f11349c7ff20871",
+      "size_bytes": 99659,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/batch-12.json"
+    },
+    "raw/project/benchmark/out/batch-13.json": {
+      "sha256": "2df48b619a38cd5f658883808b3f3c46fdb84c0c206e1d1500e746eddf851cd3",
+      "size_bytes": 99673,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/batch-13.json"
+    },
+    "raw/project/benchmark/out/batch-14.json": {
+      "sha256": "e28bcf9cb7cbc1374bddbf998155a464c908424dfa9ce5a5f0925f2e70643753",
+      "size_bytes": 99654,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/batch-14.json"
+    },
+    "raw/project/benchmark/out/batch-15.json": {
+      "sha256": "37830c70a62696286b9c597c2c1bcfd9b2996073fd2c3ca444e79abc1ddaef83",
+      "size_bytes": 99651,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/batch-15.json"
+    },
+    "raw/project/benchmark/out/batch-16.json": {
+      "sha256": "039bbace86487742ef524996306a0e77dff57663071ae302dc829f7b9543f180",
+      "size_bytes": 99664,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/batch-16.json"
+    },
+    "raw/project/benchmark/out/batch-17.json": {
+      "sha256": "ba30ed708117e7f9bb526f49f416a4e52dbf25822dc0ad23b9562d069ad3fa11",
+      "size_bytes": 99651,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/batch-17.json"
+    },
+    "raw/project/benchmark/out/failure.json": {
+      "sha256": "f2c9bb97110a3e469f6d988d5f639b46366f573c947b114b1f2f68ad3a9d93ca",
+      "size_bytes": 2389,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/failure.json"
+    },
+    "raw/project/benchmark/out/ready-00.json": {
+      "sha256": "b026f2f4c4eba39cb9e4811fb4fe5d81a577da6ea65c41ff5dec88ddc053ea49",
+      "size_bytes": 656,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/ready-00.json"
+    },
+    "raw/project/benchmark/out/ready-01.json": {
+      "sha256": "839a12e284bb29c729c7793dc1048e8dee4efd7592d15e6ce3c974a56b18f058",
+      "size_bytes": 660,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/ready-01.json"
+    },
+    "raw/project/benchmark/out/ready-02.json": {
+      "sha256": "f02f6712c377c5befe7982abc98e11141aca74b1f91a3a09c166622fc2f4a4da",
+      "size_bytes": 662,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/ready-02.json"
+    },
+    "raw/project/benchmark/out/ready-03.json": {
+      "sha256": "c5ecbfa8ba9bf4e008acdeb77e1dae86738a69bf8937b9ab3d6c26e307580d63",
+      "size_bytes": 662,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/ready-03.json"
+    },
+    "raw/project/benchmark/out/ready-04.json": {
+      "sha256": "d5302edd99d413d50a80254c29c0e9114553f676a025b0a30f3b76847ae2ce06",
+      "size_bytes": 662,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/ready-04.json"
+    },
+    "raw/project/benchmark/out/ready-05.json": {
+      "sha256": "ec7f59739fdf2de60ca80c6ea283b350832218a2ec62d970ee7ab2c4ee2ec3c4",
+      "size_bytes": 663,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/ready-05.json"
+    },
+    "raw/project/benchmark/out/ready-06.json": {
+      "sha256": "e0946c8ac0ae92a0139696bdee3b832296fd5e214e5d8ffcad0aa10de1dec2a6",
+      "size_bytes": 663,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/ready-06.json"
+    },
+    "raw/project/benchmark/out/ready-07.json": {
+      "sha256": "9271cfc2a425038ced002b715952aca38f9dcc3ee6882f6658ce67f44144e478",
+      "size_bytes": 663,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/ready-07.json"
+    },
+    "raw/project/benchmark/out/ready-08.json": {
+      "sha256": "9ac2f70ade353d296e148e8388f8cad9f10bd67660452be8d382f35a3ebf4538",
+      "size_bytes": 663,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/ready-08.json"
+    },
+    "raw/project/benchmark/out/ready-09.json": {
+      "sha256": "eec727eae87929ee76c01d8c89e7cab3b65205025063fe751b14e4ee0d30118f",
+      "size_bytes": 664,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/ready-09.json"
+    },
+    "raw/project/benchmark/out/ready-10.json": {
+      "sha256": "81e806c56008b169d840b137e4ec988a3f094feae44e53aadf5cdb6201d3c6a5",
+      "size_bytes": 666,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/ready-10.json"
+    },
+    "raw/project/benchmark/out/ready-11.json": {
+      "sha256": "ab5cbcb06ede1080e881eadc3f546891b10205755e94747422939af88399e1fb",
+      "size_bytes": 667,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/ready-11.json"
+    },
+    "raw/project/benchmark/out/ready-12.json": {
+      "sha256": "61e2bccd0b9e86183fa6278841888e761e7fbb8a825b088133b3eb5f6fc87c27",
+      "size_bytes": 668,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/ready-12.json"
+    },
+    "raw/project/benchmark/out/ready-13.json": {
+      "sha256": "f3cb5551dceb60be0ec85d5d8b9470398cfd56b8f8e158373722165573b9f7c6",
+      "size_bytes": 668,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/ready-13.json"
+    },
+    "raw/project/benchmark/out/ready-14.json": {
+      "sha256": "7c35d5b2043da4350600f29935b736e38b7ff86fda431272a72408327b9708d0",
+      "size_bytes": 668,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/ready-14.json"
+    },
+    "raw/project/benchmark/out/ready-15.json": {
+      "sha256": "d6966dd1a02c6b78d93a65645c853601108858ee864a301627c652c9064f8c40",
+      "size_bytes": 668,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/ready-15.json"
+    },
+    "raw/project/benchmark/out/ready-16.json": {
+      "sha256": "694ad708f690ca0616bd24c9e9121835ace13e7945a037b0c20777ab9fdd5cae",
+      "size_bytes": 668,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/ready-16.json"
+    },
+    "raw/project/benchmark/out/ready-17.json": {
+      "sha256": "37d123effe16cc1c5b6e5126df9ec460983a6c28655fa1d1087abfe7d74ec006",
+      "size_bytes": 668,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/ready-17.json"
+    },
+    "raw/project/benchmark/out/sparse-00.json": {
+      "sha256": "0384675458e6c36e5865525af138c7b82fb70be4a32fded9926f04b6820399ac",
+      "size_bytes": 63966,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/sparse-00.json"
+    },
+    "raw/project/benchmark/out/sparse-post-00.json": {
+      "sha256": "320cbd83a6a8f92960cff1c5af6aa97e757de899ab6767dddb9155cd91fc4f42",
+      "size_bytes": 639,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/project/benchmark/out/sparse-post-00.json"
+    },
+    "raw/s96-composition.json": {
+      "sha256": "bfe08003a9f01a4b4c4376a1f96e2fce0f2e1027b0a44c4ea9896a3dbfc6bf13",
+      "size_bytes": 747,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/s96-composition.json"
+    },
+    "raw/sample-preview-00.json": {
+      "sha256": "612ce0e80a12e3fc561a0173a15057fd01152229ae0d262d07e85e0a6d99c6a8",
+      "size_bytes": 72794,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/sample-preview-00.json"
+    },
+    "raw/sample-preview-01.json": {
+      "sha256": "74422dbce618b47e490c0ce09bc5daab400987cd4f1bf72cd2242f4e7c32af73",
+      "size_bytes": 72784,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/sample-preview-01.json"
+    },
+    "raw/sample-preview-02.json": {
+      "sha256": "a0bd1be66b0b20378f6efd1585c9de131421c9c5a386a1eb652b79339bd64950",
+      "size_bytes": 72807,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/sample-preview-02.json"
+    },
+    "raw/sample-preview-03.json": {
+      "sha256": "5931fcf4e840aa8954577a7e026026820f49f2488e46f9f6d3c11523ca7a6562",
+      "size_bytes": 72728,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/sample-preview-03.json"
+    },
+    "raw/sample-preview-04.json": {
+      "sha256": "c2dba5472192b8b3788e6193f285f895b7c7f3cd74b33bc0a2787f192669c4fb",
+      "size_bytes": 72734,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/sample-preview-04.json"
+    },
+    "raw/sample-preview-05.json": {
+      "sha256": "85c4d38448fa1e0f46e820d0531d36f6467926d2ae9067c31348237b303472b4",
+      "size_bytes": 72802,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/sample-preview-05.json"
+    },
+    "raw/sample-preview-06.json": {
+      "sha256": "97a29d0fc544eb7e21b77ba6c1a13bf32ab2f7d1dbf23fff0ebf4660ef90017e",
+      "size_bytes": 72825,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/sample-preview-06.json"
+    },
+    "raw/sample-preview-07.json": {
+      "sha256": "5aded48c4a2d598903693770017c0de8bbc80a367bc2a8a1ace7211b6e18ea67",
+      "size_bytes": 72826,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/sample-preview-07.json"
+    },
+    "raw/sample-preview-08.json": {
+      "sha256": "503f5c898763a7c9087ad6cbd89bcf2a2073a85839471e428ae1ff03bea9c825",
+      "size_bytes": 73056,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/sample-preview-08.json"
+    },
+    "raw/sample-preview-09.json": {
+      "sha256": "139c4d784e0db4e9b26a7a36d42dec9ddbeacedb06edd6be564961d779af18f8",
+      "size_bytes": 73213,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/sample-preview-09.json"
+    },
+    "raw/sample-preview-10.json": {
+      "sha256": "fecd6e1eb090afc64de690d0503cd7218a468ffd6da610ec47a901efd7f95428",
+      "size_bytes": 73271,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/sample-preview-10.json"
+    },
+    "raw/sample-preview-11.json": {
+      "sha256": "2b297e26d1fad97714e6151e2ea7eabceb5f8bbc19c1a40854bfcb1c66963f6d",
+      "size_bytes": 73436,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/sample-preview-11.json"
+    },
+    "raw/sample-preview-12.json": {
+      "sha256": "869c7974a3ee9b85db416019e69b5622fe929805e53612f16a3209da5da29f25",
+      "size_bytes": 73460,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/sample-preview-12.json"
+    },
+    "raw/sample-preview-13.json": {
+      "sha256": "e2cc6fa893fd55d70756013f24f035ea37fd40701662643014d45017d18eb36a",
+      "size_bytes": 73438,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/sample-preview-13.json"
+    },
+    "raw/sample-preview-14.json": {
+      "sha256": "c4d88065a6c7fc856abedee4a69e902d03c351cd2c0132a73b9529ca87109316",
+      "size_bytes": 73480,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/sample-preview-14.json"
+    },
+    "raw/sample-preview-15.json": {
+      "sha256": "0f1f6557c968feeb939b40ebbe09b79d40c8ed1ee3f377ab0244e03dcfd3f352",
+      "size_bytes": 73515,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/sample-preview-15.json"
+    },
+    "raw/sample-preview-16.json": {
+      "sha256": "b793d46a7265353729a278fe0bb14a395a8c1b1371de7d7c4d72e59fb6ed7330",
+      "size_bytes": 73539,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/sample-preview-16.json"
+    },
+    "raw/source-files.json": {
+      "sha256": "fbf3f5a057e59cea2d5a9c2607a4fc6df3be4cb41396b2132b99b46911d3b397",
+      "size_bytes": 5156,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source-files.json"
+    },
+    "raw/source/studio/blender-addon/ipc_client.py": {
+      "sha256": "ee5d77e52dabb8b746e528be2acddc07b821f6b6724e9de9a36ec18b71cd8da9",
+      "size_bytes": 16349,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/blender-addon/ipc_client.py"
+    },
+    "raw/source/studio/contracts/perf-collector.schema.json": {
+      "sha256": "394d1df03bdfd736ea3fe9f260e9d718d35f3820cde35d1c45ccab65fbc24834",
+      "size_bytes": 30060,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/contracts/perf-collector.schema.json"
+    },
+    "raw/source/studio/godot-addon/addons/hh_studio/plugin.cfg": {
+      "sha256": "cf8a7f06c8972291ef011ce0033e2f8f4bd6f8423ff10e5ce8d0dbe7fdc72a7c",
+      "size_bytes": 165,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/godot-addon/addons/hh_studio/plugin.cfg"
+    },
+    "raw/source/studio/godot-addon/addons/hh_studio/plugin.gd": {
+      "sha256": "13dc29df8b673358c40af96220b8d8c29e999eb9f9a2618b224a1e9d983b6036",
+      "size_bytes": 23043,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/godot-addon/addons/hh_studio/plugin.gd"
+    },
+    "raw/source/studio/godot-addon/addons/hh_studio/scene_commands.gd": {
+      "sha256": "8da8495197b3d5358ea681321765c388618aadc63459c3eda18f69957f623069",
+      "size_bytes": 32174,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/godot-addon/addons/hh_studio/scene_commands.gd"
+    },
+    "raw/source/studio/godot-addon/bundle_staging.py": {
+      "sha256": "3d614edbec8e9a7f5ad3caf2b9694d7498df129de95683952268621f91d68e43",
+      "size_bytes": 15005,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/godot-addon/bundle_staging.py"
+    },
+    "raw/source/studio/godot-addon/bundle_v2.py": {
+      "sha256": "2c5cdc71cdaf80f58bb93ec791e84bab8bd02cd4d9bdbd93d635db13583de62a",
+      "size_bytes": 8475,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/godot-addon/bundle_v2.py"
+    },
+    "raw/source/studio/godot-addon/cli_job.py": {
+      "sha256": "5a0f37bc129bde409a2657054fb091d637d838e442d45a69e7adc1f1527d4c88",
+      "size_bytes": 12672,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/godot-addon/cli_job.py"
+    },
+    "raw/source/studio/godot-addon/fixture_profile.py": {
+      "sha256": "25e1667dd930dcf0746b071fc29ea3460bc18d5fb9f3f83e806c1793028f21ae",
+      "size_bytes": 6020,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/godot-addon/fixture_profile.py"
+    },
+    "raw/source/studio/godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid": {
+      "sha256": "d689c5ff6ecc00052ba97281ba43f0ca9f77ddddf3d0b14648ab58d58b08c21b",
+      "size_bytes": 20,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/jcs_godot.gd.uid"
+    },
+    "raw/source/studio/godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid": {
+      "sha256": "e10cce9d7676f3f20f7e0920f07232f9da53c2735ebe47758c75d95c627ce75d",
+      "size_bytes": 20,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/plugin.gd.uid"
+    },
+    "raw/source/studio/godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid": {
+      "sha256": "5cce030cb2799b74c89e9b1b096ba00b5290c61087cbe330de9319e62fdaec69",
+      "size_bytes": 19,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/godot-addon/fixture_profile/addons/hh_studio/scene_commands.gd.uid"
+    },
+    "raw/source/studio/godot-addon/fixture_profile/project.godot": {
+      "sha256": "2d4fa9c7261fc5ec4292094854ffa79b602249671a03db3c9808ea7521f4fa51",
+      "size_bytes": 282,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/godot-addon/fixture_profile/project.godot"
+    },
+    "raw/source/studio/godot-addon/fixture_profile/scripts/fixture_actor.gd.uid": {
+      "sha256": "044d3a7db380113ba5622c36febb7e57f7d387e7818cd558e71fda2788b19142",
+      "size_bytes": 20,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/godot-addon/fixture_profile/scripts/fixture_actor.gd.uid"
+    },
+    "raw/source/studio/godot-addon/fixture_profile/source-pins.json": {
+      "sha256": "c0a40998bd63d4d3dc628e4b9d2e0932fcb5725d1870adc43d0fdc3af2fdeed2",
+      "size_bytes": 1873,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/godot-addon/fixture_profile/source-pins.json"
+    },
+    "raw/source/studio/host/blender/__init__.py": {
+      "sha256": "812b123ddad075d7bb1892a38e099fdb48db147f80a27db83101c2b640044a90",
+      "size_bytes": 69,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/host/blender/__init__.py"
+    },
+    "raw/source/studio/host/blender/deadline.py": {
+      "sha256": "55fb3f77cadd9edc633186e1d6727bbed06216d659846aa3836e2582eef46926",
+      "size_bytes": 1130,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/host/blender/deadline.py"
+    },
+    "raw/source/studio/host/blender/export_job.py": {
+      "sha256": "8eb0cc4a93361faf8cf09a3f11fd0278ec3fcdb2c9863e4b2ee98852c67ecdfe",
+      "size_bytes": 13605,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/host/blender/export_job.py"
+    },
+    "raw/source/studio/host/blender/glb_preflight.py": {
+      "sha256": "5e4015c77ee3dced056634f89a0ba1fe2f94dd6650250fac8b03317c12d54f62",
+      "size_bytes": 11815,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/host/blender/glb_preflight.py"
+    },
+    "raw/source/studio/host/blender/ui_host.py": {
+      "sha256": "0fa5afa44046b61b68baafc275b39ade4787a55221074018db588c4c2f71dc35",
+      "size_bytes": 22464,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/host/blender/ui_host.py"
+    },
+    "raw/source/studio/host/core/journal.py": {
+      "sha256": "826bc5e4c60817e3a22dd2e0b6a199eb522a4eb78532cb5300249fe9056c0cc6",
+      "size_bytes": 29602,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/host/core/journal.py"
+    },
+    "raw/source/studio/host/core/limits.py": {
+      "sha256": "9d01ce56f5976bb034e60e33bf4b7986cdc44b3a8ffad46da738a6ed1b143f3f",
+      "size_bytes": 15813,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/host/core/limits.py"
+    },
+    "raw/source/studio/host/core/private_store.py": {
+      "sha256": "c914b5a66a45660c782ecd43fd2321c238702340f3b33062e284feada4d46476",
+      "size_bytes": 20476,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/host/core/private_store.py"
+    },
+    "raw/source/studio/host/core/redaction.py": {
+      "sha256": "e37d998399f589d4202591a1262a7dc19231e5e4b5236b47d4c8234956275c1f",
+      "size_bytes": 10038,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/host/core/redaction.py"
+    },
+    "raw/source/studio/host/core/safe_create.py": {
+      "sha256": "681fb7c0f4e74d82597bd8049a6b42cde0ea73941d879ec8ef0ba4df326d0606",
+      "size_bytes": 13170,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/host/core/safe_create.py"
+    },
+    "raw/source/studio/host/core/safe_open.py": {
+      "sha256": "efc083f1c4fa875d3f748602924a05712aa60fed3abcdb46d058672930201535",
+      "size_bytes": 12093,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/host/core/safe_open.py"
+    },
+    "raw/source/studio/host/core/transport.py": {
+      "sha256": "1ec03356b1cb8c8987e1604bcb164aea6a9934dbe259451c19e12de36398aba0",
+      "size_bytes": 47056,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/host/core/transport.py"
+    },
+    "raw/source/studio/host/replay/disk_journal_index.py": {
+      "sha256": "56beb93119dfb66feec32eb51d389fc089d89911c0a1be199071c17e1801cb28",
+      "size_bytes": 13593,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/host/replay/disk_journal_index.py"
+    },
+    "raw/source/studio/host/replay/perf.py": {
+      "sha256": "7c24c11989420e1600bcb20b8949fea44ea93b381bcab824e471465f5148edc7",
+      "size_bytes": 19085,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/host/replay/perf.py"
+    },
+    "raw/source/studio/host/replay/process_probe.py": {
+      "sha256": "53b6b24813e6ba6dc040dcbb87aee529b7f4e8855a64bcd0689b19c240180500",
+      "size_bytes": 5485,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/host/replay/process_probe.py"
+    },
+    "raw/source/studio/host/replay/verified_journal.py": {
+      "sha256": "129baa4d9e08c8a1d5acf2ea05c9c89a4fdddb53ca6f3baf2d61311ab98e62ab",
+      "size_bytes": 9155,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/host/replay/verified_journal.py"
+    },
+    "raw/source/studio/pipeline/__init__.py": {
+      "sha256": "ffea2c35acdfe30636d61970e16c573e4de68228c4f7e780a6061d7be3fbbc68",
+      "size_bytes": 79,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/pipeline/__init__.py"
+    },
+    "raw/source/studio/pipeline/native_job.py": {
+      "sha256": "456bb70c315e38cf7a29354b7df51862e1ded4578f6b22d9110bf628547c20ca",
+      "size_bytes": 12512,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/pipeline/native_job.py"
+    },
+    "raw/source/studio/protocol/__init__.py": {
+      "sha256": "a906ecde6f60d5fa2febd3f8a4a5fae440d87fea69e7d7e51a750677e03ad09f",
+      "size_bytes": 881,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/protocol/__init__.py"
+    },
+    "raw/source/studio/protocol/_rfc8785/__init__.py": {
+      "sha256": "49d914da77ba606d535832d97df2e43458a8e51d57cdba6883a0a895ac50484b",
+      "size_bytes": 505,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/protocol/_rfc8785/__init__.py"
+    },
+    "raw/source/studio/protocol/_rfc8785/_impl.py": {
+      "sha256": "c25bc3a046528482d53bee3487b837f31dd9c05f33e8f13288c7aab320932cec",
+      "size_bytes": 7251,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/protocol/_rfc8785/_impl.py"
+    },
+    "raw/source/studio/protocol/core.py": {
+      "sha256": "e8153f5a4dcf639f4d1cbce2fa74f7866d963a692c68e4e8d1477136889bd93e",
+      "size_bytes": 19886,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/protocol/core.py"
+    },
+    "raw/source/studio/protocol/jcs_godot.gd": {
+      "sha256": "61114350432d4ac6309f7f6f43d92c2940ef979ccea140a054d430948f15d2c5",
+      "size_bytes": 10165,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/protocol/jcs_godot.gd"
+    },
+    "raw/source/studio/tests/replay/benchmark_assembly.py": {
+      "sha256": "19c684d72995327e65458422ab66384e4d586705cad31f3ab3fd8615934f2a22",
+      "size_bytes": 50798,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/tests/replay/benchmark_assembly.py"
+    },
+    "raw/source/studio/tests/replay/benchmark_commands.py": {
+      "sha256": "29ab59c799855e6695f5c0db18b21ed4ee3f7cd70fb42dcc3b9784e8960d6ca0",
+      "size_bytes": 21010,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/tests/replay/benchmark_commands.py"
+    },
+    "raw/source/studio/tests/replay/benchmark_job.py": {
+      "sha256": "be424a6f37ae573ac4bf40954b31017025daee2147699c80b05f9a0ab70e1611",
+      "size_bytes": 24991,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/tests/replay/benchmark_job.py"
+    },
+    "raw/source/studio/tests/replay/benchmark_native.gd": {
+      "sha256": "52fbd9af5c6191ada5baf1d7195a75685ed5e27a95f4d244af8b4d679f8c00f2",
+      "size_bytes": 51618,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/tests/replay/benchmark_native.gd"
+    },
+    "raw/source/studio/tests/replay/benchmark_plugin.cfg": {
+      "sha256": "648d8821a36d0abc825ef1f380b4917639074302a619cb25a798df987a5a1092",
+      "size_bytes": 189,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/tests/replay/benchmark_plugin.cfg"
+    },
+    "raw/source/studio/tests/replay/benchmark_profile.py": {
+      "sha256": "ddbd98583060f791226fca83e275cf01204b37112627383198dcef4ec6f6f233",
+      "size_bytes": 19625,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/tests/replay/benchmark_profile.py"
+    },
+    "raw/source/studio/tests/replay/benchmark_readiness.py": {
+      "sha256": "842db6244d93384932929544045654f089d67f6f304624b7348b7d5c4583ab68",
+      "size_bytes": 6746,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/tests/replay/benchmark_readiness.py"
+    },
+    "raw/source/studio/tests/replay/benchmark_transport.py": {
+      "sha256": "3b789fc025c5d217d8567ee1a3cd97ccf4c2e01214c974417643c080622848df",
+      "size_bytes": 4687,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/tests/replay/benchmark_transport.py"
+    },
+    "raw/source/studio/tests/replay/campaign_task.ps1": {
+      "sha256": "405e2abfa39332b1313871763184fdda0755ff998ec83310e67e10cebfe2ebb9",
+      "size_bytes": 18607,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/tests/replay/campaign_task.ps1"
+    },
+    "raw/source/studio/tests/replay/run_benchmark_campaign.py": {
+      "sha256": "bb43ecc04c2de4872177a440eb071d533efdaa9e8194f62b4e0907bad8d4b252",
+      "size_bytes": 53592,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/tests/replay/run_benchmark_campaign.py"
+    },
+    "raw/source/studio/tests/replay/run_campaign_task.py": {
+      "sha256": "f5cb71fa96b8fd2f935ac933dcd5190cef2b3b6821f031bfe72becb2d360a6fd",
+      "size_bytes": 8033,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/tests/replay/run_campaign_task.py"
+    },
+    "raw/source/studio/tests/replay/run_native_benchmark.py": {
+      "sha256": "e6b0f8e9711ac881cfa65b4537232c685ff577af0a13778a51cc54999b1c1fc7",
+      "size_bytes": 26986,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/tests/replay/run_native_benchmark.py"
+    },
+    "raw/source/studio/toolchain.lock.json": {
+      "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+      "size_bytes": 3026,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/studio/toolchain.lock.json"
+    },
+    "raw/source/zdoc/reviews/20260918-gt06-s93-sparse-attribution/diagnose_sequence_s91.py": {
+      "sha256": "5b93e33f9589c38889d8cc9ae6cf69e6c98d8e0624753ccf535b5e3a3a168cae",
+      "size_bytes": 13398,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/zdoc/reviews/20260918-gt06-s93-sparse-attribution/diagnose_sequence_s91.py"
+    },
+    "raw/source/zdoc/reviews/20260918-gt06-s93-sparse-attribution/launch_observer.py": {
+      "sha256": "aebbff3662c03f6e130354a0ea99a53f00da01f948b632c3fca9adbe48e0cad6",
+      "size_bytes": 19290,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/zdoc/reviews/20260918-gt06-s93-sparse-attribution/launch_observer.py"
+    },
+    "raw/source/zdoc/reviews/20260918-gt06-s93-sparse-attribution/patch_native_s91.py": {
+      "sha256": "f4226f40839e40579ae5c489cfd33800e3739bb6e280193c38a54414afaf2bc0",
+      "size_bytes": 4260,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/zdoc/reviews/20260918-gt06-s93-sparse-attribution/patch_native_s91.py"
+    },
+    "raw/source/zdoc/reviews/20260918-gt06-s95-native-isolation/object_probe_s95.gd": {
+      "sha256": "8a1ef457b6d4612fbf61176bc99598ec046d72c081e01c73665bb3237680784e",
+      "size_bytes": 9120,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/zdoc/reviews/20260918-gt06-s95-native-isolation/object_probe_s95.gd"
+    },
+    "raw/source/zdoc/reviews/20260918-gt06-s95-result-prep/http-phases/phase_observer.py": {
+      "sha256": "9a79e5767f07674e80fb457b6d8f6326cb3558e9feb1d5d51884ad7784f5be57",
+      "size_bytes": 11653,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/zdoc/reviews/20260918-gt06-s95-result-prep/http-phases/phase_observer.py"
+    },
+    "raw/source/zdoc/reviews/20260918-gt06-s95-status-recovery/source-current.json": {
+      "sha256": "7480a3cce54d1b596d40abdb633c509915554c23ecce91e2e86bc4ad81cf371d",
+      "size_bytes": 5665,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/zdoc/reviews/20260918-gt06-s95-status-recovery/source-current.json"
+    },
+    "raw/source/zdoc/reviews/20260918-gt06-s96-coupled-phases/coupled_phases.py": {
+      "sha256": "b1e311144b5beaad3fc0188b4d09e285351a4978502e64c0ac015122d4465ee0",
+      "size_bytes": 15603,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/zdoc/reviews/20260918-gt06-s96-coupled-phases/coupled_phases.py"
+    },
+    "raw/source/zdoc/reviews/20260918-gt06-s96-coupled-phases/register_task.ps1": {
+      "sha256": "691ea6b4cf3fffc3859ec5cf2522fad1338f6e43e71b89dbc889ae8f594fa859",
+      "size_bytes": 11579,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/zdoc/reviews/20260918-gt06-s96-coupled-phases/register_task.ps1"
+    },
+    "raw/source/zdoc/reviews/20260918-gt06-s96-coupled-phases/test_coupled_phases.py": {
+      "sha256": "efd3952d4ed479ec863e469f546ebe952dd2e45b50c1d79d3424f59af8d5efd1",
+      "size_bytes": 4710,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/source/zdoc/reviews/20260918-gt06-s96-coupled-phases/test_coupled_phases.py"
+    },
+    "raw/supervisor-return.json": {
+      "sha256": "7c31dbcf4b00ce5ddd53c5cc68d87b9885b636ecba2a8ba49ceb3d09b47e3d5a",
+      "size_bytes": 225,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/supervisor-return.json"
+    },
+    "raw/supervisor-start.json": {
+      "sha256": "5686172a10dd004d25d8075d9a25b2c6e08e4afcc191079f44ab4e145ea120ff",
+      "size_bytes": 76,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/supervisor-start.json"
+    },
+    "raw/supervisor-stderr.txt": {
+      "sha256": "c4f604c87458a1bf0567deb5015f84367c61b283f12f0f86830eb93f4e28a0e4",
+      "size_bytes": 233,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/supervisor-stderr.txt"
+    },
+    "raw/supervisor-stdout.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/supervisor-stdout.txt"
+    },
+    "raw/toolchain.lock.json": {
+      "sha256": "28bdce555e9a44ef68193723d512feda02c42a417ceb78faf0b29f52d095dca9",
+      "size_bytes": 3026,
+      "source": "studio/.local/reviews/gt06-s96-coupled-phases-01/toolchain.lock.json"
+    },
+    "scheduler/scheduler-terminal.json": {
+      "sha256": "180591ee96a0f7ee2a2384cef4646433d833a573bdd8b26b67614cd469292e0f",
+      "size_bytes": 500,
+      "source": "zdoc/reviews/20260918-gt06-s97-ack-recovery/scheduler-terminal.json"
+    }
+  },
+  "formal_acceptance": false,
+  "missing_terminal_artifacts": [
+    "child-result.json",
+    "editor-host/process-exit.json"
+  ],
+  "profile_sha256": "0cd5b53055853b592d4376a6b8a89d69c70ea5facc40dfc25ebd6fcd6dbf4d85",
+  "run_id": "gt06-s96-coupled-phases-01",
+  "scope": "Exact failure copies; omitted command00-16 remain hashed raw. External retained-handle exits supplement missing inner editor exit without natural-exit inference. No acceptance.",
+  "source_closure_sha256": "564e5b7877f49d33a1af84eaf3b3a7ddf4ea2f846c4161eb694c5c40514fc752"
+}

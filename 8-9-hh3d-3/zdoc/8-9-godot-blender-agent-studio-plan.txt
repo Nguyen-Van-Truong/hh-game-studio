@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 18-09-2026, Asia/Saigon | Revision S96 | TRIỂN KHAI THEO GATE
+Ngày 18-09-2026, Asia/Saigon | Revision S97 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -16,7 +16,7 @@ STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng
 
 CURRENT_VALID_WP=GT-06
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
-IMPLEMENTATION=GT06_S96_COUPLED_HTTP_PHASES_AND_ACK_IDENTITY_DIAGNOSTIC
+IMPLEMENTATION=GT06_S97_ACK_READ_FAILURE_PRESERVED_CAUSAL_PROBE_PREPARATION
 GT01_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260913
 GT01_PENDING=NONE
 GT01_PIN_DECISION=GODOT_4.7.2_STABLE_OFFICIAL
@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S96
+PLAN_REVISION=S97
 EXECUTION_MODE=COORDINATOR_THREE_ASTRA_ULTRA_OWNER_20260918
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -54,119 +54,77 @@ GT05_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260917_S64
 GT05_REVIEW_STATUS=TWO_INDEPENDENT_PASS_TICK_YES_S64
 GT05_CHECKPOINT_COMMIT=808d8ba
 GT05_LAST_TESTED_SOURCE_CLOSURE=c141d54b80022ca7fefdf81f83e7e1078d3cc6aa43954831f82bb3178338a135
-GT06_EVIDENCE_STATUS=S93_FAILURE_STATUS_GAP_BATCH6_RETAINED_NO_ACCEPTANCE
-GT06_WORKING_SOURCE_STATUS=S95_FROZEN_85_AFFECTED_TESTS_HTTP200_SUPPLEMENTAL
+GT06_EVIDENCE_STATUS=S96_FAILURE_ACK_READ_BATCH17_RETAINED_NO_ACCEPTANCE
+GT06_WORKING_SOURCE_STATUS=S97_ACK_READER_REPAIR_IN_PROGRESS_NOT_FROZEN
 GT06_LAST_TESTED_SOURCE_CLOSURE=564e5b7877f49d33a1af84eaf3b3a7ddf4ea2f846c4161eb694c5c40514fc752
-GT06_CURRENT_SOURCE_CLOSURE=564e5b7877f49d33a1af84eaf3b3a7ddf4ea2f846c4161eb694c5c40514fc752
+GT06_CURRENT_SOURCE_CLOSURE=UNFROZEN_S97_CANDIDATE
 GT06_SOURCE_CHECKPOINT=ad81e944
 GT06_BENCHMARK_CAMPAIGN=gt06-s86-campaign-01
 GT06_BENCHMARK_STATUS=S86_FAILURE_RETAINED_OBJECTDB_GROWTH_BATCH17_20260918T120235Z
-GT06_ACTIVE_DIAGNOSTIC=gt06-s96-coupled-phases-01; STARTED_20260918T155103Z; OBSERVED_LIVE_20260918T155206Z; DIAGNOSTIC_ONLY
-GT06_NEXT_ACTION=Keep S96 runtime/helper/profile fixed. Query live task and short logs; verify first real ACK and batch4 sparse ACK binding. On terminal inspect HTTP first-lookup-failure window, native identity deltas, actual exits and cleanup before repair or next campaign.
+GT06_ACTIVE_DIAGNOSTIC=NONE; S96_TERMINAL_FAILED_20260918T162632Z; TASK_RETIRED_20260918T163646Z
+GT06_NEXT_ACTION=Diagnose S96 ACK open/read failure using preserved exact bytes and bounded native Windows probe; no retry until cause/repair validated. Keep original gates and deadlines; any source/helper change requires fresh run ID.
 GT06_S88_SCHEDULER_TASK=OBSERVED_ABSENT_20260918; historic_delete_report_retained_in_chat; durable_delete_receipt_missing
 GT06_S90_DIAGNOSTIC=gt06-s90-lifecycle-attribution-01; preflight=gt06-s90-lifecycle-attribution-preflight-06; five_partial_batches; interrupted_before_batch5_capture; formal_acceptance=false; eligible_for_dataset=false
 GT06_DIAGNOSTIC_EXCLUSION=S81-S90 diagnostic and partial/failure prefixes are excluded from F13/F14 acceptance datasets; see s83-mapping requirements and each packet manifest.
 
-TIẾN ĐỘ HIỆN HÀNH — S96, ngày 18-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S97, ngày 18-09-2026
 GT-01–05 ACCEPTED; GT-06 IN_PROGRESS; GT-07–10 chưa mở.
-S93 kết thúc14:54:47Z, KHÔNG còn chạy. CAMPAIGN_STATUS_GAP batch6: host
-2033.1318ms>2000ms, native579.328ms. Có7partial batches, không fullrun/PASS.
-Khoảng lỗi là admission→lookup UNKNOWN của b6.inspect.4; lookup2002.973ms,
-lookup lại COMMITTED. Discovery/lease timestamps đã có, không phải omission S91.
-Stage/category của lỗi lookup bị call sau reset trước lưu; chưa biết nguyên
-nhân latency là socket/disk/lock/CPU/RAM. Không gọi thành công retry là PASS.
+S96 kết thúc16:26:32Z, KHÔNG còn chạy. Có17completed joint/ACK batches0–16;
+native đã publish batch17 đủ100cycles nhưng ACK17 chưa có receipt. Host fail
+CAMPAIGN_NATIVE_FAILURE tại joint_observation; native BENCHMARK_HOST_ACK_READ.
+Code này gộp open-null và short-read, chưa có errno/length tại thời điểm lỗi.
+ACK17 cuối cùng423bytes hợp lệ, host đã qua publish readback rồi chờ ACK.
+Không suy file cuối cùng hợp lệ nghĩa là native đã đọc được, không gọi partial
+write hoặc Windows rename-sharing là nguyên nhân đã chứng minh.
 
-S95 sửa observation: giữ sanitized transport_failure tại từng lookup attempt,
-schema1.3 và strict validator; không đổi timeout/retry/status samples/ngưỡng.
-85/85 affected tests đạt, actual target43688/helper31992exit0/treeverified;
-GitHEAD51source khớp ad81e944. Unit01 giữ77pass/1fail do clock diagnostic
-GetTickCount64 bị lệch với QPC của producer; đã dùng chung perf_counter_ns.
-Không đổi phép đo statusgap S93, không claim đã sửa latency gốc.
-HTTP200 trên copyhistory đã xong: actual8824/helper13900exit0/treeverified,
-maxgap401.4742ms; không tái hiện2s. Hash HTTP closure riêng, không gọi full
-campaign51map. Ba worker Astra ultra chia helper/native review/HTTP analysis;
-implementation review không thay final critic.
-Chuẩn bị hai thí nghiệm tách biệt, chạy tuần tự: HTTP với bản sao history để
-đo journal/lock phases; native-only35×100 sparse để HTTP không cắt mất lượt
-quan sát ObjectDB. Smoke01 giữ nguyên; preflight phát hiện receipt publication race và hook
-sau timestamp. Smoke02 collector fail vì chuyển census trước semantic inspect:
-71062→71063 khác lifecycle, nativeexit0/clean. Sửa hook về cùng thời điểm
-counters, refresh actualtimestamp và heartbeat thật sau capture. Smoke03
-5×1 readback/cleanup đạt: import33312/editor18096exit0, outer1444/helper31040
-exit0/treeverified;8focused tests đạt. Chỉ baseline, chưa là growth/benchmarkPASS.
-Native40closure ebed9418490379bb902d2049e4a2f98a96e3378d09b369aef02684e16214c74e;
-helper4448ab35a6e087c8756063e0d8a025f4dc60a44329fcf56c4b270e6d1474302b.
-Helper/preflight/launch: reviews/20260918-gt06-s95-native-isolation/.
-Checkpoint8136012c giữ failure/HTTP; cd777989 giữ helper/smoke/launcher.
-S95 native-only35×100 đã hoàn tất15:32:50Z, không còn chạy. Native937.112325s,
-outer954.157s; ObjectDB71127/resource6 ở cả35batch, maxheartbeat1102.852ms.
-Import26164/editor11288/child32268/supervisor21072 actualexit0; các Jobzero/
-closed/handlesreleased, schedulerstate3/result0/noinstances và knownPIDsabsent.
-Task đã retired15:35:43Z sau preservation. Packet120exactcopies/67rawartifacts:
-reviews/20260918-gt06-s95-native-result/, manifest
-e79551bccc6e746a0b6cb50653ec559fd3a1d99c59273d75be1e731deb201f0a.
-Strict analyzer actual47876exit0, khôngbindinggap; baseline chỉ4607selectedIDs
-(Tree102/TreeItem4493/Node3Dfamily12), còn66520ObjectDB ngoài inventory.
-Khônggrowthsnapshot nên identity sau baseline chưa được đo. Kết luận chỉ là
-không tái hiện trong workload native riêng; thiếu HTTP/idle/ACK và lifecycle
-khác coupledpostACK. Khôngclaimno-leak hoặc benchmarkPASS.
+Cleanup: import29676 actualexit0; outer retained handles thấy supervisor6888/
+host22148/helper23452exit1, editor50100/helper5652exit2. Inner editor exit/capture
+vẫn thiếu; outer proof là domain riêng, không suy naturalexit. Jobszero/closed,
+handles/probes/listeners/threads/index đã đóng, cleanup errors=[]; scheduler
+state3/result1/noinstances, knownPIDsabsent. Task retired16:36:46Z sau preservation.
+Failure packet reviews/20260918-gt06-s97-ack-recovery/failure/:244exactcopies,
+177declaredraw,51runtime9helpers verify; manifest
+46ad1f9701c5e3bd000b7fb58e7c7d638a1c1bc580d376ea4c2df1f182b126f2.
+Executed native.gd nằm ở effective-native-supplement riêng, SHA
+ de1838cf836e7dfd9a80fa05c7636774e43da0121dc3d7b551e02b90f5f746b1;
+basepacket không sửa sau seal. Raw gốc và command00–16 giữ hash/locator.
 
-S96 đã freeze tại a10ce7f1 và khởi chạy15:51:03Z:
-- Run gt06-s96-coupled-phases-01; task cùng ID với prefix HHStudio.GT06.
-  Raw studio/.local/reviews/gt06-s96-coupled-phases-01; observer nằm trong
-  reviews/20260918-gt06-s96-coupled-phases/launch-01/observer/.
-- Formal source51/profile không đổi. Helper9 closure
-  49305105575402570035bbff7f3f7abdcc5a98653b8cc994932b4ae07f921795.
-  Effective native de1838cf836e7dfd9a80fa05c7636774e43da0121dc3d7b551e02b90f5f746b1.
-- Recorder12/12 và smokeHTTP thật đạt: actual47412/helper17632exit0/clean.
-  Hai disconnect trong smoke là injected; không claim S93 đã tái hiện/sửa.
-  Chỉ first LOOKUP failure giữ bounded pre-event/open spans; endpoint khác
-  được đếm nhưng không chiếm snapshot. Current producer không chủ động drop
-  submit; nhận định ngược từ test cũ đã được sửa, ghi trong coordinator-validation.
-- Composition6/6; import Godot42632/parent24936/helper9388exit0/clean.
-  Census chuyển đúng sau ACK đã validate, ngay trước fresh counters;
-  _write_batch, original observed/deadline/heartbeat giữ byte gốc. Preflight
-  chỉ chứng minh compile/import; first real ACK và baseline4 cần kiểm tiếp.
-- Quan sát15:52:06Z: supervisor6888/host22148/editor50100 sống, PID/start/exe
-  khớp; hostbatch0 commands, native HOST_START, stderr0B. Schedulerstate4/
-  instances0 không tự chứng minh chết hoặc sống. Phải query mới mỗi lần.
-- Workload vẫn35×1000HTTP+100native, nguyên ngưỡng; đây là diagnostic,
-  không F13/F14/PASS. Inner7410s/outer7530s/task130min; ước lượng45–90phút
-  ban đầu, hiệu chỉnh bằng batch hoàn chỉnh. Không ETA toànplan.
-- Terminal-only HTTP flush sau cleanup tránh I/O dưới locks; hardkill trước
-  finally có thể thiếu phase làGAP. Không bỏ Stop hoặc retry ngầm. Giữ source/
-  helper/workstation, không thêm engine/tests/heavyhash trong lúc đo.
+HTTP recorder báo0transportfailure mọiroute, first_failure=null, khôngdrop/
+missingidentity/unfinished; terminalring512events chỉ phần đuôi sau1263154evictions.
+Command17 COMPLETE1000commands, effects3400→3600, maxgap418.1515ms.
+Không tái hiện S93lookup2s, không chứng minh latency gốc đã sửa.
+17ACK đã có ObjectDB71128/resources6; sparsebaseline ACK4 khớp hash/run/PID/
+frame/time, selfdrift=false;4607IDs inventorymộtphần. Khônggrowthsnapshot.
+Batch17 chưa ACK nên counter tại lifecycle đó UNKNOWN; khôngclaimno-leak.
 
-Root giữ plan/checkpoint; ba worker đã hoàn tất recorder, composition và
-implementation review. Đây không phải hai critic nghiệm thu. Mapping reuse:
-reviews/20260918-gt06-s95-result-prep/dependency-next.md; chỉ rerun lane đổi
-sau exact dependency join. Lịch10phút đã được cập nhật theo S96 hiện hành.
+Runtime vẫn ad81e944/formal51closure564e5b7877f49d33a1af84eaf3b3a7ddf4ea2f846c4161eb694c5c40514fc752;
+profile không đổi. S96 helpercheckpointa10ce7f1,helper9closure49305105575402570035bbff7f3f7abdcc5a98653b8cc994932b4ae07f921795.
+Root bảo toàn failure/plan; ba worker làm ACKpublication/read audit + native
+causalprobe chuẩn bị, cleanup/identity audit, HTTPphase analysis. Candidate repair chỉ benchmark_native.gd đã được giao một writer, chưa freeze/test;
+chưa launch probe hoặc retry full. Runtime ad81e944 bên dưới là last frozen source,
+không gán old evidence cho candidate. Đây không phải critic nghiệm thu.
+Hướng điều tra: Windows name-visible trước rename-handle-close có thể gây
+sharingviolation; phải kiểm actual pinned Godot, không chỉ suy từ documentation.
+Giữ nguyên timeout/statusgap/counters/RSS/Stop; không sửa gate để chạy qua.
 
-S93 raw: studio/.local/reviews/gt06-s93-sparse-attribution-01.
-Failure: reviews/20260918-gt06-s95-status-recovery/,96exactcopies/90rawartifacts,
-51frozenruntime+6helpers đã verify; manifest
-ca7e46b7fb7cbfb0ee8c81825c7a262afac80d7dbe2ae0167c01f9368c5de4fc.
-Outer retained handles: supervisor12544/host10984/helper19080 exit1;
-editor33152/helper30580 exit2 forcedcleanup, khôngnatural. Jobszero/closed,
-handlesreleased; innereditor exitfile vẫn thiếu, outer proof giữ domain riêng.
-Scheduler state3/result1/noinstances đã lưu; task retired14:58:03Z sau seal.
-Sparse chỉbaseline, khônggrowth; ACKObjects71128/resources6 ổn định. Chưa
-truy nguyên S86+2, không chứng minh noleak. Giữ toàn bộ S70–S93 failures.
+S95 native-only35×100 đã xong15:32:50Z/retired15:35:43Z; native937s, ObjectDB71127/
+resources6,maxgap1102.852ms,actualexit0/cleanup. Packet120copies tại s95-native-result,
+manifest e79551bccc6e746a0b6cb50653ec559fd3a1d99c59273d75be1e731deb201f0a.
+Chỉ không tái hiện workload riêng, thiếuHTTP/ACK/idle. S93statusgap2033.1318ms
+và S86ObjectDB+2 vẫn chưa được chứng minh sửa. Giữ mọi failureS70–S96.
+S95schema1.3/QPC observation sửa85/85tests, HTTP200supplement là scope riêng;
+không đổi producer timeout. Chi tiết trước đây lưu tools-plan-s96.txt và
+plan-archive.json trong s97-ack-recovery, AUTHORITY=0, không nguồn tiến độ.
 
-S91 lỗi2072.4595ms và repairS93 giữ tại s92-status-recovery/ cùng b113587b;
-S94 doc-only commitbf88058f làm rõ memory gate khớp code, không nới ngưỡng.
-Superagent SA2/HH World S23 đã bổ sung kit/data/social/device/extension, giữ
-16/32WP; chưa triển khai game. Review/checks: reviews/20260918-s94-plan-clarifications/.
-Chi tiết tiến độ S94 trước rút gọn giữ tại Gitbf88058f; evidence cũ không sửa.
-
-Lịch duy nhất ti-p-t-c-hh3d-tools ACTIVE mỗi10phút phải đọc trạng thái mới;
-không tiếp tục báo S93RUNNING. Không có ETA toànplan đáng tin cậy.
 Đường nghiệm thu vẫn10freshpairs×35batch (5warmup+30measured), originalprofile
 →final requirement/test/evidence + manifest →hai critic MỚI cùng hash
 PASS/TICK=yes →coordinator ACCEPTED. F01–F15: s83-mapping/requirements.md;
-F13/F14 không dùng diagnostic hoặc partial/failure. Reuse lane đúngdependency.
-Sau GT06 mới GT07 recovery/concurrency, GT08 CI/export/Android máy thật,
-GT09 conformance và GT10 package/install/upgrade/rollback. Games sauGT10 riêng.
+F13/F14 không dùng diagnostic hoặc partial/failure. Reuse lane đúngdependency:
+s95-result-prep/dependency-next.md chỉ hướng dẫn, chưa chữký source mới.
+SauGT06 mớiGT07recovery/concurrency,GT08CI/export/Androidmáythật,GT09conformance,
+GT10package/install/upgrade/rollback. HHWorldS23/SuperagentSA2 game riêng sauGT10;
+GT10 không tự chứng minh fullgameauthoring. Lịch duy nhất ti-p-t-c-hh3d-tools
+phải theo trạng tháiS97, không báoS96RUNNING. KhôngETAtoànplan đáng tin cậy.
 
 Lịch sử đầy đủ S90 trước rút gọn: reviews/20260918-plan-history-s90/
 tools-plan-s90.txt, AUTHORITY=0, SHA256=c5d51b62e2bc78714f49b6f4727dee1b68fa7d702cf5f4a4365ecd7fcdf16e54.

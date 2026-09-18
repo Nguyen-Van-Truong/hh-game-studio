@@ -1,0 +1,120 @@
+{
+  "observed_utc": "2026-09-18T16:10:11.856424+00:00",
+  "run_id": "gt06-s96-coupled-phases-01",
+  "formal_acceptance": false,
+  "baseline4_binding_verified": true,
+  "checks": {
+    "s96_schema_phase": true,
+    "snapshot_bytes": true,
+    "ack_bytes": true,
+    "native_bytes": true,
+    "run_batch_pid": true,
+    "original_barrier": true,
+    "same_frame_and_lifecycle": true,
+    "counters_and_no_self_drift": true,
+    "diagnostic_exclusion": true
+  },
+  "baseline_sparse_sha256": "0384675458e6c36e5865525af138c7b82fb70be4a32fded9926f04b6820399ac",
+  "ack_sha256": "ad2a2f4f0249e80196722640d12fceb8a2b7506c83f2a01d1828fa8e0daf453a",
+  "baseline_objects": 71128,
+  "baseline_resources": 6,
+  "inventory_ids": 4607,
+  "inventory_partial": true,
+  "growth_snapshot_present_at_observation": false,
+  "completed_joint_rows": [
+    {
+      "index": 0,
+      "joint_duration_s": 72.637852,
+      "native_duration_s": 27.591122,
+      "non_native_window_s": 45.04673,
+      "objects": 71128,
+      "resources": 6
+    },
+    {
+      "index": 1,
+      "joint_duration_s": 77.108432,
+      "native_duration_s": 27.317562,
+      "non_native_window_s": 49.79087,
+      "objects": 71128,
+      "resources": 6
+    },
+    {
+      "index": 2,
+      "joint_duration_s": 84.188928,
+      "native_duration_s": 27.617684,
+      "non_native_window_s": 56.57124400000001,
+      "objects": 71128,
+      "resources": 6
+    },
+    {
+      "index": 3,
+      "joint_duration_s": 87.633828,
+      "native_duration_s": 25.466367,
+      "non_native_window_s": 62.16746099999999,
+      "objects": 71128,
+      "resources": 6
+    },
+    {
+      "index": 4,
+      "joint_duration_s": 92.280141,
+      "native_duration_s": 22.98178,
+      "non_native_window_s": 69.298361,
+      "objects": 71128,
+      "resources": 6
+    },
+    {
+      "index": 5,
+      "joint_duration_s": 100.23839,
+      "native_duration_s": 25.008689,
+      "non_native_window_s": 75.22970099999999,
+      "objects": 71128,
+      "resources": 6
+    },
+    {
+      "index": 6,
+      "joint_duration_s": 101.580713,
+      "native_duration_s": 23.918565,
+      "non_native_window_s": 77.662148,
+      "objects": 71128,
+      "resources": 6
+    },
+    {
+      "index": 7,
+      "joint_duration_s": 108.473137,
+      "native_duration_s": 23.413171,
+      "non_native_window_s": 85.059966,
+      "objects": 71128,
+      "resources": 6
+    },
+    {
+      "index": 8,
+      "joint_duration_s": 115.878373,
+      "native_duration_s": 23.73903,
+      "non_native_window_s": 92.139343,
+      "objects": 71128,
+      "resources": 6
+    },
+    {
+      "index": 9,
+      "joint_duration_s": 119.012875,
+      "native_duration_s": 23.722064,
+      "non_native_window_s": 95.29081099999999,
+      "objects": 71128,
+      "resources": 6
+    },
+    {
+      "index": 10,
+      "joint_duration_s": 129.252872,
+      "native_duration_s": 27.491549,
+      "non_native_window_s": 101.761323,
+      "objects": 71128,
+      "resources": 6
+    }
+  ],
+  "eta_estimate": {
+    "recent_five_average_batch_s": 114.83959399999999,
+    "remaining_at_recent_rate_minutes": 45.9358376,
+    "limitations": "Extrapolation of partial prefix only; excludes future slowing/failure and terminal cleanup. Not full-plan ETA."
+  },
+  "scope": "Small immutable completed artifact prefix only. No source/profile audit or final run verdict."
+}

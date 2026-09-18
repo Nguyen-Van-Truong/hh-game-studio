@@ -1,0 +1,35 @@
+{
+  "formal_acceptance": false,
+  "supervisor_stderr_bytes": 0,
+  "status_scope": "Fresh exact PID/start/executable observation only, not completion",
+  "host_tail": [
+    "HH_GT06_CAMPAIGN_PROGRESS {\"run_id\": \"gt06-s96-coupled-phases-01\", \"batch\": 0, \"phase\": \"commands\"}",
+    "HH_GT06_CAMPAIGN_PROGRESS {\"run_id\": \"gt06-s96-coupled-phases-01\", \"batch\": 0, \"phase\": \"commands\"}"
+  ],
+  "native_tail": [
+    "HH_GT06_BENCHMARK_HEARTBEAT {\"batch\":0,\"cycle\":0,\"main_thread\":true,\"monotonic_us\":48668615,\"phase\":\"HOST_START\",\"pid\":50100,\"run_id\":\"gt06-s96-coupled-phases-01\"}",
+    "HH_GT06_BENCHMARK_HEARTBEAT {\"batch\":0,\"cycle\":0,\"main_thread\":true,\"monotonic_us\":49171945,\"phase\":\"HOST_START\",\"pid\":50100,\"run_id\":\"gt06-s96-coupled-phases-01\"}"
+  ],
+  "native_stderr_bytes": 0,
+  "observed_utc": "2026-09-18T15:52:06.1554185Z",
+  "processes": [
+    {
+      "pid": 6888,
+      "process_start": "windows:134342202657183936",
+      "executable_matches": true,
+      "alive": true
+    },
+    {
+      "pid": 22148,
+      "process_start": "windows:134342202686852044",
+      "executable_matches": true,
+      "alive": true
+    },
+    {
+      "pid": 50100,
+      "process_start": "windows:134342202765127721",
+      "executable_matches": true,
+      "alive": true
+    }
+  ]
+}
