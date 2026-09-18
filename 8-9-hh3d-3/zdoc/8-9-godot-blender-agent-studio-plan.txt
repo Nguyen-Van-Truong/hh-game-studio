@@ -1,5 +1,5 @@
 HH STUDIO — PLAN 1/3: GODOT + BLENDER + CÔNG CỤ CHO AGENT
-Ngày 18-09-2026, Asia/Saigon | Revision S93 | TRIỂN KHAI THEO GATE
+Ngày 18-09-2026, Asia/Saigon | Revision S94 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO CÔNG CỤ
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -25,7 +25,7 @@ RUNTIME_ACCEPTANCE=GT01_GT02_GT03_GT04_GT05_ACCEPTED
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/studio
 PLAN_ROLE=TOOLS_SOURCE_OF_PROGRESS
-PLAN_REVISION=S93
+PLAN_REVISION=S94
 EXECUTION_MODE=COORDINATOR_THREE_ASTRA_ULTRA_OWNER_20260918
 SUBAGENTS_ENABLED=3
 GT02_EVIDENCE_STATUS=ACCEPTED_COORDINATOR_20260916_S46
@@ -67,8 +67,13 @@ GT06_S88_SCHEDULER_TASK=OBSERVED_ABSENT_20260918; historic_delete_report_retaine
 GT06_S90_DIAGNOSTIC=gt06-s90-lifecycle-attribution-01; preflight=gt06-s90-lifecycle-attribution-preflight-06; five_partial_batches; interrupted_before_batch5_capture; formal_acceptance=false; eligible_for_dataset=false
 GT06_DIAGNOSTIC_EXCLUSION=S81-S90 diagnostic and partial/failure prefixes are excluded from F13/F14 acceptance datasets; see s83-mapping requirements and each packet manifest.
 
-TIẾN ĐỘ HIỆN HÀNH — S93, ngày 18-09-2026
+TIẾN ĐỘ HIỆN HÀNH — S94, ngày 18-09-2026
 GT-01–05 ACCEPTED; GT-06 IN_PROGRESS; GT-07–10 chưa mở.
+S94 chỉ làm rõ tài liệu: memory gate khớp verifier hiện hành; consumer có
+extension owner, phần tối thiểu, WP dùng đầu và proof cụ thể. Ba worker Astra
+ultra đã rà độc lập ba plan, không phải final critic. Không đổi source/profile,
+ngưỡng, verdict cũ hoặc tiến độ WP; runtime vẫn S93. Review và checks tại
+reviews/20260918-s94-plan-clarifications/; bản trước giữ trong Git754186c4.
 S93 diagnostic mới dispatched14:44:18Z; query sau dispatch state4/1instance,
 host đangbatch0commands, editor33152 heartbeatHOST_START tăng. Đây là startup
 observation, không terminal/PASS. Script/receipts ở s93-sparse-attribution/,
@@ -79,8 +84,9 @@ Source b113587b/e05d6913… đã kiểm51Gitbytes. FullHTTP1000/200effects stric
 exit0/clean; không tái hiện2s nên chưaclaim sửa toàn bộ performance.
 Giữ currentrun, không thêm engine/test/heavyhash. Lịch ti-p-t-c-hh3d-tools ACTIVE
 mỗi10phút; initial45–75phút cho diagnostic, hiệu chỉnhcompletedbatches.
-Superagent SA1 và HH World S22 đã lưu tại135cc588. Đây là các plan game riêng,
-chưa triển khai game; không thêm gate game/Web vào GT hiện hành.
+Superagent SA2 và HH World S23 làm rõ đầu vào/đầu ra theo góp ý owner; bản
+SA1/S22 giữ tại135cc588. Đây là plan game, chưa triển khai; không thêm gate
+game/Web vào GT hiện hành.
 
 S91 đã kết thúc14:26:02Z, KHÔNG còn chạy: CAMPAIGN_STATUS_GAP tại batch16,
 17partial batches. Host gap2072.4595ms>2000ms; native601.142ms. Khoảng lỗi
@@ -107,9 +113,9 @@ Failure packet reviews/20260918-gt06-s92-status-recovery/:159exactcopies,
 Missing innereditorprocess-exit giữ nguyên; outer retainedhandleexit bổ sung
 trong hashdomain riêng. Không resume prefix này; nó là instrumented diagnostic.
 
-Ba worker Astra ultra đã chia rawgapanalysis, source/probe, terminalclosureaudit.
-Hai worker sau đó báo workspace out of credits; coordinator tiếp quản partial
-files và tiếp tục solo, không giả verdict. Source repair checkpoint b113587b.
+Trong lượt S93, ba worker đã chia rawgapanalysis, source/probe, terminalclosureaudit.
+Hai worker lượt đó báo workspace out of credits; coordinator tiếp quản partial
+files và hoàn tất repair, không giả verdict. Source repair checkpoint b113587b.
 Implementation review không thayfinalcritics. Lịch hiện hành phải theo S93;
 không còn báo S91RUNNING. S92 progression đầy đủ giữ ở Git135cc588; các history
 archive cũ AUTHORITY=0 vẫn nguyên. Không có ETA toànplan đáng tin cậy.
@@ -929,9 +935,22 @@ Hiệu năng UX công cụ dự kiến trên workstation ghi tạiGT-01:
 - Job nặng deadline/workload do profile khóa; watchdog/status update mỗi≤2s,
   operation noninterruptible phải bounded terminate owned-process sau timeout,
   không buộc thread UI bận chờ. Mất bridge hiện disconnected/UNKNOWN không “xong”.
-- 1000 commands protocol và 100 create/undo/save/reload cycles fixture: không
-  duplicate/lost effects/leak tăng đều. Sau10 vòng cùng workload mức RAM ổn định
-  tăng≤10% so warm baseline; rawsamples/GC/import phases rõ, OS cache ghi riêng.
+- Mỗi fresh host/editor pair giữ nguyên process identity qua 35 batch; mỗi
+  batch có 1000 commands và 100 create/undo/save/reload cycles, không duplicate/
+  lost effects. Warmup là batch index 0–4; baseline riêng từng role/counter là
+  đúng observation post_batch_quiescent của batch 4, không trung bình/rebaseline.
+  Ở MỌI measured batch 5–34, host/editor RSS riêng rẽ phải ≤110% baseline;
+  host OS handles và editor objects/resources/OS handles phải ≤baseline tương
+  ứng. Bất kỳ một mẫu count vượt baseline cũng FAIL, kể cả plateau hoặc sau đó
+  giảm. repetition_10 chỉ báo measured thứ 10 (batch 14), không thay gate cả
+  30 mẫu. Counter bắt buộc thiếu là GAP kể cả warmup; chỉ host objects/resources
+  được NOT_APPLICABLE_PYTHON_HOST theo profile, không chuyển thiếu thành zero.
+  Giữ raw samples/GC/import phases và ghi OS cache riêng; không reset/subtract
+  overhead. Counter growth là vi phạm gate, chưa tự chứng minh leak tăng đều.
+  Cleanup kiểm riêng actual exits 0, owned-tree 0 và retained owned-handles 0;
+  retained owner handles khác OS handle count đang đo khi process còn sống.
+  Đây là làm rõ verifier đã khóa (benchmark_profile.summarize_dataset và
+  run_benchmark_campaign.screen_sample), không đổi policy hay hồi tố failure.
 - Benchmark artifact/UX chạy riêng, không đồng thời Blender render/GPU test game.
 Khóa metrics và test devices trước chạy; thay target phải decision/review,
 không hạ để tick. Chưa chứng minh mọi máy đều đạt hoặc mọi lỗi đã được bao phủ.
@@ -1043,6 +1062,16 @@ mới chạy regression affected capabilities+install/rollback+consumer contract
 2critics cho mọi release package thay đổi, giữ last-good package đến khi đủ evidence.
 Consumer upgrade explicit lock diff; project khác chỉ nhận sau owner grant.
 Không phá compatible client đang dùng hoặc silently auto-upgrade global Godot.
+
+Để change request có thể giao việc ngay, consumer matrix phải khóa request ID,
+tool owner chịu trách nhiệm, minimum public operations/schema/profile, WP dùng
+đầu, affected paths, package version và acceptance test. Coordinator giao writer/
+lease khi mở request; đối chiếu package trước, phần đã đủ proof thì reuse.
+Nhu cầu cụ thể nằm tại mục3 Superagent (SA-T01–06) và mục2 HH World (H2-T01–04),
+không tạo bảng tiến độ tools thứ hai hoặc thêm gate vào lần GT-10 đầu. Nhu cầu
+chung như executable script/UI authoring dùng cùng một implementation request
+với hai consumer tests; không xây trùng adapter. Chỉ consumer thiếu capability
+bị chặn; bản mở rộng đi qua quy trình release/rollback/critic ở trên.
 
 Làm rõ phạm vi claim/handoff (S76; không thay gate hoặc mở consumer sớm):
 - Capability matrix phải phân biệt thao tác bằng public catalog đã kiểm với

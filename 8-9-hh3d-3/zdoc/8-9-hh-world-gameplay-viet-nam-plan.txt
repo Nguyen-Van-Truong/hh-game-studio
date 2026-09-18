@@ -1,5 +1,5 @@
 HH WORLD — PLAN 2/3: GAMEPLAY, SOCIAL MULTIPLAYER, VIỆT NAM
-Ngày 18-09-2026, Asia/Saigon | Revision S22 | TRIỂN KHAI THEO GATE
+Ngày 18-09-2026, Asia/Saigon | Revision S23 | TRIỂN KHAI THEO GATE
 
 BẢNG TÓM TẮT / TIẾN ĐỘ — NGUỒN TRẠNG THÁI DUY NHẤT CHO GAME
 STT | WP | Kết quả cần có | Phụ thuộc trước nghiệm thu | Trạng thái
@@ -40,25 +40,27 @@ CURRENT_VALID_WP=H2-P0-01
 DISPATCHABLE=NO_UNTIL_GT10_ACCEPTED
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_GATED
 IMPLEMENTATION=NOT_STARTED
-PLAN_DESIGN_CRITICS=NO_ACCEPTED_VERDICT_S6_TO_S22
+PLAN_DESIGN_CRITICS=NO_ACCEPTED_VERDICT_S6_TO_S23
 RUNTIME_ACCEPTANCE=NONE
 HUMAN_ACCEPTANCE=NONE
 PLAN_SCOPE=8-9-hh3d-3/game-and-services
 PLAN_ROLE=GAME_SOURCE_OF_PROGRESS
-PLAN_REVISION=S22
+PLAN_REVISION=S23
 REVIEW_BASE_COMMIT=b4195ca
 HISTORICAL_REJECTED_COMMIT=54d0c7c
 HISTORICAL_STUDIO_COMMIT=3cc7a85f730c99963a5a64079a0e02dc20edbd40
 HISTORICAL_SOCIAL_COMMIT=71629923641178171ec4339143b3cf1472618adc
 
-CẬP NHẬT S22 — PHẠM VI GAME, CHƯA TRIỂN KHAI
-Rà ngày18-09 đưa cải thiện dữ liệu/nội dung/chơi thử/chi phí vào đúng H2;
-32 WP, dependency và trạng thái PLANNED giữ nguyên. GT-10 vẫn là gate intake.
-Không thêm minigame co-op, Web hoặc game2D thành yêu cầu GT/H2. Source Hoàn Hảo
-đã được đọc; cấu hình VPS/coverage/quyền dataset chưa xác minh.
-Nguồn: reviews/20260918-hoanhao-map-reuse-review.md (AUTHORITY=0).
-Archive S21/hash và scoped checks: reviews/20260918-hhworld-s22-plan-update/.
-REVIEW_BASE_COMMIT phía trên là provenance review cũ, không là verdict S22.
+CẬP NHẬT S23 — PHẠM VI GAME, CHƯA TRIỂN KHAI
+Làm rõ kit kiến trúc P5, source geometry thực tại P7-01 trước converter,
+phiên social 2–4 người sớm sau P4 và các extension công cụ theo consumer đầu.
+32 WP/dependency/PLANNED giữ nguyên, GT-10 vẫn là gate intake; không thêm
+minigame/Web/game2D hoặc thay human acceptance P6. S22 giữ trong Git135cc588;
+review/checks S23 tại reviews/20260918-s94-plan-clarifications/ (AUTHORITY=0).
+Source Hoàn Hảo đã đọc; VPS/coverage/quyền dataset chưa xác minh. Nguồn:
+reviews/20260918-hoanhao-map-reuse-review.md. Archive S21 giữ tại
+reviews/20260918-hhworld-s22-plan-update/. REVIEW_BASE_COMMIT là provenance cũ,
+không là verdict thiết kế/runtime S23.
 
 0. ĐỌC FILE NÀY VÀ NHẬN CÔNG CỤ TRƯỚC KHI LÀM GAME
 
@@ -136,6 +138,21 @@ UNSUPPORTED, command/schema và test/readback; trusted box fixture không chứn
 minh public authoring. Gap đi qua minimal repro và versioned change request
 đến tool owner, rồi kiểm lại package intake; không tự cấp arbitrary eval.
 Chỉ lane phụ thuộc thiếu capability bị chặn; intake không đợi game hoàn chỉnh.
+
+Các hàng cần đối chiếu package trong matrix P0-01 (chưa claim SUPPORTED):
+ID | Tool owner chịu trách nhiệm | Minimum capability | Consumer đầu | Proof
+H2-T01 | Godot adapter maintainer/GT-03 | typed executable .gd, scene/resource/InputActions/Control bindings | H2-P0-03 | public edit→menu/input/quit thật; parse/type reject, atomic save/readback/undo, last-good khi lỗi
+H2-T02 | Godot adapter maintainer/GT-03 | controller/camera/collision properties/resources và script linkage có allowlist | H2-P1-02 subset; H2-P2-01 đầy đủ | input thật, collision/wall/slope/camera và readback
+H2-T03 | Blender adapter maintainer/GT-04 phối hợp GT-05 | bounded mesh/rig/skin/clip/material authoring + export/import | rig đại diện H2-P1-03; avatar mới H2-P2-02 | skin/clip readback, animation thật, reimport/rollback và source lineage
+H2-T04 | Godot adapter maintainer/GT-03 | UI/audio bindings, activity/save script edits; không sửa player state có authority bằng tool | H2-P2-03; placement H2-P2-04 | cue/input/reward/save/relaunch và placement/undo/readback
+Mỗi hàng khóa change_request_id, người được coordinator giao/lease, operation/
+schema/profile, paths, package version và acceptance test trước mutation.
+Rig hợp lệ có sẵn chỉ chứng minh intake, không thay proof public rig authoring.
+Có thể dùng rig đó cho benchmark P1-03; proof authoring bắt buộc trước lần
+tạo/sửa rig đầu tiên, thường P2-02, không bắt dựng rig mới chỉ để benchmark.
+Request đi qua maintenance sau GT-10, affected regression, hai critic và explicit
+consumer lock upgrade; reuse request chung với Superagent nếu cùng capability.
+Đây là nhu cầu bàn giao, không thêm WP hoặc buộc GT-10 thành editor tổng quát.
 
 3. GAME HH WORLD: GAMEPLAY TRƯỚC, VIỆT NAM SAU
 3.1 HỢP ĐỒNG TRẢI NGHIỆM GAME (P01–P08)
@@ -1696,6 +1713,15 @@ VERIFY: spam/bypass Unicode/oversized payload, blocked chat/history/lookup,
 report to operator action to affected client; operator privileges least privilege;
 tên giả mạo staff/bạn bè bị từ chối, bạn bè thấy tên mới kèm tên cũ trong TTL;
 hàng đợi review cờ automation EX52 có audit, không auto-ban; bản ghi Q01-T-P4-04.
+Trước bulk final art P5, chuẩn bị phiên social 2–4 người thật sau technical P4:
+gọi/đến bạn → cùng room → câu cá cạnh nhau → thăm nhà → emote/chat theo quyền.
+Ghi thời gian tìm/đến bạn, nhầm invite/room, trợ giúp cần có, chỗ vui/chán/khó
+hiểu và điều muốn làm tiếp; consent/ẩn danh, build/source hash và quyết định sửa.
+Coordinator triage về WP hiện có; P5 kiểm lại thay đổi liên quan. Chưa có người
+ghi HUMAN_UNVERIFIED cùng đầu mối và lịch dự kiến; lane kỹ thuật vẫn tiếp tục,
+không giả người chơi hoặc thay Q03-H/Q04-W2/P6-03. Chỉ audience/môi trường đã
+được phép; INTERNAL_ONLY/account giả khi quyết định áp dụng chưa đủ. DEV_ONLY
+vẫn loopback, LAN/WAN cần auth/transport tương ứng; không mở alpha trước P6.
 DoD: technical flow tested; policies/real staffing remain P6-02; 2 critics.
 
 ## P5 — Chất lượng hình ảnh và mượt
@@ -1705,9 +1731,16 @@ CONTRACT/VERIFY: P08 versioned balancing, worst outfit/pose mix, muted/touch cue
 ALLOWED: original assets/import/content catalogs/style guide updates từ P2-02.
 BUILD: đủ P03 3 avatar presets/6 outfits/6 emotes/12 furniture/6 collectible
 items, original plaza landmarks, ambient/SFX/music with manifests.
+Giao kit kiến trúc nguyên bản dùng lại cho P7-02: đường/lối đi và module mặt
+nhà, mái, cửa/điểm nối, props thuộc plaza/nội dung đã chốt; không thêm khu hoặc
+hệ gameplay. Owner art khóa version/hash, stable catalog IDs, source/license,
+units, pivot/attachment, phạm vi footprint/height và material/LOD/collision budget.
 VERIFY: Q03-R on devices, LOD/rig/font/audio pooling, license closure,
 no copyrighted reference assets; no placeholder counted final; bản ghi Q01-T-P5-01.
-DoD: runtime art package 6 angles+video, signed critic notes (agent, not human owner).
+Ráp kit trên fixture authored đại diện để kiểm seam/scale/pivot/material/collision
+và GLB→runtime readback; không cần dữ liệu địa lý thật trước P7.
+DoD: runtime art package 6 angles+video, kit manifest/version + assembly proof,
+signed critic notes (agent, not human owner). P7 thiếu module trả về owner P5.
 
 ### H2-P5-02 — Polish/streaming/accessibility
 P5-02 accessibility acceptance enumerates supported Windows/Android assistive technology, minimum contrast and touch-target sizes, keyboard/touch remapping, screen-reader announcements for PENDING/UNKNOWN/REJECTED, 200% text and reduced-motion behavior. Each target has a human test matrix; unavailable platform capability is recorded as a visible fallback or GAP, never silently ignored.
@@ -1842,20 +1875,31 @@ of evidence. Missing humans remains UNVERIFIED, not fictitious names.
 ## P7 — Địa lý thật sau gameplay
 
 ### H2-P7-01 — Data/integration contract
-ALLOWED: `geo/` contracts/manifests/tests, read-only API integration documentation.
+ALLOWED: `geo/` contracts/manifests/tests và bounded source snapshots,
+read-only API integration documentation.
 BUILD: G01–G04 fixture and Hoàn Hảo adapter schema; verify actual provider/API
 availability with permission, source/license/attribution/refresh/cost decision,
 one VN pilot polygon, source data acquisition bound; readiness từng lớp và
 actual dependency/provider theo G01, không coi có code là deployment PASS.
+Sau review quyền nguồn, xuất thật vùng nhỏ trong pilot polygon: road polylines
+và building-footprint polygons có geometry đầy đủ của feature đã chọn, source
+ID/type/version, CRS/units, acquired timestamp, checksum, provider/source và
+license/attribution. Manifest ghi extent/bytes, coverage/completeness, clipping/
+simplification và lớp thiếu; water/height/POI có nguồn hoặc trạng thái thiếu rõ.
 VERIFY: unknown fields/IDs/CRS, offline provider behavior, license matrix;
 review rights before actual dataset acquire, no Google/reference package rip.
-DoD: approved source+scope; missing rights/provider → keep authored game usable;
+Đọc lại file xuất, kiểm geometry/IDs/CRS/bounds/provenance và độ đầy đủ đã khai
+báo. Readiness/schema/sample tự tạo hoặc road centers/shop clusters không thay
+geometry thực. Thiếu lớp/quyền không chuyển thành mẫu giả đủ điều kiện.
+DoD: approved source+scope và immutable bounded snapshot/hash đã kiểm;
+missing rights/provider/required geometry → GAP, giữ game authored dùng được;
 2 critics. Do not edit production Hoàn Hảo services from this WP.
 
 ### H2-P7-02 — Converter/chunks
 ALLOWED: `geo/` converter/fixtures/manifests and `game/` chunk loader interface.
-BUILD: WGS84→local meters, approved acquire limited data, roads/buildings/height
-confidence, nav/collision authored adjustments, content hashes/IDs/tombstones.
+BUILD: consume immutable bounded snapshot đã nghiệm thu P7-01, WGS84→local
+meters, roads/buildings/height confidence, nav/collision authored adjustments,
+content hashes/IDs/tombstones; output lineage giữ input snapshot/hash.
 Bounded/versioned geometry từ nguồn hợp lệ hoặc PostGIS → tái sử dụng kit art
 nguyên bản có version từ P5 → GLB → Godot; phần thiếu ghi estimated/authored.
 P7-02 chỉ consume kit; art còn thiếu trả đúng owner/path P5, không mở authoring
@@ -2779,6 +2823,10 @@ chi phí nội dung vào H2; không thay32WP/GT10/hard gates/thứ tự game tr�
 Co-op reward/Web/game2D chưa tự mở. Source review ba lane là research, không
 runtime/human/legal acceptance hay verdict thiết kế. Archive S21 và scoped
 checks: reviews/20260918-hhworld-s22-plan-update/.
+
+S23 (18-09): cụ thể hóa producer kit P5→consumer P7, dời mẫu geometry thực
+vào P7-01 trước converter, social feedback sớm và H2-T01–04. Giữ32WP, không
+claim runtime/human/rights acceptance; sửa tài liệu không là final critic.
 
 9.3 Kiểm bàn giao và giới hạn
 Bảng32H2/32spec, dependency một chiều GT-10→H2-P0-01, không vòng; Q00–06,

@@ -1,0 +1,54 @@
+{
+  "checked_at_utc": "2026-09-18T14:53:44.105720+00:00",
+  "baseline_commit": "754186c456342795f648f8c35d45646aae6f81bd",
+  "scope": "document consistency only; no engine/test or runtime acceptance",
+  "results": {
+    "tools": {
+      "path": "8-9-hh3d-3/zdoc/8-9-godot-blender-agent-studio-plan.txt",
+      "sha256": "0d380270206c777e9e3bd6a557843f7545ea67cbff85d334684092c305eb0b08",
+      "wp_rows": 10,
+      "progress_and_dependencies_unchanged": true,
+      "dependency_order_valid": true,
+      "runtime_claims_unchanged": true,
+      "utf8": true,
+      "specs_match_progress_rows": true
+    },
+    "hhworld": {
+      "path": "8-9-hh3d-3/zdoc/8-9-hh-world-gameplay-viet-nam-plan.txt",
+      "sha256": "439ed6fdd4d82812a223650de0a75e7122f89e5936690201d1130835f4084194",
+      "wp_rows": 32,
+      "progress_and_dependencies_unchanged": true,
+      "dependency_order_valid": true,
+      "runtime_claims_unchanged": true,
+      "utf8": true,
+      "specs_match_progress_rows": true
+    },
+    "superagent": {
+      "path": "8-9-hh3d-3/zdoc/18-9-superagent-2d-y8-plan.txt",
+      "sha256": "3a40964f5fa2be7ae1b12269221cbabeb2f8821202fde5777b5873e28fcb6111",
+      "wp_rows": 16,
+      "progress_and_dependencies_unchanged": true,
+      "dependency_order_valid": true,
+      "runtime_claims_unchanged": true,
+      "utf8": true,
+      "specs_match_progress_rows": true
+    }
+  },
+  "tracked_changed_files": [
+    "8-9-hh3d-3/zdoc/18-9-superagent-2d-y8-plan.txt",
+    "8-9-hh3d-3/zdoc/8-9-godot-blender-agent-studio-plan.txt",
+    "8-9-hh3d-3/zdoc/8-9-hh-world-gameplay-viet-nam-plan.txt"
+  ],
+  "studio_tracked_diff_empty": true,
+  "automation": {
+    "id": "ti-p-t-c-hh3d-tools",
+    "status": "ACTIVE",
+    "interval_minutes": 10,
+    "prompt_matches_current_plan_and_run": true
+  },
+  "followup_review": {
+    "hhworld": "no blocking finding; rig timing clarification applied",
+    "superagent": "ordinary device baseline restored as requested; no other finding",
+    "acceptance_scope": "document review only"
+  }
+}

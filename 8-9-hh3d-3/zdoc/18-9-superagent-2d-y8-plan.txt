@@ -1,10 +1,10 @@
 SUPERAGENT — PLAN GAME 2D: ĐỐI CHIẾU ĐẦY ĐỦ SUPERFIGHTERS TRÊN Y8
-Ngày 18-09-2026, Asia/Saigon | Revision SA1 | KẾ HOẠCH, CHƯA TRIỂN KHAI
+Ngày 18-09-2026, Asia/Saigon | Revision SA2 | KẾ HOẠCH, CHƯA TRIỂN KHAI
 
 PRODUCT_NAME=Superagent
 PLAN_ROLE=SUPERAGENT_PRODUCT_SOURCE_OF_PROGRESS
 PLAN_SCOPE=8-9-hh3d-3/superagent
-PLAN_REVISION=SA1
+PLAN_REVISION=SA2
 CURRENT_VALID_WP=SA-01
 EXECUTION_AUTHORIZATION=OWNER_APPROVED_PLANNING
 DISPATCHABLE=NO_IMPLEMENTATION_UNTIL_GT10_ACCEPTED_AND_PRODUCT_START
@@ -15,6 +15,12 @@ REFERENCE_INVENTORY=NOT_FROZEN
 FUNCTIONAL_PARITY=UNVERIFIED
 RELEASE_STATUS=NOT_BUILT
 LEGACY_PROGRESS_INHERITED=NONE
+REQUIRED_TARGET_PROFILES=UNVERIFIED_UNTIL_SA01
+
+SA2 làm rõ simulation/render/device, nối target touch/mobile có điều kiện
+đến nghiệm thu cuối và giao extension công cụ theo owner/consumer/proof.
+Giữ16WP và toàn bộ parity owner yêu cầu; không mở implementation. Bản SA1
+giữ trong Git135cc588; review/checks: reviews/20260918-s94-plan-clarifications/.
 
 0. MỤC TIÊU OWNER VÀ RANH GIỚI
 
@@ -107,7 +113,8 @@ Giới hạn hành vi không quan sát được phải nêu điều kiện và c
 không đảo thành “không có”. Final còn GAP/UNVERIFIED chức năng thì chưa full parity.
 
 Các nhóm bắt buộc phải kiểm kê đầy đủ, kể cả mục sau đó được xác nhận không có:
-R01 input/control presets, hai người chung máy, remap nếu reference có;
+R01 input/control presets, hai người chung máy, remap và touch/pointer/virtual
+    controls nếu reference có;
 R02 walk/run/sprint/crouch/jump/air control/roll/dive/ledge/ladder/fall;
 R03 melee/kick/combo/grab/disarm/stun/knockdown/get-up/invulnerability;
 R04 aim/fire/recoil/spread/projectile/hitscan/reload/ammo/swap/drop/pickup;
@@ -157,10 +164,27 @@ Capability thiếu gửi minimal repro/change request đúng tool owner; phát h
 version có affected regression/rollback và hai critic, rồi explicit lock upgrade.
 Không sửa generated addon, hidden shell-edit/eval để giả public authoring.
 Không tự thêm các nhu cầu mới vào gate GT-06 hoặc trì hoãn lần GT-10 đầu tiên.
+Backlog capability cần đối chiếu package, không phải sáu WP mới hoặc operation
+đã SUPPORTED. Coordinator giao người/lease, request ID, schema/profile tối thiểu,
+affected paths, package version và test trước consumer mutation; reuse khi đã
+đủ proof và gộp implementation request chung với HH World khi hợp đồng trùng.
+ID | Tool owner chịu trách nhiệm | Minimum capability | Consumer đầu | Proof
+SA-T01 | Godot adapter maintainer/GT-03 | typed 2D scene/body/collision/UI/audio classes và resources dùng ở bootstrap | SA-02 | public edit→play/readback→undo/redo/reopen, invalid mutation no-effect
+SA-T02 | Script-authoring maintainer/GT-03 | executable .gd có validation và atomic scene/script publication | SA-02→SA-03 | public command đổi behavior thật; parse/@tool/crash failure giữ last-good
+SA-T03 | Runtime/input maintainer/GT-06 | 2D observation/fixed-tick input/2P, capture identity, sim/render counters riêng | SA-02 | menu→move/collision→pause/release/resume/Stop, actual exits
+SA-T04 | Asset/import maintainer/GT-03+05 | sprite/atlas/animation/audio import, provenance và atomic replace | SA-02 cơ bản; SA-12 đầy đủ | playback thực, reimport/readback/rollback giữ gameplay timing; Blender tùy asset
+SA-T05 | Export/target maintainer/GT-08 | Web templates/preset/serving profile/artifact manifest và browser harness | SA-02 | clean export + HTTP Start/input/audio/save/reload, package upgrade/rollback regression
+SA-T06 | Runtime/input maintainer phối hợp target/GT-06+08 | touch controls đã quan sát và real mobile-browser profile, CONDITIONAL | SA-02 nếu SA-01 yêu cầu | real-device touch/release/cancel/focus/orientation/audio và frame metrics
 Android thật của GT-08 vẫn là gate upstream; không tự thêm Android/mobile/Safari
 thành claim hỗ trợ nếu chưa kiểm. Nếu bản Y8 hiện hành có touch/mobile chơi
 được, SA-01 đưa hành vi đó và target thiết bị thật vào requirements; không
 loại bằng desktop-only để claim full parity. “Mở bằng link” không là online multiplayer.
+SA-01 khóa REQUIRED_TARGET_PROFILES với OS/device/browser/input/viewport:
+Windows portable + desktop Web tối thiểu, touch/mobile có observation thì thêm;
+UNKNOWN phải kiểm tiếp, không tự loại. Mọi required profile đi qua SA-02 probe,
+SA-03 input, SA-13 parity, SA-14 quality, SA-15 delivery và SA-16 acceptance.
+Mobile Web không tự đòi native Android; GT-08 Android fixture không thay proof
+touch/mobile browser của Superagent. Target phát hiện muộn mở lại đúng WP ảnh hưởng.
 
 Windows/Web dùng cùng gameplay contracts. Chọn Compatibility/GDScript và thử
 single-thread Web trước; quyết định threads/headers dựa host thực. Browser smoke
@@ -196,11 +220,19 @@ Q1 Correctness: đủ R01–R15, interaction matrix và trace state; không lost
 double hit ngoài contract, stuck death/aim/ladder, duplicate reward/unlock/save.
 Q2 Presentation: nhân vật phân biệt rõ, hit/aim/weapon/pickup đọc được; art đủ
 idle/move/air/melee/aim/fire/hurt/down/death theo inventory, không placeholder final.
-Q3 Performance: SA-01 khóa máy phổ thông/browser baseline, actor/FX worst-case,
-resolution và target60Hz. SA-02 đo feasibility trước bulk content. Mục tiêu
-frame p95≤20ms/p99≤33.4ms ở workload đã khóa; các số là target, chưa đo đạt.
-Cold start/download/RAM/artifact budget khóa từ probe sớm trước tuning; không
-lấy workstation cao cấp hay trung bình FPS thay tail/frame-time trên máy target.
+Q3 Performance: simulation/input fixed 60 Hz (dt=1/60s) khác render mục tiêu
+60 FPS trên display 60 Hz; không suy FPS từ physics tick. SA-01 khóa máy phổ
+thông baseline cho từng required profile: device/CPU/GPU/RAM, OS/driver/browser,
+viewport/DPR/refresh/VSync, power/thermal và
+actor/FX workload; SA-02 probe feasibility trước bulk content, SA-14 đo cuối.
+Giữ mục tiêu frame p95≤20ms/p99≤33.4ms; riêng hai số này không chứng minh
+render luôn60FPS. Đo raw frame-time, p50/p95/p99/max, tỷ lệ frame vượt
+16.67/20/33.4ms và chuỗi frame giật dài nhất. Khóa định nghĩa jank/window/sample/
+exclusion và budget trước tuning theo từng profile; chưa khóa thì UNVERIFIED,
+không tuyên bố performance đã đạt. Tách active gameplay với load/tab-hidden;
+pause/resume clock kiểm riêng. Cold start/download/RAM/artifact budget khóa
+từ probe sớm. Không hạ workload/arsenal, dùng máy mạnh hoặc FPS trung bình thay
+tail/frame-time trên máy target; thay profile phải có revision/impact review.
 Q4 Lifecycle: scene/match/restart/save/load/focus-loss/stop; bounded pools và
 cleanup chứng minh bằng counters/retained owners, actual exits/process trees.
 Engine cache plateau không tự là leak; tăng unexplained phải minimal repro,
@@ -228,7 +260,8 @@ Failure giữ nguyên, sửa/resume từ checkpoint hợp lệ; đổi source m�
 Scope: contracts/, reference ledger ngoài artifact ship, evidence thiết kế.
 Làm: kiểm kê R01–R15; đọc public docs + quan sát phiên Y8 được phép; xác định
 version/session, roster, rules, uncertainty và tolerance/measurement protocol.
-Khóa target/máy/browser và art/map exception; không dùng legacy33/50 làm input.
+Khóa REQUIRED_TARGET_PROFILES/máy/browser/input và art/map exception; không dùng
+legacy33/50 làm input. Touch/mobile current reference phải có disposition/evidence.
 Verify: mỗi feature có nguồn, observable test và owner WP; historical/current
 không trộn. Inventory nào chưa đủ quan sát vẫn GAP, không tick closure đầy đủ.
 DoD: đủ inventory loại/mode/content để giao việc và protocol đối chiếu; các
@@ -241,14 +274,16 @@ Làm: nhận accepted GT-10; bổ sung qua versioned tool release nếu cần; s
 nhỏ chứng minh public edit/UndoRedo/save/input/collision/UI/audio/export.
 Verify: Windows chạy/thoát thật; Web serve/Start/input/audio/save/reload thật;
 invalid mutation/rollback/Stop; actual target/helper exits và source closure.
-DoD: đường authoring và hai target có proof cho phần dùng ngay; capability tương
-lai ghi rõ WP dùng đầu, không chặn bootstrap vì art chưa xong.
+Nếu required có mobile/touch, probe trên thiết bị thật ngay tại đây.
+DoD: đường authoring và mọi required target có proof cho phần dùng ngay;
+capability tương lai ghi rõ WP dùng đầu, không chặn bootstrap vì art chưa xong.
 
 ### SA-03 — Movement/controller
 Scope: actor/input/collision/camera và test rooms, contracts R01/R02.
 Làm: đầy đủ states quan sát được, physics/slope/platform/ladder/air transitions.
 Verify: pressed/held/released ở60Hz, edge cases, reference timing/distance và
 frame-rate variations; không teleport/call state setter làm bằng chứng duy nhất.
+Kiểm từng input profile bắt buộc, kể cả touch/cancel/release nếu đã được khóa.
 DoD: controller matched trên phòng kiểm chuẩn; chưa suy map mới đã balanced.
 
 ### SA-04 — Combat cơ sở
@@ -339,13 +374,18 @@ controls/timing/AI/presentation phải kiểm lại phần human bị ảnh hư�
 SA-16; packaging không ảnh hưởng được reuse với impact rationale, không mời
 lại cả nhóm chỉ vì một byte tài liệu đổi.
 SA-13 kiểm interaction/modes/bots/P1/P2 trên toàn roster map cuối.
+Differential coverage gồm input/device của mọi REQUIRED_TARGET_PROFILES;
+không bỏ target đã quan sát chỉ vì desktop đã matched.
 DoD: full inventory closure + actual play notes và owner scope/quality decision.
 
 ### SA-14 — Reliability/performance/agent workflow
 Scope: release-target regression, command-line harness và browser harness.
-Verify: Windows + Chromium/Firefox versions đã khóa; worst-case reference
+Verify: mọi REQUIRED_TARGET_PROFILES, tối thiểu Windows + Chromium/Firefox
+versions đã khóa, và mobile/touch trên máy thật nếu required; worst-case reference
 workload, long match, ít nhất30 match/restart transitions và10phút peak workload;
 ghi frame tails/RSS/objects/handles, cleanup, focus/tab/audio/save/resize/input.
+Áp dụng Q3 riêng từng profile, gồm jank budget đã khóa và lifecycle/input/audio;
+không lấy desktop hoặc GT-08 fixture làm kết quả thay mobile.
 Bot replay exact build; cross-target semantic comparison, không giả bit-equality.
 Agent nhận một task mới trong supported scope→edit→play→observe→repair→checkpoint;
 mutation qua tool công bố, không hidden hand-edit. UI/browser proof là riêng,
@@ -357,6 +397,8 @@ Scope: exports/build recipes/manifests/licenses/help/known issues/rollback.
 Verify: clean export từ pinned source, actual build exits; Windows offline,
 Web serving/headers/cache invalidation, fresh và existing save, downgrade
 unsupported không đè save; installer/archive không secret/cache/debug endpoints.
+Build/serve/install đúng distribution của mọi required profile và kiểm actual
+artifact trên target đó; mobile Web không tự mở scope native mobile product.
 DoD: reproducible input closure và artifact hashes, bản last-good restore được;
 release-ready local khác published. Không tự deploy/đăng Y8/mua domain/ký public.
 
@@ -364,6 +406,8 @@ release-ready local khác published. Không tự deploy/đăng Y8/mua domain/ký
 Scope: final package + đầy đủ requirement→test→evidence và handoff.
 Verify: hai critic MỚI độc lập cùng final frozen source/assets/tool/artifact hash;
 parity matrix, exceptions, actual runs, human records, provenance và support docs.
+Mỗi required target có evidence accepted tương ứng; không để hàng mobile/touch
+chỉ ở requirements rồi mất khỏi nghiệm thu cuối.
 DoD: SA-01–SA-15 ACCEPTED, SA-16 đủ final checks/hai critics/owner quality
 decision thật, không P0/P1 còn mở; coordinator mới chuyển SA-16 ACCEPTED và
 ghi RELEASE_READY. Không dùng trạng thái chính WP cuối làm input cho nó.
